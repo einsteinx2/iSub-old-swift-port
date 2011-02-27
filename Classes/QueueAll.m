@@ -1,0 +1,268 @@
+//
+//  QueueAll.m
+//  iSub
+//
+//  Created by Ben Baron on 1/16/11.
+//  Copyright 2011 Ben Baron. All rights reserved.
+//
+
+#import "QueueAll.h"
+#import "iSubAppDelegate.h"
+#import "MusicControlsSingleton.h"
+#import "DatabaseControlsSingleton.h"
+#import "ViewObjectsSingleton.h"
+#import "QueueAlbumXMLParser.h"
+#import "Album.h"
+#import "Song.h"
+#import "FMDatabase.h"
+#import "FMDatabaseAdditions.h"
+
+
+@implementation QueueAll
+
+@synthesize currentPlaylist, shufflePlaylist, myArtist, folderIds;
+
+- (id)init
+{
+	if (self = [super init])
+	{
+		appDelegate = [iSubAppDelegate sharedInstance];
+		musicControls = [MusicControlsSingleton sharedInstance];
+		databaseControls = [DatabaseControlsSingleton sharedInstance];
+		viewObjects = [ViewObjectsSingleton sharedInstance];
+		
+		connection = nil;
+		receivedData = nil;
+		myArtist = nil;
+		folderIds = [[NSMutableArray arrayWithCapacity:1] retain]; 
+	}
+
+	return self;
+}
+
+- (void)loadAlbumFolder
+{	
+	NSString *folderId = [folderIds objectAtIndex:0];
+	//NSLog(@"Loading folderid: %@", folderId);
+	
+	NSString *urlString = [NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"getMusicDirectory.view"], folderId];
+	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	if (connection)
+	{
+		receivedData = [[NSMutableData data] retain];
+	}
+}
+   
+- (void)finishLoad
+{
+	// Remove the processed folder from array
+	[folderIds removeObjectAtIndex:0];
+	
+	// Continue the iteration
+	if ([folderIds count] > 0)
+	{
+		[self loadAlbumFolder];
+	}
+	else 
+	{
+		//if (musicControls.isShuffle)
+		if (isShuffleButton)
+		{
+			// Perform the shuffle
+			[databaseControls shufflePlaylist];
+		}
+		
+		if (isQueue)
+		{
+			if (viewObjects.isJukebox)
+			{
+				[musicControls jukeboxReplacePlaylistWithLocal];
+			}
+		}
+		else
+		{
+			if (musicControls.isQueueListDownloading == NO)
+			{
+				[musicControls downloadNextQueuedSong];
+			}
+		}
+		
+		[viewObjects hideLoadingScreen];
+		
+		if (doShowPlayer)
+		{
+			[musicControls showPlayer];
+		}
+		
+		if (viewObjects.isJukebox)
+		{
+			musicControls.isShuffle = NO;
+		}
+	}
+}
+
+- (void)loadData:(NSString *)folderId artist:(Artist *)theArtist //isQueue:(BOOL)queue 
+{	
+	[folderIds addObject:folderId];
+	self.myArtist = theArtist;
+	
+	
+	//jukeboxSongIds = [[NSMutableArray alloc] init];
+	
+	if (viewObjects.isJukebox)
+	{
+		self.currentPlaylist = @"jukeboxCurrentPlaylist";
+		self.shufflePlaylist = @"jukeboxShufflePlaylist";
+	}
+	else
+	{
+		self.currentPlaylist = @"currentPlaylist";
+		self.shufflePlaylist = @"shufflePlaylist";
+	}
+	
+	[self loadAlbumFolder];
+}
+
+- (void)queueData:(NSString *)folderId artist:(Artist *)theArtist
+{
+	isQueue = YES;
+	isShuffleButton = NO;
+	doShowPlayer = NO;
+	[self loadData:folderId artist:theArtist];
+}
+
+- (void)cacheData:(NSString *)folderId artist:(Artist *)theArtist
+{
+	isQueue = NO;
+	isShuffleButton = NO;
+	doShowPlayer = NO;
+	[self loadData:folderId artist:theArtist];
+}
+
+- (void)playAllData:(NSString *)folderId artist:(Artist *)theArtist
+{
+	isQueue = YES;
+	isShuffleButton = NO;
+	doShowPlayer = YES;
+	[self loadData:folderId artist:theArtist];
+}
+
+- (void)shuffleData:(NSString *)folderId artist:(Artist *)theArtist
+{
+	isQueue = YES;
+	isShuffleButton = YES;
+	doShowPlayer = YES;
+	[self loadData:folderId artist:theArtist];
+}
+
+#pragma mark Connection Delegate
+
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
+{
+	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
+		return YES; // Self-signed cert will be accepted
+	
+	return NO;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{	
+	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+	{
+		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
+	}
+	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+	[receivedData setLength:0];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
+{
+    [receivedData appendData:incrementalData];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
+{
+	// Inform the user that the connection failed.
+	NSString *message = [NSString stringWithFormat:@"There was an error loading the album.\n\nError %i: %@", [error code], [error localizedDescription]];
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+	[alert release];
+		
+	[theConnection release]; theConnection = nil;
+	[receivedData release]; receivedData = nil;
+	
+	// Remove the processed folder from array
+	[folderIds removeObjectAtIndex:0];
+	
+	// Continue the iteration
+	[self finishLoad];
+	
+	NSLog(@"QueueAll CONNECTION FAILED!!!");
+}	
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
+{	
+	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
+	QueueAlbumXMLParser *parser = (QueueAlbumXMLParser *)[[QueueAlbumXMLParser alloc] initXMLParser];
+	parser.myArtist = myArtist;
+	[xmlParser setDelegate:parser];
+	[xmlParser parse];
+		
+	// Add each song to playlist
+	for (Song *aSong in parser.listOfSongs)
+	{
+		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+		
+		if (isQueue)
+		{
+			[databaseControls addSongToPlaylistQueue:aSong];
+		}
+		else
+		{
+			[databaseControls addSongToCacheQueue:aSong];
+		}
+		
+		[pool release];
+	}
+	
+	//NSLog(@"parser.listOfSongs = %@", parser.listOfSongs);
+	//NSLog(@"Playlist count: %i", [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"]);
+	
+	for (Album *anAlbum in parser.listOfAlbums)
+	{
+		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+		
+		[folderIds addObject:anAlbum.albumId];
+		
+		[pool release];
+	}
+	
+	[parser release];
+	[xmlParser release];
+	
+	[theConnection release]; theConnection = nil;
+	[receivedData release]; receivedData = nil;
+	
+	// Continue the iteration
+	[self finishLoad];
+}
+
+
+#pragma mark Memory Management
+
+- (void)dealloc
+{
+	[currentPlaylist release];
+	[shufflePlaylist release];
+	[myArtist release];
+	
+	[super dealloc];
+}
+
+
+@end

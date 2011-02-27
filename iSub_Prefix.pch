@@ -1,0 +1,43 @@
+//
+// Prefix header for all source files of the 'iSub' target in the 'iSub' project
+//
+#import <Availability.h>
+
+#ifndef __IPHONE_3_0
+#warning "This project uses features only available in iPhone SDK 3.0 and later."
+#endif
+
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+    #import <UIKit/UIKit.h>
+#endif
+
+// 240.0 is the minimum URL connection timeout enforced by CFNetwork
+// Unless an HTTP Post body is created then it may default to 74.0
+// unless you reset the timeout after setting up the post body
+#define kLoadingTimeout 240.0
+#define kJukeboxTimeout 5.0
+
+// iPad detection
+#ifdef UI_USER_INTERFACE_IDIOM()
+#define IS_IPAD() (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+#else
+#define IS_IPAD() (false)
+#endif
+
+
+#ifdef DEBUG
+#define BETA_VERSION @" GM"
+#else
+#define BETA_VERSION @""
+#endif
+
+// Lite version build switch
+#define IS_LITE() (false)    // DISABLE Lite version
+//#define IS_LITE() (true)   // ENABLE  Lite version
+
+// Test server details
+#define DEFAULT_URL @"http://isubapp.com:9000"
+#define DEFAULT_USER_NAME @"isub-guest"
+#define DEFAULT_PASSWORD @"1sub1snumb3r0n3"
