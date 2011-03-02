@@ -26,7 +26,11 @@
 
 @synthesize parentController, loadedTime;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation {
+-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
+{
+	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"])
+		return NO;
+	
     return YES;
 }
 
@@ -62,6 +66,14 @@
 	versionLabel.text = [NSString stringWithFormat:@"iSub version %@%@", version, BETA_VERSION];
 	
 	// Main Settings
+	if ([[appDelegate.settingsDictionary objectForKey:@"enableScrobblingSetting"] isEqualToString:@"YES"])
+		enableScrobblingSwitch.on = YES;
+	else
+		enableScrobblingSwitch.on = NO;
+	
+	scrobblePercentSlider.value = [[appDelegate.settingsDictionary objectForKey:@"scrobblePercentSetting"] floatValue];
+	[self updateScrobblePercentLabel];
+	
 	if ([[appDelegate.settingsDictionary objectForKey:@"manualOfflineModeSetting"] isEqualToString:@"YES"])
 		manualOfflineModeSwitch.on = YES;
 	else
@@ -76,6 +88,11 @@
 		autoReloadArtistSwitch.on = YES;
 	else
 		autoReloadArtistSwitch.on = NO;
+	
+	if ([[appDelegate.settingsDictionary objectForKey:@"disablePopupsSetting"] isEqualToString:@"YES"])
+		disablePopupsSwitch.on = YES;
+	else
+		disablePopupsSwitch.on = NO;
 	
 	/*if ([[UIDevice currentDevice] isOldDevice])
 	{
@@ -342,6 +359,13 @@
 				[(UINavigationController*)appDelegate.currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
 			}
 		}
+		else if (sender == enableScrobblingSwitch)
+		{
+			if (enableScrobblingSwitch.on)
+				[appDelegate.settingsDictionary setObject:@"YES" forKey:@"enableScrobblingSetting"];
+			else
+				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"enableScrobblingSetting"];
+		}
 		else if (sender == enableSongCachingSwitch)
 		{
 			if (enableSongCachingSwitch.on)
@@ -404,6 +428,13 @@
 			else
 				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"autoReloadArtistsSetting"];
 		}
+		else if (sender == disablePopupsSwitch)
+		{
+			if (disablePopupsSwitch.on)
+				[appDelegate.settingsDictionary setObject:@"YES" forKey:@"disablePopupsSetting"];
+			else
+				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"disablePopupsSetting"];
+		}
 		else if (sender == enableSongsTabSwitch)
 		{
 			if (enableSongsTabSwitch.on)
@@ -411,7 +442,9 @@
 				[appDelegate.settingsDictionary setObject:@"YES" forKey:@"enableSongsTabSetting"];
 				
 				if (IS_IPAD())
+				{
 					[appDelegate.mainMenu loadTable];
+				}
 				else
 				{
 					NSMutableArray *controllers = [NSMutableArray arrayWithArray:appDelegate.mainTabBarController.viewControllers];
@@ -420,14 +453,6 @@
 					[controllers addObject:appDelegate.genresNavigationController];
 					appDelegate.mainTabBarController.viewControllers = controllers;
 				}
-				
-				[databaseControls.allAlbumsDb close];
-				[databaseControls.allSongsDb close];
-				[databaseControls.genresDb close];
-			}
-			else
-			{
-				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"enableSongsTabSetting"];
 				
 				// Setup the allAlbums database
 				databaseControls.allAlbumsDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allAlbums.db", databaseControls.databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]];
@@ -443,11 +468,19 @@
 				databaseControls.genresDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@genres.db", databaseControls.databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]];
 				[databaseControls.genresDb executeUpdate:@"PRAGMA cache_size = 1"];
 				if ([databaseControls.genresDb open] == NO) { NSLog(@"Could not open genresDb."); }
-				
+			}
+			else
+			{
+				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"enableSongsTabSetting"];
+
 				if (IS_IPAD())
 					[appDelegate.mainMenu loadTable];
 				else
 					[viewObjects orderMainTabBarController];
+				
+				[databaseControls.allAlbumsDb close];
+				[databaseControls.allSongsDb close];
+				[databaseControls.genresDb close];
 			}
 		}
 		
@@ -530,6 +563,21 @@
 				[self.parentController presentModalViewController:controller animated:YES];
 		}
 	}
+}
+
+- (IBAction) updateScrobblePercentLabel
+{
+	NSUInteger percentInt = scrobblePercentSlider.value * 100;
+	scrobblePercentLabel.text = [NSString stringWithFormat:@"%i", percentInt];
+}
+
+- (IBAction) updateScrobblePercentSetting;
+{
+	NSNumber *percent = [NSNumber numberWithFloat:scrobblePercentSlider.value];
+	[appDelegate.settingsDictionary setObject:percent forKey:@"scrobblePercentSetting"];
+	
+	[[NSUserDefaults standardUserDefaults] setObject:appDelegate.settingsDictionary forKey:@"settingsDictionary"];
+	[[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)didReceiveMemoryWarning {

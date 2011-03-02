@@ -19,10 +19,15 @@
 #import "ServerTypeViewController.h"
 #import "UbuntuServerEditViewController.h"
 #import "UIView-tools.h"
+#import "CustomUIAlertView.h"
 
 @implementation ServerListViewController
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation {
+-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
+{
+	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"])
+		return NO;
+	
     return YES;
 }
 
@@ -436,7 +441,7 @@
 		// Alert user to select new default server if they deleting the default
 		if ([appDelegate.defaultUrl isEqualToString:[[viewObjects.serverList objectAtIndex:indexPath.row] url]])
 		{
-			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"Make sure to select a new server" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Make sure to select a new server" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 			[alert show];
 			[alert release];
 		}

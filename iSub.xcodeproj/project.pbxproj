@@ -74,6 +74,9 @@
 		5327F58612B95D2900735119 /* StoreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5327F58412B95D2900735119 /* StoreViewController.xib */; };
 		532862DB11C573AD00B40FF0 /* UAApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 532862DA11C573AD00B40FF0 /* UAApplication.m */; };
 		532B0DE012AF0AF700E8FF4F /* NSString-rfcEncode.m in Sources */ = {isa = PBXBuildFile; fileRef = 532B0DDF12AF0AF700E8FF4F /* NSString-rfcEncode.m */; };
+		532D9B43131AE19700FD8CA7 /* CustomUIAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 532D9B42131AE19700FD8CA7 /* CustomUIAlertView.m */; };
+		532D9DE2131B682600FD8CA7 /* KeychainAccessGroups.plist in Resources */ = {isa = PBXBuildFile; fileRef = 532D9DE1131B682600FD8CA7 /* KeychainAccessGroups.plist */; };
+		532D9E1E131B6D3700FD8CA7 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 532D9E1D131B6D3700FD8CA7 /* KeychainItemWrapper.m */; };
 		532E6FCF11AB31C3000A0E3B /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 532E6FCA11AB31C3000A0E3B /* FMDatabase.m */; };
 		532E6FD011AB31C3000A0E3B /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 532E6FCC11AB31C3000A0E3B /* FMDatabaseAdditions.m */; };
 		532E6FD111AB31C3000A0E3B /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 532E6FCE11AB31C3000A0E3B /* FMResultSet.m */; };
@@ -364,6 +367,7 @@
 		53F675DC113B093900822059 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675DB113B093900822059 /* CFNetwork.framework */; };
 		53F675E2113B095900822059 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675E1113B095900822059 /* QuartzCore.framework */; };
 		53F675E8113B096400822059 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675E7113B096400822059 /* AudioToolbox.framework */; };
+		53F7A128131B7F3B002C829D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F7A127131B7F3B002C829D /* Security.framework */; };
 		53F8C7BF12972502007BDC0E /* NewHomeViewControllerLandscape.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F8C7BE12972502007BDC0E /* NewHomeViewControllerLandscape.xib */; };
 		53F8C80B129728F9007BDC0E /* home-background-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8C803129728F9007BDC0E /* home-background-ipad.png */; };
 		53F8C81B12972A51007BDC0E /* NewHomeViewController~iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F8C81A12972A51007BDC0E /* NewHomeViewController~iPad.xib */; };
@@ -500,6 +504,11 @@
 		532862DA11C573AD00B40FF0 /* UAApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UAApplication.m; sourceTree = "<group>"; };
 		532B0DDE12AF0AF700E8FF4F /* NSString-rfcEncode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString-rfcEncode.h"; sourceTree = "<group>"; };
 		532B0DDF12AF0AF700E8FF4F /* NSString-rfcEncode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString-rfcEncode.m"; sourceTree = "<group>"; };
+		532D9B41131AE19700FD8CA7 /* CustomUIAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomUIAlertView.h; sourceTree = "<group>"; };
+		532D9B42131AE19700FD8CA7 /* CustomUIAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomUIAlertView.m; sourceTree = "<group>"; };
+		532D9DE1131B682600FD8CA7 /* KeychainAccessGroups.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = KeychainAccessGroups.plist; sourceTree = "<group>"; };
+		532D9E1C131B6D3700FD8CA7 /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
+		532D9E1D131B6D3700FD8CA7 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 		532E6FC911AB31C3000A0E3B /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
 		532E6FCA11AB31C3000A0E3B /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
 		532E6FCB11AB31C3000A0E3B /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
@@ -929,6 +938,7 @@
 		53F675DB113B093900822059 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		53F675E1113B095900822059 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		53F675E7113B096400822059 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		53F7A127131B7F3B002C829D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		53F8C7BE12972502007BDC0E /* NewHomeViewControllerLandscape.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewHomeViewControllerLandscape.xib; sourceTree = "<group>"; };
 		53F8C803129728F9007BDC0E /* home-background-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-background-ipad.png"; path = "Images/Home Screen/home-background-ipad.png"; sourceTree = "<group>"; };
 		53F8C81A12972A51007BDC0E /* NewHomeViewController~iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "NewHomeViewController~iPad.xib"; sourceTree = "<group>"; };
@@ -989,6 +999,7 @@
 				536AD1D311EA628200387CB0 /* libxml2.dylib in Frameworks */,
 				536AD29511EA7EFB00387CB0 /* libOAuth.a in Frameworks */,
 				5327F52512B955F100735119 /* StoreKit.framework in Frameworks */,
+				53F7A128131B7F3B002C829D /* Security.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1039,6 +1050,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				532D9DE1131B682600FD8CA7 /* KeychainAccessGroups.plist */,
 				537FCC5312F8F7F400F1D996 /* iTunesArtwork */,
 				536D624311444E4600DFCE56 /* Icon.png */,
 				53AAF1E711DAA1BC00447FF7 /* Icon@2x.png */,
@@ -1053,6 +1065,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				53F7A127131B7F3B002C829D /* Security.framework */,
 				5327F52412B955F100735119 /* StoreKit.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
@@ -1142,6 +1155,8 @@
 		5327F4EC12B9533A00735119 /* MKStoreManager */ = {
 			isa = PBXGroup;
 			children = (
+				532D9E1C131B6D3700FD8CA7 /* KeychainItemWrapper.h */,
+				532D9E1D131B6D3700FD8CA7 /* KeychainItemWrapper.m */,
 				5327F4F512B9534400735119 /* MKStoreManager.h */,
 				5327F4F612B9534400735119 /* MKStoreManager.m */,
 				5327F4F712B9534400735119 /* MKStoreObserver.h */,
@@ -1562,6 +1577,8 @@
 		539797F31162CE9300F41D8B /* Custom Objects */ = {
 			isa = PBXGroup;
 			children = (
+				532D9B41131AE19700FD8CA7 /* CustomUIAlertView.h */,
+				532D9B42131AE19700FD8CA7 /* CustomUIAlertView.m */,
 				53F2D1FC1139F5A500107D63 /* Index.h */,
 				53F2D1FD1139F5A500107D63 /* Index.m */,
 				53F2D1D51139F05200107D63 /* Artist.h */,
@@ -2235,6 +2252,7 @@
 				53C6054F12F1FCC6003C6895 /* intro-icon-ownserver.png in Resources */,
 				53C6055012F1FCC6003C6895 /* intro-icon-ownserver@2x.png in Resources */,
 				537FCC5412F8F7F400F1D996 /* iTunesArtwork in Resources */,
+				532D9DE2131B682600FD8CA7 /* KeychainAccessGroups.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2392,6 +2410,8 @@
 				535CB2A212E2348A00389DA1 /* UbuntuServerEditViewController.m in Sources */,
 				535CB69012E383F400389DA1 /* QueueAll.m in Sources */,
 				53C6052E12F1F01E003C6895 /* IntroViewController.m in Sources */,
+				532D9B43131AE19700FD8CA7 /* CustomUIAlertView.m in Sources */,
+				532D9E1E131B6D3700FD8CA7 /* KeychainItemWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

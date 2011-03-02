@@ -18,7 +18,38 @@
 //	While I'm ok with modifications to this source code, 
 //	if you are re-publishing after editing, please retain the above copyright notices
 
+//  -----------------------------------------------------------------------------
+//  Edited by Ben Baron on 28-Feb-2011 
+//  for use in iSub Music Streamer Lite ( http://isubapp.com )
+//
+//  Required frameworks:
+//  --------------------
+//  Security.framework
+//  
+//  What was changed and why:
+//  -------------------------
+//  The original version of this class used the preferences plist file to store
+//  which products were purchased and how many of a consumable product were left.
+//  The problem with that is that apps for Mac and Windows such as Phone Explorer
+//  give users full r/w access to the app sandbox, including the preferences plist
+//  even on non-jailbroken phones. That means all the user would need to do is
+//  download the free program, and take two seconds to edit themselves a million
+//  gold coins, access to all your restricted features, or whatever.
+//
+//  I've changed the storage mechanism to the keychain instead. This is not easily
+//  accessed, so is a much better location to store that info. I'm using the
+//  KeychainItemWrapper class from Apple's keychain example project.
+//
+//  Other than changing all NSUserDefaults calls to keychain calls, the class is the
+//  same as the original.
+//
+//  NOTE: I've only personally tested purchases of non-consumables, so I can't
+//  guarentee the consumables part will work, though there is no reason it shouldn't.
+//  If you plan to use this for consumables, just do a few tests first. ;)
+//
+
 #import "MKStoreManager.h"
+#import "KeychainItemWrapper.h"
 
 @interface MKStoreManager (PrivateMethods)
 
@@ -76,7 +107,7 @@ static MKStoreManager* _sharedStoreManager;
 			_sharedStoreManager.purchasableObjects = [[NSMutableArray alloc] init];
 			[_sharedStoreManager requestProductData];						
 			_sharedStoreManager.storeObserver = [[MKStoreObserver alloc] init];
-			[[SKPaymentQueue defaultQueue] addTransactionObserver:_sharedStoreManager.storeObserver];			
+			[[SKPaymentQueue defaultQueue] addTransactionObserver:_sharedStoreManager.storeObserver];		
 #endif
         }
     }
@@ -168,7 +199,11 @@ static MKStoreManager* _sharedStoreManager;
 // call this function to check if the user has already purchased your feature
 + (BOOL) isFeaturePurchased:(NSString*) featureId
 {
-	return [[NSUserDefaults standardUserDefaults] boolForKey:featureId];
+	KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:featureId accessGroup:nil];
+	BOOL isPurchased = [[wrapper objectForKey:(id)kSecAttrAccount] boolValue];
+	[wrapper release];
+	
+	return isPurchased;
 }
 
 // Call this function to populate your UI
@@ -237,7 +272,9 @@ static MKStoreManager* _sharedStoreManager;
 
 - (BOOL) canConsumeProduct:(NSString*) productIdentifier
 {
-	int count = [[NSUserDefaults standardUserDefaults] integerForKey:productIdentifier];
+	KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:productIdentifier accessGroup:nil];
+	int count = [[wrapper objectForKey:(id)kSecAttrAccount] intValue];
+	[wrapper release];
 	
 	return (count > 0);
 	
@@ -245,21 +282,28 @@ static MKStoreManager* _sharedStoreManager;
 
 - (BOOL) canConsumeProduct:(NSString*) productIdentifier quantity:(int) quantity
 {
-	int count = [[NSUserDefaults standardUserDefaults] integerForKey:productIdentifier];
+	KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:productIdentifier accessGroup:nil];
+	int count = [[wrapper objectForKey:(id)kSecAttrAccount] intValue];
+	[wrapper release];
+	
 	return (count >= quantity);
 }
 
 - (BOOL) consumeProduct:(NSString*) productIdentifier quantity:(int) quantity
 {
-	int count = [[NSUserDefaults standardUserDefaults] integerForKey:productIdentifier];
+	KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:productIdentifier accessGroup:nil];
+	int count = [[wrapper objectForKey:(id)kSecAttrAccount] intValue];
+	
 	if(count < quantity)
 	{
+		[wrapper release];
 		return NO;
 	}
 	else 
 	{
 		count -= quantity;
-		[[NSUserDefaults standardUserDefaults] setInteger:count forKey:productIdentifier];
+		[wrapper setObject:[NSString stringWithFormat:@"%i", count] forKey:productIdentifier];
+		[wrapper release];
 		return YES;
 	}
 	
@@ -288,21 +332,19 @@ static MKStoreManager* _sharedStoreManager;
 	NSRange range = [productIdentifier rangeOfString:kConsumableBaseFeatureId];		
 	NSString *countText = [productIdentifier substringFromIndex:range.location+[kConsumableBaseFeatureId length]];
 	
+	KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:productIdentifier accessGroup:nil];
 	int quantityPurchased = [countText intValue];
 	if(quantityPurchased != 0)
 	{
-		
-		int oldCount = [[NSUserDefaults standardUserDefaults] integerForKey:productIdentifier];
-		oldCount += quantityPurchased;	
-		
-		[[NSUserDefaults standardUserDefaults] setInteger:oldCount forKey:productIdentifier];		
+		int count = [[wrapper objectForKey:(id)kSecAttrAccount] intValue];
+		count += quantityPurchased;	
+		[wrapper setObject:[NSString stringWithFormat:@"%i", count] forKey:productIdentifier];		
 	}
 	else 
 	{
-		[[NSUserDefaults standardUserDefaults] setBool:YES forKey:productIdentifier];		
+		[wrapper setObject:@"YES" forKey:(id)kSecAttrAccount];
 	}
-
-	[[NSUserDefaults standardUserDefaults] synchronize];
+	[wrapper release];
 
 	if([_delegate respondsToSelector:@selector(productPurchased:)])
 		[_delegate productPurchased:productIdentifier];	

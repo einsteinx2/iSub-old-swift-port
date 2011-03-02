@@ -8,6 +8,8 @@
 
 #import "APICheckConnectionDelegate.h"
 #import "APICheckXMLParser.h"
+#import "CustomUIAlertView.h"
+#import "ViewObjectsSingleton.h"
 
 @implementation APICheckConnectionDelegate
 
@@ -51,15 +53,15 @@
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
-	//if ([error code] != NSURLErrorTimedOut)
-	//{
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error checking the server version.\n\nError %i: %@", [error code], [error localizedDescription]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-	[alert release];
-	
-	[theConnection release];
-	[receivedData release]; receivedData = nil;
-	//}
+	if (![ViewObjectsSingleton sharedInstance].isOfflineMode)
+	{
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error checking the server version.\n\nError %i: %@", [error code], [error localizedDescription]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		[alert release];
+		
+		[theConnection release];
+		[receivedData release]; receivedData = nil;
+	}
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 

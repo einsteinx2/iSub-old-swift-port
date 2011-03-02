@@ -15,6 +15,7 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "NSURLConnectionDelegateQueueArtwork.h"
+#import "CustomUIAlertView.h"
 
 @implementation NSURLConnectionDelegateQueue
 

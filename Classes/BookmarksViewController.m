@@ -20,13 +20,18 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "NSString+md5.h"
+#import "CustomUIAlertView.h"
 
 @implementation BookmarksViewController
 
 #pragma mark -
 #pragma mark View lifecycle
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation {
+-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
+{
+	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"])
+		return NO;
+	
     return YES;
 }
 
@@ -588,7 +593,7 @@
 	{
 		[musicControls startDownloadA];
 		
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sorry" message:@"It's currently not possible to skip within m4a files, so the song is starting from the begining instead of resuming.\n\nYou can turn on m4a > mp3 transcoding in Subsonic to resume this song properly." delegate:appDelegate cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Sorry" message:@"It's currently not possible to skip within m4a files, so the song is starting from the begining instead of resuming.\n\nYou can turn on m4a > mp3 transcoding in Subsonic to resume this song properly." delegate:appDelegate cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
 		[alert release];
 	}
@@ -640,7 +645,7 @@
 			{
 				if (viewObjects.isOfflineMode)
 				{
-					UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"Unable to resume this song in offline mode as it isn't fully cached." delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+					CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Unable to resume this song in offline mode as it isn't fully cached." delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 					[alert show];
 					[alert release];
 				}

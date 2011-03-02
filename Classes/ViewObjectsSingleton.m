@@ -392,7 +392,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 
 - (BOOL)isPlaylistUnlocked
 {
-	if (!IS_LITE() | [MKStoreManager isFeaturePurchased:kFeaturePlaylistsId] || [MKStoreManager isFeaturePurchased:kFeatureAllId])
+	if (!IS_LITE() || [MKStoreManager isFeaturePurchased:kFeaturePlaylistsId] || [MKStoreManager isFeaturePurchased:kFeatureAllId])
 		return YES;
 	
 	return NO;
@@ -400,7 +400,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 
 - (BOOL)isCacheUnlocked
 {
-	if (!IS_LITE() | [MKStoreManager isFeaturePurchased:kFeatureCacheId] || [MKStoreManager isFeaturePurchased:kFeatureAllId])
+	if (!IS_LITE() || [MKStoreManager isFeaturePurchased:kFeatureCacheId] || [MKStoreManager isFeaturePurchased:kFeatureAllId])
 		return YES;
 	
 	return NO;
@@ -408,7 +408,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 
 - (BOOL)isJukeboxUnlocked
 {
-	if (!IS_LITE() | [MKStoreManager isFeaturePurchased:kFeatureJukeboxId] || [MKStoreManager isFeaturePurchased:kFeatureAllId])
+	if (!IS_LITE() || [MKStoreManager isFeaturePurchased:kFeatureJukeboxId] || [MKStoreManager isFeaturePurchased:kFeatureAllId])
 		return YES;
 	
 	return NO;

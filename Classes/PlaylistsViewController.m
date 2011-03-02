@@ -26,6 +26,7 @@
 #import "Song.h"
 #import "ASIHTTPRequest.h"
 #import "StoreViewController.h"
+#import "CustomUIAlertView.h"
 
 @interface PlaylistsViewController (Private)
 
@@ -38,7 +39,11 @@
 
 @synthesize listOfSongs;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation {
+-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
+{
+	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"])
+		return NO;
+	
     return YES;
 }
 
@@ -741,7 +746,7 @@
 				savePlaylistLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
 				playlistCountLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
 				
-				UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Playlist Name:" message:@"      \n      " delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
+				CustomUIAlertView *myAlertView = [[CustomUIAlertView alloc] initWithTitle:@"Playlist Name:" message:@"      \n      " delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
 				myAlertView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
 				playlistNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 22.0)];
 				//playlistNameTextField.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
@@ -931,7 +936,7 @@
 }
 
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(CustomUIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if([alertView.title isEqualToString:@"Playlist Name:"])
 	{
@@ -957,7 +962,7 @@
 			else
 			{
 				// If it exists, ask to overwrite
-				UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Overwrite?" message:@"There is already a playlist with this name. Would you like to overwrite it?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+				CustomUIAlertView *myAlertView = [[CustomUIAlertView alloc] initWithTitle:@"Overwrite?" message:@"There is already a playlist with this name. Would you like to overwrite it?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
 				[myAlertView show];
 				[myAlertView release];
 			}
@@ -1000,7 +1005,7 @@
 	[request startSynchronous];
 	if ([request error])
 	{
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"There was an error grabbing the playlist from the server." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error grabbing the playlist from the server." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
 	}

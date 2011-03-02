@@ -17,6 +17,7 @@
 #import "ASIHTTPRequest.h"
 #import "AsynchronousImageView.h"
 #import "AsynchronousImageViewCached.h"
+#import "CustomUIAlertView.h"
 
 static iSubAppDelegate *appDelegate;
 static MusicControlsSingleton *musicControls;

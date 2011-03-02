@@ -28,6 +28,10 @@
 	
 	IBOutlet UISwitch *autoReloadArtistSwitch;
 	
+	IBOutlet UISwitch *disablePopupsSwitch;
+	
+	IBOutlet UISwitch *disableRotationSwitch;
+	
 	IBOutlet UISwitch *enableSongsTabSwitch;
 	IBOutlet UILabel *enableSongsTabLabel;
 	IBOutlet UILabel *enableSongsTabDesc;
@@ -65,6 +69,10 @@
 	IBOutlet UILabel *twitterStatusLabel;
 	IBOutlet UISwitch *twitterEnabledSwitch;
 	
+	IBOutlet UISwitch *enableScrobblingSwitch;
+	IBOutlet UILabel *scrobblePercentLabel;
+	IBOutlet UISlider *scrobblePercentSlider;
+	
 	NSDate *loadedTime;
 }
 
@@ -80,5 +88,7 @@
 - (IBAction) updateMinFreeSpaceSetting;
 - (IBAction) revertMinFreeSpaceSlider;
 - (IBAction) twitterButtonAction;
+- (IBAction) updateScrobblePercentLabel;
+- (IBAction) updateScrobblePercentSetting;
 
 @end

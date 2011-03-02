@@ -25,7 +25,6 @@
 #import "UIView-tools.h"
 #import <QuartzCore/QuartzCore.h>
 
-
 @interface iPhoneStreamingPlayerViewController ()
 
 @property (nonatomic, retain) UIImageView *reflectionView;
@@ -33,6 +32,11 @@
 - (UIImage *)reflectedImage:(UIImageView *)fromImage withHeight:(NSUInteger)height;
 
 - (void)createReflection;
+- (void)initSongInfo;
+- (void)setStopButtonImage;
+- (void)setPlayButtonImage;
+- (void)setPauseButtonImage;
+- (void)updateBarButtonImage;
 
 @end
 
@@ -42,6 +46,9 @@
 
 static const CGFloat kDefaultReflectionFraction = 0.30;
 static const CGFloat kDefaultReflectionOpacity = 0.55;
+
+#pragma mark -
+#pragma mark Controller Life Cycle
 
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {	
@@ -59,6 +66,202 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	return self;
 }
+
+- (void)viewDidLoad2
+{
+	//self.title = [musicControls.currentSongObject title];
+	[self setSongTitle];
+	
+	//musicControls.songUrl = nil;
+	musicControls.songUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], [musicControls.currentSongObject songId]]];
+	
+	[self initSongInfo];
+	
+	if (viewObjects.isJukebox)
+	{
+		CGRect frame = volumeSlider.bounds;
+		frame.size.height = volumeSlider.bounds.size.height / 2;
+		jukeboxVolumeView = [[[UISlider alloc] initWithFrame:frame] autorelease];
+		[jukeboxVolumeView addTarget:self action:@selector(jukeboxVolumeChanged:) forControlEvents:UIControlEventValueChanged];
+		jukeboxVolumeView.minimumValue = 0.0;
+		jukeboxVolumeView.maximumValue = 1.0;
+		jukeboxVolumeView.continuous = NO;
+		jukeboxVolumeView.value = musicControls.jukeboxGain;
+		[volumeSlider addSubview:jukeboxVolumeView];
+	}
+	else
+	{
+		volumeView = [[[MPVolumeView alloc] initWithFrame:volumeSlider.bounds] autorelease];
+		[volumeSlider addSubview:volumeView];
+		[volumeView sizeToFit];
+	}
+	
+	if (viewObjects.isJukebox)
+	{
+		if (musicControls.jukeboxIsPlaying)
+			[self setStopButtonImage];
+		else 
+			[self setPlayButtonImage];
+	}
+	else
+	{
+		if(musicControls.isNewSong)
+		{
+			[self setPlayButtonImage];
+		}
+		else
+		{
+			if([musicControls.streamer isPlaying])
+				[self setPauseButtonImage];
+			else
+				[self setPlayButtonImage];
+		}		
+	}
+	
+	if (UIDeviceOrientationIsPortrait([UIDevice currentDevice].orientation) && 
+		[[appDelegate.settingsDictionary objectForKey:@"autoPlayerInfoSetting"] isEqualToString:@"YES"])
+	{
+		[self songInfoToggle:nil];
+	}
+	
+	// determine the size of the reflection to create
+	reflectionHeight = coverArtImageView.bounds.size.height * kDefaultReflectionFraction;
+	[reflectionView newHeight:(float)reflectionHeight];
+	
+	// create the reflection image and assign it to the UIImageView
+	reflectionView.image = [self reflectedImage:coverArtImageView withHeight:reflectionHeight];
+	reflectionView.alpha = kDefaultReflectionOpacity;
+}
+
+- (void)viewDidLoad
+{
+	[super viewDidLoad];
+	
+	//[coverArtImageView.layer setCornerRadius:20];
+	
+	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
+	musicControls = [MusicControlsSingleton sharedInstance];
+	databaseControls = [DatabaseControlsSingleton sharedInstance];
+	viewObjects = [ViewObjectsSingleton sharedInstance];
+	
+	isFlipped = NO;
+	
+	if (!IS_IPAD())
+		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(backAction:)] autorelease];
+	
+	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"player-overlay.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(songInfoToggle:)] autorelease];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPlayButtonImage) name:@"setPlayButtonImage" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPauseButtonImage) name:@"setPauseButtonImage" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setSongTitle) name:@"setSongTitle" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) name:@"initSongInfo" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createReflection) name:@"createReflection" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songInfoToggle:) name:@"hideSongInfo" object:nil];
+	
+	
+	// Setup landscape orientation if necessary
+	if (!IS_IPAD())
+	{
+		artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(310, 50, 170, 30)];
+		artistLabel.backgroundColor = [UIColor clearColor];
+		artistLabel.textColor = [UIColor whiteColor];
+		artistLabel.font = [UIFont boldSystemFontOfSize:24];
+		artistLabel.adjustsFontSizeToFitWidth = YES;
+		artistLabel.textAlignment = UITextAlignmentCenter;
+		[self.view addSubview:artistLabel];
+		[self.view sendSubviewToBack:artistLabel];
+		[artistLabel release];
+		
+		albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(310, 80, 170, 30)];
+		albumLabel.backgroundColor = [UIColor clearColor];
+		albumLabel.textColor = [UIColor whiteColor];
+		albumLabel.font = [UIFont systemFontOfSize:24];
+		albumLabel.adjustsFontSizeToFitWidth = YES;
+		albumLabel.textAlignment = UITextAlignmentCenter;
+		[self.view addSubview:albumLabel];
+		[self.view sendSubviewToBack:albumLabel];
+		[albumLabel release];
+		
+		titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(310, 110, 170, 30)];
+		titleLabel.backgroundColor = [UIColor clearColor];
+		titleLabel.textColor = [UIColor whiteColor];
+		titleLabel.font = [UIFont boldSystemFontOfSize:24];
+		titleLabel.adjustsFontSizeToFitWidth = YES;
+		titleLabel.textAlignment = UITextAlignmentCenter;
+		[self.view addSubview:titleLabel];
+		[self.view sendSubviewToBack:titleLabel];
+		[titleLabel	release];
+		
+		if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation))
+		{
+			coverArtImageView.frame = CGRectMake(0, 0, 300, 300);
+			prevButton.frame = CGRectMake(290, 184, 72, 60);
+			playButton.frame = CGRectMake(357.5, 184, 72, 60);
+			nextButton.frame = CGRectMake(420, 184, 72, 60);
+			volumeSlider.frame = CGRectMake(300, 244, 180, 55);
+			volumeView.frame = CGRectMake(0, 0, 180, 55);
+			//[volumeView sizeToFit];
+		}
+		else
+		{
+			artistLabel.hidden = YES;
+			albumLabel.hidden = YES;
+			titleLabel.hidden = YES;
+		}
+	}
+	
+	if (viewObjects.isJukebox)
+	{
+		//[viewObjects showLoadingScreen:self.view.superview blockInput:YES mainWindow:NO];
+		//[self performSelectorInBackground:@selector(loadJukeboxInfo) withObject:nil];
+		[musicControls jukeboxGetInfo];
+		
+		self.view.backgroundColor = viewObjects.jukeboxColor;
+	}
+	
+	[self viewDidLoad2];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+	[super viewWillAppear:animated];
+	
+	if (viewObjects.isJukebox)
+	{
+		//[viewObjects showLoadingScreen:self.view.superview blockInput:YES mainWindow:NO];
+		//[self performSelectorInBackground:@selector(loadJukeboxInfo) withObject:nil];
+		[musicControls jukeboxGetInfo];
+		
+		self.view.backgroundColor = viewObjects.jukeboxColor;
+	}
+	else 
+	{
+		self.view.backgroundColor = [UIColor blackColor]; 
+	}
+	
+}
+
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+	[super viewDidDisappear:animated];
+	
+	[[UIApplication sharedApplication] setStatusBarHidden:NO animated:NO];
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"hideSongInfoFast" object:nil];
+}
+
+- (void)viewDidUnload
+{
+	[super viewDidUnload];
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"setPlayButtonImage" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"setPauseButtonImage" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"setSongTitle" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"initSongInfo" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"createReflection" object:nil];
+}
+
+#pragma mark Rotation
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -122,6 +325,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[self setSongTitle];
 	}
 }
+
+#pragma mark Main
 
 - (void)setPlayButtonImage
 {		
@@ -245,6 +450,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			coverArtImageView.image = [UIImage imageNamed:@"default-album-art.png"];
 	}
 	
+	// Update the icon in top right
+	if (isFlipped)
+		[self updateBarButtonImage];
+	
 	// create the reflection image and assign it to the UIImageView
 	reflectionView.image = [self reflectedImage:coverArtImageView withHeight:reflectionHeight];
 	if (isFlipped)
@@ -285,201 +494,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[musicControls jukeboxSetVolume:jukeboxVolumeView.value];
 }
 
-- (void)viewDidLoad2
-{
-	//self.title = [musicControls.currentSongObject title];
-	[self setSongTitle];
-	
-	//musicControls.songUrl = nil;
-	musicControls.songUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], [musicControls.currentSongObject songId]]];
-	
-	[self initSongInfo];
-	
-	if (viewObjects.isJukebox)
-	{
-		CGRect frame = volumeSlider.bounds;
-		frame.size.height = volumeSlider.bounds.size.height / 2;
-		jukeboxVolumeView = [[[UISlider alloc] initWithFrame:frame] autorelease];
-		[jukeboxVolumeView addTarget:self action:@selector(jukeboxVolumeChanged:) forControlEvents:UIControlEventValueChanged];
-		jukeboxVolumeView.minimumValue = 0.0;
-		jukeboxVolumeView.maximumValue = 1.0;
-		jukeboxVolumeView.continuous = NO;
-		jukeboxVolumeView.value = musicControls.jukeboxGain;
-		[volumeSlider addSubview:jukeboxVolumeView];
-	}
-	else
-	{
-		volumeView = [[[MPVolumeView alloc] initWithFrame:volumeSlider.bounds] autorelease];
-		[volumeSlider addSubview:volumeView];
-		[volumeView sizeToFit];
-	}
-	
-	if (viewObjects.isJukebox)
-	{
-		if (musicControls.jukeboxIsPlaying)
-			[self setStopButtonImage];
-		else 
-			[self setPlayButtonImage];
-	}
-	else
-	{
-		if(musicControls.isNewSong)
-		{
-			[self setPlayButtonImage];
-		}
-		else
-		{
-			if([musicControls.streamer isPlaying])
-				[self setPauseButtonImage];
-			else
-				[self setPlayButtonImage];
-		}		
-	}
-		
-	if (UIDeviceOrientationIsPortrait([UIDevice currentDevice].orientation) && 
-		[[appDelegate.settingsDictionary objectForKey:@"autoPlayerInfoSetting"] isEqualToString:@"YES"])
-	{
-		[self songInfoToggle:nil];
-	}
-	
-	// determine the size of the reflection to create
-	reflectionHeight = coverArtImageView.bounds.size.height * kDefaultReflectionFraction;
-	[reflectionView newHeight:(float)reflectionHeight];
-	
-	// create the reflection image and assign it to the UIImageView
-	reflectionView.image = [self reflectedImage:coverArtImageView withHeight:reflectionHeight];
-	reflectionView.alpha = kDefaultReflectionOpacity;
-}
-
-- (void)viewDidLoad
-{
-	[super viewDidLoad];
-	
-	//[coverArtImageView.layer setCornerRadius:20];
-	
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	musicControls = [MusicControlsSingleton sharedInstance];
-	databaseControls = [DatabaseControlsSingleton sharedInstance];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	
-	isFlipped = NO;
-	
-	if (!IS_IPAD())
-		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(backAction:)] autorelease];
-	
-	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"player-overlay.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(songInfoToggle:)] autorelease];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPlayButtonImage) name:@"setPlayButtonImage" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPauseButtonImage) name:@"setPauseButtonImage" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setSongTitle) name:@"setSongTitle" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) name:@"initSongInfo" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createReflection) name:@"createReflection" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songInfoToggle:) name:@"hideSongInfo" object:nil];
-
-	
-	// Setup landscape orientation if necessary
-	if (!IS_IPAD())
-	{
-		artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(310, 50, 170, 30)];
-		artistLabel.backgroundColor = [UIColor clearColor];
-		artistLabel.textColor = [UIColor whiteColor];
-		artistLabel.font = [UIFont boldSystemFontOfSize:24];
-		artistLabel.adjustsFontSizeToFitWidth = YES;
-		artistLabel.textAlignment = UITextAlignmentCenter;
-		[self.view addSubview:artistLabel];
-		[self.view sendSubviewToBack:artistLabel];
-		[artistLabel release];
-		
-		albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(310, 80, 170, 30)];
-		albumLabel.backgroundColor = [UIColor clearColor];
-		albumLabel.textColor = [UIColor whiteColor];
-		albumLabel.font = [UIFont systemFontOfSize:24];
-		albumLabel.adjustsFontSizeToFitWidth = YES;
-		albumLabel.textAlignment = UITextAlignmentCenter;
-		[self.view addSubview:albumLabel];
-		[self.view sendSubviewToBack:albumLabel];
-		[albumLabel release];
-		
-		titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(310, 110, 170, 30)];
-		titleLabel.backgroundColor = [UIColor clearColor];
-		titleLabel.textColor = [UIColor whiteColor];
-		titleLabel.font = [UIFont boldSystemFontOfSize:24];
-		titleLabel.adjustsFontSizeToFitWidth = YES;
-		titleLabel.textAlignment = UITextAlignmentCenter;
-		[self.view addSubview:titleLabel];
-		[self.view sendSubviewToBack:titleLabel];
-		[titleLabel	release];
-		
-		if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation))
-		{
-			coverArtImageView.frame = CGRectMake(0, 0, 300, 300);
-			prevButton.frame = CGRectMake(290, 184, 72, 60);
-			playButton.frame = CGRectMake(357.5, 184, 72, 60);
-			nextButton.frame = CGRectMake(420, 184, 72, 60);
-			volumeSlider.frame = CGRectMake(300, 244, 180, 55);
-			volumeView.frame = CGRectMake(0, 0, 180, 55);
-			//[volumeView sizeToFit];
-		}
-		else
-		{
-			artistLabel.hidden = YES;
-			albumLabel.hidden = YES;
-			titleLabel.hidden = YES;
-		}
-	}
-	
-	if (viewObjects.isJukebox)
-	{
-		//[viewObjects showLoadingScreen:self.view.superview blockInput:YES mainWindow:NO];
-		//[self performSelectorInBackground:@selector(loadJukeboxInfo) withObject:nil];
-		[musicControls jukeboxGetInfo];
-		
-		self.view.backgroundColor = viewObjects.jukeboxColor;
-	}
-	
-	[self viewDidLoad2];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-	[super viewWillAppear:animated];
-	
-	if (viewObjects.isJukebox)
-	{
-		//[viewObjects showLoadingScreen:self.view.superview blockInput:YES mainWindow:NO];
-		//[self performSelectorInBackground:@selector(loadJukeboxInfo) withObject:nil];
-		[musicControls jukeboxGetInfo];
-		
-		self.view.backgroundColor = viewObjects.jukeboxColor;
-	}
-	else 
-	{
-		self.view.backgroundColor = [UIColor blackColor]; 
-	}
-
-}
-
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-	[super viewDidDisappear:animated];
-	
-	[[UIApplication sharedApplication] setStatusBarHidden:NO animated:NO];
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"hideSongInfoFast" object:nil];
-}
-
-- (void)viewDidUnload
-{
-	[super viewDidUnload];
-	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"setPlayButtonImage" object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"setPauseButtonImage" object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"setSongTitle" object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"initSongInfo" object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"createReflection" object:nil];
-}
-
-
 - (void)backAction:(id)sender
 {
 	NSArray *viewControllers = self.navigationController.viewControllers;
@@ -488,6 +502,32 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	UIViewController *backVC = [viewControllers objectAtIndex:(count - 2)];
 	
 	[self.navigationController popToViewController:backVC animated:YES];
+}
+
+- (void)updateBarButtonImage
+{
+	if (UIGraphicsBeginImageContextWithOptions != NULL)
+		UIGraphicsBeginImageContextWithOptions(CGSizeMake(30.0, 30.0), NO, 0.0);
+	else
+		UIGraphicsBeginImageContext(CGSizeMake(30.0, 30.0));
+	[coverArtImageView.image drawInRect:CGRectMake(0, 0,30.0, 30.0)];
+	UIImage *cover = UIGraphicsGetImageFromCurrentImageContext();
+	UIGraphicsEndImageContext();
+	
+	UIView *aView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0,34.0, 30.0)] autorelease];
+	aView.layer.cornerRadius = 4;
+	
+	UIImageView *coverView = [[[UIImageView alloc] initWithImage:cover] autorelease];
+	coverView.frame = CGRectMake(2, 0,30.0, 30.0);
+	//coverView.userInteractionEnabled = YES;
+	[aView addSubview:coverView];
+	
+	UIButton *action = [UIButton buttonWithType:UIButtonTypeCustom];
+	action.frame = coverView.frame;
+	[action addTarget:self action:@selector(songInfoToggle:) forControlEvents:UIControlEventTouchUpInside];
+	[aView addSubview:action];
+	
+	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:aView] autorelease];
 }
 
 - (IBAction)songInfoToggle:(id)sender
@@ -499,29 +539,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		PageControlViewController *pageControlViewController = [[PageControlViewController alloc] initWithNibName:@"PageControlViewController" bundle:nil];
 		pageControlViewController.view.frame = CGRectMake (0, 0, coverArtImageView.frame.size.width, coverArtImageView.frame.size.height);
 		
-		
-		if (UIGraphicsBeginImageContextWithOptions != NULL)
-			UIGraphicsBeginImageContextWithOptions(CGSizeMake(30.0, 30.0), NO, 0.0);
-		else
-			UIGraphicsBeginImageContext(CGSizeMake(30.0, 30.0));
-		[coverArtImageView.image drawInRect:CGRectMake(0, 0,30.0, 30.0)];
-		UIImage *cover = UIGraphicsGetImageFromCurrentImageContext();
-		UIGraphicsEndImageContext();
-		
-		UIView *aView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0,34.0, 30.0)] autorelease];
-		aView.layer.cornerRadius = 4;
-		
-		UIImageView *coverView = [[[UIImageView alloc] initWithImage:cover] autorelease];
-		coverView.frame = CGRectMake(2, 0,30.0, 30.0);
-		//coverView.userInteractionEnabled = YES;
-		[aView addSubview:coverView];
-		
-		UIButton *action = [UIButton buttonWithType:UIButtonTypeCustom];
-		action.frame = coverView.frame;
-		[action addTarget:self action:@selector(songInfoToggle:) forControlEvents:UIControlEventTouchUpInside];
-		[aView addSubview:action];
-		
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:aView] autorelease];
+		// Set the icon in the top right
+		[self updateBarButtonImage];
 		
 		// Flip the album art horizontally
 		coverArtImageView.transform = CGAffineTransformMakeScale(-1, 1);
@@ -593,14 +612,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	{
 		[musicControls prevSong];
 	}
-	[self initSongInfo];
 }
 
 - (IBAction)nextButtonPressed:(id)sender
 {
 	[musicControls nextSong];
-	
-	[self initSongInfo];
 }
 
 #pragma mark Image Reflection

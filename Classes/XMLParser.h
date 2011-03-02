@@ -33,6 +33,8 @@
 	NSMutableArray *artistsArray;
 	
 	ViewObjectsSingleton *viewObjects;
+	
+	NSMutableArray *loadedSongMD5s;
 }
 
 @property (nonatomic, retain) NSString *parseState;

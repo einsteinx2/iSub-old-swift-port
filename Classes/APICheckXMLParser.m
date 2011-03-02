@@ -9,6 +9,7 @@
 #import "APICheckXMLParser.h"
 #import "ViewObjectsSingleton.h"
 #import "iSubAppDelegate.h"
+#import "CustomUIAlertView.h"
 
 @implementation APICheckXMLParser
 
@@ -36,7 +37,7 @@
 {
 	if (!viewObjects.isSettingsShowing)
 	{
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:[NSString stringWithFormat:@"There was an error parsing the Jukebox XML response.\n\nError:%@", parseError.localizedDescription] delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:[NSString stringWithFormat:@"There was an error parsing the Jukebox XML response.\n\nError:%@", parseError.localizedDescription] delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 		[alert show];
 		[alert release];
 	}
@@ -53,7 +54,7 @@
 	else if ([elementName isEqualToString:@"subsonic-response"])
 	{
 		NSString *version = [attributeDict objectForKey:@"version"];
-		/*UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Version" message:version delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+		/*CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Version" message:version delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		[alert show];
 		[alert release];*/
 		

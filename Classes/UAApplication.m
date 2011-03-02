@@ -9,6 +9,7 @@
 #import "UAApplication.h"
 #import "MusicControlsSingleton.h"
 #import "ViewObjectsSingleton.h"
+#import "iSubAppDelegate.h"
  
 @implementation UAApplication
 

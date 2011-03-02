@@ -14,6 +14,7 @@
 #import "ViewObjectsSingleton.h"
 #import "Song.h"
 #import "ServerListViewController.h"
+#import "CustomUIAlertView.h"
 
 @implementation PlayingXMLParser
 
@@ -29,13 +30,13 @@
 
 - (void) subsonicErrorCode:(NSString *)errorCode message:(NSString *)message
 {
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:message delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
+	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	[alert show];
 	[alert release];
 }
 
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(CustomUIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
 	if(buttonIndex == 1)
 	{

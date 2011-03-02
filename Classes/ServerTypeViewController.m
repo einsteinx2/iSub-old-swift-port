@@ -9,10 +9,15 @@
 #import "ServerTypeViewController.h"
 #import "SubsonicServerEditViewController.h"
 #import "UbuntuServerEditViewController.h"
+#import "iSubAppDelegate.h"
 
 @implementation ServerTypeViewController
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation {
+-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
+{
+	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"])
+		return NO;
+	
     return YES;
 }
 

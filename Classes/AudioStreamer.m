@@ -282,6 +282,8 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 {
 	shouldInvalidateTweetTimer = NO;
 	tweetTimer = nil;
+	shouldInvalidateScrobbleTimer = NO;
+	scrobbleTimer = nil;
 	fileDownloadBytesRead = 0;
 	self.fileDownloadComplete = NO;
 	self.fileDownloadCurrentSize = 0;
@@ -473,8 +475,8 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 		}
 
 /*#ifdef TARGET_OS_IPHONE			
-		UIAlertView *alert =
-			[[[UIAlertView alloc]
+		CustomUIAlertView *alert =
+			[[[CustomUIAlertView alloc]
 				initWithTitle:NSLocalizedStringFromTable(@"Audio Error", @"Errors", nil)
 				message:NSLocalizedStringFromTable(@"Attempt to play streaming audio failed.", @"Errors", nil)
 				delegate:self
@@ -707,8 +709,8 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 										kCFBooleanTrue) == false)
 			{
 /*#ifdef TARGET_OS_IPHONE
-				UIAlertView *alert =
-				[[UIAlertView alloc]
+				CustomUIAlertView *alert =
+				[[CustomUIAlertView alloc]
 				 initWithTitle:NSLocalizedStringFromTable(@"File Error", @"Errors", nil)
 				 message:NSLocalizedStringFromTable(@"Unable to configure network read stream.", @"Errors", nil)
 				 delegate:self
@@ -771,8 +773,8 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 			CFRelease(stream);
 			stream = nil;
 /*#ifdef TARGET_OS_IPHONE
-			UIAlertView *alert =
-			[[UIAlertView alloc]
+			CustomUIAlertView *alert =
+			[[CustomUIAlertView alloc]
 			 initWithTitle:NSLocalizedStringFromTable(@"File Error", @"Errors", nil)
 			 message:NSLocalizedStringFromTable(@"Unable to configure network read stream.", @"Errors", nil)
 			 delegate:self
@@ -1043,7 +1045,26 @@ cleanup:
 	shouldInvalidateTweetTimer = YES;
 	tweetTimer = [[NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(tweetSong) userInfo:nil repeats:NO] retain];
 	
-	//NSLog(@"");
+	// Scrobbling timer
+	iSubAppDelegate *appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
+	MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
+	shouldInvalidateScrobbleTimer = YES;
+	NSTimeInterval scrobbleInterval = 30.0;
+	if (musicControls.currentSongObject.duration != nil)
+	{
+		double scrobblePercent = [[appDelegate.settingsDictionary objectForKey:@"scrobblePercentSetting"] doubleValue];
+		double duration = [musicControls.currentSongObject.duration doubleValue];
+		scrobbleInterval = scrobblePercent * duration;
+		NSLog(@"duration: %f    percent: %f    scrobbleInterval: %f", duration, scrobblePercent, scrobbleInterval);
+	}
+	scrobbleTimer = [[NSTimer scheduledTimerWithTimeInterval:scrobbleInterval target:self selector:@selector(scrobbleSong) userInfo:nil repeats:NO] retain];
+	
+	// If scrobbling is enabled, send "now playing" call
+	if ([[appDelegate.settingsDictionary objectForKey:@"enableScrobblingSetting"] isEqualToString:@"YES"])
+	{
+		MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
+		[musicControls scrobbleSong:musicControls.currentSongObject.songId isSubmission:NO];
+	}
 }
 
 
@@ -1076,6 +1097,19 @@ cleanup:
 		//NSLog(@"------------- not tweeting song because no engine or not enabled --------------");
 	}
 
+}
+
+- (void) scrobbleSong
+{
+	shouldInvalidateScrobbleTimer = NO;
+	scrobbleTimer = nil;
+	
+	iSubAppDelegate *appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
+	if ([[appDelegate.settingsDictionary objectForKey:@"enableScrobblingSetting"] isEqualToString:@"YES"])
+	{
+		MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
+		[musicControls scrobbleSong:musicControls.currentSongObject.songId isSubmission:YES];
+	}
 }
 
 
@@ -1294,6 +1328,11 @@ cleanup:
 	if (shouldInvalidateTweetTimer)
 	{
 		[tweetTimer invalidate];
+	}
+	
+	if (shouldInvalidateScrobbleTimer)
+	{
+		[scrobbleTimer invalidate];
 	}
 	
 	@synchronized(self)

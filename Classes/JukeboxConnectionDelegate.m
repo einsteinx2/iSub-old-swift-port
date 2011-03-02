@@ -11,6 +11,7 @@
 #import "MusicControlsSingleton.h"
 #import "DatabaseControlsSingleton.h"
 #import "BBSimpleConnectionQueue.h"
+#import "CustomUIAlertView.h"
 
 @implementation JukeboxConnectionDelegate
 
@@ -63,7 +64,7 @@
 	//{
 		[musicControls.connectionQueue connectionFinished:theConnection];
 	
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error controlling the Jukebox.\n\nError %i: %@", [error code], [error localizedDescription]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error controlling the Jukebox.\n\nError %i: %@", [error code], [error localizedDescription]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
 		

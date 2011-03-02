@@ -40,6 +40,8 @@
 #import "Server.h"
 #import "UIDevice-Hardware.h"
 #import "IntroViewController.h"
+#import "CustomUIAlertView.h"
+#import "KeychainItemWrapper.h"
 
 @implementation iSubAppDelegate
 
@@ -94,9 +96,10 @@
 		[MKStoreManager setDelegate:self];
 	}
 	
-	// Hack for empty store on first access
-	//NSArray *items = [MKStoreManager sharedManager].purchasableObjects;
-	//[items count];
+	NSLog(@"is kFeaturePlaylistsId enabled: %i", [MKStoreManager isFeaturePurchased:kFeaturePlaylistsId]);
+	NSLog(@"is kFeatureJukeboxId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureJukeboxId]);
+	NSLog(@"is kFeatureCacheId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureCacheId]);
+	NSLog(@"is kFeatureAllId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureAllId]);
 	
 	//
 	// Uncomment to redirect the console output to a log file
@@ -192,6 +195,16 @@
 	{
 		self.settingsDictionary = [NSMutableDictionary dictionaryWithDictionary:[defaults objectForKey:@"settingsDictionary"]];
 		
+		// Add the scrobble and popup settings if not there - 3.0.1
+		if ([settingsDictionary objectForKey:@"scrobblePercentSetting"] == nil)
+		{
+			NSNumber *percent = [NSNumber numberWithFloat:0.5];
+			[settingsDictionary setObject:percent forKey:@"scrobblePercentSetting"];
+			[settingsDictionary setObject:@"NO" forKey:@"enableScrobblingSetting"];
+			[settingsDictionary setObject:@"NO" forKey:@"disablePopupsSetting"];
+			[settingsDictionary setObject:@"NO" forKey:@"lockRotationSetting"];
+		}
+		
 		// Add the new player overlay setting if not there - 3.0
 		if ([settingsDictionary objectForKey:@"autoPlayerInfoSetting"] == nil)
 		{
@@ -199,9 +212,6 @@
 			[settingsDictionary setObject:@"NO" forKey:@"autoPlayerInfoSetting"];
 			[settingsDictionary setObject:@"NO" forKey:@"autoReloadArtistsSetting"];
 			[settingsDictionary setObject:@"NO" forKey:@"enableSongsTabSetting"];
-			[defaults setObject:settingsDictionary forKey:@"settingsDictionary"];
-			[defaults synchronize];
-			
 		}
 		
 		// Add the new settings if they aren't there - 2.2.3
@@ -212,8 +222,6 @@
 			[settingsDictionary setObject:@"YES" forKey:@"enableNextSongCacheSetting"];
 			[settingsDictionary setObject:[NSNumber numberWithInt:0] forKey:@"cachingTypeSetting"];
 			[settingsDictionary setObject:[NSNumber numberWithUnsignedLongLong:1073741824] forKey:@"maxCacheSize"];
-			[defaults setObject:settingsDictionary forKey:@"settingsDictionary"];
-			[defaults synchronize];
 		}
 		
 		// Add the new Wifi/3G bitrate settings if not there
@@ -224,8 +232,6 @@
 			[settingsDictionary setObject:setting forKey:@"maxBitrateWifiSetting"];
 			[settingsDictionary setObject:setting forKey:@"maxBitrate3GSetting"];
 			[settingsDictionary removeObjectForKey:@"maxBitrateSetting"];
-			[defaults setObject:settingsDictionary forKey:@"settingsDictionary"];
-			[defaults synchronize];
 		}
 		
 		// Add the lyrics setting if it's not there
@@ -233,8 +239,6 @@
 		{
 			NSLog(@"Adding the enable lyrics setting");
 			[settingsDictionary setObject:@"YES" forKey:@"lyricsEnabledSetting"];
-			[defaults setObject:settingsDictionary forKey:@"settingsDictionary"];
-			[defaults synchronize];
 		}
 	}
 	else
@@ -257,9 +261,11 @@
 		[settingsDictionary setObject:@"NO" forKey:@"twitterEnabledSetting"];
 		[settingsDictionary setObject:@"YES" forKey:@"lyricsEnabledSetting"];
 		[settingsDictionary setObject:@"NO" forKey:@"enableSongsTabSetting"];
-		[defaults setObject:settingsDictionary forKey:@"settingsDictionary"];
-		[defaults synchronize];
 	}
+	
+	// Save and sync the defaults
+	[defaults setObject:settingsDictionary forKey:@"settingsDictionary"];
+	[defaults synchronize];
 	
 	// Handle In App Purchase Settings
 	if (viewObjects.isCacheUnlocked == NO)
@@ -271,7 +277,7 @@
 	{
 		viewObjects.isOfflineMode = YES;
 		
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"Offline mode switch on, entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Offline mode switch on, entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
 	}
@@ -279,7 +285,7 @@
 	{
 		viewObjects.isOfflineMode = YES;
 		
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"No network detected, entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"No network detected, entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
 	}
@@ -363,13 +369,13 @@
 		
 		if (viewObjects.isOfflineMode)
 		{
-			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome!" message:@"Looks like this is your first time using iSub or you haven't set up your Subsonic account info yet.\n\nYou'll need an internet connection to watch the intro video and use the included demo account." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Welcome!" message:@"Looks like this is your first time using iSub or you haven't set up your Subsonic account info yet.\n\nYou'll need an internet connection to watch the intro video and use the included demo account." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 			[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 			[alert release];
 		}
 		else
 		{
-			/*UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome!" message:@"Looks like this is your first time using iSub or you haven't set up your Subsonic account info yet.\n\nGet the hang of things with this test account graciously provided by the developer of Subsonic and then tap the gear on the top left of the screen to access the settings panel when you're ready!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+			/*CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Welcome!" message:@"Looks like this is your first time using iSub or you haven't set up your Subsonic account info yet.\n\nGet the hang of things with this test account graciously provided by the developer of Subsonic and then tap the gear on the top left of the screen to access the settings panel when you're ready!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 			[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 			[alert release];*/
 			
@@ -388,6 +394,11 @@
 			
 			showIntro = YES;
 		}
+		
+		// Setup the HTTP Basic Auth credentials
+		//NSURLCredential *credential = [NSURLCredential credentialWithUser:self.defaultUserName password:self.defaultPassword persistence:NSURLCredentialPersistenceForSession];
+		//NSURLProtectionSpace *protectionSpace = [[NSURLProtectionSpace alloc] initWithHost:@"example.com" port:0 protocol:@"http" realm:nil authenticationMethod:NSURLAuthenticationMethodHTTPBasic];
+		
 		
 		[self appInit2];
 		[self adjustCacheSize];
@@ -421,7 +432,7 @@
 	
 	if(!isURLValid && !viewObjects.isOfflineMode)
 	{
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\nError code %i:\n%@", error.code, [ASIHTTPRequest errorCodeToEnglish:error.code]] delegate:self cancelButtonTitle:@"Retry" otherButtonTitles:@"Settings", nil];
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\nError code %i:\n%@", error.code, [ASIHTTPRequest errorCodeToEnglish:error.code]] delegate:self cancelButtonTitle:@"Retry" otherButtonTitles:@"Settings", nil];
 		//[alert show];
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
@@ -506,7 +517,7 @@
 	if ([settingsDictionary objectForKey:@"checkUpdatesSetting"] == nil)
 	{
 		// Ask to check for updates if haven't asked yet
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Update Alerts" message:@"Would you like iSub to notify you when app updates are available?\n\nYou can change this setting at any time from the settings menu." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Update Alerts" message:@"Would you like iSub to notify you when app updates are available?\n\nYou can change this setting at any time from the settings menu." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
 		[alert show];
 		[alert release];
 	}
@@ -574,11 +585,11 @@
 {
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	
-	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:@"http://isub.einsteinx2.com/update.xml"]];
+	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:@"http://isubapp.com/update.xml"]];
 	[request startSynchronous];
 	if ([request error])
 	{
-		/*UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"There was an error checking for app updates." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		/*CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error checking for app updates." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];*/
 		
@@ -586,6 +597,7 @@
 	}
 	else
 	{
+		NSLog(@"%@", [[[NSString alloc] initWithData:[request responseData] encoding:NSUTF8StringEncoding] autorelease]);
 		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:[request responseData]];
 		UpdateXMLParser *parser = [(UpdateXMLParser*) [UpdateXMLParser alloc] initXMLParser];
 		[xmlParser setDelegate:parser];
@@ -821,7 +833,7 @@
 {
 	/*isOfflineMode = YES;
 	
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"No network detected, entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"No network detected, entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 	[alert show];
 	[alert release];
 	
@@ -834,7 +846,7 @@
 	self.currentTabBarController = offlineTabBarController;
 	[self.window addSubview:[offlineTabBarController view]];*/
 
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"No network detected, would you like to enter offline mode? Any currently playing music will stop.\n\nIf this is just temporary connection loss, select No." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"No network detected, would you like to enter offline mode? Any currently playing music will stop.\n\nIf this is just temporary connection loss, select No." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
 	[alert show];
 	[alert release];
 }
@@ -845,7 +857,7 @@
 	if (!viewObjects.isOnlineModeAlertShowing)
 	{
 		viewObjects.isOnlineModeAlertShowing = YES;
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"Network detected, would you like to enter online mode? Any currently playing music will stop." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Network detected, would you like to enter online mode? Any currently playing music will stop." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
 		[alert show];
 		[alert release];
 	}
@@ -946,7 +958,7 @@
 }
 
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(CustomUIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
 	if ([alertView.title isEqualToString:@"Subsonic Error"])
 	{
@@ -1215,20 +1227,24 @@
 
 - (void) checkAPIVersion
 {
-	APICheckConnectionDelegate *conDelegate = [[APICheckConnectionDelegate alloc] init];
-	
-	NSString *urlString = [self getBaseUrl:@"ping.view"];
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
-	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:conDelegate];
-	if (!connection)
+	// Only perform check in online mode
+	if (!viewObjects.isOfflineMode)
 	{
-		// Inform the user that the connection failed.
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Version Check Error" message:@"There was an error checking the server version.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-		[alert release];
+		APICheckConnectionDelegate *conDelegate = [[APICheckConnectionDelegate alloc] init];
+		
+		NSString *urlString = [self getBaseUrl:@"ping.view"];
+		NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+		NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:conDelegate];
+		if (!connection)
+		{
+			// Inform the user that the connection failed.
+			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Version Check Error" message:@"There was an error checking the server version.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+			[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+			[alert release];
+		}
+		
+		[conDelegate release];
 	}
-	
-	[conDelegate release];
 }
 
 #pragma mark -
@@ -1306,7 +1322,7 @@
 
 /*- (void)productFetchComplete
  {
- UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Store" message:@"Product fetch complete" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+ CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Store" message:@"Product fetch complete" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
  [alert show];
  [alert release];
  }*/
@@ -1325,14 +1341,14 @@
 	else
 		message = @"";
 	
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Purchase Successful!" message:message delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Purchase Successful!" message:message delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
 	[alert release];
 }
 
 - (void)transactionCanceled
 {
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Store" message:@"Transaction canceled. Try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Store" message:@"Transaction canceled. Try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
 	[alert release];
 }

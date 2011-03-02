@@ -45,12 +45,15 @@
 // use this only to "enable/disable your UI or hide your activity indicator view etc.,
 @end
 
+@class KeychainItemWrapper;
 @interface MKStoreManager : NSObject<SKProductsRequestDelegate> {
 
 	NSMutableArray *_purchasableObjects;
 	MKStoreObserver *_storeObserver;
 	
 	BOOL isProductsAvailable;
+	
+	KeychainItemWrapper *keychainWrapper;
 }
 
 @property (nonatomic, retain) NSMutableArray *purchasableObjects;

@@ -30,12 +30,17 @@
 #import "SA_OAuthTwitterEngine.h"
 
 #import "CustomUITableView.h"
+#import "CustomUIAlertView.h"
 
 @implementation AllAlbumsViewController
 
 @synthesize headerView, sectionInfo;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation {
+-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
+{
+	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"])
+		return NO;
+	
     return YES;
 }
 
@@ -214,7 +219,7 @@ static NSInteger order (id a, id b, void* context)
 				[request startSynchronous];
 				if ([request error])
 				{
-					UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"There was an error grabbing the album list." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+					CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error grabbing the album list." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 					[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 					[alert release];
 				}
@@ -420,13 +425,13 @@ static NSInteger order (id a, id b, void* context)
 		{
 			if(viewObjects.listOfArtists == nil)
 			{
-				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"You must load the Folders tab first" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+				CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"You must load the Folders tab first" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 				[alert show];
 				[alert release];
 			}
 			else if (viewObjects.isSongsLoading)
 			{
-				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please Wait" message:@"You cannot reload the Albums tab while the Songs tab is loading" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+				CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Please Wait" message:@"You cannot reload the Albums tab while the Songs tab is loading" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 				[alert show];
 				[alert release];
 			}
@@ -434,13 +439,13 @@ static NSInteger order (id a, id b, void* context)
 			{
 				if ([[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllAlbumsLoading", appDelegate.defaultUrl]] isEqualToString:@"YES"])
 				{
-					UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Resume Load?" message:@"If you've reloaded the Folders tab since this load started you should choose 'Restart Load'.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Restart Load", @"Resume Load", nil];
+					CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Resume Load?" message:@"If you've reloaded the Folders tab since this load started you should choose 'Restart Load'.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Restart Load", @"Resume Load", nil];
 					[alert show];
 					[alert release];
 				}
 				else
 				{
-					UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Load?" message:@"This could take a while if you have a big collection.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection.\n\nNote: If you've added new artists, you should reload the Folders tab first." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+					CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Load?" message:@"This could take a while if you have a big collection.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection.\n\nNote: If you've added new artists, you should reload the Folders tab first." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
 					[alert show];
 					[alert release];
 				}
@@ -512,20 +517,20 @@ static NSInteger order (id a, id b, void* context)
 	//if (!appDelegate.isArtistsLoading && !appDelegate.isSongsLoading && [[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllSongsLoading", appDelegate.defaultUrl]] isEqualToString:@"NO"])
 	if (!viewObjects.isArtistsLoading && !viewObjects.isSongsLoading)
 	{
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Reload?" message:@"This could take a while if you have a big collection.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection.\n\nNote: If you've added new artists, you should reload the Folders tab first." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Reload?" message:@"This could take a while if you have a big collection.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection.\n\nNote: If you've added new artists, you should reload the Folders tab first." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
 		[alert show];
 		[alert release];
 	}
 	else
 	{
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please Wait" message:@"You cannot reload the Albums tab while the Folders or Songs tabs are loading" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Please Wait" message:@"You cannot reload the Albums tab while the Folders or Songs tabs are loading" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
 		[alert release];
 	}	
 }
 
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(CustomUIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1)
 	{

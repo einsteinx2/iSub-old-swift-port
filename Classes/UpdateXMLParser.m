@@ -7,6 +7,7 @@
 //
 
 #import "UpdateXMLParser.h"
+#import "CustomUIAlertView.h"
 
 
 @implementation UpdateXMLParser
@@ -22,18 +23,20 @@
 }
 
 
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex 
+-(void)alertView:(CustomUIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex 
 {
 	if(buttonIndex == 1)
 	{
+		//http://itunes.apple.com/us/app/isub-music-streamer/id362920532?mt=8&ls=1
 		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms://itunes.com/apps/isubmusicstreamer"]];
+		//[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftwareUpdate?id=id362920532"]];
 	}
 }
 
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
-	/*UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"There was an error parsing the XML response. Maybe you forgot to set the right port for your server?" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
+	/*CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error parsing the XML response. Maybe you forgot to set the right port for your server?" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	[alert show];
 	[alert release];
 	[self retain];
@@ -48,8 +51,8 @@
 	NSString *title = [NSString stringWithFormat:@"Free Update %@ Available", newVersion];
 	NSString *finalMessage = [message stringByReplacingOccurrencesOfString:@"\\n" withString:@"\n"];
 	
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:finalMessage delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles:@"App Store", nil];
-	[alert show];
+	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:title message:finalMessage delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles:@"App Store", nil];
+	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 	[alert release];
 	[self retain];
 }
@@ -71,28 +74,62 @@
 		NSArray *currentVersionSplit = [currentVersion componentsSeparatedByString:@"."];
 		NSArray *newVersionSplit = [newVersion componentsSeparatedByString:@"."];
 		
-		if ([[newVersionSplit objectAtIndex:0] intValue] > [[currentVersionSplit objectAtIndex:0] intValue])
+		NSMutableArray *currentVersionPadded = [NSMutableArray arrayWithArray:currentVersionSplit];
+		NSMutableArray *newVersionPadded = [NSMutableArray arrayWithArray:newVersionSplit];
+		
+		if ([currentVersionPadded count] < 3)
 		{
-			// Update is available
-			[self showAlert];
-		}
-		else if ([[newVersionSplit objectAtIndex:0] intValue] == [[currentVersionSplit objectAtIndex:0] intValue])
-		{
-			if ([[newVersionSplit objectAtIndex:1] intValue] > [[currentVersionSplit objectAtIndex:1] intValue])
+			for (int i = [currentVersionPadded count]; i < 3; i++)
 			{
-				// Update is available
+				[currentVersionPadded addObject:@"0"];
+			}
+		}
+		
+		if ([newVersionPadded count] < 3)
+		{
+			for (int i = [newVersionPadded count]; i < 3; i++)
+			{
+				[newVersionPadded addObject:@"0"];
+			}
+		}
+		
+		NSLog(@"currentVersionSplit: %@", currentVersionSplit);
+		NSLog(@"newVersionSplit: %@", newVersionSplit);
+		NSLog(@"currentVersionPadded: %@", currentVersionPadded);
+		NSLog(@"newVersionPadded: %@", newVersionPadded);
+		
+		
+		@try 
+		{
+			if (currentVersionSplit == nil || newVersionSplit == nil || [currentVersionSplit count] == 0 || [newVersionSplit count] == 0)
+				return;
+			
+			if ([[newVersionPadded objectAtIndex:0] intValue] > [[currentVersionPadded objectAtIndex:0] intValue])
+			{
+				// Major version number is bigger, update is available
 				[self showAlert];
 			}
-			else if ([[newVersionSplit objectAtIndex:1] intValue] == [[currentVersionSplit objectAtIndex:1] intValue])
+			else if ([[newVersionPadded objectAtIndex:0] intValue] == [[currentVersionPadded objectAtIndex:0] intValue])
 			{
-				if ([[newVersionSplit objectAtIndex:2] intValue] > [[currentVersionSplit objectAtIndex:2] intValue])
+				if ([[newVersionPadded objectAtIndex:1] intValue] > [[currentVersionPadded objectAtIndex:1] intValue])
 				{
 					// Update is available
 					[self showAlert];
 				}
+				else if ([[newVersionPadded objectAtIndex:1] intValue] == [[currentVersionPadded objectAtIndex:1] intValue])
+				{
+					if ([[newVersionPadded objectAtIndex:2] intValue] > [[currentVersionPadded objectAtIndex:2] intValue])
+					{
+						// Update is available
+						[self showAlert];
+					}				
+				}
 			}
 		}
-		
+		@catch (NSException *exception) 
+		{
+			NSLog(@"Range exception checking update version - %@: %@", [exception name], [exception reason]);
+		}
 	}
 }
 

@@ -22,6 +22,7 @@
 #import "FMDatabaseAdditions.h"
 #import "ViewObjectsSingleton.h"
 #import "LoadingScreen.h"
+#import "CustomUIAlertView.h"
 
 @implementation XMLParser
 
@@ -42,6 +43,8 @@
 		
 		listOfAlbums = [[NSMutableArray alloc] init];
 		listOfSongs = [[NSMutableArray alloc] init];
+		
+		loadedSongMD5s = [[NSMutableArray alloc] init];
 	}
 
 	return self;
@@ -76,7 +79,7 @@
 	}
 	else
 	{
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:[NSString stringWithFormat:@"An error occured reading the response from Subsonic.\n\nIf you are loading the artist list, this can mean the server URL is wrong\n\nError: %@", parseError.localizedDescription] delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:[NSString stringWithFormat:@"An error occured reading the response from Subsonic.\n\nIf you are loading the artist list, this can mean the server URL is wrong\n\nError: %@", parseError.localizedDescription] delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 		[alert show];
 		[alert release];
 	}
@@ -161,11 +164,6 @@
 			// Set the artist name and id
 			viewObjects.allAlbumsCurrentArtistName = nil; viewObjects.allAlbumsCurrentArtistName = [attributeDict objectForKey:@"name"];
 			viewObjects.allAlbumsCurrentArtistId = nil; viewObjects.allAlbumsCurrentArtistId = [attributeDict objectForKey:@"id"];
-			
-			/*[databaseControls.albumListCacheDb beginTransaction];
-			[databaseControls.albumListCacheDb executeUpdate:@"DELETE FROM albumsCache WHERE folderId = ?", [NSString md5:viewObjects.allAlbumsCurrentArtistId]];
-			[databaseControls.albumListCacheDb executeUpdate:@"DELETE FROM songsCache WHERE folderId = ?", [NSString md5:viewObjects.allAlbumsCurrentArtistId]];
-			[databaseControls.albumListCacheDb commit];*/
 		}
 		else if([elementName isEqualToString:@"child"]) 
 		{
@@ -179,31 +177,12 @@
 					[databaseControls insertAlbum:anAlbum intoTable:@"allAlbumsTemp" inDatabase:databaseControls.allAlbumsDb];
 				}
 				
-				/*//Add album object to lookup dictionary and list array for caching
-				if (![anAlbum.title isEqualToString:@".AppleDouble"])
-				{
-					//[viewObjects.allAlbumsListOfAlbums addObject:anAlbum];
-					[databaseControls insertAlbumIntoFolderCache:anAlbum forId:viewObjects.allAlbumsCurrentArtistId];
-				}*/
-				
 				// Update the loading screen message
 				viewObjects.allAlbumsLoadingProgress++;
 				[self performSelectorOnMainThread:@selector(updateMessage) withObject:nil waitUntilDone:NO];
 				
 				[anAlbum release];
 			}
-			/*else
-			{
-				Song *aSong = [[Song alloc] initWithAttributeDict:attributeDict];
-				
-				//Add song object to lookup dictionary
-				if (aSong.path)
-				{
-					[databaseControls insertSongIntoFolderCache:aSong forId:viewObjects.allAlbumsCurrentArtistId];
-				}
-				
-				[aSong release];
-			}*/
 		}		
 	}		
 	else if( [parseState isEqualToString: @"albums"] )
@@ -306,6 +285,8 @@
 	[listOfArtists release];
 	[listOfAlbums release];
 	[listOfSongs release];
+	
+	[loadedSongMD5s release];
 	
 	[super dealloc];
 }

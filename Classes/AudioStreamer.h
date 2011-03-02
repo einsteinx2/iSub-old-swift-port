@@ -135,6 +135,10 @@ extern NSString * const ASStatusChangedNotification;
 	// The twitter post timer
 	BOOL shouldInvalidateTweetTimer;
 	NSTimer *tweetTimer;
+	
+	// The scrobbling timer
+	BOOL shouldInvalidateScrobbleTimer;
+	NSTimer *scrobbleTimer;
 }
 
 @property AudioStreamerErrorCode errorCode;

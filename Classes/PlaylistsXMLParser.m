@@ -16,6 +16,7 @@
 #import "Song.h"
 #import "ServerListViewController.h"
 #import "NSString+md5.h"
+#import "CustomUIAlertView.h"
 
 @implementation PlaylistsXMLParser
 
@@ -32,7 +33,7 @@
 }
 
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(CustomUIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
 	if(buttonIndex == 1)
 	{

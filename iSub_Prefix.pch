@@ -28,7 +28,7 @@
 
 
 #ifdef DEBUG
-#define BETA_VERSION @" GM"
+#define BETA_VERSION @" beta 1"
 #else
 #define BETA_VERSION @""
 #endif
