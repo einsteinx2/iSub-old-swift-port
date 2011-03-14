@@ -22,7 +22,7 @@
 #import "PlaylistSongsViewController.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString+md5.h"
+#import "NSString-md5.h"
 #import "Song.h"
 #import "ASIHTTPRequest.h"
 #import "StoreViewController.h"
@@ -41,7 +41,8 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"])
+	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] 
+		&& inOrientation != UIDeviceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -746,7 +747,7 @@
 				savePlaylistLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
 				playlistCountLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
 				
-				CustomUIAlertView *myAlertView = [[CustomUIAlertView alloc] initWithTitle:@"Playlist Name:" message:@"      \n      " delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
+				UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Playlist Name:" message:@"      \n      " delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
 				myAlertView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
 				playlistNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 22.0)];
 				//playlistNameTextField.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;

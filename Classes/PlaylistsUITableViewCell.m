@@ -13,7 +13,7 @@
 #import "DatabaseControlsSingleton.h"
 #import "PlaylistsXMLParser.h"
 #import "CellOverlay.h"
-#import "NSString+md5.h"
+#import "NSString-md5.h"
 
 @implementation PlaylistsUITableViewCell
 

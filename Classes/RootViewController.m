@@ -18,7 +18,7 @@
 #import "Artist.h"
 #import "LoadingScreen.h"
 #import "ArtistUITableViewCell.h"
-#import "NSString+md5.h"
+#import "NSString-md5.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 
@@ -34,8 +34,11 @@
 #import "UIView-tools.h"
 #import "CustomUIAlertView.h"
 
+#import "EGORefreshTableHeaderView.h"
+
 @interface RootViewController (Private)
 
+- (void)dataSourceDidFinishLoadingNewData;
 - (void)addCount;
 
 @end
@@ -46,9 +49,12 @@
 @synthesize copyListOfArtists;
 @synthesize isSearching;
 
+@synthesize reloading=_reloading;
+
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"])
+	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] 
+		&& inOrientation != UIDeviceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -84,12 +90,18 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doneSearching_Clicked:) name:@"endSearch" object:searchOverlayView];
 	
-	// Add the table fade
+	// Add the pull to refresh view
+	refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
+	refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
+	[self.tableView addSubview:refreshHeaderView];
+	[refreshHeaderView release];
+	
+	/*// Add the table fade
 	UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
 	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
 	fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	[self.tableView addSubview:fadeTop];
-	[fadeTop release];
+	[fadeTop release];*/
 	
 	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
@@ -685,6 +697,8 @@
 	
 	// Hide the loading screen
 	[allArtistsLoadingScreen hide]; [allArtistsLoadingScreen release];
+	
+	[self dataSourceDidFinishLoadingNewData];
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
@@ -719,6 +733,54 @@
 	
 	[theConnection release];
 	[receivedData release];
+	
+	[self dataSourceDidFinishLoadingNewData];
+}
+
+#pragma mark -
+#pragma mark Pull to refresh methods
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{	
+	if (scrollView.isDragging) 
+	{
+		if (refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !_reloading) 
+		{
+			[refreshHeaderView setState:EGOOPullRefreshNormal];
+		} 
+		else if (refreshHeaderView.state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !_reloading) 
+		{
+			[refreshHeaderView setState:EGOOPullRefreshPulling];
+		}
+	}
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+	
+	if (scrollView.contentOffset.y <= - 65.0f && !_reloading) 
+	{
+		_reloading = YES;
+		//[self reloadAction:nil];
+		[self loadData];
+		[refreshHeaderView setState:EGOOPullRefreshLoading];
+		[UIView beginAnimations:nil context:NULL];
+		[UIView setAnimationDuration:0.2];
+		self.tableView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
+		[UIView commitAnimations];
+	}
+}
+
+- (void)dataSourceDidFinishLoadingNewData
+{
+	_reloading = NO;
+	
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:.3];
+	[self.tableView setContentInset:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
+	[UIView commitAnimations];
+	
+	[refreshHeaderView setState:EGOOPullRefreshNormal];
 }
 
 @end

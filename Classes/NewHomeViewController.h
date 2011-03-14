@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton, AsynchronousImageView;
 
 @interface NewHomeViewController : UIViewController 
 {
@@ -27,6 +27,19 @@
 	
 	BOOL isSearch;
 	NSMutableData *receivedData;
+	
+	IBOutlet UILabel *quickLabel;
+	IBOutlet UILabel *shuffleLabel;
+	IBOutlet UILabel *jukeboxLabel;
+	IBOutlet UILabel *settingsLabel;
+	IBOutlet UILabel *chatLabel;
+	IBOutlet UILabel *playerLabel;
+	
+	UIView *coverArtBorder;
+	AsynchronousImageView *coverArtView;
+	UILabel *artistLabel;
+	UILabel *albumLabel;
+	UILabel *songLabel;
 }
 
 - (IBAction)quickAlbums;
@@ -35,5 +48,7 @@
 - (IBAction)player;
 - (IBAction)jukebox;
 - (IBAction)chat;
+
+- (void)initSongInfo;
 
 @end

@@ -11,7 +11,7 @@
 #import "MusicControlsSingleton.h"
 #import "DatabaseControlsSingleton.h"
 #import "Song.h"
-#import "NSString+md5.h"
+#import "NSString-md5.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "NSURLConnectionDelegateQueueArtwork.h"

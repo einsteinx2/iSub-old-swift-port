@@ -37,7 +37,7 @@
 {
 	if (!viewObjects.isSettingsShowing)
 	{
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:[NSString stringWithFormat:@"There was an error parsing the Jukebox XML response.\n\nError:%@", parseError.localizedDescription] delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:[NSString stringWithFormat:@"There was an error parsing the API check XML response.\n\nError:%@", parseError.localizedDescription] delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 		[alert show];
 		[alert release];
 	}

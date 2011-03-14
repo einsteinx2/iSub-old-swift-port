@@ -9,7 +9,7 @@
 #import "ModalAlbumArtViewController.h"
 #import "AsynchronousImageView.h"
 #import "DatabaseControlsSingleton.h"
-#import "NSString+md5.h"
+#import "NSString-md5.h"
 #import "iSubAppDelegate.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"

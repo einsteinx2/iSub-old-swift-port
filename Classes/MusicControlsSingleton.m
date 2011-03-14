@@ -13,7 +13,7 @@
 #import "ASIHTTPRequest.h"
 #import "Song.h"
 #import "AudioStreamer.h"
-#import "NSString+md5.h"
+#import "NSString-md5.h"
 #import "CFNetworkRequests.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"

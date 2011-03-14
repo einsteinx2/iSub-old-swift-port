@@ -16,7 +16,7 @@
 #import "Song.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString+md5.h"
+#import "NSString-md5.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIView-tools.h"
 #import "CustomUIAlertView.h"

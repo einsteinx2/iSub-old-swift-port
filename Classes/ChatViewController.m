@@ -20,7 +20,7 @@
 #import "Song.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString+md5.h"
+#import "NSString-md5.h"
 #import "ASIHTTPRequest.h"
 #import "EGORefreshTableHeaderView.h"
 #import "NSString-rfcEncode.h"
@@ -42,7 +42,8 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"])
+	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] 
+		&& inOrientation != UIDeviceOrientationPortrait) 
 		return NO;
 	
     return YES;

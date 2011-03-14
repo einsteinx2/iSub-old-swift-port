@@ -1,5 +1,5 @@
 //
-//  NSString+hex.h
+//  NSString-hex.h
 //  iSub
 //
 //  Created by Ben Baron on 10/20/10.
@@ -11,5 +11,8 @@
 
 	+ (NSString *) stringFromHex:(NSString *)str;
 	+ (NSString *) stringToHex:(NSString *)str;
+
+	- (NSString *) fromHex;
+	- (NSString *) toHex;
 
 @end

@@ -19,7 +19,7 @@
 #import "Song.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString+md5.h"
+#import "NSString-md5.h"
 #import "AsynchronousImageViewCached.h"
 
 @implementation GenresAlbumViewController
@@ -28,7 +28,8 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"])
+	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] 
+		&& inOrientation != UIDeviceOrientationPortrait)
 		return NO;
 	
     return YES;

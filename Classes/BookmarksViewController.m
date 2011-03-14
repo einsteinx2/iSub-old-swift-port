@@ -19,7 +19,7 @@
 #import "AudioStreamer.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString+md5.h"
+#import "NSString-md5.h"
 #import "CustomUIAlertView.h"
 
 @implementation BookmarksViewController
@@ -29,7 +29,8 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"])
+	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] 
+		&& inOrientation != UIDeviceOrientationPortrait)
 		return NO;
 	
     return YES;

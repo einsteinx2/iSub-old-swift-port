@@ -23,7 +23,7 @@
 #import "Artist.h"
 #import "Album.h"
 #import "Song.h"
-#import "NSString+md5.h"
+#import "NSString-md5.h"
 #import "AsynchronousImageViewCached.h"
 #import "AlbumViewController.h"
 #import "UITableViewCell-overlay.h"
@@ -41,7 +41,8 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"])
+	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] 
+		&& inOrientation != UIDeviceOrientationPortrait)
 		return NO;
 	
     return YES;

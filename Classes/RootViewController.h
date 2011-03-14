@@ -6,7 +6,7 @@
 //  Copyright Ben Baron 2010. All rights reserved.
 //
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton, SearchOverlayViewController, LoadingScreen, Artist; //, EGORefreshTableHeaderView;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton, SearchOverlayViewController, LoadingScreen, Artist, EGORefreshTableHeaderView;
 
 @interface RootViewController : UITableViewController <UISearchBarDelegate> 
 {
@@ -37,13 +37,12 @@
 	NSMutableArray *copyListOfArtists;
 	
 	NSMutableData *receivedData;
-}
-	
-	/*EGORefreshTableHeaderView *refreshHeaderView;
+
+	EGORefreshTableHeaderView *refreshHeaderView;
 	BOOL _reloading;
 }
 
-@property(assign,getter=isReloading) BOOL reloading; */
+@property(assign,getter=isReloading) BOOL reloading;
 
 @property (nonatomic, retain) UIView *headerView;
 @property (nonatomic, retain) UISearchBar *searchBar;

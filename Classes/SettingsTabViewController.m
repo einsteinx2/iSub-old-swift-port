@@ -19,7 +19,7 @@
 #import "UIDevice-Hardware.h"
 #import "iPadMainMenu.h"
 
-#import "NSString+md5.h"
+#import "NSString-md5.h"
 #import "FMDatabase.h"
 
 @implementation SettingsTabViewController
@@ -28,7 +28,8 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"])
+	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] 
+		&& inOrientation != UIDeviceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -93,6 +94,11 @@
 		disablePopupsSwitch.on = YES;
 	else
 		disablePopupsSwitch.on = NO;
+	
+	if ([[appDelegate.settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"])
+		disableRotationSwitch.on = YES;
+	else
+		disableRotationSwitch.on = NO;
 	
 	/*if ([[UIDevice currentDevice] isOldDevice])
 	{
@@ -482,6 +488,13 @@
 				[databaseControls.allSongsDb close];
 				[databaseControls.genresDb close];
 			}
+		}
+		else if (sender == disableRotationSwitch)
+		{
+			if (disableRotationSwitch.on)
+				[appDelegate.settingsDictionary setObject:@"YES" forKey:@"lockRotationSetting"];
+			else
+				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"lockRotationSetting"];
 		}
 		
 		[[NSUserDefaults standardUserDefaults] setObject:appDelegate.settingsDictionary forKey:@"settingsDictionary"];

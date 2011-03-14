@@ -22,12 +22,18 @@
 #import "NSString-rfcEncode.h"
 #import "StoreViewController.h"
 #import "CustomUIAlertView.h"
+#import "AsynchronousImageView.h"
+#import "Song.h"
+#import "NSString-md5.h"
+#import "FMDatabase.h"
+#import "FMDatabaseAdditions.h"
 
 @implementation NewHomeViewController
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"])
+	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] 
+		&& inOrientation != UIDeviceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -37,24 +43,52 @@
 {
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 	
-	if (UIDeviceOrientationIsPortrait(toInterfaceOrientation))
+	BOOL rotationDisabled = [[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"];
+	
+	if (UIDeviceOrientationIsPortrait(toInterfaceOrientation) && !rotationDisabled)
 	{
 		if (!IS_IPAD())
 		{
-			[[NSBundle mainBundle] loadNibNamed:@"NewHomeViewController" owner:self options:nil];
-			searchSegment.alpha = 0.0;
-			searchSegment.enabled = NO;
-			searchSegmentBackground.alpha = 0.0;
+			// Animate the segmented control off screen
+			[UIView beginAnimations:nil context:NULL];
+			[UIView setAnimationDuration:.3];
+			[UIView setAnimationCurve:UIViewAnimationCurveLinear];
+			quickLabel.alpha = 1.0;
+			shuffleLabel.alpha = 1.0;
+			jukeboxLabel.alpha = 1.0;
+			settingsLabel.alpha = 1.0;
+			chatLabel.alpha = 1.0;
+			playerLabel.alpha = 1.0;
+			
+			coverArtBorder.alpha = 1.0;
+			coverArtView.alpha = 1.0;
+			artistLabel.alpha = 1.0;
+			albumLabel.alpha = 1.0;
+			songLabel.alpha = 1.0;
+			[UIView commitAnimations];
 		}
 	}
-	else if (UIDeviceOrientationIsLandscape(toInterfaceOrientation))
+	else if (UIDeviceOrientationIsLandscape(toInterfaceOrientation) && !rotationDisabled)
 	{
 		if (!IS_IPAD())
 		{
-			[[NSBundle mainBundle] loadNibNamed:@"NewHomeViewControllerLandscape" owner:self options:nil];
-			searchSegment.alpha = 0.0;
-			searchSegment.enabled = NO;
-			searchSegmentBackground.alpha = 0.0;
+			// Animate the segmented control off screen
+			[UIView beginAnimations:nil context:NULL];
+			[UIView setAnimationDuration:.3];
+			[UIView setAnimationCurve:UIViewAnimationCurveLinear];
+			quickLabel.alpha = 0.0;
+			shuffleLabel.alpha = 0.0;
+			jukeboxLabel.alpha = 0.0;
+			settingsLabel.alpha = 0.0;
+			chatLabel.alpha = 0.0;
+			playerLabel.alpha = 0.0;
+			
+			coverArtBorder.alpha = 0.0;
+			coverArtView.alpha = 0.0;
+			artistLabel.alpha = 0.0;
+			albumLabel.alpha = 0.0;
+			songLabel.alpha = 0.0;
+			[UIView commitAnimations];
 		}
 	}
 }
@@ -72,6 +106,46 @@
 	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settings)] autorelease];
 
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jukeboxOff) name:@"JukeboxTurnedOff" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) name:@"initSongInfo" object:nil];
+
+	if (!IS_IPAD())
+	{
+		coverArtBorder = [[UIView alloc] initWithFrame:CGRectMake(20, 158, 100, 100)];
+		coverArtBorder.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1.0];
+		
+		coverArtView = [[AsynchronousImageView alloc] init];
+		coverArtView.frame = CGRectMake(2, 2, 96, 96);
+		coverArtView.isForPlayer = YES;
+		
+		[coverArtBorder addSubview:coverArtView];
+		[self.view addSubview:coverArtBorder];
+		
+		artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(140, 165, 165, 30)];
+		artistLabel.backgroundColor = [UIColor clearColor];
+		artistLabel.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
+		artistLabel.font = [UIFont boldSystemFontOfSize:24];
+		artistLabel.adjustsFontSizeToFitWidth = YES;
+		artistLabel.textAlignment = UITextAlignmentCenter;
+		[self.view addSubview:artistLabel];
+		
+		albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(140, 195, 165, 20)];
+		albumLabel.backgroundColor = [UIColor clearColor];
+		albumLabel.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
+		albumLabel.font = [UIFont systemFontOfSize:24];
+		albumLabel.adjustsFontSizeToFitWidth = YES;
+		albumLabel.textAlignment = UITextAlignmentCenter;
+		[self.view addSubview:albumLabel];
+		
+		songLabel = [[UILabel alloc] initWithFrame:CGRectMake(140, 215, 165, 30)];
+		songLabel.backgroundColor = [UIColor clearColor];
+		songLabel.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
+		songLabel.font = [UIFont boldSystemFontOfSize:24];
+		songLabel.adjustsFontSizeToFitWidth = YES;
+		songLabel.textAlignment = UITextAlignmentCenter;
+		[self.view addSubview:songLabel];				
+		
+		[self initSongInfo];
+	}	
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -80,7 +154,7 @@
 	
 	viewObjects.isSettingsShowing = NO;
 	
-	if (UIDeviceOrientationIsPortrait([UIDevice currentDevice].orientation))
+	/*if (UIDeviceOrientationIsPortrait([UIDevice currentDevice].orientation))
 	{
 		if (!IS_IPAD())
 			[[NSBundle mainBundle] loadNibNamed:@"NewHomeViewController" owner:self options:nil];
@@ -89,7 +163,7 @@
 	{
 		if (!IS_IPAD())
 			[[NSBundle mainBundle] loadNibNamed:@"NewHomeViewControllerLandscape" owner:self options:nil];
-	}
+	}*/
 	
 	if(musicControls.showPlayerIcon)
 	{
@@ -124,6 +198,67 @@
 	searchSegmentBackground.alpha = 0.0;
 	
 	[appDelegate checkAPIVersion];
+}
+
+- (void)initSongInfo
+{
+	if (musicControls.currentSongObject != nil)
+	{		
+		if([musicControls.currentSongObject coverArtId])
+		{		
+			FMDatabase *coverArtCache = databaseControls.coverArtCacheDb320;
+			
+			if ([coverArtCache intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:musicControls.currentSongObject.coverArtId]] == 1)
+			{
+				NSData *imageData = [coverArtCache dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [NSString md5:musicControls.currentSongObject.coverArtId]];
+				if (appDelegate.isHighRez)
+				{
+					UIGraphicsBeginImageContextWithOptions(CGSizeMake(320.0,320.0), NO, 2.0);
+					[[UIImage imageWithData:imageData] drawInRect:CGRectMake(0,0,320,320)];
+					coverArtView.image = UIGraphicsGetImageFromCurrentImageContext();
+					UIGraphicsEndImageContext();
+				}
+				else
+				{
+					coverArtView.image = [UIImage imageWithData:imageData];
+				}
+			}
+			else 
+			{
+				[coverArtView loadImageFromCoverArtId:musicControls.currentSongObject.coverArtId isForPlayer:YES];
+			}
+		}
+		else 
+		{
+			coverArtView.image = [UIImage imageNamed:@"default-album-art.png"];
+		}
+		
+		artistLabel.text = @"";
+		albumLabel.text = @"";
+		songLabel.text = @"";
+		
+		if ([musicControls.currentSongObject artist])
+		{
+			artistLabel.text = [musicControls.currentSongObject artist];
+		}
+		
+		if ([musicControls.currentSongObject album])
+		{
+			albumLabel.text = [musicControls.currentSongObject album];
+		}
+		
+		if ([musicControls.currentSongObject title])
+		{
+			songLabel.text = [musicControls.currentSongObject title];
+		}
+	}
+	else
+	{
+		coverArtView.image = [UIImage imageNamed:@"default-album-art.png"];
+		artistLabel.text = @"Use the Folders tab to find music";
+		albumLabel.text = @"";
+		songLabel.text = @"";
+	}
 }
 
 - (IBAction)quickAlbums
@@ -261,6 +396,12 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+	
+	[coverArtBorder release];
+	[coverArtView release];
+	[artistLabel release];
+	[albumLabel release];
+	[songLabel release];
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"JukeboxTurnedOff" object:nil];
 }

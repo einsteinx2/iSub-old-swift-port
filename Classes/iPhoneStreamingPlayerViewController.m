@@ -21,7 +21,7 @@
 #import <CFNetwork/CFNetwork.h>
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString+md5.h"
+#import "NSString-md5.h"
 #import "UIView-tools.h"
 #import <QuartzCore/QuartzCore.h>
 

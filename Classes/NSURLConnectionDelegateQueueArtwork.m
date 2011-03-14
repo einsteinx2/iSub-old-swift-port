@@ -10,7 +10,7 @@
 #import "DatabaseControlsSingleton.h"
 #import "MusicControlsSingleton.h"
 #import "Song.h"
-#import "NSString+md5.h"
+#import "NSString-md5.h"
 #import "FMDatabase.h"
 
 @implementation NSURLConnectionDelegateQueueArtwork

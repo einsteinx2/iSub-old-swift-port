@@ -18,7 +18,7 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "LoadingScreen.h"
-#import "NSString+md5.h"
+#import "NSString-md5.h"
 #import "ServerListViewController.h"
 
 @implementation AllSongsXMLParser

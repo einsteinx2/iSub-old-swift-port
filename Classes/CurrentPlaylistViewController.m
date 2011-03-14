@@ -12,7 +12,7 @@
 #import "ViewObjectsSingleton.h"
 #import "MusicControlsSingleton.h"
 #import "DatabaseControlsSingleton.h"
-#import "NSString+md5.h"
+#import "NSString-md5.h"
 #import "Song.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"

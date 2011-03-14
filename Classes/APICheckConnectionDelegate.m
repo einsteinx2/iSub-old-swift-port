@@ -53,15 +53,16 @@
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
-	if (![ViewObjectsSingleton sharedInstance].isOfflineMode)
-	{
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error checking the server version.\n\nError %i: %@", [error code], [error localizedDescription]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-		[alert release];
+	//if (![ViewObjectsSingleton sharedInstance].isOfflineMode)
+	//{
+		//CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error checking the server version.\n\nError %i: %@", [error code], [error localizedDescription]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		//[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		//[alert release];
+		NSLog(@"There was an error checking the server version.\n\nError %i: %@", [error code], [error localizedDescription]);
 		
 		[theConnection release];
 		[receivedData release]; receivedData = nil;
-	}
+	//}
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 

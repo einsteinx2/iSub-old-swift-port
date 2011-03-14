@@ -16,7 +16,7 @@
 #import "InitialDetailViewController.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString+md5.h"
+#import "NSString-md5.h"
 #import "ServerListViewController.h"
 #import "RootViewController.h"
 #import "Reachability.h"
@@ -35,7 +35,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #import "CFNetworkRequests.h"
-#import "NSString+hex.h"
+#import "NSString-hex.h"
 #import "MKStoreManager.h"
 #import "Server.h"
 #import "UIDevice-Hardware.h"

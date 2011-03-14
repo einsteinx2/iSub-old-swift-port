@@ -10,7 +10,7 @@
 #import "iSubAppDelegate.h"
 #import "MusicControlsSingleton.h"
 #import "DatabaseControlsSingleton.h"
-#import "NSString+md5.h"
+#import "NSString-md5.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "AudioStreamer.h"
@@ -35,8 +35,10 @@ id databaseControlsRef;
 static BOOL isThrottlingEnabled;
 static NSDate *throttlingDate;
 static UInt32 bytesTransferred;
-#define kThrottleTimeInterval 0.01
-#define kMaxBytesPerSec 64000
+//#define kThrottleTimeInterval 0.01
+#define kThrottleTimeInterval 0.1
+#define kMaxKilobitsPerSec 750
+#define kMaxBytesPerSec ((kMaxKilobitsPerSec * 1024) / 8)
 #define kMaxBytesPerInterval (kMaxBytesPerSec * kThrottleTimeInterval)
 
 

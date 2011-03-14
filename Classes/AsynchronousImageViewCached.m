@@ -12,7 +12,7 @@
 #import "AsynchronousImageViewCached.h"
 #import "iSubAppDelegate.h"
 #import "DatabaseControlsSingleton.h"
-#import "NSString+md5.h"
+#import "NSString-md5.h"
 #import "FMDatabase.h"
 
 @implementation AsynchronousImageViewCached
