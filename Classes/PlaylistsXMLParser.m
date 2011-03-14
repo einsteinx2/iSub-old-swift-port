@@ -15,7 +15,7 @@
 #import "DatabaseControlsSingleton.h"
 #import "Song.h"
 #import "ServerListViewController.h"
-#import "NSString+md5.h"
+#import "NSString-md5.h"
 #import "CustomUIAlertView.h"
 
 @implementation PlaylistsXMLParser
