@@ -77,6 +77,7 @@
 	else if (sender == testServer)
 	{
 		[self dismissModalViewControllerAnimated:YES];
+		appDelegate.isIntroShowing = NO;
 	}
 	else if (sender == ownServer)
 	{
@@ -84,6 +85,7 @@
 		serverListViewController.hidesBottomBarWhenPushed = YES;
 		
 		[self dismissModalViewControllerAnimated:NO];
+		appDelegate.isIntroShowing = NO;
 
 		if (IS_IPAD())
 		{

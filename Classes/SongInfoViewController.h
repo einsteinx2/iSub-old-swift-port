@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton, OBSlider;
 
 @interface SongInfoViewController : UIViewController
 {
@@ -18,7 +18,7 @@
 	DatabaseControlsSingleton *databaseControls;
 	
 	IBOutlet UIButton *songInfoToggleButton;
-	IBOutlet UISlider *progressSlider;
+	IBOutlet OBSlider *progressSlider;
 	IBOutlet UIView *downloadProgress;
 	IBOutlet UILabel *progressLabel;
 	IBOutlet UIImageView *progressLabelBackground;
@@ -53,7 +53,7 @@
 	int bookmarkPosition;
 }
 
-@property (nonatomic, retain) UISlider *progressSlider;
+@property (nonatomic, retain) OBSlider *progressSlider;
 @property (nonatomic, retain) UIView *downloadProgress;
 @property (nonatomic, retain) UILabel *elapsedTimeLabel;
 @property (nonatomic, retain) UILabel *remainingTimeLabel;

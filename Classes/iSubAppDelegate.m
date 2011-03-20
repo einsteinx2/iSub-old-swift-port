@@ -47,6 +47,8 @@
 
 @synthesize window;
 
+@synthesize isIntroShowing;
+
 // Main interface elements for iPhone
 @synthesize background, currentTabBarController, mainTabBarController, offlineTabBarController;
 @synthesize homeNavigationController, playerNavigationController, artistsNavigationController, rootViewController, allAlbumsNavigationController, allSongsNavigationController, playlistsNavigationController, bookmarksNavigationController, playingNavigationController, genresNavigationController, cacheNavigationController, chatNavigationController;
@@ -85,6 +87,8 @@
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application
 {   	
+	introController = nil;
+	
 	//NSLog(@"App finish launching called");
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	databaseControls = [DatabaseControlsSingleton sharedInstance];
@@ -195,6 +199,15 @@
 	{
 		self.settingsDictionary = [NSMutableDictionary dictionaryWithDictionary:[defaults objectForKey:@"settingsDictionary"]];
 		
+		// Add the default music folder id if not there - 3.0.1
+		if ([settingsDictionary objectForKey:@"folderDropdownCache"] == nil)
+		{
+			NSDictionary *folders = [[NSDictionary alloc] initWithObjectsAndKeys:@"All Folders", @"-1", nil];
+			NSData *foldersData = [NSKeyedArchiver archivedDataWithRootObject:folders];
+			[settingsDictionary setObject:foldersData forKey:@"folderDropdownCache"];
+			[settingsDictionary setObject:@"-1" forKey:@"selectedMusicFolderId"];
+		}
+
 		// Add the scrobble and popup settings if not there - 3.0.1
 		if ([settingsDictionary objectForKey:@"scrobblePercentSetting"] == nil)
 		{
@@ -261,6 +274,7 @@
 		[settingsDictionary setObject:@"NO" forKey:@"twitterEnabledSetting"];
 		[settingsDictionary setObject:@"YES" forKey:@"lyricsEnabledSetting"];
 		[settingsDictionary setObject:@"NO" forKey:@"enableSongsTabSetting"];
+		[settingsDictionary setObject:@"-1" forKey:@"selectedMusicFolderId"];
 	}
 	
 	// Save and sync the defaults
@@ -531,10 +545,10 @@
 
 - (void) appInit4
 {
-	IntroViewController *intro = [[IntroViewController alloc] init];
+	introController = [[IntroViewController alloc] init];
 	//intro.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-	if ([intro respondsToSelector:@selector(setModalPresentationStyle:)])
-		intro.modalPresentationStyle = UIModalPresentationFormSheet;
+	if ([introController respondsToSelector:@selector(setModalPresentationStyle:)])
+		introController.modalPresentationStyle = UIModalPresentationFormSheet;
 	
 	if (IS_IPAD())
 	{
@@ -547,7 +561,10 @@
 		splitView.masterViewController = mainMenu;
 		
 		if (showIntro)
-			[splitView presentModalViewController:intro animated:NO];
+		{
+			[splitView presentModalViewController:introController animated:NO];
+			isIntroShowing = YES;
+		}
 	}
 	else
 	{
@@ -570,7 +587,10 @@
 		}
 		
 		if (showIntro)
-			[currentTabBarController presentModalViewController:intro animated:NO];
+		{
+			[currentTabBarController presentModalViewController:introController animated:NO];
+			isIntroShowing = YES;
+		}
 	}
 	
 	if (viewObjects.isJukebox)
@@ -987,6 +1007,11 @@
 	}
 	else if ([alertView.title isEqualToString:@"Error"])
 	{
+		if (isIntroShowing)
+		{
+			[introController dismissModalViewControllerAnimated:NO];
+		}
+		
 		if (buttonIndex == 0)
 		{
 			[self appInit2];
@@ -1286,7 +1311,7 @@
 	//NSLog(@"username: %@    password: %@", encodedUserName, encodedPassword);
 	
 	// Return the base URL
-	if ([action isEqualToString:@"getIndexes.view"] || [action isEqualToString:@"search.view"] || [action isEqualToString:@"search2.view"] || [action isEqualToString:@"getNowPlaying.view"] || [action isEqualToString:@"getPlaylists.view"])
+	if ([action isEqualToString:@"getIndexes.view"] || [action isEqualToString:@"search.view"] || [action isEqualToString:@"search2.view"] || [action isEqualToString:@"getNowPlaying.view"] || [action isEqualToString:@"getPlaylists.view"] || [action isEqualToString:@"getMusicFolders.view"])
 	{
 		return [NSString stringWithFormat:@"%@/rest/%@?u=%@&p=%@&v=1.1.0&c=iSub", urlString, action, [encodedUserName autorelease], [encodedPassword autorelease]];
 	}

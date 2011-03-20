@@ -10,9 +10,9 @@
 	};
 	1D3623250D0F684500981E51 /* iSubAppDelegate.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {2788, 22112}}";
-			sepNavSelRange = "{3374, 0}";
-			sepNavVisRange = "{2890, 918}";
+			sepNavIntBoundsRect = "{{0, 0}, {2788, 22288}}";
+			sepNavSelRange = "{21128, 17}";
+			sepNavVisRange = "{21797, 1452}";
 			sepNavWindowFrame = "{{2005, 55}, {1798, 996}}";
 		};
 	};
@@ -174,8 +174,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 321749408;
-			PBXWorkspaceStateSaveDate = 321749408;
+			PBXPerProjectTemplateStateSaveDate = 321782892;
+			PBXWorkspaceStateSaveDate = 321782892;
 		};
 		perUserProjectItems = {
 			530D05BA12D6742B00DCDEA2 /* PBXTextBookmark */ = 530D05BA12D6742B00DCDEA2 /* PBXTextBookmark */;
@@ -473,15 +473,13 @@
 			53CC1E73132D90BD003521B5 /* PBXTextBookmark */ = 53CC1E73132D90BD003521B5 /* PBXTextBookmark */;
 			53CC217F132DC7A1003521B5 /* PBXTextBookmark */ = 53CC217F132DC7A1003521B5 /* PBXTextBookmark */;
 			53CC2180132DC7A1003521B5 /* PlistBookmark */ = 53CC2180132DC7A1003521B5 /* PlistBookmark */;
-			53CC2181132DC7A1003521B5 /* PlistBookmark */ = 53CC2181132DC7A1003521B5 /* PlistBookmark */;
-			53CC2182132DC7A1003521B5 /* PlistBookmark */ = 53CC2182132DC7A1003521B5 /* PlistBookmark */;
-			53CC218B132DC7A1003521B5 /* PlistBookmark */ = 53CC218B132DC7A1003521B5 /* PlistBookmark */;
-			53CC218C132DC7A1003521B5 /* PlistBookmark */ = 53CC218C132DC7A1003521B5 /* PlistBookmark */;
 			53D123ED129EF5E000934F08 /* PBXTextBookmark */ = 53D123ED129EF5E000934F08 /* PBXTextBookmark */;
 			53D9995912D404FC00A97412 /* PBXTextBookmark */ = 53D9995912D404FC00A97412 /* PBXTextBookmark */;
 			53D9998C12D4102500A97412 /* PBXTextBookmark */ = 53D9998C12D4102500A97412 /* PBXTextBookmark */;
 			53D9998E12D4102500A97412 /* PBXTextBookmark */ = 53D9998E12D4102500A97412 /* PBXTextBookmark */;
 			53E53D3A1320957E008AB79E /* PBXTextBookmark */ = 53E53D3A1320957E008AB79E /* PBXTextBookmark */;
+			53E59D20132E049900A41886 /* PlistBookmark */ = 53E59D20132E049900A41886 /* PlistBookmark */;
+			53E59D31132E055600A41886 /* PBXTextBookmark */ = 53E59D31132E055600A41886 /* PBXTextBookmark */;
 			53F2F74312C678C500B756A2 /* PBXTextBookmark */ = 53F2F74312C678C500B756A2 /* PBXTextBookmark */;
 			53F7A0B8131B7058002C829D /* PlistBookmark */ = 53F7A0B8131B7058002C829D /* PlistBookmark */;
 			53F7A0F1131B7BC3002C829D /* PBXTextBookmark */ = 53F7A0F1131B7BC3002C829D /* PBXTextBookmark */;
@@ -3619,7 +3617,7 @@
 		ignoreCount = 0;
 		lineNumber = 1649;
 		location = iSub;
-		modificationTime = 321765736.941618;
+		modificationTime = 321765736.9416181;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -4715,7 +4713,7 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		lineNumber = 821;
-		modificationTime = 321765925.195171;
+		modificationTime = 321782911.55785;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -4732,7 +4730,7 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		lineNumber = 819;
-		modificationTime = 321765925.202936;
+		modificationTime = 321765925.2029361;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -4952,52 +4950,7 @@
 		);
 		name = "/Users/bbaron/Dropbox/iPhone Dev/iSub/trunk/iSub-Info.plist";
 		rLen = 0;
-		rLoc = 9223372036854775807;
-	};
-	53CC2181132DC7A1003521B5 /* PlistBookmark */ = {
-		isa = PlistBookmark;
-		fRef = 53CC217D132DC79F003521B5 /* Entitlements.plist */;
-		fallbackIsa = PBXBookmark;
-		isK = 0;
-		kPath = (
-		);
-		name = "/Users/bbaron/Dropbox/iPhone Dev/iSub/trunk/Entitlements.plist";
-		rLen = 0;
-		rLoc = 9223372036854775807;
-	};
-	53CC2182132DC7A1003521B5 /* PlistBookmark */ = {
-		isa = PlistBookmark;
-		fRef = 53CC217D132DC79F003521B5 /* Entitlements.plist */;
-		fallbackIsa = PBXBookmark;
-		isK = 0;
-		kPath = (
-		);
-		name = "/Users/bbaron/Dropbox/iPhone Dev/iSub/trunk/Entitlements.plist";
-		rLen = 0;
-		rLoc = 9223372036854775807;
-	};
-	53CC218B132DC7A1003521B5 /* PlistBookmark */ = {
-		isa = PlistBookmark;
-		fRef = 8D1107310486CEB800E47090 /* iSub-Info.plist */;
-		fallbackIsa = PBXBookmark;
-		isK = 0;
-		kPath = (
-		);
-		name = "/Users/bbaron/Dropbox/iPhone Dev/iSub/trunk/iSub-Info.plist";
-		rLen = 0;
-		rLoc = 9223372036854775807;
-	};
-	53CC218C132DC7A1003521B5 /* PlistBookmark */ = {
-		isa = PlistBookmark;
-		fRef = 8D1107310486CEB800E47090 /* iSub-Info.plist */;
-		fallbackIsa = PBXBookmark;
-		isK = 0;
-		kPath = (
-			CFBundleIconFiles,
-		);
-		name = "/Users/bbaron/Dropbox/iPhone Dev/iSub/trunk/iSub-Info.plist";
-		rLen = 0;
-		rLoc = 9223372036854775807;
+		rLoc = 9223372036854775808;
 	};
 	53CECEF6113D8B9500B09699 /* SongInfoViewController.h */ = {
 		uiCtxt = {
@@ -5146,6 +5099,27 @@
 		rType = 0;
 		vrLen = 764;
 		vrLoc = 249;
+	};
+	53E59D20132E049900A41886 /* PlistBookmark */ = {
+		isa = PlistBookmark;
+		fRef = 53CC217D132DC79F003521B5 /* Entitlements.plist */;
+		fallbackIsa = PBXBookmark;
+		isK = 0;
+		kPath = (
+		);
+		name = "/Users/bbaron/Dropbox/iPhone Dev/iSub/trunk/Entitlements.plist";
+		rLen = 0;
+		rLoc = 9223372036854775807;
+	};
+	53E59D31132E055600A41886 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1D3623250D0F684500981E51 /* iSubAppDelegate.m */;
+		name = "iSubAppDelegate.m: 532";
+		rLen = 17;
+		rLoc = 21128;
+		rType = 0;
+		vrLen = 1452;
+		vrLoc = 21797;
 	};
 	53E75C531270053300BC1A19 /* iPadMainMenu.h */ = {
 		uiCtxt = {
@@ -5491,7 +5465,7 @@
 	};
 	8D1107310486CEB800E47090 /* iSub-Info.plist */ = {
 		uiCtxt = {
-			sepNavWindowFrame = "{{442, 268}, {1005, 771}}";
+			sepNavWindowFrame = "{{595, 106}, {1005, 771}}";
 		};
 	};
 }

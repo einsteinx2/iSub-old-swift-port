@@ -265,7 +265,7 @@
 			if ( [listOfArtists count] == 0 && [shortcuts count] > 0 )
 			{
 				[listOfArtists addObject:shortcuts];
-				[shortcuts release];
+				//[shortcuts release];
 			}
 		}
 	}

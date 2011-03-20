@@ -36,6 +36,10 @@
 
 #import "EGORefreshTableHeaderView.h"
 
+#import <QuartzCore/QuartzCore.h>
+
+#import "FolderDropdownControl.h"
+
 @interface RootViewController (Private)
 
 - (void)dataSourceDidFinishLoadingNewData;
@@ -67,6 +71,8 @@
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	databaseControls = [DatabaseControlsSingleton sharedInstance];
 	musicControls = [MusicControlsSingleton sharedInstance];
+	
+	//folders = [[NSDictionary alloc] initWithObjectsAndKeys:@"All Folders", @"-1", nil];
 	
 	/*UIView *gray = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
 	gray.backgroundColor = viewObjects.darkNormal;
@@ -123,15 +129,9 @@
 	isCountShowing = YES;
 	
 	//Build the search and reload view
-	headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 90)] autorelease];
+	headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 120)] autorelease];
 	headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	headerView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
-	
-	reloadButton = [UIButton buttonWithType:UIButtonTypeCustom];
-	reloadButton.frame = CGRectMake(0, 0, 320, 40);
-	reloadButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	[reloadButton addTarget:self action:@selector(reloadAction:) forControlEvents:UIControlEventTouchUpInside];
-	[headerView addSubview:reloadButton];
 	
 	countLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, 320, 30)];
 	countLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -142,18 +142,23 @@
 	[headerView addSubview:countLabel];
 	[countLabel release];
 	
-	reloadImage = [[UIImageView alloc] initWithFrame:CGRectMake(20, 13, 24, 26)];
-	reloadImage.image = [UIImage imageNamed:@"reload-table.png"];
-	[headerView addSubview:reloadImage];
-	[reloadImage release];
-	
-	searchBar = [[UISearchBar  alloc] initWithFrame:CGRectMake(0, 50, 320, 40)];
+	searchBar = [[UISearchBar  alloc] initWithFrame:CGRectMake(0, 80, 320, 40)];
 	searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	searchBar.delegate = self;
 	searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
 	searchBar.placeholder = @"Folder name";
 	[headerView addSubview:searchBar];
 	[searchBar release];
+	
+	FolderDropdownControl *dropdown = [[FolderDropdownControl alloc] initWithFrame:CGRectMake(50, 50, 220, 30)];
+	dropdown.delegate = self;
+	dropdown.tableView = self.tableView;
+	dropdown.viewsToMove = [NSArray arrayWithObjects:searchBar, nil];
+	dropdown.folders = [NSKeyedUnarchiver unarchiveObjectWithData:[appDelegate.settingsDictionary objectForKey:@"folderDropdownCache"]];
+	NSLog(@"folders: %@", dropdown.folders);
+	[dropdown selectFolderWithId:[[appDelegate.settingsDictionary objectForKey:@"selectedMusicFolderId"] intValue]];
+	[headerView addSubview:dropdown];
+	[dropdown release];
 
 	reloadTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 36, 320, 12)];
 	reloadTimeLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -181,17 +186,87 @@
 	self.tableView.tableHeaderView = headerView;
 }
 
-
--(void)loadData
+////////////////
+- (void)showDropdown:(id)sender
 {
-	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
-	//NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
+	/*[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:.5];
+	if (((UIButton*)sender).tag == 0)
+	{
+		[headerView newHeight:200];
+		[folderDropdownLabel newHeight:110];
+		[searchBar newY:160];
+		((UIButton*)sender).tag = 1;
+	}
+	else
+	{
+		[headerView newHeight:120];
+		[folderDropdownLabel newHeight:30];
+		[searchBar newY:80];
+		((UIButton*)sender).tag = 0;
+	}
+	self.tableView.tableHeaderView = headerView;
+	[UIView commitAnimations];*/
 	
-	viewObjects.isArtistsLoading = YES;
+	if (((UIButton*)sender).tag == 0)
+	{
+		[UIView beginAnimations:nil context:NULL];
+		[UIView setAnimationDuration:.5];
+		[headerView newHeight:200];
+		[folderDropdown newHeight:110];
+		[searchBar newY:160];
+		self.tableView.tableHeaderView = headerView;
+		[UIView commitAnimations];
 		
-	//NSLog(@"%@", [appDelegate getBaseUrl:@"getIndexes.view"]);
+		[CATransaction begin];
+		[CATransaction setAnimationDuration:.5];
+		arrowImage.transform = CATransform3DMakeRotation((M_PI / 180.0) * -60.0f, 0.0f, 0.0f, 1.0f);
+		[CATransaction commit];
+		
+		((UIButton*)sender).tag = 1;
+	}
+	else
+	{
+		[UIView beginAnimations:nil context:NULL];
+		[UIView setAnimationDuration:.5];
+		[headerView newHeight:120];
+		[folderDropdown newHeight:30];
+		[searchBar newY:80];
+		self.tableView.tableHeaderView = headerView;
+		[UIView commitAnimations];
+		
+		[CATransaction begin];
+		[CATransaction setAnimationDuration:.5];
+		arrowImage.transform = CATransform3DMakeRotation((M_PI / 180.0) * 0.0f, 0.0f, 0.0f, 1.0f);
+		[CATransaction commit];
+		/*[CATransaction begin];
+		[CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions]; 
+		arrowImage.hidden = NO;
+		arrowImage.transform = CATransform3DIdentity;
+		[CATransaction commit];*/
+		
+		((UIButton*)sender).tag = 0;
+	}
 	
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[appDelegate getBaseUrl:@"getIndexes.view"]] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+}
+//////////////////
+
+-(void)loadData:(NSString*)folderId 
+{
+	viewObjects.isArtistsLoading = YES;
+	
+	NSString *urlString = @"";
+	if ([folderId isEqualToString:@"-1"])
+	{
+		urlString = [appDelegate getBaseUrl:@"getIndexes.view"];
+	}
+	else
+	{
+		urlString = [NSString stringWithFormat:@"%@&musicFolderId=%@", [appDelegate getBaseUrl:@"getIndexes.view"], folderId];
+	}
+	NSLog(@"urlString: %@", urlString);
+	
+	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
 	{
@@ -213,59 +288,7 @@
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
 	}
-	
-	/*ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[appDelegate getBaseUrl:@"getIndexes.view"]]];
-	[request setTimeOutSeconds:240];
-	[request startSynchronous];
-	if ([request error])
-	{
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error grabbing the album list.\n\nError: %@", [request error].localizedDescription] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-		[alert release];
-	}
-	else
-	{
-		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:[request responseData]];
-		XMLParser *parser = [[XMLParser alloc] initXMLParser];
-		parser.parseState = @"artists";
-		[xmlParser setDelegate:parser];
-		[xmlParser parse];
-		
-		viewObjects.artistIndex = [[NSArray alloc] initWithArray:parser.indexes copyItems:YES];
-		viewObjects.listOfArtists = [[NSArray alloc] initWithArray:parser.listOfArtists copyItems:YES];
-	
-		[xmlParser release];
-		[parser release];
-	}
-	
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:viewObjects.listOfArtists] forKey:[NSString stringWithFormat:@"%@listOfArtists", appDelegate.defaultUrl]];
-	[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:viewObjects.artistIndex] forKey:[NSString stringWithFormat:@"%@indexes", appDelegate.defaultUrl]];
-	[defaults setObject:[NSDate date] forKey:[NSString stringWithFormat:@"%@artistsReloadTime", appDelegate.defaultUrl]];
-	[defaults synchronize];
-	
-	// Must do the UI stuff in the main thread
-	[self performSelectorOnMainThread:@selector(loadData2) withObject:nil waitUntilDone:NO];
-	
-	[autoreleasePool release];*/
 }
-
-
-/*-(void) loadData2
-{
-	[self addCount];
-	
-	[self.tableView reloadData];
-	self.tableView.backgroundColor = [UIColor clearColor];
-	
-	viewObjects.isArtistsLoading = NO;
-	
-	// Hide the loading screen
-	[allArtistsLoadingScreen hide]; [allArtistsLoadingScreen release];
-	
-}*/
-
-
 
 -(void)viewWillAppear:(BOOL)animated 
 {
@@ -288,10 +311,8 @@
 			if([defaults objectForKey:[NSString stringWithFormat:@"%@listOfArtists", appDelegate.defaultUrl]] == nil || 
 			   [[appDelegate.settingsDictionary objectForKey:@"autoReloadArtistsSetting"] isEqualToString:@"YES"])
 			{
-				//[appDelegate showLoadingScreen:self.view.superview blockInput:YES mainWindow:NO];
-				//allArtistsLoadingScreen = [[LoadingScreen alloc] initOnView:self.view.superview withMessage:[NSArray arrayWithObjects:@"Processing Artists", @"", @"", @"", nil] blockInput:YES mainWindow:NO];
-				//[self performSelectorInBackground:@selector(loadData) withObject:nil];
-				[self loadData];
+				NSString *currentFolderId = [appDelegate.settingsDictionary objectForKey:@"selectedMusicFolderId"];
+				[self loadData:currentFolderId];
 			}
 			else 
 			{
@@ -305,9 +326,8 @@
 					{
 						if ([[[viewObjects.listOfArtists objectAtIndex:0] objectAtIndex:0] isKindOfClass:[NSArray class]])
 						{
-							//allArtistsLoadingScreen = [[LoadingScreen alloc] initOnView:self.view.superview withMessage:[NSArray arrayWithObjects:@"Processing Artists", @"", @"", @"", nil] blockInput:YES mainWindow:NO];
-							//[self performSelectorInBackground:@selector(loadData) withObject:nil];
-							[self loadData];
+							NSString *currentFolderId = [appDelegate.settingsDictionary objectForKey:@"selectedMusicFolderId"];
+							[self loadData:currentFolderId];
 						}
 						else
 						{
@@ -399,10 +419,8 @@
 {
 	if (!viewObjects.isAlbumsLoading && !viewObjects.isSongsLoading)
 	{
-		//viewObjects.listOfArtists = nil;
-		//allArtistsLoadingScreen = [[LoadingScreen alloc] initOnView:self.view.superview withMessage:[NSArray arrayWithObjects:@"Processing Artists", @"", @"", @"", nil] blockInput:YES mainWindow:NO];
-		//[self performSelectorInBackground:@selector(loadData) withObject:nil];	
-		[self loadData];
+		NSString *currentFolderId = [appDelegate.settingsDictionary objectForKey:@"selectedMusicFolderId"];
+		[self loadData:currentFolderId];
 	}
 	else
 	{
@@ -703,6 +721,8 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
+	NSLog(@"%@", [[NSString alloc]  initWithBytes:[receivedData bytes]
+										   length:[receivedData length] encoding: NSUTF8StringEncoding]);
 	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
 	XMLParser *parser = [[XMLParser alloc] initXMLParser];
 	parser.parseState = @"artists";
@@ -762,7 +782,8 @@
 	{
 		_reloading = YES;
 		//[self reloadAction:nil];
-		[self loadData];
+		NSString *currentFolderId = [appDelegate.settingsDictionary objectForKey:@"selectedMusicFolderId"];
+		[self loadData:currentFolderId];
 		[refreshHeaderView setState:EGOOPullRefreshLoading];
 		[UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:0.2];

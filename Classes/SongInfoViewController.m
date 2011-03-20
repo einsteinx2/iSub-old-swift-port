@@ -20,7 +20,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIView-tools.h"
 #import "CustomUIAlertView.h"
-
+#import "OBSlider.h"
 
 #define downloadProgressWidth (progressSlider.frame.size.width + 4)
 
@@ -229,6 +229,8 @@
 
 - (IBAction) movingSlider
 {
+	NSLog(@"scrubbing speed: %f", progressSlider.scrubbingSpeed);
+	
 	progressLabel.hidden = NO;
 	progressLabelBackground.hidden = NO;
 	

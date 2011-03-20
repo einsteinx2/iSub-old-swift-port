@@ -197,48 +197,7 @@
 	<key>Notifications</key>
 	<array/>
 	<key>OpenEditors</key>
-	<array>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
-				<string>53CC2189132DC7A1003521B5</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>iSub-Info.plist</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>53CC218A132DC7A1003521B5</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>iSub-Info.plist</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>53CC218C132DC7A1003521B5</string>
-						<key>history</key>
-						<array>
-							<string>53CC218B132DC7A1003521B5</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {1005, 674}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>442 324 1005 715 0 0 1920 1058 </string>
-			</dict>
-		</dict>
-	</array>
+	<array/>
 	<key>PerspectiveWidths</key>
 	<array>
 		<integer>1855</integer>
@@ -272,8 +231,6 @@
 			<key>Layout</key>
 			<array>
 				<dict>
-					<key>BecomeActive</key>
-					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -339,13 +296,15 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>257</integer>
-									<integer>250</integer>
+									<integer>9</integer>
+									<integer>5</integer>
+									<integer>2</integer>
+									<integer>1</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 4143}, {303, 964}}</string>
+							<string>{{0, 0}, {303, 964}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -362,7 +321,7 @@
 							<real>303</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>309 35 1855 1023 0 0 1920 1058 </string>
+						<string>177 -357 1855 1023 0 0 1920 1058 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -373,12 +332,14 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>538B15CA129B63D900F3FE2D</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>Entitlements.plist</string>
+								<string>iSubAppDelegate.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -386,11 +347,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>538B15CB129B63D900F3FE2D</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>Entitlements.plist</string>
+										<string>iSubAppDelegate.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>53CC2182132DC7A1003521B5</string>
+										<string>53E59D31132E055600A41886</string>
 										<key>history</key>
 										<array>
 											<string>53D123ED129EF5E000934F08</string>
@@ -662,7 +623,6 @@
 											<string>532171BB132B0439001AE660</string>
 											<string>532171D8132B04D7001AE660</string>
 											<string>532175A9132B3BF7001AE660</string>
-											<string>53217627132B3F85001AE660</string>
 											<string>5340190D132C1A40007351FC</string>
 											<string>53401930132C1CFD007351FC</string>
 											<string>53401931132C1CFD007351FC</string>
@@ -700,7 +660,8 @@
 											<string>53CC1E73132D90BD003521B5</string>
 											<string>53CC217F132DC7A1003521B5</string>
 											<string>53CC2180132DC7A1003521B5</string>
-											<string>53CC2181132DC7A1003521B5</string>
+											<string>53E59D20132E049900A41886</string>
+											<string>53217627132B3F85001AE660</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -714,18 +675,18 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {1530, 682}}</string>
+								<string>{{0, 0}, {1530, 676}}</string>
 								<key>RubberWindowFrame</key>
-								<string>309 35 1855 1023 0 0 1920 1058 </string>
+								<string>177 -357 1855 1023 0 0 1920 1058 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>682pt</string>
+							<string>676pt</string>
 						</dict>
 						<dict>
 							<key>Proportion</key>
-							<string>295pt</string>
+							<string>301pt</string>
 							<key>Tabs</key>
 							<array>
 								<dict>
@@ -739,9 +700,9 @@
 									<key>GeometryConfiguration</key>
 									<dict>
 										<key>Frame</key>
-										<string>{{10, 27}, {1530, 268}}</string>
+										<string>{{10, 27}, {1530, 274}}</string>
 										<key>RubberWindowFrame</key>
-										<string>309 35 1855 1023 0 0 1920 1058 </string>
+										<string>177 -357 1855 1023 0 0 1920 1058 </string>
 									</dict>
 									<key>Module</key>
 									<string>XCDetailModule</string>
@@ -823,11 +784,11 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>53CC1D71132D850A003521B5</string>
+				<string>53E59D22132E049900A41886</string>
 				<string>1CA23ED40692098700951B8B</string>
-				<string>53CC1D72132D850A003521B5</string>
+				<string>53E59D23132E049900A41886</string>
 				<string>538B15CA129B63D900F3FE2D</string>
-				<string>53CC1D73132D850A003521B5</string>
+				<string>53E59D24132E049900A41886</string>
 				<string>1CA23EDF0692099D00951B8B</string>
 				<string>1CA23EE00692099D00951B8B</string>
 				<string>1CA23EE10692099D00951B8B</string>
@@ -1021,7 +982,7 @@
 		<string>/Users/bbaron/Dropbox/iPhone Dev/iSub/trunk/iSub.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>309 35 1855 1023 0 0 1920 1058 </string>
+	<string>177 -357 1855 1023 0 0 1920 1058 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>

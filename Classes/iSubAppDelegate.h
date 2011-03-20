@@ -8,7 +8,7 @@
 
 #include "MKStoreManager.h"
 
-@class BBSplitViewController, ViewObjectsSingleton, DatabaseControlsSingleton, MusicControlsSingleton, SocialControlsSingleton, MGSplitViewController, iPadMainMenu, InitialDetailViewController, ASIHTTPRequest, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, Reachability, iPhoneStreamingPlayerViewController, SettingsViewController, RootViewController, AudioStreamer, Index, Artist, Album, Song;
+@class BBSplitViewController, ViewObjectsSingleton, DatabaseControlsSingleton, MusicControlsSingleton, SocialControlsSingleton, MGSplitViewController, iPadMainMenu, InitialDetailViewController, ASIHTTPRequest, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, Reachability, iPhoneStreamingPlayerViewController, SettingsViewController, RootViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController;
 
 @interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate> 
 {	
@@ -18,6 +18,9 @@
 	SocialControlsSingleton *socialControls;
 	
 	UIWindow *window;
+	
+	BOOL isIntroShowing;
+	IntroViewController *introController;
 	
 	// Main interface elements for iPhone
 	//
@@ -74,6 +77,8 @@
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
+
+@property BOOL isIntroShowing;
 
 // Main interface elements for iPhone
 //

@@ -8,7 +8,7 @@
 
 @class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton, SearchOverlayViewController, LoadingScreen, Artist, EGORefreshTableHeaderView;
 
-@interface RootViewController : UITableViewController <UISearchBarDelegate> 
+@interface RootViewController : UITableViewController <UISearchBarDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
@@ -16,9 +16,9 @@
 	DatabaseControlsSingleton *databaseControls;
 	
 	UIView *headerView;
-	UIButton *reloadButton;
-	UILabel *reloadLabel;
-	UIImageView *reloadImage;
+	UIView *folderDropdown;
+	UILabel *folderDropdownLabel;
+	CALayer *arrowImage;
 	UILabel *countLabel;
 	UILabel *reloadTimeLabel;
 	IBOutlet UISearchBar *searchBar;
@@ -40,6 +40,8 @@
 
 	EGORefreshTableHeaderView *refreshHeaderView;
 	BOOL _reloading;
+	
+	//NSDictionary *folders;
 }
 
 @property(assign,getter=isReloading) BOOL reloading;
