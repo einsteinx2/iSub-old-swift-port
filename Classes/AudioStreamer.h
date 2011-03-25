@@ -23,7 +23,7 @@
 #include <AudioToolbox/AudioToolbox.h>
 
 #define kNumAQBufs 16			// number of audio queue buffers we allocate
-#define kAQBufSize 2048			// number of bytes in each audio queue buffer
+#define kAQBufSize 16384		// number of bytes in each audio queue buffer -- originally 2048, raised to support ALAC
 #define kAQMaxPacketDescs 512	// number of packet descriptions in our array
 
 typedef enum
