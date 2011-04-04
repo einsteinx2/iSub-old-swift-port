@@ -102,7 +102,7 @@
 
 -(id) initWithCoder: (NSCoder *) decoder
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		title = nil;
 		songId = nil;

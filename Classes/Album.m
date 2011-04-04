@@ -15,7 +15,7 @@
 
 - (id)initWithAttributeDict:(NSDictionary *)attributeDict
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		title = nil;
 		albumId = nil;

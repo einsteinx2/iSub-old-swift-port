@@ -8,7 +8,7 @@
 
 @class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton, SearchOverlayViewController, LoadingScreen, Artist, EGORefreshTableHeaderView;
 
-@interface RootViewController : UITableViewController <UISearchBarDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
+@interface RootViewController : UITableViewController <UISearchBarDelegate>
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;

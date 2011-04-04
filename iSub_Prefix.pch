@@ -34,8 +34,8 @@
 #endif
 
 // Lite version build switch
-#define IS_LITE() (false)    // DISABLE Lite version
-//#define IS_LITE() (true)   // ENABLE  Lite version
+//#define IS_LITE() (false)    // DISABLE Lite version
+#define IS_LITE() (true)   // ENABLE  Lite version
 
 // Test server details
 #define DEFAULT_URL @"http://isubapp.com:9000"

@@ -75,7 +75,7 @@
 	}
 	else
 	{
-		headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)] autorelease];
+		headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 0)] autorelease];
 	}
 	headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
 	segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Cached", @"Queue", nil]];
@@ -257,7 +257,7 @@
 		[deleteSongsLabel removeFromSuperview];
 		[cacheSizeLabel removeFromSuperview];
 		[headerView2 removeFromSuperview];
-		headerView.frame = CGRectMake(0, 0, 320, 40);
+		headerView.frame = CGRectMake(0, 0, 320, 0);
 		
 		self.tableView.tableHeaderView = headerView;
 	}

@@ -76,7 +76,7 @@
 		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
 	
 	// Setup segmented control in the header view
-	headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)] autorelease];
+	headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 0)] autorelease];
 	headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
 	
 	if (viewObjects.isOfflineMode)
@@ -172,7 +172,8 @@
 	// Remove the save and edit buttons if showing
 	if (isPlaylistSaveEditShowing == YES)
 	{
-		headerView.frame = CGRectMake(0, 0, 320, 44);
+		//headerView.frame = CGRectMake(0, 0, 320, 44);
+		headerView.frame = CGRectMake(0, 0, 320, 0);
 		[savePlaylistLabel removeFromSuperview];
 		[playlistCountLabel removeFromSuperview];
 		[savePlaylistButton removeFromSuperview];

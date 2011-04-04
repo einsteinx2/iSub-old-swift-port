@@ -28,7 +28,7 @@
 
 - (id) initWithAttributeDict:(NSDictionary *)attributeDict
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		name = nil;
 		artistId = nil;

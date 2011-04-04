@@ -17,7 +17,7 @@
 
 - (id)initWithFrame:(CGRect)frame 
 {
-    if (self = [super initWithFrame:frame]) 
+    if ((self = [super initWithFrame:frame])) 
 	{		
 		self.lastDeleteToggle = [NSDate date];
 		self.lastOverlayToggle = [NSDate date];
@@ -27,7 +27,7 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
-	if (self = [super initWithCoder:aDecoder])
+	if ((self = [super initWithCoder:aDecoder]))
 	{
 		self.lastDeleteToggle = [NSDate date];
 		self.lastOverlayToggle = [NSDate date];
@@ -111,12 +111,6 @@
 {
 	return !blockInput;
 }
-
-- (void)setBlockInput:(BOOL)block
-{
-	blockInput = block;
-}
-
 
 - (void)dealloc {
     [super dealloc];
