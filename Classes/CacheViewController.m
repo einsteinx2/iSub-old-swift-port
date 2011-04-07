@@ -27,7 +27,7 @@
 
 @implementation CacheViewController
 
-@synthesize listOfArtists, sectionInfo;
+@synthesize listOfArtists, listOfArtistsSections, sectionInfo;
 
 //@synthesize queueDownloadProgressView;
 
@@ -66,17 +66,14 @@
 	self.tableView.separatorColor = [UIColor clearColor];
 	
 	if (viewObjects.isOfflineMode)
-		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
+	{
+		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] 
+																				  style:UIBarButtonItemStyleBordered 
+																				 target:self 
+																				 action:@selector(settingsAction:)] autorelease];
+	}
 	
-	// Setup segmented control in the header view
-	if (viewObjects.isOfflineMode) 
-	{
-		headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 0)] autorelease];
-	}
-	else
-	{
-		headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 0)] autorelease];
-	}
+	headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 0)] autorelease];
 	headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
 	segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Cached", @"Queue", nil]];
 	[segmentedControl addTarget:self action:@selector(segmentAction:) forControlEvents:UIControlEventValueChanged];
@@ -91,6 +88,70 @@
 		segmentedControl.hidden = YES;
 	}
 	[headerView addSubview:segmentedControl];
+	
+	if (viewObjects.isOfflineMode) 
+	{
+		headerView.frame = CGRectMake(0, 0, 320, 50);
+		
+		headerView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
+		headerView2.backgroundColor = viewObjects.darkNormal;
+		[headerView addSubview:headerView2];
+		[headerView2 release];
+		
+		playAllImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play-all-note.png"]];
+		playAllImage.frame = CGRectMake(10, 10, 19, 30);
+		[headerView2 addSubview:playAllImage];
+		[playAllImage release];
+		
+		playAllLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 160, 50)];
+		playAllLabel.backgroundColor = [UIColor clearColor];
+		playAllLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
+		playAllLabel.textAlignment = UITextAlignmentCenter;
+		playAllLabel.font = [UIFont boldSystemFontOfSize:30];
+		playAllLabel.text = @"Play All";
+		[headerView2 addSubview:playAllLabel];
+		[playAllLabel release];
+		
+		playAllButton = [UIButton buttonWithType:UIButtonTypeCustom];
+		playAllButton.frame = CGRectMake(0, 0, 160, 40);
+		[playAllButton addTarget:self action:@selector(playAllAction:) forControlEvents:UIControlEventTouchUpInside];
+		[headerView2 addSubview:playAllButton];
+		
+		spacerLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(158, -2, 6, 50)];
+		spacerLabel2.backgroundColor = [UIColor clearColor];
+		spacerLabel2.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
+		spacerLabel2.font = [UIFont systemFontOfSize:40];
+		spacerLabel2.text = @"|";
+		[headerView2 addSubview:spacerLabel2];
+		[spacerLabel2 release];
+		
+		shuffleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shuffle-small.png"]];
+		shuffleImage.frame = CGRectMake(180, 12, 24, 26);
+		[headerView2 addSubview:shuffleImage];
+		[shuffleImage release];
+		
+		shuffleLabel = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 160, 50)];
+		shuffleLabel.backgroundColor = [UIColor clearColor];
+		shuffleLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
+		shuffleLabel.textAlignment = UITextAlignmentCenter;
+		shuffleLabel.font = [UIFont boldSystemFontOfSize:30];
+		shuffleLabel.text = @"Shuffle";
+		[headerView2 addSubview:shuffleLabel];
+		[shuffleLabel release];
+		
+		shuffleButton = [UIButton buttonWithType:UIButtonTypeCustom];
+		shuffleButton.frame = CGRectMake(160, 0, 160, 40);
+		[shuffleButton addTarget:self action:@selector(shuffleAction:) forControlEvents:UIControlEventTouchUpInside];
+		[headerView2 addSubview:shuffleButton];
+		
+		// Add the top fade
+		UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
+		fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
+		fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		[self.tableView addSubview:fadeTop];
+		[fadeTop release];
+	}
+	
 	self.tableView.tableHeaderView = headerView;
 	
 	
@@ -138,14 +199,6 @@
 	[headerView addSubview:segmentedControl];
 	self.tableView.tableHeaderView = spacerView;
 	[self.tableView.superview addSubview:headerView];*/
-	
-	
-	// Add the table fade
-	/*UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
-	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
-	fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	[self.tableView addSubview:fadeTop];
-	[fadeTop release];*/
 	
 	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
@@ -257,7 +310,15 @@
 		[deleteSongsLabel removeFromSuperview];
 		[cacheSizeLabel removeFromSuperview];
 		[headerView2 removeFromSuperview];
-		headerView.frame = CGRectMake(0, 0, 320, 0);
+		
+		/*[playAllImage removeFromSuperview];
+		[playAllLabel removeFromSuperview];
+		[playAllButton removeFromSuperview];
+		[spacerLabel2 removeFromSuperview];
+		[shuffleImage removeFromSuperview];
+		[shuffleLabel removeFromSuperview];
+		[shuffleButton removeFromSuperview];*/
+		headerView.frame = CGRectMake(0, 0, 320, 44);
 		
 		self.tableView.tableHeaderView = headerView;
 	}
@@ -271,16 +332,9 @@
 	{
 		// Modify the header view to include the save and edit buttons
 		isSaveEditShowing = YES;
-		int y;
-		//if (IS_IPAD())
-		//	y = 48;
-		//else
-			y = 40;
+		int y = 40;
 		
-		headerView.frame = CGRectMake(0, 0, 320, y + 50);
-		
-		if (segmentedControl.selectedSegmentIndex == 2)
-			headerView.frame = CGRectMake(0, 0, 320, y + 100);
+		headerView.frame = CGRectMake(0, 0, 320, y + 100);
 		
 		songsCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, y, 227, 34)];
 		songsCountLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
@@ -313,10 +367,17 @@
 		cacheSizeLabel.font = [UIFont boldSystemFontOfSize:12];
 		if (segmentedControl.selectedSegmentIndex == 0)
 		{
-			unsigned long long combinedSize = 0;
+			/*unsigned long long combinedSize = 0;
 			for (NSString *path in [[NSFileManager defaultManager] subpathsAtPath:musicControls.audioFolderPath]) 
 			{
 				combinedSize += [[[NSFileManager defaultManager] attributesOfItemAtPath:[musicControls.audioFolderPath stringByAppendingPathComponent:path] error:NULL] fileSize];
+			}
+			cacheSizeLabel.text = [appDelegate formatFileSize:combinedSize];*/
+			unsigned long long combinedSize = 0;
+			FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT size FROM cachedSongs"];
+			while ([result next])
+			{
+				combinedSize += [result longLongIntForColumnIndex:0];
 			}
 			cacheSizeLabel.text = [appDelegate formatFileSize:combinedSize];
 		}
@@ -377,59 +438,56 @@
 		[headerView addSubview:deleteSongsLabel];
 		[deleteSongsLabel release];
 		
-		if (segmentedControl.selectedSegmentIndex == 2)
-		{
-			headerView2 = [[UIView alloc] initWithFrame:CGRectMake(0, y + 50, 320, 50)];
-			headerView2.backgroundColor = viewObjects.darkNormal;
-			[headerView addSubview:headerView2];
-			[headerView2 release];
-			
-			UIImageView *playAllImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play-all-note.png"]];
-			playAllImage.frame = CGRectMake(10, 10, 19, 30);
-			[headerView2 addSubview:playAllImage];
-			[playAllImage release];
-			
-			UILabel *playAllLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 160, 50)];
-			playAllLabel.backgroundColor = [UIColor clearColor];
-			playAllLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
-			playAllLabel.textAlignment = UITextAlignmentCenter;
-			playAllLabel.font = [UIFont boldSystemFontOfSize:30];
-			playAllLabel.text = @"Play All";
-			[headerView2 addSubview:playAllLabel];
-			[playAllLabel release];
-			
-			UIButton *playAllButton = [UIButton buttonWithType:UIButtonTypeCustom];
-			playAllButton.frame = CGRectMake(0, 0, 160, 40);
-			[playAllButton addTarget:self action:@selector(playAllAction:) forControlEvents:UIControlEventTouchUpInside];
-			[headerView2 addSubview:playAllButton];
-			
-			UILabel *spacerLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(158, -2, 6, 50)];
-			spacerLabel2.backgroundColor = [UIColor clearColor];
-			spacerLabel2.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
-			spacerLabel2.font = [UIFont systemFontOfSize:40];
-			spacerLabel2.text = @"|";
-			[headerView2 addSubview:spacerLabel2];
-			[spacerLabel2 release];
-			
-			UIImageView *shuffleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shuffle-small.png"]];
-			shuffleImage.frame = CGRectMake(180, 12, 24, 26);
-			[headerView2 addSubview:shuffleImage];
-			[shuffleImage release];
-			
-			UILabel *shuffleLabel = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 160, 50)];
-			shuffleLabel.backgroundColor = [UIColor clearColor];
-			shuffleLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
-			shuffleLabel.textAlignment = UITextAlignmentCenter;
-			shuffleLabel.font = [UIFont boldSystemFontOfSize:30];
-			shuffleLabel.text = @"Shuffle";
-			[headerView2 addSubview:shuffleLabel];
-			[shuffleLabel release];
-			
-			UIButton *shuffleButton = [UIButton buttonWithType:UIButtonTypeCustom];
-			shuffleButton.frame = CGRectMake(160, 0, 160, 40);
-			[shuffleButton addTarget:self action:@selector(shuffleAction:) forControlEvents:UIControlEventTouchUpInside];
-			[headerView2 addSubview:shuffleButton];
-		}
+		headerView2 = [[UIView alloc] initWithFrame:CGRectMake(0, y + 50, 320, 50)];
+		headerView2.backgroundColor = viewObjects.darkNormal;
+		[headerView addSubview:headerView2];
+		[headerView2 release];
+		
+		playAllImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play-all-note.png"]];
+		playAllImage.frame = CGRectMake(10, 10, 19, 30);
+		[headerView2 addSubview:playAllImage];
+		[playAllImage release];
+		
+		playAllLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 160, 50)];
+		playAllLabel.backgroundColor = [UIColor clearColor];
+		playAllLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
+		playAllLabel.textAlignment = UITextAlignmentCenter;
+		playAllLabel.font = [UIFont boldSystemFontOfSize:30];
+		playAllLabel.text = @"Play All";
+		[headerView2 addSubview:playAllLabel];
+		[playAllLabel release];
+		
+		playAllButton = [UIButton buttonWithType:UIButtonTypeCustom];
+		playAllButton.frame = CGRectMake(0, 0, 160, 40);
+		[playAllButton addTarget:self action:@selector(playAllAction:) forControlEvents:UIControlEventTouchUpInside];
+		[headerView2 addSubview:playAllButton];
+		
+		spacerLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(158, -2, 6, 50)];
+		spacerLabel2.backgroundColor = [UIColor clearColor];
+		spacerLabel2.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
+		spacerLabel2.font = [UIFont systemFontOfSize:40];
+		spacerLabel2.text = @"|";
+		[headerView2 addSubview:spacerLabel2];
+		[spacerLabel2 release];
+		
+		shuffleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shuffle-small.png"]];
+		shuffleImage.frame = CGRectMake(180, 12, 24, 26);
+		[headerView2 addSubview:shuffleImage];
+		[shuffleImage release];
+		
+		shuffleLabel = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 160, 50)];
+		shuffleLabel.backgroundColor = [UIColor clearColor];
+		shuffleLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
+		shuffleLabel.textAlignment = UITextAlignmentCenter;
+		shuffleLabel.font = [UIFont boldSystemFontOfSize:30];
+		shuffleLabel.text = @"Shuffle";
+		[headerView2 addSubview:shuffleLabel];
+		[shuffleLabel release];
+		
+		shuffleButton = [UIButton buttonWithType:UIButtonTypeCustom];
+		shuffleButton.frame = CGRectMake(160, 0, 160, 40);
+		[shuffleButton addTarget:self action:@selector(shuffleAction:) forControlEvents:UIControlEventTouchUpInside];
+		[headerView2 addSubview:shuffleButton];
 		
 		self.tableView.tableHeaderView = headerView;
 	}
@@ -525,9 +583,9 @@
 		
 		// Create the artist list
 		self.listOfArtists = [NSMutableArray arrayWithCapacity:1];
-		//self.listOfArtists = nil; self.listOfArtists = [[NSMutableArray alloc] init];
+		self.listOfArtistsSections = [NSMutableArray arrayWithCapacity:28];
 		
-		// Fix for slow load problem
+		// Fix for slow load problem (EDIT: Looks like it didn't actually work :(
 		[databaseControls.inMemoryDb executeUpdate:@"DROP TABLE cachedSongsArtistList"];
 		[databaseControls.inMemoryDb executeUpdate:@"CREATE TABLE cachedSongsArtistList (artist TEXT UNIQUE)"];
 		[databaseControls.inMemoryDb executeUpdate:@"ATTACH DATABASE ? AS songCacheDb", [NSString stringWithFormat:@"%@/songCache.db", databaseControls.databaseFolderPath]];
@@ -545,7 +603,52 @@
 			if ([[result stringForColumnIndex:0] length] > 0)
 				[listOfArtists addObject:[result stringForColumnIndex:0]]; 
 		}
-		
+
+		// Sort out The El La Los Las Le Les (Subsonic default)
+		for (int i = 0; i < [listOfArtists count]; i++)
+		{
+			NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+			NSString *artist = [listOfArtists objectAtIndex:i];
+			if ([artist length] > 5)
+			{
+				if ([[[artist substringToIndex:4] lowercaseString] isEqualToString:@"the "])
+				{
+					artist = [NSString stringWithFormat:@"%@, The", [artist substringFromIndex:4]];
+				}
+				else if ([[[artist substringToIndex:4] lowercaseString] isEqualToString:@"los "])
+				{
+					artist = [NSString stringWithFormat:@"%@, Los", [artist substringFromIndex:4]];
+				}
+				else if ([[[artist substringToIndex:4] lowercaseString] isEqualToString:@"las "])
+				{
+					artist = [NSString stringWithFormat:@"%@, Las", [artist substringFromIndex:4]];
+				}
+				else if ([[[artist substringToIndex:4] lowercaseString] isEqualToString:@"les "])
+				{
+					artist = [NSString stringWithFormat:@"%@, Les", [artist substringFromIndex:4]];
+				}
+				[listOfArtists replaceObjectAtIndex:i withObject:artist];
+			}
+			else if ([artist length] > 4)
+			{
+				if ([[[artist substringToIndex:3] lowercaseString] isEqualToString:@"el "])
+				{
+					artist = [NSString stringWithFormat:@"%@, El", [artist substringFromIndex:3]];
+				}
+				else if ([[[artist substringToIndex:3] lowercaseString] isEqualToString:@"la "])
+				{
+					artist = [NSString stringWithFormat:@"%@, La", [artist substringFromIndex:3]];
+				}
+				else if ([[[artist substringToIndex:3] lowercaseString] isEqualToString:@"le "])
+				{
+					artist = [NSString stringWithFormat:@"%@, Le", [artist substringFromIndex:3]];
+				}
+				[listOfArtists replaceObjectAtIndex:i withObject:artist];
+			}
+			[pool release];
+		}
+		[listOfArtists sortUsingSelector:@selector(caseInsensitiveCompare:)];
+
 		// Create the section index
 		[databaseControls.inMemoryDb executeUpdate:@"DROP TABLE cachedSongsArtistIndex"];
 		[databaseControls.inMemoryDb executeUpdate:@"CREATE TABLE cachedSongsArtistIndex (artist TEXT)"];
@@ -553,9 +656,76 @@
 		{
 			[databaseControls.inMemoryDb executeUpdate:@"INSERT INTO cachedSongsArtistIndex (artist) VALUES (?)", artist];
 		}
-		self.sectionInfo = nil; self.sectionInfo = [databaseControls sectionInfoFromTable:@"cachedSongsArtistIndex" inDatabase:databaseControls.inMemoryDb withColumn:@"artist"];
+		self.sectionInfo = nil; 
+		self.sectionInfo = [databaseControls sectionInfoFromTable:@"cachedSongsArtistIndex" 
+													   inDatabase:databaseControls.inMemoryDb 
+													   withColumn:@"artist"];
+		showIndex = YES;
 		if ([sectionInfo count] < 5)
-			self.sectionInfo = nil;
+			showIndex = NO;
+
+		// Sort into sections		
+		if ([sectionInfo count] > 0)
+		{
+			int lastIndex = 0;
+			for (int i = 0; i < [sectionInfo count] - 1; i++)
+			{
+				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+				int index = [[[sectionInfo objectAtIndex:i+1] objectAtIndex:1] intValue];
+				NSMutableArray *section = [NSMutableArray arrayWithCapacity:0];
+				for (int i = lastIndex; i < index; i++)
+				{
+					[section addObject:[listOfArtists objectAtIndex:i]];
+				}
+				[listOfArtistsSections addObject:section];
+				lastIndex = index;
+				[pool release];
+			}
+			NSMutableArray *section = [NSMutableArray arrayWithCapacity:0];
+			for (int i = lastIndex; i < [listOfArtists count]; i++)
+			{
+				[section addObject:[listOfArtists objectAtIndex:i]];
+			}
+			[listOfArtistsSections addObject:section];
+		}
+		
+		
+		// Move the definite article back to the beginning  Le El La The Los Las Les
+		for (int i = 0; i < [listOfArtists count]; i++)
+		{
+			NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+			NSString *artist = [listOfArtists objectAtIndex:i];
+			NSUInteger length = [artist length];
+			
+			if (length > 6)
+			{
+				NSString *substring5 = [artist substringFromIndex:length - 5];
+				if ([substring5 isEqualToString:@", The"] ||
+					[substring5 isEqualToString:@", Los"] ||
+					[substring5 isEqualToString:@", Las"] ||
+					[substring5 isEqualToString:@", Les"])
+				{
+					artist = [NSString stringWithFormat:@"%@ %@", 
+														[artist substringFromIndex:length - 3], 
+														[artist substringToIndex:length - 5]];
+				}
+			}
+			else if (length > 5)
+			{
+				NSString *substring4 = [artist substringFromIndex:length - 4];
+				if ([substring4 isEqualToString:@", Le"] ||
+					[substring4 isEqualToString:@", El"] ||
+					[substring4 isEqualToString:@", La"])
+				{
+					artist = [NSString stringWithFormat:@"%@ %@", 
+														[artist substringFromIndex:length - 2], 
+														[artist substringToIndex:length - 4]];
+				}
+			}
+			
+			[listOfArtists replaceObjectAtIndex:i withObject:artist];
+			[pool release];
+		}
 		
 		//NSLog(@"sectionInfo: %@", sectionInfo);
 		
@@ -575,7 +745,7 @@
 			{
 				[self addSaveEditButtons];
 			}
-		}		
+		}
 	}
 	else if (segmentedControl.selectedSegmentIndex == 1)
 	{
@@ -1056,15 +1226,20 @@
 #pragma mark -
 #pragma mark Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // Return the number of sections.
-    return 1;
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView 
+{
+	if (segmentedControl.selectedSegmentIndex == 0 && viewObjects.isCacheUnlocked)
+	{
+		return [sectionInfo count];
+	}
+	
+	return 1;
 }
 
 // Following 2 methods handle the right side index
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView 
 {
-	if (segmentedControl.selectedSegmentIndex == 0 && viewObjects.isCacheUnlocked)
+	if (segmentedControl.selectedSegmentIndex == 0 && viewObjects.isCacheUnlocked && showIndex)
 	{
 		NSMutableArray *indexes = [[[NSMutableArray alloc] init] autorelease];
 		for (int i = 0; i < [sectionInfo count]; i++)
@@ -1073,18 +1248,25 @@
 		}
 		return indexes;
 	}
-	else 
-	{
-		return nil;
-	}
+		
+	return nil;
+}
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+	
+	if (segmentedControl.selectedSegmentIndex == 0 && viewObjects.isCacheUnlocked)
+	{
+		return [[sectionInfo objectAtIndex:section] objectAtIndex:0];
+	}
+	
+	return @"";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index 
 {
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
-		if (index == 0)
+		/*if (index == 0)
 		{
 			[tableView scrollRectToVisible:CGRectMake(0, 90, 320, 40) animated:NO];
 		}
@@ -1093,7 +1275,15 @@
 			NSUInteger row = [[[sectionInfo objectAtIndex:(index - 1)] objectAtIndex:1] intValue];
 			NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
 			[tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+		}*/
+		
+		if (index == 0) 
+		{
+			[tableView scrollRectToVisible:CGRectMake(0, 90, 320, 40) animated:NO];
+			return -1;
 		}
+		
+		return index;
 	}
 	
 	return -1;
@@ -1117,7 +1307,8 @@
 		// Return the number of rows in the section.
 		if (segmentedControl.selectedSegmentIndex == 0)
 		{
-			return [listOfArtists count];
+			//return [listOfArtists count];
+			return [[listOfArtistsSections objectAtIndex:section] count];
 		}
 		else if (segmentedControl.selectedSegmentIndex == 1)
 		{
@@ -1138,13 +1329,14 @@
 		
 		CacheArtistUITableViewCell *cell = [[[CacheArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		cell.indexPath = indexPath;
+		//cell.indexPath = indexPath;
 		
-		if (sectionInfo)
+		if (showIndex)
 			cell.isIndexShowing = YES;
 		
 		// Set up the cell...
-		[cell.artistNameLabel setText:[listOfArtists objectAtIndex:indexPath.row]];
+		//[cell.artistNameLabel setText:[listOfArtists objectAtIndex:indexPath.row]];
+		[cell.artistNameLabel setText:[[listOfArtistsSections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
 		
 		cell.backgroundView = [[[UIView alloc] init] autorelease];
 		if(indexPath.row % 2 == 0)
@@ -1246,6 +1438,18 @@
 #pragma mark -
 #pragma mark Table view delegate
 
+NSInteger trackSort1(id obj1, id obj2, void *context)
+{
+	NSUInteger track1 = [(NSNumber*)[(NSArray*)obj1 objectAtIndex:1] intValue];
+	NSUInteger track2 = [(NSNumber*)[(NSArray*)obj2 objectAtIndex:1] intValue];
+	if (track1 < track2)
+		return NSOrderedAscending;
+	else if (track1 == track2)
+		return NSOrderedSame;
+	else
+		return NSOrderedDescending;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
     if (segmentedControl.selectedSegmentIndex == 0)
@@ -1253,23 +1457,41 @@
 		if (viewObjects.isCellEnabled)
 		{
 			CacheAlbumViewController *cacheAlbumViewController = [[CacheAlbumViewController alloc] initWithNibName:@"CacheAlbumViewController" bundle:nil];
-			cacheAlbumViewController.title = [listOfArtists objectAtIndex:indexPath.row];
+			//cacheAlbumViewController.title = [listOfArtists objectAtIndex:indexPath.row];
+			cacheAlbumViewController.title = [[listOfArtistsSections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
 			cacheAlbumViewController.listOfAlbums = [NSMutableArray arrayWithCapacity:1];
 			cacheAlbumViewController.listOfSongs = [NSMutableArray arrayWithCapacity:1];
 			//cacheAlbumViewController.listOfAlbums = [[NSMutableArray alloc] init];
 			//cacheAlbumViewController.listOfSongs = [[NSMutableArray alloc] init];
 			cacheAlbumViewController.segment = 2;
-			cacheAlbumViewController.seg1 = [listOfArtists objectAtIndex:indexPath.row];
-			FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT md5, segs, seg2 FROM cachedSongsLayout WHERE seg1 = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", [listOfArtists objectAtIndex:indexPath.row]];
+			cacheAlbumViewController.seg1 = [[listOfArtistsSections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+			FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT md5, segs, seg2, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", [[listOfArtistsSections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
 			while ([result next])
 			{
 				if ([result intForColumnIndex:1] > 2)
 				{
-					[cacheAlbumViewController.listOfAlbums addObject:[NSArray arrayWithObjects:[result stringForColumnIndex:0], [result stringForColumnIndex:2], nil]];
+					[cacheAlbumViewController.listOfAlbums addObject:[NSArray arrayWithObjects:[result stringForColumnIndex:0], 
+																							   [result stringForColumnIndex:2], nil]];
 				}
 				else
 				{
-					[cacheAlbumViewController.listOfSongs addObject:[result stringForColumnIndex:0]];
+					[cacheAlbumViewController.listOfSongs addObject:[NSArray arrayWithObjects:[result stringForColumnIndex:0], 
+																							  [NSNumber numberWithInt:[result intForColumnIndex:3]], nil]];
+					
+					/*// Sort by track number -- iOS 4.0+ only
+					[cacheAlbumViewController.listOfSongs sortUsingComparator: ^NSComparisonResult(id obj1, id obj2) {
+						NSUInteger track1 = [(NSNumber*)[(NSArray*)obj1 objectAtIndex:1] intValue];
+						NSUInteger track2 = [(NSNumber*)[(NSArray*)obj2 objectAtIndex:1] intValue];
+						if (track1 < track2)
+							return NSOrderedAscending;
+						else if (track1 == track2)
+							return NSOrderedSame;
+						else
+							return NSOrderedDescending;
+					}];*/
+					
+					// Sort by track number
+					[cacheAlbumViewController.listOfSongs sortUsingFunction:trackSort1 context:NULL];
 				}
 			}
 			

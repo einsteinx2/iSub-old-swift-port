@@ -21,9 +21,12 @@
 
 - (ChatXMLParser *) initXMLParser 
 {	
-	[super init];	
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
+	if ((self = [super init]))	
+	{
+		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
+		viewObjects = [ViewObjectsSingleton sharedInstance];
+	}
+	
 	return self;
 }
 

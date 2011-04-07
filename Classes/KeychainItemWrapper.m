@@ -93,7 +93,7 @@ Keychain API expects as a validly constructed container class.
 
 - (id)initWithIdentifier: (NSString *)identifier accessGroup:(NSString *) accessGroup;
 {
-    if (self = [super init])
+    if ((self = [super init]))
     {
         // Begin Keychain search setup. The genericPasswordQuery leverages the special user
         // defined attribute kSecAttrGeneric to distinguish itself between other generic Keychain

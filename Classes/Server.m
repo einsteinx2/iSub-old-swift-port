@@ -14,7 +14,7 @@
 
 - (id) init
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		url = nil;
 		username = nil;
@@ -36,7 +36,7 @@
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		url = [[decoder decodeObject] retain];
 		username = [[decoder decodeObject] retain];

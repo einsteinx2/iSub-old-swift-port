@@ -112,6 +112,9 @@
 		53523D9011CD5889006AEA48 /* GenresAlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53523D8E11CD5889006AEA48 /* GenresAlbumViewController.xib */; };
 		53523D9411CD61F7006AEA48 /* GenresArtistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53523D9211CD61F7006AEA48 /* GenresArtistViewController.m */; };
 		53523D9511CD61F7006AEA48 /* GenresArtistViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53523D9311CD61F7006AEA48 /* GenresArtistViewController.xib */; };
+		5353B839134D4D6C005C589E /* PagingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5353B838134D4D6C005C589E /* PagingScrollView.m */; };
+		5353B83C134D8019005C589E /* upload-playlist.png in Resources */ = {isa = PBXBuildFile; fileRef = 5353B83A134D8019005C589E /* upload-playlist.png */; };
+		5353B83D134D8019005C589E /* upload-playlist@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5353B83B134D8019005C589E /* upload-playlist@2x.png */; };
 		53544D8A1187DED400B63DB9 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53544D891187DED400B63DB9 /* CoreLocation.framework */; };
 		5354911A11B03D8E00928E0F /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 5354910C11B03D8E00928E0F /* ASIAuthenticationDialog.m */; };
 		5354911B11B03D8E00928E0F /* ASIFormDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5354910E11B03D8E00928E0F /* ASIFormDataRequest.m */; };
@@ -124,6 +127,22 @@
 		535806EA11CD92DC00A09386 /* GenresSongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 535806E911CD92DC00A09386 /* GenresSongUITableViewCell.m */; };
 		5358083811CEB5F200A09386 /* CacheQueueSongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358083711CEB5F200A09386 /* CacheQueueSongUITableViewCell.m */; };
 		535A889A113F62DD00979783 /* default-album-art.png in Resources */ = {isa = PBXBuildFile; fileRef = 535A8899113F62DD00979783 /* default-album-art.png */; };
+		535B7246134C16FC003E0E1C /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7245134C16FC003E0E1C /* GTMNSString+HTML.m */; };
+		535B7254134CEE1E003E0E1C /* DDSocialDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7251134CEE1E003E0E1C /* DDSocialDialog.m */; };
+		535B7255134CEE1E003E0E1C /* DDSocialLoginDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7253134CEE1E003E0E1C /* DDSocialLoginDialog.m */; };
+		535B725E134CEEB0003E0E1C /* ShuffleFolderPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B725C134CEEAC003E0E1C /* ShuffleFolderPickerViewController.m */; };
+		535B725F134CEEB0003E0E1C /* ShuffleFolderPickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 535B725D134CEEAD003E0E1C /* ShuffleFolderPickerViewController.xib */; };
+		535B726A134CFB0E003E0E1C /* FolderPickerDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7269134CFB0A003E0E1C /* FolderPickerDialog.m */; };
+		535B726C134D0721003E0E1C /* SongInfoViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 535B726B134D0721003E0E1C /* SongInfoViewController-iPad.xib */; };
+		535B7274134D0900003E0E1C /* controller-bookmark-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B726D134D0900003E0E1C /* controller-bookmark-ipad.png */; };
+		535B7275134D0900003E0E1C /* controller-bookmark-on-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B726E134D0900003E0E1C /* controller-bookmark-on-ipad.png */; };
+		535B7276134D0900003E0E1C /* controller-repeat-all-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B726F134D0900003E0E1C /* controller-repeat-all-ipad.png */; };
+		535B7277134D0900003E0E1C /* controller-repeat-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B7270134D0900003E0E1C /* controller-repeat-ipad.png */; };
+		535B7278134D0900003E0E1C /* controller-repeat-one-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B7271134D0900003E0E1C /* controller-repeat-one-ipad.png */; };
+		535B7279134D0900003E0E1C /* controller-shuffle-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B7272134D0900003E0E1C /* controller-shuffle-ipad.png */; };
+		535B727A134D0900003E0E1C /* controller-shuffle-on-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B7273134D0900003E0E1C /* controller-shuffle-on-ipad.png */; };
+		535B727E134D273B003E0E1C /* SearchAllViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B727C134D26E2003E0E1C /* SearchAllViewController.m */; };
+		535B727F134D273B003E0E1C /* SearchAllViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 535B727D134D2704003E0E1C /* SearchAllViewController.xib */; };
 		535CA9C712DBCA9000389DA1 /* folders-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CA9C512DBCA9000389DA1 /* folders-tabbaricon.png */; };
 		535CA9C812DBCA9000389DA1 /* folders-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CA9C612DBCA9000389DA1 /* folders-tabbaricon@2x.png */; };
 		535CAC6812DC2D6D00389DA1 /* player-overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CAC6612DC2D6D00389DA1 /* player-overlay.png */; };
@@ -189,7 +208,6 @@
 		5379DC511219E48800F426CD /* ChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5379DC4C1219E48800F426CD /* ChatViewController.xib */; };
 		5379DC521219E48800F426CD /* ChatXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC4E1219E48800F426CD /* ChatXMLParser.m */; };
 		5379DC571219EEEB00F426CD /* ChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC561219EEEB00F426CD /* ChatMessage.m */; };
-		537D26D9128DC685007E4CEC /* FolderLoadingScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 537D26D8128DC685007E4CEC /* FolderLoadingScreen.m */; };
 		537D2781128DE258007E4CEC /* NSURLConnectionDelegateQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 537D2780128DE258007E4CEC /* NSURLConnectionDelegateQueue.m */; };
 		537D279D128DE8EC007E4CEC /* NSURLConnectionDelegateQueueArtwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 537D279C128DE8EC007E4CEC /* NSURLConnectionDelegateQueueArtwork.m */; };
 		537DE2D9113F008C00875852 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DE2D8113F008C00875852 /* CoreFoundation.framework */; };
@@ -575,6 +593,10 @@
 		53523D9111CD61F7006AEA48 /* GenresArtistViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenresArtistViewController.h; sourceTree = "<group>"; };
 		53523D9211CD61F7006AEA48 /* GenresArtistViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenresArtistViewController.m; sourceTree = "<group>"; };
 		53523D9311CD61F7006AEA48 /* GenresArtistViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GenresArtistViewController.xib; sourceTree = "<group>"; };
+		5353B837134D4D6C005C589E /* PagingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PagingScrollView.h; sourceTree = "<group>"; };
+		5353B838134D4D6C005C589E /* PagingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PagingScrollView.m; sourceTree = "<group>"; };
+		5353B83A134D8019005C589E /* upload-playlist.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "upload-playlist.png"; path = "Images/Other/upload-playlist.png"; sourceTree = "<group>"; };
+		5353B83B134D8019005C589E /* upload-playlist@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "upload-playlist@2x.png"; path = "Images/Other/upload-playlist@2x.png"; sourceTree = "<group>"; };
 		53544D891187DED400B63DB9 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		5354910B11B03D8E00928E0F /* ASIAuthenticationDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIAuthenticationDialog.h; sourceTree = "<group>"; };
 		5354910C11B03D8E00928E0F /* ASIAuthenticationDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIAuthenticationDialog.m; sourceTree = "<group>"; };
@@ -598,6 +620,29 @@
 		5358083611CEB5F200A09386 /* CacheQueueSongUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheQueueSongUITableViewCell.h; sourceTree = "<group>"; };
 		5358083711CEB5F200A09386 /* CacheQueueSongUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheQueueSongUITableViewCell.m; sourceTree = "<group>"; };
 		535A8899113F62DD00979783 /* default-album-art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art.png"; path = "Images/Other/default-album-art.png"; sourceTree = "<group>"; };
+		535B7243134C16FC003E0E1C /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
+		535B7244134C16FC003E0E1C /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
+		535B7245134C16FC003E0E1C /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
+		535B7250134CEE1E003E0E1C /* DDSocialDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDSocialDialog.h; sourceTree = "<group>"; };
+		535B7251134CEE1E003E0E1C /* DDSocialDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDSocialDialog.m; sourceTree = "<group>"; };
+		535B7252134CEE1E003E0E1C /* DDSocialLoginDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDSocialLoginDialog.h; sourceTree = "<group>"; };
+		535B7253134CEE1E003E0E1C /* DDSocialLoginDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDSocialLoginDialog.m; sourceTree = "<group>"; };
+		535B725B134CEEAB003E0E1C /* ShuffleFolderPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShuffleFolderPickerViewController.h; sourceTree = "<group>"; };
+		535B725C134CEEAC003E0E1C /* ShuffleFolderPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShuffleFolderPickerViewController.m; sourceTree = "<group>"; };
+		535B725D134CEEAD003E0E1C /* ShuffleFolderPickerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShuffleFolderPickerViewController.xib; sourceTree = "<group>"; };
+		535B7268134CFB08003E0E1C /* FolderPickerDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FolderPickerDialog.h; sourceTree = "<group>"; };
+		535B7269134CFB0A003E0E1C /* FolderPickerDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FolderPickerDialog.m; sourceTree = "<group>"; };
+		535B726B134D0721003E0E1C /* SongInfoViewController-iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "SongInfoViewController-iPad.xib"; sourceTree = "<group>"; };
+		535B726D134D0900003E0E1C /* controller-bookmark-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-bookmark-ipad.png"; path = "Images/Player Icons/controller-bookmark-ipad.png"; sourceTree = "<group>"; };
+		535B726E134D0900003E0E1C /* controller-bookmark-on-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-bookmark-on-ipad.png"; path = "Images/Player Icons/controller-bookmark-on-ipad.png"; sourceTree = "<group>"; };
+		535B726F134D0900003E0E1C /* controller-repeat-all-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-repeat-all-ipad.png"; path = "Images/Player Icons/controller-repeat-all-ipad.png"; sourceTree = "<group>"; };
+		535B7270134D0900003E0E1C /* controller-repeat-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-repeat-ipad.png"; path = "Images/Player Icons/controller-repeat-ipad.png"; sourceTree = "<group>"; };
+		535B7271134D0900003E0E1C /* controller-repeat-one-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-repeat-one-ipad.png"; path = "Images/Player Icons/controller-repeat-one-ipad.png"; sourceTree = "<group>"; };
+		535B7272134D0900003E0E1C /* controller-shuffle-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-shuffle-ipad.png"; path = "Images/Player Icons/controller-shuffle-ipad.png"; sourceTree = "<group>"; };
+		535B7273134D0900003E0E1C /* controller-shuffle-on-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-shuffle-on-ipad.png"; path = "Images/Player Icons/controller-shuffle-on-ipad.png"; sourceTree = "<group>"; };
+		535B727B134D26D6003E0E1C /* SearchAllViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchAllViewController.h; sourceTree = "<group>"; };
+		535B727C134D26E2003E0E1C /* SearchAllViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchAllViewController.m; sourceTree = "<group>"; };
+		535B727D134D2704003E0E1C /* SearchAllViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchAllViewController.xib; sourceTree = "<group>"; };
 		535CA9C512DBCA9000389DA1 /* folders-tabbaricon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "folders-tabbaricon.png"; path = "Images/Tab Bar Icons/folders-tabbaricon.png"; sourceTree = "<group>"; };
 		535CA9C612DBCA9000389DA1 /* folders-tabbaricon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "folders-tabbaricon@2x.png"; path = "Images/Tab Bar Icons/folders-tabbaricon@2x.png"; sourceTree = "<group>"; };
 		535CAC6612DC2D6D00389DA1 /* player-overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "player-overlay.png"; path = "Images/Other/player-overlay.png"; sourceTree = "<group>"; };
@@ -709,8 +754,6 @@
 		5379DC4E1219E48800F426CD /* ChatXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatXMLParser.m; sourceTree = "<group>"; };
 		5379DC551219EEEB00F426CD /* ChatMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatMessage.h; sourceTree = "<group>"; };
 		5379DC561219EEEB00F426CD /* ChatMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatMessage.m; sourceTree = "<group>"; };
-		537D26D7128DC685007E4CEC /* FolderLoadingScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FolderLoadingScreen.h; sourceTree = "<group>"; };
-		537D26D8128DC685007E4CEC /* FolderLoadingScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FolderLoadingScreen.m; sourceTree = "<group>"; };
 		537D277F128DE258007E4CEC /* NSURLConnectionDelegateQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSURLConnectionDelegateQueue.h; sourceTree = "<group>"; };
 		537D2780128DE258007E4CEC /* NSURLConnectionDelegateQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSURLConnectionDelegateQueue.m; sourceTree = "<group>"; };
 		537D279B128DE8EC007E4CEC /* NSURLConnectionDelegateQueueArtwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSURLConnectionDelegateQueueArtwork.h; sourceTree = "<group>"; };
@@ -1270,12 +1313,12 @@
 				535806E911CD92DC00A09386 /* GenresSongUITableViewCell.m */,
 				5388A2EE1198741E0049BA9E /* LocalPlaylistsUITableViewCell.h */,
 				5388A2EF1198741E0049BA9E /* LocalPlaylistsUITableViewCell.m */,
+				53ABE54A11665C3800197877 /* PlaylistsUITableViewCell.h */,
+				53ABE54B11665C3800197877 /* PlaylistsUITableViewCell.m */,
 				53ABE3571165C52D00197877 /* PlayingUITableViewCell.h */,
 				53ABE3581165C52D00197877 /* PlayingUITableViewCell.m */,
 				53ABE54D1166641B00197877 /* PlaylistSongUITableViewCell.h */,
 				53ABE54E1166641B00197877 /* PlaylistSongUITableViewCell.m */,
-				53ABE54A11665C3800197877 /* PlaylistsUITableViewCell.h */,
-				53ABE54B11665C3800197877 /* PlaylistsUITableViewCell.m */,
 				53B9D0B61279FB6B00CAB0E0 /* SearchSongUITableViewCell.h */,
 				53B9D0B71279FB6B00CAB0E0 /* SearchSongUITableViewCell.m */,
 				530CE842119B9D9100728ED5 /* SongInfoPlaylistCustomUITableView.h */,
@@ -1299,14 +1342,14 @@
 				53BA48671284C2340010B380 /* JukeboxXMLParser.m */,
 				53F2D2391139F9DC00107D63 /* XMLParser.h */,
 				53F2D23A1139F9DC00107D63 /* XMLParser.m */,
+				530388AA116573A30043292D /* AllSongsXMLParser.h */,
+				530388AB116573A30043292D /* AllSongsXMLParser.m */,
 				534050F511E99633004AEC41 /* LyricsXMLParser.h */,
 				534050F611E99633004AEC41 /* LyricsXMLParser.m */,
 				531F1595126F711100F524BD /* HomeXMLParser.h */,
 				531F1596126F711100F524BD /* HomeXMLParser.m */,
 				53E75E82127123B300BC1A19 /* SearchXMLParser.h */,
 				53E75E83127123B300BC1A19 /* SearchXMLParser.m */,
-				530388AA116573A30043292D /* AllSongsXMLParser.h */,
-				530388AB116573A30043292D /* AllSongsXMLParser.m */,
 				53ABE53D11665B1100197877 /* PlaylistsXMLParser.h */,
 				53ABE53E11665B1100197877 /* PlaylistsXMLParser.m */,
 				53ABE3761165C97100197877 /* PlayingXMLParser.h */,
@@ -1339,6 +1382,17 @@
 				5354911911B03D8E00928E0F /* ASIProgressDelegate.h */,
 			);
 			name = ASIHTTPRequest;
+			sourceTree = "<group>";
+		};
+		535B724F134CEE0A003E0E1C /* DDSocialDialog */ = {
+			isa = PBXGroup;
+			children = (
+				535B7250134CEE1E003E0E1C /* DDSocialDialog.h */,
+				535B7251134CEE1E003E0E1C /* DDSocialDialog.m */,
+				535B7252134CEE1E003E0E1C /* DDSocialLoginDialog.h */,
+				535B7253134CEE1E003E0E1C /* DDSocialLoginDialog.m */,
+			);
+			name = DDSocialDialog;
 			sourceTree = "<group>";
 		};
 		536AD25711EA7EFB00387CB0 /* Twitter+OAuth */ = {
@@ -1454,8 +1508,6 @@
 				28C286DF0D94DF7D0034E888 /* RootViewController.h */,
 				28C286E00D94DF7D0034E888 /* RootViewController.m */,
 				28F335F01007B36200424DE2 /* RootViewController.xib */,
-				53ADBBBE13352DB40098FAE6 /* FolderDropdownControl.h */,
-				53ADBBBF13352DB40098FAE6 /* FolderDropdownControl.m */,
 			);
 			name = "Folders view";
 			sourceTree = "<group>";
@@ -1539,6 +1591,9 @@
 				53B20D2D12C27CE000A90DD9 /* UIView-tools.m */,
 				5382BA8B12DA4038005A3D1A /* UIDevice-Hardware.h */,
 				5382BA8C12DA4039005A3D1A /* UIDevice-Hardware.m */,
+				535B7243134C16FC003E0E1C /* GTMDefines.h */,
+				535B7244134C16FC003E0E1C /* GTMNSString+HTML.h */,
+				535B7245134C16FC003E0E1C /* GTMNSString+HTML.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1571,6 +1626,14 @@
 				53B9D0B11279FAEF00CAB0E0 /* SearchSongsViewController.h */,
 				53B9D0B21279FAEF00CAB0E0 /* SearchSongsViewController.m */,
 				53B9D0B31279FAEF00CAB0E0 /* SearchSongsViewController.xib */,
+				535B725B134CEEAB003E0E1C /* ShuffleFolderPickerViewController.h */,
+				535B725C134CEEAC003E0E1C /* ShuffleFolderPickerViewController.m */,
+				535B725D134CEEAD003E0E1C /* ShuffleFolderPickerViewController.xib */,
+				535B7268134CFB08003E0E1C /* FolderPickerDialog.h */,
+				535B7269134CFB0A003E0E1C /* FolderPickerDialog.m */,
+				535B727B134D26D6003E0E1C /* SearchAllViewController.h */,
+				535B727C134D26E2003E0E1C /* SearchAllViewController.m */,
+				535B727D134D2704003E0E1C /* SearchAllViewController.xib */,
 			);
 			name = "Home view";
 			sourceTree = "<group>";
@@ -1601,6 +1664,7 @@
 		539797F21162CE7700F41D8B /* Support Classes */ = {
 			isa = PBXGroup;
 			children = (
+				535B724F134CEE0A003E0E1C /* DDSocialDialog */,
 				53A45479133D6F6A00741030 /* cocoahttpserver */,
 				5382A81812D82CE8005A3D1A /* Categories */,
 				5382A81712D82CD8005A3D1A /* FMDB */,
@@ -1625,6 +1689,8 @@
 		539797F31162CE9300F41D8B /* Custom Objects */ = {
 			isa = PBXGroup;
 			children = (
+				53ADBBBE13352DB40098FAE6 /* FolderDropdownControl.h */,
+				53ADBBBF13352DB40098FAE6 /* FolderDropdownControl.m */,
 				532D9B41131AE19700FD8CA7 /* CustomUIAlertView.h */,
 				532D9B42131AE19700FD8CA7 /* CustomUIAlertView.m */,
 				53F2D1FC1139F5A500107D63 /* Index.h */,
@@ -1648,8 +1714,6 @@
 				53B5298811AD9B79005776B5 /* LoadingScreen.h */,
 				53B5298911AD9B79005776B5 /* LoadingScreen.m */,
 				536B5D5D11C8183D00CC1D69 /* LoadingScreen.xib */,
-				537D26D7128DC685007E4CEC /* FolderLoadingScreen.h */,
-				537D26D8128DC685007E4CEC /* FolderLoadingScreen.m */,
 				53A77FCB128E38E7005D2D65 /* CellOverlay.h */,
 				53A77FCC128E38E7005D2D65 /* CellOverlay.m */,
 				53B20F5912C2D7AC00A90DD9 /* CustomUITabBarController.h */,
@@ -1745,6 +1809,8 @@
 				53BB7FAB121B96E400BEE7E8 /* comment-write-pressed.png */,
 				53BB8009121B9CA200BEE7E8 /* comment-write-pressed@2x.png */,
 				53BB800A121B9CA200BEE7E8 /* comment-write@2x.png */,
+				5353B83A134D8019005C589E /* upload-playlist.png */,
+				5353B83B134D8019005C589E /* upload-playlist@2x.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -1830,6 +1896,13 @@
 		53AAF1BE11DA913000447FF7 /* Player Icons */ = {
 			isa = PBXGroup;
 			children = (
+				535B726D134D0900003E0E1C /* controller-bookmark-ipad.png */,
+				535B726E134D0900003E0E1C /* controller-bookmark-on-ipad.png */,
+				535B726F134D0900003E0E1C /* controller-repeat-all-ipad.png */,
+				535B7270134D0900003E0E1C /* controller-repeat-ipad.png */,
+				535B7271134D0900003E0E1C /* controller-repeat-one-ipad.png */,
+				535B7272134D0900003E0E1C /* controller-shuffle-ipad.png */,
+				535B7273134D0900003E0E1C /* controller-shuffle-on-ipad.png */,
 				53404FF611E94AA5004AEC41 /* controller-bookmark-on.png */,
 				53404FF711E94AA5004AEC41 /* controller-bookmark-on@2x.png */,
 				53404FF811E94AA5004AEC41 /* controller-bookmark.png */,
@@ -1974,6 +2047,7 @@
 				53CECEF6113D8B9500B09699 /* SongInfoViewController.h */,
 				53CECEF7113D8B9500B09699 /* SongInfoViewController.m */,
 				53CECEF8113D8B9500B09699 /* SongInfoViewController.xib */,
+				535B726B134D0721003E0E1C /* SongInfoViewController-iPad.xib */,
 				53F4A226117011B900BB8411 /* CurrentPlaylistBackgroundViewController.h */,
 				53F4A227117011B900BB8411 /* CurrentPlaylistBackgroundViewController.m */,
 				53F4A228117011B900BB8411 /* CurrentPlaylistBackgroundViewController.xib */,
@@ -1985,6 +2059,8 @@
 				53F4A071116FF48400BB8411 /* DebugViewController.h */,
 				53F4A072116FF48400BB8411 /* DebugViewController.m */,
 				53F4A073116FF48400BB8411 /* DebugViewController.xib */,
+				5353B837134D4D6C005C589E /* PagingScrollView.h */,
+				5353B838134D4D6C005C589E /* PagingScrollView.m */,
 			);
 			name = "Song Info";
 			sourceTree = "<group>";
@@ -2334,6 +2410,18 @@
 				53CC217E132DC79F003521B5 /* Entitlements.plist in Resources */,
 				53ADBBBC133525BD0098FAE6 /* folder-dropdown-arrow.png in Resources */,
 				53ADBBBD133525BD0098FAE6 /* folder-dropdown-arrow@2x.png in Resources */,
+				535B725F134CEEB0003E0E1C /* ShuffleFolderPickerViewController.xib in Resources */,
+				535B726C134D0721003E0E1C /* SongInfoViewController-iPad.xib in Resources */,
+				535B7274134D0900003E0E1C /* controller-bookmark-ipad.png in Resources */,
+				535B7275134D0900003E0E1C /* controller-bookmark-on-ipad.png in Resources */,
+				535B7276134D0900003E0E1C /* controller-repeat-all-ipad.png in Resources */,
+				535B7277134D0900003E0E1C /* controller-repeat-ipad.png in Resources */,
+				535B7278134D0900003E0E1C /* controller-repeat-one-ipad.png in Resources */,
+				535B7279134D0900003E0E1C /* controller-shuffle-ipad.png in Resources */,
+				535B727A134D0900003E0E1C /* controller-shuffle-on-ipad.png in Resources */,
+				535B727F134D273B003E0E1C /* SearchAllViewController.xib in Resources */,
+				5353B83C134D8019005C589E /* upload-playlist.png in Resources */,
+				5353B83D134D8019005C589E /* upload-playlist@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2464,7 +2552,6 @@
 				53BA48681284C2340010B380 /* JukeboxXMLParser.m in Sources */,
 				53BA49431285BD7A0010B380 /* NewHomeViewController.m in Sources */,
 				53BA497D1285D5B10010B380 /* QuickAlbumsViewController.m in Sources */,
-				537D26D9128DC685007E4CEC /* FolderLoadingScreen.m in Sources */,
 				537D2781128DE258007E4CEC /* NSURLConnectionDelegateQueue.m in Sources */,
 				537D279D128DE8EC007E4CEC /* NSURLConnectionDelegateQueueArtwork.m in Sources */,
 				53A77FC7128E3648005D2D65 /* UITableViewCell-overlay.m in Sources */,
@@ -2506,6 +2593,13 @@
 				53A45494133D710C00741030 /* HttpIndexPage.m in Sources */,
 				53A4549D133D75E900741030 /* MyHTTPConnection.m in Sources */,
 				53A454AF133D7E2800741030 /* LocalhostAddresses.m in Sources */,
+				535B7246134C16FC003E0E1C /* GTMNSString+HTML.m in Sources */,
+				535B7254134CEE1E003E0E1C /* DDSocialDialog.m in Sources */,
+				535B7255134CEE1E003E0E1C /* DDSocialLoginDialog.m in Sources */,
+				535B725E134CEEB0003E0E1C /* ShuffleFolderPickerViewController.m in Sources */,
+				535B726A134CFB0E003E0E1C /* FolderPickerDialog.m in Sources */,
+				535B727E134D273B003E0E1C /* SearchAllViewController.m in Sources */,
+				5353B839134D4D6C005C589E /* PagingScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

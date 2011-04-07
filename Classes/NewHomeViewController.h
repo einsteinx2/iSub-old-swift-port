@@ -10,7 +10,7 @@
 
 @class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton, AsynchronousImageView;
 
-@interface NewHomeViewController : UIViewController 
+@interface NewHomeViewController : UIViewController
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
@@ -50,5 +50,7 @@
 - (IBAction)chat;
 
 - (void)initSongInfo;
+
+- (void)performServerShuffle:(NSNotification*)notification;
 
 @end

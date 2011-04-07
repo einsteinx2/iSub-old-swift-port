@@ -10,15 +10,17 @@
 
 @implementation BBSimpleConnectionQueue
 
-@synthesize connectionStack, isRunning;
+@synthesize connectionStack, isRunning, delegate;
 
 - (id) init
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		connectionStack = [[NSMutableArray alloc] init];
 		
 		isRunning = NO;
+		
+		delegate = nil;
 	}
 	
 	return self;
@@ -53,6 +55,8 @@
 	else
 	{
 		isRunning = NO;
+		
+		[delegate connectionQueueDidFinish:self];
 	}
 }
 
@@ -71,6 +75,18 @@
 - (void)stopQueue
 {
 	isRunning = NO;
+}
+
+- (void)clearQueue
+{
+	[self stopQueue];
+	
+	for (NSURLConnection *connection in connectionStack)
+	{
+		[connection release];
+	}
+	
+	[connectionStack removeAllObjects];
 }
 
 @end

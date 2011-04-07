@@ -27,6 +27,9 @@
 #import "NSString-md5.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
+#import "ShuffleFolderPickerViewController.h"
+#import "FolderPickerDialog.h"
+#import "SearchAllViewController.h"
 
 @implementation NewHomeViewController
 
@@ -102,11 +105,14 @@
 	musicControls = [MusicControlsSingleton sharedInstance];
 	databaseControls = [DatabaseControlsSingleton sharedInstance];
 	
+	searchSegment.selectedSegmentIndex = 3;
+	
 	self.title = @"Home";
 	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settings)] autorelease];
 
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jukeboxOff) name:@"JukeboxTurnedOff" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) name:@"initSongInfo" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(performServerShuffle:) name:@"performServerShuffle" object:nil];
 
 	if (!IS_IPAD())
 	{
@@ -286,10 +292,48 @@
 
 - (IBAction)serverShuffle
 {
-	isSearch = NO;
+	NSDictionary *folders = [NSKeyedUnarchiver unarchiveObjectWithData:[appDelegate.settingsDictionary objectForKey:@"folderDropdownCache"]];
 	
+	if ([folders count] == 2)
+	{
+		[self performServerShuffle:nil];
+	}
+	else
+	{
+		NSDictionary *folders = [NSKeyedUnarchiver unarchiveObjectWithData:[appDelegate.settingsDictionary objectForKey:@"folderDropdownCache"]];
+		
+		float height = 65.0f;
+		height += (float)[folders count] * 44.0f;
+		
+		if (height > 300.0f)
+			height = 300.0f;
+		
+		FolderPickerDialog *blankDialog = [[FolderPickerDialog alloc] initWithFrame:CGRectMake(0, 0, 300, height)];
+		blankDialog.titleLabel.text = @"Folder to Shuffle";
+		[blankDialog show];
+		[blankDialog release];
+	}
+}
+
+- (void)performServerShuffle:(NSNotification*)notification 
+{
 	// Start the 100 record open search to create shuffle list
-	NSString *urlString = [NSString stringWithFormat:@"%@&size=100", [appDelegate getBaseUrl:@"getRandomSongs.view"]];
+	isSearch = NO;
+	NSString *urlString = @"";
+	if (notification == nil)
+	{
+		urlString = [NSString stringWithFormat:@"%@&size=100", [appDelegate getBaseUrl:@"getRandomSongs.view"]];
+	}
+	else 
+	{
+		NSDictionary *userInfo = [notification userInfo];
+		NSInteger folderId = [[userInfo objectForKey:@"folderId"] intValue];
+		
+		if (folderId < 0)
+			urlString = [NSString stringWithFormat:@"%@&size=100", [appDelegate getBaseUrl:@"getRandomSongs.view"]];
+		else
+			urlString = [NSString stringWithFormat:@"%@&size=100&musicFolderId=%i", [appDelegate getBaseUrl:@"getRandomSongs.view"], folderId];
+	}
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
@@ -500,9 +544,14 @@
 			urlString = [NSString stringWithFormat:@"%@&artistCount=0&albumCount=20&songCount=0&query=%@*", 
 						 [appDelegate getBaseUrl:@"search2.view"], [searchBar.text stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 		}
-		else
+		else if (searchSegment.selectedSegmentIndex == 2)
 		{
 			urlString = [NSString stringWithFormat:@"%@&artistCount=0&albumCount=0&songCount=20&query=%@*", 
+						 [appDelegate getBaseUrl:@"search2.view"], [searchBar.text stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+		}
+		else
+		{
+			urlString = [NSString stringWithFormat:@"%@&artistCount=20&albumCount=20&songCount=20&query=%@*", 
 						 [appDelegate getBaseUrl:@"search2.view"], [searchBar.text stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 		}
 	}
@@ -594,50 +643,71 @@
 		// It's a search
 		
 		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
+		NSLog(@"search XML: %@", [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]); 
 		SearchXMLParser *parser = (SearchXMLParser*)[[SearchXMLParser alloc] initXMLParser];
 		[xmlParser setDelegate:parser];
 		[xmlParser parse];
-				
-		SearchSongsViewController *searchViewController = [[SearchSongsViewController alloc] initWithNibName:@"SearchSongsViewController" bundle:nil];
-		searchViewController.title = @"Search";
-		if (viewObjects.isNewSearchAPI)
+		
+		
+		if (viewObjects.isNewSearchAPI && searchSegment.selectedSegmentIndex == 3)
 		{
-			if (searchSegment.selectedSegmentIndex == 0)
+			SearchAllViewController *searchViewController = [[SearchAllViewController alloc] initWithNibName:@"SearchAllViewController" 
+																						   bundle:nil];
+			searchViewController.listOfArtists = [NSMutableArray arrayWithArray:parser.listOfArtists];
+			searchViewController.listOfAlbums = [NSMutableArray arrayWithArray:parser.listOfAlbums];
+			searchViewController.listOfSongs = [NSMutableArray arrayWithArray:parser.listOfSongs];
+			
+			[xmlParser release];
+			[parser release];
+			
+			[self.navigationController pushViewController:searchViewController animated:YES];
+			
+			[searchViewController release];
+		}
+		else
+		{
+			SearchSongsViewController *searchViewController = [[SearchSongsViewController alloc] initWithNibName:@"SearchSongsViewController" 
+																										  bundle:nil];
+			searchViewController.title = @"Search";
+			if (viewObjects.isNewSearchAPI)
 			{
-				searchViewController.listOfArtists = [NSMutableArray arrayWithArray:parser.listOfArtists];
-				//NSLog(@"%@", searchViewController.listOfArtists);
-			}
-			else if (searchSegment.selectedSegmentIndex == 1)
-			{
-				searchViewController.listOfAlbums = [NSMutableArray arrayWithArray:parser.listOfAlbums];
-				//NSLog(@"%@", searchViewController.listOfAlbums);
+				if (searchSegment.selectedSegmentIndex == 0)
+				{
+					searchViewController.listOfArtists = [NSMutableArray arrayWithArray:parser.listOfArtists];
+					//NSLog(@"%@", searchViewController.listOfArtists);
+				}
+				else if (searchSegment.selectedSegmentIndex == 1)
+				{
+					searchViewController.listOfAlbums = [NSMutableArray arrayWithArray:parser.listOfAlbums];
+					//NSLog(@"%@", searchViewController.listOfAlbums);
+				}
+				else if (searchSegment.selectedSegmentIndex == 2)
+				{
+					searchViewController.listOfSongs = [NSMutableArray arrayWithArray:parser.listOfSongs];
+					//NSLog(@"%@", searchViewController.listOfSongs);
+				}
+				
+				searchViewController.searchType = searchSegment.selectedSegmentIndex;
 			}
 			else
 			{
 				searchViewController.listOfSongs = [NSMutableArray arrayWithArray:parser.listOfSongs];
-				//NSLog(@"%@", searchViewController.listOfSongs);
+				searchViewController.searchType = 2;
 			}
 			
-			searchViewController.searchType = searchSegment.selectedSegmentIndex;
-		}
-		else
-		{
-			searchViewController.listOfSongs = [NSMutableArray arrayWithArray:parser.listOfSongs];
-			searchViewController.searchType = 2;
-		}
-		
-		if (viewObjects.isNewSearchAPI)
-			searchViewController.query = [NSString stringWithFormat:@"%@*", searchBar.text];
-		else
-			searchViewController.query = searchBar.text;
+			if (viewObjects.isNewSearchAPI)
+				searchViewController.query = [NSString stringWithFormat:@"%@*", searchBar.text];
+			else
+				searchViewController.query = searchBar.text;
 			
-		[xmlParser release];
-		[parser release];
+			[xmlParser release];
+			[parser release];
+			
+			[self.navigationController pushViewController:searchViewController animated:YES];
+			
+			[searchViewController release];
+		}
 		
-		[self.navigationController pushViewController:searchViewController animated:YES];
-		
-		[searchViewController release];
-				
 		// Hide the loading screen
 		[viewObjects hideLoadingScreen];
 	}

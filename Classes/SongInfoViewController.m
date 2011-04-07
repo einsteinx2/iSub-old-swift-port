@@ -28,6 +28,23 @@
 @synthesize progressSlider, downloadProgress, elapsedTimeLabel, remainingTimeLabel, artistLabel, albumLabel, titleLabel, trackLabel, yearLabel, genreLabel, bitRateLabel, lengthLabel, repeatButton, bookmarkButton, shuffleButton, progressTimer;
 
 
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{	
+	NSString *name;
+	if (IS_IPAD())
+	{
+		name = @"SongInfoViewController-iPad";
+	}
+	else
+	{
+		name = @"SongInfoViewController";
+	}
+	
+	self = [super initWithNibName:name bundle:nil];
+	
+	return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
@@ -35,6 +52,10 @@
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	musicControls = [MusicControlsSingleton sharedInstance];
 	databaseControls = [DatabaseControlsSingleton sharedInstance];
+	
+	/////////// RESIZE PROGRESS SLIDER
+	//progressSlider.layer.transform = CATransform3DMakeScale(1.0, 2.0, 1.0);
+	/////
 	
 	[self initInfo];
 	
@@ -47,7 +68,10 @@
 	if (bookmarkCount > 0)
 	{
 		bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", bookmarkCount];
-		bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
+		if (IS_IPAD())
+			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on-ipad.png"];
+		else
+			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
 	}
 	
 	progressTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(updateSlider) userInfo:nil repeats:YES];
@@ -144,23 +168,44 @@
 		genreLabel.text = @"";
 	
 	if(musicControls.repeatMode == 1)
-		[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one.png"] forState:0];
+	{
+		if (IS_IPAD())
+			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one-ipad.png"] forState:0];
+		else
+			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one.png"] forState:0];
+	}
 	else if(musicControls.repeatMode == 2)
-		[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all.png"] forState:0];
+	{
+		if (IS_IPAD())
+			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all-ipad.png"] forState:0];
+		else
+			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all.png"] forState:0];
+	}
 	
 	if(musicControls.isShuffle)
-		[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-on.png"] forState:0];
+	{
+		if (IS_IPAD())
+			[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-on-ipad.png"] forState:0];
+		else
+			[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-on.png"] forState:0];
+	}
 	
 	NSInteger bookmarkCount = [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", musicControls.currentSongObject.songId];
 	if (bookmarkCount > 0)
 	{
 		bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", bookmarkCount];
-		bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
+		if (IS_IPAD())
+			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on-ipad.png"];
+		else
+			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
 	}
 	else
 	{
 		bookmarkCountLabel.text = @"";
-		bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark.png"];
+		if(IS_IPAD())
+			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-ipad.png"];
+		else
+			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark.png"];
 	}
 
 }
@@ -342,17 +387,26 @@
 {
 	if(musicControls.repeatMode == 0)
 	{
-		[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one.png"] forState:0];
+		if (IS_IPAD())
+			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one-ipad.png"] forState:0];
+		else
+			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one.png"] forState:0];
 		musicControls.repeatMode = 1;
 	}
 	else if(musicControls.repeatMode == 1)
 	{
-		[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all.png"] forState:0];
+		if (IS_IPAD())
+			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all-ipad.png"] forState:0];
+		else
+			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all.png"] forState:0];
 		musicControls.repeatMode = 2;
 	}
 	else if(musicControls.repeatMode == 2)
 	{
-		[repeatButton setImage:[UIImage imageNamed:@"controller-repeat.png"] forState:0];
+		if (IS_IPAD())
+			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-ipad.png"] forState:0];
+		else
+			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat.png"] forState:0];
 		musicControls.repeatMode = 0;
 	}
 }
@@ -414,7 +468,10 @@
 				Song *aSong = musicControls.currentSongObject;
 				[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarks (name, position, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
 				bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", musicControls.currentSongObject.songId]];
-				bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
+				if (IS_IPAD())
+					bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on-ipad.png"];
+				else
+					bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
 			}
 			else
 			{
@@ -434,7 +491,10 @@
 			[databaseControls.bookmarksDb executeUpdate:@"DELETE FROM bookmarks WHERE name = ?", bookmarkNameTextField.text];
 			[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarks (name, position, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", bookmarkNameTextField.text, [NSNumber numberWithInt:(int)progressSlider.value], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
 			bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", musicControls.currentSongObject.songId]];
-			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
+			if (IS_IPAD())
+				bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on-ipad.png"];
+			else
+				bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
 		}
 	}
 }
@@ -496,7 +556,10 @@
 {
 	if (musicControls.isShuffle)
 	{
-		[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle.png"] forState:0];
+		if (IS_IPAD())
+			[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-ipad.png"] forState:0];
+		else
+			[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle.png"] forState:0];
 		musicControls.isShuffle = NO;
 		
 		if (viewObjects.isJukebox)
@@ -515,7 +578,12 @@
 	else
 	{
 		if (!viewObjects.isJukebox)
-			[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-on.png"] forState:0];
+		{
+			if (IS_IPAD())
+				[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-on-ipad.png"] forState:0];
+			else
+				[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-on.png"] forState:0];
+		}
 					
 		[viewObjects showLoadingScreenOnMainWindow];
 		[self performSelectorInBackground:@selector(performShuffle) withObject:nil];

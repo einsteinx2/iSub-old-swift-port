@@ -23,7 +23,7 @@
 	CGRect newFrame = cell.frame;
 	newFrame.origin.x = 0;
 	newFrame.origin.y = 0;
-	if (self = [super initWithFrame:newFrame])
+	if ((self = [super initWithFrame:newFrame]))
 	{
 		ViewObjectsSingleton *viewObjects = [ViewObjectsSingleton sharedInstance];
 		

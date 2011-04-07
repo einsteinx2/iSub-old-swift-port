@@ -20,7 +20,7 @@
 
 - (id)initWithAlbum:(Album*)theAlbum
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{		
 		//iSubAppDelegate *appDelegate = (iSubAppDelegate*)[UIApplication sharedApplication].delegate;
 		DatabaseControlsSingleton *databaseControls = [DatabaseControlsSingleton sharedInstance];

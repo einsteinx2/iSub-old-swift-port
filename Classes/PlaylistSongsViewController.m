@@ -22,6 +22,8 @@
 #import "NSString-md5.h"
 #import "EGORefreshTableHeaderView.h"
 #import "CustomUIAlertView.h"
+#import "NSString-rfcEncode.h"
+#import "TBXML.h"
 
 @interface PlaylistSongsViewController (Private)
 
@@ -55,6 +57,34 @@
     if (viewObjects.isLocalPlaylist)
 	{
 		self.title = [databaseControls.localPlaylistsDb stringForQuery:@"SELECT playlist FROM localPlaylists WHERE md5 = ?", self.md5];
+		
+		UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
+		headerView.backgroundColor = viewObjects.darkNormal;
+		
+		UIImageView *sendImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"upload-playlist.png"]];
+		sendImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+		sendImage.frame = CGRectMake(23, 11, 24, 24);
+		[headerView addSubview:sendImage];
+		[sendImage release];
+		
+		UILabel *sendLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 320, 50)];
+		sendLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+		sendLabel.backgroundColor = [UIColor clearColor];
+		sendLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
+		sendLabel.textAlignment = UITextAlignmentCenter;
+		sendLabel.font = [UIFont boldSystemFontOfSize:30];
+		sendLabel.text = @"Save to Server";
+		[headerView addSubview:sendLabel];
+		[sendLabel release];
+		
+		UIButton *sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
+		sendButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+		sendButton.frame = CGRectMake(0, 0, 320, 40);
+		[sendButton addTarget:self action:@selector(uploadPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
+		[headerView addSubview:sendButton];
+		
+		self.tableView.tableHeaderView = headerView;
+		[headerView release];
 		
 		UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
 		fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
@@ -117,7 +147,11 @@
 	[connection cancel];
 	self.tableView.scrollEnabled = YES;
 	[viewObjects hideLoadingScreen];
-	[self dataSourceDidFinishLoadingNewData];
+	
+	if (!viewObjects.isLocalPlaylist)
+	{
+		[self dataSourceDidFinishLoadingNewData];
+	}
 }
 
 - (void)viewWillAppear:(BOOL)animated 
@@ -178,6 +212,47 @@
 	[streamingPlayerViewController release];  
 }
 
+- (void)uploadPlaylistAction:(id)sender
+{
+	//NSMutableString *urlString = [NSMutableString stringWithFormat:@"%@?name=%@", [appDelegate getBaseUrl:@"createPlaylist.view"], self.];
+	
+	NSMutableString *urlString = [NSMutableString stringWithString:[appDelegate getBaseUrl:@"createPlaylist.view"]];
+	[urlString appendFormat:@"&name=%@", [self.title stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+
+	NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", self.md5];
+	NSUInteger count = [databaseControls.localPlaylistsDb intForQuery:query];
+	for (int i = 1; i <= count; i++)
+	{
+		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+		
+		NSString *query = [NSString stringWithFormat:@"SELECT songId FROM playlist%@ WHERE ROWID = %i", self.md5, i];
+		NSString *songId = [databaseControls.localPlaylistsDb stringForQuery:query];
+		[urlString appendFormat:@"&songId=%@", songId];
+		
+		[pool release];
+	}
+	
+	NSLog(@"server playlist upload urlString: %@", urlString);
+	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	if (connection)
+	{
+		// Create the NSMutableData to hold the received data.
+		// receivedData is an instance variable declared elsewhere.
+		receivedData = [[NSMutableData data] retain];
+		
+		self.tableView.scrollEnabled = NO;
+		[viewObjects showAlbumLoadingScreen:self.view sender:self];
+	} 
+	else 
+	{
+		// Inform the user that the connection failed.
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error saving the playlist to the server.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		[alert release];
+	}
+}
+
 #pragma mark Connection Delegate
 
 - (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
@@ -209,8 +284,21 @@
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
+	NSString *message = @"";
+	if (viewObjects.isLocalPlaylist)
+	{
+		message = [NSString stringWithFormat:@"There was an error saving the playlist to the server.\n\nError %i: %@", 
+											 [error code], 
+											 [error localizedDescription]];
+	}
+	else
+	{
+		message = [NSString stringWithFormat:@"There was an error loading the playlist.\n\nError %i: %@", 
+				   [error code], 
+				   [error localizedDescription]];
+	}
+	
 	// Inform the user that the connection failed.
-	NSString *message = [NSString stringWithFormat:@"There was an error loading the playlist.\n\nError %i: %@", [error code], [error localizedDescription]];
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 	[alert release];
@@ -226,24 +314,68 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
-	PlaylistsXMLParser *parser = [[PlaylistsXMLParser alloc] initXMLParser];
-	[xmlParser setDelegate:parser];
-	[xmlParser parse];
-	[xmlParser release];
-	[parser release];
-	
-	self.tableView.scrollEnabled = YES;
-	[viewObjects hideLoadingScreen];
+	if (!viewObjects.isLocalPlaylist)
+	{
+		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
+		PlaylistsXMLParser *parser = [[PlaylistsXMLParser alloc] initXMLParser];
+		[xmlParser setDelegate:parser];
+		[xmlParser parse];
+		[xmlParser release];
+		[parser release];
+		
+		self.tableView.scrollEnabled = YES;
+
+		playlistCount = [databaseControls.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM splaylist%@", md5]];
+		[self.tableView reloadData];
+		
+		[self dataSourceDidFinishLoadingNewData];
+		
+		[receivedData release];
+		[viewObjects hideLoadingScreen];
+	}
+	else
+	{
+		[self performSelectorInBackground:@selector(parseData) withObject:nil];
+	}
 	
 	[theConnection release];
-	[receivedData release];
+}
 
-	//playlistCount = [databaseControls.serverPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", md5]];
-	playlistCount = [databaseControls.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM splaylist%@", md5]];
-	[self.tableView reloadData];
+static NSString *kName_Error = @"error";
+
+- (void) subsonicErrorCode:(NSString *)errorCode message:(NSString *)message
+{
+	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+	 [alert show];
+	 [alert release];
+	//NSLog(@"Subsonic error %@:  %@", errorCode, message);
+}
+
+- (void)parseData
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-	[self dataSourceDidFinishLoadingNewData];
+	// Parse the data
+	//
+	TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
+    TBXMLElement *root = tbxml.rootXMLElement;
+    if (root) 
+	{
+		TBXMLElement *error = [TBXML childElementNamed:kName_Error parentElement:root];
+		if (error)
+		{
+			NSString *code = [TBXML valueOfAttributeNamed:@"code" forElement:error];
+			NSString *message = [TBXML valueOfAttributeNamed:@"message" forElement:error];
+			[self subsonicErrorCode:code message:message];
+		}
+	}
+    [tbxml release];
+	
+	[receivedData release];
+	
+	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
+	
+	[pool release];
 }
 
 

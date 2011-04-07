@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 @class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton;
 
@@ -32,19 +33,32 @@
 	UIButton *editSongsButton;
 	BOOL isSaveEditShowing;
 	
+	UIImageView *playAllImage;
+	UILabel *playAllLabel;
+	UIButton *playAllButton;
+	UILabel *spacerLabel2;
+	UIImageView *shuffleImage;
+	UILabel *shuffleLabel;
+	UIButton *shuffleButton;
+	
 	//UIProgressView *queueDownloadProgressView;
 	unsigned long long int queueDownloadProgress;
 	NSTimer *updateTimer;
 	
 	NSMutableArray *listOfArtists;
+	NSMutableArray *listOfArtistsSections;
 	NSArray *sectionInfo;
+	NSUInteger rowCounter;
 	
 	BOOL firstLoad;
 	
 	UIButton *jukeboxInputBlocker;
+	
+	BOOL showIndex;
 }
 
 @property (nonatomic, retain) NSMutableArray *listOfArtists;
+@property (nonatomic, retain) NSMutableArray *listOfArtistsSections;
 @property (nonatomic, retain) NSArray *sectionInfo;
 
 //@property (nonatomic, retain) UIProgressView *queueDownloadProgressView;

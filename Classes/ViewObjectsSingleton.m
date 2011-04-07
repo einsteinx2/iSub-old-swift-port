@@ -70,6 +70,8 @@ static ViewObjectsSingleton *sharedInstance = nil;
 
 @synthesize isSettingsShowing;
 
+@synthesize isNoNetworkAlertShowing;
+
 #pragma mark -
 #pragma mark Class instance methods
 
@@ -461,7 +463,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 
 -(id)init 
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		sharedInstance = self;
 		
@@ -510,6 +512,8 @@ static ViewObjectsSingleton *sharedInstance = nil;
 		
 		isJukebox = NO;
 		isNewSearchAPI = NO;
+		
+		isNoNetworkAlertShowing = NO;
 	}
 	
 	return self;

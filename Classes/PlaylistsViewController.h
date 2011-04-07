@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BBSimpleConnectionQueue.h"
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton, BBSimpleConnectionQueue;
 
-@interface PlaylistsViewController : UITableViewController 
+@interface PlaylistsViewController : UITableViewController <BBSimpleConnectionQueueDelegate>
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
@@ -38,6 +39,10 @@
 	UInt32 currentPlaylistCount;
 	
 	NSArray *listOfSongs;
+	
+	BBSimpleConnectionQueue *connectionQueue;
+	
+	//NSMutableData *receivedData;
 }
 
 @property (nonatomic, retain) NSArray *listOfSongs;

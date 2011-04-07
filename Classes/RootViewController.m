@@ -52,6 +52,7 @@
 @synthesize searchBar, headerView;
 @synthesize copyListOfArtists;
 @synthesize isSearching;
+@synthesize dropdown;
 
 @synthesize reloading=_reloading;
 
@@ -91,6 +92,8 @@
 	didBeginSearching = NO;
 	letUserSelectRow = YES;	
 	isCountShowing = NO;
+	searchY = 80;
+	dropdown = nil;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadArtistList) name:@"reloadArtistList" object:nil];
 	
@@ -113,6 +116,16 @@
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fadeBottom;
+	
+	NSDictionary *folders = [NSKeyedUnarchiver unarchiveObjectWithData:[appDelegate.settingsDictionary objectForKey:@"folderDropdownCache"]];
+	
+	//[self.tableView scrollRectToVisible:CGRectMake(0, 50, 320, 500) animated:NO];
+	if (folders == nil || [folders count] == 2)
+		//[self.tableView scrollRectToVisible:CGRectMake(0, 87, 320, searchY) animated:NO];
+		[self.tableView setContentOffset:CGPointMake(0, 86) animated:NO];
+	else
+		//[self.tableView scrollRectToVisible:CGRectMake(0, 50, 320, searchY) animated:NO];
+		[self.tableView setContentOffset:CGPointMake(0, 50) animated:NO];
 }
 
 - (void)reloadArtistList
@@ -128,8 +141,7 @@
 	
 	isCountShowing = YES;
 	
-	//Build the search and reload view
-	headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 120)] autorelease];
+	headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 126)] autorelease];
 	headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	headerView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
 	
@@ -142,24 +154,6 @@
 	[headerView addSubview:countLabel];
 	[countLabel release];
 	
-	searchBar = [[UISearchBar  alloc] initWithFrame:CGRectMake(0, 80, 320, 40)];
-	searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	searchBar.delegate = self;
-	searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
-	searchBar.placeholder = @"Folder name";
-	[headerView addSubview:searchBar];
-	[searchBar release];
-	
-	FolderDropdownControl *dropdown = [[FolderDropdownControl alloc] initWithFrame:CGRectMake(50, 50, 220, 30)];
-	dropdown.delegate = self;
-	dropdown.tableView = self.tableView;
-	dropdown.viewsToMove = [NSArray arrayWithObjects:searchBar, nil];
-	dropdown.folders = [NSKeyedUnarchiver unarchiveObjectWithData:[appDelegate.settingsDictionary objectForKey:@"folderDropdownCache"]];
-	NSLog(@"folders: %@", dropdown.folders);
-	[dropdown selectFolderWithId:[[appDelegate.settingsDictionary objectForKey:@"selectedMusicFolderId"] intValue]];
-	[headerView addSubview:dropdown];
-	[dropdown release];
-
 	reloadTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 36, 320, 12)];
 	reloadTimeLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	reloadTimeLabel.backgroundColor = [UIColor clearColor];
@@ -168,6 +162,30 @@
 	reloadTimeLabel.font = [UIFont systemFontOfSize:11];
 	[headerView addSubview:reloadTimeLabel];
 	[reloadTimeLabel release];	
+	
+	searchBar = [[UISearchBar  alloc] initWithFrame:CGRectMake(0, 86, 320, 40)];
+	searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	searchBar.delegate = self;
+	searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
+	searchBar.placeholder = @"Folder name";
+	[headerView addSubview:searchBar];
+	[searchBar release];
+	
+	self.dropdown = [[FolderDropdownControl alloc] initWithFrame:CGRectMake(50, 53, 220, 30)];
+	dropdown.delegate = self;
+	dropdown.tableView = self.tableView;
+	dropdown.viewsToMove = [NSArray arrayWithObjects:searchBar, nil];
+	dropdown.folders = [NSKeyedUnarchiver unarchiveObjectWithData:[appDelegate.settingsDictionary objectForKey:@"folderDropdownCache"]];
+	//NSLog(@"folders: %@", dropdown.folders);
+	[dropdown selectFolderWithId:[[appDelegate.settingsDictionary objectForKey:@"selectedMusicFolderId"] intValue]];
+	[headerView addSubview:dropdown];
+	[dropdown release];
+	
+	/*if ([dropdown.folders count] == 2)
+	{
+		headerView.frame = CGRectMake(0, 0, 320, 80);
+		searchBar.frame = 
+	}*/
 	
 	NSInteger count = 0;
 	for (NSArray *array in viewObjects.listOfArtists)
@@ -264,7 +282,7 @@
 	{
 		urlString = [NSString stringWithFormat:@"%@&musicFolderId=%@", [appDelegate getBaseUrl:@"getIndexes.view"], folderId];
 	}
-	NSLog(@"urlString: %@", urlString);
+	//NSLog(@"urlString: %@", urlString);
 	
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
@@ -383,6 +401,7 @@
 	[searchBar release];
 	[searchOverlayView release];
 	[copyListOfArtists release];
+	[dropdown release];
     [super dealloc];
 }
 
@@ -412,7 +431,7 @@
 	
 	[self.tableView reloadData];
 	
-	[self.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
+	//[self.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
 }
 
 - (void) reloadAction:(id)sender
@@ -458,7 +477,7 @@
 {
 	[self.tableView.tableHeaderView retain];
 
-	[self.tableView setContentOffset:CGPointMake(0, 50) animated:YES];
+	[self.tableView setContentOffset:CGPointMake(0, 86) animated:YES];
 	//[self.tableView setContentOffset:CGPointMake(0, 50) animated:NO];
 	
 	if ([theSearchBar.text length] == 0)
@@ -631,7 +650,17 @@
 	
 	if (index == 0) 
 	{
-		[tableView scrollRectToVisible:CGRectMake(0, 50, 320, 40) animated:NO];
+		//[tableView scrollRectToVisible:CGRectMake(0, 50, 320, searchY) animated:NO];
+		
+		NSDictionary *folders = [NSKeyedUnarchiver unarchiveObjectWithData:[appDelegate.settingsDictionary objectForKey:@"folderDropdownCache"]];
+		
+		if (folders == nil || [folders count] == 2)
+			//[tableView scrollRectToVisible:CGRectMake(0, 87, 320, searchY) animated:NO];
+			[self.tableView setContentOffset:CGPointMake(0, 86) animated:NO];
+		else
+			//[tableView scrollRectToVisible:CGRectMake(0, 50, 320, searchY) animated:NO];
+			[self.tableView setContentOffset:CGPointMake(0, 50) animated:NO];
+		
 		return -1;
 	}
 	
@@ -721,8 +750,8 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	NSLog(@"%@", [[NSString alloc]  initWithBytes:[receivedData bytes]
-										   length:[receivedData length] encoding: NSUTF8StringEncoding]);
+	//NSLog(@"%@", [[NSString alloc]  initWithBytes:[receivedData bytes]
+	//									   length:[receivedData length] encoding: NSUTF8StringEncoding]);
 	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
 	XMLParser *parser = [[XMLParser alloc] initXMLParser];
 	parser.parseState = @"artists";

@@ -24,7 +24,7 @@
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
 {
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) 
+    if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]))
 	{
         // Initialization code
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -47,6 +47,8 @@
 		[playlistCountLabel release];
 		
 		playlistNameScrollView = [[UIScrollView alloc] init];
+		playlistNameScrollView.frame = CGRectMake(5, 0, 310, 44);
+		playlistNameScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		playlistNameScrollView.showsVerticalScrollIndicator = NO;
 		playlistNameScrollView.showsHorizontalScrollIndicator = NO;
 		playlistNameScrollView.userInteractionEnabled = NO;
@@ -208,7 +210,6 @@
     [super layoutSubviews];
 	
 	deleteToggleImage.frame = CGRectMake(4.0, 18.5, 23.0, 23.0);
-	playlistNameScrollView.frame = CGRectMake(5, 0, 290, 44);
 	playlistCountLabel.frame = CGRectMake(5, 35, 320, 20);
 	
 	// Automatically set the width based on the width of the text

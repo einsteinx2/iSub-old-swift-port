@@ -176,6 +176,7 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 		[songCacheDb executeUpdate:@"CREATE INDEX cachedDate ON cachedSongs (cachedDate DESC)"];
 		[songCacheDb executeUpdate:@"CREATE INDEX playedDate ON cachedSongs (playedDate DESC)"];
 	}
+	[songCacheDb executeUpdate:@"CREATE INDEX md5 IF NOT EXISTS ON cachedSongs (md5)"];
 	if ([songCacheDb tableExists:@"cachedSongsLayout"] == NO) {
 		[songCacheDb executeUpdate:@"CREATE TABLE cachedSongsLayout (md5 TEXT UNIQUE, genre TEXT, segs INTEGER, seg1 TEXT, seg2 TEXT, seg3 TEXT, seg4 TEXT, seg5 TEXT, seg6 TEXT, seg7 TEXT, seg8 TEXT, seg9 TEXT)"];
 		[songCacheDb executeUpdate:@"CREATE INDEX genreLayout ON cachedSongsLayout (genre)"];
@@ -363,6 +364,44 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	}
 }
 
+- (Song *) songFromAllSongsDb:(NSUInteger)row inTable:(NSString *)table
+{
+	row++;
+	Song *aSong = [[Song alloc] init];
+	FMResultSet *result = [allSongsDb executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE ROWID = %i", table, row]];
+	[result next];
+	if ([allSongsDb hadError]) {
+		NSLog(@"Err %d: %@", [allSongsDb lastErrorCode], [allSongsDb lastErrorMessage]);
+	}
+	
+	aSong.title = [[result stringForColumn:@"title"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	aSong.songId = [result stringForColumn:@"songId"];
+	aSong.artist = [[result stringForColumn:@"artist"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	aSong.album = [[result stringForColumn:@"album"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	aSong.genre = [[result stringForColumn:@"genre"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	aSong.coverArtId = [result stringForColumn:@"coverArtId"];
+	aSong.path = [result stringForColumn:@"path"];
+	aSong.suffix = [result stringForColumn:@"suffix"];
+	aSong.transcodedSuffix = [result stringForColumn:@"transcodedSuffix"];
+	aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
+	aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
+	aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
+	aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
+	aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
+	
+	[result close];
+	
+	if (aSong.path == nil)
+	{
+		[aSong release];
+		return nil;
+	}
+	else
+	{
+		return [aSong autorelease];
+	}
+}
+
 - (Song *) songFromGenreDb:(NSString *)md5
 {
 	Song *aSong = [[Song alloc] init];
@@ -383,11 +422,11 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	}
 	
 	[result next];
-	aSong.title = [result stringForColumnIndex:1];
+	aSong.title = [[result stringForColumnIndex:1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 	aSong.songId = [result stringForColumnIndex:2];
-	aSong.artist = [result stringForColumnIndex:3];
-	aSong.album = [result stringForColumnIndex:4];
-	aSong.genre = [result stringForColumnIndex:5];
+	aSong.artist = [[result stringForColumnIndex:3] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	aSong.album = [[result stringForColumnIndex:4] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	aSong.genre = [[result stringForColumnIndex:5] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 	aSong.coverArtId = [result stringForColumnIndex:6];
 	aSong.path = [result stringForColumnIndex:7];
 	aSong.suffix = [result stringForColumnIndex:8];

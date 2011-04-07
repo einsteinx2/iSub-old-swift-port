@@ -22,11 +22,14 @@
 
 - (LyricsXMLParser *) initXMLParser 
 {	
-	[super init];	
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	musicControls = [MusicControlsSingleton sharedInstance];
-	databaseControls = [DatabaseControlsSingleton sharedInstance];
-	currentElementValue = nil;
+	if ((self = [super init]))
+	{
+		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
+		musicControls = [MusicControlsSingleton sharedInstance];
+		databaseControls = [DatabaseControlsSingleton sharedInstance];
+		currentElementValue = nil;
+	}
+	
 	return self;
 }
 

@@ -19,8 +19,10 @@
 
 @synthesize myId, myArtist, coverArtView, albumNameScrollView, albumNameLabel, artistNameLabel, canShowOverlay, isOverlayShowing, overlayView;
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
+{
+    if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) 
+	{
 		// Initialization code
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 		viewObjects = [ViewObjectsSingleton sharedInstance];

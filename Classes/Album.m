@@ -45,7 +45,7 @@
 
 - (id)initWithAttributeDict:(NSDictionary *)attributeDict artist:(Artist *)myArtist
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		title = nil;
 		albumId = nil;
@@ -84,7 +84,7 @@
 
 -(id) initWithCoder: (NSCoder *) decoder
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		title = nil;
 		albumId = nil;

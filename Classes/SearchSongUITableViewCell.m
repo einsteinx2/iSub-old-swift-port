@@ -22,8 +22,10 @@
 
 @synthesize mySong, row, coverArtView, songNameScrollView, songNameLabel, artistNameLabel, canShowOverlay, isOverlayShowing, overlayView;
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
+{
+    if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]))
+	{
 		// Initialization code
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 		viewObjects = [ViewObjectsSingleton sharedInstance];
@@ -175,16 +177,16 @@
 		overlayView = [CellOverlay cellOverlayWithTableCell:self];
 		[self.contentView addSubview:overlayView];
 		
-		overlayView.downloadButton = [UIButton buttonWithType:UIButtonTypeCustom];
+		//overlayView.downloadButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		if ([[databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", [NSString md5:mySong.path]] isEqualToString:@"YES"]) {
 			overlayView.downloadButton.alpha = .3;
 			overlayView.downloadButton.enabled = NO;
 		}
-		else {
-			overlayView.downloadButton.alpha = .8;
-			[overlayView.downloadButton addTarget:self action:@selector(downloadAction) forControlEvents:UIControlEventTouchUpInside];
-			overlayView.downloadButton.enabled = YES;
-		}
+		//else {
+		//	overlayView.downloadButton.alpha = .8;
+		//	[overlayView.downloadButton addTarget:self action:@selector(downloadAction) forControlEvents:UIControlEventTouchUpInside];
+		//	overlayView.downloadButton.enabled = YES;
+		//}
 		
 		[UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:.5];

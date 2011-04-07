@@ -20,7 +20,7 @@
 
 - (id)initXMLParser 
 {	
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		appDelegate = (iSubAppDelegate*)[UIApplication sharedApplication].delegate;
 		listOfSongs = [[NSMutableArray alloc] init];

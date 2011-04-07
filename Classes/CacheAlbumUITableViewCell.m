@@ -19,7 +19,7 @@
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
 {
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) 
+    if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) 
 	{
 		// Initialization code
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -33,7 +33,7 @@
 		[coverArtView release];
 		
 		albumNameScrollView = [[UIScrollView alloc] init];
-		albumNameScrollView.frame = CGRectMake(65, 0, 230, 60);
+		albumNameScrollView.frame = CGRectMake(65, 0, 250, 60);
 		albumNameScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		albumNameScrollView.showsVerticalScrollIndicator = NO;
 		albumNameScrollView.showsHorizontalScrollIndicator = NO;

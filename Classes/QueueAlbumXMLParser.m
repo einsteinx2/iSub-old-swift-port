@@ -24,7 +24,7 @@
 
 - (id) initXMLParser 
 {	
-	if (self = [super init])
+	if ((self = [super init]))
 	{
         // your code here
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];

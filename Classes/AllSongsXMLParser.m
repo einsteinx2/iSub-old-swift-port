@@ -27,10 +27,13 @@
 
 - (AllSongsXMLParser *) initXMLParser 
 {	
-	[super init];	
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	databaseControls = [DatabaseControlsSingleton sharedInstance];
+	if ((self = [super init]))
+	{
+		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
+		viewObjects = [ViewObjectsSingleton sharedInstance];
+		databaseControls = [DatabaseControlsSingleton sharedInstance];
+	}
+	
 	return self;
 }
 
@@ -185,6 +188,7 @@
 							// Check if the genre has a table in the database yet, if not create it and add the new genre to the genres table
 							if ([databaseControls.genresDb intForQuery:@"SELECT COUNT(*) FROM genresTemp WHERE genre = ?", aSong.genre] == 0)
 							{							
+								NSLog(@"aSong.genre: %@", aSong.genre);
 								[databaseControls.genresDb executeUpdate:@"INSERT INTO genresTemp (genre) VALUES (?)", aSong.genre];
 								if ([databaseControls.genresDb hadError]) { NSLog(@"Err adding the genre %d: %@", [databaseControls.genresDb lastErrorCode], [databaseControls.genresDb lastErrorMessage]); }
 							}

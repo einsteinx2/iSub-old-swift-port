@@ -105,6 +105,9 @@
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fadeBottom;
+	
+	connectionQueue = [[BBSimpleConnectionQueue alloc] init];
+	connectionQueue.delegate = self;
 }
 
 
@@ -172,8 +175,8 @@
 	// Remove the save and edit buttons if showing
 	if (isPlaylistSaveEditShowing == YES)
 	{
-		//headerView.frame = CGRectMake(0, 0, 320, 44);
-		headerView.frame = CGRectMake(0, 0, 320, 0);
+		headerView.frame = CGRectMake(0, 0, 320, 44);
+		//headerView.frame = CGRectMake(0, 0, 320, 0);
 		[savePlaylistLabel removeFromSuperview];
 		[playlistCountLabel removeFromSuperview];
 		[savePlaylistButton removeFromSuperview];
@@ -218,6 +221,15 @@
 				savePlaylistLabel.text = [NSString stringWithFormat:@"1 playlist"];
 			else 
 				savePlaylistLabel.text = [NSString stringWithFormat:@"%i playlists", [databaseControls.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists"]];
+		}
+		else if (segmentedControl.selectedSegmentIndex == 2)
+		{
+			savePlaylistLabel.frame = CGRectMake(0, y, 227, 50);
+			if ([viewObjects.listOfPlaylists count] == 1)
+				savePlaylistLabel.text = [NSString stringWithFormat:@"1 playlist"];
+			else 
+				savePlaylistLabel.text = [NSString stringWithFormat:@"%i playlists", [viewObjects.listOfPlaylists count]];
+			
 		}
 		[headerView addSubview:savePlaylistLabel];
 		[savePlaylistLabel release];
@@ -306,6 +318,14 @@
 				playlistCountLabel.text = [NSString stringWithFormat:@"1 playlist"];
 			else 
 				playlistCountLabel.text = [NSString stringWithFormat:@"%i playlists", [databaseControls.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists"]];
+		}
+		else if (segmentedControl.selectedSegmentIndex == 2)
+		{
+			if ([viewObjects.listOfPlaylists count] == 1)
+				playlistCountLabel.text = [NSString stringWithFormat:@"1 playlist"];
+			else 
+				playlistCountLabel.text = [NSString stringWithFormat:@"%i playlists", [viewObjects.listOfPlaylists count]];
+			
 		}
 	}
 }
@@ -508,7 +528,8 @@
 		// Remove the no playlists overlay screen if it's showing
 		[self removeNoPlaylistsScreen];
 		
-		[viewObjects showLoadingScreen:self.view blockInput:YES mainWindow:NO];
+		//[viewObjects showLoadingScreen:self.view blockInput:YES mainWindow:NO];
+		[viewObjects showLoadingScreenOnMainWindow];
 		[self performSelectorInBackground:@selector(loadRemotePlaylists) withObject:nil];
 	}
 }
@@ -599,7 +620,8 @@
 			}
 		}
 	}
-	else if (segmentedControl.selectedSegmentIndex == 1)
+	else if (segmentedControl.selectedSegmentIndex == 1 ||
+			 segmentedControl.selectedSegmentIndex == 2)
 	{
 		if (self.tableView.editing == NO)
 		{
@@ -652,7 +674,8 @@
 			deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %i Songs", [viewObjects.multiDeleteList count]];
 		}
 	}
-	else if (segmentedControl.selectedSegmentIndex == 1)
+	else if (segmentedControl.selectedSegmentIndex == 1 ||
+			 segmentedControl.selectedSegmentIndex == 2)
 	{
 		if ([viewObjects.multiDeleteList count] == 0)
 		{
@@ -700,7 +723,8 @@
 			deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %i Songs", [viewObjects.multiDeleteList count]];
 		}
 	}
-	else if (segmentedControl.selectedSegmentIndex == 1)
+	else if (segmentedControl.selectedSegmentIndex == 1 ||
+			 segmentedControl.selectedSegmentIndex == 2)
 	{
 		if ([viewObjects.multiDeleteList count] == 0)
 		{
@@ -735,7 +759,6 @@
 		[[cell deleteToggleImage] setHidden:NO];
 	}
 }
-
 
 - (void) savePlaylistAction:(id)sender
 {
@@ -935,6 +958,90 @@
 			}
 		}
 	}
+	else if (segmentedControl.selectedSegmentIndex == 2)
+	{
+		if (deleteSongsLabel.hidden == NO)
+		{
+			self.tableView.scrollEnabled = NO;
+			[viewObjects showAlbumLoadingScreen:self.view sender:self];
+			
+			if ([deleteSongsLabel.text isEqualToString:@"Clear Playlists"])
+			{		
+				for (NSArray *playlist in viewObjects.listOfPlaylists)
+				{
+					NSString *urlString = [NSString stringWithFormat:@"%@%@", 
+																	 [appDelegate getBaseUrl:@"deletePlaylist.view"], 
+																	 [playlist objectAtIndex:0]];
+					
+					NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] 
+															 cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData 
+														 timeoutInterval:10.0];
+					
+					NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request 
+																				  delegate:self 
+																		  startImmediately:NO];
+					if (connection)
+					{
+						[connectionQueue registerConnection:connection];
+						[connectionQueue startQueue];
+					} 
+					else 
+					{
+						// Inform the user that the connection failed.
+						//CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+						//[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+						//[alert release];
+						NSLog(@"There was an error deleting a server playlist, could not create network request");
+					}
+				}
+			}
+			else
+			{
+				for (NSNumber *index in viewObjects.multiDeleteList)
+				{
+					NSString *urlString = [NSString stringWithFormat:@"%@%@", 
+										   [appDelegate getBaseUrl:@"deletePlaylist.view"], 
+										   [[viewObjects.listOfPlaylists objectAtIndex:[index intValue]] objectAtIndex:0]];
+					
+					NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] 
+															 cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData 
+														 timeoutInterval:10.0];
+					
+					NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request 
+																				  delegate:self 
+																		  startImmediately:NO];
+					if (connection)
+					{
+						[connectionQueue registerConnection:connection];
+						[connectionQueue startQueue];
+					} 
+					else 
+					{
+						/*// Inform the user that the connection failed.
+						 CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+						 [alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+						 [alert release];*/
+						NSLog(@"There was an error deleting a server playlist, could not create network request");
+					}
+				}
+			}
+		}
+	}
+}
+
+- (void)connectionQueueDidFinish:(id)connectionQueue
+{
+	[viewObjects hideLoadingScreen];
+	self.tableView.scrollEnabled = YES;
+	[self editPlaylistAction:nil];
+	[self segmentAction:nil];
+}
+
+- (void)cancelLoad
+{
+	[connectionQueue clearQueue];
+	
+	[self connectionQueueDidFinish:connectionQueue];
 }
 
 
@@ -1027,9 +1134,18 @@
 	[autoreleasePool release];
 }	
 
+NSInteger playlistSort(id obj1, id obj2, void *context)
+{
+	NSString *playlist1 = (NSString*)[(NSArray*)obj1 objectAtIndex:1];
+	NSString *playlist2 = (NSString*)[(NSArray*)obj2 objectAtIndex:1];
+	
+	return [playlist1 caseInsensitiveCompare:playlist2];
+}
 
 - (void)loadRemotePlaylists2
 {
+	[viewObjects.listOfPlaylists sortUsingFunction:playlistSort context:NULL];
+	
 	[self.tableView reloadData];
 
 	// If the list is empty, display the no playlists overlay screen
@@ -1055,6 +1171,11 @@
 		[self.view addSubview:noPlaylistsScreen];
 		
 		[noPlaylistsScreen release];
+	}
+	else
+	{
+		// Modify the header view to include the save and edit buttons
+		[self addSaveEditButtons];
 	}
 	
 	// Hide the loading screen
@@ -1129,6 +1250,110 @@
 	[streamingPlayerViewController release];
 }
 
+#pragma mark Connection Delegate
+
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
+{
+	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
+		return YES; // Self-signed cert will be accepted
+	
+	return NO;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{	
+	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+	{
+		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
+	}
+	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+	//[receivedData setLength:0];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
+{
+    //[receivedData appendData:incrementalData];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
+{
+	NSString *message = @"";
+	if (viewObjects.isLocalPlaylist)
+	{
+		message = [NSString stringWithFormat:@"There was an error saving the playlist to the server.\n\nError %i: %@", 
+				   [error code], 
+				   [error localizedDescription]];
+	}
+	else
+	{
+		message = [NSString stringWithFormat:@"There was an error loading the playlist.\n\nError %i: %@", 
+				   [error code], 
+				   [error localizedDescription]];
+	}
+	
+	// Inform the user that the connection failed.
+	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+	[alert release];
+	
+	self.tableView.scrollEnabled = YES;
+	[viewObjects hideLoadingScreen];
+	
+	[theConnection release];
+	//[receivedData release];
+	
+	[connectionQueue connectionFinished:theConnection];
+}	
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
+{	
+	//[self performSelectorInBackground:@selector(parseData) withObject:nil];
+	
+	[theConnection release];
+	
+	[connectionQueue connectionFinished:theConnection];
+}
+
+static NSString *kName_Error = @"error";
+
+- (void) subsonicErrorCode:(NSString *)errorCode message:(NSString *)message
+{
+	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+	[alert show];
+	[alert release];
+	//NSLog(@"Subsonic error %@:  %@", errorCode, message);
+}
+
+- (void)parseData
+{
+	/*NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	// Parse the data
+	//
+	TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
+    TBXMLElement *root = tbxml.rootXMLElement;
+    if (root) 
+	{
+		TBXMLElement *error = [TBXML childElementNamed:kName_Error parentElement:root];
+		if (error)
+		{
+			NSString *code = [TBXML valueOfAttributeNamed:@"code" forElement:error];
+			NSString *message = [TBXML valueOfAttributeNamed:@"message" forElement:error];
+			[self subsonicErrorCode:code message:message];
+		}
+	}
+    [tbxml release];
+	
+	[receivedData release];
+	
+	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
+	
+	[pool release];*/
+}
 
 #pragma mark Table view methods
 
@@ -1204,14 +1429,14 @@
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	if (segmentedControl.selectedSegmentIndex == 0)
+	/*if (segmentedControl.selectedSegmentIndex == 0)
 		return YES;
 	else if (segmentedControl.selectedSegmentIndex == 1)
 		return YES;
 	else if (segmentedControl.selectedSegmentIndex == 2)
-		return NO;
+		return NO;*/
 	
-	return NO;
+	return YES;
 }
 
 // Set the editing style, set to none for no delete minus sign (overriding with own custom multi-delete boxes)
@@ -1549,7 +1774,12 @@
 		PlaylistsUITableViewCell *cell = [[[PlaylistsUITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
 		cell.indexPath = indexPath;
 		
-		// Set up the cell...
+		cell.deleteToggleImage.hidden = !viewObjects.isEditing;
+		if ([viewObjects.multiDeleteList containsObject:[NSNumber numberWithInt:indexPath.row]])
+		{
+			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
+		}
+		
 		cell.contentView.backgroundColor = [UIColor clearColor];
 		cell.playlistNameLabel.backgroundColor = [UIColor clearColor];
 		cell.playlistNameLabel.text = [[viewObjects.listOfPlaylists objectAtIndex:indexPath.row] objectAtIndex:1];
@@ -1565,7 +1795,6 @@
 	
 	return nil;
 }
-
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
@@ -1613,7 +1842,9 @@
 }
 
 
-- (void)dealloc {
+- (void)dealloc 
+{
+	[connectionQueue release];
     [super dealloc];
 }
 

@@ -15,7 +15,7 @@
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
 {
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) 
+    if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) 
 	{
 		// Initialization code
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];

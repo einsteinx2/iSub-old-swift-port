@@ -19,7 +19,7 @@
 
 - (id) initXMLParser 
 {	
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 		listOfArtists = [[NSMutableArray alloc] init];
@@ -40,7 +40,7 @@
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
-	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:@"There was an error parsing the XML response. Maybe you forgot to set the right port for your server?" delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
+	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:@"There was an error parsing the XML response. Subsonic may have had an error performing the search." delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	[alert show];
 	[alert release];
 }

@@ -144,6 +144,8 @@
 	NSString *currentLoadingFolderId;
 	
 	BOOL isSettingsShowing;
+	
+	BOOL isNoNetworkAlertShowing;
 }
 
 // In App Purchase
@@ -264,6 +266,8 @@
 @property (nonatomic, retain) NSString *currentLoadingFolderId;
 
 @property BOOL isSettingsShowing;
+
+@property BOOL isNoNetworkAlertShowing;
 
 + (ViewObjectsSingleton*)sharedInstance;
 

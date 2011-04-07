@@ -29,6 +29,7 @@
 #import "TBXML.h"
 #import "CustomUITableView.h"
 #import "CustomUIAlertView.h"
+#import "GTMNSString+HTML.h"
 
 @interface AllSongsViewController (Private)
 
@@ -365,7 +366,6 @@ static NSInteger order (id a, id b, void* context)
 {
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	
-	NSLog(@"loadFinish called");
 	// Check if loading should stop
 	if (viewObjects.cancelLoading)
 	{
@@ -376,7 +376,6 @@ static NSInteger order (id a, id b, void* context)
 	}
 	[databaseControls.allSongsDb executeUpdate:@"DROP TABLE allSongsTemp"];
 	//[databaseControls.allSongsDb executeUpdate:@"VACUUM"];
-	NSLog(@"1");
 	
 	// Check if loading should stop
 	if (viewObjects.cancelLoading)
@@ -388,7 +387,6 @@ static NSInteger order (id a, id b, void* context)
 	}
 	[databaseControls.genresDb executeUpdate:@"DROP TABLE genresTemp"];
 	//[databaseControls.genresDb executeUpdate:@"VACUUM"];
-	NSLog(@"2");
 	
 	// Check if loading should stop
 	if (viewObjects.cancelLoading)
@@ -406,7 +404,6 @@ static NSInteger order (id a, id b, void* context)
 	{
 		[databaseControls.allSongsDb executeUpdate:@"INSERT INTO sectionInfo (title, row) VALUES (?, ?)", [section objectAtIndex:0], [section objectAtIndex:1]];
 	}
-	NSLog(@"3");
 	
 	// Check if loading should stop
 	if (viewObjects.cancelLoading)
@@ -419,7 +416,6 @@ static NSInteger order (id a, id b, void* context)
 	// Count the table
 	numberOfRows = [databaseControls.allSongsDb intForQuery:@"SELECT COUNT (*) FROM allSongs"];
 	
-	NSLog(@"4");
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[defaults setObject:[NSDate date] forKey:[NSString stringWithFormat:@"%@songsReloadTime", appDelegate.defaultUrl]];
 	[defaults synchronize];
@@ -662,11 +658,11 @@ static NSString *kName_Error = @"error";
 					Album *anAlbum = [[Album alloc] init];
 					
 					//Extract the attributes here.
-					anAlbum.title = [TBXML valueOfAttributeNamed:@"title" forElement:child];
+					anAlbum.title = [[TBXML valueOfAttributeNamed:@"title" forElement:child] gtm_stringByUnescapingFromHTML];
 					anAlbum.albumId = [TBXML valueOfAttributeNamed:@"id" forElement:child];
 					if([TBXML valueOfAttributeNamed:@"coverArt" forElement:child])
 						anAlbum.coverArtId = [TBXML valueOfAttributeNamed:@"coverArt" forElement:child];
-					anAlbum.artistName = [viewObjects.allSongsCurrentArtistName copy];
+					anAlbum.artistName = [[viewObjects.allSongsCurrentArtistName copy] gtm_stringByUnescapingFromHTML];
 					anAlbum.artistId = [viewObjects.allSongsCurrentArtistId copy];
 					
 					//NSLog(@"Album: %@", anAlbum.title);
@@ -697,13 +693,14 @@ static NSString *kName_Error = @"error";
 					Song *aSong = [[Song alloc] init];
 					
 					//Extract the attributes here.
-					aSong.title = [TBXML valueOfAttributeNamed:@"title" forElement:child];
+					aSong.title = [[TBXML valueOfAttributeNamed:@"title" forElement:child] gtm_stringByUnescapingFromHTML];
+					NSLog(@"aSong.title: %@", aSong.title);
 					aSong.songId = [TBXML valueOfAttributeNamed:@"id" forElement:child];
-					aSong.artist = [TBXML valueOfAttributeNamed:@"artist" forElement:child];
+					aSong.artist = [[TBXML valueOfAttributeNamed:@"artist" forElement:child] gtm_stringByUnescapingFromHTML];
 					if([TBXML valueOfAttributeNamed:@"album" forElement:child])
-						aSong.album = [TBXML valueOfAttributeNamed:@"album" forElement:child];
+						aSong.album = [[TBXML valueOfAttributeNamed:@"album" forElement:child] gtm_stringByUnescapingFromHTML];
 					if([TBXML valueOfAttributeNamed:@"genre" forElement:child])
-						aSong.genre = [TBXML valueOfAttributeNamed:@"genre" forElement:child];
+						aSong.genre = [[TBXML valueOfAttributeNamed:@"genre" forElement:child] gtm_stringByUnescapingFromHTML];
 					if([TBXML valueOfAttributeNamed:@"coverArt" forElement:child])
 						aSong.coverArtId = [TBXML valueOfAttributeNamed:@"coverArt" forElement:child];
 					aSong.path = [TBXML valueOfAttributeNamed:@"path" forElement:child];
@@ -744,6 +741,7 @@ static NSString *kName_Error = @"error";
 									[databaseControls.genresDb executeUpdate:@"INSERT INTO genresTemp (genre) VALUES (?)", aSong.genre];
 									if ([databaseControls.genresDb hadError]) { NSLog(@"Err adding the genre %d: %@", [databaseControls.genresDb lastErrorCode], [databaseControls.genresDb lastErrorMessage]); }
 								}*/
+								NSLog(@"aSong.genre: %@", aSong.genre);
 								[databaseControls.genresDb executeUpdate:@"INSERT INTO genresTemp (genre) VALUES (?)", aSong.genre];
 								
 								// Insert the song object into the appropriate genre table
@@ -815,6 +813,8 @@ static NSString *kName_Error = @"error";
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
+	NSString *xmlResponse = [[NSString alloc] initWithData:loadingData encoding:NSUTF8StringEncoding];
+	NSLog(@"%@", xmlResponse);
 	[self performSelectorInBackground:@selector(parseData:) withObject:theConnection];
 }
 

@@ -268,13 +268,13 @@
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	
 	// Create http server
-	httpServer = [HTTPServer new];
+	/*httpServer = [HTTPServer new];
 	[httpServer setType:@"_http._tcp."];
 	[httpServer setConnectionClass:[MyHTTPConnection class]];
 	NSString *root = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES) objectAtIndex:0];
 	[httpServer setDocumentRoot:[NSURL fileURLWithPath:root]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(displayInfoUpdate:) name:@"LocalhostAdressesResolved" object:nil];
-	[LocalhostAddresses performSelectorInBackground:@selector(list) withObject:nil];
+	[LocalhostAddresses performSelectorInBackground:@selector(list) withObject:nil];*/
 	
 	// Set default settings
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -529,8 +529,13 @@
 	
 	if(!isURLValid && !viewObjects.isOfflineMode)
 	{
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\nError code %i:\n%@", error.code, [ASIHTTPRequest errorCodeToEnglish:error.code]] delegate:self cancelButtonTitle:@"Retry" otherButtonTitles:@"Settings", nil];
-		//[alert show];
+		//CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\nError code %i:\n%@", error.code, [ASIHTTPRequest errorCodeToEnglish:error.code]] delegate:self cancelButtonTitle:@"Retry" otherButtonTitles:@"Settings", nil];
+		
+		viewObjects.isOfflineMode = YES;
+		[databaseControls initDatabases];
+		[viewObjects loadArtistList];
+		
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\nEntering offline mode. \n\nError code %i:\n%@", error.code, [ASIHTTPRequest errorCodeToEnglish:error.code]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Settings", nil];
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
 	}
@@ -683,7 +688,7 @@
 
 	[window makeKeyAndVisible];	
 	
-	[self startStopServer];
+	/*[self startStopServer];*/
 }
 
 - (void)checkForUpdate
@@ -951,9 +956,14 @@
 	self.currentTabBarController = offlineTabBarController;
 	[self.window addSubview:[offlineTabBarController view]];*/
 
-	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"No network detected, would you like to enter offline mode? Any currently playing music will stop.\n\nIf this is just temporary connection loss, select No." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
-	[alert show];
-	[alert release];
+	if (viewObjects.isNoNetworkAlertShowing == NO)
+	{
+		viewObjects.isNoNetworkAlertShowing = YES;
+		
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"No network detected, would you like to enter offline mode? Any currently playing music will stop.\n\nIf this is just temporary connection loss, select No." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+		[alert show];
+		[alert release];
+	}
 }
 
 
@@ -962,6 +972,7 @@
 	if (!viewObjects.isOnlineModeAlertShowing)
 	{
 		viewObjects.isOnlineModeAlertShowing = YES;
+		
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Network detected, would you like to enter online mode? Any currently playing music will stop." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
 		[alert show];
 		[alert release];
@@ -1062,6 +1073,28 @@
 		return NO;
 }
 
+- (void)showSettings
+{
+	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
+	
+	if (currentTabBarController.selectedIndex == 4)
+	{
+		[currentTabBarController.moreNavigationController popToViewController:[currentTabBarController.moreNavigationController.viewControllers objectAtIndex:1] animated:YES];
+		[currentTabBarController.moreNavigationController pushViewController:serverListViewController animated:YES];
+	}
+	else if (currentTabBarController.selectedIndex == NSNotFound)
+	{
+		[currentTabBarController.moreNavigationController popToRootViewControllerAnimated:YES];
+		[currentTabBarController.moreNavigationController pushViewController:serverListViewController animated:YES];
+	}
+	else
+	{
+		[(UINavigationController*)currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
+		[(UINavigationController*)currentTabBarController.selectedViewController pushViewController:serverListViewController animated:YES];
+	}
+	
+	[serverListViewController release];
+}
 
 - (void)alertView:(CustomUIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -1109,26 +1142,15 @@
 			}
 			else
 			{
-				ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
-				
-				if (currentTabBarController.selectedIndex == 4)
-				{
-					[currentTabBarController.moreNavigationController popToViewController:[currentTabBarController.moreNavigationController.viewControllers objectAtIndex:1] animated:YES];
-					[currentTabBarController.moreNavigationController pushViewController:serverListViewController animated:YES];
-				}
-				else if (currentTabBarController.selectedIndex == NSNotFound)
-				{
-					[currentTabBarController.moreNavigationController popToRootViewControllerAnimated:YES];
-					[currentTabBarController.moreNavigationController pushViewController:serverListViewController animated:YES];
-				}
-				else
-				{
-					[(UINavigationController*)currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
-					[(UINavigationController*)currentTabBarController.selectedViewController pushViewController:serverListViewController animated:YES];
-				}
-				
-				[serverListViewController release];
+				[self showSettings];
 			}
+		}
+	}
+	else if ([alertView.title isEqualToString:@"Server Unavailable"])
+	{
+		if (buttonIndex == 1)
+		{
+			[self showSettings];
 		}
 	}
 	else if ([alertView.title isEqualToString:@"Notice"])
@@ -1136,6 +1158,7 @@
 		// Offline mode handling
 		
 		viewObjects.isOnlineModeAlertShowing = NO;
+		viewObjects.isNoNetworkAlertShowing = NO;
 		
 		if (buttonIndex == 1)
 		{
@@ -1396,7 +1419,7 @@
 	//NSLog(@"username: %@    password: %@", encodedUserName, encodedPassword);
 	
 	// Return the base URL
-	if ([action isEqualToString:@"getIndexes.view"] || [action isEqualToString:@"search.view"] || [action isEqualToString:@"search2.view"] || [action isEqualToString:@"getNowPlaying.view"] || [action isEqualToString:@"getPlaylists.view"] || [action isEqualToString:@"getMusicFolders.view"])
+	if ([action isEqualToString:@"getIndexes.view"] || [action isEqualToString:@"search.view"] || [action isEqualToString:@"search2.view"] || [action isEqualToString:@"getNowPlaying.view"] || [action isEqualToString:@"getPlaylists.view"] || [action isEqualToString:@"getMusicFolders.view"] || [action isEqualToString:@"createPlaylist.view"])
 	{
 		return [NSString stringWithFormat:@"%@/rest/%@?u=%@&p=%@&v=1.1.0&c=iSub", urlString, action, [encodedUserName autorelease], [encodedPassword autorelease]];
 	}

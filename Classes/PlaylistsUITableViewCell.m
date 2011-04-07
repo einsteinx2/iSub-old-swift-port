@@ -17,11 +17,11 @@
 
 @implementation PlaylistsUITableViewCell
 
-@synthesize indexPath, playlistNameScrollView, playlistNameLabel, isOverlayShowing, overlayView;
+@synthesize indexPath, playlistNameScrollView, playlistNameLabel, isOverlayShowing, overlayView, deleteToggleImage, isDelete;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
 {
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) 
+    if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) 
 	{
         // Initialization code
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -32,7 +32,7 @@
 		isOverlayShowing = NO;
 		
 		playlistNameScrollView = [[UIScrollView alloc] init];
-		playlistNameScrollView.frame = CGRectMake(5, 10, 290, 44);
+		playlistNameScrollView.frame = CGRectMake(5, 10, 310, 44);
 		playlistNameScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		playlistNameScrollView.showsVerticalScrollIndicator = NO;
 		playlistNameScrollView.showsHorizontalScrollIndicator = NO;
@@ -47,14 +47,31 @@
 		playlistNameLabel.font = [UIFont boldSystemFontOfSize:20];
 		[playlistNameScrollView addSubview:playlistNameLabel];
 		[playlistNameLabel release];
+		
+		deleteToggleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"unselected.png"]];
+		[self addSubview:deleteToggleImage];
+		[deleteToggleImage release];
     }
     return self;
 }
 
 
-// Empty function
 - (void)toggleDelete
 {
+	if (deleteToggleImage.image == [UIImage imageNamed:@"unselected.png"])
+	{
+		[viewObjects.multiDeleteList addObject:[NSNumber numberWithInt:indexPath.row]];
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"showDeleteButton" object:nil];
+		//NSLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
+		deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
+	}
+	else
+	{
+		[viewObjects.multiDeleteList removeObject:[NSNumber numberWithInt:indexPath.row]];
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"hideDeleteButton" object:nil];
+		//NSLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
+		deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
+	}
 }
 
 
@@ -196,6 +213,8 @@
 {
     [super layoutSubviews];
 	
+	deleteToggleImage.frame = CGRectMake(4.0, 18.5, 23.0, 23.0);
+
 	// Automatically set the width based on the width of the text
 	playlistNameLabel.frame = CGRectMake(0, 0, 290, 44);
 	CGSize expectedLabelSize = [playlistNameLabel.text sizeWithFont:playlistNameLabel.font constrainedToSize:CGSizeMake(1000,44) lineBreakMode:playlistNameLabel.lineBreakMode]; 

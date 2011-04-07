@@ -35,9 +35,8 @@ id databaseControlsRef;
 static BOOL isThrottlingEnabled;
 static NSDate *throttlingDate;
 static UInt32 bytesTransferred;
-//#define kThrottleTimeInterval 0.01
 #define kThrottleTimeInterval 0.1
-#define kMaxKilobitsPerSec 750
+#define kMaxKilobitsPerSec 700
 #define kMaxBytesPerSec ((kMaxKilobitsPerSec * 1024) / 8)
 #define kMaxBytesPerInterval (kMaxBytesPerSec * kThrottleTimeInterval)
 

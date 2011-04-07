@@ -23,12 +23,15 @@
 
 - (PlaylistsXMLParser *) initXMLParser 
 {	
-	[super init];	
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	databaseControls = [DatabaseControlsSingleton sharedInstance];
-	isPlaylist = YES;
-	md5 = nil;
+	if ((self = [super init]))
+	{
+		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
+		viewObjects = [ViewObjectsSingleton sharedInstance];
+		databaseControls = [DatabaseControlsSingleton sharedInstance];
+		isPlaylist = YES;
+		md5 = nil;
+	}
+	
 	return self;
 }
 

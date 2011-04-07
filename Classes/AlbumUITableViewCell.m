@@ -20,7 +20,7 @@
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
 {
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) 
+    if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) 
 	{
 		myId = nil;
 		myArtist = nil;
@@ -42,9 +42,9 @@
 		albumNameScrollView = [[UIScrollView alloc] init];
 		NSUInteger width;
 		if (isIndexShowing)
-			width = 200;
+			width = 220;
 		else
-			width = 230;
+			width = 250;
 		albumNameScrollView.frame = CGRectMake(65, 0, width, 60);
 		albumNameScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		albumNameScrollView.showsVerticalScrollIndicator = NO;

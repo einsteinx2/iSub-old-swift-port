@@ -88,6 +88,13 @@
     [super dealloc];
 }
 
+NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
+{
+    NSString *folder1 = [(NSArray*)keyVal1 objectAtIndex:1];
+	NSString *folder2 = [(NSArray*)keyVal2 objectAtIndex:1];
+	return [folder1 caseInsensitiveCompare:folder2];
+}
+
 - (void)setFolders:(NSDictionary *)namesAndIds
 {
 	// Set the property
@@ -104,14 +111,32 @@
 	
 	sizeIncrease = [folders count] * 30.0f;
 	
-	NSMutableArray *keys = [NSMutableArray arrayWithArray:[[folders allKeys] sortedArrayUsingSelector:@selector(compare:)]];
-	//NSLog(@"keys: %@", keys);
+	NSMutableArray *sortedValues = [NSMutableArray arrayWithCapacity:[folders count]];
+	for (NSString *key in [folders allKeys])
+	{
+		NSArray *keyValuePair = [NSArray arrayWithObjects:key, [folders objectForKey:key], nil];
+		[sortedValues addObject:keyValuePair];
+	}
+	
+	/*// Sort by folder name - iOS 4.0+ only
+	[sortedValues sortUsingComparator: ^NSComparisonResult(id keyVal1, id keyVal2) {
+		NSString *folder1 = [(NSArray*)keyVal1 objectAtIndex:1];
+		NSString *folder2 = [(NSArray*)keyVal2 objectAtIndex:1];
+		return [folder1 caseInsensitiveCompare:folder2];
+	}];*/
+	
+	// Sort by folder name
+	[sortedValues sortUsingFunction:folderSort2 context:NULL];
+	
+	//NSLog(@"keys: %@", [folders allKeys]);
+	//NSMutableArray *keys = [NSMutableArray arrayWithArray:[[folders allKeys] sortedArrayUsingSelector:@selector(compare:)]];
+	//NSLog(@"sorted keys: %@", keys);
 		
 	// Process the names and create the labels/buttons
-	for (int i = 0; i < [keys count]; i++)
+	for (int i = 0; i < [sortedValues count]; i++)
 	{
-		NSString *folder = [folders objectForKey:[keys objectAtIndex:i]];
-		
+		NSString *folder   = [[sortedValues objectAtIndex:i] objectAtIndex:1];
+		NSUInteger tag     = [[[sortedValues objectAtIndex:i] objectAtIndex:0] intValue];
 		CGRect labelFrame  = CGRectMake(0, (i + 1) * 30, self.frame.size.width, 30);
 		CGRect buttonFrame = CGRectMake(0, 0, self.frame.size.width - 10, 20);
 
@@ -127,7 +152,7 @@
 		folderLabel.textAlignment = UITextAlignmentCenter;
 		folderLabel.font = [UIFont boldSystemFontOfSize:20];
 		folderLabel.text = folder;
-		folderLabel.tag = [[keys objectAtIndex:i] intValue];
+		folderLabel.tag = tag;
 		[self addSubview:folderLabel];
 		[labels addObject:folderLabel];
 		[folderLabel release];
@@ -138,6 +163,25 @@
 		[folderLabel addSubview:folderButton];
 		[folderButton release];
 	}
+	
+	/*if ([folders count] == 2)
+	{
+		self.hidden = YES;
+		[tableView.tableHeaderView addHeight:-40];
+		for (UIView *view in viewsToMove)
+		{
+			[view addHeight:-40];
+		}
+	}
+	else
+	{
+		self.hidden = NO;
+		[tableView.tableHeaderView addHeight:40];
+		for (UIView *view in viewsToMove)
+		{
+			[view addHeight:40];
+		}
+	}*/
 }
 
 - (void)toggleDropdown:(id)sender

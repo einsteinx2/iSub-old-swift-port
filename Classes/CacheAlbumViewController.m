@@ -478,7 +478,7 @@
 		CacheSongUITableViewCell *cell = [[[CacheSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 		cell.accessoryType = UITableViewCellAccessoryNone;
 		NSUInteger a = indexPath.row - [listOfAlbums count];
-		cell.md5 = [listOfSongs objectAtIndex:a];
+		cell.md5 = [[listOfSongs objectAtIndex:a] objectAtIndex:0];
 		
 		Song *aSong = [self songFromCacheDb:cell.md5];
 		
@@ -513,6 +513,17 @@
 	}
 }
 
+NSInteger trackSort2(id obj1, id obj2, void *context)
+{
+	NSUInteger track1 = [(NSNumber*)[(NSArray*)obj1 objectAtIndex:1] intValue];
+	NSUInteger track2 = [(NSNumber*)[(NSArray*)obj2 objectAtIndex:1] intValue];
+	if (track1 < track2)
+		return NSOrderedAscending;
+	else if (track1 == track2)
+		return NSOrderedSame;
+	else
+		return NSOrderedDescending;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {	
@@ -529,16 +540,34 @@
 			cacheAlbumViewController.segment = (self.segment + 1);
 			cacheAlbumViewController.seg1 = self.seg1;
 			//NSLog(@"query: %@", [NSString stringWithFormat:@"SELECT md5, segs, seg%i FROM cachedSongsLayout WHERE seg1 = '%@' AND seg%i = '%@' GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), seg1, segment, [[listOfAlbums objectAtIndex:indexPath.row] objectAtIndex:1], (segment + 1), (segment + 1)]);
-			FMResultSet *result = [databaseControls.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), segment, (segment + 1), (segment + 1)], seg1, [[listOfAlbums objectAtIndex:indexPath.row] objectAtIndex:1]];
+			FMResultSet *result = [databaseControls.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? AND seg%i = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), segment, (segment + 1), (segment + 1)], seg1, [[listOfAlbums objectAtIndex:indexPath.row] objectAtIndex:1]];
 			while ([result next])
 			{
 				if ([result intForColumnIndex:1] > (segment + 1))
 				{
-					[cacheAlbumViewController.listOfAlbums addObject:[NSArray arrayWithObjects:[result stringForColumnIndex:0], [result stringForColumnIndex:2], nil]];
+					[cacheAlbumViewController.listOfAlbums addObject:[NSArray arrayWithObjects:[result stringForColumnIndex:0], 
+																							   [result stringForColumnIndex:2], nil]];
 				}
 				else
 				{
-					[cacheAlbumViewController.listOfSongs addObject:[result stringForColumnIndex:0]];
+					NSLog(@"%i - %@", [result intForColumn:@"track"], [result stringForColumnIndex:2]);
+					[cacheAlbumViewController.listOfSongs addObject:[NSArray arrayWithObjects:[result stringForColumnIndex:0], 
+																							  [NSNumber numberWithInt:[result intForColumnIndex:3]], nil]];
+					
+					/*// Sort by track number
+					[cacheAlbumViewController.listOfSongs sortUsingComparator: ^NSComparisonResult(id obj1, id obj2) {
+						NSUInteger track1 = [(NSNumber*)[(NSArray*)obj1 objectAtIndex:1] intValue];
+						NSUInteger track2 = [(NSNumber*)[(NSArray*)obj2 objectAtIndex:1] intValue];
+						if (track1 < track2)
+							return NSOrderedAscending;
+						else if (track1 == track2)
+							return NSOrderedSame;
+						else
+							return NSOrderedDescending;
+					}];*/
+					
+					// Sort by track number
+					[cacheAlbumViewController.listOfSongs sortUsingFunction:trackSort2 context:NULL];
 				}
 			}
 						
@@ -548,7 +577,7 @@
 		else
 		{
 			NSUInteger a = indexPath.row - [listOfAlbums count];
-			musicControls.currentSongObject = nil; musicControls.currentSongObject = [self songFromCacheDb:[listOfSongs objectAtIndex:a]];
+			musicControls.currentSongObject = nil; musicControls.currentSongObject = [self songFromCacheDb:[[listOfSongs objectAtIndex:a] objectAtIndex:0]];
 			
 			musicControls.currentPlaylistPosition = a;
 			[databaseControls resetCurrentPlaylistDb];

@@ -30,12 +30,14 @@
  
 - (HomeXMLParser *) initXMLParser 
 {	
-	[super init];	
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	databaseControls = [DatabaseControlsSingleton sharedInstance];
-	
-	listOfAlbums = [[NSMutableArray alloc] init];
+	if ((self = [super init]))
+	{
+		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
+		viewObjects = [ViewObjectsSingleton sharedInstance];
+		databaseControls = [DatabaseControlsSingleton sharedInstance];
+		
+		listOfAlbums = [[NSMutableArray alloc] init];
+	}
 
 	return self;
 }

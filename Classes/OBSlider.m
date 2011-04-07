@@ -49,7 +49,15 @@
     return self;
 }
 
+// How many extra touchable pixels you want above and below the 23px slider
+#define SIZE_EXTENSION_Y -10
 
+- (BOOL) pointInside:(CGPoint)point withEvent:(UIEvent*)event 
+{
+    CGRect bounds = self.bounds;
+    bounds = CGRectInset(bounds, 0, SIZE_EXTENSION_Y);
+    return CGRectContainsPoint(bounds, point);
+}
 
 #pragma mark -
 #pragma mark NSCoding

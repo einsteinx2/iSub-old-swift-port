@@ -6,7 +6,7 @@
 //  Copyright Ben Baron 2010. All rights reserved.
 //
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton, SearchOverlayViewController, LoadingScreen, Artist, EGORefreshTableHeaderView;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton, SearchOverlayViewController, LoadingScreen, Artist, EGORefreshTableHeaderView, FolderDropdownControl;
 
 @interface RootViewController : UITableViewController <UISearchBarDelegate>
 {
@@ -41,6 +41,10 @@
 	EGORefreshTableHeaderView *refreshHeaderView;
 	BOOL _reloading;
 	
+	NSUInteger searchY;
+	
+	FolderDropdownControl *dropdown;
+	
 	//NSDictionary *folders;
 }
 
@@ -52,6 +56,8 @@
 @property (nonatomic, retain) NSMutableArray *copyListOfArtists;
 
 @property BOOL isSearching;
+
+@property (nonatomic, retain) FolderDropdownControl *dropdown;
 
 - (void) searchTableView;
 - (void) doneSearching_Clicked:(id)sender;

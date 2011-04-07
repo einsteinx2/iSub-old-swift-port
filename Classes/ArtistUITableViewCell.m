@@ -20,7 +20,7 @@
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
 {
-	if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) 
+	if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) 
 	{
 		// Initialization code
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -31,7 +31,7 @@
 		isOverlayShowing = NO;
 		
 		artistNameScrollView = [[UIScrollView alloc] init];
-		artistNameScrollView.frame = CGRectMake(5, 0, 280, 44);
+		artistNameScrollView.frame = CGRectMake(5, 0, 320, 44);
 		artistNameScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		artistNameScrollView.showsVerticalScrollIndicator = NO;
 		artistNameScrollView.showsHorizontalScrollIndicator = NO;

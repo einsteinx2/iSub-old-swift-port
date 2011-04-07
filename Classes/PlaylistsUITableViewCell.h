@@ -30,6 +30,9 @@
 	BOOL hasSwiped;
 	BOOL fingerIsMovingLeftOrRight;
 	BOOL fingerMovingVertically;
+	
+	UIImageView *deleteToggleImage;
+	BOOL isDelete;
 }
 
 @property (nonatomic, retain) NSIndexPath *indexPath;
@@ -40,13 +43,17 @@
 @property BOOL isOverlayShowing;
 @property (nonatomic, retain) CellOverlay *overlayView;
 
+@property (nonatomic, retain) UIImageView *deleteToggleImage;
+@property BOOL isDelete;
+
 
 - (BOOL)isTouchGoingLeftOrRight:(UITouch *)touch;
 - (void)lookForSwipeGestureInTouches:(NSSet *)touches withEvent:(UIEvent *)event;
 - (void)hideOverlay;
 - (void)showOverlay;
 
-// Empty function
 - (void)toggleDelete;
+
+
 
 @end
