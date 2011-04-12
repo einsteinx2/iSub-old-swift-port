@@ -28,7 +28,7 @@
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] 
-		&& inOrientation != UIDeviceOrientationPortrait)
+		&& inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -581,12 +581,13 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			
 			musicControls.currentPlaylistPosition = a;
 			[databaseControls resetCurrentPlaylistDb];
-			for(NSString *songMD5 in listOfSongs)
+			for(NSArray *song in listOfSongs)
 			{
 				//NSLog(@"songMD5: %@", songMD5);
-				Song *aSong = [self songFromCacheDb:songMD5];
+				Song *aSong = [self songFromCacheDb:[song objectAtIndex:0]];
 				//NSLog(@"aSong: %@", aSong);
-				[databaseControls insertSong:aSong intoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
+				[databaseControls addSongToPlaylistQueue:aSong];
+				//[databaseControls insertSong:aSong intoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 			}
 			
 			musicControls.nextSongObject = nil; musicControls.nextSongObject = [databaseControls songFromDbRow:(a + 1) inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
@@ -597,6 +598,22 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			[musicControls destroyStreamer];
 			musicControls.seekTime = 0.0;
 			[musicControls playPauseSong];
+			
+			// Grab the first bytes of the song to trick Subsonic into seeing that it's being played
+			NSURL *songUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], musicControls.currentSongObject.songId]];
+			NSLog(@"songUrl: %@", [songUrl absoluteString]);
+			NSURLRequest *request = [NSURLRequest requestWithURL:songUrl cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+			NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:musicControls];
+			if (!connection)
+			{
+				NSLog(@"Subsonic cached song play notification failed");
+			}
+			
+			// Update the playtime to now
+			NSString *query = [NSString stringWithFormat:@"UPDATE cachedSongs SET playedDate = %i WHERE md5 = '%@'", 
+														 (NSUInteger)[[NSDate date] timeIntervalSince1970], 
+														 [musicControls.currentSongObject.songId md5]];
+			[databaseControls.songCacheDb executeUpdate:query];
 			
 			if (IS_IPAD())
 			{

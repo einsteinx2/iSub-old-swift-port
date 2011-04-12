@@ -59,7 +59,7 @@
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] 
-		&& inOrientation != UIDeviceOrientationPortrait)
+		&& inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -72,17 +72,8 @@
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	databaseControls = [DatabaseControlsSingleton sharedInstance];
 	musicControls = [MusicControlsSingleton sharedInstance];
-	
-	//folders = [[NSDictionary alloc] initWithObjectsAndKeys:@"All Folders", @"-1", nil];
-	
-	/*UIView *gray = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
-	gray.backgroundColor = viewObjects.darkNormal;
-	[self.tableView addSubview:gray];
-	[gray release];*/
-	
+
 	self.title = @"Folders";
-	
-	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
 	
 	//Initialize the copy array for searching.
 	copyListOfArtists = [[NSMutableArray alloc] init];
@@ -105,26 +96,18 @@
 	[self.tableView addSubview:refreshHeaderView];
 	[refreshHeaderView release];
 	
-	/*// Add the table fade
-	UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
-	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
-	fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	[self.tableView addSubview:fadeTop];
-	[fadeTop release];*/
-	
 	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fadeBottom;
 	
-	NSDictionary *folders = [NSKeyedUnarchiver unarchiveObjectWithData:[appDelegate.settingsDictionary objectForKey:@"folderDropdownCache"]];
+	NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [appDelegate.defaultUrl md5]];
+	NSData *archivedData = [appDelegate.settingsDictionary objectForKey:key];
+	NSDictionary *folders = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
 	
-	//[self.tableView scrollRectToVisible:CGRectMake(0, 50, 320, 500) animated:NO];
 	if (folders == nil || [folders count] == 2)
-		//[self.tableView scrollRectToVisible:CGRectMake(0, 87, 320, searchY) animated:NO];
 		[self.tableView setContentOffset:CGPointMake(0, 86) animated:NO];
 	else
-		//[self.tableView scrollRectToVisible:CGRectMake(0, 50, 320, searchY) animated:NO];
 		[self.tableView setContentOffset:CGPointMake(0, 50) animated:NO];
 }
 
@@ -132,6 +115,8 @@
 {
 	[self.tableView reloadData];
 	[self addCount];
+	
+	//[dropdown updateFolders];
 }
 
 
@@ -175,17 +160,20 @@
 	dropdown.delegate = self;
 	dropdown.tableView = self.tableView;
 	dropdown.viewsToMove = [NSArray arrayWithObjects:searchBar, nil];
-	dropdown.folders = [NSKeyedUnarchiver unarchiveObjectWithData:[appDelegate.settingsDictionary objectForKey:@"folderDropdownCache"]];
-	//NSLog(@"folders: %@", dropdown.folders);
-	[dropdown selectFolderWithId:[[appDelegate.settingsDictionary objectForKey:@"selectedMusicFolderId"] intValue]];
+	
+	dropdown.folders = [NSDictionary dictionaryWithObject:@"All Folders" forKey:@"-1"];
+	NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [appDelegate.defaultUrl md5]];
+	if ([appDelegate.settingsDictionary objectForKey:key])
+		dropdown.folders = [NSKeyedUnarchiver unarchiveObjectWithData:[appDelegate.settingsDictionary objectForKey:key]];
+	
+	NSInteger selectedFolderId = -1;
+	key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [appDelegate.defaultUrl md5]];
+	if ([appDelegate.settingsDictionary objectForKey:key])
+		selectedFolderId = [[appDelegate.settingsDictionary objectForKey:key] intValue];
+	
+	[dropdown selectFolderWithId:selectedFolderId];
 	[headerView addSubview:dropdown];
 	[dropdown release];
-	
-	/*if ([dropdown.folders count] == 2)
-	{
-		headerView.frame = CGRectMake(0, 0, 320, 80);
-		searchBar.frame = 
-	}*/
 	
 	NSInteger count = 0;
 	for (NSArray *array in viewObjects.listOfArtists)
@@ -204,70 +192,6 @@
 	self.tableView.tableHeaderView = headerView;
 }
 
-////////////////
-- (void)showDropdown:(id)sender
-{
-	/*[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.5];
-	if (((UIButton*)sender).tag == 0)
-	{
-		[headerView newHeight:200];
-		[folderDropdownLabel newHeight:110];
-		[searchBar newY:160];
-		((UIButton*)sender).tag = 1;
-	}
-	else
-	{
-		[headerView newHeight:120];
-		[folderDropdownLabel newHeight:30];
-		[searchBar newY:80];
-		((UIButton*)sender).tag = 0;
-	}
-	self.tableView.tableHeaderView = headerView;
-	[UIView commitAnimations];*/
-	
-	if (((UIButton*)sender).tag == 0)
-	{
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:.5];
-		[headerView newHeight:200];
-		[folderDropdown newHeight:110];
-		[searchBar newY:160];
-		self.tableView.tableHeaderView = headerView;
-		[UIView commitAnimations];
-		
-		[CATransaction begin];
-		[CATransaction setAnimationDuration:.5];
-		arrowImage.transform = CATransform3DMakeRotation((M_PI / 180.0) * -60.0f, 0.0f, 0.0f, 1.0f);
-		[CATransaction commit];
-		
-		((UIButton*)sender).tag = 1;
-	}
-	else
-	{
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:.5];
-		[headerView newHeight:120];
-		[folderDropdown newHeight:30];
-		[searchBar newY:80];
-		self.tableView.tableHeaderView = headerView;
-		[UIView commitAnimations];
-		
-		[CATransaction begin];
-		[CATransaction setAnimationDuration:.5];
-		arrowImage.transform = CATransform3DMakeRotation((M_PI / 180.0) * 0.0f, 0.0f, 0.0f, 1.0f);
-		[CATransaction commit];
-		/*[CATransaction begin];
-		[CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions]; 
-		arrowImage.hidden = NO;
-		arrowImage.transform = CATransform3DIdentity;
-		[CATransaction commit];*/
-		
-		((UIButton*)sender).tag = 0;
-	}
-	
-}
-//////////////////
 
 -(void)loadData:(NSString*)folderId 
 {
@@ -422,7 +346,6 @@
 	isSearching = NO;
 	didBeginSearching = NO;
 	self.navigationItem.leftBarButtonItem = nil;
-	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
 	self.tableView.scrollEnabled = YES;
 	
 	[searchOverlayView.view removeFromSuperview];
@@ -431,7 +354,7 @@
 	
 	[self.tableView reloadData];
 	
-	//[self.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
+	[self.tableView setContentOffset:CGPointMake(0, 86) animated:YES];
 }
 
 - (void) reloadAction:(id)sender
@@ -522,7 +445,7 @@
 	}
 	else 
 	{
-		[self.tableView setContentOffset:CGPointMake(0, 50) animated:YES];
+		[self.tableView setContentOffset:CGPointMake(0, 86) animated:YES];
 		
 		//Add the overlay view.
 		if(searchOverlayView == nil)
@@ -750,8 +673,6 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	//NSLog(@"%@", [[NSString alloc]  initWithBytes:[receivedData bytes]
-	//									   length:[receivedData length] encoding: NSUTF8StringEncoding]);
 	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
 	XMLParser *parser = [[XMLParser alloc] initXMLParser];
 	parser.parseState = @"artists";

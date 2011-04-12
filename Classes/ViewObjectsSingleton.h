@@ -138,9 +138,7 @@
 	
 	
 	BOOL isJukebox;
-	
-	BOOL isNewSearchAPI;
-	
+		
 	NSString *currentLoadingFolderId;
 	
 	BOOL isSettingsShowing;
@@ -261,7 +259,6 @@
 
 
 @property BOOL isJukebox;
-@property BOOL isNewSearchAPI;
 
 @property (nonatomic, retain) NSString *currentLoadingFolderId;
 

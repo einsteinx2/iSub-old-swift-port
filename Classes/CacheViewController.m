@@ -37,7 +37,7 @@
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] 
-		&& inOrientation != UIDeviceOrientationPortrait)
+		&& inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -335,6 +335,8 @@
 		int y = 40;
 		
 		headerView.frame = CGRectMake(0, 0, 320, y + 100);
+		if (segmentedControl.selectedSegmentIndex == 1)
+			headerView.frame = CGRectMake(0, 0, 320, y + 50);
 		
 		songsCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, y, 227, 34)];
 		songsCountLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
@@ -438,56 +440,68 @@
 		[headerView addSubview:deleteSongsLabel];
 		[deleteSongsLabel release];
 		
-		headerView2 = [[UIView alloc] initWithFrame:CGRectMake(0, y + 50, 320, 50)];
-		headerView2.backgroundColor = viewObjects.darkNormal;
-		[headerView addSubview:headerView2];
-		[headerView2 release];
-		
-		playAllImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play-all-note.png"]];
-		playAllImage.frame = CGRectMake(10, 10, 19, 30);
-		[headerView2 addSubview:playAllImage];
-		[playAllImage release];
-		
-		playAllLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 160, 50)];
-		playAllLabel.backgroundColor = [UIColor clearColor];
-		playAllLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
-		playAllLabel.textAlignment = UITextAlignmentCenter;
-		playAllLabel.font = [UIFont boldSystemFontOfSize:30];
-		playAllLabel.text = @"Play All";
-		[headerView2 addSubview:playAllLabel];
-		[playAllLabel release];
-		
-		playAllButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		playAllButton.frame = CGRectMake(0, 0, 160, 40);
-		[playAllButton addTarget:self action:@selector(playAllAction:) forControlEvents:UIControlEventTouchUpInside];
-		[headerView2 addSubview:playAllButton];
-		
-		spacerLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(158, -2, 6, 50)];
-		spacerLabel2.backgroundColor = [UIColor clearColor];
-		spacerLabel2.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
-		spacerLabel2.font = [UIFont systemFontOfSize:40];
-		spacerLabel2.text = @"|";
-		[headerView2 addSubview:spacerLabel2];
-		[spacerLabel2 release];
-		
-		shuffleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shuffle-small.png"]];
-		shuffleImage.frame = CGRectMake(180, 12, 24, 26);
-		[headerView2 addSubview:shuffleImage];
-		[shuffleImage release];
-		
-		shuffleLabel = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 160, 50)];
-		shuffleLabel.backgroundColor = [UIColor clearColor];
-		shuffleLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
-		shuffleLabel.textAlignment = UITextAlignmentCenter;
-		shuffleLabel.font = [UIFont boldSystemFontOfSize:30];
-		shuffleLabel.text = @"Shuffle";
-		[headerView2 addSubview:shuffleLabel];
-		[shuffleLabel release];
-		
-		shuffleButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		shuffleButton.frame = CGRectMake(160, 0, 160, 40);
-		[shuffleButton addTarget:self action:@selector(shuffleAction:) forControlEvents:UIControlEventTouchUpInside];
-		[headerView2 addSubview:shuffleButton];
+		headerView2 = nil;
+		if (segmentedControl.selectedSegmentIndex == 0)
+		{
+			headerView2 = [[UIView alloc] initWithFrame:CGRectMake(0, y + 50, 320, 50)];
+			headerView2.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+			headerView2.backgroundColor = viewObjects.darkNormal;
+			[headerView addSubview:headerView2];
+			[headerView2 release];
+			
+			playAllImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play-all-note.png"]];
+			playAllImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+			playAllImage.frame = CGRectMake(10, 10, 19, 30);
+			[headerView2 addSubview:playAllImage];
+			[playAllImage release];
+			
+			playAllLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 160, 50)];
+			playAllLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+			playAllLabel.backgroundColor = [UIColor clearColor];
+			playAllLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
+			playAllLabel.textAlignment = UITextAlignmentCenter;
+			playAllLabel.font = [UIFont boldSystemFontOfSize:30];
+			playAllLabel.text = @"Play All";
+			[headerView2 addSubview:playAllLabel];
+			[playAllLabel release];
+			
+			playAllButton = [UIButton buttonWithType:UIButtonTypeCustom];
+			playAllButton.frame = CGRectMake(0, 0, 160, 40);
+			playAllButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+			[playAllButton addTarget:self action:@selector(playAllAction:) forControlEvents:UIControlEventTouchUpInside];
+			[headerView2 addSubview:playAllButton];
+			
+			spacerLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(158, -2, 6, 50)];
+			spacerLabel2.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+			spacerLabel2.backgroundColor = [UIColor clearColor];
+			spacerLabel2.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
+			spacerLabel2.font = [UIFont systemFontOfSize:40];
+			spacerLabel2.text = @"|";
+			[headerView2 addSubview:spacerLabel2];
+			[spacerLabel2 release];
+			
+			shuffleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shuffle-small.png"]];
+			shuffleImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+			shuffleImage.frame = CGRectMake(180, 12, 24, 26);
+			[headerView2 addSubview:shuffleImage];
+			[shuffleImage release];
+			
+			shuffleLabel = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 160, 50)];
+			shuffleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
+			shuffleLabel.backgroundColor = [UIColor clearColor];
+			shuffleLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
+			shuffleLabel.textAlignment = UITextAlignmentCenter;
+			shuffleLabel.font = [UIFont boldSystemFontOfSize:30];
+			shuffleLabel.text = @"Shuffle";
+			[headerView2 addSubview:shuffleLabel];
+			[shuffleLabel release];
+			
+			shuffleButton = [UIButton buttonWithType:UIButtonTypeCustom];
+			shuffleButton.frame = CGRectMake(160, 0, 160, 40);
+			shuffleButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
+			[shuffleButton addTarget:self action:@selector(shuffleAction:) forControlEvents:UIControlEventTouchUpInside];
+			[headerView2 addSubview:shuffleButton];
+		}
 		
 		self.tableView.tableHeaderView = headerView;
 	}
@@ -691,40 +705,42 @@
 		
 		
 		// Move the definite article back to the beginning  Le El La The Los Las Les
-		for (int i = 0; i < [listOfArtists count]; i++)
+		for (NSMutableArray *section in listOfArtistsSections)
 		{
-			NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-			NSString *artist = [listOfArtists objectAtIndex:i];
-			NSUInteger length = [artist length];
-			
-			if (length > 6)
+			for (int i = 0; i < [section count]; i++)
 			{
-				NSString *substring5 = [artist substringFromIndex:length - 5];
-				if ([substring5 isEqualToString:@", The"] ||
-					[substring5 isEqualToString:@", Los"] ||
-					[substring5 isEqualToString:@", Las"] ||
-					[substring5 isEqualToString:@", Les"])
+				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+				NSString *artist = [section objectAtIndex:i];
+				NSUInteger length = [artist length];
+				
+				if (length > 6)
 				{
-					artist = [NSString stringWithFormat:@"%@ %@", 
-														[artist substringFromIndex:length - 3], 
-														[artist substringToIndex:length - 5]];
+					NSString *substring5 = [artist substringFromIndex:length - 5];
+					if ([substring5 isEqualToString:@", The"] ||
+						[substring5 isEqualToString:@", Los"] ||
+						[substring5 isEqualToString:@", Las"] ||
+						[substring5 isEqualToString:@", Les"])
+					{
+						artist = [NSString stringWithFormat:@"%@ %@", 
+								  [artist substringFromIndex:length - 3], 
+								  [artist substringToIndex:length - 5]];
+					}
 				}
-			}
-			else if (length > 5)
-			{
-				NSString *substring4 = [artist substringFromIndex:length - 4];
-				if ([substring4 isEqualToString:@", Le"] ||
-					[substring4 isEqualToString:@", El"] ||
-					[substring4 isEqualToString:@", La"])
+				else if (length > 5)
 				{
-					artist = [NSString stringWithFormat:@"%@ %@", 
-														[artist substringFromIndex:length - 2], 
-														[artist substringToIndex:length - 4]];
+					NSString *substring4 = [artist substringFromIndex:length - 4];
+					if ([substring4 isEqualToString:@", Le"] ||
+						[substring4 isEqualToString:@", El"] ||
+						[substring4 isEqualToString:@", La"])
+					{
+						artist = [NSString stringWithFormat:@"%@ %@", 
+								  [artist substringFromIndex:length - 2], 
+								  [artist substringToIndex:length - 4]];
+					}
 				}
+				[section replaceObjectAtIndex:i withObject:artist];
+				[pool release];
 			}
-			
-			[listOfArtists replaceObjectAtIndex:i withObject:artist];
-			[pool release];
 		}
 		
 		//NSLog(@"sectionInfo: %@", sectionInfo);
@@ -1328,7 +1344,7 @@
 		static NSString *CellIdentifier = @"Cell";
 		
 		CacheArtistUITableViewCell *cell = [[[CacheArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		//cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		//cell.indexPath = indexPath;
 		
 		if (showIndex)

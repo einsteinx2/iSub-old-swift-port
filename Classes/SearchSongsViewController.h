@@ -36,6 +36,8 @@
 	BOOL isLoading;
 	
 	NSMutableData *receivedData;
+	
+	NSURLConnection *connection;
 }
 
 @property (nonatomic, retain) NSString *query;
@@ -47,5 +49,7 @@
 
 @property NSUInteger offset;
 @property BOOL isMoreResults;
+
+@property (nonatomic, retain) NSURLConnection *connection;
 
 @end

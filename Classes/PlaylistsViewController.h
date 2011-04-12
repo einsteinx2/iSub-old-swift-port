@@ -42,6 +42,11 @@
 	
 	BBSimpleConnectionQueue *connectionQueue;
 	
+	BOOL savePlaylistLocal;
+	
+	NSMutableData *receivedData;
+	NSURLConnection *connection;
+	
 	//NSMutableData *receivedData;
 }
 

@@ -64,7 +64,6 @@ static ViewObjectsSingleton *sharedInstance = nil;
 
 
 @synthesize isJukebox;
-@synthesize isNewSearchAPI;
 
 @synthesize currentLoadingFolderId;
 
@@ -459,6 +458,8 @@ static ViewObjectsSingleton *sharedInstance = nil;
 			}
 		}
 	}
+	
+	
 }
 
 -(id)init 
@@ -511,7 +512,6 @@ static ViewObjectsSingleton *sharedInstance = nil;
 		self.isSettingsShowing = NO;
 		
 		isJukebox = NO;
-		isNewSearchAPI = NO;
 		
 		isNoNetworkAlertShowing = NO;
 	}

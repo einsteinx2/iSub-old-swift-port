@@ -62,14 +62,12 @@
 	{
 		[viewObjects.multiDeleteList addObject:[NSNumber numberWithInt:indexPath.row]];
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"showDeleteButton" object:nil];
-		//NSLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
 		deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
 	}
 	else
 	{
 		[viewObjects.multiDeleteList removeObject:[NSNumber numberWithInt:indexPath.row]];
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"hideDeleteButton" object:nil];
-		//NSLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
 		deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
 	}
 }

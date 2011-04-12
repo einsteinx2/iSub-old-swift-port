@@ -10,6 +10,7 @@
 #import "ViewObjectsSingleton.h"
 #import "iSubAppDelegate.h"
 #import "CustomUIAlertView.h"
+#import "NSString-md5.h"
 
 @implementation APICheckXMLParser
 
@@ -19,6 +20,7 @@
 	{
 		appDelegate = [iSubAppDelegate sharedInstance];
 		viewObjects = [ViewObjectsSingleton sharedInstance];
+		isNewSearchAPI = NO;
 	}
 	return self;
 }
@@ -63,19 +65,28 @@
 		{
 			NSUInteger ver = [[splitVersion objectAtIndex:0] intValue];
 			if (ver >= 2)
-				viewObjects.isNewSearchAPI = YES;
+				isNewSearchAPI = YES;
 			else
-				viewObjects.isNewSearchAPI = NO;
+				isNewSearchAPI = NO;
 		}
 		else if ([splitVersion count] > 1)
 		{
 			NSUInteger ver1 = [[splitVersion objectAtIndex:0] intValue];
 			NSUInteger ver2 = [[splitVersion objectAtIndex:1] intValue];
 			if ((ver1 >= 1 && ver2 >= 4) || (ver1 >= 2))
-				viewObjects.isNewSearchAPI = YES;
+				isNewSearchAPI = YES;
 			else
-				viewObjects.isNewSearchAPI = NO;
+				isNewSearchAPI = NO;
 		}
+		
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
+		if (isNewSearchAPI)
+			[appDelegate.settingsDictionary setObject:@"YES" forKey:key];
+		else
+			[appDelegate.settingsDictionary setObject:@"NO" forKey:key];
+		[defaults setObject:appDelegate.settingsDictionary forKey:@"settingsDictionary"];
+		[defaults synchronize];
 	}	
 }
 

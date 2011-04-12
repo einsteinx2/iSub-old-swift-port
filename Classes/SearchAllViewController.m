@@ -11,7 +11,7 @@
 #import "ViewObjectsSingleton.h"
 
 @implementation SearchAllViewController
-@synthesize cellNames, listOfArtists, listOfAlbums, listOfSongs;
+@synthesize cellNames, listOfArtists, listOfAlbums, listOfSongs, query;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -21,6 +21,7 @@
 		listOfArtists = nil;
 		listOfAlbums = nil;
 		listOfSongs = nil;
+		query = nil;
 	}
 	
 	return self;
@@ -33,6 +34,7 @@
 	[listOfArtists release]; listOfArtists = nil;
 	[listOfAlbums release]; listOfAlbums = nil;
 	[listOfSongs release]; listOfSongs = nil;
+	[query release]; query = nil;
 	
     [super dealloc];
 }
@@ -192,19 +194,21 @@
 	NSString *type = [cellNames objectAtIndex:indexPath.row];
 	if ([type isEqualToString:@"Artists"])
 	{
-		searchView.listOfArtists = [NSArray arrayWithArray:listOfArtists];
+		searchView.listOfArtists = [NSMutableArray arrayWithArray:listOfArtists];
 		searchView.searchType = 0;
 	}
 	else if ([type isEqualToString:@"Albums"])
 	{
-		searchView.listOfAlbums = [NSArray arrayWithArray:listOfAlbums];
+		searchView.listOfAlbums = [NSMutableArray arrayWithArray:listOfAlbums];
 		searchView.searchType = 1;
 	}
 	else if ([type isEqualToString:@"Songs"])
 	{
-		searchView.listOfSongs = [NSArray arrayWithArray:listOfSongs];
+		searchView.listOfSongs = [NSMutableArray arrayWithArray:listOfSongs];
 		searchView.searchType = 2;
 	}
+	
+	searchView.query = query;
 	
 	[self.navigationController pushViewController:searchView animated:YES];
 	[searchView release];

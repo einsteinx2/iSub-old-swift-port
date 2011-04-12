@@ -35,6 +35,7 @@
 
 @synthesize query, searchType;
 @synthesize listOfArtists, listOfAlbums, listOfSongs, offset, isMoreResults;
+@synthesize connection;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -42,7 +43,7 @@
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] 
-		&& inOrientation != UIDeviceOrientationPortrait)
+		&& inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -156,6 +157,15 @@
 		
 		self.tableView.tableHeaderView = headerView;
 	}*/
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	
+	[connection cancel];
+	[connection release];
+	connection = nil;
 }
 
 /*- (void)loadPlayAllPlaylist:(NSString *)shuffle
@@ -316,8 +326,9 @@
 {
 	offset += 20;
 	
-	NSString *urlString;
-	if (viewObjects.isNewSearchAPI)
+	NSString *urlString = @"";
+	NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
+	if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
 	{
 		if (searchType == 0)
 		{
@@ -340,9 +351,10 @@
 		urlString = [NSString stringWithFormat:@"%@&count=20&any=%@&offset=%i", 
 					 [appDelegate getBaseUrl:@"search.view"], [query stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding], offset];
 	}
+	//NSLog(@"urlString: %@", urlString);
 	
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
-	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
 	{
 		// Create the NSMutableData to hold the received data.
@@ -682,7 +694,7 @@
 	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 	[alert release];
 	
-	[theConnection release];
+	[theConnection release]; theConnection = nil;
 	[receivedData release];
 	
 	[viewObjects hideLoadingScreen];
@@ -690,6 +702,8 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
+	//NSLog(@"%@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
+	
 	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
 	SearchXMLParser *parser = [[SearchXMLParser alloc] initXMLParser];
 	[xmlParser setDelegate:parser];
@@ -697,16 +711,40 @@
 	
 	//NSLog(@"parser.listOfSongs:\n%@", parser.listOfSongs);
 	
-	if ([parser.listOfSongs count] == 0)
+	if (searchType == 0)
 	{
-		// There are no more songs
-		isMoreResults = NO;
+		if ([parser.listOfArtists count] == 0)
+		{
+			isMoreResults = NO;
+		}
+		else 
+		{
+			[listOfArtists addObjectsFromArray:parser.listOfArtists];
+		}
 	}
-	else 
+	else if (searchType == 1)
 	{
-		// Add the new results to the list of songs
-		[listOfSongs addObjectsFromArray:parser.listOfSongs];
+		if ([parser.listOfAlbums count] == 0)
+		{
+			isMoreResults = NO;
+		}
+		else 
+		{
+			[listOfAlbums addObjectsFromArray:parser.listOfAlbums];
+		}
 	}
+	else if (searchType == 2)
+	{
+		if ([parser.listOfSongs count] == 0)
+		{
+			isMoreResults = NO;
+		}
+		else 
+		{
+			[listOfSongs addObjectsFromArray:parser.listOfSongs];
+		}
+	}
+	
 		
 	[xmlParser release];
 	[parser release];
@@ -715,7 +753,7 @@
 	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
 	isLoading = NO;
 		
-	[theConnection release];
+	[theConnection release]; theConnection = nil;
 	[receivedData release];
 }
 

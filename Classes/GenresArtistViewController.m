@@ -28,7 +28,7 @@
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] 
-		&& inOrientation != UIDeviceOrientationPortrait)
+		&& inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;

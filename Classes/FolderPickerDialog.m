@@ -87,11 +87,11 @@ static CGFloat kDDSocialDialogPadding = 10;
 		
 		UIColor* color = [UIColor colorWithRed:167.0/255 green:184.0/255 blue:216.0/255 alpha:1];
 		closeButton_ = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
-		[closeButton_ setTitle:@" " forState:UIControlStateNormal];
+		[closeButton_ setTitle:@"X" forState:UIControlStateNormal];
 		[closeButton_ setTitleColor:color forState:UIControlStateNormal];
 		[closeButton_ setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
-		[closeButton_ addTarget:self action:@selector(cancel) forControlEvents:UIControlEventTouchUpInside];
-		closeButton_.titleLabel.font = [UIFont boldSystemFontOfSize:12];
+		[closeButton_ addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
+		closeButton_.titleLabel.font = [UIFont boldSystemFontOfSize:18];
 		closeButton_.showsTouchWhenHighlighted = YES;
 		closeButton_.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
 		[self addSubview:closeButton_];
@@ -199,6 +199,11 @@ static CGFloat kDDSocialDialogPadding = 10;
 											 selector:@selector(keyboardDidShow:) name:@"UIKeyboardDidShowNotification" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(keyboardWillHide:) name:@"UIKeyboardWillHideNotification" object:nil];	
+}
+
+- (void)cancel:(id)sender
+{
+	[self dismiss:YES];
 }
 
 - (void)dismiss:(BOOL)animated {

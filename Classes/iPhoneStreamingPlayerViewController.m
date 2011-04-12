@@ -70,10 +70,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)viewDidLoad2
 {
-	//self.title = [musicControls.currentSongObject title];
-	[self setSongTitle];
-	
-	//musicControls.songUrl = nil;
 	musicControls.songUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], [musicControls.currentSongObject songId]]];
 	
 	[self initSongInfo];
@@ -119,12 +115,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		}		
 	}
 	
-	if (UIDeviceOrientationIsPortrait([UIDevice currentDevice].orientation) && 
-		[[appDelegate.settingsDictionary objectForKey:@"autoPlayerInfoSetting"] isEqualToString:@"YES"])
-	{
-		[self songInfoToggle:nil];
-	}
-	
 	// determine the size of the reflection to create
 	reflectionHeight = coverArtImageView.bounds.size.height * kDefaultReflectionFraction;
 	[reflectionView newHeight:(float)reflectionHeight];
@@ -132,6 +122,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	// create the reflection image and assign it to the UIImageView
 	reflectionView.image = [self reflectedImage:coverArtImageView withHeight:reflectionHeight];
 	reflectionView.alpha = kDefaultReflectionOpacity;
+	
+	if([[appDelegate.settingsDictionary objectForKey:@"autoPlayerInfoSetting"] isEqualToString:@"YES"])
+	{
+		[self songInfoToggle:nil];
+	}
 }
 
 - (void)viewDidLoad
@@ -193,7 +188,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[self.view sendSubviewToBack:titleLabel];
 		[titleLabel	release];
 		
-		if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation))
+		if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
 		{
 			coverArtImageView.frame = CGRectMake(0, 0, 300, 300);
 			prevButton.frame = CGRectMake(290, 184, 72, 60);
@@ -201,13 +196,14 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			nextButton.frame = CGRectMake(420, 184, 72, 60);
 			volumeSlider.frame = CGRectMake(300, 244, 180, 55);
 			volumeView.frame = CGRectMake(0, 0, 180, 55);
-			//[volumeView sizeToFit];
 		}
 		else
 		{
 			artistLabel.hidden = YES;
 			albumLabel.hidden = YES;
 			titleLabel.hidden = YES;
+			
+			[self setSongTitle];
 		}
 	}
 	
@@ -277,7 +273,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	if (!IS_IPAD())
 	{
-		if (UIDeviceOrientationIsPortrait(toInterfaceOrientation))
+		if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
 		{
 			coverArtImageView.frame = CGRectMake(0, 0, 320, 320);
 			prevButton.frame = CGRectMake(13, 324, 72, 60);
@@ -297,7 +293,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			albumLabel.hidden = YES;
 			titleLabel.hidden = YES;
 		}
-		else if (UIDeviceOrientationIsLandscape(toInterfaceOrientation))
+		else if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation))
 		{
 			coverArtImageView.frame = CGRectMake(0, 0, 300, 300);
 			prevButton.frame = CGRectMake(290, 184, 72, 60);
@@ -321,7 +317,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-	if (UIDeviceOrientationIsLandscape(fromInterfaceOrientation))
+	if (UIInterfaceOrientationIsLandscape(fromInterfaceOrientation))
 	{
 		[self setSongTitle];
 	}
@@ -359,32 +355,40 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	UIView *titleView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 40)] autorelease];
 	titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	
-	UILabel *artist = [[UILabel alloc] initWithFrame:CGRectMake(0, 3, width, 10)];
-	artist.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	CGRect artistFrame = CGRectMake(0, -2, width, 15);
+	CGRect albumFrame  = CGRectMake(0, 10, width, 15);
+	CGRect songFrame   = CGRectMake(0, 23, width, 15);
+	
+	NSUInteger artistSize = 12;
+	NSUInteger albumSize  = 11;
+	NSUInteger songSize   = 12;
+	
+	UILabel *artist = [[UILabel alloc] initWithFrame:artistFrame];
+	artist.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	artist.backgroundColor = [UIColor clearColor];
 	artist.textColor = [UIColor whiteColor];
-	artist.font = [UIFont boldSystemFontOfSize:10];
-	artist.adjustsFontSizeToFitWidth = YES;
+	artist.font = [UIFont boldSystemFontOfSize:artistSize];
+	//artist.adjustsFontSizeToFitWidth = YES;
 	artist.textAlignment = UITextAlignmentCenter;
 	[titleView addSubview:artist];
 	[artist release];
 	
-	UILabel *album = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, width, 10)];
-	album.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	UILabel *album = [[UILabel alloc] initWithFrame:albumFrame];
+	album.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	album.backgroundColor = [UIColor clearColor];
 	album.textColor = [UIColor whiteColor];
-	album.font = [UIFont systemFontOfSize:10];
-	album.adjustsFontSizeToFitWidth = YES;
+	album.font = [UIFont systemFontOfSize:albumSize];
+	//album.adjustsFontSizeToFitWidth = YES;
 	album.textAlignment = UITextAlignmentCenter;
 	[titleView addSubview:album];
 	[album release];
 	
-	UILabel *song = [[UILabel alloc] initWithFrame:CGRectMake(0, 27, width, 10)];
-	song.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	UILabel *song = [[UILabel alloc] initWithFrame:songFrame];
+	song.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	song.backgroundColor = [UIColor clearColor];
 	song.textColor = [UIColor whiteColor];
-	song.font = [UIFont boldSystemFontOfSize:10];
-	song.adjustsFontSizeToFitWidth = YES;
+	song.font = [UIFont boldSystemFontOfSize:songSize];
+	//song.adjustsFontSizeToFitWidth = YES;
 	song.textAlignment = UITextAlignmentCenter;
 	[titleView addSubview:song];
 	[song release];

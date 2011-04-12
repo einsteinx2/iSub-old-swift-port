@@ -30,13 +30,14 @@
 #import "ShuffleFolderPickerViewController.h"
 #import "FolderPickerDialog.h"
 #import "SearchAllViewController.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation NewHomeViewController
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] 
-		&& inOrientation != UIDeviceOrientationPortrait)
+		&& inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -48,7 +49,7 @@
 	
 	BOOL rotationDisabled = [[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"];
 	
-	if (UIDeviceOrientationIsPortrait(toInterfaceOrientation) && !rotationDisabled)
+	if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation) && !rotationDisabled)
 	{
 		if (!IS_IPAD())
 		{
@@ -71,7 +72,7 @@
 			[UIView commitAnimations];
 		}
 	}
-	else if (UIDeviceOrientationIsLandscape(toInterfaceOrientation) && !rotationDisabled)
+	else if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation) && !rotationDisabled)
 	{
 		if (!IS_IPAD())
 		{
@@ -116,39 +117,51 @@
 
 	if (!IS_IPAD())
 	{
-		coverArtBorder = [[UIView alloc] initWithFrame:CGRectMake(20, 158, 100, 100)];
-		coverArtBorder.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1.0];
-		
-		coverArtView = [[AsynchronousImageView alloc] init];
-		coverArtView.frame = CGRectMake(2, 2, 96, 96);
-		coverArtView.isForPlayer = YES;
-		
-		[coverArtBorder addSubview:coverArtView];
+		//coverArtBorder = [[UIView alloc] initWithFrame:CGRectMake(15, 180, 290, 60)];
+		coverArtBorder = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+		coverArtBorder.frame = CGRectMake(15, 177, 290, 60);
+		coverArtBorder.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
+		coverArtBorder.layer.borderWidth = 2.0f;
+		[coverArtBorder addTarget:self action:@selector(player) forControlEvents:UIControlEventTouchUpInside];
 		[self.view addSubview:coverArtBorder];
 		
-		artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(140, 165, 165, 30)];
+		coverArtView = [[AsynchronousImageView alloc] init];
+		//coverArtView.frame = CGRectMake(2, 2, 56, 56);
+		coverArtView.frame = CGRectMake(0, 0, 60, 60);
+		coverArtView.isForPlayer = YES;
+		coverArtView.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
+		coverArtView.layer.borderWidth = 2.0f;
+		
+		//[coverArtBorder addSubview:coverArtView];
+		//[self.view addSubview:coverArtBorder];
+		[coverArtBorder addSubview:coverArtView];
+		
+		artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 3, 220, 17)];
 		artistLabel.backgroundColor = [UIColor clearColor];
 		artistLabel.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
-		artistLabel.font = [UIFont boldSystemFontOfSize:24];
+		artistLabel.font = [UIFont boldSystemFontOfSize:17];
+		artistLabel.minimumFontSize = 12;
 		artistLabel.adjustsFontSizeToFitWidth = YES;
 		artistLabel.textAlignment = UITextAlignmentCenter;
-		[self.view addSubview:artistLabel];
+		[coverArtBorder addSubview:artistLabel];
 		
-		albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(140, 195, 165, 20)];
+		albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 20, 220, 17)];
 		albumLabel.backgroundColor = [UIColor clearColor];
 		albumLabel.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
-		albumLabel.font = [UIFont systemFontOfSize:24];
+		albumLabel.font = [UIFont systemFontOfSize:17];
+		albumLabel.minimumFontSize = 12;
 		albumLabel.adjustsFontSizeToFitWidth = YES;
 		albumLabel.textAlignment = UITextAlignmentCenter;
-		[self.view addSubview:albumLabel];
+		[coverArtBorder addSubview:albumLabel];
 		
-		songLabel = [[UILabel alloc] initWithFrame:CGRectMake(140, 215, 165, 30)];
+		songLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 37, 220, 17)];
 		songLabel.backgroundColor = [UIColor clearColor];
 		songLabel.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
-		songLabel.font = [UIFont boldSystemFontOfSize:24];
+		songLabel.font = [UIFont boldSystemFontOfSize:17];
+		songLabel.minimumFontSize = 12;
 		songLabel.adjustsFontSizeToFitWidth = YES;
 		songLabel.textAlignment = UITextAlignmentCenter;
-		[self.view addSubview:songLabel];				
+		[coverArtBorder addSubview:songLabel];				
 		
 		[self initSongInfo];
 	}	
@@ -160,12 +173,12 @@
 	
 	viewObjects.isSettingsShowing = NO;
 	
-	/*if (UIDeviceOrientationIsPortrait([UIDevice currentDevice].orientation))
+	/*if (UIInterfaceOrientationIsPortrait([UIDevice currentDevice].orientation))
 	{
 		if (!IS_IPAD())
 			[[NSBundle mainBundle] loadNibNamed:@"NewHomeViewController" owner:self options:nil];
 	}
-	else if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation))
+	else if (UIInterfaceOrientationIsLandscape([UIDevice currentDevice].orientation))
 	{
 		if (!IS_IPAD())
 			[[NSBundle mainBundle] loadNibNamed:@"NewHomeViewControllerLandscape" owner:self options:nil];
@@ -441,17 +454,16 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 	
-	[coverArtBorder release];
-	[coverArtView release];
-	[artistLabel release];
-	[albumLabel release];
-	[songLabel release];
-	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"JukeboxTurnedOff" object:nil];
 }
 
 
 - (void)dealloc {
+	[coverArtBorder release];
+	[coverArtView release];
+	[artistLabel release];
+	[albumLabel release];
+	[songLabel release];
     [super dealloc];
 }
 
@@ -460,9 +472,11 @@
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)theSearchBar
 {	
+	NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
+	
 	// Create search overlay
 	searchOverlay = [[UIView alloc] init];
-	if (viewObjects.isNewSearchAPI)
+	if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
 	{
 		if (IS_IPAD())
 			searchOverlay.frame = CGRectMake(0, 86, 1024, 1024);
@@ -494,9 +508,8 @@
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:.5];
 	[UIView setAnimationCurve:UIViewAnimationCurveLinear];
-	if (viewObjects.isNewSearchAPI)
+	if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
 	{
-		
 		searchSegment.alpha = 1;
 		searchSegment.enabled = YES;
 		searchSegmentBackground.alpha = 1;
@@ -512,7 +525,8 @@
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:.3];
 	[UIView setAnimationCurve:UIViewAnimationCurveLinear];
-	if (viewObjects.isNewSearchAPI)
+	NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
+	if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
 	{
 		searchSegment.alpha = 0;
 		searchSegment.enabled = NO;
@@ -530,9 +544,10 @@
 	[searchBar resignFirstResponder];
 	
 	// Perform the search
-	NSString *urlString;
+	NSString *urlString = @"";
 	
-	if (viewObjects.isNewSearchAPI)
+	NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
+	if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
 	{
 		if (searchSegment.selectedSegmentIndex == 0)
 		{
@@ -643,19 +658,24 @@
 		// It's a search
 		
 		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
-		NSLog(@"search XML: %@", [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]); 
 		SearchXMLParser *parser = (SearchXMLParser*)[[SearchXMLParser alloc] initXMLParser];
 		[xmlParser setDelegate:parser];
 		[xmlParser parse];
 		
+		NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
+		BOOL isNewSearchAPI = NO;
+		if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
+			isNewSearchAPI = YES;
 		
-		if (viewObjects.isNewSearchAPI && searchSegment.selectedSegmentIndex == 3)
+		if (isNewSearchAPI && searchSegment.selectedSegmentIndex == 3)
 		{
 			SearchAllViewController *searchViewController = [[SearchAllViewController alloc] initWithNibName:@"SearchAllViewController" 
 																						   bundle:nil];
 			searchViewController.listOfArtists = [NSMutableArray arrayWithArray:parser.listOfArtists];
 			searchViewController.listOfAlbums = [NSMutableArray arrayWithArray:parser.listOfAlbums];
 			searchViewController.listOfSongs = [NSMutableArray arrayWithArray:parser.listOfSongs];
+			
+			searchViewController.query = [NSString stringWithFormat:@"%@*", searchBar.text];
 			
 			[xmlParser release];
 			[parser release];
@@ -669,7 +689,7 @@
 			SearchSongsViewController *searchViewController = [[SearchSongsViewController alloc] initWithNibName:@"SearchSongsViewController" 
 																										  bundle:nil];
 			searchViewController.title = @"Search";
-			if (viewObjects.isNewSearchAPI)
+			if (isNewSearchAPI)
 			{
 				if (searchSegment.selectedSegmentIndex == 0)
 				{
@@ -688,17 +708,14 @@
 				}
 				
 				searchViewController.searchType = searchSegment.selectedSegmentIndex;
+				searchViewController.query = [NSString stringWithFormat:@"%@*", searchBar.text];
 			}
 			else
 			{
 				searchViewController.listOfSongs = [NSMutableArray arrayWithArray:parser.listOfSongs];
 				searchViewController.searchType = 2;
-			}
-			
-			if (viewObjects.isNewSearchAPI)
-				searchViewController.query = [NSString stringWithFormat:@"%@*", searchBar.text];
-			else
 				searchViewController.query = searchBar.text;
+			}
 			
 			[xmlParser release];
 			[parser release];

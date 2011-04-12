@@ -14,6 +14,8 @@
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
+	
+	BOOL isNewSearchAPI;
 }
 
 - (id) initXMLParser;

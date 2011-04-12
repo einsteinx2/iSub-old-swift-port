@@ -94,7 +94,6 @@ static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStr
 }
 
 
-
 #pragma mark Terminate
 static void TerminateDownload(CFReadStreamRef stream)
 {	

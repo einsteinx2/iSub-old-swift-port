@@ -29,7 +29,7 @@
 		isOverlayShowing = NO;
 		
 		artistNameScrollView = [[UIScrollView alloc] init];
-		artistNameScrollView.frame = CGRectMake(5, 0, 310, 44);
+		artistNameScrollView.frame = CGRectMake(5, 0, 320, 44);
 		artistNameScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		artistNameScrollView.showsVerticalScrollIndicator = NO;
 		artistNameScrollView.showsHorizontalScrollIndicator = NO;

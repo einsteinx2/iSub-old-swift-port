@@ -535,7 +535,7 @@
 		[databaseControls initDatabases];
 		[viewObjects loadArtistList];
 		
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\nEntering offline mode. \n\nError code %i:\n%@", error.code, [ASIHTTPRequest errorCodeToEnglish:error.code]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Settings", nil];
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", error.code, [ASIHTTPRequest errorCodeToEnglish:error.code]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Settings", nil];
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
 	}
@@ -1366,7 +1366,9 @@
 		APICheckConnectionDelegate *conDelegate = [[APICheckConnectionDelegate alloc] init];
 		
 		NSString *urlString = [self getBaseUrl:@"ping.view"];
-		NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+		NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] 
+												 cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData 
+											 timeoutInterval:kLoadingTimeout];
 		NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:conDelegate];
 		if (!connection)
 		{

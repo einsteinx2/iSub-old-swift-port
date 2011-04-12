@@ -20,13 +20,14 @@
 #import "UbuntuServerEditViewController.h"
 #import "UIView-tools.h"
 #import "CustomUIAlertView.h"
+#import "Reachability.h"
 
 @implementation ServerListViewController
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] 
-		&& inOrientation != UIDeviceOrientationPortrait)
+		&& inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -253,58 +254,70 @@
 	else
 	{
 		[self.navigationController popToRootViewControllerAnimated:YES];
-		if (!viewObjects.isOfflineMode)
+		
+		if ([appDelegate.wifiReach currentReachabilityStatus] == NotReachable)
+			return;
+		
+		// Cancel any tab loads
+		if (viewObjects.isAlbumsLoading || viewObjects.isSongsLoading)
 		{
-			// Cancel any tab loads
-			if (viewObjects.isAlbumsLoading || viewObjects.isSongsLoading)
-			{
-				if (viewObjects.isAlbumsLoading)
-					NSLog(@"detected albums tab loading");
-				else if (viewObjects.isSongsLoading)
-					NSLog(@"detected songs tab loading");
-				
-				viewObjects.cancelLoading = YES;
-			}
+			if (viewObjects.isAlbumsLoading)
+				NSLog(@"detected albums tab loading");
+			else if (viewObjects.isSongsLoading)
+				NSLog(@"detected songs tab loading");
 			
-			while (viewObjects.cancelLoading == YES)
-			{
-				NSLog(@"waiting for the load to cancel before continuing");
-			}
-			
-			// Stop any playing song and remove old tab bar controller from window
-			[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"recover"];
-			[[NSUserDefaults standardUserDefaults] synchronize];
-			musicControls.currentSongObject = nil;
-			musicControls.nextSongObject = nil;
-			[musicControls destroyStreamer];
-			musicControls.isPlaying = NO;
-			viewObjects.isJukebox = NO;
-			musicControls.showNowPlayingIcon = NO;
-			musicControls.seekTime = 0.0;
-			
-			if (!IS_IPAD())
-				[appDelegate.mainTabBarController.view removeFromSuperview];
-			
-			// Reset the databases
-			[databaseControls closeAllDatabases];
-			[appDelegate appInit2];
-			
-			// Reset the tabs
-			[viewObjects loadArtistList];
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadArtistList" object:nil];
-			if (IS_IPAD())
-				[appDelegate.artistsNavigationController popToRootViewControllerAnimated:NO];
-			else
-				[appDelegate.rootViewController.navigationController popToRootViewControllerAnimated:NO];
-			//[appDelegate.allAlbumsNavigationController.topViewController viewDidLoad];
-			//[appDelegate.allSongsNavigationController.topViewController viewDidLoad];
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"setSongTitle" object:nil];
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"initSongInfo" object:nil];
-			
-			// Add the tab bar controller back to the window
-			if (!IS_IPAD())
-				[appDelegate.window addSubview:[appDelegate.mainTabBarController view]];
+			viewObjects.cancelLoading = YES;
 		}
+		
+		while (viewObjects.cancelLoading == YES)
+		{
+			NSLog(@"waiting for the load to cancel before continuing");
+		}
+		
+		// Stop any playing song and remove old tab bar controller from window
+		[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"recover"];
+		[[NSUserDefaults standardUserDefaults] synchronize];
+		musicControls.currentSongObject = nil;
+		musicControls.nextSongObject = nil;
+		[musicControls destroyStreamer];
+		musicControls.isPlaying = NO;
+		viewObjects.isJukebox = NO;
+		musicControls.showNowPlayingIcon = NO;
+		musicControls.seekTime = 0.0;
+		
+		if (!IS_IPAD())
+			[appDelegate.mainTabBarController.view removeFromSuperview];
+		
+		// Reset the databases
+		[databaseControls closeAllDatabases];
+		[appDelegate appInit2];
+		
+		if (viewObjects.isOfflineMode)
+		{
+			viewObjects.isOfflineMode = NO;
+			
+			if (!IS_IPAD())
+			{
+				[appDelegate.offlineTabBarController.view removeFromSuperview];
+				[viewObjects orderMainTabBarController];
+			}
+		}
+		
+		// Reset the tabs
+		[viewObjects loadArtistList];
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadArtistList" object:nil];
+		if (IS_IPAD())
+			[appDelegate.artistsNavigationController popToRootViewControllerAnimated:NO];
+		else
+			[appDelegate.rootViewController.navigationController popToRootViewControllerAnimated:NO];
+		//[appDelegate.allAlbumsNavigationController.topViewController viewDidLoad];
+		//[appDelegate.allSongsNavigationController.topViewController viewDidLoad];
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"setSongTitle" object:nil];
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"initSongInfo" object:nil];
+		
+		// Add the tab bar controller back to the window
+		if (!IS_IPAD())
+			[appDelegate.window addSubview:[appDelegate.mainTabBarController view]];
 	}
 }
 

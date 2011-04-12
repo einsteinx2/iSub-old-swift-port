@@ -11,6 +11,7 @@
 #import "UIView-tools.h"
 #import "iSubAppDelegate.h"
 #import "CustomUIAlertView.h"
+#import "NSString-md5.h"
 
 @implementation FolderDropdownControl
 @synthesize tableView, viewsToMove, folders, selectedFolderId;
@@ -56,11 +57,16 @@
 		[self addSubview:selectedFolderLabel];
 		[selectedFolderLabel release];
 		
+		UIView *arrowImageView = [[UIView alloc] initWithFrame:CGRectMake(193, 7, 18, 18)];
+		arrowImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+		[self addSubview:arrowImageView];
+		
 		arrowImage = [[CALayer alloc] init];
-		arrowImage.frame = CGRectMake(193, 7, 18, 18);
+		//arrowImage.frame = CGRectMake(193, 7, 18, 18);
+		arrowImage.frame = CGRectMake(0, 0, 18, 18);
 		arrowImage.contentsGravity = kCAGravityResizeAspect;
 		arrowImage.contents = (id)[UIImage imageNamed:@"folder-dropdown-arrow.png"].CGImage;
-		[[self layer] addSublayer:arrowImage];
+		[[arrowImageView layer] addSublayer:arrowImage];
 		[arrowImage release];
 		
 		UIButton *dropdownButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 220, 30)];
@@ -252,8 +258,10 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	// Save the default
 	iSubAppDelegate *appDelegate = [iSubAppDelegate sharedInstance];
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[appDelegate.settingsDictionary setObject:[NSString stringWithFormat:@"%i", selectedFolderId]
-									   forKey:@"selectedMusicFolderId"];
+	NSString *object = [NSString stringWithFormat:@"%i", selectedFolderId];
+	NSString *key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [appDelegate.defaultUrl md5]];
+	
+	[appDelegate.settingsDictionary setObject:object forKey:key];
 	[defaults setObject:appDelegate.settingsDictionary forKey:@"settingsDictionary"];
 	[defaults synchronize];
 	
@@ -262,6 +270,8 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 
 - (void)selectFolderWithId:(NSUInteger)folderId
 {
+	NSLog(@"folders: %@", folders);
+	NSLog(@"folderId: %i", folderId);
 	self.selectedFolderId = folderId;
 	selectedFolderLabel.text = [folders objectForKey:[NSString stringWithFormat:@"%i", selectedFolderId]];
 }
@@ -280,6 +290,13 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 - (void)updateFolders
 {
 	iSubAppDelegate *appDelegate = [iSubAppDelegate sharedInstance];
+		
+	/*NSString *key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [appDelegate.defaultUrl md5]];
+	self.selectedFolderId = [[appDelegate.settingsDictionary objectForKey:key] intValue];
+	
+	key = [NSString stringWithFormat:@"folderDropdownCache%@", [appDelegate.defaultUrl md5]];
+	self.folders = [appDelegate.settingsDictionary objectForKey:key];*/
+	
 	NSString *urlString = [appDelegate getBaseUrl:@"getMusicFolders.view"];
 		
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
@@ -389,7 +406,9 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 		iSubAppDelegate *appDelegate = [iSubAppDelegate sharedInstance];
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		NSData *foldersData = [NSKeyedArchiver archivedDataWithRootObject:folders];
-		[appDelegate.settingsDictionary setObject:foldersData forKey:@"folderDropdownCache"];
+		NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [appDelegate.defaultUrl md5]];
+		
+		[appDelegate.settingsDictionary setObject:foldersData forKey:key];
 		[defaults setObject:appDelegate.settingsDictionary forKey:@"settingsDictionary"];
 		[defaults synchronize];
 		

@@ -35,7 +35,7 @@
 	IBOutlet UILabel *chatLabel;
 	IBOutlet UILabel *playerLabel;
 	
-	UIView *coverArtBorder;
+	UIButton *coverArtBorder;
 	AsynchronousImageView *coverArtView;
 	UILabel *artistLabel;
 	UILabel *albumLabel;
