@@ -8,6 +8,7 @@
 
 #import "ShuffleFolderPickerViewController.h"
 #import "iSubAppDelegate.h"
+#import "NSString-md5.h"
 
 @implementation ShuffleFolderPickerViewController
 
@@ -50,7 +51,9 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
 	
 	appDelegate = [iSubAppDelegate sharedInstance];
 	
-	NSDictionary *folders = [NSKeyedUnarchiver unarchiveObjectWithData:[appDelegate.settingsDictionary objectForKey:@"folderDropdownCache"]];
+	NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [appDelegate.defaultUrl md5]];
+	NSData *archivedData = [appDelegate.settingsDictionary objectForKey:key];
+	NSDictionary *folders = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
 	
 	self.sortedFolders = [NSMutableArray arrayWithCapacity:[folders count]];
 	for (NSString *key in [folders allKeys])

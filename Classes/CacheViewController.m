@@ -73,13 +73,13 @@
 																				 action:@selector(settingsAction:)] autorelease];
 	}
 	
-	headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 0)] autorelease];
+	headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)] autorelease];
 	headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
 	segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Cached", @"Queue", nil]];
 	[segmentedControl addTarget:self action:@selector(segmentAction:) forControlEvents:UIControlEventValueChanged];
 	
 	segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
-	segmentedControl.frame = CGRectMake(5, 2, 310, 36);
+	segmentedControl.frame = CGRectMake(5, 5, 310, 36);
 	segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	segmentedControl.tintColor = [UIColor colorWithWhite:.57 alpha:1];
 	segmentedControl.selectedSegmentIndex = 0;
@@ -332,7 +332,7 @@
 	{
 		// Modify the header view to include the save and edit buttons
 		isSaveEditShowing = YES;
-		int y = 40;
+		int y = 45;
 		
 		headerView.frame = CGRectMake(0, 0, 320, y + 100);
 		if (segmentedControl.selectedSegmentIndex == 1)
@@ -1506,8 +1506,24 @@ NSInteger trackSort1(id obj1, id obj2, void *context)
 							return NSOrderedDescending;
 					}];*/
 					
+					BOOL multipleSameTrackNumbers = NO;
+					NSMutableArray *trackNumbers = [NSMutableArray arrayWithCapacity:[cacheAlbumViewController.listOfSongs count]];
+					for (NSArray *song in cacheAlbumViewController.listOfSongs)
+					{
+						NSNumber *track = [song objectAtIndex:1];
+						
+						if ([trackNumbers containsObject:track])
+						{
+							multipleSameTrackNumbers = YES;
+							break;
+						}
+						
+						[trackNumbers addObject:track];
+					}
+					
 					// Sort by track number
-					[cacheAlbumViewController.listOfSongs sortUsingFunction:trackSort1 context:NULL];
+					if (!multipleSameTrackNumbers)
+						[cacheAlbumViewController.listOfSongs sortUsingFunction:trackSort1 context:NULL];
 				}
 			}
 			

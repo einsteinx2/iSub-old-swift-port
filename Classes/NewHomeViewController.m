@@ -305,16 +305,16 @@
 
 - (IBAction)serverShuffle
 {
-	NSDictionary *folders = [NSKeyedUnarchiver unarchiveObjectWithData:[appDelegate.settingsDictionary objectForKey:@"folderDropdownCache"]];
+	NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [appDelegate.defaultUrl md5]];
+	NSData *archivedData = [appDelegate.settingsDictionary objectForKey:key];
+	NSDictionary *folders = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
 	
-	if ([folders count] == 2)
+	if (folders == nil || [folders count] == 2)
 	{
 		[self performServerShuffle:nil];
 	}
 	else
-	{
-		NSDictionary *folders = [NSKeyedUnarchiver unarchiveObjectWithData:[appDelegate.settingsDictionary objectForKey:@"folderDropdownCache"]];
-		
+	{		
 		float height = 65.0f;
 		height += (float)[folders count] * 44.0f;
 		
@@ -347,8 +347,9 @@
 		else
 			urlString = [NSString stringWithFormat:@"%@&size=100&musicFolderId=%i", [appDelegate getBaseUrl:@"getRandomSongs.view"], folderId];
 	}
+	NSLog(@"urlString: %@", urlString);
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
-	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
 	{
 		// Create the NSMutableData to hold the received data.
@@ -356,7 +357,11 @@
 		receivedData = [[NSMutableData data] retain];
 		
 		// Display the loading screen
-		[viewObjects showLoadingScreenOnMainWindow];
+		if (IS_IPAD())
+			[viewObjects showAlbumLoadingScreen:appDelegate.splitView.view sender:self];
+		else
+			[viewObjects showAlbumLoadingScreen:appDelegate.currentTabBarController.view sender:self];
+		//[viewObjects showLoadingScreenOnMainWindow];
 	} 
 	else 
 	{
@@ -365,6 +370,12 @@
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
 	}
+}
+
+- (void)cancelLoad
+{
+	[connection cancel];
+	[viewObjects hideLoadingScreen];
 }
 
 - (IBAction)chat

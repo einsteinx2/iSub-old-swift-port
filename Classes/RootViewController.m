@@ -198,7 +198,7 @@
 	viewObjects.isArtistsLoading = YES;
 	
 	NSString *urlString = @"";
-	if ([folderId isEqualToString:@"-1"])
+	if (folderId == nil || [folderId isEqualToString:@"-1"])
 	{
 		urlString = [appDelegate getBaseUrl:@"getIndexes.view"];
 	}
@@ -253,7 +253,8 @@
 			if([defaults objectForKey:[NSString stringWithFormat:@"%@listOfArtists", appDelegate.defaultUrl]] == nil || 
 			   [[appDelegate.settingsDictionary objectForKey:@"autoReloadArtistsSetting"] isEqualToString:@"YES"])
 			{
-				NSString *currentFolderId = [appDelegate.settingsDictionary objectForKey:@"selectedMusicFolderId"];
+				NSString *key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [appDelegate.defaultUrl md5]];
+				NSString *currentFolderId = [appDelegate.settingsDictionary objectForKey:key];
 				[self loadData:currentFolderId];
 			}
 			else 
@@ -268,7 +269,8 @@
 					{
 						if ([[[viewObjects.listOfArtists objectAtIndex:0] objectAtIndex:0] isKindOfClass:[NSArray class]])
 						{
-							NSString *currentFolderId = [appDelegate.settingsDictionary objectForKey:@"selectedMusicFolderId"];
+							NSString *key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [appDelegate.defaultUrl md5]];
+							NSString *currentFolderId = [appDelegate.settingsDictionary objectForKey:key];
 							[self loadData:currentFolderId];
 						}
 						else
@@ -361,7 +363,8 @@
 {
 	if (!viewObjects.isAlbumsLoading && !viewObjects.isSongsLoading)
 	{
-		NSString *currentFolderId = [appDelegate.settingsDictionary objectForKey:@"selectedMusicFolderId"];
+		NSString *key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [appDelegate.defaultUrl md5]];
+		NSString *currentFolderId = [appDelegate.settingsDictionary objectForKey:key];
 		[self loadData:currentFolderId];
 	}
 	else
@@ -400,6 +403,7 @@
 {
 	[self.tableView.tableHeaderView retain];
 
+	[dropdown closeDropdownFast];
 	[self.tableView setContentOffset:CGPointMake(0, 86) animated:YES];
 	//[self.tableView setContentOffset:CGPointMake(0, 50) animated:NO];
 	
@@ -575,8 +579,10 @@
 	{
 		//[tableView scrollRectToVisible:CGRectMake(0, 50, 320, searchY) animated:NO];
 		
-		NSDictionary *folders = [NSKeyedUnarchiver unarchiveObjectWithData:[appDelegate.settingsDictionary objectForKey:@"folderDropdownCache"]];
-		
+		NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [appDelegate.defaultUrl md5]];
+		NSData *archivedData = [appDelegate.settingsDictionary objectForKey:key];
+		NSDictionary *folders = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
+				
 		if (folders == nil || [folders count] == 2)
 			//[tableView scrollRectToVisible:CGRectMake(0, 87, 320, searchY) animated:NO];
 			[self.tableView setContentOffset:CGPointMake(0, 86) animated:NO];
@@ -732,7 +738,8 @@
 	{
 		_reloading = YES;
 		//[self reloadAction:nil];
-		NSString *currentFolderId = [appDelegate.settingsDictionary objectForKey:@"selectedMusicFolderId"];
+		NSString *key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [appDelegate.defaultUrl md5]];
+		NSString *currentFolderId = [appDelegate.settingsDictionary objectForKey:key];
 		[self loadData:currentFolderId];
 		[refreshHeaderView setState:EGOOPullRefreshLoading];
 		[UIView beginAnimations:nil context:NULL];

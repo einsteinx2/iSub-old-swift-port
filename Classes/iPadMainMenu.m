@@ -47,7 +47,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showPlayer) name:@"showPlayer" object:nil];
 }
 
-- (void)centerCells:(UIDeviceOrientation)orientation
+- (void)centerCells:(UIInterfaceOrientation)orientation
 {
 	float totalCellHeight = 93.5 * [rowNames count];
 	if (UIInterfaceOrientationIsLandscape(orientation))
@@ -72,7 +72,8 @@
 	
 	[self.tableView reloadData];
 	
-	[self centerCells:[UIDevice currentDevice].orientation];
+	//[self centerCells:[UIDevice currentDevice].orientation];
+	[self centerCells:self.interfaceOrientation];
 }
 
 - (void)showPlayer

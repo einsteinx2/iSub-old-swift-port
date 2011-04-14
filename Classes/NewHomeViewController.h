@@ -26,6 +26,7 @@
 	UIButton *dismissButton;
 	
 	BOOL isSearch;
+	NSURLConnection *connection;
 	NSMutableData *receivedData;
 	
 	IBOutlet UILabel *quickLabel;

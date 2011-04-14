@@ -66,7 +66,7 @@ static SocialControlsSingleton *sharedInstance = nil;
 {
 	//NSLog(@"Authentication Failed!");
 	self.twitterEngine = nil;
-	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Twitter Error" message:@"Failed to authenticate user. Try logging in again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Twitter Error" message:@"Failed to authenticate user. Try logging in again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 	[alert release];
 }

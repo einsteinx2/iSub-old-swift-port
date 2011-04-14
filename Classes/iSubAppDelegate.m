@@ -282,15 +282,6 @@
 	{
 		self.settingsDictionary = [NSMutableDictionary dictionaryWithDictionary:[defaults objectForKey:@"settingsDictionary"]];
 		
-		// Add the default music folder id if not there - 3.0.1
-		if ([settingsDictionary objectForKey:@"folderDropdownCache"] == nil)
-		{
-			NSDictionary *folders = [[NSDictionary alloc] initWithObjectsAndKeys:@"All Folders", @"-1", nil];
-			NSData *foldersData = [NSKeyedArchiver archivedDataWithRootObject:folders];
-			[settingsDictionary setObject:foldersData forKey:@"folderDropdownCache"];
-			[settingsDictionary setObject:@"-1" forKey:@"selectedMusicFolderId"];
-		}
-
 		// Add the scrobble and popup settings if not there - 3.0.1
 		if ([settingsDictionary objectForKey:@"scrobblePercentSetting"] == nil)
 		{
@@ -343,7 +334,6 @@
 		self.settingsDictionary = [NSMutableDictionary dictionaryWithCapacity:8];
 		[settingsDictionary setObject:@"NO" forKey:@"manualOfflineModeSetting"];
 		[settingsDictionary setObject:[NSNumber numberWithInt:0] forKey:@"recoverSetting"];
-		//[settingsDictionary setObject:[NSNumber numberWithInt:7] forKey:@"maxBitrateSetting"];
 		[settingsDictionary setObject:[NSNumber numberWithInt:7] forKey:@"maxBitrateWifiSetting"];
 		[settingsDictionary setObject:[NSNumber numberWithInt:7] forKey:@"maxBitrate3GSetting"];
 		[settingsDictionary setObject:@"YES" forKey:@"enableSongCachingSetting"];
@@ -357,7 +347,6 @@
 		[settingsDictionary setObject:@"NO" forKey:@"twitterEnabledSetting"];
 		[settingsDictionary setObject:@"YES" forKey:@"lyricsEnabledSetting"];
 		[settingsDictionary setObject:@"NO" forKey:@"enableSongsTabSetting"];
-		[settingsDictionary setObject:@"-1" forKey:@"selectedMusicFolderId"];
 	}
 	
 	// Save and sync the defaults
@@ -457,38 +446,18 @@
 	}
 	else
 	{
-		/*self.defaultUrl = @"http://isubapp.com:9000";
-		self.defaultUserName = @"isub-guest";
-		self.defaultPassword = @"1sub1snumb3r0n3";*/
 		self.defaultUrl = DEFAULT_URL;
 		self.defaultUserName = DEFAULT_USER_NAME;
 		self.defaultPassword = DEFAULT_PASSWORD;
 		
 		if (viewObjects.isOfflineMode)
 		{
-			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Welcome!" message:@"Looks like this is your first time using iSub or you haven't set up your Subsonic account info yet.\n\nYou'll need an internet connection to watch the intro video and use the included demo account." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome!" message:@"Looks like this is your first time using iSub or you haven't set up your Subsonic account info yet.\n\nYou'll need an internet connection to watch the intro video and use the included demo account." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 			[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 			[alert release];
 		}
 		else
 		{
-			/*CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Welcome!" message:@"Looks like this is your first time using iSub or you haven't set up your Subsonic account info yet.\n\nGet the hang of things with this test account graciously provided by the developer of Subsonic and then tap the gear on the top left of the screen to access the settings panel when you're ready!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-			[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-			[alert release];*/
-			
-			//IntroViewController *intro = [[IntroViewController alloc] init];
-			//intro.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-			//if ([intro respondsToSelector:@selector(setModalPresentationStyle:)])
-			//	intro.modalPresentationStyle = UIModalPresentationFormSheet;
-			//[window presentModalViewController:intro animated:YES];
-			
-			//window.backgroundColor = viewObjects.windowColor;
-			//[window makeKeyAndVisible];	
-			//
-			//[window addSubview:intro.view];
-			
-			
-			
 			showIntro = YES;
 		}
 		
@@ -535,7 +504,7 @@
 		[databaseControls initDatabases];
 		[viewObjects loadArtistList];
 		
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", error.code, [ASIHTTPRequest errorCodeToEnglish:error.code]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Settings", nil];
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", error.code, [ASIHTTPRequest errorCodeToEnglish:error.code]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Settings", nil];
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
 	}
@@ -619,7 +588,7 @@
 	if ([settingsDictionary objectForKey:@"checkUpdatesSetting"] == nil)
 	{
 		// Ask to check for updates if haven't asked yet
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Update Alerts" message:@"Would you like iSub to notify you when app updates are available?\n\nYou can change this setting at any time from the settings menu." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Update Alerts" message:@"Would you like iSub to notify you when app updates are available?\n\nYou can change this setting at any time from the settings menu." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
 		[alert show];
 		[alert release];
 	}
@@ -1096,7 +1065,7 @@
 	[serverListViewController release];
 }
 
-- (void)alertView:(CustomUIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
 	if ([alertView.title isEqualToString:@"Subsonic Error"])
 	{
@@ -1476,14 +1445,14 @@
 	else
 		message = @"";
 	
-	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Purchase Successful!" message:message delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Purchase Successful!" message:message delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
 	[alert release];
 }
 
 - (void)transactionCanceled
 {
-	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Store" message:@"Transaction canceled. Try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Store" message:@"Transaction canceled. Try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
 	[alert release];
 }

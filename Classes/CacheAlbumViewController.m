@@ -554,20 +554,24 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 					[cacheAlbumViewController.listOfSongs addObject:[NSArray arrayWithObjects:[result stringForColumnIndex:0], 
 																							  [NSNumber numberWithInt:[result intForColumnIndex:3]], nil]];
 					
-					/*// Sort by track number
-					[cacheAlbumViewController.listOfSongs sortUsingComparator: ^NSComparisonResult(id obj1, id obj2) {
-						NSUInteger track1 = [(NSNumber*)[(NSArray*)obj1 objectAtIndex:1] intValue];
-						NSUInteger track2 = [(NSNumber*)[(NSArray*)obj2 objectAtIndex:1] intValue];
-						if (track1 < track2)
-							return NSOrderedAscending;
-						else if (track1 == track2)
-							return NSOrderedSame;
-						else
-							return NSOrderedDescending;
-					}];*/
+					BOOL multipleSameTrackNumbers = NO;
+					NSMutableArray *trackNumbers = [NSMutableArray arrayWithCapacity:[cacheAlbumViewController.listOfSongs count]];
+					for (NSArray *song in cacheAlbumViewController.listOfSongs)
+					{
+						NSNumber *track = [song objectAtIndex:1];
+						
+						if ([trackNumbers containsObject:track])
+						{
+							multipleSameTrackNumbers = YES;
+							break;
+						}
+						
+						[trackNumbers addObject:track];
+					}
 					
 					// Sort by track number
-					[cacheAlbumViewController.listOfSongs sortUsingFunction:trackSort2 context:NULL];
+					if (!multipleSameTrackNumbers)
+						[cacheAlbumViewController.listOfSongs sortUsingFunction:trackSort2 context:NULL];
 				}
 			}
 						

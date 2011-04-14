@@ -120,8 +120,11 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	NSMutableArray *sortedValues = [NSMutableArray arrayWithCapacity:[folders count]];
 	for (NSString *key in [folders allKeys])
 	{
-		NSArray *keyValuePair = [NSArray arrayWithObjects:key, [folders objectForKey:key], nil];
-		[sortedValues addObject:keyValuePair];
+		if (![key isEqualToString:@"-1"])
+		{
+			NSArray *keyValuePair = [NSArray arrayWithObjects:key, [folders objectForKey:key], nil];
+			[sortedValues addObject:keyValuePair];
+		}
 	}
 	
 	/*// Sort by folder name - iOS 4.0+ only
@@ -133,6 +136,10 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	
 	// Sort by folder name
 	[sortedValues sortUsingFunction:folderSort2 context:NULL];
+	
+	// Add All Folders again
+	NSArray *keyValuePair = [NSArray arrayWithObjects:@"-1", @"All Folders", nil];
+	[sortedValues insertObject:keyValuePair atIndex:0];
 	
 	//NSLog(@"keys: %@", [folders allKeys]);
 	//NSMutableArray *keys = [NSMutableArray arrayWithArray:[[folders allKeys] sortedArrayUsingSelector:@selector(compare:)]];
@@ -242,6 +249,30 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	}
 	
 	isOpen = !isOpen;
+}
+
+- (void)closeDropdown
+{
+	if (isOpen)
+	{
+		[self toggleDropdown:nil];
+	}
+}
+
+- (void)closeDropdownFast
+{
+	if (isOpen)
+	{
+		[self.tableView.tableHeaderView addHeight:-sizeIncrease];
+		[self addHeight:-sizeIncrease];
+		for (UIView *aView in viewsToMove)
+		{
+			[aView addY:-sizeIncrease];
+		}
+		self.tableView.tableHeaderView = self.tableView.tableHeaderView;
+		
+		arrowImage.transform = CATransform3DMakeRotation((M_PI / 180.0) * 0.0f, 0.0f, 0.0f, 1.0f);
+	}
 }
 
 - (void)selectFolder:(id)sender

@@ -35,10 +35,12 @@ id databaseControlsRef;
 static BOOL isThrottlingEnabled;
 static NSDate *throttlingDate;
 static UInt32 bytesTransferred;
-#define kThrottleTimeInterval 0.1
-#define kMaxKilobitsPerSec 700
+#define kThrottleTimeInterval 0.01
+#define kMaxKilobitsPerSec 650
 #define kMaxBytesPerSec ((kMaxKilobitsPerSec * 1024) / 8)
 #define kMaxBytesPerInterval (kMaxBytesPerSec * kThrottleTimeInterval)
+
+#define kMinBytesToStart 100000
 
 
 @implementation CFNetworkRequests
@@ -281,7 +283,7 @@ static void	ReadStreamClientCallBackA( CFReadStreamRef stream, CFStreamEventType
 					[[musicControlsRef streamer] setFileDownloadCurrentSize:[musicControlsRef downloadedLengthA]];
 				
 				// When we get enough of the file, then just start playing it.
-				if (![musicControlsRef streamer] && [musicControlsRef downloadedLengthA] > 100000) 
+				if (![musicControlsRef streamer] && ([musicControlsRef downloadedLengthA] > kMinBytesToStart)) 
 				{
 					//NSLog(@"start playback for %@", [musicControlsRef downloadFileNameA]);
 					
@@ -307,7 +309,8 @@ static void	ReadStreamClientCallBackA( CFReadStreamRef stream, CFStreamEventType
 							CFReadStreamUnscheduleFromRunLoop(stream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
 							
 							//Calculate how many intervals to pause
-							NSTimeInterval delay = kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerInterval);
+							// only pause 90% of the time calculated to compensate for delays in resuming the thread
+							NSTimeInterval delay = (kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerInterval)) * 0.9;
 							//NSLog(@"Pausing for %f", delay);
 							[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
 						}
@@ -627,7 +630,7 @@ static void	ReadStreamClientCallBackTemp( CFReadStreamRef stream, CFStreamEventT
 				[[musicControlsRef streamer] setFileDownloadCurrentSize:[musicControlsRef downloadedLengthA]];
 			
 			// When we get enough of the file, then just start playing it.
-			if (![musicControlsRef streamer] && [musicControlsRef downloadedLengthA] > 100000) 
+			if (![musicControlsRef streamer] && ([musicControlsRef downloadedLengthA] > kMinBytesToStart)) 
 			{
 				//NSLog(@"start playback for %@", [musicControlsRef downloadFileNameA]);
 				

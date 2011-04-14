@@ -55,5 +55,7 @@
 
 - (void)selectFolderWithId:(NSUInteger)folderId;
 - (void)updateFolders;
+- (void)closeDropdown;
+- (void)closeDropdownFast;
 
 @end

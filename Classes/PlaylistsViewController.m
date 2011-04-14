@@ -81,7 +81,7 @@
 		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
 	
 	// Setup segmented control in the header view
-	headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 0)] autorelease];
+	headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)] autorelease];
 	headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
 	
 	if (viewObjects.isOfflineMode)
@@ -89,7 +89,7 @@
 	else
 		segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Current", @"Local", @"Server", nil]];
 	
-	segmentedControl.frame = CGRectMake(5, 2, 310, 36);
+	segmentedControl.frame = CGRectMake(5, 5, 310, 36);
 	segmentedControl.selectedSegmentIndex = 0;
 	segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
 	segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -201,13 +201,13 @@
 	{
 		// Modify the header view to include the save and edit buttons
 		isPlaylistSaveEditShowing = YES;
-		headerView.frame = CGRectMake(0, 0, 320, 90);
+		headerView.frame = CGRectMake(0, 0, 320, 95);
 		
 		int y;
 		//if (IS_IPAD())
 		//	y = 44;
 		//else
-			y = 40;
+			y = 45;
 		
 		savePlaylistLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, y, 227, 34)];
 		savePlaylistLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
@@ -1156,7 +1156,7 @@
 }
 
 
-- (void)alertView:(CustomUIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
 	if ([alertView.title isEqualToString:@"Local or Server?"])
 	{
@@ -1167,6 +1167,10 @@
 		else if (buttonIndex == 1)
 		{
 			savePlaylistLocal = NO;
+		}
+		else if (buttonIndex == 2)
+		{
+			return;
 		}
 		NSLog(@"savePlaylistLocal: %i", savePlaylistLocal);
 		
@@ -1453,19 +1457,28 @@ NSInteger playlistSort(id obj1, id obj2, void *context)
 	[theConnection release];
 	
 	if (segmentedControl.selectedSegmentIndex == 0)
+	{
 		[receivedData release];
-	
-	[connectionQueue connectionFinished:theConnection];
+	}
+	else
+	{
+		[connectionQueue connectionFinished:theConnection];
+	}
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
 	if (segmentedControl.selectedSegmentIndex == 0)
+	{
 		[self performSelectorInBackground:@selector(parseData) withObject:nil];
+	}
+	else
+	{
+		[connectionQueue connectionFinished:theConnection];
+	}
 	
+	self.tableView.scrollEnabled = YES;
 	[theConnection release];
-	
-	[connectionQueue connectionFinished:theConnection];
 }
 
 static NSString *kName_Error = @"error";

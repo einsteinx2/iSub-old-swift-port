@@ -312,7 +312,7 @@
 			progressLabelBackground.hidden = YES;
 			pauseSlider = NO;
 
-			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Sorry" message:@"It's currently not possible to skip within m4a files.\n\nYou can turn on m4a > mp3 transcoding in Subsonic to skip within this song." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sorry" message:@"It's currently not possible to skip within m4a files.\n\nYou can turn on m4a > mp3 transcoding in Subsonic to skip within this song." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 			[alert show];
 			[alert release];
 		}
@@ -324,6 +324,18 @@
 			hasMoved = YES;
 			progressLabel.hidden = YES;
 			progressLabelBackground.hidden = YES;
+			
+			// Fix for skipping to end of file going to next song
+			// It seems that the max time is always off
+			if (progressSlider.value > (progressSlider.maximumValue - 16.0))
+			{
+				float newValue = progressSlider.maximumValue - 16.0;
+				
+				if (newValue < 0.0)
+					newValue = 0.0;
+				
+				progressSlider.value = newValue;
+			}
 			
 			if (musicControls.bitRate < 1000)
 				byteOffset = ((float)musicControls.bitRate * 128 * progressSlider.value);
@@ -358,7 +370,7 @@
 					if ((int)byteOffset > musicControls.streamer.fileDownloadCurrentSize)
 					{
 						//NSLog(@"fileDownloadCurrentSize inside else: %i", musicControls.streamer.fileDownloadCurrentSize);
-						CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Past Cache Point" message:@"You are trying to skip further than the song has cached. You can do this, but the song won't be cached. Or you can wait a little bit for the cache to catch up." delegate:self cancelButtonTitle:@"Wait" otherButtonTitles:@"OK", nil];
+						UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Past Cache Point" message:@"You are trying to skip further than the song has cached. You can do this, but the song won't be cached. Or you can wait a little bit for the cache to catch up." delegate:self cancelButtonTitle:@"Wait" otherButtonTitles:@"OK", nil];
 						[alert show];
 						[alert release];
 					}
@@ -416,7 +428,7 @@
 {
 	bookmarkPosition = (int)progressSlider.value;
 	
-	CustomUIAlertView *myAlertView = [[CustomUIAlertView alloc] initWithTitle:@"Bookmark Name:" message:@"this gets covered" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
+	UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Bookmark Name:" message:@"this gets covered" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
 	bookmarkNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 22.0)];
 	[bookmarkNameTextField setBackgroundColor:[UIColor whiteColor]];
 	[myAlertView addSubview:bookmarkNameTextField];
@@ -431,7 +443,7 @@
 }
 
 
-- (void)alertView:(CustomUIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
 	if ([alertView.title isEqualToString:@"Sorry"])
 	{
@@ -476,7 +488,7 @@
 			else
 			{
 				// Bookmark exists so ask to overwrite
-				CustomUIAlertView *myAlertView = [[CustomUIAlertView alloc] initWithTitle:@"Overwrite?" message:@"There is already a bookmark with this name. Overwrite it?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+				UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Overwrite?" message:@"There is already a bookmark with this name. Overwrite it?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
 				[myAlertView show];
 				[myAlertView release];
 			}
