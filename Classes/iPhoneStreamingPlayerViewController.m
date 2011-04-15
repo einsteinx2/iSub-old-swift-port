@@ -344,62 +344,60 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)setSongTitle
 {
-	self.navigationItem.titleView = nil;
-	
-	float width;
-	if (IS_IPAD())
-		width = 400;
-	else
-		width = 180;
-	
-	UIView *titleView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 40)] autorelease];
-	titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	
-	CGRect artistFrame = CGRectMake(0, -2, width, 15);
-	CGRect albumFrame  = CGRectMake(0, 10, width, 15);
-	CGRect songFrame   = CGRectMake(0, 23, width, 15);
-	
-	NSUInteger artistSize = 12;
-	NSUInteger albumSize  = 11;
-	NSUInteger songSize   = 12;
-	
-	UILabel *artist = [[UILabel alloc] initWithFrame:artistFrame];
-	artist.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	artist.backgroundColor = [UIColor clearColor];
-	artist.textColor = [UIColor whiteColor];
-	artist.font = [UIFont boldSystemFontOfSize:artistSize];
-	//artist.adjustsFontSizeToFitWidth = YES;
-	artist.textAlignment = UITextAlignmentCenter;
-	[titleView addSubview:artist];
-	[artist release];
-	
-	UILabel *album = [[UILabel alloc] initWithFrame:albumFrame];
-	album.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	album.backgroundColor = [UIColor clearColor];
-	album.textColor = [UIColor whiteColor];
-	album.font = [UIFont systemFontOfSize:albumSize];
-	//album.adjustsFontSizeToFitWidth = YES;
-	album.textAlignment = UITextAlignmentCenter;
-	[titleView addSubview:album];
-	[album release];
-	
-	UILabel *song = [[UILabel alloc] initWithFrame:songFrame];
-	song.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	song.backgroundColor = [UIColor clearColor];
-	song.textColor = [UIColor whiteColor];
-	song.font = [UIFont boldSystemFontOfSize:songSize];
-	//song.adjustsFontSizeToFitWidth = YES;
-	song.textAlignment = UITextAlignmentCenter;
-	[titleView addSubview:song];
-	[song release];
-	
-	artist.text = [musicControls.currentSongObject artist];
-	album.text = [musicControls.currentSongObject album];
-	song.text = [musicControls.currentSongObject title];
-	
-	self.navigationItem.titleView = titleView;
-	
-	//self.title = [musicControls.currentSongObject title];
+	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) || IS_IPAD())
+	{
+		self.navigationItem.titleView = nil;
+		
+		float width;
+		if (IS_IPAD())
+			width = 400;
+		else
+			width = 180;
+		
+		UIView *titleView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 40)] autorelease];
+		titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		
+		CGRect artistFrame = CGRectMake(0, -2, width, 15);
+		CGRect albumFrame  = CGRectMake(0, 10, width, 15);
+		CGRect songFrame   = CGRectMake(0, 23, width, 15);
+		
+		NSUInteger artistSize = 12;
+		NSUInteger albumSize  = 11;
+		NSUInteger songSize   = 12;
+		
+		UILabel *artist = [[UILabel alloc] initWithFrame:artistFrame];
+		artist.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		artist.backgroundColor = [UIColor clearColor];
+		artist.textColor = [UIColor whiteColor];
+		artist.font = [UIFont boldSystemFontOfSize:artistSize];
+		artist.textAlignment = UITextAlignmentCenter;
+		[titleView addSubview:artist];
+		[artist release];
+		
+		UILabel *album = [[UILabel alloc] initWithFrame:albumFrame];
+		album.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		album.backgroundColor = [UIColor clearColor];
+		album.textColor = [UIColor whiteColor];
+		album.font = [UIFont systemFontOfSize:albumSize];
+		album.textAlignment = UITextAlignmentCenter;
+		[titleView addSubview:album];
+		[album release];
+		
+		UILabel *song = [[UILabel alloc] initWithFrame:songFrame];
+		song.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		song.backgroundColor = [UIColor clearColor];
+		song.textColor = [UIColor whiteColor];
+		song.font = [UIFont boldSystemFontOfSize:songSize];
+		song.textAlignment = UITextAlignmentCenter;
+		[titleView addSubview:song];
+		[song release];
+		
+		artist.text = [musicControls.currentSongObject artist];
+		album.text = [musicControls.currentSongObject album];
+		song.text = [musicControls.currentSongObject title];
+		
+		self.navigationItem.titleView = titleView;		
+	}
 }
 
 - (void)initSongInfo

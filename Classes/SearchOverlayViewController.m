@@ -7,12 +7,18 @@
 //
 
 #import "SearchOverlayViewController.h"
-//#import "RootViewController.h"
-//#import "AllAlbumsViewController.h"
-//#import "AllSongsViewController.h"
-//#import "iSubAppDelegate.h"
+#import "iSubAppDelegate.h"
 
 @implementation SearchOverlayViewController
+
+-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
+{
+	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] 
+		&& inOrientation != UIInterfaceOrientationPortrait)
+		return NO;
+	
+    return YES;
+}
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event 
 {	

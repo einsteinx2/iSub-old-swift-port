@@ -65,6 +65,18 @@
     return YES;
 }
 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+	
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:.1];
+	
+	[searchOverlayView.view addY:40.0];
+ 
+	[UIView commitAnimations];
+}
+
 - (void)viewDidLoad 
 {
     [super viewDidLoad];

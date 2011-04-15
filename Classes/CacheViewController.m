@@ -998,7 +998,16 @@
 	
 	// If there's a download in progress, stop it
 	[musicControls stopDownloadQueue];
+
+	[self performSelectorOnMainThread:@selector(clearCacheQueue2) withObject:nil waitUntilDone:YES];
 	
+	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
+	
+	[pool release];
+}
+
+- (void)clearCacheQueue2
+{
 	// Delete each song from the database
 	NSMutableArray *indexes = [[NSMutableArray alloc] init];
 	NSInteger rowCount = [databaseControls.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM queuedSongsList"];
@@ -1016,15 +1025,130 @@
 	}
 	
 	// Delete the rows from the table
-	//[self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:YES];
-	[self performSelectorOnMainThread:@selector(deleteRowsAtIndexPathsWithAnimation:) withObject:indexes waitUntilDone:YES];
+	[self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:YES];
+	//[self.tableView performSelectorOnMainThread:@selector(deleteRowsAtIndexPaths:withRowAnimation:) withObject:indexes waitUntilDone:YES];
 	[indexes release];
+	
+	// Reload the table
+	[self editSongsAction:nil];
+	[self viewWillAppear:NO];
+}
+
+- (void)deleteCachedSongs
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	[self performSelectorOnMainThread:@selector(deleteCachedSongs2) withObject:nil waitUntilDone:YES];
 	
 	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
 	
 	[pool release];
 }
 
+- (void)deleteCachedSongs2
+{
+	// Truncate the song cache genre tables
+	[databaseControls.songCacheDb executeUpdate:@"DELETE FROM genres"];
+	[databaseControls.songCacheDb executeUpdate:@"DELETE FROM genresSongs"];
+	
+	// Delete each song off the disk and from the songCacheDb
+	FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT md5, transcodedSuffix, suffix FROM cachedSongs WHERE finished = 'YES'"];
+	while ([result next])
+	{
+		NSString *rowMD5 = [result stringForColumnIndex:0];
+		NSString *transcodedSuffix = [result stringForColumnIndex:1];
+		NSString *suffix = [result stringForColumnIndex:2];
+		
+		BOOL skipDelete = NO;
+		// Check if we're deleting the song that's currently playing. If so, skip deleting it.
+		if (musicControls.currentSongObject)
+		{
+			if ([[NSString md5:musicControls.currentSongObject.path] isEqualToString:rowMD5])
+			{
+				//[appDelegate destroyStreamer];
+				skipDelete = YES;
+			}
+		}
+		
+		// Check if we're deleting the song that's about to play. If so, skip deleting it.
+		if (musicControls.nextSongObject)
+		{
+			if ([[NSString md5:musicControls.nextSongObject.path] isEqualToString:rowMD5])
+			{
+				//[appDelegate destroyStreamer];
+				skipDelete = YES;
+			}
+		}
+		
+		if (skipDelete == NO)
+		{
+			// Delete the row from the cachedSongs
+			[databaseControls.songCacheDb executeUpdate:@"DELETE FROM cachedSongs WHERE md5 = ?", rowMD5];
+			[databaseControls.songCacheDb executeUpdate:@"DELETE FROM cachedSongsLayout WHERE md5 = ?", rowMD5];
+			
+			// Delete the song from disk
+			NSString *fileName;
+			if (transcodedSuffix)
+				fileName = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", rowMD5, transcodedSuffix]];
+			else
+				fileName = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", rowMD5, suffix]];
+			[[NSFileManager defaultManager] removeItemAtPath:fileName error:NULL];
+		}
+	}
+	
+	// Reload the table
+	[self editSongsAction:nil];
+	[self viewWillAppear:NO];
+}
+
+- (void)deleteQueuedSongs
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	// Sort the multiDeleteList to make sure it's accending
+	[viewObjects.multiDeleteList sortUsingSelector:@selector(compare:)];
+	
+	[self performSelectorOnMainThread:@selector(deleteQueuedSongs2) withObject:nil waitUntilDone:YES];
+	
+	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
+
+	[pool release];
+}
+
+- (void)deleteQueuedSongs2
+{
+	// Delete each song from the database
+	NSMutableArray *indexes = [[NSMutableArray alloc] init];
+	for (NSNumber *rowNumber in viewObjects.multiDeleteList)
+	{
+		NSInteger row = [rowNumber intValue] + 1;
+		NSString *rowMD5 = [databaseControls.cacheQueueDb stringForQuery:@"SELECT md5 FROM queuedSongsList WHERE ROWID = ?", [NSNumber numberWithInt:row]];
+		
+		// Check if we're deleting the song that's currently caching. If so, stop the download.
+		if (musicControls.queueSongObject)
+		{
+			if ([[NSString md5:musicControls.queueSongObject.path] isEqualToString:rowMD5])
+			{
+				[musicControls stopDownloadQueue];
+			}
+		}
+		
+		// Delete the row from the cachedSongs
+		[databaseControls.cacheQueueDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", rowMD5];
+		[databaseControls.cacheQueueDb executeUpdate:@"DELETE FROM queuedSongsList WHERE md5 = ?", rowMD5];
+		
+		// Add the row to the index array
+		[indexes addObject:[NSIndexPath indexPathForRow:[rowNumber intValue] inSection:0]];
+	}
+	
+	// Delete the rows from the table
+	[self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:YES];
+	[indexes release];
+	
+	// Reload the table
+	[self editSongsAction:nil];
+	[self viewWillAppear:NO];
+}
 
 - (void) deleteSongsAction:(id)sender
 {
@@ -1034,124 +1158,23 @@
 		{
 			if (segmentedControl.selectedSegmentIndex == 0)
 			{
-				// Truncate the song cache genre tables
-				[databaseControls.songCacheDb executeUpdate:@"DELETE FROM genres"];
-				[databaseControls.songCacheDb executeUpdate:@"DELETE FROM genresSongs"];
-				
-				// Delete each song off the disk and from the songCacheDb
-				FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT md5, transcodedSuffix, suffix FROM cachedSongs WHERE finished = 'YES'"];
-				while ([result next])
-				{
-					NSString *rowMD5 = [result stringForColumnIndex:0];
-					NSString *transcodedSuffix = [result stringForColumnIndex:1];
-					NSString *suffix = [result stringForColumnIndex:2];
-					
-					BOOL skipDelete = NO;
-					// Check if we're deleting the song that's currently playing. If so, skip deleting it.
-					if (musicControls.currentSongObject)
-					{
-						if ([[NSString md5:musicControls.currentSongObject.path] isEqualToString:rowMD5])
-						{
-							//[appDelegate destroyStreamer];
-							skipDelete = YES;
-						}
-					}
-					
-					// Check if we're deleting the song that's about to play. If so, skip deleting it.
-					if (musicControls.nextSongObject)
-					{
-						if ([[NSString md5:musicControls.nextSongObject.path] isEqualToString:rowMD5])
-						{
-							//[appDelegate destroyStreamer];
-							skipDelete = YES;
-						}
-					}
-					
-					if (skipDelete == NO)
-					{
-						// Delete the row from the cachedSongs
-						[databaseControls.songCacheDb executeUpdate:@"DELETE FROM cachedSongs WHERE md5 = ?", rowMD5];
-						[databaseControls.songCacheDb executeUpdate:@"DELETE FROM cachedSongsLayout WHERE md5 = ?", rowMD5];
-						
-						// Delete the song from disk
-						NSString *fileName;
-						if (transcodedSuffix)
-							fileName = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", rowMD5, transcodedSuffix]];
-						else
-							fileName = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", rowMD5, suffix]];
-						[[NSFileManager defaultManager] removeItemAtPath:fileName error:NULL];
-					}
-				}
+				[viewObjects showLoadingScreenOnMainWindow];
+				[self performSelectorInBackground:@selector(deleteCachedSongs) withObject:nil];
 			}
 			else if (segmentedControl.selectedSegmentIndex == 1)
 			{
-				/*[viewObjects showLoadingScreenOnMainWindow];
-				[self performSelectorInBackground:@selector(clearCacheQueue) withObject:nil];*/
-				
-				// If there's a download in progress, stop it
-				[musicControls stopDownloadQueue];
-				
-				// Delete each song from the database
-				NSMutableArray *indexes = [[NSMutableArray alloc] init];
-				NSInteger rowCount = [databaseControls.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM queuedSongsList"];
-				for (int row = 1; row <= rowCount; row++)
-				{
-					NSInteger tableRow = row - 1;
-					NSString *rowMD5 = [databaseControls.cacheQueueDb stringForQuery:@"SELECT md5 FROM queuedSongsList WHERE ROWID = ?", [NSNumber numberWithInt:row]];
-					
-					// Delete the row from the cacheQueue
-					[databaseControls.cacheQueueDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", rowMD5];
-					[databaseControls.cacheQueueDb executeUpdate:@"DELETE FROM queuedSongsList WHERE md5 = ?", rowMD5];
-					
-					// Add the row to the index array
-					[indexes addObject:[NSIndexPath indexPathForRow:tableRow inSection:0]];
-				}
-				
-				// Delete the rows from the table
-				[self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:YES];
-				[indexes release];
+				[viewObjects showLoadingScreenOnMainWindow];
+				[self performSelectorInBackground:@selector(clearCacheQueue) withObject:nil];
 			}
 		}
 		else
 		{
 			if (segmentedControl.selectedSegmentIndex == 1)
 			{
-				// Sort the multiDeleteList to make sure it's accending
-				[viewObjects.multiDeleteList sortUsingSelector:@selector(compare:)];
-				
-				// Delete each song from the database
-				NSMutableArray *indexes = [[NSMutableArray alloc] init];
-				for (NSNumber *rowNumber in viewObjects.multiDeleteList)
-				{
-					NSInteger row = [rowNumber intValue] + 1;
-					NSString *rowMD5 = [databaseControls.cacheQueueDb stringForQuery:@"SELECT md5 FROM queuedSongsList WHERE ROWID = ?", [NSNumber numberWithInt:row]];
-					
-					// Check if we're deleting the song that's currently caching. If so, stop the download.
-					if (musicControls.queueSongObject)
-					{
-						if ([[NSString md5:musicControls.queueSongObject.path] isEqualToString:rowMD5])
-						{
-							[musicControls stopDownloadQueue];
-						}
-					}
-					
-					// Delete the row from the cachedSongs
-					[databaseControls.cacheQueueDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", rowMD5];
-					[databaseControls.cacheQueueDb executeUpdate:@"DELETE FROM queuedSongsList WHERE md5 = ?", rowMD5];
-					
-					// Add the row to the index array
-					[indexes addObject:[NSIndexPath indexPathForRow:[rowNumber intValue] inSection:0]];
-				}
-				
-				// Delete the rows from the table
-				[self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:YES];
-				[indexes release];
+				[viewObjects showLoadingScreenOnMainWindow];
+				[self performSelectorInBackground:@selector(deleteQueuedSongs) withObject:nil];
 			}
 		}
-		
-		// Reload the table
-		[self editSongsAction:nil];
-		[self viewWillAppear:NO];
 	}
 }
 

@@ -28,7 +28,7 @@
 
 
 #ifdef DEBUG
-#define BETA_VERSION @" GM"
+#define BETA_VERSION @" GM Throttling Fix"
 #else
 #define BETA_VERSION @""
 #endif

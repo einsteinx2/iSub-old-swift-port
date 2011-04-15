@@ -338,6 +338,7 @@
 		[self performSelectorInBackground:@selector(parseData) withObject:nil];
 	}
 	
+	self.tableView.scrollEnabled = YES;
 	[theConnection release];
 }
 

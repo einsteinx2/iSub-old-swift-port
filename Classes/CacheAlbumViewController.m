@@ -180,7 +180,8 @@
 
 - (void) cachedSongDeleted
 {
-	FMResultSet *result = [databaseControls.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", segment, (segment - 1), segment, segment], seg1, self.title];
+	FMResultSet *result = [databaseControls.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? AND seg%i = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", segment, (segment - 1), segment, segment], seg1, self.title];
+	
 	self.listOfAlbums = [NSMutableArray arrayWithCapacity:1];
 	self.listOfSongs = [NSMutableArray arrayWithCapacity:1];
 	//self.listOfAlbums = nil; self.listOfAlbums = [[NSMutableArray alloc] init];
@@ -193,7 +194,7 @@
 		}
 		else
 		{
-			[self.listOfSongs addObject:[result stringForColumnIndex:0]];
+			[self.listOfSongs addObject:[NSArray arrayWithObjects:[result stringForColumnIndex:0], [NSString stringWithFormat:@"%i", [result intForColumnIndex:3]], nil]];
 		}
 	}
 
@@ -478,6 +479,7 @@
 		CacheSongUITableViewCell *cell = [[[CacheSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 		cell.accessoryType = UITableViewCellAccessoryNone;
 		NSUInteger a = indexPath.row - [listOfAlbums count];
+		NSLog(@"listOfSongs: %@", listOfSongs);
 		cell.md5 = [[listOfSongs objectAtIndex:a] objectAtIndex:0];
 		
 		Song *aSong = [self songFromCacheDb:cell.md5];
