@@ -479,7 +479,6 @@
 		CacheSongUITableViewCell *cell = [[[CacheSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 		cell.accessoryType = UITableViewCellAccessoryNone;
 		NSUInteger a = indexPath.row - [listOfAlbums count];
-		NSLog(@"listOfSongs: %@", listOfSongs);
 		cell.md5 = [[listOfSongs objectAtIndex:a] objectAtIndex:0];
 		
 		Song *aSong = [self songFromCacheDb:cell.md5];
@@ -552,7 +551,6 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 				}
 				else
 				{
-					NSLog(@"%i - %@", [result intForColumn:@"track"], [result stringForColumnIndex:2]);
 					[cacheAlbumViewController.listOfSongs addObject:[NSArray arrayWithObjects:[result stringForColumnIndex:0], 
 																							  [NSNumber numberWithInt:[result intForColumnIndex:3]], nil]];
 					
@@ -607,7 +605,6 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			
 			// Grab the first bytes of the song to trick Subsonic into seeing that it's being played
 			NSURL *songUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], musicControls.currentSongObject.songId]];
-			NSLog(@"songUrl: %@", [songUrl absoluteString]);
 			NSURLRequest *request = [NSURLRequest requestWithURL:songUrl cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
 			NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:musicControls];
 			if (!connection)

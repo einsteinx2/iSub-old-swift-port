@@ -27,11 +27,13 @@
 #endif
 
 
-#ifdef DEBUG
+/*#ifdef DEBUG
 #define BETA_VERSION @" GM 3"
 #else
 #define BETA_VERSION @""
-#endif
+#endif*/
+
+#define BETA_VERSION @""
 
 // Lite version build switch
 #define IS_LITE() (false)    // DISABLE Lite version

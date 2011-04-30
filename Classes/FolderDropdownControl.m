@@ -280,7 +280,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	UIButton *button = (UIButton *)sender;
 	UILabel  *label  = (UILabel *)button.superview;
 	
-	NSLog(@"Folder selected: %@ -- %i", label.text, label.tag);
+	//NSLog(@"Folder selected: %@ -- %i", label.text, label.tag);
 	
 	self.selectedFolderId = label.tag;
 	selectedFolderLabel.text = [folders objectForKey:[NSString stringWithFormat:@"%i", selectedFolderId]];
@@ -301,8 +301,8 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 
 - (void)selectFolderWithId:(NSUInteger)folderId
 {
-	NSLog(@"folders: %@", folders);
-	NSLog(@"folderId: %i", folderId);
+	//NSLog(@"folders: %@", folders);
+	//NSLog(@"folderId: %i", folderId);
 	self.selectedFolderId = folderId;
 	selectedFolderLabel.text = [folders objectForKey:[NSString stringWithFormat:@"%i", selectedFolderId]];
 }

@@ -340,24 +340,24 @@ static void	ReadStreamClientCallBackA( CFReadStreamRef stream, CFStreamEventType
 				{
 					if ([appDelegateRef isWifi] == NO && bytesTransferred > kMaxBytesPerInterval3G)
 					{
-						NSLog(@"Bandwidth used is more than kMaxBytesPerSec3G, throttling for kThrottleTimeInterval");
+						//NSLog(@"Bandwidth used is more than kMaxBytesPerSec3G, throttling for kThrottleTimeInterval");
 						CFReadStreamUnscheduleFromRunLoop(stream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
 						
 						//Calculate how many intervals to pause
 						NSTimeInterval delay = (kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerInterval3G));
-						NSLog(@"Pausing for %f", delay);
+						//NSLog(@"Pausing for %f", delay);
 						[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
 						
 						bytesTransferred = 0;
 					}
 					else if ([appDelegateRef isWifi] && bytesTransferred > kMaxBytesPerIntervalWifi)
 					{
-						NSLog(@"Bandwidth used is more than kMaxBytesPerSecWifi, throttling for kThrottleTimeInterval");
+						//NSLog(@"Bandwidth used is more than kMaxBytesPerSecWifi, throttling for kThrottleTimeInterval");
 						CFReadStreamUnscheduleFromRunLoop(stream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
 						
 						//Calculate how many intervals to pause
 						NSTimeInterval delay = (kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerIntervalWifi));
-						NSLog(@"Pausing for %f", delay);
+						//NSLog(@"Pausing for %f", delay);
 						[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
 						
 						bytesTransferred = 0;
@@ -558,24 +558,24 @@ static void	ReadStreamClientCallBackB( CFReadStreamRef stream, CFStreamEventType
 				{
 					if ([appDelegateRef isWifi] == NO && bytesTransferred > kMaxBytesPerInterval3G)
 					{
-						NSLog(@"Bandwidth used is more than kMaxBytesPerSec, throttling for kThrottleTimeInterval");
+						//NSLog(@"Bandwidth used is more than kMaxBytesPerSec, throttling for kThrottleTimeInterval");
 						CFReadStreamUnscheduleFromRunLoop(stream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
 						
 						//Calculate how many intervals to pause
 						NSTimeInterval delay = kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerInterval3G);
-						NSLog(@"Pausing for %f", delay);
+						//NSLog(@"Pausing for %f", delay);
 						[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadB) userInfo:nil repeats:NO];
 						
 						bytesTransferred = 0;
 					}
 					else if ([appDelegateRef isWifi] && bytesTransferred > kMaxBytesPerIntervalWifi)
 					{
-						NSLog(@"Bandwidth used is more than kMaxBytesPerSec, throttling for kThrottleTimeInterval");
+						//NSLog(@"Bandwidth used is more than kMaxBytesPerSec, throttling for kThrottleTimeInterval");
 						CFReadStreamUnscheduleFromRunLoop(stream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
 						
 						//Calculate how many intervals to pause
 						NSTimeInterval delay = kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerIntervalWifi);
-						NSLog(@"Pausing for %f", delay);
+						//NSLog(@"Pausing for %f", delay);
 						[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadB) userInfo:nil repeats:NO];
 						
 						bytesTransferred = 0;
@@ -682,24 +682,24 @@ static void	ReadStreamClientCallBackTemp( CFReadStreamRef stream, CFStreamEventT
 			{
 				if ([appDelegateRef isWifi] == NO && bytesTransferred > kMaxBytesPerInterval3G)
 				{
-					NSLog(@"Bandwidth used is more than kMaxBytesPerSec3G, throttling for kThrottleTimeInterval");
+					//NSLog(@"Bandwidth used is more than kMaxBytesPerSec3G, throttling for kThrottleTimeInterval");
 					CFReadStreamUnscheduleFromRunLoop(stream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
 					
 					//Calculate how many intervals to pause
 					NSTimeInterval delay = kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerInterval3G);
-					NSLog(@"Pausing for %f", delay);
+					//NSLog(@"Pausing for %f", delay);
 					[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
 					
 					bytesTransferred = 0;
 				}
 				else if ([appDelegateRef isWifi] && bytesTransferred > kMaxBytesPerIntervalWifi)
 				{
-					NSLog(@"Bandwidth used is more than kMaxBytesPerSecWifi, throttling for kThrottleTimeInterval");
+					//NSLog(@"Bandwidth used is more than kMaxBytesPerSecWifi, throttling for kThrottleTimeInterval");
 					CFReadStreamUnscheduleFromRunLoop(stream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
 					
 					//Calculate how many intervals to pause
 					NSTimeInterval delay = kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerIntervalWifi);
-					NSLog(@"Pausing for %f", delay);
+					//NSLog(@"Pausing for %f", delay);
 					[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
 					
 					bytesTransferred = 0;

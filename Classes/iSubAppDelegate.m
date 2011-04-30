@@ -103,10 +103,12 @@
 		[MKStoreManager setDelegate:self];
 	}
 	
+	#ifdef DEBUG
 	NSLog(@"is kFeaturePlaylistsId enabled: %i", [MKStoreManager isFeaturePurchased:kFeaturePlaylistsId]);
 	NSLog(@"is kFeatureJukeboxId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureJukeboxId]);
 	NSLog(@"is kFeatureCacheId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureCacheId]);
 	NSLog(@"is kFeatureAllId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureAllId]);
+	#endif
 	
 	//
 	// Uncomment to redirect the console output to a log file
