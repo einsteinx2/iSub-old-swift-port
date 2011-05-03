@@ -28,7 +28,7 @@
 
 
 #ifdef DEBUG
-#define BETA_VERSION @" - Network code from 3.0"
+#define BETA_VERSION @" GM 4"
 #else
 #define BETA_VERSION @""
 #endif
