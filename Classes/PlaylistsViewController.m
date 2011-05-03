@@ -39,7 +39,7 @@
 
 @implementation PlaylistsViewController
 
-@synthesize listOfSongs;
+@synthesize listOfSongs, request;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -796,7 +796,9 @@
 	//NSMutableString *urlString = [NSMutableString stringWithFormat:@"%@?name=%@", [appDelegate getBaseUrl:@"createPlaylist.view"], self.];
 	
 	NSString *urlString = [NSString stringWithFormat:@"%@&name=%@", [appDelegate getBaseUrl:@"createPlaylist.view"], [name stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+	NSLog(@"urlString: %@", urlString);
 	
+	NSLog(@"currentPlaylistCount: %lu", currentPlaylistCount);
 	NSMutableString *body = [NSMutableString stringWithCapacity:0];
 	for (int i = 0; i < currentPlaylistCount; i++)
 	{
@@ -822,12 +824,14 @@
 		
 		[pool release];
 	}
+	NSLog(@"body: %@", body);
 
-	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString] 
+	self.request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString] 
 											 cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData 
 										 timeoutInterval:kLoadingTimeout];
 	[request setHTTPMethod:@"POST"];
 	[request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
+	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
 	
 	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
@@ -1497,6 +1501,20 @@ NSInteger playlistSort(id obj1, id obj2, void *context)
 		[connectionQueue connectionFinished:theConnection];
 	}
 }	
+
+- (NSURLRequest *)connection: (NSURLConnection *)inConnection willSendRequest:(NSURLRequest *)inRequest redirectResponse:(NSURLResponse *)inRedirectResponse;
+{
+    if (inRedirectResponse) 
+	{
+        NSMutableURLRequest *newRequest = [[request mutableCopy] autorelease];
+        [newRequest setURL:[inRequest URL]];
+        return newRequest;
+    } 
+	else 
+	{
+        return inRequest;
+    }
+}
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	

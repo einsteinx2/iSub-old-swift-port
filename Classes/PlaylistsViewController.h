@@ -46,11 +46,14 @@
 	
 	NSMutableData *receivedData;
 	NSURLConnection *connection;
+	NSMutableURLRequest *request;
 	
 	//NSMutableData *receivedData;
 }
 
 @property (nonatomic, retain) NSArray *listOfSongs;
+
+@property (nonatomic, retain) NSMutableURLRequest *request;
 
 - (void)showDeleteButton;
 - (void)hideDeleteButton;

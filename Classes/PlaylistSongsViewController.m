@@ -239,6 +239,7 @@
 													   timeoutInterval:kLoadingTimeout];
 	[request setHTTPMethod:@"POST"];
 	[request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
+	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
 	
 	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
