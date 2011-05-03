@@ -2680,8 +2680,8 @@
 					"-ObjC",
 				);
 				PREBINDING = NO;
-				PROVISIONING_PROFILE = "6E3DCDD8-FF4C-49A6-B0E9-A2F8D43BC75F";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "6E3DCDD8-FF4C-49A6-B0E9-A2F8D43BC75F";
+				PROVISIONING_PROFILE = "B369E010-40BF-431E-9772-8034FA350669";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B369E010-40BF-431E-9772-8034FA350669";
 				SDKROOT = iphoneos;
 				SYMROOT = /Users/bbaron/build;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2693,6 +2693,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Benjamin Baron";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Benjamin Baron";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -2708,7 +2709,8 @@
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 				);
 				PRODUCT_NAME = iSub;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "6E3DCDD8-FF4C-49A6-B0E9-A2F8D43BC75F";
+				PROVISIONING_PROFILE = "B369E010-40BF-431E-9772-8034FA350669";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B369E010-40BF-431E-9772-8034FA350669";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

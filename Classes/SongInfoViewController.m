@@ -55,6 +55,7 @@
 	[downloadProgress newY:0.0];
 	downloadProgress.backgroundColor = [UIColor whiteColor];
 	downloadProgress.alpha = 0.3;
+	downloadProgress.userInteractionEnabled = NO;
 	[progressSlider addSubview:downloadProgress];
 	[downloadProgress release];
 	
@@ -239,7 +240,7 @@
 		if (width > downloadProgressWidth)
 			width = downloadProgressWidth;
 		[downloadProgress newWidth:width];
-		NSLog(@"width %f", width);
+		//NSLog(@"width %f", width);
 	}	
 }
 
@@ -340,9 +341,9 @@
 			
 			// Fix for skipping to end of file going to next song
 			// It seems that the max time is always off
-			if (progressSlider.value > (progressSlider.maximumValue - 16.0))
+			if (progressSlider.value > (progressSlider.maximumValue - 8.0))
 			{
-				float newValue = progressSlider.maximumValue - 16.0;
+				float newValue = progressSlider.maximumValue - 8.0;
 				
 				if (newValue < 0.0)
 					newValue = 0.0;
