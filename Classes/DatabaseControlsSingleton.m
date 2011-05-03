@@ -727,6 +727,10 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 			[sections insertObject:[NSArray arrayWithObjects:@"#", [NSNumber numberWithInt:0], nil] atIndex:0];
 		}
 	}
+	else
+	{
+		[sections insertObject:[NSArray arrayWithObjects:@"#", [NSNumber numberWithInt:0], nil] atIndex:0];
+	}
 	
 	NSArray *returnArray = [NSArray arrayWithArray:sections];
 	[sectionTitles release];

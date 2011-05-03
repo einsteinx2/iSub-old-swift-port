@@ -37,16 +37,20 @@ static NSDate *throttlingDate;
 static UInt32 bytesTransferred;
 #define kThrottleTimeInterval 0.01
 
-#define kMaxKilobitsPerSec3G 475
+#define kMaxKilobitsPerSec3G 550
 #define kMaxBytesPerSec3G ((kMaxKilobitsPerSec3G * 1024) / 8)
 #define kMaxBytesPerInterval3G (kMaxBytesPerSec3G * kThrottleTimeInterval)
 
-#define kMaxKilobitsPerSecWifi 2000
+#define kMaxKilobitsPerSecWifi 5000
 #define kMaxBytesPerSecWifi ((kMaxKilobitsPerSecWifi * 1024) / 8)
 #define kMaxBytesPerIntervalWifi (kMaxBytesPerSecWifi * kThrottleTimeInterval)
 
-#define kMinBytesToStartPlayback (1024 * 200)    // Start playback at 200KB to counter playback start delay bug
-#define kMinBytesToStartLimiting (1024 * 1024)   // Start throttling bandwidth after 1 MB downloaded
+#define kMinBytesToStartPlayback (1024 * 50)    // Number of bytes to wait before activating the player
+#define kMinBytesToStartLimiting (1024 * 1024)   // Start throttling bandwidth after 1 MB downloaded for 192kbps files (adjusted accordingly by bitrate)
+
+// Logging
+#define isProgressLoggingEnabled NO
+#define isThrottleLoggingEnabled NO
 
 
 @implementation CFNetworkRequests
@@ -313,6 +317,9 @@ static void	ReadStreamClientCallBackA( CFReadStreamRef stream, CFStreamEventType
 				[[musicControlsRef audioFileA] writeData:data];
 				[musicControlsRef setDownloadedLengthA:([musicControlsRef downloadedLengthA] + bytesRead)];
 				
+				if (isProgressLoggingEnabled)
+					NSLog(@"downloadedLengthA:  %lu   bytesRead: %ld", [musicControlsRef downloadedLengthA], bytesRead);
+				
 				if ([musicControlsRef streamer])
 					[[musicControlsRef streamer] setFileDownloadCurrentSize:[musicControlsRef downloadedLengthA]];
 				
@@ -340,24 +347,28 @@ static void	ReadStreamClientCallBackA( CFReadStreamRef stream, CFStreamEventType
 				{
 					if ([appDelegateRef isWifi] == NO && bytesTransferred > kMaxBytesPerInterval3G)
 					{
-						//NSLog(@"Bandwidth used is more than kMaxBytesPerSec3G, throttling for kThrottleTimeInterval");
 						CFReadStreamUnscheduleFromRunLoop(stream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
 						
 						//Calculate how many intervals to pause
 						NSTimeInterval delay = (kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerInterval3G));
-						//NSLog(@"Pausing for %f", delay);
+						
+						if (isThrottleLoggingEnabled)
+							NSLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
+						
 						[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
 						
 						bytesTransferred = 0;
 					}
 					else if ([appDelegateRef isWifi] && bytesTransferred > kMaxBytesPerIntervalWifi)
 					{
-						//NSLog(@"Bandwidth used is more than kMaxBytesPerSecWifi, throttling for kThrottleTimeInterval");
 						CFReadStreamUnscheduleFromRunLoop(stream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
 						
 						//Calculate how many intervals to pause
 						NSTimeInterval delay = (kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerIntervalWifi));
-						//NSLog(@"Pausing for %f", delay);
+						
+						if (isThrottleLoggingEnabled)
+							NSLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
+						
 						[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
 						
 						bytesTransferred = 0;
@@ -536,6 +547,9 @@ static void	ReadStreamClientCallBackB( CFReadStreamRef stream, CFStreamEventType
 				[[musicControlsRef audioFileB] writeData:data];
 				[musicControlsRef setDownloadedLengthB:([musicControlsRef downloadedLengthB] + bytesRead)];
 				
+				if (isProgressLoggingEnabled)
+					NSLog(@"downloadedLengthB:  %lu   bytesRead: %ld", [musicControlsRef downloadedLengthB], bytesRead);
+				
 				// If this is the currently playing song, update the streamer on the downloaded length
 				if ([musicControlsRef reportDownloadedLengthB])
 				{
@@ -558,24 +572,28 @@ static void	ReadStreamClientCallBackB( CFReadStreamRef stream, CFStreamEventType
 				{
 					if ([appDelegateRef isWifi] == NO && bytesTransferred > kMaxBytesPerInterval3G)
 					{
-						//NSLog(@"Bandwidth used is more than kMaxBytesPerSec, throttling for kThrottleTimeInterval");
 						CFReadStreamUnscheduleFromRunLoop(stream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
 						
 						//Calculate how many intervals to pause
 						NSTimeInterval delay = kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerInterval3G);
-						//NSLog(@"Pausing for %f", delay);
+						
+						if (isThrottleLoggingEnabled)
+							NSLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
+						
 						[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadB) userInfo:nil repeats:NO];
 						
 						bytesTransferred = 0;
 					}
 					else if ([appDelegateRef isWifi] && bytesTransferred > kMaxBytesPerIntervalWifi)
 					{
-						//NSLog(@"Bandwidth used is more than kMaxBytesPerSec, throttling for kThrottleTimeInterval");
 						CFReadStreamUnscheduleFromRunLoop(stream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
 						
 						//Calculate how many intervals to pause
 						NSTimeInterval delay = kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerIntervalWifi);
-						//NSLog(@"Pausing for %f", delay);
+						
+						if (isThrottleLoggingEnabled)
+							NSLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
+						
 						[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadB) userInfo:nil repeats:NO];
 						
 						bytesTransferred = 0;
@@ -656,6 +674,9 @@ static void	ReadStreamClientCallBackTemp( CFReadStreamRef stream, CFStreamEventT
 			[[musicControlsRef audioFileA] writeData:data];
 			[musicControlsRef setDownloadedLengthA:([musicControlsRef downloadedLengthA] + bytesRead)];
 			
+			if (isProgressLoggingEnabled)
+				NSLog(@"downloadedLengthA:  %lu   bytesRead: %ld", [musicControlsRef downloadedLengthA], bytesRead);
+			
 			if ([musicControlsRef streamer])
 				[[musicControlsRef streamer] setFileDownloadCurrentSize:[musicControlsRef downloadedLengthA]];
 			
@@ -682,24 +703,28 @@ static void	ReadStreamClientCallBackTemp( CFReadStreamRef stream, CFStreamEventT
 			{
 				if ([appDelegateRef isWifi] == NO && bytesTransferred > kMaxBytesPerInterval3G)
 				{
-					//NSLog(@"Bandwidth used is more than kMaxBytesPerSec3G, throttling for kThrottleTimeInterval");
 					CFReadStreamUnscheduleFromRunLoop(stream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
 					
 					//Calculate how many intervals to pause
 					NSTimeInterval delay = kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerInterval3G);
-					//NSLog(@"Pausing for %f", delay);
+					
+					if (isThrottleLoggingEnabled)
+						NSLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
+					
 					[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
 					
 					bytesTransferred = 0;
 				}
 				else if ([appDelegateRef isWifi] && bytesTransferred > kMaxBytesPerIntervalWifi)
 				{
-					//NSLog(@"Bandwidth used is more than kMaxBytesPerSecWifi, throttling for kThrottleTimeInterval");
 					CFReadStreamUnscheduleFromRunLoop(stream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
 					
 					//Calculate how many intervals to pause
 					NSTimeInterval delay = kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerIntervalWifi);
-					//NSLog(@"Pausing for %f", delay);
+					
+					if (isThrottleLoggingEnabled)
+						NSLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
+					
 					[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
 					
 					bytesTransferred = 0;
@@ -799,6 +824,8 @@ static void	ReadStreamClientCallBackTemp( CFReadStreamRef stream, CFStreamEventT
 	// Start the HTTP connection
 	if (CFReadStreamOpen(readStreamRefA) == false)
 	    goto Bail;
+	
+	NSLog(@"--- STARTING HTTP CONNECTION");
 	
 	if (messageRef != NULL) CFRelease(messageRef);
 	return;

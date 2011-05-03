@@ -155,6 +155,10 @@
 	[UIDevice currentDevice].batteryMonitoringEnabled = YES;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(batteryStateChanged:) name:@"UIDeviceBatteryStateDidChangeNotification" object:[UIDevice currentDevice]];
 	[self batteryStateChanged:nil];	
+	
+	// Disable the screen idle timer if that setting is enabled
+	if ([[settingsDictionary objectForKey:@"disableScreenSleepSetting"] isEqualToString:@"YES"])
+		[UIApplication sharedApplication].idleTimerDisabled = YES;
 }
 
 - (void)batteryStateChanged:(NSNotification *)notification
@@ -162,11 +166,12 @@
 	UIDevice *device = [UIDevice currentDevice];
 	if (device.batteryState == UIDeviceBatteryStateCharging || device.batteryState == UIDeviceBatteryStateFull) 
 	{
-		[UIApplication sharedApplication].idleTimerDisabled = YES;
+			[UIApplication sharedApplication].idleTimerDisabled = YES;
     }
 	else
 	{
-		[UIApplication sharedApplication].idleTimerDisabled = NO;
+		if (![[settingsDictionary objectForKey:@"disableScreenSleepSetting"] isEqualToString:@"YES"])
+			[UIApplication sharedApplication].idleTimerDisabled = NO;
 	}
 }
 

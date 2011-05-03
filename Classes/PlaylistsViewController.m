@@ -50,6 +50,21 @@
     return YES;
 }
 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+	if (!IS_IPAD())
+	{
+		if (UIInterfaceOrientationIsPortrait(fromInterfaceOrientation))
+		{
+			noPlaylistsScreen.transform = CGAffineTransformTranslate(noPlaylistsScreen.transform, 0.0, 23.0);
+		}
+		else
+		{
+			noPlaylistsScreen.transform = CGAffineTransformTranslate(noPlaylistsScreen.transform, 0.0, -110.0);
+		}
+	}
+}
+
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
@@ -421,6 +436,15 @@
 	[self.view addSubview:noPlaylistsScreen];
 	
 	[noPlaylistsScreen release];
+	
+	if (!IS_IPAD())
+	{
+		if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
+		{
+			//noPlaylistsScreen.transform = CGAffineTransformScale(noPlaylistsScreen.transform, 0.75, 0.75);
+			noPlaylistsScreen.transform = CGAffineTransformTranslate(noPlaylistsScreen.transform, 0.0, 23.0);
+		}
+	}
 }
 
 - (void)showStore
@@ -771,9 +795,9 @@
 {
 	//NSMutableString *urlString = [NSMutableString stringWithFormat:@"%@?name=%@", [appDelegate getBaseUrl:@"createPlaylist.view"], self.];
 	
-	NSMutableString *urlString = [NSMutableString stringWithString:[appDelegate getBaseUrl:@"createPlaylist.view"]];
-	[urlString appendFormat:@"&name=%@", [name stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+	NSString *urlString = [NSString stringWithFormat:@"%@&name=%@", [appDelegate getBaseUrl:@"createPlaylist.view"], [name stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	
+	NSMutableString *body = [NSMutableString stringWithCapacity:0];
 	for (int i = 0; i < currentPlaylistCount; i++)
 	{
 		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -791,15 +815,20 @@
 				aSong = [databaseControls songFromDbRow:i inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 		}
 		
-		[urlString appendFormat:@"&songId=%@", aSong.songId];
+		if (i == 0)
+			[body appendFormat:@"songId=%@", aSong.songId];
+		else
+			[body appendFormat:@"&songId=%@", aSong.songId];
 		
 		[pool release];
 	}
-	
-	NSLog(@"server playlist upload urlString: %@", urlString);
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] 
+
+	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString] 
 											 cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData 
 										 timeoutInterval:kLoadingTimeout];
+	[request setHTTPMethod:@"POST"];
+	[request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
+	
 	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
 	{
@@ -1056,8 +1085,8 @@
 	{
 		if (deleteSongsLabel.hidden == NO)
 		{
-			self.tableView.scrollEnabled = NO;
-			[viewObjects showAlbumLoadingScreen:self.view sender:self];
+			//self.tableView.scrollEnabled = NO;
+			//[viewObjects showAlbumLoadingScreen:self.view sender:self];
 			
 			//if ([deleteSongsLabel.text isEqualToString:@"Clear Playlists"])
 			if ([viewObjects.multiDeleteList count] == 0)
@@ -1101,6 +1130,9 @@
 			}
 			else
 			{
+				self.tableView.scrollEnabled = NO;
+				[viewObjects showAlbumLoadingScreen:self.view sender:self];
+				
 				for (NSNumber *index in viewObjects.multiDeleteList)
 				{
 					NSString *urlString = [NSString stringWithFormat:@"%@%@", 

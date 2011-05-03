@@ -9,10 +9,10 @@
 
 @interface NSString (hex) 
 
-	+ (NSString *) stringFromHex:(NSString *)str;
-	+ (NSString *) stringToHex:(NSString *)str;
++ (NSString *) stringFromHex:(NSString *)str;
++ (NSString *) stringToHex:(NSString *)str;
 
-	- (NSString *) fromHex;
-	- (NSString *) toHex;
+- (NSString *) fromHex;
+- (NSString *) toHex;
 
 @end

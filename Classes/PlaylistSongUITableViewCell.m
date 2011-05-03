@@ -16,7 +16,7 @@
 
 @implementation PlaylistSongUITableViewCell
 
-@synthesize indexPath, coverArtView, numberLabel, nameScrollView, songNameLabel, artistNameLabel, isOverlayShowing, overlayView;
+@synthesize indexPath, playlistMD5, coverArtView, numberLabel, nameScrollView, songNameLabel, artistNameLabel, isOverlayShowing, overlayView;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
 {
@@ -91,7 +91,19 @@
 
 - (void)downloadAction
 {
-	Song *aSong = [viewObjects.listOfPlaylistSongs objectAtIndex:indexPath.row];
+	Song *aSong;
+	if (viewObjects.isLocalPlaylist)
+	{
+		aSong = [databaseControls songFromDbRow:indexPath.row 
+										inTable:[NSString stringWithFormat:@"playlist%@", playlistMD5] 
+									 inDatabase:databaseControls.localPlaylistsDb];
+	}
+	else
+	{
+		aSong = [databaseControls songFromServerPlaylistId:playlistMD5 row:indexPath.row];
+	}
+	
+	//Song *aSong = [viewObjects.listOfPlaylistSongs objectAtIndex:indexPath.row];
 	[databaseControls addSongToCacheQueue:aSong];
 	
 	overlayView.downloadButton.alpha = .3;
@@ -108,8 +120,19 @@
 
 - (void)queueAction
 {
-	//NSLog(@"queueAction");
-	Song *aSong = [viewObjects.listOfPlaylistSongs objectAtIndex:indexPath.row];
+	Song *aSong;
+	if (viewObjects.isLocalPlaylist)
+	{
+		aSong = [databaseControls songFromDbRow:indexPath.row 
+										inTable:[NSString stringWithFormat:@"playlist%@", playlistMD5] 
+									 inDatabase:databaseControls.localPlaylistsDb];
+	}
+	else
+	{
+		aSong = [databaseControls songFromServerPlaylistId:playlistMD5 row:indexPath.row];
+	}
+	
+	//Song *aSong = [viewObjects.listOfPlaylistSongs objectAtIndex:indexPath.row];
 	[databaseControls queueSong:aSong];
 	
 	/*[databaseControls insertSong:aSong intoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];

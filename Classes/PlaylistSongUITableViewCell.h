@@ -19,6 +19,8 @@
 	
 	NSIndexPath *indexPath;
 	
+	NSString *playlistMD5;
+	
 	AsynchronousImageViewCached *coverArtView;
 	UILabel *numberLabel;
 	UIScrollView *nameScrollView;
@@ -37,6 +39,7 @@
 }
 
 @property (nonatomic, retain) NSIndexPath *indexPath;
+@property (nonatomic, retain) NSString *playlistMD5;
 
 @property (nonatomic, retain) AsynchronousImageViewCached *coverArtView;
 @property (nonatomic, retain) UILabel *numberLabel;

@@ -19,7 +19,7 @@
 	
 	IBOutlet UIButton *songInfoToggleButton;
 	IBOutlet OBSlider *progressSlider;
-	IBOutlet UIView *downloadProgress;
+	UIView *downloadProgress;
 	IBOutlet UILabel *progressLabel;
 	IBOutlet UIImageView *progressLabelBackground;
 	IBOutlet UILabel *elapsedTimeLabel;

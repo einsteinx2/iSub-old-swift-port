@@ -21,8 +21,10 @@
 #import "UIView-tools.h"
 #import "CustomUIAlertView.h"
 #import "OBSlider.h"
+#import "UIView-tools.h"
 
-#define downloadProgressWidth (progressSlider.frame.size.width + 4)
+//#define downloadProgressWidth (progressSlider.frame.size.width + 4)
+#define downloadProgressWidth progressSlider.frame.size.width
 
 @implementation SongInfoViewController
 @synthesize progressSlider, downloadProgress, elapsedTimeLabel, remainingTimeLabel, artistLabel, albumLabel, titleLabel, trackLabel, yearLabel, genreLabel, bitRateLabel, lengthLabel, repeatButton, bookmarkButton, shuffleButton, progressTimer;
@@ -48,6 +50,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
+	downloadProgress = [[UIView alloc] initWithFrame:progressSlider.frame];
+	[downloadProgress newX:0.0];
+	[downloadProgress newY:0.0];
+	downloadProgress.backgroundColor = [UIColor whiteColor];
+	downloadProgress.alpha = 0.3;
+	[progressSlider addSubview:downloadProgress];
+	[downloadProgress release];
+	
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	musicControls = [MusicControlsSingleton sharedInstance];
@@ -59,10 +69,8 @@
 	
 	[self initInfo];
 	
-	CGRect frame = self.view.frame;
-	frame.origin.y = 0;
-	frame.origin.x = -320;
-	self.view.frame = frame;
+	[self.view newY:0];
+	[self.view newX:-320];
 	
 	NSInteger bookmarkCount = [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", musicControls.currentSongObject.songId];
 	if (bookmarkCount > 0)
@@ -89,8 +97,11 @@
 	{
 		// Setup the update timer for the song download progress bar
 		updateTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateDownloadProgress) userInfo:nil repeats:YES];
-		CGRect frame = downloadProgress.frame;
-		downloadProgress.frame = CGRectMake(frame.origin.x, frame.origin.y, 0.0, frame.size.height);
+		[downloadProgress newWidth:0.0];
+		//[downloadProgress newX:70.0];
+		//if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
+		//	[downloadProgress addX:2.0];
+		//NSLog(@"downloadProgress.frame %@", NSStringFromCGRect(downloadProgress.frame));
 		downloadProgress.layer.cornerRadius = 5;
 		
 		[self updateDownloadProgress];
@@ -223,10 +234,12 @@
 	else
 	{
 		downloadProgress.hidden = NO;
-		float width = ([musicControls findCurrentSongProgress] * downloadProgressWidth) + 5.0;
+		//float width = ([musicControls findCurrentSongProgress] * downloadProgressWidth) + 5.0;
+		float width = ([musicControls findCurrentSongProgress] * downloadProgressWidth);
 		if (width > downloadProgressWidth)
 			width = downloadProgressWidth;
 		[downloadProgress newWidth:width];
+		NSLog(@"width %f", width);
 	}	
 }
 

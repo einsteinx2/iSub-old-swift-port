@@ -232,6 +232,7 @@
 		538C720A127D115500A296C0 /* shuffle-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C7208127D115500A296C0 /* shuffle-small.png */; };
 		538C720B127D115500A296C0 /* shuffle-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C7209127D115500A296C0 /* shuffle-small@2x.png */; };
 		538DF6E812CC25C300DB6D8C /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 538DF6E712CC25C300DB6D8C /* Server.m */; };
+		53929E65136F930300979CBC /* CFNetworkRequests.m in Sources */ = {isa = PBXBuildFile; fileRef = 53929E64136F930300979CBC /* CFNetworkRequests.m */; };
 		539796E41162B68800F41D8B /* AllAlbumsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 539796E31162B68800F41D8B /* AllAlbumsViewController.m */; };
 		539797FA1162D3F100F41D8B /* AllAlbumsUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 539797F91162D3F100F41D8B /* AllAlbumsUITableViewCell.m */; };
 		539797FE1162D4D200F41D8B /* AllAlbumsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 539797FD1162D4D200F41D8B /* AllAlbumsViewController.xib */; };
@@ -429,7 +430,6 @@
 		53F8CC8D1297949A007BDC0E /* home-shuffle-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC761297949A007BDC0E /* home-shuffle-ipad.png */; };
 		53F8CC8E1297949A007BDC0E /* home-shuffle.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC771297949A007BDC0E /* home-shuffle.png */; };
 		53F8CC8F1297949A007BDC0E /* home-shuffle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC781297949A007BDC0E /* home-shuffle@2x.png */; };
-		53FB066311EE1C69008A30C7 /* CFNetworkRequests.m in Sources */ = {isa = PBXBuildFile; fileRef = 53FB066211EE1C69008A30C7 /* CFNetworkRequests.m */; };
 		53FDEE2611E822CC00FE3ECD /* current-server@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2511E822CC00FE3ECD /* current-server@2x.png */; };
 		53FDEE2911E823A100FE3ECD /* default-album-art-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2711E823A100FE3ECD /* default-album-art-small@2x.png */; };
 		53FDEE2A11E823A100FE3ECD /* default-album-art@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2811E823A100FE3ECD /* default-album-art@2x.png */; };
@@ -789,6 +789,7 @@
 		538C7209127D115500A296C0 /* shuffle-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shuffle-small@2x.png"; sourceTree = "<group>"; };
 		538DF6E612CC25C300DB6D8C /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Server.h; sourceTree = "<group>"; };
 		538DF6E712CC25C300DB6D8C /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Server.m; sourceTree = "<group>"; };
+		53929E64136F930300979CBC /* CFNetworkRequests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFNetworkRequests.m; sourceTree = "<group>"; };
 		539796E21162B68800F41D8B /* AllAlbumsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllAlbumsViewController.h; sourceTree = "<group>"; };
 		539796E31162B68800F41D8B /* AllAlbumsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllAlbumsViewController.m; sourceTree = "<group>"; };
 		539797F81162D3F100F41D8B /* AllAlbumsUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllAlbumsUITableViewCell.h; sourceTree = "<group>"; };
@@ -936,6 +937,7 @@
 		53BB800A121B9CA200BEE7E8 /* comment-write@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "comment-write@2x.png"; path = "Images/Other/comment-write@2x.png"; sourceTree = SOURCE_ROOT; };
 		53C22CCD128EE81C00FFBA67 /* ModalAlbumArtViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModalAlbumArtViewController.h; sourceTree = "<group>"; };
 		53C22CCE128EE81C00FFBA67 /* ModalAlbumArtViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModalAlbumArtViewController.m; sourceTree = "<group>"; };
+		53C4EB89136CBFF100122151 /* CFNetworkRequests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFNetworkRequests.h; sourceTree = "<group>"; };
 		53C6051A12F1EFD4003C6895 /* intro-bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "intro-bottom.png"; path = "Images/Intro Screen/intro-bottom.png"; sourceTree = "<group>"; };
 		53C6051B12F1EFD4003C6895 /* intro-bottom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "intro-bottom@2x.png"; path = "Images/Intro Screen/intro-bottom@2x.png"; sourceTree = "<group>"; };
 		53C6051C12F1EFD4003C6895 /* intro-foreground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "intro-foreground.png"; path = "Images/Intro Screen/intro-foreground.png"; sourceTree = "<group>"; };
@@ -1053,8 +1055,6 @@
 		53F8CC761297949A007BDC0E /* home-shuffle-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-shuffle-ipad.png"; path = "Images/Home Screen/home-shuffle-ipad.png"; sourceTree = "<group>"; };
 		53F8CC771297949A007BDC0E /* home-shuffle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-shuffle.png"; path = "Images/Home Screen/home-shuffle.png"; sourceTree = "<group>"; };
 		53F8CC781297949A007BDC0E /* home-shuffle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-shuffle@2x.png"; path = "Images/Home Screen/home-shuffle@2x.png"; sourceTree = "<group>"; };
-		53FB066111EE1C69008A30C7 /* CFNetworkRequests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFNetworkRequests.h; sourceTree = "<group>"; };
-		53FB066211EE1C69008A30C7 /* CFNetworkRequests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFNetworkRequests.m; sourceTree = "<group>"; };
 		53FDEE2511E822CC00FE3ECD /* current-server@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "current-server@2x.png"; path = "Images/Other/current-server@2x.png"; sourceTree = "<group>"; };
 		53FDEE2711E823A100FE3ECD /* default-album-art-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art-small@2x.png"; path = "Images/Other/default-album-art-small@2x.png"; sourceTree = "<group>"; };
 		53FDEE2811E823A100FE3ECD /* default-album-art@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art@2x.png"; path = "Images/Other/default-album-art@2x.png"; sourceTree = "<group>"; };
@@ -2116,8 +2116,8 @@
 			children = (
 				53B9D293127A395D00CAB0E0 /* DonationParser.h */,
 				53B9D294127A395D00CAB0E0 /* DonationParser.m */,
-				53FB066111EE1C69008A30C7 /* CFNetworkRequests.h */,
-				53FB066211EE1C69008A30C7 /* CFNetworkRequests.m */,
+				53C4EB89136CBFF100122151 /* CFNetworkRequests.h */,
+				53929E64136F930300979CBC /* CFNetworkRequests.m */,
 			);
 			name = CFNetworkRequests;
 			sourceTree = "<group>";
@@ -2524,7 +2524,6 @@
 				536AD2A311EA7EFB00387CB0 /* NSString+UUID.m in Sources */,
 				536AD2A411EA7EFB00387CB0 /* SA_OAuthTwitterController.m in Sources */,
 				536AD2A511EA7EFB00387CB0 /* SA_OAuthTwitterEngine.m in Sources */,
-				53FB066311EE1C69008A30C7 /* CFNetworkRequests.m in Sources */,
 				5379DBB41217BAF100F426CD /* UpdateXMLParser.m in Sources */,
 				5379DC4F1219E48800F426CD /* ChatUITableViewCell.m in Sources */,
 				5379DC501219E48800F426CD /* ChatViewController.m in Sources */,
@@ -2600,6 +2599,7 @@
 				5353B839134D4D6C005C589E /* PagingScrollView.m in Sources */,
 				536AB8021353B4F600DABD83 /* ShuffleFolderPickerViewController.m in Sources */,
 				536AB8111353DCF900DABD83 /* PlaylistSongsViewController.m in Sources */,
+				53929E65136F930300979CBC /* CFNetworkRequests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2660,8 +2660,8 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Benjamin Baron";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Benjamin Baron";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -2680,8 +2680,8 @@
 					"-ObjC",
 				);
 				PREBINDING = NO;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "6E3DCDD8-FF4C-49A6-B0E9-A2F8D43BC75F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "6E3DCDD8-FF4C-49A6-B0E9-A2F8D43BC75F";
 				SDKROOT = iphoneos;
 				SYMROOT = /Users/bbaron/build;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2693,7 +2693,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Benjamin Baron";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -2708,7 +2708,7 @@
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 				);
 				PRODUCT_NAME = iSub;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "6E3DCDD8-FF4C-49A6-B0E9-A2F8D43BC75F";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

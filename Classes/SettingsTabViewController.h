@@ -32,6 +32,8 @@
 	
 	IBOutlet UISwitch *disableRotationSwitch;
 	
+	IBOutlet UISwitch *disableScreenSleepSwitch;
+	
 	IBOutlet UISwitch *enableSongsTabSwitch;
 	IBOutlet UILabel *enableSongsTabLabel;
 	IBOutlet UILabel *enableSongsTabDesc;

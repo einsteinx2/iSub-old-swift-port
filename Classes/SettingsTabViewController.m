@@ -100,6 +100,11 @@
 	else
 		disableRotationSwitch.on = NO;
 	
+	if ([[appDelegate.settingsDictionary objectForKey:@"disableScreenSleepSetting"] isEqualToString:@"YES"])
+		disableScreenSleepSwitch.on = YES;
+	else
+		disableScreenSleepSwitch.on = NO;
+	
 	/*if ([[UIDevice currentDevice] isOldDevice])
 	{
 		enableSongsTabSwitch.enabled = NO;
@@ -495,6 +500,19 @@
 				[appDelegate.settingsDictionary setObject:@"YES" forKey:@"lockRotationSetting"];
 			else
 				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"lockRotationSetting"];
+		}
+		else if (sender == disableScreenSleepSwitch)
+		{
+			if (disableScreenSleepSwitch.on)
+			{
+				[appDelegate.settingsDictionary setObject:@"YES" forKey:@"disableScreenSleepSetting"];
+				[UIApplication sharedApplication].idleTimerDisabled = YES;
+			}
+			else
+			{
+				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"disableScreenSleepSetting"];
+				[UIApplication sharedApplication].idleTimerDisabled = NO;
+			}
 		}
 		
 		[[NSUserDefaults standardUserDefaults] setObject:appDelegate.settingsDictionary forKey:@"settingsDictionary"];

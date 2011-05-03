@@ -769,7 +769,7 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 			
 			errorCode = AS_FILE_STREAM_OPEN_FAILED;
 			
-			NSLog(@"Error domain = %i, err = %i", myErr.domain, myErr.error);
+			NSLog(@"Error domain = %ld, err = %ld", myErr.domain, myErr.error);
 			CFRelease(stream);
 			stream = nil;
 /*#ifdef TARGET_OS_IPHONE
@@ -854,7 +854,7 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 //
 - (void)startInternal
 {
-	//NSLog(@"------ audiostreamer startInternal called");
+	NSLog(@"------ audiostreamer startInternal called");
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
 	@synchronized(self)
@@ -920,6 +920,7 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 	{
 		// If we are playing a fixed-length MP3 make sure we are not too close to the end of the file.  This prevents us from hitting the end of the file 
 		// before it is fully downloaded.  Very useful when not on 3G since the song may be played faster than it is downloaded.
+		//NSLog(@"fileDownloadCurrentSize:  %i   (fileDownloadBytesRead + (kAQBufSize * kNumAQBufs):  %i", self.fileDownloadCurrentSize, (fileDownloadBytesRead + (kAQBufSize * kNumAQBufs)));
 		if (!fixedLength || self.fileDownloadComplete || self.fileDownloadCurrentSize > (fileDownloadBytesRead + (kAQBufSize * kNumAQBufs))) 
 		{	
 			if (isThrottling) {
@@ -951,7 +952,7 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 			isThrottling = YES;
 			
 			// Sleep for a few seconds
-			[NSThread sleepForTimeInterval:3.0];
+			[NSThread sleepForTimeInterval:1.0];
 		}
 	} 
 	while (isRunning && ![self runLoopShouldExit]);
@@ -1020,7 +1021,7 @@ cleanup:
 //
 - (void)start
 {
-	//NSLog(@"------ audiostreamer start called");
+	NSLog(@"------ audiostreamer start called");
 	@synchronized (self)
 	{
 		if (state == AS_PAUSED)

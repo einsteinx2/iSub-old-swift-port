@@ -45,23 +45,6 @@
 				<int key="NSvFlags">319</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<object class="IBUIView" id="797757711">
-						<reference key="NSNextResponder" ref="340187579"/>
-						<int key="NSvFlags">290</int>
-						<string key="NSFrame">{{57, 34}, {427, 24}}</string>
-						<reference key="NSSuperview" ref="340187579"/>
-						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="234350813"/>
-						<object class="NSColor" key="IBUIBackgroundColor">
-							<int key="NSColorSpace">3</int>
-							<bytes key="NSWhite">MQA</bytes>
-							<object class="NSColorSpace" key="NSCustomColorSpace">
-								<int key="NSID">2</int>
-							</object>
-						</object>
-						<float key="IBUIAlpha">0.40000000596046448</float>
-						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-					</object>
 					<object class="IBUISlider" id="234350813">
 						<reference key="NSNextResponder" ref="340187579"/>
 						<int key="NSvFlags">290</int>
@@ -269,7 +252,7 @@
 						<string key="NSFrame">{{11, 35}, {42, 21}}</string>
 						<reference key="NSSuperview" ref="340187579"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="797757711"/>
+						<reference key="NSNextKeyView"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -388,7 +371,6 @@
 						<string key="NSFrame">{{420, 436}, {100, 100}}</string>
 						<reference key="NSSuperview" ref="340187579"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -727,14 +709,6 @@
 					<int key="connectionID">56</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">downloadProgress</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="797757711"/>
-					</object>
-					<int key="connectionID">61</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">movingSlider</string>
 						<reference key="source" ref="234350813"/>
@@ -795,7 +769,6 @@
 							<reference ref="171759796"/>
 							<reference ref="942445207"/>
 							<reference ref="814205155"/>
-							<reference ref="797757711"/>
 							<reference ref="290200344"/>
 						</object>
 						<reference key="parent" ref="0"/>
@@ -890,11 +863,6 @@
 						<reference key="object" ref="814205155"/>
 						<reference key="parent" ref="340187579"/>
 					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">59</int>
-						<reference key="object" ref="797757711"/>
-						<reference key="parent" ref="340187579"/>
-					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -927,8 +895,6 @@
 					<string>52.IBPluginDependency</string>
 					<string>55.IBPluginDependency</string>
 					<string>55.IBViewBoundsToFrameTransform</string>
-					<string>59.IBPluginDependency</string>
-					<string>59.IBViewBoundsToFrameTransform</string>
 					<string>8.IBEditorWindowLastContentRect</string>
 					<string>8.IBPluginDependency</string>
 					<string>9.CustomClassName</string>
@@ -975,10 +941,6 @@
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
 						<bytes key="NSTransformStruct">P4AAAL+AAABDEQAAw5AAAA</bytes>
-					</object>
-					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">AUKOAABB4AAAA</bytes>
 					</object>
 					<string>{{2075, 312}, {320, 300}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>

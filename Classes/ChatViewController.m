@@ -49,6 +49,27 @@
     return YES;
 }
 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+	if (!IS_IPAD())
+	{
+		if (UIInterfaceOrientationIsPortrait(fromInterfaceOrientation))
+		{
+			CGAffineTransform translate = CGAffineTransformMakeTranslation(0.0, 42.0);
+			//CGAffineTransform scale = CGAffineTransformMakeScale(0.75, 0.75);
+			//noChatMessagesScreen.transform = CGAffineTransformConcat(translate, scale);
+			noChatMessagesScreen.transform = translate;
+		}
+		else
+		{
+			CGAffineTransform translate = CGAffineTransformMakeTranslation(0.0, -160.0);
+			//CGAffineTransform scale = CGAffineTransformMakeScale(1.0, 1.0);
+			//noChatMessagesScreen.transform = CGAffineTransformConcat(scale, translate);
+			noChatMessagesScreen.transform = translate;
+		}
+	}
+}
+
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
@@ -127,6 +148,21 @@
 		[self.view addSubview:noChatMessagesScreen];
 		
 		[noChatMessagesScreen release];
+		
+		if (!IS_IPAD())
+		{
+			if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
+			{
+				CGAffineTransform translate = CGAffineTransformMakeTranslation(0.0, 42.0);
+				CGAffineTransform scale = CGAffineTransformMakeScale(0.75, 0.75);
+				noChatMessagesScreen.transform = CGAffineTransformConcat(scale, translate);
+				//noChatMessagesScreen.transform = translate;
+				
+				//CGAffineTransform translate = CGAffineTransformTranslate(noChatMessagesScreen.transform, 0.0, 42.0);
+				//CGAffineTransform scale = CGAffineTransformScale(noChatMessagesScreen.transform, 0.75, 0.75);
+				//noChatMessagesScreen.transform = CGAffineTransformConcat(scale, translate);
+			}
+		}
 	}
 }
 

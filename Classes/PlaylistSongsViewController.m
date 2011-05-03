@@ -122,7 +122,7 @@
 	
 	NSString *urlString = [NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"getPlaylist.view"], [viewObjects.subsonicPlaylist objectAtIndex:0]];
 	NSLog(@"server playlist urlString: %@", urlString);
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:3600.0]; // Timeout set to 60 mins to prevent timeout errors
 	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
 	{
@@ -213,12 +213,10 @@
 }
 
 - (void)uploadPlaylistAction:(id)sender
-{
-	//NSMutableString *urlString = [NSMutableString stringWithFormat:@"%@?name=%@", [appDelegate getBaseUrl:@"createPlaylist.view"], self.];
-	
-	NSMutableString *urlString = [NSMutableString stringWithString:[appDelegate getBaseUrl:@"createPlaylist.view"]];
-	[urlString appendFormat:@"&name=%@", [self.title stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+{	
+	NSString *urlString = [NSString stringWithFormat:@"%@&name=%@", [appDelegate getBaseUrl:@"createPlaylist.view"], [self.title stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 
+	NSMutableString *body = [NSMutableString stringWithCapacity:0];
 	NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", self.md5];
 	NSUInteger count = [databaseControls.localPlaylistsDb intForQuery:query];
 	for (int i = 1; i <= count; i++)
@@ -227,13 +225,21 @@
 		
 		NSString *query = [NSString stringWithFormat:@"SELECT songId FROM playlist%@ WHERE ROWID = %i", self.md5, i];
 		NSString *songId = [databaseControls.localPlaylistsDb stringForQuery:query];
-		[urlString appendFormat:@"&songId=%@", songId];
+		
+		if (i == 1)
+			[body appendFormat:@"songId=%@", songId];
+		else
+			[body appendFormat:@"&songId=%@", songId];
 		
 		[pool release];
 	}
 	
-	NSLog(@"server playlist upload urlString: %@", urlString);
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString] 
+														   cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData 
+													   timeoutInterval:kLoadingTimeout];
+	[request setHTTPMethod:@"POST"];
+	[request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
+	
 	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
 	{
@@ -409,6 +415,7 @@ static NSString *kName_Error = @"error";
     static NSString *CellIdentifier = @"Cell";
 	PlaylistSongUITableViewCell *cell = [[[PlaylistSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 	cell.indexPath = indexPath;
+	cell.playlistMD5 = self.md5;
 	
 	// Set up the cell...
 	Song *aSong;

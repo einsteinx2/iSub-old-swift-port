@@ -27,13 +27,13 @@
 #endif
 
 
-/*#ifdef DEBUG
-#define BETA_VERSION @" GM 3"
+#ifdef DEBUG
+#define BETA_VERSION @" - Network code from 3.0"
 #else
 #define BETA_VERSION @""
-#endif*/
+#endif
 
-#define BETA_VERSION @""
+//#define BETA_VERSION @""
 
 // Lite version build switch
 #define IS_LITE() (false)    // DISABLE Lite version

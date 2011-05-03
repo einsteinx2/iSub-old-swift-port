@@ -43,6 +43,21 @@
     return YES;
 }
 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+	if (!IS_IPAD())
+	{
+		if (UIInterfaceOrientationIsPortrait(fromInterfaceOrientation))
+		{
+			noSongsScreen.transform = CGAffineTransformTranslate(noSongsScreen.transform, 0.0, 23.0);
+		}
+		else
+		{
+			noSongsScreen.transform = CGAffineTransformTranslate(noSongsScreen.transform, 0.0, -110.0);
+		}
+	}
+}
+
 - (void)viewDidLoad 
 {
 	[super viewDidLoad];
@@ -576,6 +591,14 @@
 		[self.view addSubview:noSongsScreen];
 		
 		[noSongsScreen release];
+		
+		if (!IS_IPAD())
+		{
+			if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
+			{
+				noSongsScreen.transform = CGAffineTransformTranslate(noSongsScreen.transform, 0.0, 23.0);
+			}
+		}
 	}
 }
 
@@ -617,7 +640,7 @@
 			if ([[result stringForColumnIndex:0] length] > 0)
 				[listOfArtists addObject:[result stringForColumnIndex:0]]; 
 		}
-
+		
 		// Sort out The El La Los Las Le Les (Subsonic default)
 		for (int i = 0; i < [listOfArtists count]; i++)
 		{
@@ -662,13 +685,13 @@
 			[pool release];
 		}
 		[listOfArtists sortUsingSelector:@selector(caseInsensitiveCompare:)];
-
+		
 		// Create the section index
 		[databaseControls.inMemoryDb executeUpdate:@"DROP TABLE cachedSongsArtistIndex"];
 		[databaseControls.inMemoryDb executeUpdate:@"CREATE TABLE cachedSongsArtistIndex (artist TEXT)"];
 		for (NSString *artist in listOfArtists)
 		{
-			[databaseControls.inMemoryDb executeUpdate:@"INSERT INTO cachedSongsArtistIndex (artist) VALUES (?)", artist];
+			[databaseControls.inMemoryDb executeUpdate:@"INSERT INTO cachedSongsArtistIndex (artist) VALUES (?)", artist, nil];
 		}
 		self.sectionInfo = nil; 
 		self.sectionInfo = [databaseControls sectionInfoFromTable:@"cachedSongsArtistIndex" 
@@ -743,7 +766,7 @@
 			}
 		}
 		
-		//NSLog(@"sectionInfo: %@", sectionInfo);
+		NSLog(@"sectionInfo: %@", sectionInfo);
 		
 		[self.tableView reloadData];
 		
