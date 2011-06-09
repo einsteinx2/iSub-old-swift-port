@@ -27,11 +27,11 @@
 #endif
 
 
-#ifdef DEBUG
-#define BETA_VERSION @" GM 4"
+/*#ifdef DEBUG
+#define BETA_VERSION @" Final"
 #else
 #define BETA_VERSION @""
-#endif
+#endif*/
 
 //#define BETA_VERSION @""
 

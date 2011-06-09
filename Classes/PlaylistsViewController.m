@@ -52,7 +52,7 @@
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-	if (!IS_IPAD())
+	if (!IS_IPAD() && isNoPlaylistsScreenShowing)
 	{
 		if (UIInterfaceOrientationIsPortrait(fromInterfaceOrientation))
 		{
@@ -134,6 +134,8 @@
 - (void)viewWillAppear:(BOOL)animated 
 {
     [super viewWillAppear:animated];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:) name:@"storePurchaseComplete" object:nil];
 	
 	if(musicControls.showPlayerIcon)
 	{
@@ -1391,6 +1393,8 @@ NSInteger playlistSort(id obj1, id obj2, void *context)
 - (void)viewWillDisappear:(BOOL)animated
 {
 	[super viewWillDisappear:animated];
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"storePurchaseComplete" object:nil];
 	
 	if (viewObjects.isEditing)
 	{

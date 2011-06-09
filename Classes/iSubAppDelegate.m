@@ -41,10 +41,20 @@
 #import "UIDevice-Hardware.h"
 #import "IntroViewController.h"
 #import "CustomUIAlertView.h"
-#import "KeychainItemWrapper.h"
 #import "HTTPServer.h"
 #import "MyHTTPConnection.h"
 #import "LocalhostAddresses.h"
+#import "SFHFKeychainUtils.h"
+#import "BWQuincyManager.h"
+#import "BWHockeyManager.h"
+
+/*#if defined (CONFIGURATION_AdHoc)
+#import "BWQuincyManager.m"
+#import "BWHockeyManager.m"
+#endif
+#if defined (CONFIGURATION_Release)
+#import "BWQuincyManager.m"
+#endif*/
 
 @implementation iSubAppDelegate
 
@@ -89,7 +99,17 @@
 #pragma mark -
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application
-{   	
+{   
+	// HockyApp Kits
+#if defined (CONFIGURATION_AdHoc)
+    [[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
+	[[BWHockeyManager sharedHockeyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
+	[[BWHockeyManager sharedHockeyManager] setAlwaysShowUpdateReminder:YES];
+#endif
+#if defined (CONFIGURATION_Release)
+    [[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb"];
+#endif
+	
 	introController = nil;
 	
 	//NSLog(@"App finish launching called");
@@ -101,14 +121,21 @@
 	{
 		[MKStoreManager sharedManager];
 		[MKStoreManager setDelegate:self];
+		
+#ifdef DEBUG
+		// Reset features
+
+		/*[SFHFKeychainUtils storeUsername:kFeaturePlaylistsId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
+		[SFHFKeychainUtils storeUsername:kFeatureJukeboxId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
+		[SFHFKeychainUtils storeUsername:kFeatureCacheId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
+		[SFHFKeychainUtils storeUsername:kFeatureAllId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];*/
+		
+		NSLog(@"is kFeaturePlaylistsId enabled: %i", [MKStoreManager isFeaturePurchased:kFeaturePlaylistsId]);
+		NSLog(@"is kFeatureJukeboxId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureJukeboxId]);
+		NSLog(@"is kFeatureCacheId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureCacheId]);
+		NSLog(@"is kFeatureAllId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureAllId]);
+#endif
 	}
-	
-	#ifdef DEBUG
-	NSLog(@"is kFeaturePlaylistsId enabled: %i", [MKStoreManager isFeaturePurchased:kFeaturePlaylistsId]);
-	NSLog(@"is kFeatureJukeboxId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureJukeboxId]);
-	NSLog(@"is kFeatureCacheId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureCacheId]);
-	NSLog(@"is kFeatureAllId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureAllId]);
-	#endif
 	
 	//
 	// Uncomment to redirect the console output to a log file
@@ -401,8 +428,7 @@
 	}
 	
 	
-	if([defaults objectForKey:@"username"] != nil &&
-	   ![[defaults objectForKey:@"username"] isEqualToString:DEFAULT_URL])
+	if([defaults objectForKey:@"username"] != nil)
 	{
 		self.defaultUrl = [defaults objectForKey:@"url"];
 		self.defaultUserName = [defaults objectForKey:@"username"];
@@ -669,6 +695,7 @@
 
 - (void)checkForUpdate
 {
+#if RELEASE
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:@"http://isubapp.com/update.xml"]];
@@ -694,6 +721,7 @@
 	}
 	
 	[autoreleasePool release];
+#endif
 }
 
 - (void)applicationWillResignActive:(UIApplication*)application
@@ -1440,7 +1468,7 @@
 
 - (void)productPurchased:(NSString *)productId
 {
-	NSString *message;
+	NSString *message = nil;
 	if ([productId isEqualToString:kFeatureAllId])
 		message = @"You may now use all of the iSub features.";
 	else if ([productId isEqualToString:kFeaturePlaylistsId])
@@ -1455,6 +1483,8 @@
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Purchase Successful!" message:message delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
 	[alert release];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"storePurchaseComplete" object:nil];
 }
 
 - (void)transactionCanceled

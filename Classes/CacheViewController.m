@@ -45,7 +45,7 @@
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-	if (!IS_IPAD())
+	if (!IS_IPAD() && isNoSongsScreenShowing)
 	{
 		if (UIInterfaceOrientationIsPortrait(fromInterfaceOrientation))
 		{
@@ -648,37 +648,21 @@
 			NSString *artist = [listOfArtists objectAtIndex:i];
 			if ([artist length] > 5)
 			{
-				if ([[[artist substringToIndex:4] lowercaseString] isEqualToString:@"the "])
+				NSString *artistPrefix = [[artist substringToIndex:4] lowercaseString];
+				if ([artistPrefix isEqualToString:@"the "] || [artistPrefix isEqualToString:@"los "] ||
+					[artistPrefix isEqualToString:@"las "] || [artistPrefix isEqualToString:@"les "])
 				{
-					artist = [NSString stringWithFormat:@"%@, The", [artist substringFromIndex:4]];
-				}
-				else if ([[[artist substringToIndex:4] lowercaseString] isEqualToString:@"los "])
-				{
-					artist = [NSString stringWithFormat:@"%@, Los", [artist substringFromIndex:4]];
-				}
-				else if ([[[artist substringToIndex:4] lowercaseString] isEqualToString:@"las "])
-				{
-					artist = [NSString stringWithFormat:@"%@, Las", [artist substringFromIndex:4]];
-				}
-				else if ([[[artist substringToIndex:4] lowercaseString] isEqualToString:@"les "])
-				{
-					artist = [NSString stringWithFormat:@"%@, Les", [artist substringFromIndex:4]];
+					artist = [NSString stringWithFormat:@"%@, %@", [artist substringFromIndex:4], [artist substringToIndex:3]];
 				}
 				[listOfArtists replaceObjectAtIndex:i withObject:artist];
 			}
 			else if ([artist length] > 4)
 			{
-				if ([[[artist substringToIndex:3] lowercaseString] isEqualToString:@"el "])
+				NSString *artistPrefix = [[artist substringToIndex:4] lowercaseString];
+				if ([artistPrefix isEqualToString:@"el "] || [artistPrefix isEqualToString:@"la "] ||
+					[artistPrefix isEqualToString:@"le "])
 				{
-					artist = [NSString stringWithFormat:@"%@, El", [artist substringFromIndex:3]];
-				}
-				else if ([[[artist substringToIndex:3] lowercaseString] isEqualToString:@"la "])
-				{
-					artist = [NSString stringWithFormat:@"%@, La", [artist substringFromIndex:3]];
-				}
-				else if ([[[artist substringToIndex:3] lowercaseString] isEqualToString:@"le "])
-				{
-					artist = [NSString stringWithFormat:@"%@, Le", [artist substringFromIndex:3]];
+					artist = [NSString stringWithFormat:@"%@, %@", [artist substringFromIndex:3], [artist substringToIndex:2]];
 				}
 				[listOfArtists replaceObjectAtIndex:i withObject:artist];
 			}
@@ -738,11 +722,9 @@
 				
 				if (length > 6)
 				{
-					NSString *substring5 = [artist substringFromIndex:length - 5];
-					if ([substring5 isEqualToString:@", The"] ||
-						[substring5 isEqualToString:@", Los"] ||
-						[substring5 isEqualToString:@", Las"] ||
-						[substring5 isEqualToString:@", Les"])
+					NSString *substring5 = [[artist substringFromIndex:length - 5] lowercaseString];
+					if ([substring5 isEqualToString:@", the"] || [substring5 isEqualToString:@", los"] ||
+						[substring5 isEqualToString:@", las"] || [substring5 isEqualToString:@", les"])
 					{
 						artist = [NSString stringWithFormat:@"%@ %@", 
 								  [artist substringFromIndex:length - 3], 
@@ -751,10 +733,9 @@
 				}
 				else if (length > 5)
 				{
-					NSString *substring4 = [artist substringFromIndex:length - 4];
-					if ([substring4 isEqualToString:@", Le"] ||
-						[substring4 isEqualToString:@", El"] ||
-						[substring4 isEqualToString:@", La"])
+					NSString *substring4 = [[artist substringFromIndex:length - 4] lowercaseString];
+					if ([substring4 isEqualToString:@", le"] || [substring4 isEqualToString:@", el"] ||
+						[substring4 isEqualToString:@", la"])
 					{
 						artist = [NSString stringWithFormat:@"%@ %@", 
 								  [artist substringFromIndex:length - 2], 
@@ -817,6 +798,8 @@
 {	
 	[super viewWillAppear:animated];
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:) name:@"storePurchaseComplete" object:nil];
+	
 	self.tableView.scrollEnabled = YES;
 	[jukeboxInputBlocker removeFromSuperview];
 	jukeboxInputBlocker = nil;
@@ -858,13 +841,17 @@
 	{
 		self.tableView.tableHeaderView.hidden = YES;
 		[self addNoSongsScreen];
+		
+		firstLoad = NO;
 	}
 }
 
 
 -(void)viewWillDisappear:(BOOL)animated
 {
+	[super viewWillDisappear:animated];
 	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"storePurchaseComplete" object:nil];
 }
 
 

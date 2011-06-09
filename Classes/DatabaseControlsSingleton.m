@@ -247,6 +247,46 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	[bookmarksDb close]; self.bookmarksDb = nil;
 }
 
+- (void) resetCoverArtCache
+{
+	// Clear the table cell cover art
+	[coverArtCacheDb60 close]; self.coverArtCacheDb60 = nil;
+	[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/coverArtCache60.db", databaseFolderPath] error:NULL];
+	
+	coverArtCacheDb60 = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/coverArtCache60.db", databaseFolderPath]] retain];
+	[coverArtCacheDb60 executeUpdate:@"PRAGMA cache_size = 1"];
+	if ([coverArtCacheDb60 open] == NO) { NSLog(@"Could not open coverArtCacheDb60."); }
+	if ([coverArtCacheDb60 tableExists:@"coverArtCache"] == NO) {
+		[coverArtCacheDb60 executeUpdate:@"CREATE TABLE coverArtCache (id TEXT PRIMARY KEY, data BLOB)"];
+	}
+	
+	// Clear the player cover art
+	if (IS_IPAD())
+	{
+		[coverArtCacheDb540 close]; self.coverArtCacheDb540 = nil;
+		[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/coverArtCache540.db", databaseFolderPath] error:NULL];
+
+		coverArtCacheDb540 = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/coverArtCache540.db", databaseFolderPath]] retain];
+		[coverArtCacheDb540 executeUpdate:@"PRAGMA cache_size = 1"];
+		if ([coverArtCacheDb540 open] == NO) { NSLog(@"Could not open coverArtCacheDb540."); }
+		if ([coverArtCacheDb540 tableExists:@"coverArtCache"] == NO) {
+			[coverArtCacheDb540 executeUpdate:@"CREATE TABLE coverArtCache (id TEXT PRIMARY KEY, data BLOB)"];
+		}
+	}
+	else
+	{
+		[coverArtCacheDb320 close]; self.coverArtCacheDb320 = nil;
+		[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/coverArtCache320.db", databaseFolderPath] error:NULL];
+		
+		coverArtCacheDb320 = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/coverArtCache320.db", databaseFolderPath]] retain];
+		[coverArtCacheDb320 executeUpdate:@"PRAGMA cache_size = 1"];
+		if ([coverArtCacheDb320 open] == NO) { NSLog(@"Could not open coverArtCacheDb320."); }
+		if ([coverArtCacheDb320 tableExists:@"coverArtCache"] == NO) {
+			[coverArtCacheDb320 executeUpdate:@"CREATE TABLE coverArtCache (id TEXT PRIMARY KEY, data BLOB)"];
+		}
+	}
+}
+
 - (void) resetLocalPlaylistsDb
 {
 	[localPlaylistsDb close]; self.localPlaylistsDb = nil;

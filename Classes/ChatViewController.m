@@ -51,7 +51,7 @@
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-	if (!IS_IPAD())
+	if (!IS_IPAD() && isNoChatMessagesScreenShowing)
 	{
 		if (UIInterfaceOrientationIsPortrait(fromInterfaceOrientation))
 		{

@@ -498,46 +498,36 @@ static NSString *kName_Error = @"error";
 	{
 		[musicControls destroyStreamer];
 		
-		/*if (viewObjects.isLocalPlaylist)
-		{
-			musicControls.currentSongObject = nil; musicControls.currentSongObject = [databaseControls songFromDbRow:indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", self.md5] inDatabase:databaseControls.localPlaylistsDb];
-			musicControls.nextSongObject = nil; musicControls.nextSongObject = [databaseControls songFromDbRow:(indexPath.row + 1) inTable:[NSString stringWithFormat:@"playlist%@", self.md5] inDatabase:databaseControls.localPlaylistsDb];
-		}
+		// Clear the current playlist
+		if (!viewObjects.isJukebox)
+			[databaseControls resetJukeboxPlaylist];
 		else
-		{
-			musicControls.currentSongObject = nil; musicControls.currentSongObject = [viewObjects.listOfPlaylistSongs objectAtIndex:indexPath.row];
-			musicControls.nextSongObject = nil; musicControls.nextSongObject = [viewObjects.listOfPlaylistSongs objectAtIndex:(indexPath.row + 1)];
-		}*/
-		
-		[databaseControls resetCurrentPlaylistDb];
+			[databaseControls resetCurrentPlaylistDb];
 		
 		if (viewObjects.isLocalPlaylist)
 		{			
 			[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [NSString md5:appDelegate.defaultUrl]], @"currentPlaylistDb"];
 			if ([databaseControls.localPlaylistsDb hadError]) { NSLog(@"Err attaching the localPlaylistsDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
-			[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", self.md5]];
+			if (viewObjects.isJukebox)
+				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO jukeboxCurrentPlaylist SELECT * FROM playlist%@", self.md5]];
+			else
+				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", self.md5]];
 			[databaseControls.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 		}
 		else
 		{
-			/*for (Song *aSong in viewObjects.listOfPlaylistSongs)
-			{
-				[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO currentPlaylist (title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
-			}*/
-			
-			/*NSLog(@"ATTACH DATABASE \"%@\" AS serverPlaylistsDb", [NSString stringWithFormat:@"%@/%@serverPlaylists.db", databaseControls.databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]);
-			[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@serverPlaylists.db", databaseControls.databaseFolderPath, [NSString md5:appDelegate.defaultUrl]], @"serverPlaylistsDb"];
-			if ([databaseControls.localPlaylistsDb hadError]) { NSLog(@"Err attaching the serverPlaylistsDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
-			NSLog(@"count: %i", [databaseControls.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", self.md5]]);
-			
-			[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", self.md5]];
-			NSLog(@"%@", [NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", self.md5]);
-			[databaseControls.localPlaylistsDb executeUpdate:@"DETACH DATABASE serverPlaylistsDb"];*/
-			
 			[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [NSString md5:appDelegate.defaultUrl]], @"currentPlaylistDb"];
 			if ([databaseControls.localPlaylistsDb hadError]) { NSLog(@"Err attaching the localPlaylistsDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
-			[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM splaylist%@", self.md5]];
+			if (viewObjects.isJukebox)
+				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO jukeboxCurrentPlaylist SELECT * FROM splaylist%@", self.md5]];
+			else
+				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM splaylist%@", self.md5]];
 			[databaseControls.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
+		}
+		
+		if (viewObjects.isJukebox)
+		{
+			[musicControls jukeboxReplacePlaylistWithLocal];
 		}
 		
 		musicControls.currentPlaylistPosition = indexPath.row;

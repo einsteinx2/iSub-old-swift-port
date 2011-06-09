@@ -318,6 +318,8 @@
 		// Add the tab bar controller back to the window
 		if (!IS_IPAD())
 			[appDelegate.window addSubview:[appDelegate.mainTabBarController view]];
+		
+		appDelegate.window.backgroundColor = viewObjects.windowColor;
 	}
 }
 

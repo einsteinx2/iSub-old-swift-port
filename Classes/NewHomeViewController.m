@@ -173,6 +173,47 @@
 	
 	viewObjects.isSettingsShowing = NO;
 	
+	//////////// Handle landscape bug
+	BOOL rotationDisabled = [[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"];
+	
+	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && !rotationDisabled)
+	{
+		if (!IS_IPAD())
+		{
+			quickLabel.alpha = 1.0;
+			shuffleLabel.alpha = 1.0;
+			jukeboxLabel.alpha = 1.0;
+			settingsLabel.alpha = 1.0;
+			chatLabel.alpha = 1.0;
+			playerLabel.alpha = 1.0;
+			
+			coverArtBorder.alpha = 1.0;
+			coverArtView.alpha = 1.0;
+			artistLabel.alpha = 1.0;
+			albumLabel.alpha = 1.0;
+			songLabel.alpha = 1.0;
+		}
+	}
+	else if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation) && !rotationDisabled)
+	{
+		if (!IS_IPAD())
+		{
+			quickLabel.alpha = 0.0;
+			shuffleLabel.alpha = 0.0;
+			jukeboxLabel.alpha = 0.0;
+			settingsLabel.alpha = 0.0;
+			chatLabel.alpha = 0.0;
+			playerLabel.alpha = 0.0;
+			
+			coverArtBorder.alpha = 0.0;
+			coverArtView.alpha = 0.0;
+			artistLabel.alpha = 0.0;
+			albumLabel.alpha = 0.0;
+			songLabel.alpha = 0.0;
+		}
+	}
+	////////////////
+	
 	/*if (UIInterfaceOrientationIsPortrait([UIDevice currentDevice].orientation))
 	{
 		if (!IS_IPAD())

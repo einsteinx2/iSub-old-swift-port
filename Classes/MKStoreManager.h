@@ -23,6 +23,8 @@
 #import <StoreKit/StoreKit.h>
 #import "MKStoreObserver.h"
 
+#define kServiceName @"Features"
+
 // CONFIGURATION STARTS -- Change this in your app
 #define kConsumableBaseFeatureId @"com.einsteinx2.isublite."
 #define kFeaturePlaylistsId @"com.einsteinx2.isublite.playlistUnlock"
@@ -45,15 +47,12 @@
 // use this only to "enable/disable your UI or hide your activity indicator view etc.,
 @end
 
-@class KeychainItemWrapper;
 @interface MKStoreManager : NSObject<SKProductsRequestDelegate> {
 
 	NSMutableArray *_purchasableObjects;
 	MKStoreObserver *_storeObserver;
 	
-	BOOL isProductsAvailable;
-	
-	KeychainItemWrapper *keychainWrapper;
+	BOOL isProductsAvailable;	
 }
 
 @property (nonatomic, retain) NSMutableArray *purchasableObjects;

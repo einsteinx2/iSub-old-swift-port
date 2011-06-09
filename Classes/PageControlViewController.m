@@ -65,7 +65,7 @@
     [controllers release];
 	
 	// a page is the width of the scroll view
-	NSLog(@"scrollview.frame: %@  scrollview.bounds: %@  view.frame: %@   view.bounds: %@", NSStringFromCGRect(scrollView.frame), NSStringFromCGRect(scrollView.bounds), NSStringFromCGRect(self.view.frame), NSStringFromCGRect(self.view.bounds));
+	//NSLog(@"scrollview.frame: %@  scrollview.bounds: %@  view.frame: %@   view.bounds: %@", NSStringFromCGRect(scrollView.frame), NSStringFromCGRect(scrollView.bounds), NSStringFromCGRect(self.view.frame), NSStringFromCGRect(self.view.bounds));
     scrollView.pagingEnabled = YES;
 	CGSize contentSize;
 	if (IS_IPAD())
@@ -73,7 +73,7 @@
 	else
 		contentSize = CGSizeMake(scrollView.bounds.size.width * numberOfPages, scrollView.bounds.size.height - 20);
     scrollView.contentSize = contentSize;
-	NSLog(@"scrollView.contentSize: %@", NSStringFromCGSize(scrollView.contentSize));
+	//NSLog(@"scrollView.contentSize: %@", NSStringFromCGSize(scrollView.contentSize));
     scrollView.showsHorizontalScrollIndicator = NO;
     scrollView.showsVerticalScrollIndicator = NO;
     scrollView.scrollsToTop = NO;

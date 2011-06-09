@@ -814,6 +814,10 @@ static void	ReadStreamClientCallBackTemp( CFReadStreamRef stream, CFStreamEventT
 		CFReadStreamSetProperty(readStreamRefA, kCFStreamPropertySSLSettings, sslSettings);
 	}
 	
+	// Handle proxy
+	CFDictionaryRef proxyDict = CFNetworkCopySystemProxySettings();
+	CFReadStreamSetProperty(readStreamRefA, kCFStreamPropertyHTTPProxy, proxyDict);
+	
 	// Set the client notifier
 	if (CFReadStreamSetClient(readStreamRefA, kNetworkEvents, ReadStreamClientCallBackA, &ctxt) == false)
 		goto Bail;
@@ -895,6 +899,10 @@ Bail:
 		
 		CFReadStreamSetProperty(readStreamRefB, kCFStreamPropertySSLSettings, sslSettings);
 	}
+	
+	// Handle proxy
+	CFDictionaryRef proxyDict = CFNetworkCopySystemProxySettings();
+	CFReadStreamSetProperty(readStreamRefB, kCFStreamPropertyHTTPProxy, proxyDict);
 	
 	// Set the client notifier
 	if (CFReadStreamSetClient(readStreamRefB, kNetworkEvents, ReadStreamClientCallBackB, &ctxt) == false)
@@ -980,6 +988,10 @@ Bail:
 		
 		CFReadStreamSetProperty(readStreamRefA, kCFStreamPropertySSLSettings, sslSettings);
 	}
+	
+	// Handle proxy
+	CFDictionaryRef proxyDict = CFNetworkCopySystemProxySettings();
+	CFReadStreamSetProperty(readStreamRefA, kCFStreamPropertyHTTPProxy, proxyDict);
 	
 	// Set the client notifier
 	if (CFReadStreamSetClient(readStreamRefA, kNetworkEvents, ReadStreamClientCallBackTemp, &ctxt) == false)

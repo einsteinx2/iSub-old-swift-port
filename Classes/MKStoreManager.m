@@ -49,7 +49,7 @@
 //
 
 #import "MKStoreManager.h"
-#import "KeychainItemWrapper.h"
+#import "SFHFKeychainUtils.h"
 
 @interface MKStoreManager (PrivateMethods)
 
@@ -199,10 +199,15 @@ static MKStoreManager* _sharedStoreManager;
 // call this function to check if the user has already purchased your feature
 + (BOOL) isFeaturePurchased:(NSString*) featureId
 {
-	KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:featureId accessGroup:nil];
-	BOOL isPurchased = [[wrapper objectForKey:(id)kSecAttrAccount] boolValue];
-	[wrapper release];
-	
+	NSString *value = [SFHFKeychainUtils getPasswordForUsername:featureId 
+												 andServiceName:kServiceName 
+														  error:nil];
+	BOOL isPurchased = NO;
+	if (value)
+	{
+		isPurchased = [value boolValue];
+	}
+
 	return isPurchased;
 }
 
@@ -272,41 +277,59 @@ static MKStoreManager* _sharedStoreManager;
 
 - (BOOL) canConsumeProduct:(NSString*) productIdentifier
 {
-	KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:productIdentifier accessGroup:nil];
-	int count = [[wrapper objectForKey:(id)kSecAttrAccount] intValue];
-	[wrapper release];
-	
+	NSString *value = [SFHFKeychainUtils getPasswordForUsername:productIdentifier 
+												 andServiceName:kServiceName 
+														  error:nil];
+	int count = 0;
+	if (value)
+	{
+		count = [value intValue];
+	}
+
 	return (count > 0);
-	
 }
 
 - (BOOL) canConsumeProduct:(NSString*) productIdentifier quantity:(int) quantity
 {
-	KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:productIdentifier accessGroup:nil];
-	int count = [[wrapper objectForKey:(id)kSecAttrAccount] intValue];
-	[wrapper release];
+	NSString *value = [SFHFKeychainUtils getPasswordForUsername:productIdentifier 
+												 andServiceName:kServiceName 
+														  error:nil];
+	int count = 0;
+	if (value)
+	{
+		count = [value intValue];
+	}
 	
 	return (count >= quantity);
 }
 
 - (BOOL) consumeProduct:(NSString*) productIdentifier quantity:(int) quantity
 {
-	KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:productIdentifier accessGroup:nil];
-	int count = [[wrapper objectForKey:(id)kSecAttrAccount] intValue];
-	
-	if(count < quantity)
+	NSString *value = [SFHFKeychainUtils getPasswordForUsername:productIdentifier 
+												 andServiceName:kServiceName 
+														  error:nil];
+	int count = 0;
+	if (value)
 	{
-		[wrapper release];
-		return NO;
-	}
-	else 
-	{
-		count -= quantity;
-		[wrapper setObject:[NSString stringWithFormat:@"%i", count] forKey:productIdentifier];
-		[wrapper release];
-		return YES;
+		count = [value intValue];
+		
+		if(count < quantity)
+		{
+			return NO;
+		}
+		else 
+		{
+			count -= quantity;
+			[SFHFKeychainUtils storeUsername:productIdentifier 
+								 andPassword:[NSString stringWithFormat:@"%i", count]
+							  forServiceName:kServiceName 
+							  updateExisting:YES 
+									   error:nil];
+			return YES;
+		}
 	}
 	
+	return NO;
 }
 
 -(void) enableContentForThisSession: (NSString*) productIdentifier
@@ -331,21 +354,36 @@ static MKStoreManager* _sharedStoreManager;
 
 	NSRange range = [productIdentifier rangeOfString:kConsumableBaseFeatureId];		
 	NSString *countText = [productIdentifier substringFromIndex:range.location+[kConsumableBaseFeatureId length]];
-	
-	KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:productIdentifier accessGroup:nil];
+
 	int quantityPurchased = [countText intValue];
+	
 	if(quantityPurchased != 0)
 	{
-		int count = [[wrapper objectForKey:(id)kSecAttrAccount] intValue];
-		count += quantityPurchased;	
-		[wrapper setObject:[NSString stringWithFormat:@"%i", count] forKey:productIdentifier];		
+		NSString *value = [SFHFKeychainUtils getPasswordForUsername:productIdentifier 
+													 andServiceName:kServiceName 
+															  error:nil];
+		int count = 0;
+		if (value)
+		{
+			count = [value intValue];
+			count += quantityPurchased;	
+			
+			[SFHFKeychainUtils storeUsername:productIdentifier 
+								 andPassword:[NSString stringWithFormat:@"%i", count]
+							  forServiceName:kServiceName 
+							  updateExisting:YES 
+									   error:nil];
+		}
 	}
 	else 
 	{
-		[wrapper setObject:@"YES" forKey:(id)kSecAttrAccount];
+		[SFHFKeychainUtils storeUsername:productIdentifier 
+							 andPassword:@"YES"
+						  forServiceName:kServiceName 
+						  updateExisting:YES 
+								   error:nil];
 	}
-	[wrapper release];
-
+	
 	if([_delegate respondsToSelector:@selector(productPurchased:)])
 		[_delegate productPurchased:productIdentifier];	
 }

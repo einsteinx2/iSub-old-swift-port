@@ -1750,7 +1750,7 @@ static MusicControlsSingleton *sharedInstance = nil;
 			[urlString appendString:songId];
 		}
 		
-		//NSLog(@"jukeboxAddSongs urlString: %@", urlString);
+		NSLog(@"jukeboxAddSongs urlString: %@", urlString);
 		
 		JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
 		

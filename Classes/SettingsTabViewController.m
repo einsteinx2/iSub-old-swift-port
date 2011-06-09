@@ -63,8 +63,13 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTwitterUIElements) name:@"twitterAuthenticated" object:nil];
 	
 	// Set version label
-	NSString* version = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
-	versionLabel.text = [NSString stringWithFormat:@"iSub version %@%@", version, BETA_VERSION];
+	NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+	NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
+#if DEBUG
+	versionLabel.text = [NSString stringWithFormat:@"iSub version %@ build %@", build, version];
+#else
+	versionLabel.text = [NSString stringWithFormat:@"iSub version %@", version];
+#endif
 	
 	// Main Settings
 	if ([[appDelegate.settingsDictionary objectForKey:@"enableScrobblingSetting"] isEqualToString:@"YES"])

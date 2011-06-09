@@ -81,6 +81,7 @@
 - (BOOL) removeSongFromCacheDb:(NSString *)md5;
 
 - (void) closeAllDatabases;
+- (void) resetCoverArtCache;
 - (void) resetLocalPlaylistsDb;
 - (void) resetCurrentPlaylistDb;
 - (void) resetShufflePlaylist;

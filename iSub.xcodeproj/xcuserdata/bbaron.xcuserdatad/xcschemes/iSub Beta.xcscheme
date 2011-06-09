@@ -13,9 +13,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
-               BuildableName = "iSub.app"
-               BlueprintName = "iSub"
+               BlueprintIdentifier = "53BC269F139AF0DD00A825F1"
+               BuildableName = "iSub Beta.app"
+               BlueprintName = "iSub Beta"
                ReferencedContainer = "container:iSub.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,13 +28,6 @@
       buildConfiguration = "Debug">
       <Testables>
       </Testables>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "NSZombieEnabled"
-            value = "YES"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
    </TestAction>
    <LaunchAction
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.GDB"
@@ -47,19 +40,12 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
-            BuildableName = "iSub.app"
-            BlueprintName = "iSub"
+            BlueprintIdentifier = "53BC269F139AF0DD00A825F1"
+            BuildableName = "iSub Beta.app"
+            BlueprintName = "iSub Beta"
             ReferencedContainer = "container:iSub.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "NSZombieEnabled"
-            value = "YES"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -73,19 +59,12 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
-            BuildableName = "iSub.app"
-            BlueprintName = "iSub"
+            BlueprintIdentifier = "53BC269F139AF0DD00A825F1"
+            BuildableName = "iSub Beta.app"
+            BlueprintName = "iSub Beta"
             ReferencedContainer = "container:iSub.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "NSZombieEnabled"
-            value = "YES"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

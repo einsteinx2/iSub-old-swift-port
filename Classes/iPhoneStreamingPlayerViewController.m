@@ -72,6 +72,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {
 	musicControls.songUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], [musicControls.currentSongObject songId]]];
 	
+	if([[appDelegate.settingsDictionary objectForKey:@"autoPlayerInfoSetting"] isEqualToString:@"YES"])
+	{
+		[self songInfoToggle:nil];
+	}
+	
 	[self initSongInfo];
 	
 	if (viewObjects.isJukebox)
@@ -123,10 +128,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	reflectionView.image = [self reflectedImage:coverArtImageView withHeight:reflectionHeight];
 	reflectionView.alpha = kDefaultReflectionOpacity;
 	
-	if([[appDelegate.settingsDictionary objectForKey:@"autoPlayerInfoSetting"] isEqualToString:@"YES"])
-	{
-		[self songInfoToggle:nil];
-	}
+	if (isFlipped)
+		reflectionView.alpha = 0.0;
 }
 
 - (void)viewDidLoad
@@ -415,6 +418,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			
 		if ([coverArtCache intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:musicControls.currentSongObject.coverArtId]] == 1)
 		{
+			NSLog(@"Cover Art Found!!");
 			NSData *imageData = [coverArtCache dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [NSString md5:musicControls.currentSongObject.coverArtId]];
 			if (appDelegate.isHighRez)
 			{
@@ -428,20 +432,12 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			{
 				coverArtImageView.image = [UIImage imageWithData:imageData];
 			}
+			
+			[self createReflection];
 		}
 		else 
 		{
-			/*musicControls.coverArtUrl = nil;
-			if (appDelegate.isHighRez)
-			{
-				musicControls.coverArtUrl = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@%@&size=640", [appDelegate getBaseUrl:@"getCoverArt.view"], musicControls.currentSongObject.coverArtId]];
-			}
-			else
-			{	
-				musicControls.coverArtUrl = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@%@&size=320", [appDelegate getBaseUrl:@"getCoverArt.view"], musicControls.currentSongObject.coverArtId]];
-			}
-			NSLog(@"covertArt URL: %@", [musicControls.coverArtUrl absoluteString]);
-			[coverArtImageView loadImageFromURLString:[musicControls.coverArtUrl absoluteString]];*/
+			NSLog(@"No Cover Art Found, LOADING");
 			[coverArtImageView loadImageFromCoverArtId:musicControls.currentSongObject.coverArtId isForPlayer:YES];
 		}
 	}
@@ -451,18 +447,16 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			coverArtImageView.image = [UIImage imageNamed:@"default-album-art-ipad.png"];
 		else
 			coverArtImageView.image = [UIImage imageNamed:@"default-album-art.png"];
+		
+		[self createReflection];
 	}
 	
 	// Update the icon in top right
 	if (isFlipped)
+	{
+		NSLog(@"Updating the top right button");
 		[self updateBarButtonImage];
-	
-	// create the reflection image and assign it to the UIImageView
-	reflectionView.image = [self reflectedImage:coverArtImageView withHeight:reflectionHeight];
-	if (isFlipped)
-		reflectionView.alpha = 0.0;
-	else
-		reflectionView.alpha = kDefaultReflectionOpacity;
+	}
 	
 	artistLabel.text = [musicControls currentSongObject].artist;
 	albumLabel.text = [musicControls currentSongObject].album;
@@ -513,6 +507,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		UIGraphicsBeginImageContextWithOptions(CGSizeMake(30.0, 30.0), NO, 0.0);
 	else
 		UIGraphicsBeginImageContext(CGSizeMake(30.0, 30.0));
+	NSLog(@"coverArtImageView.image: %@", coverArtImageView.image);
 	[coverArtImageView.image drawInRect:CGRectMake(0, 0,30.0, 30.0)];
 	UIImage *cover = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
@@ -624,7 +619,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 #pragma mark Image Reflection
 
-CGImageRef CreateGradientImage(int pixelsWide, int pixelsHigh)
+CGImageRef CreateGradientImagePlayer(int pixelsWide, int pixelsHigh)
 {
 	CGImageRef theCGImage = NULL;
 	
@@ -660,7 +655,7 @@ CGImageRef CreateGradientImage(int pixelsWide, int pixelsHigh)
     return theCGImage;
 }
 
-CGContextRef MyCreateBitmapContext(int pixelsWide, int pixelsHigh)
+CGContextRef MyCreateBitmapContextPlayer(int pixelsWide, int pixelsHigh)
 {
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 	
@@ -680,12 +675,12 @@ CGContextRef MyCreateBitmapContext(int pixelsWide, int pixelsHigh)
 		return nil;
     
 	// create a bitmap graphics context the size of the image
-	CGContextRef mainViewContentContext = MyCreateBitmapContext(fromImage.bounds.size.width, height);
+	CGContextRef mainViewContentContext = MyCreateBitmapContextPlayer(fromImage.bounds.size.width, height);
 	
 	// create a 2 bit CGImage containing a gradient that will be used for masking the 
 	// main view content to create the 'fade' of the reflection.  The CGImageCreateWithMask
 	// function will stretch the bitmap image as required, so we can create a 1 pixel wide gradient
-	CGImageRef gradientMaskImage = CreateGradientImage(1, height);
+	CGImageRef gradientMaskImage = CreateGradientImagePlayer(1, height);
 	
 	// create an image by masking the bitmap of the mainView content with the gradient view
 	// then release the  pre-masked content bitmap and the gradient bitmap
@@ -715,9 +710,17 @@ CGContextRef MyCreateBitmapContext(int pixelsWide, int pixelsHigh)
 
 - (void)createReflection
 {
-	// create the reflection image and assign it to the UIImageView
-	reflectionView.image = [self reflectedImage:coverArtImageView withHeight:reflectionHeight];
-	reflectionView.alpha = kDefaultReflectionOpacity;
+	if (isFlipped)
+	{
+		[self updateBarButtonImage];
+	}
+	else
+	{
+		NSLog(@"It's not flipped, creating the reflection");
+		// create the reflection image and assign it to the UIImageView
+		reflectionView.image = [self reflectedImage:coverArtImageView withHeight:reflectionHeight];
+		reflectionView.alpha = kDefaultReflectionOpacity;
+	}
 }
 
 
