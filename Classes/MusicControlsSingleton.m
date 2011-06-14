@@ -668,7 +668,7 @@ static MusicControlsSingleton *sharedInstance = nil;
 				// Start the download
 				NSURLConnectionDelegateQueue *connDelegateQueue = [[NSURLConnectionDelegateQueue alloc] init];
 				NSURLRequest *downloadRequestQueue = [NSURLRequest requestWithURL:queueSongUrl cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:kLoadingTimeout];	
-				downloadQueue = [[NSURLConnection alloc] initWithRequest:downloadRequestQueue delegate:connDelegateQueue];
+				self.downloadQueue = [NSURLConnection connectionWithRequest:downloadRequestQueue delegate:connDelegateQueue];
 				[connDelegateQueue release];
 			}
 			else 
@@ -716,12 +716,12 @@ static MusicControlsSingleton *sharedInstance = nil;
 			
 			// Create new file on disk
 			[[NSFileManager defaultManager] createFileAtPath:downloadFileNameQueue contents:[NSData data] attributes:nil];
-			self.audioFileQueue = [[NSFileHandle fileHandleForWritingAtPath:downloadFileNameQueue] retain];
+			self.audioFileQueue = [NSFileHandle fileHandleForWritingAtPath:downloadFileNameQueue];
 			
 			// Start the download
 			NSURLConnectionDelegateQueue *connDelegateQueue = [[NSURLConnectionDelegateQueue alloc] init];
 			NSURLRequest *downloadRequestQueue = [NSURLRequest requestWithURL:queueSongUrl cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:kLoadingTimeout];	
-			self.downloadQueue = [[NSURLConnection alloc] initWithRequest:downloadRequestQueue delegate:connDelegateQueue];	
+			self.downloadQueue = [NSURLConnection connectionWithRequest:downloadRequestQueue delegate:connDelegateQueue];
 			[connDelegateQueue release];
 		}
 	}
@@ -736,7 +736,7 @@ static MusicControlsSingleton *sharedInstance = nil;
 		NSMutableURLRequest *downloadRequestQueue = [NSMutableURLRequest requestWithURL:queueSongUrl cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:kLoadingTimeout];	
 		NSString *range = [NSString stringWithFormat:@"bytes=%i-", byteOffset];
 		[downloadRequestQueue setValue:range forHTTPHeaderField:@"Range"];
-		self.downloadQueue = [[NSURLConnection alloc] initWithRequest:downloadRequestQueue delegate:connDelegateQueue];	
+		self.downloadQueue = [NSURLConnection connectionWithRequest:downloadRequestQueue delegate:connDelegateQueue];
 		[connDelegateQueue release];		
 	}
 }

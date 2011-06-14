@@ -113,7 +113,8 @@
 	
 	// Automatically set the width based on the width of the text
 	artistNameLabel.frame = CGRectMake(0, 0, 280, 44);
-	CGSize expectedLabelSize = [artistNameLabel.text sizeWithFont:artistNameLabel.font constrainedToSize:CGSizeMake(1000,44) lineBreakMode:artistNameLabel.lineBreakMode]; 
+	CGSize expectedLabelSize = [artistNameLabel.text sizeWithFont:artistNameLabel.font constrainedToSize:CGSizeMake(1000,44) lineBreakMode:artistNameLabel.lineBreakMode];
+	NSLog(@"%@: size: %@", artistNameLabel.text, NSStringFromCGSize(expectedLabelSize));
 	
 	if (expectedLabelSize.width > 280)
 	{
@@ -228,12 +229,11 @@
 				
 				if (artistNameLabel.frame.size.width > artistNameScrollView.frame.size.width)
 				{
-					[artistNameScrollView setContentOffset:CGPointMake(artistNameLabel.frame.size.width - artistNameScrollView.frame.size.width, 0) animated:YES];
 					[UIView beginAnimations:@"scroll" context:nil];
 					[UIView setAnimationDelegate:self];
 					[UIView setAnimationDidStopSelector:@selector(textScrollingStopped)];
 					[UIView setAnimationDuration:artistNameLabel.frame.size.width/(float)150];
-					artistNameScrollView.contentOffset = CGPointMake(artistNameLabel.frame.size.width - artistNameScrollView.frame.size.width, 0);
+					artistNameScrollView.contentOffset = CGPointMake(artistNameLabel.frame.size.width - artistNameScrollView.frame.size.width + 10, 0);
 					[UIView commitAnimations];
 				}
 				

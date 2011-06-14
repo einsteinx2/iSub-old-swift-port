@@ -310,12 +310,11 @@
 				
 				if (artistNameLabel.frame.size.width > artistNameScrollView.frame.size.width)
 				{
-					[artistNameScrollView setContentOffset:CGPointMake(artistNameLabel.frame.size.width - artistNameScrollView.frame.size.width, 0) animated:YES];
 					[UIView beginAnimations:@"scroll" context:nil];
 					[UIView setAnimationDelegate:self];
 					[UIView setAnimationDidStopSelector:@selector(textScrollingStopped)];
 					[UIView setAnimationDuration:artistNameLabel.frame.size.width/(float)150];
-					artistNameScrollView.contentOffset = CGPointMake(artistNameLabel.frame.size.width - artistNameScrollView.frame.size.width, 0);
+					artistNameScrollView.contentOffset = CGPointMake(artistNameLabel.frame.size.width - artistNameScrollView.frame.size.width + 10, 0);
 					[UIView commitAnimations];
 				}
 				

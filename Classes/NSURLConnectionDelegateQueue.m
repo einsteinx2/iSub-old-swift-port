@@ -76,7 +76,10 @@
 	NSLog(@"didFailWithError, resuming download");
 	[musicControls resumeDownloadQueue:musicControls.downloadedLengthQueue];
 	
-	[theConnection release];
+	// Had to comment this out to fix an EXC_BAD_ACCESS crash, 
+	// don't have any idea why this is necessary and isn't causing leaks
+	// The NSURLConnection seemingly isn't being released anywhere, but yet it is
+	//[theConnection release];
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
@@ -150,7 +153,7 @@
 				NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:delegate];
 				if (connection)
 				{
-					delegate.receivedData = [[NSMutableData data] retain];
+					delegate.receivedData = [NSMutableData data];
 				} 
 				[delegate release];
 			}
@@ -172,7 +175,7 @@
 				NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:delegate];
 				if (connection)
 				{
-					delegate.receivedData = [[NSMutableData data] retain];
+					delegate.receivedData = [NSMutableData data];
 				} 
 				[delegate release];
 			}
@@ -188,7 +191,10 @@
 		[musicControls downloadNextQueuedSong];
 	}	
 	
-	[theConnection release];
+	// Had to comment this out to fix an EXC_BAD_ACCESS crash, 
+	// don't have any idea why this is necessary and isn't causing leaks
+	// The NSURLConnection seemingly isn't being released anywhere, but yet it is
+	//[theConnection release];
 }
 
 

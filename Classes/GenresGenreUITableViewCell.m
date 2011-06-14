@@ -312,12 +312,11 @@
 				
 				if (genreNameLabel.frame.size.width > genreNameScrollView.frame.size.width)
 				{
-					[genreNameScrollView setContentOffset:CGPointMake(genreNameLabel.frame.size.width - genreNameScrollView.frame.size.width, 0) animated:YES];
 					[UIView beginAnimations:@"scroll" context:nil];
 					[UIView setAnimationDelegate:self];
 					[UIView setAnimationDidStopSelector:@selector(textScrollingStopped)];
 					[UIView setAnimationDuration:genreNameLabel.frame.size.width/(float)150];
-					genreNameScrollView.contentOffset = CGPointMake(genreNameLabel.frame.size.width - genreNameScrollView.frame.size.width, 0);
+					genreNameScrollView.contentOffset = CGPointMake(genreNameLabel.frame.size.width - genreNameScrollView.frame.size.width + 10, 0);
 					[UIView commitAnimations];
 				}
 				

@@ -67,8 +67,8 @@
 	BOOL reportDownloadedLengthB;
 	
 	NSMutableData *receivedDataQueue;
-	//NSURLConnection *downloadQueue;
-	ASIHTTPRequest *downloadQueue;
+	NSURLConnection *downloadQueue;
+	//ASIHTTPRequest *downloadQueue;
 	NSString *downloadFileNameQueue;
 	NSString *downloadFileNameHashQueue;
 	NSFileHandle *audioFileQueue;
@@ -137,8 +137,8 @@
 @property UInt32 downloadedLengthB;
 @property BOOL reportDownloadedLengthB;
 @property (nonatomic, retain) NSMutableData *receivedDataQueue;
-//@property (nonatomic, retain) NSURLConnection *downloadQueue;
-@property (nonatomic, retain) ASIHTTPRequest *downloadQueue;
+@property (nonatomic, retain) NSURLConnection *downloadQueue;
+//@property (nonatomic, retain) ASIHTTPRequest *downloadQueue;
 @property (nonatomic, retain) NSString *downloadFileNameQueue;
 @property (nonatomic, retain) NSString *downloadFileNameHashQueue;
 @property (nonatomic, retain) NSFileHandle *audioFileQueue;

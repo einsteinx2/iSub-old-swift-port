@@ -249,6 +249,8 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 
 - (void) resetCoverArtCache
 {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
 	// Clear the table cell cover art
 	[coverArtCacheDb60 close]; self.coverArtCacheDb60 = nil;
 	[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/coverArtCache60.db", databaseFolderPath] error:NULL];
@@ -285,6 +287,33 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 			[coverArtCacheDb320 executeUpdate:@"CREATE TABLE coverArtCache (id TEXT PRIMARY KEY, data BLOB)"];
 		}
 	}
+	
+	[pool release];
+}
+
+- (void) resetFolderCache
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	[albumListCacheDb close]; self.albumListCacheDb = nil;
+	[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@albumListCache.db", databaseFolderPath, [NSString md5:appDelegate.defaultUrl]] error:NULL];
+	
+	albumListCacheDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@albumListCache.db", databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]] retain];
+	[albumListCacheDb executeUpdate:@"PRAGMA cache_size = 1"];
+	if ([albumListCacheDb open] == NO) { NSLog(@"Could not open albumListCacheDb."); }
+	if ([albumListCacheDb tableExists:@"albumListCache"] == NO) {
+		[albumListCacheDb executeUpdate:@"CREATE TABLE albumListCache (id TEXT PRIMARY KEY, data BLOB)"];
+	}
+	if ([albumListCacheDb tableExists:@"albumsCache"] == NO) {
+		[albumListCacheDb executeUpdate:@"CREATE TABLE albumsCache (folderId TEXT, title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
+		[albumListCacheDb executeUpdate:@"CREATE INDEX albumsFolderId ON albumsCache (folderId)"];
+	}
+	if ([albumListCacheDb tableExists:@"songsCache"] == NO) {
+		[albumListCacheDb executeUpdate:@"CREATE TABLE songsCache (folderId TEXT, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+		[albumListCacheDb executeUpdate:@"CREATE INDEX songsFolderId ON songsCache (folderId)"];
+	}
+	
+	[pool release];
 }
 
 - (void) resetLocalPlaylistsDb

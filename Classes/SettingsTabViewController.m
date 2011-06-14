@@ -12,6 +12,7 @@
 #import "MusicControlsSingleton.h"
 #import "SocialControlsSingleton.h"
 #import "DatabaseControlsSingleton.h"
+#import "RootViewController.h"
 
 #import "SA_OAuthTwitterEngine.h"
 #import "SA_OAuthTwitterController.h"
@@ -21,6 +22,7 @@
 
 #import "NSString-md5.h"
 #import "FMDatabase.h"
+
 
 @implementation SettingsTabViewController
 
@@ -522,6 +524,58 @@
 		
 		[[NSUserDefaults standardUserDefaults] setObject:appDelegate.settingsDictionary forKey:@"settingsDictionary"];
 		[[NSUserDefaults standardUserDefaults] synchronize];
+	}
+}
+
+- (IBAction)resetFolderCacheAction
+{
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Reset Album Folder Cache" message:@"Are you sure you want to do this? This clears just the cached folder listings, not the cached songs" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+	alert.tag = 0;
+	[alert show];
+	[alert release];
+}
+
+- (IBAction)resetAlbumArtCacheAction
+{
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Reset Album Art Cache" message:@"Are you sure you want to do this? This will clear all saved album art." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+	alert.tag = 1;
+	[alert show];
+	[alert release];
+}
+
+- (void)resetFolderCache
+{
+	[databaseControls resetFolderCache];
+	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:YES];
+	[self performSelectorOnMainThread:@selector(popFoldersTab) withObject:nil waitUntilDone:YES];
+}
+
+- (void)resetAlbumArtCache
+{
+	[databaseControls resetCoverArtCache];
+	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:YES];
+	[self performSelectorOnMainThread:@selector(popFoldersTab) withObject:nil waitUntilDone:YES];
+}
+
+- (void)popFoldersTab
+{
+	if (IS_IPAD())
+		[appDelegate.artistsNavigationController popToRootViewControllerAnimated:NO];
+	else
+		[appDelegate.rootViewController.navigationController popToRootViewControllerAnimated:NO];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+	if (alertView.tag == 0 && buttonIndex == 1)
+	{
+		[viewObjects showLoadingScreenOnMainWindow];
+		[self performSelectorInBackground:@selector(resetFolderCache) withObject:nil];
+	}
+	else if (alertView.tag == 1 && buttonIndex == 1)
+	{
+		[viewObjects showLoadingScreenOnMainWindow];
+		[self performSelectorInBackground:@selector(resetAlbumArtCache) withObject:nil];
 	}
 }
 

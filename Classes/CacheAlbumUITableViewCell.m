@@ -295,12 +295,11 @@
 				
 				if (albumNameLabel.frame.size.width > albumNameScrollView.frame.size.width)
 				{
-					[albumNameScrollView setContentOffset:CGPointMake(albumNameLabel.frame.size.width - albumNameScrollView.frame.size.width, 0) animated:YES];
 					[UIView beginAnimations:@"scroll" context:nil];
 					[UIView setAnimationDelegate:self];
 					[UIView setAnimationDidStopSelector:@selector(textScrollingStopped)];
 					[UIView setAnimationDuration:albumNameLabel.frame.size.width/(float)150];
-						albumNameScrollView.contentOffset = CGPointMake(albumNameLabel.frame.size.width - albumNameScrollView.frame.size.width, 0);
+						albumNameScrollView.contentOffset = CGPointMake(albumNameLabel.frame.size.width - albumNameScrollView.frame.size.width + 10, 0);
 					[UIView commitAnimations];
 				}
 				

@@ -92,5 +92,7 @@
 - (IBAction) twitterButtonAction;
 - (IBAction) updateScrobblePercentLabel;
 - (IBAction) updateScrobblePercentSetting;
+- (IBAction) resetFolderCacheAction;
+- (IBAction) resetAlbumArtCacheAction;
 
 @end

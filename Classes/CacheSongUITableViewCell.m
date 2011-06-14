@@ -292,12 +292,11 @@
 				
 				if (scrollWidth > songNameScrollView.frame.size.width)
 				{
-					[songNameScrollView setContentOffset:CGPointMake(songNameLabel.frame.size.width - songNameScrollView.frame.size.width, 0) animated:YES];
 					[UIView beginAnimations:@"scroll" context:nil];
 					[UIView setAnimationDelegate:self];
 					[UIView setAnimationDidStopSelector:@selector(textScrollingStopped)];
 					[UIView setAnimationDuration:songNameLabel.frame.size.width/(float)150];
-					songNameScrollView.contentOffset = CGPointMake(songNameLabel.frame.size.width - songNameScrollView.frame.size.width, 0);
+					songNameScrollView.contentOffset = CGPointMake(songNameLabel.frame.size.width - songNameScrollView.frame.size.width + 10, 0);
 					[UIView commitAnimations];
 				}
 				

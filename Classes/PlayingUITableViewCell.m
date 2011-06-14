@@ -209,12 +209,11 @@
 				
 				if (scrollWidth > nameScrollView.frame.size.width)
 				{
-					[nameScrollView setContentOffset:CGPointMake(scrollWidth - nameScrollView.frame.size.width, 0) animated:YES];
 					[UIView beginAnimations:@"scroll" context:nil];
 					[UIView setAnimationDelegate:self];
 					[UIView setAnimationDidStopSelector:@selector(textScrollingStopped)];
 					[UIView setAnimationDuration:scrollWidth/(float)150];
-					nameScrollView.contentOffset = CGPointMake(scrollWidth - nameScrollView.frame.size.width, 0);
+					nameScrollView.contentOffset = CGPointMake(scrollWidth - nameScrollView.frame.size.width + 10, 0);
 					[UIView commitAnimations];
 				}
 				

@@ -28,6 +28,8 @@
 		musicControls = [MusicControlsSingleton sharedInstance];
 		databaseControls = [DatabaseControlsSingleton sharedInstance];
 		currentElementValue = nil;
+		artist = nil;
+		title = nil;
 	}
 	
 	return self;
@@ -106,6 +108,8 @@
 
 - (void) dealloc 
 {
+	[artist release];
+	[title release];
 	[currentElementValue release];
 	[super dealloc];
 }

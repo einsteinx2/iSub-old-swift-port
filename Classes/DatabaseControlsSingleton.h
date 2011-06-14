@@ -82,6 +82,7 @@
 
 - (void) closeAllDatabases;
 - (void) resetCoverArtCache;
+- (void) resetFolderCache;
 - (void) resetLocalPlaylistsDb;
 - (void) resetCurrentPlaylistDb;
 - (void) resetShufflePlaylist;
