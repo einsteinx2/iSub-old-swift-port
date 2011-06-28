@@ -499,7 +499,7 @@ static NSString *kName_Error = @"error";
 		[musicControls destroyStreamer];
 		
 		// Clear the current playlist
-		if (!viewObjects.isJukebox)
+		if (viewObjects.isJukebox)
 			[databaseControls resetJukeboxPlaylist];
 		else
 			[databaseControls resetCurrentPlaylistDb];

@@ -85,6 +85,7 @@
 - (void) resetFolderCache;
 - (void) resetLocalPlaylistsDb;
 - (void) resetCurrentPlaylistDb;
+- (void) resetCurrentPlaylist;
 - (void) resetShufflePlaylist;
 - (void) resetJukeboxPlaylist;
 

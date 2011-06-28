@@ -342,6 +342,20 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	//	[musicControls jukeboxClearPlaylist];
 }
 
+- (void) resetCurrentPlaylist
+{
+	if (viewObjects.isJukebox)
+	{
+		[currentPlaylistDb executeUpdate:@"DROP TABLE jukeboxCurrentPlaylist"];
+		[currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxCurrentPlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];	
+	}
+	else
+	{	
+		[currentPlaylistDb executeUpdate:@"DROP TABLE currentPlaylist"];
+		[currentPlaylistDb executeUpdate:@"CREATE TABLE currentPlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];	
+	}
+}
+
 - (void) resetShufflePlaylist
 {
 	if (viewObjects.isJukebox)

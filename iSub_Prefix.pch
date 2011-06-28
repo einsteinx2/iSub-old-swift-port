@@ -26,14 +26,9 @@
 #define IS_IPAD() (false)
 #endif
 
-
-/*#ifdef DEBUG
-#define BETA_VERSION @" Final"
-#else
-#define BETA_VERSION @""
-#endif*/
-
-//#define BETA_VERSION @""
+// 3G restrictions
+#define IS_3G_UNRESTRICTED NO   // 3G is restricted (safe for App Store)
+//#define IS_3G_UNRESTRICTED YES  // 3G is NOT restricted (NOT safe for App Store)
 
 // Lite version build switch
 #define IS_LITE() (false)    // DISABLE Lite version

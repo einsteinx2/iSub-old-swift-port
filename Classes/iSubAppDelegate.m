@@ -1037,6 +1037,24 @@
 			[self enterOfflineMode];
 		}
 	}
+	else if ([curReach currentReachabilityStatus] == ReachableViaWiFi || IS_3G_UNRESTRICTED)
+	{
+		NSLog(@"Reachability Changed: ReachableViaWiFi");
+		reachabilityStatus = 2;
+		
+		if (viewObjects.isOfflineMode)
+		{
+			[self enterOnlineMode];
+		}
+		else
+		{
+			NSLog(@"musicControls.isQueueListDownloading: %i", musicControls.isQueueListDownloading);
+			if (!musicControls.isQueueListDownloading) {
+				NSLog(@"Calling [musicControls downloadNextQueuedSong]");
+				[musicControls downloadNextQueuedSong];
+			}
+		}
+	}
 	else if ([curReach currentReachabilityStatus] == ReachableViaWWAN)
 	{
 		NSLog(@"Reachability Changed: ReachableViaWWAN");
@@ -1051,27 +1069,11 @@
 			[musicControls stopDownloadQueue];
 		}
 	}
-	else if ([curReach currentReachabilityStatus] == ReachableViaWiFi)
-	{
-		NSLog(@"Reachability Changed: ReachableViaWiFi");
-		reachabilityStatus = 2;
-		
-		if (viewObjects.isOfflineMode)
-		{
-			[self enterOnlineMode];
-		}
-		else
-		{
-			if (!musicControls.isQueueListDownloading) {
-				[musicControls downloadNextQueuedSong];
-			}
-		}
-	}	
 }
 
 - (BOOL)isWifi
 {
-	if ([wifiReach currentReachabilityStatus] == ReachableViaWiFi)
+	if ([wifiReach currentReachabilityStatus] == ReachableViaWiFi || IS_3G_UNRESTRICTED)
 		return YES;
 	else
 		return NO;

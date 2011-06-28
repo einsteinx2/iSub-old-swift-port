@@ -3796,8 +3796,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Benjamin Baron";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Benjamin Baron";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3816,8 +3816,8 @@
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 				);
 				PRODUCT_NAME = iSub;
-				PROVISIONING_PROFILE = "B369E010-40BF-431E-9772-8034FA350669";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B369E010-40BF-431E-9772-8034FA350669";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -3862,8 +3862,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Benjamin Baron";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Benjamin Baron";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3882,8 +3882,8 @@
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 				);
 				PRODUCT_NAME = "iSub Beta";
-				PROVISIONING_PROFILE = "5EEA272A-9EC6-4746-9120-20D29CB03674";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "5EEA272A-9EC6-4746-9120-20D29CB03674";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

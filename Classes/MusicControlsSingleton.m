@@ -584,6 +584,7 @@ static MusicControlsSingleton *sharedInstance = nil;
 // Start downloading the file specified in the text field.
 - (void)startDownloadQueue
 {		
+	NSLog(@"startDownloadQueue called");
 	//NSLog(@"queueSongObject: %@", queueSongObject.title);
 	
 	// Are we already downloading?  If so, stop it.
@@ -767,13 +768,15 @@ static MusicControlsSingleton *sharedInstance = nil;
 
 - (void)downloadNextQueuedSong
 {
+	NSLog(@"downloadNextQueuedSong called");
 	isQueueListDownloading = NO;
 
 	if (appDelegate.reachabilityStatus == 2)
 	{
-		//NSLog(@"downloadNextQueuedSong: inside =downloadNextQueuedSong if");
+		NSLog(@"reachabilityStatus is 2 so this is on Wifi");
 		if ([databaseControls.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
 		{
+			NSLog(@"cacheQueue has more than 0 rows, so starting the download queue");
 			//NSLog(@"downloadNextQueuedSong: inside select count if");
 			isQueueListDownloading = YES;
 			self.queueSongObject = nil; self.queueSongObject = [self nextQueuedSong];
@@ -894,35 +897,47 @@ static MusicControlsSingleton *sharedInstance = nil;
 
 - (void)prevSong
 {
-	if (viewObjects.isJukebox)
+	self.streamerProgress = [streamer progress];
+	NSLog(@"track position: %f", (streamerProgress + seekTime));
+	if ((streamerProgress + seekTime) > 10.0)
 	{
-		[self jukeboxPrevSong];
+		if (viewObjects.isJukebox)
+			[self jukeboxPlaySongAtPosition:currentPlaylistPosition];
+		else
+			[self playSongAtPosition:currentPlaylistPosition];
 	}
 	else
 	{
-		NSInteger index = currentPlaylistPosition - 1;
-		if (index >= 0)
+		if (viewObjects.isJukebox)
 		{
-			currentPlaylistPosition = index;
-			
-			if (isShuffle) {
-				self.currentSongObject = [databaseControls songFromDbRow:index inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
-				self.nextSongObject = [databaseControls songFromDbRow:(index + 1) inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
+			[self jukeboxPrevSong];
+		}
+		else
+		{
+			NSInteger index = currentPlaylistPosition - 1;
+			if (index >= 0)
+			{
+				currentPlaylistPosition = index;
+				
+				if (isShuffle) {
+					self.currentSongObject = [databaseControls songFromDbRow:index inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
+					self.nextSongObject = [databaseControls songFromDbRow:(index + 1) inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
+				}
+				else {
+					self.currentSongObject = [databaseControls songFromDbRow:index inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
+					self.nextSongObject = [databaseControls songFromDbRow:(index + 1) inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
+				}
+				
+				self.songUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], currentSongObject.songId]];
+				
+				[self destroyStreamer];
+				seekTime = 0.0;
+				[self playPauseSong];
+				[[NSNotificationCenter defaultCenter] postNotificationName:@"setSongTitle" object:nil];
+				[[NSNotificationCenter defaultCenter] postNotificationName:@"initSongInfo" object:nil];
+				
+				[self addAutoNextNotification];
 			}
-			else {
-				self.currentSongObject = [databaseControls songFromDbRow:index inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-				self.nextSongObject = [databaseControls songFromDbRow:(index + 1) inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-			}
-			
-			self.songUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], currentSongObject.songId]];
-			
-			[self destroyStreamer];
-			seekTime = 0.0;
-			[self playPauseSong];
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"setSongTitle" object:nil];
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"initSongInfo" object:nil];
-			
-			[self addAutoNextNotification];
 		}
 	}
 }

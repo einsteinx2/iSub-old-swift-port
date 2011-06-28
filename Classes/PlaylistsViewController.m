@@ -866,50 +866,81 @@
 		
 		if (viewObjects.isJukebox)
 		{
-			[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE jukeboxTemp"];
-			[databaseControls.currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxTemp(title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
-			
-			for (NSNumber *index in [viewObjects.multiDeleteList reverseObjectEnumerator])
+			NSUInteger playlistCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"];
+			if ([viewObjects.multiDeleteList count] == playlistCount)
 			{
-				NSInteger rowId = [index integerValue] + 1;
-				[databaseControls.currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"DELETE FROM jukeboxCurrentPlaylist WHERE ROWID = %i", rowId]];
+				[databaseControls resetCurrentPlaylist];
 			}
-			
-			[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO jukeboxTemp SELECT * FROM jukeboxCurrentPlaylist"];
-			[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE jukeboxCurrentPlaylist"];
-			[databaseControls.currentPlaylistDb executeUpdate:@"ALTER TABLE jukeboxTemp RENAME TO jukeboxCurrentPlaylist"];
+			else
+			{
+				[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE jukeboxTemp"];
+				[databaseControls.currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxTemp(title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+				
+				for (NSNumber *index in [viewObjects.multiDeleteList reverseObjectEnumerator])
+				{
+					NSAutoreleasePool *pool2 = [[NSAutoreleasePool alloc] init];
+					NSInteger rowId = [index integerValue] + 1;
+					[databaseControls.currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"DELETE FROM jukeboxCurrentPlaylist WHERE ROWID = %i", rowId]];
+					[pool2 release];
+				}
+				
+				[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO jukeboxTemp SELECT * FROM jukeboxCurrentPlaylist"];
+				[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE jukeboxCurrentPlaylist"];
+				[databaseControls.currentPlaylistDb executeUpdate:@"ALTER TABLE jukeboxTemp RENAME TO jukeboxCurrentPlaylist"];
+			}
 		}
 		else
 		{
 			if (musicControls.isShuffle)
 			{
-				[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE shuffleTemp"];
-				[databaseControls.currentPlaylistDb executeUpdate:@"CREATE TABLE shuffleTemp(title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
-				
-				for (NSNumber *index in [viewObjects.multiDeleteList reverseObjectEnumerator])
+				NSUInteger playlistCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM shufflePlaylist"];
+				if ([viewObjects.multiDeleteList count] == playlistCount)
 				{
-					NSInteger rowId = [index integerValue] + 1;
-					[databaseControls.currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"DELETE FROM shufflePlaylist WHERE ROWID = %i", rowId]];
+					[databaseControls resetShufflePlaylist];
 				}
-				
-				[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shuffleTemp SELECT * FROM shufflePlaylist"];
-				[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE shufflePlaylist"];
-				[databaseControls.currentPlaylistDb executeUpdate:@"ALTER TABLE shuffleTemp RENAME TO shufflePlaylist"];
+				else
+				{
+					[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE shuffleTemp"];
+					[databaseControls.currentPlaylistDb executeUpdate:@"CREATE TABLE shuffleTemp(title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+					
+					for (NSNumber *index in [viewObjects.multiDeleteList reverseObjectEnumerator])
+					{
+						NSAutoreleasePool *pool2 = [[NSAutoreleasePool alloc] init];
+						NSInteger rowId = [index integerValue] + 1;
+						[databaseControls.currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"DELETE FROM shufflePlaylist WHERE ROWID = %i", rowId]];
+						[pool2 release];
+					}
+					
+					[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shuffleTemp SELECT * FROM shufflePlaylist"];
+					[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE shufflePlaylist"];
+					[databaseControls.currentPlaylistDb executeUpdate:@"ALTER TABLE shuffleTemp RENAME TO shufflePlaylist"];
+
+				}
 			}
 			else
 			{
-				[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE currentTemp"];
-				[databaseControls.currentPlaylistDb executeUpdate:@"CREATE TABLE currentTemp(title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
-				
-				for (NSNumber *index in [viewObjects.multiDeleteList reverseObjectEnumerator])
+				NSUInteger playlistCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
+				if ([viewObjects.multiDeleteList count] == playlistCount)
 				{
-					NSInteger rowId = [index integerValue] + 1;
-					[databaseControls.currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"DELETE FROM currentPlaylist WHERE ROWID = %i", rowId]];
+					[databaseControls resetCurrentPlaylist];
 				}
-				
-				[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO currentTemp SELECT * FROM currentPlaylist"];
-				[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE currentPlaylist"];
-				[databaseControls.currentPlaylistDb executeUpdate:@"ALTER TABLE currentTemp RENAME TO currentPlaylist"];
+				else
+				{
+					[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE currentTemp"];
+					[databaseControls.currentPlaylistDb executeUpdate:@"CREATE TABLE currentTemp(title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+					
+					for (NSNumber *index in [viewObjects.multiDeleteList reverseObjectEnumerator])
+					{
+						NSAutoreleasePool *pool2 = [[NSAutoreleasePool alloc] init];
+						NSInteger rowId = [index integerValue] + 1;
+						[databaseControls.currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"DELETE FROM currentPlaylist WHERE ROWID = %i", rowId]];
+						[pool2 release];
+					}
+					
+					[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO currentTemp SELECT * FROM currentPlaylist"];
+					[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE currentPlaylist"];
+					[databaseControls.currentPlaylistDb executeUpdate:@"ALTER TABLE currentTemp RENAME TO currentPlaylist"];
+				}
 			}
 		}
 		
@@ -924,10 +955,12 @@
 		NSInteger numberBefore = 0;
 		for (NSNumber *index in viewObjects.multiDeleteList)
 		{
+			NSAutoreleasePool *pool2 = [[NSAutoreleasePool alloc] init];
 			if ([index integerValue] <= musicControls.currentPlaylistPosition)
 			{
 				numberBefore = numberBefore + 1;
 			}
+			[pool2 release];
 		}
 		musicControls.currentPlaylistPosition = musicControls.currentPlaylistPosition - numberBefore;
 		
@@ -941,7 +974,9 @@
 		NSMutableArray *indexes = [[NSMutableArray alloc] init];
 		for (NSNumber *index in viewObjects.multiDeleteList)
 		{
+			NSAutoreleasePool *pool2 = [[NSAutoreleasePool alloc] init];
 			[indexes addObject:[NSIndexPath indexPathForRow:[index integerValue] inSection:0]];
+			[pool2 release];
 		}
 		[self.tableView performSelectorOnMainThread:@selector(deleteRowsAtIndexPaths:withRowAnimation:) withObject:indexes waitUntilDone:YES];
 		//[self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:YES];
