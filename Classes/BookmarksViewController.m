@@ -40,7 +40,7 @@
 {
     [super viewDidLoad];
 	
-	//NSLog(@"Cache viewDidLoad");
+	//DLog(@"Cache viewDidLoad");
 	
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
@@ -307,7 +307,7 @@
 	{
 		// Sort the multiDeleteList to make sure it's accending
 		[viewObjects.multiDeleteList sortUsingSelector:@selector(compare:)];
-		//NSLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
+		//DLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
 		
 		for (NSNumber *index in [viewObjects.multiDeleteList reverseObjectEnumerator])
 		{
@@ -371,7 +371,7 @@
 	
 	
 	// Fix the multiDeleteList to reflect the new row positions
-	//NSLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
+	//DLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
 	if ([viewObjects.multiDeleteList count] > 0)
 	{
 		NSMutableArray *tempMultiDeleteList = [[NSMutableArray alloc] init];
@@ -420,7 +420,7 @@
 		viewObjects.multiDeleteList = [NSMutableArray arrayWithArray:tempMultiDeleteList];
 		[tempMultiDeleteList release];
 	}
-	//NSLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
+	//DLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
 }
 
 
@@ -480,7 +480,7 @@
 	FMResultSet *result = [databaseControls.bookmarksDb executeQuery:[NSString stringWithFormat:@"SELECT * FROM bookmarks WHERE ROWID = %i", row]];
 	[result next];
 	if ([databaseControls.bookmarksDb hadError]) {
-		NSLog(@"Err %d: %@", [databaseControls.bookmarksDb lastErrorCode], [databaseControls.bookmarksDb lastErrorMessage]);
+		DLog(@"Err %d: %@", [databaseControls.bookmarksDb lastErrorCode], [databaseControls.bookmarksDb lastErrorMessage]);
 	}
 	
 	aSong.title = [result stringForColumnIndex:2];
@@ -608,7 +608,7 @@
 			if ([isDownloadFinished isEqualToString:@"YES"])
 			{
 				// The song is fully cached, start streaming from the local copy
-				//NSLog(@"Song in the cache. Resuming from local copy");
+				//DLog(@"Song in the cache. Resuming from local copy");
 				
 				musicControls.isTempDownload = NO;
 				
@@ -620,24 +620,24 @@
 					musicControls.downloadFileNameA = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", musicControls.downloadFileNameHashA, musicControls.currentSongObject.transcodedSuffix]];
 				else
 					musicControls.downloadFileNameA = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", musicControls.downloadFileNameHashA, musicControls.currentSongObject.suffix]];
-				//NSLog(@"File name = %@", downloadFileNameA);		
+				//DLog(@"File name = %@", downloadFileNameA);		
 				
 				// Start streaming from the local copy
-				//NSLog(@"Playing from local copy");
+				//DLog(@"Playing from local copy");
 				
 				// Check the file size
 				NSNumber *fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:musicControls.downloadFileNameA error:NULL] objectForKey:NSFileSize];
 				musicControls.bitRate = (UInt32) (([fileSize floatValue] / [musicControls.currentSongObject.duration floatValue]) / 128);
-				//NSLog(@"bitrate: %i", musicControls.bitRate);
+				//DLog(@"bitrate: %i", musicControls.bitRate);
 				musicControls.downloadedLengthA = [fileSize intValue];
-				//NSLog(@"downloadedLengthA: %i", downloadedLengthA);
+				//DLog(@"downloadedLengthA: %i", downloadedLengthA);
 				
 				musicControls.streamerProgress = 0.0;
 				musicControls.streamer = [[AudioStreamer alloc] initWithFileURL:[NSURL fileURLWithPath:musicControls.downloadFileNameA]];
 				if (musicControls.streamer)
 				{
 					musicControls.streamer.fileDownloadCurrentSize = musicControls.downloadedLengthA;
-					//NSLog(@"fileDownloadCurrentSize: %i", streamer.fileDownloadCurrentSize);
+					//DLog(@"fileDownloadCurrentSize: %i", streamer.fileDownloadCurrentSize);
 					musicControls.streamer.fileDownloadComplete = YES;
 					[musicControls.streamer startWithOffsetInSecs:(UInt32) musicControls.seekTime];
 				}
@@ -653,14 +653,14 @@
 				else 
 				{
 					// The song is not fully cached, call startTempDownloadA to start a temp cache stream
-					//NSLog(@"Song in cache but not finished, resuming with a temp download");
+					//DLog(@"Song in cache but not finished, resuming with a temp download");
 					
 					// Determine the name and path of the file.
 					if (musicControls.currentSongObject.transcodedSuffix)
 						musicControls.downloadFileNameA = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", musicControls.downloadFileNameHashA, musicControls.currentSongObject.transcodedSuffix]];
 					else
 						musicControls.downloadFileNameA = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", musicControls.downloadFileNameHashA, musicControls.currentSongObject.suffix]];
-					//NSLog(@"File name = %@", downloadFileNameA);		
+					//DLog(@"File name = %@", downloadFileNameA);		
 					
 					if (musicControls.currentSongObject.transcodedSuffix)
 					{
@@ -684,7 +684,7 @@
 								musicControls.bitRate = [musicControls maxBitrateSetting];
 						}
 					}
-					//NSLog(@"bitrate: %i", musicControls.bitRate);
+					//DLog(@"bitrate: %i", musicControls.bitRate);
 					
 					// Determine the byte offset
 					float byteOffset;
@@ -703,14 +703,14 @@
 			if (!viewObjects.isOfflineMode)
 			{
 				// Song not in the cache at all, call startTempDownloadA to start a temp cache stream
-				//NSLog(@"Song not in cache at all, starting a temp download");
+				//DLog(@"Song not in cache at all, starting a temp download");
 				
 				// Determine the name and path of the file.
 				if (musicControls.currentSongObject.transcodedSuffix)
 					musicControls.downloadFileNameA = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", musicControls.downloadFileNameHashA, musicControls.currentSongObject.transcodedSuffix]];
 				else
 					musicControls.downloadFileNameA = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", musicControls.downloadFileNameHashA, musicControls.currentSongObject.suffix]];
-				//NSLog(@"File name = %@", downloadFileNameA);		
+				//DLog(@"File name = %@", downloadFileNameA);		
 				
 				if (musicControls.currentSongObject.transcodedSuffix)
 				{
@@ -734,7 +734,7 @@
 							musicControls.bitRate = [musicControls maxBitrateSetting];
 					}
 				}
-				//NSLog(@"bitrate: %i", musicControls.bitRate);
+				//DLog(@"bitrate: %i", musicControls.bitRate);
 				
 				// Determine the byte offset
 				float byteOffset;

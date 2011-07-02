@@ -73,14 +73,14 @@
 	{
 		[viewObjects.multiDeleteList addObject:[NSNumber numberWithInt:indexPath.row]];
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"showDeleteButton" object:nil];
-		//NSLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
+		//DLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
 		deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
 	}
 	else
 	{
 		[viewObjects.multiDeleteList removeObject:[NSNumber numberWithInt:indexPath.row]];
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"hideDeleteButton" object:nil];
-		//NSLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
+		//DLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
 		deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
 	}
 }
@@ -136,16 +136,16 @@
 	if (viewObjects.isJukebox)
 	{
 		/*[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/currentPlaylist.db", databaseControls.databaseFolderPath], @"currentPlaylistDb"];
-		if ([databaseControls.localPlaylistsDb hadError]) { NSLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
+		if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
 		[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", self.md5]];
 		[databaseControls.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];*/
 	}
 	else
 	{
 		[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [NSString md5:appDelegate.defaultUrl]], @"currentPlaylistDb"];
-		if ([databaseControls.localPlaylistsDb hadError]) { NSLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
+		if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
 		[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", md5]];
-		if ([databaseControls.localPlaylistsDb hadError]) { NSLog(@"Err performing query %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
+		if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err performing query %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
 		[databaseControls.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 	}
 
@@ -157,7 +157,7 @@
 
 - (void)blockerAction
 {
-	//NSLog(@"blockerAction");
+	//DLog(@"blockerAction");
 	[self hideOverlay];
 }
 

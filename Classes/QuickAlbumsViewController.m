@@ -104,7 +104,7 @@
 	albumViewController.title = [titles objectForKey:modifier];
 	
 	// Parse the XML
-	//NSLog(@"%@", [NSString stringWithFormat:@"%@&size=20&type=%@", [appDelegate getBaseUrl:@"getAlbumList.view"], modifier]);
+	//DLog(@"%@", [NSString stringWithFormat:@"%@&size=20&type=%@", [appDelegate getBaseUrl:@"getAlbumList.view"], modifier]);
 	NSURL *url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@&size=20&type=%@", [appDelegate getBaseUrl:@"getAlbumList.view"], modifier]];
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
 	[request startSynchronous];

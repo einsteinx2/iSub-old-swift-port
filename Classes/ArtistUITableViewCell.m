@@ -79,7 +79,7 @@
 
 - (void)hideOverlay
 {
-	//NSLog(@"%@ isOverlayShowing: %i", artistNameLabel.text, isOverlayShowing);
+	//DLog(@"%@ isOverlayShowing: %i", artistNameLabel.text, isOverlayShowing);
 	if (overlayView)
 	{
 		[UIView beginAnimations:nil context:NULL];
@@ -114,7 +114,7 @@
 	// Automatically set the width based on the width of the text
 	artistNameLabel.frame = CGRectMake(0, 0, 280, 44);
 	CGSize expectedLabelSize = [artistNameLabel.text sizeWithFont:artistNameLabel.font constrainedToSize:CGSizeMake(1000,44) lineBreakMode:artistNameLabel.lineBreakMode];
-	NSLog(@"%@: size: %@", artistNameLabel.text, NSStringFromCGSize(expectedLabelSize));
+	DLog(@"%@: size: %@", artistNameLabel.text, NSStringFromCGSize(expectedLabelSize));
 	
 	if (expectedLabelSize.width > 280)
 	{

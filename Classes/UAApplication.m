@@ -43,7 +43,7 @@
 {
 	if (motion == UIEventSubtypeMotionShake) 
 	{
-		NSLog(@"oh ya, shake it now!: %d");
+		DLog(@"oh ya, shake it now!: %d");
 	}
 }
 - (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event 
@@ -72,32 +72,32 @@
 
 - (void)remoteControlReceivedWithEvent:(UIEvent *)event 
 {
-	//NSLog(@"remoteControlReceivedWithEvent: %d", event.subtype);
+	//DLog(@"remoteControlReceivedWithEvent: %d", event.subtype);
 	MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
 	switch(event.subtype) 
 	{
 		case UIEventSubtypeRemoteControlPlay:
-			//NSLog(@"UIEventSubtypeRemoteControlPlay");
+			//DLog(@"UIEventSubtypeRemoteControlPlay");
 			[self playPauseStop];
 			break;
 		case UIEventSubtypeRemoteControlPause:
-			//NSLog(@"UIEventSubtypeRemoteControlPause");
+			//DLog(@"UIEventSubtypeRemoteControlPause");
 			[self playPauseStop];
 			break;
 		case UIEventSubtypeRemoteControlStop:
-			//NSLog(@"UIEventSubtypeRemoteControlStop");
+			//DLog(@"UIEventSubtypeRemoteControlStop");
 			[self playPauseStop];
 			break;
 		case UIEventSubtypeRemoteControlTogglePlayPause:
-			//NSLog(@"UIEventSubtypeRemoteControlTogglePlayPause");
+			//DLog(@"UIEventSubtypeRemoteControlTogglePlayPause");
 			[self playPauseStop];
 			break;
 		case UIEventSubtypeRemoteControlNextTrack:
-			//NSLog(@"UIEventSubtypeRemoteControlNextTrack");
+			//DLog(@"UIEventSubtypeRemoteControlNextTrack");
 			[musicControls nextSong];
 			break;
 		case UIEventSubtypeRemoteControlPreviousTrack:
-			//NSLog(@"UIEventSubtypeRemoteControlPreviousTrack");
+			//DLog(@"UIEventSubtypeRemoteControlPreviousTrack");
 			[musicControls prevSong];
 			break;
 		default:

@@ -203,7 +203,7 @@
 - (void)loadData
 {
 	NSString *urlString = [NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"getMusicDirectory.view"], self.myId];
-	//NSLog(@"loading from the server: %@", urlString);
+	//DLog(@"loading from the server: %@", urlString);
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
 	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
@@ -506,7 +506,7 @@
 		if (sectionInfo)
 			cell.isIndexShowing = YES;
 		
-		//NSLog(@"%@\n%@\n%@\n%@", anAlbum.albumId, [NSString stringFromHex:anAlbum.albumId], [NSString stringToHex:[NSString stringFromHex:anAlbum.albumId]], [NSString stringFromHex:[NSString stringToHex:[NSString stringFromHex:anAlbum.albumId]]]);
+		//DLog(@"%@\n%@\n%@\n%@", anAlbum.albumId, [NSString stringFromHex:anAlbum.albumId], [NSString stringToHex:[NSString stringFromHex:anAlbum.albumId]], [NSString stringFromHex:[NSString stringToHex:[NSString stringFromHex:anAlbum.albumId]]]);
 		
 		if (anAlbum.coverArtId)
 		{

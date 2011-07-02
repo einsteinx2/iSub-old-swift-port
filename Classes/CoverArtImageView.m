@@ -14,7 +14,7 @@
 
 -(void)oneTap
 {
-	NSLog(@"Single tap");
+	DLog(@"Single tap");
 	PageControlViewController *pageControlViewController = [[PageControlViewController alloc] initWithNibName:@"PageControlViewController" bundle:nil];
 	[self addSubview:pageControlViewController.view];
 	[pageControlViewController showSongInfo];
@@ -22,12 +22,12 @@
 
 -(void)twoTaps
 {
-	NSLog(@"Double tap");
+	DLog(@"Double tap");
 }
 
 -(void)threeTaps
 {
-	NSLog(@"Triple tap");
+	DLog(@"Triple tap");
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event 

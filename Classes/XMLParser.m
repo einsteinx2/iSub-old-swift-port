@@ -61,7 +61,7 @@
 {
 	if ([parseState isEqualToString: @"allAlbums"])
 	{
-		NSLog(@"Subsonic error: %@", message);
+		DLog(@"Subsonic error: %@", message);
 	}
 	else
 	{
@@ -75,7 +75,7 @@
 {
 	if ([parseState isEqualToString: @"allAlbums"])
 	{
-		NSLog(@"%@", [NSString stringWithFormat:@"An error occured reading the response from Subsonic.\n\nIf you are loading the artist list, this can mean the server URL is wrong\n\nError: %@", parseError.localizedDescription]);
+		DLog(@"%@", [NSString stringWithFormat:@"An error occured reading the response from Subsonic.\n\nIf you are loading the artist list, this can mean the server URL is wrong\n\nError: %@", parseError.localizedDescription]);
 	}
 	else
 	{
@@ -100,7 +100,7 @@
 		{
 			// Initialize the arrays and lookup dictionaries.
 			isFirstIndex = YES;
-			//NSLog(@"hit indexes tag");
+			//DLog(@"hit indexes tag");
 		}
 		else if ([elementName isEqualToString:@"shortcut"])
 		{
@@ -136,7 +136,7 @@
 		
 			//Extract the attribute here.
 			anIndex.name = [attributeDict objectForKey:@"name"];
-			//NSLog(@"index: %@", anIndex.name);
+			//DLog(@"index: %@", anIndex.name);
 		}
 		else if([elementName isEqualToString:@"artist"]) 
 		{
@@ -148,7 +148,7 @@
 				[artistsArray addObject:anArtist];
 			}
 			
-			//NSLog(@"artist: %@", anArtist.name);
+			//DLog(@"artist: %@", anArtist.name);
 			
 			[anArtist release];
 		}
@@ -187,7 +187,7 @@
 	}		
 	else if( [parseState isEqualToString: @"albums"] )
 	{
-		//NSLog(@"elementName: %@", elementName);
+		//DLog(@"elementName: %@", elementName);
 		if( [elementName isEqualToString:@"error"] )
 		{
 			[self subsonicErrorCode:[attributeDict objectForKey:@"code"] message:[attributeDict objectForKey:@"message"]];

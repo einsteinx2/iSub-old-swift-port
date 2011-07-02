@@ -36,7 +36,7 @@
 - (void)registerConnection:(NSURLConnection *)connection
 {
 	[connectionStack addObject:connection];
-	//NSLog(@"CONNECTION QUEUE REGISTER: %i connections registered", [connectionStack count]);
+	//DLog(@"CONNECTION QUEUE REGISTER: %i connections registered", [connectionStack count]);
 }
 
 - (void)connectionFinished:(NSURLConnection *)connection
@@ -44,7 +44,7 @@
 	if ([connectionStack count] > 0)
 		[connectionStack removeObjectAtIndex:0];
 	
-	//NSLog(@"CONNECTION QUEUE FINISHED: %i connections registered", [connectionStack count]);
+	//DLog(@"CONNECTION QUEUE FINISHED: %i connections registered", [connectionStack count]);
 	
 	if (isRunning && [connectionStack count] > 0)
 	{

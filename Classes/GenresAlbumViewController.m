@@ -44,9 +44,9 @@
 	musicControls = [MusicControlsSingleton sharedInstance];
 	databaseControls = [DatabaseControlsSingleton sharedInstance];
 	
-	//NSLog(@"segment %i", segment);
-	//NSLog(@"listOfAlbums: %@", listOfAlbums);
-	//NSLog(@"listOfSongs: %@", listOfSongs);
+	//DLog(@"segment %i", segment);
+	//DLog(@"listOfAlbums: %@", listOfAlbums);
+	//DLog(@"listOfSongs: %@", listOfSongs);
 	
 	// Add the table fade
 	UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
@@ -489,7 +489,7 @@
 				}
 			}
 			[result close];
-			//NSLog(@"genresAlbumViewController.listOfSongs: %@", genresAlbumViewController.listOfSongs);
+			//DLog(@"genresAlbumViewController.listOfSongs: %@", genresAlbumViewController.listOfSongs);
 						
 			[self.navigationController pushViewController:genresAlbumViewController animated:YES];
 			[genresAlbumViewController release];
@@ -503,9 +503,9 @@
 			[databaseControls resetCurrentPlaylistDb];
 			for(NSString *songMD5 in listOfSongs)
 			{
-				//NSLog(@"songMD5: %@", songMD5);
+				//DLog(@"songMD5: %@", songMD5);
 				Song *aSong = [databaseControls songFromGenreDb:songMD5];
-				//NSLog(@"aSong: %@", aSong);
+				//DLog(@"aSong: %@", aSong);
 				[databaseControls insertSong:aSong intoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 			}
 			

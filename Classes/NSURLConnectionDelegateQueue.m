@@ -36,7 +36,7 @@
 	[databaseControls.songCacheDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO %@ (md5, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", table], [NSString md5:aSong.path], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
 	
 	if ([databaseControls.songCacheDb hadError]) {
-		NSLog(@"Err inserting song into genre table %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
+		DLog(@"Err inserting song into genre table %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
 	}
 	
 	return [databaseControls.songCacheDb hadError];
@@ -73,7 +73,7 @@
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
-	NSLog(@"didFailWithError, resuming download");
+	DLog(@"didFailWithError, resuming download");
 	[musicControls resumeDownloadQueue:musicControls.downloadedLengthQueue];
 	
 	// Had to comment this out to fix an EXC_BAD_ACCESS crash, 
@@ -84,7 +84,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	//NSLog(@"connectionDidFinishLoading");
+	//DLog(@"connectionDidFinishLoading");
 	
 	// Check if the file is less than 500 bytes. If it is, then it's almost definitely an API expiration notice
 	if (musicControls.downloadedLengthQueue < 500)
@@ -126,7 +126,7 @@
 			if ([databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM genres WHERE genre = ?", musicControls.queueSongObject.genre] == 0)
 			{							
 				[databaseControls.songCacheDb executeUpdate:@"INSERT INTO genres (genre) VALUES (?)", musicControls.queueSongObject.genre];
-				if ([databaseControls.songCacheDb hadError]) { NSLog(@"Err adding the genre %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]); }
+				if ([databaseControls.songCacheDb hadError]) { DLog(@"Err adding the genre %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]); }
 			}
 			
 			// Insert the song object into the appropriate genresSongs table
@@ -138,7 +138,7 @@
 		{
 			if ([databaseControls.coverArtCacheDb320 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:musicControls.queueSongObject.coverArtId]] == 0)
 			{
-				//NSLog(@"320 artwork doesn't exist, caching");
+				//DLog(@"320 artwork doesn't exist, caching");
 				NSString *imgUrlString;
 				if (appDelegate.isHighRez)
 				{
@@ -159,7 +159,7 @@
 			}
 			if ([databaseControls.coverArtCacheDb60 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:musicControls.queueSongObject.coverArtId]] == 0)
 			{
-				//NSLog(@"60 artwork doesn't exist, caching");
+				//DLog(@"60 artwork doesn't exist, caching");
 				NSString *imgUrlString;
 				if (appDelegate.isHighRez)
 				{

@@ -115,7 +115,7 @@
 
 - (void)blockerAction
 {
-	//NSLog(@"blockerAction");
+	//DLog(@"blockerAction");
 	[self hideOverlay];
 }
 
@@ -169,7 +169,7 @@
 	}
 	else 
 	{
-		//NSLog(@"%@", [NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = %@ AND seg%i = %@ AND genre = %@ ORDER BY seg%i COLLATE NOCASE", seg1, segment, albumNameLabel.text, genre, (segment + 1)]);
+		//DLog(@"%@", [NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = %@ AND seg%i = %@ AND genre = %@ ORDER BY seg%i COLLATE NOCASE", seg1, segment, albumNameLabel.text, genre, (segment + 1)]);
 		result = [databaseControls.genresDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text, genre];
 	}
 	

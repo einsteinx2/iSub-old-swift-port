@@ -882,7 +882,7 @@ static void MyCFWriteStreamCallback (CFWriteStreamRef stream, CFStreamEventType 
 		err = CFSocketSetAddress (theSocket, (CFDataRef)address);
 		if (err != kCFSocketSuccess) goto Failed;
 		
-		//NSLog(@"theSocket4: %hu", [self localPort:theSocket]);
+		//DLog(@"theSocket4: %hu", [self localPort:theSocket]);
 	}
 	
 	if(port == 0 && theSocket && theSocket6)
@@ -901,7 +901,7 @@ static void MyCFWriteStreamCallback (CFWriteStreamRef stream, CFStreamEventType 
 		err = CFSocketSetAddress (theSocket6, (CFDataRef)address6);
 		if (err != kCFSocketSuccess) goto Failed;
 		
-		//NSLog(@"theSocket6: %hu", [self localPort:theSocket6]);
+		//DLog(@"theSocket6: %hu", [self localPort:theSocket6]);
 	}
 
 	theFlags |= kDidPassConnectMethod;
@@ -1477,7 +1477,7 @@ Failed:;
 	CFDataRef peeraddr = CFSocketCopyPeerAddress(socket);
 	if(peeraddr == NULL)
 	{
-		NSLog(@"AsyncSocket couldn't determine IP version of socket");
+		DLog(@"AsyncSocket couldn't determine IP version of socket");
 		
 		if (errPtr) *errPtr = [self getSocketError];
 		return NO;

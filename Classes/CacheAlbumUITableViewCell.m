@@ -105,7 +105,7 @@
 
 - (void)blockerAction
 {
-	//NSLog(@"blockerAction");
+	//DLog(@"blockerAction");
 	[self hideOverlay];
 }
 

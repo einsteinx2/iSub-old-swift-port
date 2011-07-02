@@ -19,7 +19,7 @@
   namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName 
     attributes:(NSDictionary *)attributeDict
 {
-    //NSLog(@"Started element: %@ (%@)", elementName, attributeDict);
+    //DLog(@"Started element: %@ (%@)", elementName, attributeDict);
     [self setLastOpenedElement:elementName];
     
     if ([elementName isEqualToString:@"status"]) {
@@ -41,7 +41,7 @@
 
 - (void)parser:(NSXMLParser *)theParser foundCharacters:(NSString *)characters
 {
-    //NSLog(@"Found characters: %@", characters);
+    //DLog(@"Found characters: %@", characters);
     // Append found characters to value of lastOpenedElement in currentNode.
     if (lastOpenedElement && currentNode) {
         [[currentNode objectForKey:lastOpenedElement] appendString:characters];

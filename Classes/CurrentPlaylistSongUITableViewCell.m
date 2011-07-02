@@ -84,14 +84,14 @@
 	{
 		[viewObjects.multiDeleteList addObject:[NSNumber numberWithInt:indexPath.row]];
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"showDeleteButton" object:nil];
-		//NSLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
+		//DLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
 		deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
 	}
 	else
 	{
 		[viewObjects.multiDeleteList removeObject:[NSNumber numberWithInt:indexPath.row]];
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"hideDeleteButton" object:nil];
-		//NSLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
+		//DLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
 		deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
 	}
 }
@@ -107,9 +107,9 @@
 	}
 	else 
 	{
-		//NSLog(@"caching song from now playing playlist");
+		//DLog(@"caching song from now playing playlist");
 		Song *aSong = [[databaseControls songFromDbRow:indexPath.row inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb] retain];
-		//NSLog(@"aSong.title = %@", aSong.title);
+		//DLog(@"aSong.title = %@", aSong.title);
 		[databaseControls addSongToCacheQueue:aSong];
 		[aSong release];
 	}
@@ -128,7 +128,7 @@
 
 - (void)queueAction
 {
-	//NSLog(@"queueAction");
+	//DLog(@"queueAction");
 	if (musicControls.isShuffle)
 	{
 		Song *aSong = [databaseControls songFromDbRow:indexPath.row inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
@@ -153,7 +153,7 @@
 
 - (void)blockerAction
 {
-	//NSLog(@"blockerAction");
+	//DLog(@"blockerAction");
 	[self hideOverlay];
 }
 

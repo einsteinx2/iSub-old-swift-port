@@ -117,7 +117,7 @@
 #ifndef _GTMDevLog
 
 #ifdef DEBUG
-#define _GTMDevLog(...) NSLog(__VA_ARGS__)
+#define _GTMDevLog(...) DLog(__VA_ARGS__)
 #else
 #define _GTMDevLog(...) do { } while (0)
 #endif

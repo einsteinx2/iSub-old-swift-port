@@ -85,7 +85,7 @@
 		{
 			if ([artist isEqualToString:musicControls.currentSongObject.artist] && [title isEqualToString:musicControls.currentSongObject.title])
 			{
-				//NSLog(@"------------------ no lyrics found for %@ - %@ -------------------", artist, title);
+				//DLog(@"------------------ no lyrics found for %@ - %@ -------------------", artist, title);
 				musicControls.currentSongLyrics = @"\n\nNo lyrics found";
 				[[NSNotificationCenter defaultCenter] postNotificationName:@"lyricsDoneLoading" object:nil];
 			}
@@ -94,13 +94,13 @@
 		{
 			if ([artist isEqualToString:musicControls.currentSongObject.artist] && [title isEqualToString:musicControls.currentSongObject.title])
 			{
-				//NSLog(@"------------------ lyrics found! for %@ - %@ -------------------", artist, title);
+				//DLog(@"------------------ lyrics found! for %@ - %@ -------------------", artist, title);
 				musicControls.currentSongLyrics = currentElementValue;
 				[[NSNotificationCenter defaultCenter] postNotificationName:@"lyricsDoneLoading" object:nil];
 			}
 			
 			[databaseControls.lyricsDb executeUpdate:@"INSERT INTO lyrics (artist, title, lyrics) VALUES (?, ?, ?)", artist, title, currentElementValue];
-			if ([databaseControls.lyricsDb hadError]) { NSLog(@"Err inserting lyrics %d: %@", [databaseControls.lyricsDb lastErrorCode], [databaseControls.lyricsDb lastErrorMessage]); }
+			if ([databaseControls.lyricsDb hadError]) { DLog(@"Err inserting lyrics %d: %@", [databaseControls.lyricsDb lastErrorCode], [databaseControls.lyricsDb lastErrorMessage]); }
 		}	
 	}
 }

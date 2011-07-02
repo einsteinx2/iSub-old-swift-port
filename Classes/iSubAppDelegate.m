@@ -112,7 +112,7 @@
 	
 	introController = nil;
 	
-	//NSLog(@"App finish launching called");
+	//DLog(@"App finish launching called");
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	databaseControls = [DatabaseControlsSingleton sharedInstance];
 	musicControls = [MusicControlsSingleton sharedInstance];
@@ -130,10 +130,10 @@
 		[SFHFKeychainUtils storeUsername:kFeatureCacheId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
 		[SFHFKeychainUtils storeUsername:kFeatureAllId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];*/
 		
-		NSLog(@"is kFeaturePlaylistsId enabled: %i", [MKStoreManager isFeaturePurchased:kFeaturePlaylistsId]);
-		NSLog(@"is kFeatureJukeboxId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureJukeboxId]);
-		NSLog(@"is kFeatureCacheId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureCacheId]);
-		NSLog(@"is kFeatureAllId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureAllId]);
+		DLog(@"is kFeaturePlaylistsId enabled: %i", [MKStoreManager isFeaturePurchased:kFeaturePlaylistsId]);
+		DLog(@"is kFeatureJukeboxId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureJukeboxId]);
+		DLog(@"is kFeatureCacheId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureCacheId]);
+		DLog(@"is kFeatureAllId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureAllId]);
 #endif
 	}
 	
@@ -225,13 +225,13 @@
 
 - (void)displayInfoUpdate:(NSNotification *) notification
 {
-	NSLog(@"displayInfoUpdate:");
+	DLog(@"displayInfoUpdate:");
 	
 	if(notification)
 	{
 		[addresses release];
 		addresses = [[notification object] copy];
-		NSLog(@"addresses: %@", addresses);
+		DLog(@"addresses: %@", addresses);
 	}
 	
 	if(addresses == nil)
@@ -264,7 +264,7 @@
 		info = [info stringByAppendingString:@"Web: Unable to determine external IP\n"];
 	
 	//displayInfo.text = info;
-	NSLog(@"info: %@", info);
+	DLog(@"info: %@", info);
 }
 
 
@@ -287,7 +287,7 @@
 		NSError *error;
 		if(![httpServer start:&error])
 		{
-			NSLog(@"Error starting HTTP Server: %@", error);
+			DLog(@"Error starting HTTP Server: %@", error);
 		}
 		
 		[self displayInfoUpdate:nil];
@@ -329,7 +329,7 @@
 		// Add the new player overlay setting if not there - 3.0
 		if ([settingsDictionary objectForKey:@"autoPlayerInfoSetting"] == nil)
 		{
-			NSLog(@"Adding new player overlay setting");
+			DLog(@"Adding new player overlay setting");
 			[settingsDictionary setObject:@"NO" forKey:@"autoPlayerInfoSetting"];
 			[settingsDictionary setObject:@"NO" forKey:@"autoReloadArtistsSetting"];
 			[settingsDictionary setObject:@"NO" forKey:@"enableSongsTabSetting"];
@@ -338,7 +338,7 @@
 		// Add the new settings if they aren't there - 2.2.3
 		if ([settingsDictionary objectForKey:@"maxCacheSize"] == nil)
 		{
-			NSLog(@"Adding new settings dictionary options");
+			DLog(@"Adding new settings dictionary options");
 			[settingsDictionary setObject:@"YES" forKey:@"enableSongCachingSetting"];
 			[settingsDictionary setObject:@"YES" forKey:@"enableNextSongCacheSetting"];
 			[settingsDictionary setObject:[NSNumber numberWithInt:0] forKey:@"cachingTypeSetting"];
@@ -348,7 +348,7 @@
 		// Add the new Wifi/3G bitrate settings if not there
 		if ([settingsDictionary objectForKey:@"maxBitrateSetting"])
 		{
-			NSLog(@"Adding new maxBitrateSettings");
+			DLog(@"Adding new maxBitrateSettings");
 			NSNumber *setting = [[settingsDictionary objectForKey:@"maxBitrateSetting"] copy];
 			[settingsDictionary setObject:setting forKey:@"maxBitrateWifiSetting"];
 			[settingsDictionary setObject:setting forKey:@"maxBitrate3GSetting"];
@@ -358,13 +358,13 @@
 		// Add the lyrics setting if it's not there
 		if ([settingsDictionary objectForKey:@"lyricsEnabledSetting"] == nil)
 		{
-			NSLog(@"Adding the enable lyrics setting");
+			DLog(@"Adding the enable lyrics setting");
 			[settingsDictionary setObject:@"YES" forKey:@"lyricsEnabledSetting"];
 		}
 	}
 	else
 	{
-		NSLog(@"Creating new settings dictionary");
+		DLog(@"Creating new settings dictionary");
 		self.settingsDictionary = [NSMutableDictionary dictionaryWithCapacity:8];
 		[settingsDictionary setObject:@"NO" forKey:@"manualOfflineModeSetting"];
 		[settingsDictionary setObject:[NSNumber numberWithInt:0] forKey:@"recoverSetting"];
@@ -470,7 +470,7 @@
 			viewObjects.serverList = [NSKeyedUnarchiver unarchiveObjectWithData:serverList];
 		}
 		
-		//NSLog(@"serverList: %@", viewObjects.serverList);
+		//DLog(@"serverList: %@", viewObjects.serverList);
 		
 		[self appInit2];
 		[self adjustCacheSize];
@@ -524,9 +524,9 @@
 	if (!viewObjects.isOfflineMode) 
 	{
 		//[NSThread sleepForTimeInterval:15];
-		//NSLog(@"%@", [NSString stringWithFormat:@"%@/rest/ping.view", defaultUrl]);
+		//DLog(@"%@", [NSString stringWithFormat:@"%@/rest/ping.view", defaultUrl]);
 		isURLValid = [self isURLValid:[NSString stringWithFormat:@"%@/rest/ping.view", defaultUrl] error:&error];
-		//NSLog(@"isURLValid: %i", isURLValid);
+		//DLog(@"isURLValid: %i", isURLValid);
 	}
 	
 	if(!isURLValid && !viewObjects.isOfflineMode)
@@ -570,7 +570,7 @@
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	if([[defaults objectForKey:@"recover"] isEqualToString:@"YES"])
 	{
-		//NSLog(@"defaults isPlaying: %@", [[NSUserDefaults standardUserDefaults] objectForKey:@"isPlaying"]);
+		//DLog(@"defaults isPlaying: %@", [[NSUserDefaults standardUserDefaults] objectForKey:@"isPlaying"]);
 		if ([[defaults objectForKey:@"isPlaying"] isEqualToString:@"YES"])
 		{
 			if ([[settingsDictionary objectForKey:@"recoverSetting"] intValue] == 0)
@@ -603,7 +603,7 @@
 	musicControls.isQueueListDownloading = NO;
 	if ([wifiReach currentReachabilityStatus] == ReachableViaWiFi)
 	{
-		//NSLog(@"currentReachabilityStatus = Wifi - starting download of queue");
+		//DLog(@"currentReachabilityStatus = Wifi - starting download of queue");
 		reachabilityStatus = 2;
 		[musicControls downloadNextQueuedSong];
 	}
@@ -611,7 +611,7 @@
 	// Setup Twitter connection
 	if (!viewObjects.isOfflineMode && [[NSUserDefaults standardUserDefaults] objectForKey: @"twitterAuthData"])
 	{
-		NSLog(@"creating twitter engine");
+		DLog(@"creating twitter engine");
 		[socialControls createTwitterEngine];
 		UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine:socialControls.twitterEngine delegate: socialControls];
 		if (controller) 
@@ -661,10 +661,10 @@
 		// Setup the tabBarController
 		mainTabBarController.moreNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 		
-		//NSLog(@"isOfflineMode: %i", viewObjects.isOfflineMode);
+		//DLog(@"isOfflineMode: %i", viewObjects.isOfflineMode);
 		if (viewObjects.isOfflineMode)
 		{
-			//NSLog(@"--------------- isOfflineMode");
+			//DLog(@"--------------- isOfflineMode");
 			currentTabBarController = offlineTabBarController;
 			[window addSubview:offlineTabBarController.view];
 		}
@@ -706,11 +706,11 @@
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];*/
 		
-		NSLog(@"There was an error checking for app updates.");
+		DLog(@"There was an error checking for app updates.");
 	}
 	else
 	{
-		NSLog(@"%@", [[[NSString alloc] initWithData:[request responseData] encoding:NSUTF8StringEncoding] autorelease]);
+		DLog(@"%@", [[[NSString alloc] initWithData:[request responseData] encoding:NSUTF8StringEncoding] autorelease]);
 		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:[request responseData]];
 		UpdateXMLParser *parser = [(UpdateXMLParser*) [UpdateXMLParser alloc] initXMLParser];
 		[xmlParser setDelegate:parser];
@@ -726,45 +726,99 @@
 
 - (void)applicationWillResignActive:(UIApplication*)application
 {
-	NSLog(@"applicationWillResignActive called");
+	DLog(@"applicationWillResignActive called");
 	
-	//NSLog(@"applicationWillResignActive finished");
+	//DLog(@"applicationWillResignActive finished");
 }
 
 
 - (void)applicationDidBecomeActive:(UIApplication*)application
 {
-	NSLog(@"applicationDidBecomeActive called");
+	DLog(@"applicationDidBecomeActive called");
 	
-	//NSLog(@"applicationDidBecomeActive finished");
+	//DLog(@"applicationDidBecomeActive finished");
 }
 
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-	NSLog(@"applicationDidEnterBackground called");
+	DLog(@"applicationDidEnterBackground called");
 	
 	[self saveDefaults];
 	
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
-	//NSAssert(backgroundTask == UIBackgroundTaskInvalid, nil);
-	backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
+	if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)])
+    {
+		backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:
+						  ^{
+							  // App is about to be put to sleep, stop the cache download queue
+							  if (musicControls.isQueueListDownloading)
+								  [musicControls stopDownloadQueue];
+							  
+							  // Make sure to end the background so we don't get killed by the OS
+							  [application endBackgroundTask:backgroundTask];
+							  backgroundTask = UIBackgroundTaskInvalid;
+						  }];
+		
+		// Check the remaining background time and alert the user if necessary
+		dispatch_queue_t queue = dispatch_queue_create("isub.backgroundqueue", 0);
+		//dispatch_get_main_queue()
+		dispatch_async(queue, 
+		^{
+			isInBackground = YES;
+			UIApplication *application = [UIApplication sharedApplication];
+			while ([application backgroundTimeRemaining] > 1.0 && isInBackground) 
+			{
+				DLog(@"backgroundTimeRemaining: %f", [application backgroundTimeRemaining]);
+				
+				// Sleep early is nothing is happening
+				if ([application backgroundTimeRemaining] < 570.0 && !musicControls.isQueueListDownloading)
+				{
+					DLog("Sleeping early, isQueueListDownloading: %i", musicControls.isQueueListDownloading);
+					[application endBackgroundTask:backgroundTask];
+					backgroundTask = UIBackgroundTaskInvalid;
+					break;
+				}
+				
+				// Warn at 2 minute mark if cache queue is downloading
+				if ([application backgroundTimeRemaining] < 120.0 && musicControls.isQueueListDownloading)
+				{
+					UILocalNotification *localNotif = [[UILocalNotification alloc] init];
+					if (localNotif) 
+					{
+						localNotif.alertBody = NSLocalizedString(@"Songs are still caching. Please return to iSub within 2 minutes, or it will be put to sleep and your song caching will be paused.", nil);
+						localNotif.alertAction = NSLocalizedString(@"Open iSub", nil);
+						[application presentLocalNotificationNow:localNotif];
+						[localNotif release];
+						break;
+					}
+				}
+			}
+		});
+	}
 }
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-	NSLog(@"applicationWillEnterForeground called");
+	DLog(@"applicationWillEnterForeground called");
 	
-	[[UIApplication sharedApplication] endBackgroundTask:backgroundTask];
-	backgroundTask = UIBackgroundTaskInvalid;
+	if ([[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)])
+    {
+		isInBackground = NO;
+		if (backgroundTask != UIBackgroundTaskInvalid)
+		{
+			[[UIApplication sharedApplication] endBackgroundTask:backgroundTask];
+			backgroundTask = UIBackgroundTaskInvalid;
+		}
+	}
 }
 
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-	NSLog(@"applicationWillTerminate called");
+	DLog(@"applicationWillTerminate called");
 	
 	if (isMultitaskingSupported)
 	{
@@ -780,7 +834,7 @@
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-	//NSLog(@"saveDefaults!!");
+	//DLog(@"saveDefaults!!");
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
@@ -939,7 +993,7 @@
 {
 	long long int usage = [ASIHTTPRequest averageBandwidthUsedPerSecond];
 	usage = (usage * 8) / 1024; // convert to kbits
-	//NSLog(@"bandwidth usage: %qi kbps", usage);
+	//DLog(@"bandwidth usage: %qi kbps", usage);
 }
 
 
@@ -1027,7 +1081,7 @@
 	
 	if ([curReach currentReachabilityStatus] == NotReachable)
 	{
-		NSLog(@"Reachability Changed: NotReachable");
+		DLog(@"Reachability Changed: NotReachable");
 		reachabilityStatus = 0;
 		//[self stopDownloadQueue];
 		
@@ -1039,7 +1093,7 @@
 	}
 	else if ([curReach currentReachabilityStatus] == ReachableViaWiFi || IS_3G_UNRESTRICTED)
 	{
-		NSLog(@"Reachability Changed: ReachableViaWiFi");
+		DLog(@"Reachability Changed: ReachableViaWiFi");
 		reachabilityStatus = 2;
 		
 		if (viewObjects.isOfflineMode)
@@ -1048,16 +1102,16 @@
 		}
 		else
 		{
-			NSLog(@"musicControls.isQueueListDownloading: %i", musicControls.isQueueListDownloading);
+			DLog(@"musicControls.isQueueListDownloading: %i", musicControls.isQueueListDownloading);
 			if (!musicControls.isQueueListDownloading) {
-				NSLog(@"Calling [musicControls downloadNextQueuedSong]");
+				DLog(@"Calling [musicControls downloadNextQueuedSong]");
 				[musicControls downloadNextQueuedSong];
 			}
 		}
 	}
 	else if ([curReach currentReachabilityStatus] == ReachableViaWWAN)
 	{
-		NSLog(@"Reachability Changed: ReachableViaWWAN");
+		DLog(@"Reachability Changed: ReachableViaWWAN");
 		reachabilityStatus = 1;
 		
 		if (viewObjects.isOfflineMode)
@@ -1241,7 +1295,7 @@
 
 - (BOOL)isURLValid:(NSString *)url error:(NSError **)error
 {	
-	//NSLog(@"isURLValid url: %@", url);
+	//DLog(@"isURLValid url: %@", url);
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
 	[request setTimeOutSeconds:15];
 	[request startSynchronous];
@@ -1333,7 +1387,7 @@
 	// Wait for the redirects to finish
 	while (connDelegate.connectionFinished == NO)
 	{
-		NSLog(@"Waiting for connection to finish");
+		DLog(@"Waiting for connection to finish");
 	}
 	
 	//
@@ -1424,7 +1478,7 @@
 	NSString *encodedUserName = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)defaultUserName, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8 );
 	NSString *encodedPassword = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)defaultPassword, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8 );
 
-	//NSLog(@"username: %@    password: %@", encodedUserName, encodedPassword);
+	//DLog(@"username: %@    password: %@", encodedUserName, encodedPassword);
 	
 	// Return the base URL
 	if ([action isEqualToString:@"getIndexes.view"] || [action isEqualToString:@"search.view"] || [action isEqualToString:@"search2.view"] || [action isEqualToString:@"getNowPlaying.view"] || [action isEqualToString:@"getPlaylists.view"] || [action isEqualToString:@"getMusicFolders.view"] || [action isEqualToString:@"createPlaylist.view"])

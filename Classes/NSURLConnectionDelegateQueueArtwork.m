@@ -59,7 +59,7 @@
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
-	NSLog(@"didFailWithError, resuming download");
+	DLog(@"didFailWithError, resuming download");
 	
 	[theConnection release];
 	[receivedData release];
@@ -67,11 +67,11 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	//NSLog(@"connectionDidFinishLoading");
+	//DLog(@"connectionDidFinishLoading");
 	
 	if([UIImage imageWithData:receivedData])
 	{
-		//NSLog(@"image is good so caching it");
+		//DLog(@"image is good so caching it");
 		if (is320)
 			[databaseControls.coverArtCacheDb320 executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:musicControls.queueSongObject.coverArtId], receivedData];
 		else

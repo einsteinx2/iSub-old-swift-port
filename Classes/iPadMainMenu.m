@@ -164,7 +164,7 @@
     }
     
     // Configure the cell...
-	//NSLog(@"row %i: %@", indexPath.row, [rowNames objectAtIndex:indexPath.row]);
+	//DLog(@"row %i: %@", indexPath.row, [rowNames objectAtIndex:indexPath.row]);
 	cell.textLabel.text = [rowNames objectAtIndex:indexPath.row];
 	cell.textLabel.font = [UIFont boldSystemFontOfSize:36];
 	cell.textLabel.textColor = [UIColor whiteColor];

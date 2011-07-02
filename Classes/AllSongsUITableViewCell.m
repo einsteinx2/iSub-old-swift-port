@@ -117,7 +117,7 @@
 
 - (void)blockerAction
 {
-	//NSLog(@"blockerAction");
+	//DLog(@"blockerAction");
 	[self hideOverlay];
 }
 
@@ -143,8 +143,8 @@
 		overlayView = [CellOverlay cellOverlayWithTableCell:self];
 		[self.contentView addSubview:overlayView];
 
-		//NSLog(@"SELECT finished FROM cachedSongs WHERE md5 = %@", md5);
-		//NSLog(@"%@", [databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", md5]);
+		//DLog(@"SELECT finished FROM cachedSongs WHERE md5 = %@", md5);
+		//DLog(@"%@", [databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", md5]);
 		if ([[databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", md5] isEqualToString:@"YES"]) {
 			overlayView.downloadButton.alpha = .3;
 			overlayView.downloadButton.enabled = NO;

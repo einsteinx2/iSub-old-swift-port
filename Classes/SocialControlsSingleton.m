@@ -58,13 +58,13 @@ static SocialControlsSingleton *sharedInstance = nil;
 // SA_OAuthTwitterControllerDelegate
 - (void) OAuthTwitterController:(SA_OAuthTwitterController *)controller authenticatedWithUsername:(NSString *)username 
 {
-	//NSLog(@"Authenicated for %@", username);
+	//DLog(@"Authenicated for %@", username);
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"twitterAuthenticated" object:nil];
 }
 
 - (void) OAuthTwitterControllerFailed:(SA_OAuthTwitterController *)controller 
 {
-	//NSLog(@"Authentication Failed!");
+	//DLog(@"Authentication Failed!");
 	self.twitterEngine = nil;
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Twitter Error" message:@"Failed to authenticate user. Try logging in again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
@@ -73,7 +73,7 @@ static SocialControlsSingleton *sharedInstance = nil;
 
 - (void) OAuthTwitterControllerCanceled:(SA_OAuthTwitterController *)controller 
 {
-	//NSLog(@"Authentication Canceled.");
+	//DLog(@"Authentication Canceled.");
 	self.twitterEngine = nil;
 }
 
@@ -81,12 +81,12 @@ static SocialControlsSingleton *sharedInstance = nil;
 // TwitterEngineDelegate
 - (void) requestSucceeded:(NSString *)requestIdentifier 
 {
-	//NSLog(@"Request %@ succeeded", requestIdentifier);
+	//DLog(@"Request %@ succeeded", requestIdentifier);
 }
 
 - (void) requestFailed:(NSString *)requestIdentifier withError:(NSError *) error 
 {
-	//NSLog(@"Request %@ failed with error: %@", requestIdentifier, error);
+	//DLog(@"Request %@ failed with error: %@", requestIdentifier, error);
 }
 
 #pragma mark -

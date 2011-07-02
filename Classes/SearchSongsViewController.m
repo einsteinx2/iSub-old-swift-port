@@ -351,7 +351,7 @@
 		urlString = [NSString stringWithFormat:@"%@&count=20&any=%@&offset=%i", 
 					 [appDelegate getBaseUrl:@"search.view"], [query stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding], offset];
 	}
-	//NSLog(@"urlString: %@", urlString);
+	//DLog(@"urlString: %@", urlString);
 	
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
 	self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
@@ -702,14 +702,14 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	//NSLog(@"%@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
+	//DLog(@"%@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
 	
 	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
 	SearchXMLParser *parser = [[SearchXMLParser alloc] initXMLParser];
 	[xmlParser setDelegate:parser];
 	[xmlParser parse];
 	
-	//NSLog(@"parser.listOfSongs:\n%@", parser.listOfSongs);
+	//DLog(@"parser.listOfSongs:\n%@", parser.listOfSongs);
 	
 	if (searchType == 0)
 	{

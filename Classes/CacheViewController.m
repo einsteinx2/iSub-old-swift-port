@@ -62,7 +62,7 @@
 {
 	[super viewDidLoad];
 	
-	//NSLog(@"Cache viewDidLoad");
+	//DLog(@"Cache viewDidLoad");
 	
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
@@ -273,7 +273,7 @@
 	FMResultSet *result = [databaseControls.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE ROWID = %i", table, row]];
 	[result next];
 	if ([databaseControls.songCacheDb hadError]) {
-		NSLog(@"Err %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
+		DLog(@"Err %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
 	}
 	
 	aSong.title = [result stringForColumnIndex:4];
@@ -626,7 +626,7 @@
 		[databaseControls.inMemoryDb executeUpdate:@"DROP TABLE cachedSongsArtistList"];
 		[databaseControls.inMemoryDb executeUpdate:@"CREATE TABLE cachedSongsArtistList (artist TEXT UNIQUE)"];
 		[databaseControls.inMemoryDb executeUpdate:@"ATTACH DATABASE ? AS songCacheDb", [NSString stringWithFormat:@"%@/songCache.db", databaseControls.databaseFolderPath]];
-		if ([databaseControls.inMemoryDb hadError]) { NSLog(@"Err attaching the songCacheDb %d: %@", [databaseControls.inMemoryDb lastErrorCode], [databaseControls.inMemoryDb lastErrorMessage]); }
+		if ([databaseControls.inMemoryDb hadError]) { DLog(@"Err attaching the songCacheDb %d: %@", [databaseControls.inMemoryDb lastErrorCode], [databaseControls.inMemoryDb lastErrorMessage]); }
 		[databaseControls.inMemoryDb executeUpdate:@"INSERT OR IGNORE INTO cachedSongsArtistList SELECT seg1 FROM cachedSongsLayout"];
 		[databaseControls.inMemoryDb executeUpdate:@"DETACH DATABASE songCacheDb"];
 		
@@ -747,7 +747,7 @@
 			}
 		}
 		
-		NSLog(@"sectionInfo: %@", sectionInfo);
+		DLog(@"sectionInfo: %@", sectionInfo);
 		
 		[self.tableView reloadData];
 		

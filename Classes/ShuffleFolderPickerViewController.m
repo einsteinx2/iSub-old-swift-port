@@ -119,7 +119,7 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-	NSLog(@"[sortedFolders count]: %i", [sortedFolders count]);
+	DLog(@"[sortedFolders count]: %i", [sortedFolders count]);
     return [sortedFolders count];
 }
 

@@ -218,7 +218,7 @@
 	{
 		urlString = [NSString stringWithFormat:@"%@&musicFolderId=%@", [appDelegate getBaseUrl:@"getIndexes.view"], folderId];
 	}
-	//NSLog(@"urlString: %@", urlString);
+	//DLog(@"urlString: %@", urlString);
 	
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];

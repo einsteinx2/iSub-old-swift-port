@@ -43,7 +43,7 @@
 		if ((point.x < 40) && ([[NSDate date] timeIntervalSinceDate:lastDeleteToggle] > 0.25))
 		{
 			self.lastDeleteToggle = [NSDate date];
-			//NSLog(@"calling toggleDelete");
+			//DLog(@"calling toggleDelete");
 			NSIndexPath *indexPathAtHitPoint = [self indexPathForRowAtPoint:point];
 			id cell = [self cellForRowAtIndexPath:indexPathAtHitPoint];
 			[cell toggleDelete];

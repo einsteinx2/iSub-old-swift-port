@@ -75,7 +75,7 @@
 	}
 	else
 	{
-		//NSLog(@"%@", [url substringToIndex:7]);
+		//DLog(@"%@", [url substringToIndex:7]);
 		if (![[url substringToIndex:7] isEqualToString:@"http://"] && ![[url substringToIndex:8] isEqualToString:@"https://"])
 		{
 			urlField.text = [NSString stringWithFormat:@"http://%@", url];

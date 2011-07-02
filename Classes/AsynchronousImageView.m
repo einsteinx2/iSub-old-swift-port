@@ -64,7 +64,7 @@
 
 -(void)oneTap
 {
-	NSLog(@"Single tap");
+	DLog(@"Single tap");
 	PageControlViewController *pageControlViewController = [[PageControlViewController alloc] initWithNibName:@"PageControlViewController" bundle:nil];
 	[self addSubview:pageControlViewController.view];
 	[pageControlViewController showSongInfo];
@@ -72,13 +72,13 @@
 
 -(void)twoTaps
 {
-	NSLog(@"Double tap");
+	DLog(@"Double tap");
 	[self reloadCoverArt];
 }
 
 -(void)threeTaps
 {
-	NSLog(@"Triple tap");
+	DLog(@"Triple tap");
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event 
@@ -179,7 +179,7 @@
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
-	NSLog(@"Connection to album art failed");
+	DLog(@"Connection to album art failed");
 	if([songAtTimeOfLoad.songId isEqualToString:musicControls.currentSongObject.songId])
 	{
 		self.image = [UIImage imageNamed:@"default-album-art.png"];

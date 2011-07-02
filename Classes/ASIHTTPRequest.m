@@ -479,7 +479,7 @@ static BOOL isiPhoneOS2;
 - (void)cancel
 {
 	#if DEBUG_REQUEST_STATUS
-	NSLog(@"Request cancelled: %@",self);
+	DLog(@"Request cancelled: %@",self);
 	#endif
 	[[self cancelledLock] lock];
 
@@ -529,7 +529,7 @@ static BOOL isiPhoneOS2;
 - (void)startSynchronous
 {
 #if DEBUG_REQUEST_STATUS || DEBUG_THROTTLING
-	NSLog(@"Starting synchronous request %@",self);
+	DLog(@"Starting synchronous request %@",self);
 #endif
 	[self setRunLoopMode:ASIHTTPRequestRunLoopMode];
 	[self setInProgress:YES];
@@ -571,7 +571,7 @@ static BOOL isiPhoneOS2;
 - (void)startAsynchronous
 {
 #if DEBUG_REQUEST_STATUS || DEBUG_THROTTLING
-	NSLog(@"Starting asynchronous request %@",self);
+	DLog(@"Starting asynchronous request %@",self);
 #endif
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
@@ -970,7 +970,7 @@ static BOOL isiPhoneOS2;
 			// Check if we should have expired this connection
 			} else if ([[[self connectionInfo] objectForKey:@"expires"] timeIntervalSinceNow] < 0) {
 				#if DEBUG_PERSISTENT_CONNECTIONS
-				NSLog(@"Not re-using connection #%hi because it has expired",[[[self connectionInfo] objectForKey:@"id"] intValue]);
+				DLog(@"Not re-using connection #%hi because it has expired",[[[self connectionInfo] objectForKey:@"id"] intValue]);
 				#endif
 				[persistentConnectionsPool removeObject:[self connectionInfo]];
 				[self setConnectionInfo:nil];
@@ -1015,7 +1015,7 @@ static BOOL isiPhoneOS2;
 		CFReadStreamSetProperty((CFReadStreamRef)[self readStream],  kCFStreamPropertyHTTPAttemptPersistentConnection, kCFBooleanTrue);
 		
 		#if DEBUG_PERSISTENT_CONNECTIONS
-		NSLog(@"Request #%@ will use connection #%hi",[self requestID],[[[self connectionInfo] objectForKey:@"id"] intValue]);
+		DLog(@"Request #%@ will use connection #%hi",[self requestID],[[[self connectionInfo] objectForKey:@"id"] intValue]);
 		#endif
 		
 		
@@ -1207,7 +1207,7 @@ static BOOL isiPhoneOS2;
 						
 				#if DEBUG_REQUEST_STATUS
 				if ([self totalBytesSent] == [self postLength]) {
-					NSLog(@"Request %@ finished uploading data",self);
+					DLog(@"Request %@ finished uploading data",self);
 				}
 				#endif
 			}
@@ -1529,7 +1529,7 @@ static BOOL isiPhoneOS2;
 - (void)requestFinished
 {
 #if DEBUG_REQUEST_STATUS || DEBUG_THROTTLING
-	NSLog(@"Request finished: %@",self);
+	DLog(@"Request finished: %@",self);
 #endif
 	if ([self error] || [self mainRequest]) {
 		return;
@@ -1551,7 +1551,7 @@ static BOOL isiPhoneOS2;
 - (void)failWithError:(NSError *)theError
 {
 #if DEBUG_REQUEST_STATUS || DEBUG_THROTTLING
-	NSLog(@"Request failed: %@",self);
+	DLog(@"Request failed: %@",self);
 #endif
 	[self setComplete:YES];
 	
@@ -1559,7 +1559,7 @@ static BOOL isiPhoneOS2;
 	if (theError && [theError code] != ASIAuthenticationErrorType && [theError code] != ASITooMuchRedirectionErrorType) {
 		[connectionsLock lock];
 		#if DEBUG_PERSISTENT_CONNECTIONS
-		NSLog(@"Request #%@ failed and will invalidate connection #%@",[self requestID],[[self connectionInfo] objectForKey:@"id"]);
+		DLog(@"Request #%@ failed and will invalidate connection #%@",[self requestID],[[self connectionInfo] objectForKey:@"id"]);
 		#endif
 		[[self connectionInfo] removeObjectForKey:@"request"];
 		[persistentConnectionsPool removeObject:[self connectionInfo]];
@@ -1619,7 +1619,7 @@ static BOOL isiPhoneOS2;
 
 	#if DEBUG_REQUEST_STATUS
 	if ([self totalBytesSent] == [self postLength]) {
-		NSLog(@"Request %@ received response headers",self);
+		DLog(@"Request %@ received response headers",self);
 	}
 	#endif		
 
@@ -1758,7 +1758,7 @@ static BOOL isiPhoneOS2;
 			[self setRequestCookies:[NSMutableArray array]];
 			
 			#if DEBUG_REQUEST_STATUS
-				NSLog(@"Request will redirect (code: %hi): %@",[self responseStatusCode],self);
+				DLog(@"Request will redirect (code: %hi): %@",[self responseStatusCode],self);
 			#endif
 			
 		}
@@ -1791,7 +1791,7 @@ static BOOL isiPhoneOS2;
 						[self setConnectionCanBeReused:YES];
 						[self setPersistentConnectionTimeoutSeconds:timeout];
 						#if DEBUG_PERSISTENT_CONNECTIONS
-							NSLog(@"Got a keep-alive header, will keep this connection open for %f seconds", [self persistentConnectionTimeoutSeconds]);
+							DLog(@"Got a keep-alive header, will keep this connection open for %f seconds", [self persistentConnectionTimeoutSeconds]);
 						#endif					
 					}
 				
@@ -1799,7 +1799,7 @@ static BOOL isiPhoneOS2;
 				} else {
 					[self setConnectionCanBeReused:YES];
 					#if DEBUG_PERSISTENT_CONNECTIONS
-						NSLog(@"Got no keep-alive header, will keep this connection open for %f seconds", [self persistentConnectionTimeoutSeconds]);
+						DLog(@"Got no keep-alive header, will keep this connection open for %f seconds", [self persistentConnectionTimeoutSeconds]);
 					#endif
 				}
 			}
@@ -2534,7 +2534,7 @@ static BOOL isiPhoneOS2;
 - (void)handleStreamComplete
 {	
 #if DEBUG_REQUEST_STATUS
-	NSLog(@"Request %@ finished downloading data",self);
+	DLog(@"Request %@ finished downloading data",self);
 #endif
 	
 	[self setDownloadComplete:YES];
@@ -2606,7 +2606,7 @@ static BOOL isiPhoneOS2;
 		[self unscheduleReadStream];
 	}
 	#if DEBUG_PERSISTENT_CONNECTIONS
-	NSLog(@"Request #%@ finished using connection #%@",[self requestID], [[self connectionInfo] objectForKey:@"id"]);
+	DLog(@"Request #%@ finished using connection #%@",[self requestID], [[self connectionInfo] objectForKey:@"id"]);
 	#endif
 	[[self connectionInfo] removeObjectForKey:@"request"];
 	[[self connectionInfo] setObject:[NSDate dateWithTimeIntervalSinceNow:[self persistentConnectionTimeoutSeconds]] forKey:@"expires"];
@@ -2640,7 +2640,7 @@ static BOOL isiPhoneOS2;
 {
 	if ([self retryCount] == 0) {
 		#if DEBUG_PERSISTENT_CONNECTIONS
-			NSLog(@"Request attempted to use connection #%@, but it has been closed - will retry with a new connection", [[self connectionInfo] objectForKey:@"id"]);
+			DLog(@"Request attempted to use connection #%@, but it has been closed - will retry with a new connection", [[self connectionInfo] objectForKey:@"id"]);
 		#endif
 		[connectionsLock lock];
 		[[self connectionInfo] removeObjectForKey:@"request"];
@@ -2652,7 +2652,7 @@ static BOOL isiPhoneOS2;
 		return YES;
 	}
 	#if DEBUG_PERSISTENT_CONNECTIONS
-		NSLog(@"Request attempted to use connection #%@, but it has been closed - we have already retried with a new connection, so we must give up", [[self connectionInfo] objectForKey:@"id"]);
+		DLog(@"Request attempted to use connection #%@, but it has been closed - we have already retried with a new connection, so we must give up", [[self connectionInfo] objectForKey:@"id"]);
 	#endif	
 	return NO;
 }
@@ -2745,7 +2745,7 @@ static BOOL isiPhoneOS2;
 		NSDictionary *existingConnection = [persistentConnectionsPool objectAtIndex:i];
 		if (![existingConnection objectForKey:@"request"] && [[existingConnection objectForKey:@"expires"] timeIntervalSinceNow] <= 0) {
 #if DEBUG_PERSISTENT_CONNECTIONS
-			NSLog(@"Closing connection #%hi because it has expired",[[existingConnection objectForKey:@"id"] intValue]);
+			DLog(@"Closing connection #%hi because it has expired",[[existingConnection objectForKey:@"id"] intValue]);
 #endif
 			NSInputStream *stream = [existingConnection objectForKey:@"stream"];
 			if (stream) {
@@ -3433,14 +3433,14 @@ static BOOL isiPhoneOS2;
 				if ([self readStreamIsScheduled]) {
 					[self unscheduleReadStream];
 					#if DEBUG_THROTTLING
-					NSLog(@"Sleeping request %@ until after %@",self,throttleWakeUpTime);
+					DLog(@"Sleeping request %@ until after %@",self,throttleWakeUpTime);
 					#endif
 				}
 			} else {
 				if (![self readStreamIsScheduled]) {
 					[self scheduleReadStream];
 					#if DEBUG_THROTTLING
-					NSLog(@"Waking up request %@",self);
+					DLog(@"Waking up request %@",self);
 					#endif
 				}
 			}
@@ -3503,7 +3503,7 @@ static BOOL isiPhoneOS2;
 		}
 	}
 	#if DEBUG_THROTTLING
-	NSLog(@"===Used: %u bytes of bandwidth in last measurement period===",bandwidthUsedInLastSecond);
+	DLog(@"===Used: %u bytes of bandwidth in last measurement period===",bandwidthUsedInLastSecond);
 	#endif
 	[bandwidthUsageTracker addObject:[NSNumber numberWithUnsignedLong:bandwidthUsedInLastSecond]];
 	[bandwidthMeasurementDate release];
@@ -3637,7 +3637,7 @@ static BOOL isiPhoneOS2;
 	[bandwidthThrottlingLock lock];
 	//isBandwidthThrottled = [ASIHTTPRequest isNetworkReachableViaWWAN:note];
 	isBandwidthThrottled = [ASIHTTPRequest isNetworkReachableViaWWAN];
-	NSLog(@"isBandwidthThrottled = %i", isBandwidthThrottled);
+	DLog(@"isBandwidthThrottled = %i", isBandwidthThrottled);
 	[bandwidthThrottlingLock unlock];
 }
 #endif

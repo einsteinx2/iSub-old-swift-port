@@ -58,7 +58,7 @@
 		// Handle multi delete touching
 		if (viewObjects.isEditing)
 		{
-			//NSLog(@"inside the isEditing IF");
+			//DLog(@"inside the isEditing IF");
 			if ((point.x < 40) && ([[NSDate date] timeIntervalSinceDate:lastDeleteToggle] > 0.25))
 			{
 				self.lastDeleteToggle = [NSDate date];

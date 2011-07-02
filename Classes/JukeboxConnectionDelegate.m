@@ -77,7 +77,7 @@
 {	
 	DatabaseControlsSingleton *databaseControls = [DatabaseControlsSingleton sharedInstance];
 	
-	//NSLog(@"%@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
+	//DLog(@"%@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
 	
 	[musicControls.connectionQueue connectionFinished:theConnection];
 	

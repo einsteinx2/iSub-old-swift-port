@@ -44,7 +44,7 @@
 - (void)loadAlbumFolder
 {	
 	NSString *folderId = [folderIds objectAtIndex:0];
-	//NSLog(@"Loading folderid: %@", folderId);
+	//DLog(@"Loading folderid: %@", folderId);
 	
 	NSString *urlString = [NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"getMusicDirectory.view"], folderId];
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
@@ -203,7 +203,7 @@
 	// Continue the iteration
 	[self finishLoad];
 	
-	NSLog(@"QueueAll CONNECTION FAILED!!!");
+	DLog(@"QueueAll CONNECTION FAILED!!!");
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
@@ -231,8 +231,8 @@
 		[pool release];
 	}
 	
-	//NSLog(@"parser.listOfSongs = %@", parser.listOfSongs);
-	//NSLog(@"Playlist count: %i", [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"]);
+	//DLog(@"parser.listOfSongs = %@", parser.listOfSongs);
+	//DLog(@"Playlist count: %i", [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"]);
 	
 	for (Album *anAlbum in parser.listOfAlbums)
 	{

@@ -42,7 +42,7 @@
     for (NSString *fname in array)
     {
         NSDictionary *fileDict = [[NSFileManager defaultManager] fileAttributesAtPath:[path stringByAppendingPathComponent:fname] traverseLink:NO];
-		//NSLog(@"fileDict: %@", fileDict);
+		//DLog(@"fileDict: %@", fileDict);
         NSString *modDate = [[fileDict objectForKey:NSFileModificationDate] description];
 		if ([[fileDict objectForKey:NSFileType] isEqualToString: @"NSFileTypeDirectory"]) fname = [fname stringByAppendingString:@"/"];
 		[outdata appendFormat:@"<a href=\"%@\">%@</a>		(%8.1f Kb, %@)<br />\n", fname, fname, [[fileDict objectForKey:NSFileSize] floatValue] / 1024, modDate];
@@ -63,7 +63,7 @@
 	
 	[outdata appendString:@"</body></html>"];
     
-	//NSLog(@"outData: %@", outdata);
+	//DLog(@"outData: %@", outdata);
     return [outdata autorelease];
 }
 
@@ -85,7 +85,7 @@
 **/
 - (BOOL)supportsPOST:(NSString *)path withSize:(UInt64)contentLength
 {
-//	NSLog(@"POST:%@", path);
+//	DLog(@"POST:%@", path);
 	
 	dataStartIndex = 0;
 	multipartData = [[NSMutableArray alloc] init];
@@ -104,16 +104,16 @@
 **/
 - (NSObject<HTTPResponse> *)httpResponseForMethod:(NSString *)method URI:(NSString *)path
 {
-	NSLog(@"httpResponseForURI: method:%@ path:%@", method, path);
+	DLog(@"httpResponseForURI: method:%@ path:%@", method, path);
 	
 	NSData *requestData = [(NSData *)CFHTTPMessageCopySerializedMessage(request) autorelease];
 	
 	NSString *requestStr = [[[NSString alloc] initWithData:requestData encoding:NSASCIIStringEncoding] autorelease];
-	NSLog(@"\n=== Request ====================\n%@\n================================", requestStr);
+	DLog(@"\n=== Request ====================\n%@\n================================", requestStr);
 	
 	if (requestContentLength > 0)  // Process POST data
 	{
-		NSLog(@"processing post data: %llu", requestContentLength);
+		DLog(@"processing post data: %llu", requestContentLength);
 		
 		if ([multipartData count] < 2) return nil;
 		
@@ -135,7 +135,7 @@
 			int count = 2;	//number of times the separator shows up at the end of file data
 			
 			NSFileHandle* dataToTrim = [multipartData lastObject];
-			NSLog(@"data: %@", dataToTrim);
+			DLog(@"data: %@", dataToTrim);
 			
 			for (unsigned long long i = [dataToTrim offsetInFile] - l; i > 0; i--)
 			{
@@ -148,12 +148,12 @@
 				}
 			}
 			
-			NSLog(@"NewFileUploaded");
+			DLog(@"NewFileUploaded");
 			[[NSNotificationCenter defaultCenter] postNotificationName:@"NewFileUploaded" object:nil];
 		}
 		
 		for (int n = 1; n < [multipartData count] - 1; n++)
-			NSLog(@"%@", [[NSString alloc] initWithBytes:[[multipartData objectAtIndex:n] bytes] length:[[multipartData objectAtIndex:n] length] encoding:NSUTF8StringEncoding]);
+			DLog(@"%@", [[NSString alloc] initWithBytes:[[multipartData objectAtIndex:n] bytes] length:[[multipartData objectAtIndex:n] length] encoding:NSUTF8StringEncoding]);
 		
 		[postInfo release];
 		[multipartData release];
@@ -173,7 +173,7 @@
 
 		if ([self isBrowseable:folder])
 		{
-			//NSLog(@"folder: %@", folder);
+			//DLog(@"folder: %@", folder);
 			NSData *browseData = [[self createBrowseableIndex:folder] dataUsingEncoding:NSUTF8StringEncoding];
 			return [[[HTTPDataResponse alloc] initWithData:browseData] autorelease];
 		}
@@ -198,7 +198,7 @@
 	// The size of the chunks are limited by the POST_CHUNKSIZE definition.
 	// Therefore, this method may be called multiple times for the same POST request.
 	
-	//NSLog(@"processPostDataChunk");
+	//DLog(@"processPostDataChunk");
 	
 	if (!postHeaderOK)
 	{

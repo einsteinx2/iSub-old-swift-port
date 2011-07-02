@@ -47,7 +47,7 @@
 
 - (void)viewDidLoad 
 {
-	//NSLog(@"allAlbums viewDidLoad");
+	//DLog(@"allAlbums viewDidLoad");
     [super viewDidLoad];
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
@@ -67,7 +67,7 @@
 	self.sectionInfo = nil;
 	if ([databaseControls.allAlbumsDb tableExists:@"allAlbums"] == YES && ![[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllAlbumsLoading", appDelegate.defaultUrl]] isEqualToString:@"YES"])
 	{
-		//NSLog(@"1");
+		//DLog(@"1");
 		numberOfRows = [databaseControls.allAlbumsDb intForQuery:@"SELECT COUNT(*) FROM allAlbums"];
 		self.sectionInfo = [self createSectionInfo];
 		[self addCount];
@@ -197,7 +197,7 @@ static NSInteger order (id a, id b, void* context)
 			NSAutoreleasePool *autoreleasePool2 = [[NSAutoreleasePool alloc] init];
 			
 			NSArray *artistArray = [viewObjects.listOfArtists objectAtIndex:i];
-			//NSLog(@"artistArray: %@", artistArray);
+			//DLog(@"artistArray: %@", artistArray);
 			int artistNum = [databaseControls.allAlbumsDb intForQuery:@"SELECT artistNum FROM resumeLoad"];
 			int artistCount = [artistArray count];
 			for (int j = artistNum; j < artistCount; j++)
@@ -539,7 +539,7 @@ static NSInteger order (id a, id b, void* context)
 		viewObjects.allAlbumsLoadingProgress = 0;
 		viewObjects.allAlbumsLoadingScreen = [[LoadingScreen alloc] initOnView:self.view withMessage:[NSArray arrayWithObjects:@"Processing Artist:", @"", @"Total Albums:", @"", nil] blockInput:YES mainWindow:NO];
 		self.tableView.scrollEnabled = NO;
-		//NSLog(@"self.tableView: %@", self.tableView);
+		//DLog(@"self.tableView: %@", self.tableView);
 		[(CustomUITableView*)self.tableView setBlockInput:YES];
 		self.navigationItem.leftBarButtonItem = nil;
 		self.navigationItem.rightBarButtonItem = nil;
@@ -550,13 +550,13 @@ static NSInteger order (id a, id b, void* context)
 		viewObjects.allAlbumsLoadingProgress = [databaseControls.allAlbumsDb intForQuery:@"SELECT COUNT(*) FROM allAlbumsTemp"];
 		viewObjects.allAlbumsLoadingScreen = [[LoadingScreen alloc] initOnView:self.view withMessage:[NSArray arrayWithObjects:@"Processing Artist:", @"", @"Total Albums:", @"", nil] blockInput:YES mainWindow:NO];
 		self.tableView.scrollEnabled = NO;
-		//NSLog(@"self.tableView: %@", self.tableView);
+		//DLog(@"self.tableView: %@", self.tableView);
 		[(CustomUITableView*)self.tableView setBlockInput:YES];
 		self.navigationItem.leftBarButtonItem = nil;
 		self.navigationItem.rightBarButtonItem = nil;
 		[self performSelectorInBackground:@selector(loadData) withObject:nil];
 	}
-	//NSLog(@"loading screen bounds: %@", NSStringFromCGRect(viewObjects.allAlbumsLoadingScreen.view.bounds));
+	//DLog(@"loading screen bounds: %@", NSStringFromCGRect(viewObjects.allAlbumsLoadingScreen.view.bounds));
 }
 
 
@@ -706,7 +706,7 @@ static NSInteger order (id a, id b, void* context)
 	// Perform the search
 	[databaseControls.allAlbumsDb executeUpdate:@"INSERT INTO allAlbumsSearch SELECT * FROM allAlbums WHERE title MATCH ? LIMIT 100", searchBar.text];
 	if ([databaseControls.allAlbumsDb hadError]) {
-		NSLog(@"Err %d: %@", [databaseControls.allAlbumsDb lastErrorCode], [databaseControls.allAlbumsDb lastErrorMessage]);
+		DLog(@"Err %d: %@", [databaseControls.allAlbumsDb lastErrorCode], [databaseControls.allAlbumsDb lastErrorMessage]);
 	}
 }
 

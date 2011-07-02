@@ -36,7 +36,7 @@
 		
 		if (mainWindow)
 		{
-			//NSLog(@"mainWindow");
+			//DLog(@"mainWindow");
 			CGRect frame = self.loadingScreenRectangle.frame;
 			frame.origin.y -= 40;
 			self.loadingScreenRectangle.frame = frame;
@@ -96,7 +96,7 @@
 
 - (IBAction)inputBlockerAction:(id)sender
 {
-	//NSLog(@"INPUT BLOOOOOOOOOCKER!!!!!!");
+	//DLog(@"INPUT BLOOOOOOOOOCKER!!!!!!");
 }
 
 

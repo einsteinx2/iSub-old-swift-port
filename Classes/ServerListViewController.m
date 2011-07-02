@@ -64,7 +64,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchServer) name:@"switchServer" object:nil];
 	
 	//viewObjects.tempServerList = [[NSMutableArray arrayWithArray:viewObjects.serverList] retain];
-	//NSLog(@"tempServerList: %@", viewObjects.tempServerList);
+	//DLog(@"tempServerList: %@", viewObjects.tempServerList);
 	
 	self.title = @"Servers";
 	if(self != [[self.navigationController viewControllers] objectAtIndex:0])
@@ -208,7 +208,7 @@
 - (void)viewDidUnload {
 	// Release any retained subviews of the main view.
 	// e.g. self.myOutlet = nil;
-	//NSLog(@"server list view controller view did unload");
+	//DLog(@"server list view controller view did unload");
 }
 
 - (void)showServerEditScreen
@@ -262,16 +262,20 @@
 		if (viewObjects.isAlbumsLoading || viewObjects.isSongsLoading)
 		{
 			if (viewObjects.isAlbumsLoading)
-				NSLog(@"detected albums tab loading");
+			{
+				DLog(@"detected albums tab loading");
+			}
 			else if (viewObjects.isSongsLoading)
-				NSLog(@"detected songs tab loading");
+			{
+				DLog(@"detected songs tab loading");
+			}
 			
 			viewObjects.cancelLoading = YES;
 		}
 		
 		while (viewObjects.cancelLoading == YES)
 		{
-			NSLog(@"waiting for the load to cancel before continuing");
+			DLog(@"waiting for the load to cancel before continuing");
 		}
 		
 		// Stop any playing song and remove old tab bar controller from window

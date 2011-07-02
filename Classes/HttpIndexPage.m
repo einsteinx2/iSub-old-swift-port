@@ -51,7 +51,7 @@
 	[databaseControls.inMemoryDb executeUpdate:@"DROP TABLE cachedSongsArtistList"];
 	[databaseControls.inMemoryDb executeUpdate:@"CREATE TABLE cachedSongsArtistList (artist TEXT UNIQUE)"];
 	[databaseControls.inMemoryDb executeUpdate:@"ATTACH DATABASE ? AS songCacheDb", [NSString stringWithFormat:@"%@/songCache.db", databaseControls.databaseFolderPath]];
-	if ([databaseControls.inMemoryDb hadError]) { NSLog(@"Err attaching the songCacheDb %d: %@", [databaseControls.inMemoryDb lastErrorCode], [databaseControls.inMemoryDb lastErrorMessage]); }
+	if ([databaseControls.inMemoryDb hadError]) { DLog(@"Err attaching the songCacheDb %d: %@", [databaseControls.inMemoryDb lastErrorCode], [databaseControls.inMemoryDb lastErrorMessage]); }
 	[databaseControls.inMemoryDb executeUpdate:@"INSERT OR IGNORE INTO cachedSongsArtistList SELECT seg1 FROM cachedSongsLayout"];
 	[databaseControls.inMemoryDb executeUpdate:@"DETACH DATABASE songCacheDb"];
 

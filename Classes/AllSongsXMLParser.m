@@ -50,7 +50,7 @@
 	/*CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	[alert show];
 	[alert release];*/
-	NSLog(@"Subsonic error %@:  %@", errorCode, message);
+	DLog(@"Subsonic error %@:  %@", errorCode, message);
 }
 
 
@@ -59,7 +59,7 @@
 	[databaseControls.genresDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO %@ (md5, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", table], [NSString md5:aSong.path], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
 	
 	if ([databaseControls.genresDb hadError]) {
-		NSLog(@"Err inserting song into genre table %d: %@", [databaseControls.genresDb lastErrorCode], [databaseControls.genresDb lastErrorMessage]);
+		DLog(@"Err inserting song into genre table %d: %@", [databaseControls.genresDb lastErrorCode], [databaseControls.genresDb lastErrorMessage]);
 	}
 	
 	return [databaseControls.genresDb hadError];
@@ -70,7 +70,7 @@
 	/*CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:[NSString stringWithFormat:@"An error occured reading the response from Subsonic.\n\nIf you are loading the artist list, this can mean the server URL is wrong\n\nError: %@", parseError.localizedDescription] delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	[alert show];
 	[alert release];*/
-	NSLog(@"%@", [NSString stringWithFormat:@"An error occured reading the response from Subsonic.\n\nIf you are loading the artist list, this can mean the server URL is wrong\n\nError: %@", parseError.localizedDescription]);
+	DLog(@"%@", [NSString stringWithFormat:@"An error occured reading the response from Subsonic.\n\nIf you are loading the artist list, this can mean the server URL is wrong\n\nError: %@", parseError.localizedDescription]);
 }
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName 
@@ -188,9 +188,9 @@
 							// Check if the genre has a table in the database yet, if not create it and add the new genre to the genres table
 							if ([databaseControls.genresDb intForQuery:@"SELECT COUNT(*) FROM genresTemp WHERE genre = ?", aSong.genre] == 0)
 							{							
-								NSLog(@"aSong.genre: %@", aSong.genre);
+								DLog(@"aSong.genre: %@", aSong.genre);
 								[databaseControls.genresDb executeUpdate:@"INSERT INTO genresTemp (genre) VALUES (?)", aSong.genre];
-								if ([databaseControls.genresDb hadError]) { NSLog(@"Err adding the genre %d: %@", [databaseControls.genresDb lastErrorCode], [databaseControls.genresDb lastErrorMessage]); }
+								if ([databaseControls.genresDb hadError]) { DLog(@"Err adding the genre %d: %@", [databaseControls.genresDb lastErrorCode], [databaseControls.genresDb lastErrorMessage]); }
 							}
 							
 							// Insert the song object into the appropriate genre table
@@ -244,7 +244,7 @@
 	/*// After finished processing an album folder, add the lists and dicts to the album list cache
 	[databaseControls.albumListCacheDb executeUpdate:@"INSERT OR REPLACE INTO albumListCache (id, data) VALUES (?, ?)", [NSString md5:viewObjects.allSongsCurrentAlbumId], [NSKeyedArchiver archivedDataWithRootObject:[NSArray arrayWithObjects:viewObjects.allSongsListOfAlbums, viewObjects.allSongsListOfSongs, nil]]];
 	if ([databaseControls.albumListCacheDb hadError]) {
-		NSLog(@"Err %d: %@", [databaseControls.albumListCacheDb lastErrorCode], [databaseControls.albumListCacheDb lastErrorMessage]);
+		DLog(@"Err %d: %@", [databaseControls.albumListCacheDb lastErrorCode], [databaseControls.albumListCacheDb lastErrorMessage]);
 	}*/
 }
 

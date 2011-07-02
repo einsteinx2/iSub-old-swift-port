@@ -81,12 +81,12 @@
 				[self.listOfAlbums addObject:anAlbum];
 			}
 			
-			//NSLog(@"%@", anAlbum.title);
-			//NSLog(@"%@", anAlbum.albumId);
-			//NSLog(@"%@", anAlbum.coverArtId);
-			//NSLog(@"%@", anAlbum.artistName);
-			//NSLog(@"%@", anAlbum.artistId);
-			//NSLog(@"  ");
+			//DLog(@"%@", anAlbum.title);
+			//DLog(@"%@", anAlbum.albumId);
+			//DLog(@"%@", anAlbum.coverArtId);
+			//DLog(@"%@", anAlbum.artistName);
+			//DLog(@"%@", anAlbum.artistId);
+			//DLog(@"  ");
 			
 			[anAlbum release];
 		}
@@ -125,7 +125,7 @@
 			if (aSong.path)
 			{
 				[self.listOfSongs addObject:aSong];
-				//NSLog(@"listOfSongs count: %i", [self.listOfSongs count]);
+				//DLog(@"listOfSongs count: %i", [self.listOfSongs count]);
 			}
 			
 			[aSong release];

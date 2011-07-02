@@ -50,7 +50,7 @@
 
 
 #ifdef kHockeyDebugEnabled
-#define BWHockeyLog(fmt, ...) NSLog((@"[HockeyLib] %s/%d " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#define BWHockeyLog(fmt, ...) DLog((@"[HockeyLib] %s/%d " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
 #else
 #define BWHockeyLog(...)
 #endif

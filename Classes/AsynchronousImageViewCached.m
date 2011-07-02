@@ -62,7 +62,7 @@
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
-	NSLog(@"Connection to album art failed");
+	DLog(@"Connection to album art failed");
 	self.image = [UIImage imageNamed:@"default-album-art-small.png"];
 	[data release];
 	[connection release];

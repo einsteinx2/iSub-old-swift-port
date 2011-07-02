@@ -42,7 +42,7 @@
 	[self retain];
 	[appDelegate.currentTabBarController.view removeFromSuperview];*/
 	
-	NSLog(@"Error parsing update XML response");
+	DLog(@"Error parsing update XML response");
 }
 
 
@@ -67,9 +67,9 @@
 		NSString *currentVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
 		newVersion = [attributeDict objectForKey:@"version"];
 		message = [attributeDict objectForKey:@"message"];
-		NSLog(@"currentVersion = %@", currentVersion);
-		NSLog(@"newVersion = %@", newVersion);
-		NSLog(@"message = %@", message);
+		DLog(@"currentVersion = %@", currentVersion);
+		DLog(@"newVersion = %@", newVersion);
+		DLog(@"message = %@", message);
 		
 		NSArray *currentVersionSplit = [currentVersion componentsSeparatedByString:@"."];
 		NSArray *newVersionSplit = [newVersion componentsSeparatedByString:@"."];
@@ -93,10 +93,10 @@
 			}
 		}
 		
-		NSLog(@"currentVersionSplit: %@", currentVersionSplit);
-		NSLog(@"newVersionSplit: %@", newVersionSplit);
-		NSLog(@"currentVersionPadded: %@", currentVersionPadded);
-		NSLog(@"newVersionPadded: %@", newVersionPadded);
+		DLog(@"currentVersionSplit: %@", currentVersionSplit);
+		DLog(@"newVersionSplit: %@", newVersionSplit);
+		DLog(@"currentVersionPadded: %@", currentVersionPadded);
+		DLog(@"newVersionPadded: %@", newVersionPadded);
 		
 		
 		@try 
@@ -128,7 +128,7 @@
 		}
 		@catch (NSException *exception) 
 		{
-			NSLog(@"Range exception checking update version - %@: %@", [exception name], [exception reason]);
+			DLog(@"Range exception checking update version - %@: %@", [exception name], [exception reason]);
 		}
 	}
 }

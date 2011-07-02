@@ -41,7 +41,7 @@
 		textView.textColor = [UIColor whiteColor];
 		textView.font = [UIFont systemFontOfSize:16.5];
 		textView.editable = NO;
-		//NSLog(@"Lyrics query: SELECT lyrics FROM lyrics WHERE artist = %@ AND title = %@", musicControls.currentSongObject.artist, musicControls.currentSongObject.title);
+		//DLog(@"Lyrics query: SELECT lyrics FROM lyrics WHERE artist = %@ AND title = %@", musicControls.currentSongObject.artist, musicControls.currentSongObject.title);
 		NSString *lyrics = [databaseControls.lyricsDb stringForQuery:@"SELECT lyrics FROM lyrics WHERE artist = ? AND title = ?", musicControls.currentSongObject.artist, musicControls.currentSongObject.title];
 		if (lyrics)
 		{

@@ -365,7 +365,7 @@
 	
 	// Parse the XML
 	NSURL *url = [[NSURL alloc] initWithString:urlString];
-	//NSLog(@"url: %@", urlString);
+	//DLog(@"url: %@", urlString);
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
 	[request startSynchronous];
 	if ([request error])

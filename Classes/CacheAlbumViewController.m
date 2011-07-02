@@ -360,7 +360,7 @@
 	FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT * FROM cachedSongs WHERE md5 = ?", md5];
 	[result next];
 	if ([databaseControls.songCacheDb hadError]) {
-		NSLog(@"Err %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
+		DLog(@"Err %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
 	}
 	
 	aSong.title = [result stringForColumnIndex:4];
@@ -540,7 +540,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			//cacheAlbumViewController.listOfSongs = [[NSMutableArray alloc] init];
 			cacheAlbumViewController.segment = (self.segment + 1);
 			cacheAlbumViewController.seg1 = self.seg1;
-			//NSLog(@"query: %@", [NSString stringWithFormat:@"SELECT md5, segs, seg%i FROM cachedSongsLayout WHERE seg1 = '%@' AND seg%i = '%@' GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), seg1, segment, [[listOfAlbums objectAtIndex:indexPath.row] objectAtIndex:1], (segment + 1), (segment + 1)]);
+			//DLog(@"query: %@", [NSString stringWithFormat:@"SELECT md5, segs, seg%i FROM cachedSongsLayout WHERE seg1 = '%@' AND seg%i = '%@' GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), seg1, segment, [[listOfAlbums objectAtIndex:indexPath.row] objectAtIndex:1], (segment + 1), (segment + 1)]);
 			FMResultSet *result = [databaseControls.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? AND seg%i = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), segment, (segment + 1), (segment + 1)], seg1, [[listOfAlbums objectAtIndex:indexPath.row] objectAtIndex:1]];
 			while ([result next])
 			{
@@ -587,9 +587,9 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			[databaseControls resetCurrentPlaylistDb];
 			for(NSArray *song in listOfSongs)
 			{
-				//NSLog(@"songMD5: %@", songMD5);
+				//DLog(@"songMD5: %@", songMD5);
 				Song *aSong = [self songFromCacheDb:[song objectAtIndex:0]];
-				//NSLog(@"aSong: %@", aSong);
+				//DLog(@"aSong: %@", aSong);
 				[databaseControls addSongToPlaylistQueue:aSong];
 				//[databaseControls insertSong:aSong intoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 			}
@@ -609,7 +609,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:musicControls];
 			if (!connection)
 			{
-				NSLog(@"Subsonic cached song play notification failed");
+				DLog(@"Subsonic cached song play notification failed");
 			}
 			
 			// Update the playtime to now

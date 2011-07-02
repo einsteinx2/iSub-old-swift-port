@@ -330,7 +330,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 	}
 	
 	int count = appDelegate.mainTabBarController.viewControllers.count;
-	//NSLog(@"savedTabsOrderArray: %@", savedTabsOrderArray);
+	//DLog(@"savedTabsOrderArray: %@", savedTabsOrderArray);
 	if (savedTabsOrderArray.count == count) 
 	{
 		BOOL needsReordering = NO;

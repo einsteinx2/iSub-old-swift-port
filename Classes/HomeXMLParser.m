@@ -111,8 +111,8 @@
 				splitPath = [path componentsSeparatedByString:@"/"];
 			}
 			
-			//NSLog(@"splitPath: %@", splitPath);
-			//NSLog(@"[splitPath objectAtIndex:[splitPath count] - 2]: %@", [splitPath objectAtIndex:[splitPath count] - 2]);
+			//DLog(@"splitPath: %@", splitPath);
+			//DLog(@"[splitPath objectAtIndex:[splitPath count] - 2]: %@", [splitPath objectAtIndex:[splitPath count] - 2]);
 			if ([splitPath count] > 0 && [splitPath count] < 2)
 			{
 				anAlbum.artistName = [splitPath objectAtIndex:0];

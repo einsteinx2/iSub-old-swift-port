@@ -142,7 +142,7 @@ NSBundle *quincyBundle() {
             
 			// Enable the Crash Reporter
 			if (![crashReporter enableCrashReporterAndReturnError: &error])
-				NSLog(@"Warning: Could not enable crash reporter: %@", error);
+				DLog(@"Warning: Could not enable crash reporter: %@", error);
             
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startManager) name:BWQuincyNetworkBecomeReachable object:nil];
 		}
@@ -360,7 +360,7 @@ NSBundle *quincyBundle() {
 			_serverResult = (CrashReportStatus)[_contentOfProperty intValue];
 		} else {
             CrashReportStatus errorcode = (CrashReportStatus)[_contentOfProperty intValue];
-			NSLog(@"CrashReporter ended in error code: %i", errorcode);
+			DLog(@"CrashReporter ended in error code: %i", errorcode);
 		}
 	}
 }
@@ -424,7 +424,7 @@ NSBundle *quincyBundle() {
 			PLCrashReport *report = [[[PLCrashReport alloc] initWithData:crashData error:&error] autorelease];
 			
             if (report == nil) {
-                NSLog(@"Could not parse crash report");
+                DLog(@"Could not parse crash report");
                 continue;
             }
 
@@ -878,7 +878,7 @@ NSBundle *quincyBundle() {
         NSString *cacheFilename = [NSString stringWithFormat: @"%.0f", [NSDate timeIntervalSinceReferenceDate]];
 	
         if (_crashData == nil) {
-            NSLog(@"Could not load crash report: %@", error);
+            DLog(@"Could not load crash report: %@", error);
         } else {
             [_crashData writeToFile:[_crashesDir stringByAppendingPathComponent: cacheFilename] atomically:YES];
 		}

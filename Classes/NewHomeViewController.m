@@ -388,7 +388,7 @@
 		else
 			urlString = [NSString stringWithFormat:@"%@&size=100&musicFolderId=%i", [appDelegate getBaseUrl:@"getRandomSongs.view"], folderId];
 	}
-	NSLog(@"urlString: %@", urlString);
+	DLog(@"urlString: %@", urlString);
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
 	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
@@ -628,7 +628,7 @@
 					 [appDelegate getBaseUrl:@"search.view"], [searchBar.text stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	}
 	
-	//NSLog(@"search url: %@", urlString);
+	//DLog(@"search url: %@", urlString);
 	
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
@@ -746,17 +746,17 @@
 				if (searchSegment.selectedSegmentIndex == 0)
 				{
 					searchViewController.listOfArtists = [NSMutableArray arrayWithArray:parser.listOfArtists];
-					//NSLog(@"%@", searchViewController.listOfArtists);
+					//DLog(@"%@", searchViewController.listOfArtists);
 				}
 				else if (searchSegment.selectedSegmentIndex == 1)
 				{
 					searchViewController.listOfAlbums = [NSMutableArray arrayWithArray:parser.listOfAlbums];
-					//NSLog(@"%@", searchViewController.listOfAlbums);
+					//DLog(@"%@", searchViewController.listOfAlbums);
 				}
 				else if (searchSegment.selectedSegmentIndex == 2)
 				{
 					searchViewController.listOfSongs = [NSMutableArray arrayWithArray:parser.listOfSongs];
-					//NSLog(@"%@", searchViewController.listOfSongs);
+					//DLog(@"%@", searchViewController.listOfSongs);
 				}
 				
 				searchViewController.searchType = searchSegment.selectedSegmentIndex;

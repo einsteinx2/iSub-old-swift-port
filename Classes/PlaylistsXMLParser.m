@@ -74,7 +74,7 @@
 	}
 	else if([elementName isEqualToString:@"playlists"]) 
 	{
-		//NSLog(@"hit playlists xml tag");
+		//DLog(@"hit playlists xml tag");
 		viewObjects.listOfPlaylists = [NSMutableArray arrayWithCapacity:1];
 		//viewObjects.listOfPlaylists = nil; viewObjects.listOfPlaylists = [[NSMutableArray alloc] init];
 		isPlaylist = NO;
@@ -163,7 +163,7 @@
 			// After finished processing an album folder, add the lists and dicts to the album list cache
 			//[appDelegate.albumListCacheDb executeUpdate:@"INSERT INTO albumListCache (id, data) VALUES (?, ?)", [NSString md5:appDelegate.subsonicPlaylist.albumId], [NSKeyedArchiver archivedDataWithRootObject:[NSArray arrayWithObjects:appDelegate.listOfPlaylistSongs, appDelegate.dictOfPlaylistSongs, nil]]];
 			//if ([appDelegate.albumListCacheDb hadError]) {
-			//	NSLog(@"Err %d: %@", [appDelegate.albumListCacheDb lastErrorCode], [appDelegate.albumListCacheDb lastErrorMessage]);
+			//	DLog(@"Err %d: %@", [appDelegate.albumListCacheDb lastErrorCode], [appDelegate.albumListCacheDb lastErrorMessage]);
 			//}
 		}
 	}

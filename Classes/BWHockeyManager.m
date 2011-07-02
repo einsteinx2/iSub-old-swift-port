@@ -629,7 +629,7 @@ static NSString *kHockeyErrorDomain = @"HockeyErrorDomain";
                 }
             } else {
                 // different token, block this version
-                NSLog(@"AUTH FAILURE");
+                DLog(@"AUTH FAILURE");
                 
                 // store the new data
                 [[NSUserDefaults standardUserDefaults] setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"] forKey:kHockeyAuthorizedVersion];

@@ -261,7 +261,7 @@
 	float height = fullSize.height;
 	
 	if (NO) { // Just for debugging.
-		NSLog(@"Target orientation is %@, dimensions will be %.0f x %.0f", 
+		DLog(@"Target orientation is %@, dimensions will be %.0f x %.0f", 
 			  [self nameOfInterfaceOrientation:theOrientation], width, height);
 	}
 	
@@ -924,7 +924,7 @@
 			self.masterViewController = [controllers objectAtIndex:0];
 			self.detailViewController = [controllers objectAtIndex:1];
 		} else {
-			NSLog(@"Error: %@ requires 2 view-controllers. (%@)", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+			DLog(@"Error: %@ requires 2 view-controllers. (%@)", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
 		}
 		
 		[self layoutSubviews];
@@ -989,7 +989,7 @@
 
 - (void)setDetailViewController:(UIViewController *)detail
 {
-	NSLog(@"_viewControllers: %@", _viewControllers);
+	DLog(@"_viewControllers: %@", _viewControllers);
 	if (!_viewControllers) {
 		_viewControllers = [[NSMutableArray alloc] initWithCapacity:2];
 		[_viewControllers addObject:[NSNull null]];
@@ -1008,7 +1008,7 @@
 	}
 	
 	if (changed) {
-		NSLog(@"_viewControllers: %@", _viewControllers);
+		DLog(@"_viewControllers: %@", _viewControllers);
 		[self layoutSubviews];
 		[[_viewControllers objectAtIndex:1] viewDidAppear:NO];
 	}

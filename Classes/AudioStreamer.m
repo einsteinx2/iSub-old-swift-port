@@ -184,7 +184,7 @@ void MyAudioQueueIsRunningCallback(void *inUserData, AudioQueueRef inAQ, AudioQu
 //
 void MyAudioSessionInterruptionListener(void *inClientData, UInt32 inInterruptionState)
 {
-	NSLog(@"MyAudioSessionInterruptionListener called");
+	DLog(@"MyAudioSessionInterruptionListener called");
 	//AudioStreamer* streamer = (AudioStreamer *)inClientData;
 	//if (streamer)
 	//	[streamer handleInterruptionChangeToState:inInterruptionState];
@@ -200,7 +200,7 @@ void MyAudioSessionInterruptionListener(void *inClientData, UInt32 inInterruptio
 
 void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue) 
 {
-    NSLog(@"audioRouteChangeListenerCallback called");
+    DLog(@"audioRouteChangeListenerCallback called");
 	
 	//iSubAppDelegate *appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
@@ -321,7 +321,7 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 //
 - (void)dealloc
 {
-	//NSLog(@"------ audiostreamer dealloc called");
+	//DLog(@"------ audiostreamer dealloc called");
 	shouldInvalidateTweetTimer = NO;
 	tweetTimer = nil;
 	[self stop];
@@ -455,14 +455,14 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 		if (err)
 		{
 			char *errChars = (char *)&err;
-			NSLog(@"%@ err: %c%c%c%c %d\n",
+			DLog(@"%@ err: %c%c%c%c %d\n",
 				[AudioStreamer stringForErrorCode:anErrorCode],
 				errChars[3], errChars[2], errChars[1], errChars[0],
 				(int)err);
 		}
 		else
 		{
-			NSLog(@"%@", [AudioStreamer stringForErrorCode:anErrorCode]);
+			DLog(@"%@", [AudioStreamer stringForErrorCode:anErrorCode]);
 		}
 
 		if (state == AS_PLAYING ||
@@ -519,7 +519,7 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 {
 	@synchronized(self)
 	{
-		//NSLog(@"sending change of state notification");
+		//DLog(@"sending change of state notification");
 		if (state != aStatus)
 		{
 			state = aStatus;
@@ -633,7 +633,7 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 			fileExtension = appDelegate.currentSongObject.transcodedSuffix;
 		else
 			fileExtension = appDelegate.currentSongObject.suffix;
-		NSLog(@"fileExtension = %@", fileExtension);*/
+		DLog(@"fileExtension = %@", fileExtension);*/
 		
 		//AudioFileTypeID fileTypeHint = kAudioFileMP3Type;
 		AudioFileTypeID fileTypeHint = kAudioFileMPEG4Type;
@@ -669,7 +669,7 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 		{
 			fileTypeHint = kAudioFileAAC_ADTSType;
 		}
-		//NSLog(@"fileTypeHint: %@", fileTypeHint);
+		//DLog(@"fileTypeHint: %@", fileTypeHint);
 
 		// create an audio file stream parser
 		err = AudioFileStreamOpen(self, MyPropertyListenerProc, MyPacketsProc, 
@@ -683,20 +683,20 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 		if (fixedLength) 
 		{
 			// Just open the file at the specified location
-			//NSLog(@"Opening file stream for %@", [url absoluteString] );
+			//DLog(@"Opening file stream for %@", [url absoluteString] );
 			stream = CFReadStreamCreateWithFile(kCFAllocatorDefault, (CFURLRef)url);
 			if (!stream)
-				NSLog(@"Could not open file stream");
+				DLog(@"Could not open file stream");
 			if(!CFReadStreamSetProperty(stream, kCFStreamPropertyFileCurrentOffset, CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &offsetStart)))
-				NSLog(@"error setting the offset");
-			//NSLog(@"Stream created");
+				DLog(@"error setting the offset");
+			//DLog(@"Stream created");
 		} 
 		else 
 		{
 			//
 			// Create the GET request
 			//
-			//NSLog(@"Opening HTTP stream");
+			//DLog(@"Opening HTTP stream");
 			CFHTTPMessageRef message= CFHTTPMessageCreateRequest(NULL, (CFStringRef)@"GET", (CFURLRef)url, kCFHTTPVersion1_1);
 			stream = CFReadStreamCreateForHTTPRequest(NULL, message);
 			CFRelease(message);			
@@ -758,18 +758,18 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 			}
 		}
 		
-		//NSLog(@"Ready to open stream");
+		//DLog(@"Ready to open stream");
 		//
 		// Open the stream
 		//
 		if (!CFReadStreamOpen(stream))
 		{
-			NSLog(@"Failed to open stream");
+			DLog(@"Failed to open stream");
 			CFStreamError myErr = CFReadStreamGetError(stream);
 			
 			errorCode = AS_FILE_STREAM_OPEN_FAILED;
 			
-			NSLog(@"Error domain = %ld, err = %ld", myErr.domain, myErr.error);
+			DLog(@"Error domain = %ld, err = %ld", myErr.domain, myErr.error);
 			CFRelease(stream);
 			stream = nil;
 /*#ifdef TARGET_OS_IPHONE
@@ -804,7 +804,7 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 		} 
 		else 
 		{
-			//NSLog(@"Opened the stream!");
+			//DLog(@"Opened the stream!");
 			
 			
 			//
@@ -854,7 +854,7 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 //
 - (void)startInternal
 {
-	NSLog(@"------ audiostreamer startInternal called");
+	DLog(@"------ audiostreamer startInternal called");
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
 	@synchronized(self)
@@ -920,11 +920,11 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 	{
 		// If we are playing a fixed-length MP3 make sure we are not too close to the end of the file.  This prevents us from hitting the end of the file 
 		// before it is fully downloaded.  Very useful when not on 3G since the song may be played faster than it is downloaded.
-		//NSLog(@"fileDownloadCurrentSize:  %i   (fileDownloadBytesRead + (kAQBufSize * kNumAQBufs):  %i", self.fileDownloadCurrentSize, (fileDownloadBytesRead + (kAQBufSize * kNumAQBufs)));
+		//DLog(@"fileDownloadCurrentSize:  %i   (fileDownloadBytesRead + (kAQBufSize * kNumAQBufs):  %i", self.fileDownloadCurrentSize, (fileDownloadBytesRead + (kAQBufSize * kNumAQBufs)));
 		if (!fixedLength || self.fileDownloadComplete || self.fileDownloadCurrentSize > (fileDownloadBytesRead + (kAQBufSize * kNumAQBufs))) 
 		{	
 			if (isThrottling) {
-				//NSLog(@"Stop throttling.");
+				//DLog(@"Stop throttling.");
 				isThrottling = NO;
 				AudioQueueStart(audioQueue, NULL);
 				self.state = AS_PLAYING;
@@ -944,7 +944,7 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 		} 
 		else if (!isThrottling && self.state == AS_PLAYING) 
 		{
-			//NSLog(@"Start throttling because we are too close to EOF.");
+			//DLog(@"Start throttling because we are too close to EOF.");
 			
 			self.state = AS_BUFFERING;
 			
@@ -1021,7 +1021,7 @@ cleanup:
 //
 - (void)start
 {
-	NSLog(@"------ audiostreamer start called");
+	DLog(@"------ audiostreamer start called");
 	@synchronized (self)
 	{
 		if (state == AS_PAUSED)
@@ -1056,7 +1056,7 @@ cleanup:
 		double scrobblePercent = [[appDelegate.settingsDictionary objectForKey:@"scrobblePercentSetting"] doubleValue];
 		double duration = [musicControls.currentSongObject.duration doubleValue];
 		scrobbleInterval = scrobblePercent * duration;
-		NSLog(@"duration: %f    percent: %f    scrobbleInterval: %f", duration, scrobblePercent, scrobbleInterval);
+		DLog(@"duration: %f    percent: %f    scrobbleInterval: %f", duration, scrobblePercent, scrobbleInterval);
 	}
 	scrobbleTimer = [[NSTimer scheduledTimerWithTimeInterval:scrobbleInterval target:self selector:@selector(scrobbleSong) userInfo:nil repeats:NO] retain];
 	
@@ -1082,7 +1082,7 @@ cleanup:
 	{
 		if (musicControls.currentSongObject.artist && musicControls.currentSongObject.title)
 		{
-			NSLog(@"------------- tweeting song --------------");
+			DLog(@"------------- tweeting song --------------");
 			NSString *tweet = [NSString stringWithFormat:@"is listening to \"%@\" by %@", musicControls.currentSongObject.title, musicControls.currentSongObject.artist];
 			if ([tweet length] <= 140)
 				[socialControls.twitterEngine sendUpdate:tweet];
@@ -1090,12 +1090,12 @@ cleanup:
 				[socialControls.twitterEngine sendUpdate:[tweet substringToIndex:140]];
 		}
 		else {
-			//NSLog(@"------------- not tweeting song because either no artist or no title --------------");
+			//DLog(@"------------- not tweeting song because either no artist or no title --------------");
 		}
 
 	}
 	else {
-		//NSLog(@"------------- not tweeting song because no engine or not enabled --------------");
+		//DLog(@"------------- not tweeting song because no engine or not enabled --------------");
 	}
 
 }
@@ -1121,7 +1121,7 @@ cleanup:
 	
 	MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
 	
-	//NSLog(@"AudioStreamer::startAt - starting at second %d", offsetInSecs);
+	//DLog(@"AudioStreamer::startAt - starting at second %d", offsetInSecs);
 	
 	if ([self isPlaying]) 
 		[self stop];
@@ -1136,7 +1136,7 @@ cleanup:
 	{
 		self.offsetStart = 0;
 		[self start];	
-		while ( !self.bitRate ) { NSLog(@"stuck in bitrate loop");}
+		while ( !self.bitRate ) { DLog(@"stuck in bitrate loop");}
 		[self stop];
 		
 		// This is needed or the iPhone cuts out on the second play, also can block never starting audio.   
@@ -1152,20 +1152,20 @@ cleanup:
 	}*/
 	bitRate = musicControls.bitRate;
 	
-	//NSLog(@"AudioStreamer::startAt - this files total offset %d", thisFileDataOffset);
+	//DLog(@"AudioStreamer::startAt - this files total offset %d", thisFileDataOffset);
 	
 	// 1 kilobit == 128 bytes
-	//NSLog(@"self.bitrate = %d", self.bitRate);
+	//DLog(@"self.bitrate = %d", self.bitRate);
 	if (self.bitRate < 1000)
 	{
 		self.offsetStart = ( self.bitRate * 128 * offsetInSecs );// + thisFileDataOffset;
-		//NSLog(@"self.offsetStart: %i", self.offsetStart);
+		//DLog(@"self.offsetStart: %i", self.offsetStart);
 		
 	}
 	else
 	{
 		self.offsetStart = ( (self.bitRate / 1000) * 128 * offsetInSecs );// + thisFileDataOffset;
-		//NSLog(@"self.offsetStart: %i", self.offsetStart);
+		//DLog(@"self.offsetStart: %i", self.offsetStart);
 	}
 	
 	self.fileDownloadBytesRead = self.offsetStart;
@@ -1182,10 +1182,10 @@ cleanup:
 	BOOL keepWaiting = YES;
 	while (keepWaiting)
 	{
-		//NSLog(@"in the keepWaiting loop");
+		//DLog(@"in the keepWaiting loop");
 		if ([self queueFailed])
 		{
-			NSLog(@"queueFailed");
+			DLog(@"queueFailed");
 			self.offsetStart -= 1000;
 			self.fileDownloadBytesRead = self.offsetStart;
 			err = 0;
@@ -1552,6 +1552,17 @@ cleanup:
 		{
 			err = AudioQueueEnqueueBuffer(audioQueue, fillBuf, 0, NULL);
 		}
+		
+		/*//SInt16* audioData = fillBuf->mAudioData;
+		for (int i = 0; i < fillBuf->mAudioDataByteSize; i+=2)
+		{
+			char *buf = (char *) fillBuf->mAudioData;
+			SInt16 s = (buf[i] << 16) | (buf[i+1] << 8);
+			DLog(@"AudioData: %hi", s);
+			//in[i] = (double) s;
+			//in[i+1] = 0;
+		}
+		DLog(@"   ");*/
 		
 		if (err)
 		{
@@ -1963,7 +1974,7 @@ cleanup:
 
 //
 //  Enable this logging to measure how many buffers are queued at any time.
-//	NSLog(@"Queued buffers: %ld", buffersUsed);
+//	DLog(@"Queued buffers: %ld", buffersUsed);
 //
 	
 	pthread_cond_signal(&queueBufferReadyCondition);
@@ -2015,7 +2026,7 @@ cleanup:
 			}
 			else
 			{
-				NSLog(@"AudioQueue changed state in unexpected way.");
+				DLog(@"AudioQueue changed state in unexpected way.");
 			}
 		}
 	}
@@ -2046,26 +2057,26 @@ cleanup:
 }*/
 - (void)handleInterruptionChangeToState:(AudioQueuePropertyID)inInterruptionState
 {
-	//NSLog(@"handleInterruptionChangeToState called");
+	//DLog(@"handleInterruptionChangeToState called");
 	MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
 	if (inInterruptionState == kAudioSessionBeginInterruption)
 	{
-		//NSLog(@"inInterruptionState == kAudioSessionBeginInterruption called");
+		//DLog(@"inInterruptionState == kAudioSessionBeginInterruption called");
 		if(musicControls.isPlaying)
 		{	
 			musicControls.streamerProgress = [self progress];
 			musicControls.seekTime += musicControls.streamerProgress;
 		}
-		//NSLog(@"inInterruptionState == kAudioSessionBeginInterruption finished");
+		//DLog(@"inInterruptionState == kAudioSessionBeginInterruption finished");
 	}
 	else if (inInterruptionState == kAudioSessionEndInterruption)
 	{
-		//NSLog(@"inInterruptionState == kAudioSessionEndInterruption called");
+		//DLog(@"inInterruptionState == kAudioSessionEndInterruption called");
 		if(musicControls.isPlaying)
 		{
 			[self startWithOffsetInSecs:(UInt32) musicControls.seekTime];
 		}
-		//NSLog(@"inInterruptionState == kAudioSessionEndInterruption finished");
+		//DLog(@"inInterruptionState == kAudioSessionEndInterruption finished");
 	}
 }
 #endif

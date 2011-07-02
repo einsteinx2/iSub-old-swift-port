@@ -78,6 +78,8 @@
 	HTTPServer *httpServer;
 	NSDictionary *addresses;
 	BOOL *isHttpServerOn;
+	
+	BOOL isInBackground;
 }
 
 - (void)startStopServer;

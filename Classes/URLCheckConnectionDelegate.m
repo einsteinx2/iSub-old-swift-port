@@ -36,7 +36,7 @@
 
 - (NSURLRequest *)connection:(NSURLConnection *)connection  willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)redirectResponse
 {
-	//NSLog(@"%@", [[redirectResponse URL] absoluteString]);
+	//DLog(@"%@", [[redirectResponse URL] absoluteString]);
 	
 	self.redirectUrl = [[redirectResponse URL] absoluteString];
 	
@@ -46,14 +46,14 @@
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
-	NSLog(@"didFailWithError");
+	DLog(@"didFailWithError");
 	connectionFinished = YES;
 }	
 
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	NSLog(@"connectionDidFinishLoading");
+	DLog(@"connectionDidFinishLoading");
 	connectionFinished = YES;
 }
 

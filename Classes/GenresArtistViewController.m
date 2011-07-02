@@ -43,7 +43,7 @@
 	musicControls = [MusicControlsSingleton sharedInstance];
 	databaseControls = [DatabaseControlsSingleton sharedInstance];
 	
-	//NSLog(@"listOfArtists: %@", listOfArtists);
+	//DLog(@"listOfArtists: %@", listOfArtists);
 	
 	// Add the table fade
 	UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];

@@ -82,14 +82,14 @@
 	{
 		[viewObjects.multiDeleteList addObject:[NSNumber numberWithInt:indexPath.row]];
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"showDeleteButton" object:nil];
-		//NSLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
+		//DLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
 		deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
 	}
 	else
 	{
 		[viewObjects.multiDeleteList removeObject:[NSNumber numberWithInt:indexPath.row]];
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"hideDeleteButton" object:nil];
-		//NSLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
+		//DLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
 		deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
 	}
 }
@@ -111,13 +111,13 @@
 	numberLabel.frame = CGRectMake(2, 0, 40, 45);
 	/*if (viewObjects.isEditing)
 	{
-		//NSLog(@"isEditing");
+		//DLog(@"isEditing");
 		self.songNameLabel.frame = CGRectMake(45, 0, 210, 30);
 		self.artistNameLabel.frame = CGRectMake(45, 27, 210, 15);
 	}
 	else
 	{
-		//NSLog(@"!isEditing");
+		//DLog(@"!isEditing");
 		self.songNameLabel.frame = CGRectMake(45, 0, 235, 30);
 		self.artistNameLabel.frame = CGRectMake(45, 27, 235, 15);
 	}

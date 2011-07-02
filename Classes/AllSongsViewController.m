@@ -273,7 +273,7 @@ static NSInteger order (id a, id b, void* context)
 	[databaseControls.genresDb close]; databaseControls.genresDb = nil;
 	[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@genres.db", databaseControls.databaseFolderPath, [NSString md5:appDelegate.defaultUrl]] error:NULL];
 	databaseControls.genresDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@genres.db", databaseControls.databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]] retain];
-	if ([databaseControls.genresDb open] == NO) { NSLog(@"Could not open genresDb."); }
+	if ([databaseControls.genresDb open] == NO) { DLog(@"Could not open genresDb."); }
 	
 	[databaseControls.genresDb executeUpdate:@"CREATE TABLE genres (genre TEXT UNIQUE)"];
 	[databaseControls.genresDb executeUpdate:@"CREATE TABLE genresTemp (genre TEXT UNIQUE)"];
@@ -334,7 +334,7 @@ static NSInteger order (id a, id b, void* context)
 	} 
 	else 
 	{
-		//NSLog(@"%@", [NSString stringWithFormat:@"There was an error grabbing the song list for album: %@", currentAlbum.title]);
+		//DLog(@"%@", [NSString stringWithFormat:@"There was an error grabbing the song list for album: %@", currentAlbum.title]);
 	}
 }
 
@@ -356,7 +356,7 @@ static NSInteger order (id a, id b, void* context)
 	
 	[databaseControls.allSongsDb executeUpdate:@"UPDATE resumeLoad SET albumNum = ?, iteration = ?", [NSNumber numberWithInt:0], [NSNumber numberWithInt:5]];
 	
-	NSLog(@"calling loadFinish");
+	DLog(@"calling loadFinish");
 	[self loadFinish];
 	
 	[autoreleasePool release];
@@ -492,7 +492,7 @@ static NSInteger order (id a, id b, void* context)
 
 - (void) loadData2
 {
-	NSLog(@"loadData2 called");
+	DLog(@"loadData2 called");
 	// Check if loading should stop
 	if (viewObjects.cancelLoading)
 	{
@@ -506,7 +506,7 @@ static NSInteger order (id a, id b, void* context)
 	[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:[NSString stringWithFormat:@"%@isAllSongsLoading", appDelegate.defaultUrl]];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
-	NSLog(@"1");
+	DLog(@"1");
 	
 	[self addCount];
 	
@@ -601,7 +601,7 @@ static NSString *kName_Error = @"error";
 	/*CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	 [alert show];
 	 [alert release];*/
-	NSLog(@"Subsonic error %@:  %@", errorCode, message);
+	DLog(@"Subsonic error %@:  %@", errorCode, message);
 }
 
 - (BOOL) insertSong:(Song *)aSong intoGenreTable:(NSString *)table
@@ -609,7 +609,7 @@ static NSString *kName_Error = @"error";
 	[databaseControls.genresDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO %@ (md5, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", table], [NSString md5:aSong.path], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
 	
 	if ([databaseControls.genresDb hadError]) {
-		NSLog(@"Err inserting song into genre table %d: %@", [databaseControls.genresDb lastErrorCode], [databaseControls.genresDb lastErrorMessage]);
+		DLog(@"Err inserting song into genre table %d: %@", [databaseControls.genresDb lastErrorCode], [databaseControls.genresDb lastErrorMessage]);
 	}
 	
 	return [databaseControls.genresDb hadError];
@@ -665,7 +665,7 @@ static NSString *kName_Error = @"error";
 					anAlbum.artistName = [[viewObjects.allSongsCurrentArtistName copy] gtm_stringByUnescapingFromHTML];
 					anAlbum.artistId = [viewObjects.allSongsCurrentArtistId copy];
 					
-					//NSLog(@"Album: %@", anAlbum.title);
+					//DLog(@"Album: %@", anAlbum.title);
 					
 					//Add album object to the subalbums table to be processed in the next iteration
 					if (![anAlbum.title isEqualToString:@".AppleDouble"])
@@ -694,7 +694,7 @@ static NSString *kName_Error = @"error";
 					
 					//Extract the attributes here.
 					aSong.title = [[TBXML valueOfAttributeNamed:@"title" forElement:child] gtm_stringByUnescapingFromHTML];
-					NSLog(@"aSong.title: %@", aSong.title);
+					DLog(@"aSong.title: %@", aSong.title);
 					aSong.songId = [TBXML valueOfAttributeNamed:@"id" forElement:child];
 					aSong.artist = [[TBXML valueOfAttributeNamed:@"artist" forElement:child] gtm_stringByUnescapingFromHTML];
 					if([TBXML valueOfAttributeNamed:@"album" forElement:child])
@@ -739,9 +739,9 @@ static NSString *kName_Error = @"error";
 								if ([databaseControls.genresDb intForQuery:@"SELECT COUNT(*) FROM genresTemp WHERE genre = ?", aSong.genre] == 0)
 								{							
 									[databaseControls.genresDb executeUpdate:@"INSERT INTO genresTemp (genre) VALUES (?)", aSong.genre];
-									if ([databaseControls.genresDb hadError]) { NSLog(@"Err adding the genre %d: %@", [databaseControls.genresDb lastErrorCode], [databaseControls.genresDb lastErrorMessage]); }
+									if ([databaseControls.genresDb hadError]) { DLog(@"Err adding the genre %d: %@", [databaseControls.genresDb lastErrorCode], [databaseControls.genresDb lastErrorMessage]); }
 								}*/
-								NSLog(@"aSong.genre: %@", aSong.genre);
+								DLog(@"aSong.genre: %@", aSong.genre);
 								[databaseControls.genresDb executeUpdate:@"INSERT INTO genresTemp (genre) VALUES (?)", aSong.genre];
 								
 								// Insert the song object into the appropriate genre table
@@ -788,7 +788,7 @@ static NSString *kName_Error = @"error";
 	// Handle the iteration
 	//
 	currentRow++;
-	//NSLog(@"currentRow: %i", currentRow);
+	//DLog(@"currentRow: %i", currentRow);
 	if (currentRow == albumCount)
 	{
 		// This iteration is done
@@ -814,7 +814,7 @@ static NSString *kName_Error = @"error";
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
 	NSString *xmlResponse = [[NSString alloc] initWithData:loadingData encoding:NSUTF8StringEncoding];
-	NSLog(@"%@", xmlResponse);
+	DLog(@"%@", xmlResponse);
 	[self performSelectorInBackground:@selector(parseData:) withObject:theConnection];
 }
 
@@ -1040,10 +1040,10 @@ static NSString *kName_Error = @"error";
 	// Perform the search
 	[databaseControls.allSongsDb executeUpdate:@"INSERT INTO allSongsSearch SELECT * FROM allSongs WHERE title MATCH ? LIMIT 100", searchBar.text];
 	if ([databaseControls.allSongsDb hadError]) {
-		NSLog(@"Err %d: %@", [databaseControls.allSongsDb lastErrorCode], [databaseControls.allSongsDb lastErrorMessage]);
+		DLog(@"Err %d: %@", [databaseControls.allSongsDb lastErrorCode], [databaseControls.allSongsDb lastErrorMessage]);
 	}
 	
-	//NSLog(@"allSongsSearch count: %i", [databaseControls.allSongsDb intForQuery:@"SELECT count(*) FROM allSongsSearch"]);
+	//DLog(@"allSongsSearch count: %i", [databaseControls.allSongsDb intForQuery:@"SELECT count(*) FROM allSongsSearch"]);
 }
 
 

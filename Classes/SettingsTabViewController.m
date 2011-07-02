@@ -475,17 +475,17 @@
 				// Setup the allAlbums database
 				databaseControls.allAlbumsDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allAlbums.db", databaseControls.databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]];
 				[databaseControls.allAlbumsDb executeUpdate:@"PRAGMA cache_size = 1"];
-				if ([databaseControls.allAlbumsDb open] == NO) { NSLog(@"Could not open allAlbumsDb."); }
+				if ([databaseControls.allAlbumsDb open] == NO) { DLog(@"Could not open allAlbumsDb."); }
 				
 				// Setup the allSongs database
 				databaseControls.allSongsDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allSongs.db", databaseControls.databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]];
 				[databaseControls.allSongsDb executeUpdate:@"PRAGMA cache_size = 1"];
-				if ([databaseControls.allSongsDb open] == NO) { NSLog(@"Could not open allSongsDb."); }
+				if ([databaseControls.allSongsDb open] == NO) { DLog(@"Could not open allSongsDb."); }
 				
 				// Setup the Genres database
 				databaseControls.genresDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@genres.db", databaseControls.databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]];
 				[databaseControls.genresDb executeUpdate:@"PRAGMA cache_size = 1"];
-				if ([databaseControls.genresDb open] == NO) { NSLog(@"Could not open genresDb."); }
+				if ([databaseControls.genresDb open] == NO) { DLog(@"Could not open genresDb."); }
 			}
 			else
 			{
@@ -581,13 +581,13 @@
 
 - (IBAction) updateMinFreeSpaceLabel
 {
-	//NSLog(@"cacheSpaceSlider.value: %f", cacheSpaceSlider.value);
+	//DLog(@"cacheSpaceSlider.value: %f", cacheSpaceSlider.value);
 	cacheSpaceLabel2.text = [appDelegate formatFileSize:(unsigned long long int) (cacheSpaceSlider.value * totalSpace)];
 }
 
 - (IBAction) updateMinFreeSpaceSetting
 {
-	//NSLog(@"cacheSpaceSlider.value: %f", cacheSpaceSlider.value);
+	//DLog(@"cacheSpaceSlider.value: %f", cacheSpaceSlider.value);
 	if (cachingTypeSegmentedControl.selectedSegmentIndex == 0)
 	{
 		// Check if the user is trying to assing a higher min free space than is available space - 50MB
@@ -626,7 +626,7 @@
 
 - (IBAction) revertMinFreeSpaceSlider
 {
-	//NSLog(@"revertMinFreeSpaceSlider");
+	//DLog(@"revertMinFreeSpaceSlider");
 	cacheSpaceLabel2.text = [appDelegate formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
 	cacheSpaceSlider.value = [[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] floatValue] / totalSpace;
 }
@@ -680,7 +680,7 @@
 - (void)viewDidUnload {
     [super viewDidUnload];
     
-	//NSLog(@"settigns tab view did unload");
+	//DLog(@"settigns tab view did unload");
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"twitterAuthenticated" object:nil];
 	[parentController release];
 }

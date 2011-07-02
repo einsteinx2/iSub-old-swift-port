@@ -19,7 +19,7 @@
   namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName 
     attributes:(NSDictionary *)attributeDict
 {
-    //NSLog(@"Started element: %@ (%@)", elementName, attributeDict);
+    //DLog(@"Started element: %@ (%@)", elementName, attributeDict);
     [self setLastOpenedElement:elementName];
     
 	if (!currentNode) {

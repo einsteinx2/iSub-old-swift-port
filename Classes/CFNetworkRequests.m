@@ -67,7 +67,7 @@ static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStr
 	[databaseControls.songCacheDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO %@ (md5, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", table], [NSString md5:aSong.path], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
 	
 	if ([databaseControls.songCacheDb hadError]) {
-		NSLog(@"Err inserting song into genre table %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
+		DLog(@"Err inserting song into genre table %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
 	}
 	
 	return [databaseControls.songCacheDb hadError];
@@ -88,7 +88,7 @@ static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStr
 	if (isDownloadA)
 	{
 		// Schedule the stream
-		//NSLog(@"continuing downloadA");
+		//DLog(@"continuing downloadA");
 		[throttlingDate release]; throttlingDate = [[NSDate date] retain];
 		CFReadStreamScheduleWithRunLoop(readStreamRefA, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
 	}
@@ -99,7 +99,7 @@ static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStr
 	if (isDownloadB)
 	{
 		// Schedule the stream
-		//NSLog(@"continuing downloadB");
+		//DLog(@"continuing downloadB");
 		[throttlingDate release]; throttlingDate = [[NSDate date] retain];
 		CFReadStreamScheduleWithRunLoop(readStreamRefB, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
 	}
@@ -111,10 +111,10 @@ static void TerminateDownload(CFReadStreamRef stream)
 {	
 	if (stream == nil)
 	{
-		//NSLog(@"------------------------------ stream is nil so returning");
+		//DLog(@"------------------------------ stream is nil so returning");
 		return;
 	}
-	//NSLog(@"------------------------------ stream is not nil so closing the stream");
+	//DLog(@"------------------------------ stream is not nil so closing the stream");
 	
 	//***	ALWAYS set the stream client (notifier) to NULL if you are releaseing it
 	//	otherwise your notifier may be called after you released the stream leaving you with a 
@@ -129,14 +129,14 @@ static void TerminateDownload(CFReadStreamRef stream)
 
 + (void) cancelCFNetA
 {
-	//NSLog(@"cancelCFNetA called, isDownloadA = %i", isDownloadA);
+	//DLog(@"cancelCFNetA called, isDownloadA = %i", isDownloadA);
 	isDownloadA = NO;
 	TerminateDownload(readStreamRefA);
 }
 
 + (void) cancelCFNetB
 {
-	//NSLog(@"cancelCFNetB called, isDownloadB = %i", isDownloadB);
+	//DLog(@"cancelCFNetB called, isDownloadB = %i", isDownloadB);
 	isDownloadB = NO;
 	TerminateDownload(readStreamRefB);
 }
@@ -181,10 +181,10 @@ static void DownloadDoneA()
 	/*// Get the response header
 	CFHTTPMessageRef myResponse = CFReadStreamCopyProperty(readStreamRefA, kCFStreamPropertyHTTPResponseHeader);
 	CFStringRef myStatusLine = CFHTTPMessageCopyResponseStatusLine(myResponse);
-	NSLog(@"http response status: %@", myStatusLine);*/
+	DLog(@"http response status: %@", myStatusLine);*/
 	
 	
-	//NSLog(@"------------------ DownloadDoneA called");
+	//DLog(@"------------------ DownloadDoneA called");
 	// Check if the file is less than 500 bytes. If it is, then it's almost definitely an API expiration notice
 	if ([musicControlsRef downloadedLengthA] < 500)
 	{
@@ -206,7 +206,7 @@ static void DownloadDoneA()
 		
 		// Save the offline view layout info
 		NSArray *splitPath = [[[databaseControlsRef songCacheDb] stringForQuery:@"SELECT path FROM cachedSongs WHERE md5 = ?", [musicControlsRef downloadFileNameHashA]] componentsSeparatedByString:@"/"];
-		//NSLog(@"------------------- splitPath count: %i", [splitPath count]);
+		//DLog(@"------------------- splitPath count: %i", [splitPath count]);
 		if ([splitPath count] <= 9)
 		{
 			NSMutableArray *segments = [[NSMutableArray alloc] initWithArray:splitPath];
@@ -228,7 +228,7 @@ static void DownloadDoneA()
 			if ([[databaseControlsRef songCacheDb] intForQuery:@"SELECT COUNT(*) FROM genres WHERE genre = ?", [[musicControlsRef currentSongObject] genre]] == 0)
 			{							
 				[[databaseControlsRef songCacheDb] executeUpdate:@"INSERT INTO genres (genre) VALUES (?)", [[musicControlsRef currentSongObject] genre]];
-				if ([[databaseControlsRef songCacheDb] hadError]) { NSLog(@"Err adding the genre %d: %@", [[databaseControlsRef songCacheDb] lastErrorCode], [[databaseControlsRef songCacheDb] lastErrorMessage]); }
+				if ([[databaseControlsRef songCacheDb] hadError]) { DLog(@"Err adding the genre %d: %@", [[databaseControlsRef songCacheDb] lastErrorCode], [[databaseControlsRef songCacheDb] lastErrorMessage]); }
 			}
 			
 			// Insert the song object into the genresSongs
@@ -241,7 +241,7 @@ static void DownloadDoneA()
 		{
 			if ([[databaseControlsRef coverArtCacheDb320] intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:coverArtId]] == 0)
 			{
-				//NSLog(@"320 artwork doesn't exist, caching");
+				//DLog(@"320 artwork doesn't exist, caching");
 				NSString *imgUrlString;
 				if ([appDelegateRef isHighRez])
 				{
@@ -257,14 +257,14 @@ static void DownloadDoneA()
 				{
 					if([UIImage imageWithData:[aRequest responseData]])
 					{
-						//NSLog(@"image is good so caching it");
+						//DLog(@"image is good so caching it");
 						[[databaseControlsRef coverArtCacheDb320] executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:coverArtId], [aRequest responseData]];
 					}
 				}
 			}
 			if ([[databaseControlsRef coverArtCacheDb60] intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:coverArtId]] == 0)
 			{
-				//NSLog(@"60 artwork doesn't exist, caching");
+				//DLog(@"60 artwork doesn't exist, caching");
 				NSString *imgUrlString;
 				if ([appDelegateRef isHighRez])
 				{
@@ -280,7 +280,7 @@ static void DownloadDoneA()
 				{
 					if([UIImage imageWithData:[aRequest responseData]])
 					{
-						//NSLog(@"image is good so caching it");
+						//DLog(@"image is good so caching it");
 						[[databaseControlsRef coverArtCacheDb60] executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:coverArtId], [aRequest responseData]];
 					}
 				}
@@ -318,7 +318,7 @@ static void	ReadStreamClientCallBackA( CFReadStreamRef stream, CFStreamEventType
 				[musicControlsRef setDownloadedLengthA:([musicControlsRef downloadedLengthA] + bytesRead)];
 				
 				if (isProgressLoggingEnabled)
-					NSLog(@"downloadedLengthA:  %lu   bytesRead: %ld", [musicControlsRef downloadedLengthA], bytesRead);
+					DLog(@"downloadedLengthA:  %lu   bytesRead: %ld", [musicControlsRef downloadedLengthA], bytesRead);
 				
 				if ([musicControlsRef streamer])
 					[[musicControlsRef streamer] setFileDownloadCurrentSize:[musicControlsRef downloadedLengthA]];
@@ -326,7 +326,7 @@ static void	ReadStreamClientCallBackA( CFReadStreamRef stream, CFStreamEventType
 				// When we get enough of the file, then just start playing it.
 				if (![musicControlsRef streamer] && ([musicControlsRef downloadedLengthA] > kMinBytesToStartPlayback)) 
 				{
-					//NSLog(@"start playback for %@", [musicControlsRef downloadFileNameA]);
+					//DLog(@"start playback for %@", [musicControlsRef downloadFileNameA]);
 					
 					[musicControlsRef createStreamer];
 					[musicControlsRef setShowNowPlayingIcon: NO];
@@ -353,7 +353,7 @@ static void	ReadStreamClientCallBackA( CFReadStreamRef stream, CFStreamEventType
 						NSTimeInterval delay = (kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerInterval3G));
 						
 						if (isThrottleLoggingEnabled)
-							NSLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
+							DLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
 						
 						[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
 						
@@ -367,7 +367,7 @@ static void	ReadStreamClientCallBackA( CFReadStreamRef stream, CFStreamEventType
 						NSTimeInterval delay = (kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerIntervalWifi));
 						
 						if (isThrottleLoggingEnabled)
-							NSLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
+							DLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
 						
 						[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
 						
@@ -425,7 +425,7 @@ static void DownloadDoneB()
 		
 		// Save the offline view layout info
 		NSArray *splitPath = [[[databaseControlsRef songCacheDb] stringForQuery:@"SELECT path FROM cachedSongs WHERE md5 = ?", [musicControlsRef downloadFileNameHashB]] componentsSeparatedByString:@"/"];
-		//NSLog(@"------------------- splitPath count: %i", [splitPath count]);
+		//DLog(@"------------------- splitPath count: %i", [splitPath count]);
 		if ([splitPath count] <= 9)
 		{
 			NSMutableArray *segments = [[NSMutableArray alloc] initWithArray:splitPath];
@@ -447,7 +447,7 @@ static void DownloadDoneB()
 			if ([[databaseControlsRef songCacheDb] intForQuery:@"SELECT COUNT(*) FROM genres WHERE genre = ?", [[musicControlsRef songB] genre]] == 0)
 			{							
 				[[databaseControlsRef songCacheDb] executeUpdate:@"INSERT INTO genres (genre) VALUES (?)", [[musicControlsRef songB] genre]];
-				if ([[databaseControlsRef songCacheDb] hadError]) { NSLog(@"Err adding the genre %d: %@", [[databaseControlsRef songCacheDb] lastErrorCode], [[databaseControlsRef songCacheDb] lastErrorMessage]); }
+				if ([[databaseControlsRef songCacheDb] hadError]) { DLog(@"Err adding the genre %d: %@", [[databaseControlsRef songCacheDb] lastErrorCode], [[databaseControlsRef songCacheDb] lastErrorMessage]); }
 			}
 			
 			// Insert the song object into the genresSongs
@@ -460,7 +460,7 @@ static void DownloadDoneB()
 		{
 			if ([[databaseControlsRef coverArtCacheDb320] intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:coverArtId]] == 0)
 			{
-				//NSLog(@"320 artwork doesn't exist, caching");
+				//DLog(@"320 artwork doesn't exist, caching");
 				NSString *imgUrlString;
 				if ([appDelegateRef isHighRez])
 				{
@@ -476,14 +476,14 @@ static void DownloadDoneB()
 				{
 					if([UIImage imageWithData:[aRequest responseData]])
 					{
-						//NSLog(@"image is good so caching it");
+						//DLog(@"image is good so caching it");
 						[[databaseControlsRef coverArtCacheDb320] executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:coverArtId], [aRequest responseData]];
 					}
 				}
 			}
 			if ([[databaseControlsRef coverArtCacheDb60] intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:coverArtId]] == 0)
 			{
-				//NSLog(@"60 artwork doesn't exist, caching");
+				//DLog(@"60 artwork doesn't exist, caching");
 				NSString *imgUrlString;
 				if ([appDelegateRef isHighRez])
 				{
@@ -499,7 +499,7 @@ static void DownloadDoneB()
 				{
 					if([UIImage imageWithData:[aRequest responseData]])
 					{
-						//NSLog(@"image is good so caching it");
+						//DLog(@"image is good so caching it");
 						[[databaseControlsRef coverArtCacheDb60] executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:coverArtId], [aRequest responseData]];
 					}
 				}
@@ -548,12 +548,12 @@ static void	ReadStreamClientCallBackB( CFReadStreamRef stream, CFStreamEventType
 				[musicControlsRef setDownloadedLengthB:([musicControlsRef downloadedLengthB] + bytesRead)];
 				
 				if (isProgressLoggingEnabled)
-					NSLog(@"downloadedLengthB:  %lu   bytesRead: %ld", [musicControlsRef downloadedLengthB], bytesRead);
+					DLog(@"downloadedLengthB:  %lu   bytesRead: %ld", [musicControlsRef downloadedLengthB], bytesRead);
 				
 				// If this is the currently playing song, update the streamer on the downloaded length
 				if ([musicControlsRef reportDownloadedLengthB])
 				{
-					//NSLog(@"downloadB reporting length to streamer");
+					//DLog(@"downloadB reporting length to streamer");
 					if ([musicControlsRef streamer])
 						[[musicControlsRef streamer] setFileDownloadCurrentSize:[musicControlsRef downloadedLengthB]];
 				}
@@ -578,7 +578,7 @@ static void	ReadStreamClientCallBackB( CFReadStreamRef stream, CFStreamEventType
 						NSTimeInterval delay = kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerInterval3G);
 						
 						if (isThrottleLoggingEnabled)
-							NSLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
+							DLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
 						
 						[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadB) userInfo:nil repeats:NO];
 						
@@ -592,7 +592,7 @@ static void	ReadStreamClientCallBackB( CFReadStreamRef stream, CFStreamEventType
 						NSTimeInterval delay = kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerIntervalWifi);
 						
 						if (isThrottleLoggingEnabled)
-							NSLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
+							DLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
 						
 						[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadB) userInfo:nil repeats:NO];
 						
@@ -657,7 +657,7 @@ static void DownloadDoneTemp()
 
 static void	ReadStreamClientCallBackTemp( CFReadStreamRef stream, CFStreamEventType type, void *clientCallBackInfo )
 {	
-	//NSLog(@"ReadStreamClientCallBackTemp [musicControlsRef downloadedLengthA]: %i", [musicControlsRef downloadedLengthA]);
+	//DLog(@"ReadStreamClientCallBackTemp [musicControlsRef downloadedLengthA]: %i", [musicControlsRef downloadedLengthA]);
 	
 	#pragma unused (clientCallBackInfo)
 	UInt8		buffer[16 * 1024];				//	Create a 16K buffer
@@ -675,7 +675,7 @@ static void	ReadStreamClientCallBackTemp( CFReadStreamRef stream, CFStreamEventT
 			[musicControlsRef setDownloadedLengthA:([musicControlsRef downloadedLengthA] + bytesRead)];
 			
 			if (isProgressLoggingEnabled)
-				NSLog(@"downloadedLengthA:  %lu   bytesRead: %ld", [musicControlsRef downloadedLengthA], bytesRead);
+				DLog(@"downloadedLengthA:  %lu   bytesRead: %ld", [musicControlsRef downloadedLengthA], bytesRead);
 			
 			if ([musicControlsRef streamer])
 				[[musicControlsRef streamer] setFileDownloadCurrentSize:[musicControlsRef downloadedLengthA]];
@@ -683,7 +683,7 @@ static void	ReadStreamClientCallBackTemp( CFReadStreamRef stream, CFStreamEventT
 			// When we get enough of the file, then just start playing it.
 			if (![musicControlsRef streamer] && ([musicControlsRef downloadedLengthA] > kMinBytesToStartPlayback)) 
 			{
-				//NSLog(@"start playback for %@", [musicControlsRef downloadFileNameA]);
+				//DLog(@"start playback for %@", [musicControlsRef downloadFileNameA]);
 				
 				[musicControls createStreamerWithOffset];
 				[musicControlsRef setShowNowPlayingIcon: NO];
@@ -709,7 +709,7 @@ static void	ReadStreamClientCallBackTemp( CFReadStreamRef stream, CFStreamEventT
 					NSTimeInterval delay = kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerInterval3G);
 					
 					if (isThrottleLoggingEnabled)
-						NSLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
+						DLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
 					
 					[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
 					
@@ -723,7 +723,7 @@ static void	ReadStreamClientCallBackTemp( CFReadStreamRef stream, CFStreamEventT
 					NSTimeInterval delay = kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerIntervalWifi);
 					
 					if (isThrottleLoggingEnabled)
-						NSLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
+						DLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
 					
 					[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
 					
@@ -757,7 +757,7 @@ static void	ReadStreamClientCallBackTemp( CFReadStreamRef stream, CFStreamEventT
 #pragma mark Download
 + (void) downloadCFNetA:(NSURL *)url
 {
-	//NSLog(@"downloadCFNetA url: %@", [url absoluteString]);
+	//DLog(@"downloadCFNetA url: %@", [url absoluteString]);
 	
 	if (!appDelegate)
 	{
@@ -829,7 +829,7 @@ static void	ReadStreamClientCallBackTemp( CFReadStreamRef stream, CFStreamEventT
 	if (CFReadStreamOpen(readStreamRefA) == false)
 	    goto Bail;
 	
-	NSLog(@"--- STARTING HTTP CONNECTION");
+	DLog(@"--- STARTING HTTP CONNECTION");
 	
 	if (messageRef != NULL) CFRelease(messageRef);
 	return;
@@ -959,7 +959,7 @@ Bail:
 	
 	// Add the HTTP header to resume the download
 	//CFHTTPMessageSetHeaderFieldValue( messageRef, CFSTR("Range"), CFStringCreateWithFormat(NULL, NULL, CFSTR("bytes=%d-"), appDelegate.tempDownloadByteOffset)); 
-	//NSLog(@"----------------- byteOffset header: %@", [NSString stringWithFormat:@"bytes=%d-", appDelegate.tempDownloadByteOffset]);
+	//DLog(@"----------------- byteOffset header: %@", [NSString stringWithFormat:@"bytes=%d-", appDelegate.tempDownloadByteOffset]);
 	CFHTTPMessageSetHeaderFieldValue(messageRef, CFSTR("Range"), (CFStringRef)[NSString stringWithFormat:@"bytes=%d-", musicControls.tempDownloadByteOffset]);
 	
 	// Create the stream for the request.
@@ -1022,7 +1022,7 @@ Bail:
 #pragma mark Resume
 + (void) resumeCFNetA:(UInt32)byteOffset
 {
-	//NSLog(@"resuming download A");
+	//DLog(@"resuming download A");
 	if (!appDelegate)
 	{
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -1049,7 +1049,7 @@ Bail:
 	if ( messageRef == NULL ) goto Bail;
 	
 	// Add the HTTP header to resume the download
-	//NSLog(@"----------------- byteOffset header: %@", [NSString stringWithFormat:@"bytes=%d-", byteOffset]);
+	//DLog(@"----------------- byteOffset header: %@", [NSString stringWithFormat:@"bytes=%d-", byteOffset]);
 	CFHTTPMessageSetHeaderFieldValue( messageRef, CFSTR("Range"), CFStringCreateWithFormat(NULL, NULL, CFSTR("bytes=%i-"), byteOffset)); 
 	
 	// Create the stream for the request.
@@ -1107,7 +1107,7 @@ Bail:
 
 + (void) resumeCFNetB:(UInt32)byteOffset
 {
-	//NSLog(@"resuming download B");
+	//DLog(@"resuming download B");
 	if (!appDelegate)
 	{
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -1134,7 +1134,7 @@ Bail:
 	if ( messageRef == NULL ) goto Bail;
 	
 	// Add the HTTP header to resume the download
-	//NSLog(@"----------------- byteOffset header: %@", [NSString stringWithFormat:@"bytes=%d-", byteOffset]);
+	//DLog(@"----------------- byteOffset header: %@", [NSString stringWithFormat:@"bytes=%d-", byteOffset]);
 	CFHTTPMessageSetHeaderFieldValue( messageRef, CFSTR("Range"), CFStringCreateWithFormat(NULL, NULL, CFSTR("bytes=%i-"), byteOffset)); 
 	
 	// Create the stream for the request.

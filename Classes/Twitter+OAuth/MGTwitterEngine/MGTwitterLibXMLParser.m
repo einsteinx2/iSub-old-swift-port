@@ -111,7 +111,7 @@ connectionIdentifier:(NSString *)theIdentifier requestType:(MGTwitterRequestType
 		nodeType = xmlTextReaderNodeType(_reader);
 	}
 
-	//NSLog(@"node: %25s = %s", xmlTextReaderConstName(_reader), result);
+	//DLog(@"node: %25s = %s", xmlTextReaderConstName(_reader), result);
 	
 	return result;
 }
@@ -357,13 +357,13 @@ connectionIdentifier:(NSString *)theIdentifier requestType:(MGTwitterRequestType
 
 - (void)_parsingDidEnd
 {
-    //NSLog(@"Parsing complete: %@", parsedObjects);
+    //DLog(@"Parsing complete: %@", parsedObjects);
     [delegate parsingSucceededForRequest:identifier ofResponseType:responseType withParsedObjects:parsedObjects];
 }
 
 - (void)_parsingErrorOccurred:(NSError *)parseError
 {
-	//NSLog(@"Parsing error occurred: %@", parseError);
+	//DLog(@"Parsing error occurred: %@", parseError);
 	[delegate parsingFailedForRequest:identifier ofResponseType:responseType withError:parseError];
 }
 

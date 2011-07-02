@@ -102,7 +102,7 @@
 		//[downloadProgress newX:70.0];
 		//if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
 		//	[downloadProgress addX:2.0];
-		//NSLog(@"downloadProgress.frame %@", NSStringFromCGRect(downloadProgress.frame));
+		//DLog(@"downloadProgress.frame %@", NSStringFromCGRect(downloadProgress.frame));
 		downloadProgress.layer.cornerRadius = 5;
 		
 		[self updateDownloadProgress];
@@ -240,7 +240,7 @@
 		if (width > downloadProgressWidth)
 			width = downloadProgressWidth;
 		[downloadProgress newWidth:width];
-		//NSLog(@"width %f", width);
+		//DLog(@"width %f", width);
 	}	
 }
 
@@ -288,7 +288,7 @@
 
 - (IBAction) movingSlider
 {
-	NSLog(@"scrubbing speed: %f", progressSlider.scrubbingSpeed);
+	DLog(@"scrubbing speed: %f", progressSlider.scrubbingSpeed);
 	
 	progressLabel.hidden = NO;
 	progressLabelBackground.hidden = NO;
@@ -355,7 +355,7 @@
 				byteOffset = ((float)musicControls.bitRate * 128 * progressSlider.value);
 			else
 				byteOffset = (((float)musicControls.bitRate / 1000) * 128 * progressSlider.value);
-			//NSLog(@"byteOffset: %f", byteOffset);
+			//DLog(@"byteOffset: %f", byteOffset);
 			
 			if (musicControls.isTempDownload)
 			{
@@ -370,7 +370,7 @@
 			{
 				if (musicControls.streamer.fileDownloadComplete)
 				{
-					//NSLog(@"skipping to area within cached song inside if");
+					//DLog(@"skipping to area within cached song inside if");
 					musicControls.seekTime = progressSlider.value;
 					[musicControls.streamer startWithOffsetInSecs:(UInt32)progressSlider.value];
 					musicControls.streamer.fileDownloadComplete = YES;
@@ -379,18 +379,18 @@
 				}
 				else
 				{
-					//NSLog(@"------------- byteOffset: %i", (int)byteOffset);
-					//NSLog(@"------------- fileDownloadCurrentSize: %i", musicControls.streamer.fileDownloadCurrentSize);
+					//DLog(@"------------- byteOffset: %i", (int)byteOffset);
+					//DLog(@"------------- fileDownloadCurrentSize: %i", musicControls.streamer.fileDownloadCurrentSize);
 					if ((int)byteOffset > musicControls.streamer.fileDownloadCurrentSize)
 					{
-						//NSLog(@"fileDownloadCurrentSize inside else: %i", musicControls.streamer.fileDownloadCurrentSize);
+						//DLog(@"fileDownloadCurrentSize inside else: %i", musicControls.streamer.fileDownloadCurrentSize);
 						UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Past Cache Point" message:@"You are trying to skip further than the song has cached. You can do this, but the song won't be cached. Or you can wait a little bit for the cache to catch up." delegate:self cancelButtonTitle:@"Wait" otherButtonTitles:@"OK", nil];
 						[alert show];
 						[alert release];
 					}
 					else
 					{
-						//NSLog(@"skipping to area within cached song inside else");
+						//DLog(@"skipping to area within cached song inside else");
 						musicControls.seekTime = progressSlider.value;
 						[musicControls.streamer startWithOffsetInSecs:(UInt32)progressSlider.value];
 						pauseSlider = NO;
@@ -475,7 +475,7 @@
 			[musicControls destroyStreamer];
 			musicControls.isPlaying = YES;
 			musicControls.seekTime = progressSlider.value;
-			//NSLog(@"seekTime: %f", musicControls.seekTime);
+			//DLog(@"seekTime: %f", musicControls.seekTime);
 			[musicControls startTempDownloadA:(UInt32)byteOffset];
 			pauseSlider = NO;
 			hasMoved = NO;

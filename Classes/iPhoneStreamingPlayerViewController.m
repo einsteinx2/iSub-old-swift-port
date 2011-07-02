@@ -408,7 +408,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	coverArtImageView.isForPlayer = YES;
 	if([musicControls.currentSongObject coverArtId])
 	{
-		//NSLog(@"coverArtId: %@", [musicControls.currentSongObject coverArtId]);
+		//DLog(@"coverArtId: %@", [musicControls.currentSongObject coverArtId]);
 		
 		FMDatabase *coverArtCache;
 		if (IS_IPAD())
@@ -418,7 +418,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			
 		if ([coverArtCache intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:musicControls.currentSongObject.coverArtId]] == 1)
 		{
-			NSLog(@"Cover Art Found!!");
+			DLog(@"Cover Art Found!!");
 			NSData *imageData = [coverArtCache dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [NSString md5:musicControls.currentSongObject.coverArtId]];
 			if (appDelegate.isHighRez)
 			{
@@ -437,7 +437,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		}
 		else 
 		{
-			NSLog(@"No Cover Art Found, LOADING");
+			DLog(@"No Cover Art Found, LOADING");
 			[coverArtImageView loadImageFromCoverArtId:musicControls.currentSongObject.coverArtId isForPlayer:YES];
 		}
 	}
@@ -454,7 +454,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	// Update the icon in top right
 	if (isFlipped)
 	{
-		NSLog(@"Updating the top right button");
+		DLog(@"Updating the top right button");
 		[self updateBarButtonImage];
 	}
 	
@@ -507,7 +507,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		UIGraphicsBeginImageContextWithOptions(CGSizeMake(30.0, 30.0), NO, 0.0);
 	else
 		UIGraphicsBeginImageContext(CGSizeMake(30.0, 30.0));
-	NSLog(@"coverArtImageView.image: %@", coverArtImageView.image);
+	DLog(@"coverArtImageView.image: %@", coverArtImageView.image);
 	[coverArtImageView.image drawInRect:CGRectMake(0, 0,30.0, 30.0)];
 	UIImage *cover = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
@@ -598,7 +598,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 - (IBAction)prevButtonPressed:(id)sender
 {
 	musicControls.streamerProgress = [musicControls.streamer progress];
-	NSLog(@"track position: %f", (musicControls.streamerProgress + musicControls.seekTime));
+	DLog(@"track position: %f", (musicControls.streamerProgress + musicControls.seekTime));
 	if ((musicControls.streamerProgress + musicControls.seekTime) > 10.0)
 	{
 		if (viewObjects.isJukebox)
@@ -716,7 +716,7 @@ CGContextRef MyCreateBitmapContextPlayer(int pixelsWide, int pixelsHigh)
 	}
 	else
 	{
-		NSLog(@"It's not flipped, creating the reflection");
+		DLog(@"It's not flipped, creating the reflection");
 		// create the reflection image and assign it to the UIImageView
 		reflectionView.image = [self reflectedImage:coverArtImageView withHeight:reflectionHeight];
 		reflectionView.alpha = kDefaultReflectionOpacity;

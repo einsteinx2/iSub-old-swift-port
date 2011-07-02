@@ -39,7 +39,7 @@
 {
     [super viewDidLoad];
 
-	//NSLog(@"Cache viewDidLoad");
+	//DLog(@"Cache viewDidLoad");
 	
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
@@ -234,14 +234,14 @@
 			//result = [appDelegate.songCacheDb executeQuery:@"SELECT seg1 FROM cachedSongsLayout a INNER JOIN genresSongs b ON a.md5 = b.md5 WHERE b.genre = ? GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE", artistViewController.title];
 			result = [databaseControls.songCacheDb executeQuery:@"SELECT seg1 FROM cachedSongsLayout a INNER JOIN genresSongs b ON a.md5 = b.md5 WHERE b.genre = ? GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE", artistViewController.title];
 			if ([databaseControls.songCacheDb hadError])
-				NSLog(@"Error grabbing the artists for this genre... Err %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
+				DLog(@"Error grabbing the artists for this genre... Err %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
 		}
 		else 
 		{
 			//result = [databaseControls.genresDb executeQuery:@"SELECT seg1 FROM genresLayout a INNER JOIN genresSongs b ON a.md5 = b.md5 WHERE b.genre = ? GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE", artistViewController.title];
 			result = [databaseControls.genresDb executeQuery:@"SELECT seg1 FROM genresLayout a INNER JOIN genresSongs b ON a.md5 = b.md5 WHERE b.genre = ? GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE", artistViewController.title];
 			if ([databaseControls.genresDb hadError])
-				NSLog(@"Error grabbing the artists for this genre... Err %d: %@", [databaseControls.genresDb lastErrorCode], [databaseControls.genresDb lastErrorMessage]);
+				DLog(@"Error grabbing the artists for this genre... Err %d: %@", [databaseControls.genresDb lastErrorCode], [databaseControls.genresDb lastErrorMessage]);
 		}
 		while ([result next])
 		{

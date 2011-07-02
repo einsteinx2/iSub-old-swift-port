@@ -141,9 +141,9 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	NSArray *keyValuePair = [NSArray arrayWithObjects:@"-1", @"All Folders", nil];
 	[sortedValues insertObject:keyValuePair atIndex:0];
 	
-	//NSLog(@"keys: %@", [folders allKeys]);
+	//DLog(@"keys: %@", [folders allKeys]);
 	//NSMutableArray *keys = [NSMutableArray arrayWithArray:[[folders allKeys] sortedArrayUsingSelector:@selector(compare:)]];
-	//NSLog(@"sorted keys: %@", keys);
+	//DLog(@"sorted keys: %@", keys);
 		
 	// Process the names and create the labels/buttons
 	for (int i = 0; i < [sortedValues count]; i++)
@@ -280,7 +280,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	UIButton *button = (UIButton *)sender;
 	UILabel  *label  = (UILabel *)button.superview;
 	
-	//NSLog(@"Folder selected: %@ -- %i", label.text, label.tag);
+	//DLog(@"Folder selected: %@ -- %i", label.text, label.tag);
 	
 	self.selectedFolderId = label.tag;
 	selectedFolderLabel.text = [folders objectForKey:[NSString stringWithFormat:@"%i", selectedFolderId]];
@@ -301,8 +301,8 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 
 - (void)selectFolderWithId:(NSUInteger)folderId
 {
-	//NSLog(@"folders: %@", folders);
-	//NSLog(@"folderId: %i", folderId);
+	//DLog(@"folders: %@", folders);
+	//DLog(@"folderId: %i", folderId);
 	self.selectedFolderId = folderId;
 	selectedFolderLabel.text = [folders objectForKey:[NSString stringWithFormat:@"%i", selectedFolderId]];
 }
@@ -404,7 +404,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
-	NSLog(@"Error parsing update XML response");
+	DLog(@"Error parsing update XML response");
 }
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName 

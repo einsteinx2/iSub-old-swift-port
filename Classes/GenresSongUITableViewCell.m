@@ -102,7 +102,7 @@
 
 - (void)queueAction
 {
-	//NSLog(@"queueAction");
+	//DLog(@"queueAction");
 	[databaseControls addSongToPlaylistQueue:[databaseControls songFromGenreDb:md5]];
 	
 	[self hideOverlay];
@@ -111,7 +111,7 @@
 
 - (void)blockerAction
 {
-	//NSLog(@"blockerAction");
+	//DLog(@"blockerAction");
 	[self hideOverlay];
 }
 

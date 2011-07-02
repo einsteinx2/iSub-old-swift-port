@@ -112,7 +112,7 @@
 
 - (void)blockerAction
 {
-	//NSLog(@"blockerAction");
+	//DLog(@"blockerAction");
 	[self hideOverlay];
 }
 
@@ -175,7 +175,7 @@
 	
 	while ([result next])
 	{
-		//NSLog(@"adding %@", [result stringForColumnIndex:0]);
+		//DLog(@"adding %@", [result stringForColumnIndex:0]);
 		[databaseControls addSongToPlaylistQueue:[databaseControls songFromGenreDb:[result stringForColumnIndex:0]]];
 	}
 	
