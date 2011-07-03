@@ -38,8 +38,6 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	
-	self.tableView.scrollEnabled = NO;
-	
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
 	[self loadTable];
@@ -65,6 +63,11 @@
 
 - (void)loadTable
 {
+	// Enable menu scrolling if the albums/songs/genres tabs are enabled
+	self.tableView.scrollEnabled = NO;
+	if ([[appDelegate.settingsDictionary objectForKey:@"enableSongsTabSetting"] isEqualToString:@"YES"])
+		self.tableView.scrollEnabled = YES;
+	
 	if ([[appDelegate.settingsDictionary objectForKey:@"enableSongsTabSetting"] isEqualToString:@"YES"])
 		rowNames = [[NSArray alloc] initWithObjects:@"Home", @"Player", @"Folders", @"Playlists", @"Playing", @"Bookmarks", @"Cache", @"Chat", @"Genres", @"Albums", @"Songs", nil];
 	else

@@ -3847,6 +3847,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
+					"\"$(SRCROOT)/../../SoX iOS Framework/Universal Framework\"",
 				);
 				PRODUCT_NAME = "iSub Beta";
 				PROVISIONING_PROFILE = "";
@@ -3880,6 +3881,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
+					"\"$(SRCROOT)/../../SoX iOS Framework/Universal Framework\"",
 				);
 				PRODUCT_NAME = "iSub Beta";
 				PROVISIONING_PROFILE = "";
@@ -3911,6 +3913,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
+					"\"$(SRCROOT)/../../SoX iOS Framework/Universal Framework\"",
 				);
 				PRODUCT_NAME = "iSub Beta";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D4A8945F-4511-4F9F-B707-8A73518A9D3B";

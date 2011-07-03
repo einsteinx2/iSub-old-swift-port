@@ -11,7 +11,6 @@
 //  this copyright and permission notice. Attribution in compiled projects is
 //  appreciated but not required.
 //
-
 #import "AudioStreamer.h"
 #import "iSubAppDelegate.h"
 #import "MusicControlsSingleton.h"
@@ -1553,16 +1552,124 @@ cleanup:
 			err = AudioQueueEnqueueBuffer(audioQueue, fillBuf, 0, NULL);
 		}
 		
-		/*//SInt16* audioData = fillBuf->mAudioData;
-		for (int i = 0; i < fillBuf->mAudioDataByteSize; i+=2)
+		
+		/*//
+		//
+		// mAudioData test -- IT'S THE COMPRESSED MP3 DATA :(
+		NSData *test = [[NSData alloc] initWithBytes:fillBuf->mAudioData length:fillBuf->mAudioDataByteSize];
+		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+		NSString *databaseFolderPath = [[paths objectAtIndex: 0] stringByAppendingPathComponent:@"database"];
+		NSString *path = [NSString stringWithFormat:@"%@/test.wav", databaseFolderPath];
+
+		BOOL isDir = NO;
+		if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir]) 
 		{
-			char *buf = (char *) fillBuf->mAudioData;
-			SInt16 s = (buf[i] << 16) | (buf[i+1] << 8);
-			DLog(@"AudioData: %hi", s);
-			//in[i] = (double) s;
-			//in[i+1] = 0;
+			[test writeToFile:path atomically:YES];
 		}
-		DLog(@"   ");*/
+		else
+		{
+			NSFileHandle *handle = [NSFileHandle fileHandleForUpdatingAtPath:path];
+			[handle seekToEndOfFile];
+			[handle writeData:test];
+			[handle closeFile];
+			[test release];
+		}
+		//
+		//
+		//*/
+		
+				
+		/*//
+		//
+		// SoX Effects
+		int tprofile;
+		SInt16 *buffer = (SInt16 *)calloc(1, fillBuf->mAudioDataByteSize);
+		static sox_format_t *in, *out;
+		sox_effects_chain_t * chain;
+		sox_effect_t * e;
+		char *args[10];
+		
+		// All libSoX applications must start by initialising the SoX library
+		assert(sox_init() == SOX_SUCCESS);
+		
+		// Open the input file (with default parameters)
+		assert(in = sox_open_mem_read(fillBuf->mAudioData, fillBuf->mAudioDataByteSize, NULL, NULL, NULL));
+		
+		// Open the output file; we must specify the output signal characteristics.
+		// Since we are using only simple effects, they are the same as the input
+		// file characteristics
+		assert(out = sox_open_mem_write(buffer, fillBuf->mAudioDataByteSize, &in->signal, NULL, NULL, NULL));
+		
+		// Create an effects chain; some effects need to know about the input
+		// or output file encoding so we provide that information here
+		chain = sox_create_effects_chain(&in->encoding, &out->encoding);
+		
+		// The first effect in the effect chain must be something that can source
+		// samples; in this case, we use the built-in handler that inputs
+		// data from an audio file
+		e = sox_create_effect(sox_find_effect("input"));
+		args[0] = (char *)in, assert(sox_effect_options(e, 1, args) == SOX_SUCCESS);
+		// This becomes the first `effect' in the chain
+		assert(sox_add_effect(chain, e, &in->signal, &in->signal) == SOX_SUCCESS);
+		
+		if (tprofile == 1) {
+			
+			e = sox_create_effect(sox_find_effect("lowpass"));
+			args[0] = "2000", assert(sox_effect_options(e, 1, args) == SOX_SUCCESS);
+			assert(sox_add_effect(chain, e, &in->signal, &in->signal) == SOX_SUCCESS);
+			
+			e = sox_create_effect(sox_find_effect("gain"));
+			args[0] = "-10", assert(sox_effect_options(e, 1, args) == SOX_SUCCESS);
+			assert(sox_add_effect(chain, e, &in->signal, &in->signal) == SOX_SUCCESS);
+		}
+		
+		if (tprofile == 2) {
+			
+			e = sox_create_effect(sox_find_effect("lowpass"));
+			args[0] = "1000", assert(sox_effect_options(e, 1, args) == SOX_SUCCESS);
+			assert(sox_add_effect(chain, e, &in->signal, &in->signal) == SOX_SUCCESS);
+			
+			e = sox_create_effect(sox_find_effect("gain"));
+			args[0] = "-25", assert(sox_effect_options(e, 1, args) == SOX_SUCCESS);
+			assert(sox_add_effect(chain, e, &in->signal, &in->signal) == SOX_SUCCESS);
+		}
+		
+		
+		// Create the `vol' effect, and initialise it with the desired parameters:
+		e = sox_create_effect(sox_find_effect("vol"));
+		args[0] = "3dB", assert(sox_effect_options(e, 1, args) == SOX_SUCCESS);
+		// Add the effect to the end of the effects processing chain:
+		assert(sox_add_effect(chain, e, &in->signal, &in->signal) == SOX_SUCCESS);
+		
+		// Create the `flanger' effect, and initialise it with default parameters:
+		e = sox_create_effect(sox_find_effect("flanger"));
+		assert(sox_effect_options(e, 0, NULL) == SOX_SUCCESS);
+		// Add the effect to the end of the effects processing chain:
+		assert(sox_add_effect(chain, e, &in->signal, &in->signal) == SOX_SUCCESS);
+		
+		
+		// The last effect in the effect chain must be something that only consumes
+		// samples; in this case, we use the built-in handler that outputs
+		// data to an audio file
+		e = sox_create_effect(sox_find_effect("output"));
+		args[0] = (char *)out, assert(sox_effect_options(e, 1, args) == SOX_SUCCESS);
+		assert(sox_add_effect(chain, e, &in->signal, &in->signal) == SOX_SUCCESS);
+		
+		// Flow samples through the effects processing chain until EOF is reached
+		sox_flow_effects(chain, NULL, NULL);
+		
+		// All done; tidy up:
+		sox_delete_effects_chain(chain);
+		sox_close(out);
+		sox_close(in);
+		sox_quit();
+		
+		memmove(fillBuf->mAudioData, buffer, fillBuf->mAudioDataByteSize);
+		free(buffer);
+		buffer = NULL;
+		//
+		//
+		//*/
 		
 		if (err)
 		{
