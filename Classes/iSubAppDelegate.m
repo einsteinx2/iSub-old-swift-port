@@ -48,14 +48,6 @@
 #import "BWQuincyManager.h"
 #import "BWHockeyManager.h"
 
-/*#if defined (CONFIGURATION_AdHoc)
-#import "BWQuincyManager.m"
-#import "BWHockeyManager.m"
-#endif
-#if defined (CONFIGURATION_Release)
-#import "BWQuincyManager.m"
-#endif*/
-
 @implementation iSubAppDelegate
 
 @synthesize window;
@@ -103,11 +95,16 @@
 	// HockyApp Kits
 #if defined (CONFIGURATION_AdHoc)
     [[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
+	[[BWQuincyManager sharedQuincyManager] setShowAlwaysButton:YES];
 	[[BWHockeyManager sharedHockeyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
 	[[BWHockeyManager sharedHockeyManager] setAlwaysShowUpdateReminder:YES];
 #endif
 #if defined (CONFIGURATION_Release)
-    [[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb"];
+	if (IS_LITE())
+		[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7"];
+	else
+		[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb"];
+	[[BWQuincyManager sharedQuincyManager] setShowAlwaysButton:YES];
 #endif
 	
 	introController = nil;

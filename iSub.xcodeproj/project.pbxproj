@@ -34,6 +34,7 @@
 		530B960911E8ED33002EA08E /* settings-page@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530B960811E8ED33002EA08E /* settings-page@2x.png */; };
 		530CE7F2119B8E8C00728ED5 /* CurrentPlaylistSongSmallUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 530CE7F1119B8E8C00728ED5 /* CurrentPlaylistSongSmallUITableViewCell.m */; };
 		530CE844119B9D9100728ED5 /* SongInfoPlaylistCustomUITableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 530CE843119B9D9100728ED5 /* SongInfoPlaylistCustomUITableView.m */; };
+		530FD22313C132F900C95451 /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 534F1633139AF85B00127A02 /* CrashReporter.framework */; };
 		5311F5D51194DCEE009ACE8E /* ArtistUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5311F5D41194DCEE009ACE8E /* ArtistUITableViewCell.m */; };
 		5312E1AF11B8C23100AFC08D /* bookmarks-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5312E1AD11B8C23100AFC08D /* bookmarks-tabbaricon.png */; };
 		5312E1B011B8C23100AFC08D /* genres-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5312E1AE11B8C23100AFC08D /* genres-tabbaricon.png */; };
@@ -839,6 +840,456 @@
 		53D8ACB4116C47E600E5C9CB /* PageControlViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53D8ACB2116C47E600E5C9CB /* PageControlViewController.xib */; };
 		53D9996E12D40C4000A97412 /* NSDataAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D9996B12D40C4000A97412 /* NSDataAdditions.m */; };
 		53D9996F12D40C4000A97412 /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D9996D12D40C4000A97412 /* TBXML.m */; };
+		53DCF3FE13BFEAD3009160F9 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
+		53DCF3FF13BFEAD3009160F9 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* RootViewController.xib */; };
+		53DCF40013BFEAD3009160F9 /* AlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F2D3ED113A338500107D63 /* AlbumViewController.xib */; };
+		53DCF40113BFEAD3009160F9 /* controller-next.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D7F113C963300B3A376 /* controller-next.png */; };
+		53DCF40213BFEAD3009160F9 /* controller-pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D80113C963300B3A376 /* controller-pause.png */; };
+		53DCF40313BFEAD3009160F9 /* controller-play.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D81113C963300B3A376 /* controller-play.png */; };
+		53DCF40413BFEAD3009160F9 /* controller-previous.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D82113C963300B3A376 /* controller-previous.png */; };
+		53DCF40513BFEAD3009160F9 /* SongInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53CECEF8113D8B9500B09699 /* SongInfoViewController.xib */; };
+		53DCF40613BFEAD3009160F9 /* SubsonicServerEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53CED25E113E2FF100B09699 /* SubsonicServerEditViewController.xib */; };
+		53DCF40713BFEAD3009160F9 /* default-album-art.png in Resources */ = {isa = PBXBuildFile; fileRef = 535A8899113F62DD00979783 /* default-album-art.png */; };
+		53DCF40813BFEAD3009160F9 /* settings-page.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D612811441F5B00DFCE56 /* settings-page.png */; };
+		53DCF40913BFEAD3009160F9 /* controller-repeat-all.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D615C11442AA000DFCE56 /* controller-repeat-all.png */; };
+		53DCF40A13BFEAD3009160F9 /* controller-repeat-one.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D615D11442AA000DFCE56 /* controller-repeat-one.png */; };
+		53DCF40B13BFEAD3009160F9 /* controller-repeat.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D615E11442AA000DFCE56 /* controller-repeat.png */; };
+		53DCF40C13BFEAD3009160F9 /* controller-shuffle-on.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D615F11442AA000DFCE56 /* controller-shuffle-on.png */; };
+		53DCF40D13BFEAD3009160F9 /* controller-shuffle.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D616011442AA000DFCE56 /* controller-shuffle.png */; };
+		53DCF40E13BFEAD3009160F9 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D624311444E4600DFCE56 /* Icon.png */; };
+		53DCF40F13BFEAD3009160F9 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AA300311461A04003E57E3 /* background.png */; };
+		53DCF41013BFEAD3009160F9 /* default-album-art-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 534E443E1155AD01000B4134 /* default-album-art-small.png */; };
+		53DCF41113BFEAD3009160F9 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 5305C2051157F4F800BC78F0 /* Default.png */; };
+		53DCF41213BFEAD3009160F9 /* progress-label-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F0CD8111589F0A00A665CD /* progress-label-background.png */; };
+		53DCF41313BFEAD3009160F9 /* AllAlbumsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 539797FD1162D4D200F41D8B /* AllAlbumsViewController.xib */; };
+		53DCF41413BFEAD3009160F9 /* loading-screen-image.png in Resources */ = {isa = PBXBuildFile; fileRef = 539799781163084200F41D8B /* loading-screen-image.png */; };
+		53DCF41513BFEAD3009160F9 /* ServerListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53614AC9116432DA0088ABC0 /* ServerListViewController.xib */; };
+		53DCF41613BFEAD3009160F9 /* AllSongsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53614BD7116467420088ABC0 /* AllSongsViewController.xib */; };
+		53DCF41713BFEAD3009160F9 /* SearchOverlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5303877311653AE80043292D /* SearchOverlayViewController.xib */; };
+		53DCF41813BFEAD3009160F9 /* PlayingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE3621165C83900197877 /* PlayingViewController.xib */; };
+		53DCF41913BFEAD3009160F9 /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE4EE1166538500197877 /* gear.png */; };
+		53DCF41A13BFEAD3009160F9 /* artists-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE50D1166584900197877 /* artists-tabbaricon.png */; };
+		53DCF41B13BFEAD3009160F9 /* playlists-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE518116658C700197877 /* playlists-tabbaricon.png */; };
+		53DCF41C13BFEAD3009160F9 /* albums-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE51E1166590700197877 /* albums-tabbaricon.png */; };
+		53DCF41D13BFEAD3009160F9 /* songs-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE524116659D900197877 /* songs-tabbaricon.png */; };
+		53DCF41E13BFEAD3009160F9 /* playing-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE52A11665A3700197877 /* playing-tabbaricon.png */; };
+		53DCF41F13BFEAD3009160F9 /* PlaylistsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE54211665B6B00197877 /* PlaylistsViewController.xib */; };
+		53DCF42013BFEAD3009160F9 /* current-server.png in Resources */ = {isa = PBXBuildFile; fileRef = 53191DEF1167CFDC00E1C08A /* current-server.png */; };
+		53DCF42113BFEAD3009160F9 /* chat-page.png in Resources */ = {isa = PBXBuildFile; fileRef = 530AD55B116877A300AD2540 /* chat-page.png */; };
+		53DCF42213BFEAD3009160F9 /* now-playing.png in Resources */ = {isa = PBXBuildFile; fileRef = 530AD58D116913AC00AD2540 /* now-playing.png */; };
+		53DCF42313BFEAD3009160F9 /* reload-table.png in Resources */ = {isa = PBXBuildFile; fileRef = 53030314116ADF8B00B0AF5D /* reload-table.png */; };
+		53DCF42413BFEAD3009160F9 /* PageControlViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53D8ACB2116C47E600E5C9CB /* PageControlViewController.xib */; };
+		53DCF42513BFEAD3009160F9 /* DebugViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F4A073116FF48400BB8411 /* DebugViewController.xib */; };
+		53DCF42613BFEAD3009160F9 /* CurrentPlaylistViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F4A07C116FF7EE00BB8411 /* CurrentPlaylistViewController.xib */; };
+		53DCF42713BFEAD3009160F9 /* CurrentPlaylistBackgroundViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F4A228117011B900BB8411 /* CurrentPlaylistBackgroundViewController.xib */; };
+		53DCF42813BFEAD3009160F9 /* play-all-note.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B8A1FA11704E100005AA86 /* play-all-note.png */; };
+		53DCF42913BFEAD3009160F9 /* BookmarksViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5388A3B3119899260049BA9E /* BookmarksViewController.xib */; };
+		53DCF42A13BFEAD3009160F9 /* selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 5388A42A1198AD840049BA9E /* selected.png */; };
+		53DCF42B13BFEAD3009160F9 /* unselected.png in Resources */ = {isa = PBXBuildFile; fileRef = 5388A42B1198AD840049BA9E /* unselected.png */; };
+		53DCF42C13BFEAD3009160F9 /* cache-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A2213411A8489900C1ACD4 /* cache-button.png */; };
+		53DCF42D13BFEAD3009160F9 /* queue-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A2213511A8489900C1ACD4 /* queue-button.png */; };
+		53DCF42E13BFEAD3009160F9 /* GenresViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53B52BA411ADE0A6005776B5 /* GenresViewController.xib */; };
+		53DCF42F13BFEAD3009160F9 /* CacheViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 530B417111B607A200743C09 /* CacheViewController.xib */; };
+		53DCF43013BFEAD3009160F9 /* bookmarks-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5312E1AD11B8C23100AFC08D /* bookmarks-tabbaricon.png */; };
+		53DCF43113BFEAD3009160F9 /* genres-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5312E1AE11B8C23100AFC08D /* genres-tabbaricon.png */; };
+		53DCF43213BFEAD3009160F9 /* cache-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5312E1B311B8C31E00AFC08D /* cache-tabbaricon.png */; };
+		53DCF43313BFEAD3009160F9 /* LoadingScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 536B5D5D11C8183D00CC1D69 /* LoadingScreen.xib */; };
+		53DCF43413BFEAD3009160F9 /* CacheAlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 538229F511C98091003F1E23 /* CacheAlbumViewController.xib */; };
+		53DCF43513BFEAD3009160F9 /* GenresAlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53523D8E11CD5889006AEA48 /* GenresAlbumViewController.xib */; };
+		53DCF43613BFEAD3009160F9 /* GenresArtistViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53523D9311CD61F7006AEA48 /* GenresArtistViewController.xib */; };
+		53DCF43713BFEAD3009160F9 /* delete-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314C7B311D4157D000CA726 /* delete-button.png */; };
+		53DCF43813BFEAD3009160F9 /* SettingsTabViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5398F26C11DA61DA00007870 /* SettingsTabViewController.xib */; };
+		53DCF43913BFEAD3009160F9 /* HelpTabViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5398F27711DA627500007870 /* HelpTabViewController.xib */; };
+		53DCF43A13BFEAD3009160F9 /* iPhoneStreamingPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5398F2B511DA8B1000007870 /* iPhoneStreamingPlayerViewController.xib */; };
+		53DCF43B13BFEAD3009160F9 /* albums-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF18811DA8D7500447FF7 /* albums-tabbaricon@2x.png */; };
+		53DCF43C13BFEAD3009160F9 /* artists-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF18C11DA90D800447FF7 /* artists-tabbaricon@2x.png */; };
+		53DCF43D13BFEAD3009160F9 /* bookmarks-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF18D11DA90D800447FF7 /* bookmarks-tabbaricon@2x.png */; };
+		53DCF43E13BFEAD3009160F9 /* cache-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF18E11DA90D800447FF7 /* cache-tabbaricon@2x.png */; };
+		53DCF43F13BFEAD3009160F9 /* genres-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF18F11DA90D800447FF7 /* genres-tabbaricon@2x.png */; };
+		53DCF44013BFEAD3009160F9 /* playing-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF19011DA90D800447FF7 /* playing-tabbaricon@2x.png */; };
+		53DCF44113BFEAD3009160F9 /* playlists-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF19111DA90D800447FF7 /* playlists-tabbaricon@2x.png */; };
+		53DCF44213BFEAD3009160F9 /* songs-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF19211DA90D800447FF7 /* songs-tabbaricon@2x.png */; };
+		53DCF44313BFEAD3009160F9 /* gear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF1C311DA983700447FF7 /* gear@2x.png */; };
+		53DCF44413BFEAD3009160F9 /* background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF1D811DA9DB600447FF7 /* background@2x.png */; };
+		53DCF44513BFEAD3009160F9 /* now-playing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF1DD11DA9F0200447FF7 /* now-playing@2x.png */; };
+		53DCF44613BFEAD3009160F9 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF1E711DAA1BC00447FF7 /* Icon@2x.png */; };
+		53DCF44713BFEAD3009160F9 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF1EB11DAA21600447FF7 /* Icon-72.png */; };
+		53DCF44813BFEAD3009160F9 /* current-server@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2511E822CC00FE3ECD /* current-server@2x.png */; };
+		53DCF44913BFEAD3009160F9 /* default-album-art-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2711E823A100FE3ECD /* default-album-art-small@2x.png */; };
+		53DCF44A13BFEAD3009160F9 /* default-album-art@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2811E823A100FE3ECD /* default-album-art@2x.png */; };
+		53DCF44B13BFEAD3009160F9 /* reload-table@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE4D11E827A100FE3ECD /* reload-table@2x.png */; };
+		53DCF44C13BFEAD3009160F9 /* cache-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE6011E82A8700FE3ECD /* cache-button@2x.png */; };
+		53DCF44D13BFEAD3009160F9 /* queue-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE6811E82CD700FE3ECD /* queue-button@2x.png */; };
+		53DCF44E13BFEAD3009160F9 /* delete-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE6C11E82D7700FE3ECD /* delete-button@2x.png */; };
+		53DCF44F13BFEAD3009160F9 /* selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530B95E711E8E5C3002EA08E /* selected@2x.png */; };
+		53DCF45013BFEAD3009160F9 /* unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530B95EB11E8E7B7002EA08E /* unselected@2x.png */; };
+		53DCF45113BFEAD3009160F9 /* play-all-note@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530B960211E8E99C002EA08E /* play-all-note@2x.png */; };
+		53DCF45213BFEAD3009160F9 /* loading-screen-image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530B960611E8EC86002EA08E /* loading-screen-image@2x.png */; };
+		53DCF45313BFEAD3009160F9 /* settings-page@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530B960811E8ED33002EA08E /* settings-page@2x.png */; };
+		53DCF45413BFEAD3009160F9 /* controller-next@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE011E9487C004AEC41 /* controller-next@2x.png */; };
+		53DCF45513BFEAD3009160F9 /* controller-pause@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE211E9488A004AEC41 /* controller-pause@2x.png */; };
+		53DCF45613BFEAD3009160F9 /* controller-play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE311E9488A004AEC41 /* controller-play@2x.png */; };
+		53DCF45713BFEAD3009160F9 /* controller-previous@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE411E9488A004AEC41 /* controller-previous@2x.png */; };
+		53DCF45813BFEAD3009160F9 /* controller-repeat-all@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE511E9488A004AEC41 /* controller-repeat-all@2x.png */; };
+		53DCF45913BFEAD3009160F9 /* controller-repeat-one@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE611E9488A004AEC41 /* controller-repeat-one@2x.png */; };
+		53DCF45A13BFEAD3009160F9 /* controller-repeat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE711E9488A004AEC41 /* controller-repeat@2x.png */; };
+		53DCF45B13BFEAD3009160F9 /* controller-shuffle-on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE811E9488A004AEC41 /* controller-shuffle-on@2x.png */; };
+		53DCF45C13BFEAD3009160F9 /* controller-shuffle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE911E9488A004AEC41 /* controller-shuffle@2x.png */; };
+		53DCF45D13BFEAD3009160F9 /* controller-bookmark-on.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FF611E94AA5004AEC41 /* controller-bookmark-on.png */; };
+		53DCF45E13BFEAD3009160F9 /* controller-bookmark-on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FF711E94AA5004AEC41 /* controller-bookmark-on@2x.png */; };
+		53DCF45F13BFEAD3009160F9 /* controller-bookmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FF811E94AA5004AEC41 /* controller-bookmark.png */; };
+		53DCF46013BFEAD3009160F9 /* controller-bookmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FF911E94AA5004AEC41 /* controller-bookmark@2x.png */; };
+		53DCF46113BFEAD3009160F9 /* twitter-signin.png in Resources */ = {isa = PBXBuildFile; fileRef = 536AD1C711EA5E1600387CB0 /* twitter-signin.png */; };
+		53DCF46213BFEAD3009160F9 /* twitter-signin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 536AD1C811EA5E1700387CB0 /* twitter-signin@2x.png */; };
+		53DCF46313BFEAD3009160F9 /* jQueryInject.txt in Resources */ = {isa = PBXBuildFile; fileRef = 536AD25911EA7EFB00387CB0 /* jQueryInject.txt */; };
+		53DCF46413BFEAD3009160F9 /* jQueryInjectLandscape.txt in Resources */ = {isa = PBXBuildFile; fileRef = 536AD25A11EA7EFB00387CB0 /* jQueryInjectLandscape.txt */; };
+		53DCF46513BFEAD3009160F9 /* twitter_load.png in Resources */ = {isa = PBXBuildFile; fileRef = 536AD29211EA7EFB00387CB0 /* twitter_load.png */; };
+		53DCF46613BFEAD3009160F9 /* twitter-signout.png in Resources */ = {isa = PBXBuildFile; fileRef = 536AD3E111EAA96100387CB0 /* twitter-signout.png */; };
+		53DCF46713BFEAD3009160F9 /* twitter-signout@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 536AD3E211EAA96100387CB0 /* twitter-signout@2x.png */; };
+		53DCF46813BFEAD3009160F9 /* ChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5379DC4C1219E48800F426CD /* ChatViewController.xib */; };
+		53DCF46913BFEAD3009160F9 /* comment-write.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BB7F9B121B95A600BEE7E8 /* comment-write.png */; };
+		53DCF46A13BFEAD3009160F9 /* comment-write-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BB7FAB121B96E400BEE7E8 /* comment-write-pressed.png */; };
+		53DCF46B13BFEAD3009160F9 /* chat-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BB7FB3121B97BA00BEE7E8 /* chat-tabbaricon.png */; };
+		53DCF46C13BFEAD3009160F9 /* chat-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BB7FB4121B97BA00BEE7E8 /* chat-tabbaricon@2x.png */; };
+		53DCF46D13BFEAD3009160F9 /* comment-write-pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BB8009121B9CA200BEE7E8 /* comment-write-pressed@2x.png */; };
+		53DCF46E13BFEAD3009160F9 /* comment-write@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BB800A121B9CA200BEE7E8 /* comment-write@2x.png */; };
+		53DCF46F13BFEAD3009160F9 /* HomeAlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 538A29231264EBD600DBFC96 /* HomeAlbumViewController.xib */; };
+		53DCF47013BFEAD3009160F9 /* home-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314B4EC126FD20300CDB511 /* home-tabbaricon.png */; };
+		53DCF47113BFEAD3009160F9 /* home-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314B4ED126FD20300CDB511 /* home-tabbaricon@2x.png */; };
+		53DCF47213BFEAD3009160F9 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53E75C351270013D00BC1A19 /* MainWindow-iPad.xib */; };
+		53DCF47313BFEAD3009160F9 /* iPadMainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53E75C551270053300BC1A19 /* iPadMainMenu.xib */; };
+		53DCF47413BFEAD3009160F9 /* InitialDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53E75C6F1270067900BC1A19 /* InitialDetailViewController.xib */; };
+		53DCF47513BFEAD3009160F9 /* SearchSongsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53B9D0B31279FAEF00CAB0E0 /* SearchSongsViewController.xib */; };
+		53DCF47613BFEAD3009160F9 /* blackArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7A127D012300B745B4 /* blackArrow.png */; };
+		53DCF47713BFEAD3009160F9 /* blackArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7B127D012300B745B4 /* blackArrow@2x.png */; };
+		53DCF47813BFEAD3009160F9 /* blueArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7C127D012300B745B4 /* blueArrow.png */; };
+		53DCF47913BFEAD3009160F9 /* blueArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7D127D012300B745B4 /* blueArrow@2x.png */; };
+		53DCF47A13BFEAD3009160F9 /* grayArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7E127D012300B745B4 /* grayArrow.png */; };
+		53DCF47B13BFEAD3009160F9 /* grayArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7F127D012300B745B4 /* grayArrow@2x.png */; };
+		53DCF47C13BFEAD3009160F9 /* whiteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B80127D012300B745B4 /* whiteArrow.png */; };
+		53DCF47D13BFEAD3009160F9 /* whiteArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B81127D012300B745B4 /* whiteArrow@2x.png */; };
+		53DCF47E13BFEAD3009160F9 /* shuffle-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C7208127D115500A296C0 /* shuffle-small.png */; };
+		53DCF47F13BFEAD3009160F9 /* shuffle-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C7209127D115500A296C0 /* shuffle-small@2x.png */; };
+		53DCF48013BFEAD3009160F9 /* NewHomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53BA49421285BD7A0010B380 /* NewHomeViewController.xib */; };
+		53DCF48113BFEAD3009160F9 /* QuickAlbumsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53BA497C1285D5B10010B380 /* QuickAlbumsViewController.xib */; };
+		53DCF48213BFEAD3009160F9 /* NewHomeViewControllerLandscape.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F8C7BE12972502007BDC0E /* NewHomeViewControllerLandscape.xib */; };
+		53DCF48313BFEAD3009160F9 /* home-background-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8C803129728F9007BDC0E /* home-background-ipad.png */; };
+		53DCF48413BFEAD3009160F9 /* NewHomeViewController~iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F8C81A12972A51007BDC0E /* NewHomeViewController~iPad.xib */; };
+		53DCF48513BFEAD3009160F9 /* ipad-menu-selected-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8C8701297304C007BDC0E /* ipad-menu-selected-background.png */; };
+		53DCF48613BFEAD3009160F9 /* QuickAlbumsViewController~iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F8C8B31297326D007BDC0E /* QuickAlbumsViewController~iPad.xib */; };
+		53DCF48713BFEAD3009160F9 /* home-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC621297949A007BDC0E /* home-background.png */; };
+		53DCF48813BFEAD3009160F9 /* home-background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC631297949A007BDC0E /* home-background@2x.png */; };
+		53DCF48913BFEAD3009160F9 /* home-jukebox-off-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC641297949A007BDC0E /* home-jukebox-off-ipad.png */; };
+		53DCF48A13BFEAD3009160F9 /* home-jukebox-off.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC651297949A007BDC0E /* home-jukebox-off.png */; };
+		53DCF48B13BFEAD3009160F9 /* home-jukebox-off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC661297949A007BDC0E /* home-jukebox-off@2x.png */; };
+		53DCF48C13BFEAD3009160F9 /* home-jukebox-on-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC671297949A007BDC0E /* home-jukebox-on-ipad.png */; };
+		53DCF48D13BFEAD3009160F9 /* home-jukebox-on.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC681297949A007BDC0E /* home-jukebox-on.png */; };
+		53DCF48E13BFEAD3009160F9 /* home-jukebox-on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC691297949A007BDC0E /* home-jukebox-on@2x.png */; };
+		53DCF48F13BFEAD3009160F9 /* home-player-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC6A1297949A007BDC0E /* home-player-ipad.png */; };
+		53DCF49013BFEAD3009160F9 /* home-player.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC6B1297949A007BDC0E /* home-player.png */; };
+		53DCF49113BFEAD3009160F9 /* home-player@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC6C1297949A007BDC0E /* home-player@2x.png */; };
+		53DCF49213BFEAD3009160F9 /* home-playlists-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC6D1297949A007BDC0E /* home-playlists-ipad.png */; };
+		53DCF49313BFEAD3009160F9 /* home-playlists.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC6E1297949A007BDC0E /* home-playlists.png */; };
+		53DCF49413BFEAD3009160F9 /* home-playlists@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC6F1297949A007BDC0E /* home-playlists@2x.png */; };
+		53DCF49513BFEAD3009160F9 /* home-quick-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC701297949A007BDC0E /* home-quick-ipad.png */; };
+		53DCF49613BFEAD3009160F9 /* home-quick.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC711297949A007BDC0E /* home-quick.png */; };
+		53DCF49713BFEAD3009160F9 /* home-quick@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC721297949A007BDC0E /* home-quick@2x.png */; };
+		53DCF49813BFEAD3009160F9 /* home-settings-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC731297949A007BDC0E /* home-settings-ipad.png */; };
+		53DCF49913BFEAD3009160F9 /* home-settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC741297949A007BDC0E /* home-settings.png */; };
+		53DCF49A13BFEAD3009160F9 /* home-settings@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC751297949A007BDC0E /* home-settings@2x.png */; };
+		53DCF49B13BFEAD3009160F9 /* home-shuffle-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC761297949A007BDC0E /* home-shuffle-ipad.png */; };
+		53DCF49C13BFEAD3009160F9 /* home-shuffle.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC771297949A007BDC0E /* home-shuffle.png */; };
+		53DCF49D13BFEAD3009160F9 /* home-shuffle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC781297949A007BDC0E /* home-shuffle@2x.png */; };
+		53DCF49E13BFEAD3009160F9 /* iPhoneStreamingPlayerViewController~iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53E45BCF129DCEC30054F6BF /* iPhoneStreamingPlayerViewController~iPad.xib */; };
+		53DCF49F13BFEAD3009160F9 /* controller-stop.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327F1BE12B8243C00735119 /* controller-stop.png */; };
+		53DCF4A013BFEAD3009160F9 /* controller-stop@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327F1BF12B8243C00735119 /* controller-stop@2x.png */; };
+		53DCF4A113BFEAD3009160F9 /* StoreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5327F58412B95D2900735119 /* StoreViewController.xib */; };
+		53DCF4A213BFEAD3009160F9 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20D1C12C27AAA00A90DD9 /* Default@2x.png */; };
+		53DCF4A313BFEAD3009160F9 /* home-quick-random.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DCD12C2945400A90DD9 /* home-quick-random.png */; };
+		53DCF4A413BFEAD3009160F9 /* home-quick-random@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DD112C2957A00A90DD9 /* home-quick-random@2x.png */; };
+		53DCF4A513BFEAD3009160F9 /* home-quick-recent@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DD512C298E500A90DD9 /* home-quick-recent@2x.png */; };
+		53DCF4A613BFEAD3009160F9 /* home-quick-recent.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DD612C298E500A90DD9 /* home-quick-recent.png */; };
+		53DCF4A713BFEAD3009160F9 /* home-quick-newest@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DD712C298E500A90DD9 /* home-quick-newest@2x.png */; };
+		53DCF4A813BFEAD3009160F9 /* home-quick-newest.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DD812C298E500A90DD9 /* home-quick-newest.png */; };
+		53DCF4A913BFEAD3009160F9 /* home-quick-frequent@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DD912C298E500A90DD9 /* home-quick-frequent@2x.png */; };
+		53DCF4AA13BFEAD3009160F9 /* home-quick-frequent.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DDA12C298E500A90DD9 /* home-quick-frequent.png */; };
+		53DCF4AB13BFEAD3009160F9 /* home-quick-cancel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DDB12C298E500A90DD9 /* home-quick-cancel@2x.png */; };
+		53DCF4AC13BFEAD3009160F9 /* home-quick-cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DDC12C298E500A90DD9 /* home-quick-cancel.png */; };
+		53DCF4AD13BFEAD3009160F9 /* home-quick-topbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DE512C29A7600A90DD9 /* home-quick-topbar@2x.png */; };
+		53DCF4AE13BFEAD3009160F9 /* home-quick-topbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DE612C29A7600A90DD9 /* home-quick-topbar.png */; };
+		53DCF4AF13BFEAD3009160F9 /* home-chat-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20E2B12C2A60D00A90DD9 /* home-chat-ipad.png */; };
+		53DCF4B013BFEAD3009160F9 /* home-chat.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20E2C12C2A60D00A90DD9 /* home-chat.png */; };
+		53DCF4B113BFEAD3009160F9 /* home-chat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20E2D12C2A60D00A90DD9 /* home-chat@2x.png */; };
+		53DCF4B213BFEAD3009160F9 /* table-fade-bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20FD512C2EB0000A90DD9 /* table-fade-bottom.png */; };
+		53DCF4B313BFEAD3009160F9 /* table-fade-bottom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20FD612C2EB0000A90DD9 /* table-fade-bottom@2x.png */; };
+		53DCF4B413BFEAD3009160F9 /* table-fade-top.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20FD712C2EB0000A90DD9 /* table-fade-top.png */; };
+		53DCF4B513BFEAD3009160F9 /* table-fade-top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20FD812C2EB0000A90DD9 /* table-fade-top@2x.png */; };
+		53DCF4B613BFEAD3009160F9 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C01AE12C3DCC40061545B /* back.png */; };
+		53DCF4B713BFEAD3009160F9 /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C01AF12C3DCC40061545B /* back@2x.png */; };
+		53DCF4B813BFEAD3009160F9 /* Default-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B64B7E12C9173E007F1ED5 /* Default-Portrait.png */; };
+		53DCF4B913BFEAD3009160F9 /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B64B9612C917E4007F1ED5 /* Default-Landscape.png */; };
+		53DCF4BA13BFEAD3009160F9 /* folders-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CA9C512DBCA9000389DA1 /* folders-tabbaricon.png */; };
+		53DCF4BB13BFEAD3009160F9 /* folders-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CA9C612DBCA9000389DA1 /* folders-tabbaricon@2x.png */; };
+		53DCF4BC13BFEAD3009160F9 /* player-overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CAC6612DC2D6D00389DA1 /* player-overlay.png */; };
+		53DCF4BD13BFEAD3009160F9 /* player-overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CAC6712DC2D6D00389DA1 /* player-overlay@2x.png */; };
+		53DCF4BE13BFEAD3009160F9 /* server-subsonic.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB22012E0014A00389DA1 /* server-subsonic.png */; };
+		53DCF4BF13BFEAD3009160F9 /* server-subsonic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB22112E0014A00389DA1 /* server-subsonic@2x.png */; };
+		53DCF4C013BFEAD3009160F9 /* server-ubuntu.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB22212E0014A00389DA1 /* server-ubuntu.png */; };
+		53DCF4C113BFEAD3009160F9 /* server-ubuntu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB22312E0014A00389DA1 /* server-ubuntu@2x.png */; };
+		53DCF4C213BFEAD3009160F9 /* ServerTypeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 535CB23112E0027800389DA1 /* ServerTypeViewController.xib */; };
+		53DCF4C313BFEAD3009160F9 /* UbuntuServerEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 535CB2A112E2348A00389DA1 /* UbuntuServerEditViewController.xib */; };
+		53DCF4C413BFEAD3009160F9 /* ubuntu-add-server.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB2A612E2372B00389DA1 /* ubuntu-add-server.png */; };
+		53DCF4C513BFEAD3009160F9 /* ubuntu-add-server@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB2A712E2372B00389DA1 /* ubuntu-add-server@2x.png */; };
+		53DCF4C613BFEAD3009160F9 /* server-button-subsonic.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB48612E2664700389DA1 /* server-button-subsonic.png */; };
+		53DCF4C713BFEAD3009160F9 /* server-button-subsonic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB48712E2664700389DA1 /* server-button-subsonic@2x.png */; };
+		53DCF4C813BFEAD3009160F9 /* server-button-ubuntu.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB48812E2664700389DA1 /* server-button-ubuntu.png */; };
+		53DCF4C913BFEAD3009160F9 /* server-button-ubuntu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB48912E2664700389DA1 /* server-button-ubuntu@2x.png */; };
+		53DCF4CA13BFEAD3009160F9 /* default-album-art-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB58312E27A5400389DA1 /* default-album-art-ipad.png */; };
+		53DCF4CB13BFEAD3009160F9 /* player-songinfo.png in Resources */ = {isa = PBXBuildFile; fileRef = 5313031B12ECA65200211401 /* player-songinfo.png */; };
+		53DCF4CC13BFEAD3009160F9 /* player-songinfo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5313031C12ECA65200211401 /* player-songinfo@2x.png */; };
+		53DCF4CD13BFEAD3009160F9 /* intro-bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6051A12F1EFD4003C6895 /* intro-bottom.png */; };
+		53DCF4CE13BFEAD3009160F9 /* intro-bottom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6051B12F1EFD4003C6895 /* intro-bottom@2x.png */; };
+		53DCF4CF13BFEAD3009160F9 /* intro-foreground.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6051C12F1EFD4003C6895 /* intro-foreground.png */; };
+		53DCF4D013BFEAD3009160F9 /* intro-foreground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6051D12F1EFD4003C6895 /* intro-foreground@2x.png */; };
+		53DCF4D113BFEAD3009160F9 /* intro-top.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6052012F1EFD4003C6895 /* intro-top.png */; };
+		53DCF4D213BFEAD3009160F9 /* intro-top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6052112F1EFD4003C6895 /* intro-top@2x.png */; };
+		53DCF4D313BFEAD3009160F9 /* IntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53C6052D12F1F01E003C6895 /* IntroViewController.xib */; };
+		53DCF4D413BFEAD3009160F9 /* intro-rowbackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6053112F1F19F003C6895 /* intro-rowbackground.png */; };
+		53DCF4D513BFEAD3009160F9 /* intro-rowbackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6053212F1F19F003C6895 /* intro-rowbackground@2x.png */; };
+		53DCF4D613BFEAD3009160F9 /* intro-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6053912F1F2F5003C6895 /* intro-arrow.png */; };
+		53DCF4D713BFEAD3009160F9 /* intro-arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6053A12F1F2F5003C6895 /* intro-arrow@2x.png */; };
+		53DCF4D813BFEAD3009160F9 /* intro-rowbackground-dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6053D12F1F493003C6895 /* intro-rowbackground-dark.png */; };
+		53DCF4D913BFEAD3009160F9 /* intro-rowbackground-dark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6053E12F1F493003C6895 /* intro-rowbackground-dark@2x.png */; };
+		53DCF4DA13BFEAD3009160F9 /* intro-icon-testserver.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6054112F1F755003C6895 /* intro-icon-testserver.png */; };
+		53DCF4DB13BFEAD3009160F9 /* intro-icon-testserver@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6054212F1F755003C6895 /* intro-icon-testserver@2x.png */; };
+		53DCF4DC13BFEAD3009160F9 /* intro-icon-video.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6054312F1F755003C6895 /* intro-icon-video.png */; };
+		53DCF4DD13BFEAD3009160F9 /* intro-icon-video@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6054412F1F755003C6895 /* intro-icon-video@2x.png */; };
+		53DCF4DE13BFEAD3009160F9 /* intro-sunkenlogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6054912F1FB4B003C6895 /* intro-sunkenlogo.png */; };
+		53DCF4DF13BFEAD3009160F9 /* intro-sunkenlogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6054A12F1FB4B003C6895 /* intro-sunkenlogo@2x.png */; };
+		53DCF4E013BFEAD3009160F9 /* intro-icon-ownserver.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6054D12F1FCC6003C6895 /* intro-icon-ownserver.png */; };
+		53DCF4E113BFEAD3009160F9 /* intro-icon-ownserver@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6054E12F1FCC6003C6895 /* intro-icon-ownserver@2x.png */; };
+		53DCF4E213BFEAD3009160F9 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 537FCC5312F8F7F400F1D996 /* iTunesArtwork */; };
+		53DCF4E313BFEAD3009160F9 /* KeychainAccessGroups.plist in Resources */ = {isa = PBXBuildFile; fileRef = 532D9DE1131B682600FD8CA7 /* KeychainAccessGroups.plist */; };
+		53DCF4E413BFEAD3009160F9 /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53CC217D132DC79F003521B5 /* Entitlements.plist */; };
+		53DCF4E513BFEAD3009160F9 /* folder-dropdown-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ADBBBA133525BD0098FAE6 /* folder-dropdown-arrow.png */; };
+		53DCF4E613BFEAD3009160F9 /* folder-dropdown-arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ADBBBB133525BD0098FAE6 /* folder-dropdown-arrow@2x.png */; };
+		53DCF4E713BFEAD3009160F9 /* SongInfoViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 535B726B134D0721003E0E1C /* SongInfoViewController-iPad.xib */; };
+		53DCF4E813BFEAD3009160F9 /* controller-bookmark-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B726D134D0900003E0E1C /* controller-bookmark-ipad.png */; };
+		53DCF4E913BFEAD3009160F9 /* controller-bookmark-on-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B726E134D0900003E0E1C /* controller-bookmark-on-ipad.png */; };
+		53DCF4EA13BFEAD3009160F9 /* controller-repeat-all-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B726F134D0900003E0E1C /* controller-repeat-all-ipad.png */; };
+		53DCF4EB13BFEAD3009160F9 /* controller-repeat-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B7270134D0900003E0E1C /* controller-repeat-ipad.png */; };
+		53DCF4EC13BFEAD3009160F9 /* controller-repeat-one-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B7271134D0900003E0E1C /* controller-repeat-one-ipad.png */; };
+		53DCF4ED13BFEAD3009160F9 /* controller-shuffle-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B7272134D0900003E0E1C /* controller-shuffle-ipad.png */; };
+		53DCF4EE13BFEAD3009160F9 /* controller-shuffle-on-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B7273134D0900003E0E1C /* controller-shuffle-on-ipad.png */; };
+		53DCF4EF13BFEAD3009160F9 /* SearchAllViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 535B727D134D2704003E0E1C /* SearchAllViewController.xib */; };
+		53DCF4F013BFEAD3009160F9 /* upload-playlist.png in Resources */ = {isa = PBXBuildFile; fileRef = 5353B83A134D8019005C589E /* upload-playlist.png */; };
+		53DCF4F113BFEAD3009160F9 /* upload-playlist@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5353B83B134D8019005C589E /* upload-playlist@2x.png */; };
+		53DCF4F213BFEAD3009160F9 /* ShuffleFolderPickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 536AB8011353B4F500DABD83 /* ShuffleFolderPickerViewController.xib */; };
+		53DCF4F313BFEAD3009160F9 /* PlaylistSongsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 536AB8101353DCF700DABD83 /* PlaylistSongsViewController.xib */; };
+		53DCF4F413BFEAD3009160F9 /* Quincy.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 53BC2673139AE7E100A825F1 /* Quincy.bundle */; };
+		53DCF4F513BFEAD3009160F9 /* Hockey.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 53BC268D139AEBFF00A825F1 /* Hockey.bundle */; };
+		53DCF4F613BFEAD3009160F9 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 53BC2691139AEBFF00A825F1 /* README.md */; };
+		53DCF4F713BFEAD3009160F9 /* iSub-Info-Beta.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53BC2867139AF11400A825F1 /* iSub-Info-Beta.plist */; };
+		53DCF4F813BFEAD3009160F9 /* Icon-72-Beta.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BC2869139AF17B00A825F1 /* Icon-72-Beta.png */; };
+		53DCF4F913BFEAD3009160F9 /* Icon-Beta.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BC286A139AF17B00A825F1 /* Icon-Beta.png */; };
+		53DCF4FA13BFEAD3009160F9 /* Icon@2x-Beta.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BC286B139AF17B00A825F1 /* Icon@2x-Beta.png */; };
+		53DCF4FC13BFEAD3009160F9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
+		53DCF4FD13BFEAD3009160F9 /* iSubAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* iSubAppDelegate.m */; };
+		53DCF4FE13BFEAD3009160F9 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
+		53DCF4FF13BFEAD3009160F9 /* Artist.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1D61139F05200107D63 /* Artist.m */; };
+		53DCF50013BFEAD3009160F9 /* Index.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1FD1139F5A500107D63 /* Index.m */; };
+		53DCF50113BFEAD3009160F9 /* XMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D23A1139F9DC00107D63 /* XMLParser.m */; };
+		53DCF50213BFEAD3009160F9 /* AlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D3EC113A338500107D63 /* AlbumViewController.m */; };
+		53DCF50313BFEAD3009160F9 /* Album.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D41F113A4E2C00107D63 /* Album.m */; };
+		53DCF50413BFEAD3009160F9 /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D5A5113A63F300107D63 /* Song.m */; };
+		53DCF50513BFEAD3009160F9 /* iPhoneStreamingPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F675AE113B048600822059 /* iPhoneStreamingPlayerViewController.m */; };
+		53DCF50613BFEAD3009160F9 /* AsynchronousImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 533A2D06113C61CA00B3A376 /* AsynchronousImageView.m */; };
+		53DCF50713BFEAD3009160F9 /* SongInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CECEF7113D8B9500B09699 /* SongInfoViewController.m */; };
+		53DCF50813BFEAD3009160F9 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */; };
+		53DCF50913BFEAD3009160F9 /* AlbumUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 534E43B61155659A000B4134 /* AlbumUITableViewCell.m */; };
+		53DCF50A13BFEAD3009160F9 /* AsynchronousImageViewCached.m in Sources */ = {isa = PBXBuildFile; fileRef = 534E43B9115565FA000B4134 /* AsynchronousImageViewCached.m */; };
+		53DCF50B13BFEAD3009160F9 /* SongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 534E44701155B106000B4134 /* SongUITableViewCell.m */; };
+		53DCF50C13BFEAD3009160F9 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 5305C1D91157EA7A00BC78F0 /* Reachability.m */; };
+		53DCF50D13BFEAD3009160F9 /* AllAlbumsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 539796E31162B68800F41D8B /* AllAlbumsViewController.m */; };
+		53DCF50E13BFEAD3009160F9 /* AllAlbumsUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 539797F91162D3F100F41D8B /* AllAlbumsUITableViewCell.m */; };
+		53DCF50F13BFEAD3009160F9 /* ServerListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53614AC8116432DA0088ABC0 /* ServerListViewController.m */; };
+		53DCF51013BFEAD3009160F9 /* SearchOverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5303877211653AE80043292D /* SearchOverlayViewController.m */; };
+		53DCF51113BFEAD3009160F9 /* AllSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 530388A8116571920043292D /* AllSongsViewController.m */; };
+		53DCF51213BFEAD3009160F9 /* AllSongsXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 530388AB116573A30043292D /* AllSongsXMLParser.m */; };
+		53DCF51313BFEAD3009160F9 /* PlayingUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE3581165C52D00197877 /* PlayingUITableViewCell.m */; };
+		53DCF51413BFEAD3009160F9 /* PlayingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE3611165C83900197877 /* PlayingViewController.m */; };
+		53DCF51513BFEAD3009160F9 /* PlayingXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE3771165C97100197877 /* PlayingXMLParser.m */; };
+		53DCF51613BFEAD3009160F9 /* PlaylistsXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE53E11665B1100197877 /* PlaylistsXMLParser.m */; };
+		53DCF51713BFEAD3009160F9 /* PlaylistsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE54111665B6B00197877 /* PlaylistsViewController.m */; };
+		53DCF51813BFEAD3009160F9 /* PlaylistsUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE54B11665C3800197877 /* PlaylistsUITableViewCell.m */; };
+		53DCF51913BFEAD3009160F9 /* PlaylistSongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE54E1166641B00197877 /* PlaylistSongUITableViewCell.m */; };
+		53DCF51A13BFEAD3009160F9 /* PageControlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D8ACB1116C47E600E5C9CB /* PageControlViewController.m */; };
+		53DCF51B13BFEAD3009160F9 /* DebugViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F4A072116FF48400BB8411 /* DebugViewController.m */; };
+		53DCF51C13BFEAD3009160F9 /* CurrentPlaylistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F4A07B116FF7EE00BB8411 /* CurrentPlaylistViewController.m */; };
+		53DCF51D13BFEAD3009160F9 /* CurrentPlaylistBackgroundViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F4A227117011B900BB8411 /* CurrentPlaylistBackgroundViewController.m */; };
+		53DCF51E13BFEAD3009160F9 /* CustomUITableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5348A59A11879C3A0078994D /* CustomUITableView.m */; };
+		53DCF51F13BFEAD3009160F9 /* QueueAlbumXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 531D8EF811890FED00B7B040 /* QueueAlbumXMLParser.m */; };
+		53DCF52013BFEAD3009160F9 /* NSString-md5.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345FADF1191E6A000C6EAB7 /* NSString-md5.m */; };
+		53DCF52113BFEAD3009160F9 /* ArtistUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5311F5D41194DCEE009ACE8E /* ArtistUITableViewCell.m */; };
+		53DCF52213BFEAD3009160F9 /* AllSongsUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53049CBE119617660098582B /* AllSongsUITableViewCell.m */; };
+		53DCF52313BFEAD3009160F9 /* CurrentPlaylistSongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 536F9F3C1197B0B9002E526A /* CurrentPlaylistSongUITableViewCell.m */; };
+		53DCF52413BFEAD3009160F9 /* LocalPlaylistsUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5388A2EF1198741E0049BA9E /* LocalPlaylistsUITableViewCell.m */; };
+		53DCF52513BFEAD3009160F9 /* BookmarksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5388A3B2119899260049BA9E /* BookmarksViewController.m */; };
+		53DCF52613BFEAD3009160F9 /* BookmarkUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5388A3B71198997B0049BA9E /* BookmarkUITableViewCell.m */; };
+		53DCF52713BFEAD3009160F9 /* CurrentPlaylistSongSmallUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 530CE7F1119B8E8C00728ED5 /* CurrentPlaylistSongSmallUITableViewCell.m */; };
+		53DCF52813BFEAD3009160F9 /* SongInfoPlaylistCustomUITableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 530CE843119B9D9100728ED5 /* SongInfoPlaylistCustomUITableView.m */; };
+		53DCF52913BFEAD3009160F9 /* AudioStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B45A711A4C020007BB329 /* AudioStreamer.m */; };
+		53DCF52A13BFEAD3009160F9 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 532E6FCA11AB31C3000A0E3B /* FMDatabase.m */; };
+		53DCF52B13BFEAD3009160F9 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 532E6FCC11AB31C3000A0E3B /* FMDatabaseAdditions.m */; };
+		53DCF52C13BFEAD3009160F9 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 532E6FCE11AB31C3000A0E3B /* FMResultSet.m */; };
+		53DCF52D13BFEAD3009160F9 /* LoadingScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B5298911AD9B79005776B5 /* LoadingScreen.m */; };
+		53DCF52E13BFEAD3009160F9 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 53B52A9511ADB7AD005776B5 /* sqlite3.c */; };
+		53DCF52F13BFEAD3009160F9 /* GenresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B52BA311ADE0A6005776B5 /* GenresViewController.m */; };
+		53DCF53013BFEAD3009160F9 /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 5354910C11B03D8E00928E0F /* ASIAuthenticationDialog.m */; };
+		53DCF53113BFEAD3009160F9 /* ASIFormDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5354910E11B03D8E00928E0F /* ASIFormDataRequest.m */; };
+		53DCF53213BFEAD3009160F9 /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5354911011B03D8E00928E0F /* ASIHTTPRequest.m */; };
+		53DCF53313BFEAD3009160F9 /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 5354911411B03D8E00928E0F /* ASIInputStream.m */; };
+		53DCF53413BFEAD3009160F9 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 5354911611B03D8E00928E0F /* ASINetworkQueue.m */; };
+		53DCF53513BFEAD3009160F9 /* ASINSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5354911811B03D8E00928E0F /* ASINSStringAdditions.m */; };
+		53DCF53613BFEAD3009160F9 /* CacheViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 530B417011B607A200743C09 /* CacheViewController.m */; };
+		53DCF53713BFEAD3009160F9 /* UAApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 532862DA11C573AD00B40FF0 /* UAApplication.m */; };
+		53DCF53813BFEAD3009160F9 /* CacheAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 538229F411C98091003F1E23 /* CacheAlbumViewController.m */; };
+		53DCF53913BFEAD3009160F9 /* CacheAlbumUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 538229FB11C98401003F1E23 /* CacheAlbumUITableViewCell.m */; };
+		53DCF53A13BFEAD3009160F9 /* CacheSongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 538229FD11C98401003F1E23 /* CacheSongUITableViewCell.m */; };
+		53DCF53B13BFEAD3009160F9 /* CacheArtistUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53822A0111C986A4003F1E23 /* CacheArtistUITableViewCell.m */; };
+		53DCF53C13BFEAD3009160F9 /* GenresAlbumUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53523D8711CD580D006AEA48 /* GenresAlbumUITableViewCell.m */; };
+		53DCF53D13BFEAD3009160F9 /* GenresArtistUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53523D8911CD580D006AEA48 /* GenresArtistUITableViewCell.m */; };
+		53DCF53E13BFEAD3009160F9 /* GenresAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53523D8D11CD5889006AEA48 /* GenresAlbumViewController.m */; };
+		53DCF53F13BFEAD3009160F9 /* GenresArtistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53523D9211CD61F7006AEA48 /* GenresArtistViewController.m */; };
+		53DCF54013BFEAD3009160F9 /* GenresSongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 535806E911CD92DC00A09386 /* GenresSongUITableViewCell.m */; };
+		53DCF54113BFEAD3009160F9 /* CacheQueueSongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358083711CEB5F200A09386 /* CacheQueueSongUITableViewCell.m */; };
+		53DCF54213BFEAD3009160F9 /* GenresGenreUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DF310611D3EE26007552A4 /* GenresGenreUITableViewCell.m */; };
+		53DCF54313BFEAD3009160F9 /* SettingsTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F26B11DA61DA00007870 /* SettingsTabViewController.m */; };
+		53DCF54413BFEAD3009160F9 /* HelpTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F27611DA627500007870 /* HelpTabViewController.m */; };
+		53DCF54513BFEAD3009160F9 /* LyricsXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 534050F611E99633004AEC41 /* LyricsXMLParser.m */; };
+		53DCF54613BFEAD3009160F9 /* LyricsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 534050F911E9966C004AEC41 /* LyricsViewController.m */; };
+		53DCF54713BFEAD3009160F9 /* URLCheckConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 536ACEC611EA449A00387CB0 /* URLCheckConnectionDelegate.m */; };
+		53DCF54813BFEAD3009160F9 /* MGTwitterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD26E11EA7EFB00387CB0 /* MGTwitterEngine.m */; };
+		53DCF54913BFEAD3009160F9 /* MGTwitterHTTPURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD27211EA7EFB00387CB0 /* MGTwitterHTTPURLConnection.m */; };
+		53DCF54A13BFEAD3009160F9 /* MGTwitterLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD27411EA7EFB00387CB0 /* MGTwitterLibXMLParser.m */; };
+		53DCF54B13BFEAD3009160F9 /* MGTwitterMessagesLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD27611EA7EFB00387CB0 /* MGTwitterMessagesLibXMLParser.m */; };
+		53DCF54C13BFEAD3009160F9 /* MGTwitterMessagesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD27811EA7EFB00387CB0 /* MGTwitterMessagesParser.m */; };
+		53DCF54D13BFEAD3009160F9 /* MGTwitterMiscLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD27A11EA7EFB00387CB0 /* MGTwitterMiscLibXMLParser.m */; };
+		53DCF54E13BFEAD3009160F9 /* MGTwitterMiscParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD27C11EA7EFB00387CB0 /* MGTwitterMiscParser.m */; };
+		53DCF54F13BFEAD3009160F9 /* MGTwitterStatusesLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD28011EA7EFB00387CB0 /* MGTwitterStatusesLibXMLParser.m */; };
+		53DCF55013BFEAD3009160F9 /* MGTwitterStatusesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD28211EA7EFB00387CB0 /* MGTwitterStatusesParser.m */; };
+		53DCF55113BFEAD3009160F9 /* MGTwitterUsersLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD28411EA7EFB00387CB0 /* MGTwitterUsersLibXMLParser.m */; };
+		53DCF55213BFEAD3009160F9 /* MGTwitterUsersParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD28611EA7EFB00387CB0 /* MGTwitterUsersParser.m */; };
+		53DCF55313BFEAD3009160F9 /* MGTwitterXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD28811EA7EFB00387CB0 /* MGTwitterXMLParser.m */; };
+		53DCF55413BFEAD3009160F9 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD28A11EA7EFB00387CB0 /* NSData+Base64.m */; };
+		53DCF55513BFEAD3009160F9 /* NSString+UUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD28C11EA7EFB00387CB0 /* NSString+UUID.m */; };
+		53DCF55613BFEAD3009160F9 /* SA_OAuthTwitterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD28F11EA7EFB00387CB0 /* SA_OAuthTwitterController.m */; };
+		53DCF55713BFEAD3009160F9 /* SA_OAuthTwitterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD29111EA7EFB00387CB0 /* SA_OAuthTwitterEngine.m */; };
+		53DCF55813BFEAD3009160F9 /* UpdateXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DBB31217BAF100F426CD /* UpdateXMLParser.m */; };
+		53DCF55913BFEAD3009160F9 /* ChatUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC491219E48800F426CD /* ChatUITableViewCell.m */; };
+		53DCF55A13BFEAD3009160F9 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC4B1219E48800F426CD /* ChatViewController.m */; };
+		53DCF55B13BFEAD3009160F9 /* ChatXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC4E1219E48800F426CD /* ChatXMLParser.m */; };
+		53DCF55C13BFEAD3009160F9 /* ChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC561219EEEB00F426CD /* ChatMessage.m */; };
+		53DCF55D13BFEAD3009160F9 /* CustomUITextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BB7EC9121B8D8F00BEE7E8 /* CustomUITextView.m */; };
+		53DCF55E13BFEAD3009160F9 /* ViewObjectsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751C61268A36200A4793F /* ViewObjectsSingleton.m */; };
+		53DCF55F13BFEAD3009160F9 /* MusicControlsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CC1268A3BE00A4793F /* MusicControlsSingleton.m */; };
+		53DCF56013BFEAD3009160F9 /* SocialControlsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CF1268A3D400A4793F /* SocialControlsSingleton.m */; };
+		53DCF56113BFEAD3009160F9 /* DatabaseControlsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751D21268A43A00A4793F /* DatabaseControlsSingleton.m */; };
+		53DCF56213BFEAD3009160F9 /* NSString-hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F157B126F6B5600F524BD /* NSString-hex.m */; };
+		53DCF56313BFEAD3009160F9 /* HomeXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F1596126F711100F524BD /* HomeXMLParser.m */; };
+		53DCF56413BFEAD3009160F9 /* HomeAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F166D126FA2E600F524BD /* HomeAlbumViewController.m */; };
+		53DCF56513BFEAD3009160F9 /* MGSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5314B66F126FFDF500CDB511 /* MGSplitViewController.m */; };
+		53DCF56613BFEAD3009160F9 /* MGSplitDividerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5314B671126FFDF500CDB511 /* MGSplitDividerView.m */; };
+		53DCF56713BFEAD3009160F9 /* MGSplitCornersView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5314B673126FFDF500CDB511 /* MGSplitCornersView.m */; };
+		53DCF56813BFEAD3009160F9 /* iPadMainMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E75C541270053300BC1A19 /* iPadMainMenu.m */; };
+		53DCF56913BFEAD3009160F9 /* InitialDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E75C6E1270067900BC1A19 /* InitialDetailViewController.m */; };
+		53DCF56A13BFEAD3009160F9 /* SearchXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E75E83127123B300BC1A19 /* SearchXMLParser.m */; };
+		53DCF56B13BFEAD3009160F9 /* SearchSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B9D0B21279FAEF00CAB0E0 /* SearchSongsViewController.m */; };
+		53DCF56C13BFEAD3009160F9 /* SearchSongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B9D0B71279FB6B00CAB0E0 /* SearchSongUITableViewCell.m */; };
+		53DCF56D13BFEAD3009160F9 /* DonationParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B9D294127A395D00CAB0E0 /* DonationParser.m */; };
+		53DCF56E13BFEAD3009160F9 /* EGORefreshTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53260B78127D012300B745B4 /* EGORefreshTableHeaderView.m */; };
+		53DCF56F13BFEAD3009160F9 /* JukeboxXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BA48671284C2340010B380 /* JukeboxXMLParser.m */; };
+		53DCF57013BFEAD3009160F9 /* NewHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BA49411285BD7A0010B380 /* NewHomeViewController.m */; };
+		53DCF57113BFEAD3009160F9 /* QuickAlbumsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BA497B1285D5B10010B380 /* QuickAlbumsViewController.m */; };
+		53DCF57213BFEAD3009160F9 /* NSURLConnectionDelegateQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 537D2780128DE258007E4CEC /* NSURLConnectionDelegateQueue.m */; };
+		53DCF57313BFEAD3009160F9 /* NSURLConnectionDelegateQueueArtwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 537D279C128DE8EC007E4CEC /* NSURLConnectionDelegateQueueArtwork.m */; };
+		53DCF57413BFEAD3009160F9 /* UITableViewCell-overlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A77FC6128E3648005D2D65 /* UITableViewCell-overlay.m */; };
+		53DCF57513BFEAD3009160F9 /* CellOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A77FCC128E38E7005D2D65 /* CellOverlay.m */; };
+		53DCF57613BFEAD3009160F9 /* ModalAlbumArtViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C22CCE128EE81C00FFBA67 /* ModalAlbumArtViewController.m */; };
+		53DCF57713BFEAD3009160F9 /* CoverArtImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D123E0129EF58F00934F08 /* CoverArtImageView.m */; };
+		53DCF57813BFEAD3009160F9 /* NSString-rfcEncode.m in Sources */ = {isa = PBXBuildFile; fileRef = 532B0DDF12AF0AF700E8FF4F /* NSString-rfcEncode.m */; };
+		53DCF57913BFEAD3009160F9 /* JukeboxConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F0F712B8110E00735119 /* JukeboxConnectionDelegate.m */; };
+		53DCF57A13BFEAD3009160F9 /* APICheckConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F3AF12B86BD500735119 /* APICheckConnectionDelegate.m */; };
+		53DCF57B13BFEAD3009160F9 /* APICheckXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F3B412B86C6400735119 /* APICheckXMLParser.m */; };
+		53DCF57C13BFEAD3009160F9 /* MKStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F4F612B9534400735119 /* MKStoreManager.m */; };
+		53DCF57D13BFEAD3009160F9 /* MKStoreObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F4F812B9534400735119 /* MKStoreObserver.m */; };
+		53DCF57E13BFEAD3009160F9 /* StoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F58312B95D2900735119 /* StoreViewController.m */; };
+		53DCF57F13BFEAD3009160F9 /* StoreUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53AAB77912B98699007EA08B /* StoreUITableViewCell.m */; };
+		53DCF58013BFEAD3009160F9 /* UIView-tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B20D2D12C27CE000A90DD9 /* UIView-tools.m */; };
+		53DCF58113BFEAD3009160F9 /* MoreTableViewDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B20F5512C2D72300A90DD9 /* MoreTableViewDataSource.m */; };
+		53DCF58213BFEAD3009160F9 /* CustomUITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B20F5A12C2D7AC00A90DD9 /* CustomUITabBarController.m */; };
+		53DCF58313BFEAD3009160F9 /* BBSimpleConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B64CF212C96129007F1ED5 /* BBSimpleConnectionQueue.m */; };
+		53DCF58413BFEAD3009160F9 /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 538DF6E712CC25C300DB6D8C /* Server.m */; };
+		53DCF58513BFEAD3009160F9 /* NSDataAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D9996B12D40C4000A97412 /* NSDataAdditions.m */; };
+		53DCF58613BFEAD3009160F9 /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D9996D12D40C4000A97412 /* TBXML.m */; };
+		53DCF58713BFEAD3009160F9 /* UIDevice-Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 5382BA8C12DA4039005A3D1A /* UIDevice-Hardware.m */; };
+		53DCF58813BFEAD3009160F9 /* ServerTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB23012E0027800389DA1 /* ServerTypeViewController.m */; };
+		53DCF58913BFEAD3009160F9 /* UbuntuServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB2A012E2348A00389DA1 /* UbuntuServerEditViewController.m */; };
+		53DCF58A13BFEAD3009160F9 /* QueueAll.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB68F12E383F400389DA1 /* QueueAll.m */; };
+		53DCF58B13BFEAD3009160F9 /* IntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C6052C12F1F01E003C6895 /* IntroViewController.m */; };
+		53DCF58C13BFEAD3009160F9 /* CustomUIAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 532D9B42131AE19700FD8CA7 /* CustomUIAlertView.m */; };
+		53DCF58D13BFEAD3009160F9 /* OBSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5324C6C513345D75004E6C79 /* OBSlider.m */; };
+		53DCF58E13BFEAD3009160F9 /* FolderDropdownControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ADBBBF13352DB40098FAE6 /* FolderDropdownControl.m */; };
+		53DCF58F13BFEAD3009160F9 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A4547B133D6F8200741030 /* AsyncSocket.m */; };
+		53DCF59013BFEAD3009160F9 /* DDData.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A4547D133D6F8200741030 /* DDData.m */; };
+		53DCF59113BFEAD3009160F9 /* DDNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A4547F133D6F8200741030 /* DDNumber.m */; };
+		53DCF59213BFEAD3009160F9 /* DDRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45481133D6F8200741030 /* DDRange.m */; };
+		53DCF59313BFEAD3009160F9 /* HTTPAuthenticationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45483133D6F8200741030 /* HTTPAuthenticationRequest.m */; };
+		53DCF59413BFEAD3009160F9 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45485133D6F8200741030 /* HTTPConnection.m */; };
+		53DCF59513BFEAD3009160F9 /* HTTPResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45487133D6F8200741030 /* HTTPResponse.m */; };
+		53DCF59613BFEAD3009160F9 /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45489133D6F8200741030 /* HTTPServer.m */; };
+		53DCF59713BFEAD3009160F9 /* HttpIndexPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45493133D710C00741030 /* HttpIndexPage.m */; };
+		53DCF59813BFEAD3009160F9 /* MyHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A4549C133D75E300741030 /* MyHTTPConnection.m */; };
+		53DCF59913BFEAD3009160F9 /* LocalhostAddresses.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A454AE133D7E2700741030 /* LocalhostAddresses.m */; };
+		53DCF59A13BFEAD3009160F9 /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7245134C16FC003E0E1C /* GTMNSString+HTML.m */; };
+		53DCF59B13BFEAD3009160F9 /* DDSocialDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7251134CEE1E003E0E1C /* DDSocialDialog.m */; };
+		53DCF59C13BFEAD3009160F9 /* DDSocialLoginDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7253134CEE1E003E0E1C /* DDSocialLoginDialog.m */; };
+		53DCF59D13BFEAD3009160F9 /* FolderPickerDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7269134CFB0A003E0E1C /* FolderPickerDialog.m */; };
+		53DCF59E13BFEAD3009160F9 /* SearchAllViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B727C134D26E2003E0E1C /* SearchAllViewController.m */; };
+		53DCF59F13BFEAD3009160F9 /* PagingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5353B838134D4D6C005C589E /* PagingScrollView.m */; };
+		53DCF5A013BFEAD3009160F9 /* ShuffleFolderPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AB8001353B4F500DABD83 /* ShuffleFolderPickerViewController.m */; };
+		53DCF5A113BFEAD3009160F9 /* PlaylistSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AB80F1353DCF700DABD83 /* PlaylistSongsViewController.m */; };
+		53DCF5A213BFEAD3009160F9 /* CFNetworkRequests.m in Sources */ = {isa = PBXBuildFile; fileRef = 53929E64136F930300979CBC /* CFNetworkRequests.m */; };
+		53DCF5A313BFEAD3009160F9 /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 538F6469137105610049C6ED /* SFHFKeychainUtils.m */; };
+		53DCF5A413BFEAD3009160F9 /* BWQuincyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BC2671139AE7E100A825F1 /* BWQuincyManager.m */; };
+		53DCF5A513BFEAD3009160F9 /* BWApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BC2679139AEBFF00A825F1 /* BWApp.m */; };
+		53DCF5A613BFEAD3009160F9 /* BWGlobal.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BC267B139AEBFF00A825F1 /* BWGlobal.m */; };
+		53DCF5A713BFEAD3009160F9 /* BWHockeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BC267D139AEBFF00A825F1 /* BWHockeyManager.m */; };
+		53DCF5A813BFEAD3009160F9 /* BWHockeySettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BC267F139AEBFF00A825F1 /* BWHockeySettingsViewController.m */; };
+		53DCF5A913BFEAD3009160F9 /* BWHockeyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BC2681139AEBFF00A825F1 /* BWHockeyViewController.m */; };
+		53DCF5AA13BFEAD3009160F9 /* NSString+HockeyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BC2684139AEBFF00A825F1 /* NSString+HockeyAdditions.m */; };
+		53DCF5AB13BFEAD3009160F9 /* PSAppStoreHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BC2686139AEBFF00A825F1 /* PSAppStoreHeader.m */; };
+		53DCF5AC13BFEAD3009160F9 /* PSStoreButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BC2688139AEBFF00A825F1 /* PSStoreButton.m */; };
+		53DCF5AD13BFEAD3009160F9 /* PSWebTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BC268A139AEBFF00A825F1 /* PSWebTableViewCell.m */; };
+		53DCF5AE13BFEAD3009160F9 /* UIImage+HockeyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BC268C139AEBFF00A825F1 /* UIImage+HockeyAdditions.m */; };
+		53DCF5AF13BFEAD3009160F9 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BC2690139AEBFF00A825F1 /* JSONKit.m */; };
+		53DCF5B113BFEAD3009160F9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		53DCF5B213BFEAD3009160F9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		53DCF5B313BFEAD3009160F9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */; };
+		53DCF5B413BFEAD3009160F9 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675D7113B092C00822059 /* MediaPlayer.framework */; };
+		53DCF5B513BFEAD3009160F9 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675DB113B093900822059 /* CFNetwork.framework */; };
+		53DCF5B613BFEAD3009160F9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675E1113B095900822059 /* QuartzCore.framework */; };
+		53DCF5B713BFEAD3009160F9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675E7113B096400822059 /* AudioToolbox.framework */; };
+		53DCF5B813BFEAD3009160F9 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DE2D8113F008C00875852 /* CoreFoundation.framework */; };
+		53DCF5B913BFEAD3009160F9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 536D620A1144495400DFCE56 /* SystemConfiguration.framework */; };
+		53DCF5BA13BFEAD3009160F9 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53544D891187DED400B63DB9 /* CoreLocation.framework */; };
+		53DCF5BB13BFEAD3009160F9 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5354914A11B03FC900928E0F /* MobileCoreServices.framework */; };
+		53DCF5BC13BFEAD3009160F9 /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5354914E11B03FDD00928E0F /* libz.1.2.3.dylib */; };
+		53DCF5BD13BFEAD3009160F9 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 536AD1D211EA628200387CB0 /* libxml2.dylib */; };
+		53DCF5BE13BFEAD3009160F9 /* libOAuth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 536AD25B11EA7EFB00387CB0 /* libOAuth.a */; };
+		53DCF5BF13BFEAD3009160F9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5327F52412B955F100735119 /* StoreKit.framework */; };
+		53DCF5C013BFEAD3009160F9 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F7A127131B7F3B002C829D /* Security.framework */; };
+		53DCF5C913BFEB51009160F9 /* iSub-Info-Lite.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53DCF5C813BFEB51009160F9 /* iSub-Info-Lite.plist */; };
 		53DF310711D3EE26007552A4 /* GenresGenreUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DF310611D3EE26007552A4 /* GenresGenreUITableViewCell.m */; };
 		53E45BD0129DCEC30054F6BF /* iPhoneStreamingPlayerViewController~iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53E45BCF129DCEC30054F6BF /* iPhoneStreamingPlayerViewController~iPad.xib */; };
 		53E75C361270013D00BC1A19 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53E75C351270013D00BC1A19 /* MainWindow-iPad.xib */; };
@@ -1485,6 +1936,8 @@
 		53D9996B12D40C4000A97412 /* NSDataAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDataAdditions.m; sourceTree = "<group>"; };
 		53D9996C12D40C4000A97412 /* TBXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBXML.h; sourceTree = "<group>"; };
 		53D9996D12D40C4000A97412 /* TBXML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBXML.m; sourceTree = "<group>"; };
+		53DCF5C613BFEAD3009160F9 /* iSub Lite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Lite.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		53DCF5C813BFEB51009160F9 /* iSub-Info-Lite.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "iSub-Info-Lite.plist"; sourceTree = "<group>"; };
 		53DF310511D3EE26007552A4 /* GenresGenreUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenresGenreUITableViewCell.h; sourceTree = "<group>"; };
 		53DF310611D3EE26007552A4 /* GenresGenreUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenresGenreUITableViewCell.m; sourceTree = "<group>"; };
 		53E45BCF129DCEC30054F6BF /* iPhoneStreamingPlayerViewController~iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "iPhoneStreamingPlayerViewController~iPad.xib"; sourceTree = "<group>"; };
@@ -1614,6 +2067,30 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		53DCF5B013BFEAD3009160F9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				53DCF5B113BFEAD3009160F9 /* Foundation.framework in Frameworks */,
+				53DCF5B213BFEAD3009160F9 /* UIKit.framework in Frameworks */,
+				53DCF5B313BFEAD3009160F9 /* CoreGraphics.framework in Frameworks */,
+				53DCF5B413BFEAD3009160F9 /* MediaPlayer.framework in Frameworks */,
+				53DCF5B513BFEAD3009160F9 /* CFNetwork.framework in Frameworks */,
+				53DCF5B613BFEAD3009160F9 /* QuartzCore.framework in Frameworks */,
+				53DCF5B713BFEAD3009160F9 /* AudioToolbox.framework in Frameworks */,
+				53DCF5B813BFEAD3009160F9 /* CoreFoundation.framework in Frameworks */,
+				53DCF5B913BFEAD3009160F9 /* SystemConfiguration.framework in Frameworks */,
+				53DCF5BA13BFEAD3009160F9 /* CoreLocation.framework in Frameworks */,
+				53DCF5BB13BFEAD3009160F9 /* MobileCoreServices.framework in Frameworks */,
+				53DCF5BC13BFEAD3009160F9 /* libz.1.2.3.dylib in Frameworks */,
+				53DCF5BD13BFEAD3009160F9 /* libxml2.dylib in Frameworks */,
+				53DCF5BE13BFEAD3009160F9 /* libOAuth.a in Frameworks */,
+				53DCF5BF13BFEAD3009160F9 /* StoreKit.framework in Frameworks */,
+				53DCF5C013BFEAD3009160F9 /* Security.framework in Frameworks */,
+				530FD22313C132F900C95451 /* CrashReporter.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -1633,6 +2110,7 @@
 			children = (
 				1D6058910D05DD3D006BFB54 /* iSub.app */,
 				53BC2865139AF0DD00A825F1 /* iSub Beta.app */,
+				53DCF5C613BFEAD3009160F9 /* iSub Lite.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1671,6 +2149,7 @@
 				53BC286A139AF17B00A825F1 /* Icon-Beta.png */,
 				53BC286B139AF17B00A825F1 /* Icon@2x-Beta.png */,
 				8D1107310486CEB800E47090 /* iSub-Info.plist */,
+				53DCF5C813BFEB51009160F9 /* iSub-Info-Lite.plist */,
 				53BC2867139AF11400A825F1 /* iSub-Info-Beta.plist */,
 				53CC217D132DC79F003521B5 /* Entitlements.plist */,
 				539797F41162CEB100F41D8B /* Images */,
@@ -2751,6 +3230,23 @@
 			productReference = 53BC2865139AF0DD00A825F1 /* iSub Beta.app */;
 			productType = "com.apple.product-type.application";
 		};
+		53DCF3FC13BFEAD3009160F9 /* iSub Lite Release */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 53DCF5C213BFEAD3009160F9 /* Build configuration list for PBXNativeTarget "iSub Lite Release" */;
+			buildPhases = (
+				53DCF3FD13BFEAD3009160F9 /* Resources */,
+				53DCF4FB13BFEAD3009160F9 /* Sources */,
+				53DCF5B013BFEAD3009160F9 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "iSub Lite Release";
+			productName = iSubTESTING;
+			productReference = 53DCF5C613BFEAD3009160F9 /* iSub Lite.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -2776,6 +3272,7 @@
 			projectRoot = "";
 			targets = (
 				1D6058900D05DD3D006BFB54 /* iSub Release */,
+				53DCF3FC13BFEAD3009160F9 /* iSub Lite Release */,
 				53BC269F139AF0DD00A825F1 /* iSub Beta */,
 			);
 		};
@@ -3039,6 +3536,7 @@
 				53BC286C139AF17B00A825F1 /* Icon-72-Beta.png in Resources */,
 				53BC286D139AF17B00A825F1 /* Icon-Beta.png in Resources */,
 				53BC286E139AF17B00A825F1 /* Icon@2x-Beta.png in Resources */,
+				53DCF5C913BFEB51009160F9 /* iSub-Info-Lite.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3295,6 +3793,266 @@
 				53BC2797139AF0DD00A825F1 /* Quincy.bundle in Resources */,
 				53BC2798139AF0DD00A825F1 /* Hockey.bundle in Resources */,
 				53BC2799139AF0DD00A825F1 /* README.md in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		53DCF3FD13BFEAD3009160F9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				53DCF3FE13BFEAD3009160F9 /* MainWindow.xib in Resources */,
+				53DCF3FF13BFEAD3009160F9 /* RootViewController.xib in Resources */,
+				53DCF40013BFEAD3009160F9 /* AlbumViewController.xib in Resources */,
+				53DCF40113BFEAD3009160F9 /* controller-next.png in Resources */,
+				53DCF40213BFEAD3009160F9 /* controller-pause.png in Resources */,
+				53DCF40313BFEAD3009160F9 /* controller-play.png in Resources */,
+				53DCF40413BFEAD3009160F9 /* controller-previous.png in Resources */,
+				53DCF40513BFEAD3009160F9 /* SongInfoViewController.xib in Resources */,
+				53DCF40613BFEAD3009160F9 /* SubsonicServerEditViewController.xib in Resources */,
+				53DCF40713BFEAD3009160F9 /* default-album-art.png in Resources */,
+				53DCF40813BFEAD3009160F9 /* settings-page.png in Resources */,
+				53DCF40913BFEAD3009160F9 /* controller-repeat-all.png in Resources */,
+				53DCF40A13BFEAD3009160F9 /* controller-repeat-one.png in Resources */,
+				53DCF40B13BFEAD3009160F9 /* controller-repeat.png in Resources */,
+				53DCF40C13BFEAD3009160F9 /* controller-shuffle-on.png in Resources */,
+				53DCF40D13BFEAD3009160F9 /* controller-shuffle.png in Resources */,
+				53DCF40E13BFEAD3009160F9 /* Icon.png in Resources */,
+				53DCF40F13BFEAD3009160F9 /* background.png in Resources */,
+				53DCF41013BFEAD3009160F9 /* default-album-art-small.png in Resources */,
+				53DCF41113BFEAD3009160F9 /* Default.png in Resources */,
+				53DCF41213BFEAD3009160F9 /* progress-label-background.png in Resources */,
+				53DCF41313BFEAD3009160F9 /* AllAlbumsViewController.xib in Resources */,
+				53DCF41413BFEAD3009160F9 /* loading-screen-image.png in Resources */,
+				53DCF41513BFEAD3009160F9 /* ServerListViewController.xib in Resources */,
+				53DCF41613BFEAD3009160F9 /* AllSongsViewController.xib in Resources */,
+				53DCF41713BFEAD3009160F9 /* SearchOverlayViewController.xib in Resources */,
+				53DCF41813BFEAD3009160F9 /* PlayingViewController.xib in Resources */,
+				53DCF41913BFEAD3009160F9 /* gear.png in Resources */,
+				53DCF41A13BFEAD3009160F9 /* artists-tabbaricon.png in Resources */,
+				53DCF41B13BFEAD3009160F9 /* playlists-tabbaricon.png in Resources */,
+				53DCF41C13BFEAD3009160F9 /* albums-tabbaricon.png in Resources */,
+				53DCF41D13BFEAD3009160F9 /* songs-tabbaricon.png in Resources */,
+				53DCF41E13BFEAD3009160F9 /* playing-tabbaricon.png in Resources */,
+				53DCF41F13BFEAD3009160F9 /* PlaylistsViewController.xib in Resources */,
+				53DCF42013BFEAD3009160F9 /* current-server.png in Resources */,
+				53DCF42113BFEAD3009160F9 /* chat-page.png in Resources */,
+				53DCF42213BFEAD3009160F9 /* now-playing.png in Resources */,
+				53DCF42313BFEAD3009160F9 /* reload-table.png in Resources */,
+				53DCF42413BFEAD3009160F9 /* PageControlViewController.xib in Resources */,
+				53DCF42513BFEAD3009160F9 /* DebugViewController.xib in Resources */,
+				53DCF42613BFEAD3009160F9 /* CurrentPlaylistViewController.xib in Resources */,
+				53DCF42713BFEAD3009160F9 /* CurrentPlaylistBackgroundViewController.xib in Resources */,
+				53DCF42813BFEAD3009160F9 /* play-all-note.png in Resources */,
+				53DCF42913BFEAD3009160F9 /* BookmarksViewController.xib in Resources */,
+				53DCF42A13BFEAD3009160F9 /* selected.png in Resources */,
+				53DCF42B13BFEAD3009160F9 /* unselected.png in Resources */,
+				53DCF42C13BFEAD3009160F9 /* cache-button.png in Resources */,
+				53DCF42D13BFEAD3009160F9 /* queue-button.png in Resources */,
+				53DCF42E13BFEAD3009160F9 /* GenresViewController.xib in Resources */,
+				53DCF42F13BFEAD3009160F9 /* CacheViewController.xib in Resources */,
+				53DCF43013BFEAD3009160F9 /* bookmarks-tabbaricon.png in Resources */,
+				53DCF43113BFEAD3009160F9 /* genres-tabbaricon.png in Resources */,
+				53DCF43213BFEAD3009160F9 /* cache-tabbaricon.png in Resources */,
+				53DCF43313BFEAD3009160F9 /* LoadingScreen.xib in Resources */,
+				53DCF43413BFEAD3009160F9 /* CacheAlbumViewController.xib in Resources */,
+				53DCF43513BFEAD3009160F9 /* GenresAlbumViewController.xib in Resources */,
+				53DCF43613BFEAD3009160F9 /* GenresArtistViewController.xib in Resources */,
+				53DCF43713BFEAD3009160F9 /* delete-button.png in Resources */,
+				53DCF43813BFEAD3009160F9 /* SettingsTabViewController.xib in Resources */,
+				53DCF43913BFEAD3009160F9 /* HelpTabViewController.xib in Resources */,
+				53DCF43A13BFEAD3009160F9 /* iPhoneStreamingPlayerViewController.xib in Resources */,
+				53DCF43B13BFEAD3009160F9 /* albums-tabbaricon@2x.png in Resources */,
+				53DCF43C13BFEAD3009160F9 /* artists-tabbaricon@2x.png in Resources */,
+				53DCF43D13BFEAD3009160F9 /* bookmarks-tabbaricon@2x.png in Resources */,
+				53DCF43E13BFEAD3009160F9 /* cache-tabbaricon@2x.png in Resources */,
+				53DCF43F13BFEAD3009160F9 /* genres-tabbaricon@2x.png in Resources */,
+				53DCF44013BFEAD3009160F9 /* playing-tabbaricon@2x.png in Resources */,
+				53DCF44113BFEAD3009160F9 /* playlists-tabbaricon@2x.png in Resources */,
+				53DCF44213BFEAD3009160F9 /* songs-tabbaricon@2x.png in Resources */,
+				53DCF44313BFEAD3009160F9 /* gear@2x.png in Resources */,
+				53DCF44413BFEAD3009160F9 /* background@2x.png in Resources */,
+				53DCF44513BFEAD3009160F9 /* now-playing@2x.png in Resources */,
+				53DCF44613BFEAD3009160F9 /* Icon@2x.png in Resources */,
+				53DCF44713BFEAD3009160F9 /* Icon-72.png in Resources */,
+				53DCF44813BFEAD3009160F9 /* current-server@2x.png in Resources */,
+				53DCF44913BFEAD3009160F9 /* default-album-art-small@2x.png in Resources */,
+				53DCF44A13BFEAD3009160F9 /* default-album-art@2x.png in Resources */,
+				53DCF44B13BFEAD3009160F9 /* reload-table@2x.png in Resources */,
+				53DCF44C13BFEAD3009160F9 /* cache-button@2x.png in Resources */,
+				53DCF44D13BFEAD3009160F9 /* queue-button@2x.png in Resources */,
+				53DCF44E13BFEAD3009160F9 /* delete-button@2x.png in Resources */,
+				53DCF44F13BFEAD3009160F9 /* selected@2x.png in Resources */,
+				53DCF45013BFEAD3009160F9 /* unselected@2x.png in Resources */,
+				53DCF45113BFEAD3009160F9 /* play-all-note@2x.png in Resources */,
+				53DCF45213BFEAD3009160F9 /* loading-screen-image@2x.png in Resources */,
+				53DCF45313BFEAD3009160F9 /* settings-page@2x.png in Resources */,
+				53DCF45413BFEAD3009160F9 /* controller-next@2x.png in Resources */,
+				53DCF45513BFEAD3009160F9 /* controller-pause@2x.png in Resources */,
+				53DCF45613BFEAD3009160F9 /* controller-play@2x.png in Resources */,
+				53DCF45713BFEAD3009160F9 /* controller-previous@2x.png in Resources */,
+				53DCF45813BFEAD3009160F9 /* controller-repeat-all@2x.png in Resources */,
+				53DCF45913BFEAD3009160F9 /* controller-repeat-one@2x.png in Resources */,
+				53DCF45A13BFEAD3009160F9 /* controller-repeat@2x.png in Resources */,
+				53DCF45B13BFEAD3009160F9 /* controller-shuffle-on@2x.png in Resources */,
+				53DCF45C13BFEAD3009160F9 /* controller-shuffle@2x.png in Resources */,
+				53DCF45D13BFEAD3009160F9 /* controller-bookmark-on.png in Resources */,
+				53DCF45E13BFEAD3009160F9 /* controller-bookmark-on@2x.png in Resources */,
+				53DCF45F13BFEAD3009160F9 /* controller-bookmark.png in Resources */,
+				53DCF46013BFEAD3009160F9 /* controller-bookmark@2x.png in Resources */,
+				53DCF46113BFEAD3009160F9 /* twitter-signin.png in Resources */,
+				53DCF46213BFEAD3009160F9 /* twitter-signin@2x.png in Resources */,
+				53DCF46313BFEAD3009160F9 /* jQueryInject.txt in Resources */,
+				53DCF46413BFEAD3009160F9 /* jQueryInjectLandscape.txt in Resources */,
+				53DCF46513BFEAD3009160F9 /* twitter_load.png in Resources */,
+				53DCF46613BFEAD3009160F9 /* twitter-signout.png in Resources */,
+				53DCF46713BFEAD3009160F9 /* twitter-signout@2x.png in Resources */,
+				53DCF46813BFEAD3009160F9 /* ChatViewController.xib in Resources */,
+				53DCF46913BFEAD3009160F9 /* comment-write.png in Resources */,
+				53DCF46A13BFEAD3009160F9 /* comment-write-pressed.png in Resources */,
+				53DCF46B13BFEAD3009160F9 /* chat-tabbaricon.png in Resources */,
+				53DCF46C13BFEAD3009160F9 /* chat-tabbaricon@2x.png in Resources */,
+				53DCF46D13BFEAD3009160F9 /* comment-write-pressed@2x.png in Resources */,
+				53DCF46E13BFEAD3009160F9 /* comment-write@2x.png in Resources */,
+				53DCF46F13BFEAD3009160F9 /* HomeAlbumViewController.xib in Resources */,
+				53DCF47013BFEAD3009160F9 /* home-tabbaricon.png in Resources */,
+				53DCF47113BFEAD3009160F9 /* home-tabbaricon@2x.png in Resources */,
+				53DCF47213BFEAD3009160F9 /* MainWindow-iPad.xib in Resources */,
+				53DCF47313BFEAD3009160F9 /* iPadMainMenu.xib in Resources */,
+				53DCF47413BFEAD3009160F9 /* InitialDetailViewController.xib in Resources */,
+				53DCF47513BFEAD3009160F9 /* SearchSongsViewController.xib in Resources */,
+				53DCF47613BFEAD3009160F9 /* blackArrow.png in Resources */,
+				53DCF47713BFEAD3009160F9 /* blackArrow@2x.png in Resources */,
+				53DCF47813BFEAD3009160F9 /* blueArrow.png in Resources */,
+				53DCF47913BFEAD3009160F9 /* blueArrow@2x.png in Resources */,
+				53DCF47A13BFEAD3009160F9 /* grayArrow.png in Resources */,
+				53DCF47B13BFEAD3009160F9 /* grayArrow@2x.png in Resources */,
+				53DCF47C13BFEAD3009160F9 /* whiteArrow.png in Resources */,
+				53DCF47D13BFEAD3009160F9 /* whiteArrow@2x.png in Resources */,
+				53DCF47E13BFEAD3009160F9 /* shuffle-small.png in Resources */,
+				53DCF47F13BFEAD3009160F9 /* shuffle-small@2x.png in Resources */,
+				53DCF48013BFEAD3009160F9 /* NewHomeViewController.xib in Resources */,
+				53DCF48113BFEAD3009160F9 /* QuickAlbumsViewController.xib in Resources */,
+				53DCF48213BFEAD3009160F9 /* NewHomeViewControllerLandscape.xib in Resources */,
+				53DCF48313BFEAD3009160F9 /* home-background-ipad.png in Resources */,
+				53DCF48413BFEAD3009160F9 /* NewHomeViewController~iPad.xib in Resources */,
+				53DCF48513BFEAD3009160F9 /* ipad-menu-selected-background.png in Resources */,
+				53DCF48613BFEAD3009160F9 /* QuickAlbumsViewController~iPad.xib in Resources */,
+				53DCF48713BFEAD3009160F9 /* home-background.png in Resources */,
+				53DCF48813BFEAD3009160F9 /* home-background@2x.png in Resources */,
+				53DCF48913BFEAD3009160F9 /* home-jukebox-off-ipad.png in Resources */,
+				53DCF48A13BFEAD3009160F9 /* home-jukebox-off.png in Resources */,
+				53DCF48B13BFEAD3009160F9 /* home-jukebox-off@2x.png in Resources */,
+				53DCF48C13BFEAD3009160F9 /* home-jukebox-on-ipad.png in Resources */,
+				53DCF48D13BFEAD3009160F9 /* home-jukebox-on.png in Resources */,
+				53DCF48E13BFEAD3009160F9 /* home-jukebox-on@2x.png in Resources */,
+				53DCF48F13BFEAD3009160F9 /* home-player-ipad.png in Resources */,
+				53DCF49013BFEAD3009160F9 /* home-player.png in Resources */,
+				53DCF49113BFEAD3009160F9 /* home-player@2x.png in Resources */,
+				53DCF49213BFEAD3009160F9 /* home-playlists-ipad.png in Resources */,
+				53DCF49313BFEAD3009160F9 /* home-playlists.png in Resources */,
+				53DCF49413BFEAD3009160F9 /* home-playlists@2x.png in Resources */,
+				53DCF49513BFEAD3009160F9 /* home-quick-ipad.png in Resources */,
+				53DCF49613BFEAD3009160F9 /* home-quick.png in Resources */,
+				53DCF49713BFEAD3009160F9 /* home-quick@2x.png in Resources */,
+				53DCF49813BFEAD3009160F9 /* home-settings-ipad.png in Resources */,
+				53DCF49913BFEAD3009160F9 /* home-settings.png in Resources */,
+				53DCF49A13BFEAD3009160F9 /* home-settings@2x.png in Resources */,
+				53DCF49B13BFEAD3009160F9 /* home-shuffle-ipad.png in Resources */,
+				53DCF49C13BFEAD3009160F9 /* home-shuffle.png in Resources */,
+				53DCF49D13BFEAD3009160F9 /* home-shuffle@2x.png in Resources */,
+				53DCF49E13BFEAD3009160F9 /* iPhoneStreamingPlayerViewController~iPad.xib in Resources */,
+				53DCF49F13BFEAD3009160F9 /* controller-stop.png in Resources */,
+				53DCF4A013BFEAD3009160F9 /* controller-stop@2x.png in Resources */,
+				53DCF4A113BFEAD3009160F9 /* StoreViewController.xib in Resources */,
+				53DCF4A213BFEAD3009160F9 /* Default@2x.png in Resources */,
+				53DCF4A313BFEAD3009160F9 /* home-quick-random.png in Resources */,
+				53DCF4A413BFEAD3009160F9 /* home-quick-random@2x.png in Resources */,
+				53DCF4A513BFEAD3009160F9 /* home-quick-recent@2x.png in Resources */,
+				53DCF4A613BFEAD3009160F9 /* home-quick-recent.png in Resources */,
+				53DCF4A713BFEAD3009160F9 /* home-quick-newest@2x.png in Resources */,
+				53DCF4A813BFEAD3009160F9 /* home-quick-newest.png in Resources */,
+				53DCF4A913BFEAD3009160F9 /* home-quick-frequent@2x.png in Resources */,
+				53DCF4AA13BFEAD3009160F9 /* home-quick-frequent.png in Resources */,
+				53DCF4AB13BFEAD3009160F9 /* home-quick-cancel@2x.png in Resources */,
+				53DCF4AC13BFEAD3009160F9 /* home-quick-cancel.png in Resources */,
+				53DCF4AD13BFEAD3009160F9 /* home-quick-topbar@2x.png in Resources */,
+				53DCF4AE13BFEAD3009160F9 /* home-quick-topbar.png in Resources */,
+				53DCF4AF13BFEAD3009160F9 /* home-chat-ipad.png in Resources */,
+				53DCF4B013BFEAD3009160F9 /* home-chat.png in Resources */,
+				53DCF4B113BFEAD3009160F9 /* home-chat@2x.png in Resources */,
+				53DCF4B213BFEAD3009160F9 /* table-fade-bottom.png in Resources */,
+				53DCF4B313BFEAD3009160F9 /* table-fade-bottom@2x.png in Resources */,
+				53DCF4B413BFEAD3009160F9 /* table-fade-top.png in Resources */,
+				53DCF4B513BFEAD3009160F9 /* table-fade-top@2x.png in Resources */,
+				53DCF4B613BFEAD3009160F9 /* back.png in Resources */,
+				53DCF4B713BFEAD3009160F9 /* back@2x.png in Resources */,
+				53DCF4B813BFEAD3009160F9 /* Default-Portrait.png in Resources */,
+				53DCF4B913BFEAD3009160F9 /* Default-Landscape.png in Resources */,
+				53DCF4BA13BFEAD3009160F9 /* folders-tabbaricon.png in Resources */,
+				53DCF4BB13BFEAD3009160F9 /* folders-tabbaricon@2x.png in Resources */,
+				53DCF4BC13BFEAD3009160F9 /* player-overlay.png in Resources */,
+				53DCF4BD13BFEAD3009160F9 /* player-overlay@2x.png in Resources */,
+				53DCF4BE13BFEAD3009160F9 /* server-subsonic.png in Resources */,
+				53DCF4BF13BFEAD3009160F9 /* server-subsonic@2x.png in Resources */,
+				53DCF4C013BFEAD3009160F9 /* server-ubuntu.png in Resources */,
+				53DCF4C113BFEAD3009160F9 /* server-ubuntu@2x.png in Resources */,
+				53DCF4C213BFEAD3009160F9 /* ServerTypeViewController.xib in Resources */,
+				53DCF4C313BFEAD3009160F9 /* UbuntuServerEditViewController.xib in Resources */,
+				53DCF4C413BFEAD3009160F9 /* ubuntu-add-server.png in Resources */,
+				53DCF4C513BFEAD3009160F9 /* ubuntu-add-server@2x.png in Resources */,
+				53DCF4C613BFEAD3009160F9 /* server-button-subsonic.png in Resources */,
+				53DCF4C713BFEAD3009160F9 /* server-button-subsonic@2x.png in Resources */,
+				53DCF4C813BFEAD3009160F9 /* server-button-ubuntu.png in Resources */,
+				53DCF4C913BFEAD3009160F9 /* server-button-ubuntu@2x.png in Resources */,
+				53DCF4CA13BFEAD3009160F9 /* default-album-art-ipad.png in Resources */,
+				53DCF4CB13BFEAD3009160F9 /* player-songinfo.png in Resources */,
+				53DCF4CC13BFEAD3009160F9 /* player-songinfo@2x.png in Resources */,
+				53DCF4CD13BFEAD3009160F9 /* intro-bottom.png in Resources */,
+				53DCF4CE13BFEAD3009160F9 /* intro-bottom@2x.png in Resources */,
+				53DCF4CF13BFEAD3009160F9 /* intro-foreground.png in Resources */,
+				53DCF4D013BFEAD3009160F9 /* intro-foreground@2x.png in Resources */,
+				53DCF4D113BFEAD3009160F9 /* intro-top.png in Resources */,
+				53DCF4D213BFEAD3009160F9 /* intro-top@2x.png in Resources */,
+				53DCF4D313BFEAD3009160F9 /* IntroViewController.xib in Resources */,
+				53DCF4D413BFEAD3009160F9 /* intro-rowbackground.png in Resources */,
+				53DCF4D513BFEAD3009160F9 /* intro-rowbackground@2x.png in Resources */,
+				53DCF4D613BFEAD3009160F9 /* intro-arrow.png in Resources */,
+				53DCF4D713BFEAD3009160F9 /* intro-arrow@2x.png in Resources */,
+				53DCF4D813BFEAD3009160F9 /* intro-rowbackground-dark.png in Resources */,
+				53DCF4D913BFEAD3009160F9 /* intro-rowbackground-dark@2x.png in Resources */,
+				53DCF4DA13BFEAD3009160F9 /* intro-icon-testserver.png in Resources */,
+				53DCF4DB13BFEAD3009160F9 /* intro-icon-testserver@2x.png in Resources */,
+				53DCF4DC13BFEAD3009160F9 /* intro-icon-video.png in Resources */,
+				53DCF4DD13BFEAD3009160F9 /* intro-icon-video@2x.png in Resources */,
+				53DCF4DE13BFEAD3009160F9 /* intro-sunkenlogo.png in Resources */,
+				53DCF4DF13BFEAD3009160F9 /* intro-sunkenlogo@2x.png in Resources */,
+				53DCF4E013BFEAD3009160F9 /* intro-icon-ownserver.png in Resources */,
+				53DCF4E113BFEAD3009160F9 /* intro-icon-ownserver@2x.png in Resources */,
+				53DCF4E213BFEAD3009160F9 /* iTunesArtwork in Resources */,
+				53DCF4E313BFEAD3009160F9 /* KeychainAccessGroups.plist in Resources */,
+				53DCF4E413BFEAD3009160F9 /* Entitlements.plist in Resources */,
+				53DCF4E513BFEAD3009160F9 /* folder-dropdown-arrow.png in Resources */,
+				53DCF4E613BFEAD3009160F9 /* folder-dropdown-arrow@2x.png in Resources */,
+				53DCF4E713BFEAD3009160F9 /* SongInfoViewController-iPad.xib in Resources */,
+				53DCF4E813BFEAD3009160F9 /* controller-bookmark-ipad.png in Resources */,
+				53DCF4E913BFEAD3009160F9 /* controller-bookmark-on-ipad.png in Resources */,
+				53DCF4EA13BFEAD3009160F9 /* controller-repeat-all-ipad.png in Resources */,
+				53DCF4EB13BFEAD3009160F9 /* controller-repeat-ipad.png in Resources */,
+				53DCF4EC13BFEAD3009160F9 /* controller-repeat-one-ipad.png in Resources */,
+				53DCF4ED13BFEAD3009160F9 /* controller-shuffle-ipad.png in Resources */,
+				53DCF4EE13BFEAD3009160F9 /* controller-shuffle-on-ipad.png in Resources */,
+				53DCF4EF13BFEAD3009160F9 /* SearchAllViewController.xib in Resources */,
+				53DCF4F013BFEAD3009160F9 /* upload-playlist.png in Resources */,
+				53DCF4F113BFEAD3009160F9 /* upload-playlist@2x.png in Resources */,
+				53DCF4F213BFEAD3009160F9 /* ShuffleFolderPickerViewController.xib in Resources */,
+				53DCF4F313BFEAD3009160F9 /* PlaylistSongsViewController.xib in Resources */,
+				53DCF4F413BFEAD3009160F9 /* Quincy.bundle in Resources */,
+				53DCF4F513BFEAD3009160F9 /* Hockey.bundle in Resources */,
+				53DCF4F613BFEAD3009160F9 /* README.md in Resources */,
+				53DCF4F713BFEAD3009160F9 /* iSub-Info-Beta.plist in Resources */,
+				53DCF4F813BFEAD3009160F9 /* Icon-72-Beta.png in Resources */,
+				53DCF4F913BFEAD3009160F9 /* Icon-Beta.png in Resources */,
+				53DCF4FA13BFEAD3009160F9 /* Icon@2x-Beta.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3692,6 +4450,193 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		53DCF4FB13BFEAD3009160F9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				53DCF4FC13BFEAD3009160F9 /* main.m in Sources */,
+				53DCF4FD13BFEAD3009160F9 /* iSubAppDelegate.m in Sources */,
+				53DCF4FE13BFEAD3009160F9 /* RootViewController.m in Sources */,
+				53DCF4FF13BFEAD3009160F9 /* Artist.m in Sources */,
+				53DCF50013BFEAD3009160F9 /* Index.m in Sources */,
+				53DCF50113BFEAD3009160F9 /* XMLParser.m in Sources */,
+				53DCF50213BFEAD3009160F9 /* AlbumViewController.m in Sources */,
+				53DCF50313BFEAD3009160F9 /* Album.m in Sources */,
+				53DCF50413BFEAD3009160F9 /* Song.m in Sources */,
+				53DCF50513BFEAD3009160F9 /* iPhoneStreamingPlayerViewController.m in Sources */,
+				53DCF50613BFEAD3009160F9 /* AsynchronousImageView.m in Sources */,
+				53DCF50713BFEAD3009160F9 /* SongInfoViewController.m in Sources */,
+				53DCF50813BFEAD3009160F9 /* SubsonicServerEditViewController.m in Sources */,
+				53DCF50913BFEAD3009160F9 /* AlbumUITableViewCell.m in Sources */,
+				53DCF50A13BFEAD3009160F9 /* AsynchronousImageViewCached.m in Sources */,
+				53DCF50B13BFEAD3009160F9 /* SongUITableViewCell.m in Sources */,
+				53DCF50C13BFEAD3009160F9 /* Reachability.m in Sources */,
+				53DCF50D13BFEAD3009160F9 /* AllAlbumsViewController.m in Sources */,
+				53DCF50E13BFEAD3009160F9 /* AllAlbumsUITableViewCell.m in Sources */,
+				53DCF50F13BFEAD3009160F9 /* ServerListViewController.m in Sources */,
+				53DCF51013BFEAD3009160F9 /* SearchOverlayViewController.m in Sources */,
+				53DCF51113BFEAD3009160F9 /* AllSongsViewController.m in Sources */,
+				53DCF51213BFEAD3009160F9 /* AllSongsXMLParser.m in Sources */,
+				53DCF51313BFEAD3009160F9 /* PlayingUITableViewCell.m in Sources */,
+				53DCF51413BFEAD3009160F9 /* PlayingViewController.m in Sources */,
+				53DCF51513BFEAD3009160F9 /* PlayingXMLParser.m in Sources */,
+				53DCF51613BFEAD3009160F9 /* PlaylistsXMLParser.m in Sources */,
+				53DCF51713BFEAD3009160F9 /* PlaylistsViewController.m in Sources */,
+				53DCF51813BFEAD3009160F9 /* PlaylistsUITableViewCell.m in Sources */,
+				53DCF51913BFEAD3009160F9 /* PlaylistSongUITableViewCell.m in Sources */,
+				53DCF51A13BFEAD3009160F9 /* PageControlViewController.m in Sources */,
+				53DCF51B13BFEAD3009160F9 /* DebugViewController.m in Sources */,
+				53DCF51C13BFEAD3009160F9 /* CurrentPlaylistViewController.m in Sources */,
+				53DCF51D13BFEAD3009160F9 /* CurrentPlaylistBackgroundViewController.m in Sources */,
+				53DCF51E13BFEAD3009160F9 /* CustomUITableView.m in Sources */,
+				53DCF51F13BFEAD3009160F9 /* QueueAlbumXMLParser.m in Sources */,
+				53DCF52013BFEAD3009160F9 /* NSString-md5.m in Sources */,
+				53DCF52113BFEAD3009160F9 /* ArtistUITableViewCell.m in Sources */,
+				53DCF52213BFEAD3009160F9 /* AllSongsUITableViewCell.m in Sources */,
+				53DCF52313BFEAD3009160F9 /* CurrentPlaylistSongUITableViewCell.m in Sources */,
+				53DCF52413BFEAD3009160F9 /* LocalPlaylistsUITableViewCell.m in Sources */,
+				53DCF52513BFEAD3009160F9 /* BookmarksViewController.m in Sources */,
+				53DCF52613BFEAD3009160F9 /* BookmarkUITableViewCell.m in Sources */,
+				53DCF52713BFEAD3009160F9 /* CurrentPlaylistSongSmallUITableViewCell.m in Sources */,
+				53DCF52813BFEAD3009160F9 /* SongInfoPlaylistCustomUITableView.m in Sources */,
+				53DCF52913BFEAD3009160F9 /* AudioStreamer.m in Sources */,
+				53DCF52A13BFEAD3009160F9 /* FMDatabase.m in Sources */,
+				53DCF52B13BFEAD3009160F9 /* FMDatabaseAdditions.m in Sources */,
+				53DCF52C13BFEAD3009160F9 /* FMResultSet.m in Sources */,
+				53DCF52D13BFEAD3009160F9 /* LoadingScreen.m in Sources */,
+				53DCF52E13BFEAD3009160F9 /* sqlite3.c in Sources */,
+				53DCF52F13BFEAD3009160F9 /* GenresViewController.m in Sources */,
+				53DCF53013BFEAD3009160F9 /* ASIAuthenticationDialog.m in Sources */,
+				53DCF53113BFEAD3009160F9 /* ASIFormDataRequest.m in Sources */,
+				53DCF53213BFEAD3009160F9 /* ASIHTTPRequest.m in Sources */,
+				53DCF53313BFEAD3009160F9 /* ASIInputStream.m in Sources */,
+				53DCF53413BFEAD3009160F9 /* ASINetworkQueue.m in Sources */,
+				53DCF53513BFEAD3009160F9 /* ASINSStringAdditions.m in Sources */,
+				53DCF53613BFEAD3009160F9 /* CacheViewController.m in Sources */,
+				53DCF53713BFEAD3009160F9 /* UAApplication.m in Sources */,
+				53DCF53813BFEAD3009160F9 /* CacheAlbumViewController.m in Sources */,
+				53DCF53913BFEAD3009160F9 /* CacheAlbumUITableViewCell.m in Sources */,
+				53DCF53A13BFEAD3009160F9 /* CacheSongUITableViewCell.m in Sources */,
+				53DCF53B13BFEAD3009160F9 /* CacheArtistUITableViewCell.m in Sources */,
+				53DCF53C13BFEAD3009160F9 /* GenresAlbumUITableViewCell.m in Sources */,
+				53DCF53D13BFEAD3009160F9 /* GenresArtistUITableViewCell.m in Sources */,
+				53DCF53E13BFEAD3009160F9 /* GenresAlbumViewController.m in Sources */,
+				53DCF53F13BFEAD3009160F9 /* GenresArtistViewController.m in Sources */,
+				53DCF54013BFEAD3009160F9 /* GenresSongUITableViewCell.m in Sources */,
+				53DCF54113BFEAD3009160F9 /* CacheQueueSongUITableViewCell.m in Sources */,
+				53DCF54213BFEAD3009160F9 /* GenresGenreUITableViewCell.m in Sources */,
+				53DCF54313BFEAD3009160F9 /* SettingsTabViewController.m in Sources */,
+				53DCF54413BFEAD3009160F9 /* HelpTabViewController.m in Sources */,
+				53DCF54513BFEAD3009160F9 /* LyricsXMLParser.m in Sources */,
+				53DCF54613BFEAD3009160F9 /* LyricsViewController.m in Sources */,
+				53DCF54713BFEAD3009160F9 /* URLCheckConnectionDelegate.m in Sources */,
+				53DCF54813BFEAD3009160F9 /* MGTwitterEngine.m in Sources */,
+				53DCF54913BFEAD3009160F9 /* MGTwitterHTTPURLConnection.m in Sources */,
+				53DCF54A13BFEAD3009160F9 /* MGTwitterLibXMLParser.m in Sources */,
+				53DCF54B13BFEAD3009160F9 /* MGTwitterMessagesLibXMLParser.m in Sources */,
+				53DCF54C13BFEAD3009160F9 /* MGTwitterMessagesParser.m in Sources */,
+				53DCF54D13BFEAD3009160F9 /* MGTwitterMiscLibXMLParser.m in Sources */,
+				53DCF54E13BFEAD3009160F9 /* MGTwitterMiscParser.m in Sources */,
+				53DCF54F13BFEAD3009160F9 /* MGTwitterStatusesLibXMLParser.m in Sources */,
+				53DCF55013BFEAD3009160F9 /* MGTwitterStatusesParser.m in Sources */,
+				53DCF55113BFEAD3009160F9 /* MGTwitterUsersLibXMLParser.m in Sources */,
+				53DCF55213BFEAD3009160F9 /* MGTwitterUsersParser.m in Sources */,
+				53DCF55313BFEAD3009160F9 /* MGTwitterXMLParser.m in Sources */,
+				53DCF55413BFEAD3009160F9 /* NSData+Base64.m in Sources */,
+				53DCF55513BFEAD3009160F9 /* NSString+UUID.m in Sources */,
+				53DCF55613BFEAD3009160F9 /* SA_OAuthTwitterController.m in Sources */,
+				53DCF55713BFEAD3009160F9 /* SA_OAuthTwitterEngine.m in Sources */,
+				53DCF55813BFEAD3009160F9 /* UpdateXMLParser.m in Sources */,
+				53DCF55913BFEAD3009160F9 /* ChatUITableViewCell.m in Sources */,
+				53DCF55A13BFEAD3009160F9 /* ChatViewController.m in Sources */,
+				53DCF55B13BFEAD3009160F9 /* ChatXMLParser.m in Sources */,
+				53DCF55C13BFEAD3009160F9 /* ChatMessage.m in Sources */,
+				53DCF55D13BFEAD3009160F9 /* CustomUITextView.m in Sources */,
+				53DCF55E13BFEAD3009160F9 /* ViewObjectsSingleton.m in Sources */,
+				53DCF55F13BFEAD3009160F9 /* MusicControlsSingleton.m in Sources */,
+				53DCF56013BFEAD3009160F9 /* SocialControlsSingleton.m in Sources */,
+				53DCF56113BFEAD3009160F9 /* DatabaseControlsSingleton.m in Sources */,
+				53DCF56213BFEAD3009160F9 /* NSString-hex.m in Sources */,
+				53DCF56313BFEAD3009160F9 /* HomeXMLParser.m in Sources */,
+				53DCF56413BFEAD3009160F9 /* HomeAlbumViewController.m in Sources */,
+				53DCF56513BFEAD3009160F9 /* MGSplitViewController.m in Sources */,
+				53DCF56613BFEAD3009160F9 /* MGSplitDividerView.m in Sources */,
+				53DCF56713BFEAD3009160F9 /* MGSplitCornersView.m in Sources */,
+				53DCF56813BFEAD3009160F9 /* iPadMainMenu.m in Sources */,
+				53DCF56913BFEAD3009160F9 /* InitialDetailViewController.m in Sources */,
+				53DCF56A13BFEAD3009160F9 /* SearchXMLParser.m in Sources */,
+				53DCF56B13BFEAD3009160F9 /* SearchSongsViewController.m in Sources */,
+				53DCF56C13BFEAD3009160F9 /* SearchSongUITableViewCell.m in Sources */,
+				53DCF56D13BFEAD3009160F9 /* DonationParser.m in Sources */,
+				53DCF56E13BFEAD3009160F9 /* EGORefreshTableHeaderView.m in Sources */,
+				53DCF56F13BFEAD3009160F9 /* JukeboxXMLParser.m in Sources */,
+				53DCF57013BFEAD3009160F9 /* NewHomeViewController.m in Sources */,
+				53DCF57113BFEAD3009160F9 /* QuickAlbumsViewController.m in Sources */,
+				53DCF57213BFEAD3009160F9 /* NSURLConnectionDelegateQueue.m in Sources */,
+				53DCF57313BFEAD3009160F9 /* NSURLConnectionDelegateQueueArtwork.m in Sources */,
+				53DCF57413BFEAD3009160F9 /* UITableViewCell-overlay.m in Sources */,
+				53DCF57513BFEAD3009160F9 /* CellOverlay.m in Sources */,
+				53DCF57613BFEAD3009160F9 /* ModalAlbumArtViewController.m in Sources */,
+				53DCF57713BFEAD3009160F9 /* CoverArtImageView.m in Sources */,
+				53DCF57813BFEAD3009160F9 /* NSString-rfcEncode.m in Sources */,
+				53DCF57913BFEAD3009160F9 /* JukeboxConnectionDelegate.m in Sources */,
+				53DCF57A13BFEAD3009160F9 /* APICheckConnectionDelegate.m in Sources */,
+				53DCF57B13BFEAD3009160F9 /* APICheckXMLParser.m in Sources */,
+				53DCF57C13BFEAD3009160F9 /* MKStoreManager.m in Sources */,
+				53DCF57D13BFEAD3009160F9 /* MKStoreObserver.m in Sources */,
+				53DCF57E13BFEAD3009160F9 /* StoreViewController.m in Sources */,
+				53DCF57F13BFEAD3009160F9 /* StoreUITableViewCell.m in Sources */,
+				53DCF58013BFEAD3009160F9 /* UIView-tools.m in Sources */,
+				53DCF58113BFEAD3009160F9 /* MoreTableViewDataSource.m in Sources */,
+				53DCF58213BFEAD3009160F9 /* CustomUITabBarController.m in Sources */,
+				53DCF58313BFEAD3009160F9 /* BBSimpleConnectionQueue.m in Sources */,
+				53DCF58413BFEAD3009160F9 /* Server.m in Sources */,
+				53DCF58513BFEAD3009160F9 /* NSDataAdditions.m in Sources */,
+				53DCF58613BFEAD3009160F9 /* TBXML.m in Sources */,
+				53DCF58713BFEAD3009160F9 /* UIDevice-Hardware.m in Sources */,
+				53DCF58813BFEAD3009160F9 /* ServerTypeViewController.m in Sources */,
+				53DCF58913BFEAD3009160F9 /* UbuntuServerEditViewController.m in Sources */,
+				53DCF58A13BFEAD3009160F9 /* QueueAll.m in Sources */,
+				53DCF58B13BFEAD3009160F9 /* IntroViewController.m in Sources */,
+				53DCF58C13BFEAD3009160F9 /* CustomUIAlertView.m in Sources */,
+				53DCF58D13BFEAD3009160F9 /* OBSlider.m in Sources */,
+				53DCF58E13BFEAD3009160F9 /* FolderDropdownControl.m in Sources */,
+				53DCF58F13BFEAD3009160F9 /* AsyncSocket.m in Sources */,
+				53DCF59013BFEAD3009160F9 /* DDData.m in Sources */,
+				53DCF59113BFEAD3009160F9 /* DDNumber.m in Sources */,
+				53DCF59213BFEAD3009160F9 /* DDRange.m in Sources */,
+				53DCF59313BFEAD3009160F9 /* HTTPAuthenticationRequest.m in Sources */,
+				53DCF59413BFEAD3009160F9 /* HTTPConnection.m in Sources */,
+				53DCF59513BFEAD3009160F9 /* HTTPResponse.m in Sources */,
+				53DCF59613BFEAD3009160F9 /* HTTPServer.m in Sources */,
+				53DCF59713BFEAD3009160F9 /* HttpIndexPage.m in Sources */,
+				53DCF59813BFEAD3009160F9 /* MyHTTPConnection.m in Sources */,
+				53DCF59913BFEAD3009160F9 /* LocalhostAddresses.m in Sources */,
+				53DCF59A13BFEAD3009160F9 /* GTMNSString+HTML.m in Sources */,
+				53DCF59B13BFEAD3009160F9 /* DDSocialDialog.m in Sources */,
+				53DCF59C13BFEAD3009160F9 /* DDSocialLoginDialog.m in Sources */,
+				53DCF59D13BFEAD3009160F9 /* FolderPickerDialog.m in Sources */,
+				53DCF59E13BFEAD3009160F9 /* SearchAllViewController.m in Sources */,
+				53DCF59F13BFEAD3009160F9 /* PagingScrollView.m in Sources */,
+				53DCF5A013BFEAD3009160F9 /* ShuffleFolderPickerViewController.m in Sources */,
+				53DCF5A113BFEAD3009160F9 /* PlaylistSongsViewController.m in Sources */,
+				53DCF5A213BFEAD3009160F9 /* CFNetworkRequests.m in Sources */,
+				53DCF5A313BFEAD3009160F9 /* SFHFKeychainUtils.m in Sources */,
+				53DCF5A413BFEAD3009160F9 /* BWQuincyManager.m in Sources */,
+				53DCF5A513BFEAD3009160F9 /* BWApp.m in Sources */,
+				53DCF5A613BFEAD3009160F9 /* BWGlobal.m in Sources */,
+				53DCF5A713BFEAD3009160F9 /* BWHockeyManager.m in Sources */,
+				53DCF5A813BFEAD3009160F9 /* BWHockeySettingsViewController.m in Sources */,
+				53DCF5A913BFEAD3009160F9 /* BWHockeyViewController.m in Sources */,
+				53DCF5AA13BFEAD3009160F9 /* NSString+HockeyAdditions.m in Sources */,
+				53DCF5AB13BFEAD3009160F9 /* PSAppStoreHeader.m in Sources */,
+				53DCF5AC13BFEAD3009160F9 /* PSStoreButton.m in Sources */,
+				53DCF5AD13BFEAD3009160F9 /* PSWebTableViewCell.m in Sources */,
+				53DCF5AE13BFEAD3009160F9 /* UIImage+HockeyAdditions.m in Sources */,
+				53DCF5AF13BFEAD3009160F9 /* JSONKit.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
@@ -3712,6 +4657,10 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = iSub_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"CONFIGURATION_$(CONFIGURATION)",
+				);
 				INFOPLIST_FILE = "iSub-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3720,6 +4669,7 @@
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 				);
+				LITE = 1;
 				PRODUCT_NAME = iSub;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -3734,6 +4684,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Benjamin Baron";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Benjamin Baron";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3742,6 +4693,10 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = iSub_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"RELEASE=1",
+					"CONFIGURATION_$(CONFIGURATION)",
+				);
 				INFOPLIST_FILE = "iSub-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
 				LIBRARY_SEARCH_PATHS = (
@@ -3751,8 +4706,10 @@
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 				);
+				LITE = 1;
 				PRODUCT_NAME = iSub;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D4A8945F-4511-4F9F-B707-8A73518A9D3B";
+				PROVISIONING_PROFILE = "8EF018F3-30A1-4F07-AF21-B3B6D0F32C44";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8EF018F3-30A1-4F07-AF21-B3B6D0F32C44";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -3807,6 +4764,11 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = iSub_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"ADHOC=1",
+					"CONFIGURATION_$(CONFIGURATION)",
+				);
 				INFOPLIST_FILE = "iSub-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3815,6 +4777,7 @@
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 				);
+				LITE = 1;
 				PRODUCT_NAME = iSub;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -3847,7 +4810,6 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
-					"\"$(SRCROOT)/../../SoX iOS Framework/Universal Framework\"",
 				);
 				PRODUCT_NAME = "iSub Beta";
 				PROVISIONING_PROFILE = "";
@@ -3881,7 +4843,6 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
-					"\"$(SRCROOT)/../../SoX iOS Framework/Universal Framework\"",
 				);
 				PRODUCT_NAME = "iSub Beta";
 				PROVISIONING_PROFILE = "";
@@ -3913,9 +4874,120 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
-					"\"$(SRCROOT)/../../SoX iOS Framework/Universal Framework\"",
 				);
 				PRODUCT_NAME = "iSub Beta";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D4A8945F-4511-4F9F-B707-8A73518A9D3B";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		53DCF5C313BFEAD3009160F9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 534F1636139B1F5900127A02 /* buildnumber.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Classes\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = iSub_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"CONFIGURATION_$(CONFIGURATION)",
+					"LITE=1",
+				);
+				INFOPLIST_FILE = "iSub-Info-Lite.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Classes\"",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
+					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
+				);
+				PRODUCT_NAME = "iSub Lite";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		53DCF5C413BFEAD3009160F9 /* AdHoc */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 534F1636139B1F5900127A02 /* buildnumber.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Classes\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = iSub_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"ADHOC=1",
+					"CONFIGURATION_$(CONFIGURATION)",
+					"LITE=1",
+				);
+				INFOPLIST_FILE = "iSub-Info-Lite.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Classes\"",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
+					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
+				);
+				PRODUCT_NAME = "iSub Lite";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = AdHoc;
+		};
+		53DCF5C513BFEAD3009160F9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 534F1636139B1F5900127A02 /* buildnumber.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Benjamin Baron";
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Classes\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = iSub_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"RELEASE=1",
+					"CONFIGURATION_$(CONFIGURATION)",
+					"LITE=1",
+				);
+				INFOPLIST_FILE = "iSub-Info-Lite.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Classes\"",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
+					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
+				);
+				PRODUCT_NAME = "iSub Lite";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D4A8945F-4511-4F9F-B707-8A73518A9D3B";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4002,6 +5074,16 @@
 				53BC2862139AF0DD00A825F1 /* Debug */,
 				53BC2863139AF0DD00A825F1 /* AdHoc */,
 				53BC2864139AF0DD00A825F1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		53DCF5C213BFEAD3009160F9 /* Build configuration list for PBXNativeTarget "iSub Lite Release" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				53DCF5C313BFEAD3009160F9 /* Debug */,
+				53DCF5C413BFEAD3009160F9 /* AdHoc */,
+				53DCF5C513BFEAD3009160F9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

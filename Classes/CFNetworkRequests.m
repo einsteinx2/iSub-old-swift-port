@@ -41,7 +41,7 @@ static UInt32 bytesTransferred;
 #define kMaxBytesPerSec3G ((kMaxKilobitsPerSec3G * 1024) / 8)
 #define kMaxBytesPerInterval3G (kMaxBytesPerSec3G * kThrottleTimeInterval)
 
-#define kMaxKilobitsPerSecWifi 5000
+#define kMaxKilobitsPerSecWifi 8000
 #define kMaxBytesPerSecWifi ((kMaxKilobitsPerSecWifi * 1024) / 8)
 #define kMaxBytesPerIntervalWifi (kMaxBytesPerSecWifi * kThrottleTimeInterval)
 
