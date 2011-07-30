@@ -10,7 +10,6 @@
 #import "SearchOverlayViewController.h"
 #import "iSubAppDelegate.h"
 #import "MusicControlsSingleton.h"
-#import "DatabaseControlsSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "XMLParser.h"
@@ -40,6 +39,9 @@
 
 #import "FolderDropdownControl.h"
 
+#import "SUSIndexesLoader.h"
+#import "DefaultSettings.h"
+
 @interface RootViewController (Private)
 
 - (void)dataSourceDidFinishLoadingNewData;
@@ -50,7 +52,7 @@
 @implementation RootViewController
 
 @synthesize searchBar, headerView;
-@synthesize copyListOfArtists;
+@synthesize indexes, folders, foldersSearch;
 @synthesize isSearching;
 @synthesize dropdown;
 
@@ -82,13 +84,15 @@
     [super viewDidLoad];
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
-	databaseControls = [DatabaseControlsSingleton sharedInstance];
 	musicControls = [MusicControlsSingleton sharedInstance];
+	settings = [DefaultSettings sharedInstance];
 
 	self.title = @"Folders";
 	
 	//Initialize the copy array for searching.
-	copyListOfArtists = [[NSMutableArray alloc] init];
+	self.indexes = [settings getTopLevelIndexes];
+	self.folders = [settings getTopLevelFolders];
+	foldersSearch = [[NSMutableArray alloc] init];
 		
 	//Set defaults
 	isSearching = NO;
@@ -113,11 +117,11 @@
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fadeBottom;
 	
-	NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [appDelegate.defaultUrl md5]];
+	NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [settings.urlString md5]];
 	NSData *archivedData = [appDelegate.settingsDictionary objectForKey:key];
-	NSDictionary *folders = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
-	
-	if (folders == nil || [folders count] == 2)
+	NSDictionary *folderNames = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
+		
+	if (folderNames == nil || [folderNames count] == 2)
 		[self.tableView setContentOffset:CGPointMake(0, 86) animated:NO];
 	else
 		[self.tableView setContentOffset:CGPointMake(0, 50) animated:NO];
@@ -174,12 +178,12 @@
 	dropdown.viewsToMove = [NSArray arrayWithObjects:searchBar, nil];
 	
 	dropdown.folders = [NSDictionary dictionaryWithObject:@"All Folders" forKey:@"-1"];
-	NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [appDelegate.defaultUrl md5]];
+	NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [settings.urlString md5]];
 	if ([appDelegate.settingsDictionary objectForKey:key])
 		dropdown.folders = [NSKeyedUnarchiver unarchiveObjectWithData:[appDelegate.settingsDictionary objectForKey:key]];
 	
 	NSInteger selectedFolderId = -1;
-	key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [appDelegate.defaultUrl md5]];
+	key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [settings.urlString md5]];
 	if ([appDelegate.settingsDictionary objectForKey:key])
 		selectedFolderId = [[appDelegate.settingsDictionary objectForKey:key] intValue];
 	
@@ -188,7 +192,7 @@
 	[dropdown release];
 	
 	NSInteger count = 0;
-	for (NSArray *array in viewObjects.listOfArtists)
+	for (NSArray *array in folders)
 	{
 		count = count + [array count];
 	}
@@ -198,7 +202,7 @@
 	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 	[formatter setDateStyle:NSDateFormatterMediumStyle];
 	[formatter setTimeStyle:NSDateFormatterShortStyle];
-	reloadTimeLabel.text = [NSString stringWithFormat:@"last reload: %@", [formatter stringFromDate:[defaults objectForKey:[NSString stringWithFormat:@"%@artistsReloadTime", appDelegate.defaultUrl]]]];
+	reloadTimeLabel.text = [NSString stringWithFormat:@"last reload: %@", [formatter stringFromDate:[defaults objectForKey:[NSString stringWithFormat:@"%@artistsReloadTime", settings.urlString]]]];
 	[formatter release];
 	
 	self.tableView.tableHeaderView = headerView;
@@ -209,39 +213,47 @@
 {
 	viewObjects.isArtistsLoading = YES;
 	
-	NSString *urlString = @"";
-	if (folderId == nil || [folderId isEqualToString:@"-1"])
-	{
-		urlString = [appDelegate getBaseUrl:@"getIndexes.view"];
-	}
-	else
-	{
-		urlString = [NSString stringWithFormat:@"%@&musicFolderId=%@", [appDelegate getBaseUrl:@"getIndexes.view"], folderId];
-	}
-	//DLog(@"urlString: %@", urlString);
+	allArtistsLoadingScreen = [[LoadingScreen alloc] initOnView:self.view.superview withMessage:[NSArray arrayWithObjects:@"Processing Folders", @"", @"", @"", nil] blockInput:YES mainWindow:NO];
 	
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
-	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	if (connection)
-	{
-		// Create the NSMutableData to hold the received data.
-		// receivedData is an instance variable declared elsewhere.
-		receivedData = [[NSMutableData data] retain];
-		
-		viewObjects.listOfArtists = nil;
-		viewObjects.artistIndex = nil;
-		
-		allArtistsLoadingScreen = [[LoadingScreen alloc] initOnView:self.view.superview withMessage:[NSArray arrayWithObjects:@"Processing Folders", @"", @"", @"", nil] blockInput:YES mainWindow:NO];
-	} 
-	else 
-	{
-		viewObjects.isArtistsLoading = NO;
-		
-		// Inform the user that the connection failed.
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error loading the artist list.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-		[alert release];
-	}
+	SUSIndexesLoader *loader = [[SUSIndexesLoader alloc] initWithDelegate:self];
+	loader.folderId = folderId;
+	[loader startLoad];
+}
+
+- (void)loadingFailed:(Loader*)loader
+{
+	[loader release];
+	
+	viewObjects.isArtistsLoading = NO;
+	
+	// Hide the loading screen
+	[allArtistsLoadingScreen hide]; [allArtistsLoadingScreen release];
+	
+	[self dataSourceDidFinishLoadingNewData];
+	
+	// Inform the user that the connection failed.
+	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error loading the artist list.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+	[alert release];
+}
+
+- (void)loadingFinished:(Loader*)loader
+{
+	self.folders = [NSArray arrayWithArray:[[loader results] objectForKey:@"folders"]];
+	self.indexes = [NSArray arrayWithArray:[[loader results] objectForKey:@"indexes"]];
+	[loader release];
+	
+	[self addCount];
+	
+	[self.tableView reloadData];
+	self.tableView.backgroundColor = [UIColor clearColor];
+	
+	viewObjects.isArtistsLoading = NO;
+	
+	// Hide the loading screen
+	[allArtistsLoadingScreen hide]; [allArtistsLoadingScreen release];
+	
+	[self dataSourceDidFinishLoadingNewData];
 }
 
 -(void)viewWillAppear:(BOOL)animated 
@@ -260,28 +272,30 @@
 	if (!viewObjects.isAlbumsLoading && !viewObjects.isSongsLoading && !viewObjects.isArtistsLoading)
 	{
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		if(viewObjects.listOfArtists == nil || [[appDelegate.settingsDictionary objectForKey:@"autoReloadArtistsSetting"] isEqualToString:@"YES"])
+		if(folders == nil || [[appDelegate.settingsDictionary objectForKey:@"autoReloadArtistsSetting"] isEqualToString:@"YES"])
 		{
-			if([defaults objectForKey:[NSString stringWithFormat:@"%@listOfArtists", appDelegate.defaultUrl]] == nil || 
+			if([defaults objectForKey:[NSString stringWithFormat:@"%@topLevelFolders", settings.urlString]] == nil || 
 			   [[appDelegate.settingsDictionary objectForKey:@"autoReloadArtistsSetting"] isEqualToString:@"YES"])
 			{
-				NSString *key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [appDelegate.defaultUrl md5]];
+				NSString *key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [settings.urlString md5]];
 				NSString *currentFolderId = [appDelegate.settingsDictionary objectForKey:key];
 				[self loadData:currentFolderId];
 			}
 			else 
 			{
-				viewObjects.listOfArtists = [NSKeyedUnarchiver unarchiveObjectWithData:[defaults objectForKey:[NSString stringWithFormat:@"%@listOfArtists", appDelegate.defaultUrl]]];
-				viewObjects.artistIndex = [NSKeyedUnarchiver unarchiveObjectWithData:[defaults objectForKey:[NSString stringWithFormat:@"%@indexes", appDelegate.defaultUrl]]];
+				self.folders = [NSKeyedUnarchiver unarchiveObjectWithData:[defaults objectForKey:[NSString stringWithFormat:@"%@topLevelFolders", settings.urlString]]];
+				self.indexes = [NSKeyedUnarchiver unarchiveObjectWithData:[defaults objectForKey:[NSString stringWithFormat:@"%@topLevelIndexes", settings.urlString]]];
+				
+				// TODO: Rewrite the gracefull transition of listOfArtists
 				
 				// Handle the change to the listOfArtists structure gracefully
-				if ([viewObjects.listOfArtists count] > 0)
+				if ([folders count] > 0)
 				{
-					if ([[viewObjects.listOfArtists objectAtIndex:0] count] > 0)
+					if ([[folders objectAtIndex:0] count] > 0)
 					{
-						if ([[[viewObjects.listOfArtists objectAtIndex:0] objectAtIndex:0] isKindOfClass:[NSArray class]])
+						if ([[[folders objectAtIndex:0] objectAtIndex:0] isKindOfClass:[NSArray class]])
 						{
-							NSString *key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [appDelegate.defaultUrl md5]];
+							NSString *key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [settings.urlString md5]];
 							NSString *currentFolderId = [appDelegate.settingsDictionary objectForKey:key];
 							[self loadData:currentFolderId];
 						}
@@ -338,7 +352,7 @@
 - (void)dealloc {
 	[searchBar release];
 	[searchOverlayView release];
-	[copyListOfArtists release];
+	[foldersSearch release];
 	[dropdown release];
     [super dealloc];
 }
@@ -375,7 +389,7 @@
 {
 	if (!viewObjects.isAlbumsLoading && !viewObjects.isSongsLoading)
 	{
-		NSString *key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [appDelegate.defaultUrl md5]];
+		NSString *key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [settings.urlString md5]];
 		NSString *currentFolderId = [appDelegate.settingsDictionary objectForKey:key];
 		[self loadData:currentFolderId];
 	}
@@ -449,7 +463,7 @@
 - (void)searchBar:(UISearchBar *)theSearchBar textDidChange:(NSString *)searchText
 {
 	//Remove all objects first.
-	[copyListOfArtists removeAllObjects];
+	[foldersSearch removeAllObjects];
 	
 	if([searchText length] > 0) 
 	{
@@ -491,7 +505,7 @@
 	NSString *searchText = searchBar.text;
 	NSMutableArray *searchArray = [[NSMutableArray alloc] init];
 	
-	for (NSArray *array in viewObjects.listOfArtists)
+	for (NSArray *array in folders)
 	{
 		[searchArray addObjectsFromArray:array];
 	}
@@ -501,7 +515,7 @@
 		NSRange titleResultsRange = [anArtist.name rangeOfString:searchText options:NSCaseInsensitiveSearch];
 		
 		if (titleResultsRange.length > 0)
-			[copyListOfArtists addObject:anArtist];
+			[foldersSearch addObject:anArtist];
 	}
 	
 	[searchArray release];
@@ -513,7 +527,7 @@
 	if (isSearching)
 		return 1;
 	else
-		return [viewObjects.listOfArtists count];
+		return [folders count];
 }
 
 
@@ -524,11 +538,11 @@
 {
 	if (isSearching)
 	{
-		return [copyListOfArtists count];
+		return [foldersSearch count];
 	}
 	else 
 	{
-		return [[viewObjects.listOfArtists objectAtIndex:section] count];
+		return [[folders objectAtIndex:section] count];
 	}
 }
 
@@ -542,12 +556,12 @@
 	Artist *anArtist;
 	if(isSearching)
 	{
-		//anArtist = [[copyListOfArtists objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-		anArtist = [copyListOfArtists objectAtIndex:indexPath.row];
+		//anArtist = [[foldersSearch objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+		anArtist = [foldersSearch objectAtIndex:indexPath.row];
 	}
 	else
 	{
-		anArtist = [[viewObjects.listOfArtists objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+		anArtist = [[folders objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
 	}
 	cell.myArtist = anArtist;
 	
@@ -563,7 +577,7 @@
 	if(isSearching || didBeginSearching)
 		return @"";
 	
-	return [viewObjects.artistIndex objectAtIndex:section];
+	return [indexes objectAtIndex:section];
 }
 
 
@@ -576,7 +590,7 @@
 	{
 		NSMutableArray *searchIndexes = [[[NSMutableArray alloc] init] autorelease];
 		[searchIndexes addObject:@"{search}"];
-		[searchIndexes addObjectsFromArray:viewObjects.artistIndex];
+		[searchIndexes addObjectsFromArray:indexes];
 		
 		return searchIndexes;
 	}
@@ -591,11 +605,11 @@
 	{
 		//[tableView scrollRectToVisible:CGRectMake(0, 50, 320, searchY) animated:NO];
 		
-		NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [appDelegate.defaultUrl md5]];
+		NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [settings.urlString md5]];
 		NSData *archivedData = [appDelegate.settingsDictionary objectForKey:key];
-		NSDictionary *folders = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
+		NSDictionary *folderNames = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
 				
-		if (folders == nil || [folders count] == 2)
+		if (folderNames == nil || [folderNames count] == 2)
 			//[tableView scrollRectToVisible:CGRectMake(0, 87, 320, searchY) animated:NO];
 			[self.tableView setContentOffset:CGPointMake(0, 86) animated:NO];
 		else
@@ -624,11 +638,11 @@
 		Artist *anArtist;
 		if(isSearching)
 		{
-			anArtist = [copyListOfArtists objectAtIndex:indexPath.row];
+			anArtist = [foldersSearch objectAtIndex:indexPath.row];
 		}
 		else 
 		{	
-			anArtist = [[viewObjects.listOfArtists objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+			anArtist = [[folders objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
 		}
 		AlbumViewController* albumViewController = [[AlbumViewController alloc] initWithArtist:anArtist orAlbum:nil];
 				
@@ -639,90 +653,6 @@
 	{
 		[self.tableView deselectRowAtIndexPath:indexPath animated:NO];
 	}
-}
-
-#pragma mark Connection Delegate
-
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
-{
-	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
-		return YES; // Self-signed cert will be accepted
-	
-	return NO;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{	
-	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
-	{
-		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
-	}
-	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-	[receivedData setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
-{
-    [receivedData appendData:incrementalData];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
-{
-	// Inform the user that the connection failed.
-	NSString *message = [NSString stringWithFormat:@"There was an error loading the artist list.\n\nError %i: %@", [error code], [error localizedDescription]];
-	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-	[alert release];
-	
-	[theConnection release];
-	[receivedData release];
-	
-	viewObjects.isArtistsLoading = NO;
-	
-	// Hide the loading screen
-	[allArtistsLoadingScreen hide]; [allArtistsLoadingScreen release];
-	
-	[self dataSourceDidFinishLoadingNewData];
-}	
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
-{	
-	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
-	XMLParser *parser = [[XMLParser alloc] initXMLParser];
-	parser.parseState = @"artists";
-	[xmlParser setDelegate:parser];
-	[xmlParser parse];
-	
-	viewObjects.artistIndex = [[NSArray alloc] initWithArray:parser.indexes copyItems:YES];
-	viewObjects.listOfArtists = [[NSArray alloc] initWithArray:parser.listOfArtists copyItems:YES];
-	
-	[xmlParser release];
-	[parser release];
-	
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:viewObjects.listOfArtists] forKey:[NSString stringWithFormat:@"%@listOfArtists", appDelegate.defaultUrl]];
-	[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:viewObjects.artistIndex] forKey:[NSString stringWithFormat:@"%@indexes", appDelegate.defaultUrl]];
-	[defaults setObject:[NSDate date] forKey:[NSString stringWithFormat:@"%@artistsReloadTime", appDelegate.defaultUrl]];
-	[defaults synchronize];
-	
-	[self addCount];
-	
-	[self.tableView reloadData];
-	self.tableView.backgroundColor = [UIColor clearColor];
-	
-	viewObjects.isArtistsLoading = NO;
-	
-	// Hide the loading screen
-	[allArtistsLoadingScreen hide]; [allArtistsLoadingScreen release];
-	
-	[theConnection release];
-	[receivedData release];
-	
-	[self dataSourceDidFinishLoadingNewData];
 }
 
 #pragma mark -
@@ -750,7 +680,7 @@
 	{
 		_reloading = YES;
 		//[self reloadAction:nil];
-		NSString *key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [appDelegate.defaultUrl md5]];
+		NSString *key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [settings.urlString md5]];
 		NSString *currentFolderId = [appDelegate.settingsDictionary objectForKey:key];
 		[self loadData:currentFolderId];
 		[refreshHeaderView setState:EGOOPullRefreshLoading];

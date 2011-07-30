@@ -8,7 +8,6 @@
 
 #import "Artist.h"
 
-
 @implementation Artist
 
 @synthesize name, artistId;
@@ -38,6 +37,23 @@
 		
 		if ([attributeDict objectForKey:@"id"])
 			self.artistId = [attributeDict objectForKey:@"id"];
+	}
+	
+	return self;
+}
+
+- (id) initWithTBXMLElement:(TBXMLElement *)element
+{
+	if ((self = [super init]))
+	{
+		name = nil;
+		artistId = nil;
+		
+		if ([TBXML valueOfAttributeNamed:@"name" forElement:element])
+			self.name = [TBXML valueOfAttributeNamed:@"name" forElement:element];
+		
+		if ([TBXML valueOfAttributeNamed:@"id" forElement:element])
+			self.artistId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
 	}
 	
 	return self;

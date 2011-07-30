@@ -48,6 +48,8 @@
 #import "BWQuincyManager.h"
 #import "BWHockeyManager.h"
 
+#import "DefaultSettings.h"
+
 @implementation iSubAppDelegate
 
 @synthesize window;
@@ -65,7 +67,8 @@
 @synthesize wifiReach, reachabilityStatus;
 
 // User defaults
-@synthesize defaultUrl, defaultUserName, defaultPassword, cachedIP, cachedIPHour;
+// TODO: Remove these
+@synthesize defaultUrl, defaultUserName, defaultPassword;
 
 
 // Settings
@@ -298,6 +301,8 @@
 {		
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	
+	DefaultSettings *settings = [DefaultSettings sharedInstance];
+	
 	// Create http server
 	/*httpServer = [HTTPServer new];
 	[httpServer setType:@"_http._tcp."];
@@ -427,9 +432,9 @@
 	
 	if([defaults objectForKey:@"username"] != nil)
 	{
-		self.defaultUrl = [defaults objectForKey:@"url"];
-		self.defaultUserName = [defaults objectForKey:@"username"];
-		self.defaultPassword = [defaults objectForKey:@"password"];
+		settings.urlString = [defaults objectForKey:@"url"];
+		settings.username = [defaults objectForKey:@"username"];
+		settings.password = [defaults objectForKey:@"password"];
 		
 		// Convert to the new Server object if necessary
 		id serverList = [defaults objectForKey:@"servers"];
@@ -476,9 +481,9 @@
 	}
 	else
 	{
-		self.defaultUrl = DEFAULT_URL;
-		self.defaultUserName = DEFAULT_USER_NAME;
-		self.defaultPassword = DEFAULT_PASSWORD;
+		settings.urlString = DEFAULT_URL;
+		settings.username = DEFAULT_USER_NAME;
+		settings.password = DEFAULT_PASSWORD;
 		
 		if (viewObjects.isOfflineMode)
 		{
@@ -512,6 +517,8 @@
 {	
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	
+	DefaultSettings *settings = [DefaultSettings sharedInstance];
+	
 	// Check if the subsonic URL is valid by attempting to access the ping.view page, 
 	// if it's not then display an alert and allow user to change settings if they want.
 	// This is in case the user is, for instance, connected to a wifi network but does not 
@@ -522,7 +529,7 @@
 	{
 		//[NSThread sleepForTimeInterval:15];
 		//DLog(@"%@", [NSString stringWithFormat:@"%@/rest/ping.view", defaultUrl]);
-		isURLValid = [self isURLValid:[NSString stringWithFormat:@"%@/rest/ping.view", defaultUrl] error:&error];
+		isURLValid = [self isURLValid:[NSString stringWithFormat:@"%@/rest/ping.view", settings.urlString] error:&error];
 		//DLog(@"isURLValid: %i", isURLValid);
 	}
 	
@@ -1447,34 +1454,37 @@
 
 - (NSString *)getBaseUrl:(NSString *)action
 {	
-	NSString *urlString = [[[NSString alloc] init] autorelease];
 	// If the user used a hostname, implement the IP address caching and create the urlstring
 	/*if ([[defaultUrl componentsSeparatedByString:@"."] count] == 1)
-	{
-		// Check to see if it's been an hour since the last IP check. If it has, update the cached IP.
-		if ([self getHour] > cachedIPHour)
-		{
-			cachedIP = [[NSString alloc] initWithString:[self getIPAddressForHost:defaultUrl]];
-			cachedIPHour = [self getHour];
-		}
+	 {
+	 // Check to see if it's been an hour since the last IP check. If it has, update the cached IP.
+	 if ([self getHour] > cachedIPHour)
+	 {
+	 cachedIP = [[NSString alloc] initWithString:[self getIPAddressForHost:defaultUrl]];
+	 cachedIPHour = [self getHour];
+	 }
+	 
+	 // Grab the http (or https for the future) and the port (if there is one)
+	 NSArray *subStrings = [defaultUrl componentsSeparatedByString:@":"];
+	 if ([subStrings count] == 2)
+	 urlString = [NSString stringWithFormat:@"%@://%@", [subStrings objectAtIndex:0], cachedIP];
+	 else if ([subStrings count] == 3)
+	 urlString = [NSString stringWithFormat:@"%@://%@:%@", [subStrings objectAtIndex:0], cachedIP, [subStrings objectAtIndex:2]];
+	 }
+	 else 
+	 {
+	 // If the user used an IP address, just use the defaultUrl as is.
+	 urlString = defaultUrl;
+	 }*/
 	
-		// Grab the http (or https for the future) and the port (if there is one)
-		NSArray *subStrings = [defaultUrl componentsSeparatedByString:@":"];
-		if ([subStrings count] == 2)
-			urlString = [NSString stringWithFormat:@"%@://%@", [subStrings objectAtIndex:0], cachedIP];
-		else if ([subStrings count] == 3)
-			urlString = [NSString stringWithFormat:@"%@://%@:%@", [subStrings objectAtIndex:0], cachedIP, [subStrings objectAtIndex:2]];
-	}
-	else 
-	{
-		// If the user used an IP address, just use the defaultUrl as is.
-		urlString = defaultUrl;
-	}*/
-	urlString = defaultUrl;
+	DefaultSettings *settings = [DefaultSettings sharedInstance];
+	NSString *urlString = settings.urlString;
+	NSString *username = settings.username;
+	NSString *password = settings.password;
 	
-	NSString *encodedUserName = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)defaultUserName, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8 );
-	NSString *encodedPassword = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)defaultPassword, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8 );
-
+	NSString *encodedUserName = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)username, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8 );
+	NSString *encodedPassword = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)password, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8 );
+	
 	//DLog(@"username: %@    password: %@", encodedUserName, encodedPassword);
 	
 	// Return the base URL
@@ -1506,7 +1516,6 @@
 		return [NSString stringWithFormat:@"%@/rest/%@?u=%@&p=%@&v=1.1.0&c=iSub&id=", urlString, action, [encodedUserName autorelease], [encodedPassword autorelease]];
 	}
 }
-
 
 #pragma mark -
 #pragma mark Store Manager delegate
@@ -1560,10 +1569,10 @@
 	//[wwanReach release];
 	[wifiReach release];
 	
-	[defaultUrl release];
-	[defaultUserName release];
-	[defaultPassword release];
-	[cachedIP release];
+	//[defaultUrl release];
+	//[defaultUserName release];
+	//[defaultPassword release];
+	//[cachedIP release];
 	
 	[super dealloc];
 }

@@ -21,6 +21,7 @@
 #import "UIView-tools.h"
 #import "CustomUIAlertView.h"
 #import "Reachability.h"
+#import "DefaultSettings.h"
 
 @implementation ServerListViewController
 
@@ -242,9 +243,10 @@
 	[defaults synchronize];
 	
 	// Update the variables
-	appDelegate.defaultUrl = [NSString stringWithString:viewObjects.serverToEdit.url];
-	appDelegate.defaultUserName = [NSString stringWithString:viewObjects.serverToEdit.username];
-	appDelegate.defaultPassword = [NSString stringWithString:viewObjects.serverToEdit.password];
+	DefaultSettings *settings = [DefaultSettings sharedInstance];
+	settings.urlString = [NSString stringWithString:viewObjects.serverToEdit.url];
+	settings.username = [NSString stringWithString:viewObjects.serverToEdit.username];
+	settings.password = [NSString stringWithString:viewObjects.serverToEdit.password];
 		
 	[self retain];
 	if(self == [[self.navigationController viewControllers] objectAtIndex:0])

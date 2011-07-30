@@ -6,14 +6,17 @@
 //  Copyright Ben Baron 2010. All rights reserved.
 //
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton, SearchOverlayViewController, LoadingScreen, Artist, EGORefreshTableHeaderView, FolderDropdownControl;
+#import "LoaderDelegate.h"
 
-@interface RootViewController : UITableViewController <UISearchBarDelegate>
+@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, SearchOverlayViewController, LoadingScreen, Artist, EGORefreshTableHeaderView, FolderDropdownControl, DefaultSettings;
+
+@interface RootViewController : UITableViewController <UISearchBarDelegate, LoaderDelegate>
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
 	MusicControlsSingleton *musicControls;
-	DatabaseControlsSingleton *databaseControls;
+	
+	DefaultSettings *settings;
 	
 	UIView *headerView;
 	UIView *folderDropdown;
@@ -34,9 +37,11 @@
 	
 	BOOL isCountShowing;
 	
-	NSMutableArray *copyListOfArtists;
+	NSArray *indexes;
+	NSArray *folders;
+	NSMutableArray *foldersSearch;
 	
-	NSMutableData *receivedData;
+	//NSMutableData *receivedData;
 
 	EGORefreshTableHeaderView *refreshHeaderView;
 	BOOL _reloading;
@@ -53,7 +58,9 @@
 @property (nonatomic, retain) UIView *headerView;
 @property (nonatomic, retain) UISearchBar *searchBar;
 
-@property (nonatomic, retain) NSMutableArray *copyListOfArtists;
+@property (nonatomic, retain) NSArray *indexes;
+@property (nonatomic, retain) NSArray *folders;
+@property (nonatomic, retain) NSMutableArray *foldersSearch;
 
 @property BOOL isSearching;
 
@@ -61,5 +68,9 @@
 
 - (void) searchTableView;
 - (void) doneSearching_Clicked:(id)sender;
+
+// Loader Delegate Methods
+- (void)loadingFailed:(Loader*)loader;
+- (void)loadingFinished:(Loader*)loader;
 
 @end

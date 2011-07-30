@@ -244,6 +244,18 @@
 		5398F27811DA627500007870 /* HelpTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F27611DA627500007870 /* HelpTabViewController.m */; };
 		5398F27911DA627500007870 /* HelpTabViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5398F27711DA627500007870 /* HelpTabViewController.xib */; };
 		5398F2B611DA8B1000007870 /* iPhoneStreamingPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5398F2B511DA8B1000007870 /* iPhoneStreamingPlayerViewController.xib */; };
+		539A356B13D3E48C00D80554 /* Loader.m in Sources */ = {isa = PBXBuildFile; fileRef = 539A356713D3E48C00D80554 /* Loader.m */; };
+		539A356C13D3E48C00D80554 /* SUSIndexesLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 539A356A13D3E48C00D80554 /* SUSIndexesLoader.m */; };
+		539A356F13D3E49B00D80554 /* DefaultSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 539A356E13D3E49B00D80554 /* DefaultSettings.m */; };
+		539A358113D406E100D80554 /* DefaultSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 539A356E13D3E49B00D80554 /* DefaultSettings.m */; };
+		539A358313D406E200D80554 /* Loader.m in Sources */ = {isa = PBXBuildFile; fileRef = 539A356713D3E48C00D80554 /* Loader.m */; };
+		539A358613D406E300D80554 /* SUSIndexesLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 539A356A13D3E48C00D80554 /* SUSIndexesLoader.m */; };
+		539A358913D42BF700D80554 /* SUSDirectoryLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 539A358813D42BF600D80554 /* SUSDirectoryLoader.m */; };
+		539A358A13D42BF700D80554 /* SUSDirectoryLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 539A358813D42BF600D80554 /* SUSDirectoryLoader.m */; };
+		539A358B13D42BF700D80554 /* SUSDirectoryLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 539A358813D42BF600D80554 /* SUSDirectoryLoader.m */; };
+		539A35B013D5438B00D80554 /* SUSArtworkLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 539A35AF13D5438B00D80554 /* SUSArtworkLoader.m */; };
+		539A35B113D5438B00D80554 /* SUSArtworkLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 539A35AF13D5438B00D80554 /* SUSArtworkLoader.m */; };
+		539A35B213D5438B00D80554 /* SUSArtworkLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 539A35AF13D5438B00D80554 /* SUSArtworkLoader.m */; };
 		53A2213611A8489900C1ACD4 /* cache-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A2213411A8489900C1ACD4 /* cache-button.png */; };
 		53A2213711A8489900C1ACD4 /* queue-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A2213511A8489900C1ACD4 /* queue-button.png */; };
 		53A4548A133D6F8200741030 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A4547B133D6F8200741030 /* AsyncSocket.m */; };
@@ -1722,6 +1734,17 @@
 		5398F27611DA627500007870 /* HelpTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpTabViewController.m; sourceTree = "<group>"; };
 		5398F27711DA627500007870 /* HelpTabViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HelpTabViewController.xib; sourceTree = "<group>"; };
 		5398F2B511DA8B1000007870 /* iPhoneStreamingPlayerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = iPhoneStreamingPlayerViewController.xib; sourceTree = "<group>"; };
+		539A356613D3E48C00D80554 /* Loader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Loader.h; sourceTree = "<group>"; };
+		539A356713D3E48C00D80554 /* Loader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Loader.m; sourceTree = "<group>"; };
+		539A356813D3E48C00D80554 /* LoaderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoaderDelegate.h; sourceTree = "<group>"; };
+		539A356913D3E48C00D80554 /* SUSIndexesLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSIndexesLoader.h; sourceTree = "<group>"; };
+		539A356A13D3E48C00D80554 /* SUSIndexesLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSIndexesLoader.m; sourceTree = "<group>"; };
+		539A356D13D3E49B00D80554 /* DefaultSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultSettings.h; sourceTree = "<group>"; };
+		539A356E13D3E49B00D80554 /* DefaultSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DefaultSettings.m; sourceTree = "<group>"; };
+		539A358713D42BF600D80554 /* SUSDirectoryLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSDirectoryLoader.h; sourceTree = "<group>"; };
+		539A358813D42BF600D80554 /* SUSDirectoryLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSDirectoryLoader.m; sourceTree = "<group>"; };
+		539A35AE13D5438A00D80554 /* SUSArtworkLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSArtworkLoader.h; sourceTree = "<group>"; };
+		539A35AF13D5438B00D80554 /* SUSArtworkLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSArtworkLoader.m; sourceTree = "<group>"; };
 		53A2213411A8489900C1ACD4 /* cache-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cache-button.png"; path = "Images/Other/cache-button.png"; sourceTree = "<group>"; };
 		53A2213511A8489900C1ACD4 /* queue-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "queue-button.png"; path = "Images/Other/queue-button.png"; sourceTree = "<group>"; };
 		53A4547A133D6F8200741030 /* AsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncSocket.h; sourceTree = "<group>"; };
@@ -2504,6 +2527,7 @@
 			children = (
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				53E75C351270013D00BC1A19 /* MainWindow-iPad.xib */,
+				539A356513D3E46700D80554 /* Data Model */,
 				537D27CD128DEEE4007E4CEC /* Singletons */,
 				53FB066011EE1C4E008A30C7 /* CFNetworkRequests */,
 				5304BCE111BD58E3000EF6F9 /* NSURLConnectionDelegates */,
@@ -2563,8 +2587,6 @@
 				1D3623250D0F684500981E51 /* iSubAppDelegate.m */,
 				53C751C51268A36200A4793F /* ViewObjectsSingleton.h */,
 				53C751C61268A36200A4793F /* ViewObjectsSingleton.m */,
-				53C751D11268A43A00A4793F /* DatabaseControlsSingleton.h */,
-				53C751D21268A43A00A4793F /* DatabaseControlsSingleton.m */,
 				53C751CB1268A3BE00A4793F /* MusicControlsSingleton.h */,
 				53C751CC1268A3BE00A4793F /* MusicControlsSingleton.m */,
 				53C751CE1268A3D400A4793F /* SocialControlsSingleton.h */,
@@ -2825,6 +2847,42 @@
 				5353B83B134D8019005C589E /* upload-playlist@2x.png */,
 			);
 			name = Images;
+			sourceTree = "<group>";
+		};
+		539A356513D3E46700D80554 /* Data Model */ = {
+			isa = PBXGroup;
+			children = (
+				539A358D13D43B3B00D80554 /* Data Loaders */,
+				539A358C13D43B2E00D80554 /* Saved Settings */,
+			);
+			name = "Data Model";
+			sourceTree = "<group>";
+		};
+		539A358C13D43B2E00D80554 /* Saved Settings */ = {
+			isa = PBXGroup;
+			children = (
+				539A356D13D3E49B00D80554 /* DefaultSettings.h */,
+				539A356E13D3E49B00D80554 /* DefaultSettings.m */,
+			);
+			name = "Saved Settings";
+			sourceTree = "<group>";
+		};
+		539A358D13D43B3B00D80554 /* Data Loaders */ = {
+			isa = PBXGroup;
+			children = (
+				53C751D11268A43A00A4793F /* DatabaseControlsSingleton.h */,
+				53C751D21268A43A00A4793F /* DatabaseControlsSingleton.m */,
+				539A356813D3E48C00D80554 /* LoaderDelegate.h */,
+				539A356613D3E48C00D80554 /* Loader.h */,
+				539A356713D3E48C00D80554 /* Loader.m */,
+				539A356913D3E48C00D80554 /* SUSIndexesLoader.h */,
+				539A356A13D3E48C00D80554 /* SUSIndexesLoader.m */,
+				539A358713D42BF600D80554 /* SUSDirectoryLoader.h */,
+				539A358813D42BF600D80554 /* SUSDirectoryLoader.m */,
+				539A35AE13D5438A00D80554 /* SUSArtworkLoader.h */,
+				539A35AF13D5438B00D80554 /* SUSArtworkLoader.m */,
+			);
+			name = "Data Loaders";
 			sourceTree = "<group>";
 		};
 		53A1CEC0126D396A006BB76F /* Reused */ = {
@@ -4260,6 +4318,11 @@
 				53BC269A139AEBFF00A825F1 /* PSWebTableViewCell.m in Sources */,
 				53BC269B139AEBFF00A825F1 /* UIImage+HockeyAdditions.m in Sources */,
 				53BC269D139AEBFF00A825F1 /* JSONKit.m in Sources */,
+				539A356B13D3E48C00D80554 /* Loader.m in Sources */,
+				539A356C13D3E48C00D80554 /* SUSIndexesLoader.m in Sources */,
+				539A356F13D3E49B00D80554 /* DefaultSettings.m in Sources */,
+				539A358913D42BF700D80554 /* SUSDirectoryLoader.m in Sources */,
+				539A35B013D5438B00D80554 /* SUSArtworkLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4267,6 +4330,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				539A358113D406E100D80554 /* DefaultSettings.m in Sources */,
+				539A358313D406E200D80554 /* Loader.m in Sources */,
+				539A358613D406E300D80554 /* SUSIndexesLoader.m in Sources */,
 				53BC279B139AF0DD00A825F1 /* main.m in Sources */,
 				53BC279C139AF0DD00A825F1 /* iSubAppDelegate.m in Sources */,
 				53BC279D139AF0DD00A825F1 /* RootViewController.m in Sources */,
@@ -4447,6 +4513,8 @@
 				53BC284C139AF0DD00A825F1 /* PSWebTableViewCell.m in Sources */,
 				53BC284D139AF0DD00A825F1 /* UIImage+HockeyAdditions.m in Sources */,
 				53BC284E139AF0DD00A825F1 /* JSONKit.m in Sources */,
+				539A358B13D42BF700D80554 /* SUSDirectoryLoader.m in Sources */,
+				539A35B213D5438B00D80554 /* SUSArtworkLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4634,6 +4702,8 @@
 				53DCF5AD13BFEAD3009160F9 /* PSWebTableViewCell.m in Sources */,
 				53DCF5AE13BFEAD3009160F9 /* UIImage+HockeyAdditions.m in Sources */,
 				53DCF5AF13BFEAD3009160F9 /* JSONKit.m in Sources */,
+				539A358A13D42BF700D80554 /* SUSDirectoryLoader.m in Sources */,
+				539A35B113D5438B00D80554 /* SUSArtworkLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

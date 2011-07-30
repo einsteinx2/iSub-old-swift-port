@@ -6,6 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+#import "TBXML.h"
 
 @interface Artist : NSObject <NSCoding, NSCopying> {
 	
@@ -22,5 +23,7 @@
 -(id) initWithCoder: (NSCoder *) decoder;
 
 - (id) initWithAttributeDict:(NSDictionary *)attributeDict;
+
+- (id) initWithTBXMLElement:(TBXMLElement *)element;
 
 @end

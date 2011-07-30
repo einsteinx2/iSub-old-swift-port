@@ -57,11 +57,12 @@
 	
 	// User defaults
 	//
+	// TODO: Remove these
 	NSString *defaultUrl;
 	NSString *defaultUserName;
 	NSString *defaultPassword;
-	NSString *cachedIP;
-	NSInteger cachedIPHour;
+	//NSString *cachedIP;
+	//NSInteger cachedIPHour;
 	
 	// Settings
 	//
@@ -120,11 +121,12 @@
 
 // User defaults
 //
+// TODO: Remove these
 @property (nonatomic, retain) NSString *defaultUrl;
 @property (nonatomic, retain) NSString *defaultUserName;
 @property (nonatomic, retain) NSString *defaultPassword;
-@property (nonatomic, retain) NSString *cachedIP;
-@property NSInteger cachedIPHour;
+//@property (nonatomic, retain) NSString *cachedIP;
+//@property NSInteger cachedIPHour;
 
 // Settings
 //

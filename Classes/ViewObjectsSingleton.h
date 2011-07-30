@@ -44,8 +44,8 @@
 	
 	// Artists page objects
 	//
-	NSArray *artistIndex;
-	NSArray *listOfArtists;
+	//NSArray *artistIndex;
+	//NSArray *listOfArtists;
 	BOOL isArtistsLoading;
 	
 	// Albums page objects and variables
@@ -169,8 +169,8 @@
 
 // Artists page objects
 //
-@property (nonatomic, retain) NSArray *artistIndex;
-@property (nonatomic, retain) NSArray *listOfArtists;
+//@property (nonatomic, retain) NSArray *artistIndex;
+//@property (nonatomic, retain) NSArray *listOfArtists;
 @property BOOL isArtistsLoading;
 
 // Albums page objects and variables

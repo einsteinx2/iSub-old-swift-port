@@ -31,7 +31,8 @@ static ViewObjectsSingleton *sharedInstance = nil;
 @synthesize homeListOfAlbums;
 
 // Artists page objects
-@synthesize artistIndex, listOfArtists, isArtistsLoading;
+//@synthesize artistIndex, listOfArtists, isArtistsLoading;
+@synthesize isArtistsLoading;
 
 // Albums page objects and variables
 @synthesize currentArtistName, currentArtistId; 
@@ -443,7 +444,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 
 - (void)loadArtistList
 {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	/*NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		
 	self.listOfArtists = [NSKeyedUnarchiver unarchiveObjectWithData:[defaults objectForKey:[NSString stringWithFormat:@"%@listOfArtists", appDelegate.defaultUrl]]];
 	self.artistIndex = [NSKeyedUnarchiver unarchiveObjectWithData:[defaults objectForKey:[NSString stringWithFormat:@"%@indexes", appDelegate.defaultUrl]]];
@@ -458,7 +459,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 			}
 		}
 	}
-	
+	*/
 	
 }
 

@@ -32,6 +32,8 @@
 #import "CustomUITableView.h"
 #import "CustomUIAlertView.h"
 
+#import "DefaultSettings.h"
+
 @implementation AllAlbumsViewController
 
 @synthesize headerView, sectionInfo;
@@ -181,8 +183,10 @@ static NSInteger order (id a, id b, void* context)
 	
 	if ([databaseControls.allAlbumsDb intForQuery:@"SELECT iteration FROM resumeLoad"] == 0)
 	{
+		NSArray *listOfArtists = [[DefaultSettings sharedInstance] getTopLevelFolders];
+		
 		int sectionNum = [databaseControls.allAlbumsDb intForQuery:@"SELECT sectionNum FROM resumeLoad"];
-		int sectionCount = [viewObjects.listOfArtists count];
+		int sectionCount = [listOfArtists count];
 		for (int i = sectionNum; i < sectionCount; i++)
 		{
 			// Check if loading should stop
@@ -196,7 +200,7 @@ static NSInteger order (id a, id b, void* context)
 			
 			NSAutoreleasePool *autoreleasePool2 = [[NSAutoreleasePool alloc] init];
 			
-			NSArray *artistArray = [viewObjects.listOfArtists objectAtIndex:i];
+			NSArray *artistArray = [listOfArtists objectAtIndex:i];
 			//DLog(@"artistArray: %@", artistArray);
 			int artistNum = [databaseControls.allAlbumsDb intForQuery:@"SELECT artistNum FROM resumeLoad"];
 			int artistCount = [artistArray count];
@@ -424,7 +428,7 @@ static NSInteger order (id a, id b, void* context)
 		// If the database hasn't been created or the device was shutoff during the process then create it, otherwise show the header
 		if ([databaseControls.allAlbumsDb tableExists:@"allAlbums"] == NO || [[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllAlbumsLoading", appDelegate.defaultUrl]] isEqualToString:@"YES"])
 		{
-			if(viewObjects.listOfArtists == nil)
+			if([[DefaultSettings sharedInstance] getTopLevelFolders] == nil)
 			{
 				CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"You must load the Folders tab first" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 				[alert show];
