@@ -30,6 +30,7 @@
 #import "ShuffleFolderPickerViewController.h"
 #import "FolderPickerDialog.h"
 #import "SearchAllViewController.h"
+#import "NSString-TrimmingAdditions.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation NewHomeViewController
@@ -598,40 +599,43 @@
 	// Perform the search
 	NSString *urlString = @"";
 	
+	NSString *searchTerms = [[searchBar.text stringByTrimmingLeadingAndTrailingWhitespace] 
+							 stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	
 	NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
 	if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
 	{
 		if (searchSegment.selectedSegmentIndex == 0)
 		{
 			urlString = [NSString stringWithFormat:@"%@&artistCount=20&albumCount=0&songCount=0&query=%@*", 
-						 [appDelegate getBaseUrl:@"search2.view"], [searchBar.text stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+						 [appDelegate getBaseUrl:@"search2.view"], searchTerms];
 		}
 		else if (searchSegment.selectedSegmentIndex == 1)
 		{
 			urlString = [NSString stringWithFormat:@"%@&artistCount=0&albumCount=20&songCount=0&query=%@*", 
-						 [appDelegate getBaseUrl:@"search2.view"], [searchBar.text stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+						 [appDelegate getBaseUrl:@"search2.view"], searchTerms];
 		}
 		else if (searchSegment.selectedSegmentIndex == 2)
 		{
 			urlString = [NSString stringWithFormat:@"%@&artistCount=0&albumCount=0&songCount=20&query=%@*", 
-						 [appDelegate getBaseUrl:@"search2.view"], [searchBar.text stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+						 [appDelegate getBaseUrl:@"search2.view"], searchTerms];
 		}
 		else
 		{
 			urlString = [NSString stringWithFormat:@"%@&artistCount=20&albumCount=20&songCount=20&query=%@*", 
-						 [appDelegate getBaseUrl:@"search2.view"], [searchBar.text stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+						 [appDelegate getBaseUrl:@"search2.view"], searchTerms];
 		}
 	}
 	else
 	{
 		urlString = [NSString stringWithFormat:@"%@&count=20&any=%@", 
-					 [appDelegate getBaseUrl:@"search.view"], [searchBar.text stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+					 [appDelegate getBaseUrl:@"search.view"], searchTerms];
 	}
 	
 	//DLog(@"search url: %@", urlString);
 	
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
-	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
 	{
 		// Create the NSMutableData to hold the received data.

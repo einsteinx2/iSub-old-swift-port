@@ -62,7 +62,7 @@
 		// Cover up for blank insert problem
 		//
 		if ([[result stringForColumnIndex:0] length] > 0)
-			[listOfArtists addObject:[result stringForColumnIndex:0]]; 
+			[listOfArtists addObject:[NSString stringWithString:[result stringForColumnIndex:0]]]; 
 	}
 	
 	return @"";

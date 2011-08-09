@@ -206,7 +206,7 @@
 	{
 		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 		
-		NSString *songIdMD5 = [result stringForColumnIndex:0];
+		NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
 		Song *aSong = [databaseControls songFromGenreDb:songIdMD5];
 		
 		[databaseControls addSongToPlaylistQueue:aSong];
@@ -249,7 +249,7 @@
 	{
 		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 		
-		NSString *songIdMD5 = [result stringForColumnIndex:0];
+		NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
 		Song *aSong = [databaseControls songFromGenreDb:songIdMD5];
 		
 		[databaseControls addSongToPlaylistQueue:aSong];
@@ -349,7 +349,8 @@
 		{
 			if ([result intForColumnIndex:1] > 2)
 			{
-				[genresAlbumViewController.listOfAlbums addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], [NSString stringWithString:[result stringForColumnIndex:2]], nil]];
+				[genresAlbumViewController.listOfAlbums addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], 
+																							[NSString stringWithString:[result stringForColumnIndex:2]], nil]];
 			}
 			else
 			{

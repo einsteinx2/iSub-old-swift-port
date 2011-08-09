@@ -478,12 +478,40 @@
 	row++;
 	Song *aSong = [[Song alloc] init];
 	FMResultSet *result = [databaseControls.bookmarksDb executeQuery:[NSString stringWithFormat:@"SELECT * FROM bookmarks WHERE ROWID = %i", row]];
-	[result next];
-	if ([databaseControls.bookmarksDb hadError]) {
+	if ([databaseControls.bookmarksDb hadError]) 
+	{
 		DLog(@"Err %d: %@", [databaseControls.bookmarksDb lastErrorCode], [databaseControls.bookmarksDb lastErrorMessage]);
 	}
+	else
+	{
+		[result next];
+		
+		if ([result stringForColumn:@"title"] != nil)
+			aSong.title = [[result stringForColumn:@"title"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		if ([result stringForColumn:@"songId"] != nil)
+			aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
+		if ([result stringForColumn:@"artist"] != nil)
+			aSong.artist = [[result stringForColumn:@"artist"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		if ([result stringForColumn:@"album"] != nil)
+			aSong.album = [[result stringForColumn:@"album"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		if ([result stringForColumn:@"genre"] != nil)
+			aSong.genre = [[result stringForColumn:@"genre"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		if ([result stringForColumn:@"coverArtId"] != nil)
+			aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
+		if ([result stringForColumn:@"path"] != nil)
+			aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
+		if ([result stringForColumn:@"suffix"] != nil)
+			aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
+		if ([result stringForColumn:@"transcodedSuffix"] != nil)
+			aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
+		aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
+		aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
+		aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
+		aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
+		aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
+	}
 	
-	aSong.title = [result stringForColumnIndex:2];
+	/*aSong.title = [result stringForColumnIndex:2];
 	aSong.songId = [result stringForColumnIndex:3];
 	aSong.artist = [result stringForColumnIndex:4];
 	aSong.album = [result stringForColumnIndex:5];
@@ -496,7 +524,7 @@
 	aSong.bitRate = [NSNumber numberWithInt:[result intForColumnIndex:12]];
 	aSong.track = [NSNumber numberWithInt:[result intForColumnIndex:13]];
 	aSong.year = [NSNumber numberWithInt:[result intForColumnIndex:14]];
-	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:15]];
+	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:15]];*/
 	
 	[result close];
 	return [aSong autorelease];

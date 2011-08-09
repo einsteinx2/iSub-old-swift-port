@@ -837,6 +837,16 @@
 
 
 - (void)dealloc {
+	NSLog(@"CurrentPlaylistViewController dealloc called");
+	[headerView release]; headerView = nil;
+	[savePlaylistLabel release]; savePlaylistLabel = nil;
+	[deleteSongsLabel release]; deleteSongsLabel = nil;
+	[playlistCountLabel release]; playlistCountLabel = nil;
+	[savePlaylistButton release]; savePlaylistButton = nil;
+	[editPlaylistLabel release]; editPlaylistLabel = nil;
+	
+	[playlistNameTextField release]; playlistNameTextField = nil;
+	
     [super dealloc];
 }
 

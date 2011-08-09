@@ -164,12 +164,12 @@
 
 - (void)dealloc 
 {
-	[myId release];
-	[myArtist release];
-	[myAlbum release];
+	[myId release]; myId = nil;
+	[myArtist release]; myArtist = nil;
+	[myAlbum release]; myAlbum = nil;
 	
-	[listOfAlbums release];
-	[listOfSongs release];
+	[listOfAlbums release]; listOfAlbums = nil;
+	[listOfSongs release]; listOfSongs = nil;
 	[super dealloc];
 }
 
@@ -178,8 +178,8 @@
 - (void) createArrays
 {
 	// Create the album and song arrays
-	listOfAlbums = [[NSMutableArray alloc] init];
-	listOfSongs = [[NSMutableArray alloc] init];
+	self.listOfAlbums = [NSMutableArray arrayWithCapacity:0];
+	self.listOfSongs = [NSMutableArray arrayWithCapacity:0];
 	
 	[databaseControls.albumListCacheDb beginTransaction];
 	

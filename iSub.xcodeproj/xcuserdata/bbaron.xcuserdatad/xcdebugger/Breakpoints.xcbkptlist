@@ -33,11 +33,13 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioStreamer.m"
-         timestampString = "331279281.650184"
+         timestampString = "333846435.126057"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1764"
-         endingLineNumber = "1764">
+         startingLineNumber = "1771"
+         endingLineNumber = "1771"
+         landmarkName = "-handlePropertyChangeForFileStream:fileStreamPropertyID:ioFlags:"
+         landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
    <ExceptionBreakpoints>

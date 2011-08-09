@@ -344,14 +344,17 @@ static MusicControlsSingleton *sharedInstance = nil;
 	// Grab the lyrics
 	if (nextSongObject.artist && nextSongObject.title)
 	{
-		[self performSelectorInBackground:@selector(loadLyricsForArtistAndTitle:) withObject:[NSArray arrayWithObjects:nextSongObject.artist, nextSongObject.title, nil]];
+		[self performSelectorInBackground:@selector(loadLyricsForArtistAndTitle:) 
+							   withObject:[NSArray arrayWithObjects:[NSString stringWithString:nextSongObject.artist], 
+																	[NSString stringWithString:nextSongObject.title], nil]];
 	}
 	
 	// Reset the download counter
 	downloadedLengthB = 0;
 	
 	// Determine the hashed filename
-	self.downloadFileNameHashB = nil; self.downloadFileNameHashB = [NSString md5:nextSongObject.path];
+	self.downloadFileNameHashB = nil; 
+	self.downloadFileNameHashB = [nextSongObject.path md5];
 	
 	// Determine the name of the file we are downloading.
 	//DLog(@"nextSongObject.path: %@", nextSongObject.path);
@@ -557,12 +560,40 @@ static MusicControlsSingleton *sharedInstance = nil;
 {
 	Song *aSong = [[Song alloc] init];
 	FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT * FROM cacheQueue WHERE finished = 'NO' LIMIT 1"];
-	[result next];
-	if ([databaseControls.songCacheDb hadError]) {
+	if ([databaseControls.songCacheDb hadError]) 
+	{
 		DLog(@"Err %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
 	}
+	else
+	{
+		[result next];
+		
+		if ([result stringForColumn:@"title"] != nil)
+			aSong.title = [[result stringForColumn:@"title"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		if ([result stringForColumn:@"songId"] != nil)
+			aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
+		if ([result stringForColumn:@"artist"] != nil)
+			aSong.artist = [[result stringForColumn:@"artist"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		if ([result stringForColumn:@"album"] != nil)
+			aSong.album = [[result stringForColumn:@"album"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		if ([result stringForColumn:@"genre"] != nil)
+			aSong.genre = [[result stringForColumn:@"genre"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		if ([result stringForColumn:@"coverArtId"] != nil)
+			aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
+		if ([result stringForColumn:@"path"] != nil)
+			aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
+		if ([result stringForColumn:@"suffix"] != nil)
+			aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
+		if ([result stringForColumn:@"transcodedSuffix"] != nil)
+			aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
+		aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
+		aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
+		aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
+		aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
+		aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
+	}
 	
-	aSong.title = [result stringForColumnIndex:4];
+	/*aSong.title = [result stringForColumnIndex:4];
 	aSong.songId = [result stringForColumnIndex:5];
 	aSong.artist = [result stringForColumnIndex:6];
 	aSong.album = [result stringForColumnIndex:7];
@@ -575,7 +606,7 @@ static MusicControlsSingleton *sharedInstance = nil;
 	aSong.bitRate = [NSNumber numberWithInt:[result intForColumnIndex:14]];
 	aSong.track = [NSNumber numberWithInt:[result intForColumnIndex:15]];
 	aSong.year = [NSNumber numberWithInt:[result intForColumnIndex:16]];
-	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:17]];
+	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:17]];*/
 	
 	[result close];
 	return [aSong autorelease];
@@ -1530,7 +1561,7 @@ static MusicControlsSingleton *sharedInstance = nil;
 {
 	if (self.nextSongObject.path != nil)
 	{
-		NSString *songMD5 = [NSString md5:self.nextSongObject.path];
+		NSString *songMD5 = [self.nextSongObject.path md5];
 		
 		if ([[databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", songMD5] isEqualToString:@"YES"])
 		{
@@ -1809,7 +1840,7 @@ static MusicControlsSingleton *sharedInstance = nil;
 	
 	while ([result next])
 	{
-		[songIds addObject:[result stringForColumnIndex:0]];
+		[songIds addObject:[NSString stringWithString:[result stringForColumnIndex:0]]];
 	}
 	[result close];
 	

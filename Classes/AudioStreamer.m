@@ -272,6 +272,9 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 @synthesize fileDownloadBytesRead;
 @dynamic progress;
 
+@synthesize tweetTimer;
+@synthesize scrobbleTimer;
+
 //
 // initWithURL
 //
@@ -279,17 +282,17 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 //
 - (id)initWithURL:(NSURL *)aURL
 {
-	shouldInvalidateTweetTimer = NO;
-	tweetTimer = nil;
-	shouldInvalidateScrobbleTimer = NO;
-	scrobbleTimer = nil;
-	fileDownloadBytesRead = 0;
-	self.fileDownloadComplete = NO;
-	self.fileDownloadCurrentSize = 0;
-	fixedLength = NO;
 	self = [super init];
 	if (self != nil)
 	{
+		shouldInvalidateTweetTimer = NO;
+		tweetTimer = nil;
+		shouldInvalidateScrobbleTimer = NO;
+		scrobbleTimer = nil;
+		fileDownloadBytesRead = 0;
+		fileDownloadComplete = NO;
+		fileDownloadCurrentSize = 0;
+		fixedLength = NO;
 		url = [aURL retain];
 		self.offsetStart = 0;
 	}
@@ -302,14 +305,13 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 // Init method for the playing a file on the file system.
 //
 - (id)initWithFileURL:(NSURL *)aURL 
-{
+{	
 	[self initWithURL:aURL];
 	if (self != nil)
 	{
-		url = [aURL retain];
-		self.offsetStart = 0;
+		offsetStart = 0;
+		fixedLength = YES;
 	}
-	fixedLength = YES;
 	return self;
 }
 
@@ -322,10 +324,11 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 {
 	//DLog(@"------ audiostreamer dealloc called");
 	shouldInvalidateTweetTimer = NO;
-	tweetTimer = nil;
+	[tweetTimer invalidate]; [tweetTimer release]; tweetTimer = nil;
+	[scrobbleTimer invalidate]; [scrobbleTimer release]; scrobbleTimer = nil;
 	[self stop];
-	[notificationCenter release];
-	[url release];
+	[notificationCenter release]; notificationCenter = nil;
+	[url release]; url = nil;
 	[super dealloc];
 }
 
@@ -1043,7 +1046,7 @@ cleanup:
 	
 	// Start song tweeting timer for 30 seconds
 	shouldInvalidateTweetTimer = YES;
-	tweetTimer = [[NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(tweetSong) userInfo:nil repeats:NO] retain];
+	self.tweetTimer = [NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(tweetSong) userInfo:nil repeats:NO];
 	
 	// Scrobbling timer
 	iSubAppDelegate *appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -1057,7 +1060,7 @@ cleanup:
 		scrobbleInterval = scrobblePercent * duration;
 		DLog(@"duration: %f    percent: %f    scrobbleInterval: %f", duration, scrobblePercent, scrobbleInterval);
 	}
-	scrobbleTimer = [[NSTimer scheduledTimerWithTimeInterval:scrobbleInterval target:self selector:@selector(scrobbleSong) userInfo:nil repeats:NO] retain];
+	self.scrobbleTimer = [NSTimer scheduledTimerWithTimeInterval:scrobbleInterval target:self selector:@selector(scrobbleSong) userInfo:nil repeats:NO];
 	
 	// If scrobbling is enabled, send "now playing" call
 	if ([[appDelegate.settingsDictionary objectForKey:@"enableScrobblingSetting"] isEqualToString:@"YES"])
@@ -1328,11 +1331,15 @@ cleanup:
 	if (shouldInvalidateTweetTimer)
 	{
 		[tweetTimer invalidate];
+        [tweetTimer release];
+        tweetTimer = nil;
 	}
 	
 	if (shouldInvalidateScrobbleTimer)
 	{
 		[scrobbleTimer invalidate];
+        [scrobbleTimer release];
+        scrobbleTimer = nil;
 	}
 	
 	@synchronized(self)

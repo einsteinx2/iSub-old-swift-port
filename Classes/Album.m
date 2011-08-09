@@ -113,11 +113,11 @@
 	newAlbum.artistName = nil;
 	newAlbum.artistId = nil;
 	
-	newAlbum.title = [title copy];
-	newAlbum.albumId = [albumId copy];
-	newAlbum.coverArtId = [coverArtId copy];
-	newAlbum.artistName = [artistName copy];
-	newAlbum.artistId = [artistId copy];
+	newAlbum.title = [NSString stringWithString:title];
+	newAlbum.albumId = [NSString stringWithString:albumId];
+	newAlbum.coverArtId = [NSString stringWithString:coverArtId];
+	newAlbum.artistName = [NSString stringWithString:artistName];
+	newAlbum.artistId = [NSString stringWithString:artistId];
 	
 	return newAlbum;
 }
@@ -128,13 +128,13 @@
 }
 
 
-- (void) dealloc {
-	
-	[title release];
-	[albumId release];
-	[coverArtId release];
-	[artistName release];
-	[artistId release];
+- (void) dealloc 
+{	
+	[title release]; title = nil;
+	[albumId release]; albumId = nil;
+	[coverArtId release]; coverArtId = nil;
+	[artistName release]; artistName = nil;
+	[artistId release]; artistId = nil;
 	[super dealloc];
 }
 

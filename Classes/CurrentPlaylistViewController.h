@@ -26,7 +26,7 @@
 	
 	UITextField *playlistNameTextField;
 	
-	NSTimer *songHighlightTimer;
+	//NSTimer *songHighlightTimer;
 	
 	BOOL goToNextSong;
 }

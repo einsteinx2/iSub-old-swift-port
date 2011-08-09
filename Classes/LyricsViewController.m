@@ -115,6 +115,8 @@
 
 
 - (void)dealloc {
+	NSLog(@"LyricsViewController dealloc called");
+	[textView release]; textView = nil;
     [super dealloc];
 
 }

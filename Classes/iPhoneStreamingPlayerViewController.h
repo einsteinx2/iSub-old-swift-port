@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class iSubAppDelegate, MusicControlsSingleton, DatabaseControlsSingleton, ViewObjectsSingleton, CoverArtImageView, MPVolumeView;
+@class iSubAppDelegate, MusicControlsSingleton, DatabaseControlsSingleton, ViewObjectsSingleton, CoverArtImageView, PageControlViewController, MPVolumeView;
 
 @interface iPhoneStreamingPlayerViewController : UIViewController
 {
@@ -36,6 +36,8 @@
 	BOOL isFlipped;
 	
 	UIView *flipButtonView;
+	
+	PageControlViewController *pageControlViewController;
 }
 
 @property (nonatomic, retain) NSArray *listOfSongs;

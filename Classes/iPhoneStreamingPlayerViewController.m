@@ -143,6 +143,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	databaseControls = [DatabaseControlsSingleton sharedInstance];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	
+	pageControlViewController = nil;
+	
 	isFlipped = NO;
 	
 	if (!IS_IPAD())
@@ -530,12 +532,16 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (IBAction)songInfoToggle:(id)sender
 {
+	NSLog(@"songInfoToggle called");
 	if (!isFlipped)
 	{
 		songInfoToggleButton.userInteractionEnabled = NO;
 		
-		PageControlViewController *pageControlViewController = [[PageControlViewController alloc] initWithNibName:@"PageControlViewController" bundle:nil];
-		pageControlViewController.view.frame = CGRectMake (0, 0, coverArtImageView.frame.size.width, coverArtImageView.frame.size.height);
+		if (!pageControlViewController)
+		{
+			pageControlViewController = [[PageControlViewController alloc] initWithNibName:@"PageControlViewController" bundle:nil];
+			pageControlViewController.view.frame = CGRectMake (0, 0, coverArtImageView.frame.size.width, coverArtImageView.frame.size.height);
+		}
 		
 		// Set the icon in the top right
 		[self updateBarButtonImage];
@@ -548,12 +554,13 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[UIView setAnimationDuration:0.40];
 		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:coverArtImageView cache:YES];
 		
+		//[pageControlViewController resetScrollView];
 		[coverArtImageView addSubview:pageControlViewController.view];
 		[reflectionView setAlpha:0.0];
 		
 		[UIView commitAnimations];
 		
-		[pageControlViewController viewWillAppear:NO];
+		//[pageControlViewController viewWillAppear:NO];
 	}
 	else
 	{
@@ -567,17 +574,28 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:0.5];
 		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:coverArtImageView cache:YES];
+		//[UIView setAnimationDelegate:self];
+		//[UIView setAnimationDidStopSelector:@selector(releaseSongInfo:finished:context:)];
 		
-		[[[coverArtImageView subviews] lastObject] removeFromSuperview];
+		//[[[coverArtImageView subviews] lastObject] removeFromSuperview];
+		[pageControlViewController.view removeFromSuperview];
 		[reflectionView setAlpha:kDefaultReflectionOpacity];
 		
 		UIGraphicsEndImageContext();
 		
 		[UIView commitAnimations];
+		
+		[pageControlViewController resetScrollView];
 	}
 	
 	isFlipped = !isFlipped;
 }
+
+/*- (void)releaseSongInfo:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context
+{
+	NSLog(@"releaseSongInfo called");
+	[pageControlViewController release]; pageControlViewController = nil;
+}*/
 
 
 - (IBAction)playButtonPressed:(id)sender
@@ -741,12 +759,15 @@ CGContextRef MyCreateBitmapContextPlayer(int pixelsWide, int pixelsHigh)
 //
 - (void)dealloc
 {
-	[playButton release];
-	[nextButton release];
-	[prevButton release];
-	[volumeSlider release];
-	[coverArtImageView release];
-	[songInfoToggleButton release];
+	NSLog(@"player dealloc called");
+	[playButton release]; playButton = nil;
+	[nextButton release]; nextButton = nil;
+	[prevButton release]; prevButton = nil;
+	[volumeSlider release]; volumeSlider = nil;
+	[coverArtImageView release]; coverArtImageView = nil;
+	[songInfoToggleButton release]; songInfoToggleButton = nil;
+	[reflectionView release]; reflectionView = nil;
+	[pageControlViewController release]; pageControlViewController = nil;
 
 	[super dealloc];
 }

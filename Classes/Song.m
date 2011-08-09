@@ -184,20 +184,20 @@
 
 - (void) dealloc 
 {	
-	[title release];
-	[songId release];
-	[artist release];
-	[album release];
-	[genre release];
-	[coverArtId release];
-	[path release];
-	[suffix release];
-	[transcodedSuffix release];
-	[duration release];
-	[bitRate release];
-	[track release];
-	[year release];
-	[size release];
+	[title release]; title = nil;
+	[songId release]; songId = nil;
+	[artist release]; artist = nil;
+	[album release]; album = nil;
+	[genre release]; genre = nil;
+	[coverArtId release]; coverArtId = nil;
+	[path release]; path = nil;
+	[suffix release]; suffix = nil;
+	[transcodedSuffix release]; transcodedSuffix = nil;
+	[duration release]; duration = nil;
+	[bitRate release]; bitRate = nil;
+	[track release]; track = nil;
+	[year release]; year = nil;
+	[size release]; size = nil;
 	
 	[super dealloc];
 }

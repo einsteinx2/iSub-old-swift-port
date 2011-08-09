@@ -84,8 +84,8 @@
 
 - (void) dealloc 
 {	
-	[name release];
-	[artistId release];
+	[name release]; name = nil;
+	[artistId release]; artistId = nil;
 	[super dealloc];
 }
 

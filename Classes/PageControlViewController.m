@@ -27,9 +27,11 @@
 @synthesize scrollView, pageControl, viewControllers;
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewWillAppear:(BOOL)animated 
+//- (void)viewWillAppear:(BOOL)animated 
+- (void)viewDidLoad
 {
-    [super viewWillAppear:animated];
+    //[super viewWillAppear:animated];
+	[super viewDidLoad];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideSongInfoFast) name:@"hideSongInfoFast" object:nil];
 	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideSongInfo) name:@"hideSongInfo" object:nil];
@@ -96,6 +98,18 @@
     [self loadScrollViewWithPage:1];
 	[self loadScrollViewWithPage:2]; // THIS IS THE EXTRA LOADED PAGE, USUALLY ONLY FIRST 2 SHOULD BE PRE-LOADED
 	[self loadScrollViewWithPage:3]; // THIS IS THE EXTRA LOADED PAGE, USUALLY ONLY FIRST 2 SHOULD BE PRE-LOADED*/
+}
+
+/*- (void)viewWillAppear:(BOOL)animated 
+{
+	NSLog(@"page control viewWillAppear called");
+	[super viewWillAppear:animated];
+	[scrollView setContentOffset:CGPointZero animated:YES];
+}*/
+
+- (void)resetScrollView
+{
+	[scrollView setContentOffset:CGPointZero animated:YES];
 }
 
 
@@ -231,7 +245,7 @@
 	
 	self.view.alpha = 1.0;
 	
-	[UIView commitAnimations];
+	//[UIView commitAnimations];
 }
  
  
@@ -244,7 +258,9 @@
 	
 	[UIView commitAnimations];
 	
-	[self viewDidUnload];
+	[self resetScrollView];
+	
+	//[self viewDidUnload];
 }
  
  
@@ -254,7 +270,9 @@
 	
 	[self.view removeFromSuperview];
 	
-	[self viewDidUnload];
+	[self resetScrollView];
+	
+	//[self viewDidUnload];
 }
 
 
@@ -280,9 +298,10 @@
 
 - (void)dealloc 
 {
-	[scrollView release];
-	[pageControl release];
-	[viewControllers release];
+	NSLog(@"PageControl dealloc called");
+	[scrollView release]; scrollView = nil;
+	[pageControl release]; pageControl = nil;
+	[viewControllers release]; viewControllers = nil;
     [super dealloc];
 }
 

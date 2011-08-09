@@ -32,11 +32,13 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+	[playlistView.view removeFromSuperview];
+	[playlistView release]; playlistView = nil;
 }
 
 
 - (void)dealloc {
-	[playlistView release];
+	NSLog(@"CurrentPlaylistBackgroundViewController dealloc called");
     [super dealloc];
 }
 

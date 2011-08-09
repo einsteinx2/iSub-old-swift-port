@@ -150,6 +150,8 @@ extern NSString * const ASStatusChangedNotification;
 @property BOOL fileDownloadComplete;
 @property int fileDownloadCurrentSize;
 @property int fileDownloadBytesRead;
+@property (nonatomic, retain) NSTimer *tweetTimer;
+@property (nonatomic, retain) NSTimer *scrobbleTimer;
 
 
 - (id)initWithURL:(NSURL *)aURL;

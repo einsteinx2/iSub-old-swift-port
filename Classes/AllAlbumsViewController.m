@@ -395,7 +395,8 @@ static NSInteger order (id a, id b, void* context)
 	
 	while ([result next])
 	{
-		[sections addObject:[NSArray arrayWithObjects:[result stringForColumnIndex:0], [NSNumber numberWithInt:[result intForColumnIndex:1]], nil]];
+		[sections addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], 
+													  [NSNumber numberWithInt:[result intForColumnIndex:1]], nil]];
 	}
 	
 	NSArray *returnArray = [NSArray arrayWithArray:sections];
