@@ -158,20 +158,20 @@
 	newSong.year = nil;
 	newSong.size = nil;
 	
-	newSong.title = [title copy];
-	newSong.songId = [songId copy];
-	newSong.artist = [artist copy];
-	newSong.album = [album copy];
-	newSong.genre = [genre copy];
-	newSong.coverArtId = [coverArtId copy];
-	newSong.path = [path copy];
-	newSong.suffix = [suffix copy];
-	newSong.transcodedSuffix = [transcodedSuffix copy];
-	newSong.duration = [duration copy];
-	newSong.bitRate = [bitRate copy];
-	newSong.track = [track copy];
-	newSong.year = [year copy];
-	newSong.size = [size copy];
+	newSong.title = [[title copy] autorelease];
+	newSong.songId = [[songId copy] autorelease];
+	newSong.artist = [[artist copy] autorelease];
+	newSong.album = [[album copy] autorelease];
+	newSong.genre = [[genre copy] autorelease];
+	newSong.coverArtId = [[coverArtId copy] autorelease];
+	newSong.path = [[path copy] autorelease];
+	newSong.suffix = [[suffix copy] autorelease];
+	newSong.transcodedSuffix = [[transcodedSuffix copy] autorelease];
+	newSong.duration = [[duration copy] autorelease];
+	newSong.bitRate = [[bitRate copy] autorelease];
+	newSong.track = [[track copy] autorelease];
+	newSong.year = [[year copy] autorelease];
+	newSong.size = [[size copy] autorelease];
 	
 	return newSong;
 }

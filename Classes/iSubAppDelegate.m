@@ -349,7 +349,7 @@ NSLog(@"4");
 		if ([settingsDictionary objectForKey:@"maxBitrateSetting"])
 		{
 			DLog(@"Adding new maxBitrateSettings");
-			NSNumber *setting = [[settingsDictionary objectForKey:@"maxBitrateSetting"] copy];
+			NSNumber *setting = [[[settingsDictionary objectForKey:@"maxBitrateSetting"] copy] autorelease];
 			[settingsDictionary setObject:setting forKey:@"maxBitrateWifiSetting"];
 			[settingsDictionary setObject:setting forKey:@"maxBitrate3GSetting"];
 			[settingsDictionary removeObjectForKey:@"maxBitrateSetting"];
@@ -454,6 +454,7 @@ NSLog(@"4");
 						aServer.type = SUBSONIC;
 						
 						[newServerList addObject:aServer];
+						[aServer release];
 					}
 					
 					viewObjects.serverList = [NSMutableArray arrayWithArray:newServerList];
@@ -1466,7 +1467,7 @@ NSLog(@"38");
 
 - (NSString *)getBaseUrl:(NSString *)action
 {	
-	NSString *urlString = [[[NSString alloc] init] autorelease];
+	//NSString *urlString = [[[NSString alloc] init] autorelease];
 	// If the user used a hostname, implement the IP address caching and create the urlstring
 	/*if ([[defaultUrl componentsSeparatedByString:@"."] count] == 1)
 	{
@@ -1489,7 +1490,7 @@ NSLog(@"38");
 		// If the user used an IP address, just use the defaultUrl as is.
 		urlString = defaultUrl;
 	}*/
-	urlString = defaultUrl;
+	NSString *urlString = [[defaultUrl copy] autorelease];
 	
 	NSString *encodedUserName = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)defaultUserName, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8 );
 	NSString *encodedPassword = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)defaultPassword, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8 );

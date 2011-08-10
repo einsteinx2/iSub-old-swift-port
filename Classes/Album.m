@@ -113,11 +113,11 @@
 	newAlbum.artistName = nil;
 	newAlbum.artistId = nil;
 	
-	newAlbum.title = [NSString stringWithString:title];
-	newAlbum.albumId = [NSString stringWithString:albumId];
-	newAlbum.coverArtId = [NSString stringWithString:coverArtId];
-	newAlbum.artistName = [NSString stringWithString:artistName];
-	newAlbum.artistId = [NSString stringWithString:artistId];
+	newAlbum.title = [[title copy] autorelease];
+	newAlbum.albumId = [[albumId copy] autorelease];
+	newAlbum.coverArtId = [[coverArtId copy] autorelease];
+	newAlbum.artistName = [[artistName copy] autorelease];
+	newAlbum.artistId = [[artistId copy] autorelease];
 	
 	return newAlbum;
 }
