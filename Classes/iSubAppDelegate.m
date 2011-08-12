@@ -92,6 +92,15 @@
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application
 {   
+	//
+	// Uncomment to redirect the console output to a log file
+	//
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex:0];
+	NSString *logPath = [documentsDirectory stringByAppendingPathComponent:@"console.log"];
+	freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
+	//
+	
 	// HockyApp Kits
 #if defined (CONFIGURATION_AdHoc)
     [[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
@@ -133,15 +142,6 @@
 		DLog(@"is kFeatureAllId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureAllId]);
 #endif
 	}
-	
-	//
-	// Uncomment to redirect the console output to a log file
-	//
-	//NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	//NSString *documentsDirectory = [paths objectAtIndex:0];
-	//NSString *logPath = [documentsDirectory stringByAppendingPathComponent:@"console.log"];
-	//freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
-	//
 	
 	// Check if it's a retina display
 	if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
@@ -204,11 +204,14 @@
 //
 - (void) adjustCacheSize
 {
+	NSLog(@"adjustCacheSize:  [settingsDictionary objectForKey:@\"cachingTypeSetting\"] = %i", [[settingsDictionary objectForKey:@"cachingTypeSetting"] intValue]);
 	// Only adjust if the user is using max cache size as option
 	if ([[settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 1)
 	{
 		unsigned long long int freeSpace = [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:musicControls.audioFolderPath error:NULL] objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
 		unsigned long long int maxCacheSize = [[settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue];		
+		
+		NSLog(@"adjustCacheSize:  freeSpace = %llu  maxCacheSize = %llu", freeSpace, maxCacheSize);
 		
 		if (freeSpace < maxCacheSize)
 		{
@@ -739,7 +742,7 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-	DLog(@"applicationDidEnterBackground called");
+	//DLog(@"applicationDidEnterBackground called");
 	
 	[self saveDefaults];
 	
@@ -760,19 +763,18 @@
 		
 		// Check the remaining background time and alert the user if necessary
 		dispatch_queue_t queue = dispatch_queue_create("isub.backgroundqueue", 0);
-		//dispatch_get_main_queue()
 		dispatch_async(queue, 
 		^{
 			isInBackground = YES;
 			UIApplication *application = [UIApplication sharedApplication];
 			while ([application backgroundTimeRemaining] > 1.0 && isInBackground) 
 			{
-				DLog(@"backgroundTimeRemaining: %f", [application backgroundTimeRemaining]);
+				//DLog(@"backgroundTimeRemaining: %f", [application backgroundTimeRemaining]);
 				
 				// Sleep early is nothing is happening
 				if ([application backgroundTimeRemaining] < 570.0 && !musicControls.isQueueListDownloading)
 				{
-					DLog("Sleeping early, isQueueListDownloading: %i", musicControls.isQueueListDownloading);
+					//DLog("Sleeping early, isQueueListDownloading: %i", musicControls.isQueueListDownloading);
 					[application endBackgroundTask:backgroundTask];
 					backgroundTask = UIBackgroundTaskInvalid;
 					break;
@@ -791,6 +793,9 @@
 						break;
 					}
 				}
+				
+				// Sleep for a second to avoid a fast loop eating all cpu cycles
+				sleep(1);
 			}
 		});
 	}
