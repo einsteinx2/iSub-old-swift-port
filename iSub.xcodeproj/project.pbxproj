@@ -2052,7 +2052,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				53926D3213E9F7BD0047AD39 /* libz.dylib in Frameworks */,
 				53BC2850139AF0DD00A825F1 /* Foundation.framework in Frameworks */,
 				53BC2851139AF0DD00A825F1 /* UIKit.framework in Frameworks */,
 				53BC2852139AF0DD00A825F1 /* CoreGraphics.framework in Frameworks */,
@@ -2065,6 +2064,7 @@
 				53BC2859139AF0DD00A825F1 /* CoreLocation.framework in Frameworks */,
 				53BC285A139AF0DD00A825F1 /* MobileCoreServices.framework in Frameworks */,
 				53BC285C139AF0DD00A825F1 /* libxml2.dylib in Frameworks */,
+				53926D3213E9F7BD0047AD39 /* libz.dylib in Frameworks */,
 				53BC285D139AF0DD00A825F1 /* libOAuth.a in Frameworks */,
 				53BC285E139AF0DD00A825F1 /* StoreKit.framework in Frameworks */,
 				53BC285F139AF0DD00A825F1 /* Security.framework in Frameworks */,
@@ -2123,7 +2123,6 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				53926D3113E9F7BD0047AD39 /* libz.dylib */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -2181,6 +2180,7 @@
 				53544D891187DED400B63DB9 /* CoreLocation.framework */,
 				5354914A11B03FC900928E0F /* MobileCoreServices.framework */,
 				536AD1D211EA628200387CB0 /* libxml2.dylib */,
+				53926D3113E9F7BD0047AD39 /* libz.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

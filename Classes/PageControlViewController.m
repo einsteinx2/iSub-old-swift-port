@@ -43,15 +43,15 @@
 	else
 		numberOfPages = 3;	
 	
-	/*if ([MusicControlsSingleton sharedInstance].currentSongObject)
-	{
-		isCurrentSong = YES;
-	}
-	else
-	{
-		isCurrentSong = NO;
-		numberOfPages -= 1;
-	}*/
+	//if ([MusicControlsSingleton sharedInstance].currentSongObject)
+	//{
+	//	isCurrentSong = YES;
+	//}
+	//else
+	//{
+	//	isCurrentSong = NO;
+	//	numberOfPages -= 1;
+	//}
 	isCurrentSong = YES;
 	
 	//Start the view with 0 alpha so it can be faded into view
@@ -90,14 +90,14 @@
 		[self loadScrollViewWithPage:i];
 	}
 	
-	/*// pages are created on demand
+	// pages are created on demand
     // load the visible page
     // load the page on either side to avoid flashes when the user starts scrolling
 	// NOTE: LOADING ALL PAGES AT ONCE TO PREVENT SLOWDOWN BUG WHEN SLIDING TO SECOND SCREEN. KEEPING REST OF THE CODE AS IS FOR REFERENCE FOR FUTURE PROJECTS.
-	[self loadScrollViewWithPage:0];
-    [self loadScrollViewWithPage:1];
-	[self loadScrollViewWithPage:2]; // THIS IS THE EXTRA LOADED PAGE, USUALLY ONLY FIRST 2 SHOULD BE PRE-LOADED
-	[self loadScrollViewWithPage:3]; // THIS IS THE EXTRA LOADED PAGE, USUALLY ONLY FIRST 2 SHOULD BE PRE-LOADED*/
+	//[self loadScrollViewWithPage:0];
+    //[self loadScrollViewWithPage:1];
+	//[self loadScrollViewWithPage:2]; // THIS IS THE EXTRA LOADED PAGE, USUALLY ONLY FIRST 2 SHOULD BE PRE-LOADED
+	//[self loadScrollViewWithPage:3]; // THIS IS THE EXTRA LOADED PAGE, USUALLY ONLY FIRST 2 SHOULD BE PRE-LOADED
 }
 
 /*- (void)viewWillAppear:(BOOL)animated 
@@ -161,6 +161,10 @@
 		[viewControllers replaceObjectAtIndex:page withObject:controller];
 		[controller release];
     }
+	else
+	{
+		DLog(@"Not loading view, already loaded");
+	}
 	
     // add the controller's view to the scroll view
     if (nil == controller.view.superview) 
@@ -185,7 +189,11 @@
     // We don't want a "feedback loop" between the UIPageControl and the scroll delegate in
     // which a scroll event generated from the user hitting the page control triggers updates from
     // the delegate method. We use a boolean to disable the delegate logic when the page control is used.
-    if (pageControlUsed) {
+    if (pageControlUsed) 
+	{
+		// Send a notification so the playlist view hides the edit controls
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"hideEditControls" object:nil];
+		
         // do nothing - the scroll was initiated from the page control, not the user dragging
         return;
     }
@@ -291,6 +299,11 @@
 	// e.g. self.myOutlet = nil;
 	//self.scrollView = nil;
 	//self.pageControl = nil;
+	
+	for (UIViewController *subView in viewControllers)
+	{
+		[subView.view removeFromSuperview];
+	}
 	
 	[super viewDidUnload];
 }
