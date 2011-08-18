@@ -113,8 +113,10 @@
 			anAlbum.albumId = [attributeDict objectForKey:@"id"];
 			if([attributeDict objectForKey:@"coverArt"])
 				anAlbum.coverArtId = [attributeDict objectForKey:@"coverArt"];
-			anAlbum.artistName = [viewObjects.allSongsCurrentArtistName copy];
-			anAlbum.artistId = [viewObjects.allSongsCurrentArtistId copy];
+			if (viewObjects.allSongsCurrentArtistName != nil)
+				anAlbum.artistName = [NSString stringWithString:viewObjects.allSongsCurrentArtistName];
+			if (viewObjects.allSongsCurrentArtistId != nil)
+				anAlbum.artistId = [NSString stringWithString:viewObjects.allSongsCurrentArtistId];
 			
 			//Add album object to the subalbums table to be processed in the next iteration
 			if (![anAlbum.title isEqualToString:@".AppleDouble"])
@@ -132,8 +134,6 @@
 			// Update the loading screen message
 			[self performSelectorOnMainThread:@selector(updateMessage) withObject:nil waitUntilDone:NO];
 			
-			[anAlbum.artistName release];
-			[anAlbum.artistId release];
 			[anAlbum release];
 		}
 		else

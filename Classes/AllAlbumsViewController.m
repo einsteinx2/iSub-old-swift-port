@@ -399,7 +399,8 @@ static NSInteger order (id a, id b, void* context)
 	
 	while ([result next])
 	{
-		[sections addObject:[NSArray arrayWithObjects:[result stringForColumnIndex:0], [NSNumber numberWithInt:[result intForColumnIndex:1]], nil]];
+		[sections addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], 
+													  [NSNumber numberWithInt:[result intForColumnIndex:1]], nil]];
 	}
 	
 	NSArray *returnArray = [NSArray arrayWithArray:sections];
@@ -471,12 +472,16 @@ static NSInteger order (id a, id b, void* context)
     [super didReceiveMemoryWarning];
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+	[super viewDidDisappear:animated];
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"endSearch" object:searchOverlayView];
+}
 
 - (void)viewDidUnload {
 	// Release anything that can be recreated in viewDidLoad or on demand.
 	// e.g. self.myOutlet = nil;
-	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"endSearch" object:searchOverlayView];
 }
 
 

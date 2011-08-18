@@ -193,7 +193,8 @@
 	[self.view removeFromSuperview];
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     [super dealloc];
 }
 

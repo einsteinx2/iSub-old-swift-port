@@ -33,5 +33,6 @@
 - (void)showSongInfo;
 - (void)hideSongInfo;
 - (void)hideSongInfoFast;
+- (void)resetScrollView;
 
 @end

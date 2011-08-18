@@ -271,12 +271,40 @@
 	row++;
 	Song *aSong = [[Song alloc] init];
 	FMResultSet *result = [databaseControls.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE ROWID = %i", table, row]];
-	[result next];
-	if ([databaseControls.songCacheDb hadError]) {
+	if ([databaseControls.songCacheDb hadError])
+	{
 		DLog(@"Err %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
 	}
+	else
+	{
+		[result next];
+		
+		if ([result stringForColumn:@"title"] != nil)
+			aSong.title = [[result stringForColumn:@"title"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		if ([result stringForColumn:@"songId"] != nil)
+			aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
+		if ([result stringForColumn:@"artist"] != nil)
+			aSong.artist = [[result stringForColumn:@"artist"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		if ([result stringForColumn:@"album"] != nil)
+			aSong.album = [[result stringForColumn:@"album"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		if ([result stringForColumn:@"genre"] != nil)
+			aSong.genre = [[result stringForColumn:@"genre"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		if ([result stringForColumn:@"coverArtId"] != nil)
+			aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
+		if ([result stringForColumn:@"path"] != nil)
+			aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
+		if ([result stringForColumn:@"suffix"] != nil)
+			aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
+		if ([result stringForColumn:@"transcodedSuffix"] != nil)
+			aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
+		aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
+		aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
+		aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
+		aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
+		aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
+	}
 	
-	aSong.title = [result stringForColumnIndex:4];
+	/*aSong.title = [result stringForColumnIndex:4];
 	aSong.songId = [result stringForColumnIndex:5];
 	aSong.artist = [result stringForColumnIndex:6];
 	aSong.album = [result stringForColumnIndex:7];
@@ -289,7 +317,7 @@
 	aSong.bitRate = [NSNumber numberWithInt:[result intForColumnIndex:14]];
 	aSong.track = [NSNumber numberWithInt:[result intForColumnIndex:15]];
 	aSong.year = [NSNumber numberWithInt:[result intForColumnIndex:16]];
-	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:17]];
+	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:17]];*/
 	
 	[result close];
 	return [aSong autorelease];
@@ -638,7 +666,7 @@
 			// Cover up for blank insert problem
 			//
 			if ([[result stringForColumnIndex:0] length] > 0)
-				[listOfArtists addObject:[result stringForColumnIndex:0]]; 
+				[listOfArtists addObject:[NSString stringWithString:[result stringForColumnIndex:0]]]; 
 		}
 		
 		// Sort out The El La Los Las Le Les (Subsonic default)
@@ -1065,9 +1093,9 @@
 	FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT md5, transcodedSuffix, suffix FROM cachedSongs WHERE finished = 'YES'"];
 	while ([result next])
 	{
-		NSString *rowMD5 = [result stringForColumnIndex:0];
-		NSString *transcodedSuffix = [result stringForColumnIndex:1];
-		NSString *suffix = [result stringForColumnIndex:2];
+		NSString *rowMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
+		NSString *transcodedSuffix = [NSString stringWithString:[result stringForColumnIndex:1]];
+		NSString *suffix = [NSString stringWithString:[result stringForColumnIndex:2]];
 		
 		BOOL skipDelete = NO;
 		// Check if we're deleting the song that's currently playing. If so, skip deleting it.
@@ -1083,7 +1111,7 @@
 		// Check if we're deleting the song that's about to play. If so, skip deleting it.
 		if (musicControls.nextSongObject)
 		{
-			if ([[NSString md5:musicControls.nextSongObject.path] isEqualToString:rowMD5])
+			if ([[musicControls.nextSongObject.path md5] isEqualToString:rowMD5])
 			{
 				//[appDelegate destroyStreamer];
 				skipDelete = YES;
@@ -1223,7 +1251,7 @@
 	{
 		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 		
-		Song *aSong = [databaseControls songFromCacheDb:[result stringForColumnIndex:0]];
+		Song *aSong = [databaseControls songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]];
 		
 		if (aSong.path)
 			[databaseControls addSongToPlaylistQueue:aSong];
@@ -1519,12 +1547,12 @@ NSInteger trackSort1(id obj1, id obj2, void *context)
 			{
 				if ([result intForColumnIndex:1] > 2)
 				{
-					[cacheAlbumViewController.listOfAlbums addObject:[NSArray arrayWithObjects:[result stringForColumnIndex:0], 
-																							   [result stringForColumnIndex:2], nil]];
+					[cacheAlbumViewController.listOfAlbums addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], 
+																							   [NSString stringWithString:[result stringForColumnIndex:2]], nil]];
 				}
 				else
 				{
-					[cacheAlbumViewController.listOfSongs addObject:[NSArray arrayWithObjects:[result stringForColumnIndex:0], 
+					[cacheAlbumViewController.listOfSongs addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], 
 																							  [NSNumber numberWithInt:[result intForColumnIndex:3]], nil]];
 					
 					/*// Sort by track number -- iOS 4.0+ only

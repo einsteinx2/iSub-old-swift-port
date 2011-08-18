@@ -346,6 +346,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 			{
 				needsReordering = YES;
 			}
+			[tag release];
 		}
 		
 		if (needsReordering) 

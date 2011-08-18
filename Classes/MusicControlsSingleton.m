@@ -344,14 +344,17 @@ static MusicControlsSingleton *sharedInstance = nil;
 	// Grab the lyrics
 	if (nextSongObject.artist && nextSongObject.title)
 	{
-		[self performSelectorInBackground:@selector(loadLyricsForArtistAndTitle:) withObject:[NSArray arrayWithObjects:nextSongObject.artist, nextSongObject.title, nil]];
+		[self performSelectorInBackground:@selector(loadLyricsForArtistAndTitle:) 
+							   withObject:[NSArray arrayWithObjects:[NSString stringWithString:nextSongObject.artist], 
+																	[NSString stringWithString:nextSongObject.title], nil]];
 	}
 	
 	// Reset the download counter
 	downloadedLengthB = 0;
 	
 	// Determine the hashed filename
-	self.downloadFileNameHashB = nil; self.downloadFileNameHashB = [NSString md5:nextSongObject.path];
+	self.downloadFileNameHashB = nil; 
+	self.downloadFileNameHashB = [nextSongObject.path md5];
 	
 	// Determine the name of the file we are downloading.
 	//DLog(@"nextSongObject.path: %@", nextSongObject.path);
@@ -557,12 +560,40 @@ static MusicControlsSingleton *sharedInstance = nil;
 {
 	Song *aSong = [[Song alloc] init];
 	FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT * FROM cacheQueue WHERE finished = 'NO' LIMIT 1"];
-	[result next];
-	if ([databaseControls.songCacheDb hadError]) {
+	if ([databaseControls.songCacheDb hadError]) 
+	{
 		DLog(@"Err %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
 	}
+	else
+	{
+		[result next];
+		
+		if ([result stringForColumn:@"title"] != nil)
+			aSong.title = [[result stringForColumn:@"title"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		if ([result stringForColumn:@"songId"] != nil)
+			aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
+		if ([result stringForColumn:@"artist"] != nil)
+			aSong.artist = [[result stringForColumn:@"artist"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		if ([result stringForColumn:@"album"] != nil)
+			aSong.album = [[result stringForColumn:@"album"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		if ([result stringForColumn:@"genre"] != nil)
+			aSong.genre = [[result stringForColumn:@"genre"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		if ([result stringForColumn:@"coverArtId"] != nil)
+			aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
+		if ([result stringForColumn:@"path"] != nil)
+			aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
+		if ([result stringForColumn:@"suffix"] != nil)
+			aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
+		if ([result stringForColumn:@"transcodedSuffix"] != nil)
+			aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
+		aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
+		aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
+		aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
+		aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
+		aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
+	}
 	
-	aSong.title = [result stringForColumnIndex:4];
+	/*aSong.title = [result stringForColumnIndex:4];
 	aSong.songId = [result stringForColumnIndex:5];
 	aSong.artist = [result stringForColumnIndex:6];
 	aSong.album = [result stringForColumnIndex:7];
@@ -575,7 +606,7 @@ static MusicControlsSingleton *sharedInstance = nil;
 	aSong.bitRate = [NSNumber numberWithInt:[result intForColumnIndex:14]];
 	aSong.track = [NSNumber numberWithInt:[result intForColumnIndex:15]];
 	aSong.year = [NSNumber numberWithInt:[result intForColumnIndex:16]];
-	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:17]];
+	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:17]];*/
 	
 	[result close];
 	return [aSong autorelease];
@@ -1368,6 +1399,7 @@ static MusicControlsSingleton *sharedInstance = nil;
 	unsigned long long int freeSpace = [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:audioFolderPath error:NULL] objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
 	unsigned long long int minFreeSpace = [[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue];
 	unsigned long long int maxCacheSize = [[appDelegate.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue];
+	NSLog(@"checkCache:  cacheSize = %llu  freeSpace = %llu  minFreeSpace = %llu  maxCacheSize = %llu", cacheSize, freeSpace, minFreeSpace, maxCacheSize);
 	//DLog(@"cacheSize: %qu", cacheSize);
 	//DLog(@"freeSpace: %qu", freeSpace);
 	//DLog(@"minFreeSpace: %qu", minFreeSpace);
@@ -1376,14 +1408,17 @@ static MusicControlsSingleton *sharedInstance = nil;
 	if ([[appDelegate.settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 0 &&
 		[[appDelegate.settingsDictionary objectForKey:@"enableSongCachingSetting"] isEqualToString:@"YES"])
 	{
+		NSLog(@"checkCache:  entered the if");
 		// User has chosen to limit cache by minimum free space
 		
 		// Check to see if the free space left is lower than the setting
 		if (freeSpace < minFreeSpace)
 		{
+			NSLog(@"checkCache:  entered the if if");
 			// Check to see if the cache size + free space is still less than minFreeSpace
 			if (cacheSize + freeSpace < minFreeSpace)
 			{
+				NSLog(@"checkCache:  entered the if if if");
 				// Looks like even removing all of the cache will not be enough so turn off caching
 				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"enableSongCachingSetting"];
 				
@@ -1393,15 +1428,18 @@ static MusicControlsSingleton *sharedInstance = nil;
 			}
 			else
 			{
+				NSLog(@"checkCache:  entered the if if else");
 				// Remove the oldest cached songs until freeSpace > minFreeSpace or pop the free space low alert
 				DLog(@"freeSpace < minFreeSpace");
 				if ([[appDelegate.settingsDictionary objectForKey:@"autoDeleteCacheSetting"] isEqualToString:@"YES"])
 				{
+					NSLog(@"checkCache:  entered the if if else if");
 					DLog(@"deleting oldest cached songs");
 					[self performSelectorInBackground:@selector(removeOldestCachedSongs) withObject:nil];
 				}
 				else
 				{
+					NSLog(@"checkCache:  entered the if if else else");
 					UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"Free space is running low. Delete some cached songs or lower the minimum free space setting." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 					[alert show];
 					[alert release];
@@ -1412,19 +1450,23 @@ static MusicControlsSingleton *sharedInstance = nil;
 	else if ([[appDelegate.settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 1 &&
 			 [[appDelegate.settingsDictionary objectForKey:@"enableSongCachingSetting"] isEqualToString:@"YES"])
 	{
+		NSLog(@"checkCache:  entered the else");
 		// User has chosen to limit cache by maximum size
 		
 		// Check to see if the cache size is higher than the max
 		if (cacheSize > maxCacheSize)
 		{
+			NSLog(@"checkCache:  entered the else if");
 			DLog(@"cacheSize > maxCacheSize");
 			if ([[appDelegate.settingsDictionary objectForKey:@"autoDeleteCacheSetting"] isEqualToString:@"YES"])
 			{
+				NSLog(@"checkCache:  entered the else if if");
 				DLog(@"deleting oldest cached songs");
 				[self performSelectorInBackground:@selector(removeOldestCachedSongs) withObject:nil];
 			}
 			else
 			{
+				NSLog(@"checkCache:  entered the else if else");
 				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"enableSongCachingSetting"];
 				
 				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"The song cache is full. Automatic song caching has been disabled.\n\nYou can re-enable it in the Settings menu (tap the gear, tap Settings at the top)" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
@@ -1530,7 +1572,7 @@ static MusicControlsSingleton *sharedInstance = nil;
 {
 	if (self.nextSongObject.path != nil)
 	{
-		NSString *songMD5 = [NSString md5:self.nextSongObject.path];
+		NSString *songMD5 = [self.nextSongObject.path md5];
 		
 		if ([[databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", songMD5] isEqualToString:@"YES"])
 		{
@@ -1809,7 +1851,7 @@ static MusicControlsSingleton *sharedInstance = nil;
 	
 	while ([result next])
 	{
-		[songIds addObject:[result stringForColumnIndex:0]];
+		[songIds addObject:[NSString stringWithString:[result stringForColumnIndex:0]]];
 	}
 	[result close];
 	

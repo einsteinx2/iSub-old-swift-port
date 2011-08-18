@@ -68,6 +68,7 @@
 
 
 - (void)dealloc {
+	[lastDeleteToggle release]; lastDeleteToggle = nil;
     [super dealloc];
 }
 

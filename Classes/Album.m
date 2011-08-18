@@ -113,11 +113,11 @@
 	newAlbum.artistName = nil;
 	newAlbum.artistId = nil;
 	
-	newAlbum.title = [title copy];
-	newAlbum.albumId = [albumId copy];
-	newAlbum.coverArtId = [coverArtId copy];
-	newAlbum.artistName = [artistName copy];
-	newAlbum.artistId = [artistId copy];
+	newAlbum.title = [[title copy] autorelease];
+	newAlbum.albumId = [[albumId copy] autorelease];
+	newAlbum.coverArtId = [[coverArtId copy] autorelease];
+	newAlbum.artistName = [[artistName copy] autorelease];
+	newAlbum.artistId = [[artistId copy] autorelease];
 	
 	return newAlbum;
 }
@@ -128,13 +128,13 @@
 }
 
 
-- (void) dealloc {
-	
-	[title release];
-	[albumId release];
-	[coverArtId release];
-	[artistName release];
-	[artistId release];
+- (void) dealloc 
+{	
+	[title release]; title = nil;
+	[albumId release]; albumId = nil;
+	[coverArtId release]; coverArtId = nil;
+	[artistName release]; artistName = nil;
+	[artistId release]; artistId = nil;
 	[super dealloc];
 }
 

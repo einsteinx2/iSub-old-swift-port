@@ -121,6 +121,37 @@
 	[updateTimer invalidate]; updateTimer = nil;
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+	NSLog(@"SongInfoView viewDidDisappear called");
+
+	[super viewDidDisappear:animated];
+	[songInfoToggleButton release]; songInfoToggleButton = nil;
+	[progressSlider release]; progressSlider = nil;
+	[progressLabel release]; progressLabel = nil;
+	[progressLabelBackground release]; progressLabelBackground = nil;
+	[elapsedTimeLabel release]; elapsedTimeLabel = nil;
+	[remainingTimeLabel release]; remainingTimeLabel = nil;
+	[artistLabel release]; artistLabel = nil;
+	[albumLabel release]; albumLabel = nil;
+	[titleLabel release]; titleLabel = nil;
+	[trackLabel release]; trackLabel = nil;
+	[yearLabel release]; yearLabel = nil;
+	[genreLabel release]; genreLabel = nil;
+	[bitRateLabel release]; bitRateLabel = nil;
+	[lengthLabel release]; lengthLabel = nil;
+	[repeatButton release]; repeatButton = nil;
+	[shuffleButton release]; shuffleButton = nil;
+}
+
+
+- (void)dealloc {
+	NSLog(@"SongInfoView dealloc called");
+	
+    [super dealloc];
+}
+
+
 - (void)didReceiveMemoryWarning 
 {
 	// Releases the view if it doesn't have a superview.
@@ -616,26 +647,6 @@
 	}
 }
 
-
-- (void)dealloc {
-	[songInfoToggleButton release];
-	[progressSlider release];
-	[progressLabel release];
-	[progressLabelBackground release];
-	[elapsedTimeLabel release];
-	[remainingTimeLabel release];
-	[artistLabel release];
-	[albumLabel release];
-	[titleLabel release];
-	[trackLabel release];
-	[yearLabel release];
-	[genreLabel release];
-	[bitRateLabel release];
-	[lengthLabel release];
-	[repeatButton release];
-	[shuffleButton release];
-    [super dealloc];
-}
 
 
 @end

@@ -44,4 +44,10 @@
     }
 }
 
+- (void)dealloc
+{
+	NSLog(@"PagingScrollView dealloc called");
+	[super dealloc];
+}
+
 @end

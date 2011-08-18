@@ -397,15 +397,25 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	Album *anAlbum = [[Album alloc] init];
 	FMResultSet *result = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE ROWID = %i", table, row]];
 	[result next];
-	if ([db hadError]) {
+	if ([db hadError]) 
+	{
 		DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
 	}
-	anAlbum.title = [result stringForColumn:@"title"];
-	anAlbum.albumId = [result stringForColumn:@"albumId"];
-	anAlbum.coverArtId = [result stringForColumn:@"coverArtId"];
-	anAlbum.artistName = [result stringForColumn:@"artistName"];
-	anAlbum.artistId = [result stringForColumn:@"artistId"];
+	else
+	{
+		if ([result stringForColumn:@"title"] != nil)
+			anAlbum.title = [NSString stringWithString:[result stringForColumn:@"title"]];
+		if ([result stringForColumn:@"albumId"] != nil)
+			anAlbum.albumId = [NSString stringWithString:[result stringForColumn:@"albumId"]];
+		if ([result stringForColumn:@"coverArtId"] != nil)
+			anAlbum.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
+		if ([result stringForColumn:@"artistName"] != nil)
+			anAlbum.artistName = [NSString stringWithString:[result stringForColumn:@"artistName"]];
+		if ([result stringForColumn:@"artistId"] != nil)
+			anAlbum.artistId = [NSString stringWithString:[result stringForColumn:@"artistId"]];
+	}
 	[result close];
+	
 	return [anAlbum autorelease];
 }
 
@@ -415,24 +425,36 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	Song *aSong = [[Song alloc] init];
 	FMResultSet *result = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE ROWID = %i", table, row]];
 	[result next];
-	if ([db hadError]) {
+	if ([db hadError]) 
+	{
 		DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
 	}
-	
-	aSong.title = [result stringForColumn:@"title"];
-	aSong.songId = [result stringForColumn:@"songId"];
-	aSong.artist = [result stringForColumn:@"artist"];
-	aSong.album = [result stringForColumn:@"album"];
-	aSong.genre = [result stringForColumn:@"genre"];
-	aSong.coverArtId = [result stringForColumn:@"coverArtId"];
-	aSong.path = [result stringForColumn:@"path"];
-	aSong.suffix = [result stringForColumn:@"suffix"];
-	aSong.transcodedSuffix = [result stringForColumn:@"transcodedSuffix"];
-	aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
-	aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
-	aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
-	aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
-	aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
+	else
+	{
+		if ([result stringForColumn:@"title"] != nil)
+			aSong.title = [NSString stringWithString:[result stringForColumn:@"title"]];
+		if ([result stringForColumn:@"songId"] != nil)
+			aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
+		if ([result stringForColumn:@"artist"] != nil)
+			aSong.artist = [NSString stringWithString:[result stringForColumn:@"artist"]];
+		if ([result stringForColumn:@"album"] != nil)
+			aSong.album = [NSString stringWithString:[result stringForColumn:@"album"]];
+		if ([result stringForColumn:@"genre"] != nil)
+			aSong.genre = [NSString stringWithString:[result stringForColumn:@"genre"]];
+		if ([result stringForColumn:@"coverArtId"] != nil)
+			aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
+		if ([result stringForColumn:@"path"] != nil)
+			aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
+		if ([result stringForColumn:@"suffix"] != nil)
+			aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
+		if ([result stringForColumn:@"transcodedSuffix"] != nil)
+			aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
+		aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
+		aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
+		aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
+		aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
+		aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
+	}
 	
 	[result close];
 	
@@ -457,15 +479,24 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 		DLog(@"Err %d: %@", [allSongsDb lastErrorCode], [allSongsDb lastErrorMessage]);
 	}
 	
-	aSong.title = [[result stringForColumn:@"title"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	aSong.songId = [result stringForColumn:@"songId"];
-	aSong.artist = [[result stringForColumn:@"artist"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	aSong.album = [[result stringForColumn:@"album"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	aSong.genre = [[result stringForColumn:@"genre"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	aSong.coverArtId = [result stringForColumn:@"coverArtId"];
-	aSong.path = [result stringForColumn:@"path"];
-	aSong.suffix = [result stringForColumn:@"suffix"];
-	aSong.transcodedSuffix = [result stringForColumn:@"transcodedSuffix"];
+	if ([result stringForColumn:@"title"] != nil)
+		aSong.title = [[result stringForColumn:@"title"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	if ([result stringForColumn:@"songId"] != nil)
+		aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
+	if ([result stringForColumn:@"artist"] != nil)
+		aSong.artist = [[result stringForColumn:@"artist"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	if ([result stringForColumn:@"album"] != nil)
+		aSong.album = [[result stringForColumn:@"album"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	if ([result stringForColumn:@"genre"] != nil)
+		aSong.genre = [[result stringForColumn:@"genre"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	if ([result stringForColumn:@"coverArtId"] != nil)
+		aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
+	if ([result stringForColumn:@"path"] != nil)
+		aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
+	if ([result stringForColumn:@"suffix"] != nil)
+		aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
+	if ([result stringForColumn:@"transcodedSuffix"] != nil)
+		aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
 	aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
 	aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
 	aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
@@ -503,9 +534,33 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 			DLog(@"Err %d: %@", [genresDb lastErrorCode], [genresDb lastErrorMessage]);
 		}
 	}
-	
 	[result next];
-	aSong.title = [[result stringForColumnIndex:1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	
+	if ([result stringForColumn:@"title"] != nil)
+		aSong.title = [[result stringForColumn:@"title"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	if ([result stringForColumn:@"songId"] != nil)
+		aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
+	if ([result stringForColumn:@"artist"] != nil)
+		aSong.artist = [[result stringForColumn:@"artist"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	if ([result stringForColumn:@"album"] != nil)
+		aSong.album = [[result stringForColumn:@"album"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	if ([result stringForColumn:@"genre"] != nil)
+		aSong.genre = [[result stringForColumn:@"genre"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	if ([result stringForColumn:@"coverArtId"] != nil)
+		aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
+	if ([result stringForColumn:@"path"] != nil)
+		aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
+	if ([result stringForColumn:@"suffix"] != nil)
+		aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
+	if ([result stringForColumn:@"transcodedSuffix"] != nil)
+		aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
+	aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
+	aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
+	aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
+	aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
+	aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
+	
+	/*aSong.title = [[result stringForColumnIndex:1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 	aSong.songId = [result stringForColumnIndex:2];
 	aSong.artist = [[result stringForColumnIndex:3] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 	aSong.album = [[result stringForColumnIndex:4] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -518,7 +573,7 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	aSong.bitRate = [NSNumber numberWithInt:[result intForColumnIndex:11]];
 	aSong.track = [NSNumber numberWithInt:[result intForColumnIndex:12]];
 	aSong.year = [NSNumber numberWithInt:[result intForColumnIndex:13]];
-	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:14]];
+	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:14]];*/
 	
 	[result close];
 	return [aSong autorelease];
@@ -532,9 +587,33 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	if ([songCacheDb hadError]) {
 		DLog(@"Err %d: %@", [songCacheDb lastErrorCode], [songCacheDb lastErrorMessage]);
 	}
-	
 	[result next];
-	aSong.title = [result stringForColumnIndex:4];
+	
+	if ([result stringForColumn:@"title"] != nil)
+		aSong.title = [[result stringForColumn:@"title"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	if ([result stringForColumn:@"songId"] != nil)
+		aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
+	if ([result stringForColumn:@"artist"] != nil)
+		aSong.artist = [[result stringForColumn:@"artist"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	if ([result stringForColumn:@"album"] != nil)
+		aSong.album = [[result stringForColumn:@"album"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	if ([result stringForColumn:@"genre"] != nil)
+		aSong.genre = [[result stringForColumn:@"genre"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	if ([result stringForColumn:@"coverArtId"] != nil)
+		aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
+	if ([result stringForColumn:@"path"] != nil)
+		aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
+	if ([result stringForColumn:@"suffix"] != nil)
+		aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
+	if ([result stringForColumn:@"transcodedSuffix"] != nil)
+		aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
+	aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
+	aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
+	aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
+	aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
+	aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
+	
+	/*aSong.title = [result stringForColumnIndex:4];
 	aSong.songId = [result stringForColumnIndex:5];
 	aSong.artist = [result stringForColumnIndex:6];
 	aSong.album = [result stringForColumnIndex:7];
@@ -547,7 +626,7 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	aSong.bitRate = [NSNumber numberWithInt:[result intForColumnIndex:14]];
 	aSong.track = [NSNumber numberWithInt:[result intForColumnIndex:15]];
 	aSong.year = [NSNumber numberWithInt:[result intForColumnIndex:16]];
-	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:17]];
+	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:17]];*/
 	
 	[result close];
 	return [aSong autorelease];
@@ -569,9 +648,33 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	if ([localPlaylistsDb hadError]) {
 		DLog(@"Err %d: %@", [localPlaylistsDb lastErrorCode], [localPlaylistsDb lastErrorMessage]);
 	}
-	
 	[result next];
-	aSong.title = [result stringForColumnIndex:0];
+	
+	if ([result stringForColumn:@"title"] != nil)
+		aSong.title = [[result stringForColumn:@"title"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	if ([result stringForColumn:@"songId"] != nil)
+		aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
+	if ([result stringForColumn:@"artist"] != nil)
+		aSong.artist = [[result stringForColumn:@"artist"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	if ([result stringForColumn:@"album"] != nil)
+		aSong.album = [[result stringForColumn:@"album"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	if ([result stringForColumn:@"genre"] != nil)
+		aSong.genre = [[result stringForColumn:@"genre"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	if ([result stringForColumn:@"coverArtId"] != nil)
+		aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
+	if ([result stringForColumn:@"path"] != nil)
+		aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
+	if ([result stringForColumn:@"suffix"] != nil)
+		aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
+	if ([result stringForColumn:@"transcodedSuffix"] != nil)
+		aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
+	aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
+	aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
+	aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
+	aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
+	aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
+	
+	/*aSong.title = [result stringForColumnIndex:0];
 	aSong.songId = [result stringForColumnIndex:1];
 	aSong.artist = [result stringForColumnIndex:2];
 	aSong.album = [result stringForColumnIndex:3];
@@ -584,7 +687,7 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	aSong.bitRate = [NSNumber numberWithInt:[result intForColumnIndex:10]];
 	aSong.track = [NSNumber numberWithInt:[result intForColumnIndex:11]];
 	aSong.year = [NSNumber numberWithInt:[result intForColumnIndex:12]];
-	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:13]];
+	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:13]];*/
 	
 	[result close];
 	return [aSong autorelease];
@@ -738,9 +841,9 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	// Get the song info
 	FMResultSet *result = [songCacheDb executeQuery:@"SELECT genre, transcodedSuffix, suffix FROM cachedSongs WHERE md5 = ?", md5];
 	[result next];
-	NSString *genre = [result stringForColumnIndex:0];
-	NSString *transcodedSuffix = [result stringForColumnIndex:1];
-	NSString *suffix = [result stringForColumnIndex:2];
+	NSString *genre = [NSString stringWithString:[result stringForColumnIndex:0]];
+	NSString *transcodedSuffix = [NSString stringWithString:[result stringForColumnIndex:1]];
+	NSString *suffix = [NSString stringWithString:[result stringForColumnIndex:2]];
 	[result close];
 	if ([songCacheDb hadError])
 		hadError = YES;

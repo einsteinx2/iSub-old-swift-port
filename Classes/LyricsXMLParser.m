@@ -108,9 +108,9 @@
 
 - (void) dealloc 
 {
-	[artist release];
-	[title release];
-	[currentElementValue release];
+	[artist release]; artist = nil;
+	[title release]; title = nil;
+	[currentElementValue release]; currentElementValue = nil;
 	[super dealloc];
 }
 

@@ -87,8 +87,8 @@
 	newArtist.name = nil;
 	newArtist.artistId = nil;
 	
-	newArtist.name = [name copy];
-	newArtist.artistId = [artistId copy];
+	newArtist.name = [[name copy] autorelease];
+	newArtist.artistId = [[artistId copy] autorelease];
 	
 	return newArtist;
 }
@@ -100,8 +100,8 @@
 
 - (void) dealloc 
 {	
-	[name release];
-	[artistId release];
+	[name release]; name = nil;
+	[artistId release]; artistId = nil;
 	[super dealloc];
 }
 
