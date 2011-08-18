@@ -204,9 +204,9 @@
     pageControl.currentPage = page;
 	
     // load the visible page and the page on either side of it (to avoid flashes when the user starts scrolling)
-    [self loadScrollViewWithPage:page - 1];
-    [self loadScrollViewWithPage:page];
-    [self loadScrollViewWithPage:page + 1];
+    //[self loadScrollViewWithPage:page - 1];
+    //[self loadScrollViewWithPage:page];
+    //[self loadScrollViewWithPage:page + 1];
 	
 	// Send a notification so the playlist view hides the edit controls
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"hideEditControls" object:nil];
@@ -290,9 +290,12 @@
     [super didReceiveMemoryWarning];
 }
 
-
-- (void)viewDidUnload 
+- (void)viewDidDisappear:(BOOL)animated
 {
+	[super viewDidDisappear:animated];
+	
+	NSLog(@"PageControlViewController viewDidDisappear called");
+	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfoFast" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfo" object:nil];
 	// Release any retained subviews of the main view.
@@ -303,8 +306,17 @@
 	for (UIViewController *subView in viewControllers)
 	{
 		[subView.view removeFromSuperview];
+		[subView viewDidDisappear:NO];
 	}
 	
+	[scrollView release]; scrollView = nil;
+	[pageControl release]; pageControl = nil;
+	[viewControllers release]; viewControllers = nil;
+}
+
+
+- (void)viewDidUnload 
+{
 	[super viewDidUnload];
 }
 
@@ -312,9 +324,6 @@
 - (void)dealloc 
 {
 	NSLog(@"PageControl dealloc called");
-	[scrollView release]; scrollView = nil;
-	[pageControl release]; pageControl = nil;
-	[viewControllers release]; viewControllers = nil;
     [super dealloc];
 }
 

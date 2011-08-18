@@ -95,10 +95,10 @@
 	//
 	// Uncomment to redirect the console output to a log file
 	//
-	//NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	//NSString *documentsDirectory = [paths objectAtIndex:0];
-	//NSString *logPath = [documentsDirectory stringByAppendingPathComponent:@"console.log"];
-	//freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex:0];
+	NSString *logPath = [documentsDirectory stringByAppendingPathComponent:@"console.log"];
+	freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
 	//
 	
 	NSLog(@"1");
@@ -811,6 +811,9 @@ NSLog(@"38");
 						break;
 					}
 				}
+				
+				// Sleep for a second to avoid the 100% cpu problem
+				sleep(1);
 			}
 		});
 	}

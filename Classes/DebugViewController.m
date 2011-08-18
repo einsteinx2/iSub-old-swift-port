@@ -193,19 +193,21 @@
 {
     [super viewDidUnload];
 	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfoFast" object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfo" object:nil];
-	
-	[updateTimer invalidate]; updateTimer = nil;
-	[updateTimer2 invalidate]; updateTimer2 = nil;
 	//[[NSNotificationCenter defaultCenter] removeObserver:self name:@"queuedBuffers" object:nil];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
 
-
-- (void)dealloc {
-	NSLog(@"DebugViewController dealloc called");
+- (void)viewDidDisappear:(BOOL)animated
+{
+	NSLog(@"DebugViewController viewDidDisappear called");
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfoFast" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfo" object:nil];
+	
+	[updateTimer invalidate]; updateTimer = nil;
+	[updateTimer2 invalidate]; updateTimer2 = nil;
+	
 	[currentSongProgressView release]; currentSongProgressView = nil;
 	[nextSongLabel release]; nextSongLabel = nil;
 	[nextSongProgressView release]; nextSongProgressView = nil;
@@ -217,7 +219,13 @@
 	[freeSpaceLabel release]; freeSpaceLabel = nil;
 	
 	[songInfoToggleButton release]; songInfoToggleButton = nil;
-    [super dealloc];
+
+}
+
+
+- (void)dealloc {
+	
+	[super dealloc];
 }
 
 

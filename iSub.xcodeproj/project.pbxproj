@@ -2336,8 +2336,6 @@
 				53ABE54E1166641B00197877 /* PlaylistSongUITableViewCell.m */,
 				53B9D0B61279FB6B00CAB0E0 /* SearchSongUITableViewCell.h */,
 				53B9D0B71279FB6B00CAB0E0 /* SearchSongUITableViewCell.m */,
-				530CE842119B9D9100728ED5 /* SongInfoPlaylistCustomUITableView.h */,
-				530CE843119B9D9100728ED5 /* SongInfoPlaylistCustomUITableView.m */,
 				534E446F1155B106000B4134 /* SongUITableViewCell.h */,
 				534E44701155B106000B4134 /* SongUITableViewCell.m */,
 				53AAB77812B98699007EA08B /* StoreUITableViewCell.h */,
@@ -3125,6 +3123,8 @@
 				53CECEF7113D8B9500B09699 /* SongInfoViewController.m */,
 				53CECEF8113D8B9500B09699 /* SongInfoViewController.xib */,
 				535B726B134D0721003E0E1C /* SongInfoViewController-iPad.xib */,
+				530CE842119B9D9100728ED5 /* SongInfoPlaylistCustomUITableView.h */,
+				530CE843119B9D9100728ED5 /* SongInfoPlaylistCustomUITableView.m */,
 				53F4A226117011B900BB8411 /* CurrentPlaylistBackgroundViewController.h */,
 				53F4A227117011B900BB8411 /* CurrentPlaylistBackgroundViewController.m */,
 				53F4A228117011B900BB8411 /* CurrentPlaylistBackgroundViewController.xib */,
@@ -4789,8 +4789,8 @@
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 				);
 				PRODUCT_NAME = iSub;
-				PROVISIONING_PROFILE = "ADE45AF6-79E3-4B42-B5D8-788B5182843E";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ADE45AF6-79E3-4B42-B5D8-788B5182843E";
+				PROVISIONING_PROFILE = "6182084F-B608-4BD2-8EBC-FFB1DFA283A0";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "6182084F-B608-4BD2-8EBC-FFB1DFA283A0";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -563,8 +563,8 @@
 	[UIView setAnimationCurve:UIViewAnimationCurveLinear];
 	if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
 	{
-		searchSegment.alpha = 1;
 		searchSegment.enabled = YES;
+		searchSegment.alpha = 1;
 		searchSegmentBackground.alpha = 1;
 	}
 	searchOverlay.alpha = 1;

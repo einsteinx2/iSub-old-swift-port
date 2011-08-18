@@ -247,20 +247,48 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 - (void)viewDidDisappear:(BOOL)animated
 {
 	[super viewDidDisappear:animated];
+	NSLog(@"player viewDidDisappear called");
 	
 	[[UIApplication sharedApplication] setStatusBarHidden:NO animated:NO];
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"hideSongInfoFast" object:nil];
-}
-
-- (void)viewDidUnload
-{
-	[super viewDidUnload];
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"setPlayButtonImage" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"setPauseButtonImage" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"setSongTitle" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"initSongInfo" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"createReflection" object:nil];
+	
+	[pageControlViewController viewDidDisappear:NO];
+	[pageControlViewController release]; pageControlViewController = nil;
+	[playButton release]; playButton = nil;
+	[nextButton release]; nextButton = nil;
+	[prevButton release]; prevButton = nil;
+	[volumeSlider release]; volumeSlider = nil;
+	[coverArtImageView release]; coverArtImageView = nil;
+	[songInfoToggleButton release]; songInfoToggleButton = nil;
+	[reflectionView release]; reflectionView = nil;
+	[pageControlViewController release]; pageControlViewController = nil;
+}
+
+#pragma mark Memory Management
+
+
+- (void)didReceiveMemoryWarning 
+{
+	// Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+}
+
+//
+// dealloc
+//
+// Releases instance memory.
+//
+- (void)dealloc
+{
+	NSLog(@"player dealloc called");
+	
+	[super dealloc];
 }
 
 #pragma mark Rotation
@@ -572,7 +600,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		coverArtImageView.transform = CGAffineTransformMakeScale(1, 1);
 		
 		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:0.5];
+		[UIView setAnimationDuration:0.4];
 		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:coverArtImageView cache:YES];
 		//[UIView setAnimationDelegate:self];
 		//[UIView setAnimationDidStopSelector:@selector(releaseSongInfo:finished:context:)];
@@ -739,37 +767,6 @@ CGContextRef MyCreateBitmapContextPlayer(int pixelsWide, int pixelsHigh)
 		reflectionView.image = [self reflectedImage:coverArtImageView withHeight:reflectionHeight];
 		reflectionView.alpha = kDefaultReflectionOpacity;
 	}
-}
-
-
-#pragma mark Memory Management
-
-
-- (void)didReceiveMemoryWarning 
-{
-	// Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-}
-
-
-//
-// dealloc
-//
-// Releases instance memory.
-//
-- (void)dealloc
-{
-	NSLog(@"player dealloc called");
-	[playButton release]; playButton = nil;
-	[nextButton release]; nextButton = nil;
-	[prevButton release]; prevButton = nil;
-	[volumeSlider release]; volumeSlider = nil;
-	[coverArtImageView release]; coverArtImageView = nil;
-	[songInfoToggleButton release]; songInfoToggleButton = nil;
-	[reflectionView release]; reflectionView = nil;
-	[pageControlViewController release]; pageControlViewController = nil;
-
-	[super dealloc];
 }
 
 @end
