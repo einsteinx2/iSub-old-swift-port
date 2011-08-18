@@ -28,15 +28,23 @@
     [super didReceiveMemoryWarning];
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+	NSLog(@"current playlist background controller viewDidDisappear called");
+	[playlistView viewDidDisappear:NO];
+	[playlistView release]; playlistView = nil;
+}
+
 - (void)viewDidUnload {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+	//[playlistView.view removeFromSuperview];
 }
 
 
 - (void)dealloc {
-	[playlistView release];
+	NSLog(@"CurrentPlaylistBackgroundViewController dealloc called");
     [super dealloc];
 }
 

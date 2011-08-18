@@ -27,9 +27,11 @@
 @synthesize scrollView, pageControl, viewControllers;
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewWillAppear:(BOOL)animated 
+//- (void)viewWillAppear:(BOOL)animated 
+- (void)viewDidLoad
 {
-    [super viewWillAppear:animated];
+    //[super viewWillAppear:animated];
+	[super viewDidLoad];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideSongInfoFast) name:@"hideSongInfoFast" object:nil];
 	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideSongInfo) name:@"hideSongInfo" object:nil];
@@ -41,15 +43,15 @@
 	else
 		numberOfPages = 3;	
 	
-	/*if ([MusicControlsSingleton sharedInstance].currentSongObject)
-	{
-		isCurrentSong = YES;
-	}
-	else
-	{
-		isCurrentSong = NO;
-		numberOfPages -= 1;
-	}*/
+	//if ([MusicControlsSingleton sharedInstance].currentSongObject)
+	//{
+	//	isCurrentSong = YES;
+	//}
+	//else
+	//{
+	//	isCurrentSong = NO;
+	//	numberOfPages -= 1;
+	//}
 	isCurrentSong = YES;
 	
 	//Start the view with 0 alpha so it can be faded into view
@@ -88,14 +90,26 @@
 		[self loadScrollViewWithPage:i];
 	}
 	
-	/*// pages are created on demand
+	// pages are created on demand
     // load the visible page
     // load the page on either side to avoid flashes when the user starts scrolling
 	// NOTE: LOADING ALL PAGES AT ONCE TO PREVENT SLOWDOWN BUG WHEN SLIDING TO SECOND SCREEN. KEEPING REST OF THE CODE AS IS FOR REFERENCE FOR FUTURE PROJECTS.
-	[self loadScrollViewWithPage:0];
-    [self loadScrollViewWithPage:1];
-	[self loadScrollViewWithPage:2]; // THIS IS THE EXTRA LOADED PAGE, USUALLY ONLY FIRST 2 SHOULD BE PRE-LOADED
-	[self loadScrollViewWithPage:3]; // THIS IS THE EXTRA LOADED PAGE, USUALLY ONLY FIRST 2 SHOULD BE PRE-LOADED*/
+	//[self loadScrollViewWithPage:0];
+    //[self loadScrollViewWithPage:1];
+	//[self loadScrollViewWithPage:2]; // THIS IS THE EXTRA LOADED PAGE, USUALLY ONLY FIRST 2 SHOULD BE PRE-LOADED
+	//[self loadScrollViewWithPage:3]; // THIS IS THE EXTRA LOADED PAGE, USUALLY ONLY FIRST 2 SHOULD BE PRE-LOADED
+}
+
+/*- (void)viewWillAppear:(BOOL)animated 
+{
+	NSLog(@"page control viewWillAppear called");
+	[super viewWillAppear:animated];
+	[scrollView setContentOffset:CGPointZero animated:YES];
+}*/
+
+- (void)resetScrollView
+{
+	[scrollView setContentOffset:CGPointZero animated:YES];
 }
 
 
@@ -147,6 +161,10 @@
 		[viewControllers replaceObjectAtIndex:page withObject:controller];
 		[controller release];
     }
+	else
+	{
+		DLog(@"Not loading view, already loaded");
+	}
 	
     // add the controller's view to the scroll view
     if (nil == controller.view.superview) 
@@ -171,7 +189,11 @@
     // We don't want a "feedback loop" between the UIPageControl and the scroll delegate in
     // which a scroll event generated from the user hitting the page control triggers updates from
     // the delegate method. We use a boolean to disable the delegate logic when the page control is used.
-    if (pageControlUsed) {
+    if (pageControlUsed) 
+	{
+		// Send a notification so the playlist view hides the edit controls
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"hideEditControls" object:nil];
+		
         // do nothing - the scroll was initiated from the page control, not the user dragging
         return;
     }
@@ -182,9 +204,9 @@
     pageControl.currentPage = page;
 	
     // load the visible page and the page on either side of it (to avoid flashes when the user starts scrolling)
-    [self loadScrollViewWithPage:page - 1];
-    [self loadScrollViewWithPage:page];
-    [self loadScrollViewWithPage:page + 1];
+    //[self loadScrollViewWithPage:page - 1];
+    //[self loadScrollViewWithPage:page];
+    //[self loadScrollViewWithPage:page + 1];
 	
 	// Send a notification so the playlist view hides the edit controls
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"hideEditControls" object:nil];
@@ -231,7 +253,7 @@
 	
 	self.view.alpha = 1.0;
 	
-	[UIView commitAnimations];
+	//[UIView commitAnimations];
 }
  
  
@@ -244,7 +266,9 @@
 	
 	[UIView commitAnimations];
 	
-	[self viewDidUnload];
+	[self resetScrollView];
+	
+	//[self viewDidUnload];
 }
  
  
@@ -254,7 +278,9 @@
 	
 	[self.view removeFromSuperview];
 	
-	[self viewDidUnload];
+	[self resetScrollView];
+	
+	//[self viewDidUnload];
 }
 
 
@@ -264,9 +290,12 @@
     [super didReceiveMemoryWarning];
 }
 
-
-- (void)viewDidUnload 
+- (void)viewDidDisappear:(BOOL)animated
 {
+	[super viewDidDisappear:animated];
+	
+	NSLog(@"PageControlViewController viewDidDisappear called");
+	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfoFast" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfo" object:nil];
 	// Release any retained subviews of the main view.
@@ -274,15 +303,27 @@
 	//self.scrollView = nil;
 	//self.pageControl = nil;
 	
+	for (UIViewController *subView in viewControllers)
+	{
+		[subView.view removeFromSuperview];
+		[subView viewDidDisappear:NO];
+	}
+	
+	[scrollView release]; scrollView = nil;
+	[pageControl release]; pageControl = nil;
+	[viewControllers release]; viewControllers = nil;
+}
+
+
+- (void)viewDidUnload 
+{
 	[super viewDidUnload];
 }
 
 
 - (void)dealloc 
 {
-	[scrollView release];
-	[pageControl release];
-	[viewControllers release];
+	NSLog(@"PageControl dealloc called");
     [super dealloc];
 }
 

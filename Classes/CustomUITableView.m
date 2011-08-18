@@ -112,7 +112,10 @@
 	return !blockInput;
 }
 
-- (void)dealloc {
+- (void)dealloc 
+{
+    [lastDeleteToggle release]; lastDeleteToggle = nil;
+    [lastOverlayToggle release]; lastOverlayToggle = nil;
     [super dealloc];
 }
 

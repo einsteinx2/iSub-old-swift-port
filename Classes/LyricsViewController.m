@@ -104,17 +104,24 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
-- (void)viewDidUnload 
+- (void)viewDidDisappear:(BOOL)animated
 {
-    [super viewDidUnload];
-		
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"lyricsDoneLoading" object:nil];
+	[super viewDidDisappear:animated];
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"lyricsDoneLoading" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfoFast" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfo" object:nil];
 }
 
+- (void)viewDidUnload 
+{
+    [super viewDidUnload];
+}
+
 
 - (void)dealloc {
+	NSLog(@"LyricsViewController dealloc called");
+	[textView release]; textView = nil;
     [super dealloc];
 
 }

@@ -15,7 +15,7 @@
 
 - (void) dealloc 
 {
-	[name release];
+	[name release]; name = nil;
 	[super dealloc];
 }
 

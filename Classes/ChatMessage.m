@@ -17,8 +17,8 @@
 {
 	ChatMessage *newChatMessage = [[ChatMessage alloc] init];
 	newChatMessage.timestamp = timestamp;
-	newChatMessage.user = [user copy];
-	newChatMessage.message = [message copy];
+	newChatMessage.user = [[user copy] autorelease];
+	newChatMessage.message = [[message copy] autorelease];
 	
 	return newChatMessage;
 }
@@ -26,8 +26,8 @@
 
 - (void) dealloc 
 {
-	[user release];
-	[message release];
+	[user release]; user = nil;
+	[message release]; message = nil;
 	[super dealloc];
 }
 

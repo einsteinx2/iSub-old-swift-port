@@ -190,11 +190,13 @@
 	{
 		if ([result intForColumnIndex:1] > segment)
 		{
-			[self.listOfAlbums addObject:[NSArray arrayWithObjects:[result stringForColumnIndex:0], [result stringForColumnIndex:2], nil]];
+			[self.listOfAlbums addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], 
+																   [NSString stringWithString:[result stringForColumnIndex:2]], nil]];
 		}
 		else
 		{
-			[self.listOfSongs addObject:[NSArray arrayWithObjects:[result stringForColumnIndex:0], [NSString stringWithFormat:@"%i", [result intForColumnIndex:3]], nil]];
+			[self.listOfSongs addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], 
+																  [NSString stringWithFormat:@"%i", [result intForColumnIndex:3]], nil]];
 		}
 	}
 
@@ -256,7 +258,7 @@
 
 	while ([result next])
 	{
-		[databaseControls addSongToPlaylistQueue:[databaseControls songFromCacheDb:[result stringForColumnIndex:0]]];
+		[databaseControls addSongToPlaylistQueue:[databaseControls songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]]];
 	}
 	
 	if (isShuffle)
@@ -358,12 +360,40 @@
 {
 	Song *aSong = [[Song alloc] init];
 	FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT * FROM cachedSongs WHERE md5 = ?", md5];
-	[result next];
-	if ([databaseControls.songCacheDb hadError]) {
+	if ([databaseControls.songCacheDb hadError]) 
+	{
 		DLog(@"Err %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
 	}
+	else
+	{
+		[result next];
+		
+		if ([result stringForColumn:@"title"] != nil)
+			aSong.title = [[result stringForColumn:@"title"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		if ([result stringForColumn:@"songId"] != nil)
+			aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
+		if ([result stringForColumn:@"artist"] != nil)
+			aSong.artist = [[result stringForColumn:@"artist"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		if ([result stringForColumn:@"album"] != nil)
+			aSong.album = [[result stringForColumn:@"album"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		if ([result stringForColumn:@"genre"] != nil)
+			aSong.genre = [[result stringForColumn:@"genre"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		if ([result stringForColumn:@"coverArtId"] != nil)
+			aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
+		if ([result stringForColumn:@"path"] != nil)
+			aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
+		if ([result stringForColumn:@"suffix"] != nil)
+			aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
+		if ([result stringForColumn:@"transcodedSuffix"] != nil)
+			aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
+		aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
+		aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
+		aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
+		aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
+		aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
+	}
 	
-	aSong.title = [result stringForColumnIndex:4];
+	/*aSong.title = [result stringForColumnIndex:4];
 	aSong.songId = [result stringForColumnIndex:5];
 	aSong.artist = [result stringForColumnIndex:6];
 	aSong.album = [result stringForColumnIndex:7];
@@ -376,7 +406,7 @@
 	aSong.bitRate = [NSNumber numberWithInt:[result intForColumnIndex:14]];
 	aSong.track = [NSNumber numberWithInt:[result intForColumnIndex:15]];
 	aSong.year = [NSNumber numberWithInt:[result intForColumnIndex:16]];
-	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:17]];
+	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:17]];*/
 	
 	[result close];
 	return [aSong autorelease];
@@ -546,12 +576,12 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			{
 				if ([result intForColumnIndex:1] > (segment + 1))
 				{
-					[cacheAlbumViewController.listOfAlbums addObject:[NSArray arrayWithObjects:[result stringForColumnIndex:0], 
-																							   [result stringForColumnIndex:2], nil]];
+					[cacheAlbumViewController.listOfAlbums addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], 
+																							   [NSString stringWithString:[result stringForColumnIndex:2]], nil]];
 				}
 				else
 				{
-					[cacheAlbumViewController.listOfSongs addObject:[NSArray arrayWithObjects:[result stringForColumnIndex:0], 
+					[cacheAlbumViewController.listOfSongs addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], 
 																							  [NSNumber numberWithInt:[result intForColumnIndex:3]], nil]];
 					
 					BOOL multipleSameTrackNumbers = NO;

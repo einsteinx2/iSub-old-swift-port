@@ -832,11 +832,22 @@
 - (void)viewDidUnload {
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
     // For example: self.myOutlet = nil;
+	NSLog(@"CurrentPlaylistViewController viewDidUnload");
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideEditControls" object:nil];
+	[headerView release]; headerView = nil;
+	[savePlaylistLabel release]; savePlaylistLabel = nil;
+	[deleteSongsLabel release]; deleteSongsLabel = nil;
+	[playlistCountLabel release]; playlistCountLabel = nil;
+	[savePlaylistButton release]; savePlaylistButton = nil;
+	[editPlaylistLabel release]; editPlaylistLabel = nil;
+	
+	[playlistNameTextField release]; playlistNameTextField = nil;
 }
 
 
 - (void)dealloc {
+	NSLog(@"CurrentPlaylistViewController dealloc called");
+	
     [super dealloc];
 }
 

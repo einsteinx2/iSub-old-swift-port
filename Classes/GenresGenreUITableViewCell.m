@@ -87,7 +87,7 @@
 	
 	while ([result next])
 	{
-		[databaseControls addSongToCacheQueue:[databaseControls songFromGenreDb:[result stringForColumnIndex:0]]];
+		[databaseControls addSongToCacheQueue:[databaseControls songFromGenreDb:[NSString stringWithString:[result stringForColumnIndex:0]]]];
 	}
 	
 	if (musicControls.isQueueListDownloading == NO)
@@ -176,7 +176,7 @@
 	while ([result next])
 	{
 		//DLog(@"adding %@", [result stringForColumnIndex:0]);
-		[databaseControls addSongToPlaylistQueue:[databaseControls songFromGenreDb:[result stringForColumnIndex:0]]];
+		[databaseControls addSongToPlaylistQueue:[databaseControls songFromGenreDb:[NSString stringWithString:[result stringForColumnIndex:0]]]];
 	}
 	
 	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:YES];

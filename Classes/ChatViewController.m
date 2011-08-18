@@ -282,6 +282,7 @@
 	formatter.timeStyle = kCFDateFormatterShortStyle;
 	formatter.locale = [NSLocale currentLocale];
 	NSString *formattedDate = [formatter stringFromDate:date];
+	[formatter release];
 	
 	return formattedDate;
 }
