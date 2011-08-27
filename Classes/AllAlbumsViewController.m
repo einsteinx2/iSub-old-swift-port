@@ -32,7 +32,7 @@
 #import "CustomUITableView.h"
 #import "CustomUIAlertView.h"
 
-#import "DefaultSettings.h"
+#import "SavedSettings.h"
 
 @implementation AllAlbumsViewController
 
@@ -165,7 +165,7 @@ static NSInteger order (id a, id b, void* context)
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	
 	viewObjects.isAlbumsLoading = YES;
-	[[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:[NSString stringWithFormat:@"%@isAllAlbumsLoading", appDelegate.defaultUrl]];
+	[[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:[NSString stringWithFormat:@"%@isAllAlbumsLoading", [SavedSettings sharedInstance].urlString]];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
 	// Check to see if we need to create the tables
@@ -183,7 +183,7 @@ static NSInteger order (id a, id b, void* context)
 	
 	if ([databaseControls.allAlbumsDb intForQuery:@"SELECT iteration FROM resumeLoad"] == 0)
 	{
-		NSArray *listOfArtists = [[DefaultSettings sharedInstance] getTopLevelFolders];
+		NSArray *listOfArtists = [[SavedSettings sharedInstance] getTopLevelFolders];
 		
 		int sectionNum = [databaseControls.allAlbumsDb intForQuery:@"SELECT sectionNum FROM resumeLoad"];
 		int sectionCount = [listOfArtists count];
@@ -429,7 +429,7 @@ static NSInteger order (id a, id b, void* context)
 		// If the database hasn't been created or the device was shutoff during the process then create it, otherwise show the header
 		if ([databaseControls.allAlbumsDb tableExists:@"allAlbums"] == NO || [[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllAlbumsLoading", appDelegate.defaultUrl]] isEqualToString:@"YES"])
 		{
-			if([[DefaultSettings sharedInstance] getTopLevelFolders] == nil)
+			if([[SavedSettings sharedInstance] getTopLevelFolders] == nil)
 			{
 				CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"You must load the Folders tab first" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 				[alert show];

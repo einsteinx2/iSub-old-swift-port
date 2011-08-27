@@ -21,6 +21,8 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "UIDevice-Hardware.h"
 #import "QueueAll.h"
+#import "SavedSettings.h"
+#import "GTMNSString+HTML.h"
 
 static DatabaseControlsSingleton *sharedInstance = nil;
 
@@ -34,14 +36,16 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 
 - (void)initDatabases
 {
-	//DLog(@"%@", [NSString stringWithFormat:@"%@/%@allAlbums.db", databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]);
+	NSString *urlStringMd5 = [[[SavedSettings sharedInstance] urlString] md5];
+	
+	//DLog(@"%@", [NSString stringWithFormat:@"%@/%@allAlbums.db", databaseFolderPath, urlStringMd5]);
 	
 	// Only load Albums, Songs, and Genre databases if this is a newer device
 	//if (![[UIDevice currentDevice] isOldDevice])
 	if ([[appDelegate.settingsDictionary objectForKey:@"enableSongsTabSetting"] isEqualToString:@"YES"])
 	{
 		// Setup the allAlbums database
-		allAlbumsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allAlbums.db", databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]] retain];
+		allAlbumsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allAlbums.db", databaseFolderPath, urlStringMd5]] retain];
 		[allAlbumsDb executeUpdate:@"PRAGMA cache_size = 1"];
 		if ([allAlbumsDb open] == NO) { DLog(@"Could not open allAlbumsDb."); }
 		
@@ -64,12 +68,12 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 		 if ([allAlbumsDb open] == NO) { DLog(@"Could not open allAlbumsDb."); }*/
 		
 		// Setup the allSongs database
-		allSongsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allSongs.db", databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]] retain];
+		allSongsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allSongs.db", databaseFolderPath, urlStringMd5]] retain];
 		[allSongsDb executeUpdate:@"PRAGMA cache_size = 1"];
 		if ([allSongsDb open] == NO) { DLog(@"Could not open allSongsDb."); }
 		
 		// Setup the Genres database
-		genresDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@genres.db", databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]] retain];
+		genresDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@genres.db", databaseFolderPath, urlStringMd5]] retain];
 		[genresDb executeUpdate:@"PRAGMA cache_size = 1"];
 		if ([genresDb open] == NO) { DLog(@"Could not open genresDb."); }
 	}
@@ -81,19 +85,40 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	}
 	
 	// Setup the album list cache database
-	albumListCacheDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@albumListCache.db", databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]] retain];
+	albumListCacheDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@albumListCache.db", databaseFolderPath, urlStringMd5]] retain];
 	[albumListCacheDb executeUpdate:@"PRAGMA cache_size = 1"];
-	if ([albumListCacheDb open] == NO) { DLog(@"Could not open albumListCacheDb."); }
-	if ([albumListCacheDb tableExists:@"albumListCache"] == NO) {
-		[albumListCacheDb executeUpdate:@"CREATE TABLE albumListCache (id TEXT PRIMARY KEY, data BLOB)"];
+	if ([albumListCacheDb open] == NO) 
+	{ 
+		DLog(@"Could not open albumListCacheDb."); 
 	}
-	if ([albumListCacheDb tableExists:@"albumsCache"] == NO) {
-		[albumListCacheDb executeUpdate:@"CREATE TABLE albumsCache (folderId TEXT, title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
-		[albumListCacheDb executeUpdate:@"CREATE INDEX albumsFolderId ON albumsCache (folderId)"];
-	}
-	if ([albumListCacheDb tableExists:@"songsCache"] == NO) {
-		[albumListCacheDb executeUpdate:@"CREATE TABLE songsCache (folderId TEXT, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
-		[albumListCacheDb executeUpdate:@"CREATE INDEX songsFolderId ON songsCache (folderId)"];
+	else
+	{
+		/*if ([albumListCacheDb tableExists:@"rootFolderIndexCache"] == NO) {
+			[albumListCacheDb executeUpdate:@"CREATE TABLE rootFolderIndexCache (name TEXT PRIMARY KEY, position INTEGER, count INTEGER)"];
+		}
+		if ([albumListCacheDb tableExists:@"rootFolderNameCache"] == NO) {
+			[albumListCacheDb executeUpdate:@"CREATE VIRTUAL TABLE rootFolderNameCache USING FTS3 (id TEXT PRIMARY KEY, name TEXT, tokenize=porter)"];
+			//[albumListCacheDb executeUpdate:@"CREATE TABLE rootFolderNameCache (id TEXT PRIMARY KEY, name TEXT)"];
+			[albumListCacheDb executeUpdate:@"CREATE INDEX name ON rootFolderNameCache (name ASC)"];
+		}
+		if ([albumListCacheDb tableExists:@"rootFolderNameSearch"] == NO) {
+			[albumListCacheDb executeUpdate:@"CREATE TABLE rootFolderNameSearch (id TEXT PRIMARY KEY, name TEXT)"];
+		}
+		if ([albumListCacheDb tableExists:@"rootFolderCount"] == NO) {
+			[albumListCacheDb executeUpdate:@"CREATE TABLE rootFolderCount (count INTEGER)"];
+		}*/
+		
+		if ([albumListCacheDb tableExists:@"albumListCache"] == NO) {
+			[albumListCacheDb executeUpdate:@"CREATE TABLE albumListCache (id TEXT PRIMARY KEY, data BLOB)"];
+		}
+		if ([albumListCacheDb tableExists:@"albumsCache"] == NO) {
+			[albumListCacheDb executeUpdate:@"CREATE TABLE albumsCache (folderId TEXT, title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
+			[albumListCacheDb executeUpdate:@"CREATE INDEX albumsFolderId ON albumsCache (folderId)"];
+		}
+		if ([albumListCacheDb tableExists:@"songsCache"] == NO) {
+			[albumListCacheDb executeUpdate:@"CREATE TABLE songsCache (folderId TEXT, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+			[albumListCacheDb executeUpdate:@"CREATE INDEX songsFolderId ON songsCache (folderId)"];
+		}
 	}
 	
 	// Only load large album art DB if this is an iPad
@@ -133,7 +158,7 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 		currentPlaylistDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/offlineCurrentPlaylist.db", databaseFolderPath]] retain];
 	}
 	else {
-		currentPlaylistDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]] retain];
+		currentPlaylistDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseFolderPath, urlStringMd5]] retain];
 	}
 	[currentPlaylistDb executeUpdate:@"PRAGMA cache_size = 1"];
 	if ([currentPlaylistDb open] == NO) { DLog(@"Could not open currentPlaylistDb."); }
@@ -152,10 +177,10 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	
 	// Setup the local playlists database
 	if (viewObjects.isOfflineMode) {
-		localPlaylistsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/offlineLocalPlaylists.db", databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]] retain];
+		localPlaylistsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/offlineLocalPlaylists.db", databaseFolderPath, [NSString md5:urlStringMd5]]] retain];
 	}
 	else {
-		localPlaylistsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@localPlaylists.db", databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]] retain];
+		localPlaylistsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@localPlaylists.db", databaseFolderPath, [NSString md5:urlStringMd5]]] retain];
 	}
 	[localPlaylistsDb executeUpdate:@"PRAGMA cache_size = 1"];
 	if ([localPlaylistsDb open] == NO) { DLog(@"Could not open localPlaylistsDb."); }
@@ -164,7 +189,7 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	}
 	
 	// Setup the server playlists database
-	//serverPlaylistsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@serverPlaylists.db", databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]] retain];
+	//serverPlaylistsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@serverPlaylists.db", databaseFolderPath, [NSString md5:urlStringMd5]]] retain];
 	//if ([serverPlaylistsDb open] == NO) { DLog(@"Could not open serverPlaylistsDb."); }
 	
 	// Setup the song cache database
@@ -198,14 +223,14 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 		[songCacheDb executeUpdate:@"CREATE INDEX songGenre ON genresSongs (genre)"];
 	}
 	
-	cacheQueueDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]] retain];
+	cacheQueueDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", databaseFolderPath, urlStringMd5]] retain];
 	[cacheQueueDb executeUpdate:@"PRAGMA cache_size = 1"];
 	if ([cacheQueueDb open] == NO) { DLog(@"Could not open cacheQueueDb."); }
 	if ([cacheQueueDb tableExists:@"cacheQueue"] == NO) {
 		[cacheQueueDb executeUpdate:@"CREATE TABLE cacheQueue (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
 		[cacheQueueDb executeUpdate:@"CREATE INDEX queueDate ON cacheQueue (cachedDate DESC)"];
 	}
-	[songCacheDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@cacheQueue.db", databaseFolderPath, [NSString md5:appDelegate.defaultUrl]], @"cacheQueueDb"];
+	[songCacheDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@cacheQueue.db", databaseFolderPath, urlStringMd5], @"cacheQueueDb"];
 	if ([songCacheDb hadError]) { DLog(@"Err attaching the cacheQueueDb %d: %@", [songCacheDb lastErrorCode], [songCacheDb lastErrorMessage]); }
 	
 	// Setup the lyrics database
@@ -218,7 +243,7 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	}
 	
 	// Setup the bookmarks database
-	bookmarksDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@bookmarks.db", databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]] retain];
+	bookmarksDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@bookmarks.db", databaseFolderPath, urlStringMd5]] retain];
 	[bookmarksDb executeUpdate:@"PRAGMA cache_size = 1"];
 	if ([bookmarksDb open] == NO) { DLog(@"Could not open bookmarksDb."); }
 	if ([bookmarksDb tableExists:@"bookmarks"] == NO) {
@@ -295,10 +320,12 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-	[albumListCacheDb close]; self.albumListCacheDb = nil;
-	[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@albumListCache.db", databaseFolderPath, [NSString md5:appDelegate.defaultUrl]] error:NULL];
+	NSString *urlStringMd5 = [[[SavedSettings sharedInstance] urlString] md5];
 	
-	albumListCacheDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@albumListCache.db", databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]] retain];
+	[albumListCacheDb close]; self.albumListCacheDb = nil;
+	[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@albumListCache.db", databaseFolderPath, urlStringMd5] error:NULL];
+	
+	albumListCacheDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@albumListCache.db", databaseFolderPath, urlStringMd5]] retain];
 	[albumListCacheDb executeUpdate:@"PRAGMA cache_size = 1"];
 	if ([albumListCacheDb open] == NO) { DLog(@"Could not open albumListCacheDb."); }
 	if ([albumListCacheDb tableExists:@"albumListCache"] == NO) {
@@ -318,9 +345,11 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 
 - (void) resetLocalPlaylistsDb
 {
+	NSString *urlStringMd5 = [[[SavedSettings sharedInstance] urlString] md5];
+	
 	[localPlaylistsDb close]; self.localPlaylistsDb = nil;
-	[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@localPlaylists.db", databaseFolderPath, [NSString md5:appDelegate.defaultUrl]] error:NULL];
-	localPlaylistsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@localPlaylists.db", databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]] retain];
+	[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@localPlaylists.db", databaseFolderPath, urlStringMd5] error:NULL];
+	localPlaylistsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@localPlaylists.db", databaseFolderPath, urlStringMd5]] retain];
 	if ([localPlaylistsDb open] == NO) { DLog(@"Could not open localPlaylistsDb."); }
 	if ([localPlaylistsDb tableExists:@"localPlaylists"] == NO) {
 		[localPlaylistsDb executeUpdate:@"CREATE TABLE localPlaylists (playlist TEXT, md5 TEXT)"];
@@ -329,9 +358,11 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 
 - (void) resetCurrentPlaylistDb
 {
+	NSString *urlStringMd5 = [[[SavedSettings sharedInstance] urlString] md5];
+	
 	[currentPlaylistDb close]; self.currentPlaylistDb = nil;
-	[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseFolderPath, [NSString md5:appDelegate.defaultUrl]] error:NULL];
-	currentPlaylistDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]] retain];
+	[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseFolderPath, urlStringMd5] error:NULL];
+	currentPlaylistDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseFolderPath, urlStringMd5]] retain];
 	if ([currentPlaylistDb open] == NO) { DLog(@"Could not open currentPlaylistDb."); }
 	[currentPlaylistDb executeUpdate:@"CREATE TABLE currentPlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
 	[currentPlaylistDb executeUpdate:@"CREATE TABLE shufflePlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];	
@@ -1123,9 +1154,12 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	[pool release];
 }
 
+// New Model Stuff
 
-#pragma mark -
-#pragma mark Singleton methods
+
+
+
+#pragma mark - Singleton methods
 
 + (DatabaseControlsSingleton*)sharedInstance
 {
@@ -1189,7 +1223,7 @@ static DatabaseControlsSingleton *sharedInstance = nil;
     return UINT_MAX;  // denotes an object that cannot be released
 }
 
-- (void)release {
+- (oneway void)release {
     //do nothing
 }
 

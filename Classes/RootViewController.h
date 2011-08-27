@@ -7,16 +7,17 @@
 //
 
 #import "LoaderDelegate.h"
+#import "FolderDropdownDelegate.h"
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, SearchOverlayViewController, LoadingScreen, Artist, EGORefreshTableHeaderView, FolderDropdownControl, DefaultSettings;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, SearchOverlayViewController, LoadingScreen, Artist, EGORefreshTableHeaderView, FolderDropdownControl, SavedSettings, SUSRootFoldersDAO;
 
-@interface RootViewController : UITableViewController <UISearchBarDelegate, LoaderDelegate>
+@interface RootViewController : UITableViewController <UISearchBarDelegate, LoaderDelegate, FolderDropdownDelegate>
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
 	MusicControlsSingleton *musicControls;
 	
-	DefaultSettings *settings;
+	SavedSettings *settings;
 	
 	UIView *headerView;
 	UIView *folderDropdown;
@@ -29,17 +30,15 @@
 	LoadingScreen *allArtistsLoadingScreen;
 	
 	SearchOverlayViewController *searchOverlayView;
-	BOOL searching;
 	BOOL letUserSelectRow;
-	BOOL didBeginSearching;
 	
 	BOOL isSearching;
 	
 	BOOL isCountShowing;
 	
-	NSArray *indexes;
-	NSArray *folders;
-	NSMutableArray *foldersSearch;
+	//NSArray *indexes;
+	//NSArray *folders;
+	//NSMutableArray *foldersSearch;
 	
 	//NSMutableData *receivedData;
 
@@ -51,6 +50,8 @@
 	FolderDropdownControl *dropdown;
 	
 	//NSDictionary *folders;
+	
+	SUSRootFoldersDAO *dataModel;
 }
 
 @property(assign,getter=isReloading) BOOL reloading;
@@ -58,19 +59,24 @@
 @property (nonatomic, retain) UIView *headerView;
 @property (nonatomic, retain) UISearchBar *searchBar;
 
-@property (nonatomic, retain) NSArray *indexes;
-@property (nonatomic, retain) NSArray *folders;
-@property (nonatomic, retain) NSMutableArray *foldersSearch;
+//@property (nonatomic, retain) NSArray *indexes;
+//@property (nonatomic, retain) NSArray *folders;
+//@property (nonatomic, retain) NSMutableArray *foldersSearch;
 
 @property BOOL isSearching;
 
 @property (nonatomic, retain) FolderDropdownControl *dropdown;
 
-- (void) searchTableView;
+@property (nonatomic, retain) SUSRootFoldersDAO *dataModel;
+
 - (void) doneSearching_Clicked:(id)sender;
 
 // Loader Delegate Methods
 - (void)loadingFailed:(Loader*)loader;
 - (void)loadingFinished:(Loader*)loader;
+
+// FolderDropdown Delegate Methods
+- (void)folderDropdownMoveViewsY:(float)y;
+- (void)folderDropdownSelectFolder:(NSNumber *)folderId;
 
 @end

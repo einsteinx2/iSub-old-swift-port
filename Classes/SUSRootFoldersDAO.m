@@ -1,0 +1,613 @@
+//
+//  SUSRootFoldersDAO.m
+//  iSub
+//
+//  Created by Ben Baron on 8/21/11.
+//  Copyright 2011 Ben Baron. All rights reserved.
+//
+
+#import "SUSRootFoldersDAO.h"
+#import "DatabaseControlsSingleton.h"
+#import "FMDatabase.h"
+#import "FMDatabaseAdditions.h"
+#import "GTMNSString+HTML.h"
+#import "TBXML.h"
+#import "Artist.h"
+#import "Index.h"
+#import "SavedSettings.h"
+
+@implementation SUSRootFoldersDAO
+
+@synthesize indexNames, indexPositions, indexCounts;
+
+#pragma mark - Lifecycle
+
+- (void)setup
+{
+	indexNames = nil;
+	indexPositions = nil;
+	indexCounts = nil;
+	selectedFolderId = nil;
+	db = [[DatabaseControlsSingleton sharedInstance] albumListCacheDb]; 
+}
+
+- (id)init
+{
+    self = [super init];
+    if (self) 
+	{
+		[self setup];
+    }
+    
+    return self;
+}
+
+- (id)initWithDelegate:(id <LoaderDelegate>)theDelegate
+{
+	self = [super initWithDelegate:theDelegate];
+    if (self) 
+	{
+		[self setup];
+    }
+    
+    return self;
+}
+
+- (void)dealloc
+{
+	[indexNames release]; indexNames = nil;
+	[indexPositions release]; indexPositions = nil;
+	[indexCounts release]; indexCounts = nil;
+	[selectedFolderId release]; selectedFolderId = nil;
+	[super dealloc];
+}
+
+#pragma mark - Private Methods
+
+- (NSString *)tableModifier
+{
+	NSString *tableModifier = @"_all";
+	
+	if (selectedFolderId != nil && [selectedFolderId intValue] != -1)
+	{
+		tableModifier = [NSString stringWithFormat:@"_%@", [selectedFolderId stringValue]];
+	}
+	
+	return tableModifier;
+}
+
+- (void)resetRootFolderCache
+{
+	// Delete the old tables
+	[db executeUpdate:[NSString stringWithFormat:@"DELETE FROM rootFolderIndexCache%@", self.tableModifier]];
+	[db executeUpdate:[NSString stringWithFormat:@"DELETE FROM rootFolderNameCache%@", self.tableModifier]];
+	[db executeUpdate:[NSString stringWithFormat:@"DELETE FROM rootFolderCount%@", self.tableModifier]];
+	[db executeUpdate:[NSString stringWithFormat:@"DELETE FROM rootFolderNameSearch%@", self.tableModifier]];
+	[db executeUpdate:@"VACUUM"];
+	
+	// Create the new tables
+	NSString *query;
+	query = @"CREATE TABLE rootFolderIndexCache%@ (name TEXT PRIMARY KEY, position INTEGER, count INTEGER)";
+	[db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
+	query = @"CREATE VIRTUAL TABLE rootFolderNameCache%@ USING FTS3 (id TEXT PRIMARY KEY, name TEXT, tokenize=porter)";
+	[db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
+	query = @"CREATE INDEX name ON rootFolderNameCache%@ (name ASC)";
+	[db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
+	query = @"CREATE TABLE rootFolderNameSearch%@ (id TEXT PRIMARY KEY, name TEXT)";
+	[db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
+	query = @"CREATE TABLE rootFolderCount%@ (count INTEGER)";
+	[db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
+}
+
+- (BOOL)addRootFolderIndexToCache:(NSUInteger)position count:(NSUInteger)folderCount name:(NSString*)name
+{
+	NSString *query = [NSString stringWithFormat:@"INSERT INTO rootFolderIndexCache%@ VALUES (?, ?, ?)", self.tableModifier];
+	[db executeUpdate:query, [name gtm_stringByUnescapingFromHTML], [NSNumber numberWithInt:position], [NSNumber numberWithInt:folderCount]];
+	return ![db hadError];
+}
+
+- (BOOL)addRootFolderToCache:(NSString*)folderId name:(NSString*)name
+{
+	NSString *query = [NSString stringWithFormat:@"INSERT INTO rootFolderNameCache%@ VALUES (?, ?)", self.tableModifier];
+	[db executeUpdate:query, folderId, [name gtm_stringByUnescapingFromHTML]];
+	return ![db hadError];
+}
+
+- (NSUInteger)rootFolderUpdateCount
+{
+	NSString *query = [NSString stringWithFormat:@"DELETE FROM rootFolderCount%@", self.tableModifier];
+	[db executeUpdate:query];
+	
+	query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM rootFolderNameCache%@", self.tableModifier];
+	NSNumber *folderCount = [NSNumber numberWithInt:[db intForQuery:query]];
+	
+	query = [NSString stringWithFormat:@"INSERT INTO rootFolderCount%@ VALUES (?)", self.tableModifier];
+	[db executeUpdate:query, folderCount];
+	
+	return [folderCount intValue];
+}
+
+- (NSUInteger)rootFolderCount
+{
+	NSString *query = [NSString stringWithFormat:@"SELECT count FROM rootFolderCount%@ LIMIT 1", self.tableModifier];
+	return [db intForQuery:query];
+}
+
+- (NSUInteger)rootFolderSearchCount
+{
+	NSString *query = [NSString stringWithFormat:@"SELECT count(*) FROM rootFolderNameSearch%@", self.tableModifier];
+	return [db intForQuery:query];
+}
+
+- (NSArray *)rootFolderIndexNames
+{
+	NSMutableArray *names = [NSMutableArray arrayWithCapacity:0];
+	
+	NSString *query = [NSString stringWithFormat:@"SELECT * FROM rootFolderIndexCache%@", self.tableModifier];
+	FMResultSet *result = [db executeQuery:query];
+	while ([result next])
+	{
+		NSString *name = [result stringForColumn:@"name"];
+		[names addObject:name];
+	}
+	[result close];
+	
+	return [NSArray arrayWithArray:names];
+}
+
+- (NSArray *)rootFolderIndexPositions
+{	
+	NSMutableArray *positions = [NSMutableArray arrayWithCapacity:0];
+	
+	NSString *query = [NSString stringWithFormat:@"SELECT * FROM rootFolderIndexCache%@", self.tableModifier];
+	FMResultSet *result = [db executeQuery:query];
+	while ([result next])
+	{
+		NSNumber *position = [NSNumber numberWithInt:[result intForColumn:@"position"]];
+		[positions addObject:position];
+	}
+	[result close];
+	
+	return [NSArray arrayWithArray:positions];
+}
+
+- (NSArray *)rootFolderIndexCounts
+{	
+	NSMutableArray *counts = [NSMutableArray arrayWithCapacity:0];
+	
+	NSString *query = [NSString stringWithFormat:@"SELECT * FROM rootFolderIndexCache%@", self.tableModifier];
+	FMResultSet *result = [db executeQuery:query];
+	while ([result next])
+	{
+		NSNumber *folderCount = [NSNumber numberWithInt:[result intForColumn:@"count"]];
+		[counts addObject:folderCount];
+	}
+	[result close];
+	
+	return [NSArray arrayWithArray:counts];
+}
+
+- (Artist *)rootFolderArtistForPosition:(NSUInteger)position
+{
+	Artist *anArtist = nil;
+	NSString *query = [NSString stringWithFormat:@"SELECT * FROM rootFolderNameCache%@ WHERE ROWID = ?", self.tableModifier];
+	FMResultSet *result = [db executeQuery:query, [NSNumber numberWithInt:position]];
+	while ([result next])
+	{
+		NSString *name = [result stringForColumn:@"name"];
+		NSString *folderId = [result stringForColumn:@"id"];
+		anArtist = [Artist artistWithName:name andArtistId:folderId];
+	}
+	[result close];
+	
+	return anArtist;
+}
+
+- (Artist *)rootFolderArtistForPositionInSearch:(NSUInteger)position
+{
+	Artist *anArtist = nil;
+	NSString *query = [NSString stringWithFormat:@"SELECT * FROM rootFolderNameSearch%@ WHERE ROWID = ?", self.tableModifier];
+	FMResultSet *result = [db executeQuery:query, [NSNumber numberWithInt:position]];
+	while ([result next])
+	{
+		NSString *name = [result stringForColumn:@"name"];
+		NSString *folderId = [result stringForColumn:@"id"];
+		anArtist = [Artist artistWithName:name andArtistId:folderId];
+	}
+	[result close];
+	
+	return anArtist;
+}
+
+- (void)rootFolderClearSearch
+{
+	NSString *query = [NSString stringWithFormat:@"DELETE FROM rootFolderNameSearch%@", self.tableModifier];
+	[db executeUpdate:query];
+	//[db executeUpdate:@"VACUUM"];
+}
+
+- (void)rootFolderPerformSearch:(NSString *)name
+{
+	// Inialize the search DB
+	NSString *query = [NSString stringWithFormat:@"DELETE FROM rootFolderNameSearch%@", self.tableModifier];
+	[db executeUpdate:query];
+	
+	// Perform the search
+	query = [NSString stringWithFormat:@"INSERT INTO rootFolderNameSearch%@ SELECT * FROM rootFolderNameCache%@ WHERE name LIKE ? LIMIT 100", self.tableModifier, self.tableModifier];
+	NSLog(@"query: %@", query);
+	[db executeUpdate:query, [NSString stringWithFormat:@"%%%@%%", name]];
+	if ([db hadError]) {
+		DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+	}
+}
+
+- (BOOL)rootFolderIsFolderCached
+{
+	NSString *query = [NSString stringWithFormat:@"rootFolderIndexCache%@", self.tableModifier];
+	return [db tableExists:query];
+}
+
+#pragma mark - Loader Methods
+
+- (void)startLoad
+{
+	DLog(@"Starting load");
+	NSString *urlString = @"";
+	if (selectedFolderId == nil || [selectedFolderId intValue] == -1)
+	{
+		urlString = [self getBaseUrlString:@"getIndexes.view"];
+	}
+	else
+	{
+		urlString = [NSString stringWithFormat:@"%@&musicFolderId=%i", [self getBaseUrlString:@"getIndexes.view"], [selectedFolderId intValue]];
+	}
+	//DLog(@"urlString: %@", urlString);
+	
+	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	if (connection)
+	{
+		// Create the NSMutableData to hold the received data.
+		// receivedData is an instance variable declared elsewhere.
+		receivedData = [[NSMutableData data] retain];
+	} 
+	else 
+	{
+		// Inform the delegate that the loading failed.
+		[delegate loadingFailed:self];
+	}
+}
+
+- (void)cancelLoad
+{
+	// Clean up connection objects
+	[connection cancel];
+	[connection release]; connection = nil;
+	[receivedData release]; receivedData = nil;
+	[delegate release];
+}
+
+#pragma mark Connection Delegate
+
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
+{
+	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
+		return YES; // Self-signed cert will be accepted
+	
+	return NO;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{	
+	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+	{
+		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
+	}
+	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+	DLog(@"did receive response");
+	[receivedData setLength:0];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
+{
+	DLog("received data");
+    [receivedData appendData:incrementalData];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
+{
+	DLog("connection failed");
+	// Clean up the connection
+	[theConnection release]; theConnection = nil;
+	[receivedData release]; receivedData = nil;
+	
+	// Inform the delegate that loading failed
+	[delegate loadingFailed:self];
+}	
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
+{		
+	// Clear the database
+	[self resetRootFolderCache];
+	
+	//NSMutableArray *indexes = [NSMutableArray arrayWithCapacity:0];
+	//NSMutableArray *shortcuts = [NSMutableArray arrayWithCapacity:0];
+	//NSMutableArray *folders = [NSMutableArray arrayWithCapacity:0];
+	
+	TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
+	if (tbxml.rootXMLElement)
+	{
+		// Check for an error response
+		TBXMLElement *errorElement = [TBXML childElementNamed:@"error" parentElement:tbxml.rootXMLElement];
+		if (errorElement)
+		{
+			NSString *code = [TBXML valueOfAttributeNamed:@"code" forElement:errorElement];
+			NSString *message = [TBXML valueOfAttributeNamed:@"message" forElement:errorElement];
+			[self subsonicErrorCode:code message:message];
+		}
+		
+		NSUInteger rowCount = 0;
+		NSUInteger sectionCount = 0;
+		NSUInteger rowIndex = 0;
+		
+		TBXMLElement *indexesElement = [TBXML childElementNamed:@"indexes" parentElement:tbxml.rootXMLElement];
+		if (indexesElement)
+		{
+			// Parse the shortcuts if they exist
+			TBXMLElement *shortcutElement = [TBXML childElementNamed:@"shortcut" parentElement:indexesElement];
+			while (shortcutElement != nil)
+			{
+				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+				
+				rowIndex = 1;
+				rowCount++;
+				sectionCount++;
+				
+				// Create the shortcut object (actually an artist object)
+				// and add it to the shortcuts array
+				//Artist *anArtist = [[Artist alloc] initWithTBXMLElement:shortcutElement];
+				//[shortcuts addObject:anArtist];
+				//[anArtist release];
+				
+				// Parse the shortcut
+				NSString *folderId = [TBXML valueOfAttributeNamed:@"id" forElement:shortcutElement];
+				NSString *name = [TBXML valueOfAttributeNamed:@"name" forElement:shortcutElement];
+				//DLog(@"id: %@  name: %@", folderId, name);
+				
+				// Add the shortcut to the DB
+				if (folderId != nil && name != nil)
+				{
+					[self addRootFolderToCache:folderId name:name];
+				}
+				
+				// Get the next shortcut
+				shortcutElement = [TBXML nextSiblingNamed:@"shortcut" searchFromElement:shortcutElement];
+				
+				[pool release];
+			}
+			
+			// If there are shortcuts, add the shortcut index
+			//if ([shortcuts count] == 0)
+			//	[indexes addObject:@"★"];
+			if (rowIndex > 0)
+			{
+				[self addRootFolderIndexToCache:rowIndex count:sectionCount name:@"★"];
+				DLog(@"Adding shortcut to index table, count %i", sectionCount);
+			}
+			
+			// Add the shortcuts array to artists
+			//if ([shortcuts count] > 0)
+			//{
+			//	[folders addObject:shortcuts];
+			//}
+			
+			// Parse the letter indexes
+			TBXMLElement *indexElement = [TBXML childElementNamed:@"index" parentElement:indexesElement];
+			while (indexElement != nil)
+			{
+				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+				
+				sectionCount = 0;
+				rowIndex = rowCount + 1;
+				
+				// Initialize the Artist array for this section
+				//NSMutableArray *artistsArray = [NSMutableArray arrayWithCapacity:0];
+				
+				// Loop through the artist elements
+				TBXMLElement *artistElement = [TBXML childElementNamed:@"artist" parentElement:indexElement];
+				while (artistElement != nil)
+				{
+					NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+					
+					rowCount++;
+					sectionCount++;
+					
+					// Create the artist object and add it to the 
+					// array for this section if not named .AppleDouble
+					if (![[TBXML valueOfAttributeNamed:@"name" forElement:artistElement] isEqualToString:@".AppleDouble"])
+					{
+						//Artist *anArtist = [[Artist alloc] initWithTBXMLElement:artistElement];
+						//[artistsArray addObject:anArtist];
+						//[anArtist release];
+						
+						// Parse the top level folder
+						NSString *folderId = [TBXML valueOfAttributeNamed:@"id" forElement:artistElement];
+						NSString *name = [TBXML valueOfAttributeNamed:@"name" forElement:artistElement];
+						//DLog(@"id: %@  name: %@", folderId, name);
+						
+						// Add the folder to the DB
+						if (folderId != nil && name != nil)
+						{
+							[self addRootFolderToCache:folderId name:name];
+						}
+					}
+					
+					// Get the next artist
+					artistElement = [TBXML nextSiblingNamed:@"artist" searchFromElement:artistElement];
+					
+					[pool release];
+				}
+				
+				NSString *indexName = [TBXML valueOfAttributeNamed:@"name" forElement:indexElement];
+				BOOL success = [self addRootFolderIndexToCache:rowIndex count:sectionCount name:indexName];
+				DLog(@"Adding index %@  count: %i  success: %i", indexName, sectionCount, success);
+				
+				// Add the index and artists to the arrays
+				//[indexes addObject:[TBXML valueOfAttributeNamed:@"name" forElement:indexElement]];
+				//[folders addObject:artistsArray];
+				
+				// Get the next index
+				indexElement = [TBXML nextSiblingNamed:@"index" searchFromElement:indexElement];
+				
+				[pool release];
+			}
+		}
+	}
+	
+	// Save the results dictionary
+	//results = [[NSDictionary alloc] initWithObjectsAndKeys:indexes, @"indexes", folders, @"folders", nil];
+	
+	// Save the defaults
+	//[[SavedSettings sharedInstance] saveTopLevelIndexes:indexes folders:folders];
+	
+	// Release the XML parser
+	[tbxml release];
+	
+	// Clean up the connection
+	[theConnection release]; theConnection = nil;
+	[receivedData release]; receivedData = nil;
+	
+	// Update the count
+	[self rootFolderUpdateCount];
+	
+	// Clear data
+	[indexNames release]; indexNames = nil;
+	[indexPositions release]; indexPositions = nil;
+	[indexCounts release]; indexCounts = nil;
+	
+	// Save the reload time
+	[[SavedSettings sharedInstance] setRootFoldersReloadTime:[NSDate date]];
+	
+	// Notify the delegate that the loading is finished
+	[delegate loadingFinished:self];
+}
+
+#pragma mark - Public DAO Methods
+
++ (void)setFolderDropdownFolders:(NSDictionary *)folders
+{
+	FMDatabase *database = [[DatabaseControlsSingleton sharedInstance] albumListCacheDb];
+	[database executeUpdate:@"DROP TABLE IF EXISTS rootFolderDropdownCache (id INTEGER, name TEXT)"];
+	[database executeUpdate:@"CREATE TABLE rootFolderDropdownCache (id INTEGER, name TEXT)"];
+	
+	for (NSNumber *folderId in [folders allKeys])
+	{
+		NSString *folderName = [folders objectForKey:folderId];
+		[database executeUpdate:@"INSERT INTO rootFolderDropdownCache VALUES (?, ?)", folderId, folderName];
+	}
+}
+
++ (NSDictionary *)folderDropdownFolders
+{
+	FMDatabase *database = [[DatabaseControlsSingleton sharedInstance] albumListCacheDb];
+	if (![database tableExists:@"rootFolderDropdownCache"])
+		return nil;
+	
+	NSMutableDictionary *folders = [NSMutableDictionary dictionaryWithCapacity:0];
+	FMResultSet *result = [database executeQuery:@"SELECT * FROM rootFolderDropdownCache"];
+	while ([result next])
+	{
+		NSNumber *folderId = [NSNumber numberWithInt:[result intForColumn:@"id"]];
+		NSString *folderName = [result stringForColumn:@"name"];
+		[folders setObject:folderName forKey:folderId];
+	}
+	[result close];
+	
+	return [NSDictionary dictionaryWithDictionary:folders];
+}
+
+- (NSNumber *)selectedFolderId
+{
+	if (selectedFolderId == nil)
+		return [NSNumber numberWithInt:-1];
+	else
+		return selectedFolderId;
+}
+
+- (void)setSelectedFolderId:(NSNumber *)newSelectedFolderId
+{
+	selectedFolderId = newSelectedFolderId;
+	[indexNames release]; indexNames = nil;
+	[indexCounts release]; indexCounts = nil;
+	[indexPositions release]; indexPositions = nil;
+}
+
+- (BOOL)isRootFolderIdCached
+{
+	return [self rootFolderIsFolderCached];
+}
+
+- (NSUInteger)count
+{
+	return [self rootFolderCount];
+}
+
+- (NSUInteger)searchCount
+{
+	return [self rootFolderSearchCount];
+}
+
+- (NSArray *)indexNames
+{
+	if (indexNames == nil)
+	{
+		indexNames = [[self rootFolderIndexNames] retain];
+	}
+	
+	return indexNames;
+}
+
+- (NSArray *)indexPositions
+{
+	if (indexPositions == nil)
+	{
+		indexPositions = [[self rootFolderIndexPositions] retain];
+	}
+	return indexPositions;
+}
+
+- (NSArray *)indexCounts
+{
+	if (indexCounts == nil)
+	{
+		indexCounts = [[self rootFolderIndexCounts] retain];
+	}
+	
+	return indexCounts;
+}
+
+- (Artist *)artistForPosition:(NSUInteger)position
+{
+	return [self rootFolderArtistForPosition:position];
+}
+
+- (Artist *)artistForPositionInSearch:(NSUInteger)position
+{
+	return [self rootFolderArtistForPositionInSearch:position];
+}
+
+- (void)clearSearchTable
+{
+	[self rootFolderClearSearch];
+}
+
+- (void)searchForFolderName:(NSString *)name
+{
+	[self rootFolderPerformSearch:name];
+}
+
+@end

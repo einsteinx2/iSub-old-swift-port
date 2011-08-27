@@ -48,7 +48,7 @@
 #import "BWQuincyManager.h"
 #import "BWHockeyManager.h"
 
-#import "DefaultSettings.h"
+#import "SavedSettings.h"
 
 @implementation iSubAppDelegate
 
@@ -98,10 +98,10 @@
 	//
 	// Uncomment to redirect the console output to a log file
 	//
-	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *documentsDirectory = [paths objectAtIndex:0];
-	NSString *logPath = [documentsDirectory stringByAppendingPathComponent:@"console.log"];
-	freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
+	//NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	//NSString *documentsDirectory = [paths objectAtIndex:0];
+	//NSString *logPath = [documentsDirectory stringByAppendingPathComponent:@"console.log"];
+	//freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
 	//
 	
 	NSLog(@"1");
@@ -309,7 +309,7 @@ NSLog(@"4");
 - (void)appInit
 {		
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];	
-	DefaultSettings *settings = [DefaultSettings sharedInstance];
+	SavedSettings *settings = [SavedSettings sharedInstance];
 
 	NSLog(@"7");
 
@@ -531,7 +531,7 @@ NSLog(@"4");
 - (void)appInit2
 {	
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-	DefaultSettings *settings = [DefaultSettings sharedInstance];
+	SavedSettings *settings = [SavedSettings sharedInstance];
 
 	NSLog(@"15");
 
@@ -1508,7 +1508,7 @@ NSLog(@"38");
 	 urlString = defaultUrl;
 	 }*/
 	
-	DefaultSettings *settings = [DefaultSettings sharedInstance];
+	SavedSettings *settings = [SavedSettings sharedInstance];
 	NSString *urlString = settings.urlString;
 	NSString *username = settings.username;
 	NSString *password = settings.password;

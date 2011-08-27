@@ -39,8 +39,8 @@
 
 #import "FolderDropdownControl.h"
 
-#import "SUSIndexesLoader.h"
-#import "DefaultSettings.h"
+#import "SUSRootFoldersDAO.h"
+#import "SavedSettings.h"
 
 @interface RootViewController (Private)
 
@@ -52,11 +52,13 @@
 @implementation RootViewController
 
 @synthesize searchBar, headerView;
-@synthesize indexes, folders, foldersSearch;
+//@synthesize indexes, folders, foldersSearch;
 @synthesize isSearching;
 @synthesize dropdown;
 
 @synthesize reloading=_reloading;
+
+@synthesize dataModel;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -85,18 +87,15 @@
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	musicControls = [MusicControlsSingleton sharedInstance];
-	settings = [DefaultSettings sharedInstance];
+	settings = [SavedSettings sharedInstance];
+	
+	self.dataModel = [[[SUSRootFoldersDAO alloc] initWithDelegate:self] autorelease];
+	dataModel.selectedFolderId = [[SavedSettings sharedInstance] rootFoldersSelectedFolderId];
 
 	self.title = @"Folders";
-	
-	//Initialize the copy array for searching.
-	self.indexes = [settings getTopLevelIndexes];
-	self.folders = [settings getTopLevelFolders];
-	foldersSearch = [[NSMutableArray alloc] init];
 		
 	//Set defaults
 	isSearching = NO;
-	didBeginSearching = NO;
 	letUserSelectRow = YES;	
 	isCountShowing = NO;
 	searchY = 80;
@@ -125,12 +124,27 @@
 		[self.tableView setContentOffset:CGPointMake(0, 86) animated:NO];
 	else
 		[self.tableView setContentOffset:CGPointMake(0, 50) animated:NO];
+	
+	if ([dataModel isRootFolderIdCached])
+		[self addCount];
+}
+
+- (void)updateCount
+{
+	countLabel.text = [NSString stringWithFormat:@"%i Folders", [dataModel count]];
+	
+	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+	[formatter setDateStyle:NSDateFormatterMediumStyle];
+	[formatter setTimeStyle:NSDateFormatterShortStyle];
+	reloadTimeLabel.text = [NSString stringWithFormat:@"last reload: %@", [formatter stringFromDate:[[SavedSettings sharedInstance] rootFoldersReloadTime]]];
+	[formatter release];
+	
 }
 
 - (void)reloadArtistList
 {
 	[self.tableView reloadData];
-	[self addCount];
+	[self updateCount];
 	
 	//[dropdown updateFolders];
 }
@@ -174,56 +188,37 @@
 	
 	self.dropdown = [[FolderDropdownControl alloc] initWithFrame:CGRectMake(50, 53, 220, 30)];
 	dropdown.delegate = self;
-	dropdown.tableView = self.tableView;
-	dropdown.viewsToMove = [NSArray arrayWithObjects:searchBar, nil];
+	NSDictionary *dropdownFolders = [SUSRootFoldersDAO folderDropdownFolders];
+	if (dropdownFolders != nil)
+	{
+		dropdown.folders = dropdownFolders;
+	}
+	else
+	{
+		dropdown.folders = [NSDictionary dictionaryWithObject:@"All Folders" forKey:[NSNumber numberWithInt:-1]];
+	}
+	[dropdown selectFolderWithId:[dataModel selectedFolderId]];
 	
-	dropdown.folders = [NSDictionary dictionaryWithObject:@"All Folders" forKey:@"-1"];
-	NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [settings.urlString md5]];
-	if ([appDelegate.settingsDictionary objectForKey:key])
-		dropdown.folders = [NSKeyedUnarchiver unarchiveObjectWithData:[appDelegate.settingsDictionary objectForKey:key]];
-	
-	NSInteger selectedFolderId = -1;
-	key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [settings.urlString md5]];
-	if ([appDelegate.settingsDictionary objectForKey:key])
-		selectedFolderId = [[appDelegate.settingsDictionary objectForKey:key] intValue];
-	
-	[dropdown selectFolderWithId:selectedFolderId];
 	[headerView addSubview:dropdown];
 	[dropdown release];
 	
-	NSInteger count = 0;
-	for (NSArray *array in folders)
-	{
-		count = count + [array count];
-	}
-	countLabel.text = [NSString stringWithFormat:@"%i Folders", count];
-	
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-	[formatter setDateStyle:NSDateFormatterMediumStyle];
-	[formatter setTimeStyle:NSDateFormatterShortStyle];
-	reloadTimeLabel.text = [NSString stringWithFormat:@"last reload: %@", [formatter stringFromDate:[defaults objectForKey:[NSString stringWithFormat:@"%@artistsReloadTime", settings.urlString]]]];
-	[formatter release];
+	[self updateCount];
 	
 	self.tableView.tableHeaderView = headerView;
 }
 
-
--(void)loadData:(NSString*)folderId 
+-(void)loadData:(NSNumber *)folderId 
 {
 	viewObjects.isArtistsLoading = YES;
 	
 	allArtistsLoadingScreen = [[LoadingScreen alloc] initOnView:self.view.superview withMessage:[NSArray arrayWithObjects:@"Processing Folders", @"", @"", @"", nil] blockInput:YES mainWindow:NO];
 	
-	SUSIndexesLoader *loader = [[SUSIndexesLoader alloc] initWithDelegate:self];
-	loader.folderId = folderId;
-	[loader startLoad];
+	dataModel.selectedFolderId = folderId;
+	[dataModel startLoad];
 }
 
 - (void)loadingFailed:(Loader*)loader
-{
-	[loader release];
-	
+{	
 	viewObjects.isArtistsLoading = NO;
 	
 	// Hide the loading screen
@@ -238,12 +233,11 @@
 }
 
 - (void)loadingFinished:(Loader*)loader
-{
-	self.folders = [NSArray arrayWithArray:[[loader results] objectForKey:@"folders"]];
-	self.indexes = [NSArray arrayWithArray:[[loader results] objectForKey:@"indexes"]];
-	[loader release];
-	
-	[self addCount];
+{	
+	if (!isCountShowing)
+		[self addCount];
+	else
+		[self updateCount];
 	
 	[self.tableView reloadData];
 	self.tableView.backgroundColor = [UIColor clearColor];
@@ -271,65 +265,17 @@
 	
 	if (!viewObjects.isAlbumsLoading && !viewObjects.isSongsLoading && !viewObjects.isArtistsLoading)
 	{
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		if(folders == nil || [[appDelegate.settingsDictionary objectForKey:@"autoReloadArtistsSetting"] isEqualToString:@"YES"])
+		if (![dataModel isRootFolderIdCached])
 		{
-			if([defaults objectForKey:[NSString stringWithFormat:@"%@topLevelFolders", settings.urlString]] == nil || 
-			   [[appDelegate.settingsDictionary objectForKey:@"autoReloadArtistsSetting"] isEqualToString:@"YES"])
-			{
-				NSString *key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [settings.urlString md5]];
-				NSString *currentFolderId = [appDelegate.settingsDictionary objectForKey:key];
-				[self loadData:currentFolderId];
-			}
-			else 
-			{
-				self.folders = [NSKeyedUnarchiver unarchiveObjectWithData:[defaults objectForKey:[NSString stringWithFormat:@"%@topLevelFolders", settings.urlString]]];
-				self.indexes = [NSKeyedUnarchiver unarchiveObjectWithData:[defaults objectForKey:[NSString stringWithFormat:@"%@topLevelIndexes", settings.urlString]]];
-				
-				// TODO: Rewrite the gracefull transition of listOfArtists
-				
-				// Handle the change to the listOfArtists structure gracefully
-				if ([folders count] > 0)
-				{
-					if ([[folders objectAtIndex:0] count] > 0)
-					{
-						if ([[[folders objectAtIndex:0] objectAtIndex:0] isKindOfClass:[NSArray class]])
-						{
-							NSString *key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [settings.urlString md5]];
-							NSString *currentFolderId = [appDelegate.settingsDictionary objectForKey:key];
-							[self loadData:currentFolderId];
-						}
-						else
-						{
-							[self addCount];
-							[self.tableView reloadData];
-						}
-					}
-					else
-					{
-						[self addCount];
-						[self.tableView reloadData];
-					}
-				}
-				else
-				{
-					[self addCount];
-					[self.tableView reloadData];
-				}
-			}
-		}
-		else 
-		{
-			if (!isCountShowing)
-				[self addCount];
+			[self loadData:[[SavedSettings sharedInstance] rootFoldersSelectedFolderId]];
 		}
 	}
 	
-	if (!viewObjects.isArtistsLoading)
+	/*if (!viewObjects.isArtistsLoading)
 	{
 		if (!isCountShowing)
 			[self addCount];
-	}
+	}*/
 }
 
 
@@ -352,33 +298,59 @@
 - (void)dealloc {
 	[searchBar release];
 	[searchOverlayView release];
-	[foldersSearch release];
 	[dropdown release];
     [super dealloc];
 }
 
+#pragma mark - Folder Dropdown Delegate
 
-#pragma mark -
-#pragma mark Button handling methods
+- (void)folderDropdownMoveViewsY:(float)y
+{
+	[self.tableView.tableHeaderView addHeight:y];
+	self.tableView.tableHeaderView = self.tableView.tableHeaderView;
+	[searchBar addY:y];
+}
+
+- (void)folderDropdownSelectFolder:(NSNumber *)folderId
+{
+	// Save the default
+	[[SavedSettings sharedInstance] setRootFoldersSelectedFolderId:folderId];
+	
+	// Reload the data
+	dataModel.selectedFolderId = folderId;
+	isSearching = NO;
+	if ([dataModel isRootFolderIdCached])
+	{
+		[self.tableView reloadData];
+		[self updateCount];
+	}
+	else
+	{
+		[self loadData:folderId];
+	}
+}
+
+
+#pragma mark - Button handling methods
 
 
 - (void) doneSearching_Clicked:(id)sender 
 {
-	self.tableView.tableHeaderView = nil;
-	[self addCount];
+	[self updateCount];
 	
 	searchBar.text = @"";
 	[searchBar resignFirstResponder];
 	
 	letUserSelectRow = YES;
 	isSearching = NO;
-	didBeginSearching = NO;
 	self.navigationItem.leftBarButtonItem = nil;
 	self.tableView.scrollEnabled = YES;
 	
 	[searchOverlayView.view removeFromSuperview];
 	[searchOverlayView release];
 	searchOverlayView = nil;
+	
+	[dataModel clearSearchTable];
 	
 	[self.tableView reloadData];
 	
@@ -389,9 +361,7 @@
 {
 	if (!viewObjects.isAlbumsLoading && !viewObjects.isSongsLoading)
 	{
-		NSString *key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [settings.urlString md5]];
-		NSString *currentFolderId = [appDelegate.settingsDictionary objectForKey:key];
-		[self loadData:currentFolderId];
+		[self loadData:[[SavedSettings sharedInstance] rootFoldersSelectedFolderId]];
 	}
 	else
 	{
@@ -427,11 +397,15 @@
 
 - (void) searchBarTextDidBeginEditing:(UISearchBar *)theSearchBar 
 {
+	// Remove the index bar
+	isSearching = YES;
+	[dataModel clearSearchTable];
+	[self.tableView reloadData];
+	
 	[self.tableView.tableHeaderView retain];
 
 	[dropdown closeDropdownFast];
 	[self.tableView setContentOffset:CGPointMake(0, 86) animated:YES];
-	//[self.tableView setContentOffset:CGPointMake(0, 50) animated:NO];
 	
 	if ([theSearchBar.text length] == 0)
 	{
@@ -450,10 +424,6 @@
 		self.tableView.scrollEnabled = NO;
 	}
 	
-	// Remove the index bar
-	didBeginSearching = YES;
-	[self.tableView reloadData];
-	
 	//Add the done button.
 	self.navigationItem.leftBarButtonItem = nil;
 	self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneSearching_Clicked:)] autorelease];
@@ -462,21 +432,19 @@
 
 - (void)searchBar:(UISearchBar *)theSearchBar textDidChange:(NSString *)searchText
 {
-	//Remove all objects first.
-	[foldersSearch removeAllObjects];
-	
 	if([searchText length] > 0) 
 	{
 		[searchOverlayView.view removeFromSuperview];
-		isSearching = YES;
+		viewObjects.isSearchingAllAlbums = YES;
 		letUserSelectRow = YES;
 		self.tableView.scrollEnabled = YES;
-		[self searchTableView];
+		
+		[dataModel searchForFolderName:searchBar.text];
+		
+		[self.tableView reloadData];
 	}
 	else 
-	{
-		[self.tableView setContentOffset:CGPointMake(0, 86) animated:YES];
-		
+	{		
 		//Add the overlay view.
 		if(searchOverlayView == nil)
 			searchOverlayView = [[SearchOverlayViewController alloc] initWithNibName:@"SearchOverlayViewController" bundle:[NSBundle mainBundle]];
@@ -486,63 +454,53 @@
 		searchOverlayView.view.frame = frame;
 		[self.view.superview addSubview:searchOverlayView.view];
 		
-		isSearching = NO;
+		viewObjects.isSearchingAllAlbums = NO;
 		letUserSelectRow = NO;
 		self.tableView.scrollEnabled = NO;
+		
+		[dataModel clearSearchTable];
+		
+		[self.tableView reloadData];
+		
+		[self.tableView setContentOffset:CGPointMake(0, 86) animated:NO];
 	}
-	
-	[self.tableView reloadData];
 }
 
 - (void) searchBarSearchButtonClicked:(UISearchBar *)theSearchBar 
 {
-	[self searchTableView];
+	//[self searchTableView];
 	[searchBar resignFirstResponder];
-}
-
-- (void) searchTableView 
-{
-	NSString *searchText = searchBar.text;
-	NSMutableArray *searchArray = [[NSMutableArray alloc] init];
-	
-	for (NSArray *array in folders)
-	{
-		[searchArray addObjectsFromArray:array];
-	}
-	
-	for (Artist *anArtist in searchArray)
-	{
-		NSRange titleResultsRange = [anArtist.name rangeOfString:searchText options:NSCaseInsensitiveSearch];
-		
-		if (titleResultsRange.length > 0)
-			[foldersSearch addObject:anArtist];
-	}
-	
-	[searchArray release];
-}
-
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView 
-{
-	if (isSearching)
-		return 1;
-	else
-		return [folders count];
 }
 
 
 #pragma mark TableView
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView 
+{	
+	if (isSearching)
+	{
+		return 1;
+	}
+	else
+	{
+		NSUInteger count = [[dataModel indexNames] count];
+		return count;
+	}
+}
+
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	if (isSearching)
 	{
-		return [foldersSearch count];
+		NSUInteger count = dataModel.searchCount;
+		return count;
 	}
 	else 
 	{
-		return [[folders objectAtIndex:section] count];
+		NSUInteger count = [[[dataModel indexCounts] objectAtIndex:section] intValue];
+		return count;
 	}
 }
 
@@ -553,15 +511,19 @@
 	static NSString *CellIdentifier = @"Cell";
 	ArtistUITableViewCell *cell = [[[ArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 	
-	Artist *anArtist;
+	Artist *anArtist = nil;
 	if(isSearching)
 	{
 		//anArtist = [[foldersSearch objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-		anArtist = [foldersSearch objectAtIndex:indexPath.row];
+		//anArtist = [foldersSearch objectAtIndex:indexPath.row];
+		//anArtist = nil;
+		anArtist = [dataModel artistForPositionInSearch:(indexPath.row + 1)];
 	}
 	else
 	{
-		anArtist = [[folders objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+		//anArtist = [[folders objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+		NSUInteger sectionStartIndex = [[[dataModel indexPositions] objectAtIndex:indexPath.section] intValue];
+		anArtist = [dataModel artistForPosition:(sectionStartIndex + indexPath.row)];
 	}
 	cell.myArtist = anArtist;
 	
@@ -574,31 +536,36 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 	
-	if(isSearching || didBeginSearching)
+	if(isSearching)
 		return @"";
 	
-	return [indexes objectAtIndex:section];
+	return [[dataModel indexNames] objectAtIndex:section];
 }
 
 
 // Following 2 methods handle the right side index
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView 
 {
-	if(isSearching || didBeginSearching)
+	if(isSearching)
 		return nil;
 	else
 	{
-		NSMutableArray *searchIndexes = [[[NSMutableArray alloc] init] autorelease];
+		/*NSMutableArray *searchIndexes = [[[NSMutableArray alloc] init] autorelease];
 		[searchIndexes addObject:@"{search}"];
 		[searchIndexes addObjectsFromArray:indexes];
 		
-		return searchIndexes;
+		return searchIndexes;*/
+		NSMutableArray *titles = [NSMutableArray arrayWithCapacity:0];
+		[titles addObject:@"{search}"];
+		[titles addObjectsFromArray:[dataModel indexNames]];
+		
+		return titles;
 	}
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index 
 {
-	if(isSearching || didBeginSearching)
+	if(isSearching)
 		return -1;
 	
 	if (index == 0) 
@@ -635,14 +602,15 @@
 {
 	if (viewObjects.isCellEnabled)
 	{
-		Artist *anArtist;
+		Artist *anArtist = nil;
 		if(isSearching)
 		{
-			anArtist = [foldersSearch objectAtIndex:indexPath.row];
+			anArtist = [dataModel artistForPositionInSearch:indexPath.row];
 		}
 		else 
 		{	
-			anArtist = [[folders objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+			NSUInteger sectionStartIndex = [[[dataModel indexPositions] objectAtIndex:indexPath.section] intValue];
+			anArtist = [dataModel artistForPosition:(sectionStartIndex + indexPath.row)];
 		}
 		AlbumViewController* albumViewController = [[AlbumViewController alloc] initWithArtist:anArtist orAlbum:nil];
 				
@@ -680,9 +648,7 @@
 	{
 		_reloading = YES;
 		//[self reloadAction:nil];
-		NSString *key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [settings.urlString md5]];
-		NSString *currentFolderId = [appDelegate.settingsDictionary objectForKey:key];
-		[self loadData:currentFolderId];
+		[self loadData:[[SavedSettings sharedInstance] rootFoldersSelectedFolderId]];
 		[refreshHeaderView setState:EGOOPullRefreshLoading];
 		[UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:0.2];

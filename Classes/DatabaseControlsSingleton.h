@@ -99,4 +99,7 @@
 - (void)shuffleAllSongs:(NSString *)folderId artist:(Artist *)theArtist;
 - (void)shufflePlaylist;
 
+// New Model Stuff
+
+
 @end

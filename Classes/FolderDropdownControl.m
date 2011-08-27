@@ -12,9 +12,10 @@
 #import "iSubAppDelegate.h"
 #import "CustomUIAlertView.h"
 #import "NSString-md5.h"
+#import "SUSRootFoldersDAO.h"
 
 @implementation FolderDropdownControl
-@synthesize tableView, viewsToMove, folders, selectedFolderId;
+@synthesize folders, selectedFolderId;
 @synthesize borderColor, textColor, lightColor, darkColor;
 @synthesize delegate;
 
@@ -24,11 +25,9 @@
     if (self) 
 	{
 		delegate = nil;
-		selectedFolderId = -1;
-		folders = nil;
+		selectedFolderId = [[NSNumber numberWithInt:-1] retain];
+		folders = [[SUSRootFoldersDAO folderDropdownFolders] retain];
 		updatedfolders = nil;
-		viewsToMove = nil;
-		tableView = nil;
 		labels = [[NSMutableArray alloc] init];
 		isOpen = NO;
 		
@@ -53,7 +52,7 @@
 		selectedFolderLabel.textColor = borderColor;
 		selectedFolderLabel.textAlignment = UITextAlignmentCenter;
 		selectedFolderLabel.font = [UIFont boldSystemFontOfSize:20];
-		//selectedFolderLabel.text = @"All Folders";
+		selectedFolderLabel.text = @"All Folders";
 		[self addSubview:selectedFolderLabel];
 		[selectedFolderLabel release];
 		
@@ -82,15 +81,14 @@
 
 - (void)dealloc
 {
-	[folders release];
+	[folders release]; folders = nil;
 	
-	[borderColor release];
-	[textColor release];
-	[lightColor release];
-	[darkColor release];
+	[borderColor release]; borderColor = nil;
+	[textColor release]; textColor = nil;
+	[lightColor release]; lightColor = nil;
+	[darkColor release]; darkColor = nil;
 	
-	[labels release];
-	[viewsToMove release];
+	[labels release]; labels = nil;
     [super dealloc];
 }
 
@@ -104,8 +102,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 - (void)setFolders:(NSDictionary *)namesAndIds
 {
 	// Set the property
-	[folders release];
-	folders = nil;
+	[folders release]; folders = nil;
 	folders = [namesAndIds retain];
 	
 	// Remove old labels
@@ -118,9 +115,9 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	sizeIncrease = [folders count] * 30.0f;
 	
 	NSMutableArray *sortedValues = [NSMutableArray arrayWithCapacity:[folders count]];
-	for (NSString *key in [folders allKeys])
+	for (NSNumber *key in [folders allKeys])
 	{
-		if (![key isEqualToString:@"-1"])
+		if ([key intValue] != -1)
 		{
 			NSArray *keyValuePair = [NSArray arrayWithObjects:key, [folders objectForKey:key], nil];
 			[sortedValues addObject:keyValuePair];
@@ -202,48 +199,26 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	if (!isOpen)
 	{
 		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:.5];
-		//[UIView setAnimationDelegate:self];
-		//[UIView setAnimationDidStopSelector:@selector(animationStopped)];
-		[self.tableView.tableHeaderView addHeight:sizeIncrease];
+		[UIView setAnimationDuration:.25];
 		[self addHeight:sizeIncrease];
-		for (UIView *aView in viewsToMove)
-		{
-			[aView addY:sizeIncrease];
-		}
-		for (UILabel *label in labels)
-		{
-			//label.alpha = 1.0;
-		}
-		self.tableView.tableHeaderView = self.tableView.tableHeaderView;
+		[delegate folderDropdownMoveViewsY:sizeIncrease];
 		[UIView commitAnimations];
 		
 		[CATransaction begin];
-		[CATransaction setAnimationDuration:.5];
+		[CATransaction setAnimationDuration:.25];
 		arrowImage.transform = CATransform3DMakeRotation((M_PI / 180.0) * -60.0f, 0.0f, 0.0f, 1.0f);
 		[CATransaction commit];
 	}
 	else
 	{
 		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:.5];
-		//[UIView setAnimationDelegate:self];
-		//[UIView setAnimationDidStopSelector:@selector(animationStopped)];
-		[self.tableView.tableHeaderView addHeight:-sizeIncrease];
+		[UIView setAnimationDuration:.25];
 		[self addHeight:-sizeIncrease];
-		for (UIView *aView in viewsToMove)
-		{
-			[aView addY:-sizeIncrease];
-		}
-		for (UILabel *label in labels)
-		{
-			//label.alpha = 0.0;
-		}
-		self.tableView.tableHeaderView = self.tableView.tableHeaderView;
+		[delegate folderDropdownMoveViewsY:-sizeIncrease];
 		[UIView commitAnimations];
 		
 		[CATransaction begin];
-		[CATransaction setAnimationDuration:.5];
+		[CATransaction setAnimationDuration:.25];
 		arrowImage.transform = CATransform3DMakeRotation((M_PI / 180.0) * 0.0f, 0.0f, 0.0f, 1.0f);
 		[CATransaction commit];
 	}
@@ -263,13 +238,10 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 {
 	if (isOpen)
 	{
-		[self.tableView.tableHeaderView addHeight:-sizeIncrease];
+		isOpen = NO;
+		
 		[self addHeight:-sizeIncrease];
-		for (UIView *aView in viewsToMove)
-		{
-			[aView addY:-sizeIncrease];
-		}
-		self.tableView.tableHeaderView = self.tableView.tableHeaderView;
+		[delegate folderDropdownMoveViewsY:-sizeIncrease];
 		
 		arrowImage.transform = CATransform3DMakeRotation((M_PI / 180.0) * 0.0f, 0.0f, 0.0f, 1.0f);
 	}
@@ -282,41 +254,21 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	
 	//DLog(@"Folder selected: %@ -- %i", label.text, label.tag);
 	
-	self.selectedFolderId = label.tag;
-	selectedFolderLabel.text = [folders objectForKey:[NSString stringWithFormat:@"%i", selectedFolderId]];
-	[self toggleDropdown:nil];
+	self.selectedFolderId = [NSNumber numberWithInt:label.tag];
+	NSLog(@"%@", [folders objectForKey:selectedFolderId]);
+	selectedFolderLabel.text = [folders objectForKey:selectedFolderId];
+	//[self toggleDropdown:nil];
+	[self closeDropdownFast];
 	
-	// Save the default
-	iSubAppDelegate *appDelegate = [iSubAppDelegate sharedInstance];
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSString *object = [NSString stringWithFormat:@"%i", selectedFolderId];
-	NSString *key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [appDelegate.defaultUrl md5]];
-	
-	[appDelegate.settingsDictionary setObject:object forKey:key];
-	[defaults setObject:appDelegate.settingsDictionary forKey:@"settingsDictionary"];
-	[defaults synchronize];
-	
-	[delegate performSelector:@selector(loadData:) withObject:[NSString stringWithFormat:@"%i", selectedFolderId]];
+	// Call the delegate method
+	[delegate folderDropdownSelectFolder:selectedFolderId];	
 }
 
-- (void)selectFolderWithId:(NSUInteger)folderId
+- (void)selectFolderWithId:(NSNumber *)folderId
 {
-	//DLog(@"folders: %@", folders);
-	//DLog(@"folderId: %i", folderId);
 	self.selectedFolderId = folderId;
-	selectedFolderLabel.text = [folders objectForKey:[NSString stringWithFormat:@"%i", selectedFolderId]];
+	selectedFolderLabel.text = [folders objectForKey:selectedFolderId];
 }
-
-/*- (void)animationStopped
-{
-	if (isOpen)
-	{
-		for (UILabel *label in labels)
-		{
-			label.hidden = NO;
-		}
-	}
-}*/
 
 - (void)updateFolders
 {
@@ -415,11 +367,11 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	{
 		updatedfolders = [[NSMutableDictionary alloc] init];
 		
-		[updatedfolders setObject:@"All Folders" forKey:@"-1"];
+		[updatedfolders setObject:@"All Folders" forKey:[NSNumber numberWithInt:-1]];
 	}
 	else if ([elementName isEqualToString:@"musicFolder"])
 	{
-		NSString *folderId = [attributeDict objectForKey:@"id"];
+		NSNumber *folderId = [NSNumber numberWithInt:[[attributeDict objectForKey:@"id"] intValue]];
 		NSString *folderName = [attributeDict objectForKey:@"name"];
 		
 		[updatedfolders setObject:folderName forKey:folderId];
@@ -434,14 +386,16 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 		self.folders = [NSDictionary dictionaryWithDictionary:updatedfolders];
 		
 		// Save the default
-		iSubAppDelegate *appDelegate = [iSubAppDelegate sharedInstance];
+		[SUSRootFoldersDAO setFolderDropdownFolders:self.folders];
+		
+		/*iSubAppDelegate *appDelegate = [iSubAppDelegate sharedInstance];
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		NSData *foldersData = [NSKeyedArchiver archivedDataWithRootObject:folders];
 		NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [appDelegate.defaultUrl md5]];
 		
 		[appDelegate.settingsDictionary setObject:foldersData forKey:key];
 		[defaults setObject:appDelegate.settingsDictionary forKey:@"settingsDictionary"];
-		[defaults synchronize];
+		[defaults synchronize];*/
 		
 		[updatedfolders release];
 	}

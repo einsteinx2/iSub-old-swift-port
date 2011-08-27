@@ -7,13 +7,13 @@
 //
 
 #import "Loader.h"
-#import "DefaultSettings.h"
+#import "SavedSettings.h"
 #import "MusicControlsSingleton.h"
 #import "Song.h"
 
 @implementation Loader
 
-@synthesize loadError, results;
+@synthesize delegate, loadError, results;
 
 - (id)init
 {
@@ -22,20 +22,20 @@
 	{
 		results = nil;
 		loadError = nil;
-		delegate_ = nil;
+		delegate = nil;
     }
     
     return self;
 }
 
-- (id)initWithDelegate:(id <LoaderDelegate>)delegate
+- (id)initWithDelegate:(id <LoaderDelegate>)theDelegate
 {
 	self = [super init];
     if (self) 
 	{
 		results = nil;
 		loadError = nil;
-		delegate_ = [delegate retain];
+		delegate = [theDelegate retain];
 	}
 	
 	return self;
@@ -45,7 +45,7 @@
 {
 	[results release]; results = nil;
 	[loadError release]; loadError = nil;
-	[delegate_ release]; delegate_ = nil;
+	[delegate release]; delegate = nil;
     [super dealloc];
 }
 
@@ -59,16 +59,6 @@
 {
 	[NSException raise:NSInternalInconsistencyException 
 				format:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)];
-}
-
-- (void)setDelegate:(id <LoaderDelegate>)delegate
-{
-	delegate_ = [delegate retain];
-}
-
-- (id <LoaderDelegate>)delegate
-{
-	return delegate_;
 }
 
 - (void) subsonicErrorCode:(NSString *)errorCode message:(NSString *)message
@@ -112,7 +102,7 @@
 	 urlString = defaultUrl;
 	 }*/
 	
-	DefaultSettings *settings = [DefaultSettings sharedInstance];
+	SavedSettings *settings = [SavedSettings sharedInstance];
 	NSString *urlString = settings.urlString;
 	NSString *username = settings.username;
 	NSString *password = settings.password;

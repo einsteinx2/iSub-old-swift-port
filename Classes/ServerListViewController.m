@@ -21,7 +21,7 @@
 #import "UIView-tools.h"
 #import "CustomUIAlertView.h"
 #import "Reachability.h"
-#import "DefaultSettings.h"
+#import "SavedSettings.h"
 
 @implementation ServerListViewController
 
@@ -243,7 +243,7 @@
 	[defaults synchronize];
 	
 	// Update the variables
-	DefaultSettings *settings = [DefaultSettings sharedInstance];
+	SavedSettings *settings = [SavedSettings sharedInstance];
 	settings.urlString = [NSString stringWithString:viewObjects.serverToEdit.url];
 	settings.username = [NSString stringWithString:viewObjects.serverToEdit.username];
 	settings.password = [NSString stringWithString:viewObjects.serverToEdit.password];

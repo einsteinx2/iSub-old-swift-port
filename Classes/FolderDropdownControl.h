@@ -7,20 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "FolderDropdownDelegate.h"
 
 @interface FolderDropdownControl : UIView <NSXMLParserDelegate>
 {
 	CALayer *arrowImage;
 	
-	UITableView *tableView;
-	NSArray *viewsToMove;
-	
 	float sizeIncrease;
 	
 	NSDictionary *folders;
 	NSMutableDictionary *updatedfolders;
-	NSInteger selectedFolderId;
+	NSNumber *selectedFolderId;
 	
 	UILabel *selectedFolderLabel;
 	
@@ -34,16 +31,14 @@
 	UIColor *lightColor;
 	UIColor *darkColor;
 	
-	id delegate;
+	id<FolderDropdownDelegate> delegate;
 	
 	NSMutableData *receivedData;
 }
 
-@property (assign) UITableView *tableView;
-@property (nonatomic, retain) NSArray *viewsToMove;
 @property (nonatomic, retain) NSDictionary *folders;
 
-@property NSInteger selectedFolderId;
+@property (nonatomic, retain) NSNumber *selectedFolderId;
 
 // Colors
 @property (nonatomic, retain) UIColor *borderColor;
@@ -51,9 +46,9 @@
 @property (nonatomic, retain) UIColor *lightColor;
 @property (nonatomic, retain) UIColor *darkColor;
 
-@property (assign) id delegate;
+@property (assign) id<FolderDropdownDelegate> delegate;
 
-- (void)selectFolderWithId:(NSUInteger)folderId;
+- (void)selectFolderWithId:(NSNumber *)folderId;
 - (void)updateFolders;
 - (void)closeDropdown;
 - (void)closeDropdownFast;

@@ -12,19 +12,19 @@
 @interface Loader : NSObject 
 {
 	NSError *loadError;
-	id <LoaderDelegate> delegate_;
+	id<LoaderDelegate> delegate;
 	NSDictionary *results;
 }
+
+@property (nonatomic, retain) id<LoaderDelegate> delegate;
 
 @property (readonly) NSError *loadError;
 @property (readonly) NSDictionary *results;
 
-- (id)initWithDelegate:(id <LoaderDelegate>)delegate;
+- (id)initWithDelegate:(id <LoaderDelegate>)theDelegate;
 
 - (void)startLoad;
 - (void)cancelLoad;
-- (void)setDelegate:(id <LoaderDelegate>)delegate;
-- (id <LoaderDelegate>)delegate;
 - (void) subsonicErrorCode:(NSString *)errorCode message:(NSString *)message;
 - (NSString *)getBaseUrlString:(NSString *)action;
 
