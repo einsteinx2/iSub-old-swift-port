@@ -11,6 +11,7 @@
 #import "iSubAppDelegate.h"
 #import "CustomUIAlertView.h"
 #import "NSString-md5.h"
+#import "SavedSettings.h"
 
 @implementation APICheckXMLParser
 
@@ -79,14 +80,15 @@
 				isNewSearchAPI = NO;
 		}
 		
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		[SavedSettings sharedInstance].isNewSearchAPI = isNewSearchAPI;
+		/*NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
 		if (isNewSearchAPI)
 			[appDelegate.settingsDictionary setObject:@"YES" forKey:key];
 		else
 			[appDelegate.settingsDictionary setObject:@"NO" forKey:key];
 		[defaults setObject:appDelegate.settingsDictionary forKey:@"settingsDictionary"];
-		[defaults synchronize];
+		[defaults synchronize];*/
 	}	
 }
 

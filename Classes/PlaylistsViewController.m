@@ -29,6 +29,7 @@
 #import "CustomUIAlertView.h"
 #import "NSString-rfcEncode.h"
 #import "TBXML.h"
+#import "SavedSettings.h"
 
 @interface PlaylistsViewController (Private)
 
@@ -43,8 +44,8 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] 
-		&& inOrientation != UIInterfaceOrientationPortrait)
+	//if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] && inOrientation != UIInterfaceOrientationPortrait)
+	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -1188,11 +1189,11 @@
 										   [appDelegate getBaseUrl:@"deletePlaylist.view"], 
 										   [[viewObjects.listOfPlaylists objectAtIndex:[index intValue]] objectAtIndex:0]];
 					
-					NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] 
+					NSURLRequest *aRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] 
 															 cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData 
 														 timeoutInterval:10.0];
 					
-					connection = [[NSURLConnection alloc] initWithRequest:request 
+					connection = [[NSURLConnection alloc] initWithRequest:aRequest 
 																 delegate:self 
 														 startImmediately:NO];
 					if (connection)
@@ -1340,9 +1341,9 @@
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	
 	// Grab the list of playlists from the server
-	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[appDelegate getBaseUrl:@"getPlaylists.view"]]];
-	[request startSynchronous];
-	if ([request error])
+	ASIHTTPRequest *aRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[appDelegate getBaseUrl:@"getPlaylists.view"]]];
+	[aRequest startSynchronous];
+	if ([aRequest error])
 	{
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error grabbing the playlist from the server." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
@@ -1350,7 +1351,7 @@
 	}
 	else
 	{
-		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:[request responseData]];
+		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:[aRequest responseData]];
 		PlaylistsXMLParser *parser = [[PlaylistsXMLParser alloc] initXMLParser];
 		[xmlParser setDelegate:parser];
 		[xmlParser parse];

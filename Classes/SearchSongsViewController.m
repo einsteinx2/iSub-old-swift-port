@@ -30,6 +30,7 @@
 #import "MGSplitViewController.h"
 #import "NSString-rfcEncode.h"
 #import "CustomUIAlertView.h"
+#import "SavedSettings.h"
 
 @implementation SearchSongsViewController
 
@@ -42,8 +43,8 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] 
-		&& inOrientation != UIInterfaceOrientationPortrait)
+	//if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] && inOrientation != UIInterfaceOrientationPortrait)
+	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -327,8 +328,9 @@
 	offset += 20;
 	
 	NSString *urlString = @"";
-	NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
-	if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
+	/*NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
+	if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])*/
+	if ([SavedSettings sharedInstance].isNewSearchAPI)
 	{
 		if (searchType == 0)
 		{

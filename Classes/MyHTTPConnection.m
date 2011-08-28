@@ -28,7 +28,8 @@
 **/
 - (NSString *)createBrowseableIndex:(NSString *)path
 {
-    NSArray *array = [[NSFileManager defaultManager] directoryContentsAtPath:path];
+    //NSArray *array = [[NSFileManager defaultManager] directoryContentsAtPath:path];
+	NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
     
     NSMutableString *outdata = [NSMutableString new];
 	[outdata appendString:@"<html><head>"];
@@ -41,7 +42,8 @@
 	[outdata appendFormat:@"<a href=\"..\">..</a><br />\n"];
     for (NSString *fname in array)
     {
-        NSDictionary *fileDict = [[NSFileManager defaultManager] fileAttributesAtPath:[path stringByAppendingPathComponent:fname] traverseLink:NO];
+        //NSDictionary *fileDict = [[NSFileManager defaultManager] fileAttributesAtPath:[path stringByAppendingPathComponent:fname] traverseLink:NO];
+		NSDictionary *fileDict = [[NSFileManager defaultManager] attributesOfItemAtPath:[path stringByAppendingPathComponent:fname] error:nil];
 		//DLog(@"fileDict: %@", fileDict);
         NSString *modDate = [[fileDict objectForKey:NSFileModificationDate] description];
 		if ([[fileDict objectForKey:NSFileType] isEqualToString: @"NSFileTypeDirectory"]) fname = [fname stringByAppendingString:@"/"];

@@ -22,6 +22,7 @@
 #import "InitialDetailViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ViewObjectsSingleton.h"
+#import "SavedSettings.h"
 
 @implementation iPadMainMenu
 
@@ -63,15 +64,17 @@
 
 - (void)loadTable
 {
-	// Enable menu scrolling if the albums/songs/genres tabs are enabled
 	self.tableView.scrollEnabled = NO;
-	if ([[appDelegate.settingsDictionary objectForKey:@"enableSongsTabSetting"] isEqualToString:@"YES"])
-		self.tableView.scrollEnabled = YES;
 	
-	if ([[appDelegate.settingsDictionary objectForKey:@"enableSongsTabSetting"] isEqualToString:@"YES"])
+	if ([SavedSettings sharedInstance].isSongsTabEnabled)
+	{
+		self.tableView.scrollEnabled = YES;
 		rowNames = [[NSArray alloc] initWithObjects:@"Home", @"Player", @"Folders", @"Playlists", @"Playing", @"Bookmarks", @"Cache", @"Chat", @"Genres", @"Albums", @"Songs", nil];
+	}
 	else
+	{
 		rowNames = [[NSArray alloc] initWithObjects:@"Home", @"Player", @"Folders", @"Playlists", @"Playing", @"Bookmarks", @"Cache", @"Chat", nil];
+	}
 	
 	[self.tableView reloadData];
 	

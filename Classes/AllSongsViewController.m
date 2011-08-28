@@ -30,6 +30,7 @@
 #import "CustomUITableView.h"
 #import "CustomUIAlertView.h"
 #import "GTMNSString+HTML.h"
+#import "SavedSettings.h"
 
 @interface AllSongsViewController (Private)
 
@@ -46,8 +47,8 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] 
-		&& inOrientation != UIInterfaceOrientationPortrait)
+	//if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] && inOrientation != UIInterfaceOrientationPortrait)
+	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;

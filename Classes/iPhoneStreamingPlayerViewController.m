@@ -24,6 +24,7 @@
 #import "NSString-md5.h"
 #import "UIView-tools.h"
 #import <QuartzCore/QuartzCore.h>
+#import "SavedSettings.h"
 
 
 @interface iPhoneStreamingPlayerViewController ()
@@ -72,7 +73,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {
 	musicControls.songUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], [musicControls.currentSongObject songId]]];
 	
-	if([[appDelegate.settingsDictionary objectForKey:@"autoPlayerInfoSetting"] isEqualToString:@"YES"])
+	//if([[appDelegate.settingsDictionary objectForKey:@"autoPlayerInfoSetting"] isEqualToString:@"YES"])
+	if ([SavedSettings sharedInstance].isAutoShowSongInfoEnabled)
 	{
 		[self songInfoToggle:nil];
 	}

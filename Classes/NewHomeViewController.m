@@ -32,13 +32,15 @@
 #import "SearchAllViewController.h"
 #import "NSString-TrimmingAdditions.h"
 #import <QuartzCore/QuartzCore.h>
+#import "SavedSettings.h"
+#import "SUSRootFoldersDAO.h"
 
 @implementation NewHomeViewController
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] 
-		&& inOrientation != UIInterfaceOrientationPortrait)
+	//if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] && inOrientation != UIInterfaceOrientationPortrait)
+	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -48,7 +50,8 @@
 {
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 	
-	BOOL rotationDisabled = [[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"];
+	//BOOL rotationDisabled = [[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"];
+	BOOL rotationDisabled = [SavedSettings sharedInstance].isRotationLockEnabled;
 	
 	if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation) && !rotationDisabled)
 	{
@@ -175,7 +178,8 @@
 	viewObjects.isSettingsShowing = NO;
 	
 	//////////// Handle landscape bug
-	BOOL rotationDisabled = [[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"];
+	//BOOL rotationDisabled = [[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"];
+	BOOL rotationDisabled = [SavedSettings sharedInstance].isRotationLockEnabled;
 	
 	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && !rotationDisabled)
 	{
@@ -347,9 +351,11 @@
 
 - (IBAction)serverShuffle
 {
-	NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [appDelegate.defaultUrl md5]];
+	NSDictionary *folders = [SUSRootFoldersDAO folderDropdownFolders];
+	
+	/*NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [appDelegate.defaultUrl md5]];
 	NSData *archivedData = [appDelegate.settingsDictionary objectForKey:key];
-	NSDictionary *folders = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
+	NSDictionary *folders = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];*/
 	
 	if (folders == nil || [folders count] == 2)
 	{
@@ -525,11 +531,12 @@
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)theSearchBar
 {	
-	NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
+	//NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
 	
 	// Create search overlay
 	searchOverlay = [[UIView alloc] init];
-	if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
+	//if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
+	if ([SavedSettings sharedInstance].isNewSearchAPI)
 	{
 		if (IS_IPAD())
 			searchOverlay.frame = CGRectMake(0, 86, 1024, 1024);
@@ -561,7 +568,8 @@
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:.5];
 	[UIView setAnimationCurve:UIViewAnimationCurveLinear];
-	if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
+	//if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
+	if ([SavedSettings sharedInstance].isNewSearchAPI)
 	{
 		searchSegment.enabled = YES;
 		searchSegment.alpha = 1;
@@ -578,8 +586,9 @@
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:.3];
 	[UIView setAnimationCurve:UIViewAnimationCurveLinear];
-	NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
-	if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
+	//NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
+	//if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
+	if ([SavedSettings sharedInstance].isNewSearchAPI)
 	{
 		searchSegment.alpha = 0;
 		searchSegment.enabled = NO;
@@ -602,8 +611,9 @@
 	NSString *searchTerms = [[searchBar.text stringByTrimmingLeadingAndTrailingWhitespace] 
 							 stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding];
 	
-	NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
-	if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
+	//NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
+	//if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
+	if ([SavedSettings sharedInstance].isNewSearchAPI)
 	{
 		if (searchSegment.selectedSegmentIndex == 0)
 		{
@@ -718,12 +728,13 @@
 		[xmlParser setDelegate:parser];
 		[xmlParser parse];
 		
-		NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
+		/*NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
 		BOOL isNewSearchAPI = NO;
 		if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
 			isNewSearchAPI = YES;
 		
-		if (isNewSearchAPI && searchSegment.selectedSegmentIndex == 3)
+		if (isNewSearchAPI && searchSegment.selectedSegmentIndex == 3)*/
+		if ([SavedSettings sharedInstance].isNewSearchAPI && searchSegment.selectedSegmentIndex == 3)
 		{
 			SearchAllViewController *searchViewController = [[SearchAllViewController alloc] initWithNibName:@"SearchAllViewController" 
 																						   bundle:nil];
@@ -745,7 +756,8 @@
 			SearchSongsViewController *searchViewController = [[SearchSongsViewController alloc] initWithNibName:@"SearchSongsViewController" 
 																										  bundle:nil];
 			searchViewController.title = @"Search";
-			if (isNewSearchAPI)
+			//if (isNewSearchAPI)
+			if ([SavedSettings sharedInstance].isNewSearchAPI)
 			{
 				if (searchSegment.selectedSegmentIndex == 0)
 				{

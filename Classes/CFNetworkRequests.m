@@ -18,6 +18,7 @@
 #import "AsynchronousImageView.h"
 #import "AsynchronousImageViewCached.h"
 #import "CustomUIAlertView.h"
+#import "SavedSettings.h"
 
 static iSubAppDelegate *appDelegate;
 static MusicControlsSingleton *musicControls;
@@ -293,7 +294,8 @@ static void DownloadDoneA()
 		isDownloadA = NO;
 		
 		// Start the download of the next song if there is one and the setting is turned on
-		if ([[musicControlsRef nextSongObject] path] != nil && [[[appDelegateRef settingsDictionary] objectForKey:@"enableNextSongCacheSetting"] isEqualToString:@"YES"])
+		//if ([[musicControlsRef nextSongObject] path] != nil && [[[appDelegateRef settingsDictionary] objectForKey:@"enableNextSongCacheSetting"] isEqualToString:@"YES"])
+		if ([[musicControlsRef nextSongObject] path] != nil && [SavedSettings sharedInstance].isNextSongCacheEnabled)
 			[musicControlsRef startDownloadB];
 	}
 }
@@ -514,7 +516,8 @@ static void DownloadDoneB()
 		// If we're playing from this file and the setting is turned on, call startDownloadB again to grab the next song
 		if ([musicControlsRef reportDownloadedLengthB])
 		{
-			if ([[musicControlsRef nextSongObject] path] != nil && [[[appDelegateRef settingsDictionary] objectForKey:@"enableNextSongCacheSetting"] isEqualToString:@"YES"])
+			//if ([[musicControlsRef nextSongObject] path] != nil && [[[appDelegateRef settingsDictionary] objectForKey:@"enableNextSongCacheSetting"] isEqualToString:@"YES"])
+			if ([[musicControlsRef nextSongObject] path] != nil && [SavedSettings sharedInstance].isNextSongCacheEnabled)
 				[musicControlsRef startDownloadB];
 		}
 		
@@ -650,7 +653,8 @@ static void DownloadDoneTemp()
 		isDownloadA = NO;
 		
 		// Start the download of the next song if there is one and the setting is turned on and auto song caching is enabled
-		if ([[musicControlsRef nextSongObject] path] != nil && [[[appDelegateRef settingsDictionary] objectForKey:@"enableNextSongCacheSetting"] isEqualToString:@"YES"] && [[[appDelegateRef settingsDictionary] objectForKey:@"enableSongCachingSetting"] isEqualToString:@"YES"])
+		//if ([[musicControlsRef nextSongObject] path] != nil && [[[appDelegateRef settingsDictionary] objectForKey:@"enableNextSongCacheSetting"] isEqualToString:@"YES"] && [[[appDelegateRef settingsDictionary] objectForKey:@"enableSongCachingSetting"] isEqualToString:@"YES"])
+		if ([[musicControlsRef nextSongObject] path] != nil && [SavedSettings sharedInstance].isNextSongCacheEnabled && [SavedSettings sharedInstance].isSongCachingEnabled)
 			[musicControlsRef startDownloadB];
 	}
 }

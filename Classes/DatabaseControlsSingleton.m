@@ -42,7 +42,8 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	
 	// Only load Albums, Songs, and Genre databases if this is a newer device
 	//if (![[UIDevice currentDevice] isOldDevice])
-	if ([[appDelegate.settingsDictionary objectForKey:@"enableSongsTabSetting"] isEqualToString:@"YES"])
+	//if ([[appDelegate.settingsDictionary objectForKey:@"enableSongsTabSetting"] isEqualToString:@"YES"])
+	if ([SavedSettings sharedInstance].isSongsTabEnabled)
 	{
 		// Setup the allAlbums database
 		allAlbumsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allAlbums.db", databaseFolderPath, urlStringMd5]] retain];

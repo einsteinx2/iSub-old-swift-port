@@ -10,6 +10,14 @@
 #import "ViewObjectsSingleton.h"
 //#import "UITableViewCell-overlay.h"
 
+@interface NSObject (cell)
+- (void)toggleDelete;
+- (BOOL)fingerIsMovingVertically;
+- (void)hideOverlay;
+- (BOOL)isOverlayShowing;
+- (UIView *)contentView;
+@end
+
 
 @implementation CustomUITableView
 

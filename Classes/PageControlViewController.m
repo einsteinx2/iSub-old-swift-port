@@ -13,6 +13,7 @@
 #import "DebugViewController.h"
 #import "iSubAppDelegate.h"
 #import "MusicControlsSingleton.h"
+#import "SavedSettings.h"
 
 @interface PageControlViewController (PrivateMethods)
 
@@ -38,7 +39,8 @@
 	
 	appDelegate = (iSubAppDelegate *)[UIApplication sharedApplication].delegate; 
 	
-	if ([[appDelegate.settingsDictionary objectForKey:@"lyricsEnabledSetting"] isEqualToString:@"YES"])
+	//if ([[appDelegate.settingsDictionary objectForKey:@"lyricsEnabledSetting"] isEqualToString:@"YES"])
+	if ([SavedSettings sharedInstance].isLyricsEnabled)
 		numberOfPages = 4;
 	else
 		numberOfPages = 3;	

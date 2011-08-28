@@ -15,7 +15,7 @@
 #import "FMDatabaseAdditions.h"
 #import "NSString-md5.h"
 #import "Song.h"
-
+#import "SavedSettings.h"
 
 @implementation DebugViewController
 
@@ -127,15 +127,18 @@
 		songsCachedLabel.text = [NSString stringWithFormat:@"%i songs", cachedSongs];
 	
 	// Set the cache setting labels
-	if ([[appDelegate.settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 0)
+	//if ([[appDelegate.settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 0)
+	if ([SavedSettings sharedInstance].cachingType == 0)
 	{
 		cacheSettingLabel.text = @"Min Free Space:";
-		cacheSettingSizeLabel.text = [appDelegate formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
+		//cacheSettingSizeLabel.text = [appDelegate formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
+		cacheSettingSizeLabel.text = [appDelegate formatFileSize:[SavedSettings sharedInstance].minFreeSpace];
 	}
 	else
 	{
 		cacheSettingLabel.text = @"Max Cache Size:";
-		cacheSettingSizeLabel.text = [appDelegate formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue]];
+		//cacheSettingSizeLabel.text = [appDelegate formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue]];
+		cacheSettingSizeLabel.text = [appDelegate formatFileSize:[SavedSettings sharedInstance].maxCacheSize];
 	}
 	
 	// Set the free space label

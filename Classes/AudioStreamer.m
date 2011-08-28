@@ -13,6 +13,7 @@
 //
 #import "AudioStreamer.h"
 #import "iSubAppDelegate.h"
+#import "SavedSettings.h"
 #import "MusicControlsSingleton.h"
 #import "SocialControlsSingleton.h"
 #import "Song.h"
@@ -1049,21 +1050,23 @@ cleanup:
 	self.tweetTimer = [NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(tweetSong) userInfo:nil repeats:NO];
 	
 	// Scrobbling timer
-	iSubAppDelegate *appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
+	SavedSettings *settings = [SavedSettings sharedInstance];
 	MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
 	shouldInvalidateScrobbleTimer = YES;
 	NSTimeInterval scrobbleInterval = 30.0;
 	if (musicControls.currentSongObject.duration != nil)
 	{
-		double scrobblePercent = [[appDelegate.settingsDictionary objectForKey:@"scrobblePercentSetting"] doubleValue];
-		double duration = [musicControls.currentSongObject.duration doubleValue];
+		//double scrobblePercent = [[appDelegate.settingsDictionary objectForKey:@"scrobblePercentSetting"] doubleValue];
+		float scrobblePercent = settings.scrobblePercent;
+		float duration = [musicControls.currentSongObject.duration floatValue];
 		scrobbleInterval = scrobblePercent * duration;
 		DLog(@"duration: %f    percent: %f    scrobbleInterval: %f", duration, scrobblePercent, scrobbleInterval);
 	}
 	self.scrobbleTimer = [NSTimer scheduledTimerWithTimeInterval:scrobbleInterval target:self selector:@selector(scrobbleSong) userInfo:nil repeats:NO];
 	
 	// If scrobbling is enabled, send "now playing" call
-	if ([[appDelegate.settingsDictionary objectForKey:@"enableScrobblingSetting"] isEqualToString:@"YES"])
+	//if ([[appDelegate.settingsDictionary objectForKey:@"enableScrobblingSetting"] isEqualToString:@"YES"])
+	if (settings.isScrobbleEnabled)
 	{
 		MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
 		[musicControls scrobbleSong:musicControls.currentSongObject.songId isSubmission:NO];
@@ -1073,14 +1076,15 @@ cleanup:
 
 - (void) tweetSong
 {
-	iSubAppDelegate *appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
 	SocialControlsSingleton *socialControls = [SocialControlsSingleton sharedInstance];
+	SavedSettings *settings = [SavedSettings sharedInstance];
 	
 	shouldInvalidateTweetTimer = NO;
 	tweetTimer = nil;
 	
-	if (socialControls.twitterEngine && [[appDelegate.settingsDictionary objectForKey:@"twitterEnabledSetting"] isEqualToString:@"YES"])
+	//if (socialControls.twitterEngine && [[appDelegate.settingsDictionary objectForKey:@"twitterEnabledSetting"] isEqualToString:@"YES"])
+	if (socialControls.twitterEngine && settings.isTwitterEnabled)
 	{
 		if (musicControls.currentSongObject.artist && musicControls.currentSongObject.title)
 		{
@@ -1107,8 +1111,9 @@ cleanup:
 	shouldInvalidateScrobbleTimer = NO;
 	scrobbleTimer = nil;
 	
-	iSubAppDelegate *appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	if ([[appDelegate.settingsDictionary objectForKey:@"enableScrobblingSetting"] isEqualToString:@"YES"])
+	//iSubAppDelegate *appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
+	//if ([[appDelegate.settingsDictionary objectForKey:@"enableScrobblingSetting"] isEqualToString:@"YES"])
+	if ([SavedSettings sharedInstance].isScrobbleEnabled)
 	{
 		MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
 		[musicControls scrobbleSong:musicControls.currentSongObject.songId isSubmission:YES];

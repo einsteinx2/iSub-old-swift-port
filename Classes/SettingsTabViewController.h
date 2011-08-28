@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, SocialControlsSingleton, DatabaseControlsSingleton;
+@class SavedSettings, iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, SocialControlsSingleton, DatabaseControlsSingleton;
 
 @interface SettingsTabViewController : UIViewController 
 {
+	SavedSettings *settings;
+	
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
 	MusicControlsSingleton *musicControls;

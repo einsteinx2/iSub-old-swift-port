@@ -72,7 +72,7 @@
 
 
 // Settings
-@synthesize settingsDictionary;
+//@synthesize settingsDictionary;
 
 
 // Multitasking stuff
@@ -104,8 +104,6 @@
 	//freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
 	//
 	
-	NSLog(@"1");
-
 	// HockyApp Kits
 #if defined (CONFIGURATION_AdHoc)
     [[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
@@ -122,7 +120,7 @@
 #endif
 	
 	introController = nil;
-	NSLog(@"2");
+
 	//DLog(@"App finish launching called");
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	databaseControls = [DatabaseControlsSingleton sharedInstance];
@@ -167,7 +165,7 @@
 	{
 		isHighRez = NO;
 	}
-NSLog(@"4");
+
 	// Setup network reachability notifications
 	wifiReach = [[Reachability reachabilityForLocalWiFi] retain];
 	[wifiReach startNotifier];
@@ -182,16 +180,16 @@ NSLog(@"4");
 	
 	// Initiallize the save state timer
 	[NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(saveDefaults) userInfo:nil repeats:YES];
-	NSLog(@"5");
+
 	// Check battery state and register for notifications
 	[UIDevice currentDevice].batteryMonitoringEnabled = YES;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(batteryStateChanged:) name:@"UIDeviceBatteryStateDidChangeNotification" object:[UIDevice currentDevice]];
 	[self batteryStateChanged:nil];	
 	
 	// Disable the screen idle timer if that setting is enabled
-	if ([[settingsDictionary objectForKey:@"disableScreenSleepSetting"] isEqualToString:@"YES"])
+	//if ([[settingsDictionary objectForKey:@"disableScreenSleepSetting"] isEqualToString:@"YES"])
+	if (![SavedSettings sharedInstance].isScreenSleepEnabled)
 		[UIApplication sharedApplication].idleTimerDisabled = YES;
-	NSLog(@"6");
 }
 
 - (void)batteryStateChanged:(NSNotification *)notification
@@ -203,7 +201,8 @@ NSLog(@"4");
     }
 	else
 	{
-		if (![[settingsDictionary objectForKey:@"disableScreenSleepSetting"] isEqualToString:@"YES"])
+		//if (![[settingsDictionary objectForKey:@"disableScreenSleepSetting"] isEqualToString:@"YES"])
+		if ([SavedSettings sharedInstance].isScreenSleepEnabled)
 			[UIApplication sharedApplication].idleTimerDisabled = NO;
 	}
 }
@@ -213,21 +212,23 @@ NSLog(@"4");
 //
 - (void) adjustCacheSize
 {
-	NSLog(@"adjustCacheSize:  [settingsDictionary objectForKey:@\"cachingTypeSetting\"] = %i", [[settingsDictionary objectForKey:@"cachingTypeSetting"] intValue]);
 	// Only adjust if the user is using max cache size as option
-	if ([[settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 1)
+	//if ([[settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 1)
+	if ([SavedSettings sharedInstance].cachingType == 1)
 	{
 		unsigned long long int freeSpace = [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:musicControls.audioFolderPath error:NULL] objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
-		unsigned long long int maxCacheSize = [[settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue];		
+		//unsigned long long int maxCacheSize = [[settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue];		
+		unsigned long long int maxCacheSize = [SavedSettings sharedInstance].maxCacheSize;
 		
 		NSLog(@"adjustCacheSize:  freeSpace = %llu  maxCacheSize = %llu", freeSpace, maxCacheSize);
 		
 		if (freeSpace < maxCacheSize)
 		{
 			unsigned long long int newMaxCacheSize = freeSpace - 26214400; // Set the max cache size to 25MB less than the free space
-			[settingsDictionary setObject:[NSNumber numberWithUnsignedLongLong:newMaxCacheSize] forKey:@"maxCacheSize"];
+			[SavedSettings sharedInstance].maxCacheSize = newMaxCacheSize;
+			/*[settingsDictionary setObject:[NSNumber numberWithUnsignedLongLong:newMaxCacheSize] forKey:@"maxCacheSize"];
 			[[NSUserDefaults standardUserDefaults] setObject:settingsDictionary forKey:@"settingsDictionary"];
-			[[NSUserDefaults standardUserDefaults] synchronize];
+			[[NSUserDefaults standardUserDefaults] synchronize];*/
 		}
 	}
 }
@@ -309,9 +310,6 @@ NSLog(@"4");
 - (void)appInit
 {		
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];	
-	SavedSettings *settings = [SavedSettings sharedInstance];
-
-	NSLog(@"7");
 
 	// Create http server
 	/*httpServer = [HTTPServer new];
@@ -322,6 +320,9 @@ NSLog(@"4");
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(displayInfoUpdate:) name:@"LocalhostAdressesResolved" object:nil];
 	[LocalhostAddresses performSelectorInBackground:@selector(list) withObject:nil];*/
 	
+	
+	/*//
+	//
 	// Set default settings
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	if ([defaults objectForKey:@"settingsDictionary"])
@@ -399,13 +400,19 @@ NSLog(@"4");
 	[defaults setObject:settingsDictionary forKey:@"settingsDictionary"];
 	[defaults synchronize];
 	NSLog(@"8");
+	 */
+	
+	SavedSettings *settings = [SavedSettings sharedInstance];
+	
 	// Handle In App Purchase Settings
 	if (viewObjects.isCacheUnlocked == NO)
 	{
-		[settingsDictionary setObject:@"NO" forKey:@"enableSongCachingSetting"];
+		settings.isSongCachingEnabled = NO;
+		//[settingsDictionary setObject:@"NO" forKey:@"enableSongCachingSetting"];
 	}
 	
-	if ([[settingsDictionary objectForKey:@"manualOfflineModeSetting"] isEqualToString:@"YES"])
+	//if ([[settingsDictionary objectForKey:@"manualOfflineModeSetting"] isEqualToString:@"YES"])
+	if (settings.isForceOfflineMode)
 	{
 		viewObjects.isOfflineMode = YES;
 		
@@ -426,11 +433,11 @@ NSLog(@"4");
 		viewObjects.isOfflineMode = NO;
 	}
 	
-	if ([[defaults objectForKey:@"isJukebox"] isEqualToString:@"YES"])
+	//if ([[defaults objectForKey:@"isJukebox"] isEqualToString:@"YES"])
+	if (settings.isJukeboxEnabled)
 	{
 		viewObjects.isJukebox = YES;
 	}
-	NSLog(@"9");
 	
 	self.isMultitaskingSupported = NO;
 	UIDevice* device = [UIDevice currentDevice];
@@ -440,13 +447,15 @@ NSLog(@"4");
 	}
 	
 	
-	if([defaults objectForKey:@"username"] != nil)
+	//if([defaults objectForKey:@"username"] != nil)
+	if (!settings.isTestServer)
 	{
-		settings.urlString = [defaults objectForKey:@"url"];
-		settings.username = [defaults objectForKey:@"username"];
-		settings.password = [defaults objectForKey:@"password"];
+		//settings.urlString = [defaults objectForKey:@"url"];
+		//settings.username = [defaults objectForKey:@"username"];
+		//settings.password = [defaults objectForKey:@"password"];
 		
 		// Convert to the new Server object if necessary
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		id serverList = [defaults objectForKey:@"servers"];
 		if ([serverList isKindOfClass:[NSArray class]])
 		{
@@ -482,23 +491,18 @@ NSLog(@"4");
 		{
 			viewObjects.serverList = [NSKeyedUnarchiver unarchiveObjectWithData:serverList];
 		}
-		NSLog(@"9");
 		//DLog(@"serverList: %@", viewObjects.serverList);
 		
 		[self appInit2];
-		NSLog(@"10");
 		[self adjustCacheSize];
-		NSLog(@"11");
 		[musicControls checkCache];
-		NSLog(@"12");
 		[self performSelectorOnMainThread:@selector(appInit3) withObject:nil waitUntilDone:NO];
-		NSLog(@"13");
 	}
 	else
 	{
-		settings.urlString = DEFAULT_URL;
-		settings.username = DEFAULT_USER_NAME;
-		settings.password = DEFAULT_PASSWORD;
+		//settings.urlString = DEFAULT_URL;
+		//settings.username = DEFAULT_USER_NAME;
+		//settings.password = DEFAULT_PASSWORD;
 		
 		if (viewObjects.isOfflineMode)
 		{
@@ -514,7 +518,6 @@ NSLog(@"4");
 		// Setup the HTTP Basic Auth credentials
 		//NSURLCredential *credential = [NSURLCredential credentialWithUser:self.defaultUserName password:self.defaultPassword persistence:NSURLCredentialPersistenceForSession];
 		//NSURLProtectionSpace *protectionSpace = [[NSURLProtectionSpace alloc] initWithHost:@"example.com" port:0 protocol:@"http" realm:nil authenticationMethod:NSURLAuthenticationMethodHTTPBasic];
-		NSLog(@"14");
 		
 		[self appInit2];
 		[self adjustCacheSize];
@@ -533,8 +536,6 @@ NSLog(@"4");
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	SavedSettings *settings = [SavedSettings sharedInstance];
 
-	NSLog(@"15");
-
 	// Check if the subsonic URL is valid by attempting to access the ping.view page, 
 	// if it's not then display an alert and allow user to change settings if they want.
 	// This is in case the user is, for instance, connected to a wifi network but does not 
@@ -548,15 +549,12 @@ NSLog(@"4");
 		isURLValid = [self isURLValid:[NSString stringWithFormat:@"%@/rest/ping.view", settings.urlString] error:&error];
 		//DLog(@"isURLValid: %i", isURLValid);
 	}
-	NSLog(@"16");
 	if(!isURLValid && !viewObjects.isOfflineMode)
 	{
 		//CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\nError code %i:\n%@", error.code, [ASIHTTPRequest errorCodeToEnglish:error.code]] delegate:self cancelButtonTitle:@"Retry" otherButtonTitles:@"Settings", nil];
-		NSLog(@"17");
 		viewObjects.isOfflineMode = YES;
 		[databaseControls initDatabases];
 		[viewObjects loadArtistList];
-		NSLog(@"18");
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", error.code, [ASIHTTPRequest errorCodeToEnglish:error.code]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Settings", nil];
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
@@ -573,11 +571,8 @@ NSLog(@"4");
 		 self.cachedIPHour = [self getHour];
 		 }
 		 }*/
-		NSLog(@"19");
 		[databaseControls initDatabases];
-		NSLog(@"20");
 		[viewObjects loadArtistList];
-		NSLog(@"21");
 	}
 	
 	[autoreleasePool release];
@@ -588,7 +583,7 @@ NSLog(@"4");
 //
 - (void) appInit3
 {
-	NSLog(@"22");
+
 	// Recover current state if player was interrupted
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	if([[defaults objectForKey:@"recover"] isEqualToString:@"YES"])
@@ -596,12 +591,14 @@ NSLog(@"4");
 		//DLog(@"defaults isPlaying: %@", [[NSUserDefaults standardUserDefaults] objectForKey:@"isPlaying"]);
 		if ([[defaults objectForKey:@"isPlaying"] isEqualToString:@"YES"])
 		{
-			if ([[settingsDictionary objectForKey:@"recoverSetting"] intValue] == 0)
+			//if ([[settingsDictionary objectForKey:@"recoverSetting"] intValue] == 0)
+			if ([SavedSettings sharedInstance].recoverSetting == 0)
 			{
 				//[musicControls resumeSong];
 				[musicControls performSelectorInBackground:@selector(resumeSong) withObject:nil];
 			}
-			else if ([[settingsDictionary objectForKey:@"recoverSetting"] intValue] == 1)
+			//else if ([[settingsDictionary objectForKey:@"recoverSetting"] intValue] == 1)
+			else if ([SavedSettings sharedInstance].recoverSetting == 1)
 			{
 				[defaults setObject:@"NO" forKey:@"isPlaying"];
 				[defaults synchronize];
@@ -621,7 +618,7 @@ NSLog(@"4");
 		//[self resetCurrentPlaylistDb];
 		musicControls.bitRate = 192;
 	}
-	NSLog(@"23");
+
 	// Start the queued downloads if Wifi is available
 	musicControls.isQueueListDownloading = NO;
 	if ([wifiReach currentReachabilityStatus] == ReachableViaWiFi)
@@ -630,7 +627,7 @@ NSLog(@"4");
 		reachabilityStatus = 2;
 		[musicControls downloadNextQueuedSong];
 	}
-		NSLog(@"24");
+
 	// Setup Twitter connection
 	if (!viewObjects.isOfflineMode && [[NSUserDefaults standardUserDefaults] objectForKey: @"twitterAuthData"])
 	{
@@ -640,33 +637,33 @@ NSLog(@"4");
 		if (controller) 
 			[mainTabBarController presentModalViewController:controller animated:YES];
 	}
-	NSLog(@"25");
-	if ([settingsDictionary objectForKey:@"checkUpdatesSetting"] == nil)
+
+	//if ([settingsDictionary objectForKey:@"checkUpdatesSetting"] == nil)
+	if ([SavedSettings sharedInstance].isUpdateCheckQuestionAsked)
 	{
 		// Ask to check for updates if haven't asked yet
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Update Alerts" message:@"Would you like iSub to notify you when app updates are available?\n\nYou can change this setting at any time from the settings menu." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
 		[alert show];
 		[alert release];
 	}
-	else if ([[settingsDictionary objectForKey:@"checkUpdatesSetting"] isEqualToString:@"YES"])
+	//else if ([[settingsDictionary objectForKey:@"checkUpdatesSetting"] isEqualToString:@"YES"])
+	else if ([SavedSettings sharedInstance].isUpdateCheckEnabled)
 	{
 		[self performSelectorInBackground:@selector(checkForUpdate) withObject:nil];
 	}
-	NSLog(@"26");
+
 	[self appInit4];
 }
 
 - (void) appInit4
 {
-	NSLog(@"27");
 	introController = [[IntroViewController alloc] init];
 	//intro.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 	if ([introController respondsToSelector:@selector(setModalPresentationStyle:)])
 		introController.modalPresentationStyle = UIModalPresentationFormSheet;
-	NSLog(@"28");
+
 	if (IS_IPAD())
 	{
-		NSLog(@"29");
 		// Setup the split view
 		[window addSubview:splitView.view];
 		splitView.showsMasterInPortrait = YES;
@@ -683,45 +680,37 @@ NSLog(@"4");
 	}
 	else
 	{
-		NSLog(@"30");
 		// Setup the tabBarController
 		mainTabBarController.moreNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 		
 		//DLog(@"isOfflineMode: %i", viewObjects.isOfflineMode);
 		if (viewObjects.isOfflineMode)
 		{
-			NSLog(@"31");
 			//DLog(@"--------------- isOfflineMode");
 			currentTabBarController = offlineTabBarController;
 			[window addSubview:offlineTabBarController.view];
-			NSLog(@"32");
 		}
 		else 
 		{
-			NSLog(@"33");
 			// Recover the tab order and load the main tabBarController
 			currentTabBarController = mainTabBarController;
 			[viewObjects orderMainTabBarController];
 			[window addSubview:mainTabBarController.view];
-			NSLog(@"34");
 		}
 		
 		if (showIntro)
 		{
-			NSLog(@"35");
 			[currentTabBarController presentModalViewController:introController animated:NO];
 			isIntroShowing = YES;
-			NSLog(@"36");
 		}
 	}
-	NSLog(@"37");
+
 	if (viewObjects.isJukebox)
 		window.backgroundColor = viewObjects.jukeboxColor;
 	else 
 		window.backgroundColor = viewObjects.windowColor;
-NSLog(@"38");
+	
 	[window makeKeyAndVisible];	
-	NSLog(@"39");
 	/*[self startStopServer];*/
 }
 
@@ -1107,7 +1096,8 @@ NSLog(@"38");
 
 - (void)reachabilityChanged: (NSNotification *)note
 {
-	if ([[settingsDictionary objectForKey:@"manualOfflineModeSetting"] isEqualToString:@"YES"])
+	//if ([[settingsDictionary objectForKey:@"manualOfflineModeSetting"] isEqualToString:@"YES"])
+	if ([SavedSettings sharedInstance].isForceOfflineMode)
 		return;
 	
 	Reachability* curReach = [note object];
@@ -1314,15 +1304,17 @@ NSLog(@"38");
 	{
 		if (buttonIndex == 0)
 		{
-			[settingsDictionary setObject:@"NO" forKey:@"checkUpdatesSetting"];
+			[SavedSettings sharedInstance].isUpdateCheckEnabled = NO;
+			//[settingsDictionary setObject:@"NO" forKey:@"checkUpdatesSetting"];
 		}
 		else if (buttonIndex == 1)
 		{
-			[settingsDictionary setObject:@"YES" forKey:@"checkUpdatesSetting"];
+			[SavedSettings sharedInstance].isUpdateCheckEnabled = YES;
+			//[settingsDictionary setObject:@"YES" forKey:@"checkUpdatesSetting"];
 		}
 		
-		[[NSUserDefaults standardUserDefaults] setObject:settingsDictionary forKey:@"settingsDictionary"];
-		[[NSUserDefaults standardUserDefaults] synchronize];
+		//[[NSUserDefaults standardUserDefaults] setObject:settingsDictionary forKey:@"settingsDictionary"];
+		//[[NSUserDefaults standardUserDefaults] synchronize];
 	}
 }
 
@@ -1523,7 +1515,8 @@ NSLog(@"38");
 	{
 		return [NSString stringWithFormat:@"%@/rest/%@?u=%@&p=%@&v=1.1.0&c=iSub", urlString, action, [encodedUserName autorelease], [encodedPassword autorelease]];
 	}
-	else if ([action isEqualToString:@"stream.view"] && [[settingsDictionary objectForKey:@"maxBitrateSetting"] intValue] != 7)
+	//else if ([action isEqualToString:@"stream.view"] && [[settingsDictionary objectForKey:@"maxBitrateSetting"] intValue] != 7)
+	else if ([action isEqualToString:@"stream.view"] && [musicControls maxBitrateSetting] != 0)
 	{
 		return [NSString stringWithFormat:@"%@/rest/stream.view?maxBitRate=%i&u=%@&p=%@&v=1.2.0&c=iSub&id=", urlString, [musicControls maxBitrateSetting], [encodedUserName autorelease], [encodedPassword autorelease]];
 	}

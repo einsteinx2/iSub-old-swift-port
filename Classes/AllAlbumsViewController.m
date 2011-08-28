@@ -40,8 +40,8 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] 
-		&& inOrientation != UIInterfaceOrientationPortrait)
+	//if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] && inOrientation != UIInterfaceOrientationPortrait)
+	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -183,7 +183,7 @@ static NSInteger order (id a, id b, void* context)
 	
 	if ([databaseControls.allAlbumsDb intForQuery:@"SELECT iteration FROM resumeLoad"] == 0)
 	{
-		NSArray *listOfArtists = [[SavedSettings sharedInstance] getTopLevelFolders];
+		//NSArray *listOfArtists = [[SavedSettings sharedInstance] getTopLevelFolders];
 		
 		int sectionNum = [databaseControls.allAlbumsDb intForQuery:@"SELECT sectionNum FROM resumeLoad"];
 		int sectionCount = [listOfArtists count];

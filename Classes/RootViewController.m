@@ -62,8 +62,8 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] 
-		&& inOrientation != UIInterfaceOrientationPortrait)
+	//if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] && inOrientation != UIInterfaceOrientationPortrait)
+	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -116,11 +116,12 @@
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fadeBottom;
 	
-	NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [settings.urlString md5]];
+	/*NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [settings.urlString md5]];
 	NSData *archivedData = [appDelegate.settingsDictionary objectForKey:key];
-	NSDictionary *folderNames = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
+	NSDictionary *folderNames = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];*/
 		
-	if (folderNames == nil || [folderNames count] == 2)
+	//if (folderNames == nil || [folderNames count] == 2)
+	if (dropdown.folders == nil || [dropdown.folders count] == 2)
 		[self.tableView setContentOffset:CGPointMake(0, 86) animated:NO];
 	else
 		[self.tableView setContentOffset:CGPointMake(0, 50) animated:NO];
@@ -572,11 +573,18 @@
 	{
 		//[tableView scrollRectToVisible:CGRectMake(0, 50, 320, searchY) animated:NO];
 		
-		NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [settings.urlString md5]];
+		/*NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [settings.urlString md5]];
 		NSData *archivedData = [appDelegate.settingsDictionary objectForKey:key];
 		NSDictionary *folderNames = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
-				
+			
 		if (folderNames == nil || [folderNames count] == 2)
+			//[tableView scrollRectToVisible:CGRectMake(0, 87, 320, searchY) animated:NO];
+			[self.tableView setContentOffset:CGPointMake(0, 86) animated:NO];
+		else
+			//[tableView scrollRectToVisible:CGRectMake(0, 50, 320, searchY) animated:NO];
+			[self.tableView setContentOffset:CGPointMake(0, 50) animated:NO];*/
+		
+		if (dropdown.folders == nil || [dropdown.folders count] == 2)
 			//[tableView scrollRectToVisible:CGRectMake(0, 87, 320, searchY) animated:NO];
 			[self.tableView setContentOffset:CGPointMake(0, 86) animated:NO];
 		else

@@ -13,6 +13,7 @@
 #import "UIDevice-Hardware.h"
 #import "MGSplitViewController.h"
 #import "iPadMainMenu.h"
+#import "SavedSettings.h"
 
 static ViewObjectsSingleton *sharedInstance = nil;
 
@@ -233,7 +234,8 @@ static ViewObjectsSingleton *sharedInstance = nil;
 
 - (UIColor *) currentDarkColor
 {
-	switch ([[appDelegate.settingsDictionary objectForKey:@"cacheSongCellColorSetting"] intValue])
+	//switch ([[appDelegate.settingsDictionary objectForKey:@"cacheSongCellColorSetting"] intValue])
+	switch([SavedSettings sharedInstance].cachedSongCellColorType)
 	{
 		case 0:
 			return darkRed;
@@ -246,11 +248,14 @@ static ViewObjectsSingleton *sharedInstance = nil;
 		default:
 			return darkNormal;
 	}
+	
+	return darkNormal;
 }
 
 - (UIColor *) currentLightColor
 {
-	switch ([[appDelegate.settingsDictionary objectForKey:@"cacheSongCellColorSetting"] intValue])
+	//switch ([[appDelegate.settingsDictionary objectForKey:@"cacheSongCellColorSetting"] intValue])
+	switch([SavedSettings sharedInstance].cachedSongCellColorType)
 	{
 		case 0:
 			return lightRed;
@@ -263,6 +268,8 @@ static ViewObjectsSingleton *sharedInstance = nil;
 		default:
 			return lightNormal;
 	}
+	
+	return lightNormal;
 }
 
 #pragma mark Tab Saving
@@ -306,7 +313,8 @@ static ViewObjectsSingleton *sharedInstance = nil;
 	NSArray *savedTabsOrderArray = [[[NSUserDefaults standardUserDefaults] arrayForKey:@"mainTabBarTabsOrder"] retain];
 	
 	// If this is an old device, remove Albums and Songs tabs
-	if (![[appDelegate.settingsDictionary objectForKey:@"enableSongsTabSetting"] isEqualToString:@"YES"]) 
+	//if (![[appDelegate.settingsDictionary objectForKey:@"enableSongsTabSetting"] isEqualToString:@"YES"]) 
+	if ([SavedSettings sharedInstance].isSongsTabEnabled)
 	{
 		NSMutableArray *tabs = [[NSMutableArray alloc] init];
 		for (UIViewController *controller in appDelegate.mainTabBarController.viewControllers)

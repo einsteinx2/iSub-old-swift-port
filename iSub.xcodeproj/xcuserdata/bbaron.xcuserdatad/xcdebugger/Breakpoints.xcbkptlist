@@ -37,7 +37,9 @@
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1764"
-         endingLineNumber = "1764">
+         endingLineNumber = "1764"
+         landmarkName = "-handlePropertyChangeForFileStream:fileStreamPropertyID:ioFlags:"
+         landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
    <ExceptionBreakpoints>

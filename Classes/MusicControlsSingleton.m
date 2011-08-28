@@ -25,6 +25,7 @@
 #import "BBSimpleConnectionQueue.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "CustomUIAlertView.h"
+#import "SavedSettings.h"
  
 static MusicControlsSingleton *sharedInstance = nil;
 
@@ -105,6 +106,8 @@ static MusicControlsSingleton *sharedInstance = nil;
 // Start downloading the file specified in the text field.
 - (void)startDownloadA 
 {		
+	SavedSettings *settings = [SavedSettings sharedInstance];
+	
 	isTempDownload = NO;
 	
 	// Are we already downloading?  If so, stop it.
@@ -179,7 +182,8 @@ static MusicControlsSingleton *sharedInstance = nil;
 			}			
 			[streamer start];
 			
-			if (nextSongObject.path != nil && [[appDelegate.settingsDictionary objectForKey:@"enableNextSongCacheSetting"] isEqualToString:@"YES"] && [[appDelegate.settingsDictionary objectForKey:@"enableSongCachingSetting"] isEqualToString:@"YES"])
+			//if (nextSongObject.path != nil && [[appDelegate.settingsDictionary objectForKey:@"enableNextSongCacheSetting"] isEqualToString:@"YES"] && [[appDelegate.settingsDictionary objectForKey:@"enableSongCachingSetting"] isEqualToString:@"YES"])
+			if (nextSongObject.path != nil && settings.isNextSongCacheEnabled && settings.isSongCachingEnabled)
 				[self startDownloadB];
 		}
 		else
@@ -210,7 +214,8 @@ static MusicControlsSingleton *sharedInstance = nil;
 			else
 			{
 				// The song is not being downloaded and is not fully cached
-				if ([[appDelegate.settingsDictionary objectForKey:@"enableSongCachingSetting"] isEqualToString:@"YES"])
+				//if ([[appDelegate.settingsDictionary objectForKey:@"enableSongCachingSetting"] isEqualToString:@"YES"])
+				if (settings.isSongCachingEnabled)
 				{
 					// Delete the download and start over
 					DLog(@"Deleting the Download and starting over");
@@ -248,7 +253,8 @@ static MusicControlsSingleton *sharedInstance = nil;
 	else 
 	{
 		// The song has not been cached yet, start from scratch
-		if ([[appDelegate.settingsDictionary objectForKey:@"enableSongCachingSetting"] isEqualToString:@"YES"])
+		//if ([[appDelegate.settingsDictionary objectForKey:@"enableSongCachingSetting"] isEqualToString:@"YES"])
+		if (settings.isSongCachingEnabled)
 		{
 			//DLog(@"starting a new download of %@", downloadFileNameHashA);
 			
@@ -1228,10 +1234,9 @@ static MusicControlsSingleton *sharedInstance = nil;
 {
 	int bitrateSetting;
 	if ([appDelegate.wifiReach currentReachabilityStatus] == ReachableViaWiFi)
-		bitrateSetting = [[appDelegate.settingsDictionary objectForKey:@"maxBitrateWifiSetting"] intValue];
+		bitrateSetting = [SavedSettings sharedInstance].maxBitrateWifi;
 	else
-		bitrateSetting = [[appDelegate.settingsDictionary objectForKey:@"maxBitrate3GSetting"] intValue];
-	
+		bitrateSetting = [SavedSettings sharedInstance].maxBitrate3G;	
 	
 	NSInteger bitrate;
 	switch (bitrateSetting)
@@ -1332,18 +1337,24 @@ static MusicControlsSingleton *sharedInstance = nil;
 {
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	
+	SavedSettings *settings = [SavedSettings sharedInstance];
+	
 	unsigned long long int freeSpace = [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:audioFolderPath error:NULL] objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
-	unsigned long long int minFreeSpace = [[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue];
-	unsigned long long int maxCacheSize = [[appDelegate.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue];
+	//unsigned long long int minFreeSpace = [[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue];
+	unsigned long long minFreeSpace = settings.minFreeSpace;
+	//unsigned long long int maxCacheSize = [[appDelegate.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue];
+	unsigned long long maxCacheSize = settings.maxCacheSize;
 	NSString *songMD5;
 	int songSize;
 	
-	if ([[appDelegate.settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 0)
+	//if ([[appDelegate.settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 0)
+	if (settings.cachingType == 0)
 	{
 		// Remove the oldest songs based on either oldest played or oldest cached until free space is more than minFreeSpace
 		while (freeSpace < minFreeSpace)
 		{
-			if ([[appDelegate.settingsDictionary objectForKey:@"autoDeleteCacheTypeSetting"] intValue] == 0)
+			//if ([[appDelegate.settingsDictionary objectForKey:@"autoDeleteCacheTypeSetting"] intValue] == 0)
+			if (settings.autoDeleteCacheType == 0)
 				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
 			else
 				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY chachedDate ASC LIMIT 1"];
@@ -1353,7 +1364,8 @@ static MusicControlsSingleton *sharedInstance = nil;
 			freeSpace = [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:audioFolderPath error:NULL] objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
 		}
 	}
-	else if ([[appDelegate.settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 1)
+	//else if ([[appDelegate.settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 1)
+	else if (settings.cachingType == 1)
 	{
 		// Remove the oldest songs based on either oldest played or oldest cached until cache size is less than maxCacheSize
 		unsigned long long cacheSize = 0;
@@ -1364,7 +1376,8 @@ static MusicControlsSingleton *sharedInstance = nil;
 		
 		while (cacheSize > maxCacheSize)
 		{
-			if ([[appDelegate.settingsDictionary objectForKey:@"autoDeleteCacheTypeSetting"] intValue] == 0)
+			//if ([[appDelegate.settingsDictionary objectForKey:@"autoDeleteCacheTypeSetting"] intValue] == 0)
+			if (settings.autoDeleteCacheType == 0)
 			{
 				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
 			}
@@ -1391,22 +1404,27 @@ static MusicControlsSingleton *sharedInstance = nil;
 
 - (void) checkCache
 {
+	SavedSettings *settings = [SavedSettings sharedInstance];
+	
 	unsigned long long cacheSize = 0;
 	for (NSString *path in [[NSFileManager defaultManager] subpathsAtPath:documentsPath]) 
 	{
 		cacheSize += [[[NSFileManager defaultManager] attributesOfItemAtPath:[documentsPath stringByAppendingPathComponent:path] error:NULL] fileSize];
 	}
 	unsigned long long int freeSpace = [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:audioFolderPath error:NULL] objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
-	unsigned long long int minFreeSpace = [[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue];
-	unsigned long long int maxCacheSize = [[appDelegate.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue];
+	//unsigned long long int minFreeSpace = [[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue];
+	unsigned long long minFreeSpace = settings.minFreeSpace;
+	//unsigned long long int maxCacheSize = [[appDelegate.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue];
+	unsigned long long maxCacheSize = settings.maxCacheSize;
 	NSLog(@"checkCache:  cacheSize = %llu  freeSpace = %llu  minFreeSpace = %llu  maxCacheSize = %llu", cacheSize, freeSpace, minFreeSpace, maxCacheSize);
 	//DLog(@"cacheSize: %qu", cacheSize);
 	//DLog(@"freeSpace: %qu", freeSpace);
 	//DLog(@"minFreeSpace: %qu", minFreeSpace);
 	//DLog(@"maxCacheSize: %qu", maxCacheSize);
 	
-	if ([[appDelegate.settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 0 &&
-		[[appDelegate.settingsDictionary objectForKey:@"enableSongCachingSetting"] isEqualToString:@"YES"])
+	//if ([[appDelegate.settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 0 &&
+	//	[[appDelegate.settingsDictionary objectForKey:@"enableSongCachingSetting"] isEqualToString:@"YES"])
+	if (settings.cachingType == 0 && settings.isSongCachingEnabled)
 	{
 		NSLog(@"checkCache:  entered the if");
 		// User has chosen to limit cache by minimum free space
@@ -1420,7 +1438,8 @@ static MusicControlsSingleton *sharedInstance = nil;
 			{
 				NSLog(@"checkCache:  entered the if if if");
 				// Looks like even removing all of the cache will not be enough so turn off caching
-				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"enableSongCachingSetting"];
+				//[appDelegate.settingsDictionary setObject:@"NO" forKey:@"enableSongCachingSetting"];
+				settings.isSongCachingEnabled = NO;
 				
 				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"IMPORTANT" message:@"Free space is running low, but even deleting the entire cache will not bring the free space up higher than your minimum setting. Automatic song caching has been turned off.\n\nYou can re-enable it in the Settings menu (tap the gear, tap Settings at the top)" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 				[alert show];
@@ -1431,7 +1450,8 @@ static MusicControlsSingleton *sharedInstance = nil;
 				NSLog(@"checkCache:  entered the if if else");
 				// Remove the oldest cached songs until freeSpace > minFreeSpace or pop the free space low alert
 				DLog(@"freeSpace < minFreeSpace");
-				if ([[appDelegate.settingsDictionary objectForKey:@"autoDeleteCacheSetting"] isEqualToString:@"YES"])
+				//if ([[appDelegate.settingsDictionary objectForKey:@"autoDeleteCacheSetting"] isEqualToString:@"YES"])
+				if (settings.isAutoDeleteCacheEnabled)
 				{
 					NSLog(@"checkCache:  entered the if if else if");
 					DLog(@"deleting oldest cached songs");
@@ -1447,8 +1467,9 @@ static MusicControlsSingleton *sharedInstance = nil;
 			}
 		}
 	}
-	else if ([[appDelegate.settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 1 &&
-			 [[appDelegate.settingsDictionary objectForKey:@"enableSongCachingSetting"] isEqualToString:@"YES"])
+	//else if ([[appDelegate.settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 1 &&
+	//		 [[appDelegate.settingsDictionary objectForKey:@"enableSongCachingSetting"] isEqualToString:@"YES"])
+	else if (settings.cachingType == 1 && settings.isSongCachingEnabled)
 	{
 		NSLog(@"checkCache:  entered the else");
 		// User has chosen to limit cache by maximum size
@@ -1458,7 +1479,8 @@ static MusicControlsSingleton *sharedInstance = nil;
 		{
 			NSLog(@"checkCache:  entered the else if");
 			DLog(@"cacheSize > maxCacheSize");
-			if ([[appDelegate.settingsDictionary objectForKey:@"autoDeleteCacheSetting"] isEqualToString:@"YES"])
+			//if ([[appDelegate.settingsDictionary objectForKey:@"autoDeleteCacheSetting"] isEqualToString:@"YES"])
+			if (settings.isAutoDeleteCacheEnabled)
 			{
 				NSLog(@"checkCache:  entered the else if if");
 				DLog(@"deleting oldest cached songs");
@@ -1467,7 +1489,8 @@ static MusicControlsSingleton *sharedInstance = nil;
 			else
 			{
 				NSLog(@"checkCache:  entered the else if else");
-				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"enableSongCachingSetting"];
+				//[appDelegate.settingsDictionary setObject:@"NO" forKey:@"enableSongCachingSetting"];
+				settings.isSongCachingEnabled = NO;
 				
 				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"The song cache is full. Automatic song caching has been disabled.\n\nYou can re-enable it in the Settings menu (tap the gear, tap Settings at the top)" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 				[alert show];

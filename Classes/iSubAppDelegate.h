@@ -66,7 +66,7 @@
 	
 	// Settings
 	//
-	NSMutableDictionary *settingsDictionary;
+	//NSMutableDictionary *settingsDictionary;
 	
 	// Multitasking stuff
 	BOOL isMultitaskingSupported;
@@ -130,7 +130,7 @@
 
 // Settings
 //
-@property (nonatomic, retain) NSMutableDictionary *settingsDictionary;
+//@property (nonatomic, retain) NSMutableDictionary *settingsDictionary;
 
 // Multitasking stuff
 @property BOOL isMultitaskingSupported;
