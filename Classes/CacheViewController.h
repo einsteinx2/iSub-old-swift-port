@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton, SavedSettings;
 
 @interface CacheViewController : UITableViewController 
 {
@@ -17,6 +17,7 @@
 	ViewObjectsSingleton *viewObjects;
 	MusicControlsSingleton *musicControls;
 	DatabaseControlsSingleton *databaseControls;
+	SavedSettings *settings;
 	
 	BOOL isNoSongsScreenShowing;
 	UIImageView *noSongsScreen;

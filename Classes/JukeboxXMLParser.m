@@ -13,6 +13,7 @@
 #import "ViewObjectsSingleton.h"
 #import "DatabaseControlsSingleton.h"
 #import "CustomUIAlertView.h"
+#import "SavedSettings.h"
 
 @implementation JukeboxXMLParser
 
@@ -38,7 +39,7 @@
 	
 	if ([errorCode isEqualToString:@"50"])
 	{
-		[ViewObjectsSingleton sharedInstance].isJukebox = NO;
+		[SavedSettings sharedInstance].isJukebox = NO;
 		appDelegate.window.backgroundColor = [ViewObjectsSingleton sharedInstance].windowColor;
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"JukeboxTurnedOff" object:nil];
 	}

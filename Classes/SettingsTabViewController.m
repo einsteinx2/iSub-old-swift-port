@@ -212,9 +212,8 @@
 		twitterStatusLabel.text = @"Signed out";
 	}
 	
-	
 	// Handle In App Purchase settings
-	if (viewObjects.isCacheUnlocked == NO)
+	if ([SavedSettings sharedInstance].isCacheUnlocked == NO)
 	{
 		// Caching is disabled, so disable the controls
 		enableSongCachingSwitch.enabled = NO; enableSongCachingSwitch.alpha = 0.5;
@@ -385,12 +384,10 @@
 			settings.isForceOfflineMode = manualOfflineModeSwitch.on;
 			if (manualOfflineModeSwitch.on)
 			{
-				//[appDelegate.settingsDictionary setObject:@"YES" forKey:@"manualOfflineModeSetting"];
 				[appDelegate enterOfflineModeForce];
 			}
 			else
 			{
-				//[appDelegate.settingsDictionary setObject:@"NO" forKey:@"manualOfflineModeSetting"];
 				[appDelegate enterOnlineModeForce];
 			}
 			
@@ -407,95 +404,48 @@
 		else if (sender == enableScrobblingSwitch)
 		{
 			settings.isScrobbleEnabled = enableScrobblingSwitch.on;
-			/*if (enableScrobblingSwitch.on)
-				[appDelegate.settingsDictionary setObject:@"YES" forKey:@"enableScrobblingSetting"];
-			else
-				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"enableScrobblingSetting"];*/
 		}
 		else if (sender == enableSongCachingSwitch)
 		{
 			settings.isSongCachingEnabled = enableSongCachingSwitch.on;
 			[self toggleCacheControlsVisibility];
-			/*if (enableSongCachingSwitch.on)
-			{
-				[appDelegate.settingsDictionary setObject:@"YES" forKey:@"enableSongCachingSetting"];
-				[self toggleCacheControlsVisibility];
-			}
-			else
-			{
-				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"enableSongCachingSetting"];
-				[self toggleCacheControlsVisibility];
-			}*/
 		}
 		else if (sender == enableNextSongCacheSwitch)
 		{
 			settings.isNextSongCacheEnabled = enableNextSongCacheSwitch.on;
-			/*if (enableNextSongCacheSwitch.on)
-				[appDelegate.settingsDictionary setObject:@"YES" forKey:@"enableNextSongCacheSetting"];
-			else
-				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"enableNextSongCacheSetting"];*/
 		}
 		else if (sender == autoDeleteCacheSwitch)
 		{
 			settings.isAutoDeleteCacheEnabled = autoDeleteCacheSwitch.on;
-			/*if (autoDeleteCacheSwitch.on)
-				[appDelegate.settingsDictionary setObject:@"YES" forKey:@"autoDeleteCacheSetting"];
-			else
-				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"autoDeleteCacheSetting"];*/
 		}
 		else if (sender == twitterEnabledSwitch)
 		{
 			settings.isTwitterEnabled = twitterEnabledSwitch.on;
-			/*if (twitterEnabledSwitch.on)
-				[appDelegate.settingsDictionary setObject:@"YES" forKey:@"twitterEnabledSetting"];
-			else
-				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"twitterEnabledSetting"];*/
 		}
 		else if (sender == checkUpdatesSwitch)
 		{
 			settings.isUpdateCheckEnabled = checkUpdatesSwitch.on;
-			/*if (checkUpdatesSwitch.on)
-				[appDelegate.settingsDictionary setObject:@"YES" forKey:@"checkUpdatesSetting"];
-			else
-				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"checkUpdatesSetting"];*/
 		}
 		else if (sender == enableLyricsSwitch)
 		{
 			settings.isLyricsEnabled = enableLyricsSwitch.on;
-			/*if (enableLyricsSwitch.on)
-				[appDelegate.settingsDictionary setObject:@"YES" forKey:@"lyricsEnabledSetting"];
-			else
-				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"lyricsEnabledSetting"];*/
 		}
 		else if (sender == autoPlayerInfoSwitch)
 		{
 			settings.isAutoShowSongInfoEnabled = autoPlayerInfoSwitch.on;
-			/*if (autoPlayerInfoSwitch.on)
-				[appDelegate.settingsDictionary setObject:@"YES" forKey:@"autoPlayerInfoSetting"];
-			else
-				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"autoPlayerInfoSetting"];*/
 		}
 		else if (sender == autoReloadArtistSwitch)
 		{
 			settings.isAutoReloadArtistsEnabled = autoReloadArtistSwitch.on;
-			/*if (autoReloadArtistSwitch.on)
-				[appDelegate.settingsDictionary setObject:@"YES" forKey:@"autoReloadArtistsSetting"];
-			else
-				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"autoReloadArtistsSetting"];*/
 		}
 		else if (sender == disablePopupsSwitch)
 		{
 			settings.isPopupsEnabled = !disablePopupsSwitch.on;
-			/*if (disablePopupsSwitch.on)
-				[appDelegate.settingsDictionary setObject:@"YES" forKey:@"disablePopupsSetting"];
-			else
-				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"disablePopupsSetting"];*/
 		}
 		else if (sender == enableSongsTabSwitch)
 		{
 			if (enableSongsTabSwitch.on)
 			{
-				//[appDelegate.settingsDictionary setObject:@"YES" forKey:@"enableSongsTabSetting"];
 				settings.isSongsTabEnabled = YES;
 				
 				if (IS_IPAD())
@@ -528,7 +478,6 @@
 			}
 			else
 			{
-				//[appDelegate.settingsDictionary setObject:@"NO" forKey:@"enableSongsTabSetting"];
 				settings.isSongsTabEnabled = NO;
 
 				if (IS_IPAD())
@@ -544,29 +493,12 @@
 		else if (sender == disableRotationSwitch)
 		{
 			settings.isRotationLockEnabled = disableRotationSwitch.on;
-			/*if (disableRotationSwitch.on)
-				[appDelegate.settingsDictionary setObject:@"YES" forKey:@"lockRotationSetting"];
-			else
-				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"lockRotationSetting"];*/
 		}
 		else if (sender == disableScreenSleepSwitch)
 		{
 			settings.isScreenSleepEnabled = !disableScreenSleepSwitch.on;
 			[UIApplication sharedApplication].idleTimerDisabled = disableScreenSleepSwitch.on;
-			/*if (disableScreenSleepSwitch.on)
-			{
-				[appDelegate.settingsDictionary setObject:@"YES" forKey:@"disableScreenSleepSetting"];
-				[UIApplication sharedApplication].idleTimerDisabled = YES;
-			}
-			else
-			{
-				[appDelegate.settingsDictionary setObject:@"NO" forKey:@"disableScreenSleepSetting"];
-				[UIApplication sharedApplication].idleTimerDisabled = NO;
-			}*/
 		}
-		
-		//[[NSUserDefaults standardUserDefaults] setObject:appDelegate.settingsDictionary forKey:@"settingsDictionary"];
-		//[[NSUserDefaults standardUserDefaults] synchronize];
 	}
 }
 

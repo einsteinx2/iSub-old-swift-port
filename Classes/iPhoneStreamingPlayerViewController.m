@@ -81,7 +81,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	[self initSongInfo];
 	
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		CGRect frame = volumeSlider.bounds;
 		frame.size.height = volumeSlider.bounds.size.height / 2;
@@ -100,7 +100,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[volumeView sizeToFit];
 	}
 	
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		if (musicControls.jukeboxIsPlaying)
 			[self setStopButtonImage];
@@ -214,7 +214,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		}
 	}
 	
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		//[viewObjects showLoadingScreen:self.view.superview blockInput:YES mainWindow:NO];
 		//[self performSelectorInBackground:@selector(loadJukeboxInfo) withObject:nil];
@@ -230,7 +230,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {
 	[super viewWillAppear:animated];
 	
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		//[viewObjects showLoadingScreen:self.view.superview blockInput:YES mainWindow:NO];
 		//[self performSelectorInBackground:@selector(loadJukeboxInfo) withObject:nil];
@@ -316,7 +316,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			nextButton.frame = CGRectMake(228, 324, 72, 60);
 			volumeSlider.frame = CGRectMake(20, 384, 280, 55);
 			
-			if (viewObjects.isJukebox)
+			if ([SavedSettings sharedInstance].isJukeboxEnabled)
 				jukeboxVolumeView.frame = CGRectMake(0, 0, 280, 22.5);
 			else
 				volumeView.frame = CGRectMake(0, 0, 280, 55);
@@ -336,7 +336,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			nextButton.frame = CGRectMake(420, 184, 72, 60);
 			volumeSlider.frame = CGRectMake(300, 244, 180, 55);
 			
-			if (viewObjects.isJukebox)
+			if ([SavedSettings sharedInstance].isJukeboxEnabled)
 				jukeboxVolumeView.frame = CGRectMake(0, 0, 180, 22.5);
 			else
 				volumeView.frame = CGRectMake(0, 0, 180, 55);
@@ -452,7 +452,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		{
 			DLog(@"Cover Art Found!!");
 			NSData *imageData = [coverArtCache dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [NSString md5:musicControls.currentSongObject.coverArtId]];
-			if (appDelegate.isHighRez)
+			if (SCREEN_SCALE() == 2.0)
 			{
 				UIGraphicsBeginImageContextWithOptions(CGSizeMake(320.0,320.0), NO, 2.0);
 				[[UIImage imageWithData:imageData] drawInRect:CGRectMake(0,0,320,320)];
@@ -494,7 +494,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	albumLabel.text = [musicControls currentSongObject].album;
 	titleLabel.text = [musicControls currentSongObject].title;
 	
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		jukeboxVolumeView.value = musicControls.jukeboxGain;
 		
@@ -630,7 +630,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (IBAction)playButtonPressed:(id)sender
 {
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		if (musicControls.jukeboxIsPlaying)
 			[musicControls jukeboxStop];
@@ -649,7 +649,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	DLog(@"track position: %f", (musicControls.streamerProgress + musicControls.seekTime));
 	if ((musicControls.streamerProgress + musicControls.seekTime) > 10.0)
 	{
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			[musicControls jukeboxPlaySongAtPosition:musicControls.currentPlaylistPosition];
 		else
 			[musicControls playSongAtPosition:musicControls.currentPlaylistPosition];

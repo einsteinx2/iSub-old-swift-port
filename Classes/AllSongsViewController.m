@@ -1095,7 +1095,7 @@ static NSString *kName_Error = @"error";
 		{			
 			// If not, grab it from the url and cache it
 			NSString *imgUrlString;
-			if (appDelegate.isHighRez)
+			if (SCREEN_SCALE() == 2.0)
 			{
 				imgUrlString = [NSString stringWithFormat:@"%@%@&size=120", [appDelegate getBaseUrl:@"getCoverArt.view"], aSong.coverArtId];
 			}
@@ -1148,7 +1148,7 @@ static NSString *kName_Error = @"error";
 		musicControls.currentPlaylistPosition = 0;
 		
 		// Clear the current playlist
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			[databaseControls resetJukeboxPlaylist];
 		else
 			[databaseControls resetCurrentPlaylistDb];
@@ -1166,7 +1166,7 @@ static NSString *kName_Error = @"error";
 		[databaseControls addSongToPlaylistQueue:aSong];
 		
 		// If jukebox mode, send song id to server
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		{
 			[musicControls jukeboxStop];
 			[musicControls jukeboxClearPlaylist];
@@ -1177,7 +1177,7 @@ static NSString *kName_Error = @"error";
 		// Set the current and next song objects
 		musicControls.currentSongObject == nil;
 		musicControls.nextSongObject = nil; 
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		{
 			musicControls.currentSongObject = [databaseControls songFromDbRow:indexPath.row inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 		}

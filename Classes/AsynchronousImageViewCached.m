@@ -71,7 +71,6 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {
-	iSubAppDelegate *appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	DatabaseControlsSingleton *databaseControls = [DatabaseControlsSingleton sharedInstance];
 	
 	// Check to see if the data is a valid image. If so, use it; if not, use the default image.
@@ -79,7 +78,7 @@
 	{
 		[databaseControls.coverArtCacheDb60 executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:coverArtId], data];
 
-		if (appDelegate.isHighRez)
+		if (SCREEN_SCALE() == 2.0)
 		{
 			//UIGraphicsBeginImageContextWithOptions(CGSizeMake(60.0,60.0), NO, 2.0);
 			//[[UIImage imageWithData:data] drawInRect:CGRectMake(0,0,60,60)];

@@ -140,7 +140,7 @@
 			{
 				//DLog(@"320 artwork doesn't exist, caching");
 				NSString *imgUrlString;
-				if (appDelegate.isHighRez)
+				if (SCREEN_SCALE() == 2.0)
 				{
 					imgUrlString = [NSString stringWithFormat:@"%@%@&size=640", [appDelegate getBaseUrl:@"getCoverArt.view"], musicControls.queueSongObject.coverArtId];
 				}
@@ -161,7 +161,7 @@
 			{
 				//DLog(@"60 artwork doesn't exist, caching");
 				NSString *imgUrlString;
-				if (appDelegate.isHighRez)
+				if (SCREEN_SCALE() == 2.0)
 				{
 					imgUrlString = [NSString stringWithFormat:@"%@%@&size=120", [appDelegate getBaseUrl:@"getCoverArt.view"], musicControls.queueSongObject.coverArtId];
 				}

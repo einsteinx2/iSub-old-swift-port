@@ -19,9 +19,6 @@ static ViewObjectsSingleton *sharedInstance = nil;
 
 @implementation ViewObjectsSingleton
 
-// In App Purchase
-@synthesize isPlaylistUnlocked, isCacheUnlocked, isJukeboxUnlocked;
-
 // Constants
 @synthesize kHorizSwipeDragMin, kVertSwipeDragMax;
 
@@ -51,7 +48,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 @synthesize listOfPlayingSongs;
 
 // Settings page objects
-@synthesize serverList, serverToEdit;
+@synthesize serverToEdit;
 
 // Chat page objects
 @synthesize chatMessages;
@@ -63,9 +60,6 @@ static ViewObjectsSingleton *sharedInstance = nil;
 @synthesize lightRed, darkRed, lightYellow, darkYellow, lightGreen, darkGreen, lightBlue, darkBlue, lightNormal, darkNormal, windowColor, jukeboxColor;
 
 @synthesize deleteButtonImage, cacheButtonImage, queueButtonImage;
-
-
-@synthesize isJukebox;
 
 @synthesize currentLoadingFolderId;
 
@@ -399,34 +393,57 @@ static ViewObjectsSingleton *sharedInstance = nil;
 }
 
 #pragma mark -
-#pragma mark Lite Version properties
-
-- (BOOL)isPlaylistUnlocked
-{
-	if (!IS_LITE() || [MKStoreManager isFeaturePurchased:kFeaturePlaylistsId] || [MKStoreManager isFeaturePurchased:kFeatureAllId])
-		return YES;
-	
-	return NO;
-}
-
-- (BOOL)isCacheUnlocked
-{
-	if (!IS_LITE() || [MKStoreManager isFeaturePurchased:kFeatureCacheId] || [MKStoreManager isFeaturePurchased:kFeatureAllId])
-		return YES;
-	
-	return NO;
-}
-
-- (BOOL)isJukeboxUnlocked
-{
-	if (!IS_LITE() || [MKStoreManager isFeaturePurchased:kFeatureJukeboxId] || [MKStoreManager isFeaturePurchased:kFeatureAllId])
-		return YES;
-	
-	return NO;
-}
-
-#pragma mark -
 #pragma mark Singleton methods
+
+- (void)setup
+{
+	appDelegate = (iSubAppDelegate*)[[UIApplication sharedApplication] delegate];
+	
+	kHorizSwipeDragMin = 3;
+	kVertSwipeDragMax = 80;
+	
+	lightRed = [[UIColor colorWithRed:255/255.0 green:146/255.0 blue:115/255.0 alpha:1] retain];
+	darkRed = [[UIColor colorWithRed:226/255.0 green:0/255.0 blue:0/255.0 alpha:1] retain];
+	
+	lightYellow = [[UIColor colorWithRed:255/255.0 green:233/255.0 blue:115/255.0 alpha:1] retain];
+	darkYellow = [[UIColor colorWithRed:255/255.0 green:215/255.0 blue:0/255.0 alpha:1] retain];
+	
+	lightGreen = [[UIColor colorWithRed:169/255.0 green:241/255.0 blue:108/255.0 alpha:1] retain];
+	darkGreen = [[UIColor colorWithRed:103/255.0 green:227/255.0 blue:0/255.0 alpha:1] retain];
+	
+	//lightBlue = [[UIColor colorWithRed:100/255.0 green:168/255.0 blue:209/255.0 alpha:1] retain];
+	//darkBlue = [[UIColor colorWithRed:9/255.0 green:105/255.0 blue:162/255.0 alpha:1] retain];
+	
+	lightBlue = [[UIColor colorWithRed:87/255.0 green:198/255.0 blue:255/255.0 alpha:1] retain];
+	darkBlue = [[UIColor colorWithRed:28/255.0 green:163/255.0 blue:255/255.0 alpha:1] retain];
+	
+	//lightBlue = [[UIColor colorWithRed:14/255.0 green:148/255.0 blue:218/255.0 alpha:1] retain];
+	//darkBlue = [[UIColor colorWithRed:54/255.0 green:142/255.0 blue:188/255.0 alpha:1] retain];
+	
+	lightNormal = [[UIColor whiteColor] retain];
+	darkNormal = [[UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1] retain];
+	
+	//windowColor = [[UIColor colorWithRed:241.0/255.0 green:246.0/255.0 blue:253.0/255.0 alpha:1] retain];
+	//windowColor = [[UIColor colorWithRed:206.0/255.0 green:211.0/255.0 blue:218.0/255.0 alpha:1] retain];
+	windowColor = [[UIColor colorWithWhite:.3 alpha:1] retain];
+	jukeboxColor = [[UIColor colorWithRed:140.0/255.0 green:0.0 blue:0.0 alpha:1.0] retain];
+	
+	self.isCellEnabled = YES;
+	self.isEditing = NO;
+	self.isArtistsLoading = NO;
+	self.isAlbumsLoading = NO;
+	self.isSongsLoading = NO;
+	self.isOnlineModeAlertShowing = NO;
+	self.cancelLoading = NO;
+	self.deleteButtonImage = [UIImage imageNamed:@"delete-button.png"];
+	self.cacheButtonImage = [UIImage imageNamed:@"cache-button.png"];
+	self.queueButtonImage = [UIImage imageNamed:@"queue-button.png"];
+	self.isSettingsShowing = NO;
+	
+	//isJukebox = NO;
+	
+	isNoNetworkAlertShowing = NO;
+}
 
 + (ViewObjectsSingleton*)sharedInstance
 {
@@ -445,31 +462,11 @@ static ViewObjectsSingleton *sharedInstance = nil;
         if (sharedInstance == nil) 
 		{
             sharedInstance = [super allocWithZone:zone];
+			[sharedInstance setup];
             return sharedInstance;  // assignment and return on first allocation
         }
     }
     return nil; // on subsequent allocation attempts return nil
-}
-
-- (void)loadArtistList
-{
-	/*NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		
-	self.listOfArtists = [NSKeyedUnarchiver unarchiveObjectWithData:[defaults objectForKey:[NSString stringWithFormat:@"%@listOfArtists", appDelegate.defaultUrl]]];
-	self.artistIndex = [NSKeyedUnarchiver unarchiveObjectWithData:[defaults objectForKey:[NSString stringWithFormat:@"%@indexes", appDelegate.defaultUrl]]];
-	// Handle the change the listOfArtists structure gracefully
-	if ([listOfArtists count] > 0)
-	{
-		if ([[listOfArtists objectAtIndex:0] count] > 0)
-		{
-			if ([[[listOfArtists objectAtIndex:0] objectAtIndex:0] isKindOfClass:[NSArray class]])
-			{
-				self.listOfArtists = nil;
-			}
-		}
-	}
-	*/
-	
 }
 
 -(id)init 
@@ -478,52 +475,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 	{
 		sharedInstance = self;
 		
-		appDelegate = (iSubAppDelegate*)[[UIApplication sharedApplication] delegate];
-		
-		kHorizSwipeDragMin = 3;
-		kVertSwipeDragMax = 80;
-		
-		lightRed = [[UIColor colorWithRed:255/255.0 green:146/255.0 blue:115/255.0 alpha:1] retain];
-		darkRed = [[UIColor colorWithRed:226/255.0 green:0/255.0 blue:0/255.0 alpha:1] retain];
-		
-		lightYellow = [[UIColor colorWithRed:255/255.0 green:233/255.0 blue:115/255.0 alpha:1] retain];
-		darkYellow = [[UIColor colorWithRed:255/255.0 green:215/255.0 blue:0/255.0 alpha:1] retain];
-		
-		lightGreen = [[UIColor colorWithRed:169/255.0 green:241/255.0 blue:108/255.0 alpha:1] retain];
-		darkGreen = [[UIColor colorWithRed:103/255.0 green:227/255.0 blue:0/255.0 alpha:1] retain];
-		
-		//lightBlue = [[UIColor colorWithRed:100/255.0 green:168/255.0 blue:209/255.0 alpha:1] retain];
-		//darkBlue = [[UIColor colorWithRed:9/255.0 green:105/255.0 blue:162/255.0 alpha:1] retain];
-		
-		lightBlue = [[UIColor colorWithRed:87/255.0 green:198/255.0 blue:255/255.0 alpha:1] retain];
-		darkBlue = [[UIColor colorWithRed:28/255.0 green:163/255.0 blue:255/255.0 alpha:1] retain];
-		
-		//lightBlue = [[UIColor colorWithRed:14/255.0 green:148/255.0 blue:218/255.0 alpha:1] retain];
-		//darkBlue = [[UIColor colorWithRed:54/255.0 green:142/255.0 blue:188/255.0 alpha:1] retain];
-		
-		lightNormal = [[UIColor whiteColor] retain];
-		darkNormal = [[UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1] retain];
-		
-		//windowColor = [[UIColor colorWithRed:241.0/255.0 green:246.0/255.0 blue:253.0/255.0 alpha:1] retain];
-		//windowColor = [[UIColor colorWithRed:206.0/255.0 green:211.0/255.0 blue:218.0/255.0 alpha:1] retain];
-		windowColor = [[UIColor colorWithWhite:.3 alpha:1] retain];
-		jukeboxColor = [[UIColor colorWithRed:140.0/255.0 green:0.0 blue:0.0 alpha:1.0] retain];
-		
-		self.isCellEnabled = YES;
-		self.isEditing = NO;
-		self.isArtistsLoading = NO;
-		self.isAlbumsLoading = NO;
-		self.isSongsLoading = NO;
-		self.isOnlineModeAlertShowing = NO;
-		self.cancelLoading = NO;
-		self.deleteButtonImage = [UIImage imageNamed:@"delete-button.png"];
-		self.cacheButtonImage = [UIImage imageNamed:@"cache-button.png"];
-		self.queueButtonImage = [UIImage imageNamed:@"queue-button.png"];
-		self.isSettingsShowing = NO;
-		
-		isJukebox = NO;
-		
-		isNoNetworkAlertShowing = NO;
+		[self setup];
 	}
 	
 	return self;

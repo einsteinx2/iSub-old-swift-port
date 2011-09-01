@@ -805,7 +805,9 @@ static MusicControlsSingleton *sharedInstance = nil;
 
 - (void)downloadNextQueuedSong
 {
-	if (appDelegate.reachabilityStatus == 2 || IS_3G_UNRESTRICTED)
+	//if (appDelegate.reachabilityStatus == 2 || IS_3G_UNRESTRICTED)
+	//if ([appDelegate.wifiReach currentReachabilityStatus] == ReachableViaWiFi || IS_3G_UNRESTRICTED)
+	if (appDelegate.isWifi)
 	{
 		//DLog(@"reachabilityStatus is 2 so this is on Wifi");
 		if ([databaseControls.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
@@ -896,7 +898,9 @@ static MusicControlsSingleton *sharedInstance = nil;
 		
 		if (seekTime > 0.0)
 		{
-			[self resumeSong2];
+			// TODO: test this
+			[SavedSettings sharedInstance].isRecover = YES;
+			[self resumeSong];
 		}
 		else
 		{
@@ -921,7 +925,7 @@ static MusicControlsSingleton *sharedInstance = nil;
 		self.nextSongObject = [databaseControls songFromDbRow:(position + 1) inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 	}
 	
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		[self jukeboxPlaySongAtPosition:position];
 	}
@@ -945,14 +949,14 @@ static MusicControlsSingleton *sharedInstance = nil;
 	DLog(@"track position: %f", (streamerProgress + seekTime));
 	if ((streamerProgress + seekTime) > 10.0)
 	{
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			[self jukeboxPlaySongAtPosition:currentPlaylistPosition];
 		else
 			[self playSongAtPosition:currentPlaylistPosition];
 	}
 	else
 	{
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		{
 			[self jukeboxPrevSong];
 		}
@@ -988,7 +992,7 @@ static MusicControlsSingleton *sharedInstance = nil;
 
 - (void)nextSong
 {
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		[self jukeboxNextSong];
 	}
@@ -1024,7 +1028,7 @@ static MusicControlsSingleton *sharedInstance = nil;
 			[self destroyStreamer];
 			seekTime = 0.0;
 			
-			[appDelegate saveDefaults];
+			[[SavedSettings sharedInstance] saveState];
 		}
 	}
 }
@@ -1063,152 +1067,152 @@ static MusicControlsSingleton *sharedInstance = nil;
 
 - (void)resumeSong
 {	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	SavedSettings *settings = [SavedSettings sharedInstance];
 	
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	if([[defaults objectForKey:@"isShuffle"] isEqualToString:@"YES"])
-	{
-		self.isShuffle = YES;
-	}
-	else 
-	{
-		self.isShuffle = NO;
-	}
-	self.currentPlaylistPosition = [[defaults objectForKey:@"currentPlaylistPosition"] integerValue];
-	self.repeatMode = [[defaults objectForKey:@"repeatMode"] integerValue];
-	self.currentSongObject = [NSKeyedUnarchiver unarchiveObjectWithData:[defaults objectForKey:@"currentSongObject"]];
-	self.nextSongObject = [NSKeyedUnarchiver unarchiveObjectWithData:[defaults objectForKey:@"nextSongObject"]];
-	self.bitRate = [[defaults objectForKey:@"bitRate"] integerValue];
-	self.seekTime = [[defaults objectForKey:@"seekTime"] floatValue];
-	self.showNowPlayingIcon = YES;
-
-	if ([[defaults objectForKey:@"isPlaying"] isEqualToString:@"YES"])
-	{
-		[self performSelectorOnMainThread:@selector(resumeSong2) withObject:nil waitUntilDone:NO];
-	}
+	[settings loadState];
 	
-	[pool release];
-}
-
-- (void)resumeSong2
-{
-	self.songUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], [currentSongObject songId]]];
-	//DLog(@"resumeSong2 songUrl: %@", [self.songUrl absoluteString]);
-	
-	// Determine the hashed filename
-	self.downloadFileNameHashA = nil; self.downloadFileNameHashA = [NSString md5:currentSongObject.path];
-	
-	self.isPlaying = YES;
-	
-	// Check to see if the song is an m4a, if so don't resume and display message
-	BOOL isM4A = NO;
-	if (currentSongObject.transcodedSuffix)
+	if (settings.isRecover)
 	{
-		if ([currentSongObject.transcodedSuffix isEqualToString:@"m4a"] || [currentSongObject.transcodedSuffix isEqualToString:@"aac"])
-			isM4A = YES;
-	}
-	else
-	{
-		if ([currentSongObject.suffix isEqualToString:@"m4a"] || [currentSongObject.suffix isEqualToString:@"aac"])
-			isM4A = YES;
-	}
-	
-	if (isM4A)
-	{
-		[self startDownloadA];
-		
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Sorry" message:@"It's currently not possible to skip within m4a files, so the song is starting from the begining instead of resuming.\n\nYou can turn on m4a > mp3 transcoding in Subsonic to resume this song properly." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert show];
-		[alert release];
-	}
-	else
-	{
-		// Check to see if the song is already cached
-		if ([databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE md5 = ?", downloadFileNameHashA])
+		BOOL resume = NO;
+		if (self.isPlaying)
 		{
-			// Looks like the song is in the database, check if it's cached fully
-			NSString *isDownloadFinished = [databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", downloadFileNameHashA];
-			if ([isDownloadFinished isEqualToString:@"YES"])
-			{
-				// The song is fully cached, start streaming from the local copy
-				//DLog(@"Resuming from local copy");
-				
-				isTempDownload = NO;
-				
-				// Determine the file hash
-				self.downloadFileNameHashA = [NSString md5:currentSongObject.path];
-				
-				// Determine the name and path of the file.
-				if (currentSongObject.transcodedSuffix)
-					self.downloadFileNameA = [audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", downloadFileNameHashA, currentSongObject.transcodedSuffix]];
-				else
-					self.downloadFileNameA = [audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", downloadFileNameHashA, currentSongObject.suffix]];
-				//DLog(@"File name = %@", downloadFileNameA);		
-				
-				// Start streaming from the local copy
-				//DLog(@"Playing from local copy");
-				
-				// Check the file size
-				NSNumber *fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:downloadFileNameA error:NULL] objectForKey:NSFileSize];
-				downloadedLengthA = [fileSize intValue];
-				//DLog(@"downloadedLengthA: %i", downloadedLengthA);
-				
-				streamerProgress = 0.0;
-				
-				streamer = [[AudioStreamer alloc] initWithFileURL:[NSURL fileURLWithPath:downloadFileNameA]];
-				if (streamer)
-				{
-					streamer.fileDownloadCurrentSize = downloadedLengthA;
-					//DLog(@"fileDownloadCurrentSize: %i", streamer.fileDownloadCurrentSize);
-					streamer.fileDownloadComplete = YES;
-					[streamer startWithOffsetInSecs:(UInt32) seekTime];
-					
-					//DLog(@"started with offset in secs");
-				}
-			}
-			else
-			{
-				if (viewObjects.isOfflineMode)
-				{
-					CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Unable to resume this song in offline mode as it isn't fully cached." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-					[alert show];
-					[alert release];
-				}
-				else 
-				{
-					// The song is not fully cached, call startTempDownloadA to start a temp cache stream
-					//DLog(@"Resuming with a temp download");
-					
-					// Determine the name and path of the file.
-					if (currentSongObject.transcodedSuffix)
-						self.downloadFileNameA = [audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", downloadFileNameHashA, currentSongObject.transcodedSuffix]];
-					else
-						self.downloadFileNameA = [audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", downloadFileNameHashA, currentSongObject.suffix]];
-					//DLog(@"File name = %@", downloadFileNameA);		
-					
-					// Determine the byte offset
-					float byteOffset;
-					if (bitRate < 1000)
-						byteOffset = ((float)bitRate * 128 * seekTime);
-					else
-						byteOffset = (((float)bitRate / 1000) * 128 * seekTime);
-					
-					
-					// Start the download
-					[self startTempDownloadA:byteOffset];
-				}
-			}
+			if (settings.recoverSetting == 0 || settings.recoverSetting == 1)
+				resume = YES;
+			
+			if (settings.recoverSetting == 1)
+				self.isPlaying = NO;
 		}
 		else
 		{
-			if (!viewObjects.isOfflineMode)
+			// Always resume when isPlaying == NO just to resume the song state, song doesn't play
+			resume = YES;
+		}
+		
+		if (resume)
+		{
+			self.songUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], [currentSongObject songId]]];
+			//DLog(@"resumeSong2 songUrl: %@", [self.songUrl absoluteString]);
+			
+			// Determine the hashed filename
+			self.downloadFileNameHashA = nil; self.downloadFileNameHashA = [NSString md5:currentSongObject.path];
+			
+			//self.isPlaying = YES;
+			
+			// Check to see if the song is an m4a, if so don't resume and display message
+			BOOL isM4A = NO;
+			if (currentSongObject.transcodedSuffix)
 			{
-				// Somehow we're resuming a song that doesn't exist in the cache at all (should never happen). So call startDownloadA to start a fresh download.
-				DLog(@"Somehow the song we're trying to resume doesn't exist. Starting a fresh download");
-				
+				if ([currentSongObject.transcodedSuffix isEqualToString:@"m4a"] || [currentSongObject.transcodedSuffix isEqualToString:@"aac"])
+					isM4A = YES;
+			}
+			else
+			{
+				if ([currentSongObject.suffix isEqualToString:@"m4a"] || [currentSongObject.suffix isEqualToString:@"aac"])
+					isM4A = YES;
+			}
+			
+			if (isM4A)
+			{
 				[self startDownloadA];
+				
+				CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Sorry" message:@"It's currently not possible to skip within m4a files, so the song is starting from the begining instead of resuming.\n\nYou can turn on m4a > mp3 transcoding in Subsonic to resume this song properly." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+				[alert show];
+				[alert release];
+			}
+			else
+			{
+				// Check to see if the song is already cached
+				if ([databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE md5 = ?", downloadFileNameHashA])
+				{
+					// Looks like the song is in the database, check if it's cached fully
+					NSString *isDownloadFinished = [databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", downloadFileNameHashA];
+					if ([isDownloadFinished isEqualToString:@"YES"])
+					{
+						// The song is fully cached, start streaming from the local copy
+						//DLog(@"Resuming from local copy");
+						
+						isTempDownload = NO;
+						
+						// Determine the file hash
+						self.downloadFileNameHashA = [NSString md5:currentSongObject.path];
+						
+						// Determine the name and path of the file.
+						if (currentSongObject.transcodedSuffix)
+							self.downloadFileNameA = [audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", downloadFileNameHashA, currentSongObject.transcodedSuffix]];
+						else
+							self.downloadFileNameA = [audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", downloadFileNameHashA, currentSongObject.suffix]];
+						//DLog(@"File name = %@", downloadFileNameA);		
+						
+						// Start streaming from the local copy
+						//DLog(@"Playing from local copy");
+						
+						// Check the file size
+						NSNumber *fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:downloadFileNameA error:NULL] objectForKey:NSFileSize];
+						downloadedLengthA = [fileSize intValue];
+						//DLog(@"downloadedLengthA: %i", downloadedLengthA);
+						
+						streamerProgress = 0.0;
+						
+						streamer = [[AudioStreamer alloc] initWithFileURL:[NSURL fileURLWithPath:downloadFileNameA]];
+						if (streamer)
+						{
+							streamer.fileDownloadCurrentSize = downloadedLengthA;
+							//DLog(@"fileDownloadCurrentSize: %i", streamer.fileDownloadCurrentSize);
+							streamer.fileDownloadComplete = YES;
+							[streamer startWithOffsetInSecs:(UInt32) seekTime];
+							
+							//DLog(@"started with offset in secs");
+						}
+					}
+					else
+					{
+						if (viewObjects.isOfflineMode)
+						{
+							CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Unable to resume this song in offline mode as it isn't fully cached." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+							[alert show];
+							[alert release];
+						}
+						else 
+						{
+							// The song is not fully cached, call startTempDownloadA to start a temp cache stream
+							//DLog(@"Resuming with a temp download");
+							
+							// Determine the name and path of the file.
+							if (currentSongObject.transcodedSuffix)
+								self.downloadFileNameA = [audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", downloadFileNameHashA, currentSongObject.transcodedSuffix]];
+							else
+								self.downloadFileNameA = [audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", downloadFileNameHashA, currentSongObject.suffix]];
+							//DLog(@"File name = %@", downloadFileNameA);		
+							
+							// Determine the byte offset
+							float byteOffset;
+							if (bitRate < 1000)
+								byteOffset = ((float)bitRate * 128 * seekTime);
+							else
+								byteOffset = (((float)bitRate / 1000) * 128 * seekTime);
+							
+							
+							// Start the download
+							[self startTempDownloadA:byteOffset];
+						}
+					}
+				}
+				else
+				{
+					if (!viewObjects.isOfflineMode)
+					{
+						// Somehow we're resuming a song that doesn't exist in the cache at all (should never happen). So call startDownloadA to start a fresh download.
+						DLog(@"Somehow the song we're trying to resume doesn't exist. Starting a fresh download");
+						
+						[self startDownloadA];
+					}
+				}
 			}
 		}
+	}
+	else 
+	{
+		self.bitRate = 192;
 	}
 }
 

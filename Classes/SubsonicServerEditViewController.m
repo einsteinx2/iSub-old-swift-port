@@ -170,14 +170,16 @@
 			theServer.password = passwordField.text;
 			theServer.type = SUBSONIC;
 			
-			if (viewObjects.serverList == nil)
-				viewObjects.serverList = [NSMutableArray arrayWithCapacity:1];
+			SavedSettings *settings = [SavedSettings sharedInstance];
+			
+			if (settings.serverList == nil)
+				settings.serverList = [NSMutableArray arrayWithCapacity:1];
 			
 			if(viewObjects.serverToEdit)
 			{					
 				// Replace the entry in the server list
-				NSInteger index = [viewObjects.serverList indexOfObject:viewObjects.serverToEdit];
-				[viewObjects.serverList replaceObjectAtIndex:index withObject:theServer];
+				NSInteger index = [settings.serverList indexOfObject:viewObjects.serverToEdit];
+				[settings.serverList replaceObjectAtIndex:index withObject:theServer];
 				
 				// Update the serverToEdit to the new details
 				viewObjects.serverToEdit = theServer;
@@ -187,7 +189,7 @@
 				[defaults setObject:theServer.url forKey:@"url"];
 				[defaults setObject:theServer.username forKey:@"username"];
 				[defaults setObject:theServer.password forKey:@"password"];
-				[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:viewObjects.serverList] forKey:@"servers"];
+				[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
 				[defaults synchronize];
 				
 				[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadServerList" object:nil];
@@ -204,14 +206,14 @@
 			{
 				// Create the entry in serverList
 				viewObjects.serverToEdit = theServer;
-				[viewObjects.serverList addObject:viewObjects.serverToEdit];
+				[settings.serverList addObject:viewObjects.serverToEdit];
 				
 				// Save the plist values
 				NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 				[defaults setObject:urlField.text forKey:@"url"];
 				[defaults setObject:usernameField.text forKey:@"username"];
 				[defaults setObject:passwordField.text forKey:@"password"];
-				[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:viewObjects.serverList] forKey:@"servers"];
+				[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
 				[defaults synchronize];
 				
 				[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadServerList" object:nil];

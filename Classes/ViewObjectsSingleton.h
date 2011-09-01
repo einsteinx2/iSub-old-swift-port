@@ -97,7 +97,7 @@
 	
 	// Settings page objects
 	//
-	NSMutableArray *serverList;
+	//NSMutableArray *serverList;
 	Server *serverToEdit;
 	
 	
@@ -137,7 +137,7 @@
 	UIImage *queueButtonImage;
 	
 	
-	BOOL isJukebox;
+	//BOOL isJukebox;
 		
 	NSString *currentLoadingFolderId;
 	
@@ -145,12 +145,6 @@
 	
 	BOOL isNoNetworkAlertShowing;
 }
-
-// In App Purchase
-//
-@property (readonly) BOOL isPlaylistUnlocked;
-@property (readonly) BOOL isJukeboxUnlocked;
-@property (readonly) BOOL isCacheUnlocked;
 
 // Constants
 //
@@ -219,7 +213,7 @@
 
 // Settings page objects
 //
-@property (nonatomic, retain) NSMutableArray *serverList;
+//@property (nonatomic, retain) NSMutableArray *serverList;
 @property (nonatomic, retain) Server *serverToEdit;
 
 // Chat page objects
@@ -258,7 +252,7 @@
 @property (nonatomic, retain) UIImage *queueButtonImage;
 
 
-@property BOOL isJukebox;
+//@property BOOL isJukebox;
 
 @property (nonatomic, retain) NSString *currentLoadingFolderId;
 
@@ -267,8 +261,6 @@
 @property BOOL isNoNetworkAlertShowing;
 
 + (ViewObjectsSingleton*)sharedInstance;
-
-- (void)loadArtistList;
 
 - (void)orderMainTabBarController;
 

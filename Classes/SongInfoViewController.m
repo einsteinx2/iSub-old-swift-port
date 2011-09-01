@@ -22,6 +22,7 @@
 #import "CustomUIAlertView.h"
 #import "OBSlider.h"
 #import "UIView-tools.h"
+#import "SavedSettings.h"
 
 //#define downloadProgressWidth (progressSlider.frame.size.width + 4)
 #define downloadProgressWidth progressSlider.frame.size.width
@@ -90,7 +91,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidUnload) name:@"hideSongInfoFast" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidUnload) name:@"hideSongInfo" object:nil];
 	
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		downloadProgress.hidden = YES;
 	}
@@ -166,7 +167,7 @@
 	
 	progressSlider.minimumValue = 0.0;
 	
-	if ([musicControls.currentSongObject duration] && !viewObjects.isJukebox)
+	if ([musicControls.currentSongObject duration] && ![SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		progressSlider.maximumValue = [[musicControls.currentSongObject duration] floatValue];
 		progressSlider.enabled = YES;
@@ -278,7 +279,7 @@
 
 - (void) updateSlider
 {
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		elapsedTimeLabel.text = [appDelegate formatTime:0];
 		remainingTimeLabel.text = [NSString stringWithFormat:@"-%@",[appDelegate formatTime:[[musicControls.currentSongObject duration] floatValue]]];
@@ -570,7 +571,7 @@
 	[databaseControls addSongToShuffleQueue:musicControls.currentSongObject];
 	//[databaseControls insertSong:musicControls.currentSongObject intoTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
 	
-	/*if (viewObjects.isJukebox)
+	/*if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		[musicControls jukeboxShuffle];
 		musicControls.isShuffle = NO;
@@ -580,7 +581,7 @@
 		[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist WHERE ROWID != ? ORDER BY RANDOM()", oldPlaylistPosition];
 	}*/
 	
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO jukeboxShufflePlaylist SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID != ? ORDER BY RANDOM()", oldPlaylistPosition];
 	}
@@ -592,7 +593,7 @@
 	// Send a notification to update the playlist view
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadPlaylist" object:nil];
 	
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		[self performSelectorOnMainThread:@selector(jukeboxShuffleSteps) withObject:nil waitUntilDone:NO];
 	
 	// Hide the loading screen
@@ -619,7 +620,7 @@
 			[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle.png"] forState:0];
 		musicControls.isShuffle = NO;
 		
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		{
 			[musicControls jukeboxReplacePlaylistWithLocal];
 			//[musicControls playSongAtPosition:1];
@@ -634,7 +635,7 @@
 	}
 	else
 	{
-		if (!viewObjects.isJukebox)
+		if (![SavedSettings sharedInstance].isJukeboxEnabled)
 		{
 			if (IS_IPAD())
 				[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-on-ipad.png"] forState:0];

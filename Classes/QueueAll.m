@@ -76,7 +76,7 @@
 		
 		if (isQueue)
 		{
-			if (viewObjects.isJukebox)
+			if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			{
 				[musicControls jukeboxReplacePlaylistWithLocal];
 			}
@@ -96,7 +96,7 @@
 			[musicControls showPlayer];
 		}
 		
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		{
 			musicControls.isShuffle = NO;
 		}
@@ -111,7 +111,7 @@
 	
 	//jukeboxSongIds = [[NSMutableArray alloc] init];
 	
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		self.currentPlaylist = @"jukeboxCurrentPlaylist";
 		self.shufflePlaylist = @"jukeboxShufflePlaylist";

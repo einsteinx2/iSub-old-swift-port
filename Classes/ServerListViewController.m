@@ -22,6 +22,7 @@
 #import "CustomUIAlertView.h"
 #import "Reachability.h"
 #import "SavedSettings.h"
+#import "ASIHTTPRequest.h"
 
 @implementation ServerListViewController
 
@@ -57,6 +58,7 @@
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	musicControls = [MusicControlsSingleton sharedInstance];
 	databaseControls = [DatabaseControlsSingleton sharedInstance];
+	settings = [SavedSettings sharedInstance];
 	
 	self.tableView.allowsSelectionDuringEditing = YES;
 	
@@ -72,7 +74,7 @@
 		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(saveAction:)] autorelease];
 	self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	
-	if (viewObjects.serverList == nil || [viewObjects.serverList count] == 0)
+	if (settings.serverList == nil || [settings.serverList count] == 0)
 		[self addAction:nil];
 	
 	// Setup segmented control in the header view
@@ -239,11 +241,10 @@
 	[defaults setObject:viewObjects.serverToEdit.url forKey:@"url"];
 	[defaults setObject:viewObjects.serverToEdit.username forKey:@"username"];
 	[defaults setObject:viewObjects.serverToEdit.password forKey:@"password"];
-	[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:viewObjects.serverList] forKey:@"servers"];
+	[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
 	[defaults synchronize];
 	
 	// Update the variables
-	SavedSettings *settings = [SavedSettings sharedInstance];
 	settings.urlString = [NSString stringWithString:viewObjects.serverToEdit.url];
 	settings.username = [NSString stringWithString:viewObjects.serverToEdit.username];
 	settings.password = [NSString stringWithString:viewObjects.serverToEdit.password];
@@ -287,7 +288,7 @@
 		musicControls.nextSongObject = nil;
 		[musicControls destroyStreamer];
 		musicControls.isPlaying = NO;
-		viewObjects.isJukebox = NO;
+		settings.isJukeboxEnabled = NO;
 		musicControls.showNowPlayingIcon = NO;
 		musicControls.seekTime = 0.0;
 		
@@ -296,6 +297,8 @@
 		
 		// Reset the databases
 		[databaseControls closeAllDatabases];
+		//[appDelegate appInit2];
+		
 		[appDelegate appInit2];
 		
 		if (viewObjects.isOfflineMode)
@@ -310,7 +313,7 @@
 		}
 		
 		// Reset the tabs
-		[viewObjects loadArtistList];
+		//[viewObjects loadArtistList];
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadArtistList" object:nil];
 		if (IS_IPAD())
 			[appDelegate.artistsNavigationController popToRootViewControllerAnimated:NO];
@@ -340,7 +343,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
 	if (segmentedControl.selectedSegmentIndex == 0)
-		return [viewObjects.serverList count];
+		return [settings.serverList count];
 	else
 		return 0;
 }
@@ -353,7 +356,7 @@
 	
 	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 	
-	Server *aServer = [viewObjects.serverList objectAtIndex:indexPath.row];
+	Server *aServer = [settings.serverList objectAtIndex:indexPath.row];
 	
 	// Set up the cell...
 	UILabel *serverNameLabel = [[UILabel alloc] init];
@@ -417,7 +420,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	viewObjects.serverToEdit = [viewObjects.serverList objectAtIndex:indexPath.row];
+	viewObjects.serverToEdit = [settings.serverList objectAtIndex:indexPath.row];
 
 	if (isEditing)
 	{
@@ -444,11 +447,11 @@
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath 
 {
-	NSArray *server = [[viewObjects.serverList objectAtIndex:fromIndexPath.row] retain];
-	[viewObjects.serverList removeObjectAtIndex:fromIndexPath.row];
-	[viewObjects.serverList insertObject:server atIndex:toIndexPath.row];
+	NSArray *server = [[settings.serverList objectAtIndex:fromIndexPath.row] retain];
+	[settings.serverList removeObjectAtIndex:fromIndexPath.row];
+	[settings.serverList insertObject:server atIndex:toIndexPath.row];
 	[server release];
-	[[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject:viewObjects.serverList] forKey:@"servers"];
+	[[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
 	[self.tableView reloadData];
@@ -461,7 +464,7 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) 
 	{
 		// Alert user to select new default server if they deleting the default
-		if ([appDelegate.defaultUrl isEqualToString:[[viewObjects.serverList objectAtIndex:indexPath.row] url]])
+		if ([appDelegate.defaultUrl isEqualToString:[[settings.serverList objectAtIndex:indexPath.row] url]])
 		{
 			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Make sure to select a new server" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 			[alert show];
@@ -469,7 +472,7 @@
 		}
 		
         // Delete the row from the data source
-        [viewObjects.serverList removeObjectAtIndex:indexPath.row];
+        [settings.serverList removeObjectAtIndex:indexPath.row];
 		[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
 		[self.tableView reloadData];
 		
@@ -485,7 +488,7 @@
 			appDelegate.defaultUserName = [NSString stringWithString:viewObjects.serverToEdit.username];
 			appDelegate.defaultPassword = [NSString stringWithString:viewObjects.serverToEdit.password];
 		}*/
-		[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:viewObjects.serverList] forKey:@"servers"];
+		[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
 		[defaults synchronize];
     }   
 }

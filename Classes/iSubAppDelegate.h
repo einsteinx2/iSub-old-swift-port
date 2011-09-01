@@ -69,10 +69,7 @@
 	//NSMutableDictionary *settingsDictionary;
 	
 	// Multitasking stuff
-	BOOL isMultitaskingSupported;
-	UIBackgroundTaskIdentifier backgroundTask;
-	BOOL isHighRez;
-	
+	UIBackgroundTaskIdentifier backgroundTask;	
 	
 	BOOL showIntro;
 	
@@ -117,7 +114,8 @@
 // Network connectivity objects and variables
 //
 @property (nonatomic, retain) Reachability *wifiReach;
-@property int reachabilityStatus;
+@property (readonly) BOOL isWifi;
+//@property int reachabilityStatus;
 
 // User defaults
 //
@@ -133,21 +131,23 @@
 //@property (nonatomic, retain) NSMutableDictionary *settingsDictionary;
 
 // Multitasking stuff
-@property BOOL isMultitaskingSupported;
 @property UIBackgroundTaskIdentifier backgroundTask;
-@property BOOL isHighRez;
 
 + (iSubAppDelegate *)sharedInstance;
 
 - (void)enterOnlineModeForce;
 - (void)enterOfflineModeForce;
 
-- (void)appInit;
+- (void)loadHockeyApp;
+- (void)loadInAppPurchaseStore;
+- (void)createHTTPServer;
 - (void)appInit2;
-- (void)appInit3;
-- (void)appInit4;
+//- (void)appInit3;
+- (void)createAndDisplayUI;
 
-- (void)saveDefaults;
+- (void) adjustCacheSize;
+
+//- (void)saveDefaults;
 - (NSString *)getBaseUrl:(NSString *)action;
 - (void)reachabilityChanged: (NSNotification *)note;
 - (BOOL)isURLValid:(NSString *)url error:(NSError **)error;
@@ -158,11 +158,14 @@
 - (NSString *) formatTime:(float)seconds;
 - (NSString *) relativeTime:(NSDate *)date;
 
-- (BOOL)isWifi;
+//- (BOOL)isWifi;
 
 - (void)batteryStateChanged:(NSNotification *)notification;
 
 - (void) checkAPIVersion;
+
+- (void)startRedirectingLogToFile;
+- (void)stopRedirectingLogToFile;
 
 @end
 

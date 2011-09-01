@@ -217,7 +217,7 @@
 	
 	[result close];
 	
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		[musicControls jukeboxReplacePlaylistWithLocal];
 	
 	// Hide loading screen
@@ -263,7 +263,7 @@
 	// Shuffle the playlist
 	[databaseControls shufflePlaylist];
 	
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		[musicControls jukeboxReplacePlaylistWithLocal];
 	
 	// Set the isShuffle flag

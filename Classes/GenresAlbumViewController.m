@@ -225,7 +225,7 @@
 	
 	[result close];
 	
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		[musicControls jukeboxReplacePlaylistWithLocal];
 	
 	// Hide loading screen
@@ -271,7 +271,7 @@
 	// Shuffle the playlist
 	[databaseControls shufflePlaylist];
 	
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		[musicControls jukeboxReplacePlaylistWithLocal];
 	
 	// Set the isShuffle flag
@@ -362,7 +362,7 @@
 				{
 					// Image not cached, grab it from the url and cache it
 					NSString *imgUrlString;
-					if (appDelegate.isHighRez)
+					if (SCREEN_SCALE() == 2.0)
 					{
 						imgUrlString = [NSString stringWithFormat:@"%@%@&size=120", [appDelegate getBaseUrl:@"getCoverArt.view"], coverArtId];
 					}
@@ -540,7 +540,7 @@
 			musicControls.currentPlaylistPosition = songRow;
 			
 			// Clear the current playlist
-			if (viewObjects.isJukebox)
+			if ([SavedSettings sharedInstance].isJukeboxEnabled)
 				[databaseControls resetJukeboxPlaylist];
 			else
 				[databaseControls resetCurrentPlaylistDb];
@@ -556,14 +556,14 @@
 				[databaseControls addSongToPlaylistQueue:aSong];
 				
 				// In jukebox mode, collect the song ids to send to the server
-				if (viewObjects.isJukebox)
+				if ([SavedSettings sharedInstance].isJukeboxEnabled)
 					[songIds addObject:aSong.songId];
 				
 				[pool release];
 			}
 			
 			// If jukebox mode, send song ids to server
-			if (viewObjects.isJukebox)
+			if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			{
 				[musicControls jukeboxStop];
 				[musicControls jukeboxClearPlaylist];
@@ -572,7 +572,7 @@
 			[songIds release];
 			
 			// Set the current and next song objects
-			if (viewObjects.isJukebox)
+			if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			{
 				musicControls.currentSongObject = [databaseControls songFromDbRow:songRow inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 				musicControls.nextSongObject = [databaseControls songFromDbRow:(songRow + 1) inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseControls.currentPlaylistDb];

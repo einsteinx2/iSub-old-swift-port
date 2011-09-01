@@ -370,13 +370,13 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	[currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxCurrentPlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];	
 	[currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxShufflePlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];	
 
-	//if (viewObjects.isJukebox)
+	//if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	//	[musicControls jukeboxClearPlaylist];
 }
 
 - (void) resetCurrentPlaylist
 {
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		[currentPlaylistDb executeUpdate:@"DROP TABLE jukeboxCurrentPlaylist"];
 		[currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxCurrentPlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];	
@@ -390,7 +390,7 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 
 - (void) resetShufflePlaylist
 {
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		[currentPlaylistDb executeUpdate:@"DROP TABLE jukeboxShufflePlaylist"];
 		[currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxShufflePlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];	
@@ -814,7 +814,7 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 {
 	BOOL hadError = NO;
 	
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		//DLog(@"inserting %@", aSong.title);
 		[self insertSong:aSong intoTable:@"jukeboxCurrentPlaylist" inDatabase:currentPlaylistDb];
@@ -849,7 +849,7 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 {
 	BOOL hadError = NO;
 	
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		[self insertSong:aSong intoTable:@"jukeboxShufflePlaylist" inDatabase:currentPlaylistDb];
 		if ([songCacheDb hadError])
@@ -901,7 +901,7 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	[[NSFileManager defaultManager] removeItemAtPath:fileName error:NULL];
 	
 	// Check if we're deleting the song that's currently playing. If so, stop the player.
-	if (musicControls.currentSongObject && !viewObjects.isJukebox &&
+	if (musicControls.currentSongObject && ![SavedSettings sharedInstance].isJukeboxEnabled &&
 		[[NSString md5:musicControls.currentSongObject.path] isEqualToString:md5])
 	{
 		[musicControls destroyStreamer];
@@ -1082,7 +1082,7 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 
 - (void)queueSong:(Song *)aSong
 {
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		[self insertSong:aSong intoTable:@"jukeboxCurrentPlaylist" inDatabase:self.currentPlaylistDb];
 		[musicControls jukeboxAddSong:aSong.songId];
@@ -1145,7 +1145,7 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	
 	[self resetShufflePlaylist];
 	
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		[self.currentPlaylistDb executeUpdate:@"INSERT INTO jukeboxShufflePlaylist SELECT * FROM jukeboxCurrentPlaylist ORDER BY RANDOM()"];
 	else
 		[self.currentPlaylistDb executeUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist ORDER BY RANDOM()"];

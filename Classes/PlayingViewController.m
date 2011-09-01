@@ -177,7 +177,7 @@
 		{			
 			// If not, grab it from the url and cache it
 			NSString *imgUrlString;
-			if (appDelegate.isHighRez)
+			if (SCREEN_SCALE() == 2.0)
 			{
 				imgUrlString = [NSString stringWithFormat:@"%@%@&size=120", [appDelegate getBaseUrl:@"getCoverArt.view"], aSong.coverArtId];
 			}

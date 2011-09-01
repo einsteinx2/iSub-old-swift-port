@@ -37,6 +37,11 @@
 #	define IS_LITE() (false) // DISABLE Lite version
 #endif
 
+// Screen scale detection
+#define SCREEN_SCALE() ([[UIScreen mainScreen] respondsToSelector:@selector(scale)] ? [[UIScreen mainScreen] scale] : 1.0f)
+
+// Multitasking support check
+#define IS_MULTITASKING() ([[UIDevice currentDevice] respondsToSelector:@selector(multitaskingSupported)] ? [UIDevice currentDevice].multitaskingSupported : false)
 
 // DLog is almost a drop-in replacement for NSLog
 // DLog();

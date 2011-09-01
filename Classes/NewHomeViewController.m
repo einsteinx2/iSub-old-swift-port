@@ -243,7 +243,7 @@
 		//self.navigationItem.rightBarButtonItem = nil;
 	}
 	
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		if (IS_IPAD())
 			[jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-on-ipad.png"] forState:UIControlStateNormal];
@@ -276,7 +276,7 @@
 			if ([coverArtCache intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:musicControls.currentSongObject.coverArtId]] == 1)
 			{
 				NSData *imageData = [coverArtCache dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [NSString md5:musicControls.currentSongObject.coverArtId]];
-				if (appDelegate.isHighRez)
+				if (SCREEN_SCALE() == 2.0)
 				{
 					UIGraphicsBeginImageContextWithOptions(CGSizeMake(320.0,320.0), NO, 2.0);
 					[[UIImage imageWithData:imageData] drawInRect:CGRectMake(0,0,320,320)];
@@ -461,16 +461,16 @@
 
 - (IBAction)jukebox
 {
-	if (viewObjects.isJukeboxUnlocked)
+	if ([SavedSettings sharedInstance].isJukeboxUnlocked)
 	{
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		{
 			// Jukebox mode is on, turn it off
 			if (IS_IPAD())
 				[jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off-ipad.png"] forState:UIControlStateNormal];
 			else
 				[jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off.png"] forState:UIControlStateNormal];
-			viewObjects.isJukebox = NO;
+			[SavedSettings sharedInstance].isJukeboxEnabled = NO;
 			
 			musicControls.currentSongObject = nil;
 			
@@ -485,7 +485,7 @@
 				[jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-on-ipad.png"] forState:UIControlStateNormal];
 			else
 				[jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-on.png"] forState:UIControlStateNormal];
-			viewObjects.isJukebox = YES;
+			[SavedSettings sharedInstance].isJukeboxEnabled = YES;
 			
 			[musicControls jukeboxGetInfo];
 			
@@ -815,7 +815,7 @@
 			//[databaseControls insertSong:aSong intoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 		}
 		
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			[musicControls jukeboxReplacePlaylistWithLocal];
 		
 		//musicControls.currentSongObject = [databaseControls songFromDbRow:0 inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];

@@ -11,8 +11,9 @@
 
 @interface SavedSettings : NSObject 
 {
-	NSUserDefaults *settings;
+	NSUserDefaults *userDefaults;
 	
+	NSMutableArray *serverList;
 	NSString *urlString;
 	NSString *username;
 	NSString *password;
@@ -21,17 +22,22 @@
 	BOOL isJukeboxEnabled;
 	BOOL isScreenSleepEnabled;
 	
-	/*NSInteger cacheType;
-	unsigned long long minFreeSpace;
-	unsigned long long maxCacheSize;
-	BOOL enableCache;
-	BOOL autoDeleteCache;*/
-	
-	//NSDate *rootFoldersReloadTime;
-	//NSNumber *rootFoldersSelectedFolderId;
+	// State Saving
+	BOOL isPlaying;	
+	BOOL isShuffle;
+	NSInteger currentPlaylistPosition;
+	NSInteger repeatMode;
+	NSString *currentSongId;
+	NSString *nextSongId;
+	NSInteger bitRate;
 }
 
+// State Saving
+@property (nonatomic, retain) NSString *currentSongId;
+@property (nonatomic, retain) NSString *nextSongId;
+
 // Server Login Settings
+@property (nonatomic, retain) NSMutableArray *serverList;
 @property (nonatomic, retain) NSString *urlString;
 @property (nonatomic, retain) NSString *username;
 @property (nonatomic, retain) NSString *password;
@@ -39,6 +45,11 @@
 // Root Folders Settings
 @property (nonatomic, retain) NSDate *rootFoldersReloadTime;
 @property (nonatomic, retain) NSNumber *rootFoldersSelectedFolderId;
+
+// Lite Version Properties
+@property (readonly) BOOL isPlaylistUnlocked;
+@property (readonly) BOOL isJukeboxUnlocked;
+@property (readonly) BOOL isCacheUnlocked;
 
 @property BOOL isForceOfflineMode;
 @property NSInteger recoverSetting;
@@ -68,6 +79,9 @@
 @property BOOL isNewSearchAPI;
 @property (readonly) BOOL isTestServer;
 
+// State Saving
+@property BOOL isRecover;
+
 // Document Paths
 @property (readonly) NSString *documentsPath;
 @property (readonly) NSString *databasePath;
@@ -79,6 +93,10 @@
 @property unsigned long long maxCacheSize;
 @property BOOL enableCache;
 @property BOOL autoDeleteCache;*/
+
+- (void)setupSaveState;
+- (void)loadState;
+- (void)saveState;
 
 + (SavedSettings *)sharedInstance;
 

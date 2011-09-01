@@ -17,6 +17,7 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "CustomUIAlertView.h"
+#import "SavedSettings.h"
 
 
 @implementation CurrentPlaylistViewController
@@ -37,7 +38,7 @@
 	
 	self.tableView.backgroundColor = [UIColor clearColor];
 	
-	if (viewObjects.isPlaylistUnlocked)
+	if ([SavedSettings sharedInstance].isPlaylistUnlocked)
 	{
 		viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 		//viewObjects.multiDeleteList = nil; viewObjects.multiDeleteList = [[NSMutableArray alloc] init];
@@ -72,7 +73,7 @@
 		playlistCountLabel.textAlignment = UITextAlignmentCenter;
 		playlistCountLabel.font = [UIFont boldSystemFontOfSize:12];
 		NSUInteger songCount;
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			songCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"];
 		else
 			songCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
@@ -334,7 +335,7 @@
 	{
 		if ([deleteSongsLabel.text isEqualToString:@"Clear Playlist"])
 		{
-			if (viewObjects.isJukebox)
+			if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			{
 				[databaseControls resetJukeboxPlaylist];
 				[musicControls jukeboxClearPlaylist];
@@ -356,7 +357,7 @@
 			// Sort the multiDeleteList to make sure it's accending
 			[viewObjects.multiDeleteList sortUsingSelector:@selector(compare:)];
 			
-			if (viewObjects.isJukebox)
+			if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			{
 				[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE jukeboxTemp"];
 				[databaseControls.currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxTemp(title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
@@ -433,7 +434,7 @@
 			
 			[indexes release];
 			
-			if (viewObjects.isJukebox)
+			if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			{
 				[musicControls jukeboxReplacePlaylistWithLocal];
 			}
@@ -443,7 +444,7 @@
 		
 		// Fix the playlist count
 		NSUInteger songCount;
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			songCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"];
 		else
 			songCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
@@ -566,9 +567,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
     // Return the number of rows in the section.
-	if (viewObjects.isPlaylistUnlocked)
+	if ([SavedSettings sharedInstance].isPlaylistUnlocked)
 	{
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			return [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"];
 		else
 			return [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
@@ -593,7 +594,7 @@
 	}
 	
 	Song *aSong;
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		aSong = [databaseControls songFromDbRow:indexPath.row inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 	}
@@ -647,7 +648,7 @@
 	NSInteger fromRow = fromIndexPath.row + 1;
 	NSInteger toRow = toIndexPath.row + 1;
 	
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE jukeboxTemp"];
 		[databaseControls.currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxTemp(title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
@@ -796,7 +797,7 @@
 		}
 	}
 	
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		[musicControls jukeboxReplacePlaylistWithLocal];
 	}

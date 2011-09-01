@@ -17,6 +17,7 @@
 #import "FMDatabaseAdditions.h"
 #import "Song.h"
 #import "CellOverlay.h"
+#import "SavedSettings.h"
 
 @implementation LocalPlaylistsUITableViewCell
 
@@ -133,7 +134,7 @@
 {
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		/*[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/currentPlaylist.db", databaseControls.databaseFolderPath], @"currentPlaylistDb"];
 		if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }

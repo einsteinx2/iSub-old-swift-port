@@ -182,7 +182,6 @@
 - (void)createStreamer;
 - (void)createStreamerWithOffset;
 - (void)destroyStreamer;
-- (void)resumeSong;
 - (void)playPauseSong;
 - (void)playSongAtPosition:(NSInteger)position;
 - (void)nextSong;
@@ -191,7 +190,6 @@
 
 - (void)checkCache;
 - (void)resumeSong;
-- (void)resumeSong2;
 
 - (void) loadLyricsForArtistAndTitle:(NSArray *)artistAndTitle;
 

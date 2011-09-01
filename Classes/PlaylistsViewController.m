@@ -147,7 +147,7 @@
 		self.navigationItem.rightBarButtonItem = nil;
 	}
 	
-	if (viewObjects.isPlaylistUnlocked)
+	if ([SavedSettings sharedInstance].isPlaylistUnlocked)
 	{
 		// Reload the data in case it changed
 		self.tableView.tableHeaderView.hidden = NO;
@@ -165,7 +165,7 @@
 {
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			currentPlaylistCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"];
 		else
 			currentPlaylistCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
@@ -384,7 +384,7 @@
 	textLabel.font = [UIFont boldSystemFontOfSize:32];
 	textLabel.textAlignment = UITextAlignmentCenter;
 	textLabel.numberOfLines = 0;
-	if (viewObjects.isPlaylistUnlocked)
+	if ([SavedSettings sharedInstance].isPlaylistUnlocked)
 	{
 		if (segmentedControl.selectedSegmentIndex == 0)
 		{
@@ -411,7 +411,7 @@
 	textLabel2.font = [UIFont boldSystemFontOfSize:14];
 	textLabel2.textAlignment = UITextAlignmentCenter;
 	textLabel2.numberOfLines = 0;
-	if (viewObjects.isPlaylistUnlocked)
+	if ([SavedSettings sharedInstance].isPlaylistUnlocked)
 	{
 		if (segmentedControl.selectedSegmentIndex == 0)
 		{
@@ -428,7 +428,7 @@
 	[noPlaylistsScreen addSubview:textLabel2];
 	[textLabel2 release];
 	
-	if (!viewObjects.isPlaylistUnlocked)
+	if (![SavedSettings sharedInstance].isPlaylistUnlocked)
 	{
 		UIButton *storeLauncher = [UIButton buttonWithType:UIButtonTypeCustom];
 		storeLauncher.frame = CGRectMake(0, 0, noPlaylistsScreen.frame.size.width, noPlaylistsScreen.frame.size.height);
@@ -465,7 +465,7 @@
 		viewObjects.isLocalPlaylist = YES;
 		
 		// Get the current playlist count
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			currentPlaylistCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"];
 		else
 			currentPlaylistCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
@@ -808,7 +808,7 @@
 		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 		
 		Song *aSong = nil;
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		{
 			aSong = [databaseControls songFromDbRow:i inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 		}
@@ -865,7 +865,7 @@
 		[viewObjects.multiDeleteList sortUsingSelector:@selector(compare:)];
 		//DLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
 		
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		{
 			NSUInteger playlistCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"];
 			if ([viewObjects.multiDeleteList count] == playlistCount)
@@ -969,7 +969,7 @@
 		musicControls.currentPlaylistPosition = musicControls.currentPlaylistPosition - numberBefore;
 		
 		// Recaculate the table count
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			currentPlaylistCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"];
 		else
 		{
@@ -992,7 +992,7 @@
 		
 		[indexes release];
 		
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		{
 			[musicControls jukeboxReplacePlaylistWithLocal];
 		}
@@ -1072,7 +1072,7 @@
 				[self.tableView reloadData];
 				[self showDeleteButton];
 				
-				/*if (viewObjects.isJukebox)
+				/*if ([SavedSettings sharedInstance].isJukeboxEnabled)
 				{
 					[databaseControls resetJukeboxPlaylist];
 					[musicControls jukeboxClearPlaylist];
@@ -1715,7 +1715,7 @@ static NSString *kName_Error = @"error";
 		NSInteger fromRow = fromIndexPath.row + 1;
 		NSInteger toRow = toIndexPath.row + 1;
 		
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		{
 			[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE jukeboxTemp"];
 			[databaseControls.currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxTemp(title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
@@ -1876,7 +1876,7 @@ static NSString *kName_Error = @"error";
 			//DLog(@"main: Caught %@: %@", [exception name], [exception reason]);
 		}
 		
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		{
 			[musicControls jukeboxReplacePlaylistWithLocal];
 		}
@@ -1927,7 +1927,7 @@ static NSString *kName_Error = @"error";
 		
 		Song *aSong;
 		
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		{
 			aSong = [databaseControls songFromDbRow:indexPath.row inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 		}
@@ -1950,7 +1950,7 @@ static NSString *kName_Error = @"error";
 			{			
 				// If not, grab it from the url and cache it
 				NSString *imgUrlString;
-				if (appDelegate.isHighRez)
+				if (SCREEN_SCALE() == 2.0)
 				{
 					imgUrlString = [NSString stringWithFormat:@"%@%@&size=120", [appDelegate getBaseUrl:@"getCoverArt.view"], aSong.coverArtId];
 				}

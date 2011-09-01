@@ -69,6 +69,7 @@
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	musicControls = [MusicControlsSingleton sharedInstance];
 	databaseControls = [DatabaseControlsSingleton sharedInstance];
+	settings = [SavedSettings sharedInstance];
 	
 	jukeboxInputBlocker = nil;
 	
@@ -581,7 +582,7 @@
 		textLabel.font = [UIFont boldSystemFontOfSize:32];
 		textLabel.textAlignment = UITextAlignmentCenter;
 		textLabel.numberOfLines = 0;
-		if (viewObjects.isCacheUnlocked)
+		if (settings.isCacheUnlocked)
 		{
 			if (segmentedControl.selectedSegmentIndex == 0)
 				[textLabel setText:@"No Cached\nSongs"];
@@ -598,7 +599,7 @@
 		[noSongsScreen addSubview:textLabel];
 		[textLabel release];
 		
-		if (viewObjects.isCacheUnlocked == NO)
+		if (settings.isCacheUnlocked == NO)
 		{
 			UILabel *textLabel2 = [[UILabel alloc] init];
 			textLabel2.backgroundColor = [UIColor clearColor];
@@ -832,7 +833,7 @@
 	self.tableView.scrollEnabled = YES;
 	[jukeboxInputBlocker removeFromSuperview];
 	jukeboxInputBlocker = nil;
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		self.tableView.scrollEnabled = NO;
 		
@@ -857,7 +858,7 @@
 	}
 	
 	// Reload the data in case it changed
-	if (viewObjects.isCacheUnlocked)
+	if (settings.isCacheUnlocked)
 	{
 		self.tableView.tableHeaderView.hidden = NO;
 		
@@ -1270,7 +1271,7 @@
 		musicControls.isShuffle = NO;
 	}
 	
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		[musicControls jukeboxReplacePlaylistWithLocal];
 	
 	// Must do UI stuff in main thread
@@ -1306,7 +1307,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView 
 {
-	if (segmentedControl.selectedSegmentIndex == 0 && viewObjects.isCacheUnlocked)
+	if (segmentedControl.selectedSegmentIndex == 0 && settings.isCacheUnlocked)
 	{
 		return [sectionInfo count];
 	}
@@ -1317,7 +1318,7 @@
 // Following 2 methods handle the right side index
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView 
 {
-	if (segmentedControl.selectedSegmentIndex == 0 && viewObjects.isCacheUnlocked && showIndex)
+	if (segmentedControl.selectedSegmentIndex == 0 && settings.isCacheUnlocked && showIndex)
 	{
 		NSMutableArray *indexes = [[[NSMutableArray alloc] init] autorelease];
 		for (int i = 0; i < [sectionInfo count]; i++)
@@ -1332,7 +1333,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 	
-	if (segmentedControl.selectedSegmentIndex == 0 && viewObjects.isCacheUnlocked)
+	if (segmentedControl.selectedSegmentIndex == 0 && settings.isCacheUnlocked)
 	{
 		return [[sectionInfo objectAtIndex:section] objectAtIndex:0];
 	}
@@ -1380,7 +1381,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
-	if (viewObjects.isCacheUnlocked)
+	if (settings.isCacheUnlocked)
 	{
 		// Return the number of rows in the section.
 		if (segmentedControl.selectedSegmentIndex == 0)
@@ -1450,7 +1451,7 @@
 			{			
 				// If not, grab it from the url and cache it
 				NSString *imgUrlString;
-				if (appDelegate.isHighRez)
+				if (SCREEN_SCALE() == 2.0)
 				{
 					imgUrlString = [NSString stringWithFormat:@"%@%@&size=120", [appDelegate getBaseUrl:@"getCoverArt.view"], aSong.coverArtId];
 				}

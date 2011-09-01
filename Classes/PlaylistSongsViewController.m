@@ -445,7 +445,7 @@ static NSString *kName_Error = @"error";
 			{			
 				// If not, grab it from the url and cache it
 				NSString *imgUrlString;
-				if (appDelegate.isHighRez)
+				if (SCREEN_SCALE() == 2.0)
 				{
 					imgUrlString = [NSString stringWithFormat:@"%@%@&size=120", [appDelegate getBaseUrl:@"getCoverArt.view"], aSong.coverArtId];
 				}
@@ -500,7 +500,7 @@ static NSString *kName_Error = @"error";
 		[musicControls destroyStreamer];
 		
 		// Clear the current playlist
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			[databaseControls resetJukeboxPlaylist];
 		else
 			[databaseControls resetCurrentPlaylistDb];
@@ -509,7 +509,7 @@ static NSString *kName_Error = @"error";
 		{			
 			[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [NSString md5:appDelegate.defaultUrl]], @"currentPlaylistDb"];
 			if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the localPlaylistsDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
-			if (viewObjects.isJukebox)
+			if ([SavedSettings sharedInstance].isJukeboxEnabled)
 				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO jukeboxCurrentPlaylist SELECT * FROM playlist%@", self.md5]];
 			else
 				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", self.md5]];
@@ -519,14 +519,14 @@ static NSString *kName_Error = @"error";
 		{
 			[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [NSString md5:appDelegate.defaultUrl]], @"currentPlaylistDb"];
 			if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the localPlaylistsDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
-			if (viewObjects.isJukebox)
+			if ([SavedSettings sharedInstance].isJukeboxEnabled)
 				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO jukeboxCurrentPlaylist SELECT * FROM splaylist%@", self.md5]];
 			else
 				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM splaylist%@", self.md5]];
 			[databaseControls.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 		}
 		
-		if (viewObjects.isJukebox)
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		{
 			[musicControls jukeboxReplacePlaylistWithLocal];
 		}

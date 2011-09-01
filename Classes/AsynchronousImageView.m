@@ -46,7 +46,7 @@
 	/*if(musicControls.currentSongObject.coverArtId)
 	{
 		musicControls.coverArtUrl = nil;
-		if (appDelegate.isHighRez)
+		if (SCREEN_SCALE() == 2.0)
 		{
 			musicControls.coverArtUrl = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@%@&size=640", [appDelegate getBaseUrl:@"getCoverArt.view"], musicControls.currentSongObject.coverArtId]];
 		}
@@ -129,7 +129,7 @@
 	}
 	else
 	{
-		if (appDelegate.isHighRez)
+		if (SCREEN_SCALE() == 2.0)
 		{
 			theUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@&size=640", [appDelegate getBaseUrl:@"getCoverArt.view"], coverArtId]];
 		}
@@ -207,7 +207,7 @@
 				[databaseControls.coverArtCacheDb320 executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:coverArtId], data];
 			}
 			
-			if (appDelegate.isHighRez && !IS_IPAD())
+			if (SCREEN_SCALE() == 2.0 && !IS_IPAD())
 			{
 				UIGraphicsBeginImageContextWithOptions(CGSizeMake(320.0,320.0), NO, 2.0);
 				[[UIImage imageWithData:data] drawInRect:CGRectMake(0,0,320,320)];

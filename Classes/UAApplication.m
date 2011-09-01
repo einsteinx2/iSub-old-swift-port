@@ -8,8 +8,8 @@
 
 #import "UAApplication.h"
 #import "MusicControlsSingleton.h"
-#import "ViewObjectsSingleton.h"
 #import "iSubAppDelegate.h"
+#import "SavedSettings.h"
  
 @implementation UAApplication
 
@@ -55,9 +55,8 @@
 
 - (void)playPauseStop
 {
-	ViewObjectsSingleton *viewObjects = [ViewObjectsSingleton sharedInstance];
 	MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		if (musicControls.isPlaying)
 			[musicControls jukeboxStop];

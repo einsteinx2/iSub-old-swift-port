@@ -244,7 +244,7 @@ static void DownloadDoneA()
 			{
 				//DLog(@"320 artwork doesn't exist, caching");
 				NSString *imgUrlString;
-				if ([appDelegateRef isHighRez])
+				if (SCREEN_SCALE() == 2.0)
 				{
 					imgUrlString = [NSString stringWithFormat:@"%@%@&size=640", [appDelegateRef  getBaseUrl:@"getCoverArt.view"], coverArtId];
 				}
@@ -267,7 +267,7 @@ static void DownloadDoneA()
 			{
 				//DLog(@"60 artwork doesn't exist, caching");
 				NSString *imgUrlString;
-				if ([appDelegateRef isHighRez])
+				if (SCREEN_SCALE() == 2.0)
 				{
 					imgUrlString = [NSString stringWithFormat:@"%@%@&size=120", [appDelegateRef  getBaseUrl:@"getCoverArt.view"], coverArtId];
 				}
@@ -464,7 +464,7 @@ static void DownloadDoneB()
 			{
 				//DLog(@"320 artwork doesn't exist, caching");
 				NSString *imgUrlString;
-				if ([appDelegateRef isHighRez])
+				if (SCREEN_SCALE() == 2.0)
 				{
 					imgUrlString = [NSString stringWithFormat:@"%@%@&size=640", [appDelegateRef  getBaseUrl:@"getCoverArt.view"], coverArtId];
 				}
@@ -487,7 +487,7 @@ static void DownloadDoneB()
 			{
 				//DLog(@"60 artwork doesn't exist, caching");
 				NSString *imgUrlString;
-				if ([appDelegateRef isHighRez])
+				if (SCREEN_SCALE() == 2.0)
 				{
 					imgUrlString = [NSString stringWithFormat:@"%@%@&size=120", [appDelegateRef  getBaseUrl:@"getCoverArt.view"], coverArtId];
 				}

@@ -44,7 +44,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidUnload) name:@"hideSongInfoFast" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidUnload) name:@"hideSongInfo" object:nil];
 	
-	if (viewObjects.isCacheUnlocked == NO)
+	if ([SavedSettings sharedInstance].isCacheUnlocked == NO)
 	{
 		UIImageView *noCacheScreen = [[UIImageView alloc] init];
 		noCacheScreen.frame = CGRectMake(40, 80, 240, 180);
@@ -81,7 +81,7 @@
 
 - (void) updateStats
 {
-	if (viewObjects.isJukebox)
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		currentSongProgressView.progress = 0.0;
 		currentSongProgressView.alpha = 0.2;
