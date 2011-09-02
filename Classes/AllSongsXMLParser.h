@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class iSubAppDelegate, ViewObjectsSingleton, Song, DatabaseControlsSingleton;
+@class iSubAppDelegate, ViewObjectsSingleton, Song, DatabaseSingleton;
 
 @interface AllSongsXMLParser : NSObject <NSXMLParserDelegate>
 {
@@ -17,7 +17,7 @@
 	
 	iSubAppDelegate *appDelegate; 
 	ViewObjectsSingleton *viewObjects;
-	DatabaseControlsSingleton *databaseControls;
+	DatabaseSingleton *databaseControls;
 	
 	NSInteger iteration;
 	NSString *albumName;

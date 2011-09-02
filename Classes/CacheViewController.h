@@ -9,14 +9,14 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton, SavedSettings;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, SavedSettings;
 
 @interface CacheViewController : UITableViewController 
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
-	MusicControlsSingleton *musicControls;
-	DatabaseControlsSingleton *databaseControls;
+	MusicSingleton *musicControls;
+	DatabaseSingleton *databaseControls;
 	SavedSettings *settings;
 	
 	BOOL isNoSongsScreenShowing;

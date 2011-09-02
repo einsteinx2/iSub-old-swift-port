@@ -6,7 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "SocialControlsSingleton.h"
+#import "SocialSingleton.h"
 #import "SA_OAuthTwitterEngine.h"
 #import "SA_OAuthTwitterController.h"
 #import "CustomUIAlertView.h"
@@ -15,9 +15,9 @@
 #define kOAuthConsumerKey				@"nYKAEcLstFYnI9EEnv6g"
 #define kOAuthConsumerSecret			@"wXSWVvY7GN1e8Z2KFaR9A5skZKtHzpchvMS7Elpu0"
 
-static SocialControlsSingleton *sharedInstance = nil;
+static SocialSingleton *sharedInstance = nil;
 
-@implementation SocialControlsSingleton
+@implementation SocialSingleton
 
 // Twitter
 @synthesize twitterEngine;
@@ -92,7 +92,7 @@ static SocialControlsSingleton *sharedInstance = nil;
 #pragma mark -
 #pragma mark Singleton methods
 
-+ (SocialControlsSingleton*)sharedInstance
++ (SocialSingleton*)sharedInstance
 {
     @synchronized(self)
     {

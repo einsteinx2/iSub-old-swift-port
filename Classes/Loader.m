@@ -8,7 +8,7 @@
 
 #import "Loader.h"
 #import "SavedSettings.h"
-#import "MusicControlsSingleton.h"
+#import "MusicSingleton.h"
 #import "Song.h"
 
 @implementation Loader
@@ -107,7 +107,7 @@
 	NSString *username = settings.username;
 	NSString *password = settings.password;
 	NSDictionary *settingsDictionary = [[NSUserDefaults standardUserDefaults] objectForKey:@"settingsDictionary"];
-	MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
+	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 		
 	NSString *encodedUserName = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)username, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8 );
 	NSString *encodedPassword = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)password, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8 );

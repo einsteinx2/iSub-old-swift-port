@@ -9,16 +9,20 @@
 #import "SavedSettings.h"
 #import "NSString-md5.h"
 #import "ASIHTTPRequest.h"
-#import "MusicControlsSingleton.h"
+#import "MusicSingleton.h"
+#import "AudioStreamer.h"
+#import "Song.h"
+#import "Server.h"
+#import "MKStoreManager.h"
 
 @implementation SavedSettings
 
-@synthesize serverList;
+@synthesize serverList, currentSongId, nextSongId;
 
 - (void)setupSaveState
 {
 	// Initiallize the save state stuff
-	MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
+	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 	
 	if (self.isJukeboxEnabled)
 		isPlaying = NO;
@@ -63,7 +67,7 @@
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	//DLog(@"saveDefaults!!");
 	
-	MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
+	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 		
 	if (musicControls.isPlaying != isPlaying)
 	{
@@ -93,13 +97,13 @@
 		[userDefaults setInteger:repeatMode forKey:@"repeatMode"];
 	}
 	
-	if (![musicControls.currentSongObject.songId isEqualToString:currentSongId])
+	if (musicControls.currentSongObject.songId && ![musicControls.currentSongObject.songId isEqualToString:currentSongId])
 	{
 		self.currentSongId = [NSString stringWithString:musicControls.currentSongObject.songId];
 		[userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:musicControls.currentSongObject] forKey:@"currentSongObject"];
 	}
 	
-	if (![musicControls.nextSongObject.songId isEqualToString:nextSongId])
+	if (musicControls.nextSongObject.songId && ![musicControls.nextSongObject.songId isEqualToString:nextSongId])
 	{
 		self.nextSongId = [NSString stringWithString:musicControls.nextSongObject.songId];
 		[userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:musicControls.nextSongObject] forKey:@"nextSongObject"];
@@ -126,7 +130,7 @@
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-	MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
+	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 	
 	if (self.isJukeboxEnabled)
 		isPlaying = NO;
@@ -144,25 +148,25 @@
 	musicControls.repeatMode = repeatMode;
 	
 	currentSongId = nil;
-	musicControls.currentSongObject = [NSKeyedUnarchiver unarchiveObjectWithData:[defaults objectForKey:@"currentSongObject"]];
-	if (![musicControls.currentSongObject.songId isEqualToString:currentSongId])
+	musicControls.currentSongObject = [NSKeyedUnarchiver unarchiveObjectWithData:[userDefaults objectForKey:@"currentSongObject"]];
+	if (musicControls.currentSongObject.songId && ![musicControls.currentSongObject.songId isEqualToString:currentSongId])
 	{
 		self.currentSongId = [NSString stringWithString:musicControls.currentSongObject.songId];
 	}
 	
 	nextSongId = nil;
-	musicControls.nextSongObject = [NSKeyedUnarchiver unarchiveObjectWithData:[defaults objectForKey:@"nextSongObject"]];
-	if (![musicControls.nextSongObject.songId isEqualToString:nextSongId])
+	musicControls.nextSongObject = [NSKeyedUnarchiver unarchiveObjectWithData:[userDefaults objectForKey:@"nextSongObject"]];
+	if (musicControls.nextSongObject.songId && ![musicControls.nextSongObject.songId isEqualToString:nextSongId])
 	{
 		self.nextSongId = [NSString stringWithString:musicControls.nextSongObject.songId];
 	}
 	
 	bitRate = [userDefaults integerForKey:@"bitRate"];
-	musicControls = bitRate;
+	musicControls.bitRate = bitRate;
 
 	musicControls.seekTime = [userDefaults floatForKey:@"seekTime"];
 	
-	musicControls.showPlayerIcon = YES;
+	musicControls.showNowPlayingIcon = YES;
 	
 	[pool release];
 }
@@ -206,7 +210,7 @@
 	[self createInitialSettings];
 	
 	// Convert server list
-	id servers = [defaults objectForKey:@"servers"];
+	id servers = [userDefaults objectForKey:@"servers"];
 	if ([servers isKindOfClass:[NSArray class]])
 	{
 		if ([servers count] > 0)
@@ -243,7 +247,7 @@
 	NSDictionary *settingsDictionary = [userDefaults objectForKey:@"settingsDictionary"];
 	if (settingsDictionary != nil)
 	{
-		NSArray *boolKeys = [NSArray arrayWithObjects:@"areSettingsSetup" , @"manualOfflineModeSetting" , @"enableSongCachingSetting" , @"enableNextSongCacheSetting", @"autoDeleteCacheSetting", @"twitterEnabledSetting", @"lyricsEnabledSetting", @"enableSongsTabSetting", @"autoPlayerInfoSetting", @"autoReloadArtistsSetting", @"enableScrobblingSetting", @"lockRotationSetting", @"checkUpdatesSetting", nil];
+		NSArray *boolKeys = [NSArray arrayWithObjects:@"manualOfflineModeSetting" , @"enableSongCachingSetting" , @"enableNextSongCacheSetting", @"autoDeleteCacheSetting", @"twitterEnabledSetting", @"lyricsEnabledSetting", @"enableSongsTabSetting", @"autoPlayerInfoSetting", @"autoReloadArtistsSetting", @"enableScrobblingSetting", @"lockRotationSetting", @"checkUpdatesSetting", nil];
 		NSArray *intKeys = [NSArray arrayWithObjects:@"recoverSetting", @"maxBitrateWifiSetting", @"maxBitrate3GSetting", @"cachingTypeSetting", @"autoDeleteCacheTypeSetting", @"cacheSongCellColorSetting", nil];
 		NSArray *objKeys = [NSArray arrayWithObjects:@"maxCacheSize", @"minFreeSpace", nil];
 		NSArray *floatKeys = [NSArray arrayWithObject:@"scrobblePercentSetting"];
@@ -404,7 +408,7 @@
 
 - (NSDate *)rootFoldersReloadTime
 {
-	return [settings objectForKey:[NSString stringWithFormat:@"%@rootFoldersReloadTime", urlString]];
+	return [userDefaults objectForKey:[NSString stringWithFormat:@"%@rootFoldersReloadTime", urlString]];
 }
 
 - (void)setRootFoldersReloadTime:(NSDate *)reloadTime
@@ -779,6 +783,7 @@ static SavedSettings *sharedInstance = nil;
 
 - (void)setup
 {
+	NSLog(@"SavedSettings setup called");
 	// Setup save state stuff
 	//[self setupSaveState];
 	
@@ -796,7 +801,7 @@ static SavedSettings *sharedInstance = nil;
 	password = [[NSString alloc] initWithString:DEFAULT_PASSWORD];
 	
 	// If the settings are not set up, convert them
-	if (![settings boolForKey:@"areSettingsSetup"])
+	if (![userDefaults boolForKey:@"areSettingsSetup"])
 	{
 		[self convertFromOldSettingsType];
 	}

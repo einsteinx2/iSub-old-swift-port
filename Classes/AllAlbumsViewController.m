@@ -10,8 +10,8 @@
 #import "SearchOverlayViewController.h"
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
-#import "MusicControlsSingleton.h"
-#import "DatabaseControlsSingleton.h"
+#import "MusicSingleton.h"
+#import "DatabaseSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "XMLParser.h"
@@ -53,8 +53,8 @@
     [super viewDidLoad];
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicControlsSingleton sharedInstance];
-	databaseControls = [DatabaseControlsSingleton sharedInstance];
+	musicControls = [MusicSingleton sharedInstance];
+	databaseControls = [DatabaseSingleton sharedInstance];
 	
 	self.title = @"Albums";
 	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
@@ -67,7 +67,7 @@
 	numberOfRows = 0;
 	//[self.headerView removeFromSuperview];
 	self.sectionInfo = nil;
-	if ([databaseControls.allAlbumsDb tableExists:@"allAlbums"] == YES && ![[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllAlbumsLoading", appDelegate.defaultUrl]] isEqualToString:@"YES"])
+	if ([databaseControls.allAlbumsDb tableExists:@"allAlbums"] == YES && ![[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllAlbumsLoading", [SavedSettings sharedInstance].urlString]] isEqualToString:@"YES"])
 	{
 		//DLog(@"1");
 		numberOfRows = [databaseControls.allAlbumsDb intForQuery:@"SELECT COUNT(*) FROM allAlbums"];
@@ -142,7 +142,7 @@
 	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 	[formatter setDateStyle:NSDateFormatterMediumStyle];
 	[formatter setTimeStyle:NSDateFormatterShortStyle];
-	reloadTimeLabel.text = [NSString stringWithFormat:@"last reload: %@", [formatter stringFromDate:[defaults objectForKey:[NSString stringWithFormat:@"%@albumsReloadTime", appDelegate.defaultUrl]]]];
+	reloadTimeLabel.text = [NSString stringWithFormat:@"last reload: %@", [formatter stringFromDate:[defaults objectForKey:[NSString stringWithFormat:@"%@albumsReloadTime", [SavedSettings sharedInstance].urlString]]]];
 	[formatter release];
 	
 	self.tableView.tableHeaderView = headerView;
@@ -161,7 +161,8 @@ static NSInteger order (id a, id b, void* context)
 
 -(void)loadData
 {
-	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
+	// TODO: fix this
+	/*// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	
 	viewObjects.isAlbumsLoading = YES;
@@ -326,7 +327,7 @@ static NSInteger order (id a, id b, void* context)
 	// Must do the UI stuff in the main thread
 	[self performSelectorOnMainThread:@selector(loadData2) withObject:nil waitUntilDone:NO];
 	
-	[autoreleasePool release];
+	[autoreleasePool release];*/
 }	
 
 
@@ -361,7 +362,7 @@ static NSInteger order (id a, id b, void* context)
 		return;
 	}
 	viewObjects.isAlbumsLoading = NO;
-	[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:[NSString stringWithFormat:@"%@isAllAlbumsLoading", appDelegate.defaultUrl]];
+	[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:[NSString stringWithFormat:@"%@isAllAlbumsLoading", [SavedSettings sharedInstance].urlString]];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
 	[self addCount];
@@ -414,7 +415,8 @@ static NSInteger order (id a, id b, void* context)
 {
 	[super viewWillAppear:animated];
 	
-	// Don't run this while the table is updating
+	// TODO: fix this
+	/*// Don't run this while the table is updating
 	if (!viewObjects.isAlbumsLoading)
 	{
 		if(musicControls.showPlayerIcon)
@@ -462,7 +464,7 @@ static NSInteger order (id a, id b, void* context)
 	{
 		[viewObjects.allAlbumsLoadingScreen.view removeFromSuperview];
 		[self.view addSubview:viewObjects.allAlbumsLoadingScreen.view];
-	}
+	}*/
 }
 
 

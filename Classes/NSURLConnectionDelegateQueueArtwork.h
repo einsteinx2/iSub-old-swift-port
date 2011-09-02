@@ -8,12 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-@class DatabaseControlsSingleton, MusicControlsSingleton;
+@class DatabaseSingleton, MusicSingleton;
 
 @interface NSURLConnectionDelegateQueueArtwork : NSObject 
 {
-	DatabaseControlsSingleton *databaseControls;
-	MusicControlsSingleton *musicControls;
+	DatabaseSingleton *databaseControls;
+	MusicSingleton *musicControls;
 	
 	NSMutableData *receivedData;
 	

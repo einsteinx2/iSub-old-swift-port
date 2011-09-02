@@ -14,7 +14,6 @@
 	NSTimer *cacheCheckTimer;
 	
 	unsigned long long cacheSize;
-	unsigned long long freeSpace;
 }
 
 @property NSTimeInterval cacheCheckInterval;

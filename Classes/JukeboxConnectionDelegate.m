@@ -8,8 +8,8 @@
 
 #import "JukeboxConnectionDelegate.h"
 #import "JukeboxXMLParser.h"
-#import "MusicControlsSingleton.h"
-#import "DatabaseControlsSingleton.h"
+#import "MusicSingleton.h"
+#import "DatabaseSingleton.h"
 #import "BBSimpleConnectionQueue.h"
 #import "CustomUIAlertView.h"
 
@@ -22,7 +22,7 @@
 	self = [super init];
 	if (self != nil)
 	{
-		musicControls = [MusicControlsSingleton sharedInstance];
+		musicControls = [MusicSingleton sharedInstance];
 		
 		receivedData = [[NSMutableData data] retain];
 		
@@ -75,7 +75,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	DatabaseControlsSingleton *databaseControls = [DatabaseControlsSingleton sharedInstance];
+	DatabaseSingleton *databaseControls = [DatabaseSingleton sharedInstance];
 	
 	//DLog(@"%@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
 	

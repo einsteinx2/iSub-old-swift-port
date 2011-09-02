@@ -7,8 +7,8 @@
 //
 
 #import "iSubAppDelegate.h"
-#import "MusicControlsSingleton.h"
-#import "DatabaseControlsSingleton.h"
+#import "MusicSingleton.h"
+#import "DatabaseSingleton.h"
 #import "ViewObjectsSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "SongInfoViewController.h"
@@ -141,8 +141,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	//[coverArtImageView.layer setCornerRadius:20];
 	
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	musicControls = [MusicControlsSingleton sharedInstance];
-	databaseControls = [DatabaseControlsSingleton sharedInstance];
+	musicControls = [MusicSingleton sharedInstance];
+	databaseControls = [DatabaseSingleton sharedInstance];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	
 	pageControlViewController = nil;

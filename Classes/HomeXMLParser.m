@@ -11,7 +11,7 @@
 
 #import "HomeXMLParser.h"
 #import "iSubAppDelegate.h"
-#import "DatabaseControlsSingleton.h"
+#import "DatabaseSingleton.h"
 #import "ServerListViewController.h"
 #import "Index.h"
 #import "Album.h"
@@ -34,7 +34,7 @@
 	{
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 		viewObjects = [ViewObjectsSingleton sharedInstance];
-		databaseControls = [DatabaseControlsSingleton sharedInstance];
+		databaseControls = [DatabaseSingleton sharedInstance];
 		
 		listOfAlbums = [[NSMutableArray alloc] init];
 	}

@@ -11,8 +11,8 @@
 #import "SearchOverlayViewController.h"
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
-#import "MusicControlsSingleton.h"
-#import "DatabaseControlsSingleton.h"
+#import "MusicSingleton.h"
+#import "DatabaseSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "AllSongsXMLParser.h"
@@ -58,8 +58,9 @@
     [super viewDidLoad];
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicControlsSingleton sharedInstance];
-	databaseControls = [DatabaseControlsSingleton sharedInstance];
+	musicControls = [MusicSingleton sharedInstance];
+	databaseControls = [DatabaseSingleton sharedInstance];
+	settings = [SavedSettings sharedInstance];
 	
 	self.title = @"Songs";
 	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
@@ -72,7 +73,7 @@
 	numberOfRows = 0;
 	[self.headerView removeFromSuperview];
 	self.sectionInfo = nil;
-	if ([databaseControls.allSongsDb tableExists:@"allSongs"] == YES && ![[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllSongsLoading", appDelegate.defaultUrl]] isEqualToString:@"YES"])
+	if ([databaseControls.allSongsDb tableExists:@"allSongs"] == YES && ![[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllSongsLoading", settings.urlString]] isEqualToString:@"YES"])
 	{
 		numberOfRows = [databaseControls.allSongsDb intForQuery:@"SELECT COUNT(*) FROM allSongs"];
 		self.sectionInfo = [self createSectionInfo];
@@ -113,9 +114,9 @@
 		}
 		
 		// If the database hasn't been created then create it otherwise show the header
-		if ([databaseControls.allSongsDb tableExists:@"allSongs"] == NO || [[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllSongsLoading", appDelegate.defaultUrl]] isEqualToString:@"YES"])
+		if ([databaseControls.allSongsDb tableExists:@"allSongs"] == NO || [[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllSongsLoading", settings.urlString]] isEqualToString:@"YES"])
 		{
-			if ([databaseControls.allAlbumsDb tableExists:@"allAlbums"] == NO || [[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllAlbumsLoading", appDelegate.defaultUrl]] isEqualToString:@"YES"])
+			if ([databaseControls.allAlbumsDb tableExists:@"allAlbums"] == NO || [[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllAlbumsLoading", settings.urlString]] isEqualToString:@"YES"])
 			{
 				CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"You must load the Albums tab first" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 				[alert show];
@@ -129,7 +130,7 @@
 			}
 			else
 			{
-				if ([[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllSongsLoading", appDelegate.defaultUrl]] isEqualToString:@"YES"])
+				if ([[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllSongsLoading", settings.urlString]] isEqualToString:@"YES"])
 				{
 					UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Resume Load?" message:@"If you've reloaded the albums tab since this load started you should choose 'Restart Load'.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Restart Load", @"Resume Load", nil];
 					[alert show];
@@ -230,7 +231,7 @@
 	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 	[formatter setDateStyle:NSDateFormatterMediumStyle];
 	[formatter setTimeStyle:NSDateFormatterShortStyle];
-	reloadTimeLabel.text = [NSString stringWithFormat:@"last reload: %@", [formatter stringFromDate:[defaults objectForKey:[NSString stringWithFormat:@"%@songsReloadTime", appDelegate.defaultUrl]]]];
+	reloadTimeLabel.text = [NSString stringWithFormat:@"last reload: %@", [formatter stringFromDate:[defaults objectForKey:[NSString stringWithFormat:@"%@songsReloadTime", settings.urlString]]]];
 	[formatter release];
 	
 	self.tableView.tableHeaderView = headerView;
@@ -272,8 +273,8 @@ static NSInteger order (id a, id b, void* context)
 	
 	// Initialize the genres db
 	[databaseControls.genresDb close]; databaseControls.genresDb = nil;
-	[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@genres.db", databaseControls.databaseFolderPath, [NSString md5:appDelegate.defaultUrl]] error:NULL];
-	databaseControls.genresDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@genres.db", databaseControls.databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]] retain];
+	[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@genres.db", databaseControls.databaseFolderPath, [settings.urlString md5]] error:NULL];
+	databaseControls.genresDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@genres.db", databaseControls.databaseFolderPath, [settings.urlString md5]]] retain];
 	if ([databaseControls.genresDb open] == NO) { DLog(@"Could not open genresDb."); }
 	
 	[databaseControls.genresDb executeUpdate:@"CREATE TABLE genres (genre TEXT UNIQUE)"];
@@ -418,7 +419,7 @@ static NSInteger order (id a, id b, void* context)
 	numberOfRows = [databaseControls.allSongsDb intForQuery:@"SELECT COUNT (*) FROM allSongs"];
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults setObject:[NSDate date] forKey:[NSString stringWithFormat:@"%@songsReloadTime", appDelegate.defaultUrl]];
+	[defaults setObject:[NSDate date] forKey:[NSString stringWithFormat:@"%@songsReloadTime", settings.urlString]];
 	[defaults synchronize];
 	
 	[databaseControls.allSongsDb executeUpdate:@"UPDATE resumeLoad SET albumNum = ?, iteration = ?", [NSNumber numberWithInt:0], [NSNumber numberWithInt:6]];
@@ -431,7 +432,7 @@ static NSInteger order (id a, id b, void* context)
 - (void)loadData
 {
 	viewObjects.isSongsLoading = YES;
-	[[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:[NSString stringWithFormat:@"%@isAllSongsLoading", appDelegate.defaultUrl]];
+	[[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:[NSString stringWithFormat:@"%@isAllSongsLoading", settings.urlString]];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
 	// Check to see if we need to create the tables
@@ -504,7 +505,7 @@ static NSInteger order (id a, id b, void* context)
 		return;
 	}
 	viewObjects.isSongsLoading = NO;
-	[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:[NSString stringWithFormat:@"%@isAllSongsLoading", appDelegate.defaultUrl]];
+	[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:[NSString stringWithFormat:@"%@isAllSongsLoading", settings.urlString]];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
 	DLog(@"1");

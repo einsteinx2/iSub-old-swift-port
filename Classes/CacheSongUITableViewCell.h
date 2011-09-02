@@ -8,13 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@class CellOverlay, iSubAppDelegate, ViewObjectsSingleton, DatabaseControlsSingleton;
+@class CellOverlay, iSubAppDelegate, ViewObjectsSingleton, DatabaseSingleton;
 
 @interface CacheSongUITableViewCell : UITableViewCell 
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
-	DatabaseControlsSingleton *databaseControls;
+	DatabaseSingleton *databaseControls;
 	
 	NSString *md5;
 	

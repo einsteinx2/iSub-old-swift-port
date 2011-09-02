@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@class CellOverlay, iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton, Artist;
+@class CellOverlay, iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, Artist;
 
 @interface ArtistUITableViewCell : UITableViewCell 
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
-	MusicControlsSingleton *musicControls;
-	DatabaseControlsSingleton *databaseControls;
+	MusicSingleton *musicControls;
+	DatabaseSingleton *databaseControls;
 		
 	UIScrollView *artistNameScrollView;
 	UILabel *artistNameLabel;

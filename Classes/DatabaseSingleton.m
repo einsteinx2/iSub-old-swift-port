@@ -6,9 +6,9 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "DatabaseControlsSingleton.h"
+#import "DatabaseSingleton.h"
 #import "ViewObjectsSingleton.h"
-#import "MusicControlsSingleton.h"
+#import "MusicSingleton.h"
 #import "iSubAppDelegate.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
@@ -20,13 +20,13 @@
 #import "QueueAlbumXMLParser.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "UIDevice-Hardware.h"
-#import "QueueAll.h"
+#import "SUSQueueAllDAO.h"
 #import "SavedSettings.h"
 #import "GTMNSString+HTML.h"
 
-static DatabaseControlsSingleton *sharedInstance = nil;
+static DatabaseSingleton *sharedInstance = nil;
 
-@implementation DatabaseControlsSingleton
+@implementation DatabaseSingleton
 
 // New SQL stuff
 @synthesize databaseFolderPath, allAlbumsDb, allSongsDb, coverArtCacheDb540, coverArtCacheDb320, coverArtCacheDb60, albumListCacheDb, genresDb, currentPlaylistDb, localPlaylistsDb, serverPlaylistsDb, songCacheDb, cacheQueueDb, lyricsDb, bookmarksDb, inMemoryDb;
@@ -1063,7 +1063,7 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	
 	// Download all the songs
 	if (queueAll == nil)
-		queueAll = [[QueueAll alloc] init];
+		queueAll = [[SUSQueueAllDAO alloc] init];
 	//[queueAll loadData:folderId artist:theArtist isQueue:NO];
 	[queueAll cacheData:folderId artist:theArtist];
 }
@@ -1075,7 +1075,7 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	
 	// Queue all the songs
 	if (queueAll == nil)
-		queueAll = [[QueueAll alloc] init];
+		queueAll = [[SUSQueueAllDAO alloc] init];
 	//[queueAll loadData:folderId artist:theArtist isQueue:YES];
 	[queueAll queueData:folderId artist:theArtist];
 }
@@ -1113,7 +1113,7 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	
 	// Queue all the songs
 	if (queueAll == nil)
-		queueAll = [[QueueAll alloc] init];
+		queueAll = [[SUSQueueAllDAO alloc] init];
 	//[queueAll loadData:folderId artist:theArtist isQueue:YES];
 	[queueAll playAllData:folderId artist:theArtist];
 }
@@ -1131,7 +1131,7 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	
 	// Queue all the songs
 	if (queueAll == nil)
-		queueAll = [[QueueAll alloc] init];
+		queueAll = [[SUSQueueAllDAO alloc] init];
 	//[queueAll loadData:folderId artist:theArtist isQueue:YES];
 	[queueAll shuffleData:folderId artist:theArtist];
 }
@@ -1162,7 +1162,7 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 
 #pragma mark - Singleton methods
 
-+ (DatabaseControlsSingleton*)sharedInstance
++ (DatabaseSingleton*)sharedInstance
 {
     @synchronized(self)
     {
@@ -1193,7 +1193,7 @@ static DatabaseControlsSingleton *sharedInstance = nil;
 	//initialize here
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicControlsSingleton sharedInstance];
+	musicControls = [MusicSingleton sharedInstance];
 	
 	queueAll = nil;
 	

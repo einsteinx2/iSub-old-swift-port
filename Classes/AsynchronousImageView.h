@@ -8,13 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@class iSubAppDelegate, MusicControlsSingleton, DatabaseControlsSingleton, Song;
+@class iSubAppDelegate, MusicSingleton, DatabaseSingleton, Song;
 
 @interface AsynchronousImageView : UIImageView 
 {
 	iSubAppDelegate *appDelegate;
-	MusicControlsSingleton *musicControls;
-	DatabaseControlsSingleton *databaseControls;
+	MusicSingleton *musicControls;
+	DatabaseSingleton *databaseControls;
 	
 	NSString *coverArtId;
 	NSURLConnection *connection;

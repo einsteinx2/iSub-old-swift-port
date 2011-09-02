@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class iSubAppDelegate, ViewObjectsSingleton, DatabaseControlsSingleton, Index, Artist, Album, Song;
+@class iSubAppDelegate, ViewObjectsSingleton, DatabaseSingleton, Index, Artist, Album, Song;
 
 @interface XMLParser : NSObject <NSXMLParserDelegate> 
 {
@@ -16,7 +16,7 @@
 	NSMutableString *currentElementValue;
 	
 	iSubAppDelegate *appDelegate; 
-	DatabaseControlsSingleton *databaseControls;
+	DatabaseSingleton *databaseControls;
 	Index *anIndex;
 	NSMutableArray *shortcuts;
 	BOOL isFirstIndex;

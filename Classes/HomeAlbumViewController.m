@@ -9,8 +9,8 @@
 #import "HomeAlbumViewController.h"
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
-#import "MusicControlsSingleton.h"
-#import "DatabaseControlsSingleton.h"
+#import "MusicSingleton.h"
+#import "DatabaseSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "AlbumViewController.h"
 #import "AllAlbumsUITableViewCell.h"
@@ -52,8 +52,8 @@
     if (self != nil)
     {
 		appDelegate = (iSubAppDelegate *)[UIApplication sharedApplication].delegate;
-		musicControls = [MusicControlsSingleton sharedInstance];
-		databaseControls = [DatabaseControlsSingleton sharedInstance];
+		musicControls = [MusicSingleton sharedInstance];
+		databaseControls = [DatabaseSingleton sharedInstance];
 		viewObjects = [ViewObjectsSingleton sharedInstance];
 
 		offset = 0;

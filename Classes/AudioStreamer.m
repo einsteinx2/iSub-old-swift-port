@@ -14,8 +14,8 @@
 #import "AudioStreamer.h"
 #import "iSubAppDelegate.h"
 #import "SavedSettings.h"
-#import "MusicControlsSingleton.h"
-#import "SocialControlsSingleton.h"
+#import "MusicSingleton.h"
+#import "SocialSingleton.h"
 #import "Song.h"
 #import "SA_OAuthTwitterEngine.h"
 #ifdef TARGET_OS_IPHONE
@@ -203,7 +203,7 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
     DLog(@"audioRouteChangeListenerCallback called");
 	
 	//iSubAppDelegate *appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
+	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 	
     // ensure that this callback was invoked for a route change
     if (inPropertyID != kAudioSessionProperty_AudioRouteChange) return;
@@ -1051,7 +1051,7 @@ cleanup:
 	
 	// Scrobbling timer
 	SavedSettings *settings = [SavedSettings sharedInstance];
-	MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
+	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 	shouldInvalidateScrobbleTimer = YES;
 	NSTimeInterval scrobbleInterval = 30.0;
 	if (musicControls.currentSongObject.duration != nil)
@@ -1068,7 +1068,7 @@ cleanup:
 	//if ([[appDelegate.settingsDictionary objectForKey:@"enableScrobblingSetting"] isEqualToString:@"YES"])
 	if (settings.isScrobbleEnabled)
 	{
-		MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
+		MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 		[musicControls scrobbleSong:musicControls.currentSongObject.songId isSubmission:NO];
 	}
 }
@@ -1076,8 +1076,8 @@ cleanup:
 
 - (void) tweetSong
 {
-	MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
-	SocialControlsSingleton *socialControls = [SocialControlsSingleton sharedInstance];
+	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
+	SocialSingleton *socialControls = [SocialSingleton sharedInstance];
 	SavedSettings *settings = [SavedSettings sharedInstance];
 	
 	shouldInvalidateTweetTimer = NO;
@@ -1115,7 +1115,7 @@ cleanup:
 	//if ([[appDelegate.settingsDictionary objectForKey:@"enableScrobblingSetting"] isEqualToString:@"YES"])
 	if ([SavedSettings sharedInstance].isScrobbleEnabled)
 	{
-		MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
+		MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 		[musicControls scrobbleSong:musicControls.currentSongObject.songId isSubmission:YES];
 	}
 }
@@ -1126,7 +1126,7 @@ cleanup:
 {
 	fixedLength = YES;
 	
-	MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
+	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 	
 	//DLog(@"AudioStreamer::startAt - starting at second %d", offsetInSecs);
 	
@@ -1908,7 +1908,7 @@ cleanup:
 				kAudioFileStreamProperty_BitRate,
 				&dataRateDataSize,
 				&bitRate);
-			MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
+			MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 			musicControls.bitRate = bitRate;
 			if (err)
 			{
@@ -2177,7 +2177,7 @@ cleanup:
 - (void)handleInterruptionChangeToState:(AudioQueuePropertyID)inInterruptionState
 {
 	//DLog(@"handleInterruptionChangeToState called");
-	MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
+	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 	if (inInterruptionState == kAudioSessionBeginInterruption)
 	{
 		//DLog(@"inInterruptionState == kAudioSessionBeginInterruption called");

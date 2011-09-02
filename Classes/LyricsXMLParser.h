@@ -8,15 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-@class iSubAppDelegate, MusicControlsSingleton, DatabaseControlsSingleton;
+@class iSubAppDelegate, MusicSingleton, DatabaseSingleton;
 
 @interface LyricsXMLParser : NSObject <NSXMLParserDelegate>
 {
 	NSMutableString *currentElementValue;
 	
 	iSubAppDelegate *appDelegate;
-	MusicControlsSingleton *musicControls;
-	DatabaseControlsSingleton *databaseControls;
+	MusicSingleton *musicControls;
+	DatabaseSingleton *databaseControls;
 	
 	NSString *artist;
 	NSString *title;

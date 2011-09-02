@@ -12,7 +12,7 @@
 
 @class SA_OAuthTwitterEngine;
 
-@interface SocialControlsSingleton : NSObject <SA_OAuthTwitterControllerDelegate>
+@interface SocialSingleton : NSObject <SA_OAuthTwitterControllerDelegate>
 {
 	
 	SA_OAuthTwitterEngine *twitterEngine;
@@ -21,7 +21,7 @@
 
 @property (nonatomic, retain) SA_OAuthTwitterEngine *twitterEngine;
 
-+ (SocialControlsSingleton*)sharedInstance;
++ (SocialSingleton*)sharedInstance;
 
 - (void) createTwitterEngine;
 

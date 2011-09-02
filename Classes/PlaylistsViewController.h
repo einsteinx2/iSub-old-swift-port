@@ -9,14 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "BBSimpleConnectionQueue.h"
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton, BBSimpleConnectionQueue;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, BBSimpleConnectionQueue;
 
 @interface PlaylistsViewController : UITableViewController <BBSimpleConnectionQueueDelegate>
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
-	MusicControlsSingleton *musicControls;
-	DatabaseControlsSingleton *databaseControls;
+	MusicSingleton *musicControls;
+	DatabaseSingleton *databaseControls;
 	
 	UIView *headerView;
 	UISegmentedControl *segmentedControl;

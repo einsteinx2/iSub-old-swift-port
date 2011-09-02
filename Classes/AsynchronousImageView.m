@@ -11,8 +11,8 @@
 
 #import "AsynchronousImageView.h"
 #import "iSubAppDelegate.h"
-#import "MusicControlsSingleton.h"
-#import "DatabaseControlsSingleton.h"
+#import "MusicSingleton.h"
+#import "DatabaseSingleton.h"
 #import "Song.h"
 #import "NSString-md5.h"
 #import "FMDatabase.h"
@@ -29,8 +29,8 @@
     if (self != nil)
     {
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-		musicControls = [MusicControlsSingleton sharedInstance];
-		databaseControls = [DatabaseControlsSingleton sharedInstance];
+		musicControls = [MusicSingleton sharedInstance];
+		databaseControls = [DatabaseSingleton sharedInstance];
 		isForPlayer = NO;
     }
 	
@@ -117,8 +117,8 @@
 	self.isForPlayer = isPlayer;
 	
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	musicControls = [MusicControlsSingleton sharedInstance];
-	databaseControls = [DatabaseControlsSingleton sharedInstance];
+	musicControls = [MusicSingleton sharedInstance];
+	databaseControls = [DatabaseSingleton sharedInstance];
 	
 	songAtTimeOfLoad = [musicControls.currentSongObject copy];
 

@@ -8,9 +8,9 @@
 
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
-#import "DatabaseControlsSingleton.h"
-#import "MusicControlsSingleton.h"
-#import "SocialControlsSingleton.h"
+#import "DatabaseSingleton.h"
+#import "MusicSingleton.h"
+#import "SocialSingleton.h"
 #import "MGSplitViewController.h"
 #import "iPadMainMenu.h"
 #import "InitialDetailViewController.h"
@@ -49,6 +49,7 @@
 #import "BWHockeyManager.h"
 
 #import "SavedSettings.h"
+#import "CacheSingleton.h"
 
 @implementation iSubAppDelegate
 
@@ -64,16 +65,7 @@
 @synthesize splitView, mainMenu, initialDetail;
 
 // Network connectivity objects
-@synthesize wifiReach;//, reachabilityStatus;
-
-// User defaults
-// TODO: Remove these
-@synthesize defaultUrl, defaultUserName, defaultPassword;
-
-
-// Settings
-//@synthesize settingsDictionary;
-
+@synthesize wifiReach;
 
 // Multitasking stuff
 @synthesize backgroundTask;
@@ -99,16 +91,15 @@
 	showIntro = NO;
 
 	viewObjects = [ViewObjectsSingleton sharedInstance];
-	databaseControls = [DatabaseControlsSingleton sharedInstance];
-	musicControls = [MusicControlsSingleton sharedInstance];
-	socialControls = [SocialControlsSingleton sharedInstance];
-
+	databaseControls = [DatabaseSingleton sharedInstance];
+	musicControls = [MusicSingleton sharedInstance];
+	socialControls = [SocialSingleton sharedInstance];
+	cacheControls = [CacheSingleton sharedInstance];
+	SavedSettings *settings = [SavedSettings sharedInstance];
+	
 	[self loadHockeyApp];
 	
 	[self loadInAppPurchaseStore];
-	
-	[self adjustCacheSize];
-	[musicControls checkCache];
 	
 	// Setup network reachability notifications
 	wifiReach = [[Reachability reachabilityForLocalWiFi] retain];
@@ -120,14 +111,14 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(batteryStateChanged:) name:@"UIDeviceBatteryStateDidChangeNotification" object:[UIDevice currentDevice]];
 	[self batteryStateChanged:nil];	
 	
-	if ([SavedSettings sharedInstance].isUpdateCheckQuestionAsked)
+	if (!settings.isUpdateCheckQuestionAsked)
 	{
 		// Ask to check for updates if haven't asked yet
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Update Alerts" message:@"Would you like iSub to notify you when app updates are available?\n\nYou can change this setting at any time from the settings menu." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
 		[alert show];
 		[alert release];
 	}
-	else if ([SavedSettings sharedInstance].isUpdateCheckEnabled)
+	else if (settings.isUpdateCheckEnabled)
 	{
 		[self performSelectorInBackground:@selector(checkForUpdate) withObject:nil];
 	}
@@ -135,13 +126,12 @@
 
 	// appinit 1
 	//
-	SavedSettings *settings = [SavedSettings sharedInstance];
 	if (settings.isForceOfflineMode)
 	{
 		viewObjects.isOfflineMode = YES;
 		
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Offline mode switch on, entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		[alert show];
 		[alert release];
 	}
 	else if ([wifiReach currentReachabilityStatus] == NotReachable)
@@ -149,7 +139,7 @@
 		viewObjects.isOfflineMode = YES;
 		
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"No network detected, entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		[alert show];
 		[alert release];
 	}
 	else 
@@ -162,7 +152,7 @@
 		if (viewObjects.isOfflineMode)
 		{
 			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome!" message:@"Looks like this is your first time using iSub or you haven't set up your Subsonic account info yet.\n\nYou'll need an internet connection to watch the intro video and use the included demo account." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-			[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+			[alert show];
 			[alert release];
 		}
 		else
@@ -171,10 +161,9 @@
 		}
 	}	
 	
+	
 	// app init 2
 	[databaseControls initDatabases];
-	// TODO: need to check server availability in background
-	//
 	
 	// CAN'T GET THIS TO WORK
 	// Setup the HTTP Basic Auth credentials
@@ -193,8 +182,7 @@
 	
 	// Recover current state if player was interrupted
 	[musicControls resumeSong];
-	
-	
+		
 	
 	// appinit 3
 	//
@@ -205,6 +193,38 @@
 	[settings setupSaveState];
 	
 	[self createAndDisplayUI];
+	
+	// Check the server status in the background
+	[self performSelectorInBackground:@selector(checkServer) withObject:nil];
+}
+
+- (void)checkServer
+{
+	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
+	SavedSettings *settings = [SavedSettings sharedInstance];
+	
+	// Check if the subsonic URL is valid by attempting to access the ping.view page, 
+	// if it's not then display an alert and allow user to change settings if they want.
+	// This is in case the user is, for instance, connected to a wifi network but does not 
+	// have internet access or if the host url entered was wrong.
+	BOOL isURLValid = YES;
+	NSError *error;
+	if (!viewObjects.isOfflineMode) 
+	{
+		isURLValid = [self isURLValid:[NSString stringWithFormat:@"%@/rest/ping.view", settings.urlString] error:&error];
+	}
+	
+	if(!isURLValid && !viewObjects.isOfflineMode)
+	{
+		viewObjects.isOfflineMode = YES;
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", error.code, [ASIHTTPRequest errorCodeToEnglish:error.code]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Settings", nil];
+		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		[alert release];
+		
+		[self performSelectorOnMainThread:@selector(enterOfflineModeForce) withObject:nil waitUntilDone:NO];
+	}
+	
+	[autoreleasePool release];
 }
 
 //
@@ -309,6 +329,7 @@
 	
 	[window makeKeyAndVisible];	
 	/*[self startStopServer];*/
+	NSLog(@"end of create UI");
 }
 
 - (void)loadHockeyApp
@@ -388,32 +409,6 @@
 	{
 		if ([SavedSettings sharedInstance].isScreenSleepEnabled)
 			[UIApplication sharedApplication].idleTimerDisabled = NO;
-	}
-}
-
-//
-// If the available space has dropped below the max cache size since last app load, adjust it.
-//
-- (void) adjustCacheSize
-{
-	// Only adjust if the user is using max cache size as option
-	//if ([[settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 1)
-	if ([SavedSettings sharedInstance].cachingType == 1)
-	{
-		unsigned long long int freeSpace = [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:musicControls.audioFolderPath error:NULL] objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
-		//unsigned long long int maxCacheSize = [[settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue];		
-		unsigned long long int maxCacheSize = [SavedSettings sharedInstance].maxCacheSize;
-		
-		NSLog(@"adjustCacheSize:  freeSpace = %llu  maxCacheSize = %llu", freeSpace, maxCacheSize);
-		
-		if (freeSpace < maxCacheSize)
-		{
-			unsigned long long int newMaxCacheSize = freeSpace - 26214400; // Set the max cache size to 25MB less than the free space
-			[SavedSettings sharedInstance].maxCacheSize = newMaxCacheSize;
-			/*[settingsDictionary setObject:[NSNumber numberWithUnsignedLongLong:newMaxCacheSize] forKey:@"maxCacheSize"];
-			[[NSUserDefaults standardUserDefaults] setObject:settingsDictionary forKey:@"settingsDictionary"];
-			[[NSUserDefaults standardUserDefaults] synchronize];*/
-		}
 	}
 }
 
@@ -1033,6 +1028,8 @@
 		{
 			[SavedSettings sharedInstance].isUpdateCheckEnabled = YES;
 		}
+		
+		[SavedSettings sharedInstance].isUpdateCheckQuestionAsked = YES;
 	}
 }
 

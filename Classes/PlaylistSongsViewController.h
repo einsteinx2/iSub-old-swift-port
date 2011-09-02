@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton, EGORefreshTableHeaderView;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, EGORefreshTableHeaderView;
 
 @interface PlaylistSongsViewController : UITableViewController
 {
 	iSubAppDelegate *appDelegate;	
 	ViewObjectsSingleton *viewObjects;
-	MusicControlsSingleton *musicControls;
-	DatabaseControlsSingleton *databaseControls;
+	MusicSingleton *musicControls;
+	DatabaseSingleton *databaseControls;
 
 	NSString *md5;
 	

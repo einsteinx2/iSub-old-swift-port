@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class iSubAppDelegate, ViewObjectsSingleton, DatabaseControlsSingleton;
+@class iSubAppDelegate, ViewObjectsSingleton, DatabaseSingleton;
 
 @interface JukeboxXMLParser : NSObject <NSXMLParserDelegate>
 {	

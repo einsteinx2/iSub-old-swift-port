@@ -12,7 +12,7 @@
 #import "LyricsViewController.h"
 #import "DebugViewController.h"
 #import "iSubAppDelegate.h"
-#import "MusicControlsSingleton.h"
+#import "MusicSingleton.h"
 #import "SavedSettings.h"
 
 @interface PageControlViewController (PrivateMethods)

@@ -7,7 +7,7 @@
 //
 
 #import "UAApplication.h"
-#import "MusicControlsSingleton.h"
+#import "MusicSingleton.h"
 #import "iSubAppDelegate.h"
 #import "SavedSettings.h"
  
@@ -55,7 +55,7 @@
 
 - (void)playPauseStop
 {
-	MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
+	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		if (musicControls.isPlaying)
@@ -72,7 +72,7 @@
 - (void)remoteControlReceivedWithEvent:(UIEvent *)event 
 {
 	//DLog(@"remoteControlReceivedWithEvent: %d", event.subtype);
-	MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
+	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 	switch(event.subtype) 
 	{
 		case UIEventSubtypeRemoteControlPlay:

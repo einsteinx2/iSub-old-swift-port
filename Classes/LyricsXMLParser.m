@@ -9,8 +9,8 @@
 
 #import "LyricsXMLParser.h"
 #import "iSubAppDelegate.h"
-#import "MusicControlsSingleton.h"
-#import "DatabaseControlsSingleton.h"
+#import "MusicSingleton.h"
+#import "DatabaseSingleton.h"
 #import "NSString-md5.h"
 #import "Song.h"
 #import "FMDatabase.h"
@@ -25,8 +25,8 @@
 	if ((self = [super init]))
 	{
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-		musicControls = [MusicControlsSingleton sharedInstance];
-		databaseControls = [DatabaseControlsSingleton sharedInstance];
+		musicControls = [MusicSingleton sharedInstance];
+		databaseControls = [DatabaseSingleton sharedInstance];
 		currentElementValue = nil;
 		artist = nil;
 		title = nil;

@@ -8,7 +8,7 @@
 
 #import "ModalAlbumArtViewController.h"
 #import "AsynchronousImageView.h"
-#import "DatabaseControlsSingleton.h"
+#import "DatabaseSingleton.h"
 #import "NSString-md5.h"
 #import "iSubAppDelegate.h"
 #import "FMDatabase.h"
@@ -23,7 +23,7 @@
 	if ((self = [super init]))
 	{		
 		//iSubAppDelegate *appDelegate = (iSubAppDelegate*)[UIApplication sharedApplication].delegate;
-		DatabaseControlsSingleton *databaseControls = [DatabaseControlsSingleton sharedInstance];
+		DatabaseSingleton *databaseControls = [DatabaseSingleton sharedInstance];
 		
 		self.view.backgroundColor = [UIColor blackColor];
 		

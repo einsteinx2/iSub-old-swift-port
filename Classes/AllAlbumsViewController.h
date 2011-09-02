@@ -6,14 +6,14 @@
 //  Copyright Ben Baron 2010. All rights reserved.
 //
 
-@class iSubAppDelegate, ViewObjectsSingleton, SearchOverlayViewController, Album, MusicControlsSingleton, DatabaseControlsSingleton;
+@class iSubAppDelegate, ViewObjectsSingleton, SearchOverlayViewController, Album, MusicSingleton, DatabaseSingleton;
 
 @interface AllAlbumsViewController : UITableViewController <UISearchBarDelegate> 
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
-	MusicControlsSingleton *musicControls;
-	DatabaseControlsSingleton *databaseControls;
+	MusicSingleton *musicControls;
+	DatabaseSingleton *databaseControls;
 	
 	UIView *headerView;
 	UIButton *reloadButton;

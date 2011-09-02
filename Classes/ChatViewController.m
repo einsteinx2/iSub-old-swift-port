@@ -13,7 +13,7 @@
 #import "SearchOverlayViewController.h"
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
-#import "MusicControlsSingleton.h"
+#import "MusicSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "AsynchronousImageViewCached.h"
@@ -77,7 +77,7 @@
 	
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicControlsSingleton sharedInstance];
+	musicControls = [MusicSingleton sharedInstance];
 	
 	isNoChatMessagesScreenShowing = NO;
 	

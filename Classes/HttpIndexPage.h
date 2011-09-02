@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-@class DatabaseControlsSingleton;
+@class DatabaseSingleton;
 
 @interface HttpIndexPage : NSObject 
 {
-	DatabaseControlsSingleton *databaseControls;
+	DatabaseSingleton *databaseControls;
 	
     NSString *documentsDirectory;
 }

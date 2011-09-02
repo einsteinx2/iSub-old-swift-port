@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class CellOverlay, iSubAppDelegate, ViewObjectsSingleton, DatabaseControlsSingleton;
+@class CellOverlay, iSubAppDelegate, ViewObjectsSingleton, DatabaseSingleton;
 
 @interface CacheAlbumUITableViewCell : UITableViewCell 
 {	
@@ -17,7 +17,7 @@
 	
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
-	DatabaseControlsSingleton *databaseControls;
+	DatabaseSingleton *databaseControls;
 	
 	UIImageView *coverArtView;
 	UIScrollView *albumNameScrollView;

@@ -9,8 +9,8 @@
 #import "SearchSongsViewController.h"
 #import "SearchSongUITableViewCell.h"
 #import "iSubAppDelegate.h"
-#import "MusicControlsSingleton.h"
-#import "DatabaseControlsSingleton.h"
+#import "MusicSingleton.h"
+#import "DatabaseSingleton.h"
 #import "ViewObjectsSingleton.h"
 #import "SearchXMLParser.h"
 #import "ViewObjectsSingleton.h"
@@ -57,8 +57,8 @@
     if (self != nil)
     {
         appDelegate = (iSubAppDelegate *)[UIApplication sharedApplication].delegate;
-		musicControls = [MusicControlsSingleton sharedInstance];
-		databaseControls = [DatabaseControlsSingleton sharedInstance];
+		musicControls = [MusicSingleton sharedInstance];
+		databaseControls = [DatabaseSingleton sharedInstance];
 		viewObjects = [ViewObjectsSingleton sharedInstance];
 		
 		listOfArtists = nil;

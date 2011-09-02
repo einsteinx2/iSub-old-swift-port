@@ -11,7 +11,7 @@
 
 #import "AsynchronousImageViewCached.h"
 #import "iSubAppDelegate.h"
-#import "DatabaseControlsSingleton.h"
+#import "DatabaseSingleton.h"
 #import "NSString-md5.h"
 #import "FMDatabase.h"
 
@@ -71,7 +71,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {
-	DatabaseControlsSingleton *databaseControls = [DatabaseControlsSingleton sharedInstance];
+	DatabaseSingleton *databaseControls = [DatabaseSingleton sharedInstance];
 	
 	// Check to see if the data is a valid image. If so, use it; if not, use the default image.
 	if([UIImage imageWithData:data])

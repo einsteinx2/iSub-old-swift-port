@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class iSubAppDelegate, ViewObjectsSingleton, DatabaseControlsSingleton, Song;
+@class iSubAppDelegate, ViewObjectsSingleton, DatabaseSingleton, Song;
 
 @interface PlaylistsXMLParser : NSObject <NSXMLParserDelegate>
 {
@@ -17,7 +17,7 @@
 	
 	iSubAppDelegate *appDelegate; 
 	ViewObjectsSingleton *viewObjects;
-	DatabaseControlsSingleton *databaseControls;
+	DatabaseSingleton *databaseControls;
 	
 	BOOL isPlaylist;
 	

@@ -8,12 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-@class iSubAppDelegate, DatabaseControlsSingleton, ViewObjectsSingleton, Song, ASIHTTPRequest, AudioStreamer, BBSimpleConnectionQueue;
+@class iSubAppDelegate, DatabaseSingleton, ViewObjectsSingleton, Song, ASIHTTPRequest, AudioStreamer, BBSimpleConnectionQueue;
 
-@interface MusicControlsSingleton : NSObject 
+@interface MusicSingleton : NSObject 
 {
 	iSubAppDelegate *appDelegate;
-	DatabaseControlsSingleton *databaseControls;
+	DatabaseSingleton *databaseControls;
 	ViewObjectsSingleton *viewObjects;
 	
 	// Audio streamer objects and variables
@@ -85,7 +85,7 @@
 	BOOL jukeboxIsPlaying;
 	float jukeboxGain;
 	
-	BOOL showPlayerIcon;
+	//BOOL showPlayerIcon;
 	
 	BBSimpleConnectionQueue *connectionQueue;
 	
@@ -158,7 +158,7 @@
 
 @property (nonatomic, retain) BBSimpleConnectionQueue *connectionQueue;
 
-+ (MusicControlsSingleton*)sharedInstance;
++ (MusicSingleton*)sharedInstance;
 
 - (void)startDownloadA;
 - (void)stopDownloadA;
@@ -188,7 +188,7 @@
 - (void)nextSongAuto;
 - (void)prevSong;
 
-- (void)checkCache;
+//- (void)checkCache;
 - (void)resumeSong;
 
 - (void) loadLyricsForArtistAndTitle:(NSArray *)artistAndTitle;
@@ -217,8 +217,8 @@
 
 - (float) findCurrentSongProgress;
 - (float) findNextSongProgress;
-- (unsigned long long int) findCacheSize;
-- (unsigned long long int) findFreeSpace;
+//- (unsigned long long int) findCacheSize;
+//- (unsigned long long int) findFreeSpace;
 
 - (void)scrobbleSong:(NSString*)songId isSubmission:(BOOL)isSubmission;
 

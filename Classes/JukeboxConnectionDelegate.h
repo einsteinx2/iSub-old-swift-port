@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class MusicControlsSingleton;
+@class MusicSingleton;
 
 @interface JukeboxConnectionDelegate : NSObject 
 {
@@ -16,7 +16,7 @@
 	
 	BOOL isGetInfo;
 	
-	MusicControlsSingleton *musicControls;
+	MusicSingleton *musicControls;
 }
 
 @property (nonatomic, retain) NSMutableData *receivedData;

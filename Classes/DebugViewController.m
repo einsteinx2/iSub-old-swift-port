@@ -8,14 +8,15 @@
 
 #import "DebugViewController.h"
 #import "iSubAppDelegate.h"
-#import "MusicControlsSingleton.h"
-#import "DatabaseControlsSingleton.h"
+#import "MusicSingleton.h"
+#import "DatabaseSingleton.h"
 #import "ViewObjectsSingleton.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "NSString-md5.h"
 #import "Song.h"
 #import "SavedSettings.h"
+#import "CacheSingleton.h"
 
 @implementation DebugViewController
 
@@ -29,8 +30,8 @@
     [super viewDidLoad];
 	
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	musicControls = [MusicControlsSingleton sharedInstance];
-	databaseControls = [DatabaseControlsSingleton sharedInstance];
+	musicControls = [MusicSingleton sharedInstance];
+	databaseControls = [DatabaseSingleton sharedInstance];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	
 	// Set the fields
@@ -142,7 +143,7 @@
 	}
 	
 	// Set the free space label
-	freeSpaceLabel.text = [appDelegate formatFileSize:[musicControls findFreeSpace]];
+	freeSpaceLabel.text = [appDelegate formatFileSize:[CacheSingleton sharedInstance].freeSpace];
 }
 
 - (void) updateStats2
@@ -155,7 +156,7 @@
 	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	
-	NSString *size = [appDelegate formatFileSize:[musicControls findCacheSize]];
+	NSString *size = [appDelegate formatFileSize:[CacheSingleton sharedInstance].cacheSize];
 	[self performSelectorOnMainThread:@selector(updateCacheSizeLabel2:) withObject:size waitUntilDone:NO];
 	
 	[autoreleasePool release];

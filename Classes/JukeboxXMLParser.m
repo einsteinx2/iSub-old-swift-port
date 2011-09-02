@@ -11,7 +11,7 @@
 #import "Song.h"
 #import "ServerListViewController.h"
 #import "ViewObjectsSingleton.h"
-#import "DatabaseControlsSingleton.h"
+#import "DatabaseSingleton.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 
@@ -39,7 +39,7 @@
 	
 	if ([errorCode isEqualToString:@"50"])
 	{
-		[SavedSettings sharedInstance].isJukebox = NO;
+		[SavedSettings sharedInstance].isJukeboxEnabled = NO;
 		appDelegate.window.backgroundColor = [ViewObjectsSingleton sharedInstance].windowColor;
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"JukeboxTurnedOff" object:nil];
 	}
@@ -66,7 +66,7 @@
 		isPlaying = [[attributeDict objectForKey:@"playing"] boolValue];
 		gain = [[attributeDict objectForKey:@"gain"] floatValue];
 		
-		[[DatabaseControlsSingleton sharedInstance] resetJukeboxPlaylist];
+		[[DatabaseSingleton sharedInstance] resetJukeboxPlaylist];
 	}
 	else if ([elementName isEqualToString:@"entry"])
 	{
@@ -100,7 +100,7 @@
 			aSong.size = [numberFormatter numberFromString:[attributeDict objectForKey:@"size"]];
 		
 		//[listOfSongs addObject:aSong];
-		[[DatabaseControlsSingleton sharedInstance] addSongToPlaylistQueue:aSong];
+		[[DatabaseSingleton sharedInstance] addSongToPlaylistQueue:aSong];
 		
 		[aSong release];
 		[numberFormatter release];

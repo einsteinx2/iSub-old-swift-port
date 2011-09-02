@@ -7,7 +7,7 @@
 //
 
 #import "HttpIndexPage.h"
-#import "DatabaseControlsSingleton.h"
+#import "DatabaseSingleton.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 
@@ -25,7 +25,7 @@
 {
 	if ((self = [super init]))
 	{
-		databaseControls = [DatabaseControlsSingleton sharedInstance];
+		databaseControls = [DatabaseSingleton sharedInstance];
 		
 		// Find documents directory
 		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);

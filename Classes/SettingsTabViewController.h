@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class SavedSettings, iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, SocialControlsSingleton, DatabaseControlsSingleton;
+@class SavedSettings, iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, SocialSingleton, DatabaseSingleton;
 
 @interface SettingsTabViewController : UIViewController 
 {
@@ -16,9 +16,9 @@
 	
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
-	MusicControlsSingleton *musicControls;
-	SocialControlsSingleton *socialControls;
-	DatabaseControlsSingleton *databaseControls;
+	MusicSingleton *musicControls;
+	SocialSingleton *socialControls;
+	DatabaseSingleton *databaseControls;
 	
 	UIViewController *parentController;
 	

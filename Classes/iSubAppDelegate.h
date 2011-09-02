@@ -8,14 +8,15 @@
 
 #include "MKStoreManager.h"
 
-@class BBSplitViewController, ViewObjectsSingleton, DatabaseControlsSingleton, MusicControlsSingleton, SocialControlsSingleton, MGSplitViewController, iPadMainMenu, InitialDetailViewController, ASIHTTPRequest, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, Reachability, iPhoneStreamingPlayerViewController, SettingsViewController, RootViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController, HTTPServer;
+@class BBSplitViewController, ViewObjectsSingleton, DatabaseSingleton, MusicSingleton, SocialSingleton, MGSplitViewController, iPadMainMenu, InitialDetailViewController, ASIHTTPRequest, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, Reachability, iPhoneStreamingPlayerViewController, SettingsViewController, RootViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController, HTTPServer, CacheSingleton;
 
 @interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate> 
 {	
 	ViewObjectsSingleton *viewObjects;
-	DatabaseControlsSingleton *databaseControls;
-	MusicControlsSingleton *musicControls;
-	SocialControlsSingleton *socialControls;
+	DatabaseSingleton *databaseControls;
+	MusicSingleton *musicControls;
+	SocialSingleton *socialControls;
+	CacheSingleton *cacheControls;
 	
 	UIWindow *window;
 	
@@ -46,7 +47,6 @@
 	// Main interface elements for iPad
 	//
 	IBOutlet MGSplitViewController *splitView;
-	//IBOutlet BBSplitViewController *splitView;
 	iPadMainMenu *mainMenu;
 	InitialDetailViewController *initialDetail;
 	
@@ -54,19 +54,6 @@
 	//
     Reachability *wifiReach;
 	int reachabilityStatus;
-	
-	// User defaults
-	//
-	// TODO: Remove these
-	NSString *defaultUrl;
-	NSString *defaultUserName;
-	NSString *defaultPassword;
-	//NSString *cachedIP;
-	//NSInteger cachedIPHour;
-	
-	// Settings
-	//
-	//NSMutableDictionary *settingsDictionary;
 	
 	// Multitasking stuff
 	UIBackgroundTaskIdentifier backgroundTask;	
@@ -115,20 +102,6 @@
 //
 @property (nonatomic, retain) Reachability *wifiReach;
 @property (readonly) BOOL isWifi;
-//@property int reachabilityStatus;
-
-// User defaults
-//
-// TODO: Remove these
-@property (nonatomic, retain) NSString *defaultUrl;
-@property (nonatomic, retain) NSString *defaultUserName;
-@property (nonatomic, retain) NSString *defaultPassword;
-//@property (nonatomic, retain) NSString *cachedIP;
-//@property NSInteger cachedIPHour;
-
-// Settings
-//
-//@property (nonatomic, retain) NSMutableDictionary *settingsDictionary;
 
 // Multitasking stuff
 @property UIBackgroundTaskIdentifier backgroundTask;
@@ -144,8 +117,6 @@
 - (void)appInit2;
 //- (void)appInit3;
 - (void)createAndDisplayUI;
-
-- (void) adjustCacheSize;
 
 //- (void)saveDefaults;
 - (NSString *)getBaseUrl:(NSString *)action;

@@ -15,13 +15,13 @@
 
 #import <UIKit/UIKit.h>
 
-@class iSubAppDelegate, MusicControlsSingleton, DatabaseControlsSingleton, ViewObjectsSingleton;
+@class iSubAppDelegate, MusicSingleton, DatabaseSingleton, ViewObjectsSingleton;
 
 @interface SearchSongsViewController : UITableViewController 
 {
 	iSubAppDelegate *appDelegate;
-	MusicControlsSingleton *musicControls;
-	DatabaseControlsSingleton *databaseControls;
+	MusicSingleton *musicControls;
+	DatabaseSingleton *databaseControls;
 	ViewObjectsSingleton *viewObjects;
 	
 	NSString *query;

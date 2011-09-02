@@ -7,8 +7,8 @@
 //
 
 #import "NSURLConnectionDelegateQueueArtwork.h"
-#import "DatabaseControlsSingleton.h"
-#import "MusicControlsSingleton.h"
+#import "DatabaseSingleton.h"
+#import "MusicSingleton.h"
 #import "Song.h"
 #import "NSString-md5.h"
 #import "FMDatabase.h"
@@ -22,8 +22,8 @@
 	self = [super init];
 	if (self != nil)
 	{
-		databaseControls = [DatabaseControlsSingleton sharedInstance];
-		musicControls = [MusicControlsSingleton sharedInstance];
+		databaseControls = [DatabaseSingleton sharedInstance];
+		musicControls = [MusicSingleton sharedInstance];
 		is320 = YES;
 	}	
 	return self;

@@ -7,7 +7,7 @@
 //
 
 #import "SUSSubFolderDAO.h"
-#import "DatabaseControlsSingleton.h"
+#import "DatabaseSingleton.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 
@@ -17,7 +17,7 @@
 
 - (void)setup
 {
-	db = [[DatabaseControlsSingleton sharedInstance] albumListCacheDb]; 
+	db = [[DatabaseSingleton sharedInstance] albumListCacheDb]; 
 }
 
 - (id)init

@@ -7,7 +7,7 @@
 //
 
 #import "SUSRootFoldersDAO.h"
-#import "DatabaseControlsSingleton.h"
+#import "DatabaseSingleton.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "GTMNSString+HTML.h"
@@ -28,7 +28,7 @@
 	indexPositions = nil;
 	indexCounts = nil;
 	selectedFolderId = nil;
-	db = [[DatabaseControlsSingleton sharedInstance] albumListCacheDb]; 
+	db = [[DatabaseSingleton sharedInstance] albumListCacheDb]; 
 }
 
 - (id)init
@@ -500,7 +500,7 @@
 
 + (void)setFolderDropdownFolders:(NSDictionary *)folders
 {
-	FMDatabase *database = [[DatabaseControlsSingleton sharedInstance] albumListCacheDb];
+	FMDatabase *database = [[DatabaseSingleton sharedInstance] albumListCacheDb];
 	[database executeUpdate:@"DROP TABLE IF EXISTS rootFolderDropdownCache (id INTEGER, name TEXT)"];
 	[database executeUpdate:@"CREATE TABLE rootFolderDropdownCache (id INTEGER, name TEXT)"];
 	
@@ -513,7 +513,7 @@
 
 + (NSDictionary *)folderDropdownFolders
 {
-	FMDatabase *database = [[DatabaseControlsSingleton sharedInstance] albumListCacheDb];
+	FMDatabase *database = [[DatabaseSingleton sharedInstance] albumListCacheDb];
 	if (![database tableExists:@"rootFolderDropdownCache"])
 		return nil;
 	

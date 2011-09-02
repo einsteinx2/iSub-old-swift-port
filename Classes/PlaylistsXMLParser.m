@@ -12,7 +12,7 @@
 #import "PlaylistsXMLParser.h"
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
-#import "DatabaseControlsSingleton.h"
+#import "DatabaseSingleton.h"
 #import "Song.h"
 #import "ServerListViewController.h"
 #import "NSString-md5.h"
@@ -27,7 +27,7 @@
 	{
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 		viewObjects = [ViewObjectsSingleton sharedInstance];
-		databaseControls = [DatabaseControlsSingleton sharedInstance];
+		databaseControls = [DatabaseSingleton sharedInstance];
 		isPlaylist = YES;
 		md5 = nil;
 	}

@@ -9,13 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "CustomUITextView.h"
 
-@class iSubAppDelegate, SearchOverlayViewController, ViewObjectsSingleton, MusicControlsSingleton, CustomUITextView, EGORefreshTableHeaderView;
+@class iSubAppDelegate, SearchOverlayViewController, ViewObjectsSingleton, MusicSingleton, CustomUITextView, EGORefreshTableHeaderView;
 
 @interface ChatViewController : UITableViewController <UITextViewDelegate> 
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
-	MusicControlsSingleton *musicControls;
+	MusicSingleton *musicControls;
 	
 	UIView *headerView;
 	CustomUITextView *textInput;

@@ -9,7 +9,7 @@
 #import "RootViewController.h"
 #import "SearchOverlayViewController.h"
 #import "iSubAppDelegate.h"
-#import "MusicControlsSingleton.h"
+#import "MusicSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "XMLParser.h"
@@ -86,7 +86,7 @@
     [super viewDidLoad];
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicControlsSingleton sharedInstance];
+	musicControls = [MusicSingleton sharedInstance];
 	settings = [SavedSettings sharedInstance];
 	
 	self.dataModel = [[[SUSRootFoldersDAO alloc] initWithDelegate:self] autorelease];

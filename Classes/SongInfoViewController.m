@@ -8,8 +8,8 @@
 
 #import "SongInfoViewController.h"
 #import "ViewObjectsSingleton.h"
-#import "MusicControlsSingleton.h"
-#import "DatabaseControlsSingleton.h"
+#import "MusicSingleton.h"
+#import "DatabaseSingleton.h"
 #import "iSubAppDelegate.h"
 #import "AudioStreamer.h"
 #import "math.h"
@@ -62,8 +62,8 @@
 	
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicControlsSingleton sharedInstance];
-	databaseControls = [DatabaseControlsSingleton sharedInstance];
+	musicControls = [MusicSingleton sharedInstance];
+	databaseControls = [DatabaseSingleton sharedInstance];
 	
 	/////////// RESIZE PROGRESS SLIDER
 	//progressSlider.layer.transform = CATransform3DMakeScale(1.0, 2.0, 1.0);

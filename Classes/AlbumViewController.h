@@ -6,14 +6,14 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton, Artist, Album, EGORefreshTableHeaderView, FMResultSet;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, Artist, Album, EGORefreshTableHeaderView, FMResultSet;
 
 @interface AlbumViewController : UITableViewController 
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
-	MusicControlsSingleton *musicControls;
-	DatabaseControlsSingleton *databaseControls;
+	MusicSingleton *musicControls;
+	DatabaseSingleton *databaseControls;
 	
 	NSURLConnection *connection;
 	NSMutableData *loadingData;

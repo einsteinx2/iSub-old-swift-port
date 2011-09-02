@@ -9,8 +9,8 @@
 #import "AlbumViewController.h"
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
-#import "MusicControlsSingleton.h"
-#import "DatabaseControlsSingleton.h"
+#import "MusicSingleton.h"
+#import "DatabaseSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "AlbumUITableViewCell.h"
 #import "SongUITableViewCell.h"
@@ -74,8 +74,8 @@
 	{
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 		viewObjects = [ViewObjectsSingleton sharedInstance];
-		databaseControls = [DatabaseControlsSingleton sharedInstance];
-		musicControls = [MusicControlsSingleton sharedInstance];
+		databaseControls = [DatabaseSingleton sharedInstance];
+		musicControls = [MusicSingleton sharedInstance];
 		self.sectionInfo = nil;
 		
 		if (anArtist != nil)
@@ -768,6 +768,7 @@
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
 {
+	NSLog(@"album load did receive data");
     [loadingData appendData:incrementalData];
 }
 
@@ -789,6 +790,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
+	NSLog(@"album load connection finished, parsing...");
 	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:loadingData];
 	XMLParser *parser = [[XMLParser alloc] initXMLParser];
 	

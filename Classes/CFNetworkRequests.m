@@ -8,8 +8,8 @@
 
 #import "CFNetworkRequests.h"
 #import "iSubAppDelegate.h"
-#import "MusicControlsSingleton.h"
-#import "DatabaseControlsSingleton.h"
+#import "MusicSingleton.h"
+#import "DatabaseSingleton.h"
 #import "NSString-md5.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
@@ -21,8 +21,8 @@
 #import "SavedSettings.h"
 
 static iSubAppDelegate *appDelegate;
-static MusicControlsSingleton *musicControls;
-static DatabaseControlsSingleton *databaseControls;
+static MusicSingleton *musicControls;
+static DatabaseSingleton *databaseControls;
 static CFReadStreamRef readStreamRefA;
 static CFReadStreamRef readStreamRefB;
 static BOOL isDownloadA = NO;
@@ -766,8 +766,8 @@ static void	ReadStreamClientCallBackTemp( CFReadStreamRef stream, CFStreamEventT
 	if (!appDelegate)
 	{
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-		musicControls = [MusicControlsSingleton sharedInstance];
-		databaseControls = [DatabaseControlsSingleton sharedInstance];
+		musicControls = [MusicSingleton sharedInstance];
+		databaseControls = [DatabaseSingleton sharedInstance];
 		appDelegateRef = appDelegate;
 		musicControlsRef = musicControls;
 		databaseControlsRef = databaseControls;
@@ -855,8 +855,8 @@ Bail:
 	if (!appDelegate)
 	{
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-		musicControls = [MusicControlsSingleton sharedInstance];
-		databaseControls = [DatabaseControlsSingleton sharedInstance];
+		musicControls = [MusicSingleton sharedInstance];
+		databaseControls = [DatabaseSingleton sharedInstance];
 		appDelegateRef = appDelegate;
 		musicControlsRef = musicControls;
 		databaseControlsRef = databaseControls;
@@ -939,8 +939,8 @@ Bail:
 	if (!appDelegate)
 	{
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-		musicControls = [MusicControlsSingleton sharedInstance];
-		databaseControls = [DatabaseControlsSingleton sharedInstance];
+		musicControls = [MusicSingleton sharedInstance];
+		databaseControls = [DatabaseSingleton sharedInstance];
 		appDelegateRef = appDelegate;
 		musicControlsRef = musicControls;
 		databaseControlsRef = databaseControls;
@@ -1030,8 +1030,8 @@ Bail:
 	if (!appDelegate)
 	{
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-		musicControls = [MusicControlsSingleton sharedInstance];
-		databaseControls = [DatabaseControlsSingleton sharedInstance];
+		musicControls = [MusicSingleton sharedInstance];
+		databaseControls = [DatabaseSingleton sharedInstance];
 		appDelegateRef = appDelegate;
 		musicControlsRef = musicControls;
 		databaseControlsRef = databaseControls;
@@ -1115,8 +1115,8 @@ Bail:
 	if (!appDelegate)
 	{
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-		musicControls = [MusicControlsSingleton sharedInstance];
-		databaseControls = [DatabaseControlsSingleton sharedInstance];
+		musicControls = [MusicSingleton sharedInstance];
+		databaseControls = [DatabaseSingleton sharedInstance];
 		appDelegateRef = appDelegate;
 		musicControlsRef = musicControls;
 		databaseControlsRef = databaseControls;

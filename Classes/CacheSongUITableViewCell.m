@@ -8,7 +8,7 @@
 
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
-#import "DatabaseControlsSingleton.h"
+#import "DatabaseSingleton.h"
 #import "CacheSongUITableViewCell.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
@@ -25,7 +25,7 @@
 		// Initialization code
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 		viewObjects = [ViewObjectsSingleton sharedInstance];
-		databaseControls = [DatabaseControlsSingleton sharedInstance];
+		databaseControls = [DatabaseSingleton sharedInstance];
 		
 		isOverlayShowing = NO;
 		

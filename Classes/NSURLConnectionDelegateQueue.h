@@ -8,13 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-@class iSubAppDelegate, MusicControlsSingleton, DatabaseControlsSingleton;
+@class iSubAppDelegate, MusicSingleton, DatabaseSingleton;
 
 @interface NSURLConnectionDelegateQueue : NSObject
 {
 	iSubAppDelegate *appDelegate;
-	MusicControlsSingleton *musicControls;
-	DatabaseControlsSingleton *databaseControls;	
+	MusicSingleton *musicControls;
+	DatabaseSingleton *databaseControls;	
 }
 
 

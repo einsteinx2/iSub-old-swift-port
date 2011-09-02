@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton, SettingsTabViewController, HelpTabViewController, SavedSettings;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, SettingsTabViewController, HelpTabViewController, SavedSettings;
 
 @interface ServerListViewController : UITableViewController 
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
-	MusicControlsSingleton *musicControls;
-	DatabaseControlsSingleton *databaseControls;
+	MusicSingleton *musicControls;
+	DatabaseSingleton *databaseControls;
 	SavedSettings *settings;
 	
 	BOOL isEditing;

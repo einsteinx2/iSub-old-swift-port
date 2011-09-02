@@ -9,8 +9,8 @@
 #import "LyricsViewController.h"
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
-#import "MusicControlsSingleton.h"
-#import "DatabaseControlsSingleton.h"
+#import "MusicSingleton.h"
+#import "DatabaseSingleton.h"
 #import "ASIHTTPRequest.h"
 #import "LyricsXMLParser.h"
 #import "FMDatabase.h"
@@ -28,8 +28,8 @@
 	{		
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 		viewObjects = [ViewObjectsSingleton sharedInstance];
-		musicControls = [MusicControlsSingleton sharedInstance];
-		databaseControls = [DatabaseControlsSingleton sharedInstance];
+		musicControls = [MusicSingleton sharedInstance];
+		databaseControls = [DatabaseSingleton sharedInstance];
 		
         // Custom initialization
 		self.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 300)];

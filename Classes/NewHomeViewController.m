@@ -12,8 +12,8 @@
 #import "SearchXMLParser.h"
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
-#import "MusicControlsSingleton.h"
-#import "DatabaseControlsSingleton.h"
+#import "MusicSingleton.h"
+#import "DatabaseSingleton.h"
 #import "ASIHTTPRequest.h"
 #import "QuickAlbumsViewController.h"
 #import "ChatViewController.h"
@@ -107,8 +107,8 @@
 	
 	appDelegate = (iSubAppDelegate*)[UIApplication sharedApplication].delegate;
 	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicControlsSingleton sharedInstance];
-	databaseControls = [DatabaseControlsSingleton sharedInstance];
+	musicControls = [MusicSingleton sharedInstance];
+	databaseControls = [DatabaseSingleton sharedInstance];
 	
 	searchSegment.selectedSegmentIndex = 3;
 	

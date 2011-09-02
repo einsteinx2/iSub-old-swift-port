@@ -9,13 +9,13 @@
 #import "LoaderDelegate.h"
 #import "FolderDropdownDelegate.h"
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, SearchOverlayViewController, LoadingScreen, Artist, EGORefreshTableHeaderView, FolderDropdownControl, SavedSettings, SUSRootFoldersDAO;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, SearchOverlayViewController, LoadingScreen, Artist, EGORefreshTableHeaderView, FolderDropdownControl, SavedSettings, SUSRootFoldersDAO;
 
 @interface RootViewController : UITableViewController <UISearchBarDelegate, LoaderDelegate, FolderDropdownDelegate>
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
-	MusicControlsSingleton *musicControls;
+	MusicSingleton *musicControls;
 	
 	SavedSettings *settings;
 	

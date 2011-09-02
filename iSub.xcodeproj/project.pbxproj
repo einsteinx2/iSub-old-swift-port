@@ -160,7 +160,7 @@
 		535CB48C12E2664700389DA1 /* server-button-ubuntu.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB48812E2664700389DA1 /* server-button-ubuntu.png */; };
 		535CB48D12E2664700389DA1 /* server-button-ubuntu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB48912E2664700389DA1 /* server-button-ubuntu@2x.png */; };
 		535CB58412E27A5400389DA1 /* default-album-art-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB58312E27A5400389DA1 /* default-album-art-ipad.png */; };
-		535CB69012E383F400389DA1 /* QueueAll.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB68F12E383F400389DA1 /* QueueAll.m */; };
+		535CB69012E383F400389DA1 /* SUSQueueAllDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB68F12E383F400389DA1 /* SUSQueueAllDAO.m */; };
 		53614ACA116432DA0088ABC0 /* ServerListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53614AC8116432DA0088ABC0 /* ServerListViewController.m */; };
 		53614ACB116432DA0088ABC0 /* ServerListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53614AC9116432DA0088ABC0 /* ServerListViewController.xib */; };
 		53614BD9116467420088ABC0 /* AllSongsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53614BD7116467420088ABC0 /* AllSongsViewController.xib */; };
@@ -713,9 +713,9 @@
 		53BC27FB139AF0DD00A825F1 /* ChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC561219EEEB00F426CD /* ChatMessage.m */; };
 		53BC27FC139AF0DD00A825F1 /* CustomUITextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BB7EC9121B8D8F00BEE7E8 /* CustomUITextView.m */; };
 		53BC27FD139AF0DD00A825F1 /* ViewObjectsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751C61268A36200A4793F /* ViewObjectsSingleton.m */; };
-		53BC27FE139AF0DD00A825F1 /* MusicControlsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CC1268A3BE00A4793F /* MusicControlsSingleton.m */; };
-		53BC27FF139AF0DD00A825F1 /* SocialControlsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CF1268A3D400A4793F /* SocialControlsSingleton.m */; };
-		53BC2800139AF0DD00A825F1 /* DatabaseControlsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751D21268A43A00A4793F /* DatabaseControlsSingleton.m */; };
+		53BC27FE139AF0DD00A825F1 /* MusicSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CC1268A3BE00A4793F /* MusicSingleton.m */; };
+		53BC27FF139AF0DD00A825F1 /* SocialSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CF1268A3D400A4793F /* SocialSingleton.m */; };
+		53BC2800139AF0DD00A825F1 /* DatabaseSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751D21268A43A00A4793F /* DatabaseSingleton.m */; };
 		53BC2801139AF0DD00A825F1 /* NSString-hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F157B126F6B5600F524BD /* NSString-hex.m */; };
 		53BC2802139AF0DD00A825F1 /* HomeXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F1596126F711100F524BD /* HomeXMLParser.m */; };
 		53BC2803139AF0DD00A825F1 /* HomeAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F166D126FA2E600F524BD /* HomeAlbumViewController.m */; };
@@ -756,7 +756,7 @@
 		53BC2826139AF0DD00A825F1 /* UIDevice-Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 5382BA8C12DA4039005A3D1A /* UIDevice-Hardware.m */; };
 		53BC2827139AF0DD00A825F1 /* ServerTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB23012E0027800389DA1 /* ServerTypeViewController.m */; };
 		53BC2828139AF0DD00A825F1 /* UbuntuServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB2A012E2348A00389DA1 /* UbuntuServerEditViewController.m */; };
-		53BC2829139AF0DD00A825F1 /* QueueAll.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB68F12E383F400389DA1 /* QueueAll.m */; };
+		53BC2829139AF0DD00A825F1 /* SUSQueueAllDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB68F12E383F400389DA1 /* SUSQueueAllDAO.m */; };
 		53BC282A139AF0DD00A825F1 /* IntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C6052C12F1F01E003C6895 /* IntroViewController.m */; };
 		53BC282B139AF0DD00A825F1 /* CustomUIAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 532D9B42131AE19700FD8CA7 /* CustomUIAlertView.m */; };
 		53BC282C139AF0DD00A825F1 /* OBSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5324C6C513345D75004E6C79 /* OBSlider.m */; };
@@ -837,9 +837,9 @@
 		53C6054F12F1FCC6003C6895 /* intro-icon-ownserver.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6054D12F1FCC6003C6895 /* intro-icon-ownserver.png */; };
 		53C6055012F1FCC6003C6895 /* intro-icon-ownserver@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6054E12F1FCC6003C6895 /* intro-icon-ownserver@2x.png */; };
 		53C751C71268A36200A4793F /* ViewObjectsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751C61268A36200A4793F /* ViewObjectsSingleton.m */; };
-		53C751CD1268A3BE00A4793F /* MusicControlsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CC1268A3BE00A4793F /* MusicControlsSingleton.m */; };
-		53C751D01268A3D400A4793F /* SocialControlsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CF1268A3D400A4793F /* SocialControlsSingleton.m */; };
-		53C751D31268A43A00A4793F /* DatabaseControlsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751D21268A43A00A4793F /* DatabaseControlsSingleton.m */; };
+		53C751CD1268A3BE00A4793F /* MusicSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CC1268A3BE00A4793F /* MusicSingleton.m */; };
+		53C751D01268A3D400A4793F /* SocialSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CF1268A3D400A4793F /* SocialSingleton.m */; };
+		53C751D31268A43A00A4793F /* DatabaseSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751D21268A43A00A4793F /* DatabaseSingleton.m */; };
 		53CC217E132DC79F003521B5 /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53CC217D132DC79F003521B5 /* Entitlements.plist */; };
 		53CECEF9113D8B9500B09699 /* SongInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CECEF7113D8B9500B09699 /* SongInfoViewController.m */; };
 		53CECEFA113D8B9500B09699 /* SongInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53CECEF8113D8B9500B09699 /* SongInfoViewController.xib */; };
@@ -1202,9 +1202,9 @@
 		53DCF55C13BFEAD3009160F9 /* ChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC561219EEEB00F426CD /* ChatMessage.m */; };
 		53DCF55D13BFEAD3009160F9 /* CustomUITextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BB7EC9121B8D8F00BEE7E8 /* CustomUITextView.m */; };
 		53DCF55E13BFEAD3009160F9 /* ViewObjectsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751C61268A36200A4793F /* ViewObjectsSingleton.m */; };
-		53DCF55F13BFEAD3009160F9 /* MusicControlsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CC1268A3BE00A4793F /* MusicControlsSingleton.m */; };
-		53DCF56013BFEAD3009160F9 /* SocialControlsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CF1268A3D400A4793F /* SocialControlsSingleton.m */; };
-		53DCF56113BFEAD3009160F9 /* DatabaseControlsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751D21268A43A00A4793F /* DatabaseControlsSingleton.m */; };
+		53DCF55F13BFEAD3009160F9 /* MusicSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CC1268A3BE00A4793F /* MusicSingleton.m */; };
+		53DCF56013BFEAD3009160F9 /* SocialSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CF1268A3D400A4793F /* SocialSingleton.m */; };
+		53DCF56113BFEAD3009160F9 /* DatabaseSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751D21268A43A00A4793F /* DatabaseSingleton.m */; };
 		53DCF56213BFEAD3009160F9 /* NSString-hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F157B126F6B5600F524BD /* NSString-hex.m */; };
 		53DCF56313BFEAD3009160F9 /* HomeXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F1596126F711100F524BD /* HomeXMLParser.m */; };
 		53DCF56413BFEAD3009160F9 /* HomeAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F166D126FA2E600F524BD /* HomeAlbumViewController.m */; };
@@ -1245,7 +1245,7 @@
 		53DCF58713BFEAD3009160F9 /* UIDevice-Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 5382BA8C12DA4039005A3D1A /* UIDevice-Hardware.m */; };
 		53DCF58813BFEAD3009160F9 /* ServerTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB23012E0027800389DA1 /* ServerTypeViewController.m */; };
 		53DCF58913BFEAD3009160F9 /* UbuntuServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB2A012E2348A00389DA1 /* UbuntuServerEditViewController.m */; };
-		53DCF58A13BFEAD3009160F9 /* QueueAll.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB68F12E383F400389DA1 /* QueueAll.m */; };
+		53DCF58A13BFEAD3009160F9 /* SUSQueueAllDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB68F12E383F400389DA1 /* SUSQueueAllDAO.m */; };
 		53DCF58B13BFEAD3009160F9 /* IntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C6052C12F1F01E003C6895 /* IntroViewController.m */; };
 		53DCF58C13BFEAD3009160F9 /* CustomUIAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 532D9B42131AE19700FD8CA7 /* CustomUIAlertView.m */; };
 		53DCF58D13BFEAD3009160F9 /* OBSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5324C6C513345D75004E6C79 /* OBSlider.m */; };
@@ -1311,9 +1311,6 @@
 		53E82A98140720BC0051D44B /* SUSSubFolderDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E82A97140720BC0051D44B /* SUSSubFolderDAO.m */; };
 		53E82A99140720BC0051D44B /* SUSSubFolderDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E82A97140720BC0051D44B /* SUSSubFolderDAO.m */; };
 		53E82A9A140720BC0051D44B /* SUSSubFolderDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E82A97140720BC0051D44B /* SUSSubFolderDAO.m */; };
-		53E82A9F140721FB0051D44B /* CacheDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E82A9E140721FB0051D44B /* CacheDAO.m */; };
-		53E82AA0140721FB0051D44B /* CacheDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E82A9E140721FB0051D44B /* CacheDAO.m */; };
-		53E82AA1140721FB0051D44B /* CacheDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E82A9E140721FB0051D44B /* CacheDAO.m */; };
 		53E82AA414072F090051D44B /* CacheSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E82AA314072F090051D44B /* CacheSingleton.m */; };
 		53E82AA514072F090051D44B /* CacheSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E82AA314072F090051D44B /* CacheSingleton.m */; };
 		53E82AA614072F090051D44B /* CacheSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E82AA314072F090051D44B /* CacheSingleton.m */; };
@@ -1601,8 +1598,8 @@
 		535CB48812E2664700389DA1 /* server-button-ubuntu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "server-button-ubuntu.png"; path = "Images/Other/server-button-ubuntu.png"; sourceTree = "<group>"; };
 		535CB48912E2664700389DA1 /* server-button-ubuntu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "server-button-ubuntu@2x.png"; path = "Images/Other/server-button-ubuntu@2x.png"; sourceTree = "<group>"; };
 		535CB58312E27A5400389DA1 /* default-album-art-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art-ipad.png"; path = "Images/Other/default-album-art-ipad.png"; sourceTree = "<group>"; };
-		535CB68E12E383F400389DA1 /* QueueAll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueueAll.h; sourceTree = "<group>"; };
-		535CB68F12E383F400389DA1 /* QueueAll.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueueAll.m; sourceTree = "<group>"; };
+		535CB68E12E383F400389DA1 /* SUSQueueAllDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSQueueAllDAO.h; sourceTree = "<group>"; };
+		535CB68F12E383F400389DA1 /* SUSQueueAllDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSQueueAllDAO.m; sourceTree = "<group>"; };
 		53614AC7116432DA0088ABC0 /* ServerListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerListViewController.h; sourceTree = "<group>"; };
 		53614AC8116432DA0088ABC0 /* ServerListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerListViewController.m; sourceTree = "<group>"; };
 		53614AC9116432DA0088ABC0 /* ServerListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ServerListViewController.xib; sourceTree = "<group>"; };
@@ -1946,12 +1943,12 @@
 		53C6054E12F1FCC6003C6895 /* intro-icon-ownserver@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "intro-icon-ownserver@2x.png"; path = "Images/Intro Screen/intro-icon-ownserver@2x.png"; sourceTree = "<group>"; };
 		53C751C51268A36200A4793F /* ViewObjectsSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewObjectsSingleton.h; sourceTree = "<group>"; };
 		53C751C61268A36200A4793F /* ViewObjectsSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewObjectsSingleton.m; sourceTree = "<group>"; };
-		53C751CB1268A3BE00A4793F /* MusicControlsSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicControlsSingleton.h; sourceTree = "<group>"; };
-		53C751CC1268A3BE00A4793F /* MusicControlsSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicControlsSingleton.m; sourceTree = "<group>"; };
-		53C751CE1268A3D400A4793F /* SocialControlsSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocialControlsSingleton.h; sourceTree = "<group>"; };
-		53C751CF1268A3D400A4793F /* SocialControlsSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocialControlsSingleton.m; sourceTree = "<group>"; };
-		53C751D11268A43A00A4793F /* DatabaseControlsSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseControlsSingleton.h; sourceTree = "<group>"; };
-		53C751D21268A43A00A4793F /* DatabaseControlsSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseControlsSingleton.m; sourceTree = "<group>"; };
+		53C751CB1268A3BE00A4793F /* MusicSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicSingleton.h; sourceTree = "<group>"; };
+		53C751CC1268A3BE00A4793F /* MusicSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicSingleton.m; sourceTree = "<group>"; };
+		53C751CE1268A3D400A4793F /* SocialSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocialSingleton.h; sourceTree = "<group>"; };
+		53C751CF1268A3D400A4793F /* SocialSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocialSingleton.m; sourceTree = "<group>"; };
+		53C751D11268A43A00A4793F /* DatabaseSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseSingleton.h; sourceTree = "<group>"; };
+		53C751D21268A43A00A4793F /* DatabaseSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseSingleton.m; sourceTree = "<group>"; };
 		53CC217D132DC79F003521B5 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		53CECEF6113D8B9500B09699 /* SongInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SongInfoViewController.h; sourceTree = "<group>"; };
 		53CECEF7113D8B9500B09699 /* SongInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongInfoViewController.m; sourceTree = "<group>"; };
@@ -1985,8 +1982,6 @@
 		53E82A951406D47F0051D44B /* FolderDropdownDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FolderDropdownDelegate.h; sourceTree = "<group>"; };
 		53E82A96140720BC0051D44B /* SUSSubFolderDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSSubFolderDAO.h; sourceTree = "<group>"; };
 		53E82A97140720BC0051D44B /* SUSSubFolderDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSSubFolderDAO.m; sourceTree = "<group>"; };
-		53E82A9D140721FB0051D44B /* CacheDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheDAO.h; sourceTree = "<group>"; };
-		53E82A9E140721FB0051D44B /* CacheDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheDAO.m; sourceTree = "<group>"; };
 		53E82AA214072F090051D44B /* CacheSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheSingleton.h; sourceTree = "<group>"; };
 		53E82AA314072F090051D44B /* CacheSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheSingleton.m; sourceTree = "<group>"; };
 		53EB49911401B71C0014E59A /* SUSRootFoldersDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSRootFoldersDAO.h; sourceTree = "<group>"; };
@@ -2544,10 +2539,13 @@
 		536F9D7D119783D4002E526A /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				1D3623240D0F684500981E51 /* iSubAppDelegate.h */,
+				1D3623250D0F684500981E51 /* iSubAppDelegate.m */,
+				53C751C51268A36200A4793F /* ViewObjectsSingleton.h */,
+				53C751C61268A36200A4793F /* ViewObjectsSingleton.m */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				53E75C351270013D00BC1A19 /* MainWindow-iPad.xib */,
 				539A356513D3E46700D80554 /* Data Model */,
-				537D27CD128DEEE4007E4CEC /* Singletons */,
 				53FB066011EE1C4E008A30C7 /* CFNetworkRequests */,
 				5304BCE111BD58E3000EF6F9 /* NSURLConnectionDelegates */,
 				533A207C12887EB100539BAE /* XML Parsers */,
@@ -2596,23 +2594,6 @@
 				5379DC4C1219E48800F426CD /* ChatViewController.xib */,
 			);
 			name = "Chat view";
-			sourceTree = "<group>";
-		};
-		537D27CD128DEEE4007E4CEC /* Singletons */ = {
-			isa = PBXGroup;
-			children = (
-				1D3623240D0F684500981E51 /* iSubAppDelegate.h */,
-				1D3623250D0F684500981E51 /* iSubAppDelegate.m */,
-				53C751C51268A36200A4793F /* ViewObjectsSingleton.h */,
-				53C751C61268A36200A4793F /* ViewObjectsSingleton.m */,
-				53C751CB1268A3BE00A4793F /* MusicControlsSingleton.h */,
-				53C751CC1268A3BE00A4793F /* MusicControlsSingleton.m */,
-				53C751CE1268A3D400A4793F /* SocialControlsSingleton.h */,
-				53C751CF1268A3D400A4793F /* SocialControlsSingleton.m */,
-				535CB68E12E383F400389DA1 /* QueueAll.h */,
-				535CB68F12E383F400389DA1 /* QueueAll.m */,
-			);
-			name = Singletons;
 			sourceTree = "<group>";
 		};
 		5382A81712D82CD8005A3D1A /* FMDB */ = {
@@ -2875,22 +2856,20 @@
 				5386FB8514062A390009F73F /* SavedSettings.h */,
 				5386FB8614062A3A0009F73F /* SavedSettings.m */,
 				53EB49901401ABF20014E59A /* DAOs */,
-				539A358D13D43B3B00D80554 /* Data Loaders */,
+				539A358D13D43B3B00D80554 /* Data Loaders (TODO: convert to daos) */,
 			);
 			name = "Data Model";
 			sourceTree = "<group>";
 		};
-		539A358D13D43B3B00D80554 /* Data Loaders */ = {
+		539A358D13D43B3B00D80554 /* Data Loaders (TODO: convert to daos) */ = {
 			isa = PBXGroup;
 			children = (
-				53C751D11268A43A00A4793F /* DatabaseControlsSingleton.h */,
-				53C751D21268A43A00A4793F /* DatabaseControlsSingleton.m */,
 				539A358713D42BF600D80554 /* SUSDirectoryLoader.h */,
 				539A358813D42BF600D80554 /* SUSDirectoryLoader.m */,
 				539A35AE13D5438A00D80554 /* SUSArtworkLoader.h */,
 				539A35AF13D5438B00D80554 /* SUSArtworkLoader.m */,
 			);
-			name = "Data Loaders";
+			name = "Data Loaders (TODO: convert to daos)";
 			sourceTree = "<group>";
 		};
 		53A1CEC0126D396A006BB76F /* Reused */ = {
@@ -3181,6 +3160,8 @@
 				53EB49921401B71C0014E59A /* SUSRootFoldersDAO.m */,
 				53E82A96140720BC0051D44B /* SUSSubFolderDAO.h */,
 				53E82A97140720BC0051D44B /* SUSSubFolderDAO.m */,
+				535CB68E12E383F400389DA1 /* SUSQueueAllDAO.h */,
+				535CB68F12E383F400389DA1 /* SUSQueueAllDAO.m */,
 			);
 			name = Subsonic;
 			sourceTree = "<group>";
@@ -3188,10 +3169,14 @@
 		53E82A9C140721D50051D44B /* Generic */ = {
 			isa = PBXGroup;
 			children = (
-				53E82A9D140721FB0051D44B /* CacheDAO.h */,
-				53E82A9E140721FB0051D44B /* CacheDAO.m */,
 				53E82AA214072F090051D44B /* CacheSingleton.h */,
 				53E82AA314072F090051D44B /* CacheSingleton.m */,
+				53C751D11268A43A00A4793F /* DatabaseSingleton.h */,
+				53C751D21268A43A00A4793F /* DatabaseSingleton.m */,
+				53C751CB1268A3BE00A4793F /* MusicSingleton.h */,
+				53C751CC1268A3BE00A4793F /* MusicSingleton.m */,
+				53C751CE1268A3D400A4793F /* SocialSingleton.h */,
+				53C751CF1268A3D400A4793F /* SocialSingleton.m */,
 			);
 			name = Generic;
 			sourceTree = "<group>";
@@ -4280,9 +4265,9 @@
 				5379DC571219EEEB00F426CD /* ChatMessage.m in Sources */,
 				53BB7ECA121B8D8F00BEE7E8 /* CustomUITextView.m in Sources */,
 				53C751C71268A36200A4793F /* ViewObjectsSingleton.m in Sources */,
-				53C751CD1268A3BE00A4793F /* MusicControlsSingleton.m in Sources */,
-				53C751D01268A3D400A4793F /* SocialControlsSingleton.m in Sources */,
-				53C751D31268A43A00A4793F /* DatabaseControlsSingleton.m in Sources */,
+				53C751CD1268A3BE00A4793F /* MusicSingleton.m in Sources */,
+				53C751D01268A3D400A4793F /* SocialSingleton.m in Sources */,
+				53C751D31268A43A00A4793F /* DatabaseSingleton.m in Sources */,
 				531F157C126F6B5600F524BD /* NSString-hex.m in Sources */,
 				531F1597126F711100F524BD /* HomeXMLParser.m in Sources */,
 				531F166E126FA2E600F524BD /* HomeAlbumViewController.m in Sources */,
@@ -4323,7 +4308,7 @@
 				5382BA8D12DA4039005A3D1A /* UIDevice-Hardware.m in Sources */,
 				535CB23212E0027800389DA1 /* ServerTypeViewController.m in Sources */,
 				535CB2A212E2348A00389DA1 /* UbuntuServerEditViewController.m in Sources */,
-				535CB69012E383F400389DA1 /* QueueAll.m in Sources */,
+				535CB69012E383F400389DA1 /* SUSQueueAllDAO.m in Sources */,
 				53C6052E12F1F01E003C6895 /* IntroViewController.m in Sources */,
 				532D9B43131AE19700FD8CA7 /* CustomUIAlertView.m in Sources */,
 				5324C6C613345D75004E6C79 /* OBSlider.m in Sources */,
@@ -4367,7 +4352,6 @@
 				5386FB821406243A0009F73F /* Loader.m in Sources */,
 				5386FB8714062A3A0009F73F /* SavedSettings.m in Sources */,
 				53E82A98140720BC0051D44B /* SUSSubFolderDAO.m in Sources */,
-				53E82A9F140721FB0051D44B /* CacheDAO.m in Sources */,
 				53E82AA414072F090051D44B /* CacheSingleton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4475,9 +4459,9 @@
 				53BC27FB139AF0DD00A825F1 /* ChatMessage.m in Sources */,
 				53BC27FC139AF0DD00A825F1 /* CustomUITextView.m in Sources */,
 				53BC27FD139AF0DD00A825F1 /* ViewObjectsSingleton.m in Sources */,
-				53BC27FE139AF0DD00A825F1 /* MusicControlsSingleton.m in Sources */,
-				53BC27FF139AF0DD00A825F1 /* SocialControlsSingleton.m in Sources */,
-				53BC2800139AF0DD00A825F1 /* DatabaseControlsSingleton.m in Sources */,
+				53BC27FE139AF0DD00A825F1 /* MusicSingleton.m in Sources */,
+				53BC27FF139AF0DD00A825F1 /* SocialSingleton.m in Sources */,
+				53BC2800139AF0DD00A825F1 /* DatabaseSingleton.m in Sources */,
 				53BC2801139AF0DD00A825F1 /* NSString-hex.m in Sources */,
 				53BC2802139AF0DD00A825F1 /* HomeXMLParser.m in Sources */,
 				53BC2803139AF0DD00A825F1 /* HomeAlbumViewController.m in Sources */,
@@ -4518,7 +4502,7 @@
 				53BC2826139AF0DD00A825F1 /* UIDevice-Hardware.m in Sources */,
 				53BC2827139AF0DD00A825F1 /* ServerTypeViewController.m in Sources */,
 				53BC2828139AF0DD00A825F1 /* UbuntuServerEditViewController.m in Sources */,
-				53BC2829139AF0DD00A825F1 /* QueueAll.m in Sources */,
+				53BC2829139AF0DD00A825F1 /* SUSQueueAllDAO.m in Sources */,
 				53BC282A139AF0DD00A825F1 /* IntroViewController.m in Sources */,
 				53BC282B139AF0DD00A825F1 /* CustomUIAlertView.m in Sources */,
 				53BC282C139AF0DD00A825F1 /* OBSlider.m in Sources */,
@@ -4562,7 +4546,6 @@
 				5386FB841406243A0009F73F /* Loader.m in Sources */,
 				5386FB8914062A3A0009F73F /* SavedSettings.m in Sources */,
 				53E82A9A140720BC0051D44B /* SUSSubFolderDAO.m in Sources */,
-				53E82AA1140721FB0051D44B /* CacheDAO.m in Sources */,
 				53E82AA614072F090051D44B /* CacheSingleton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4670,9 +4653,9 @@
 				53DCF55C13BFEAD3009160F9 /* ChatMessage.m in Sources */,
 				53DCF55D13BFEAD3009160F9 /* CustomUITextView.m in Sources */,
 				53DCF55E13BFEAD3009160F9 /* ViewObjectsSingleton.m in Sources */,
-				53DCF55F13BFEAD3009160F9 /* MusicControlsSingleton.m in Sources */,
-				53DCF56013BFEAD3009160F9 /* SocialControlsSingleton.m in Sources */,
-				53DCF56113BFEAD3009160F9 /* DatabaseControlsSingleton.m in Sources */,
+				53DCF55F13BFEAD3009160F9 /* MusicSingleton.m in Sources */,
+				53DCF56013BFEAD3009160F9 /* SocialSingleton.m in Sources */,
+				53DCF56113BFEAD3009160F9 /* DatabaseSingleton.m in Sources */,
 				53DCF56213BFEAD3009160F9 /* NSString-hex.m in Sources */,
 				53DCF56313BFEAD3009160F9 /* HomeXMLParser.m in Sources */,
 				53DCF56413BFEAD3009160F9 /* HomeAlbumViewController.m in Sources */,
@@ -4713,7 +4696,7 @@
 				53DCF58713BFEAD3009160F9 /* UIDevice-Hardware.m in Sources */,
 				53DCF58813BFEAD3009160F9 /* ServerTypeViewController.m in Sources */,
 				53DCF58913BFEAD3009160F9 /* UbuntuServerEditViewController.m in Sources */,
-				53DCF58A13BFEAD3009160F9 /* QueueAll.m in Sources */,
+				53DCF58A13BFEAD3009160F9 /* SUSQueueAllDAO.m in Sources */,
 				53DCF58B13BFEAD3009160F9 /* IntroViewController.m in Sources */,
 				53DCF58C13BFEAD3009160F9 /* CustomUIAlertView.m in Sources */,
 				53DCF58D13BFEAD3009160F9 /* OBSlider.m in Sources */,
@@ -4757,7 +4740,6 @@
 				5386FB831406243A0009F73F /* Loader.m in Sources */,
 				5386FB8814062A3A0009F73F /* SavedSettings.m in Sources */,
 				53E82A99140720BC0051D44B /* SUSSubFolderDAO.m in Sources */,
-				53E82AA0140721FB0051D44B /* CacheDAO.m in Sources */,
 				53E82AA514072F090051D44B /* CacheSingleton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

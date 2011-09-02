@@ -6,10 +6,10 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-#import "QueueAll.h"
+#import "SUSQueueAllDAO.h"
 #import "iSubAppDelegate.h"
-#import "MusicControlsSingleton.h"
-#import "DatabaseControlsSingleton.h"
+#import "MusicSingleton.h"
+#import "DatabaseSingleton.h"
 #import "ViewObjectsSingleton.h"
 #import "QueueAlbumXMLParser.h"
 #import "Album.h"
@@ -17,9 +17,9 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "CustomUIAlertView.h"
+#import "SavedSettings.h"
 
-
-@implementation QueueAll
+@implementation SUSQueueAllDAO
 
 @synthesize currentPlaylist, shufflePlaylist, myArtist, folderIds;
 
@@ -28,8 +28,8 @@
 	if ((self = [super init]))
 	{
 		appDelegate = [iSubAppDelegate sharedInstance];
-		musicControls = [MusicControlsSingleton sharedInstance];
-		databaseControls = [DatabaseControlsSingleton sharedInstance];
+		musicControls = [MusicSingleton sharedInstance];
+		databaseControls = [DatabaseSingleton sharedInstance];
 		viewObjects = [ViewObjectsSingleton sharedInstance];
 		
 		connection = nil;

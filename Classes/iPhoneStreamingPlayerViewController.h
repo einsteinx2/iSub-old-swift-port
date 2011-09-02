@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class iSubAppDelegate, MusicControlsSingleton, DatabaseControlsSingleton, ViewObjectsSingleton, CoverArtImageView, PageControlViewController, MPVolumeView;
+@class iSubAppDelegate, MusicSingleton, DatabaseSingleton, ViewObjectsSingleton, CoverArtImageView, PageControlViewController, MPVolumeView;
 
 @interface iPhoneStreamingPlayerViewController : UIViewController
 {
@@ -27,8 +27,8 @@
 	UILabel *titleLabel;
 	
 	iSubAppDelegate *appDelegate;
-	MusicControlsSingleton *musicControls;
-	DatabaseControlsSingleton *databaseControls;
+	MusicSingleton *musicControls;
+	DatabaseSingleton *databaseControls;
 	ViewObjectsSingleton *viewObjects;
 	
 	NSUInteger reflectionHeight;

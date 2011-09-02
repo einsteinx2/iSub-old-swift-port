@@ -6,8 +6,8 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "MusicControlsSingleton.h"
-#import "DatabaseControlsSingleton.h"
+#import "MusicSingleton.h"
+#import "DatabaseSingleton.h"
 #import "ViewObjectsSingleton.h"
 #import "iSubAppDelegate.h"
 #import "ASIHTTPRequest.h"
@@ -27,9 +27,9 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
  
-static MusicControlsSingleton *sharedInstance = nil;
+static MusicSingleton *sharedInstance = nil;
 
-@implementation MusicControlsSingleton
+@implementation MusicSingleton
 
 // Audio streamer objects and variables
 //
@@ -1406,7 +1406,7 @@ static MusicControlsSingleton *sharedInstance = nil;
 	[autoreleasePool release];
 }
 
-- (void) checkCache
+/*- (void) checkCache
 {
 	SavedSettings *settings = [SavedSettings sharedInstance];
 	
@@ -1502,7 +1502,7 @@ static MusicControlsSingleton *sharedInstance = nil;
 			}			
 		}
 	}
-}
+}*/
 
 
 - (BOOL)showPlayerIcon
@@ -1648,7 +1648,7 @@ static MusicControlsSingleton *sharedInstance = nil;
 }
 
 
-- (unsigned long long int) findCacheSize
+/*- (unsigned long long int) findCacheSize
 {	
 	unsigned long long combinedSize = 0;
 	for (NSString *path in [[NSFileManager defaultManager] subpathsAtPath:self.documentsPath]) 
@@ -1662,7 +1662,7 @@ static MusicControlsSingleton *sharedInstance = nil;
 - (unsigned long long int) findFreeSpace
 {
 	return [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:self.audioFolderPath error:NULL] objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
-}
+}*/
 
 
 #pragma mark -
@@ -2014,7 +2014,7 @@ static MusicControlsSingleton *sharedInstance = nil;
 #pragma mark -
 #pragma mark Singleton methods
 
-+ (MusicControlsSingleton*)sharedInstance
++ (MusicSingleton*)sharedInstance
 {
     @synchronized(self)
     {
@@ -2041,7 +2041,7 @@ static MusicControlsSingleton *sharedInstance = nil;
 	
 	//initialize here
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	databaseControls = [DatabaseControlsSingleton sharedInstance];
+	databaseControls = [DatabaseSingleton sharedInstance];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -2069,7 +2069,7 @@ static MusicControlsSingleton *sharedInstance = nil;
 	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackStateChanged:) name:ASStatusChangedNotification object:nil];
 	
 	// Check the free space every 60 seconds
-	[NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(checkCache) userInfo:nil repeats:YES];
+	//[NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(checkCache) userInfo:nil repeats:YES];
 	
 	connectionQueue = [[BBSimpleConnectionQueue alloc] init];
 	

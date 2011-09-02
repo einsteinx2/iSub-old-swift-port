@@ -9,8 +9,8 @@
 #import "UbuntuServerEditViewController.h"
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
-#import "MusicControlsSingleton.h"
-#import "DatabaseControlsSingleton.h"
+#import "MusicSingleton.h"
+#import "DatabaseSingleton.h"
 #import "RootViewController.h"
 #import "XMLParser.h"
 #import "Server.h"
@@ -46,8 +46,8 @@
 	
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicControlsSingleton sharedInstance];
-	databaseControls = [DatabaseControlsSingleton sharedInstance];
+	musicControls = [MusicSingleton sharedInstance];
+	databaseControls = [DatabaseSingleton sharedInstance];
 	
 	if (viewObjects.serverToEdit)
 	{
@@ -99,6 +99,8 @@
 
 - (IBAction) saveButtonPressed:(id)sender
 {
+	SavedSettings *settings = [SavedSettings sharedInstance];
+	
 	if (![self checkUsername:usernameField.text])
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a username" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
@@ -121,14 +123,14 @@
 		theServer.password = passwordField.text;
 		theServer.type = UBUNTU_ONE;
 		
-		if (viewObjects.serverList == nil)
-			viewObjects.serverList = [NSMutableArray arrayWithCapacity:1];
+		if (settings.serverList == nil)
+			settings.serverList = [NSMutableArray arrayWithCapacity:1];
 		
 		if(viewObjects.serverToEdit)
 		{					
 			// Replace the entry in the server list
-			NSInteger index = [viewObjects.serverList indexOfObject:viewObjects.serverToEdit];
-			[viewObjects.serverList replaceObjectAtIndex:index withObject:theServer];
+			NSInteger index = [settings.serverList indexOfObject:viewObjects.serverToEdit];
+			[settings.serverList replaceObjectAtIndex:index withObject:theServer];
 			
 			// Update the serverToEdit to the new details
 			viewObjects.serverToEdit = theServer;
@@ -138,7 +140,7 @@
 			[defaults setObject:theServer.url forKey:@"url"];
 			[defaults setObject:theServer.username forKey:@"username"];
 			[defaults setObject:theServer.password forKey:@"password"];
-			[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:viewObjects.serverList] forKey:@"servers"];
+			[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
 			[defaults synchronize];
 			
 			[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadServerList" object:nil];
@@ -155,14 +157,14 @@
 		{
 			// Create the entry in serverList
 			viewObjects.serverToEdit = theServer;
-			[viewObjects.serverList addObject:viewObjects.serverToEdit];
+			[settings.serverList addObject:viewObjects.serverToEdit];
 			
 			// Save the plist values
 			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 			[defaults setObject:URL forKey:@"url"];
 			[defaults setObject:usernameField.text forKey:@"username"];
 			[defaults setObject:passwordField.text forKey:@"password"];
-			[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:viewObjects.serverList] forKey:@"servers"];
+			[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
 			[defaults synchronize];
 			
 			[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadServerList" object:nil];

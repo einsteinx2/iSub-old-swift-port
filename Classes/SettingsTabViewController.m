@@ -9,9 +9,9 @@
 #import "SettingsTabViewController.h"
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
-#import "MusicControlsSingleton.h"
-#import "SocialControlsSingleton.h"
-#import "DatabaseControlsSingleton.h"
+#import "MusicSingleton.h"
+#import "SocialSingleton.h"
+#import "DatabaseSingleton.h"
 #import "RootViewController.h"
 
 #import "SA_OAuthTwitterEngine.h"
@@ -61,9 +61,9 @@
 	settings = [SavedSettings sharedInstance];
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicControlsSingleton sharedInstance];
-	socialControls = [SocialControlsSingleton sharedInstance];
-	databaseControls = [DatabaseControlsSingleton sharedInstance];
+	musicControls = [MusicSingleton sharedInstance];
+	socialControls = [SocialSingleton sharedInstance];
+	databaseControls = [DatabaseSingleton sharedInstance];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTwitterUIElements) name:@"twitterAuthenticated" object:nil];
 	
@@ -462,17 +462,17 @@
 				}
 				
 				// Setup the allAlbums database
-				databaseControls.allAlbumsDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allAlbums.db", databaseControls.databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]];
+				databaseControls.allAlbumsDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allAlbums.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]]];
 				[databaseControls.allAlbumsDb executeUpdate:@"PRAGMA cache_size = 1"];
 				if ([databaseControls.allAlbumsDb open] == NO) { DLog(@"Could not open allAlbumsDb."); }
 				
 				// Setup the allSongs database
-				databaseControls.allSongsDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allSongs.db", databaseControls.databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]];
+				databaseControls.allSongsDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allSongs.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]]];
 				[databaseControls.allSongsDb executeUpdate:@"PRAGMA cache_size = 1"];
 				if ([databaseControls.allSongsDb open] == NO) { DLog(@"Could not open allSongsDb."); }
 				
 				// Setup the Genres database
-				databaseControls.genresDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@genres.db", databaseControls.databaseFolderPath, [NSString md5:appDelegate.defaultUrl]]];
+				databaseControls.genresDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@genres.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]]];
 				[databaseControls.genresDb executeUpdate:@"PRAGMA cache_size = 1"];
 				if ([databaseControls.genresDb open] == NO) { DLog(@"Could not open genresDb."); }
 			}

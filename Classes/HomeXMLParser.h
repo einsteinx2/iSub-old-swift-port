@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@class iSubAppDelegate, ViewObjectsSingleton, DatabaseControlsSingleton, Index, Artist, Album, Song;
+@class iSubAppDelegate, ViewObjectsSingleton, DatabaseSingleton, Index, Artist, Album, Song;
 
 @interface HomeXMLParser : NSObject <NSXMLParserDelegate> 
 {
 	NSMutableString *currentElementValue;
 	
 	iSubAppDelegate *appDelegate; 
-	DatabaseControlsSingleton *databaseControls;
+	DatabaseSingleton *databaseControls;
 	
 	NSString *myId;
 

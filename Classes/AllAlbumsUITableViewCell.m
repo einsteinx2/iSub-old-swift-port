@@ -10,8 +10,8 @@
 #import "AsynchronousImageViewCached.h"
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
-#import "DatabaseControlsSingleton.h"
-#import "MusicControlsSingleton.h"
+#import "DatabaseSingleton.h"
+#import "MusicSingleton.h"
 #import "Album.h"
 #import "CellOverlay.h"
 
@@ -26,8 +26,8 @@
 		// Initialization code
 		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 		viewObjects = [ViewObjectsSingleton sharedInstance];
-		databaseControls = [DatabaseControlsSingleton sharedInstance];
-		musicControls = [MusicControlsSingleton sharedInstance];
+		databaseControls = [DatabaseSingleton sharedInstance];
+		musicControls = [MusicSingleton sharedInstance];
 		
 		canShowOverlay = YES;
 		isOverlayShowing = NO;

@@ -8,13 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, FMDatabase, Artist, Album, Song, QueueAll;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, FMDatabase, Artist, Album, Song, SUSQueueAllDAO;
 
-@interface DatabaseControlsSingleton : NSObject 
+@interface DatabaseSingleton : NSObject 
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
-	MusicControlsSingleton *musicControls;
+	MusicSingleton *musicControls;
 	
 	NSString *databaseFolderPath;
 	FMDatabase *allAlbumsDb;
@@ -33,7 +33,7 @@
 	FMDatabase *bookmarksDb;
 	FMDatabase *inMemoryDb;
 	
-	QueueAll *queueAll;
+	SUSQueueAllDAO *queueAll;
 }
 
 @property (nonatomic, retain) NSString *databaseFolderPath;
@@ -53,7 +53,7 @@
 @property (nonatomic, retain) FMDatabase *bookmarksDb;
 @property (nonatomic, retain) FMDatabase *inMemoryDb;
 
-+ (DatabaseControlsSingleton*)sharedInstance;
++ (DatabaseSingleton*)sharedInstance;
 
 - (void) initDatabases;
 

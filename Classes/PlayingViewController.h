@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicControlsSingleton, DatabaseControlsSingleton;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton;
 
 @interface PlayingViewController : UITableViewController 
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
-	MusicControlsSingleton *musicControls;
-	DatabaseControlsSingleton *databaseControls;
+	MusicSingleton *musicControls;
+	DatabaseSingleton *databaseControls;
 	
 	BOOL isNothingPlayingScreenShowing;
 	UIImageView *nothingPlayingScreen;

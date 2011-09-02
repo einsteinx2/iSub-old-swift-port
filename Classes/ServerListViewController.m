@@ -9,9 +9,9 @@
 #import "ServerListViewController.h"
 #import "SubsonicServerEditViewController.h"
 #import "iSubAppDelegate.h"
-#import "MusicControlsSingleton.h"
+#import "MusicSingleton.h"
 #import "ViewObjectsSingleton.h"
-#import "DatabaseControlsSingleton.h"
+#import "DatabaseSingleton.h"
 #import "SettingsTabViewController.h"
 #import "HelpTabViewController.h"
 #import "RootViewController.h"
@@ -56,8 +56,8 @@
 
     appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicControlsSingleton sharedInstance];
-	databaseControls = [DatabaseControlsSingleton sharedInstance];
+	musicControls = [MusicSingleton sharedInstance];
+	databaseControls = [DatabaseSingleton sharedInstance];
 	settings = [SavedSettings sharedInstance];
 	
 	self.tableView.allowsSelectionDuringEditing = YES;
@@ -388,9 +388,9 @@
 	[cell.contentView addSubview:serverType];
 	[serverType release];
 	
-	if([appDelegate.defaultUrl isEqualToString:aServer.url] && 
-	   [appDelegate.defaultUserName isEqualToString:aServer.username] &&
-	   [appDelegate.defaultPassword isEqualToString:aServer.password])
+	if([settings.urlString isEqualToString:aServer.url] && 
+	   [settings.username isEqualToString:aServer.username] &&
+	   [settings.password isEqualToString:aServer.password])
 	{
 		UIImageView *currentServerMarker = [[UIImageView alloc] init];
 		currentServerMarker.image = [UIImage imageNamed:@"current-server.png"];
@@ -464,7 +464,7 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) 
 	{
 		// Alert user to select new default server if they deleting the default
-		if ([appDelegate.defaultUrl isEqualToString:[[settings.serverList objectAtIndex:indexPath.row] url]])
+		if ([settings.urlString isEqualToString:[[settings.serverList objectAtIndex:indexPath.row] url]])
 		{
 			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Make sure to select a new server" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 			[alert show];

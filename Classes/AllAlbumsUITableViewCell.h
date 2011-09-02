@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class CellOverlay, iSubAppDelegate, ViewObjectsSingleton, DatabaseControlsSingleton, MusicControlsSingleton, AsynchronousImageViewCached, Artist;
+@class CellOverlay, iSubAppDelegate, ViewObjectsSingleton, DatabaseSingleton, MusicSingleton, AsynchronousImageViewCached, Artist;
 
 @interface AllAlbumsUITableViewCell : UITableViewCell 
 {
@@ -17,8 +17,8 @@
 	
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
-	DatabaseControlsSingleton *databaseControls;
-	MusicControlsSingleton *musicControls;
+	DatabaseSingleton *databaseControls;
+	MusicSingleton *musicControls;
 	
 	AsynchronousImageViewCached *coverArtView;
 	CGFloat scrollWidth;

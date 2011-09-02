@@ -6,14 +6,15 @@
 //  Copyright Ben Baron 2010. All rights reserved.
 //
 
-@class iSubAppDelegate, ViewObjectsSingleton, SearchOverlayViewController, Song, MusicControlsSingleton, DatabaseControlsSingleton, Album;
+@class iSubAppDelegate, SavedSettings, ViewObjectsSingleton, SearchOverlayViewController, Song, MusicSingleton, DatabaseSingleton, Album;
 
 @interface AllSongsViewController : UITableViewController <UISearchBarDelegate> 
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
-	MusicControlsSingleton *musicControls;
-	DatabaseControlsSingleton *databaseControls;
+	MusicSingleton *musicControls;
+	DatabaseSingleton *databaseControls;
+	SavedSettings *settings;
 	
 	UIView *headerView;
 	UIButton *reloadButton;
