@@ -110,18 +110,6 @@
 	[UIDevice currentDevice].batteryMonitoringEnabled = YES;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(batteryStateChanged:) name:@"UIDeviceBatteryStateDidChangeNotification" object:[UIDevice currentDevice]];
 	[self batteryStateChanged:nil];	
-	
-	if (!settings.isUpdateCheckQuestionAsked)
-	{
-		// Ask to check for updates if haven't asked yet
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Update Alerts" message:@"Would you like iSub to notify you when app updates are available?\n\nYou can change this setting at any time from the settings menu." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
-		[alert show];
-		[alert release];
-	}
-	else if (settings.isUpdateCheckEnabled)
-	{
-		[self performSelectorInBackground:@selector(checkForUpdate) withObject:nil];
-	}
 		
 
 	// appinit 1
@@ -193,6 +181,18 @@
 	[settings setupSaveState];
 	
 	[self createAndDisplayUI];
+	
+	if (!settings.isUpdateCheckQuestionAsked)
+	{
+		// Ask to check for updates if haven't asked yet
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Update Alerts" message:@"Would you like iSub to notify you when app updates are available?\n\nYou can change this setting at any time from the settings menu." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+		[alert show];
+		[alert release];
+	}
+	else if (settings.isUpdateCheckEnabled)
+	{
+		[self performSelectorInBackground:@selector(checkForUpdate) withObject:nil];
+	}
 	
 	// Check the server status in the background
 	[self performSelectorInBackground:@selector(checkServer) withObject:nil];
@@ -329,7 +329,6 @@
 	
 	[window makeKeyAndVisible];	
 	/*[self startStopServer];*/
-	NSLog(@"end of create UI");
 }
 
 - (void)loadHockeyApp
