@@ -191,6 +191,7 @@ static void DownloadDoneA()
 	{
 		// Show an alert and delete the file
 		UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"Error" message:@"No song data returned. This could be because your Subsonic API trial has expired, this song is not an mp3 and the Subsonic transcoding plugins failed, or another reason." delegate:appDelegateRef cancelButtonTitle:@"OK" otherButtonTitles: nil] autorelease];
+		alert.tag = 2;
 		[alert performSelector:@selector(show) onThread:[NSThread mainThread] withObject:nil waitUntilDone:NO];
 		[[NSFileManager defaultManager] removeItemAtPath:[musicControlsRef downloadFileNameA] error:NULL];
 		
@@ -408,6 +409,7 @@ static void DownloadDoneB()
 	{
 		// Show an alert and delete the file
 		UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"Error" message:@"No song data returned. This could be because your Subsonic API trial has expired, this song is not an mp3 and the Subsonic transcoding plugins failed, or another reason." delegate:appDelegateRef cancelButtonTitle:@"OK" otherButtonTitles: nil] autorelease];
+		alert.tag = 2;
 		[alert performSelector:@selector(show) onThread:[NSThread mainThread] withObject:nil waitUntilDone:NO];
 		[[NSFileManager defaultManager] removeItemAtPath:[musicControlsRef downloadFileNameB] error:NULL];
 		
@@ -634,6 +636,7 @@ static void DownloadDoneTemp()
 	{
 		// Show an alert and delete the file
 		UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"Error" message:@"No song data returned. This could be because your Subsonic API trial has expired, this song is not an mp3 and the Subsonic transcoding plugins failed, or another reason." delegate:appDelegateRef cancelButtonTitle:@"OK" otherButtonTitles: nil] autorelease];
+		alert.tag = 2;
 		[alert performSelector:@selector(show) onThread:[NSThread mainThread] withObject:nil waitUntilDone:NO];
 		[[NSFileManager defaultManager] removeItemAtPath:[musicControlsRef downloadFileNameA] error:NULL];
 		

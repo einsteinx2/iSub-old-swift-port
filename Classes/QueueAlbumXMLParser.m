@@ -41,6 +41,7 @@
 - (void) subsonicErrorCode:(NSString *)errorCode message:(NSString *)message
 {
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
+	alert.tag = 1;
 	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 	[alert release];
 }
@@ -48,6 +49,7 @@
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:@"There was an error parsing the XML response. Maybe you forgot to set the right port for your server?" delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
+	alert.tag = 1;
 	[alert show];
 	[alert release];
 }

@@ -174,6 +174,7 @@ static CacheSingleton *sharedInstance = nil;
 				else
 				{
 					UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"Free space is running low. Delete some cached songs or lower the minimum free space setting." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+					alert.tag = 4;
 					[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 					[alert release];
 				}
@@ -196,6 +197,7 @@ static CacheSingleton *sharedInstance = nil;
 				settings.isSongCachingEnabled = NO;
 				
 				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"The song cache is full. Automatic song caching has been disabled.\n\nYou can re-enable it in the Settings menu (tap the gear, tap Settings at the top)" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+				alert.tag = 4;
 				[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 				[alert release];
 			}			

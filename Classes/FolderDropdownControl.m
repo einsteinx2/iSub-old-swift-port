@@ -295,6 +295,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 		// Inform the user that the connection failed.
 		NSString *message = [NSString stringWithFormat:@"There was an error loading the music folders for the dropdown."];
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		alert.tag = 2;
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
 	}
@@ -334,6 +335,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	// Inform the user that the connection failed.
 	NSString *message = [NSString stringWithFormat:@"There was an error loading the music folders for the dropdown.\n\nError %i: %@", [error code], [error localizedDescription]];
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	alert.tag = 2;
 	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 	[alert release];
 	

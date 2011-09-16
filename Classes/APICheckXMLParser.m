@@ -31,6 +31,7 @@
 	if (!viewObjects.isSettingsShowing)
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
+		alert.tag = 1;
 		[alert show];
 		[alert release];
 	}
@@ -41,6 +42,7 @@
 	if (!viewObjects.isSettingsShowing)
 	{
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:[NSString stringWithFormat:@"There was an error parsing the API check XML response.\n\nError:%@", parseError.localizedDescription] delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
+		alert.tag = 1;
 		[alert show];
 		[alert release];
 	}

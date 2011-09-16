@@ -226,6 +226,7 @@ static NSInteger order (id a, id b, void* context)
 				if ([request error])
 				{
 					CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error grabbing the album list." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+					alert.tag = 2;
 					[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 					[alert release];
 				}
@@ -434,6 +435,7 @@ static NSInteger order (id a, id b, void* context)
 			if([[SavedSettings sharedInstance] getTopLevelFolders] == nil)
 			{
 				CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"You must load the Folders tab first" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+				alert.tag = 4;
 				[alert show];
 				[alert release];
 			}

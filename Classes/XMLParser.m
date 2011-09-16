@@ -66,6 +66,7 @@
 	else
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
+		alert.tag = 1;
 		[alert show];
 		[alert release];
 	}
@@ -80,6 +81,7 @@
 	else
 	{
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:[NSString stringWithFormat:@"An error occured reading the response from Subsonic.\n\nIf you are loading the artist list, this can mean the server URL is wrong\n\nError: %@ Line: %i Column: %i", parseError.localizedDescription, [parser lineNumber], [parser columnNumber]] delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
+		alert.tag = 1;
 		[alert show];
 		[alert release];
 	}

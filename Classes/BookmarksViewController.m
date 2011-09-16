@@ -676,6 +676,7 @@
 				if (viewObjects.isOfflineMode)
 				{
 					CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Unable to resume this song in offline mode as it isn't fully cached." delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+					alert.tag = 4;
 					[alert show];
 					[alert release];
 				}

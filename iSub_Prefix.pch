@@ -37,6 +37,27 @@
 #	define IS_LITE() (false) // DISABLE Lite version
 #endif
 
+// Full version build switch
+#ifdef FULL
+#	define IS_FULL() (true)
+#else
+#	define IS_FULL() (false)
+#endif
+
+// Beta version build switch
+#ifdef BETA
+#	define IS_BETA() (true)
+#else
+#	define IS_BETA() (false)
+#endif
+
+// Debug version build switch (activated on debug and adhoc)
+#ifdef DEBUG
+#	define IS_DEBUG() (true)
+#else
+#	define IS_DEBUG() (false)
+#endif
+
 // Screen scale detection
 #define SCREEN_SCALE() ([[UIScreen mainScreen] respondsToSelector:@selector(scale)] ? [[UIScreen mainScreen] scale] : 1.0f)
 

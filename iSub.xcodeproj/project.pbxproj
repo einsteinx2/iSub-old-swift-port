@@ -35,6 +35,9 @@
 		530CE7F2119B8E8C00728ED5 /* CurrentPlaylistSongSmallUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 530CE7F1119B8E8C00728ED5 /* CurrentPlaylistSongSmallUITableViewCell.m */; };
 		530CE844119B9D9100728ED5 /* SongInfoPlaylistCustomUITableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 530CE843119B9D9100728ED5 /* SongInfoPlaylistCustomUITableView.m */; };
 		530FD22313C132F900C95451 /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 534F1633139AF85B00127A02 /* CrashReporter.framework */; };
+		530FEFAA14213B0D00884FCF /* libFlurryAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 530FEFA914213B0D00884FCF /* libFlurryAnalytics.a */; };
+		530FEFAB14213B0D00884FCF /* libFlurryAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 530FEFA914213B0D00884FCF /* libFlurryAnalytics.a */; };
+		530FEFAC14213B0D00884FCF /* libFlurryAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 530FEFA914213B0D00884FCF /* libFlurryAnalytics.a */; };
 		5311F5D51194DCEE009ACE8E /* ArtistUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5311F5D41194DCEE009ACE8E /* ArtistUITableViewCell.m */; };
 		5312E1AF11B8C23100AFC08D /* bookmarks-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5312E1AD11B8C23100AFC08D /* bookmarks-tabbaricon.png */; };
 		5312E1B011B8C23100AFC08D /* genres-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5312E1AE11B8C23100AFC08D /* genres-tabbaricon.png */; };
@@ -249,12 +252,6 @@
 		5398F27811DA627500007870 /* HelpTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F27611DA627500007870 /* HelpTabViewController.m */; };
 		5398F27911DA627500007870 /* HelpTabViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5398F27711DA627500007870 /* HelpTabViewController.xib */; };
 		5398F2B611DA8B1000007870 /* iPhoneStreamingPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5398F2B511DA8B1000007870 /* iPhoneStreamingPlayerViewController.xib */; };
-		539A358913D42BF700D80554 /* SUSDirectoryLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 539A358813D42BF600D80554 /* SUSDirectoryLoader.m */; };
-		539A358A13D42BF700D80554 /* SUSDirectoryLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 539A358813D42BF600D80554 /* SUSDirectoryLoader.m */; };
-		539A358B13D42BF700D80554 /* SUSDirectoryLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 539A358813D42BF600D80554 /* SUSDirectoryLoader.m */; };
-		539A35B013D5438B00D80554 /* SUSArtworkLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 539A35AF13D5438B00D80554 /* SUSArtworkLoader.m */; };
-		539A35B113D5438B00D80554 /* SUSArtworkLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 539A35AF13D5438B00D80554 /* SUSArtworkLoader.m */; };
-		539A35B213D5438B00D80554 /* SUSArtworkLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 539A35AF13D5438B00D80554 /* SUSArtworkLoader.m */; };
 		53A2213611A8489900C1ACD4 /* cache-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A2213411A8489900C1ACD4 /* cache-button.png */; };
 		53A2213711A8489900C1ACD4 /* queue-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A2213511A8489900C1ACD4 /* queue-button.png */; };
 		53A4548A133D6F8200741030 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A4547B133D6F8200741030 /* AsyncSocket.m */; };
@@ -1417,6 +1414,8 @@
 		530CE7F1119B8E8C00728ED5 /* CurrentPlaylistSongSmallUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CurrentPlaylistSongSmallUITableViewCell.m; sourceTree = "<group>"; };
 		530CE842119B9D9100728ED5 /* SongInfoPlaylistCustomUITableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SongInfoPlaylistCustomUITableView.h; sourceTree = "<group>"; };
 		530CE843119B9D9100728ED5 /* SongInfoPlaylistCustomUITableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongInfoPlaylistCustomUITableView.m; sourceTree = "<group>"; };
+		530FEFA814213B0D00884FCF /* FlurryAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlurryAnalytics.h; sourceTree = "<group>"; };
+		530FEFA914213B0D00884FCF /* libFlurryAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFlurryAnalytics.a; sourceTree = "<group>"; };
 		5311F5D31194DCEE009ACE8E /* ArtistUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArtistUITableViewCell.h; sourceTree = "<group>"; };
 		5311F5D41194DCEE009ACE8E /* ArtistUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArtistUITableViewCell.m; sourceTree = "<group>"; };
 		5312E1AD11B8C23100AFC08D /* bookmarks-tabbaricon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bookmarks-tabbaricon.png"; path = "Images/Tab Bar Icons/bookmarks-tabbaricon.png"; sourceTree = "<group>"; };
@@ -1747,10 +1746,6 @@
 		5398F27711DA627500007870 /* HelpTabViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HelpTabViewController.xib; sourceTree = "<group>"; };
 		5398F2B511DA8B1000007870 /* iPhoneStreamingPlayerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = iPhoneStreamingPlayerViewController.xib; sourceTree = "<group>"; };
 		539A356813D3E48C00D80554 /* LoaderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoaderDelegate.h; sourceTree = "<group>"; };
-		539A358713D42BF600D80554 /* SUSDirectoryLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSDirectoryLoader.h; sourceTree = "<group>"; };
-		539A358813D42BF600D80554 /* SUSDirectoryLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSDirectoryLoader.m; sourceTree = "<group>"; };
-		539A35AE13D5438A00D80554 /* SUSArtworkLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSArtworkLoader.h; sourceTree = "<group>"; };
-		539A35AF13D5438B00D80554 /* SUSArtworkLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSArtworkLoader.m; sourceTree = "<group>"; };
 		53A2213411A8489900C1ACD4 /* cache-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cache-button.png"; path = "Images/Other/cache-button.png"; sourceTree = "<group>"; };
 		53A2213511A8489900C1ACD4 /* queue-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "queue-button.png"; path = "Images/Other/queue-button.png"; sourceTree = "<group>"; };
 		53A4547A133D6F8200741030 /* AsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncSocket.h; sourceTree = "<group>"; };
@@ -2077,6 +2072,7 @@
 				5327F52512B955F100735119 /* StoreKit.framework in Frameworks */,
 				53F7A128131B7F3B002C829D /* Security.framework in Frameworks */,
 				534F1634139AF85B00127A02 /* CrashReporter.framework in Frameworks */,
+				530FEFAA14213B0D00884FCF /* libFlurryAnalytics.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2101,6 +2097,7 @@
 				53BC285E139AF0DD00A825F1 /* StoreKit.framework in Frameworks */,
 				53BC285F139AF0DD00A825F1 /* Security.framework in Frameworks */,
 				53E7C358139DDE5300B123EF /* CrashReporter.framework in Frameworks */,
+				530FEFAC14213B0D00884FCF /* libFlurryAnalytics.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2125,6 +2122,7 @@
 				53DCF5BF13BFEAD3009160F9 /* StoreKit.framework in Frameworks */,
 				53DCF5C013BFEAD3009160F9 /* Security.framework in Frameworks */,
 				530FD22313C132F900C95451 /* CrashReporter.framework in Frameworks */,
+				530FEFAB14213B0D00884FCF /* libFlurryAnalytics.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2245,6 +2243,15 @@
 				53E75C6F1270067900BC1A19 /* InitialDetailViewController.xib */,
 			);
 			name = iPad;
+			sourceTree = "<group>";
+		};
+		530FEFA714213B0D00884FCF /* FlurryAnalytics */ = {
+			isa = PBXGroup;
+			children = (
+				530FEFA814213B0D00884FCF /* FlurryAnalytics.h */,
+				530FEFA914213B0D00884FCF /* libFlurryAnalytics.a */,
+			);
+			path = FlurryAnalytics;
 			sourceTree = "<group>";
 		};
 		5314B66D126FFDF500CDB511 /* MGSplitViewController */ = {
@@ -2697,6 +2704,7 @@
 		539797F21162CE7700F41D8B /* Support Classes */ = {
 			isa = PBXGroup;
 			children = (
+				530FEFA714213B0D00884FCF /* FlurryAnalytics */,
 				53BC2677139AEBCB00A825F1 /* HockyKit */,
 				53BC266F139AE7C500A825F1 /* QuincyKit */,
 				535B724F134CEE0A003E0E1C /* DDSocialDialog */,
@@ -2856,20 +2864,9 @@
 				5386FB8514062A390009F73F /* SavedSettings.h */,
 				5386FB8614062A3A0009F73F /* SavedSettings.m */,
 				53EB49901401ABF20014E59A /* DAOs */,
-				539A358D13D43B3B00D80554 /* Data Loaders (TODO: convert to daos) */,
+				53E82A9C140721D50051D44B /* Generic */,
 			);
 			name = "Data Model";
-			sourceTree = "<group>";
-		};
-		539A358D13D43B3B00D80554 /* Data Loaders (TODO: convert to daos) */ = {
-			isa = PBXGroup;
-			children = (
-				539A358713D42BF600D80554 /* SUSDirectoryLoader.h */,
-				539A358813D42BF600D80554 /* SUSDirectoryLoader.m */,
-				539A35AE13D5438A00D80554 /* SUSArtworkLoader.h */,
-				539A35AF13D5438B00D80554 /* SUSArtworkLoader.m */,
-			);
-			name = "Data Loaders (TODO: convert to daos)";
 			sourceTree = "<group>";
 		};
 		53A1CEC0126D396A006BB76F /* Reused */ = {
@@ -3188,7 +3185,6 @@
 				5386FB801406243A0009F73F /* Loader.h */,
 				5386FB811406243A0009F73F /* Loader.m */,
 				53E82A9B140721BD0051D44B /* Subsonic */,
-				53E82A9C140721D50051D44B /* Generic */,
 			);
 			name = DAOs;
 			sourceTree = "<group>";
@@ -4346,8 +4342,6 @@
 				53BC269A139AEBFF00A825F1 /* PSWebTableViewCell.m in Sources */,
 				53BC269B139AEBFF00A825F1 /* UIImage+HockeyAdditions.m in Sources */,
 				53BC269D139AEBFF00A825F1 /* JSONKit.m in Sources */,
-				539A358913D42BF700D80554 /* SUSDirectoryLoader.m in Sources */,
-				539A35B013D5438B00D80554 /* SUSArtworkLoader.m in Sources */,
 				53EB49931401B71C0014E59A /* SUSRootFoldersDAO.m in Sources */,
 				5386FB821406243A0009F73F /* Loader.m in Sources */,
 				5386FB8714062A3A0009F73F /* SavedSettings.m in Sources */,
@@ -4540,8 +4534,6 @@
 				53BC284C139AF0DD00A825F1 /* PSWebTableViewCell.m in Sources */,
 				53BC284D139AF0DD00A825F1 /* UIImage+HockeyAdditions.m in Sources */,
 				53BC284E139AF0DD00A825F1 /* JSONKit.m in Sources */,
-				539A358B13D42BF700D80554 /* SUSDirectoryLoader.m in Sources */,
-				539A35B213D5438B00D80554 /* SUSArtworkLoader.m in Sources */,
 				53EB49951401B71C0014E59A /* SUSRootFoldersDAO.m in Sources */,
 				5386FB841406243A0009F73F /* Loader.m in Sources */,
 				5386FB8914062A3A0009F73F /* SavedSettings.m in Sources */,
@@ -4734,8 +4726,6 @@
 				53DCF5AD13BFEAD3009160F9 /* PSWebTableViewCell.m in Sources */,
 				53DCF5AE13BFEAD3009160F9 /* UIImage+HockeyAdditions.m in Sources */,
 				53DCF5AF13BFEAD3009160F9 /* JSONKit.m in Sources */,
-				539A358A13D42BF700D80554 /* SUSDirectoryLoader.m in Sources */,
-				539A35B113D5438B00D80554 /* SUSArtworkLoader.m in Sources */,
 				53EB49941401B71C0014E59A /* SUSRootFoldersDAO.m in Sources */,
 				5386FB831406243A0009F73F /* Loader.m in Sources */,
 				5386FB8814062A3A0009F73F /* SavedSettings.m in Sources */,
@@ -4767,6 +4757,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"CONFIGURATION_$(CONFIGURATION)",
+					"FULL=1",
 				);
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
@@ -4777,6 +4768,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
+					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
 				);
 				LITE = 1;
 				PRODUCT_NAME = iSub;
@@ -4805,6 +4797,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"RELEASE=1",
 					"CONFIGURATION_$(CONFIGURATION)",
+					"FULL=1",
 				);
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
@@ -4816,6 +4809,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
+					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
 				);
 				LITE = 1;
 				PRODUCT_NAME = iSub;
@@ -4878,6 +4872,7 @@
 					"DEBUG=1",
 					"ADHOC=1",
 					"CONFIGURATION_$(CONFIGURATION)",
+					"FULL=1",
 				);
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
@@ -4888,6 +4883,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
+					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
 				);
 				LITE = 1;
 				PRODUCT_NAME = iSub;
@@ -4915,6 +4911,11 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = iSub_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"CONFIGURATION_$(CONFIGURATION)",
+					"BETA=1",
+				);
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				INFOPLIST_FILE = "iSub-Info-Beta.plist";
@@ -4924,6 +4925,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
+					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
 				);
 				PRODUCT_NAME = "iSub Beta";
 				PROVISIONING_PROFILE = "";
@@ -4950,6 +4952,12 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = iSub_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"ADHOC=1",
+					"CONFIGURATION_$(CONFIGURATION)",
+					"BETA=1",
+				);
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				INFOPLIST_FILE = "iSub-Info-Beta.plist";
@@ -4959,6 +4967,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
+					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
 				);
 				PRODUCT_NAME = "iSub Beta";
 				PROVISIONING_PROFILE = "";
@@ -4982,6 +4991,11 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = iSub_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"RELEASE=1",
+					"CONFIGURATION_$(CONFIGURATION)",
+					"BETA=1",
+				);
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				INFOPLIST_FILE = "iSub-Info-Beta.plist";
@@ -4992,6 +5006,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
+					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
 				);
 				PRODUCT_NAME = "iSub Beta";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D4A8945F-4511-4F9F-B707-8A73518A9D3B";
@@ -5031,6 +5046,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
+					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
 				);
 				PRODUCT_NAME = "iSub Lite";
 				PROVISIONING_PROFILE = "";
@@ -5072,6 +5088,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
+					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
 				);
 				PRODUCT_NAME = "iSub Lite";
 				PROVISIONING_PROFILE = "";
@@ -5110,6 +5127,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
+					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
 				);
 				PRODUCT_NAME = "iSub Lite";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D4A8945F-4511-4F9F-B707-8A73518A9D3B";

@@ -297,7 +297,6 @@
 		
 		// Reset the databases
 		[databaseControls closeAllDatabases];
-		//[appDelegate appInit2];
 		
 		[appDelegate appInit2];
 		
@@ -467,6 +466,7 @@
 		if ([settings.urlString isEqualToString:[[settings.serverList objectAtIndex:indexPath.row] url]])
 		{
 			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Make sure to select a new server" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+			alert.tag = 4;
 			[alert show];
 			[alert release];
 		}

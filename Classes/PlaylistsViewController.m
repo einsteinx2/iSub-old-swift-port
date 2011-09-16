@@ -850,6 +850,7 @@
 	{
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error saving the playlist to the server.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		alert.tag = 2;
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
 	}
@@ -1172,6 +1173,7 @@
 					{
 						// Inform the user that the connection failed.
 						//CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+						//alert.tag = 2;
 						//[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 						//[alert release];
 						DLog(@"There was an error deleting a server playlist, could not create network request");
@@ -1205,6 +1207,7 @@
 					{
 						/*// Inform the user that the connection failed.
 						 CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+						 alert.tag = 2;
 						 [alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 						 [alert release];*/
 						DLog(@"There was an error deleting a server playlist, could not create network request");
@@ -1346,6 +1349,7 @@
 	if ([aRequest error])
 	{
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error grabbing the playlist from the server." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		alert.tag = 2;
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
 	}
@@ -1532,6 +1536,7 @@ NSInteger playlistSort(id obj1, id obj2, void *context)
 	
 	// Inform the user that the connection failed.
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	alert.tag = 2;
 	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 	[alert release];
 	
@@ -1584,6 +1589,7 @@ static NSString *kName_Error = @"error";
 - (void) subsonicErrorCode:(NSString *)errorCode message:(NSString *)message
 {
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+	alert.tag = 1;
 	[alert show];
 	[alert release];
 	//DLog(@"Subsonic error %@:  %@", errorCode, message);

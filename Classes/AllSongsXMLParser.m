@@ -48,6 +48,7 @@
 - (void) subsonicErrorCode:(NSString *)errorCode message:(NSString *)message
 {
 	/*CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
+	 alert.tag = 1;
 	[alert show];
 	[alert release];*/
 	DLog(@"Subsonic error %@:  %@", errorCode, message);
@@ -68,6 +69,7 @@
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
 	/*CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:[NSString stringWithFormat:@"An error occured reading the response from Subsonic.\n\nIf you are loading the artist list, this can mean the server URL is wrong\n\nError: %@", parseError.localizedDescription] delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
+	 alert.tag = 1;
 	[alert show];
 	[alert release];*/
 	DLog(@"%@", [NSString stringWithFormat:@"An error occured reading the response from Subsonic.\n\nIf you are loading the artist list, this can mean the server URL is wrong\n\nError: %@", parseError.localizedDescription]);

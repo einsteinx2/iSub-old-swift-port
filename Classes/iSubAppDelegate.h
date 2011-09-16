@@ -20,7 +20,6 @@
 	
 	UIWindow *window;
 	
-	BOOL isIntroShowing;
 	IntroViewController *introController;
 	
 	// Main interface elements for iPhone
@@ -71,8 +70,6 @@
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 
-@property BOOL isIntroShowing;
-
 // Main interface elements for iPhone
 //
 @property (nonatomic, retain) IBOutlet UIImageView *background;
@@ -111,6 +108,7 @@
 - (void)enterOnlineModeForce;
 - (void)enterOfflineModeForce;
 
+- (void)loadFlurryAnalytics;
 - (void)loadHockeyApp;
 - (void)loadInAppPurchaseStore;
 - (void)createHTTPServer;

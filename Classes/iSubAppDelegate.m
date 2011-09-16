@@ -47,6 +47,7 @@
 #import "SFHFKeychainUtils.h"
 #import "BWQuincyManager.h"
 #import "BWHockeyManager.h"
+#import "FlurryAnalytics.h"
 
 #import "SavedSettings.h"
 #import "CacheSingleton.h"
@@ -54,8 +55,6 @@
 @implementation iSubAppDelegate
 
 @synthesize window;
-
-@synthesize isIntroShowing;
 
 // Main interface elements for iPhone
 @synthesize background, currentTabBarController, mainTabBarController, offlineTabBarController;
@@ -97,6 +96,7 @@
 	cacheControls = [CacheSingleton sharedInstance];
 	SavedSettings *settings = [SavedSettings sharedInstance];
 	
+	[self loadFlurryAnalytics];
 	[self loadHockeyApp];
 	
 	[self loadInAppPurchaseStore];
@@ -119,6 +119,7 @@
 		viewObjects.isOfflineMode = YES;
 		
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Offline mode switch on, entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+		alert.tag = 4;
 		[alert show];
 		[alert release];
 	}
@@ -127,6 +128,7 @@
 		viewObjects.isOfflineMode = YES;
 		
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"No network detected, entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+		alert.tag = 4;
 		[alert show];
 		[alert release];
 	}
@@ -182,18 +184,6 @@
 	
 	[self createAndDisplayUI];
 	
-	if (!settings.isUpdateCheckQuestionAsked)
-	{
-		// Ask to check for updates if haven't asked yet
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Update Alerts" message:@"Would you like iSub to notify you when app updates are available?\n\nYou can change this setting at any time from the settings menu." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
-		[alert show];
-		[alert release];
-	}
-	else if (settings.isUpdateCheckEnabled)
-	{
-		[self performSelectorInBackground:@selector(checkForUpdate) withObject:nil];
-	}
-	
 	// Check the server status in the background
 	[self performSelectorInBackground:@selector(checkServer) withObject:nil];
 }
@@ -202,6 +192,21 @@
 {
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	SavedSettings *settings = [SavedSettings sharedInstance];
+	
+	// Ask the update question if necessary
+	if (!settings.isUpdateCheckQuestionAsked)
+	{
+		// Ask to check for updates if haven't asked yet
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Update Alerts" message:@"Would you like iSub to notify you when app updates are available?\n\nYou can change this setting at any time from the settings menu." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+		alert.tag = 6;
+		//[alert show];
+		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
+		[alert release];
+	}
+	else if (settings.isUpdateCheckEnabled)
+	{
+		[self performSelectorInBackground:@selector(checkForUpdate) withObject:nil];
+	}
 	
 	// Check if the subsonic URL is valid by attempting to access the ping.view page, 
 	// if it's not then display an alert and allow user to change settings if they want.
@@ -218,6 +223,7 @@
 	{
 		viewObjects.isOfflineMode = YES;
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", error.code, [ASIHTTPRequest errorCodeToEnglish:error.code]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Settings", nil];
+		alert.tag = 3;
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
 		
@@ -250,6 +256,7 @@
 		viewObjects.isOfflineMode = YES;
 		[databaseControls initDatabases];
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", error.code, [ASIHTTPRequest errorCodeToEnglish:error.code]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Settings", nil];
+		alert.tag = 3;
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
 	}
@@ -274,10 +281,7 @@
 
 - (void)createAndDisplayUI
 {
-	introController = [[IntroViewController alloc] init];
-	//intro.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-	if ([introController respondsToSelector:@selector(setModalPresentationStyle:)])
-		introController.modalPresentationStyle = UIModalPresentationFormSheet;
+	introController = nil;
 	
 	if (IS_IPAD())
 	{
@@ -291,8 +295,10 @@
 		
 		if (showIntro)
 		{
+			introController = [[IntroViewController alloc] init];
+			introController.modalPresentationStyle = UIModalPresentationFormSheet;
 			[splitView presentModalViewController:introController animated:NO];
-			isIntroShowing = YES;
+			[introController release];
 		}
 	}
 	else
@@ -317,8 +323,9 @@
 		
 		if (showIntro)
 		{
+			introController = [[IntroViewController alloc] init];
 			[currentTabBarController presentModalViewController:introController animated:NO];
-			isIntroShowing = YES;
+			[introController release];
 		}
 	}
 	
@@ -329,6 +336,14 @@
 	
 	[window makeKeyAndVisible];	
 	/*[self startStopServer];*/
+}
+
+- (void)loadFlurryAnalytics
+{
+	if (IS_FULL())
+	{
+		[FlurryAnalytics startSession:@"3KK4KKD2PSEU5APF7PNX"];
+	}
 }
 
 - (void)loadHockeyApp
@@ -356,19 +371,20 @@
 		[MKStoreManager sharedManager];
 		[MKStoreManager setDelegate:self];
 		
-#ifdef DEBUG
-		// Reset features
-		
-		/*[SFHFKeychainUtils storeUsername:kFeaturePlaylistsId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
-		 [SFHFKeychainUtils storeUsername:kFeatureJukeboxId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
-		 [SFHFKeychainUtils storeUsername:kFeatureCacheId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
-		 [SFHFKeychainUtils storeUsername:kFeatureAllId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];*/
-		
-		DLog(@"is kFeaturePlaylistsId enabled: %i", [MKStoreManager isFeaturePurchased:kFeaturePlaylistsId]);
-		DLog(@"is kFeatureJukeboxId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureJukeboxId]);
-		DLog(@"is kFeatureCacheId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureCacheId]);
-		DLog(@"is kFeatureAllId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureAllId]);
-#endif
+		if (IS_DEBUG())
+		{
+			// Reset features
+			
+			/*[SFHFKeychainUtils storeUsername:kFeaturePlaylistsId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
+			 [SFHFKeychainUtils storeUsername:kFeatureJukeboxId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
+			 [SFHFKeychainUtils storeUsername:kFeatureCacheId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
+			 [SFHFKeychainUtils storeUsername:kFeatureAllId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];*/
+			
+			DLog(@"is kFeaturePlaylistsId enabled: %i", [MKStoreManager isFeaturePurchased:kFeaturePlaylistsId]);
+			DLog(@"is kFeatureJukeboxId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureJukeboxId]);
+			DLog(@"is kFeatureCacheId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureCacheId]);
+			DLog(@"is kFeatureAllId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureAllId]);
+		}
 	}
 }
 
@@ -493,6 +509,7 @@
 	if ([request error])
 	{
 		/*CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error checking for app updates." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		alert.tag = 2;
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];*/
 		
@@ -740,6 +757,7 @@
 	/*isOfflineMode = YES;
 	
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"No network detected, entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+	alert.tag = 4;
 	[alert show];
 	[alert release];
 	
@@ -757,6 +775,7 @@
 		viewObjects.isNoNetworkAlertShowing = YES;
 		
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"No network detected, would you like to enter offline mode? Any currently playing music will stop.\n\nIf this is just temporary connection loss, select No." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+		alert.tag = 4;
 		[alert show];
 		[alert release];
 	}
@@ -770,6 +789,7 @@
 		viewObjects.isOnlineModeAlertShowing = YES;
 		
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Network detected, would you like to enter online mode? Any currently playing music will stop." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+		alert.tag = 4;
 		[alert show];
 		[alert release];
 	}
@@ -896,139 +916,158 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-	if ([alertView.title isEqualToString:@"Subsonic Error"])
+	switch (alertView.tag)
 	{
-		if(buttonIndex == 1)
+		case 1:
 		{
-			if (IS_IPAD())
+			// Title: @"Subsonic Error"
+			if(buttonIndex == 1)
 			{
-				[mainMenu showSettings];
-			}
-			else
-			{
-				ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
-				
-				if (currentTabBarController.selectedIndex == 4)
+				if (IS_IPAD())
 				{
-					[currentTabBarController.moreNavigationController pushViewController:serverListViewController animated:YES];
+					[mainMenu showSettings];
 				}
 				else
 				{
-					[(UINavigationController*)currentTabBarController.selectedViewController pushViewController:serverListViewController animated:YES];
+					ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
+					
+					if (currentTabBarController.selectedIndex == 4)
+					{
+						[currentTabBarController.moreNavigationController pushViewController:serverListViewController animated:YES];
+					}
+					else
+					{
+						[(UINavigationController*)currentTabBarController.selectedViewController pushViewController:serverListViewController animated:YES];
+					}
+					
+					[serverListViewController release];
 				}
-				
-				[serverListViewController release];
 			}
+			
+			break;
 		}
-	}
-	else if ([alertView.title isEqualToString:@"Error"])
-	{
-		if (isIntroShowing)
+		case 2:
 		{
+			// Title: @"Error"
 			[introController dismissModalViewControllerAnimated:NO];
-		}
-		
-		if (buttonIndex == 0)
-		{
-			[self appInit2];
-		}
-		else if (buttonIndex == 1)
-		{
-			if (IS_IPAD())
+			
+			if (buttonIndex == 0)
 			{
-				[mainMenu showSettings];
+				[self appInit2];
 			}
-			else
+			else if (buttonIndex == 1)
+			{
+				if (IS_IPAD())
+				{
+					[mainMenu showSettings];
+				}
+				else
+				{
+					[self showSettings];
+				}
+			}
+			
+			break;
+		}
+		case 3:
+		{
+			// Title: @"Server Unavailable"
+			if (buttonIndex == 1)
 			{
 				[self showSettings];
 			}
-		}
-	}
-	else if ([alertView.title isEqualToString:@"Server Unavailable"])
-	{
-		if (buttonIndex == 1)
-		{
-			[self showSettings];
-		}
-	}
-	else if ([alertView.title isEqualToString:@"Notice"])
-	{
-		// Offline mode handling
-		
-		viewObjects.isOnlineModeAlertShowing = NO;
-		viewObjects.isNoNetworkAlertShowing = NO;
-		
-		if (buttonIndex == 1)
-		{
-			if (viewObjects.isOfflineMode)
-			{
-				viewObjects.isOfflineMode = NO;
-				
-				[musicControls destroyStreamer];
-				[offlineTabBarController.view removeFromSuperview];
-				[databaseControls closeAllDatabases];
-				[self appInit2];
-				[viewObjects orderMainTabBarController];
-				[window addSubview:[mainTabBarController view]];
-			}
-			else
-			{
-				viewObjects.isOfflineMode = YES;
-				[SavedSettings sharedInstance].isJukeboxEnabled = NO;
-				
-				[musicControls destroyStreamer];
-				[musicControls stopDownloadA];
-				[musicControls stopDownloadB];
-				[musicControls stopDownloadQueue];
-				[mainTabBarController.view removeFromSuperview];
-				[databaseControls closeAllDatabases];
-				[self appInit2];
-				currentTabBarController = offlineTabBarController;
-				[window addSubview:[offlineTabBarController view]];
-			}
-		}
-	}
-	else if ([alertView.title isEqualToString:@"Resume?"])
-	{
-		if (buttonIndex == 0)
-		{
-			musicControls.bitRate = 192;
-		}
-		if (buttonIndex == 1)
-		{
-			//[musicControls resumeSong];
-			//[musicControls performSelectorInBackground:@selector(resumeSong) withObject:nil];
-			// TODO: Test this
-			[SavedSettings sharedInstance].isRecover = YES;
-			[musicControls resumeSong];
 			
-			// Reload the tab to display the Now Playing button - NOTE: DOESN'T WORK WHEN MORE TAB IS SELECTED
-			if (currentTabBarController.selectedIndex == 4)
-			{
-				[[currentTabBarController.moreNavigationController topViewController] viewWillAppear:NO];				
-			}
-			else if (currentTabBarController.selectedIndex == NSNotFound)
-			{
-				[[currentTabBarController.moreNavigationController topViewController] viewWillAppear:NO];
-			}
-			else
-			{
-				[[(UINavigationController*)currentTabBarController.selectedViewController topViewController] viewWillAppear:NO];				
-			}
+			break;
 		}
-	}
-	else if ([alertView.title isEqualToString:@"Update Alerts"])
-	{
-		if (buttonIndex == 0)
+		case 4:
 		{
-			[SavedSettings sharedInstance].isUpdateCheckEnabled = NO;
+			// Title: @"Notice"
+			
+			// Offline mode handling
+			
+			viewObjects.isOnlineModeAlertShowing = NO;
+			viewObjects.isNoNetworkAlertShowing = NO;
+			
+			if (buttonIndex == 1)
+			{
+				if (viewObjects.isOfflineMode)
+				{
+					viewObjects.isOfflineMode = NO;
+					
+					[musicControls destroyStreamer];
+					[offlineTabBarController.view removeFromSuperview];
+					[databaseControls closeAllDatabases];
+					[self appInit2];
+					[viewObjects orderMainTabBarController];
+					[window addSubview:[mainTabBarController view]];
+				}
+				else
+				{
+					viewObjects.isOfflineMode = YES;
+					[SavedSettings sharedInstance].isJukeboxEnabled = NO;
+					
+					[musicControls destroyStreamer];
+					[musicControls stopDownloadA];
+					[musicControls stopDownloadB];
+					[musicControls stopDownloadQueue];
+					[mainTabBarController.view removeFromSuperview];
+					[databaseControls closeAllDatabases];
+					[self appInit2];
+					currentTabBarController = offlineTabBarController;
+					[window addSubview:[offlineTabBarController view]];
+				}
+			}
+			
+			break;
 		}
-		else if (buttonIndex == 1)
+		case 5:
 		{
-			[SavedSettings sharedInstance].isUpdateCheckEnabled = YES;
+			// Title: @"Resume?"
+			if (buttonIndex == 0)
+			{
+				musicControls.bitRate = 192;
+			}
+			if (buttonIndex == 1)
+			{
+				//[musicControls resumeSong];
+				//[musicControls performSelectorInBackground:@selector(resumeSong) withObject:nil];
+				// TODO: Test this
+				[SavedSettings sharedInstance].isRecover = YES;
+				[musicControls resumeSong];
+				
+				// Reload the tab to display the Now Playing button - NOTE: DOESN'T WORK WHEN MORE TAB IS SELECTED
+				if (currentTabBarController.selectedIndex == 4)
+				{
+					[[currentTabBarController.moreNavigationController topViewController] viewWillAppear:NO];				
+				}
+				else if (currentTabBarController.selectedIndex == NSNotFound)
+				{
+					[[currentTabBarController.moreNavigationController topViewController] viewWillAppear:NO];
+				}
+				else
+				{
+					[[(UINavigationController*)currentTabBarController.selectedViewController topViewController] viewWillAppear:NO];				
+				}
+			}
+			
+			break;
 		}
-		
-		[SavedSettings sharedInstance].isUpdateCheckQuestionAsked = YES;
+		case 6:
+		{
+			// Title: @"Update Alerts"
+			if (buttonIndex == 0)
+			{
+				[SavedSettings sharedInstance].isUpdateCheckEnabled = NO;
+			}
+			else if (buttonIndex == 1)
+			{
+				[SavedSettings sharedInstance].isUpdateCheckEnabled = YES;
+			}
+			
+			[SavedSettings sharedInstance].isUpdateCheckQuestionAsked = YES;
+			
+			break;
+		}
 	}
 }
 

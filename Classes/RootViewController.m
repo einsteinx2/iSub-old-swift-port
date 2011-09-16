@@ -81,6 +81,12 @@
 	[UIView commitAnimations];
 }
 
+- (void)createDataModel
+{
+	self.dataModel = [[[SUSRootFoldersDAO alloc] initWithDelegate:self] autorelease];
+	dataModel.selectedFolderId = [[SavedSettings sharedInstance] rootFoldersSelectedFolderId];
+}
+
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
@@ -89,9 +95,8 @@
 	musicControls = [MusicSingleton sharedInstance];
 	settings = [SavedSettings sharedInstance];
 	
-	self.dataModel = [[[SUSRootFoldersDAO alloc] initWithDelegate:self] autorelease];
-	dataModel.selectedFolderId = [[SavedSettings sharedInstance] rootFoldersSelectedFolderId];
-
+	[self createDataModel];
+	
 	self.title = @"Folders";
 		
 	//Set defaults
@@ -144,6 +149,8 @@
 
 - (void)reloadArtistList
 {
+	[self createDataModel];
+	
 	[self.tableView reloadData];
 	[self updateCount];
 	
@@ -229,6 +236,7 @@
 	
 	// Inform the user that the connection failed.
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error loading the artist list.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	alert.tag = 2;
 	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 	[alert release];
 }

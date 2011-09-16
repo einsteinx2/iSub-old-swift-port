@@ -91,6 +91,7 @@
 	{
 		// Show an alert and delete the file
 		UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"Notice" message:@"No song data returned. This could be because your Subsonic API trial has expired, this song is not an mp3 and the Subsonic transcoding plugins failed, or another reason." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil] autorelease];
+		alert.tag = 4;
 		[alert performSelector:@selector(show) onThread:[NSThread mainThread] withObject:nil waitUntilDone:NO];
 		[[NSFileManager defaultManager] removeItemAtPath:musicControls.downloadFileNameQueue error:NULL];
 		musicControls.isQueueListDownloading = NO;

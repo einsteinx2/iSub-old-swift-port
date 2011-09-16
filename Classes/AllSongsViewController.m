@@ -119,6 +119,7 @@
 			if ([databaseControls.allAlbumsDb tableExists:@"allAlbums"] == NO || [[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllAlbumsLoading", settings.urlString]] isEqualToString:@"YES"])
 			{
 				CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"You must load the Albums tab first" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+				alert.tag = 4;
 				[alert show];
 				[alert release];
 			}
@@ -602,6 +603,7 @@ static NSString *kName_Error = @"error";
 - (void) subsonicErrorCode:(NSString *)errorCode message:(NSString *)message
 {
 	/*CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
+	 alert.tag = 1;
 	 [alert show];
 	 [alert release];*/
 	DLog(@"Subsonic error %@:  %@", errorCode, message);
