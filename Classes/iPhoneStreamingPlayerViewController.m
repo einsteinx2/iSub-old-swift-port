@@ -615,7 +615,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		[UIView commitAnimations];
 		
-		[pageControlViewController resetScrollView];
+		//[pageControlViewController resetScrollView];
+		
+		[pageControlViewController release]; pageControlViewController = nil;
 	}
 	
 	isFlipped = !isFlipped;

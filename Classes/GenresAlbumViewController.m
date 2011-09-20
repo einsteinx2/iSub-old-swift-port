@@ -215,10 +215,13 @@
 	{
 		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 		
-		NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
-		Song *aSong = [databaseControls songFromGenreDb:songIdMD5];
-		
-		[databaseControls addSongToPlaylistQueue:aSong];
+		if ([result stringForColumnIndex:0] != nil)
+		{
+			NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
+			Song *aSong = [databaseControls songFromGenreDb:songIdMD5];
+			
+			[databaseControls addSongToPlaylistQueue:aSong];
+		}
 		
 		[pool release];
 	}
@@ -258,10 +261,13 @@
 	{
 		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 		
-		NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
-		Song *aSong = [databaseControls songFromGenreDb:songIdMD5];
-		
-		[databaseControls addSongToPlaylistQueue:aSong];
+		if ([result stringForColumnIndex:0] != nil)
+		{
+			NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
+			Song *aSong = [databaseControls songFromGenreDb:songIdMD5];
+			
+			[databaseControls addSongToPlaylistQueue:aSong];
+		}		
 		
 		[pool release];
 	}

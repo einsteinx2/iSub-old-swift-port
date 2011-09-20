@@ -37,13 +37,6 @@
 #	define IS_LITE() (false) // DISABLE Lite version
 #endif
 
-// Full version build switch
-#ifdef FULL
-#	define IS_FULL() (true)
-#else
-#	define IS_FULL() (false)
-#endif
-
 // Beta version build switch
 #ifdef BETA
 #	define IS_BETA() (true)
@@ -56,6 +49,20 @@
 #	define IS_DEBUG() (true)
 #else
 #	define IS_DEBUG() (false)
+#endif
+
+// Adhoc version build switch (activated only on adhoc)
+#ifdef ADHOC
+#	define IS_ADHOC() (true)
+#else
+#	define IS_ADHOC() (false)
+#endif
+
+// Release version build switch
+#ifdef RELEASE
+#	define IS_RELEASE() (true)
+#else
+#	define IS_RELEASE() (false)
 #endif
 
 // Screen scale detection

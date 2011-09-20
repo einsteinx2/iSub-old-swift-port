@@ -8,14 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@class iSubAppDelegate, MusicSingleton, DatabaseSingleton, ViewObjectsSingleton;
+@class MusicSingleton, CacheSingleton, SavedSettings;
 
 @interface DebugViewController : UIViewController 
 {
-	iSubAppDelegate *appDelegate;
 	MusicSingleton *musicControls;
-	DatabaseSingleton *databaseControls;
-	ViewObjectsSingleton *viewObjects;
+	CacheSingleton *cacheControls;
+	SavedSettings *settings;
 	
 	IBOutlet UIProgressView *currentSongProgressView;
 	IBOutlet UILabel *nextSongLabel;
@@ -30,13 +29,9 @@
 	IBOutlet UIButton *songInfoToggleButton;
 	
 	NSTimer *updateTimer;
-	NSTimer *updateTimer2;
 }
 
 - (IBAction)songInfoToggle;
-
 - (void) updateStats;
-- (void) updateStats2;
-
 
 @end

@@ -55,10 +55,7 @@
 	//	numberOfPages -= 1;
 	//}
 	isCurrentSong = YES;
-	
-	//Start the view with 0 alpha so it can be faded into view
-	//self.view.alpha = 0.0;
-	
+
 	// view controllers are created lazily
     // in the meantime, load the array with placeholders which will be replaced on demand
     NSMutableArray *controllers = [[NSMutableArray alloc] init];
@@ -69,7 +66,6 @@
     [controllers release];
 	
 	// a page is the width of the scroll view
-	//DLog(@"scrollview.frame: %@  scrollview.bounds: %@  view.frame: %@   view.bounds: %@", NSStringFromCGRect(scrollView.frame), NSStringFromCGRect(scrollView.bounds), NSStringFromCGRect(self.view.frame), NSStringFromCGRect(self.view.bounds));
     scrollView.pagingEnabled = YES;
 	CGSize contentSize;
 	if (IS_IPAD())
@@ -77,7 +73,6 @@
 	else
 		contentSize = CGSizeMake(scrollView.bounds.size.width * numberOfPages, scrollView.bounds.size.height - 20);
     scrollView.contentSize = contentSize;
-	//DLog(@"scrollView.contentSize: %@", NSStringFromCGSize(scrollView.contentSize));
     scrollView.showsHorizontalScrollIndicator = NO;
     scrollView.showsVerticalScrollIndicator = NO;
     scrollView.scrollsToTop = NO;
@@ -87,19 +82,16 @@
     pageControl.currentPage = 0;
 	
 	// Load all the pages for better performance
-	for (int i = 0; i < numberOfPages; i++)
+	/*for (int i = 0; i < numberOfPages; i++)
 	{
 		[self loadScrollViewWithPage:i];
-	}
+	}*/
 	
 	// pages are created on demand
     // load the visible page
     // load the page on either side to avoid flashes when the user starts scrolling
-	// NOTE: LOADING ALL PAGES AT ONCE TO PREVENT SLOWDOWN BUG WHEN SLIDING TO SECOND SCREEN. KEEPING REST OF THE CODE AS IS FOR REFERENCE FOR FUTURE PROJECTS.
-	//[self loadScrollViewWithPage:0];
-    //[self loadScrollViewWithPage:1];
-	//[self loadScrollViewWithPage:2]; // THIS IS THE EXTRA LOADED PAGE, USUALLY ONLY FIRST 2 SHOULD BE PRE-LOADED
-	//[self loadScrollViewWithPage:3]; // THIS IS THE EXTRA LOADED PAGE, USUALLY ONLY FIRST 2 SHOULD BE PRE-LOADED
+	[self loadScrollViewWithPage:0];
+    [self loadScrollViewWithPage:1];
 }
 
 /*- (void)viewWillAppear:(BOOL)animated 
@@ -111,6 +103,7 @@
 
 - (void)resetScrollView
 {
+	DLog(@"PageControlViewController resetScrollView called");
 	[scrollView setContentOffset:CGPointZero animated:YES];
 }
 
@@ -165,7 +158,7 @@
     }
 	else
 	{
-		DLog(@"Not loading view, already loaded");
+		//DLog(@"Not loading view, already loaded");
 	}
 	
     // add the controller's view to the scroll view
@@ -206,9 +199,9 @@
     pageControl.currentPage = page;
 	
     // load the visible page and the page on either side of it (to avoid flashes when the user starts scrolling)
-    //[self loadScrollViewWithPage:page - 1];
-    //[self loadScrollViewWithPage:page];
-    //[self loadScrollViewWithPage:page + 1];
+    [self loadScrollViewWithPage:page - 1];
+    [self loadScrollViewWithPage:page];
+	[self loadScrollViewWithPage:page + 1];
 	
 	// Send a notification so the playlist view hides the edit controls
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"hideEditControls" object:nil];
@@ -254,8 +247,6 @@
 	[UIView setAnimationDuration:.20];
 	
 	self.view.alpha = 1.0;
-	
-	//[UIView commitAnimations];
 }
  
  
@@ -267,22 +258,12 @@
 	self.view.alpha = 0.0;
 	
 	[UIView commitAnimations];
-	
-	[self resetScrollView];
-	
-	//[self viewDidUnload];
 }
  
  
 - (void) hideSongInfoFast
-{
-	//self.view.alpha = 0.0;
-	
+{	
 	[self.view removeFromSuperview];
-	
-	[self resetScrollView];
-	
-	//[self viewDidUnload];
 }
 
 
@@ -300,19 +281,16 @@
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfoFast" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfo" object:nil];
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
-	//self.scrollView = nil;
-	//self.pageControl = nil;
 	
 	for (UIViewController *subView in viewControllers)
 	{
-		[subView.view removeFromSuperview];
-		[subView viewDidDisappear:NO];
+		if ((NSNull*)subView != [NSNull null])
+		{
+			[subView.view removeFromSuperview];
+			[subView viewDidDisappear:NO];
+		}
 	}
 	
-	[scrollView release]; scrollView = nil;
-	[pageControl release]; pageControl = nil;
 	[viewControllers release]; viewControllers = nil;
 }
 

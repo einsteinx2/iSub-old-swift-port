@@ -463,7 +463,7 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) 
 	{
 		// Alert user to select new default server if they deleting the default
-		if ([settings.urlString isEqualToString:[[settings.serverList objectAtIndex:indexPath.row] url]])
+		if ([settings.urlString isEqualToString:[(Server *)[settings.serverList objectAtIndex:indexPath.row] url]])
 		{
 			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Make sure to select a new server" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 			alert.tag = 4;

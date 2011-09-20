@@ -7,46 +7,33 @@
 //
 
 #import "DebugViewController.h"
-#import "iSubAppDelegate.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
-#import "ViewObjectsSingleton.h"
-#import "FMDatabase.h"
-#import "FMDatabaseAdditions.h"
-#import "NSString-md5.h"
-#import "Song.h"
 #import "SavedSettings.h"
 #import "CacheSingleton.h"
+#import "Song.h"
 
 @implementation DebugViewController
 
-//@synthesize currentSongProgressView, nextSongProgressView;
-//@synthesize songsCachedLabel, cacheSizeLabel, freeSpaceLabel;
-//@synthesize songInfoToggleButton;
-
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
 	
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	musicControls = [MusicSingleton sharedInstance];
-	databaseControls = [DatabaseSingleton sharedInstance];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	
-	// Set the fields
-	[self updateStats];
-	[self updateStats2];
-	
-	// Setup the update timer
-	updateTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateStats) userInfo:nil repeats:YES];
-	updateTimer2 = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(updateStats2) userInfo:nil repeats:YES];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidUnload) name:@"hideSongInfoFast" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidUnload) name:@"hideSongInfo" object:nil];
-	
-	if ([SavedSettings sharedInstance].isCacheUnlocked == NO)
+	cacheControls = [CacheSingleton sharedInstance];
+	settings = [SavedSettings sharedInstance];
+		
+	if (settings.isCacheUnlocked)
 	{
+		// Set the fields
+		[self updateStats];
+		
+		// Setup the update timer
+		updateTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateStats) userInfo:nil repeats:YES];
+	}
+	else
+	{
+		// Display the unlock cache feature screen
+		
 		UIImageView *noCacheScreen = [[UIImageView alloc] init];
 		noCacheScreen.frame = CGRectMake(40, 80, 240, 180);
 		noCacheScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
@@ -78,11 +65,10 @@
 		[noCacheScreen release];
 	}
 }
-				   
 
 - (void) updateStats
 {
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settings.isJukeboxEnabled)
 	{
 		currentSongProgressView.progress = 0.0;
 		currentSongProgressView.alpha = 0.2;
@@ -121,71 +107,35 @@
 	}
 	
 	// Set the number of songs cached label
-	NSInteger cachedSongs = [databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES'"];
+	NSUInteger cachedSongs = cacheControls.numberOfCachedSongs;
 	if (cachedSongs == 1)
 		songsCachedLabel.text = @"1 song";
 	else
 		songsCachedLabel.text = [NSString stringWithFormat:@"%i songs", cachedSongs];
 	
 	// Set the cache setting labels
-	//if ([[appDelegate.settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 0)
-	if ([SavedSettings sharedInstance].cachingType == 0)
+	if (settings.cachingType == 0)
 	{
 		cacheSettingLabel.text = @"Min Free Space:";
-		//cacheSettingSizeLabel.text = [appDelegate formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
-		cacheSettingSizeLabel.text = [appDelegate formatFileSize:[SavedSettings sharedInstance].minFreeSpace];
+		cacheSettingSizeLabel.text = [settings formatFileSize:settings.minFreeSpace];
 	}
 	else
 	{
 		cacheSettingLabel.text = @"Max Cache Size:";
-		//cacheSettingSizeLabel.text = [appDelegate formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue]];
-		cacheSettingSizeLabel.text = [appDelegate formatFileSize:[SavedSettings sharedInstance].maxCacheSize];
+		cacheSettingSizeLabel.text = [settings formatFileSize:settings.maxCacheSize];
 	}
 	
 	// Set the free space label
-	freeSpaceLabel.text = [appDelegate formatFileSize:[CacheSingleton sharedInstance].freeSpace];
-}
-
-- (void) updateStats2
-{
-	[self performSelectorInBackground:@selector(updateCacheSizeLabel) withObject:nil];
-}
-
-- (void) updateCacheSizeLabel
-{
-	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
+	freeSpaceLabel.text = [settings formatFileSize:cacheControls.freeSpace];
 	
-	NSString *size = [appDelegate formatFileSize:[CacheSingleton sharedInstance].cacheSize];
-	[self performSelectorOnMainThread:@selector(updateCacheSizeLabel2:) withObject:size waitUntilDone:NO];
-	
-	[autoreleasePool release];
+	// Set the cache size label
+	cacheSizeLabel.text = [settings formatFileSize:cacheControls.cacheSize];
 }
-
-- (void) updateCacheSizeLabel2:(NSString *)size
-{
-	cacheSizeLabel.text = size;
-}
-
-
-/*- (void)viewWillAppear:(BOOL)animated
-{
-	[super viewWillAppear:animated];
-}
-
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-	[super viewWillDisappear:animated];
-}*/
-
 
 - (IBAction) songInfoToggle
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"hideSongInfo" object:nil];
 }
-
-
 
 - (void)didReceiveMemoryWarning 
 {
@@ -193,24 +143,11 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void)viewDidUnload 
-{
-    [super viewDidUnload];
-	
-	//[[NSNotificationCenter defaultCenter] removeObserver:self name:@"queuedBuffers" object:nil];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
 - (void)viewDidDisappear:(BOOL)animated
 {
 	NSLog(@"DebugViewController viewDidDisappear called");
 	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfoFast" object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfo" object:nil];
-	
 	[updateTimer invalidate]; updateTimer = nil;
-	[updateTimer2 invalidate]; updateTimer2 = nil;
 	
 	[currentSongProgressView release]; currentSongProgressView = nil;
 	[nextSongLabel release]; nextSongLabel = nil;
@@ -223,11 +160,11 @@
 	[freeSpaceLabel release]; freeSpaceLabel = nil;
 	
 	[songInfoToggleButton release]; songInfoToggleButton = nil;
-
 }
 
 
-- (void)dealloc {
+- (void)dealloc
+{
 	
 	[super dealloc];
 }

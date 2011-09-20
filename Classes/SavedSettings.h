@@ -88,11 +88,7 @@
 @property (readonly) NSString *cachePath;
 @property (readonly) NSString *tempCachePath;
 
-/*@property NSInteger cacheType;
-@property unsigned long long minFreeSpace;
-@property unsigned long long maxCacheSize;
-@property BOOL enableCache;
-@property BOOL autoDeleteCache;*/
+- (NSString *) formatFileSize:(unsigned long long int)size;
 
 - (void)setupSaveState;
 - (void)loadState;

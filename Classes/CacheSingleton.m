@@ -43,6 +43,12 @@ static CacheSingleton *sharedInstance = nil;
 	cacheCheckTimer = nil;
 }
 
+- (NSUInteger)numberOfCachedSongs
+{
+	DatabaseSingleton *databaseControls = [DatabaseSingleton sharedInstance];
+	return [databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES'"];
+}
+
 //
 // If the available space has dropped below the max cache size since last app load, adjust it.
 //
@@ -129,6 +135,8 @@ static CacheSingleton *sharedInstance = nil;
 
 - (void)findCacheSize
 {
+	NSDate *startTime = [NSDate date];
+	
 	SavedSettings *settings = [SavedSettings sharedInstance];
 	
 	unsigned long long size = 0;
@@ -138,6 +146,9 @@ static CacheSingleton *sharedInstance = nil;
 	}
 	
 	cacheSize = size;
+	
+	DLog(@"cache size: %ul", cacheSize);
+	DLog(@"findCacheSize took %ul", [[NSDate date] timeIntervalSinceDate:startTime]); 
 }
 
 - (void) checkCache
@@ -212,6 +223,7 @@ static CacheSingleton *sharedInstance = nil;
 	
 	[self adjustCacheSize];
 	
+	[self checkCache];
 	[self startCacheCheckTimer];
 }
 

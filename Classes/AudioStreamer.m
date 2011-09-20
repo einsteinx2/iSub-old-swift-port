@@ -1024,6 +1024,8 @@ cleanup:
 //
 - (void)start
 {
+	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
+	
 	DLog(@"------ audiostreamer start called");
 	@synchronized (self)
 	{
@@ -1033,15 +1035,13 @@ cleanup:
 		}
 		else if (state == AS_INITIALIZED)
 		{
-			NSAssert([[NSThread currentThread] isEqual:[NSThread mainThread]],
-				@"Playback can only be started from the main thread.");
-			notificationCenter =
-				[[NSNotificationCenter defaultCenter] retain];
-			self.state = AS_STARTING_FILE_THREAD;
-			[NSThread
-				detachNewThreadSelector:@selector(startInternal)
-				toTarget:self
-				withObject:nil];
+			//if (musicControls.isPlaying)
+			{
+				NSAssert([[NSThread currentThread] isEqual:[NSThread mainThread]], @"Playback can only be started from the main thread.");
+				notificationCenter = [[NSNotificationCenter defaultCenter] retain];
+				self.state = AS_STARTING_FILE_THREAD;
+				[NSThread detachNewThreadSelector:@selector(startInternal) toTarget:self withObject:nil];
+			}
 		}
 	}
 	
@@ -1051,7 +1051,6 @@ cleanup:
 	
 	// Scrobbling timer
 	SavedSettings *settings = [SavedSettings sharedInstance];
-	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 	shouldInvalidateScrobbleTimer = YES;
 	NSTimeInterval scrobbleInterval = 30.0;
 	if (musicControls.currentSongObject.duration != nil)
@@ -1068,7 +1067,6 @@ cleanup:
 	//if ([[appDelegate.settingsDictionary objectForKey:@"enableScrobblingSetting"] isEqualToString:@"YES"])
 	if (settings.isScrobbleEnabled)
 	{
-		MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 		[musicControls scrobbleSong:musicControls.currentSongObject.songId isSubmission:NO];
 	}
 }
@@ -1278,7 +1276,30 @@ cleanup:
 {
 	@synchronized(self)
 	{
-		if (state == AS_PLAYING)
+		if (state == AS_PAUSED)
+		{
+			err = AudioQueueStart(audioQueue, NULL);
+			if (err)
+			{
+				[self failWithErrorCode:AS_AUDIO_QUEUE_START_FAILED];
+				return;
+			}
+			self.state = AS_PLAYING;
+		}
+		else
+		{
+			// Either the song is AS_PLAYING and the user wants to pause
+			// Or the song is buffering and the user wants to pause
+			err = AudioQueuePause(audioQueue);
+			if (err)
+			{
+				[self failWithErrorCode:AS_AUDIO_QUEUE_PAUSE_FAILED];
+				return;
+			}
+			self.state = AS_PAUSED;
+		}
+		
+		/*if (state == AS_PLAYING)
 		{
 			err = AudioQueuePause(audioQueue);
 			if (err)
@@ -1297,7 +1318,7 @@ cleanup:
 				return;
 			}
 			self.state = AS_PLAYING;
-		}
+		}*/
 	}
 }
 

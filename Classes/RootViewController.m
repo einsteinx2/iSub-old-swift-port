@@ -62,7 +62,6 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	//if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] && inOrientation != UIInterfaceOrientationPortrait)
 	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
@@ -121,11 +120,6 @@
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fadeBottom;
 	
-	/*NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [settings.urlString md5]];
-	NSData *archivedData = [appDelegate.settingsDictionary objectForKey:key];
-	NSDictionary *folderNames = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];*/
-		
-	//if (folderNames == nil || [folderNames count] == 2)
 	if (dropdown.folders == nil || [dropdown.folders count] == 2)
 		[self.tableView setContentOffset:CGPointMake(0, 86) animated:NO];
 	else
@@ -153,15 +147,11 @@
 	
 	[self.tableView reloadData];
 	[self updateCount];
-	
-	//[dropdown updateFolders];
 }
 
 
 -(void)addCount
-{
-	//float parentWidth = self.view.bounds.size.width;
-	
+{	
 	isCountShowing = YES;
 	
 	headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 126)] autorelease];
@@ -219,7 +209,7 @@
 {
 	viewObjects.isArtistsLoading = YES;
 	
-	allArtistsLoadingScreen = [[LoadingScreen alloc] initOnView:self.view.superview withMessage:[NSArray arrayWithObjects:@"Processing Folders", @"", @"", @"", nil] blockInput:YES mainWindow:NO];
+	allArtistsLoadingScreen = [[LoadingScreen alloc] initOnView:self.view.superview withMessage:[NSArray arrayWithObjects:@"Processing Folders", @"", @"", @"", nil]  blockInput:YES mainWindow:NO];
 	
 	dataModel.selectedFolderId = folderId;
 	[dataModel startLoad];
@@ -279,12 +269,6 @@
 			[self loadData:[[SavedSettings sharedInstance] rootFoldersSelectedFolderId]];
 		}
 	}
-	
-	/*if (!viewObjects.isArtistsLoading)
-	{
-		if (!isCountShowing)
-			[self addCount];
-	}*/
 }
 
 
@@ -519,26 +503,29 @@
 {
 	static NSString *CellIdentifier = @"Cell";
 	ArtistUITableViewCell *cell = [[[ArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-	
-	Artist *anArtist = nil;
-	if(isSearching)
-	{
-		//anArtist = [[foldersSearch objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-		//anArtist = [foldersSearch objectAtIndex:indexPath.row];
-		//anArtist = nil;
-		anArtist = [dataModel artistForPositionInSearch:(indexPath.row + 1)];
+
+	@try 
+	{				
+		Artist *anArtist = nil;
+		if(isSearching)
+		{
+			anArtist = [dataModel artistForPositionInSearch:(indexPath.row + 1)];
+		}
+		else
+		{
+			NSUInteger sectionStartIndex = [[[dataModel indexPositions] objectAtIndex:indexPath.section] intValue];
+			anArtist = [dataModel artistForPosition:(sectionStartIndex + indexPath.row)];
+		}
+		cell.myArtist = anArtist;
+		
+		[cell.artistNameLabel setText:anArtist.name];
+		cell.backgroundView = [viewObjects createCellBackground:indexPath.row];
 	}
-	else
+	@catch (NSException *exception) 
 	{
-		//anArtist = [[folders objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-		NSUInteger sectionStartIndex = [[[dataModel indexPositions] objectAtIndex:indexPath.section] intValue];
-		anArtist = [dataModel artistForPosition:(sectionStartIndex + indexPath.row)];
+		DLog("exception name: %@  reason: %@", [exception name], [exception reason]);
 	}
-	cell.myArtist = anArtist;
-	
-	[cell.artistNameLabel setText:anArtist.name];
-	cell.backgroundView = [viewObjects createCellBackground:indexPath.row];
-	
+		
 	return cell;
 }
 
@@ -559,11 +546,6 @@
 		return nil;
 	else
 	{
-		/*NSMutableArray *searchIndexes = [[[NSMutableArray alloc] init] autorelease];
-		[searchIndexes addObject:@"{search}"];
-		[searchIndexes addObjectsFromArray:indexes];
-		
-		return searchIndexes;*/
 		NSMutableArray *titles = [NSMutableArray arrayWithCapacity:0];
 		[titles addObject:@"{search}"];
 		[titles addObjectsFromArray:[dataModel indexNames]];
@@ -579,24 +561,9 @@
 	
 	if (index == 0) 
 	{
-		//[tableView scrollRectToVisible:CGRectMake(0, 50, 320, searchY) animated:NO];
-		
-		/*NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [settings.urlString md5]];
-		NSData *archivedData = [appDelegate.settingsDictionary objectForKey:key];
-		NSDictionary *folderNames = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
-			
-		if (folderNames == nil || [folderNames count] == 2)
-			//[tableView scrollRectToVisible:CGRectMake(0, 87, 320, searchY) animated:NO];
-			[self.tableView setContentOffset:CGPointMake(0, 86) animated:NO];
-		else
-			//[tableView scrollRectToVisible:CGRectMake(0, 50, 320, searchY) animated:NO];
-			[self.tableView setContentOffset:CGPointMake(0, 50) animated:NO];*/
-		
 		if (dropdown.folders == nil || [dropdown.folders count] == 2)
-			//[tableView scrollRectToVisible:CGRectMake(0, 87, 320, searchY) animated:NO];
 			[self.tableView setContentOffset:CGPointMake(0, 86) animated:NO];
 		else
-			//[tableView scrollRectToVisible:CGRectMake(0, 50, 320, searchY) animated:NO];
 			[self.tableView setContentOffset:CGPointMake(0, 50) animated:NO];
 		
 		return -1;
@@ -663,7 +630,6 @@
 	if (scrollView.contentOffset.y <= - 65.0f && !_reloading) 
 	{
 		_reloading = YES;
-		//[self reloadAction:nil];
 		[self loadData:[[SavedSettings sharedInstance] rootFoldersSelectedFolderId]];
 		[refreshHeaderView setState:EGOOPullRefreshLoading];
 		[UIView beginAnimations:nil context:NULL];

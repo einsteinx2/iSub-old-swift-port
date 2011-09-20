@@ -164,8 +164,8 @@
 		
 	totalSpace = [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:musicControls.audioFolderPath error:NULL] objectForKey:NSFileSystemSize] unsignedLongLongValue];
 	freeSpace = [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:musicControls.audioFolderPath error:NULL] objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
-	freeSpaceLabel.text = [NSString stringWithFormat:@"Free space: %@", [appDelegate formatFileSize:freeSpace]];
-	totalSpaceLabel.text = [NSString stringWithFormat:@"Total space: %@", [appDelegate formatFileSize:totalSpace]];
+	freeSpaceLabel.text = [NSString stringWithFormat:@"Free space: %@", [settings formatFileSize:freeSpace]];
+	totalSpaceLabel.text = [NSString stringWithFormat:@"Total space: %@", [settings formatFileSize:totalSpace]];
 	float percentFree = (float) freeSpace / (float) totalSpace;
 	CGRect frame = freeSpaceBackground.frame;
 	frame.size.width = frame.size.width * percentFree;
@@ -277,16 +277,16 @@
 	if (cachingTypeSegmentedControl.selectedSegmentIndex == 0)
 	{
 		cacheSpaceLabel1.text = @"Minimum free space:";
-		//cacheSpaceLabel2.text = [appDelegate formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
-		cacheSpaceLabel2.text = [appDelegate formatFileSize:settings.minFreeSpace];
+		//cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
+		cacheSpaceLabel2.text = [settings formatFileSize:settings.minFreeSpace];
 		//cacheSpaceSlider.value = [[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] floatValue] / totalSpace;
 		cacheSpaceSlider.value = (float)settings.minFreeSpace / totalSpace;
 	}
 	else if (cachingTypeSegmentedControl.selectedSegmentIndex == 1)
 	{
 		cacheSpaceLabel1.text = @"Maximum cache size:";
-		//cacheSpaceLabel2.text = [appDelegate formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue]];
-		cacheSpaceLabel2.text = [appDelegate formatFileSize:settings.maxCacheSize];
+		//cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue]];
+		cacheSpaceLabel2.text = [settings formatFileSize:settings.maxCacheSize];
 		//cacheSpaceSlider.value = [[appDelegate.settingsDictionary objectForKey:@"maxCacheSize"] floatValue] / totalSpace;
 		cacheSpaceSlider.value = (float)settings.maxCacheSize / totalSpace;
 	}
@@ -557,7 +557,7 @@
 - (IBAction) updateMinFreeSpaceLabel
 {
 	//DLog(@"cacheSpaceSlider.value: %f", cacheSpaceSlider.value);
-	cacheSpaceLabel2.text = [appDelegate formatFileSize:(unsigned long long int) (cacheSpaceSlider.value * totalSpace)];
+	cacheSpaceLabel2.text = [settings formatFileSize:(unsigned long long int) (cacheSpaceSlider.value * totalSpace)];
 }
 
 - (IBAction) updateMinFreeSpaceSetting
@@ -570,16 +570,16 @@
 		{
 			//[appDelegate.settingsDictionary setObject:[NSNumber numberWithLongLong:freeSpace] forKey:@"minFreeSpace"];
 			settings.minFreeSpace = freeSpace;
-			//cacheSpaceLabel2.text = [appDelegate formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
-			cacheSpaceLabel2.text = [appDelegate formatFileSize:settings.minFreeSpace];
+			//cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
+			cacheSpaceLabel2.text = [settings formatFileSize:settings.minFreeSpace];
 			cacheSpaceSlider.value = ( (float)freeSpace / (float)totalSpace ) - 52428800.0; // Leave 50MB space
 		}
 		else 
 		{
 			//[appDelegate.settingsDictionary setObject:[NSNumber numberWithLongLong:(unsigned long long int) (cacheSpaceSlider.value * totalSpace)] forKey:@"minFreeSpace"];
 			settings.minFreeSpace = (unsigned long long int) (cacheSpaceSlider.value * totalSpace);
-			//cacheSpaceLabel2.text = [appDelegate formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
-			cacheSpaceLabel2.text = [appDelegate formatFileSize:settings.minFreeSpace];
+			//cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
+			cacheSpaceLabel2.text = [settings formatFileSize:settings.minFreeSpace];
 		}
 	}
 	else if (cachingTypeSegmentedControl.selectedSegmentIndex == 1)
@@ -590,16 +590,16 @@
 		{
 			//[appDelegate.settingsDictionary setObject:[NSNumber numberWithLongLong:(freeSpace - 52428800)] forKey:@"minFreeSpace"];
 			settings.maxCacheSize = (freeSpace - 52428800);
-			//cacheSpaceLabel2.text = [appDelegate formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
-			cacheSpaceLabel2.text = [appDelegate formatFileSize:settings.maxCacheSize];
+			//cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
+			cacheSpaceLabel2.text = [settings formatFileSize:settings.maxCacheSize];
 			cacheSpaceSlider.value = ( (float)freeSpace / (float)totalSpace ) - 52428800.0; // Leave 50MB space
 		}
 		else
 		{
 			//[appDelegate.settingsDictionary setObject:[NSNumber numberWithLongLong:(unsigned long long int) (cacheSpaceSlider.value * totalSpace)] forKey:@"maxCacheSize"];
 			settings.maxCacheSize = (unsigned long long int) (cacheSpaceSlider.value * totalSpace);
-			//cacheSpaceLabel2.text = [appDelegate formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue]];
-			cacheSpaceLabel2.text = [appDelegate formatFileSize:settings.maxCacheSize];
+			//cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue]];
+			cacheSpaceLabel2.text = [settings formatFileSize:settings.maxCacheSize];
 		}
 	}
 	
@@ -610,8 +610,8 @@
 - (IBAction) revertMinFreeSpaceSlider
 {
 	//DLog(@"revertMinFreeSpaceSlider");
-	//cacheSpaceLabel2.text = [appDelegate formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
-	cacheSpaceLabel2.text = [appDelegate formatFileSize:settings.minFreeSpace];
+	//cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
+	cacheSpaceLabel2.text = [settings formatFileSize:settings.minFreeSpace];
 	//cacheSpaceSlider.value = [[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] floatValue] / totalSpace;
 	cacheSpaceSlider.value = (float)settings.minFreeSpace / totalSpace;
 }

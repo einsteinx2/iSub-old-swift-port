@@ -78,7 +78,8 @@
 	
 	while ([result next])
 	{
-		[databaseControls removeSongFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]];
+		if ([result stringForColumnIndex:0] != nil)
+			[databaseControls removeSongFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]];
 	}
 	
 	// Reload the cached songs table
@@ -150,7 +151,8 @@
 	
 	while ([result next])
 	{
-		[databaseControls addSongToPlaylistQueue:[databaseControls songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]]];
+		if ([result stringForColumnIndex:0] != nil)
+			[databaseControls addSongToPlaylistQueue:[databaseControls songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]]];
 	}
 	
 	[result close];

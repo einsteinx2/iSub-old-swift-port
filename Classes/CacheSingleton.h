@@ -19,6 +19,7 @@
 @property NSTimeInterval cacheCheckInterval;
 @property (readonly) unsigned long long cacheSize;
 @property (readonly) unsigned long long freeSpace;
+@property (readonly) NSUInteger numberOfCachedSongs;
 
 + (CacheSingleton *)sharedInstance;
 

@@ -873,9 +873,15 @@ static DatabaseSingleton *sharedInstance = nil;
 	// Get the song info
 	FMResultSet *result = [songCacheDb executeQuery:@"SELECT genre, transcodedSuffix, suffix FROM cachedSongs WHERE md5 = ?", md5];
 	[result next];
-	NSString *genre = [NSString stringWithString:[result stringForColumnIndex:0]];
-	NSString *transcodedSuffix = [NSString stringWithString:[result stringForColumnIndex:1]];
-	NSString *suffix = [NSString stringWithString:[result stringForColumnIndex:2]];
+	NSString *genre = nil;
+	NSString *transcodedSuffix = nil;
+	NSString *suffix = nil;
+	if ([result stringForColumnIndex:0] != nil)
+		genre = [NSString stringWithString:[result stringForColumnIndex:0]];
+	if ([result stringForColumnIndex:1] != nil)
+		transcodedSuffix = [NSString stringWithString:[result stringForColumnIndex:1]];
+	if ([result stringForColumnIndex:2] != nil)
+		suffix = [NSString stringWithString:[result stringForColumnIndex:2]];
 	[result close];
 	if ([songCacheDb hadError])
 		hadError = YES;

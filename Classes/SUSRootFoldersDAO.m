@@ -334,10 +334,6 @@
 	// Clear the database
 	[self resetRootFolderCache];
 	
-	//NSMutableArray *indexes = [NSMutableArray arrayWithCapacity:0];
-	//NSMutableArray *shortcuts = [NSMutableArray arrayWithCapacity:0];
-	//NSMutableArray *folders = [NSMutableArray arrayWithCapacity:0];
-	
 	TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
 	if (tbxml.rootXMLElement)
 	{
@@ -366,13 +362,7 @@
 				rowIndex = 1;
 				rowCount++;
 				sectionCount++;
-				
-				// Create the shortcut object (actually an artist object)
-				// and add it to the shortcuts array
-				//Artist *anArtist = [[Artist alloc] initWithTBXMLElement:shortcutElement];
-				//[shortcuts addObject:anArtist];
-				//[anArtist release];
-				
+
 				// Parse the shortcut
 				NSString *folderId = [TBXML valueOfAttributeNamed:@"id" forElement:shortcutElement];
 				NSString *name = [TBXML valueOfAttributeNamed:@"name" forElement:shortcutElement];
@@ -390,20 +380,11 @@
 				[pool release];
 			}
 			
-			// If there are shortcuts, add the shortcut index
-			//if ([shortcuts count] == 0)
-			//	[indexes addObject:@"★"];
 			if (rowIndex > 0)
 			{
 				[self addRootFolderIndexToCache:rowIndex count:sectionCount name:@"★"];
 				DLog(@"Adding shortcut to index table, count %i", sectionCount);
 			}
-			
-			// Add the shortcuts array to artists
-			//if ([shortcuts count] > 0)
-			//{
-			//	[folders addObject:shortcuts];
-			//}
 			
 			// Parse the letter indexes
 			TBXMLElement *indexElement = [TBXML childElementNamed:@"index" parentElement:indexesElement];
@@ -413,9 +394,6 @@
 				
 				sectionCount = 0;
 				rowIndex = rowCount + 1;
-				
-				// Initialize the Artist array for this section
-				//NSMutableArray *artistsArray = [NSMutableArray arrayWithCapacity:0];
 				
 				// Loop through the artist elements
 				TBXMLElement *artistElement = [TBXML childElementNamed:@"artist" parentElement:indexElement];
@@ -430,10 +408,6 @@
 					// array for this section if not named .AppleDouble
 					if (![[TBXML valueOfAttributeNamed:@"name" forElement:artistElement] isEqualToString:@".AppleDouble"])
 					{
-						//Artist *anArtist = [[Artist alloc] initWithTBXMLElement:artistElement];
-						//[artistsArray addObject:anArtist];
-						//[anArtist release];
-						
 						// Parse the top level folder
 						NSString *folderId = [TBXML valueOfAttributeNamed:@"id" forElement:artistElement];
 						NSString *name = [TBXML valueOfAttributeNamed:@"name" forElement:artistElement];
@@ -455,11 +429,7 @@
 				NSString *indexName = [TBXML valueOfAttributeNamed:@"name" forElement:indexElement];
 				BOOL success = [self addRootFolderIndexToCache:rowIndex count:sectionCount name:indexName];
 				DLog(@"Adding index %@  count: %i  success: %i", indexName, sectionCount, success);
-				
-				// Add the index and artists to the arrays
-				//[indexes addObject:[TBXML valueOfAttributeNamed:@"name" forElement:indexElement]];
-				//[folders addObject:artistsArray];
-				
+
 				// Get the next index
 				indexElement = [TBXML nextSiblingNamed:@"index" searchFromElement:indexElement];
 				
@@ -467,12 +437,6 @@
 			}
 		}
 	}
-	
-	// Save the results dictionary
-	//results = [[NSDictionary alloc] initWithObjectsAndKeys:indexes, @"indexes", folders, @"folders", nil];
-	
-	// Save the defaults
-	//[[SavedSettings sharedInstance] saveTopLevelIndexes:indexes folders:folders];
 	
 	// Release the XML parser
 	[tbxml release];

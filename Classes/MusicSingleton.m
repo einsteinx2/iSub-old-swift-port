@@ -874,7 +874,6 @@ static MusicSingleton *sharedInstance = nil;
 
 - (void)playPauseSong
 {
-	
 	if ([streamer isPaused])
 	{
 		isPlaying = YES;
@@ -889,26 +888,35 @@ static MusicSingleton *sharedInstance = nil;
 	}
 	else 
 	{
-		// If the player is playing from downloadB and it's still downloading, stop it.
-		if (reportDownloadedLengthB)
-			[self stopDownloadB];
-		
-		isPlaying = YES;
-		//seekTime = 0.0;
-		
-		if (seekTime > 0.0)
+		if (isPlaying)
 		{
-			// TODO: test this
-			[SavedSettings sharedInstance].isRecover = YES;
-			[self resumeSong];
+			isPlaying = NO;
+			[streamer pause];
+			[[NSNotificationCenter defaultCenter] postNotificationName:@"setPlayButtonImage" object:nil];
 		}
 		else
 		{
-			[self startDownloadA];
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"setPauseButtonImage" object:nil];
+			// If the player is playing from downloadB and it's still downloading, stop it.
+			if (reportDownloadedLengthB)
+				[self stopDownloadB];
+			
+			isPlaying = YES;
+			//seekTime = 0.0;
+			
+			if (seekTime > 0.0)
+			{
+				// TODO: test this
+				[SavedSettings sharedInstance].isRecover = YES;
+				[self resumeSong];
+			}
+			else
+			{
+				[self startDownloadA];
+				[[NSNotificationCenter defaultCenter] postNotificationName:@"setPauseButtonImage" object:nil];
+			}
+			
+			[self addAutoNextNotification];
 		}
-		
-		[self addAutoNextNotification];
 	}
 }
 
@@ -1068,9 +1076,7 @@ static MusicSingleton *sharedInstance = nil;
 - (void)resumeSong
 {	
 	SavedSettings *settings = [SavedSettings sharedInstance];
-	
-	[settings loadState];
-	
+		
 	if (settings.isRecover)
 	{
 		BOOL resume = NO;
@@ -1082,11 +1088,8 @@ static MusicSingleton *sharedInstance = nil;
 			if (settings.recoverSetting == 1)
 				self.isPlaying = NO;
 		}
-		else
-		{
-			// Always resume when isPlaying == NO just to resume the song state, song doesn't play
-			resume = YES;
-		}
+
+		DLog(@"isPlaying = %i", isPlaying);
 		
 		if (resume)
 		{
@@ -1887,7 +1890,8 @@ static MusicSingleton *sharedInstance = nil;
 	
 	while ([result next])
 	{
-		[songIds addObject:[NSString stringWithString:[result stringForColumnIndex:0]]];
+		if ([result stringForColumnIndex:0] != nil)
+			[songIds addObject:[NSString stringWithString:[result stringForColumnIndex:0]]];
 	}
 	[result close];
 	

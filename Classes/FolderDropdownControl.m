@@ -35,7 +35,6 @@
 		textColor   = [[UIColor colorWithRed:106.0/255.0 green:111.0/255.0 blue:118.0/255.0 alpha:1] retain];
 		lightColor  = [[UIColor colorWithRed:206.0/255.0 green:211.0/255.0 blue:218.0/255.0 alpha:1] retain];
 		darkColor   = [[UIColor colorWithRed:196.0/255.0 green:201.0/255.0 blue:208.0/255.0 alpha:1] retain];
-        //sizeIncrease = 80.0f;
 		
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		self.userInteractionEnabled = YES;
@@ -61,7 +60,6 @@
 		[self addSubview:arrowImageView];
 		
 		arrowImage = [[CALayer alloc] init];
-		//arrowImage.frame = CGRectMake(193, 7, 18, 18);
 		arrowImage.frame = CGRectMake(0, 0, 18, 18);
 		arrowImage.contentsGravity = kCAGravityResizeAspect;
 		arrowImage.contents = (id)[UIImage imageNamed:@"folder-dropdown-arrow.png"].CGImage;
@@ -173,25 +171,6 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 		[folderLabel addSubview:folderButton];
 		[folderButton release];
 	}
-	
-	/*if ([folders count] == 2)
-	{
-		self.hidden = YES;
-		[tableView.tableHeaderView addHeight:-40];
-		for (UIView *view in viewsToMove)
-		{
-			[view addHeight:-40];
-		}
-	}
-	else
-	{
-		self.hidden = NO;
-		[tableView.tableHeaderView addHeight:40];
-		for (UIView *view in viewsToMove)
-		{
-			[view addHeight:40];
-		}
-	}*/
 }
 
 - (void)toggleDropdown:(id)sender
@@ -273,12 +252,6 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 - (void)updateFolders
 {
 	iSubAppDelegate *appDelegate = [iSubAppDelegate sharedInstance];
-		
-	/*NSString *key = [NSString stringWithFormat:@"selectedMusicFolderId%@", [appDelegate.defaultUrl md5]];
-	self.selectedFolderId = [[appDelegate.settingsDictionary objectForKey:key] intValue];
-	
-	key = [NSString stringWithFormat:@"folderDropdownCache%@", [appDelegate.defaultUrl md5]];
-	self.folders = [appDelegate.settingsDictionary objectForKey:key];*/
 	
 	NSString *urlString = [appDelegate getBaseUrl:@"getMusicFolders.view"];
 		
@@ -389,15 +362,6 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 		
 		// Save the default
 		[SUSRootFoldersDAO setFolderDropdownFolders:self.folders];
-		
-		/*iSubAppDelegate *appDelegate = [iSubAppDelegate sharedInstance];
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		NSData *foldersData = [NSKeyedArchiver archivedDataWithRootObject:folders];
-		NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [appDelegate.defaultUrl md5]];
-		
-		[appDelegate.settingsDictionary setObject:foldersData forKey:key];
-		[defaults setObject:appDelegate.settingsDictionary forKey:@"settingsDictionary"];
-		[defaults synchronize];*/
 		
 		[updatedfolders release];
 	}

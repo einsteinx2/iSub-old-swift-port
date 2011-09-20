@@ -123,7 +123,6 @@
 - (NSString *)getIPAddressForHost:(NSString *)theHost;
 - (NSInteger)getHour;
 
-- (NSString *) formatFileSize:(unsigned long long int)size;
 - (NSString *) formatTime:(float)seconds;
 - (NSString *) relativeTime:(NSDate *)date;
 

@@ -170,10 +170,6 @@
 		//	[mainTabBarController presentModalViewController:controller animated:YES];
 	}
 	
-	// Recover current state if player was interrupted
-	[musicControls resumeSong];
-		
-	
 	// appinit 3
 	//
 	// Start the queued downloads if Wifi is available
@@ -186,6 +182,9 @@
 	
 	// Check the server status in the background
 	[self performSelectorInBackground:@selector(checkServer) withObject:nil];
+	
+	// Recover current state if player was interrupted
+	[musicControls resumeSong];
 }
 
 - (void)checkServer
@@ -340,28 +339,39 @@
 
 - (void)loadFlurryAnalytics
 {
-	if (IS_FULL())
+	if (IS_RELEASE())
 	{
-		[FlurryAnalytics startSession:@"3KK4KKD2PSEU5APF7PNX"];
+		if (IS_LITE())
+		{
+			[FlurryAnalytics startSession:@"MQV1D5WQYUTCDAD6PFLU"];
+		}
+		else
+		{
+			[FlurryAnalytics startSession:@"3KK4KKD2PSEU5APF7PNX"];
+		}
 	}
 }
 
 - (void)loadHockeyApp
 {
 	// HockyApp Kits
-#if defined (CONFIGURATION_AdHoc)
-    [[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
-	[[BWQuincyManager sharedQuincyManager] setShowAlwaysButton:YES];
-	[[BWHockeyManager sharedHockeyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
-	[[BWHockeyManager sharedHockeyManager] setAlwaysShowUpdateReminder:YES];
-#endif
-#if defined (CONFIGURATION_Release)
-	if (IS_LITE())
-		[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7"];
-	else
-		[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb"];
-	[[BWQuincyManager sharedQuincyManager] setShowAlwaysButton:YES];
-#endif
+	if (IS_ADHOC() && !IS_LITE())
+	{
+		[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
+		[[BWQuincyManager sharedQuincyManager] setShowAlwaysButton:YES];
+		
+		[[BWHockeyManager sharedHockeyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
+		[[BWHockeyManager sharedHockeyManager] setAlwaysShowUpdateReminder:YES];
+	}
+	else if (IS_RELEASE())
+	{
+		if (IS_LITE())
+			[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7"];
+		else
+			[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb"];
+		
+		[[BWQuincyManager sharedQuincyManager] setShowAlwaysButton:YES];
+	}
 }
 
 - (void)loadInAppPurchaseStore
@@ -643,28 +653,6 @@
 
 
 #pragma mark Formatting Methods
-
-- (NSString *) formatFileSize:(unsigned long long int)size
-{
-	if (size < 1024)
-	{
-		return [NSString stringWithFormat:@"%qu bytes", size];
-	}
-	else if (size >= 1024 && size < 1048576)
-	{
-		return [NSString stringWithFormat:@"%.02f KB", ((double)size / 1024)];
-	}
-	else if (size >= 1048576 && size < 1073741824)
-	{
-		return [NSString stringWithFormat:@"%.02f MB", ((double)size / 1024 / 1024)];
-	}
-	else if (size >= 1073741824)
-	{
-		return [NSString stringWithFormat:@"%.02f GB", ((double)size / 1024 / 1024 / 1024)];
-	}
-	
-	return @"";
-}
 
 - (NSString *) formatTime:(float)seconds
 {

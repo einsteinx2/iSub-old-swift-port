@@ -19,8 +19,35 @@
 
 @synthesize serverList, currentSongId, nextSongId;
 
+- (NSString *) formatFileSize:(unsigned long long int)size
+{
+	if (size < 1024)
+	{
+		return [NSString stringWithFormat:@"%qu bytes", size];
+	}
+	else if (size >= 1024 && size < 1048576)
+	{
+		return [NSString stringWithFormat:@"%.02f KB", ((double)size / 1024)];
+	}
+	else if (size >= 1048576 && size < 1073741824)
+	{
+		return [NSString stringWithFormat:@"%.02f MB", ((double)size / 1024 / 1024)];
+	}
+	else if (size >= 1073741824)
+	{
+		return [NSString stringWithFormat:@"%.02f GB", ((double)size / 1024 / 1024 / 1024)];
+	}
+	
+	return @"";
+}
+
 - (void)setupSaveState
 {
+	DLog(@"setting up save state");
+
+	// Load saved state first
+	[self loadState];
+	
 	// Initiallize the save state stuff
 	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 	
@@ -59,7 +86,8 @@
 	[userDefaults synchronize];
 	
 	// Start the timer
-	[NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(saveState) userInfo:nil repeats:YES];
+	[NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(saveState) userInfo:nil repeats:YES];
+	DLog(@"starting the save state timer");
 }
 
 - (void)saveState
@@ -76,8 +104,11 @@
 		else
 			isPlaying = musicControls.isPlaying;
 		
+		DLog(@"saving state, isPlaying = %i", isPlaying);
+		
 		[userDefaults setBool:isPlaying forKey:@"isPlaying"];
 	}
+	DLog(@"musicControls.isPlaying = %i   isPlaying = %i", musicControls.isPlaying, isPlaying);
 	
 	if (musicControls.isShuffle != isShuffle)
 	{
@@ -137,6 +168,8 @@
 	else
 		isPlaying = [userDefaults boolForKey:@"isPlaying"];
 	musicControls.isPlaying = isPlaying;
+	
+	DLog(@"loading state, isPlaying = %i", isPlaying);
 	
 	isShuffle = [userDefaults boolForKey:@"isShuffle"];
 	musicControls.isShuffle = isShuffle;

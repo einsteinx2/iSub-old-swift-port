@@ -25,6 +25,7 @@
 #import "StoreViewController.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
+#import "CacheSingleton.h"
 
 @implementation CacheViewController
 
@@ -69,6 +70,7 @@
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	musicControls = [MusicSingleton sharedInstance];
 	databaseControls = [DatabaseSingleton sharedInstance];
+	cacheControls = [CacheSingleton sharedInstance];
 	settings = [SavedSettings sharedInstance];
 	
 	jukeboxInputBlocker = nil;
@@ -77,9 +79,7 @@
 	//viewObjects.multiDeleteList = nil; viewObjects.multiDeleteList = [[NSMutableArray alloc] init];
 	isNoSongsScreenShowing = NO;
 	isSaveEditShowing = NO;
-	
-	firstLoad = YES;
-	
+		
 	self.tableView.separatorColor = [UIColor clearColor];
 	
 	if (viewObjects.isOfflineMode)
@@ -414,19 +414,7 @@
 		cacheSizeLabel.font = [UIFont boldSystemFontOfSize:12];
 		if (segmentedControl.selectedSegmentIndex == 0)
 		{
-			/*unsigned long long combinedSize = 0;
-			for (NSString *path in [[NSFileManager defaultManager] subpathsAtPath:musicControls.audioFolderPath]) 
-			{
-				combinedSize += [[[NSFileManager defaultManager] attributesOfItemAtPath:[musicControls.audioFolderPath stringByAppendingPathComponent:path] error:NULL] fileSize];
-			}
-			cacheSizeLabel.text = [appDelegate formatFileSize:combinedSize];*/
-			unsigned long long combinedSize = 0;
-			FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT size FROM cachedSongs"];
-			while ([result next])
-			{
-				combinedSize += [result longLongIntForColumnIndex:0];
-			}
-			cacheSizeLabel.text = [appDelegate formatFileSize:combinedSize];
+			cacheSizeLabel.text = [settings formatFileSize:cacheControls.cacheSize];
 		}
 		else if (segmentedControl.selectedSegmentIndex == 1)
 		{
@@ -436,7 +424,7 @@
 			{
 				combinedSize += [result longLongIntForColumnIndex:0];
 			}
-			cacheSizeLabel.text = [appDelegate formatFileSize:combinedSize];
+			cacheSizeLabel.text = [settings formatFileSize:combinedSize];
 		}
 		[headerView addSubview:cacheSizeLabel];
 		[cacheSizeLabel release];
@@ -862,17 +850,13 @@
 	{
 		self.tableView.tableHeaderView.hidden = NO;
 		
-		if (!firstLoad)
-			[self segmentAction:nil];
-
-		firstLoad = NO;
+		segmentedControl.selectedSegmentIndex = 0;
+		[self segmentAction:nil];
 	}
 	else
 	{
 		self.tableView.tableHeaderView.hidden = YES;
 		[self addNoSongsScreen];
-		
-		firstLoad = NO;
 	}
 }
 
@@ -1095,9 +1079,15 @@
 	FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT md5, transcodedSuffix, suffix FROM cachedSongs WHERE finished = 'YES'"];
 	while ([result next])
 	{
-		NSString *rowMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
-		NSString *transcodedSuffix = [NSString stringWithString:[result stringForColumnIndex:1]];
-		NSString *suffix = [NSString stringWithString:[result stringForColumnIndex:2]];
+		NSString *rowMD5 = nil;
+		NSString *transcodedSuffix = nil;
+		NSString *suffix = nil;
+		if ([result stringForColumnIndex:0] != nil)
+			rowMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
+		if ([result stringForColumnIndex:1] != nil)
+			transcodedSuffix = [NSString stringWithString:[result stringForColumnIndex:1]];
+		if ([result stringForColumnIndex:2] != nil)
+			suffix = [NSString stringWithString:[result stringForColumnIndex:2]];
 		
 		BOOL skipDelete = NO;
 		// Check if we're deleting the song that's currently playing. If so, skip deleting it.
@@ -1476,7 +1466,7 @@
 		NSDate *cached = [NSDate dateWithTimeIntervalSince1970:(double)[databaseControls.songCacheDb intForQuery:@"SELECT cachedDate FROM queuedSongsList WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]]];
 		if ([[NSString md5:aSong.path] isEqualToString:musicControls.downloadFileNameHashQueue] && musicControls.isQueueListDownloading)
 		{
-			[cell.cacheInfoLabel setText:[NSString stringWithFormat:@"Queued %@ - Progress: %@", [appDelegate relativeTime:cached], [appDelegate formatFileSize:queueDownloadProgress]]];
+			[cell.cacheInfoLabel setText:[NSString stringWithFormat:@"Queued %@ - Progress: %@", [appDelegate relativeTime:cached], [settings formatFileSize:queueDownloadProgress]]];
 		}
 		else if (indexPath.row == 0)
 		{

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, SavedSettings;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, SavedSettings, CacheSingleton;
 
 @interface CacheViewController : UITableViewController 
 {
@@ -17,6 +17,7 @@
 	ViewObjectsSingleton *viewObjects;
 	MusicSingleton *musicControls;
 	DatabaseSingleton *databaseControls;
+	CacheSingleton *cacheControls;
 	SavedSettings *settings;
 	
 	BOOL isNoSongsScreenShowing;
@@ -50,9 +51,7 @@
 	NSMutableArray *listOfArtistsSections;
 	NSArray *sectionInfo;
 	NSUInteger rowCounter;
-	
-	BOOL firstLoad;
-	
+		
 	UIButton *jukeboxInputBlocker;
 	
 	BOOL showIndex;
