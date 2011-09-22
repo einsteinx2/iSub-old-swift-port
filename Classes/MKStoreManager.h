@@ -19,7 +19,7 @@
 //	if you are re-publishing after editing, please retain the above copyright notices
 
 
-#import <Foundation/Foundation.h>
+//#import <Foundation/Foundation.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
 #import <StoreKit/StoreKit.h>
 #import "MKStoreObserver.h"
 

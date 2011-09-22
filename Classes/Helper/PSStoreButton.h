@@ -24,7 +24,7 @@
 //  THE SOFTWARE.
 
 #import <QuartzCore/QuartzCore.h>
-#import <UIKit/UIKit.h>
+//#import <UIKit/UIKit.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
 
 // defines a button action set (data container)
 @interface PSStoreButtonData : NSObject {

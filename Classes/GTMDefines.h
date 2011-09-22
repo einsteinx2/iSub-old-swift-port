@@ -22,7 +22,7 @@
 #include <TargetConditionals.h>
 
 #if TARGET_OS_IPHONE
-#include <Availability.h>
+//#include <Availability.h>  // REMOVED THIS TO STOP XCODE HIGHLIGHTING PROBLEMS, ALREADY INCLUDED IN PROJECT HEADER
 #endif //  TARGET_OS_IPHONE
 
 // Not all MAC_OS_X_VERSION_10_X macros defined in past SDKs

@@ -26,7 +26,7 @@
 //  Note: Hockey currently supports following JSON Frameworks: JSONKit
 //  To detect internet accessibility, Apple's Reachability Class has to be linked and used
 
-#import <UIKit/UIKit.h>
+//#import <UIKit/UIKit.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
 #import "BWGlobal.h"
 #import "BWApp.h"
 #import "BWHockeyViewController.h"

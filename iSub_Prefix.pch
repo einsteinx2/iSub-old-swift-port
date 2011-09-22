@@ -32,37 +32,37 @@
 
 // Lite version build switch
 #ifdef LITE
-#	define IS_LITE() (true)  // ENABLE  Lite version
+#define IS_LITE() (true)  // ENABLE  Lite version
 #else
-#	define IS_LITE() (false) // DISABLE Lite version
+#define IS_LITE() (false) // DISABLE Lite version
 #endif
 
 // Beta version build switch
 #ifdef BETA
-#	define IS_BETA() (true)
+#define IS_BETA() (true)
 #else
-#	define IS_BETA() (false)
+#define IS_BETA() (false)
 #endif
 
 // Debug version build switch (activated on debug and adhoc)
 #ifdef DEBUG
-#	define IS_DEBUG() (true)
+#define IS_DEBUG() (true)
 #else
-#	define IS_DEBUG() (false)
+#define IS_DEBUG() (false)
 #endif
 
 // Adhoc version build switch (activated only on adhoc)
 #ifdef ADHOC
-#	define IS_ADHOC() (true)
+#define IS_ADHOC() (true)
 #else
-#	define IS_ADHOC() (false)
+#define IS_ADHOC() (false)
 #endif
 
 // Release version build switch
 #ifdef RELEASE
-#	define IS_RELEASE() (true)
+#define IS_RELEASE() (true)
 #else
-#	define IS_RELEASE() (false)
+#define IS_RELEASE() (false)
 #endif
 
 // Screen scale detection
@@ -77,9 +77,9 @@
 // DLog(@"value: %d", x);
 // Unfortunately this doesn't work DLog(aStringVariable); you have to do this instead DLog(@"%@", aStringVariable);
 #ifdef DEBUG
-#	define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
 #else
-#	define DLog(...)
+#define DLog(...)
 #endif
 
 // ALog always displays output regardless of the DEBUG setting

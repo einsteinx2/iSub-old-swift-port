@@ -79,11 +79,15 @@
 - (void)resetRootFolderCache
 {
 	// Delete the old tables
-	[db executeUpdate:[NSString stringWithFormat:@"DELETE FROM rootFolderIndexCache%@", self.tableModifier]];
+	/*[db executeUpdate:[NSString stringWithFormat:@"DELETE FROM rootFolderIndexCache%@", self.tableModifier]];
 	[db executeUpdate:[NSString stringWithFormat:@"DELETE FROM rootFolderNameCache%@", self.tableModifier]];
 	[db executeUpdate:[NSString stringWithFormat:@"DELETE FROM rootFolderCount%@", self.tableModifier]];
-	[db executeUpdate:[NSString stringWithFormat:@"DELETE FROM rootFolderNameSearch%@", self.tableModifier]];
-	[db executeUpdate:@"VACUUM"];
+	[db executeUpdate:[NSString stringWithFormat:@"DELETE FROM rootFolderNameSearch%@", self.tableModifier]];*/
+	[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS rootFolderIndexCache%@", self.tableModifier]];
+	[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS rootFolderNameCache%@", self.tableModifier]];
+	[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS rootFolderCount%@", self.tableModifier]];
+	//[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS rootFolderNameSearch%@", self.tableModifier]];
+	//[db executeUpdate:@"VACUUM"];
 	
 	// Create the new tables
 	NSString *query;
@@ -93,10 +97,59 @@
 	[db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
 	query = @"CREATE INDEX name ON rootFolderNameCache%@ (name ASC)";
 	[db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
-	query = @"CREATE TABLE rootFolderNameSearch%@ (id TEXT PRIMARY KEY, name TEXT)";
-	[db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
+	//query = @"CREATE TABLE rootFolderNameSearch%@ (id TEXT PRIMARY KEY, name TEXT)";
+	//[db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
 	query = @"CREATE TABLE rootFolderCount%@ (count INTEGER)";
 	[db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
+}
+
+- (void)resetRootFolderTempTable
+{
+	[db executeUpdate:@"DROP TABLE IF EXISTS rootFolderNameCacheTemp"];
+	[db executeUpdate:@"CREATE TEMPORARY TABLE rootFolderNameCacheTemp (id TEXT, name TEXT)"];
+	
+	tempRecordCount = 0;
+}
+
+- (BOOL)clearRootFolderTempTable
+{
+	[db executeUpdate:@"DELETE FROM rootFolderNameCacheTemp"];
+	
+	return ![db hadError];
+}
+
+- (BOOL)moveRootFolderTempTableRecordsToMainCache
+{
+	NSString *query = @"INSERT INTO rootFolderNameCache%@ SELECT * FROM rootFolderNameCacheTemp";
+	[db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
+	
+	return ![db hadError];
+}
+
+- (BOOL)addRootFolderToTempCache:(NSString*)folderId name:(NSString*)name
+{
+	BOOL hadError = NO;
+	
+	// Add the shortcut to the DB
+	if (folderId != nil && name != nil)
+	{
+		NSString *query = @"INSERT INTO rootFolderNameCacheTemp VALUES (?, ?)";
+		hadError = [db executeUpdate:query, folderId, [name gtm_stringByUnescapingFromHTML]];
+		tempRecordCount++;
+	}
+	
+	// Flush temp records to main cache if necessary
+	if (tempRecordCount == TEMP_FLUSH_AMOUNT)
+	{
+		if (![self moveRootFolderTempTableRecordsToMainCache])
+			hadError = YES;
+		
+		[self resetRootFolderTempTable];
+		
+		tempRecordCount = 0;
+	}
+
+	return !hadError;
 }
 
 - (BOOL)addRootFolderIndexToCache:(NSUInteger)position count:(NSUInteger)folderCount name:(NSString*)name
@@ -135,7 +188,8 @@
 
 - (NSUInteger)rootFolderSearchCount
 {
-	NSString *query = [NSString stringWithFormat:@"SELECT count(*) FROM rootFolderNameSearch%@", self.tableModifier];
+	//NSString *query = [NSString stringWithFormat:@"SELECT count(*) FROM rootFolderNameSearch%@", self.tableModifier];
+	NSString *query = @"SELECT count(*) FROM rootFolderNameSearch";
 	return [db intForQuery:query];
 }
 
@@ -206,7 +260,8 @@
 - (Artist *)rootFolderArtistForPositionInSearch:(NSUInteger)position
 {
 	Artist *anArtist = nil;
-	NSString *query = [NSString stringWithFormat:@"SELECT * FROM rootFolderNameSearch%@ WHERE ROWID = ?", self.tableModifier];
+	//NSString *query = [NSString stringWithFormat:@"SELECT * FROM rootFolderNameSearch%@ WHERE ROWID = ?", self.tableModifier];
+	NSString *query = @"SELECT * FROM rootFolderNameSearch WHERE ROWID = ?";
 	FMResultSet *result = [db executeQuery:query, [NSNumber numberWithInt:position]];
 	while ([result next])
 	{
@@ -221,7 +276,8 @@
 
 - (void)rootFolderClearSearch
 {
-	NSString *query = [NSString stringWithFormat:@"DELETE FROM rootFolderNameSearch%@", self.tableModifier];
+	//NSString *query = [NSString stringWithFormat:@"DELETE FROM rootFolderNameSearch%@", self.tableModifier];
+	NSString *query = [NSString stringWithFormat:@"DELETE FROM rootFolderNameSearch", self.tableModifier];
 	[db executeUpdate:query];
 	//[db executeUpdate:@"VACUUM"];
 }
@@ -229,11 +285,15 @@
 - (void)rootFolderPerformSearch:(NSString *)name
 {
 	// Inialize the search DB
-	NSString *query = [NSString stringWithFormat:@"DELETE FROM rootFolderNameSearch%@", self.tableModifier];
+	//NSString *query = [NSString stringWithFormat:@"DELETE FROM rootFolderNameSearch%@", self.tableModifier];
+	NSString *query = @"DROP TABLE IF EXISTS rootFolderNameSearch";
+	[db executeUpdate:query];
+	query = @"CREATE TEMPORARY TABLE rootFolderNameSearch (id TEXT PRIMARY KEY, name TEXT)";
 	[db executeUpdate:query];
 	
 	// Perform the search
-	query = [NSString stringWithFormat:@"INSERT INTO rootFolderNameSearch%@ SELECT * FROM rootFolderNameCache%@ WHERE name LIKE ? LIMIT 100", self.tableModifier, self.tableModifier];
+	//query = [NSString stringWithFormat:@"INSERT INTO rootFolderNameSearch%@ SELECT * FROM rootFolderNameCache%@ WHERE name LIKE ? LIMIT 100", self.tableModifier, self.tableModifier];
+	query = [NSString stringWithFormat:@"INSERT INTO rootFolderNameSearch SELECT * FROM rootFolderNameCache%@ WHERE name LIKE ? LIMIT 100", self.tableModifier];
 	NSLog(@"query: %@", query);
 	[db executeUpdate:query, [NSString stringWithFormat:@"%%%@%%", name]];
 	if ([db hadError]) {
@@ -331,8 +391,15 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {		
+	DLog("connection finished");
+	
 	// Clear the database
 	[self resetRootFolderCache];
+	
+	// Create the temp table to store records
+	[self resetRootFolderTempTable];
+	
+	NSDate *startTime = [NSDate date];
 	
 	TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
 	if (tbxml.rootXMLElement)
@@ -368,11 +435,8 @@
 				NSString *name = [TBXML valueOfAttributeNamed:@"name" forElement:shortcutElement];
 				//DLog(@"id: %@  name: %@", folderId, name);
 				
-				// Add the shortcut to the DB
-				if (folderId != nil && name != nil)
-				{
-					[self addRootFolderToCache:folderId name:name];
-				}
+				// Add the record to the cache
+				[self addRootFolderToTempCache:folderId name:name];
 				
 				// Get the next shortcut
 				shortcutElement = [TBXML nextSiblingNamed:@"shortcut" searchFromElement:shortcutElement];
@@ -392,6 +456,8 @@
 			{
 				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 				
+				NSDate *startTime2 = [NSDate date];
+				NSTimeInterval dbInserts = 0;
 				sectionCount = 0;
 				rowIndex = rowCount + 1;
 				
@@ -414,10 +480,9 @@
 						//DLog(@"id: %@  name: %@", folderId, name);
 						
 						// Add the folder to the DB
-						if (folderId != nil && name != nil)
-						{
-							[self addRootFolderToCache:folderId name:name];
-						}
+						NSDate *startTime3 = [NSDate date];
+						[self addRootFolderToTempCache:folderId name:name];
+						dbInserts += [[NSDate date] timeIntervalSinceDate:startTime3];
 					}
 					
 					// Get the next artist
@@ -427,9 +492,11 @@
 				}
 				
 				NSString *indexName = [TBXML valueOfAttributeNamed:@"name" forElement:indexElement];
-				BOOL success = [self addRootFolderIndexToCache:rowIndex count:sectionCount name:indexName];
-				DLog(@"Adding index %@  count: %i  success: %i", indexName, sectionCount, success);
-
+				[self addRootFolderIndexToCache:rowIndex count:sectionCount name:indexName];
+				//BOOL success = [self addRootFolderIndexToCache:rowIndex count:sectionCount name:indexName];
+				//DLog(@"Adding index %@  count: %i  success: %i", indexName, sectionCount, success);
+				DLog(@"Processing index %@ time: %f dbTime: %f", indexName, [[NSDate date] timeIntervalSinceDate:startTime2], dbInserts);
+				
 				// Get the next index
 				indexElement = [TBXML nextSiblingNamed:@"index" searchFromElement:indexElement];
 				
@@ -438,8 +505,14 @@
 		}
 	}
 	
+	// Move any remaining temp records to main cache
+	[self moveRootFolderTempTableRecordsToMainCache];
+	[self resetRootFolderTempTable];
+	
 	// Release the XML parser
 	[tbxml release];
+	
+	DLog(@"Folders load time: %f", [[NSDate date] timeIntervalSinceDate:startTime]);
 	
 	// Clean up the connection
 	[theConnection release]; theConnection = nil;

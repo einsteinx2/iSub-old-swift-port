@@ -355,7 +355,7 @@
 - (void)loadHockeyApp
 {
 	// HockyApp Kits
-	if (IS_ADHOC() && !IS_LITE())
+	if (IS_BETA() && IS_ADHOC() && !IS_LITE())
 	{
 		[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
 		[[BWQuincyManager sharedQuincyManager] setShowAlwaysButton:YES];

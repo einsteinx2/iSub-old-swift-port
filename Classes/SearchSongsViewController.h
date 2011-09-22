@@ -13,7 +13,7 @@
 //	2 = song
 //
 
-#import <UIKit/UIKit.h>
+//#import <UIKit/UIKit.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
 
 @class iSubAppDelegate, MusicSingleton, DatabaseSingleton, ViewObjectsSingleton;
 

@@ -6,7 +6,7 @@
 //  Copyright 2009 Slava Bushtruk. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+//#import <UIKit/UIKit.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
 
 @class iSubAppDelegate, MusicSingleton, DatabaseSingleton, Song;
 

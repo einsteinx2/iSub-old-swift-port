@@ -390,6 +390,9 @@
 
 - (void) searchBarTextDidBeginEditing:(UISearchBar *)theSearchBar 
 {
+	if (isSearching)
+		return;
+	
 	// Remove the index bar
 	isSearching = YES;
 	[dataModel clearSearchTable];
@@ -588,7 +591,7 @@
 		Artist *anArtist = nil;
 		if(isSearching)
 		{
-			anArtist = [dataModel artistForPositionInSearch:indexPath.row];
+			anArtist = [dataModel artistForPositionInSearch:(indexPath.row + 1)];
 		}
 		else 
 		{	

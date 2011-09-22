@@ -25,6 +25,7 @@
 #import "AsynchronousImageView.h"
 #import "Song.h"
 #import "NSString-md5.h"
+#import "NSString-TrimmingAdditions.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "ShuffleFolderPickerViewController.h"

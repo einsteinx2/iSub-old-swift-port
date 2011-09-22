@@ -6,7 +6,7 @@
 //  Copyright 2005 Flying Meat Inc.. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+//#import <Foundation/Foundation.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
 @interface FMDatabase (FMDatabaseAdditions)
 
 

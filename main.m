@@ -6,7 +6,7 @@
 //  Copyright __MyCompanyName__ 2010. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+//#import <UIKit/UIKit.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
 
 int main(int argc, char *argv[]) {
     

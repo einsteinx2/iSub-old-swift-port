@@ -26,7 +26,7 @@
 #import "NSString+HockeyAdditions.h"
 #import "UIImage+HockeyAdditions.h"
 #import <sys/sysctl.h>
-#import <Foundation/Foundation.h>
+//#import <Foundation/Foundation.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
 
 // API defines - do not change
 #define BETA_DOWNLOAD_TYPE_PROFILE	@"profile"

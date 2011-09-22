@@ -115,7 +115,7 @@
 #include <CoreFoundation/CFDictionary.h>
 #include <CoreFoundation/CFNumber.h>
 
-//#import <Foundation/Foundation.h>
+////#import <Foundation/Foundation.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
 #import <Foundation/NSArray.h>
 #import <Foundation/NSAutoreleasePool.h>
 #import <Foundation/NSData.h>

@@ -6,8 +6,10 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+//#import <Foundation/Foundation.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
 #import "Loader.h"
+
+#define TEMP_FLUSH_AMOUNT 400
 
 @class Artist, FMDatabase;
 
@@ -25,6 +27,8 @@
 	
 	NSURLConnection *connection;
 	NSMutableData *receivedData;
+	
+	NSUInteger tempRecordCount;
 }
 
 @property (readonly) NSUInteger count;

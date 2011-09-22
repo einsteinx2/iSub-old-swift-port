@@ -6,7 +6,7 @@
 //  Copyright 2010 Instinctive Code.
 //
 
-#import <UIKit/UIKit.h>
+//#import <UIKit/UIKit.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
 
 @class MGSplitViewController;
 @interface MGSplitDividerView : UIView {

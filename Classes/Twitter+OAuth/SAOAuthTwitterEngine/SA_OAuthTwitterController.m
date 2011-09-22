@@ -9,7 +9,7 @@
 //  See ReadMe for further attributions, copyrights and license info.
 //
 
-#import <UIKit/UIKit.h>
+//#import <UIKit/UIKit.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
 #import <QuartzCore/QuartzCore.h>
 
 #import "SA_OAuthTwitterEngine.h"

@@ -128,6 +128,7 @@
 	else
 		enableSongsTabSwitch.on = NO;*/
 	enableSongsTabSwitch.on = settings.isSongsTabEnabled;
+	DLog(@"isSongsTabEnabled: %i", settings.isSongsTabEnabled);
 	
 	//recoverSegmentedControl.selectedSegmentIndex = [[appDelegate.settingsDictionary objectForKey:@"recoverSetting"] intValue];
 	recoverSegmentedControl.selectedSegmentIndex = settings.recoverSetting;

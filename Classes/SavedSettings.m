@@ -103,12 +103,9 @@
 			isPlaying = NO;
 		else
 			isPlaying = musicControls.isPlaying;
-		
-		DLog(@"saving state, isPlaying = %i", isPlaying);
-		
+				
 		[userDefaults setBool:isPlaying forKey:@"isPlaying"];
 	}
-	DLog(@"musicControls.isPlaying = %i   isPlaying = %i", musicControls.isPlaying, isPlaying);
 	
 	if (musicControls.isShuffle != isShuffle)
 	{
