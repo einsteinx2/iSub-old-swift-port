@@ -39,7 +39,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 @synthesize allAlbumsListOfAlbums, allAlbumsAlbumObject, allAlbumsListOfSongs, allAlbumsCurrentArtistName, allAlbumsCurrentArtistId, allAlbumsLoadingScreen, allAlbumsLoadingProgress, isSearchingAllAlbums, isAlbumsLoading;
 
 // All songs view objects
-@synthesize allSongsListOfAlbums, allSongsListOfSongs, allSongsCurrentArtistId, allSongsCurrentArtistName, allSongsCurrentAlbumId, allSongsCurrentAlbumName, allSongsCount, allSongsLoadingScreen, allSongsLoadingProgress, isSearchingAllSongs, isSongsLoading;
+@synthesize isSongsLoading;
 
 // Playlists view objects
 @synthesize listOfPlaylists, listOfPlaylistSongs, subsonicPlaylist, localPlaylist, listOfLocalPlaylists, isLocalPlaylist;

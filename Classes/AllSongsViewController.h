@@ -6,7 +6,7 @@
 //  Copyright Ben Baron 2010. All rights reserved.
 //
 
-@class iSubAppDelegate, SavedSettings, ViewObjectsSingleton, SearchOverlayViewController, Song, MusicSingleton, DatabaseSingleton, Album;
+@class iSubAppDelegate, SavedSettings, ViewObjectsSingleton, SearchOverlayViewController, Song, MusicSingleton, DatabaseSingleton, Album, SUSAllSongsDAO, LoadingScreen;
 
 @interface AllSongsViewController : UITableViewController <UISearchBarDelegate> 
 {
@@ -15,6 +15,8 @@
 	MusicSingleton *musicControls;
 	DatabaseSingleton *databaseControls;
 	SavedSettings *settings;
+	
+	SUSAllSongsDAO *dataModel;
 	
 	UIView *headerView;
 	UIButton *reloadButton;
@@ -27,32 +29,27 @@
 	SearchOverlayViewController *searchOverlayView;
 	BOOL letUserSelectRow;
 	NSURL *url;
-	
-	BOOL isAllSongsLoading;
-	
+		
 	NSInteger numberOfRows;
 	
 	NSArray *sectionInfo;
 	
-	BOOL didBeginSearching;
+	BOOL isSearching;
 	
-	NSMutableData *loadingData;
+	LoadingScreen *loadingScreen;
 	
-	NSUInteger iteration;
-	NSUInteger albumCount;
-	NSUInteger currentRow;
-	Album *currentAlbum;
+	BOOL isProcessingArtists;
 }
+
+@property (nonatomic, retain) SUSAllSongsDAO *dataModel;
 
 @property (nonatomic, retain) UIView *headerView;
 @property (nonatomic, retain) NSArray *sectionInfo;
 
-@property (nonatomic, retain) Album *currentAlbum;
+@property (nonatomic, retain) LoadingScreen *loadingScreen;
 
-- (NSArray *) createSectionInfo;
 - (void) addCount;
 
-- (void) searchTableView;
 - (void) doneSearching_Clicked:(id)sender;
 
 @end

@@ -79,15 +79,10 @@
 - (void)resetRootFolderCache
 {
 	// Delete the old tables
-	/*[db executeUpdate:[NSString stringWithFormat:@"DELETE FROM rootFolderIndexCache%@", self.tableModifier]];
-	[db executeUpdate:[NSString stringWithFormat:@"DELETE FROM rootFolderNameCache%@", self.tableModifier]];
-	[db executeUpdate:[NSString stringWithFormat:@"DELETE FROM rootFolderCount%@", self.tableModifier]];
-	[db executeUpdate:[NSString stringWithFormat:@"DELETE FROM rootFolderNameSearch%@", self.tableModifier]];*/
 	[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS rootFolderIndexCache%@", self.tableModifier]];
 	[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS rootFolderNameCache%@", self.tableModifier]];
 	[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS rootFolderCount%@", self.tableModifier]];
-	//[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS rootFolderNameSearch%@", self.tableModifier]];
-	//[db executeUpdate:@"VACUUM"];
+	//[db executeUpdate:@"VACUUM"]; // Removed because it takes waaaaaay too long, maybe make a button in settings?
 	
 	// Create the new tables
 	NSString *query;
@@ -97,8 +92,6 @@
 	[db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
 	query = @"CREATE INDEX name ON rootFolderNameCache%@ (name ASC)";
 	[db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
-	//query = @"CREATE TABLE rootFolderNameSearch%@ (id TEXT PRIMARY KEY, name TEXT)";
-	//[db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
 	query = @"CREATE TABLE rootFolderCount%@ (count INTEGER)";
 	[db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
 }
@@ -188,7 +181,6 @@
 
 - (NSUInteger)rootFolderSearchCount
 {
-	//NSString *query = [NSString stringWithFormat:@"SELECT count(*) FROM rootFolderNameSearch%@", self.tableModifier];
 	NSString *query = @"SELECT count(*) FROM rootFolderNameSearch";
 	return [db intForQuery:query];
 }
@@ -260,7 +252,6 @@
 - (Artist *)rootFolderArtistForPositionInSearch:(NSUInteger)position
 {
 	Artist *anArtist = nil;
-	//NSString *query = [NSString stringWithFormat:@"SELECT * FROM rootFolderNameSearch%@ WHERE ROWID = ?", self.tableModifier];
 	NSString *query = @"SELECT * FROM rootFolderNameSearch WHERE ROWID = ?";
 	FMResultSet *result = [db executeQuery:query, [NSNumber numberWithInt:position]];
 	while ([result next])
@@ -276,7 +267,6 @@
 
 - (void)rootFolderClearSearch
 {
-	//NSString *query = [NSString stringWithFormat:@"DELETE FROM rootFolderNameSearch%@", self.tableModifier];
 	NSString *query = [NSString stringWithFormat:@"DELETE FROM rootFolderNameSearch", self.tableModifier];
 	[db executeUpdate:query];
 	//[db executeUpdate:@"VACUUM"];
@@ -285,14 +275,12 @@
 - (void)rootFolderPerformSearch:(NSString *)name
 {
 	// Inialize the search DB
-	//NSString *query = [NSString stringWithFormat:@"DELETE FROM rootFolderNameSearch%@", self.tableModifier];
 	NSString *query = @"DROP TABLE IF EXISTS rootFolderNameSearch";
 	[db executeUpdate:query];
 	query = @"CREATE TEMPORARY TABLE rootFolderNameSearch (id TEXT PRIMARY KEY, name TEXT)";
 	[db executeUpdate:query];
 	
 	// Perform the search
-	//query = [NSString stringWithFormat:@"INSERT INTO rootFolderNameSearch%@ SELECT * FROM rootFolderNameCache%@ WHERE name LIKE ? LIMIT 100", self.tableModifier, self.tableModifier];
 	query = [NSString stringWithFormat:@"INSERT INTO rootFolderNameSearch SELECT * FROM rootFolderNameCache%@ WHERE name LIKE ? LIMIT 100", self.tableModifier];
 	NSLog(@"query: %@", query);
 	[db executeUpdate:query, [NSString stringWithFormat:@"%%%@%%", name]];

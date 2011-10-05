@@ -13,18 +13,19 @@
 {
 	NSError *loadError;
 	id<LoaderDelegate> delegate;
-	NSDictionary *results;
+	
+	NSURLConnection *connection;
+	NSMutableData *receivedData;
 }
 
 @property (nonatomic, retain) id<LoaderDelegate> delegate;
 
 @property (readonly) NSError *loadError;
-@property (readonly) NSDictionary *results;
 
 - (id)initWithDelegate:(id <LoaderDelegate>)theDelegate;
 
-- (void)startLoad;
-- (void)cancelLoad;
+- (void)startLoad; // Override this
+- (void)cancelLoad; // Override this
 - (void) subsonicErrorCode:(NSString *)errorCode message:(NSString *)message;
 - (NSString *)getBaseUrlString:(NSString *)action;
 

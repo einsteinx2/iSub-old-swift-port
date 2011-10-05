@@ -25,9 +25,6 @@
 	
 	NSNumber *selectedFolderId;
 	
-	NSURLConnection *connection;
-	NSMutableData *receivedData;
-	
 	NSUInteger tempRecordCount;
 }
 
@@ -50,7 +47,5 @@
 - (void)searchForFolderName:(NSString *)name;
 - (Artist *)artistForPositionInSearch:(NSUInteger)position;
 - (void)clearSearchTable;
-- (void)searchForFolderName:(NSString *)name;
-
 
 @end

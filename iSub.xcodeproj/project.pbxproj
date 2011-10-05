@@ -19,7 +19,6 @@
 		5303877411653AE80043292D /* SearchOverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5303877211653AE80043292D /* SearchOverlayViewController.m */; };
 		5303877511653AE80043292D /* SearchOverlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5303877311653AE80043292D /* SearchOverlayViewController.xib */; };
 		530388A9116571920043292D /* AllSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 530388A8116571920043292D /* AllSongsViewController.m */; };
-		530388AC116573A30043292D /* AllSongsXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 530388AB116573A30043292D /* AllSongsXMLParser.m */; };
 		53049CBF119617660098582B /* AllSongsUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53049CBE119617660098582B /* AllSongsUITableViewCell.m */; };
 		5305C1DA1157EA7A00BC78F0 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 5305C1D91157EA7A00BC78F0 /* Reachability.m */; };
 		5305C2061157F4F800BC78F0 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 5305C2051157F4F800BC78F0 /* Default.png */; };
@@ -103,6 +102,15 @@
 		53404FFD11E94AA5004AEC41 /* controller-bookmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FF911E94AA5004AEC41 /* controller-bookmark@2x.png */; };
 		534050F711E99633004AEC41 /* LyricsXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 534050F611E99633004AEC41 /* LyricsXMLParser.m */; };
 		534050FB11E9966C004AEC41 /* LyricsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 534050F911E9966C004AEC41 /* LyricsViewController.m */; };
+		53409898142D487600455754 /* SUSAllAlbumsDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53409897142D487600455754 /* SUSAllAlbumsDAO.m */; };
+		53409899142D487600455754 /* SUSAllAlbumsDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53409897142D487600455754 /* SUSAllAlbumsDAO.m */; };
+		5340989A142D487600455754 /* SUSAllAlbumsDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53409897142D487600455754 /* SUSAllAlbumsDAO.m */; };
+		534098A2142D489F00455754 /* SUSAllSongsDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 534098A1142D489F00455754 /* SUSAllSongsDAO.m */; };
+		534098A3142D489F00455754 /* SUSAllSongsDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 534098A1142D489F00455754 /* SUSAllSongsDAO.m */; };
+		534098A4142D489F00455754 /* SUSAllSongsDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 534098A1142D489F00455754 /* SUSAllSongsDAO.m */; };
+		534098A7142D491100455754 /* SUSAllSongsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 534098A6142D491100455754 /* SUSAllSongsLoader.m */; };
+		534098A8142D491100455754 /* SUSAllSongsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 534098A6142D491100455754 /* SUSAllSongsLoader.m */; };
+		534098A9142D491100455754 /* SUSAllSongsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 534098A6142D491100455754 /* SUSAllSongsLoader.m */; };
 		5345FAE01191E6A000C6EAB7 /* NSString-md5.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345FADF1191E6A000C6EAB7 /* NSString-md5.m */; };
 		5348A59B11879C3A0078994D /* CustomUITableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5348A59A11879C3A0078994D /* CustomUITableView.m */; };
 		534E43B71155659A000B4134 /* AlbumUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 534E43B61155659A000B4134 /* AlbumUITableViewCell.m */; };
@@ -633,7 +641,6 @@
 		53BC27AE139AF0DD00A825F1 /* ServerListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53614AC8116432DA0088ABC0 /* ServerListViewController.m */; };
 		53BC27AF139AF0DD00A825F1 /* SearchOverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5303877211653AE80043292D /* SearchOverlayViewController.m */; };
 		53BC27B0139AF0DD00A825F1 /* AllSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 530388A8116571920043292D /* AllSongsViewController.m */; };
-		53BC27B1139AF0DD00A825F1 /* AllSongsXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 530388AB116573A30043292D /* AllSongsXMLParser.m */; };
 		53BC27B2139AF0DD00A825F1 /* PlayingUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE3581165C52D00197877 /* PlayingUITableViewCell.m */; };
 		53BC27B3139AF0DD00A825F1 /* PlayingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE3611165C83900197877 /* PlayingViewController.m */; };
 		53BC27B4139AF0DD00A825F1 /* PlayingXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE3771165C97100197877 /* PlayingXMLParser.m */; };
@@ -1122,7 +1129,6 @@
 		53DCF50F13BFEAD3009160F9 /* ServerListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53614AC8116432DA0088ABC0 /* ServerListViewController.m */; };
 		53DCF51013BFEAD3009160F9 /* SearchOverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5303877211653AE80043292D /* SearchOverlayViewController.m */; };
 		53DCF51113BFEAD3009160F9 /* AllSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 530388A8116571920043292D /* AllSongsViewController.m */; };
-		53DCF51213BFEAD3009160F9 /* AllSongsXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 530388AB116573A30043292D /* AllSongsXMLParser.m */; };
 		53DCF51313BFEAD3009160F9 /* PlayingUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE3581165C52D00197877 /* PlayingUITableViewCell.m */; };
 		53DCF51413BFEAD3009160F9 /* PlayingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE3611165C83900197877 /* PlayingViewController.m */; };
 		53DCF51513BFEAD3009160F9 /* PlayingXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE3771165C97100197877 /* PlayingXMLParser.m */; };
@@ -1396,8 +1402,6 @@
 		5303877311653AE80043292D /* SearchOverlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchOverlayViewController.xib; sourceTree = "<group>"; };
 		530388A7116571920043292D /* AllSongsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllSongsViewController.h; sourceTree = "<group>"; };
 		530388A8116571920043292D /* AllSongsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllSongsViewController.m; sourceTree = "<group>"; };
-		530388AA116573A30043292D /* AllSongsXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AllSongsXMLParser.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		530388AB116573A30043292D /* AllSongsXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllSongsXMLParser.m; sourceTree = "<group>"; };
 		53049CBD119617660098582B /* AllSongsUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AllSongsUITableViewCell.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		53049CBE119617660098582B /* AllSongsUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllSongsUITableViewCell.m; sourceTree = "<group>"; };
 		5305C1D81157EA7A00BC78F0 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
@@ -1510,6 +1514,13 @@
 		534050F611E99633004AEC41 /* LyricsXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LyricsXMLParser.m; sourceTree = "<group>"; };
 		534050F811E9966C004AEC41 /* LyricsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LyricsViewController.h; sourceTree = "<group>"; };
 		534050F911E9966C004AEC41 /* LyricsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LyricsViewController.m; sourceTree = "<group>"; };
+		53409896142D487600455754 /* SUSAllAlbumsDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSAllAlbumsDAO.h; sourceTree = "<group>"; };
+		53409897142D487600455754 /* SUSAllAlbumsDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSAllAlbumsDAO.m; sourceTree = "<group>"; };
+		534098A0142D489F00455754 /* SUSAllSongsDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSAllSongsDAO.h; sourceTree = "<group>"; };
+		534098A1142D489F00455754 /* SUSAllSongsDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSAllSongsDAO.m; sourceTree = "<group>"; };
+		534098A5142D491100455754 /* SUSAllSongsLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSAllSongsLoader.h; sourceTree = "<group>"; };
+		534098A6142D491100455754 /* SUSAllSongsLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSAllSongsLoader.m; sourceTree = "<group>"; };
+		534098C0142E66CB00455754 /* LoaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoaderManager.h; sourceTree = "<group>"; };
 		5345FADE1191E6A000C6EAB7 /* NSString-md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString-md5.h"; sourceTree = "<group>"; };
 		5345FADF1191E6A000C6EAB7 /* NSString-md5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString-md5.m"; sourceTree = "<group>"; };
 		5348A59911879C3A0078994D /* CustomUITableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomUITableView.h; sourceTree = "<group>"; };
@@ -2392,8 +2403,6 @@
 				53BA48671284C2340010B380 /* JukeboxXMLParser.m */,
 				53F2D2391139F9DC00107D63 /* XMLParser.h */,
 				53F2D23A1139F9DC00107D63 /* XMLParser.m */,
-				530388AA116573A30043292D /* AllSongsXMLParser.h */,
-				530388AB116573A30043292D /* AllSongsXMLParser.m */,
 				534050F511E99633004AEC41 /* LyricsXMLParser.h */,
 				534050F611E99633004AEC41 /* LyricsXMLParser.m */,
 				531F1595126F711100F524BD /* HomeXMLParser.h */,
@@ -2410,6 +2419,32 @@
 				5327F3B412B86C6400735119 /* APICheckXMLParser.m */,
 			);
 			name = "XML Parsers";
+			sourceTree = "<group>";
+		};
+		534098BA142E5DBA00455754 /* DAOs */ = {
+			isa = PBXGroup;
+			children = (
+				53EB49911401B71C0014E59A /* SUSRootFoldersDAO.h */,
+				53EB49921401B71C0014E59A /* SUSRootFoldersDAO.m */,
+				53E82A96140720BC0051D44B /* SUSSubFolderDAO.h */,
+				53E82A97140720BC0051D44B /* SUSSubFolderDAO.m */,
+				535CB68E12E383F400389DA1 /* SUSQueueAllDAO.h */,
+				535CB68F12E383F400389DA1 /* SUSQueueAllDAO.m */,
+				53409896142D487600455754 /* SUSAllAlbumsDAO.h */,
+				53409897142D487600455754 /* SUSAllAlbumsDAO.m */,
+				534098A0142D489F00455754 /* SUSAllSongsDAO.h */,
+				534098A1142D489F00455754 /* SUSAllSongsDAO.m */,
+			);
+			name = DAOs;
+			sourceTree = "<group>";
+		};
+		534098BB142E5DC500455754 /* Loaders */ = {
+			isa = PBXGroup;
+			children = (
+				534098A5142D491100455754 /* SUSAllSongsLoader.h */,
+				534098A6142D491100455754 /* SUSAllSongsLoader.m */,
+			);
+			name = Loaders;
 			sourceTree = "<group>";
 		};
 		5354910011B03D7000928E0F /* ASIHTTPRequest */ = {
@@ -3160,12 +3195,8 @@
 		53E82A9B140721BD0051D44B /* Subsonic */ = {
 			isa = PBXGroup;
 			children = (
-				53EB49911401B71C0014E59A /* SUSRootFoldersDAO.h */,
-				53EB49921401B71C0014E59A /* SUSRootFoldersDAO.m */,
-				53E82A96140720BC0051D44B /* SUSSubFolderDAO.h */,
-				53E82A97140720BC0051D44B /* SUSSubFolderDAO.m */,
-				535CB68E12E383F400389DA1 /* SUSQueueAllDAO.h */,
-				535CB68F12E383F400389DA1 /* SUSQueueAllDAO.m */,
+				534098BA142E5DBA00455754 /* DAOs */,
+				534098BB142E5DC500455754 /* Loaders */,
 			);
 			name = Subsonic;
 			sourceTree = "<group>";
@@ -3188,6 +3219,7 @@
 		53EB49901401ABF20014E59A /* DAOs */ = {
 			isa = PBXGroup;
 			children = (
+				534098C0142E66CB00455754 /* LoaderManager.h */,
 				539A356813D3E48C00D80554 /* LoaderDelegate.h */,
 				5386FB801406243A0009F73F /* Loader.h */,
 				5386FB811406243A0009F73F /* Loader.m */,
@@ -4191,7 +4223,6 @@
 				53614ACA116432DA0088ABC0 /* ServerListViewController.m in Sources */,
 				5303877411653AE80043292D /* SearchOverlayViewController.m in Sources */,
 				530388A9116571920043292D /* AllSongsViewController.m in Sources */,
-				530388AC116573A30043292D /* AllSongsXMLParser.m in Sources */,
 				53ABE3591165C52D00197877 /* PlayingUITableViewCell.m in Sources */,
 				53ABE3631165C83900197877 /* PlayingViewController.m in Sources */,
 				53ABE3781165C97100197877 /* PlayingXMLParser.m in Sources */,
@@ -4355,6 +4386,9 @@
 				53E82A98140720BC0051D44B /* SUSSubFolderDAO.m in Sources */,
 				53E82AA414072F090051D44B /* CacheSingleton.m in Sources */,
 				5316CA5B142BDE740032DB3E /* NSString-TrimmingAdditions.m in Sources */,
+				53409898142D487600455754 /* SUSAllAlbumsDAO.m in Sources */,
+				534098A2142D489F00455754 /* SUSAllSongsDAO.m in Sources */,
+				534098A7142D491100455754 /* SUSAllSongsLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4384,7 +4418,6 @@
 				53BC27AE139AF0DD00A825F1 /* ServerListViewController.m in Sources */,
 				53BC27AF139AF0DD00A825F1 /* SearchOverlayViewController.m in Sources */,
 				53BC27B0139AF0DD00A825F1 /* AllSongsViewController.m in Sources */,
-				53BC27B1139AF0DD00A825F1 /* AllSongsXMLParser.m in Sources */,
 				53BC27B2139AF0DD00A825F1 /* PlayingUITableViewCell.m in Sources */,
 				53BC27B3139AF0DD00A825F1 /* PlayingViewController.m in Sources */,
 				53BC27B4139AF0DD00A825F1 /* PlayingXMLParser.m in Sources */,
@@ -4548,6 +4581,9 @@
 				53E82A9A140720BC0051D44B /* SUSSubFolderDAO.m in Sources */,
 				53E82AA614072F090051D44B /* CacheSingleton.m in Sources */,
 				5316CA5D142BDE740032DB3E /* NSString-TrimmingAdditions.m in Sources */,
+				5340989A142D487600455754 /* SUSAllAlbumsDAO.m in Sources */,
+				534098A4142D489F00455754 /* SUSAllSongsDAO.m in Sources */,
+				534098A9142D491100455754 /* SUSAllSongsLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4577,7 +4613,6 @@
 				53DCF50F13BFEAD3009160F9 /* ServerListViewController.m in Sources */,
 				53DCF51013BFEAD3009160F9 /* SearchOverlayViewController.m in Sources */,
 				53DCF51113BFEAD3009160F9 /* AllSongsViewController.m in Sources */,
-				53DCF51213BFEAD3009160F9 /* AllSongsXMLParser.m in Sources */,
 				53DCF51313BFEAD3009160F9 /* PlayingUITableViewCell.m in Sources */,
 				53DCF51413BFEAD3009160F9 /* PlayingViewController.m in Sources */,
 				53DCF51513BFEAD3009160F9 /* PlayingXMLParser.m in Sources */,
@@ -4741,6 +4776,9 @@
 				53E82A99140720BC0051D44B /* SUSSubFolderDAO.m in Sources */,
 				53E82AA514072F090051D44B /* CacheSingleton.m in Sources */,
 				5316CA5C142BDE740032DB3E /* NSString-TrimmingAdditions.m in Sources */,
+				53409899142D487600455754 /* SUSAllAlbumsDAO.m in Sources */,
+				534098A3142D489F00455754 /* SUSAllSongsDAO.m in Sources */,
+				534098A8142D491100455754 /* SUSAllSongsLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

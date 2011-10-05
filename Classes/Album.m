@@ -8,10 +8,33 @@
 
 #import "Album.h"
 #import "Artist.h"
+#import "GTMNSString+HTML.h"
 
 @implementation Album
 
 @synthesize title, albumId, coverArtId, artistName, artistId;
+
+- (id)initWithTBXMLElement:(TBXMLElement *)element artistId:(NSString *)artistIdToSet artistName:(NSString *)artistNameToSet
+{
+	if ((self = [super init]))
+	{
+		title = nil;
+		albumId = nil;
+		coverArtId = nil;
+		artistName = nil;
+		artistId = nil;
+		
+		self.title = [[TBXML valueOfAttributeNamed:@"title" forElement:element] gtm_stringByUnescapingFromHTML];
+		self.albumId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
+		if([TBXML valueOfAttributeNamed:@"coverArt" forElement:element])
+			self.coverArtId = [TBXML valueOfAttributeNamed:@"coverArt" forElement:element];
+		if (artistIdToSet != nil)
+			self.artistId = [NSString stringWithString:artistIdToSet];
+		self.artistName = [artistNameToSet gtm_stringByUnescapingFromHTML];
+	}
+	
+	return self;
+}
 
 - (id)initWithAttributeDict:(NSDictionary *)attributeDict
 {

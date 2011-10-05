@@ -67,16 +67,6 @@
 	
 	// All songs view objects
 	//
-	NSMutableArray *allSongsListOfAlbums;
-	NSMutableArray *allSongsListOfSongs;
-	NSString *allSongsCurrentArtistId;
-	NSString *allSongsCurrentArtistName;
-	NSString *allSongsCurrentAlbumId;
-	NSString *allSongsCurrentAlbumName;
-	NSInteger allSongsCount;
-	LoadingScreen *allSongsLoadingScreen;
-	NSInteger allSongsLoadingProgress;
-	BOOL isSearchingAllSongs;
 	BOOL isSongsLoading;
 	
 	
@@ -186,16 +176,6 @@
 
 // All songs view objects
 //
-@property (nonatomic, retain) NSMutableArray *allSongsListOfAlbums;
-@property (nonatomic, retain) NSMutableArray *allSongsListOfSongs;
-@property (nonatomic, retain) NSString *allSongsCurrentAlbumId;
-@property (nonatomic, retain) NSString *allSongsCurrentAlbumName;
-@property (nonatomic, retain) NSString *allSongsCurrentArtistId;
-@property (nonatomic, retain) NSString *allSongsCurrentArtistName;
-@property NSInteger allSongsCount;
-@property (nonatomic, retain) LoadingScreen *allSongsLoadingScreen;
-@property NSInteger allSongsLoadingProgress;
-@property BOOL isSearchingAllSongs;
 @property BOOL isSongsLoading;
 
 // Playlists view objects

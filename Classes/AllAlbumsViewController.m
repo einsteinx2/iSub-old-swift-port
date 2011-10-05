@@ -18,6 +18,7 @@
 #import "AlbumViewController.h"
 #import "AllAlbumsUITableViewCell.h"
 #import "AsynchronousImageViewCached.h"
+#import "Index.h"
 #import "Artist.h"
 #import "Album.h"
 #import "FMDatabase.h"
@@ -33,10 +34,11 @@
 #import "CustomUIAlertView.h"
 
 #import "SavedSettings.h"
+#import "SUSAllAlbumsDAO.h"
 
 @implementation AllAlbumsViewController
 
-@synthesize headerView, sectionInfo;
+@synthesize headerView, sectionInfo, dataModel;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -45,6 +47,11 @@
 		return NO;
 	
     return YES;
+}
+
+- (void)createDataModel
+{
+	self.dataModel = [[[SUSAllAlbumsDAO alloc] init] autorelease];
 }
 
 - (void)viewDidLoad 
@@ -62,19 +69,9 @@
 	//Set defaults
 	viewObjects.isSearchingAllAlbums = NO;
 	letUserSelectRow = YES;	
-	didBeginSearching = NO;
+	isSearching = NO;
 	
-	numberOfRows = 0;
-	//[self.headerView removeFromSuperview];
-	self.sectionInfo = nil;
-	if ([databaseControls.allAlbumsDb tableExists:@"allAlbums"] == YES && ![[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllAlbumsLoading", [SavedSettings sharedInstance].urlString]] isEqualToString:@"YES"])
-	{
-		//DLog(@"1");
-		numberOfRows = [databaseControls.allAlbumsDb intForQuery:@"SELECT COUNT(*) FROM allAlbums"];
-		self.sectionInfo = [self createSectionInfo];
-		[self addCount];
-	}
-	[self.tableView reloadData];
+	[self createDataModel];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doneSearching_Clicked:) name:@"endSearch" object:searchOverlayView];
 	
@@ -150,188 +147,6 @@
 	[self.tableView reloadData];
 }
 
-
-static NSInteger order (id a, id b, void* context)
-{
-    NSString* catA = [a lastObject];
-    NSString* catB = [b lastObject];
-    return [catA caseInsensitiveCompare:catB];
-}
-
-
--(void)loadData
-{
-	// TODO: fix this
-	/*// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-	
-	viewObjects.isAlbumsLoading = YES;
-	[[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:[NSString stringWithFormat:@"%@isAllAlbumsLoading", [SavedSettings sharedInstance].urlString]];
-	[[NSUserDefaults standardUserDefaults] synchronize];
-	
-	// Check to see if we need to create the tables
-	if ([databaseControls.allAlbumsDb tableExists:@"resumeLoad"] == NO)
-	{
-		// Inialize the DB
-		[databaseControls.allAlbumsDb executeUpdate:@"CREATE TABLE resumeLoad (sectionNum INTEGER, artistNum INTEGER, iteration INTEGER)"];
-		[databaseControls.allAlbumsDb executeUpdate:@"INSERT INTO resumeLoad (sectionNum, artistNum, iteration) VALUES (0, 0, 0)"];
-		[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE allAlbums"];
-		[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE allAlbumsTemp"];
-		[databaseControls.allAlbumsDb executeUpdate:@"CREATE VIRTUAL TABLE allAlbums USING FTS3(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT, tokenize=porter)"];
-		[databaseControls.allAlbumsDb executeUpdate:@"CREATE TABLE allAlbumsTemp(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
-		[databaseControls.allAlbumsDb executeUpdate:@"CREATE INDEX title ON allAlbumsTemp (title ASC)"];
-	}
-	
-	if ([databaseControls.allAlbumsDb intForQuery:@"SELECT iteration FROM resumeLoad"] == 0)
-	{
-		//NSArray *listOfArtists = [[SavedSettings sharedInstance] getTopLevelFolders];
-		
-		int sectionNum = [databaseControls.allAlbumsDb intForQuery:@"SELECT sectionNum FROM resumeLoad"];
-		int sectionCount = [listOfArtists count];
-		for (int i = sectionNum; i < sectionCount; i++)
-		{
-			// Check if loading should stop
-			if (viewObjects.cancelLoading)
-			{
-				viewObjects.cancelLoading = NO;
-				viewObjects.isAlbumsLoading = NO;
-				[self performSelectorInBackground:@selector(hideLoadingScreen) withObject:nil];
-				return;
-			}
-			
-			NSAutoreleasePool *autoreleasePool2 = [[NSAutoreleasePool alloc] init];
-			
-			NSArray *artistArray = [listOfArtists objectAtIndex:i];
-			//DLog(@"artistArray: %@", artistArray);
-			int artistNum = [databaseControls.allAlbumsDb intForQuery:@"SELECT artistNum FROM resumeLoad"];
-			int artistCount = [artistArray count];
-			for (int j = artistNum; j < artistCount; j++)
-			{
-				// Check if loading should stop
-				if (viewObjects.cancelLoading)
-				{
-					viewObjects.cancelLoading = NO;
-					viewObjects.isAlbumsLoading = NO;
-					[self performSelectorInBackground:@selector(hideLoadingScreen) withObject:nil];
-					return;
-				}
-				
-				// Start the transaction
-				//[appDelegate.allAlbumsDb executeUpdate:@"BEGIN EXCLUSIVE TRANSACTION"];
-				
-				Artist *anArtist = [artistArray objectAtIndex:j];
-				viewObjects.currentLoadingFolderId = anArtist.artistId;
-				ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"getMusicDirectory.view"], anArtist.artistId]]];
-				[request startSynchronous];
-				if ([request error])
-				{
-					CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error grabbing the album list." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-					alert.tag = 2;
-					[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-					[alert release];
-				}
-				else
-				{
-					NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:[request responseData]];
-					XMLParser *parser = [[XMLParser alloc] initXMLParser];
-					parser.parseState = @"allAlbums";
-					[xmlParser setDelegate:parser];
-					[xmlParser parse];
-					
-					[xmlParser release];
-					[parser release];
-				}
-				
-				// End the transaction
-				//[appDelegate.allAlbumsDb executeUpdate:@"COMMIT TRANSACTION"];
-				
-				[databaseControls.allAlbumsDb executeUpdate:@"UPDATE resumeLoad SET artistNum = ?", [NSNumber numberWithInt:(j + 1)]];
-			}
-			
-			[databaseControls.allAlbumsDb executeUpdate:@"UPDATE resumeLoad SET sectionNum = ?, artistNum = ?", [NSNumber numberWithInt:(i + 1)], [NSNumber numberWithInt:0]];
-			
-			[autoreleasePool2 release];
-		}
-		
-		[databaseControls.allAlbumsDb executeUpdate:@"UPDATE resumeLoad SET iteration = ?", [NSNumber numberWithInt:1]];
-	}
-	
-	[self performSelectorOnMainThread:@selector(updateMessage) withObject:nil waitUntilDone:NO];
-	
-	if ([databaseControls.allAlbumsDb intForQuery:@"SELECT iteration FROM resumeLoad"] == 1)
-	{
-		// Sort the table
-		[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE allAlbums"];
-		[databaseControls.allAlbumsDb executeUpdate:@"CREATE VIRTUAL TABLE allAlbums USING FTS3(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT, tokenize=porter)"];
-		[databaseControls.allAlbumsDb executeUpdate:@"INSERT INTO allAlbums SELECT * FROM allAlbumsTemp ORDER BY title COLLATE NOCASE"];
-		
-		// Check if loading should stop
-		if (viewObjects.cancelLoading)
-		{
-			viewObjects.cancelLoading = NO;
-			viewObjects.isAlbumsLoading = NO;
-			[self performSelectorInBackground:@selector(hideLoadingScreen) withObject:nil];
-			return;
-		}
-		[databaseControls.allAlbumsDb executeUpdate:@"UPDATE resumeLoad SET iteration = ?", [NSNumber numberWithInt:2]];
-	}
-	
-	if ([databaseControls.allAlbumsDb intForQuery:@"SELECT iteration FROM resumeLoad"] == 2)
-	{
-		// Check if loading should stop
-		if (viewObjects.cancelLoading)
-		{
-			viewObjects.cancelLoading = NO;
-			viewObjects.isAlbumsLoading = NO;
-			[self performSelectorInBackground:@selector(hideLoadingScreen) withObject:nil];
-			return;
-		}
-		[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE allAlbumsTemp"];
-		[databaseControls.allAlbumsDb executeUpdate:@"VACUUM"];
-		
-		// Check if loading should stop
-		if (viewObjects.cancelLoading)
-		{
-			viewObjects.cancelLoading = NO;
-			viewObjects.isAlbumsLoading = NO;
-			[self performSelectorInBackground:@selector(hideLoadingScreen) withObject:nil];
-			return;
-		}
-		// Create the section info array
-		self.sectionInfo = [databaseControls sectionInfoFromTable:@"allAlbums" inDatabase:databaseControls.allAlbumsDb withColumn:@"title"];
-		[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE sectionInfo"];
-		[databaseControls.allAlbumsDb executeUpdate:@"CREATE TABLE sectionInfo (title TEXT, row INTEGER)"];
-		for (NSArray *section in sectionInfo)
-		{
-			[databaseControls.allAlbumsDb executeUpdate:@"INSERT INTO sectionInfo (title, row) VALUES (?, ?)", [section objectAtIndex:0], [section objectAtIndex:1]];
-		}
-		
-		// Count the table
-		numberOfRows = [databaseControls.allAlbumsDb intForQuery:@"SELECT COUNT(*) FROM allAlbums"];
-		
-		// Save the reload time to user defaults
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		[defaults setObject:[NSDate date] forKey:[NSString stringWithFormat:@"%@albumsReloadTime", appDelegate.defaultUrl]];
-		[defaults synchronize];
-		
-		// Check if loading should stop
-		if (viewObjects.cancelLoading)
-		{
-			viewObjects.cancelLoading = NO;
-			viewObjects.isAlbumsLoading = NO;
-			[self performSelectorInBackground:@selector(hideLoadingScreen) withObject:nil];
-			return;
-		}
-		[databaseControls.allAlbumsDb executeUpdate:@"UPDATE resumeLoad SET iteration = ?", [NSNumber numberWithInt:3]];
-	}
-	
-	// Must do the UI stuff in the main thread
-	[self performSelectorOnMainThread:@selector(loadData2) withObject:nil waitUntilDone:NO];
-	
-	[autoreleasePool release];*/
-}	
-
-
 - (void) updateMessage
 {
 	[viewObjects.allAlbumsLoadingScreen setAllMessagesText:[NSArray arrayWithObjects:@"Sorting Table", @"", @"", @"", nil]];
@@ -349,66 +164,6 @@ static NSInteger order (id a, id b, void* context)
 	viewObjects.allAlbumsLoadingScreen = nil;
 	
 	[autoreleasePool release];
-}
-
-
-- (void) loadData2
-{
-	// Check if loading should stop
-	if (viewObjects.cancelLoading)
-	{
-		viewObjects.cancelLoading = NO;
-		viewObjects.isAlbumsLoading = NO;
-		[self hideLoadingScreen];
-		return;
-	}
-	viewObjects.isAlbumsLoading = NO;
-	[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:[NSString stringWithFormat:@"%@isAllAlbumsLoading", [SavedSettings sharedInstance].urlString]];
-	[[NSUserDefaults standardUserDefaults] synchronize];
-	
-	[self addCount];
-	
-	self.tableView.backgroundColor = [UIColor clearColor];
-	
-	// Hide the loading screen
-	[self hideLoadingScreen];
-	
-	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
-	if(musicControls.streamer || musicControls.showNowPlayingIcon)
-	{
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
-	}
-	else
-	{
-		self.navigationItem.rightBarButtonItem = nil;
-	}
-	
-	// Check if loading should stop
-	if (viewObjects.cancelLoading)
-	{
-		viewObjects.cancelLoading = NO;
-		viewObjects.isAlbumsLoading = NO;
-		return;
-	}
-	[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE resumeLoad"];
-}
-
-
-- (NSArray *)createSectionInfo
-{
-	NSMutableArray *sections = [[NSMutableArray alloc] init];
-	FMResultSet *result = [databaseControls.allAlbumsDb executeQuery:@"SELECT * FROM sectionInfo"];
-	
-	while ([result next])
-	{
-		[sections addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], 
-													  [NSNumber numberWithInt:[result intForColumnIndex:1]], nil]];
-	}
-	
-	NSArray *returnArray = [NSArray arrayWithArray:sections];
-	[sections release];
-	
-	return returnArray;
 }
 
 
@@ -509,7 +264,7 @@ static NSInteger order (id a, id b, void* context)
 	searchBar.text = @"";
 	[searchBar resignFirstResponder];
 	
-	didBeginSearching = NO;
+	isSearching = NO;
 	letUserSelectRow = YES;
 	viewObjects.isSearchingAllAlbums = NO;
 	self.navigationItem.leftBarButtonItem = nil;
@@ -599,35 +354,35 @@ static NSInteger order (id a, id b, void* context)
 // Following 2 methods handle the right side index
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView 
 {
-	if(viewObjects.isSearchingAllAlbums || didBeginSearching)
+	if(isSearching)
+	{
 		return nil;
+	}
 	else
 	{
-		NSMutableArray *searchIndexes = [[[NSMutableArray alloc] init] autorelease];
-		[searchIndexes addObject:@"{search}"];
-		for (int i = 0; i < [sectionInfo count]; i++)
+		NSMutableArray *titles = [NSMutableArray arrayWithCapacity:0];
+		[titles addObject:@"{search}"];
+		for (Index *item in dataModel.index)
 		{
-			[searchIndexes addObject:[[sectionInfo objectAtIndex:i] objectAtIndex:0]];
+			[titles addObject:item.name];
 		}
-		return searchIndexes;
+		
+		return titles;
 	}
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index 
 {
-	if(viewObjects.isSearchingAllAlbums || didBeginSearching)
+	if(isSearching)
 		return -1;
 	
-	if (index == 0)
+	if (index == 0) 
 	{
 		[tableView scrollRectToVisible:CGRectMake(0, 50, 320, 40) animated:NO];
-	}
-	else
-	{
-		[tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[[[sectionInfo objectAtIndex:(index - 1)] objectAtIndex:1] intValue] inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+		return -1;
 	}
 	
-	return -1;
+	return index - 1;
 }
 
 
@@ -662,7 +417,7 @@ static NSInteger order (id a, id b, void* context)
 	}
 	
 	// Remove the index bar
-	didBeginSearching = YES;
+	isSearching = YES;
 	[self.tableView reloadData];
 	
 	//Add the done button.
@@ -726,35 +481,48 @@ static NSInteger order (id a, id b, void* context)
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView 
 {
-	return 1;
+	if (isSearching)
+	{
+		return 1;
+	}
+	else
+	{
+		NSUInteger count = [[dataModel index] count];
+		return count;
+	}
 }
 
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	if(viewObjects.isSearchingAllAlbums)
+	if (isSearching)
 	{
-		return [databaseControls.allAlbumsDb intForQuery:@"SELECT COUNT(*) FROM allAlbumsSearch"];
+		return dataModel.searchCount;
 	}
 	else 
 	{
-		return numberOfRows;
+		return [(Index *)[dataModel.index objectAtIndex:section] count];
 	}
 }
 
-
+								   
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
 	static NSString *CellIdentifier = @"Cell";
 	AllAlbumsUITableViewCell *cell = [[[AllAlbumsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 	
-	Album *anAlbum;
-	if(viewObjects.isSearchingAllAlbums)
-		anAlbum = [databaseControls albumFromDbRow:indexPath.row inTable:@"allAlbumsSearch" inDatabase:databaseControls.allAlbumsDb];
+	Album *anAlbum = nil;
+	if(isSearching)
+	{
+		anAlbum = [dataModel albumForPositionInSearch:(indexPath.row + 1)];
+	}
 	else
-		anAlbum = [databaseControls albumFromDbRow:indexPath.row inTable:@"allAlbums" inDatabase:databaseControls.allAlbumsDb];
+	{
+		NSUInteger sectionStartIndex = [(Index *)[dataModel.index objectAtIndex:indexPath.section] position];
+		anAlbum = [dataModel albumForPosition:(sectionStartIndex + indexPath.row)];
+	}
 	
 	cell.myId = anAlbum.albumId;
 	cell.myArtist = [Artist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
@@ -802,11 +570,16 @@ static NSInteger order (id a, id b, void* context)
 {
 	if (viewObjects.isCellEnabled)
 	{
-		Album *anAlbum;
-		if(viewObjects.isSearchingAllAlbums)
-			anAlbum = [databaseControls albumFromDbRow:indexPath.row inTable:@"allAlbumsSearch" inDatabase:databaseControls.allAlbumsDb];
+		Album *anAlbum = nil;
+		if(isSearching)
+		{
+			anAlbum = [dataModel albumForPositionInSearch:(indexPath.row + 1)];
+		}
 		else
-			anAlbum = [databaseControls albumFromDbRow:indexPath.row inTable:@"allAlbums" inDatabase:databaseControls.allAlbumsDb];
+		{
+			NSUInteger sectionStartIndex = [(Index *)[dataModel.index objectAtIndex:indexPath.section] position];
+			anAlbum = [dataModel albumForPosition:(sectionStartIndex + indexPath.row)];
+		}
 		
 		AlbumViewController* albumViewController = [[AlbumViewController alloc] initWithArtist:nil orAlbum:anAlbum];
 		[self.navigationController pushViewController:albumViewController animated:YES];

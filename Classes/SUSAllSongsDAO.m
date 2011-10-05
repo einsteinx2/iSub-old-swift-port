@@ -1,0 +1,315 @@
+//
+//  SUSAllSongsDAO.m
+//  iSub
+//
+//  Created by Ben Baron on 9/23/11.
+//  Copyright 2011 Ben Baron. All rights reserved.
+//
+
+#import "SUSAllSongsDAO.h"
+#import "SUSAllSongsLoader.h"
+#import "Index.h"
+#import "Song.h"
+#import "DatabaseSingleton.h"
+#import "FMDatabase.h"
+#import "FMDatabaseAdditions.h"
+
+@implementation SUSAllSongsDAO
+
+@synthesize isLoading, loader;
+
+- (void)setup
+{
+	delegate = nil;
+	loader = nil;
+	count = NSUIntegerMax;
+	index = nil;
+	db = [[DatabaseSingleton sharedInstance] allSongsDb]; 
+}
+
+- (id)init
+{
+    if ((self = [super init]))
+	{
+        [self setup];
+    }
+    
+    return self;
+}
+
+- (id)initWithDelegate:(id <LoaderDelegate>)theDelegate
+{
+    if ((self = [super init]))
+	{
+		[self setup];
+		delegate = [theDelegate retain];
+    }
+    
+    return self;
+}
+
+- (void)dealloc
+{
+	[delegate release]; delegate = nil;
+	[loader release]; loader = nil;
+	[index release]; index = nil;
+	
+	[super dealloc];
+}
+
+#pragma mark - Private Methods
+
+- (NSUInteger)allSongsCount
+{
+	NSUInteger value = NSUIntegerMax;
+	
+	if ([db tableExists:@"allSongsCount"] && [db intForQuery:@"SELECT COUNT(*) FROM allSongsCount"] > 0)
+	{
+		value = [db intForQuery:@"SELECT count FROM allSongsCount LIMIT 1"];
+	}
+	
+	return value;
+}
+
+- (NSUInteger)allSongsSearchCount
+{
+	NSUInteger value = NSUIntegerMax;
+	
+	if ([db tableExists:@"allSongsNameSearch"])
+	{
+		value = [db intForQuery:@"SELECT count(*) FROM allSongsNameSearch"];
+	}
+	
+	return value;
+}
+
+- (NSArray *)allSongsIndex
+{
+	NSMutableArray *indexItems = [NSMutableArray arrayWithCapacity:0];
+	
+	FMResultSet *result = [db executeQuery:@"SELECT * FROM allSongsIndexCache"];
+	while ([result next])
+	{
+		Index *item = [[Index alloc] init];
+		item.name = [result stringForColumn:@"name"];
+		item.position = [result intForColumn:@"position"];
+		item.count = [result intForColumn:@"count"];
+		[indexItems addObject:item];
+	}
+	[result close];
+	
+	return [NSArray arrayWithArray:indexItems];
+}
+
+- (Song *)allSongsSongForPosition:(NSUInteger)position
+{
+	Song *aSong = [[Song alloc] init];
+	FMResultSet *result = [db executeQuery:@"SELECT * FROM allSongs WHERE ROWID = %i", [NSNumber numberWithInt:position]];
+	[result next];
+	if ([db hadError]) 
+	{
+		DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+	}
+	else
+	{
+		if ([result stringForColumn:@"title"] != nil)
+			aSong.title = [NSString stringWithString:[result stringForColumn:@"title"]];
+		if ([result stringForColumn:@"songId"] != nil)
+			aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
+		if ([result stringForColumn:@"artist"] != nil)
+			aSong.artist = [NSString stringWithString:[result stringForColumn:@"artist"]];
+		if ([result stringForColumn:@"album"] != nil)
+			aSong.album = [NSString stringWithString:[result stringForColumn:@"album"]];
+		if ([result stringForColumn:@"genre"] != nil)
+			aSong.genre = [NSString stringWithString:[result stringForColumn:@"genre"]];
+		if ([result stringForColumn:@"coverArtId"] != nil)
+			aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
+		if ([result stringForColumn:@"path"] != nil)
+			aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
+		if ([result stringForColumn:@"suffix"] != nil)
+			aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
+		if ([result stringForColumn:@"transcodedSuffix"] != nil)
+			aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
+		aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
+		aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
+		aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
+		aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
+		aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
+	}
+	
+	[result close];
+	
+	if (aSong.path == nil)
+	{
+		[aSong release]; aSong = nil;
+	}
+	
+	return [aSong autorelease];
+}
+
+- (Song *)allSongsSongForPositionInSearch:(NSUInteger)position
+{
+	Song *aSong = [[Song alloc] init];
+	FMResultSet *result = [db executeQuery:@"SELECT * FROM allSongsNameSearch WHERE ROWID = %i", [NSNumber numberWithInt:position]];
+	[result next];
+	if ([db hadError]) 
+	{
+		DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+	}
+	else
+	{
+		if ([result stringForColumn:@"title"] != nil)
+			aSong.title = [NSString stringWithString:[result stringForColumn:@"title"]];
+		if ([result stringForColumn:@"songId"] != nil)
+			aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
+		if ([result stringForColumn:@"artist"] != nil)
+			aSong.artist = [NSString stringWithString:[result stringForColumn:@"artist"]];
+		if ([result stringForColumn:@"album"] != nil)
+			aSong.album = [NSString stringWithString:[result stringForColumn:@"album"]];
+		if ([result stringForColumn:@"genre"] != nil)
+			aSong.genre = [NSString stringWithString:[result stringForColumn:@"genre"]];
+		if ([result stringForColumn:@"coverArtId"] != nil)
+			aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
+		if ([result stringForColumn:@"path"] != nil)
+			aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
+		if ([result stringForColumn:@"suffix"] != nil)
+			aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
+		if ([result stringForColumn:@"transcodedSuffix"] != nil)
+			aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
+		aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
+		aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
+		aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
+		aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
+		aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
+	}
+	
+	[result close];
+	
+	if (aSong.path == nil)
+	{
+		[aSong release]; aSong = nil;
+	}
+	
+	return [aSong autorelease];
+}
+
+- (void)allSongsClearSearch
+{
+	[db executeUpdate:@"DELETE FROM allSongsNameSearch"];
+}
+
+- (void)allSongsPerformSearch:(NSString *)name
+{
+	// Inialize the search DB
+	[db executeUpdate:@"DROP TABLE IF EXISTS allSongsNameSearch"];
+	[db executeUpdate:@"CREATE TEMPORARY TABLE allSongsNameSearch (id TEXT PRIMARY KEY, name TEXT)"];
+	
+	// Perform the search
+	NSString *query = @"INSERT INTO allSongsNameSearch SELECT * FROM allSongs WHERE name LIKE ? LIMIT 100";
+	[db executeUpdate:query, [NSString stringWithFormat:@"%%%@%%", name]];
+	if ([db hadError]) {
+		DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+	}
+}
+
+- (BOOL)allSongsIsDataLoaded
+{
+	BOOL isLoaded = NO;
+	
+	if ([db tableExists:@"allSongsCount"] && [db intForQuery:@"SELECT COUNT(*) FROM allSongsCount"] > 0)
+	{
+		isLoaded = YES;
+	}
+	
+	return isLoaded;
+}
+
+#pragma mark - Public DAO Methods
+
+- (NSUInteger)count
+{
+	if (count == NSUIntegerMax)
+	{
+		count = [self allSongsCount];
+	}
+	
+	return count;
+}
+
+- (NSUInteger)searchCount
+{
+	return [self allSongsSearchCount];
+}
+
+- (NSArray *)index
+{
+	if (index == nil)
+	{
+		index = [[self allSongsIndex] retain];
+	}
+	
+	return index;
+}
+
+- (Song *)songForPosition:(NSUInteger)position
+{
+	return [self allSongsSongForPosition:position];
+}
+
+- (Song *)songForPositionInSearch:(NSUInteger)position
+{
+	return [self allSongsSongForPositionInSearch:position];
+}
+
+- (void)clearSearchTable
+{
+	[self allSongsClearSearch];
+}
+
+- (void)searchForSongName:(NSString *)name
+{
+	[self allSongsPerformSearch:name];
+}
+
+- (BOOL)isDataLoaded
+{
+	return [self allSongsIsDataLoaded];
+}
+
+- (void)allSongsRestartLoad
+{
+	[db executeUpdate:@"CREATE TABLE restartLoad (a INTEGER)"];
+}
+
+#pragma mark - Loader Manager Methods
+
+- (void)restartLoad
+{
+	if (!isLoading)
+	{
+		[self allSongsRestartLoad];
+		[self startLoad];
+	}
+}
+
+- (void)startLoad
+{
+	if (!isLoading)
+	{
+		isLoading = YES;
+		self.loader = [[SUSAllSongsLoader alloc] initWithDelegate:delegate];
+		[loader startLoad];
+	}
+}
+
+- (void)cancelLoad
+{
+	if (isLoading)
+	{
+		isLoading = NO;
+		[loader cancelLoad];
+		[loader release]; loader = nil;
+	}
+}
+
+@end

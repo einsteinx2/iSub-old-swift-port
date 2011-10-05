@@ -6,7 +6,7 @@
 //  Copyright Ben Baron 2010. All rights reserved.
 //
 
-@class iSubAppDelegate, ViewObjectsSingleton, SearchOverlayViewController, Album, MusicSingleton, DatabaseSingleton;
+@class iSubAppDelegate, ViewObjectsSingleton, SearchOverlayViewController, Album, MusicSingleton, DatabaseSingleton, SUSAllAlbumsDAO;
 
 @interface AllAlbumsViewController : UITableViewController <UISearchBarDelegate> 
 {
@@ -14,6 +14,8 @@
 	ViewObjectsSingleton *viewObjects;
 	MusicSingleton *musicControls;
 	DatabaseSingleton *databaseControls;
+	
+	SUSAllAlbumsDAO *dataModel;
 	
 	UIView *headerView;
 	UIButton *reloadButton;
@@ -32,13 +34,14 @@
 	
 	NSArray *sectionInfo;
 	
-	BOOL didBeginSearching;
+	BOOL isSearching;
 }
+
+@property (nonatomic, retain) SUSAllAlbumsDAO *dataModel;
 
 @property (nonatomic, retain) UIView *headerView;
 @property (nonatomic, retain) NSArray *sectionInfo;
 
-- (NSArray *)createSectionInfo;
 - (void) addCount;
 
 - (void) searchTableView;

@@ -34,6 +34,8 @@
 	BOOL hasSwiped;
 	BOOL fingerIsMovingLeftOrRight;
 	BOOL fingerMovingVertically;
+	
+	BOOL isSearching;
 }
 
 @property (nonatomic, retain) NSIndexPath *indexPath;
@@ -46,6 +48,8 @@
 
 @property BOOL isOverlayShowing;
 @property (nonatomic, retain) CellOverlay *overlayView;
+
+@property BOOL isSearching;
 
 
 - (BOOL)isTouchGoingLeftOrRight:(UITouch *)touch;

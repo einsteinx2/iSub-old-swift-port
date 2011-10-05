@@ -19,7 +19,7 @@
 
 @implementation AllSongsUITableViewCell
 
-@synthesize indexPath, md5, coverArtView, songNameScrollView, songNameLabel, artistNameLabel, isOverlayShowing, overlayView;
+@synthesize indexPath, md5, coverArtView, songNameScrollView, songNameLabel, artistNameLabel, isOverlayShowing, overlayView, isSearching;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
 {
@@ -31,6 +31,7 @@
 		musicControls = [MusicSingleton sharedInstance];
 		databaseControls = [DatabaseSingleton sharedInstance];
 		
+		isSearching = NO;
 		isOverlayShowing = NO;
 		
 		coverArtView = [[AsynchronousImageViewCached alloc] init];
@@ -73,7 +74,7 @@
 
 - (void)downloadAction
 {
-	if (viewObjects.isSearchingAllSongs) 
+	if (isSearching) 
 	{
 		Song *aSong = [[databaseControls songFromDbRow:indexPath.row inTable:@"allSongsSearch" inDatabase:databaseControls.allSongsDb] retain];
 		[databaseControls addSongToCacheQueue:aSong];
@@ -100,7 +101,7 @@
 
 - (void)queueAction
 {	
-	if (viewObjects.isSearchingAllSongs) 
+	if (isSearching) 
 	{
 		Song *aSong = [databaseControls songFromDbRow:indexPath.row inTable:@"allSongsSearch" inDatabase:databaseControls.allSongsDb];
 		[databaseControls queueSong:aSong];

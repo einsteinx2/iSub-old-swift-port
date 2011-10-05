@@ -6,6 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+#import "TBXML.h"
 
 @interface Song : NSObject <NSCoding, NSCopying> 
 {
@@ -45,6 +46,7 @@
 
 - (id)copyWithZone:(NSZone *)zone;
 
-- (id)initWithAttributeDict:(NSDictionary*)attributeDict;
+- (id)initWithTBXMLElement:(TBXMLElement *)element;
+- (id)initWithAttributeDict:(NSDictionary *)attributeDict;
 
 @end

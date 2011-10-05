@@ -11,9 +11,21 @@
 
 @implementation Index
 
-@synthesize name;
+@synthesize name, position, count;
 
-- (void) dealloc 
+- (id)init
+{
+	if ((self = [super init]))
+	{
+		name = nil;
+		position = NSUIntegerMax;
+		count = NSUIntegerMax;
+	}
+	
+	return self;
+}
+
+- (void)dealloc
 {
 	[name release]; name = nil;
 	[super dealloc];

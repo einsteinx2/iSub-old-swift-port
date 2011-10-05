@@ -11,8 +11,12 @@
 @interface Index : NSObject 
 {
 	NSString *name;
+	NSUInteger position;
+	NSUInteger count;
 }
 
 @property (nonatomic, retain) NSString *name;
+@property NSUInteger position;
+@property NSUInteger count;
 
 @end

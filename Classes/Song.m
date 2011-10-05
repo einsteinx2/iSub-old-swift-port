@@ -7,14 +7,65 @@
 //
 
 #import "Song.h"
-
+#import "GTMNSString+HTML.h"
 
 @implementation Song
 
 @synthesize title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix;
 @synthesize duration, bitRate, track, year, size;
 
-- (id)initWithAttributeDict:(NSDictionary*)attributeDict
+- (id)initWithTBXMLElement:(TBXMLElement *)element
+{
+	if ((self = [super init]))
+	{
+		title = nil;
+		songId = nil;
+		artist = nil;
+		album = nil;
+		genre = nil;
+		coverArtId = nil;
+		path = nil;
+		suffix = nil;
+		transcodedSuffix = nil;
+		duration = nil;
+		bitRate = nil;
+		track = nil;
+		year = nil;
+		size = nil;
+		
+		self.title = [[TBXML valueOfAttributeNamed:@"title" forElement:element] gtm_stringByUnescapingFromHTML];
+		self.songId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
+		self.artist = [[TBXML valueOfAttributeNamed:@"artist" forElement:element] gtm_stringByUnescapingFromHTML];
+		if([TBXML valueOfAttributeNamed:@"album" forElement:element])
+			self.album = [[TBXML valueOfAttributeNamed:@"album" forElement:element] gtm_stringByUnescapingFromHTML];
+		if([TBXML valueOfAttributeNamed:@"genre" forElement:element])
+			self.genre = [[TBXML valueOfAttributeNamed:@"genre" forElement:element] gtm_stringByUnescapingFromHTML];
+		if([TBXML valueOfAttributeNamed:@"coverArt" forElement:element])
+			self.coverArtId = [TBXML valueOfAttributeNamed:@"coverArt" forElement:element];
+		self.path = [TBXML valueOfAttributeNamed:@"path" forElement:element];
+		self.suffix = [TBXML valueOfAttributeNamed:@"suffix" forElement:element];
+		if ([TBXML valueOfAttributeNamed:@"transcodedSuffix" forElement:element])
+			self.transcodedSuffix = [TBXML valueOfAttributeNamed:@"transcodedSuffix" forElement:element];
+		
+		NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+		if([TBXML valueOfAttributeNamed:@"duration" forElement:element])
+			self.duration = [numberFormatter numberFromString:[TBXML valueOfAttributeNamed:@"duration" forElement:element]];
+		if([TBXML valueOfAttributeNamed:@"bitRate" forElement:element])
+			self.bitRate = [numberFormatter numberFromString:[TBXML valueOfAttributeNamed:@"bitRate" forElement:element]];
+		if([TBXML valueOfAttributeNamed:@"track" forElement:element])
+			self.track = [numberFormatter numberFromString:[TBXML valueOfAttributeNamed:@"track" forElement:element]];
+		if([TBXML valueOfAttributeNamed:@"year" forElement:element])
+			self.year = [numberFormatter numberFromString:[TBXML valueOfAttributeNamed:@"year" forElement:element]];
+		if([TBXML valueOfAttributeNamed:@"size" forElement:element])
+			self.size = [numberFormatter numberFromString:[TBXML valueOfAttributeNamed:@"size" forElement:element]];
+		
+		[numberFormatter release];
+	}
+	
+	return self;
+}
+
+- (id)initWithAttributeDict:(NSDictionary *)attributeDict
 {
 	if ((self = [super init]))
 	{

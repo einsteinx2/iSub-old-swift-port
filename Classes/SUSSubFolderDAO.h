@@ -14,9 +14,6 @@
 @interface SUSSubFolderDAO : Loader
 {
 	FMDatabase *db;
-	
-	NSURLConnection *connection;
-	NSMutableData *receivedData;
 }
 
 

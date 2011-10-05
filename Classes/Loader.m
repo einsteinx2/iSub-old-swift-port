@@ -13,14 +13,13 @@
 
 @implementation Loader
 
-@synthesize delegate, loadError, results;
+@synthesize delegate, loadError;
 
 - (id)init
 {
     self = [super init];
     if (self) 
 	{
-		results = nil;
 		loadError = nil;
 		delegate = nil;
     }
@@ -33,7 +32,6 @@
 	self = [super init];
     if (self) 
 	{
-		results = nil;
 		loadError = nil;
 		delegate = [theDelegate retain];
 	}
@@ -43,7 +41,6 @@
 
 - (void)dealloc
 {
-	[results release]; results = nil;
 	[loadError release]; loadError = nil;
 	[delegate release]; delegate = nil;
     [super dealloc];
