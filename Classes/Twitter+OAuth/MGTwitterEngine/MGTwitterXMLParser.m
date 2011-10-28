@@ -37,7 +37,7 @@ connectionIdentifier:(NSString *)theIdentifier requestType:(MGTwitterRequestType
         identifier = [theIdentifier retain];
         requestType = reqType;
         responseType = respType;
-        delegate = theDelegate;
+        delegate = (NSObject<MGTwitterParserDelegate> *)theDelegate;
         parsedObjects = [[NSMutableArray alloc] initWithCapacity:0];
         
         // Set up the parser object.

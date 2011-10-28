@@ -347,7 +347,7 @@
 		}
 		appDelegate.splitView.detailViewController = appDelegate.allSongsNavigationController;
 	}
-	[appDelegate.splitView.detailViewController willRotateToInterfaceOrientation:[[UIDevice currentDevice] orientation] duration:0];
+	[appDelegate.splitView.detailViewController willRotateToInterfaceOrientation:(UIInterfaceOrientation)[[UIDevice currentDevice] orientation] duration:0];
 	[appDelegate.splitView.detailViewController viewWillAppear:NO];
 	appDelegate.splitView.detailViewController.view.hidden = NO;
 	[(UINavigationController*)appDelegate.splitView.detailViewController navigationBar].barStyle = UIBarStyleBlack;

@@ -43,7 +43,7 @@ connectionIdentifier:(NSString *)theIdentifier requestType:(MGTwitterRequestType
 		requestType = reqType;
 		responseType = respType;
 		URL = [theURL retain];
-		delegate = theDelegate;
+		delegate = (NSObject<MGTwitterParserDelegate> *)theDelegate;
 		parsedObjects = [[NSMutableArray alloc] initWithCapacity:0];
 
 		// setup the xml reader

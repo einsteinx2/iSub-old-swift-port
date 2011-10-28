@@ -90,11 +90,21 @@
 	[self updateNetworkActivityIndicator];
 }
 
+- (id)uploadProgressDelegate
+{
+	return uploadProgressDelegate;
+}
+
 - (void)setUploadProgressDelegate:(id)newDelegate
 {
 	uploadProgressDelegate = newDelegate;
 	[self resetProgressDelegate:newDelegate];
 
+}
+
+- (id)downloadProgressDelegate
+{
+	return downloadProgressDelegate;
 }
 
 - (void)setDownloadProgressDelegate:(id)newDelegate
@@ -326,8 +336,6 @@
 @synthesize bytesDownloadedSoFar;
 @synthesize totalBytesToDownload;
 @synthesize shouldCancelAllRequestsOnFailure;
-@synthesize uploadProgressDelegate;
-@synthesize downloadProgressDelegate;
 @synthesize requestDidStartSelector;
 @synthesize requestDidReceiveResponseHeadersSelector;
 @synthesize requestDidFinishSelector;

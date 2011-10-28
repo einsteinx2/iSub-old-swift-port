@@ -264,7 +264,6 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 @implementation AudioStreamer
 
 @synthesize errorCode;
-@synthesize state;
 @synthesize bitRate;
 @synthesize offsetStart;
 @synthesize stopReason;
@@ -538,6 +537,11 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 				waitUntilDone:NO];
 		}
 	}
+}
+
+- (AudioStreamerState)state
+{
+	return state;
 }
 
 //

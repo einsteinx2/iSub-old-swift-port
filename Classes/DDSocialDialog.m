@@ -373,7 +373,7 @@ static CGFloat kDDSocialDialogPadding = 10;
 		self.transform = CGAffineTransformIdentity;
 	}
 	
-	orientation_ = [UIApplication sharedApplication].statusBarOrientation;
+	orientation_ = (UIDeviceOrientation)[UIApplication sharedApplication].statusBarOrientation;
 	
 	CGSize frameSize = defaultFrameSize_;
 	self.frame = CGRectMake(kDDSocialDialogPadding, kDDSocialDialogPadding, frameSize.width - kDDSocialDialogPadding * 2, frameSize.height - kDDSocialDialogPadding * 2);
@@ -405,7 +405,7 @@ static CGFloat kDDSocialDialogPadding = 10;
 
 - (void)deviceOrientationDidChange:(void*)object {
 	
-	UIDeviceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+	UIDeviceOrientation orientation = (UIDeviceOrientation)[UIApplication sharedApplication].statusBarOrientation;
 	
 	if ([self shouldRotateToOrientation:orientation]) {
 		if (!showingKeyboard_) {

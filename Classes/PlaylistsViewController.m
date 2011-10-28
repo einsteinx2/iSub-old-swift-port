@@ -2003,7 +2003,7 @@ static NSString *kName_Error = @"error";
 	{
 		static NSString *CellIdentifier = @"Cell";
 		
-		LocalPlaylistsUITableViewCell *cell = [[[LocalPlaylistsUITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
+		LocalPlaylistsUITableViewCell *cell = [[[LocalPlaylistsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 		cell.indexPath = indexPath;
 		
 		// Set up the cell...
@@ -2038,7 +2038,7 @@ static NSString *kName_Error = @"error";
 	{
 		static NSString *CellIdentifier = @"Cell";
 		
-		PlaylistsUITableViewCell *cell = [[[PlaylistsUITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
+		PlaylistsUITableViewCell *cell = [[[PlaylistsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 		cell.indexPath = indexPath;
 		
 		cell.deleteToggleImage.hidden = !viewObjects.isEditing;

@@ -135,7 +135,7 @@ static CacheSingleton *sharedInstance = nil;
 
 - (void)findCacheSize
 {
-	NSDate *startTime = [NSDate date];
+	//NSDate *startTime = [NSDate date];
 	
 	SavedSettings *settings = [SavedSettings sharedInstance];
 	
@@ -147,8 +147,8 @@ static CacheSingleton *sharedInstance = nil;
 	
 	cacheSize = size;
 	
-	DLog(@"cache size: %ul", cacheSize);
-	DLog(@"findCacheSize took %ul", [[NSDate date] timeIntervalSinceDate:startTime]); 
+	//DLog(@"cache size: %i", cacheSize);
+	//DLog(@"findCacheSize took %f", [[NSDate date] timeIntervalSinceDate:startTime]); 
 }
 
 - (void) checkCache

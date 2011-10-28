@@ -91,7 +91,7 @@
 	headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	headerView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
 	
-	textInput = [[UITextView alloc] initWithFrame:CGRectMake(5, 5, 240, 72)];
+	textInput = [[CustomUITextView alloc] initWithFrame:CGRectMake(5, 5, 240, 72)];
 	textInput.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	textInput.font = [UIFont systemFontOfSize:16];
 	textInput.delegate = self;

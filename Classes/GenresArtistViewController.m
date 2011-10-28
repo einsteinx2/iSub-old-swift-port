@@ -20,7 +20,7 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "NSString-md5.h"
-#import "SavedSettings.h";
+#import "SavedSettings.h"
 
 @implementation GenresArtistViewController
 

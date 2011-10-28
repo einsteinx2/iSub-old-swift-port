@@ -659,7 +659,7 @@
 		
 		// Set the current and next song objects
 		// Set the current and next song objects
-		musicControls.currentSongObject == nil;
+		musicControls.currentSongObject = nil;
 		musicControls.nextSongObject = nil; 
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		{

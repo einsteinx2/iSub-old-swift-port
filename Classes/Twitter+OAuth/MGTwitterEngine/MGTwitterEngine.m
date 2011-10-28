@@ -98,7 +98,7 @@
 - (MGTwitterEngine *)initWithDelegate:(NSObject *)newDelegate
 {
     if ((self = [super init])) {
-        _delegate = newDelegate; // deliberately weak reference
+        _delegate = (NSObject<MGTwitterEngineDelegate> *)newDelegate; // deliberately weak reference
         _connections = [[NSMutableDictionary alloc] initWithCapacity:0];
         _clientName = [DEFAULT_CLIENT_NAME retain];
         _clientVersion = [DEFAULT_CLIENT_VERSION retain];

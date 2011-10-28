@@ -43,7 +43,7 @@
 {
 	if (motion == UIEventSubtypeMotionShake) 
 	{
-		DLog(@"oh ya, shake it now!: %d");
+		DLog(@"oh ya, shake it now!");
 	}
 }
 - (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event 

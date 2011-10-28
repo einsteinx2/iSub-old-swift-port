@@ -460,11 +460,21 @@ static BOOL isiPhoneOS2;
 	[stream close];
 }
 
+- (id)delegate
+{
+	return delegate;
+}
+
 - (void)setDelegate:(id)newDelegate
 {
 	[[self cancelledLock] lock];
 	delegate = newDelegate;
 	[[self cancelledLock] unlock];
+}
+
+- (id)queue
+{
+	return queue;
 }
 
 - (void)setQueue:(id)newQueue
@@ -1312,6 +1322,10 @@ static BOOL isiPhoneOS2;
 	}
 }
 
+- (id)uploadProgressDelegate
+{
+	return uploadProgressDelegate;
+}
 
 - (void)setUploadProgressDelegate:(id)newDelegate
 {
@@ -1324,6 +1338,11 @@ static BOOL isiPhoneOS2;
 	[ASIHTTPRequest performSelector:@selector(setMaxValue:) onTarget:[self uploadProgressDelegate] withObject:nil amount:&max];
 	#endif
 	[[self cancelledLock] unlock];
+}
+
+- (id)downloadProgressDelegate
+{
+	return downloadProgressDelegate;
 }
 
 - (void)setDownloadProgressDelegate:(id)newDelegate
@@ -3695,10 +3714,6 @@ static BOOL isiPhoneOS2;
 @synthesize proxyDomain;
 @synthesize url;
 @synthesize originalURL;
-@synthesize delegate;
-@synthesize queue;
-@synthesize uploadProgressDelegate;
-@synthesize downloadProgressDelegate;
 @synthesize useKeychainPersistence;
 @synthesize useSessionPersistence;
 @synthesize useCookiePersistence;

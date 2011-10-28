@@ -24658,7 +24658,8 @@ static int afpLock(sqlite3_file *id, int locktype){
     
     assert( pLock->cnt==0 );
     assert( pLock->locktype==0 );
-        
+	  
+	#pragma clang diagnostic ignored "-Wconstant-conversion" // fix for the warning on the next line
     mask = (sizeof(long)==8) ? LARGEST_INT64 : 0x7fffffff;
     /* Now get the read-lock SHARED_LOCK */
     /* note that the quality of the randomness doesn't matter that much */
@@ -104766,6 +104767,7 @@ SQLITE_PRIVATE int sqlite3Fts3InitHashTable(
   }
 #endif
 
+#pragma clang diagnostic ignored "-Wempty-body" // fix for the warning on the next line
   if( SQLITE_OK!=rc
    || SQLITE_OK!=(rc = sqlite3_create_function(db, zName, 1, any, p, scalarFunc, 0, 0))
    || SQLITE_OK!=(rc = sqlite3_create_function(db, zName, 2, any, p, scalarFunc, 0, 0))

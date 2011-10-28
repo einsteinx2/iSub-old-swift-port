@@ -48,6 +48,7 @@
 
 //#import <Foundation/Foundation.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
 #import <SystemConfiguration/SystemConfiguration.h>
+#import <netinet/in.h>
 
 typedef enum {
 	NotReachable = 0,

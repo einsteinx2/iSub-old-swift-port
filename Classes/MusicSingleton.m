@@ -1397,10 +1397,10 @@ static MusicSingleton *sharedInstance = nil;
 			DLog(@"removing %@", songMD5);
 			[databaseControls removeSongFromCacheDb:songMD5];
 
-			DLog(@"cacheSize: %i", cacheSize);
+			//DLog(@"cacheSize: %i", cacheSize);
 			cacheSize = cacheSize - songSize;
-			DLog(@"new cacheSize: %i", cacheSize);
-			DLog(@"maxCacheSize: %i", maxCacheSize);
+			//DLog(@"new cacheSize: %i", cacheSize);
+			//DLog(@"maxCacheSize: %i", maxCacheSize);
 			
 			// Sleep the thread so the repeated cacheSize calls don't kill performance
 			[NSThread sleepForTimeInterval:5];
@@ -2107,7 +2107,7 @@ static MusicSingleton *sharedInstance = nil;
     return UINT_MAX;  // denotes an object that cannot be released
 }
 
-- (void)release {
+- (oneway void)release {
     //do nothing
 }
 

@@ -151,7 +151,6 @@
 		}
 	}	
 	
-	
 	// app init 2
 	[databaseControls initDatabases];
 	
