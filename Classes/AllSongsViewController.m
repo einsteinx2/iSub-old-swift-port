@@ -34,6 +34,10 @@
 #import "SUSAllSongsDAO.h"
 #import "SUSAllSongsLoader.h"
 
+@interface AllSongsViewController (Private)
+- (void)hideLoadingScreen;
+@end
+
 @implementation AllSongsViewController
 
 @synthesize headerView, sectionInfo, dataModel, loadingScreen;
@@ -214,6 +218,19 @@
 	[searchOverlayView release];
 	[url release];
     [super dealloc];
+}
+
+#pragma mark - LoaderDelegate methods
+
+- (void)loadingFailed:(Loader*)loader
+{
+    
+}
+
+- (void)loadingFinished:(Loader*)loader
+{
+    [self hideLoadingScreen];
+    [self.tableView reloadData];
 }
 
 #pragma mark - Loading Display Handling

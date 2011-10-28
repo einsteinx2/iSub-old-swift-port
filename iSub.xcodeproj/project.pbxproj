@@ -4814,7 +4814,6 @@
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
 				);
-				LITE = 1;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = iSub;
 				PROVISIONING_PROFILE = "";
@@ -4852,7 +4851,6 @@
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
 				);
-				LITE = 1;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = iSub;
 				PROVISIONING_PROFILE = "8EF018F3-30A1-4F07-AF21-B3B6D0F32C44";
@@ -4890,7 +4888,7 @@
 				PROVISIONING_PROFILE = "B369E010-40BF-431E-9772-8034FA350669";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B369E010-40BF-431E-9772-8034FA350669";
 				SDKROOT = iphoneos;
-				SYMROOT = /Volumes/Data/Xcode_build;
+				SYMROOT = build;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = AdHoc;
@@ -4927,7 +4925,6 @@
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
 				);
-				LITE = 1;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = iSub;
 				PROVISIONING_PROFILE = "";
@@ -5206,7 +5203,7 @@
 				PROVISIONING_PROFILE = "DAB12A2B-4321-4624-B97C-2B9C9C4A24D6";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "DAB12A2B-4321-4624-B97C-2B9C9C4A24D6";
 				SDKROOT = iphoneos;
-				SYMROOT = /Volumes/Data/Xcode_build;
+				SYMROOT = build;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -5237,7 +5234,7 @@
 				PROVISIONING_PROFILE = "D4A8945F-4511-4F9F-B707-8A73518A9D3B";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D4A8945F-4511-4F9F-B707-8A73518A9D3B";
 				SDKROOT = iphoneos;
-				SYMROOT = /Volumes/Data/Xcode_build;
+				SYMROOT = build;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

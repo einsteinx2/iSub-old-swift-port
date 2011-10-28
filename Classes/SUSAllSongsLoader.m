@@ -290,7 +290,7 @@ static NSInteger order (id a, id b, void* context)
 	if (iteration == -1)
 	{
 		self.currentArtist = [rootFolders artistForPosition:currentRow];
-		//DLog(@"current artist: %@", currentArtist.name);
+		DLog(@"current artist: %@", currentArtist.name);
 		
 		[self sendArtistNotification:currentArtist.name];
 	}
@@ -300,7 +300,7 @@ static NSInteger order (id a, id b, void* context)
 			self.currentAlbum = [databaseControls albumFromDbRow:currentRow inTable:@"allAlbumsUnsorted" inDatabase:databaseControls.allAlbumsDb];
 		else
 			self.currentAlbum = [databaseControls albumFromDbRow:currentRow inTable:[NSString stringWithFormat:@"subalbums%i", iteration] inDatabase:databaseControls.allAlbumsDb];
-		//DLog(@"current album: %@", currentAlbum.title);
+		DLog(@"current album: %@", currentAlbum.title);
 		
 		self.currentArtist = [Artist artistWithName:currentAlbum.artistName andArtistId:currentAlbum.artistId];
 		
@@ -373,48 +373,48 @@ static NSInteger order (id a, id b, void* context)
 
 - (void)loadFinish
 {
-	/*NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
+	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	 
-	 // Check if loading should stop
-	 if (viewObjects.cancelLoading)
-	 {
-	 viewObjects.cancelLoading = NO;
-	 viewObjects.isAlbumsLoading = NO;
-	 viewObjects.isSongsLoading = NO;
-	 [self performSelectorInBackground:@selector(hideLoadingScreen) withObject:nil];
-	 return;
-	 }
-	 
-	 // Create the section info array
-	 self.sectionInfo = [databaseControls sectionInfoFromTable:@"allSongs" inDatabase:databaseControls.allSongsDb withColumn:@"title"];
-	 [databaseControls.allSongsDb executeUpdate:@"DROP TABLE sectionInfo"];
-	 [databaseControls.allSongsDb executeUpdate:@"CREATE TABLE sectionInfo (title TEXT, row INTEGER)"];
-	 for (NSArray *section in sectionInfo)
-	 {
-	 [databaseControls.allSongsDb executeUpdate:@"INSERT INTO sectionInfo (title, row) VALUES (?, ?)", [section objectAtIndex:0], [section objectAtIndex:1]];
-	 }
-	 
-	 // Check if loading should stop
-	 if (viewObjects.cancelLoading)
-	 {
-	 viewObjects.cancelLoading = NO;
-	 viewObjects.isSongsLoading = NO;
-	 [self performSelectorInBackground:@selector(hideLoadingScreen) withObject:nil];
-	 return;
-	 }
-	 // Count the table
-	 NSUInteger allSongsCount = [databaseControls.allSongsDb intForQuery:@"SELECT COUNT (*) FROM allSongs"];
-	 [databaseControls.allSongsDb intForQuery:@"INSERT INTO allSongsCount VALUES (?)", [NSNumber numberWithInt:allSongsCount]];
-	 
-	 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	 [defaults setObject:[NSDate date] forKey:[NSString stringWithFormat:@"%@songsReloadTime", settings.urlString]];
-	 [defaults synchronize];
-	 
-	 [databaseControls.allSongsDb executeUpdate:@"UPDATE resumeLoad SET albumNum = ?, iteration = ?", [NSNumber numberWithInt:0], [NSNumber numberWithInt:6]];
-	 
-	 [self performSelectorOnMainThread:@selector(loadData2) withObject:nil waitUntilDone:NO];
-	 
-	 [autoreleasePool release];*/
+    // Check if loading should stop
+    if (viewObjects.cancelLoading)
+    {
+        viewObjects.cancelLoading = NO;
+        viewObjects.isAlbumsLoading = NO;
+        viewObjects.isSongsLoading = NO;
+        [self performSelectorInBackground:@selector(hideLoadingScreen) withObject:nil];
+        return;
+    }
+    
+    /*// Create the section info array
+    self.sectionInfo = [databaseControls sectionInfoFromTable:@"allSongs" inDatabase:databaseControls.allSongsDb withColumn:@"title"];
+    [databaseControls.allSongsDb executeUpdate:@"DROP TABLE sectionInfo"];
+    [databaseControls.allSongsDb executeUpdate:@"CREATE TABLE sectionInfo (title TEXT, row INTEGER)"];
+    for (NSArray *section in sectionInfo)
+    {
+        [databaseControls.allSongsDb executeUpdate:@"INSERT INTO sectionInfo (title, row) VALUES (?, ?)", [section objectAtIndex:0], [section objectAtIndex:1]];
+    }*/
+    
+    // Check if loading should stop
+    if (viewObjects.cancelLoading)
+    {
+        viewObjects.cancelLoading = NO;
+        viewObjects.isSongsLoading = NO;
+        [self performSelectorInBackground:@selector(hideLoadingScreen) withObject:nil];
+        return;
+    }
+    // Count the table
+    NSUInteger allSongsCount = [databaseControls.allSongsDb intForQuery:@"SELECT COUNT (*) FROM allSongs"];
+    [databaseControls.allSongsDb executeUpdate:@"INSERT INTO allSongsCount VALUES (?)", [NSNumber numberWithInt:allSongsCount]];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:[NSDate date] forKey:[NSString stringWithFormat:@"%@songsReloadTime", settings.urlString]];
+    [defaults synchronize];
+    
+    [databaseControls.allSongsDb executeUpdate:@"UPDATE resumeLoad SET albumNum = ?, iteration = ?", [NSNumber numberWithInt:0], [NSNumber numberWithInt:6]];
+    
+    [self performSelectorOnMainThread:@selector(loadData2) withObject:nil waitUntilDone:NO];
+    
+    [autoreleasePool release];
 }
 
 - (void) loadData2
@@ -451,6 +451,8 @@ static NSInteger order (id a, id b, void* context)
 	}*/
 	
 	[databaseControls.allSongsDb executeUpdate:@"DROP TABLE resumeLoad"];
+    
+    [delegate loadingFinished:self];
 }
 
 
@@ -780,6 +782,18 @@ static NSString *kName_Error = @"error";
 		else
 		{
 			[databaseControls.allAlbumsDb executeUpdate:@"UPDATE resumeLoad SET artistNum = ?", [NSNumber numberWithInt:currentRow]];
+            
+            // Load the next folder
+            //
+            if (iteration < 4)
+            {
+                [self loadAlbumFolder];
+            }
+            else if (iteration == 4)
+            {
+                DLog(@"calling loadSort");
+                [self performSelectorInBackground:@selector(loadSort) withObject:nil];
+            }
 		}
 	}
 	else
@@ -825,17 +839,19 @@ static NSString *kName_Error = @"error";
 		else
 		{
 			[databaseControls.allSongsDb executeUpdate:@"UPDATE resumeLoad SET albumNum = ?", [NSNumber numberWithInt:currentRow]];
+            
+            // Load the next folder
+            //
+            if (iteration < 4)
+            {
+                [self loadAlbumFolder];
+            }
+            else if (iteration == 4)
+            {
+                DLog(@"calling loadSort");
+                [self performSelectorInBackground:@selector(loadSort) withObject:nil];
+            }
 		}
-	}
-	
-	// Load the next folder
-	//
-	if (iteration < 4)
-		[self loadAlbumFolder];
-	else if (iteration == 4)
-	{
-		DLog(@"calling loadSort");
-		[self performSelectorInBackground:@selector(loadSort) withObject:nil];
 	}
 	
 	[pool release];
