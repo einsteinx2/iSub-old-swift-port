@@ -13,6 +13,7 @@
 #import "DatabaseSingleton.h"
 #import "GTMNSString+HTML.h"
 #import "SavedSettings.h"
+#import "NSError-ISMSError.h"
 
 @implementation SUSRootFoldersLoader
 
@@ -33,7 +34,7 @@
     return self;
 }
 
-- (id)initWithDelegate:(id <LoaderDelegate>)theDelegate
+- (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate
 {
 	if ((self = [super initWithDelegate:theDelegate]))
 	{
@@ -176,70 +177,22 @@
 	//DLog(@"urlString: %@", urlString);
 	
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
-	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	if (connection)
+	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+	if (self.connection)
 	{
 		// Create the NSMutableData to hold the received data.
 		// receivedData is an instance variable declared elsewhere.
-		receivedData = [[NSMutableData data] retain];
+		self.receivedData = [NSMutableData data];
 	} 
 	else 
 	{
 		// Inform the delegate that the loading failed.
-		[delegate loadingFailed:self];
+		NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
+		[self.delegate loadingFailed:self withError:error];
 	}
-}
-
-- (void)cancelLoad
-{
-	// Clean up connection objects
-	[connection cancel];
-	[connection release]; connection = nil;
-	[receivedData release]; receivedData = nil;
-	[delegate release];
 }
 
 #pragma mark Connection Delegate
-
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
-{
-	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
-		return YES; // Self-signed cert will be accepted
-	
-	return NO;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{	
-	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
-	{
-		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
-	}
-	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-	DLog(@"did receive response");
-	[receivedData setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
-{
-	DLog("received data");
-    [receivedData appendData:incrementalData];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
-{
-	DLog("connection failed");
-	// Clean up the connection
-	[theConnection release]; theConnection = nil;
-	[receivedData release]; receivedData = nil;
-	
-	// Inform the delegate that loading failed
-	[delegate loadingFailed:self];
-}	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {		
@@ -253,7 +206,7 @@
 	
 	NSDate *startTime = [NSDate date];
 	
-	TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
+	TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData];
 	if (tbxml.rootXMLElement)
 	{
 		// Check for an error response
@@ -262,7 +215,7 @@
 		{
 			NSString *code = [TBXML valueOfAttributeNamed:@"code" forElement:errorElement];
 			NSString *message = [TBXML valueOfAttributeNamed:@"message" forElement:errorElement];
-			[self subsonicErrorCode:code message:message];
+			[self subsonicErrorCode:[code intValue] message:message];
 		}
 		
 		NSUInteger rowCount = 0;
@@ -367,8 +320,8 @@
 	DLog(@"Folders load time: %f", [[NSDate date] timeIntervalSinceDate:startTime]);
 	
 	// Clean up the connection
-	[theConnection release]; theConnection = nil;
-	[receivedData release]; receivedData = nil;
+	self.connection = nil;
+	self.receivedData = nil;
 	
 	// Update the count
 	[self rootFolderUpdateCount];
@@ -377,7 +330,7 @@
 	[[SavedSettings sharedInstance] setRootFoldersReloadTime:[NSDate date]];
 	
 	// Notify the delegate that the loading is finished
-	[delegate loadingFinished:self];
+	[self.delegate loadingFinished:self];
 }
 
 @end

@@ -6,8 +6,6 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-
-
 @class iSubAppDelegate, MusicSingleton, DatabaseSingleton, ViewObjectsSingleton, Artist;
 
 @interface SUSQueueAllDAO : NSObject 

@@ -6,13 +6,13 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "Loader.h"
+#import "SUSLoader.h"
 
 #define TEMP_FLUSH_AMOUNT 400
 
 @class FMDatabase;
 
-@interface SUSRootFoldersLoader : Loader
+@interface SUSRootFoldersLoader : SUSLoader
 {
     NSUInteger tempRecordCount;
 }

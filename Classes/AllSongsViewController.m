@@ -97,7 +97,7 @@
 	// Don't run this while the table is updating
 	if (viewObjects.isSongsLoading)
 	{
-		//TODO: display the loading progress box
+		// TODO: display the loading progress box
 	}
 	else
 	{
@@ -119,7 +119,7 @@
 		{
 			if (viewObjects.isAlbumsLoading)
 			{
-				//TODO: display the loading progress box
+				// TODO: display the loading progress box
 			}
 			else
 			{
@@ -221,12 +221,12 @@
 
 #pragma mark - LoaderDelegate methods
 
-- (void)loadingFailed:(Loader*)loader
+- (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
 {
     
 }
 
-- (void)loadingFinished:(Loader*)loader
+- (void)loadingFinished:(SUSLoader*)theLoader
 {
     [self hideLoadingScreen];
     [self.tableView reloadData];

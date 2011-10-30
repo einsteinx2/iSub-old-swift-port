@@ -6,11 +6,11 @@
 //  Copyright Ben Baron 2010. All rights reserved.
 //
 
-#import "LoaderDelegate.h"
+#import "SUSLoaderDelegate.h"
 
 @class iSubAppDelegate, SavedSettings, ViewObjectsSingleton, SearchOverlayViewController, Song, MusicSingleton, DatabaseSingleton, Album, SUSAllSongsDAO, LoadingScreen;
 
-@interface AllSongsViewController : UITableViewController <UISearchBarDelegate, LoaderDelegate> 
+@interface AllSongsViewController : UITableViewController <UISearchBarDelegate, SUSLoaderDelegate> 
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
@@ -54,7 +54,7 @@
 
 - (void) doneSearching_Clicked:(id)sender;
 
-- (void)loadingFailed:(Loader*)loader;
-- (void)loadingFinished:(Loader*)loader;
+- (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error;
+- (void)loadingFinished:(SUSLoader*)theLoader;
 
 @end

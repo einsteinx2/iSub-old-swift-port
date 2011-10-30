@@ -67,6 +67,8 @@ static ViewObjectsSingleton *sharedInstance = nil;
 
 @synthesize isNoNetworkAlertShowing;
 
+@synthesize isLoadingScreenShowing;
+
 #pragma mark -
 #pragma mark Class instance methods
 
@@ -78,6 +80,11 @@ static ViewObjectsSingleton *sharedInstance = nil;
 
 - (void)showLoadingScreenOnMainWindow
 {
+	if (isLoadingScreenShowing)
+		return;
+	
+	isLoadingScreenShowing = YES;
+	
 	if (IS_IPAD())
 		[self showLoadingScreen:appDelegate.splitView.view blockInput:YES mainWindow:YES];
 	else
@@ -86,6 +93,11 @@ static ViewObjectsSingleton *sharedInstance = nil;
 
 - (void)showLoadingScreen:(UIView *)view blockInput:(BOOL)blockInput mainWindow:(BOOL)mainWindow
 {
+	if (isLoadingScreenShowing)
+		return;
+	
+	isLoadingScreenShowing = YES;
+	
 	CGRect newFrame = CGRectMake(0, 0, view.bounds.size.width, view.bounds.size.height);
 	
 	loadingBackground = [[UIView alloc] init];
@@ -140,6 +152,11 @@ static ViewObjectsSingleton *sharedInstance = nil;
 
 - (void)showAlbumLoadingScreen:(UIView *)view sender:(id)sender
 {	
+	if (isLoadingScreenShowing)
+		return;
+	
+	isLoadingScreenShowing = YES;
+	
 	CGRect newFrame = CGRectMake(0, 0, view.bounds.size.width, view.bounds.size.height);
 	
 	loadingBackground = [[UIView alloc] init];
@@ -201,6 +218,11 @@ static ViewObjectsSingleton *sharedInstance = nil;
 	
 - (void)hideLoadingScreen
 {
+	if (!isLoadingScreenShowing)
+		return;
+	
+	isLoadingScreenShowing = NO;
+	
 	// Animate it off screen
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:.3];
@@ -444,6 +466,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 	//isJukebox = NO;
 	
 	isNoNetworkAlertShowing = NO;
+	isLoadingScreenShowing = NO;
 }
 
 + (ViewObjectsSingleton*)sharedInstance

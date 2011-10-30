@@ -38,7 +38,7 @@
 	
 	if (!connection)
     {
-        NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldntCreateConnection];
+        NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
         [delegate serverURLCheckFailed:self withError:error];
     }
 }

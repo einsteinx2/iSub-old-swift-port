@@ -240,6 +240,8 @@
 
 @property BOOL isNoNetworkAlertShowing;
 
+@property BOOL isLoadingScreenShowing;
+
 + (ViewObjectsSingleton*)sharedInstance;
 
 - (void)orderMainTabBarController;

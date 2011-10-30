@@ -8,7 +8,7 @@
 
 
 
-@class iSubAppDelegate, DatabaseSingleton, ViewObjectsSingleton, Song, ASIHTTPRequest, AudioStreamer, BBSimpleConnectionQueue;
+@class iSubAppDelegate, DatabaseSingleton, ViewObjectsSingleton, Song, AudioStreamer, BBSimpleConnectionQueue;
 
 @interface MusicSingleton : NSObject 
 {
@@ -50,16 +50,12 @@
 	UInt32 tempDownloadByteOffset; // The byte offset that we originally started the temp download
 	
 	NSMutableData *receivedDataA;
-	//NSURLConnection *downloadA;
-	ASIHTTPRequest *downloadA;
 	NSString *downloadFileNameA;
 	NSString *downloadFileNameHashA;
 	NSFileHandle *audioFileA;
 	UInt32 downloadedLengthA; // Keeps track of the number of bytes downloaded
 	
 	NSMutableData *receivedDataB;
-	//NSURLConnection *downloadB;
-	ASIHTTPRequest *downloadB;
 	NSString *downloadFileNameB;
 	NSString *downloadFileNameHashB;
 	NSFileHandle *audioFileB;
@@ -68,7 +64,6 @@
 	
 	NSMutableData *receivedDataQueue;
 	NSURLConnection *downloadQueue;
-	//ASIHTTPRequest *downloadQueue;
 	NSString *downloadFileNameQueue;
 	NSString *downloadFileNameHashQueue;
 	NSFileHandle *audioFileQueue;
@@ -122,15 +117,11 @@
 @property (nonatomic, retain) NSString *tempAudioFolderPath;
 @property UInt32 tempDownloadByteOffset;
 @property (nonatomic, retain) NSMutableData *receivedDataA;
-//@property (nonatomic, retain) NSURLConnection *downloadA;
-@property (nonatomic, retain) ASIHTTPRequest *downloadA;
 @property (nonatomic, retain) NSString *downloadFileNameA;
 @property (nonatomic, retain) NSString *downloadFileNameHashA;
 @property (nonatomic, retain) NSFileHandle *audioFileA;
 @property UInt32 downloadedLengthA;
 @property (nonatomic, retain) NSMutableData *receivedDataB;
-//@property (nonatomic, retain) NSURLConnection *downloadB;
-@property (nonatomic, retain) ASIHTTPRequest *downloadB;
 @property (nonatomic, retain) NSString *downloadFileNameB;
 @property (nonatomic, retain) NSString *downloadFileNameHashB;
 @property (nonatomic, retain) NSFileHandle *audioFileB;
@@ -138,7 +129,6 @@
 @property BOOL reportDownloadedLengthB;
 @property (nonatomic, retain) NSMutableData *receivedDataQueue;
 @property (nonatomic, retain) NSURLConnection *downloadQueue;
-//@property (nonatomic, retain) ASIHTTPRequest *downloadQueue;
 @property (nonatomic, retain) NSString *downloadFileNameQueue;
 @property (nonatomic, retain) NSString *downloadFileNameHashQueue;
 @property (nonatomic, retain) NSFileHandle *audioFileQueue;

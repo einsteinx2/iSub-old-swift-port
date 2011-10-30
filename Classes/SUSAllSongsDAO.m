@@ -36,7 +36,7 @@
     return self;
 }
 
-- (id)initWithDelegate:(id <LoaderDelegate>)theDelegate
+- (id)initWithDelegate:(NSObject <SUSLoaderDelegate> *)theDelegate
 {
     if ((self = [super init]))
 	{

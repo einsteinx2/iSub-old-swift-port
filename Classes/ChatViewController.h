@@ -7,10 +7,11 @@
 //
 
 #import "CustomUITextView.h"
+#import "SUSLoaderDelegate.h"
 
-@class iSubAppDelegate, SearchOverlayViewController, ViewObjectsSingleton, MusicSingleton, CustomUITextView, EGORefreshTableHeaderView;
+@class iSubAppDelegate, SearchOverlayViewController, ViewObjectsSingleton, MusicSingleton, CustomUITextView, EGORefreshTableHeaderView, SUSChatDAO;
 
-@interface ChatViewController : UITableViewController <UITextViewDelegate> 
+@interface ChatViewController : UITableViewController <UITextViewDelegate, SUSLoaderDelegate> 
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
@@ -41,6 +42,8 @@
 @property NSInteger lastCheck;
 
 @property(assign,getter=isReloading) BOOL reloading;
+
+@property (nonatomic, retain) SUSChatDAO *dataModel;
 
 
 @end

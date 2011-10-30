@@ -6,12 +6,12 @@
 //  Copyright Ben Baron 2010. All rights reserved.
 //
 
-#import "LoaderDelegate.h"
+#import "SUSLoaderDelegate.h"
 #import "FolderDropdownDelegate.h"
 
 @class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, SearchOverlayViewController, LoadingScreen, Artist, EGORefreshTableHeaderView, FolderDropdownControl, SavedSettings, SUSRootFoldersDAO;
 
-@interface RootViewController : UITableViewController <UISearchBarDelegate, LoaderDelegate, FolderDropdownDelegate>
+@interface RootViewController : UITableViewController <UISearchBarDelegate, SUSLoaderDelegate, FolderDropdownDelegate>
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
@@ -72,8 +72,8 @@
 - (void) doneSearching_Clicked:(id)sender;
 
 // Loader Delegate Methods
-- (void)loadingFailed:(Loader*)loader;
-- (void)loadingFinished:(Loader*)loader;
+- (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error;
+- (void)loadingFinished:(SUSLoader*)theLoader;
 
 // FolderDropdown Delegate Methods
 - (void)folderDropdownMoveViewsY:(float)y;

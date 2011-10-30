@@ -295,7 +295,6 @@ static void DownloadDoneA()
 		isDownloadA = NO;
 		
 		// Start the download of the next song if there is one and the setting is turned on
-		//if ([[musicControlsRef nextSongObject] path] != nil && [[[appDelegateRef settingsDictionary] objectForKey:@"enableNextSongCacheSetting"] isEqualToString:@"YES"])
 		if ([[musicControlsRef nextSongObject] path] != nil && [SavedSettings sharedInstance].isNextSongCacheEnabled)
 			[musicControlsRef startDownloadB];
 	}

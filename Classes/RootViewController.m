@@ -214,7 +214,7 @@
 	[dataModel startLoad];
 }
 
-- (void)loadingFailed:(Loader*)loader
+- (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
 {	
 	viewObjects.isArtistsLoading = NO;
 	
@@ -230,7 +230,7 @@
 	[alert release];
 }
 
-- (void)loadingFinished:(Loader*)loader
+- (void)loadingFinished:(SUSLoader*)theLoader
 {	
 	if (!isCountShowing)
 		[self addCount];

@@ -60,7 +60,7 @@
     return self;
 }
 
-- (id)initWithDelegate:(id <LoaderDelegate>)theDelegate
+- (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate
 {
 	if ((self = [super initWithDelegate:theDelegate]))
 	{
@@ -314,10 +314,10 @@ static NSInteger order (id a, id b, void* context)
 		urlString = [NSString stringWithFormat:@"%@%@", [self getBaseUrlString:@"getMusicDirectory.view"], currentAlbum.albumId];
 	//DLog(@"loading url: %@", urlString);
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
-	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	if (connection)
+	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+	if (self.connection)
 	{
-		receivedData = [[NSMutableData data] retain];
+		self.receivedData = [NSMutableData data];
 	} 
 	else 
 	{
@@ -426,7 +426,7 @@ static NSInteger order (id a, id b, void* context)
 		viewObjects.cancelLoading = NO;
 		viewObjects.isSongsLoading = NO;
 		
-		//TODO: call delegate's error method with "user canceled" message
+		// TODO: call delegate's error method with "user canceled" message
 		//[self hideLoadingScreen];
 		return;
 	}
@@ -452,7 +452,7 @@ static NSInteger order (id a, id b, void* context)
 	
 	[databaseControls.allSongsDb executeUpdate:@"DROP TABLE resumeLoad"];
     
-    [delegate loadingFinished:self];
+    [self.delegate loadingFinished:self];
 }
 
 
@@ -502,55 +502,18 @@ static NSInteger order (id a, id b, void* context)
 
 #pragma mark Connection Delegate
 
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
-{
-	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
-		return YES; // Self-signed cert will be accepted
-	
-	return NO;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{	
-	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
-	{
-		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
-	}
-	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-	[receivedData setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
-{
-    [receivedData appendData:incrementalData];
-}
-
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
 	// Load the same folder
 	//
 	[self loadAlbumFolder];
 	
-	[theConnection release];
-	[receivedData release];	
+	[super connection:theConnection didFailWithError:error];
 }	
 
 static NSString *kName_Directory = @"directory";
 static NSString *kName_Child = @"child";
 static NSString *kName_Error = @"error";
-
-- (void) subsonicErrorCode:(NSString *)errorCode message:(NSString *)message
-{
-	/*CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
-	 alert.tag = 1;
-	 [alert show];
-	 [alert release];*/
-	DLog(@"Subsonic error %@:  %@", errorCode, message);
-}
 
 - (void)parseData:(NSURLConnection*)theConnection
 {
@@ -567,7 +530,7 @@ static NSString *kName_Error = @"error";
 	
 	// Parse the data
 	//
-	TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
+	TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData];
     TBXMLElement *root = tbxml.rootXMLElement;
     if (root) 
 	{
@@ -576,7 +539,7 @@ static NSString *kName_Error = @"error";
 		{
 			NSString *code = [TBXML valueOfAttributeNamed:@"code" forElement:error];
 			NSString *message = [TBXML valueOfAttributeNamed:@"message" forElement:error];
-			[self subsonicErrorCode:code message:message];
+			[self subsonicErrorCode:[code intValue] message:message];
 		}
 		
         TBXMLElement *directory = [TBXML childElementNamed:kName_Directory parentElement:root];
@@ -728,8 +691,8 @@ static NSString *kName_Error = @"error";
 	
 	// Close the connection
 	//
-	[theConnection release];
-	[receivedData release];
+	self.connection = nil;
+	self.receivedData = nil;
 	
 	// Handle the iteration
 	//

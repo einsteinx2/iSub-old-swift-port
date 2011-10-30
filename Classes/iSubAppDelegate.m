@@ -162,11 +162,7 @@
 	// Setup Twitter connection
 	if (!viewObjects.isOfflineMode && [[NSUserDefaults standardUserDefaults] objectForKey: @"twitterAuthData"])
 	{
-		// TODO: test this
 		[socialControls createTwitterEngine];
-		//UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine:socialControls.twitterEngine delegate: socialControls];
-		//if (controller) 
-		//	[mainTabBarController presentModalViewController:controller animated:YES];
 	}
 	
 	// appinit 3
@@ -180,7 +176,6 @@
 	[self createAndDisplayUI];
 	
 	// Check the server status in the background
-	//[self performSelectorInBackground:@selector(checkServer) withObject:nil];
 	[self checkServer];
     
 	// Recover current state if player was interrupted

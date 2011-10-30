@@ -52,7 +52,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "226"
          endingLineNumber = "226"
-         landmarkName = "-loadingFailed:"
+         landmarkName = "-loadingFailed:withError:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint

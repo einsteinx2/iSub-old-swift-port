@@ -44,7 +44,6 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	//if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] && inOrientation != UIInterfaceOrientationPortrait)
 	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
@@ -69,9 +68,7 @@
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
-	
-	//DLog(@"Playlist viewDidLoad");
-	
+		
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	musicControls = [MusicSingleton sharedInstance];
@@ -84,7 +81,6 @@
 	receivedData = nil;
 	
 	viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-	//viewObjects.multiDeleteList = nil; viewObjects.multiDeleteList = [[NSMutableArray alloc] init];
 	goToNextSong = NO;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:@"initSongInfo" object:nil];
@@ -184,7 +180,6 @@
 	if (viewObjects.isEditing)
 	{
 		viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-		//viewObjects.multiDeleteList = nil; viewObjects.multiDeleteList = [[NSMutableArray alloc] init];
 		viewObjects.isEditing = NO;
 		self.tableView.editing = NO;
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
@@ -199,7 +194,6 @@
 	if (isPlaylistSaveEditShowing == YES)
 	{
 		headerView.frame = CGRectMake(0, 0, 320, 44);
-		//headerView.frame = CGRectMake(0, 0, 320, 0);
 		[savePlaylistLabel removeFromSuperview];
 		[playlistCountLabel removeFromSuperview];
 		[savePlaylistButton removeFromSuperview];
@@ -221,11 +215,7 @@
 		isPlaylistSaveEditShowing = YES;
 		headerView.frame = CGRectMake(0, 0, 320, 95);
 		
-		int y;
-		//if (IS_IPAD())
-		//	y = 44;
-		//else
-			y = 45;
+		int y = 45;
 		
 		savePlaylistLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, y, 227, 34)];
 		savePlaylistLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
@@ -487,19 +477,13 @@
 		
 		if (currentPlaylistCount > 0 && musicControls.currentPlaylistPosition >= 0)
 		{
-			/*if (appDelegate.streamer)
-			 {
-			 // Highlight the current playing song
-			 [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:appDelegate.currentPlaylistPosition inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
-			 }*/
-			
 			@try 
 			{
 				[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:musicControls.currentPlaylistPosition inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 			}
 			@catch (NSException *exception) 
 			{
-				//DLog(@"main: Caught %@: %@", [exception name], [exception reason]);
+				DLog(@"main: Caught %@: %@", [exception name], [exception reason]);
 			}
 		}
 		
@@ -580,7 +564,6 @@
 			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:@"showDeleteButton" object: nil];
 			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:@"hideDeleteButton" object: nil];
 			viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-			//viewObjects.multiDeleteList = nil; viewObjects.multiDeleteList = [[NSMutableArray alloc] init];
 			[self.tableView setEditing:YES animated:YES];
 			editPlaylistLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
 			editPlaylistLabel.text = @"Done";
@@ -594,7 +577,6 @@
 			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
 			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
 			viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-			//viewObjects.multiDeleteList = nil; viewObjects.multiDeleteList = [[NSMutableArray alloc] init];
 			[self hideDeleteButton];
 			[self.tableView setEditing:NO animated:YES];
 			editPlaylistLabel.backgroundColor = [UIColor clearColor];
@@ -649,7 +631,7 @@
 				}
 				@catch (NSException *exception) 
 				{
-					//DLog(@"main: Caught %@: %@", [exception name], [exception reason]);
+					DLog(@"main: Caught %@: %@", [exception name], [exception reason]);
 				}
 			}
 		}
@@ -664,7 +646,6 @@
 			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:@"showDeleteButton" object: nil];
 			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:@"hideDeleteButton" object: nil];
 			viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-			//viewObjects.multiDeleteList = nil; viewObjects.multiDeleteList = [[NSMutableArray alloc] init];
 			[self.tableView setEditing:YES animated:YES];
 			editPlaylistLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
 			editPlaylistLabel.text = @"Done";
@@ -678,7 +659,6 @@
 			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
 			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
 			viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-			//viewObjects.multiDeleteList = nil; viewObjects.multiDeleteList = [[NSMutableArray alloc] init];
 			[self hideDeleteButton];
 			[self.tableView setEditing:NO animated:YES];
 			editPlaylistLabel.backgroundColor = [UIColor clearColor];
@@ -795,9 +775,7 @@
 }
 
 - (void)uploadPlaylist:(NSString*)name
-{
-	//NSMutableString *urlString = [NSMutableString stringWithFormat:@"%@?name=%@", [appDelegate getBaseUrl:@"createPlaylist.view"], self.];
-	
+{	
 	NSString *urlString = [NSString stringWithFormat:@"%@&name=%@", [appDelegate getBaseUrl:@"createPlaylist.view"], [name stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	DLog(@"urlString: %@", urlString);
 	
@@ -839,8 +817,6 @@
 	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
 	{
-		// Create the NSMutableData to hold the received data.
-		// receivedData is an instance variable declared elsewhere.
 		receivedData = [[NSMutableData data] retain];
 		
 		self.tableView.scrollEnabled = NO;
@@ -864,7 +840,6 @@
 	{
 		// Sort the multiDeleteList to make sure it's accending
 		[viewObjects.multiDeleteList sortUsingSelector:@selector(compare:)];
-		//DLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
 		
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		{
@@ -1005,7 +980,6 @@
 	{
 		// Sort the multiDeleteList to make sure it's accending
 		[viewObjects.multiDeleteList sortUsingSelector:@selector(compare:)];
-		//DLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
 		
 		[databaseControls.localPlaylistsDb executeUpdate:@"DROP TABLE localPlaylistsTemp"];
 		[databaseControls.localPlaylistsDb executeUpdate:@"CREATE TABLE localPlaylistsTemp(playlist TEXT, md5 TEXT)"];
@@ -1027,7 +1001,6 @@
 			[indexes addObject:[NSIndexPath indexPathForRow:[index integerValue] inSection:0]];
 		}
 		[self.tableView performSelectorOnMainThread:@selector(deleteRowsAtIndexPaths:withRowAnimation:) withObject:indexes waitUntilDone:YES];
-		//[self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:YES];
 		
 		[indexes release];
 		
@@ -1062,7 +1035,6 @@
 		}
 		else 
 		{
-			//if ([deleteSongsLabel.text isEqualToString:@"Clear Playlist"])
 			if ([viewObjects.multiDeleteList count] == 0)
 			{
 				// Select all the rows
@@ -1072,29 +1044,10 @@
 				}
 				[self.tableView reloadData];
 				[self showDeleteButton];
-				
-				/*if ([SavedSettings sharedInstance].isJukeboxEnabled)
-				{
-					[databaseControls resetJukeboxPlaylist];
-					[musicControls jukeboxClearPlaylist];
-				}
-				else
-				{
-					[musicControls destroyStreamer];
-					[databaseControls resetCurrentPlaylistDb];
-				}
-				
-				[self editPlaylistAction:nil];
-				[self segmentAction:nil];
-				
-				musicControls.currentPlaylistPosition = 0;*/
 			}
 			else
 			{
-				//
 				// Delete action
-				//
-				
 				[viewObjects showLoadingScreenOnMainWindow];
 				[self performSelectorInBackground:@selector(deleteAction) withObject:nil];
 			}
@@ -1104,7 +1057,6 @@
 	{
 		if (deleteSongsLabel.hidden == NO)
 		{
-			//if ([deleteSongsLabel.text isEqualToString:@"Clear Playlists"])
 			if ([viewObjects.multiDeleteList count] == 0)
 			{
 				// Select all the rows
@@ -1115,18 +1067,10 @@
 				}
 				[self.tableView reloadData];
 				[self showDeleteButton];
-				
-				/*[self.tableView reloadData];
-				[databaseControls resetLocalPlaylistsDb];
-				[self editPlaylistAction:nil];
-				[self segmentAction:nil];*/
 			}
 			else
 			{
-				//
 				// Delete action
-				//
-				
 				[viewObjects showLoadingScreenOnMainWindow];
 				[self performSelectorInBackground:@selector(deleteAction) withObject:nil];
 			}
@@ -1136,10 +1080,6 @@
 	{
 		if (deleteSongsLabel.hidden == NO)
 		{
-			//self.tableView.scrollEnabled = NO;
-			//[viewObjects showAlbumLoadingScreen:self.view sender:self];
-			
-			//if ([deleteSongsLabel.text isEqualToString:@"Clear Playlists"])
 			if ([viewObjects.multiDeleteList count] == 0)
 			{
 				// Select all the rows
@@ -1150,35 +1090,6 @@
 				}
 				[self.tableView reloadData];
 				[self showDeleteButton];
-				
-				/*for (NSArray *playlist in viewObjects.listOfPlaylists)
-				{
-					NSString *urlString = [NSString stringWithFormat:@"%@%@", 
-																	 [appDelegate getBaseUrl:@"deletePlaylist.view"], 
-																	 [playlist objectAtIndex:0]];
-					
-					NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] 
-															 cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData 
-														 timeoutInterval:10.0];
-					
-					NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request 
-																				  delegate:self 
-																		  startImmediately:NO];
-					if (connection)
-					{
-						[connectionQueue registerConnection:connection];
-						[connectionQueue startQueue];
-					} 
-					else 
-					{
-						// Inform the user that the connection failed.
-						//CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-						//alert.tag = 2;
-						//[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-						//[alert release];
-						DLog(@"There was an error deleting a server playlist, could not create network request");
-					}
-				}*/
 			}
 			else
 			{
@@ -1205,11 +1116,6 @@
 					} 
 					else 
 					{
-						/*// Inform the user that the connection failed.
-						 CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-						 alert.tag = 2;
-						 [alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-						 [alert release];*/
 						DLog(@"There was an error deleting a server playlist, could not create network request");
 					}
 				}
@@ -1257,12 +1163,10 @@
 		{
 			return;
 		}
-		DLog(@"savePlaylistLocal: %i", savePlaylistLocal);
 		
 		UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Playlist Name:" message:@"      \n      " delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
 		myAlertView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
 		playlistNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 22.0)];
-		//playlistNameTextField.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
 		[playlistNameTextField setBackgroundColor:[UIColor whiteColor]];
 		[myAlertView addSubview:playlistNameTextField];
 		if ([[[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."] objectAtIndex:0] isEqualToString:@"3"])
@@ -1337,9 +1241,7 @@
 
 
 - (void)loadRemotePlaylists
-{
-	//DLog(@"loadRemotePlaylists listOfPlaylists count: %i", [viewObjects.listOfPlaylists count]);
-	
+{	
 	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	
@@ -1432,7 +1334,7 @@ NSInteger playlistSort(id obj1, id obj2, void *context)
 			}
 			@catch (NSException *exception) 
 			{
-				//DLog(@"main: Caught %@: %@", [exception name], [exception reason]);
+				DLog(@"main: Caught %@: %@", [exception name], [exception reason]);
 			}
 		}
 	}
@@ -1448,7 +1350,6 @@ NSInteger playlistSort(id obj1, id obj2, void *context)
 	{
 		// Clear the edit stuff if they switch tabs in the middle of editing
 		viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-		//viewObjects.multiDeleteList = nil; viewObjects.multiDeleteList = [[NSMutableArray alloc] init];
 		viewObjects.isEditing = NO;
 		self.tableView.editing = NO;
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
@@ -1592,7 +1493,6 @@ static NSString *kName_Error = @"error";
 	alert.tag = 1;
 	[alert show];
 	[alert release];
-	//DLog(@"Subsonic error %@:  %@", errorCode, message);
 }
 
 - (void)parseData
@@ -1696,13 +1596,6 @@ static NSString *kName_Error = @"error";
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	/*if (segmentedControl.selectedSegmentIndex == 0)
-		return YES;
-	else if (segmentedControl.selectedSegmentIndex == 1)
-		return YES;
-	else if (segmentedControl.selectedSegmentIndex == 2)
-		return NO;*/
-	
 	return YES;
 }
 
@@ -1804,7 +1697,6 @@ static NSString *kName_Error = @"error";
 		}
 		
 		// Fix the multiDeleteList to reflect the new row positions
-		//DLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
 		if ([viewObjects.multiDeleteList count] > 0)
 		{
 			NSMutableArray *tempMultiDeleteList = [[NSMutableArray alloc] init];
@@ -1853,7 +1745,6 @@ static NSString *kName_Error = @"error";
 			viewObjects.multiDeleteList = [NSMutableArray arrayWithArray:tempMultiDeleteList];
 			[tempMultiDeleteList release];
 		}
-		//DLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
 		
 		// Correct the value of currentPlaylistPosition
 		if (fromIndexPath.row == musicControls.currentPlaylistPosition)
@@ -1879,7 +1770,7 @@ static NSString *kName_Error = @"error";
 		}
 		@catch (NSException *exception) 
 		{
-			//DLog(@"main: Caught %@: %@", [exception name], [exception reason]);
+			DLog(@"main: Caught %@: %@", [exception name], [exception reason]);
 		}
 		
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -1902,19 +1793,6 @@ static NSString *kName_Error = @"error";
 	
 	return NO;
 }
-
-
-/*// Customize the height of individual rows to make the album rows taller to accomidate the album art.
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath 
-{
-	if (segmentedControl.selectedSegmentIndex == 0)
-		return 60.0;
-	else if (segmentedControl.selectedSegmentIndex == 1)
-		return 60.0;
-	else
-		return 43.0;
-}*/
-
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
@@ -2087,7 +1965,6 @@ static NSString *kName_Error = @"error";
 		}
 		else if (segmentedControl.selectedSegmentIndex == 1)
 		{
-			//appDelegate.localPlaylist = [[NSString md5:[appDelegate.listOfLocalPlaylists objectAtIndex:indexPath.row]] retain];
 			PlaylistSongsViewController *playlistSongsViewController = [[PlaylistSongsViewController alloc] initWithNibName:@"PlaylistSongsViewController" bundle:nil];
 			playlistSongsViewController.md5 = [databaseControls.localPlaylistsDb stringForQuery:@"SELECT md5 FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
 			[self.navigationController pushViewController:playlistSongsViewController animated:YES];

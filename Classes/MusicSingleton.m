@@ -41,8 +41,8 @@ static MusicSingleton *sharedInstance = nil;
 
 // Song cache stuff
 @synthesize documentsPath, audioFolderPath, tempAudioFolderPath, tempDownloadByteOffset;
-@synthesize receivedDataA, downloadA, downloadFileNameA, downloadFileNameHashA, audioFileA, downloadedLengthA;
-@synthesize receivedDataB, downloadB, downloadFileNameB, downloadFileNameHashB, audioFileB, downloadedLengthB, reportDownloadedLengthB;
+@synthesize receivedDataA, downloadFileNameA, downloadFileNameHashA, audioFileA, downloadedLengthA;
+@synthesize receivedDataB, downloadFileNameB, downloadFileNameHashB, audioFileB, downloadedLengthB, reportDownloadedLengthB;
 @synthesize receivedDataQueue, downloadQueue, downloadFileNameQueue, downloadFileNameHashQueue, audioFileQueue, downloadedLengthQueue, isQueueListDownloading;
 @synthesize bitRate, isTempDownload, showNowPlayingIcon;
 

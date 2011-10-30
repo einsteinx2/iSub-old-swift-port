@@ -228,7 +228,6 @@
 		5379DC4F1219E48800F426CD /* ChatUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC491219E48800F426CD /* ChatUITableViewCell.m */; };
 		5379DC501219E48800F426CD /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC4B1219E48800F426CD /* ChatViewController.m */; };
 		5379DC511219E48800F426CD /* ChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5379DC4C1219E48800F426CD /* ChatViewController.xib */; };
-		5379DC521219E48800F426CD /* ChatXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC4E1219E48800F426CD /* ChatXMLParser.m */; };
 		5379DC571219EEEB00F426CD /* ChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC561219EEEB00F426CD /* ChatMessage.m */; };
 		537D2781128DE258007E4CEC /* NSURLConnectionDelegateQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 537D2780128DE258007E4CEC /* NSURLConnectionDelegateQueue.m */; };
 		537D279D128DE8EC007E4CEC /* NSURLConnectionDelegateQueueArtwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 537D279C128DE8EC007E4CEC /* NSURLConnectionDelegateQueueArtwork.m */; };
@@ -240,9 +239,9 @@
 		538229FF11C98401003F1E23 /* CacheSongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 538229FD11C98401003F1E23 /* CacheSongUITableViewCell.m */; };
 		53822A0211C986A4003F1E23 /* CacheArtistUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53822A0111C986A4003F1E23 /* CacheArtistUITableViewCell.m */; };
 		5382BA8D12DA4039005A3D1A /* UIDevice-Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 5382BA8C12DA4039005A3D1A /* UIDevice-Hardware.m */; };
-		5386FB821406243A0009F73F /* Loader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5386FB811406243A0009F73F /* Loader.m */; };
-		5386FB831406243A0009F73F /* Loader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5386FB811406243A0009F73F /* Loader.m */; };
-		5386FB841406243A0009F73F /* Loader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5386FB811406243A0009F73F /* Loader.m */; };
+		5386FB821406243A0009F73F /* SUSLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5386FB811406243A0009F73F /* SUSLoader.m */; };
+		5386FB831406243A0009F73F /* SUSLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5386FB811406243A0009F73F /* SUSLoader.m */; };
+		5386FB841406243A0009F73F /* SUSLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5386FB811406243A0009F73F /* SUSLoader.m */; };
 		5386FB8714062A3A0009F73F /* SavedSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 5386FB8614062A3A0009F73F /* SavedSettings.m */; };
 		5386FB8814062A3A0009F73F /* SavedSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 5386FB8614062A3A0009F73F /* SavedSettings.m */; };
 		5386FB8914062A3A0009F73F /* SavedSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 5386FB8614062A3A0009F73F /* SavedSettings.m */; };
@@ -725,7 +724,6 @@
 		53BC27F7139AF0DD00A825F1 /* UpdateXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DBB31217BAF100F426CD /* UpdateXMLParser.m */; };
 		53BC27F8139AF0DD00A825F1 /* ChatUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC491219E48800F426CD /* ChatUITableViewCell.m */; };
 		53BC27F9139AF0DD00A825F1 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC4B1219E48800F426CD /* ChatViewController.m */; };
-		53BC27FA139AF0DD00A825F1 /* ChatXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC4E1219E48800F426CD /* ChatXMLParser.m */; };
 		53BC27FB139AF0DD00A825F1 /* ChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC561219EEEB00F426CD /* ChatMessage.m */; };
 		53BC27FC139AF0DD00A825F1 /* CustomUITextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BB7EC9121B8D8F00BEE7E8 /* CustomUITextView.m */; };
 		53BC27FD139AF0DD00A825F1 /* ViewObjectsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751C61268A36200A4793F /* ViewObjectsSingleton.m */; };
@@ -1213,7 +1211,6 @@
 		53DCF55813BFEAD3009160F9 /* UpdateXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DBB31217BAF100F426CD /* UpdateXMLParser.m */; };
 		53DCF55913BFEAD3009160F9 /* ChatUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC491219E48800F426CD /* ChatUITableViewCell.m */; };
 		53DCF55A13BFEAD3009160F9 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC4B1219E48800F426CD /* ChatViewController.m */; };
-		53DCF55B13BFEAD3009160F9 /* ChatXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC4E1219E48800F426CD /* ChatXMLParser.m */; };
 		53DCF55C13BFEAD3009160F9 /* ChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC561219EEEB00F426CD /* ChatMessage.m */; };
 		53DCF55D13BFEAD3009160F9 /* CustomUITextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BB7EC9121B8D8F00BEE7E8 /* CustomUITextView.m */; };
 		53DCF55E13BFEAD3009160F9 /* ViewObjectsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751C61268A36200A4793F /* ViewObjectsSingleton.m */; };
@@ -1538,7 +1535,7 @@
 		534098A1142D489F00455754 /* SUSAllSongsDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSAllSongsDAO.m; sourceTree = "<group>"; };
 		534098A5142D491100455754 /* SUSAllSongsLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSAllSongsLoader.h; sourceTree = "<group>"; };
 		534098A6142D491100455754 /* SUSAllSongsLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSAllSongsLoader.m; sourceTree = "<group>"; };
-		534098C0142E66CB00455754 /* LoaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoaderManager.h; sourceTree = "<group>"; };
+		534098C0142E66CB00455754 /* SUSLoaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSLoaderManager.h; sourceTree = "<group>"; };
 		5345FADE1191E6A000C6EAB7 /* NSString-md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString-md5.h"; sourceTree = "<group>"; };
 		5345FADF1191E6A000C6EAB7 /* NSString-md5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString-md5.m"; sourceTree = "<group>"; };
 		5348A59911879C3A0078994D /* CustomUITableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomUITableView.h; sourceTree = "<group>"; };
@@ -1726,8 +1723,6 @@
 		5379DC4A1219E48800F426CD /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
 		5379DC4B1219E48800F426CD /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
 		5379DC4C1219E48800F426CD /* ChatViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatViewController.xib; sourceTree = "<group>"; };
-		5379DC4D1219E48800F426CD /* ChatXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatXMLParser.h; sourceTree = "<group>"; };
-		5379DC4E1219E48800F426CD /* ChatXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatXMLParser.m; sourceTree = "<group>"; };
 		5379DC551219EEEB00F426CD /* ChatMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ChatMessage.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		5379DC561219EEEB00F426CD /* ChatMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatMessage.m; sourceTree = "<group>"; };
 		537D277F128DE258007E4CEC /* NSURLConnectionDelegateQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSURLConnectionDelegateQueue.h; sourceTree = "<group>"; };
@@ -1747,8 +1742,8 @@
 		53822A0111C986A4003F1E23 /* CacheArtistUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheArtistUITableViewCell.m; sourceTree = "<group>"; };
 		5382BA8B12DA4038005A3D1A /* UIDevice-Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice-Hardware.h"; sourceTree = "<group>"; };
 		5382BA8C12DA4039005A3D1A /* UIDevice-Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice-Hardware.m"; sourceTree = "<group>"; };
-		5386FB801406243A0009F73F /* Loader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Loader.h; sourceTree = "<group>"; };
-		5386FB811406243A0009F73F /* Loader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Loader.m; sourceTree = "<group>"; };
+		5386FB801406243A0009F73F /* SUSLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSLoader.h; sourceTree = "<group>"; };
+		5386FB811406243A0009F73F /* SUSLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSLoader.m; sourceTree = "<group>"; };
 		5386FB8514062A390009F73F /* SavedSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedSettings.h; sourceTree = "<group>"; };
 		5386FB8614062A3A0009F73F /* SavedSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedSettings.m; sourceTree = "<group>"; };
 		5388A2EE1198741E0049BA9E /* LocalPlaylistsUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalPlaylistsUITableViewCell.h; sourceTree = "<group>"; };
@@ -1783,7 +1778,7 @@
 		5398F27611DA627500007870 /* HelpTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpTabViewController.m; sourceTree = "<group>"; };
 		5398F27711DA627500007870 /* HelpTabViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HelpTabViewController.xib; sourceTree = "<group>"; };
 		5398F2B511DA8B1000007870 /* iPhoneStreamingPlayerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = iPhoneStreamingPlayerViewController.xib; sourceTree = "<group>"; };
-		539A356813D3E48C00D80554 /* LoaderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoaderDelegate.h; sourceTree = "<group>"; };
+		539A356813D3E48C00D80554 /* SUSLoaderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSLoaderDelegate.h; sourceTree = "<group>"; };
 		53A2213411A8489900C1ACD4 /* cache-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cache-button.png"; path = "Images/Other/cache-button.png"; sourceTree = "<group>"; };
 		53A2213511A8489900C1ACD4 /* queue-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "queue-button.png"; path = "Images/Other/queue-button.png"; sourceTree = "<group>"; };
 		53A4547A133D6F8200741030 /* AsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AsyncSocket.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -1855,7 +1850,7 @@
 		53ADBBBB133525BD0098FAE6 /* folder-dropdown-arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "folder-dropdown-arrow@2x.png"; path = "Images/Other/folder-dropdown-arrow@2x.png"; sourceTree = "<group>"; };
 		53ADBBBE13352DB40098FAE6 /* FolderDropdownControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FolderDropdownControl.h; sourceTree = "<group>"; };
 		53ADBBBF13352DB40098FAE6 /* FolderDropdownControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FolderDropdownControl.m; sourceTree = "<group>"; };
-		53B15EB1145CFF08007A04F6 /* ISMSErrorCodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSErrorCodes.h; sourceTree = "<group>"; };
+		53B15EB1145CFF08007A04F6 /* ISMSErrorDomain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSErrorDomain.h; sourceTree = "<group>"; };
 		53B15EB2145D02EC007A04F6 /* NSError-ISMSError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError-ISMSError.h"; sourceTree = "<group>"; };
 		53B15EB3145D02EC007A04F6 /* NSError-ISMSError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError-ISMSError.m"; sourceTree = "<group>"; };
 		53B20D1C12C27AAA00A90DD9 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Images/Other/Default@2x.png"; sourceTree = "<group>"; };
@@ -2017,7 +2012,7 @@
 		53E75C6F1270067900BC1A19 /* InitialDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InitialDetailViewController.xib; sourceTree = "<group>"; };
 		53E75E82127123B300BC1A19 /* SearchXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchXMLParser.h; sourceTree = "<group>"; };
 		53E75E83127123B300BC1A19 /* SearchXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchXMLParser.m; sourceTree = "<group>"; };
-		53E82A951406D47F0051D44B /* FolderDropdownDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FolderDropdownDelegate.h; sourceTree = "<group>"; };
+		53E82A951406D47F0051D44B /* FolderDropdownDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; path = FolderDropdownDelegate.h; sourceTree = "<group>"; };
 		53E82A96140720BC0051D44B /* SUSSubFolderDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSSubFolderDAO.h; sourceTree = "<group>"; };
 		53E82A97140720BC0051D44B /* SUSSubFolderDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSSubFolderDAO.m; sourceTree = "<group>"; };
 		53E82AA214072F090051D44B /* CacheSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CacheSingleton.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -2094,6 +2089,7 @@
 		53FDEE6011E82A8700FE3ECD /* cache-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cache-button@2x.png"; path = "Images/Other/cache-button@2x.png"; sourceTree = "<group>"; };
 		53FDEE6811E82CD700FE3ECD /* queue-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "queue-button@2x.png"; path = "Images/Other/queue-button@2x.png"; sourceTree = "<group>"; };
 		53FDEE6C11E82D7700FE3ECD /* delete-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "delete-button@2x.png"; path = "Images/Other/delete-button@2x.png"; sourceTree = "<group>"; };
+		53FF430E145DF10F000833F3 /* SUSErrorDomain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSErrorDomain.h; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* iSub-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "iSub-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2217,7 +2213,8 @@
 			children = (
 				28A0AAE50D9B0CCF005BE974 /* iSub_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
-				53B15EB1145CFF08007A04F6 /* ISMSErrorCodes.h */,
+				53FF430E145DF10F000833F3 /* SUSErrorDomain.h */,
+				53B15EB1145CFF08007A04F6 /* ISMSErrorDomain.h */,
 				53B15EB2145D02EC007A04F6 /* NSError-ISMSError.h */,
 				53B15EB3145D02EC007A04F6 /* NSError-ISMSError.m */,
 			);
@@ -2451,8 +2448,6 @@
 				53ABE53E11665B1100197877 /* PlaylistsXMLParser.m */,
 				53ABE3761165C97100197877 /* PlayingXMLParser.h */,
 				53ABE3771165C97100197877 /* PlayingXMLParser.m */,
-				5379DC4D1219E48800F426CD /* ChatXMLParser.h */,
-				5379DC4E1219E48800F426CD /* ChatXMLParser.m */,
 				5327F3B312B86C6400735119 /* APICheckXMLParser.h */,
 				5327F3B412B86C6400735119 /* APICheckXMLParser.m */,
 			);
@@ -2934,7 +2929,7 @@
 			children = (
 				5386FB8514062A390009F73F /* SavedSettings.h */,
 				5386FB8614062A3A0009F73F /* SavedSettings.m */,
-				53EB49901401ABF20014E59A /* DAOs */,
+				53E82A9B140721BD0051D44B /* Subsonic */,
 				53E82A9C140721D50051D44B /* Generic */,
 				53FB066011EE1C4E008A30C7 /* CFNetworkRequests */,
 				5304BCE111BD58E3000EF6F9 /* NSURLConnectionDelegates */,
@@ -3235,6 +3230,10 @@
 		53E82A9B140721BD0051D44B /* Subsonic */ = {
 			isa = PBXGroup;
 			children = (
+				534098C0142E66CB00455754 /* SUSLoaderManager.h */,
+				539A356813D3E48C00D80554 /* SUSLoaderDelegate.h */,
+				5386FB801406243A0009F73F /* SUSLoader.h */,
+				5386FB811406243A0009F73F /* SUSLoader.m */,
 				534098BA142E5DBA00455754 /* DAOs */,
 				534098BB142E5DC500455754 /* Loaders */,
 			);
@@ -3258,18 +3257,6 @@
 				53C751C61268A36200A4793F /* ViewObjectsSingleton.m */,
 			);
 			name = Generic;
-			sourceTree = "<group>";
-		};
-		53EB49901401ABF20014E59A /* DAOs */ = {
-			isa = PBXGroup;
-			children = (
-				534098C0142E66CB00455754 /* LoaderManager.h */,
-				539A356813D3E48C00D80554 /* LoaderDelegate.h */,
-				5386FB801406243A0009F73F /* Loader.h */,
-				5386FB811406243A0009F73F /* Loader.m */,
-				53E82A9B140721BD0051D44B /* Subsonic */,
-			);
-			name = DAOs;
 			sourceTree = "<group>";
 		};
 		53F4A070116FF44400BB8411 /* Song Info */ = {
@@ -4339,7 +4326,6 @@
 				5379DBB41217BAF100F426CD /* UpdateXMLParser.m in Sources */,
 				5379DC4F1219E48800F426CD /* ChatUITableViewCell.m in Sources */,
 				5379DC501219E48800F426CD /* ChatViewController.m in Sources */,
-				5379DC521219E48800F426CD /* ChatXMLParser.m in Sources */,
 				5379DC571219EEEB00F426CD /* ChatMessage.m in Sources */,
 				53BB7ECA121B8D8F00BEE7E8 /* CustomUITextView.m in Sources */,
 				53C751C71268A36200A4793F /* ViewObjectsSingleton.m in Sources */,
@@ -4425,7 +4411,7 @@
 				53BC269B139AEBFF00A825F1 /* UIImage+HockeyAdditions.m in Sources */,
 				53BC269D139AEBFF00A825F1 /* JSONKit.m in Sources */,
 				53EB49931401B71C0014E59A /* SUSRootFoldersDAO.m in Sources */,
-				5386FB821406243A0009F73F /* Loader.m in Sources */,
+				5386FB821406243A0009F73F /* SUSLoader.m in Sources */,
 				5386FB8714062A3A0009F73F /* SavedSettings.m in Sources */,
 				53E82A98140720BC0051D44B /* SUSSubFolderDAO.m in Sources */,
 				53E82AA414072F090051D44B /* CacheSingleton.m in Sources */,
@@ -4540,7 +4526,6 @@
 				53BC27F7139AF0DD00A825F1 /* UpdateXMLParser.m in Sources */,
 				53BC27F8139AF0DD00A825F1 /* ChatUITableViewCell.m in Sources */,
 				53BC27F9139AF0DD00A825F1 /* ChatViewController.m in Sources */,
-				53BC27FA139AF0DD00A825F1 /* ChatXMLParser.m in Sources */,
 				53BC27FB139AF0DD00A825F1 /* ChatMessage.m in Sources */,
 				53BC27FC139AF0DD00A825F1 /* CustomUITextView.m in Sources */,
 				53BC27FD139AF0DD00A825F1 /* ViewObjectsSingleton.m in Sources */,
@@ -4626,7 +4611,7 @@
 				53BC284D139AF0DD00A825F1 /* UIImage+HockeyAdditions.m in Sources */,
 				53BC284E139AF0DD00A825F1 /* JSONKit.m in Sources */,
 				53EB49951401B71C0014E59A /* SUSRootFoldersDAO.m in Sources */,
-				5386FB841406243A0009F73F /* Loader.m in Sources */,
+				5386FB841406243A0009F73F /* SUSLoader.m in Sources */,
 				5386FB8914062A3A0009F73F /* SavedSettings.m in Sources */,
 				53E82A9A140720BC0051D44B /* SUSSubFolderDAO.m in Sources */,
 				53E82AA614072F090051D44B /* CacheSingleton.m in Sources */,
@@ -4741,7 +4726,6 @@
 				53DCF55813BFEAD3009160F9 /* UpdateXMLParser.m in Sources */,
 				53DCF55913BFEAD3009160F9 /* ChatUITableViewCell.m in Sources */,
 				53DCF55A13BFEAD3009160F9 /* ChatViewController.m in Sources */,
-				53DCF55B13BFEAD3009160F9 /* ChatXMLParser.m in Sources */,
 				53DCF55C13BFEAD3009160F9 /* ChatMessage.m in Sources */,
 				53DCF55D13BFEAD3009160F9 /* CustomUITextView.m in Sources */,
 				53DCF55E13BFEAD3009160F9 /* ViewObjectsSingleton.m in Sources */,
@@ -4827,7 +4811,7 @@
 				53DCF5AE13BFEAD3009160F9 /* UIImage+HockeyAdditions.m in Sources */,
 				53DCF5AF13BFEAD3009160F9 /* JSONKit.m in Sources */,
 				53EB49941401B71C0014E59A /* SUSRootFoldersDAO.m in Sources */,
-				5386FB831406243A0009F73F /* Loader.m in Sources */,
+				5386FB831406243A0009F73F /* SUSLoader.m in Sources */,
 				5386FB8814062A3A0009F73F /* SavedSettings.m in Sources */,
 				53E82A99140720BC0051D44B /* SUSSubFolderDAO.m in Sources */,
 				53E82AA514072F090051D44B /* CacheSingleton.m in Sources */,
@@ -4868,7 +4852,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = iSub_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
-				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "iSub-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
@@ -4907,7 +4891,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = iSub_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE=1";
-				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "iSub-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
@@ -4945,6 +4929,7 @@
 					"ADHOC=1",
 					"CONFIGURATION_$(CONFIGURATION)",
 				);
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -4988,7 +4973,7 @@
 					"DEBUG=1",
 					"ADHOC=1",
 				);
-				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "iSub-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
@@ -5284,6 +5269,7 @@
 					"DEBUG=1",
 					"CONFIGURATION_$(CONFIGURATION)",
 				);
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -5318,6 +5304,7 @@
 					"RELEASE=1",
 					"CONFIGURATION_$(CONFIGURATION)",
 				);
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;

@@ -6,13 +6,20 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "LoaderDelegate.h"
-#import "LoaderManager.h"
+#import "SUSLoaderDelegate.h"
+#import "SUSLoaderManager.h"
 
-@interface SUSChatDAO : NSObject <LoaderManager>
+@class SUSChatLoader;
+@interface SUSChatDAO : NSObject <SUSLoaderManager, SUSLoaderDelegate>
 
 @property (nonatomic, retain) SUSChatLoader *loader;
+@property (nonatomic, assign) NSObject <SUSLoaderDelegate> *delegate;
 
-- (void)sendChatMessage;
+@property (nonatomic, retain) NSArray *chatMessages;
+
+@property (nonatomic, retain) NSURLConnection *connection;
+@property (nonatomic, retain) NSMutableData *receivedData;
+
+- (void)sendChatMessage:(NSString *)message;
 
 @end

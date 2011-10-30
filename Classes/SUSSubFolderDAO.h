@@ -7,11 +7,11 @@
 //
 
 
-#import "Loader.h"
+#import "SUSLoader.h"
 
 @class FMDatabase, Album;
 
-@interface SUSSubFolderDAO : Loader
+@interface SUSSubFolderDAO : SUSLoader
 {
 	
 }

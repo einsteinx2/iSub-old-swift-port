@@ -8,7 +8,6 @@
 
 #import "ChatViewController.h"
 #import "ChatUITableViewCell.h"
-#import "ChatXMLParser.h"
 #import "ChatMessage.h"
 #import "SearchOverlayViewController.h"
 #import "iSubAppDelegate.h"
@@ -21,11 +20,12 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "NSString-md5.h"
-#import "ASIHTTPRequest.h"
 #import "EGORefreshTableHeaderView.h"
 #import "NSString-rfcEncode.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
+#import "SUSChatDAO.h"
+#import "NSError-ISMSError.h"
 
 
 @interface ChatViewController (Private)
@@ -37,6 +37,7 @@
 
 @synthesize noChatMessagesScreen, chatMessages, lastCheck;
 @synthesize reloading=_reloading;
+@synthesize dataModel;
 
 #pragma mark - Rotation
 
@@ -66,6 +67,17 @@
 }
 
 #pragma mark - Life Cycle
+
+- (void)createDataModel
+{
+	self.dataModel = [[SUSChatDAO alloc] initWithDelegate:self];
+}
+
+- (void)loadData
+{
+	[self.dataModel startLoad];
+	[viewObjects showLoadingScreenOnMainWindow];
+}
 
 - (void)viewDidLoad 
 {
@@ -114,6 +126,8 @@
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fadeBottom;
+	
+	[self createDataModel];
 }
 
 - (void)viewWillAppear:(BOOL)animated 
@@ -128,8 +142,7 @@
 	{
 		self.navigationItem.rightBarButtonItem = nil;
 	}
-	
-	[viewObjects showLoadingScreenOnMainWindow];
+		
 	[self loadData];
 }
 
@@ -212,6 +225,29 @@
 	[streamingPlayerViewController release];
 }
 
+#pragma mark - SUSLoader delegate
+
+- (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
+{
+	[viewObjects hideLoadingScreen];
+	
+	[self.tableView reloadData];
+	[self dataSourceDidFinishLoadingNewData];
+	
+	if ([error code] == ISMSErrorCode_CouldNotSendChatMessage)
+	{
+		textInput.text = [[[[error userInfo] objectForKey:@"message"] copy] autorelease];
+	}
+}
+
+- (void)loadingFinished:(SUSLoader*)theLoader
+{
+	[viewObjects hideLoadingScreen];
+	
+	[self.tableView reloadData];
+	[self dataSourceDidFinishLoadingNewData];
+}
+
 #pragma mark - UITextView delegate
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
@@ -280,7 +316,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
 	// Automatically set the height based on the height of the message text
-	ChatMessage *aChatMessage = [viewObjects.chatMessages objectAtIndex:indexPath.row];
+	ChatMessage *aChatMessage = [dataModel.chatMessages objectAtIndex:indexPath.row];
 	CGSize expectedLabelSize = [aChatMessage.message sizeWithFont:[UIFont systemFontOfSize:20] constrainedToSize:CGSizeMake(310,CGFLOAT_MAX) lineBreakMode:UILineBreakModeWordWrap];
 	if (expectedLabelSize.height < 40)
 		expectedLabelSize.height = 40;
@@ -297,7 +333,7 @@
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
-    return [viewObjects.chatMessages count];
+    return [dataModel.chatMessages count];
 }
 
 
@@ -323,7 +359,7 @@
 	ChatUITableViewCell *cell = [[[ChatUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 	
     // Set up the cell...
-	ChatMessage *aChatMessage = [viewObjects.chatMessages objectAtIndex:indexPath.row];
+	ChatMessage *aChatMessage = [dataModel.chatMessages objectAtIndex:indexPath.row];
 	cell.userNameLabel.text = [NSString stringWithFormat:@"%@ - %@", aChatMessage.user, [self formatDate:aChatMessage.timestamp]];
 	cell.messageLabel.text = aChatMessage.message;
 	
@@ -357,9 +393,11 @@
 			self.navigationItem.rightBarButtonItem = nil;
 		}
 		
-		
 		[viewObjects showLoadingScreenOnMainWindow];
-		[self performSelectorInBackground:@selector(sendChatMessage) withObject:nil];
+		[self.dataModel sendChatMessage:textInput.text];
+		
+		textInput.text = @"";
+		[textInput resignFirstResponder];
 	}
 }
 

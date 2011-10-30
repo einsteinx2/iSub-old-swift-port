@@ -6,14 +6,14 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-#import "LoaderDelegate.h"
-#import "LoaderManager.h"
+#import "SUSLoaderDelegate.h"
+#import "SUSLoaderManager.h"
 
 @class FMDatabase, Song, SUSAllSongsLoader;
 
-@interface SUSAllSongsDAO : NSObject <LoaderManager>
+@interface SUSAllSongsDAO : NSObject <SUSLoaderManager>
 {
-	id<LoaderDelegate> delegate;
+	id<SUSLoaderDelegate> delegate;
 		
 	NSUInteger count;
 	NSArray *index;
@@ -29,7 +29,7 @@
 
 @property (nonatomic, retain) SUSAllSongsLoader *loader;
 
-- (id)initWithDelegate:(id <LoaderDelegate>)theDelegate;
+- (id)initWithDelegate:(NSObject <SUSLoaderDelegate> *)theDelegate;
 - (void)restartLoad;
 - (void)startLoad;
 - (void)cancelLoad;

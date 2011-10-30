@@ -19,7 +19,7 @@
 
 @implementation SUSRootFoldersDAO
 
-@synthesize indexNames, indexPositions, indexCounts, loader;
+@synthesize indexNames, indexPositions, indexCounts, loader, delegate;
 
 #pragma mark - Lifecycle
 
@@ -42,11 +42,11 @@
     return self;
 }
 
-- (id)initWithDelegate:(id <LoaderDelegate>)theDelegate
+- (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate
 {
-	self = [super initWithDelegate:theDelegate];
-    if (self) 
+    if ((self = [super init]))
 	{
+		delegate = theDelegate;
 		[self setup];
     }
     

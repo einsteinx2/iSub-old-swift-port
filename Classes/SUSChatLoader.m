@@ -7,63 +7,82 @@
 //
 
 #import "SUSChatLoader.h"
+#import "NSError-ISMSError.h"
+#import "TBXML.h"
+#import "ChatMessage.h"
 
 @implementation SUSChatLoader
 
+@synthesize chatMessages;
+
+- (void)setup
+{
+	chatMessages = nil;
+}
+
+- (id)init
+{
+    if ((self = [super init]))
+	{
+		[self setup];
+	}
+    
+    return self;
+}
+
+- (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate
+{
+	if ((self = [super initWithDelegate:theDelegate]))
+	{
+		[self setup];
+	}
+	
+	return self;
+}
+
+- (void)dealloc
+{
+	[chatMessages release]; chatMessages = nil;
+	[super dealloc];
+}
+
+#pragma mark - Loader Methods
+
 - (void)loadData
 {
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[appDelegate getBaseUrl:@"getChatMessages.view"]] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
-	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	if (connection)
+	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[self getBaseUrlString:@"getChatMessages.view"]] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+	if (self.connection)
 	{
 		// Create the NSMutableData to hold the received data.
 		// receivedData is an instance variable declared elsewhere.
-		receivedData = [[NSMutableData data] retain];
+		self.receivedData = [NSMutableData data];
+		self.chatMessages = [NSMutableArray arrayWithCapacity:0];
 	} 
 	else 
 	{
-		// Inform the user that the connection failed.
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error retreiving the chat messages.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		alert.tag = 2;
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-		[alert release];
-        
-		[self dataSourceDidFinishLoadingNewData];
+		NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
+		[self.delegate loadingFailed:self withError:error]; 
+		
+		/*// Inform the user that the connection failed.
+		 CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error retreiving the chat messages.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		 alert.tag = 2;
+		 [alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		 [alert release];
+		 
+		 [self dataSourceDidFinishLoadingNewData];*/
 	}
 }
 
-#pragma mark Connection Delegate
-
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
-{
-	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
-		return YES; // Self-signed cert will be accepted
-	
-	return NO;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{	
-	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
-	{
-		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
-	}
-	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-	[receivedData setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
-{
-    [receivedData appendData:incrementalData];
-}
+#pragma mark - Connection Delegate
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
-	// Inform the user that the connection failed.
+	[self.delegate loadingFailed:self withError:error];
+	
+	[super connection:theConnection didFailWithError:error];
+	
+	/*// Inform the user that the connection failed.
 	NSString *message = [NSString stringWithFormat:@"There was an error retreiving the chat messages.\n\nError %i: %@", [error code], [error localizedDescription]];
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	alert.tag = 2;
@@ -74,12 +93,53 @@
 	[receivedData release];
 	
 	[viewObjects hideLoadingScreen];
-	[self dataSourceDidFinishLoadingNewData];
+	[self dataSourceDidFinishLoadingNewData];*/
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	viewObjects.chatMessages = [NSMutableArray arrayWithCapacity:1];
+	// Parse the data
+	//
+	TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData];
+    TBXMLElement *root = tbxml.rootXMLElement;
+    if (root) 
+	{
+		TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
+		if (error)
+		{
+			NSString *code = [TBXML valueOfAttributeNamed:@"code" forElement:error];
+			NSString *message = [TBXML valueOfAttributeNamed:@"message" forElement:error];
+			[self subsonicErrorCode:[code intValue] message:message];
+		}
+		else
+		{
+			TBXMLElement *chatMessagesElement = [TBXML childElementNamed:@"chatMessages" parentElement:root];
+			if (chatMessagesElement)
+			{
+				// Loop through the chat messages
+				TBXMLElement *chatMessage = [TBXML childElementNamed:@"chatMessage" parentElement:chatMessagesElement];
+				while (chatMessage != nil)
+				{
+					NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+					
+					// Create the chat message object and add it to the array
+					ChatMessage *aChatMessage = [[ChatMessage alloc] initWithTBXMLElement:chatMessage];
+					[chatMessages addObject:aChatMessage];
+					[aChatMessage release];
+					
+					// Get the next message
+					chatMessage = [TBXML nextSiblingNamed:@"chatMessage" searchFromElement:chatMessage];
+					
+					[pool release];
+				}
+			}
+		}
+	}
+	
+	[super connectionDidFinishLoading:theConnection];
+
+	
+	/*viewObjects.chatMessages = [NSMutableArray arrayWithCapacity:1];
 	//viewObjects.chatMessages = nil, viewObjects.chatMessages = [[NSMutableArray alloc] init];
 	
 	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
@@ -107,9 +167,9 @@
 	
 	[viewObjects hideLoadingScreen];
 	[self dataSourceDidFinishLoadingNewData];
-	
-	[theConnection release];
-	[receivedData release];
+	 
+	 [theConnection release];
+	 [receivedData release];*/
 }
 
 @end

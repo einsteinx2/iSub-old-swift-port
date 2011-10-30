@@ -30,7 +30,7 @@
     return self;
 }
 
-- (id)initWithDelegate:(id <LoaderDelegate>)theDelegate
+- (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate
 {
 	self = [super initWithDelegate:theDelegate];
     if (self) 

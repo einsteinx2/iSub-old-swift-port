@@ -6,7 +6,7 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-#import "Loader.h"
+#import "SUSLoader.h"
 
 #define NOTIF_LOADING_ARTISTS @"SUSAllSongsLoader loading artists"
 #define NOTIF_LOADING_ALBUMS @"SUSAllSongsLoader loading albums"
@@ -20,7 +20,7 @@
 
 @class ViewObjectsSingleton, DatabaseSingleton, SavedSettings, Artist, Album, SUSRootFoldersDAO;
 
-@interface SUSAllSongsLoader : Loader
+@interface SUSAllSongsLoader : SUSLoader
 {
 	ViewObjectsSingleton *viewObjects;
 	DatabaseSingleton *databaseControls;

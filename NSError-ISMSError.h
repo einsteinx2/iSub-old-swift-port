@@ -6,10 +6,12 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "ISMSErrorCodes.h"
+#import "SUSErrorDomain.h"
+#import "ISMSErrorDomain.h"
 
 @interface NSError (ISMSError)
 
 + (NSError *)errorWithISMSCode:(NSInteger)code;
++ (NSError *)errorWithISMSCode:(NSInteger)code withExtraAttributes:(NSDictionary *)attributes;
 
 @end

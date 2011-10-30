@@ -6,10 +6,10 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-@protocol LoaderManager <NSObject>
+@protocol SUSLoaderManager <NSObject>
 
 @required
-- (id)initWithDelegate:(id <LoaderDelegate>)theDelegate;
+- (id)initWithDelegate:(NSObject <SUSLoaderDelegate> *)theDelegate;
 - (void)startLoad;
 - (void)cancelLoad;
 

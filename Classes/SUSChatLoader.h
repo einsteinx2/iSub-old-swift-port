@@ -6,10 +6,10 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "Loader.h"
+#import "SUSLoader.h"
 
-@interface SUSChatLoader : Loader
+@interface SUSChatLoader : SUSLoader
 
-
+@property (nonatomic, retain) NSMutableArray *chatMessages;
 
 @end
