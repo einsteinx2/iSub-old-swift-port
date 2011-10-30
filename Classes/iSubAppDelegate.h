@@ -7,11 +7,11 @@
 //
 
 #import "MKStoreManager.h"
-#import "ServerURLChecker.h"
+#import "SUSServerURLChecker.h"
 
 @class BBSplitViewController, ViewObjectsSingleton, DatabaseSingleton, MusicSingleton, SocialSingleton, MGSplitViewController, iPadMainMenu, InitialDetailViewController, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, Reachability, iPhoneStreamingPlayerViewController, SettingsViewController, RootViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController, HTTPServer, CacheSingleton;
 
-@interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate, ServerURLCheckerDelegate> 
+@interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate, SUSServerURLCheckerDelegate> 
 {	
 	ViewObjectsSingleton *viewObjects;
 	DatabaseSingleton *databaseControls;
@@ -114,13 +114,10 @@
 - (void)loadInAppPurchaseStore;
 - (void)createHTTPServer;
 - (void)appInit2;
-//- (void)appInit3;
 - (void)createAndDisplayUI;
 
-//- (void)saveDefaults;
 - (NSString *)getBaseUrl:(NSString *)action;
 - (void)reachabilityChanged: (NSNotification *)note;
-- (BOOL)isURLValid:(NSString *)url error:(NSError **)error;
 - (NSString *)getIPAddressForHost:(NSString *)theHost;
 - (NSInteger)getHour;
 
@@ -137,10 +134,6 @@
 - (void)stopRedirectingLogToFile;
 
 - (void)checkServer;
-
-// Server check delegate methods
-- (void)serverURLCheckFailed:(ServerURLChecker *)checker withError:(NSError *)error;
-- (void)serverURLCheckPassed:(ServerURLChecker *)checker;
 
 @end
 

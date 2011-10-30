@@ -6,10 +6,11 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+#import "SUSServerURLChecker.h"
 
 @class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, ServerTypeViewController;
 
-@interface SubsonicServerEditViewController : UIViewController
+@interface SubsonicServerEditViewController : UIViewController <SUSServerURLCheckerDelegate>
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;

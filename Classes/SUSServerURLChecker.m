@@ -6,11 +6,11 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "ServerURLChecker.h"
+#import "SUSServerURLChecker.h"
 #import "TBXML.h"
 #import "NSError-ISMSError.h"
 
-@implementation ServerURLChecker
+@implementation SUSServerURLChecker
 
 @synthesize receivedData, delegate;
 
@@ -20,7 +20,7 @@
 	return self;
 }
 
-- (id)initWithDelegate:(NSObject<ServerURLCheckerDelegate> *)theDelegate
+- (id)initWithDelegate:(NSObject<SUSServerURLCheckerDelegate> *)theDelegate
 {
     if ((self = [super init]))
 	{
@@ -39,7 +39,7 @@
 	if (!connection)
     {
         NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
-        [delegate serverURLCheckFailed:self withError:error];
+        [delegate SUSServerURLCheckFailed:self withError:error];
     }
 }
 
@@ -77,7 +77,7 @@
     [theConnection release];
     self.receivedData = nil;
     
-    [delegate serverURLCheckFailed:self withError:error];
+    [delegate SUSServerURLCheckFailed:self withError:error];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
@@ -89,20 +89,20 @@
         if ([[TBXML elementName:root] isEqualToString:@"subsonic-response"])
         {
             // This is a Subsonic server, so pass
-            [delegate serverURLCheckPassed:self];
+            [delegate SUSServerURLCheckPassed:self];
         }
         else
         {
             // This is not a Subsonic server, so fail
             NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NotASubsonicServer];
-            [delegate serverURLCheckFailed:self withError:error];
+            [delegate SUSServerURLCheckFailed:self withError:error];
         }
     }
     else
     {
         // This is not XML, so fail
         NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NotXML];
-        [delegate serverURLCheckFailed:self withError:error];
+        [delegate SUSServerURLCheckFailed:self withError:error];
     }
     
 	[theConnection release];

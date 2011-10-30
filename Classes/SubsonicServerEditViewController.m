@@ -14,7 +14,6 @@
 #import "RootViewController.h"
 #import "XMLParser.h"
 #import "Server.h"
-#import "ASIHTTPRequest.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 
@@ -22,16 +21,18 @@
 
 @synthesize parentController;
 
+#pragma mark - Rotation
+
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	//if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] && inOrientation != UIInterfaceOrientationPortrait)
 	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
 }
 
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
+#pragma mark - Lifecycle
+
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
@@ -56,6 +57,27 @@
 	}
 }
 
+- (void)didReceiveMemoryWarning 
+{
+	// Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+}
+
+- (void)viewDidUnload {
+	// Release any retained subviews of the main view.
+	// e.g. self.myOutlet = nil;
+}
+
+- (void)dealloc {
+	[urlField release];
+	[usernameField release];
+	[passwordField release];
+	[cancelButton release];
+	[saveButton release];
+    [super dealloc];
+}
+
+#pragma mark - Button handling
 
 - (BOOL) checkUrl:(NSString *)url
 {
@@ -75,7 +97,6 @@
 	}
 	else
 	{
-		//DLog(@"%@", [url substringToIndex:7]);
 		if (![[url substringToIndex:7] isEqualToString:@"http://"] && ![[url substringToIndex:8] isEqualToString:@"https://"])
 		{
 			urlField.text = [NSString stringWithFormat:@"http://%@", url];
@@ -156,86 +177,99 @@
 	
 	if ([self checkUrl:urlField.text] && [self checkUsername:usernameField.text] && [self checkPassword:passwordField.text])
 	{
-		// Check if the subsonic URL is valid by attempting to access the ping.view page, if it's not then display an alert and allow user to change settings if they want.
-		// This is in case the user is, for instance, connected to a wifi network but does not have internet access or if the host url entered was wrong.
-		NSError *error;
-		if(![appDelegate isURLValid:[NSString stringWithFormat:@"%@/rest/ping.view", urlField.text] error:&error])
-		{
-			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\nError code %i:\n%@", error.code, [ASIHTTPRequest errorCodeToEnglish:error.code]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-			alert.tag = 2;
-			[alert show];
-			[alert release];
-		}
-		else
-		{	
-			Server *theServer = [[Server alloc] init];
-			theServer.url = urlField.text;
-			theServer.username = usernameField.text;
-			theServer.password = passwordField.text;
-			theServer.type = SUBSONIC;
-			
-			SavedSettings *settings = [SavedSettings sharedInstance];
-			
-			if (settings.serverList == nil)
-				settings.serverList = [NSMutableArray arrayWithCapacity:1];
-			
-			if(viewObjects.serverToEdit)
-			{					
-				// Replace the entry in the server list
-				NSInteger index = [settings.serverList indexOfObject:viewObjects.serverToEdit];
-				[settings.serverList replaceObjectAtIndex:index withObject:theServer];
-				
-				// Update the serverToEdit to the new details
-				viewObjects.serverToEdit = theServer;
-				
-				// Save the plist values
-				NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-				[defaults setObject:theServer.url forKey:@"url"];
-				[defaults setObject:theServer.username forKey:@"username"];
-				[defaults setObject:theServer.password forKey:@"password"];
-				[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
-				[defaults synchronize];
-				
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadServerList" object:nil];
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"showSaveButton" object:nil];
-				
-				if (parentController)
-					[parentController dismissModalViewControllerAnimated:YES];
-				
-				[self dismissModalViewControllerAnimated:YES];
-				
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"switchServer" object:nil];
-			}
-			else
-			{
-				// Create the entry in serverList
-				viewObjects.serverToEdit = theServer;
-				[settings.serverList addObject:viewObjects.serverToEdit];
-				
-				// Save the plist values
-				NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-				[defaults setObject:urlField.text forKey:@"url"];
-				[defaults setObject:usernameField.text forKey:@"username"];
-				[defaults setObject:passwordField.text forKey:@"password"];
-				[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
-				[defaults synchronize];
-				
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadServerList" object:nil];
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"showSaveButton" object:nil];
-				
-				if (parentController)
-					[parentController dismissModalViewControllerAnimated:YES];
-				
-				[self dismissModalViewControllerAnimated:YES];
-				
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"switchServer" object:nil];
-			}
-			
-			[theServer release];
-		}
+		[viewObjects showLoadingScreenOnMainWindow];
+		
+		SUSServerURLChecker *checker = [[SUSServerURLChecker alloc] initWithDelegate:self];
+		[checker checkURL:[NSURL URLWithString:urlField.text]];
 	}
 }
 
+#pragma mark - Server URL Checker delegate
+
+- (void)SUSServerURLCheckFailed:(SUSServerURLChecker *)checker withError:(NSError *)error
+{
+	[checker release]; checker = nil;
+	[viewObjects hideLoadingScreen];
+	
+	NSString *message = [NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\nError code %i:\n%@", [error code], [error localizedDescription]];
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	alert.tag = 2;
+	[alert show];
+	[alert release];
+}	
+	
+- (void)SUSServerURLCheckPassed:(SUSServerURLChecker *)checker
+{
+	[checker release]; checker = nil;
+	[viewObjects hideLoadingScreen];
+	
+	Server *theServer = [[Server alloc] init];
+	theServer.url = urlField.text;
+	theServer.username = usernameField.text;
+	theServer.password = passwordField.text;
+	theServer.type = SUBSONIC;
+	
+	SavedSettings *settings = [SavedSettings sharedInstance];
+	
+	if (settings.serverList == nil)
+		settings.serverList = [NSMutableArray arrayWithCapacity:1];
+	
+	if(viewObjects.serverToEdit)
+	{					
+		// Replace the entry in the server list
+		NSInteger index = [settings.serverList indexOfObject:viewObjects.serverToEdit];
+		[settings.serverList replaceObjectAtIndex:index withObject:theServer];
+		
+		// Update the serverToEdit to the new details
+		viewObjects.serverToEdit = theServer;
+		
+		// Save the plist values
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		[defaults setObject:theServer.url forKey:@"url"];
+		[defaults setObject:theServer.username forKey:@"username"];
+		[defaults setObject:theServer.password forKey:@"password"];
+		[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
+		[defaults synchronize];
+		
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadServerList" object:nil];
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"showSaveButton" object:nil];
+		
+		if (parentController)
+			[parentController dismissModalViewControllerAnimated:YES];
+		
+		[self dismissModalViewControllerAnimated:YES];
+		
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"switchServer" object:nil];
+	}
+	else
+	{
+		// Create the entry in serverList
+		viewObjects.serverToEdit = theServer;
+		[settings.serverList addObject:viewObjects.serverToEdit];
+		
+		// Save the plist values
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		[defaults setObject:urlField.text forKey:@"url"];
+		[defaults setObject:usernameField.text forKey:@"username"];
+		[defaults setObject:passwordField.text forKey:@"password"];
+		[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
+		[defaults synchronize];
+		
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadServerList" object:nil];
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"showSaveButton" object:nil];
+		
+		if (parentController)
+			[parentController dismissModalViewControllerAnimated:YES];
+		
+		[self dismissModalViewControllerAnimated:YES];
+		
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"switchServer" object:nil];
+	}
+	
+	[theServer release];
+}
+
+#pragma mark - UITextField delegate
 
 // This dismisses the keyboard when the "done" button is pressed
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -254,28 +288,5 @@
 	[passwordField resignFirstResponder];
 	[super touchesBegan:touches withEvent:event ];
 }
-
-
-- (void)didReceiveMemoryWarning 
-{
-	// Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-}
-
-- (void)viewDidUnload {
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
-}
-
-
-- (void)dealloc {
-	[urlField release];
-	[usernameField release];
-	[passwordField release];
-	[cancelButton release];
-	[saveButton release];
-    [super dealloc];
-}
-
 
 @end

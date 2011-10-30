@@ -225,7 +225,7 @@
 	// have internet access or if the host url entered was wrong.
     if (!viewObjects.isOfflineMode) 
 	{
-        ServerURLChecker *checker = [[ServerURLChecker alloc] initWithDelegate:self];
+        SUSServerURLChecker *checker = [[SUSServerURLChecker alloc] initWithDelegate:self];
         [checker checkURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/rest/ping.view", settings.urlString]]];
     }
 }
@@ -236,9 +236,9 @@
     [self checkServer];
 }
 
-#pragma mark - Server Check Delegate
+#pragma mark - SUS Server Check Delegate
 
-- (void)serverURLCheckFailed:(ServerURLChecker *)checker withError:(NSError *)error
+- (void)SUSServerURLCheckFailed:(SUSServerURLChecker *)checker withError:(NSError *)error
 {
     DLog(@"server check failed");
     if(!viewObjects.isOfflineMode)
@@ -255,7 +255,7 @@
     [checker release]; checker = nil;
 }
 
-- (void)serverURLCheckPassed:(ServerURLChecker *)checker
+- (void)SUSServerURLCheckPassed:(SUSServerURLChecker *)checker
 {
     DLog(@"server check passed");
     
@@ -1071,26 +1071,6 @@
 			
 			break;
 		}
-	}
-}
-
-
-- (BOOL)isURLValid:(NSString *)url error:(NSError **)error
-{	
-	//DLog(@"isURLValid url: %@", url);
-	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
-	[request setTimeOutSeconds:15];
-	[request startSynchronous];
-	NSError *conError = [request error];
-	
-	if(conError.code)
-	{
-		*error = conError;
-		return NO;
-	}
-	else
-	{
-		return YES;
 	}
 }
 
