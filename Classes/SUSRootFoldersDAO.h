@@ -6,13 +6,12 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-#import "Loader.h"
 #import "LoaderDelegate.h"
 #import "LoaderManager.h"
 
 @class Artist, FMDatabase, SUSRootFoldersLoader;
 
-@interface SUSRootFoldersDAO : Loader <LoaderManager>
+@interface SUSRootFoldersDAO : NSObject <LoaderManager>
 {		
 	NSUInteger count;
 	NSUInteger searchCount;

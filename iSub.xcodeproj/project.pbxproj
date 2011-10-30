@@ -175,6 +175,12 @@
 		535EFD84145D144400EDF867 /* SUSRootFoldersLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 535EFD83145D144400EDF867 /* SUSRootFoldersLoader.m */; };
 		535EFD85145D144400EDF867 /* SUSRootFoldersLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 535EFD83145D144400EDF867 /* SUSRootFoldersLoader.m */; };
 		535EFD86145D144400EDF867 /* SUSRootFoldersLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 535EFD83145D144400EDF867 /* SUSRootFoldersLoader.m */; };
+		535EFD89145D152A00EDF867 /* SUSChatDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 535EFD88145D152A00EDF867 /* SUSChatDAO.m */; };
+		535EFD8A145D152A00EDF867 /* SUSChatDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 535EFD88145D152A00EDF867 /* SUSChatDAO.m */; };
+		535EFD8B145D152A00EDF867 /* SUSChatDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 535EFD88145D152A00EDF867 /* SUSChatDAO.m */; };
+		535EFD8E145D153900EDF867 /* SUSChatLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 535EFD8D145D153900EDF867 /* SUSChatLoader.m */; };
+		535EFD8F145D153900EDF867 /* SUSChatLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 535EFD8D145D153900EDF867 /* SUSChatLoader.m */; };
+		535EFD90145D153900EDF867 /* SUSChatLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 535EFD8D145D153900EDF867 /* SUSChatLoader.m */; };
 		53614ACA116432DA0088ABC0 /* ServerListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53614AC8116432DA0088ABC0 /* ServerListViewController.m */; };
 		53614ACB116432DA0088ABC0 /* ServerListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53614AC9116432DA0088ABC0 /* ServerListViewController.xib */; };
 		53614BD9116467420088ABC0 /* AllSongsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53614BD7116467420088ABC0 /* AllSongsViewController.xib */; };
@@ -1627,6 +1633,10 @@
 		535CB68F12E383F400389DA1 /* SUSQueueAllDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSQueueAllDAO.m; sourceTree = "<group>"; };
 		535EFD82145D144400EDF867 /* SUSRootFoldersLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSRootFoldersLoader.h; sourceTree = "<group>"; };
 		535EFD83145D144400EDF867 /* SUSRootFoldersLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSRootFoldersLoader.m; sourceTree = "<group>"; };
+		535EFD87145D152A00EDF867 /* SUSChatDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSChatDAO.h; sourceTree = "<group>"; };
+		535EFD88145D152A00EDF867 /* SUSChatDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSChatDAO.m; sourceTree = "<group>"; };
+		535EFD8C145D153900EDF867 /* SUSChatLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSChatLoader.h; sourceTree = "<group>"; };
+		535EFD8D145D153900EDF867 /* SUSChatLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSChatLoader.m; sourceTree = "<group>"; };
 		53614AC7116432DA0088ABC0 /* ServerListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerListViewController.h; sourceTree = "<group>"; };
 		53614AC8116432DA0088ABC0 /* ServerListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerListViewController.m; sourceTree = "<group>"; };
 		53614AC9116432DA0088ABC0 /* ServerListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ServerListViewController.xib; sourceTree = "<group>"; };
@@ -2170,7 +2180,9 @@
 			isa = PBXGroup;
 			children = (
 				536F9D7D119783D4002E526A /* Main */,
-				539797F01162CE4B00F41D8B /* Views */,
+				539A356513D3E46700D80554 /* Data Model */,
+				533A207C12887EB100539BAE /* XML Parsers */,
+				539797F01162CE4B00F41D8B /* View Controllers */,
 				539797F21162CE7700F41D8B /* Support Classes */,
 				539797F31162CE9300F41D8B /* Custom Objects */,
 			);
@@ -2460,6 +2472,8 @@
 				53409897142D487600455754 /* SUSAllAlbumsDAO.m */,
 				534098A0142D489F00455754 /* SUSAllSongsDAO.h */,
 				534098A1142D489F00455754 /* SUSAllSongsDAO.m */,
+				535EFD87145D152A00EDF867 /* SUSChatDAO.h */,
+				535EFD88145D152A00EDF867 /* SUSChatDAO.m */,
 			);
 			name = DAOs;
 			sourceTree = "<group>";
@@ -2471,6 +2485,8 @@
 				534098A6142D491100455754 /* SUSAllSongsLoader.m */,
 				535EFD82145D144400EDF867 /* SUSRootFoldersLoader.h */,
 				535EFD83145D144400EDF867 /* SUSRootFoldersLoader.m */,
+				535EFD8C145D153900EDF867 /* SUSChatLoader.h */,
+				535EFD8D145D153900EDF867 /* SUSChatLoader.m */,
 			);
 			name = Loaders;
 			sourceTree = "<group>";
@@ -2607,16 +2623,8 @@
 			children = (
 				1D3623240D0F684500981E51 /* iSubAppDelegate.h */,
 				1D3623250D0F684500981E51 /* iSubAppDelegate.m */,
-				53C751C51268A36200A4793F /* ViewObjectsSingleton.h */,
-				53C751C61268A36200A4793F /* ViewObjectsSingleton.m */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				53E75C351270013D00BC1A19 /* MainWindow-iPad.xib */,
-				539A356513D3E46700D80554 /* Data Model */,
-				53FB066011EE1C4E008A30C7 /* CFNetworkRequests */,
-				5304BCE111BD58E3000EF6F9 /* NSURLConnectionDelegates */,
-				533A207C12887EB100539BAE /* XML Parsers */,
-				53F98335145CD65E005A083E /* ServerURLChecker.h */,
-				53F98336145CD65E005A083E /* ServerURLChecker.m */,
 			);
 			name = Main;
 			sourceTree = "<group>";
@@ -2741,7 +2749,7 @@
 			name = "Home view";
 			sourceTree = "<group>";
 		};
-		539797F01162CE4B00F41D8B /* Views */ = {
+		539797F01162CE4B00F41D8B /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				530AB2C512713F4B002981DB /* iPad */,
@@ -2761,7 +2769,7 @@
 				53C0D5FC11B586B600267C27 /* Cache view */,
 				5379DC431219E36C00F426CD /* Chat view */,
 			);
-			name = Views;
+			name = "View Controllers";
 			sourceTree = "<group>";
 		};
 		539797F21162CE7700F41D8B /* Support Classes */ = {
@@ -2928,6 +2936,8 @@
 				5386FB8614062A3A0009F73F /* SavedSettings.m */,
 				53EB49901401ABF20014E59A /* DAOs */,
 				53E82A9C140721D50051D44B /* Generic */,
+				53FB066011EE1C4E008A30C7 /* CFNetworkRequests */,
+				5304BCE111BD58E3000EF6F9 /* NSURLConnectionDelegates */,
 			);
 			name = "Data Model";
 			sourceTree = "<group>";
@@ -3234,6 +3244,8 @@
 		53E82A9C140721D50051D44B /* Generic */ = {
 			isa = PBXGroup;
 			children = (
+				53F98335145CD65E005A083E /* ServerURLChecker.h */,
+				53F98336145CD65E005A083E /* ServerURLChecker.m */,
 				53E82AA214072F090051D44B /* CacheSingleton.h */,
 				53E82AA314072F090051D44B /* CacheSingleton.m */,
 				53C751D11268A43A00A4793F /* DatabaseSingleton.h */,
@@ -3242,6 +3254,8 @@
 				53C751CC1268A3BE00A4793F /* MusicSingleton.m */,
 				53C751CE1268A3D400A4793F /* SocialSingleton.h */,
 				53C751CF1268A3D400A4793F /* SocialSingleton.m */,
+				53C751C51268A36200A4793F /* ViewObjectsSingleton.h */,
+				53C751C61268A36200A4793F /* ViewObjectsSingleton.m */,
 			);
 			name = Generic;
 			sourceTree = "<group>";
@@ -4423,6 +4437,8 @@
 				53F98337145CD65E005A083E /* ServerURLChecker.m in Sources */,
 				53B15EB4145D02EC007A04F6 /* NSError-ISMSError.m in Sources */,
 				535EFD84145D144400EDF867 /* SUSRootFoldersLoader.m in Sources */,
+				535EFD89145D152A00EDF867 /* SUSChatDAO.m in Sources */,
+				535EFD8E145D153900EDF867 /* SUSChatLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4622,6 +4638,8 @@
 				53F98339145CD65E005A083E /* ServerURLChecker.m in Sources */,
 				53B15EB6145D02EC007A04F6 /* NSError-ISMSError.m in Sources */,
 				535EFD86145D144400EDF867 /* SUSRootFoldersLoader.m in Sources */,
+				535EFD8B145D152A00EDF867 /* SUSChatDAO.m in Sources */,
+				535EFD90145D153900EDF867 /* SUSChatLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4821,6 +4839,8 @@
 				53F98338145CD65E005A083E /* ServerURLChecker.m in Sources */,
 				53B15EB5145D02EC007A04F6 /* NSError-ISMSError.m in Sources */,
 				535EFD85145D144400EDF867 /* SUSRootFoldersLoader.m in Sources */,
+				535EFD8A145D152A00EDF867 /* SUSChatDAO.m in Sources */,
+				535EFD8F145D153900EDF867 /* SUSChatLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

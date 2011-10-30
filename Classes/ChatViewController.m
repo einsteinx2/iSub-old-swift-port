@@ -27,12 +27,10 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 
+
 @interface ChatViewController (Private)
-
 - (void)dataSourceDidFinishLoadingNewData;
-
 @end
-
 
 
 @implementation ChatViewController
@@ -40,10 +38,10 @@
 @synthesize noChatMessagesScreen, chatMessages, lastCheck;
 @synthesize reloading=_reloading;
 
+#pragma mark - Rotation
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	//if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] && inOrientation != UIInterfaceOrientationPortrait)
 	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
@@ -57,19 +55,17 @@
 		if (UIInterfaceOrientationIsPortrait(fromInterfaceOrientation))
 		{
 			CGAffineTransform translate = CGAffineTransformMakeTranslation(0.0, 42.0);
-			//CGAffineTransform scale = CGAffineTransformMakeScale(0.75, 0.75);
-			//noChatMessagesScreen.transform = CGAffineTransformConcat(translate, scale);
 			noChatMessagesScreen.transform = translate;
 		}
 		else
 		{
 			CGAffineTransform translate = CGAffineTransformMakeTranslation(0.0, -160.0);
-			//CGAffineTransform scale = CGAffineTransformMakeScale(1.0, 1.0);
-			//noChatMessagesScreen.transform = CGAffineTransformConcat(scale, translate);
 			noChatMessagesScreen.transform = translate;
 		}
 	}
 }
+
+#pragma mark - Life Cycle
 
 - (void)viewDidLoad 
 {
@@ -84,7 +80,6 @@
 	self.tableView.separatorColor = [UIColor clearColor];
 	
 	self.title = @"Chat";
-	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
 
 	// Create text input box in header
 	headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 82)] autorelease];
@@ -112,7 +107,6 @@
 	refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
 	refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
 	[self.tableView addSubview:refreshHeaderView];
-	//self.tableView.showsVerticalScrollIndicator = YES;
 	[refreshHeaderView release];
 	
 	// Add the table fade
@@ -121,75 +115,6 @@
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fadeBottom;
 }
-
-
-- (void)showNoChatMessagesScreen
-{
-	if (isNoChatMessagesScreenShowing == NO)
-	{
-		isNoChatMessagesScreenShowing = YES;
-		noChatMessagesScreen = [[UIImageView alloc] init];
-		noChatMessagesScreen.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
-		noChatMessagesScreen.frame = CGRectMake(40, 100, 240, 180);
-		noChatMessagesScreen.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 2);
-		noChatMessagesScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
-		noChatMessagesScreen.alpha = .80;
-		
-		UILabel *textLabel = [[UILabel alloc] init];
-		textLabel.backgroundColor = [UIColor clearColor];
-		textLabel.textColor = [UIColor whiteColor];
-		textLabel.font = [UIFont boldSystemFontOfSize:32];
-		textLabel.textAlignment = UITextAlignmentCenter;
-		textLabel.numberOfLines = 0;
-		[textLabel setText:@"No Chat Messages\non the\nServer"];
-		textLabel.frame = CGRectMake(15, 15, 210, 150);
-		[noChatMessagesScreen addSubview:textLabel];
-		[textLabel release];
-		
-		[self.view addSubview:noChatMessagesScreen];
-		
-		[noChatMessagesScreen release];
-		
-		if (!IS_IPAD())
-		{
-			if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
-			{
-				CGAffineTransform translate = CGAffineTransformMakeTranslation(0.0, 42.0);
-				CGAffineTransform scale = CGAffineTransformMakeScale(0.75, 0.75);
-				noChatMessagesScreen.transform = CGAffineTransformConcat(scale, translate);
-				//noChatMessagesScreen.transform = translate;
-				
-				//CGAffineTransform translate = CGAffineTransformTranslate(noChatMessagesScreen.transform, 0.0, 42.0);
-				//CGAffineTransform scale = CGAffineTransformScale(noChatMessagesScreen.transform, 0.75, 0.75);
-				//noChatMessagesScreen.transform = CGAffineTransformConcat(scale, translate);
-			}
-		}
-	}
-}
-
-
-- (void)loadData
-{
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[appDelegate getBaseUrl:@"getChatMessages.view"]] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
-	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	if (connection)
-	{
-		// Create the NSMutableData to hold the received data.
-		// receivedData is an instance variable declared elsewhere.
-		receivedData = [[NSMutableData data] retain];
-	} 
-	else 
-	{
-		// Inform the user that the connection failed.
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error retreiving the chat messages.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		alert.tag = 2;
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-		[alert release];
-	
-		[self dataSourceDidFinishLoadingNewData];
-	}
-}
-
 
 - (void)viewWillAppear:(BOOL)animated 
 {
@@ -229,6 +154,46 @@
 	// e.g. self.myOutlet = nil;
 }
 
+- (void)showNoChatMessagesScreen
+{
+	if (isNoChatMessagesScreenShowing == NO)
+	{
+		isNoChatMessagesScreenShowing = YES;
+		noChatMessagesScreen = [[UIImageView alloc] init];
+		noChatMessagesScreen.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
+		noChatMessagesScreen.frame = CGRectMake(40, 100, 240, 180);
+		noChatMessagesScreen.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 2);
+		noChatMessagesScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
+		noChatMessagesScreen.alpha = .80;
+		
+		UILabel *textLabel = [[UILabel alloc] init];
+		textLabel.backgroundColor = [UIColor clearColor];
+		textLabel.textColor = [UIColor whiteColor];
+		textLabel.font = [UIFont boldSystemFontOfSize:32];
+		textLabel.textAlignment = UITextAlignmentCenter;
+		textLabel.numberOfLines = 0;
+		[textLabel setText:@"No Chat Messages\non the\nServer"];
+		textLabel.frame = CGRectMake(15, 15, 210, 150);
+		[noChatMessagesScreen addSubview:textLabel];
+		[textLabel release];
+		
+		[self.view addSubview:noChatMessagesScreen];
+		
+		[noChatMessagesScreen release];
+		
+		if (!IS_IPAD())
+		{
+			if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
+			{
+				CGAffineTransform translate = CGAffineTransformMakeTranslation(0.0, 42.0);
+				CGAffineTransform scale = CGAffineTransformMakeScale(0.75, 0.75);
+				noChatMessagesScreen.transform = CGAffineTransformConcat(scale, translate);
+			}
+		}
+	}
+}
+
+#pragma mark - Button handling
 
 - (void) settingsAction:(id)sender 
 {
@@ -237,7 +202,6 @@
 	[self.navigationController pushViewController:serverListViewController animated:YES];
 	[serverListViewController release];
 }
-
 
 - (IBAction)nowPlayingAction:(id)sender
 {
@@ -248,8 +212,70 @@
 	[streamingPlayerViewController release];
 }
 
+#pragma mark - UITextView delegate
 
-#pragma mark Table view methods
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+	// Create overlay
+	chatMessageOverlay = [[UIView alloc] init];
+	if (IS_IPAD())
+		chatMessageOverlay.frame = CGRectMake(0, 82, 1024, 1024);
+	else
+		chatMessageOverlay.frame = CGRectMake(0, 82, 480, 480);
+	
+	chatMessageOverlay.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	chatMessageOverlay.backgroundColor = [UIColor colorWithWhite:0 alpha:.80];
+	chatMessageOverlay.alpha = 0.0;
+	[self.view addSubview:chatMessageOverlay];
+	[chatMessageOverlay release];
+	
+	dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
+	dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	[dismissButton addTarget:self action:@selector(doneSearching_Clicked:) forControlEvents:UIControlEventTouchUpInside];
+	dismissButton.frame = self.view.bounds;
+	dismissButton.enabled = NO;
+	[chatMessageOverlay addSubview:dismissButton];
+	
+	// Animate the segmented control on screen
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:.5];
+	[UIView setAnimationCurve:UIViewAnimationCurveLinear];
+	chatMessageOverlay.alpha = 1;
+	dismissButton.enabled = YES;
+	[UIView commitAnimations];
+	
+	
+	//Add the done button.
+	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneSearching_Clicked:)] autorelease];
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+	// Animate the segmented control off screen
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:.3];
+	[UIView setAnimationCurve:UIViewAnimationCurveLinear];
+	chatMessageOverlay.alpha = 0;
+	dismissButton.enabled = NO;
+	[UIView commitAnimations];
+}
+
+
+- (void) doneSearching_Clicked:(id)sender 
+{	
+	[textInput resignFirstResponder];
+	
+	if(musicControls.showPlayerIcon)
+	{
+		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
+	}
+	else
+	{
+		self.navigationItem.rightBarButtonItem = nil;
+	}
+}
+
+#pragma mark - Table view delegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
@@ -321,10 +347,7 @@
 	if ([textInput.text length] != 0)
 	{
 		[textInput resignFirstResponder];
-		
-		//self.navigationItem.leftBarButtonItem = nil;
-		//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];	
-		
+
 		if(musicControls.showPlayerIcon)
 		{
 			self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
@@ -340,190 +363,7 @@
 	}
 }
 
-
-- (void) sendChatMessage
-{
-	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-	
-	// Form the URL and send the message
-	NSString *encodedMessage = [textInput.text stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	NSURL *url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"addChatMessage.view"], encodedMessage]];
-	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-	[request startSynchronous];
-	if ([request error])
-	{
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error posting the message." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		alert.tag = 2;
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-		[alert release];
-		
-		// Hide the loading screen
-		[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:YES];
-	}
-	else
-	{
-		// Hide the loading screen
-		//[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:YES];
-		
-		// Connection worked, reload the table
-		[self performSelectorOnMainThread:@selector(loadData) withObject:nil waitUntilDone:NO];
-	}
-	[url release];
-	
-	[textInput performSelectorOnMainThread:@selector(setText:) withObject:@"" waitUntilDone:NO];
-	[textInput performSelectorOnMainThread:@selector(resignFirstResponder) withObject:nil waitUntilDone:NO];
-	
-	[autoreleasePool release];
-}
-
-
-#pragma mark UITextView delegate methods
-
-- (void)textViewDidBeginEditing:(UITextView *)textView
-{
-	// Create overlay
-	chatMessageOverlay = [[UIView alloc] init];
-	if (IS_IPAD())
-		chatMessageOverlay.frame = CGRectMake(0, 82, 1024, 1024);
-	else
-		chatMessageOverlay.frame = CGRectMake(0, 82, 480, 480);
-	
-	chatMessageOverlay.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	chatMessageOverlay.backgroundColor = [UIColor colorWithWhite:0 alpha:.80];
-	chatMessageOverlay.alpha = 0.0;
-	[self.view addSubview:chatMessageOverlay];
-	[chatMessageOverlay release];
-	
-	dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
-	dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	[dismissButton addTarget:self action:@selector(doneSearching_Clicked:) forControlEvents:UIControlEventTouchUpInside];
-	dismissButton.frame = self.view.bounds;
-	dismissButton.enabled = NO;
-	[chatMessageOverlay addSubview:dismissButton];
-	
-	// Animate the segmented control on screen
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.5];
-	[UIView setAnimationCurve:UIViewAnimationCurveLinear];
-	chatMessageOverlay.alpha = 1;
-	dismissButton.enabled = YES;
-	[UIView commitAnimations];
-	
-	
-	//Add the done button.
-	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneSearching_Clicked:)] autorelease];
-}
-
-- (void)textViewDidEndEditing:(UITextView *)textView
-{
-	// Animate the segmented control off screen
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.3];
-	[UIView setAnimationCurve:UIViewAnimationCurveLinear];
-	chatMessageOverlay.alpha = 0;
-	dismissButton.enabled = NO;
-	[UIView commitAnimations];
-}
-
-
-- (void) doneSearching_Clicked:(id)sender 
-{	
-	[textInput resignFirstResponder];
-	
-	if(musicControls.showPlayerIcon)
-	{
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
-	}
-	else
-	{
-		self.navigationItem.rightBarButtonItem = nil;
-	}
-}
-
-
-#pragma mark Connection Delegate
-
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
-{
-	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
-		return YES; // Self-signed cert will be accepted
-	
-	return NO;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{	
-	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
-	{
-		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
-	}
-	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-	[receivedData setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
-{
-    [receivedData appendData:incrementalData];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
-{
-	// Inform the user that the connection failed.
-	NSString *message = [NSString stringWithFormat:@"There was an error retreiving the chat messages.\n\nError %i: %@", [error code], [error localizedDescription]];
-	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	alert.tag = 2;
-	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-	[alert release];
-	
-	[theConnection release];
-	[receivedData release];
-	
-	[viewObjects hideLoadingScreen];
-	[self dataSourceDidFinishLoadingNewData];
-}	
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
-{	
-	viewObjects.chatMessages = [NSMutableArray arrayWithCapacity:1];
-	//viewObjects.chatMessages = nil, viewObjects.chatMessages = [[NSMutableArray alloc] init];
-	
-	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
-	ChatXMLParser *parser = [[ChatXMLParser alloc] initXMLParser];
-	[xmlParser setDelegate:parser];
-	[xmlParser parse];
-		
-	[xmlParser release];
-	[parser release];
-	
-	[self.tableView reloadData]; 
-	
-	if ([viewObjects.chatMessages count] == 0)
-	{
-		[self showNoChatMessagesScreen];
-	}
-	else
-	{
-		if (isNoChatMessagesScreenShowing == YES)
-		{
-			isNoChatMessagesScreenShowing = NO;
-			[noChatMessagesScreen removeFromSuperview];
-		}
-	}
-	
-	[viewObjects hideLoadingScreen];
-	[self dataSourceDidFinishLoadingNewData];
-	
-	[theConnection release];
-	[receivedData release];
-}
-
-#pragma mark -
-#pragma mark Pull to refresh methods
+#pragma mark - Pull to refresh methods
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {	
