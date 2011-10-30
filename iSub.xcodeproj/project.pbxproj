@@ -172,6 +172,9 @@
 		535CB48D12E2664700389DA1 /* server-button-ubuntu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB48912E2664700389DA1 /* server-button-ubuntu@2x.png */; };
 		535CB58412E27A5400389DA1 /* default-album-art-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB58312E27A5400389DA1 /* default-album-art-ipad.png */; };
 		535CB69012E383F400389DA1 /* SUSQueueAllDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB68F12E383F400389DA1 /* SUSQueueAllDAO.m */; };
+		535EFD84145D144400EDF867 /* SUSRootFoldersLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 535EFD83145D144400EDF867 /* SUSRootFoldersLoader.m */; };
+		535EFD85145D144400EDF867 /* SUSRootFoldersLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 535EFD83145D144400EDF867 /* SUSRootFoldersLoader.m */; };
+		535EFD86145D144400EDF867 /* SUSRootFoldersLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 535EFD83145D144400EDF867 /* SUSRootFoldersLoader.m */; };
 		53614ACA116432DA0088ABC0 /* ServerListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53614AC8116432DA0088ABC0 /* ServerListViewController.m */; };
 		53614ACB116432DA0088ABC0 /* ServerListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53614AC9116432DA0088ABC0 /* ServerListViewController.xib */; };
 		53614BD9116467420088ABC0 /* AllSongsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53614BD7116467420088ABC0 /* AllSongsViewController.xib */; };
@@ -1622,6 +1625,8 @@
 		535CB58312E27A5400389DA1 /* default-album-art-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art-ipad.png"; path = "Images/Other/default-album-art-ipad.png"; sourceTree = "<group>"; };
 		535CB68E12E383F400389DA1 /* SUSQueueAllDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSQueueAllDAO.h; sourceTree = "<group>"; };
 		535CB68F12E383F400389DA1 /* SUSQueueAllDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSQueueAllDAO.m; sourceTree = "<group>"; };
+		535EFD82145D144400EDF867 /* SUSRootFoldersLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSRootFoldersLoader.h; sourceTree = "<group>"; };
+		535EFD83145D144400EDF867 /* SUSRootFoldersLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSRootFoldersLoader.m; sourceTree = "<group>"; };
 		53614AC7116432DA0088ABC0 /* ServerListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerListViewController.h; sourceTree = "<group>"; };
 		53614AC8116432DA0088ABC0 /* ServerListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerListViewController.m; sourceTree = "<group>"; };
 		53614AC9116432DA0088ABC0 /* ServerListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ServerListViewController.xib; sourceTree = "<group>"; };
@@ -2464,6 +2469,8 @@
 			children = (
 				534098A5142D491100455754 /* SUSAllSongsLoader.h */,
 				534098A6142D491100455754 /* SUSAllSongsLoader.m */,
+				535EFD82145D144400EDF867 /* SUSRootFoldersLoader.h */,
+				535EFD83145D144400EDF867 /* SUSRootFoldersLoader.m */,
 			);
 			name = Loaders;
 			sourceTree = "<group>";
@@ -4415,6 +4422,7 @@
 				53F98332145CCEAC005A083E /* ServerCheckConnectionDelegate.m in Sources */,
 				53F98337145CD65E005A083E /* ServerURLChecker.m in Sources */,
 				53B15EB4145D02EC007A04F6 /* NSError-ISMSError.m in Sources */,
+				535EFD84145D144400EDF867 /* SUSRootFoldersLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4613,6 +4621,7 @@
 				53F98334145CCEAC005A083E /* ServerCheckConnectionDelegate.m in Sources */,
 				53F98339145CD65E005A083E /* ServerURLChecker.m in Sources */,
 				53B15EB6145D02EC007A04F6 /* NSError-ISMSError.m in Sources */,
+				535EFD86145D144400EDF867 /* SUSRootFoldersLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4811,6 +4820,7 @@
 				53F98333145CCEAC005A083E /* ServerCheckConnectionDelegate.m in Sources */,
 				53F98338145CD65E005A083E /* ServerURLChecker.m in Sources */,
 				53B15EB5145D02EC007A04F6 /* NSError-ISMSError.m in Sources */,
+				535EFD85145D144400EDF867 /* SUSRootFoldersLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
