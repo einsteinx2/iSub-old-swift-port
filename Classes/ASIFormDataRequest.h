@@ -6,7 +6,6 @@
 //  Copyright 2008-2009 All-Seeing Interactive. All rights reserved.
 //
 
-//#import <Foundation/Foundation.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
 #import "ASIHTTPRequest.h"
 #import "ASIHTTPRequestConfig.h"
 

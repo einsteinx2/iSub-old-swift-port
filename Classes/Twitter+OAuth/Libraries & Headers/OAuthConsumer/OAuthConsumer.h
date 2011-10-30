@@ -23,7 +23,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-//#import <Foundation/Foundation.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
+
 #import <OAuthConsumer/OAToken.h>
 #import <OAuthConsumer/OAConsumer.h>
 #import <OAuthConsumer/OAMutableURLRequest.h>

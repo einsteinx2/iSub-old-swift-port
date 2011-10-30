@@ -138,13 +138,11 @@ static MusicSingleton *sharedInstance = nil;
 	self.downloadFileNameHashA = nil; downloadFileNameHashA = [[NSString md5:currentSongObject.path] retain];
 	
 	// Determine the name of the file we are downloading.
-	//DLog(@"currentSongObject.path: %@", currentSongObject.path);
 	self.downloadFileNameA = nil;
 	if (currentSongObject.transcodedSuffix)
 		self.downloadFileNameA = [audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", downloadFileNameHashA, currentSongObject.transcodedSuffix]];
 	else
 		self.downloadFileNameA = [audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", downloadFileNameHashA, currentSongObject.suffix]];
-	//DLog(@"File name = %@", downloadFileNameA);
 	
 	// Check to see if the song is already cached
 	if ([databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE md5 = ?", downloadFileNameHashA])
@@ -154,7 +152,6 @@ static MusicSingleton *sharedInstance = nil;
 		if ([isDownloadFinished isEqualToString:@"YES"])
 		{
 			// The song is fully cached, start streaming from the local copy
-			//DLog(@"Playing from local copy");
 			
 			// Grab the first bytes of the song to trick Subsonic into seeing that it's being played
 			NSURLRequest *request = [NSURLRequest requestWithURL:songUrl cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
@@ -182,7 +179,6 @@ static MusicSingleton *sharedInstance = nil;
 			}			
 			[streamer start];
 			
-			//if (nextSongObject.path != nil && [[appDelegate.settingsDictionary objectForKey:@"enableNextSongCacheSetting"] isEqualToString:@"YES"] && [[appDelegate.settingsDictionary objectForKey:@"enableSongCachingSetting"] isEqualToString:@"YES"])
 			if (nextSongObject.path != nil && settings.isNextSongCacheEnabled && settings.isSongCachingEnabled)
 				[self startDownloadB];
 		}
@@ -192,7 +188,6 @@ static MusicSingleton *sharedInstance = nil;
 			if ([downloadFileNameHashA isEqualToString:downloadFileNameHashB])
 			{
 				// The song is already being downloaded so start playing the local copy
-				//DLog(@"Playing from downloadB's file");
 				
 				// Update the playtime to now
 				[databaseControls.songCacheDb executeUpdate:[NSString stringWithFormat:@"UPDATE cachedSongs SET playedDate = %i WHERE md5 = '%@'", (NSUInteger)[[NSDate date] timeIntervalSince1970], downloadFileNameHashA]];
@@ -214,7 +209,6 @@ static MusicSingleton *sharedInstance = nil;
 			else
 			{
 				// The song is not being downloaded and is not fully cached
-				//if ([[appDelegate.settingsDictionary objectForKey:@"enableSongCachingSetting"] isEqualToString:@"YES"])
 				if (settings.isSongCachingEnabled)
 				{
 					// Delete the download and start over
@@ -228,17 +222,6 @@ static MusicSingleton *sharedInstance = nil;
 					[[NSFileManager defaultManager] createFileAtPath:downloadFileNameA contents:[NSData data] attributes:nil];
 					self.audioFileA = nil; self.audioFileA = [NSFileHandle fileHandleForWritingAtPath:downloadFileNameA];
 					
-					/*NSURLConnectionDelegateA *connDelegateA = [[NSURLConnectionDelegateA alloc] init];
-					 NSURLRequest *downloadRequestA = [NSURLRequest requestWithURL:songUrl cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];	
-					 self.downloadA = [[NSURLConnection alloc] initWithRequest:downloadRequestA delegate:connDelegateA];
-					 [connDelegateA release];*/
-					
-					/*ASIHTTPRequestDelegateA *requestDelegateA = [[ASIHTTPRequestDelegateA alloc] init];
-					 self.downloadA = [ASIHTTPRequest requestWithURL:songUrl];
-					 [downloadA setDelegate:requestDelegateA];
-					 [downloadA startAsynchronous];*/
-					
-					//DLog(@"--------- calling DownloadCFNetA");
 					[CFNetworkRequests downloadCFNetA:songUrl];
 				}
 				else
@@ -253,31 +236,20 @@ static MusicSingleton *sharedInstance = nil;
 	else 
 	{
 		// The song has not been cached yet, start from scratch
-		//if ([[appDelegate.settingsDictionary objectForKey:@"enableSongCachingSetting"] isEqualToString:@"YES"])
 		if (settings.isSongCachingEnabled)
-		{
-			//DLog(@"starting a new download of %@", downloadFileNameHashA);
-			
+		{			
 			// Add the row to the song cache database (looooooong query :P)
 			[databaseControls.songCacheDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO cachedSongs (md5, finished, cachedDate, playedDate, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES ('%@', 'NO', %i, %i, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", downloadFileNameHashA, (NSUInteger)[[NSDate date] timeIntervalSince1970], (NSUInteger)[[NSDate date] timeIntervalSince1970]], currentSongObject.title, currentSongObject.songId, currentSongObject.artist, currentSongObject.album, currentSongObject.genre, currentSongObject.coverArtId, currentSongObject.path, currentSongObject.suffix, currentSongObject.transcodedSuffix, currentSongObject.duration, currentSongObject.bitRate, currentSongObject.track, currentSongObject.year, currentSongObject.size];
 			
 			// Create new file on disk
 			[[NSFileManager defaultManager] createFileAtPath:downloadFileNameA contents:[NSData data] attributes:nil];
 			self.audioFileA = [NSFileHandle fileHandleForWritingAtPath:downloadFileNameA];
-			
-			// Start the download
-			/*ASIHTTPRequestDelegateA *requestDelegateA = [[ASIHTTPRequestDelegateA alloc] init];
-			 self.downloadA = [ASIHTTPRequest requestWithURL:songUrl];
-			 [downloadA setDelegate:requestDelegateA];
-			 [downloadA startAsynchronous];*/
-			
-			//DLog(@"--------- calling DownloadCFNetA");
+
 			[CFNetworkRequests downloadCFNetA:songUrl];
 		}
 		else
 		{
 			// Song caching is off, so use the startTempDownload method
-			//DLog(@"Song caching is off, using startTempDownload");
 			[self startTempDownloadA:0];
 		}
 	}
@@ -288,37 +260,21 @@ static MusicSingleton *sharedInstance = nil;
 	// Create the request and resume the download
 	if (!viewObjects.isOfflineMode)
 	{
-		/*ASIHTTPRequestDelegateA *requestDelegateA = [[ASIHTTPRequestDelegateA alloc] init];
-		 self.downloadA = [ASIHTTPRequest requestWithURL:songUrl];
-		 NSString *range = [NSString stringWithFormat:@"bytes=%i-", byteOffset];
-		 [downloadA setDelegate:requestDelegateA];
-		 [downloadA addRequestHeader:@"Range" value:range];
-		 [downloadA startAsynchronous];*/
-		
-		//DLog(@"--------- calling resumeCFNetA");
 		[CFNetworkRequests resumeCFNetA:byteOffset];
 	}
 }
 
 - (void)stopDownloadA 
 {
-	//if (downloadA)
-	//DLog(@"---------------------------------------- downloadA %i", [CFNetworkRequests downloadA]);
 	if ([CFNetworkRequests downloadA])
 	{
-		/*[downloadA cancel];
-		 self.downloadA = nil;*/
-		
-		//DLog(@"calling cancelCFNetA");
 		[CFNetworkRequests cancelCFNetA];
 	}
 	
 	// Delete the unfinished download and remove it from the cache database
 	NSString *isDownloadFinished = [databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", downloadFileNameHashA];
 	if ([isDownloadFinished isEqualToString:@"NO"])
-	{
-		//DLog(@"Removing unfinished download");
-		
+	{		
 		// Delete the song from disk
 		[[NSFileManager defaultManager] removeItemAtPath:downloadFileNameA error:NULL];
 		
@@ -329,9 +285,7 @@ static MusicSingleton *sharedInstance = nil;
 
 // Start downloading the file specified in the text field.
 - (void)startDownloadB
-{		
-	//DLog(@"nextSongObject: %@", nextSongObject.title);
-	
+{			
 	// Are we already downloading?  If so, stop it.
 	[self stopDownloadB];
 	
@@ -363,13 +317,11 @@ static MusicSingleton *sharedInstance = nil;
 	self.downloadFileNameHashB = [nextSongObject.path md5];
 	
 	// Determine the name of the file we are downloading.
-	//DLog(@"nextSongObject.path: %@", nextSongObject.path);
 	self.downloadFileNameB = nil;
 	if (nextSongObject.transcodedSuffix)
 		self.downloadFileNameB = [audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", downloadFileNameHashB, nextSongObject.transcodedSuffix]];
 	else
 		self.downloadFileNameB = [audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", downloadFileNameHashB, nextSongObject.suffix]];
-	//DLog(@"File name = %@", downloadFileNameB);
 	
 	// Check to see if the song is already cached
 	if ([databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE md5 = ?", downloadFileNameHashB])
@@ -383,7 +335,6 @@ static MusicSingleton *sharedInstance = nil;
 		else
 		{
 			// The song is not fully cached, delete the download and start over
-			//DLog(@"Deleting the Download and starting over");
 			
 			// Update the cached and played dates to now
 			[databaseControls.songCacheDb executeUpdate:[NSString stringWithFormat:@"UPDATE cachedSongs SET cachedDate = %i, playedDate = 0 WHERE md5 = ?", (NSUInteger)[[NSDate date] timeIntervalSince1970]], downloadFileNameHashB];
@@ -396,20 +347,6 @@ static MusicSingleton *sharedInstance = nil;
 			[[NSFileManager defaultManager] createFileAtPath:downloadFileNameB contents:[NSData data] attributes:nil];
 			self.audioFileB = nil; self.audioFileB = [NSFileHandle fileHandleForWritingAtPath:downloadFileNameB];
 			
-			// Start the download
-			/*NSURLConnectionDelegateB *connDelegateB = [[NSURLConnectionDelegateB alloc] init];
-			 connDelegateB.songB = [nextSongObject copy];
-			 NSURLRequest *downloadRequestB = [NSURLRequest requestWithURL:nextSongUrl cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];	
-			 self.downloadB = [[NSURLConnection alloc] initWithRequest:downloadRequestB delegate:connDelegateB];
-			 [connDelegateB release];*/
-			
-			/*ASIHTTPRequestDelegateB *requestDelegateB = [[ASIHTTPRequestDelegateB alloc] init];
-			 requestDelegateB.songB = [nextSongObject copy];
-			 self.downloadB = [ASIHTTPRequest requestWithURL:nextSongUrl];
-			 [downloadB setDelegate:requestDelegateB];
-			 [downloadB startAsynchronous];*/
-			
-			//DLog(@"--------- calling DownloadCFNetB");
 			self.songB = [[nextSongObject copy] autorelease];
 			[CFNetworkRequests downloadCFNetB:nextSongUrl];
 		}
@@ -417,7 +354,6 @@ static MusicSingleton *sharedInstance = nil;
 	else 
 	{
 		// The song has not been cached yet, start from scratch
-		//DLog(@"starting a new download of %@", downloadFileNameHashB);
 		
 		// Add the row to the song cache database (looooooong query :P)
 		[databaseControls.songCacheDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO cachedSongs (md5, finished, cachedDate, playedDate, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES ('%@', 'NO', %i, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", downloadFileNameHashB, (NSUInteger)[[NSDate date] timeIntervalSince1970]], nextSongObject.title, nextSongObject.songId, nextSongObject.artist, nextSongObject.album, nextSongObject.genre, nextSongObject.coverArtId, nextSongObject.path, nextSongObject.suffix, nextSongObject.transcodedSuffix, nextSongObject.duration, nextSongObject.bitRate, nextSongObject.track, nextSongObject.year, nextSongObject.size];
@@ -429,20 +365,6 @@ static MusicSingleton *sharedInstance = nil;
 		[[NSFileManager defaultManager] createFileAtPath:downloadFileNameB contents:[NSData data] attributes:nil];
 		self.audioFileB = [NSFileHandle fileHandleForWritingAtPath:downloadFileNameB];
 		
-		// Start the download
-		/*NSURLConnectionDelegateB *connDelegateB = [[NSURLConnectionDelegateB alloc] init];
-		 connDelegateB.songB = [nextSongObject copy];
-		 NSURLRequest *downloadRequestB = [NSURLRequest requestWithURL:nextSongUrl cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];	
-		 downloadB = [[NSURLConnection alloc] initWithRequest:downloadRequestB delegate:connDelegateB];
-		 [connDelegateB release];*/
-		
-		/*ASIHTTPRequestDelegateB *requestDelegateB = [[ASIHTTPRequestDelegateB alloc] init];
-		 requestDelegateB.songB = [nextSongObject copy];
-		 self.downloadB = [ASIHTTPRequest requestWithURL:nextSongUrl];
-		 [downloadB setDelegate:requestDelegateB];
-		 [downloadB startAsynchronous];*/
-		
-		//DLog(@"--------- calling DownloadCFNetB");
 		self.songB = [[nextSongObject copy] autorelease];
 		[CFNetworkRequests downloadCFNetB:nextSongUrl];
 	}
@@ -453,15 +375,6 @@ static MusicSingleton *sharedInstance = nil;
 	// Create the request and resume the download
 	if (!viewObjects.isOfflineMode)
 	{
-		/*ASIHTTPRequestDelegateB *requestDelegateB = [[ASIHTTPRequestDelegateB alloc] init];
-		 requestDelegateB.songB = [songB copy];
-		 self.downloadB = [ASIHTTPRequest requestWithURL:nextSongUrl];
-		 [downloadB setDelegate:requestDelegateB];
-		 NSString *range = [NSString stringWithFormat:@"bytes=%i-", byteOffset];
-		 [downloadB addRequestHeader:@"Range" value:range];
-		 [downloadB startAsynchronous];*/
-		
-		//DLog(@"--------- calling resumeCFNetB");
 		[CFNetworkRequests resumeCFNetB:byteOffset];
 	}
 }
@@ -470,30 +383,14 @@ static MusicSingleton *sharedInstance = nil;
 {
 	DLog(@"----------------------------- (void)resumeDownloadB:(UInt32)byteOffset withSong:(Song *)song");
 	DLog(@"----------------------------- I SHOULDN'T HAVE BEEN CALLED!!! -------------------------------");
-	/*// Create the request and resume the download
-	if (!viewObjects.isOfflineMode)
-	{
-		ASIHTTPRequestDelegateB *requestDelegateB = [[ASIHTTPRequestDelegateB alloc] init];
-		requestDelegateB.songB = [song copy];
-		self.downloadB = [ASIHTTPRequest requestWithURL:nextSongUrl];
-		[downloadB setDelegate:requestDelegateB];
-		NSString *range = [NSString stringWithFormat:@"bytes=%i-", byteOffset];
-		[downloadB addRequestHeader:@"Range" value:range];
-		[downloadB startAsynchronous];
-	}*/
 }
 
 - (void)stopDownloadB
 {
 	reportDownloadedLengthB = NO;
-	
-	//if (downloadB) 
-	//DLog(@"---------------------------------------- downloadA %i", [CFNetworkRequests downloadB]);
+
 	if ([CFNetworkRequests downloadB])
 	{
-		/*[downloadB cancel];
-		 self.downloadB = nil;*/
-		
 		[CFNetworkRequests cancelCFNetB];
 		self.songB = nil;
 	}		
@@ -501,9 +398,7 @@ static MusicSingleton *sharedInstance = nil;
 	// Delete the unfinished download and remove it from the cache database
 	NSString *isDownloadFinished = [databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", downloadFileNameHashB];
 	if ([isDownloadFinished isEqualToString:@"NO"])
-	{
-		//DLog(@"Removing unfinished download");
-		
+	{		
 		// Delete the song from disk
 		[[NSFileManager defaultManager] removeItemAtPath:downloadFileNameB error:NULL];
 		
@@ -537,28 +432,11 @@ static MusicSingleton *sharedInstance = nil;
 		self.downloadFileNameA = [tempAudioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", downloadFileNameHashA, currentSongObject.transcodedSuffix]];
 	else
 		self.downloadFileNameA = [tempAudioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", downloadFileNameHashA, currentSongObject.suffix]];	
-	//DLog(@"File name = %@", downloadFileNameA);
 	
 	// Create the new temp file
 	[[NSFileManager defaultManager] createFileAtPath:downloadFileNameA contents:[NSData data] attributes:nil];
 	self.audioFileA = nil; self.audioFileA = [NSFileHandle fileHandleForWritingAtPath:downloadFileNameA];
-	
-	// Create the request and start the download
-	/*NSURLConnectionDelegateTempA *connDelegateA = [[NSURLConnectionDelegateTempA alloc] init];
-	 NSMutableURLRequest *downloadRequestA = [NSMutableURLRequest requestWithURL:songUrl cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];	
-	 NSString *range = [NSString stringWithFormat:@"bytes=%i-", byteOffset];
-	 [downloadRequestA setValue:range forHTTPHeaderField:@"Range"];		
-	 self.downloadA = [[NSURLConnection alloc] initWithRequest:downloadRequestA delegate:connDelegateA];
-	 [connDelegateA release];*/
-	
-	/*ASIHTTPRequestDelegateTemp *requestDelegateA = [[ASIHTTPRequestDelegateTemp alloc] init];
-	 self.downloadA = [ASIHTTPRequest requestWithURL:songUrl];
-	 NSString *range = [NSString stringWithFormat:@"bytes=%i-", byteOffset];
-	 [downloadA setDelegate:requestDelegateA];
-	 [downloadA addRequestHeader:@"Range" value:range];
-	 [downloadA startAsynchronous];*/
-	
-	//DLog(@"--------- calling DownloadCFNetTempA");
+
 	[CFNetworkRequests downloadCFNetTemp:songUrl];
 }
 
@@ -599,21 +477,6 @@ static MusicSingleton *sharedInstance = nil;
 		aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
 	}
 	
-	/*aSong.title = [result stringForColumnIndex:4];
-	aSong.songId = [result stringForColumnIndex:5];
-	aSong.artist = [result stringForColumnIndex:6];
-	aSong.album = [result stringForColumnIndex:7];
-	aSong.genre = [result stringForColumnIndex:8];
-	aSong.coverArtId = [result stringForColumnIndex:9];
-	aSong.path = [result stringForColumnIndex:10];
-	aSong.suffix = [result stringForColumnIndex:11];
-	aSong.transcodedSuffix = [result stringForColumnIndex:12];
-	aSong.duration = [NSNumber numberWithInt:[result intForColumnIndex:13]];
-	aSong.bitRate = [NSNumber numberWithInt:[result intForColumnIndex:14]];
-	aSong.track = [NSNumber numberWithInt:[result intForColumnIndex:15]];
-	aSong.year = [NSNumber numberWithInt:[result intForColumnIndex:16]];
-	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:17]];*/
-	
 	[result close];
 	return [aSong autorelease];
 }
@@ -622,7 +485,6 @@ static MusicSingleton *sharedInstance = nil;
 - (void)startDownloadQueue
 {		
 	DLog(@"startDownloadQueue called");
-	//DLog(@"queueSongObject: %@", queueSongObject.title);
 	
 	// Are we already downloading?  If so, stop it.
 	[self stopDownloadQueue];
@@ -642,13 +504,11 @@ static MusicSingleton *sharedInstance = nil;
 	self.downloadFileNameHashQueue = nil; self.downloadFileNameHashQueue = [NSString md5:queueSongObject.path];
 	
 	// Determine the name of the file we are downloading.
-	//DLog(@"queueSongObject.path: %@", queueSongObject.path);
 	self.downloadFileNameQueue = nil;
 	if (queueSongObject.transcodedSuffix)
 		self.downloadFileNameQueue = [audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", downloadFileNameHashQueue, queueSongObject.transcodedSuffix]];
 	else
 		self.downloadFileNameQueue = [audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", downloadFileNameHashQueue, queueSongObject.suffix]];
-	//DLog(@"File name = %@", downloadFileNameQueue);
 	
 	// Check to see if the song is already cached
 	if ([databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE md5 = ?", downloadFileNameHashQueue])
@@ -670,7 +530,6 @@ static MusicSingleton *sharedInstance = nil;
 		else
 		{
 			// The song is not fully cached, check to see if it is the current or next playing song
-			//DLog(@"Deleting the Download and starting over");
 			
 			BOOL doDownload = YES;
 			if (currentSongObject.path)
@@ -747,7 +606,6 @@ static MusicSingleton *sharedInstance = nil;
 		if (doDownload)
 		{
 			// The song has not been cached yet, start from scratch
-			//DLog(@"starting a new download of %@", downloadFileNameHashQueue);
 			
 			// Set the song url
 			self.queueSongUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], queueSongObject.songId]];
@@ -792,41 +650,29 @@ static MusicSingleton *sharedInstance = nil;
 	// Delete the unfinished download
 	NSString *isDownloadFinished = [databaseControls.cacheQueueDb stringForQuery:@"SELECT finished FROM cacheQueue WHERE md5 = ?", downloadFileNameHashQueue];
 	if ([isDownloadFinished isEqualToString:@"NO"])
-	{
-		//DLog(@"Removing unfinished download");
-		
+	{		
 		// Delete the song from disk
 		[[NSFileManager defaultManager] removeItemAtPath:downloadFileNameQueue error:NULL];
-		
-		// Delete the song row from the cache database
-		//[songCacheDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", downloadFileNameHashQueue];
 	}
 }
 
 - (void)downloadNextQueuedSong
 {
-	//if (appDelegate.reachabilityStatus == 2 || IS_3G_UNRESTRICTED)
-	//if ([appDelegate.wifiReach currentReachabilityStatus] == ReachableViaWiFi || IS_3G_UNRESTRICTED)
 	if (appDelegate.isWifi)
 	{
-		//DLog(@"reachabilityStatus is 2 so this is on Wifi");
 		if ([databaseControls.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
 		{
-			//DLog(@"cacheQueue has more than 0 rows, so starting the download queue");
-			//DLog(@"downloadNextQueuedSong: inside select count if");
 			isQueueListDownloading = YES;
 			self.queueSongObject = nil; self.queueSongObject = [self nextQueuedSong];
 			[self startDownloadQueue];
 		}
 		else
 		{
-			DLog(@"There are no more songs to cache, setting isQueueListDownloading = NO");
 			isQueueListDownloading = NO;
 		}
 	}
 	else
 	{
-		DLog(@"Wifi not reachable and 3G is restricted, setting isQueueListDownloading = NO");
 		isQueueListDownloading = NO;
 	}
 }
@@ -835,15 +681,12 @@ static MusicSingleton *sharedInstance = nil;
 
 - (void)createStreamer
 {
-	//DLog(@"createStreamer method called");
 	streamerProgress = 0.0;
 	seekTime = 0.0;
 	
 	streamer = [[AudioStreamer alloc] initWithFileURL:[NSURL fileURLWithPath:downloadFileNameA]];
 	[self addAutoNextNotification];
-	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackStateChanged:) name:ASStatusChangedNotification object:nil];		
 	[streamer start];	
-	//DLog(@"streamer: %@", streamer);
 }
 
 - (void)createStreamerWithOffset
@@ -852,7 +695,6 @@ static MusicSingleton *sharedInstance = nil;
 	
 	streamer = [[AudioStreamer alloc] initWithFileURL:[NSURL fileURLWithPath:downloadFileNameA]];
 	[self addAutoNextNotification];
-	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackStateChanged:) name:ASStatusChangedNotification object:nil];		
 	[streamer start];	
 }
 
@@ -862,9 +704,7 @@ static MusicSingleton *sharedInstance = nil;
 	
 	if (streamer)
 	{
-		//DLog(@"there is a streamer, destroying....");
 		[self removeAutoNextNotification];
-		//[[NSNotificationCenter defaultCenter] removeObserver:self name:ASStatusChangedNotification object:nil];
 		
 		[streamer stop];
 		[streamer release];
@@ -901,7 +741,6 @@ static MusicSingleton *sharedInstance = nil;
 				[self stopDownloadB];
 			
 			isPlaying = YES;
-			//seekTime = 0.0;
 			
 			if (seekTime > 0.0)
 			{
@@ -954,7 +793,6 @@ static MusicSingleton *sharedInstance = nil;
 - (void)prevSong
 {
 	self.streamerProgress = [streamer progress];
-	DLog(@"track position: %f", (streamerProgress + seekTime));
 	if ((streamerProgress + seekTime) > 10.0)
 	{
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -1042,9 +880,7 @@ static MusicSingleton *sharedInstance = nil;
 }
 
 - (void)nextSongAuto
-{
-	//DLog(@"nextSongAuto called");
-	
+{	
 	// If it's in regular play mode, then go to the next track.
 	if(repeatMode == 0)
 	{
@@ -1088,19 +924,14 @@ static MusicSingleton *sharedInstance = nil;
 			if (settings.recoverSetting == 1)
 				self.isPlaying = NO;
 		}
-
-		DLog(@"isPlaying = %i", isPlaying);
 		
 		if (resume)
 		{
 			self.songUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], [currentSongObject songId]]];
-			//DLog(@"resumeSong2 songUrl: %@", [self.songUrl absoluteString]);
 			
 			// Determine the hashed filename
 			self.downloadFileNameHashA = nil; self.downloadFileNameHashA = [NSString md5:currentSongObject.path];
-			
-			//self.isPlaying = YES;
-			
+						
 			// Check to see if the song is an m4a, if so don't resume and display message
 			BOOL isM4A = NO;
 			if (currentSongObject.transcodedSuffix)
@@ -1132,7 +963,6 @@ static MusicSingleton *sharedInstance = nil;
 					if ([isDownloadFinished isEqualToString:@"YES"])
 					{
 						// The song is fully cached, start streaming from the local copy
-						//DLog(@"Resuming from local copy");
 						
 						isTempDownload = NO;
 						
@@ -1144,10 +974,8 @@ static MusicSingleton *sharedInstance = nil;
 							self.downloadFileNameA = [audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", downloadFileNameHashA, currentSongObject.transcodedSuffix]];
 						else
 							self.downloadFileNameA = [audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", downloadFileNameHashA, currentSongObject.suffix]];
-						//DLog(@"File name = %@", downloadFileNameA);		
 						
 						// Start streaming from the local copy
-						//DLog(@"Playing from local copy");
 						
 						// Check the file size
 						NSNumber *fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:downloadFileNameA error:NULL] objectForKey:NSFileSize];
@@ -1160,11 +988,8 @@ static MusicSingleton *sharedInstance = nil;
 						if (streamer)
 						{
 							streamer.fileDownloadCurrentSize = downloadedLengthA;
-							//DLog(@"fileDownloadCurrentSize: %i", streamer.fileDownloadCurrentSize);
 							streamer.fileDownloadComplete = YES;
 							[streamer startWithOffsetInSecs:(UInt32) seekTime];
-							
-							//DLog(@"started with offset in secs");
 						}
 					}
 					else
@@ -1179,14 +1004,12 @@ static MusicSingleton *sharedInstance = nil;
 						else 
 						{
 							// The song is not fully cached, call startTempDownloadA to start a temp cache stream
-							//DLog(@"Resuming with a temp download");
 							
 							// Determine the name and path of the file.
 							if (currentSongObject.transcodedSuffix)
 								self.downloadFileNameA = [audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", downloadFileNameHashA, currentSongObject.transcodedSuffix]];
 							else
 								self.downloadFileNameA = [audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", downloadFileNameHashA, currentSongObject.suffix]];
-							//DLog(@"File name = %@", downloadFileNameA);		
 							
 							// Determine the byte offset
 							float byteOffset;
@@ -1274,9 +1097,7 @@ static MusicSingleton *sharedInstance = nil;
 			bitrate = 0;
 			break;
 	}
-	
-	//DLog(@"maxBitrateSetting: %i", bitrate);
-	
+		
 	return bitrate;
 }
 
@@ -1294,7 +1115,6 @@ static MusicSingleton *sharedInstance = nil;
 
 - (void) loadLyricsForArtistAndTitle:(NSArray *)artistAndTitle
 {
-	//DLog(@"artistAndTitle: %@", artistAndTitle);
 	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	
@@ -1304,7 +1124,6 @@ static MusicSingleton *sharedInstance = nil;
 	NSString *lyrics = [databaseControls.lyricsDb stringForQuery:@"SELECT lyrics FROM lyrics WHERE artist = ? AND title = ?", artist, title];
 	if (lyrics)
 	{
-		//DLog(@"-------------- lyrics found for %@ - %@, loading from DB -----------", artist, title);
 		if ([artist isEqualToString:currentSongObject.artist] && [title isEqualToString:currentSongObject.title])
 		{
 			self.currentSongLyrics = lyrics;
@@ -1313,7 +1132,6 @@ static MusicSingleton *sharedInstance = nil;
 	}
 	else
 	{
-		//DLog(@"-------------- lyrics not found for %@ - %@, loading lyrics from server -------------", artist, title);
 		ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[appDelegate getBaseUrl:@"getLyrics.view"]]];
 		[request startSynchronous];
 		if ([request error])
@@ -1348,31 +1166,25 @@ static MusicSingleton *sharedInstance = nil;
 	SavedSettings *settings = [SavedSettings sharedInstance];
 	
 	unsigned long long int freeSpace = [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:audioFolderPath error:NULL] objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
-	//unsigned long long int minFreeSpace = [[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue];
 	unsigned long long minFreeSpace = settings.minFreeSpace;
-	//unsigned long long int maxCacheSize = [[appDelegate.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue];
 	unsigned long long maxCacheSize = settings.maxCacheSize;
 	NSString *songMD5;
 	int songSize;
 	
-	//if ([[appDelegate.settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 0)
 	if (settings.cachingType == 0)
 	{
 		// Remove the oldest songs based on either oldest played or oldest cached until free space is more than minFreeSpace
 		while (freeSpace < minFreeSpace)
 		{
-			//if ([[appDelegate.settingsDictionary objectForKey:@"autoDeleteCacheTypeSetting"] intValue] == 0)
 			if (settings.autoDeleteCacheType == 0)
 				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
 			else
 				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY chachedDate ASC LIMIT 1"];
-			//DLog(@"removing %@", songMD5);
 			[databaseControls removeSongFromCacheDb:songMD5];
 			
 			freeSpace = [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:audioFolderPath error:NULL] objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
 		}
 	}
-	//else if ([[appDelegate.settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 1)
 	else if (settings.cachingType == 1)
 	{
 		// Remove the oldest songs based on either oldest played or oldest cached until cache size is less than maxCacheSize
@@ -1384,7 +1196,6 @@ static MusicSingleton *sharedInstance = nil;
 		
 		while (cacheSize > maxCacheSize)
 		{
-			//if ([[appDelegate.settingsDictionary objectForKey:@"autoDeleteCacheTypeSetting"] intValue] == 0)
 			if (settings.autoDeleteCacheType == 0)
 			{
 				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
@@ -1394,13 +1205,10 @@ static MusicSingleton *sharedInstance = nil;
 				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY chachedDate ASC LIMIT 1"];
 			}
 			songSize = [databaseControls.songCacheDb intForQuery:@"SELECT size FROM cachedSongs WHERE md5 = ?", songMD5];
-			DLog(@"removing %@", songMD5);
+
 			[databaseControls removeSongFromCacheDb:songMD5];
 
-			//DLog(@"cacheSize: %i", cacheSize);
 			cacheSize = cacheSize - songSize;
-			//DLog(@"new cacheSize: %i", cacheSize);
-			//DLog(@"maxCacheSize: %i", maxCacheSize);
 			
 			// Sleep the thread so the repeated cacheSize calls don't kill performance
 			[NSThread sleepForTimeInterval:5];
@@ -1410,107 +1218,6 @@ static MusicSingleton *sharedInstance = nil;
 	[autoreleasePool release];
 }
 
-/*- (void) checkCache
-{
-	SavedSettings *settings = [SavedSettings sharedInstance];
-	
-	unsigned long long cacheSize = 0;
-	for (NSString *path in [[NSFileManager defaultManager] subpathsAtPath:documentsPath]) 
-	{
-		cacheSize += [[[NSFileManager defaultManager] attributesOfItemAtPath:[documentsPath stringByAppendingPathComponent:path] error:NULL] fileSize];
-	}
-	unsigned long long int freeSpace = [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:audioFolderPath error:NULL] objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
-	//unsigned long long int minFreeSpace = [[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue];
-	unsigned long long minFreeSpace = settings.minFreeSpace;
-	//unsigned long long int maxCacheSize = [[appDelegate.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue];
-	unsigned long long maxCacheSize = settings.maxCacheSize;
-	NSLog(@"checkCache:  cacheSize = %llu  freeSpace = %llu  minFreeSpace = %llu  maxCacheSize = %llu", cacheSize, freeSpace, minFreeSpace, maxCacheSize);
-	//DLog(@"cacheSize: %qu", cacheSize);
-	//DLog(@"freeSpace: %qu", freeSpace);
-	//DLog(@"minFreeSpace: %qu", minFreeSpace);
-	//DLog(@"maxCacheSize: %qu", maxCacheSize);
-	
-	//if ([[appDelegate.settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 0 &&
-	//	[[appDelegate.settingsDictionary objectForKey:@"enableSongCachingSetting"] isEqualToString:@"YES"])
-	if (settings.cachingType == 0 && settings.isSongCachingEnabled)
-	{
-		NSLog(@"checkCache:  entered the if");
-		// User has chosen to limit cache by minimum free space
-		
-		// Check to see if the free space left is lower than the setting
-		if (freeSpace < minFreeSpace)
-		{
-			NSLog(@"checkCache:  entered the if if");
-			// Check to see if the cache size + free space is still less than minFreeSpace
-			if (cacheSize + freeSpace < minFreeSpace)
-			{
-				NSLog(@"checkCache:  entered the if if if");
-				// Looks like even removing all of the cache will not be enough so turn off caching
-				//[appDelegate.settingsDictionary setObject:@"NO" forKey:@"enableSongCachingSetting"];
-				settings.isSongCachingEnabled = NO;
-				
-				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"IMPORTANT" message:@"Free space is running low, but even deleting the entire cache will not bring the free space up higher than your minimum setting. Automatic song caching has been turned off.\n\nYou can re-enable it in the Settings menu (tap the gear, tap Settings at the top)" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-				[alert show];
-				[alert release];
-			}
-			else
-			{
-				NSLog(@"checkCache:  entered the if if else");
-				// Remove the oldest cached songs until freeSpace > minFreeSpace or pop the free space low alert
-				DLog(@"freeSpace < minFreeSpace");
-				//if ([[appDelegate.settingsDictionary objectForKey:@"autoDeleteCacheSetting"] isEqualToString:@"YES"])
-				if (settings.isAutoDeleteCacheEnabled)
-				{
-					NSLog(@"checkCache:  entered the if if else if");
-					DLog(@"deleting oldest cached songs");
-					[self performSelectorInBackground:@selector(removeOldestCachedSongs) withObject:nil];
-				}
-				else
-				{
-					NSLog(@"checkCache:  entered the if if else else");
-					UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"Free space is running low. Delete some cached songs or lower the minimum free space setting." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-					alert.tag = 4;
-					[alert show];
-					[alert release];
-				}
-			}
-		}
-	}
-	//else if ([[appDelegate.settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 1 &&
-	//		 [[appDelegate.settingsDictionary objectForKey:@"enableSongCachingSetting"] isEqualToString:@"YES"])
-	else if (settings.cachingType == 1 && settings.isSongCachingEnabled)
-	{
-		NSLog(@"checkCache:  entered the else");
-		// User has chosen to limit cache by maximum size
-		
-		// Check to see if the cache size is higher than the max
-		if (cacheSize > maxCacheSize)
-		{
-			NSLog(@"checkCache:  entered the else if");
-			DLog(@"cacheSize > maxCacheSize");
-			//if ([[appDelegate.settingsDictionary objectForKey:@"autoDeleteCacheSetting"] isEqualToString:@"YES"])
-			if (settings.isAutoDeleteCacheEnabled)
-			{
-				NSLog(@"checkCache:  entered the else if if");
-				DLog(@"deleting oldest cached songs");
-				[self performSelectorInBackground:@selector(removeOldestCachedSongs) withObject:nil];
-			}
-			else
-			{
-				NSLog(@"checkCache:  entered the else if else");
-				//[appDelegate.settingsDictionary setObject:@"NO" forKey:@"enableSongCachingSetting"];
-				settings.isSongCachingEnabled = NO;
-				
-				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"The song cache is full. Automatic song caching has been disabled.\n\nYou can re-enable it in the Settings menu (tap the gear, tap Settings at the top)" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-				alert.tag = 4;
-				[alert show];
-				[alert release];
-			}			
-		}
-	}
-}*/
-
-
 - (BOOL)showPlayerIcon
 {
 	if (IS_IPAD())
@@ -1518,7 +1225,6 @@ static MusicSingleton *sharedInstance = nil;
 	
 	return YES;
 }
-
 
 - (void)showPlayer
 {
@@ -1563,7 +1269,6 @@ static MusicSingleton *sharedInstance = nil;
 	NSString *urlString = [NSString stringWithFormat:@"%@%@&submission=%i", [appDelegate getBaseUrl:@"scrobble.view"], songId, isSubmission];
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
 	[[NSURLConnection alloc] initWithRequest:request delegate:self];
-	DLog(@"scrobbling song: %@", urlString);
 }
 
 #pragma mark -
@@ -1653,24 +1358,6 @@ static MusicSingleton *sharedInstance = nil;
 	return 0.0;
 }
 
-
-/*- (unsigned long long int) findCacheSize
-{	
-	unsigned long long combinedSize = 0;
-	for (NSString *path in [[NSFileManager defaultManager] subpathsAtPath:self.documentsPath]) 
-	{
-		combinedSize += [[[NSFileManager defaultManager] attributesOfItemAtPath:[self.documentsPath stringByAppendingPathComponent:path] error:NULL] fileSize];
-	}
-	return combinedSize;
-}
-
-
-- (unsigned long long int) findFreeSpace
-{
-	return [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:self.audioFolderPath error:NULL] objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
-}*/
-
-
 #pragma mark -
 #pragma mark Jukebox Control methods
 
@@ -1685,7 +1372,6 @@ static MusicSingleton *sharedInstance = nil;
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
 	{
-		//[viewObjects showAlbumLoadingScreen:self.view sender:self];
 		currentPlaylistPosition = position;
 		
 		[connectionQueue registerConnection:connection];
@@ -1851,9 +1537,7 @@ static MusicSingleton *sharedInstance = nil;
 			[urlString appendString:@"&id="];
 			[urlString appendString:songId];
 		}
-		
-		DLog(@"jukeboxAddSongs urlString: %@", urlString);
-		
+				
 		JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
 		
 		NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kJukeboxTimeout];
@@ -2007,7 +1691,6 @@ static MusicSingleton *sharedInstance = nil;
 	connDelegate.isGetInfo = YES;
 	
 	NSString *urlString = [NSString stringWithFormat:@"%@&action=get", [appDelegate getBaseUrl:@"jukeboxControl.view"]];
-	//DLog(@"jukeboxGetInfo urlString: %@", urlString);
 	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kJukeboxTimeout];
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
@@ -2084,10 +1767,6 @@ static MusicSingleton *sharedInstance = nil;
 	isAutoNextNotificationOn = NO;
 	
 	[self addAutoNextNotification];
-	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackStateChanged:) name:ASStatusChangedNotification object:nil];
-	
-	// Check the free space every 60 seconds
-	//[NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(checkCache) userInfo:nil repeats:YES];
 	
 	connectionQueue = [[BBSimpleConnectionQueue alloc] init];
 	

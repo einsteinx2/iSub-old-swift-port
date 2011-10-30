@@ -6,7 +6,6 @@
 //  Copyright 2008 www.iPhoneSDKArticles.com.
 //
 
-//#import <UIKit/UIKit.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
 
 @class iSubAppDelegate, ViewObjectsSingleton;
 

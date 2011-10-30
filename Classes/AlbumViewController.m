@@ -22,7 +22,6 @@
 #import "NSString-md5.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "ASIHTTPRequest.h"
 #import "LoadingScreen.h"
 #import "NSString-hex.h"
 #import "AsynchronousImageView.h"

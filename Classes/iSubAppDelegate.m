@@ -149,7 +149,7 @@
 		{
 			showIntro = YES;
 		}
-	}	
+	}
 	
 	// app init 2
 	[databaseControls initDatabases];
@@ -180,16 +180,35 @@
 	[self createAndDisplayUI];
 	
 	// Check the server status in the background
-	[self performSelectorInBackground:@selector(checkServer) withObject:nil];
-	
+	//[self performSelectorInBackground:@selector(checkServer) withObject:nil];
+	[self checkServer];
+    
 	// Recover current state if player was interrupted
 	[musicControls resumeSong];
 }
 
 - (void)checkServer
 {
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	SavedSettings *settings = [SavedSettings sharedInstance];
+    
+    // TEST
+    //
+    //
+    /*if (!viewObjects.isOfflineMode)
+    {
+    	// First check to see if the user used an IP address or a hostname. If they used a hostname,
+    	// cache the IP of the host so that it doesn't need to be resolved for every call to the API
+    	if ([[settings.urlString componentsSeparatedByString:@"."] count] > 0)
+    	{
+    		NSString *cachedIP = [self getIPAddressForHost:settings.urlString];
+    		NSInteger cachedIPHour = [self getHour];
+            
+            DLog(@"cachedIP: %@    hour: %i", cachedIP, cachedIPHour);
+    	}
+    }*/
+    //
+    //
+    //
 	
 	// Ask the update question if necessary
 	if (!settings.isUpdateCheckQuestionAsked)
@@ -197,44 +216,63 @@
 		// Ask to check for updates if haven't asked yet
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Update Alerts" message:@"Would you like iSub to notify you when app updates are available?\n\nYou can change this setting at any time from the settings menu." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
 		alert.tag = 6;
-		//[alert show];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
+		[alert show];
 		[alert release];
 	}
 	else if (settings.isUpdateCheckEnabled)
 	{
 		[self performSelectorInBackground:@selector(checkForUpdate) withObject:nil];
 	}
-	
-	// Check if the subsonic URL is valid by attempting to access the ping.view page, 
+    
+    // Check if the subsonic URL is valid by attempting to access the ping.view page, 
 	// if it's not then display an alert and allow user to change settings if they want.
 	// This is in case the user is, for instance, connected to a wifi network but does not 
 	// have internet access or if the host url entered was wrong.
-	BOOL isURLValid = YES;
-	NSError *error;
-	if (!viewObjects.isOfflineMode) 
+    if (!viewObjects.isOfflineMode) 
 	{
-		isURLValid = [self isURLValid:[NSString stringWithFormat:@"%@/rest/ping.view", settings.urlString] error:&error];
-	}
-	
-	if(!isURLValid && !viewObjects.isOfflineMode)
+        ServerURLChecker *checker = [[ServerURLChecker alloc] initWithDelegate:self];
+        [checker checkURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/rest/ping.view", settings.urlString]]];
+    }
+}
+
+- (void)appInit2
+{
+    [databaseControls initDatabases];
+    [self checkServer];
+}
+
+#pragma mark - Server Check Delegate
+
+- (void)serverURLCheckFailed:(ServerURLChecker *)checker withError:(NSError *)error
+{
+    DLog(@"server check failed");
+    if(!viewObjects.isOfflineMode)
 	{
 		viewObjects.isOfflineMode = YES;
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", error.code, [ASIHTTPRequest errorCodeToEnglish:error.code]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Settings", nil];
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", [error code], [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Settings", nil];
 		alert.tag = 3;
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
 		
 		[self performSelectorOnMainThread:@selector(enterOfflineModeForce) withObject:nil waitUntilDone:NO];
 	}
-	
-	[autoreleasePool release];
+    
+    [checker release]; checker = nil;
 }
+
+- (void)serverURLCheckPassed:(ServerURLChecker *)checker
+{
+    DLog(@"server check passed");
+    
+    [checker release]; checker = nil;
+}
+
+#pragma mark -
 
 //
 // Setup the server specific defaults and all of the databases /* background thread */
 //
-- (void)appInit2
+/*- (void)appInit2
 {	
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	SavedSettings *settings = [SavedSettings sharedInstance];
@@ -274,8 +312,7 @@
 	}
 	
 	[autoreleasePool release];
-}
-
+}*/
 
 - (void)createAndDisplayUI
 {
@@ -741,22 +778,6 @@
 
 - (void)enterOfflineMode
 {
-	/*isOfflineMode = YES;
-	
-	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"No network detected, entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-	alert.tag = 4;
-	[alert show];
-	[alert release];
-	
-	[self destroyStreamer];
-	[self stopDownloadA];
-	[self stopDownloadB];
-	[mainTabBarController.view removeFromSuperview];
-	[self closeAllDatabases];
-	[self appInit2];
-	self.currentTabBarController = offlineTabBarController;
-	[self.window addSubview:[offlineTabBarController view]];*/
-
 	if (viewObjects.isNoNetworkAlertShowing == NO)
 	{
 		viewObjects.isNoNetworkAlertShowing = YES;
@@ -1154,13 +1175,17 @@
 	while (connDelegate.connectionFinished == NO)
 	{
 		DLog(@"Waiting for connection to finish");
+        sleep(1);
 	}
 	
 	//
 	// Finish writing logic
 	//
+    
+    NSString *urlString = [connDelegate.redirectUrl copy];
+    [connDelegate release];
 	
-	return @"";
+	return urlString;
 }
 
 

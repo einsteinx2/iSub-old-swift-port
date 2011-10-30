@@ -10,7 +10,7 @@
 
 #import "NSData+Base64.h"
 
-//#import <Foundation/Foundation.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
+
 
 static char encodingTable[64] = {
 		'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P',

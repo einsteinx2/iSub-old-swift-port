@@ -4,7 +4,6 @@
  BSD License, Use at your own risk
  */
 
-//#import <UIKit/UIKit.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
 
 #define IFPGA_NAMESTRING				@"iFPGA"
 

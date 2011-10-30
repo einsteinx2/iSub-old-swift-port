@@ -8,7 +8,6 @@
 
 #import "CustomUITableView.h"
 #import "ViewObjectsSingleton.h"
-//#import "UITableViewCell-overlay.h"
 
 @interface NSObject (cell)
 - (void)toggleDelete;

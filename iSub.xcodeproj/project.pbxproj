@@ -308,6 +308,9 @@
 		53ADBBBC133525BD0098FAE6 /* folder-dropdown-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ADBBBA133525BD0098FAE6 /* folder-dropdown-arrow.png */; };
 		53ADBBBD133525BD0098FAE6 /* folder-dropdown-arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ADBBBB133525BD0098FAE6 /* folder-dropdown-arrow@2x.png */; };
 		53ADBBC013352DB40098FAE6 /* FolderDropdownControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ADBBBF13352DB40098FAE6 /* FolderDropdownControl.m */; };
+		53B15EB4145D02EC007A04F6 /* NSError-ISMSError.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B15EB3145D02EC007A04F6 /* NSError-ISMSError.m */; };
+		53B15EB5145D02EC007A04F6 /* NSError-ISMSError.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B15EB3145D02EC007A04F6 /* NSError-ISMSError.m */; };
+		53B15EB6145D02EC007A04F6 /* NSError-ISMSError.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B15EB3145D02EC007A04F6 /* NSError-ISMSError.m */; };
 		53B20D1D12C27AAA00A90DD9 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20D1C12C27AAA00A90DD9 /* Default@2x.png */; };
 		53B20D2E12C27CE000A90DD9 /* UIView-tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B20D2D12C27CE000A90DD9 /* UIView-tools.m */; };
 		53B20DCE12C2945400A90DD9 /* home-quick-random.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DCD12C2945400A90DD9 /* home-quick-random.png */; };
@@ -1374,6 +1377,12 @@
 		53F8CC8D1297949A007BDC0E /* home-shuffle-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC761297949A007BDC0E /* home-shuffle-ipad.png */; };
 		53F8CC8E1297949A007BDC0E /* home-shuffle.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC771297949A007BDC0E /* home-shuffle.png */; };
 		53F8CC8F1297949A007BDC0E /* home-shuffle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC781297949A007BDC0E /* home-shuffle@2x.png */; };
+		53F98332145CCEAC005A083E /* ServerCheckConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F98331145CCEAC005A083E /* ServerCheckConnectionDelegate.m */; };
+		53F98333145CCEAC005A083E /* ServerCheckConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F98331145CCEAC005A083E /* ServerCheckConnectionDelegate.m */; };
+		53F98334145CCEAC005A083E /* ServerCheckConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F98331145CCEAC005A083E /* ServerCheckConnectionDelegate.m */; };
+		53F98337145CD65E005A083E /* ServerURLChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F98336145CD65E005A083E /* ServerURLChecker.m */; };
+		53F98338145CD65E005A083E /* ServerURLChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F98336145CD65E005A083E /* ServerURLChecker.m */; };
+		53F98339145CD65E005A083E /* ServerURLChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F98336145CD65E005A083E /* ServerURLChecker.m */; };
 		53FDEE2611E822CC00FE3ECD /* current-server@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2511E822CC00FE3ECD /* current-server@2x.png */; };
 		53FDEE2911E823A100FE3ECD /* default-album-art-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2711E823A100FE3ECD /* default-album-art-small@2x.png */; };
 		53FDEE2A11E823A100FE3ECD /* default-album-art@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2811E823A100FE3ECD /* default-album-art@2x.png */; };
@@ -1831,6 +1840,9 @@
 		53ADBBBB133525BD0098FAE6 /* folder-dropdown-arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "folder-dropdown-arrow@2x.png"; path = "Images/Other/folder-dropdown-arrow@2x.png"; sourceTree = "<group>"; };
 		53ADBBBE13352DB40098FAE6 /* FolderDropdownControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FolderDropdownControl.h; sourceTree = "<group>"; };
 		53ADBBBF13352DB40098FAE6 /* FolderDropdownControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FolderDropdownControl.m; sourceTree = "<group>"; };
+		53B15EB1145CFF08007A04F6 /* ISMSErrorCodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSErrorCodes.h; sourceTree = "<group>"; };
+		53B15EB2145D02EC007A04F6 /* NSError-ISMSError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError-ISMSError.h"; sourceTree = "<group>"; };
+		53B15EB3145D02EC007A04F6 /* NSError-ISMSError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError-ISMSError.m"; sourceTree = "<group>"; };
 		53B20D1C12C27AAA00A90DD9 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Images/Other/Default@2x.png"; sourceTree = "<group>"; };
 		53B20D2C12C27CE000A90DD9 /* UIView-tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView-tools.h"; sourceTree = "<group>"; };
 		53B20D2D12C27CE000A90DD9 /* UIView-tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView-tools.m"; sourceTree = "<group>"; };
@@ -2056,6 +2068,10 @@
 		53F8CC761297949A007BDC0E /* home-shuffle-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-shuffle-ipad.png"; path = "Images/Home Screen/home-shuffle-ipad.png"; sourceTree = "<group>"; };
 		53F8CC771297949A007BDC0E /* home-shuffle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-shuffle.png"; path = "Images/Home Screen/home-shuffle.png"; sourceTree = "<group>"; };
 		53F8CC781297949A007BDC0E /* home-shuffle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-shuffle@2x.png"; path = "Images/Home Screen/home-shuffle@2x.png"; sourceTree = "<group>"; };
+		53F98330145CCEAC005A083E /* ServerCheckConnectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerCheckConnectionDelegate.h; sourceTree = "<group>"; };
+		53F98331145CCEAC005A083E /* ServerCheckConnectionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerCheckConnectionDelegate.m; sourceTree = "<group>"; };
+		53F98335145CD65E005A083E /* ServerURLChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerURLChecker.h; sourceTree = "<group>"; };
+		53F98336145CD65E005A083E /* ServerURLChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerURLChecker.m; sourceTree = "<group>"; };
 		53FDEE2511E822CC00FE3ECD /* current-server@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "current-server@2x.png"; path = "Images/Other/current-server@2x.png"; sourceTree = "<group>"; };
 		53FDEE2711E823A100FE3ECD /* default-album-art-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art-small@2x.png"; path = "Images/Other/default-album-art-small@2x.png"; sourceTree = "<group>"; };
 		53FDEE2811E823A100FE3ECD /* default-album-art@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art@2x.png"; path = "Images/Other/default-album-art@2x.png"; sourceTree = "<group>"; };
@@ -2184,6 +2200,9 @@
 			children = (
 				28A0AAE50D9B0CCF005BE974 /* iSub_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
+				53B15EB1145CFF08007A04F6 /* ISMSErrorCodes.h */,
+				53B15EB2145D02EC007A04F6 /* NSError-ISMSError.h */,
+				53B15EB3145D02EC007A04F6 /* NSError-ISMSError.m */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -2244,6 +2263,8 @@
 				5327F0F712B8110E00735119 /* JukeboxConnectionDelegate.m */,
 				5327F3AE12B86BD500735119 /* APICheckConnectionDelegate.h */,
 				5327F3AF12B86BD500735119 /* APICheckConnectionDelegate.m */,
+				53F98330145CCEAC005A083E /* ServerCheckConnectionDelegate.h */,
+				53F98331145CCEAC005A083E /* ServerCheckConnectionDelegate.m */,
 			);
 			name = NSURLConnectionDelegates;
 			sourceTree = "<group>";
@@ -2587,6 +2608,8 @@
 				53FB066011EE1C4E008A30C7 /* CFNetworkRequests */,
 				5304BCE111BD58E3000EF6F9 /* NSURLConnectionDelegates */,
 				533A207C12887EB100539BAE /* XML Parsers */,
+				53F98335145CD65E005A083E /* ServerURLChecker.h */,
+				53F98336145CD65E005A083E /* ServerURLChecker.m */,
 			);
 			name = Main;
 			sourceTree = "<group>";
@@ -4389,6 +4412,9 @@
 				53409898142D487600455754 /* SUSAllAlbumsDAO.m in Sources */,
 				534098A2142D489F00455754 /* SUSAllSongsDAO.m in Sources */,
 				534098A7142D491100455754 /* SUSAllSongsLoader.m in Sources */,
+				53F98332145CCEAC005A083E /* ServerCheckConnectionDelegate.m in Sources */,
+				53F98337145CD65E005A083E /* ServerURLChecker.m in Sources */,
+				53B15EB4145D02EC007A04F6 /* NSError-ISMSError.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4584,6 +4610,9 @@
 				5340989A142D487600455754 /* SUSAllAlbumsDAO.m in Sources */,
 				534098A4142D489F00455754 /* SUSAllSongsDAO.m in Sources */,
 				534098A9142D491100455754 /* SUSAllSongsLoader.m in Sources */,
+				53F98334145CCEAC005A083E /* ServerCheckConnectionDelegate.m in Sources */,
+				53F98339145CD65E005A083E /* ServerURLChecker.m in Sources */,
+				53B15EB6145D02EC007A04F6 /* NSError-ISMSError.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4779,6 +4808,9 @@
 				53409899142D487600455754 /* SUSAllAlbumsDAO.m in Sources */,
 				534098A3142D489F00455754 /* SUSAllSongsDAO.m in Sources */,
 				534098A8142D491100455754 /* SUSAllSongsLoader.m in Sources */,
+				53F98333145CCEAC005A083E /* ServerCheckConnectionDelegate.m in Sources */,
+				53F98338145CD65E005A083E /* ServerURLChecker.m in Sources */,
+				53B15EB5145D02EC007A04F6 /* NSError-ISMSError.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4790,7 +4822,10 @@
 			baseConfigurationReference = 534F1636139B1F5900127A02 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					armv6,
+					armv7,
+				);
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -4803,7 +4838,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = iSub_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "iSub-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
@@ -4828,7 +4863,10 @@
 			baseConfigurationReference = 534F1636139B1F5900127A02 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					armv6,
+					armv7,
+				);
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Benjamin Baron";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Benjamin Baron";
 				COPY_PHASE_STRIP = YES;
@@ -4839,7 +4877,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = iSub_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE=1";
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "iSub-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
@@ -4864,7 +4902,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 534F1636139B1F5900127A02 /* buildnumber.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					armv6,
+					armv7,
+				);
 				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Benjamin Baron";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Benjamin Baron";
@@ -4898,7 +4939,10 @@
 			baseConfigurationReference = 534F1636139B1F5900127A02 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					armv6,
+					armv7,
+				);
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
@@ -4914,7 +4958,7 @@
 					"DEBUG=1",
 					"ADHOC=1",
 				);
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "iSub-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
@@ -4939,7 +4983,10 @@
 			baseConfigurationReference = 534F1636139B1F5900127A02 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					armv6,
+					armv7,
+				);
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -4980,7 +5027,10 @@
 			baseConfigurationReference = 534F1636139B1F5900127A02 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					armv6,
+					armv7,
+				);
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
@@ -5022,7 +5072,10 @@
 			baseConfigurationReference = 534F1636139B1F5900127A02 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					armv6,
+					armv7,
+				);
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Benjamin Baron";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5060,7 +5113,10 @@
 			baseConfigurationReference = 534F1636139B1F5900127A02 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					armv6,
+					armv7,
+				);
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -5101,7 +5157,10 @@
 			baseConfigurationReference = 534F1636139B1F5900127A02 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					armv6,
+					armv7,
+				);
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
@@ -5143,7 +5202,10 @@
 			baseConfigurationReference = 534F1636139B1F5900127A02 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					armv6,
+					armv7,
+				);
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Benjamin Baron";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5180,7 +5242,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 534F1636139B1F5900127A02 /* buildnumber.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					armv6,
+					armv7,
+				);
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Benjamin Baron (T2FQV5U2DH)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Benjamin Baron (T2FQV5U2DH)";
@@ -5212,7 +5277,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 534F1636139B1F5900127A02 /* buildnumber.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					armv6,
+					armv7,
+				);
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Benjamin Baron";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Benjamin Baron";
 				GCC_C_LANGUAGE_STANDARD = c99;

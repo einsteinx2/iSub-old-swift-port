@@ -11,7 +11,6 @@
 #import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
-#import "ASIHTTPRequest.h"
 #import "LyricsXMLParser.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"

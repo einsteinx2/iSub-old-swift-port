@@ -22,7 +22,6 @@
 #import "CustomUIAlertView.h"
 #import "Reachability.h"
 #import "SavedSettings.h"
-#import "ASIHTTPRequest.h"
 
 @implementation ServerListViewController
 

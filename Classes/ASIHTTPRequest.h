@@ -10,7 +10,6 @@
 //  Portions are based on the ImageClient example from Apple:
 //  See: http://developer.apple.com/samplecode/ImageClient/listing37.html
 
-//#import <Foundation/Foundation.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
 #if TARGET_OS_IPHONE
 	#import <CFNetwork/CFNetwork.h>
 #endif

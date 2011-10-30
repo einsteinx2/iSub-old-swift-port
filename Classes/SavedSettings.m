@@ -8,7 +8,6 @@
 
 #import "SavedSettings.h"
 #import "NSString-md5.h"
-#import "ASIHTTPRequest.h"
 #import "MusicSingleton.h"
 #import "AudioStreamer.h"
 #import "Song.h"
@@ -816,9 +815,6 @@ static SavedSettings *sharedInstance = nil;
 	NSLog(@"SavedSettings setup called");
 	// Setup save state stuff
 	//[self setupSaveState];
-	
-	// Limit the bandwidth over 3G to 500Kbps
-	[ASIHTTPRequest throttleBandwidthForWWANUsingLimit:64000];
 	
 	// Disable screen sleep if necessary
 	if (!self.isScreenSleepEnabled)

@@ -347,7 +347,7 @@
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	
 	// Form the URL and send the message
-	NSString *encodedMessage = [textInput.text stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding]; //(NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef).text, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8 );
+	NSString *encodedMessage = [textInput.text stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding];
 	NSURL *url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"addChatMessage.view"], encodedMessage]];
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
 	[request startSynchronous];

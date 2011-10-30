@@ -14,7 +14,6 @@
 #import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
-#import "ASIHTTPRequest.h"
 #import "QuickAlbumsViewController.h"
 #import "ChatViewController.h"
 #import "MGSplitViewController.h"

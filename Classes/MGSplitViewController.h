@@ -6,7 +6,6 @@
 //  Copyright 2010 Instinctive Code.
 //
 
-//#import <UIKit/UIKit.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
 
 typedef enum _MGSplitViewDividerStyle {
 	// These names have been chosen to be conceptually similar to those of NSSplitView on Mac OS X.

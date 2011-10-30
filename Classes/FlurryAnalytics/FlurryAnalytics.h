@@ -6,7 +6,6 @@
 //	
 //	Methods in this header file are for use with Flurry Analytics
 
-//#import <UIKit/UIKit.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
 
 /*!
  * \brief Provides all available methods for defining and reporting Analytics from use

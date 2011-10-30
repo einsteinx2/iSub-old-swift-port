@@ -1,4 +1,3 @@
-//#import <Foundation/Foundation.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
 #import "sqlite3.h"
 
 #ifndef __has_feature      // Optional.

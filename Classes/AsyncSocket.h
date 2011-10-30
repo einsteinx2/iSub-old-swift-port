@@ -8,7 +8,6 @@
 //  http://code.google.com/p/cocoaasyncsocket/
 //
 
-//#import <Foundation/Foundation.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
 
 @class AsyncSocket;
 @class AsyncReadPacket;

@@ -23,7 +23,6 @@
 
 #import "ASIAuthenticationDialog.h"
 #import "ASIFormDataRequest.h"
-#import "ASIHTTPRequest.h"
 #import "ASIInputStream.h"
 #import "ASINetworkQueue.h"
 #import "ASINSStringAdditions.h"

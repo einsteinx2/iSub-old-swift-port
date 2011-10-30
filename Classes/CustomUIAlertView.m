@@ -7,16 +7,12 @@
 //
 
 #import "CustomUIAlertView.h"
-//#import "iSubAppDelegate.h"
 #import "SavedSettings.h"
 
 @implementation CustomUIAlertView
 
 - (void)show
 {
-	//iSubAppDelegate *appDelegate = [iSubAppDelegate sharedInstance];
-	
-	//if (![[appDelegate.settingsDictionary objectForKey:@"disablePopupsSetting"] isEqualToString:@"YES"])
 	if ([SavedSettings sharedInstance].isPopupsEnabled)
 		[super show];
 }

@@ -24,7 +24,6 @@
 #import "FMDatabaseAdditions.h"
 #import "NSString-md5.h"
 #import "LoadingScreen.h"
-#import "ASIHTTPRequest.h"
 #import "RootViewController.h"
 #import "TBXML.h"
 #import "CustomUITableView.h"

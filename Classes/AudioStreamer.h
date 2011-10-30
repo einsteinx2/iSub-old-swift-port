@@ -14,7 +14,6 @@
 //
 
 #ifdef TARGET_OS_IPHONE			
-//#import <UIKit/UIKit.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
 #else
 #import <Cocoa/Cocoa.h>
 #endif //TARGET_OS_IPHONE			

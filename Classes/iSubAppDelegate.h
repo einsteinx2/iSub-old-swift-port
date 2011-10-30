@@ -6,11 +6,12 @@
 //  Copyright Ben Baron 2010. All rights reserved.
 //
 
-#include "MKStoreManager.h"
+#import "MKStoreManager.h"
+#import "ServerURLChecker.h"
 
-@class BBSplitViewController, ViewObjectsSingleton, DatabaseSingleton, MusicSingleton, SocialSingleton, MGSplitViewController, iPadMainMenu, InitialDetailViewController, ASIHTTPRequest, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, Reachability, iPhoneStreamingPlayerViewController, SettingsViewController, RootViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController, HTTPServer, CacheSingleton;
+@class BBSplitViewController, ViewObjectsSingleton, DatabaseSingleton, MusicSingleton, SocialSingleton, MGSplitViewController, iPadMainMenu, InitialDetailViewController, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, Reachability, iPhoneStreamingPlayerViewController, SettingsViewController, RootViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController, HTTPServer, CacheSingleton;
 
-@interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate> 
+@interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate, ServerURLCheckerDelegate> 
 {	
 	ViewObjectsSingleton *viewObjects;
 	DatabaseSingleton *databaseControls;
@@ -134,6 +135,12 @@
 
 - (void)startRedirectingLogToFile;
 - (void)stopRedirectingLogToFile;
+
+- (void)checkServer;
+
+// Server check delegate methods
+- (void)serverURLCheckFailed:(ServerURLChecker *)checker withError:(NSError *)error;
+- (void)serverURLCheckPassed:(ServerURLChecker *)checker;
 
 @end
 

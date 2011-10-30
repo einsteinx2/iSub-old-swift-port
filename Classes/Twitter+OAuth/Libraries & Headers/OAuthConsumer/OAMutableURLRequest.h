@@ -24,7 +24,7 @@
 //  THE SOFTWARE.
 
 
-//#import <Foundation/Foundation.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
+
 #import "OAConsumer.h"
 #import "OAToken.h"
 #import "OAHMAC_SHA1SignatureProvider.h"

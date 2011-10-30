@@ -1,4 +1,4 @@
-//#import <Foundation/Foundation.h>  // REMOVED THIS TO STOP XCODE SYNTAX HIGHLIGHT PROBLEM, THIS IS INCLUDED IN THE PROJECT HEADER
+
 
 #if TARGET_OS_IPHONE
 // Note: You may need to add the CFNetwork Framework to your project
