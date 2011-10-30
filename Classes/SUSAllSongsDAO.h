@@ -14,16 +14,12 @@
 @interface SUSAllSongsDAO : NSObject <LoaderManager>
 {
 	id<LoaderDelegate> delegate;
-	
-	FMDatabase *db;
-	
+		
 	NSUInteger count;
 	NSArray *index;
-	
-	SUSAllSongsLoader *loader;
-	
-	BOOL isLoading;
 }
+
+@property (readonly) FMDatabase *db;
 
 @property (readonly) NSUInteger count;
 @property (readonly) NSUInteger searchCount;

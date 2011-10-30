@@ -19,8 +19,6 @@
 {
 	count = NSUIntegerMax;
 	index = nil;
-		
-	db = [[DatabaseSingleton sharedInstance] allAlbumsDb]; 
 }
 
 - (id)init
@@ -33,15 +31,20 @@
     return self;
 }
 
+- (FMDatabase *)db
+{
+    return [[DatabaseSingleton sharedInstance] allAlbumsDb]; 
+}
+
 #pragma mark - Private Methods
 
 - (NSUInteger)allAlbumsCount
 {
 	NSUInteger value = NSUIntegerMax;
 	
-	if ([db tableExists:@"allAlbumsCount"] && [db intForQuery:@"SELECT COUNT(*) FROM allAlbumsCount"] > 0)
+	if ([self.db tableExists:@"allAlbumsCount"] && [self.db intForQuery:@"SELECT COUNT(*) FROM allAlbumsCount"] > 0)
 	{
-		value = [db intForQuery:@"SELECT count FROM allAlbumsCount LIMIT 1"];
+		value = [self.db intForQuery:@"SELECT count FROM allAlbumsCount LIMIT 1"];
 	}
 	
 	return value;
@@ -51,9 +54,9 @@
 {
 	NSUInteger value = NSUIntegerMax;
 	
-	if ([db tableExists:@"allAlbumsNameSearch"])
+	if ([self.db tableExists:@"allAlbumsNameSearch"])
 	{
-		value = [db intForQuery:@"SELECT count(*) FROM allAlbumsNameSearch"];
+		value = [self.db intForQuery:@"SELECT count(*) FROM allAlbumsNameSearch"];
 	}
 	
 	return value;
@@ -63,7 +66,7 @@
 {
 	NSMutableArray *indexItems = [NSMutableArray arrayWithCapacity:0];
 	
-	FMResultSet *result = [db executeQuery:@"SELECT * FROM allAlbumsIndexCache"];
+	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allAlbumsIndexCache"];
 	while ([result next])
 	{
 		Index *item = [[Index alloc] init];
@@ -80,7 +83,7 @@
 - (Album *)allAlbumsAlbumForPosition:(NSUInteger)position
 {
 	Album *anAlbum = [[[Album alloc] init] autorelease];
-	FMResultSet *result = [db executeQuery:@"SELECT * FROM allAlbums WHERE ROWID = %i", [NSNumber numberWithInt:position]];
+	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allAlbums WHERE ROWID = %i", [NSNumber numberWithInt:position]];
 	while ([result next])
 	{
 		if ([result stringForColumn:@"title"] != nil)
@@ -102,7 +105,7 @@
 - (Album *)allAlbumsAlbumForPositionInSearch:(NSUInteger)position
 {
 	Album *anAlbum = [[[Album alloc] init] autorelease];
-	FMResultSet *result = [db executeQuery:@"SELECT * FROM allAlbumsNameSearch WHERE ROWID = %i", [NSNumber numberWithInt:position]];
+	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allAlbumsNameSearch WHERE ROWID = %i", [NSNumber numberWithInt:position]];
 	while ([result next])
 	{
 		if ([result stringForColumn:@"title"] != nil)
@@ -123,20 +126,20 @@
 
 - (void)allAlbumsClearSearch
 {
-	[db executeUpdate:@"DELETE FROM allAlbumsNameSearch"];
+	[self.db executeUpdate:@"DELETE FROM allAlbumsNameSearch"];
 }
 
 - (void)allAlbumsPerformSearch:(NSString *)name
 {
 	// Inialize the search DB
-	[db executeUpdate:@"DROP TABLE IF EXISTS allAlbumsNameSearch"];
-	[db executeUpdate:@"CREATE TEMPORARY TABLE allAlbumsNameSearch (id TEXT PRIMARY KEY, name TEXT)"];
+	[self.db executeUpdate:@"DROP TABLE IF EXISTS allAlbumsNameSearch"];
+	[self.db executeUpdate:@"CREATE TEMPORARY TABLE allAlbumsNameSearch (id TEXT PRIMARY KEY, name TEXT)"];
 	
 	// Perform the search
 	NSString *query = @"INSERT INTO allAlbumsNameSearch SELECT * FROM allAlbums WHERE name LIKE ? LIMIT 100";
-	[db executeUpdate:query, [NSString stringWithFormat:@"%%%@%%", name]];
-	if ([db hadError]) {
-		DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+	[self.db executeUpdate:query, [NSString stringWithFormat:@"%%%@%%", name]];
+	if ([self.db hadError]) {
+		DLog(@"Err %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
 	}
 }
 
@@ -144,7 +147,7 @@
 {
 	BOOL isLoaded = NO;
 	
-	if ([db tableExists:@"allAlbumsCount"] && [db intForQuery:@"SELECT COUNT(*) FROM allAlbumsCount"] > 0)
+	if ([self.db tableExists:@"allAlbumsCount"] && [self.db intForQuery:@"SELECT COUNT(*) FROM allAlbumsCount"] > 0)
 	{
 		isLoaded = YES;
 	}

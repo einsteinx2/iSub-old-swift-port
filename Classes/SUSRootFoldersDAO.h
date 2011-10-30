@@ -6,27 +6,25 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-
 #import "Loader.h"
+#import "LoaderDelegate.h"
+#import "LoaderManager.h"
 
-#define TEMP_FLUSH_AMOUNT 400
+@class Artist, FMDatabase, SUSRootFoldersLoader;
 
-@class Artist, FMDatabase;
-
-@interface SUSRootFoldersDAO : Loader
-{	
-	FMDatabase *db;
-	
+@interface SUSRootFoldersDAO : Loader <LoaderManager>
+{		
 	NSUInteger count;
 	NSUInteger searchCount;
-	NSArray *indexNames;
-	NSArray *indexPositions;
-	NSArray *indexCounts;
 	
 	NSNumber *selectedFolderId;
 	
 	NSUInteger tempRecordCount;
 }
+
+@property (readonly) FMDatabase *db;
+
+@property (nonatomic, retain) SUSRootFoldersLoader *loader;
 
 @property (readonly) NSUInteger count;
 @property (readonly) NSUInteger searchCount;
@@ -47,5 +45,9 @@
 - (void)searchForFolderName:(NSString *)name;
 - (Artist *)artistForPositionInSearch:(NSUInteger)position;
 - (void)clearSearchTable;
+
+- (id)initWithDelegate:(id <LoaderDelegate>)theDelegate;
+- (void)startLoad;
+- (void)cancelLoad;
 
 @end

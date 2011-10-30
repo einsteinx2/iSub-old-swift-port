@@ -23,8 +23,7 @@
 	delegate = nil;
 	loader = nil;
 	count = NSUIntegerMax;
-	index = nil;
-	db = [[DatabaseSingleton sharedInstance] allSongsDb]; 
+	//index = nil;
 }
 
 - (id)init
@@ -57,15 +56,20 @@
 	[super dealloc];
 }
 
+- (FMDatabase *)db
+{
+    return [[DatabaseSingleton sharedInstance] allSongsDb]; 
+}
+
 #pragma mark - Private Methods
 
 - (NSUInteger)allSongsCount
 {
 	NSUInteger value = NSUIntegerMax;
 	
-	if ([db tableExists:@"allSongsCount"] && [db intForQuery:@"SELECT COUNT(*) FROM allSongsCount"] > 0)
+	if ([self.db tableExists:@"allSongsCount"] && [self.db intForQuery:@"SELECT COUNT(*) FROM allSongsCount"] > 0)
 	{
-		value = [db intForQuery:@"SELECT count FROM allSongsCount LIMIT 1"];
+		value = [self.db intForQuery:@"SELECT count FROM allSongsCount LIMIT 1"];
 	}
 	
 	return value;
@@ -75,9 +79,9 @@
 {
 	NSUInteger value = NSUIntegerMax;
 	
-	if ([db tableExists:@"allSongsNameSearch"])
+	if ([self.db tableExists:@"allSongsNameSearch"])
 	{
-		value = [db intForQuery:@"SELECT count(*) FROM allSongsNameSearch"];
+		value = [self.db intForQuery:@"SELECT count(*) FROM allSongsNameSearch"];
 	}
 	
 	return value;
@@ -87,7 +91,7 @@
 {
 	NSMutableArray *indexItems = [NSMutableArray arrayWithCapacity:0];
 	
-	FMResultSet *result = [db executeQuery:@"SELECT * FROM allSongsIndexCache"];
+	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allSongsIndexCache"];
 	while ([result next])
 	{
 		Index *item = [[Index alloc] init];
@@ -104,11 +108,11 @@
 - (Song *)allSongsSongForPosition:(NSUInteger)position
 {
 	Song *aSong = [[Song alloc] init];
-	FMResultSet *result = [db executeQuery:@"SELECT * FROM allSongs WHERE ROWID = %i", [NSNumber numberWithInt:position]];
+	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allSongs WHERE ROWID = %i", [NSNumber numberWithInt:position]];
 	[result next];
-	if ([db hadError]) 
+	if ([self.db hadError]) 
 	{
-		DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+		DLog(@"Err %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
 	}
 	else
 	{
@@ -150,11 +154,11 @@
 - (Song *)allSongsSongForPositionInSearch:(NSUInteger)position
 {
 	Song *aSong = [[Song alloc] init];
-	FMResultSet *result = [db executeQuery:@"SELECT * FROM allSongsNameSearch WHERE ROWID = %i", [NSNumber numberWithInt:position]];
+	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allSongsNameSearch WHERE ROWID = %i", [NSNumber numberWithInt:position]];
 	[result next];
-	if ([db hadError]) 
+	if ([self.db hadError]) 
 	{
-		DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+		DLog(@"Err %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
 	}
 	else
 	{
@@ -195,20 +199,20 @@
 
 - (void)allSongsClearSearch
 {
-	[db executeUpdate:@"DELETE FROM allSongsNameSearch"];
+	[self.db executeUpdate:@"DELETE FROM allSongsNameSearch"];
 }
 
 - (void)allSongsPerformSearch:(NSString *)name
 {
 	// Inialize the search DB
-	[db executeUpdate:@"DROP TABLE IF EXISTS allSongsNameSearch"];
-	[db executeUpdate:@"CREATE TEMPORARY TABLE allSongsNameSearch (id TEXT PRIMARY KEY, name TEXT)"];
+	[self.db executeUpdate:@"DROP TABLE IF EXISTS allSongsNameSearch"];
+	[self.db executeUpdate:@"CREATE TEMPORARY TABLE allSongsNameSearch (id TEXT PRIMARY KEY, name TEXT)"];
 	
 	// Perform the search
 	NSString *query = @"INSERT INTO allSongsNameSearch SELECT * FROM allSongs WHERE name LIKE ? LIMIT 100";
-	[db executeUpdate:query, [NSString stringWithFormat:@"%%%@%%", name]];
-	if ([db hadError]) {
-		DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+	[self.db executeUpdate:query, [NSString stringWithFormat:@"%%%@%%", name]];
+	if ([self.db hadError]) {
+		DLog(@"Err %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
 	}
 }
 
@@ -216,7 +220,7 @@
 {
 	BOOL isLoaded = NO;
 	
-	if ([db tableExists:@"allSongsCount"] && [db intForQuery:@"SELECT COUNT(*) FROM allSongsCount"] > 0)
+	if ([self.db tableExists:@"allSongsCount"] && [self.db intForQuery:@"SELECT COUNT(*) FROM allSongsCount"] > 0)
 	{
 		isLoaded = YES;
 	}
@@ -278,7 +282,7 @@
 
 - (void)allSongsRestartLoad
 {
-	[db executeUpdate:@"CREATE TABLE restartLoad (a INTEGER)"];
+	[self.db executeUpdate:@"CREATE TABLE restartLoad (a INTEGER)"];
 }
 
 #pragma mark - Loader Manager Methods
@@ -297,7 +301,7 @@
 	if (!isLoading)
 	{
 		isLoading = YES;
-		self.loader = [[SUSAllSongsLoader alloc] initWithDelegate:delegate];
+		self.loader = [[[SUSAllSongsLoader alloc] initWithDelegate:delegate] autorelease];
 		[loader startLoad];
 	}
 }
@@ -308,7 +312,7 @@
 	{
 		isLoading = NO;
 		[loader cancelLoad];
-		[loader release]; loader = nil;
+        self.loader = nil;
 	}
 }
 

@@ -13,8 +13,9 @@
 
 @interface SUSSubFolderDAO : Loader
 {
-	FMDatabase *db;
+	
 }
 
+@property (readonly) FMDatabase *db;
 
 @end

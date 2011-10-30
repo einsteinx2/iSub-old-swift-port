@@ -17,7 +17,6 @@
 
 - (void)setup
 {
-	db = [[DatabaseSingleton sharedInstance] albumListCacheDb]; 
 }
 
 - (id)init
@@ -47,6 +46,9 @@
 	[super dealloc];
 }
 
-
+- (FMDatabase *)db
+{
+    return [[DatabaseSingleton sharedInstance] albumListCacheDb]; 
+}
 
 @end

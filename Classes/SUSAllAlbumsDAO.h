@@ -9,12 +9,12 @@
 @class FMDatabase, Album;
 
 @interface SUSAllAlbumsDAO : NSObject
-{
-	FMDatabase *db;
-	
+{	
 	NSUInteger count;
 	NSArray *index;
 }
+
+@property (readonly) FMDatabase *db;
 
 @property (readonly) NSUInteger count;
 @property (readonly) NSUInteger searchCount;
