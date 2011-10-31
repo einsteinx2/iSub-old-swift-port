@@ -21,27 +21,7 @@
 
 - (void)setup
 {
-
-}
-
-- (id)init
-{
-    if ((self = [super init]))
-	{
-		[self setup];
-	}
-    
-    return self;
-}
-
-- (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate
-{
-	if ((self = [super initWithDelegate:theDelegate]))
-	{
-		[self setup];
-	}
-	
-	return self;
+    [super setup];
 }
 
 - (void)dealloc
@@ -190,6 +170,12 @@
 		NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
 		[self.delegate loadingFailed:self withError:error];
 	}
+}
+
+// TODO Add cancel load
+- (void)cancelLoad
+{
+    
 }
 
 #pragma mark Connection Delegate

@@ -26,6 +26,7 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "CacheSingleton.h"
+#import "NSString-time.h"
 
 @implementation CacheViewController
 
@@ -1466,15 +1467,15 @@
 		NSDate *cached = [NSDate dateWithTimeIntervalSince1970:(double)[databaseControls.songCacheDb intForQuery:@"SELECT cachedDate FROM queuedSongsList WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]]];
 		if ([[NSString md5:aSong.path] isEqualToString:musicControls.downloadFileNameHashQueue] && musicControls.isQueueListDownloading)
 		{
-			[cell.cacheInfoLabel setText:[NSString stringWithFormat:@"Queued %@ - Progress: %@", [appDelegate relativeTime:cached], [settings formatFileSize:queueDownloadProgress]]];
+			[cell.cacheInfoLabel setText:[NSString stringWithFormat:@"Queued %@ - Progress: %@", [NSString relativeTime:cached], [settings formatFileSize:queueDownloadProgress]]];
 		}
 		else if (indexPath.row == 0)
 		{
-			[cell.cacheInfoLabel setText:[NSString stringWithFormat:@"Queued %@ - Progress: Need Wifi", [appDelegate relativeTime:cached]]];
+			[cell.cacheInfoLabel setText:[NSString stringWithFormat:@"Queued %@ - Progress: Need Wifi", [NSString relativeTime:cached]]];
 		}
 		else
 		{
-			[cell.cacheInfoLabel setText:[NSString stringWithFormat:@"Queued %@ - Progress: Waiting...", [appDelegate relativeTime:cached]]];
+			[cell.cacheInfoLabel setText:[NSString stringWithFormat:@"Queued %@ - Progress: Waiting...", [NSString relativeTime:cached]]];
 		}
 		
 		[cell.songNameLabel setText:aSong.title];

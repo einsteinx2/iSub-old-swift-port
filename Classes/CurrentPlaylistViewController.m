@@ -18,7 +18,7 @@
 #import "FMDatabaseAdditions.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
-
+#import "NSString-time.h"
 
 @implementation CurrentPlaylistViewController
 
@@ -614,7 +614,7 @@
 	else
 		cell.artistNameLabel.text = aSong.artist;
 
-	cell.durationLabel.text = [appDelegate formatTime:[aSong.duration floatValue]];	
+	cell.durationLabel.text = [NSString formatTime:[aSong.duration floatValue]];	
 	
 	// Hide the duration labels if editing
 	if (viewObjects.isEditing)

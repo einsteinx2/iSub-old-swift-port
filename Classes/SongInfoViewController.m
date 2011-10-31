@@ -23,6 +23,7 @@
 #import "OBSlider.h"
 #import "UIView-tools.h"
 #import "SavedSettings.h"
+#import "NSString-time.h"
 
 //#define downloadProgressWidth (progressSlider.frame.size.width + 4)
 #define downloadProgressWidth progressSlider.frame.size.width
@@ -187,7 +188,7 @@
 		bitRateLabel.text = @"";
 		
 	if ([musicControls.currentSongObject duration])
-		lengthLabel.text = [NSString stringWithFormat:@"Length: %@", [appDelegate formatTime:[[musicControls.currentSongObject duration] floatValue]]];
+		lengthLabel.text = [NSString stringWithFormat:@"Length: %@", [NSString formatTime:[[musicControls.currentSongObject duration] floatValue]]];
 	else
 		lengthLabel.text = @"";
 	
@@ -281,8 +282,8 @@
 {
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
-		elapsedTimeLabel.text = [appDelegate formatTime:0];
-		remainingTimeLabel.text = [NSString stringWithFormat:@"-%@",[appDelegate formatTime:[[musicControls.currentSongObject duration] floatValue]]];
+		elapsedTimeLabel.text = [NSString formatTime:0];
+		remainingTimeLabel.text = [NSString stringWithFormat:@"-%@",[NSString formatTime:[[musicControls.currentSongObject duration] floatValue]]];
 
 		progressSlider.value = 0.0;
 		
@@ -298,15 +299,15 @@
 			{
 				musicControls.streamerProgress = [musicControls.streamer progress];
 				progressSlider.value = (musicControls.streamerProgress + musicControls.seekTime);
-				elapsedTimeLabel.text = [appDelegate formatTime:(musicControls.streamerProgress + musicControls.seekTime)];
-				remainingTimeLabel.text = [NSString stringWithFormat:@"-%@",[appDelegate formatTime:([[musicControls.currentSongObject duration] floatValue] - (musicControls.streamerProgress + musicControls.seekTime))]];
+				elapsedTimeLabel.text = [NSString formatTime:(musicControls.streamerProgress + musicControls.seekTime)];
+				remainingTimeLabel.text = [NSString stringWithFormat:@"-%@",[NSString formatTime:([[musicControls.currentSongObject duration] floatValue] - (musicControls.streamerProgress + musicControls.seekTime))]];
 			}
 		}
 		else 
 		{
 			musicControls.streamerProgress = [musicControls.streamer progress];
-			elapsedTimeLabel.text = [appDelegate formatTime:(musicControls.streamerProgress + musicControls.seekTime)];
-			remainingTimeLabel.text = [appDelegate formatTime:0];
+			elapsedTimeLabel.text = [NSString formatTime:(musicControls.streamerProgress + musicControls.seekTime)];
+			remainingTimeLabel.text = [NSString formatTime:0];
 		}
 	}
 }
@@ -330,7 +331,7 @@
 	progressLabel.center = CGPointMake(x, 15);
 	progressLabelBackground.center = CGPointMake(x - 0.5, 15.5);
 	
-	[progressLabel setText:[appDelegate formatTime:progressSlider.value]];
+	[progressLabel setText:[NSString formatTime:progressSlider.value]];
 }
 
 

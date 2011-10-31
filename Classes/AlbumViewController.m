@@ -33,6 +33,7 @@
 #import "CustomUIAlertView.h"
 
 #import "SavedSettings.h"
+#import "NSString-time.h"
 
 @interface AlbumViewController (Private)
 
@@ -311,7 +312,7 @@
 		durationLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		durationLabel.backgroundColor = [UIColor clearColor];
 		durationLabel.textAlignment = UITextAlignmentRight;
-		durationLabel.text = [appDelegate formatTime:duration];
+		durationLabel.text = [NSString formatTime:duration];
 		durationLabel.font = [UIFont boldSystemFontOfSize:24];
 		[headerView addSubview:durationLabel];
 		[durationLabel release];
@@ -571,7 +572,7 @@
 			cell.artistNameLabel.text = @"";		
 		
 		if ( aSong.duration )
-			cell.songDurationLabel.text = [appDelegate formatTime:[aSong.duration floatValue]];
+			cell.songDurationLabel.text = [NSString formatTime:[aSong.duration floatValue]];
 		else
 			cell.songDurationLabel.text = @"";
 		

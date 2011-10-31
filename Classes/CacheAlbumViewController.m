@@ -21,6 +21,7 @@
 #import "FMDatabaseAdditions.h"
 #import "NSString-md5.h"
 #import "SavedSettings.h"
+#import "NSString-time.h"
 
 @implementation CacheAlbumViewController
 
@@ -532,7 +533,7 @@
 			cell.artistNameLabel.text = @"";		
 		
 		if (aSong.duration)
-			cell.songDurationLabel.text = [appDelegate formatTime:[aSong.duration floatValue]];
+			cell.songDurationLabel.text = [NSString formatTime:[aSong.duration floatValue]];
 		else
 			cell.songDurationLabel.text = @"";
 		

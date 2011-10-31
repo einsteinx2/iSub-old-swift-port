@@ -22,6 +22,7 @@
 #import "NSString-md5.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
+#import "NSString-time.h"
 
 @implementation BookmarksViewController
 
@@ -583,7 +584,7 @@
 	
 	NSString *name = [databaseControls.bookmarksDb stringForQuery:@"SELECT name FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
 	int position = [databaseControls.bookmarksDb intForQuery:@"SELECT position FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
-	[cell.bookmarkNameLabel setText:[NSString stringWithFormat:@"%@ - %@", name, [appDelegate formatTime:(float)position]]];
+	[cell.bookmarkNameLabel setText:[NSString stringWithFormat:@"%@ - %@", name, [NSString formatTime:(float)position]]];
 	
 	[cell.songNameLabel setText:aSong.title];
 	if (aSong.album)

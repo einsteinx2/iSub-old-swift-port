@@ -121,9 +121,6 @@
 - (NSString *)getIPAddressForHost:(NSString *)theHost;
 - (NSInteger)getHour;
 
-- (NSString *) formatTime:(float)seconds;
-- (NSString *) relativeTime:(NSDate *)date;
-
 //- (BOOL)isWifi;
 
 - (void)batteryStateChanged:(NSNotification *)notification;

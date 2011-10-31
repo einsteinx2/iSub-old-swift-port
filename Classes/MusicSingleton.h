@@ -181,8 +181,6 @@
 //- (void)checkCache;
 - (void)resumeSong;
 
-- (void) loadLyricsForArtistAndTitle:(NSArray *)artistAndTitle;
-
 - (void)showPlayer;
 
 - (void)removeAutoNextNotification;

@@ -11,16 +11,17 @@
 #import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
-#import "LyricsXMLParser.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "Song.h"
+#import "SUSLyricsDAO.h"
 
 @implementation LyricsViewController
 
-@synthesize textView;
+@synthesize textView, dataModel;
 
-// The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
+#pragma mark - Lifecycle
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
 {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) 
@@ -29,6 +30,8 @@
 		viewObjects = [ViewObjectsSingleton sharedInstance];
 		musicControls = [MusicSingleton sharedInstance];
 		databaseControls = [DatabaseSingleton sharedInstance];
+        
+        dataModel = [[SUSLyricsDAO alloc] initWithDelegate:self];
 		
         // Custom initialization
 		self.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 300)];
@@ -40,8 +43,9 @@
 		textView.textColor = [UIColor whiteColor];
 		textView.font = [UIFont systemFontOfSize:16.5];
 		textView.editable = NO;
-		//DLog(@"Lyrics query: SELECT lyrics FROM lyrics WHERE artist = %@ AND title = %@", musicControls.currentSongObject.artist, musicControls.currentSongObject.title);
-		NSString *lyrics = [databaseControls.lyricsDb stringForQuery:@"SELECT lyrics FROM lyrics WHERE artist = ? AND title = ?", musicControls.currentSongObject.artist, musicControls.currentSongObject.title];
+        
+        NSString *lyrics = [dataModel lyricsForArtist:musicControls.currentSongObject.artist andTitle:musicControls.currentSongObject.title];
+                
 		if (lyrics)
 		{
 			textView.text = lyrics;
@@ -54,10 +58,7 @@
 			}
 			else
 			{
-				if (musicControls.currentSongLyrics)
-					textView.text = musicControls.currentSongLyrics;
-				else
-					textView.text = @"\n\nLoading Lyrics...";
+				textView.text = @"\n\nLoading Lyrics...";
 			}
 		}
 		[self.view addSubview:textView];
@@ -78,7 +79,6 @@
     return self;
 }
 
-
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
@@ -89,14 +89,8 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidUnload) name:@"hideSongInfo" object:nil];
 }
 
-
-- (void) updateLyricsLabel
-{	
-	[textView performSelectorOnMainThread:@selector(setText:) withObject:musicControls.currentSongLyrics waitUntilDone:NO];
-}
-
-
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     
@@ -117,13 +111,28 @@
     [super viewDidUnload];
 }
 
-
-- (void)dealloc {
-	NSLog(@"LyricsViewController dealloc called");
+- (void)dealloc 
+{
 	[textView release]; textView = nil;
     [super dealloc];
-
+    
 }
 
+- (void) updateLyricsLabel
+{	
+	[textView performSelectorOnMainThread:@selector(setText:) withObject:musicControls.currentSongLyrics waitUntilDone:NO];
+}
+
+#pragma mark - SUSLoader delegate
+
+- (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
+{
+    textView.text = @"\n\nNo lyrics found";
+}
+
+- (void)loadingFinished:(SUSLoader*)theLoader
+{
+    textView.text = [dataModel lyricsForArtist:musicControls.currentSongObject.artist andTitle:musicControls.currentSongObject.title];
+}
 
 @end

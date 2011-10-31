@@ -19,3 +19,9 @@
 
 #define ISMSErrorCode_CouldNotSendChatMessage	4
 #define ISMSErrorDesc_CouldNotSendChatMessage	@"Could not send chat message"
+
+#define ISMSErrorCode_NoLyricsElement           5
+#define ISMSErrorDesc_NoLyricsElement           @"No lyrics XML element found"
+
+#define ISMSErrorCode_NoLyricsFound             6
+#define ISMSErrorDesc_NoLyricsFound             @"No lyrics found for this song"

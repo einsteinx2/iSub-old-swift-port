@@ -10,14 +10,12 @@
 #import "DatabaseSingleton.h"
 #import "ViewObjectsSingleton.h"
 #import "iSubAppDelegate.h"
-#import "ASIHTTPRequest.h"
 #import "Song.h"
 #import "AudioStreamer.h"
 #import "NSString-md5.h"
 #import "CFNetworkRequests.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "LyricsXMLParser.h"
 #import "Reachability.h"
 #import "JukeboxXMLParser.h"
 #import "NSURLConnectionDelegateQueue.h"
@@ -1111,52 +1109,6 @@ static MusicSingleton *sharedInstance = nil;
 {
 	progressTimer = nil;
 	progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(incrementProgress) userInfo:nil repeats:YES];
-}
-
-- (void) loadLyricsForArtistAndTitle:(NSArray *)artistAndTitle
-{
-	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-	
-	NSString *artist = [artistAndTitle objectAtIndex:0];
-	NSString *title = [artistAndTitle objectAtIndex:1];
-	
-	NSString *lyrics = [databaseControls.lyricsDb stringForQuery:@"SELECT lyrics FROM lyrics WHERE artist = ? AND title = ?", artist, title];
-	if (lyrics)
-	{
-		if ([artist isEqualToString:currentSongObject.artist] && [title isEqualToString:currentSongObject.title])
-		{
-			self.currentSongLyrics = lyrics;
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"lyricsDoneLoading" object:nil];
-		}
-	}
-	else
-	{
-		ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[appDelegate getBaseUrl:@"getLyrics.view"]]];
-		[request startSynchronous];
-		if ([request error])
-		{
-			if ([artist isEqualToString:currentSongObject.artist] && [title isEqualToString:currentSongObject.title])
-			{
-				self.currentSongLyrics = [NSString stringWithFormat:@"\n\nHTTP Connection Error Code: %i\n\nError Message: %@", [[request error] code], [ASIHTTPRequest errorCodeToEnglish:[[request error] code]]];
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"lyricsDoneLoading" object:nil];
-			}
-		}
-		else
-		{
-			NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:[request responseData]];
-			LyricsXMLParser *parser = [(LyricsXMLParser *)[LyricsXMLParser alloc] initXMLParser];
-			parser.artist = artist;
-			parser.title = title;
-			[xmlParser setDelegate:parser];
-			[xmlParser parse];
-			
-			[xmlParser release];
-			[parser release];
-		}
-	}
-	
-	[autoreleasePool release];
 }
 
 - (void) removeOldestCachedSongs

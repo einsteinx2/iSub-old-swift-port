@@ -100,7 +100,6 @@
 		53404FFB11E94AA5004AEC41 /* controller-bookmark-on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FF711E94AA5004AEC41 /* controller-bookmark-on@2x.png */; };
 		53404FFC11E94AA5004AEC41 /* controller-bookmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FF811E94AA5004AEC41 /* controller-bookmark.png */; };
 		53404FFD11E94AA5004AEC41 /* controller-bookmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FF911E94AA5004AEC41 /* controller-bookmark@2x.png */; };
-		534050F711E99633004AEC41 /* LyricsXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 534050F611E99633004AEC41 /* LyricsXMLParser.m */; };
 		534050FB11E9966C004AEC41 /* LyricsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 534050F911E9966C004AEC41 /* LyricsViewController.m */; };
 		53409898142D487600455754 /* SUSAllAlbumsDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53409897142D487600455754 /* SUSAllAlbumsDAO.m */; };
 		53409899142D487600455754 /* SUSAllAlbumsDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53409897142D487600455754 /* SUSAllAlbumsDAO.m */; };
@@ -268,6 +267,15 @@
 		5398F27811DA627500007870 /* HelpTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F27611DA627500007870 /* HelpTabViewController.m */; };
 		5398F27911DA627500007870 /* HelpTabViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5398F27711DA627500007870 /* HelpTabViewController.xib */; };
 		5398F2B611DA8B1000007870 /* iPhoneStreamingPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5398F2B511DA8B1000007870 /* iPhoneStreamingPlayerViewController.xib */; };
+		539B3088145E733C00D06475 /* NSString-time.m in Sources */ = {isa = PBXBuildFile; fileRef = 539B3087145E733C00D06475 /* NSString-time.m */; };
+		539B3089145E733C00D06475 /* NSString-time.m in Sources */ = {isa = PBXBuildFile; fileRef = 539B3087145E733C00D06475 /* NSString-time.m */; };
+		539B308A145E733C00D06475 /* NSString-time.m in Sources */ = {isa = PBXBuildFile; fileRef = 539B3087145E733C00D06475 /* NSString-time.m */; };
+		539B308D145E750700D06475 /* SUSLyricsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 539B308C145E750700D06475 /* SUSLyricsLoader.m */; };
+		539B308E145E750700D06475 /* SUSLyricsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 539B308C145E750700D06475 /* SUSLyricsLoader.m */; };
+		539B308F145E750700D06475 /* SUSLyricsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 539B308C145E750700D06475 /* SUSLyricsLoader.m */; };
+		539B3092145E78AF00D06475 /* SUSLyricsDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 539B3091145E78AE00D06475 /* SUSLyricsDAO.m */; };
+		539B3093145E78AF00D06475 /* SUSLyricsDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 539B3091145E78AE00D06475 /* SUSLyricsDAO.m */; };
+		539B3094145E78AF00D06475 /* SUSLyricsDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 539B3091145E78AE00D06475 /* SUSLyricsDAO.m */; };
 		539D6075145E0D7D0018AA90 /* ISMSUpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 539D6074145E0D7D0018AA90 /* ISMSUpdateChecker.m */; };
 		539D6076145E0D7D0018AA90 /* ISMSUpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 539D6074145E0D7D0018AA90 /* ISMSUpdateChecker.m */; };
 		539D6077145E0D7D0018AA90 /* ISMSUpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 539D6074145E0D7D0018AA90 /* ISMSUpdateChecker.m */; };
@@ -705,7 +713,6 @@
 		53BC27E1139AF0DD00A825F1 /* GenresGenreUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DF310611D3EE26007552A4 /* GenresGenreUITableViewCell.m */; };
 		53BC27E2139AF0DD00A825F1 /* SettingsTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F26B11DA61DA00007870 /* SettingsTabViewController.m */; };
 		53BC27E3139AF0DD00A825F1 /* HelpTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F27611DA627500007870 /* HelpTabViewController.m */; };
-		53BC27E4139AF0DD00A825F1 /* LyricsXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 534050F611E99633004AEC41 /* LyricsXMLParser.m */; };
 		53BC27E5139AF0DD00A825F1 /* LyricsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 534050F911E9966C004AEC41 /* LyricsViewController.m */; };
 		53BC27E6139AF0DD00A825F1 /* URLCheckConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 536ACEC611EA449A00387CB0 /* URLCheckConnectionDelegate.m */; };
 		53BC27E7139AF0DD00A825F1 /* MGTwitterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD26E11EA7EFB00387CB0 /* MGTwitterEngine.m */; };
@@ -1192,7 +1199,6 @@
 		53DCF54213BFEAD3009160F9 /* GenresGenreUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DF310611D3EE26007552A4 /* GenresGenreUITableViewCell.m */; };
 		53DCF54313BFEAD3009160F9 /* SettingsTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F26B11DA61DA00007870 /* SettingsTabViewController.m */; };
 		53DCF54413BFEAD3009160F9 /* HelpTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F27611DA627500007870 /* HelpTabViewController.m */; };
-		53DCF54513BFEAD3009160F9 /* LyricsXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 534050F611E99633004AEC41 /* LyricsXMLParser.m */; };
 		53DCF54613BFEAD3009160F9 /* LyricsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 534050F911E9966C004AEC41 /* LyricsViewController.m */; };
 		53DCF54713BFEAD3009160F9 /* URLCheckConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 536ACEC611EA449A00387CB0 /* URLCheckConnectionDelegate.m */; };
 		53DCF54813BFEAD3009160F9 /* MGTwitterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD26E11EA7EFB00387CB0 /* MGTwitterEngine.m */; };
@@ -1528,8 +1534,6 @@
 		53404FF711E94AA5004AEC41 /* controller-bookmark-on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-bookmark-on@2x.png"; path = "Images/Player Icons/controller-bookmark-on@2x.png"; sourceTree = "<group>"; };
 		53404FF811E94AA5004AEC41 /* controller-bookmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-bookmark.png"; path = "Images/Player Icons/controller-bookmark.png"; sourceTree = "<group>"; };
 		53404FF911E94AA5004AEC41 /* controller-bookmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-bookmark@2x.png"; path = "Images/Player Icons/controller-bookmark@2x.png"; sourceTree = "<group>"; };
-		534050F511E99633004AEC41 /* LyricsXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LyricsXMLParser.h; sourceTree = "<group>"; };
-		534050F611E99633004AEC41 /* LyricsXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LyricsXMLParser.m; sourceTree = "<group>"; };
 		534050F811E9966C004AEC41 /* LyricsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LyricsViewController.h; sourceTree = "<group>"; };
 		534050F911E9966C004AEC41 /* LyricsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LyricsViewController.m; sourceTree = "<group>"; };
 		53409896142D487600455754 /* SUSAllAlbumsDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSAllAlbumsDAO.h; sourceTree = "<group>"; };
@@ -1782,6 +1786,12 @@
 		5398F27711DA627500007870 /* HelpTabViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HelpTabViewController.xib; sourceTree = "<group>"; };
 		5398F2B511DA8B1000007870 /* iPhoneStreamingPlayerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = iPhoneStreamingPlayerViewController.xib; sourceTree = "<group>"; };
 		539A356813D3E48C00D80554 /* SUSLoaderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSLoaderDelegate.h; sourceTree = "<group>"; };
+		539B3086145E733C00D06475 /* NSString-time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString-time.h"; sourceTree = "<group>"; };
+		539B3087145E733C00D06475 /* NSString-time.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString-time.m"; sourceTree = "<group>"; };
+		539B308B145E750700D06475 /* SUSLyricsLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSLyricsLoader.h; sourceTree = "<group>"; };
+		539B308C145E750700D06475 /* SUSLyricsLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSLyricsLoader.m; sourceTree = "<group>"; };
+		539B3090145E78AE00D06475 /* SUSLyricsDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSLyricsDAO.h; sourceTree = "<group>"; };
+		539B3091145E78AE00D06475 /* SUSLyricsDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSLyricsDAO.m; sourceTree = "<group>"; };
 		539D6073145E0D7D0018AA90 /* ISMSUpdateChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSUpdateChecker.h; sourceTree = "<group>"; };
 		539D6074145E0D7D0018AA90 /* ISMSUpdateChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSUpdateChecker.m; sourceTree = "<group>"; };
 		53A2213411A8489900C1ACD4 /* cache-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cache-button.png"; path = "Images/Other/cache-button.png"; sourceTree = "<group>"; };
@@ -2443,8 +2453,6 @@
 				53BA48671284C2340010B380 /* JukeboxXMLParser.m */,
 				53F2D2391139F9DC00107D63 /* XMLParser.h */,
 				53F2D23A1139F9DC00107D63 /* XMLParser.m */,
-				534050F511E99633004AEC41 /* LyricsXMLParser.h */,
-				534050F611E99633004AEC41 /* LyricsXMLParser.m */,
 				531F1595126F711100F524BD /* HomeXMLParser.h */,
 				531F1596126F711100F524BD /* HomeXMLParser.m */,
 				53E75E82127123B300BC1A19 /* SearchXMLParser.h */,
@@ -2474,6 +2482,8 @@
 				534098A1142D489F00455754 /* SUSAllSongsDAO.m */,
 				535EFD87145D152A00EDF867 /* SUSChatDAO.h */,
 				535EFD88145D152A00EDF867 /* SUSChatDAO.m */,
+				539B3090145E78AE00D06475 /* SUSLyricsDAO.h */,
+				539B3091145E78AE00D06475 /* SUSLyricsDAO.m */,
 			);
 			name = DAOs;
 			sourceTree = "<group>";
@@ -2487,6 +2497,8 @@
 				535EFD83145D144400EDF867 /* SUSRootFoldersLoader.m */,
 				535EFD8C145D153900EDF867 /* SUSChatLoader.h */,
 				535EFD8D145D153900EDF867 /* SUSChatLoader.m */,
+				539B308B145E750700D06475 /* SUSLyricsLoader.h */,
+				539B308C145E750700D06475 /* SUSLyricsLoader.m */,
 			);
 			name = Loaders;
 			sourceTree = "<group>";
@@ -2705,6 +2717,8 @@
 				535B7243134C16FC003E0E1C /* GTMDefines.h */,
 				535B7244134C16FC003E0E1C /* GTMNSString+HTML.h */,
 				535B7245134C16FC003E0E1C /* GTMNSString+HTML.m */,
+				539B3086145E733C00D06475 /* NSString-time.h */,
+				539B3087145E733C00D06475 /* NSString-time.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -4311,7 +4325,6 @@
 				53DF310711D3EE26007552A4 /* GenresGenreUITableViewCell.m in Sources */,
 				5398F26D11DA61DA00007870 /* SettingsTabViewController.m in Sources */,
 				5398F27811DA627500007870 /* HelpTabViewController.m in Sources */,
-				534050F711E99633004AEC41 /* LyricsXMLParser.m in Sources */,
 				534050FB11E9966C004AEC41 /* LyricsViewController.m in Sources */,
 				536ACEC711EA449A00387CB0 /* URLCheckConnectionDelegate.m in Sources */,
 				536AD29611EA7EFB00387CB0 /* MGTwitterEngine.m in Sources */,
@@ -4433,6 +4446,9 @@
 				535EFD89145D152A00EDF867 /* SUSChatDAO.m in Sources */,
 				535EFD8E145D153900EDF867 /* SUSChatLoader.m in Sources */,
 				539D6075145E0D7D0018AA90 /* ISMSUpdateChecker.m in Sources */,
+				539B3088145E733C00D06475 /* NSString-time.m in Sources */,
+				539B308D145E750700D06475 /* SUSLyricsLoader.m in Sources */,
+				539B3092145E78AF00D06475 /* SUSLyricsDAO.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4512,7 +4528,6 @@
 				53BC27E1139AF0DD00A825F1 /* GenresGenreUITableViewCell.m in Sources */,
 				53BC27E2139AF0DD00A825F1 /* SettingsTabViewController.m in Sources */,
 				53BC27E3139AF0DD00A825F1 /* HelpTabViewController.m in Sources */,
-				53BC27E4139AF0DD00A825F1 /* LyricsXMLParser.m in Sources */,
 				53BC27E5139AF0DD00A825F1 /* LyricsViewController.m in Sources */,
 				53BC27E6139AF0DD00A825F1 /* URLCheckConnectionDelegate.m in Sources */,
 				53BC27E7139AF0DD00A825F1 /* MGTwitterEngine.m in Sources */,
@@ -4634,6 +4649,9 @@
 				535EFD8B145D152A00EDF867 /* SUSChatDAO.m in Sources */,
 				535EFD90145D153900EDF867 /* SUSChatLoader.m in Sources */,
 				539D6077145E0D7D0018AA90 /* ISMSUpdateChecker.m in Sources */,
+				539B308A145E733C00D06475 /* NSString-time.m in Sources */,
+				539B308F145E750700D06475 /* SUSLyricsLoader.m in Sources */,
+				539B3094145E78AF00D06475 /* SUSLyricsDAO.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4713,7 +4731,6 @@
 				53DCF54213BFEAD3009160F9 /* GenresGenreUITableViewCell.m in Sources */,
 				53DCF54313BFEAD3009160F9 /* SettingsTabViewController.m in Sources */,
 				53DCF54413BFEAD3009160F9 /* HelpTabViewController.m in Sources */,
-				53DCF54513BFEAD3009160F9 /* LyricsXMLParser.m in Sources */,
 				53DCF54613BFEAD3009160F9 /* LyricsViewController.m in Sources */,
 				53DCF54713BFEAD3009160F9 /* URLCheckConnectionDelegate.m in Sources */,
 				53DCF54813BFEAD3009160F9 /* MGTwitterEngine.m in Sources */,
@@ -4835,6 +4852,9 @@
 				535EFD8A145D152A00EDF867 /* SUSChatDAO.m in Sources */,
 				535EFD8F145D153900EDF867 /* SUSChatLoader.m in Sources */,
 				539D6076145E0D7D0018AA90 /* ISMSUpdateChecker.m in Sources */,
+				539B3089145E733C00D06475 /* NSString-time.m in Sources */,
+				539B308E145E750700D06475 /* SUSLyricsLoader.m in Sources */,
+				539B3093145E78AF00D06475 /* SUSLyricsDAO.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

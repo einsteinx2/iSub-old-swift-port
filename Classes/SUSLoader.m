@@ -17,13 +17,18 @@
 @synthesize connection, receivedData;
 @synthesize delegate, loadError;
 
+- (void)setup
+{
+    loadError = nil;
+    delegate = nil;
+}
+
 - (id)init
 {
     self = [super init];
     if (self) 
 	{
-		loadError = nil;
-		delegate = nil;
+        [self setup];
     }
     
     return self;
@@ -34,8 +39,8 @@
 	self = [super init];
     if (self) 
 	{
-		loadError = nil;
 		delegate = theDelegate;
+        [self setup];
 	}
 	
 	return self;
@@ -134,10 +139,7 @@
 	}
 	else if ([action isEqualToString:@"getLyrics.view"])
 	{
-		NSString *encodedArtist = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)musicControls.currentSongObject.artist, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8 );
-		NSString *encodedTitle = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)musicControls.currentSongObject.title, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8 );
-		
-		return [NSString stringWithFormat:@"%@/rest/getLyrics.view?artist=%@&title=%@&u=%@&p=%@&v=1.2.0&c=iSub", urlString, [encodedArtist autorelease], [encodedTitle autorelease], [encodedUserName autorelease], [encodedPassword autorelease]];
+		return [NSString stringWithFormat:@"%@/rest/getLyrics.view?u=%@&p=%@&v=1.2.0&c=iSub", urlString, [encodedUserName autorelease], [encodedPassword autorelease]];
 	}
 	else if ([action isEqualToString:@"getRandomSongs.view"] || [action isEqualToString:@"getAlbumList.view"] || [action isEqualToString:@"jukeboxControl.view"])
 	{

@@ -38,6 +38,8 @@
 
 - (void)setup
 {
+    [super setup];
+    
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	databaseControls = [DatabaseSingleton sharedInstance];
 	settings = [SavedSettings sharedInstance];
@@ -48,26 +50,6 @@
 	notificationTimeArtist = [[NSDate alloc] init];
 	notificationTimeAlbum = [[NSDate alloc] init];
 	notificationTimeSong = [[NSDate alloc] init];
-}
-
-- (id)init
-{
-    if ((self = [super init]))
-	{
-		[self setup];
-	}
-    
-    return self;
-}
-
-- (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate
-{
-	if ((self = [super initWithDelegate:theDelegate]))
-	{
-		[self setup];
-	}
-	
-	return self;
 }
 
 - (void)dealloc

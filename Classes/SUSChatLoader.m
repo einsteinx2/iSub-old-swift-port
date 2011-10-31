@@ -15,29 +15,12 @@
 
 @synthesize chatMessages;
 
+#pragma mark - Lifecycle
+
 - (void)setup
 {
+    [super setup];
 	chatMessages = nil;
-}
-
-- (id)init
-{
-    if ((self = [super init]))
-	{
-		[self setup];
-	}
-    
-    return self;
-}
-
-- (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate
-{
-	if ((self = [super initWithDelegate:theDelegate]))
-	{
-		[self setup];
-	}
-	
-	return self;
 }
 
 - (void)dealloc

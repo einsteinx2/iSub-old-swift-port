@@ -16,7 +16,6 @@
 #import "Artist.h"
 #import "Album.h"
 #import "Song.h"
-#import "LyricsXMLParser.h"
 #import "QueueAlbumXMLParser.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "UIDevice-Hardware.h"
