@@ -31,6 +31,8 @@
 #import "NSString-rfcEncode.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
+#import "NSString+URLEncode.h"
+#import "NSMutableURLRequest+SUS.h"
 
 @implementation SearchSongsViewController
 
@@ -326,41 +328,40 @@
 - (void)loadMoreResults
 {
 	offset += 20;
-	
-	NSString *urlString = @"";
-	/*NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
-	if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])*/
+    NSString *searchTerms = [query URLEncodeString];
+    
+    NSDictionary *parameters = nil;
+    NSString *action = nil;
 	if ([SavedSettings sharedInstance].isNewSearchAPI)
 	{
+        action = @"search2";
 		if (searchType == 0)
 		{
-			urlString = [NSString stringWithFormat:@"%@&artistCount=20&albumCount=0&songCount=0&query=%@&artistOffset=%i", 
-						 [appDelegate getBaseUrl:@"search2.view"], [query stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding], offset];
+            parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"artistCount", @"0", @"albumCount", @"0", @"songCount", 
+                          n2N([NSString stringWithFormat:@"%@*", searchTerms]), @"query", n2N([NSString stringWithFormat:@"%i", offset]), @"artistOffset", nil];
 		}
 		else if (searchType == 1)
 		{
-			urlString = [NSString stringWithFormat:@"%@&artistCount=0&albumCount=20&songCount=0&query=%@&albumOffset=%i", 
-						 [appDelegate getBaseUrl:@"search2.view"], [query stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding], offset];
+            parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"0", @"artistCount", @"20", @"albumCount", @"0", @"songCount", 
+                          n2N([NSString stringWithFormat:@"%@*", searchTerms]), @"query", n2N([NSString stringWithFormat:@"%i", offset]), @"albumOffset", nil];
 		}
 		else
 		{
-			urlString = [NSString stringWithFormat:@"%@&artistCount=0&albumCount=0&songCount=20&query=%@&songOffset=%i", 
-						 [appDelegate getBaseUrl:@"search2.view"], [query stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding], offset];
+            parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"0", @"artistCount", @"0", @"albumCount", @"20", @"songCount", 
+                          n2N([NSString stringWithFormat:@"%@*", searchTerms]), @"query", n2N([NSString stringWithFormat:@"%i", offset]), @"songOffset", nil];
 		}
 	}
 	else
 	{
-		urlString = [NSString stringWithFormat:@"%@&count=20&any=%@&offset=%i", 
-					 [appDelegate getBaseUrl:@"search.view"], [query stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding], offset];
+        action = @"search";
+        parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"count", n2N(searchTerms), @"any", n2N([NSString stringWithFormat:@"%i", offset]), @"offset", nil];
 	}
-	//DLog(@"urlString: %@", urlString);
-	
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:action andParameters:parameters];
+
 	self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
 	{
-		// Create the NSMutableData to hold the received data.
-		// receivedData is an instance variable declared elsewhere.
 		receivedData = [[NSMutableData data] retain];
 	} 
 	else 
@@ -390,7 +391,6 @@
 		[cell addSubview:indicator];
 		[indicator startAnimating];
 		[indicator release];
-		//[self performSelectorInBackground:@selector(loadMoreResults) withObject:nil];
 		[self loadMoreResults];
 	}
 	else 

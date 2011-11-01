@@ -24,6 +24,7 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
+#import "NSMutableURLRequest+SUS.h"
  
 static MusicSingleton *sharedInstance = nil;
 
@@ -1218,8 +1219,10 @@ static MusicSingleton *sharedInstance = nil;
 
 - (void)scrobbleSong:(NSString*)songId isSubmission:(BOOL)isSubmission
 {
-	NSString *urlString = [NSString stringWithFormat:@"%@%@&submission=%i", [appDelegate getBaseUrl:@"scrobble.view"], songId, isSubmission];
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+    NSString *isSubmissionString = [NSString stringWithFormat:@"%i", isSubmission];
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(songId), @"id", n2N(isSubmissionString), @"submission", nil];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"scrobble" andParameters:parameters];
+    
 	[[NSURLConnection alloc] initWithRequest:request delegate:self];
 }
 
@@ -1318,9 +1321,12 @@ static MusicSingleton *sharedInstance = nil;
 	JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
 	
 	seekTime = 0.0;
+    
+    NSString *positionString = [NSString stringWithFormat:@"%i", position];
+    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"skip", @"action", n2N(positionString), @"index", nil];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
 	
-	NSString *urlString = [NSString stringWithFormat:@"%@&action=skip&index=%i", [appDelegate getBaseUrl:@"jukeboxControl.view"], position];
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kJukeboxTimeout];
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
 	{
@@ -1347,9 +1353,10 @@ static MusicSingleton *sharedInstance = nil;
 	JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
 	
 	seekTime = 0.0;
+    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:@"start" forKey:@"action"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
 	
-	NSString *urlString = [NSString stringWithFormat:@"%@&action=start", [appDelegate getBaseUrl:@"jukeboxControl.view"]];
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kJukeboxTimeout];
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
 	{
@@ -1374,9 +1381,10 @@ static MusicSingleton *sharedInstance = nil;
 {
 	
 	JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
+    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:@"stop" forKey:@"action"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
 	
-	NSString *urlString = [NSString stringWithFormat:@"%@&action=stop", [appDelegate getBaseUrl:@"jukeboxControl.view"]];
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kJukeboxTimeout];
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
 	{
@@ -1433,9 +1441,12 @@ static MusicSingleton *sharedInstance = nil;
 - (void)jukeboxSetVolume:(float)level
 {
 	JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
+    
+    NSString *gainString = [NSString stringWithFormat:@"%f", level];
+    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"setGain", @"action", n2N(gainString), @"gain", nil];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
 	
-	NSString *urlString = [NSString stringWithFormat:@"%@&action=setGain&gain=%f", [appDelegate getBaseUrl:@"jukeboxControl.view"], level];
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kJukeboxTimeout];
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
 	{
@@ -1457,9 +1468,10 @@ static MusicSingleton *sharedInstance = nil;
 - (void)jukeboxAddSong:(NSString*)songId
 {
 	JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
+    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"add", @"action", n2N(songId), @"id", nil];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
 	
-	NSString *urlString = [NSString stringWithFormat:@"%@&action=add&id=%@", [appDelegate getBaseUrl:@"jukeboxControl.view"], songId];
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kJukeboxTimeout];
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
 	{
@@ -1482,18 +1494,17 @@ static MusicSingleton *sharedInstance = nil;
 {
 	if ([songIds count] > 0)
 	{
-		NSMutableString *urlString = [NSMutableString stringWithFormat:@"%@&action=add", [appDelegate getBaseUrl:@"jukeboxControl.view"]];
-		
+        JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
+        
+        NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:@"add" forKey:@"action"];
 		for (NSString *songId in songIds)
 		{
-			[urlString appendString:@"&id="];
-			[urlString appendString:songId];
+            [parameters setObject:n2N(songId) forKey:@"id"];
 		}
-				
-		JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
 		
-		NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kJukeboxTimeout];
-		NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
+		
+        NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 		if (connection)
 		{
 			[connectionQueue registerConnection:connection];
@@ -1540,9 +1551,10 @@ static MusicSingleton *sharedInstance = nil;
 - (void)jukeboxRemoveSong:(NSString*)songId
 {
 	JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
+    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"remove", @"action", n2N(songId), @"id", nil];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
 	
-	NSString *urlString = [NSString stringWithFormat:@"%@&action=remove&id=%@", [appDelegate getBaseUrl:@"jukeboxControl.view"], songId];
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kJukeboxTimeout];
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
 	{
@@ -1564,9 +1576,10 @@ static MusicSingleton *sharedInstance = nil;
 - (void)jukeboxClearPlaylist
 {
 	JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
+    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:@"clear" forKey:@"action"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
 	
-	NSString *urlString = [NSString stringWithFormat:@"%@&action=clear", [appDelegate getBaseUrl:@"jukeboxControl.view"]];
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kJukeboxTimeout];
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
 	{
@@ -1590,9 +1603,10 @@ static MusicSingleton *sharedInstance = nil;
 - (void)jukeboxClearRemotePlaylist
 {
 	JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
+    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:@"clear" forKey:@"action"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
 	
-	NSString *urlString = [NSString stringWithFormat:@"%@&action=clear", [appDelegate getBaseUrl:@"jukeboxControl.view"]];
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kJukeboxTimeout];
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
 	{
@@ -1615,8 +1629,9 @@ static MusicSingleton *sharedInstance = nil;
 {
 	JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
 	
-	NSString *urlString = [NSString stringWithFormat:@"%@&action=shuffle", [appDelegate getBaseUrl:@"jukeboxControl.view"]];
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kJukeboxTimeout];
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:@"shuffle" forKey:@"action"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
+    
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
 	{
@@ -1641,9 +1656,10 @@ static MusicSingleton *sharedInstance = nil;
 {	
 	JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
 	connDelegate.isGetInfo = YES;
+    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:@"get" forKey:@"action"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
 	
-	NSString *urlString = [NSString stringWithFormat:@"%@&action=get", [appDelegate getBaseUrl:@"jukeboxControl.view"]];
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kJukeboxTimeout];
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
 	{

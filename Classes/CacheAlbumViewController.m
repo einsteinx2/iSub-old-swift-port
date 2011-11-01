@@ -22,6 +22,7 @@
 #import "NSString-md5.h"
 #import "SavedSettings.h"
 #import "NSString-time.h"
+#import "NSMutableURLRequest+SUS.h"
 
 @implementation CacheAlbumViewController
 
@@ -637,8 +638,9 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			[musicControls playPauseSong];
 			
 			// Grab the first bytes of the song to trick Subsonic into seeing that it's being played
-			NSURL *songUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], musicControls.currentSongObject.songId]];
-			NSURLRequest *request = [NSURLRequest requestWithURL:songUrl cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+            NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(musicControls.currentSongObject.songId) forKey:@"id"];
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters];
+            
 			NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:musicControls];
 			if (!connection)
 			{

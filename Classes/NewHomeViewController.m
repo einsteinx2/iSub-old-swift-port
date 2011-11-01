@@ -34,6 +34,9 @@
 #import <QuartzCore/QuartzCore.h>
 #import "SavedSettings.h"
 #import "SUSRootFoldersDAO.h"
+#import "NSMutableURLRequest+SUS.h"
+#import "NSString+URLEncode.h"
+#import "NSMutableURLRequest+SUS.h"
 
 @implementation NewHomeViewController
 
@@ -380,10 +383,10 @@
 {
 	// Start the 100 record open search to create shuffle list
 	isSearch = NO;
-	NSString *urlString = @"";
+	NSDictionary *parameters = nil;
 	if (notification == nil)
 	{
-		urlString = [NSString stringWithFormat:@"%@&size=100", [appDelegate getBaseUrl:@"getRandomSongs.view"]];
+        parameters = [NSDictionary dictionaryWithObject:@"100" forKey:@"size"];
 	}
 	else 
 	{
@@ -391,17 +394,16 @@
 		NSInteger folderId = [[userInfo objectForKey:@"folderId"] intValue];
 		
 		if (folderId < 0)
-			urlString = [NSString stringWithFormat:@"%@&size=100", [appDelegate getBaseUrl:@"getRandomSongs.view"]];
+            parameters = [NSDictionary dictionaryWithObject:@"100" forKey:@"size"];
 		else
-			urlString = [NSString stringWithFormat:@"%@&size=100&musicFolderId=%i", [appDelegate getBaseUrl:@"getRandomSongs.view"], folderId];
+            parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"100", @"size", n2N([NSString stringWithFormat:@"%i", folderId]), @"musicFolderId", nil];
 	}
-	DLog(@"urlString: %@", urlString);
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getRandomSongs" andParameters:parameters];
+    
 	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
 	{
-		// Create the NSMutableData to hold the received data.
-		// receivedData is an instance variable declared elsewhere.
 		receivedData = [[NSMutableData data] retain];
 		
 		// Display the loading screen
@@ -409,7 +411,6 @@
 			[viewObjects showAlbumLoadingScreen:appDelegate.splitView.view sender:self];
 		else
 			[viewObjects showAlbumLoadingScreen:appDelegate.currentTabBarController.view sender:self];
-		//[viewObjects showLoadingScreenOnMainWindow];
 	} 
 	else 
 	{
@@ -606,51 +607,45 @@
 	
 	[searchBar resignFirstResponder];
 	
-	// Perform the search
-	NSString *urlString = @"";
+	NSString *searchTerms = [[searchBar.text stringByTrimmingLeadingAndTrailingWhitespace] URLEncodeString];
 	
-	NSString *searchTerms = [[searchBar.text stringByTrimmingLeadingAndTrailingWhitespace] 
-							 stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	
-	//NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
-	//if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
+    NSDictionary *parameters = nil;
+    NSString *action = nil;
 	if ([SavedSettings sharedInstance].isNewSearchAPI)
 	{
+        action = @"search2";
 		if (searchSegment.selectedSegmentIndex == 0)
 		{
-			urlString = [NSString stringWithFormat:@"%@&artistCount=20&albumCount=0&songCount=0&query=%@*", 
-						 [appDelegate getBaseUrl:@"search2.view"], searchTerms];
+            parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"artistCount", @"0", @"albumCount", @"0", @"songCount", 
+                          n2N([NSString stringWithFormat:@"%@*", searchTerms]), @"query", nil];
 		}
 		else if (searchSegment.selectedSegmentIndex == 1)
 		{
-			urlString = [NSString stringWithFormat:@"%@&artistCount=0&albumCount=20&songCount=0&query=%@*", 
-						 [appDelegate getBaseUrl:@"search2.view"], searchTerms];
+            parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"0", @"artistCount", @"20", @"albumCount", @"0", @"songCount", 
+                          n2N([NSString stringWithFormat:@"%@*", searchTerms]), @"query", nil];
 		}
 		else if (searchSegment.selectedSegmentIndex == 2)
 		{
-			urlString = [NSString stringWithFormat:@"%@&artistCount=0&albumCount=0&songCount=20&query=%@*", 
-						 [appDelegate getBaseUrl:@"search2.view"], searchTerms];
+            parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"0", @"artistCount", @"0", @"albumCount", @"20", @"songCount", 
+                          n2N([NSString stringWithFormat:@"%@*", searchTerms]), @"query", nil];
 		}
 		else
 		{
-			urlString = [NSString stringWithFormat:@"%@&artistCount=20&albumCount=20&songCount=20&query=%@*", 
-						 [appDelegate getBaseUrl:@"search2.view"], searchTerms];
+            parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"artistCount", @"20", @"albumCount", @"20", @"songCount", 
+                          n2N([NSString stringWithFormat:@"%@*", searchTerms]), @"query", nil];
 		}
 	}
 	else
 	{
-		urlString = [NSString stringWithFormat:@"%@&count=20&any=%@", 
-					 [appDelegate getBaseUrl:@"search.view"], searchTerms];
+        action = @"search";
+        parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"count", n2N(searchTerms), @"any", nil];
 	}
-	
-	//DLog(@"search url: %@", urlString);
-	
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+		
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:action andParameters:parameters];
+    
 	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
 	{
-		// Create the NSMutableData to hold the received data.
-		// receivedData is an instance variable declared elsewhere.
 		receivedData = [[NSMutableData data] retain];
 		
 		// Display the loading screen

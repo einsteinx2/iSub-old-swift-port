@@ -116,7 +116,6 @@
 - (void)appInit2;
 - (void)createAndDisplayUI;
 
-- (NSString *)getBaseUrl:(NSString *)action;
 - (void)reachabilityChanged: (NSNotification *)note;
 - (NSString *)getIPAddressForHost:(NSString *)theHost;
 - (NSInteger)getHour;

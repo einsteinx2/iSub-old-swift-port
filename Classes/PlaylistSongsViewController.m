@@ -25,6 +25,7 @@
 #import "NSString-rfcEncode.h"
 #import "TBXML.h"
 #import "SavedSettings.h"
+#import "NSMutableURLRequest+SUS.h"
 
 @interface PlaylistSongsViewController (Private)
 
@@ -116,14 +117,9 @@
 
 -(void)loadData
 {
-	//viewObjects.listOfPlaylistSongs = nil;
-	//[databaseControls removeServerPlaylistTable:md5];
-	//playlistCount = 0;
-	//[self.tableView reloadData];
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N([viewObjects.subsonicPlaylist objectAtIndex:0]) forKey:@"id"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getPlaylist" andParameters:parameters];
 	
-	NSString *urlString = [NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"getPlaylist.view"], [viewObjects.subsonicPlaylist objectAtIndex:0]];
-	DLog(@"server playlist urlString: %@", urlString);
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:3600.0]; // Timeout set to 60 mins to prevent timeout errors
 	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
 	{

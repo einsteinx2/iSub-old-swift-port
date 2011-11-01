@@ -18,6 +18,7 @@
 #import "FMDatabaseAdditions.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
+#import "NSMutableURLRequest+SUS.h"
 
 @implementation SUSQueueAllDAO
 
@@ -45,9 +46,10 @@
 {	
 	NSString *folderId = [folderIds objectAtIndex:0];
 	//DLog(@"Loading folderid: %@", folderId);
-	
-	NSString *urlString = [NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"getMusicDirectory.view"], folderId];
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:folderId forKey:@"id"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getMusicDirectory" andParameters:parameters];
+    
 	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
 	{

@@ -13,6 +13,7 @@
 #import "CustomUIAlertView.h"
 #import "NSString-md5.h"
 #import "SUSRootFoldersDAO.h"
+#import "NSMutableURLRequest+SUS.h"
 
 @implementation FolderDropdownControl
 @synthesize folders, selectedFolderId;
@@ -250,12 +251,9 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 }
 
 - (void)updateFolders
-{
-	iSubAppDelegate *appDelegate = [iSubAppDelegate sharedInstance];
-	
-	NSString *urlString = [appDelegate getBaseUrl:@"getMusicFolders.view"];
-		
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+{    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getMusicFolders" andParameters:nil];
+    
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
 	{

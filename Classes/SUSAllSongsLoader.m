@@ -17,6 +17,7 @@
 #import "Album.h"
 #import "Song.h"
 #import "SUSRootFoldersDAO.h"
+#import "NSMutableURLRequest+SUS.h"
 
 @interface SUSAllSongsLoader (Private)
 
@@ -289,13 +290,15 @@ static NSInteger order (id a, id b, void* context)
 		[self sendAlbumNotification:currentAlbum.title];
 	}
 	
-	NSString *urlString = nil;
+	NSString *dirId = nil;
 	if (iteration == -1)
-		urlString = [NSString stringWithFormat:@"%@%@", [self getBaseUrlString:@"getMusicDirectory.view"], currentArtist.artistId];
+		dirId = [[currentArtist.artistId copy] autorelease];
 	else
-		urlString = [NSString stringWithFormat:@"%@%@", [self getBaseUrlString:@"getMusicDirectory.view"], currentAlbum.albumId];
-	//DLog(@"loading url: %@", urlString);
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+		dirId = [[currentAlbum.albumId copy] autorelease];
+    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:dirId forKey:@"id"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getMusicDirectory" andParameters:parameters];
+    
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)
 	{

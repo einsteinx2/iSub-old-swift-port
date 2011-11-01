@@ -23,9 +23,6 @@
 - (void)cancelLoad; // Override this
 
 - (void) subsonicErrorCode:(NSInteger)errorCode message:(NSString *)message;
-- (NSString *)getBaseUrlString:(NSString *)action;
-
-
 
 #pragma mark - Connection Delegate
 - (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space;

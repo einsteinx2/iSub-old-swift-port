@@ -23,6 +23,7 @@
 #import "MGSplitViewController.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
+#import "NSMutableURLRequest+SUS.h"
 
 @implementation PlayingViewController
 
@@ -82,7 +83,8 @@
 	//viewObjects.listOfPlayingSongs = nil, viewObjects.listOfPlayingSongs = [[NSMutableArray alloc] init];
 
 	// Load the data
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[appDelegate getBaseUrl:@"getNowPlaying.view"]] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getNowPlaying" andParameters:nil];
+    
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
 	{

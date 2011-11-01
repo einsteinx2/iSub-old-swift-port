@@ -13,6 +13,7 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "NSString-rfcEncode.h"
+#import "NSMutableURLRequest+SUS.h"
 
 @implementation SUSLyricsLoader
 
@@ -39,13 +40,9 @@
 
 - (void)startLoad
 {
-    NSString *encodedArtist = [artist stringByAddingRFC3875PercentEscapesUsingEncoding:kCFStringEncodingUTF8];
-    NSString *encodedTitle = [title stringByAddingRFC3875PercentEscapesUsingEncoding:kCFStringEncodingUTF8];
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(artist), @"artist", n2N(title), @"title", nil];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getLyrics" andParameters:parameters];
     
-    NSString *urlString = [NSString stringWithFormat:@"%@&artist=%@&title=%@", [self getBaseUrlString:@"getLyrics.view"], encodedArtist, encodedTitle];
-    
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] 
-                                             cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)
 	{

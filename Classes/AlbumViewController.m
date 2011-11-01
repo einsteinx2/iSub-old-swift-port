@@ -25,17 +25,14 @@
 #import "LoadingScreen.h"
 #import "NSString-hex.h"
 #import "AsynchronousImageView.h"
-
 #import "EGORefreshTableHeaderView.h"
-
 #import "ModalAlbumArtViewController.h"
-
 #import "CustomUIAlertView.h"
-
 #import "SavedSettings.h"
 #import "NSString-time.h"
-
 #import "NSData+Base64.h"
+#import "NSMutableURLRequest+SUS.h"
+#import "NSString+URLEncode.h"
 
 @interface AlbumViewController (Private)
 
@@ -199,26 +196,13 @@
 }
 
 - (void)loadData
-{
-	/*NSString *urlString = [NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"getMusicDirectory.view"], self.myId];
-	//DLog(@"loading from the server: %@", urlString);
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];*/
-    
-    SavedSettings *settings = [SavedSettings sharedInstance];
-    
-    NSString *urlString = [NSString stringWithFormat:@"%@/rest/%@?v=1.1.0&c=iSub", settings.urlString, @"getMusicDirectory.view"];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
-    
-    NSString *authStr = [NSString stringWithFormat:@"%@:%@", settings.username, settings.password];
-    NSData *authData = [authStr dataUsingEncoding:NSASCIIStringEncoding];
-    NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64EncodingWithLineLength:0]];
-    [request setValue:authValue forHTTPHeaderField:@"Authorization"];
+{    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:self.myId forKey:@"id"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getMusicDirectory" andParameters:parameters];
     
 	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
 	{
-		// Create the NSMutableData to hold the received data.
-		// receivedData is an instance variable declared elsewhere.
 		loadingData = [[NSMutableData data] retain];
 		
 		[viewObjects showAlbumLoadingScreen:self.view sender:self];
@@ -806,6 +790,7 @@
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
 	NSLog(@"album load connection finished, parsing...");
+    DLog(@"received data: %@", [[[NSString alloc] initWithData:loadingData encoding:NSUTF8StringEncoding] autorelease]);
 	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:loadingData];
 	XMLParser *parser = [[XMLParser alloc] initXMLParser];
 	

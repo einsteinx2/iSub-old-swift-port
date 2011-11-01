@@ -10,6 +10,7 @@
 #import "NSError-ISMSError.h"
 #import "TBXML.h"
 #import "ChatMessage.h"
+#import "NSMutableURLRequest+SUS.h"
 
 @implementation SUSChatLoader
 
@@ -33,7 +34,8 @@
 
 - (void)loadData
 {
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[self getBaseUrlString:@"getChatMessages.view"]] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getChatMessages" andParameters:nil];
+    
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)
 	{

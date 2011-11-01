@@ -14,6 +14,7 @@
 #import "GTMNSString+HTML.h"
 #import "SavedSettings.h"
 #import "NSError-ISMSError.h"
+#import "NSMutableURLRequest+SUS.h"
 
 @implementation SUSRootFoldersLoader
 
@@ -145,18 +146,14 @@
 - (void)startLoad
 {
 	DLog(@"Starting load");
-	NSString *urlString = @"";
-	if (selectedFolderId == nil || [selectedFolderId intValue] == -1)
+    NSDictionary *parameters = nil;
+	if (selectedFolderId != nil && [selectedFolderId intValue] != -1)
 	{
-		urlString = [self getBaseUrlString:@"getIndexes.view"];
+        parameters = [NSDictionary dictionaryWithObject:n2N([selectedFolderId stringValue]) forKey:@"musicFolderId"];
 	}
-	else
-	{
-		urlString = [NSString stringWithFormat:@"%@&musicFolderId=%i", [self getBaseUrlString:@"getIndexes.view"], [selectedFolderId intValue]];
-	}
-	//DLog(@"urlString: %@", urlString);
-	
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getIndexes" andParameters:parameters];
+    
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)
 	{

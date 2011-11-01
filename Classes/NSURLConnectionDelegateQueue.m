@@ -16,6 +16,7 @@
 #import "FMDatabaseAdditions.h"
 #import "NSURLConnectionDelegateQueueArtwork.h"
 #import "CustomUIAlertView.h"
+#import "NSMutableURLRequest+SUS.h"
 
 @implementation NSURLConnectionDelegateQueue
 
@@ -137,49 +138,45 @@
 		// Cache the album art if it exists
 		if (musicControls.queueSongObject.coverArtId)
 		{
-			if ([databaseControls.coverArtCacheDb320 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:musicControls.queueSongObject.coverArtId]] == 0)
+            NSString *size = nil;
+            NSString *artId = [[musicControls.queueSongObject.coverArtId copy] autorelease];
+            NSURLConnectionDelegateQueueArtwork *delegate = [[NSURLConnectionDelegateQueueArtwork alloc] init];
+            
+			if ([databaseControls.coverArtCacheDb320 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", 
+                 [musicControls.queueSongObject.coverArtId md5]] == 0)
 			{
-				//DLog(@"320 artwork doesn't exist, caching");
-				NSString *imgUrlString;
 				if (SCREEN_SCALE() == 2.0)
 				{
-					imgUrlString = [NSString stringWithFormat:@"%@%@&size=640", [appDelegate getBaseUrl:@"getCoverArt.view"], musicControls.queueSongObject.coverArtId];
+                    size = @"640";
 				}
 				else 
 				{
-					imgUrlString = [NSString stringWithFormat:@"%@%@&size=320", [appDelegate getBaseUrl:@"getCoverArt.view"], musicControls.queueSongObject.coverArtId];
+                    size = @"320";
 				}
-				NSURLConnectionDelegateQueueArtwork *delegate = [[NSURLConnectionDelegateQueueArtwork alloc] init];
-				NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:imgUrlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
-				NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:delegate];
-				if (connection)
-				{
-					delegate.receivedData = [NSMutableData data];
-				} 
-				[delegate release];
 			}
-			if ([databaseControls.coverArtCacheDb60 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:musicControls.queueSongObject.coverArtId]] == 0)
+			if ([databaseControls.coverArtCacheDb60 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", 
+                 [musicControls.queueSongObject.coverArtId md5]] == 0)
 			{
-				//DLog(@"60 artwork doesn't exist, caching");
-				NSString *imgUrlString;
 				if (SCREEN_SCALE() == 2.0)
 				{
-					imgUrlString = [NSString stringWithFormat:@"%@%@&size=120", [appDelegate getBaseUrl:@"getCoverArt.view"], musicControls.queueSongObject.coverArtId];
+                    size = @"120";
 				}
 				else 
 				{
-					imgUrlString = [NSString stringWithFormat:@"%@%@&size=60", [appDelegate getBaseUrl:@"getCoverArt.view"], musicControls.queueSongObject.coverArtId];
+                    size = @"60";
 				}
-				NSURLConnectionDelegateQueueArtwork *delegate = [[NSURLConnectionDelegateQueueArtwork alloc] init];
 				delegate.is320 = NO;
-				NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:imgUrlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
-				NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:delegate];
-				if (connection)
-				{
-					delegate.receivedData = [NSMutableData data];
-				} 
-				[delegate release];
-			}
+            }
+            
+            NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(size), @"size", n2N(artId), @"id", nil];
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getCoverArt" andParameters:parameters];
+            
+            NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:delegate];
+            if (connection)
+            {
+                delegate.receivedData = [NSMutableData data];
+            } 
+            [delegate release];
 		}
 		
 		// Close the file

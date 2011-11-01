@@ -17,6 +17,7 @@
 #import "NSString-md5.h"
 #import "FMDatabase.h"
 #import "PageControlViewController.h"
+#import "NSMutableURLRequest+SUS.h"
 
 @implementation AsynchronousImageView
 
@@ -122,23 +123,25 @@
 	
 	songAtTimeOfLoad = [musicControls.currentSongObject copy];
 
-	NSURL *theUrl;
+	NSString *size = nil;
 	if (IS_IPAD())
 	{
-		theUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@&size=540", [appDelegate getBaseUrl:@"getCoverArt.view"], coverArtId]];
+        size = @"540";
 	}
 	else
 	{
 		if (SCREEN_SCALE() == 2.0)
 		{
-			theUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@&size=640", [appDelegate getBaseUrl:@"getCoverArt.view"], coverArtId]];
+            size = @"640";
 		}
 		else
 		{	
-			theUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@&size=320", [appDelegate getBaseUrl:@"getCoverArt.view"], coverArtId]];
+            size = @"320";
 		}
 	}
-	NSURLRequest *request = [NSURLRequest requestWithURL:theUrl cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30.0];
+    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(size), @"size", n2N(artId), @"id", nil];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getCoverArt" andParameters:parameters];
 	
 	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	data = [[NSMutableData data] retain];

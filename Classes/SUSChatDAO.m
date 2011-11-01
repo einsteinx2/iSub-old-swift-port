@@ -10,6 +10,7 @@
 #import "NSString-rfcEncode.h"
 #import "SUSChatLoader.h"
 #import "NSError-ISMSError.h"
+#import "NSMutableURLRequest+SUS.h"
 
 @implementation SUSChatDAO
 @synthesize loader, delegate, chatMessages, connection, receivedData;
@@ -53,12 +54,12 @@
 
 - (void)sendChatMessage:(NSString *)message
 {
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[loader getBaseUrlString:@"sendChatMessages.view"]] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(message) forKey:@"message"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"addChatMessage" andParameters:parameters];
+
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)
 	{
-		// Create the NSMutableData to hold the received data.
-		// receivedData is an instance variable declared elsewhere.
 		self.receivedData = [NSMutableData data];
 	} 
 	else 
