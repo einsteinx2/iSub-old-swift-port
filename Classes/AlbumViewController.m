@@ -35,6 +35,8 @@
 #import "SavedSettings.h"
 #import "NSString-time.h"
 
+#import "NSData+Base64.h"
+
 @interface AlbumViewController (Private)
 
 - (void)dataSourceDidFinishLoadingNewData;
@@ -198,9 +200,20 @@
 
 - (void)loadData
 {
-	NSString *urlString = [NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"getMusicDirectory.view"], self.myId];
+	/*NSString *urlString = [NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"getMusicDirectory.view"], self.myId];
 	//DLog(@"loading from the server: %@", urlString);
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];*/
+    
+    SavedSettings *settings = [SavedSettings sharedInstance];
+    
+    NSString *urlString = [NSString stringWithFormat:@"%@/rest/%@?v=1.1.0&c=iSub", settings.urlString, @"getMusicDirectory.view"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+    
+    NSString *authStr = [NSString stringWithFormat:@"%@:%@", settings.username, settings.password];
+    NSData *authData = [authStr dataUsingEncoding:NSASCIIStringEncoding];
+    NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64EncodingWithLineLength:0]];
+    [request setValue:authValue forHTTPHeaderField:@"Authorization"];
+    
 	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
 	{
