@@ -39,8 +39,9 @@
 	self = [super init];
     if (self) 
 	{
-		delegate = theDelegate;
         [self setup];
+		delegate = theDelegate;
+        DLog(@"init with delegate %@", delegate);
 	}
 	
 	return self;

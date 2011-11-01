@@ -316,6 +316,7 @@
 	[[SavedSettings sharedInstance] setRootFoldersReloadTime:[NSDate date]];
 	
 	// Notify the delegate that the loading is finished
+    DLog(@"calling delegate %@ loadingFinished", self.delegate);
 	[self.delegate loadingFinished:self];
 }
 

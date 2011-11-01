@@ -45,6 +45,7 @@
 
 - (void)dataSourceDidFinishLoadingNewData;
 - (void)addCount;
+-(void)loadData:(NSNumber *)folderId;
 
 @end
 
@@ -58,6 +59,8 @@
 @synthesize reloading=_reloading;
 
 @synthesize dataModel;
+
+#pragma mark - Rotation
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -78,6 +81,8 @@
  
 	[UIView commitAnimations];
 }
+
+#pragma mark - Lifecycle
 
 - (void)createDataModel
 {
@@ -127,6 +132,54 @@
 	if ([dataModel isRootFolderIdCached])
 		[self addCount];
 }
+
+-(void)viewWillAppear:(BOOL)animated 
+{
+	[super viewWillAppear:animated];
+	
+	if(musicControls.showPlayerIcon)
+	{
+		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
+	}
+	else
+	{
+		self.navigationItem.rightBarButtonItem = nil;
+	}
+	
+	if (!viewObjects.isAlbumsLoading && !viewObjects.isSongsLoading && !viewObjects.isArtistsLoading)
+	{
+		if (![dataModel isRootFolderIdCached])
+		{
+			[self loadData:[[SavedSettings sharedInstance] rootFoldersSelectedFolderId]];
+		}
+	}
+}
+
+
+- (void)didReceiveMemoryWarning 
+{
+	// Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+}
+
+
+- (void)viewDidUnload {
+	// Release anything that can be recreated in viewDidLoad or on demand.
+	// e.g. self.myOutlet = nil;
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"endSearch" object:searchOverlayView];
+    
+}
+
+
+- (void)dealloc {
+	[searchBar release];
+	[searchOverlayView release];
+	[dropdown release];
+    [super dealloc];
+}
+
+#pragma mark - Loading
 
 - (void)updateCount
 {
@@ -232,6 +285,7 @@
 
 - (void)loadingFinished:(SUSLoader*)theLoader
 {	
+    DLog(@"loadingFinished called");
 	if (!isCountShowing)
 		[self addCount];
 	else
@@ -246,52 +300,6 @@
 	[allArtistsLoadingScreen hide]; [allArtistsLoadingScreen release];
 	
 	[self dataSourceDidFinishLoadingNewData];
-}
-
--(void)viewWillAppear:(BOOL)animated 
-{
-	[super viewWillAppear:animated];
-	
-	if(musicControls.showPlayerIcon)
-	{
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
-	}
-	else
-	{
-		self.navigationItem.rightBarButtonItem = nil;
-	}
-	
-	if (!viewObjects.isAlbumsLoading && !viewObjects.isSongsLoading && !viewObjects.isArtistsLoading)
-	{
-		if (![dataModel isRootFolderIdCached])
-		{
-			[self loadData:[[SavedSettings sharedInstance] rootFoldersSelectedFolderId]];
-		}
-	}
-}
-
-
-- (void)didReceiveMemoryWarning 
-{
-	// Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-}
-
-
-- (void)viewDidUnload {
-	// Release anything that can be recreated in viewDidLoad or on demand.
-	// e.g. self.myOutlet = nil;
-	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"endSearch" object:searchOverlayView];
-
-}
-
-
-- (void)dealloc {
-	[searchBar release];
-	[searchOverlayView release];
-	[dropdown release];
-    [super dealloc];
 }
 
 #pragma mark - Folder Dropdown Delegate
