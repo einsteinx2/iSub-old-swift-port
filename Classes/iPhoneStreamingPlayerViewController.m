@@ -71,7 +71,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)viewDidLoad2
 {
-	musicControls.songUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], [musicControls.currentSongObject songId]]];
+    musicControls.songUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:musicControls.currentSongObject.songId]];
 	
 	//if([[appDelegate.settingsDictionary objectForKey:@"autoPlayerInfoSetting"] isEqualToString:@"YES"])
 	if ([SavedSettings sharedInstance].isAutoShowSongInfoEnabled)

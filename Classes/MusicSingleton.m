@@ -339,7 +339,7 @@ static MusicSingleton *sharedInstance = nil;
 			[databaseControls.songCacheDb executeUpdate:[NSString stringWithFormat:@"UPDATE cachedSongs SET cachedDate = %i, playedDate = 0 WHERE md5 = ?", (NSUInteger)[[NSDate date] timeIntervalSince1970]], downloadFileNameHashB];
 			
 			// Set the song url
-			self.nextSongUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], nextSongObject.songId]];
+            self.nextSongUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:nextSongObject.songId]];
 			
 			// Remove and recreate the song file on disk
 			[[NSFileManager defaultManager] removeItemAtPath:downloadFileNameB error:NULL];
@@ -358,7 +358,7 @@ static MusicSingleton *sharedInstance = nil;
 		[databaseControls.songCacheDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO cachedSongs (md5, finished, cachedDate, playedDate, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES ('%@', 'NO', %i, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", downloadFileNameHashB, (NSUInteger)[[NSDate date] timeIntervalSince1970]], nextSongObject.title, nextSongObject.songId, nextSongObject.artist, nextSongObject.album, nextSongObject.genre, nextSongObject.coverArtId, nextSongObject.path, nextSongObject.suffix, nextSongObject.transcodedSuffix, nextSongObject.duration, nextSongObject.bitRate, nextSongObject.track, nextSongObject.year, nextSongObject.size];
 		
 		// Set the song url
-		self.nextSongUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], nextSongObject.songId]];
+        self.nextSongUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:nextSongObject.songId]];
 		
 		// Create new file on disk
 		[[NSFileManager defaultManager] createFileAtPath:downloadFileNameB contents:[NSData data] attributes:nil];
@@ -554,7 +554,7 @@ static MusicSingleton *sharedInstance = nil;
 				[databaseControls.songCacheDb executeUpdate:@"DELETE FROM cachedSongs WHERE md5 = downloadFileNameHashQueue"];
 				
 				// Set the song url
-				self.queueSongUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], queueSongObject.songId]];
+                self.queueSongUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:queueSongObject.songId]];
 				
 				// Remove and recreate the song file on disk
 				[[NSFileManager defaultManager] removeItemAtPath:downloadFileNameQueue error:NULL];
@@ -607,7 +607,7 @@ static MusicSingleton *sharedInstance = nil;
 			// The song has not been cached yet, start from scratch
 			
 			// Set the song url
-			self.queueSongUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], queueSongObject.songId]];
+            self.queueSongUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:queueSongObject.songId]];
 			
 			// Create new file on disk
 			[[NSFileManager defaultManager] createFileAtPath:downloadFileNameQueue contents:[NSData data] attributes:nil];
@@ -777,7 +777,7 @@ static MusicSingleton *sharedInstance = nil;
 	}
 	else
 	{
-		self.songUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], currentSongObject.songId]];
+        self.songUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:currentSongObject.songId]];
 		
 		[self destroyStreamer];
 		seekTime = 0.0;
@@ -821,7 +821,7 @@ static MusicSingleton *sharedInstance = nil;
 					self.nextSongObject = [databaseControls songFromDbRow:(index + 1) inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 				}
 				
-				self.songUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], currentSongObject.songId]];
+                self.songUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:currentSongObject.songId]];
 				
 				[self destroyStreamer];
 				seekTime = 0.0;
@@ -857,7 +857,7 @@ static MusicSingleton *sharedInstance = nil;
 				self.nextSongObject = [databaseControls songFromDbRow:(index + 1) inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 			}
 			
-			self.songUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], currentSongObject.songId]];
+            self.songUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:currentSongObject.songId]];
 			
 			[self destroyStreamer];
 			seekTime = 0.0;
@@ -926,7 +926,7 @@ static MusicSingleton *sharedInstance = nil;
 		
 		if (resume)
 		{
-			self.songUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], [currentSongObject songId]]];
+            self.songUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:currentSongObject.songId]];
 			
 			// Determine the hashed filename
 			self.downloadFileNameHashA = nil; self.downloadFileNameHashA = [NSString md5:currentSongObject.path];

@@ -1,20 +1,19 @@
 //
-//  SUSCoverArtLoader.m
+//  SUSTableCellCoverArtLoader.m
 //  iSub
 //
-//  Created by Ben Baron on 11/1/11.
+//  Created by Benjamin Baron on 11/1/11.
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "SUSCoverArtLoader.h"
+#import "SUSTableCellCoverArtLoader.h"
 #import "DatabaseSingleton.h"
 #import "ViewObjectsSingleton.h"
 #import "NSString-md5.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 
-@implementation SUSCoverArtLoader
-
+@implementation SUSTableCellCoverArtLoader
 @synthesize coverArtId;
 
 #pragma mark - Lifecycle
@@ -31,16 +30,16 @@
 	[super dealloc];
 }
 
-#pragma mark - Private DB Methods
+#pragma mark - Properties
 
-- (BOOL)isPlayerArtCached
+- (FMDatabase *)db
 {
-	return [[databaseControls coverArtCacheDb320] intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [coverArtId md5]] >= 0;
+    return [databaseControls coverArtCacheDb60];
 }
 
-- (BOOL)isTableCellArtCached
+- (BOOL)isCoverArtCached
 {
-	return [[databaseControls coverArtCacheDb60] intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [coverArtId md5]] >= 0;
+	return [self.db intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [coverArtId md5]] >= 0;
 }
 
 #pragma mark - Data loading
@@ -51,27 +50,8 @@
 	if (coverArtId && !viewObjects.isOfflineMode)
 	{
 		NSString *size = nil;
-
-		if (![self isPlayerArtCached])
-		{
-			if (IS_IPAD())
-			{
-				size = @"540";
-			}
-			else
-			{
-				if (SCREEN_SCALE() == 2.0)
-				{
-					size = @"640";
-				}
-				else
-				{	
-					size = @"320";
-				}
-			}
-		}
-		
-		if (![self isTableCellArtCached])
+        
+		if (!self.isCoverArtCached)
 		{
 			if (SCREEN_SCALE() == 2.0)
 			{
@@ -117,27 +97,12 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	    
-    
+    if([UIImage imageWithData:self.receivedData])
+	{
+		[self.db executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [coverArtId md5], self.receivedData];
+	}
 	
 	[super connectionDidFinishLoading:theConnection];
 }
 
-
-if (![aRequest error])
-{
-	if([UIImage imageWithData:[aRequest responseData]])
-	{
-		//DLog(@"image is good so caching it");
-		[[databaseControlsRef coverArtCacheDb320] executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:coverArtId], [aRequest responseData]];
-	}
-}
-
-if (![aRequest error])
-{
-	if([UIImage imageWithData:[aRequest responseData]])
-	{
-		//DLog(@"image is good so caching it");
-		[[databaseControlsRef coverArtCacheDb60] executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:coverArtId], [aRequest responseData]];
-	}
-}
 @end

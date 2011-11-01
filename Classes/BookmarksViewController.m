@@ -577,7 +577,7 @@
 
 - (void)playBookmarkSong
 {
-	musicControls.songUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"stream.view"], musicControls.currentSongObject.songId]];
+    musicControls.songUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:musicControls.currentSongObject.songId]];
 	
 	// Determine the hashed filename
 	musicControls.downloadFileNameHashA = nil; musicControls.downloadFileNameHashA = [NSString md5:musicControls.currentSongObject.path];

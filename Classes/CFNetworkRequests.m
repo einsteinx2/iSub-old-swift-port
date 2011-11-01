@@ -19,6 +19,8 @@
 #import "AsynchronousImageViewCached.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
+#import "SUSPlayerCoverArtLoader.h"
+#import "SUSTableCellCoverArtLoader.h"
 
 static iSubAppDelegate *appDelegate;
 static MusicSingleton *musicControls;
@@ -31,6 +33,7 @@ static void TerminateDownload(CFReadStreamRef stream);
 id appDelegateRef;
 id musicControlsRef;
 id databaseControlsRef;
+void * selfRef;
 
 // Bandwidth Throttling
 static BOOL isThrottlingEnabled;
@@ -239,55 +242,16 @@ static void DownloadDoneA()
 		
 		// Cache the album art if it exists
 		NSString *coverArtId = [[databaseControlsRef songCacheDb] stringForQuery:@"SELECT coverArtId FROM cachedSongs WHERE md5 = ?", [musicControlsRef downloadFileNameHashA]];
-		if (coverArtId)
-		{
-			if ([[databaseControlsRef coverArtCacheDb320] intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:coverArtId]] == 0)
-			{
-				//DLog(@"320 artwork doesn't exist, caching");
-				NSString *imgUrlString;
-				if (SCREEN_SCALE() == 2.0)
-				{
-					imgUrlString = [NSString stringWithFormat:@"%@%@&size=640", [appDelegateRef  getBaseUrl:@"getCoverArt.view"], coverArtId];
-				}
-				else 
-				{
-					imgUrlString = [NSString stringWithFormat:@"%@%@&size=320", [appDelegateRef  getBaseUrl:@"getCoverArt.view"], coverArtId];
-				}
-				ASIHTTPRequest *aRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:imgUrlString]];
-				[aRequest startSynchronous];
-				if (![aRequest error])
-				{
-					if([UIImage imageWithData:[aRequest responseData]])
-					{
-						//DLog(@"image is good so caching it");
-						[[databaseControlsRef coverArtCacheDb320] executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:coverArtId], [aRequest responseData]];
-					}
-				}
-			}
-			if ([[databaseControlsRef coverArtCacheDb60] intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:coverArtId]] == 0)
-			{
-				//DLog(@"60 artwork doesn't exist, caching");
-				NSString *imgUrlString;
-				if (SCREEN_SCALE() == 2.0)
-				{
-					imgUrlString = [NSString stringWithFormat:@"%@%@&size=120", [appDelegateRef  getBaseUrl:@"getCoverArt.view"], coverArtId];
-				}
-				else 
-				{
-					imgUrlString = [NSString stringWithFormat:@"%@%@&size=60", [appDelegateRef  getBaseUrl:@"getCoverArt.view"], coverArtId];
-				}
-				ASIHTTPRequest *aRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:imgUrlString]];
-				[aRequest startSynchronous];
-				if (![aRequest error])
-				{
-					if([UIImage imageWithData:[aRequest responseData]])
-					{
-						//DLog(@"image is good so caching it");
-						[[databaseControlsRef coverArtCacheDb60] executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:coverArtId], [aRequest responseData]];
-					}
-				}
-			}
-		}
+        
+        SUSPlayerCoverArtLoader *playerCoverArtLoader = [[SUSPlayerCoverArtLoader alloc] initWithDelegate:selfRef];
+        playerCoverArtLoader.coverArtId = coverArtId;
+        if (!playerCoverArtLoader.isCoverArtCached) 
+            [playerCoverArtLoader startLoad];
+        
+        SUSTableCellCoverArtLoader *tableCellCoverArtLoader = [[SUSTableCellCoverArtLoader alloc] initWithDelegate:selfRef];
+        tableCellCoverArtLoader.coverArtId = coverArtId;
+        if (!tableCellCoverArtLoader.isCoverArtCached)
+            [tableCellCoverArtLoader startLoad];
 		
 		// Close the file
 		[[musicControlsRef audioFileA] closeFile];
@@ -459,56 +423,17 @@ static void DownloadDoneB()
 		
 		// Cache the album art if it exists
 		NSString *coverArtId = [[databaseControlsRef songCacheDb] stringForQuery:@"SELECT coverArtId FROM cachedSongs WHERE md5 = ?", [musicControlsRef downloadFileNameHashB]];
-		if (coverArtId)
-		{
-			if ([[databaseControlsRef coverArtCacheDb320] intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:coverArtId]] == 0)
-			{
-				//DLog(@"320 artwork doesn't exist, caching");
-				NSString *imgUrlString;
-				if (SCREEN_SCALE() == 2.0)
-				{
-					imgUrlString = [NSString stringWithFormat:@"%@%@&size=640", [appDelegateRef  getBaseUrl:@"getCoverArt.view"], coverArtId];
-				}
-				else 
-				{
-					imgUrlString = [NSString stringWithFormat:@"%@%@&size=320", [appDelegateRef  getBaseUrl:@"getCoverArt.view"], coverArtId];
-				}
-				ASIHTTPRequest *aRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:imgUrlString]];
-				[aRequest startSynchronous];
-				if (![aRequest error])
-				{
-					if([UIImage imageWithData:[aRequest responseData]])
-					{
-						//DLog(@"image is good so caching it");
-						[[databaseControlsRef coverArtCacheDb320] executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:coverArtId], [aRequest responseData]];
-					}
-				}
-			}
-			if ([[databaseControlsRef coverArtCacheDb60] intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:coverArtId]] == 0)
-			{
-				//DLog(@"60 artwork doesn't exist, caching");
-				NSString *imgUrlString;
-				if (SCREEN_SCALE() == 2.0)
-				{
-					imgUrlString = [NSString stringWithFormat:@"%@%@&size=120", [appDelegateRef  getBaseUrl:@"getCoverArt.view"], coverArtId];
-				}
-				else 
-				{
-					imgUrlString = [NSString stringWithFormat:@"%@%@&size=60", [appDelegateRef  getBaseUrl:@"getCoverArt.view"], coverArtId];
-				}
-				ASIHTTPRequest *aRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:imgUrlString]];
-				[aRequest startSynchronous];
-				if (![aRequest error])
-				{
-					if([UIImage imageWithData:[aRequest responseData]])
-					{
-						//DLog(@"image is good so caching it");
-						[[databaseControlsRef coverArtCacheDb60] executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:coverArtId], [aRequest responseData]];
-					}
-				}
-			}
-		}
-		
+        
+        SUSPlayerCoverArtLoader *playerCoverArtLoader = [[SUSPlayerCoverArtLoader alloc] initWithDelegate:selfRef];
+        playerCoverArtLoader.coverArtId = coverArtId;
+        if (!playerCoverArtLoader.isCoverArtCached) 
+            [playerCoverArtLoader startLoad];
+        
+        SUSTableCellCoverArtLoader *tableCellCoverArtLoader = [[SUSTableCellCoverArtLoader alloc] initWithDelegate:selfRef];
+        tableCellCoverArtLoader.coverArtId = coverArtId;
+        if (!tableCellCoverArtLoader.isCoverArtCached)
+            [tableCellCoverArtLoader startLoad];
+        
 		// Close the file
 		[[musicControlsRef audioFileB] closeFile];
 		
@@ -774,6 +699,9 @@ static void	ReadStreamClientCallBackTemp( CFReadStreamRef stream, CFStreamEventT
 		musicControlsRef = musicControls;
 		databaseControlsRef = databaseControls;
 	}
+    
+    if (!selfRef)
+        selfRef = self;
 	
 	if (throttlingDate)
 		[throttlingDate release];
@@ -863,6 +791,9 @@ Bail:
 		musicControlsRef = musicControls;
 		databaseControlsRef = databaseControls;
 	}
+    
+    if (!selfRef)
+        selfRef = self;
 	
 	if (throttlingDate)
 		[throttlingDate release];
@@ -947,6 +878,9 @@ Bail:
 		musicControlsRef = musicControls;
 		databaseControlsRef = databaseControls;
 	}
+    
+    if (!selfRef)
+        selfRef = self;
 	
 	if (throttlingDate)
 		[throttlingDate release];
@@ -1038,6 +972,9 @@ Bail:
 		musicControlsRef = musicControls;
 		databaseControlsRef = databaseControls;
 	}
+    
+    if (!selfRef)
+        selfRef = self;
 	
 	if (throttlingDate)
 		[throttlingDate release];
@@ -1123,6 +1060,9 @@ Bail:
 		musicControlsRef = musicControls;
 		databaseControlsRef = databaseControls;
 	}
+    
+    if (!selfRef)
+        selfRef = self;
 	
 	if (throttlingDate)
 		[throttlingDate release];
@@ -1194,6 +1134,18 @@ Bail:
         CFRelease(readStreamRefB);
     }
 	return;
+}
+
+#pragma mark - SUSLoader delegate
+
+- (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
+{
+    [theLoader release]; theLoader = nil;
+}
+
+- (void)loadingFinished:(SUSLoader*)theLoader
+{
+    [theLoader release]; theLoader = nil;
 }
 
 @end

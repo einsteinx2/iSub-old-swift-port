@@ -7,9 +7,9 @@
 //
 
 #import "Song.h"
+#import "SUSLoaderDelegate.h"
 
-
-@interface CFNetworkRequests : NSObject 
+@interface CFNetworkRequests : NSObject <SUSLoaderDelegate>
 {
 
 }

@@ -8,7 +8,6 @@
 
 
 @class SUSLoader;
-
 @protocol SUSLoaderDelegate <NSObject>
 
 @required
