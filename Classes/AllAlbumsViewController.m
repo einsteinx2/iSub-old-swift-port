@@ -526,32 +526,7 @@
 	cell.myId = anAlbum.albumId;
 	cell.myArtist = [Artist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
 	
-	if (anAlbum.coverArtId)
-	{
-		if ([databaseControls.coverArtCacheDb60 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:anAlbum.coverArtId]] == 1)
-		{
-			// If the image is already in the cache dictionary, load it
-			cell.coverArtView.image = [UIImage imageWithData:[databaseControls.coverArtCacheDb60 dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [NSString md5:anAlbum.coverArtId]]];
-		}
-		else 
-		{			
-			// If not, grab it from the url and cache it
-			NSString *imgUrlString;
-			if (SCREEN_SCALE() == 2.0)
-			{
-				imgUrlString = [NSString stringWithFormat:@"%@%@&size=120", [appDelegate getBaseUrl:@"getCoverArt.view"], anAlbum.coverArtId];
-			}
-			else
-			{
-				imgUrlString = [NSString stringWithFormat:@"%@%@&size=60", [appDelegate getBaseUrl:@"getCoverArt.view"], anAlbum.coverArtId];
-			}
-			[cell.coverArtView loadImageFromURLString:imgUrlString coverArtId:anAlbum.coverArtId];
-		}
-	}
-	else
-	{
-		cell.coverArtView.image = [UIImage imageNamed:@"default-album-art-small.png"];
-	}
+	[cell.coverArtView loadImageFromCoverArtId:anAlbum.coverArtId];
 	
 	cell.backgroundView = [[[UIView alloc] init] autorelease];
 	if(indexPath.row % 2 == 0)

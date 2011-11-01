@@ -7,10 +7,8 @@
 //
 
 #import "SUSChatLoader.h"
-#import "NSError-ISMSError.h"
 #import "TBXML.h"
 #import "ChatMessage.h"
-#import "NSMutableURLRequest+SUS.h"
 
 @implementation SUSChatLoader
 
@@ -32,7 +30,7 @@
 
 #pragma mark - Loader Methods
 
-- (void)loadData
+- (void)startLoad
 {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getChatMessages" andParameters:nil];
     

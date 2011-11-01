@@ -351,41 +351,7 @@
 		}
 		NSString *name = [[listOfAlbums objectAtIndex:indexPath.row] objectAtIndex:1];
 		
-		if (coverArtId)
-		{
-			if ([databaseControls.coverArtCacheDb60 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:coverArtId]] == 1)
-			{
-				// If the image is already in the cache database, load it
-				cell.coverArtView.image = [UIImage imageWithData:[databaseControls.coverArtCacheDb60 dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [NSString md5:coverArtId]]];
-			}
-			else 
-			{	
-				if (viewObjects.isOfflineMode)
-				{
-					// Image not cached and we're offline so display the default image
-					cell.coverArtView.image = [UIImage imageNamed:@"default-album-art-small.png"];
-				}
-				else 
-				{
-					// Image not cached, grab it from the url and cache it
-					NSString *imgUrlString;
-					if (SCREEN_SCALE() == 2.0)
-					{
-						imgUrlString = [NSString stringWithFormat:@"%@%@&size=120", [appDelegate getBaseUrl:@"getCoverArt.view"], coverArtId];
-					}
-					else
-					{
-						imgUrlString = [NSString stringWithFormat:@"%@%@&size=60", [appDelegate getBaseUrl:@"getCoverArt.view"], coverArtId];
-					}
-					[cell.coverArtView loadImageFromURLString:imgUrlString coverArtId:coverArtId];
-				}
-			}
-		}
-		else
-		{
-			// If there's no cover art at all, display the default image
-			cell.coverArtView.image = [UIImage imageNamed:@"default-album-art-small.png"];
-		}
+		[cell.coverArtView loadImageFromCoverArtId:coverArtId];
 		
 		[cell.albumNameLabel setText:name];
 		cell.backgroundView = [[[UIView alloc] init] autorelease];

@@ -328,33 +328,33 @@
 - (void)loadMoreResults
 {
 	offset += 20;
-    NSString *searchTerms = [query URLEncodeString];
-    
     NSDictionary *parameters = nil;
     NSString *action = nil;
+	NSString *offsetString = [NSString stringWithFormat:@"%i", offset];
 	if ([SavedSettings sharedInstance].isNewSearchAPI)
 	{
         action = @"search2";
+		NSString *queryString = [NSString stringWithFormat:@"%@*", query];
 		if (searchType == 0)
 		{
             parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"artistCount", @"0", @"albumCount", @"0", @"songCount", 
-                          n2N([NSString stringWithFormat:@"%@*", searchTerms]), @"query", n2N([NSString stringWithFormat:@"%i", offset]), @"artistOffset", nil];
+                          n2N(queryString), @"query", n2N(offsetString), @"artistOffset", nil];
 		}
 		else if (searchType == 1)
 		{
             parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"0", @"artistCount", @"20", @"albumCount", @"0", @"songCount", 
-                          n2N([NSString stringWithFormat:@"%@*", searchTerms]), @"query", n2N([NSString stringWithFormat:@"%i", offset]), @"albumOffset", nil];
+                          n2N(queryString), @"query", n2N(offsetString), @"albumOffset", nil];
 		}
 		else
 		{
             parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"0", @"artistCount", @"0", @"albumCount", @"20", @"songCount", 
-                          n2N([NSString stringWithFormat:@"%@*", searchTerms]), @"query", n2N([NSString stringWithFormat:@"%i", offset]), @"songOffset", nil];
+                          n2N(queryString), @"query", n2N(offsetString), @"songOffset", nil];
 		}
 	}
 	else
 	{
         action = @"search";
-        parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"count", n2N(searchTerms), @"any", n2N([NSString stringWithFormat:@"%i", offset]), @"offset", nil];
+        parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"count", n2N(query), @"any", n2N(offsetString), @"offset", nil];
 	}
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:action andParameters:parameters];
@@ -443,34 +443,8 @@
 			cell.myId = anAlbum.albumId;
 			cell.myArtist = [Artist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
 			cell.isIndexShowing = NO;
-						
-			if (anAlbum.coverArtId)
-			{
-				if ([databaseControls.coverArtCacheDb60 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:anAlbum.coverArtId]] == 1)
-				{
-					// If the image is already in the cache dictionary, load it
-					cell.coverArtView.image = [UIImage imageWithData:[databaseControls.coverArtCacheDb60 dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [NSString md5:anAlbum.coverArtId]]];
-				}
-				else 
-				{	
-					// If not, grab it from the url and cache it
-					NSString *imgUrlString;
-					if (SCREEN_SCALE() == 2.0)
-					{
-						imgUrlString = [NSString stringWithFormat:@"%@%@&size=120", [appDelegate getBaseUrl:@"getCoverArt.view"], anAlbum.coverArtId];
-					}
-					else 
-					{
-						imgUrlString = [NSString stringWithFormat:@"%@%@&size=60", [appDelegate getBaseUrl:@"getCoverArt.view"], anAlbum.coverArtId];
-					}
-					
-					[cell.coverArtView loadImageFromURLString:imgUrlString coverArtId:anAlbum.coverArtId];
-				}
-			}
-			else
-			{
-				cell.coverArtView.image = [UIImage imageNamed:@"default-album-art-small.png"];
-			}
+			
+			[cell.coverArtView loadImageFromCoverArtId:anAlbum.coverArtId];
 			
 			[cell.albumNameLabel setText:anAlbum.title];
 			

@@ -244,6 +244,9 @@
 		5386FB8714062A3A0009F73F /* SavedSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 5386FB8614062A3A0009F73F /* SavedSettings.m */; };
 		5386FB8814062A3A0009F73F /* SavedSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 5386FB8614062A3A0009F73F /* SavedSettings.m */; };
 		5386FB8914062A3A0009F73F /* SavedSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 5386FB8614062A3A0009F73F /* SavedSettings.m */; };
+		53880A9314608DBA00C7DE62 /* SUSCoverArtLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53880A9214608DBA00C7DE62 /* SUSCoverArtLoader.m */; };
+		53880A9414608DBA00C7DE62 /* SUSCoverArtLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53880A9214608DBA00C7DE62 /* SUSCoverArtLoader.m */; };
+		53880A9514608DBA00C7DE62 /* SUSCoverArtLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53880A9214608DBA00C7DE62 /* SUSCoverArtLoader.m */; };
 		5388A2F01198741E0049BA9E /* LocalPlaylistsUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5388A2EF1198741E0049BA9E /* LocalPlaylistsUITableViewCell.m */; };
 		5388A3B4119899260049BA9E /* BookmarksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5388A3B2119899260049BA9E /* BookmarksViewController.m */; };
 		5388A3B5119899260049BA9E /* BookmarksViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5388A3B3119899260049BA9E /* BookmarksViewController.xib */; };
@@ -1759,6 +1762,8 @@
 		5386FB811406243A0009F73F /* SUSLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSLoader.m; sourceTree = "<group>"; };
 		5386FB8514062A390009F73F /* SavedSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedSettings.h; sourceTree = "<group>"; };
 		5386FB8614062A3A0009F73F /* SavedSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedSettings.m; sourceTree = "<group>"; };
+		53880A9114608DBA00C7DE62 /* SUSCoverArtLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSCoverArtLoader.h; sourceTree = "<group>"; };
+		53880A9214608DBA00C7DE62 /* SUSCoverArtLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSCoverArtLoader.m; sourceTree = "<group>"; };
 		5388A2EE1198741E0049BA9E /* LocalPlaylistsUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalPlaylistsUITableViewCell.h; sourceTree = "<group>"; };
 		5388A2EF1198741E0049BA9E /* LocalPlaylistsUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalPlaylistsUITableViewCell.m; sourceTree = "<group>"; };
 		5388A3B1119899260049BA9E /* BookmarksViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BookmarksViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -2509,6 +2514,8 @@
 				535EFD8D145D153900EDF867 /* SUSChatLoader.m */,
 				539B308B145E750700D06475 /* SUSLyricsLoader.h */,
 				539B308C145E750700D06475 /* SUSLyricsLoader.m */,
+				53880A9114608DBA00C7DE62 /* SUSCoverArtLoader.h */,
+				53880A9214608DBA00C7DE62 /* SUSCoverArtLoader.m */,
 			);
 			name = Loaders;
 			sourceTree = "<group>";
@@ -4465,6 +4472,7 @@
 				539B3092145E78AF00D06475 /* SUSLyricsDAO.m in Sources */,
 				53B36D7C145F95E5005538F3 /* NSMutableURLRequest+SUS.m in Sources */,
 				53B36D81145F9F29005538F3 /* NSString+URLEncode.m in Sources */,
+				53880A9314608DBA00C7DE62 /* SUSCoverArtLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4670,6 +4678,7 @@
 				539B3094145E78AF00D06475 /* SUSLyricsDAO.m in Sources */,
 				53B36D7E145F95E5005538F3 /* NSMutableURLRequest+SUS.m in Sources */,
 				53B36D83145F9F29005538F3 /* NSString+URLEncode.m in Sources */,
+				53880A9514608DBA00C7DE62 /* SUSCoverArtLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4875,6 +4884,7 @@
 				539B3093145E78AF00D06475 /* SUSLyricsDAO.m in Sources */,
 				53B36D7D145F95E5005538F3 /* NSMutableURLRequest+SUS.m in Sources */,
 				53B36D82145F9F29005538F3 /* NSString+URLEncode.m in Sources */,
+				53880A9414608DBA00C7DE62 /* SUSCoverArtLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -13,8 +13,6 @@
 #import "DatabaseSingleton.h"
 #import "GTMNSString+HTML.h"
 #import "SavedSettings.h"
-#import "NSError-ISMSError.h"
-#import "NSMutableURLRequest+SUS.h"
 
 @implementation SUSRootFoldersLoader
 
@@ -172,7 +170,7 @@
 // TODO Add cancel load
 - (void)cancelLoad
 {
-    
+    [super cancelLoad];
 }
 
 #pragma mark Connection Delegate

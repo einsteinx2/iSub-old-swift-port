@@ -11,10 +11,11 @@
 @interface AsynchronousImageViewCached : UIImageView 
 {
     NSURLConnection *connection;
-    NSMutableData *data;
-	NSString *coverArtId;
+    NSMutableData *receivedData;
 }
 
-- (void)loadImageFromURLString:(NSString *)theUrlString coverArtId:(NSString *)artId;
+@property (nonatomic, retain) NSString *coverArtId;
+
+- (void)loadImageFromCoverArtId:(NSString *)artId;
 
 @end

@@ -26,7 +26,6 @@
 @property (nonatomic, retain) NSString *coverArtId;
 @property BOOL isForPlayer;
 
-//- (void)loadImageFromURLString:(NSString *)theUrlString;
 - (void)loadImageFromCoverArtId:(NSString *)artId isForPlayer:(BOOL)isPlayer;
 
 @end

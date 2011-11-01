@@ -30,6 +30,7 @@
 #import "NSString-rfcEncode.h"
 #import "TBXML.h"
 #import "SavedSettings.h"
+#import "NSMutableURLRequest+SUS.h"
 
 @interface PlaylistsViewController (Private)
 
@@ -776,11 +777,8 @@
 
 - (void)uploadPlaylist:(NSString*)name
 {	
-	NSString *urlString = [NSString stringWithFormat:@"%@&name=%@", [appDelegate getBaseUrl:@"createPlaylist.view"], [name stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-	DLog(@"urlString: %@", urlString);
+	NSMutableDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(name), @"name", nil];
 	
-	DLog(@"currentPlaylistCount: %lu", currentPlaylistCount);
-	NSMutableString *body = [NSMutableString stringWithCapacity:0];
 	for (int i = 0; i < currentPlaylistCount; i++)
 	{
 		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -798,21 +796,12 @@
 				aSong = [databaseControls songFromDbRow:i inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 		}
 		
-		if (i == 0)
-			[body appendFormat:@"songId=%@", aSong.songId];
-		else
-			[body appendFormat:@"&songId=%@", aSong.songId];
+		[parameters setObject:n2N(aSong.songId) forKey:@"songId"];
 		
 		[pool release];
 	}
-	DLog(@"body: %@", body);
 
-	self.request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString] 
-											 cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData 
-										 timeoutInterval:kLoadingTimeout];
-	[request setHTTPMethod:@"POST"];
-	[request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
-	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+	self.request = [NSMutableURLRequest requestWithSUSAction:@"createPlaylist" andParameters:parameters];
 	
 	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
@@ -1013,7 +1002,7 @@
 	[pool release];
 }
 
-- (void) savePlaylistAction:(id)sender
+- (void)savePlaylistAction:(id)sender
 {
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
@@ -1823,32 +1812,7 @@ static NSString *kName_Error = @"error";
 				aSong = [databaseControls songFromDbRow:indexPath.row inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 		}
 		
-		if (aSong.coverArtId)
-		{
-			if ([databaseControls.coverArtCacheDb60 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:aSong.coverArtId]] == 1)
-			{
-				// If the image is already in the cache dictionary, load it
-				cell.coverArtView.image = [UIImage imageWithData:[databaseControls.coverArtCacheDb60 dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [NSString md5:aSong.coverArtId]]];
-			}
-			else 
-			{			
-				// If not, grab it from the url and cache it
-				NSString *imgUrlString;
-				if (SCREEN_SCALE() == 2.0)
-				{
-					imgUrlString = [NSString stringWithFormat:@"%@%@&size=120", [appDelegate getBaseUrl:@"getCoverArt.view"], aSong.coverArtId];
-				}
-				else
-				{
-					imgUrlString = [NSString stringWithFormat:@"%@%@&size=60", [appDelegate getBaseUrl:@"getCoverArt.view"], aSong.coverArtId];
-				}
-				[cell.coverArtView loadImageFromURLString:imgUrlString coverArtId:aSong.coverArtId];
-			}
-		}
-		else
-		{
-			cell.coverArtView.image = [UIImage imageNamed:@"default-album-art-small.png"];
-		}
+		[cell.coverArtView loadImageFromCoverArtId:aSong.coverArtId];
 		
 		cell.numberLabel.text = [NSString stringWithFormat:@"%i", (indexPath.row + 1)];
 		

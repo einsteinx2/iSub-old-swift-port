@@ -391,12 +391,12 @@
 	else 
 	{
 		NSDictionary *userInfo = [notification userInfo];
-		NSInteger folderId = [[userInfo objectForKey:@"folderId"] intValue];
+		NSString *folderId = [NSString stringWithFormat:@"%i", [[userInfo objectForKey:@"folderId"] intValue]];
 		
 		if (folderId < 0)
             parameters = [NSDictionary dictionaryWithObject:@"100" forKey:@"size"];
 		else
-            parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"100", @"size", n2N([NSString stringWithFormat:@"%i", folderId]), @"musicFolderId", nil];
+            parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"100", @"size", n2N(folderId), @"musicFolderId", nil];
 	}
 
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getRandomSongs" andParameters:parameters];
@@ -607,32 +607,33 @@
 	
 	[searchBar resignFirstResponder];
 	
-	NSString *searchTerms = [[searchBar.text stringByTrimmingLeadingAndTrailingWhitespace] URLEncodeString];
+	NSString *searchTerms = [searchBar.text stringByTrimmingLeadingAndTrailingWhitespace];
 	
     NSDictionary *parameters = nil;
     NSString *action = nil;
 	if ([SavedSettings sharedInstance].isNewSearchAPI)
 	{
         action = @"search2";
+		NSString *searchTermsString = [NSString stringWithFormat:@"%@*", searchTerms];
 		if (searchSegment.selectedSegmentIndex == 0)
 		{
             parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"artistCount", @"0", @"albumCount", @"0", @"songCount", 
-                          n2N([NSString stringWithFormat:@"%@*", searchTerms]), @"query", nil];
+                          n2N(searchTermsString), @"query", nil];
 		}
 		else if (searchSegment.selectedSegmentIndex == 1)
 		{
             parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"0", @"artistCount", @"20", @"albumCount", @"0", @"songCount", 
-                          n2N([NSString stringWithFormat:@"%@*", searchTerms]), @"query", nil];
+                          n2N(searchTermsString), @"query", nil];
 		}
 		else if (searchSegment.selectedSegmentIndex == 2)
 		{
             parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"0", @"artistCount", @"0", @"albumCount", @"20", @"songCount", 
-                          n2N([NSString stringWithFormat:@"%@*", searchTerms]), @"query", nil];
+                          n2N(searchTermsString), @"query", nil];
 		}
 		else
 		{
             parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"artistCount", @"20", @"albumCount", @"20", @"songCount", 
-                          n2N([NSString stringWithFormat:@"%@*", searchTerms]), @"query", nil];
+                          n2N(searchTermsString), @"query", nil];
 		}
 	}
 	else

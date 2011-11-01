@@ -69,32 +69,7 @@
 {
 	mySong = [aSong retain];
 	
-	if (aSong.coverArtId)
-	{
-		if ([databaseControls.coverArtCacheDb60 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:aSong.coverArtId]] == 1)
-		{
-			// If the image is already in the cache dictionary, load it
-			coverArtView.image = [UIImage imageWithData:[databaseControls.coverArtCacheDb60 dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [NSString md5:aSong.coverArtId]]];
-		}
-		else 
-		{			
-			// If not, grab it from the url and cache it
-			NSString *imgUrlString;
-			if (SCREEN_SCALE() == 2.0)
-			{
-				imgUrlString = [NSString stringWithFormat:@"%@%@&size=120", [appDelegate getBaseUrl:@"getCoverArt.view"], aSong.coverArtId];
-			}
-			else
-			{
-				imgUrlString = [NSString stringWithFormat:@"%@%@&size=60", [appDelegate getBaseUrl:@"getCoverArt.view"], aSong.coverArtId];
-			}
-			[coverArtView loadImageFromURLString:imgUrlString coverArtId:aSong.coverArtId];
-		}
-	}
-	else
-	{
-		coverArtView.image = [UIImage imageNamed:@"default-album-art-small.png"];
-	}
+	[coverArtView loadImageFromCoverArtId:aSong.coverArtId];
 	
 	self.backgroundView = [[[UIView alloc] init] autorelease];
 	if(row % 2 == 0)

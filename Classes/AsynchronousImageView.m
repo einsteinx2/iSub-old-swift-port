@@ -108,10 +108,10 @@
 	}
 }
 
-#pragma mark -
-#pragma mark Load Image
+#pragma mark - Load Image
 
-//- (void)loadImageFromURLString:(NSString *)theUrlString
+// TODO: rewrite this to get DB calls out of this class
+
 - (void)loadImageFromCoverArtId:(NSString *)artId isForPlayer:(BOOL)isPlayer
 {
 	self.coverArtId = artId;

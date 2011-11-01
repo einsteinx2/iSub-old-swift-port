@@ -14,17 +14,61 @@
 #import "DatabaseSingleton.h"
 #import "NSString-md5.h"
 #import "FMDatabase.h"
+#import "FMDatabaseAdditions.h"
+#import "NSMutableURLRequest+SUS.h"
+#import "ViewObjectsSingleton.h"
 
 @implementation AsynchronousImageViewCached
 
-- (void)loadImageFromURLString:(NSString *)theUrlString coverArtId:(NSString *)artId
+@synthesize coverArtId;
+
+// TODO: rewrite this to get DB calls out of this class
+- (void)loadImageFromCoverArtId:(NSString *)artId
 {
-	coverArtId = [artId retain];
-	[self.image release], self.image = nil;
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:theUrlString] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:kLoadingTimeout];
+	self.coverArtId = artId;
 	
-	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	data = [[NSMutableData data] retain];
+	DatabaseSingleton *databaseControls = [DatabaseSingleton sharedInstance];
+	ViewObjectsSingleton *viewObjects = [ViewObjectsSingleton sharedInstance];
+	
+	NSString *size = nil;
+	if (artId)
+	{
+		if ([databaseControls.coverArtCacheDb60 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:artId]] == 1)
+		{
+			// If the image is already in the cache dictionary, load it
+			self.image = [UIImage imageWithData:[databaseControls.coverArtCacheDb60 dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [artId md5]]];
+		}
+		else 
+		{	
+			if (viewObjects.isOfflineMode)
+			{
+				// Image not cached and we're offline so display the default image
+				self.image = [UIImage imageNamed:@"default-album-art-small.png"];
+			}
+			else
+			{
+				// If not, grab it and cache it
+				if (SCREEN_SCALE() == 2.0)
+				{
+					size = @"120";
+				}
+				else 
+				{
+					size = @"60";
+				}
+				
+				NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(size), @"size", n2N(artId), @"id", nil];
+				NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getCoverArt" andParameters:parameters];
+				
+				connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+				receivedData = [[NSMutableData data] retain];
+			}
+		}
+	}
+	else
+	{
+		self.image = [UIImage imageNamed:@"default-album-art-small.png"];
+	}
 }
 
 
@@ -51,12 +95,12 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-	[data setLength:0];
+	[receivedData setLength:0];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
 {
-    [data appendData:incrementalData];
+    [receivedData appendData:incrementalData];
 }
 
 
@@ -64,7 +108,7 @@
 {
 	DLog(@"Connection to album art failed");
 	self.image = [UIImage imageNamed:@"default-album-art-small.png"];
-	[data release];
+	[receivedData release];
 	[connection release];
 }	
 
@@ -74,9 +118,9 @@
 	DatabaseSingleton *databaseControls = [DatabaseSingleton sharedInstance];
 	
 	// Check to see if the data is a valid image. If so, use it; if not, use the default image.
-	if([UIImage imageWithData:data])
+	if([UIImage imageWithData:receivedData])
 	{
-		[databaseControls.coverArtCacheDb60 executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:coverArtId], data];
+		[databaseControls.coverArtCacheDb60 executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:coverArtId], receivedData];
 
 		if (SCREEN_SCALE() == 2.0)
 		{
@@ -84,11 +128,11 @@
 			//[[UIImage imageWithData:data] drawInRect:CGRectMake(0,0,60,60)];
 			//self.image = UIGraphicsGetImageFromCurrentImageContext();
 			//UIGraphicsEndImageContext();
-			self.image = [UIImage imageWithData:data];
+			self.image = [UIImage imageWithData:receivedData];
 		}
 		else
 		{
-			self.image = [UIImage imageWithData:data];
+			self.image = [UIImage imageWithData:receivedData];
 		}
 	}
 	else 
@@ -97,7 +141,7 @@
 	}
 	
 	[coverArtId release];
-	[data release];
+	[receivedData release];
 	[connection release];
 }
 
