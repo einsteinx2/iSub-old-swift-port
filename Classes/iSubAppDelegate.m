@@ -85,8 +85,15 @@
 #pragma mark Application lifecycle
 #pragma mark -
 
+void onUncaughtException(NSException* exception)
+{
+    NSLog(@"uncaught exception: %@", exception.description);
+}
+
 - (void)applicationDidFinishLaunching:(UIApplication *)application
 {   
+    NSSetUncaughtExceptionHandler(&onUncaughtException);
+    
 	introController = nil;
 	showIntro = NO;
 
