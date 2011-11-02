@@ -24,13 +24,13 @@
 #import "FMDatabaseAdditions.h"
 #import "NSString-md5.h"
 #import "Song.h"
-#import "ASIHTTPRequest.h"
 #import "StoreViewController.h"
 #import "CustomUIAlertView.h"
 #import "NSString-rfcEncode.h"
 #import "TBXML.h"
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
+#import "OrderedDictionary.h"
 
 @interface PlaylistsViewController (Private)
 
@@ -777,7 +777,7 @@
 
 - (void)uploadPlaylist:(NSString*)name
 {	
-	NSMutableDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(name), @"name", nil];
+	OrderedDictionary *parameters = [OrderedDictionary dictionaryWithObjectsAndKeys:n2N(name), @"name", nil];
 	
 	for (int i = 0; i < currentPlaylistCount; i++)
 	{

@@ -20,7 +20,6 @@
 #import "ServerListViewController.h"
 #import "RootViewController.h"
 #import "Reachability.h"
-#import "ASIHTTPRequest.h"
 #import "URLCheckConnectionDelegate.h"
 #import "APICheckConnectionDelegate.h"
 #import "AudioStreamer.h"

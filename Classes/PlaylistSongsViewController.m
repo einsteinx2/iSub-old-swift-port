@@ -26,6 +26,7 @@
 #import "TBXML.h"
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
+#import "OrderedDictionary.h"
 
 @interface PlaylistSongsViewController (Private)
 
@@ -212,9 +213,8 @@
 
 - (void)uploadPlaylistAction:(id)sender
 {	
-	NSString *urlString = [NSString stringWithFormat:@"%@&name=%@", [appDelegate getBaseUrl:@"createPlaylist.view"], [self.title stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-
-	NSMutableString *body = [NSMutableString stringWithCapacity:0];
+    OrderedDictionary *parameters = [OrderedDictionary dictionaryWithObject:n2N(self.title) forKey:@"name"];
+    
 	NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", self.md5];
 	NSUInteger count = [databaseControls.localPlaylistsDb intForQuery:query];
 	for (int i = 1; i <= count; i++)
@@ -224,20 +224,12 @@
 		NSString *query = [NSString stringWithFormat:@"SELECT songId FROM playlist%@ WHERE ROWID = %i", self.md5, i];
 		NSString *songId = [databaseControls.localPlaylistsDb stringForQuery:query];
 		
-		if (i == 1)
-			[body appendFormat:@"songId=%@", songId];
-		else
-			[body appendFormat:@"&songId=%@", songId];
-		
+        [parameters setObject:n2N(songId) forKey:@"songId"];
+        
 		[pool release];
 	}
 	
-	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString] 
-														   cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData 
-													   timeoutInterval:kLoadingTimeout];
-	[request setHTTPMethod:@"POST"];
-	[request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
-	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"createPlaylist" andParameters:parameters];
 	
 	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)

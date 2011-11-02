@@ -23,6 +23,8 @@
 	BOOL isLoading;
 }
 
+@property (nonatomic, retain) NSMutableData *receivedData;
+
 @property (nonatomic, retain) NSMutableArray *listOfAlbums;
 
 @property (nonatomic, retain) NSString *modifier;

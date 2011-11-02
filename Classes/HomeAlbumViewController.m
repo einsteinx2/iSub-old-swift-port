@@ -23,18 +23,19 @@
 #import "NSString-md5.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "ASIHTTPRequest.h"
 #import "LoadingScreen.h"
 #import "HomeXMLParser.h"
 #import "ServerListViewController.h"
 #import "UITableViewCell-overlay.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
+#import "NSMutableURLRequest+SUS.h"
 
 
 @implementation HomeAlbumViewController
 @synthesize listOfAlbums;
 @synthesize offset, isMoreAlbums, modifier;
+@synthesize receivedData;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -359,56 +360,98 @@
 }
 
 - (void)loadMoreResults
-{
-	NSAutoreleasePool *releasePool = [[NSAutoreleasePool alloc] init];
-	
+{	
 	offset += 20;
 	
-	NSString *urlString = [NSString stringWithFormat:@"%@&size=20&type=%@&offset=%i", [appDelegate getBaseUrl:@"getAlbumList.view"], modifier, offset];
+	NSString *offsetString = [NSString stringWithFormat:@"%i", offset];
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"size", n2N(modifier), @"type", n2N(offsetString), @"offset", nil];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getAlbumList" andParameters:parameters];
 	
-	// Parse the XML
-	NSURL *url = [[NSURL alloc] initWithString:urlString];
-	//DLog(@"url: %@", urlString);
-	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-	[request startSynchronous];
-	if ([request error])
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	if (connection)
 	{
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error doing the search.\n\nError:%@", [request error].localizedDescription] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		self.receivedData = [NSMutableData data];
+		
+		[viewObjects showLoadingScreenOnMainWindow];
+	} 
+	else 
+	{
+		// Inform the user that the connection failed.
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error doing the search.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		alert.tag = 2;
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
 	}
-	else
-	{
-		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:[request responseData]];
-		HomeXMLParser *parser = (HomeXMLParser*)[[HomeXMLParser alloc] initXMLParser];
-		[xmlParser setDelegate:parser];
-		[xmlParser parse];
-				
-		if ([parser.listOfAlbums count] == 0)
-		{
-			// There are no more songs
-			isMoreAlbums = NO;
-		}
-		else 
-		{
-			// Add the new results to the list of songs
-			[listOfAlbums addObjectsFromArray:parser.listOfAlbums];
-		}
-				
-		[xmlParser release];
-		[parser release];
-		
-		// Reload the table
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
-		isLoading = NO;
-	}
-	
-	[url release];
-	
-	[releasePool release];
 }
 
+#pragma mark - Connection Delegate
+
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
+{
+	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
+		return YES; // Self-signed cert will be accepted
+	
+	return NO;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{	
+	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+	{
+		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
+	}
+	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+	[self.receivedData setLength:0];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
+{
+    [self.receivedData appendData:incrementalData];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
+{
+	self.receivedData = nil;
+	[theConnection release];
+    
+    CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error doing the search.\n\nError:%@", error.localizedDescription] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    alert.tag = 2;
+    [alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+    [alert release];
+}	
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
+{	
+    NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:self.receivedData];
+    HomeXMLParser *parser = (HomeXMLParser*)[[HomeXMLParser alloc] initXMLParser];
+    [xmlParser setDelegate:parser];
+    [xmlParser parse];
+    
+    if ([parser.listOfAlbums count] == 0)
+    {
+        // There are no more songs
+        isMoreAlbums = NO;
+    }
+    else 
+    {
+        // Add the new results to the list of songs
+        [listOfAlbums addObjectsFromArray:parser.listOfAlbums];
+    }
+    
+    [xmlParser release];
+    [parser release];
+    
+    // Reload the table
+    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    isLoading = NO;
+    
+	self.receivedData = nil;
+	[theConnection release];
+}
 
 #pragma mark Table view methods
 
@@ -467,7 +510,7 @@
 			[cell addSubview:indicator];
 			[indicator startAnimating];
 			[indicator release];
-			[self performSelectorInBackground:@selector(loadMoreResults) withObject:nil];
+            [self loadMoreResults];
 		}
 		else 
 		{

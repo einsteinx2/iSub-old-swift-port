@@ -8,16 +8,20 @@
 
 #import "QuickAlbumsViewController.h"
 #import "HomeAlbumViewController.h"
-#import "ASIHTTPRequest.h"
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
 #import "HomeXMLParser.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
+#import "NSMutableURLRequest+SUS.h"
+
+@interface QuickAlbumsViewController (Private)
+- (void)albumLoad:(NSString*)modifier;
+@end
 
 @implementation QuickAlbumsViewController
 
-@synthesize parent;
+@synthesize parent, receivedData, modifier;
 
 - (id)init
 {
@@ -55,28 +59,28 @@
 {
 	[self dismissModalViewControllerAnimated:YES];
 	[viewObjects showLoadingScreenOnMainWindow];
-	[self performSelectorInBackground:@selector(albumLoad:) withObject:@"random"];
+	[self albumLoad:@"random"];
 }
 
 - (IBAction)frequent
 {
 	[self dismissModalViewControllerAnimated:YES];
 	[viewObjects showLoadingScreenOnMainWindow];
-	[self performSelectorInBackground:@selector(albumLoad:) withObject:@"frequent"];
+	[self albumLoad:@"frequent"];
 }
 
 - (IBAction)newest
 {
 	[self dismissModalViewControllerAnimated:YES];
 	[viewObjects showLoadingScreenOnMainWindow];
-	[self performSelectorInBackground:@selector(albumLoad:) withObject:@"newest"];
+	[self albumLoad:@"newest"];
 }
 
 - (IBAction)recent
 {
 	[self dismissModalViewControllerAnimated:YES];
 	[viewObjects showLoadingScreenOnMainWindow];
-	[self performSelectorInBackground:@selector(albumLoad:) withObject:@"recent"];
+	[self albumLoad:@"recent"];
 }
 
 
@@ -97,47 +101,30 @@
 		[parent.navigationController pushViewController:viewController animated:YES];
 }
 
-- (void)albumLoad:(NSString*)modifier
-{	
-	NSAutoreleasePool *releasePool = [[NSAutoreleasePool alloc] init];
-	
-	HomeAlbumViewController *albumViewController = [[HomeAlbumViewController alloc] initWithNibName:@"HomeAlbumViewController" bundle:nil];
-	albumViewController.title = [titles objectForKey:modifier];
-	
-	// Parse the XML
-	NSURL *url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@&size=20&type=%@", [appDelegate getBaseUrl:@"getAlbumList.view"], modifier]];
-	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-	[request startSynchronous];
-	if ([request error])
+- (void)albumLoad:(NSString*)theModifier
+{		
+    self.modifier = theModifier;
+    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"size", n2N(modifier), @"type", nil];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getAlbumList" andParameters:parameters];
+    
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	if (connection)
 	{
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error grabbing the album list.\n\nError:%@", [request error].localizedDescription] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		receivedData = [[NSMutableData data] retain];
+		
+		[viewObjects showAlbumLoadingScreen:self.view sender:self];
+	} 
+	else 
+	{
+		// Inform the user that the connection failed.
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error loading the albums.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		alert.tag = 2;
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
+        
+        [viewObjects hideLoadingScreen];
 	}
-	else
-	{
-		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:[request responseData]];
-		HomeXMLParser *parser = [[HomeXMLParser alloc] initXMLParser];
-		[xmlParser setDelegate:parser];
-		[xmlParser parse];
-		
-		albumViewController.listOfAlbums = [NSMutableArray arrayWithArray:parser.listOfAlbums];
-		albumViewController.modifier = modifier;
-		//if ([albumViewController.listOfAlbums count] < 20)
-		//	albumViewController.isMoreAlbums = NO;
-		
-		[xmlParser release];
-		[parser release];
-	}
-	
-	[modifier release];
-	[url release];
-	
-	[self performSelectorOnMainThread:@selector(pushViewController:) withObject:albumViewController waitUntilDone:YES];
-	[albumViewController release];	
-	
-	[releasePool release];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -161,5 +148,71 @@
 	[titles release];
 }
 
+#pragma mark - Connection Delegate
+
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
+{
+	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
+		return YES; // Self-signed cert will be accepted
+	
+	return NO;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{	
+	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+	{
+		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
+	}
+	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+	[self.receivedData setLength:0];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
+{
+    [self.receivedData appendData:incrementalData];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
+{
+    [viewObjects hideLoadingScreen];
+    
+    CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error grabbing the album list.\n\nError:%@", error.localizedDescription] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    alert.tag = 2;
+    [alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+    [alert release];
+    
+	self.receivedData = nil;
+	[theConnection release];
+}	
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
+{	
+    HomeAlbumViewController *albumViewController = [[HomeAlbumViewController alloc] initWithNibName:@"HomeAlbumViewController" bundle:nil];
+	albumViewController.title = [titles objectForKey:modifier];
+	
+    NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:self.receivedData];
+    HomeXMLParser *parser = [[HomeXMLParser alloc] initXMLParser];
+    [xmlParser setDelegate:parser];
+    [xmlParser parse];
+    
+    albumViewController.listOfAlbums = [NSMutableArray arrayWithArray:parser.listOfAlbums];
+    albumViewController.modifier = modifier;
+    
+    [xmlParser release];
+    [parser release];
+    
+    self.modifier = nil;
+	
+	[self pushViewController:albumViewController];
+	[albumViewController release];	
+    
+	self.receivedData = nil;
+	[theConnection release];
+}
 
 @end

@@ -25,6 +25,7 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
+#import "OrderedDictionary.h"
  
 static MusicSingleton *sharedInstance = nil;
 
@@ -1496,7 +1497,7 @@ static MusicSingleton *sharedInstance = nil;
 	{
         JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
         
-        NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:@"add" forKey:@"action"];
+        OrderedDictionary *parameters = [OrderedDictionary dictionaryWithObject:@"add" forKey:@"action"];
 		for (NSString *songId in songIds)
 		{
             [parameters setObject:n2N(songId) forKey:@"id"];

@@ -14,9 +14,11 @@
 #import "PlaylistsXMLParser.h"
 #import "CellOverlay.h"
 #import "NSString-md5.h"
+#import "NSMutableURLRequest+SUS.h"
 
 @implementation PlaylistsUITableViewCell
 
+@synthesize receivedData;
 @synthesize indexPath, playlistNameScrollView, playlistNameLabel, isOverlayShowing, overlayView, deleteToggleImage, isDelete;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
@@ -221,6 +223,52 @@
 	playlistNameLabel.frame = newFrame;
 }
 
+#pragma mark - Connection Delegate
+
+/*- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
+{
+	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
+		return YES; // Self-signed cert will be accepted
+	
+	return NO;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{	
+	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+	{
+		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
+	}
+	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+	[self.receivedData setLength:0];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
+{
+    [self.receivedData appendData:incrementalData];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
+{
+	self.receivedData = nil;
+	[theConnection release];
+	
+	// Inform the delegate that loading failed
+	[self.delegate loadingFailed:self withError:error];
+}	
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
+{	
+	self.receivedData = nil;
+	[theConnection release];
+	
+	// Notify the delegate that the loading is finished
+	[self.delegate loadingFinished:self];
+}*/
 
 #pragma mark Touch gestures for custom cell view
 

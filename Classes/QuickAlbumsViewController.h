@@ -21,6 +21,10 @@
 
 @property (nonatomic, assign) UIViewController *parent;
 
+@property (nonatomic, retain) NSMutableData *receivedData;
+
+@property (nonatomic, retain) NSString *modifier;
+
 - (IBAction)random;
 - (IBAction)frequent;
 - (IBAction)newest;

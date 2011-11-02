@@ -45,6 +45,8 @@
 @property (nonatomic, retain) UIImageView *deleteToggleImage;
 @property BOOL isDelete;
 
+@property (nonatomic, retain) NSMutableData *receivedData;
+
 
 - (BOOL)isTouchGoingLeftOrRight:(UITouch *)touch;
 - (void)lookForSwipeGestureInTouches:(NSSet *)touches withEvent:(UIEvent *)event;
