@@ -13,7 +13,7 @@
 #import "Song.h"
 #import "AudioStreamer.h"
 #import "NSString-md5.h"
-#import "CFNetworkRequests.h"
+#import "SUSDownloadSingleton.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "Reachability.h"
@@ -37,7 +37,7 @@ static MusicSingleton *sharedInstance = nil;
 
 // Music player objects
 //
-@synthesize currentSongObject, nextSongObject, queueSongObject, currentSongLyrics, currentPlaylistPosition, isNewSong, songUrl, nextSongUrl, queueSongUrl, coverArtUrl; 
+@synthesize currentSongObject, nextSongObject, queueSongObject, currentSongLyrics, currentPlaylistPosition, isNewSong, coverArtUrl; 
 
 // Song cache stuff
 @synthesize documentsPath, audioFolderPath, tempAudioFolderPath, tempDownloadByteOffset;
@@ -154,7 +154,9 @@ static MusicSingleton *sharedInstance = nil;
 			// The song is fully cached, start streaming from the local copy
 			
 			// Grab the first bytes of the song to trick Subsonic into seeing that it's being played
-			NSURLRequest *request = [NSURLRequest requestWithURL:songUrl cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:kLoadingTimeout];
+            NSString *songId = [[currentSongObject.songId copy] autorelease];
+            NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(songId) forKey:@"id"];
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters];
 			NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 			if (!connection)
 			{
@@ -222,7 +224,8 @@ static MusicSingleton *sharedInstance = nil;
 					[[NSFileManager defaultManager] createFileAtPath:downloadFileNameA contents:[NSData data] attributes:nil];
 					self.audioFileA = nil; self.audioFileA = [NSFileHandle fileHandleForWritingAtPath:downloadFileNameA];
 					
-					[CFNetworkRequests downloadCFNetA:songUrl];
+                    NSString *songId = [[currentSongObject.songId copy] autorelease];
+					[[SUSDownloadSingleton sharedInstance] downloadCFNetA:songId];
 				}
 				else
 				{
@@ -245,7 +248,8 @@ static MusicSingleton *sharedInstance = nil;
 			[[NSFileManager defaultManager] createFileAtPath:downloadFileNameA contents:[NSData data] attributes:nil];
 			self.audioFileA = [NSFileHandle fileHandleForWritingAtPath:downloadFileNameA];
 
-			[CFNetworkRequests downloadCFNetA:songUrl];
+            NSString *songId = [[currentSongObject.songId copy] autorelease];
+			[[SUSDownloadSingleton sharedInstance] downloadCFNetA:songId];
 		}
 		else
 		{
@@ -260,15 +264,16 @@ static MusicSingleton *sharedInstance = nil;
 	// Create the request and resume the download
 	if (!viewObjects.isOfflineMode)
 	{
-		[CFNetworkRequests resumeCFNetA:byteOffset];
+        NSString *songId = [[currentSongObject.songId copy] autorelease];
+		[[SUSDownloadSingleton sharedInstance] resumeCFNetA:songId offset:byteOffset];
 	}
 }
 
 - (void)stopDownloadA 
 {
-	if ([CFNetworkRequests downloadA])
+	if ([[SUSDownloadSingleton sharedInstance] isDownloadA])
 	{
-		[CFNetworkRequests cancelCFNetA];
+		[[SUSDownloadSingleton sharedInstance] cancelCFNetA];
 	}
 	
 	// Delete the unfinished download and remove it from the cache database
@@ -340,7 +345,7 @@ static MusicSingleton *sharedInstance = nil;
 			[databaseControls.songCacheDb executeUpdate:[NSString stringWithFormat:@"UPDATE cachedSongs SET cachedDate = %i, playedDate = 0 WHERE md5 = ?", (NSUInteger)[[NSDate date] timeIntervalSince1970]], downloadFileNameHashB];
 			
 			// Set the song url
-            self.nextSongUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:nextSongObject.songId]];
+            //self.nextSongUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:nextSongObject.songId]];
 			
 			// Remove and recreate the song file on disk
 			[[NSFileManager defaultManager] removeItemAtPath:downloadFileNameB error:NULL];
@@ -348,7 +353,9 @@ static MusicSingleton *sharedInstance = nil;
 			self.audioFileB = nil; self.audioFileB = [NSFileHandle fileHandleForWritingAtPath:downloadFileNameB];
 			
 			self.songB = [[nextSongObject copy] autorelease];
-			[CFNetworkRequests downloadCFNetB:nextSongUrl];
+            
+            NSString *songId = [[nextSongObject.songId copy] autorelease];
+			[[SUSDownloadSingleton sharedInstance] downloadCFNetB:songId];
 		}
 	}
 	else 
@@ -359,14 +366,15 @@ static MusicSingleton *sharedInstance = nil;
 		[databaseControls.songCacheDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO cachedSongs (md5, finished, cachedDate, playedDate, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES ('%@', 'NO', %i, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", downloadFileNameHashB, (NSUInteger)[[NSDate date] timeIntervalSince1970]], nextSongObject.title, nextSongObject.songId, nextSongObject.artist, nextSongObject.album, nextSongObject.genre, nextSongObject.coverArtId, nextSongObject.path, nextSongObject.suffix, nextSongObject.transcodedSuffix, nextSongObject.duration, nextSongObject.bitRate, nextSongObject.track, nextSongObject.year, nextSongObject.size];
 		
 		// Set the song url
-        self.nextSongUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:nextSongObject.songId]];
+        //self.nextSongUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:nextSongObject.songId]];
 		
 		// Create new file on disk
 		[[NSFileManager defaultManager] createFileAtPath:downloadFileNameB contents:[NSData data] attributes:nil];
 		self.audioFileB = [NSFileHandle fileHandleForWritingAtPath:downloadFileNameB];
 		
 		self.songB = [[nextSongObject copy] autorelease];
-		[CFNetworkRequests downloadCFNetB:nextSongUrl];
+        NSString *songId = [[nextSongObject.songId copy] autorelease];
+		[[SUSDownloadSingleton sharedInstance] downloadCFNetB:songId];
 	}
 }
 
@@ -375,7 +383,8 @@ static MusicSingleton *sharedInstance = nil;
 	// Create the request and resume the download
 	if (!viewObjects.isOfflineMode)
 	{
-		[CFNetworkRequests resumeCFNetB:byteOffset];
+        NSString *songId = [[nextSongObject.songId copy] autorelease];
+		[[SUSDownloadSingleton sharedInstance] resumeCFNetB:songId offset:byteOffset];
 	}
 }
 
@@ -389,9 +398,9 @@ static MusicSingleton *sharedInstance = nil;
 {
 	reportDownloadedLengthB = NO;
 
-	if ([CFNetworkRequests downloadB])
+	if ([[SUSDownloadSingleton sharedInstance] isDownloadB])
 	{
-		[CFNetworkRequests cancelCFNetB];
+		[[SUSDownloadSingleton sharedInstance] cancelCFNetB];
 		self.songB = nil;
 	}		
 	
@@ -437,7 +446,8 @@ static MusicSingleton *sharedInstance = nil;
 	[[NSFileManager defaultManager] createFileAtPath:downloadFileNameA contents:[NSData data] attributes:nil];
 	self.audioFileA = nil; self.audioFileA = [NSFileHandle fileHandleForWritingAtPath:downloadFileNameA];
 
-	[CFNetworkRequests downloadCFNetTemp:songUrl];
+    NSString *songId = [[currentSongObject.songId copy] autorelease];
+	[[SUSDownloadSingleton sharedInstance] downloadCFNetTemp:songId];
 }
 
 - (Song *) nextQueuedSong
@@ -554,9 +564,6 @@ static MusicSingleton *sharedInstance = nil;
 				// Delete the row from cachedSongs
 				[databaseControls.songCacheDb executeUpdate:@"DELETE FROM cachedSongs WHERE md5 = downloadFileNameHashQueue"];
 				
-				// Set the song url
-                self.queueSongUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:queueSongObject.songId]];
-				
 				// Remove and recreate the song file on disk
 				[[NSFileManager defaultManager] removeItemAtPath:downloadFileNameQueue error:NULL];
 				[[NSFileManager defaultManager] createFileAtPath:downloadFileNameQueue contents:[NSData data] attributes:nil];
@@ -564,8 +571,9 @@ static MusicSingleton *sharedInstance = nil;
 				
 				// Start the download
 				NSURLConnectionDelegateQueue *connDelegateQueue = [[NSURLConnectionDelegateQueue alloc] init];
-				NSURLRequest *downloadRequestQueue = [NSURLRequest requestWithURL:queueSongUrl cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:kLoadingTimeout];	
-				self.downloadQueue = [NSURLConnection connectionWithRequest:downloadRequestQueue delegate:connDelegateQueue];
+                NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(queueSongObject.songId) forKey:@"id"];
+                NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters];
+				self.downloadQueue = [NSURLConnection connectionWithRequest:request delegate:connDelegateQueue];
 				[connDelegateQueue release];
 			}
 			else 
@@ -606,18 +614,16 @@ static MusicSingleton *sharedInstance = nil;
 		if (doDownload)
 		{
 			// The song has not been cached yet, start from scratch
-			
-			// Set the song url
-            self.queueSongUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:queueSongObject.songId]];
-			
+						
 			// Create new file on disk
 			[[NSFileManager defaultManager] createFileAtPath:downloadFileNameQueue contents:[NSData data] attributes:nil];
 			self.audioFileQueue = [NSFileHandle fileHandleForWritingAtPath:downloadFileNameQueue];
 			
 			// Start the download
 			NSURLConnectionDelegateQueue *connDelegateQueue = [[NSURLConnectionDelegateQueue alloc] init];
-			NSURLRequest *downloadRequestQueue = [NSURLRequest requestWithURL:queueSongUrl cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:kLoadingTimeout];	
-			self.downloadQueue = [NSURLConnection connectionWithRequest:downloadRequestQueue delegate:connDelegateQueue];
+            NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(queueSongObject.songId) forKey:@"id"];
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters];
+			self.downloadQueue = [NSURLConnection connectionWithRequest:request delegate:connDelegateQueue];
 			[connDelegateQueue release];
 		}
 	}
@@ -628,11 +634,13 @@ static MusicSingleton *sharedInstance = nil;
 	// Create the request and resume the download
 	if (!viewObjects.isOfflineMode)
 	{
-		NSURLConnectionDelegateQueue *connDelegateQueue = [[NSURLConnectionDelegateQueue alloc] init];
-		NSMutableURLRequest *downloadRequestQueue = [NSMutableURLRequest requestWithURL:queueSongUrl cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:kLoadingTimeout];	
+		NSURLConnectionDelegateQueue *connDelegateQueue = [[NSURLConnectionDelegateQueue alloc] init];	
+        NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(queueSongObject.songId) forKey:@"id"];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters];
+        
 		NSString *range = [NSString stringWithFormat:@"bytes=%i-", byteOffset];
-		[downloadRequestQueue setValue:range forHTTPHeaderField:@"Range"];
-		self.downloadQueue = [NSURLConnection connectionWithRequest:downloadRequestQueue delegate:connDelegateQueue];
+		[request setValue:range forHTTPHeaderField:@"Range"];
+		self.downloadQueue = [NSURLConnection connectionWithRequest:request delegate:connDelegateQueue];
 		[connDelegateQueue release];		
 	}
 }
@@ -778,7 +786,7 @@ static MusicSingleton *sharedInstance = nil;
 	}
 	else
 	{
-        self.songUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:currentSongObject.songId]];
+        //self.songUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:currentSongObject.songId]];
 		
 		[self destroyStreamer];
 		seekTime = 0.0;
@@ -822,7 +830,7 @@ static MusicSingleton *sharedInstance = nil;
 					self.nextSongObject = [databaseControls songFromDbRow:(index + 1) inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 				}
 				
-                self.songUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:currentSongObject.songId]];
+                //self.songUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:currentSongObject.songId]];
 				
 				[self destroyStreamer];
 				seekTime = 0.0;
@@ -858,7 +866,7 @@ static MusicSingleton *sharedInstance = nil;
 				self.nextSongObject = [databaseControls songFromDbRow:(index + 1) inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 			}
 			
-            self.songUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:currentSongObject.songId]];
+            //self.songUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:currentSongObject.songId]];
 			
 			[self destroyStreamer];
 			seekTime = 0.0;
@@ -927,7 +935,7 @@ static MusicSingleton *sharedInstance = nil;
 		
 		if (resume)
 		{
-            self.songUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:currentSongObject.songId]];
+            //self.songUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:currentSongObject.songId]];
 			
 			// Determine the hashed filename
 			self.downloadFileNameHashA = nil; self.downloadFileNameHashA = [NSString md5:currentSongObject.path];

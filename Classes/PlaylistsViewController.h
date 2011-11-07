@@ -7,10 +7,11 @@
 //
 
 #import "BBSimpleConnectionQueue.h"
+#import "SUSLoaderDelegate.h"
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, BBSimpleConnectionQueue;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, BBSimpleConnectionQueue, SUSServerPlaylistsDAO;
 
-@interface PlaylistsViewController : UITableViewController <BBSimpleConnectionQueueDelegate>
+@interface PlaylistsViewController : UITableViewController <BBSimpleConnectionQueueDelegate, SUSLoaderDelegate>
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
@@ -53,6 +54,8 @@
 @property (nonatomic, retain) NSArray *listOfSongs;
 
 @property (nonatomic, retain) NSMutableURLRequest *request;
+
+@property (nonatomic, retain) SUSServerPlaylistsDAO *serverPlaylistsDataModel;
 
 - (void)showDeleteButton;
 - (void)hideDeleteButton;

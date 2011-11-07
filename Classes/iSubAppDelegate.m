@@ -32,7 +32,6 @@
 #include <netinet/in.h> 
 #include <netdb.h>
 #include <arpa/inet.h>
-#import "CFNetworkRequests.h"
 #import "NSString-hex.h"
 #import "MKStoreManager.h"
 #import "Server.h"
@@ -1132,7 +1131,7 @@ void onUncaughtException(NSException* exception)
 #pragma mark Music Streamer
 #pragma mark -
 
-- (NSString *)getStreamURLStringForSongId:(NSString *)songId
+/*- (NSString *)getStreamURLStringForSongId:(NSString *)songId
 {	
     SavedSettings *settings = [SavedSettings sharedInstance];
     
@@ -1147,7 +1146,7 @@ void onUncaughtException(NSException* exception)
 	{
 		return [NSString stringWithFormat:@"%@/rest/stream.view?u=%@&p=%@&v=1.1.0&c=iSub&id=", settings.urlString, [encodedUserName autorelease], [encodedPassword autorelease]];
 	}
-}
+}*/
 
 /*- (NSString *)getBaseUrl:(NSString *)action
 {	

@@ -7,7 +7,7 @@
 //
 
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, EGORefreshTableHeaderView;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, EGORefreshTableHeaderView, SUSServerPlaylist;
 
 @interface PlaylistSongsViewController : UITableViewController
 {
@@ -29,6 +29,8 @@
 
 @property(assign,getter=isReloading) BOOL reloading;
 
-@property (nonatomic, retain) NSString *md5;
+@property (nonatomic, copy) NSString *md5;
+
+@property (nonatomic, copy) SUSServerPlaylist *serverPlaylist;
 
 @end

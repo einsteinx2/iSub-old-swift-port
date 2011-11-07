@@ -131,8 +131,6 @@
 
 - (void)checkServer;
 
-- (NSString *)getStreamURLStringForSongId:(NSString *)songId;
-
 @end
 
 

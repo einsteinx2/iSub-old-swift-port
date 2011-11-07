@@ -18,6 +18,7 @@
 
 - (id)initWithDelegate:(NSObject <SUSLoaderDelegate> *)theDelegate;
 
+#pragma mark - Public DAO Methods
 - (NSString *)lyricsForArtist:(NSString *)artist andTitle:(NSString *)title;
 
 @end

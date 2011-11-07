@@ -6,7 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "CFNetworkRequests.h"
+#import "SUSDownloadSingleton.h"
 #import "iSubAppDelegate.h"
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
@@ -20,24 +20,25 @@
 #import "SavedSettings.h"
 #import "SUSPlayerCoverArtLoader.h"
 #import "SUSTableCellCoverArtLoader.h"
+#import "NSString+URLEncode.h"
+#import "NSData+Base64.h"
+
+static SUSDownloadSingleton *sharedInstance = nil;
 
 static iSubAppDelegate *appDelegate;
 static MusicSingleton *musicControls;
 static DatabaseSingleton *databaseControls;
 static CFReadStreamRef readStreamRefA;
 static CFReadStreamRef readStreamRefB;
-static BOOL isDownloadA = NO;
-static BOOL isDownloadB = NO;
 static void TerminateDownload(CFReadStreamRef stream);
 id appDelegateRef;
 id musicControlsRef;
 id databaseControlsRef;
-void * selfRef;
+id selfRef;
 
 // Bandwidth Throttling
-static BOOL isThrottlingEnabled;
-static NSDate *throttlingDate;
 static UInt32 bytesTransferred;
+
 #define kThrottleTimeInterval 0.01
 
 #define kMaxKilobitsPerSec3G 550
@@ -56,16 +57,13 @@ static UInt32 bytesTransferred;
 #define isThrottleLoggingEnabled NO
 
 
-@implementation CFNetworkRequests
+@implementation SUSDownloadSingleton
+
+@synthesize throttlingDate, isDownloadA, isDownloadB;
 
 static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStreamEventHasBytesAvailable | kCFStreamEventEndEncountered | kCFStreamEventErrorOccurred;
 
-+ (void) setShouldThrottle:(BOOL)shouldThrottle
-{
-	isThrottlingEnabled = shouldThrottle;
-}
-
-+ (BOOL) insertSong:(Song *)aSong intoGenreTable:(NSString *)table
+- (BOOL) insertSong:(Song *)aSong intoGenreTable:(NSString *)table
 {
 	[databaseControls.songCacheDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO %@ (md5, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", table], [NSString md5:aSong.path], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
 	
@@ -76,34 +74,22 @@ static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStr
 	return [databaseControls.songCacheDb hadError];
 }
 
-+ (BOOL) downloadA
-{
-	return isDownloadA;
-}
-
-+ (BOOL) downloadB
-{
-	return isDownloadB;
-}
-
-+ (void) continueDownloadA
+- (void) continueDownloadA
 {
 	if (isDownloadA)
 	{
 		// Schedule the stream
-		//DLog(@"continuing downloadA");
-		[throttlingDate release]; throttlingDate = [[NSDate date] retain];
+        self.throttlingDate = [NSDate date];
 		CFReadStreamScheduleWithRunLoop(readStreamRefA, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
 	}
 }
 
-+ (void) continueDownloadB
+- (void) continueDownloadB
 {
 	if (isDownloadB)
 	{
 		// Schedule the stream
-		//DLog(@"continuing downloadB");
-		[throttlingDate release]; throttlingDate = [[NSDate date] retain];
+		self.throttlingDate = [NSDate date];
 		CFReadStreamScheduleWithRunLoop(readStreamRefB, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
 	}
 }
@@ -130,14 +116,14 @@ static void TerminateDownload(CFReadStreamRef stream)
 	stream = nil;
 }
 
-+ (void) cancelCFNetA
+- (void) cancelCFNetA
 {
 	//DLog(@"cancelCFNetA called, isDownloadA = %i", isDownloadA);
 	isDownloadA = NO;
 	TerminateDownload(readStreamRefA);
 }
 
-+ (void) cancelCFNetB
+- (void) cancelCFNetB
 {
 	//DLog(@"cancelCFNetB called, isDownloadB = %i", isDownloadB);
 	isDownloadB = NO;
@@ -200,7 +186,7 @@ static void DownloadDoneA()
 		// Close the file
 		[[musicControlsRef audioFileA] closeFile];
 		
-		isDownloadA = NO;
+        [selfRef setIsDownloadA:NO];
 	}
 	else
 	{
@@ -236,7 +222,7 @@ static void DownloadDoneA()
 			}
 			
 			// Insert the song object into the genresSongs
-			[CFNetworkRequests insertSong:[musicControlsRef currentSongObject] intoGenreTable:@"genresSongs"];
+			[[SUSDownloadSingleton sharedInstance] insertSong:[musicControlsRef currentSongObject] intoGenreTable:@"genresSongs"];
 		}
 		
 		// Cache the album art if it exists
@@ -255,7 +241,7 @@ static void DownloadDoneA()
 		// Close the file
 		[[musicControlsRef audioFileA] closeFile];
 		
-		isDownloadA = NO;
+        [selfRef setIsDownloadA:NO];
 		
 		// Start the download of the next song if there is one and the setting is turned on
 		if ([[musicControlsRef nextSongObject] path] != nil && [SavedSettings sharedInstance].isNextSongCacheEnabled)
@@ -265,7 +251,7 @@ static void DownloadDoneA()
 
 static void	ReadStreamClientCallBackA( CFReadStreamRef stream, CFStreamEventType type, void *clientCallBackInfo )
 {	
-	if (isDownloadA)
+	if ([selfRef isDownloadA])
 	{
 		#pragma unused (clientCallBackInfo)
 		UInt8		buffer[16 * 1024];				//	Create a 16K buffer
@@ -303,11 +289,11 @@ static void	ReadStreamClientCallBackA( CFReadStreamRef stream, CFStreamEventType
 
 				if ([musicControlsRef downloadedLengthA] < (kMinBytesToStartLimiting * ((float)currentSongBitrate() / 160.0f)))
 				{
-					[throttlingDate release]; throttlingDate = [[NSDate date] retain];
+                    [selfRef setThrottlingDate:[NSDate date]];
 					bytesTransferred = 0;
 				}
 				
-				if ([[NSDate date] timeIntervalSinceDate:throttlingDate] > kThrottleTimeInterval &&
+				if ([[NSDate date] timeIntervalSinceDate:[selfRef throttlingDate]] > kThrottleTimeInterval &&
 					[musicControlsRef downloadedLengthA] > (kMinBytesToStartLimiting * ((float)currentSongBitrate() / 160.0f)))
 				{
 					if ([appDelegateRef isWifi] == NO && bytesTransferred > kMaxBytesPerInterval3G)
@@ -320,7 +306,7 @@ static void	ReadStreamClientCallBackA( CFReadStreamRef stream, CFStreamEventType
 						if (isThrottleLoggingEnabled)
 							DLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
 						
-						[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
+						[NSTimer scheduledTimerWithTimeInterval:delay target:[SUSDownloadSingleton sharedInstance] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
 						
 						bytesTransferred = 0;
 					}
@@ -334,7 +320,7 @@ static void	ReadStreamClientCallBackA( CFReadStreamRef stream, CFStreamEventType
 						if (isThrottleLoggingEnabled)
 							DLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
 						
-						[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
+						[NSTimer scheduledTimerWithTimeInterval:delay target:[SUSDownloadSingleton sharedInstance] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
 						
 						bytesTransferred = 0;
 					}				
@@ -378,7 +364,7 @@ static void DownloadDoneB()
 		// Close the file
 		[[musicControlsRef audioFileB] closeFile];
 		
-		isDownloadB = NO;
+		[selfRef setIsDownloadB:NO];
 	}
 	else
 	{
@@ -417,7 +403,7 @@ static void DownloadDoneB()
 			}
 			
 			// Insert the song object into the genresSongs
-			[CFNetworkRequests insertSong:[musicControlsRef songB] intoGenreTable:@"genresSongs"];
+			[[SUSDownloadSingleton sharedInstance] insertSong:[musicControlsRef songB] intoGenreTable:@"genresSongs"];
 		}
 		
 		// Cache the album art if it exists
@@ -436,7 +422,7 @@ static void DownloadDoneB()
 		// Close the file
 		[[musicControlsRef audioFileB] closeFile];
 		
-		isDownloadB = NO;
+		[selfRef setIsDownloadB:NO];
 		
 		// If we're playing from this file and the setting is turned on, call startDownloadB again to grab the next song
 		if ([musicControlsRef reportDownloadedLengthB])
@@ -455,7 +441,7 @@ static void DownloadDoneB()
 
 static void	ReadStreamClientCallBackB( CFReadStreamRef stream, CFStreamEventType type, void *clientCallBackInfo )
 {	
-	if (isDownloadB)
+	if ([selfRef isDownloadB])
 	{
 		#pragma unused (clientCallBackInfo)
 		UInt8		buffer[16 * 1024];				//	Create a 16K buffer
@@ -491,11 +477,11 @@ static void	ReadStreamClientCallBackB( CFReadStreamRef stream, CFStreamEventType
 
 				if ([musicControlsRef downloadedLengthB] < (kMinBytesToStartLimiting * ((float)currentSongBitrate() / 160.0f)))
 				{
-					[throttlingDate release]; throttlingDate = [[NSDate date] retain];
+					[selfRef setThrottlingDate:[NSDate date]];
 					bytesTransferred = 0;
 				}
 				
-				if ([[NSDate date] timeIntervalSinceDate:throttlingDate] > kThrottleTimeInterval &&
+				if ([[NSDate date] timeIntervalSinceDate:[selfRef throttlingDate]] > kThrottleTimeInterval &&
 					[musicControlsRef downloadedLengthB] > (kMinBytesToStartLimiting * ((float)nextSongBitrate() / 160.0f)))
 				{
 					if ([appDelegateRef isWifi] == NO && bytesTransferred > kMaxBytesPerInterval3G)
@@ -508,7 +494,7 @@ static void	ReadStreamClientCallBackB( CFReadStreamRef stream, CFStreamEventType
 						if (isThrottleLoggingEnabled)
 							DLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
 						
-						[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadB) userInfo:nil repeats:NO];
+						[NSTimer scheduledTimerWithTimeInterval:delay target:[SUSDownloadSingleton sharedInstance] selector:@selector(continueDownloadB) userInfo:nil repeats:NO];
 						
 						bytesTransferred = 0;
 					}
@@ -522,7 +508,7 @@ static void	ReadStreamClientCallBackB( CFReadStreamRef stream, CFStreamEventType
 						if (isThrottleLoggingEnabled)
 							DLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
 						
-						[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadB) userInfo:nil repeats:NO];
+						[NSTimer scheduledTimerWithTimeInterval:delay target:[SUSDownloadSingleton sharedInstance] selector:@selector(continueDownloadB) userInfo:nil repeats:NO];
 						
 						bytesTransferred = 0;
 					}
@@ -566,7 +552,7 @@ static void DownloadDoneTemp()
 		// Close the file
 		[[musicControlsRef audioFileA] closeFile];
 		
-		isDownloadA = NO;
+		[selfRef setIsDownloadA:NO];
 	}
 	else
 	{
@@ -576,7 +562,7 @@ static void DownloadDoneTemp()
 		// Close the file
 		[[musicControlsRef audioFileA] closeFile];
 	
-		isDownloadA = NO;
+		[selfRef setIsDownloadA:NO];
 		
 		// Start the download of the next song if there is one and the setting is turned on and auto song caching is enabled
 		//if ([[musicControlsRef nextSongObject] path] != nil && [[[appDelegateRef settingsDictionary] objectForKey:@"enableNextSongCacheSetting"] isEqualToString:@"YES"] && [[[appDelegateRef settingsDictionary] objectForKey:@"enableSongCachingSetting"] isEqualToString:@"YES"])
@@ -624,11 +610,11 @@ static void	ReadStreamClientCallBackTemp( CFReadStreamRef stream, CFStreamEventT
 
 			if ([musicControlsRef downloadedLengthA] < (kMinBytesToStartLimiting * ((float)currentSongBitrate() / 160.0f)))
 			{
-				[throttlingDate release]; throttlingDate = [[NSDate date] retain];
+				[selfRef setThrottlingDate:[NSDate date]];
 				bytesTransferred = 0;
 			}
 			
-			if ([[NSDate date] timeIntervalSinceDate:throttlingDate] > kThrottleTimeInterval &&
+			if ([[NSDate date] timeIntervalSinceDate:[selfRef throttlingDate]] > kThrottleTimeInterval &&
 				[musicControlsRef downloadedLengthA] > (kMinBytesToStartLimiting * ((float)currentSongBitrate() / 160.0f)))
 			{
 				if ([appDelegateRef isWifi] == NO && bytesTransferred > kMaxBytesPerInterval3G)
@@ -641,7 +627,7 @@ static void	ReadStreamClientCallBackTemp( CFReadStreamRef stream, CFStreamEventT
 					if (isThrottleLoggingEnabled)
 						DLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
 					
-					[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
+					[NSTimer scheduledTimerWithTimeInterval:delay target:[SUSDownloadSingleton sharedInstance] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
 					
 					bytesTransferred = 0;
 				}
@@ -655,7 +641,7 @@ static void	ReadStreamClientCallBackTemp( CFReadStreamRef stream, CFStreamEventT
 					if (isThrottleLoggingEnabled)
 						DLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
 					
-					[NSTimer scheduledTimerWithTimeInterval:delay target:[CFNetworkRequests class] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
+					[NSTimer scheduledTimerWithTimeInterval:delay target:[SUSDownloadSingleton sharedInstance] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
 					
 					bytesTransferred = 0;
 				}
@@ -684,51 +670,59 @@ static void	ReadStreamClientCallBackTemp( CFReadStreamRef stream, CFStreamEventT
 	}
 }
 
-#pragma mark Download
-+ (void) downloadCFNetA:(NSURL *)url
+#pragma mark Connection factory
+
+- (void)createConnectionForReadStreamRef:(CFReadStreamRef)readStreamRef callback:(CFReadStreamClientCallBack)callback songId:(NSString *)songId offset:(UInt32)byteOffset
 {
-	//DLog(@"downloadCFNetA url: %@", [url absoluteString]);
-	
-	if (!appDelegate)
-	{
-		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-		musicControls = [MusicSingleton sharedInstance];
-		databaseControls = [DatabaseSingleton sharedInstance];
-		appDelegateRef = appDelegate;
-		musicControlsRef = musicControls;
-		databaseControlsRef = databaseControls;
-	}
+    SavedSettings *settings = [SavedSettings sharedInstance];
+	NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/rest/stream.view", settings.urlString]];
+	NSString *username = [settings.username URLEncodeString];
+	NSString *password = [settings.password URLEncodeString];
     
-    if (!selfRef)
-        selfRef = self;
-	
-	if (throttlingDate)
-		[throttlingDate release];
-	throttlingDate = nil;
-	bytesTransferred = 0;
-	
-	isDownloadA = YES;
-	
-	CFHTTPMessageRef messageRef = NULL;
-	//CFReadStreamRef	readStreamRef = NULL;
+    CFHTTPMessageRef messageRef = NULL;
 	CFStreamClientContext ctxt = {0, (void*)NULL, NULL, NULL, NULL};
     
-	// Create the GET request
-	messageRef = CFHTTPMessageCreateRequest(kCFAllocatorDefault, CFSTR("GET"), (CFURLRef)url, kCFHTTPVersion1_1);
+	// Create the POST request
+	messageRef = CFHTTPMessageCreateRequest(kCFAllocatorDefault, CFSTR("POST"), (CFURLRef)url, kCFHTTPVersion1_1);
 	if ( messageRef == NULL ) goto Bail;
 	
 	// Create the stream for the request.
-	readStreamRefA	= CFReadStreamCreateForHTTPRequest( kCFAllocatorDefault, messageRef );
-	if ( readStreamRefA == NULL ) goto Bail;
+	readStreamRef	= CFReadStreamCreateForHTTPRequest( kCFAllocatorDefault, messageRef );
+	if ( readStreamRef == NULL ) goto Bail;
 	
 	//	There are times when a server checks the User-Agent to match a well known browser.  This is what Safari used at the time the sample was written
 	//CFHTTPMessageSetHeaderFieldValue( messageRef, CFSTR("User-Agent"), CFSTR("Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) AppleWebKit/125.5.5 (KHTML, like Gecko) Safari/125")); 
+    
+    // Set the POST body
+    NSString *postString = nil;
+    if ([musicControls maxBitrateSetting] != 0)
+	{
+        postString = [NSString stringWithFormat:@"v=1.2.0&c=iSub&maxBitRate=%i&id=%@", musicControls.maxBitrateSetting, songId];
+	}
+    else
+	{
+        postString = [NSString stringWithFormat:@"v=1.1.0&c=iSub&id=%@", songId];
+	}
+    CFHTTPMessageSetBody(messageRef, (CFDataRef)[postString dataUsingEncoding:NSUTF8StringEncoding]);
 	
 	// Set a no cache policy
 	CFHTTPMessageSetHeaderFieldValue( messageRef, CFSTR("Cache-Control"), CFSTR("no-cache"));
+    
+    if (byteOffset > 0)
+    {
+        // Add the HTTP header to resume the download
+        //DLog(@"----------------- byteOffset header: %@", [NSString stringWithFormat:@"bytes=%d-", byteOffset]);
+        CFHTTPMessageSetHeaderFieldValue( messageRef, CFSTR("Range"), CFStringCreateWithFormat(NULL, NULL, CFSTR("bytes=%i-"), byteOffset)); 
+    }
+        
+    // Handle Basic Auth
+    NSString *authStr = [NSString stringWithFormat:@"%@:%@", username, password];
+    NSData *authData = [authStr dataUsingEncoding:NSASCIIStringEncoding];
+    NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64EncodingWithLineLength:0]];
+    CFHTTPMessageSetHeaderFieldValue(messageRef, CFSTR("Authorization"), (CFStringRef)authValue);
 	
 	// Enable stream redirection
-    if (CFReadStreamSetProperty(readStreamRefA, kCFStreamPropertyHTTPShouldAutoredirect, kCFBooleanTrue) == false)
+    if (CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyHTTPShouldAutoredirect, kCFBooleanTrue) == false)
 		goto Bail;
 	
 	// Handle SSL connections
@@ -744,395 +738,91 @@ static void	ReadStreamClientCallBackTemp( CFReadStreamRef stream, CFStreamEventT
 		 [NSNull null], kCFStreamSSLPeerName,
 		 nil];
 		
-		CFReadStreamSetProperty(readStreamRefA, kCFStreamPropertySSLSettings, sslSettings);
+		CFReadStreamSetProperty(readStreamRef, kCFStreamPropertySSLSettings, sslSettings);
 	}
 	
 	// Handle proxy
 	CFDictionaryRef proxyDict = CFNetworkCopySystemProxySettings();
-	CFReadStreamSetProperty(readStreamRefA, kCFStreamPropertyHTTPProxy, proxyDict);
+	CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyHTTPProxy, proxyDict);
 	
 	// Set the client notifier
-	if (CFReadStreamSetClient(readStreamRefA, kNetworkEvents, ReadStreamClientCallBackA, &ctxt) == false)
+	if (CFReadStreamSetClient(readStreamRef, kNetworkEvents, callback, &ctxt) == false)
 		goto Bail;
     
 	// Schedule the stream
-	CFReadStreamScheduleWithRunLoop(readStreamRefA, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
+	CFReadStreamScheduleWithRunLoop(readStreamRef, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
     
 	// Start the HTTP connection
-	if (CFReadStreamOpen(readStreamRefA) == false)
+	if (CFReadStreamOpen(readStreamRef) == false)
 	    goto Bail;
 	
 	DLog(@"--- STARTING HTTP CONNECTION");
 	
 	if (messageRef != NULL) CFRelease(messageRef);
-	return;
+    return;
 	
 Bail:
 	if (messageRef != NULL) CFRelease(messageRef);
-	if (readStreamRefA != NULL)
+	if (readStreamRef != NULL)
     {
-        CFReadStreamSetClient(readStreamRefA, kCFStreamEventNone, NULL, NULL);
-	    CFReadStreamUnscheduleFromRunLoop(readStreamRefA, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
-	    CFReadStreamClose(readStreamRefA);
-        CFRelease(readStreamRefA);
+        CFReadStreamSetClient(readStreamRef, kCFStreamEventNone, NULL, NULL);
+	    CFReadStreamUnscheduleFromRunLoop(readStreamRef, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
+	    CFReadStreamClose(readStreamRef);
+        CFRelease(readStreamRef);
     }
 	return;
 }
 
-+ (void) downloadCFNetB:(NSURL *)url
+#pragma mark Download
+- (void) downloadCFNetA:(NSString *)songId
 {
-	if (!appDelegate)
-	{
-		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-		musicControls = [MusicSingleton sharedInstance];
-		databaseControls = [DatabaseSingleton sharedInstance];
-		appDelegateRef = appDelegate;
-		musicControlsRef = musicControls;
-		databaseControlsRef = databaseControls;
-	}
-    
-    if (!selfRef)
-        selfRef = self;
-	
-	if (throttlingDate)
-		[throttlingDate release];
-	throttlingDate = nil;
-	bytesTransferred = 0;
-	
-	isDownloadB = YES;
-	
-	CFHTTPMessageRef messageRef = NULL;
-	//CFReadStreamRef	readStreamRefB = NULL;
-	CFStreamClientContext ctxt = {0, (void*)NULL, NULL, NULL, NULL};
-    
-	// Create the GET request
-	messageRef = CFHTTPMessageCreateRequest(kCFAllocatorDefault, CFSTR("GET"), (CFURLRef)url, kCFHTTPVersion1_1);
-	if ( messageRef == NULL ) goto Bail;
-	
-	// Create the stream for the request.
-	readStreamRefB	= CFReadStreamCreateForHTTPRequest( kCFAllocatorDefault, messageRef );
-	if ( readStreamRefB == NULL ) goto Bail;
-	
-	//	There are times when a server checks the User-Agent to match a well known browser.  This is what Safari used at the time the sample was written
-	//CFHTTPMessageSetHeaderFieldValue( messageRef, CFSTR("User-Agent"), CFSTR("Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) AppleWebKit/125.5.5 (KHTML, like Gecko) Safari/125")); 
-	
-	// Enable stream redirection
-    if (CFReadStreamSetProperty(readStreamRefB, kCFStreamPropertyHTTPShouldAutoredirect, kCFBooleanTrue) == false)
-		goto Bail;
-	
-	// Handle SSL connections
-	if([[url absoluteString] rangeOfString:@"https"].location != NSNotFound)
-	{
-		NSDictionary *sslSettings =
-		[NSDictionary dictionaryWithObjectsAndKeys:
-		 (NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL, kCFStreamSSLLevel,
-		 [NSNumber numberWithBool:YES], kCFStreamSSLAllowsExpiredCertificates,
-		 [NSNumber numberWithBool:YES], kCFStreamSSLAllowsExpiredRoots,
-		 [NSNumber numberWithBool:YES], kCFStreamSSLAllowsAnyRoot,
-		 [NSNumber numberWithBool:NO], kCFStreamSSLValidatesCertificateChain,
-		 [NSNull null], kCFStreamSSLPeerName,
-		 nil];
-		
-		CFReadStreamSetProperty(readStreamRefB, kCFStreamPropertySSLSettings, sslSettings);
-	}
-	
-	// Handle proxy
-	CFDictionaryRef proxyDict = CFNetworkCopySystemProxySettings();
-	CFReadStreamSetProperty(readStreamRefB, kCFStreamPropertyHTTPProxy, proxyDict);
-	
-	// Set the client notifier
-	if (CFReadStreamSetClient(readStreamRefB, kNetworkEvents, ReadStreamClientCallBackB, &ctxt) == false)
-		goto Bail;
-    
-	// Schedule the stream
-	CFReadStreamScheduleWithRunLoop(readStreamRefB, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
-    
-	// Start the HTTP connection
-	if (CFReadStreamOpen(readStreamRefB) == false)
-	    goto Bail;
-	
-	if (messageRef != NULL) CFRelease(messageRef);
-	return;
-	
-Bail:
-	if (messageRef != NULL) CFRelease(messageRef);
-	if (readStreamRefB != NULL)
-    {
-        CFReadStreamSetClient(readStreamRefB, kCFStreamEventNone, NULL, NULL);
-	    CFReadStreamUnscheduleFromRunLoop(readStreamRefB, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
-	    CFReadStreamClose(readStreamRefB);
-        CFRelease(readStreamRefB);
-    }
-	return;
-}
-
-+ (void) downloadCFNetTemp:(NSURL *)url
-{
-	if (!appDelegate)
-	{
-		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-		musicControls = [MusicSingleton sharedInstance];
-		databaseControls = [DatabaseSingleton sharedInstance];
-		appDelegateRef = appDelegate;
-		musicControlsRef = musicControls;
-		databaseControlsRef = databaseControls;
-	}
-    
-    if (!selfRef)
-        selfRef = self;
-	
-	if (throttlingDate)
-		[throttlingDate release];
-	throttlingDate = nil;
+    self.throttlingDate = nil;
 	bytesTransferred = 0;
 	
 	isDownloadA = YES;
-	
-	CFHTTPMessageRef messageRef = NULL;
-	//CFReadStreamRef	readStreamRef = NULL;
-	CFStreamClientContext ctxt = {0, (void*)NULL, NULL, NULL, NULL};
     
-	// Create the GET request
-	messageRef = CFHTTPMessageCreateRequest(kCFAllocatorDefault, CFSTR("GET"), (CFURLRef)url, kCFHTTPVersion1_1);
-	if ( messageRef == NULL ) goto Bail;
+    [self createConnectionForReadStreamRef:readStreamRefA callback:ReadStreamClientCallBackA songId:songId offset:0];
+}
+
+- (void) downloadCFNetB:(NSString *)songId
+{
+	self.throttlingDate = nil;
+	bytesTransferred = 0;
 	
-	// Add the HTTP header to resume the download
-	//CFHTTPMessageSetHeaderFieldValue( messageRef, CFSTR("Range"), CFStringCreateWithFormat(NULL, NULL, CFSTR("bytes=%d-"), appDelegate.tempDownloadByteOffset)); 
-	//DLog(@"----------------- byteOffset header: %@", [NSString stringWithFormat:@"bytes=%d-", appDelegate.tempDownloadByteOffset]);
-	CFHTTPMessageSetHeaderFieldValue(messageRef, CFSTR("Range"), (CFStringRef)[NSString stringWithFormat:@"bytes=%d-", musicControls.tempDownloadByteOffset]);
-	
-	// Create the stream for the request.
-	readStreamRefA	= CFReadStreamCreateForHTTPRequest( kCFAllocatorDefault, messageRef );
-	if ( readStreamRefA == NULL ) goto Bail;
-	
-	//	There are times when a server checks the User-Agent to match a well known browser.  This is what Safari used at the time the sample was written
-	//CFHTTPMessageSetHeaderFieldValue( messageRef, CFSTR("User-Agent"), CFSTR("Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) AppleWebKit/125.5.5 (KHTML, like Gecko) Safari/125")); 
-	
-	// Enable stream redirection
-    if (CFReadStreamSetProperty(readStreamRefA, kCFStreamPropertyHTTPShouldAutoredirect, kCFBooleanTrue) == false)
-		goto Bail;
-	
-	// Handle SSL connections
-	if([[url absoluteString] rangeOfString:@"https"].location != NSNotFound)
-	{
-		NSDictionary *sslSettings =
-		[NSDictionary dictionaryWithObjectsAndKeys:
-		 (NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL, kCFStreamSSLLevel,
-		 [NSNumber numberWithBool:YES], kCFStreamSSLAllowsExpiredCertificates,
-		 [NSNumber numberWithBool:YES], kCFStreamSSLAllowsExpiredRoots,
-		 [NSNumber numberWithBool:YES], kCFStreamSSLAllowsAnyRoot,
-		 [NSNumber numberWithBool:NO], kCFStreamSSLValidatesCertificateChain,
-		 [NSNull null], kCFStreamSSLPeerName,
-		 nil];
-		
-		CFReadStreamSetProperty(readStreamRefA, kCFStreamPropertySSLSettings, sslSettings);
-	}
-	
-	// Handle proxy
-	CFDictionaryRef proxyDict = CFNetworkCopySystemProxySettings();
-	CFReadStreamSetProperty(readStreamRefA, kCFStreamPropertyHTTPProxy, proxyDict);
-	
-	// Set the client notifier
-	if (CFReadStreamSetClient(readStreamRefA, kNetworkEvents, ReadStreamClientCallBackTemp, &ctxt) == false)
-		goto Bail;
+	isDownloadB = YES;
     
-	// Schedule the stream
-	CFReadStreamScheduleWithRunLoop(readStreamRefA, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
+    [self createConnectionForReadStreamRef:readStreamRefB callback:ReadStreamClientCallBackB songId:songId offset:0];
+}
+
+- (void) downloadCFNetTemp:(NSString *)songId
+{
+	self.throttlingDate = nil;
+	bytesTransferred = 0;
+	
+	isDownloadA = YES;
     
-	// Start the HTTP connection
-	if (CFReadStreamOpen(readStreamRefA) == false)
-	    goto Bail;
-	
-	if (messageRef != NULL) CFRelease(messageRef);
-	return;
-	
-Bail:
-	if (messageRef != NULL) CFRelease(messageRef);
-	if (readStreamRefA != NULL)
-    {
-        CFReadStreamSetClient(readStreamRefA, kCFStreamEventNone, NULL, NULL);
-	    CFReadStreamUnscheduleFromRunLoop(readStreamRefA, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
-	    CFReadStreamClose(readStreamRefA);
-        CFRelease(readStreamRefA);
-    }
-	return;
+    [self createConnectionForReadStreamRef:readStreamRefA callback:ReadStreamClientCallBackTemp songId:songId offset:0];
 }
 
 #pragma mark Resume
-+ (void) resumeCFNetA:(UInt32)byteOffset
+- (void) resumeCFNetA:(NSString *)songId offset:(UInt32)byteOffset
 {
-	//DLog(@"resuming download A");
-	if (!appDelegate)
-	{
-		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-		musicControls = [MusicSingleton sharedInstance];
-		databaseControls = [DatabaseSingleton sharedInstance];
-		appDelegateRef = appDelegate;
-		musicControlsRef = musicControls;
-		databaseControlsRef = databaseControls;
-	}
-    
-    if (!selfRef)
-        selfRef = self;
-	
-	if (throttlingDate)
-		[throttlingDate release];
-	throttlingDate = [[NSDate date] retain];
+    self.throttlingDate = [NSDate date];
 	bytesTransferred = 0;
 	
 	isDownloadA = YES;
-	
-	CFHTTPMessageRef messageRef = NULL;
-	//CFReadStreamRef	readStreamRef = NULL;
-	CFStreamClientContext ctxt = {0, (void*)NULL, NULL, NULL, NULL};
-	
-	// Create the GET request
-	messageRef = CFHTTPMessageCreateRequest(kCFAllocatorDefault, CFSTR("GET"), (CFURLRef)musicControls.songUrl, kCFHTTPVersion1_1);
-	if ( messageRef == NULL ) goto Bail;
-	
-	// Add the HTTP header to resume the download
-	//DLog(@"----------------- byteOffset header: %@", [NSString stringWithFormat:@"bytes=%d-", byteOffset]);
-	CFHTTPMessageSetHeaderFieldValue( messageRef, CFSTR("Range"), CFStringCreateWithFormat(NULL, NULL, CFSTR("bytes=%i-"), byteOffset)); 
-	
-	// Create the stream for the request.
-	readStreamRefA	= CFReadStreamCreateForHTTPRequest( kCFAllocatorDefault, messageRef );
-	if ( readStreamRefA == NULL ) goto Bail;
-	
-	//	There are times when a server checks the User-Agent to match a well known browser.  This is what Safari used at the time the sample was written
-	//CFHTTPMessageSetHeaderFieldValue( messageRef, CFSTR("User-Agent"), CFSTR("Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) AppleWebKit/125.5.5 (KHTML, like Gecko) Safari/125")); 
-	
-	// Enable stream redirection
-    if (CFReadStreamSetProperty(readStreamRefA, kCFStreamPropertyHTTPShouldAutoredirect, kCFBooleanTrue) == false)
-		goto Bail;
-	
-	// Handle SSL connections
-	if([[musicControls.songUrl absoluteString] rangeOfString:@"https"].location != NSNotFound)
-	{
-		NSDictionary *sslSettings =
-		[NSDictionary dictionaryWithObjectsAndKeys:
-		 (NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL, kCFStreamSSLLevel,
-		 [NSNumber numberWithBool:YES], kCFStreamSSLAllowsExpiredCertificates,
-		 [NSNumber numberWithBool:YES], kCFStreamSSLAllowsExpiredRoots,
-		 [NSNumber numberWithBool:YES], kCFStreamSSLAllowsAnyRoot,
-		 [NSNumber numberWithBool:NO], kCFStreamSSLValidatesCertificateChain,
-		 [NSNull null], kCFStreamSSLPeerName,
-		 nil];
-		
-		CFReadStreamSetProperty(readStreamRefA, kCFStreamPropertySSLSettings, sslSettings);
-	}
-	
-	// Set the client notifier
-	if (CFReadStreamSetClient(readStreamRefA, kNetworkEvents, ReadStreamClientCallBackA, &ctxt) == false)
-		goto Bail;
     
-	// Schedule the stream
-	CFReadStreamScheduleWithRunLoop(readStreamRefA, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
-    
-	// Start the HTTP connection
-	if (CFReadStreamOpen(readStreamRefA) == false)
-	    goto Bail;
-	
-	if (messageRef != NULL) CFRelease(messageRef);
-	return;
-	
-Bail:
-	if (messageRef != NULL) CFRelease(messageRef);
-	if (readStreamRefA != NULL)
-    {
-        CFReadStreamSetClient(readStreamRefA, kCFStreamEventNone, NULL, NULL);
-	    CFReadStreamUnscheduleFromRunLoop(readStreamRefA, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
-	    CFReadStreamClose(readStreamRefA);
-        CFRelease(readStreamRefA);
-    }
-	return;
+    [self createConnectionForReadStreamRef:readStreamRefA callback:ReadStreamClientCallBackA songId:songId offset:byteOffset];
 }
 
-+ (void) resumeCFNetB:(UInt32)byteOffset
+- (void) resumeCFNetB:(NSString *)songId offset:(UInt32)byteOffset
 {
-	//DLog(@"resuming download B");
-	if (!appDelegate)
-	{
-		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-		musicControls = [MusicSingleton sharedInstance];
-		databaseControls = [DatabaseSingleton sharedInstance];
-		appDelegateRef = appDelegate;
-		musicControlsRef = musicControls;
-		databaseControlsRef = databaseControls;
-	}
-    
-    if (!selfRef)
-        selfRef = self;
-	
-	if (throttlingDate)
-		[throttlingDate release];
-	throttlingDate = [[NSDate date] retain];
+	self.throttlingDate = [NSDate date];
 	bytesTransferred = 0;
 	
 	isDownloadB = YES;
-	
-	CFHTTPMessageRef messageRef = NULL;
-	//CFReadStreamRef	readStreamRef = NULL;
-	CFStreamClientContext ctxt = {0, (void*)NULL, NULL, NULL, NULL};
     
-	// Create the GET request
-	messageRef = CFHTTPMessageCreateRequest(kCFAllocatorDefault, CFSTR("GET"), (CFURLRef)musicControls.nextSongUrl, kCFHTTPVersion1_1);
-	if ( messageRef == NULL ) goto Bail;
-	
-	// Add the HTTP header to resume the download
-	//DLog(@"----------------- byteOffset header: %@", [NSString stringWithFormat:@"bytes=%d-", byteOffset]);
-	CFHTTPMessageSetHeaderFieldValue( messageRef, CFSTR("Range"), CFStringCreateWithFormat(NULL, NULL, CFSTR("bytes=%i-"), byteOffset)); 
-	
-	// Create the stream for the request.
-	readStreamRefB = CFReadStreamCreateForHTTPRequest( kCFAllocatorDefault, messageRef );
-	if ( readStreamRefB == NULL ) goto Bail;
-	
-	//	There are times when a server checks the User-Agent to match a well known browser.  This is what Safari used at the time the sample was written
-	//CFHTTPMessageSetHeaderFieldValue( messageRef, CFSTR("User-Agent"), CFSTR("Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) AppleWebKit/125.5.5 (KHTML, like Gecko) Safari/125")); 
-	
-	// Enable stream redirection
-    if (CFReadStreamSetProperty(readStreamRefB, kCFStreamPropertyHTTPShouldAutoredirect, kCFBooleanTrue) == false)
-		goto Bail;
-	
-	// Handle SSL connections
-	if([[musicControls.nextSongUrl absoluteString] rangeOfString:@"https"].location != NSNotFound)
-	{
-		NSDictionary *sslSettings =
-		[NSDictionary dictionaryWithObjectsAndKeys:
-		 (NSString *)kCFStreamSocketSecurityLevelNegotiatedSSL, kCFStreamSSLLevel,
-		 [NSNumber numberWithBool:YES], kCFStreamSSLAllowsExpiredCertificates,
-		 [NSNumber numberWithBool:YES], kCFStreamSSLAllowsExpiredRoots,
-		 [NSNumber numberWithBool:YES], kCFStreamSSLAllowsAnyRoot,
-		 [NSNumber numberWithBool:NO], kCFStreamSSLValidatesCertificateChain,
-		 [NSNull null], kCFStreamSSLPeerName,
-		 nil];
-		
-		CFReadStreamSetProperty(readStreamRefB, kCFStreamPropertySSLSettings, sslSettings);
-	}
-	
-	// Set the client notifier
-	if (CFReadStreamSetClient(readStreamRefB, kNetworkEvents, ReadStreamClientCallBackB, &ctxt) == false)
-		goto Bail;
-    
-	// Schedule the stream
-	CFReadStreamScheduleWithRunLoop(readStreamRefB, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
-    
-	// Start the HTTP connection
-	if (CFReadStreamOpen(readStreamRefB) == false)
-	    goto Bail;
-	
-	if (messageRef != NULL) CFRelease(messageRef);
-	return;
-	
-Bail:
-	if (messageRef != NULL) CFRelease(messageRef);
-	if (readStreamRefB != NULL)
-    {
-        CFReadStreamSetClient(readStreamRefB, kCFStreamEventNone, NULL, NULL);
-	    CFReadStreamUnscheduleFromRunLoop(readStreamRefB, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
-	    CFReadStreamClose(readStreamRefB);
-        CFRelease(readStreamRefB);
-    }
-	return;
+    [self createConnectionForReadStreamRef:readStreamRefB callback:ReadStreamClientCallBackB songId:songId offset:byteOffset];
 }
 
 #pragma mark - SUSLoader delegate
@@ -1145,6 +835,78 @@ Bail:
 - (void)loadingFinished:(SUSLoader*)theLoader
 {
     [theLoader release]; theLoader = nil;
+}
+
+#pragma mark - Singleton methods
+
+- (void)setup
+{
+	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
+    musicControls = [MusicSingleton sharedInstance];
+    databaseControls = [DatabaseSingleton sharedInstance];
+    appDelegateRef = appDelegate;
+    musicControlsRef = musicControls;
+    databaseControlsRef = databaseControls;
+    selfRef = self;
+    isDownloadA = NO;
+    isDownloadB = NO;
+}
+
++ (SUSDownloadSingleton *)sharedInstance
+{
+    @synchronized(self)
+    {
+        if (sharedInstance == nil)
+			[[self alloc] init];
+    }
+    return sharedInstance;
+}
+
++ (id)allocWithZone:(NSZone *)zone 
+{
+    @synchronized(self) 
+	{
+        if (sharedInstance == nil) 
+		{
+            sharedInstance = [super allocWithZone:zone];
+			[sharedInstance setup];
+            return sharedInstance;  // assignment and return on first allocation
+        }
+    }
+    return nil; // on subsequent allocation attempts return nil
+}
+
+-(id)init 
+{
+	if ((self = [super init]))
+	{
+		[self setup];
+		sharedInstance = self;
+	}
+    
+	return self;
+}
+
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    return self;
+}
+
+- (id)retain {
+    return self;
+}
+
+- (unsigned)retainCount {
+    return UINT_MAX;  // denotes an object that cannot be released
+}
+
+- (oneway void)release {
+    //do nothing
+}
+
+- (id)autorelease {
+    return self;
 }
 
 @end

@@ -9,15 +9,10 @@
 #import "TBXML.h"
 
 @interface ChatMessage : NSObject <NSCopying> 
-{
-	NSInteger timestamp;
-	NSString *user;
-	NSString *message;
-}
 
 @property NSInteger timestamp;
-@property (nonatomic, retain) NSString *user;
-@property (nonatomic, retain) NSString *message;
+@property (nonatomic, copy) NSString *user;
+@property (nonatomic, copy) NSString *message;
 
 - (id)initWithTBXMLElement:(TBXMLElement *)element;
 -(id) copyWithZone: (NSZone *) zone;

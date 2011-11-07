@@ -31,7 +31,7 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	//if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] && inOrientation != UIInterfaceOrientationPortrait)
+	
 	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
@@ -577,7 +577,7 @@
 
 - (void)playBookmarkSong
 {
-    musicControls.songUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:musicControls.currentSongObject.songId]];
+    //musicControls.songUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:musicControls.currentSongObject.songId]];
 	
 	// Determine the hashed filename
 	musicControls.downloadFileNameHashA = nil; musicControls.downloadFileNameHashA = [NSString md5:musicControls.currentSongObject.path];

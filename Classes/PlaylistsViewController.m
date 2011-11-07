@@ -14,7 +14,6 @@
 #import "AudioStreamer.h"
 #import "ServerListViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
-#import "PlaylistsXMLParser.h"
 #import "PlaylistsUITableViewCell.h"
 #import "CurrentPlaylistSongUITableViewCell.h"
 #import "AsynchronousImageViewCached.h"
@@ -31,6 +30,8 @@
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "OrderedDictionary.h"
+#import "SUSServerPlaylistsDAO.h"
+#import "SUSServerPlaylist.h"
 
 @interface PlaylistsViewController (Private)
 
@@ -42,6 +43,9 @@
 @implementation PlaylistsViewController
 
 @synthesize listOfSongs, request;
+@synthesize serverPlaylistsDataModel;
+
+#pragma mark - Rotation
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -65,6 +69,8 @@
 		}
 	}
 }
+
+#pragma mark - Lifecycle
 
 - (void)viewDidLoad 
 {
@@ -156,6 +162,56 @@
 		[self addNoPlaylistsScreen];
 	}
 }
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"storePurchaseComplete" object:nil];
+	
+	if (viewObjects.isEditing)
+	{
+		// Clear the edit stuff if they switch tabs in the middle of editing
+		viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+		viewObjects.isEditing = NO;
+		self.tableView.editing = NO;
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
+	}
+}
+
+- (void)didReceiveMemoryWarning 
+{
+	// Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+}
+
+- (void)viewDidUnload {
+	// Release any retained subviews of the main view.
+	// e.g. self.myOutlet = nil;
+}
+
+#pragma mark - Button Handling
+
+- (void) settingsAction:(id)sender 
+{
+	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
+	serverListViewController.hidesBottomBarWhenPushed = YES;
+	[self.navigationController pushViewController:serverListViewController animated:YES];
+	[serverListViewController release];
+}
+
+
+- (IBAction)nowPlayingAction:(id)sender
+{
+	musicControls.isNewSong = NO;
+	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
+	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
+	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
+	[streamingPlayerViewController release];
+}
+
+#pragma mark -
 
 
 - (void)updateCurrentPlaylistCount
@@ -549,7 +605,8 @@
 		
 		//[viewObjects showLoadingScreen:self.view blockInput:YES mainWindow:NO];
 		[viewObjects showLoadingScreenOnMainWindow];
-		[self performSelectorInBackground:@selector(loadRemotePlaylists) withObject:nil];
+        self.serverPlaylistsDataModel = [[SUSServerPlaylistsDAO alloc] initWithDelegate:self];
+        [serverPlaylistsDataModel startLoad];
 	}
 }
 
@@ -1087,17 +1144,12 @@
 				
 				for (NSNumber *index in viewObjects.multiDeleteList)
 				{
-					NSString *urlString = [NSString stringWithFormat:@"%@%@", 
-										   [appDelegate getBaseUrl:@"deletePlaylist.view"], 
-										   [[viewObjects.listOfPlaylists objectAtIndex:[index intValue]] objectAtIndex:0]];
-					
-					NSURLRequest *aRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString] 
-															 cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData 
-														 timeoutInterval:10.0];
-					
-					connection = [[NSURLConnection alloc] initWithRequest:aRequest 
-																 delegate:self 
-														 startImmediately:NO];
+                    NSString *playlistId = [serverPlaylistsDataModel.serverPlaylists objectAtIndex:[index intValue]];
+                    NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(playlistId) forKey:@"id"];
+                    
+                    NSMutableURLRequest *aRequest = [NSMutableURLRequest requestWithSUSAction:@"deletePlaylist" andParameters:parameters];
+                    
+					connection = [[NSURLConnection alloc] initWithRequest:aRequest delegate:self startImmediately:NO];
 					if (connection)
 					{
 						[connectionQueue registerConnection:connection];
@@ -1228,88 +1280,6 @@
 	playlistCountLabel.backgroundColor = [UIColor clearColor];
 }
 
-
-- (void)loadRemotePlaylists
-{	
-	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-	
-	// Grab the list of playlists from the server
-	ASIHTTPRequest *aRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[appDelegate getBaseUrl:@"getPlaylists.view"]]];
-	[aRequest startSynchronous];
-	if ([aRequest error])
-	{
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error grabbing the playlist from the server." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		alert.tag = 2;
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-		[alert release];
-	}
-	else
-	{
-		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:[aRequest responseData]];
-		PlaylistsXMLParser *parser = [[PlaylistsXMLParser alloc] initXMLParser];
-		[xmlParser setDelegate:parser];
-		[xmlParser parse];
-		
-		[xmlParser release];
-		[parser release];
-	}
-	
-	[self performSelectorOnMainThread:@selector(loadRemotePlaylists2) withObject:nil waitUntilDone:NO];
-	
-	[autoreleasePool release];
-}	
-
-NSInteger playlistSort(id obj1, id obj2, void *context)
-{
-	NSString *playlist1 = (NSString*)[(NSArray*)obj1 objectAtIndex:1];
-	NSString *playlist2 = (NSString*)[(NSArray*)obj2 objectAtIndex:1];
-	
-	return [playlist1 caseInsensitiveCompare:playlist2];
-}
-
-- (void)loadRemotePlaylists2
-{
-	[viewObjects.listOfPlaylists sortUsingFunction:playlistSort context:NULL];
-	
-	[self.tableView reloadData];
-
-	// If the list is empty, display the no playlists overlay screen
-	if ([viewObjects.listOfPlaylists count] == 0 && isNoPlaylistsScreenShowing == NO)
-	{
-		isNoPlaylistsScreenShowing = YES;
-		noPlaylistsScreen = [[UIImageView alloc] init];
-		noPlaylistsScreen.frame = CGRectMake(40, 100, 240, 180);
-		noPlaylistsScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
-		noPlaylistsScreen.alpha = .80;
-		
-		UILabel *textLabel = [[UILabel alloc] init];
-		textLabel.backgroundColor = [UIColor clearColor];
-		textLabel.textColor = [UIColor whiteColor];
-		textLabel.font = [UIFont boldSystemFontOfSize:32];
-		textLabel.textAlignment = UITextAlignmentCenter;
-		textLabel.numberOfLines = 0;
-		[textLabel setText:@"No Playlists\nFound"];
-		textLabel.frame = CGRectMake(20, 20, 200, 140);
-		[noPlaylistsScreen addSubview:textLabel];
-		[textLabel release];
-		
-		[self.view addSubview:noPlaylistsScreen];
-		
-		[noPlaylistsScreen release];
-	}
-	else
-	{
-		// Modify the header view to include the save and edit buttons
-		[self addSaveEditButtons];
-	}
-	
-	// Hide the loading screen
-	[viewObjects hideLoadingScreen];
-}
-
-
-
 - (void)selectRow
 {
 	if (segmentedControl.selectedSegmentIndex == 0)
@@ -1329,55 +1299,52 @@ NSInteger playlistSort(id obj1, id obj2, void *context)
 	}
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+#pragma mark - SUSLoader Delegate
+
+- (void)loadingFailed:(SUSLoader *)theLoader withError:(NSError *)error
 {
-	[super viewWillDisappear:animated];
-	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"storePurchaseComplete" object:nil];
-	
-	if (viewObjects.isEditing)
-	{
-		// Clear the edit stuff if they switch tabs in the middle of editing
-		viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-		viewObjects.isEditing = NO;
-		self.tableView.editing = NO;
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
-	}
+    [viewObjects hideLoadingScreen];
 }
 
-
-- (void)didReceiveMemoryWarning 
-{
-	// Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
+- (void)loadingFinished:(SUSLoader *)theLoader
+{    
+    [self.tableView reloadData];
+    
+    // If the list is empty, display the no playlists overlay screen
+    if ([viewObjects.listOfPlaylists count] == 0 && isNoPlaylistsScreenShowing == NO)
+    {
+        isNoPlaylistsScreenShowing = YES;
+        noPlaylistsScreen = [[UIImageView alloc] init];
+        noPlaylistsScreen.frame = CGRectMake(40, 100, 240, 180);
+        noPlaylistsScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
+        noPlaylistsScreen.alpha = .80;
+        
+        UILabel *textLabel = [[UILabel alloc] init];
+        textLabel.backgroundColor = [UIColor clearColor];
+        textLabel.textColor = [UIColor whiteColor];
+        textLabel.font = [UIFont boldSystemFontOfSize:32];
+        textLabel.textAlignment = UITextAlignmentCenter;
+        textLabel.numberOfLines = 0;
+        [textLabel setText:@"No Playlists\nFound"];
+        textLabel.frame = CGRectMake(20, 20, 200, 140);
+        [noPlaylistsScreen addSubview:textLabel];
+        [textLabel release];
+        
+        [self.view addSubview:noPlaylistsScreen];
+        
+        [noPlaylistsScreen release];
+    }
+    else
+    {
+        // Modify the header view to include the save and edit buttons
+        [self addSaveEditButtons];
+    }
+    
+    // Hide the loading screen
+    [viewObjects hideLoadingScreen];
 }
 
-- (void)viewDidUnload {
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
-}
-
-
-- (void) settingsAction:(id)sender 
-{
-	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
-	serverListViewController.hidesBottomBarWhenPushed = YES;
-	[self.navigationController pushViewController:serverListViewController animated:YES];
-	[serverListViewController release];
-}
-
-
-- (IBAction)nowPlayingAction:(id)sender
-{
-	musicControls.isNewSong = NO;
-	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-	[streamingPlayerViewController release];
-}
-
-#pragma mark Connection Delegate
+#pragma mark - Connection Delegate
 
 - (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
 {
@@ -1576,7 +1543,7 @@ static NSString *kName_Error = @"error";
 	else if (segmentedControl.selectedSegmentIndex == 1)
 		return [databaseControls.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists"];
 	else if (segmentedControl.selectedSegmentIndex == 2)
-		return [viewObjects.listOfPlaylists count];
+		return [serverPlaylistsDataModel.serverPlaylists count];
 	
 	return 0;
 }
@@ -1882,6 +1849,7 @@ static NSString *kName_Error = @"error";
 		
 		PlaylistsUITableViewCell *cell = [[[PlaylistsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 		cell.indexPath = indexPath;
+        cell.serverPlaylist = [serverPlaylistsDataModel.serverPlaylists objectAtIndex:indexPath.row];
 		
 		cell.deleteToggleImage.hidden = !viewObjects.isEditing;
 		if ([viewObjects.multiDeleteList containsObject:[NSNumber numberWithInt:indexPath.row]])
@@ -1891,7 +1859,8 @@ static NSString *kName_Error = @"error";
 		
 		cell.contentView.backgroundColor = [UIColor clearColor];
 		cell.playlistNameLabel.backgroundColor = [UIColor clearColor];
-		cell.playlistNameLabel.text = [[viewObjects.listOfPlaylists objectAtIndex:indexPath.row] objectAtIndex:1];
+        SUSServerPlaylist *playlist = [serverPlaylistsDataModel.serverPlaylists objectAtIndex:indexPath.row];        
+        cell.playlistNameLabel.text = [[playlist.playlistName copy] autorelease];
 		cell.backgroundView = [[[UIView alloc] init] autorelease];
 		if(indexPath.row % 2 == 0)
 			cell.backgroundView.backgroundColor = [UIColor whiteColor];
@@ -1936,9 +1905,10 @@ static NSString *kName_Error = @"error";
 		}		
 		else if (segmentedControl.selectedSegmentIndex == 2)
 		{
-			viewObjects.subsonicPlaylist = [viewObjects.listOfPlaylists objectAtIndex:indexPath.row];
 			PlaylistSongsViewController *playlistSongsViewController = [[PlaylistSongsViewController alloc] initWithNibName:@"PlaylistSongsViewController" bundle:nil];
-			playlistSongsViewController.md5 = [NSString md5:[viewObjects.subsonicPlaylist objectAtIndex:0]];
+            SUSServerPlaylist *playlist = [serverPlaylistsDataModel.serverPlaylists objectAtIndex:indexPath.row];
+			playlistSongsViewController.md5 = [playlist.playlistName md5];
+            playlistSongsViewController.serverPlaylist = playlist;
 			[self.navigationController pushViewController:playlistSongsViewController animated:YES];
 			[playlistSongsViewController release];		
 		}

@@ -11,15 +11,20 @@
 #import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
-#import "PlaylistsXMLParser.h"
 #import "CellOverlay.h"
 #import "NSString-md5.h"
 #import "NSMutableURLRequest+SUS.h"
+#import "SUSServerPlaylist.h"
+#import "NSMutableURLRequest+SUS.h"
+#import "CustomUIAlertView.h"
+#import "Song.h"
+#import "TBXML.h"
 
 @implementation PlaylistsUITableViewCell
 
 @synthesize receivedData;
 @synthesize indexPath, playlistNameScrollView, playlistNameLabel, isOverlayShowing, overlayView, deleteToggleImage, isDelete;
+@synthesize serverPlaylist;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
 {
@@ -74,11 +79,23 @@
 	}
 }
 
-
 - (void)downloadAction
 {
 	[viewObjects showLoadingScreenOnMainWindow];
-	[self performSelectorInBackground:@selector(downloadAllSongs) withObject:nil];
+	
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(serverPlaylist.playlistId) forKey:@"id"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getPlaylist" andParameters:parameters];
+    
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	if (connection)
+	{
+        isDownload = YES;
+		self.receivedData = [NSMutableData dataWithCapacity:0];
+	} 
+	else 
+	{
+		// TODO: Handle error
+	}
 	
 	overlayView.downloadButton.alpha = .3;
 	overlayView.downloadButton.enabled = NO;
@@ -86,77 +103,27 @@
 	[self hideOverlay];
 }
 
-
-- (void)downloadAllSongs
-{
-	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-	
-	viewObjects.subsonicPlaylist = [viewObjects.listOfPlaylists objectAtIndex:indexPath.row];
-	
-	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"getPlaylist.view"], [[viewObjects.listOfPlaylists objectAtIndex:indexPath.row] objectAtIndex:0]]]];
-	PlaylistsXMLParser *parser = [[PlaylistsXMLParser alloc] initXMLParser];
-	[xmlParser setDelegate:parser];
-	[xmlParser parse];
-	[xmlParser release];
-	[parser release];
-	
-	// Add each song to cache queue
-	NSString *md5 = [NSString md5:[viewObjects.subsonicPlaylist objectAtIndex:0]];
-	int count = [databaseControls serverPlaylistCount:md5];
-	for (int i = 0; i < count; i++)
-	{
-		Song *aSong = [databaseControls songFromServerPlaylistId:md5 row:i];
-		[databaseControls addSongToCacheQueue:aSong];
-	}
-	
-	if (musicControls.isQueueListDownloading == NO)
-	{
-		[musicControls performSelectorOnMainThread:@selector(downloadNextQueuedSong) withObject:nil waitUntilDone:NO];
-	}	
-	
-	// Hide the loading screen
-	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:YES];
-	
-	[autoreleasePool release];
-}
-
-
 - (void)queueAction
 {
 	[viewObjects showLoadingScreenOnMainWindow];
-	[self performSelectorInBackground:@selector(queueAllSongs) withObject:nil];
+	
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(serverPlaylist.playlistId) forKey:@"id"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getPlaylist" andParameters:parameters];
+    
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	if (connection)
+	{
+        isDownload = NO;
+		self.receivedData = [NSMutableData dataWithCapacity:0];
+	} 
+	else 
+	{
+		// TODO: Handle error
+	}
+    
 	[self hideOverlay];
 }
 
-
-- (void)queueAllSongs
-{
-	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-	
-	viewObjects.subsonicPlaylist = [viewObjects.listOfPlaylists objectAtIndex:indexPath.row];
-		
-	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"getPlaylist.view"], [[viewObjects.listOfPlaylists objectAtIndex:indexPath.row] objectAtIndex:0]]]];
-	PlaylistsXMLParser *parser = [[PlaylistsXMLParser alloc] initXMLParser];
-	[xmlParser setDelegate:parser];
-	[xmlParser parse];
-	[xmlParser release];
-	[parser release];
-	
-	// Add each song to playlist
-	NSString *md5 = [NSString md5:[viewObjects.subsonicPlaylist objectAtIndex:0]];
-	int count = [databaseControls serverPlaylistCount:md5];
-	for (int i = 0; i < count; i++)
-	{
-		Song *aSong = [databaseControls songFromServerPlaylistId:md5 row:i];
-		[databaseControls addSongToPlaylistQueue:aSong];
-	}
-	
-	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:YES];
-	
-	[autoreleasePool release];
-}
 
 
 - (void)blockerAction
@@ -225,7 +192,7 @@
 
 #pragma mark - Connection Delegate
 
-/*- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
 {
 	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
 		return YES; // Self-signed cert will be accepted
@@ -258,17 +225,68 @@
 	[theConnection release];
 	
 	// Inform the delegate that loading failed
-	[self.delegate loadingFailed:self withError:error];
+	[viewObjects hideLoadingScreen];
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
 	self.receivedData = nil;
 	[theConnection release];
+    
+    // Parse the data
+    //
+    TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData];
+    TBXMLElement *root = tbxml.rootXMLElement;
+    if (root) 
+    {
+        TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
+        if (error)
+        {
+            // TODO: handle error
+        }
+        else
+        {
+            TBXMLElement *playlist = [TBXML childElementNamed:@"playlist" parentElement:root];
+            if (playlist)
+            {
+                NSString *md5 = [serverPlaylist.playlistName md5];
+                [databaseControls removeServerPlaylistTable:md5];
+                [databaseControls createServerPlaylistTable:md5];
+                
+                TBXMLElement *entry = [TBXML childElementNamed:@"entry" parentElement:playlist];
+                while (entry != nil)
+                {
+                    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+                    
+                    Song *aSong = [[Song alloc] initWithTBXMLElement:entry];
+                    [databaseControls insertSongIntoServerPlaylist:aSong playlistId:md5];
+                    if (isDownload)
+                    {
+                        [databaseControls addSongToCacheQueue:aSong];
+                    }
+                    else
+                    {
+                        [databaseControls addSongToPlaylistQueue:aSong];
+                    }
+                    [aSong release];
+                    
+                    // Get the next message
+                    entry = [TBXML nextSiblingNamed:@"entry" searchFromElement:entry];
+                    
+                    [pool release];
+                }
+                
+                if (isDownload && musicControls.isQueueListDownloading == NO)
+                {
+                    [musicControls downloadNextQueuedSong];
+                }
+            }
+        }
+    }
 	
-	// Notify the delegate that the loading is finished
-	[self.delegate loadingFinished:self];
-}*/
+	// Hide the loading screen
+	[viewObjects hideLoadingScreen];
+}
 
 #pragma mark Touch gestures for custom cell view
 

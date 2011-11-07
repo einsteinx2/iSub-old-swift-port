@@ -7,7 +7,7 @@
 //
 
 
-@class CellOverlay, iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton;
+@class CellOverlay, iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, SUSServerPlaylist;
 
 @interface PlaylistsUITableViewCell : UITableViewCell 
 {
@@ -32,6 +32,8 @@
 	
 	UIImageView *deleteToggleImage;
 	BOOL isDelete;
+    
+    BOOL isDownload;
 }
 
 @property (nonatomic, retain) NSIndexPath *indexPath;
@@ -46,6 +48,8 @@
 @property BOOL isDelete;
 
 @property (nonatomic, retain) NSMutableData *receivedData;
+
+@property (nonatomic, copy) SUSServerPlaylist *serverPlaylist;
 
 
 - (BOOL)isTouchGoingLeftOrRight:(UITouch *)touch;

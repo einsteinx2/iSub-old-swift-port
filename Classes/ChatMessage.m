@@ -37,8 +37,8 @@
 {
 	ChatMessage *newChatMessage = [[ChatMessage alloc] init];
 	newChatMessage.timestamp = timestamp;
-	newChatMessage.user = [[user copy] autorelease];
-	newChatMessage.message = [[message copy] autorelease];
+	newChatMessage.user = self.user;
+	newChatMessage.message = self.message;
 	
 	return newChatMessage;
 }

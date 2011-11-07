@@ -74,7 +74,6 @@
 	//
 	NSMutableArray *listOfPlaylists;
 	NSMutableArray *listOfPlaylistSongs;
-	NSArray *subsonicPlaylist;
 	NSString *localPlaylist;
 	NSMutableArray *listOfLocalPlaylists;
 	BOOL isLocalPlaylist;
@@ -182,7 +181,6 @@
 //
 @property (nonatomic, retain) NSMutableArray *listOfPlaylists;
 @property (nonatomic, retain) NSMutableArray *listOfPlaylistSongs;
-@property (nonatomic, retain) NSArray *subsonicPlaylist;
 @property (nonatomic, retain) NSString *localPlaylist;
 @property (nonatomic, retain) NSMutableArray *listOfLocalPlaylists;
 @property BOOL isLocalPlaylist;

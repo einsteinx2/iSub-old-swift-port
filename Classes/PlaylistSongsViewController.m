@@ -13,7 +13,6 @@
 #import "DatabaseSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
-#import "PlaylistsXMLParser.h"
 #import "PlaylistSongUITableViewCell.h"
 #import "AsynchronousImageViewCached.h"
 #import "Song.h"
@@ -27,6 +26,7 @@
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "OrderedDictionary.h"
+#import "SUSServerPlaylist.h"
 
 @interface PlaylistSongsViewController (Private)
 
@@ -37,12 +37,13 @@
 
 @implementation PlaylistSongsViewController
 
-@synthesize md5;
+@synthesize md5, serverPlaylist;
 @synthesize reloading=_reloading;
+
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	//if ([[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"] && inOrientation != UIInterfaceOrientationPortrait)
+	
 	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
@@ -97,8 +98,7 @@
 	}
 	else
 	{
-		self.title = [viewObjects.subsonicPlaylist objectAtIndex:1];
-		//playlistCount = [databaseControls.serverPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", md5]];
+        self.title = serverPlaylist.playlistName;
 		playlistCount = [databaseControls.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM splaylist%@", md5]];
 		[self.tableView reloadData];
 		
@@ -118,7 +118,7 @@
 
 -(void)loadData
 {
-    NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N([viewObjects.subsonicPlaylist objectAtIndex:0]) forKey:@"id"];
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(serverPlaylist.playlistId) forKey:@"id"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getPlaylist" andParameters:parameters];
 	
 	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
@@ -315,12 +315,42 @@
 {	
 	if (!viewObjects.isLocalPlaylist)
 	{
-		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
-		PlaylistsXMLParser *parser = [[PlaylistsXMLParser alloc] initXMLParser];
-		[xmlParser setDelegate:parser];
-		[xmlParser parse];
-		[xmlParser release];
-		[parser release];
+        // Parse the data
+        //
+        TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
+        TBXMLElement *root = tbxml.rootXMLElement;
+        if (root) 
+        {
+            TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
+            if (error)
+            {
+                // TODO: handle error
+            }
+            else
+            {
+                TBXMLElement *playlist = [TBXML childElementNamed:@"playlist" parentElement:root];
+                if (playlist)
+                {
+                    [databaseControls removeServerPlaylistTable:md5];
+                    [databaseControls createServerPlaylistTable:md5];
+                    
+                    TBXMLElement *entry = [TBXML childElementNamed:@"entry" parentElement:playlist];
+                    while (entry != nil)
+                    {
+                        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+                        
+                        Song *aSong = [[Song alloc] initWithTBXMLElement:entry];
+                        [databaseControls insertSongIntoServerPlaylist:aSong playlistId:md5];
+                        [aSong release];
+                        
+                        // Get the next message
+                        entry = [TBXML nextSiblingNamed:@"entry" searchFromElement:entry];
+                        
+                        [pool release];
+                    }
+                }
+            }
+        }
 		
 		self.tableView.scrollEnabled = YES;
 
@@ -518,7 +548,9 @@ static NSString *kName_Error = @"error";
 }
 
 
-- (void)dealloc {
+- (void)dealloc 
+{
+    [serverPlaylist release]; serverPlaylist = nil;
     [super dealloc];
 }
 

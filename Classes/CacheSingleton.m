@@ -215,6 +215,7 @@ static CacheSingleton *sharedInstance = nil;
 		}
 	}
 }
+
 #pragma mark - Singleton methods
 			
 - (void)setup

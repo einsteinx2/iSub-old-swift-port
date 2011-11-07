@@ -35,9 +35,6 @@
 	NSString *currentSongLyrics;
 	NSInteger currentPlaylistPosition;
 	BOOL isNewSong;
-	NSURL *songUrl;
-	NSURL *nextSongUrl;
-	NSURL *queueSongUrl;
 	NSURL *coverArtUrl;
 	NSTimer *progressTimer;
 	
@@ -105,9 +102,6 @@
 @property (nonatomic, retain) NSString *currentSongLyrics;
 @property NSInteger currentPlaylistPosition;
 @property BOOL isNewSong;
-@property (nonatomic, retain) NSURL *songUrl;
-@property (nonatomic, retain) NSURL *nextSongUrl;
-@property (nonatomic, retain) NSURL *queueSongUrl;
 @property (nonatomic, retain) NSURL *coverArtUrl;
 
 // Song caching stuff
