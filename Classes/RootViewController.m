@@ -12,7 +12,6 @@
 #import "MusicSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
-#import "XMLParser.h"
 #import "AlbumViewController.h"
 #import "Artist.h"
 #import "LoadingScreen.h"

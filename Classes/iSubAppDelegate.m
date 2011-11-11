@@ -23,7 +23,6 @@
 #import "URLCheckConnectionDelegate.h"
 #import "APICheckConnectionDelegate.h"
 #import "AudioStreamer.h"
-#import "XMLParser.h"
 #import "UpdateXMLParser.h"
 #import "Album.h"
 #import "Song.h"

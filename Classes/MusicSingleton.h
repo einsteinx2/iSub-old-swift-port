@@ -6,11 +6,11 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-
+#import "SUSLoaderDelegate.h"
 
 @class iSubAppDelegate, DatabaseSingleton, ViewObjectsSingleton, Song, AudioStreamer, BBSimpleConnectionQueue;
 
-@interface MusicSingleton : NSObject 
+@interface MusicSingleton : NSObject <SUSLoaderDelegate>
 {
 	iSubAppDelegate *appDelegate;
 	DatabaseSingleton *databaseControls;

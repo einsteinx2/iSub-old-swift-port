@@ -22,4 +22,6 @@
 
 - (void)sendChatMessage:(NSString *)message;
 
+- (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate;
+
 @end

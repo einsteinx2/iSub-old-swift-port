@@ -15,7 +15,6 @@
 #import "AlbumUITableViewCell.h"
 #import "SongUITableViewCell.h"
 #import "AsynchronousImageViewCached.h"
-#import "XMLParser.h"
 #import "Artist.h"
 #import "Album.h"
 #import "Song.h"
@@ -33,20 +32,18 @@
 #import "NSData+Base64.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "NSString+URLEncode.h"
+#import "SUSSubFolderDAO.h"
 
 @interface AlbumViewController (Private)
-
 - (void)dataSourceDidFinishLoadingNewData;
 - (void)addHeaderAndIndex;
-- (void)loadData;
-- (void)createArrays;
-
 @end
 
 
 @implementation AlbumViewController
 @synthesize myId, myArtist, myAlbum;
-@synthesize listOfAlbums, listOfSongs, sectionInfo;
+@synthesize sectionInfo;
+@synthesize dataModel;
 
 @synthesize reloading=_reloading;
 
@@ -92,28 +89,21 @@
 			self.myAlbum = anAlbum;
 		}
 		
-		// Create the listOfSongs and listOfAlbums arrays
-		[self createArrays];
+		self.dataModel = [[SUSSubFolderDAO alloc] initWithDelegate:self];
+        dataModel.myId = self.myId;
+        dataModel.myArtist = self.myArtist;
 		
-		if ((viewObjects.isAlbumsLoading || viewObjects.isSongsLoading) && [self.myId isEqualToString:viewObjects.currentLoadingFolderId])
-		{
-			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Please Wait" message:@"This folder is currently being loaded by the Albums or Songs tab. Try again in a few seconds." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-			[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-			[alert release];
-		}
-		else
-		{
-			//if ([databaseControls.albumListCacheDb intForQuery:@"SELECT COUNT(*) FROM albumListCache WHERE id = ?", [NSString md5:self.myId]] == 0)
-			if ([listOfAlbums count] == 0 && [listOfSongs count] == 0)
-			{
-				[self loadData];
-			}
-			else
-			{
-				[self.tableView reloadData];
-				[self addHeaderAndIndex];
-			}
-		}
+        //if ([databaseControls.albumListCacheDb intForQuery:@"SELECT COUNT(*) FROM albumListCache WHERE id = ?", [NSString md5:self.myId]] == 0)
+        if (dataModel.hasLoaded)
+        {
+            [self.tableView reloadData];
+            [self addHeaderAndIndex];
+        }
+        else
+        {
+            [viewObjects showAlbumLoadingScreen:self.view sender:self];
+            [dataModel startLoad];
+        }
 	}
 	
 	return self;
@@ -163,70 +153,18 @@
 	[myArtist release]; myArtist = nil;
 	[myAlbum release]; myAlbum = nil;
 	
-	[listOfAlbums release]; listOfAlbums = nil;
-	[listOfSongs release]; listOfSongs = nil;
+	[dataModel release]; dataModel = nil;
 	[super dealloc];
 }
 
 #pragma mark Loading
 
-- (void) createArrays
-{
-	// Create the album and song arrays
-	self.listOfAlbums = [NSMutableArray arrayWithCapacity:0];
-	self.listOfSongs = [NSMutableArray arrayWithCapacity:0];
-	
-	[databaseControls.albumListCacheDb beginTransaction];
-	
-	FMResultSet *result = [databaseControls.albumListCacheDb executeQuery:@"SELECT rowid FROM albumsCache WHERE folderId = ?", [NSString md5:self.myId]];
-	while ([result next])
-	{
-		[listOfAlbums addObject:[NSNumber numberWithInt:[result intForColumnIndex:0]]];
-	}
-	[result close];
-	
-	result = [databaseControls.albumListCacheDb executeQuery:@"SELECT rowid FROM songsCache WHERE folderId = ?", [NSString md5:self.myId]];
-	while ([result next])
-	{
-		[listOfSongs addObject:[NSNumber numberWithInt:[result intForColumnIndex:0]]];
-	}
-	[result close];
-	
-	[databaseControls.albumListCacheDb commit];
-}
-
-- (void)loadData
-{    
-    NSDictionary *parameters = [NSDictionary dictionaryWithObject:self.myId forKey:@"id"];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getMusicDirectory" andParameters:parameters];
-    
-	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	if (connection)
-	{
-		loadingData = [[NSMutableData data] retain];
-		
-		[viewObjects showAlbumLoadingScreen:self.view sender:self];
-	} 
-	else 
-	{
-		// Inform the user that the connection failed.
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error loading the album.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		alert.tag = 2;
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-		[alert release];
-		
-		[self dataSourceDidFinishLoadingNewData];
-	}
-}
-
 - (void)cancelLoad
 {
-	[connection cancel];
+	[dataModel cancelLoad];
 	[self dataSourceDidFinishLoadingNewData];
 	[viewObjects hideLoadingScreen];
 }
-
-
 
 - (void)addHeaderAndIndex
 {
@@ -298,18 +236,11 @@
 		[headerView addSubview:albumLabel];
 		[albumLabel release];
 		
-		float duration = 0;
-		for (NSNumber *rowId in self.listOfSongs)
-		{
-			NSUInteger row = [rowId intValue] - 1;
-			Song *aSong = [databaseControls songFromDbRow:row inTable:@"songsCache" inDatabase:databaseControls.albumListCacheDb];
-			duration += [aSong.duration floatValue];
-		}
 		UILabel *durationLabel = [[UILabel alloc] initWithFrame:CGRectMake(280, 140, 100, 20)];
 		durationLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		durationLabel.backgroundColor = [UIColor clearColor];
 		durationLabel.textAlignment = UITextAlignmentRight;
-		durationLabel.text = [NSString formatTime:duration];
+		durationLabel.text = [NSString formatTime:dataModel.folderLength];
 		durationLabel.font = [UIFont boldSystemFontOfSize:24];
 		[headerView addSubview:durationLabel];
 		[durationLabel release];
@@ -378,9 +309,9 @@
 		self.tableView.tableHeaderView = headerView;
 	}
 	
-	
+    // TODO create section index
 	// Create the section index
-	if ([listOfAlbums count] > 10)
+	/*if (dataModel.albumsCount > 10)
 	{
 		[databaseControls.inMemoryDb executeUpdate:@"DROP TABLE albumIndex"];
 		[databaseControls.inMemoryDb executeUpdate:@"CREATE TABLE albumIndex (album TEXT)"];
@@ -406,7 +337,7 @@
 			else
 				[self.tableView reloadData];
 		}
-	}	
+	}	*/
 }
 
 #pragma mark Actions
@@ -440,9 +371,6 @@
 	[streamingPlayerViewController release];
 }
 
-
-
-
 #pragma mark Table view methods
 
 // Following 2 methods handle the right side index
@@ -475,12 +403,8 @@
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
-	NSUInteger albumCount = [listOfAlbums count];
-	NSUInteger songCount = [listOfSongs count];
-	
-	return (albumCount + songCount);
+	return dataModel.totalCount;
 }
-
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
@@ -488,14 +412,13 @@
 	static NSString *CellIdentifier = @"Cell";
 	
 	// Set up the cell...
-	if (indexPath.row < [listOfAlbums count])
+	if (indexPath.row < dataModel.albumsCount)
 	{
 		AlbumUITableViewCell *cell = [[[AlbumUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 
-		//Album *anAlbum = [listOfAlbums objectAtIndex:indexPath.row];
-		NSUInteger row = [[listOfAlbums objectAtIndex:indexPath.row] intValue] - 1;
-		Album *anAlbum = [databaseControls albumFromDbRow:row inTable:@"albumsCache" inDatabase:databaseControls.albumListCacheDb];
-		cell.myId = anAlbum.albumId;
+        Album *anAlbum = [self.dataModel albumForTableViewRow:indexPath.row];
+        
+        cell.myId = anAlbum.albumId;
 		cell.myArtist = [Artist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
 		if (sectionInfo)
 			cell.isIndexShowing = YES;
@@ -520,12 +443,9 @@
 		SongUITableViewCell *cell = [[[SongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 		cell.indexPath = indexPath;
 		cell.accessoryType = UITableViewCellAccessoryNone;
-		
-		NSUInteger songRow = indexPath.row - [listOfAlbums count];
-		//Song *aSong = [listOfSongs objectAtIndex:songRow];
-		NSUInteger row = [[listOfSongs objectAtIndex:songRow] intValue] - 1;
-		Song *aSong = [databaseControls songFromDbRow:row inTable:@"songsCache" inDatabase:databaseControls.albumListCacheDb];
-		
+        
+        Song *aSong = [self.dataModel songForTableViewRow:indexPath.row];
+        
 		cell.mySong = aSong;
 		
 		if ( aSong.track )
@@ -569,7 +489,7 @@
 // Customize the height of individual rows to make the album rows taller to accomidate the album art.
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	if (indexPath.row < [listOfAlbums count])
+	if (indexPath.row < dataModel.albumsCount)
 		return 60.0;
 	else
 		return 50.0;
@@ -580,12 +500,10 @@
 {	
 	if (viewObjects.isCellEnabled)
 	{
-		if (indexPath.row < [listOfAlbums count])
+		if (indexPath.row < dataModel.albumsCount)
 		{
-			//Album *anAlbum = [listOfAlbums objectAtIndex:indexPath.row];
-			NSUInteger row = [[listOfAlbums objectAtIndex:indexPath.row] intValue] - 1;
-			Album *anAlbum = [databaseControls albumFromDbRow:row inTable:@"albumsCache" inDatabase:databaseControls.albumListCacheDb];
-			
+            Album *anAlbum = [dataModel albumForTableViewRow:indexPath.row];
+            			
 			AlbumViewController *albumViewController = [[AlbumViewController alloc] initWithArtist:nil orAlbum:anAlbum];	
 			
 			[self.navigationController pushViewController:albumViewController animated:YES];
@@ -593,45 +511,11 @@
 		}
 		else
 		{
-			/*if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			{
-				NSUInteger songRow = indexPath.row - [listOfAlbums count];
-				musicControls.currentPlaylistPosition = songRow;
-				
-				NSMutableArray *songIds = [[NSMutableArray alloc] init];
-				for (NSNumber *rowId in listOfSongs)
-				{
-					NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-					
-					NSString *songId = [databaseControls.albumListCacheDb stringForQuery:@"SELECT songId FROM songsCache WHERE rowId = ?", rowId];
-					[songIds addObject:songId];
-					
-					[pool release];
-				}
-
-				[musicControls jukeboxStop];
-				[musicControls jukeboxClearPlaylist];
-				[musicControls jukeboxAddSongs:songIds];
-				[songIds release];
-				
-				[musicControls jukeboxPlaySongAtPosition:songRow];
-				
-				musicControls.isNewSong = YES;
-				musicControls.isShuffle = NO;
-				
-				iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-				streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-				[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-				[streamingPlayerViewController release];
-			}
-			else
-			{*/
-			
 			// Kill the streamer if it's playing
 			[musicControls destroyStreamer];
 			
 			// Find the new playlist position
-			NSUInteger songRow = indexPath.row - [listOfAlbums count];
+			NSUInteger songRow = indexPath.row - dataModel.albumsCount;
 			musicControls.currentPlaylistPosition = songRow;
 			
 			// Clear the current playlist
@@ -639,24 +523,21 @@
 				[databaseControls resetJukeboxPlaylist];
 			else
 				[databaseControls resetCurrentPlaylistDb];
-			
-			// Add the songs to the playlist 
-			NSMutableArray *songIds = [[NSMutableArray alloc] init];
-			for (NSNumber *rowId in listOfSongs)
-			{
-				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-				
-				NSInteger row = [rowId intValue] - 1;
-				Song *aSong = [databaseControls songFromDbRow:row inTable:@"songsCache" inDatabase:databaseControls.albumListCacheDb];
-				[databaseControls addSongToPlaylistQueue:aSong];
-				//[databaseControls insertSong:aSong intoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-				
-				// In jukebox mode, collect the song ids to send to the server
-				if ([SavedSettings sharedInstance].isJukeboxEnabled)
-					[songIds addObject:aSong.songId];
-				
-				[pool release];
-			}
+            
+            // Add the songs to the playlist
+            NSMutableArray *songIds = [[NSMutableArray alloc] init];
+            for (int i = dataModel.albumsCount; i < dataModel.totalCount; i++)
+            {
+                @autoreleasepool 
+                {
+                    Song *aSong = [dataModel songForTableViewRow:i];
+                    [databaseControls addSongToPlaylistQueue:aSong];
+                    
+                    // In jukebox mode, collect the song ids to send to the server
+                    if ([SavedSettings sharedInstance].isJukeboxEnabled)
+                        [songIds addObject:aSong.songId];
+                }
+            }
 			
 			// If jukebox mode, send song ids to server
 			if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -710,41 +591,11 @@
 	}
 }
 
+#pragma mark - SUSLoader delegate
 
-#pragma mark Connection Delegate
-
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
+- (void)loadingFailed:(SUSLoader *)theLoader withError:(NSError *)error
 {
-	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
-		return YES; // Self-signed cert will be accepted
-	
-	return NO;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{	
-	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
-	{
-		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
-	}
-	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
-}
-
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-	[loadingData setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
-{
-	NSLog(@"album load did receive data");
-    [loadingData appendData:incrementalData];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
-{
-	// Inform the user that the connection failed.
+    // Inform the user that the connection failed.
 	NSString *message = [NSString stringWithFormat:@"There was an error loading the album.\n\nError %i: %@", [error code], [error localizedDescription]];
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	alert.tag = 2;
@@ -752,35 +603,13 @@
 	[alert release];
 	
 	[viewObjects hideLoadingScreen];
-	
-	[theConnection release];
-	[loadingData release];
-	
+		
 	[self dataSourceDidFinishLoadingNewData];
-}	
+}
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
-{	
-	NSLog(@"album load connection finished, parsing...");
-    DLog(@"received data: %@", [[[NSString alloc] initWithData:loadingData encoding:NSUTF8StringEncoding] autorelease]);
-	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:loadingData];
-	XMLParser *parser = [[XMLParser alloc] initXMLParser];
-	
-	parser.myId = self.myId;
-	parser.myArtist = myArtist;
-	parser.parseState = @"albums";
-	[xmlParser setDelegate:parser];
-	[xmlParser parse];
-	
-	[xmlParser release];
-	[parser release];
-	
-	[self createArrays];
-	
-	[viewObjects hideLoadingScreen];
-	
-	[theConnection release];
-	[loadingData release];
+- (void)loadingFinished:(SUSLoader *)theLoader
+{
+    [viewObjects hideLoadingScreen];
 	
 	[self.tableView reloadData];
 	[self addHeaderAndIndex];
@@ -788,9 +617,7 @@
 	[self dataSourceDidFinishLoadingNewData];
 }
 
-
-#pragma mark -
-#pragma mark Pull to refresh methods
+#pragma mark - Pull to refresh methods
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {	
@@ -813,8 +640,7 @@
 	if (scrollView.contentOffset.y <= - 65.0f && !_reloading) 
 	{
 		_reloading = YES;
-		//[self reloadAction:nil];
-		[self loadData];
+		[dataModel startLoad];
 		[refreshHeaderView setState:EGOOPullRefreshLoading];
 		[UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:0.2];

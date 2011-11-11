@@ -33,6 +33,11 @@
     return [DatabaseSingleton sharedInstance].localPlaylistsDb;
 }
 
+- (SUSLoaderType)type
+{
+    return SUSLoaderType_ServerPlaylist;
+}
+
 #pragma mark - Private DB Methods
 
 #pragma mark - Loader Methods

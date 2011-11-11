@@ -31,6 +31,11 @@
 	[super dealloc];
 }
 
+- (SUSLoaderType)type
+{
+    return SUSLoaderType_PlayerCoverArt;
+}
+
 #pragma mark - Private DB Methods
 
 #pragma mark - Properties

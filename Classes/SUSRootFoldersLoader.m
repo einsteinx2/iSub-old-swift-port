@@ -28,6 +28,11 @@
 	[super dealloc];
 }
 
+- (SUSLoaderType)type
+{
+    return SUSLoaderType_RootFolders;
+}
+
 #pragma mark - Properties
 
 - (FMDatabase *)db

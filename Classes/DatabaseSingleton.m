@@ -119,6 +119,21 @@ static DatabaseSingleton *sharedInstance = nil;
 			[albumListCacheDb executeUpdate:@"CREATE TABLE songsCache (folderId TEXT, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
 			[albumListCacheDb executeUpdate:@"CREATE INDEX songsFolderId ON songsCache (folderId)"];
 		}
+        if ([albumListCacheDb tableExists:@"albumsCacheCount"] == NO)
+        {
+            [albumListCacheDb executeUpdate:@"CREATE TABLE albumsCacheCount (folderId TEXT, count INTEGER)"];
+            [albumListCacheDb executeUpdate:@"CREATE INDEX albumsCacheCountFolderId ON albumsCacheCount (folderId)"];
+        }
+        if ([albumListCacheDb tableExists:@"songsCacheCount"] == NO)
+        {
+            [albumListCacheDb executeUpdate:@"CREATE TABLE songsCacheCount (folderId TEXT, count INTEGER)"];
+            [albumListCacheDb executeUpdate:@"CREATE INDEX songsCacheCountFolderId ON songsCacheCount (folderId)"];
+        }
+        if ([albumListCacheDb tableExists:@"folderLength"] == NO)
+        {
+            [albumListCacheDb executeUpdate:@"CREATE TABLE folderLength (folderId TEXT, length INTEGER)"];
+            [albumListCacheDb executeUpdate:@"CREATE INDEX folderLengthFolderId ON folderLength (folderId)"];
+        }
 	}
 	
 	// Only load large album art DB if this is an iPad

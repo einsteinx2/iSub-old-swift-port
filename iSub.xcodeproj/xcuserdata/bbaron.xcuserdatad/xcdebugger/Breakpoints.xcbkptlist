@@ -80,7 +80,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "325"
          endingLineNumber = "325"
-         landmarkName = "-folderDropdownSelectFolder:"
+         landmarkName = "-doneSearching_Clicked:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -94,7 +94,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "330"
          endingLineNumber = "330"
-         landmarkName = "-folderDropdownSelectFolder:"
+         landmarkName = "-doneSearching_Clicked:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

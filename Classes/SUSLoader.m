@@ -52,6 +52,11 @@
     [super dealloc];
 }
 
+- (SUSLoaderType)type
+{
+    return SUSLoaderType_Generic;
+}
+
 - (void)startLoad
 {
 	[NSException raise:NSInternalInconsistencyException 

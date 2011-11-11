@@ -64,6 +64,11 @@
 	[super dealloc];
 }
 
+- (SUSLoaderType)type
+{
+    return SUSLoaderType_AllSongs;
+}
+
 #pragma mark Data loading
 
 static NSInteger order (id a, id b, void* context)

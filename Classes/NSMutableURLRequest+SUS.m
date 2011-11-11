@@ -77,7 +77,9 @@ static void destroy_versionArrays()
     // Handle special case when loading playlists
     NSTimeInterval loadingTimeout = kLoadingTimeout;
     if ([action isEqualToString:@"getPlaylist"])
+    {
         loadingTimeout = 3600.0; // Timeout set to 60 mins to prevent timeout errors
+    }
     
     // Create the request
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString] 
@@ -91,8 +93,6 @@ static void destroy_versionArrays()
     NSData *authData = [authStr dataUsingEncoding:NSASCIIStringEncoding];
     NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64EncodingWithLineLength:0]];
     [request setValue:authValue forHTTPHeaderField:@"Authorization"];
-
-    DLog(@"urlString: %@  postString: %@", urlString, postString);
     
     return request;
 }

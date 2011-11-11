@@ -6,9 +6,11 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, Artist, Album, EGORefreshTableHeaderView, FMResultSet;
+#import "SUSLoaderDelegate.h"
 
-@interface AlbumViewController : UITableViewController 
+@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, Artist, Album, EGORefreshTableHeaderView, SUSSubFolderDAO;
+
+@interface AlbumViewController : UITableViewController <SUSLoaderDelegate>
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
@@ -22,18 +24,10 @@
 	Artist *myArtist;
 	Album *myAlbum;
 	
-	NSMutableArray *listOfAlbums;
-	NSMutableArray *listOfSongs;
-	
 	NSArray *sectionInfo;
 	
 	EGORefreshTableHeaderView *refreshHeaderView;
 	BOOL _reloading;
-			
-	/*NSUInteger albumsCount;
-	NSUInteger count;
-	FMResultSet *albumsResult;
-	FMResultSet *songsResult;*/
 }
 
 @property(assign,getter=isReloading) BOOL reloading;
@@ -42,13 +36,9 @@
 @property (nonatomic, retain) Artist *myArtist;
 @property (nonatomic, retain) Album *myAlbum;
 
-@property (nonatomic, retain) NSMutableArray *listOfAlbums;
-@property (nonatomic, retain) NSMutableArray *listOfSongs;
-
 @property (nonatomic, retain) NSArray *sectionInfo;
 
-/*@property (nonatomic, retain) FMResultSet *albumsResult;
-@property (nonatomic, retain) FMResultSet *songsResult;*/
+@property (nonatomic, retain) SUSSubFolderDAO *dataModel;
 
 - (AlbumViewController *)initWithArtist:(Artist *)anArtist orAlbum:(Album *)anAlbum;
 

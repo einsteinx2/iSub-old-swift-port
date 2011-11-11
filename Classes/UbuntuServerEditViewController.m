@@ -12,7 +12,6 @@
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
 #import "RootViewController.h"
-#import "XMLParser.h"
 #import "Server.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"

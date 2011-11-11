@@ -131,6 +131,12 @@
 		535806EA11CD92DC00A09386 /* GenresSongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 535806E911CD92DC00A09386 /* GenresSongUITableViewCell.m */; };
 		5358083811CEB5F200A09386 /* CacheQueueSongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358083711CEB5F200A09386 /* CacheQueueSongUITableViewCell.m */; };
 		535A889A113F62DD00979783 /* default-album-art.png in Resources */ = {isa = PBXBuildFile; fileRef = 535A8899113F62DD00979783 /* default-album-art.png */; };
+		535AC24E146C8E0300E19492 /* SUSStreamSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 535AC24D146C8E0300E19492 /* SUSStreamSingleton.m */; };
+		535AC24F146C8E0300E19492 /* SUSStreamSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 535AC24D146C8E0300E19492 /* SUSStreamSingleton.m */; };
+		535AC250146C8E0300E19492 /* SUSStreamSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 535AC24D146C8E0300E19492 /* SUSStreamSingleton.m */; };
+		535AC253146C8E1D00E19492 /* SUSStreamConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 535AC252146C8E1D00E19492 /* SUSStreamConnectionDelegate.m */; };
+		535AC254146C8E1D00E19492 /* SUSStreamConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 535AC252146C8E1D00E19492 /* SUSStreamConnectionDelegate.m */; };
+		535AC255146C8E1D00E19492 /* SUSStreamConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 535AC252146C8E1D00E19492 /* SUSStreamConnectionDelegate.m */; };
 		535B7246134C16FC003E0E1C /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7245134C16FC003E0E1C /* GTMNSString+HTML.m */; };
 		535B7254134CEE1E003E0E1C /* DDSocialDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7251134CEE1E003E0E1C /* DDSocialDialog.m */; };
 		535B7255134CEE1E003E0E1C /* DDSocialLoginDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7253134CEE1E003E0E1C /* DDSocialLoginDialog.m */; };
@@ -292,6 +298,9 @@
 		53A45494133D710C00741030 /* HttpIndexPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45493133D710C00741030 /* HttpIndexPage.m */; };
 		53A4549D133D75E900741030 /* MyHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A4549C133D75E300741030 /* MyHTTPConnection.m */; };
 		53A454AF133D7E2800741030 /* LocalhostAddresses.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A454AE133D7E2700741030 /* LocalhostAddresses.m */; };
+		53A698DA1467B34D00DCAFCB /* SUSSubFolderLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A698D91467B34D00DCAFCB /* SUSSubFolderLoader.m */; };
+		53A698DB1467B34D00DCAFCB /* SUSSubFolderLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A698D91467B34D00DCAFCB /* SUSSubFolderLoader.m */; };
+		53A698DC1467B34D00DCAFCB /* SUSSubFolderLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A698D91467B34D00DCAFCB /* SUSSubFolderLoader.m */; };
 		53A77FC7128E3648005D2D65 /* UITableViewCell-overlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A77FC6128E3648005D2D65 /* UITableViewCell-overlay.m */; };
 		53A77FCD128E38E7005D2D65 /* CellOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A77FCC128E38E7005D2D65 /* CellOverlay.m */; };
 		53AA300411461A04003E57E3 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AA300311461A04003E57E3 /* background.png */; };
@@ -1580,6 +1589,10 @@
 		5358083611CEB5F200A09386 /* CacheQueueSongUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheQueueSongUITableViewCell.h; sourceTree = "<group>"; };
 		5358083711CEB5F200A09386 /* CacheQueueSongUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheQueueSongUITableViewCell.m; sourceTree = "<group>"; };
 		535A8899113F62DD00979783 /* default-album-art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art.png"; path = "Images/Other/default-album-art.png"; sourceTree = "<group>"; };
+		535AC24C146C8E0300E19492 /* SUSStreamSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSStreamSingleton.h; sourceTree = "<group>"; };
+		535AC24D146C8E0300E19492 /* SUSStreamSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSStreamSingleton.m; sourceTree = "<group>"; };
+		535AC251146C8E1D00E19492 /* SUSStreamConnectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSStreamConnectionDelegate.h; sourceTree = "<group>"; };
+		535AC252146C8E1D00E19492 /* SUSStreamConnectionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSStreamConnectionDelegate.m; sourceTree = "<group>"; };
 		535B7243134C16FC003E0E1C /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		535B7244134C16FC003E0E1C /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
 		535B7245134C16FC003E0E1C /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
@@ -1810,6 +1823,8 @@
 		53A4549C133D75E300741030 /* MyHTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyHTTPConnection.m; sourceTree = "<group>"; };
 		53A454AD133D7E2700741030 /* LocalhostAddresses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalhostAddresses.h; sourceTree = "<group>"; };
 		53A454AE133D7E2700741030 /* LocalhostAddresses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalhostAddresses.m; sourceTree = "<group>"; };
+		53A698D81467B34D00DCAFCB /* SUSSubFolderLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSSubFolderLoader.h; sourceTree = "<group>"; };
+		53A698D91467B34D00DCAFCB /* SUSSubFolderLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSSubFolderLoader.m; sourceTree = "<group>"; };
 		53A77FC5128E3648005D2D65 /* UITableViewCell-overlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell-overlay.h"; sourceTree = "<group>"; };
 		53A77FC6128E3648005D2D65 /* UITableViewCell-overlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell-overlay.m"; sourceTree = "<group>"; };
 		53A77FCB128E38E7005D2D65 /* CellOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellOverlay.h; sourceTree = "<group>"; };
@@ -2493,10 +2508,12 @@
 		534098BB142E5DC500455754 /* Loaders */ = {
 			isa = PBXGroup;
 			children = (
-				534098A5142D491100455754 /* SUSAllSongsLoader.h */,
-				534098A6142D491100455754 /* SUSAllSongsLoader.m */,
 				535EFD82145D144400EDF867 /* SUSRootFoldersLoader.h */,
 				535EFD83145D144400EDF867 /* SUSRootFoldersLoader.m */,
+				53A698D81467B34D00DCAFCB /* SUSSubFolderLoader.h */,
+				53A698D91467B34D00DCAFCB /* SUSSubFolderLoader.m */,
+				534098A5142D491100455754 /* SUSAllSongsLoader.h */,
+				534098A6142D491100455754 /* SUSAllSongsLoader.m */,
 				535EFD8C145D153900EDF867 /* SUSChatLoader.h */,
 				535EFD8D145D153900EDF867 /* SUSChatLoader.m */,
 				539B308B145E750700D06475 /* SUSLyricsLoader.h */,
@@ -3353,6 +3370,10 @@
 				53B9D294127A395D00CAB0E0 /* DonationParser.m */,
 				53C4EB89136CBFF100122151 /* SUSDownloadSingleton.h */,
 				53929E64136F930300979CBC /* SUSDownloadSingleton.m */,
+				535AC24C146C8E0300E19492 /* SUSStreamSingleton.h */,
+				535AC24D146C8E0300E19492 /* SUSStreamSingleton.m */,
+				535AC251146C8E1D00E19492 /* SUSStreamConnectionDelegate.h */,
+				535AC252146C8E1D00E19492 /* SUSStreamConnectionDelegate.m */,
 			);
 			name = CFNetworkRequests;
 			sourceTree = "<group>";
@@ -4443,6 +4464,9 @@
 				53F11B7B1460FBAD0010820B /* SUSServerPlaylistsDAO.m in Sources */,
 				53EC180114675A6F00601C2D /* SUSServerPlaylistsLoader.m in Sources */,
 				53EC1806146760E000601C2D /* SUSServerPlaylist.m in Sources */,
+				53A698DA1467B34D00DCAFCB /* SUSSubFolderLoader.m in Sources */,
+				535AC24E146C8E0300E19492 /* SUSStreamSingleton.m in Sources */,
+				535AC253146C8E1D00E19492 /* SUSStreamConnectionDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4647,6 +4671,9 @@
 				53F11B7D1460FBAD0010820B /* SUSServerPlaylistsDAO.m in Sources */,
 				53EC180314675A6F00601C2D /* SUSServerPlaylistsLoader.m in Sources */,
 				53EC1808146760E000601C2D /* SUSServerPlaylist.m in Sources */,
+				53A698DC1467B34D00DCAFCB /* SUSSubFolderLoader.m in Sources */,
+				535AC250146C8E0300E19492 /* SUSStreamSingleton.m in Sources */,
+				535AC255146C8E1D00E19492 /* SUSStreamConnectionDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4851,6 +4878,9 @@
 				53F11B7C1460FBAD0010820B /* SUSServerPlaylistsDAO.m in Sources */,
 				53EC180214675A6F00601C2D /* SUSServerPlaylistsLoader.m in Sources */,
 				53EC1807146760E000601C2D /* SUSServerPlaylist.m in Sources */,
+				53A698DB1467B34D00DCAFCB /* SUSSubFolderLoader.m in Sources */,
+				535AC24F146C8E0300E19492 /* SUSStreamSingleton.m in Sources */,
+				535AC254146C8E1D00E19492 /* SUSStreamConnectionDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

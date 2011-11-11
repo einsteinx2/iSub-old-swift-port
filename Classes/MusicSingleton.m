@@ -26,7 +26,8 @@
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "OrderedDictionary.h"
- 
+#import "SUSLyricsLoader.h" 
+
 static MusicSingleton *sharedInstance = nil;
 
 @implementation MusicSingleton
@@ -101,6 +102,18 @@ static MusicSingleton *sharedInstance = nil;
 	[theConnection release];
 }
 
+#pragma mark - Lyric Loader Delegate
+
+- (void)loadingFailed:(SUSLoader *)theLoader withError:(NSError *)error
+{
+    [theLoader release]; theLoader = nil;
+}
+
+- (void)loadingFinished:(SUSLoader *)theLoader
+{
+    [theLoader release]; theLoader = nil;
+}
+
 #pragma mark Download Methods
 
 // Start downloading the file specified in the text field.
@@ -128,7 +141,10 @@ static MusicSingleton *sharedInstance = nil;
 	// Grab the lyrics
 	if (currentSongObject.artist && currentSongObject.title)
 	{
-		[self performSelectorInBackground:@selector(loadLyricsForArtistAndTitle:) withObject:[NSArray arrayWithObjects:currentSongObject.artist, currentSongObject.title, nil]];
+        SUSLyricsLoader *lyricsLoader = [[SUSLyricsLoader alloc] initWithDelegate:self];
+        lyricsLoader.artist = currentSongObject.artist;
+        lyricsLoader.title = currentSongObject.title;
+        [lyricsLoader startLoad];        
 	}
 	
 	// Reset the download counter
@@ -306,14 +322,15 @@ static MusicSingleton *sharedInstance = nil;
 		}
 	}
 	
-	// Grab the lyrics
+    // Grab the lyrics
 	if (nextSongObject.artist && nextSongObject.title)
 	{
-		[self performSelectorInBackground:@selector(loadLyricsForArtistAndTitle:) 
-							   withObject:[NSArray arrayWithObjects:[NSString stringWithString:nextSongObject.artist], 
-																	[NSString stringWithString:nextSongObject.title], nil]];
+        SUSLyricsLoader *lyricsLoader = [[SUSLyricsLoader alloc] initWithDelegate:self];
+        lyricsLoader.artist = nextSongObject.artist;
+        lyricsLoader.title = nextSongObject.title;
+        [lyricsLoader startLoad];        
 	}
-	
+    
 	// Reset the download counter
 	downloadedLengthB = 0;
 	
@@ -498,11 +515,14 @@ static MusicSingleton *sharedInstance = nil;
 	
 	// Are we already downloading?  If so, stop it.
 	[self stopDownloadQueue];
-	
-	// Grab the lyrics
+    
+    // Grab the lyrics
 	if (queueSongObject.artist && queueSongObject.title)
 	{
-		[self performSelectorInBackground:@selector(loadLyricsForArtistAndTitle:) withObject:[NSArray arrayWithObjects:queueSongObject.artist, queueSongObject.title, nil]];
+        SUSLyricsLoader *lyricsLoader = [[SUSLyricsLoader alloc] initWithDelegate:self];
+        lyricsLoader.artist = queueSongObject.artist;
+        lyricsLoader.title = queueSongObject.title;
+        [lyricsLoader startLoad];        
 	}
 	
 	isQueueListDownloading = YES;

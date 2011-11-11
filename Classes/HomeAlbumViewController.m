@@ -16,7 +16,6 @@
 #import "AllAlbumsUITableViewCell.h"
 #import "SongUITableViewCell.h"
 #import "AsynchronousImageViewCached.h"
-#import "XMLParser.h"
 #import "Artist.h"
 #import "Album.h"
 #import "Song.h"

@@ -34,6 +34,11 @@
     return [DatabaseSingleton sharedInstance].lyricsDb;
 }
 
+- (SUSLoaderType)type
+{
+    return SUSLoaderType_Lyrics;
+}
+
 #pragma mark - Loader Methods
 
 - (void)startLoad
@@ -53,9 +58,14 @@
 	}
 }
 
-- (void)cancelLoad
+#pragma mark - Private DB Methods
+
+- (void)insertLyricsIntoDb
 {
-    
+    [self.db executeUpdate:@"INSERT INTO lyrics (artist, title, lyrics) VALUES (?, ?, ?)", artist, title, self.loadedLyrics];
+    if ([self.db hadError]) { 
+        DLog(@"Err inserting lyrics %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]); 
+    }
 }
 
 #pragma mark - Connection Delegate
@@ -90,6 +100,7 @@
 			if (lyrics)
 			{
                 self.loadedLyrics = [TBXML textForElement:lyrics];
+                [self insertLyricsIntoDb];
                 [self.delegate loadingFinished:self];
 			}
             else
@@ -100,8 +111,11 @@
             }
 		}
 	}
-	
-	[super connectionDidFinishLoading:theConnection];
+    else
+    {
+        NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NoLyricsElement];
+        [self.delegate loadingFailed:self withError:error];
+    }
 }
 
 @end

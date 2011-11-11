@@ -17,6 +17,7 @@
 @property (nonatomic, retain) NSMutableData *receivedData;
 @property (nonatomic, assign) NSObject<SUSLoaderDelegate> *delegate;
 @property (readonly) NSError *loadError;
+@property (readonly) SUSLoaderType type;
 
 - (void)setup;
 - (id)initWithDelegate:(NSObject<SUSLoaderDelegate> *)theDelegate;

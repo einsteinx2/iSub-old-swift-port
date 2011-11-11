@@ -28,6 +28,11 @@
 	[super dealloc];
 }
 
+- (SUSLoaderType)type
+{
+    return SUSLoaderType_Chat;
+}
+
 #pragma mark - Loader Methods
 
 - (void)startLoad

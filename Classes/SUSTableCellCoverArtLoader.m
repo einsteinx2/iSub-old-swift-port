@@ -30,6 +30,11 @@
 	[super dealloc];
 }
 
+- (SUSLoaderType)type
+{
+    return SUSLoaderType_TableCellCoverArt;
+}
+
 #pragma mark - Properties
 
 - (FMDatabase *)db

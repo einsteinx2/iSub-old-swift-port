@@ -12,7 +12,6 @@
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
 #import "RootViewController.h"
-#import "XMLParser.h"
 #import "Server.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
@@ -179,8 +178,9 @@
 	{
 		[viewObjects showLoadingScreenOnMainWindow];
 		
+        NSString *urlString = [NSString stringWithFormat:@"%@/rest/ping.view", urlField.text];
 		SUSServerURLChecker *checker = [[SUSServerURLChecker alloc] initWithDelegate:self];
-		[checker checkURL:[NSURL URLWithString:urlField.text]];
+		[checker checkURL:[NSURL URLWithString:urlString]];
 	}
 }
 

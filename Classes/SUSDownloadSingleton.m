@@ -672,57 +672,59 @@ static void	ReadStreamClientCallBackTemp( CFReadStreamRef stream, CFStreamEventT
 
 #pragma mark Connection factory
 
-- (void)createConnectionForReadStreamRef:(CFReadStreamRef)readStreamRef callback:(CFReadStreamClientCallBack)callback songId:(NSString *)songId offset:(UInt32)byteOffset
+- (void)createConnectionForReadStreamRef:(CFReadStreamRef *)readStreamRef callback:(CFReadStreamClientCallBack)callback songId:(NSString *)songId offset:(UInt32)byteOffset
 {
     SavedSettings *settings = [SavedSettings sharedInstance];
-	NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/rest/stream.view", settings.urlString]];
-	NSString *username = [settings.username URLEncodeString];
+    
+    NSString *username = [settings.username URLEncodeString];
 	NSString *password = [settings.password URLEncodeString];
     
-    CFHTTPMessageRef messageRef = NULL;
-	CFStreamClientContext ctxt = {0, (void*)NULL, NULL, NULL, NULL};
-    
-	// Create the POST request
-	messageRef = CFHTTPMessageCreateRequest(kCFAllocatorDefault, CFSTR("POST"), (CFURLRef)url, kCFHTTPVersion1_1);
-	if ( messageRef == NULL ) goto Bail;
-	
-	// Create the stream for the request.
-	readStreamRef	= CFReadStreamCreateForHTTPRequest( kCFAllocatorDefault, messageRef );
-	if ( readStreamRef == NULL ) goto Bail;
-	
-	//	There are times when a server checks the User-Agent to match a well known browser.  This is what Safari used at the time the sample was written
-	//CFHTTPMessageSetHeaderFieldValue( messageRef, CFSTR("User-Agent"), CFSTR("Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) AppleWebKit/125.5.5 (KHTML, like Gecko) Safari/125")); 
-    
-    // Set the POST body
-    NSString *postString = nil;
+    NSString *urlString = nil;
     if ([musicControls maxBitrateSetting] != 0)
 	{
-        postString = [NSString stringWithFormat:@"v=1.2.0&c=iSub&maxBitRate=%i&id=%@", musicControls.maxBitrateSetting, songId];
+        //urlString = [NSString stringWithFormat:@"%@/rest/stream.view?v=1.2.0&c=iSub&maxBitRate=%i&id=%@", settings.urlString, musicControls.maxBitrateSetting, songId];
+        urlString = [NSString stringWithFormat:@"%@/rest/stream.view?u=%@&p=%@&v=1.2.0&c=iSub&maxBitRate=%i&id=%@", settings.urlString, username, password, musicControls.maxBitrateSetting, songId];
 	}
     else
 	{
-        postString = [NSString stringWithFormat:@"v=1.1.0&c=iSub&id=%@", songId];
+        //urlString = [NSString stringWithFormat:@"%@/rest/stream.view?v=1.1.0&c=iSub&id=%@", settings.urlString, songId];
+        urlString = [NSString stringWithFormat:@"%@/rest/stream.view?u=%@&p=%@&v=1.1.0&c=iSub&id=%@", settings.urlString, username, password, songId];
 	}
-    CFHTTPMessageSetBody(messageRef, (CFDataRef)[postString dataUsingEncoding:NSUTF8StringEncoding]);
+    
+    DLog(@"urlString: %@", urlString);
+    NSURL *url = [NSURL URLWithString:urlString];
+        
+    CFHTTPMessageRef messageRef = NULL;
+	CFStreamClientContext ctxt = {0, (void*)NULL, NULL, NULL, NULL};
+    
+	// Create the GET request
+    messageRef = CFHTTPMessageCreateRequest(kCFAllocatorDefault, CFSTR("GET"), (CFURLRef)url, kCFHTTPVersion1_1);
+	if (messageRef == NULL) 
+        goto Bail;
 	
+	//	There are times when a server checks the User-Agent to match a well known browser.  This is what Safari used at the time the sample was written
+	//CFHTTPMessageSetHeaderFieldValue( messageRef, CFSTR("User-Agent"), CFSTR("Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) AppleWebKit/125.5.5 (KHTML, like Gecko) Safari/125")); 
+    	
 	// Set a no cache policy
-	CFHTTPMessageSetHeaderFieldValue( messageRef, CFSTR("Cache-Control"), CFSTR("no-cache"));
+	CFHTTPMessageSetHeaderFieldValue(messageRef, CFSTR("Cache-Control"), CFSTR("no-cache"));
     
     if (byteOffset > 0)
     {
         // Add the HTTP header to resume the download
-        //DLog(@"----------------- byteOffset header: %@", [NSString stringWithFormat:@"bytes=%d-", byteOffset]);
+        DLog(@"----------------- byteOffset header: %@", [NSString stringWithFormat:@"bytes=%d-", byteOffset]);
         CFHTTPMessageSetHeaderFieldValue( messageRef, CFSTR("Range"), CFStringCreateWithFormat(NULL, NULL, CFSTR("bytes=%i-"), byteOffset)); 
     }
-        
+    
     // Handle Basic Auth
-    NSString *authStr = [NSString stringWithFormat:@"%@:%@", username, password];
-    NSData *authData = [authStr dataUsingEncoding:NSASCIIStringEncoding];
-    NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64EncodingWithLineLength:0]];
-    CFHTTPMessageSetHeaderFieldValue(messageRef, CFSTR("Authorization"), (CFStringRef)authValue);
+    //CFHTTPMessageAddAuthentication(messageRef, NULL, (CFStringRef)username, (CFStringRef)password, kCFHTTPAuthenticationSchemeBasic, FALSE);
+    
+    // Create the stream for the request.
+	*readStreamRef = CFReadStreamCreateForHTTPRequest(kCFAllocatorDefault, messageRef);
+	if (*readStreamRef == NULL) 
+        goto Bail;
 	
 	// Enable stream redirection
-    if (CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyHTTPShouldAutoredirect, kCFBooleanTrue) == false)
+    if (CFReadStreamSetProperty(*readStreamRef, kCFStreamPropertyHTTPShouldAutoredirect, kCFBooleanTrue) == false)
 		goto Bail;
 	
 	// Handle SSL connections
@@ -738,22 +740,26 @@ static void	ReadStreamClientCallBackTemp( CFReadStreamRef stream, CFStreamEventT
 		 [NSNull null], kCFStreamSSLPeerName,
 		 nil];
 		
-		CFReadStreamSetProperty(readStreamRef, kCFStreamPropertySSLSettings, sslSettings);
+		CFReadStreamSetProperty(*readStreamRef, kCFStreamPropertySSLSettings, sslSettings);
 	}
 	
 	// Handle proxy
 	CFDictionaryRef proxyDict = CFNetworkCopySystemProxySettings();
-	CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyHTTPProxy, proxyDict);
+	CFReadStreamSetProperty(*readStreamRef, kCFStreamPropertyHTTPProxy, proxyDict);
 	
 	// Set the client notifier
-	if (CFReadStreamSetClient(readStreamRef, kNetworkEvents, callback, &ctxt) == false)
+	if (CFReadStreamSetClient(*readStreamRef, kNetworkEvents, callback, &ctxt) == false)
 		goto Bail;
     
+    // Print the message
+    NSData *d = (NSData *)CFHTTPMessageCopySerializedMessage(messageRef);
+    DLog(@"messageRef: %@", [[[NSString alloc] initWithBytes:[d bytes] length:[d length] encoding:NSUTF8StringEncoding] autorelease]);
+    
 	// Schedule the stream
-	CFReadStreamScheduleWithRunLoop(readStreamRef, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
+	CFReadStreamScheduleWithRunLoop(*readStreamRef, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
     
 	// Start the HTTP connection
-	if (CFReadStreamOpen(readStreamRef) == false)
+	if (CFReadStreamOpen(*readStreamRef) == false)
 	    goto Bail;
 	
 	DLog(@"--- STARTING HTTP CONNECTION");
@@ -765,64 +771,69 @@ Bail:
 	if (messageRef != NULL) CFRelease(messageRef);
 	if (readStreamRef != NULL)
     {
-        CFReadStreamSetClient(readStreamRef, kCFStreamEventNone, NULL, NULL);
-	    CFReadStreamUnscheduleFromRunLoop(readStreamRef, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
-	    CFReadStreamClose(readStreamRef);
+        CFReadStreamSetClient(*readStreamRef, kCFStreamEventNone, NULL, NULL);
+	    CFReadStreamUnscheduleFromRunLoop(*readStreamRef, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
+	    CFReadStreamClose(*readStreamRef);
         CFRelease(readStreamRef);
     }
 	return;
 }
 
 #pragma mark Download
-- (void) downloadCFNetA:(NSString *)songId
+- (void)downloadCFNetA:(NSString *)songId
 {
+    DLog(@"downloadCFNetA");
     self.throttlingDate = nil;
 	bytesTransferred = 0;
 	
 	isDownloadA = YES;
     
-    [self createConnectionForReadStreamRef:readStreamRefA callback:ReadStreamClientCallBackA songId:songId offset:0];
+    [self createConnectionForReadStreamRef:&readStreamRefA callback:ReadStreamClientCallBackA songId:songId offset:0];
 }
 
-- (void) downloadCFNetB:(NSString *)songId
+- (void)downloadCFNetB:(NSString *)songId
 {
+    DLog(@"downloadCFNetB");
 	self.throttlingDate = nil;
 	bytesTransferred = 0;
 	
 	isDownloadB = YES;
     
-    [self createConnectionForReadStreamRef:readStreamRefB callback:ReadStreamClientCallBackB songId:songId offset:0];
+    [self createConnectionForReadStreamRef:&readStreamRefB callback:ReadStreamClientCallBackB songId:songId offset:0];
 }
 
-- (void) downloadCFNetTemp:(NSString *)songId
+- (void)downloadCFNetTemp:(NSString *)songId
 {
+    DLog(@"downloadCFNetTemp");
 	self.throttlingDate = nil;
 	bytesTransferred = 0;
 	
 	isDownloadA = YES;
     
-    [self createConnectionForReadStreamRef:readStreamRefA callback:ReadStreamClientCallBackTemp songId:songId offset:0];
+    [self createConnectionForReadStreamRef:&readStreamRefA callback:ReadStreamClientCallBackTemp songId:songId offset:0];
 }
 
 #pragma mark Resume
-- (void) resumeCFNetA:(NSString *)songId offset:(UInt32)byteOffset
+- (void)resumeCFNetA:(NSString *)songId offset:(UInt32)byteOffset
 {
+    DLog(@"resumeCFNetA");
     self.throttlingDate = [NSDate date];
 	bytesTransferred = 0;
 	
 	isDownloadA = YES;
     
-    [self createConnectionForReadStreamRef:readStreamRefA callback:ReadStreamClientCallBackA songId:songId offset:byteOffset];
+    [self createConnectionForReadStreamRef:&readStreamRefA callback:ReadStreamClientCallBackA songId:songId offset:byteOffset];
 }
 
-- (void) resumeCFNetB:(NSString *)songId offset:(UInt32)byteOffset
+- (void)resumeCFNetB:(NSString *)songId offset:(UInt32)byteOffset
 {
+    DLog(@"resumeCFNetB");
 	self.throttlingDate = [NSDate date];
 	bytesTransferred = 0;
 	
 	isDownloadB = YES;
     
-    [self createConnectionForReadStreamRef:readStreamRefB callback:ReadStreamClientCallBackB songId:songId offset:byteOffset];
+    [self createConnectionForReadStreamRef:&readStreamRefB callback:ReadStreamClientCallBackB songId:songId offset:byteOffset];
 }
 
 #pragma mark - SUSLoader delegate
