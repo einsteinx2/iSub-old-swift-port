@@ -22,6 +22,7 @@
 #import "SUSQueueAllDAO.h"
 #import "SavedSettings.h"
 #import "GTMNSString+HTML.h"
+#import "SUSCurrentPlaylistDAO.h"
 
 static DatabaseSingleton *sharedInstance = nil;
 
@@ -920,9 +921,11 @@ static DatabaseSingleton *sharedInstance = nil;
 	///////// REWRITE TO CATCH THIS NSFILEMANAGER ERROR ///////////
 	[[NSFileManager defaultManager] removeItemAtPath:fileName error:NULL];
 	
+	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+	
 	// Check if we're deleting the song that's currently playing. If so, stop the player.
-	if (musicControls.currentSongObject && ![SavedSettings sharedInstance].isJukeboxEnabled &&
-		[[NSString md5:musicControls.currentSongObject.path] isEqualToString:md5])
+	if (dataModel.currentSong && ![SavedSettings sharedInstance].isJukeboxEnabled &&
+		[[dataModel.currentSong.path md5] isEqualToString:md5])
 	{
 		[musicControls destroyStreamer];
 	}
@@ -1160,7 +1163,7 @@ static DatabaseSingleton *sharedInstance = nil;
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-	musicControls.currentPlaylistPosition = 0;
+	[SUSCurrentPlaylistDAO dataModel].currentIndex = 0;
 	musicControls.isShuffle = YES;
 	
 	[self resetShufflePlaylist];

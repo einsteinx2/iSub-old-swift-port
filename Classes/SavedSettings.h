@@ -81,6 +81,7 @@
 
 // State Saving
 @property BOOL isRecover;
+@property NSUInteger seekTime;
 
 // Document Paths
 @property (readonly) NSString *documentsPath;

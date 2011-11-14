@@ -23,6 +23,7 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "NSString-time.h"
+#import "SUSStreamSingleton.h"
 
 @implementation BookmarksViewController
 
@@ -575,197 +576,10 @@
 #pragma mark -
 #pragma mark Table view delegate
 
-- (void)playBookmarkSong
-{
-    //musicControls.songUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:musicControls.currentSongObject.songId]];
-	
-	// Determine the hashed filename
-	musicControls.downloadFileNameHashA = nil; musicControls.downloadFileNameHashA = [NSString md5:musicControls.currentSongObject.path];
-	
-	// Check to see if the song is an m4a, if so don't resume and display message
-	BOOL isM4A = NO;
-	if (musicControls.currentSongObject.transcodedSuffix)
-	{
-		if ([musicControls.currentSongObject.transcodedSuffix isEqualToString:@"m4a"] || [musicControls.currentSongObject.transcodedSuffix isEqualToString:@"aac"])
-			isM4A = YES;
-	}
-	else
-	{
-		if ([musicControls.currentSongObject.suffix isEqualToString:@"m4a"] || [musicControls.currentSongObject.suffix isEqualToString:@"aac"])
-			isM4A = YES;
-	}
-	
-	if (isM4A)
-	{
-		[musicControls startDownloadA];
-		
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Sorry" message:@"It's currently not possible to skip within m4a files, so the song is starting from the begining instead of resuming.\n\nYou can turn on m4a > mp3 transcoding in Subsonic to resume this song properly." delegate:appDelegate cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert show];
-		[alert release];
-	}
-	else
-	{
-		// Check to see if the song is already cached
-		if ([databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE md5 = ?", musicControls.downloadFileNameHashA])
-		{
-			// Looks like the song is in the database, check if it's cached fully
-			NSString *isDownloadFinished = [databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", musicControls.downloadFileNameHashA];
-			if ([isDownloadFinished isEqualToString:@"YES"])
-			{
-				// The song is fully cached, start streaming from the local copy
-				//DLog(@"Song in the cache. Resuming from local copy");
-				
-				musicControls.isTempDownload = NO;
-				
-				// Determine the file hash
-				musicControls.downloadFileNameHashA = [NSString md5:musicControls.currentSongObject.path];
-				
-				// Determine the name and path of the file.
-				if (musicControls.currentSongObject.transcodedSuffix)
-					musicControls.downloadFileNameA = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", musicControls.downloadFileNameHashA, musicControls.currentSongObject.transcodedSuffix]];
-				else
-					musicControls.downloadFileNameA = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", musicControls.downloadFileNameHashA, musicControls.currentSongObject.suffix]];
-				//DLog(@"File name = %@", downloadFileNameA);		
-				
-				// Start streaming from the local copy
-				//DLog(@"Playing from local copy");
-				
-				// Check the file size
-				NSNumber *fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:musicControls.downloadFileNameA error:NULL] objectForKey:NSFileSize];
-				musicControls.bitRate = (UInt32) (([fileSize floatValue] / [musicControls.currentSongObject.duration floatValue]) / 128);
-				//DLog(@"bitrate: %i", musicControls.bitRate);
-				musicControls.downloadedLengthA = [fileSize intValue];
-				//DLog(@"downloadedLengthA: %i", downloadedLengthA);
-				
-				musicControls.streamerProgress = 0.0;
-				musicControls.streamer = [[AudioStreamer alloc] initWithFileURL:[NSURL fileURLWithPath:musicControls.downloadFileNameA]];
-				if (musicControls.streamer)
-				{
-					musicControls.streamer.fileDownloadCurrentSize = musicControls.downloadedLengthA;
-					//DLog(@"fileDownloadCurrentSize: %i", streamer.fileDownloadCurrentSize);
-					musicControls.streamer.fileDownloadComplete = YES;
-					[musicControls.streamer startWithOffsetInSecs:(UInt32) musicControls.seekTime];
-				}
-			}
-			else
-			{
-				if (viewObjects.isOfflineMode)
-				{
-					CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Unable to resume this song in offline mode as it isn't fully cached." delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-					alert.tag = 4;
-					[alert show];
-					[alert release];
-				}
-				else 
-				{
-					// The song is not fully cached, call startTempDownloadA to start a temp cache stream
-					//DLog(@"Song in cache but not finished, resuming with a temp download");
-					
-					// Determine the name and path of the file.
-					if (musicControls.currentSongObject.transcodedSuffix)
-						musicControls.downloadFileNameA = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", musicControls.downloadFileNameHashA, musicControls.currentSongObject.transcodedSuffix]];
-					else
-						musicControls.downloadFileNameA = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", musicControls.downloadFileNameHashA, musicControls.currentSongObject.suffix]];
-					//DLog(@"File name = %@", downloadFileNameA);		
-					
-					if (musicControls.currentSongObject.transcodedSuffix)
-					{
-						// It's transcoded! Guess that it's transcoded at 160kbps
-						musicControls.bitRate = 160;
-					}
-					else
-					{
-						// It's not transcoded, check the max bitrate setting
-						if ([musicControls maxBitrateSetting] == 0)
-						{
-							// No max setting, use the bitrate of the song object
-							musicControls.bitRate = [musicControls.currentSongObject.bitRate intValue];
-						}
-						else 
-						{
-							// Use the bitrate of the song object or the max bitrate setting, whichever is lower
-							if ([musicControls maxBitrateSetting] > [musicControls.currentSongObject.bitRate intValue])
-								musicControls.bitRate = [musicControls.currentSongObject.bitRate intValue];
-							else
-								musicControls.bitRate = [musicControls maxBitrateSetting];
-						}
-					}
-					//DLog(@"bitrate: %i", musicControls.bitRate);
-					
-					// Determine the byte offset
-					float byteOffset;
-					if (musicControls.bitRate < 1000)
-						byteOffset = ((float)musicControls.bitRate * 128 * musicControls.seekTime);
-					else
-						byteOffset = (((float)musicControls.bitRate / 1000) * 128 * musicControls.seekTime);
-
-					// Start the download
-					[musicControls startTempDownloadA:byteOffset];
-				}
-			}
-		}
-		else
-		{
-			if (!viewObjects.isOfflineMode)
-			{
-				// Song not in the cache at all, call startTempDownloadA to start a temp cache stream
-				//DLog(@"Song not in cache at all, starting a temp download");
-				
-				// Determine the name and path of the file.
-				if (musicControls.currentSongObject.transcodedSuffix)
-					musicControls.downloadFileNameA = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", musicControls.downloadFileNameHashA, musicControls.currentSongObject.transcodedSuffix]];
-				else
-					musicControls.downloadFileNameA = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", musicControls.downloadFileNameHashA, musicControls.currentSongObject.suffix]];
-				//DLog(@"File name = %@", downloadFileNameA);		
-				
-				if (musicControls.currentSongObject.transcodedSuffix)
-				{
-					// It's transcoded! Guess that it's transcoded at 160kbps
-					musicControls.bitRate = 160;
-				}
-				else
-				{
-					// It's not transcoded, check the max bitrate setting
-					if ([musicControls maxBitrateSetting] == 0)
-					{
-						// No max setting, use the bitrate of the song object
-						musicControls.bitRate = [musicControls.currentSongObject.bitRate intValue];
-					}
-					else 
-					{
-						// Use the bitrate of the song object or the max bitrate setting, whichever is lower
-						if ([musicControls maxBitrateSetting] > [musicControls.currentSongObject.bitRate intValue])
-							musicControls.bitRate = [musicControls.currentSongObject.bitRate intValue];
-						else
-							musicControls.bitRate = [musicControls maxBitrateSetting];
-					}
-				}
-				//DLog(@"bitrate: %i", musicControls.bitRate);
-				
-				// Determine the byte offset
-				float byteOffset;
-				if (musicControls.bitRate < 1000)
-					byteOffset = ((float)musicControls.bitRate * 128 * musicControls.seekTime);
-				else
-					byteOffset = (((float)musicControls.bitRate / 1000) * 128 * musicControls.seekTime);
-				
-				
-				// Start the download
-				[musicControls startTempDownloadA:byteOffset];
-			}
-		}
-	}
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	musicControls.currentSongObject = nil;
-	musicControls.nextSongObject = nil;
-	musicControls.currentSongObject = [self songFromDbRow:indexPath.row];
-	
-	musicControls.currentPlaylistPosition = 0;
 	[databaseControls resetCurrentPlaylistDb];
-	[databaseControls insertSong:musicControls.currentSongObject intoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
+	[databaseControls insertSong:[self songFromDbRow:indexPath.row] intoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 	
     musicControls.isNewSong = YES;
 	musicControls.isShuffle = NO;
@@ -782,10 +596,9 @@
 		[streamingPlayerViewController release];
 	}
 		
-	[musicControls destroyStreamer];
 	musicControls.isPlaying = YES;
-	musicControls.seekTime = (float)[databaseControls.bookmarksDb intForQuery:@"SELECT position FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
-	[self playBookmarkSong];
+	NSUInteger offsetSeconds = [databaseControls.bookmarksDb intForQuery:@"SELECT position FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
+	[musicControls startSongAtOffsetInSeconds:offsetSeconds];
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"setPauseButtonImage" object:nil];
 }
 

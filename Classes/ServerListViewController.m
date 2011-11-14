@@ -283,13 +283,10 @@
 		// Stop any playing song and remove old tab bar controller from window
 		[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"recover"];
 		[[NSUserDefaults standardUserDefaults] synchronize];
-		musicControls.currentSongObject = nil;
-		musicControls.nextSongObject = nil;
 		[musicControls destroyStreamer];
 		musicControls.isPlaying = NO;
 		settings.isJukeboxEnabled = NO;
 		musicControls.showNowPlayingIcon = NO;
-		musicControls.seekTime = 0.0;
 		
 		if (!IS_IPAD())
 			[appDelegate.mainTabBarController.view removeFromSuperview];

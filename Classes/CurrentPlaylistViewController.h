@@ -7,7 +7,7 @@
 //
 
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, SUSCurrentPlaylistDAO;
 
 @interface CurrentPlaylistViewController : UITableViewController 
 {
@@ -29,6 +29,8 @@
 	
 	BOOL goToNextSong;
 }
+
+@property (nonatomic, retain) SUSCurrentPlaylistDAO *dataModel;
 
 - (void) selectRow;
 

@@ -17,6 +17,7 @@
 #import "MusicSingleton.h"
 #import "SocialSingleton.h"
 #import "Song.h"
+#import "SUSCurrentPlaylistDAO.h"
 #import "SA_OAuthTwitterEngine.h"
 #ifdef TARGET_OS_IPHONE
 #import <CFNetwork/CFNetwork.h>
@@ -271,6 +272,7 @@ void ASReadStreamCallBack (CFReadStreamRef aStream, CFStreamEventType eventType,
 @synthesize fileDownloadCurrentSize;
 @synthesize fileDownloadBytesRead;
 @dynamic progress;
+@synthesize seekTime;
 
 @synthesize tweetTimer;
 @synthesize scrobbleTimer;
@@ -1055,13 +1057,15 @@ cleanup:
 	
 	// Scrobbling timer
 	SavedSettings *settings = [SavedSettings sharedInstance];
+	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+	Song *currentSong = dataModel.currentSong;
 	shouldInvalidateScrobbleTimer = YES;
 	NSTimeInterval scrobbleInterval = 30.0;
-	if (musicControls.currentSongObject.duration != nil)
+	if (currentSong.duration != nil)
 	{
 		//double scrobblePercent = [[appDelegate.settingsDictionary objectForKey:@"scrobblePercentSetting"] doubleValue];
 		float scrobblePercent = settings.scrobblePercent;
-		float duration = [musicControls.currentSongObject.duration floatValue];
+		float duration = [currentSong.duration floatValue];
 		scrobbleInterval = scrobblePercent * duration;
 		DLog(@"duration: %f    percent: %f    scrobbleInterval: %f", duration, scrobblePercent, scrobbleInterval);
 	}
@@ -1071,16 +1075,17 @@ cleanup:
 	//if ([[appDelegate.settingsDictionary objectForKey:@"enableScrobblingSetting"] isEqualToString:@"YES"])
 	if (settings.isScrobbleEnabled)
 	{
-		[musicControls scrobbleSong:musicControls.currentSongObject.songId isSubmission:NO];
+		[musicControls scrobbleSong:currentSong.songId isSubmission:NO];
 	}
 }
 
 
 - (void) tweetSong
 {
-	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 	SocialSingleton *socialControls = [SocialSingleton sharedInstance];
 	SavedSettings *settings = [SavedSettings sharedInstance];
+	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+	Song *currentSong = dataModel.currentSong;
 	
 	shouldInvalidateTweetTimer = NO;
 	tweetTimer = nil;
@@ -1088,10 +1093,10 @@ cleanup:
 	//if (socialControls.twitterEngine && [[appDelegate.settingsDictionary objectForKey:@"twitterEnabledSetting"] isEqualToString:@"YES"])
 	if (socialControls.twitterEngine && settings.isTwitterEnabled)
 	{
-		if (musicControls.currentSongObject.artist && musicControls.currentSongObject.title)
+		if (currentSong.artist && currentSong.title)
 		{
 			DLog(@"------------- tweeting song --------------");
-			NSString *tweet = [NSString stringWithFormat:@"is listening to \"%@\" by %@", musicControls.currentSongObject.title, musicControls.currentSongObject.artist];
+			NSString *tweet = [NSString stringWithFormat:@"is listening to \"%@\" by %@", currentSong.title, currentSong.artist];
 			if ([tweet length] <= 140)
 				[socialControls.twitterEngine sendUpdate:tweet];
 			else
@@ -1118,7 +1123,9 @@ cleanup:
 	if ([SavedSettings sharedInstance].isScrobbleEnabled)
 	{
 		MusicSingleton *musicControls = [MusicSingleton sharedInstance];
-		[musicControls scrobbleSong:musicControls.currentSongObject.songId isSubmission:YES];
+		SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+		Song *currentSong = dataModel.currentSong;
+		[musicControls scrobbleSong:currentSong.songId isSubmission:YES];
 	}
 }
 
@@ -1127,6 +1134,7 @@ cleanup:
 - (void)startWithOffsetInSecs:(UInt32) offsetInSecs
 {
 	fixedLength = YES;
+	seekTime = (double)offsetInSecs;
 	
 	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 	
@@ -2206,11 +2214,11 @@ cleanup:
 	if (inInterruptionState == kAudioSessionBeginInterruption)
 	{
 		//DLog(@"inInterruptionState == kAudioSessionBeginInterruption called");
-		if(musicControls.isPlaying)
+		/*if(musicControls.isPlaying)
 		{	
 			musicControls.streamerProgress = [self progress];
 			musicControls.seekTime += musicControls.streamerProgress;
-		}
+		}*/
 		//DLog(@"inInterruptionState == kAudioSessionBeginInterruption finished");
 	}
 	else if (inInterruptionState == kAudioSessionEndInterruption)
@@ -2218,7 +2226,7 @@ cleanup:
 		//DLog(@"inInterruptionState == kAudioSessionEndInterruption called");
 		if(musicControls.isPlaying)
 		{
-			[self startWithOffsetInSecs:(UInt32) musicControls.seekTime];
+			[self startWithOffsetInSecs:[self progress]];
 		}
 		//DLog(@"inInterruptionState == kAudioSessionEndInterruption finished");
 	}

@@ -437,8 +437,6 @@
 			genresAlbumViewController.title = [[listOfAlbums objectAtIndex:indexPath.row] objectAtIndex:1];
 			genresAlbumViewController.listOfAlbums = [NSMutableArray arrayWithCapacity:1];
 			genresAlbumViewController.listOfSongs = [NSMutableArray arrayWithCapacity:1];
-			//genresAlbumViewController.listOfAlbums = [[NSMutableArray alloc] init];
-			//genresAlbumViewController.listOfSongs = [[NSMutableArray alloc] init];
 			genresAlbumViewController.segment = (self.segment + 1);
 			genresAlbumViewController.seg1 = self.seg1;
 			genresAlbumViewController.genre = [NSString stringWithString:genre];
@@ -464,53 +462,14 @@
 				}
 			}
 			[result close];
-			//DLog(@"genresAlbumViewController.listOfSongs: %@", genresAlbumViewController.listOfSongs);
 						
 			[self.navigationController pushViewController:genresAlbumViewController animated:YES];
 			[genresAlbumViewController release];
 		}
 		else
 		{
-			/*NSUInteger a = indexPath.row - [listOfAlbums count];
-			musicControls.currentSongObject = nil; musicControls.currentSongObject = [databaseControls songFromGenreDb:[listOfSongs objectAtIndex:a]];
-			
-			musicControls.currentPlaylistPosition = a;
-			[databaseControls resetCurrentPlaylistDb];
-			for(NSString *songMD5 in listOfSongs)
-			{
-				//DLog(@"songMD5: %@", songMD5);
-				Song *aSong = [databaseControls songFromGenreDb:songMD5];
-				//DLog(@"aSong: %@", aSong);
-				[databaseControls insertSong:aSong intoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-			}
-			
-			musicControls.nextSongObject = nil; musicControls.nextSongObject = [databaseControls songFromDbRow:(a + 1) inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-			
-			musicControls.isNewSong = YES;
-			musicControls.isShuffle = NO;
-			
-			[musicControls destroyStreamer];
-			musicControls.seekTime = 0.0;
-			[musicControls playPauseSong];
-			
-			if (IS_IPAD())
-			{
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"showPlayer" object:nil];
-			}
-			else
-			{
-				iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-				streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-				[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-				[streamingPlayerViewController release];
-			}*/
-			
-			// Kill the streamer if it's playing
-			[musicControls destroyStreamer];
-			
 			// Find the new playlist position
 			NSUInteger songRow = indexPath.row - [listOfAlbums count];
-			musicControls.currentPlaylistPosition = songRow;
 			
 			// Clear the current playlist
 			if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -544,25 +503,11 @@
 			}
 			[songIds release];
 			
-			// Set the current and next song objects
-			if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			{
-				musicControls.currentSongObject = [databaseControls songFromDbRow:songRow inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-				musicControls.nextSongObject = [databaseControls songFromDbRow:(songRow + 1) inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-			}
-			else
-			{
-				musicControls.currentSongObject = [databaseControls songFromDbRow:songRow inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-				musicControls.nextSongObject = [databaseControls songFromDbRow:(songRow + 1) inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-			}
-			
 			// Set player defaults
 			musicControls.isNewSong = YES;
 			musicControls.isShuffle = NO;
 			
-			
 			// Start the song
-			musicControls.seekTime = 0.0;
 			[musicControls playSongAtPosition:songRow];
 			
 			// Show the player

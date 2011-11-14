@@ -9,37 +9,25 @@
 #import "TBXML.h"
 
 @interface Song : NSObject <NSCoding, NSCopying> 
-{
-	NSString *title;
-	NSString *songId;
-	NSString *artist;
-	NSString *album;
-	NSString *genre;
-	NSString *coverArtId;
-	NSString *path;
-	NSString *suffix;
-	NSString *transcodedSuffix;
-	NSNumber *duration;
-	NSNumber *bitRate;
-	NSNumber *track;
-	NSNumber *year;
-	NSNumber *size;
-}
 
-@property (nonatomic, retain) NSString *title;
-@property (nonatomic, retain) NSString *songId;
-@property (nonatomic, retain) NSString *artist;
-@property (nonatomic, retain) NSString *album;
-@property (nonatomic, retain) NSString *genre;
-@property (nonatomic, retain) NSString *coverArtId;
-@property (nonatomic, retain) NSString *path;
-@property (nonatomic, retain) NSString *suffix;
-@property (nonatomic, retain) NSString *transcodedSuffix;
-@property (nonatomic, retain) NSNumber *duration;
-@property (nonatomic, retain) NSNumber *bitRate;
-@property (nonatomic, retain) NSNumber *track;
-@property (nonatomic, retain) NSNumber *year;
-@property (nonatomic, retain) NSNumber *size;
+@property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy) NSString *songId;
+@property (nonatomic, copy) NSString *artist;
+@property (nonatomic, copy) NSString *album;
+@property (nonatomic, copy) NSString *genre;
+@property (nonatomic, copy) NSString *coverArtId;
+@property (nonatomic, copy) NSString *path;
+@property (nonatomic, copy) NSString *suffix;
+@property (nonatomic, copy) NSString *transcodedSuffix;
+@property (nonatomic, copy) NSNumber *duration;
+@property (nonatomic, copy) NSNumber *bitRate;
+@property (nonatomic, copy) NSNumber *track;
+@property (nonatomic, copy) NSNumber *year;
+@property (nonatomic, copy) NSNumber *size;
+
+@property (readonly) NSString *localSuffix;
+@property (readonly) NSString *localPath;
+@property (readonly) unsigned long long localFileSize;
 
 - (void)encodeWithCoder:(NSCoder *)encoder;
 - (id)initWithCoder:(NSCoder *)decoder;
@@ -48,5 +36,7 @@
 
 - (id)initWithTBXMLElement:(TBXMLElement *)element;
 - (id)initWithAttributeDict:(NSDictionary *)attributeDict;
+
+- (BOOL)isEqualToSong:(Song	*)otherSong;
 
 @end

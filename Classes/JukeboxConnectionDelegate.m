@@ -12,6 +12,7 @@
 #import "DatabaseSingleton.h"
 #import "BBSimpleConnectionQueue.h"
 #import "CustomUIAlertView.h"
+#import "SUSCurrentPlaylistDAO.h"
 
 @implementation JukeboxConnectionDelegate
 
@@ -75,9 +76,7 @@
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
-{	
-	DatabaseSingleton *databaseControls = [DatabaseSingleton sharedInstance];
-	
+{		
 	//DLog(@"%@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
 	
 	[musicControls.connectionQueue connectionFinished:theConnection];
@@ -89,10 +88,11 @@
 		[xmlParser setDelegate:parser];
 		[xmlParser parse];
 		
-		musicControls.currentPlaylistPosition = parser.currentIndex;
+		SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+		
+		dataModel.currentIndex = parser.currentIndex;
 		musicControls.jukeboxGain = parser.gain;
 		musicControls.jukeboxIsPlaying = parser.isPlaying;
-		musicControls.currentSongObject = [databaseControls songFromDbRow:musicControls.currentPlaylistPosition inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 		
 		[xmlParser release];
 		[parser release];

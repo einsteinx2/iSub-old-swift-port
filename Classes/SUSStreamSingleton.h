@@ -6,28 +6,25 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "SUSStreamHandlerDelegate.h"
 
-@class Song;
-@interface SUSStreamSingleton : NSObject
+@class Song, SUSStreamHandler;
+@interface SUSStreamSingleton : NSObject <SUSStreamHandlerDelegate>
 
-@property (nonatomic, retain) NSDate *throttlingDate;
-@property NSUInteger bytesTransferred;
-@property BOOL isDownloadA;
-@property BOOL isDownloadB;
+@property (nonatomic, retain) NSMutableArray *handlerStack;
 
 + (SUSStreamSingleton *)sharedInstance;
 
-- (void) cancelCFNetA;
-- (void) cancelCFNetB;
+- (void)cancelAllStreams;
+- (void)cancelStreamAtIndex:(NSUInteger)index;
 
-- (void) downloadCFNetA:(NSString *)songId;
-- (void) downloadCFNetTemp:(NSString *)songId;
-- (void) downloadCFNetB:(NSString *)songId;
+- (void)queueStreamForSong:(Song *)song offset:(NSUInteger)byteOffset atIndex:(NSUInteger)index;
 
-- (void) resumeCFNetA:(NSString *)songId offset:(UInt32)byteOffset;
-- (void) resumeCFNetB:(NSString *)songId offset:(UInt32)byteOffset;
+// Convenience methods
+- (void)queueStreamForSong:(Song *)song offset:(NSUInteger)byteOffset;
+- (void)queueStreamForSong:(Song *)song atIndex:(NSUInteger)index;
+- (void)queueStreamForSong:(Song *)song;
 
-- (BOOL) insertSong:(Song *)aSong intoGenreTable:(NSString *)table;
+- (BOOL)insertSong:(Song *)aSong intoGenreTable:(NSString *)table;
 
 @end

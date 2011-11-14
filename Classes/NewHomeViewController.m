@@ -37,6 +37,7 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "NSString+URLEncode.h"
 #import "NSMutableURLRequest+SUS.h"
+#import "SUSCurrentPlaylistDAO.h"
 
 @implementation NewHomeViewController
 
@@ -272,15 +273,19 @@
 
 - (void)initSongInfo
 {
-	if (musicControls.currentSongObject != nil)
+	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+	Song *currentSong = dataModel.currentSong;
+	
+	
+	if (currentSong != nil)
 	{		
-		if([musicControls.currentSongObject coverArtId])
+		if(currentSong.coverArtId)
 		{		
 			FMDatabase *coverArtCache = databaseControls.coverArtCacheDb320;
 			
-			if ([coverArtCache intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:musicControls.currentSongObject.coverArtId]] == 1)
+			if ([coverArtCache intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [currentSong.coverArtId md5]] == 1)
 			{
-				NSData *imageData = [coverArtCache dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [NSString md5:musicControls.currentSongObject.coverArtId]];
+				NSData *imageData = [coverArtCache dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [currentSong.coverArtId md5]];
 				if (SCREEN_SCALE() == 2.0)
 				{
 					UIGraphicsBeginImageContextWithOptions(CGSizeMake(320.0,320.0), NO, 2.0);
@@ -295,7 +300,7 @@
 			}
 			else 
 			{
-				[coverArtView loadImageFromCoverArtId:musicControls.currentSongObject.coverArtId isForPlayer:YES];
+				[coverArtView loadImageFromCoverArtId:currentSong.coverArtId isForPlayer:YES];
 			}
 		}
 		else 
@@ -307,19 +312,19 @@
 		albumLabel.text = @"";
 		songLabel.text = @"";
 		
-		if ([musicControls.currentSongObject artist])
+		if (currentSong.artist)
 		{
-			artistLabel.text = [musicControls.currentSongObject artist];
+			artistLabel.text = [[currentSong.artist copy] autorelease];
 		}
 		
-		if ([musicControls.currentSongObject album])
+		if (currentSong.album)
 		{
-			albumLabel.text = [musicControls.currentSongObject album];
+			albumLabel.text = [[currentSong.album copy] autorelease];
 		}
 		
-		if ([musicControls.currentSongObject title])
+		if (currentSong.title)
 		{
-			songLabel.text = [musicControls.currentSongObject title];
+			songLabel.text = [[currentSong.title copy] autorelease];
 		}
 	}
 	else
@@ -475,9 +480,7 @@
 			else
 				[jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off.png"] forState:UIControlStateNormal];
 			[SavedSettings sharedInstance].isJukeboxEnabled = NO;
-			
-			musicControls.currentSongObject = nil;
-			
+						
 			appDelegate.window.backgroundColor = viewObjects.windowColor;
 		}
 		else
@@ -805,10 +808,7 @@
 		SearchXMLParser *parser = (SearchXMLParser*)[[SearchXMLParser alloc] initXMLParser];
 		[xmlParser setDelegate:parser];
 		[xmlParser parse];
-		
-		[musicControls destroyStreamer];
-		
-		musicControls.currentPlaylistPosition = 0;
+				
 		[databaseControls resetCurrentPlaylistDb];
 		for(Song *aSong in parser.listOfSongs)
 		{
@@ -824,7 +824,6 @@
 		
 		musicControls.isNewSong = YES;
 		musicControls.isShuffle = NO;
-		musicControls.seekTime = 0.0;
 		
 		// Hide the loading screen
 		[viewObjects hideLoadingScreen];

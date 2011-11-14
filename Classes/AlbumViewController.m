@@ -485,7 +485,6 @@
 	}
 }
 
-
 // Customize the height of individual rows to make the album rows taller to accomidate the album art.
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
@@ -494,7 +493,6 @@
 	else
 		return 50.0;
 }
-
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {	
@@ -511,65 +509,7 @@
 		}
 		else
 		{
-			// Kill the streamer if it's playing
-			[musicControls destroyStreamer];
-			
-			// Find the new playlist position
-			NSUInteger songRow = indexPath.row - dataModel.albumsCount;
-			musicControls.currentPlaylistPosition = songRow;
-			
-			// Clear the current playlist
-			if ([SavedSettings sharedInstance].isJukeboxEnabled)
-				[databaseControls resetJukeboxPlaylist];
-			else
-				[databaseControls resetCurrentPlaylistDb];
-            
-            // Add the songs to the playlist
-            NSMutableArray *songIds = [[NSMutableArray alloc] init];
-            for (int i = dataModel.albumsCount; i < dataModel.totalCount; i++)
-            {
-                @autoreleasepool 
-                {
-                    Song *aSong = [dataModel songForTableViewRow:i];
-                    [databaseControls addSongToPlaylistQueue:aSong];
-                    
-                    // In jukebox mode, collect the song ids to send to the server
-                    if ([SavedSettings sharedInstance].isJukeboxEnabled)
-                        [songIds addObject:aSong.songId];
-                }
-            }
-			
-			// If jukebox mode, send song ids to server
-			if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			{
-				[musicControls jukeboxStop];
-				[musicControls jukeboxClearPlaylist];
-				[musicControls jukeboxAddSongs:songIds];
-			}
-			[songIds release];
-			
-			// Set the current and next song objects
-			//musicControls.currentSongObject = nil;
-			//musicControls.nextSongObject = nil; 
-			if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			{
-				musicControls.currentSongObject = [databaseControls songFromDbRow:songRow inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-				musicControls.nextSongObject = [databaseControls songFromDbRow:(songRow + 1) inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-			}
-			else
-			{
-				musicControls.currentSongObject = [databaseControls songFromDbRow:songRow inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-				musicControls.nextSongObject = [databaseControls songFromDbRow:(songRow + 1) inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-			}
-			
-			// Set player defaults
-			musicControls.isNewSong = YES;
-			musicControls.isShuffle = NO;
-			
-			
-			// Start the song
-			musicControls.seekTime = 0.0;
-			[musicControls playSongAtPosition:songRow];
+			[self.dataModel playSongAtTableViewRow:indexPath.row];
 			
 			// Show the player
 			if (IS_IPAD())

@@ -49,6 +49,7 @@
 #import "CacheSingleton.h"
 
 #import "NSMutableURLRequest+SUS.h"
+#import "SUSStreamSingleton.h"
 
 @implementation iSubAppDelegate
 
@@ -727,8 +728,9 @@ void onUncaughtException(NSException* exception)
 	viewObjects.isOfflineMode = YES;
 		
 	[musicControls destroyStreamer];
-	[musicControls stopDownloadA];
-	[musicControls stopDownloadB];
+	
+	[[SUSStreamSingleton sharedInstance] cancelAllStreams];
+
 	[mainTabBarController.view removeFromSuperview];
 	[databaseControls closeAllDatabases];
 	[self appInit2];
@@ -930,8 +932,7 @@ void onUncaughtException(NSException* exception)
 					[SavedSettings sharedInstance].isJukeboxEnabled = NO;
 					
 					[musicControls destroyStreamer];
-					[musicControls stopDownloadA];
-					[musicControls stopDownloadB];
+					[[SUSStreamSingleton sharedInstance] cancelAllStreams];
 					[musicControls stopDownloadQueue];
 					[mainTabBarController.view removeFromSuperview];
 					[databaseControls closeAllDatabases];

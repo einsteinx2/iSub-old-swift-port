@@ -9,6 +9,8 @@
 //  Modified by Ben Baron for the iSub project.
 //
 
+// TODO: Make sure this class still works with songAtTimeOfLoad removed
+
 #import "AsynchronousImageView.h"
 #import "iSubAppDelegate.h"
 #import "MusicSingleton.h"
@@ -121,8 +123,6 @@
 	musicControls = [MusicSingleton sharedInstance];
 	databaseControls = [DatabaseSingleton sharedInstance];
 	
-	songAtTimeOfLoad = [musicControls.currentSongObject copy];
-
 	NSString *size = nil;
 	if (IS_IPAD())
 	{
@@ -183,12 +183,8 @@
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
 	DLog(@"Connection to album art failed");
-	if([songAtTimeOfLoad.songId isEqualToString:musicControls.currentSongObject.songId])
-	{
-		self.image = [UIImage imageNamed:@"default-album-art.png"];
-	}
+	self.image = [UIImage imageNamed:@"default-album-art.png"];
 	
-	[songAtTimeOfLoad release]; songAtTimeOfLoad = nil;
 	[data release]; data = nil;
 	[connection release]; connection = nil;
 }	
@@ -196,7 +192,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	if([songAtTimeOfLoad.songId isEqualToString:musicControls.currentSongObject.songId] || !isForPlayer)
+	if(!isForPlayer)
 	{
 		// Check to see if the data is a valid image. If so, use it; if not, use the default image.
 		if([UIImage imageWithData:data])
@@ -230,7 +226,6 @@
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"createReflection" object:nil];
 	
-	[songAtTimeOfLoad release]; songAtTimeOfLoad = nil;
 	[data release]; data = nil;
 	[connection release]; connection = nil;
 }

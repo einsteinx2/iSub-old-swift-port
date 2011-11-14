@@ -15,23 +15,6 @@
 	ViewObjectsSingleton *viewObjects;
 	MusicSingleton *musicControls;
 	
-	NSString *databaseFolderPath;
-	FMDatabase *allAlbumsDb;
-	FMDatabase *allSongsDb;
-	FMDatabase *coverArtCacheDb540;
-	FMDatabase *coverArtCacheDb320;
-	FMDatabase *coverArtCacheDb60;
-	FMDatabase *albumListCacheDb;
-	FMDatabase *genresDb;
-	FMDatabase *currentPlaylistDb;
-	FMDatabase *localPlaylistsDb;
-	FMDatabase *serverPlaylistsDb;
-	FMDatabase *songCacheDb;
-	FMDatabase *cacheQueueDb;
-	FMDatabase *lyricsDb;
-	FMDatabase *bookmarksDb;
-	FMDatabase *inMemoryDb;
-	
 	SUSQueueAllDAO *queueAll;
 }
 

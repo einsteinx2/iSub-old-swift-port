@@ -260,7 +260,6 @@
 		538C720B127D115500A296C0 /* shuffle-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C7209127D115500A296C0 /* shuffle-small@2x.png */; };
 		538DF6E812CC25C300DB6D8C /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 538DF6E712CC25C300DB6D8C /* Server.m */; };
 		538F646A137105610049C6ED /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 538F6469137105610049C6ED /* SFHFKeychainUtils.m */; };
-		53929E65136F930300979CBC /* SUSDownloadSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53929E64136F930300979CBC /* SUSDownloadSingleton.m */; };
 		539796E41162B68800F41D8B /* AllAlbumsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 539796E31162B68800F41D8B /* AllAlbumsViewController.m */; };
 		539797FA1162D3F100F41D8B /* AllAlbumsUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 539797F91162D3F100F41D8B /* AllAlbumsUITableViewCell.m */; };
 		539797FE1162D4D200F41D8B /* AllAlbumsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 539797FD1162D4D200F41D8B /* AllAlbumsViewController.xib */; };
@@ -811,7 +810,6 @@
 		53BC283E139AF0DD00A825F1 /* PagingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5353B838134D4D6C005C589E /* PagingScrollView.m */; };
 		53BC283F139AF0DD00A825F1 /* ShuffleFolderPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AB8001353B4F500DABD83 /* ShuffleFolderPickerViewController.m */; };
 		53BC2840139AF0DD00A825F1 /* PlaylistSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AB80F1353DCF700DABD83 /* PlaylistSongsViewController.m */; };
-		53BC2841139AF0DD00A825F1 /* SUSDownloadSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53929E64136F930300979CBC /* SUSDownloadSingleton.m */; };
 		53BC2842139AF0DD00A825F1 /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 538F6469137105610049C6ED /* SFHFKeychainUtils.m */; };
 		53BC2843139AF0DD00A825F1 /* BWQuincyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BC2671139AE7E100A825F1 /* BWQuincyManager.m */; };
 		53BC2844139AF0DD00A825F1 /* BWApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BC2679139AEBFF00A825F1 /* BWApp.m */; };
@@ -877,6 +875,12 @@
 		53CED25F113E2FF100B09699 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */; };
 		53CED260113E2FF100B09699 /* SubsonicServerEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53CED25E113E2FF100B09699 /* SubsonicServerEditViewController.xib */; };
 		53D123E1129EF58F00934F08 /* CoverArtImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D123E0129EF58F00934F08 /* CoverArtImageView.m */; };
+		53D74D51147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D50147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m */; };
+		53D74D52147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D50147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m */; };
+		53D74D53147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D50147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m */; };
+		53D74D561471BE160025F8F1 /* Song+DAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D551471BE160025F8F1 /* Song+DAO.m */; };
+		53D74D571471BE160025F8F1 /* Song+DAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D551471BE160025F8F1 /* Song+DAO.m */; };
+		53D74D581471BE160025F8F1 /* Song+DAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D551471BE160025F8F1 /* Song+DAO.m */; };
 		53D8ACB3116C47E600E5C9CB /* PageControlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D8ACB1116C47E600E5C9CB /* PageControlViewController.m */; };
 		53D8ACB4116C47E600E5C9CB /* PageControlViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53D8ACB2116C47E600E5C9CB /* PageControlViewController.xib */; };
 		53D9996E12D40C4000A97412 /* NSDataAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D9996B12D40C4000A97412 /* NSDataAdditions.m */; };
@@ -1290,7 +1294,6 @@
 		53DCF59F13BFEAD3009160F9 /* PagingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5353B838134D4D6C005C589E /* PagingScrollView.m */; };
 		53DCF5A013BFEAD3009160F9 /* ShuffleFolderPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AB8001353B4F500DABD83 /* ShuffleFolderPickerViewController.m */; };
 		53DCF5A113BFEAD3009160F9 /* PlaylistSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AB80F1353DCF700DABD83 /* PlaylistSongsViewController.m */; };
-		53DCF5A213BFEAD3009160F9 /* SUSDownloadSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53929E64136F930300979CBC /* SUSDownloadSingleton.m */; };
 		53DCF5A313BFEAD3009160F9 /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 538F6469137105610049C6ED /* SFHFKeychainUtils.m */; };
 		53DCF5A413BFEAD3009160F9 /* BWQuincyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BC2671139AE7E100A825F1 /* BWQuincyManager.m */; };
 		53DCF5A513BFEAD3009160F9 /* BWApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BC2679139AEBFF00A825F1 /* BWApp.m */; };
@@ -1591,7 +1594,7 @@
 		535A8899113F62DD00979783 /* default-album-art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art.png"; path = "Images/Other/default-album-art.png"; sourceTree = "<group>"; };
 		535AC24C146C8E0300E19492 /* SUSStreamSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSStreamSingleton.h; sourceTree = "<group>"; };
 		535AC24D146C8E0300E19492 /* SUSStreamSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSStreamSingleton.m; sourceTree = "<group>"; };
-		535AC251146C8E1D00E19492 /* SUSStreamHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; path = SUSStreamHandler.h; sourceTree = "<group>"; };
+		535AC251146C8E1D00E19492 /* SUSStreamHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSStreamHandler.h; sourceTree = "<group>"; };
 		535AC252146C8E1D00E19492 /* SUSStreamHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSStreamHandler.m; sourceTree = "<group>"; };
 		535B7243134C16FC003E0E1C /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		535B7244134C16FC003E0E1C /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
@@ -1774,7 +1777,6 @@
 		538DF6E712CC25C300DB6D8C /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Server.m; sourceTree = "<group>"; };
 		538F6468137105610049C6ED /* SFHFKeychainUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFHFKeychainUtils.h; sourceTree = "<group>"; };
 		538F6469137105610049C6ED /* SFHFKeychainUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHFKeychainUtils.m; sourceTree = "<group>"; };
-		53929E64136F930300979CBC /* SUSDownloadSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSDownloadSingleton.m; sourceTree = "<group>"; };
 		539796E21162B68800F41D8B /* AllAlbumsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllAlbumsViewController.h; sourceTree = "<group>"; };
 		539796E31162B68800F41D8B /* AllAlbumsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllAlbumsViewController.m; sourceTree = "<group>"; };
 		539797F81162D3F100F41D8B /* AllAlbumsUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AllAlbumsUITableViewCell.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -1972,7 +1974,6 @@
 		53BC286B139AF17B00A825F1 /* Icon@2x-Beta.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x-Beta.png"; path = "Images/App Icons/Icon@2x-Beta.png"; sourceTree = "<group>"; };
 		53C22CCD128EE81C00FFBA67 /* ModalAlbumArtViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModalAlbumArtViewController.h; sourceTree = "<group>"; };
 		53C22CCE128EE81C00FFBA67 /* ModalAlbumArtViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModalAlbumArtViewController.m; sourceTree = "<group>"; };
-		53C4EB89136CBFF100122151 /* SUSDownloadSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SUSDownloadSingleton.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		53C6051A12F1EFD4003C6895 /* intro-bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "intro-bottom.png"; path = "Images/Intro Screen/intro-bottom.png"; sourceTree = "<group>"; };
 		53C6051B12F1EFD4003C6895 /* intro-bottom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "intro-bottom@2x.png"; path = "Images/Intro Screen/intro-bottom@2x.png"; sourceTree = "<group>"; };
 		53C6051C12F1EFD4003C6895 /* intro-foreground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "intro-foreground.png"; path = "Images/Intro Screen/intro-foreground.png"; sourceTree = "<group>"; };
@@ -2013,6 +2014,10 @@
 		53CED25E113E2FF100B09699 /* SubsonicServerEditViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SubsonicServerEditViewController.xib; sourceTree = "<group>"; };
 		53D123DF129EF58F00934F08 /* CoverArtImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoverArtImageView.h; sourceTree = "<group>"; };
 		53D123E0129EF58F00934F08 /* CoverArtImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoverArtImageView.m; sourceTree = "<group>"; };
+		53D74D4F147185AB0025F8F1 /* SUSCurrentPlaylistDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSCurrentPlaylistDAO.h; sourceTree = "<group>"; };
+		53D74D50147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSCurrentPlaylistDAO.m; sourceTree = "<group>"; };
+		53D74D541471BE150025F8F1 /* Song+DAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Song+DAO.h"; sourceTree = "<group>"; };
+		53D74D551471BE160025F8F1 /* Song+DAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Song+DAO.m"; sourceTree = "<group>"; };
 		53D8ACB0116C47E600E5C9CB /* PageControlViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageControlViewController.h; sourceTree = "<group>"; };
 		53D8ACB1116C47E600E5C9CB /* PageControlViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PageControlViewController.m; sourceTree = "<group>"; };
 		53D8ACB2116C47E600E5C9CB /* PageControlViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PageControlViewController.xib; sourceTree = "<group>"; };
@@ -2075,6 +2080,7 @@
 		53F4A226117011B900BB8411 /* CurrentPlaylistBackgroundViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CurrentPlaylistBackgroundViewController.h; sourceTree = "<group>"; };
 		53F4A227117011B900BB8411 /* CurrentPlaylistBackgroundViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CurrentPlaylistBackgroundViewController.m; sourceTree = "<group>"; };
 		53F4A228117011B900BB8411 /* CurrentPlaylistBackgroundViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CurrentPlaylistBackgroundViewController.xib; sourceTree = "<group>"; };
+		53F663CB1470CAB20020D0A3 /* SUSStreamHandlerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSStreamHandlerDelegate.h; sourceTree = "<group>"; };
 		53F675AD113B048600822059 /* iPhoneStreamingPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iPhoneStreamingPlayerViewController.h; sourceTree = "<group>"; };
 		53F675AE113B048600822059 /* iPhoneStreamingPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iPhoneStreamingPlayerViewController.m; sourceTree = "<group>"; };
 		53F675D7113B092C00822059 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
@@ -2501,6 +2507,10 @@
 				539B3091145E78AE00D06475 /* SUSLyricsDAO.m */,
 				53F11B791460FBAD0010820B /* SUSServerPlaylistsDAO.h */,
 				53F11B7A1460FBAD0010820B /* SUSServerPlaylistsDAO.m */,
+				53D74D4F147185AB0025F8F1 /* SUSCurrentPlaylistDAO.h */,
+				53D74D50147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m */,
+				53D74D541471BE150025F8F1 /* Song+DAO.h */,
+				53D74D551471BE160025F8F1 /* Song+DAO.m */,
 			);
 			name = DAOs;
 			sourceTree = "<group>";
@@ -3368,12 +3378,11 @@
 			children = (
 				53B9D293127A395D00CAB0E0 /* DonationParser.h */,
 				53B9D294127A395D00CAB0E0 /* DonationParser.m */,
-				53C4EB89136CBFF100122151 /* SUSDownloadSingleton.h */,
-				53929E64136F930300979CBC /* SUSDownloadSingleton.m */,
 				535AC24C146C8E0300E19492 /* SUSStreamSingleton.h */,
 				535AC24D146C8E0300E19492 /* SUSStreamSingleton.m */,
 				535AC251146C8E1D00E19492 /* SUSStreamHandler.h */,
 				535AC252146C8E1D00E19492 /* SUSStreamHandler.m */,
+				53F663CB1470CAB20020D0A3 /* SUSStreamHandlerDelegate.h */,
 			);
 			name = CFNetworkRequests;
 			sourceTree = "<group>";
@@ -4423,7 +4432,6 @@
 				5353B839134D4D6C005C589E /* PagingScrollView.m in Sources */,
 				536AB8021353B4F600DABD83 /* ShuffleFolderPickerViewController.m in Sources */,
 				536AB8111353DCF900DABD83 /* PlaylistSongsViewController.m in Sources */,
-				53929E65136F930300979CBC /* SUSDownloadSingleton.m in Sources */,
 				538F646A137105610049C6ED /* SFHFKeychainUtils.m in Sources */,
 				53BC2674139AE7E100A825F1 /* BWQuincyManager.m in Sources */,
 				53BC2692139AEBFF00A825F1 /* BWApp.m in Sources */,
@@ -4467,6 +4475,8 @@
 				53A698DA1467B34D00DCAFCB /* SUSSubFolderLoader.m in Sources */,
 				535AC24E146C8E0300E19492 /* SUSStreamSingleton.m in Sources */,
 				535AC253146C8E1D00E19492 /* SUSStreamHandler.m in Sources */,
+				53D74D51147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m in Sources */,
+				53D74D561471BE160025F8F1 /* Song+DAO.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4630,7 +4640,6 @@
 				53BC283E139AF0DD00A825F1 /* PagingScrollView.m in Sources */,
 				53BC283F139AF0DD00A825F1 /* ShuffleFolderPickerViewController.m in Sources */,
 				53BC2840139AF0DD00A825F1 /* PlaylistSongsViewController.m in Sources */,
-				53BC2841139AF0DD00A825F1 /* SUSDownloadSingleton.m in Sources */,
 				53BC2842139AF0DD00A825F1 /* SFHFKeychainUtils.m in Sources */,
 				53BC2843139AF0DD00A825F1 /* BWQuincyManager.m in Sources */,
 				53BC2844139AF0DD00A825F1 /* BWApp.m in Sources */,
@@ -4674,6 +4683,8 @@
 				53A698DC1467B34D00DCAFCB /* SUSSubFolderLoader.m in Sources */,
 				535AC250146C8E0300E19492 /* SUSStreamSingleton.m in Sources */,
 				535AC255146C8E1D00E19492 /* SUSStreamHandler.m in Sources */,
+				53D74D53147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m in Sources */,
+				53D74D581471BE160025F8F1 /* Song+DAO.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4837,7 +4848,6 @@
 				53DCF59F13BFEAD3009160F9 /* PagingScrollView.m in Sources */,
 				53DCF5A013BFEAD3009160F9 /* ShuffleFolderPickerViewController.m in Sources */,
 				53DCF5A113BFEAD3009160F9 /* PlaylistSongsViewController.m in Sources */,
-				53DCF5A213BFEAD3009160F9 /* SUSDownloadSingleton.m in Sources */,
 				53DCF5A313BFEAD3009160F9 /* SFHFKeychainUtils.m in Sources */,
 				53DCF5A413BFEAD3009160F9 /* BWQuincyManager.m in Sources */,
 				53DCF5A513BFEAD3009160F9 /* BWApp.m in Sources */,
@@ -4881,6 +4891,8 @@
 				53A698DB1467B34D00DCAFCB /* SUSSubFolderLoader.m in Sources */,
 				535AC24F146C8E0300E19492 /* SUSStreamSingleton.m in Sources */,
 				535AC254146C8E1D00E19492 /* SUSStreamHandler.m in Sources */,
+				53D74D52147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m in Sources */,
+				53D74D571471BE160025F8F1 /* Song+DAO.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -27,6 +27,7 @@
 #import "SavedSettings.h"
 #import "CacheSingleton.h"
 #import "NSString-time.h"
+#import "SUSCurrentPlaylistDAO.h"
 
 @implementation CacheViewController
 
@@ -1072,6 +1073,9 @@
 
 - (void)deleteCachedSongs2
 {
+	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+	Song *nextSong = [SUSCurrentPlaylistDAO dataModel].nextSong;
+	
 	// Truncate the song cache genre tables
 	[databaseControls.songCacheDb executeUpdate:@"DELETE FROM genres"];
 	[databaseControls.songCacheDb executeUpdate:@"DELETE FROM genresSongs"];
@@ -1092,9 +1096,9 @@
 		
 		BOOL skipDelete = NO;
 		// Check if we're deleting the song that's currently playing. If so, skip deleting it.
-		if (musicControls.currentSongObject)
+		if (currentSong)
 		{
-			if ([[NSString md5:musicControls.currentSongObject.path] isEqualToString:rowMD5])
+			if ([[currentSong.path md5] isEqualToString:rowMD5])
 			{
 				//[appDelegate destroyStreamer];
 				skipDelete = YES;
@@ -1102,9 +1106,9 @@
 		}
 		
 		// Check if we're deleting the song that's about to play. If so, skip deleting it.
-		if (musicControls.nextSongObject)
+		if (nextSong)
 		{
-			if ([[musicControls.nextSongObject.path md5] isEqualToString:rowMD5])
+			if ([[nextSong.path md5] isEqualToString:rowMD5])
 			{
 				//[appDelegate destroyStreamer];
 				skipDelete = YES;
@@ -1235,7 +1239,6 @@
 	else
 		isShuffle = NO;
 	
-	[musicControls performSelectorOnMainThread:@selector(destroyStreamer) withObject:nil waitUntilDone:YES];
 	[databaseControls resetCurrentPlaylistDb];
 	
 	FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout ORDER BY seg1 COLLATE NOCASE"];

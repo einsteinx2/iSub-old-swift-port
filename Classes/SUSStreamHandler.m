@@ -12,6 +12,8 @@
 #import "Song.h"
 #import "iSubAppDelegate.h"
 #import "NSMutableURLRequest+SUS.h"
+#import "NSError-ISMSError.h"
+#import "NSString-md5.h"
 
 #define kThrottleTimeInterval 0.01
 
@@ -31,61 +33,94 @@
 #define isThrottleLoggingEnabled NO
 
 @implementation SUSStreamHandler
-@synthesize bytesTransferred, throttlingDate, songId;
+@synthesize totalBytesTransferred, bytesTransferred, throttlingDate, mySong, connection, byteOffset, delegate, fileHandle;
 
-- (id)initWithSongId:(NSString *)theSongId
+- (id)initWithSong:(Song *)song offset:(NSUInteger)offset delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate
 {
 	if ((self = [super init]))
 	{
-		songId = [theSongId copy];
-		
-		[self performSelectorInBackground:@selector(createConnection) withObject:nil]; 
+		mySong = [song copy];
+		delegate = theDelegate;
+		byteOffset = offset;
 	}
 	
 	return self;
 }
 
-- (NSDictionary *)generateParameters
-{	
-    MusicSingleton *musicControls = [MusicSingleton sharedInstance];
-    
-    if ([musicControls maxBitrateSetting] != 0)
-	{
-		NSString *bitrate = [NSString stringWithFormat:@"%i", musicControls.maxBitrateSetting];
-		return [NSDictionary dictionaryWithObjectsAndKeys:n2N(bitrate), @"maxBitRate", n2N(songId), @"id", nil];
-	}
-    else
-	{
-		return [NSDictionary dictionaryWithObjectsAndKeys:n2N(songId), @"id", nil];
-	}
+- (id)initWithSong:(Song *)song delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate
+{
+	return [[SUSStreamHandler alloc] initWithSong:song offset:0 delegate:theDelegate];
+}
+
+- (void)dealloc
+{
+	[fileHandle release]; fileHandle = nil;
+	[mySong	release]; mySong = nil;
+	[connection release]; connection = nil;
+	[throttlingDate release]; throttlingDate = nil;
+	[super dealloc];
+}
+
+- (void)start
+{
+	[self performSelectorInBackground:@selector(createConnection) withObject:nil]; 
 }
 
 - (void)createConnection
 {
 	@autoreleasepool 
 	{
-		NSDictionary *parameters = [self generateParameters];
-		NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters];
-		NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
-		if (!connection)
+		MusicSingleton *musicControls = [MusicSingleton sharedInstance];
+		
+		// Create the file handle
+		self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:mySong.localPath];
+		
+		if (self.fileHandle)
 		{
-			[self autorelease];
+			// File exists so seek to end
+			totalBytesTransferred = [self.fileHandle seekToEndOfFile];			
+		}
+		else
+		{
+			// File doesn't exist so create it
+			totalBytesTransferred = 0;
+			[[NSFileManager defaultManager] createFileAtPath:mySong.localPath contents:[NSData data] attributes:nil];
+			self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:mySong.localPath];
+		}
+		
+		NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:n2N(mySong.songId) forKey:@"id"];
+		if ([musicControls maxBitrateSetting] != 0)
+		{
+			NSString *bitrate = [NSString stringWithFormat:@"%i", musicControls.maxBitrateSetting];
+			[parameters setObject:n2N(bitrate) forKey:@"maxBitRate"];
+		}
+		
+		NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters byteOffset:totalBytesTransferred];
+		self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+		if (connection)
+		{
+			CFRunLoopRun(); // Avoid thread exiting
+		}
+		else
+		{
+			NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
+			[self.delegate SUSStreamHandlerConnectionFailed:self withError:error];
 		}
 	}
 }
 
-- (NSUInteger)currentSongBitrate
-{
+- (NSUInteger)bitrate
+{	
 	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 	
 	int bitRate = 128;
 	
-	if (musicControls.currentSongObject.bitRate == nil)
+	if (mySong.bitRate == nil)
 		bitRate = 128;
-	else if ([musicControls.currentSongObject.bitRate intValue] < 1000)
-		bitRate = [musicControls.currentSongObject.bitRate intValue];
+	else if ([mySong.bitRate intValue] < 1000)
+		bitRate = [mySong.bitRate intValue];
 	else
-		bitRate = [musicControls.currentSongObject.bitRate intValue] / 1000;
+		bitRate = [mySong.bitRate intValue] / 1000;
 	
 	if (bitRate > musicControls.maxBitrateSetting && musicControls.maxBitrateSetting != 0)
 		bitRate = musicControls.maxBitrateSetting;
@@ -93,46 +128,9 @@
 	return bitRate;
 }
 
-- (NSUInteger)nextSongBitrate
+- (void)cancel
 {
-	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
-	
-	int bitRate = 128;
-	
-	if (musicControls.nextSongObject.bitRate == nil)
-		bitRate = 128;
-	else if ([musicControls.nextSongObject.bitRate intValue] < 1000)
-		bitRate = [musicControls.nextSongObject.bitRate intValue];
-	else
-		bitRate = [musicControls.nextSongObject.bitRate intValue] / 1000;
-	
-	if (bitRate > musicControls.maxBitrateSetting && musicControls.maxBitrateSetting != 0)
-		bitRate = musicControls.maxBitrateSetting;
-	
-	return bitRate;
-}
-
-- (BOOL)mSleep:(NSUInteger)milliseconds
-{
-	struct timespec tim;
-	
-	if (milliseconds > 1000)
-	{
-		tim.tv_sec = milliseconds / 1000
-		tim.tv_nsec = (milliseconds % 1000) * 1000000;
-	}
-	else
-	{	
-		tim.tv_sec = 0;
-		tim.tv_nsec = milliseconds * 1000000
-	}
-	
-	if(nanosleep(&tim , NULL) < 0)   
-	{
-		return NO;
-	}
-	
-	return YES;
+	[connection cancel];
 }
 
 #pragma mark - Connection Delegate
@@ -161,87 +159,93 @@
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
 {	
-	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
-	iSubAppDelegate *appDelegate = [iSubAppDelegate sharedInstance];
-	
-	long bytesRead = [incrementalData length];
+	totalBytesTransferred += [incrementalData length];
+	bytesTransferred += [incrementalData length];
 	
 	// Save the data to the file
-	[musicControls.audioFileA writeData:incrementalData];
-	musicControls.downloadedLengthA = musicControls.downloadedLengthA + bytesRead;
+	[self.fileHandle writeData:incrementalData];
 	
+	// Notify delegate if enough bytes received to start playback
+	if (totalBytesTransferred >= kMinBytesToStartPlayback)
+		[self.delegate SUSStreamHandlerStartPlayback:self];
+	
+	// Log progress
 	if (isProgressLoggingEnabled)
-		DLog(@"downloadedLengthA:  %lu   bytesRead: %ld", musicControls.downloadedLengthA, bytesRead);
+		DLog(@"downloadedLengthA:  %lu   bytesRead: %i", totalBytesTransferred, [incrementalData length]);
 	
-	if ([musicControls streamer])
-		musicControls.streamer.fileDownloadCurrentSize = musicControls.downloadedLengthA;
-	
-	// When we get enough of the file, then just start playing it.
-	if (!musicControls.streamer && (musicControls.downloadedLengthA > kMinBytesToStartPlayback)) 
-	{
-		//DLog(@"start playback for %@", [musicControlsRef downloadFileNameA]);
-		
-		[musicControls createStreamer];
-		musicControls.showNowPlayingIcon = NO;
-	}
-	
-	// Handle bandwidth throttling
-	bytesTransferred += bytesRead;
-	
-	if (musicControls.downloadedLengthA < (kMinBytesToStartLimiting * ((float)self.currentSongBitrate / 160.0f)))
+	// Handle throtling
+	if (totalBytesTransferred < (kMinBytesToStartLimiting * ((float)self.bitrate / 160.0f)))
 	{
 		self.throttlingDate = [NSDate date];
 		bytesTransferred = 0;
 	}
-	
 	if ([[NSDate date] timeIntervalSinceDate:self.throttlingDate] > kThrottleTimeInterval &&
-		musicControls.downloadedLengthA > (kMinBytesToStartLimiting * ((float)self.currentSongBitrate / 160.0f)))
+		totalBytesTransferred > (kMinBytesToStartLimiting * ((float)self.bitrate / 160.0f)))
 	{
-		if (appDelegate.isWifi == NO && bytesTransferred > kMaxBytesPerInterval3G)
+		bytesTransferred = 0;
+		
+		NSTimeInterval delay = 0.0;
+		if ([iSubAppDelegate sharedInstance].isWifi == NO && bytesTransferred > kMaxBytesPerInterval3G)
 		{
-			CFReadStreamUnscheduleFromRunLoop(stream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
-			
-			//Calculate how many intervals to pause
-			NSTimeInterval delay = (kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerInterval3G));
+			delay = (kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerInterval3G));
 			
 			if (isThrottleLoggingEnabled)
-				DLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
-			
-			[NSTimer scheduledTimerWithTimeInterval:delay target:[SUSDownloadSingleton sharedInstance] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
-			
-			bytesTransferred = 0;
+				DLog(@"Bandwidth used is more than kMaxBytesPerInterval3G, Pausing for %f", delay);
 		}
-		else if (appDelegate.isWifi && bytesTransferred > kMaxBytesPerIntervalWifi)
+		else if ([iSubAppDelegate sharedInstance].isWifi && bytesTransferred > kMaxBytesPerIntervalWifi)
 		{
-			CFReadStreamUnscheduleFromRunLoop(stream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
-			
-			//Calculate how many intervals to pause
-			NSTimeInterval delay = (kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerIntervalWifi));
+			delay = (kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerIntervalWifi));
 			
 			if (isThrottleLoggingEnabled)
-				DLog(@"Bandwidth used is more than kMaxBytesPerSec3G, Pausing for %f", delay);
-			
-			[NSTimer scheduledTimerWithTimeInterval:delay target:[SUSDownloadSingleton sharedInstance] selector:@selector(continueDownloadA) userInfo:nil repeats:NO];
-			
-			bytesTransferred = 0;
-		}				
+				DLog(@"Bandwidth used is more than kMaxBytesPerIntervalWifi, Pausing for %f", delay);
+		}
+				
+		[NSThread sleepForTimeInterval:delay];
 	}
 }
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
-	theConnection = nil;
+	[theConnection release]; theConnection = nil;
+		
+	CFRunLoopStop(CFRunLoopGetCurrent()); // Stop the run loop so the thread can die
 	
-	[[MusicSingleton sharedInstance] resumeDownloadA:[[MusicSingleton sharedInstance] downloadedLengthA]];
-	
-	[self autorelease];
+	[self.delegate SUSStreamHandlerConnectionFailed:self withError:error];
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	theConnection = nil;
+	[theConnection release]; theConnection = nil;
 	
-	[self autorelease];
+	CFRunLoopStop(CFRunLoopGetCurrent()); // Stop the run loop so the thread can die
+	
+	[self.delegate SUSStreamHandlerConnectionFinished:self];
+}
+
+#pragma mark - Overriding equality
+
+- (NSUInteger)hash
+{
+	return [mySong.songId hash];
+}
+
+- (BOOL)isEqualToSUSStreamHandler:(SUSStreamHandler	*)otherHandler 
+{
+    if (self == otherHandler)
+        return YES;
+	
+	return [mySong isEqualToSong:otherHandler.mySong];
+}
+
+- (BOOL)isEqual:(id)other 
+{
+    if (other == self)
+        return YES;
+	
+    if (!other || ![other isKindOfClass:[self class]])
+        return NO;
+	
+    return [self isEqualToSUSStreamHandler:other];
 }
 
 @end

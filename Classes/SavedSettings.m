@@ -13,6 +13,7 @@
 #import "Song.h"
 #import "Server.h"
 #import "MKStoreManager.h"
+#import "SUSCurrentPlaylistDAO.h"
 
 @implementation SavedSettings
 
@@ -42,6 +43,10 @@
 
 - (void)setupSaveState
 {
+	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+	Song *nextSong = [SUSCurrentPlaylistDAO dataModel].nextSong;
+	NSInteger currentIndex = [SUSCurrentPlaylistDAO dataModel].currentIndex;
+	
 	DLog(@"setting up save state");
 
 	// Load saved state first
@@ -59,25 +64,15 @@
 	isShuffle = musicControls.isShuffle;
 	[userDefaults setBool:isShuffle forKey:@"isShuffle"];
 	
-	currentPlaylistPosition = musicControls.currentPlaylistPosition;
+	currentPlaylistPosition = currentIndex;
 	[userDefaults setInteger:currentPlaylistPosition forKey:@"currentPlaylistPosition"];
 	
 	repeatMode = musicControls.repeatMode;
 	[userDefaults setInteger:repeatMode forKey:@"repeatMode"];
 	
-	currentSongId = nil;
-	if (musicControls.currentSongObject.songId != nil)
-	{
-		self.currentSongId = [NSString stringWithString:musicControls.currentSongObject.songId];
-		[userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:musicControls.currentSongObject] forKey:@"currentSongObject"];
-	}
+	currentSongId = currentSong.songId;
 	
-	nextSongId = nil;
-	if (musicControls.nextSongObject.songId != nil)
-	{
-		self.nextSongId = [NSString stringWithString:musicControls.nextSongObject.songId];
-		[userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:musicControls.nextSongObject] forKey:@"nextSongObject"];
-	}
+	nextSongId = nextSong.songId;
 	
 	bitRate = musicControls.streamer.bitRate;
 	[userDefaults setInteger:bitRate forKey:@"bitRate"];
@@ -95,6 +90,10 @@
 	//DLog(@"saveDefaults!!");
 	
 	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
+	
+	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+	Song *nextSong = [SUSCurrentPlaylistDAO dataModel].nextSong;
+	NSInteger currentIndex = [SUSCurrentPlaylistDAO dataModel].currentIndex;
 		
 	if (musicControls.isPlaying != isPlaying)
 	{
@@ -112,9 +111,9 @@
 		[userDefaults setBool:isShuffle forKey:@"isShuffle"];
 	}
 	
-	if (musicControls.currentPlaylistPosition != currentPlaylistPosition)
+	if (currentIndex != currentPlaylistPosition)
 	{
-		currentPlaylistPosition = musicControls.currentPlaylistPosition;
+		currentPlaylistPosition = currentIndex;
 		[userDefaults setInteger:currentPlaylistPosition forKey:@"currentPlaylistPosition"];
 	}
 	
@@ -124,16 +123,22 @@
 		[userDefaults setInteger:repeatMode forKey:@"repeatMode"];
 	}
 	
-	if (musicControls.currentSongObject.songId && ![musicControls.currentSongObject.songId isEqualToString:currentSongId])
+	if (currentSong.songId && currentSongId)
 	{
-		self.currentSongId = [NSString stringWithString:musicControls.currentSongObject.songId];
-		[userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:musicControls.currentSongObject] forKey:@"currentSongObject"];
+		if (![currentSong.songId isEqualToString:currentSongId])
+		{
+			self.currentSongId = [NSString stringWithString:currentSong.songId];
+			[userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:currentSong] forKey:@"currentSongObject"];
+		}
 	}
 	
-	if (musicControls.nextSongObject.songId && ![musicControls.nextSongObject.songId isEqualToString:nextSongId])
+	if (nextSong.songId && nextSongId)
 	{
-		self.nextSongId = [NSString stringWithString:musicControls.nextSongObject.songId];
-		[userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:musicControls.nextSongObject] forKey:@"nextSongObject"];
+		if (![nextSong.songId isEqualToString:nextSongId])
+		{
+			self.nextSongId = [NSString stringWithString:nextSong.songId];
+			[userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:nextSong] forKey:@"nextSongObject"];
+		}
 	}
 	
 	if (musicControls.streamer.bitRate != bitRate)
@@ -142,9 +147,7 @@
 		[userDefaults setInteger:bitRate forKey:@"bitRate"];
 	}
 	
-	musicControls.streamerProgress = [musicControls.streamer progress];
-	[userDefaults setFloat:(musicControls.seekTime + musicControls.streamerProgress) forKey:@"seekTime"];
-	//[defaults setObject:[NSString stringWithFormat:@"%f", (musicControls.seekTime + musicControls.streamerProgress)] forKey:@"seekTime"];
+	self.seekTime = musicControls.streamer.progress;
 	
 	self.isRecover = YES;
 		
@@ -171,29 +174,17 @@
 	musicControls.isShuffle = isShuffle;
 	
 	currentPlaylistPosition = [userDefaults integerForKey:@"currentPlaylistPosition"];
-	musicControls.currentPlaylistPosition = currentPlaylistPosition;
+	[SUSCurrentPlaylistDAO dataModel].currentIndex = currentPlaylistPosition;
 	
 	repeatMode = [userDefaults integerForKey:@"repeatMode"];
 	musicControls.repeatMode = repeatMode;
 	
-	currentSongId = nil;
-	musicControls.currentSongObject = [NSKeyedUnarchiver unarchiveObjectWithData:[userDefaults objectForKey:@"currentSongObject"]];
-	if (musicControls.currentSongObject.songId && ![musicControls.currentSongObject.songId isEqualToString:currentSongId])
-	{
-		self.currentSongId = [NSString stringWithString:musicControls.currentSongObject.songId];
-	}
+	currentSongId = [SUSCurrentPlaylistDAO dataModel].currentSong.songId;
 	
-	nextSongId = nil;
-	musicControls.nextSongObject = [NSKeyedUnarchiver unarchiveObjectWithData:[userDefaults objectForKey:@"nextSongObject"]];
-	if (musicControls.nextSongObject.songId && ![musicControls.nextSongObject.songId isEqualToString:nextSongId])
-	{
-		self.nextSongId = [NSString stringWithString:musicControls.nextSongObject.songId];
-	}
+	nextSongId = [SUSCurrentPlaylistDAO dataModel].nextSong.songId;
 	
 	bitRate = [userDefaults integerForKey:@"bitRate"];
 	musicControls.bitRate = bitRate;
-
-	musicControls.seekTime = [userDefaults floatForKey:@"seekTime"];
 	
 	musicControls.showNowPlayingIcon = YES;
 	
@@ -795,6 +786,16 @@
 	[userDefaults synchronize];
 }
 
+- (NSUInteger)seekTime
+{
+	return [userDefaults boolForKey:@"seekTime"];
+}
+
+- (void)setSeekTime:(NSUInteger)seekTime
+{
+	[userDefaults setInteger:seekTime forKey:@"seekTime"];
+	[userDefaults synchronize];
+}
 
 // Test server details
 #define DEFAULT_URL @"http://isubapp.com:9000"

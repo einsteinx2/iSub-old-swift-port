@@ -25,6 +25,7 @@
 #import "UIView-tools.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SavedSettings.h"
+#import "SUSCurrentPlaylistDAO.h"
 
 
 @interface iPhoneStreamingPlayerViewController ()
@@ -427,9 +428,12 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[titleView addSubview:song];
 		[song release];
 		
-		artist.text = [musicControls.currentSongObject artist];
-		album.text = [musicControls.currentSongObject album];
-		song.text = [musicControls.currentSongObject title];
+		SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+		Song *currentSong = dataModel.currentSong;
+		
+		artist.text = [[currentSong.artist copy] autorelease];
+		album.text = [[currentSong.album copy] autorelease];
+		song.text = [[currentSong.title copy] autorelease];
 		
 		self.navigationItem.titleView = titleView;		
 	}
@@ -437,8 +441,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)initSongInfo
 {	
+	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+	Song *currentSong = dataModel.currentSong;
+	
 	coverArtImageView.isForPlayer = YES;
-	if([musicControls.currentSongObject coverArtId])
+	if(currentSong.coverArtId)
 	{
 		//DLog(@"coverArtId: %@", [musicControls.currentSongObject coverArtId]);
 		
@@ -448,10 +455,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		else
 			coverArtCache = databaseControls.coverArtCacheDb320;
 			
-		if ([coverArtCache intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:musicControls.currentSongObject.coverArtId]] == 1)
+		if ([coverArtCache intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [currentSong.coverArtId md5]] == 1)
 		{
 			DLog(@"Cover Art Found!!");
-			NSData *imageData = [coverArtCache dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [NSString md5:musicControls.currentSongObject.coverArtId]];
+			NSData *imageData = [coverArtCache dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [currentSong.coverArtId md5]];
 			if (SCREEN_SCALE() == 2.0)
 			{
 				UIGraphicsBeginImageContextWithOptions(CGSizeMake(320.0,320.0), NO, 2.0);
@@ -470,7 +477,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		else 
 		{
 			DLog(@"No Cover Art Found, LOADING");
-			[coverArtImageView loadImageFromCoverArtId:musicControls.currentSongObject.coverArtId isForPlayer:YES];
+			[coverArtImageView loadImageFromCoverArtId:currentSong.coverArtId isForPlayer:YES];
 		}
 	}
 	else 
@@ -490,9 +497,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[self updateBarButtonImage];
 	}
 	
-	artistLabel.text = [musicControls currentSongObject].artist;
-	albumLabel.text = [musicControls currentSongObject].album;
-	titleLabel.text = [musicControls currentSongObject].title;
+	artistLabel.text = [[currentSong.artist copy] autorelease];
+	albumLabel.text = [[currentSong.album copy] autorelease];
+	titleLabel.text = [[currentSong.title copy] autorelease];
 	
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
@@ -647,14 +654,15 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (IBAction)prevButtonPressed:(id)sender
 {
-	musicControls.streamerProgress = [musicControls.streamer progress];
-	DLog(@"track position: %f", (musicControls.streamerProgress + musicControls.seekTime));
-	if ((musicControls.streamerProgress + musicControls.seekTime) > 10.0)
+	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+	
+	DLog(@"track position: %f", musicControls.streamer.progress);
+	if (musicControls.streamer.progress > 10.0)
 	{
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			[musicControls jukeboxPlaySongAtPosition:musicControls.currentPlaylistPosition];
+			[musicControls jukeboxPlaySongAtPosition:dataModel.currentIndex];
 		else
-			[musicControls playSongAtPosition:musicControls.currentPlaylistPosition];
+			[musicControls playSongAtPosition:dataModel.currentIndex];
 	}
 	else
 	{

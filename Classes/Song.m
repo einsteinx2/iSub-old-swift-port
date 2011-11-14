@@ -8,6 +8,8 @@
 
 #import "Song.h"
 #import "GTMNSString+HTML.h"
+#import "NSString-md5.h"
+#import "MusicSingleton.h"
 
 @implementation Song
 
@@ -251,6 +253,68 @@
 	[size release]; size = nil;
 	
 	[super dealloc];
+}
+
+- (NSUInteger)hash
+{
+	return [songId hash];
+}
+
+- (BOOL)isEqualToSong:(Song	*)otherSong 
+{
+    if (self == otherSong)
+        return YES;
+	
+	if (!songId || !otherSong.songId || !path || !otherSong.path)
+		return NO;
+	
+	if ([songId isEqualToString:otherSong.songId] &&
+		[path isEqualToString:otherSong.path] &&
+		[title isEqualToString:otherSong.title] &&
+		[artist isEqualToString:otherSong.artist] &&
+		[album isEqualToString:otherSong.album] &&
+		[genre isEqualToString:otherSong.genre] &&
+		[coverArtId isEqualToString:otherSong.coverArtId] &&
+		[suffix isEqualToString:otherSong.suffix] &&
+		[transcodedSuffix isEqualToString:otherSong.transcodedSuffix] &&
+		[duration isEqualToNumber:otherSong.duration] &&
+		[bitRate isEqualToNumber:otherSong.bitRate] &&
+		[track isEqualToNumber:otherSong.track] &&
+		[year isEqualToNumber:otherSong.year] &&
+		[size isEqualToNumber:otherSong.size])
+		return YES;
+	
+	return NO;
+}
+
+- (BOOL)isEqual:(id)other 
+{
+    if (other == self)
+        return YES;
+	
+    if (!other || ![other isKindOfClass:[self class]])
+        return NO;
+	
+    return [self isEqualToSong:other];
+}
+
+- (NSString *)localSuffix
+{
+	if (transcodedSuffix)
+		return transcodedSuffix;
+	
+	return suffix;
+}
+
+- (NSString *)localPath
+{
+	NSString *fileName = fileName = [[path md5] stringByAppendingPathExtension:self.localSuffix];
+	return [[MusicSingleton sharedInstance].audioFolderPath stringByAppendingPathComponent:fileName];
+}
+
+- (unsigned long long)localFileSize
+{
+	return [[[NSFileManager defaultManager] attributesOfItemAtPath:self.localPath error:NULL] fileSize];
 }
 
 @end

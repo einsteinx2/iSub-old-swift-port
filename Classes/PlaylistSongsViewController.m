@@ -486,9 +486,7 @@ static NSString *kName_Error = @"error";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
 	if (viewObjects.isCellEnabled)
-	{
-		[musicControls destroyStreamer];
-		
+	{		
 		// Clear the current playlist
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			[databaseControls resetJukeboxPlaylist];
@@ -520,14 +518,11 @@ static NSString *kName_Error = @"error";
 		{
 			[musicControls jukeboxReplacePlaylistWithLocal];
 		}
-		
-		musicControls.currentPlaylistPosition = indexPath.row;
-	
+			
 		musicControls.isNewSong = YES;
 		musicControls.isShuffle = NO;
 		
-		musicControls.seekTime = 0.0;
-		[musicControls playSongAtPosition:musicControls.currentPlaylistPosition];
+		[musicControls playSongAtPosition:indexPath.row];
 		
 		if (IS_IPAD())
 		{

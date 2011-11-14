@@ -24,6 +24,8 @@
 #import "UIView-tools.h"
 #import "SavedSettings.h"
 #import "NSString-time.h"
+#import "SUSStreamSingleton.h"
+#import "SUSCurrentPlaylistDAO.h"
 
 //#define downloadProgressWidth (progressSlider.frame.size.width + 4)
 #define downloadProgressWidth progressSlider.frame.size.width
@@ -75,7 +77,9 @@
 	[self.view newY:0];
 	[self.view newX:-320];
 	
-	NSInteger bookmarkCount = [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", musicControls.currentSongObject.songId];
+	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+	
+	NSInteger bookmarkCount = [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId];
 	if (bookmarkCount > 0)
 	{
 		bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", bookmarkCount];
@@ -168,9 +172,11 @@
 	
 	progressSlider.minimumValue = 0.0;
 	
-	if ([musicControls.currentSongObject duration] && ![SavedSettings sharedInstance].isJukeboxEnabled)
+	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+	
+	if (currentSong.duration && ![SavedSettings sharedInstance].isJukeboxEnabled)
 	{
-		progressSlider.maximumValue = [[musicControls.currentSongObject duration] floatValue];
+		progressSlider.maximumValue = [currentSong.duration floatValue];
 		progressSlider.enabled = YES;
 	}
 	else
@@ -179,36 +185,36 @@
 		progressSlider.enabled = NO;
 	}
 		
-	artistLabel.text = [musicControls.currentSongObject artist];
-	titleLabel.text = [musicControls.currentSongObject title];
+	artistLabel.text = currentSong.artist;
+	titleLabel.text = currentSong.title;
 	
-	if ([musicControls.currentSongObject bitRate])
-		bitRateLabel.text = [NSString stringWithFormat:@"Bit Rate: %@ kbps", [[musicControls.currentSongObject bitRate] stringValue]];
+	if (currentSong.bitRate)
+		bitRateLabel.text = [NSString stringWithFormat:@"Bit Rate: %@ kbps", [currentSong.bitRate stringValue]];
 	else
 		bitRateLabel.text = @"";
 		
-	if ([musicControls.currentSongObject duration])
-		lengthLabel.text = [NSString stringWithFormat:@"Length: %@", [NSString formatTime:[[musicControls.currentSongObject duration] floatValue]]];
+	if (currentSong.duration)
+		lengthLabel.text = [NSString stringWithFormat:@"Length: %@", [NSString formatTime:[currentSong.duration floatValue]]];
 	else
 		lengthLabel.text = @"";
 	
-	if ([musicControls.currentSongObject album])
-		albumLabel.text = [musicControls.currentSongObject album];
+	if (currentSong.album)
+		albumLabel.text = currentSong.album;
 	else
 		albumLabel.text = @"";
 		
-	if ([musicControls.currentSongObject track])
-		trackLabel.text = [NSString stringWithFormat:@"Track: %@", [[musicControls.currentSongObject track] stringValue]];
+	if (currentSong.track)
+		trackLabel.text = [NSString stringWithFormat:@"Track: %@", [currentSong.track stringValue]];
 	else
 		trackLabel.text = @"";
 		
-	if ([musicControls.currentSongObject year])
-		yearLabel.text = [NSString stringWithFormat:@"Year: %@", [[musicControls.currentSongObject year] stringValue]];
+	if (currentSong.year)
+		yearLabel.text = [NSString stringWithFormat:@"Year: %@", [currentSong.year stringValue]];
 	else
 		yearLabel.text = @"";
 		
-	if ([musicControls.currentSongObject genre])
-		genreLabel.text = [NSString stringWithFormat:@"Genre: %@", [musicControls.currentSongObject genre]];
+	if (currentSong.genre)
+		genreLabel.text = [NSString stringWithFormat:@"Genre: %@", currentSong.genre];
 	else
 		genreLabel.text = @"";
 	
@@ -235,7 +241,7 @@
 			[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-on.png"] forState:0];
 	}
 	
-	NSInteger bookmarkCount = [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", musicControls.currentSongObject.songId];
+	NSInteger bookmarkCount = [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId];
 	if (bookmarkCount > 0)
 	{
 		bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", bookmarkCount];
@@ -280,10 +286,12 @@
 
 - (void) updateSlider
 {
+	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+	
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		elapsedTimeLabel.text = [NSString formatTime:0];
-		remainingTimeLabel.text = [NSString stringWithFormat:@"-%@",[NSString formatTime:[[musicControls.currentSongObject duration] floatValue]]];
+		remainingTimeLabel.text = [NSString stringWithFormat:@"-%@",[NSString formatTime:[currentSong.duration floatValue]]];
 
 		progressSlider.value = 0.0;
 		
@@ -292,21 +300,20 @@
 	
 	if (!pauseSlider)
 	{
-		if([musicControls.currentSongObject duration])
+		if(currentSong.duration)
 		{
 			CGRect frame = self.view.frame;
 			if (frame.origin.x == 0)
 			{
-				musicControls.streamerProgress = [musicControls.streamer progress];
-				progressSlider.value = (musicControls.streamerProgress + musicControls.seekTime);
-				elapsedTimeLabel.text = [NSString formatTime:(musicControls.streamerProgress + musicControls.seekTime)];
-				remainingTimeLabel.text = [NSString stringWithFormat:@"-%@",[NSString formatTime:([[musicControls.currentSongObject duration] floatValue] - (musicControls.streamerProgress + musicControls.seekTime))]];
+				progressSlider.value = [musicControls.streamer progress];
+				elapsedTimeLabel.text = [NSString formatTime:[musicControls.streamer progress]];
+				remainingTimeLabel.text = [NSString stringWithFormat:@"-%@",[NSString formatTime:([currentSong.duration floatValue] - [musicControls.streamer progress])]];
 			}
 		}
 		else 
 		{
 			musicControls.streamerProgress = [musicControls.streamer progress];
-			elapsedTimeLabel.text = [NSString formatTime:(musicControls.streamerProgress + musicControls.seekTime)];
+			elapsedTimeLabel.text = [NSString formatTime:[musicControls.streamer progress]];
 			remainingTimeLabel.text = [NSString formatTime:0];
 		}
 	}
@@ -337,16 +344,18 @@
 
 - (IBAction) movedSlider
 {
+	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+	
 	// Don't allow seeking of m4a's
 	BOOL isM4A = NO;
-	if (musicControls.currentSongObject.transcodedSuffix)
+	if (currentSong.transcodedSuffix)
 	{
-		if ([musicControls.currentSongObject.transcodedSuffix isEqualToString:@"m4a"] || [musicControls.currentSongObject.transcodedSuffix isEqualToString:@"aac"])
+		if ([currentSong.transcodedSuffix isEqualToString:@"m4a"] || [currentSong.transcodedSuffix isEqualToString:@"aac"])
 			isM4A = YES;
 	}
 	else
 	{
-		if ([musicControls.currentSongObject.suffix isEqualToString:@"m4a"] || [musicControls.currentSongObject.suffix isEqualToString:@"aac"])
+		if ([currentSong.suffix isEqualToString:@"m4a"] || [currentSong.suffix isEqualToString:@"aac"])
 			isM4A = YES;
 	}
 	
@@ -394,8 +403,10 @@
 			{
 				[musicControls destroyStreamer];
 				musicControls.isPlaying = YES;
-				musicControls.seekTime = progressSlider.value;
-				[musicControls startTempDownloadA:(UInt32)byteOffset];
+				
+				//musicControls.seekTime = progressSlider.value;
+				[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong offset:byteOffset atIndex:0];
+				
 				pauseSlider = NO;
 				hasMoved = NO;
 			}
@@ -404,7 +415,6 @@
 				if (musicControls.streamer.fileDownloadComplete)
 				{
 					//DLog(@"skipping to area within cached song inside if");
-					musicControls.seekTime = progressSlider.value;
 					[musicControls.streamer startWithOffsetInSecs:(UInt32)progressSlider.value];
 					musicControls.streamer.fileDownloadComplete = YES;
 					pauseSlider = NO;
@@ -424,7 +434,6 @@
 					else
 					{
 						//DLog(@"skipping to area within cached song inside else");
-						musicControls.seekTime = progressSlider.value;
 						[musicControls.streamer startWithOffsetInSecs:(UInt32)progressSlider.value];
 						pauseSlider = NO;
 						hasMoved = NO;
@@ -492,6 +501,8 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+	
 	if ([alertView.title isEqualToString:@"Sorry"])
 	{
 		hasMoved = NO;
@@ -507,9 +518,9 @@
 		{
 			[musicControls destroyStreamer];
 			musicControls.isPlaying = YES;
-			musicControls.seekTime = progressSlider.value;
+			//musicControls.seekTime = progressSlider.value;
 			//DLog(@"seekTime: %f", musicControls.seekTime);
-			[musicControls startTempDownloadA:(UInt32)byteOffset];
+			[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong offset:byteOffset atIndex:0];
 			pauseSlider = NO;
 			hasMoved = NO;
 		}
@@ -524,9 +535,9 @@
 			if ([databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE name = ?", bookmarkNameTextField.text] == 0)
 			{
 				// Bookmark doesn't exist so save it
-				Song *aSong = musicControls.currentSongObject;
+				Song *aSong = currentSong;
 				[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarks (name, position, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
-				bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", musicControls.currentSongObject.songId]];
+				bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", aSong.songId]];
 				if (IS_IPAD())
 					bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on-ipad.png"];
 				else
@@ -546,10 +557,10 @@
 		if(buttonIndex == 1)
 		{
 			// Overwrite the bookmark
-			Song *aSong = musicControls.currentSongObject;
+			Song *aSong = currentSong;
 			[databaseControls.bookmarksDb executeUpdate:@"DELETE FROM bookmarks WHERE name = ?", bookmarkNameTextField.text];
 			[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarks (name, position, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", bookmarkNameTextField.text, [NSNumber numberWithInt:(int)progressSlider.value], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
-			bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", musicControls.currentSongObject.songId]];
+			bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", aSong.songId]];
 			if (IS_IPAD())
 				bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on-ipad.png"];
 			else
@@ -560,16 +571,19 @@
 
 
 - (void) performShuffle
-{
+{	
 	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
+
+	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
 	
-	NSNumber *oldPlaylistPosition = [NSNumber numberWithInt:(musicControls.currentPlaylistPosition + 1)];
-	musicControls.currentPlaylistPosition = 0;
+	NSNumber *oldPlaylistPosition = [NSNumber numberWithInt:(dataModel.currentIndex + 1)];
+	dataModel.currentIndex = 0;
 	musicControls.isShuffle = YES;
 	
 	[databaseControls resetShufflePlaylist];
-	[databaseControls addSongToShuffleQueue:musicControls.currentSongObject];
+	[databaseControls addSongToShuffleQueue:currentSong];
 	//[databaseControls insertSong:musicControls.currentSongObject intoTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
 	
 	/*if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -612,7 +626,7 @@
 }
 
 - (IBAction) shuffleButtonToggle
-{
+{	
 	if (musicControls.isShuffle)
 	{
 		if (IS_IPAD())
@@ -628,7 +642,7 @@
 		}
 		else
 		{
-			musicControls.currentPlaylistPosition = -1;
+			[SUSCurrentPlaylistDAO dataModel].currentIndex = -1;
 		}
 		
 		// Send a notification to update the playlist view

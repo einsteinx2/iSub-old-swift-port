@@ -19,9 +19,10 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "NSString-time.h"
+#import "SUSCurrentPlaylistDAO.h"
 
 @implementation CurrentPlaylistViewController
-
+@synthesize dataModel;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -35,6 +36,8 @@
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	musicControls = [MusicSingleton sharedInstance];
 	databaseControls = [DatabaseSingleton sharedInstance];
+	
+	dataModel = [[SUSCurrentPlaylistDAO alloc] init];
 	
 	self.tableView.backgroundColor = [UIColor clearColor];
 	
@@ -233,7 +236,7 @@
 		{
 			@try 
 			{
-				[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:musicControls.currentPlaylistPosition inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
+				[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:dataModel.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 			}
 			@catch (NSException *exception) 
 			{
@@ -408,7 +411,7 @@
 						
 			// Correct the value of currentPlaylistPosition
 			// If the current song was deleted make sure to set goToNextSong so the next song will play
-			if ([viewObjects.multiDeleteList containsObject:[NSNumber numberWithInt:musicControls.currentPlaylistPosition]])
+			if ([viewObjects.multiDeleteList containsObject:[NSNumber numberWithInt:dataModel.currentIndex]])
 			{
 				goToNextSong = YES;
 			}
@@ -417,12 +420,12 @@
 			NSInteger numberBefore = 0;
 			for (NSNumber *index in viewObjects.multiDeleteList)
 			{
-				if ([index integerValue] <= musicControls.currentPlaylistPosition)
+				if ([index integerValue] <= dataModel.currentIndex)
 				{
 					numberBefore = numberBefore + 1;
 				}
 			}
-			musicControls.currentPlaylistPosition = musicControls.currentPlaylistPosition - numberBefore;
+			dataModel.currentIndex = dataModel.currentIndex - numberBefore;
 			
 			// Create indexPaths from multiDeleteList
 			NSMutableArray *indexes = [[NSMutableArray alloc] init];
@@ -516,11 +519,11 @@
 - (void)selectRow
 {
 	[self.tableView reloadData];
-	if (musicControls.currentPlaylistPosition >= 0)
+	if (dataModel.currentIndex >= 0)
 	{
 		@try 
 		{
-			[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:musicControls.currentPlaylistPosition inSection:0] animated:YES scrollPosition:UITableViewScrollPositionMiddle];
+			[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:dataModel.currentIndex inSection:0] animated:YES scrollPosition:UITableViewScrollPositionMiddle];
 		}
 		@catch (NSException *exception) 
 		{
@@ -781,19 +784,19 @@
 	}
 	
 	// Correct the value of currentPlaylistPosition
-	if (fromIndexPath.row == musicControls.currentPlaylistPosition)
+	if (fromIndexPath.row == dataModel.currentIndex)
 	{
-		musicControls.currentPlaylistPosition = toIndexPath.row;
+		dataModel.currentIndex = toIndexPath.row;
 	}
 	else 
 	{
-		if (fromIndexPath.row < musicControls.currentPlaylistPosition && toIndexPath.row >= musicControls.currentPlaylistPosition)
+		if (fromIndexPath.row < dataModel.currentIndex && toIndexPath.row >= dataModel.currentIndex)
 		{
-			musicControls.currentPlaylistPosition = musicControls.currentPlaylistPosition - 1;
+			dataModel.currentIndex = dataModel.currentIndex - 1;
 		}
-		else if (fromIndexPath.row > musicControls.currentPlaylistPosition && toIndexPath.row <= musicControls.currentPlaylistPosition)
+		else if (fromIndexPath.row > dataModel.currentIndex && toIndexPath.row <= dataModel.currentIndex)
 		{
-			musicControls.currentPlaylistPosition = musicControls.currentPlaylistPosition + 1;
+			dataModel.currentIndex = dataModel.currentIndex + 1;
 		}
 	}
 	

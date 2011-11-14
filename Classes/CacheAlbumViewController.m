@@ -23,6 +23,7 @@
 #import "SavedSettings.h"
 #import "NSString-time.h"
 #import "NSMutableURLRequest+SUS.h"
+#import "SUSCurrentPlaylistDAO.h"
 
 @implementation CacheAlbumViewController
 
@@ -246,7 +247,6 @@
 	else
 		isShuffle = NO;
 	
-	[musicControls performSelectorOnMainThread:@selector(destroyStreamer) withObject:nil waitUntilDone:YES];
 	[databaseControls resetCurrentPlaylistDb];
 	
 	FMResultSet *result;
@@ -276,22 +276,7 @@
 	{
 		musicControls.isShuffle = NO;
 	}
-	
-	musicControls.currentPlaylistPosition = 0;
-	
-	musicControls.currentSongObject = nil;
-	musicControls.nextSongObject = nil;
-	if (isShuffle)
-	{
-		musicControls.currentSongObject = [databaseControls songFromDbRow:0 inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
-		musicControls.nextSongObject = [databaseControls songFromDbRow:1 inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
-	}
-	else
-	{
-		musicControls.currentSongObject = [databaseControls songFromDbRow:0 inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-		musicControls.nextSongObject = [databaseControls songFromDbRow:1 inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-	}
-		
+			
 	// Must do UI stuff in main thread
 	[self performSelectorOnMainThread:@selector(loadPlayAllPlaylist2) withObject:nil waitUntilDone:NO];	
 	
@@ -303,7 +288,7 @@
 {
 	musicControls.isNewSong = YES;
 	
-	[musicControls playPauseSong];
+	[musicControls playSongAtPosition:0];
 	
 	if (IS_IPAD())
 	{
@@ -615,9 +600,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 		else
 		{
 			NSUInteger a = indexPath.row - [listOfAlbums count];
-			musicControls.currentSongObject = nil; musicControls.currentSongObject = [self songFromCacheDb:[[listOfSongs objectAtIndex:a] objectAtIndex:0]];
 			
-			musicControls.currentPlaylistPosition = a;
 			[databaseControls resetCurrentPlaylistDb];
 			for(NSArray *song in listOfSongs)
 			{
@@ -627,18 +610,16 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 				[databaseControls addSongToPlaylistQueue:aSong];
 				//[databaseControls insertSong:aSong intoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 			}
-			
-			musicControls.nextSongObject = nil; musicControls.nextSongObject = [databaseControls songFromDbRow:(a + 1) inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-			
+						
 			musicControls.isNewSong = YES;
 			musicControls.isShuffle = NO;
 			
-			[musicControls destroyStreamer];
-			musicControls.seekTime = 0.0;
-			[musicControls playPauseSong];
+			[musicControls playSongAtPosition:a];
+			
+			Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
 			
 			// Grab the first bytes of the song to trick Subsonic into seeing that it's being played
-            NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(musicControls.currentSongObject.songId) forKey:@"id"];
+            NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(currentSong.songId) forKey:@"id"];
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters];
             
 			NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:musicControls];
@@ -650,7 +631,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			// Update the playtime to now
 			NSString *query = [NSString stringWithFormat:@"UPDATE cachedSongs SET playedDate = %i WHERE md5 = '%@'", 
 														 (NSUInteger)[[NSDate date] timeIntervalSince1970], 
-														 [musicControls.currentSongObject.songId md5]];
+														 [currentSong.songId md5]];
 			[databaseControls.songCacheDb executeUpdate:query];
 			
 			if (IS_IPAD())

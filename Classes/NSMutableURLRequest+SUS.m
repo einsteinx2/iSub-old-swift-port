@@ -45,7 +45,7 @@ static void destroy_versionArrays()
     [setOfVersions release]; setOfVersions = nil;
 }
 
-+ (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action andParameters:(NSDictionary *)parameters
++ (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action andParameters:(NSDictionary *)parameters byteOffset:(NSUInteger)offset
 {
     SavedSettings *settings = [SavedSettings sharedInstance];
 	NSString *urlString = [NSString stringWithFormat:@"%@/rest/%@.view", settings.urlString, action];
@@ -93,8 +93,19 @@ static void destroy_versionArrays()
     NSData *authData = [authStr dataUsingEncoding:NSASCIIStringEncoding];
     NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64EncodingWithLineLength:0]];
     [request setValue:authValue forHTTPHeaderField:@"Authorization"];
+	
+	if (offset > 0)
+	{
+		NSString *rangeString = [NSString stringWithFormat:@"bytes=%i-", offset];
+		[request setValue:rangeString forHTTPHeaderField:@"Range"];
+	}
     
     return request;
+}
+
++ (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action andParameters:(NSDictionary *)parameters
+{
+	return [NSMutableURLRequest requestWithSUSAction:action andParameters:parameters byteOffset:0];
 }
 
 @end

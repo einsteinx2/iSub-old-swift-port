@@ -17,13 +17,15 @@
 #import "NSString+URLEncode.h"
 #import "MusicSingleton.h"
 #import "SUSStreamHandler.h"
+#import "SUSCurrentPlaylistDAO.h"
+#import "AudioStreamer.h"
 
 static SUSStreamSingleton *sharedInstance = nil;
 
 @implementation SUSStreamSingleton
-@synthesize throttlingDate, isDownloadA, isDownloadB, bytesTransferred;
+@synthesize handlerStack;
 
-- (BOOL) insertSong:(Song *)aSong intoGenreTable:(NSString *)table
+- (BOOL)insertSong:(Song *)aSong intoGenreTable:(NSString *)table
 {
     DatabaseSingleton *databaseControls = [DatabaseSingleton sharedInstance];
     
@@ -36,75 +38,88 @@ static SUSStreamSingleton *sharedInstance = nil;
 	return [databaseControls.songCacheDb hadError];
 }
 
-#pragma mark Connection factory
+- (void)cancelAllStreams
+{
+	for (SUSStreamHandler *handler in handlerStack)
+	{
+		[handler cancel];
+	}
+}
 
-
+- (void)cancelStreamAtIndex:(NSUInteger)index
+{
+	if (index < [handlerStack count])
+	{
+		SUSStreamHandler *handler = [handlerStack objectAtIndex:index];
+		[handler cancel];
+	}
+}
 
 #pragma mark Download
-- (void)downloadCFNetA:(NSString *)songId
+
+- (void)queueStreamForSong:(Song *)song offset:(NSUInteger)byteOffset atIndex:(NSUInteger)index
 {
-    DLog(@"downloadCFNetA");
-    self.throttlingDate = nil;
-	bytesTransferred = 0;
+	SUSStreamHandler *handler = [[SUSStreamHandler alloc] initWithSong:song offset:byteOffset delegate:self];
+	[handlerStack insertObject:handler atIndex:index];
 	
-	isDownloadA = YES;
-	
-	// NOTE: Handler releases itself when done
-	[[SUSStreamHandler alloc] initWithSongId:songId];
+	if ([handlerStack count] == 1)
+	{
+		[handler start];
+	}
 }
 
-- (void)downloadCFNetB:(NSString *)songId
-{
-    DLog(@"downloadCFNetB");
-	self.throttlingDate = nil;
-	bytesTransferred = 0;
-	
-	isDownloadB = YES;
-    
-    [self createConnectionForReadStreamRef:&readStreamRefB callback:ReadStreamClientCallBackB songId:songId offset:0];
+- (void)queueStreamForSong:(Song *)song atIndex:(NSUInteger)index
+{	
+	[self queueStreamForSong:song offset:0 atIndex:index];
 }
 
-- (void)downloadCFNetTemp:(NSString *)songId
-{
-    DLog(@"downloadCFNetTemp");
-	self.throttlingDate = nil;
-	bytesTransferred = 0;
-	
-	isDownloadA = YES;
-    
-    [self createConnectionForReadStreamRef:&readStreamRefA callback:ReadStreamClientCallBackTemp songId:songId offset:0];
+- (void)queueStreamForSong:(Song *)song
+{	
+	[self queueStreamForSong:song offset:0 atIndex:[handlerStack count]];
 }
 
-#pragma mark Resume
-- (void)resumeCFNetA:(NSString *)songId offset:(UInt32)byteOffset
+- (void)queueStreamForSong:(Song *)song offset:(NSUInteger)byteOffset
 {
-    DLog(@"resumeCFNetA");
-    self.throttlingDate = [NSDate date];
-	bytesTransferred = 0;
-	
-	isDownloadA = YES;
-    
-    [self createConnectionForReadStreamRef:&readStreamRefA callback:ReadStreamClientCallBackA songId:songId offset:byteOffset];
+	[self queueStreamForSong:song offset:byteOffset atIndex:[handlerStack count]];
 }
 
-- (void)resumeCFNetB:(NSString *)songId offset:(UInt32)byteOffset
+#pragma mark - SUSStreamHandler delegate
+
+- (void)SUSStreamHandlerStartPlayback:(SUSStreamHandler *)handler
 {
-    DLog(@"resumeCFNetB");
-	self.throttlingDate = [NSDate date];
-	bytesTransferred = 0;
+	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
 	
-	isDownloadB = YES;
-    
-    [self createConnectionForReadStreamRef:&readStreamRefB callback:ReadStreamClientCallBackB songId:songId offset:byteOffset];
+	if ([handler.mySong isEqualToSong:currentSong])
+	{
+		// This handler is downloading the current song, so start playback
+		MusicSingleton *musicControls = [MusicSingleton sharedInstance];
+		musicControls.streamer = [[AudioStreamer alloc] initWithFileURL:[NSURL fileURLWithPath:currentSong.localPath]];
+		if (musicControls.streamer)
+		{
+			musicControls.streamer.fileDownloadCurrentSize = currentSong.localFileSize;
+			musicControls.streamer.fileDownloadComplete = YES;
+			[musicControls.streamer start];
+		}
+	}
+}
+
+- (void)SUSStreamHandlerConnectionFailed:(SUSStreamHandler *)handler withError:(NSError *)error
+{
+	[handlerStack removeObject:handler];
+	[handler release]; handler = nil;
+}
+
+- (void)SUSStreamHandlerConnectionFinished:(SUSStreamHandler *)handler
+{
+	[handlerStack removeObject:handler];
+	[handler release]; handler = nil;
 }
 
 #pragma mark - Singleton methods
 
 - (void)setup
 {
-    isDownloadA = NO;
-    isDownloadB = NO;
-    bytesTransferred = 0;
+    handlerStack = [[NSMutableArray alloc] initWithCapacity:0];
 }
 
 + (SUSStreamSingleton *)sharedInstance

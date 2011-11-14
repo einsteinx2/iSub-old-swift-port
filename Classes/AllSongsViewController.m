@@ -597,12 +597,6 @@
 {
 	if (viewObjects.isCellEnabled)
 	{
-		// Kill the streamer if it's playing
-		[musicControls destroyStreamer];
-		
-		// Set the new playlist position
-		musicControls.currentPlaylistPosition = 0;
-		
 		// Clear the current playlist
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			[databaseControls resetJukeboxPlaylist];
@@ -631,25 +625,11 @@
 			[musicControls jukeboxAddSong:aSong.songId];
 		}
 		
-		// Set the current and next song objects
-		// Set the current and next song objects
-		musicControls.currentSongObject = nil;
-		musicControls.nextSongObject = nil; 
-		if ([SavedSettings sharedInstance].isJukeboxEnabled)
-		{
-			musicControls.currentSongObject = [databaseControls songFromDbRow:indexPath.row inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-		}
-		else
-		{
-			musicControls.currentSongObject = [databaseControls songFromDbRow:indexPath.row inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-		}
-		
 		// Set player defaults
 		musicControls.isNewSong = YES;
 		musicControls.isShuffle = NO;
 		
 		// Start the song
-		musicControls.seekTime = 0.0;
 		[musicControls playSongAtPosition:0];
 		
 		// Show the player

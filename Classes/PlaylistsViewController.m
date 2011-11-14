@@ -32,6 +32,7 @@
 #import "OrderedDictionary.h"
 #import "SUSServerPlaylistsDAO.h"
 #import "SUSServerPlaylist.h"
+#import "SUSCurrentPlaylistDAO.h"
 
 @interface PlaylistsViewController (Private)
 
@@ -43,7 +44,7 @@
 @implementation PlaylistsViewController
 
 @synthesize listOfSongs, request;
-@synthesize serverPlaylistsDataModel;
+@synthesize serverPlaylistsDataModel, currentPlaylistDataModel;
 
 #pragma mark - Rotation
 
@@ -80,6 +81,9 @@
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	musicControls = [MusicSingleton sharedInstance];
 	databaseControls = [DatabaseSingleton sharedInstance];
+	
+	self.serverPlaylistsDataModel = [[[SUSServerPlaylistsDAO alloc] initWithDelegate:self] autorelease];
+	self.currentPlaylistDataModel = [SUSCurrentPlaylistDAO dataModel];
 	
 	isNoPlaylistsScreenShowing = NO;
 	isPlaylistSaveEditShowing = NO;
@@ -532,11 +536,11 @@
 		// Reload the table data
 		[self.tableView reloadData];
 		
-		if (currentPlaylistCount > 0 && musicControls.currentPlaylistPosition >= 0)
+		if (currentPlaylistCount > 0 && currentPlaylistDataModel.currentIndex >= 0)
 		{
 			@try 
 			{
-				[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:musicControls.currentPlaylistPosition inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
+				[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPlaylistDataModel.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 			}
 			@catch (NSException *exception) 
 			{
@@ -605,7 +609,7 @@
 		
 		//[viewObjects showLoadingScreen:self.view blockInput:YES mainWindow:NO];
 		[viewObjects showLoadingScreenOnMainWindow];
-        self.serverPlaylistsDataModel = [[SUSServerPlaylistsDAO alloc] initWithDelegate:self];
+        
         [serverPlaylistsDataModel startLoad];
 	}
 }
@@ -685,7 +689,7 @@
 			{
 				@try 
 				{
-					[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:musicControls.currentPlaylistPosition inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
+					[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPlaylistDataModel.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 				}
 				@catch (NSException *exception) 
 				{
@@ -972,7 +976,7 @@
 		
 		// Correct the value of currentPlaylistPosition
 		// If the current song was deleted make sure to set goToNextSong so the next song will play
-		if ([viewObjects.multiDeleteList containsObject:[NSNumber numberWithInt:musicControls.currentPlaylistPosition]])
+		if ([viewObjects.multiDeleteList containsObject:[NSNumber numberWithInt:currentPlaylistDataModel.currentIndex]])
 		{
 			goToNextSong = YES;
 		}
@@ -982,13 +986,13 @@
 		for (NSNumber *index in viewObjects.multiDeleteList)
 		{
 			NSAutoreleasePool *pool2 = [[NSAutoreleasePool alloc] init];
-			if ([index integerValue] <= musicControls.currentPlaylistPosition)
+			if ([index integerValue] <= currentPlaylistDataModel.currentIndex)
 			{
 				numberBefore = numberBefore + 1;
 			}
 			[pool2 release];
 		}
-		musicControls.currentPlaylistPosition = musicControls.currentPlaylistPosition - numberBefore;
+		currentPlaylistDataModel.currentIndex = currentPlaylistDataModel.currentIndex - numberBefore;
 		
 		// Recaculate the table count
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -1285,11 +1289,11 @@
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
 		[self.tableView reloadData];
-		if (musicControls.currentPlaylistPosition >= 0)
+		if (currentPlaylistDataModel.currentIndex >= 0)
 		{
 			@try 
 			{
-				[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:musicControls.currentPlaylistPosition inSection:0] animated:YES scrollPosition:UITableViewScrollPositionMiddle];
+				[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPlaylistDataModel.currentIndex inSection:0] animated:YES scrollPosition:UITableViewScrollPositionMiddle];
 			}
 			@catch (NSException *exception) 
 			{
@@ -1703,26 +1707,26 @@ static NSString *kName_Error = @"error";
 		}
 		
 		// Correct the value of currentPlaylistPosition
-		if (fromIndexPath.row == musicControls.currentPlaylistPosition)
+		if (fromIndexPath.row == currentPlaylistDataModel.currentIndex)
 		{
-			musicControls.currentPlaylistPosition = toIndexPath.row;
+			currentPlaylistDataModel.currentIndex = toIndexPath.row;
 		}
 		else 
 		{
-			if (fromIndexPath.row < musicControls.currentPlaylistPosition && toIndexPath.row >= musicControls.currentPlaylistPosition)
+			if (fromIndexPath.row < currentPlaylistDataModel.currentIndex && toIndexPath.row >= currentPlaylistDataModel.currentIndex)
 			{
-				musicControls.currentPlaylistPosition = musicControls.currentPlaylistPosition - 1;
+				currentPlaylistDataModel.currentIndex = currentPlaylistDataModel.currentIndex - 1;
 			}
-			else if (fromIndexPath.row > musicControls.currentPlaylistPosition && toIndexPath.row <= musicControls.currentPlaylistPosition)
+			else if (fromIndexPath.row > currentPlaylistDataModel.currentIndex && toIndexPath.row <= currentPlaylistDataModel.currentIndex)
 			{
-				musicControls.currentPlaylistPosition = musicControls.currentPlaylistPosition + 1;
+				currentPlaylistDataModel.currentIndex = currentPlaylistDataModel.currentIndex + 1;
 			}
 		}
 		
 		// Highlight the current playing song
 		@try 
 		{
-			[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:musicControls.currentPlaylistPosition inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
+			[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPlaylistDataModel.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 		}
 		@catch (NSException *exception) 
 		{

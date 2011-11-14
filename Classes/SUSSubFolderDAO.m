@@ -15,6 +15,8 @@
 #import "NSString-md5.h"
 #import "Album.h"
 #import "Song.h"
+#import "MusicSingleton.h"
+#import "SavedSettings.h"
 
 @interface SUSSubFolderDAO (Private) 
 - (NSUInteger)findFirstAlbumRow;
@@ -174,6 +176,48 @@
 	}
 }
 
+- (void)playSongAtDbRow:(NSUInteger)row
+{
+	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
+	
+	// Clear the current playlist
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+		[[DatabaseSingleton sharedInstance] resetJukeboxPlaylist];
+	else
+		[[DatabaseSingleton sharedInstance] resetCurrentPlaylistDb];
+	
+	// Add the songs to the playlist
+	NSMutableArray *songIds = [[NSMutableArray alloc] init];
+	for (int i = self.albumsCount; i < self.totalCount; i++)
+	{
+		@autoreleasepool 
+		{
+			Song *aSong = [self songForTableViewRow:i];
+			[[DatabaseSingleton sharedInstance] addSongToPlaylistQueue:aSong];
+			
+			// In jukebox mode, collect the song ids to send to the server
+			if ([SavedSettings sharedInstance].isJukeboxEnabled)
+				[songIds addObject:aSong.songId];
+		}
+	}
+	
+	// If jukebox mode, send song ids to server
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	{
+		[musicControls jukeboxStop];
+		[musicControls jukeboxClearPlaylist];
+		[musicControls jukeboxAddSongs:songIds];
+	}
+	[songIds release];
+	
+	// Set player defaults
+	musicControls.isNewSong = YES;
+	musicControls.isShuffle = NO;
+	
+	// Start the song
+	[musicControls playSongAtPosition:(row - 1)];
+}
+
 #pragma mark - Public DAO Methods
 
 - (BOOL)hasLoaded
@@ -201,6 +245,12 @@
     NSUInteger dbRow = songStartRow + (row - albumsCount);
     
     return [self findSongForDbRow:dbRow];
+}
+
+- (void)playSongAtTableViewRow:(NSUInteger)row
+{
+	NSUInteger dbRow = songStartRow + (row - albumsCount);
+	[self playSongAtDbRow:dbRow];
 }
 
 #pragma mark - Loader Manager Methods

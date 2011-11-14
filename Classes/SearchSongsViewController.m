@@ -522,45 +522,6 @@
 	{
 		if (viewObjects.isCellEnabled && indexPath.row != [listOfSongs count])
 		{
-			/*[musicControls destroyStreamer];
-			
-			musicControls.currentSongObject == nil; musicControls.currentSongObject = [[listOfSongs objectAtIndex:indexPath.row] copy];
-			
-			musicControls.currentPlaylistPosition = indexPath.row;
-			[databaseControls resetCurrentPlaylistDb];
-			for(Song *aSong in listOfSongs)
-			{
-				[databaseControls insertSong:aSong intoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-			}
-			
-			musicControls.nextSongObject = nil; musicControls.nextSongObject = [databaseControls songFromDbRow:(indexPath.row + 1) inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-			
-			musicControls.isNewSong = YES;
-			musicControls.isShuffle = NO;
-			
-			musicControls.seekTime = 0.0;
-			[musicControls playPauseSong];
-			
-			if (IS_IPAD())
-			{
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"showPlayer" object:nil];
-			}
-			else
-			{
-				iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-				streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-				[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-				[streamingPlayerViewController release];
-			}
-			 
-			return;*/
-			
-			// Kill the streamer if it's playing
-			[musicControls destroyStreamer];
-			
-			// Find the new playlist position
-			musicControls.currentPlaylistPosition = indexPath.row;
-			
 			// Clear the current playlist
 			if ([SavedSettings sharedInstance].isJukeboxEnabled)
 				[databaseControls resetJukeboxPlaylist];
@@ -591,24 +552,11 @@
 			}
 			[songIds release];
 			
-			// Set the current and next song objects
-			if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			{
-				musicControls.currentSongObject = [databaseControls songFromDbRow:indexPath.row inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-				musicControls.nextSongObject = [databaseControls songFromDbRow:(indexPath.row + 1) inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-			}
-			else
-			{
-				musicControls.currentSongObject = [databaseControls songFromDbRow:indexPath.row inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-				musicControls.nextSongObject = [databaseControls songFromDbRow:(indexPath.row + 1) inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-			}
-			
 			// Set player defaults
 			musicControls.isNewSong = YES;
 			musicControls.isShuffle = NO;
 			
 			// Start the song
-			musicControls.seekTime = 0.0;
 			[musicControls playSongAtPosition:indexPath.row];
 			
 			// Show the player

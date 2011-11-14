@@ -11,6 +11,7 @@
 #import "SavedSettings.h"
 #import "CacheSingleton.h"
 #import "Song.h"
+#import "SUSCurrentPlaylistDAO.h"
 
 @implementation DebugViewController
 
@@ -90,8 +91,10 @@
 			currentSongProgressView.alpha = 1.0;
 		}
 		
+		SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+		
 		// Set the next song progress bar
-		if (musicControls.nextSongObject.path != nil)
+		if (dataModel.nextSong.path != nil)
 		{
 			// Make sure label and progress view aren't greyed out
 			nextSongLabel.alpha = 1.0;

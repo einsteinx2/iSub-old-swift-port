@@ -7,7 +7,7 @@
 //
 
 
-@class iSubAppDelegate, MusicSingleton, DatabaseSingleton, Song;
+@class iSubAppDelegate, MusicSingleton, DatabaseSingleton;
 
 @interface AsynchronousImageView : UIImageView 
 {
@@ -18,7 +18,6 @@
 	NSString *coverArtId;
 	NSURLConnection *connection;
 	NSMutableData *data;
-	Song *songAtTimeOfLoad;
 	
 	BOOL isForPlayer;
 }

@@ -6,18 +6,28 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "SUSStreamHandlerDelegate.h"
 
+@class Song;
 @interface SUSStreamHandler : NSObject <NSURLConnectionDelegate>
 
-- (id)initWithSongId:(NSString *)songId;
+- (id)initWithSong:(Song *)song offset:(NSUInteger)offset delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate;
+- (id)initWithSong:(Song *)song delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate;
 
-@property (nonatomic, copy) NSString *songId;
+@property (nonatomic, assign) NSObject<SUSStreamHandlerDelegate> *delegate;
+@property (nonatomic, copy) Song *mySong;
+@property NSUInteger byteOffset;
+@property (nonatomic, retain) NSURLConnection *connection;
 
+@property (nonatomic, retain) NSFileHandle *fileHandle;
+
+@property long totalBytesTransferred;
 @property long bytesTransferred;
 @property (nonatomic, retain) NSDate *throttlingDate;
 
-@property (readonly) NSUInteger currentSongBitrate;
-@property (readonly) NSUInteger nextSongBitrate;
+@property (readonly) NSUInteger bitrate;
+
+- (void)start;
+- (void)cancel;
 
 @end
