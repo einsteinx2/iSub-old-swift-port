@@ -48,6 +48,7 @@ static NSUInteger currentIndex = 0;
 			aSong = [databaseControls songFromDbRow:index inTable:@"currentPlaylist" inDatabase:self.db];
 	}
 	
+	DLog(@"aSong: %@", aSong);
 	return aSong;
 }
 

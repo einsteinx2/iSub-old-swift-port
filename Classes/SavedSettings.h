@@ -27,14 +27,8 @@
 	BOOL isShuffle;
 	NSInteger currentPlaylistPosition;
 	NSInteger repeatMode;
-	NSString *currentSongId;
-	NSString *nextSongId;
 	NSInteger bitRate;
 }
-
-// State Saving
-@property (nonatomic, retain) NSString *currentSongId;
-@property (nonatomic, retain) NSString *nextSongId;
 
 // Server Login Settings
 @property (nonatomic, retain) NSMutableArray *serverList;

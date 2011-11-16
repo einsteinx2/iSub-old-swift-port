@@ -17,7 +17,7 @@
 
 @implementation SavedSettings
 
-@synthesize serverList, currentSongId, nextSongId;
+@synthesize serverList;
 
 - (NSString *) formatFileSize:(unsigned long long int)size
 {
@@ -43,8 +43,6 @@
 
 - (void)setupSaveState
 {
-	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
-	Song *nextSong = [SUSCurrentPlaylistDAO dataModel].nextSong;
 	NSInteger currentIndex = [SUSCurrentPlaylistDAO dataModel].currentIndex;
 	
 	DLog(@"setting up save state");
@@ -70,10 +68,6 @@
 	repeatMode = musicControls.repeatMode;
 	[userDefaults setInteger:repeatMode forKey:@"repeatMode"];
 	
-	currentSongId = currentSong.songId;
-	
-	nextSongId = nextSong.songId;
-	
 	bitRate = musicControls.streamer.bitRate;
 	[userDefaults setInteger:bitRate forKey:@"bitRate"];
 	
@@ -91,8 +85,6 @@
 	
 	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 	
-	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
-	Song *nextSong = [SUSCurrentPlaylistDAO dataModel].nextSong;
 	NSInteger currentIndex = [SUSCurrentPlaylistDAO dataModel].currentIndex;
 		
 	if (musicControls.isPlaying != isPlaying)
@@ -121,24 +113,6 @@
 	{
 		repeatMode = musicControls.repeatMode;
 		[userDefaults setInteger:repeatMode forKey:@"repeatMode"];
-	}
-	
-	if (currentSong.songId && currentSongId)
-	{
-		if (![currentSong.songId isEqualToString:currentSongId])
-		{
-			self.currentSongId = [NSString stringWithString:currentSong.songId];
-			[userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:currentSong] forKey:@"currentSongObject"];
-		}
-	}
-	
-	if (nextSong.songId && nextSongId)
-	{
-		if (![nextSong.songId isEqualToString:nextSongId])
-		{
-			self.nextSongId = [NSString stringWithString:nextSong.songId];
-			[userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:nextSong] forKey:@"nextSongObject"];
-		}
 	}
 	
 	if (musicControls.streamer.bitRate != bitRate)
@@ -178,10 +152,6 @@
 	
 	repeatMode = [userDefaults integerForKey:@"repeatMode"];
 	musicControls.repeatMode = repeatMode;
-	
-	currentSongId = [SUSCurrentPlaylistDAO dataModel].currentSong.songId;
-	
-	nextSongId = [SUSCurrentPlaylistDAO dataModel].nextSong.songId;
 	
 	bitRate = [userDefaults integerForKey:@"bitRate"];
 	musicControls.bitRate = bitRate;
