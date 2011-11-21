@@ -70,7 +70,15 @@ static void destroy_versionArrays()
     {
         for (NSString *key in [parameters allKeys])
         {
-            [postString appendFormat:@"&%@=%@", [key URLEncodeString], [[parameters objectForKey:key] URLEncodeString]];
+			if ((NSNull *)[parameters objectForKey:key] == [NSNull null])
+			{
+				//DLog(@"Received a null parameter for key: %@ for action: %@", key, action);
+				DLog(@"Received a null parameter for key: %@ for action: %@  stack trace:\n%@", key, action, [NSThread callStackSymbols]);
+			}
+			else
+			{
+				[postString appendFormat:@"&%@=%@", [key URLEncodeString], [[parameters objectForKey:key] URLEncodeString]];
+			}
         }
     }
     

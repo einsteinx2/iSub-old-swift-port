@@ -40,7 +40,7 @@
 	{
         [self setup];
 		delegate = theDelegate;
-        DLog(@"init with delegate %@", delegate);
+        //DLog(@"init with delegate %@", delegate);
 	}
 	
 	return self;

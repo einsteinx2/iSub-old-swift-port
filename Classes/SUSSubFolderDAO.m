@@ -39,6 +39,8 @@
     albumsCount = [self findAlbumsCount];
     songsCount = [self findSongsCount];
     folderLength = [self findFolderLength];
+	//DLog(@"albumsCount: %i", albumsCount);
+	//DLog(@"songsCount: %i", songsCount);
 }
 
 - (id)init
@@ -55,8 +57,21 @@
 {
     if ((self = [super init])) 
 	{
+		self.delegate = theDelegate;
 		[self setup];
-        self.delegate = theDelegate;
+    }
+    
+    return self;
+}
+
+- (id)initWithDelegate:(id<SUSLoaderDelegate>)theDelegate andId:(NSString *)folderId andArtist:(Artist *)anArtist
+{
+	if ((self = [super init])) 
+	{
+		self.delegate = theDelegate;
+        self.myId = folderId;
+		self.myArtist = anArtist;
+		[self setup];
     }
     
     return self;
@@ -193,7 +208,8 @@
 		@autoreleasepool 
 		{
 			Song *aSong = [self songForTableViewRow:i];
-			[[DatabaseSingleton sharedInstance] addSongToPlaylistQueue:aSong];
+			//DLog(@"adding song to playlist: %@", aSong);
+			[aSong addToPlaylistQueue];
 			
 			// In jukebox mode, collect the song ids to send to the server
 			if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -211,11 +227,10 @@
 	[songIds release];
 	
 	// Set player defaults
-	musicControls.isNewSong = YES;
 	musicControls.isShuffle = NO;
 	
 	// Start the song
-	[musicControls playSongAtPosition:(row - 1)];
+	[musicControls playSongAtPosition:(row - songStartRow)];
 }
 
 #pragma mark - Public DAO Methods

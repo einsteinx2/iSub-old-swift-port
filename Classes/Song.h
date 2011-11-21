@@ -40,3 +40,5 @@
 - (BOOL)isEqualToSong:(Song	*)otherSong;
 
 @end
+
+#import "Song+DAO.h"

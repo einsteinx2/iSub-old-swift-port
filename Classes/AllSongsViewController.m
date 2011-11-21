@@ -343,7 +343,6 @@
 
 - (IBAction)nowPlayingAction:(id)sender
 {
-	musicControls.isNewSong = NO;
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
@@ -615,7 +614,7 @@
 			aSong = [dataModel songForPosition:(sectionStartIndex + indexPath.row)];
 		}
 		
-		[databaseControls addSongToPlaylistQueue:aSong];
+		[aSong addToPlaylistQueue];
 		
 		// If jukebox mode, send song id to server
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -626,7 +625,6 @@
 		}
 		
 		// Set player defaults
-		musicControls.isNewSong = YES;
 		musicControls.isShuffle = NO;
 		
 		// Start the song

@@ -8,33 +8,28 @@
 
 #import "SUSLoaderDelegate.h"
 
-@class iSubAppDelegate, DatabaseSingleton, ViewObjectsSingleton, Song, AudioStreamer, BBSimpleConnectionQueue;
+@class iSubAppDelegate, DatabaseSingleton, ViewObjectsSingleton, Song, BBSimpleConnectionQueue, BassWrapperSingleton;
 
 @interface MusicSingleton : NSObject <SUSLoaderDelegate>
 {
 	iSubAppDelegate *appDelegate;
 	DatabaseSingleton *databaseControls;
 	ViewObjectsSingleton *viewObjects;
-	
-	NSTimer *progressTimer;
-	
+		
 	BOOL isAutoNextNotificationOn;
+	
+	BassWrapperSingleton *bassWrapper;
 }
 
 // Audio streamer objects and variables
 //
-@property (nonatomic, retain) AudioStreamer *streamer;
-@property double streamerProgress;
 @property NSInteger repeatMode;
 @property BOOL isShuffle;
-@property BOOL isPlaying;
-@property NSInteger buffersUsed;
 
 // Music player objects
 //
 @property (nonatomic, retain) Song *queueSongObject;
 @property (nonatomic, retain) NSString *currentSongLyrics;
-@property BOOL isNewSong;
 @property (nonatomic, retain) NSURL *coverArtUrl;
 
 // Song caching stuff
@@ -72,7 +67,6 @@
 
 - (NSInteger) maxBitrateSetting;
 
-- (void)createProgressTimer;
 - (void)destroyStreamer;
 - (void)startSongAtOffsetInSeconds:(NSUInteger)seconds;
 - (void)startSong;
@@ -87,8 +81,8 @@
 
 - (void)showPlayer;
 
-- (void)removeAutoNextNotification;
-- (void)addAutoNextNotification;
+//- (void)removeAutoNextNotification;
+//- (void)addAutoNextNotification;
 
 // Jukebox control methods
 - (void)jukeboxPlaySongAtPosition:(NSUInteger)position;

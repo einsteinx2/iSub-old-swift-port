@@ -11,7 +11,6 @@
 #import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
-#import "AudioStreamer.h"
 #import "ServerListViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "PlaylistsUITableViewCell.h"
@@ -94,7 +93,7 @@
 	viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 	goToNextSong = NO;
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:@"initSongInfo" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_SongPlaybackStart object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:@"reloadPlaylist" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentPlaylistCount) name:@"updateCurrentPlaylistCount" object:nil];
 
@@ -208,7 +207,6 @@
 
 - (IBAction)nowPlayingAction:(id)sender
 {
-	musicControls.isNewSong = NO;
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
@@ -647,54 +645,48 @@
 			if (goToNextSong)
 			{
 				goToNextSong = NO;
-				if (musicControls.streamer)
+				currentPlaylistCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
+				if (currentPlaylistCount > 0)
 				{
-					currentPlaylistCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
-					if (currentPlaylistCount > 0)
+					[musicControls nextSong];
+				}
+				else
+				{
+					[musicControls destroyStreamer];
+					self.navigationItem.rightBarButtonItem = nil;
+					
+					if (isPlaylistSaveEditShowing == YES)
 					{
-						[musicControls nextSong];
-					}
-					else
-					{
-						[musicControls destroyStreamer];
-						self.navigationItem.rightBarButtonItem = nil;
-						
-						if (isPlaylistSaveEditShowing == YES)
+						if (IS_IPAD())
 						{
-							if (IS_IPAD())
-							{
-								headerView.frame = CGRectMake(0, 0, 320, 48);
-							}
-							else 
-							{
-								headerView.frame = CGRectMake(0, 0, 320, 40);
-							}
-							[savePlaylistLabel removeFromSuperview];
-							[playlistCountLabel removeFromSuperview];
-							[savePlaylistButton removeFromSuperview];
-							[spacerLabel removeFromSuperview];
-							[editPlaylistLabel removeFromSuperview];
-							[editPlaylistButton removeFromSuperview];
-							[deleteSongsLabel removeFromSuperview];
-							isPlaylistSaveEditShowing = NO;
-							self.tableView.tableHeaderView = headerView;
+							headerView.frame = CGRectMake(0, 0, 320, 48);
 						}
+						else 
+						{
+							headerView.frame = CGRectMake(0, 0, 320, 40);
+						}
+						[savePlaylistLabel removeFromSuperview];
+						[playlistCountLabel removeFromSuperview];
+						[savePlaylistButton removeFromSuperview];
+						[spacerLabel removeFromSuperview];
+						[editPlaylistLabel removeFromSuperview];
+						[editPlaylistButton removeFromSuperview];
+						[deleteSongsLabel removeFromSuperview];
+						isPlaylistSaveEditShowing = NO;
+						self.tableView.tableHeaderView = headerView;
 					}
 				}
 			}
 			
 			// Reload the table to correct the numbers
 			[self.tableView reloadData];
-			if (musicControls.streamer)
+			@try 
 			{
-				@try 
-				{
-					[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPlaylistDataModel.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
-				}
-				@catch (NSException *exception) 
-				{
-					DLog(@"main: Caught %@: %@", [exception name], [exception reason]);
-				}
+				[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPlaylistDataModel.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
+			}
+			@catch (NSException *exception) 
+			{
+				DLog(@"main: Caught %@: %@", [exception name], [exception reason]);
 			}
 		}
 	}
@@ -847,14 +839,14 @@
 		Song *aSong = nil;
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		{
-			aSong = [databaseControls songFromDbRow:i inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
+			aSong = [Song songFromDbRow:i inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 		}
 		else
 		{
 			if (musicControls.isShuffle)
-				aSong = [databaseControls songFromDbRow:i inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
+				aSong = [Song songFromDbRow:i inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
 			else
-				aSong = [databaseControls songFromDbRow:i inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
+				aSong = [Song songFromDbRow:i inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 		}
 		
 		[parameters setObject:n2N(aSong.songId) forKey:@"songId"];
@@ -1773,14 +1765,14 @@ static NSString *kName_Error = @"error";
 		
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		{
-			aSong = [databaseControls songFromDbRow:indexPath.row inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
+			aSong = [Song songFromDbRow:indexPath.row inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 		}
 		else
 		{
 			if (musicControls.isShuffle)
-				aSong = [databaseControls songFromDbRow:indexPath.row inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
+				aSong = [Song songFromDbRow:indexPath.row inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
 			else
-				aSong = [databaseControls songFromDbRow:indexPath.row inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
+				aSong = [Song songFromDbRow:indexPath.row inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 		}
 		
 		[cell.coverArtView loadImageFromCoverArtId:aSong.coverArtId];
@@ -1885,9 +1877,7 @@ static NSString *kName_Error = @"error";
 		if (segmentedControl.selectedSegmentIndex == 0)
 		{
 			[musicControls playSongAtPosition:indexPath.row];
-			
-			musicControls.isNewSong = YES;
-			
+						
 			if (IS_IPAD())
 			{
 				[[NSNotificationCenter defaultCenter] postNotificationName:@"showPlayer" object:nil];

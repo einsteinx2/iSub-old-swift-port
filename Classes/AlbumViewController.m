@@ -89,11 +89,8 @@
 			self.myAlbum = anAlbum;
 		}
 		
-		self.dataModel = [[SUSSubFolderDAO alloc] initWithDelegate:self];
-        dataModel.myId = self.myId;
-        dataModel.myArtist = self.myArtist;
+		self.dataModel = [[SUSSubFolderDAO alloc] initWithDelegate:self andId:self.myId andArtist:self.myArtist];
 		
-        //if ([databaseControls.albumListCacheDb intForQuery:@"SELECT COUNT(*) FROM albumListCache WHERE id = ?", [NSString md5:self.myId]] == 0)
         if (dataModel.hasLoaded)
         {
             [self.tableView reloadData];
@@ -139,6 +136,13 @@
 	{
 		self.navigationItem.rightBarButtonItem = nil;
 	}
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	
+	[dataModel cancelLoad];
 }
 
 - (void)didReceiveMemoryWarning 
@@ -364,7 +368,6 @@
 
 - (IBAction)nowPlayingAction:(id)sender
 {
-	musicControls.isNewSong = NO;
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
@@ -468,14 +471,14 @@
 		cell.backgroundView = [[[UIView alloc] init] autorelease];
 		if(indexPath.row % 2 == 0)
 		{
-			if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [NSString md5:aSong.path]] != nil)
+			if (aSong.isFullyCached)
 				cell.backgroundView.backgroundColor = [viewObjects currentLightColor];
 			else
 				cell.backgroundView.backgroundColor = viewObjects.lightNormal;
 		}
 		else
 		{
-			if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [NSString md5:aSong.path]] != nil)
+			if (aSong.isFullyCached)
 				cell.backgroundView.backgroundColor = [viewObjects currentDarkColor];
 			else
 				cell.backgroundView.backgroundColor = viewObjects.darkNormal;
@@ -543,7 +546,7 @@
 	[alert release];
 	
 	[viewObjects hideLoadingScreen];
-		
+	
 	[self dataSourceDidFinishLoadingNewData];
 }
 
@@ -576,10 +579,10 @@
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-	
 	if (scrollView.contentOffset.y <= - 65.0f && !_reloading) 
 	{
 		_reloading = YES;
+		[viewObjects showAlbumLoadingScreen:self.view sender:self];
 		[dataModel startLoad];
 		[refreshHeaderView setState:EGOOPullRefreshLoading];
 		[UIView beginAnimations:nil context:NULL];

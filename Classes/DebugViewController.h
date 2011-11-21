@@ -7,7 +7,7 @@
 //
 
 
-@class MusicSingleton, CacheSingleton, SavedSettings;
+@class MusicSingleton, CacheSingleton, SavedSettings, Song;
 
 @interface DebugViewController : UIViewController 
 {
@@ -30,7 +30,11 @@
 	NSTimer *updateTimer;
 }
 
+@property (nonatomic, copy) Song *currentSong;
+@property (nonatomic, copy) Song *nextSong;
+
 - (IBAction)songInfoToggle;
 - (void) updateStats;
+- (void)cacheSongObjects;
 
 @end

@@ -9,11 +9,11 @@
 #import "SavedSettings.h"
 #import "NSString-md5.h"
 #import "MusicSingleton.h"
-#import "AudioStreamer.h"
 #import "Song.h"
 #import "Server.h"
 #import "MKStoreManager.h"
 #import "SUSCurrentPlaylistDAO.h"
+#import "BassWrapperSingleton.h"
 
 @implementation SavedSettings
 
@@ -45,18 +45,19 @@
 {
 	NSInteger currentIndex = [SUSCurrentPlaylistDAO dataModel].currentIndex;
 	
-	DLog(@"setting up save state");
+	//DLog(@"setting up save state");
 
 	// Load saved state first
 	[self loadState];
 	
 	// Initiallize the save state stuff
 	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
+	BassWrapperSingleton *bassWrapper = [BassWrapperSingleton sharedInstance];
 	
 	if (self.isJukeboxEnabled)
 		isPlaying = NO;
 	else
-		isPlaying = musicControls.isPlaying;
+		isPlaying = bassWrapper.isPlaying;
 	[userDefaults setBool:isPlaying forKey:@"isPlaying"];
 	
 	isShuffle = musicControls.isShuffle;
@@ -68,14 +69,14 @@
 	repeatMode = musicControls.repeatMode;
 	[userDefaults setInteger:repeatMode forKey:@"repeatMode"];
 	
-	bitRate = musicControls.streamer.bitRate;
+	bitRate = bassWrapper.bitRate;
 	[userDefaults setInteger:bitRate forKey:@"bitRate"];
 	
 	[userDefaults synchronize];
 	
 	// Start the timer
 	[NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(saveState) userInfo:nil repeats:YES];
-	DLog(@"starting the save state timer");
+	//DLog(@"starting the save state timer");
 }
 
 - (void)saveState
@@ -84,15 +85,16 @@
 	//DLog(@"saveDefaults!!");
 	
 	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
+	BassWrapperSingleton *bassWrapper = [BassWrapperSingleton sharedInstance];
 	
 	NSInteger currentIndex = [SUSCurrentPlaylistDAO dataModel].currentIndex;
 		
-	if (musicControls.isPlaying != isPlaying)
+	if (bassWrapper.isPlaying != isPlaying)
 	{
 		if (self.isJukeboxEnabled)
 			isPlaying = NO;
 		else
-			isPlaying = musicControls.isPlaying;
+			isPlaying = bassWrapper.isPlaying;
 				
 		[userDefaults setBool:isPlaying forKey:@"isPlaying"];
 	}
@@ -115,15 +117,22 @@
 		[userDefaults setInteger:repeatMode forKey:@"repeatMode"];
 	}
 	
-	if (musicControls.streamer.bitRate != bitRate)
+	if (bassWrapper.bitRate != bitRate)
 	{
-		bitRate = musicControls.streamer.bitRate;
+		bitRate = bassWrapper.bitRate;
 		[userDefaults setInteger:bitRate forKey:@"bitRate"];
 	}
 	
-	self.seekTime = musicControls.streamer.progress;
+	self.seekTime = bassWrapper.progress;
 	
-	self.isRecover = YES;
+	if (isPlaying)
+	{
+		if (self.recoverSetting == 0)
+			self.isRecover = YES;
+		
+		if (self.recoverSetting == 1)
+			self.isRecover = NO;
+	}
 		
 	[userDefaults synchronize];	
 	
@@ -140,9 +149,8 @@
 		isPlaying = NO;
 	else
 		isPlaying = [userDefaults boolForKey:@"isPlaying"];
-	musicControls.isPlaying = isPlaying;
 	
-	DLog(@"loading state, isPlaying = %i", isPlaying);
+	//DLog(@"loading state, isPlaying = %i", isPlaying);
 	
 	isShuffle = [userDefaults boolForKey:@"isShuffle"];
 	musicControls.isShuffle = isShuffle;
@@ -804,7 +812,11 @@ static SavedSettings *sharedInstance = nil;
 	}
 	else
 	{
-		self.serverList = [NSKeyedUnarchiver unarchiveObjectWithData:[userDefaults objectForKey:@"servers"]];
+		NSData *servers = [userDefaults objectForKey:@"servers"];
+		if (servers)
+		{
+			self.serverList = [NSKeyedUnarchiver unarchiveObjectWithData:servers];
+		}
 	}
 	
 	// Cache certain settings to memory for speed
@@ -828,7 +840,7 @@ static SavedSettings *sharedInstance = nil;
         if (sharedInstance == nil) 
 		{
             sharedInstance = [super allocWithZone:zone];
-			[sharedInstance setup];
+			//[sharedInstance setup];
             return sharedInstance;  // assignment and return on first allocation
         }
     }

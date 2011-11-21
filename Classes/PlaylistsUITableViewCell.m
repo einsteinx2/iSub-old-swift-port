@@ -259,14 +259,14 @@
                     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
                     
                     Song *aSong = [[Song alloc] initWithTBXMLElement:entry];
-                    [databaseControls insertSongIntoServerPlaylist:aSong playlistId:md5];
+                    [aSong insertIntoServerPlaylistWithPlaylistId:md5];
                     if (isDownload)
                     {
-                        [databaseControls addSongToCacheQueue:aSong];
+                        [aSong addToCacheQueue];
                     }
                     else
                     {
-                        [databaseControls addSongToPlaylistQueue:aSong];
+                        [aSong addToPlaylistQueue];
                     }
                     [aSong release];
                     

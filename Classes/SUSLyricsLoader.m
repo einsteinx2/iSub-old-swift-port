@@ -79,6 +79,7 @@
 	[super connection:theConnection didFailWithError:error];
 }	
 
+// TODO: FIX CRASH OF DEALLOC'D DELEGATE
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	    
     // Parse the data

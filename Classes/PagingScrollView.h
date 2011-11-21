@@ -6,11 +6,6 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-
-
-
-@interface PagingScrollView : UIScrollView {
-    
-}
+@interface PagingScrollView : UIScrollView 
 
 @end

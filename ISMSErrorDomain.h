@@ -6,6 +6,11 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
+#pragma no_pch
+
+#ifndef iSub_ISMSErrorCodes_h
+#define iSub_ISMSErrorCodes_h
+
 #define ISMSErrorDomain @"iSub Error Domain"
 
 #define ISMSErrorCode_NotASubsonicServer		1
@@ -25,3 +30,5 @@
 
 #define ISMSErrorCode_NoLyricsFound             6
 #define ISMSErrorDesc_NoLyricsFound             @"No lyrics found for this song"
+
+#endif

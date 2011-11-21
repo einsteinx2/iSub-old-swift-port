@@ -27,6 +27,10 @@
 
 @property (readonly) NSUInteger bitrate;
 
+@property BOOL isDelegateNotifiedToStartPlayback;
+
+@property NSUInteger numOfReconnects;
+
 - (void)start;
 - (void)cancel;
 

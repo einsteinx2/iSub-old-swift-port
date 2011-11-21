@@ -98,7 +98,7 @@
 		[parser release];
 		
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"setSongTitle" object:nil];
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"initSongInfo" object:nil];
+		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_SongPlaybackStart object:nil];
 	}
 	else
 	{

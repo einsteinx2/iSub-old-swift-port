@@ -13,7 +13,6 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "SongInfoViewController.h"
 #import "PageControlViewController.h"
-#import "AudioStreamer.h"
 #import "CoverArtImageView.h"
 #import "Song.h"
 #import <QuartzCore/CoreAnimation.h>
@@ -26,6 +25,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import "SavedSettings.h"
 #import "SUSCurrentPlaylistDAO.h"
+#import "BassWrapperSingleton.h"
+#import "EqualizerViewController.h"
 
 
 @interface iPhoneStreamingPlayerViewController ()
@@ -110,17 +111,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	}
 	else
 	{
-		if(musicControls.isNewSong)
-		{
-			[self setPlayButtonImage];
-		}
+		if(bassWrapper.isPlaying)
+			[self setPauseButtonImage];
 		else
-		{
-			if([musicControls.streamer isPlaying])
-				[self setPauseButtonImage];
-			else
-				[self setPlayButtonImage];
-		}		
+			[self setPlayButtonImage];
 	}
 	
 	// determine the size of the reflection to create
@@ -146,6 +140,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	databaseControls = [DatabaseSingleton sharedInstance];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	
+	bassWrapper = [BassWrapperSingleton sharedInstance];
+	
 	pageControlViewController = nil;
 	
 	isFlipped = NO;
@@ -158,7 +154,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPlayButtonImage) name:@"setPlayButtonImage" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPauseButtonImage) name:@"setPauseButtonImage" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setSongTitle) name:@"setSongTitle" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) name:@"initSongInfo" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) name:ISMSNotification_SongPlaybackStart object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createReflection) name:@"createReflection" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songInfoToggle:) name:@"hideSongInfo" object:nil];
 	
@@ -250,27 +246,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 - (void)viewDidDisappear:(BOOL)animated
 {
 	[super viewDidDisappear:animated];
-	NSLog(@"player viewDidDisappear called");
 	
-	[[UIApplication sharedApplication] setStatusBarHidden:NO animated:NO];
+	//[[UIApplication sharedApplication] setStatusBarHidden:NO animated:NO];
+	//[[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"hideSongInfoFast" object:nil];
-	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"setPlayButtonImage" object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"setPauseButtonImage" object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"setSongTitle" object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"initSongInfo" object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"createReflection" object:nil];
-	
-	[pageControlViewController viewDidDisappear:NO];
-	[pageControlViewController release]; pageControlViewController = nil;
-	[playButton release]; playButton = nil;
-	[nextButton release]; nextButton = nil;
-	[prevButton release]; prevButton = nil;
-	[volumeSlider release]; volumeSlider = nil;
-	[coverArtImageView release]; coverArtImageView = nil;
-	[songInfoToggleButton release]; songInfoToggleButton = nil;
-	[reflectionView release]; reflectionView = nil;
-	[pageControlViewController release]; pageControlViewController = nil;
 }
 
 #pragma mark Memory Management
@@ -288,9 +267,23 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 // Releases instance memory.
 //
 - (void)dealloc
-{
-	NSLog(@"player dealloc called");
+{	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"setPlayButtonImage" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"setPauseButtonImage" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"setSongTitle" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackStart object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"createReflection" object:nil];
 	
+	[pageControlViewController viewDidDisappear:NO];
+	[pageControlViewController release]; pageControlViewController = nil;
+	[playButton release]; playButton = nil;
+	[nextButton release]; nextButton = nil;
+	[prevButton release]; prevButton = nil;
+	[volumeSlider release]; volumeSlider = nil;
+	[coverArtImageView release]; coverArtImageView = nil;
+	[songInfoToggleButton release]; songInfoToggleButton = nil;
+	[reflectionView release]; reflectionView = nil;
+	[pageControlViewController release]; pageControlViewController = nil;
 	[super dealloc];
 }
 
@@ -546,7 +539,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		UIGraphicsBeginImageContextWithOptions(CGSizeMake(30.0, 30.0), NO, 0.0);
 	else
 		UIGraphicsBeginImageContext(CGSizeMake(30.0, 30.0));
-	DLog(@"coverArtImageView.image: %@", coverArtImageView.image);
+	//DLog(@"coverArtImageView.image: %@", coverArtImageView.image);
 	[coverArtImageView.image drawInRect:CGRectMake(0, 0,30.0, 30.0)];
 	UIImage *cover = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
@@ -569,7 +562,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (IBAction)songInfoToggle:(id)sender
 {
-	NSLog(@"songInfoToggle called");
 	if (!isFlipped)
 	{
 		songInfoToggleButton.userInteractionEnabled = NO;
@@ -648,7 +640,16 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	}
 	else
 	{
-		[musicControls playPauseSong];
+		[bassWrapper playPause];
+		
+		if (bassWrapper.isPlaying)
+		{
+			[[NSNotificationCenter defaultCenter] postNotificationName:@"setPauseButtonImage" object:nil];
+		}
+		else
+		{
+			[[NSNotificationCenter defaultCenter] postNotificationName:@"setPlayButtonImage" object:nil];
+		}
 	}
 }
 
@@ -656,8 +657,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {
 	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
 	
-	DLog(@"track position: %f", musicControls.streamer.progress);
-	if (musicControls.streamer.progress > 10.0)
+	DLog(@"track position: %f", bassWrapper.progress);
+	if (bassWrapper.progress > 10.0)
 	{
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			[musicControls jukeboxPlaySongAtPosition:dataModel.currentIndex];
@@ -774,11 +775,25 @@ CGContextRef MyCreateBitmapContextPlayer(int pixelsWide, int pixelsHigh)
 	}
 	else
 	{
-		DLog(@"It's not flipped, creating the reflection");
+		//DLog(@"It's not flipped, creating the reflection");
 		// create the reflection image and assign it to the UIImageView
 		reflectionView.image = [self reflectedImage:coverArtImageView withHeight:reflectionHeight];
 		reflectionView.alpha = kDefaultReflectionOpacity;
 	}
 }
+
+- (IBAction)showEq:(id)sender
+{
+	if (isFlipped)
+		[self songInfoToggle:nil];
+	
+	EqualizerViewController *eqView = [[EqualizerViewController alloc] initWithNibName:@"EqualizerViewController" bundle:nil];
+	eqView.modalPresentationStyle = UIModalPresentationFormSheet;
+	[self presentModalViewController:eqView animated:YES];
+	//[appDelegate.currentTabBarController presentModalViewController:eqView animated:NO];
+	
+	//[self songInfoToggle];
+}
+
 
 @end

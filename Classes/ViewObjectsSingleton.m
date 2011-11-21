@@ -332,7 +332,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 	//if (![[appDelegate.settingsDictionary objectForKey:@"enableSongsTabSetting"] isEqualToString:@"YES"]) 
 	if (![SavedSettings sharedInstance].isSongsTabEnabled)
 	{
-		DLog(@"isSongsTabEnabled: %i", [SavedSettings sharedInstance].isSongsTabEnabled);
+		//DLog(@"isSongsTabEnabled: %i", [SavedSettings sharedInstance].isSongsTabEnabled);
 		NSMutableArray *tabs = [[NSMutableArray alloc] init];
 		for (UIViewController *controller in appDelegate.mainTabBarController.viewControllers)
 		{

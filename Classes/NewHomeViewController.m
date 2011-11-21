@@ -122,7 +122,7 @@
 	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settings)] autorelease];
 
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jukeboxOff) name:@"JukeboxTurnedOff" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) name:@"initSongInfo" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) name:ISMSNotification_SongPlaybackStart object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(performServerShuffle:) name:@"performServerShuffle" object:nil];
 
 	if (!IS_IPAD())
@@ -453,7 +453,6 @@
 
 - (IBAction)player
 {
-	musicControls.isNewSong = NO;
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
@@ -812,7 +811,7 @@
 		[databaseControls resetCurrentPlaylistDb];
 		for(Song *aSong in parser.listOfSongs)
 		{
-			[databaseControls addSongToPlaylistQueue:aSong];
+			[aSong addToPlaylistQueue];
 			//[databaseControls insertSong:aSong intoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 		}
 		
@@ -822,7 +821,6 @@
 		//musicControls.currentSongObject = [databaseControls songFromDbRow:0 inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 		//musicControls.nextSongObject = [databaseControls songFromDbRow:1 inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 		
-		musicControls.isNewSong = YES;
 		musicControls.isShuffle = NO;
 		
 		// Hide the loading screen

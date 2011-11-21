@@ -223,9 +223,9 @@
 					Song *aSong = [[Song alloc] initWithAttributeDict:attributeDict];
 					
 					//Add song object to lookup dictionary
-					if ( aSong.path )
+					if (aSong.path)
 					{
-						[databaseControls insertSongIntoFolderCache:aSong forId:myId];
+						[aSong insertIntoFolderCacheForFolderId:myId];
 					}
 					
 					[aSong release];

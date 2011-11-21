@@ -6,9 +6,6 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-
-
-
 @interface SavedSettings : NSObject 
 {
 	NSUserDefaults *userDefaults;

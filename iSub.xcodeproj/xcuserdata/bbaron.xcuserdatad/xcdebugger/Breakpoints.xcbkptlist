@@ -33,11 +33,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioStreamer.m"
-         timestampString = "343002733.924922"
+         timestampString = "343199990.817687"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1793"
-         endingLineNumber = "1793"
+         startingLineNumber = "1795"
+         endingLineNumber = "1795"
          landmarkName = "-handlePropertyChangeForFileStream:fileStreamPropertyID:ioFlags:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -70,31 +70,45 @@
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
-         shouldBeEnabled = "Yes"
+         shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "Classes/RootViewController.m"
-         timestampString = "341804866.049365"
+         filePath = "Classes/FMResultSet.m"
+         timestampString = "343170703.68024"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "325"
-         endingLineNumber = "325"
-         landmarkName = "-doneSearching_Clicked:"
+         startingLineNumber = "200"
+         endingLineNumber = "200"
+         landmarkName = "-columnIndexForName:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
-         shouldBeEnabled = "Yes"
+         shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "Classes/RootViewController.m"
-         timestampString = "341804866.049365"
+         filePath = "Classes/FMDatabase.m"
+         timestampString = "343171066.155437"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "330"
-         endingLineNumber = "330"
-         landmarkName = "-doneSearching_Clicked:"
+         startingLineNumber = "238"
+         endingLineNumber = "238"
+         landmarkName = "-databaseExists"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/FMDatabase.m"
+         timestampString = "343432428.427747"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "225"
+         endingLineNumber = "225"
+         landmarkName = "-warnInUse"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

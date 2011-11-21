@@ -74,21 +74,26 @@
 		titleLabel.textAlignment = UITextAlignmentCenter;
 		titleLabel.text = @"Lyrics";
 		[textView addSubview:titleLabel];
-		[titleLabel release];		
+		[titleLabel release];	
+		
+		//DLog(@"textView: %@", textView.layer);
+		//DLog(@"titleLabel: %@", titleLabel.layer);
 		
 		[self viewDidLoad];
     }
     return self;
 }
 
-- (void)viewDidLoad 
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super viewDidLoad];
+	[super viewDidAppear:animated];
+	
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLyricsLabel) name:@"lyricsDoneLoading" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidUnload) name:@"hideSongInfoFast" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidUnload) name:@"hideSongInfo" object:nil];
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -106,16 +111,14 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"lyricsDoneLoading" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfoFast" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfo" object:nil];
-}
-
-- (void)viewDidUnload 
-{
-    [super viewDidUnload];
+	
+	[dataModel cancelLoad];
 }
 
 - (void)dealloc 
 {
 	[textView release]; textView = nil;
+	[dataModel release]; dataModel = nil;
     [super dealloc];
     
 }

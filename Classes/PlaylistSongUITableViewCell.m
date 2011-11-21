@@ -13,6 +13,7 @@
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
 #import "CellOverlay.h"
+#import "Song.h"
 
 @implementation PlaylistSongUITableViewCell
 
@@ -75,7 +76,7 @@
 // Empty function
 - (void)toggleDelete
 {
-	[databaseControls addSongToCacheQueue:[viewObjects.listOfPlaylistSongs objectAtIndex:indexPath.row]];
+	[[viewObjects.listOfPlaylistSongs objectAtIndex:indexPath.row] addToCacheQueue];
 	
 	overlayView.downloadButton.alpha = .3;
 	overlayView.downloadButton.enabled = NO;
@@ -94,17 +95,17 @@
 	Song *aSong;
 	if (viewObjects.isLocalPlaylist)
 	{
-		aSong = [databaseControls songFromDbRow:indexPath.row 
+		aSong = [Song songFromDbRow:indexPath.row 
 										inTable:[NSString stringWithFormat:@"playlist%@", playlistMD5] 
 									 inDatabase:databaseControls.localPlaylistsDb];
 	}
 	else
 	{
-		aSong = [databaseControls songFromServerPlaylistId:playlistMD5 row:indexPath.row];
+		aSong = [Song songFromServerPlaylistId:playlistMD5 row:indexPath.row];
 	}
 	
 	//Song *aSong = [viewObjects.listOfPlaylistSongs objectAtIndex:indexPath.row];
-	[databaseControls addSongToCacheQueue:aSong];
+	[aSong addToCacheQueue];
 	
 	overlayView.downloadButton.alpha = .3;
 	overlayView.downloadButton.enabled = NO;
@@ -123,13 +124,13 @@
 	Song *aSong;
 	if (viewObjects.isLocalPlaylist)
 	{
-		aSong = [databaseControls songFromDbRow:indexPath.row 
+		aSong = [Song songFromDbRow:indexPath.row 
 										inTable:[NSString stringWithFormat:@"playlist%@", playlistMD5] 
 									 inDatabase:databaseControls.localPlaylistsDb];
 	}
 	else
 	{
-		aSong = [databaseControls songFromServerPlaylistId:playlistMD5 row:indexPath.row];
+		aSong = [Song songFromServerPlaylistId:playlistMD5 row:indexPath.row];
 	}
 	
 	//Song *aSong = [viewObjects.listOfPlaylistSongs objectAtIndex:indexPath.row];

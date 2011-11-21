@@ -17,6 +17,11 @@
 
 - (void)cancelAllStreams;
 - (void)cancelStreamAtIndex:(NSUInteger)index;
+- (void)cancelStream:(SUSStreamHandler *)handler;
+
+- (void)removeAllStreams;
+- (void)removeStreamAtIndex:(NSUInteger)index;
+- (void)removeStream:(SUSStreamHandler *)handler;
 
 - (void)queueStreamForSong:(Song *)song offset:(NSUInteger)byteOffset atIndex:(NSUInteger)index;
 

@@ -11,7 +11,6 @@
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
 #import "iSubAppDelegate.h"
-#import "AudioStreamer.h"
 #import "math.h"
 #import "Song.h"
 #import "FMDatabase.h"
@@ -26,12 +25,16 @@
 #import "NSString-time.h"
 #import "SUSStreamSingleton.h"
 #import "SUSCurrentPlaylistDAO.h"
+#import "BassWrapperSingleton.h"
+#import "NSArray+FirstObject.h"
+#import "SUSStreamHandler.h"
+#import "EqualizerViewController.h"
 
 //#define downloadProgressWidth (progressSlider.frame.size.width + 4)
 #define downloadProgressWidth progressSlider.frame.size.width
 
 @implementation SongInfoViewController
-@synthesize progressSlider, downloadProgress, elapsedTimeLabel, remainingTimeLabel, artistLabel, albumLabel, titleLabel, trackLabel, yearLabel, genreLabel, bitRateLabel, lengthLabel, repeatButton, bookmarkButton, shuffleButton, progressTimer;
+@synthesize progressSlider, downloadProgress, elapsedTimeLabel, remainingTimeLabel, artistLabel, albumLabel, titleLabel, trackLabel, yearLabel, genreLabel, bitRateLabel, lengthLabel, repeatButton, bookmarkButton, shuffleButton, progressTimer, currentSong, songInfoToggleButton, progressLabelBackground, progressLabel, bookmarkCountLabel;
 
 
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -51,7 +54,8 @@
 	return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad 
+{
     [super viewDidLoad];
 	
 	downloadProgress = [[UIView alloc] initWithFrame:progressSlider.frame];
@@ -72,26 +76,17 @@
 	//progressSlider.layer.transform = CATransform3DMakeScale(1.0, 2.0, 1.0);
 	/////
 	
+	[self updateSlider];
 	[self initInfo];
 	
 	[self.view newY:0];
 	[self.view newX:-320];
 	
-	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+	progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateSlider) userInfo:nil repeats:YES];
+	bitrateTimer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(updateBitrateLabel) userInfo:nil repeats:YES];
 	
-	NSInteger bookmarkCount = [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId];
-	if (bookmarkCount > 0)
-	{
-		bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", bookmarkCount];
-		if (IS_IPAD())
-			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on-ipad.png"];
-		else
-			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
-	}
-	
-	progressTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(updateSlider) userInfo:nil repeats:YES];
 	pauseSlider = NO;
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initInfo) name:@"initSongInfo" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initInfo) name:ISMSNotification_SongPlaybackStart object:nil];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidUnload) name:@"hideSongInfoFast" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidUnload) name:@"hideSongInfo" object:nil];
@@ -103,7 +98,7 @@
 	else
 	{
 		// Setup the update timer for the song download progress bar
-		updateTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateDownloadProgress) userInfo:nil repeats:YES];
+		updateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateDownloadProgress) userInfo:nil repeats:YES];
 		[downloadProgress newWidth:0.0];
 		//[downloadProgress newX:70.0];
 		//if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
@@ -113,25 +108,38 @@
 		
 		[self updateDownloadProgress];
 	}
-}
-
-- (void) viewDidUnload 
-{
-	[super viewDidUnload];
 	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfoFast" object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfo" object:nil];
-	 
-	[progressTimer invalidate]; progressTimer = nil;
-	
-	[updateTimer invalidate]; updateTimer = nil;
+	/*DLog(@"songInfoToggleButton: %@", songInfoToggleButton.layer);
+	DLog(@"progressSlider: %@", progressSlider.layer);
+	DLog(@"progressLabel: %@", progressLabel.layer);
+	DLog(@"progressLabelBackground: %@", progressLabelBackground.layer);
+	DLog(@"downloadProgress: %@", downloadProgress.layer);
+	DLog(@"elapsedTimeLabel: %@", elapsedTimeLabel.layer);
+	DLog(@"remainingTimeLabel: %@", remainingTimeLabel.layer);
+	DLog(@"artistLabel: %@", artistLabel.layer);
+	DLog(@"albumLabel: %@", albumLabel.layer);
+	DLog(@"titleLabel: %@", titleLabel.layer);
+	DLog(@"trackLabel: %@", trackLabel.layer);
+	DLog(@"yearLabel: %@", yearLabel.layer);
+	DLog(@"genreLabel: %@", genreLabel.layer);
+	DLog(@"bitRateLabel: %@", bitRateLabel.layer);
+	DLog(@"lengthLabel: %@", lengthLabel.layer);
+	DLog(@"repeatButton: %@", repeatButton.layer);
+	DLog(@"bookmarkButton: %@", bookmarkButton.layer);
+	DLog(@"bookmarkCountLabel: %@", bookmarkCountLabel.layer);
+	DLog(@"shuffleButton: %@", shuffleButton.layer);
+	DLog(@"bookmarkNameTextField: %@", bookmarkNameTextField.layer);*/
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-	NSLog(@"SongInfoView viewDidDisappear called");
-
 	[super viewDidDisappear:animated];
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackStart object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfoFast" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfo" object:nil];
+	
+	// TODO: Re-enable later
 	[songInfoToggleButton release]; songInfoToggleButton = nil;
 	[progressSlider release]; progressSlider = nil;
 	[progressLabel release]; progressLabel = nil;
@@ -148,15 +156,16 @@
 	[lengthLabel release]; lengthLabel = nil;
 	[repeatButton release]; repeatButton = nil;
 	[shuffleButton release]; shuffleButton = nil;
+		
+	[progressTimer invalidate]; progressTimer = nil;
+	[bitrateTimer invalidate]; bitrateTimer = nil;
+	[updateTimer invalidate]; updateTimer = nil;
 }
 
-
-- (void)dealloc {
-	NSLog(@"SongInfoView dealloc called");
-	
+- (void)dealloc
+{	
     [super dealloc];
 }
-
 
 - (void)didReceiveMemoryWarning 
 {
@@ -164,15 +173,19 @@
     [super didReceiveMemoryWarning];
 }
 
+- (void)updateBitrateLabel
+{
+	bitRateLabel.text = [NSString stringWithFormat:@"Bit Rate: %i kbps", [BassWrapperSingleton sharedInstance].bitRate];
+}
 
-- (void) initInfo
+- (void)initInfo
 {
 	hasMoved = NO;
 	oldPosition = 0.0;
 	
 	progressSlider.minimumValue = 0.0;
 	
-	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+	self.currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
 	
 	if (currentSong.duration && ![SavedSettings sharedInstance].isJukeboxEnabled)
 	{
@@ -188,10 +201,10 @@
 	artistLabel.text = currentSong.artist;
 	titleLabel.text = currentSong.title;
 	
-	if (currentSong.bitRate)
-		bitRateLabel.text = [NSString stringWithFormat:@"Bit Rate: %@ kbps", [currentSong.bitRate stringValue]];
-	else
-		bitRateLabel.text = @"";
+	//if (currentSong.bitRate)
+		bitRateLabel.text = [NSString stringWithFormat:@"Bit Rate: %i kbps", [BassWrapperSingleton sharedInstance].bitRate]; //]] [currentSong.bitRate stringValue]];
+	//else
+	//	bitRateLabel.text = @"";
 		
 	if (currentSong.duration)
 		lengthLabel.text = [NSString stringWithFormat:@"Length: %@", [NSString formatTime:[currentSong.duration floatValue]]];
@@ -258,36 +271,32 @@
 		else
 			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark.png"];
 	}
-
 }
 
 
-- (void) updateDownloadProgress
+- (void)updateDownloadProgress
 {
 	// Set the current song progress bar
 	if (musicControls.isTempDownload)
 	{
 		downloadProgress.hidden = YES;
-		//CGRect frame = downloadProgress.frame;
-		//downloadProgress.frame = CGRectMake(frame.origin.x, frame.origin.y, 0.0, frame.size.height);
 	}
 	else
 	{
 		downloadProgress.hidden = NO;
-		//float width = ([musicControls findCurrentSongProgress] * downloadProgressWidth) + 5.0;
+		
 		float width = ([musicControls findCurrentSongProgress] * downloadProgressWidth);
 		if (width > downloadProgressWidth)
+		{
 			width = downloadProgressWidth;
+		}
 		[downloadProgress newWidth:width];
-		//DLog(@"width %f", width);
 	}	
 }
 
 
-- (void) updateSlider
-{
-	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
-	
+- (void)updateSlider
+{	
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		elapsedTimeLabel.text = [NSString formatTime:0];
@@ -297,25 +306,35 @@
 		
 		return;
 	}
+
+	BassWrapperSingleton *bassWrapper = [BassWrapperSingleton sharedInstance];
+	bitRateLabel.text = [NSString stringWithFormat:@"Bit Rate: %i kbps", bassWrapper.bitRate];
 	
 	if (!pauseSlider)
 	{
-		if(currentSong.duration)
+		/*if(currentSong.duration)
 		{
 			CGRect frame = self.view.frame;
 			if (frame.origin.x == 0)
 			{
-				progressSlider.value = [musicControls.streamer progress];
-				elapsedTimeLabel.text = [NSString formatTime:[musicControls.streamer progress]];
-				remainingTimeLabel.text = [NSString stringWithFormat:@"-%@",[NSString formatTime:([currentSong.duration floatValue] - [musicControls.streamer progress])]];
+				progressSlider.value = bassWrapper.progress;
+				elapsedTimeLabel.text = [NSString formatTime:bassWrapper.progress];
+				remainingTimeLabel.text = [NSString stringWithFormat:@"-%@",[NSString formatTime:([currentSong.duration floatValue] - bassWrapper.progress)]];
 			}
 		}
 		else 
 		{
-			musicControls.streamerProgress = [musicControls.streamer progress];
-			elapsedTimeLabel.text = [NSString formatTime:[musicControls.streamer progress]];
+			progressSlider.value = 0.0;
+			elapsedTimeLabel.text = [NSString formatTime:bassWrapper.progress];
 			remainingTimeLabel.text = [NSString formatTime:0];
-		}
+		}*/
+		
+		NSString *elapsedTime = [NSString formatTime:bassWrapper.progress];
+		NSString *remainingTime = [NSString formatTime:([currentSong.duration floatValue] - bassWrapper.progress)];
+		
+		progressSlider.value = 0.0;
+		elapsedTimeLabel.text = elapsedTime;
+		remainingTimeLabel.text =[@"-" stringByAppendingString:remainingTime];
 	}
 }
 
@@ -343,102 +362,54 @@
 
 
 - (IBAction) movedSlider
-{
-	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
-	
-	// Don't allow seeking of m4a's
-	BOOL isM4A = NO;
-	if (currentSong.transcodedSuffix)
+{	
+	if (!hasMoved)
 	{
-		if ([currentSong.transcodedSuffix isEqualToString:@"m4a"] || [currentSong.transcodedSuffix isEqualToString:@"aac"])
-			isM4A = YES;
-	}
-	else
-	{
-		if ([currentSong.suffix isEqualToString:@"m4a"] || [currentSong.suffix isEqualToString:@"aac"])
-			isM4A = YES;
-	}
-	
-	if (isM4A)
-	{
-		if (!hasMoved)
+		BassWrapperSingleton *bassWrapper = [BassWrapperSingleton sharedInstance];
+		
+		hasMoved = YES;
+		progressLabel.hidden = YES;
+		progressLabelBackground.hidden = YES;
+		
+		// Fix for skipping to end of file going to next song
+		// It seems that the max time is always off
+		if (progressSlider.value > (progressSlider.maximumValue - 8.0))
 		{
-			hasMoved = YES;
-			progressLabel.hidden = YES;
-			progressLabelBackground.hidden = YES;
-			pauseSlider = NO;
-
-			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sorry" message:@"It's currently not possible to skip within m4a files.\n\nYou can turn on m4a > mp3 transcoding in Subsonic to skip within this song." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-			[alert show];
-			[alert release];
+			float newValue = progressSlider.maximumValue - 8.0;
+			
+			if (newValue < 0.0)
+				newValue = 0.0;
+			
+			progressSlider.value = newValue;
 		}
-	}
-	else
-	{
-		if (!hasMoved)
+		
+		byteOffset = bassWrapper.bitRate * 128 * progressSlider.value;
+
+		DLog(@"byteOffset: %i", byteOffset);
+		
+		if (musicControls.isTempDownload)
 		{
-			hasMoved = YES;
-			progressLabel.hidden = YES;
-			progressLabelBackground.hidden = YES;
+			[musicControls destroyStreamer];
 			
-			// Fix for skipping to end of file going to next song
-			// It seems that the max time is always off
-			if (progressSlider.value > (progressSlider.maximumValue - 8.0))
+			//musicControls.seekTime = progressSlider.value;
+			[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong offset:byteOffset atIndex:0];
+			
+			pauseSlider = NO;
+			hasMoved = NO;
+		}
+		else 
+		{			
+			if (currentSong.isFullyCached || byteOffset <= currentSong.localFileSize)
 			{
-				float newValue = progressSlider.maximumValue - 8.0;
-				
-				if (newValue < 0.0)
-					newValue = 0.0;
-				
-				progressSlider.value = newValue;
-			}
-			
-			if (musicControls.bitRate < 1000)
-				byteOffset = ((float)musicControls.bitRate * 128 * progressSlider.value);
-			else
-				byteOffset = (((float)musicControls.bitRate / 1000) * 128 * progressSlider.value);
-			//DLog(@"byteOffset: %f", byteOffset);
-			
-			if (musicControls.isTempDownload)
-			{
-				[musicControls destroyStreamer];
-				musicControls.isPlaying = YES;
-				
-				//musicControls.seekTime = progressSlider.value;
-				[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong offset:byteOffset atIndex:0];
-				
+				[bassWrapper seekToPositionInBytes:byteOffset];
 				pauseSlider = NO;
 				hasMoved = NO;
 			}
-			else 
+			else
 			{
-				if (musicControls.streamer.fileDownloadComplete)
-				{
-					//DLog(@"skipping to area within cached song inside if");
-					[musicControls.streamer startWithOffsetInSecs:(UInt32)progressSlider.value];
-					musicControls.streamer.fileDownloadComplete = YES;
-					pauseSlider = NO;
-					hasMoved = NO;
-				}
-				else
-				{
-					//DLog(@"------------- byteOffset: %i", (int)byteOffset);
-					//DLog(@"------------- fileDownloadCurrentSize: %i", musicControls.streamer.fileDownloadCurrentSize);
-					if ((int)byteOffset > musicControls.streamer.fileDownloadCurrentSize)
-					{
-						//DLog(@"fileDownloadCurrentSize inside else: %i", musicControls.streamer.fileDownloadCurrentSize);
-						UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Past Cache Point" message:@"You are trying to skip further than the song has cached. You can do this, but the song won't be cached. Or you can wait a little bit for the cache to catch up." delegate:self cancelButtonTitle:@"Wait" otherButtonTitles:@"OK", nil];
-						[alert show];
-						[alert release];
-					}
-					else
-					{
-						//DLog(@"skipping to area within cached song inside else");
-						[musicControls.streamer startWithOffsetInSecs:(UInt32)progressSlider.value];
-						pauseSlider = NO;
-						hasMoved = NO;
-					}
-				}
+				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Past Cache Point" message:@"You are trying to skip further than the song has cached. You can do this, but the song won't be cached. Or you can wait a little bit for the cache to catch up." delegate:self cancelButtonTitle:@"Wait" otherButtonTitles:@"OK", nil];
+				[alert show];
+				[alert release];
 			}
 		}
 	}
@@ -500,9 +471,7 @@
 
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
-	
+{	
 	if ([alertView.title isEqualToString:@"Sorry"])
 	{
 		hasMoved = NO;
@@ -516,11 +485,13 @@
 		}
 		else if(buttonIndex == 1)
 		{
-			[musicControls destroyStreamer];
-			musicControls.isPlaying = YES;
-			//musicControls.seekTime = progressSlider.value;
-			//DLog(@"seekTime: %f", musicControls.seekTime);
+			[[SUSStreamSingleton sharedInstance] removeStreamAtIndex:0];
 			[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong offset:byteOffset atIndex:0];
+			if ([[SUSStreamSingleton sharedInstance].handlerStack count] > 1)
+			{
+				SUSStreamHandler *handler = [[SUSStreamSingleton sharedInstance].handlerStack firstObject];
+				[handler start];
+			}
 			pauseSlider = NO;
 			hasMoved = NO;
 		}
@@ -535,9 +506,8 @@
 			if ([databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE name = ?", bookmarkNameTextField.text] == 0)
 			{
 				// Bookmark doesn't exist so save it
-				Song *aSong = currentSong;
-				[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarks (name, position, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
-				bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", aSong.songId]];
+				[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarks (name, position, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size];
+				bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]];
 				if (IS_IPAD())
 					bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on-ipad.png"];
 				else
@@ -557,10 +527,9 @@
 		if(buttonIndex == 1)
 		{
 			// Overwrite the bookmark
-			Song *aSong = currentSong;
 			[databaseControls.bookmarksDb executeUpdate:@"DELETE FROM bookmarks WHERE name = ?", bookmarkNameTextField.text];
-			[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarks (name, position, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", bookmarkNameTextField.text, [NSNumber numberWithInt:(int)progressSlider.value], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
-			bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", aSong.songId]];
+			[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarks (name, position, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", bookmarkNameTextField.text, [NSNumber numberWithInt:(int)progressSlider.value], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size];
+			bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]];
 			if (IS_IPAD())
 				bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on-ipad.png"];
 			else
@@ -576,14 +545,13 @@
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 
 	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
-	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
 	
 	NSNumber *oldPlaylistPosition = [NSNumber numberWithInt:(dataModel.currentIndex + 1)];
 	dataModel.currentIndex = 0;
 	musicControls.isShuffle = YES;
 	
 	[databaseControls resetShufflePlaylist];
-	[databaseControls addSongToShuffleQueue:currentSong];
+	[currentSong addToShuffleQueue];
 	//[databaseControls insertSong:musicControls.currentSongObject intoTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
 	
 	/*if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -662,8 +630,6 @@
 		[self performSelectorInBackground:@selector(performShuffle) withObject:nil];
 	}
 }
-
-
 
 @end
 

@@ -76,14 +76,14 @@
 {
 	if (isSearching) 
 	{
-		Song *aSong = [[databaseControls songFromDbRow:indexPath.row inTable:@"allSongsSearch" inDatabase:databaseControls.allSongsDb] retain];
-		[databaseControls addSongToCacheQueue:aSong];
+		Song *aSong = [[Song songFromDbRow:indexPath.row inTable:@"allSongsSearch" inDatabase:databaseControls.allSongsDb] retain];
+		[aSong addToCacheQueue];
 		[aSong release];
 	}
 	else 
 	{
-		Song *aSong = [[databaseControls songFromDbRow:indexPath.row inTable:@"allSongs" inDatabase:databaseControls.allSongsDb] retain];
-		[databaseControls addSongToCacheQueue:aSong];
+		Song *aSong = [[Song songFromDbRow:indexPath.row inTable:@"allSongs" inDatabase:databaseControls.allSongsDb] retain];
+		[aSong addToCacheQueue];
 		[aSong release];
 	}
 	
@@ -103,12 +103,12 @@
 {	
 	if (isSearching) 
 	{
-		Song *aSong = [databaseControls songFromDbRow:indexPath.row inTable:@"allSongsSearch" inDatabase:databaseControls.allSongsDb];
+		Song *aSong = [Song songFromDbRow:indexPath.row inTable:@"allSongsSearch" inDatabase:databaseControls.allSongsDb];
 		[databaseControls queueSong:aSong];
 	}
 	else 
 	{
-		Song *aSong = [databaseControls songFromDbRow:indexPath.row inTable:@"allSongs" inDatabase:databaseControls.allSongsDb];
+		Song *aSong = [Song songFromDbRow:indexPath.row inTable:@"allSongs" inDatabase:databaseControls.allSongsDb];
 		[databaseControls queueSong:aSong];
 	}
 	

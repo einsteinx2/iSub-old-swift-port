@@ -9,11 +9,12 @@
 
 @class iSubAppDelegate;
 
+@class PagingScrollView;
 @interface PageControlViewController : UIViewController <UIScrollViewDelegate>
 {
 	iSubAppDelegate *appDelegate;
 	
-	UIScrollView *scrollView;
+	PagingScrollView *scrollView;
 	UIPageControl *pageControl;
 	NSMutableArray *viewControllers;
 	
@@ -27,6 +28,7 @@
 @property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, retain) IBOutlet UIPageControl *pageControl;
 @property (nonatomic, retain) NSMutableArray *viewControllers;
+
 
 - (IBAction)changePage:(id)sender;
 - (void)showSongInfo;

@@ -105,8 +105,8 @@
 	int count = [databaseControls.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", md5]];
 	for (int i = 0; i < count; i++)
 	{
-		Song *aSong = [databaseControls songFromDbRow:i inTable:[NSString stringWithFormat:@"playlist%@", md5] inDatabase:databaseControls.localPlaylistsDb];
-		[databaseControls addSongToCacheQueue:aSong];
+		Song *aSong = [Song songFromDbRow:i inTable:[NSString stringWithFormat:@"playlist%@", md5] inDatabase:databaseControls.localPlaylistsDb];
+		[aSong addToCacheQueue];
 	}
 	
 	if (musicControls.isQueueListDownloading == NO)

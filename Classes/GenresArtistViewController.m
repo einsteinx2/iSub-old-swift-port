@@ -137,7 +137,6 @@
 
 - (IBAction)nowPlayingAction:(id)sender
 {
-	musicControls.isNewSong = NO;
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
@@ -167,9 +166,7 @@
 
 - (void)showPlayer
 {
-	// Start the player
-	musicControls.isNewSong = YES;
-	
+	// Start the player	
 	[musicControls playSongAtPosition:0];
 	
 	if (IS_IPAD())
@@ -210,9 +207,9 @@
 		if ([result stringForColumnIndex:0] != nil)
 		{
 			NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
-			Song *aSong = [databaseControls songFromGenreDb:songIdMD5];
+			Song *aSong = [Song songFromGenreDb:songIdMD5];
 			
-			[databaseControls addSongToPlaylistQueue:aSong];
+			[aSong addToPlaylistQueue];
 		}		
 		
 		[pool release];
@@ -256,9 +253,9 @@
 		if ([result stringForColumnIndex:0] != nil)
 		{
 			NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
-			Song *aSong = [databaseControls songFromGenreDb:songIdMD5];
+			Song *aSong = [Song songFromGenreDb:songIdMD5];
 			
-			[databaseControls addSongToPlaylistQueue:aSong];
+			[aSong addToPlaylistQueue];
 		}
 		
 		[pool release];

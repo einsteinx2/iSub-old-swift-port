@@ -20,13 +20,13 @@
 #import "SavedSettings.h"
 #import "NSString-time.h"
 #import "SUSCurrentPlaylistDAO.h"
+#import "BassWrapperSingleton.h"
 
 @implementation CurrentPlaylistViewController
 @synthesize dataModel;
 
 #pragma mark -
 #pragma mark View lifecycle
-
 
 - (void)viewDidLoad 
 {
@@ -47,7 +47,7 @@
 		//viewObjects.multiDeleteList = nil; viewObjects.multiDeleteList = [[NSMutableArray alloc] init];
 		goToNextSong = NO;
 		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:@"initSongInfo" object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_SongPlaybackStart object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:@"reloadPlaylist" object:nil];
 		
 		if ([databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"] > 0)
@@ -56,7 +56,7 @@
 		}
 		
 		// Setup header view
-		headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)] autorelease];
+		headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
 		headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
 		
 		savePlaylistLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 227, 34)];
@@ -171,8 +171,53 @@
 		[noPlaylistsScreen release];
 	}
 
+	/*DLog(@"headerView: %@", headerView.layer);
+	DLog(@"savePlaylistLabel: %@", savePlaylistLabel.layer);
+	DLog(@"deleteSongsLabel: %@", deleteSongsLabel.layer);
+	DLog(@"playlistCountLabel: %@", playlistCountLabel.layer);
+	DLog(@"savePlaylistButton: %@", savePlaylistButton.layer);
+	DLog(@"editPlaylistLabel: %@", editPlaylistLabel.layer);
+	DLog(@"playlistNameTextField: %@", playlistNameTextField.layer);*/
 }
 
+- (void)viewWillAppear:(BOOL)animated 
+{
+	[super viewWillAppear:animated];
+	
+	[self selectRow];
+}
+
+- (void)viewWillDisappear:(BOOL)animated 
+{
+    [super viewWillDisappear:animated];
+	
+	if (viewObjects.isEditing)
+	{
+		// Clear the edit stuff if they switch tabs in the middle of editing
+		viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+		viewObjects.isEditing = NO;
+		self.tableView.editing = NO;
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
+	}
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideEditControls" object:nil];
+	
+	[headerView release]; headerView = nil;
+}
+
+- (void)didReceiveMemoryWarning 
+{
+	// Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+}
+
+- (void)dealloc 
+{
+    [super dealloc];
+}
+
+#pragma mark -
 
 - (void) editPlaylistAction:(id)sender
 {
@@ -213,46 +258,39 @@
 		if (goToNextSong)
 		{
 			goToNextSong = NO;
-			if (musicControls.streamer)
+			if ([BassWrapperSingleton sharedInstance].isPlaying)
 			{
-				if ([musicControls.streamer isPlaying])
+				if ([databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"] > 0)
 				{
-					if ([databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"] > 0)
-					{
-						[musicControls nextSong];
-					}
-					else
-					{
-						[musicControls destroyStreamer];
-						// Pop to root view controller doesn't work for nav controllers inside more tab //
-					}
+					[musicControls nextSong];
+				}
+				else
+				{
+					[musicControls destroyStreamer];
+					// Pop to root view controller doesn't work for nav controllers inside more tab //
 				}
 			}
 		}
 		
 		// Reload the table to correct the numbers
 		[self.tableView reloadData];
-		if (musicControls.streamer)
+
+		@try 
 		{
-			@try 
-			{
-				[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:dataModel.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
-			}
-			@catch (NSException *exception) 
-			{
-				//DLog(@"main: Caught %@: %@", [exception name], [exception reason]);
-			}
+			[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:dataModel.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
+		}
+		@catch (NSException *exception) 
+		{
+			//DLog(@"main: Caught %@: %@", [exception name], [exception reason]);
 		}
 	}
 }
-
 
 - (void) hideEditControls
 {
 	if (self.tableView.editing == YES)
 		[self editPlaylistAction:nil];
 }
-
 
 - (void) showDeleteButton
 {
@@ -273,7 +311,6 @@
 	playlistCountLabel.hidden = YES;
 	deleteSongsLabel.hidden = NO;
 }
-
 
 - (void) hideDeleteButton
 {
@@ -300,7 +337,6 @@
 	}
 }
 
-
 - (void) showDeleteToggle
 {
 	// Show the delete toggle for already visible cells
@@ -309,7 +345,6 @@
 		[[cell deleteToggleImage] setHidden:NO];
 	}
 }
-
 
 - (void) savePlaylistAction:(id)sender
 {
@@ -324,6 +359,7 @@
 			playlistNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 22.0)];
 			[playlistNameTextField setBackgroundColor:[UIColor whiteColor]];
 			[myAlertView addSubview:playlistNameTextField];
+			[playlistNameTextField release];
 			if ([[[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."] objectAtIndex:0] isEqualToString:@"3"])
 			{
 				CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 100.0);
@@ -458,7 +494,6 @@
 	}
 }
 
-
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if([alertView.title isEqualToString:@"Playlist Name:"])
@@ -515,7 +550,6 @@
 	playlistCountLabel.backgroundColor = [UIColor clearColor];
 }
 
-
 - (void)selectRow
 {
 	[self.tableView reloadData];
@@ -531,38 +565,6 @@
 		}
 	}
 }
-
-
-- (void)viewWillAppear:(BOOL)animated 
-{
-	[self selectRow];
-			
-	[super viewWillAppear:animated];
-}
-
-
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-
-
-- (void)viewWillDisappear:(BOOL)animated 
-{
-    [super viewWillDisappear:animated];
-	
-	if (viewObjects.isEditing)
-	{
-		// Clear the edit stuff if they switch tabs in the middle of editing
-		viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-		//viewObjects.multiDeleteList = nil; viewObjects.multiDeleteList = [[NSMutableArray alloc] init];
-		viewObjects.isEditing = NO;
-		self.tableView.editing = NO;
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
-	}
-}
-
 
 #pragma mark -
 #pragma mark Table view data source
@@ -599,14 +601,14 @@
 	Song *aSong;
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
-		aSong = [databaseControls songFromDbRow:indexPath.row inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
+		aSong = [Song songFromDbRow:indexPath.row inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 	}
 	else
 	{
 		if (musicControls.isShuffle)
-			aSong = [databaseControls songFromDbRow:indexPath.row inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
+			aSong = [Song songFromDbRow:indexPath.row inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
 		else
-			aSong = [databaseControls songFromDbRow:indexPath.row inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
+			aSong = [Song songFromDbRow:indexPath.row inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 	}
 	
 	cell.numberLabel.text = [NSString stringWithFormat:@"%i", (indexPath.row + 1)];
@@ -822,39 +824,6 @@
 {
 	[musicControls playSongAtPosition:indexPath.row];
 }
-
-
-#pragma mark -
-#pragma mark Memory management
-
-- (void)didReceiveMemoryWarning 
-{
-	// Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-}
-
-- (void)viewDidUnload {
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-    // For example: self.myOutlet = nil;
-	NSLog(@"CurrentPlaylistViewController viewDidUnload");
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideEditControls" object:nil];
-	[headerView release]; headerView = nil;
-	[savePlaylistLabel release]; savePlaylistLabel = nil;
-	[deleteSongsLabel release]; deleteSongsLabel = nil;
-	[playlistCountLabel release]; playlistCountLabel = nil;
-	[savePlaylistButton release]; savePlaylistButton = nil;
-	[editPlaylistLabel release]; editPlaylistLabel = nil;
-	
-	[playlistNameTextField release]; playlistNameTextField = nil;
-}
-
-
-- (void)dealloc {
-	NSLog(@"CurrentPlaylistViewController dealloc called");
-	
-    [super dealloc];
-}
-
 
 @end
 

@@ -6,9 +6,6 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "SUSErrorDomain.h"
-#import "ISMSErrorDomain.h"
-
 @interface NSError (ISMSError)
 
 + (NSError *)errorWithISMSCode:(NSInteger)code;

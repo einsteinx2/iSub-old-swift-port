@@ -22,7 +22,6 @@
 #import "Reachability.h"
 #import "URLCheckConnectionDelegate.h"
 #import "APICheckConnectionDelegate.h"
-#import "AudioStreamer.h"
 #import "UpdateXMLParser.h"
 #import "Album.h"
 #import "Song.h"
@@ -50,6 +49,8 @@
 
 #import "NSMutableURLRequest+SUS.h"
 #import "SUSStreamSingleton.h"
+
+#import "BassWrapperSingleton.h"
 
 @implementation iSubAppDelegate
 
@@ -95,12 +96,14 @@ void onUncaughtException(NSException* exception)
 	introController = nil;
 	showIntro = NO;
 
+	SavedSettings *settings = [SavedSettings sharedInstance];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	databaseControls = [DatabaseSingleton sharedInstance];
 	musicControls = [MusicSingleton sharedInstance];
 	socialControls = [SocialSingleton sharedInstance];
 	cacheControls = [CacheSingleton sharedInstance];
-	SavedSettings *settings = [SavedSettings sharedInstance];
+	
+	DLog(@"md5: %@", [settings.urlString md5]);
 	
 	[self loadFlurryAnalytics];
 	[self loadHockeyApp];
@@ -185,7 +188,7 @@ void onUncaughtException(NSException* exception)
 	[self checkServer];
     
 	// Recover current state if player was interrupted
-	[musicControls resumeSong];
+	//[musicControls resumeSong];
 }
 
 - (void)checkServer
@@ -263,7 +266,7 @@ void onUncaughtException(NSException* exception)
 
 - (void)SUSServerURLCheckPassed:(SUSServerURLChecker *)checker
 {
-    DLog(@"server check passed");
+    //DLog(@"server check passed");
     
     [checker release]; checker = nil;
 }
@@ -580,7 +583,7 @@ void onUncaughtException(NSException* exception)
 
 - (void)applicationWillResignActive:(UIApplication*)application
 {
-	DLog(@"applicationWillResignActive called");
+	//DLog(@"applicationWillResignActive called");
 	
 	//DLog(@"applicationWillResignActive finished");
 }
@@ -588,7 +591,7 @@ void onUncaughtException(NSException* exception)
 
 - (void)applicationDidBecomeActive:(UIApplication*)application
 {
-	DLog(@"applicationDidBecomeActive called");
+	//DLog(@"applicationDidBecomeActive called");
 	
 	//DLog(@"applicationDidBecomeActive finished");
 }
@@ -658,7 +661,7 @@ void onUncaughtException(NSException* exception)
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-	DLog(@"applicationWillEnterForeground called");
+	//DLog(@"applicationWillEnterForeground called");
 	
 	if ([[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)])
     {
@@ -674,7 +677,7 @@ void onUncaughtException(NSException* exception)
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-	DLog(@"applicationWillTerminate called");
+	//DLog(@"applicationWillTerminate called");
 	
 	if (IS_MULTITASKING())
 	{
@@ -682,6 +685,8 @@ void onUncaughtException(NSException* exception)
 	}
 	
 	[[SavedSettings sharedInstance] saveState];
+	
+	[[BassWrapperSingleton sharedInstance] bassFree];
 }
 
 #pragma mark -

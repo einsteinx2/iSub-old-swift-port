@@ -14,6 +14,7 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "CellOverlay.h"
+#import "Song.h"
 
 @implementation GenresSongUITableViewCell
 
@@ -86,7 +87,7 @@
 
 - (void)downloadAction
 {
-	[databaseControls addSongToCacheQueue:[databaseControls songFromGenreDb:md5]];	
+	[[Song songFromGenreDb:md5] addToCacheQueue];	
 		
 	overlayView.downloadButton.alpha = .3;
 	overlayView.downloadButton.enabled = NO;
@@ -103,7 +104,7 @@
 - (void)queueAction
 {
 	//DLog(@"queueAction");
-	[databaseControls addSongToPlaylistQueue:[databaseControls songFromGenreDb:md5]];
+	[[Song songFromGenreDb:md5] addToPlaylistQueue];
 	
 	[self hideOverlay];
 }

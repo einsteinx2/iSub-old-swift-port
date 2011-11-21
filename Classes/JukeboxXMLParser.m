@@ -102,7 +102,7 @@
 			aSong.size = [numberFormatter numberFromString:[attributeDict objectForKey:@"size"]];
 		
 		//[listOfSongs addObject:aSong];
-		[[DatabaseSingleton sharedInstance] addSongToPlaylistQueue:aSong];
+		[aSong addToPlaylistQueue];
 		
 		[aSong release];
 		[numberFormatter release];

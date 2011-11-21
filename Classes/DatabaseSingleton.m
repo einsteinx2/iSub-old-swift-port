@@ -37,46 +37,42 @@ static DatabaseSingleton *sharedInstance = nil;
 - (void)initDatabases
 {
 	NSString *urlStringMd5 = [[[SavedSettings sharedInstance] urlString] md5];
-	
-	//DLog(@"%@", [NSString stringWithFormat:@"%@/%@allAlbums.db", databaseFolderPath, urlStringMd5]);
-	
+		
 	// Only load Albums, Songs, and Genre databases if this is a newer device
-	//if (![[UIDevice currentDevice] isOldDevice])
-	//if ([[appDelegate.settingsDictionary objectForKey:@"enableSongsTabSetting"] isEqualToString:@"YES"])
 	if ([SavedSettings sharedInstance].isSongsTabEnabled)
 	{
 		// Setup the allAlbums database
 		allAlbumsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allAlbums.db", databaseFolderPath, urlStringMd5]] retain];
-		[allAlbumsDb executeUpdate:@"PRAGMA cache_size = 1"];
-		if ([allAlbumsDb open] == NO) { DLog(@"Could not open allAlbumsDb."); }
-		
-		/*DLog(@"allAlbumsDb: cache_size: %@   default_cache_size: %@", [allAlbumsDb stringForQuery:@"PRAGMA cache_size"], [allAlbumsDb stringForQuery:@"PRAGMA default_cache_size"]);
-		 
-		 FMResultSet *rs = [allAlbumsDb executeQuery:@"PRAGMA database_list"];
-		 while ([rs next]) {
-		 NSString *file = [rs stringForColumn:@"file"];
-		 DLog(@"1");
-		 DLog(@"database_list: %@", file);
-		 DLog(@"2");
-		 }
-		 
-		 FMResultSet *result = [allAlbumsDb executeQuery:@"PRAGMA cache_size"];
-		 [result next];
-		 DLog(@"cache_size: %@", [result stringForColumn:@"cach"]);
-		 [result close];
-		 [allAlbumsDb executeUpdate:@"PRAGMA default_cache_size = 10"];
-		 DLog(@"allAlbumsDb: cache_size: %i   default_cache_size: %i", [allAlbumsDb intForQuery:@"PRAGMA cache_size"], [allAlbumsDb intForQuery:@"PRAGMA default_cache_size"]);
-		 if ([allAlbumsDb open] == NO) { DLog(@"Could not open allAlbumsDb."); }*/
+		if ([allAlbumsDb open])
+		{
+			[allAlbumsDb executeUpdate:@"PRAGMA cache_size = 1"];
+		}
+		else
+		{
+			DLog(@"Could not open allAlbumsDb."); 
+		}
 		
 		// Setup the allSongs database
 		allSongsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allSongs.db", databaseFolderPath, urlStringMd5]] retain];
-		[allSongsDb executeUpdate:@"PRAGMA cache_size = 1"];
-		if ([allSongsDb open] == NO) { DLog(@"Could not open allSongsDb."); }
+		if ([allSongsDb open])
+		{
+			[allSongsDb executeUpdate:@"PRAGMA cache_size = 1"];
+		}
+		else
+		{
+			DLog(@"Could not open allSongsDb.");
+		}
 		
 		// Setup the Genres database
 		genresDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@genres.db", databaseFolderPath, urlStringMd5]] retain];
-		[genresDb executeUpdate:@"PRAGMA cache_size = 1"];
-		if ([genresDb open] == NO) { DLog(@"Could not open genresDb."); }
+		if ([genresDb open])
+		{
+			[genresDb executeUpdate:@"PRAGMA cache_size = 1"];
+		}
+		else
+		{
+			DLog(@"Could not open genresDb."); 
+		}
 	}
 	else
 	{
@@ -87,189 +83,263 @@ static DatabaseSingleton *sharedInstance = nil;
 	
 	// Setup the album list cache database
 	albumListCacheDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@albumListCache.db", databaseFolderPath, urlStringMd5]] retain];
-	[albumListCacheDb executeUpdate:@"PRAGMA cache_size = 1"];
-	if ([albumListCacheDb open] == NO) 
+	if ([albumListCacheDb open]) 
 	{ 
-		DLog(@"Could not open albumListCacheDb."); 
-	}
-	else
-	{
-		/*if ([albumListCacheDb tableExists:@"rootFolderIndexCache"] == NO) {
-			[albumListCacheDb executeUpdate:@"CREATE TABLE rootFolderIndexCache (name TEXT PRIMARY KEY, position INTEGER, count INTEGER)"];
-		}
-		if ([albumListCacheDb tableExists:@"rootFolderNameCache"] == NO) {
-			[albumListCacheDb executeUpdate:@"CREATE VIRTUAL TABLE rootFolderNameCache USING FTS3 (id TEXT PRIMARY KEY, name TEXT, tokenize=porter)"];
-			//[albumListCacheDb executeUpdate:@"CREATE TABLE rootFolderNameCache (id TEXT PRIMARY KEY, name TEXT)"];
-			[albumListCacheDb executeUpdate:@"CREATE INDEX name ON rootFolderNameCache (name ASC)"];
-		}
-		if ([albumListCacheDb tableExists:@"rootFolderNameSearch"] == NO) {
-			[albumListCacheDb executeUpdate:@"CREATE TABLE rootFolderNameSearch (id TEXT PRIMARY KEY, name TEXT)"];
-		}
-		if ([albumListCacheDb tableExists:@"rootFolderCount"] == NO) {
-			[albumListCacheDb executeUpdate:@"CREATE TABLE rootFolderCount (count INTEGER)"];
-		}*/
+		[albumListCacheDb executeUpdate:@"PRAGMA cache_size = 1"];
 		
-		if ([albumListCacheDb tableExists:@"albumListCache"] == NO) {
+		if (![albumListCacheDb tableExists:@"albumListCache"]) 
+		{
 			[albumListCacheDb executeUpdate:@"CREATE TABLE albumListCache (id TEXT PRIMARY KEY, data BLOB)"];
 		}
-		if ([albumListCacheDb tableExists:@"albumsCache"] == NO) {
+		if (![albumListCacheDb tableExists:@"albumsCache"]) 
+		{
 			[albumListCacheDb executeUpdate:@"CREATE TABLE albumsCache (folderId TEXT, title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
 			[albumListCacheDb executeUpdate:@"CREATE INDEX albumsFolderId ON albumsCache (folderId)"];
 		}
-		if ([albumListCacheDb tableExists:@"songsCache"] == NO) {
+		if (![albumListCacheDb tableExists:@"songsCache"]) 
+		{
 			[albumListCacheDb executeUpdate:@"CREATE TABLE songsCache (folderId TEXT, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
 			[albumListCacheDb executeUpdate:@"CREATE INDEX songsFolderId ON songsCache (folderId)"];
 		}
-        if ([albumListCacheDb tableExists:@"albumsCacheCount"] == NO)
+        if (![albumListCacheDb tableExists:@"albumsCacheCount"])
         {
             [albumListCacheDb executeUpdate:@"CREATE TABLE albumsCacheCount (folderId TEXT, count INTEGER)"];
             [albumListCacheDb executeUpdate:@"CREATE INDEX albumsCacheCountFolderId ON albumsCacheCount (folderId)"];
         }
-        if ([albumListCacheDb tableExists:@"songsCacheCount"] == NO)
+        if (![albumListCacheDb tableExists:@"songsCacheCount"])
         {
             [albumListCacheDb executeUpdate:@"CREATE TABLE songsCacheCount (folderId TEXT, count INTEGER)"];
             [albumListCacheDb executeUpdate:@"CREATE INDEX songsCacheCountFolderId ON songsCacheCount (folderId)"];
         }
-        if ([albumListCacheDb tableExists:@"folderLength"] == NO)
+        if (![albumListCacheDb tableExists:@"folderLength"])
         {
             [albumListCacheDb executeUpdate:@"CREATE TABLE folderLength (folderId TEXT, length INTEGER)"];
             [albumListCacheDb executeUpdate:@"CREATE INDEX folderLengthFolderId ON folderLength (folderId)"];
         }
 	}
+	else
+	{
+		DLog(@"Could not open albumListCacheDb."); 
+	}
 	
-	// Only load large album art DB if this is an iPad
+	// Setup music player cover art cache database
 	if (IS_IPAD())
 	{
-		// Setup music player cover art cache database
+		// Only load large album art DB if this is an iPad
 		coverArtCacheDb540 = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/coverArtCache540.db", databaseFolderPath]] retain];
-		[coverArtCacheDb540 executeUpdate:@"PRAGMA cache_size = 1"];
-		if ([coverArtCacheDb540 open] == NO) { DLog(@"Could not open coverArtCacheDb540."); }
-		if ([coverArtCacheDb540 tableExists:@"coverArtCache"] == NO) {
-			[coverArtCacheDb540 executeUpdate:@"CREATE TABLE coverArtCache (id TEXT PRIMARY KEY, data BLOB)"];
+		
+		if ([coverArtCacheDb540 open])
+		{
+			[coverArtCacheDb540 executeUpdate:@"PRAGMA cache_size = 1"];
+			
+			if (![coverArtCacheDb540 tableExists:@"coverArtCache"]) 
+			{
+				[coverArtCacheDb540 executeUpdate:@"CREATE TABLE coverArtCache (id TEXT PRIMARY KEY, data BLOB)"];
+			}
+		}
+		else
+		{ 
+			DLog(@"Could not open coverArtCacheDb540."); 
 		}
 	}
-
-	// Only load small album art DB if this is not an iPad
-	if (!IS_IPAD())
+	else
 	{
-		// Setup music player cover art cache database
+		// Only load small album art DB if this is not an iPad
 		coverArtCacheDb320 = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/coverArtCache320.db", databaseFolderPath]] retain];
-		[coverArtCacheDb320 executeUpdate:@"PRAGMA cache_size = 1"];
-		if ([coverArtCacheDb320 open] == NO) { DLog(@"Could not open coverArtCacheDb320."); }
-		if ([coverArtCacheDb320 tableExists:@"coverArtCache"] == NO) {
-			[coverArtCacheDb320 executeUpdate:@"CREATE TABLE coverArtCache (id TEXT PRIMARY KEY, data BLOB)"];
+		if ([coverArtCacheDb320 open])
+		{
+			[coverArtCacheDb320 executeUpdate:@"PRAGMA cache_size = 1"];
+			
+			if (![coverArtCacheDb320 tableExists:@"coverArtCache"]) 
+			{
+				[coverArtCacheDb320 executeUpdate:@"CREATE TABLE coverArtCache (id TEXT PRIMARY KEY, data BLOB)"];
+			}
+		}
+		else
+		{ 
+			DLog(@"Could not open coverArtCacheDb320."); 
 		}
 	}
 	
 	// Setup album cell cover art cache database
 	coverArtCacheDb60 = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/coverArtCache60.db", databaseFolderPath]] retain];
-	[coverArtCacheDb60 executeUpdate:@"PRAGMA cache_size = 1"];
-	if ([coverArtCacheDb60 open] == NO) { DLog(@"Could not open coverArtCacheDb60."); }
-	if ([coverArtCacheDb60 tableExists:@"coverArtCache"] == NO) {
-		[coverArtCacheDb60 executeUpdate:@"CREATE TABLE coverArtCache (id TEXT PRIMARY KEY, data BLOB)"];
+	if ([coverArtCacheDb60 open])
+	{
+		[coverArtCacheDb60 executeUpdate:@"PRAGMA cache_size = 1"];
+		
+		if (![coverArtCacheDb60 tableExists:@"coverArtCache"])
+		{
+			[coverArtCacheDb60 executeUpdate:@"CREATE TABLE coverArtCache (id TEXT PRIMARY KEY, data BLOB)"];
+		}
+	}
+	else
+	{ 
+		DLog(@"Could not open coverArtCacheDb60."); 
 	}
 	
 	// Setup the current playlist database
-	if (viewObjects.isOfflineMode) {
+	if (viewObjects.isOfflineMode) 
+	{
 		currentPlaylistDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/offlineCurrentPlaylist.db", databaseFolderPath]] retain];
 	}
-	else {
+	else 
+	{
 		currentPlaylistDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseFolderPath, urlStringMd5]] retain];
 	}
-	[currentPlaylistDb executeUpdate:@"PRAGMA cache_size = 1"];
-	if ([currentPlaylistDb open] == NO) { DLog(@"Could not open currentPlaylistDb."); }
-	if ([currentPlaylistDb tableExists:@"currentPlaylist"] == NO) {
-		[currentPlaylistDb executeUpdate:@"CREATE TABLE currentPlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+	if ([currentPlaylistDb open])
+	{
+		[currentPlaylistDb executeUpdate:@"PRAGMA cache_size = 1"];
+		
+		if (![currentPlaylistDb tableExists:@"currentPlaylist"]) 
+		{
+			[currentPlaylistDb executeUpdate:@"CREATE TABLE currentPlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+		}
+		if (![currentPlaylistDb tableExists:@"shufflePlaylist"]) 
+		{
+			[currentPlaylistDb executeUpdate:@"CREATE TABLE shufflePlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+		}
+		if (![currentPlaylistDb tableExists:@"jukeboxCurrentPlaylist"])
+		{
+			[currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxCurrentPlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+		}
+		if (![currentPlaylistDb tableExists:@"jukeboxShufflePlaylist"]) 
+		{
+			[currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxShufflePlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+		}
 	}
-	if ([currentPlaylistDb tableExists:@"shufflePlaylist"] == NO) {
-		[currentPlaylistDb executeUpdate:@"CREATE TABLE shufflePlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
-	}
-	if ([currentPlaylistDb tableExists:@"jukeboxCurrentPlaylist"] == NO) {
-		[currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxCurrentPlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
-	}
-	if ([currentPlaylistDb tableExists:@"jukeboxShufflePlaylist"] == NO) {
-		[currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxShufflePlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+	else
+	{ 
+		DLog(@"Could not open currentPlaylistDb."); 
 	}
 	
 	// Setup the local playlists database
-	if (viewObjects.isOfflineMode) {
-		localPlaylistsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/offlineLocalPlaylists.db", databaseFolderPath, [NSString md5:urlStringMd5]]] retain];
+	if (viewObjects.isOfflineMode) 
+	{
+		localPlaylistsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/offlineLocalPlaylists.db", databaseFolderPath]] retain];
 	}
-	else {
-		localPlaylistsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@localPlaylists.db", databaseFolderPath, [NSString md5:urlStringMd5]]] retain];
+	else 
+	{
+		localPlaylistsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@localPlaylists.db", databaseFolderPath, urlStringMd5]] retain];
 	}
-	[localPlaylistsDb executeUpdate:@"PRAGMA cache_size = 1"];
-	if ([localPlaylistsDb open] == NO) { DLog(@"Could not open localPlaylistsDb."); }
-	if ([localPlaylistsDb tableExists:@"localPlaylists"] == NO) {
-		[localPlaylistsDb executeUpdate:@"CREATE TABLE localPlaylists (playlist TEXT, md5 TEXT)"];
+	if ([localPlaylistsDb open])
+	{
+		[localPlaylistsDb executeUpdate:@"PRAGMA cache_size = 1"];
+		
+		if (![localPlaylistsDb tableExists:@"localPlaylists"]) 
+		{
+			[localPlaylistsDb executeUpdate:@"CREATE TABLE localPlaylists (playlist TEXT, md5 TEXT)"];
+		}
 	}
-	
-	// Setup the server playlists database
-	//serverPlaylistsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@serverPlaylists.db", databaseFolderPath, [NSString md5:urlStringMd5]]] retain];
-	//if ([serverPlaylistsDb open] == NO) { DLog(@"Could not open serverPlaylistsDb."); }
+	else 
+	{
+		DLog(@"Could not open localPlaylistsDb."); 
+	}
 	
 	// Setup the song cache database
 	songCacheDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/songCache.db", databaseFolderPath]] retain];
-	[songCacheDb executeUpdate:@"PRAGMA cache_size = 1"];
-	if ([songCacheDb open] == NO) { DLog(@"Could not open songCacheDb."); }
-	if ([songCacheDb tableExists:@"cachedSongs"] == NO) {
-		[songCacheDb executeUpdate:@"CREATE TABLE cachedSongs (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
-		[songCacheDb executeUpdate:@"CREATE INDEX cachedDate ON cachedSongs (cachedDate DESC)"];
-		[songCacheDb executeUpdate:@"CREATE INDEX playedDate ON cachedSongs (playedDate DESC)"];
+	if ([songCacheDb open])
+	{
+		[songCacheDb executeUpdate:@"PRAGMA cache_size = 1"];
+		
+		if (![songCacheDb tableExists:@"cachedSongs"])
+		{
+			[songCacheDb executeUpdate:@"CREATE TABLE cachedSongs (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+			[songCacheDb executeUpdate:@"CREATE INDEX cachedDate ON cachedSongs (cachedDate DESC)"];
+			[songCacheDb executeUpdate:@"CREATE INDEX playedDate ON cachedSongs (playedDate DESC)"];
+		}
+		[songCacheDb executeUpdate:@"CREATE INDEX md5 IF NOT EXISTS ON cachedSongs (md5)"];
+		if (![songCacheDb tableExists:@"cachedSongsLayout"]) 
+		{
+			[songCacheDb executeUpdate:@"CREATE TABLE cachedSongsLayout (md5 TEXT UNIQUE, genre TEXT, segs INTEGER, seg1 TEXT, seg2 TEXT, seg3 TEXT, seg4 TEXT, seg5 TEXT, seg6 TEXT, seg7 TEXT, seg8 TEXT, seg9 TEXT)"];
+			[songCacheDb executeUpdate:@"CREATE INDEX genreLayout ON cachedSongsLayout (genre)"];
+			[songCacheDb executeUpdate:@"CREATE INDEX seg1 ON cachedSongsLayout (seg1)"];
+			[songCacheDb executeUpdate:@"CREATE INDEX seg2 ON cachedSongsLayout (seg2)"];
+			[songCacheDb executeUpdate:@"CREATE INDEX seg3 ON cachedSongsLayout (seg3)"];
+			[songCacheDb executeUpdate:@"CREATE INDEX seg4 ON cachedSongsLayout (seg4)"];
+			[songCacheDb executeUpdate:@"CREATE INDEX seg5 ON cachedSongsLayout (seg5)"];
+			[songCacheDb executeUpdate:@"CREATE INDEX seg6 ON cachedSongsLayout (seg6)"];
+			[songCacheDb executeUpdate:@"CREATE INDEX seg7 ON cachedSongsLayout (seg7)"];
+			[songCacheDb executeUpdate:@"CREATE INDEX seg8 ON cachedSongsLayout (seg8)"];
+			[songCacheDb executeUpdate:@"CREATE INDEX seg9 ON cachedSongsLayout (seg9)"];
+		}
+		if (![songCacheDb tableExists:@"genres"]) 
+		{
+			[songCacheDb executeUpdate:@"CREATE TABLE genres(genre TEXT UNIQUE)"];
+		}
+		if (![songCacheDb tableExists:@"genresSongs"]) 
+		{
+			[songCacheDb executeUpdate:@"CREATE TABLE genresSongs (md5 TEXT UNIQUE, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+			[songCacheDb executeUpdate:@"CREATE INDEX songGenre ON genresSongs (genre)"];
+		}
 	}
-	[songCacheDb executeUpdate:@"CREATE INDEX md5 IF NOT EXISTS ON cachedSongs (md5)"];
-	if ([songCacheDb tableExists:@"cachedSongsLayout"] == NO) {
-		[songCacheDb executeUpdate:@"CREATE TABLE cachedSongsLayout (md5 TEXT UNIQUE, genre TEXT, segs INTEGER, seg1 TEXT, seg2 TEXT, seg3 TEXT, seg4 TEXT, seg5 TEXT, seg6 TEXT, seg7 TEXT, seg8 TEXT, seg9 TEXT)"];
-		[songCacheDb executeUpdate:@"CREATE INDEX genreLayout ON cachedSongsLayout (genre)"];
-		[songCacheDb executeUpdate:@"CREATE INDEX seg1 ON cachedSongsLayout (seg1)"];
-		[songCacheDb executeUpdate:@"CREATE INDEX seg2 ON cachedSongsLayout (seg2)"];
-		[songCacheDb executeUpdate:@"CREATE INDEX seg3 ON cachedSongsLayout (seg3)"];
-		[songCacheDb executeUpdate:@"CREATE INDEX seg4 ON cachedSongsLayout (seg4)"];
-		[songCacheDb executeUpdate:@"CREATE INDEX seg5 ON cachedSongsLayout (seg5)"];
-		[songCacheDb executeUpdate:@"CREATE INDEX seg6 ON cachedSongsLayout (seg6)"];
-		[songCacheDb executeUpdate:@"CREATE INDEX seg7 ON cachedSongsLayout (seg7)"];
-		[songCacheDb executeUpdate:@"CREATE INDEX seg8 ON cachedSongsLayout (seg8)"];
-		[songCacheDb executeUpdate:@"CREATE INDEX seg9 ON cachedSongsLayout (seg9)"];
-	}
-	if ([songCacheDb tableExists:@"genres"] == NO) {
-		[songCacheDb executeUpdate:@"CREATE TABLE genres(genre TEXT UNIQUE)"];
-	}
-	if ([songCacheDb tableExists:@"genresSongs"] == NO) {
-		[songCacheDb executeUpdate:@"CREATE TABLE genresSongs (md5 TEXT UNIQUE, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
-		[songCacheDb executeUpdate:@"CREATE INDEX songGenre ON genresSongs (genre)"];
+	else
+	{ 
+		DLog(@"Could not open songCacheDb."); 
 	}
 	
 	cacheQueueDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", databaseFolderPath, urlStringMd5]] retain];
-	[cacheQueueDb executeUpdate:@"PRAGMA cache_size = 1"];
-	if ([cacheQueueDb open] == NO) { DLog(@"Could not open cacheQueueDb."); }
-	if ([cacheQueueDb tableExists:@"cacheQueue"] == NO) {
-		[cacheQueueDb executeUpdate:@"CREATE TABLE cacheQueue (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
-		[cacheQueueDb executeUpdate:@"CREATE INDEX queueDate ON cacheQueue (cachedDate DESC)"];
+	if ([cacheQueueDb open])
+	{
+		[cacheQueueDb executeUpdate:@"PRAGMA cache_size = 1"];
+		
+		if (![cacheQueueDb tableExists:@"cacheQueue"]) 
+		{
+			[cacheQueueDb executeUpdate:@"CREATE TABLE cacheQueue (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+			[cacheQueueDb executeUpdate:@"CREATE INDEX queueDate ON cacheQueue (cachedDate DESC)"];
+		}
+		
+		[songCacheDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@cacheQueue.db", databaseFolderPath, urlStringMd5], @"cacheQueueDb"];
+		if ([songCacheDb hadError]) 
+		{
+			DLog(@"Err attaching the cacheQueueDb %d: %@", [songCacheDb lastErrorCode], [songCacheDb lastErrorMessage]);
+		}
+
 	}
-	[songCacheDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@cacheQueue.db", databaseFolderPath, urlStringMd5], @"cacheQueueDb"];
-	if ([songCacheDb hadError]) { DLog(@"Err attaching the cacheQueueDb %d: %@", [songCacheDb lastErrorCode], [songCacheDb lastErrorMessage]); }
-	
+	else
+	{ 
+		DLog(@"Could not open cacheQueueDb."); 
+	}
+		
 	// Setup the lyrics database
 	lyricsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/lyrics.db", databaseFolderPath]] retain];
-	[lyricsDb executeUpdate:@"PRAGMA cache_size = 1"];
-	if ([lyricsDb open] == NO) { DLog(@"Could not open lyricsDb."); }
-	if ([lyricsDb tableExists:@"lyrics"] == NO) {
-		[lyricsDb executeUpdate:@"CREATE TABLE lyrics (artist TEXT, title TEXT, lyrics TEXT)"];
-		[lyricsDb executeUpdate:@"CREATE INDEX artistTitle ON lyrics (artist, title)"];
+	if ([lyricsDb open])
+	{
+		[lyricsDb executeUpdate:@"PRAGMA cache_size = 1"];
+
+		if (![lyricsDb tableExists:@"lyrics"])
+		{
+			[lyricsDb executeUpdate:@"CREATE TABLE lyrics (artist TEXT, title TEXT, lyrics TEXT)"];
+			[lyricsDb executeUpdate:@"CREATE INDEX artistTitle ON lyrics (artist, title)"];
+		}
+	}
+	else
+	{ 
+		DLog(@"Could not open lyricsDb."); 
 	}
 	
 	// Setup the bookmarks database
 	bookmarksDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@bookmarks.db", databaseFolderPath, urlStringMd5]] retain];
-	[bookmarksDb executeUpdate:@"PRAGMA cache_size = 1"];
-	if ([bookmarksDb open] == NO) { DLog(@"Could not open bookmarksDb."); }
-	if ([bookmarksDb tableExists:@"bookmarks"] == NO) {
-		[bookmarksDb executeUpdate:@"CREATE TABLE bookmarks (name TEXT, position INTEGER, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
-		[bookmarksDb executeUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
+	if ([bookmarksDb open])
+	{
+		[bookmarksDb executeUpdate:@"PRAGMA cache_size = 1"];
+		
+		if (![bookmarksDb tableExists:@"bookmarks"]) 
+		{
+			[bookmarksDb executeUpdate:@"CREATE TABLE bookmarks (name TEXT, position INTEGER, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+			[bookmarksDb executeUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
+		}
+	}
+	else
+	{
+		DLog(@"Could not open bookmarksDb."); 
 	}
 	
 	// Setup in memory database
 	inMemoryDb = [[FMDatabase databaseWithPath:@":memory:"] retain];
-	if ([inMemoryDb open] == NO) { DLog(@"Could not open inMemoryDb."); }
+	if (![inMemoryDb open]) 
+	{ 
+		DLog(@"Could not open inMemoryDb.");
+	}
 }
 
 - (void) closeAllDatabases
@@ -441,327 +511,39 @@ static DatabaseSingleton *sharedInstance = nil;
 - (Album *) albumFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabase:(FMDatabase *)db
 {
 	row++;
-	Album *anAlbum = [[Album alloc] init];
+	Album *anAlbum = nil;
 	FMResultSet *result = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE ROWID = %i", table, row]];
-	[result next];
 	if ([db hadError]) 
 	{
 		DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
 	}
 	else
 	{
-		if ([result stringForColumn:@"title"] != nil)
-			anAlbum.title = [NSString stringWithString:[result stringForColumn:@"title"]];
-		if ([result stringForColumn:@"albumId"] != nil)
-			anAlbum.albumId = [NSString stringWithString:[result stringForColumn:@"albumId"]];
-		if ([result stringForColumn:@"coverArtId"] != nil)
-			anAlbum.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
-		if ([result stringForColumn:@"artistName"] != nil)
-			anAlbum.artistName = [NSString stringWithString:[result stringForColumn:@"artistName"]];
-		if ([result stringForColumn:@"artistId"] != nil)
-			anAlbum.artistId = [NSString stringWithString:[result stringForColumn:@"artistId"]];
+		if ([result next])
+		{
+			anAlbum = [[Album alloc] init];
+
+			if ([result stringForColumn:@"title"] != nil)
+				anAlbum.title = [NSString stringWithString:[result stringForColumn:@"title"]];
+			if ([result stringForColumn:@"albumId"] != nil)
+				anAlbum.albumId = [NSString stringWithString:[result stringForColumn:@"albumId"]];
+			if ([result stringForColumn:@"coverArtId"] != nil)
+				anAlbum.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
+			if ([result stringForColumn:@"artistName"] != nil)
+				anAlbum.artistName = [NSString stringWithString:[result stringForColumn:@"artistName"]];
+			if ([result stringForColumn:@"artistId"] != nil)
+				anAlbum.artistId = [NSString stringWithString:[result stringForColumn:@"artistId"]];
+		}
 	}
 	[result close];
 	
 	return [anAlbum autorelease];
 }
 
-- (Song *) songFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabase:(FMDatabase *)db
-{
-	row++;
-	Song *aSong = [[Song alloc] init];
-	FMResultSet *result = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE ROWID = %i", table, row]];
-	[result next];
-	if ([db hadError]) 
-	{
-		DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-	}
-	else
-	{
-		if ([result stringForColumn:@"title"] != nil)
-			aSong.title = [NSString stringWithString:[result stringForColumn:@"title"]];
-		if ([result stringForColumn:@"songId"] != nil)
-			aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
-		if ([result stringForColumn:@"artist"] != nil)
-			aSong.artist = [NSString stringWithString:[result stringForColumn:@"artist"]];
-		if ([result stringForColumn:@"album"] != nil)
-			aSong.album = [NSString stringWithString:[result stringForColumn:@"album"]];
-		if ([result stringForColumn:@"genre"] != nil)
-			aSong.genre = [NSString stringWithString:[result stringForColumn:@"genre"]];
-		if ([result stringForColumn:@"coverArtId"] != nil)
-			aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
-		if ([result stringForColumn:@"path"] != nil)
-			aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
-		if ([result stringForColumn:@"suffix"] != nil)
-			aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
-		if ([result stringForColumn:@"transcodedSuffix"] != nil)
-			aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
-		aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
-		aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
-		aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
-		aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
-		aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
-	}
-	
-	[result close];
-	
-	if (aSong.path == nil)
-	{
-		[aSong release];
-		return nil;
-	}
-	else
-	{
-		return [aSong autorelease];
-	}
-}
-
-- (Song *) songFromAllSongsDb:(NSUInteger)row inTable:(NSString *)table
-{
-	row++;
-	Song *aSong = [[Song alloc] init];
-	FMResultSet *result = [allSongsDb executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE ROWID = %i", table, row]];
-	[result next];
-	if ([allSongsDb hadError]) {
-		DLog(@"Err %d: %@", [allSongsDb lastErrorCode], [allSongsDb lastErrorMessage]);
-	}
-	
-	if ([result stringForColumn:@"title"] != nil)
-		aSong.title = [[result stringForColumn:@"title"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	if ([result stringForColumn:@"songId"] != nil)
-		aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
-	if ([result stringForColumn:@"artist"] != nil)
-		aSong.artist = [[result stringForColumn:@"artist"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	if ([result stringForColumn:@"album"] != nil)
-		aSong.album = [[result stringForColumn:@"album"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	if ([result stringForColumn:@"genre"] != nil)
-		aSong.genre = [[result stringForColumn:@"genre"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	if ([result stringForColumn:@"coverArtId"] != nil)
-		aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
-	if ([result stringForColumn:@"path"] != nil)
-		aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
-	if ([result stringForColumn:@"suffix"] != nil)
-		aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
-	if ([result stringForColumn:@"transcodedSuffix"] != nil)
-		aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
-	aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
-	aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
-	aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
-	aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
-	aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
-	
-	[result close];
-	
-	if (aSong.path == nil)
-	{
-		[aSong release];
-		return nil;
-	}
-	else
-	{
-		return [aSong autorelease];
-	}
-}
-
-- (Song *) songFromGenreDb:(NSString *)md5
-{
-	Song *aSong = [[Song alloc] init];
-	FMResultSet *result;
-	if (viewObjects.isOfflineMode)
-	{
-		result = [songCacheDb executeQuery:@"SELECT * FROM genresSongs WHERE md5 = ?", md5];
-		if ([songCacheDb hadError]) {
-			DLog(@"Err %d: %@", [songCacheDb lastErrorCode], [songCacheDb lastErrorMessage]);
-		}
-	}
-	else
-	{
-		result = [genresDb executeQuery:@"SELECT * FROM genresSongs WHERE md5 = ?", md5];
-		if ([genresDb hadError]) {
-			DLog(@"Err %d: %@", [genresDb lastErrorCode], [genresDb lastErrorMessage]);
-		}
-	}
-	[result next];
-	
-	if ([result stringForColumn:@"title"] != nil)
-		aSong.title = [[result stringForColumn:@"title"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	if ([result stringForColumn:@"songId"] != nil)
-		aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
-	if ([result stringForColumn:@"artist"] != nil)
-		aSong.artist = [[result stringForColumn:@"artist"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	if ([result stringForColumn:@"album"] != nil)
-		aSong.album = [[result stringForColumn:@"album"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	if ([result stringForColumn:@"genre"] != nil)
-		aSong.genre = [[result stringForColumn:@"genre"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	if ([result stringForColumn:@"coverArtId"] != nil)
-		aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
-	if ([result stringForColumn:@"path"] != nil)
-		aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
-	if ([result stringForColumn:@"suffix"] != nil)
-		aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
-	if ([result stringForColumn:@"transcodedSuffix"] != nil)
-		aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
-	aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
-	aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
-	aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
-	aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
-	aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
-	
-	/*aSong.title = [[result stringForColumnIndex:1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	aSong.songId = [result stringForColumnIndex:2];
-	aSong.artist = [[result stringForColumnIndex:3] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	aSong.album = [[result stringForColumnIndex:4] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	aSong.genre = [[result stringForColumnIndex:5] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	aSong.coverArtId = [result stringForColumnIndex:6];
-	aSong.path = [result stringForColumnIndex:7];
-	aSong.suffix = [result stringForColumnIndex:8];
-	aSong.transcodedSuffix = [result stringForColumnIndex:9];
-	aSong.duration = [NSNumber numberWithInt:[result intForColumnIndex:10]];
-	aSong.bitRate = [NSNumber numberWithInt:[result intForColumnIndex:11]];
-	aSong.track = [NSNumber numberWithInt:[result intForColumnIndex:12]];
-	aSong.year = [NSNumber numberWithInt:[result intForColumnIndex:13]];
-	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:14]];*/
-	
-	[result close];
-	return [aSong autorelease];
-}
-
-- (Song *) songFromCacheDb:(NSString *)md5
-{
-	Song *aSong = [[Song alloc] init];
-	FMResultSet *result;
-	result = [songCacheDb executeQuery:@"SELECT * FROM cachedSongs WHERE md5 = ?", md5];
-	if ([songCacheDb hadError]) {
-		DLog(@"Err %d: %@", [songCacheDb lastErrorCode], [songCacheDb lastErrorMessage]);
-	}
-	[result next];
-	
-	if ([result stringForColumn:@"title"] != nil)
-		aSong.title = [[result stringForColumn:@"title"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	if ([result stringForColumn:@"songId"] != nil)
-		aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
-	if ([result stringForColumn:@"artist"] != nil)
-		aSong.artist = [[result stringForColumn:@"artist"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	if ([result stringForColumn:@"album"] != nil)
-		aSong.album = [[result stringForColumn:@"album"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	if ([result stringForColumn:@"genre"] != nil)
-		aSong.genre = [[result stringForColumn:@"genre"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	if ([result stringForColumn:@"coverArtId"] != nil)
-		aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
-	if ([result stringForColumn:@"path"] != nil)
-		aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
-	if ([result stringForColumn:@"suffix"] != nil)
-		aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
-	if ([result stringForColumn:@"transcodedSuffix"] != nil)
-		aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
-	aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
-	aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
-	aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
-	aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
-	aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
-	
-	/*aSong.title = [result stringForColumnIndex:4];
-	aSong.songId = [result stringForColumnIndex:5];
-	aSong.artist = [result stringForColumnIndex:6];
-	aSong.album = [result stringForColumnIndex:7];
-	aSong.genre = [result stringForColumnIndex:8];
-	aSong.coverArtId = [result stringForColumnIndex:9];
-	aSong.path = [result stringForColumnIndex:10];
-	aSong.suffix = [result stringForColumnIndex:11];
-	aSong.transcodedSuffix = [result stringForColumnIndex:12];
-	aSong.duration = [NSNumber numberWithInt:[result intForColumnIndex:13]];
-	aSong.bitRate = [NSNumber numberWithInt:[result intForColumnIndex:14]];
-	aSong.track = [NSNumber numberWithInt:[result intForColumnIndex:15]];
-	aSong.year = [NSNumber numberWithInt:[result intForColumnIndex:16]];
-	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:17]];*/
-	
-	[result close];
-	return [aSong autorelease];
-}
-
-- (Song *) songFromServerPlaylistId:(NSString *)md5 row:(NSUInteger)row
-{
-	NSUInteger rowId = row + 1;
-	
-	Song *aSong = [[Song alloc] init];
-	//NSString *query = [NSString stringWithFormat:@"SELECT * FROM playlist%@ WHERE rowid = %i", md5, rowId];
-	//FMResultSet *result = [serverPlaylistsDb executeQuery:query];
-	//if ([serverPlaylistsDb hadError]) {
-	//	DLog(@"Err %d: %@", [serverPlaylistsDb lastErrorCode], [serverPlaylistsDb lastErrorMessage]);
-	//}
-	
-	NSString *query = [NSString stringWithFormat:@"SELECT * FROM splaylist%@ WHERE rowid = %i", md5, rowId];
-	FMResultSet *result = [localPlaylistsDb executeQuery:query];
-	if ([localPlaylistsDb hadError]) {
-		DLog(@"Err %d: %@", [localPlaylistsDb lastErrorCode], [localPlaylistsDb lastErrorMessage]);
-	}
-	[result next];
-	
-	if ([result stringForColumn:@"title"] != nil)
-		aSong.title = [[result stringForColumn:@"title"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	if ([result stringForColumn:@"songId"] != nil)
-		aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
-	if ([result stringForColumn:@"artist"] != nil)
-		aSong.artist = [[result stringForColumn:@"artist"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	if ([result stringForColumn:@"album"] != nil)
-		aSong.album = [[result stringForColumn:@"album"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	if ([result stringForColumn:@"genre"] != nil)
-		aSong.genre = [[result stringForColumn:@"genre"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	if ([result stringForColumn:@"coverArtId"] != nil)
-		aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
-	if ([result stringForColumn:@"path"] != nil)
-		aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
-	if ([result stringForColumn:@"suffix"] != nil)
-		aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
-	if ([result stringForColumn:@"transcodedSuffix"] != nil)
-		aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
-	aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
-	aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
-	aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
-	aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
-	aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
-	
-	/*aSong.title = [result stringForColumnIndex:0];
-	aSong.songId = [result stringForColumnIndex:1];
-	aSong.artist = [result stringForColumnIndex:2];
-	aSong.album = [result stringForColumnIndex:3];
-	aSong.genre = [result stringForColumnIndex:4];
-	aSong.coverArtId = [result stringForColumnIndex:5];
-	aSong.path = [result stringForColumnIndex:6];
-	aSong.suffix = [result stringForColumnIndex:7];
-	aSong.transcodedSuffix = [result stringForColumnIndex:8];
-	aSong.duration = [NSNumber numberWithInt:[result intForColumnIndex:9]];
-	aSong.bitRate = [NSNumber numberWithInt:[result intForColumnIndex:10]];
-	aSong.track = [NSNumber numberWithInt:[result intForColumnIndex:11]];
-	aSong.year = [NSNumber numberWithInt:[result intForColumnIndex:12]];
-	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:13]];*/
-	
-	[result close];
-	return [aSong autorelease];
-}
-
 - (NSUInteger) serverPlaylistCount:(NSString *)md5
 {
 	NSString *query = [NSString stringWithFormat:@"SELECT count(*) FROM splaylist%@", md5];
 	return [localPlaylistsDb intForQuery:query];
-}
-
-- (BOOL) insertSongIntoServerPlaylist:(Song *)aSong playlistId:(NSString *)md5
-{
-	//[serverPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ (title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", md5], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
-	[localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO splaylist%@ (title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", md5], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
-	
-	/*if ([serverPlaylistsDb hadError]) {
-		DLog(@"Err inserting song %d: %@", [serverPlaylistsDb lastErrorCode], [serverPlaylistsDb lastErrorMessage]);
-	}
-	
-	return ![serverPlaylistsDb hadError];*/
-	
-	if ([localPlaylistsDb hadError]) {
-		DLog(@"Err inserting song %d: %@", [localPlaylistsDb lastErrorCode], [localPlaylistsDb lastErrorMessage]);
-	}
-	
-	return ![localPlaylistsDb hadError];
 }
 
 - (BOOL) insertAlbumIntoFolderCache:(Album *)anAlbum forId:(NSString *)folderId
@@ -775,18 +557,6 @@ static DatabaseSingleton *sharedInstance = nil;
 	return ![albumListCacheDb hadError];
 }
 
-- (BOOL) insertSongIntoFolderCache:(Song *)aSong forId:(NSString *)folderId
-{
-	[albumListCacheDb executeUpdate:@"INSERT INTO songsCache (folderId, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [NSString md5:folderId], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
-	
-	if ([albumListCacheDb hadError]) {
-		DLog(@"Err inserting song %d: %@", [albumListCacheDb lastErrorCode], [albumListCacheDb lastErrorMessage]);
-	}
-	
-	return ![albumListCacheDb hadError];
-}
-
-
 - (BOOL) insertAlbum:(Album *)anAlbum intoTable:(NSString *)table inDatabase:(FMDatabase *)db
 {
 	[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO %@ (title, albumId, coverArtId, artistName, artistId) VALUES (?, ?, ?, ?, ?)", table], anAlbum.title, anAlbum.albumId, anAlbum.coverArtId, anAlbum.artistName, anAlbum.artistId];
@@ -796,149 +566,6 @@ static DatabaseSingleton *sharedInstance = nil;
 	}
 	
 	return ![db hadError];
-}
-
-- (BOOL) insertSong:(Song *)aSong intoTable:(NSString *)table inDatabase:(FMDatabase *)db
-{
-	[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO %@ (title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", table], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
-	
-	if ([db hadError]) {
-		DLog(@"Err inserting song %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-	}
-	
-	return ![db hadError];
-}
-
-- (BOOL) addSongToCacheQueue:(Song *)aSong
-{
-	if ([songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE md5 = ? AND finished = 'YES'", [NSString md5:aSong.path]] == 0) 
-	{
-		[songCacheDb executeUpdate:@"INSERT INTO cacheQueue (md5, finished, cachedDate, playedDate, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [NSString md5:aSong.path], @"NO", [NSNumber numberWithInt:(NSUInteger)[[NSDate date] timeIntervalSince1970]], [NSNumber numberWithInt:0], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
-	}
-	
-	if ([songCacheDb hadError]) 
-	{
-		DLog(@"Err adding song to cache queue %d: %@", [songCacheDb lastErrorCode], [songCacheDb lastErrorMessage]);
-	}
-	
-	return ![songCacheDb hadError];
-}
-
-
-- (BOOL) addSongToPlaylistQueue:(Song *)aSong
-{
-	BOOL hadError = NO;
-	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-	{
-		//DLog(@"inserting %@", aSong.title);
-		[self insertSong:aSong intoTable:@"jukeboxCurrentPlaylist" inDatabase:currentPlaylistDb];
-		if ([songCacheDb hadError])
-			hadError = YES;
-		
-		if (musicControls.isShuffle)
-		{
-			[self insertSong:aSong intoTable:@"jukeboxShufflePlaylist" inDatabase:currentPlaylistDb];
-			if ([songCacheDb hadError])
-				hadError = YES;
-		}
-	}
-	else
-	{
-		[self insertSong:aSong intoTable:@"currentPlaylist" inDatabase:currentPlaylistDb];
-		if ([songCacheDb hadError])
-			hadError = YES;
-		
-		if (musicControls.isShuffle)
-		{
-			[self insertSong:aSong intoTable:@"shufflePlaylist" inDatabase:currentPlaylistDb];
-			if ([songCacheDb hadError])
-				hadError = YES;
-		}
-	}
-	
-	return !hadError;
-}
-
-- (BOOL) addSongToShuffleQueue:(Song *)aSong
-{
-	BOOL hadError = NO;
-	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-	{
-		[self insertSong:aSong intoTable:@"jukeboxShufflePlaylist" inDatabase:currentPlaylistDb];
-		if ([songCacheDb hadError])
-			hadError = YES;
-	}
-	else
-	{
-		[self insertSong:aSong intoTable:@"shufflePlaylist" inDatabase:currentPlaylistDb];
-		if ([songCacheDb hadError])
-			hadError = YES;
-	}
-	
-	return !hadError;
-}
-
-
-- (BOOL) removeSongFromCacheDb:(NSString *)md5
-{
-	BOOL hadError = NO;
-	
-	// Get the song info
-	FMResultSet *result = [songCacheDb executeQuery:@"SELECT genre, transcodedSuffix, suffix FROM cachedSongs WHERE md5 = ?", md5];
-	[result next];
-	NSString *genre = nil;
-	NSString *transcodedSuffix = nil;
-	NSString *suffix = nil;
-	if ([result stringForColumnIndex:0] != nil)
-		genre = [NSString stringWithString:[result stringForColumnIndex:0]];
-	if ([result stringForColumnIndex:1] != nil)
-		transcodedSuffix = [NSString stringWithString:[result stringForColumnIndex:1]];
-	if ([result stringForColumnIndex:2] != nil)
-		suffix = [NSString stringWithString:[result stringForColumnIndex:2]];
-	[result close];
-	if ([songCacheDb hadError])
-		hadError = YES;
-	
-	// Delete the row from the cachedSongs and genresSongs
-	[songCacheDb executeUpdate:@"DELETE FROM cachedSongs WHERE md5 = ?", md5];
-	if ([songCacheDb hadError])
-		hadError = YES;
-	[songCacheDb executeUpdate:@"DELETE FROM cachedSongsLayout WHERE md5 = ?", md5];
-	if ([songCacheDb hadError])
-		hadError = YES;
-	[songCacheDb executeUpdate:@"DELETE FROM genresSongs WHERE md5 = ?", md5];
-	if ([songCacheDb hadError])
-		hadError = YES;
-	
-	// Delete the song from disk
-	NSString *fileName;
-	if (transcodedSuffix)
-		fileName = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", md5, transcodedSuffix]];
-	else
-		fileName = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", md5, suffix]];
-	///////// REWRITE TO CATCH THIS NSFILEMANAGER ERROR ///////////
-	[[NSFileManager defaultManager] removeItemAtPath:fileName error:NULL];
-	
-	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
-	
-	// Check if we're deleting the song that's currently playing. If so, stop the player.
-	if (dataModel.currentSong && ![SavedSettings sharedInstance].isJukeboxEnabled &&
-		[[dataModel.currentSong.path md5] isEqualToString:md5])
-	{
-		[musicControls destroyStreamer];
-	}
-	
-	// Clean up genres table
-	if ([songCacheDb intForQuery:@"SELECT COUNT(*) FROM genresSongs WHERE genre = ?", genre] == 0)
-	{
-		[songCacheDb executeUpdate:@"DELETE FROM genres WHERE genre = ?", genre];
-		if ([songCacheDb hadError])
-			hadError = YES;
-	}
-	
-	return !hadError;
 }
 
 - (NSArray *)sectionInfoFromTable:(NSString *)table inDatabase:(FMDatabase *)database withColumn:(NSString *)column
@@ -1107,14 +734,14 @@ static DatabaseSingleton *sharedInstance = nil;
 {
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
-		[self insertSong:aSong intoTable:@"jukeboxCurrentPlaylist" inDatabase:self.currentPlaylistDb];
+		[aSong insertIntoTable:@"jukeboxCurrentPlaylist" inDatabase:self.currentPlaylistDb];
 		[musicControls jukeboxAddSong:aSong.songId];
 	}
 	else
 	{
-		[self insertSong:aSong intoTable:@"currentPlaylist" inDatabase:self.currentPlaylistDb];
+		[aSong insertIntoTable:@"currentPlaylist" inDatabase:self.currentPlaylistDb];
 		if (musicControls.isShuffle)
-			[self insertSong:aSong intoTable:@"shufflePlaylist" inDatabase:self.currentPlaylistDb];
+			[aSong insertIntoTable:@"shufflePlaylist" inDatabase:self.currentPlaylistDb];
 	}
 }
 

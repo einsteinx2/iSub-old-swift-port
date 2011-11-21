@@ -18,7 +18,10 @@
 #import "MusicSingleton.h"
 #import "SUSStreamHandler.h"
 #import "SUSCurrentPlaylistDAO.h"
-#import "AudioStreamer.h"
+#import "NSArray+FirstObject.h"
+#import "BassWrapperSingleton.h"
+
+#define maxNumOfReconnects 3
 
 static SUSStreamSingleton *sharedInstance = nil;
 
@@ -55,12 +58,37 @@ static SUSStreamSingleton *sharedInstance = nil;
 	}
 }
 
+- (void)cancelStream:(SUSStreamHandler *)handler
+{
+	NSUInteger index = [handlerStack indexOfObject:handler];
+	[self cancelStreamAtIndex:index];
+}
+
+- (void)removeAllStreams
+{
+	[self cancelAllStreams];
+	[handlerStack removeAllObjects];
+}
+
+- (void)removeStreamAtIndex:(NSUInteger)index
+{
+	[self cancelStreamAtIndex:index];
+	[handlerStack removeObjectAtIndex:index];
+}
+
+- (void)removeStream:(SUSStreamHandler *)handler
+{
+	[self cancelStream:handler];
+	[handlerStack removeObject:handler];
+}
+
 #pragma mark Download
 
 - (void)queueStreamForSong:(Song *)song offset:(NSUInteger)byteOffset atIndex:(NSUInteger)index
 {
 	SUSStreamHandler *handler = [[SUSStreamHandler alloc] initWithSong:song offset:byteOffset delegate:self];
 	[handlerStack insertObject:handler atIndex:index];
+	[handler release];
 	
 	if ([handlerStack count] == 1)
 	{
@@ -83,36 +111,66 @@ static SUSStreamSingleton *sharedInstance = nil;
 	[self queueStreamForSong:song offset:byteOffset atIndex:[handlerStack count]];
 }
 
+- (void)queueStreamForNextSong
+{
+	Song *nextSong = [SUSCurrentPlaylistDAO dataModel].nextSong;
+	
+	if (nextSong)
+	{
+		[self queueStreamForSong:nextSong];
+	}
+}
+
 #pragma mark - SUSStreamHandler delegate
 
 - (void)SUSStreamHandlerStartPlayback:(SUSStreamHandler *)handler
-{
+{	
 	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+	Song *nextSong = [SUSCurrentPlaylistDAO dataModel].nextSong;
+	BassWrapperSingleton *bassWrapper = [BassWrapperSingleton sharedInstance];
 	
+	DLog(@"currentSong: %@   mySong: %@", currentSong, handler.mySong);
 	if ([handler.mySong isEqualToSong:currentSong])
 	{
-		// This handler is downloading the current song, so start playback
-		MusicSingleton *musicControls = [MusicSingleton sharedInstance];
-		musicControls.streamer = [[AudioStreamer alloc] initWithFileURL:[NSURL fileURLWithPath:currentSong.localPath]];
-		if (musicControls.streamer)
-		{
-			musicControls.streamer.fileDownloadCurrentSize = currentSong.localFileSize;
-			musicControls.streamer.fileDownloadComplete = YES;
-			[musicControls.streamer start];
-		}
+		[bassWrapper start];
 	}
+	else if ([handler.mySong isEqualToSong:nextSong])
+	{
+		[bassWrapper prepareNextSongStream];
+	}
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"setPauseButtonImage" object:nil];
 }
 
 - (void)SUSStreamHandlerConnectionFailed:(SUSStreamHandler *)handler withError:(NSError *)error
 {
-	[handlerStack removeObject:handler];
-	[handler release]; handler = nil;
+	DLog(@"stream handler failed: %@", handler);
+	if (handler.numOfReconnects < maxNumOfReconnects)
+	{
+		DLog(@"retrying stream handler");
+		// Less than max number of reconnections, so try again 
+		handler.numOfReconnects++;
+		[handler start];
+	}
+	else
+	{
+		DLog(@"removing stream handler");
+		// Tried max number of times so remove
+		[handlerStack removeObject:handler];
+	}
 }
 
 - (void)SUSStreamHandlerConnectionFinished:(SUSStreamHandler *)handler
 {
+	DLog(@"stream handler finished: %@", handler);
+	// Remove the handler from the stack
 	[handlerStack removeObject:handler];
-	[handler release]; handler = nil;
+	
+	// Start the next handler which is now the first object
+	if ([handlerStack count] > 0)
+	{
+		[(SUSStreamHandler *)[handlerStack firstObject] start];
+	}
 }
 
 #pragma mark - Singleton methods
@@ -120,6 +178,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 - (void)setup
 {
     handlerStack = [[NSMutableArray alloc] initWithCapacity:0];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(queueStreamForNextSong) name:ISMSNotification_SongPlaybackEnd object:nil];
 }
 
 + (SUSStreamSingleton *)sharedInstance

@@ -13,6 +13,7 @@
 #import "DatabaseSingleton.h"
 #import "FMDatabase.h"
 #import "CellOverlay.h"
+#import "Song.h"
 
 @implementation GenresGenreUITableViewCell
 
@@ -88,7 +89,7 @@
 	while ([result next])
 	{
 		if ([result stringForColumnIndex:0] != nil)
-			[databaseControls addSongToCacheQueue:[databaseControls songFromGenreDb:[NSString stringWithString:[result stringForColumnIndex:0]]]];
+			[[Song songFromGenreDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCacheQueue];
 	}
 	
 	if (musicControls.isQueueListDownloading == NO)
@@ -178,7 +179,7 @@
 	{
 		//DLog(@"adding %@", [result stringForColumnIndex:0]);
 		if ([result stringForColumnIndex:0] != nil)
-			[databaseControls addSongToPlaylistQueue:[databaseControls songFromGenreDb:[NSString stringWithString:[result stringForColumnIndex:0]]]];
+			[[Song songFromGenreDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToPlaylistQueue];
 	}
 	
 	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:YES];

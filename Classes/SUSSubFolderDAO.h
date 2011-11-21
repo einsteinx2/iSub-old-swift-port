@@ -34,6 +34,7 @@
 @property (readonly) NSUInteger folderLength;
 
 - (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate;
+- (id)initWithDelegate:(id<SUSLoaderDelegate>)theDelegate andId:(NSString *)folderId andArtist:(Artist *)anArtist;
 
 - (Album *)albumForTableViewRow:(NSUInteger)row;
 - (Song *)songForTableViewRow:(NSUInteger)row;

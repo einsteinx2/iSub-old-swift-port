@@ -204,7 +204,6 @@
 
 - (IBAction)nowPlayingAction:(id)sender
 {
-	musicControls.isNewSong = NO;
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
@@ -340,7 +339,7 @@
                         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
                         
                         Song *aSong = [[Song alloc] initWithTBXMLElement:entry];
-                        [databaseControls insertSongIntoServerPlaylist:aSong playlistId:md5];
+                        [aSong insertIntoServerPlaylistWithPlaylistId:md5];
                         [aSong release];
                         
                         // Get the next message
@@ -445,13 +444,13 @@ static NSString *kName_Error = @"error";
 	Song *aSong;
 	if (viewObjects.isLocalPlaylist)
 	{
-		aSong = [databaseControls songFromDbRow:indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", self.md5] inDatabase:databaseControls.localPlaylistsDb];
+		aSong = [Song songFromDbRow:indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", self.md5] inDatabase:databaseControls.localPlaylistsDb];
 		//DLog(@"aSong: %@", aSong);
 	}
 	else
 	{
 		//aSong = [viewObjects.listOfPlaylistSongs objectAtIndex:indexPath.row];
-		aSong = [databaseControls songFromServerPlaylistId:md5 row:indexPath.row];
+		aSong = [Song songFromServerPlaylistId:md5 row:indexPath.row];
 	}
 	
 	[cell.coverArtView loadImageFromCoverArtId:aSong.coverArtId];
@@ -519,7 +518,6 @@ static NSString *kName_Error = @"error";
 			[musicControls jukeboxReplacePlaylistWithLocal];
 		}
 			
-		musicControls.isNewSong = YES;
 		musicControls.isShuffle = NO;
 		
 		[musicControls playSongAtPosition:indexPath.row];

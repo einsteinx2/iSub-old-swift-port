@@ -83,7 +83,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-    DLog(@"received: %@", [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
+    //DLog(@"received: %@", [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
 	TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
     TBXMLElement *root = tbxml.rootXMLElement;
     if (root) 

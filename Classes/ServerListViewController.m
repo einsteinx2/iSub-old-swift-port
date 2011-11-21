@@ -284,7 +284,6 @@
 		[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"recover"];
 		[[NSUserDefaults standardUserDefaults] synchronize];
 		[musicControls destroyStreamer];
-		musicControls.isPlaying = NO;
 		settings.isJukeboxEnabled = NO;
 		musicControls.showNowPlayingIcon = NO;
 		
@@ -317,7 +316,7 @@
 		//[appDelegate.allAlbumsNavigationController.topViewController viewDidLoad];
 		//[appDelegate.allSongsNavigationController.topViewController viewDidLoad];
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"setSongTitle" object:nil];
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"initSongInfo" object:nil];
+		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_SongPlaybackStart object:nil];
 		
 		// Add the tab bar controller back to the window
 		if (!IS_IPAD())

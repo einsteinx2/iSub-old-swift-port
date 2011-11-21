@@ -12,6 +12,7 @@
 #import "DatabaseSingleton.h"
 #import "FMDatabase.h"
 #import "CellOverlay.h"
+#import "Song.h"
 
 @implementation CacheAlbumUITableViewCell
 
@@ -83,7 +84,7 @@
 	while ([result next])
 	{
 		if ([result stringForColumnIndex:0] != nil)
-			[databaseControls removeSongFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]];
+			[Song removeSongFromCacheDbByMD5:[NSString stringWithString:[result stringForColumnIndex:0]]];
 	}
 	
 	// Reload the cached songs table
@@ -160,7 +161,7 @@
 	while ([result next])
 	{
 		if ([result stringForColumnIndex:0] != nil)
-			[databaseControls addSongToPlaylistQueue:[databaseControls songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]]];
+			[[Song songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToPlaylistQueue];
 	}
 	
 	// Hide the loading screen

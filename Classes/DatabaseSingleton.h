@@ -38,30 +38,6 @@
 + (DatabaseSingleton*)sharedInstance;
 
 - (void) initDatabases;
-
-- (void) createServerPlaylistTable:(NSString *)md5;
-- (void) removeServerPlaylistTable:(NSString *)md5;
-
-- (Album *) albumFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabase:(FMDatabase *)db;
-- (Song *) songFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabase:(FMDatabase *)db;
-- (Song *) songFromGenreDb:(NSString *)md5;
-- (Song *) songFromCacheDb:(NSString *)md5;
-- (Song *) songFromServerPlaylistId:(NSString *)md5 row:(NSUInteger)row;
-
-- (NSUInteger) serverPlaylistCount:(NSString *)md5;
-
-- (BOOL) insertSongIntoServerPlaylist:(Song *)aSong playlistId:(NSString *)md5;
-- (BOOL) insertAlbumIntoFolderCache:(Album *)anAlbum forId:(NSString *)folderId;
-- (BOOL) insertSongIntoFolderCache:(Song *)aSong forId:(NSString *)folderId;
-
-- (BOOL) insertAlbum:(Album *)anAlbum intoTable:(NSString *)table inDatabase:(FMDatabase *)db;
-- (BOOL) insertSong:(Song *)aSong intoTable:(NSString *)table inDatabase:(FMDatabase *)db;
-- (BOOL) addSongToCacheQueue:(Song *)aSong;
-- (BOOL) addSongToPlaylistQueue:(Song *)aSong;
-- (BOOL) addSongToShuffleQueue:(Song *)aSong;
-
-- (BOOL) removeSongFromCacheDb:(NSString *)md5;
-
 - (void) closeAllDatabases;
 - (void) resetCoverArtCache;
 - (void) resetFolderCache;
@@ -71,17 +47,22 @@
 - (void) resetShufflePlaylist;
 - (void) resetJukeboxPlaylist;
 
+- (void) createServerPlaylistTable:(NSString *)md5;
+- (void) removeServerPlaylistTable:(NSString *)md5;
+
+- (Album *) albumFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabase:(FMDatabase *)db;
+- (BOOL) insertAlbumIntoFolderCache:(Album *)anAlbum forId:(NSString *)folderId;
+- (BOOL) insertAlbum:(Album *)anAlbum intoTable:(NSString *)table inDatabase:(FMDatabase *)db;
+
+- (NSUInteger) serverPlaylistCount:(NSString *)md5;
+
 - (NSArray *)sectionInfoFromTable:(NSString *)table inDatabase:(FMDatabase *)database withColumn:(NSString *)column;
 
 - (void)queueSong:(Song *)aSong;
-
 - (void)queueAllSongs:(NSString *)folderId artist:(Artist *)theArtist;
 - (void)downloadAllSongs:(NSString *)folderId artist:(Artist *)theArtist;
 - (void)playAllSongs:(NSString *)folderId artist:(Artist *)theArtist;
 - (void)shuffleAllSongs:(NSString *)folderId artist:(Artist *)theArtist;
 - (void)shufflePlaylist;
-
-// New Model Stuff
-
 
 @end

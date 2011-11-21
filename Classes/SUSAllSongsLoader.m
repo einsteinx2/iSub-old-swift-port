@@ -594,7 +594,7 @@ static NSString *kName_Error = @"error";
 						if (aSong.path)
 						{
 							// Add the song to the allSongs table
-							[databaseControls insertSong:aSong intoTable:@"allSongsTemp" inDatabase:databaseControls.allSongsDb];
+							[aSong insertIntoTable:@"allSongsTemp" inDatabase:databaseControls.allSongsDb];
 							tempSongsCount++;
 							totalSongsProcessed++;
 							

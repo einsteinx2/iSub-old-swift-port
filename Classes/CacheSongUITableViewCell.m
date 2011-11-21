@@ -13,6 +13,7 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "CellOverlay.h"
+#import "Song.h"
 
 @implementation CacheSongUITableViewCell
 
@@ -88,7 +89,7 @@
 
 - (void)deleteAction
 {
-	[databaseControls removeSongFromCacheDb:md5];
+	[Song removeSongFromCacheDbByMD5:md5];
 		
 	overlayView.downloadButton.alpha = .3;
 	overlayView.downloadButton.enabled = NO;
@@ -102,7 +103,7 @@
 
 - (void)queueAction
 {	
-	[databaseControls addSongToPlaylistQueue:[databaseControls songFromCacheDb:md5]];
+	[[Song songFromCacheDb:md5] addToPlaylistQueue];
 
 	[self hideOverlay];
 }

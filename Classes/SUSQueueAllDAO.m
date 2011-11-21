@@ -224,11 +224,11 @@
 		
 		if (isQueue)
 		{
-			[databaseControls addSongToPlaylistQueue:aSong];
+			[aSong addToPlaylistQueue];
 		}
 		else
 		{
-			[databaseControls addSongToCacheQueue:aSong];
+			[aSong addToCacheQueue];
 		}
 		
 		[pool release];

@@ -225,9 +225,7 @@
 
 
 - (void)playAllPlaySong
-{
-	musicControls.isNewSong = YES;
-	
+{	
 	[musicControls destroyStreamer];
 	[musicControls playPauseSong];
 	
@@ -278,7 +276,6 @@
 
 - (IBAction)nowPlayingAction:(id)sender
 {
-	musicControls.isNewSong = NO;
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
@@ -534,7 +531,7 @@
 			{
 				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 				
-				[databaseControls addSongToPlaylistQueue:aSong];
+				[aSong addToPlaylistQueue];
 				
 				// In jukebox mode, collect the song ids to send to the server
 				if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -553,7 +550,6 @@
 			[songIds release];
 			
 			// Set player defaults
-			musicControls.isNewSong = YES;
 			musicControls.isShuffle = NO;
 			
 			// Start the song

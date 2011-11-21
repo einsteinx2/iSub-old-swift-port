@@ -7,7 +7,7 @@
 //
 
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, OBSlider;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, OBSlider, Song;
 
 @interface SongInfoViewController : UIViewController
 {
@@ -15,58 +15,45 @@
 	ViewObjectsSingleton *viewObjects;
 	MusicSingleton *musicControls;
 	DatabaseSingleton *databaseControls;
-	
-	IBOutlet UIButton *songInfoToggleButton;
-	IBOutlet OBSlider *progressSlider;
-	UIView *downloadProgress;
-	IBOutlet UILabel *progressLabel;
-	IBOutlet UIImageView *progressLabelBackground;
-	IBOutlet UILabel *elapsedTimeLabel;
-	IBOutlet UILabel *remainingTimeLabel;
-	IBOutlet UILabel *artistLabel;
-	IBOutlet UILabel *albumLabel;
-	IBOutlet UILabel *titleLabel;
-	IBOutlet UILabel *trackLabel;
-	IBOutlet UILabel *yearLabel;
-	IBOutlet UILabel *genreLabel;
-	IBOutlet UILabel *bitRateLabel;
-	IBOutlet UILabel *lengthLabel;
-	IBOutlet UIButton *repeatButton;
-	IBOutlet UIButton *bookmarkButton;
-	IBOutlet UILabel *bookmarkCountLabel;
-	IBOutlet UIButton *shuffleButton;
-	
+		
 	UITextField *bookmarkNameTextField;
 	NSArray *bookmarkEntry;
 	NSInteger bookmarkIndex;
 
 	NSTimer *progressTimer;
+	NSTimer *bitrateTimer;
 	BOOL pauseSlider;
 	
 	BOOL hasMoved;
 	float oldPosition;
-	float byteOffset;
+	NSUInteger byteOffset;
 	
 	NSTimer *updateTimer;
 	
 	int bookmarkPosition;
 }
 
-@property (nonatomic, retain) OBSlider *progressSlider;
+@property (nonatomic, copy) Song *currentSong;
+
+@property (nonatomic, retain) IBOutlet UIButton *songInfoToggleButton;
+@property (nonatomic, retain) IBOutlet OBSlider *progressSlider;
+@property (nonatomic, retain) IBOutlet UILabel *progressLabel;
+@property (nonatomic, retain) IBOutlet UIImageView *progressLabelBackground;
 @property (nonatomic, retain) UIView *downloadProgress;
-@property (nonatomic, retain) UILabel *elapsedTimeLabel;
-@property (nonatomic, retain) UILabel *remainingTimeLabel;
-@property (nonatomic, retain) UILabel *artistLabel;
-@property (nonatomic, retain) UILabel *albumLabel;
-@property (nonatomic, retain) UILabel *titleLabel;
-@property (nonatomic, retain) UILabel *trackLabel;
-@property (nonatomic, retain) UILabel *yearLabel;
-@property (nonatomic, retain) UILabel *genreLabel;
-@property (nonatomic, retain) UILabel *bitRateLabel;
-@property (nonatomic, retain) UILabel *lengthLabel;
-@property (nonatomic, retain) UIButton *repeatButton;
-@property (nonatomic, retain) UIButton *bookmarkButton;
-@property (nonatomic, retain) UIButton *shuffleButton;
+@property (nonatomic, retain) IBOutlet UILabel *elapsedTimeLabel;
+@property (nonatomic, retain) IBOutlet UILabel *remainingTimeLabel;
+@property (nonatomic, retain) IBOutlet UILabel *artistLabel;
+@property (nonatomic, retain) IBOutlet UILabel *albumLabel;
+@property (nonatomic, retain) IBOutlet UILabel *titleLabel;
+@property (nonatomic, retain) IBOutlet UILabel *trackLabel;
+@property (nonatomic, retain) IBOutlet UILabel *yearLabel;
+@property (nonatomic, retain) IBOutlet UILabel *genreLabel;
+@property (nonatomic, retain) IBOutlet UILabel *bitRateLabel;
+@property (nonatomic, retain) IBOutlet UILabel *lengthLabel;
+@property (nonatomic, retain) IBOutlet UIButton *repeatButton;
+@property (nonatomic, retain) IBOutlet UIButton *bookmarkButton;
+@property (nonatomic, retain) IBOutlet UILabel *bookmarkCountLabel;
+@property (nonatomic, retain) IBOutlet UIButton *shuffleButton;
 
 @property (nonatomic, retain) NSTimer *progressTimer;
 

@@ -29,14 +29,20 @@
 #import "NSString-time.h"
 #import "SUSCurrentPlaylistDAO.h"
 
+@interface CacheViewController (Private)
+- (void)addNoSongsScreen;
+- (void)segmentAction:(id)sender;
+- (void)removeSaveEditButtons;
+- (void)addSaveEditButtons;
+- (void)removeNoSongsScreen;
+- (void)createQueuedSongsList;
+@end
+
 @implementation CacheViewController
 
 @synthesize listOfArtists, listOfArtistsSections, sectionInfo;
 
-//@synthesize queueDownloadProgressView;
-
-#pragma mark -
-#pragma mark View lifecycle
+#pragma mark - Rotation handling
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -61,6 +67,8 @@
 		}
 	}
 }
+
+#pragma mark - View lifecycle
 
 - (void)viewDidLoad 
 {
@@ -245,6 +253,335 @@
 		[[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(segmentAction:) name:kReachabilityChangedNotification object: nil];
 	}
 }
+
+- (void)viewWillAppear:(BOOL)animated 
+{	
+	[super viewWillAppear:animated];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:) name:@"storePurchaseComplete" object:nil];
+	
+	self.tableView.scrollEnabled = YES;
+	[jukeboxInputBlocker removeFromSuperview];
+	jukeboxInputBlocker = nil;
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	{
+		self.tableView.scrollEnabled = NO;
+		
+		jukeboxInputBlocker = [UIButton buttonWithType:UIButtonTypeCustom];
+		jukeboxInputBlocker.frame = CGRectMake(0, 0, 1004, 1004);
+		[self.view addSubview:jukeboxInputBlocker];
+		
+		UIView *colorView = [[UIView alloc] initWithFrame:jukeboxInputBlocker.frame];
+		colorView.backgroundColor = [UIColor blackColor];
+		colorView.alpha = 0.5;
+		[jukeboxInputBlocker addSubview:colorView];
+		[colorView release];
+	}
+	
+	if(musicControls.showPlayerIcon)
+	{
+		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
+	}
+	else
+	{
+		self.navigationItem.rightBarButtonItem = nil;
+	}
+	
+	// Reload the data in case it changed
+	if (settings.isCacheUnlocked)
+	{
+		self.tableView.tableHeaderView.hidden = NO;
+		
+		segmentedControl.selectedSegmentIndex = 0;
+		[self segmentAction:nil];
+	}
+	else
+	{
+		self.tableView.tableHeaderView.hidden = YES;
+		[self addNoSongsScreen];
+	}
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"storePurchaseComplete" object:nil];
+}
+
+- (void)segmentAction:(id)sender
+{
+	if (segmentedControl.selectedSegmentIndex == 0)
+	{
+		if (self.tableView.editing)
+		{
+			[self editSongsAction:nil];
+		}
+		
+		DLog(@"count of cachedSongsLayout: %i", [databaseControls.songCacheDb intForQuery:@"select count(*) from cachedSongsLayout"]);
+		
+		// Create the artist list
+		self.listOfArtists = [NSMutableArray arrayWithCapacity:1];
+		self.listOfArtistsSections = [NSMutableArray arrayWithCapacity:28];
+		
+		// Fix for slow load problem (EDIT: Looks like it didn't actually work :(
+		[databaseControls.inMemoryDb executeUpdate:@"DROP TABLE cachedSongsArtistList"];
+		[databaseControls.inMemoryDb executeUpdate:@"CREATE TABLE cachedSongsArtistList (artist TEXT UNIQUE)"];
+		[databaseControls.inMemoryDb executeUpdate:@"ATTACH DATABASE ? AS songCacheDb", [NSString stringWithFormat:@"%@/songCache.db", databaseControls.databaseFolderPath]];
+		if ([databaseControls.inMemoryDb hadError]) { DLog(@"Err attaching the songCacheDb %d: %@", [databaseControls.inMemoryDb lastErrorCode], [databaseControls.inMemoryDb lastErrorMessage]); }
+		[databaseControls.inMemoryDb executeUpdate:@"INSERT OR IGNORE INTO cachedSongsArtistList SELECT seg1 FROM cachedSongsLayout"];
+		[databaseControls.inMemoryDb executeUpdate:@"DETACH DATABASE songCacheDb"];
+		
+		//FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT seg1 FROM cachedSongsLayout GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE"];
+		FMResultSet *result = [databaseControls.inMemoryDb executeQuery:@"SELECT artist FROM cachedSongsArtistList ORDER BY artist COLLATE NOCASE"];
+		while ([result next])
+		{
+			//
+			// Cover up for blank insert problem
+			//
+			if ([[result stringForColumnIndex:0] length] > 0)
+				[listOfArtists addObject:[NSString stringWithString:[result stringForColumnIndex:0]]]; 
+		}
+		
+		// Sort out The El La Los Las Le Les (Subsonic default)
+		for (int i = 0; i < [listOfArtists count]; i++)
+		{
+			NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+			NSString *artist = [listOfArtists objectAtIndex:i];
+			if ([artist length] > 5)
+			{
+				NSString *artistPrefix = [[artist substringToIndex:4] lowercaseString];
+				if ([artistPrefix isEqualToString:@"the "] || [artistPrefix isEqualToString:@"los "] ||
+					[artistPrefix isEqualToString:@"las "] || [artistPrefix isEqualToString:@"les "])
+				{
+					artist = [NSString stringWithFormat:@"%@, %@", [artist substringFromIndex:4], [artist substringToIndex:3]];
+				}
+				[listOfArtists replaceObjectAtIndex:i withObject:artist];
+			}
+			else if ([artist length] > 4)
+			{
+				NSString *artistPrefix = [[artist substringToIndex:4] lowercaseString];
+				if ([artistPrefix isEqualToString:@"el "] || [artistPrefix isEqualToString:@"la "] ||
+					[artistPrefix isEqualToString:@"le "])
+				{
+					artist = [NSString stringWithFormat:@"%@, %@", [artist substringFromIndex:3], [artist substringToIndex:2]];
+				}
+				[listOfArtists replaceObjectAtIndex:i withObject:artist];
+			}
+			[pool release];
+		}
+		[listOfArtists sortUsingSelector:@selector(caseInsensitiveCompare:)];
+		
+		// Create the section index
+		[databaseControls.inMemoryDb executeUpdate:@"DROP TABLE cachedSongsArtistIndex"];
+		[databaseControls.inMemoryDb executeUpdate:@"CREATE TABLE cachedSongsArtistIndex (artist TEXT)"];
+		for (NSString *artist in listOfArtists)
+		{
+			[databaseControls.inMemoryDb executeUpdate:@"INSERT INTO cachedSongsArtistIndex (artist) VALUES (?)", artist, nil];
+		}
+		self.sectionInfo = nil; 
+		self.sectionInfo = [databaseControls sectionInfoFromTable:@"cachedSongsArtistIndex" 
+													   inDatabase:databaseControls.inMemoryDb 
+													   withColumn:@"artist"];
+		showIndex = YES;
+		if ([sectionInfo count] < 5)
+			showIndex = NO;
+		
+		// Sort into sections		
+		if ([sectionInfo count] > 0)
+		{
+			int lastIndex = 0;
+			for (int i = 0; i < [sectionInfo count] - 1; i++)
+			{
+				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+				int index = [[[sectionInfo objectAtIndex:i+1] objectAtIndex:1] intValue];
+				NSMutableArray *section = [NSMutableArray arrayWithCapacity:0];
+				for (int i = lastIndex; i < index; i++)
+				{
+					[section addObject:[listOfArtists objectAtIndex:i]];
+				}
+				[listOfArtistsSections addObject:section];
+				lastIndex = index;
+				[pool release];
+			}
+			NSMutableArray *section = [NSMutableArray arrayWithCapacity:0];
+			for (int i = lastIndex; i < [listOfArtists count]; i++)
+			{
+				[section addObject:[listOfArtists objectAtIndex:i]];
+			}
+			[listOfArtistsSections addObject:section];
+		}
+		
+		// Move the definite article back to the beginning  Le El La The Los Las Les
+		for (NSMutableArray *section in listOfArtistsSections)
+		{
+			for (int i = 0; i < [section count]; i++)
+			{
+				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+				NSString *artist = [section objectAtIndex:i];
+				NSUInteger length = [artist length];
+				
+				if (length > 6)
+				{
+					NSString *substring5 = [[artist substringFromIndex:length - 5] lowercaseString];
+					if ([substring5 isEqualToString:@", the"] || [substring5 isEqualToString:@", los"] ||
+						[substring5 isEqualToString:@", las"] || [substring5 isEqualToString:@", les"])
+					{
+						artist = [NSString stringWithFormat:@"%@ %@", 
+								  [artist substringFromIndex:length - 3], 
+								  [artist substringToIndex:length - 5]];
+					}
+				}
+				else if (length > 5)
+				{
+					NSString *substring4 = [[artist substringFromIndex:length - 4] lowercaseString];
+					if ([substring4 isEqualToString:@", le"] || [substring4 isEqualToString:@", el"] ||
+						[substring4 isEqualToString:@", la"])
+					{
+						artist = [NSString stringWithFormat:@"%@ %@", 
+								  [artist substringFromIndex:length - 2], 
+								  [artist substringToIndex:length - 4]];
+					}
+				}
+				[section replaceObjectAtIndex:i withObject:artist];
+				[pool release];
+			}
+		}
+		
+		DLog(@"sectionInfo: %@", sectionInfo);
+		
+		[self.tableView reloadData];
+		
+		if ([listOfArtists count] == 0)
+		{
+			[self removeSaveEditButtons];
+			
+			[self addNoSongsScreen];
+		}
+		else 
+		{
+			[self removeNoSongsScreen];
+			
+			if (viewObjects.isOfflineMode == NO)
+			{
+				[self addSaveEditButtons];
+			}
+		}
+	}
+	else if (segmentedControl.selectedSegmentIndex == 1)
+	{
+		if (self.tableView.editing)
+		{
+			[self editSongsAction:nil];
+		}
+		
+		// Create the cachedSongsList table
+		[self createQueuedSongsList];
+		
+		if ([databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"] == 0)
+		{
+			[self removeSaveEditButtons];
+			
+			[self addNoSongsScreen];
+		}
+		else
+		{
+			[self removeNoSongsScreen];
+			
+			[self addSaveEditButtons];
+		}		
+	}
+	
+	[self.tableView reloadData];
+}
+
+#pragma mark - Button Handling
+
+- (void)showStore
+{
+	StoreViewController *store = [[StoreViewController alloc] init];
+	[self.navigationController pushViewController:store animated:YES];
+	[store release];
+}
+
+- (void) settingsAction:(id)sender 
+{
+	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
+	serverListViewController.hidesBottomBarWhenPushed = YES;
+	[self.navigationController pushViewController:serverListViewController animated:YES];
+	[serverListViewController release];
+}
+
+- (IBAction)nowPlayingAction:(id)sender
+{
+	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
+	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
+	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
+	[streamingPlayerViewController release];
+}
+
+- (void)playAllAction:(id)sender
+{	
+	[viewObjects showLoadingScreenOnMainWindow];
+	[self performSelectorInBackground:@selector(loadPlayAllPlaylist:) withObject:@"NO"];
+}
+
+- (void)shuffleAction:(id)sender
+{
+	[viewObjects showLoadingScreenOnMainWindow];
+	[self performSelectorInBackground:@selector(loadPlayAllPlaylist:) withObject:@"YES"];
+}
+
+- (void)loadPlayAllPlaylist:(NSString *)shuffle
+{	
+	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
+	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
+	
+	musicControls.isShuffle = NO;
+	
+	BOOL isShuffle;
+	if ([shuffle isEqualToString:@"YES"])
+		isShuffle = YES;
+	else
+		isShuffle = NO;
+	
+	[databaseControls resetCurrentPlaylistDb];
+	
+	FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout ORDER BY seg1 COLLATE NOCASE"];
+	
+	while ([result next])
+	{
+		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+		
+		Song *aSong = [Song songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]];
+		
+		if (aSong.path)
+			[aSong addToPlaylistQueue];
+		
+		[pool release];
+	}
+	
+	if (isShuffle)
+	{
+		musicControls.isShuffle = YES;
+		[databaseControls shufflePlaylist];
+	}
+	else
+	{
+		musicControls.isShuffle = NO;
+	}
+	
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+		[musicControls jukeboxReplacePlaylistWithLocal];
+	
+	// Must do UI stuff in main thread
+	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
+	[self performSelectorOnMainThread:@selector(playAllPlaySong) withObject:nil waitUntilDone:NO];	
+	
+	[autoreleasePool release];
+}
+
+#pragma mark -
 
 - (void) updateQueueDownloadProgress
 {
@@ -622,272 +959,7 @@
 	}
 }
 
-- (void)showStore
-{
-	StoreViewController *store = [[StoreViewController alloc] init];
-	[self.navigationController pushViewController:store animated:YES];
-	[store release];
-}
 
-- (void)segmentAction:(id)sender
-{
-	if (segmentedControl.selectedSegmentIndex == 0)
-	{
-		if (self.tableView.editing)
-		{
-			[self editSongsAction:nil];
-		}
-		
-		// Create the artist list
-		self.listOfArtists = [NSMutableArray arrayWithCapacity:1];
-		self.listOfArtistsSections = [NSMutableArray arrayWithCapacity:28];
-		
-		// Fix for slow load problem (EDIT: Looks like it didn't actually work :(
-		[databaseControls.inMemoryDb executeUpdate:@"DROP TABLE cachedSongsArtistList"];
-		[databaseControls.inMemoryDb executeUpdate:@"CREATE TABLE cachedSongsArtistList (artist TEXT UNIQUE)"];
-		[databaseControls.inMemoryDb executeUpdate:@"ATTACH DATABASE ? AS songCacheDb", [NSString stringWithFormat:@"%@/songCache.db", databaseControls.databaseFolderPath]];
-		if ([databaseControls.inMemoryDb hadError]) { DLog(@"Err attaching the songCacheDb %d: %@", [databaseControls.inMemoryDb lastErrorCode], [databaseControls.inMemoryDb lastErrorMessage]); }
-		[databaseControls.inMemoryDb executeUpdate:@"INSERT OR IGNORE INTO cachedSongsArtistList SELECT seg1 FROM cachedSongsLayout"];
-		[databaseControls.inMemoryDb executeUpdate:@"DETACH DATABASE songCacheDb"];
-		
-		//FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT seg1 FROM cachedSongsLayout GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE"];
-		FMResultSet *result = [databaseControls.inMemoryDb executeQuery:@"SELECT artist FROM cachedSongsArtistList ORDER BY artist COLLATE NOCASE"];
-		while ([result next])
-		{
-			//
-			// Cover up for blank insert problem
-			//
-			if ([[result stringForColumnIndex:0] length] > 0)
-				[listOfArtists addObject:[NSString stringWithString:[result stringForColumnIndex:0]]]; 
-		}
-		
-		// Sort out The El La Los Las Le Les (Subsonic default)
-		for (int i = 0; i < [listOfArtists count]; i++)
-		{
-			NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-			NSString *artist = [listOfArtists objectAtIndex:i];
-			if ([artist length] > 5)
-			{
-				NSString *artistPrefix = [[artist substringToIndex:4] lowercaseString];
-				if ([artistPrefix isEqualToString:@"the "] || [artistPrefix isEqualToString:@"los "] ||
-					[artistPrefix isEqualToString:@"las "] || [artistPrefix isEqualToString:@"les "])
-				{
-					artist = [NSString stringWithFormat:@"%@, %@", [artist substringFromIndex:4], [artist substringToIndex:3]];
-				}
-				[listOfArtists replaceObjectAtIndex:i withObject:artist];
-			}
-			else if ([artist length] > 4)
-			{
-				NSString *artistPrefix = [[artist substringToIndex:4] lowercaseString];
-				if ([artistPrefix isEqualToString:@"el "] || [artistPrefix isEqualToString:@"la "] ||
-					[artistPrefix isEqualToString:@"le "])
-				{
-					artist = [NSString stringWithFormat:@"%@, %@", [artist substringFromIndex:3], [artist substringToIndex:2]];
-				}
-				[listOfArtists replaceObjectAtIndex:i withObject:artist];
-			}
-			[pool release];
-		}
-		[listOfArtists sortUsingSelector:@selector(caseInsensitiveCompare:)];
-		
-		// Create the section index
-		[databaseControls.inMemoryDb executeUpdate:@"DROP TABLE cachedSongsArtistIndex"];
-		[databaseControls.inMemoryDb executeUpdate:@"CREATE TABLE cachedSongsArtistIndex (artist TEXT)"];
-		for (NSString *artist in listOfArtists)
-		{
-			[databaseControls.inMemoryDb executeUpdate:@"INSERT INTO cachedSongsArtistIndex (artist) VALUES (?)", artist, nil];
-		}
-		self.sectionInfo = nil; 
-		self.sectionInfo = [databaseControls sectionInfoFromTable:@"cachedSongsArtistIndex" 
-													   inDatabase:databaseControls.inMemoryDb 
-													   withColumn:@"artist"];
-		showIndex = YES;
-		if ([sectionInfo count] < 5)
-			showIndex = NO;
-
-		// Sort into sections		
-		if ([sectionInfo count] > 0)
-		{
-			int lastIndex = 0;
-			for (int i = 0; i < [sectionInfo count] - 1; i++)
-			{
-				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-				int index = [[[sectionInfo objectAtIndex:i+1] objectAtIndex:1] intValue];
-				NSMutableArray *section = [NSMutableArray arrayWithCapacity:0];
-				for (int i = lastIndex; i < index; i++)
-				{
-					[section addObject:[listOfArtists objectAtIndex:i]];
-				}
-				[listOfArtistsSections addObject:section];
-				lastIndex = index;
-				[pool release];
-			}
-			NSMutableArray *section = [NSMutableArray arrayWithCapacity:0];
-			for (int i = lastIndex; i < [listOfArtists count]; i++)
-			{
-				[section addObject:[listOfArtists objectAtIndex:i]];
-			}
-			[listOfArtistsSections addObject:section];
-		}
-		
-		
-		// Move the definite article back to the beginning  Le El La The Los Las Les
-		for (NSMutableArray *section in listOfArtistsSections)
-		{
-			for (int i = 0; i < [section count]; i++)
-			{
-				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-				NSString *artist = [section objectAtIndex:i];
-				NSUInteger length = [artist length];
-				
-				if (length > 6)
-				{
-					NSString *substring5 = [[artist substringFromIndex:length - 5] lowercaseString];
-					if ([substring5 isEqualToString:@", the"] || [substring5 isEqualToString:@", los"] ||
-						[substring5 isEqualToString:@", las"] || [substring5 isEqualToString:@", les"])
-					{
-						artist = [NSString stringWithFormat:@"%@ %@", 
-								  [artist substringFromIndex:length - 3], 
-								  [artist substringToIndex:length - 5]];
-					}
-				}
-				else if (length > 5)
-				{
-					NSString *substring4 = [[artist substringFromIndex:length - 4] lowercaseString];
-					if ([substring4 isEqualToString:@", le"] || [substring4 isEqualToString:@", el"] ||
-						[substring4 isEqualToString:@", la"])
-					{
-						artist = [NSString stringWithFormat:@"%@ %@", 
-								  [artist substringFromIndex:length - 2], 
-								  [artist substringToIndex:length - 4]];
-					}
-				}
-				[section replaceObjectAtIndex:i withObject:artist];
-				[pool release];
-			}
-		}
-		
-		DLog(@"sectionInfo: %@", sectionInfo);
-		
-		[self.tableView reloadData];
-		
-		if ([listOfArtists count] == 0)
-		{
-			[self removeSaveEditButtons];
-						
-			[self addNoSongsScreen];
-		}
-		else 
-		{
-			[self removeNoSongsScreen];
-			
-			if (viewObjects.isOfflineMode == NO)
-			{
-				[self addSaveEditButtons];
-			}
-		}
-	}
-	else if (segmentedControl.selectedSegmentIndex == 1)
-	{
-		if (self.tableView.editing)
-		{
-			[self editSongsAction:nil];
-		}
-		
-		// Create the cachedSongsList table
-		[self createQueuedSongsList];
-		
-		if ([databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"] == 0)
-		{
-			[self removeSaveEditButtons];
-						
-			[self addNoSongsScreen];
-		}
-		else
-		{
-			[self removeNoSongsScreen];
-			
-			[self addSaveEditButtons];
-		}		
-	}
-	
-	[self.tableView reloadData];
-}
-
-- (void)viewWillAppear:(BOOL)animated 
-{	
-	[super viewWillAppear:animated];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:) name:@"storePurchaseComplete" object:nil];
-	
-	self.tableView.scrollEnabled = YES;
-	[jukeboxInputBlocker removeFromSuperview];
-	jukeboxInputBlocker = nil;
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-	{
-		self.tableView.scrollEnabled = NO;
-		
-		jukeboxInputBlocker = [UIButton buttonWithType:UIButtonTypeCustom];
-		jukeboxInputBlocker.frame = CGRectMake(0, 0, 1004, 1004);
-		[self.view addSubview:jukeboxInputBlocker];
-		
-		UIView *colorView = [[UIView alloc] initWithFrame:jukeboxInputBlocker.frame];
-		colorView.backgroundColor = [UIColor blackColor];
-		colorView.alpha = 0.5;
-		[jukeboxInputBlocker addSubview:colorView];
-		[colorView release];
-	}
-	
-	if(musicControls.showPlayerIcon)
-	{
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
-	}
-	else
-	{
-		self.navigationItem.rightBarButtonItem = nil;
-	}
-	
-	// Reload the data in case it changed
-	if (settings.isCacheUnlocked)
-	{
-		self.tableView.tableHeaderView.hidden = NO;
-		
-		segmentedControl.selectedSegmentIndex = 0;
-		[self segmentAction:nil];
-	}
-	else
-	{
-		self.tableView.tableHeaderView.hidden = YES;
-		[self addNoSongsScreen];
-	}
-}
-
-
--(void)viewWillDisappear:(BOOL)animated
-{
-	[super viewWillDisappear:animated];
-	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"storePurchaseComplete" object:nil];
-}
-
-
-- (void) settingsAction:(id)sender 
-{
-	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
-	serverListViewController.hidesBottomBarWhenPushed = YES;
-	[self.navigationController pushViewController:serverListViewController animated:YES];
-	[serverListViewController release];
-}
-
-
-- (IBAction)nowPlayingAction:(id)sender
-{
-	musicControls.isNewSong = NO;
-	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-	[streamingPlayerViewController release];
-}
 
 
 - (void) showDeleteButton
@@ -1213,73 +1285,8 @@
 	}
 }
 
-- (void)playAllAction:(id)sender
-{	
-	[viewObjects showLoadingScreenOnMainWindow];
-	[self performSelectorInBackground:@selector(loadPlayAllPlaylist:) withObject:@"NO"];
-}
-
-- (void)shuffleAction:(id)sender
-{
-	[viewObjects showLoadingScreenOnMainWindow];
-	[self performSelectorInBackground:@selector(loadPlayAllPlaylist:) withObject:@"YES"];
-}
-
-
-- (void)loadPlayAllPlaylist:(NSString *)shuffle
-{	
-	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-	
-	musicControls.isShuffle = NO;
-	
-	BOOL isShuffle;
-	if ([shuffle isEqualToString:@"YES"])
-		isShuffle = YES;
-	else
-		isShuffle = NO;
-	
-	[databaseControls resetCurrentPlaylistDb];
-	
-	FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout ORDER BY seg1 COLLATE NOCASE"];
-	
-	while ([result next])
-	{
-		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-		
-		Song *aSong = [databaseControls songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]];
-		
-		if (aSong.path)
-			[databaseControls addSongToPlaylistQueue:aSong];
-		
-		[pool release];
-	}
-	
-	if (isShuffle)
-	{
-		musicControls.isShuffle = YES;
-		[databaseControls shufflePlaylist];
-	}
-	else
-	{
-		musicControls.isShuffle = NO;
-	}
-	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-		[musicControls jukeboxReplacePlaylistWithLocal];
-	
-	// Must do UI stuff in main thread
-	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
-	[self performSelectorOnMainThread:@selector(playAllPlaySong) withObject:nil waitUntilDone:NO];	
-	
-	[autoreleasePool release];
-}
-
-
 - (void)playAllPlaySong
-{
-	musicControls.isNewSong = YES;
-	
+{	
 	[musicControls playSongAtPosition:0];
 	
 	if (IS_IPAD())

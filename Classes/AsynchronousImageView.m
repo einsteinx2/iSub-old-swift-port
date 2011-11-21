@@ -141,6 +141,7 @@
 	}
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(size), @"size", n2N(artId), @"id", nil];
+	DLog(@"parameters: %@", parameters);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getCoverArt" andParameters:parameters];
 	
 	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
@@ -192,44 +193,43 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	if(!isForPlayer)
+	// Check to see if the data is a valid image. If so, use it; if not, use the default image.
+	if([UIImage imageWithData:data])
 	{
-		// Check to see if the data is a valid image. If so, use it; if not, use the default image.
-		if([UIImage imageWithData:data])
+		if (IS_IPAD())
 		{
-			if (IS_IPAD())
-			{
-				[databaseControls.coverArtCacheDb540 executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:coverArtId], data];
-			}
-			else
-			{
-				[databaseControls.coverArtCacheDb320 executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:coverArtId], data];
-			}
-			
-			if (SCREEN_SCALE() == 2.0 && !IS_IPAD())
-			{
-				UIGraphicsBeginImageContextWithOptions(CGSizeMake(320.0,320.0), NO, 2.0);
-				[[UIImage imageWithData:data] drawInRect:CGRectMake(0,0,320,320)];
-				self.image = UIGraphicsGetImageFromCurrentImageContext();
-				UIGraphicsEndImageContext();
-			}
-			else
-			{
-				self.image = [UIImage imageWithData:data];
-			}
+			[databaseControls.coverArtCacheDb540 executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:coverArtId], data];
 		}
-		else 
+		else
 		{
-			self.image = [UIImage imageNamed:@"default-album-art.png"];
+			[databaseControls.coverArtCacheDb320 executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:coverArtId], data];
+		}
+		
+		if (SCREEN_SCALE() == 2.0 && !IS_IPAD())
+		{
+			UIGraphicsBeginImageContextWithOptions(CGSizeMake(320.0,320.0), NO, 2.0);
+			[[UIImage imageWithData:data] drawInRect:CGRectMake(0,0,320,320)];
+			self.image = UIGraphicsGetImageFromCurrentImageContext();
+			UIGraphicsEndImageContext();
+		}
+		else
+		{
+			self.image = [UIImage imageWithData:data];
 		}
 	}
+	else 
+	{
+		self.image = [UIImage imageNamed:@"default-album-art.png"];
+	}
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"createReflection" object:nil];
+	if (isForPlayer)
+	{
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"createReflection" object:nil];
+	}
 	
 	[data release]; data = nil;
 	[connection release]; connection = nil;
 }
-
 
 - (void)dealloc 
 {

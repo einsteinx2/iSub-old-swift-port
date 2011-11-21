@@ -12,15 +12,19 @@
 
 @implementation CurrentPlaylistBackgroundViewController
 
-
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
+- (void)viewDidLoad 
+{
 	playlistView = [[CurrentPlaylistViewController alloc] initWithNibName:@"CurrentPlaylistViewController" bundle:nil];
 	[self.view addSubview:playlistView.view];
 		
     [super viewDidLoad];
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+	[playlistView viewDidDisappear:NO];
+	[playlistView release]; playlistView = nil;
+}
 
 - (void)didReceiveMemoryWarning 
 {
@@ -28,25 +32,9 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void)viewDidDisappear:(BOOL)animated
+- (void)dealloc 
 {
-	NSLog(@"current playlist background controller viewDidDisappear called");
-	[playlistView viewDidDisappear:NO];
-	[playlistView release]; playlistView = nil;
-}
-
-- (void)viewDidUnload {
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-	//[playlistView.view removeFromSuperview];
-}
-
-
-- (void)dealloc {
-	NSLog(@"CurrentPlaylistBackgroundViewController dealloc called");
     [super dealloc];
 }
-
 
 @end

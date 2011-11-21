@@ -7,6 +7,7 @@
 //
 
 #import "PagingScrollView.h"
+#import "EqualizerViewController.h"
 
 @implementation PagingScrollView
 
@@ -46,7 +47,6 @@
 
 - (void)dealloc
 {
-	NSLog(@"PagingScrollView dealloc called");
 	[super dealloc];
 }
 

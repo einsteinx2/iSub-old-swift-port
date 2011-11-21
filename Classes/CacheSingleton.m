@@ -92,7 +92,7 @@ static CacheSingleton *sharedInstance = nil;
 			else
 				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY chachedDate ASC LIMIT 1"];
 			//DLog(@"removing %@", songMD5);
-			[databaseControls removeSongFromCacheDb:songMD5];			
+			[Song removeSongFromCacheDbByMD5:songMD5];			
 		}
 	}
 	else if (settings.cachingType == 1)
@@ -110,7 +110,7 @@ static CacheSingleton *sharedInstance = nil;
 				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY chachedDate ASC LIMIT 1"];
 			}
 			//songSize = [databaseControls.songCacheDb intForQuery:@"SELECT size FROM cachedSongs WHERE md5 = ?", songMD5];
-			Song *aSong = [databaseControls songFromCacheDb:songMD5];
+			Song *aSong = [Song songFromCacheDb:songMD5];
 			// Determine the name of the file we are downloading.
 			//DLog(@"currentSongObject.path: %@", currentSongObject.path);
 			NSString *songPath = nil;
@@ -121,7 +121,7 @@ static CacheSingleton *sharedInstance = nil;
 			
 			unsigned long long songSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:songPath error:NULL] fileSize];
 			
-			[databaseControls removeSongFromCacheDb:songMD5];
+			[Song removeSongFromCacheDbByMD5:songMD5];
 			
 			size -= songSize;
 			

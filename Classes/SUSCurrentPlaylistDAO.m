@@ -11,6 +11,8 @@
 #import "DatabaseSingleton.h"
 #import "SavedSettings.h"
 #import "MusicSingleton.h"
+#import "FMDatabase.h"
+#import "FMDatabaseAdditions.h"
 
 static NSUInteger currentIndex = 0;
 
@@ -32,23 +34,23 @@ static NSUInteger currentIndex = 0;
 
 - (Song *)songForIndex:(NSUInteger)index
 {
-	DatabaseSingleton *databaseControls = [DatabaseSingleton sharedInstance];
+	//DLog(@"%@", [NSThread callStackSymbols]);
 	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 	
 	Song *aSong = nil;
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
-		aSong = [databaseControls songFromDbRow:index inTable:@"jukeboxCurrentPlaylist" inDatabase:self.db];
+		aSong = [Song songFromDbRow:index inTable:@"jukeboxCurrentPlaylist" inDatabase:self.db];
 	}
 	else
 	{
 		if (musicControls.isShuffle)
-			aSong = [databaseControls songFromDbRow:index inTable:@"shufflePlaylist" inDatabase:self.db];
+			aSong = [Song songFromDbRow:index inTable:@"shufflePlaylist" inDatabase:self.db];
 		else
-			aSong = [databaseControls songFromDbRow:index inTable:@"currentPlaylist" inDatabase:self.db];
+			aSong = [Song songFromDbRow:index inTable:@"currentPlaylist" inDatabase:self.db];
 	}
 	
-	DLog(@"aSong: %@", aSong);
+	//DLog(@"aSong: %@", aSong);
 	return aSong;
 }
 
@@ -70,6 +72,24 @@ static NSUInteger currentIndex = 0;
 - (void)setCurrentIndex:(NSInteger)index
 {
 	currentIndex = index;
+}
+
+- (NSUInteger)count
+{
+	int count = 0;
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	{
+		count = [self.db intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"];
+	}
+	else
+	{
+		if ([MusicSingleton sharedInstance].isShuffle)
+			count = [self.db intForQuery:@"SELECT COUNT(*) FROM shufflePlaylist"];
+		else
+			count = [self.db intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
+	}
+	
+	return count;
 }
 
 @end

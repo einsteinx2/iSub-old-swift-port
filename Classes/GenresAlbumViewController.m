@@ -141,7 +141,6 @@
 
 - (IBAction)nowPlayingAction:(id)sender
 {
-	musicControls.isNewSong = NO;
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
@@ -176,9 +175,7 @@
 
 - (void)showPlayer
 {
-	// Start the player
-	musicControls.isNewSong = YES;
-	
+	// Start the player	
 	[musicControls playSongAtPosition:0];
 	
 	if (IS_IPAD())
@@ -219,9 +216,9 @@
 		if ([result stringForColumnIndex:0] != nil)
 		{
 			NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
-			Song *aSong = [databaseControls songFromGenreDb:songIdMD5];
+			Song *aSong = [Song songFromGenreDb:songIdMD5];
 			
-			[databaseControls addSongToPlaylistQueue:aSong];
+			[aSong addToPlaylistQueue];
 		}
 		
 		[pool release];
@@ -265,9 +262,9 @@
 		if ([result stringForColumnIndex:0] != nil)
 		{
 			NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
-			Song *aSong = [databaseControls songFromGenreDb:songIdMD5];
+			Song *aSong = [Song songFromGenreDb:songIdMD5];
 			
-			[databaseControls addSongToPlaylistQueue:aSong];
+			[aSong addToPlaylistQueue];
 		}		
 		
 		[pool release];
@@ -369,7 +366,7 @@
 		NSUInteger a = indexPath.row - [listOfAlbums count];
 		cell.md5 = [listOfSongs objectAtIndex:a];
 		
-		Song *aSong = [databaseControls songFromGenreDb:cell.md5];
+		Song *aSong = [Song songFromGenreDb:cell.md5];
 		
 		if (aSong.track)
 		{
@@ -483,9 +480,9 @@
 			{
 				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 				
-				Song *aSong = [databaseControls songFromGenreDb:songMD5];
+				Song *aSong = [Song songFromGenreDb:songMD5];
 
-				[databaseControls addSongToPlaylistQueue:aSong];
+				[aSong addToPlaylistQueue];
 				
 				// In jukebox mode, collect the song ids to send to the server
 				if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -504,7 +501,6 @@
 			[songIds release];
 			
 			// Set player defaults
-			musicControls.isNewSong = YES;
 			musicControls.isShuffle = NO;
 			
 			// Start the song

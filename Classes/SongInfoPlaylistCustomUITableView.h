@@ -9,9 +9,6 @@
 @class iSubAppDelegate;
 
 @interface SongInfoPlaylistCustomUITableView : UITableView 
-{
-	NSDate *lastDeleteToggle;
-}
 
 @property (nonatomic, retain) NSDate *lastDeleteToggle;
 

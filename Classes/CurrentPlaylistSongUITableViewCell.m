@@ -101,16 +101,16 @@
 {
 	if (musicControls.isShuffle) 
 	{
-		Song *aSong = [[databaseControls songFromDbRow:indexPath.row inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb] retain];
-		[databaseControls addSongToCacheQueue:aSong];
+		Song *aSong = [[Song songFromDbRow:indexPath.row inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb] retain];
+		[aSong addToCacheQueue];
 		[aSong release];
 	}
 	else 
 	{
 		//DLog(@"caching song from now playing playlist");
-		Song *aSong = [[databaseControls songFromDbRow:indexPath.row inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb] retain];
+		Song *aSong = [[Song songFromDbRow:indexPath.row inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb] retain];
 		//DLog(@"aSong.title = %@", aSong.title);
-		[databaseControls addSongToCacheQueue:aSong];
+		[aSong addToCacheQueue];
 		[aSong release];
 	}
 	
@@ -131,7 +131,7 @@
 	//DLog(@"queueAction");
 	if (musicControls.isShuffle)
 	{
-		Song *aSong = [databaseControls songFromDbRow:indexPath.row inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
+		Song *aSong = [Song songFromDbRow:indexPath.row inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
 		[databaseControls queueSong:aSong];
 		
 		/*[databaseControls.currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM shufflePlaylist WHERE ROWID = %i", indexPath.row + 1]];
@@ -139,7 +139,7 @@
 	}
 	else
 	{
-		Song *aSong = [databaseControls songFromDbRow:indexPath.row inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
+		Song *aSong = [Song songFromDbRow:indexPath.row inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 		[databaseControls queueSong:aSong];
 		
 		//[databaseControls.currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM currentPlaylist WHERE ROWID = %i", indexPath.row + 1]];

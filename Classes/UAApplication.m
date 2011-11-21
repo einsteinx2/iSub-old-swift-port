@@ -58,7 +58,7 @@
 	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
-		if (musicControls.isPlaying)
+		if (musicControls.jukeboxIsPlaying)
 			[musicControls jukeboxStop];
 		else
 			[musicControls jukeboxPlay];

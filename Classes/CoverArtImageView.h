@@ -8,7 +8,8 @@
 
 #import "AsynchronousImageView.h"
 
-@interface CoverArtImageView : AsynchronousImageView {
+@interface CoverArtImageView : AsynchronousImageView 
+{
 
 }
 

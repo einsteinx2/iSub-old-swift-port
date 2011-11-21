@@ -17,6 +17,7 @@
 @property (readonly) Song *nextSong;
 
 @property NSInteger currentIndex;
+@property (readonly) NSUInteger count;
 
 @property (readonly) FMDatabase *db;
 

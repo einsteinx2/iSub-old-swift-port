@@ -14,6 +14,8 @@
 #import "iSubAppDelegate.h"
 #import "MusicSingleton.h"
 #import "SavedSettings.h"
+#import "EqualizerViewController.h"
+#import "PagingScrollView.h"
 
 @interface PageControlViewController (PrivateMethods)
 
@@ -178,6 +180,15 @@
     }
 }
 
+- (void)unloadScrollViewPage:(NSUInteger)page
+{
+	UIViewController *controller = (UIViewController *) [viewControllers objectAtIndex:page];
+	if ((NSNull *)controller != [NSNull null])
+	{
+		[controller.view removeFromSuperview];
+		[viewControllers replaceObjectAtIndex:page withObject:[NSNull null]];
+	}
+}
 
 - (void)scrollViewDidScroll:(UIScrollView *)sender 
 {
@@ -203,6 +214,15 @@
     [self loadScrollViewWithPage:page];
 	[self loadScrollViewWithPage:page + 1];
 	
+	// Unload uneeded pages
+	for (int i = 0; i < [viewControllers count]; i++)
+	{
+		if (i < page - 1 || i > page + 1)
+		{
+			[self unloadScrollViewPage:i];
+		}
+	}
+	
 	// Send a notification so the playlist view hides the edit controls
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"hideEditControls" object:nil];
 	
@@ -222,7 +242,8 @@
 }
 
 
-- (IBAction)changePage:(id)sender {
+- (IBAction)changePage:(id)sender 
+{
     int page = pageControl.currentPage;
 	
     // load the visible page and the page on either side of it (to avoid flashes when the user starts scrolling)
@@ -276,9 +297,7 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
 	[super viewDidDisappear:animated];
-	
-	NSLog(@"PageControlViewController viewDidDisappear called");
-	
+		
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfoFast" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfo" object:nil];
 	
@@ -287,25 +306,16 @@
 		if ((NSNull*)subView != [NSNull null])
 		{
 			[subView.view removeFromSuperview];
-			[subView viewDidDisappear:NO];
+			//[subView viewDidDisappear:NO];
 		}
 	}
 	
 	[viewControllers release]; viewControllers = nil;
 }
 
-
-- (void)viewDidUnload 
-{
-	[super viewDidUnload];
-}
-
-
 - (void)dealloc 
 {
-	NSLog(@"PageControl dealloc called");
     [super dealloc];
 }
-
 
 @end

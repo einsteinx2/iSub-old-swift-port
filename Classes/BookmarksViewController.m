@@ -16,7 +16,6 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "Song.h"
 #import "AsynchronousImageViewCached.h"
-#import "AudioStreamer.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "NSString-md5.h"
@@ -452,7 +451,6 @@
 
 - (IBAction)nowPlayingAction:(id)sender
 {
-	musicControls.isNewSong = NO;
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
@@ -579,9 +577,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
 	[databaseControls resetCurrentPlaylistDb];
-	[databaseControls insertSong:[self songFromDbRow:indexPath.row] intoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
+	[[self songFromDbRow:indexPath.row] insertIntoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 	
-    musicControls.isNewSong = YES;
 	musicControls.isShuffle = NO;
 	
 	if (IS_IPAD())
@@ -596,7 +593,6 @@
 		[streamingPlayerViewController release];
 	}
 		
-	musicControls.isPlaying = YES;
 	NSUInteger offsetSeconds = [databaseControls.bookmarksDb intForQuery:@"SELECT position FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
 	[musicControls startSongAtOffsetInSeconds:offsetSeconds];
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"setPauseButtonImage" object:nil];

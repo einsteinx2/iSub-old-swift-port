@@ -14,6 +14,9 @@
 #import "SUSCurrentPlaylistDAO.h"
 
 @implementation DebugViewController
+@synthesize currentSong, nextSong;
+
+#pragma mark - Lifecycle
 
 - (void)viewDidLoad 
 {
@@ -22,6 +25,8 @@
 	musicControls = [MusicSingleton sharedInstance];
 	cacheControls = [CacheSingleton sharedInstance];
 	settings = [SavedSettings sharedInstance];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cacheSongObjects) name:ISMSNotification_SongPlaybackStart object:nil];
 		
 	if (settings.isCacheUnlocked)
 	{
@@ -29,7 +34,7 @@
 		[self updateStats];
 		
 		// Setup the update timer
-		updateTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateStats) userInfo:nil repeats:YES];
+		updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(updateStats) userInfo:nil repeats:YES];
 	}
 	else
 	{
@@ -64,7 +69,59 @@
 		[self.view addSubview:noCacheScreen];
 		
 		[noCacheScreen release];
+		
+		DLog(@"noCacheScreen: %@", noCacheScreen.layer);
+		DLog(@"textLabel: %@", textLabel.layer);
+		DLog(@"textLabel2: %@", textLabel2.layer);
 	}
+	
+	DLog(@"currentSongProgressView: %@", currentSongProgressView.layer);
+	DLog(@"nextSongLabel: %@", nextSongLabel.layer);
+	DLog(@"nextSongProgressView: %@", nextSongProgressView.layer);
+	DLog(@"songsCachedLabel: %@", songsCachedLabel.layer);
+	DLog(@"cacheSizeLabel: %@", cacheSizeLabel.layer);
+	DLog(@"cacheSettingLabel: %@", cacheSettingLabel.layer);
+	DLog(@"cacheSettingSizeLabel: %@", cacheSettingSizeLabel.layer);
+	DLog(@"freeSpaceLabel: %@", freeSpaceLabel.layer);
+	DLog(@"songInfoToggleButton: %@", songInfoToggleButton.layer);
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{	
+	[updateTimer invalidate]; updateTimer = nil;
+	
+	[currentSongProgressView release]; currentSongProgressView = nil;
+	[nextSongLabel release]; nextSongLabel = nil;
+	[nextSongProgressView release]; nextSongProgressView = nil;
+	
+	[songsCachedLabel release]; songsCachedLabel = nil;
+	[cacheSizeLabel release]; cacheSizeLabel = nil;
+	[cacheSettingLabel release]; cacheSettingLabel = nil;
+	[cacheSettingSizeLabel release]; cacheSettingSizeLabel = nil;
+	[freeSpaceLabel release]; freeSpaceLabel = nil;
+	
+	[songInfoToggleButton release]; songInfoToggleButton = nil;
+}
+
+- (void)didReceiveMemoryWarning 
+{
+	// Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+}
+
+- (void)dealloc
+{
+	[currentSong release]; currentSong = nil;
+	[nextSong release]; nextSong = nil;
+	[super dealloc];
+}
+
+#pragma mark -
+
+- (void)cacheSongObjects
+{
+	self.currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+	self.nextSong = [SUSCurrentPlaylistDAO dataModel].nextSong;
 }
 
 - (void) updateStats
@@ -139,38 +196,5 @@
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"hideSongInfo" object:nil];
 }
-
-- (void)didReceiveMemoryWarning 
-{
-	// Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-	NSLog(@"DebugViewController viewDidDisappear called");
-	
-	[updateTimer invalidate]; updateTimer = nil;
-	
-	[currentSongProgressView release]; currentSongProgressView = nil;
-	[nextSongLabel release]; nextSongLabel = nil;
-	[nextSongProgressView release]; nextSongProgressView = nil;
-	
-	[songsCachedLabel release]; songsCachedLabel = nil;
-	[cacheSizeLabel release]; cacheSizeLabel = nil;
-	[cacheSettingLabel release]; cacheSettingLabel = nil;
-	[cacheSettingSizeLabel release]; cacheSettingSizeLabel = nil;
-	[freeSpaceLabel release]; freeSpaceLabel = nil;
-	
-	[songInfoToggleButton release]; songInfoToggleButton = nil;
-}
-
-
-- (void)dealloc
-{
-	
-	[super dealloc];
-}
-
 
 @end

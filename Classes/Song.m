@@ -231,7 +231,8 @@
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"%@: title: %@, songId: %@", [super description], title, songId];
+	//return [NSString stringWithFormat:@"%@: title: %@, songId: %@", [super description], title, songId];
+	return [NSString stringWithFormat:@"%@  title: %@", [super description], title];
 }
 
 
@@ -268,20 +269,20 @@
 	if (!songId || !otherSong.songId || !path || !otherSong.path)
 		return NO;
 	
-	if ([songId isEqualToString:otherSong.songId] &&
-		[path isEqualToString:otherSong.path] &&
-		[title isEqualToString:otherSong.title] &&
-		[artist isEqualToString:otherSong.artist] &&
-		[album isEqualToString:otherSong.album] &&
-		[genre isEqualToString:otherSong.genre] &&
-		[coverArtId isEqualToString:otherSong.coverArtId] &&
-		[suffix isEqualToString:otherSong.suffix] &&
-		[transcodedSuffix isEqualToString:otherSong.transcodedSuffix] &&
-		[duration isEqualToNumber:otherSong.duration] &&
-		[bitRate isEqualToNumber:otherSong.bitRate] &&
-		[track isEqualToNumber:otherSong.track] &&
-		[year isEqualToNumber:otherSong.year] &&
-		[size isEqualToNumber:otherSong.size])
+	if (([songId isEqualToString:otherSong.songId] || (songId == nil && otherSong.songId == nil)) &&
+		([path isEqualToString:otherSong.path] || (path == nil && otherSong.path == nil)) &&
+		([title isEqualToString:otherSong.title] || (title == nil && otherSong.title == nil)) &&
+		([artist isEqualToString:otherSong.artist] || (artist == nil && otherSong.artist == nil)) &&
+		([album isEqualToString:otherSong.album] || (album == nil && otherSong.album == nil)) &&
+		([genre isEqualToString:otherSong.genre] || (genre == nil && otherSong.genre == nil)) &&
+		([coverArtId isEqualToString:otherSong.coverArtId] || (coverArtId == nil && otherSong.coverArtId == nil)) &&
+		([suffix isEqualToString:otherSong.suffix] || (suffix == nil && otherSong.suffix == nil)) &&
+		([transcodedSuffix isEqualToString:otherSong.transcodedSuffix] || (transcodedSuffix == nil && otherSong.transcodedSuffix == nil)) &&
+		([duration isEqualToNumber:otherSong.duration] || (duration == nil && otherSong.duration == nil)) &&
+		([bitRate isEqualToNumber:otherSong.bitRate] || (bitRate == nil && otherSong.bitRate == nil)) &&
+		([track isEqualToNumber:otherSong.track] || (track == nil && otherSong.track == nil)) &&
+		([year isEqualToNumber:otherSong.year] || (year == nil && otherSong.year == nil)) &&
+		([size isEqualToNumber:otherSong.size] || (size == nil && otherSong.size == nil)))
 		return YES;
 	
 	return NO;

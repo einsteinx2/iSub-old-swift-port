@@ -262,7 +262,7 @@
 	while ([result next])
 	{
 		if ([result stringForColumnIndex:0] != nil)
-			[databaseControls addSongToPlaylistQueue:[databaseControls songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]]];
+			[[Song songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToPlaylistQueue];
 	}
 	
 	if (isShuffle)
@@ -285,9 +285,7 @@
 
 
 - (void)playAllPlaySong
-{
-	musicControls.isNewSong = YES;
-	
+{	
 	[musicControls playSongAtPosition:0];
 	
 	if (IS_IPAD())
@@ -316,7 +314,6 @@
 
 - (IBAction)nowPlayingAction:(id)sender
 {
-	musicControls.isNewSong = NO;
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
@@ -607,11 +604,10 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 				//DLog(@"songMD5: %@", songMD5);
 				Song *aSong = [self songFromCacheDb:[song objectAtIndex:0]];
 				//DLog(@"aSong: %@", aSong);
-				[databaseControls addSongToPlaylistQueue:aSong];
+				[aSong addToPlaylistQueue];
 				//[databaseControls insertSong:aSong intoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 			}
 						
-			musicControls.isNewSong = YES;
 			musicControls.isShuffle = NO;
 			
 			[musicControls playSongAtPosition:a];

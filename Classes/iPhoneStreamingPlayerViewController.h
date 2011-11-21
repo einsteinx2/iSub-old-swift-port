@@ -7,7 +7,7 @@
 //
 
 
-@class iSubAppDelegate, MusicSingleton, DatabaseSingleton, ViewObjectsSingleton, CoverArtImageView, PageControlViewController, MPVolumeView;
+@class iSubAppDelegate, MusicSingleton, DatabaseSingleton, ViewObjectsSingleton, CoverArtImageView, PageControlViewController, MPVolumeView, BassWrapperSingleton;
 
 @interface iPhoneStreamingPlayerViewController : UIViewController
 {
@@ -37,6 +37,8 @@
 	UIView *flipButtonView;
 	
 	PageControlViewController *pageControlViewController;
+	
+	BassWrapperSingleton *bassWrapper;
 }
 
 @property (nonatomic, retain) NSArray *listOfSongs;
@@ -49,6 +51,8 @@
 - (IBAction)nextButtonPressed:(id)sender;
 
 - (void)setSongTitle;
+
+- (IBAction)showEq:(id)sender;
 
 @end
 

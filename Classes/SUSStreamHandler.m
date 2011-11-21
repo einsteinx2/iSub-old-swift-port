@@ -8,12 +8,14 @@
 
 #import "SUSStreamHandler.h"
 #import "MusicSingleton.h"
-#import "AudioStreamer.h"
 #import "Song.h"
 #import "iSubAppDelegate.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "NSError-ISMSError.h"
 #import "NSString-md5.h"
+#import "DatabaseSingleton.h"
+#import "FMDatabase.h"
+#import "FMDatabaseAdditions.h"
 
 #define kThrottleTimeInterval 0.01
 
@@ -33,7 +35,7 @@
 #define isThrottleLoggingEnabled NO
 
 @implementation SUSStreamHandler
-@synthesize totalBytesTransferred, bytesTransferred, throttlingDate, mySong, connection, byteOffset, delegate, fileHandle;
+@synthesize totalBytesTransferred, bytesTransferred, throttlingDate, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects;
 
 - (id)initWithSong:(Song *)song offset:(NSUInteger)offset delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate
 {
@@ -42,6 +44,8 @@
 		mySong = [song copy];
 		delegate = theDelegate;
 		byteOffset = offset;
+		isDelegateNotifiedToStartPlayback = NO;
+		numOfReconnects = 0;
 	}
 	
 	return self;
@@ -56,7 +60,6 @@
 {
 	[fileHandle release]; fileHandle = nil;
 	[mySong	release]; mySong = nil;
-	[connection release]; connection = nil;
 	[throttlingDate release]; throttlingDate = nil;
 	[super dealloc];
 }
@@ -99,6 +102,7 @@
 		self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 		if (connection)
 		{
+			mySong.isPartiallyCached = YES;
 			CFRunLoopRun(); // Avoid thread exiting
 		}
 		else
@@ -166,12 +170,18 @@
 	[self.fileHandle writeData:incrementalData];
 	
 	// Notify delegate if enough bytes received to start playback
-	if (totalBytesTransferred >= kMinBytesToStartPlayback)
-		[self.delegate SUSStreamHandlerStartPlayback:self];
+	if (!isDelegateNotifiedToStartPlayback && totalBytesTransferred >= kMinBytesToStartPlayback)
+	{
+		isDelegateNotifiedToStartPlayback = YES;
+		//DLog(@"player told to start playback");
+		[self performSelectorOnMainThread:@selector(startPlaybackInternal) withObject:nil waitUntilDone:NO];
+	}
 	
 	// Log progress
 	if (isProgressLoggingEnabled)
+	{
 		DLog(@"downloadedLengthA:  %lu   bytesRead: %i", totalBytesTransferred, [incrementalData length]);
+	}
 	
 	// Handle throtling
 	if (totalBytesTransferred < (kMinBytesToStartLimiting * ((float)self.bitrate / 160.0f)))
@@ -204,21 +214,61 @@
 	}
 }
 
+- (void)startPlaybackInternal
+{
+	[self.delegate SUSStreamHandlerStartPlayback:self];
+}
+
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
 	[theConnection release]; theConnection = nil;
 		
-	CFRunLoopStop(CFRunLoopGetCurrent()); // Stop the run loop so the thread can die
+	// Close the file handle
+	[self.fileHandle closeFile];
 	
-	[self.delegate SUSStreamHandlerConnectionFailed:self withError:error];
+	// Notify delegate of failure
+	[self performSelectorOnMainThread:@selector(didFailInternal:) withObject:error waitUntilDone:NO];
+	
+	// Stop the run loop so the thread can die
+	CFRunLoopStop(CFRunLoopGetCurrent());
 }	
+
+- (void)didFailInternal:(NSError *)error
+{
+	[self.delegate SUSStreamHandlerConnectionFailed:self withError:error];
+}
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
 	[theConnection release]; theConnection = nil;
 	
-	CFRunLoopStop(CFRunLoopGetCurrent()); // Stop the run loop so the thread can die
+	// Close the file handle
+	[self.fileHandle closeFile];
 	
+	if (totalBytesTransferred < 500)
+	{
+		// Show an alert and delete the file, this was not a song but an XML error
+		// TODO: Parse with TBXML and display proper error
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"No song data returned. This could be because your Subsonic API trial has expired, this song is not an mp3 and the Subsonic transcoding plugins failed, or another reason." delegate:[iSubAppDelegate sharedInstance] cancelButtonTitle:@"OK" otherButtonTitles: nil];
+		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
+		[alert release];
+		[[NSFileManager defaultManager] removeItemAtPath:mySong.localPath error:NULL];
+	}
+	else
+	{		
+		// Mark song as cached
+		mySong.isFullyCached = YES;
+	}
+	
+	//Notify the delegate of finish
+	[self performSelectorOnMainThread:@selector(didFinishLoadingInternal) withObject:nil waitUntilDone:NO];
+	
+	// Stop the run loop so the thread can die
+	CFRunLoopStop(CFRunLoopGetCurrent());
+}
+
+- (void)didFinishLoadingInternal
+{
 	[self.delegate SUSStreamHandlerConnectionFinished:self];
 }
 

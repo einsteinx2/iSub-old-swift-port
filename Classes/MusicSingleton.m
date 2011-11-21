@@ -11,7 +11,6 @@
 #import "ViewObjectsSingleton.h"
 #import "iSubAppDelegate.h"
 #import "Song.h"
-#import "AudioStreamer.h"
 #import "NSString-md5.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
@@ -28,7 +27,7 @@
 #import "SUSLyricsLoader.h" 
 #import "SUSStreamSingleton.h"
 #import "SUSCurrentPlaylistDAO.h"
-#import "Song+DAO.h"
+#import "BassWrapperSingleton.h"
 
 static MusicSingleton *sharedInstance = nil;
 
@@ -36,11 +35,11 @@ static MusicSingleton *sharedInstance = nil;
 
 // Audio streamer objects and variables
 //
-@synthesize streamer, streamerProgress, repeatMode, isShuffle, isPlaying, buffersUsed;
+@synthesize repeatMode, isShuffle;
 
 // Music player objects
 //
-@synthesize queueSongObject, currentSongLyrics, isNewSong, coverArtUrl; 
+@synthesize queueSongObject, currentSongLyrics, coverArtUrl; 
 
 // Song cache stuff
 @synthesize documentsPath, audioFolderPath, tempAudioFolderPath;
@@ -361,16 +360,7 @@ static MusicSingleton *sharedInstance = nil;
 
 - (void)destroyStreamer
 {
-	self.isPlaying = NO;
-	
-	if (streamer)
-	{
-		[self removeAutoNextNotification];
-		
-		[streamer stop];
-		[streamer release];
-		streamer = nil;
-	}
+	[bassWrapper bassFree];
 }
 
 - (void)startSongAtOffsetInSeconds:(NSUInteger)seconds
@@ -379,29 +369,29 @@ static MusicSingleton *sharedInstance = nil;
 	[self destroyStreamer];
 	
 	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
-	
-	isPlaying = YES;
-	
+	Song *nextSong = [SUSCurrentPlaylistDAO dataModel].nextSong;
+		
 	// Check to see if the song is already cached
 	if (currentSong.isFullyCached)
 	{
 		// The song is fully cached, start streaming from the local copy
 		isTempDownload = NO;
-		
-		// TODO: Find out what this does
-		streamerProgress = 0.0;
-		
+				
 		// Create the streamer
-		streamer = [[AudioStreamer alloc] initWithFileURL:[NSURL fileURLWithPath:currentSong.localPath]];
+		/*streamer = [[AudioStreamer alloc] initWithFileURL:[NSURL fileURLWithPath:currentSong.localPath]];
 		if (streamer)
 		{
 			streamer.fileDownloadCurrentSize = currentSong.localFileSize;
 			streamer.fileDownloadComplete = YES;
 			[streamer startWithOffsetInSecs:seconds];
-		}
+		}*/
+		// TODO: Rewrite this
+		//[bassWrapper startSong:currentSong];
+		
+		[bassWrapper start];
 		
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"setPauseButtonImage" object:nil];
-		[self addAutoNextNotification];
+		//[self addAutoNextNotification];
 	}
 	
 	// The file doesn't exist or it's not fully cached, start downloading it from the middle
@@ -417,14 +407,24 @@ static MusicSingleton *sharedInstance = nil;
 		// If we're starting from within the downloaded area, start playing immediately
 		if ((int)byteOffset < currentSong.localFileSize)
 		{
-			[streamer startWithOffsetInSecs:seconds];
+			// TODO: Rewrite this
+			//[bassWrapper startSong:currentSong withOffsetInSeconds:seconds];
+			
+			[bassWrapper start];
 		}
 		
 		// Start to download the rest of the song
 		[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong];
 		
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"setPauseButtonImage" object:nil];
-		[self addAutoNextNotification];
+		//[self addAutoNextNotification];
+	}
+	
+	// The file doesn't exist or it's not fully cached, start downloading it from the middle
+	if (!nextSong.fileExists || (!nextSong.isFullyCached && !viewObjects.isOfflineMode))
+	{
+		// Start to download the rest of the song
+		[[SUSStreamSingleton sharedInstance] queueStreamForSong:nextSong];
 	}
 	
 	// The file is not fully cached and we're in offline mode, so complain
@@ -444,17 +444,15 @@ static MusicSingleton *sharedInstance = nil;
 
 - (void)playPauseSong
 {
-	if ([streamer isPaused])
+	[bassWrapper playPause];
+	
+	if (bassWrapper.isPlaying)
 	{
-		isPlaying = YES;
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"setPauseButtonImage" object:nil];
-		[streamer start];
 	}
-	else if ([streamer isPlaying])
+	else
 	{
-		isPlaying = NO;
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"setPlayButtonImage" object:nil];
-		[streamer pause];
 	}
 }
 
@@ -470,17 +468,17 @@ static MusicSingleton *sharedInstance = nil;
 	{		
 		[self startSong];
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"setSongTitle" object:nil];
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"initSongInfo" object:nil];
+		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_SongPlaybackStart object:nil];
 	}
 	
-	[self addAutoNextNotification];
+	//[self addAutoNextNotification];
 }
 
 - (void)prevSong
 {
 	NSInteger currentIndex = [SUSCurrentPlaylistDAO dataModel].currentIndex;
 	
-	if ([streamer progress] > 10.0)
+	if (bassWrapper.progress > 10.0)
 	{
 		// Past 10 seconds in the song, so restart playback instead of changing songs
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -504,9 +502,9 @@ static MusicSingleton *sharedInstance = nil;
 								
 				[self startSong];
 				[[NSNotificationCenter defaultCenter] postNotificationName:@"setSongTitle" object:nil];
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"initSongInfo" object:nil];
+				[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_SongPlaybackStart object:nil];
 				
-				[self addAutoNextNotification];
+				//[self addAutoNextNotification];
 			}
 		}
 	}
@@ -519,19 +517,17 @@ static MusicSingleton *sharedInstance = nil;
 		[self jukeboxNextSong];
 	}
 	else
-	{
-		NSInteger currentIndex = [SUSCurrentPlaylistDAO dataModel].currentIndex;
-		
-		NSInteger index = currentIndex + 1;
+	{		
+		NSInteger index = [SUSCurrentPlaylistDAO dataModel].currentIndex + 1;
 		if (index <= ([databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"] - 1))
 		{
-			currentIndex = index;
+			[SUSCurrentPlaylistDAO dataModel].currentIndex = index;
 			
 			[self startSong];
 			[[NSNotificationCenter defaultCenter] postNotificationName:@"setSongTitle" object:nil];
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"initSongInfo" object:nil];
+			[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_SongPlaybackStart object:nil];
 			
-			[self addAutoNextNotification];
+			//[self addAutoNextNotification];
 		}
 		else
 		{
@@ -555,7 +551,7 @@ static MusicSingleton *sharedInstance = nil;
 	{
 		[self startSong];
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"setSongTitle" object:nil];
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"initSongInfo" object:nil];
+		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_SongPlaybackStart object:nil];
 	}
 	// If it's in repeat-all mode then check if it's at the end of the playlist and start from the beginning, or just go to the next track.
 	else if(repeatMode == 2)
@@ -577,48 +573,36 @@ static MusicSingleton *sharedInstance = nil;
 {	
 	SavedSettings *settings = [SavedSettings sharedInstance];
 	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+	DLog(@"currentSong: %@", currentSong);
 		
-	if (settings.isRecover)
+	if (currentSong && settings.isRecover)
 	{
-		BOOL resume = NO;
-		if (self.isPlaying)
+		//self.songUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:currentSongObject.songId]];
+		
+		// Check to see if the song is an m4a, if so don't resume and display message
+		BOOL isM4A = NO;
+		if (currentSong.transcodedSuffix)
 		{
-			if (settings.recoverSetting == 0 || settings.recoverSetting == 1)
-				resume = YES;
-			
-			if (settings.recoverSetting == 1)
-				self.isPlaying = NO;
+			if ([currentSong.transcodedSuffix isEqualToString:@"m4a"] || [currentSong.transcodedSuffix isEqualToString:@"aac"])
+				isM4A = YES;
+		}
+		else
+		{
+			if ([currentSong.suffix isEqualToString:@"m4a"] || [currentSong.suffix isEqualToString:@"aac"])
+				isM4A = YES;
 		}
 		
-		if (resume)
+		if (isM4A)
 		{
-            //self.songUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:currentSongObject.songId]];
-						
-			// Check to see if the song is an m4a, if so don't resume and display message
-			BOOL isM4A = NO;
-			if (currentSong.transcodedSuffix)
-			{
-				if ([currentSong.transcodedSuffix isEqualToString:@"m4a"] || [currentSong.transcodedSuffix isEqualToString:@"aac"])
-					isM4A = YES;
-			}
-			else
-			{
-				if ([currentSong.suffix isEqualToString:@"m4a"] || [currentSong.suffix isEqualToString:@"aac"])
-					isM4A = YES;
-			}
+			[self startSong];
 			
-			if (isM4A)
-			{
-				[self startSong];
-				
-				CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Sorry" message:@"It's currently not possible to skip within m4a files, so the song is starting from the begining instead of resuming.\n\nYou can turn on m4a > mp3 transcoding in Subsonic to resume this song properly." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-				[alert show];
-				[alert release];
-			}
-			else
-			{
-				[self startSongAtOffsetInSeconds:[SavedSettings sharedInstance].seekTime];
-			}
+			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Sorry" message:@"It's currently not possible to skip within m4a files, so the song is starting from the begining instead of resuming.\n\nYou can turn on m4a > mp3 transcoding in Subsonic to resume this song properly." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+			[alert show];
+			[alert release];
+		}
+		else
+		{
+			[self startSongAtOffsetInSeconds:[SavedSettings sharedInstance].seekTime];
 		}
 	}
 	else 
@@ -629,7 +613,8 @@ static MusicSingleton *sharedInstance = nil;
 
 #pragma mark Helper Methods
 
-- (void)playbackStateChanged:(NSNotification *)aNotification
+// TODO: See if this is still needed
+/*- (void)playbackStateChanged:(NSNotification *)aNotification
 {
 	if ([streamer isWaiting])
 	{
@@ -642,7 +627,7 @@ static MusicSingleton *sharedInstance = nil;
 	{	
 		[self nextSongAuto];
 	}
-}
+}*/
 
 
 - (NSInteger) maxBitrateSetting
@@ -685,18 +670,6 @@ static MusicSingleton *sharedInstance = nil;
 	return bitrate;
 }
 
-- (void)incrementProgress
-{
-	streamerProgress = streamerProgress + 1.0;
-}
-
-
-- (void)createProgressTimer
-{
-	progressTimer = nil;
-	progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(incrementProgress) userInfo:nil repeats:YES];
-}
-
 - (void) removeOldestCachedSongs
 {
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
@@ -718,7 +691,7 @@ static MusicSingleton *sharedInstance = nil;
 				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
 			else
 				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY chachedDate ASC LIMIT 1"];
-			[databaseControls removeSongFromCacheDb:songMD5];
+			[Song removeSongFromCacheDbByMD5:songMD5];
 			
 			freeSpace = [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:audioFolderPath error:NULL] objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
 		}
@@ -744,7 +717,7 @@ static MusicSingleton *sharedInstance = nil;
 			}
 			songSize = [databaseControls.songCacheDb intForQuery:@"SELECT size FROM cachedSongs WHERE md5 = ?", songMD5];
 
-			[databaseControls removeSongFromCacheDb:songMD5];
+			[Song removeSongFromCacheDbByMD5:songMD5];
 
 			cacheSize = cacheSize - songSize;
 			
@@ -766,9 +739,7 @@ static MusicSingleton *sharedInstance = nil;
 
 - (void)showPlayer
 {
-	// Start the player
-	self.isNewSong = YES;
-		
+	// Start the player		
 	[self playSongAtPosition:0];
 	
 	if (IS_IPAD())
@@ -784,7 +755,8 @@ static MusicSingleton *sharedInstance = nil;
 	}
 }
 
-- (void)removeAutoNextNotification
+// TODO: Reimplement these for libBASS
+/*- (void)removeAutoNextNotification
 {
 	if (isAutoNextNotificationOn)
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:ASStatusChangedNotification object:nil];
@@ -798,7 +770,7 @@ static MusicSingleton *sharedInstance = nil;
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackStateChanged:) name:ASStatusChangedNotification object:nil];
 	
 	isAutoNextNotificationOn = YES;
-}
+}*/
 
 - (void)scrobbleSong:(NSString*)songId isSubmission:(BOOL)isSubmission
 {
@@ -812,81 +784,34 @@ static MusicSingleton *sharedInstance = nil;
 #pragma mark -
 #pragma mark Song Download Progress Methods
 
+- (float)findProgressForSong:(Song *)aSong
+{	
+	if (aSong.isFullyCached)
+		return 1.0;
+	
+	if (aSong.isPartiallyCached)
+	{
+		// The song is being downloaded right now so return the progress (note basswrapper bitrate is actually kilobitrate
+		// Convert to actual bitrate, convert to bytes per second, multiply by number of seconds
+		float totalSize = (([BassWrapperSingleton sharedInstance].bitRate * 1024.) / 8.) * [aSong.duration floatValue];
+		DLog(@"is partially cached: bitRate: %i totalSize: %f", [BassWrapperSingleton sharedInstance].bitRate, totalSize);
+		return ((float)aSong.localFileSize / totalSize);
+	}
+	
+	// The song hasn't started downloading yet
+	return 0.0;
+}
 
 - (float) findCurrentSongProgress
 {
 	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
-	Song *currentSong = dataModel.currentSong;
-	
-	NSString *songMD5 = [currentSong.path md5];
-	
-	if ([[databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", songMD5] isEqualToString:@"YES"])
-		return 1.0;
-	
-	NSString *fileName;
-	if (currentSong.transcodedSuffix)
-		fileName = [self.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", songMD5, currentSong.transcodedSuffix]];
-	else
-		fileName = [self.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", songMD5, currentSong.suffix]];
-	
-	float fileSize = (float)[[[NSFileManager defaultManager] attributesOfItemAtPath:fileName error:NULL] fileSize];
-	
-	float formattedBitRate;
-
-	if (self.bitRate < 1000)
-		formattedBitRate = (float)self.bitRate;
-	else
-		formattedBitRate = (float)self.bitRate / 1000;
-	
-	float totalSize = formattedBitRate * 128.0 * [currentSong.duration floatValue];
-	
-	if (totalSize == 0)
-		return 0.0;
-	
-	return (fileSize / totalSize);
+	return [self findProgressForSong:dataModel.currentSong];
 }
-
 
 - (float) findNextSongProgress
 {
 	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
-	Song *nextSong = dataModel.nextSong;
-	
-	if (nextSong.path != nil)
-	{
-		NSString *songMD5 = [nextSong.path md5];
-		
-		if ([[databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", songMD5] isEqualToString:@"YES"])
-		{
-			// The next song is already cached so return 1
-			return 1.0;
-		}
-		else if ([[databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", songMD5] isEqualToString:@"NO"])
-		{
-			// The next song is being downloaded right now so return the progress
-			
-			float fileSize = (float)[[[NSFileManager defaultManager] attributesOfItemAtPath:nextSong.localPath error:NULL] fileSize];
-			
-			float formattedBitRate;
-			if (self.bitRate < 1000)
-				formattedBitRate = (float)self.bitRate;
-			else
-				formattedBitRate = (float)self.bitRate / 1000;
-			
-			float totalSize = formattedBitRate * 128.0 * [nextSong.duration floatValue];
-			
-			float progress = fileSize / totalSize;
-			
-			return progress;
-		}
-		else 
-		{
-			// The next song hasn't started downloading yet
-			return 0.0;
-		}
-	}
-	
-	return 0.0;
+	return [self findProgressForSong:dataModel.nextSong];
 }
 
 #pragma mark -
@@ -948,7 +873,7 @@ static MusicSingleton *sharedInstance = nil;
 	
 	[connDelegate release];
 	
-	isPlaying = YES;
+	jukeboxIsPlaying = YES;
 }
 
 - (void)jukeboxStop
@@ -976,7 +901,7 @@ static MusicSingleton *sharedInstance = nil;
 	
 	[connDelegate release];
 	
-	isPlaying = NO;
+	jukeboxIsPlaying = NO;
 }
 
 - (void)jukeboxPrevSong
@@ -986,7 +911,7 @@ static MusicSingleton *sharedInstance = nil;
 	{						
 		[self jukeboxPlaySongAtPosition:index];
 		
-		isPlaying = YES;
+		jukeboxIsPlaying = YES;
 	}
 }
 
@@ -997,14 +922,14 @@ static MusicSingleton *sharedInstance = nil;
 	{		
 		[self jukeboxPlaySongAtPosition:index];
 		
-		isPlaying = YES;
+		jukeboxIsPlaying = YES;
 	}
 	else
 	{
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"setPlayButtonImage" object:nil];
 		[self jukeboxStop];
 		
-		isPlaying = NO;
+		jukeboxIsPlaying = NO;
 	}
 }
 
@@ -1278,6 +1203,8 @@ static MusicSingleton *sharedInstance = nil;
 	self = [super init];
 	sharedInstance = self;
 	
+	bassWrapper = [BassWrapperSingleton sharedInstance];
+	
 	//initialize here
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	databaseControls = [DatabaseSingleton sharedInstance];
@@ -1300,10 +1227,9 @@ static MusicSingleton *sharedInstance = nil;
 	self.showNowPlayingIcon = NO;
 	self.repeatMode = 0;
 	self.isShuffle = NO;
-	self.isNewSong = NO;
 	isAutoNextNotificationOn = NO;
 	
-	[self addAutoNextNotification];
+	//[self addAutoNextNotification];
 	
 	connectionQueue = [[BBSimpleConnectionQueue alloc] init];
 	

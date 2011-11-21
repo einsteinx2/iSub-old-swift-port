@@ -11,6 +11,7 @@
 #import "FMDatabaseAdditions.h"
 #import "DatabaseSingleton.h"
 #import "SUSLyricsLoader.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation SUSLyricsDAO
 @synthesize loader, delegate;
@@ -20,7 +21,7 @@
     if ((self = [super init]))
     {
         delegate = theDelegate;
-        loader = [[SUSLyricsLoader alloc] initWithDelegate:self];
+		loader = nil;
     }
     
     return self;
@@ -41,6 +42,9 @@
 
 - (NSString *)lyricsForArtist:(NSString *)artist andTitle:(NSString *)title
 {
+	[self cancelLoad];
+	
+	self.loader = [[[SUSLyricsLoader alloc] initWithDelegate:self] autorelease];
     NSString *lyrics = [self.db stringForQuery:@"SELECT lyrics FROM lyrics WHERE artist = ? AND title = ?", artist, title];
 	if (lyrics)
 	{
@@ -56,16 +60,29 @@
     return nil;
 }
 
+#pragma mark - SUSLoader manager
+
+- (void)startLoad
+{
+	DLog(@"this shouldn't be called");
+}
+
+- (void)cancelLoad
+{
+	[loader cancelLoad];
+	[loader release]; loader = nil;
+}
+
 #pragma mark - SUSLoader delegate
 
 - (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
 {
-    [delegate loadingFailed:theLoader withError:error];
+	[delegate loadingFailed:theLoader withError:error];
 }
 
 - (void)loadingFinished:(SUSLoader*)theLoader
 {
-    [delegate loadingFinished:theLoader];
+	[delegate loadingFinished:theLoader];
 }
 
 /*

@@ -56,19 +56,15 @@
 	return [super hitTest:point withEvent:event];
 }
 
-
-
 - (BOOL)touchesShouldCancelInContentView:(UIView *)view 
 {
 	return YES;
 }
 
-
 - (BOOL)touchesShouldBegin:(NSSet *)touches withEvent:(UIEvent *)event inContentView:(UIView *)view 
 {
 	return YES;
 }
-
 
 - (void)dealloc {
 	[lastDeleteToggle release]; lastDeleteToggle = nil;
