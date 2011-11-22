@@ -22,6 +22,7 @@
 #import "CustomUIAlertView.h"
 #import "Reachability.h"
 #import "SavedSettings.h"
+#import "BassWrapperSingleton.h"
 
 @implementation ServerListViewController
 
@@ -247,6 +248,7 @@
 	settings.urlString = [NSString stringWithString:viewObjects.serverToEdit.url];
 	settings.username = [NSString stringWithString:viewObjects.serverToEdit.username];
 	settings.password = [NSString stringWithString:viewObjects.serverToEdit.password];
+    settings.redirectUrlString = nil;
 		
 	[self retain];
 	if(self == [[self.navigationController viewControllers] objectAtIndex:0])
@@ -283,7 +285,7 @@
 		// Stop any playing song and remove old tab bar controller from window
 		[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"recover"];
 		[[NSUserDefaults standardUserDefaults] synchronize];
-		[musicControls destroyStreamer];
+		[[BassWrapperSingleton sharedInstance] stop];
 		settings.isJukeboxEnabled = NO;
 		musicControls.showNowPlayingIcon = NO;
 		

@@ -358,15 +358,10 @@ static MusicSingleton *sharedInstance = nil;
 
 #pragma mark Control Methods
 
-- (void)destroyStreamer
-{
-	[bassWrapper bassFree];
-}
-
 - (void)startSongAtOffsetInSeconds:(NSUInteger)seconds
 {
 	// Destroy the streamer to start a new song
-	[self destroyStreamer];
+	[bassWrapper stop];
 	
 	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
 	Song *nextSong = [SUSCurrentPlaylistDAO dataModel].nextSong;
@@ -532,7 +527,7 @@ static MusicSingleton *sharedInstance = nil;
 		else
 		{
 			[[NSNotificationCenter defaultCenter] postNotificationName:@"setPlayButtonImage" object:nil];
-			[self destroyStreamer];
+            [bassWrapper stop];
 			
 			[[SavedSettings sharedInstance] saveState];
 		}

@@ -19,6 +19,7 @@
 - (void)seekToPositionInBytes:(NSUInteger)bytes;
 //- (void)seekToPositionInSeconds:(NSUInteger)seconds;
 - (void)start;
+- (void)stop;
 - (void)playPause;
 
 // BASS methods
@@ -39,10 +40,13 @@
 @property (readonly) float progress;
 @property (readonly) BOOL isEqualizerOn;
 @property (readonly) NSArray *equalizerValues;
+@property NSUInteger startByteOffset;
+@property BOOL isTempDownload;
 
 @property (readonly) HSTREAM currentStream;
 @property (readonly) HSTREAM nextStream;
 
 - (float)fftData:(NSUInteger)index;
+- (short)lineSpecData:(NSUInteger)index;
 
 @end

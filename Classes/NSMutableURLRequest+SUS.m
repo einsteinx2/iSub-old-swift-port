@@ -48,7 +48,12 @@ static void destroy_versionArrays()
 + (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action andParameters:(NSDictionary *)parameters byteOffset:(NSUInteger)offset
 {
     SavedSettings *settings = [SavedSettings sharedInstance];
-	NSString *urlString = [NSString stringWithFormat:@"%@/rest/%@.view", settings.urlString, action];
+    NSString *urlString = [NSString stringWithFormat:@"%@/rest/%@.view", settings.urlString, action];
+    if (settings.redirectUrlString)
+    {
+        // The redirect URL has been found, so use it
+        urlString = [NSString stringWithFormat:@"%@/rest/%@.view", settings.redirectUrlString, action];
+    }
 	NSString *username = [settings.username URLEncodeString];
 	NSString *password = [settings.password URLEncodeString];
     NSString *version = nil;

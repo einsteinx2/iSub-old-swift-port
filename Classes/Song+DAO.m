@@ -15,6 +15,7 @@
 #import "SavedSettings.h"
 #import "MusicSingleton.h"
 #import "SUSCurrentPlaylistDAO.h"
+#import "BassWrapperSingleton.h"
 
 @implementation Song (DAO)
 
@@ -377,7 +378,7 @@
 	if (dataModel.currentSong && ![SavedSettings sharedInstance].isJukeboxEnabled &&
 		[[dataModel.currentSong.path md5] isEqualToString:md5])
 	{
-		[musicControls destroyStreamer];
+        [[BassWrapperSingleton sharedInstance] stop];
 	}
 	
 	// Clean up genres table

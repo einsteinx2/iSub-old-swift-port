@@ -5062,7 +5062,6 @@
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
-					"\"$(SRCROOT)/../../Downloads/bass24-iphone/bass_fx24-iphone\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = iSub;
@@ -5103,7 +5102,6 @@
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
-					"\"$(SRCROOT)/../../Downloads/bass24-iphone/bass_fx24-iphone\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = iSub;
@@ -5185,7 +5183,6 @@
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
-					"\"$(SRCROOT)/../../Downloads/bass24-iphone/bass_fx24-iphone\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = iSub;
@@ -5235,7 +5232,6 @@
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
-					"\"$(SRCROOT)/../../Downloads/bass24-iphone/bass_fx24-iphone\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -5291,7 +5287,6 @@
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
-					"\"$(SRCROOT)/../../Downloads/bass24-iphone/bass_fx24-iphone\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -5343,7 +5338,6 @@
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
-					"\"$(SRCROOT)/../../Downloads/bass24-iphone/bass_fx24-iphone\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -5392,7 +5386,6 @@
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
-					"\"$(SRCROOT)/../../Downloads/bass24-iphone/bass_fx24-iphone\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = "iSub Lite";
@@ -5438,7 +5431,6 @@
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
-					"\"$(SRCROOT)/../../Downloads/bass24-iphone/bass_fx24-iphone\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = "iSub Lite";
@@ -5481,7 +5473,6 @@
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
-					"\"$(SRCROOT)/../../Downloads/bass24-iphone/bass_fx24-iphone\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = "iSub Lite";

@@ -57,8 +57,14 @@
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
-	
-	downloadProgress = [[UIView alloc] initWithFrame:progressSlider.frame];
+    
+	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
+	viewObjects = [ViewObjectsSingleton sharedInstance];
+	musicControls = [MusicSingleton sharedInstance];
+	databaseControls = [DatabaseSingleton sharedInstance];
+    bassWrapper = [BassWrapperSingleton sharedInstance];
+    
+    downloadProgress = [[UIView alloc] initWithFrame:progressSlider.frame];
 	[downloadProgress newX:0.0];
 	[downloadProgress newY:0.0];
 	downloadProgress.backgroundColor = [UIColor whiteColor];
@@ -66,11 +72,6 @@
 	downloadProgress.userInteractionEnabled = NO;
 	[progressSlider addSubview:downloadProgress];
 	[downloadProgress release];
-	
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicSingleton sharedInstance];
-	databaseControls = [DatabaseSingleton sharedInstance];
 	
 	/////////// RESIZE PROGRESS SLIDER
 	//progressSlider.layer.transform = CATransform3DMakeScale(1.0, 2.0, 1.0);
@@ -175,7 +176,7 @@
 
 - (void)updateBitrateLabel
 {
-	bitRateLabel.text = [NSString stringWithFormat:@"Bit Rate: %i kbps", [BassWrapperSingleton sharedInstance].bitRate];
+	bitRateLabel.text = [NSString stringWithFormat:@"Bit Rate: %i kbps", bassWrapper.bitRate];
 }
 
 - (void)initInfo
@@ -202,7 +203,7 @@
 	titleLabel.text = currentSong.title;
 	
 	//if (currentSong.bitRate)
-		bitRateLabel.text = [NSString stringWithFormat:@"Bit Rate: %i kbps", [BassWrapperSingleton sharedInstance].bitRate]; //]] [currentSong.bitRate stringValue]];
+		bitRateLabel.text = [NSString stringWithFormat:@"Bit Rate: %i kbps", bassWrapper.bitRate]; //]] [currentSong.bitRate stringValue]];
 	//else
 	//	bitRateLabel.text = @"";
 		
@@ -307,7 +308,6 @@
 		return;
 	}
 
-	BassWrapperSingleton *bassWrapper = [BassWrapperSingleton sharedInstance];
 	bitRateLabel.text = [NSString stringWithFormat:@"Bit Rate: %i kbps", bassWrapper.bitRate];
 	
 	if (!pauseSlider)
@@ -332,7 +332,7 @@
 		NSString *elapsedTime = [NSString formatTime:bassWrapper.progress];
 		NSString *remainingTime = [NSString formatTime:([currentSong.duration floatValue] - bassWrapper.progress)];
 		
-		progressSlider.value = 0.0;
+		progressSlider.value = bassWrapper.progress;
 		elapsedTimeLabel.text = elapsedTime;
 		remainingTimeLabel.text =[@"-" stringByAppendingString:remainingTime];
 	}
@@ -364,9 +364,7 @@
 - (IBAction) movedSlider
 {	
 	if (!hasMoved)
-	{
-		BassWrapperSingleton *bassWrapper = [BassWrapperSingleton sharedInstance];
-		
+	{		
 		hasMoved = YES;
 		progressLabel.hidden = YES;
 		progressLabelBackground.hidden = YES;
@@ -389,7 +387,7 @@
 		
 		if (musicControls.isTempDownload)
 		{
-			[musicControls destroyStreamer];
+            [bassWrapper stop];
 			
 			//musicControls.seekTime = progressSlider.value;
 			[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong offset:byteOffset atIndex:0];
@@ -450,7 +448,6 @@
 	}
 }
 
-
 - (IBAction) bookmarkButtonToggle
 {
 	bookmarkPosition = (int)progressSlider.value;
@@ -469,7 +466,6 @@
 	[bookmarkNameTextField becomeFirstResponder];
 }
 
-
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {	
 	if ([alertView.title isEqualToString:@"Sorry"])
@@ -485,7 +481,9 @@
 		}
 		else if(buttonIndex == 1)
 		{
+            [bassWrapper stop];
 			[[SUSStreamSingleton sharedInstance] removeStreamAtIndex:0];
+            DLog(@"byteOffset: %i", byteOffset);
 			[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong offset:byteOffset atIndex:0];
 			if ([[SUSStreamSingleton sharedInstance].handlerStack count] > 1)
 			{

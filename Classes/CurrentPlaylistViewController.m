@@ -266,7 +266,7 @@
 				}
 				else
 				{
-					[musicControls destroyStreamer];
+                    [[BassWrapperSingleton sharedInstance] stop];
 					// Pop to root view controller doesn't work for nav controllers inside more tab //
 				}
 			}
@@ -381,7 +381,7 @@
 			}
 			else
 			{
-				[musicControls destroyStreamer];
+                [[BassWrapperSingleton sharedInstance] stop];
 				[databaseControls resetCurrentPlaylistDb];
 			}
 			

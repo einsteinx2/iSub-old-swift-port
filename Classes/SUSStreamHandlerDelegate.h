@@ -9,7 +9,7 @@
 @class SUSStreamHandler;
 @protocol SUSStreamHandlerDelegate <NSObject>
 
-- (void)SUSStreamHandlerStartPlayback:(SUSStreamHandler *)handler;
+- (void)SUSStreamHandlerStartPlayback:(SUSStreamHandler *)handler startByteOffset:(NSUInteger)offset;
 - (void)SUSStreamHandlerConnectionFinished:(SUSStreamHandler *)handler;
 - (void)SUSStreamHandlerConnectionFailed:(SUSStreamHandler *)handler withError:(NSError *)error;
 

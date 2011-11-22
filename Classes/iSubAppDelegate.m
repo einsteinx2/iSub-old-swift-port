@@ -92,9 +92,6 @@ void onUncaughtException(NSException* exception)
 - (void)applicationDidFinishLaunching:(UIApplication *)application
 {   
     NSSetUncaughtExceptionHandler(&onUncaughtException);
-    
-	introController = nil;
-	showIntro = NO;
 
 	SavedSettings *settings = [SavedSettings sharedInstance];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
@@ -102,6 +99,10 @@ void onUncaughtException(NSException* exception)
 	musicControls = [MusicSingleton sharedInstance];
 	socialControls = [SocialSingleton sharedInstance];
 	cacheControls = [CacheSingleton sharedInstance];
+    bassWrapper = [BassWrapperSingleton sharedInstance];
+    
+    introController = nil;
+	showIntro = NO;
 	
 	DLog(@"md5: %@", [settings.urlString md5]);
 	
@@ -246,6 +247,13 @@ void onUncaughtException(NSException* exception)
 }
 
 #pragma mark - SUS Server Check Delegate
+
+- (void)SUSServerURLCheckRedirected:(SUSServerURLChecker *)checker redirectUrl:(NSURL *)url
+{
+    SavedSettings *settings = [SavedSettings sharedInstance];
+    settings.redirectUrlString = [NSString stringWithFormat:@"%@://%@:%@", url.scheme, url.host, url.port];
+    //DLog(@"redirectUrlString: %@", settings.redirectUrlString);
+}
 
 - (void)SUSServerURLCheckFailed:(SUSServerURLChecker *)checker withError:(NSError *)error
 {
@@ -732,7 +740,7 @@ void onUncaughtException(NSException* exception)
 	
 	viewObjects.isOfflineMode = YES;
 		
-	[musicControls destroyStreamer];
+	[bassWrapper stop];
 	
 	[[SUSStreamSingleton sharedInstance] cancelAllStreams];
 
@@ -750,7 +758,7 @@ void onUncaughtException(NSException* exception)
 		
 	viewObjects.isOfflineMode = NO;
 	
-	[musicControls destroyStreamer];
+	[bassWrapper stop];
 	[offlineTabBarController.view removeFromSuperview];
 	[databaseControls closeAllDatabases];
 	[self appInit2];
@@ -924,7 +932,7 @@ void onUncaughtException(NSException* exception)
 				{
 					viewObjects.isOfflineMode = NO;
 					
-					[musicControls destroyStreamer];
+					[bassWrapper stop];
 					[offlineTabBarController.view removeFromSuperview];
 					[databaseControls closeAllDatabases];
 					[self appInit2];
@@ -936,7 +944,7 @@ void onUncaughtException(NSException* exception)
 					viewObjects.isOfflineMode = YES;
 					[SavedSettings sharedInstance].isJukeboxEnabled = NO;
 					
-					[musicControls destroyStreamer];
+					[bassWrapper stop];
 					[[SUSStreamSingleton sharedInstance] cancelAllStreams];
 					[musicControls stopDownloadQueue];
 					[mainTabBarController.view removeFromSuperview];

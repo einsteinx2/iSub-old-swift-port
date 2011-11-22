@@ -80,16 +80,20 @@
 		
 		if (self.fileHandle)
 		{
-			// File exists so seek to end
-			totalBytesTransferred = [self.fileHandle seekToEndOfFile];			
+			/*// File exists so seek to end
+			totalBytesTransferred = [self.fileHandle seekToEndOfFile];*/
+			
+            // File exists so remove it
+            [self.fileHandle closeFile];
+            [[NSFileManager defaultManager] removeItemAtPath:mySong.localPath error:NULL];
 		}
-		else
-		{
+		//else
+		//{
 			// File doesn't exist so create it
 			totalBytesTransferred = 0;
 			[[NSFileManager defaultManager] createFileAtPath:mySong.localPath contents:[NSData data] attributes:nil];
 			self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:mySong.localPath];
-		}
+		//}
 		
 		NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:n2N(mySong.songId) forKey:@"id"];
 		if ([musicControls maxBitrateSetting] != 0)
@@ -98,7 +102,7 @@
 			[parameters setObject:n2N(bitrate) forKey:@"maxBitRate"];
 		}
 		
-		NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters byteOffset:totalBytesTransferred];
+		NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters byteOffset:byteOffset];
 		self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 		if (connection)
 		{
@@ -134,7 +138,9 @@
 
 - (void)cancel
 {
-	[connection cancel];
+    DLog(@"request canceled");
+	[connection cancel]; 
+    [connection release]; connection = nil;
 }
 
 #pragma mark - Connection Delegate
@@ -216,7 +222,7 @@
 
 - (void)startPlaybackInternal
 {
-	[self.delegate SUSStreamHandlerStartPlayback:self];
+	[self.delegate SUSStreamHandlerStartPlayback:self startByteOffset:byteOffset];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error

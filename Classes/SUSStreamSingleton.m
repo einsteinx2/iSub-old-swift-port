@@ -72,8 +72,10 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (void)removeStreamAtIndex:(NSUInteger)index
 {
+    DLog(@"handlerStack count: %i", [handlerStack count]);
 	[self cancelStreamAtIndex:index];
 	[handlerStack removeObjectAtIndex:index];
+    DLog(@"removed stream, new handlerStack count: %i", [handlerStack count]);
 }
 
 - (void)removeStream:(SUSStreamHandler *)handler
@@ -123,7 +125,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 #pragma mark - SUSStreamHandler delegate
 
-- (void)SUSStreamHandlerStartPlayback:(SUSStreamHandler *)handler
+- (void)SUSStreamHandlerStartPlayback:(SUSStreamHandler *)handler startByteOffset:(NSUInteger)offset
 {	
 	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
 	Song *nextSong = [SUSCurrentPlaylistDAO dataModel].nextSong;
@@ -133,6 +135,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 	if ([handler.mySong isEqualToSong:currentSong])
 	{
 		[bassWrapper start];
+        bassWrapper.startByteOffset = offset;
 	}
 	else if ([handler.mySong isEqualToSong:nextSong])
 	{

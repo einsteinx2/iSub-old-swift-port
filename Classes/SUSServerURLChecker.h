@@ -12,6 +12,8 @@
 @protocol SUSServerURLCheckerDelegate <NSObject>
 - (void)SUSServerURLCheckFailed:(SUSServerURLChecker *)checker withError:(NSError *)error;
 - (void)SUSServerURLCheckPassed:(SUSServerURLChecker *)checker;
+@optional
+- (void)SUSServerURLCheckRedirected:(SUSServerURLChecker *)checker redirectUrl:(NSURL *)url;
 @end
 
 
@@ -19,6 +21,7 @@
 
 @property (nonatomic, assign) NSObject<SUSServerURLCheckerDelegate> *delegate;
 @property (nonatomic, retain) NSMutableData *receivedData;
+@property (nonatomic, retain) NSURLRequest *request;
 
 - (id)initWithDelegate:(NSObject<SUSServerURLCheckerDelegate> *)theDelegate;
 

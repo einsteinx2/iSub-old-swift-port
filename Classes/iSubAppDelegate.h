@@ -9,7 +9,7 @@
 #import "MKStoreManager.h"
 #import "SUSServerURLChecker.h"
 
-@class BBSplitViewController, ViewObjectsSingleton, DatabaseSingleton, MusicSingleton, SocialSingleton, MGSplitViewController, iPadMainMenu, InitialDetailViewController, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, Reachability, iPhoneStreamingPlayerViewController, SettingsViewController, RootViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController, HTTPServer, CacheSingleton;
+@class BBSplitViewController, ViewObjectsSingleton, DatabaseSingleton, MusicSingleton, SocialSingleton, MGSplitViewController, iPadMainMenu, InitialDetailViewController, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, Reachability, iPhoneStreamingPlayerViewController, SettingsViewController, RootViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController, HTTPServer, CacheSingleton, BassWrapperSingleton;
 
 @interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate, SUSServerURLCheckerDelegate> 
 {	
@@ -18,6 +18,7 @@
 	MusicSingleton *musicControls;
 	SocialSingleton *socialControls;
 	CacheSingleton *cacheControls;
+    BassWrapperSingleton *bassWrapper;
 	
 	UIWindow *window;
 	

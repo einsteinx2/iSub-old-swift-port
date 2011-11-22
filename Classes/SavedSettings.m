@@ -17,7 +17,7 @@
 
 @implementation SavedSettings
 
-@synthesize serverList;
+@synthesize serverList, redirectUrlString;
 
 - (NSString *) formatFileSize:(unsigned long long int)size
 {
@@ -804,7 +804,8 @@ static SavedSettings *sharedInstance = nil;
 	urlString = [[NSString alloc] initWithString:DEFAULT_URL];
 	username = [[NSString alloc] initWithString:DEFAULT_USER_NAME];
 	password = [[NSString alloc] initWithString:DEFAULT_PASSWORD];
-	
+	redirectUrlString = nil;
+    
 	// If the settings are not set up, convert them
 	if (![userDefaults boolForKey:@"areSettingsSetup"])
 	{

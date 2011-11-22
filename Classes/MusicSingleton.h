@@ -67,7 +67,6 @@
 
 - (NSInteger) maxBitrateSetting;
 
-- (void)destroyStreamer;
 - (void)startSongAtOffsetInSeconds:(NSUInteger)seconds;
 - (void)startSong;
 - (void)playPauseSong;

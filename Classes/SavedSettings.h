@@ -6,8 +6,9 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
+@class BassWrapperSingleton;
 @interface SavedSettings : NSObject 
-{
+{    
 	NSUserDefaults *userDefaults;
 	
 	NSMutableArray *serverList;
@@ -32,6 +33,8 @@
 @property (nonatomic, retain) NSString *urlString;
 @property (nonatomic, retain) NSString *username;
 @property (nonatomic, retain) NSString *password;
+
+@property (nonatomic, retain) NSString *redirectUrlString;
 
 // Root Folders Settings
 @property (nonatomic, retain) NSDate *rootFoldersReloadTime;

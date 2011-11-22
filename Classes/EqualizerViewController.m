@@ -19,7 +19,7 @@
 #define SPECHEIGHT 320	// height (changing requires palette adjustments too)
 CGContextRef specdc;
 DWORD specbuf[SPECWIDTH*SPECHEIGHT];
-DWORD palette[256];
+DWORD palette[SPECHEIGHT+128];
 int specpos = 0;
 
 typedef struct 
@@ -75,23 +75,33 @@ ISMSBassVisualType visualType = ISMSBassVisualType_fatBar;
 	RGBQUAD *pal = (RGBQUAD *)palette;
 	int a;
 	memset(palette, 0, sizeof(palette));
-	for (a = 1; a < 128; a++) 
+	for (a = 1; a < 65; a++) 
 	{
-		pal[a].rgbGreen = 256 - 2 * a;
-		pal[a].rgbRed   = 2 * a;
+		pal[a].rgbRed = 130 - 2 * a;
+		pal[a].rgbBlue = 126 + 2 * a;
+	}
+    for (a = 1; a < 128; a++) 
+	{
+		pal[64+a].rgbBlue = 256 - 2 * a;
+		pal[64+a].rgbGreen   = 2 * a;
+	}
+    for (a = 1; a < 128; a++) 
+	{
+		pal[191+a].rgbGreen = 256 - 2 * a;
+		pal[191+a].rgbRed   = 2 * a;
 	}
 	
 	for (a = 0; a < 32; a++) 
 	{
-		pal[128 + a].rgbBlue       = 8 * a;
-		pal[128 + 32 + a].rgbBlue  = 255;
-		pal[128 + 32 + a].rgbRed   = 8 * a;
-		pal[128 + 64 + a].rgbRed   = 255;
-		pal[128 + 64 + a].rgbBlue  = 8 * (31 - a);
-		pal[128 + 64 + a].rgbGreen = 8 * a;
-		pal[128 + 96 + a].rgbRed   = 255;
-		pal[128 + 96 + a].rgbGreen = 255;
-		pal[128 + 96 + a].rgbBlue  = 8 * a;
+		pal[SPECHEIGHT + a].rgbBlue       = 8 * a;
+		pal[SPECHEIGHT + 32 + a].rgbBlue  = 255;
+		pal[SPECHEIGHT + 32 + a].rgbRed   = 8 * a;
+		pal[SPECHEIGHT + 64 + a].rgbRed   = 255;
+		pal[SPECHEIGHT + 64 + a].rgbBlue  = 8 * (31 - a);
+		pal[SPECHEIGHT + 64 + a].rgbGreen = 8 * a;
+		pal[SPECHEIGHT + 96 + a].rgbRed   = 255;
+		pal[SPECHEIGHT + 96 + a].rgbGreen = 255;
+		pal[SPECHEIGHT + 96 + a].rgbBlue  = 8 * a;
 	}
 
 }
@@ -147,12 +157,10 @@ ISMSBassVisualType visualType = ISMSBassVisualType_fatBar;
 			
 		case ISMSBassVisualType_line:
 		{
-			/*//short buf[SPECWIDTH];
 			memset(specbuf,0,sizeof(specbuf));
-			//BASS_ChannelGetData(chan,buf,SPECWIDTH*sizeof(short)); // get the sample data
 			for (x = 0; x < SPECWIDTH; x++) 
 			{
-				int v=(32767 - buf[x]) * SPECHEIGHT/65536; // invert and scale to fit display
+				int v=(32767 - [wrapper lineSpecData:x]) * SPECHEIGHT/65536; // invert and scale to fit display
 				if (!x) 
 					y = v;
 				do 
@@ -164,7 +172,7 @@ ISMSBassVisualType visualType = ISMSBassVisualType_fatBar;
 						y--;
 					specbuf[y * SPECWIDTH + x] = palette[abs(y - SPECHEIGHT / 2) * 2 + 1];
 				} while (y!=v);
-			}*/
+			}
 			break;
 		}
 		case ISMSBassVisualType_skinnyBar:
@@ -222,18 +230,17 @@ ISMSBassVisualType visualType = ISMSBassVisualType_fatBar;
 		}
 		case ISMSBassVisualType_aphexFace:
 		{
-			memset(specbuf, 0, sizeof(specbuf));
 			for (x=0; x < SPECHEIGHT; x++) 
 			{
 				y = sqrt([wrapper fftData:x+1]) * 3 * 127; // scale it (sqrt to make low values more visible)
 				if (y > 127)
 					y = 127; // cap it
-				specbuf[(SPECHEIGHT - 1 - x) * SPECWIDTH + specpos] = palette[128 + y]; // plot it
+				specbuf[(SPECHEIGHT - 1 - x) * SPECWIDTH + specpos] = palette[SPECHEIGHT - 1 + y]; // plot it
 			}
 			// move marker onto next position
 			specpos = (specpos + 1) % SPECWIDTH;
 			for (x = 0; x < SPECHEIGHT; x++) 
-				specbuf[x * SPECWIDTH + specpos] = palette[255];
+				specbuf[x * SPECWIDTH + specpos] = palette[SPECHEIGHT+126];
 			break;
 		}
 	}
@@ -356,10 +363,11 @@ ISMSBassVisualType visualType = ISMSBassVisualType_fatBar;
 		case ISMSBassVisualType_skinnyBar:
 			visualType = ISMSBassVisualType_fatBar; break;
 		case ISMSBassVisualType_fatBar:
+            memset(specbuf, 0, sizeof(specbuf));
+            specpos = 0;
 			visualType = ISMSBassVisualType_aphexFace; break;
 		case ISMSBassVisualType_aphexFace:
-			//visualType = ISMSBassVisualType_line; break;
-			visualType = ISMSBassVisualType_skinnyBar; break;
+			visualType = ISMSBassVisualType_line; break;
 	}
 }
 

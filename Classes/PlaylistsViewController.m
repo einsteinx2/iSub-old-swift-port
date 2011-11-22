@@ -32,6 +32,7 @@
 #import "SUSServerPlaylistsDAO.h"
 #import "SUSServerPlaylist.h"
 #import "SUSCurrentPlaylistDAO.h"
+#import "BassWrapperSingleton.h"
 
 @interface PlaylistsViewController (Private)
 
@@ -652,7 +653,7 @@
 				}
 				else
 				{
-					[musicControls destroyStreamer];
+                    [[BassWrapperSingleton sharedInstance] stop];
 					self.navigationItem.rightBarButtonItem = nil;
 					
 					if (isPlaylistSaveEditShowing == YES)

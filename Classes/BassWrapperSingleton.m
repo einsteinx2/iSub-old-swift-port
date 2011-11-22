@@ -18,10 +18,9 @@
 @end
 
 @implementation BassWrapperSingleton
-@synthesize isEqualizerOn;
+@synthesize isEqualizerOn, startByteOffset, isTempDownload;
 
 static BOOL isFilestream1 = YES;
-static BOOL isStartFromOffset = NO;
 
 extern void BASSFLACplugin;
 
@@ -30,6 +29,9 @@ static BassWrapperSingleton *selfRef;
 static HSTREAM fileStream1, fileStream2, outStream;
 
 static float fftData[1024];
+
+#define SPECWIDTH 320
+short lineSpecBuf[SPECWIDTH];
 
 static NSMutableArray *eqValueArray, *eqHandleArray;
 
@@ -74,7 +76,8 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 					[selfRef performSelectorOnMainThread:@selector(sendSongStartNotification) withObject:nil waitUntilDone:NO];
 					
 					// Read data from stream2
-					isStartFromOffset = NO;
+					[selfRef setStartByteOffset:0];
+                    [selfRef setIsTempDownload:NO];
 					isFilestream1 = NO;
 					r = BASS_ChannelGetData(fileStream2, buffer, length);
 					
@@ -109,7 +112,8 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 					[selfRef performSelectorOnMainThread:@selector(sendSongStartNotification) withObject:nil waitUntilDone:NO];
 					
 					DLog(@"getting data from stream1");
-					isStartFromOffset = NO;
+					[selfRef setStartByteOffset:0];
+                    [selfRef setIsTempDownload:NO];
 					isFilestream1 = YES;
 					r = BASS_ChannelGetData(fileStream1, buffer, length);
 					
@@ -126,6 +130,9 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		
 		// Get the FFT data for visualizer
 		BASS_ChannelGetData(outStream, fftData, BASS_DATA_FFT2048);
+        
+        // Get the data for line spec visualizer
+        BASS_ChannelGetData(outStream, lineSpecBuf, SPECWIDTH * sizeof(short));
 	}
 	
 	return r;
@@ -202,6 +209,9 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	
 	if (!currentSong)
 		return;
+    
+    startByteOffset = byteOffset;
+    isTempDownload = NO;
 	
 	[self bassInit];
 	
@@ -230,16 +240,21 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		
 		[selfRef performSelectorOnMainThread:@selector(sendSongStartNotification) withObject:nil waitUntilDone:NO];
 	}
-	
-	if (byteOffset > 0)
-	{
-		isStartFromOffset = YES;
-	}
 }
 
 - (void)start
 {
 	[self startWithOffsetInBytes:0];
+}
+
+- (void)stop
+{
+    if (self.isPlaying) 
+	{
+		BASS_Pause();
+	}
+    
+    [self bassFree];
 }
 
 - (void)playPause
@@ -258,6 +273,8 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 
 - (void)bassInit
 {
+    isTempDownload = NO;
+    
 	BASS_Free();
 	
 	BASS_SetConfig(BASS_CONFIG_IOS_MIXAUDIO, 0); // Disable mixing.	To be called before BASS_Init.
@@ -273,6 +290,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 
 - (BOOL)bassFree
 {
+    isTempDownload = NO;
 	return BASS_Free();
 }
 
@@ -299,12 +317,13 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 - (float)progress
 {
 	HSTREAM stream = self.currentStream;
-	
+    
 	NSUInteger bytePosition;
-	if (isStartFromOffset)
-		bytePosition = BASS_StreamGetFilePosition(stream, BASS_FILEPOS_START) + BASS_StreamGetFilePosition(stream, BASS_FILEPOS_CURRENT);
-	else
-		bytePosition = BASS_StreamGetFilePosition(stream, BASS_FILEPOS_CURRENT);
+	//if (isStartFromOffset)
+	//	bytePosition = BASS_StreamGetFilePosition(stream, BASS_FILEPOS_START) + BASS_StreamGetFilePosition(stream, BASS_FILEPOS_CURRENT);
+	//else
+	//	bytePosition = BASS_StreamGetFilePosition(stream, BASS_FILEPOS_CURRENT);
+    bytePosition = BASS_StreamGetFilePosition(stream, BASS_FILEPOS_CURRENT) + startByteOffset;
 	
 	float bitRateInBytes = (float)((self.bitRate * 1024) / 8);
 	float progress = bytePosition / bitRateInBytes;
@@ -453,6 +472,11 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	return fftData[index];
 }
 
+- (short)lineSpecData:(NSUInteger)index
+{
+    return lineSpecBuf[index];
+}
+
 - (HSTREAM)currentStream
 {
 	return isFilestream1 ? fileStream1 : fileStream2;
@@ -470,8 +494,10 @@ static BassWrapperSingleton *sharedInstance = nil;
 - (void)setup
 {
 	selfRef = self;
-	isEqualizerOn = YES;
-	
+	isEqualizerOn = NO;
+	isTempDownload = NO;
+    startByteOffset = 0;
+    
 	eqValueArray = [[NSMutableArray alloc] initWithCapacity:3];
 	[eqValueArray addObject:[BassParamEqValue valueWithParams:BASS_DX8_PARAMEQMake(125, 0, 18) arrayIndex:0]];
 	[eqValueArray addObject:[BassParamEqValue valueWithParams:BASS_DX8_PARAMEQMake(1000, 0, 18) arrayIndex:1]];

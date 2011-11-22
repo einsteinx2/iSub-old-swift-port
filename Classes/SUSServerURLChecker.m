@@ -10,10 +10,11 @@
 #import "TBXML.h"
 #import "NSError-ISMSError.h"
 #import "NSMutableURLRequest+SUS.h"
+#import "SavedSettings.h"
 
 @implementation SUSServerURLChecker
 
-@synthesize receivedData, delegate;
+@synthesize receivedData, delegate, request;
 
 - (id) init
 {
@@ -34,7 +35,7 @@
 {
     self.receivedData = [NSMutableData dataWithCapacity:0];
     
-    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:30.0];
+    self.request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:30.0];
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	
 	if (!connection)
@@ -66,6 +67,24 @@
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
 	[receivedData setLength:0];
+}
+
+- (NSURLRequest *)connection:(NSURLConnection *)inConnection willSendRequest:(NSURLRequest *)inRequest redirectResponse:(NSURLResponse *)inRedirectResponse
+{
+    if (inRedirectResponse) 
+    {
+        // Notify the delegate
+        [delegate SUSServerURLCheckRedirected:self redirectUrl:[inRequest URL]];
+        
+        NSMutableURLRequest *r = [[request mutableCopy] autorelease]; // original request
+        [r setURL:[inRequest URL]];
+        return r;
+    } 
+    else 
+    {
+        DLog(@"returning inRequest");
+        return inRequest;
+    }
 }
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
