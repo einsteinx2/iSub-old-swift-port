@@ -74,7 +74,10 @@
     if (inRedirectResponse) 
     {
         // Notify the delegate
-        [delegate SUSServerURLCheckRedirected:self redirectUrl:[inRequest URL]];
+        if ([delegate respondsToSelector:@selector(SUSServerURLCheckRedirected:redirectUrl:)])
+        {
+             [delegate SUSServerURLCheckRedirected:self redirectUrl:[inRequest URL]];
+        }
         
         NSMutableURLRequest *r = [[request mutableCopy] autorelease]; // original request
         [r setURL:[inRequest URL]];
