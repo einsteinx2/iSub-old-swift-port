@@ -186,6 +186,13 @@
 
 #pragma mark - Server URL Checker delegate
 
+- (void)SUSServerURLCheckRedirected:(SUSServerURLChecker *)checker redirectUrl:(NSURL *)url
+{
+    SavedSettings *settings = [SavedSettings sharedInstance];
+    settings.redirectUrlString = [NSString stringWithFormat:@"%@://%@:%@", url.scheme, url.host, url.port];
+    //DLog(@"redirectUrlString: %@", settings.redirectUrlString);
+}
+
 - (void)SUSServerURLCheckFailed:(SUSServerURLChecker *)checker withError:(NSError *)error
 {
 	[checker release]; checker = nil;
