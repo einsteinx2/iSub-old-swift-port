@@ -60,7 +60,8 @@
 - (void)finishLoad
 {
 	// Remove the processed folder from array
-	[folderIds removeObjectAtIndex:0];
+    if ([folderIds count] > 0)
+        [folderIds removeObjectAtIndex:0];
 	
 	// Continue the iteration
 	if ([folderIds count] > 0)

@@ -12,6 +12,9 @@
 #define iSub_ISMSNotificationNames_h
 
 #define ISMSNotification_SongPlaybackStart @"ISMS Song Playback Start"
+#define ISMSNotification_SongPlaybackPause @"ISMS Song Playback Pause"
 #define ISMSNotification_SongPlaybackEnd @"ISMS Song Playback End"
+#define ISMSNotification_AlbumArtLargeDownloaded @"ISMS Album art downloaded"
+#define ISMSNotification_AlbumArtLargeFailed @"ISMS Album art failed to download"
 
 #endif

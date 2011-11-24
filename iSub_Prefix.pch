@@ -3,10 +3,6 @@
 //
 #import <Availability.h>
 
-#import "ISMSNotificationNames.h"
-#import "ISMSErrorDomain.h"
-#import "SUSErrorDomain.h"
-
 #ifndef __IPHONE_3_0
 #warning "This project uses features only available in iPhone SDK 3.0 and later."
 #endif
@@ -15,6 +11,10 @@
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
 #endif
+
+#import "ISMSNotificationNames.h"
+#import "ISMSErrorDomain.h"
+#import "SUSErrorDomain.h"
 
 // 240.0 is the minimum URL connection timeout enforced by CFNetwork
 // Unless an HTTP Post body is created then it may default to 74.0

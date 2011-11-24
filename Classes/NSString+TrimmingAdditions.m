@@ -6,7 +6,7 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-#import "NSString-TrimmingAdditions.h"
+#import "NSString+TrimmingAdditions.h"
 
 @implementation NSString (TrimmingAdditions)
 

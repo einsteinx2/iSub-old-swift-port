@@ -9,7 +9,7 @@
 #import "CacheViewController.h"
 #import "CacheAlbumViewController.h"
 #import "Song.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
@@ -26,7 +26,7 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "CacheSingleton.h"
-#import "NSString-time.h"
+#import "NSString+time.h"
 #import "SUSCurrentPlaylistDAO.h"
 
 @interface CacheViewController (Private)

@@ -15,7 +15,7 @@
 #import "Album.h"
 #import "Song.h"
 #import "Artist.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 
 @implementation SUSSubFolderLoader
 @synthesize myId, myArtist;

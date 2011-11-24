@@ -6,7 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "UITableViewCell-overlay.h"
+#import "UITableViewCell+overlay.h"
 
 
 @implementation UITableViewCell (overlay)

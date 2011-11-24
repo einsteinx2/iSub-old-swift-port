@@ -8,7 +8,7 @@
 
 #import "Song.h"
 #import "GTMNSString+HTML.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "MusicSingleton.h"
 
 @implementation Song

@@ -17,7 +17,7 @@
 #import "Artist.h"
 #import "Album.h"
 #import "Song.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "ViewObjectsSingleton.h"

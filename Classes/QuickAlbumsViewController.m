@@ -23,28 +23,22 @@
 
 @synthesize parent, receivedData, modifier;
 
-- (id)init
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	NSString *name;
-	/*if (IS_IPAD())
-		name = @"QuickAlbumsViewController~iPad";
-	else*/
-		name = @"QuickAlbumsViewController";
-	
-	self = [super initWithNibName:name bundle:nil];
-	
-	titles = [[NSDictionary alloc] initWithObjectsAndKeys:@"Recently Played", @"recent", @"Frequently Played", @"frequent", @"Newest Albums", @"newest", @"Random Albums", @"random", nil];
-
-	return self;
-}
-
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
-{
-	
 	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
+}
+
+- (id)init
+{	
+	if ((self = [super initWithNibName:@"QuickAlbumsViewController" bundle:nil]))
+    {
+        titles = [[NSDictionary alloc] initWithObjectsAndKeys:@"Recently Played", @"recent", @"Frequently Played", @"frequent", @"Newest Albums", @"newest", @"Random Albums", @"random", nil];
+    }
+	
+	return self;
 }
 
 - (void)viewDidLoad
@@ -57,29 +51,21 @@
 
 - (IBAction)random
 {
-	[self dismissModalViewControllerAnimated:YES];
-	[viewObjects showLoadingScreenOnMainWindow];
 	[self albumLoad:@"random"];
 }
 
 - (IBAction)frequent
 {
-	[self dismissModalViewControllerAnimated:YES];
-	[viewObjects showLoadingScreenOnMainWindow];
 	[self albumLoad:@"frequent"];
 }
 
 - (IBAction)newest
 {
-	[self dismissModalViewControllerAnimated:YES];
-	[viewObjects showLoadingScreenOnMainWindow];
 	[self albumLoad:@"newest"];
 }
 
 - (IBAction)recent
 {
-	[self dismissModalViewControllerAnimated:YES];
-	[viewObjects showLoadingScreenOnMainWindow];
 	[self albumLoad:@"recent"];
 }
 
@@ -87,18 +73,6 @@
 - (IBAction)cancel
 {
 	[self dismissModalViewControllerAnimated:YES];
-}
-
-- (void)pushViewController:(UIViewController *)viewController
-{
-	// Hide the loading screen
-	[viewObjects hideLoadingScreen];
-	
-	// Push the view controller
-	if (IS_IPAD())
-		[appDelegate.homeNavigationController pushViewController:viewController animated:YES];
-	else
-		[parent.navigationController pushViewController:viewController animated:YES];
 }
 
 - (void)albumLoad:(NSString*)theModifier
@@ -143,9 +117,8 @@
 
 - (void)dealloc 
 {
-    [super dealloc];
-	
-	[titles release];
+    [titles release]; titles = nil;
+    [super dealloc];	
 }
 
 #pragma mark - Connection Delegate
@@ -207,12 +180,19 @@
     [parser release];
     
     self.modifier = nil;
-	
-	[self pushViewController:albumViewController];
+	    
+    if (IS_IPAD())
+		[appDelegate.homeNavigationController pushViewController:albumViewController animated:YES];
+	else
+		[parent.navigationController pushViewController:albumViewController animated:YES];
+    
 	[albumViewController release];	
     
 	self.receivedData = nil;
 	[theConnection release];
+    
+    [viewObjects hideLoadingScreen];
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 @end

@@ -20,6 +20,7 @@
 	IBOutlet CoverArtImageView *coverArtImageView;
 	IBOutlet UIImageView *reflectionView;
 	IBOutlet UIButton *songInfoToggleButton;
+    IBOutlet UIActivityIndicatorView *activityIndicator;
 	
 	UILabel *artistLabel;
 	UILabel *albumLabel;

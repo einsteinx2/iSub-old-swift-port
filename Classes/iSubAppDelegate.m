@@ -16,7 +16,7 @@
 #import "InitialDetailViewController.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "ServerListViewController.h"
 #import "RootViewController.h"
 #import "Reachability.h"
@@ -30,10 +30,10 @@
 #include <netinet/in.h> 
 #include <netdb.h>
 #include <arpa/inet.h>
-#import "NSString-hex.h"
+#import "NSString+hex.h"
 #import "MKStoreManager.h"
 #import "Server.h"
-#import "UIDevice-Hardware.h"
+#import "UIDevice+Hardware.h"
 #import "IntroViewController.h"
 #import "CustomUIAlertView.h"
 #import "HTTPServer.h"
@@ -84,14 +84,14 @@
 #pragma mark Application lifecycle
 #pragma mark -
 
-void onUncaughtException(NSException* exception)
+/*void onUncaughtException(NSException* exception)
 {
     NSLog(@"uncaught exception: %@", exception.description);
-}
+}*/
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application
 {   
-    NSSetUncaughtExceptionHandler(&onUncaughtException);
+    //NSSetUncaughtExceptionHandler(&onUncaughtException);
 
 	SavedSettings *settings = [SavedSettings sharedInstance];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
@@ -186,6 +186,9 @@ void onUncaughtException(NSException* exception)
 	[self createAndDisplayUI];
 	
 	// Check the server status in the background
+    DLog(@"adding loading screen");
+    [viewObjects showLoadingScreenOnMainWindow];
+    
 	[self checkServer];
     
 	// Recover current state if player was interrupted
@@ -270,6 +273,9 @@ void onUncaughtException(NSException* exception)
 	}
     
     [checker release]; checker = nil;
+    
+    DLog(@"server verification failed, hiding loading screen");
+    [viewObjects hideLoadingScreen];
 }
 
 - (void)SUSServerURLCheckPassed:(SUSServerURLChecker *)checker
@@ -277,6 +283,9 @@ void onUncaughtException(NSException* exception)
     //DLog(@"server check passed");
     
     [checker release]; checker = nil;
+    
+    DLog(@"server verification passed, hiding loading screen");
+    [viewObjects hideLoadingScreen];
 }
 
 #pragma mark -

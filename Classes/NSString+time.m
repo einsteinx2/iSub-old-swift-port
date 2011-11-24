@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "NSString-time.h"
+#import "NSString+time.h"
 
 @implementation NSString (time)
 

@@ -6,9 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "AsynchronousImageView.h"
-
-@interface CoverArtImageView : AsynchronousImageView 
+@interface CoverArtImageView : UIImageView 
 {
 
 }

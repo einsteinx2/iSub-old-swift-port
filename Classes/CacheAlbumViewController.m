@@ -19,9 +19,9 @@
 #import "Song.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "SavedSettings.h"
-#import "NSString-time.h"
+#import "NSString+time.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "SUSCurrentPlaylistDAO.h"
 

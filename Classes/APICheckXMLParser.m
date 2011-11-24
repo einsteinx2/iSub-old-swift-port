@@ -10,7 +10,7 @@
 #import "ViewObjectsSingleton.h"
 #import "iSubAppDelegate.h"
 #import "CustomUIAlertView.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "SavedSettings.h"
 
 @implementation APICheckXMLParser

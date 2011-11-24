@@ -10,7 +10,7 @@
 #import "iSubAppDelegate.h"
 #import "MKStoreManager.h"
 #import "Server.h"
-#import "UIDevice-Hardware.h"
+#import "UIDevice+Hardware.h"
 #import "MGSplitViewController.h"
 #import "iPadMainMenu.h"
 #import "SavedSettings.h"

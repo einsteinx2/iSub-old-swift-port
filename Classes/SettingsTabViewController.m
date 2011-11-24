@@ -17,10 +17,10 @@
 #import "SA_OAuthTwitterEngine.h"
 #import "SA_OAuthTwitterController.h"
 
-#import "UIDevice-Hardware.h"
+#import "UIDevice+Hardware.h"
 #import "iPadMainMenu.h"
 
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "FMDatabase.h"
 
 #import "SavedSettings.h"

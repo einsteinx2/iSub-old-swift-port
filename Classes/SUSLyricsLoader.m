@@ -11,7 +11,7 @@
 #import "DatabaseSingleton.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString-rfcEncode.h"
+#import "NSString+rfcEncode.h"
 
 @implementation SUSLyricsLoader
 

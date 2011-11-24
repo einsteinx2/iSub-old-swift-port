@@ -12,6 +12,7 @@
 #import "NSString+cStringUTF8.h"
 #import "BassParamEqValue.h"
 #import "BassEffectHandle.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @interface BassWrapperSingleton (Private)
 - (void)bassInit;
@@ -35,16 +36,6 @@ short lineSpecBuf[SPECWIDTH];
 
 static NSMutableArray *eqValueArray, *eqHandleArray;
 
-- (void)sendSongStartNotification
-{
-	[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_SongPlaybackStart object:nil];
-}
-
-- (void)sendSongEndNotification
-{
-	[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_SongPlaybackEnd object:nil];
-}
-
 // Stream callback
 DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *user)
 {
@@ -67,13 +58,13 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 				[SUSCurrentPlaylistDAO dataModel].currentIndex++;
 				
 				// Send song end notification
-				[selfRef performSelectorOnMainThread:@selector(sendSongEndNotification) withObject:nil waitUntilDone:NO];
+                [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnd];
 				
 				// Check to see if there is another song to play
 				if (BASS_ChannelIsActive(fileStream2))
 				{
 					// Send song start notification
-					[selfRef performSelectorOnMainThread:@selector(sendSongStartNotification) withObject:nil waitUntilDone:NO];
+                    [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStart];
 					
 					// Read data from stream2
 					[selfRef setStartByteOffset:0];
@@ -103,13 +94,13 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 				
 				// Send song done notification
 				DLog(@"sending song info notification");
-				[selfRef performSelectorOnMainThread:@selector(sendSongEndNotification) withObject:nil waitUntilDone:NO];
+                [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnd];
 				
 				DLog(@"fileStream: %llu", (unsigned long long)fileStream1);
 				if (BASS_ChannelIsActive(fileStream1))
 				{
 					// Send song start notification
-					[selfRef performSelectorOnMainThread:@selector(sendSongStartNotification) withObject:nil waitUntilDone:NO];
+                    [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStart];
 					
 					DLog(@"getting data from stream1");
 					[selfRef setStartByteOffset:0];
@@ -238,7 +229,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		
 		[self performSelectorInBackground:@selector(prepareNextSongStream) withObject:nil];
 		
-		[selfRef performSelectorOnMainThread:@selector(sendSongStartNotification) withObject:nil waitUntilDone:NO];
+        [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStart];
 	}
 }
 
@@ -252,6 +243,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
     if (self.isPlaying) 
 	{
 		BASS_Pause();
+        [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnd];
 	}
     
     [self bassFree];
@@ -263,11 +255,13 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	{
 		DLog(@"Pausing");
 		BASS_Pause();
+        [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackPause];
 	} 
 	else 
 	{
 		DLog(@"Playing");
 		BASS_Start();
+        [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStart];
 	}
 }
 

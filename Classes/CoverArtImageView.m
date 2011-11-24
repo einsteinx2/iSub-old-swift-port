@@ -15,9 +15,9 @@
 -(void)oneTap
 {
 	DLog(@"Single tap");
-	PageControlViewController *pageControlViewController = [[PageControlViewController alloc] initWithNibName:@"PageControlViewController" bundle:nil];
+	/*PageControlViewController *pageControlViewController = [[PageControlViewController alloc] initWithNibName:@"PageControlViewController" bundle:nil];
 	[self addSubview:pageControlViewController.view];
-	[pageControlViewController showSongInfo];
+	[pageControlViewController showSongInfo];*/
 }
 
 -(void)twoTaps
@@ -38,7 +38,7 @@
 	switch ([touch tapCount]) 
 	{
 		case 1:
-			[self performSelector:@selector(oneTap) withObject:nil afterDelay:0];
+			[self performSelector:@selector(oneTap) withObject:nil afterDelay:.5];
 			break;
 			
 		case 2:
@@ -47,6 +47,7 @@
 			break;
 			
 		case 3:
+            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(oneTap) object:nil];
 			[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(twoTaps) object:nil];
 			[self performSelector:@selector(threeTaps) withObject:nil afterDelay:.5];
 			break;

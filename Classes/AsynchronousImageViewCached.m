@@ -12,7 +12,7 @@
 #import "AsynchronousImageViewCached.h"
 #import "iSubAppDelegate.h"
 #import "DatabaseSingleton.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "NSMutableURLRequest+SUS.h"
@@ -122,18 +122,7 @@
 	{
 		[databaseControls.coverArtCacheDb60 executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:coverArtId], receivedData];
 
-		if (SCREEN_SCALE() == 2.0)
-		{
-			//UIGraphicsBeginImageContextWithOptions(CGSizeMake(60.0,60.0), NO, 2.0);
-			//[[UIImage imageWithData:data] drawInRect:CGRectMake(0,0,60,60)];
-			//self.image = UIGraphicsGetImageFromCurrentImageContext();
-			//UIGraphicsEndImageContext();
-			self.image = [UIImage imageWithData:receivedData];
-		}
-		else
-		{
-			self.image = [UIImage imageWithData:receivedData];
-		}
+        self.image = [UIImage imageWithData:receivedData];
 	}
 	else 
 	{

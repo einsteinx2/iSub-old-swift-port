@@ -22,7 +22,7 @@
 #import "Song.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "LoadingScreen.h"
 #import "RootViewController.h"
 #import "TBXML.h"

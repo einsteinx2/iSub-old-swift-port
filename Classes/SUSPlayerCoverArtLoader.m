@@ -9,7 +9,7 @@
 #import "SUSPlayerCoverArtLoader.h"
 #import "DatabaseSingleton.h"
 #import "ViewObjectsSingleton.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 

@@ -10,7 +10,7 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "DatabaseSingleton.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "ViewObjectsSingleton.h"
 #import "SavedSettings.h"
 #import "MusicSingleton.h"

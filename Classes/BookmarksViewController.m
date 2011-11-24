@@ -18,10 +18,10 @@
 #import "AsynchronousImageViewCached.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
-#import "NSString-time.h"
+#import "NSString+time.h"
 #import "SUSStreamSingleton.h"
 
 @implementation BookmarksViewController

@@ -16,7 +16,7 @@
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
 #import "Song.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "FMDatabase.h"
 #import "PageControlViewController.h"
 #import "NSMutableURLRequest+SUS.h"

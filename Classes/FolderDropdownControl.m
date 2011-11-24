@@ -8,10 +8,10 @@
 
 #import "FolderDropdownControl.h"
 #import <QuartzCore/QuartzCore.h>
-#import "UIView-tools.h"
+#import "UIView+tools.h"
 #import "iSubAppDelegate.h"
 #import "CustomUIAlertView.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "SUSRootFoldersDAO.h"
 #import "NSMutableURLRequest+SUS.h"
 

@@ -11,7 +11,7 @@
 #import "ViewObjectsSingleton.h"
 #import "iSubAppDelegate.h"
 #import "Song.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "Reachability.h"
@@ -385,7 +385,6 @@ static MusicSingleton *sharedInstance = nil;
 		
 		[bassWrapper start];
 		
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"setPauseButtonImage" object:nil];
 		//[self addAutoNextNotification];
 	}
 	
@@ -411,7 +410,6 @@ static MusicSingleton *sharedInstance = nil;
 		// Start to download the rest of the song
 		[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong];
 		
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"setPauseButtonImage" object:nil];
 		//[self addAutoNextNotification];
 	}
 	
@@ -437,20 +435,6 @@ static MusicSingleton *sharedInstance = nil;
 	[self startSongAtOffsetInSeconds:0];
 }
 
-- (void)playPauseSong
-{
-	[bassWrapper playPause];
-	
-	if (bassWrapper.isPlaying)
-	{
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"setPauseButtonImage" object:nil];
-	}
-	else
-	{
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"setPlayButtonImage" object:nil];
-	}
-}
-
 - (void)playSongAtPosition:(NSInteger)position
 {
 	[SUSCurrentPlaylistDAO dataModel].currentIndex = position;
@@ -462,8 +446,6 @@ static MusicSingleton *sharedInstance = nil;
 	else
 	{		
 		[self startSong];
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"setSongTitle" object:nil];
-		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_SongPlaybackStart object:nil];
 	}
 	
 	//[self addAutoNextNotification];
@@ -496,8 +478,6 @@ static MusicSingleton *sharedInstance = nil;
 				currentIndex = index;
 								
 				[self startSong];
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"setSongTitle" object:nil];
-				[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_SongPlaybackStart object:nil];
 				
 				//[self addAutoNextNotification];
 			}
@@ -519,14 +499,11 @@ static MusicSingleton *sharedInstance = nil;
 			[SUSCurrentPlaylistDAO dataModel].currentIndex = index;
 			
 			[self startSong];
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"setSongTitle" object:nil];
-			[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_SongPlaybackStart object:nil];
 			
 			//[self addAutoNextNotification];
 		}
 		else
 		{
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"setPlayButtonImage" object:nil];
             [bassWrapper stop];
 			
 			[[SavedSettings sharedInstance] saveState];
@@ -545,8 +522,6 @@ static MusicSingleton *sharedInstance = nil;
 	else if(repeatMode == 1)
 	{
 		[self startSong];
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"setSongTitle" object:nil];
-		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_SongPlaybackStart object:nil];
 	}
 	// If it's in repeat-all mode then check if it's at the end of the playlist and start from the beginning, or just go to the next track.
 	else if(repeatMode == 2)
@@ -921,7 +896,7 @@ static MusicSingleton *sharedInstance = nil;
 	}
 	else
 	{
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"setPlayButtonImage" object:nil];
+		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_SongPlaybackEnd object:nil];
 		[self jukeboxStop];
 		
 		jukeboxIsPlaying = NO;

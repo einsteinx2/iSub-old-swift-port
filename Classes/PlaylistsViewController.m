@@ -20,11 +20,11 @@
 #import "PlaylistSongsViewController.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "Song.h"
 #import "StoreViewController.h"
 #import "CustomUIAlertView.h"
-#import "NSString-rfcEncode.h"
+#import "NSString+rfcEncode.h"
 #import "TBXML.h"
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
@@ -298,10 +298,10 @@
 		else if (segmentedControl.selectedSegmentIndex == 2)
 		{
 			savePlaylistLabel.frame = CGRectMake(0, y, 227, 50);
-			if ([viewObjects.listOfPlaylists count] == 1)
+			if ([serverPlaylistsDataModel.serverPlaylists count] == 1)
 				savePlaylistLabel.text = [NSString stringWithFormat:@"1 playlist"];
 			else 
-				savePlaylistLabel.text = [NSString stringWithFormat:@"%i playlists", [viewObjects.listOfPlaylists count]];
+				savePlaylistLabel.text = [NSString stringWithFormat:@"%i playlists", [serverPlaylistsDataModel.serverPlaylists count]];
 			
 		}
 		[headerView addSubview:savePlaylistLabel];
@@ -394,10 +394,10 @@
 		}
 		else if (segmentedControl.selectedSegmentIndex == 2)
 		{
-			if ([viewObjects.listOfPlaylists count] == 1)
+			if ([serverPlaylistsDataModel.serverPlaylists count] == 1)
 				playlistCountLabel.text = [NSString stringWithFormat:@"1 playlist"];
 			else 
-				playlistCountLabel.text = [NSString stringWithFormat:@"%i playlists", [viewObjects.listOfPlaylists count]];
+				playlistCountLabel.text = [NSString stringWithFormat:@"%i playlists", [serverPlaylistsDataModel.serverPlaylists count]];
 			
 		}
 	}
@@ -1308,7 +1308,7 @@
     [self.tableView reloadData];
     
     // If the list is empty, display the no playlists overlay screen
-    if ([viewObjects.listOfPlaylists count] == 0 && isNoPlaylistsScreenShowing == NO)
+    if ([serverPlaylistsDataModel.serverPlaylists count] == 0 && isNoPlaylistsScreenShowing == NO)
     {
         isNoPlaylistsScreenShowing = YES;
         noPlaylistsScreen = [[UIImageView alloc] init];

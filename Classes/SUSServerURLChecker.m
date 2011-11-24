@@ -8,7 +8,7 @@
 
 #import "SUSServerURLChecker.h"
 #import "TBXML.h"
-#import "NSError-ISMSError.h"
+#import "NSError+ISMSError.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "SavedSettings.h"
 

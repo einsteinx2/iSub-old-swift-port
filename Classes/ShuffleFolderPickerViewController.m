@@ -8,7 +8,7 @@
 
 #import "ShuffleFolderPickerViewController.h"
 #import "iSubAppDelegate.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "SUSRootFoldersDAO.h"
 
 @implementation ShuffleFolderPickerViewController

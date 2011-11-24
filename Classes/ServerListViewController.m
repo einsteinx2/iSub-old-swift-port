@@ -18,7 +18,7 @@
 #import "Server.h"
 #import "ServerTypeViewController.h"
 #import "UbuntuServerEditViewController.h"
-#import "UIView-tools.h"
+#import "UIView+tools.h"
 #import "CustomUIAlertView.h"
 #import "Reachability.h"
 #import "SavedSettings.h"
@@ -317,7 +317,6 @@
 			[appDelegate.rootViewController.navigationController popToRootViewControllerAnimated:NO];
 		//[appDelegate.allAlbumsNavigationController.topViewController viewDidLoad];
 		//[appDelegate.allSongsNavigationController.topViewController viewDidLoad];
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"setSongTitle" object:nil];
 		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_SongPlaybackStart object:nil];
 		
 		// Add the tab bar controller back to the window

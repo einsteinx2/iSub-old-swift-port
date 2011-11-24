@@ -11,7 +11,7 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "Song.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "SavedSettings.h"
 #import "NSString+URLEncode.h"
@@ -20,6 +20,8 @@
 #import "SUSCurrentPlaylistDAO.h"
 #import "NSArray+FirstObject.h"
 #import "BassWrapperSingleton.h"
+#import "SUSCoverArtLargeDAO.h"
+#import "SUSCoverArtLargeLoader.h"
 
 #define maxNumOfReconnects 3
 
@@ -96,6 +98,18 @@ static SUSStreamSingleton *sharedInstance = nil;
 	{
 		[handler start];
 	}
+    
+    // Also download the album art
+    if (song.coverArtId)
+    {
+        SUSCoverArtLargeDAO *artDataModel = [SUSCoverArtLargeDAO dataModel];
+        if (![artDataModel coverArtExistsForId:song.coverArtId])
+        {
+            DLog(@"Cover art doesn't exist, loading for id: %@", song.coverArtId);
+            SUSCoverArtLargeLoader *loader = [[SUSCoverArtLargeLoader alloc] initWithDelegate:self];
+            [loader loadCoverArtId:song.coverArtId];
+        }
+    }
 }
 
 - (void)queueStreamForSong:(Song *)song atIndex:(NSUInteger)index
@@ -174,6 +188,18 @@ static SUSStreamSingleton *sharedInstance = nil;
 	{
 		[(SUSStreamHandler *)[handlerStack firstObject] start];
 	}
+}
+
+#pragma mark - SUSLoader handler
+
+- (void)loadingFailed:(SUSLoader *)theLoader withError:(NSError *)error
+{
+    [theLoader release]; theLoader = nil;
+}
+
+- (void)loadingFinished:(SUSLoader *)theLoader
+{
+    [theLoader release]; theLoader = nil;
 }
 
 #pragma mark - Singleton methods

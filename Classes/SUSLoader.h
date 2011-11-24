@@ -8,7 +8,7 @@
 
 
 #import "SUSLoaderDelegate.h"
-#import "NSError-ISMSError.h"
+#import "NSError+ISMSError.h"
 #import "NSMutableURLRequest+SUS.h"
 
 @interface SUSLoader : NSObject <NSURLConnectionDelegate>

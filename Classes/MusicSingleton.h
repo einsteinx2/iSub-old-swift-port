@@ -69,7 +69,6 @@
 
 - (void)startSongAtOffsetInSeconds:(NSUInteger)seconds;
 - (void)startSong;
-- (void)playPauseSong;
 - (void)playSongAtPosition:(NSInteger)position;
 - (void)nextSong;
 - (void)nextSongAuto;

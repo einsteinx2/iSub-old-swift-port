@@ -20,13 +20,14 @@
 #import <CFNetwork/CFNetwork.h>
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString-md5.h"
-#import "UIView-tools.h"
+#import "NSString+md5.h"
+#import "UIView+tools.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SavedSettings.h"
 #import "SUSCurrentPlaylistDAO.h"
 #import "BassWrapperSingleton.h"
 #import "EqualizerViewController.h"
+#import "SUSCoverArtLargeDAO.h"
 
 
 @interface iPhoneStreamingPlayerViewController ()
@@ -35,7 +36,7 @@
 
 - (UIImage *)reflectedImage:(UIImageView *)fromImage withHeight:(NSUInteger)height;
 
-- (void)createReflection;
+- (void)setupCoverArt;
 - (void)initSongInfo;
 - (void)setStopButtonImage;
 - (void)setPlayButtonImage;
@@ -127,6 +128,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	if (isFlipped)
 		reflectionView.alpha = 0.0;
+    
+    [activityIndicator stopAnimating];
 }
 
 - (void)viewDidLoad
@@ -151,11 +154,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"player-overlay.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(songInfoToggle:)] autorelease];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPlayButtonImage) name:@"setPlayButtonImage" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPauseButtonImage) name:@"setPauseButtonImage" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setSongTitle) name:@"setSongTitle" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPlayButtonImage) name:ISMSNotification_SongPlaybackEnd object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPlayButtonImage) name:ISMSNotification_SongPlaybackPause object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPauseButtonImage) name:ISMSNotification_SongPlaybackStart object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) name:ISMSNotification_SongPlaybackStart object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createReflection) name:@"createReflection" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupCoverArt) name:ISMSNotification_AlbumArtLargeDownloaded object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songInfoToggle:) name:@"hideSongInfo" object:nil];
 	
 	
@@ -268,11 +271,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 //
 - (void)dealloc
 {	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"setPlayButtonImage" object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"setPauseButtonImage" object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"setSongTitle" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackEnd object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackPause object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackStart object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"createReflection" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_AlbumArtLargeDownloaded object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfo" object:nil];
 	
 	[pageControlViewController viewDidDisappear:NO];
 	[pageControlViewController release]; pageControlViewController = nil;
@@ -434,55 +437,13 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)initSongInfo
 {	
+    [self setSongTitle];
+    
+    [self setupCoverArt];
+    
 	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
 	Song *currentSong = dataModel.currentSong;
-	
-	coverArtImageView.isForPlayer = YES;
-	if(currentSong.coverArtId)
-	{
-		//DLog(@"coverArtId: %@", [musicControls.currentSongObject coverArtId]);
-		
-		FMDatabase *coverArtCache;
-		if (IS_IPAD())
-			coverArtCache = databaseControls.coverArtCacheDb540;
-		else
-			coverArtCache = databaseControls.coverArtCacheDb320;
-			
-		if ([coverArtCache intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [currentSong.coverArtId md5]] == 1)
-		{
-			DLog(@"Cover Art Found!!");
-			NSData *imageData = [coverArtCache dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [currentSong.coverArtId md5]];
-			if (SCREEN_SCALE() == 2.0)
-			{
-				UIGraphicsBeginImageContextWithOptions(CGSizeMake(320.0,320.0), NO, 2.0);
-				[[UIImage imageWithData:imageData] drawInRect:CGRectMake(0,0,320,320)];
-				coverArtImageView.image = UIGraphicsGetImageFromCurrentImageContext();
-				UIGraphicsEndImageContext();
-				//coverArtImageView.image = [[UIImage imageWithData:imageData] drawInRect:CGRectMake(0,0,320,320)];
-			}
-			else
-			{
-				coverArtImageView.image = [UIImage imageWithData:imageData];
-			}
-			
-			[self createReflection];
-		}
-		else 
-		{
-			DLog(@"No Cover Art Found, LOADING");
-			[coverArtImageView loadImageFromCoverArtId:currentSong.coverArtId isForPlayer:YES];
-		}
-	}
-	else 
-	{
-		if (IS_IPAD())
-			coverArtImageView.image = [UIImage imageNamed:@"default-album-art-ipad.png"];
-		else
-			coverArtImageView.image = [UIImage imageNamed:@"default-album-art.png"];
-		
-		[self createReflection];
-	}
-	
+    
 	// Update the icon in top right
 	if (isFlipped)
 	{
@@ -767,8 +728,34 @@ CGContextRef MyCreateBitmapContextPlayer(int pixelsWide, int pixelsHigh)
 	return theImage;
 }
 
-- (void)createReflection
+- (void)setupCoverArt
 {
+    SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+    SUSCoverArtLargeDAO *artDataModel = [SUSCoverArtLargeDAO dataModel];
+	Song *currentSong = dataModel.currentSong;
+    
+    // Get the album art
+	if(currentSong.coverArtId)
+	{
+        UIImage *albumArt = [artDataModel coverArtImageForId:currentSong.coverArtId];
+        if (albumArt)
+        {
+            coverArtImageView.image = albumArt;
+            //[activityIndicator stopAnimating];
+        }
+        else
+        {
+            coverArtImageView.image = artDataModel.defaultCoverArt;
+            //[activityIndicator startAnimating];
+        }
+	}
+	else 
+	{
+        coverArtImageView.image = artDataModel.defaultCoverArt;		
+        //[activityIndicator stopAnimating];
+	}
+
+    // Create reflection
 	if (isFlipped)
 	{
 		[self updateBarButtonImage];

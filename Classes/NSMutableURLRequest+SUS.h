@@ -10,6 +10,8 @@
 
 @interface NSMutableURLRequest (SUS)
 
+//- (id)initWithSUSAction:(NSString *)action andParameters:(NSDictionary *)parameters byteOffset:(NSUInteger)offset;
+//- (id)initWithSUSAction:(NSString *)action andParameters:(NSDictionary *)parameters;
 + (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action andParameters:(NSDictionary *)parameters byteOffset:(NSUInteger)offset;
 + (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action andParameters:(NSDictionary *)parameters;
 

@@ -19,10 +19,10 @@
 #import "Song.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "AsynchronousImageViewCached.h"
 #import "SavedSettings.h"
-#import "NSString-time.h"
+#import "NSString+time.h"
 
 @implementation GenresAlbumViewController
 

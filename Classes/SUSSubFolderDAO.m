@@ -12,7 +12,7 @@
 #import "FMDatabaseAdditions.h"
 #import "FMResultSet.h"
 #import "SUSSubFolderLoader.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "Album.h"
 #import "Song.h"
 #import "MusicSingleton.h"

@@ -6,7 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "NSString-hex.h"
+#import "NSString+hex.h"
 
 @implementation NSString (hex)
 

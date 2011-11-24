@@ -7,9 +7,10 @@
 //
 
 #import "SUSStreamHandlerDelegate.h"
+#import "SUSLoaderDelegate.h"
 
 @class Song, SUSStreamHandler;
-@interface SUSStreamSingleton : NSObject <SUSStreamHandlerDelegate>
+@interface SUSStreamSingleton : NSObject <SUSStreamHandlerDelegate, SUSLoaderDelegate>
 
 @property (nonatomic, retain) NSMutableArray *handlerStack;
 

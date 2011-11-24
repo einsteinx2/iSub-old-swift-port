@@ -19,13 +19,13 @@
 #import "Song.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "EGORefreshTableHeaderView.h"
-#import "NSString-rfcEncode.h"
+#import "NSString+rfcEncode.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "SUSChatDAO.h"
-#import "NSError-ISMSError.h"
+#import "NSError+ISMSError.h"
 
 
 @interface ChatViewController (Private)

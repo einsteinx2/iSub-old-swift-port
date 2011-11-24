@@ -15,7 +15,7 @@
 #import "DatabaseSingleton.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "SavedSettings.h"

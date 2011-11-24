@@ -7,7 +7,7 @@
 //
 
 #import "SavedSettings.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "MusicSingleton.h"
 #import "Song.h"
 #import "Server.h"

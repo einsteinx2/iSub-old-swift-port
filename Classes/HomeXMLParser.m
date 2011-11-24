@@ -15,11 +15,11 @@
 #import "ServerListViewController.h"
 #import "Album.h"
 #import "Song.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "ViewObjectsSingleton.h"
-#import "NSString-hex.h"
+#import "NSString+hex.h"
 #import "CustomUIAlertView.h"
 
 @implementation HomeXMLParser

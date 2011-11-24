@@ -6,7 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "NSString-rfcEncode.h"
+#import "NSString+rfcEncode.h"
 
 
 @implementation NSString (RFC3875)

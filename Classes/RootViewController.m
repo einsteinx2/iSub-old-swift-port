@@ -16,11 +16,11 @@
 #import "Artist.h"
 #import "LoadingScreen.h"
 #import "ArtistUITableViewCell.h"
-#import "NSString-md5.h"
+#import "NSString+md5.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "ViewObjectsSingleton.h"
-#import "UIView-tools.h"
+#import "UIView+tools.h"
 #import "CustomUIAlertView.h"
 #import "EGORefreshTableHeaderView.h"
 #import <QuartzCore/QuartzCore.h>
