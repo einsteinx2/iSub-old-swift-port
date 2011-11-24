@@ -27,9 +27,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	
-	[BassWrapperSingleton sharedInstance].isGetDataForEQ = YES;
-	
+		
 	[self updateToggleButton];
 	
 	[self createEqViews];
@@ -63,8 +61,6 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-	[BassWrapperSingleton sharedInstance].isGetDataForEQ = NO;
-
 	[self removeEqViews];
 	
 	[self.equalizerView stopEqDisplay];
@@ -92,28 +88,31 @@
 	DLog(@"tap count: %i", [touch tapCount]);
 	
 	UIView *touchedView = [self.view hitTest:[touch locationInView:self.view] withEvent:nil];
-	if (touchedView != self.view)
+	if ([touchedView isKindOfClass:[EqualizerPointView class]])
 	{
-		if ([touchedView isKindOfClass:[EqualizerPointView class]])
-		{
-			self.selectedView = (EqualizerPointView *)touchedView;
-			
-			if ([touch tapCount] == 2)
-			{
-				// remove the point
-				DLog(@"double tap, remove point");
-				
-				[[BassWrapperSingleton sharedInstance] removeEqualizerValue:self.selectedView.eqValue];
-				[equalizerPointViews removeObject:self.selectedView];
-				[self.selectedView removeFromSuperview];
-				self.selectedView = nil;
-			}
-		}
-	}
-	else
-	{
+		self.selectedView = (EqualizerPointView *)touchedView;
+		
 		if ([touch tapCount] == 2)
 		{
+			// remove the point
+			DLog(@"double tap, remove point");
+			
+			[[BassWrapperSingleton sharedInstance] removeEqualizerValue:self.selectedView.eqValue];
+			[equalizerPointViews removeObject:self.selectedView];
+			[self.selectedView removeFromSuperview];
+			self.selectedView = nil;
+		}
+	}
+	else if ([touchedView isKindOfClass:[EqualizerView class]])
+	{
+		if ([touch tapCount] == 1)
+		{
+			[self performSelector:@selector(type:) withObject:nil afterDelay:0.25];
+		}
+		if ([touch tapCount] == 2)
+		{
+			[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(type:) object:nil];
+			
 			// add a point
 			DLog(@"double tap, adding point");
 			

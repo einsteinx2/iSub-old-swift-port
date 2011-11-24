@@ -38,6 +38,7 @@
 #pragma mark Motion
 - (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event 
 {
+	
 }
 
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event 
@@ -47,8 +48,10 @@
 		DLog(@"oh ya, shake it now!");
 	}
 }
+
 - (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event 
 { 
+	
 }
 
 #pragma mark -

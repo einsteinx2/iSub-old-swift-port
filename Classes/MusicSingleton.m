@@ -477,7 +477,7 @@ static MusicSingleton *sharedInstance = nil;
 			{
 				currentIndex = index;
 								
-				[self startSong];
+				[self playSongAtPosition:index];
 				
 				//[self addAutoNextNotification];
 			}

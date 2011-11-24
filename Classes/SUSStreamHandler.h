@@ -18,6 +18,7 @@
 @property (nonatomic, copy) Song *mySong;
 @property NSUInteger byteOffset;
 @property (nonatomic, retain) NSURLConnection *connection;
+@property (nonatomic, retain) NSURLRequest *request;
 
 @property (nonatomic, retain) NSFileHandle *fileHandle;
 

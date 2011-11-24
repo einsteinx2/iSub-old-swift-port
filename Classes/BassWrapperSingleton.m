@@ -13,6 +13,7 @@
 #import "BassParamEqValue.h"
 #import "BassEffectHandle.h"
 #import "NSNotificationCenter+MainThread.h"
+#include <AudioToolbox/AudioToolbox.h>
 
 @interface BassWrapperSingleton (Private)
 - (void)bassInit;
@@ -20,8 +21,6 @@
 
 @implementation BassWrapperSingleton
 @synthesize isEqualizerOn, startByteOffset, isTempDownload, currPlaylistDAO;
-
-static BOOL isGetDataForEQ = NO;
 
 static BOOL isFilestream1 = YES;
 
@@ -34,24 +33,60 @@ static HSTREAM fileStream1, fileStream2, outStream;
 
 static float fftData[1024];
 
-#define SPECWIDTH 320
-short lineSpecBuf[SPECWIDTH];
+//#define SPECWIDTH 320
+//short lineSpecBuf[SPECWIDTH];
+short *lineSpecBuf;
+int lineSpecBufSize;
 
 static NSMutableArray *eqValueArray, *eqHandleArray;
+
+/*- (void)handleInterruptionChangeToState:(AudioQueuePropertyID)inInterruptionState
+{
+	//DLog(@"handleInterruptionChangeToState called");
+	//MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
+	if (inInterruptionState == kAudioSessionBeginInterruption)
+	{
+		DLog(@"inInterruptionState == kAudioSessionBeginInterruption called");
+		if(self.isPlaying)
+		{	
+			//musicControls.streamerProgress = [self progress];
+			//musicControls.seekTime += musicControls.streamerProgress;
+		}
+		DLog(@"inInterruptionState == kAudioSessionBeginInterruption finished");
+	}
+	else if (inInterruptionState == kAudioSessionEndInterruption)
+	{
+		DLog(@"inInterruptionState == kAudioSessionEndInterruption called");
+		if(self.isPlaying)
+		{
+			//[self startWithOffsetInSecs:(UInt32) musicControls.seekTime];
+		}
+		DLog(@"inInterruptionState == kAudioSessionEndInterruption finished");
+	}
+}
+
+void MyAudioSessionInterruptionListener(void *inClientData, UInt32 inInterruptionState)
+{
+	DLog(@"MyAudioSessionInterruptionListener called");
+	//AudioStreamer* streamer = (AudioStreamer *)inClientData;
+	//if (streamer)
+	//	[streamer handleInterruptionChangeToState:inInterruptionState];
+	[selfRef handleInterruptionChangeToState:inInterruptionState];
+}*/
+
+- (void)readEqData
+{
+	// Get the FFT data for visualizer
+	BASS_ChannelGetData(outStream, fftData, BASS_DATA_FFT2048);
+	
+	// Get the data for line spec visualizer
+	BASS_ChannelGetData(outStream, lineSpecBuf, lineSpecBufSize);
+}
 
 // Stream callback
 DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *user)
 {
 	DWORD r;
-	
-	if (isGetDataForEQ)
-	{
-		// Get the FFT data for visualizer
-		BASS_ChannelGetData(outStream, fftData, BASS_DATA_FFT2048);
-		
-		// Get the data for line spec visualizer
-		BASS_ChannelGetData(outStream, lineSpecBuf, SPECWIDTH * sizeof(short));
-	}
 	
 	if (isFilestream1 && BASS_ChannelIsActive(fileStream1)) 
 	{
@@ -263,6 +298,44 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	}
 }
 
+void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue) 
+{
+    DLog(@"audioRouteChangeListenerCallback called");
+	
+    // ensure that this callback was invoked for a route change
+    if (inPropertyID != kAudioSessionProperty_AudioRouteChange) 
+		return;
+	
+	if ([selfRef isPlaying])
+	{
+		// Determines the reason for the route change, to ensure that it is not
+		// because of a category change.
+		CFDictionaryRef routeChangeDictionary = inPropertyValue;
+		CFNumberRef routeChangeReasonRef = CFDictionaryGetValue (routeChangeDictionary, CFSTR (kAudioSession_AudioRouteChangeKey_Reason));
+		SInt32 routeChangeReason;
+		CFNumberGetValue (routeChangeReasonRef, kCFNumberSInt32Type, &routeChangeReason);
+		
+        // "Old device unavailable" indicates that a headset was unplugged, or that the
+        // device was removed from a dock connector that supports audio output. This is
+        // the recommended test for when to pause audio.
+        if (routeChangeReason == kAudioSessionRouteChangeReason_OldDeviceUnavailable) 
+		{
+            [selfRef playPause];
+			
+            NSLog (@"Output device removed, so application audio was paused.");
+        }
+		else 
+		{
+            NSLog (@"A route change occurred that does not require pausing of application audio.");
+        }
+    }
+	else 
+	{	
+        NSLog (@"Audio route change while application audio is stopped.");
+        return;
+    }
+}
+
 - (void)bassInit
 {
     isTempDownload = NO;
@@ -278,6 +351,8 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	}
 	
 	BASS_PluginLoad(&BASSFLACplugin, 0);
+	
+	AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, self);
 }
 
 - (BOOL)bassFree
@@ -479,16 +554,6 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	return isFilestream1 ? fileStream2 : fileStream1;
 }
 
-- (BOOL)isGetDataForEQ
-{
-	return isGetDataForEQ;
-}
-
-- (void)setIsGetDataForEQ:(BOOL)getData
-{
-	isGetDataForEQ = getData;
-}
-
 #pragma mark - Singleton methods
 
 static BassWrapperSingleton *sharedInstance = nil;
@@ -508,6 +573,12 @@ static BassWrapperSingleton *sharedInstance = nil;
 	[eqValueArray addObject:[BassParamEqValue valueWithParams:BASS_DX8_PARAMEQMake(8000, 0, 18) arrayIndex:2]];
 	
 	eqHandleArray = [[NSMutableArray alloc] initWithCapacity:3];
+	
+	if (SCREEN_SCALE() == 1.0 && !IS_IPAD())
+		lineSpecBufSize = 256 * sizeof(short);
+	else
+		lineSpecBufSize = 512 * sizeof(short);
+	lineSpecBuf = malloc(lineSpecBufSize);
 }
 
 + (BassWrapperSingleton *)sharedInstance

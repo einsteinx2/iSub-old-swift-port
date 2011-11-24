@@ -34,6 +34,8 @@
 - (BassParamEqValue *)addEqualizerValue:(BASS_DX8_PARAMEQ)value;
 - (NSArray *)removeEqualizerValue:(BassParamEqValue *)value;
 
+- (void)readEqData;
+
 @property (readonly) BOOL isPlaying;
 @property (readonly) NSUInteger bitRate;
 @property (readonly) NSUInteger currentByteOffset;
@@ -42,7 +44,6 @@
 @property (readonly) NSArray *equalizerValues;
 @property NSUInteger startByteOffset;
 @property BOOL isTempDownload;
-@property BOOL isGetDataForEQ;
 
 @property (readonly) HSTREAM currentStream;
 @property (readonly) HSTREAM nextStream;

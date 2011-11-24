@@ -36,7 +36,7 @@
 #define isThrottleLoggingEnabled NO
 
 @implementation SUSStreamHandler
-@synthesize totalBytesTransferred, bytesTransferred, throttlingDate, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects;
+@synthesize totalBytesTransferred, bytesTransferred, throttlingDate, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request;
 
 - (id)initWithSong:(Song *)song offset:(NSUInteger)offset delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate
 {
@@ -67,30 +67,10 @@
 
 - (void)start
 {
-	[self performSelectorInBackground:@selector(createConnection) withObject:nil]; 
-}
-
-
-// Following 2 methods run in main thread to avoid autorelease in worker thread since
-// there is no init method to fileHandleForWritingAtPath
-- (void)createFileHandle
-{
-    self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:mySong.localPath];
-}
-
-- (void)createEmptyFile
-{
-    totalBytesTransferred = 0;
-    [[NSFileManager defaultManager] createFileAtPath:mySong.localPath contents:[NSData data] attributes:nil];
-    self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:mySong.localPath];
-}
-
-- (void)createConnection
-{
-    MusicSingleton *musicControls = [MusicSingleton sharedInstance];
+	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
     
     // Create the file handle
-    [self performSelectorOnMainThread:@selector(createFileHandle) withObject:nil waitUntilDone:YES];
+    self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:mySong.localPath];
     
     if (self.fileHandle)
     {
@@ -101,11 +81,13 @@
         [self.fileHandle closeFile];
         [[NSFileManager defaultManager] removeItemAtPath:mySong.localPath error:NULL];
     }
-
+	
     // Create the file
-    [self performSelectorOnMainThread:@selector(createEmptyFile) withObject:nil waitUntilDone:YES];
+	totalBytesTransferred = 0;
+    [[NSFileManager defaultManager] createFileAtPath:mySong.localPath contents:[NSData data] attributes:nil];
+    self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:mySong.localPath];
     
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:n2N(mySong.songId), @"id", nil];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(mySong.songId), @"id", nil];
     if ([musicControls maxBitrateSetting] != 0)
     {
         NSString *bitrate = [[NSString alloc] initWithFormat:@"%i", musicControls.maxBitrateSetting];
@@ -113,9 +95,14 @@
         [bitrate release];
     }
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters byteOffset:byteOffset];
-    [parameters release];
-    NSURLConnection *newConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    self.request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters byteOffset:byteOffset];
+	
+	[self performSelectorInBackground:@selector(createConnection) withObject:nil]; 
+}
+
+- (void)createConnection
+{
+	NSURLConnection *newConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     self.connection = newConnection;
     if (newConnection)
     {

@@ -28,12 +28,13 @@
 @synthesize  previousLocation;
 @synthesize drawTimer;
 
-#define SPECWIDTH 256	// display width
-#define SPECHEIGHT 256	// height (changing requires palette adjustments too)
-#define DRAWINTERVAL (1./60.)
+static float drawInterval = 1./20.;
+static int specWidth; //256 or 512
+static int specHeight; //256 or 512
+
 static CGContextRef specdc;
-static DWORD specbuf[SPECWIDTH*SPECHEIGHT];
-static DWORD palette[SPECHEIGHT+128];
+static DWORD *specbuf;
+static DWORD *palette;
 int specpos = 0;
 
 typedef struct 
@@ -51,12 +52,24 @@ typedef enum
 
 ISMSBassVisualType visualType = ISMSBassVisualType_skinnyBar;
 
+static void SetupArrays()
+{
+	if (SCREEN_SCALE() == 1.0 && !IS_IPAD())
+		specWidth = specHeight = 256;
+	else
+		specWidth = specHeight = 512;
+	
+	specbuf = malloc(specWidth * specHeight * 4);
+	palette = malloc((specHeight + 128) * 4);
+	
+	memset(palette, 0, ((specHeight + 128) * 4));
+}
+
 static void SetupDrawEQPalette()
 {
 	// setup palette
 	RGBQUAD *pal = (RGBQUAD *)palette;
 	int a;
-	memset(palette, 0, sizeof(palette));
 	/*for (a = 1; a < 65; a++) 
 	 {
 	 pal[a].rgbRed = 130 - 2 * a;
@@ -77,28 +90,29 @@ static void SetupDrawEQPalette()
 	 pal[318+a].rgbRed = 255;
 	 }*/
 	
-	for (a = 1; a < 128; a++) 
+	for (a = 1; a < 128 * SCREEN_SCALE(); a++) 
 	{
-		pal[a].rgbBlue = 256 - 2 * a;
-		pal[a].rgbGreen   = 2 * a;
+		pal[a].rgbBlue = 256 - ((2/SCREEN_SCALE()) * a);
+		pal[a].rgbGreen   = (2/SCREEN_SCALE()) * a;
 	}
-    for (a = 1; a < 128; a++) 
+    for (a = 1; a < 128 * SCREEN_SCALE(); a++) 
 	{
-		pal[127+a].rgbGreen = 256 - 2 * a;
-		pal[127+a].rgbRed   = 2 * a;
+		int start = 128 * SCREEN_SCALE() - 1;
+		pal[start+a].rgbGreen = 256 - ((2/SCREEN_SCALE()) * a);
+		pal[start+a].rgbRed   = (2/SCREEN_SCALE()) * a;
 	}
 	
 	for (a = 0; a < 32; a++) 
 	{
-		pal[SPECHEIGHT + a].rgbBlue       = 8 * a;
-		pal[SPECHEIGHT + 32 + a].rgbBlue  = 255;
-		pal[SPECHEIGHT + 32 + a].rgbRed   = 8 * a;
-		pal[SPECHEIGHT + 64 + a].rgbRed   = 255;
-		pal[SPECHEIGHT + 64 + a].rgbBlue  = 8 * (31 - a);
-		pal[SPECHEIGHT + 64 + a].rgbGreen = 8 * a;
-		pal[SPECHEIGHT + 96 + a].rgbRed   = 255;
-		pal[SPECHEIGHT + 96 + a].rgbGreen = 255;
-		pal[SPECHEIGHT + 96 + a].rgbBlue  = 8 * a;
+		pal[specHeight + a].rgbBlue       = 8 * a;
+		pal[specHeight + 32 + a].rgbBlue  = 255;
+		pal[specHeight + 32 + a].rgbRed   = 8 * a;
+		pal[specHeight + 64 + a].rgbRed   = 255;
+		pal[specHeight + 64 + a].rgbBlue  = 8 * (31 - a);
+		pal[specHeight + 64 + a].rgbGreen = 8 * a;
+		pal[specHeight + 96 + a].rgbRed   = 255;
+		pal[specHeight + 96 + a].rgbGreen = 255;
+		pal[specHeight + 96 + a].rgbBlue  = 8 * a;
 	}
 }
 
@@ -107,13 +121,14 @@ static void SetupDrawBitmap()
 {
 	// create the bitmap
 	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-	specdc = CGBitmapContextCreate(specbuf, SPECWIDTH, SPECHEIGHT, 8, SPECWIDTH * 4, colorSpace, kCGImageAlphaNoneSkipLast);
+	specdc = CGBitmapContextCreate(specbuf, specWidth, specHeight, 8, specWidth * 4, colorSpace, kCGImageAlphaNoneSkipLast);
 	CGColorSpaceRelease(colorSpace);
 }
 
 __attribute__((constructor))
 static void initialize_drawPalette() 
 {
+	SetupArrays();
 	SetupDrawEQPalette();
 	SetupDrawBitmap();
 }
@@ -138,6 +153,8 @@ static void destroy_versionArrays()
 {
     if ((self = [super initWithCoder:coder]))
 	{
+		self.userInteractionEnabled = YES;
+		
 		drawTimer = nil;
 		
 		//[self createBitmapToDraw];
@@ -163,7 +180,7 @@ static void destroy_versionArrays()
 		// Bind the texture name. 
 		glBindTexture(GL_TEXTURE_2D, imageTexture);
 		// Set the texture parameters to use a minifying filter and a linear filer (weighted average)
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		
 		//Set up OpenGL states
 		glMatrixMode(GL_PROJECTION);
@@ -185,7 +202,7 @@ static void destroy_versionArrays()
 
 - (void)startEqDisplay
 {
-	self.drawTimer = [NSTimer scheduledTimerWithTimeInterval:DRAWINTERVAL target:self selector:@selector(drawTheEq) userInfo:nil repeats:YES];
+	self.drawTimer = [NSTimer scheduledTimerWithTimeInterval:drawInterval target:self selector:@selector(drawTheEq) userInfo:nil repeats:YES];
 }
 
 - (void)stopEqDisplay
@@ -197,7 +214,7 @@ static void destroy_versionArrays()
 {
 	// create the bitmap
 	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-	specdc = CGBitmapContextCreate(specbuf, SPECWIDTH, SPECHEIGHT, 8, SPECWIDTH * 4, colorSpace, kCGImageAlphaNoneSkipLast);
+	specdc = CGBitmapContextCreate(specbuf, specWidth, specHeight, 8, specWidth * 4, colorSpace, kCGImageAlphaNoneSkipLast);
 	CGColorSpaceRelease(colorSpace);
 }
 
@@ -205,16 +222,21 @@ static void destroy_versionArrays()
 {	
 	BassWrapperSingleton *wrapper = [BassWrapperSingleton sharedInstance];
 	
+	if (!wrapper.isPlaying)
+		return;
+	
+	[wrapper readEqData];
+	
 	switch(visualType)
 	{
 			int x, y, y1;
 			
 		case ISMSBassVisualType_line:
 		{
-			memset(specbuf,0,sizeof(specbuf));
-			for (x = 0; x < SPECWIDTH; x++) 
+			[self eraseBitBuffer];
+			for (x = 0; x < specWidth; x++) 
 			{
-				int v=(32767 - [wrapper lineSpecData:x]) * SPECHEIGHT/65536; // invert and scale to fit display
+				int v=(32767 - [wrapper lineSpecData:x]) * specHeight/65536; // invert and scale to fit display
 				if (!x) 
 					y = v;
 				do 
@@ -224,33 +246,33 @@ static void destroy_versionArrays()
 						y++;
 					else if (y > v)
 						y--;
-					specbuf[y * SPECWIDTH + x] = palette[abs(y - SPECHEIGHT / 2) * 2 + 1];
+					specbuf[y * specWidth + x] = palette[abs(y - specHeight / 2) * 2 + 1];
 				} while (y!=v);
 			}
 			break;
 		}
 		case ISMSBassVisualType_skinnyBar:
 		{
-			memset(specbuf,0,sizeof(specbuf));
-			for (x=0;x<SPECWIDTH/2;x++) 
+			[self eraseBitBuffer];
+			for (x=0;x<specWidth/2;x++) 
 			{
 #if 1
-				y=sqrt([wrapper fftData:x+1]) * 3 * SPECHEIGHT - 4; // scale it (sqrt to make low values more visible)
+				y=sqrt([wrapper fftData:x+1]) * 3 * specHeight - 4; // scale it (sqrt to make low values more visible)
 #else
-				y=[wrapper fftData:x+1] * 10 * SPECHEIGHT; // scale it (linearly)
+				y=[wrapper fftData:x+1] * 10 * specHeight; // scale it (linearly)
 #endif
-				if (y>SPECHEIGHT) y=SPECHEIGHT; // cap it
+				if (y>specHeight) y=specHeight; // cap it
 				if (x && (y1=(y+y1)/2)) // interpolate from previous to make the display smoother
-					while (--y1>=0) specbuf[(SPECHEIGHT-1-y1)*SPECWIDTH+x*2-1]=palette[y1+1];
+					while (--y1>=0) specbuf[(specHeight-1-y1)*specWidth+x*2-1]=palette[y1+1];
 				y1=y;
-				while (--y>=0) specbuf[(SPECHEIGHT-1-y)*SPECWIDTH+x*2]=palette[y+1]; // draw level
+				while (--y>=0) specbuf[(specHeight-1-y)*specWidth+x*2]=palette[y+1]; // draw level
 			}
 			break;
 		}
 		case ISMSBassVisualType_fatBar:
 		{
 			int b0 = 0;
-			memset(specbuf,0,sizeof(specbuf));
+			[self eraseBitBuffer];
 #define BANDS 28
 			for (x=0; x < BANDS; x++) 
 			{
@@ -267,16 +289,16 @@ static void destroy_versionArrays()
 						peak = [wrapper fftData:1+b0];
 				}
 				
-				y = sqrt(peak) * 3 * SPECHEIGHT - 4; // scale it (sqrt to make low values more visible)
+				y = sqrt(peak) * 3 * specHeight - 4; // scale it (sqrt to make low values more visible)
 				
-				if (y > SPECHEIGHT) 
-					y = SPECHEIGHT; // cap it
+				if (y > specHeight) 
+					y = specHeight; // cap it
 				
 				while (--y >= 0)
 				{
-					for (y1 = 0; y1 < SPECWIDTH / BANDS - 2; y1++)
+					for (y1 = 0; y1 < specWidth / BANDS - 2; y1++)
 					{	
-						specbuf[(SPECHEIGHT - 1 - y) * SPECWIDTH + x * (SPECWIDTH / BANDS) + y1] = palette[y + 1]; // draw bar
+						specbuf[(specHeight - 1 - y) * specWidth + x * (specWidth / BANDS) + y1] = palette[y + 1]; // draw bar
 					}
 				}
 			}
@@ -284,22 +306,26 @@ static void destroy_versionArrays()
 		}
 		case ISMSBassVisualType_aphexFace:
 		{
-			for (x=0; x < SPECHEIGHT; x++) 
+			for (x=0; x < specHeight; x++) 
 			{
 				y = sqrt([wrapper fftData:x+1]) * 3 * 127; // scale it (sqrt to make low values more visible)
 				if (y > 127)
 					y = 127; // cap it
-				specbuf[(SPECHEIGHT - 1 - x) * SPECWIDTH + specpos] = palette[SPECHEIGHT - 1 + y]; // plot it
+				specbuf[(specHeight - 1 - x) * specWidth + specpos] = palette[specHeight - 1 + y]; // plot it
 			}
 			// move marker onto next position
-			specpos = (specpos + 1) % SPECWIDTH;
-			for (x = 0; x < SPECHEIGHT; x++) 
-				specbuf[x * SPECWIDTH + specpos] = palette[SPECHEIGHT+126];
+			specpos = (specpos + 1) % specWidth;
+			for (x = 0; x < specHeight; x++)
+			{
+				specbuf[x * specWidth + specpos] = palette[specHeight+126];
+				if (SCREEN_SCALE() == 2.0)
+					specbuf[x * specWidth + specpos + 1] = palette[specHeight+126];
+			}
 			break;
 		}
 	}
 	
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SPECWIDTH, SPECHEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, specbuf);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, specWidth, specHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, specbuf);
 	
 	[EAGLContext setCurrentContext:context];
 	glBindFramebufferOES(GL_FRAMEBUFFER_OES, viewFramebuffer);
@@ -419,20 +445,33 @@ static void destroy_versionArrays()
 	[context presentRenderbuffer:GL_RENDERBUFFER_OES];
 }
 
+- (void)eraseBitBuffer
+{
+	memset(specbuf, 0, (specWidth * specHeight * 4));
+}
+
 - (void)changeType
 {
 	switch (visualType)
 	{
 		case ISMSBassVisualType_line:
-			visualType = ISMSBassVisualType_skinnyBar; break;
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			visualType = ISMSBassVisualType_skinnyBar; 
+			break;
 		case ISMSBassVisualType_skinnyBar:
-			visualType = ISMSBassVisualType_fatBar; break;
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			visualType = ISMSBassVisualType_fatBar;
+			break;
 		case ISMSBassVisualType_fatBar:
-            memset(specbuf, 0, sizeof(specbuf));
+            [self eraseBitBuffer];
             specpos = 0;
-			visualType = ISMSBassVisualType_aphexFace; break;
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			visualType = ISMSBassVisualType_aphexFace; 
+			break;
 		case ISMSBassVisualType_aphexFace:
-			visualType = ISMSBassVisualType_line; break;
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			visualType = ISMSBassVisualType_line; 
+			break;
 	}
 }
 

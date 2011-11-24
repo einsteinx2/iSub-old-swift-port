@@ -49,10 +49,7 @@
 @property (nonatomic, retain) NSTimer *drawTimer;
 
 - (void)erase;
-//- (void)drawImage:(GLubyte *)imageData;
-
-//- (void)setupPalette;
-//- (void)createBitmapToDraw;
+- (void)eraseBitBuffer;
 
 - (void)changeType;
 
