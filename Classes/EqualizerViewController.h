@@ -6,16 +6,17 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-@class EqualizerView, BassParamEqValue;
+@class EqualizerView, EqualizerPointView, BassParamEqValue;
 @interface EqualizerViewController : UIViewController
 
 @property (nonatomic, retain) IBOutlet UIButton *toggleButton;
-@property (nonatomic, retain) IBOutlet UIImageView *drawImage;
-@property (nonatomic, retain) NSMutableArray *equalizerViews;
+//@property (nonatomic, retain) IBOutlet UIImageView *drawImage;
+@property (nonatomic, retain) IBOutlet EqualizerView *equalizerView;
+@property (nonatomic, retain) NSMutableArray *equalizerPointViews;
 
-@property (nonatomic, retain) NSTimer *drawTimer;
+//@property (nonatomic, retain) NSTimer *drawTimer;
 
-@property (nonatomic, assign) EqualizerView *selectedView;
+@property (nonatomic, assign) EqualizerPointView *selectedView;
 
 //- (BOOL)isTouchingEqView:(UITouch *)touch;
 
@@ -28,7 +29,7 @@
 
 - (void)createEqViews;
 - (void)removeEqViews;
-- (void)setupPalette;
-- (void)createBitmapToDraw;
+//- (void)setupPalette;
+//- (void)createBitmapToDraw;
 
 @end

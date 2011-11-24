@@ -19,13 +19,16 @@
 @end
 
 @implementation BassWrapperSingleton
-@synthesize isEqualizerOn, startByteOffset, isTempDownload;
+@synthesize isEqualizerOn, startByteOffset, isTempDownload, currPlaylistDAO;
+
+static BOOL isGetDataForEQ = NO;
 
 static BOOL isFilestream1 = YES;
 
 extern void BASSFLACplugin;
 
 static BassWrapperSingleton *selfRef;
+static SUSCurrentPlaylistDAO *currPlaylistDAORef;
 
 static HSTREAM fileStream1, fileStream2, outStream;
 
@@ -41,89 +44,84 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 {
 	DWORD r;
 	
-	@autoreleasepool 
+	if (isGetDataForEQ)
 	{
-		if (isFilestream1 && BASS_ChannelIsActive(fileStream1)) 
-		{
-			// Read data from stream1
-			r = BASS_ChannelGetData(fileStream1, buffer, length);
-			
-			// Check if stream1 is now complete
-			if (!BASS_ChannelIsActive(fileStream1))
-			{		
-				// Stream1 is done, free the stream
-				BASS_StreamFree(fileStream1);
-				
-				// Increment current playlist index
-				[SUSCurrentPlaylistDAO dataModel].currentIndex++;
-				
-				// Send song end notification
-                [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnd];
-				
-				// Check to see if there is another song to play
-				if (BASS_ChannelIsActive(fileStream2))
-				{
-					// Send song start notification
-                    [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStart];
-					
-					// Read data from stream2
-					[selfRef setStartByteOffset:0];
-                    [selfRef setIsTempDownload:NO];
-					isFilestream1 = NO;
-					r = BASS_ChannelGetData(fileStream2, buffer, length);
-					
-					// Prepare the next song for playback
-					[selfRef performSelectorInBackground:@selector(prepareNextSongStream) withObject:nil];
-				}
-			}
-		}
-		else if (BASS_ChannelIsActive(fileStream2)) 
-		{
-			// Read data from stream2
-			r = BASS_ChannelGetData(fileStream2, buffer, length);
-			
-			// Check if stream2 is now complete
-			if (!BASS_ChannelIsActive(fileStream2))
-			{
-				// Stream2 is done, free the stream
-				BASS_StreamFree(fileStream2);
-				
-				// Increment current playlist index
-				DLog(@"incrementing index");
-				[SUSCurrentPlaylistDAO dataModel].currentIndex++;
-				
-				// Send song done notification
-				DLog(@"sending song info notification");
-                [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnd];
-				
-				DLog(@"fileStream: %llu", (unsigned long long)fileStream1);
-				if (BASS_ChannelIsActive(fileStream1))
-				{
-					// Send song start notification
-                    [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStart];
-					
-					DLog(@"getting data from stream1");
-					[selfRef setStartByteOffset:0];
-                    [selfRef setIsTempDownload:NO];
-					isFilestream1 = YES;
-					r = BASS_ChannelGetData(fileStream1, buffer, length);
-					
-					DLog(@"prepping new stream2 in background thread");
-					[selfRef performSelectorInBackground:@selector(prepareNextSongStream) withObject:nil];
-				}
-			}
-		}
-		else
-		{
-			//DLog(@"no more data, ending");
-			r = BASS_STREAMPROC_END;
-		}
-		
 		// Get the FFT data for visualizer
 		BASS_ChannelGetData(outStream, fftData, BASS_DATA_FFT2048);
-        
-        // Get the data for line spec visualizer
-        BASS_ChannelGetData(outStream, lineSpecBuf, SPECWIDTH * sizeof(short));
+		
+		// Get the data for line spec visualizer
+		BASS_ChannelGetData(outStream, lineSpecBuf, SPECWIDTH * sizeof(short));
+	}
+	
+	if (isFilestream1 && BASS_ChannelIsActive(fileStream1)) 
+	{
+		// Read data from stream1
+		r = BASS_ChannelGetData(fileStream1, buffer, length);
+		
+		// Check if stream1 is now complete
+		if (!BASS_ChannelIsActive(fileStream1))
+		{		
+			// Stream1 is done, free the stream
+			BASS_StreamFree(fileStream1);
+			
+			// Increment current playlist index
+			[currPlaylistDAORef setCurrentIndex:[currPlaylistDAORef currentIndex] + 1];
+			
+			// Send song end notification
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnd];
+			
+			// Check to see if there is another song to play
+			if (BASS_ChannelIsActive(fileStream2))
+			{
+				// Send song start notification
+				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStart];
+				
+				// Read data from stream2
+				[selfRef setStartByteOffset:0];
+				[selfRef setIsTempDownload:NO];
+				isFilestream1 = NO;
+				r = BASS_ChannelGetData(fileStream2, buffer, length);
+				
+				// Prepare the next song for playback
+				[selfRef performSelectorInBackground:@selector(prepareNextSongStream) withObject:nil];
+			}
+		}
+	}
+	else if (BASS_ChannelIsActive(fileStream2)) 
+	{
+		// Read data from stream2
+		r = BASS_ChannelGetData(fileStream2, buffer, length);
+		
+		// Check if stream2 is now complete
+		if (!BASS_ChannelIsActive(fileStream2))
+		{
+			// Stream2 is done, free the stream
+			BASS_StreamFree(fileStream2);
+			
+			// Increment current playlist index
+			[currPlaylistDAORef setCurrentIndex:[currPlaylistDAORef currentIndex] + 1];
+			
+			// Send song done notification
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnd];
+			
+			if (BASS_ChannelIsActive(fileStream1))
+			{
+				// Send song start notification
+				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStart];
+				
+				[selfRef setStartByteOffset:0];
+				[selfRef setIsTempDownload:NO];
+				isFilestream1 = YES;
+				r = BASS_ChannelGetData(fileStream1, buffer, length);
+				
+				[selfRef performSelectorInBackground:@selector(prepareNextSongStream) withObject:nil];
+			}
+		}
+	}
+	else
+	{
+		//DLog(@"no more data, ending");
+		r = BASS_STREAMPROC_END;
 	}
 	
 	return r;
@@ -481,6 +479,16 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	return isFilestream1 ? fileStream2 : fileStream1;
 }
 
+- (BOOL)isGetDataForEQ
+{
+	return isGetDataForEQ;
+}
+
+- (void)setIsGetDataForEQ:(BOOL)getData
+{
+	isGetDataForEQ = getData;
+}
+
 #pragma mark - Singleton methods
 
 static BassWrapperSingleton *sharedInstance = nil;
@@ -491,6 +499,8 @@ static BassWrapperSingleton *sharedInstance = nil;
 	isEqualizerOn = NO;
 	isTempDownload = NO;
     startByteOffset = 0;
+    currPlaylistDAO = [[SUSCurrentPlaylistDAO alloc] init];
+	currPlaylistDAORef = currPlaylistDAO;
     
 	eqValueArray = [[NSMutableArray alloc] initWithCapacity:3];
 	[eqValueArray addObject:[BassParamEqValue valueWithParams:BASS_DX8_PARAMEQMake(125, 0, 18) arrayIndex:0]];

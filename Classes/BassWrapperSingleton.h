@@ -8,7 +8,7 @@
 
 #import "bass.h"
 
-@class Song, BassParamEqValue;
+@class Song, BassParamEqValue, SUSCurrentPlaylistDAO;
 @interface BassWrapperSingleton : NSObject
 
 + (BassWrapperSingleton *)sharedInstance;
@@ -42,9 +42,12 @@
 @property (readonly) NSArray *equalizerValues;
 @property NSUInteger startByteOffset;
 @property BOOL isTempDownload;
+@property BOOL isGetDataForEQ;
 
 @property (readonly) HSTREAM currentStream;
 @property (readonly) HSTREAM nextStream;
+
+@property (nonatomic, retain) SUSCurrentPlaylistDAO *currPlaylistDAO;
 
 - (float)fftData:(NSUInteger)index;
 - (short)lineSpecData:(NSUInteger)index;

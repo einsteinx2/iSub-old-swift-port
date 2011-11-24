@@ -1,43 +1,62 @@
 //
-//  EqualizerView.h
+//  EqualizerPointView.h
 //  iSub
 //
-//  Created by Ben Baron on 11/19/11.
+//  Created by Ben Baron on 11/23/11.
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "bass.h"
+#import <UIKit/UIKit.h>
+#import <OpenGLES/EAGL.h>
+#import <OpenGLES/ES1/gl.h>
+#import <OpenGLES/ES1/glext.h>
 
-#define myWidth 40
-#define myHeight 40
+//CONSTANTS:
 
-#define MIN_FREQUENCY 32
-#define MAX_FREQUENCY 16384
-#define RANGE_OF_EXPONENTS 9
+#define kBrushOpacity		1.0
+#define kBrushPixelStep		3
+#define kBrushScale			4
+#define kLuminosity			0.75
+#define kSaturation			1.0
 
-#define MIN_GAIN -15
-#define MAX_GAIN 15
+//CLASS INTERFACES:
 
-#define DEFAULT_BANDWIDTH 18
-
-@class BassParamEqValue;
-@interface EqualizerView : UIImageView
+@interface EqualizerView : UIView
 {
-	BassParamEqValue *eqValue;
+@private
+	// The pixel dimensions of the backbuffer
+	GLint backingWidth;
+	GLint backingHeight;
+	
+	EAGLContext *context;
+	
+	// OpenGL names for the renderbuffer and framebuffers used to render to this view
+	GLuint viewRenderbuffer, viewFramebuffer;
+	
+	// OpenGL name for the depth buffer that is attached to viewFramebuffer, if it exists (0 if it does not exist)
+	GLuint depthRenderbuffer;
+	
+	GLuint	imageTexture;
+	CGPoint	location;
+	CGPoint	previousLocation;
+	Boolean	firstTouch;
+	Boolean needsErase;
 }
 
-@property (nonatomic, retain) BassParamEqValue *eqValue;
-@property (readonly) NSUInteger frequency;
-@property (readonly) CGFloat gain;
-@property (readonly) HFX handle;
-@property CGPoint position;
+@property(nonatomic, readwrite) CGPoint location;
+@property(nonatomic, readwrite) CGPoint previousLocation;
 
-@property CGSize parentSize;
+@property (nonatomic, retain) NSTimer *drawTimer;
 
-- (id)initWithCGPoint:(CGPoint)point parentSize:(CGSize)size;
-- (id)initWithEqValue:(BassParamEqValue *)value parentSize:(CGSize)size;
+- (void)erase;
+//- (void)drawImage:(GLubyte *)imageData;
 
-- (CGFloat)percentXFromFrequency:(NSUInteger)frequency;
-- (CGFloat)percentYFromGain:(CGFloat)gain;
+//- (void)setupPalette;
+//- (void)createBitmapToDraw;
+
+- (void)changeType;
+
+- (void)startEqDisplay;
+- (void)stopEqDisplay;
 
 @end
