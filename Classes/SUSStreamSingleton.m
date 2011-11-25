@@ -155,8 +155,6 @@ static SUSStreamSingleton *sharedInstance = nil;
 	{
 		[bassWrapper prepareNextSongStream];
 	}
-	
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"setPauseButtonImage" object:nil];
 }
 
 - (void)SUSStreamHandlerConnectionFailed:(SUSStreamHandler *)handler withError:(NSError *)error

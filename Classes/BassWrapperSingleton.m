@@ -33,10 +33,13 @@ static HSTREAM fileStream1, fileStream2, outStream;
 
 static float fftData[1024];
 
-//#define SPECWIDTH 320
-//short lineSpecBuf[SPECWIDTH];
 short *lineSpecBuf;
 int lineSpecBufSize;
+
+int currentSongRetryAttempt = 0;
+int nextSongRetryAttempt = 0;
+#define MAX_RETRY_ATTEMPTS 30
+#define RETRY_DELAY 1.0
 
 static NSMutableArray *eqValueArray, *eqHandleArray;
 
@@ -164,37 +167,34 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 
 - (void)prepareNextSongStream
 {
-	@autoreleasepool 
+	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+	Song *nextSong = dataModel.nextSong;
+	if (nextSong.fileExists)
 	{
-		SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
-		Song *nextSong = dataModel.nextSong;
-		if (nextSong.fileExists)
+		NSUInteger silence = [self preSilenceLengthForSong:nextSong];
+		
+		HSTREAM stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], silence, 0, BASS_STREAM_DECODE);
+		
+		if (!stream)
 		{
-			NSUInteger silence = [self preSilenceLengthForSong:nextSong];
-			
-			HSTREAM stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], silence, 0, BASS_STREAM_DECODE);
-			
-			if (!stream)
-			{
-				stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], 0, 0, BASS_STREAM_DECODE);
-			}
-			
-			if (!stream)
-			{
-				DLog(@"nextSong stream: %llu error: %i", (unsigned long long)stream, BASS_ErrorGetCode());
-			}
-			
-			if (isFilestream1)
-			{
-				fileStream2 = stream;
-			}
-			else
-			{
-				fileStream1 = stream;
-			}
-			
-			DLog(@"nextSong: %llu", (unsigned long long)stream);
+			stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], 0, 0, BASS_STREAM_DECODE);
 		}
+		
+		if (!stream)
+		{
+			DLog(@"nextSong stream: %llu error: %i", (unsigned long long)stream, BASS_ErrorGetCode());
+		}
+		
+		if (isFilestream1)
+		{
+			fileStream2 = stream;
+		}
+		else
+		{
+			fileStream1 = stream;
+		}
+		
+		DLog(@"nextSong: %llu", (unsigned long long)stream);
 	}
 }
 
@@ -226,7 +226,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	return count;
 }
 
-- (void)startWithOffsetInBytes:(NSUInteger)byteOffset
+- (void)startWithOffsetInBytes:(NSNumber *)byteOffset
 {
 	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
 	Song *currentSong = dataModel.currentSong;
@@ -234,7 +234,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	if (!currentSong)
 		return;
     
-    startByteOffset = byteOffset;
+    startByteOffset = [byteOffset intValue];
     isTempDownload = NO;
 	
 	[self bassInit];
@@ -242,33 +242,46 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	if (currentSong.fileExists)
 	{
 		BASS_CHANNELINFO info;
-		fileStream1 = BASS_StreamCreateFile(false, [currentSong.localPath cStringUTF8], byteOffset, 0, BASS_STREAM_DECODE);
-		if (!fileStream1)
-			DLog(@"currentSong error: %i", BASS_ErrorGetCode());
-		
-		DLog(@"currentSong: %llu", (long long int)fileStream1);
-		BASS_ChannelGetInfo(fileStream1, &info);
-		
-		isFilestream1 = YES;
-		
-		outStream = BASS_StreamCreate(info.freq, info.chans, 0, &MyStreamProc, 0); // create the output stream
-		
-		if (isEqualizerOn)
+		fileStream1 = BASS_StreamCreateFile(false, [currentSong.localPath cStringUTF8], startByteOffset, 0, BASS_STREAM_DECODE);
+		if (fileStream1)
 		{
-			[self applyEqualizer:eqValueArray];
-		}
+			DLog(@"currentSong: %llu", (long long int)fileStream1);
+			BASS_ChannelGetInfo(fileStream1, &info);
 			
-		BASS_ChannelPlay(outStream, FALSE);
-		
-		[self performSelectorInBackground:@selector(prepareNextSongStream) withObject:nil];
-		
-        [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStart];
+			isFilestream1 = YES;
+			
+			outStream = BASS_StreamCreate(info.freq, info.chans, 0, &MyStreamProc, 0); // create the output stream
+			
+			if (isEqualizerOn)
+			{
+				[self applyEqualizer:eqValueArray];
+			}
+			
+			BASS_ChannelPlay(outStream, FALSE);
+			
+			[self performSelectorInBackground:@selector(prepareNextSongStream) withObject:nil];
+			
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStart];
+		}
+		/*else 
+		{
+			if (currentSongRetryAttempt < MAX_RETRY_ATTEMPTS)
+			{
+				DLog(@"currentSong error: %i... retry attempt: %i retrying in %f seconds", BASS_ErrorGetCode(), currentSongRetryAttempt, RETRY_DELAY);
+				currentSongRetryAttempt++;
+				[self performSelector:@selector(startWithOffsetInBytes:) withObject:byteOffset afterDelay:RETRY_DELAY];
+			}
+			else
+			{
+				currentSongRetryAttempt = 0;
+			}
+		}*/
 	}
 }
 
 - (void)start
 {
-	[self startWithOffsetInBytes:0];
+	[self startWithOffsetInBytes:[NSNumber numberWithInt:0]];
 }
 
 - (void)stop
@@ -403,7 +416,7 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 
 - (void)seekToPositionInBytes:(NSUInteger)bytes
 {
-	[self startWithOffsetInBytes:bytes];
+	[self startWithOffsetInBytes:[NSNumber numberWithInt:bytes]];
 }
 
 /*- (void)seekToPositionInSeconds:(NSUInteger)seconds

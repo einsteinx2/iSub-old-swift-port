@@ -24,7 +24,6 @@
 
 @property long totalBytesTransferred;
 @property long bytesTransferred;
-@property (nonatomic, retain) NSDate *throttlingDate;
 
 @property (readonly) NSUInteger bitrate;
 

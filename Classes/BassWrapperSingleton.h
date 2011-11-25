@@ -15,7 +15,7 @@
 
 // Playback methods
 //
-- (void)startWithOffsetInBytes:(NSUInteger)byteOffset;
+- (void)startWithOffsetInBytes:(NSNumber *)byteOffset;
 - (void)seekToPositionInBytes:(NSUInteger)bytes;
 //- (void)seekToPositionInSeconds:(NSUInteger)seconds;
 - (void)start;
