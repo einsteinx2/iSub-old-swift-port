@@ -28,6 +28,8 @@
 #import "SUSStreamSingleton.h"
 #import "SUSCurrentPlaylistDAO.h"
 #import "BassWrapperSingleton.h"
+#import <MediaPlayer/MediaPlayer.h>
+#import "SUSCoverArtLargeDAO.h"
 
 static MusicSingleton *sharedInstance = nil;
 
@@ -725,6 +727,47 @@ static MusicSingleton *sharedInstance = nil;
 	}
 }
 
+- (void)updateLockScreenInfo
+{
+	if ([NSClassFromString(@"MPNowPlayingInfoCenter") class])  
+	{
+		/* we're on iOS 5, so set up the now playing center */
+		BassWrapperSingleton *wrapper = [BassWrapperSingleton sharedInstance];
+		SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+		SUSCoverArtLargeDAO *artDataModel = [SUSCoverArtLargeDAO dataModel];
+		
+		Song *currentSong = dataModel.currentSong;
+		
+		UIImage *albumArtImage = [artDataModel coverArtImageForId:currentSong.coverArtId];
+		if (!albumArtImage)
+			albumArtImage = artDataModel.defaultCoverArt;
+		MPMediaItemArtwork *albumArt = [[[MPMediaItemArtwork alloc] initWithImage:albumArtImage] autorelease];
+		
+		NSMutableDictionary *trackInfo = [NSMutableDictionary dictionaryWithObject:albumArt forKey:MPMediaItemPropertyArtwork];
+		if (currentSong.title)
+			[trackInfo setObject:currentSong.title forKey:MPMediaItemPropertyTitle];
+		if (currentSong.album)
+			[trackInfo setObject:currentSong.album forKey:MPMediaItemPropertyAlbumTitle];
+		if (currentSong.artist)
+			[trackInfo setObject:currentSong.artist forKey:MPMediaItemPropertyArtist];
+		if (currentSong.genre)
+			[trackInfo setObject:currentSong.genre forKey:MPMediaItemPropertyGenre];
+		if (currentSong.duration)
+			[trackInfo setObject:currentSong.duration forKey:MPMediaItemPropertyPlaybackDuration];
+		NSNumber *trackIndex = [NSNumber numberWithInt:dataModel.currentIndex];
+		if (trackIndex)
+			[trackInfo setObject:trackIndex forKey:MPNowPlayingInfoPropertyPlaybackQueueIndex];
+		NSNumber *playlistCount = [NSNumber numberWithInt:dataModel.count];
+		if (playlistCount)
+			[trackInfo setObject:playlistCount forKey:MPNowPlayingInfoPropertyPlaybackQueueCount];
+		NSNumber *progress = [NSNumber numberWithDouble:wrapper.progress];
+		if (progress)
+			[trackInfo setObject:progress forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
+		
+		[MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = trackInfo;
+	}
+}
+
 // TODO: Reimplement these for libBASS
 /*- (void)removeAutoNextNotification
 {
@@ -1202,6 +1245,9 @@ static MusicSingleton *sharedInstance = nil;
 	//[self addAutoNextNotification];
 	
 	connectionQueue = [[BBSimpleConnectionQueue alloc] init];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLockScreenInfo) name:ISMSNotification_SongPlaybackStart object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLockScreenInfo) name:ISMSNotification_AlbumArtLargeDownloaded object:nil];
 	
 	return self;
 }

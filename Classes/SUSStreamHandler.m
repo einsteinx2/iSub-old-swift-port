@@ -36,7 +36,7 @@
 #define isThrottleLoggingEnabled NO
 
 @implementation SUSStreamHandler
-@synthesize totalBytesTransferred, bytesTransferred, throttlingDate, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request;
+@synthesize totalBytesTransferred, bytesTransferred, throttlingDate, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread;
 
 - (id)initWithSong:(Song *)song offset:(NSUInteger)offset delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate
 {
@@ -47,6 +47,8 @@
 		byteOffset = offset;
 		isDelegateNotifiedToStartPlayback = NO;
 		numOfReconnects = 0;
+		loadingThread = nil;
+		throttlingDate = nil;
 	}
 	
 	return self;
@@ -59,6 +61,7 @@
 
 - (void)dealloc
 {
+	[loadingThread release]; loadingThread = nil;
 	[fileHandle release]; fileHandle = nil;
 	[mySong	release]; mySong = nil;
 	[throttlingDate release]; throttlingDate = nil;
@@ -97,17 +100,12 @@
     
     self.request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters byteOffset:byteOffset];
 	
-	[self performSelectorInBackground:@selector(createConnection) withObject:nil]; 
-}
-
-- (void)createConnection
-{
-	NSURLConnection *newConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    self.connection = newConnection;
-    if (newConnection)
+	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
+    if (connection)
     {
         mySong.isPartiallyCached = YES;
-        CFRunLoopRun(); // Avoid thread exiting
+		loadingThread = [[NSThread alloc] initWithTarget:self selector:@selector(startConnection) object:nil];
+		[loadingThread start];
     }
     else
     {
@@ -115,7 +113,13 @@
         [self.delegate SUSStreamHandlerConnectionFailed:self withError:error];
         [error release];
     }
-    [newConnection release];
+    
+}
+
+- (void)startConnection
+{
+	[connection start];
+	CFRunLoopRun();
 }
 
 - (NSUInteger)bitrate
@@ -142,6 +146,13 @@
     DLog(@"request canceled");
 	[connection cancel]; 
     [connection release]; connection = nil;
+	
+	[self performSelector:@selector(cancelRunLoop) onThread:loadingThread withObject:nil waitUntilDone:NO];
+}
+
+- (void)cancelRunLoop
+{
+	CFRunLoopStop(CFRunLoopGetCurrent());
 }
 
 #pragma mark - Connection Delegate
@@ -170,11 +181,13 @@
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
 {	
-    totalBytesTransferred += [incrementalData length];
-    bytesTransferred += [incrementalData length];
+	NSUInteger dataLength = [incrementalData length];
+	
+    totalBytesTransferred += dataLength;
+    bytesTransferred += dataLength;
     
     // Save the data to the file
-    [self.fileHandle writeData:incrementalData];
+    [fileHandle writeData:incrementalData];
     
     // Notify delegate if enough bytes received to start playback
     if (!isDelegateNotifiedToStartPlayback && totalBytesTransferred >= kMinBytesToStartPlayback)
@@ -187,20 +200,23 @@
     // Log progress
     if (isProgressLoggingEnabled)
     {
-        DLog(@"downloadedLengthA:  %lu   bytesRead: %i", totalBytesTransferred, [incrementalData length]);
+        DLog(@"downloadedLengthA:  %lu   bytesRead: %i", totalBytesTransferred, dataLength);
     }
     
     // Handle throtling
     if (totalBytesTransferred < (kMinBytesToStartLimiting * ((float)self.bitrate / 160.0f)))
     {
-        self.throttlingDate = [NSDate date];
+		[throttlingDate release]; throttlingDate = nil;
+        throttlingDate = [[NSDate alloc] init];
         bytesTransferred = 0;
     }
     
     NSDate *now = [[NSDate alloc] init];
-    if ([now timeIntervalSinceDate:self.throttlingDate] > kThrottleTimeInterval &&
-        totalBytesTransferred > (kMinBytesToStartLimiting * ((float)self.bitrate / 160.0f)))
+	NSTimeInterval intervalSinceLastThrottle = [now timeIntervalSinceDate:throttlingDate];
+    if (intervalSinceLastThrottle > kThrottleTimeInterval &&
+        bytesTransferred > (kMinBytesToStartLimiting * ((float)self.bitrate / 160.0f)))
     {
+		DLog(@"entering throttling if statement, interval: %f  bytes transferred: %lu", intervalSinceLastThrottle, bytesTransferred);
         bytesTransferred = 0;
         
         NSTimeInterval delay = 0.0;
@@ -220,6 +236,8 @@
         }
         
         [NSThread sleepForTimeInterval:delay];
+		[throttlingDate release]; 
+		throttlingDate = [[NSDate alloc] init];
     }
     [now release];
 }
@@ -231,26 +249,35 @@
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
-	[theConnection release]; theConnection = nil;
-		
-	// Close the file handle
-	[self.fileHandle closeFile];
-	
-	// Notify delegate of failure
+	// Perform these operations on the main thread
 	[self performSelectorOnMainThread:@selector(didFailInternal:) withObject:error waitUntilDone:NO];
 	
 	// Stop the run loop so the thread can die
-	CFRunLoopStop(CFRunLoopGetCurrent());
+	[self cancelRunLoop];
 }	
 
 - (void)didFailInternal:(NSError *)error
 {
+	self.connection = nil;
+	
+	// Close the file handle
+	[self.fileHandle closeFile];
+	
 	[self.delegate SUSStreamHandlerConnectionFailed:self withError:error];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	[theConnection release]; theConnection = nil;
+	// Perform these operations on the main thread
+	[self performSelectorOnMainThread:@selector(didFinishLoadingInternal) withObject:nil waitUntilDone:NO];
+	
+	// Stop the run loop so the thread can die
+	[self cancelRunLoop];
+}
+
+- (void)didFinishLoadingInternal
+{
+	self.connection = nil;
 	
 	// Close the file handle
 	[self.fileHandle closeFile];
@@ -260,7 +287,7 @@
 		// Show an alert and delete the file, this was not a song but an XML error
 		// TODO: Parse with TBXML and display proper error
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"No song data returned. This could be because your Subsonic API trial has expired, this song is not an mp3 and the Subsonic transcoding plugins failed, or another reason." delegate:[iSubAppDelegate sharedInstance] cancelButtonTitle:@"OK" otherButtonTitles: nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
+		[alert show];
 		[alert release];
 		[[NSFileManager defaultManager] removeItemAtPath:mySong.localPath error:NULL];
 	}
@@ -270,15 +297,6 @@
 		mySong.isFullyCached = YES;
 	}
 	
-	//Notify the delegate of finish
-	[self performSelectorOnMainThread:@selector(didFinishLoadingInternal) withObject:nil waitUntilDone:NO];
-	
-	// Stop the run loop so the thread can die
-	CFRunLoopStop(CFRunLoopGetCurrent());
-}
-
-- (void)didFinishLoadingInternal
-{
 	[self.delegate SUSStreamHandlerConnectionFinished:self];
 }
 

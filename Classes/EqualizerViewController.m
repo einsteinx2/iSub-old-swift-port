@@ -137,12 +137,16 @@
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-	UITouch *touch = [touches anyObject];
-	
-	CGPoint location = [touch locationInView:self.equalizerView];
-	if (CGRectContainsPoint(equalizerView.frame, location))
+	if (self.selectedView != nil)
 	{
-		self.selectedView.center = [touch locationInView:self.view];
+		UITouch *touch = [touches anyObject];
+		
+		CGPoint location = [touch locationInView:self.equalizerView];
+		if (CGRectContainsPoint(equalizerView.frame, location))
+		{
+			self.selectedView.center = [touch locationInView:self.view];
+			[[BassWrapperSingleton sharedInstance] updateEqParameter:self.selectedView.eqValue];
+		}
 	}
 }
 

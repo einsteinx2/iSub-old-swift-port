@@ -79,6 +79,8 @@
 
 - (void)showPlayer;
 
+- (void)updateLockScreenInfo;
+
 //- (void)removeAutoNextNotification;
 //- (void)addAutoNextNotification;
 

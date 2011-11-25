@@ -390,8 +390,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		
 		CGRect artistFrame = CGRectMake(0, -2, width, 15);
-		CGRect albumFrame  = CGRectMake(0, 10, width, 15);
-		CGRect songFrame   = CGRectMake(0, 23, width, 15);
+		CGRect songFrame   = CGRectMake(0, 10, width, 15);
+		CGRect albumFrame  = CGRectMake(0, 23, width, 15);
 		
 		NSUInteger artistSize = 12;
 		NSUInteger albumSize  = 11;
@@ -400,20 +400,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		UILabel *artist = [[UILabel alloc] initWithFrame:artistFrame];
 		artist.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		artist.backgroundColor = [UIColor clearColor];
-		artist.textColor = [UIColor whiteColor];
+		artist.textColor = [UIColor colorWithWhite:.7 alpha:1.];
 		artist.font = [UIFont boldSystemFontOfSize:artistSize];
 		artist.textAlignment = UITextAlignmentCenter;
 		[titleView addSubview:artist];
 		[artist release];
-		
-		UILabel *album = [[UILabel alloc] initWithFrame:albumFrame];
-		album.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		album.backgroundColor = [UIColor clearColor];
-		album.textColor = [UIColor whiteColor];
-		album.font = [UIFont systemFontOfSize:albumSize];
-		album.textAlignment = UITextAlignmentCenter;
-		[titleView addSubview:album];
-		[album release];
 		
 		UILabel *song = [[UILabel alloc] initWithFrame:songFrame];
 		song.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -423,6 +414,15 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		song.textAlignment = UITextAlignmentCenter;
 		[titleView addSubview:song];
 		[song release];
+		
+		UILabel *album = [[UILabel alloc] initWithFrame:albumFrame];
+		album.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		album.backgroundColor = [UIColor clearColor];
+		album.textColor = [UIColor colorWithWhite:.7 alpha:1.];
+		album.font = [UIFont boldSystemFontOfSize:albumSize];
+		album.textAlignment = UITextAlignmentCenter;
+		[titleView addSubview:album];
+		[album release];
 		
 		SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
 		Song *currentSong = dataModel.currentSong;

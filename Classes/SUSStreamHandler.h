@@ -32,7 +32,11 @@
 
 @property NSUInteger numOfReconnects;
 
+@property (nonatomic, retain) NSThread *loadingThread;
+
 - (void)start;
 - (void)cancel;
+
+- (void)startConnection;
 
 @end
