@@ -105,6 +105,7 @@
             [super connectionDidFinishLoading:theConnection];
 		}
 	}
+	[tbxml release];
 }
 
 @end

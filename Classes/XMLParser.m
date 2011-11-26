@@ -198,8 +198,8 @@
 		{
 			//Initialize the arrays.
 			[databaseControls.albumListCacheDb beginTransaction];
-			[databaseControls.albumListCacheDb executeUpdate:@"DELETE FROM albumsCache WHERE folderId = ?", [NSString md5:myId]];
-			[databaseControls.albumListCacheDb executeUpdate:@"DELETE FROM songsCache WHERE folderId = ?", [NSString md5:myId]];
+			[databaseControls.albumListCacheDb executeUpdate:@"DELETE FROM albumsCache WHERE folderId = ?", [myId md5]];
+			[databaseControls.albumListCacheDb executeUpdate:@"DELETE FROM songsCache WHERE folderId = ?", [myId md5]];
 			[databaseControls.albumListCacheDb commit];
 		}
 		else if( [elementName isEqualToString:@"child"] ) 

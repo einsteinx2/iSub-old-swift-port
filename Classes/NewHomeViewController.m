@@ -349,6 +349,8 @@
 		[appDelegate.splitView presentModalViewController:quickAlbums animated:YES];
 	else
 		[self presentModalViewController:quickAlbums animated:YES];
+	
+	[quickAlbums release];
 }
 
 - (void)pushViewController:(UIViewController *)viewController

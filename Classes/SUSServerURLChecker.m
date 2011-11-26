@@ -128,6 +128,7 @@
         NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NotXML];
         [delegate SUSServerURLCheckFailed:self withError:error];
     }
+	[tbxml release];
     
 	[theConnection release];
     self.receivedData = nil;

@@ -89,6 +89,7 @@
         // This is not XML, so fail
         [self connection:nil didFailWithError:nil];
     }
+	[tbxml release];
     
 	[theConnection release];
     self.receivedData = nil;

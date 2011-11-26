@@ -59,6 +59,7 @@
 		UIView *arrowImageView = [[UIView alloc] initWithFrame:CGRectMake(193, 7, 18, 18)];
 		arrowImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 		[self addSubview:arrowImageView];
+		[arrowImageView release];
 		
 		arrowImage = [[CALayer alloc] init];
 		arrowImage.frame = CGRectMake(0, 0, 18, 18);
@@ -74,6 +75,8 @@
 		[dropdownButton release];
 		
 		[self updateFolders];
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFolders) name:ISMSNotification_ServerSwitched object:nil];
     }
     return self;
 }
@@ -259,7 +262,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	{
 		// Create the NSMutableData to hold the received data.
 		// receivedData is an instance variable declared elsewhere.
-		receivedData = [[NSMutableData data] retain];
+		receivedData = [[NSMutableData alloc] initWithCapacity:0];
 	} 
 	else 
 	{		

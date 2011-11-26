@@ -59,9 +59,9 @@
 		[self.view addSubview:albumLabel];
 		[albumLabel release];
 		
-		if ([databaseControls.coverArtCacheDb540 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:theAlbum.coverArtId]] == 1)
+		if ([databaseControls.coverArtCacheDb540 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [theAlbum.coverArtId md5]] == 1)
 		{
-			NSData *imageData = [databaseControls.coverArtCacheDb540 dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [NSString md5:theAlbum.coverArtId]];
+			NSData *imageData = [databaseControls.coverArtCacheDb540 dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [theAlbum.coverArtId md5]];
 			albumArt.image = [UIImage imageWithData:imageData];
 		}
 		else 

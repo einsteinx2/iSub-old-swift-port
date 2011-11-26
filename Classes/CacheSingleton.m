@@ -138,7 +138,7 @@ static CacheSingleton *sharedInstance = nil;
 	//NSDate *startTime = [NSDate date];
 	
 	SavedSettings *settings = [SavedSettings sharedInstance];
-	
+		
 	unsigned long long size = 0;
 	for (NSString *path in [[NSFileManager defaultManager] subpathsAtPath:settings.cachePath]) 
 	{

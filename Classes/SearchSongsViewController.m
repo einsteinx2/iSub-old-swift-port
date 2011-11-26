@@ -356,10 +356,10 @@
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:action andParameters:parameters];
 
-	self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (connection)
 	{
-		receivedData = [[NSMutableData data] retain];
+		receivedData = [[NSMutableData alloc] initWithCapacity:0];
 	} 
 	else 
 	{

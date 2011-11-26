@@ -316,6 +316,7 @@
 	{
         // Parse the data
         //
+		DLog(@"%@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
         TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
         TBXMLElement *root = tbxml.rootXMLElement;
         if (root) 
@@ -350,6 +351,7 @@
                 }
             }
         }
+		[tbxml release];
 		
 		self.tableView.scrollEnabled = YES;
 
@@ -458,14 +460,14 @@ static NSString *kName_Error = @"error";
 	cell.backgroundView = [[[UIView alloc] init] autorelease];
 	if(indexPath.row % 2 == 0)
 	{
-		if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [NSString md5:aSong.path]] != nil)
+		if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
 			cell.backgroundView.backgroundColor = [viewObjects currentLightColor];
 		else
 			cell.backgroundView.backgroundColor = viewObjects.lightNormal;
 	}
 	else
 	{
-		if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [NSString md5:aSong.path]] != nil)
+		if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
 			cell.backgroundView.backgroundColor = [viewObjects currentDarkColor];
 		else
 			cell.backgroundView.backgroundColor = viewObjects.darkNormal;

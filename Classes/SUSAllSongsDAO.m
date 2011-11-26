@@ -99,6 +99,7 @@
 		item.position = [result intForColumn:@"position"];
 		item.count = [result intForColumn:@"count"];
 		[indexItems addObject:item];
+		[item release];
 	}
 	[result close];
 	

@@ -137,7 +137,7 @@
 		NSNumber *isWifi = [[NSNumber alloc] initWithBool:[iSubAppDelegate sharedInstance].isWifi];
 		[loadingThread.threadDictionary setObject:isWifi forKey:@"isWifi"];
 		[isWifi release];
-		
+						
 		[loadingThread start];
 	}
 	else

@@ -79,12 +79,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 }
 
 - (void)showLoadingScreenOnMainWindow
-{
-	if (isLoadingScreenShowing)
-		return;
-	
-	isLoadingScreenShowing = YES;
-	
+{	
 	if (IS_IPAD())
 		[self showLoadingScreen:appDelegate.splitView.view blockInput:YES mainWindow:YES];
 	else
@@ -381,11 +376,11 @@ static ViewObjectsSingleton *sharedInstance = nil;
 			{
 				[tabsViewControllers addObject:[appDelegate.mainTabBarController.viewControllers objectAtIndex:[(NSNumber *)[tabsOrderDictionary objectForKey:[(NSNumber *)[savedTabsOrderArray objectAtIndex:i] stringValue]] intValue]]];
 			}
-			[tabsOrderDictionary release];
 			
 			appDelegate.mainTabBarController.viewControllers = [NSArray arrayWithArray:tabsViewControllers];
 			[tabsViewControllers release];
 		}
+		[tabsOrderDictionary release];
 	}
 	[savedTabsOrderArray release];
 	

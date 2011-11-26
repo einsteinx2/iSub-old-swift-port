@@ -70,7 +70,7 @@
 
 - (void)createDataModel
 {
-	self.dataModel = [[SUSChatDAO alloc] initWithDelegate:self];
+	self.dataModel = [[[SUSChatDAO alloc] initWithDelegate:self] autorelease];
 }
 
 - (void)loadData

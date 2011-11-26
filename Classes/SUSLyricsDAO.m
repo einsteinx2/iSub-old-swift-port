@@ -41,11 +41,16 @@
 #pragma mark - Public DAO Methods
 
 - (NSString *)lyricsForArtist:(NSString *)artist andTitle:(NSString *)title
+{	
+    return [self.db stringForQuery:@"SELECT lyrics FROM lyrics WHERE artist = ? AND title = ?", artist, title];
+}
+
+- (NSString *)loadLyricsForArtist:(NSString *)artist andTitle:(NSString *)title
 {
 	[self cancelLoad];
 	
 	self.loader = [[[SUSLyricsLoader alloc] initWithDelegate:self] autorelease];
-    NSString *lyrics = [self.db stringForQuery:@"SELECT lyrics FROM lyrics WHERE artist = ? AND title = ?", artist, title];
+    NSString *lyrics = [self lyricsForArtist:artist andTitle:title];
 	if (lyrics)
 	{
 		return lyrics;

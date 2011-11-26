@@ -92,4 +92,14 @@ static NSUInteger currentIndex = 0;
 	return count;
 }
 
+- (NSInteger)incrementIndex
+{
+	//if (self.currentIndex + 1 < self.count)
+	//{
+		currentIndex++;
+	//}
+	
+	return currentIndex;
+}
+
 @end

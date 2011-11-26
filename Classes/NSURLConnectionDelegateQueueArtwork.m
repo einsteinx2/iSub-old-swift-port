@@ -73,9 +73,9 @@
 	{
 		//DLog(@"image is good so caching it");
 		if (is320)
-			[databaseControls.coverArtCacheDb320 executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:musicControls.queueSongObject.coverArtId], receivedData];
+			[databaseControls.coverArtCacheDb320 executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [musicControls.queueSongObject.coverArtId md5], receivedData];
 		else
-			[databaseControls.coverArtCacheDb60 executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:musicControls.queueSongObject.coverArtId], receivedData];
+			[databaseControls.coverArtCacheDb60 executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [musicControls.queueSongObject.coverArtId md5], receivedData];
 	}
 	
 	[theConnection release];

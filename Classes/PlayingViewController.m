@@ -90,7 +90,7 @@
 	{
 		// Create the NSMutableData to hold the received data.
 		// receivedData is an instance variable declared elsewhere.
-		receivedData = [[NSMutableData data] retain];
+		receivedData = [[NSMutableData alloc] initWithCapacity:0];
 		
 		// Display the loading screen
 		[viewObjects showLoadingScreenOnMainWindow];

@@ -347,7 +347,7 @@
 
 - (IBAction) movingSlider
 {
-	DLog(@"scrubbing speed: %f", progressSlider.scrubbingSpeed);
+	//DLog(@"scrubbing speed: %f", progressSlider.scrubbingSpeed);
 	
 	progressLabel.hidden = NO;
 	progressLabelBackground.hidden = NO;

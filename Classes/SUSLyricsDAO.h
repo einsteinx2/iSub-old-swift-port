@@ -18,6 +18,7 @@
 @property (nonatomic, retain) SUSLyricsLoader *loader;
 
 - (id)initWithDelegate:(NSObject <SUSLoaderDelegate> *)theDelegate;
+- (NSString *)loadLyricsForArtist:(NSString *)artist andTitle:(NSString *)title;
 
 #pragma mark - Public DAO Methods
 - (NSString *)lyricsForArtist:(NSString *)artist andTitle:(NSString *)title;

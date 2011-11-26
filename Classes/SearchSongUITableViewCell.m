@@ -74,14 +74,14 @@
 	self.backgroundView = [[[UIView alloc] init] autorelease];
 	if(row % 2 == 0)
 	{
-		if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [NSString md5:aSong.path]] != nil)
+		if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
 			self.backgroundView.backgroundColor = [viewObjects currentLightColor];
 		else
 			self.backgroundView.backgroundColor = viewObjects.lightNormal;
 	}
 	else
 	{
-		if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [NSString md5:aSong.path]] != nil)
+		if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
 			self.backgroundView.backgroundColor = [viewObjects currentDarkColor];
 		else
 			self.backgroundView.backgroundColor = viewObjects.darkNormal;
@@ -153,7 +153,8 @@
 		[self.contentView addSubview:overlayView];
 		
 		//overlayView.downloadButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		if ([[databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", [NSString md5:mySong.path]] isEqualToString:@"YES"]) {
+		if ([[databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", [mySong.path md5]] isEqualToString:@"YES"]) 
+		{
 			overlayView.downloadButton.alpha = .3;
 			overlayView.downloadButton.enabled = NO;
 		}

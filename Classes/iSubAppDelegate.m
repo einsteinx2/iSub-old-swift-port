@@ -198,25 +198,6 @@
 - (void)checkServer
 {
 	SavedSettings *settings = [SavedSettings sharedInstance];
-    
-    // TEST
-    //
-    //
-    /*if (!viewObjects.isOfflineMode)
-    {
-    	// First check to see if the user used an IP address or a hostname. If they used a hostname,
-    	// cache the IP of the host so that it doesn't need to be resolved for every call to the API
-    	if ([[settings.urlString componentsSeparatedByString:@"."] count] > 0)
-    	{
-    		NSString *cachedIP = [self getIPAddressForHost:settings.urlString];
-    		NSInteger cachedIPHour = [self getHour];
-            
-            DLog(@"cachedIP: %@    hour: %i", cachedIP, cachedIPHour);
-    	}
-    }*/
-    //
-    //
-    //
 	
 	// Ask the update question if necessary
 	if (!settings.isUpdateCheckQuestionAsked)
@@ -289,51 +270,6 @@
 }
 
 #pragma mark -
-
-//
-// Setup the server specific defaults and all of the databases /* background thread */
-//
-/*- (void)appInit2
-{	
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-	SavedSettings *settings = [SavedSettings sharedInstance];
-	
-	// Check if the subsonic URL is valid by attempting to access the ping.view page, 
-	// if it's not then display an alert and allow user to change settings if they want.
-	// This is in case the user is, for instance, connected to a wifi network but does not 
-	// have internet access or if the host url entered was wrong.
-	BOOL isURLValid = YES;
-	NSError *error;
-	if (!viewObjects.isOfflineMode) 
-	{
-		isURLValid = [self isURLValid:[NSString stringWithFormat:@"%@/rest/ping.view", settings.urlString] error:&error];
-	}
-	if(!isURLValid && !viewObjects.isOfflineMode)
-	{
-		viewObjects.isOfflineMode = YES;
-		[databaseControls initDatabases];
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", error.code, [ASIHTTPRequest errorCodeToEnglish:error.code]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Settings", nil];
-		alert.tag = 3;
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-		[alert release];
-	}
-	else
-	{	
-		//if (!isOfflineMode)
-		//{
-		//	// First check to see if the user used an IP address or a hostname. If they used a hostname,
-		//	// cache the IP of the host so that it doesn't need to be resolved for every call to the API
-		//	if ([[defaultUrl componentsSeparatedByString:@"."] count] == 1)
-		//	{
-		//		self.cachedIP = [[NSString alloc] initWithString:[self getIPAddressForHost:defaultUrl]];
-		//		self.cachedIPHour = [self getHour];
-		//	}
-		//}
-		[databaseControls initDatabases];
-	}
-	
-	[autoreleasePool release];
-}*/
 
 - (void)createAndDisplayUI
 {
@@ -1063,49 +999,6 @@
 	BOOL needsConnection = flags & kSCNetworkFlagsConnectionRequired;
 	return (isReachable && !needsConnection) ? YES : NO;
 }*/
-
-
-- (NSString *) getIPAddressForHost: (NSString *) theHost 
-{
-	/*NSArray *subStrings = [theHost componentsSeparatedByString:@"://"];
-	theHost = [subStrings objectAtIndex:1];
-	subStrings = [theHost componentsSeparatedByString:@":"];
-	theHost = [subStrings objectAtIndex:0];
-	
-	struct hostent *host = gethostbyname([theHost UTF8String]);
-	if (host == NULL) 
-	{
-		herror("resolv");
-		return NULL;
-	}
-	
-	struct in_addr **list = (struct in_addr **)host->h_addr_list;
-	//NSString *addressString = [NSString stringWithCString:inet_ntoa(*list[0])];
-	NSString *addressString = [NSString stringWithCString:inet_ntoa(*list[0]) encoding:NSUTF8StringEncoding];
-	return addressString;*/
-	
-	URLCheckConnectionDelegate *connDelegate = [[URLCheckConnectionDelegate alloc] init];
-	connDelegate.connectionFinished = NO;
-	NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:theHost] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30.0];
-	[[NSURLConnection alloc] initWithRequest:request delegate:connDelegate];
-	
-	// Wait for the redirects to finish
-	while (connDelegate.connectionFinished == NO)
-	{
-		DLog(@"Waiting for connection to finish");
-        sleep(1);
-	}
-	
-	//
-	// Finish writing logic
-	//
-    
-    NSString *urlString = [connDelegate.redirectUrl copy];
-    [connDelegate release];
-	
-	return urlString;
-}
-
 
 - (NSInteger) getHour
 {

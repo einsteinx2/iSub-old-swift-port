@@ -23,8 +23,8 @@
 		if ([TBXML valueOfAttributeNamed:@"time" forElement:element])
 			self.timestamp = [[[TBXML valueOfAttributeNamed:@"time" forElement:element] substringToIndex:10] intValue];
 		
-		if ([TBXML valueOfAttributeNamed:@"user" forElement:element])
-			self.user = [TBXML valueOfAttributeNamed:@"user" forElement:element];
+		if ([TBXML valueOfAttributeNamed:@"username" forElement:element])
+			self.user = [TBXML valueOfAttributeNamed:@"username" forElement:element];
 		
 		if ([TBXML valueOfAttributeNamed:@"message" forElement:element])
 			self.message = [TBXML valueOfAttributeNamed:@"message" forElement:element];

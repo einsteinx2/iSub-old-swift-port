@@ -588,7 +588,7 @@
 	//if (queueDownloadProgressView != nil && appDelegate.isQueueListDownloading)
 	if (musicControls.isQueueListDownloading)
 	{
-		NSString *songMD5 = [NSString md5:musicControls.queueSongObject.path];
+		NSString *songMD5 = [musicControls.queueSongObject.path md5];
 		
 		NSString *fileName;
 		if (musicControls.queueSongObject.transcodedSuffix)
@@ -1234,7 +1234,7 @@
 		// Check if we're deleting the song that's currently caching. If so, stop the download.
 		if (musicControls.queueSongObject)
 		{
-			if ([[NSString md5:musicControls.queueSongObject.path] isEqualToString:rowMD5])
+			if ([[musicControls.queueSongObject.path md5] isEqualToString:rowMD5])
 			{
 				[musicControls stopDownloadQueue];
 			}
@@ -1450,7 +1450,7 @@
 			cell.backgroundView.backgroundColor = viewObjects.darkNormal;
 		
 		NSDate *cached = [NSDate dateWithTimeIntervalSince1970:(double)[databaseControls.songCacheDb intForQuery:@"SELECT cachedDate FROM queuedSongsList WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]]];
-		if ([[NSString md5:aSong.path] isEqualToString:musicControls.downloadFileNameHashQueue] && musicControls.isQueueListDownloading)
+		if ([[aSong.path md5] isEqualToString:musicControls.downloadFileNameHashQueue] && musicControls.isQueueListDownloading)
 		{
 			[cell.cacheInfoLabel setText:[NSString stringWithFormat:@"Queued %@ - Progress: %@", [NSString relativeTime:cached], [settings formatFileSize:queueDownloadProgress]]];
 		}
@@ -1520,10 +1520,13 @@ NSInteger trackSort1(id obj1, id obj2, void *context)
 			//cacheAlbumViewController.listOfSongs = [[NSMutableArray alloc] init];
 			cacheAlbumViewController.segment = 2;
 			cacheAlbumViewController.seg1 = [[listOfArtistsSections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-			FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT md5, segs, seg2, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", [[listOfArtistsSections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
+			DLog(@"cacheAlbumViewController.seg1: %@", cacheAlbumViewController.seg1);
+			FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT md5, segs, seg2, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", cacheAlbumViewController.seg1];
 			while ([result next])
 			{
-				if ([result intForColumnIndex:1] > 2)
+				NSUInteger numOfSegments = [result intForColumnIndex:1];
+				
+				if (numOfSegments > 2)
 				{
 					[cacheAlbumViewController.listOfAlbums addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], 
 																							   [NSString stringWithString:[result stringForColumnIndex:2]], nil]];

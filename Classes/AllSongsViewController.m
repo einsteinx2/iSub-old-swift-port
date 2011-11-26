@@ -357,8 +357,8 @@
 	{
 		if (buttonIndex == 1)
 		{
-			self.loadingScreen = [[LoadingScreen alloc] initOnView:self.view 
-													   withMessage:[NSArray arrayWithObjects:@"Processing Artist:", @"", @"Processing Album:", @"", nil] blockInput:YES mainWindow:NO];
+			self.loadingScreen = [[[LoadingScreen alloc] initOnView:self.view 
+													   withMessage:[NSArray arrayWithObjects:@"Processing Artist:", @"", @"Processing Album:", @"", nil] blockInput:YES mainWindow:NO] autorelease];
 			self.tableView.scrollEnabled = NO;
 			[(CustomUITableView*)self.tableView setBlockInput:YES];
 			self.navigationItem.leftBarButtonItem = nil;
@@ -369,8 +369,8 @@
 		}
 		else if (buttonIndex == 2)
 		{
-			self.loadingScreen = [[LoadingScreen alloc] initOnView:self.view 
-													   withMessage:[NSArray arrayWithObjects:@"Processing Album:", @"", @"Processing Song:", @"", nil] blockInput:YES mainWindow:NO];
+			self.loadingScreen = [[[LoadingScreen alloc] initOnView:self.view 
+													   withMessage:[NSArray arrayWithObjects:@"Processing Album:", @"", @"Processing Song:", @"", nil] blockInput:YES mainWindow:NO] autorelease];
 			self.tableView.scrollEnabled = NO;
 			[(CustomUITableView*)self.tableView setBlockInput:YES];
 			self.navigationItem.leftBarButtonItem = nil;
@@ -562,7 +562,7 @@
 		aSong = [dataModel songForPosition:(sectionStartIndex + indexPath.row)];
 	}
 	
-	cell.md5 = [NSString md5:aSong.path];
+	cell.md5 = [aSong.path md5];
 	cell.isSearching = isSearching;
 	
 	[cell.coverArtView loadImageFromCoverArtId:aSong.coverArtId];

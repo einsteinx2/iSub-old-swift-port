@@ -17,5 +17,6 @@
 #define ISMSNotification_SongPlaybackFailed @"ISMS Song Playback Failed"
 #define ISMSNotification_AlbumArtLargeDownloaded @"ISMS Album art downloaded"
 #define ISMSNotification_AlbumArtLargeFailed @"ISMS Album art failed to download"
+#define ISMSNotification_ServerSwitched @"ISMS Server Swiched"
 
 #endif

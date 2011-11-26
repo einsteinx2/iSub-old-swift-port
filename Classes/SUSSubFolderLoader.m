@@ -216,6 +216,7 @@
             }
 		}
 	}
+	[tbxml release];
 	
 	[super connectionDidFinishLoading:theConnection];
 }

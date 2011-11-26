@@ -90,6 +90,9 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (void)queueStreamForSong:(Song *)song offset:(NSUInteger)byteOffset atIndex:(NSUInteger)index
 {
+	if (!song)
+		return;
+	
 	SUSStreamHandler *handler = [[SUSStreamHandler alloc] initWithSong:song offset:byteOffset delegate:self];
 	[handlerStack insertObject:handler atIndex:index];
 	[handler release];

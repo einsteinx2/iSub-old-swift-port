@@ -117,6 +117,7 @@
         NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NoLyricsElement];
         [self.delegate loadingFailed:self withError:error];
     }
+	[tbxml release];
 }
 
 @end

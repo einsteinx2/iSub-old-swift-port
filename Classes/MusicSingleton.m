@@ -184,7 +184,7 @@ static MusicSingleton *sharedInstance = nil;
 	downloadedLengthQueue = 0;
 	
 	// Determine the hashed filename
-	self.downloadFileNameHashQueue = nil; self.downloadFileNameHashQueue = [NSString md5:queueSongObject.path];
+	self.downloadFileNameHashQueue = nil; self.downloadFileNameHashQueue = [queueSongObject.path md5];
 	
 	// Determine the name of the file we are downloading.
 	self.downloadFileNameQueue = nil;
@@ -367,6 +367,9 @@ static MusicSingleton *sharedInstance = nil;
 	
 	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
 	Song *nextSong = [SUSCurrentPlaylistDAO dataModel].nextSong;
+	
+	if (!currentSong)
+		return;
 		
 	// Check to see if the song is already cached
 	if (currentSong.isFullyCached)
@@ -439,6 +442,8 @@ static MusicSingleton *sharedInstance = nil;
 
 - (void)playSongAtPosition:(NSInteger)position
 {
+	[[SUSStreamSingleton sharedInstance] removeAllStreams];
+	
 	[SUSCurrentPlaylistDAO dataModel].currentIndex = position;
 	
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -584,23 +589,6 @@ static MusicSingleton *sharedInstance = nil;
 }
 
 #pragma mark Helper Methods
-
-// TODO: See if this is still needed
-/*- (void)playbackStateChanged:(NSNotification *)aNotification
-{
-	if ([streamer isWaiting])
-	{
-	}
-	else if ([streamer isPlaying])
-	{
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"setPauseButtonImage" object:nil];
-	}
-	else if ([streamer isIdle])
-	{	
-		[self nextSongAuto];
-	}
-}*/
-
 
 - (NSInteger) maxBitrateSetting
 {

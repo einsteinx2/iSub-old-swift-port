@@ -33,7 +33,7 @@
 	NSString *size = nil;
 	if (artId)
 	{
-		if ([databaseControls.coverArtCacheDb60 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:artId]] == 1)
+		if ([databaseControls.coverArtCacheDb60 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [artId md5]] == 1)
 		{
 			// If the image is already in the cache dictionary, load it
 			self.image = [UIImage imageWithData:[databaseControls.coverArtCacheDb60 dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [artId md5]]];
@@ -120,7 +120,7 @@
 	// Check to see if the data is a valid image. If so, use it; if not, use the default image.
 	if([UIImage imageWithData:receivedData])
 	{
-		[databaseControls.coverArtCacheDb60 executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [NSString md5:coverArtId], receivedData];
+		[databaseControls.coverArtCacheDb60 executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [coverArtId md5], receivedData];
 
         self.image = [UIImage imageWithData:receivedData];
 	}

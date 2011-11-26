@@ -602,15 +602,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	else
 	{
 		[bassWrapper playPause];
-		
-		if (bassWrapper.isPlaying)
-		{
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"setPauseButtonImage" object:nil];
-		}
-		else
-		{
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"setPlayButtonImage" object:nil];
-		}
 	}
 }
 
@@ -777,6 +768,7 @@ CGContextRef MyCreateBitmapContextPlayer(int pixelsWide, int pixelsHigh)
 	EqualizerViewController *eqView = [[EqualizerViewController alloc] initWithNibName:@"EqualizerViewController" bundle:nil];
 	eqView.modalPresentationStyle = UIModalPresentationFormSheet;
 	[self presentModalViewController:eqView animated:YES];
+	[eqView release];
 	//[appDelegate.currentTabBarController presentModalViewController:eqView animated:NO];
 	
 	//[self songInfoToggle];

@@ -108,7 +108,7 @@
 		[aSong release]; aSong = nil;
 	}
 	
-	return aSong;
+	return [aSong autorelease];
 }
 
 + (Song *)songFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabase:(FMDatabase *)db
@@ -126,7 +126,7 @@
 	}
 	[result close];
 	
-	return [aSong autorelease];
+	return aSong;
 }
 
 + (Song *)songFromAllSongsDb:(NSUInteger)row inTable:(NSString *)table
@@ -154,7 +154,7 @@
 	}
 	[result close];
 	
-	return [aSong autorelease];
+	return aSong;
 }
 
 + (Song *)songFromGenreDb:(NSString *)md5
@@ -194,7 +194,7 @@
 
 - (BOOL)insertIntoFolderCacheForFolderId:(NSString *)folderId
 {
-	[[DatabaseSingleton sharedInstance].albumListCacheDb executeUpdate:@"INSERT INTO songsCache (folderId, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [NSString md5:folderId], self.title, self.songId, self.artist, self.album, self.genre, self.coverArtId, self.path, self.suffix, self.transcodedSuffix, self.duration, self.bitRate, self.track, self.year, self.size];
+	[[DatabaseSingleton sharedInstance].albumListCacheDb executeUpdate:@"INSERT INTO songsCache (folderId, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [folderId md5], self.title, self.songId, self.artist, self.album, self.genre, self.coverArtId, self.path, self.suffix, self.transcodedSuffix, self.duration, self.bitRate, self.track, self.year, self.size];
 	
 	if ([[DatabaseSingleton sharedInstance].albumListCacheDb hadError])
 	{
@@ -318,7 +318,7 @@
 			[segments addObject:@""];
 		}
 		
-		NSString *query = [NSString stringWithFormat:@"INSERT INTO cachedSongsLayout (md5, genre, segs, seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9) VALUES ('%@', '%@', %i, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [self.songId md5], self.genre, [splitPath count]];
+		NSString *query = [NSString stringWithFormat:@"INSERT INTO cachedSongsLayout (md5, genre, segs, seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9) VALUES ('%@', '%@', %i, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [self.path md5], self.genre, [splitPath count]];
 		[self.db executeUpdate:query, [segments objectAtIndex:0], [segments objectAtIndex:1], [segments objectAtIndex:2], [segments objectAtIndex:3], [segments objectAtIndex:4], [segments objectAtIndex:5], [segments objectAtIndex:6], [segments objectAtIndex:7], [segments objectAtIndex:8]];
 		
 		hadError = [self.db hadError];

@@ -230,9 +230,6 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	self.receivedData = nil;
-	[theConnection release];
-    
     // Parse the data
     //
     TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData];
@@ -283,9 +280,13 @@
             }
         }
     }
+	[tbxml release];
 	
 	// Hide the loading screen
 	[viewObjects hideLoadingScreen];
+	
+	self.receivedData = nil;
+	[theConnection release];
 }
 
 #pragma mark Touch gestures for custom cell view

@@ -137,12 +137,15 @@
 {
 	self.receivedData = nil;
 	self.connection = nil;
+	[self.delegate loadingFailed:nil withError:error];
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
 	self.receivedData = nil;
 	self.connection = nil;
+	
+	[self startLoad];
 }
 
 

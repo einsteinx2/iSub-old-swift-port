@@ -341,6 +341,7 @@
     [indexCounts release]; indexCounts = nil;
     
     self.loader = [[[SUSRootFoldersLoader alloc] initWithDelegate:delegate] autorelease];
+	loader.selectedFolderId = [SavedSettings sharedInstance].rootFoldersSelectedFolderId;
     [loader startLoad];
 }
 

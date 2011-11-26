@@ -324,6 +324,8 @@
 			[appDelegate.window addSubview:[appDelegate.mainTabBarController view]];
 		
 		appDelegate.window.backgroundColor = viewObjects.windowColor;
+		
+		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerSwitched object:nil];
 	}
 }
 

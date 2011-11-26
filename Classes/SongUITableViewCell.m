@@ -145,7 +145,7 @@
 	{
 		overlayView = [CellOverlay cellOverlayWithTableCell:self];
 		[self.contentView addSubview:overlayView];
-		if ([[databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", [NSString md5:mySong.path]] isEqualToString:@"YES"] || [[databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cacheQueue"] isEqualToString:@"YES"]) {
+		if ([[databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", [mySong.path md5]] isEqualToString:@"YES"] || [[databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cacheQueue"] isEqualToString:@"YES"]) {
 			overlayView.downloadButton.alpha = .3;
 			overlayView.downloadButton.enabled = NO;
 		}

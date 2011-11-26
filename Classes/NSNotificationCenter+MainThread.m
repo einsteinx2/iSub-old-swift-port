@@ -21,16 +21,19 @@
 
 + (void)postNotificationToMainThreadWithName:(NSString *)name object:(id)object userInfo:(NSDictionary *)userInfo
 {
-    if (name == nil)
-        return;
-    
-    NSMutableDictionary *info = [NSMutableDictionary dictionaryWithObject:name forKey:@"name"];
-    if (object)
-        [info setObject:object forKey:@"object"];
-    if (userInfo)
-        [info setObject:userInfo forKey:@"userInfo"];
-    
-    [NSNotificationCenter performSelectorOnMainThread:@selector(postNotificationInternal:) withObject:info waitUntilDone:NO];
+	@autoreleasepool 
+	{
+		if (name == nil)
+			return;
+		
+		NSMutableDictionary *info = [NSMutableDictionary dictionaryWithObject:name forKey:@"name"];
+		if (object)
+			[info setObject:object forKey:@"object"];
+		if (userInfo)
+			[info setObject:userInfo forKey:@"userInfo"];
+		
+		[NSNotificationCenter performSelectorOnMainThread:@selector(postNotificationInternal:) withObject:info waitUntilDone:NO];
+	}
 }
 
 + (void)postNotificationToMainThreadWithName:(NSString *)name userInfo:(NSDictionary *)userInfo

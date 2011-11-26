@@ -89,38 +89,41 @@
 	
 	self.tableView.tableHeaderView = nil;
 	
+	if (isNoBookmarksScreenShowing == YES)
+	{
+		[noBookmarksScreen removeFromSuperview];
+		isNoBookmarksScreenShowing = NO;
+	}
+	
 	if ([databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks"] == 0)
 	{
-		if (isNoBookmarksScreenShowing == NO)
-		{
-			isNoBookmarksScreenShowing = YES;
-			noBookmarksScreen = [[UIImageView alloc] init];
-			noBookmarksScreen.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
-			noBookmarksScreen.frame = CGRectMake(40, 100, 240, 180);
-			noBookmarksScreen.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 2);
-			noBookmarksScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
-			noBookmarksScreen.alpha = .80;
-			
-			UILabel *textLabel = [[UILabel alloc] init];
-			textLabel.backgroundColor = [UIColor clearColor];
-			textLabel.textColor = [UIColor whiteColor];
-			textLabel.font = [UIFont boldSystemFontOfSize:32];
-			textLabel.textAlignment = UITextAlignmentCenter;
-			textLabel.numberOfLines = 0;
-			if (viewObjects.isOfflineMode) {
-				[textLabel setText:@"No Offline\nBookmarks"];
-			}
-			else {
-				[textLabel setText:@"No Saved\nBookmarks"];
-			}
-			textLabel.frame = CGRectMake(20, 20, 200, 140);
-			[noBookmarksScreen addSubview:textLabel];
-			[textLabel release];
-			
-			[self.view addSubview:noBookmarksScreen];
-			
-			[noBookmarksScreen release];
+		isNoBookmarksScreenShowing = YES;
+		noBookmarksScreen = [[UIImageView alloc] init];
+		noBookmarksScreen.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
+		noBookmarksScreen.frame = CGRectMake(40, 100, 240, 180);
+		noBookmarksScreen.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 2);
+		noBookmarksScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
+		noBookmarksScreen.alpha = .80;
+		
+		UILabel *textLabel = [[UILabel alloc] init];
+		textLabel.backgroundColor = [UIColor clearColor];
+		textLabel.textColor = [UIColor whiteColor];
+		textLabel.font = [UIFont boldSystemFontOfSize:32];
+		textLabel.textAlignment = UITextAlignmentCenter;
+		textLabel.numberOfLines = 0;
+		if (viewObjects.isOfflineMode) {
+			[textLabel setText:@"No Offline\nBookmarks"];
 		}
+		else {
+			[textLabel setText:@"No Saved\nBookmarks"];
+		}
+		textLabel.frame = CGRectMake(20, 20, 200, 140);
+		[noBookmarksScreen addSubview:textLabel];
+		[textLabel release];
+		
+		[self.view addSubview:noBookmarksScreen];
+		
+		[noBookmarksScreen release];
 	}
 	else
 	{
@@ -194,11 +197,7 @@
 
 -(void)viewWillDisappear:(BOOL)animated
 {
-	if (isNoBookmarksScreenShowing == YES)
-	{
-		[noBookmarksScreen removeFromSuperview];
-		isNoBookmarksScreenShowing = NO;
-	}
+	
 }
 
 
@@ -595,7 +594,6 @@
 		
 	NSUInteger offsetSeconds = [databaseControls.bookmarksDb intForQuery:@"SELECT position FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
 	[musicControls startSongAtOffsetInSeconds:offsetSeconds];
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"setPauseButtonImage" object:nil];
 }
 
 

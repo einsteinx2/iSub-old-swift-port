@@ -35,10 +35,10 @@
         dataModel = [[SUSLyricsDAO alloc] initWithDelegate:self];
 		
         // Custom initialization
-		self.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 300)];
+		self.view = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 300)] autorelease];
 		self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		
-		textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, 320, 300)];
+		textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 45, 320, 255)];
 		textView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		textView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.8];
 		textView.textColor = [UIColor whiteColor];
@@ -60,6 +60,7 @@
 			}
 			else
 			{
+				[dataModel loadLyricsForArtist:currentSong.artist andTitle:currentSong.title];
 				textView.text = @"\n\nLoading Lyrics...";
 			}
 		}
@@ -68,12 +69,12 @@
 		
 		UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
 		titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		titleLabel.backgroundColor = [UIColor clearColor];
+		titleLabel.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.8];
 		titleLabel.textColor = [UIColor whiteColor];
 		titleLabel.font = [UIFont boldSystemFontOfSize:32];
 		titleLabel.textAlignment = UITextAlignmentCenter;
 		titleLabel.text = @"Lyrics";
-		[textView addSubview:titleLabel];
+		[self.view addSubview:titleLabel];
 		[titleLabel release];	
 		
 		//DLog(@"textView: %@", textView.layer);
@@ -117,7 +118,6 @@
 
 - (void)dealloc 
 {
-	[textView release]; textView = nil;
 	[dataModel release]; dataModel = nil;
     [super dealloc];
     

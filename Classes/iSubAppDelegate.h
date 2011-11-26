@@ -118,7 +118,6 @@
 - (void)createAndDisplayUI;
 
 - (void)reachabilityChanged: (NSNotification *)note;
-- (NSString *)getIPAddressForHost:(NSString *)theHost;
 - (NSInteger)getHour;
 
 //- (BOOL)isWifi;

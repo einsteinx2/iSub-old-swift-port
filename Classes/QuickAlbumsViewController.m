@@ -85,7 +85,7 @@
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
 	{
-		receivedData = [[NSMutableData data] retain];
+		receivedData = [[NSMutableData alloc] initWithCapacity:0];
 		
 		[viewObjects showAlbumLoadingScreen:self.view sender:self];
 	} 

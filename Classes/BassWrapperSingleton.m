@@ -103,7 +103,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 			BASS_StreamFree(fileStream1);
 			
 			// Increment current playlist index
-			[currPlaylistDAORef setCurrentIndex:[currPlaylistDAORef currentIndex] + 1];
+			[currPlaylistDAORef performSelectorOnMainThread:@selector(incrementIndex) withObject:nil waitUntilDone:YES];
 			
 			// Send song end notification
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnd];
@@ -137,7 +137,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 			BASS_StreamFree(fileStream2);
 			
 			// Increment current playlist index
-			[currPlaylistDAORef setCurrentIndex:[currPlaylistDAORef currentIndex] + 1];
+			[currPlaylistDAORef performSelectorOnMainThread:@selector(incrementIndex) withObject:nil waitUntilDone:YES];
 			
 			// Send song done notification
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnd];
@@ -229,6 +229,10 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 - (void)startWithOffsetInBytes:(NSNumber *)byteOffset
 {
 	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+	
+	if (dataModel.currentIndex >= dataModel.count)
+		dataModel.currentIndex = dataModel.count - 1;
+	
 	Song *currentSong = dataModel.currentSong;
 	
 	if (!currentSong)
@@ -305,9 +309,17 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	} 
 	else 
 	{
-		DLog(@"Playing");
-		BASS_Start();
-        [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStart];
+		if (outStream == 0)
+		{
+			DLog(@"starting new stream");
+			[self start];
+		}
+		else
+		{
+			DLog(@"Playing");
+			BASS_Start();
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStart];
+		}
 	}
 }
 
@@ -371,7 +383,9 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 - (BOOL)bassFree
 {
     isTempDownload = NO;
-	return BASS_Free();
+	BOOL success = BASS_Free();
+	outStream = 0;
+	return success;
 }
 
 - (BOOL)isPlaying
@@ -592,6 +606,8 @@ static BassWrapperSingleton *sharedInstance = nil;
 	else
 		lineSpecBufSize = 512 * sizeof(short);
 	lineSpecBuf = malloc(lineSpecBufSize);
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bassFree) name:ISMSNotification_SongPlaybackEnd object:nil];
 }
 
 + (BassWrapperSingleton *)sharedInstance

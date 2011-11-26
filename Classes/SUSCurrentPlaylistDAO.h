@@ -12,6 +12,7 @@
 + (SUSCurrentPlaylistDAO *)dataModel;
 
 - (Song *)songForIndex:(NSUInteger)index;
+- (NSInteger)incrementIndex;
 // Convenience properties
 @property (readonly) Song *currentSong;
 @property (readonly) Song *nextSong;

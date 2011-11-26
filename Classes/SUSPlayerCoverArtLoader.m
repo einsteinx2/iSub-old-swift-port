@@ -81,7 +81,7 @@
 		NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(size), @"size", n2N(coverArtId), @"id", nil];
 		NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getCoverArt" andParameters:parameters];
 		
-		self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+		self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 		if (self.connection)
 		{
 			self.receivedData = [NSMutableData data];

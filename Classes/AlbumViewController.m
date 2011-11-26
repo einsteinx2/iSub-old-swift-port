@@ -89,7 +89,7 @@
 			self.myAlbum = anAlbum;
 		}
 		
-		self.dataModel = [[SUSSubFolderDAO alloc] initWithDelegate:self andId:self.myId andArtist:self.myArtist];
+		self.dataModel = [[[SUSSubFolderDAO alloc] initWithDelegate:self andId:self.myId andArtist:self.myArtist] autorelease];
 		
         if (dataModel.hasLoaded)
         {
@@ -136,6 +136,8 @@
 	{
 		self.navigationItem.rightBarButtonItem = nil;
 	}
+	
+	[self.tableView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -199,9 +201,9 @@
 		
 		if(myAlbum.coverArtId)
 		{			
-			if ([databaseControls.coverArtCacheDb540 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [NSString md5:myAlbum.coverArtId]] == 1)
+			if ([databaseControls.coverArtCacheDb540 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [myAlbum.coverArtId md5]] == 1)
 			{
-				NSData *imageData = [databaseControls.coverArtCacheDb540 dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [NSString md5:myAlbum.coverArtId]];
+				NSData *imageData = [databaseControls.coverArtCacheDb540 dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [myAlbum.coverArtId md5]];
 				coverArtImageView.image = [UIImage imageWithData:imageData];
 			}
 			else 

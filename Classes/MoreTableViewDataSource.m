@@ -16,7 +16,7 @@
 - (MoreTableViewDataSource *)initWithDataSource:(id<UITableViewDataSource>) dataSource
 {
     originalDataSource = dataSource;
-    [super init];
+    self = [super init];
 	
     return self;
 }
