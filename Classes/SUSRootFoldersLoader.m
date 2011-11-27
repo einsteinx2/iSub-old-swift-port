@@ -85,6 +85,7 @@
 
 - (BOOL)moveRootFolderTempTableRecordsToMainCache
 {
+	DLog(@"tableModifier: %@", self.tableModifier);
 	NSString *query = @"INSERT INTO rootFolderNameCache%@ SELECT * FROM rootFolderNameCacheTemp";
 	[self.db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
 	
@@ -156,7 +157,9 @@
 	}
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getIndexes" andParameters:parameters];
-    
+    DLog(@"loading folders url: %@", [[request URL] absoluteString]);
+	DLog(@"loading folders body: %@", [[[NSString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding] autorelease]);
+	DLog(@"loading folders header: %@", [request allHTTPHeaderFields]);
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)
 	{
@@ -180,18 +183,53 @@
 
 #pragma mark Connection Delegate
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
-{		
-	DLog("connection finished");
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
+{
+	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
+		return YES; // Self-signed cert will be accepted
 	
+	return NO;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{	
+	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+	{
+		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
+	}
+	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+	[self.receivedData setLength:0];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
+{
+    [self.receivedData appendData:incrementalData];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
+{
+	self.receivedData = nil;
+	self.connection = nil;
+	
+	// Inform the delegate that loading failed
+	[self.delegate loadingFailed:self withError:error];
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
+{			
 	// Clear the database
 	[self resetRootFolderCache];
 	
 	// Create the temp table to store records
 	[self resetRootFolderTempTable];
 	
-	NSDate *startTime = [NSDate date];
+	//NSDate *startTime = [NSDate date];
 	
+	//DLog(@"%@", [[[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding] autorelease]);
 	TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData];
 	if (tbxml.rootXMLElement)
 	{
@@ -303,7 +341,7 @@
 	// Release the XML parser
 	[tbxml release];
 	
-	DLog(@"Folders load time: %f", [[NSDate date] timeIntervalSinceDate:startTime]);
+	//DLog(@"Folders load time: %f", [[NSDate date] timeIntervalSinceDate:startTime]);
 	
 	// Clean up the connection
 	self.connection = nil;
@@ -316,7 +354,7 @@
 	[[SavedSettings sharedInstance] setRootFoldersReloadTime:[NSDate date]];
 	
 	// Notify the delegate that the loading is finished
-    DLog(@"calling delegate %@ loadingFinished", self.delegate);
+    //DLog(@"calling delegate %@ loadingFinished", self.delegate);
 	[self.delegate loadingFinished:self];
 }
 

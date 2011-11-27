@@ -94,7 +94,7 @@
 
 #pragma mark - Connection Delegate
 
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
+/*- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
 {
 	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
 		return YES; // Self-signed cert will be accepted
@@ -137,7 +137,7 @@
 	
 	// Notify the delegate that the loading is finished
 	[self.delegate loadingFinished:self];
-}
+}*/
 
 
 @end

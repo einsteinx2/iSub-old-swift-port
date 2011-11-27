@@ -61,6 +61,42 @@
 
 #pragma mark - Connection Delegate
 
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
+{
+	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
+		return YES; // Self-signed cert will be accepted
+	
+	return NO;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{	
+	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+	{
+		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
+	}
+	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+	[self.receivedData setLength:0];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
+{
+    [self.receivedData appendData:incrementalData];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
+{
+	self.receivedData = nil;
+	self.connection = nil;
+	
+	// Inform the delegate that loading failed
+	[self.delegate loadingFailed:self withError:error];
+}
+
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection
 {
     // Parse the data
@@ -75,6 +111,9 @@
 			NSString *code = [TBXML valueOfAttributeNamed:@"code" forElement:error];
 			NSString *message = [TBXML valueOfAttributeNamed:@"message" forElement:error];
 			[self subsonicErrorCode:[code intValue] message:message];
+			
+			// Inform the delegate that loading failed
+			[self.delegate loadingFailed:self withError:nil];
 		}
 		else
 		{
@@ -102,10 +141,19 @@
                 self.serverPlaylists = [tempArray sortedArrayUsingSelector:@selector(compare:)];
 			}
             
-            [super connectionDidFinishLoading:theConnection];
+            // Notify the delegate that the loading is finished
+			[self.delegate loadingFinished:self];
 		}
 	}
+	else
+	{
+		// Inform the delegate that loading failed
+		[self.delegate loadingFailed:self withError:nil];
+	}
 	[tbxml release];
+	
+	self.receivedData = nil;
+	self.connection = nil;
 }
 
 @end

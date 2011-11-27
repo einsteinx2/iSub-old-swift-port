@@ -208,7 +208,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 - (void)setup
 {
     handlerStack = [[NSMutableArray alloc] initWithCapacity:0];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(queueStreamForNextSong) name:ISMSNotification_SongPlaybackEnd object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(queueStreamForNextSong) name:ISMSNotification_SongPlaybackEnded object:nil];
 }
 
 + (SUSStreamSingleton *)sharedInstance

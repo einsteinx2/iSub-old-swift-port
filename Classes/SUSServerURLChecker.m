@@ -14,11 +14,14 @@
 
 @implementation SUSServerURLChecker
 
-@synthesize receivedData, delegate, request;
+@synthesize receivedData, delegate, request, isNewSearchAPI;
 
-- (id) init
+- (id)init
 {
-	self = [super init];
+	if ((self = [super init]))
+	{
+		isNewSearchAPI = NO;	
+	}
 	return self;
 }
 
@@ -27,6 +30,7 @@
     if ((self = [super init]))
 	{
         delegate = theDelegate;
+		isNewSearchAPI = NO;
 	}	
 	return self;
 }
@@ -99,26 +103,52 @@
 {    
     [theConnection release];
     self.receivedData = nil;
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckFailed object:nil];
     
     [delegate SUSServerURLCheckFailed:self withError:error];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-    //DLog(@"received: %@", [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
 	TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
     TBXMLElement *root = tbxml.rootXMLElement;
     if (root) 
 	{
         if ([[TBXML elementName:root] isEqualToString:@"subsonic-response"])
         {
+			NSString *version = [TBXML valueOfAttributeNamed:@"version" forElement:root];
+			if (version)
+			{
+				NSArray *splitVersion = [version componentsSeparatedByString:@"."];
+				if ([splitVersion count] == 1)
+				{
+					NSUInteger ver = [[splitVersion objectAtIndex:0] intValue];
+					if (ver >= 2)
+						isNewSearchAPI = YES;
+					else
+						isNewSearchAPI = NO;
+				}
+				else if ([splitVersion count] > 1)
+				{
+					NSUInteger ver1 = [[splitVersion objectAtIndex:0] intValue];
+					NSUInteger ver2 = [[splitVersion objectAtIndex:1] intValue];
+					if ((ver1 >= 1 && ver2 >= 4) || (ver1 >= 2))
+						isNewSearchAPI = YES;
+					else
+						isNewSearchAPI = NO;
+				}				
+			}
+			
             // This is a Subsonic server, so pass
+			[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckPassed object:nil];
             [delegate SUSServerURLCheckPassed:self];
         }
         else
         {
             // This is not a Subsonic server, so fail
             NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NotASubsonicServer];
+			[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckFailed object:nil];
             [delegate SUSServerURLCheckFailed:self withError:error];
         }
     }
@@ -126,6 +156,7 @@
     {
         // This is not XML, so fail
         NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NotXML];
+		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckFailed object:nil];
         [delegate SUSServerURLCheckFailed:self withError:error];
     }
 	[tbxml release];

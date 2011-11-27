@@ -114,7 +114,6 @@
 - (void)loadHockeyApp;
 - (void)loadInAppPurchaseStore;
 - (void)createHTTPServer;
-- (void)appInit2;
 - (void)createAndDisplayUI;
 
 - (void)reachabilityChanged: (NSNotification *)note;
@@ -123,8 +122,6 @@
 //- (BOOL)isWifi;
 
 - (void)batteryStateChanged:(NSNotification *)notification;
-
-- (void) checkAPIVersion;
 
 - (void)startRedirectingLogToFile;
 - (void)stopRedirectingLogToFile;

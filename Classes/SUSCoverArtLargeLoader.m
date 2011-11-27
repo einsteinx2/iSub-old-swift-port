@@ -71,12 +71,43 @@
 
 #pragma mark - Connection delegate
 
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
+{
+	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
+		return YES; // Self-signed cert will be accepted
+	
+	return NO;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{	
+	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+	{
+		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
+	}
+	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+	[self.receivedData setLength:0];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
+{
+    [self.receivedData appendData:incrementalData];
+}
+
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {    
     DLog(@"art loading failed for: %@", coverArtId);
     [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AlbumArtLargeFailed];
 	
-    [super connection:theConnection didFailWithError:error];
+    self.receivedData = nil;
+	self.connection = nil;
+	
+	// Inform the delegate that loading failed
+	[self.delegate loadingFailed:self withError:error];
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
@@ -87,13 +118,18 @@
         DLog(@"art loading completed for: %@", coverArtId);
         [self.db executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [coverArtId md5], self.receivedData];
         [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AlbumArtLargeDownloaded];
-        [super connectionDidFinishLoading:theConnection];
+        
+		// Notify the delegate that the loading is finished
+		[self.delegate loadingFinished:self];
 	}
     else
     {
         DLog(@"art loading failed for: %@", coverArtId);
         [self connection:theConnection didFailWithError:nil];
     }
+	
+	self.receivedData = nil;
+	self.connection = nil;
 }
 
 @end

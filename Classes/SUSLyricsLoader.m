@@ -70,16 +70,44 @@
 
 #pragma mark - Connection Delegate
 
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
+{
+	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
+		return YES; // Self-signed cert will be accepted
+	
+	return NO;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{	
+	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+	{
+		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
+	}
+	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+	[self.receivedData setLength:0];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
+{
+    [self.receivedData appendData:incrementalData];
+}
+
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
     self.loadedLyrics = nil;
     
-	[self.delegate loadingFailed:self withError:error];
+	self.receivedData = nil;
+	self.connection = nil;
 	
-	[super connection:theConnection didFailWithError:error];
+	// Inform the delegate that loading failed
+	[self.delegate loadingFailed:self withError:error];
 }	
 
-// TODO: FIX CRASH OF DEALLOC'D DELEGATE
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	    
     // Parse the data
@@ -118,6 +146,12 @@
         [self.delegate loadingFailed:self withError:error];
     }
 	[tbxml release];
+	
+	self.receivedData = nil;
+	self.connection = nil;
+	
+	// Notify the delegate that the loading is finished
+	[self.delegate loadingFinished:self];
 }
 
 @end

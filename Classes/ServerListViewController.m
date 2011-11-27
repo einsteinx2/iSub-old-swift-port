@@ -26,7 +26,9 @@
 
 @implementation ServerListViewController
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
+@synthesize theNewRedirectionUrl;
+
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	
 	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
@@ -60,11 +62,13 @@
 	databaseControls = [DatabaseSingleton sharedInstance];
 	settings = [SavedSettings sharedInstance];
 	
+	theNewRedirectionUrl = nil;
+	
 	self.tableView.allowsSelectionDuringEditing = YES;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTable) name:@"reloadServerList" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSaveButton) name:@"showSaveButton" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchServer) name:@"switchServer" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchServer:) name:@"switchServer" object:nil];
 	
 	//viewObjects.tempServerList = [[NSMutableArray arrayWithArray:viewObjects.serverList] retain];
 	//DLog(@"tempServerList: %@", viewObjects.tempServerList);
@@ -106,13 +110,13 @@
 }
 
 
-- (void) reloadTable
+- (void)reloadTable
 {
 	[self.tableView reloadData];
 }
 
 
-- (void) showSaveButton
+- (void)showSaveButton
 {
 	if(!isEditing)
 	{
@@ -123,7 +127,7 @@
 }
 
 
-- (void) segmentAction:(id)sender
+- (void)segmentAction:(id)sender
 {
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
@@ -166,7 +170,7 @@
 }
 
 
-- (void) setEditing:(BOOL)editing animated:(BOOL)animate
+- (void)setEditing:(BOOL)editing animated:(BOOL)animate
 {
     [super setEditing:editing animated:animate];
     if(editing)
@@ -181,7 +185,7 @@
     }
 }
 
-- (void) addAction:(id)sender
+- (void)addAction:(id)sender
 {
 	viewObjects.serverToEdit = nil;
 	
@@ -195,7 +199,7 @@
 	[serverTypeViewController release];
 }
 
-- (void) saveAction:(id)sender
+- (void)saveAction:(id)sender
 {
 	[self.navigationController popToRootViewControllerAnimated:YES];
 }
@@ -234,8 +238,13 @@
 	}
 }
 
-- (void)switchServer
+- (void)switchServer:(NSNotification*)notification 
 {	
+	if (notification.userInfo)
+	{
+		self.theNewRedirectionUrl = [notification.userInfo objectForKey:@"theNewRedirectUrl"];
+	}
+	
 	// Save the plist values
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[defaults setObject:viewObjects.serverToEdit.url forKey:@"url"];
@@ -248,7 +257,7 @@
 	settings.urlString = [NSString stringWithString:viewObjects.serverToEdit.url];
 	settings.username = [NSString stringWithString:viewObjects.serverToEdit.username];
 	settings.password = [NSString stringWithString:viewObjects.serverToEdit.password];
-    settings.redirectUrlString = nil;
+    settings.redirectUrlString = self.theNewRedirectionUrl;
 		
 	[self retain];
 	if(self == [[self.navigationController viewControllers] objectAtIndex:0])
@@ -295,8 +304,8 @@
 		// Reset the databases
 		[databaseControls closeAllDatabases];
 		
-		[appDelegate appInit2];
-		
+		[databaseControls initDatabases];
+				
 		if (viewObjects.isOfflineMode)
 		{
 			viewObjects.isOfflineMode = NO;
@@ -317,7 +326,7 @@
 			[appDelegate.rootViewController.navigationController popToRootViewControllerAnimated:NO];
 		//[appDelegate.allAlbumsNavigationController.topViewController viewDidLoad];
 		//[appDelegate.allSongsNavigationController.topViewController viewDidLoad];
-		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_SongPlaybackStart object:nil];
+		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_SongPlaybackStarted object:nil];
 		
 		// Add the tab bar controller back to the window
 		if (!IS_IPAD())
@@ -425,7 +434,10 @@
 	}
 	else
 	{
-		[self switchServer];
+		self.theNewRedirectionUrl = nil;
+		[viewObjects showLoadingScreenOnMainWindow];
+		SUSServerURLChecker *checker = [[SUSServerURLChecker alloc] initWithDelegate:self];
+		[checker checkURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/rest/ping.view", viewObjects.serverToEdit.url]]];
 	}
 }
 
@@ -492,10 +504,46 @@
 }
 
 
-- (void)dealloc {
+- (void)dealloc 
+{
+	[theNewRedirectionUrl release]; theNewRedirectionUrl = nil;
     [super dealloc];
 }
 
+- (void)SUSServerURLCheckFailed:(SUSServerURLChecker *)checker withError:(NSError *)error
+{
+	DLog(@"server check failed");
+    if(!viewObjects.isOfflineMode)
+	{
+		viewObjects.isOfflineMode = YES;
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", [error code], [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		alert.tag = 3;
+		[alert show];
+		[alert release];		
+	}
+    
+    [checker release]; checker = nil;
+	    
+    DLog(@"server verification failed, hiding loading screen");
+    [viewObjects hideLoadingScreen];
+}
+
+- (void)SUSServerURLCheckPassed:(SUSServerURLChecker *)checker
+{
+	settings.isNewSearchAPI = checker.isNewSearchAPI;
+    
+    [checker release]; checker = nil;
+	
+	[self switchServer:nil];
+    
+    DLog(@"server verification passed, hiding loading screen");
+    [viewObjects hideLoadingScreen];
+}
+
+- (void)SUSServerURLCheckRedirected:(SUSServerURLChecker *)checker redirectUrl:(NSURL *)url
+{
+    self.theNewRedirectionUrl = [NSString stringWithFormat:@"%@://%@:%@", url.scheme, url.host, url.port];
+}
 
 @end
 

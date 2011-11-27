@@ -47,7 +47,6 @@
 - (void)clearSearchTable;
 - (void)searchForFolderName:(NSString *)name;
 - (Artist *)artistForPositionInSearch:(NSUInteger)position;
-- (void)clearSearchTable;
 
 - (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate;
 - (void)startLoad;

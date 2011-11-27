@@ -20,8 +20,6 @@
 #import "ServerListViewController.h"
 #import "RootViewController.h"
 #import "Reachability.h"
-#import "URLCheckConnectionDelegate.h"
-#import "APICheckConnectionDelegate.h"
 #import "UpdateXMLParser.h"
 #import "Album.h"
 #import "Song.h"
@@ -224,12 +222,6 @@
     }
 }
 
-- (void)appInit2
-{
-    [databaseControls initDatabases];
-    [self checkServer];
-}
-
 #pragma mark - SUS Server Check Delegate
 
 - (void)SUSServerURLCheckRedirected:(SUSServerURLChecker *)checker redirectUrl:(NSURL *)url
@@ -254,6 +246,8 @@
 	}
     
     [checker release]; checker = nil;
+	
+	[SavedSettings sharedInstance].isNewSearchAPI = checker.isNewSearchAPI;
     
     DLog(@"server verification failed, hiding loading screen");
     [viewObjects hideLoadingScreen];
@@ -262,6 +256,8 @@
 - (void)SUSServerURLCheckPassed:(SUSServerURLChecker *)checker
 {
     //DLog(@"server check passed");
+	
+	[SavedSettings sharedInstance].isNewSearchAPI = checker.isNewSearchAPI;
     
     [checker release]; checker = nil;
     
@@ -512,7 +508,6 @@
 	if ([request error])
 	{
 		/*CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error checking for app updates." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		alert.tag = 2;
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];*/
 		
@@ -691,7 +686,7 @@
 
 	[mainTabBarController.view removeFromSuperview];
 	[databaseControls closeAllDatabases];
-	[self appInit2];
+	[databaseControls initDatabases];
 	currentTabBarController = offlineTabBarController;
 	[window addSubview:[offlineTabBarController view]];
 }
@@ -706,7 +701,8 @@
 	[bassWrapper stop];
 	[offlineTabBarController.view removeFromSuperview];
 	[databaseControls closeAllDatabases];
-	[self appInit2];
+	[databaseControls initDatabases];
+	[self checkServer];
 	[viewObjects orderMainTabBarController];
 	[window addSubview:[mainTabBarController view]];
 }
@@ -829,7 +825,7 @@
 			
 			break;
 		}
-		case 2:
+		/*case 2: // Isn't used
 		{
 			// Title: @"Error"
 			[introController dismissModalViewControllerAnimated:NO];
@@ -851,7 +847,7 @@
 			}
 			
 			break;
-		}
+		}*/
 		case 3:
 		{
 			// Title: @"Server Unavailable"
@@ -880,7 +876,7 @@
 					[bassWrapper stop];
 					[offlineTabBarController.view removeFromSuperview];
 					[databaseControls closeAllDatabases];
-					[self appInit2];
+					[databaseControls initDatabases];
 					[viewObjects orderMainTabBarController];
 					[window addSubview:[mainTabBarController view]];
 				}
@@ -894,7 +890,8 @@
 					[musicControls stopDownloadQueue];
 					[mainTabBarController.view removeFromSuperview];
 					[databaseControls closeAllDatabases];
-					[self appInit2];
+					[databaseControls initDatabases];
+					[self checkServer];
 					currentTabBarController = offlineTabBarController;
 					[window addSubview:[offlineTabBarController view]];
 				}
@@ -1018,28 +1015,6 @@
 	
 	[calendar release];
 	return [dateComponents hour];
-}
-
-- (void) checkAPIVersion
-{
-	// Only perform check in online mode
-	if (!viewObjects.isOfflineMode)
-	{
-		APICheckConnectionDelegate *conDelegate = [[APICheckConnectionDelegate alloc] init];
-        
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"ping" andParameters:nil];
-		
-		NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:conDelegate];
-		if (!connection)
-		{
-			// Inform the user that the connection failed.
-			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Version Check Error" message:@"There was an error checking the server version.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-			[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-			[alert release];
-		}
-		
-		[conDelegate release];
-	}
 }
 
 #pragma mark -

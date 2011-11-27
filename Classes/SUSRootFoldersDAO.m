@@ -112,6 +112,7 @@
 	while ([result next])
 	{
 		NSString *name = [result stringForColumn:@"name"];
+		//DLog(@"name: %@", name);
 		[names addObject:name];
 	}
 	[result close];
@@ -124,14 +125,17 @@
 	NSMutableArray *positions = [NSMutableArray arrayWithCapacity:0];
 	
 	NSString *query = [NSString stringWithFormat:@"SELECT * FROM rootFolderIndexCache%@", self.tableModifier];
+	//DLog(@"query: %@", query);
 	FMResultSet *result = [self.db executeQuery:query];
 	while ([result next])
 	{
 		NSNumber *position = [NSNumber numberWithInt:[result intForColumn:@"position"]];
+		//DLog(@"position: %i", [position intValue]);
 		[positions addObject:position];
 	}
 	[result close];
 	
+	DLog(@"positions: %i", [positions count]);
 	return [NSArray arrayWithArray:positions];
 }
 
@@ -140,14 +144,17 @@
 	NSMutableArray *counts = [NSMutableArray arrayWithCapacity:0];
 	
 	NSString *query = [NSString stringWithFormat:@"SELECT * FROM rootFolderIndexCache%@", self.tableModifier];
+	//DLog(@"query: %@", query);
 	FMResultSet *result = [self.db executeQuery:query];
 	while ([result next])
 	{
 		NSNumber *folderCount = [NSNumber numberWithInt:[result intForColumn:@"count"]];
+		//DLog(@"folderCount: %i", [folderCount intValue]);
 		[counts addObject:folderCount];
 	}
 	[result close];
 	
+	DLog(@"counts count: %i", [counts count]);
 	return [NSArray arrayWithArray:counts];
 }
 
@@ -155,11 +162,13 @@
 {
 	Artist *anArtist = nil;
 	NSString *query = [NSString stringWithFormat:@"SELECT * FROM rootFolderNameCache%@ WHERE ROWID = ?", self.tableModifier];
+	//DLog(@"query: %@", query);
 	FMResultSet *result = [self.db executeQuery:query, [NSNumber numberWithInt:position]];
 	while ([result next])
 	{
 		NSString *name = [result stringForColumn:@"name"];
 		NSString *folderId = [result stringForColumn:@"id"];
+		//DLog(@"name: %@   folderId: %@", name, folderId);
 		anArtist = [Artist artistWithName:name andArtistId:folderId];
 	}
 	[result close];
@@ -200,7 +209,7 @@
 	
 	// Perform the search
 	query = [NSString stringWithFormat:@"INSERT INTO rootFolderNameSearch SELECT * FROM rootFolderNameCache%@ WHERE name LIKE ? LIMIT 100", self.tableModifier];
-	NSLog(@"query: %@", query);
+	//NSLog(@"query: %@", query);
 	[self.db executeUpdate:query, [NSString stringWithFormat:@"%%%@%%", name]];
 	if ([self.db hadError]) {
 		DLog(@"Err %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);

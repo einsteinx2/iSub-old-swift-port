@@ -33,6 +33,7 @@
 	id<FolderDropdownDelegate> delegate;
 	
 	NSMutableData *receivedData;
+	NSURLConnection *connection;
 }
 
 @property (nonatomic, retain) NSDictionary *folders;

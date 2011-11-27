@@ -195,6 +195,9 @@ static void destroy_versionArrays()
 		glEnable(GL_POINT_SPRITE_OES);
 		glTexEnvf(GL_POINT_SPRITE_OES, GL_COORD_REPLACE_OES, GL_TRUE);
 		glPointSize(self.frame.size.width);
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopEqDisplay) name:UIApplicationWillResignActiveNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startEqDisplay) name:UIApplicationDidBecomeActiveNotification object:nil];
 	}
 	
 	return self;
@@ -202,11 +205,13 @@ static void destroy_versionArrays()
 
 - (void)startEqDisplay
 {
+	DLog(@"starting eq display");
 	self.drawTimer = [NSTimer scheduledTimerWithTimeInterval:drawInterval target:self selector:@selector(drawTheEq) userInfo:nil repeats:YES];
 }
 
 - (void)stopEqDisplay
 {
+	DLog(@"stopping eq display");
 	[drawTimer invalidate]; drawTimer = nil;
 }
 
@@ -413,6 +418,9 @@ static void destroy_versionArrays()
 // Releases resources when they are not longer needed.
 - (void) dealloc
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+	
 	[drawTimer invalidate]; drawTimer = nil;
 	
 	if (imageTexture)

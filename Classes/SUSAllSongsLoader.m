@@ -492,13 +492,44 @@ static NSInteger order (id a, id b, void* context)
 
 #pragma mark Connection Delegate
 
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
+{
+	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
+		return YES; // Self-signed cert will be accepted
+	
+	return NO;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{	
+	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+	{
+		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
+	}
+	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+	[self.receivedData setLength:0];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
+{
+    [self.receivedData appendData:incrementalData];
+}
+
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
 	// Load the same folder
 	//
 	[self loadAlbumFolder];
 	
-	[super connection:theConnection didFailWithError:error];
+	self.receivedData = nil;
+	self.connection = nil;
+	
+	// Inform the delegate that loading failed
+	[self.delegate loadingFailed:self withError:error];
 }	
 
 static NSString *kName_Directory = @"directory";

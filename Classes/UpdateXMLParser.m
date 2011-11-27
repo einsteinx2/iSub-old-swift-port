@@ -37,7 +37,6 @@
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
 	/*CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error parsing the XML response. Maybe you forgot to set the right port for your server?" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
-	alert.tag = 2;
 	[alert show];
 	[alert release];
 	[self retain];

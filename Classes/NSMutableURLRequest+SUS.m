@@ -70,7 +70,7 @@ static void destroy_versionArrays()
 	NSAssert(version != nil, @"SUS URL API version not set!");
 	
 	// Setup the POST parameters
-	NSMutableString *postString = [NSMutableString stringWithFormat:@"v=%@&c=iSub", version];
+	NSMutableString *postString = [NSMutableString stringWithFormat:@"v=%@&c=iSub&u=%@&p=%@", version, username, password];
 	if (parameters != nil)
 	{
 		for (NSString *key in [parameters allKeys])
@@ -102,10 +102,10 @@ static void destroy_versionArrays()
 	[request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
 	
 	// Set the HTTP Basic Auth
-	NSString *authStr = [NSString stringWithFormat:@"%@:%@", username, password];
+	/*NSString *authStr = [NSString stringWithFormat:@"%@:%@", username, password];
 	NSData *authData = [authStr dataUsingEncoding:NSASCIIStringEncoding];
 	NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64EncodingWithLineLength:0]];
-	[request setValue:authValue forHTTPHeaderField:@"Authorization"];
+	[request setValue:authValue forHTTPHeaderField:@"Authorization"];*/
 	
 	if (offset > 0)
 	{

@@ -103,7 +103,6 @@
 	if (![self checkUsername:usernameField.text])
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a username" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-		alert.tag = 2;
 		[alert show];
 		[alert release];
 	}
@@ -111,7 +110,6 @@
 	if (![self checkPassword:passwordField.text])
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a password" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-		alert.tag = 2;
 		[alert show];
 		[alert release];
 	}

@@ -52,7 +52,7 @@
     // e.g. self.myOutlet = nil;
 }
 
-- (IBAction) buttonAction:(id)sender
+- (IBAction)buttonAction:(id)sender
 {
 	UIView *subView = nil;
 

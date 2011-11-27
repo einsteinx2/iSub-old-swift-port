@@ -81,7 +81,6 @@
 	if ([request error])
 	{
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error posting the message." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		alert.tag = 2;
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
 		

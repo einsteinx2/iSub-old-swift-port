@@ -76,8 +76,6 @@
 		5327F0F812B8110E00735119 /* JukeboxConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F0F712B8110E00735119 /* JukeboxConnectionDelegate.m */; };
 		5327F1C012B8243C00735119 /* controller-stop.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327F1BE12B8243C00735119 /* controller-stop.png */; };
 		5327F1C112B8243C00735119 /* controller-stop@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327F1BF12B8243C00735119 /* controller-stop@2x.png */; };
-		5327F3B012B86BD500735119 /* APICheckConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F3AF12B86BD500735119 /* APICheckConnectionDelegate.m */; };
-		5327F3B512B86C6400735119 /* APICheckXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F3B412B86C6400735119 /* APICheckXMLParser.m */; };
 		5327F4F912B9534400735119 /* MKStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F4F612B9534400735119 /* MKStoreManager.m */; };
 		5327F4FA12B9534400735119 /* MKStoreObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F4F812B9534400735119 /* MKStoreObserver.m */; };
 		5327F52512B955F100735119 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5327F52412B955F100735119 /* StoreKit.framework */; };
@@ -216,7 +214,6 @@
 		536AB8031353B4F600DABD83 /* ShuffleFolderPickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 536AB8011353B4F500DABD83 /* ShuffleFolderPickerViewController.xib */; };
 		536AB8111353DCF900DABD83 /* PlaylistSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AB80F1353DCF700DABD83 /* PlaylistSongsViewController.m */; };
 		536AB8121353DCF900DABD83 /* PlaylistSongsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 536AB8101353DCF700DABD83 /* PlaylistSongsViewController.xib */; };
-		536ACEC711EA449A00387CB0 /* URLCheckConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 536ACEC611EA449A00387CB0 /* URLCheckConnectionDelegate.m */; };
 		536AD1C911EA5E1700387CB0 /* twitter-signin.png in Resources */ = {isa = PBXBuildFile; fileRef = 536AD1C711EA5E1600387CB0 /* twitter-signin.png */; };
 		536AD1CA11EA5E1700387CB0 /* twitter-signin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 536AD1C811EA5E1700387CB0 /* twitter-signin@2x.png */; };
 		536AD1D311EA628200387CB0 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 536AD1D211EA628200387CB0 /* libxml2.dylib */; };
@@ -1021,7 +1018,6 @@
 		53BC27E2139AF0DD00A825F1 /* SettingsTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F26B11DA61DA00007870 /* SettingsTabViewController.m */; };
 		53BC27E3139AF0DD00A825F1 /* HelpTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F27611DA627500007870 /* HelpTabViewController.m */; };
 		53BC27E5139AF0DD00A825F1 /* LyricsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 534050F911E9966C004AEC41 /* LyricsViewController.m */; };
-		53BC27E6139AF0DD00A825F1 /* URLCheckConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 536ACEC611EA449A00387CB0 /* URLCheckConnectionDelegate.m */; };
 		53BC27E7139AF0DD00A825F1 /* MGTwitterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD26E11EA7EFB00387CB0 /* MGTwitterEngine.m */; };
 		53BC27E8139AF0DD00A825F1 /* MGTwitterHTTPURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD27211EA7EFB00387CB0 /* MGTwitterHTTPURLConnection.m */; };
 		53BC27E9139AF0DD00A825F1 /* MGTwitterLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD27411EA7EFB00387CB0 /* MGTwitterLibXMLParser.m */; };
@@ -1071,8 +1067,6 @@
 		53BC2816139AF0DD00A825F1 /* CoverArtImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D123E0129EF58F00934F08 /* CoverArtImageView.m */; };
 		53BC2817139AF0DD00A825F1 /* NSString+rfcEncode.m in Sources */ = {isa = PBXBuildFile; fileRef = 532B0DDF12AF0AF700E8FF4F /* NSString+rfcEncode.m */; };
 		53BC2818139AF0DD00A825F1 /* JukeboxConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F0F712B8110E00735119 /* JukeboxConnectionDelegate.m */; };
-		53BC2819139AF0DD00A825F1 /* APICheckConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F3AF12B86BD500735119 /* APICheckConnectionDelegate.m */; };
-		53BC281A139AF0DD00A825F1 /* APICheckXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F3B412B86C6400735119 /* APICheckXMLParser.m */; };
 		53BC281B139AF0DD00A825F1 /* MKStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F4F612B9534400735119 /* MKStoreManager.m */; };
 		53BC281C139AF0DD00A825F1 /* MKStoreObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F4F812B9534400735119 /* MKStoreObserver.m */; };
 		53BC281D139AF0DD00A825F1 /* StoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F58312B95D2900735119 /* StoreViewController.m */; };
@@ -1504,7 +1498,6 @@
 		53DCF54313BFEAD3009160F9 /* SettingsTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F26B11DA61DA00007870 /* SettingsTabViewController.m */; };
 		53DCF54413BFEAD3009160F9 /* HelpTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F27611DA627500007870 /* HelpTabViewController.m */; };
 		53DCF54613BFEAD3009160F9 /* LyricsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 534050F911E9966C004AEC41 /* LyricsViewController.m */; };
-		53DCF54713BFEAD3009160F9 /* URLCheckConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 536ACEC611EA449A00387CB0 /* URLCheckConnectionDelegate.m */; };
 		53DCF54813BFEAD3009160F9 /* MGTwitterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD26E11EA7EFB00387CB0 /* MGTwitterEngine.m */; };
 		53DCF54913BFEAD3009160F9 /* MGTwitterHTTPURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD27211EA7EFB00387CB0 /* MGTwitterHTTPURLConnection.m */; };
 		53DCF54A13BFEAD3009160F9 /* MGTwitterLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD27411EA7EFB00387CB0 /* MGTwitterLibXMLParser.m */; };
@@ -1554,8 +1547,6 @@
 		53DCF57713BFEAD3009160F9 /* CoverArtImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D123E0129EF58F00934F08 /* CoverArtImageView.m */; };
 		53DCF57813BFEAD3009160F9 /* NSString+rfcEncode.m in Sources */ = {isa = PBXBuildFile; fileRef = 532B0DDF12AF0AF700E8FF4F /* NSString+rfcEncode.m */; };
 		53DCF57913BFEAD3009160F9 /* JukeboxConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F0F712B8110E00735119 /* JukeboxConnectionDelegate.m */; };
-		53DCF57A13BFEAD3009160F9 /* APICheckConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F3AF12B86BD500735119 /* APICheckConnectionDelegate.m */; };
-		53DCF57B13BFEAD3009160F9 /* APICheckXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F3B412B86C6400735119 /* APICheckXMLParser.m */; };
 		53DCF57C13BFEAD3009160F9 /* MKStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F4F612B9534400735119 /* MKStoreManager.m */; };
 		53DCF57D13BFEAD3009160F9 /* MKStoreObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F4F812B9534400735119 /* MKStoreObserver.m */; };
 		53DCF57E13BFEAD3009160F9 /* StoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F58312B95D2900735119 /* StoreViewController.m */; };
@@ -1707,9 +1698,6 @@
 		53F8CC8D1297949A007BDC0E /* home-shuffle-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC761297949A007BDC0E /* home-shuffle-ipad.png */; };
 		53F8CC8E1297949A007BDC0E /* home-shuffle.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC771297949A007BDC0E /* home-shuffle.png */; };
 		53F8CC8F1297949A007BDC0E /* home-shuffle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC781297949A007BDC0E /* home-shuffle@2x.png */; };
-		53F98332145CCEAC005A083E /* ServerCheckConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F98331145CCEAC005A083E /* ServerCheckConnectionDelegate.m */; };
-		53F98333145CCEAC005A083E /* ServerCheckConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F98331145CCEAC005A083E /* ServerCheckConnectionDelegate.m */; };
-		53F98334145CCEAC005A083E /* ServerCheckConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F98331145CCEAC005A083E /* ServerCheckConnectionDelegate.m */; };
 		53F98337145CD65E005A083E /* SUSServerURLChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F98336145CD65E005A083E /* SUSServerURLChecker.m */; };
 		53F98338145CD65E005A083E /* SUSServerURLChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F98336145CD65E005A083E /* SUSServerURLChecker.m */; };
 		53F98339145CD65E005A083E /* SUSServerURLChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F98336145CD65E005A083E /* SUSServerURLChecker.m */; };
@@ -1809,10 +1797,6 @@
 		5327F0F712B8110E00735119 /* JukeboxConnectionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JukeboxConnectionDelegate.m; sourceTree = "<group>"; };
 		5327F1BE12B8243C00735119 /* controller-stop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-stop.png"; path = "Images/Player Icons/controller-stop.png"; sourceTree = "<group>"; };
 		5327F1BF12B8243C00735119 /* controller-stop@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-stop@2x.png"; path = "Images/Player Icons/controller-stop@2x.png"; sourceTree = "<group>"; };
-		5327F3AE12B86BD500735119 /* APICheckConnectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = APICheckConnectionDelegate.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		5327F3AF12B86BD500735119 /* APICheckConnectionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APICheckConnectionDelegate.m; sourceTree = "<group>"; };
-		5327F3B312B86C6400735119 /* APICheckXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = APICheckXMLParser.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		5327F3B412B86C6400735119 /* APICheckXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APICheckXMLParser.m; sourceTree = "<group>"; };
 		5327F4F512B9534400735119 /* MKStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKStoreManager.h; sourceTree = "<group>"; };
 		5327F4F612B9534400735119 /* MKStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKStoreManager.m; sourceTree = "<group>"; };
 		5327F4F712B9534400735119 /* MKStoreObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKStoreObserver.h; sourceTree = "<group>"; };
@@ -1969,8 +1953,6 @@
 		536AB8011353B4F500DABD83 /* ShuffleFolderPickerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShuffleFolderPickerViewController.xib; sourceTree = "<group>"; };
 		536AB80F1353DCF700DABD83 /* PlaylistSongsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistSongsViewController.m; sourceTree = "<group>"; };
 		536AB8101353DCF700DABD83 /* PlaylistSongsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaylistSongsViewController.xib; sourceTree = "<group>"; };
-		536ACEC511EA449A00387CB0 /* URLCheckConnectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URLCheckConnectionDelegate.h; sourceTree = "<group>"; };
-		536ACEC611EA449A00387CB0 /* URLCheckConnectionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URLCheckConnectionDelegate.m; sourceTree = "<group>"; };
 		536AD1C711EA5E1600387CB0 /* twitter-signin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "twitter-signin.png"; sourceTree = "<group>"; };
 		536AD1C811EA5E1700387CB0 /* twitter-signin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "twitter-signin@2x.png"; sourceTree = "<group>"; };
 		536AD1D211EA628200387CB0 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
@@ -2624,8 +2606,6 @@
 		53F8CC761297949A007BDC0E /* home-shuffle-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-shuffle-ipad.png"; path = "Images/Home Screen/home-shuffle-ipad.png"; sourceTree = "<group>"; };
 		53F8CC771297949A007BDC0E /* home-shuffle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-shuffle.png"; path = "Images/Home Screen/home-shuffle.png"; sourceTree = "<group>"; };
 		53F8CC781297949A007BDC0E /* home-shuffle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-shuffle@2x.png"; path = "Images/Home Screen/home-shuffle@2x.png"; sourceTree = "<group>"; };
-		53F98330145CCEAC005A083E /* ServerCheckConnectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerCheckConnectionDelegate.h; sourceTree = "<group>"; };
-		53F98331145CCEAC005A083E /* ServerCheckConnectionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerCheckConnectionDelegate.m; sourceTree = "<group>"; };
 		53F98335145CD65E005A083E /* SUSServerURLChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSServerURLChecker.h; sourceTree = "<group>"; };
 		53F98336145CD65E005A083E /* SUSServerURLChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSServerURLChecker.m; sourceTree = "<group>"; };
 		53FDEE2511E822CC00FE3ECD /* current-server@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "current-server@2x.png"; path = "Images/Other/current-server@2x.png"; sourceTree = "<group>"; };
@@ -2842,14 +2822,8 @@
 				537D2780128DE258007E4CEC /* NSURLConnectionDelegateQueue.m */,
 				537D279B128DE8EC007E4CEC /* NSURLConnectionDelegateQueueArtwork.h */,
 				537D279C128DE8EC007E4CEC /* NSURLConnectionDelegateQueueArtwork.m */,
-				536ACEC511EA449A00387CB0 /* URLCheckConnectionDelegate.h */,
-				536ACEC611EA449A00387CB0 /* URLCheckConnectionDelegate.m */,
 				5327F0F612B8110E00735119 /* JukeboxConnectionDelegate.h */,
 				5327F0F712B8110E00735119 /* JukeboxConnectionDelegate.m */,
-				5327F3AE12B86BD500735119 /* APICheckConnectionDelegate.h */,
-				5327F3AF12B86BD500735119 /* APICheckConnectionDelegate.m */,
-				53F98330145CCEAC005A083E /* ServerCheckConnectionDelegate.h */,
-				53F98331145CCEAC005A083E /* ServerCheckConnectionDelegate.m */,
 			);
 			name = NSURLConnectionDelegates;
 			sourceTree = "<group>";
@@ -3013,8 +2987,6 @@
 				53E75E83127123B300BC1A19 /* SearchXMLParser.m */,
 				53ABE3761165C97100197877 /* PlayingXMLParser.h */,
 				53ABE3771165C97100197877 /* PlayingXMLParser.m */,
-				5327F3B312B86C6400735119 /* APICheckXMLParser.h */,
-				5327F3B412B86C6400735119 /* APICheckXMLParser.m */,
 			);
 			name = "XML Parsers";
 			sourceTree = "<group>";
@@ -5132,7 +5104,6 @@
 				5398F26D11DA61DA00007870 /* SettingsTabViewController.m in Sources */,
 				5398F27811DA627500007870 /* HelpTabViewController.m in Sources */,
 				534050FB11E9966C004AEC41 /* LyricsViewController.m in Sources */,
-				536ACEC711EA449A00387CB0 /* URLCheckConnectionDelegate.m in Sources */,
 				536AD29611EA7EFB00387CB0 /* MGTwitterEngine.m in Sources */,
 				536AD29711EA7EFB00387CB0 /* MGTwitterHTTPURLConnection.m in Sources */,
 				536AD29811EA7EFB00387CB0 /* MGTwitterLibXMLParser.m in Sources */,
@@ -5182,8 +5153,6 @@
 				53D123E1129EF58F00934F08 /* CoverArtImageView.m in Sources */,
 				532B0DE012AF0AF700E8FF4F /* NSString+rfcEncode.m in Sources */,
 				5327F0F812B8110E00735119 /* JukeboxConnectionDelegate.m in Sources */,
-				5327F3B012B86BD500735119 /* APICheckConnectionDelegate.m in Sources */,
-				5327F3B512B86C6400735119 /* APICheckXMLParser.m in Sources */,
 				5327F4F912B9534400735119 /* MKStoreManager.m in Sources */,
 				5327F4FA12B9534400735119 /* MKStoreObserver.m in Sources */,
 				5327F58512B95D2900735119 /* StoreViewController.m in Sources */,
@@ -5244,7 +5213,6 @@
 				53409898142D487600455754 /* SUSAllAlbumsDAO.m in Sources */,
 				534098A2142D489F00455754 /* SUSAllSongsDAO.m in Sources */,
 				534098A7142D491100455754 /* SUSAllSongsLoader.m in Sources */,
-				53F98332145CCEAC005A083E /* ServerCheckConnectionDelegate.m in Sources */,
 				53F98337145CD65E005A083E /* SUSServerURLChecker.m in Sources */,
 				53B15EB4145D02EC007A04F6 /* NSError+ISMSError.m in Sources */,
 				535EFD84145D144400EDF867 /* SUSRootFoldersLoader.m in Sources */,
@@ -5431,7 +5399,6 @@
 				53BC27E2139AF0DD00A825F1 /* SettingsTabViewController.m in Sources */,
 				53BC27E3139AF0DD00A825F1 /* HelpTabViewController.m in Sources */,
 				53BC27E5139AF0DD00A825F1 /* LyricsViewController.m in Sources */,
-				53BC27E6139AF0DD00A825F1 /* URLCheckConnectionDelegate.m in Sources */,
 				53BC27E7139AF0DD00A825F1 /* MGTwitterEngine.m in Sources */,
 				53BC27E8139AF0DD00A825F1 /* MGTwitterHTTPURLConnection.m in Sources */,
 				53BC27E9139AF0DD00A825F1 /* MGTwitterLibXMLParser.m in Sources */,
@@ -5481,8 +5448,6 @@
 				53BC2816139AF0DD00A825F1 /* CoverArtImageView.m in Sources */,
 				53BC2817139AF0DD00A825F1 /* NSString+rfcEncode.m in Sources */,
 				53BC2818139AF0DD00A825F1 /* JukeboxConnectionDelegate.m in Sources */,
-				53BC2819139AF0DD00A825F1 /* APICheckConnectionDelegate.m in Sources */,
-				53BC281A139AF0DD00A825F1 /* APICheckXMLParser.m in Sources */,
 				53BC281B139AF0DD00A825F1 /* MKStoreManager.m in Sources */,
 				53BC281C139AF0DD00A825F1 /* MKStoreObserver.m in Sources */,
 				53BC281D139AF0DD00A825F1 /* StoreViewController.m in Sources */,
@@ -5543,7 +5508,6 @@
 				5340989A142D487600455754 /* SUSAllAlbumsDAO.m in Sources */,
 				534098A4142D489F00455754 /* SUSAllSongsDAO.m in Sources */,
 				534098A9142D491100455754 /* SUSAllSongsLoader.m in Sources */,
-				53F98334145CCEAC005A083E /* ServerCheckConnectionDelegate.m in Sources */,
 				53F98339145CD65E005A083E /* SUSServerURLChecker.m in Sources */,
 				53B15EB6145D02EC007A04F6 /* NSError+ISMSError.m in Sources */,
 				535EFD86145D144400EDF867 /* SUSRootFoldersLoader.m in Sources */,
@@ -5730,7 +5694,6 @@
 				53DCF54313BFEAD3009160F9 /* SettingsTabViewController.m in Sources */,
 				53DCF54413BFEAD3009160F9 /* HelpTabViewController.m in Sources */,
 				53DCF54613BFEAD3009160F9 /* LyricsViewController.m in Sources */,
-				53DCF54713BFEAD3009160F9 /* URLCheckConnectionDelegate.m in Sources */,
 				53DCF54813BFEAD3009160F9 /* MGTwitterEngine.m in Sources */,
 				53DCF54913BFEAD3009160F9 /* MGTwitterHTTPURLConnection.m in Sources */,
 				53DCF54A13BFEAD3009160F9 /* MGTwitterLibXMLParser.m in Sources */,
@@ -5780,8 +5743,6 @@
 				53DCF57713BFEAD3009160F9 /* CoverArtImageView.m in Sources */,
 				53DCF57813BFEAD3009160F9 /* NSString+rfcEncode.m in Sources */,
 				53DCF57913BFEAD3009160F9 /* JukeboxConnectionDelegate.m in Sources */,
-				53DCF57A13BFEAD3009160F9 /* APICheckConnectionDelegate.m in Sources */,
-				53DCF57B13BFEAD3009160F9 /* APICheckXMLParser.m in Sources */,
 				53DCF57C13BFEAD3009160F9 /* MKStoreManager.m in Sources */,
 				53DCF57D13BFEAD3009160F9 /* MKStoreObserver.m in Sources */,
 				53DCF57E13BFEAD3009160F9 /* StoreViewController.m in Sources */,
@@ -5842,7 +5803,6 @@
 				53409899142D487600455754 /* SUSAllAlbumsDAO.m in Sources */,
 				534098A3142D489F00455754 /* SUSAllSongsDAO.m in Sources */,
 				534098A8142D491100455754 /* SUSAllSongsLoader.m in Sources */,
-				53F98333145CCEAC005A083E /* ServerCheckConnectionDelegate.m in Sources */,
 				53F98338145CD65E005A083E /* SUSServerURLChecker.m in Sources */,
 				53B15EB5145D02EC007A04F6 /* NSError+ISMSError.m in Sources */,
 				535EFD85145D144400EDF867 /* SUSRootFoldersLoader.m in Sources */,

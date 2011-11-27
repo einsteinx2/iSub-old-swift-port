@@ -8,7 +8,7 @@
 
 #import "SUSServerURLChecker.h"
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, ServerTypeViewController;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, ServerTypeViewController, ServerListViewController;
 
 @interface SubsonicServerEditViewController : UIViewController <SUSServerURLCheckerDelegate>
 {
@@ -27,6 +27,7 @@
 }
 
 @property (assign) ServerTypeViewController *parentController;
+@property (nonatomic, retain) NSString *theNewRedirectUrl;
 
 - (IBAction) cancelButtonPressed:(id)sender;
 - (IBAction) saveButtonPressed:(id)sender;

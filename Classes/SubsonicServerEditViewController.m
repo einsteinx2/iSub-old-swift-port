@@ -15,10 +15,12 @@
 #import "Server.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
+#import "ServerListViewController.h"
+#import "ServerTypeViewController.h"
 
 @implementation SubsonicServerEditViewController
 
-@synthesize parentController;
+@synthesize parentController, theNewRedirectUrl;
 
 #pragma mark - Rotation
 
@@ -48,6 +50,8 @@
 	musicControls = [MusicSingleton sharedInstance];
 	databaseControls = [DatabaseSingleton sharedInstance];
 	
+	theNewRedirectUrl = nil;
+	
 	if (viewObjects.serverToEdit)
 	{
 		urlField.text = viewObjects.serverToEdit.url;
@@ -68,6 +72,7 @@
 }
 
 - (void)dealloc {
+	[theNewRedirectUrl release]; theNewRedirectUrl = nil;
 	[urlField release];
 	[usernameField release];
 	[passwordField release];
@@ -153,7 +158,6 @@
 	if (![self checkUrl:urlField.text])
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"The URL must be in the format: http://mywebsite.com:port/folder\n\nBoth the :port and /folder are optional" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-		alert.tag = 2;
 		[alert show];
 		[alert release];
 	}
@@ -161,7 +165,6 @@
 	if (![self checkUsername:usernameField.text])
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a username" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-		alert.tag = 2;
 		[alert show];
 		[alert release];
 	}
@@ -169,7 +172,6 @@
 	if (![self checkPassword:passwordField.text])
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a password" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-		alert.tag = 2;
 		[alert show];
 		[alert release];
 	}
@@ -188,9 +190,8 @@
 
 - (void)SUSServerURLCheckRedirected:(SUSServerURLChecker *)checker redirectUrl:(NSURL *)url
 {
-    SavedSettings *settings = [SavedSettings sharedInstance];
-    settings.redirectUrlString = [NSString stringWithFormat:@"%@://%@:%@", url.scheme, url.host, url.port];
-    //DLog(@"redirectUrlString: %@", settings.redirectUrlString);
+    self.theNewRedirectUrl = [NSString stringWithFormat:@"%@://%@:%@", url.scheme, url.host, url.port];
+    DLog(@"redirectUrlString: %@", theNewRedirectUrl);
 }
 
 - (void)SUSServerURLCheckFailed:(SUSServerURLChecker *)checker withError:(NSError *)error
@@ -200,13 +201,13 @@
 	
 	NSString *message = [NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\nError code %i:\n%@", [error code], [error localizedDescription]];
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	alert.tag = 2;
 	[alert show];
 	[alert release];
 }	
 	
 - (void)SUSServerURLCheckPassed:(SUSServerURLChecker *)checker
 {
+	DLog(@"server check passed");
 	[checker release]; checker = nil;
 	[viewObjects hideLoadingScreen];
 	
@@ -246,7 +247,12 @@
 		
 		[self dismissModalViewControllerAnimated:YES];
 		
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"switchServer" object:nil];
+		NSDictionary *userInfo = nil;
+		if (theNewRedirectUrl)
+		{
+			userInfo = [NSDictionary dictionaryWithObject:theNewRedirectUrl forKey:@"theNewRedirectUrl"];
+		}
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"switchServer" object:nil userInfo:userInfo];
 	}
 	else
 	{
@@ -270,7 +276,12 @@
 		
 		[self dismissModalViewControllerAnimated:YES];
 		
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"switchServer" object:nil];
+		NSDictionary *userInfo = nil;
+		if (theNewRedirectUrl)
+		{
+			userInfo = [NSDictionary dictionaryWithObject:theNewRedirectUrl forKey:@"theNewRedirectUrl"];
+		}
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"switchServer" object:nil userInfo:userInfo];
 	}
 	
 	[theServer release];

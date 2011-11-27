@@ -246,6 +246,8 @@
 
 -(void)loadData:(NSNumber *)folderId 
 {
+	[dropdown updateFolders];
+	
 	viewObjects.isArtistsLoading = YES;
 	
 	allArtistsLoadingScreen = [[LoadingScreen alloc] initOnView:self.view.superview withMessage:[NSArray arrayWithObjects:@"Processing Folders", @"", @"", @"", nil]  blockInput:YES mainWindow:NO];
@@ -259,13 +261,13 @@
 	viewObjects.isArtistsLoading = NO;
 	
 	// Hide the loading screen
-	[allArtistsLoadingScreen hide]; [allArtistsLoadingScreen release];
+	[allArtistsLoadingScreen hide]; 
+	[allArtistsLoadingScreen release]; allArtistsLoadingScreen = nil;
 	
 	[self dataSourceDidFinishLoadingNewData];
 	
 	// Inform the user that the connection failed.
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error loading the artist list.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	alert.tag = 2;
 	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 	[alert release];
 }
@@ -284,7 +286,8 @@
 	viewObjects.isArtistsLoading = NO;
 	
 	// Hide the loading screen
-	[allArtistsLoadingScreen hide]; [allArtistsLoadingScreen release];
+	[allArtistsLoadingScreen hide]; 
+	[allArtistsLoadingScreen release]; allArtistsLoadingScreen = nil;
 	
 	[self dataSourceDidFinishLoadingNewData];
 }
@@ -301,7 +304,7 @@
 - (void)folderDropdownSelectFolder:(NSNumber *)folderId
 {
 	// Save the default
-	[[SavedSettings sharedInstance] setRootFoldersSelectedFolderId:folderId];
+	[SavedSettings sharedInstance].rootFoldersSelectedFolderId = folderId;
 	
 	// Reload the data
 	dataModel.selectedFolderId = folderId;
@@ -509,6 +512,7 @@
 		}
 		else
 		{
+			DLog(@"indexPositions: %@", [dataModel indexPositions]);
 			NSUInteger sectionStartIndex = [[[dataModel indexPositions] objectAtIndex:indexPath.section] intValue];
 			anArtist = [dataModel artistForPosition:(sectionStartIndex + indexPath.row)];
 		}

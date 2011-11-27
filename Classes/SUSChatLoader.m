@@ -54,7 +54,6 @@
 		
 		/*// Inform the user that the connection failed.
 		 CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error retreiving the chat messages.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		 alert.tag = 2;
 		 [alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		 [alert release];
 		 
@@ -64,16 +63,46 @@
 
 #pragma mark - Connection Delegate
 
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
+{
+	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
+		return YES; // Self-signed cert will be accepted
+	
+	return NO;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{	
+	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+	{
+		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
+	}
+	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+	[self.receivedData setLength:0];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
+{
+    [self.receivedData appendData:incrementalData];
+}
+
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
 	[self.delegate loadingFailed:self withError:error];
 	
-	[super connection:theConnection didFailWithError:error];
+	self.receivedData = nil;
+	self.connection = nil;
+	
+	// Inform the delegate that loading failed
+	[self.delegate loadingFailed:self withError:error];
 	
 	/*// Inform the user that the connection failed.
 	NSString *message = [NSString stringWithFormat:@"There was an error retreiving the chat messages.\n\nError %i: %@", [error code], [error localizedDescription]];
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	alert.tag = 2;
 	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 	[alert release];
 	
@@ -125,40 +154,11 @@
 	}
 	[tbxml release];
 	
-	[super connectionDidFinishLoading:theConnection];
-
+	self.receivedData = nil;
+	self.connection = nil;
 	
-	/*viewObjects.chatMessages = [NSMutableArray arrayWithCapacity:1];
-	//viewObjects.chatMessages = nil, viewObjects.chatMessages = [[NSMutableArray alloc] init];
-	
-	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
-	ChatXMLParser *parser = [[ChatXMLParser alloc] initXMLParser];
-	[xmlParser setDelegate:parser];
-	[xmlParser parse];
-    
-	[xmlParser release];
-	[parser release];
-	
-	[self.tableView reloadData]; 
-	
-	if ([viewObjects.chatMessages count] == 0)
-	{
-		[self showNoChatMessagesScreen];
-	}
-	else
-	{
-		if (isNoChatMessagesScreenShowing == YES)
-		{
-			isNoChatMessagesScreenShowing = NO;
-			[noChatMessagesScreen removeFromSuperview];
-		}
-	}
-	
-	[viewObjects hideLoadingScreen];
-	[self dataSourceDidFinishLoadingNewData];
-	 
-	 [theConnection release];
-	 [receivedData release];*/
+	// Notify the delegate that the loading is finished
+	[self.delegate loadingFinished:self];
 }
 
 @end

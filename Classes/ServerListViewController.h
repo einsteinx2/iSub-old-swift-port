@@ -6,10 +6,11 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+#import "SUSServerURLChecker.h"
 
 @class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, SettingsTabViewController, HelpTabViewController, SavedSettings;
 
-@interface ServerListViewController : UITableViewController 
+@interface ServerListViewController : UITableViewController <SUSServerURLCheckerDelegate>
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
@@ -26,7 +27,9 @@
 	//HelpTabViewController *helpTabViewController;
 }
 
-- (void) addAction:(id)sender;
-- (void) segmentAction:(id)sender;
+- (void)addAction:(id)sender;
+- (void)segmentAction:(id)sender;
+
+@property (nonatomic, retain) NSString *theNewRedirectionUrl;
 
 @end

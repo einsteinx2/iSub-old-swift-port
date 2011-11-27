@@ -20,9 +20,6 @@
 	SavedSettings *settings;
 	
 	UIView *headerView;
-	UIView *folderDropdown;
-	UILabel *folderDropdownLabel;
-	CALayer *arrowImage;
 	UILabel *countLabel;
 	UILabel *reloadTimeLabel;
 	IBOutlet UISearchBar *searchBar;

@@ -26,7 +26,7 @@
 	cacheControls = [CacheSingleton sharedInstance];
 	settings = [SavedSettings sharedInstance];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cacheSongObjects) name:ISMSNotification_SongPlaybackStart object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cacheSongObjects) name:ISMSNotification_SongPlaybackStarted object:nil];
 		
 	if (settings.isCacheUnlocked)
 	{

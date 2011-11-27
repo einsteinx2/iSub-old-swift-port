@@ -28,12 +28,12 @@
 - (void) subsonicErrorCode:(NSInteger)errorCode message:(NSString *)message;
 
 #pragma mark - Connection Delegate
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space;
+/*- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space;
 - (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge;
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response;
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData;
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error;
-- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection;
+- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection;*/
 
 
 @end

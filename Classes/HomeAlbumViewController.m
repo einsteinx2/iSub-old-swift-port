@@ -174,7 +174,6 @@
 		if ([request error])
 		{
 			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error grabbing the album list.\n\nError: %@", [request error].localizedDescription] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-			alert.tag = 2;
 			[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 			[alert release];
 		}
@@ -210,7 +209,6 @@
 					if ([request error])
 					{
 						CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error grabbing the album list.\n\nError:%@", [request error].localizedDescription] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-						alert.tag = 2;
 						[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 						[alert release];
 					}
@@ -373,7 +371,6 @@
 	{
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error doing the search.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		alert.tag = 2;
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
 	}
@@ -414,7 +411,6 @@
 	[theConnection release];
     
     CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error doing the search.\n\nError:%@", error.localizedDescription] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    alert.tag = 2;
     [alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
     [alert release];
 }	

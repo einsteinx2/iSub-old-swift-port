@@ -31,6 +31,8 @@
 		updatedfolders = nil;
 		labels = [[NSMutableArray alloc] init];
 		isOpen = NO;
+		connection = nil;
+		receivedData = nil;
 		
 		borderColor = [[UIColor colorWithRed:156.0/255.0 green:161.0/255.0 blue:168.0/255.0 alpha:1] retain];
 		textColor   = [[UIColor colorWithRed:106.0/255.0 green:111.0/255.0 blue:118.0/255.0 alpha:1] retain];
@@ -76,7 +78,7 @@
 		
 		[self updateFolders];
 		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFolders) name:ISMSNotification_ServerSwitched object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFolders) name:ISMSNotification_ServerCheckPassed object:nil];
     }
     return self;
 }
@@ -255,9 +257,17 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 
 - (void)updateFolders
 {    
+	if (connection)
+	{
+		[connection cancel]; 
+		[connection release]; connection = nil;
+	}
+	
+	DLog(@"Folder dropdown: updating folders");
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getMusicFolders" andParameters:nil];
+	DLog(@"folder dropdown url: %@   body: %@  headers: %@", [[request URL] absoluteString], [[[NSString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding] autorelease], [request allHTTPHeaderFields]);
     
-	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
 	{
 		// Create the NSMutableData to hold the received data.
@@ -269,7 +279,6 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 		// Inform the user that the connection failed.
 		NSString *message = [NSString stringWithFormat:@"There was an error loading the music folders for the dropdown."];
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		alert.tag = 2;
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
 	}
@@ -309,22 +318,23 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	// Inform the user that the connection failed.
 	NSString *message = [NSString stringWithFormat:@"There was an error loading the music folders for the dropdown.\n\nError %i: %@", [error code], [error localizedDescription]];
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	alert.tag = 2;
 	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 	[alert release];
 	
-	[theConnection release];
+	[connection release]; connection = nil;
 	[receivedData release];
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
+	DLog(@"folder dropdown connection finished: %@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
+	
 	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
 	[xmlParser setDelegate:self];
 	[xmlParser parse];
 	[xmlParser release];
 	
-	[theConnection release];
+	[connection release]; connection = nil;
 	[receivedData release];
 }
 

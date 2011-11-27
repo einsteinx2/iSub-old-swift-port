@@ -34,7 +34,6 @@
 - (void) subsonicErrorCode:(NSString *)errorCode message:(NSString *)message
 {
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
-	alert.tag = 2;
 	[alert show];
 	[alert release];
 }

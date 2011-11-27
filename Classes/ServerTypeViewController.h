@@ -6,8 +6,6 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-
-
 @interface ServerTypeViewController : UIViewController 
 {
 	IBOutlet UIButton *subsonicButton;
