@@ -242,20 +242,6 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "Classes/SUSLoader.m"
-         timestampString = "344046391.589969"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "76"
-         endingLineNumber = "76"
-         landmarkName = "-subsonicErrorCode:message:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
          filePath = "Classes/XMLParser.m"
          timestampString = "344046398.410043"
          startingColumnNumber = "9223372036854775807"
@@ -265,7 +251,44 @@
          landmarkName = "-subsonicErrorCode:message:"
          landmarkType = "5">
       </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/NSMutableURLRequest+SUS.m"
+         timestampString = "344299455.403298"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "50"
+         endingLineNumber = "50"
+         landmarkName = "+requestWithSUSAction:andParameters:byteOffset:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/NSNotificationCenter+MainThread.m"
+         timestampString = "344301538.024813"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "15"
+         endingLineNumber = "15"
+         landmarkName = "+postNotificationInternal:"
+         landmarkType = "5">
+      </FileBreakpoint>
    </FileBreakpoints>
+   <SymbolicBreakpoints>
+      <SymbolicBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         symbolName = "__NSAutoreleaseNoPool"
+         moduleName = "">
+      </SymbolicBreakpoint>
+   </SymbolicBreakpoints>
    <ExceptionBreakpoints>
       <ExceptionBreakpoint
          shouldBeEnabled = "Yes"

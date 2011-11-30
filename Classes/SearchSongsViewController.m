@@ -70,6 +70,8 @@
 		offset = 0;
 		isMoreResults = YES;
 		isLoading = NO;
+		
+		connection = nil;
     }
 	
     return self;
@@ -614,7 +616,7 @@
 	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 	[alert release];
 	
-	[theConnection release]; theConnection = nil;
+	[connection release]; connection = nil;
 	[receivedData release];
 	
 	[viewObjects hideLoadingScreen];
@@ -673,7 +675,7 @@
 	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
 	isLoading = NO;
 		
-	[theConnection release]; theConnection = nil;
+	[connection	release]; connection = nil;
 	[receivedData release];
 }
 

@@ -23,7 +23,6 @@
 
 // Audio streamer objects and variables
 //
-@property NSInteger repeatMode;
 @property BOOL isShuffle;
 
 // Music player objects
@@ -71,7 +70,7 @@
 - (void)startSong;
 - (void)playSongAtPosition:(NSInteger)position;
 - (void)nextSong;
-- (void)nextSongAuto;
+//- (void)nextSongAuto;
 - (void)prevSong;
 
 //- (void)checkCache;

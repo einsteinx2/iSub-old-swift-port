@@ -22,13 +22,15 @@
 #import "BassWrapperSingleton.h"
 #import "SUSCoverArtLargeDAO.h"
 #import "SUSCoverArtLargeLoader.h"
+#import "SUSLyricsDAO.h"
+#import "ViewObjectsSingleton.h"
 
 #define maxNumOfReconnects 3
 
 static SUSStreamSingleton *sharedInstance = nil;
 
 @implementation SUSStreamSingleton
-@synthesize handlerStack;
+@synthesize handlerStack, lyricsDataModel;
 
 - (BOOL)insertSong:(Song *)aSong intoGenreTable:(NSString *)table
 {
@@ -86,6 +88,12 @@ static SUSStreamSingleton *sharedInstance = nil;
 	[handlerStack removeObject:handler];
 }
 
+- (void)startHandler:(SUSStreamHandler *)handler
+{
+	[handler start];
+	[lyricsDataModel loadLyricsForArtist:handler.mySong.artist andTitle:handler.mySong.title];
+}
+
 #pragma mark Download
 
 - (void)queueStreamForSong:(Song *)song offset:(NSUInteger)byteOffset atIndex:(NSUInteger)index
@@ -99,7 +107,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 	
 	if ([handlerStack count] == 1)
 	{
-		[handler start];
+		[self startHandler:handler];
 	}
     
     // Also download the album art
@@ -133,9 +141,11 @@ static SUSStreamSingleton *sharedInstance = nil;
 - (void)queueStreamForNextSong
 {
 	Song *nextSong = [SUSCurrentPlaylistDAO dataModel].nextSong;
-	
-	if (nextSong)
+
+	// The file doesn't exist or it's not fully cached, start downloading it from the middle
+	if (nextSong && (!nextSong.fileExists || (!nextSong.isFullyCached && ![ViewObjectsSingleton sharedInstance].isOfflineMode)))
 	{
+		DLog(@"nextSong: %@  file exists: %i  is fully cached: %i   isOfflineMode: %i", nextSong, nextSong.fileExists, nextSong.isFullyCached, [ViewObjectsSingleton sharedInstance].isOfflineMode);
 		[self queueStreamForSong:nextSong];
 	}
 }
@@ -168,7 +178,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 		DLog(@"retrying stream handler");
 		// Less than max number of reconnections, so try again 
 		handler.numOfReconnects++;
-		[handler start];
+		[self startHandler:handler];
 	}
 	else
 	{
@@ -187,7 +197,8 @@ static SUSStreamSingleton *sharedInstance = nil;
 	// Start the next handler which is now the first object
 	if ([handlerStack count] > 0)
 	{
-		[(SUSStreamHandler *)[handlerStack firstObject] start];
+		SUSStreamHandler *handler = (SUSStreamHandler *)[handlerStack firstObject];
+		[self startHandler:handler];
 	}
 }
 
@@ -208,6 +219,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 - (void)setup
 {
     handlerStack = [[NSMutableArray alloc] initWithCapacity:0];
+	lyricsDataModel = [[SUSLyricsDAO alloc] initWithDelegate:self];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(queueStreamForNextSong) name:ISMSNotification_SongPlaybackEnded object:nil];
 }
 

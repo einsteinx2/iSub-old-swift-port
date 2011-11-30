@@ -1145,8 +1145,9 @@
 
 - (void)deleteCachedSongs2
 {
-	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
-	Song *nextSong = [SUSCurrentPlaylistDAO dataModel].nextSong;
+	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+	Song *currentSong = dataModel.currentSong;
+	Song *nextSong = dataModel.nextSong;
 	
 	// Truncate the song cache genre tables
 	[databaseControls.songCacheDb executeUpdate:@"DELETE FROM genres"];

@@ -170,14 +170,6 @@
 		
 		[noPlaylistsScreen release];
 	}
-
-	/*DLog(@"headerView: %@", headerView.layer);
-	DLog(@"savePlaylistLabel: %@", savePlaylistLabel.layer);
-	DLog(@"deleteSongsLabel: %@", deleteSongsLabel.layer);
-	DLog(@"playlistCountLabel: %@", playlistCountLabel.layer);
-	DLog(@"savePlaylistButton: %@", savePlaylistButton.layer);
-	DLog(@"editPlaylistLabel: %@", editPlaylistLabel.layer);
-	DLog(@"playlistNameTextField: %@", playlistNameTextField.layer);*/
 }
 
 - (void)viewWillAppear:(BOOL)animated 

@@ -26,6 +26,7 @@
 //
 - (NSUInteger)preSilenceLengthForSong:(Song *)aSong;
 - (BOOL)bassFree;
+- (void)prepareNextSongStreamInBackground;
 - (void)prepareNextSongStream;
 - (void)clearEqualizer;
 - (void)applyEqualizer:(NSArray *)values;

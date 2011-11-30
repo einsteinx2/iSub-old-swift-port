@@ -135,8 +135,12 @@
 	}
 	[result close];
 	
-	DLog(@"positions: %i", [positions count]);
-	return [NSArray arrayWithArray:positions];
+	//DLog(@"positions: %i", [positions count]);
+	
+	if ([positions count] == 0)
+		return nil;
+	else
+		return [NSArray arrayWithArray:positions];
 }
 
 - (NSArray *)rootFolderIndexCounts
@@ -154,8 +158,12 @@
 	}
 	[result close];
 	
-	DLog(@"counts count: %i", [counts count]);
-	return [NSArray arrayWithArray:counts];
+	//DLog(@"counts count: %i", [counts count]);
+	
+	if ([counts count] == 0)
+		return nil;
+	else
+		return [NSArray arrayWithArray:counts];
 }
 
 - (Artist *)rootFolderArtistForPosition:(NSUInteger)position
@@ -299,9 +307,11 @@
 
 - (NSArray *)indexPositions
 {
+	//DLog(@"indexPositions: %@", indexPositions);
 	if (indexPositions == nil)
 	{
 		indexPositions = [[self rootFolderIndexPositions] retain];
+		//DLog(@"indexPositions count: %i   tableModifier: %@   indexPositions: %@", [self.db intForQuery:@"SELECT count(*) FROM rootFolderIndexCache%@", self.tableModifier], self.tableModifier, indexPositions);
 	}
 	return indexPositions;
 }

@@ -30,11 +30,11 @@
 
 // Server Login Settings
 @property (nonatomic, retain) NSMutableArray *serverList;
-@property (nonatomic, retain) NSString *urlString;
-@property (nonatomic, retain) NSString *username;
-@property (nonatomic, retain) NSString *password;
+@property (nonatomic, copy) NSString *urlString;
+@property (nonatomic, copy) NSString *username;
+@property (nonatomic, copy) NSString *password;
 
-@property (nonatomic, retain) NSString *redirectUrlString;
+@property (nonatomic, copy) NSString *redirectUrlString;
 
 // Root Folders Settings
 @property (nonatomic, retain) NSDate *rootFoldersReloadTime;

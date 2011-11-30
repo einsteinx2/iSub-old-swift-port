@@ -82,12 +82,14 @@
 
 - (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
 {
-	[delegate loadingFailed:theLoader withError:error];
+	[loader release]; loader = nil;
+	[delegate loadingFailed:nil withError:error];
 }
 
 - (void)loadingFinished:(SUSLoader*)theLoader
 {
-	[delegate loadingFinished:theLoader];
+	[loader release]; loader = nil;
+	[delegate loadingFinished:nil];
 }
 
 /*

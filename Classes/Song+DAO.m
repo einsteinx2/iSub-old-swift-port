@@ -143,7 +143,7 @@
 + (Song *)songFromDbForMD5:(NSString *)md5 inTable:(NSString *)table inDatabase:(FMDatabase *)db
 {
 	Song *aSong = nil;
-	FMResultSet *result = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE md5 = %@", table, md5]];
+	FMResultSet *result = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE md5 = ?", table], md5];
 	if ([db hadError]) 
 	{
 		DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);

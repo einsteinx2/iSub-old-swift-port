@@ -69,21 +69,7 @@
 		[self.view addSubview:noCacheScreen];
 		
 		[noCacheScreen release];
-		
-		DLog(@"noCacheScreen: %@", noCacheScreen.layer);
-		DLog(@"textLabel: %@", textLabel.layer);
-		DLog(@"textLabel2: %@", textLabel2.layer);
 	}
-	
-	DLog(@"currentSongProgressView: %@", currentSongProgressView.layer);
-	DLog(@"nextSongLabel: %@", nextSongLabel.layer);
-	DLog(@"nextSongProgressView: %@", nextSongProgressView.layer);
-	DLog(@"songsCachedLabel: %@", songsCachedLabel.layer);
-	DLog(@"cacheSizeLabel: %@", cacheSizeLabel.layer);
-	DLog(@"cacheSettingLabel: %@", cacheSettingLabel.layer);
-	DLog(@"cacheSettingSizeLabel: %@", cacheSettingSizeLabel.layer);
-	DLog(@"freeSpaceLabel: %@", freeSpaceLabel.layer);
-	DLog(@"songInfoToggleButton: %@", songInfoToggleButton.layer);
 }
 
 - (void)viewDidDisappear:(BOOL)animated

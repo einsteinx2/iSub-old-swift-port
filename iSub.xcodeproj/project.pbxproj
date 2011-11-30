@@ -264,6 +264,9 @@
 		538229FF11C98401003F1E23 /* CacheSongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 538229FD11C98401003F1E23 /* CacheSongUITableViewCell.m */; };
 		53822A0211C986A4003F1E23 /* CacheArtistUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53822A0111C986A4003F1E23 /* CacheArtistUITableViewCell.m */; };
 		5382BA8D12DA4039005A3D1A /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 5382BA8C12DA4039005A3D1A /* UIDevice+Hardware.m */; };
+		5382F65714856F3C001C14C8 /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5382F65614856F3C001C14C8 /* libSystem.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
+		5382F65814856F4F001C14C8 /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5382F65614856F3C001C14C8 /* libSystem.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
+		5382F65914856F5B001C14C8 /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5382F65614856F3C001C14C8 /* libSystem.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
 		5386FB821406243A0009F73F /* SUSLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5386FB811406243A0009F73F /* SUSLoader.m */; };
 		5386FB831406243A0009F73F /* SUSLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5386FB811406243A0009F73F /* SUSLoader.m */; };
 		5386FB841406243A0009F73F /* SUSLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5386FB811406243A0009F73F /* SUSLoader.m */; };
@@ -2051,6 +2054,7 @@
 		53822A0111C986A4003F1E23 /* CacheArtistUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheArtistUITableViewCell.m; sourceTree = "<group>"; };
 		5382BA8B12DA4038005A3D1A /* UIDevice+Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+Hardware.h"; sourceTree = "<group>"; };
 		5382BA8C12DA4039005A3D1A /* UIDevice+Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+Hardware.m"; sourceTree = "<group>"; };
+		5382F65614856F3C001C14C8 /* libSystem.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libSystem.dylib; path = usr/lib/libSystem.dylib; sourceTree = SDKROOT; };
 		5386FB801406243A0009F73F /* SUSLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSLoader.h; sourceTree = "<group>"; };
 		5386FB811406243A0009F73F /* SUSLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSLoader.m; sourceTree = "<group>"; };
 		5386FB8514062A390009F73F /* SavedSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedSettings.h; sourceTree = "<group>"; };
@@ -2624,6 +2628,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5382F65714856F3C001C14C8 /* libSystem.dylib in Frameworks */,
 				53A2BE2A147DF14600E44822 /* OpenGLES.framework in Frameworks */,
 				53B38C141475940700CD8A99 /* AVFoundation.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
@@ -2655,6 +2660,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5382F65914856F5B001C14C8 /* libSystem.dylib in Frameworks */,
 				53A2BE28147DF13600E44822 /* OpenGLES.framework in Frameworks */,
 				53B38C12147593FA00CD8A99 /* AVFoundation.framework in Frameworks */,
 				53BC2850139AF0DD00A825F1 /* Foundation.framework in Frameworks */,
@@ -2686,6 +2692,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5382F65814856F4F001C14C8 /* libSystem.dylib in Frameworks */,
 				53A2BE29147DF14300E44822 /* OpenGLES.framework in Frameworks */,
 				53B38C131475940400CD8A99 /* AVFoundation.framework in Frameworks */,
 				53DCF5B113BFEAD3009160F9 /* Foundation.framework in Frameworks */,
@@ -2742,6 +2749,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				5382F65614856F3C001C14C8 /* libSystem.dylib */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -2994,6 +3002,8 @@
 		534098BA142E5DBA00455754 /* DAOs */ = {
 			isa = PBXGroup;
 			children = (
+				53D74D4F147185AB0025F8F1 /* SUSCurrentPlaylistDAO.h */,
+				53D74D50147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m */,
 				53EB49911401B71C0014E59A /* SUSRootFoldersDAO.h */,
 				53EB49921401B71C0014E59A /* SUSRootFoldersDAO.m */,
 				53E82A96140720BC0051D44B /* SUSSubFolderDAO.h */,
@@ -3010,8 +3020,6 @@
 				539B3091145E78AE00D06475 /* SUSLyricsDAO.m */,
 				53F11B791460FBAD0010820B /* SUSServerPlaylistsDAO.h */,
 				53F11B7A1460FBAD0010820B /* SUSServerPlaylistsDAO.m */,
-				53D74D4F147185AB0025F8F1 /* SUSCurrentPlaylistDAO.h */,
-				53D74D50147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m */,
 				53D74D541471BE150025F8F1 /* Song+DAO.h */,
 				53D74D551471BE160025F8F1 /* Song+DAO.m */,
 				531B6D68147C377100BA28B9 /* SUSCoverArtLargeDAO.h */,

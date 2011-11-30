@@ -15,10 +15,17 @@
 #define ISMSNotification_SongPlaybackPaused @"ISMS Song Playback Pause"
 #define ISMSNotification_SongPlaybackEnded @"ISMS Song Playback End"
 #define ISMSNotification_SongPlaybackFailed @"ISMS Song Playback Failed"
+
 #define ISMSNotification_AlbumArtLargeDownloaded @"ISMS Album art downloaded"
 #define ISMSNotification_AlbumArtLargeFailed @"ISMS Album art failed to download"
+
 #define ISMSNotification_ServerSwitched @"ISMS Server Swiched"
 #define ISMSNotification_ServerCheckPassed @"ISMS Server check completed successfully"
 #define ISMSNotification_ServerCheckFailed @"ISMS Server check failed"
+
+#define ISMSNotification_LyricsDownloaded @"ISMS Lyrics downloaded successfully"
+#define ISMSNotification_LyricsFailed @"ISMS Lyrics download failed"
+
+#define ISMSNotification_RepeatModeChanged @"ISMS Repeat mode changed"
 
 #endif

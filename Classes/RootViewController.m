@@ -96,7 +96,7 @@
 	searchY = 80;
 	dropdown = nil;
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadArtistList) name:@"reloadArtistList" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadArtistList) name:ISMSNotification_ServerSwitched object:nil];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doneSearching_Clicked:) name:@"endSearch" object:searchOverlayView];
 	
@@ -274,7 +274,7 @@
 
 - (void)loadingFinished:(SUSLoader*)theLoader
 {	
-    DLog(@"loadingFinished called");
+    //DLog(@"loadingFinished called");
 	if (!isCountShowing)
 		[self addCount];
 	else
@@ -512,7 +512,7 @@
 		}
 		else
 		{
-			DLog(@"indexPositions: %@", [dataModel indexPositions]);
+			//DLog(@"indexPositions: %@", [dataModel indexPositions]);
 			NSUInteger sectionStartIndex = [[[dataModel indexPositions] objectAtIndex:indexPath.section] intValue];
 			anArtist = [dataModel artistForPosition:(sectionStartIndex + indexPath.row)];
 		}
@@ -535,7 +535,18 @@
 	if(isSearching)
 		return @"";
 	
-	return [[dataModel indexNames] objectAtIndex:section];
+	NSString *title = nil;
+	
+	@try 
+	{
+		title = [[dataModel indexNames] objectAtIndex:section];
+	}
+	@catch (NSException *exception) 
+	{
+		DLog("exception name: %@  reason: %@", [exception name], [exception reason]);
+	}
+	
+	return title;
 }
 
 

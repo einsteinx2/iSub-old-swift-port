@@ -31,6 +31,8 @@ static SUSCurrentPlaylistDAO *currPlaylistDAORef;
 
 static HSTREAM fileStream1, fileStream2, outStream;
 
+static NSThread *playbackThread = nil;
+
 static float fftData[1024];
 
 short *lineSpecBuf;
@@ -89,6 +91,9 @@ void MyAudioSessionInterruptionListener(void *inClientData, UInt32 inInterruptio
 // Stream callback
 DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *user)
 {
+	if (!playbackThread)
+		playbackThread = [NSThread currentThread];
+	
 	DWORD r;
 	
 	if (isFilestream1 && BASS_ChannelIsActive(fileStream1)) 
@@ -98,7 +103,9 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		
 		// Check if stream1 is now complete
 		if (!BASS_ChannelIsActive(fileStream1))
-		{		
+		{	
+			DLog(@"stream1 complete");
+			
 			// Stream1 is done, free the stream
 			BASS_StreamFree(fileStream1);
 			
@@ -111,6 +118,8 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 			// Check to see if there is another song to play
 			if (BASS_ChannelIsActive(fileStream2))
 			{
+				DLog(@"stream2 exists, starting playback");
+				
 				// Send song start notification
 				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
 				
@@ -119,9 +128,10 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 				[selfRef setIsTempDownload:NO];
 				isFilestream1 = NO;
 				r = BASS_ChannelGetData(fileStream2, buffer, length);
+				DLog(@"error code: %i", BASS_ErrorGetCode());
 				
 				// Prepare the next song for playback
-				[selfRef performSelectorInBackground:@selector(prepareNextSongStream) withObject:nil];
+				[selfRef prepareNextSongStreamInBackground];
 			}
 		}
 	}
@@ -133,6 +143,8 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		// Check if stream2 is now complete
 		if (!BASS_ChannelIsActive(fileStream2))
 		{
+			DLog(@"stream2 complete");
+			
 			// Stream2 is done, free the stream
 			BASS_StreamFree(fileStream2);
 			
@@ -144,6 +156,8 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 			
 			if (BASS_ChannelIsActive(fileStream1))
 			{
+				DLog(@"stream1 exists, starting playback");
+				
 				// Send song start notification
 				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
 				
@@ -151,29 +165,58 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 				[selfRef setIsTempDownload:NO];
 				isFilestream1 = YES;
 				r = BASS_ChannelGetData(fileStream1, buffer, length);
+				DLog(@"error code: %i", BASS_ErrorGetCode());
 				
-				[selfRef performSelectorInBackground:@selector(prepareNextSongStream) withObject:nil];
+				[selfRef prepareNextSongStreamInBackground];
 			}
 		}
 	}
 	else
 	{
-		//DLog(@"no more data, ending");
+		DLog(@"no more data, ending");
 		r = BASS_STREAMPROC_END;
+		[selfRef performSelectorOnMainThread:@selector(bassFree) withObject:nil waitUntilDone:NO];
 	}
 	
 	return r;
 }
 
+- (void)prepareNextSongStreamInBackground
+{
+	@autoreleasepool 
+	{
+		[self performSelectorInBackground:@selector(prepareNextSongStream) withObject:nil];
+	}
+}
+
 - (void)prepareNextSongStream
 {
-	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
-	Song *nextSong = dataModel.nextSong;
-	if (nextSong.fileExists)
+	@autoreleasepool 
 	{
-		NSUInteger silence = [self preSilenceLengthForSong:nextSong];
-		
-		HSTREAM stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], silence, 0, BASS_STREAM_DECODE);
+		Song *nextSong = currPlaylistDAO.nextSong;
+		if (nextSong.fileExists)
+		{
+			if (BASS_Init(0, 44100, 0, NULL, NULL))
+			{
+				NSUInteger silence = [self preSilenceLengthForSong:nextSong];
+				[self performSelector:@selector(prepareNextSongStreamInternal:) onThread:playbackThread withObject:[NSNumber numberWithInt:silence] waitUntilDone:NO];
+				BASS_Free();
+			}
+			else
+			{
+				DLog(@"bass init failed in background thread");
+			}
+		}
+	}
+}
+
+// playback thread
+- (void)prepareNextSongStreamInternal:(NSNumber *)silence
+{
+	@autoreleasepool 
+	{
+		Song *nextSong = currPlaylistDAO.nextSong;
+		HSTREAM stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], [silence intValue], 0, BASS_STREAM_DECODE);
 		
 		if (!stream)
 		{
@@ -227,13 +270,11 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 }
 
 - (void)startWithOffsetInBytes:(NSNumber *)byteOffset
-{
-	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+{	
+	if (currPlaylistDAO.currentIndex >= currPlaylistDAO.count)
+		currPlaylistDAO.currentIndex = currPlaylistDAO.count - 1;
 	
-	if (dataModel.currentIndex >= dataModel.count)
-		dataModel.currentIndex = dataModel.count - 1;
-	
-	Song *currentSong = dataModel.currentSong;
+	Song *currentSong = currPlaylistDAO.currentSong;
 	
 	if (!currentSong)
 		return;
@@ -365,7 +406,7 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 {
     isTempDownload = NO;
     
-	BASS_Free();
+	[self bassFree];
 	
 	BASS_SetConfig(BASS_CONFIG_IOS_MIXAUDIO, 0); // Disable mixing.	To be called before BASS_Init.
 	
@@ -382,6 +423,7 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 
 - (BOOL)bassFree
 {
+	playbackThread = nil;
     isTempDownload = NO;
 	BOOL success = BASS_Free();
 	outStream = 0;
@@ -607,7 +649,7 @@ static BassWrapperSingleton *sharedInstance = nil;
 		lineSpecBufSize = 512 * sizeof(short);
 	lineSpecBuf = malloc(lineSpecBufSize);
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bassFree) name:ISMSNotification_SongPlaybackEnded object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStreamInBackground) name:ISMSNotification_RepeatModeChanged object:nil];
 }
 
 + (BassWrapperSingleton *)sharedInstance

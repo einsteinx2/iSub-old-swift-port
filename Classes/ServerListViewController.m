@@ -258,6 +258,8 @@
 	settings.username = [NSString stringWithString:viewObjects.serverToEdit.username];
 	settings.password = [NSString stringWithString:viewObjects.serverToEdit.password];
     settings.redirectUrlString = self.theNewRedirectionUrl;
+	
+	DLog(@"settings.urlString: %@   settings.redirectUrlString: %@", settings.urlString, settings.redirectUrlString);
 		
 	[self retain];
 	if(self == [[self.navigationController viewControllers] objectAtIndex:0])
@@ -318,16 +320,11 @@
 		}
 		
 		// Reset the tabs
-		//[viewObjects loadArtistList];
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadArtistList" object:nil];
 		if (IS_IPAD())
 			[appDelegate.artistsNavigationController popToRootViewControllerAnimated:NO];
 		else
 			[appDelegate.rootViewController.navigationController popToRootViewControllerAnimated:NO];
-		//[appDelegate.allAlbumsNavigationController.topViewController viewDidLoad];
-		//[appDelegate.allSongsNavigationController.topViewController viewDidLoad];
-		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_SongPlaybackStarted object:nil];
-		
+				
 		// Add the tab bar controller back to the window
 		if (!IS_IPAD())
 			[appDelegate.window addSubview:[appDelegate.mainTabBarController view]];
@@ -427,6 +424,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
 	viewObjects.serverToEdit = [settings.serverList objectAtIndex:indexPath.row];
+	DLog(@"viewObjects.serverToEdit.url: %@", viewObjects.serverToEdit.url);
 
 	if (isEditing)
 	{
@@ -533,6 +531,11 @@
 	settings.isNewSearchAPI = checker.isNewSearchAPI;
     
     [checker release]; checker = nil;
+	
+	settings.urlString = [NSString stringWithString:viewObjects.serverToEdit.url];
+	settings.username = [NSString stringWithString:viewObjects.serverToEdit.username];
+	settings.password = [NSString stringWithString:viewObjects.serverToEdit.password];
+    settings.redirectUrlString = self.theNewRedirectionUrl;
 	
 	[self switchServer:nil];
     

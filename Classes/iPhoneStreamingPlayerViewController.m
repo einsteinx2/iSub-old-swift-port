@@ -28,6 +28,7 @@
 #import "BassWrapperSingleton.h"
 #import "EqualizerViewController.h"
 #import "SUSCoverArtLargeDAO.h"
+//#import "MarqueeLabel.h"
 
 
 @interface iPhoneStreamingPlayerViewController ()
@@ -158,6 +159,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPlayButtonImage) name:ISMSNotification_SongPlaybackPaused object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPauseButtonImage) name:ISMSNotification_SongPlaybackStarted object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) name:ISMSNotification_SongPlaybackStarted object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) name:ISMSNotification_ServerSwitched object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupCoverArt) name:ISMSNotification_AlbumArtLargeDownloaded object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songInfoToggle:) name:@"hideSongInfo" object:nil];
 	
@@ -275,6 +277,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackPaused object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackStarted object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_AlbumArtLargeDownloaded object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ServerSwitched object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfo" object:nil];
 	
 	[pageControlViewController viewDidDisappear:NO];
@@ -407,6 +410,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[artist release];
 		
 		UILabel *song = [[UILabel alloc] initWithFrame:songFrame];
+		//MarqueeLabel *song = [[MarqueeLabel alloc] initWithFrame:songFrame andRate:50.0 andBufer:6.0];
 		song.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		song.backgroundColor = [UIColor clearColor];
 		song.textColor = [UIColor whiteColor];

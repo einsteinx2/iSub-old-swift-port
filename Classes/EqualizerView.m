@@ -67,6 +67,8 @@ static void SetupArrays()
 
 static void SetupDrawEQPalette()
 {
+	float scale = SCREEN_SCALE();
+	
 	// setup palette
 	RGBQUAD *pal = (RGBQUAD *)palette;
 	int a;
@@ -90,16 +92,16 @@ static void SetupDrawEQPalette()
 	 pal[318+a].rgbRed = 255;
 	 }*/
 	
-	for (a = 1; a < 128 * SCREEN_SCALE(); a++) 
+	for (a = 1; a < 128 * scale; a++) 
 	{
-		pal[a].rgbBlue = 256 - ((2/SCREEN_SCALE()) * a);
-		pal[a].rgbGreen   = (2/SCREEN_SCALE()) * a;
+		pal[a].rgbBlue = 256 - ((2/scale) * a);
+		pal[a].rgbGreen   = (2/scale) * a;
 	}
-    for (a = 1; a < 128 * SCREEN_SCALE(); a++) 
+    for (a = 1; a < 128 * scale; a++) 
 	{
-		int start = 128 * SCREEN_SCALE() - 1;
-		pal[start+a].rgbGreen = 256 - ((2/SCREEN_SCALE()) * a);
-		pal[start+a].rgbRed   = (2/SCREEN_SCALE()) * a;
+		int start = 128 * scale - 1;
+		pal[start+a].rgbGreen = 256 - ((2/scale) * a);
+		pal[start+a].rgbRed   = (2/scale) * a;
 	}
 	
 	for (a = 0; a < 32; a++) 
@@ -128,9 +130,12 @@ static void SetupDrawBitmap()
 __attribute__((constructor))
 static void initialize_drawPalette() 
 {
-	SetupArrays();
-	SetupDrawEQPalette();
-	SetupDrawBitmap();
+	@autoreleasepool 
+	{
+		SetupArrays();
+		SetupDrawEQPalette();
+		SetupDrawBitmap();
+	}
 }
 
 __attribute__((destructor))

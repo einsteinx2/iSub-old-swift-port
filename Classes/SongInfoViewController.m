@@ -88,6 +88,7 @@
 	
 	pauseSlider = NO;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initInfo) name:ISMSNotification_SongPlaybackStarted object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initInfo) name:ISMSNotification_ServerSwitched object:nil];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidUnload) name:@"hideSongInfoFast" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidUnload) name:@"hideSongInfo" object:nil];
@@ -109,27 +110,6 @@
 		
 		[self updateDownloadProgress];
 	}
-	
-	/*DLog(@"songInfoToggleButton: %@", songInfoToggleButton.layer);
-	DLog(@"progressSlider: %@", progressSlider.layer);
-	DLog(@"progressLabel: %@", progressLabel.layer);
-	DLog(@"progressLabelBackground: %@", progressLabelBackground.layer);
-	DLog(@"downloadProgress: %@", downloadProgress.layer);
-	DLog(@"elapsedTimeLabel: %@", elapsedTimeLabel.layer);
-	DLog(@"remainingTimeLabel: %@", remainingTimeLabel.layer);
-	DLog(@"artistLabel: %@", artistLabel.layer);
-	DLog(@"albumLabel: %@", albumLabel.layer);
-	DLog(@"titleLabel: %@", titleLabel.layer);
-	DLog(@"trackLabel: %@", trackLabel.layer);
-	DLog(@"yearLabel: %@", yearLabel.layer);
-	DLog(@"genreLabel: %@", genreLabel.layer);
-	DLog(@"bitRateLabel: %@", bitRateLabel.layer);
-	DLog(@"lengthLabel: %@", lengthLabel.layer);
-	DLog(@"repeatButton: %@", repeatButton.layer);
-	DLog(@"bookmarkButton: %@", bookmarkButton.layer);
-	DLog(@"bookmarkCountLabel: %@", bookmarkCountLabel.layer);
-	DLog(@"shuffleButton: %@", shuffleButton.layer);
-	DLog(@"bookmarkNameTextField: %@", bookmarkNameTextField.layer);*/
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -137,6 +117,7 @@
 	[super viewDidDisappear:animated];
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackStarted object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ServerSwitched object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfoFast" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfo" object:nil];
 	
@@ -181,12 +162,14 @@
 
 - (void)initInfo
 {
+	SUSCurrentPlaylistDAO *currentPlaylistDAO = [SUSCurrentPlaylistDAO dataModel];
+	
 	hasMoved = NO;
 	oldPosition = 0.0;
 	
 	progressSlider.minimumValue = 0.0;
 	
-	self.currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+	self.currentSong = currentPlaylistDAO.currentSong;
 	
 	if (currentSong.duration && ![SavedSettings sharedInstance].isJukeboxEnabled)
 	{
@@ -232,14 +215,14 @@
 	else
 		genreLabel.text = @"";
 	
-	if(musicControls.repeatMode == 1)
+	if(currentPlaylistDAO.repeatMode == 1)
 	{
 		if (IS_IPAD())
 			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one-ipad.png"] forState:0];
 		else
 			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one.png"] forState:0];
 	}
-	else if(musicControls.repeatMode == 2)
+	else if(currentPlaylistDAO.repeatMode == 2)
 	{
 		if (IS_IPAD())
 			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all-ipad.png"] forState:0];
@@ -422,29 +405,31 @@
 
 - (IBAction) repeatButtonToggle
 {
-	if(musicControls.repeatMode == 0)
+	SUSCurrentPlaylistDAO *currentPlaylistDAO = [SUSCurrentPlaylistDAO dataModel];
+	
+	if(currentPlaylistDAO.repeatMode == 0)
 	{
 		if (IS_IPAD())
 			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one-ipad.png"] forState:0];
 		else
 			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one.png"] forState:0];
-		musicControls.repeatMode = 1;
+		currentPlaylistDAO.repeatMode = 1;
 	}
-	else if(musicControls.repeatMode == 1)
+	else if(currentPlaylistDAO.repeatMode == 1)
 	{
 		if (IS_IPAD())
 			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all-ipad.png"] forState:0];
 		else
 			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all.png"] forState:0];
-		musicControls.repeatMode = 2;
+		currentPlaylistDAO.repeatMode = 2;
 	}
-	else if(musicControls.repeatMode == 2)
+	else if(currentPlaylistDAO.repeatMode == 2)
 	{
 		if (IS_IPAD())
 			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-ipad.png"] forState:0];
 		else
 			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat.png"] forState:0];
-		musicControls.repeatMode = 0;
+		currentPlaylistDAO.repeatMode = 0;
 	}
 }
 

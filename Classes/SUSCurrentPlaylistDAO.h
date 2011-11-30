@@ -6,6 +6,13 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
+typedef enum
+{
+	ISMSRepeatMode_Normal,
+	ISMSRepeatMode_RepeatOne,
+	ISMSRepeatMode_RepeatAll
+} ISMSRepeatMode;
+
 @class Song, FMDatabase;
 @interface SUSCurrentPlaylistDAO : NSObject
 
@@ -21,5 +28,7 @@
 @property (readonly) NSUInteger count;
 
 @property (readonly) FMDatabase *db;
+
+@property ISMSRepeatMode repeatMode;
 
 @end

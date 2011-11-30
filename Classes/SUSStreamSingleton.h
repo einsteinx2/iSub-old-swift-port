@@ -9,10 +9,11 @@
 #import "SUSStreamHandlerDelegate.h"
 #import "SUSLoaderDelegate.h"
 
-@class Song, SUSStreamHandler;
+@class Song, SUSStreamHandler, SUSLyricsDAO;
 @interface SUSStreamSingleton : NSObject <SUSStreamHandlerDelegate, SUSLoaderDelegate>
 
 @property (nonatomic, retain) NSMutableArray *handlerStack;
+@property (nonatomic, retain) SUSLyricsDAO *lyricsDataModel;
 
 + (SUSStreamSingleton *)sharedInstance;
 

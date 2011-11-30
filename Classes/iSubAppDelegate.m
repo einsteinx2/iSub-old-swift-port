@@ -118,10 +118,8 @@
 	[UIDevice currentDevice].batteryMonitoringEnabled = YES;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(batteryStateChanged:) name:@"UIDeviceBatteryStateDidChangeNotification" object:[UIDevice currentDevice]];
 	[self batteryStateChanged:nil];	
-		
 
-	// appinit 1
-	//
+	// Handle offline mode
 	if (settings.isForceOfflineMode)
 	{
 		viewObjects.isOfflineMode = YES;
@@ -159,13 +157,8 @@
 		}
 	}
 	
-	// app init 2
+	// Initialize the databases
 	[databaseControls initDatabases];
-	
-	// CAN'T GET THIS TO WORK
-	// Setup the HTTP Basic Auth credentials
-	//NSURLCredential *credential = [NSURLCredential credentialWithUser:self.defaultUserName password:self.defaultPassword persistence:NSURLCredentialPersistenceForSession];
-	//NSURLProtectionSpace *protectionSpace = [[NSURLProtectionSpace alloc] initWithHost:@"example.com" port:0 protocol:@"http" realm:nil authenticationMethod:NSURLAuthenticationMethodHTTPBasic];
 	
 	// Setup Twitter connection
 	if (!viewObjects.isOfflineMode && [[NSUserDefaults standardUserDefaults] objectForKey: @"twitterAuthData"])
@@ -173,15 +166,61 @@
 		[socialControls createTwitterEngine];
 	}
 	
-	// appinit 3
-	//
-	// Start the queued downloads if Wifi is available
-	[musicControls downloadNextQueuedSong];
-	
 	// Start the save defaults timer and mem cache initial defaults
 	[settings setupSaveState];
-	
-	[self createAndDisplayUI];
+		
+	// Create and display UI
+	introController = nil;
+	if (IS_IPAD())
+	{
+		// Setup the split view
+		[window addSubview:splitView.view];
+		splitView.showsMasterInPortrait = YES;
+		splitView.splitPosition = 220;
+		mainMenu = [[iPadMainMenu alloc] initWithNibName:@"iPadMainMenu" bundle:nil];
+		
+		splitView.masterViewController = mainMenu;
+		
+		if (showIntro)
+		{
+			introController = [[IntroViewController alloc] init];
+			introController.modalPresentationStyle = UIModalPresentationFormSheet;
+			[splitView presentModalViewController:introController animated:NO];
+			[introController release];
+		}
+	}
+	else
+	{
+		// Setup the tabBarController
+		mainTabBarController.moreNavigationController.navigationBar.barStyle = UIBarStyleBlack;
+		
+		//DLog(@"isOfflineMode: %i", viewObjects.isOfflineMode);
+		if (viewObjects.isOfflineMode)
+		{
+			//DLog(@"--------------- isOfflineMode");
+			currentTabBarController = offlineTabBarController;
+			[window addSubview:offlineTabBarController.view];
+		}
+		else 
+		{
+			// Recover the tab order and load the main tabBarController
+			currentTabBarController = mainTabBarController;
+			//[viewObjects orderMainTabBarController]; // Do this after server check
+			[window addSubview:mainTabBarController.view];
+		}
+		
+		if (showIntro)
+		{
+			introController = [[IntroViewController alloc] init];
+			[currentTabBarController presentModalViewController:introController animated:NO];
+			[introController release];
+		}
+	}
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+		window.backgroundColor = viewObjects.jukeboxColor;
+	else 
+		window.backgroundColor = viewObjects.windowColor;
+	[window makeKeyAndVisible];	
 	
 	// Check the server status in the background
     DLog(@"adding loading screen");
@@ -263,68 +302,15 @@
     
     DLog(@"server verification passed, hiding loading screen");
     [viewObjects hideLoadingScreen];
+	
+	if (!IS_IPAD() && !viewObjects.isOfflineMode)
+		[viewObjects orderMainTabBarController];
+	
+	// Start the queued downloads if Wifi is available
+	[musicControls downloadNextQueuedSong];
 }
 
 #pragma mark -
-
-- (void)createAndDisplayUI
-{
-	introController = nil;
-	
-	if (IS_IPAD())
-	{
-		// Setup the split view
-		[window addSubview:splitView.view];
-		splitView.showsMasterInPortrait = YES;
-		splitView.splitPosition = 220;
-		mainMenu = [[iPadMainMenu alloc] initWithNibName:@"iPadMainMenu" bundle:nil];
-		
-		splitView.masterViewController = mainMenu;
-		
-		if (showIntro)
-		{
-			introController = [[IntroViewController alloc] init];
-			introController.modalPresentationStyle = UIModalPresentationFormSheet;
-			[splitView presentModalViewController:introController animated:NO];
-			[introController release];
-		}
-	}
-	else
-	{
-		// Setup the tabBarController
-		mainTabBarController.moreNavigationController.navigationBar.barStyle = UIBarStyleBlack;
-		
-		//DLog(@"isOfflineMode: %i", viewObjects.isOfflineMode);
-		if (viewObjects.isOfflineMode)
-		{
-			//DLog(@"--------------- isOfflineMode");
-			currentTabBarController = offlineTabBarController;
-			[window addSubview:offlineTabBarController.view];
-		}
-		else 
-		{
-			// Recover the tab order and load the main tabBarController
-			currentTabBarController = mainTabBarController;
-			[viewObjects orderMainTabBarController];
-			[window addSubview:mainTabBarController.view];
-		}
-		
-		if (showIntro)
-		{
-			introController = [[IntroViewController alloc] init];
-			[currentTabBarController presentModalViewController:introController animated:NO];
-			[introController release];
-		}
-	}
-	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-		window.backgroundColor = viewObjects.jukeboxColor;
-	else 
-		window.backgroundColor = viewObjects.windowColor;
-	
-	[window makeKeyAndVisible];	
-	/*[self startStopServer];*/
-}
 
 - (void)loadFlurryAnalytics
 {

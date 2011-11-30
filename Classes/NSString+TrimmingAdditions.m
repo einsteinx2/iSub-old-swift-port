@@ -17,7 +17,7 @@
     unichar charBuffer[length];    
     [self getCharacters:charBuffer];
 	
-    for (NSUInteger location = 0; location < length; location++) 
+    for (location = 0; location < length; location++) 
 	{
         if (![characterSet characterIsMember:charBuffer[location]]) 
 		{
@@ -35,15 +35,15 @@
     unichar charBuffer[length];    
     [self getCharacters:charBuffer];
 	
-    for (NSUInteger length = [self length]; length > 0; length--) 
+    for (location = length; location > 0; location--) 
 	{
-        if (![characterSet characterIsMember:charBuffer[length - 1]]) 
+        if (![characterSet characterIsMember:charBuffer[location - 1]]) 
 		{
             break;
         }
     }
 	
-    return [self substringWithRange:NSMakeRange(location, length - location)];
+    return [self substringWithRange:NSMakeRange(0, location)];
 }
 
 - (NSString *)stringByTrimmingLeadingWhitespace 

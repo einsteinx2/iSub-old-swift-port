@@ -104,9 +104,9 @@
     [theConnection release];
     self.receivedData = nil;
 	
+	[delegate SUSServerURLCheckFailed:self withError:error];
+	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckFailed object:nil];
-    
-    [delegate SUSServerURLCheckFailed:self withError:error];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
@@ -141,23 +141,23 @@
 			}
 			
             // This is a Subsonic server, so pass
-			[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckPassed object:nil];
             [delegate SUSServerURLCheckPassed:self];
+			[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckPassed object:nil];
         }
         else
         {
             // This is not a Subsonic server, so fail
             NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NotASubsonicServer];
+			[delegate SUSServerURLCheckFailed:self withError:error];
 			[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckFailed object:nil];
-            [delegate SUSServerURLCheckFailed:self withError:error];
         }
     }
     else
     {
         // This is not XML, so fail
         NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NotXML];
+		[delegate SUSServerURLCheckFailed:self withError:error];
 		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckFailed object:nil];
-        [delegate SUSServerURLCheckFailed:self withError:error];
     }
 	[tbxml release];
     

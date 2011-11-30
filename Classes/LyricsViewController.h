@@ -6,11 +6,11 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "SUSLoaderDelegate.h"
+//#import "SUSLoaderDelegate.h"
 
 @class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, SUSLyricsDAO;
 
-@interface LyricsViewController : UIViewController <SUSLoaderDelegate>
+@interface LyricsViewController : UIViewController //<SUSLoaderDelegate>
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;

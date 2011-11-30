@@ -84,16 +84,16 @@
     pageControl.currentPage = 0;
 	
 	// Load all the pages for better performance
-	/*for (int i = 0; i < numberOfPages; i++)
+	for (int i = 0; i < numberOfPages; i++)
 	{
 		[self loadScrollViewWithPage:i];
-	}*/
+	}
 	
 	// pages are created on demand
     // load the visible page
     // load the page on either side to avoid flashes when the user starts scrolling
-	[self loadScrollViewWithPage:0];
-    [self loadScrollViewWithPage:1];
+	//[self loadScrollViewWithPage:0];
+    //[self loadScrollViewWithPage:1];
 }
 
 /*- (void)viewWillAppear:(BOOL)animated 
@@ -210,7 +210,7 @@
     pageControl.currentPage = page;
 	
     // load the visible page and the page on either side of it (to avoid flashes when the user starts scrolling)
-    [self loadScrollViewWithPage:page - 1];
+    /*[self loadScrollViewWithPage:page - 1];
     [self loadScrollViewWithPage:page];
 	[self loadScrollViewWithPage:page + 1];
 	
@@ -221,7 +221,7 @@
 		{
 			[self unloadScrollViewPage:i];
 		}
-	}
+	}*/
 	
 	// Send a notification so the playlist view hides the edit controls
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"hideEditControls" object:nil];

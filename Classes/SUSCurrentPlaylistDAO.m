@@ -13,8 +13,10 @@
 #import "MusicSingleton.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
+#import "NSNotificationCenter+MainThread.h"
 
 static NSUInteger currentIndex = 0;
+static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
 
 @implementation SUSCurrentPlaylistDAO
 
@@ -61,17 +63,40 @@ static NSUInteger currentIndex = 0;
 
 - (Song *)nextSong
 {
-	return [self songForIndex:(currentIndex + 1)];
+	switch (self.repeatMode) 
+	{
+		case ISMSRepeatMode_RepeatOne:
+			return self.currentSong;
+			break;
+		case ISMSRepeatMode_RepeatAll:			
+			if (self.currentIndex + 1 >= self.count)
+				return [self songForIndex:0];
+			else
+				return [self songForIndex:(currentIndex + 1)];
+			break;
+		case ISMSRepeatMode_Normal:
+		default:
+			return [self songForIndex:(currentIndex + 1)];
+			break;
+	}
 }
 
 - (NSInteger)currentIndex
 {
-	return currentIndex;
+	NSInteger index;
+	@synchronized(self.class)
+	{
+		index = currentIndex;
+	}
+	return index;
 }
 
 - (void)setCurrentIndex:(NSInteger)index
 {
-	currentIndex = index;
+	@synchronized(self.class)
+	{
+		currentIndex = index;
+	}
 }
 
 - (NSUInteger)count
@@ -88,18 +113,54 @@ static NSUInteger currentIndex = 0;
 		else
 			count = [self.db intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
 	}
-	
 	return count;
 }
 
 - (NSInteger)incrementIndex
 {
-	//if (self.currentIndex + 1 < self.count)
-	//{
-		currentIndex++;
-	//}
-	
-	return currentIndex;
+	NSInteger index;
+	@synchronized(self.class)
+	{
+		switch (self.repeatMode) 
+		{
+			case ISMSRepeatMode_RepeatOne:
+				break;
+			case ISMSRepeatMode_RepeatAll:			
+				if (self.currentIndex + 1 >= self.count)
+				{
+					currentIndex = 0;
+					break;
+				}
+			case ISMSRepeatMode_Normal:
+			default:
+				currentIndex++;
+				break;
+		}
+		index = currentIndex;
+	}
+	return index;
+}
+
+- (ISMSRepeatMode)repeatMode
+{
+	ISMSRepeatMode aMode;
+	@synchronized(self.class)
+	{
+		aMode = repeatMode;
+	}
+	return aMode;
+}
+
+- (void)setRepeatMode:(ISMSRepeatMode)mode
+{
+	@synchronized(self.class)
+	{
+		if (repeatMode != mode)
+		{
+			repeatMode = mode;
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_RepeatModeChanged];
+		}
+	}
 }
 
 @end

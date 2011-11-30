@@ -12,6 +12,7 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "NSString+rfcEncode.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation SUSLyricsLoader
 
@@ -106,6 +107,8 @@
 	
 	// Inform the delegate that loading failed
 	[self.delegate loadingFailed:self withError:error];
+	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_LyricsFailed];
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
@@ -122,6 +125,8 @@
 			NSString *code = [TBXML valueOfAttributeNamed:@"code" forElement:error];
 			NSString *message = [TBXML valueOfAttributeNamed:@"message" forElement:error];
 			[self subsonicErrorCode:[code intValue] message:message];
+			
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_LyricsFailed];
 		}
 		else
 		{
@@ -131,12 +136,16 @@
                 self.loadedLyrics = [TBXML textForElement:lyrics];
                 [self insertLyricsIntoDb];
                 [self.delegate loadingFinished:self];
+				
+				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_LyricsDownloaded];
 			}
             else
             {
                 self.loadedLyrics = nil;
                 NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NoLyricsElement];
                 [self.delegate loadingFailed:self withError:error];
+				
+				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_LyricsFailed];
             }
 		}
 	}
@@ -144,14 +153,13 @@
     {
         NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NoLyricsElement];
         [self.delegate loadingFailed:self withError:error];
+		
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_LyricsFailed];
     }
 	[tbxml release];
 	
 	self.receivedData = nil;
 	self.connection = nil;
-	
-	// Notify the delegate that the loading is finished
-	[self.delegate loadingFinished:self];
 }
 
 @end

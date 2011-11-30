@@ -114,7 +114,6 @@
 - (void)loadHockeyApp;
 - (void)loadInAppPurchaseStore;
 - (void)createHTTPServer;
-- (void)createAndDisplayUI;
 
 - (void)reachabilityChanged: (NSNotification *)note;
 - (NSInteger)getHour;

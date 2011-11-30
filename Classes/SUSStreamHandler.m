@@ -245,8 +245,8 @@
 	[now release];
 	if (intervalSinceLastThrottle > kThrottleTimeInterval && totalBytesTransferred > (kMinBytesToStartLimiting * (bitrate / 160.0f)))
 	{
-		DLog(@"entering throttling if statement, interval: %f  bytes transferred: %lu  maxBytes: %f", 
-			 intervalSinceLastThrottle, bytesTransferred, kMaxBytesPerInterval3G);
+		if (isThrottleLoggingEnabled)
+			DLog(@"entering throttling if statement, interval: %f  bytes transferred: %lu  maxBytes: %f", intervalSinceLastThrottle, bytesTransferred, kMaxBytesPerInterval3G);
 		
 		NSTimeInterval delay = 0.0;
 		if (!isWifi && bytesTransferred > kMaxBytesPerInterval3G)

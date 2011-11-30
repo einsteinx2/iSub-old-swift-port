@@ -32,7 +32,8 @@
 		musicControls = [MusicSingleton sharedInstance];
 		databaseControls = [DatabaseSingleton sharedInstance];
         
-        dataModel = [[SUSLyricsDAO alloc] initWithDelegate:self];
+        //dataModel = [[SUSLyricsDAO alloc] initWithDelegate:self];
+		dataModel = [[SUSLyricsDAO alloc] init];
 		
         // Custom initialization
 		self.view = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 300)] autorelease];
@@ -76,11 +77,6 @@
 		titleLabel.text = @"Lyrics";
 		[self.view addSubview:titleLabel];
 		[titleLabel release];	
-		
-		//DLog(@"textView: %@", textView.layer);
-		//DLog(@"titleLabel: %@", titleLabel.layer);
-		
-		[self viewDidLoad];
     }
     return self;
 }
@@ -91,7 +87,8 @@
 	
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLyricsLabel) name:@"lyricsDoneLoading" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLyricsLabel) name:ISMSNotification_SongPlaybackStarted object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLyricsLabel) name:ISMSNotification_LyricsDownloaded object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidUnload) name:@"hideSongInfoFast" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidUnload) name:@"hideSongInfo" object:nil];
 
@@ -109,7 +106,8 @@
 {
 	[super viewDidDisappear:animated];
 	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"lyricsDoneLoading" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackStarted object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_LyricsDownloaded object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfoFast" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfo" object:nil];
 	
@@ -128,7 +126,7 @@
 	[textView performSelectorOnMainThread:@selector(setText:) withObject:musicControls.currentSongLyrics waitUntilDone:NO];
 }
 
-#pragma mark - SUSLoader delegate
+/*#pragma mark - SUSLoader delegate
 
 - (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
 {
@@ -139,6 +137,6 @@
 {
 	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
     textView.text = [dataModel lyricsForArtist:currentSong.artist andTitle:currentSong.title];
-}
+}*/
 
 @end

@@ -612,6 +612,7 @@
 	[searchBar resignFirstResponder];
 	
 	NSString *searchTerms = [searchBar.text stringByTrimmingLeadingAndTrailingWhitespace];
+	DLog(@"-%@-", searchTerms);
 	
     NSDictionary *parameters = nil;
     NSString *action = nil;

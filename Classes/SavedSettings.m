@@ -43,7 +43,8 @@
 
 - (void)setupSaveState
 {
-	NSInteger currentIndex = [SUSCurrentPlaylistDAO dataModel].currentIndex;
+	SUSCurrentPlaylistDAO *currentPlaylistDAO = [SUSCurrentPlaylistDAO dataModel];
+	NSInteger currentIndex = currentPlaylistDAO.currentIndex;
 	
 	//DLog(@"setting up save state");
 
@@ -66,7 +67,7 @@
 	currentPlaylistPosition = currentIndex;
 	[userDefaults setInteger:currentPlaylistPosition forKey:@"currentPlaylistPosition"];
 	
-	repeatMode = musicControls.repeatMode;
+	repeatMode = currentPlaylistDAO.repeatMode;
 	[userDefaults setInteger:repeatMode forKey:@"repeatMode"];
 	
 	bitRate = bassWrapper.bitRate;
@@ -86,8 +87,9 @@
 	
 	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 	BassWrapperSingleton *bassWrapper = [BassWrapperSingleton sharedInstance];
+	SUSCurrentPlaylistDAO *currentPlaylistDAO = [SUSCurrentPlaylistDAO dataModel];
 	
-	NSInteger currentIndex = [SUSCurrentPlaylistDAO dataModel].currentIndex;
+	NSInteger currentIndex = currentPlaylistDAO.currentIndex;
 		
 	if (bassWrapper.isPlaying != isPlaying)
 	{
@@ -111,9 +113,9 @@
 		[userDefaults setInteger:currentPlaylistPosition forKey:@"currentPlaylistPosition"];
 	}
 	
-	if (musicControls.repeatMode != repeatMode)
+	if (currentPlaylistDAO.repeatMode != repeatMode)
 	{
-		repeatMode = musicControls.repeatMode;
+		repeatMode = currentPlaylistDAO.repeatMode;
 		[userDefaults setInteger:repeatMode forKey:@"repeatMode"];
 	}
 	
@@ -144,6 +146,7 @@
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
+	SUSCurrentPlaylistDAO *currentPlaylistDAO = [SUSCurrentPlaylistDAO dataModel];
 	
 	if (self.isJukeboxEnabled)
 		isPlaying = NO;
@@ -156,10 +159,10 @@
 	musicControls.isShuffle = isShuffle;
 	
 	currentPlaylistPosition = [userDefaults integerForKey:@"currentPlaylistPosition"];
-	[SUSCurrentPlaylistDAO dataModel].currentIndex = currentPlaylistPosition;
+	currentPlaylistDAO.currentIndex = currentPlaylistPosition;
 	
 	repeatMode = [userDefaults integerForKey:@"repeatMode"];
-	musicControls.repeatMode = repeatMode;
+	currentPlaylistDAO.repeatMode = repeatMode;
 	
 	bitRate = [userDefaults integerForKey:@"bitRate"];
 	musicControls.bitRate = bitRate;
@@ -348,7 +351,7 @@
 - (void)setUrlString:(NSString *)url
 {
 	[urlString release];
-	urlString = [[NSString alloc] initWithString:url];
+	urlString = [url copy];
 	[userDefaults setObject:url forKey:@"url"];
 	[userDefaults synchronize];
 }
@@ -361,7 +364,7 @@
 - (void)setUsername:(NSString *)user
 {
 	[username release];
-	username = [[NSString alloc] initWithString:user];
+	username = [user copy];
 	[userDefaults setObject:user forKey:@"username"];
 	[userDefaults synchronize];
 }
@@ -374,7 +377,7 @@
 - (void)setPassword:(NSString *)pass
 {
 	[password release];
-	password = [[NSString alloc] initWithString:pass];
+	password = [pass copy];
 	[userDefaults setObject:pass forKey:@"password"];
 	[userDefaults synchronize];
 }

@@ -37,7 +37,7 @@ static MusicSingleton *sharedInstance = nil;
 
 // Audio streamer objects and variables
 //
-@synthesize repeatMode, isShuffle;
+@synthesize isShuffle;
 
 // Music player objects
 //
@@ -107,11 +107,13 @@ static MusicSingleton *sharedInstance = nil;
 
 - (void)loadingFailed:(SUSLoader *)theLoader withError:(NSError *)error
 {
+	DLog(@"theLoader: %@", theLoader);
     [theLoader release]; theLoader = nil;
 }
 
 - (void)loadingFinished:(SUSLoader *)theLoader
 {
+	DLog(@"theLoader: %@", theLoader);
     [theLoader release]; theLoader = nil;
 }
 
@@ -173,6 +175,7 @@ static MusicSingleton *sharedInstance = nil;
 	if (queueSongObject.artist && queueSongObject.title)
 	{
         SUSLyricsLoader *lyricsLoader = [[SUSLyricsLoader alloc] initWithDelegate:self];
+		DLog(@"lyricsLoader: %@", lyricsLoader);
         lyricsLoader.artist = queueSongObject.artist;
         lyricsLoader.title = queueSongObject.title;
         [lyricsLoader startLoad];        
@@ -297,7 +300,7 @@ static MusicSingleton *sharedInstance = nil;
             NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(queueSongObject.songId) forKey:@"id"];
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters];
 			self.downloadQueue = [NSURLConnection connectionWithRequest:request delegate:connDelegateQueue];
-			[connDelegateQueue release];
+			//[connDelegateQueue release];
 		}
 	}
 }
@@ -396,6 +399,7 @@ static MusicSingleton *sharedInstance = nil;
 	// The file doesn't exist or it's not fully cached, start downloading it from the middle
 	if (!currentSong.fileExists || (!currentSong.isFullyCached && !viewObjects.isOfflineMode))
 	{
+		DLog(@"file exists: %i   isFullyCached: %i   isOfflineMode: %i", currentSong.fileExists, currentSong.isFullyCached, viewObjects.isOfflineMode);
 		// Determine the byte offset
 		float byteOffset;
 		if (bitRate < 1000)
@@ -419,7 +423,7 @@ static MusicSingleton *sharedInstance = nil;
 	}
 	
 	// The file doesn't exist or it's not fully cached, start downloading it from the middle
-	if (!nextSong.fileExists || (!nextSong.isFullyCached && !viewObjects.isOfflineMode))
+	if (nextSong && (!nextSong.fileExists || (!nextSong.isFullyCached && !viewObjects.isOfflineMode)))
 	{
 		// Start to download the rest of the song
 		[[SUSStreamSingleton sharedInstance] queueStreamForSong:nextSong];
@@ -518,7 +522,7 @@ static MusicSingleton *sharedInstance = nil;
 	}
 }
 
-- (void)nextSongAuto
+/*- (void)nextSongAuto
 {	
 	// If it's in regular play mode, then go to the next track.
 	if(repeatMode == 0)
@@ -544,7 +548,7 @@ static MusicSingleton *sharedInstance = nil;
 			[self playSongAtPosition:0];
 		}
 	}
-}
+}*/
 
 - (void)resumeSong
 {	
@@ -1215,7 +1219,6 @@ static MusicSingleton *sharedInstance = nil;
 	[[NSFileManager defaultManager] createDirectoryAtPath:tempAudioFolderPath withIntermediateDirectories:YES attributes:nil error:NULL];
 	
 	self.showNowPlayingIcon = NO;
-	self.repeatMode = 0;
 	self.isShuffle = NO;
 	isAutoNextNotificationOn = NO;
 	
