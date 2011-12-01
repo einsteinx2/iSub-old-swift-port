@@ -178,7 +178,7 @@
 	
 	if ([self checkUrl:urlField.text] && [self checkUsername:usernameField.text] && [self checkPassword:passwordField.text])
 	{
-		[viewObjects showLoadingScreenOnMainWindow];
+		[viewObjects showLoadingScreen:self.view blockInput:YES mainWindow:YES];
 		
         NSString *urlString = [NSString stringWithFormat:@"%@/rest/ping.view", urlField.text];
 		SUSServerURLChecker *checker = [[SUSServerURLChecker alloc] initWithDelegate:self];

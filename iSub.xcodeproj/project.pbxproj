@@ -2749,7 +2749,6 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				5382F65614856F3C001C14C8 /* libSystem.dylib */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -2815,6 +2814,7 @@
 				5354914A11B03FC900928E0F /* MobileCoreServices.framework */,
 				536AD1D211EA628200387CB0 /* libxml2.dylib */,
 				53EB4AA51405FE1B00CBA075 /* libz.dylib */,
+				5382F65614856F3C001C14C8 /* libSystem.dylib */,
 				53B38BFA14758D5200CD8A99 /* libbass.a */,
 				539A012014773CD900754061 /* libbassmix.a */,
 				53B38C191475DD3500CD8A99 /* libbassflac.a */,
