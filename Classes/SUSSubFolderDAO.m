@@ -79,6 +79,10 @@
 
 - (void)dealloc
 {
+	[myId release]; myId = nil;
+	[myArtist release]; myArtist = nil;
+	loader.delegate = nil;
+	[loader release]; loader = nil;
 	[super dealloc];
 }
 
@@ -293,11 +297,13 @@
 
 - (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
 {
+	theLoader.delegate = nil;
 	[self.delegate loadingFailed:theLoader withError:error];
 }
 
 - (void)loadingFinished:(SUSLoader*)theLoader
 {
+	theLoader.delegate = nil;
     [self setup];
 	[self.delegate loadingFinished:theLoader];
 }

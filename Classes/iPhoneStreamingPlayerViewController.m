@@ -212,7 +212,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			albumLabel.hidden = YES;
 			titleLabel.hidden = YES;
 			
-			[self setSongTitle];
+			//[self setSongTitle];
 		}
 	}
 	
@@ -302,9 +302,16 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
+	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+	
 	//[[NSNotificationCenter defaultCenter] postNotificationName:@"hideSongInfoFast" object:nil];
 	if (isFlipped)
 		[self songInfoToggle:nil];
+	
+	if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
+	{
+		[self setSongTitle];
+	}
 	
 	if (!IS_IPAD())
 	{
@@ -352,6 +359,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
+	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+	
 	if (UIInterfaceOrientationIsLandscape(fromInterfaceOrientation))
 	{
 		[self setSongTitle];

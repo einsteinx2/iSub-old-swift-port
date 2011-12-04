@@ -47,11 +47,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AllSongsViewController.m"
-         timestampString = "341622902.26519"
+         timestampString = "344640523.086409"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "226"
-         endingLineNumber = "226"
+         startingLineNumber = "228"
+         endingLineNumber = "228"
          landmarkName = "-loadingFailed:withError:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -61,11 +61,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AllSongsViewController.m"
-         timestampString = "341529024.061685"
+         timestampString = "344640523.086409"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "232"
-         endingLineNumber = "232"
+         startingLineNumber = "235"
+         endingLineNumber = "235"
          landmarkName = "-loadingFinished:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -256,20 +256,6 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "Classes/NSMutableURLRequest+SUS.m"
-         timestampString = "344299455.403298"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "50"
-         endingLineNumber = "50"
-         landmarkName = "+requestWithSUSAction:andParameters:byteOffset:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
          filePath = "Classes/NSNotificationCenter+MainThread.m"
          timestampString = "344301538.024813"
          startingColumnNumber = "9223372036854775807"
@@ -277,6 +263,62 @@
          startingLineNumber = "15"
          endingLineNumber = "15"
          landmarkName = "+postNotificationInternal:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/iPhoneStreamingPlayerViewController.m"
+         timestampString = "344652706.212909"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "306"
+         endingLineNumber = "306"
+         landmarkName = "-willRotateToInterfaceOrientation:duration:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/iPhoneStreamingPlayerViewController.m"
+         timestampString = "344652757.344568"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "321"
+         endingLineNumber = "321"
+         landmarkName = "-willRotateToInterfaceOrientation:duration:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/iPhoneStreamingPlayerViewController.m"
+         timestampString = "344652758.558255"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "341"
+         endingLineNumber = "341"
+         landmarkName = "-willRotateToInterfaceOrientation:duration:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/iPhoneStreamingPlayerViewController.m"
+         timestampString = "344652769.941969"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "313"
+         endingLineNumber = "313"
+         landmarkName = "-willRotateToInterfaceOrientation:duration:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

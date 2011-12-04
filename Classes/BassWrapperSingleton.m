@@ -407,8 +407,9 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
     isTempDownload = NO;
     
 	[self bassFree];
-	
+		
 	BASS_SetConfig(BASS_CONFIG_IOS_MIXAUDIO, 0); // Disable mixing.	To be called before BASS_Init.
+	BASS_SetConfig(BASS_CONFIG_BUFFER, 1500);
 	
 	// Initialize default device.
 	if (!BASS_Init(-1, 44100, 0, NULL, NULL)) 

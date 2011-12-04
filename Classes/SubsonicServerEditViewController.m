@@ -180,32 +180,35 @@
 	{
 		[viewObjects showLoadingScreen:self.view blockInput:YES mainWindow:YES];
 		
-        NSString *urlString = [NSString stringWithFormat:@"%@/rest/ping.view", urlField.text];
-		SUSServerURLChecker *checker = [[SUSServerURLChecker alloc] initWithDelegate:self];
-		[checker checkURL:[NSURL URLWithString:urlString]];
+		SUSServerChecker *checker = [[SUSServerChecker alloc] initWithDelegate:self];
+		[checker checkServerUrlString:urlField.text username:usernameField.text password:passwordField.text];
 	}
 }
 
 #pragma mark - Server URL Checker delegate
 
-- (void)SUSServerURLCheckRedirected:(SUSServerURLChecker *)checker redirectUrl:(NSURL *)url
+- (void)SUSServerURLCheckRedirected:(SUSServerChecker *)checker redirectUrl:(NSURL *)url
 {
     self.theNewRedirectUrl = [NSString stringWithFormat:@"%@://%@:%@", url.scheme, url.host, url.port];
     DLog(@"redirectUrlString: %@", theNewRedirectUrl);
 }
 
-- (void)SUSServerURLCheckFailed:(SUSServerURLChecker *)checker withError:(NSError *)error
+- (void)SUSServerURLCheckFailed:(SUSServerChecker *)checker withError:(NSError *)error
 {
 	[checker release]; checker = nil;
 	[viewObjects hideLoadingScreen];
 	
-	NSString *message = [NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\nError code %i:\n%@", [error code], [error localizedDescription]];
+	NSString *message = @"";
+	if (error.code == ISMSErrorCode_IncorrectCredentials)
+		message = @"Either your username or password is incorrect. Please try again";
+	else
+		message = [NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\nError code %i:\n%@", [error code], [error localizedDescription]];
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
 	[alert release];
 }	
 	
-- (void)SUSServerURLCheckPassed:(SUSServerURLChecker *)checker
+- (void)SUSServerURLCheckPassed:(SUSServerChecker *)checker
 {
 	DLog(@"server check passed");
 	[checker release]; checker = nil;

@@ -6,7 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "SUSServerURLChecker.h"
+#import "SUSServerChecker.h"
 
 @class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, SettingsTabViewController, HelpTabViewController, SavedSettings;
 

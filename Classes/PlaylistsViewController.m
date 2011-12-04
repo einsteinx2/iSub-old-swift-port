@@ -1915,7 +1915,10 @@ static NSString *kName_Error = @"error";
 
 - (void)dealloc 
 {
-	[connectionQueue release];
+	[currentPlaylistDataModel release]; currentPlaylistDataModel = nil;
+	serverPlaylistsDataModel.delegate = nil;
+	[serverPlaylistsDataModel release]; serverPlaylistsDataModel = nil;
+	[connectionQueue release]; connectionQueue = nil;
     [super dealloc];
 }
 

@@ -6,13 +6,13 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "SUSServerURLChecker.h"
+#import "SUSServerChecker.h"
 #import "TBXML.h"
 #import "NSError+ISMSError.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "SavedSettings.h"
 
-@implementation SUSServerURLChecker
+@implementation SUSServerChecker
 
 @synthesize receivedData, delegate, request, isNewSearchAPI;
 
@@ -35,11 +35,11 @@
 	return self;
 }
 
-- (void)checkURL:(NSURL *)url
+- (void)checkServerUrlString:(NSString *)urlString username:(NSString *)username password:(NSString *)password
 {
     self.receivedData = [NSMutableData dataWithCapacity:0];
     
-    self.request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:30.0];
+	self.request = [NSMutableURLRequest requestWithSUSAction:@"ping" forUrlString:urlString username:username password:password andParameters:nil];
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	
 	if (!connection)
@@ -111,6 +111,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
+	DLog(@"receivedData: %@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
 	TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
     TBXMLElement *root = tbxml.rootXMLElement;
     if (root) 
@@ -140,9 +141,29 @@
 				}				
 			}
 			
-            // This is a Subsonic server, so pass
-            [delegate SUSServerURLCheckPassed:self];
-			[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckPassed object:nil];
+			TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
+			if (error)
+			{
+				if ([[TBXML valueOfAttributeNamed:@"code" forElement:error] isEqualToString:@"40"])
+				{
+					// Incorrect credentials, so fail
+					NSError *anError = [NSError errorWithISMSCode:ISMSErrorCode_IncorrectCredentials];
+					[delegate SUSServerURLCheckFailed:self withError:anError];
+					[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckFailed object:nil];
+				}
+				else
+				{
+					// This is a Subsonic server, so pass
+					[delegate SUSServerURLCheckPassed:self];
+					[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckPassed object:nil];
+				}
+			}
+			else
+			{
+				// This is a Subsonic server, so pass
+				[delegate SUSServerURLCheckPassed:self];
+				[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckPassed object:nil];
+			}
         }
         else
         {

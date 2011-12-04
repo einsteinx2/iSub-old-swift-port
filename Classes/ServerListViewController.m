@@ -434,8 +434,8 @@
 	{
 		self.theNewRedirectionUrl = nil;
 		[viewObjects showLoadingScreenOnMainWindow];
-		SUSServerURLChecker *checker = [[SUSServerURLChecker alloc] initWithDelegate:self];
-		[checker checkURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/rest/ping.view", viewObjects.serverToEdit.url]]];
+		SUSServerChecker *checker = [[SUSServerChecker alloc] initWithDelegate:self];
+		[checker checkServerUrlString:viewObjects.serverToEdit.url username:viewObjects.serverToEdit.username password:viewObjects.serverToEdit.password];
 	}
 }
 
@@ -508,17 +508,26 @@
     [super dealloc];
 }
 
-- (void)SUSServerURLCheckFailed:(SUSServerURLChecker *)checker withError:(NSError *)error
+- (void)SUSServerURLCheckFailed:(SUSServerChecker *)checker withError:(NSError *)error
 {
 	DLog(@"server check failed");
     if(!viewObjects.isOfflineMode)
 	{
 		viewObjects.isOfflineMode = YES;
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", [error code], [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		alert.tag = 3;
-		[alert show];
-		[alert release];		
 	}
+	
+	UIAlertView *alert = nil;
+	if (error.code == ISMSErrorCode_IncorrectCredentials)
+	{
+		alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either your username or password is incorrect\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", [error code], [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	}
+	else
+	{
+		alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", [error code], [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	}
+	alert.tag = 3;
+	[alert show];
+	[alert release];	
     
     [checker release]; checker = nil;
 	    
@@ -526,7 +535,7 @@
     [viewObjects hideLoadingScreen];
 }
 
-- (void)SUSServerURLCheckPassed:(SUSServerURLChecker *)checker
+- (void)SUSServerURLCheckPassed:(SUSServerChecker *)checker
 {
 	settings.isNewSearchAPI = checker.isNewSearchAPI;
     
@@ -543,7 +552,7 @@
     [viewObjects hideLoadingScreen];
 }
 
-- (void)SUSServerURLCheckRedirected:(SUSServerURLChecker *)checker redirectUrl:(NSURL *)url
+- (void)SUSServerURLCheckRedirected:(SUSServerChecker *)checker redirectUrl:(NSURL *)url
 {
     self.theNewRedirectionUrl = [NSString stringWithFormat:@"%@://%@:%@", url.scheme, url.host, url.port];
 }

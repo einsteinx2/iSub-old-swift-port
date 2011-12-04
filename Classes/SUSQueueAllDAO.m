@@ -261,9 +261,10 @@
 
 - (void)dealloc
 {
-	[currentPlaylist release];
-	[shufflePlaylist release];
-	[myArtist release];
+	[currentPlaylist release]; currentPlaylist = nil;
+	[shufflePlaylist release]; shufflePlaylist = nil;
+	[myArtist release]; myArtist = nil;
+	
 	
 	[super dealloc];
 }

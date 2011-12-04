@@ -25,6 +25,7 @@
 
 - (void)dealloc
 {
+	[selectedFolderId release]; selectedFolderId = nil;
 	[super dealloc];
 }
 

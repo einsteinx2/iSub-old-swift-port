@@ -45,17 +45,11 @@ static void destroy_versionArrays()
     [setOfVersions release]; setOfVersions = nil;
 }
 
-+ (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action andParameters:(NSDictionary *)parameters byteOffset:(NSUInteger)offset
++ (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action forUrlString:(NSString *)url username:(NSString *)user password:(NSString *)pass andParameters:(NSDictionary *)parameters byteOffset:(NSUInteger)offset
 {
-	SavedSettings *settings = [SavedSettings sharedInstance];
-	NSString *urlString = [NSString stringWithFormat:@"%@/rest/%@.view", settings.urlString, action];
-	if (settings.redirectUrlString)
-	{
-		// The redirect URL has been found, so use it
-		urlString = [NSString stringWithFormat:@"%@/rest/%@.view", settings.redirectUrlString, action];
-	}
-	NSString *username = [settings.username URLEncodeString];
-	NSString *password = [settings.password URLEncodeString];
+	NSString *urlString = [NSString stringWithFormat:@"%@/rest/%@.view", url, action];
+	NSString *username = [user URLEncodeString];
+	NSString *password = [pass URLEncodeString];
 	NSString *version = nil;
 	
 	// Set the API version for this call by checking the arrays
@@ -70,8 +64,8 @@ static void destroy_versionArrays()
 	NSAssert(version != nil, @"SUS URL API version not set!");
 	
 	// Setup the POST parameters
-	NSMutableString *postString = [NSMutableString stringWithFormat:@"v=%@&c=iSub", version];
-	//NSMutableString *postString = [NSMutableString stringWithFormat:@"v=%@&c=iSub&u=%@&p=%@", version, username, password];
+	//NSMutableString *postString = [NSMutableString stringWithFormat:@"v=%@&c=iSub", version];
+	NSMutableString *postString = [NSMutableString stringWithFormat:@"v=%@&c=iSub&u=%@&p=%@", version, username, password];
 	if (parameters != nil)
 	{
 		for (NSString *key in [parameters allKeys])
@@ -103,10 +97,10 @@ static void destroy_versionArrays()
 	[request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
 	
 	// Set the HTTP Basic Auth
-	NSString *authStr = [NSString stringWithFormat:@"%@:%@", username, password];
+	/*NSString *authStr = [NSString stringWithFormat:@"%@:%@", username, password];
 	NSData *authData = [authStr dataUsingEncoding:NSASCIIStringEncoding];
 	NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64EncodingWithLineLength:0]];
-	[request setValue:authValue forHTTPHeaderField:@"Authorization"];
+	[request setValue:authValue forHTTPHeaderField:@"Authorization"];*/
 	
 	if (offset > 0)
 	{
@@ -117,6 +111,29 @@ static void destroy_versionArrays()
 	DLog(@"request: %@", request);
     
     return request;
+}
+
++ (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action forUrlString:(NSString *)url username:(NSString *)user password:(NSString *)pass andParameters:(NSDictionary *)parameters
+{
+	return [NSMutableURLRequest requestWithSUSAction:action forUrlString:url username:user password:pass andParameters:nil byteOffset:0];
+}
+
++ (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action andParameters:(NSDictionary *)parameters byteOffset:(NSUInteger)offset
+{
+	SavedSettings *settings = [SavedSettings sharedInstance];
+	NSString *urlString = settings.urlString;
+	if (settings.redirectUrlString)
+	{
+		// The redirect URL has been found, so use it
+		urlString = settings.redirectUrlString;
+	}
+	
+	return [NSMutableURLRequest requestWithSUSAction:action 
+										forUrlString:urlString 
+											username:settings.username
+											password:settings.password 
+									   andParameters:parameters 
+										  byteOffset:offset];
 }
 
 + (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action andParameters:(NSDictionary *)parameters

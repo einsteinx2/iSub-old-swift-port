@@ -8,16 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
-@class SUSServerURLChecker;
+@class SUSServerChecker;
 @protocol SUSServerURLCheckerDelegate <NSObject>
-- (void)SUSServerURLCheckFailed:(SUSServerURLChecker *)checker withError:(NSError *)error;
-- (void)SUSServerURLCheckPassed:(SUSServerURLChecker *)checker;
+- (void)SUSServerURLCheckFailed:(SUSServerChecker *)checker withError:(NSError *)error;
+- (void)SUSServerURLCheckPassed:(SUSServerChecker *)checker;
 @optional
-- (void)SUSServerURLCheckRedirected:(SUSServerURLChecker *)checker redirectUrl:(NSURL *)url;
+- (void)SUSServerURLCheckRedirected:(SUSServerChecker *)checker redirectUrl:(NSURL *)url;
 @end
 
 
-@interface SUSServerURLChecker : NSObject
+@interface SUSServerChecker : NSObject
 
 @property (nonatomic, assign) NSObject<SUSServerURLCheckerDelegate> *delegate;
 @property (nonatomic, retain) NSMutableData *receivedData;
@@ -26,6 +26,6 @@
 
 - (id)initWithDelegate:(NSObject<SUSServerURLCheckerDelegate> *)theDelegate;
 
-- (void)checkURL:(NSURL *)url;
+- (void)checkServerUrlString:(NSString *)urlString username:(NSString *)username password:(NSString *)password;
 
 @end

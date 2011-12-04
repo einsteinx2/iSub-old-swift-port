@@ -59,6 +59,7 @@
 	[indexPositions release]; indexPositions = nil;
 	[indexCounts release]; indexCounts = nil;
 	[selectedFolderId release]; selectedFolderId = nil;
+	loader.delegate = nil;
     [loader release]; loader = nil;
 	[super dealloc];
 }
@@ -297,8 +298,9 @@
 
 - (NSArray *)indexNames
 {
-	if (indexNames == nil)
+	if (indexNames == nil || [indexNames count] == 0)
 	{
+		[indexNames release];
 		indexNames = [[self rootFolderIndexNames] retain];
 	}
 	
@@ -308,8 +310,9 @@
 - (NSArray *)indexPositions
 {
 	//DLog(@"indexPositions: %@", indexPositions);
-	if (indexPositions == nil)
+	if (indexPositions == nil || [indexPositions count] == 0)
 	{
+		[indexPositions release];
 		indexPositions = [[self rootFolderIndexPositions] retain];
 		//DLog(@"indexPositions count: %i   tableModifier: %@   indexPositions: %@", [self.db intForQuery:@"SELECT count(*) FROM rootFolderIndexCache%@", self.tableModifier], self.tableModifier, indexPositions);
 	}
@@ -360,7 +363,7 @@
     [indexCounts release]; indexCounts = nil;
     
     self.loader = [[[SUSRootFoldersLoader alloc] initWithDelegate:delegate] autorelease];
-	loader.selectedFolderId = [SavedSettings sharedInstance].rootFoldersSelectedFolderId;
+	loader.selectedFolderId = self.selectedFolderId;
     [loader startLoad];
 }
 

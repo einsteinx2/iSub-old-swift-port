@@ -446,6 +446,8 @@
 
 - (void)dealloc 
 {
+	dataModel.delegate = nil;
+	[dataModel release]; dataModel = nil;
     [super dealloc];
 }
 

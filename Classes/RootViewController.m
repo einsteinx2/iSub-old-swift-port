@@ -159,10 +159,13 @@
 }
 
 
-- (void)dealloc {
-	[searchBar release];
-	[searchOverlayView release];
-	[dropdown release];
+- (void)dealloc 
+{
+	dataModel.delegate = nil;
+	[dataModel release]; dataModel = nil;
+	[searchBar release]; searchBar = nil;
+	[searchOverlayView release]; searchOverlayView = nil;
+	[dropdown release]; dropdown = nil;
     [super dealloc];
 }
 
@@ -170,7 +173,10 @@
 
 - (void)updateCount
 {
-	countLabel.text = [NSString stringWithFormat:@"%i Folders", [dataModel count]];
+	if ([dataModel count] == 1)
+		countLabel.text = [NSString stringWithFormat:@"%i Folder", [dataModel count]];
+	else
+		countLabel.text = [NSString stringWithFormat:@"%i Folders", [dataModel count]];
 	
 	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 	[formatter setDateStyle:NSDateFormatterMediumStyle];
@@ -275,10 +281,10 @@
 - (void)loadingFinished:(SUSLoader*)theLoader
 {	
     //DLog(@"loadingFinished called");
-	if (!isCountShowing)
-		[self addCount];
-	else
+	if (isCountShowing)
 		[self updateCount];
+	else
+		[self addCount];		
 	
 	[self.tableView reloadData];
 	self.tableView.backgroundColor = [UIColor clearColor];
@@ -491,8 +497,13 @@
 	}
 	else 
 	{
-		NSUInteger count = [[[dataModel indexCounts] objectAtIndex:section] intValue];
-		return count;
+		if ([[dataModel indexCounts] count] > section)
+		{
+			NSUInteger count = [[[dataModel indexCounts] objectAtIndex:section] intValue];
+			return count;
+		}
+		
+		return 0;
 	}
 }
 
@@ -502,29 +513,25 @@
 {
 	static NSString *CellIdentifier = @"Cell";
 	ArtistUITableViewCell *cell = [[[ArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-
-	@try 
-	{				
-		Artist *anArtist = nil;
-		if(isSearching)
-		{
-			anArtist = [dataModel artistForPositionInSearch:(indexPath.row + 1)];
-		}
-		else
+			
+	Artist *anArtist = nil;
+	if(isSearching)
+	{
+		anArtist = [dataModel artistForPositionInSearch:(indexPath.row + 1)];
+	}
+	else
+	{
+		if ([[dataModel indexPositions] count] > indexPath.section)
 		{
 			//DLog(@"indexPositions: %@", [dataModel indexPositions]);
 			NSUInteger sectionStartIndex = [[[dataModel indexPositions] objectAtIndex:indexPath.section] intValue];
 			anArtist = [dataModel artistForPosition:(sectionStartIndex + indexPath.row)];
 		}
-		cell.myArtist = anArtist;
-		
-		[cell.artistNameLabel setText:anArtist.name];
-		cell.backgroundView = [viewObjects createCellBackground:indexPath.row];
 	}
-	@catch (NSException *exception) 
-	{
-		DLog("exception name: %@  reason: %@", [exception name], [exception reason]);
-	}
+	cell.myArtist = anArtist;
+	
+	[cell.artistNameLabel setText:anArtist.name];
+	cell.backgroundView = [viewObjects createCellBackground:indexPath.row];
 		
 	return cell;
 }
@@ -535,17 +542,11 @@
 	if(isSearching)
 		return @"";
 	
-	NSString *title = nil;
+	if ([[dataModel indexNames] count] == 0)
+		return @"";
 	
-	@try 
-	{
-		title = [[dataModel indexNames] objectAtIndex:section];
-	}
-	@catch (NSException *exception) 
-	{
-		DLog("exception name: %@  reason: %@", [exception name], [exception reason]);
-	}
-	
+	NSString *title = [[dataModel indexNames] objectAtIndex:section];
+
 	return title;
 }
 
@@ -555,14 +556,12 @@
 {
 	if(isSearching)
 		return nil;
-	else
-	{
-		NSMutableArray *titles = [NSMutableArray arrayWithCapacity:0];
-		[titles addObject:@"{search}"];
-		[titles addObjectsFromArray:[dataModel indexNames]];
+	
+	NSMutableArray *titles = [NSMutableArray arrayWithCapacity:0];
+	[titles addObject:@"{search}"];
+	[titles addObjectsFromArray:[dataModel indexNames]];
 		
-		return titles;
-	}
+	return titles;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index 
@@ -603,8 +602,11 @@
 		}
 		else 
 		{	
-			NSUInteger sectionStartIndex = [[[dataModel indexPositions] objectAtIndex:indexPath.section] intValue];
-			anArtist = [dataModel artistForPosition:(sectionStartIndex + indexPath.row)];
+			if ([[dataModel indexPositions] count] > indexPath.section)
+			{
+				NSUInteger sectionStartIndex = [[[dataModel indexPositions] objectAtIndex:indexPath.section] intValue];
+				anArtist = [dataModel artistForPosition:(sectionStartIndex + indexPath.row)];
+			}
 		}
 		AlbumViewController* albumViewController = [[AlbumViewController alloc] initWithArtist:anArtist orAlbum:nil];
 				

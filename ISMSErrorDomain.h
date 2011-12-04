@@ -31,4 +31,8 @@
 #define ISMSErrorCode_NoLyricsFound             6
 #define ISMSErrorDesc_NoLyricsFound             @"No lyrics found for this song"
 
+#define ISMSErrorCode_IncorrectCredentials		7
+#define ISMSErrorDesc_IncorrectCredentials		@"Incorrect username or password."
+
+
 #endif

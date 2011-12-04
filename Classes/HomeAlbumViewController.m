@@ -409,6 +409,8 @@
 {
 	self.receivedData = nil;
 	[theConnection release];
+	
+	[viewObjects hideLoadingScreen];
     
     CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error doing the search.\n\nError:%@", error.localizedDescription] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
@@ -442,6 +444,8 @@
     
 	self.receivedData = nil;
 	[theConnection release];
+	
+	[viewObjects hideLoadingScreen];
 }
 
 #pragma mark Table view methods

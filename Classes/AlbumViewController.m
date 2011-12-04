@@ -159,6 +159,7 @@
 	[myArtist release]; myArtist = nil;
 	[myAlbum release]; myAlbum = nil;
 	
+	dataModel.delegate = nil;
 	[dataModel release]; dataModel = nil;
 	[super dealloc];
 }

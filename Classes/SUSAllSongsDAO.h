@@ -19,6 +19,8 @@
 	NSArray *index;
 }
 
+@property (nonatomic, assign) id<SUSLoaderDelegate> delegate;
+
 @property (readonly) FMDatabase *db;
 
 @property (readonly) NSUInteger count;

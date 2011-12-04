@@ -213,9 +213,11 @@
 
 - (void)dealloc 
 {
-	[searchBar release];
-	[searchOverlayView release];
-	[url release];
+	dataModel.delegate = nil;
+	[dataModel release]; dataModel = nil;
+	[searchBar release]; searchBar = nil;
+	[searchOverlayView release]; searchOverlayView = nil;
+	[url release]; url = nil;
     [super dealloc];
 }
 
@@ -223,7 +225,8 @@
 
 - (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
 {
-    
+    [self hideLoadingScreen];
+    [self.tableView reloadData];
 }
 
 - (void)loadingFinished:(SUSLoader*)theLoader

@@ -223,10 +223,13 @@
 	[window makeKeyAndVisible];	
 	
 	// Check the server status in the background
-    DLog(@"adding loading screen");
-    [viewObjects showLoadingScreenOnMainWindow];
-    
-	[self checkServer];
+    if (!viewObjects.isOfflineMode)
+	{
+		DLog(@"adding loading screen");
+		[viewObjects showLoadingScreenOnMainWindow];
+		
+		[self checkServer];
+	}
     
 	// Recover current state if player was interrupted
 	//[musicControls resumeSong];
@@ -256,21 +259,21 @@
 	// have internet access or if the host url entered was wrong.
     if (!viewObjects.isOfflineMode) 
 	{
-        SUSServerURLChecker *checker = [[SUSServerURLChecker alloc] initWithDelegate:self];
-        [checker checkURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/rest/ping.view", settings.urlString]]];
+        SUSServerChecker *checker = [[SUSServerChecker alloc] initWithDelegate:self];
+		[checker checkServerUrlString:settings.urlString username:settings.username password:settings.password];
     }
 }
 
 #pragma mark - SUS Server Check Delegate
 
-- (void)SUSServerURLCheckRedirected:(SUSServerURLChecker *)checker redirectUrl:(NSURL *)url
+- (void)SUSServerURLCheckRedirected:(SUSServerChecker *)checker redirectUrl:(NSURL *)url
 {
     SavedSettings *settings = [SavedSettings sharedInstance];
     settings.redirectUrlString = [NSString stringWithFormat:@"%@://%@:%@", url.scheme, url.host, url.port];
     //DLog(@"redirectUrlString: %@", settings.redirectUrlString);
 }
 
-- (void)SUSServerURLCheckFailed:(SUSServerURLChecker *)checker withError:(NSError *)error
+- (void)SUSServerURLCheckFailed:(SUSServerChecker *)checker withError:(NSError *)error
 {
     DLog(@"server check failed");
     if(!viewObjects.isOfflineMode)
@@ -292,7 +295,7 @@
     [viewObjects hideLoadingScreen];
 }
 
-- (void)SUSServerURLCheckPassed:(SUSServerURLChecker *)checker
+- (void)SUSServerURLCheckPassed:(SUSServerChecker *)checker
 {
     //DLog(@"server check passed");
 	

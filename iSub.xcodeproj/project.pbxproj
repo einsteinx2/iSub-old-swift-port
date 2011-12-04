@@ -1701,9 +1701,9 @@
 		53F8CC8D1297949A007BDC0E /* home-shuffle-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC761297949A007BDC0E /* home-shuffle-ipad.png */; };
 		53F8CC8E1297949A007BDC0E /* home-shuffle.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC771297949A007BDC0E /* home-shuffle.png */; };
 		53F8CC8F1297949A007BDC0E /* home-shuffle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC781297949A007BDC0E /* home-shuffle@2x.png */; };
-		53F98337145CD65E005A083E /* SUSServerURLChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F98336145CD65E005A083E /* SUSServerURLChecker.m */; };
-		53F98338145CD65E005A083E /* SUSServerURLChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F98336145CD65E005A083E /* SUSServerURLChecker.m */; };
-		53F98339145CD65E005A083E /* SUSServerURLChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F98336145CD65E005A083E /* SUSServerURLChecker.m */; };
+		53F98337145CD65E005A083E /* SUSServerChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F98336145CD65E005A083E /* SUSServerChecker.m */; };
+		53F98338145CD65E005A083E /* SUSServerChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F98336145CD65E005A083E /* SUSServerChecker.m */; };
+		53F98339145CD65E005A083E /* SUSServerChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F98336145CD65E005A083E /* SUSServerChecker.m */; };
 		53FDEE2611E822CC00FE3ECD /* current-server@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2511E822CC00FE3ECD /* current-server@2x.png */; };
 		53FDEE2911E823A100FE3ECD /* default-album-art-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2711E823A100FE3ECD /* default-album-art-small@2x.png */; };
 		53FDEE2A11E823A100FE3ECD /* default-album-art@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2811E823A100FE3ECD /* default-album-art@2x.png */; };
@@ -2610,8 +2610,8 @@
 		53F8CC761297949A007BDC0E /* home-shuffle-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-shuffle-ipad.png"; path = "Images/Home Screen/home-shuffle-ipad.png"; sourceTree = "<group>"; };
 		53F8CC771297949A007BDC0E /* home-shuffle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-shuffle.png"; path = "Images/Home Screen/home-shuffle.png"; sourceTree = "<group>"; };
 		53F8CC781297949A007BDC0E /* home-shuffle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-shuffle@2x.png"; path = "Images/Home Screen/home-shuffle@2x.png"; sourceTree = "<group>"; };
-		53F98335145CD65E005A083E /* SUSServerURLChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSServerURLChecker.h; sourceTree = "<group>"; };
-		53F98336145CD65E005A083E /* SUSServerURLChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSServerURLChecker.m; sourceTree = "<group>"; };
+		53F98335145CD65E005A083E /* SUSServerChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; path = SUSServerChecker.h; sourceTree = "<group>"; };
+		53F98336145CD65E005A083E /* SUSServerChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSServerChecker.m; sourceTree = "<group>"; };
 		53FDEE2511E822CC00FE3ECD /* current-server@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "current-server@2x.png"; path = "Images/Other/current-server@2x.png"; sourceTree = "<group>"; };
 		53FDEE2711E823A100FE3ECD /* default-album-art-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art-small@2x.png"; path = "Images/Other/default-album-art-small@2x.png"; sourceTree = "<group>"; };
 		53FDEE2811E823A100FE3ECD /* default-album-art@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art@2x.png"; path = "Images/Other/default-album-art@2x.png"; sourceTree = "<group>"; };
@@ -4014,8 +4014,8 @@
 		53E82A9B140721BD0051D44B /* Subsonic */ = {
 			isa = PBXGroup;
 			children = (
-				53F98335145CD65E005A083E /* SUSServerURLChecker.h */,
-				53F98336145CD65E005A083E /* SUSServerURLChecker.m */,
+				53F98335145CD65E005A083E /* SUSServerChecker.h */,
+				53F98336145CD65E005A083E /* SUSServerChecker.m */,
 				534098C0142E66CB00455754 /* SUSLoaderManager.h */,
 				539A356813D3E48C00D80554 /* SUSLoaderDelegate.h */,
 				5386FB801406243A0009F73F /* SUSLoader.h */,
@@ -5221,7 +5221,7 @@
 				53409898142D487600455754 /* SUSAllAlbumsDAO.m in Sources */,
 				534098A2142D489F00455754 /* SUSAllSongsDAO.m in Sources */,
 				534098A7142D491100455754 /* SUSAllSongsLoader.m in Sources */,
-				53F98337145CD65E005A083E /* SUSServerURLChecker.m in Sources */,
+				53F98337145CD65E005A083E /* SUSServerChecker.m in Sources */,
 				53B15EB4145D02EC007A04F6 /* NSError+ISMSError.m in Sources */,
 				535EFD84145D144400EDF867 /* SUSRootFoldersLoader.m in Sources */,
 				535EFD89145D152A00EDF867 /* SUSChatDAO.m in Sources */,
@@ -5516,7 +5516,7 @@
 				5340989A142D487600455754 /* SUSAllAlbumsDAO.m in Sources */,
 				534098A4142D489F00455754 /* SUSAllSongsDAO.m in Sources */,
 				534098A9142D491100455754 /* SUSAllSongsLoader.m in Sources */,
-				53F98339145CD65E005A083E /* SUSServerURLChecker.m in Sources */,
+				53F98339145CD65E005A083E /* SUSServerChecker.m in Sources */,
 				53B15EB6145D02EC007A04F6 /* NSError+ISMSError.m in Sources */,
 				535EFD86145D144400EDF867 /* SUSRootFoldersLoader.m in Sources */,
 				535EFD8B145D152A00EDF867 /* SUSChatDAO.m in Sources */,
@@ -5811,7 +5811,7 @@
 				53409899142D487600455754 /* SUSAllAlbumsDAO.m in Sources */,
 				534098A3142D489F00455754 /* SUSAllSongsDAO.m in Sources */,
 				534098A8142D491100455754 /* SUSAllSongsLoader.m in Sources */,
-				53F98338145CD65E005A083E /* SUSServerURLChecker.m in Sources */,
+				53F98338145CD65E005A083E /* SUSServerChecker.m in Sources */,
 				53B15EB5145D02EC007A04F6 /* NSError+ISMSError.m in Sources */,
 				535EFD85145D144400EDF867 /* SUSRootFoldersLoader.m in Sources */,
 				535EFD8A145D152A00EDF867 /* SUSChatDAO.m in Sources */,

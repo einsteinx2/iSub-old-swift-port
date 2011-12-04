@@ -46,6 +46,7 @@
 
 - (void)dealloc
 {
+	loader.delegate = nil;
     [loader release]; loader = nil;
 	[super dealloc];
 }

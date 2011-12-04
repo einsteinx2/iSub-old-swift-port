@@ -16,7 +16,7 @@
 
 @implementation SUSAllSongsDAO
 
-@synthesize isLoading, loader;
+@synthesize isLoading, loader, delegate;
 
 - (void)setup
 {
@@ -41,7 +41,7 @@
     if ((self = [super init]))
 	{
 		[self setup];
-		delegate = [theDelegate retain];
+		delegate = theDelegate;
     }
     
     return self;
@@ -49,7 +49,7 @@
 
 - (void)dealloc
 {
-	[delegate release]; delegate = nil;
+	loader.delegate = nil;
 	[loader release]; loader = nil;
 	[index release]; index = nil;
 	
