@@ -779,7 +779,10 @@ CGContextRef MyCreateBitmapContextPlayer(int pixelsWide, int pixelsHigh)
 		[self songInfoToggle:nil];
 	
 	EqualizerViewController *eqView = [[EqualizerViewController alloc] initWithNibName:@"EqualizerViewController" bundle:nil];
-	eqView.modalPresentationStyle = UIModalPresentationFormSheet;
+	if ([eqView respondsToSelector:@selector(setModalPresentationStyle:)])
+		eqView.modalPresentationStyle = UIModalPresentationFormSheet;
+	if ([eqView respondsToSelector:@selector(setModalTransitionStyle:)])
+		eqView.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 	[self presentModalViewController:eqView animated:YES];
 	[eqView release];
 	//[appDelegate.currentTabBarController presentModalViewController:eqView animated:NO];

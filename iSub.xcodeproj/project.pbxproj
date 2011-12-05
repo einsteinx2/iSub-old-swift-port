@@ -117,6 +117,15 @@
 		534098A8142D491100455754 /* SUSAllSongsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 534098A6142D491100455754 /* SUSAllSongsLoader.m */; };
 		534098A9142D491100455754 /* SUSAllSongsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 534098A6142D491100455754 /* SUSAllSongsLoader.m */; };
 		5345FAE01191E6A000C6EAB7 /* NSString+md5.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345FADF1191E6A000C6EAB7 /* NSString+md5.m */; };
+		5347A1AA148C3857000288D8 /* BassEffectDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 5347A1A9148C3857000288D8 /* BassEffectDAO.m */; };
+		5347A1AB148C3857000288D8 /* BassEffectDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 5347A1A9148C3857000288D8 /* BassEffectDAO.m */; };
+		5347A1AC148C3857000288D8 /* BassEffectDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 5347A1A9148C3857000288D8 /* BassEffectDAO.m */; };
+		5347A1B4148C463A000288D8 /* BassEffectValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 5347A1B3148C463A000288D8 /* BassEffectValue.m */; };
+		5347A1B5148C463A000288D8 /* BassEffectValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 5347A1B3148C463A000288D8 /* BassEffectValue.m */; };
+		5347A1B6148C463A000288D8 /* BassEffectValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 5347A1B3148C463A000288D8 /* BassEffectValue.m */; };
+		5347A1B8148C5044000288D8 /* BassEffectPresets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5347A1B7148C5044000288D8 /* BassEffectPresets.plist */; };
+		5347A1B9148C5044000288D8 /* BassEffectPresets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5347A1B7148C5044000288D8 /* BassEffectPresets.plist */; };
+		5347A1BA148C5044000288D8 /* BassEffectPresets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5347A1B7148C5044000288D8 /* BassEffectPresets.plist */; };
 		5348A59B11879C3A0078994D /* CustomUITableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5348A59A11879C3A0078994D /* CustomUITableView.m */; };
 		534E43B71155659A000B4134 /* AlbumUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 534E43B61155659A000B4134 /* AlbumUITableViewCell.m */; };
 		534E43BA115565FA000B4134 /* AsynchronousImageViewCached.m in Sources */ = {isa = PBXBuildFile; fileRef = 534E43B9115565FA000B4134 /* AsynchronousImageViewCached.m */; };
@@ -1621,6 +1630,18 @@
 		53DEAC18142BD30300A54F19 /* libFlurryAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DEAC16142BD30300A54F19 /* libFlurryAnalytics.a */; };
 		53DEAC19142BD30300A54F19 /* libFlurryAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DEAC16142BD30300A54F19 /* libFlurryAnalytics.a */; };
 		53DF310711D3EE26007552A4 /* GenresGenreUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DF310611D3EE26007552A4 /* GenresGenreUITableViewCell.m */; };
+		53DFB307148C27080066FF94 /* downArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DFB300148C27080066FF94 /* downArrow.png */; };
+		53DFB308148C27080066FF94 /* downArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DFB300148C27080066FF94 /* downArrow.png */; };
+		53DFB309148C27080066FF94 /* downArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DFB300148C27080066FF94 /* downArrow.png */; };
+		53DFB30A148C27080066FF94 /* NSString+NSArrayExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DFB302148C27080066FF94 /* NSString+NSArrayExtension.m */; };
+		53DFB30B148C27080066FF94 /* NSString+NSArrayExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DFB302148C27080066FF94 /* NSString+NSArrayExtension.m */; };
+		53DFB30C148C27080066FF94 /* NSString+NSArrayExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DFB302148C27080066FF94 /* NSString+NSArrayExtension.m */; };
+		53DFB30D148C27080066FF94 /* NWPickerField.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DFB304148C27080066FF94 /* NWPickerField.m */; };
+		53DFB30E148C27080066FF94 /* NWPickerField.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DFB304148C27080066FF94 /* NWPickerField.m */; };
+		53DFB30F148C27080066FF94 /* NWPickerField.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DFB304148C27080066FF94 /* NWPickerField.m */; };
+		53DFB310148C27080066FF94 /* NWPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DFB306148C27080066FF94 /* NWPickerView.m */; };
+		53DFB311148C27080066FF94 /* NWPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DFB306148C27080066FF94 /* NWPickerView.m */; };
+		53DFB312148C27080066FF94 /* NWPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DFB306148C27080066FF94 /* NWPickerView.m */; };
 		53E45BD0129DCEC30054F6BF /* iPhoneStreamingPlayerViewController~iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53E45BCF129DCEC30054F6BF /* iPhoneStreamingPlayerViewController~iPad.xib */; };
 		53E75C361270013D00BC1A19 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53E75C351270013D00BC1A19 /* MainWindow-iPad.xib */; };
 		53E75C561270053300BC1A19 /* iPadMainMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E75C541270053300BC1A19 /* iPadMainMenu.m */; };
@@ -1851,6 +1872,11 @@
 		534098C0142E66CB00455754 /* SUSLoaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSLoaderManager.h; sourceTree = "<group>"; };
 		5345FADE1191E6A000C6EAB7 /* NSString+md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+md5.h"; sourceTree = "<group>"; };
 		5345FADF1191E6A000C6EAB7 /* NSString+md5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+md5.m"; sourceTree = "<group>"; };
+		5347A1A8148C3857000288D8 /* BassEffectDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassEffectDAO.h; sourceTree = "<group>"; };
+		5347A1A9148C3857000288D8 /* BassEffectDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassEffectDAO.m; sourceTree = "<group>"; };
+		5347A1B2148C463A000288D8 /* BassEffectValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassEffectValue.h; sourceTree = "<group>"; };
+		5347A1B3148C463A000288D8 /* BassEffectValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassEffectValue.m; sourceTree = "<group>"; };
+		5347A1B7148C5044000288D8 /* BassEffectPresets.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BassEffectPresets.plist; sourceTree = "<group>"; };
 		5348A59911879C3A0078994D /* CustomUITableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomUITableView.h; sourceTree = "<group>"; };
 		5348A59A11879C3A0078994D /* CustomUITableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomUITableView.m; sourceTree = "<group>"; };
 		534E43B51155659A000B4134 /* AlbumUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AlbumUITableViewCell.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -2525,6 +2551,13 @@
 		53DEAC16142BD30300A54F19 /* libFlurryAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFlurryAnalytics.a; sourceTree = "<group>"; };
 		53DF310511D3EE26007552A4 /* GenresGenreUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenresGenreUITableViewCell.h; sourceTree = "<group>"; };
 		53DF310611D3EE26007552A4 /* GenresGenreUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenresGenreUITableViewCell.m; sourceTree = "<group>"; };
+		53DFB300148C27080066FF94 /* downArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = downArrow.png; sourceTree = "<group>"; };
+		53DFB301148C27080066FF94 /* NSString+NSArrayExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+NSArrayExtension.h"; sourceTree = "<group>"; };
+		53DFB302148C27080066FF94 /* NSString+NSArrayExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+NSArrayExtension.m"; sourceTree = "<group>"; };
+		53DFB303148C27080066FF94 /* NWPickerField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NWPickerField.h; sourceTree = "<group>"; };
+		53DFB304148C27080066FF94 /* NWPickerField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NWPickerField.m; sourceTree = "<group>"; };
+		53DFB305148C27080066FF94 /* NWPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NWPickerView.h; sourceTree = "<group>"; };
+		53DFB306148C27080066FF94 /* NWPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NWPickerView.m; sourceTree = "<group>"; };
 		53E45BCF129DCEC30054F6BF /* iPhoneStreamingPlayerViewController~iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "iPhoneStreamingPlayerViewController~iPad.xib"; sourceTree = "<group>"; };
 		53E75C351270013D00BC1A19 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "../Resources-iPad/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		53E75C531270053300BC1A19 /* iPadMainMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iPadMainMenu.h; sourceTree = "<group>"; };
@@ -2610,7 +2643,7 @@
 		53F8CC761297949A007BDC0E /* home-shuffle-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-shuffle-ipad.png"; path = "Images/Home Screen/home-shuffle-ipad.png"; sourceTree = "<group>"; };
 		53F8CC771297949A007BDC0E /* home-shuffle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-shuffle.png"; path = "Images/Home Screen/home-shuffle.png"; sourceTree = "<group>"; };
 		53F8CC781297949A007BDC0E /* home-shuffle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-shuffle@2x.png"; path = "Images/Home Screen/home-shuffle@2x.png"; sourceTree = "<group>"; };
-		53F98335145CD65E005A083E /* SUSServerChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; path = SUSServerChecker.h; sourceTree = "<group>"; };
+		53F98335145CD65E005A083E /* SUSServerChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSServerChecker.h; sourceTree = "<group>"; };
 		53F98336145CD65E005A083E /* SUSServerChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSServerChecker.m; sourceTree = "<group>"; };
 		53FDEE2511E822CC00FE3ECD /* current-server@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "current-server@2x.png"; path = "Images/Other/current-server@2x.png"; sourceTree = "<group>"; };
 		53FDEE2711E823A100FE3ECD /* default-album-art-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art-small@2x.png"; path = "Images/Other/default-album-art-small@2x.png"; sourceTree = "<group>"; };
@@ -2790,6 +2823,7 @@
 				53CC217D132DC79F003521B5 /* Entitlements.plist */,
 				539797F41162CEB100F41D8B /* Images */,
 				534F1636139B1F5900127A02 /* buildnumber.xcconfig */,
+				5347A1B7148C5044000288D8 /* BassEffectPresets.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -3051,6 +3085,34 @@
 				531B6D6E147C378400BA28B9 /* SUSCoverArtLargeLoader.m */,
 			);
 			name = Loaders;
+			sourceTree = "<group>";
+		};
+		5347A1A6148C3800000288D8 /* DAOs */ = {
+			isa = PBXGroup;
+			children = (
+				5347A1A8148C3857000288D8 /* BassEffectDAO.h */,
+				5347A1A9148C3857000288D8 /* BassEffectDAO.m */,
+				5347A1B2148C463A000288D8 /* BassEffectValue.h */,
+				5347A1B3148C463A000288D8 /* BassEffectValue.m */,
+			);
+			name = DAOs;
+			sourceTree = "<group>";
+		};
+		5347A1A7148C3811000288D8 /* Singletons */ = {
+			isa = PBXGroup;
+			children = (
+				53E82AA214072F090051D44B /* CacheSingleton.h */,
+				53E82AA314072F090051D44B /* CacheSingleton.m */,
+				53C751D11268A43A00A4793F /* DatabaseSingleton.h */,
+				53C751D21268A43A00A4793F /* DatabaseSingleton.m */,
+				53C751CB1268A3BE00A4793F /* MusicSingleton.h */,
+				53C751CC1268A3BE00A4793F /* MusicSingleton.m */,
+				53C751CE1268A3D400A4793F /* SocialSingleton.h */,
+				53C751CF1268A3D400A4793F /* SocialSingleton.m */,
+				53C751C51268A36200A4793F /* ViewObjectsSingleton.h */,
+				53C751C61268A36200A4793F /* ViewObjectsSingleton.m */,
+			);
+			name = Singletons;
 			sourceTree = "<group>";
 		};
 		535B724F134CEE0A003E0E1C /* DDSocialDialog */ = {
@@ -3328,6 +3390,7 @@
 		539797F21162CE7700F41D8B /* Support Classes */ = {
 			isa = PBXGroup;
 			children = (
+				53DFB2FF148C27080066FF94 /* NWPickerField */,
 				53B8943414808F7500607724 /* cocos2d */,
 				53DEAC14142BD30300A54F19 /* FlurryAnalytics */,
 				53BC2677139AEBCB00A825F1 /* HockyKit */,
@@ -4004,6 +4067,20 @@
 			path = FlurryAnalytics;
 			sourceTree = "<group>";
 		};
+		53DFB2FF148C27080066FF94 /* NWPickerField */ = {
+			isa = PBXGroup;
+			children = (
+				53DFB300148C27080066FF94 /* downArrow.png */,
+				53DFB301148C27080066FF94 /* NSString+NSArrayExtension.h */,
+				53DFB302148C27080066FF94 /* NSString+NSArrayExtension.m */,
+				53DFB303148C27080066FF94 /* NWPickerField.h */,
+				53DFB304148C27080066FF94 /* NWPickerField.m */,
+				53DFB305148C27080066FF94 /* NWPickerView.h */,
+				53DFB306148C27080066FF94 /* NWPickerView.m */,
+			);
+			path = NWPickerField;
+			sourceTree = "<group>";
+		};
 		53E75C341270013D00BC1A19 /* Resources-iPad */ = {
 			isa = PBXGroup;
 			children = (
@@ -4031,18 +4108,10 @@
 		53E82A9C140721D50051D44B /* Generic */ = {
 			isa = PBXGroup;
 			children = (
-				53E82AA214072F090051D44B /* CacheSingleton.h */,
-				53E82AA314072F090051D44B /* CacheSingleton.m */,
-				53C751D11268A43A00A4793F /* DatabaseSingleton.h */,
-				53C751D21268A43A00A4793F /* DatabaseSingleton.m */,
-				53C751CB1268A3BE00A4793F /* MusicSingleton.h */,
-				53C751CC1268A3BE00A4793F /* MusicSingleton.m */,
-				53C751CE1268A3D400A4793F /* SocialSingleton.h */,
-				53C751CF1268A3D400A4793F /* SocialSingleton.m */,
-				53C751C51268A36200A4793F /* ViewObjectsSingleton.h */,
-				53C751C61268A36200A4793F /* ViewObjectsSingleton.m */,
 				539D6073145E0D7D0018AA90 /* ISMSUpdateChecker.h */,
 				539D6074145E0D7D0018AA90 /* ISMSUpdateChecker.m */,
+				5347A1A7148C3811000288D8 /* Singletons */,
+				5347A1A6148C3800000288D8 /* DAOs */,
 			);
 			name = Generic;
 			sourceTree = "<group>";
@@ -4498,6 +4567,8 @@
 				536585841478920D00FE57A5 /* EqualizerViewController.xib in Resources */,
 				5365859F1478A43E00FE57A5 /* eqView.png in Resources */,
 				536585A21478A43E00FE57A5 /* eqView@2x.png in Resources */,
+				53DFB307148C27080066FF94 /* downArrow.png in Resources */,
+				5347A1B8148C5044000288D8 /* BassEffectPresets.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4757,6 +4828,8 @@
 				536585861478920D00FE57A5 /* EqualizerViewController.xib in Resources */,
 				536585A11478A43E00FE57A5 /* eqView.png in Resources */,
 				536585A41478A43E00FE57A5 /* eqView@2x.png in Resources */,
+				53DFB309148C27080066FF94 /* downArrow.png in Resources */,
+				5347A1BA148C5044000288D8 /* BassEffectPresets.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5020,6 +5093,8 @@
 				536585851478920D00FE57A5 /* EqualizerViewController.xib in Resources */,
 				536585A01478A43E00FE57A5 /* eqView.png in Resources */,
 				536585A31478A43E00FE57A5 /* eqView@2x.png in Resources */,
+				53DFB308148C27080066FF94 /* downArrow.png in Resources */,
+				5347A1B9148C5044000288D8 /* BassEffectPresets.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5335,6 +5410,11 @@
 				53B895D314808F7600607724 /* TGAlib.m in Sources */,
 				53B895D614808F7600607724 /* TransformUtils.m in Sources */,
 				53B895D914808F7600607724 /* ZipUtils.m in Sources */,
+				53DFB30A148C27080066FF94 /* NSString+NSArrayExtension.m in Sources */,
+				53DFB30D148C27080066FF94 /* NWPickerField.m in Sources */,
+				53DFB310148C27080066FF94 /* NWPickerView.m in Sources */,
+				5347A1AA148C3857000288D8 /* BassEffectDAO.m in Sources */,
+				5347A1B4148C463A000288D8 /* BassEffectValue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5630,6 +5710,11 @@
 				53B895D514808F7600607724 /* TGAlib.m in Sources */,
 				53B895D814808F7600607724 /* TransformUtils.m in Sources */,
 				53B895DB14808F7600607724 /* ZipUtils.m in Sources */,
+				53DFB30C148C27080066FF94 /* NSString+NSArrayExtension.m in Sources */,
+				53DFB30F148C27080066FF94 /* NWPickerField.m in Sources */,
+				53DFB312148C27080066FF94 /* NWPickerView.m in Sources */,
+				5347A1AC148C3857000288D8 /* BassEffectDAO.m in Sources */,
+				5347A1B6148C463A000288D8 /* BassEffectValue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5925,6 +6010,11 @@
 				53B895D414808F7600607724 /* TGAlib.m in Sources */,
 				53B895D714808F7600607724 /* TransformUtils.m in Sources */,
 				53B895DA14808F7600607724 /* ZipUtils.m in Sources */,
+				53DFB30B148C27080066FF94 /* NSString+NSArrayExtension.m in Sources */,
+				53DFB30E148C27080066FF94 /* NWPickerField.m in Sources */,
+				53DFB311148C27080066FF94 /* NWPickerView.m in Sources */,
+				5347A1AB148C3857000288D8 /* BassEffectDAO.m in Sources */,
+				5347A1B5148C463A000288D8 /* BassEffectValue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

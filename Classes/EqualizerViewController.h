@@ -6,8 +6,10 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
+#import "NWPickerField.h"
+
 @class EqualizerView, EqualizerPointView, BassParamEqValue;
-@interface EqualizerViewController : UIViewController
+@interface EqualizerViewController : UIViewController <NWPickerFieldDelegate>
 
 @property (nonatomic, retain) IBOutlet UIButton *toggleButton;
 //@property (nonatomic, retain) IBOutlet UIImageView *drawImage;

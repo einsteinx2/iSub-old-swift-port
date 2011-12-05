@@ -192,4 +192,30 @@
 	[equalizerView changeType];
 }
 
+#pragma mark -
+#pragma mark NWPickerField
+#pragma mark -
+
+-(NSInteger) numberOfComponentsInPickerField:(NWPickerField*)pickerField
+{
+	return 1;
+}
+
+
+-(NSInteger) pickerField:(NWPickerField*)pickerField numberOfRowsInComponent:(NSInteger)component
+{
+	return 5;	
+}
+
+-(NSString *) pickerField:(NWPickerField *)pickerField titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    NSArray *fields = [NSArray arrayWithObjects:@"Flat", @"High Bass", @"High Treble", @"Rock", @"Custom", nil];
+	return [fields objectAtIndex:row];
+}
+
+-(void) pickerField:(NWPickerField *)pickerField selectedRow:(NSInteger)row inComponent:(NSInteger)component
+{
+	[pickerField resignFirstResponder];
+}
+
 @end

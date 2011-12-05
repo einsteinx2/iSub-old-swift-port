@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+    <!-- Effect Type 0 -- Doesn't exist -->
+    <array/>
+    
+    <!-- Effect Type 1 -- Parametric Equalizer -->
+    <!-- values: (frequency, gain) -->
+    <array>
+        <dict>
+            <key>name</key>
+            <string>Flat</string>
+            <key>isDefault</key>
+            <true/>
+            <key>values</key>
+            <array>
+                <array><real>0.20</real><real>0.50</real></array>
+                <array><real>0.40</real><real>0.50</real></array>
+                <array><real>0.60</real><real>0.50</real></array>
+                <array><real>0.80</real><real>0.50</real></array>
+            </array>
+        </dict>
+        <dict>
+            <key>name</key>
+            <string>Bass Boost</string>
+            <key>isDefault</key>
+            <true/>
+            <key>values</key>
+            <array>
+                <array><real>0.00</real><real>0.75</real></array>
+                <array><real>0.20</real><real>0.70</real></array>
+                <array><real>0.40</real><real>0.60</real></array>
+                <array><real>0.60</real><real>0.50</real></array>
+            </array>
+        </dict>
+        <dict>
+            <key>name</key>
+            <string>Treble Boost</string>
+            <key>isDefault</key>
+            <true/>
+            <key>values</key>
+            <array>
+                <array><real>0.40</real><real>0.50</real></array>
+                <array><real>0.60</real><real>0.60</real></array>
+                <array><real>0.80</real><real>0.70</real></array>
+                <array><real>1.00</real><real>0.75</real></array>
+            </array>
+        </dict>
+    </array>
+</array>
+</plist>

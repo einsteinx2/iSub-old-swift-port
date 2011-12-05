@@ -341,6 +341,43 @@
 	}
 }
 
+- (id)readPlist:(NSString *)fileName 
+{  
+	NSData *plistData = nil;  
+	NSError *error = nil;  
+	NSPropertyListFormat format;  
+	id plist;  
+	
+	NSString *localizedPath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"plist"];  
+	plistData = [NSData dataWithContentsOfFile:localizedPath];   
+	
+	plist = [NSPropertyListSerialization propertyListWithData:plistData options:NSPropertyListImmutable format:&format error:&error];  
+	if (!plist) {  
+		NSLog(@"Error reading plist from file '%s', error = '%s'", [localizedPath UTF8String], [[error localizedDescription] UTF8String]);  
+		[error release];  
+	}  
+	
+	return plist;  
+}  
+
+- (void)setupBassEffectDefaults
+{
+	NSArray *effects = [self readPlist:@"BassEffectPresets"];
+	
+	for (int i = 0; i < [effects count]; i++)
+	{
+		NSString *key = [NSString stringWithFormat:@"BassEffectSelectedPreset%i", i];
+		[userDefaults setObject:[NSNumber numberWithInt:0] forKey:key];
+		
+		key = [NSString stringWithFormat:@"BassEffectPresets%i", i];
+		NSArray *presets = [effects objectAtIndex:i];
+		[userDefaults setObject:presets forKey:key];
+	}	
+	
+	[userDefaults synchronize];
+}
+
+
 #pragma mark - Login Settings
 
 - (NSString *)urlString
