@@ -423,6 +423,7 @@ static MusicSingleton *sharedInstance = nil;
 	}
 	
 	// The file doesn't exist or it's not fully cached, start downloading it from the middle
+	DLog(@"nextSong: %@    nextSong.fileExists: %i   nextSong.isFullyCached: %i", nextSong, nextSong.fileExists, nextSong.isFullyCached);
 	if (nextSong && (!nextSong.fileExists || (!nextSong.isFullyCached && !viewObjects.isOfflineMode)))
 	{
 		// Start to download the rest of the song
@@ -776,15 +777,6 @@ static MusicSingleton *sharedInstance = nil;
 	
 	isAutoNextNotificationOn = YES;
 }*/
-
-- (void)scrobbleSong:(NSString*)songId isSubmission:(BOOL)isSubmission
-{
-    NSString *isSubmissionString = [NSString stringWithFormat:@"%i", isSubmission];
-    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(songId), @"id", n2N(isSubmissionString), @"submission", nil];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"scrobble" andParameters:parameters];
-    
-	[[NSURLConnection alloc] initWithRequest:request delegate:self];
-}
 
 #pragma mark -
 #pragma mark Song Download Progress Methods

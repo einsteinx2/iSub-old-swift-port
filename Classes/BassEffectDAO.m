@@ -6,11 +6,15 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
+#import "BassWrapperSingleton.h"
 #import "BassEffectDAO.h"
 #import "BassEffectValue.h"
+#import "BassParamEqValue.h"
+#import "NSArray+FirstObject.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation BassEffectDAO
-@synthesize type, presets, selectedPresetValues, currentValueIndex, currentPresetCount;
+@synthesize type, presets;
 
 #pragma mark - Lifecycle
 
@@ -25,14 +29,60 @@
 	return self;
 }
 
+- (id)readPlist:(NSString *)fileName 
+{  
+	NSData *plistData = nil;  
+	NSError *error = nil;  
+	NSPropertyListFormat format;  
+	id plist;  
+	
+	NSString *localizedPath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"plist"];  
+	plistData = [NSData dataWithContentsOfFile:localizedPath];   
+	
+	plist = [NSPropertyListSerialization propertyListWithData:plistData options:NSPropertyListImmutable format:&format error:&error];  
+	if (!plist) {  
+		NSLog(@"Error reading plist from file '%s', error = '%s'", [localizedPath UTF8String], [[error localizedDescription] UTF8String]);  
+		[error release];  
+	}  
+	
+	return plist;  
+}  
+
 - (void)setup
 {
-	NSString *key = [NSString stringWithFormat:@"BassEffectSelectedPresets", type];
-	self.selectedPresetIndex = [[NSUserDefaults standardUserDefaults] integerForKey:key];
+	selectedPresetIndex = 0;
+	NSArray *defaultPresets = [self readPlist:@"BassEffectDefaultPresets"];
+	presets = [[defaultPresets objectAtIndex:type] retain];
 	
-	key = [NSString stringWithFormat:@"BassEffectPresets%i", type];
-	presets = [[[NSUserDefaults standardUserDefaults] arrayForKey:key] retain];
+	//NSString *key = [NSString stringWithFormat:@"BassEffectSelectedPresets", type];
+	//self.selectedPresetIndex = [[NSUserDefaults standardUserDefaults] integerForKey:key];
+	
+	//key = [NSString stringWithFormat:@"BassEffectPresets%i", type];
+	//presets = [[[NSUserDefaults standardUserDefaults] arrayForKey:key] retain];
 }
+
+/*#pragma mark - Private data methods
+
+
+
+- (void)setupBassEffectDefaults
+{
+	NSArray *defaultEffects = [self readPlist:@"BassEffectDefaultPresets"];
+	
+	for (int i = 0; i < [effects count]; i++)
+	{
+		NSString *key = [NSString stringWithFormat:@"BassEffectSelectedPreset%i", i];
+		[userDefaults setObject:[NSNumber numberWithInt:0] forKey:key];
+		
+		
+		
+		key = [NSString stringWithFormat:@"BassEffectPresets%i", i];
+		NSArray *presets = [effects objectAtIndex:i];
+		[userDefaults setObject:presets forKey:key];
+	}	
+	
+	[userDefaults synchronize];
+}*/
 
 #pragma mark - Public DAO Methods
 
@@ -43,21 +93,23 @@
 
 - (void)setSelectedPresetIndex:(NSUInteger)preset
 {
-	if (preset != selectedPresetIndex)
-		currentValueIndex = -1;
-	
 	selectedPresetIndex = preset;
-	NSString *key = [NSString stringWithFormat:@"BassEffectSelectedPreset%i", type];
-	[[NSUserDefaults standardUserDefaults] setInteger:selectedPresetIndex forKey:key];
-	[[NSUserDefaults standardUserDefaults] synchronize];
+	//NSString *key = [NSString stringWithFormat:@"BassEffectSelectedPreset%i", type];
+	//[[NSUserDefaults standardUserDefaults] setInteger:selectedPresetIndex forKey:key];
+	//[[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (NSDictionary *)selectedPreset
+{
+	if (self.selectedPresetIndex >= [self.presets count])
+		return nil;
+
+	return [presets objectAtIndex:selectedPresetIndex];
 }
 
 - (NSArray *)selectedPresetValues
 {
-	if (self.selectedPresetIndex >= self.numberOfPresets)
-		return nil;
-
-	return [presets objectAtIndex:selectedPresetIndex];
+	return [self.selectedPreset objectForKey:@"values"];
 }
 
 - (BassEffectValue *)valueForIndex:(NSInteger)valueIndex
@@ -68,68 +120,42 @@
 	if (!self.selectedPresetValues)
 		return nil;
 	
-	if (valueIndex >= [selectedPresetValues count])
+	if (valueIndex >= [self.selectedPresetValues count])
 		return nil;
 	
-	NSDictionary *valueDict = [selectedPresetValues objectAtIndex:valueIndex];
+	NSArray *valueArray = [self.selectedPresetValues objectAtIndex:valueIndex];
 	
 	BassEffectValue  *value = [[BassEffectValue alloc] init];
 	value.type = self.type;
-	value.percentX = [[valueDict objectForKey:@"percentX"] floatValue];
-	value.percentY = [[valueDict objectForKey:@"percentY"] floatValue];
-	value.isDefault = [[valueDict objectForKey:@"isDefault"] boolValue];
+	value.percentX = [[valueArray firstObject] floatValue];
+	value.percentY = [[valueArray lastObject] floatValue];
+	value.isDefault = [[self.selectedPreset objectForKey:@"isDefault"] boolValue];
 	
 	return [value autorelease];
 }
 
-- (NSUInteger)numberOfPresets
+- (void)selectPresetAtIndex:(NSUInteger)presetIndex
 {
-	return [presets count];
-}
-
-/*NSUInteger currentIndex = 0;
-- (BassEffectValue)nextValue
-{
-	if (self.count == 0)
-		return nil;
+	self.selectedPresetIndex = presetIndex;
 	
-	if (currentIndex < self.count)
-	{
-		// Return the current value
-		BassEffectValue value = [self valueForIndex:currentIndex];
-		currentIndex++;
-		return value;
-	}
-	else
-	{
-		// Return nil to signify end of array
-		currentIndex = 0;
-		return nil;
-	}
-}*/
-
-- (BOOL)next
-{
-	if (![selectedPresetValues count])
-		return NO;
+	BassWrapperSingleton *wrapper = [BassWrapperSingleton sharedInstance];
 	
-	if (currentValueIndex < [selectedPresetValues count])
+	if (type == BassEffectType_ParametricEQ)
 	{
-		// Return YES because there is a value
-		currentValueIndex++;
-		return YES;
-	}
-	else
-	{
-		// Return NO to signify end of array
-		currentValueIndex = -1;
-		return NO;
-	}
-}
+		BOOL wasEqualizerOn = wrapper.isEqualizerOn;
+		[wrapper removeAllEqualizerValues];
 
-- (BassEffectValue *)currentValue
-{
-	return [self valueForIndex:currentValueIndex];
+		for (int i = 0; i < [self.selectedPresetValues count]; i++)
+		{
+			BassEffectValue *value = [self valueForIndex:i];
+			[wrapper addEqualizerValue:BASS_DX8_PARAMEQFromPoint(value.percentX, value.percentY, DEFAULT_BANDWIDTH)];
+		}
+				
+		if (wasEqualizerOn)
+			[wrapper toggleEqualizer];
+	}
+	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_BassEffectPresetLoaded];
 }
 
 @end

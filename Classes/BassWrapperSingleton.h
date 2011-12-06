@@ -34,6 +34,7 @@
 - (void)updateEqParameter:(BassParamEqValue *)value;
 - (BassParamEqValue *)addEqualizerValue:(BASS_DX8_PARAMEQ)value;
 - (NSArray *)removeEqualizerValue:(BassParamEqValue *)value;
+- (void)removeAllEqualizerValues;
 
 - (void)readEqData;
 

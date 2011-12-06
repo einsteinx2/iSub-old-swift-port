@@ -8,13 +8,15 @@
 
 #import "NWPickerField.h"
 
-@class EqualizerView, EqualizerPointView, BassParamEqValue;
+@class EqualizerView, EqualizerPointView, BassParamEqValue, BassEffectDAO;
 @interface EqualizerViewController : UIViewController <NWPickerFieldDelegate>
 
 @property (nonatomic, retain) IBOutlet UIButton *toggleButton;
 //@property (nonatomic, retain) IBOutlet UIImageView *drawImage;
 @property (nonatomic, retain) IBOutlet EqualizerView *equalizerView;
 @property (nonatomic, retain) NSMutableArray *equalizerPointViews;
+
+@property (nonatomic, retain) BassEffectDAO *effectDAO;
 
 //@property (nonatomic, retain) NSTimer *drawTimer;
 

@@ -48,7 +48,6 @@ extern NSString* UIPickerViewDidHideNotification;
 	UIImageView* indicator;
 	
 	id<NWPickerFieldDelegate> delegate;
-
 }
 
 @property(nonatomic,assign) IBOutlet id delegate;

@@ -28,4 +28,6 @@
 
 #define ISMSNotification_RepeatModeChanged @"ISMS Repeat mode changed"
 
+#define ISMSNotification_BassEffectPresetLoaded @"ISMS Bass effect preset loaded"
+
 #endif

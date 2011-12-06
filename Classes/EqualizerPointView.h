@@ -7,18 +7,10 @@
 //
 
 #import "bass.h"
+#import "BassParamEqValue.h"
 
 #define myWidth 40
 #define myHeight 40
-
-#define MIN_FREQUENCY 32
-#define MAX_FREQUENCY 16384
-#define RANGE_OF_EXPONENTS 9
-
-#define MIN_GAIN -15
-#define MAX_GAIN 15
-
-#define DEFAULT_BANDWIDTH 18
 
 @class BassParamEqValue;
 @interface EqualizerPointView : UIImageView

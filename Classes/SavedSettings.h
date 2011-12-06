@@ -6,6 +6,8 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
+#import "BassEffectDAO.h"
+
 @class BassWrapperSingleton;
 @interface SavedSettings : NSObject 
 {    
@@ -83,7 +85,11 @@
 @property (readonly) NSString *cachePath;
 @property (readonly) NSString *tempCachePath;
 
-- (NSString *) formatFileSize:(unsigned long long int)size;
+/*- (BOOL)isSelectedIndexForBassEffectADefault:(BassEffectType)type;
+- (NSUInteger)selectedIndexForBassEffect:(BassEffectType)type;
+- (void)selectedIndexForBassEffect:(BassEffectType)type index:(NSUInteger)index isDefault:(BOOL)isDefault;*/
+
+- (NSString *)formatFileSize:(unsigned long long int)size;
 
 - (void)setupSaveState;
 - (void)loadState;

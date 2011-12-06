@@ -11,9 +11,10 @@
 #import "EqualizerPointView.h"
 #import "BassWrapperSingleton.h"
 #import "BassParamEqValue.h"
+#import "BassEffectDAO.h"
 
 @implementation EqualizerViewController
-@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton; //drawTimer;
+@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO; //drawTimer;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -27,16 +28,22 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+	
+	effectDAO = [[BassEffectDAO alloc] initWithType:BassEffectType_ParametricEQ];
 		
 	[self updateToggleButton];
 	
 	[self createEqViews];
 	
 	[self.equalizerView startEqDisplay];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createEqViews) name:ISMSNotification_BassEffectPresetLoaded object:nil];
 }
 
 - (void)createEqViews
 {
+	[self removeEqViews];
+	
 	equalizerPointViews = [[NSMutableArray alloc] initWithCapacity:0];
 	for (BassParamEqValue *value in [BassWrapperSingleton sharedInstance].equalizerValues)
 	{
@@ -61,6 +68,8 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_BassEffectPresetLoaded object:nil];
+	
 	[self removeEqViews];
 	
 	[self.equalizerView stopEqDisplay];
@@ -204,18 +213,20 @@
 
 -(NSInteger) pickerField:(NWPickerField*)pickerField numberOfRowsInComponent:(NSInteger)component
 {
-	return 5;	
+	return [effectDAO.presets count];	
 }
 
 -(NSString *) pickerField:(NWPickerField *)pickerField titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    NSArray *fields = [NSArray arrayWithObjects:@"Flat", @"High Bass", @"High Treble", @"Rock", @"Custom", nil];
-	return [fields objectAtIndex:row];
+	return [[effectDAO.presets objectAtIndex:row] objectForKey:@"name"];
 }
 
 -(void) pickerField:(NWPickerField *)pickerField selectedRow:(NSInteger)row inComponent:(NSInteger)component
 {
 	[pickerField resignFirstResponder];
+	
+	DLog(@"row: %i", row);
+	[effectDAO selectPresetAtIndex:row];
 }
 
 @end

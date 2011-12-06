@@ -7,7 +7,6 @@
 //
 
 #import "EqualizerPointView.h"
-#import "BassParamEqValue.h"
 
 @implementation EqualizerPointView
 @synthesize parentSize;

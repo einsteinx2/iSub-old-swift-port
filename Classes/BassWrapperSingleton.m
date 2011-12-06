@@ -557,6 +557,8 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 		HFX handle = BASS_ChannelSetFX(outStream, BASS_FX_DX8_PARAMEQ, 0);
 		BASS_FXSetParameters(handle, &value);
 		eqValue.handle = handle;
+	
+		[eqHandleArray addObject:[BassEffectHandle handleWithEffectHandle:handle]];
 	}
 	
 	return eqValue;
@@ -577,12 +579,19 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 	[eqValueArray removeObject:value];
 	for (int i = value.arrayIndex; i < [eqValueArray count]; i++)
 	{
-		// Adjust the arrayIndexe values for the other objects
+		// Adjust the arrayIndex values for the other objects
 		BassParamEqValue *aValue = [eqValueArray objectAtIndex:i];
 		aValue.arrayIndex = i;
 	}
 	
 	return self.equalizerValues;
+}
+
+- (void)removeAllEqualizerValues
+{
+	[self clearEqualizer];
+	
+	[eqValueArray removeAllObjects];
 }
 
 - (BOOL)toggleEqualizer

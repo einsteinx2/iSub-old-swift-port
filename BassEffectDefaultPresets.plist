@@ -28,9 +28,9 @@
             <true/>
             <key>values</key>
             <array>
-                <array><real>0.00</real><real>0.75</real></array>
-                <array><real>0.20</real><real>0.70</real></array>
-                <array><real>0.40</real><real>0.60</real></array>
+                <array><real>0.00</real><real>0.25</real></array>
+                <array><real>0.20</real><real>0.30</real></array>
+                <array><real>0.40</real><real>0.40</real></array>
                 <array><real>0.60</real><real>0.50</real></array>
             </array>
         </dict>
@@ -42,9 +42,9 @@
             <key>values</key>
             <array>
                 <array><real>0.40</real><real>0.50</real></array>
-                <array><real>0.60</real><real>0.60</real></array>
-                <array><real>0.80</real><real>0.70</real></array>
-                <array><real>1.00</real><real>0.75</real></array>
+                <array><real>0.60</real><real>0.40</real></array>
+                <array><real>0.80</real><real>0.30</real></array>
+                <array><real>1.00</real><real>0.25</real></array>
             </array>
         </dict>
     </array>

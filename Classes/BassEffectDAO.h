@@ -11,14 +11,6 @@ typedef enum
 	BassEffectType_ParametricEQ = 1
 } BassEffectType;
 
-/*typedef struct
-{
-	BassEffectType type;
-	CGFloat percentX;
-	CGFloat percentY;
-	BOOL isDefault;
-} BassEffectValue;*/
-
 @class BassEffectValue;
 @interface BassEffectDAO : NSObject
 {
@@ -27,20 +19,15 @@ typedef enum
 
 @property BassEffectType type;
 @property (nonatomic, retain) NSArray *presets;
-@property (readonly) NSUInteger numberOfPresets;
 
 @property NSUInteger selectedPresetIndex;
+@property (readonly) NSDictionary *selectedPreset;
 @property (readonly) NSArray *selectedPresetValues;
-
-@property (readonly) NSInteger currentValueIndex;
-@property (readonly) NSUInteger currentPresetCount;
-
-@property (readonly) BOOL next;
-@property (readonly) BassEffectValue *currentValue;
 
 - (id)initWithType:(BassEffectType)effectType;
 - (void)setup;
 
 - (BassEffectValue *)valueForIndex:(NSInteger)index;
+- (void)selectPresetAtIndex:(NSUInteger)presetIndex;
 
 @end

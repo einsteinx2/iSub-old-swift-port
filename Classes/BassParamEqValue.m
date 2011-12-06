@@ -88,6 +88,16 @@ BASS_DX8_PARAMEQ BASS_DX8_PARAMEQMake(float center, float gain, float bandwidth)
 	return p;
 }
 
+BASS_DX8_PARAMEQ BASS_DX8_PARAMEQFromPoint(float percentX, float percentY, float bandwidth)
+{	
+	BASS_DX8_PARAMEQ p;
+	p.fCenter = exp2f((percentX * RANGE_OF_EXPONENTS) + 5);
+	p.fGain = (.5 - percentY) * (CGFloat)(MAX_GAIN * 2);;
+	p.fBandwidth = bandwidth;
+	
+	return p;
+}
+
 - (NSUInteger)hash
 {
 	return abs(parameters.fCenter) + abs(parameters.fGain) + abs(parameters.fBandwidth) + abs(handle);

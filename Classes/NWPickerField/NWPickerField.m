@@ -37,7 +37,7 @@ NSString* UIPickerViewDidShowNotification = @"UIPickerViewDidShowNotification";
 NSString* UIPickerViewWillHideNotification = @"UIPickerViewWillHideNotification";
 NSString* UIPickerViewDidHideNotification = @"UIPickerViewDidHideNotification";
 
-
+BOOL didFinishLoading = NO;
 
 @implementation NWPickerField
 
@@ -203,6 +203,9 @@ NSString* UIPickerViewDidHideNotification = @"UIPickerViewDidHideNotification";
 	self.text = [NSString stringWithFormat:formatString array:componentStrings];
 	
 	// notify the delegate
-	[delegate pickerField:self selectedRow:row inComponent:component];
+	if (didFinishLoading)
+		[delegate pickerField:self selectedRow:row inComponent:component];
+	else
+		didFinishLoading = YES;
 }
 @end

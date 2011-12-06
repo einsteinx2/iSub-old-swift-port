@@ -105,6 +105,4 @@
 //- (unsigned long long int) findCacheSize;
 //- (unsigned long long int) findFreeSpace;
 
-- (void)scrobbleSong:(NSString*)songId isSubmission:(BOOL)isSubmission;
-
 @end

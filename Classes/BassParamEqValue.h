@@ -9,6 +9,15 @@
 #import <Foundation/Foundation.h>
 #import "bass.h"
 
+#define MIN_FREQUENCY 32
+#define MAX_FREQUENCY 16384
+#define RANGE_OF_EXPONENTS 9
+
+#define MIN_GAIN -15
+#define MAX_GAIN 15
+
+#define DEFAULT_BANDWIDTH 18
+
 @interface BassParamEqValue : NSObject
 
 @property BASS_DX8_PARAMEQ parameters;
@@ -29,5 +38,6 @@
 + (BassParamEqValue *)valueWithParams:(BASS_DX8_PARAMEQ)parameters arrayIndex:(NSUInteger)index;
 
 BASS_DX8_PARAMEQ BASS_DX8_PARAMEQMake(float center, float gain, float bandwidth);
+BASS_DX8_PARAMEQ BASS_DX8_PARAMEQFromPoint(float percentX, float percentY, float bandwidth);
 
 @end
