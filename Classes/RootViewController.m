@@ -190,7 +190,7 @@
 {
 	[self createDataModel];
 	
-	[self.tableView reloadData];
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 	[self updateCount];
 }
 
@@ -286,7 +286,7 @@
 	else
 		[self addCount];		
 	
-	[self.tableView reloadData];
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 	self.tableView.backgroundColor = [UIColor clearColor];
 	
 	viewObjects.isArtistsLoading = NO;
@@ -317,7 +317,7 @@
 	isSearching = NO;
 	if ([dataModel isRootFolderIdCached])
 	{
-		[self.tableView reloadData];
+		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 		[self updateCount];
 	}
 	else
@@ -348,7 +348,7 @@
 	
 	[dataModel clearSearchTable];
 	
-	[self.tableView reloadData];
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 	
 	[self.tableView setContentOffset:CGPointMake(0, 86) animated:YES];
 }
@@ -398,7 +398,7 @@
 	// Remove the index bar
 	isSearching = YES;
 	[dataModel clearSearchTable];
-	[self.tableView reloadData];
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 	
 	[self.tableView.tableHeaderView retain];
 
@@ -439,7 +439,7 @@
 		
 		[dataModel searchForFolderName:searchBar.text];
 		
-		[self.tableView reloadData];
+		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 	}
 	else 
 	{		
@@ -458,7 +458,7 @@
 		
 		[dataModel clearSearchTable];
 		
-		[self.tableView reloadData];
+		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 		
 		[self.tableView setContentOffset:CGPointMake(0, 86) animated:NO];
 	}

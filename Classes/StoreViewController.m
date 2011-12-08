@@ -31,7 +31,7 @@
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-	[self.tableView reloadData];
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 }
 
 - (void)viewDidLoad 
@@ -73,7 +73,7 @@
 	else
 	{
 		[self organizeList];
-		[self.tableView reloadData];
+		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 	}
 }
 
@@ -90,7 +90,7 @@
 		
 		[self organizeList];
 		
-		[self.tableView reloadData];
+		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 	}
 }
 

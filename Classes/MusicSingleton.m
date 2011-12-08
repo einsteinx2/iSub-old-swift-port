@@ -453,7 +453,7 @@ static MusicSingleton *sharedInstance = nil;
 	
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
-		[self jukeboxPlaySongAtPosition:position];
+		[self jukeboxPlaySongAtPosition:[NSNumber numberWithInt:position]];
 	}
 	else
 	{		
@@ -471,7 +471,7 @@ static MusicSingleton *sharedInstance = nil;
 	{
 		// Past 10 seconds in the song, so restart playback instead of changing songs
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			[self jukeboxPlaySongAtPosition:currentIndex];
+			[self jukeboxPlaySongAtPosition:[NSNumber numberWithInt:currentIndex]];
 		else
 			[self playSongAtPosition:currentIndex];
 	}
@@ -814,11 +814,11 @@ static MusicSingleton *sharedInstance = nil;
 #pragma mark -
 #pragma mark Jukebox Control methods
 
-- (void)jukeboxPlaySongAtPosition:(NSUInteger)position
+- (void)jukeboxPlaySongAtPosition:(NSNumber *)position
 {
 	JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
 	    
-    NSString *positionString = [NSString stringWithFormat:@"%i", position];
+    NSString *positionString = [position stringValue];
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"skip", @"action", n2N(positionString), @"index", nil];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
@@ -828,7 +828,7 @@ static MusicSingleton *sharedInstance = nil;
 	{
 		SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
 		
-		dataModel.currentIndex = position;
+		dataModel.currentIndex = [position intValue];
 		
 		[connectionQueue registerConnection:connection];
 		[connectionQueue startQueue];
@@ -903,7 +903,7 @@ static MusicSingleton *sharedInstance = nil;
 	NSInteger index = [SUSCurrentPlaylistDAO dataModel].currentIndex - 1;
 	if (index >= 0)
 	{						
-		[self jukeboxPlaySongAtPosition:index];
+		[self jukeboxPlaySongAtPosition:[NSNumber numberWithInt:index]];
 		
 		jukeboxIsPlaying = YES;
 	}
@@ -914,7 +914,7 @@ static MusicSingleton *sharedInstance = nil;
 	NSInteger index = [SUSCurrentPlaylistDAO dataModel].currentIndex + 1;
 	if (index <= ([databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"] - 1))
 	{		
-		[self jukeboxPlaySongAtPosition:index];
+		[self jukeboxPlaySongAtPosition:[NSNumber numberWithInt:index]];
 		
 		jukeboxIsPlaying = YES;
 	}

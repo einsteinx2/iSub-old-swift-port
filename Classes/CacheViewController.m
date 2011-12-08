@@ -450,7 +450,7 @@
 		
 		DLog(@"sectionInfo: %@", sectionInfo);
 		
-		[self.tableView reloadData];
+		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 		
 		if ([listOfArtists count] == 0)
 		{
@@ -492,7 +492,7 @@
 		}		
 	}
 	
-	[self.tableView reloadData];
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 }
 
 #pragma mark - Button Handling
@@ -601,7 +601,7 @@
 		// Reload the cells
 		if (segmentedControl.selectedSegmentIndex == 1)
 		{
-			[self.tableView reloadData];
+			[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 		}
 	}
 }
@@ -1048,7 +1048,7 @@
 			editSongsLabel.text = @"Edit";
 			
 			// Reload the table
-			[self.tableView reloadData];
+			[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 		}
 	}
 	else if (segmentedControl.selectedSegmentIndex == 1)
@@ -1080,7 +1080,7 @@
 			editSongsLabel.text = @"Edit";
 			
 			// Reload the table
-			[self.tableView reloadData];
+			[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 		}
 	}
 }

@@ -100,7 +100,7 @@
 	{
         self.title = serverPlaylist.playlistName;
 		playlistCount = [databaseControls.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM splaylist%@", md5]];
-		[self.tableView reloadData];
+		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 		
 		// Add the pull to refresh view
 		refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
@@ -353,7 +353,7 @@
 		self.tableView.scrollEnabled = YES;
 
 		playlistCount = [databaseControls.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM splaylist%@", md5]];
-		[self.tableView reloadData];
+		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 		
 		[self dataSourceDidFinishLoadingNewData];
 		

@@ -186,6 +186,9 @@ static SocialSingleton *sharedInstance = nil;
 	self.twitterEngine = [[SA_OAuthTwitterEngine alloc] initOAuthWithDelegate: self];
 	self.twitterEngine.consumerKey = kOAuthConsumerKey;
 	self.twitterEngine.consumerSecret = kOAuthConsumerSecret;
+	
+	// Needed to load saved twitter auth info
+	[self.twitterEngine isAuthorized];
 }
 
 //=============================================================================================================================
@@ -257,6 +260,7 @@ static SocialSingleton *sharedInstance = nil;
 {
 	//initialize here
 	twitterEngine = nil;
+	[self createTwitterEngine];
 	
 	tweetTimer = nil;
 	shouldInvalidateTweetTimer = NO;

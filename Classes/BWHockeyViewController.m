@@ -426,7 +426,7 @@
         if (breakAfterThisApp) break;
     }
 
-    [self.tableView reloadData];
+    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     [self showHidePreviousVersionsButton];
 }
 
@@ -450,7 +450,7 @@
         [self configureWebCell:cell forApp_:app];
         [cells_ addObject:cell];
     }
-    [self.tableView reloadData];
+    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     [self showHidePreviousVersionsButton];
 }
 
@@ -505,7 +505,7 @@
   // only make changes if we are visible
   if(self.view.window) {
     if ([keyPath isEqualToString:@"webViewSize"]) {
-        [self.tableView reloadData];
+        [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
         [self realignPreviousVersionButton];
     } else if ([keyPath isEqualToString:@"checkInProgress"]) {
         if (self.hockeyManager.isCheckInProgress) {

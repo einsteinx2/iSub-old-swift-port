@@ -84,7 +84,7 @@
 //- (void)addAutoNextNotification;
 
 // Jukebox control methods
-- (void)jukeboxPlaySongAtPosition:(NSUInteger)position;
+- (void)jukeboxPlaySongAtPosition:(NSNumber *)position;
 - (void)jukeboxPlay;
 - (void)jukeboxStop;
 - (void)jukeboxPrevSong;

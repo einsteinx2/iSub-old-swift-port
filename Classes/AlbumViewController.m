@@ -93,7 +93,7 @@
 		
         if (dataModel.hasLoaded)
         {
-            [self.tableView reloadData];
+            [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
             [self addHeaderAndIndex];
         }
         else
@@ -137,7 +137,7 @@
 		self.navigationItem.rightBarButtonItem = nil;
 	}
 	
-	[self.tableView reloadData];
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -316,6 +316,10 @@
 		self.tableView.tableHeaderView = headerView;
 	}
 	
+	self.sectionInfo = dataModel.sectionInfo;
+	if (sectionInfo)
+		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+	
     // TODO create section index
 	// Create the section index
 	/*if (dataModel.albumsCount > 10)
@@ -342,7 +346,7 @@
 			if ([sectionInfo count] < 5)
 				self.sectionInfo = nil;
 			else
-				[self.tableView reloadData];
+				[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 		}
 	}	*/
 }
@@ -392,16 +396,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index 
 {
-	if (index == 0)
-	{
-		[tableView scrollRectToVisible:CGRectMake(0, 50, 320, 40) animated:NO];
-	}
-	else
-	{
-		NSUInteger row = [[[sectionInfo objectAtIndex:(index - 1)] objectAtIndex:1] intValue];
-		NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
-		[tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
-	}
+	NSUInteger row = [[[sectionInfo objectAtIndex:index] objectAtIndex:1] intValue];
+	NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
+	[tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
 	
 	return -1;
 }
@@ -556,8 +553,8 @@
 {
     [viewObjects hideLoadingScreen];
 	
-	[self.tableView reloadData];
-	[self addHeaderAndIndex];
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+	[self performSelectorOnMainThread:@selector(addHeaderAndIndex) withObject:nil waitUntilDone:YES];
 	
 	[self dataSourceDidFinishLoadingNewData];
 }

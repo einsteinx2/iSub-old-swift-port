@@ -97,10 +97,10 @@ static void destroy_versionArrays()
 	[request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
 	
 	// Set the HTTP Basic Auth
-	/*NSString *authStr = [NSString stringWithFormat:@"%@:%@", username, password];
+	NSString *authStr = [NSString stringWithFormat:@"%@:%@", username, password];
 	NSData *authData = [authStr dataUsingEncoding:NSASCIIStringEncoding];
 	NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64EncodingWithLineLength:0]];
-	[request setValue:authValue forHTTPHeaderField:@"Authorization"];*/
+	[request setValue:authValue forHTTPHeaderField:@"Authorization"];
 	
 	if (offset > 0)
 	{

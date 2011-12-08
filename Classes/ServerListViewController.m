@@ -112,7 +112,7 @@
 
 - (void)reloadTable
 {
-	[self.tableView reloadData];
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 }
 
 
@@ -139,7 +139,7 @@
 		fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		self.tableView.tableFooterView = fadeBottom;
 		
-		[self.tableView reloadData];
+		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 	}
 	else if (segmentedControl.selectedSegmentIndex == 1)
 	{
@@ -150,7 +150,7 @@
 		settingsTabViewController.parentController = self;
 		self.tableView.tableFooterView = settingsTabViewController.view;
 		//[settingsTabViewController release];
-		[self.tableView reloadData];
+		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 	}
 	else if (segmentedControl.selectedSegmentIndex == 2)
 	{
@@ -165,7 +165,7 @@
 		}
 		self.tableView.tableFooterView = helpTabViewController.view;
 		[helpTabViewController release];
-		[self.tableView reloadData];
+		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 	}
 }
 
@@ -461,7 +461,7 @@
 	[[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
-	[self.tableView reloadData];
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 }
 
 
@@ -482,7 +482,7 @@
         // Delete the row from the data source
         [settings.serverList removeObjectAtIndex:indexPath.row];
 		[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
-		[self.tableView reloadData];
+		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 		
 		// Save the plist values
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

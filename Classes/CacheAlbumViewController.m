@@ -176,7 +176,7 @@
 			if ([sectionInfo count] < 5)
 				self.sectionInfo = nil;
 			else
-				[self.tableView reloadData];
+				[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 		}
 	}	
 }
@@ -219,7 +219,7 @@
 	}
 	else
 	{
-		[self.tableView reloadData];
+		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 	}
 }
 

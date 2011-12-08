@@ -272,6 +272,36 @@
 	[self playSongAtDbRow:dbRow];
 }
 
+- (NSArray *)sectionInfo
+{
+	// Create the section index
+	if (albumsCount > 10)
+	{
+		[self.db executeUpdate:@"DROP TABLE IF EXISTS albumIndex"];
+		[self.db executeUpdate:@"CREATE TEMPORARY TABLE albumIndex (title TEXT)"];
+		
+		[self.db executeUpdate:@"INSERT INTO albumIndex SELECT title FROM albumsCache WHERE rowid >= ? LIMIT ?", [NSNumber numberWithInt:albumStartRow], [NSNumber numberWithInt:albumsCount]];
+		
+		DLog(@"albumStartRow: %@    albumsCount: %@", [NSNumber numberWithInt:albumStartRow], [NSNumber numberWithInt:albumsCount]);
+		DLog(@"total table count: %i", [self.db intForQuery:@"SELECT count(title) FROM albumsCache"]);
+		DLog(@"count in table: %i", [self.db intForQuery:@"SELECT count(title) FROM albumsCache WHERE rowid >= ? LIMIT ?", [NSNumber numberWithInt:albumStartRow], [NSNumber numberWithInt:albumsCount]]);
+		DLog(@"albumIndex count: %i", [self.db intForQuery:@"SELECT COUNT(*) FROM albumIndex"]);
+		NSArray *sectionInfo = [[DatabaseSingleton sharedInstance] sectionInfoFromTable:@"albumIndex" inDatabase:self.db withColumn:@"title"];
+		DLog(@"sectionInfo: %@", sectionInfo);
+		if (sectionInfo)
+		{
+			if ([sectionInfo count] < 5)
+				return nil;
+			else
+				return sectionInfo;
+		}
+		
+		[self.db executeUpdate:@"DROP TABLE IF EXISTS albumIndex"];
+	}
+	
+	return nil;
+}
+
 #pragma mark - Loader Manager Methods
 
 - (void)restartLoad

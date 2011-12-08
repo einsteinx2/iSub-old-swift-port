@@ -30,4 +30,6 @@
 
 #define ISMSNotification_BassEffectPresetLoaded @"ISMS Bass effect preset loaded"
 
+#define ISMSNotification_CurrentPlaylistShuffleToggled @"ISMS Current playlist shuffled/unshuffled"
+
 #endif

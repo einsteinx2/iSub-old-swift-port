@@ -62,6 +62,7 @@
 
 - (void)updateDownloadProgress;
 - (void)updateSlider;
+- (void)updateShuffleIcon;
 //- (void)showSongInfo;
 //- (void)hideSongInfo;
 //- (void)hideSongInfoFast;

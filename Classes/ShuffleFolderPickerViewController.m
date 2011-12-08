@@ -75,7 +75,7 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
 	// Sort by folder name
 	[sortedFolders sortUsingFunction:folderSort1 context:NULL];
 	
-	[self.tableView reloadData];
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 }
 
 - (void)viewDidUnload

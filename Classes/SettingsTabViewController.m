@@ -77,90 +77,39 @@
 #endif
 	
 	// Main Settings
-	/*if ([[appDelegate.settingsDictionary objectForKey:@"enableScrobblingSetting"] isEqualToString:@"YES"])
-		enableScrobblingSwitch.on = YES;
-	else
-		enableScrobblingSwitch.on = NO;*/
 	enableScrobblingSwitch.on = settings.isScrobbleEnabled;
 	
 	//scrobblePercentSlider.value = [[appDelegate.settingsDictionary objectForKey:@"scrobblePercentSetting"] floatValue];
 	scrobblePercentSlider.value = settings.scrobblePercent;
 	[self updateScrobblePercentLabel];
 	
-	/*if ([[appDelegate.settingsDictionary objectForKey:@"manualOfflineModeSetting"] isEqualToString:@"YES"])
-		manualOfflineModeSwitch.on = YES;
-	else
-		manualOfflineModeSwitch.on = NO;*/
 	manualOfflineModeSwitch.on = settings.isForceOfflineMode;
 	
-	/*if ([[appDelegate.settingsDictionary objectForKey:@"checkUpdatesSetting"] isEqualToString:@"YES"])
-		checkUpdatesSwitch.on = YES;
-	else
-		checkUpdatesSwitch.on = NO;*/
 	checkUpdatesSwitch.on = settings.isUpdateCheckEnabled;
 	
-	/*if ([[appDelegate.settingsDictionary objectForKey:@"autoReloadArtistsSetting"] isEqualToString:@"YES"])
-		autoReloadArtistSwitch.on = YES;
-	else
-		autoReloadArtistSwitch.on = NO;*/
 	autoReloadArtistSwitch.on = settings.isAutoReloadArtistsEnabled;
-	
-	/*if ([[appDelegate.settingsDictionary objectForKey:@"disablePopupsSetting"] isEqualToString:@"YES"])
-		disablePopupsSwitch.on = YES;
-	else
-		disablePopupsSwitch.on = NO;*/
+
 	disablePopupsSwitch.on = !settings.isPopupsEnabled;
 	
-	/*if ([[appDelegate.settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"])
-		disableRotationSwitch.on = YES;
-	else
-		disableRotationSwitch.on = NO;*/
 	disableRotationSwitch.on = settings.isRotationLockEnabled;
 	
-	/*if ([[appDelegate.settingsDictionary objectForKey:@"disableScreenSleepSetting"] isEqualToString:@"YES"])
-		disableScreenSleepSwitch.on = YES;
-	else
-		disableScreenSleepSwitch.on = NO;*/
 	disableScreenSleepSwitch.on = !settings.isScreenSleepEnabled;
 	
-	/*if ([[appDelegate.settingsDictionary objectForKey:@"enableSongsTabSetting"] isEqualToString:@"YES"])
-		enableSongsTabSwitch.on = YES;
-	else
-		enableSongsTabSwitch.on = NO;*/
 	enableSongsTabSwitch.on = settings.isSongsTabEnabled;
 	DLog(@"isSongsTabEnabled: %i", settings.isSongsTabEnabled);
 	
-	//recoverSegmentedControl.selectedSegmentIndex = [[appDelegate.settingsDictionary objectForKey:@"recoverSetting"] intValue];
 	recoverSegmentedControl.selectedSegmentIndex = settings.recoverSetting;
 	
-	//maxBitrateWifiSegmentedControl.selectedSegmentIndex = [[appDelegate.settingsDictionary objectForKey:@"maxBitrateWifiSetting"] intValue];
 	maxBitrateWifiSegmentedControl.selectedSegmentIndex = settings.maxBitrateWifi;
-	//maxBitrate3GSegmentedControl.selectedSegmentIndex = [[appDelegate.settingsDictionary objectForKey:@"maxBitrate3GSetting"] intValue];
 	maxBitrate3GSegmentedControl.selectedSegmentIndex = settings.maxBitrate3G;
 	
-	/*if ([[appDelegate.settingsDictionary objectForKey:@"autoPlayerInfoSetting"] isEqualToString:@"YES"])
-		autoPlayerInfoSwitch.on = YES;
-	else
-		autoPlayerInfoSwitch.on = NO;*/
 	autoPlayerInfoSwitch.on = settings.isAutoShowSongInfoEnabled;
 	
-	/*if ([[appDelegate.settingsDictionary objectForKey:@"lyricsEnabledSetting"] isEqualToString:@"YES"])
-		enableLyricsSwitch.on = YES;
-	else
-		enableLyricsSwitch.on = NO;*/
 	enableLyricsSwitch.on = settings.isLyricsEnabled;
 	
 	// Cache Settings
-	/*if ([[appDelegate.settingsDictionary objectForKey:@"enableSongCachingSetting"] isEqualToString:@"YES"])
-		enableSongCachingSwitch.on = YES;
-	else
-		enableSongCachingSwitch.on = NO;*/
 	enableSongCachingSwitch.on = settings.isSongCachingEnabled;
 	
-	/*if ([[appDelegate.settingsDictionary objectForKey:@"enableNextSongCacheSetting"] isEqualToString:@"YES"])
-		enableNextSongCacheSwitch.on = YES;
-	else
-		enableNextSongCacheSwitch.on = NO;*/
 	enableNextSongCacheSwitch.on = settings.isNextSongCacheEnabled;
 		
 	totalSpace = [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:musicControls.audioFolderPath error:NULL] objectForKey:NSFileSystemSize] unsignedLongLongValue];
@@ -171,29 +120,20 @@
 	CGRect frame = freeSpaceBackground.frame;
 	frame.size.width = frame.size.width * percentFree;
 	freeSpaceBackground.frame = frame;
-	//cacheSpaceSlider.value = [[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] floatValue] / totalSpace;
-	//cachingTypeSegmentedControl.selectedSegmentIndex = [[appDelegate.settingsDictionary objectForKey:@"cachingTypeSetting"] intValue];
 	cachingTypeSegmentedControl.selectedSegmentIndex = settings.cachingType;
 	[self toggleCacheControlsVisibility];
 	[self cachingTypeToggle];
 	
-	/*if ([[appDelegate.settingsDictionary objectForKey:@"autoDeleteCacheSetting"] isEqualToString:@"YES"])
-		autoDeleteCacheSwitch.on = YES;
-	else
-		autoDeleteCacheSwitch.on = NO;*/
 	autoDeleteCacheSwitch.on = settings.isAutoDeleteCacheEnabled;
 	
-	//autoDeleteCacheTypeSegmentedControl.selectedSegmentIndex = [[appDelegate.settingsDictionary objectForKey:@"autoDeleteCacheTypeSetting"] intValue];
 	autoDeleteCacheTypeSegmentedControl.selectedSegmentIndex = settings.autoDeleteCacheType;
 	
-	//cacheSongCellColorSegmentedControl.selectedSegmentIndex = [[appDelegate.settingsDictionary objectForKey:@"cacheSongCellColorSetting"] intValue];
 	cacheSongCellColorSegmentedControl.selectedSegmentIndex = settings.cachedSongCellColorType;
 	
 	// Twitter settings
-	if (socialControls.twitterEngine)
+	if (socialControls.twitterEngine && socialControls.twitterEngine.isAuthorized)
 	{
 		twitterEnabledSwitch.enabled = YES;
-		//if ([[appDelegate.settingsDictionary objectForKey:@"twitterEnabledSetting"] isEqualToString:@"YES"])
 		if (settings.isTwitterEnabled)
 			twitterEnabledSwitch.on = YES;
 		else
@@ -628,8 +568,6 @@
 	}
 	else
 	{
-		[socialControls createTwitterEngine];
-		
 		UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine:socialControls.twitterEngine delegate:socialControls];
 		if (controller) 
 		{

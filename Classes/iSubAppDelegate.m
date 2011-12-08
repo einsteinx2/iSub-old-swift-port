@@ -528,6 +528,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication*)application
 {
+	DLog(@"isWifi: %i", [self isWifi]);
 	//DLog(@"applicationDidBecomeActive called");
 	
 	//DLog(@"applicationDidBecomeActive finished");
@@ -563,12 +564,14 @@
 			UIApplication *application = [UIApplication sharedApplication];
 			while ([application backgroundTimeRemaining] > 1.0 && isInBackground) 
 			{
-				//DLog(@"backgroundTimeRemaining: %f", [application backgroundTimeRemaining]);
+				DLog(@"backgroundTimeRemaining: %f", [application backgroundTimeRemaining]);
 				
 				// Sleep early is nothing is happening
-				if ([application backgroundTimeRemaining] < 570.0 && !musicControls.isQueueListDownloading)
+				if ([application backgroundTimeRemaining] < 590.0 && !musicControls.isQueueListDownloading)
 				{
-					//DLog("Sleeping early, isQueueListDownloading: %i", musicControls.isQueueListDownloading);
+					DLog("Sleeping early, isQueueListDownloading: %i", musicControls.isQueueListDownloading);
+					if ([BassWrapperSingleton sharedInstance].isPlaying)
+						[[BassWrapperSingleton sharedInstance] playPause];
 					[application endBackgroundTask:backgroundTask];
 					backgroundTask = UIBackgroundTaskInvalid;
 					break;

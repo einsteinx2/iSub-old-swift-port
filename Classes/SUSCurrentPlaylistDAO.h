@@ -31,4 +31,7 @@ typedef enum
 
 @property ISMSRepeatMode repeatMode;
 
+- (void)deleteSongs:(NSArray *)indexes;
+- (void)shuffleToggle;
+
 @end

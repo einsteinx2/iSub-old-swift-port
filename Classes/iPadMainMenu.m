@@ -76,7 +76,7 @@
 		rowNames = [[NSArray alloc] initWithObjects:@"Home", @"Player", @"Folders", @"Playlists", @"Playing", @"Bookmarks", @"Cache", @"Chat", nil];
 	}
 	
-	[self.tableView reloadData];
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 	
 	//[self centerCells:[UIDevice currentDevice].orientation];
 	[self centerCells:self.interfaceOrientation];

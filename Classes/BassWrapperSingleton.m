@@ -14,6 +14,7 @@
 #import "BassEffectHandle.h"
 #import "NSNotificationCenter+MainThread.h"
 #include <AudioToolbox/AudioToolbox.h>
+#include "MusicSingleton.h"
 
 @interface BassWrapperSingleton (Private)
 - (void)bassInit;
@@ -44,40 +45,6 @@ int nextSongRetryAttempt = 0;
 #define RETRY_DELAY 1.0
 
 static NSMutableArray *eqValueArray, *eqHandleArray;
-
-/*- (void)handleInterruptionChangeToState:(AudioQueuePropertyID)inInterruptionState
-{
-	//DLog(@"handleInterruptionChangeToState called");
-	//MusicControlsSingleton *musicControls = [MusicControlsSingleton sharedInstance];
-	if (inInterruptionState == kAudioSessionBeginInterruption)
-	{
-		DLog(@"inInterruptionState == kAudioSessionBeginInterruption called");
-		if(self.isPlaying)
-		{	
-			//musicControls.streamerProgress = [self progress];
-			//musicControls.seekTime += musicControls.streamerProgress;
-		}
-		DLog(@"inInterruptionState == kAudioSessionBeginInterruption finished");
-	}
-	else if (inInterruptionState == kAudioSessionEndInterruption)
-	{
-		DLog(@"inInterruptionState == kAudioSessionEndInterruption called");
-		if(self.isPlaying)
-		{
-			//[self startWithOffsetInSecs:(UInt32) musicControls.seekTime];
-		}
-		DLog(@"inInterruptionState == kAudioSessionEndInterruption finished");
-	}
-}
-
-void MyAudioSessionInterruptionListener(void *inClientData, UInt32 inInterruptionState)
-{
-	DLog(@"MyAudioSessionInterruptionListener called");
-	//AudioStreamer* streamer = (AudioStreamer *)inClientData;
-	//if (streamer)
-	//	[streamer handleInterruptionChangeToState:inInterruptionState];
-	[selfRef handleInterruptionChangeToState:inInterruptionState];
-}*/
 
 - (void)readEqData
 {
@@ -216,11 +183,13 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	@autoreleasepool 
 	{
 		Song *nextSong = currPlaylistDAO.nextSong;
-		HSTREAM stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], [silence intValue], 0, BASS_STREAM_DECODE);
+		HSTREAM stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], [silence intValue], 0, 
+											   BASS_SAMPLE_FLOAT | BASS_STREAM_DECODE);
 		
 		if (!stream)
 		{
-			stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], 0, 0, BASS_STREAM_DECODE);
+			stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], 0, 0, 
+										   BASS_SAMPLE_FLOAT | BASS_STREAM_DECODE);
 		}
 		
 		if (!stream)
@@ -287,7 +256,8 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	if (currentSong.fileExists)
 	{
 		BASS_CHANNELINFO info;
-		fileStream1 = BASS_StreamCreateFile(false, [currentSong.localPath cStringUTF8], startByteOffset, 0, BASS_STREAM_DECODE);
+		fileStream1 = BASS_StreamCreateFile(false, [currentSong.localPath cStringUTF8], startByteOffset, 0, 
+											BASS_SAMPLE_FLOAT | BASS_STREAM_DECODE);
 		if (fileStream1)
 		{
 			DLog(@"currentSong: %llu", (long long int)fileStream1);
@@ -295,7 +265,8 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 			
 			isFilestream1 = YES;
 			
-			outStream = BASS_StreamCreate(info.freq, info.chans, 0, &MyStreamProc, 0); // create the output stream
+			outStream = BASS_StreamCreate(info.freq, info.chans, 
+										  BASS_SAMPLE_FLOAT, &MyStreamProc, 0); // create the output stream
 			
 			if (isEqualizerOn)
 			{
@@ -353,7 +324,9 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		if (outStream == 0)
 		{
 			DLog(@"starting new stream");
-			[self start];
+			if (currPlaylistDAO.currentIndex >= currPlaylistDAO.count)
+				currPlaylistDAO.currentIndex = currPlaylistDAO.count - 1;
+			[[MusicSingleton sharedInstance] playSongAtPosition:currPlaylistDAO.currentIndex];
 		}
 		else
 		{
@@ -402,6 +375,11 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
     }
 }
 
+void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue) 
+{
+	DLog(@"audio interrupted");
+}
+
 - (void)bassInit
 {
     isTempDownload = NO;
@@ -410,16 +388,18 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
 		
 	BASS_SetConfig(BASS_CONFIG_IOS_MIXAUDIO, 0); // Disable mixing.	To be called before BASS_Init.
 	BASS_SetConfig(BASS_CONFIG_BUFFER, 1500);
+	BASS_SetConfig(BASS_CONFIG_FLOATDSP, true);
 	
 	// Initialize default device.
-	if (!BASS_Init(-1, 44100, 0, NULL, NULL)) 
+	if (!BASS_Init(-1, 96000, 0, NULL, NULL)) 
 	{
 		DLog(@"Can't initialize device");
 	}
-	
+		
 	BASS_PluginLoad(&BASSFLACplugin, 0);
 	
 	AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, self);
+	AudioSessionAddPropertyListener(kAudioSessionProperty_OtherAudioIsPlaying, audioInterruptionListenerCallback, self);
 }
 
 - (BOOL)bassFree

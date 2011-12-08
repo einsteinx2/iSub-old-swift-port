@@ -230,7 +230,7 @@
 {
 	[viewObjects hideLoadingScreen];
 	
-	[self.tableView reloadData];
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 	[self dataSourceDidFinishLoadingNewData];
 	
 	if ([error code] == ISMSErrorCode_CouldNotSendChatMessage)
@@ -243,7 +243,7 @@
 {
 	[viewObjects hideLoadingScreen];
 	
-	[self.tableView reloadData];
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 	[self dataSourceDidFinishLoadingNewData];
 }
 

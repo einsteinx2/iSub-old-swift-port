@@ -48,7 +48,7 @@
 		goToNextSong = NO;
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_SongPlaybackStarted object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:@"reloadPlaylist" object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 		
 		if ([databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"] > 0)
 		{
@@ -75,11 +75,7 @@
 		playlistCountLabel.textColor = [UIColor whiteColor];
 		playlistCountLabel.textAlignment = UITextAlignmentCenter;
 		playlistCountLabel.font = [UIFont boldSystemFontOfSize:12];
-		NSUInteger songCount;
-		if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			songCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"];
-		else
-			songCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
+		NSUInteger songCount = dataModel.count;
 		if (songCount == 1)
 			playlistCountLabel.text = [NSString stringWithFormat:@"1 song"];
 		else
@@ -183,6 +179,9 @@
 {
     [super viewWillDisappear:animated];
 	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackStarted object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
+	
 	if (viewObjects.isEditing)
 	{
 		// Clear the edit stuff if they switch tabs in the middle of editing
@@ -265,7 +264,7 @@
 		}
 		
 		// Reload the table to correct the numbers
-		[self.tableView reloadData];
+		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 
 		@try 
 		{
@@ -385,100 +384,25 @@
 			// Delete action
 			//
 			
-			// Sort the multiDeleteList to make sure it's accending
-			[viewObjects.multiDeleteList sortUsingSelector:@selector(compare:)];
-			
-			if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			{
-				[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE jukeboxTemp"];
-				[databaseControls.currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxTemp(title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
-				
-				for (NSNumber *index in [viewObjects.multiDeleteList reverseObjectEnumerator])
-				{
-					NSInteger rowId = [index integerValue] + 1;
-					[databaseControls.currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"DELETE FROM jukeboxCurrentPlaylist WHERE ROWID = %i", rowId]];
-				}
-				
-				[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO jukeboxTemp SELECT * FROM jukeboxCurrentPlaylist"];
-				[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE jukeboxCurrentPlaylist"];
-				[databaseControls.currentPlaylistDb executeUpdate:@"ALTER TABLE jukeboxTemp RENAME TO jukeboxCurrentPlaylist"];
-			}
-			else
-			{
-				if (musicControls.isShuffle)
-				{
-					[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE shuffleTemp"];
-					[databaseControls.currentPlaylistDb executeUpdate:@"CREATE TABLE shuffleTemp(title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
-					
-					for (NSNumber *index in [viewObjects.multiDeleteList reverseObjectEnumerator])
-					{
-						NSInteger rowId = [index integerValue] + 1;
-						[databaseControls.currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"DELETE FROM shufflePlaylist WHERE ROWID = %i", rowId]];
-					}
-					
-					[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shuffleTemp SELECT * FROM shufflePlaylist"];
-					[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE shufflePlaylist"];
-					[databaseControls.currentPlaylistDb executeUpdate:@"ALTER TABLE shuffleTemp RENAME TO shufflePlaylist"];
-				}
-				else
-				{
-					[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE currentTemp"];
-					[databaseControls.currentPlaylistDb executeUpdate:@"CREATE TABLE currentTemp(title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
-					
-					for (NSNumber *index in [viewObjects.multiDeleteList reverseObjectEnumerator])
-					{
-						NSInteger rowId = [index integerValue] + 1;
-						[databaseControls.currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"DELETE FROM currentPlaylist WHERE ROWID = %i", rowId]];
-					}
-					
-					[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO currentTemp SELECT * FROM currentPlaylist"];
-					[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE currentPlaylist"];
-					[databaseControls.currentPlaylistDb executeUpdate:@"ALTER TABLE currentTemp RENAME TO currentPlaylist"];
-				}				
-			}
+			[dataModel deleteSongs:viewObjects.multiDeleteList];
 						
-			// Correct the value of currentPlaylistPosition
-			// If the current song was deleted make sure to set goToNextSong so the next song will play
-			if ([viewObjects.multiDeleteList containsObject:[NSNumber numberWithInt:dataModel.currentIndex]])
-			{
-				goToNextSong = YES;
-			}
-			
-			// Find out how many songs were deleted before the current position to determine the new position
-			NSInteger numberBefore = 0;
-			for (NSNumber *index in viewObjects.multiDeleteList)
-			{
-				if ([index integerValue] <= dataModel.currentIndex)
-				{
-					numberBefore = numberBefore + 1;
-				}
-			}
-			dataModel.currentIndex = dataModel.currentIndex - numberBefore;
-			
-			// Create indexPaths from multiDeleteList
+			// Create indexPaths from multiDeleteList and delete the rows in the table view
 			NSMutableArray *indexes = [[NSMutableArray alloc] init];
 			for (NSNumber *index in viewObjects.multiDeleteList)
 			{
-				[indexes addObject:[NSIndexPath indexPathForRow:[index integerValue] inSection:0]];
+				@autoreleasepool 
+				{
+					[indexes addObject:[NSIndexPath indexPathForRow:[index integerValue] inSection:0]];
+				}
 			}
-			[self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:YES];
-			
+			[self.tableView performSelectorOnMainThread:@selector(deleteRowsAtIndexPaths:withRowAnimation:) withObject:indexes waitUntilDone:YES];
 			[indexes release];
-			
-			if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			{
-				[musicControls jukeboxReplacePlaylistWithLocal];
-			}
 			
 			[self editPlaylistAction:nil];
 		}
 		
 		// Fix the playlist count
-		NSUInteger songCount;
-		if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			songCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"];
-		else
-			songCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
+		NSUInteger songCount = dataModel.count;
 		if (songCount == 1)
 			playlistCountLabel.text = [NSString stringWithFormat:@"1 song"];
 		else
@@ -544,7 +468,7 @@
 
 - (void)selectRow
 {
-	[self.tableView reloadData];
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 	if (dataModel.currentIndex >= 0)
 	{
 		@try 

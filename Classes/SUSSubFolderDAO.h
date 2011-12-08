@@ -33,6 +33,8 @@
 @property (readonly) BOOL hasLoaded;
 @property (readonly) NSUInteger folderLength;
 
+@property (readonly) NSArray *sectionInfo;
+
 - (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate;
 - (id)initWithDelegate:(id<SUSLoaderDelegate>)theDelegate andId:(NSString *)folderId andArtist:(Artist *)anArtist;
 

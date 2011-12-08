@@ -570,6 +570,8 @@ static DatabaseSingleton *sharedInstance = nil;
 
 - (NSArray *)sectionInfoFromTable:(NSString *)table inDatabase:(FMDatabase *)database withColumn:(NSString *)column
 {
+	DLog(@"albumIndex count: %i", [database intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM %@", table]]);
+	
 	//NSArray *sectionTitles = [[NSArray alloc] initWithObjects:@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", @"J", @"K", @"L", @"M", @"N", @"O", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", nil];
 	NSArray *sectionTitles = [[NSArray alloc] initWithObjects:@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", @"J", @"K", @"L", @"M", @"N", @"O", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z", nil];
 	NSMutableArray *sections = [[NSMutableArray alloc] init];
@@ -800,7 +802,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	else
 		[self.currentPlaylistDb executeUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist ORDER BY RANDOM()"];
 		
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadPlaylist" object:nil];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	
 	[pool release];
 }

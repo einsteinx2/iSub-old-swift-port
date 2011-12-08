@@ -77,8 +77,8 @@
 	//progressSlider.layer.transform = CATransform3DMakeScale(1.0, 2.0, 1.0);
 	/////
 	
-	[self updateSlider];
 	[self initInfo];
+	[self updateSlider];
 	
 	[self.view newY:0];
 	[self.view newX:-320];
@@ -89,6 +89,7 @@
 	pauseSlider = NO;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initInfo) name:ISMSNotification_SongPlaybackStarted object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initInfo) name:ISMSNotification_ServerSwitched object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateShuffleIcon) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidUnload) name:@"hideSongInfoFast" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidUnload) name:@"hideSongInfo" object:nil];
@@ -118,6 +119,7 @@
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackStarted object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ServerSwitched object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfoFast" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfo" object:nil];
 	
@@ -230,13 +232,7 @@
 			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all.png"] forState:0];
 	}
 	
-	if(musicControls.isShuffle)
-	{
-		if (IS_IPAD())
-			[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-on-ipad.png"] forState:0];
-		else
-			[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-on.png"] forState:0];
-	}
+	[self updateShuffleIcon];
 	
 	NSInteger bookmarkCount = [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId];
 	if (bookmarkCount > 0)
@@ -521,85 +517,17 @@
 	}
 }
 
-
-- (void) performShuffle
+- (IBAction)shuffleButtonToggle
 {	
-	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-
-	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+	[viewObjects showLoadingScreenOnMainWindow];
 	
-	NSNumber *oldPlaylistPosition = [NSNumber numberWithInt:(dataModel.currentIndex + 1)];
-	dataModel.currentIndex = 0;
-	musicControls.isShuffle = YES;
-	
-	[databaseControls resetShufflePlaylist];
-	[currentSong addToShuffleQueue];
-	//[databaseControls insertSong:musicControls.currentSongObject intoTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
-	
-	/*if ([SavedSettings sharedInstance].isJukeboxEnabled)
-	{
-		[musicControls jukeboxShuffle];
-		musicControls.isShuffle = NO;
-	}
-	else
-	{
-		[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist WHERE ROWID != ? ORDER BY RANDOM()", oldPlaylistPosition];
-	}*/
-	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-	{
-		[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO jukeboxShufflePlaylist SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID != ? ORDER BY RANDOM()", oldPlaylistPosition];
-	}
-	else
-	{
-		[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist WHERE ROWID != ? ORDER BY RANDOM()", oldPlaylistPosition];
-	}
-	
-	// Send a notification to update the playlist view
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadPlaylist" object:nil];
-	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-		[self performSelectorOnMainThread:@selector(jukeboxShuffleSteps) withObject:nil waitUntilDone:NO];
-	
-	// Hide the loading screen
-	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
-	 
-	[autoreleasePool release];
+	SUSCurrentPlaylistDAO *currentPlaylistDAO = [SUSCurrentPlaylistDAO dataModel];
+	[currentPlaylistDAO performSelectorInBackground:@selector(shuffleToggle) withObject:nil];
 }
 
-- (void)jukeboxShuffleSteps
+- (void)updateShuffleIcon
 {
-	[musicControls jukeboxReplacePlaylistWithLocal];
-	[musicControls jukeboxPlaySongAtPosition:1];
-	
-	musicControls.isShuffle = NO;
-}
-
-- (IBAction) shuffleButtonToggle
-{	
 	if (musicControls.isShuffle)
-	{
-		if (IS_IPAD())
-			[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-ipad.png"] forState:0];
-		else
-			[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle.png"] forState:0];
-		musicControls.isShuffle = NO;
-		
-		if ([SavedSettings sharedInstance].isJukeboxEnabled)
-		{
-			[musicControls jukeboxReplacePlaylistWithLocal];
-			//[musicControls playSongAtPosition:1];
-		}
-		else
-		{
-			[SUSCurrentPlaylistDAO dataModel].currentIndex = -1;
-		}
-		
-		// Send a notification to update the playlist view
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadPlaylist" object:nil];
-	}
-	else
 	{
 		if (![SavedSettings sharedInstance].isJukeboxEnabled)
 		{
@@ -608,10 +536,16 @@
 			else
 				[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-on.png"] forState:0];
 		}
-					
-		[viewObjects showLoadingScreenOnMainWindow];
-		[self performSelectorInBackground:@selector(performShuffle) withObject:nil];
 	}
+	else
+	{
+		if (IS_IPAD())
+			[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-ipad.png"] forState:0];
+		else
+			[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle.png"] forState:0];
+	}
+	
+	[viewObjects hideLoadingScreen];
 }
 
 @end

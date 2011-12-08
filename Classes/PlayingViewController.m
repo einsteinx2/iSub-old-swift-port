@@ -248,7 +248,7 @@
 	[viewObjects hideLoadingScreen];
 	
 	// Reload the table
-	[self.tableView reloadData]; 
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES]; 
 	
 	// Display the no songs overlay if 0 results
 	if ([viewObjects.listOfPlayingSongs count] == 0)

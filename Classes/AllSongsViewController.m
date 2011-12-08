@@ -195,7 +195,7 @@
 	[formatter release];
 	
 	self.tableView.tableHeaderView = headerView;
-	[self.tableView reloadData];
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 }
 
 - (void)didReceiveMemoryWarning 
@@ -226,13 +226,13 @@
 - (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
 {
     [self hideLoadingScreen];
-    [self.tableView reloadData];
+    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 }
 
 - (void)loadingFinished:(SUSLoader*)theLoader
 {
     [self hideLoadingScreen];
-    [self.tableView reloadData];
+    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 }
 
 #pragma mark - Loading Display Handling
@@ -411,7 +411,7 @@
 	
 	// Remove the index bar
 	isSearching = YES;
-	[self.tableView reloadData];
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 	
 	//Add the done button.
 	self.navigationItem.leftBarButtonItem = nil;
@@ -447,7 +447,7 @@
 		[databaseControls.allSongsDb executeUpdate:@"DROP TABLE allSongsSearch"];
 	}
 	
-	[self.tableView reloadData];
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 }
 
 - (void) searchBarSearchButtonClicked:(UISearchBar *)theSearchBar 
@@ -474,7 +474,7 @@
 	[searchOverlayView release];
 	searchOverlayView = nil;
 	
-	[self.tableView reloadData];
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 	
 	[self.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
 }

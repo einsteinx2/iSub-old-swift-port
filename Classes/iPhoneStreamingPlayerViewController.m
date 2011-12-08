@@ -626,7 +626,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	if (bassWrapper.progress > 10.0)
 	{
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			[musicControls jukeboxPlaySongAtPosition:dataModel.currentIndex];
+			[musicControls jukeboxPlaySongAtPosition:[NSNumber numberWithInt:dataModel.currentIndex]];
 		else
 			[musicControls playSongAtPosition:dataModel.currentIndex];
 	}
