@@ -131,13 +131,13 @@
 	[headerView addSubview:reloadTimeLabel];
 	[reloadTimeLabel release];	
 	
-	countLabel.text = [NSString stringWithFormat:@"%i Albums", [databaseControls.allAlbumsDb intForQuery:@"SELECT COUNT(*) FROM allAlbums"]];
+	countLabel.text = [NSString stringWithFormat:@"%i Albums", dataModel.count];
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 	[formatter setDateStyle:NSDateFormatterMediumStyle];
 	[formatter setTimeStyle:NSDateFormatterShortStyle];
-	reloadTimeLabel.text = [NSString stringWithFormat:@"last reload: %@", [formatter stringFromDate:[defaults objectForKey:[NSString stringWithFormat:@"%@albumsReloadTime", [SavedSettings sharedInstance].urlString]]]];
+	reloadTimeLabel.text = [NSString stringWithFormat:@"last reload: %@", [formatter stringFromDate:[defaults objectForKey:[NSString stringWithFormat:@"%@songsReloadTime", [SavedSettings sharedInstance].urlString]]]];
 	[formatter release];
 	
 	self.tableView.tableHeaderView = headerView;
@@ -168,8 +168,55 @@
 -(void)viewWillAppear:(BOOL)animated 
 {
 	[super viewWillAppear:animated];
+
+	// Don't run this while the table is updating
+	if (viewObjects.isSongsLoading)
+	{
+		// TODO: display the loading progress box
+	}
+	else
+	{
+		if(musicControls.showPlayerIcon)
+		{
+			self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
+		}
+		else
+		{
+			self.navigationItem.rightBarButtonItem = nil;
+		}
+		
+		// Check if the data has been loaded
+		if (dataModel.isDataLoaded)
+		{
+			[self addCount];
+		}
+		else
+		{
+			if (viewObjects.isAlbumsLoading)
+			{
+				// TODO: display the loading progress box
+			}
+			else
+			{
+				SavedSettings *settings = [SavedSettings sharedInstance];
+				if ([[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllSongsLoading", settings.urlString]] isEqualToString:@"YES"])
+				{
+					UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Resume Load?" message:@"If you've reloaded the albums tab since this load started you should choose 'Restart Load'.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Restart Load", @"Resume Load", nil];
+					alert.tag = 1;
+					[alert show];
+					[alert release];
+				}
+				else
+				{
+					UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Load?" message:@"This could take a while if you have a big collection.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection.\n\nNote: If you've added new artists, you should reload the Folders first." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+					alert.tag = 1;
+					[alert show];
+					[alert release];
+				}
+			}
+		}
+	}
 	
-	// TODO: fix this
 	/*// Don't run this while the table is updating
 	if (!viewObjects.isAlbumsLoading)
 	{
@@ -347,6 +394,18 @@
 #pragma mark -
 #pragma mark Tableview methods
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section 
+{
+	if(isSearching)
+		return @"";
+	
+	if ([dataModel.index count] == 0)
+		return @"";
+	
+	NSString *title = [(Index *)[dataModel.index objectAtIndex:section] name];
+	
+	return title;
+}
 
 // Following 2 methods handle the right side index
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView 
@@ -518,7 +577,7 @@
 	else
 	{
 		NSUInteger sectionStartIndex = [(Index *)[dataModel.index objectAtIndex:indexPath.section] position];
-		anAlbum = [dataModel albumForPosition:(sectionStartIndex + indexPath.row)];
+		anAlbum = [dataModel albumForPosition:(sectionStartIndex + indexPath.row + 1)];
 	}
 	
 	cell.myId = anAlbum.albumId;
@@ -526,11 +585,8 @@
 	
 	[cell.coverArtView loadImageFromCoverArtId:anAlbum.coverArtId];
 	
-	cell.backgroundView = [[[UIView alloc] init] autorelease];
-	if(indexPath.row % 2 == 0)
-		cell.backgroundView.backgroundColor = [UIColor whiteColor];
-	else
-		cell.backgroundView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];	
+	cell.backgroundView = [[ViewObjectsSingleton sharedInstance] createCellBackground:indexPath.row];
+		
 	[cell.albumNameLabel setText:anAlbum.title];
 	[cell.artistNameLabel setText:anAlbum.artistName];
 	
@@ -550,7 +606,7 @@
 		else
 		{
 			NSUInteger sectionStartIndex = [(Index *)[dataModel.index objectAtIndex:indexPath.section] position];
-			anAlbum = [dataModel albumForPosition:(sectionStartIndex + indexPath.row)];
+			anAlbum = [dataModel albumForPosition:(sectionStartIndex + indexPath.row + 1)];
 		}
 		
 		AlbumViewController* albumViewController = [[AlbumViewController alloc] initWithArtist:nil orAlbum:anAlbum];

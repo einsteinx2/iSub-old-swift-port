@@ -7,9 +7,12 @@
 //
 
 #import "NWPickerField.h"
+#import "DDSocialDialog.h"
 
-@class EqualizerView, EqualizerPointView, BassParamEqValue, BassEffectDAO;
-@interface EqualizerViewController : UIViewController <NWPickerFieldDelegate>
+@class EqualizerView, EqualizerPointView, BassParamEqValue, BassEffectDAO, NWPickerField;
+@interface EqualizerViewController : UIViewController <NWPickerFieldDelegate, DDSocialDialogDelegate, UITableViewDelegate, UITableViewDataSource>
+
+@property (nonatomic, retain) IBOutlet NWPickerField *presetPicker;
 
 @property (nonatomic, retain) IBOutlet UIButton *toggleButton;
 //@property (nonatomic, retain) IBOutlet UIImageView *drawImage;
@@ -21,6 +24,15 @@
 //@property (nonatomic, retain) NSTimer *drawTimer;
 
 @property (nonatomic, assign) EqualizerPointView *selectedView;
+
+@property (nonatomic, retain) UIButton *deletePresetButton;
+@property (nonatomic, retain) UIButton *savePresetButton;
+@property BOOL isSavePresetButtonShowing;
+@property BOOL isDeletePresetButtonShowing;
+@property (nonatomic, retain) UITextField *presetNameTextField;
+
+@property (nonatomic, retain) DDSocialDialog *saveDialog;
+
 
 //- (BOOL)isTouchingEqView:(UITouch *)touch;
 
@@ -35,5 +47,12 @@
 - (void)removeEqViews;
 //- (void)setupPalette;
 //- (void)createBitmapToDraw;
+
+- (void)promptForSavePresetName;
+- (void)hideSavePresetButton:(BOOL)animated;
+- (void)showSavePresetButton:(BOOL)animated;
+- (void)hideDeletePresetButton:(BOOL)animated;
+- (void)showDeletePresetButton:(BOOL)animated;
+- (void)saveTempCustomPreset;
 
 @end

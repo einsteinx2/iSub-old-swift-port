@@ -88,7 +88,7 @@ static CGFloat kDDSocialDialogPadding = 10;
 		
 		UIColor* color = [UIColor colorWithRed:167.0/255 green:184.0/255 blue:216.0/255 alpha:1];
 		closeButton_ = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
-		[closeButton_ setTitle:@" " forState:UIControlStateNormal];
+		[closeButton_ setTitle:@"X" forState:UIControlStateNormal];
 		[closeButton_ setTitleColor:color forState:UIControlStateNormal];
 		[closeButton_ setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
 		[closeButton_ addTarget:self action:@selector(cancel) forControlEvents:UIControlEventTouchUpInside];
@@ -126,6 +126,11 @@ static CGFloat kDDSocialDialogPadding = 10;
 		DDSocialDialogTitleStrokeColor = [UIColor colorWithRed:0.753 green:0.341 blue:0.145 alpha:1.0];
 		DDSocialDialogBlackStrokeColor = [UIColor colorWithRed:0.753 green:0.341 blue:0.145 alpha:1.0];
 		DDSocialDialogBorderColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:0.3];
+	} else if (theme_ == DDSocialDialogThemeISub) {
+		DDSocialDialogTitleBackgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+		DDSocialDialogTitleStrokeColor = [UIColor colorWithWhite:0.0 alpha:1.0];
+		DDSocialDialogBlackStrokeColor = [UIColor colorWithWhite:0.0 alpha:1.0];
+		DDSocialDialogBorderColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.8];
 	} else {
 		// Default dialog theme colors are for DDSocialDialogThemeTwitter
 		DDSocialDialogTitleBackgroundColor = [UIColor colorWithRed:0.557 green:0.757 blue:0.855 alpha:1.0];

@@ -35,6 +35,8 @@
 	
 	IBOutlet UISwitch *disableScreenSleepSwitch;
 	
+	IBOutlet UISwitch *enableBasicAuthSwitch;
+	
 	IBOutlet UISwitch *enableSongsTabSwitch;
 	IBOutlet UILabel *enableSongsTabLabel;
 	IBOutlet UILabel *enableSongsTabDesc;

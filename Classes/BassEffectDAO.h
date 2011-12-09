@@ -6,6 +6,9 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
+#define BassEffectTempCustomPresetId 10000
+#define BassEffectUserPresetStartId 1000
+
 typedef enum 
 {
 	BassEffectType_ParametricEQ = 1
@@ -13,14 +16,20 @@ typedef enum
 
 @class BassEffectValue;
 @interface BassEffectDAO : NSObject
-{
-	NSUInteger selectedPresetIndex;
-}
 
 @property BassEffectType type;
-@property (nonatomic, retain) NSArray *presets;
+@property (readonly) NSArray *presetsArray;
+@property (nonatomic, retain) NSDictionary *presets;
+@property (readonly) NSArray *userPresetsArray;
+@property (readonly) NSArray *userPresetsArrayMinusCustom;
+@property (readonly) NSDictionary *userPresets;
+@property (readonly) NSDictionary *defaultPresets;
 
-@property NSUInteger selectedPresetIndex;
+@property (readonly) NSUInteger userPresetsCount;
+@property (readonly) NSUInteger defaultPresetsCount;
+
+@property (readonly) NSUInteger selectedPresetIndex;
+@property NSUInteger selectedPresetId;
 @property (readonly) NSDictionary *selectedPreset;
 @property (readonly) NSArray *selectedPresetValues;
 
@@ -28,6 +37,14 @@ typedef enum
 - (void)setup;
 
 - (BassEffectValue *)valueForIndex:(NSInteger)index;
+- (void)selectPresetId:(NSUInteger)presetId;
 - (void)selectPresetAtIndex:(NSUInteger)presetIndex;
+- (void)saveCustomPreset:(NSArray *)arrayOfPoints name:(NSString *)name presetId:(NSUInteger)presetId;
+- (void)saveCustomPreset:(NSArray *)arrayOfPoints name:(NSString *)name;
+- (void)saveTempCustomPreset:(NSArray *)arrayOfPoints;
+
+- (void)deleteCustomPresetForId:(NSUInteger)presetId;
+- (void)deleteCustomPresetForIndex:(NSUInteger)presetIndex;
+- (void)deleteTempCustomPreset;
 
 @end

@@ -31,10 +31,10 @@
 	if (settings.isCacheUnlocked)
 	{
 		// Set the fields
-		[self updateStats];
+		[self performSelectorInBackground:@selector(updateStatsInBackground) withObject:nil];
 		
 		// Setup the update timer
-		updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(updateStats) userInfo:nil repeats:YES];
+		updateTimer = [NSTimer scheduledTimerWithTimeInterval:1. target:self selector:@selector(updateStatsInBackground) userInfo:nil repeats:YES];
 	}
 	else
 	{
@@ -110,7 +110,32 @@
 	self.nextSong = [SUSCurrentPlaylistDAO dataModel].nextSong;
 }
 
-- (void) updateStats
+- (void)updateStatsInBackground
+{
+	[self performSelectorInBackground:@selector(updateStats) withObject:nil];
+}
+
+float currentSongProgress = 0;
+float nextSongProgress = 0;
+
+- (void)updateStats
+{
+	@autoreleasepool 
+	{
+		if (!settings.isJukeboxEnabled)
+		{
+			// Set the current song progress bar
+			if (!musicControls.isTempDownload)
+				currentSongProgress = [musicControls findCurrentSongProgress];
+			
+			nextSongProgress = [musicControls findNextSongProgress];
+		}
+		
+		[self performSelectorOnMainThread:@selector(updateStatsInternal) withObject:nil waitUntilDone:NO];
+	}
+}
+			 
+- (void)updateStatsInternal
 {
 	if (settings.isJukeboxEnabled)
 	{
@@ -130,7 +155,7 @@
 		}
 		else
 		{
-			currentSongProgressView.progress = [musicControls findCurrentSongProgress];
+			currentSongProgressView.progress = currentSongProgress;
 			currentSongProgressView.alpha = 1.0;
 		}
 		
@@ -149,7 +174,7 @@
 			nextSongLabel.alpha = 0.2;
 			nextSongProgressView.alpha = 0.2;
 		}
-		nextSongProgressView.progress = [musicControls findNextSongProgress];
+		nextSongProgressView.progress = nextSongProgress;
 	}
 	
 	// Set the number of songs cached label

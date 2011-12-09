@@ -375,16 +375,72 @@ static NSInteger order (id a, id b, void* context)
         return;
     }
     
-    /*// Create the section info array
-    self.sectionInfo = [databaseControls sectionInfoFromTable:@"allSongs" inDatabase:databaseControls.allSongsDb withColumn:@"title"];
-    [databaseControls.allSongsDb executeUpdate:@"DROP TABLE sectionInfo"];
-    [databaseControls.allSongsDb executeUpdate:@"CREATE TABLE sectionInfo (title TEXT, row INTEGER)"];
-    for (NSArray *section in sectionInfo)
+    // Create the section info array
+	NSArray *sectionInfo = [databaseControls sectionInfoFromTable:@"allAlbums" inDatabase:databaseControls.allAlbumsDb withColumn:@"title"];
+    [databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE allAlbumsIndexCache"];
+    [databaseControls.allAlbumsDb executeUpdate:@"CREATE TABLE allAlbumsIndexCache (name TEXT, position INTEGER, count INTEGER)"];
+	for (int i = 0; i < [sectionInfo count]; i++)
     {
-        [databaseControls.allSongsDb executeUpdate:@"INSERT INTO sectionInfo (title, row) VALUES (?, ?)", [section objectAtIndex:0], [section objectAtIndex:1]];
-    }*/
-    
-    // Check if loading should stop
+		NSArray *section = [sectionInfo objectAtIndex:i];
+		NSArray *nextSection = nil;
+		if (i + 1 < [sectionInfo count])
+			nextSection = [sectionInfo objectAtIndex:i+1];
+		
+		NSString *name = [section objectAtIndex:0];
+		NSNumber *position = [section objectAtIndex:1];
+		DLog(@"position: %i", [position intValue]);
+		NSNumber *count = nil;
+		if (nextSection)
+			count = [NSNumber numberWithInt:([[nextSection objectAtIndex:1] intValue] - [position intValue])];
+		else
+			count = [NSNumber numberWithInt:[databaseControls.allAlbumsDb intForQuery:@"SELECT COUNT(*) FROM allAlbums WHERE ROWID > ?", position]];
+		
+        [databaseControls.allAlbumsDb executeUpdate:@"INSERT INTO allAlbumsIndexCache (name, position, count) VALUES (?, ?, ?)", name, position, count];
+    }
+	
+	// Count the table
+	NSUInteger allAlbumsCount = 0;
+	FMResultSet *result = [databaseControls.allAlbumsDb executeQuery:@"SELECT count FROM allAlbumsIndexCache"];
+	while ([result next])
+	{
+		allAlbumsCount += [result intForColumn:@"count"];
+	}
+	[result close];
+    [databaseControls.allAlbumsDb executeUpdate:@"INSERT INTO allAlbumsCount VALUES (?)", [NSNumber numberWithInt:allAlbumsCount]];
+
+	// Create the section info array
+    sectionInfo = [databaseControls sectionInfoFromTable:@"allSongs" inDatabase:databaseControls.allSongsDb withColumn:@"title"];
+    [databaseControls.allSongsDb executeUpdate:@"DROP TABLE allSongsIndexCache"];
+    [databaseControls.allSongsDb executeUpdate:@"CREATE TABLE allSongsIndexCache (name TEXT, position INTEGER, count INTEGER)"];
+	for (int i = 0; i < [sectionInfo count]; i++)
+    {
+		NSArray *section = [sectionInfo objectAtIndex:i];
+		NSArray *nextSection = nil;
+		if (i + 1 < [sectionInfo count])
+			nextSection = [sectionInfo objectAtIndex:i+1];
+		
+		NSString *name = [section objectAtIndex:0];
+		NSNumber *position = [section objectAtIndex:1];
+		NSNumber *count = nil;
+		if (nextSection)
+			count = [NSNumber numberWithInt:([[nextSection objectAtIndex:1] intValue] - [position intValue])];
+		else
+			count = [NSNumber numberWithInt:[databaseControls.allSongsDb intForQuery:@"SELECT COUNT(*) FROM allSongs WHERE ROWID > ?", position]];
+		
+        [databaseControls.allSongsDb executeUpdate:@"INSERT INTO allSongsIndexCache (name, position, count) VALUES (?, ?, ?)", name, position, count];
+    }
+	
+	// Count the table
+	NSUInteger allSongsCount = 0;
+	result = [databaseControls.allSongsDb executeQuery:@"SELECT count FROM allSongsIndexCache"];
+	while ([result next])
+	{
+		allSongsCount += [result intForColumn:@"count"];
+	}
+	[result close];
+    [databaseControls.allSongsDb executeUpdate:@"INSERT INTO allSongsCount VALUES (?)", [NSNumber numberWithInt:allSongsCount]];
+	
+	// Check if loading should stop
     if (viewObjects.cancelLoading)
     {
         viewObjects.cancelLoading = NO;
@@ -392,9 +448,6 @@ static NSInteger order (id a, id b, void* context)
         [self performSelectorInBackground:@selector(hideLoadingScreen) withObject:nil];
         return;
     }
-    // Count the table
-    NSUInteger allSongsCount = [databaseControls.allSongsDb intForQuery:@"SELECT COUNT (*) FROM allSongs"];
-    [databaseControls.allSongsDb executeUpdate:@"INSERT INTO allSongsCount VALUES (?)", [NSNumber numberWithInt:allSongsCount]];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:[NSDate date] forKey:[NSString stringWithFormat:@"%@songsReloadTime", settings.urlString]];

@@ -37,12 +37,37 @@ NSString* UIPickerViewDidShowNotification = @"UIPickerViewDidShowNotification";
 NSString* UIPickerViewWillHideNotification = @"UIPickerViewWillHideNotification";
 NSString* UIPickerViewDidHideNotification = @"UIPickerViewDidHideNotification";
 
-BOOL didFinishLoading = NO;
-
 @implementation NWPickerField
 
 @synthesize delegate;
 @synthesize formatString;
+
+- (id)init
+{
+	if ((self = [super init]))
+	{
+		didFinishLoading = NO;
+	}
+	return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+	if ((self = [super initWithCoder:aDecoder]))
+	{
+		didFinishLoading = NO;
+	}
+	return self;
+}
+
+- (id)initWithFrame:(CGRect)frame
+{
+	if ((self = [super initWithFrame:frame]))
+	{
+		didFinishLoading = NO;
+	}
+	return self;
+}
 
 - (BOOL)canBecomeFirstResponder {
 	return YES;
@@ -132,11 +157,11 @@ BOOL didFinishLoading = NO;
         // add the picker view to our window so its top most like a keyboard.
         [appWindow addSubview:pickerView];
 
-        int component = 0;
+        //int component = 0;
 	
         // select the first items in each component by default.
-        for (component = 0; component < [pickerView numberOfComponents]; component++) 
-            [self selectRow:0 inComponent:component animated:NO];
+        //for (component = 0; component < [pickerView numberOfComponents]; component++) 
+		//   [self selectRow:0 inComponent:component animated:NO];
     }
 }
 
@@ -146,6 +171,10 @@ BOOL didFinishLoading = NO;
 	indicator.hidden = wasHidden;
 }
 
+- (void)reloadAllComponents
+{
+	[pickerView reloadAllComponents];
+}
 
 #pragma mark -
 #pragma mark UIPickerView wrappers

@@ -74,6 +74,7 @@
 @property BOOL isUpdateCheckQuestionAsked;
 @property BOOL isNewSearchAPI;
 @property (readonly) BOOL isTestServer;
+@property BOOL isBasicAuthEnabled;
 
 // State Saving
 @property BOOL isRecover;

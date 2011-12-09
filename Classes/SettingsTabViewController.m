@@ -95,6 +95,8 @@
 	
 	disableScreenSleepSwitch.on = !settings.isScreenSleepEnabled;
 	
+	enableBasicAuthSwitch.on = settings.isBasicAuthEnabled;
+	
 	enableSongsTabSwitch.on = settings.isSongsTabEnabled;
 	DLog(@"isSongsTabEnabled: %i", settings.isSongsTabEnabled);
 	
@@ -439,6 +441,10 @@
 		{
 			settings.isScreenSleepEnabled = !disableScreenSleepSwitch.on;
 			[UIApplication sharedApplication].idleTimerDisabled = disableScreenSleepSwitch.on;
+		}
+		else if (sender == enableBasicAuthSwitch)
+		{
+			settings.isBasicAuthEnabled = enableBasicAuthSwitch.on;
 		}
 	}
 }

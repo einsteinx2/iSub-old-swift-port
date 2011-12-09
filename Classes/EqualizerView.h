@@ -11,16 +11,6 @@
 #import <OpenGLES/ES1/gl.h>
 #import <OpenGLES/ES1/glext.h>
 
-//CONSTANTS:
-
-#define kBrushOpacity		1.0
-#define kBrushPixelStep		3
-#define kBrushScale			4
-#define kLuminosity			0.75
-#define kSaturation			1.0
-
-//CLASS INTERFACES:
-
 @interface EqualizerView : UIView
 {
 @private

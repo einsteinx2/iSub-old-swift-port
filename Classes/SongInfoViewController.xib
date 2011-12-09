@@ -405,6 +405,7 @@
 						<string key="NSFrame">{{236, 234}, {55, 55}}</string>
 						<reference key="NSSuperview" ref="340187579"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -515,6 +516,51 @@
 						<float key="IBUIMinimumFontSize">10</float>
 						<reference key="IBUIFontDescription" ref="634873495"/>
 						<reference key="IBUIFont" ref="69483875"/>
+					</object>
+					<object class="IBUIButton" id="994782857">
+						<reference key="NSNextResponder" ref="340187579"/>
+						<int key="NSvFlags">292</int>
+						<string key="NSFrame">{{20, 45}, {30, 32}}</string>
+						<reference key="NSSuperview" ref="340187579"/>
+						<reference key="NSWindow"/>
+						<string key="NSReuseIdentifierKey">_NS:225</string>
+						<bool key="IBUIOpaque">NO</bool>
+						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+						<int key="IBUIContentHorizontalAlignment">0</int>
+						<int key="IBUIContentVerticalAlignment">0</int>
+						<int key="IBUIButtonType">1</int>
+						<reference key="IBUIHighlightedTitleColor" ref="418717898"/>
+						<object class="NSColor" key="IBUINormalTitleColor">
+							<int key="NSColorSpace">1</int>
+							<bytes key="NSRGB">MC4xOTYwNzg0MzQ2IDAuMzA5ODAzOTMyOSAwLjUyMTU2ODY1NgA</bytes>
+						</object>
+						<reference key="IBUINormalTitleShadowColor" ref="477567388"/>
+						<object class="IBUIFontDescription" key="IBUIFontDescription" id="3382923">
+							<int key="type">2</int>
+							<double key="pointSize">15</double>
+						</object>
+						<reference key="IBUIFont" ref="64025637"/>
+					</object>
+					<object class="IBUIButton" id="393976015">
+						<reference key="NSNextResponder" ref="340187579"/>
+						<int key="NSvFlags">292</int>
+						<string key="NSFrame">{{261, 44}, {30, 32}}</string>
+						<reference key="NSSuperview" ref="340187579"/>
+						<reference key="NSWindow"/>
+						<string key="NSReuseIdentifierKey">_NS:225</string>
+						<bool key="IBUIOpaque">NO</bool>
+						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+						<int key="IBUIContentHorizontalAlignment">0</int>
+						<int key="IBUIContentVerticalAlignment">0</int>
+						<int key="IBUIButtonType">1</int>
+						<reference key="IBUIHighlightedTitleColor" ref="418717898"/>
+						<object class="NSColor" key="IBUINormalTitleColor">
+							<int key="NSColorSpace">1</int>
+							<bytes key="NSRGB">MC4xOTYwNzg0MzQ2IDAuMzA5ODAzOTMyOSAwLjUyMTU2ODY1NgA</bytes>
+						</object>
+						<reference key="IBUINormalTitleShadowColor" ref="477567388"/>
+						<reference key="IBUIFontDescription" ref="3382923"/>
+						<reference key="IBUIFont" ref="64025637"/>
 					</object>
 				</object>
 				<string key="NSFrameSize">{320, 300}</string>
@@ -765,6 +811,24 @@
 					</object>
 					<int key="connectionID">54</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">skipBack30</string>
+						<reference key="source" ref="994782857"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">70</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">skipForward30</string>
+						<reference key="source" ref="393976015"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">71</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -811,6 +875,8 @@
 							<reference ref="171759796"/>
 							<reference ref="942445207"/>
 							<reference ref="814205155"/>
+							<reference ref="994782857"/>
+							<reference ref="393976015"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -904,6 +970,16 @@
 						<reference key="object" ref="814205155"/>
 						<reference key="parent" ref="340187579"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">68</int>
+						<reference key="object" ref="994782857"/>
+						<reference key="parent" ref="340187579"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">69</int>
+						<reference key="object" ref="393976015"/>
+						<reference key="parent" ref="340187579"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -931,6 +1007,8 @@
 					<string>50.IBPluginDependency</string>
 					<string>52.IBPluginDependency</string>
 					<string>55.IBPluginDependency</string>
+					<string>68.IBPluginDependency</string>
+					<string>69.IBPluginDependency</string>
 					<string>8.IBPluginDependency</string>
 					<string>9.CustomClassName</string>
 					<string>9.IBPluginDependency</string>
@@ -940,6 +1018,8 @@
 					<string>SongInfoViewController</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>UIResponder</string>
+					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -975,7 +1055,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">67</int>
+			<int key="maxID">71</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -999,13 +1079,15 @@
 							<string>movedSlider</string>
 							<string>movingSlider</string>
 							<string>repeatButtonToggle</string>
-							<string>showEq:</string>
 							<string>shuffleButtonToggle</string>
+							<string>skipBack30</string>
+							<string>skipForward30</string>
 							<string>songInfoToggle</string>
 							<string>touchedSlider</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -1024,8 +1106,9 @@
 							<string>movedSlider</string>
 							<string>movingSlider</string>
 							<string>repeatButtonToggle</string>
-							<string>showEq:</string>
 							<string>shuffleButtonToggle</string>
+							<string>skipBack30</string>
+							<string>skipForward30</string>
 							<string>songInfoToggle</string>
 							<string>touchedSlider</string>
 						</object>
@@ -1048,11 +1131,15 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">showEq:</string>
+								<string key="name">shuffleButtonToggle</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">shuffleButtonToggle</string>
+								<string key="name">skipBack30</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">skipForward30</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">

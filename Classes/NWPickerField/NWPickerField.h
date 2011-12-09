@@ -48,6 +48,8 @@ extern NSString* UIPickerViewDidHideNotification;
 	UIImageView* indicator;
 	
 	id<NWPickerFieldDelegate> delegate;
+	
+	BOOL didFinishLoading;
 }
 
 @property(nonatomic,assign) IBOutlet id delegate;
@@ -56,6 +58,7 @@ extern NSString* UIPickerViewDidHideNotification;
 -(void) selectRow:(NSInteger)row inComponent:(NSInteger)component animated:(BOOL)animated;
 -(NSInteger) selectedRowInComponent:(NSInteger)component;
 
+- (void)reloadAllComponents;
 
 @end
 

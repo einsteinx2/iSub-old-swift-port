@@ -801,14 +801,20 @@ static MusicSingleton *sharedInstance = nil;
 
 - (float) findCurrentSongProgress
 {
-	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
-	return [self findProgressForSong:dataModel.currentSong];
+	@autoreleasepool 
+	{
+		SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+		return [self findProgressForSong:dataModel.currentSong];
+	}
 }
 
 - (float) findNextSongProgress
 {
-	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
-	return [self findProgressForSong:dataModel.nextSong];
+	@autoreleasepool
+	{
+		SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+		return [self findProgressForSong:dataModel.nextSong];
+	}
 }
 
 #pragma mark -

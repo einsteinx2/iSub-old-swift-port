@@ -109,7 +109,7 @@
 - (Song *)allSongsSongForPosition:(NSUInteger)position
 {
 	Song *aSong = [[Song alloc] init];
-	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allSongs WHERE ROWID = %i", [NSNumber numberWithInt:position]];
+	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allSongs WHERE ROWID = ?", [NSNumber numberWithInt:position]];
 	[result next];
 	if ([self.db hadError]) 
 	{
@@ -155,7 +155,7 @@
 - (Song *)allSongsSongForPositionInSearch:(NSUInteger)position
 {
 	Song *aSong = [[Song alloc] init];
-	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allSongsNameSearch WHERE ROWID = %i", [NSNumber numberWithInt:position]];
+	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allSongsNameSearch WHERE ROWID = ?", [NSNumber numberWithInt:position]];
 	[result next];
 	if ([self.db hadError]) 
 	{

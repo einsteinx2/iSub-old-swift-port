@@ -60,6 +60,7 @@
 
 - (void)initInfo;
 
+- (void)updateDownloadProgressInBackground;
 - (void)updateDownloadProgress;
 - (void)updateSlider;
 - (void)updateShuffleIcon;
@@ -73,5 +74,8 @@
 - (IBAction)touchedSlider;
 - (IBAction)movingSlider;
 - (IBAction)movedSlider;
+
+- (IBAction)skipBack30;
+- (IBAction)skipForward30;
 
 @end

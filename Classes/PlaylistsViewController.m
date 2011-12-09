@@ -835,29 +835,30 @@
 
 - (void)uploadPlaylist:(NSString*)name
 {	
-	OrderedDictionary *parameters = [OrderedDictionary dictionaryWithObjectsAndKeys:n2N(name), @"name", nil];
+	NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(name), @"name", nil];
 	
+	NSMutableArray *songIds = [NSMutableArray arrayWithCapacity:currentPlaylistCount];
 	for (int i = 0; i < currentPlaylistCount; i++)
 	{
-		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-		
-		Song *aSong = nil;
-		if ([SavedSettings sharedInstance].isJukeboxEnabled)
+		@autoreleasepool 
 		{
-			aSong = [Song songFromDbRow:i inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-		}
-		else
-		{
-			if (musicControls.isShuffle)
-				aSong = [Song songFromDbRow:i inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
+			Song *aSong = nil;
+			if ([SavedSettings sharedInstance].isJukeboxEnabled)
+			{
+				aSong = [Song songFromDbRow:i inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
+			}
 			else
-				aSong = [Song songFromDbRow:i inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
+			{
+				if (musicControls.isShuffle)
+					aSong = [Song songFromDbRow:i inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
+				else
+					aSong = [Song songFromDbRow:i inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
+			}
+			
+			[songIds addObject:n2N(aSong.songId)];
 		}
-		
-		[parameters setObject:n2N(aSong.songId) forKey:@"songId"];
-		
-		[pool release];
 	}
+	[parameters setObject:[NSArray arrayWithArray:songIds] forKey:@"songId"];
 
 	self.request = [NSMutableURLRequest requestWithSUSAction:@"createPlaylist" andParameters:parameters];
 	

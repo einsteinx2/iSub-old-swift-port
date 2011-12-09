@@ -77,7 +77,24 @@ static void destroy_versionArrays()
 			}
 			else
 			{
-				[postString appendFormat:@"&%@=%@", [key URLEncodeString], [[parameters objectForKey:key] URLEncodeString]];
+				id value = [parameters objectForKey:key];
+				if ([value isKindOfClass:[NSArray class]])
+				{
+					// handle multiple values for key
+					for (id subValue in (NSArray*)value)
+					{
+						if ([subValue isKindOfClass:[NSString class]])
+						{
+							// handle single value for key
+							[postString appendFormat:@"&%@=%@", [key URLEncodeString], [(NSString*)subValue URLEncodeString]];
+						}
+					}
+				}
+				else if ([value isKindOfClass:[NSString class]])
+				{
+					// handle single value for key
+					[postString appendFormat:@"&%@=%@", [key URLEncodeString], [(NSString*)value URLEncodeString]];
+				}
 			}
 		}
 	}
@@ -97,10 +114,14 @@ static void destroy_versionArrays()
 	[request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
 	
 	// Set the HTTP Basic Auth
-	NSString *authStr = [NSString stringWithFormat:@"%@:%@", username, password];
-	NSData *authData = [authStr dataUsingEncoding:NSASCIIStringEncoding];
-	NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64EncodingWithLineLength:0]];
-	[request setValue:authValue forHTTPHeaderField:@"Authorization"];
+	if ([SavedSettings sharedInstance].isBasicAuthEnabled)
+	{
+		DLog(@"using basic auth!");
+		NSString *authStr = [NSString stringWithFormat:@"%@:%@", username, password];
+		NSData *authData = [authStr dataUsingEncoding:NSASCIIStringEncoding];
+		NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64EncodingWithLineLength:0]];
+		[request setValue:authValue forHTTPHeaderField:@"Authorization"];
+	}
 	
 	if (offset > 0)
 	{

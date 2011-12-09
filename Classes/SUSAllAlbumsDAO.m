@@ -33,7 +33,7 @@
 
 - (FMDatabase *)db
 {
-    return [[DatabaseSingleton sharedInstance] allAlbumsDb]; 
+    return [DatabaseSingleton sharedInstance].allAlbumsDb; 
 }
 
 #pragma mark - Private Methods
@@ -84,7 +84,7 @@
 - (Album *)allAlbumsAlbumForPosition:(NSUInteger)position
 {
 	Album *anAlbum = [[[Album alloc] init] autorelease];
-	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allAlbums WHERE ROWID = %i", [NSNumber numberWithInt:position]];
+	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allAlbums WHERE ROWID = ?", [NSNumber numberWithInt:position]];
 	while ([result next])
 	{
 		if ([result stringForColumn:@"title"] != nil)
@@ -106,7 +106,7 @@
 - (Album *)allAlbumsAlbumForPositionInSearch:(NSUInteger)position
 {
 	Album *anAlbum = [[[Album alloc] init] autorelease];
-	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allAlbumsNameSearch WHERE ROWID = %i", [NSNumber numberWithInt:position]];
+	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allAlbumsNameSearch WHERE ROWID = ?", [NSNumber numberWithInt:position]];
 	while ([result next])
 	{
 		if ([result stringForColumn:@"title"] != nil)

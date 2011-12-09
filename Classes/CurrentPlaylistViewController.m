@@ -37,6 +37,7 @@
 	musicControls = [MusicSingleton sharedInstance];
 	databaseControls = [DatabaseSingleton sharedInstance];
 	
+	NSDate *start = [NSDate date];
 	dataModel = [[SUSCurrentPlaylistDAO alloc] init];
 	
 	self.tableView.backgroundColor = [UIColor clearColor];
@@ -166,6 +167,7 @@
 		
 		[noPlaylistsScreen release];
 	}
+	DLog(@"end: %f", [[NSDate date] timeIntervalSinceDate:start]);
 }
 
 - (void)viewWillAppear:(BOOL)animated 

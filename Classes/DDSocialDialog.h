@@ -44,7 +44,8 @@
 
 typedef enum{
 	DDSocialDialogThemeTwitter = 0,
-	DDSocialDialogThemePlurk
+	DDSocialDialogThemePlurk,
+	DDSocialDialogThemeISub
 } DDSocialDialogTheme;
 
 @protocol DDSocialDialogDelegate;

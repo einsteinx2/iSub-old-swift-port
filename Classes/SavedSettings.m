@@ -203,6 +203,7 @@
 	[userDefaults setBool:YES forKey:@"isPopupsEnabled"];
 	[userDefaults setBool:NO forKey:@"checkUpdatesSetting"];
 	[userDefaults setBool:NO forKey:@"isUpdateCheckQuestionAsked"];
+	[userDefaults setBool:NO forKey:@"isBasicAuthEnabled"];
 	[userDefaults synchronize];
 }
 
@@ -778,6 +779,17 @@
 	[userDefaults synchronize];
 }
 
+- (BOOL)isBasicAuthEnabled
+{
+	return [userDefaults boolForKey:@"isBasicAuthEnabled"];
+}
+
+- (void)setIsBasicAuthEnabled:(BOOL)isBasicAuthEnabled
+{
+	[userDefaults setBool:isBasicAuthEnabled forKey:@"isBasicAuthEnabled"];
+	[userDefaults synchronize];
+}
+
 // Test server details
 #define DEFAULT_URL @"http://isubapp.com:9000"
 #define DEFAULT_USER_NAME @"isub-guest"
@@ -787,6 +799,7 @@
 {
 	return [urlString isEqualToString:DEFAULT_URL];
 }
+
 
 #pragma mark - Singleton methods
 

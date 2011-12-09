@@ -1,52 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<array>
-    <!-- Effect Type 0 -- Doesn't exist -->
-    <array/>
-    
+<dict>
     <!-- Effect Type 1 -- Parametric Equalizer -->
     <!-- values: (frequency, gain) -->
-    <array>
+    <key>1</key>
+	<dict>
+		<key>0</key>
         <dict>
+			<key>presetId</key>
+			<integer>0</integer>
             <key>name</key>
             <string>Flat</string>
             <key>isDefault</key>
             <true/>
             <key>values</key>
             <array>
-                <array><real>0.20</real><real>0.50</real></array>
-                <array><real>0.40</real><real>0.50</real></array>
-                <array><real>0.60</real><real>0.50</real></array>
-                <array><real>0.80</real><real>0.50</real></array>
+				<string>{0.20, 0.50}</string>
+				<string>{0.40, 0.50}</string>
+				<string>{0.60, 0.50}</string>
+				<string>{0.80, 0.50}</string>
             </array>
         </dict>
+		<key>1</key>
         <dict>
+			<key>presetId</key>
+			<integer>1</integer>
             <key>name</key>
             <string>Bass Boost</string>
             <key>isDefault</key>
             <true/>
             <key>values</key>
             <array>
-                <array><real>0.00</real><real>0.25</real></array>
-                <array><real>0.20</real><real>0.30</real></array>
-                <array><real>0.40</real><real>0.40</real></array>
-                <array><real>0.60</real><real>0.50</real></array>
+				<string>{0.00, 0.25}</string>
+				<string>{0.20, 0.30}</string>
+				<string>{0.40, 0.40}</string>
+				<string>{0.60, 0.50}</string>
             </array>
         </dict>
+		<key>2</key>
         <dict>
+			<key>presetId</key>
+			<integer>2</integer>
             <key>name</key>
             <string>Treble Boost</string>
             <key>isDefault</key>
             <true/>
             <key>values</key>
             <array>
-                <array><real>0.40</real><real>0.50</real></array>
-                <array><real>0.60</real><real>0.40</real></array>
-                <array><real>0.80</real><real>0.30</real></array>
-                <array><real>1.00</real><real>0.25</real></array>
+				<string>{0.40, 0.50}</string>
+				<string>{0.60, 0.40}</string>
+				<string>{0.80, 0.30}</string>
+				<string>{1.00, 0.25}</string>
             </array>
         </dict>
-    </array>
-</array>
+    </dict>
+</dict>
 </plist>

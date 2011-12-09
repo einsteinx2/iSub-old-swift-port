@@ -55,6 +55,7 @@
 - (void)createDataModel
 {
 	self.dataModel = [[[SUSAllSongsDAO alloc] init] autorelease];
+	dataModel.delegate = self;
 }
 
 - (void)viewDidLoad {
@@ -113,7 +114,7 @@
 		// Check if the data has been loaded
 		if (dataModel.isDataLoaded)
 		{
-			//[self addCount];
+			[self addCount];
 		}
 		else
 		{
@@ -185,7 +186,7 @@
 	[headerView addSubview:reloadTimeLabel];
 	[reloadTimeLabel release];
 	
-	countLabel.text = [NSString stringWithFormat:@"%i Songs", [databaseControls.allSongsDb intForQuery:@"SELECT COUNT(*) FROM allSongs"]];
+	countLabel.text = [NSString stringWithFormat:@"%i Songs", dataModel.count];
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -481,6 +482,19 @@
 
 #pragma mark - UITableView delegate
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section 
+{
+	if(isSearching)
+		return @"";
+	
+	if ([dataModel.index count] == 0)
+		return @"";
+	
+	NSString *title = [(Index *)[dataModel.index objectAtIndex:section] name];
+	
+	return title;
+}
+
 // Following 2 methods handle the right side index
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView 
 {
@@ -562,7 +576,7 @@
 	else
 	{
 		NSUInteger sectionStartIndex = [(Index *)[dataModel.index objectAtIndex:indexPath.section] position];
-		aSong = [dataModel songForPosition:(sectionStartIndex + indexPath.row)];
+		aSong = [dataModel songForPosition:(sectionStartIndex + indexPath.row + 1)];
 	}
 	
 	cell.md5 = [aSong.path md5];
@@ -573,14 +587,14 @@
 	cell.backgroundView = [[[UIView alloc] init] autorelease];
 	if(indexPath.row % 2 == 0)
 	{
-		if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", cell.md5] != nil)
+		if (aSong.isFullyCached)
 			cell.backgroundView.backgroundColor = [viewObjects currentLightColor];
 		else
 			cell.backgroundView.backgroundColor = viewObjects.lightNormal;
 	}
 	else
 	{
-		if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", cell.md5] != nil)
+		if (aSong.isFullyCached)
 			cell.backgroundView.backgroundColor = [viewObjects currentDarkColor];
 		else
 			cell.backgroundView.backgroundColor = viewObjects.darkNormal;
@@ -614,7 +628,7 @@
 		else
 		{
 			NSUInteger sectionStartIndex = [(Index *)[dataModel.index objectAtIndex:indexPath.section] position];
-			aSong = [dataModel songForPosition:(sectionStartIndex + indexPath.row)];
+			aSong = [dataModel songForPosition:(sectionStartIndex + indexPath.row + 1)];
 		}
 		
 		[aSong addToPlaylistQueue];

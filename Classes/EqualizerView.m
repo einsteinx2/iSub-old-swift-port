@@ -203,9 +203,20 @@ static void destroy_versionArrays()
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopEqDisplay) name:UIApplicationWillResignActiveNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startEqDisplay) name:UIApplicationDidBecomeActiveNotification object:nil];
+		
+		[self addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:NULL];
 	}
 	
 	return self;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)con
+{	
+	if ([keyPath isEqualToString:@"frame"])
+	{
+		DLog(@"self.frame.size.width: %f", self.frame.size.width);
+		glPointSize(self.frame.size.width);
+	}
 }
 
 - (void)startEqDisplay

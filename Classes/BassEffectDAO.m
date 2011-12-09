@@ -50,61 +50,121 @@
 
 - (void)setup
 {
-	selectedPresetIndex = 0;
-	NSArray *defaultPresets = [self readPlist:@"BassEffectDefaultPresets"];
-	presets = [[defaultPresets objectAtIndex:type] retain];
+	NSMutableDictionary *presetsDict = [NSMutableDictionary dictionaryWithCapacity:0];
 	
-	//NSString *key = [NSString stringWithFormat:@"BassEffectSelectedPresets", type];
-	//self.selectedPresetIndex = [[NSUserDefaults standardUserDefaults] integerForKey:key];
-	
-	//key = [NSString stringWithFormat:@"BassEffectPresets%i", type];
-	//presets = [[[NSUserDefaults standardUserDefaults] arrayForKey:key] retain];
+	[presetsDict addEntriesFromDictionary:self.defaultPresets];
+	NSDictionary *userPresets = self.userPresets;
+	if (userPresets)
+		[presetsDict addEntriesFromDictionary:userPresets];
+
+	presets = [[NSDictionary alloc] initWithDictionary:presetsDict];
 }
-
-/*#pragma mark - Private data methods
-
-
-
-- (void)setupBassEffectDefaults
-{
-	NSArray *defaultEffects = [self readPlist:@"BassEffectDefaultPresets"];
-	
-	for (int i = 0; i < [effects count]; i++)
-	{
-		NSString *key = [NSString stringWithFormat:@"BassEffectSelectedPreset%i", i];
-		[userDefaults setObject:[NSNumber numberWithInt:0] forKey:key];
-		
-		
-		
-		key = [NSString stringWithFormat:@"BassEffectPresets%i", i];
-		NSArray *presets = [effects objectAtIndex:i];
-		[userDefaults setObject:presets forKey:key];
-	}	
-	
-	[userDefaults synchronize];
-}*/
 
 #pragma mark - Public DAO Methods
 
-- (NSUInteger)selectedPresetIndex
+NSInteger presetSort(id preset1, id preset2, void *context)
 {
-	return selectedPresetIndex;
+    NSUInteger presetId1 = [[preset1 objectForKey:@"presetId"] intValue];
+	NSUInteger presetId2 = [[preset2 objectForKey:@"presetId"] intValue];
+	
+    if (presetId1 < presetId2)
+        return NSOrderedAscending;
+    else if (presetId1 > presetId2)
+        return NSOrderedDescending;
+    else
+        return NSOrderedSame;
 }
 
-- (void)setSelectedPresetIndex:(NSUInteger)preset
+- (NSArray *)presetsArray
 {
-	selectedPresetIndex = preset;
-	//NSString *key = [NSString stringWithFormat:@"BassEffectSelectedPreset%i", type];
-	//[[NSUserDefaults standardUserDefaults] setInteger:selectedPresetIndex forKey:key];
-	//[[NSUserDefaults standardUserDefaults] synchronize];
+	NSMutableArray *presetsArray = [NSMutableArray arrayWithCapacity:0];
+	for (NSString *key in [self.presets allKeys])
+	{
+		[presetsArray addObject:[self.presets objectForKey:key]];
+	}
+	
+	return [presetsArray sortedArrayUsingFunction:presetSort context:NULL];
+}
+
+- (NSDictionary *)userPresets
+{
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	return [[defaults objectForKey:@"BassEffectUserPresets"] objectForKey:[[NSNumber numberWithInt:type] stringValue]];
+}
+
+- (NSArray *)userPresetsArray
+{
+	NSMutableArray *presetsArray = [NSMutableArray arrayWithCapacity:0];
+	NSDictionary *userPresets = self.userPresets;
+	for (NSString *key in [userPresets allKeys])
+	{
+		[presetsArray addObject:[userPresets objectForKey:key]];
+	}
+
+	return [presetsArray sortedArrayUsingFunction:presetSort context:NULL];
+}
+
+- (NSArray *)userPresetsArrayMinusCustom
+{
+	NSMutableArray *presetsArray = [NSMutableArray arrayWithCapacity:0];
+	NSDictionary *userPresets = self.userPresets;
+	for (NSString *key in [userPresets allKeys])
+	{
+		if ([[[userPresets objectForKey:key] objectForKey:@"presetId"] intValue] != BassEffectTempCustomPresetId)
+			[presetsArray addObject:[userPresets objectForKey:key]];
+	}
+	
+	return [presetsArray sortedArrayUsingFunction:presetSort context:NULL];
+}
+
+- (NSDictionary *)defaultPresets
+{
+	// Load default presets
+	return [[self readPlist:@"BassEffectDefaultPresets"] objectForKey:[[NSNumber numberWithInt:type] stringValue]];
+}
+
+- (NSUInteger)userPresetsCount
+{
+	if (self.userPresets)
+		return [[self.userPresets allKeys] count]; 
+	
+	return 0;
+}
+
+- (NSUInteger)defaultPresetsCount
+{
+	if (self.defaultPresets)
+		return [[self.defaultPresets allKeys] count];
+	
+	return 0;
+}
+
+- (NSUInteger)selectedPresetIndex
+{
+	return [self.presetsArray indexOfObject:self.selectedPreset];
+}
+
+- (NSUInteger)selectedPresetId
+{
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	return [[[defaults objectForKey:@"BassEffectSelectedPresetId"] objectForKey:[[NSNumber numberWithInt:type] stringValue]] intValue];
+}
+
+- (void)setSelectedPresetId:(NSUInteger)preset
+{
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSMutableDictionary *selectedPresetIds = [NSMutableDictionary dictionaryWithCapacity:0];
+	if ([defaults objectForKey:@"BassEffectSelectedPresetId"])
+		[selectedPresetIds addEntriesFromDictionary:[defaults objectForKey:@"BassEffectSelectedPresetId"]];
+	
+	[selectedPresetIds setObject:[NSNumber numberWithInt:preset] forKey:[[NSNumber numberWithInt:type] stringValue]];
+	[defaults setObject:selectedPresetIds forKey:@"BassEffectSelectedPresetId"];
+	[defaults synchronize];
 }
 
 - (NSDictionary *)selectedPreset
 {
-	if (self.selectedPresetIndex >= [self.presets count])
-		return nil;
-
-	return [presets objectAtIndex:selectedPresetIndex];
+	return [self.presets objectForKey:[[NSNumber numberWithInt:self.selectedPresetId] stringValue]];
 }
 
 - (NSArray *)selectedPresetValues
@@ -123,20 +183,19 @@
 	if (valueIndex >= [self.selectedPresetValues count])
 		return nil;
 	
-	NSArray *valueArray = [self.selectedPresetValues objectAtIndex:valueIndex];
-	
+	CGPoint point = CGPointFromString([self.selectedPresetValues objectAtIndex:valueIndex]);
 	BassEffectValue  *value = [[BassEffectValue alloc] init];
 	value.type = self.type;
-	value.percentX = [[valueArray firstObject] floatValue];
-	value.percentY = [[valueArray lastObject] floatValue];
+	value.percentX = point.x;
+	value.percentY = point.y;
 	value.isDefault = [[self.selectedPreset objectForKey:@"isDefault"] boolValue];
 	
 	return [value autorelease];
 }
 
-- (void)selectPresetAtIndex:(NSUInteger)presetIndex
+- (void)selectPresetId:(NSUInteger)presetId
 {
-	self.selectedPresetIndex = presetIndex;
+	self.selectedPresetId = presetId;
 	
 	BassWrapperSingleton *wrapper = [BassWrapperSingleton sharedInstance];
 	
@@ -144,18 +203,112 @@
 	{
 		BOOL wasEqualizerOn = wrapper.isEqualizerOn;
 		[wrapper removeAllEqualizerValues];
-
+		
 		for (int i = 0; i < [self.selectedPresetValues count]; i++)
 		{
 			BassEffectValue *value = [self valueForIndex:i];
 			[wrapper addEqualizerValue:BASS_DX8_PARAMEQFromPoint(value.percentX, value.percentY, DEFAULT_BANDWIDTH)];
 		}
-				
+		
 		if (wasEqualizerOn)
 			[wrapper toggleEqualizer];
 	}
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_BassEffectPresetLoaded];
+}
+
+- (void)selectPresetAtIndex:(NSUInteger)presetIndex
+{
+	if (presetIndex >= [self.presets count])
+		return;
+	
+	self.selectedPresetId = [[[self.presetsArray objectAtIndex:presetIndex] objectForKey:@"presetId"] intValue];
+	
+	[self selectPresetId:self.selectedPresetId];
+}
+
+- (void)deleteCustomPresetForId:(NSUInteger)presetId
+{
+	if (presetId == self.selectedPresetId)
+		self.selectedPresetId = 0;
+	
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSDictionary *allUserPresets = [defaults objectForKey:[NSString stringWithFormat:@"BassEffectUserPresets"]];
+	NSMutableDictionary *mutableAllUserPresets = [NSMutableDictionary dictionaryWithCapacity:0];
+	if (allUserPresets)
+		[mutableAllUserPresets addEntriesFromDictionary:allUserPresets];
+	
+	NSMutableDictionary *mutableUserPresets = [NSMutableDictionary dictionaryWithCapacity:0];
+	if (self.userPresets)
+		[mutableUserPresets addEntriesFromDictionary:self.userPresets];
+	
+	[mutableUserPresets removeObjectForKey:[[NSNumber numberWithInt:presetId] stringValue]];
+	[mutableAllUserPresets setObject:mutableUserPresets forKey:[[NSNumber numberWithInt:type] stringValue]];
+	[defaults setObject:mutableAllUserPresets forKey:@"BassEffectUserPresets"];
+	[defaults synchronize];
+	
+	[self setup];
+}
+
+- (void)deleteCustomPresetForIndex:(NSUInteger)presetIndex
+{
+	NSUInteger presetId = [[[self.presetsArray objectAtIndex:presetIndex] objectForKey:@"presetId"] intValue];
+	[self deleteCustomPresetForId:presetId];
+}
+
+- (void)deleteTempCustomPreset
+{
+	[self deleteCustomPresetForId:BassEffectTempCustomPresetId];
+}
+
+- (void)saveCustomPreset:(NSArray *)arrayOfPoints name:(NSString *)name presetId:(NSUInteger)presetId	
+{
+	if (!name || !arrayOfPoints)
+		return;
+	
+	self.selectedPresetId = presetId;
+	
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSDictionary *allUserPresets = [defaults objectForKey:[NSString stringWithFormat:@"BassEffectUserPresets"]];
+	NSMutableDictionary *mutableAllUserPresets = [NSMutableDictionary dictionaryWithCapacity:0];
+	if (allUserPresets)
+		[mutableAllUserPresets addEntriesFromDictionary:allUserPresets];
+	
+	NSMutableDictionary *mutableUserPresets = [NSMutableDictionary dictionaryWithCapacity:0];
+	if (self.userPresets)
+		[mutableUserPresets addEntriesFromDictionary:self.userPresets];
+	
+	// Add new temp custom preset
+	NSMutableDictionary *newPresetDict = [NSMutableDictionary dictionaryWithCapacity:0];
+	[newPresetDict setObject:[NSNumber numberWithInt:presetId] forKey:@"presetId"];
+	[newPresetDict setObject:name forKey:@"name"];
+	[newPresetDict setObject:arrayOfPoints forKey:@"values"];
+	[newPresetDict setObject:[NSNumber numberWithBool:NO] forKey:@"isDefault"];
+	[mutableUserPresets setObject:newPresetDict forKey:[[NSNumber numberWithInt:presetId] stringValue]];
+	[mutableAllUserPresets setObject:mutableUserPresets forKey:[[NSNumber numberWithInt:type] stringValue]];
+	[defaults setObject:mutableAllUserPresets forKey:@"BassEffectUserPresets"];
+	[defaults synchronize];
+	
+	[self setup];
+}
+
+- (void)saveCustomPreset:(NSArray *)arrayOfPoints name:(NSString *)name
+{
+	NSUInteger presetId = BassEffectUserPresetStartId;
+	
+	NSArray *userPresetsArrayMinusCustom = self.userPresetsArrayMinusCustom;
+	if (userPresetsArrayMinusCustom)
+	{
+		presetId = [[[userPresetsArrayMinusCustom lastObject] objectForKey:@"presetId"] intValue] + 1;
+	}
+	
+	[self saveCustomPreset:arrayOfPoints name:name presetId:presetId];
+}
+
+// Takes array of NSStrings containing CGPoints between 0.0 and 1.0
+- (void)saveTempCustomPreset:(NSArray *)arrayOfPoints
+{
+	[self saveCustomPreset:arrayOfPoints name:@"Custom" presetId:BassEffectTempCustomPresetId];
 }
 
 @end

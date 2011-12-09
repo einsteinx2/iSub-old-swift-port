@@ -15,6 +15,7 @@
 #import "NSNotificationCenter+MainThread.h"
 #include <AudioToolbox/AudioToolbox.h>
 #include "MusicSingleton.h"
+#import "BassEffectDAO.h"
 
 @interface BassWrapperSingleton (Private)
 - (void)bassInit;
@@ -255,6 +256,9 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	
 	if (currentSong.fileExists)
 	{
+		//fileStream1 = BASS_StreamCreateFile(false, [currentSong.localPath cStringUTF8], startByteOffset, 0, BASS_SAMPLE_FLOAT);
+		//BASS_ChannelPlay(fileStream1, FALSE);
+		
 		BASS_CHANNELINFO info;
 		fileStream1 = BASS_StreamCreateFile(false, [currentSong.localPath cStringUTF8], startByteOffset, 0, 
 											BASS_SAMPLE_FLOAT | BASS_STREAM_DECODE);
@@ -626,12 +630,10 @@ static BassWrapperSingleton *sharedInstance = nil;
     currPlaylistDAO = [[SUSCurrentPlaylistDAO alloc] init];
 	currPlaylistDAORef = currPlaylistDAO;
     
-	eqValueArray = [[NSMutableArray alloc] initWithCapacity:3];
-	[eqValueArray addObject:[BassParamEqValue valueWithParams:BASS_DX8_PARAMEQMake(125, 0, 18) arrayIndex:0]];
-	[eqValueArray addObject:[BassParamEqValue valueWithParams:BASS_DX8_PARAMEQMake(1000, 0, 18) arrayIndex:1]];
-	[eqValueArray addObject:[BassParamEqValue valueWithParams:BASS_DX8_PARAMEQMake(8000, 0, 18) arrayIndex:2]];
-	
-	eqHandleArray = [[NSMutableArray alloc] initWithCapacity:3];
+	eqValueArray = [[NSMutableArray alloc] initWithCapacity:4];
+	eqHandleArray = [[NSMutableArray alloc] initWithCapacity:4];
+	BassEffectDAO *effectDAO = [[BassEffectDAO alloc] initWithType:BassEffectType_ParametricEQ];
+	[effectDAO selectPresetId:effectDAO.selectedPresetId];
 	
 	if (SCREEN_SCALE() == 1.0 && !IS_IPAD())
 		lineSpecBufSize = 256 * sizeof(short);

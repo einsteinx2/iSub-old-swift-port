@@ -57,7 +57,7 @@
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
-    
+	
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	musicControls = [MusicSingleton sharedInstance];
@@ -72,7 +72,7 @@
 	downloadProgress.userInteractionEnabled = NO;
 	[progressSlider addSubview:downloadProgress];
 	[downloadProgress release];
-	
+
 	/////////// RESIZE PROGRESS SLIDER
 	//progressSlider.layer.transform = CATransform3DMakeScale(1.0, 2.0, 1.0);
 	/////
@@ -101,7 +101,7 @@
 	else
 	{
 		// Setup the update timer for the song download progress bar
-		updateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateDownloadProgress) userInfo:nil repeats:YES];
+		updateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateDownloadProgressInBackground) userInfo:nil repeats:YES];
 		[downloadProgress newWidth:0.0];
 		//[downloadProgress newX:70.0];
 		//if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
@@ -109,7 +109,7 @@
 		//DLog(@"downloadProgress.frame %@", NSStringFromCGRect(downloadProgress.frame));
 		downloadProgress.layer.cornerRadius = 5;
 		
-		[self updateDownloadProgress];
+		[self updateDownloadProgressInBackground];
 	}
 }
 
@@ -253,27 +253,38 @@
 	}
 }
 
+- (void)updateDownloadProgressInBackground
+{
+	[self performSelectorInBackground:@selector(updateDownloadProgress) withObject:nil];
+}
 
 - (void)updateDownloadProgress
 {
-	// Set the current song progress bar
-	if (musicControls.isTempDownload)
+	@autoreleasepool
 	{
-		downloadProgress.hidden = YES;
-	}
-	else
-	{
-		downloadProgress.hidden = NO;
-		
-		float width = ([musicControls findCurrentSongProgress] * downloadProgressWidth);
-		if (width > downloadProgressWidth)
+		// Set the current song progress bar
+		if (musicControls.isTempDownload)
 		{
-			width = downloadProgressWidth;
+			downloadProgress.hidden = YES;
 		}
-		[downloadProgress newWidth:width];
-	}	
+		else
+		{
+			downloadProgress.hidden = NO;
+			
+			float width = ([musicControls findCurrentSongProgress] * downloadProgressWidth);
+			if (width > downloadProgressWidth)
+			{
+				width = downloadProgressWidth;
+			}
+			[self performSelectorOnMainThread:@selector(updateDownloadProgressInternal:) withObject:[NSNumber numberWithFloat:width] waitUntilDone:NO];
+		}
+	}
 }
 
+- (void)updateDownloadProgressInternal:(NSNumber *)width
+{
+	[downloadProgress newWidth:[width floatValue]];
+}
 
 - (void)updateSlider
 {	
@@ -392,6 +403,22 @@
 	}
 }
 
+- (IBAction)skipBack30
+{
+	float newValue = 0.0;
+	if (progressSlider.value - 30.0 >= 0.0)
+	{
+		newValue = progressSlider.value - 30.0;
+	}
+	progressSlider.value = newValue;
+	[self movedSlider];
+}
+
+- (IBAction)skipForward30
+{
+	progressSlider.value = progressSlider.value + 30.0;
+	[self movedSlider];
+}
 
 - (IBAction) songInfoToggle
 {
