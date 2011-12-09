@@ -8,6 +8,8 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import <OpenGLES/EAGLDrawable.h>
+#import "OpenGLCommon.h"
+#import "ConstantsAndMacros.h"
 
 #import "EqualizerView.h"
 #import "BassWrapperSingleton.h"
@@ -175,11 +177,12 @@ static void destroy_versionArrays()
 		
 		context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
 		
-		if (!context || ![EAGLContext setCurrentContext:context]) {
+		if (!context || ![EAGLContext setCurrentContext:context])
+		{
 			[self release];
 			return nil;
 		}
-		
+	
 		// Use OpenGL ES to generate a name for the texture.
 		glGenTextures(1, &imageTexture);
 		// Bind the texture name. 
@@ -199,24 +202,12 @@ static void destroy_versionArrays()
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnable(GL_POINT_SPRITE_OES);
 		glTexEnvf(GL_POINT_SPRITE_OES, GL_COORD_REPLACE_OES, GL_TRUE);
-		glPointSize(self.frame.size.width);
-		
+				
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopEqDisplay) name:UIApplicationWillResignActiveNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startEqDisplay) name:UIApplicationDidBecomeActiveNotification object:nil];
-		
-		[self addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:NULL];
 	}
 	
 	return self;
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)con
-{	
-	if ([keyPath isEqualToString:@"frame"])
-	{
-		DLog(@"self.frame.size.width: %f", self.frame.size.width);
-		glPointSize(self.frame.size.width);
-	}
 }
 
 - (void)startEqDisplay
@@ -351,17 +342,25 @@ static void destroy_versionArrays()
 	[EAGLContext setCurrentContext:context];
 	glBindFramebufferOES(GL_FRAMEBUFFER_OES, viewFramebuffer);
 	
-	//Allocate vertex array buffer
-	static GLfloat *vertexBuffer = NULL;
-	if(vertexBuffer == NULL)
-		vertexBuffer = malloc(2 * sizeof(GLfloat));
+	GLfloat width = self.frame.size.width;
+	GLfloat height = self.frame.size.height;
+	GLfloat box[] = 
+	{   0,     height, 0, 
+		width, height, 0,
+		width,      0, 0,
+	    0,          0, 0 };
+	GLfloat tex[] = {0,0, 1,0, 1,1, 0,1};
 	
-	vertexBuffer[0] = self.center.x;
-	vertexBuffer[1] = self.center.y;
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	
-	//Render the vertex array
-	glVertexPointer(2, GL_FLOAT, 0, vertexBuffer);
-	glDrawArrays(GL_POINTS, 0, 1);
+	glVertexPointer(3, GL_FLOAT, 0, box);
+	glTexCoordPointer(2, GL_FLOAT, 0, tex);
+	
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	
 	//Display the buffer
 	glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
@@ -373,6 +372,10 @@ static void destroy_versionArrays()
 // the same size as our display area.
 -(void)layoutSubviews
 {
+	DLog(@"self.layer.frame: %@", NSStringFromCGRect(self.layer.frame));
+	self.layer.frame = self.frame;
+	DLog(@"self.layer.frame: %@", NSStringFromCGRect(self.layer.frame));
+	
 	[EAGLContext setCurrentContext:context];
 	[self destroyFramebuffer];
 	[self createFramebuffer];

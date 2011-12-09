@@ -2455,6 +2455,8 @@
 		53BBDA4E148EAE5D00032114 /* MGTwitterUsersParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGTwitterUsersParser.m; sourceTree = "<group>"; };
 		53BBDA4F148EAE5D00032114 /* MGTwitterXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGTwitterXMLParser.h; sourceTree = "<group>"; };
 		53BBDA50148EAE5D00032114 /* MGTwitterXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGTwitterXMLParser.m; sourceTree = "<group>"; };
+		53BBDB3B1491DD6600032114 /* OpenGLCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLCommon.h; sourceTree = "<group>"; };
+		53BBDB3C1491DE5600032114 /* ConstantsAndMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConstantsAndMacros.h; sourceTree = "<group>"; };
 		53BC2670139AE7E100A825F1 /* BWQuincyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BWQuincyManager.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		53BC2671139AE7E100A825F1 /* BWQuincyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWQuincyManager.m; sourceTree = "<group>"; };
 		53BC2673139AE7E100A825F1 /* Quincy.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Quincy.bundle; sourceTree = "<group>"; };
@@ -4145,6 +4147,8 @@
 				5365857E1478920B00FE57A5 /* EqualizerViewController.h */,
 				5365857F1478920B00FE57A5 /* EqualizerViewController.m */,
 				536585801478920D00FE57A5 /* EqualizerViewController.xib */,
+				53BBDB3B1491DD6600032114 /* OpenGLCommon.h */,
+				53BBDB3C1491DE5600032114 /* ConstantsAndMacros.h */,
 				5365859114789AD800FE57A5 /* EqualizerView.h */,
 				5365859214789AD900FE57A5 /* EqualizerView.m */,
 				53A2BE22147DF09800E44822 /* EqualizerPointView.h */,

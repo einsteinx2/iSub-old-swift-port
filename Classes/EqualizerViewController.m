@@ -20,10 +20,6 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
 	return YES;
-	
-    // Return YES for supported orientations
-	
-	//return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -32,41 +28,38 @@
 	if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
 	{
 		[[UIApplication sharedApplication] setStatusBarHidden:NO animated:YES];
-		[self createEqViews];
 	}
 	else
 	{
 		[[UIApplication sharedApplication] setStatusBarHidden:YES animated:YES];
-		[self removeEqViews];
 	}
 }
 
-/*- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-	if (UIInterfaceOrientationIsLandscape(fromInterfaceOrientation))
+	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+	
+	if (UIInterfaceOrientationIsPortrait(fromInterfaceOrientation))
 	{
-		
+		[self removeEqViews];
 	}
 	else
 	{
-		
+		[self createEqViews];
 	}
-}*/
+}
 
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-		
+	
 	effectDAO = [[BassEffectDAO alloc] initWithType:BassEffectType_ParametricEQ];
 
 	DLog(@"effectDAO.selectedPresetIndex: %i", effectDAO.selectedPresetIndex);
 	[presetPicker selectRow:effectDAO.selectedPresetIndex inComponent:0 animated:NO];
 	
-	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
-		[self createEqViews];
-		
 	[self updateToggleButton];
 	
 	[self.equalizerView startEqDisplay];
@@ -101,6 +94,12 @@
 	}
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+		[self createEqViews];
+}
+
 - (void)createEqViews
 {
 	[self removeEqViews];
@@ -109,7 +108,7 @@
 	for (BassParamEqValue *value in [BassWrapperSingleton sharedInstance].equalizerValues)
 	{
 		DLog(@"eq handle: %i", value.handle);
-		EqualizerPointView *eqView = [[EqualizerPointView alloc] initWithEqValue:value parentSize:self.equalizerView.bounds.size];
+		EqualizerPointView *eqView = [[EqualizerPointView alloc] initWithEqValue:value parentSize:self.equalizerView.frame.size];
 		[equalizerPointViews addObject:eqView];
 		[self.view addSubview:eqView];
 		[eqView release];
