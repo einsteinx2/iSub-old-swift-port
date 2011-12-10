@@ -84,7 +84,7 @@ static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
 			}
 			else
 			{
-				[self.db executeUpdate:@"DROP TABLE jukeboxTemp"];
+				[self.db executeUpdate:@"DROP TABLE IF EXISTS jukeboxTemp"];
 				[self.db executeUpdate:@"CREATE TABLE jukeboxTemp(title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
 				
 				for (NSNumber *index in [indexesMut reverseObjectEnumerator])
@@ -112,7 +112,7 @@ static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
 				}
 				else
 				{
-					[self.db executeUpdate:@"DROP TABLE shuffleTemp"];
+					[self.db executeUpdate:@"DROP TABLE IF EXISTS shuffleTemp"];
 					[self.db executeUpdate:@"CREATE TABLE shuffleTemp(title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
 					
 					for (NSNumber *index in [indexesMut reverseObjectEnumerator])
@@ -176,6 +176,8 @@ static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
 			}
 		}
 		self.currentIndex = self.currentIndex - numberBefore;
+		if (self.currentIndex < 0)
+			self.currentIndex = 0;
 		
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		{

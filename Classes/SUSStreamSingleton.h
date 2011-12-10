@@ -9,6 +9,8 @@
 #import "SUSStreamHandlerDelegate.h"
 #import "SUSLoaderDelegate.h"
 
+#define ISMSNumberOfStreamsToQueue 2
+
 @class Song, SUSStreamHandler, SUSLyricsDAO;
 @interface SUSStreamSingleton : NSObject <SUSStreamHandlerDelegate, SUSLoaderDelegate>
 
@@ -33,5 +35,7 @@
 - (void)queueStreamForSong:(Song *)song;
 
 - (BOOL)insertSong:(Song *)aSong intoGenreTable:(NSString *)table;
+
+- (void)fillStreamQueue;
 
 @end

@@ -319,36 +319,6 @@
 	self.sectionInfo = dataModel.sectionInfo;
 	if (sectionInfo)
 		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
-	
-    // TODO create section index
-	// Create the section index
-	/*if (dataModel.albumsCount > 10)
-	{
-		[databaseControls.inMemoryDb executeUpdate:@"DROP TABLE albumIndex"];
-		[databaseControls.inMemoryDb executeUpdate:@"CREATE TABLE albumIndex (album TEXT)"];
-
-		[databaseControls.albumListCacheDb beginTransaction];
-		for (NSNumber *rowId in listOfAlbums)
-		{
-			NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-			
-			NSString *albumTitle = [databaseControls.albumListCacheDb stringForQuery:@"SELECT title FROM albumsCache WHERE rowid = ?", rowId];
-			[databaseControls.inMemoryDb executeUpdate:@"INSERT INTO albumIndex (album) VALUES (?)", albumTitle];
-			
-			[pool release];
-		}
-		[databaseControls.albumListCacheDb commit];
-		
-		self.sectionInfo = [databaseControls sectionInfoFromTable:@"albumIndex" inDatabase:databaseControls.inMemoryDb withColumn:@"album"];
-		
-		if (sectionInfo)
-		{
-			if ([sectionInfo count] < 5)
-				self.sectionInfo = nil;
-			else
-				[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
-		}
-	}	*/
 }
 
 #pragma mark Actions

@@ -33,7 +33,6 @@
 @property (nonatomic, retain) FMDatabase *cacheQueueDb;
 @property (nonatomic, retain) FMDatabase *lyricsDb;
 @property (nonatomic, retain) FMDatabase *bookmarksDb;
-@property (nonatomic, retain) FMDatabase *inMemoryDb;
 
 + (DatabaseSingleton*)sharedInstance;
 

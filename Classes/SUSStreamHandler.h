@@ -33,6 +33,7 @@
 
 @property (nonatomic, retain) NSThread *loadingThread;
 
+- (void)start:(BOOL)resume;
 - (void)start;
 - (void)cancel;
 

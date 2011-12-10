@@ -48,14 +48,12 @@
 	NSMutableArray *listOfArtists = [NSMutableArray arrayWithCapacity:1];
 	
 	// Fix for slow load problem
-	[databaseControls.inMemoryDb executeUpdate:@"DROP TABLE cachedSongsArtistList"];
-	[databaseControls.inMemoryDb executeUpdate:@"CREATE TABLE cachedSongsArtistList (artist TEXT UNIQUE)"];
-	[databaseControls.inMemoryDb executeUpdate:@"ATTACH DATABASE ? AS songCacheDb", [NSString stringWithFormat:@"%@/songCache.db", databaseControls.databaseFolderPath]];
-	if ([databaseControls.inMemoryDb hadError]) { DLog(@"Err attaching the songCacheDb %d: %@", [databaseControls.inMemoryDb lastErrorCode], [databaseControls.inMemoryDb lastErrorMessage]); }
-	[databaseControls.inMemoryDb executeUpdate:@"INSERT OR IGNORE INTO cachedSongsArtistList SELECT seg1 FROM cachedSongsLayout"];
-	[databaseControls.inMemoryDb executeUpdate:@"DETACH DATABASE songCacheDb"];
+	FMDatabase *db = databaseControls.songCacheDb;
+	[db executeUpdate:@"DROP TABLE IF EXISTS cachedSongsArtistList"];
+	[db executeUpdate:@"CREATE TEMP TABLE cachedSongsArtistList (artist TEXT UNIQUE)"];
+	[db executeUpdate:@"INSERT OR IGNORE INTO cachedSongsArtistList SELECT seg1 FROM cachedSongsLayout"];
 
-	FMResultSet *result = [databaseControls.inMemoryDb executeQuery:@"SELECT artist FROM cachedSongsArtistList ORDER BY artist COLLATE NOCASE"];
+	FMResultSet *result = [db executeQuery:@"SELECT artist FROM cachedSongsArtistList ORDER BY artist COLLATE NOCASE"];
 	while ([result next])
 	{
 		//
@@ -64,6 +62,8 @@
 		if ([[result stringForColumnIndex:0] length] > 0)
 			[listOfArtists addObject:[NSString stringWithString:[result stringForColumnIndex:0]]]; 
 	}
+	[result close];
+	[db executeUpdate:@"DROP TABLE IF EXISTS cachedSongsArtistList"];
 	
 	return @"";
 }

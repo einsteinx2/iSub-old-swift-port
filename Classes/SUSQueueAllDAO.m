@@ -19,6 +19,7 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
+#import "SUSStreamSingleton.h"
 
 @implementation SUSQueueAllDAO
 
@@ -103,6 +104,8 @@
 		{
 			musicControls.isShuffle = NO;
 		}
+		
+		[[SUSStreamSingleton sharedInstance] fillStreamQueue];
 	}
 }
 

@@ -332,8 +332,8 @@
 + (BOOL)removeSongFromCacheDbByMD5:(NSString *)md5
 {
 	DatabaseSingleton *dbControls = [DatabaseSingleton sharedInstance];
-	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
-
+	SavedSettings *settings = [SavedSettings sharedInstance];
+	
 	BOOL hadError = NO;	
 	
 	// Get the song info
@@ -366,9 +366,9 @@
 	// Delete the song from disk
 	NSString *fileName;
 	if (transcodedSuffix)
-		fileName = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", md5, transcodedSuffix]];
+		fileName = [settings.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", md5, transcodedSuffix]];
 	else
-		fileName = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", md5, suffix]];
+		fileName = [settings.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", md5, suffix]];
 	///////// REWRITE TO CATCH THIS NSFILEMANAGER ERROR ///////////
 	[[NSFileManager defaultManager] removeItemAtPath:fileName error:NULL];
 	

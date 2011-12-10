@@ -139,37 +139,22 @@
 	// Create the section index
 	if ([listOfAlbums count] > 10)
 	{
-		[databaseControls.inMemoryDb executeUpdate:@"DROP TABLE albumIndex"];
-		[databaseControls.inMemoryDb executeUpdate:@"CREATE TABLE albumIndex (album TEXT)"];
-		/*for (Album *album in listOfAlbums)
-		 {
-		 [databaseControls.inMemoryDb executeUpdate:@"INSERT INTO albumIndex (album) VALUES (?)", album.title];
-		 }*/
+		FMDatabase *db = databaseControls.albumListCacheDb;
+		[db executeUpdate:@"DROP TABLE IF EXSITS albumIndex"];
+		[db executeUpdate:@"CREATE TEMP TABLE albumIndex (album TEXT)"];
 		
-		[databaseControls.albumListCacheDb beginTransaction];
+		[db beginTransaction];
 		for (NSNumber *rowId in listOfAlbums)
 		{
-			NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-			
-			NSString *albumTitle = [databaseControls.albumListCacheDb stringForQuery:@"SELECT title FROM albumsCache WHERE rowid = ?", rowId];
-			[databaseControls.inMemoryDb executeUpdate:@"INSERT INTO albumIndex (album) VALUES (?)", albumTitle];
-			
-			[pool release];
+			@autoreleasepool 
+			{
+				[db executeUpdate:@"INSERT INTO albumIndex SELECT title FROM albumsCache WHERE rowid = ?", rowId];
+			}
 		}
-		[databaseControls.albumListCacheDb commit];
+		[db commit];
 		
-		/*FMResultSet *result = [databaseControls.albumListCacheDb executeQuery:@"SELECT title FROM albumsCache WHERE folderId = ?", self.myId];
-		 while ([result next]);
-		 {
-		 NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-		 
-		 NSString *albumTitle = [result stringForColumnIndex:0];
-		 [databaseControls.inMemoryDb executeUpdate:@"INSERT INTO albumIndex (album) VALUES (?)", albumTitle];
-		 
-		 [pool release];
-		 }*/
-		//self.sectionInfo = nil; 
-		self.sectionInfo = [databaseControls sectionInfoFromTable:@"albumIndex" inDatabase:databaseControls.inMemoryDb withColumn:@"album"];
+		self.sectionInfo = [databaseControls sectionInfoFromTable:@"albumIndex" inDatabase:db withColumn:@"album"];
+		[db executeUpdate:@"DROP TABLE IF EXSITS albumIndex"];
 		
 		if (sectionInfo)
 		{

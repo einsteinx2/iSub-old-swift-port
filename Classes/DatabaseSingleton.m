@@ -23,13 +23,14 @@
 #import "SavedSettings.h"
 #import "GTMNSString+HTML.h"
 #import "SUSCurrentPlaylistDAO.h"
+#import "SUSStreamSingleton.h"
 
 static DatabaseSingleton *sharedInstance = nil;
 
 @implementation DatabaseSingleton
 
 // New SQL stuff
-@synthesize databaseFolderPath, allAlbumsDb, allSongsDb, coverArtCacheDb540, coverArtCacheDb320, coverArtCacheDb60, albumListCacheDb, genresDb, currentPlaylistDb, localPlaylistsDb, serverPlaylistsDb, songCacheDb, cacheQueueDb, lyricsDb, bookmarksDb, inMemoryDb;
+@synthesize databaseFolderPath, allAlbumsDb, allSongsDb, coverArtCacheDb540, coverArtCacheDb320, coverArtCacheDb60, albumListCacheDb, genresDb, currentPlaylistDb, localPlaylistsDb, serverPlaylistsDb, songCacheDb, cacheQueueDb, lyricsDb, bookmarksDb;
 
 #pragma mark -
 #pragma mark class instance methods
@@ -236,7 +237,16 @@ static DatabaseSingleton *sharedInstance = nil;
 	}
 	
 	// Setup the song cache database
-	songCacheDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/songCache.db", databaseFolderPath]] retain];
+	// Check if the songCache DB is in the documents directory
+	SavedSettings *settings = [SavedSettings sharedInstance];
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	if ([fileManager fileExistsAtPath:[databaseFolderPath stringByAppendingPathComponent:@"songCache.db"]]) 
+	{
+		// The song cache Db is in the old place and needs to be moved
+		[fileManager moveItemAtURL:[NSURL fileURLWithPath:[databaseFolderPath stringByAppendingPathComponent:@"songCache.db"]]
+							 toURL:[NSURL fileURLWithPath:[settings.cachesPath stringByAppendingPathComponent:@"songCache.db"]] error:nil];
+	}
+	songCacheDb = [[FMDatabase databaseWithPath:[settings.cachesPath stringByAppendingPathComponent:@"songCache.db"]] retain];
 	if ([songCacheDb open])
 	{
 		[songCacheDb executeUpdate:@"PRAGMA cache_size = 1"];
@@ -277,7 +287,13 @@ static DatabaseSingleton *sharedInstance = nil;
 		DLog(@"Could not open songCacheDb."); 
 	}
 	
-	cacheQueueDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", databaseFolderPath, urlStringMd5]] retain];
+	if ([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", databaseFolderPath, [settings.urlString md5]]]) 
+	{
+		// The song cache queue Db is in the old place and needs to be moved
+		[fileManager moveItemAtURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", databaseFolderPath, [settings.urlString md5]]] 
+							 toURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", settings.cachesPath, [settings.urlString md5]]] error:nil];
+	}
+	cacheQueueDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", settings.cachesPath, [settings.urlString md5]]] retain];
 	if ([cacheQueueDb open])
 	{
 		[cacheQueueDb executeUpdate:@"PRAGMA cache_size = 1"];
@@ -293,7 +309,6 @@ static DatabaseSingleton *sharedInstance = nil;
 		{
 			DLog(@"Err attaching the cacheQueueDb %d: %@", [songCacheDb lastErrorCode], [songCacheDb lastErrorMessage]);
 		}
-
 	}
 	else
 	{ 
@@ -332,13 +347,6 @@ static DatabaseSingleton *sharedInstance = nil;
 	else
 	{
 		DLog(@"Could not open bookmarksDb."); 
-	}
-	
-	// Setup in memory database
-	inMemoryDb = [[FMDatabase databaseWithPath:@":memory:"] retain];
-	if (![inMemoryDb open]) 
-	{ 
-		DLog(@"Could not open inMemoryDb.");
 	}
 }
 
@@ -745,6 +753,9 @@ static DatabaseSingleton *sharedInstance = nil;
 		if (musicControls.isShuffle)
 			[aSong insertIntoTable:@"shufflePlaylist" inDatabase:self.currentPlaylistDb];
 	}
+	
+	[[SUSStreamSingleton sharedInstance] fillStreamQueue];
+	//[[SUSStreamSingleton sharedInstance] performSelectorOnMainThread:@selector(fillStreamQueue) withObject:nil waitUntilDone:NO];
 }
 
 - (void)showLoadingScreen

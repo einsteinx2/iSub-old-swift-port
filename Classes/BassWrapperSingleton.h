@@ -7,6 +7,11 @@
 //
 
 #import "bass.h"
+#import "bassflac.h"
+#import "bass_fx.h"
+#import "bassmix.h"
+
+#define ISMS_BASSBufferSize 1500
 
 @class Song, BassParamEqValue, SUSCurrentPlaylistDAO;
 @interface BassWrapperSingleton : NSObject
@@ -17,7 +22,7 @@
 //
 - (void)startWithOffsetInBytes:(NSNumber *)byteOffset;
 - (void)seekToPositionInBytes:(NSUInteger)bytes;
-//- (void)seekToPositionInSeconds:(NSUInteger)seconds;
+- (void)seekToPositionInSeconds:(NSUInteger)seconds;
 - (void)start;
 - (void)stop;
 - (void)playPause;
@@ -41,7 +46,7 @@
 @property (readonly) BOOL isPlaying;
 @property (readonly) NSUInteger bitRate;
 @property (readonly) NSUInteger currentByteOffset;
-@property (readonly) float progress;
+@property (readonly) double progress;
 @property (readonly) BOOL isEqualizerOn;
 @property (readonly) NSArray *equalizerValues;
 @property NSUInteger startByteOffset;

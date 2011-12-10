@@ -83,7 +83,8 @@
 // Document Paths
 @property (readonly) NSString *documentsPath;
 @property (readonly) NSString *databasePath;
-@property (readonly) NSString *cachePath;
+@property (readonly) NSString *cachesPath;
+@property (readonly) NSString *songCachePath;
 @property (readonly) NSString *tempCachePath;
 
 /*- (BOOL)isSelectedIndexForBassEffectADefault:(BassEffectType)type;

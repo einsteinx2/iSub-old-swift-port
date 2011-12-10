@@ -389,7 +389,8 @@
 		{			
 			if (currentSong.isFullyCached || byteOffset <= currentSong.localFileSize)
 			{
-				[bassWrapper seekToPositionInBytes:byteOffset];
+				[bassWrapper seekToPositionInSeconds:progressSlider.value];
+				//[bassWrapper seekToPositionInBytes:byteOffset];
 				pauseSlider = NO;
 				hasMoved = NO;
 			}

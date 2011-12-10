@@ -9,7 +9,7 @@
 #import "Song.h"
 #import "GTMNSString+HTML.h"
 #import "NSString+md5.h"
-#import "MusicSingleton.h"
+#import "SavedSettings.h"
 
 @implementation Song
 
@@ -310,7 +310,7 @@
 - (NSString *)localPath
 {
 	NSString *fileName = fileName = [[path md5] stringByAppendingPathExtension:self.localSuffix];
-	return [[MusicSingleton sharedInstance].audioFolderPath stringByAppendingPathComponent:fileName];
+	return [[SavedSettings sharedInstance].songCachePath stringByAppendingPathComponent:fileName];
 }
 
 - (unsigned long long)localFileSize

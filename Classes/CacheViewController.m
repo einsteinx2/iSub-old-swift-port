@@ -325,15 +325,12 @@
 		self.listOfArtistsSections = [NSMutableArray arrayWithCapacity:28];
 		
 		// Fix for slow load problem (EDIT: Looks like it didn't actually work :(
-		[databaseControls.inMemoryDb executeUpdate:@"DROP TABLE cachedSongsArtistList"];
-		[databaseControls.inMemoryDb executeUpdate:@"CREATE TABLE cachedSongsArtistList (artist TEXT UNIQUE)"];
-		[databaseControls.inMemoryDb executeUpdate:@"ATTACH DATABASE ? AS songCacheDb", [NSString stringWithFormat:@"%@/songCache.db", databaseControls.databaseFolderPath]];
-		if ([databaseControls.inMemoryDb hadError]) { DLog(@"Err attaching the songCacheDb %d: %@", [databaseControls.inMemoryDb lastErrorCode], [databaseControls.inMemoryDb lastErrorMessage]); }
-		[databaseControls.inMemoryDb executeUpdate:@"INSERT OR IGNORE INTO cachedSongsArtistList SELECT seg1 FROM cachedSongsLayout"];
-		[databaseControls.inMemoryDb executeUpdate:@"DETACH DATABASE songCacheDb"];
+		FMDatabase *db = databaseControls.songCacheDb;
+		[db executeUpdate:@"DROP TABLE IF EXISTS cachedSongsArtistList"];
+		[db executeUpdate:@"CREATE TEMP TABLE cachedSongsArtistList (artist TEXT UNIQUE)"];
+		[db executeUpdate:@"INSERT OR IGNORE INTO cachedSongsArtistList SELECT seg1 FROM cachedSongsLayout"];
 		
-		//FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT seg1 FROM cachedSongsLayout GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE"];
-		FMResultSet *result = [databaseControls.inMemoryDb executeQuery:@"SELECT artist FROM cachedSongsArtistList ORDER BY artist COLLATE NOCASE"];
+		FMResultSet *result = [db executeQuery:@"SELECT artist FROM cachedSongsArtistList ORDER BY artist COLLATE NOCASE"];
 		while ([result next])
 		{
 			//
@@ -371,17 +368,18 @@
 			[pool release];
 		}
 		[listOfArtists sortUsingSelector:@selector(caseInsensitiveCompare:)];
+		DLog(@"listOfArtists: %@", listOfArtists);
 		
 		// Create the section index
-		[databaseControls.inMemoryDb executeUpdate:@"DROP TABLE cachedSongsArtistIndex"];
-		[databaseControls.inMemoryDb executeUpdate:@"CREATE TABLE cachedSongsArtistIndex (artist TEXT)"];
+		[db executeUpdate:@"DROP TABLE IF EXISTS cachedSongsArtistIndex"];
+		[db executeUpdate:@"CREATE TEMP TABLE cachedSongsArtistIndex (artist TEXT)"];
 		for (NSString *artist in listOfArtists)
 		{
-			[databaseControls.inMemoryDb executeUpdate:@"INSERT INTO cachedSongsArtistIndex (artist) VALUES (?)", artist, nil];
+			[db executeUpdate:@"INSERT INTO cachedSongsArtistIndex (artist) VALUES (?)", artist, nil];
 		}
 		self.sectionInfo = nil; 
 		self.sectionInfo = [databaseControls sectionInfoFromTable:@"cachedSongsArtistIndex" 
-													   inDatabase:databaseControls.inMemoryDb 
+													   inDatabase:db 
 													   withColumn:@"artist"];
 		showIndex = YES;
 		if ([sectionInfo count] < 5)
@@ -448,6 +446,8 @@
 			}
 		}
 		
+		DLog(@"listOfArtists: %@", listOfArtists);
+		DLog(@"listOfArtistsSections: %@", listOfArtistsSections);
 		DLog(@"sectionInfo: %@", sectionInfo);
 		
 		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
@@ -587,16 +587,8 @@
 {
 	//if (queueDownloadProgressView != nil && appDelegate.isQueueListDownloading)
 	if (musicControls.isQueueListDownloading)
-	{
-		NSString *songMD5 = [musicControls.queueSongObject.path md5];
-		
-		NSString *fileName;
-		if (musicControls.queueSongObject.transcodedSuffix)
-			fileName = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", songMD5, musicControls.queueSongObject.transcodedSuffix]];
-		else
-			fileName = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", songMD5, musicControls.queueSongObject.suffix]];
-		
-		queueDownloadProgress = (unsigned long long int)[[[NSFileManager defaultManager] attributesOfItemAtPath:fileName error:NULL] fileSize];
+	{		
+		queueDownloadProgress = musicControls.queueSongObject.localFileSize;
 		
 		// Reload the cells
 		if (segmentedControl.selectedSegmentIndex == 1)
@@ -1197,9 +1189,9 @@
 			// Delete the song from disk
 			NSString *fileName;
 			if (transcodedSuffix)
-				fileName = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", rowMD5, transcodedSuffix]];
+				fileName = [settings.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", rowMD5, transcodedSuffix]];
 			else
-				fileName = [musicControls.audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", rowMD5, suffix]];
+				fileName = [settings.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", rowMD5, suffix]];
 			[[NSFileManager defaultManager] removeItemAtPath:fileName error:NULL];
 		}
 	}

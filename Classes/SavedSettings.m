@@ -396,14 +396,20 @@
 	return [self.documentsPath stringByAppendingPathComponent:@"database"];
 }
 
-- (NSString *)cachePath
+- (NSString *)cachesPath
 {
-	return [self.documentsPath stringByAppendingPathComponent:@"songCache"];
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+	return [paths objectAtIndex: 0];
+}
+
+- (NSString *)songCachePath
+{
+	return [self.cachesPath stringByAppendingPathComponent:@"songCache"];
 }
 
 - (NSString *)tempCachePath
 {
-	return [self.documentsPath stringByAppendingPathComponent:@"tempCache"];
+	return [self.cachesPath stringByAppendingPathComponent:@"tempCache"];
 }
 
 #pragma mark - Root Folders Settings

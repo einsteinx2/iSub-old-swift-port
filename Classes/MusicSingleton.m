@@ -44,7 +44,6 @@ static MusicSingleton *sharedInstance = nil;
 @synthesize queueSongObject, currentSongLyrics, coverArtUrl; 
 
 // Song cache stuff
-@synthesize documentsPath, audioFolderPath, tempAudioFolderPath;
 @synthesize receivedDataQueue, downloadQueue, downloadFileNameQueue, downloadFileNameHashQueue, audioFileQueue, downloadedLengthQueue, isQueueListDownloading;
 @synthesize bitRate, isTempDownload, showNowPlayingIcon;
 
@@ -190,12 +189,8 @@ static MusicSingleton *sharedInstance = nil;
 	self.downloadFileNameHashQueue = nil; self.downloadFileNameHashQueue = [queueSongObject.path md5];
 	
 	// Determine the name of the file we are downloading.
-	self.downloadFileNameQueue = nil;
-	if (queueSongObject.transcodedSuffix)
-		self.downloadFileNameQueue = [audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", downloadFileNameHashQueue, queueSongObject.transcodedSuffix]];
-	else
-		self.downloadFileNameQueue = [audioFolderPath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", downloadFileNameHashQueue, queueSongObject.suffix]];
-	
+	self.downloadFileNameQueue = queueSongObject.localPath;
+
 	// Check to see if the song is already cached
 	if ([databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE md5 = ?", downloadFileNameHashQueue])
 	{
@@ -523,44 +518,16 @@ static MusicSingleton *sharedInstance = nil;
 	}
 }
 
-/*- (void)nextSongAuto
-{	
-	// If it's in regular play mode, then go to the next track.
-	if(repeatMode == 0)
-	{
-		[self nextSong];
-	}
-	// If it's in repeat-one mode then just restart the streamer
-	else if(repeatMode == 1)
-	{
-		[self startSong];
-	}
-	// If it's in repeat-all mode then check if it's at the end of the playlist and start from the beginning, or just go to the next track.
-	else if(repeatMode == 2)
-	{
-		SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
-		
-		NSInteger index = dataModel.currentIndex + 1;
-		
-		if (index <= ([databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"] - 1)) {
-			[self nextSong];
-		}
-		else {
-			[self playSongAtPosition:0];
-		}
-	}
-}*/
-
+// Resume song after iSub shuts down
 - (void)resumeSong
 {	
+	return;
 	SavedSettings *settings = [SavedSettings sharedInstance];
 	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
 	DLog(@"currentSong: %@", currentSong);
 		
 	if (currentSong && settings.isRecover)
-	{
-		//self.songUrl = [NSURL URLWithString:[appDelegate getStreamURLStringForSongId:currentSongObject.songId]];
-		
+	{		
 		// Check to see if the song is an m4a, if so don't resume and display message
 		BOOL isM4A = NO;
 		if (currentSong.transcodedSuffix)
@@ -633,65 +600,6 @@ static MusicSingleton *sharedInstance = nil;
 	}
 		
 	return bitrate;
-}
-
-- (void) removeOldestCachedSongs
-{
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-	
-	SavedSettings *settings = [SavedSettings sharedInstance];
-	
-	unsigned long long int freeSpace = [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:audioFolderPath error:NULL] objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
-	unsigned long long minFreeSpace = settings.minFreeSpace;
-	unsigned long long maxCacheSize = settings.maxCacheSize;
-	NSString *songMD5;
-	int songSize;
-	
-	if (settings.cachingType == 0)
-	{
-		// Remove the oldest songs based on either oldest played or oldest cached until free space is more than minFreeSpace
-		while (freeSpace < minFreeSpace)
-		{
-			if (settings.autoDeleteCacheType == 0)
-				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
-			else
-				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY chachedDate ASC LIMIT 1"];
-			[Song removeSongFromCacheDbByMD5:songMD5];
-			
-			freeSpace = [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:audioFolderPath error:NULL] objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
-		}
-	}
-	else if (settings.cachingType == 1)
-	{
-		// Remove the oldest songs based on either oldest played or oldest cached until cache size is less than maxCacheSize
-		unsigned long long cacheSize = 0;
-		for (NSString *path in [[NSFileManager defaultManager] subpathsAtPath:documentsPath]) 
-		{
-			cacheSize += [[[NSFileManager defaultManager] attributesOfItemAtPath:[documentsPath stringByAppendingPathComponent:path] error:NULL] fileSize];
-		}
-		
-		while (cacheSize > maxCacheSize)
-		{
-			if (settings.autoDeleteCacheType == 0)
-			{
-				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
-			}
-			else
-			{
-				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY chachedDate ASC LIMIT 1"];
-			}
-			songSize = [databaseControls.songCacheDb intForQuery:@"SELECT size FROM cachedSongs WHERE md5 = ?", songMD5];
-
-			[Song removeSongFromCacheDbByMD5:songMD5];
-
-			cacheSize = cacheSize - songSize;
-			
-			// Sleep the thread so the repeated cacheSize calls don't kill performance
-			[NSThread sleepForTimeInterval:5];
-		}
-	}
-	
-	[autoreleasePool release];
 }
 
 - (BOOL)showPlayerIcon
@@ -1201,20 +1109,6 @@ static MusicSingleton *sharedInstance = nil;
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	databaseControls = [DatabaseSingleton sharedInstance];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
-	
-	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	self.documentsPath = [paths objectAtIndex: 0];
-	self.audioFolderPath = [documentsPath stringByAppendingPathComponent:@"songCache"];
-	self.tempAudioFolderPath = [documentsPath stringByAppendingPathComponent:@"tempCache"];
-	
-	// Make sure songCache and tempCache directories exist, if not create them
-	BOOL isDir = YES;
-	if (![[NSFileManager defaultManager] fileExistsAtPath:audioFolderPath isDirectory:&isDir]) 
-	{
-		[[NSFileManager defaultManager] createDirectoryAtPath:audioFolderPath withIntermediateDirectories:YES attributes:nil error:NULL];
-	}
-	[[NSFileManager defaultManager] removeItemAtPath:tempAudioFolderPath error:NULL];
-	[[NSFileManager defaultManager] createDirectoryAtPath:tempAudioFolderPath withIntermediateDirectories:YES attributes:nil error:NULL];
 	
 	self.showNowPlayingIcon = NO;
 	self.isShuffle = NO;

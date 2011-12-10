@@ -28,7 +28,7 @@
 #define kMaxBytesPerSecWifi ((kMaxKilobitsPerSecWifi * 1024) / 8)
 #define kMaxBytesPerIntervalWifi (kMaxBytesPerSecWifi * kThrottleTimeInterval)
 
-#define kMinBytesToStartPlayback (1024 * 200)		// Number of bytes to wait before activating the player (200 KB)
+#define kMinBytesToStartPlayback (1024 * 300)		// Number of bytes to wait before activating the player (300 KB)
 #define kMinBytesToStartLimiting (1024 * 1024)	// Start throttling bandwidth after 1 MB downloaded for 160kbps files (adjusted accordingly by bitrate)
 
 // Logging
@@ -90,7 +90,7 @@
 }
 
 // Create the request and start the connection in loadingThread
-- (void)start
+- (void)start:(BOOL)resume
 {
 	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 	
@@ -99,18 +99,30 @@
 	
 	if (self.fileHandle)
 	{
-		// File exists so seek to end
-		//totalBytesTransferred = [self.fileHandle seekToEndOfFile];
-		
-		// File exists so remove it
-		[self.fileHandle closeFile];
-		[[NSFileManager defaultManager] removeItemAtPath:mySong.localPath error:NULL];
+		if (resume)
+		{
+			// File exists so seek to end
+			totalBytesTransferred = [self.fileHandle seekToEndOfFile];
+		}
+		else
+		{
+			// File exists so remove it
+			[self.fileHandle closeFile];
+			[[NSFileManager defaultManager] removeItemAtPath:mySong.localPath error:NULL];
+		}
 	}
 	
-	// Create the file
-	totalBytesTransferred = 0;
-	[[NSFileManager defaultManager] createFileAtPath:mySong.localPath contents:[NSData data] attributes:nil];
-	self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:mySong.localPath];
+	if (resume)
+	{
+		byteOffset = totalBytesTransferred;
+	}
+	else
+	{
+		// Create the file
+		totalBytesTransferred = 0;
+		[[NSFileManager defaultManager] createFileAtPath:mySong.localPath contents:[NSData data] attributes:nil];
+		self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:mySong.localPath];
+	}
 	
 	NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(mySong.songId), @"id", nil];
 	if ([musicControls maxBitrateSetting] != 0)
@@ -137,6 +149,11 @@
 	
 	[loadingThread start];
 	
+}
+
+- (void)start
+{
+	[self start:NO];
 }
 
 // loadingThread entry point

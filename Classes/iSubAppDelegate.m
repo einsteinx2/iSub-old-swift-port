@@ -161,7 +161,7 @@
 	[databaseControls initDatabases];
 	
 	// Setup Twitter connection
-	if (!viewObjects.isOfflineMode && [[NSUserDefaults standardUserDefaults] objectForKey: @"twitterAuthData"])
+	if (!viewObjects.isOfflineMode && [[NSUserDefaults standardUserDefaults] objectForKey:@"twitterAuthData"])
 	{
 		[socialControls createTwitterEngine];
 	}
@@ -232,7 +232,7 @@
 	}
     
 	// Recover current state if player was interrupted
-	//[musicControls resumeSong];
+	[musicControls resumeSong];
 }
 
 - (void)checkServer

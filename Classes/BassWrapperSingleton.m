@@ -184,13 +184,13 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	@autoreleasepool 
 	{
 		Song *nextSong = currPlaylistDAO.nextSong;
-		HSTREAM stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], [silence intValue], 0, 
-											   BASS_SAMPLE_FLOAT | BASS_STREAM_DECODE);
+		//HSTREAM stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], [silence intValue], 0, BASS_SAMPLE_FLOAT | BASS_STREAM_DECODE);
+		HSTREAM stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], [silence intValue], 0, BASS_STREAM_DECODE);
 		
 		if (!stream)
 		{
-			stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], 0, 0, 
-										   BASS_SAMPLE_FLOAT | BASS_STREAM_DECODE);
+			//stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], 0, 0, BASS_SAMPLE_FLOAT | BASS_STREAM_DECODE);
+			stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], 0, 0, BASS_STREAM_DECODE);
 		}
 		
 		if (!stream)
@@ -254,14 +254,16 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	
 	[self bassInit];
 	
+	BASS_INFO info;
+	if (!BASS_GetInfo(&info))
+		DLog(@"error: %i", BASS_ErrorGetCode());
+	
+	
 	if (currentSong.fileExists)
 	{
-		//fileStream1 = BASS_StreamCreateFile(false, [currentSong.localPath cStringUTF8], startByteOffset, 0, BASS_SAMPLE_FLOAT);
-		//BASS_ChannelPlay(fileStream1, FALSE);
-		
 		BASS_CHANNELINFO info;
-		fileStream1 = BASS_StreamCreateFile(false, [currentSong.localPath cStringUTF8], startByteOffset, 0, 
-											BASS_SAMPLE_FLOAT | BASS_STREAM_DECODE);
+		//fileStream1 = BASS_StreamCreateFile(false, [currentSong.localPath cStringUTF8], startByteOffset, 0,BASS_SAMPLE_FLOAT | BASS_STREAM_DECODE);
+		fileStream1 = BASS_StreamCreateFile(false, [currentSong.localPath cStringUTF8], startByteOffset, 0, BASS_STREAM_DECODE);
 		if (fileStream1)
 		{
 			DLog(@"currentSong: %llu", (long long int)fileStream1);
@@ -269,8 +271,8 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 			
 			isFilestream1 = YES;
 			
-			outStream = BASS_StreamCreate(info.freq, info.chans, 
-										  BASS_SAMPLE_FLOAT, &MyStreamProc, 0); // create the output stream
+			//outStream = BASS_StreamCreate(info.freq, info.chans, BASS_SAMPLE_FLOAT, &MyStreamProc, 0); // create the output stream
+			outStream = BASS_StreamCreate(info.freq, info.chans, 0, &MyStreamProc, 0); // create the output stream
 			
 			if (isEqualizerOn)
 			{
@@ -282,6 +284,10 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 			[self performSelectorInBackground:@selector(prepareNextSongStream) withObject:nil];
 			
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
+		}
+		else
+		{
+			DLog(@"BASS error: %i", BASS_ErrorGetCode());
 		}
 		/*else 
 		{
@@ -391,11 +397,11 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	[self bassFree];
 		
 	BASS_SetConfig(BASS_CONFIG_IOS_MIXAUDIO, 0); // Disable mixing.	To be called before BASS_Init.
-	BASS_SetConfig(BASS_CONFIG_BUFFER, 1500);
+	BASS_SetConfig(BASS_CONFIG_BUFFER, ISMS_BASSBufferSize);
 	BASS_SetConfig(BASS_CONFIG_FLOATDSP, true);
 	
 	// Initialize default device.
-	if (!BASS_Init(-1, 96000, 0, NULL, NULL)) 
+	if (!BASS_Init(-1, 44100, 0, NULL, NULL)) 
 	{
 		DLog(@"Can't initialize device");
 	}
@@ -435,40 +441,30 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	return self.bitRate * 128 * self.progress;
 }
 
-- (float)progress
+- (double)progress
 {
-	HSTREAM stream = self.currentStream;
-    
-	NSUInteger bytePosition;
-	//if (isStartFromOffset)
-	//	bytePosition = BASS_StreamGetFilePosition(stream, BASS_FILEPOS_START) + BASS_StreamGetFilePosition(stream, BASS_FILEPOS_CURRENT);
-	//else
-	//	bytePosition = BASS_StreamGetFilePosition(stream, BASS_FILEPOS_CURRENT);
-    bytePosition = BASS_StreamGetFilePosition(stream, BASS_FILEPOS_CURRENT) + startByteOffset;
-	
-	float bitRateInBytes = (float)((self.bitRate * 1024) / 8);
-	float progress = bytePosition / bitRateInBytes;
-
-	if (isfinite(progress))
-		return progress;
-
-	return 0;
+	NSUInteger bytePosition = BASS_ChannelGetPosition(self.currentStream, BASS_POS_BYTE) + startByteOffset;
+	double seconds = BASS_ChannelBytes2Seconds(self.currentStream, bytePosition);
+	if (seconds < 0)
+		DLog(@"error: %i", BASS_ErrorGetCode());
+	return seconds;
 }
 
 - (void)seekToPositionInBytes:(NSUInteger)bytes
 {
-	[self startWithOffsetInBytes:[NSNumber numberWithInt:bytes]];
+	DLog(@"seekToPositionInBytes: %i", bytes);
+	BASS_ChannelSetPosition(self.currentStream, bytes, BASS_POS_BYTE);
+	startByteOffset = bytes;
 }
 
-/*- (void)seekToPositionInSeconds:(NSUInteger)seconds
+- (void)seekToPositionInSeconds:(NSUInteger)seconds
 {
-	//NSUInteger byteOffset = self.bitRate * 128 * seconds;
-	//[self seekToPositionInBytes:byteOffset];
-
-	HSTREAM stream = self.currentStream;
-	NSUInteger bytes = BASS_ChannelSeconds2Bytes(stream, seconds);
-	[self startWithOffsetInBytes:bytes];
-}*/
+	// I have no idea why this needs to be devided by 2, but it works lol
+	double bufferInSeconds = (double)ISMS_BASSBufferSize / 1000.0;
+	double actualSecondsToSkip = (double)seconds - (bufferInSeconds / 2.0); // Make up for the buffer size
+	NSUInteger bytes = BASS_ChannelSeconds2Bytes(self.currentStream, actualSecondsToSkip) / 2.0;
+	[self seekToPositionInBytes:bytes];
+}
 
 - (void)clearEqualizer
 {
@@ -520,10 +516,6 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	
 	if (isEqualizerOn)
 	{
-		//BASS_DX8_PARAMEQ oldP;
-		//BASS_FXGetParameters(value.handle, &oldP);
-		//DLog(@"old values: handle: %i   center: %f  gain: %f   bandwidth: %f", value.handle, oldP.fCenter, oldP.fGain, oldP.fBandwidth);
-		
 		BASS_DX8_PARAMEQ p = value.parameters;
 		DLog(@"updating eq for handle: %i   new freq: %f   new gain: %f", value.handle, p.fCenter, p.fGain);
 		BASS_FXSetParameters(value.handle, &p);

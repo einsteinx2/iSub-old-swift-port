@@ -13,6 +13,7 @@
 #import "SocialSingleton.h"
 #import "DatabaseSingleton.h"
 #import "RootViewController.h"
+#import "CacheSingleton.h"
 
 #import "SA_OAuthTwitterEngine.h"
 #import "SA_OAuthTwitterController.h"
@@ -64,6 +65,7 @@
 	musicControls = [MusicSingleton sharedInstance];
 	socialControls = [SocialSingleton sharedInstance];
 	databaseControls = [DatabaseSingleton sharedInstance];
+	CacheSingleton *cacheControls = [CacheSingleton sharedInstance];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTwitterUIElements) name:@"twitterAuthenticated" object:nil];
 	
@@ -114,8 +116,8 @@
 	
 	enableNextSongCacheSwitch.on = settings.isNextSongCacheEnabled;
 		
-	totalSpace = [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:musicControls.audioFolderPath error:NULL] objectForKey:NSFileSystemSize] unsignedLongLongValue];
-	freeSpace = [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:musicControls.audioFolderPath error:NULL] objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
+	totalSpace = cacheControls.totalSpace;
+	freeSpace = cacheControls.freeSpace;
 	freeSpaceLabel.text = [NSString stringWithFormat:@"Free space: %@", [settings formatFileSize:freeSpace]];
 	totalSpaceLabel.text = [NSString stringWithFormat:@"Total space: %@", [settings formatFileSize:totalSpace]];
 	float percentFree = (float) freeSpace / (float) totalSpace;

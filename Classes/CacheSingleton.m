@@ -19,9 +19,14 @@ static CacheSingleton *sharedInstance = nil;
 
 @synthesize cacheCheckInterval, cacheSize;
 
+- (unsigned long long)totalSpace
+{
+	return [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:[SavedSettings sharedInstance].cachesPath error:NULL] objectForKey:NSFileSystemSize] unsignedLongLongValue];
+}
+
 - (unsigned long long)freeSpace
 {
-	return [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:[SavedSettings sharedInstance].cachePath error:NULL] objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
+	return [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:[SavedSettings sharedInstance].cachesPath error:NULL] objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
 }
 
 - (void)startCacheCheckTimer
@@ -60,15 +65,15 @@ static CacheSingleton *sharedInstance = nil;
 	//if ([[settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 1)
 	if (settings.cachingType == 1)
 	{
-		unsigned long long int freeSpace = [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:settings.cachePath error:NULL] objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
-		unsigned long long int maxCacheSize = settings.maxCacheSize;
+		unsigned long long freeSpace = self.freeSpace;
+		unsigned long long maxCacheSize = settings.maxCacheSize;
 		
 		NSLog(@"adjustCacheSize:  freeSpace = %llu  maxCacheSize = %llu", freeSpace, maxCacheSize);
 		
 		if (freeSpace < maxCacheSize)
 		{
-			unsigned long long int newMaxCacheSize = freeSpace - 26214400; // Set the max cache size to 25MB less than the free space
-			settings.maxCacheSize = newMaxCacheSize;
+			// Set the max cache size to 25MB less than the free space
+			settings.maxCacheSize = freeSpace - 26214400;
 		}
 	}
 }
@@ -115,9 +120,9 @@ static CacheSingleton *sharedInstance = nil;
 			//DLog(@"currentSongObject.path: %@", currentSongObject.path);
 			NSString *songPath = nil;
 			if (aSong.transcodedSuffix)
-				songPath = [settings.cachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", songMD5, aSong.transcodedSuffix]];
+				songPath = [settings.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", songMD5, aSong.transcodedSuffix]];
 			else
-				songPath = [settings.cachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", songMD5, aSong.suffix]];
+				songPath = [settings.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", songMD5, aSong.suffix]];
 			
 			unsigned long long songSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:songPath error:NULL] fileSize];
 			
@@ -140,9 +145,9 @@ static CacheSingleton *sharedInstance = nil;
 	SavedSettings *settings = [SavedSettings sharedInstance];
 		
 	unsigned long long size = 0;
-	for (NSString *path in [[NSFileManager defaultManager] subpathsAtPath:settings.cachePath]) 
+	for (NSString *path in [[NSFileManager defaultManager] subpathsAtPath:settings.songCachePath]) 
 	{
-		size += [[[NSFileManager defaultManager] attributesOfItemAtPath:[settings.cachePath stringByAppendingPathComponent:path] error:NULL] fileSize];
+		size += [[[NSFileManager defaultManager] attributesOfItemAtPath:[settings.songCachePath stringByAppendingPathComponent:path] error:NULL] fileSize];
 	}
 	
 	cacheSize = size;
@@ -220,10 +225,28 @@ static CacheSingleton *sharedInstance = nil;
 			
 - (void)setup
 {
+	SavedSettings *settings = [SavedSettings sharedInstance];
+	NSFileManager *defaultManager = [NSFileManager defaultManager];
+	
+	// Move the cache path if necessary
+	if ([defaultManager fileExistsAtPath:[settings.documentsPath stringByAppendingPathComponent:@"songCache"]]) 
+	{
+		// The song cache is in the old place, move it
+		[defaultManager moveItemAtURL:[NSURL fileURLWithPath:[settings.documentsPath stringByAppendingPathComponent:@"songCache"]] 
+								toURL:[NSURL fileURLWithPath:settings.songCachePath] error:nil];
+	}
+	// Make sure songCache directory exists, if not create it
+	if (![[NSFileManager defaultManager] fileExistsAtPath:settings.songCachePath]) 
+	{
+		[[NSFileManager defaultManager] createDirectoryAtPath:settings.songCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
+	}
+	// Clear the temp cache directory
+	[[NSFileManager defaultManager] removeItemAtPath:settings.tempCachePath error:NULL];
+	[[NSFileManager defaultManager] createDirectoryAtPath:settings.tempCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
+	
+	// Setup the cache check
 	cacheCheckInterval = 120.0;
-	
 	[self adjustCacheSize];
-	
 	[self checkCache];
 	[self startCacheCheckTimer];
 }

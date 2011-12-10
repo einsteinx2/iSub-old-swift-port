@@ -88,10 +88,15 @@ static SUSStreamSingleton *sharedInstance = nil;
 	[handlerStack removeObject:handler];
 }
 
+- (void)startHandler:(SUSStreamHandler *)handler resume:(BOOL)resume
+{
+	[handler start:resume];
+	[lyricsDataModel loadLyricsForArtist:handler.mySong.artist andTitle:handler.mySong.title];
+}
+
 - (void)startHandler:(SUSStreamHandler *)handler
 {
-	[handler start];
-	[lyricsDataModel loadLyricsForArtist:handler.mySong.artist andTitle:handler.mySong.title];
+	[self startHandler:handler resume:NO];
 }
 
 #pragma mark Download
@@ -102,25 +107,28 @@ static SUSStreamSingleton *sharedInstance = nil;
 		return;
 	
 	SUSStreamHandler *handler = [[SUSStreamHandler alloc] initWithSong:song offset:byteOffset delegate:self];
-	[handlerStack insertObject:handler atIndex:index];
-	[handler release];
-	
-	if ([handlerStack count] == 1)
+	if (![handlerStack containsObject:handler])
 	{
-		[self startHandler:handler];
+		[handlerStack insertObject:handler atIndex:index];
+		[handler release];
+		
+		if ([handlerStack count] == 1)
+		{
+			[self startHandler:handler];
+		}
+		
+		// Also download the album art
+		if (song.coverArtId)
+		{
+			SUSCoverArtLargeDAO *artDataModel = [SUSCoverArtLargeDAO dataModel];
+			if (![artDataModel coverArtExistsForId:song.coverArtId])
+			{
+				DLog(@"Cover art doesn't exist, loading for id: %@", song.coverArtId);
+				SUSCoverArtLargeLoader *loader = [[SUSCoverArtLargeLoader alloc] initWithDelegate:self];
+				[loader loadCoverArtId:song.coverArtId];
+			}
+		}
 	}
-    
-    // Also download the album art
-    if (song.coverArtId)
-    {
-        SUSCoverArtLargeDAO *artDataModel = [SUSCoverArtLargeDAO dataModel];
-        if (![artDataModel coverArtExistsForId:song.coverArtId])
-        {
-            DLog(@"Cover art doesn't exist, loading for id: %@", song.coverArtId);
-            SUSCoverArtLargeLoader *loader = [[SUSCoverArtLargeLoader alloc] initWithDelegate:self];
-            [loader loadCoverArtId:song.coverArtId];
-        }
-    }
 }
 
 - (void)queueStreamForSong:(Song *)song atIndex:(NSUInteger)index
@@ -142,11 +150,25 @@ static SUSStreamSingleton *sharedInstance = nil;
 {
 	Song *nextSong = [SUSCurrentPlaylistDAO dataModel].nextSong;
 
-	// The file doesn't exist or it's not fully cached, start downloading it from the middle
+	// The file doesn't exist or it's not fully cached, start downloading it from the beginning
 	if (nextSong && (!nextSong.fileExists || (!nextSong.isFullyCached && ![ViewObjectsSingleton sharedInstance].isOfflineMode)))
 	{
-		DLog(@"nextSong: %@  file exists: %i  is fully cached: %i   isOfflineMode: %i", nextSong, nextSong.fileExists, nextSong.isFullyCached, [ViewObjectsSingleton sharedInstance].isOfflineMode);
 		[self queueStreamForSong:nextSong];
+	}
+}
+
+- (void)fillStreamQueue
+{
+	if ([handlerStack count] < ISMSNumberOfStreamsToQueue)
+	{
+		for (int i = 0; i < ISMSNumberOfStreamsToQueue; i++)
+		{
+			Song *aSong = [[SUSCurrentPlaylistDAO dataModel] songForIndex:i];
+			if (aSong && (!aSong.fileExists || (!aSong.isFullyCached && ![ViewObjectsSingleton sharedInstance].isOfflineMode)))
+			{
+				[self queueStreamForSong:aSong];
+			}
+		}
 	}
 }
 
@@ -178,7 +200,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 		DLog(@"retrying stream handler");
 		// Less than max number of reconnections, so try again 
 		handler.numOfReconnects++;
-		[self startHandler:handler];
+		[self startHandler:handler resume:YES];
 	}
 	else
 	{

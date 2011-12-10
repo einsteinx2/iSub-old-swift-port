@@ -31,12 +31,6 @@
 @property (nonatomic, retain) NSString *currentSongLyrics;
 @property (nonatomic, retain) NSURL *coverArtUrl;
 
-// Song caching stuff
-//
-@property (nonatomic, retain) NSString *documentsPath;
-@property (nonatomic, retain) NSString *audioFolderPath;
-@property (nonatomic, retain) NSString *tempAudioFolderPath;
-
 @property (nonatomic, retain) NSMutableData *receivedDataQueue;
 @property (nonatomic, retain) NSURLConnection *downloadQueue;
 @property (nonatomic, retain) NSString *downloadFileNameQueue;
