@@ -327,39 +327,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/BassWrapperSingleton.m"
-         timestampString = "345180606.810014"
+         timestampString = "345258061.512408"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "261"
-         endingLineNumber = "261"
-         landmarkName = "-startWithOffsetInBytes:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Classes/BassWrapperSingleton.m"
-         timestampString = "345180606.810014"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "262"
-         endingLineNumber = "262"
-         landmarkName = "-startWithOffsetInBytes:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Classes/BassWrapperSingleton.m"
-         timestampString = "345180606.810014"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "268"
-         endingLineNumber = "268"
+         startingLineNumber = "307"
+         endingLineNumber = "307"
          landmarkName = "-startWithOffsetInBytes:"
          landmarkType = "5">
       </FileBreakpoint>

@@ -28,11 +28,12 @@
 #define kMaxBytesPerSecWifi ((kMaxKilobitsPerSecWifi * 1024) / 8)
 #define kMaxBytesPerIntervalWifi (kMaxBytesPerSecWifi * kThrottleTimeInterval)
 
-#define kMinBytesToStartPlayback (1024 * 300)		// Number of bytes to wait before activating the player (300 KB)
+#define kMinKiloBytesToStartPlayback 20000
+#define kMinBytesToStartPlayback (1024 * kMinKiloBytesToStartPlayback) // Number of bytes to wait before activating the player
 #define kMinBytesToStartLimiting (1024 * 1024)	// Start throttling bandwidth after 1 MB downloaded for 160kbps files (adjusted accordingly by bitrate)
 
 // Logging
-#define isProgressLoggingEnabled NO
+#define isProgressLoggingEnabled YES
 #define isThrottleLoggingEnabled NO
 
 @implementation SUSStreamHandler
@@ -314,7 +315,7 @@
 	
 	totalBytesTransferred += dataLength;
 	bytesTransferred += dataLength;
-	
+		
 	// Save the data to the file
 	[fileHandle writeData:incrementalData];
 	

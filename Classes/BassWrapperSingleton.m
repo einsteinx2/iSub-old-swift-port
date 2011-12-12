@@ -184,13 +184,13 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	@autoreleasepool 
 	{
 		Song *nextSong = currPlaylistDAO.nextSong;
-		//HSTREAM stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], [silence intValue], 0, BASS_SAMPLE_FLOAT | BASS_STREAM_DECODE);
-		HSTREAM stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], [silence intValue], 0, BASS_STREAM_DECODE);
+		HSTREAM stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], [silence intValue], 0, BASS_SAMPLE_FLOAT | BASS_STREAM_DECODE);
+		//HSTREAM stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], [silence intValue], 0, BASS_STREAM_DECODE);
 		
 		if (!stream)
 		{
-			//stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], 0, 0, BASS_SAMPLE_FLOAT | BASS_STREAM_DECODE);
-			stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], 0, 0, BASS_STREAM_DECODE);
+			stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], 0, 0, BASS_SAMPLE_FLOAT | BASS_STREAM_DECODE);
+			//stream = BASS_StreamCreateFile(FALSE, [nextSong.localPath cStringUTF8], 0, 0, BASS_STREAM_DECODE);
 		}
 		
 		if (!stream)
@@ -239,6 +239,35 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	return count;
 }
 
+// translate a CTYPE value to text
+const char *GetCTypeString(DWORD ctype, HPLUGIN plugin)
+{
+	if (plugin) { // using a plugin
+		const BASS_PLUGININFO *pinfo=BASS_PluginGetInfo(plugin); // get plugin info
+		int a;
+		for (a=0;a<pinfo->formatc;a++) {
+			if (pinfo->formats[a].ctype==ctype) // found a "ctype" match...
+				return pinfo->formats[a].name; // return it's name
+		}
+	}
+	// check built-in stream formats...
+	if (ctype==BASS_CTYPE_STREAM_OGG) return "Ogg Vorbis";
+	if (ctype==BASS_CTYPE_STREAM_MP1) return "MPEG layer 1";
+	if (ctype==BASS_CTYPE_STREAM_MP2) return "MPEG layer 2";
+	if (ctype==BASS_CTYPE_STREAM_MP3) return "MPEG layer 3";
+	if (ctype==BASS_CTYPE_STREAM_AIFF) return "Audio IFF";
+	if (ctype==BASS_CTYPE_STREAM_WAV_PCM) return "PCM WAVE";
+	if (ctype==BASS_CTYPE_STREAM_WAV_FLOAT) return "Floating-point WAVE";
+	if (ctype&BASS_CTYPE_STREAM_WAV) return "WAVE";
+	if (ctype==BASS_CTYPE_STREAM_CA) { // CoreAudio codec
+		static char buf[100];
+		const TAG_CA_CODEC *codec=(TAG_CA_CODEC*)BASS_ChannelGetTags(fileStream1,BASS_TAG_CA_CODEC); // get codec info
+		snprintf(buf,sizeof(buf),"CoreAudio: %s",codec->name);
+		return buf;
+	}
+	return "?";
+}
+
 - (void)startWithOffsetInBytes:(NSNumber *)byteOffset
 {	
 	if (currPlaylistDAO.currentIndex >= currPlaylistDAO.count)
@@ -261,13 +290,26 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	
 	if (currentSong.fileExists)
 	{
+		/*fileStream1 = BASS_StreamCreateFile(FALSE,[currentSong.localPath cStringUTF8],0,0,BASS_SAMPLE_LOOP|BASS_SAMPLE_FLOAT);
+		BASS_ChannelPlay(fileStream1, FALSE);
 		BASS_CHANNELINFO info;
-		//fileStream1 = BASS_StreamCreateFile(false, [currentSong.localPath cStringUTF8], startByteOffset, 0,BASS_SAMPLE_FLOAT | BASS_STREAM_DECODE);
-		fileStream1 = BASS_StreamCreateFile(false, [currentSong.localPath cStringUTF8], startByteOffset, 0, BASS_STREAM_DECODE);
+		BASS_ChannelGetInfo(fileStream1,&info);
+		QWORD bytes=BASS_ChannelGetLength(fileStream1,BASS_POS_BYTE);
+		DWORD time=BASS_ChannelBytes2Seconds(fileStream1,bytes);
+		DLog("channel type = %x (%s)\nlength = %llu (%u:%02u)", info.ctype,GetCTypeString(info.ctype,info.plugin),bytes,time/60,time%60);*/
+		
+		
+		BASS_CHANNELINFO info;
+		
+		fileStream1 = BASS_StreamCreateFile(false, [currentSong.localPath cStringUTF8], startByteOffset, 0, BASS_SAMPLE_SOFTWARE|BASS_SAMPLE_LOOP|BASS_STREAM_DECODE);
+		//fileStream1 = BASS_StreamCreateFile(false, [currentSong.localPath cStringUTF8], startByteOffset, 0, BASS_STREAM_DECODE);
 		if (fileStream1)
 		{
-			DLog(@"currentSong: %llu", (long long int)fileStream1);
+			DLog(@"currentSong: %i", fileStream1);
 			BASS_ChannelGetInfo(fileStream1, &info);
+			QWORD bytes=BASS_ChannelGetLength(fileStream1,BASS_POS_BYTE);
+			DWORD time=BASS_ChannelBytes2Seconds(fileStream1,bytes);
+			DLog("channel type = %x (%s)\nlength = %llu (%u:%02u)  flags: %i  freq: %i  origres: %i", info.ctype,GetCTypeString(info.ctype,info.plugin),bytes,time/60,time%60, info.flags, info.freq, info.origres);
 			
 			isFilestream1 = YES;
 			
@@ -390,6 +432,15 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	DLog(@"audio interrupted");
 }
 
+NSString *NSStringFromOSStatus(OSStatus errCode)
+{
+    if (errCode == noErr)
+        return @"noErr";
+    char message[5] = {0};
+    *(UInt32*) message = CFSwapInt32HostToBig(errCode);
+    return [NSString stringWithCString:message encoding:NSASCIIStringEncoding];
+}
+
 - (void)bassInit
 {
     isTempDownload = NO;
@@ -401,10 +452,15 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	BASS_SetConfig(BASS_CONFIG_FLOATDSP, true);
 	
 	// Initialize default device.
-	if (!BASS_Init(-1, 44100, 0, NULL, NULL)) 
+	if (!BASS_Init(-1, 22050, 0, NULL, NULL)) 
 	{
 		DLog(@"Can't initialize device");
 	}
+	
+	Float64 sampleRate;
+	UInt32 size = sizeof(Float64);
+	OSStatus status = AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareSampleRate, &size, &sampleRate);
+	NSLog(@"sample rate: %f   status: %@", sampleRate, NSStringFromOSStatus(status));
 		
 	BASS_PluginLoad(&BASSFLACplugin, 0);
 	

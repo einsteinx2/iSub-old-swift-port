@@ -64,6 +64,9 @@
 		531F1597126F711100F524BD /* HomeXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F1596126F711100F524BD /* HomeXMLParser.m */; };
 		531F166E126FA2E600F524BD /* HomeAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F166D126FA2E600F524BD /* HomeAlbumViewController.m */; };
 		5324C6C613345D75004E6C79 /* OBSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5324C6C513345D75004E6C79 /* OBSlider.m */; };
+		5325EFA11494345B00704975 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5325EFA01494345B00704975 /* libbass.a */; };
+		5325EFA21494345B00704975 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5325EFA01494345B00704975 /* libbass.a */; };
+		5325EFA31494345B00704975 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5325EFA01494345B00704975 /* libbass.a */; };
 		53260B83127D012300B745B4 /* EGORefreshTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53260B78127D012300B745B4 /* EGORefreshTableHeaderView.m */; };
 		53260B84127D012300B745B4 /* blackArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7A127D012300B745B4 /* blackArrow.png */; };
 		53260B85127D012300B745B4 /* blackArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7B127D012300B745B4 /* blackArrow@2x.png */; };
@@ -407,9 +410,6 @@
 		53B38BD91474C95300CD8A99 /* BassWrapperSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B38BD81474C95200CD8A99 /* BassWrapperSingleton.m */; };
 		53B38BDA1474C95300CD8A99 /* BassWrapperSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B38BD81474C95200CD8A99 /* BassWrapperSingleton.m */; };
 		53B38BDB1474C95300CD8A99 /* BassWrapperSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B38BD81474C95200CD8A99 /* BassWrapperSingleton.m */; };
-		53B38BFB14758D5200CD8A99 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53B38BFA14758D5200CD8A99 /* libbass.a */; };
-		53B38BFC14758D5200CD8A99 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53B38BFA14758D5200CD8A99 /* libbass.a */; };
-		53B38BFD14758D5200CD8A99 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53B38BFA14758D5200CD8A99 /* libbass.a */; };
 		53B38C12147593FA00CD8A99 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53B38C11147593F900CD8A99 /* AVFoundation.framework */; };
 		53B38C131475940400CD8A99 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53B38C11147593F900CD8A99 /* AVFoundation.framework */; };
 		53B38C141475940700CD8A99 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53B38C11147593F900CD8A99 /* AVFoundation.framework */; };
@@ -1804,6 +1804,7 @@
 		531F166D126FA2E600F524BD /* HomeAlbumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeAlbumViewController.m; sourceTree = "<group>"; };
 		5324C6C413345D75004E6C79 /* OBSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBSlider.h; sourceTree = "<group>"; };
 		5324C6C513345D75004E6C79 /* OBSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OBSlider.m; sourceTree = "<group>"; };
+		5325EFA01494345B00704975 /* libbass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbass.a; sourceTree = "<group>"; };
 		53260B77127D012300B745B4 /* EGORefreshTableHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EGORefreshTableHeaderView.h; path = Classes/View/EGORefreshTableHeaderView.h; sourceTree = "<group>"; };
 		53260B78127D012300B745B4 /* EGORefreshTableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EGORefreshTableHeaderView.m; path = Classes/View/EGORefreshTableHeaderView.m; sourceTree = "<group>"; };
 		53260B7A127D012300B745B4 /* blackArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blackArrow.png; sourceTree = "<group>"; };
@@ -2213,7 +2214,6 @@
 		53B38BD71474C95100CD8A99 /* BassWrapperSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassWrapperSingleton.h; sourceTree = "<group>"; };
 		53B38BD81474C95200CD8A99 /* BassWrapperSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassWrapperSingleton.m; sourceTree = "<group>"; };
 		53B38BE01474CA0F00CD8A99 /* bass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bass.h; sourceTree = "<group>"; };
-		53B38BFA14758D5200CD8A99 /* libbass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbass.a; sourceTree = "<group>"; };
 		53B38C11147593F900CD8A99 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		53B38C191475DD3500CD8A99 /* libbassflac.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbassflac.a; sourceTree = "<group>"; };
 		53B38C211475E4AB00CD8A99 /* libbass_fx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbass_fx.a; sourceTree = "<group>"; };
@@ -2680,10 +2680,10 @@
 				53F7A128131B7F3B002C829D /* Security.framework in Frameworks */,
 				534F1634139AF85B00127A02 /* CrashReporter.framework in Frameworks */,
 				53DEAC17142BD30300A54F19 /* libFlurryAnalytics.a in Frameworks */,
-				53B38BFB14758D5200CD8A99 /* libbass.a in Frameworks */,
 				53B38C1A1475DD3600CD8A99 /* libbassflac.a in Frameworks */,
 				53B38C221475E4AB00CD8A99 /* libbass_fx.a in Frameworks */,
 				539A012114773CD900754061 /* libbassmix.a in Frameworks */,
+				5325EFA11494345B00704975 /* libbass.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2712,10 +2712,10 @@
 				53BC285F139AF0DD00A825F1 /* Security.framework in Frameworks */,
 				53E7C358139DDE5300B123EF /* CrashReporter.framework in Frameworks */,
 				53DEAC19142BD30300A54F19 /* libFlurryAnalytics.a in Frameworks */,
-				53B38BFD14758D5200CD8A99 /* libbass.a in Frameworks */,
 				53B38C1C1475DD3600CD8A99 /* libbassflac.a in Frameworks */,
 				53B38C241475E4AB00CD8A99 /* libbass_fx.a in Frameworks */,
 				539A012314773CD900754061 /* libbassmix.a in Frameworks */,
+				5325EFA31494345B00704975 /* libbass.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2744,10 +2744,10 @@
 				53DCF5C013BFEAD3009160F9 /* Security.framework in Frameworks */,
 				530FD22313C132F900C95451 /* CrashReporter.framework in Frameworks */,
 				53DEAC18142BD30300A54F19 /* libFlurryAnalytics.a in Frameworks */,
-				53B38BFC14758D5200CD8A99 /* libbass.a in Frameworks */,
 				53B38C1B1475DD3600CD8A99 /* libbassflac.a in Frameworks */,
 				53B38C231475E4AB00CD8A99 /* libbass_fx.a in Frameworks */,
 				539A012214773CD900754061 /* libbassmix.a in Frameworks */,
+				5325EFA21494345B00704975 /* libbass.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2847,7 +2847,7 @@
 				536AD1D211EA628200387CB0 /* libxml2.dylib */,
 				53EB4AA51405FE1B00CBA075 /* libz.dylib */,
 				5382F65614856F3C001C14C8 /* libSystem.dylib */,
-				53B38BFA14758D5200CD8A99 /* libbass.a */,
+				5325EFA01494345B00704975 /* libbass.a */,
 				539A012014773CD900754061 /* libbassmix.a */,
 				53B38C191475DD3500CD8A99 /* libbassflac.a */,
 				53B38C211475E4AB00CD8A99 /* libbass_fx.a */,
