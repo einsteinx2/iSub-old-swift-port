@@ -123,7 +123,7 @@
 						<string key="NSFrame">{{20, 45}, {280, 32}}</string>
 						<reference key="NSSuperview" ref="340187579"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="546995061"/>
+						<reference key="NSNextKeyView" ref="994782857"/>
 						<reference key="IBUIBackgroundColor" ref="1001518357"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -131,22 +131,21 @@
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<string key="IBUIText">Artist</string>
 						<object class="NSColor" key="IBUITextColor">
-							<int key="NSColorSpace">1</int>
-							<bytes key="NSRGB">MSAxIDEAA</bytes>
-							<reference key="NSCustomColorSpace" ref="773856264"/>
+							<int key="NSColorSpace">3</int>
+							<bytes key="NSWhite">MC43OTYxODE5NTU2AA</bytes>
 						</object>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">1</int>
-						<float key="IBUIMinimumFontSize">10</float>
+						<float key="IBUIMinimumFontSize">20</float>
 						<int key="IBUITextAlignment">1</int>
-						<object class="IBUIFontDescription" key="IBUIFontDescription" id="876834784">
-							<string key="name">Helvetica-Bold</string>
+						<object class="IBUIFontDescription" key="IBUIFontDescription" id="555562660">
+							<string key="name">Helvetica</string>
 							<string key="family">Helvetica</string>
-							<int key="traits">2</int>
+							<int key="traits">0</int>
 							<double key="pointSize">24</double>
 						</object>
-						<object class="NSFont" key="IBUIFont" id="974126686">
-							<string key="NSName">Helvetica-Bold</string>
+						<object class="NSFont" key="IBUIFont" id="909536874">
+							<string key="NSName">Helvetica</string>
 							<double key="NSSize">24</double>
 							<int key="NSfFlags">16</int>
 						</object>
@@ -154,7 +153,7 @@
 					<object class="IBUILabel" id="546995061">
 						<reference key="NSNextResponder" ref="340187579"/>
 						<int key="NSvFlags">290</int>
-						<string key="NSFrame">{{20, 77}, {280, 32}}</string>
+						<string key="NSFrame">{{20, 109}, {280, 32}}</string>
 						<reference key="NSSuperview" ref="340187579"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="189807377"/>
@@ -164,30 +163,20 @@
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<string key="IBUIText">Album</string>
 						<object class="NSColor" key="IBUITextColor">
-							<int key="NSColorSpace">1</int>
-							<bytes key="NSRGB">MSAxIDEAA</bytes>
-							<reference key="NSCustomColorSpace" ref="773856264"/>
+							<int key="NSColorSpace">3</int>
+							<bytes key="NSWhite">MC44MDExOTA3NzYyAA</bytes>
 						</object>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">1</int>
-						<float key="IBUIMinimumFontSize">10</float>
+						<float key="IBUIMinimumFontSize">20</float>
 						<int key="IBUITextAlignment">1</int>
-						<object class="IBUIFontDescription" key="IBUIFontDescription">
-							<string key="name">Helvetica</string>
-							<string key="family">Helvetica</string>
-							<int key="traits">0</int>
-							<double key="pointSize">24</double>
-						</object>
-						<object class="NSFont" key="IBUIFont">
-							<string key="NSName">Helvetica</string>
-							<double key="NSSize">24</double>
-							<int key="NSfFlags">16</int>
-						</object>
+						<reference key="IBUIFontDescription" ref="555562660"/>
+						<reference key="IBUIFont" ref="909536874"/>
 					</object>
 					<object class="IBUILabel" id="189807377">
 						<reference key="NSNextResponder" ref="340187579"/>
 						<int key="NSvFlags">290</int>
-						<string key="NSFrame">{{20, 109}, {280, 32}}</string>
+						<string key="NSFrame">{{20, 77}, {280, 32}}</string>
 						<reference key="NSSuperview" ref="340187579"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="858485993"/>
@@ -203,10 +192,19 @@
 						</object>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">1</int>
-						<float key="IBUIMinimumFontSize">10</float>
+						<float key="IBUIMinimumFontSize">20</float>
 						<int key="IBUITextAlignment">1</int>
-						<reference key="IBUIFontDescription" ref="876834784"/>
-						<reference key="IBUIFont" ref="974126686"/>
+						<object class="IBUIFontDescription" key="IBUIFontDescription">
+							<string key="name">Helvetica-Bold</string>
+							<string key="family">Helvetica</string>
+							<int key="traits">2</int>
+							<double key="pointSize">24</double>
+						</object>
+						<object class="NSFont" key="IBUIFont">
+							<string key="NSName">Helvetica-Bold</string>
+							<double key="NSSize">24</double>
+							<int key="NSfFlags">16</int>
+						</object>
 					</object>
 					<object class="IBUILabel" id="858485993">
 						<reference key="NSNextResponder" ref="340187579"/>
@@ -235,7 +233,7 @@
 					<object class="IBUIButton" id="816468247">
 						<reference key="NSNextResponder" ref="340187579"/>
 						<int key="NSvFlags">274</int>
-						<string key="NSFrame">{{0, 54}, {320, 172}}</string>
+						<string key="NSFrame">{{-320, 54}, {320, 172}}</string>
 						<reference key="NSSuperview" ref="340187579"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="993468053"/>
@@ -523,6 +521,7 @@
 						<string key="NSFrame">{{20, 45}, {30, 32}}</string>
 						<reference key="NSSuperview" ref="340187579"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="393976015"/>
 						<string key="NSReuseIdentifierKey">_NS:225</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -547,6 +546,7 @@
 						<string key="NSFrame">{{261, 44}, {30, 32}}</string>
 						<reference key="NSSuperview" ref="340187579"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="546995061"/>
 						<string key="NSReuseIdentifierKey">_NS:225</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -860,7 +860,6 @@
 							<reference ref="234350813"/>
 							<reference ref="605316286"/>
 							<reference ref="100702299"/>
-							<reference ref="993468053"/>
 							<reference ref="189807377"/>
 							<reference ref="546995061"/>
 							<reference ref="290200344"/>
@@ -877,6 +876,7 @@
 							<reference ref="814205155"/>
 							<reference ref="994782857"/>
 							<reference ref="393976015"/>
+							<reference ref="993468053"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>

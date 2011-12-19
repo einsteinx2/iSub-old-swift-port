@@ -28,6 +28,8 @@
 #import "CacheSingleton.h"
 #import "NSString+time.h"
 #import "SUSCurrentPlaylistDAO.h"
+#import "NSString+compareWithoutIndefiniteArticles.h"
+#import "FlurryAnalytics.h"
 
 @interface CacheViewController (Private)
 - (void)addNoSongsScreen;
@@ -300,6 +302,8 @@
 		self.tableView.tableHeaderView.hidden = YES;
 		[self addNoSongsScreen];
 	}
+	
+	[FlurryAnalytics logEvent:@"CacheTab"];
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -340,34 +344,7 @@
 				[listOfArtists addObject:[NSString stringWithString:[result stringForColumnIndex:0]]]; 
 		}
 		
-		// Sort out The El La Los Las Le Les (Subsonic default)
-		for (int i = 0; i < [listOfArtists count]; i++)
-		{
-			NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-			NSString *artist = [listOfArtists objectAtIndex:i];
-			if ([artist length] > 5)
-			{
-				NSString *artistPrefix = [[artist substringToIndex:4] lowercaseString];
-				if ([artistPrefix isEqualToString:@"the "] || [artistPrefix isEqualToString:@"los "] ||
-					[artistPrefix isEqualToString:@"las "] || [artistPrefix isEqualToString:@"les "])
-				{
-					artist = [NSString stringWithFormat:@"%@, %@", [artist substringFromIndex:4], [artist substringToIndex:3]];
-				}
-				[listOfArtists replaceObjectAtIndex:i withObject:artist];
-			}
-			else if ([artist length] > 4)
-			{
-				NSString *artistPrefix = [[artist substringToIndex:4] lowercaseString];
-				if ([artistPrefix isEqualToString:@"el "] || [artistPrefix isEqualToString:@"la "] ||
-					[artistPrefix isEqualToString:@"le "])
-				{
-					artist = [NSString stringWithFormat:@"%@, %@", [artist substringFromIndex:3], [artist substringToIndex:2]];
-				}
-				[listOfArtists replaceObjectAtIndex:i withObject:artist];
-			}
-			[pool release];
-		}
-		[listOfArtists sortUsingSelector:@selector(caseInsensitiveCompare:)];
+		[listOfArtists sortUsingSelector:@selector(caseInsensitiveCompareWithoutIndefiniteArticles:)];
 		DLog(@"listOfArtists: %@", listOfArtists);
 		
 		// Create the section index
@@ -409,47 +386,7 @@
 			}
 			[listOfArtistsSections addObject:section];
 		}
-		
-		// Move the definite article back to the beginning  Le El La The Los Las Les
-		for (NSMutableArray *section in listOfArtistsSections)
-		{
-			for (int i = 0; i < [section count]; i++)
-			{
-				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-				NSString *artist = [section objectAtIndex:i];
-				NSUInteger length = [artist length];
-				
-				if (length > 6)
-				{
-					NSString *substring5 = [[artist substringFromIndex:length - 5] lowercaseString];
-					if ([substring5 isEqualToString:@", the"] || [substring5 isEqualToString:@", los"] ||
-						[substring5 isEqualToString:@", las"] || [substring5 isEqualToString:@", les"])
-					{
-						artist = [NSString stringWithFormat:@"%@ %@", 
-								  [artist substringFromIndex:length - 3], 
-								  [artist substringToIndex:length - 5]];
-					}
-				}
-				else if (length > 5)
-				{
-					NSString *substring4 = [[artist substringFromIndex:length - 4] lowercaseString];
-					if ([substring4 isEqualToString:@", le"] || [substring4 isEqualToString:@", el"] ||
-						[substring4 isEqualToString:@", la"])
-					{
-						artist = [NSString stringWithFormat:@"%@ %@", 
-								  [artist substringFromIndex:length - 2], 
-								  [artist substringToIndex:length - 4]];
-					}
-				}
-				[section replaceObjectAtIndex:i withObject:artist];
-				[pool release];
-			}
-		}
-		
-		DLog(@"listOfArtists: %@", listOfArtists);
-		DLog(@"listOfArtistsSections: %@", listOfArtistsSections);
-		DLog(@"sectionInfo: %@", sectionInfo);
-		
+
 		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 		
 		if ([listOfArtists count] == 0)
@@ -950,9 +887,6 @@
 		}
 	}
 }
-
-
-
 
 - (void) showDeleteButton
 {

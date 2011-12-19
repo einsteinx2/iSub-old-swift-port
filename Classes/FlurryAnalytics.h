@@ -1,11 +1,12 @@
 //
 //  FlurryAnalytics.h
-//  Flurry iOS Analytics Agent 3.0.0 ver 53
+//  Flurry iOS Analytics Agent
 //
 //  Copyright 2009-2011 Flurry, Inc. All rights reserved.
 //	
 //	Methods in this header file are for use with Flurry Analytics
 
+#import <UIKit/UIKit.h>
 
 /*!
  * \brief Provides all available methods for defining and reporting Analytics from use
@@ -25,8 +26,6 @@
  * @helps This class provides methods necessary for correct function of FlurryAppCircle.h.
  * For information on how to use Flurry's AppCircle SDK to
  * attract high-quality users and monetize your user base see http://wiki.flurry.com/index.php?title=AppCircle.
- * @updated 2011-06-19
- * @version 3.0.0
  * 
  */
 
@@ -85,7 +84,7 @@
  optional session settings that can be changed after start session
  */
 + (void)setSessionReportsOnCloseEnabled:(BOOL)sendSessionReportsOnClose;	// default is YES
-+ (void)setSessionReportsOnPauseEnabled:(BOOL)setSessionReportsOnPauseEnabled;	// default is YES
++ (void)setSessionReportsOnPauseEnabled:(BOOL)setSessionReportsOnPauseEnabled;	// default is NO
 + (void)setEventLoggingEnabled:(BOOL)value;		// default is YES
 
 @end

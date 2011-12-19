@@ -26,6 +26,7 @@
 #import "SavedSettings.h"
 #import "SUSChatDAO.h"
 #import "NSError+ISMSError.h"
+#import "FlurryAnalytics.h"
 
 
 @interface ChatViewController (Private)
@@ -144,6 +145,8 @@
 	}
 		
 	[self loadData];
+	
+	[FlurryAnalytics logEvent:@"ChatTab"];
 }
 
 -(void)viewWillDisappear:(BOOL)animated

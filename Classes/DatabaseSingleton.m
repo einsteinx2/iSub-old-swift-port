@@ -304,7 +304,7 @@ static DatabaseSingleton *sharedInstance = nil;
 			[cacheQueueDb executeUpdate:@"CREATE INDEX queueDate ON cacheQueue (cachedDate DESC)"];
 		}
 		
-		[songCacheDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@cacheQueue.db", databaseFolderPath, urlStringMd5], @"cacheQueueDb"];
+		[songCacheDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@cacheQueue.db", settings.cachesPath, urlStringMd5], @"cacheQueueDb"];
 		if ([songCacheDb hadError]) 
 		{
 			DLog(@"Err attaching the cacheQueueDb %d: %@", [songCacheDb lastErrorCode], [songCacheDb lastErrorMessage]);

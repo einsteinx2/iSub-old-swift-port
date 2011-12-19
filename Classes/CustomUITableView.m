@@ -49,9 +49,9 @@
 	if (!blockInput)
 	{
 		ViewObjectsSingleton *viewObjects = [ViewObjectsSingleton sharedInstance];
-		
+				
 		if (self.decelerating)
-		{
+		{			
 			// don't try anything when the tableview is moving..
 			return [super hitTest:point withEvent:event];
 		}
@@ -105,8 +105,6 @@
 	
 	return [super hitTest:point withEvent:event];
 }
-
-
 
 - (BOOL)touchesShouldCancelInContentView:(UIView *)view 
 {

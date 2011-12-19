@@ -16,7 +16,7 @@
 #import "NSMutableURLRequest+SUS.h"
 
 @implementation FolderDropdownControl
-@synthesize folders, selectedFolderId;
+@synthesize folders, selectedFolderId, isOpen;
 @synthesize borderColor, textColor, lightColor, darkColor;
 @synthesize delegate;
 
@@ -185,6 +185,8 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	{
 		[UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:.25];
+		[UIView setAnimationDelegate:self];
+		[UIView setAnimationDidStopSelector:@selector(viewsFinishedMoving)];
 		[self addHeight:sizeIncrease];
 		[delegate folderDropdownMoveViewsY:sizeIncrease];
 		[UIView commitAnimations];
@@ -198,6 +200,8 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	{
 		[UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:.25];
+		[UIView setAnimationDelegate:self];
+		[UIView setAnimationDidStopSelector:@selector(viewsFinishedMoving)];
 		[self addHeight:-sizeIncrease];
 		[delegate folderDropdownMoveViewsY:-sizeIncrease];
 		[UIView commitAnimations];
@@ -209,6 +213,11 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	}
 	
 	isOpen = !isOpen;
+}
+
+- (void)viewsFinishedMoving
+{
+	[delegate folderDropdownViewsFinishedMoving];
 }
 
 - (void)closeDropdown

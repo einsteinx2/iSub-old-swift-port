@@ -11,6 +11,7 @@
 
 @required
 - (void)folderDropdownMoveViewsY:(float)y;
+- (void)folderDropdownViewsFinishedMoving;
 - (void)folderDropdownSelectFolder:(NSNumber *)folderId;
 
 @end

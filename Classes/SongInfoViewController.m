@@ -187,10 +187,7 @@
 	artistLabel.text = currentSong.artist;
 	titleLabel.text = currentSong.title;
 	
-	//if (currentSong.bitRate)
-		bitRateLabel.text = [NSString stringWithFormat:@"Bit Rate: %i kbps", bassWrapper.bitRate]; //]] [currentSong.bitRate stringValue]];
-	//else
-	//	bitRateLabel.text = @"";
+	bitRateLabel.text = [NSString stringWithFormat:@"Bit Rate: %i kbps", bassWrapper.bitRate];
 		
 	if (currentSong.duration)
 		lengthLabel.text = [NSString stringWithFormat:@"Length: %@", [NSString formatTime:[currentSong.duration floatValue]]];
@@ -202,7 +199,7 @@
 	else
 		albumLabel.text = @"";
 		
-	if (currentSong.track)
+	if ( [currentSong.track intValue] != 0 )
 		trackLabel.text = [NSString stringWithFormat:@"Track: %@", [currentSong.track stringValue]];
 	else
 		trackLabel.text = @"";

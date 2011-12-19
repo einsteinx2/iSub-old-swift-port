@@ -32,6 +32,7 @@
 #import "SavedSettings.h"
 #import "SUSAllSongsDAO.h"
 #import "SUSAllSongsLoader.h"
+#import "FlurryAnalytics.h"
 
 @interface AllSongsViewController (Private)
 - (void)hideLoadingScreen;
@@ -141,6 +142,8 @@
 			}
 		}
 	}
+	
+	[FlurryAnalytics logEvent:@"AllSongsTab"];
 }
 
 -(void)addCount

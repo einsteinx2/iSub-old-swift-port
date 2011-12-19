@@ -46,7 +46,7 @@
 		textView.font = [UIFont systemFontOfSize:16.5];
 		textView.editable = NO;
         
-		Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+		/*Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
         NSString *lyrics = [dataModel lyricsForArtist:currentSong.artist andTitle:currentSong.title];
                 
 		if (lyrics)
@@ -64,7 +64,8 @@
 				[dataModel loadLyricsForArtist:currentSong.artist andTitle:currentSong.title];
 				textView.text = @"\n\nLoading Lyrics...";
 			}
-		}
+		}*/
+		[self updateLyricsLabel];
 		[self.view addSubview:textView];
 		[textView release];
 		
@@ -89,6 +90,7 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLyricsLabel) name:ISMSNotification_SongPlaybackStarted object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLyricsLabel) name:ISMSNotification_LyricsDownloaded object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLyricsLabel) name:ISMSNotification_LyricsFailed object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidUnload) name:@"hideSongInfoFast" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidUnload) name:@"hideSongInfo" object:nil];
 
@@ -108,6 +110,7 @@
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackStarted object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_LyricsDownloaded object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_LyricsFailed object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfoFast" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfo" object:nil];
 	
@@ -122,9 +125,15 @@
     
 }
 
-- (void) updateLyricsLabel
+- (void)updateLyricsLabel
 {	
-	[textView performSelectorOnMainThread:@selector(setText:) withObject:musicControls.currentSongLyrics waitUntilDone:NO];
+	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+	NSString *lyrics = [dataModel loadLyricsForArtist:currentSong.artist andTitle:currentSong.title];
+	DLog(@"lyrics = %@", lyrics);
+	if (!lyrics)
+		lyrics = @"\n\nNo lyrics found";
+	
+	[textView performSelectorOnMainThread:@selector(setText:) withObject:lyrics waitUntilDone:NO];
 }
 
 /*#pragma mark - SUSLoader delegate

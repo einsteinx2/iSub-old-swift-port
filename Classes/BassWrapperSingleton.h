@@ -21,7 +21,9 @@
 // Playback methods
 //
 - (void)startWithOffsetInBytes:(NSNumber *)byteOffset;
-- (void)seekToPositionInBytes:(NSUInteger)bytes;
+- (void)seekToPositionInBytes:(QWORD)bytes inStream:(HSTREAM)stream;
+- (void)seekToPositionInBytes:(QWORD)bytes;
+- (void)seekToPositionInSeconds:(NSUInteger)seconds inStream:(HSTREAM)stream;
 - (void)seekToPositionInSeconds:(NSUInteger)seconds;
 - (void)start;
 - (void)stop;
@@ -29,7 +31,8 @@
 
 // BASS methods
 //
-- (NSUInteger)preSilenceLengthForSong:(Song *)aSong;
+- (unsigned long long)preSilenceLengthForSong:(Song *)aSong;
+- (void)bassInit;
 - (BOOL)bassFree;
 - (void)prepareNextSongStreamInBackground;
 - (void)prepareNextSongStream;
@@ -45,11 +48,11 @@
 
 @property (readonly) BOOL isPlaying;
 @property (readonly) NSUInteger bitRate;
-@property (readonly) NSUInteger currentByteOffset;
+@property (readonly) QWORD currentByteOffset;
 @property (readonly) double progress;
 @property (readonly) BOOL isEqualizerOn;
 @property (readonly) NSArray *equalizerValues;
-@property NSUInteger startByteOffset;
+@property QWORD startByteOffset;
 @property BOOL isTempDownload;
 
 @property (readonly) HSTREAM currentStream;
@@ -60,4 +63,12 @@
 - (float)fftData:(NSUInteger)index;
 - (short)lineSpecData:(NSUInteger)index;
 
+const char *GetCTypeString(DWORD ctype, HPLUGIN plugin);
+
 @end
+
+typedef struct
+{
+	const char *localPath;
+	FILE *file;
+} ISMS_BASS_USERINFO;

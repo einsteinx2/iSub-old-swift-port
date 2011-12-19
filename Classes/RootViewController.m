@@ -27,6 +27,7 @@
 #import "FolderDropdownControl.h"
 #import "SUSRootFoldersDAO.h"
 #import "SavedSettings.h"
+#import "FlurryAnalytics.h"
 
 @interface RootViewController (Private)
 
@@ -140,6 +141,8 @@
 			[self loadData:[[SavedSettings sharedInstance] rootFoldersSelectedFolderId]];
 		}
 	}
+	
+	[FlurryAnalytics logEvent:@"FoldersTab"];
 }
 
 
@@ -303,8 +306,14 @@
 - (void)folderDropdownMoveViewsY:(float)y
 {
 	[self.tableView.tableHeaderView addHeight:y];
-	self.tableView.tableHeaderView = self.tableView.tableHeaderView;
 	[searchBar addY:y];
+	if (!dropdown.isOpen)
+		self.tableView.tableHeaderView = self.tableView.tableHeaderView;
+}
+
+- (void)folderDropdownViewsFinishedMoving
+{
+	self.tableView.tableHeaderView = self.tableView.tableHeaderView;
 }
 
 - (void)folderDropdownSelectFolder:(NSNumber *)folderId
@@ -585,6 +594,7 @@
 
 - (NSIndexPath *)tableView :(UITableView *)theTableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
+	DLog(@"will indexPath.row: %i", indexPath.row);
 	if(letUserSelectRow)
 		return indexPath;
 	else
@@ -595,6 +605,7 @@
 {
 	if (viewObjects.isCellEnabled)
 	{
+		DLog(@"did indexPath.row: %i", indexPath.row);
 		Artist *anArtist = nil;
 		if(isSearching)
 		{
@@ -639,7 +650,6 @@
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-	
 	if (scrollView.contentOffset.y <= - 65.0f && !_reloading) 
 	{
 		_reloading = YES;

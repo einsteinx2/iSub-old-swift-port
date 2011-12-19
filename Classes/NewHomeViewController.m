@@ -39,6 +39,7 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "SUSCurrentPlaylistDAO.h"
 #import "BassWrapperSingleton.h"
+#import "FlurryAnalytics.h"
 
 @implementation NewHomeViewController
 
@@ -269,6 +270,8 @@
 	searchSegment.alpha = 0.0;
 	searchSegment.enabled = NO;
 	searchSegmentBackground.alpha = 0.0;
+	
+	[FlurryAnalytics logEvent:@"HomeTab"];
 }
 
 - (void)initSongInfo

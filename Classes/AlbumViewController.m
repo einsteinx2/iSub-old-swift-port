@@ -421,7 +421,7 @@
         
 		cell.mySong = aSong;
 		
-		if ( aSong.track )
+		if ( [aSong.track intValue] != 0 )
 			cell.trackNumberLabel.text = [NSString stringWithFormat:@"%i", [aSong.track intValue]];
 		else
 			cell.trackNumberLabel.text = @"";

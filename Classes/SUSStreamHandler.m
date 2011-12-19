@@ -28,12 +28,12 @@
 #define kMaxBytesPerSecWifi ((kMaxKilobitsPerSecWifi * 1024) / 8)
 #define kMaxBytesPerIntervalWifi (kMaxBytesPerSecWifi * kThrottleTimeInterval)
 
-#define kMinKiloBytesToStartPlayback 20000
+#define kMinKiloBytesToStartPlayback 250
 #define kMinBytesToStartPlayback (1024 * kMinKiloBytesToStartPlayback) // Number of bytes to wait before activating the player
 #define kMinBytesToStartLimiting (1024 * 1024)	// Start throttling bandwidth after 1 MB downloaded for 160kbps files (adjusted accordingly by bitrate)
 
 // Logging
-#define isProgressLoggingEnabled YES
+#define isProgressLoggingEnabled NO
 #define isThrottleLoggingEnabled NO
 
 @implementation SUSStreamHandler
@@ -188,82 +188,6 @@
 	[self.delegate SUSStreamHandlerConnectionFailed:self withError:error];
 	[error release];
 }
-
-/*// Create the request and start the connection in loadingThread
-- (void)start
-{
-	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
-	
-	// Create the file handle
-	self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:mySong.localPath];
-	
-	if (self.fileHandle)
-	{
-		// File exists so seek to end
-		//totalBytesTransferred = [self.fileHandle seekToEndOfFile];
-		
-		// File exists so remove it
-		[self.fileHandle closeFile];
-		[[NSFileManager defaultManager] removeItemAtPath:mySong.localPath error:NULL];
-	}
-	
-	// Create the file
-	totalBytesTransferred = 0;
-	[[NSFileManager defaultManager] createFileAtPath:mySong.localPath contents:[NSData data] attributes:nil];
-	self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:mySong.localPath];
-	
-	NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(mySong.songId), @"id", nil];
-	if ([musicControls maxBitrateSetting] != 0)
-	{
-		NSString *bitrate = [[NSString alloc] initWithFormat:@"%i", musicControls.maxBitrateSetting];
-		[parameters setObject:n2N(bitrate) forKey:@"maxBitRate"];
-		[bitrate release];
-	}
-	
-	self.request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters byteOffset:byteOffset];
-	
-	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
-	if (connection)
-	{
-		mySong.isPartiallyCached = YES;
-		loadingThread = [[NSThread alloc] initWithTarget:self selector:@selector(startConnection) object:nil];
-		[loadingThread.threadDictionary setObject:connection forKey:@"connection"];
-		
-		NSNumber *bitrate = [[NSNumber alloc] initWithInt:self.bitrate];
-		[loadingThread.threadDictionary setObject:bitrate forKey:@"bitrate"];
-		[bitrate release];
-		NSDate *now = [[NSDate alloc] init];
-		[loadingThread.threadDictionary setObject:now forKey:@"throttlingDate"];
-		[now release];
-		NSNumber *isWifi = [[NSNumber alloc] initWithBool:[iSubAppDelegate sharedInstance].isWifi];
-		[loadingThread.threadDictionary setObject:isWifi forKey:@"isWifi"];
-		[isWifi release];
-						
-		[loadingThread start];
-	}
-	else
-	{
-		NSError *error = [[NSError alloc] initWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
-		[self.delegate SUSStreamHandlerConnectionFailed:self withError:error];
-		[error release];
-	}
-	
-}
-
-// loadingThread entry point
-- (void)startConnection
-{
-	@autoreleasepool 
-	{
-		NSURLConnection *theConnection = [[NSThread currentThread].threadDictionary objectForKey:@"connection"];
-		NSLog(@"connection: %@", connection);
-		NSLog(@"theConnection: %@", theConnection);
-		[self.connection start];
-		DLog(@"connection starting, starting runloop");
-		CFRunLoopRun();
-		DLog(@"run loop finished");
-	}
-}*/
 
 // Cancel the download and stop the run loop in loadingThread
 - (void)cancel

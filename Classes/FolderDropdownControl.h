@@ -37,6 +37,7 @@
 }
 
 @property (nonatomic, retain) NSDictionary *folders;
+@property BOOL isOpen;
 
 @property (nonatomic, retain) NSNumber *selectedFolderId;
 

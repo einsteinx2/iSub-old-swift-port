@@ -24,6 +24,7 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
+#import "FlurryAnalytics.h"
 
 @implementation PlayingViewController
 
@@ -102,6 +103,8 @@
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 		[alert release];
 	}
+	
+	[FlurryAnalytics logEvent:@"NowPlayingTab"];
 }
 
 -(void)viewWillDisappear:(BOOL)animated

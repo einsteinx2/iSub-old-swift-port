@@ -21,4 +21,5 @@
 @property (nonatomic, retain) SUSLyricsDAO *dataModel;
 @property (nonatomic, retain) UITextView *textView;
 
+- (void)updateLyricsLabel;
 @end

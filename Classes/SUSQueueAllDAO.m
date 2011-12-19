@@ -84,6 +84,10 @@
 			{
 				[musicControls jukeboxReplacePlaylistWithLocal];
 			}
+			else
+			{
+				[[SUSStreamSingleton sharedInstance] fillStreamQueue];
+			}
 		}
 		else
 		{
@@ -104,8 +108,6 @@
 		{
 			musicControls.isShuffle = NO;
 		}
-		
-		[[SUSStreamSingleton sharedInstance] fillStreamQueue];
 	}
 }
 

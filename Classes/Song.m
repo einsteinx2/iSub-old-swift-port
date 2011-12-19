@@ -49,6 +49,7 @@
 		if ([TBXML valueOfAttributeNamed:@"transcodedSuffix" forElement:element])
 			self.transcodedSuffix = [TBXML valueOfAttributeNamed:@"transcodedSuffix" forElement:element];
 		
+		DLog(@"title: %@", self.title);
 		NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
 		if([TBXML valueOfAttributeNamed:@"duration" forElement:element])
 			self.duration = [numberFormatter numberFromString:[TBXML valueOfAttributeNamed:@"duration" forElement:element]];

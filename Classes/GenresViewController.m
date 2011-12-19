@@ -19,6 +19,7 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "SavedSettings.h"
+#import "FlurryAnalytics.h"
 
 @implementation GenresViewController
 

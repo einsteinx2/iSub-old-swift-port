@@ -135,7 +135,8 @@
 	hasSwiped = NO;
 	fingerIsMovingLeftOrRight = NO;
 	fingerMovingVertically = NO;
-	[self.nextResponder touchesBegan:touches withEvent:event];
+	
+	[super touchesBegan:touches withEvent:event];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event 
@@ -143,12 +144,9 @@
 	if ([self isTouchGoingLeftOrRight:[touches anyObject]]) 
 	{
 		[self lookForSwipeGestureInTouches:(NSSet *)touches withEvent:(UIEvent *)event];
-		[super touchesMoved:touches withEvent:event];
 	} 
-	else 
-	{
-		[self.nextResponder touchesMoved:touches withEvent:event];
-	}
+	
+	[super touchesMoved:touches withEvent:event];
 }
 
 // Determine what kind of gesture the finger event is generating
@@ -189,6 +187,7 @@
 // Check for swipe gestures
 - (void)lookForSwipeGestureInTouches:(NSSet *)touches withEvent:(UIEvent *)event 
 {
+	DLog(@"lookForSwipeGestureInTouches");
     UITouch *touch = [touches anyObject];
     CGPoint currentTouchPosition = [touch locationInView:self];
 	
@@ -245,7 +244,6 @@
 		{
 			// Process a non-swipe event.
 		}
-		
 	}
 }
 
@@ -259,10 +257,11 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event 
 {
+	DLog(@"touches ended");
 	swiping = NO;
 	hasSwiped = NO;
 	fingerMovingVertically = NO;
-	[self.nextResponder touchesEnded:touches withEvent:event];
+	[super touchesEnded:touches withEvent:event];
 }
 
 - (void)dealloc

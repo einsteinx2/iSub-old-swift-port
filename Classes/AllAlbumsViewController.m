@@ -33,6 +33,7 @@
 
 #import "SavedSettings.h"
 #import "SUSAllAlbumsDAO.h"
+#import "FlurryAnalytics.h"
 
 @implementation AllAlbumsViewController
 
@@ -267,6 +268,8 @@
 		[viewObjects.allAlbumsLoadingScreen.view removeFromSuperview];
 		[self.view addSubview:viewObjects.allAlbumsLoadingScreen.view];
 	}*/
+	
+	[FlurryAnalytics logEvent:@"AllAlbumsTab"];
 }
 
 

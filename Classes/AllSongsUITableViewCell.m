@@ -205,7 +205,7 @@
 	hasSwiped = NO;
 	fingerIsMovingLeftOrRight = NO;
 	fingerMovingVertically = NO;
-	[self.nextResponder touchesBegan:touches withEvent:event];
+	[super touchesBegan:touches withEvent:event];
 }
 
 
@@ -341,7 +341,7 @@
 	swiping = NO;
 	hasSwiped = NO;
 	fingerMovingVertically = NO;
-	[self.nextResponder touchesEnded:touches withEvent:event];
+	[super touchesEnded:touches withEvent:event];
 }
 
 

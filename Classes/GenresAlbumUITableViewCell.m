@@ -215,7 +215,7 @@
 	hasSwiped = NO;
 	fingerIsMovingLeftOrRight = NO;
 	fingerMovingVertically = NO;
-	[self.nextResponder touchesBegan:touches withEvent:event];
+	[super touchesBegan:touches withEvent:event];
 }
 
 
@@ -224,12 +224,9 @@
 	if ([self isTouchGoingLeftOrRight:[touches anyObject]]) 
 	{
 		[self lookForSwipeGestureInTouches:(NSSet *)touches withEvent:(UIEvent *)event];
-		[super touchesMoved:touches withEvent:event];
 	} 
-	else 
-	{
-		[self.nextResponder touchesMoved:touches withEvent:event];
-	}
+	
+	[super touchesMoved:touches withEvent:event];
 }
 
 
@@ -344,7 +341,7 @@
 	swiping = NO;
 	hasSwiped = NO;
 	fingerMovingVertically = NO;
-	[self.nextResponder touchesEnded:touches withEvent:event];
+	[super touchesEnded:touches withEvent:event];
 }
 
 - (void)dealloc {

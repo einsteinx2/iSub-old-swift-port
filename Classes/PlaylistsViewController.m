@@ -33,6 +33,7 @@
 #import "SUSServerPlaylist.h"
 #import "SUSCurrentPlaylistDAO.h"
 #import "BassWrapperSingleton.h"
+#import "FlurryAnalytics.h"
 
 @interface PlaylistsViewController (Private)
 
@@ -165,6 +166,8 @@
 		self.tableView.tableHeaderView.hidden = YES;
 		[self addNoPlaylistsScreen];
 	}
+	
+	[FlurryAnalytics logEvent:@"PlaylistsTab"];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -1011,7 +1014,7 @@
 			if ([viewObjects.multiDeleteList count] == 0)
 			{
 				// Select all the rows
-				NSUInteger count = [viewObjects.listOfPlaylists count];
+				NSUInteger count = [serverPlaylistsDataModel.serverPlaylists count];
 				for (int i = 0; i < count; i++)
 				{
 					[viewObjects.multiDeleteList addObject:[NSNumber numberWithInt:i]];
@@ -1026,9 +1029,9 @@
 				
 				for (NSNumber *index in viewObjects.multiDeleteList)
 				{
-                    NSString *playlistId = [serverPlaylistsDataModel.serverPlaylists objectAtIndex:[index intValue]];
+                    NSString *playlistId = [[serverPlaylistsDataModel.serverPlaylists objectAtIndex:[index intValue]] playlistId];
                     NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(playlistId) forKey:@"id"];
-                    
+                    DLog(@"parameters: %@", parameters);
                     NSMutableURLRequest *aRequest = [NSMutableURLRequest requestWithSUSAction:@"deletePlaylist" andParameters:parameters];
                     
 					connection = [[NSURLConnection alloc] initWithRequest:aRequest delegate:self startImmediately:NO];

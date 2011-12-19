@@ -28,7 +28,6 @@
 // Music player objects
 //
 @property (nonatomic, retain) Song *queueSongObject;
-@property (nonatomic, retain) NSString *currentSongLyrics;
 @property (nonatomic, retain) NSURL *coverArtUrl;
 
 @property (nonatomic, retain) NSMutableData *receivedDataQueue;

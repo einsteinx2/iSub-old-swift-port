@@ -41,7 +41,7 @@ static MusicSingleton *sharedInstance = nil;
 
 // Music player objects
 //
-@synthesize queueSongObject, currentSongLyrics, coverArtUrl; 
+@synthesize queueSongObject, coverArtUrl; 
 
 // Song cache stuff
 @synthesize receivedDataQueue, downloadQueue, downloadFileNameQueue, downloadFileNameHashQueue, audioFileQueue, downloadedLengthQueue, isQueueListDownloading;
@@ -396,7 +396,7 @@ static MusicSingleton *sharedInstance = nil;
 	{
 		DLog(@"file exists: %i   isFullyCached: %i   isOfflineMode: %i", currentSong.fileExists, currentSong.isFullyCached, viewObjects.isOfflineMode);
 		// Determine the byte offset
-		float byteOffset;
+		/*float byteOffset;
 		if (bitRate < 1000)
 			byteOffset = ((float)bitRate * 128 * seconds);
 		else
@@ -409,7 +409,7 @@ static MusicSingleton *sharedInstance = nil;
 			//[bassWrapper startSong:currentSong withOffsetInSeconds:seconds];
 			
 			[bassWrapper start];
-		}
+		}*/
 		
 		// Start to download the rest of the song
 		[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong];

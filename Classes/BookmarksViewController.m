@@ -23,6 +23,7 @@
 #import "SavedSettings.h"
 #import "NSString+time.h"
 #import "SUSStreamSingleton.h"
+#import "FlurryAnalytics.h"
 
 @implementation BookmarksViewController
 
@@ -192,6 +193,8 @@
 	}
 	
 	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES]; 
+	
+	[FlurryAnalytics logEvent:@"BookmarksTab"];
 }
 
 

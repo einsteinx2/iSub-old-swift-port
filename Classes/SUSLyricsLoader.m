@@ -11,6 +11,7 @@
 #import "DatabaseSingleton.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabase+Synchronized.h"
 #import "NSString+rfcEncode.h"
 #import "NSNotificationCenter+MainThread.h"
 
@@ -47,7 +48,7 @@
 {
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(artist), @"artist", n2N(title), @"title", nil];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getLyrics" andParameters:parameters];
-    
+   
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)
 	{
@@ -64,7 +65,7 @@
 
 - (void)insertLyricsIntoDb
 {
-    [self.db executeUpdate:@"INSERT INTO lyrics (artist, title, lyrics) VALUES (?, ?, ?)", artist, title, self.loadedLyrics];
+    [self.db synchronizedUpdate:@"INSERT INTO lyrics (artist, title, lyrics) VALUES (?, ?, ?)", artist, title, self.loadedLyrics];
     if ([self.db hadError]) { 
         DLog(@"Err inserting lyrics %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]); 
     }
@@ -135,13 +136,25 @@
 			if (lyrics)
 			{
                 self.loadedLyrics = [TBXML textForElement:lyrics];
-                [self insertLyricsIntoDb];
-                [self.delegate loadingFinished:self];
-				
-				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_LyricsDownloaded];
+				if ([self.loadedLyrics isEqualToString:@""])
+				{
+					DLog(@"lyrics tag found, but it's empty");
+					self.loadedLyrics = nil;
+					NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NoLyricsFound];
+					[self.delegate loadingFailed:self withError:error];
+				}
+				else
+				{
+					DLog(@"lyrics tag found, and it's got lyrics! \\o/");
+					[self insertLyricsIntoDb];
+					[self.delegate loadingFinished:self];
+					
+					[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_LyricsDownloaded];
+				}
 			}
             else
             {
+				DLog(@"no lyrics tag found");
                 self.loadedLyrics = nil;
                 NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NoLyricsElement];
                 [self.delegate loadingFailed:self withError:error];

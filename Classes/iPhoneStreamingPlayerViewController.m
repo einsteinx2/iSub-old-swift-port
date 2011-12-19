@@ -760,16 +760,10 @@ CGContextRef MyCreateBitmapContextPlayer(int pixelsWide, int pixelsHigh)
 	}
 
     // Create reflection
+	reflectionView.image = [self reflectedImage:coverArtImageView withHeight:reflectionHeight];
 	if (isFlipped)
 	{
 		[self updateBarButtonImage];
-	}
-	else
-	{
-		//DLog(@"It's not flipped, creating the reflection");
-		// create the reflection image and assign it to the UIImageView
-		reflectionView.image = [self reflectedImage:coverArtImageView withHeight:reflectionHeight];
-		reflectionView.alpha = kDefaultReflectionOpacity;
 	}
 }
 

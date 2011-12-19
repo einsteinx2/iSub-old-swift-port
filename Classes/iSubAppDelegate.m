@@ -317,16 +317,33 @@
 
 - (void)loadFlurryAnalytics
 {
+	BOOL isSessionStarted = NO;
 	if (IS_RELEASE())
 	{
 		if (IS_LITE())
 		{
+			// Lite version key
 			[FlurryAnalytics startSession:@"MQV1D5WQYUTCDAD6PFLU"];
+			isSessionStarted = YES;
 		}
 		else
 		{
+			// Full version key
 			[FlurryAnalytics startSession:@"3KK4KKD2PSEU5APF7PNX"];
+			isSessionStarted = YES;
 		}
+	}
+	else if (IS_BETA())
+	{
+		// Beta version key
+		[FlurryAnalytics startSession:@"KNN9DUXQEENZUG4Q12UA"];
+		isSessionStarted = YES;
+	}
+	
+	if (isSessionStarted)
+	{
+		[FlurryAnalytics setSessionReportsOnPauseEnabled:YES];
+		[FlurryAnalytics setSecureTransportEnabled:YES];
 	}
 }
 
@@ -566,8 +583,8 @@
 			{
 				DLog(@"backgroundTimeRemaining: %f", [application backgroundTimeRemaining]);
 				
-				// Sleep early is nothing is happening
-				if ([application backgroundTimeRemaining] < 590.0 && !musicControls.isQueueListDownloading)
+				// Sleep early is nothing is happening after 30 seconds
+				if ([application backgroundTimeRemaining] < 570.0 && !musicControls.isQueueListDownloading)
 				{
 					DLog("Sleeping early, isQueueListDownloading: %i", musicControls.isQueueListDownloading);
 					if ([BassWrapperSingleton sharedInstance].isPlaying)

@@ -190,7 +190,7 @@
 	[userDefaults setInteger:0 forKey:@"autoDeleteCacheTypeSetting"];
 	[userDefaults setInteger:3 forKey:@"cacheSongCellColorSetting"];
 	[userDefaults setBool:NO forKey:@"twitterEnabledSetting"];
-	[userDefaults setBool:YES forKey:@"lyricsEnabledSetting"];
+	[userDefaults setBool:NO forKey:@"lyricsEnabledSetting"];
 	[userDefaults setBool:NO forKey:@"enableSongsTabSetting"];
 	[userDefaults setBool:NO forKey:@"autoPlayerInfoSetting"];
 	[userDefaults setBool:NO forKey:@"autoReloadArtistsSetting"];
