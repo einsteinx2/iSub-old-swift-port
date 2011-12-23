@@ -7,27 +7,19 @@
 //
 
 #import "CurrentPlaylistSongSmallUITableViewCell.h"
-#import "iSubAppDelegate.h"
-#import "ViewObjectsSingleton.h"
 
 @implementation CurrentPlaylistSongSmallUITableViewCell
 
-@synthesize indexPath, deleteToggleImage, isDelete, numberLabel, songNameLabel, artistNameLabel, durationLabel;
+@synthesize numberLabel, songNameLabel, artistNameLabel, durationLabel;
+
+#pragma mark - Lifecycle
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
 {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) 
 	{
-		// Initialization code
-		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-		viewObjects = [ViewObjectsSingleton sharedInstance];
-		
 		self.backgroundView.backgroundColor = [UIColor clearColor];
 		self.contentView.backgroundColor = [UIColor clearColor];
-		
-		deleteToggleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"unselected.png"]];
-		[self addSubview:deleteToggleImage];
-		[deleteToggleImage release];
 		
 		numberLabel = [[UILabel alloc] init];
 		numberLabel.backgroundColor = [UIColor clearColor];
@@ -75,71 +67,24 @@
 	return self;
 }
 
-
-- (void)toggleDelete
+- (void)layoutSubviews 
 {
-	if (deleteToggleImage.image == [UIImage imageNamed:@"unselected.png"])
-	{
-		[viewObjects.multiDeleteList addObject:[NSNumber numberWithInt:indexPath.row]];
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"showDeleteButton" object:nil];
-		//DLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
-		deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
-	}
-	else
-	{
-		[viewObjects.multiDeleteList removeObject:[NSNumber numberWithInt:indexPath.row]];
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"hideDeleteButton" object:nil];
-		//DLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
-		deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
-	}
-}
-
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
-
-
-- (void)layoutSubviews {
-	
     [super layoutSubviews];
 	
-	deleteToggleImage.frame = CGRectMake(4, 11, 23, 23);
+	self.deleteToggleImage.frame = CGRectMake(4, 11, 23, 23);
 	numberLabel.frame = CGRectMake(2, 0, 40, 45);
-	/*if (viewObjects.isEditing)
-	{
-		//DLog(@"isEditing");
-		self.songNameLabel.frame = CGRectMake(45, 0, 210, 30);
-		self.artistNameLabel.frame = CGRectMake(45, 27, 210, 15);
-	}
-	else
-	{
-		//DLog(@"!isEditing");
-		self.songNameLabel.frame = CGRectMake(45, 0, 235, 30);
-		self.artistNameLabel.frame = CGRectMake(45, 27, 235, 15);
-	}
-	self.durationLabel.frame = CGRectMake(270, 0, 45, 41);*/
 }
 
+#pragma mark - Overlay
 
-- (void)setEditing:(BOOL)editing animated:(BOOL)animated
+- (void)showOverlay
 {
-	if (viewObjects.isEditing)
-		[super setEditing:editing animated:animated];
+	return;
 }
 
-
-- (void)dealloc {
-	[indexPath release];
-	
-	/*[numberLabel release];
-	[songNameLabel release];
-	[artistNameLabel release];*/
-    [super dealloc];
+- (void)hideOverlay
+{
+	return;
 }
-
 
 @end

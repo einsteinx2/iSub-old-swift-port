@@ -6,33 +6,11 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+#import "CustomUITableViewCell.h"
 
-@class CellOverlay, iSubAppDelegate, ViewObjectsSingleton, AsynchronousImageViewCached, MusicSingleton, DatabaseSingleton;
+@class AsynchronousImageViewCached;
 
-@interface GenresAlbumUITableViewCell : UITableViewCell 
-{
-	NSInteger segment;
-	NSString *seg1;
-	NSString *genre;
-	
-	iSubAppDelegate *appDelegate;
-	ViewObjectsSingleton *viewObjects;
-	MusicSingleton *musicControls;
-	DatabaseSingleton *databaseControls;
-	
-	AsynchronousImageViewCached *coverArtView;
-	UIScrollView *albumNameScrollView;
-	UILabel *albumNameLabel;
-	
-	BOOL isOverlayShowing;
-	CellOverlay *overlayView;
-	
-	CGPoint startTouchPosition;
-	BOOL swiping;
-	BOOL hasSwiped;
-	BOOL fingerIsMovingLeftOrRight;
-	BOOL fingerMovingVertically;
-}
+@interface GenresAlbumUITableViewCell : CustomUITableViewCell 
 
 @property NSInteger segment;
 @property (nonatomic, retain) NSString *seg1;
@@ -41,17 +19,5 @@
 @property (nonatomic, retain) AsynchronousImageViewCached *coverArtView;
 @property (nonatomic, retain) UIScrollView *albumNameScrollView;
 @property (nonatomic, retain) UILabel *albumNameLabel;
-
-@property BOOL isOverlayShowing;
-@property (nonatomic, retain) CellOverlay *overlayView;
-
-
-- (BOOL)isTouchGoingLeftOrRight:(UITouch *)touch;
-- (void)lookForSwipeGestureInTouches:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void)hideOverlay;
-- (void)showOverlay;
-
-// Empty function
-- (void)toggleDelete;
 
 @end

@@ -19,5 +19,6 @@
 - (void)queueAction;
 - (BOOL)fingerIsMovingVertically;
 - (void)toggleDelete;
+- (void)scrollLabels;
 
 @end

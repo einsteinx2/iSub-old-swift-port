@@ -313,6 +313,9 @@
 		5398F27811DA627500007870 /* HelpTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F27611DA627500007870 /* HelpTabViewController.m */; };
 		5398F27911DA627500007870 /* HelpTabViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5398F27711DA627500007870 /* HelpTabViewController.xib */; };
 		5398F2B611DA8B1000007870 /* iPhoneStreamingPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5398F2B511DA8B1000007870 /* iPhoneStreamingPlayerViewController.xib */; };
+		5398FA4414A44591002808E1 /* CustomUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398FA4314A44590002808E1 /* CustomUITableViewCell.m */; };
+		5398FA4514A44591002808E1 /* CustomUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398FA4314A44590002808E1 /* CustomUITableViewCell.m */; };
+		5398FA4614A44591002808E1 /* CustomUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398FA4314A44590002808E1 /* CustomUITableViewCell.m */; };
 		539B3088145E733C00D06475 /* NSString+time.m in Sources */ = {isa = PBXBuildFile; fileRef = 539B3087145E733C00D06475 /* NSString+time.m */; };
 		539B3089145E733C00D06475 /* NSString+time.m in Sources */ = {isa = PBXBuildFile; fileRef = 539B3087145E733C00D06475 /* NSString+time.m */; };
 		539B308A145E733C00D06475 /* NSString+time.m in Sources */ = {isa = PBXBuildFile; fileRef = 539B3087145E733C00D06475 /* NSString+time.m */; };
@@ -2101,6 +2104,8 @@
 		5398F27611DA627500007870 /* HelpTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpTabViewController.m; sourceTree = "<group>"; };
 		5398F27711DA627500007870 /* HelpTabViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HelpTabViewController.xib; sourceTree = "<group>"; };
 		5398F2B511DA8B1000007870 /* iPhoneStreamingPlayerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = iPhoneStreamingPlayerViewController.xib; sourceTree = "<group>"; };
+		5398FA4214A4458F002808E1 /* CustomUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomUITableViewCell.h; sourceTree = "<group>"; };
+		5398FA4314A44590002808E1 /* CustomUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomUITableViewCell.m; sourceTree = "<group>"; };
 		539A012414773CEA00754061 /* bass_fx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bass_fx.h; sourceTree = "<group>"; };
 		539A012514773D3800754061 /* bassmix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bassmix.h; sourceTree = "<group>"; };
 		539A356813D3E48C00D80554 /* SUSLoaderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSLoaderDelegate.h; sourceTree = "<group>"; };
@@ -2971,6 +2976,8 @@
 		533A207B12887EA300539BAE /* Table Cells */ = {
 			isa = PBXGroup;
 			children = (
+				5398FA4214A4458F002808E1 /* CustomUITableViewCell.h */,
+				5398FA4314A44590002808E1 /* CustomUITableViewCell.m */,
 				534E43B51155659A000B4134 /* AlbumUITableViewCell.h */,
 				534E43B61155659A000B4134 /* AlbumUITableViewCell.m */,
 				539797F81162D3F100F41D8B /* AllAlbumsUITableViewCell.h */,
@@ -5421,6 +5428,7 @@
 				53BBDA72148EAE5D00032114 /* MGTwitterXMLParser.m in Sources */,
 				5345204E149999AB0089D9E3 /* FMDatabase+Synchronized.m in Sources */,
 				535A1A09149D40E6008DA9F6 /* NSString+compareWithoutIndefiniteArticles.m in Sources */,
+				5398FA4414A44591002808E1 /* CustomUITableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5722,6 +5730,7 @@
 				53BBDA74148EAE5D00032114 /* MGTwitterXMLParser.m in Sources */,
 				53452050149999AB0089D9E3 /* FMDatabase+Synchronized.m in Sources */,
 				535A1A0B149D40E6008DA9F6 /* NSString+compareWithoutIndefiniteArticles.m in Sources */,
+				5398FA4614A44591002808E1 /* CustomUITableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6023,6 +6032,7 @@
 				53BBDA73148EAE5D00032114 /* MGTwitterXMLParser.m in Sources */,
 				5345204F149999AB0089D9E3 /* FMDatabase+Synchronized.m in Sources */,
 				535A1A0A149D40E6008DA9F6 /* NSString+compareWithoutIndefiniteArticles.m in Sources */,
+				5398FA4514A44591002808E1 /* CustomUITableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6059,7 +6069,6 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
-					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -6105,7 +6114,6 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
-					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -6192,7 +6200,6 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
-					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -6247,7 +6254,6 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
-					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -6303,7 +6309,6 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
-					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -6355,7 +6360,6 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
-					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -6404,7 +6408,6 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
-					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -6455,7 +6458,6 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
-					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -6503,7 +6505,6 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
-					"\"$(SRCROOT)/Classes/FlurryAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",

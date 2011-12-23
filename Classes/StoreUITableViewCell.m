@@ -51,12 +51,12 @@
 
 - (void)setMyProduct:(SKProduct*)product
 {
-	myProduct = [product retain];
+	self.myProduct = product;
 	
-	titleLabel.text = [product localizedTitle];
-	descLabel.text = [product localizedDescription];
+	titleLabel.text = [myProduct localizedTitle];
+	descLabel.text = [myProduct localizedDescription];
 	
-	if ([MKStoreManager isFeaturePurchased:[product productIdentifier]])
+	if ([MKStoreManager isFeaturePurchased:[myProduct productIdentifier]])
 	{
 		priceLabel.textColor = [UIColor colorWithRed:0.0 green:.66 blue:0.0 alpha:1.0];
 		priceLabel.text = @"Unlocked";
@@ -74,19 +74,10 @@
 	}
 }
 
-
-// Empty function
-- (void)toggleDelete
-{
-}
-
-
 - (void)dealloc 
 {
-	[myProduct release];
-	/*[titleLabel release];
-	[descLabel release];
-	[priceLabel release];*/
+	[myProduct release]; myProduct = nil;
+
     [super dealloc];
 }
 

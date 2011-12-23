@@ -7,19 +7,17 @@
 //
 
 #import "ChatUITableViewCell.h"
-#import "iSubAppDelegate.h"
 
 @implementation ChatUITableViewCell
 
 @synthesize userNameLabel, messageLabel;
 
+#pragma mark - Lifecycle
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
 {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) 
 	{
-		// Initialization code
-		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-
 		userNameLabel = [[UILabel alloc] init];
 		userNameLabel.frame = CGRectMake(0, 0, 320, 20);
 		userNameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -46,35 +44,11 @@
 	return self;
 }
 
-- (void) hideOverlay
+- (void)layoutSubviews
 {
-}
-
-- (void) showOverlay
-{
-}
-
-- (void) isOverlayShowing
-{	
-}
-
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
-
-
-- (void)layoutSubviews {
-	
     [super layoutSubviews];
-	
-	//self.userNameLabel.frame = CGRectMake(0, 0, 320, 20);
-	
+		
 	// Automatically set the height based on the height of the message text
-	//self.messageLabel.frame = CGRectMake(5, 20, 310, 55);
 	CGSize expectedLabelSize = [messageLabel.text sizeWithFont:messageLabel.font constrainedToSize:CGSizeMake(310,CGFLOAT_MAX) lineBreakMode:messageLabel.lineBreakMode];
 	if (expectedLabelSize.height < 40)
 		expectedLabelSize.height = 40;
@@ -83,12 +57,16 @@
 	messageLabel.frame = newFrame;
 }
 
+#pragma mark - Overlay
 
-- (void)dealloc {
-	/*[userNameLabel release];
-	[messageLabel release];*/
-    [super dealloc];
+- (void) hideOverlay
+{
+	return;
 }
 
+- (void) showOverlay
+{
+	return;
+}
 
 @end

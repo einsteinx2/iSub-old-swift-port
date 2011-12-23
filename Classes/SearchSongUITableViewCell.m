@@ -8,7 +8,6 @@
 
 #import "SearchSongUITableViewCell.h"
 #import "AsynchronousImageViewCached.h"
-#import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
@@ -20,21 +19,12 @@
 
 @implementation SearchSongUITableViewCell
 
-@synthesize mySong, row, coverArtView, songNameScrollView, songNameLabel, artistNameLabel, canShowOverlay, isOverlayShowing, overlayView;
+@synthesize mySong, row, coverArtView, songNameScrollView, songNameLabel, artistNameLabel;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
 {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]))
 	{
-		// Initialization code
-		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-		viewObjects = [ViewObjectsSingleton sharedInstance];
-		musicControls = [MusicSingleton sharedInstance];
-		databaseControls = [DatabaseSingleton sharedInstance];
-		
-		canShowOverlay = YES;
-		isOverlayShowing = NO;
-		
 		coverArtView = [[AsynchronousImageViewCached alloc] init];
 		[self.contentView addSubview:coverArtView];
 		[coverArtView release];
@@ -65,125 +55,8 @@
 	return self;
 }
 
-- (void) setMySong:(Song *)aSong
+- (void)layoutSubviews
 {
-	mySong = [aSong retain];
-	
-	[coverArtView loadImageFromCoverArtId:aSong.coverArtId];
-	
-	self.backgroundView = [[[UIView alloc] init] autorelease];
-	if(row % 2 == 0)
-	{
-		if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
-			self.backgroundView.backgroundColor = [viewObjects currentLightColor];
-		else
-			self.backgroundView.backgroundColor = viewObjects.lightNormal;
-	}
-	else
-	{
-		if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
-			self.backgroundView.backgroundColor = [viewObjects currentDarkColor];
-		else
-			self.backgroundView.backgroundColor = viewObjects.darkNormal;
-	}
-	
-	[songNameLabel setText:aSong.title];
-	if (aSong.album)
-		[artistNameLabel setText:[NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album]];
-	else
-		[artistNameLabel setText:aSong.artist];
-}
-
-// Empty function
-- (void)toggleDelete
-{
-}
-
-
-- (void)downloadAction
-{
-	[mySong addToCacheQueue];
-	
-	overlayView.downloadButton.alpha = .3;
-	overlayView.downloadButton.enabled = NO;
-	
-	if (musicControls.isQueueListDownloading == NO)
-	{
-		[musicControls downloadNextQueuedSong];
-	}
-	
-	[self hideOverlay];
-}
-
-
-- (void)queueAction
-{	
-	[databaseControls queueSong:mySong];
-	
-	[self hideOverlay];
-}
-
-
-- (void)blockerAction
-{
-	//DLog(@"blockerAction");
-	[self hideOverlay];
-}
-
-
-- (void)hideOverlay
-{
-	if (overlayView)
-	{
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:.5];
-		overlayView.alpha = 0.0;
-		[UIView commitAnimations];
-		
-		isOverlayShowing = NO;
-	}
-}
-
-
-- (void)showOverlay
-{
-	if (!isOverlayShowing && canShowOverlay)
-	{
-		overlayView = [CellOverlay cellOverlayWithTableCell:self];
-		[self.contentView addSubview:overlayView];
-		
-		//overlayView.downloadButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		if ([[databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", [mySong.path md5]] isEqualToString:@"YES"]) 
-		{
-			overlayView.downloadButton.alpha = .3;
-			overlayView.downloadButton.enabled = NO;
-		}
-		//else {
-		//	overlayView.downloadButton.alpha = .8;
-		//	[overlayView.downloadButton addTarget:self action:@selector(downloadAction) forControlEvents:UIControlEventTouchUpInside];
-		//	overlayView.downloadButton.enabled = YES;
-		//}
-		
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:.5];
-		self.overlayView.alpha = 1.0;
-		[UIView commitAnimations];		
-		
-		isOverlayShowing = YES;
-	}
-}
-
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
-
-
-- (void)layoutSubviews {
-	
     [super layoutSubviews];
 	
 	coverArtView.frame = CGRectMake(0, 0, 60, 60);
@@ -203,163 +76,106 @@
 	artistNameLabel.frame = newFrame;
 }
 
-
-#pragma mark Touch gestures for custom cell view
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event 
+- (void)setMySong:(Song *)aSong
 {
-	UITouch *touch = [touches anyObject];
-    startTouchPosition = [touch locationInView:self];
-	swiping = NO;
-	hasSwiped = NO;
-	fingerIsMovingLeftOrRight = NO;
-	fingerMovingVertically = NO;
-	[super touchesBegan:touches withEvent:event];
-}
-
-
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event 
-{
-	if ([self isTouchGoingLeftOrRight:[touches anyObject]]) 
-	{
-		[self lookForSwipeGestureInTouches:(NSSet *)touches withEvent:(UIEvent *)event];
-	} 
+	mySong = [aSong retain];
 	
-	[super touchesMoved:touches withEvent:event];
-}
-
-
-// Determine what kind of gesture the finger event is generating
-- (BOOL)isTouchGoingLeftOrRight:(UITouch *)touch 
-{
-    CGPoint currentTouchPosition = [touch locationInView:self];
-	if (fabsf(startTouchPosition.x - currentTouchPosition.x) >= 1.0) 
+	[coverArtView loadImageFromCoverArtId:aSong.coverArtId];
+	
+	self.backgroundView = [[[UIView alloc] init] autorelease];
+	if(row % 2 == 0)
 	{
-		fingerIsMovingLeftOrRight = YES;
-		return YES;
-    } 
-	else 
+		if (mySong.isFullyCached)
+			self.backgroundView.backgroundColor = [[ViewObjectsSingleton sharedInstance] currentLightColor];
+		else
+			self.backgroundView.backgroundColor = [ViewObjectsSingleton sharedInstance].lightNormal;
+	}
+	else
 	{
-		fingerIsMovingLeftOrRight = NO;
-		return NO;
+		if (mySong.isFullyCached)
+			self.backgroundView.backgroundColor = [[ViewObjectsSingleton sharedInstance] currentDarkColor];
+		else
+			self.backgroundView.backgroundColor = [ViewObjectsSingleton sharedInstance].darkNormal;
 	}
 	
-	if (fabsf(startTouchPosition.y - currentTouchPosition.y) >= 2.0) 
-	{
-		fingerMovingVertically = YES;
-	} 
-	else 
-	{
-		fingerMovingVertically = NO;
-	}
+	[songNameLabel setText:aSong.title];
+	if (aSong.album)
+		[artistNameLabel setText:[NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album]];
+	else
+		[artistNameLabel setText:aSong.artist];
 }
 
-
-- (BOOL)fingerIsMoving {
-	return fingerIsMovingLeftOrRight;
+- (void)dealloc 
+{
+	[mySong release]; mySong = nil;
+	
+    [super dealloc];
 }
 
+#pragma mark - Overlay
 
-- (BOOL)fingerIsMovingVertically {
-	return fingerMovingVertically;
-}
-
-
-// Check for swipe gestures
-- (void)lookForSwipeGestureInTouches:(NSSet *)touches withEvent:(UIEvent *)event {
-    UITouch *touch = [touches anyObject];
-    CGPoint currentTouchPosition = [touch locationInView:self];
+- (void)showOverlay
+{
+	[super showOverlay];
 	
-	[self setSelected:NO];
-	swiping = YES;
-	
-	//ShoppingAppDelegate *appDelegate = (ShoppingAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	if (hasSwiped == NO) 
+	if (self.isOverlayShowing)
 	{
-		// If the swipe tracks correctly.
-		if (fabsf(startTouchPosition.x - currentTouchPosition.x) >= viewObjects.kHorizSwipeDragMin &&
-			fabsf(startTouchPosition.y - currentTouchPosition.y) <= viewObjects.kVertSwipeDragMax)
+		if (mySong.isFullyCached)
 		{
-			// It appears to be a swipe.
-			if (startTouchPosition.x < currentTouchPosition.x) 
-			{
-				// Right swipe
-				// Disable the cells so we don't get accidental selections
-				viewObjects.isCellEnabled = NO;
-				
-				hasSwiped = YES;
-				swiping = NO;
-				
-				[self showOverlay];
-				
-				// Re-enable cell touches in 1 second
-				viewObjects.cellEnabledTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:viewObjects selector:@selector(enableCells) userInfo:nil repeats:NO];
-			} 
-			else 
-			{
-				// Left Swipe
-				// Disable the cells so we don't get accidental selections
-				viewObjects.isCellEnabled = NO;
-				
-				hasSwiped = YES;
-				swiping = NO;
-				
-				if (songNameLabel.frame.size.width > artistNameLabel.frame.size.width)
-					scrollWidth = songNameLabel.frame.size.width;
-				else
-					scrollWidth = artistNameLabel.frame.size.width;
-				
-				if (scrollWidth > songNameScrollView.frame.size.width)
-				{
-					[UIView beginAnimations:@"scroll" context:nil];
-					[UIView setAnimationDelegate:self];
-					[UIView setAnimationDidStopSelector:@selector(textScrollingStopped)];
-					[UIView setAnimationDuration:scrollWidth/(float)150];
-					songNameScrollView.contentOffset = CGPointMake(scrollWidth - songNameScrollView.frame.size.width + 10, 0);
-					[UIView commitAnimations];
-				}
-				
-				// Re-enable cell touches in 1 second
-				viewObjects.cellEnabledTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:viewObjects selector:@selector(enableCells) userInfo:nil repeats:NO];
-			}
-		} 
-		else 
-		{
-			// Process a non-swipe event.
+			self.overlayView.downloadButton.alpha = .3;
+			self.overlayView.downloadButton.enabled = NO;
 		}
-		
 	}
 }
 
+- (void)downloadAction
+{
+	[mySong addToCacheQueue];
+	
+	self.overlayView.downloadButton.alpha = .3;
+	self.overlayView.downloadButton.enabled = NO;
+	
+	if ([MusicSingleton sharedInstance].isQueueListDownloading == NO)
+	{
+		[[MusicSingleton sharedInstance] downloadNextQueuedSong];
+	}
+	
+	[self hideOverlay];
+}
+
+- (void)queueAction
+{	
+	[[DatabaseSingleton sharedInstance] queueSong:mySong];
+	
+	[self hideOverlay];
+}
+
+#pragma mark - Scrolling
+
+- (void)scrollLabels
+{
+	CGFloat scrollWidth = songNameLabel.frame.size.width > artistNameLabel.frame.size.width ? songNameLabel.frame.size.width : artistNameLabel.frame.size.width;
+	if (scrollWidth > songNameScrollView.frame.size.width)
+	{
+		[UIView beginAnimations:@"scroll" context:nil];
+		[UIView setAnimationDelegate:self];
+		[UIView setAnimationDidStopSelector:@selector(textScrollingStopped)];
+		[UIView setAnimationDuration:scrollWidth/150.];
+		songNameScrollView.contentOffset = CGPointMake(scrollWidth - songNameScrollView.frame.size.width + 10, 0);
+		[UIView commitAnimations];
+	}
+}
 
 - (void)textScrollingStopped
 {
+	CGFloat scrollWidth = songNameLabel.frame.size.width > artistNameLabel.frame.size.width ? songNameLabel.frame.size.width : artistNameLabel.frame.size.width;
 	[UIView beginAnimations:@"scroll" context:nil];
-	[UIView setAnimationDuration:scrollWidth/(float)150];
+	[UIView setAnimationDuration:scrollWidth/150.];
 	songNameScrollView.contentOffset = CGPointZero;
 	[UIView commitAnimations];
 }
 
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event 
-{
-	swiping = NO;
-	hasSwiped = NO;
-	fingerMovingVertically = NO;
-	[super touchesEnded:touches withEvent:event];
-}
-
-
-- (void)dealloc {
-	[mySong release];
-	
-	/*[artistNameLabel release];
-	[songNameScrollView release];
-	[songNameLabel release];
-	[coverArtView release];*/
-    [super dealloc];
-}
 
 
 @end

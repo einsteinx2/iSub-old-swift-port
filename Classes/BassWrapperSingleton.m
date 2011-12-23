@@ -762,31 +762,38 @@ void BASSLogError()
 	}
 }
 
-- (void)bassInit
+- (void)bassInit:(NSUInteger)sampleRate
 {
-    isTempDownload = NO;
+	isTempDownload = NO;
     
 	[self bassFree];
-		
+	
 	BASS_SetConfig(BASS_CONFIG_IOS_MIXAUDIO, 0); // Disable mixing.	To be called before BASS_Init.
 	BASS_SetConfig(BASS_CONFIG_BUFFER, ISMS_BASSBufferSize);
 	BASS_SetConfig(BASS_CONFIG_FLOATDSP, true);
 	
 	// Initialize default device.
-	if (!BASS_Init(-1, 44100, 0, NULL, NULL)) 
+	if (!BASS_Init(-1, sampleRate, 0, NULL, NULL)) 
 	{
 		DLog(@"Can't initialize device");
 	}
 	
-	Float64 sampleRate;
-	UInt32 size = sizeof(Float64);
-	OSStatus status = AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareSampleRate, &size, &sampleRate);
-	NSLog(@"sample rate: %f   status: %@", sampleRate, NSStringFromOSStatus(status));
-		
 	BASS_PluginLoad(&BASSFLACplugin, 0);
 	
 	AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, self);
 	AudioSessionAddPropertyListener(kAudioSessionProperty_OtherAudioIsPlaying, audioInterruptionListenerCallback, self);
+
+	// Log actual sample rate
+	Float64 actualSampleRate;
+	UInt32 size = sizeof(Float64);
+	OSStatus status = AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareSampleRate, &size, &actualSampleRate);
+	NSLog(@"sample rate: %f   status: %@", actualSampleRate, NSStringFromOSStatus(status));
+}
+
+- (void)bassInit
+{
+	// Default to 44.1 KHz
+    [self bassInit:44100];
 }
 
 - (BOOL)bassFree

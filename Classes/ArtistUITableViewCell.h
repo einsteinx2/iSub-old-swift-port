@@ -6,45 +6,15 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@class CellOverlay, iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, Artist;
+#import "CustomUITableViewCell.h"
 
-@interface ArtistUITableViewCell : UITableViewCell 
-{
-	iSubAppDelegate *appDelegate;
-	ViewObjectsSingleton *viewObjects;
-	MusicSingleton *musicControls;
-	DatabaseSingleton *databaseControls;
-		
-	UIScrollView *artistNameScrollView;
-	UILabel *artistNameLabel;
-	
-	Artist *myArtist;
+@class Artist;
 
-	BOOL isOverlayShowing;
-	CellOverlay *overlayView;
-	
-	CGPoint startTouchPosition;
-	BOOL swiping;
-	BOOL hasSwiped;
-	BOOL fingerIsMovingLeftOrRight;
-	BOOL fingerMovingVertically;
-}
+@interface ArtistUITableViewCell : CustomUITableViewCell 
 
 @property (nonatomic, retain) UIScrollView *artistNameScrollView;
 @property (nonatomic, retain) UILabel *artistNameLabel;
 
 @property (nonatomic, retain) Artist *myArtist;
-
-@property BOOL isOverlayShowing;
-@property (nonatomic, retain) CellOverlay *overlayView;
-
-
-- (BOOL)isTouchGoingLeftOrRight:(UITouch *)touch;
-- (void)lookForSwipeGestureInTouches:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void)hideOverlay;
-- (void)showOverlay;
-
-// Empty function
-- (void)toggleDelete;
 
 @end

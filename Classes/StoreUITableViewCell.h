@@ -23,7 +23,4 @@
 @property (nonatomic, retain) UILabel *descLabel;
 @property (nonatomic, retain) UILabel *priceLabel;
 
-// Empty function
-- (void)toggleDelete;
-
 @end

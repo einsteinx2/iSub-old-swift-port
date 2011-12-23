@@ -6,56 +6,17 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@class CellOverlay, iSubAppDelegate, ViewObjectsSingleton, AsynchronousImageViewCached, MusicSingleton, DatabaseSingleton;
+#include "CustomUITableViewCell.h"
 
-@interface AllSongsUITableViewCell : UITableViewCell 
-{
-	NSIndexPath *indexPath;
-	NSString *md5;
-	
-	iSubAppDelegate *appDelegate;
-	ViewObjectsSingleton *viewObjects;
-	MusicSingleton *musicControls;
-	DatabaseSingleton *databaseControls;
-	
-	AsynchronousImageViewCached *coverArtView;
-	UIScrollView *songNameScrollView;
-	CGFloat scrollWidth;
-	UILabel *songNameLabel;
-	UILabel *artistNameLabel;
-	
-	BOOL isOverlayShowing;
-	CellOverlay *overlayView;
-	
-	CGPoint startTouchPosition;
-	BOOL swiping;
-	BOOL hasSwiped;
-	BOOL fingerIsMovingLeftOrRight;
-	BOOL fingerMovingVertically;
-	
-	BOOL isSearching;
-}
+@class AsynchronousImageViewCached;
 
-@property (nonatomic, retain) NSIndexPath *indexPath;
+@interface AllSongsUITableViewCell : CustomUITableViewCell 
+
 @property (nonatomic, retain) NSString *md5;
 
 @property (nonatomic, retain) AsynchronousImageViewCached *coverArtView;
 @property (nonatomic, retain) UIScrollView *songNameScrollView;
 @property (nonatomic, retain) UILabel *songNameLabel;
 @property (nonatomic, retain) UILabel *artistNameLabel;
-
-@property BOOL isOverlayShowing;
-@property (nonatomic, retain) CellOverlay *overlayView;
-
-@property BOOL isSearching;
-
-
-- (BOOL)isTouchGoingLeftOrRight:(UITouch *)touch;
-- (void)lookForSwipeGestureInTouches:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void)hideOverlay;
-- (void)showOverlay;
-
-// Empty function
-- (void)toggleDelete;
 
 @end

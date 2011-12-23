@@ -32,6 +32,7 @@
 // BASS methods
 //
 - (unsigned long long)preSilenceLengthForSong:(Song *)aSong;
+- (void)bassInit:(NSUInteger)sampleRate;
 - (void)bassInit;
 - (BOOL)bassFree;
 - (void)prepareNextSongStreamInBackground;

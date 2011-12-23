@@ -8,15 +8,14 @@
 
 #import "AlbumUITableViewCell.h"
 #import "AsynchronousImageViewCached.h"
-#import "iSubAppDelegate.h"
-#import "ViewObjectsSingleton.h"
-#import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
 #import "CellOverlay.h"
 
 @implementation AlbumUITableViewCell
 
-@synthesize myId, myArtist, coverArtView, albumNameScrollView, albumNameLabel, isOverlayShowing, overlayView, isIndexShowing;
+@synthesize myId, myArtist, coverArtView, albumNameScrollView, albumNameLabel;
+
+#pragma mark - Lifecycle
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
 {
@@ -24,16 +23,9 @@
 	{
 		myId = nil;
 		myArtist = nil;
-		overlayView = nil;
 		
-		// Initialization code
-		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-		viewObjects = [ViewObjectsSingleton sharedInstance];
-		musicControls = [MusicSingleton sharedInstance];
-		databaseControls = [DatabaseSingleton sharedInstance];
-		
-		isOverlayShowing = NO;
-		isIndexShowing = NO;
+		self.isOverlayShowing = NO;
+		self.isIndexShowing = NO;
 		
 		coverArtView = [[AsynchronousImageViewCached alloc] init];
 		[self.contentView addSubview:coverArtView];
@@ -41,7 +33,7 @@
 		
 		albumNameScrollView = [[UIScrollView alloc] init];
 		NSUInteger width;
-		if (isIndexShowing)
+		if (self.isIndexShowing)
 			width = 220;
 		else
 			width = 250;
@@ -65,72 +57,6 @@
 	return self;
 }
 
-
-// Empty function
-- (void)toggleDelete
-{
-}
-	
-
-- (void)downloadAction
-{
-	[databaseControls downloadAllSongs:myId artist:myArtist];
-	
-	overlayView.downloadButton.alpha = .3;
-	overlayView.downloadButton.enabled = NO;
-	
-	[self hideOverlay];
-}
-
-- (void)queueAction
-{
-	[databaseControls queueAllSongs:myId artist:myArtist];
-	[self hideOverlay];
-}
-
-- (void)blockerAction
-{
-	[self hideOverlay];
-}
-
-
-- (void)hideOverlay
-{
-	if (overlayView)
-	{
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:.5];
-			overlayView.alpha = 0.0;
-		[UIView commitAnimations];
-		
-		isOverlayShowing = NO;
-	}
-}
-
-
-- (void)showOverlay
-{
-	if (!isOverlayShowing)
-	{
-		overlayView = [CellOverlay cellOverlayWithTableCell:self];
-		[self.contentView addSubview:overlayView];
-				
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:.5];
-			overlayView.alpha = 1.0;
-		[UIView commitAnimations];		
-		
-		isOverlayShowing = YES;
-	}
-}
-
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated 
-{
-    [super setSelected:selected animated:animated];
-}
-
-
 - (void)layoutSubviews 
 {	
     [super layoutSubviews];
@@ -145,155 +71,53 @@
 	coverArtView.frame = CGRectMake(0, 0, 60, 60);
 }
 
-
-#pragma mark Touch gestures for custom cell view
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event 
+- (void)dealloc 
 {
-	UITouch *touch = [touches anyObject];
-    startTouchPosition = [touch locationInView:self];
-	swiping = NO;
-	hasSwiped = NO;
-	fingerIsMovingLeftOrRight = NO;
-	fingerMovingVertically = NO;
-	[super touchesBegan:touches withEvent:event];
+	[myId release]; myId = nil;
+	[myArtist release]; myArtist = nil;
+	
+    [super dealloc];
 }
 
+#pragma mark - Overlay
 
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event 
+- (void)downloadAction
 {
-	if ([self isTouchGoingLeftOrRight:[touches anyObject]]) 
-	{
-		[self lookForSwipeGestureInTouches:(NSSet *)touches withEvent:(UIEvent *)event];
-	} 
+	[[DatabaseSingleton sharedInstance] downloadAllSongs:myId artist:myArtist];
 	
-	[super touchesMoved:touches withEvent:event];
+	self.overlayView.downloadButton.alpha = .3;
+	self.overlayView.downloadButton.enabled = NO;
+	
+	[self hideOverlay];
 }
 
-
-// Determine what kind of gesture the finger event is generating
-- (BOOL)isTouchGoingLeftOrRight:(UITouch *)touch 
+- (void)queueAction
 {
-    CGPoint currentTouchPosition = [touch locationInView:self];
-	if (fabsf(startTouchPosition.x - currentTouchPosition.x) >= 1.0) 
+	[[DatabaseSingleton sharedInstance] queueAllSongs:myId artist:myArtist];
+	[self hideOverlay];
+}
+
+#pragma mark - Scrolling
+
+- (void)scrollLabels
+{
+	if (albumNameLabel.frame.size.width > albumNameScrollView.frame.size.width)
 	{
-		fingerIsMovingLeftOrRight = YES;
-		return YES;
-    } 
-	else 
-	{
-		fingerIsMovingLeftOrRight = NO;
-		return NO;
-	}
-	
-	if (fabsf(startTouchPosition.y - currentTouchPosition.y) >= 2.0) 
-	{
-		fingerMovingVertically = YES;
-	} 
-	else 
-	{
-		fingerMovingVertically = NO;
+		[UIView beginAnimations:@"scroll" context:nil];
+		[UIView setAnimationDelegate:self];
+		[UIView setAnimationDidStopSelector:@selector(textScrollingStopped)];
+		[UIView setAnimationDuration:albumNameLabel.frame.size.width/150.];
+		albumNameScrollView.contentOffset = CGPointMake(albumNameLabel.frame.size.width - albumNameScrollView.frame.size.width + 10, 0);
+		[UIView commitAnimations];
 	}
 }
-
-
-- (BOOL)fingerIsMoving {
-	return fingerIsMovingLeftOrRight;
-}
-
-- (BOOL)fingerIsMovingVertically {
-	return fingerMovingVertically;
-}
-
-// Check for swipe gestures
-- (void)lookForSwipeGestureInTouches:(NSSet *)touches withEvent:(UIEvent *)event {
-    UITouch *touch = [touches anyObject];
-    CGPoint currentTouchPosition = [touch locationInView:self];
-	
-	[self setSelected:NO];
-	swiping = YES;
-	
-	//ShoppingAppDelegate *appDelegate = (ShoppingAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	if (hasSwiped == NO) 
-	{
-		// If the swipe tracks correctly.
-		if (fabsf(startTouchPosition.x - currentTouchPosition.x) >= viewObjects.kHorizSwipeDragMin &&
-			fabsf(startTouchPosition.y - currentTouchPosition.y) <= viewObjects.kVertSwipeDragMax)
-		{
-			// It appears to be a swipe.
-			if (startTouchPosition.x < currentTouchPosition.x) 
-			{
-				// Right swipe
-				// Disable the cells so we don't get accidental selections
-				viewObjects.isCellEnabled = NO;
-				
-				hasSwiped = YES;
-				swiping = NO;
-				
-				[self showOverlay];
-								
-				// Re-enable cell touches in 1 second
-				viewObjects.cellEnabledTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:viewObjects selector:@selector(enableCells) userInfo:nil repeats:NO];
-			} 
-			else 
-			{
-				// Left Swipe
-				// Disable the cells so we don't get accidental selections
-				viewObjects.isCellEnabled = NO;
-				
-				hasSwiped = YES;
-				swiping = NO;
-				
-				if (albumNameLabel.frame.size.width > albumNameScrollView.frame.size.width)
-				{
-					[UIView beginAnimations:@"scroll" context:nil];
-					[UIView setAnimationDelegate:self];
-					[UIView setAnimationDidStopSelector:@selector(textScrollingStopped)];
-					[UIView setAnimationDuration:albumNameLabel.frame.size.width/(float)150];
-						albumNameScrollView.contentOffset = CGPointMake(albumNameLabel.frame.size.width - albumNameScrollView.frame.size.width + 10, 0);
-					[UIView commitAnimations];
-				}
-				
-				// Re-enable cell touches in 1 second
-				viewObjects.cellEnabledTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:viewObjects selector:@selector(enableCells) userInfo:nil repeats:NO];
-			}
-		} 
-		else 
-		{
-			// Process a non-swipe event.
-		}
-		
-	}
-}
-
 
 - (void)textScrollingStopped
 {
 	[UIView beginAnimations:@"scroll" context:nil];
-	[UIView setAnimationDuration:albumNameLabel.frame.size.width/(float)150];
-		albumNameScrollView.contentOffset = CGPointZero;
+	[UIView setAnimationDuration:albumNameLabel.frame.size.width/150.];
+	albumNameScrollView.contentOffset = CGPointZero;
 	[UIView commitAnimations];
 }
-
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event 
-{
-	swiping = NO;
-	hasSwiped = NO;
-	fingerMovingVertically = NO;
-	[super touchesEnded:touches withEvent:event];
-}
-
-- (void)dealloc 
-{
-	[myId release];
-	[myArtist release];
-	/*[albumNameScrollView release];
-	[albumNameLabel release];
-	[coverArtView release];*/
-    [super dealloc];
-}
-
 
 @end

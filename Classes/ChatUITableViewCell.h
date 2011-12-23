@@ -6,13 +6,10 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+#import "CustomUITableViewCell.h"
 
-@class iSubAppDelegate;
-
-@interface ChatUITableViewCell : UITableViewCell 
+@interface ChatUITableViewCell : CustomUITableViewCell 
 {
-	iSubAppDelegate *appDelegate;
-	
 	UILabel *userNameLabel;
 	UILabel *messageLabel;
 }

@@ -18,27 +18,27 @@
 
 - (void)showOverlay
 {
-	
+	return;
 }
 
 - (void)hideOverlay
 {
-	
+	return;
 }
 
 - (void)blockerAction
 {
-	
+	return;
 }
 
 - (void)downloadAction
 {
-	
+	return;
 }
 
 - (void)queueAction
 {
-	
+	return;
 }
 
 - (BOOL)fingerIsMovingVertically
@@ -48,7 +48,12 @@
 
 - (void)toggleDelete
 {
-	
+	return;
+}
+
+- (void)scrollLabels
+{
+	return;
 }
 
 @end

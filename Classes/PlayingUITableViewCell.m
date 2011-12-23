@@ -8,21 +8,17 @@
 
 #import "PlayingUITableViewCell.h"
 #import "AsynchronousImageViewCached.h"
-#import "iSubAppDelegate.h"
-#import "ViewObjectsSingleton.h"
 
 @implementation PlayingUITableViewCell
 
 @synthesize coverArtView, userNameLabel, nameScrollView, songNameLabel, artistNameLabel;
 
+#pragma mark - Lifecycle
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
 {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]))
 	{
-		// Initialization code
-		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-		viewObjects = [ViewObjectsSingleton sharedInstance];
-		
 		coverArtView = [[AsynchronousImageViewCached alloc] init];
 		[self.contentView addSubview:coverArtView];
 		[coverArtView release];
@@ -67,29 +63,8 @@
 	return self;
 }
 
-- (void) hideOverlay
+- (void)layoutSubviews 
 {
-}
-
-- (void) showOverlay
-{
-}
-
-- (void) isOverlayShowing
-{	
-}
-
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
-
-
-- (void)layoutSubviews {
-	
     [super layoutSubviews];
 	
 	coverArtView.frame = CGRectMake(0, 20, 60, 60);
@@ -108,152 +83,41 @@
 	artistNameLabel.frame = newFrame;
 }
 
+#pragma mark - Overlay
 
-#pragma mark Touch gestures for custom cell view
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event 
+- (void) showOverlay
 {
-	UITouch *touch = [touches anyObject];
-    startTouchPosition = [touch locationInView:self];
-	swiping = NO;
-	hasSwiped = NO;
-	fingerIsMovingLeftOrRight = NO;
-	fingerMovingVertically = NO;
-	[super touchesBegan:touches withEvent:event];
+	return;
 }
 
-
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event 
+- (void) hideOverlay
 {
-	if ([self isTouchGoingLeftOrRight:[touches anyObject]]) 
-	{
-		[self lookForSwipeGestureInTouches:(NSSet *)touches withEvent:(UIEvent *)event];
-	} 
-	
-	[super touchesMoved:touches withEvent:event];
+	return;
 }
 
+#pragma mark - Scrolling
 
-// Determine what kind of gesture the finger event is generating
-- (BOOL)isTouchGoingLeftOrRight:(UITouch *)touch 
+- (void)scrollLabels
 {
-    CGPoint currentTouchPosition = [touch locationInView:self];
-	if (fabsf(startTouchPosition.x - currentTouchPosition.x) >= 1.0) 
+	CGFloat scrollWidth = songNameLabel.frame.size.width > artistNameLabel.frame.size.width ? songNameLabel.frame.size.width : artistNameLabel.frame.size.width;
+	if (scrollWidth > nameScrollView.frame.size.width)
 	{
-		fingerIsMovingLeftOrRight = YES;
-		return YES;
-    } 
-	else 
-	{
-		fingerIsMovingLeftOrRight = NO;
-		return NO;
-	}
-	
-	if (fabsf(startTouchPosition.y - currentTouchPosition.y) >= 2.0) 
-	{
-		fingerMovingVertically = YES;
-	} 
-	else 
-	{
-		fingerMovingVertically = NO;
+		[UIView beginAnimations:@"scroll" context:nil];
+		[UIView setAnimationDelegate:self];
+		[UIView setAnimationDidStopSelector:@selector(textScrollingStopped)];
+		[UIView setAnimationDuration:scrollWidth/150.];
+		nameScrollView.contentOffset = CGPointMake(scrollWidth - nameScrollView.frame.size.width + 10, 0);
+		[UIView commitAnimations];
 	}
 }
-
-
-- (BOOL)fingerIsMoving {
-	return fingerIsMovingLeftOrRight;
-}
-
-- (BOOL)fingerIsMovingVertically {
-	return fingerMovingVertically;
-}
-
-// Check for swipe gestures
-- (void)lookForSwipeGestureInTouches:(NSSet *)touches withEvent:(UIEvent *)event 
-{
-    UITouch *touch = [touches anyObject];
-    CGPoint currentTouchPosition = [touch locationInView:self];
-	
-	[self setSelected:NO];
-	swiping = YES;
-	
-	//ShoppingAppDelegate *appDelegate = (ShoppingAppDelegate *)[[UIApplication sharedApplication] delegate];
-	
-	if (hasSwiped == NO) 
-	{
-		// If the swipe tracks correctly.
-		if (fabsf(startTouchPosition.x - currentTouchPosition.x) >= viewObjects.kHorizSwipeDragMin &&
-			fabsf(startTouchPosition.y - currentTouchPosition.y) <= viewObjects.kVertSwipeDragMax)
-		{
-			// It appears to be a swipe.
-			if (startTouchPosition.x < currentTouchPosition.x) 
-			{
-				// Right swipe
-			} 
-			else 
-			{
-				// Left Swipe
-				// Disable the cells so we don't get accidental selections
-				viewObjects.isCellEnabled = NO;
-				
-				hasSwiped = YES;
-				swiping = NO;
-				
-				if (songNameLabel.frame.size.width > artistNameLabel.frame.size.width)
-					scrollWidth = songNameLabel.frame.size.width;
-				else
-					scrollWidth = artistNameLabel.frame.size.width;
-				
-				if (scrollWidth > nameScrollView.frame.size.width)
-				{
-					[UIView beginAnimations:@"scroll" context:nil];
-					[UIView setAnimationDelegate:self];
-					[UIView setAnimationDidStopSelector:@selector(textScrollingStopped)];
-					[UIView setAnimationDuration:scrollWidth/(float)150];
-					nameScrollView.contentOffset = CGPointMake(scrollWidth - nameScrollView.frame.size.width + 10, 0);
-					[UIView commitAnimations];
-				}
-				
-				// Re-enable cell touches in 1 second
-				viewObjects.cellEnabledTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:viewObjects selector:@selector(enableCells) userInfo:nil repeats:NO];
-			}
-		} 
-		else 
-		{
-			// Process a non-swipe event.
-		}
-		
-	}
-}
-
 
 - (void)textScrollingStopped
 {
+	CGFloat scrollWidth = songNameLabel.frame.size.width > artistNameLabel.frame.size.width ? songNameLabel.frame.size.width : artistNameLabel.frame.size.width;
 	[UIView beginAnimations:@"scroll" context:nil];
 	[UIView setAnimationDuration:scrollWidth/(float)150];
 	nameScrollView.contentOffset = CGPointZero;
 	[UIView commitAnimations];
 }
-
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event 
-{
-	swiping = NO;
-	hasSwiped = NO;
-	fingerMovingVertically = NO;
-	[super touchesEnded:touches withEvent:event];
-}
-
-
-
-- (void)dealloc {
-	/*[coverArtView release];
-	[userNameLabel release];
-	[nameScrollView release];
-	[songNameLabel release];
-	[artistNameLabel release];*/
-    [super dealloc];
-}
-
 
 @end
