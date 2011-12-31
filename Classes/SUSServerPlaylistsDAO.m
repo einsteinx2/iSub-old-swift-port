@@ -53,6 +53,7 @@
 - (void)cancelLoad
 {
     [loader cancelLoad];
+	loader.delegate = nil;
     self.loader = nil;
 }
 
@@ -60,15 +61,26 @@
 
 - (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
 {
+	loader.delegate = nil;
     self.loader = nil;
-	[self.delegate loadingFailed:nil withError:error];
+	
+	if ([delegate respondsToSelector:@selector(loadingFailed:withError:)])
+	{
+		[delegate loadingFailed:nil withError:error];
+	}
 }
 
 - (void)loadingFinished:(SUSLoader*)theLoader
 {
 	self.serverPlaylists = [NSArray arrayWithArray:loader.serverPlaylists];
-    self.loader = nil;
-	[self.delegate loadingFinished:nil];
+	
+	loader.delegate = nil;
+	self.loader = nil;
+    
+	if ([delegate respondsToSelector:@selector(loadingFinished:)])
+	{
+		[delegate loadingFinished:nil];
+	}
 }
 
 @end

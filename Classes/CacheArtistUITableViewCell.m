@@ -58,8 +58,18 @@
 
 #pragma mark - Overlay
 
+- (void)showOverlay
+{	
+	[super showOverlay];
+	if (self.isOverlayShowing)
+	{
+		[self.overlayView.downloadButton setImage:[UIImage imageNamed:@"delete-button.png"] forState:UIControlStateNormal];
+		[self.overlayView.downloadButton addTarget:self action:@selector(deleteAction) forControlEvents:UIControlEventTouchUpInside];
+	}
+}
+
 - (void)deleteAction
-{
+{	
 	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindow];
 	[self performSelectorInBackground:@selector(deleteAllSongs) withObject:nil];
 	
@@ -94,6 +104,8 @@
 
 - (void)queueAction
 {
+	[super queueAction];
+	
 	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindow];
 	[self performSelectorInBackground:@selector(queueAllSongs) withObject:nil];
 	[self hideOverlay];

@@ -228,12 +228,14 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (void)loadingFailed:(SUSLoader *)theLoader withError:(NSError *)error
 {
-    [theLoader release]; theLoader = nil;
+	theLoader.delegate = nil;
+    [theLoader release];
 }
 
 - (void)loadingFinished:(SUSLoader *)theLoader
 {
-    [theLoader release]; theLoader = nil;
+	theLoader.delegate = nil;
+    [theLoader release];
 }
 
 #pragma mark - Singleton methods

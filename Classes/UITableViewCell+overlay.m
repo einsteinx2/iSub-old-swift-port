@@ -7,7 +7,7 @@
 //
 
 #import "UITableViewCell+overlay.h"
-
+#import "CellOverlay.h"
 
 @implementation UITableViewCell (overlay)
 
@@ -54,6 +54,11 @@
 - (void)scrollLabels
 {
 	return;
+}
+
+- (CellOverlay *)overlayView
+{
+	return nil;
 }
 
 @end

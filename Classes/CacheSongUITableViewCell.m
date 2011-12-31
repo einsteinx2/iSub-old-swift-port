@@ -101,6 +101,17 @@
 
 #pragma mark - Overlay
 
+- (void)showOverlay
+{
+	[super showOverlay];
+	
+	if (self.isOverlayShowing)
+	{
+		[self.overlayView.downloadButton setImage:[UIImage imageNamed:@"delete-button.png"] forState:UIControlStateNormal];
+		[self.overlayView.downloadButton addTarget:self action:@selector(deleteAction) forControlEvents:UIControlEventTouchUpInside];
+	}
+}
+
 - (void)deleteAction
 {
 	[Song removeSongFromCacheDbByMD5:md5];

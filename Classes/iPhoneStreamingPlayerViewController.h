@@ -26,6 +26,10 @@
 	UILabel *albumLabel;
 	UILabel *titleLabel;
 	
+	UILabel *artistTitleLabel;
+	UILabel *albumTitleLabel;
+	UILabel *songTitleLabel;
+	
 	iSubAppDelegate *appDelegate;
 	MusicSingleton *musicControls;
 	DatabaseSingleton *databaseControls;
@@ -51,6 +55,8 @@
 - (IBAction)prevButtonPressed:(id)sender;
 - (IBAction)nextButtonPressed:(id)sender;
 
+- (void)createSongTitle;
+- (void)removeSongTitle;
 - (void)setSongTitle;
 
 - (IBAction)showEq:(id)sender;

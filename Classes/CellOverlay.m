@@ -11,7 +11,7 @@
 
 @implementation CellOverlay
 
-@synthesize downloadButton, queueButton;
+@synthesize downloadButton, queueButton, inputBlocker;
 
 + (CellOverlay*)cellOverlayWithTableCell:(UITableViewCell*)cell
 {
@@ -33,30 +33,21 @@
 		
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		
-		UIButton *inputBlocker = [UIButton buttonWithType:UIButtonTypeCustom];
+		inputBlocker = [UIButton buttonWithType:UIButtonTypeCustom];
 		inputBlocker.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		[inputBlocker addTarget:cell action:@selector(blockerAction) forControlEvents:UIControlEventTouchUpInside];
 		inputBlocker.frame = self.frame;
-		inputBlocker.enabled = YES;
+		inputBlocker.userInteractionEnabled = NO;
 		[self addSubview:inputBlocker];
 		
 		downloadButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		downloadButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		downloadButton.alpha = .8;
 		[downloadButton addTarget:cell action:@selector(downloadAction) forControlEvents:UIControlEventTouchUpInside];
-		downloadButton.enabled = YES;
+		downloadButton.userInteractionEnabled = NO;
 		[downloadButton setImage:viewObjects.cacheButtonImage forState:UIControlStateNormal];
 		downloadButton.frame = CGRectMake(30, 5, 120, 40);
-		//self.downloadButton.center = CGPointMake(self.frame.size.width / 3, self.frame.size.height / 2);
-		float width;
-		if (self.frame.size.width == 320)
-		{
-			width = 90.0;
-		}
-		else 
-		{
-			width = (self.frame.size.width / 3.0) - 50.0;
-		}
+		float width = self.frame.size.width == 320 ? 90.0 : (self.frame.size.width / 3.0) - 50.0;
 		downloadButton.center = CGPointMake(width, self.frame.size.height / 2);
 		[inputBlocker addSubview:downloadButton];
 		
@@ -64,45 +55,23 @@
 		queueButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		queueButton.alpha = .8;
 		[queueButton addTarget:cell action:@selector(queueAction) forControlEvents:UIControlEventTouchUpInside];
-		queueButton.enabled = YES;
+		queueButton.userInteractionEnabled = NO;
 		[queueButton setImage:viewObjects.queueButtonImage forState:UIControlStateNormal];
 		queueButton.frame = CGRectMake(170, 5, 120, 40);
-		if (self.frame.size.width == 320)
-		{
-			width = 230.0;
-		}
-		else 
-		{
-			width = ((self.frame.size.width / 3.0) * 2.0) + 40.0;
-		}
-		//self.queueButton.center = CGPointMake((self.frame.size.width / 3) * 2, self.frame.size.height / 2);
+		width = self.frame.size.width == 320 ? 230.0 : ((self.frame.size.width / 3.0) * 2.0) + 40.0;
 		queueButton.center = CGPointMake(width, self.frame.size.height / 2);
 		[inputBlocker addSubview:queueButton];
 	}
 	return self;
 }
 
-- (id)initWithFrame:(CGRect)frame {
-    
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code.
-    }
-    return self;
+- (void)enableButtons
+{
+	inputBlocker.userInteractionEnabled = YES;
+	downloadButton.userInteractionEnabled = YES;
+	queueButton.userInteractionEnabled = YES;
+	NSLog(@"enabling buttons - download: %@   queue: %@", NSStringFromBOOL(downloadButton.userInteractionEnabled), NSStringFromBOOL(queueButton.userInteractionEnabled));
 }
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code.
-}
-*/
-
-- (void)dealloc {
-    [super dealloc];
-}
-
 
 @end
 

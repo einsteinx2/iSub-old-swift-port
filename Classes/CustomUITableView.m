@@ -9,19 +9,24 @@
 #import "CustomUITableView.h"
 #import "ViewObjectsSingleton.h"
 #import "UITableViewCell+overlay.h"
+#import "CellOverlay.h"
 
 #define ISMSHorizSwipeDragMin 3
 #define ISMSVertSwipeDragMax 80
 
+#define ISMSCellEnableDelay 1.0
+#define ISMSTapAndHoldDelay 0.4
+
 @implementation CustomUITableView
 
-@synthesize blockInput, lastDeleteToggle, lastOverlayToggle, isCellsEnabled;
+@synthesize blockInput, lastDeleteToggle, lastOverlayToggle;
+
+#pragma mark Lifecycle
 
 - (void)setup
 {
 	self.lastDeleteToggle = [NSDate date];
 	self.lastOverlayToggle = [NSDate date];
-	isCellsEnabled = YES;
 }
 
 - (id)initWithFrame:(CGRect)frame 
@@ -42,6 +47,15 @@
 	return self;
 }
 
+- (void)dealloc 
+{
+    [lastDeleteToggle release]; lastDeleteToggle = nil;
+    [lastOverlayToggle release]; lastOverlayToggle = nil;
+    [super dealloc];
+}
+
+#pragma mark Touch gestures interception
+
 - (void)hideAllOverlays:(UITableViewCell *)cellToSkip
 {
 	// Remove any visible buttons
@@ -52,61 +66,31 @@
 	}
 }
 
-#pragma mark Touch gestures interception
-
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
-{
-	if (!blockInput)
+{	
+	// Don't try anything when the tableview is moving
+	// and do not catch as a swipe if touch is far right (potential index control)
+	if (!blockInput && !self.decelerating && point.x < 290)
 	{
-		ViewObjectsSingleton *viewObjects = [ViewObjectsSingleton sharedInstance];
-				
-		if (self.decelerating)
-		{			
-			// don't try anything when the tableview is moving..
-			return [super hitTest:point withEvent:event];
-		}
-		
-		// Do not catch as a swipe if touch is far right (potential index control)
-		if (point.x > 290) 
-		{
-			return [super hitTest:point withEvent:event];
-		}
+		// Find the cell
+		UITableViewCell *cell = [self cellForRowAtIndexPath:[self indexPathForRowAtPoint:point]];
 		
 		// Handle multi delete touching
-		if (viewObjects.isEditing)
+		if ([ViewObjectsSingleton sharedInstance].isEditing &&
+			point.x < 40 && [[NSDate date] timeIntervalSinceDate:lastDeleteToggle] > 0.25)
 		{
-			//DLog(@"inside the isEditing IF");
-			if ((point.x < 40) && ([[NSDate date] timeIntervalSinceDate:lastDeleteToggle] > 0.25))
-			{
-				self.lastDeleteToggle = [NSDate date];
-				NSIndexPath *indexPathAtHitPoint = [self indexPathForRowAtPoint:point];
-				UITableViewCell *cell = [self cellForRowAtIndexPath:indexPathAtHitPoint];
-				[cell toggleDelete];
-				//return (UIView *)[cell contentView];
-			}
+			self.lastDeleteToggle = [NSDate date];
+			[cell toggleDelete];
 		}
 		
-		// Find the cell
-		NSIndexPath *indexPathAtHitPoint = [self indexPathForRowAtPoint:point];
-		UITableViewCell *cell = [self cellForRowAtIndexPath:indexPathAtHitPoint];
-		// forward to the cell unless we desire to have vertical scrolling
-		//if (cell != nil && [cell fingerIsMovingVertically] == NO && [[NSDate date] timeIntervalSinceDate:lastOverlayToggle] > 0.5) 
-		if (cell != nil && !isFingerMovingVertically && [[NSDate date] timeIntervalSinceDate:lastOverlayToggle] > 0.5) 
+		// Remove overlays
+		if ([[NSDate date] timeIntervalSinceDate:lastOverlayToggle] > 0.5) 
 		{
 			self.lastOverlayToggle = [NSDate date];
 			
 			[self hideAllOverlays:cell];
-			
 			if ([cell isOverlayShowing])
-			{
-				[NSTimer scheduledTimerWithTimeInterval:1 target:cell selector:@selector(hideOverlay) userInfo:nil repeats:NO];
-				return [super hitTest:point withEvent:event];
-			}
-			else
-			{
-				return [super hitTest:point withEvent:event];
-				//return (UIView *)[cell contentView];
-			}
+				[cell performSelector:@selector(hideOverlay) withObject:nil afterDelay:1.0];
 		}
 	}
 	
@@ -118,131 +102,73 @@
 	return YES;
 }
 
-
 - (BOOL)touchesShouldBegin:(NSSet *)touches withEvent:(UIEvent *)event inContentView:(UIView *)view 
 {
 	return !blockInput;
 }
 
-- (void)dealloc 
-{
-    [lastDeleteToggle release]; lastDeleteToggle = nil;
-    [lastOverlayToggle release]; lastOverlayToggle = nil;
-    [super dealloc];
-}
-
-
 #pragma mark Touch gestures for custom cell view
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event 
+- (void)disableCellsTemporarily
 {
-	UITouch *touch = [touches anyObject];
-    startTouchPosition = [touch locationInView:self];
-	swiping = NO;
-	hasSwiped = NO;
-	isFingerMovingLeftOrRight = NO;
-	isFingerMovingVertically = NO;
-	[super touchesBegan:touches withEvent:event];
-}
-
-
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event 
-{
-	if ([self isTouchGoingLeftOrRight:[touches anyObject]]) 
-	{
-		[self lookForSwipeGestureInTouches:(NSSet *)touches withEvent:(UIEvent *)event];
-	} 
-	
-	[super touchesMoved:touches withEvent:event];
-}
-
-
-// Determine what kind of gesture the finger event is generating
-- (BOOL)isTouchGoingLeftOrRight:(UITouch *)touch 
-{
-    CGPoint currentTouchPosition = [touch locationInView:self];
-	if (fabsf(startTouchPosition.x - currentTouchPosition.x) >= 1.0) 
-	{
-		isFingerMovingLeftOrRight = YES;
-		return YES;
-    } 
-	else 
-	{
-		isFingerMovingLeftOrRight = NO;
-		return NO;
-	}
-	
-	if (fabsf(startTouchPosition.y - currentTouchPosition.y) >= 2.0) 
-	{
-		isFingerMovingVertically = YES;
-	} 
-	else 
-	{
-		isFingerMovingVertically = NO;
-	}
+	self.allowsSelection = NO;
+	[self performSelector:@selector(enableCells) withObject:nil afterDelay:ISMSCellEnableDelay];
 }
 
 - (void)enableCells
 {
-	isCellsEnabled = YES;
+	self.allowsSelection = YES;
 }
 
-// Check for swipe gestures
+- (BOOL)isTouchHorizontal:(UITouch *)touch 
+{
+    CGPoint currentTouchPosition = [touch locationInView:self];
+	if (fabsf(startTouchPosition.x - currentTouchPosition.x) >= 1.0) 
+		return YES;
+	
+	return NO;
+}
+
+- (BOOL)isTouchVertical:(UITouch *)touch
+{
+	CGPoint currentTouchPosition = [touch locationInView:self];
+	if (fabsf(startTouchPosition.y - currentTouchPosition.y) >= 2.0) 
+		return YES;
+	
+	return NO;
+}
+
 - (void)lookForSwipeGestureInTouches:(NSSet *)touches withEvent:(UIEvent *)event 
 {
-    UITouch *touch = [touches anyObject];
-    CGPoint currentTouchPosition = [touch locationInView:self];
+    CGPoint currentTouchPosition = [[touches anyObject] locationInView:self];
+	UITableViewCell *cell = [self cellForRowAtIndexPath: [self indexPathForRowAtPoint:currentTouchPosition]];
 	
-	NSIndexPath *indexPathAtHitPoint = [self indexPathForRowAtPoint:currentTouchPosition];
-	UITableViewCell *cell = [self cellForRowAtIndexPath:indexPathAtHitPoint];
-	
-	cell.selected = NO;
-	swiping = YES;
-		
-	if (hasSwiped == NO) 
+	if (!hasSwiped) 
 	{
-		// If the swipe tracks correctly.
+		// Check if this is a full swipe
 		if (fabsf(startTouchPosition.x - currentTouchPosition.x) >= ISMSHorizSwipeDragMin &&
 			fabsf(startTouchPosition.y - currentTouchPosition.y) <= ISMSVertSwipeDragMax)
 		{
-			// It appears to be a swipe.
+			hasSwiped = YES;
+			self.scrollEnabled = NO;			
+			
+			// Temporarily disable the cells so we don't get accidental selections
+			[self disableCellsTemporarily];
+			
+			// Hide any open overlays
+			[self hideAllOverlays:nil];
+			
+			// Detect the direction
 			if (startTouchPosition.x < currentTouchPosition.x) 
 			{
 				// Right swipe
-				// Disable the cells so we don't get accidental selections
-				isCellsEnabled = NO;
-				
-				hasSwiped = YES;
-				swiping = NO;
-				
 				[cell showOverlay];
-				
-				// Re-enable cell touches in 1 second
-				[NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(enableCells) userInfo:nil repeats:NO];
+				cellShowingOverlay = cell;
 			} 
 			else 
 			{
-				// Left Swipe
-				// Disable the cells so we don't get accidental selections
-				isCellsEnabled = NO;
-				
-				hasSwiped = YES;
-				swiping = NO;
-				
+				// Left Swipe				
 				[cell scrollLabels];
-				
-				/*if (albumNameLabel.frame.size.width > albumNameScrollView.frame.size.width)
-				{
-					[UIView beginAnimations:@"scroll" context:nil];
-					[UIView setAnimationDelegate:self];
-					[UIView setAnimationDidStopSelector:@selector(textScrollingStopped)];
-					[UIView setAnimationDuration:albumNameLabel.frame.size.width/(float)150];
-					albumNameScrollView.contentOffset = CGPointMake(albumNameLabel.frame.size.width - albumNameScrollView.frame.size.width + 10, 0);
-					[UIView commitAnimations];
-				}*/
-				
-				// Re-enable cell touches in 1 second
-				[NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(enableCells) userInfo:nil repeats:NO];
 			}
 		} 
 		else 
@@ -252,14 +178,87 @@
 	}
 }
 
+- (void)tapAndHoldFired
+{
+    tapAndHoldFired = YES;
+	[tapAndHoldCell showOverlay];
+	cellShowingOverlay = tapAndHoldCell;
+}
+
+- (void)cancelTapAndHold
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(tapAndHoldFired) object:nil];
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event 
+{	
+	self.allowsSelection = NO;
+	self.scrollEnabled = YES;
+		
+	// Handle swipe
+    startTouchPosition = [[touches anyObject] locationInView:self];
+	hasSwiped = NO;
+	cellShowingOverlay = nil;
+
+	// Handle tap and hold
+	tapAndHoldFired = NO;
+	tapAndHoldCell = [self cellForRowAtIndexPath: [self indexPathForRowAtPoint:startTouchPosition]];
+	[self performSelector:@selector(tapAndHoldFired) withObject:nil afterDelay:ISMSTapAndHoldDelay];
+	
+	[super touchesBegan:touches withEvent:event];
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event 
+{	
+	// Cancel the tap and hold if user moves finger
+	[self cancelTapAndHold];
+	
+	// Check for swipe
+	if ([self isTouchHorizontal:[touches anyObject]]) 
+	{
+		[self lookForSwipeGestureInTouches:(NSSet *)touches withEvent:(UIEvent *)event];
+	} 
+	
+	[super touchesMoved:touches withEvent:event];
+}
+
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event 
 {
-	swiping = NO;
+	self.allowsSelection = YES;
+	self.scrollEnabled = YES;
+	
+	[self cancelTapAndHold];
+
+	if (tapAndHoldFired || hasSwiped)
+	{
+		// Enable the buttons if the overlay is showing
+		[[cellShowingOverlay overlayView] enableButtons];
+	}
+	else
+	{
+		// Select the cell if this was a touch not a swipe or tap and hold
+		CGPoint currentTouchPosition = [[touches anyObject] locationInView:self];
+		UITableViewCell *cell = [self cellForRowAtIndexPath: [self indexPathForRowAtPoint:currentTouchPosition]];
+		[self selectRowAtIndexPath:[self indexPathForCell:cell] animated:NO scrollPosition:UITableViewScrollPositionNone];
+		[self.delegate tableView:self didSelectRowAtIndexPath:[self indexPathForCell:cell]];
+	}
 	hasSwiped = NO;
-	isFingerMovingVertically = NO;
+	
 	[super touchesEnded:touches withEvent:event];
 }
 
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self cancelTapAndHold];
+	
+	self.allowsSelection = YES;
+	self.scrollEnabled = YES;
+	hasSwiped = NO;
+	
+	[[cellShowingOverlay overlayView] enableButtons];
+	
+	[super touchesCancelled:touches withEvent:event];
+}
 
 
 @end

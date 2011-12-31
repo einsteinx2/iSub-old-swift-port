@@ -91,3 +91,5 @@
 #define n2N(value) (value ? value : [NSNull null])
 
 //static id n2N(id value) { return value ? value : [NSNull null]; }
+
+#define NSStringFromBOOL(value) (value ? @"YES" : @"NO")

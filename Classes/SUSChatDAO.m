@@ -165,6 +165,7 @@
 - (void)cancelLoad
 {
     [loader cancelLoad];
+	loader.delegate = nil;
     self.loader = nil;
 }
 
@@ -172,13 +173,26 @@
 
 - (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
 {
-	[self.delegate loadingFailed:theLoader withError:error];
+	loader.delegate = nil;
+	self.loader = nil;
+	
+	if ([delegate respondsToSelector:@selector(loadingFailed:withError:)])
+	{
+		[self.delegate loadingFailed:nil withError:error];
+	}
 }
 
 - (void)loadingFinished:(SUSLoader*)theLoader
 {
 	self.chatMessages = [NSArray arrayWithArray:loader.chatMessages];
-	[self.delegate loadingFinished:theLoader];
+	
+	loader.delegate = nil;
+	self.loader = nil;
+	
+	if ([delegate respondsToSelector:@selector(loadingFinished:)])
+	{
+		[self.delegate loadingFinished:nil];
+	}
 }
 
 @end

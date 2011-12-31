@@ -172,7 +172,7 @@
 	{
 		// Inform the delegate that the loading failed.
 		NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
-		[self.delegate loadingFailed:self withError:error];
+		[self informDelegateLoadingFailed:error];
 	}
 }
 
@@ -217,7 +217,7 @@
 	self.connection = nil;
 	
 	// Inform the delegate that loading failed
-	[self.delegate loadingFailed:self withError:error];
+	[self informDelegateLoadingFailed:error];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
@@ -355,8 +355,7 @@
 	[[SavedSettings sharedInstance] setRootFoldersReloadTime:[NSDate date]];
 	
 	// Notify the delegate that the loading is finished
-    //DLog(@"calling delegate %@ loadingFinished", self.delegate);
-	[self.delegate loadingFinished:self];
+	[self informDelegateLoadingFinished];
 }
 
 @end

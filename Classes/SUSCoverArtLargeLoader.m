@@ -107,7 +107,7 @@
 	self.connection = nil;
 	
 	// Inform the delegate that loading failed
-	[self.delegate loadingFailed:self withError:error];
+	[self informDelegateLoadingFailed:error];
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
@@ -120,7 +120,7 @@
         [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AlbumArtLargeDownloaded];
         
 		// Notify the delegate that the loading is finished
-		[self.delegate loadingFinished:self];
+		[self informDelegateLoadingFinished];
 	}
     else
     {

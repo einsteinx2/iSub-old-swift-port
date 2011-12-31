@@ -313,6 +313,7 @@
 	{
 		isLoading = NO;
 		[loader cancelLoad];
+		loader.delegate = nil;
         self.loader = nil;
 	}
 }

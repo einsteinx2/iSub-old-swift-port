@@ -237,6 +237,9 @@
 		536585AC1478C20900FE57A5 /* BassEffectHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 536585AB1478C20800FE57A5 /* BassEffectHandle.m */; };
 		536585AD1478C20900FE57A5 /* BassEffectHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 536585AB1478C20800FE57A5 /* BassEffectHandle.m */; };
 		536585AE1478C20900FE57A5 /* BassEffectHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 536585AB1478C20800FE57A5 /* BassEffectHandle.m */; };
+		5365ABE414AFB05100C0958D /* UIDevice+Software.m in Sources */ = {isa = PBXBuildFile; fileRef = 5365ABE314AFB05100C0958D /* UIDevice+Software.m */; };
+		5365ABE514AFB05100C0958D /* UIDevice+Software.m in Sources */ = {isa = PBXBuildFile; fileRef = 5365ABE314AFB05100C0958D /* UIDevice+Software.m */; };
+		5365ABE614AFB05100C0958D /* UIDevice+Software.m in Sources */ = {isa = PBXBuildFile; fileRef = 5365ABE314AFB05100C0958D /* UIDevice+Software.m */; };
 		536AB8021353B4F600DABD83 /* ShuffleFolderPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AB8001353B4F500DABD83 /* ShuffleFolderPickerViewController.m */; };
 		536AB8031353B4F600DABD83 /* ShuffleFolderPickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 536AB8011353B4F500DABD83 /* ShuffleFolderPickerViewController.xib */; };
 		536AB8111353DCF900DABD83 /* PlaylistSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AB80F1353DCF700DABD83 /* PlaylistSongsViewController.m */; };
@@ -1991,6 +1994,8 @@
 		536585A61478BF2600FE57A5 /* BassParamEqValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassParamEqValue.m; sourceTree = "<group>"; };
 		536585AA1478C20700FE57A5 /* BassEffectHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassEffectHandle.h; sourceTree = "<group>"; };
 		536585AB1478C20800FE57A5 /* BassEffectHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassEffectHandle.m; sourceTree = "<group>"; };
+		5365ABE214AFB05100C0958D /* UIDevice+Software.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+Software.h"; sourceTree = "<group>"; };
+		5365ABE314AFB05100C0958D /* UIDevice+Software.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+Software.m"; sourceTree = "<group>"; };
 		536AB7FF1353B4F500DABD83 /* ShuffleFolderPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShuffleFolderPickerViewController.h; sourceTree = "<group>"; };
 		536AB8001353B4F500DABD83 /* ShuffleFolderPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShuffleFolderPickerViewController.m; sourceTree = "<group>"; };
 		536AB8011353B4F500DABD83 /* ShuffleFolderPickerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShuffleFolderPickerViewController.xib; sourceTree = "<group>"; };
@@ -2148,6 +2153,7 @@
 		53A454AE133D7E2700741030 /* LocalhostAddresses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalhostAddresses.m; sourceTree = "<group>"; };
 		53A698D81467B34D00DCAFCB /* SUSSubFolderLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSSubFolderLoader.h; sourceTree = "<group>"; };
 		53A698D91467B34D00DCAFCB /* SUSSubFolderLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSSubFolderLoader.m; sourceTree = "<group>"; };
+		53A7652A14AE9A94004253D1 /* NSString+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Additions.h"; sourceTree = "<group>"; };
 		53A77FC5128E3648005D2D65 /* UITableViewCell+overlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+overlay.h"; sourceTree = "<group>"; };
 		53A77FC6128E3648005D2D65 /* UITableViewCell+overlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+overlay.m"; sourceTree = "<group>"; };
 		53A77FCB128E38E7005D2D65 /* CellOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellOverlay.h; sourceTree = "<group>"; };
@@ -2976,8 +2982,14 @@
 		533A207B12887EA300539BAE /* Table Cells */ = {
 			isa = PBXGroup;
 			children = (
+				5348A59911879C3A0078994D /* CustomUITableView.h */,
+				5348A59A11879C3A0078994D /* CustomUITableView.m */,
 				5398FA4214A4458F002808E1 /* CustomUITableViewCell.h */,
 				5398FA4314A44590002808E1 /* CustomUITableViewCell.m */,
+				53A77FC5128E3648005D2D65 /* UITableViewCell+overlay.h */,
+				53A77FC6128E3648005D2D65 /* UITableViewCell+overlay.m */,
+				53A77FCB128E38E7005D2D65 /* CellOverlay.h */,
+				53A77FCC128E38E7005D2D65 /* CellOverlay.m */,
 				534E43B51155659A000B4134 /* AlbumUITableViewCell.h */,
 				534E43B61155659A000B4134 /* AlbumUITableViewCell.m */,
 				539797F81162D3F100F41D8B /* AllAlbumsUITableViewCell.h */,
@@ -3309,16 +3321,7 @@
 		5382A81812D82CE8005A3D1A /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				5345FADE1191E6A000C6EAB7 /* NSString+md5.h */,
-				5345FADF1191E6A000C6EAB7 /* NSString+md5.m */,
-				531F157A126F6B5600F524BD /* NSString+hex.h */,
-				531F157B126F6B5600F524BD /* NSString+hex.m */,
-				532B0DDE12AF0AF700E8FF4F /* NSString+rfcEncode.h */,
-				532B0DDF12AF0AF700E8FF4F /* NSString+rfcEncode.m */,
-				5316CA59142BDE740032DB3E /* NSString+TrimmingAdditions.h */,
-				5316CA5A142BDE740032DB3E /* NSString+TrimmingAdditions.m */,
-				53A77FC5128E3648005D2D65 /* UITableViewCell+overlay.h */,
-				53A77FC6128E3648005D2D65 /* UITableViewCell+overlay.m */,
+				53A7652914AE9A53004253D1 /* NSString */,
 				53B20D2C12C27CE000A90DD9 /* UIView+tools.h */,
 				53B20D2D12C27CE000A90DD9 /* UIView+tools.m */,
 				5382BA8B12DA4038005A3D1A /* UIDevice+Hardware.h */,
@@ -3326,20 +3329,14 @@
 				535B7243134C16FC003E0E1C /* GTMDefines.h */,
 				535B7244134C16FC003E0E1C /* GTMNSString+HTML.h */,
 				535B7245134C16FC003E0E1C /* GTMNSString+HTML.m */,
-				539B3086145E733C00D06475 /* NSString+time.h */,
-				539B3087145E733C00D06475 /* NSString+time.m */,
-				53B36D7F145F9F29005538F3 /* NSString+URLEncode.h */,
-				53B36D80145F9F29005538F3 /* NSString+URLEncode.m */,
 				53B38BCE1474C14200CD8A99 /* NSArray+FirstObject.h */,
 				53B38BCF1474C14200CD8A99 /* NSArray+FirstObject.m */,
-				53B38C251475EF3200CD8A99 /* NSString+cStringUTF8.h */,
-				53B38C261475EF3200CD8A99 /* NSString+cStringUTF8.m */,
 				531B6D72147C416B00BA28B9 /* NSNotificationCenter+MainThread.h */,
 				531B6D73147C416B00BA28B9 /* NSNotificationCenter+MainThread.m */,
 				5345204C149999AB0089D9E3 /* FMDatabase+Synchronized.h */,
 				5345204D149999AB0089D9E3 /* FMDatabase+Synchronized.m */,
-				535A1A07149D40E6008DA9F6 /* NSString+compareWithoutIndefiniteArticles.h */,
-				535A1A08149D40E6008DA9F6 /* NSString+compareWithoutIndefiniteArticles.m */,
+				5365ABE214AFB05100C0958D /* UIDevice+Software.h */,
+				5365ABE314AFB05100C0958D /* UIDevice+Software.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -3372,11 +3369,11 @@
 				53B9D0B11279FAEF00CAB0E0 /* SearchSongsViewController.h */,
 				53B9D0B21279FAEF00CAB0E0 /* SearchSongsViewController.m */,
 				53B9D0B31279FAEF00CAB0E0 /* SearchSongsViewController.xib */,
+				535B7268134CFB08003E0E1C /* FolderPickerDialog.h */,
+				535B7269134CFB0A003E0E1C /* FolderPickerDialog.m */,
 				536AB7FF1353B4F500DABD83 /* ShuffleFolderPickerViewController.h */,
 				536AB8001353B4F500DABD83 /* ShuffleFolderPickerViewController.m */,
 				536AB8011353B4F500DABD83 /* ShuffleFolderPickerViewController.xib */,
-				535B7268134CFB08003E0E1C /* FolderPickerDialog.h */,
-				535B7269134CFB0A003E0E1C /* FolderPickerDialog.m */,
 				535B727B134D26D6003E0E1C /* SearchAllViewController.h */,
 				535B727C134D26E2003E0E1C /* SearchAllViewController.m */,
 				535B727D134D2704003E0E1C /* SearchAllViewController.xib */,
@@ -3455,8 +3452,6 @@
 				5379DC561219EEEB00F426CD /* ChatMessage.m */,
 				53BB7EC8121B8D8F00BEE7E8 /* CustomUITextView.h */,
 				53BB7EC9121B8D8F00BEE7E8 /* CustomUITextView.m */,
-				5348A59911879C3A0078994D /* CustomUITableView.h */,
-				5348A59A11879C3A0078994D /* CustomUITableView.m */,
 				533A2D05113C61C900B3A376 /* AsynchronousImageView.h */,
 				533A2D06113C61CA00B3A376 /* AsynchronousImageView.m */,
 				534E43B8115565FA000B4134 /* AsynchronousImageViewCached.h */,
@@ -3464,8 +3459,6 @@
 				53B5298811AD9B79005776B5 /* LoadingScreen.h */,
 				53B5298911AD9B79005776B5 /* LoadingScreen.m */,
 				536B5D5D11C8183D00CC1D69 /* LoadingScreen.xib */,
-				53A77FCB128E38E7005D2D65 /* CellOverlay.h */,
-				53A77FCC128E38E7005D2D65 /* CellOverlay.m */,
 				53B20F5912C2D7AC00A90DD9 /* CustomUITabBarController.h */,
 				53B20F5A12C2D7AC00A90DD9 /* CustomUITabBarController.m */,
 				53B20F5412C2D72300A90DD9 /* MoreTableViewDataSource.h */,
@@ -3630,6 +3623,30 @@
 				53A454AE133D7E2700741030 /* LocalhostAddresses.m */,
 			);
 			name = cocoahttpserver;
+			sourceTree = "<group>";
+		};
+		53A7652914AE9A53004253D1 /* NSString */ = {
+			isa = PBXGroup;
+			children = (
+				53A7652A14AE9A94004253D1 /* NSString+Additions.h */,
+				535A1A07149D40E6008DA9F6 /* NSString+compareWithoutIndefiniteArticles.h */,
+				535A1A08149D40E6008DA9F6 /* NSString+compareWithoutIndefiniteArticles.m */,
+				53B38C251475EF3200CD8A99 /* NSString+cStringUTF8.h */,
+				53B38C261475EF3200CD8A99 /* NSString+cStringUTF8.m */,
+				531F157A126F6B5600F524BD /* NSString+hex.h */,
+				531F157B126F6B5600F524BD /* NSString+hex.m */,
+				5345FADE1191E6A000C6EAB7 /* NSString+md5.h */,
+				5345FADF1191E6A000C6EAB7 /* NSString+md5.m */,
+				532B0DDE12AF0AF700E8FF4F /* NSString+rfcEncode.h */,
+				532B0DDF12AF0AF700E8FF4F /* NSString+rfcEncode.m */,
+				539B3086145E733C00D06475 /* NSString+time.h */,
+				539B3087145E733C00D06475 /* NSString+time.m */,
+				5316CA59142BDE740032DB3E /* NSString+TrimmingAdditions.h */,
+				5316CA5A142BDE740032DB3E /* NSString+TrimmingAdditions.m */,
+				53B36D7F145F9F29005538F3 /* NSString+URLEncode.h */,
+				53B36D80145F9F29005538F3 /* NSString+URLEncode.m */,
+			);
+			name = NSString;
 			sourceTree = "<group>";
 		};
 		53AAF1A411DA910400447FF7 /* Tab Bar Icons */ = {
@@ -5429,6 +5446,7 @@
 				5345204E149999AB0089D9E3 /* FMDatabase+Synchronized.m in Sources */,
 				535A1A09149D40E6008DA9F6 /* NSString+compareWithoutIndefiniteArticles.m in Sources */,
 				5398FA4414A44591002808E1 /* CustomUITableViewCell.m in Sources */,
+				5365ABE414AFB05100C0958D /* UIDevice+Software.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5731,6 +5749,7 @@
 				53452050149999AB0089D9E3 /* FMDatabase+Synchronized.m in Sources */,
 				535A1A0B149D40E6008DA9F6 /* NSString+compareWithoutIndefiniteArticles.m in Sources */,
 				5398FA4614A44591002808E1 /* CustomUITableViewCell.m in Sources */,
+				5365ABE614AFB05100C0958D /* UIDevice+Software.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6033,6 +6052,7 @@
 				5345204F149999AB0089D9E3 /* FMDatabase+Synchronized.m in Sources */,
 				535A1A0A149D40E6008DA9F6 /* NSString+compareWithoutIndefiniteArticles.m in Sources */,
 				5398FA4514A44591002808E1 /* CustomUITableViewCell.m in Sources */,
+				5365ABE514AFB05100C0958D /* UIDevice+Software.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

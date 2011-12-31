@@ -370,6 +370,7 @@
 - (void)cancelLoad
 {
     [loader cancelLoad];
+	loader.delegate = nil;
     self.loader = nil;
 }
 

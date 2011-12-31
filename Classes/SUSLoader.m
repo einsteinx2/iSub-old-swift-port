@@ -77,7 +77,7 @@
 	
 	NSDictionary *dict = [NSDictionary dictionaryWithObject:message forKey:NSLocalizedDescriptionKey];
 	NSError *error = [NSError errorWithDomain:SUSErrorDomain code:errorCode userInfo:dict];
-	[self.delegate loadingFailed:self withError:error];
+	[self informDelegateLoadingFailed:error];
 	
 	/*if ([parseState isEqualToString: @"allAlbums"])
 	{
@@ -92,52 +92,28 @@
 	}*/
 }
 
-#pragma mark - Connection Delegate
-
-/*- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
+- (BOOL)informDelegateLoadingFailed:(NSError *)error
 {
-	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
-		return YES; // Self-signed cert will be accepted
+	if ([delegate respondsToSelector:@selector(loadingFailed:withError:)])
+	{
+		[delegate loadingFailed:self withError:error];
+		return YES;
+	}
 	
+	DLog(@"delegate (%@) did not respond to loading failed", delegate);
 	return NO;
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{	
-	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+- (BOOL)informDelegateLoadingFinished
+{
+	if ([delegate respondsToSelector:@selector(loadingFinished:)])
 	{
-		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
+		[delegate loadingFinished:self];
+		return YES;
 	}
-	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-	[self.receivedData setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
-{
-    [self.receivedData appendData:incrementalData];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
-{
-	self.receivedData = nil;
-	self.connection = nil;
 	
-	// Inform the delegate that loading failed
-	[self.delegate loadingFailed:self withError:error];
-}	
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
-{	
-	self.receivedData = nil;
-	self.connection = nil;
-	
-	// Notify the delegate that the loading is finished
-	[self.delegate loadingFinished:self];
-}*/
-
+	DLog(@"delegate (%@) did not respond to loading finished", delegate);
+	return NO;
+}
 
 @end

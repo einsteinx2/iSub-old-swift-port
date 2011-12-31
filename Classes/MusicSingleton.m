@@ -107,13 +107,15 @@ static MusicSingleton *sharedInstance = nil;
 - (void)loadingFailed:(SUSLoader *)theLoader withError:(NSError *)error
 {
 	DLog(@"theLoader: %@", theLoader);
-    [theLoader release]; theLoader = nil;
+	theLoader.delegate = nil;
+    [theLoader release];
 }
 
 - (void)loadingFinished:(SUSLoader *)theLoader
 {
 	DLog(@"theLoader: %@", theLoader);
-    [theLoader release]; theLoader = nil;
+	theLoader.delegate = nil;
+    [theLoader release];
 }
 
 #pragma mark Download Methods

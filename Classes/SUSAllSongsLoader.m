@@ -495,7 +495,7 @@ static NSInteger order (id a, id b, void* context)
 	
 	[databaseControls.allSongsDb executeUpdate:@"DROP TABLE resumeLoad"];
     
-    [self.delegate loadingFinished:self];
+	[self informDelegateLoadingFinished];
 }
 
 
@@ -582,7 +582,7 @@ static NSInteger order (id a, id b, void* context)
 	self.connection = nil;
 	
 	// Inform the delegate that loading failed
-	[self.delegate loadingFailed:self withError:error];
+	[self informDelegateLoadingFailed:error];
 }	
 
 static NSString *kName_Directory = @"directory";

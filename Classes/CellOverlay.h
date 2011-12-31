@@ -10,14 +10,17 @@
 
 @interface CellOverlay : UIView 
 {
+	UIButton *inputBlocker;
 	UIButton *downloadButton;
 	UIButton *queueButton;
 }
-
+@property (nonatomic, retain) UIButton *inputBlocker;
 @property (nonatomic, retain) UIButton *downloadButton;
 @property (nonatomic, retain) UIButton *queueButton;
 
 + (CellOverlay*)cellOverlayWithTableCell:(UITableViewCell*)cell;
 - (id)initWithTableCell:(UITableViewCell*)cell;
+
+- (void)enableButtons;
 
 @end

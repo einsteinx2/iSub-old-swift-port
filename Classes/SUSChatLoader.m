@@ -50,7 +50,7 @@
 	else 
 	{
 		NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
-		[self.delegate loadingFailed:self withError:error]; 
+		[self informDelegateLoadingFailed:error];
 		
 		/*// Inform the user that the connection failed.
 		 CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error retreiving the chat messages.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -92,13 +92,13 @@
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
-	[self.delegate loadingFailed:self withError:error];
+	[self informDelegateLoadingFailed:error];
 	
 	self.receivedData = nil;
 	self.connection = nil;
 	
 	// Inform the delegate that loading failed
-	[self.delegate loadingFailed:self withError:error];
+	[self informDelegateLoadingFailed:error];
 	
 	/*// Inform the user that the connection failed.
 	NSString *message = [NSString stringWithFormat:@"There was an error retreiving the chat messages.\n\nError %i: %@", [error code], [error localizedDescription]];
@@ -158,7 +158,7 @@
 	self.connection = nil;
 	
 	// Notify the delegate that the loading is finished
-	[self.delegate loadingFinished:self];
+	[self informDelegateLoadingFinished];
 }
 
 @end

@@ -9,19 +9,21 @@
 @interface CustomUITableView : UITableView 
 {	
 	CGPoint startTouchPosition;
-	BOOL swiping;
 	BOOL hasSwiped;
-	BOOL isFingerMovingLeftOrRight;
-	BOOL isFingerMovingVertically;
+	UITableViewCell *cellShowingOverlay;
+	BOOL tapAndHoldFired;
+	UITableViewCell *tapAndHoldCell;
 }
 
 @property (nonatomic) BOOL blockInput;
 @property (nonatomic, retain) NSDate *lastDeleteToggle;
 @property (nonatomic, retain) NSDate *lastOverlayToggle;
 
-@property (nonatomic) BOOL isCellsEnabled;
-
-- (BOOL)isTouchGoingLeftOrRight:(UITouch *)touch;
+- (BOOL)isTouchHorizontal:(UITouch *)touch;
+- (BOOL)isTouchVertical:(UITouch *)touch;
 - (void)lookForSwipeGestureInTouches:(NSSet *)touches withEvent:(UIEvent *)event;
+
+- (void)disableCellsTemporarily;
+- (void)enableCells;
 
 @end

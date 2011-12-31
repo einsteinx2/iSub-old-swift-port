@@ -337,9 +337,7 @@
 		FMResultSet *result = [db executeQuery:@"SELECT artist FROM cachedSongsArtistList ORDER BY artist COLLATE NOCASE"];
 		while ([result next])
 		{
-			//
 			// Cover up for blank insert problem
-			//
 			if ([[result stringForColumnIndex:0] length] > 0)
 				[listOfArtists addObject:[NSString stringWithString:[result stringForColumnIndex:0]]]; 
 		}
@@ -352,15 +350,15 @@
 		[db executeUpdate:@"CREATE TEMP TABLE cachedSongsArtistIndex (artist TEXT)"];
 		for (NSString *artist in listOfArtists)
 		{
-			[db executeUpdate:@"INSERT INTO cachedSongsArtistIndex (artist) VALUES (?)", artist, nil];
+			[db executeUpdate:@"INSERT INTO cachedSongsArtistIndex (artist) VALUES (?)", [artist stringWithoutIndefiniteArticle], nil];
 		}
 		self.sectionInfo = nil; 
-		self.sectionInfo = [databaseControls sectionInfoFromTable:@"cachedSongsArtistIndex" 
-													   inDatabase:db 
-													   withColumn:@"artist"];
+		self.sectionInfo = [databaseControls sectionInfoFromTable:@"cachedSongsArtistIndex" inDatabase:db withColumn:@"artist"];
 		showIndex = YES;
 		if ([sectionInfo count] < 5)
 			showIndex = NO;
+		
+		DLog(@"sectionInfo: %@", sectionInfo);
 		
 		// Sort into sections		
 		if ([sectionInfo count] > 0)

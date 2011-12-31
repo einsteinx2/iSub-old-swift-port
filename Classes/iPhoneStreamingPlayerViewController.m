@@ -246,8 +246,12 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		self.view.backgroundColor = [UIColor blackColor]; 
 	}
 	
+	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+	{
+		//[self setSongTitle];
+		[self createSongTitle];
+	}
 }
-
 
 - (void)viewDidDisappear:(BOOL)animated
 {
@@ -311,7 +315,12 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
 	{
-		[self setSongTitle];
+		//[self setSongTitle];
+		[self createSongTitle];
+	}
+	else
+	{
+		[self removeSongTitle];
 	}
 	
 	if (!IS_IPAD())
@@ -364,7 +373,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	if (UIInterfaceOrientationIsLandscape(fromInterfaceOrientation))
 	{
-		[self setSongTitle];
+		[self createSongTitle];
+		//[self setSongTitle];
 	}
 }
 
@@ -386,8 +396,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[playButton setImage:[UIImage imageNamed:@"controller-stop.png"] forState:0];
 }
  
-
-- (void)setSongTitle
+- (void)createSongTitle
 {
 	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) || IS_IPAD())
 	{
@@ -410,42 +419,61 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		NSUInteger albumSize  = 11;
 		NSUInteger songSize   = 12;
 		
-		UILabel *artist = [[UILabel alloc] initWithFrame:artistFrame];
-		artist.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		artist.backgroundColor = [UIColor clearColor];
-		artist.textColor = [UIColor colorWithWhite:.7 alpha:1.];
-		artist.font = [UIFont boldSystemFontOfSize:artistSize];
-		artist.textAlignment = UITextAlignmentCenter;
-		[titleView addSubview:artist];
-		[artist release];
+		artistTitleLabel = [[UILabel alloc] initWithFrame:artistFrame];
+		artistTitleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		artistTitleLabel.backgroundColor = [UIColor clearColor];
+		artistTitleLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
+		artistTitleLabel.font = [UIFont boldSystemFontOfSize:artistSize];
+		artistTitleLabel.textAlignment = UITextAlignmentCenter;
+		[titleView addSubview:artistTitleLabel];
+		[artistTitleLabel release];
 		
-		UILabel *song = [[UILabel alloc] initWithFrame:songFrame];
+		songTitleLabel = [[UILabel alloc] initWithFrame:songFrame];
 		//MarqueeLabel *song = [[MarqueeLabel alloc] initWithFrame:songFrame andRate:50.0 andBufer:6.0];
-		song.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		song.backgroundColor = [UIColor clearColor];
-		song.textColor = [UIColor whiteColor];
-		song.font = [UIFont boldSystemFontOfSize:songSize];
-		song.textAlignment = UITextAlignmentCenter;
-		[titleView addSubview:song];
-		[song release];
+		songTitleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		songTitleLabel.backgroundColor = [UIColor clearColor];
+		songTitleLabel.textColor = [UIColor whiteColor];
+		songTitleLabel.font = [UIFont boldSystemFontOfSize:songSize];
+		songTitleLabel.textAlignment = UITextAlignmentCenter;
+		[titleView addSubview:songTitleLabel];
+		[songTitleLabel release];
 		
-		UILabel *album = [[UILabel alloc] initWithFrame:albumFrame];
-		album.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		album.backgroundColor = [UIColor clearColor];
-		album.textColor = [UIColor colorWithWhite:.7 alpha:1.];
-		album.font = [UIFont boldSystemFontOfSize:albumSize];
-		album.textAlignment = UITextAlignmentCenter;
-		[titleView addSubview:album];
-		[album release];
+		albumTitleLabel = [[UILabel alloc] initWithFrame:albumFrame];
+		albumTitleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		albumTitleLabel.backgroundColor = [UIColor clearColor];
+		albumTitleLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
+		albumTitleLabel.font = [UIFont boldSystemFontOfSize:albumSize];
+		albumTitleLabel.textAlignment = UITextAlignmentCenter;
+		[titleView addSubview:albumTitleLabel];
+		[albumTitleLabel release];
 		
-		SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
-		Song *currentSong = dataModel.currentSong;
+		Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
 		
-		artist.text = [[currentSong.artist copy] autorelease];
-		album.text = [[currentSong.album copy] autorelease];
-		song.text = [[currentSong.title copy] autorelease];
+		artistTitleLabel.text = currentSong.artist;
+		albumTitleLabel.text = currentSong.album;
+		songTitleLabel.text = currentSong.title;
 		
 		self.navigationItem.titleView = titleView;		
+	}
+}
+
+- (void)removeSongTitle
+{
+	self.navigationItem.titleView = nil;
+	artistTitleLabel = nil;
+	albumTitleLabel = nil;
+	songTitleLabel = nil;
+}
+
+- (void)setSongTitle
+{
+	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) || IS_IPAD())
+	{
+		Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+		
+		artistTitleLabel.text = currentSong.artist;
+		albumTitleLabel.text = currentSong.album;
+		songTitleLabel.text = currentSong.title;
 	}
 }
 

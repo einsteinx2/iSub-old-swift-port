@@ -57,12 +57,21 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
 	NSDictionary *folders = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];*/
 	
 	NSDictionary *folders = [SUSRootFoldersDAO folderDropdownFolders];
+	DLog(@"folders: %@", folders);
 	
+	NSArray *allFoldersKeyPair = nil;
 	self.sortedFolders = [NSMutableArray arrayWithCapacity:[folders count]];
-	for (NSString *key in [folders allKeys])
+	for (NSNumber *key in [folders allKeys])
 	{
 		NSArray *keyValuePair = [NSArray arrayWithObjects:key, [folders objectForKey:key], nil];
-		[sortedFolders addObject:keyValuePair];
+		if ([key isEqualToNumber:[NSNumber numberWithInt:-1]])
+		{
+			allFoldersKeyPair = [NSArray arrayWithArray:keyValuePair];
+		}
+		else
+		{
+			[sortedFolders addObject:keyValuePair];
+		}
 	}
 	
 	/*// Sort by folder name -- iOS 4.0+ only
@@ -74,6 +83,9 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
 	
 	// Sort by folder name
 	[sortedFolders sortUsingFunction:folderSort1 context:NULL];
+	
+	// Add the All Folders entry back
+	[sortedFolders insertObject:allFoldersKeyPair atIndex:0];
 	
 	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 }

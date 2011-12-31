@@ -51,7 +51,7 @@
 	{
 		if (!overlayView)
 		{
-			overlayView = [CellOverlay cellOverlayWithTableCell:self];
+			self.overlayView = [CellOverlay cellOverlayWithTableCell:self];
 			[self.contentView addSubview:overlayView];
 		}
 		

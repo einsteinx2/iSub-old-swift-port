@@ -50,6 +50,8 @@
 
 #import "BassWrapperSingleton.h"
 
+#import "UIDevice+Software.h"
+
 @implementation iSubAppDelegate
 
 @synthesize window;
@@ -344,6 +346,10 @@
 	{
 		[FlurryAnalytics setSessionReportsOnPauseEnabled:YES];
 		[FlurryAnalytics setSecureTransportEnabled:YES];
+		
+		// Send the firmware version
+		NSDictionary *params = [NSDictionary dictionaryWithObject:[[UIDevice currentDevice] completeVersionString] forKey:@"FirmwareVersion"];
+		[FlurryAnalytics logEvent:@"FirmwareVersion" withParameters:params];
 	}
 }
 

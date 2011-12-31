@@ -7,7 +7,7 @@
 //
 
 
-
+@class CellOverlay;
 
 @interface UITableViewCell (overlay) 
 
@@ -20,5 +20,6 @@
 - (BOOL)fingerIsMovingVertically;
 - (void)toggleDelete;
 - (void)scrollLabels;
+- (CellOverlay *)overlayView;
 
 @end

@@ -90,7 +90,7 @@
 		{
 			// Inform the delegate that the loading failed.
 			NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
-			[self.delegate loadingFailed:self withError:error];
+			[self informDelegateLoadingFailed:error];
 		}
 	}
 }
@@ -131,14 +131,12 @@
 }
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
-{    
-	[self.delegate loadingFailed:self withError:error];
-	
+{  
 	self.receivedData = nil;
 	self.connection = nil;
 	
 	// Inform the delegate that loading failed
-	[self.delegate loadingFailed:self withError:error];
+	[self informDelegateLoadingFailed:error];
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
@@ -152,7 +150,7 @@
 	self.connection = nil;
 	
 	// Notify the delegate that the loading is finished
-	[self.delegate loadingFinished:self];
+	[self informDelegateLoadingFinished];
 }
 
 @end

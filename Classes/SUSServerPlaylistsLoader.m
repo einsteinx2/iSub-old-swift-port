@@ -55,7 +55,7 @@
 	else 
 	{
 		NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
-		[self.delegate loadingFailed:self withError:error]; 
+		[self informDelegateLoadingFailed:error];
 	}
 }
 
@@ -94,7 +94,7 @@
 	self.connection = nil;
 	
 	// Inform the delegate that loading failed
-	[self.delegate loadingFailed:self withError:error];
+	[self informDelegateLoadingFailed:error];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection
@@ -113,7 +113,7 @@
 			[self subsonicErrorCode:[code intValue] message:message];
 			
 			// Inform the delegate that loading failed
-			[self.delegate loadingFailed:self withError:nil];
+			[self informDelegateLoadingFailed:nil];
 		}
 		else
 		{
@@ -142,13 +142,13 @@
 			}
             
             // Notify the delegate that the loading is finished
-			[self.delegate loadingFinished:self];
+			[self informDelegateLoadingFinished];
 		}
 	}
 	else
 	{
 		// Inform the delegate that loading failed
-		[self.delegate loadingFailed:self withError:nil];
+		[self informDelegateLoadingFailed:nil];
 	}
 	[tbxml release];
 	

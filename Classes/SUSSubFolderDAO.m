@@ -320,6 +320,7 @@
 - (void)cancelLoad
 {
     [loader cancelLoad];
+	loader.delegate = nil;
     self.loader = nil;
 }
 
@@ -327,15 +328,26 @@
 
 - (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
 {
-	theLoader.delegate = nil;
-	[self.delegate loadingFailed:theLoader withError:error];
+	loader.delegate = nil;
+	self.loader = nil;
+	
+	if ([delegate respondsToSelector:@selector(loadingFailed:withError:)])
+	{
+		[delegate loadingFailed:nil withError:error];
+	}
 }
 
 - (void)loadingFinished:(SUSLoader*)theLoader
 {
-	theLoader.delegate = nil;
+	loader.delegate = nil;
+	self.loader = nil;
+	
     [self setup];
-	[self.delegate loadingFinished:theLoader];
+	
+	if ([delegate respondsToSelector:@selector(loadingFinished:)])
+	{
+		[delegate loadingFinished:nil];
+	}
 }
 
 @end

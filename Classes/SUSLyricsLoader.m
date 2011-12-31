@@ -57,7 +57,7 @@
 	else 
 	{
 		NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
-		[self.delegate loadingFailed:self withError:error]; 
+		[self informDelegateLoadingFailed:error];
 	}
 }
 
@@ -108,7 +108,7 @@
 	self.connection = nil;
 	
 	// Inform the delegate that loading failed
-	[self.delegate loadingFailed:self withError:error];
+	[self informDelegateLoadingFailed:error];
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_LyricsFailed];
 }	
@@ -141,13 +141,13 @@
 					DLog(@"lyrics tag found, but it's empty");
 					self.loadedLyrics = nil;
 					NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NoLyricsFound];
-					[self.delegate loadingFailed:self withError:error];
+					[self informDelegateLoadingFailed:error];
 				}
 				else
 				{
 					DLog(@"lyrics tag found, and it's got lyrics! \\o/");
 					[self insertLyricsIntoDb];
-					[self.delegate loadingFinished:self];
+					[self informDelegateLoadingFinished];
 					
 					[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_LyricsDownloaded];
 				}
@@ -157,7 +157,7 @@
 				DLog(@"no lyrics tag found");
                 self.loadedLyrics = nil;
                 NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NoLyricsElement];
-                [self.delegate loadingFailed:self withError:error];
+                [self informDelegateLoadingFailed:error];
 				
 				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_LyricsFailed];
             }
@@ -166,7 +166,7 @@
     else
     {
         NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NoLyricsElement];
-        [self.delegate loadingFailed:self withError:error];
+        [self informDelegateLoadingFailed:error];
 		
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_LyricsFailed];
     }
