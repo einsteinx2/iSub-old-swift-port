@@ -47,13 +47,12 @@ int lineSpecBufSize;
 
 #pragma mark - Decode Stream Callbacks
 
-/* not used, high cpu usage. Using BASS_FX_BFX_VOLUME instead
 void CALLBACK MyStreamFreeCallback(HSYNC handle, DWORD channel, DWORD data, void *user)
 {
 	// Stream is done, release the user info object
 	BassUserInfo *userInfo = (BassUserInfo *)user;
 	[userInfo release];
-}*/
+}
 
 void CALLBACK MyFileCloseProc(void *user)
 {	
@@ -123,6 +122,7 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 
 #pragma mark - Output Stream Callbacks
 
+/* not used, high cpu usage. Using BASS_FX_BFX_VOLUME instead
 void CALLBACK MyGainAdjustProc(HDSP handle, DWORD channel, void *buffer, DWORD length, void *user)
 {
 	DLog(@"gain: %f", [SavedSettings sharedInstance].gainMultiplier);
@@ -132,7 +132,7 @@ void CALLBACK MyGainAdjustProc(HDSP handle, DWORD channel, void *buffer, DWORD l
 		d[a] *= [SavedSettings sharedInstance].gainMultiplier;
 		d[a+1] *= [SavedSettings sharedInstance].gainMultiplier;
 	}
-}
+}*/
 
 DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *user)
 {
