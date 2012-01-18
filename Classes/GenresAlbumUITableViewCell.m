@@ -14,6 +14,7 @@
 #import "FMDatabase.h"
 #import "CellOverlay.h"
 #import "Song.h"
+#import "FMDatabase+Synchronized.h"
 
 @implementation GenresAlbumUITableViewCell
 
@@ -105,7 +106,7 @@
 		FMResultSet *result;
 		if ([ViewObjectsSingleton sharedInstance].isOfflineMode) 
 		{
-			result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text, genre];
+			result = [[DatabaseSingleton sharedInstance].songCacheDb synchronizedQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text, genre];
 		}
 		else 
 		{
@@ -142,7 +143,7 @@
 		FMResultSet *result;
 		if ([ViewObjectsSingleton sharedInstance].isOfflineMode) 
 		{
-			result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text, genre];
+			result = [[DatabaseSingleton sharedInstance].songCacheDb synchronizedQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text, genre];
 		}
 		else 
 		{

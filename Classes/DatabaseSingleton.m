@@ -12,6 +12,7 @@
 #import "iSubAppDelegate.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabase+Synchronized.h"
 #import "NSString+md5.h"
 #import "Artist.h"
 #import "Album.h"
@@ -19,7 +20,7 @@
 #import "QueueAlbumXMLParser.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "UIDevice+Hardware.h"
-#import "SUSQueueAllDAO.h"
+#import "SUSQueueAllLoader.h"
 #import "SavedSettings.h"
 #import "GTMNSString+HTML.h"
 #import "SUSCurrentPlaylistDAO.h"
@@ -44,6 +45,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	{
 		// Setup the allAlbums database
 		allAlbumsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allAlbums.db", databaseFolderPath, urlStringMd5]] retain];
+		DLog(@"allAlbumsDb: %@", allAlbumsDb);
 		if ([allAlbumsDb open])
 		{
 			[allAlbumsDb executeUpdate:@"PRAGMA cache_size = 1"];
@@ -249,37 +251,37 @@ static DatabaseSingleton *sharedInstance = nil;
 	songCacheDb = [[FMDatabase databaseWithPath:[settings.cachesPath stringByAppendingPathComponent:@"songCache.db"]] retain];
 	if ([songCacheDb open])
 	{
-		[songCacheDb executeUpdate:@"PRAGMA cache_size = 1"];
+		[songCacheDb synchronizedUpdate:@"PRAGMA cache_size = 1"];
 		
 		if (![songCacheDb tableExists:@"cachedSongs"])
 		{
-			[songCacheDb executeUpdate:@"CREATE TABLE cachedSongs (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
-			[songCacheDb executeUpdate:@"CREATE INDEX cachedDate ON cachedSongs (cachedDate DESC)"];
-			[songCacheDb executeUpdate:@"CREATE INDEX playedDate ON cachedSongs (playedDate DESC)"];
+			[songCacheDb synchronizedUpdate:@"CREATE TABLE cachedSongs (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+			[songCacheDb synchronizedUpdate:@"CREATE INDEX cachedDate ON cachedSongs (cachedDate DESC)"];
+			[songCacheDb synchronizedUpdate:@"CREATE INDEX playedDate ON cachedSongs (playedDate DESC)"];
 		}
-		[songCacheDb executeUpdate:@"CREATE INDEX md5 IF NOT EXISTS ON cachedSongs (md5)"];
+		[songCacheDb synchronizedUpdate:@"CREATE INDEX md5 IF NOT EXISTS ON cachedSongs (md5)"];
 		if (![songCacheDb tableExists:@"cachedSongsLayout"]) 
 		{
-			[songCacheDb executeUpdate:@"CREATE TABLE cachedSongsLayout (md5 TEXT UNIQUE, genre TEXT, segs INTEGER, seg1 TEXT, seg2 TEXT, seg3 TEXT, seg4 TEXT, seg5 TEXT, seg6 TEXT, seg7 TEXT, seg8 TEXT, seg9 TEXT)"];
-			[songCacheDb executeUpdate:@"CREATE INDEX genreLayout ON cachedSongsLayout (genre)"];
-			[songCacheDb executeUpdate:@"CREATE INDEX seg1 ON cachedSongsLayout (seg1)"];
-			[songCacheDb executeUpdate:@"CREATE INDEX seg2 ON cachedSongsLayout (seg2)"];
-			[songCacheDb executeUpdate:@"CREATE INDEX seg3 ON cachedSongsLayout (seg3)"];
-			[songCacheDb executeUpdate:@"CREATE INDEX seg4 ON cachedSongsLayout (seg4)"];
-			[songCacheDb executeUpdate:@"CREATE INDEX seg5 ON cachedSongsLayout (seg5)"];
-			[songCacheDb executeUpdate:@"CREATE INDEX seg6 ON cachedSongsLayout (seg6)"];
-			[songCacheDb executeUpdate:@"CREATE INDEX seg7 ON cachedSongsLayout (seg7)"];
-			[songCacheDb executeUpdate:@"CREATE INDEX seg8 ON cachedSongsLayout (seg8)"];
-			[songCacheDb executeUpdate:@"CREATE INDEX seg9 ON cachedSongsLayout (seg9)"];
+			[songCacheDb synchronizedUpdate:@"CREATE TABLE cachedSongsLayout (md5 TEXT UNIQUE, genre TEXT, segs INTEGER, seg1 TEXT, seg2 TEXT, seg3 TEXT, seg4 TEXT, seg5 TEXT, seg6 TEXT, seg7 TEXT, seg8 TEXT, seg9 TEXT)"];
+			[songCacheDb synchronizedUpdate:@"CREATE INDEX genreLayout ON cachedSongsLayout (genre)"];
+			[songCacheDb synchronizedUpdate:@"CREATE INDEX seg1 ON cachedSongsLayout (seg1)"];
+			[songCacheDb synchronizedUpdate:@"CREATE INDEX seg2 ON cachedSongsLayout (seg2)"];
+			[songCacheDb synchronizedUpdate:@"CREATE INDEX seg3 ON cachedSongsLayout (seg3)"];
+			[songCacheDb synchronizedUpdate:@"CREATE INDEX seg4 ON cachedSongsLayout (seg4)"];
+			[songCacheDb synchronizedUpdate:@"CREATE INDEX seg5 ON cachedSongsLayout (seg5)"];
+			[songCacheDb synchronizedUpdate:@"CREATE INDEX seg6 ON cachedSongsLayout (seg6)"];
+			[songCacheDb synchronizedUpdate:@"CREATE INDEX seg7 ON cachedSongsLayout (seg7)"];
+			[songCacheDb synchronizedUpdate:@"CREATE INDEX seg8 ON cachedSongsLayout (seg8)"];
+			[songCacheDb synchronizedUpdate:@"CREATE INDEX seg9 ON cachedSongsLayout (seg9)"];
 		}
 		if (![songCacheDb tableExists:@"genres"]) 
 		{
-			[songCacheDb executeUpdate:@"CREATE TABLE genres(genre TEXT UNIQUE)"];
+			[songCacheDb synchronizedUpdate:@"CREATE TABLE genres(genre TEXT UNIQUE)"];
 		}
 		if (![songCacheDb tableExists:@"genresSongs"]) 
 		{
-			[songCacheDb executeUpdate:@"CREATE TABLE genresSongs (md5 TEXT UNIQUE, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
-			[songCacheDb executeUpdate:@"CREATE INDEX songGenre ON genresSongs (genre)"];
+			[songCacheDb synchronizedUpdate:@"CREATE TABLE genresSongs (md5 TEXT UNIQUE, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+			[songCacheDb synchronizedUpdate:@"CREATE INDEX songGenre ON genresSongs (genre)"];
 		}
 	}
 	else
@@ -304,7 +306,7 @@ static DatabaseSingleton *sharedInstance = nil;
 			[cacheQueueDb executeUpdate:@"CREATE INDEX queueDate ON cacheQueue (cachedDate DESC)"];
 		}
 		
-		[songCacheDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@cacheQueue.db", settings.cachesPath, urlStringMd5], @"cacheQueueDb"];
+		[songCacheDb synchronizedUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@cacheQueue.db", settings.cachesPath, urlStringMd5], @"cacheQueueDb"];
 		if ([songCacheDb hadError]) 
 		{
 			DLog(@"Err attaching the cacheQueueDb %d: %@", [songCacheDb lastErrorCode], [songCacheDb lastErrorMessage]);
@@ -620,110 +622,13 @@ static DatabaseSingleton *sharedInstance = nil;
 
 - (void)downloadAllSongs:(NSString *)folderId artist:(Artist *)theArtist
 {
-	/*// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-	
-	NSURL *url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"getMusicDirectory.view"], folderId]];
-	
-	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithContentsOfURL:url];
-	[url release];
-	QueueAlbumXMLParser *parser = (QueueAlbumXMLParser *)[[QueueAlbumXMLParser alloc] initXMLParser];
-	parser.myArtist = theArtist;
-	[xmlParser setDelegate:parser];
-	[xmlParser parse];
-	
-	// Add each song to playlist
-	for (Song *aSong in parser.listOfSongs)
-	{
-		[self addSongToCacheQueue:aSong];
-	}
-	
-	// First level of recursion
-	for (Album *anAlbum in parser.listOfAlbums)
-	{
-		// Do an XML parse for each item.
-		url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"getMusicDirectory.view"], anAlbum.albumId]];
-		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithContentsOfURL:url];
-		[url release];
-		QueueAlbumXMLParser *parser1 = (QueueAlbumXMLParser *)[[QueueAlbumXMLParser alloc] initXMLParser];
-		parser1.myArtist = theArtist;
-		[xmlParser setDelegate:parser1];
-		[xmlParser parse];
-		
-		// Add each song to playlist
-		for (Song *aSong in parser1.listOfSongs)
-		{
-			[self addSongToCacheQueue:aSong];
-		}
-		
-		// Second level of recursion
-		for (Album *anAlbum in parser1.listOfAlbums)
-		{
-			// Do an XML parse for each item.
-			url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"getMusicDirectory.view"], anAlbum.albumId]];
-			NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithContentsOfURL:url];
-			[url release];
-			QueueAlbumXMLParser *parser2 = (QueueAlbumXMLParser *)[[QueueAlbumXMLParser alloc] initXMLParser];
-			parser2.myArtist = theArtist;
-			[xmlParser setDelegate:parser2];
-			[xmlParser parse];
-			
-			// Add each song to playlist
-			for (Song *aSong in parser2.listOfSongs)
-			{
-				[self addSongToCacheQueue:aSong];
-			}
-			
-			// Third level of recursion
-			for (Album *anAlbum in parser2.listOfAlbums)
-			{
-				// Do an XML parse for each item.
-				url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"getMusicDirectory.view"], anAlbum.albumId]];
-				NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithContentsOfURL:url];
-				[url release];
-				QueueAlbumXMLParser *parser3 = (QueueAlbumXMLParser *)[[QueueAlbumXMLParser alloc] initXMLParser];
-				parser3.myArtist = theArtist;
-				[xmlParser setDelegate:parser3];
-				[xmlParser parse];
-				
-				// Add each song to playlist
-				for (Song *aSong in parser3.listOfSongs)
-				{
-					[self addSongToCacheQueue:aSong];
-				}
-				
-				[xmlParser release];
-				[parser3 release];
-			}
-			
-			[xmlParser release];
-			[parser2 release];
-		}		
-		
-		[xmlParser release];
-		[parser1 release];
-	}
-	
-	[xmlParser release];
-	[parser release];
-	
-	if (musicControls.isQueueListDownloading == NO)
-	{
-		[musicControls performSelectorOnMainThread:@selector(downloadNextQueuedSong) withObject:nil waitUntilDone:NO];
-	}
-	
-	//[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
-	
-	[autoreleasePool release];
-	*/
-	
-	
 	// Show loading screen
-	[viewObjects showLoadingScreenOnMainWindow];
+	//[viewObjects showLoadingScreenOnMainWindow];
+	[viewObjects showAlbumLoadingScreen:appDelegate.window sender:queueAll];
 	
 	// Download all the songs
 	if (queueAll == nil)
-		queueAll = [[SUSQueueAllDAO alloc] init];
+		queueAll = [[SUSQueueAllLoader alloc] init];
 	//[queueAll loadData:folderId artist:theArtist isQueue:NO];
 	[queueAll cacheData:folderId artist:theArtist];
 }
@@ -731,11 +636,12 @@ static DatabaseSingleton *sharedInstance = nil;
 - (void)queueAllSongs:(NSString *)folderId artist:(Artist *)theArtist
 {
 	// Show loading screen
-	[viewObjects showLoadingScreenOnMainWindow];
+	//[viewObjects showLoadingScreenOnMainWindow];
+	[viewObjects showAlbumLoadingScreen:appDelegate.window sender:queueAll];
 	
 	// Queue all the songs
 	if (queueAll == nil)
-		queueAll = [[SUSQueueAllDAO alloc] init];
+		queueAll = [[SUSQueueAllLoader alloc] init];
 	//[queueAll loadData:folderId artist:theArtist isQueue:YES];
 	[queueAll queueData:folderId artist:theArtist];
 }
@@ -755,7 +661,6 @@ static DatabaseSingleton *sharedInstance = nil;
 	}
 	
 	[[SUSStreamSingleton sharedInstance] fillStreamQueue];
-	//[[SUSStreamSingleton sharedInstance] performSelectorOnMainThread:@selector(fillStreamQueue) withObject:nil waitUntilDone:NO];
 }
 
 - (void)showLoadingScreen
@@ -766,7 +671,8 @@ static DatabaseSingleton *sharedInstance = nil;
 - (void)playAllSongs:(NSString *)folderId artist:(Artist *)theArtist
 {	
 	// Show loading screen
-	[viewObjects showLoadingScreenOnMainWindow];
+	//[viewObjects showLoadingScreenOnMainWindow];
+	[viewObjects showAlbumLoadingScreen:appDelegate.window sender:queueAll];
 	
 	// Clear the current and shuffle playlists
 	[self resetCurrentPlaylistDb];
@@ -776,7 +682,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	
 	// Queue all the songs
 	if (queueAll == nil)
-		queueAll = [[SUSQueueAllDAO alloc] init];
+		queueAll = [[SUSQueueAllLoader alloc] init];
 	//[queueAll loadData:folderId artist:theArtist isQueue:YES];
 	[queueAll playAllData:folderId artist:theArtist];
 }
@@ -784,7 +690,8 @@ static DatabaseSingleton *sharedInstance = nil;
 - (void)shuffleAllSongs:(NSString *)folderId artist:(Artist *)theArtist
 {
 	// Show loading screen
-	[viewObjects showLoadingScreenOnMainWindow];
+	//[viewObjects showLoadingScreenOnMainWindow];
+	[viewObjects showAlbumLoadingScreen:appDelegate.window sender:queueAll];
 	
 	// Clear the current and shuffle playlists
 	[self resetCurrentPlaylistDb];
@@ -794,7 +701,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	
 	// Queue all the songs
 	if (queueAll == nil)
-		queueAll = [[SUSQueueAllDAO alloc] init];
+		queueAll = [[SUSQueueAllLoader alloc] init];
 	//[queueAll loadData:folderId artist:theArtist isQueue:YES];
 	[queueAll shuffleData:folderId artist:theArtist];
 }

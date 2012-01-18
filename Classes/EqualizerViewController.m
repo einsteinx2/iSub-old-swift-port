@@ -13,9 +13,10 @@
 #import "BassParamEqValue.h"
 #import "BassEffectDAO.h"
 #import "UIView+tools.h"
+#import "SavedSettings.h"
 
 @implementation EqualizerViewController
-@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog; //drawTimer;
+@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider; //drawTimer;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -92,6 +93,8 @@
 	{
 		[self showDeletePresetButton:NO];
 	}
+	
+	gainSlider.value = [SavedSettings sharedInstance].gainMultiplier;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -326,6 +329,13 @@
 			[presetPicker selectRow:effectDAO.selectedPresetIndex inComponent:0 animated:YES];
 		}
 	}
+}
+
+- (IBAction)movedGainSlider:(id)sender
+{
+	DLog(@"gainSlider.value: %f", gainSlider.value);
+	[SavedSettings sharedInstance].gainMultiplier = gainSlider.value;
+	[[BassWrapperSingleton sharedInstance] bassSetGainLevel:gainSlider.value];
 }
 
 #pragma mark Touch gestures interception

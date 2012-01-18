@@ -10,7 +10,6 @@
 
 @interface SUSAllAlbumsDAO : NSObject
 {	
-	NSUInteger count;
 	NSArray *index;
 }
 

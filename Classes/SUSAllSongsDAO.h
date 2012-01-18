@@ -11,11 +11,10 @@
 
 @class FMDatabase, Song, SUSAllSongsLoader;
 
-@interface SUSAllSongsDAO : NSObject <SUSLoaderManager>
+@interface SUSAllSongsDAO : NSObject <SUSLoaderManager, SUSLoaderDelegate>
 {
 	id<SUSLoaderDelegate> delegate;
 		
-	NSUInteger count;
 	NSArray *index;
 }
 
@@ -27,7 +26,6 @@
 @property (readonly) NSUInteger searchCount;
 @property (readonly) NSArray *index;
 @property (readonly) BOOL isDataLoaded;
-@property (readonly) BOOL isLoading;
 
 @property (nonatomic, retain) SUSAllSongsLoader *loader;
 

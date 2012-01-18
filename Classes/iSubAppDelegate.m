@@ -52,6 +52,7 @@
 
 #import "UIDevice+Software.h"
 
+
 @implementation iSubAppDelegate
 
 @synthesize window;
@@ -100,7 +101,7 @@
 	socialControls = [SocialSingleton sharedInstance];
 	cacheControls = [CacheSingleton sharedInstance];
     bassWrapper = [BassWrapperSingleton sharedInstance];
-    
+	    
     introController = nil;
 	showIntro = NO;
 	
@@ -272,7 +273,7 @@
 {
     SavedSettings *settings = [SavedSettings sharedInstance];
     settings.redirectUrlString = [NSString stringWithFormat:@"%@://%@:%@", url.scheme, url.host, url.port];
-    //DLog(@"redirectUrlString: %@", settings.redirectUrlString);
+    DLog(@"redirectUrlString: %@", settings.redirectUrlString);
 }
 
 - (void)SUSServerURLCheckFailed:(SUSServerChecker *)checker withError:(NSError *)error
@@ -385,11 +386,10 @@
 		if (IS_DEBUG())
 		{
 			// Reset features
-			
-			/*[SFHFKeychainUtils storeUsername:kFeaturePlaylistsId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
-			 [SFHFKeychainUtils storeUsername:kFeatureJukeboxId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
-			 [SFHFKeychainUtils storeUsername:kFeatureCacheId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
-			 [SFHFKeychainUtils storeUsername:kFeatureAllId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];*/
+			[SFHFKeychainUtils storeUsername:kFeaturePlaylistsId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
+			[SFHFKeychainUtils storeUsername:kFeatureJukeboxId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
+			[SFHFKeychainUtils storeUsername:kFeatureCacheId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
+			[SFHFKeychainUtils storeUsername:kFeatureAllId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
 			
 			DLog(@"is kFeaturePlaylistsId enabled: %i", [MKStoreManager isFeaturePurchased:kFeaturePlaylistsId]);
 			DLog(@"is kFeatureJukeboxId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureJukeboxId]);
@@ -587,7 +587,7 @@
 			UIApplication *application = [UIApplication sharedApplication];
 			while ([application backgroundTimeRemaining] > 1.0 && isInBackground) 
 			{
-				DLog(@"backgroundTimeRemaining: %f", [application backgroundTimeRemaining]);
+				//DLog(@"backgroundTimeRemaining: %f", [application backgroundTimeRemaining]);
 				
 				// Sleep early is nothing is happening after 30 seconds
 				if ([application backgroundTimeRemaining] < 570.0 && !musicControls.isQueueListDownloading)
@@ -919,7 +919,7 @@
 			// Title: @"Resume?"
 			if (buttonIndex == 0)
 			{
-				musicControls.bitRate = 192;
+				//musicControls.bitRate = 192;
 			}
 			if (buttonIndex == 1)
 			{
@@ -1124,7 +1124,7 @@
 	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
 	[alert release];
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"storePurchaseComplete" object:nil];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_StorePurchaseComplete object:nil];
 }
 
 - (void)transactionCanceled

@@ -47,6 +47,4 @@
 
 - (id) initXMLParser;
 
-- (void) updateMessage;
-
 @end

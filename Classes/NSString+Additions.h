@@ -17,5 +17,6 @@
 #import "NSString+time.h"
 #import "NSString+TrimmingAdditions.h"
 #import "NSString+URLEncode.h"
+#import "GTMNSString+HTML.h"
 
 #endif

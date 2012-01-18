@@ -28,6 +28,7 @@
 #import "SUSRootFoldersDAO.h"
 #import "SavedSettings.h"
 #import "FlurryAnalytics.h"
+#import "SUSAllSongsLoader.h"
 
 @interface RootViewController (Private)
 
@@ -134,7 +135,7 @@
 		self.navigationItem.rightBarButtonItem = nil;
 	}
 	
-	if (!viewObjects.isAlbumsLoading && !viewObjects.isSongsLoading && !viewObjects.isArtistsLoading)
+	if (![SUSAllSongsLoader isLoading] && !viewObjects.isArtistsLoading)
 	{
 		if (![dataModel isRootFolderIdCached])
 		{
@@ -205,6 +206,11 @@
 	headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 126)] autorelease];
 	headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	headerView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
+	
+	blockerButton = [UIButton buttonWithType:UIButtonTypeCustom];
+	blockerButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	blockerButton.frame = headerView.frame;
+	[headerView addSubview:blockerButton];
 	
 	countLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, 320, 30)];
 	countLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -305,15 +311,18 @@
 
 - (void)folderDropdownMoveViewsY:(float)y
 {
+	[self.tableView beginUpdates];
 	[self.tableView.tableHeaderView addHeight:y];
 	[searchBar addY:y];
-	if (!dropdown.isOpen)
-		self.tableView.tableHeaderView = self.tableView.tableHeaderView;
+	blockerButton.frame = self.tableView.tableHeaderView.frame;
+	//if (!dropdown.isOpen)
+	self.tableView.tableHeaderView = self.tableView.tableHeaderView;
+	[self.tableView endUpdates];
 }
 
 - (void)folderDropdownViewsFinishedMoving
 {
-	self.tableView.tableHeaderView = self.tableView.tableHeaderView;
+	//self.tableView.tableHeaderView = self.tableView.tableHeaderView;
 }
 
 - (void)folderDropdownSelectFolder:(NSNumber *)folderId
@@ -364,7 +373,7 @@
 
 - (void) reloadAction:(id)sender
 {
-	if (!viewObjects.isAlbumsLoading && !viewObjects.isSongsLoading)
+	if (![SUSAllSongsLoader isLoading])
 	{
 		[self loadData:[[SavedSettings sharedInstance] rootFoldersSelectedFolderId]];
 	}
@@ -442,7 +451,6 @@
 	if([searchText length] > 0) 
 	{
 		[searchOverlayView.view removeFromSuperview];
-		viewObjects.isSearchingAllAlbums = YES;
 		letUserSelectRow = YES;
 		self.tableView.scrollEnabled = YES;
 		
@@ -461,7 +469,6 @@
 		searchOverlayView.view.frame = frame;
 		[self.view.superview addSubview:searchOverlayView.view];
 		
-		viewObjects.isSearchingAllAlbums = NO;
 		letUserSelectRow = NO;
 		self.tableView.scrollEnabled = NO;
 		

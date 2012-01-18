@@ -13,6 +13,7 @@
 #import "FMDatabase.h"
 #import "CellOverlay.h"
 #import "Song.h"
+#import "FMDatabase+Synchronized.h"
 
 @implementation GenresArtistUITableViewCell
 
@@ -97,7 +98,7 @@
 		FMResultSet *result;
 		if ([ViewObjectsSingleton sharedInstance].isOfflineMode) 
 		{
-			result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
+			result = [[DatabaseSingleton sharedInstance].songCacheDb synchronizedQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
 		}
 		else 
 		{
@@ -136,7 +137,7 @@
 		FMResultSet *result;
 		if ([ViewObjectsSingleton sharedInstance].isOfflineMode) 
 		{
-			result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
+			result = [[DatabaseSingleton sharedInstance].songCacheDb synchronizedQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
 		}
 		else 
 		{

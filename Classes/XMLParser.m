@@ -50,13 +50,6 @@
 	return self;
 }
 
-- (void) updateMessage
-{
-	[viewObjects.allAlbumsLoadingScreen setMessage1Text:viewObjects.allAlbumsCurrentArtistName];
-	[viewObjects.allAlbumsLoadingScreen setMessage2Text:[NSString stringWithFormat:@"%i", viewObjects.allAlbumsLoadingProgress]];
-}
-
-
 - (void) subsonicErrorCode:(NSString *)errorCode message:(NSString *)message
 {
 	if ([parseState isEqualToString: @"allAlbums"])
@@ -154,39 +147,7 @@
 			
 			[anArtist release];
 		}
-	}
-	else if ( [parseState isEqualToString: @"allAlbums"] )
-	{
-		if([elementName isEqualToString:@"error"])
-		{
-			[self subsonicErrorCode:[attributeDict objectForKey:@"code"] message:[attributeDict objectForKey:@"message"]];
-		}
-		else if([elementName isEqualToString:@"directory"]) 
-		{
-			// Set the artist name and id
-			viewObjects.allAlbumsCurrentArtistName = nil; viewObjects.allAlbumsCurrentArtistName = [attributeDict objectForKey:@"name"];
-			viewObjects.allAlbumsCurrentArtistId = nil; viewObjects.allAlbumsCurrentArtistId = [attributeDict objectForKey:@"id"];
-		}
-		else if([elementName isEqualToString:@"child"]) 
-		{
-			if ([[attributeDict objectForKey:@"isDir"] isEqualToString:@"true"])
-			{				
-				Album *anAlbum = [[Album alloc] initWithAttributeDict:attributeDict artist:[Artist artistWithName:viewObjects.allAlbumsCurrentArtistName andArtistId:viewObjects.allAlbumsCurrentArtistId]];
-				
-				//Add album object to the database
-				if (![anAlbum.title isEqualToString:@".AppleDouble"])
-				{
-					[databaseControls insertAlbum:anAlbum intoTable:@"allAlbumsTemp" inDatabase:databaseControls.allAlbumsDb];
-				}
-				
-				// Update the loading screen message
-				viewObjects.allAlbumsLoadingProgress++;
-				[self performSelectorOnMainThread:@selector(updateMessage) withObject:nil waitUntilDone:NO];
-				
-				[anAlbum release];
-			}
-		}		
-	}		
+	}	
 	else if( [parseState isEqualToString: @"albums"] )
 	{
 		//DLog(@"elementName: %@", elementName);

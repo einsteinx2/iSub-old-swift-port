@@ -2,15 +2,16 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1280</int>
-		<string key="IBDocument.SystemVersion">11A511</string>
+		<string key="IBDocument.SystemVersion">11C74</string>
 		<string key="IBDocument.InterfaceBuilderVersion">1938</string>
-		<string key="IBDocument.AppKitVersion">1138</string>
-		<string key="IBDocument.HIToolboxVersion">566.00</string>
+		<string key="IBDocument.AppKitVersion">1138.23</string>
+		<string key="IBDocument.HIToolboxVersion">567.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			<string key="NS.object.0">933</string>
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
+			<string>IBUISlider</string>
 			<string>IBUIButton</string>
 			<string>IBUIView</string>
 			<string>IBUITextField</string>
@@ -135,7 +136,7 @@
 					<object class="IBUITextField" id="561648492">
 						<reference key="NSNextResponder" ref="607013602"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{20, 355}, {280, 31}}</string>
+						<string key="NSFrame">{{20, 372}, {280, 31}}</string>
 						<reference key="NSSuperview" ref="607013602"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="949317054"/>
@@ -174,7 +175,7 @@
 						<string key="NSFrame">{{0, 320}, {480, 1}}</string>
 						<reference key="NSSuperview" ref="607013602"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="561648492"/>
+						<reference key="NSNextKeyView" ref="735940589"/>
 						<string key="NSReuseIdentifierKey">_NS:196</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
@@ -182,6 +183,22 @@
 							<reference key="NSCustomColorSpace" ref="145595332"/>
 						</object>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+					</object>
+					<object class="IBUISlider" id="735940589">
+						<reference key="NSNextResponder" ref="607013602"/>
+						<int key="NSvFlags">292</int>
+						<string key="NSFrame">{{23, 334}, {279, 23}}</string>
+						<reference key="NSSuperview" ref="607013602"/>
+						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="561648492"/>
+						<string key="NSReuseIdentifierKey">_NS:623</string>
+						<bool key="IBUIOpaque">NO</bool>
+						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+						<int key="IBUIContentHorizontalAlignment">0</int>
+						<int key="IBUIContentVerticalAlignment">0</int>
+						<float key="IBUIValue">1</float>
+						<float key="IBUIMinValue">1</float>
+						<float key="IBUIMaxValue">4</float>
 					</object>
 				</array>
 				<string key="NSFrameSize">{480, 320}</string>
@@ -205,14 +222,6 @@
 			<array class="NSMutableArray" key="connectionRecords">
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">view</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="607013602"/>
-					</object>
-					<int key="connectionID">7</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">toggleButton</string>
 						<reference key="source" ref="372490531"/>
 						<reference key="destination" ref="1037058280"/>
@@ -234,6 +243,22 @@
 						<reference key="destination" ref="347511592"/>
 					</object>
 					<int key="connectionID">18</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">view</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="607013602"/>
+					</object>
+					<int key="connectionID">26</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">gainSlider</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="735940589"/>
+					</object>
+					<int key="connectionID">30</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
@@ -270,6 +295,24 @@
 					</object>
 					<int key="connectionID">21</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">movedGainSlider:</string>
+						<reference key="source" ref="735940589"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">13</int>
+					</object>
+					<int key="connectionID">28</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">movedGainSlider:</string>
+						<reference key="source" ref="735940589"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">3</int>
+					</object>
+					<int key="connectionID">29</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -300,6 +343,7 @@
 							<reference ref="347511592"/>
 							<reference ref="561648492"/>
 							<reference ref="621224345"/>
+							<reference ref="735940589"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -333,6 +377,11 @@
 						<reference key="object" ref="347511592"/>
 						<reference key="parent" ref="607013602"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">24</int>
+						<reference key="object" ref="735940589"/>
+						<reference key="parent" ref="607013602"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -348,13 +397,14 @@
 				<string key="20.CustomClassName">NWPickerField</string>
 				<string key="20.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="22.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<string key="24.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="4.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			</dictionary>
 			<dictionary class="NSMutableDictionary" key="unlocalizedProperties"/>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">23</int>
+			<int key="maxID">30</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -371,12 +421,17 @@
 					<string key="superclassName">UIViewController</string>
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="dismiss:">id</string>
+						<string key="movedGainSlider:">id</string>
 						<string key="toggle:">id</string>
 						<string key="type:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
 						<object class="IBActionInfo" key="dismiss:">
 							<string key="name">dismiss:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="movedGainSlider:">
+							<string key="name">movedGainSlider:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="toggle:">
@@ -390,6 +445,7 @@
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="equalizerView">EqualizerView</string>
+						<string key="gainSlider">UISlider</string>
 						<string key="presetPicker">NWPickerField</string>
 						<string key="toggleButton">UIButton</string>
 					</dictionary>
@@ -397,6 +453,10 @@
 						<object class="IBToOneOutletInfo" key="equalizerView">
 							<string key="name">equalizerView</string>
 							<string key="candidateClassName">EqualizerView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="gainSlider">
+							<string key="name">gainSlider</string>
+							<string key="candidateClassName">UISlider</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="presetPicker">
 							<string key="name">presetPicker</string>

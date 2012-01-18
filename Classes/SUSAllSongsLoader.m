@@ -18,6 +18,7 @@
 #import "Song.h"
 #import "SUSRootFoldersDAO.h"
 #import "NSMutableURLRequest+SUS.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @interface SUSAllSongsLoader (Private)
 
@@ -34,6 +35,10 @@
 @end
 
 @implementation SUSAllSongsLoader
+
+static BOOL isAllSongsLoading = NO;
++ (BOOL)isLoading { return isAllSongsLoading; }
++ (void)setIsLoading:(BOOL)isLoading { isAllSongsLoading = isLoading; }
 
 @synthesize currentArtist, currentAlbum, rootFolders, notificationTimeArtist, notificationTimeAlbum, notificationTimeSong;
 
@@ -80,7 +85,7 @@ static NSInteger order (id a, id b, void* context)
 
 - (void)cancelLoad
 {
-	viewObjects.cancelLoading = YES;
+	viewObjects.cancelLoading = YES;	
 }
 
 - (void)startLoad
@@ -93,8 +98,8 @@ static NSInteger order (id a, id b, void* context)
 	totalAlbumsProcessed = 0;
 	totalSongsProcessed = 0;
 	
-	viewObjects.isAlbumsLoading = YES;
-	viewObjects.isSongsLoading = YES;
+	[SUSAllSongsLoader setIsLoading:YES];
+	
 	[[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:[NSString stringWithFormat:@"%@isAllAlbumsLoading", settings.urlString]];
 	[[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:[NSString stringWithFormat:@"%@isAllSongsLoading", settings.urlString]];
 	[[NSUserDefaults standardUserDefaults] synchronize];
@@ -120,7 +125,7 @@ static NSInteger order (id a, id b, void* context)
 		currentRow = [databaseControls.allAlbumsDb intForQuery:@"SELECT artistNum FROM resumeLoad"];
 		artistCount = [databaseControls.albumListCacheDb intForQuery:@"SELECT count FROM rootFolderCount_all LIMIT 1"];
 		
-		[[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_LOADING_ARTISTS object:nil];
+		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_AllSongsLoadingArtists object:nil];
 		
 		[self loadAlbumFolder];	
 	}
@@ -136,7 +141,7 @@ static NSInteger order (id a, id b, void* context)
 			albumCount = [databaseControls.allAlbumsDb intForQuery:@"SELECT COUNT(*) FROM allAlbumsUnsorted"];
 			DLog(@"albumCount: %i", albumCount);
 			
-			[[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_LOADING_ALBUMS object:nil];
+			[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_AllSongsLoadingAlbums object:nil];
 			
 			[self loadAlbumFolder];
 		}
@@ -148,7 +153,7 @@ static NSInteger order (id a, id b, void* context)
 			
 			if (albumCount > 0)
 			{
-				[[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_LOADING_ALBUMS object:nil];
+				[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_AllSongsLoadingAlbums object:nil];
 				[self loadAlbumFolder];
 			}
 			else
@@ -266,12 +271,11 @@ static NSInteger order (id a, id b, void* context)
 	if (viewObjects.cancelLoading)
 	{
 		viewObjects.cancelLoading = NO;
-		viewObjects.isAlbumsLoading = NO;
-		viewObjects.isSongsLoading = NO;
+		[SUSAllSongsLoader setIsLoading:NO];
 		[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:[NSString stringWithFormat:@"%@isAllAlbumsLoading", [SavedSettings sharedInstance].urlString]];
 		[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:[NSString stringWithFormat:@"%@isAllSongsLoading", settings.urlString]];
 		[[NSUserDefaults standardUserDefaults] synchronize];
-		[self performSelectorInBackground:@selector(hideLoadingScreen) withObject:nil];
+		[self informDelegateLoadingFailed:nil];
 		return;
 	}
 	
@@ -369,9 +373,8 @@ static NSInteger order (id a, id b, void* context)
     if (viewObjects.cancelLoading)
     {
         viewObjects.cancelLoading = NO;
-        viewObjects.isAlbumsLoading = NO;
-        viewObjects.isSongsLoading = NO;
-        [self performSelectorInBackground:@selector(hideLoadingScreen) withObject:nil];
+		[SUSAllSongsLoader setIsLoading:NO];
+		[self informDelegateLoadingFailed:nil];
         return;
     }
     
@@ -443,9 +446,8 @@ static NSInteger order (id a, id b, void* context)
 	// Check if loading should stop
     if (viewObjects.cancelLoading)
     {
-        viewObjects.cancelLoading = NO;
-        viewObjects.isSongsLoading = NO;
-        [self performSelectorInBackground:@selector(hideLoadingScreen) withObject:nil];
+        [SUSAllSongsLoader setIsLoading:NO];
+        [self informDelegateLoadingFailed:nil];
         return;
     }
     
@@ -454,50 +456,20 @@ static NSInteger order (id a, id b, void* context)
     [defaults synchronize];
     
     [databaseControls.allSongsDb executeUpdate:@"UPDATE resumeLoad SET albumNum = ?, iteration = ?", [NSNumber numberWithInt:0], [NSNumber numberWithInt:6]];
-    
-    [self performSelectorOnMainThread:@selector(loadData2) withObject:nil waitUntilDone:NO];
-    
-    [autoreleasePool release];
-}
-
-- (void) loadData2
-{
-	DLog(@"loadData2 called");
-	// Check if loading should stop
-	if (viewObjects.cancelLoading)
-	{
-		viewObjects.cancelLoading = NO;
-		viewObjects.isSongsLoading = NO;
-		
-		// TODO: call delegate's error method with "user canceled" message
-		//[self hideLoadingScreen];
-		return;
-	}
-	viewObjects.isSongsLoading = NO;
+	
+	[SUSAllSongsLoader setIsLoading:NO];
+	[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:[NSString stringWithFormat:@"%@isAllAlbumsLoading", settings.urlString]];
 	[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:[NSString stringWithFormat:@"%@isAllSongsLoading", settings.urlString]];
 	[[NSUserDefaults standardUserDefaults] synchronize];
-		
-	/*[self addCount];
-	
-	self.tableView.backgroundColor = [UIColor clearColor];
-	
-	// Hide the loading screen
-	[self hideLoadingScreen];
-	
-	if(musicControls.streamer || musicControls.showNowPlayingIcon)
-	{
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
-	}
-	else
-	{
-		self.navigationItem.rightBarButtonItem = nil;
-	}*/
 	
 	[databaseControls.allSongsDb executeUpdate:@"DROP TABLE resumeLoad"];
-    
-	[self informDelegateLoadingFinished];
+	
+	[self performSelectorOnMainThread:@selector(informDelegateLoadingFinished) withObject:nil waitUntilDone:NO];
+	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AllSongsLoadingFinished];
+        
+    [autoreleasePool release];
 }
-
 
 - (NSArray *)createSectionInfo
 {
@@ -521,7 +493,7 @@ static NSInteger order (id a, id b, void* context)
 	if ([[NSDate date] timeIntervalSinceDate:notificationTimeArtist] > .5)
 	{
 		self.notificationTimeArtist = [NSDate date];
-		[[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_ARTIST_NAME object:artistName];
+		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_AllSongsArtistName object:artistName];
 	}
 }
 
@@ -530,7 +502,7 @@ static NSInteger order (id a, id b, void* context)
 	if ([[NSDate date] timeIntervalSinceDate:notificationTimeAlbum] > .5)
 	{
 		self.notificationTimeAlbum = [NSDate date];
-		[[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_ALBUM_NAME object:albumTitle];
+		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_AllSongsAlbumName object:albumTitle];
 	}
 }
 
@@ -539,7 +511,7 @@ static NSInteger order (id a, id b, void* context)
 	if ([[NSDate date] timeIntervalSinceDate:notificationTimeSong] > .5)
 	{
 		self.notificationTimeSong = [NSDate date];
-		[[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_SONG_NAME object:songTitle];
+		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_AllSongsSongName object:songTitle];
 	}
 }
 

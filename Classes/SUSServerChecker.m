@@ -39,7 +39,9 @@
 {
     self.receivedData = [NSMutableData dataWithCapacity:0];
     
-	self.request = [NSMutableURLRequest requestWithSUSAction:@"ping" forUrlString:urlString username:username password:password andParameters:nil];
+	NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithSUSAction:@"ping" forUrlString:urlString username:username password:password andParameters:nil];
+	[theRequest setTimeoutInterval:ISMSServerCheckTimeout];
+	self.request = theRequest;
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	
 	if (!connection)
@@ -84,6 +86,7 @@
         }
         
         NSMutableURLRequest *r = [[request mutableCopy] autorelease]; // original request
+		[r setTimeoutInterval:ISMSServerCheckTimeout];
         [r setURL:[inRequest URL]];
         return r;
     } 

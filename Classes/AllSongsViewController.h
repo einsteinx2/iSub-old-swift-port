@@ -8,7 +8,7 @@
 
 #import "SUSLoaderDelegate.h"
 
-@class iSubAppDelegate, SavedSettings, ViewObjectsSingleton, SearchOverlayViewController, Song, MusicSingleton, DatabaseSingleton, Album, SUSAllSongsDAO, LoadingScreen;
+@class iSubAppDelegate, SavedSettings, ViewObjectsSingleton, SearchOverlayViewController, Song, MusicSingleton, DatabaseSingleton, Album, SUSAllSongsDAO, LoadingScreen, EGORefreshTableHeaderView;
 
 @interface AllSongsViewController : UITableViewController <UISearchBarDelegate, SUSLoaderDelegate> 
 {
@@ -37,10 +37,11 @@
 	NSArray *sectionInfo;
 	
 	BOOL isSearching;
-	
-	LoadingScreen *loadingScreen;
-	
+		
 	BOOL isProcessingArtists;
+	
+	EGORefreshTableHeaderView *refreshHeaderView;
+	BOOL _reloading;
 }
 
 @property (nonatomic, retain) SUSAllSongsDAO *dataModel;
@@ -56,5 +57,10 @@
 
 - (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error;
 - (void)loadingFinished:(SUSLoader*)theLoader;
+
+- (void)dataSourceDidFinishLoadingNewData;
+
+- (void)showLoadingScreen;
+- (void)hideLoadingScreen;
 
 @end

@@ -34,6 +34,7 @@
 #import "SUSCurrentPlaylistDAO.h"
 #import "BassWrapperSingleton.h"
 #import "FlurryAnalytics.h"
+#import "FMDatabase+Synchronized.h"
 
 @interface PlaylistsViewController (Private)
 
@@ -95,7 +96,7 @@
 	viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 	goToNextSong = NO;
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_SongPlaybackStarted object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentPlaylistCount) name:@"updateCurrentPlaylistCount" object:nil];
 
@@ -144,7 +145,7 @@
 {
     [super viewWillAppear:animated];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:) name:@"storePurchaseComplete" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:) name:ISMSNotification_StorePurchaseComplete object:nil];
 	
 	if(musicControls.showPlayerIcon)
 	{
@@ -174,11 +175,11 @@
 {
 	[super viewWillDisappear:animated];
 	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackStarted object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"updateCurrentPlaylistCount" object:nil];
 	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"storePurchaseComplete" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_StorePurchaseComplete object:nil];
 	
 	if (viewObjects.isEditing)
 	{
@@ -1677,14 +1678,14 @@ static NSString *kName_Error = @"error";
 		cell.backgroundView = [[[UIView alloc] init] autorelease];
 		if(indexPath.row % 2 == 0)
 		{
-			if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
+			if ([databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
 				cell.backgroundView.backgroundColor = [viewObjects currentLightColor];
 			else
 				cell.backgroundView.backgroundColor = viewObjects.lightNormal;
 		}
 		else
 		{
-			if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
+			if ([databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
 				cell.backgroundView.backgroundColor = [viewObjects currentDarkColor];
 			else
 				cell.backgroundView.backgroundColor = viewObjects.darkNormal;

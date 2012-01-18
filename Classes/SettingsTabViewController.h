@@ -48,6 +48,9 @@
 	IBOutlet UISwitch *enableLyricsSwitch;
 	IBOutlet UISwitch *autoPlayerInfoSwitch;
 	
+	IBOutlet UISwitch *enableSwipeSwitch;
+	IBOutlet UISwitch *enableTapAndHoldSwitch;
+	
 	IBOutlet UISwitch *enableSongCachingSwitch;
 	
 	IBOutlet UILabel *enableNextSongCacheLabel;

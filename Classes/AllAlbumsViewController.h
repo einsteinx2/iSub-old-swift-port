@@ -6,9 +6,11 @@
 //  Copyright Ben Baron 2010. All rights reserved.
 //
 
-@class iSubAppDelegate, ViewObjectsSingleton, SearchOverlayViewController, Album, MusicSingleton, DatabaseSingleton, SUSAllAlbumsDAO;
+#import "SUSLoaderDelegate.h"
 
-@interface AllAlbumsViewController : UITableViewController <UISearchBarDelegate> 
+@class iSubAppDelegate, ViewObjectsSingleton, SearchOverlayViewController, Album, MusicSingleton, DatabaseSingleton, SUSAllAlbumsDAO, EGORefreshTableHeaderView, LoadingScreen, SUSAllSongsDAO;
+
+@interface AllAlbumsViewController : UITableViewController <UISearchBarDelegate, SUSLoaderDelegate> 
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
@@ -34,17 +36,29 @@
 	
 	NSArray *sectionInfo;
 	
+	BOOL isProcessingArtists;
+		
 	BOOL isSearching;
+	
+	EGORefreshTableHeaderView *refreshHeaderView;
+	BOOL _reloading;
 }
 
 @property (nonatomic, retain) SUSAllAlbumsDAO *dataModel;
+@property (nonatomic, retain) SUSAllSongsDAO *allSongsDataModel;
 
 @property (nonatomic, retain) UIView *headerView;
 @property (nonatomic, retain) NSArray *sectionInfo;
 
+@property (nonatomic, retain) LoadingScreen *loadingScreen;
+
 - (void) addCount;
 
-- (void) searchTableView;
 - (void) doneSearching_Clicked:(id)sender;
+
+- (void)dataSourceDidFinishLoadingNewData;
+
+- (void)showLoadingScreen;
+- (void)hideLoadingScreen;
 
 @end

@@ -256,6 +256,7 @@ static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
 	{
 		currentIndex = index;
 	}
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistIndexChanged];
 }
 
 - (NSUInteger)count
@@ -297,6 +298,7 @@ static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
 		}
 		index = currentIndex;
 	}
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistIndexChanged];
 	return index;
 }
 

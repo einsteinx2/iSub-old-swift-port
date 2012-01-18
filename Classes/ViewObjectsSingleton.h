@@ -19,11 +19,7 @@
 	BOOL isPlaylistUnlocked;
 	BOOL isJukeboxUnlocked;
 	BOOL isCacheUnlocked;
-	
-	// Constants
-	UInt32 kHorizSwipeDragMin;
-	UInt32 kVertSwipeDragMax;
-	
+
 	// XMLParser states, used to tell the parser how to parse
 	//
 	NSString *parseState;
@@ -44,8 +40,6 @@
 	
 	// Artists page objects
 	//
-	//NSArray *artistIndex;
-	//NSArray *listOfArtists;
 	BOOL isArtistsLoading;
 	
 	// Albums page objects and variables
@@ -53,7 +47,7 @@
 	NSString *currentArtistId; //the id of the current artist so that it can be added to the album object (it's not returned with the xml response)
 	NSString *currentArtistName; //the name of the current artist so that it can be added to the album object (it's not returned with the xml response)
 	
-	// All albums view objects
+	/*// All albums view objects
 	//
 	NSMutableArray *allAlbumsListOfAlbums; //array of album names for the current folder
 	Album *allAlbumsAlbumObject;
@@ -62,13 +56,7 @@
 	NSString *allAlbumsCurrentArtistName;
 	LoadingScreen *allAlbumsLoadingScreen;
 	NSInteger allAlbumsLoadingProgress;
-	BOOL isSearchingAllAlbums;
-	BOOL isAlbumsLoading;
-	
-	// All songs view objects
-	//
-	BOOL isSongsLoading;
-	
+	BOOL isAlbumsLoading;*/
 	
 	// Playlists view objects
 	//
@@ -135,11 +123,6 @@
 	BOOL isNoNetworkAlertShowing;
 }
 
-// Constants
-//
-@property (readonly) UInt32 kHorizSwipeDragMin;
-@property (readonly) UInt32 kVertSwipeDragMax;
-
 // XMLParser objects used to tell the parser how to parse
 //
 @property (nonatomic, retain) NSString *parseState;
@@ -161,7 +144,7 @@
 @property (nonatomic, retain) NSString *currentArtistName;
 @property (nonatomic, retain) NSString *currentArtistId;
 
-// All albums view objects
+/*// All albums view objects
 //
 @property (nonatomic, retain) NSMutableArray *allAlbumsListOfAlbums;
 @property (nonatomic, retain) Album *allAlbumsAlbumObject;
@@ -170,12 +153,11 @@
 @property (nonatomic, retain) NSString *allAlbumsCurrentArtistName;
 @property (nonatomic, retain) LoadingScreen *allAlbumsLoadingScreen;
 @property NSInteger allAlbumsLoadingProgress;
-@property BOOL isSearchingAllAlbums;
 @property BOOL isAlbumsLoading;
 
 // All songs view objects
 //
-@property BOOL isSongsLoading;
+@property BOOL isSongsLoading;*/
 
 // Playlists view objects
 //

@@ -7,7 +7,7 @@
 //
 
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, FMDatabase, Artist, Album, Song, SUSQueueAllDAO;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, FMDatabase, Artist, Album, Song, SUSQueueAllLoader;
 
 @interface DatabaseSingleton : NSObject 
 {
@@ -15,7 +15,7 @@
 	ViewObjectsSingleton *viewObjects;
 	MusicSingleton *musicControls;
 	
-	SUSQueueAllDAO *queueAll;
+	SUSQueueAllLoader *queueAll;
 }
 
 @property (nonatomic, retain) NSString *databaseFolderPath;

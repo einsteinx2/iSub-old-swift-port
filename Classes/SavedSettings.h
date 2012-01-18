@@ -21,6 +21,7 @@
 	BOOL isPopupsEnabled;
 	BOOL isJukeboxEnabled;
 	BOOL isScreenSleepEnabled;
+	float gainMultiplier;
 	
 	// State Saving
 	BOOL isPlaying;	
@@ -51,6 +52,7 @@
 @property NSInteger recoverSetting;
 @property NSInteger maxBitrateWifi;
 @property NSInteger maxBitrate3G;
+@property (readonly) NSInteger currentMaxBitrate;
 @property BOOL isSongCachingEnabled;
 @property BOOL isNextSongCacheEnabled;
 @property NSInteger cachingType;
@@ -75,6 +77,9 @@
 @property BOOL isNewSearchAPI;
 @property (readonly) BOOL isTestServer;
 @property BOOL isBasicAuthEnabled;
+@property BOOL isTapAndHoldEnabled;
+@property BOOL isSwipeEnabled;
+@property float gainMultiplier;
 
 // State Saving
 @property BOOL isRecover;

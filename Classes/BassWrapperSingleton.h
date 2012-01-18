@@ -11,9 +11,10 @@
 #import "bass_fx.h"
 #import "bassmix.h"
 
-#define ISMS_BASSBufferSize 1500
+#define ISMS_BASSBufferSizeForeground 200
+#define ISMS_BASSBufferSizeBackground 1500
 
-@class Song, BassParamEqValue, SUSCurrentPlaylistDAO;
+@class Song, BassParamEqValue, SUSCurrentPlaylistDAO, BassUserInfo;
 @interface BassWrapperSingleton : NSObject
 
 + (BassWrapperSingleton *)sharedInstance;
@@ -44,8 +45,10 @@
 - (BassParamEqValue *)addEqualizerValue:(BASS_DX8_PARAMEQ)value;
 - (NSArray *)removeEqualizerValue:(BassParamEqValue *)value;
 - (void)removeAllEqualizerValues;
-
 - (void)readEqData;
+- (float)fftData:(NSUInteger)index;
+- (short)lineSpecData:(NSUInteger)index;
+- (void)bassSetGainLevel:(float)gain;
 
 @property (readonly) BOOL isPlaying;
 @property (readonly) NSUInteger bitRate;
@@ -55,21 +58,12 @@
 @property (readonly) NSArray *equalizerValues;
 @property QWORD startByteOffset;
 @property BOOL isTempDownload;
-
 @property (readonly) HSTREAM currentStream;
 @property (readonly) HSTREAM nextStream;
-
-@property (nonatomic, retain) SUSCurrentPlaylistDAO *currPlaylistDAO;
-
-- (float)fftData:(NSUInteger)index;
-- (short)lineSpecData:(NSUInteger)index;
+@property (retain) SUSCurrentPlaylistDAO *currPlaylistDAO;
+@property (retain) NSThread *fftDataThread;
+@property BOOL isFftDataThreadToTerminate;
 
 const char *GetCTypeString(DWORD ctype, HPLUGIN plugin);
 
 @end
-
-typedef struct
-{
-	const char *localPath;
-	FILE *file;
-} ISMS_BASS_USERINFO;

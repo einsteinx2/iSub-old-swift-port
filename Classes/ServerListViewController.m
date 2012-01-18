@@ -23,6 +23,7 @@
 #import "Reachability.h"
 #import "SavedSettings.h"
 #import "BassWrapperSingleton.h"
+#import "SUSAllSongsLoader.h"
 
 @implementation ServerListViewController
 
@@ -274,17 +275,9 @@
 			return;
 		
 		// Cancel any tab loads
-		if (viewObjects.isAlbumsLoading || viewObjects.isSongsLoading)
+		if ([SUSAllSongsLoader isLoading])
 		{
-			if (viewObjects.isAlbumsLoading)
-			{
-				DLog(@"detected albums tab loading");
-			}
-			else if (viewObjects.isSongsLoading)
-			{
-				DLog(@"detected songs tab loading");
-			}
-			
+			DLog(@"detected all songs loading");
 			viewObjects.cancelLoading = YES;
 		}
 		
@@ -298,7 +291,6 @@
 		[[NSUserDefaults standardUserDefaults] synchronize];
 		[[BassWrapperSingleton sharedInstance] stop];
 		settings.isJukeboxEnabled = NO;
-		musicControls.showNowPlayingIcon = NO;
 		
 		if (!IS_IPAD())
 			[appDelegate.mainTabBarController.view removeFromSuperview];

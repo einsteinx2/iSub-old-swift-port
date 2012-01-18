@@ -14,12 +14,14 @@
 #import "MKStoreManager.h"
 #import "SUSCurrentPlaylistDAO.h"
 #import "BassWrapperSingleton.h"
+#import "iSubAppDelegate.h"
+#import "Reachability.h"
 
 @implementation SavedSettings
 
 @synthesize serverList, redirectUrlString;
 
-- (NSString *) formatFileSize:(unsigned long long int)size
+- (NSString *)formatFileSize:(unsigned long long int)size
 {
 	if (size < 1024)
 	{
@@ -165,52 +167,14 @@
 	currentPlaylistDAO.repeatMode = repeatMode;
 	
 	bitRate = [userDefaults integerForKey:@"bitRate"];
-	musicControls.bitRate = bitRate;
-	
-	musicControls.showNowPlayingIcon = YES;
-	
+		
 	[pool release];
 }
 
 #pragma mark - Settings Setup
 
-- (void)createInitialSettings
-{
-	[userDefaults setBool:YES forKey:@"areSettingsSetup"];
-	[userDefaults setBool:NO forKey:@"manualOfflineModeSetting"];
-	[userDefaults setInteger:0 forKey:@"recoverSetting"];
-	[userDefaults setInteger:7 forKey:@"maxBitrateWifiSetting"];
-	[userDefaults setInteger:7 forKey:@"maxBitrate3GSetting"];
-	[userDefaults setBool:YES forKey:@"enableSongCachingSetting"];
-	[userDefaults setBool:YES forKey:@"enableNextSongCacheSetting"];
-	[userDefaults setInteger:0 forKey:@"cachingTypeSetting"];
-	[userDefaults setObject:[NSNumber numberWithUnsignedLongLong:1073741824] forKey:@"maxCacheSize"];
-	[userDefaults setObject:[NSNumber numberWithUnsignedLongLong:268435456] forKey:@"minFreeSpace"];
-	[userDefaults setBool:YES forKey:@"autoDeleteCacheSetting"];
-	[userDefaults setInteger:0 forKey:@"autoDeleteCacheTypeSetting"];
-	[userDefaults setInteger:3 forKey:@"cacheSongCellColorSetting"];
-	[userDefaults setBool:NO forKey:@"twitterEnabledSetting"];
-	[userDefaults setBool:NO forKey:@"lyricsEnabledSetting"];
-	[userDefaults setBool:NO forKey:@"enableSongsTabSetting"];
-	[userDefaults setBool:NO forKey:@"autoPlayerInfoSetting"];
-	[userDefaults setBool:NO forKey:@"autoReloadArtistsSetting"];
-	[userDefaults setFloat:0.5 forKey:@"scrobblePercentSetting"];
-	[userDefaults setBool:NO forKey:@"enableScrobblingSetting"];
-	[userDefaults setBool:NO forKey:@"disablePopupsSetting"];
-	[userDefaults setBool:NO forKey:@"lockRotationSetting"];
-	[userDefaults setBool:NO forKey:@"isJukeboxEnabled"];
-	[userDefaults setBool:YES forKey:@"isScreenSleepEnabled"];
-	[userDefaults setBool:YES forKey:@"isPopupsEnabled"];
-	[userDefaults setBool:NO forKey:@"checkUpdatesSetting"];
-	[userDefaults setBool:NO forKey:@"isUpdateCheckQuestionAsked"];
-	[userDefaults setBool:NO forKey:@"isBasicAuthEnabled"];
-	[userDefaults synchronize];
-}
-
 - (void)convertFromOldSettingsType
-{
-	[self createInitialSettings];
-	
+{	
 	// Convert server list
 	id servers = [userDefaults objectForKey:@"servers"];
 	if ([servers isKindOfClass:[NSArray class]])
@@ -317,11 +281,65 @@
 	}
 }
 
+- (void)createInitialSettings
+{
+	if (![userDefaults boolForKey:@"areSettingsSetup"])
+	{
+		[userDefaults setBool:YES forKey:@"areSettingsSetup"];
+		[userDefaults setBool:NO forKey:@"manualOfflineModeSetting"];
+		[userDefaults setInteger:0 forKey:@"recoverSetting"];
+		[userDefaults setInteger:7 forKey:@"maxBitrateWifiSetting"];
+		[userDefaults setInteger:7 forKey:@"maxBitrate3GSetting"];
+		[userDefaults setBool:YES forKey:@"enableSongCachingSetting"];
+		[userDefaults setBool:YES forKey:@"enableNextSongCacheSetting"];
+		[userDefaults setInteger:0 forKey:@"cachingTypeSetting"];
+		[userDefaults setObject:[NSNumber numberWithUnsignedLongLong:1073741824] forKey:@"maxCacheSize"];
+		[userDefaults setObject:[NSNumber numberWithUnsignedLongLong:268435456] forKey:@"minFreeSpace"];
+		[userDefaults setBool:YES forKey:@"autoDeleteCacheSetting"];
+		[userDefaults setInteger:0 forKey:@"autoDeleteCacheTypeSetting"];
+		[userDefaults setInteger:3 forKey:@"cacheSongCellColorSetting"];
+		[userDefaults setBool:NO forKey:@"twitterEnabledSetting"];
+		[userDefaults setBool:NO forKey:@"lyricsEnabledSetting"];
+		[userDefaults setBool:NO forKey:@"enableSongsTabSetting"];
+		[userDefaults setBool:NO forKey:@"autoPlayerInfoSetting"];
+		[userDefaults setBool:NO forKey:@"autoReloadArtistsSetting"];
+		[userDefaults setFloat:0.5 forKey:@"scrobblePercentSetting"];
+		[userDefaults setBool:NO forKey:@"enableScrobblingSetting"];
+		[userDefaults setBool:NO forKey:@"disablePopupsSetting"];
+		[userDefaults setBool:NO forKey:@"lockRotationSetting"];
+		[userDefaults setBool:NO forKey:@"isJukeboxEnabled"];
+		[userDefaults setBool:YES forKey:@"isScreenSleepEnabled"];
+		[userDefaults setBool:YES forKey:@"isPopupsEnabled"];
+		[userDefaults setBool:NO forKey:@"checkUpdatesSetting"];
+		[userDefaults setBool:NO forKey:@"isUpdateCheckQuestionAsked"];
+		[userDefaults setBool:NO forKey:@"isBasicAuthEnabled"];
+		
+		[self convertFromOldSettingsType];
+	}
+	
+	// New settings 3.0.5 beta 18
+	if (![userDefaults objectForKey:@"gainMultiplier"])
+	{
+		[userDefaults setBool:YES forKey:@"isTapAndHoldEnabled"];
+		[userDefaults setBool:YES forKey:@"isSwipeEnabled"];
+		[userDefaults setFloat:1.6 forKey:@"gainMultiplier"];
+	}
+	
+	[userDefaults synchronize];
+}
+
+- (void)addNewSettings
+{
+	//[userDefaults 
+}
+
 - (void)memCacheDefaults
 {
 	isJukeboxEnabled = [userDefaults boolForKey:@"isJukeboxEnabled"];
 	isScreenSleepEnabled = [userDefaults boolForKey:@"isScreenSleepEnabled"];
 	isPopupsEnabled = [userDefaults boolForKey:@"isPopupsEnabled"];
+	
+	gainMultiplier = [userDefaults floatForKey:@"gainMultiplier"];
 	
 	NSString *url = [userDefaults stringForKey:@"url"];
 	if (url)
@@ -506,6 +524,40 @@
 {
 	[userDefaults setInteger:maxBitrate3G forKey:@"maxBitrate3GSetting"];
 	[userDefaults synchronize];
+}
+
+- (NSInteger)currentMaxBitrate
+{
+	NSInteger bitrate;
+	switch ([iSubAppDelegate sharedInstance].isWifi ? self.maxBitrateWifi : self.maxBitrate3G)
+	{
+		case 0:
+			bitrate = 64;
+			break;
+		case 1:
+			bitrate = 96;
+			break;
+		case 2:
+			bitrate = 128;
+			break;
+		case 3:
+			bitrate = 160;
+			break;
+		case 4:
+			bitrate = 192;
+			break;
+		case 5:
+			bitrate = 224;
+			break;
+		case 6:
+			bitrate = 256;
+			break;
+		default:
+			bitrate = 0;
+			break;
+	}
+	
+	return bitrate;
 }
 
 - (BOOL)isSongCachingEnabled
@@ -796,6 +848,40 @@
 	[userDefaults synchronize];
 }
 
+- (BOOL)isTapAndHoldEnabled
+{
+	return [userDefaults boolForKey:@"isTapAndHoldEnabled"];
+}
+
+- (void)setIsTapAndHoldEnabled:(BOOL)isTapAndHoldEnabled
+{
+	[userDefaults setBool:isTapAndHoldEnabled forKey:@"isTapAndHoldEnabled"];
+	[userDefaults synchronize];
+}
+
+- (BOOL)isSwipeEnabled
+{
+	return [userDefaults boolForKey:@"isSwipeEnabled"];
+}
+
+- (void)setIsSwipeEnabled:(BOOL)isSwipeEnabled
+{
+	[userDefaults setBool:isSwipeEnabled forKey:@"isSwipeEnabled"];
+	[userDefaults synchronize];
+}
+
+- (float)gainMultiplier
+{
+	return gainMultiplier;
+}
+
+- (void)setGainMultiplier:(float)multiplier
+{
+	gainMultiplier = multiplier;
+	[userDefaults setFloat:multiplier forKey:@"gainMultiplier"];
+	[userDefaults synchronize];
+}
+
 // Test server details
 #define DEFAULT_URL @"http://isubapp.com:9000"
 #define DEFAULT_USER_NAME @"isub-guest"
@@ -827,13 +913,11 @@ static SavedSettings *sharedInstance = nil;
 	username = [[NSString alloc] initWithString:DEFAULT_USER_NAME];
 	password = [[NSString alloc] initWithString:DEFAULT_PASSWORD];
 	redirectUrlString = nil;
+	
+	[self createInitialSettings];
     
 	// If the settings are not set up, convert them
-	if (![userDefaults boolForKey:@"areSettingsSetup"])
-	{
-		[self convertFromOldSettingsType];
-	}
-	else
+	if ([userDefaults boolForKey:@"areSettingsSetup"])
 	{
 		NSData *servers = [userDefaults objectForKey:@"servers"];
 		if (servers)

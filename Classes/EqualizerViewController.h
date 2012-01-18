@@ -19,6 +19,8 @@
 @property (nonatomic, retain) IBOutlet EqualizerView *equalizerView;
 @property (nonatomic, retain) NSMutableArray *equalizerPointViews;
 
+@property (nonatomic, retain) IBOutlet UISlider *gainSlider;
+
 @property (nonatomic, retain) BassEffectDAO *effectDAO;
 
 //@property (nonatomic, retain) NSTimer *drawTimer;
@@ -54,5 +56,7 @@
 - (void)hideDeletePresetButton:(BOOL)animated;
 - (void)showDeletePresetButton:(BOOL)animated;
 - (void)saveTempCustomPreset;
+
+- (IBAction)movedGainSlider:(id)sender;
 
 @end

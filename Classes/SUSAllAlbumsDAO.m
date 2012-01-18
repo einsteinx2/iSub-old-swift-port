@@ -17,7 +17,6 @@
 
 - (void)setup
 {
-	count = NSUIntegerMax;
 	index = nil;
 }
 
@@ -40,7 +39,7 @@
 
 - (NSUInteger)allAlbumsCount
 {
-	NSUInteger value = NSUIntegerMax;
+	NSUInteger value = 0;
 	
 	if ([self.db tableExists:@"allAlbumsCount"] && [self.db intForQuery:@"SELECT COUNT(*) FROM allAlbumsCount"] > 0)
 	{
@@ -52,13 +51,10 @@
 
 - (NSUInteger)allAlbumsSearchCount
 {
-	NSUInteger value = NSUIntegerMax;
+	[self.db executeUpdate:@"CREATE TEMPORARY TABLE IF NOT EXISTS allAlbumsNameSearch (rowIdInAllAlbums INTEGER)"];
+	NSUInteger value = [self.db intForQuery:@"SELECT count(*) FROM allAlbumsNameSearch"];
 	
-	if ([self.db tableExists:@"allAlbumsNameSearch"])
-	{
-		value = [self.db intForQuery:@"SELECT count(*) FROM allAlbumsNameSearch"];
-	}
-	
+	DLog(@"allAlbumsNameSearch count: %i   value: %i", [self.db intForQuery:@"SELECT count(*) FROM allAlbumsNameSearch"], value);
 	return value;
 }
 
@@ -105,24 +101,8 @@
 
 - (Album *)allAlbumsAlbumForPositionInSearch:(NSUInteger)position
 {
-	Album *anAlbum = [[[Album alloc] init] autorelease];
-	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allAlbumsNameSearch WHERE ROWID = ?", [NSNumber numberWithInt:position]];
-	while ([result next])
-	{
-		if ([result stringForColumn:@"title"] != nil)
-			anAlbum.title = [NSString stringWithString:[result stringForColumn:@"title"]];
-		if ([result stringForColumn:@"albumId"] != nil)
-			anAlbum.albumId = [NSString stringWithString:[result stringForColumn:@"albumId"]];
-		if ([result stringForColumn:@"coverArtId"] != nil)
-			anAlbum.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
-		if ([result stringForColumn:@"artistName"] != nil)
-			anAlbum.artistName = [NSString stringWithString:[result stringForColumn:@"artistName"]];
-		if ([result stringForColumn:@"artistId"] != nil)
-			anAlbum.artistId = [NSString stringWithString:[result stringForColumn:@"artistId"]];
-	}
-	[result close];
-	
-	return anAlbum;
+	NSUInteger rowId = [self.db intForQuery:@"SELECT rowIdInAllAlbums FROM allAlbumsNameSearch WHERE ROWID = ?", [NSNumber numberWithInt:position]];
+	return [self allAlbumsAlbumForPosition:rowId];
 }
 
 - (void)allAlbumsClearSearch
@@ -134,21 +114,22 @@
 {
 	// Inialize the search DB
 	[self.db executeUpdate:@"DROP TABLE IF EXISTS allAlbumsNameSearch"];
-	[self.db executeUpdate:@"CREATE TEMPORARY TABLE allAlbumsNameSearch (id TEXT PRIMARY KEY, name TEXT)"];
+	[self.db executeUpdate:@"CREATE TEMPORARY TABLE allAlbumsNameSearch (rowIdInAllAlbums INTEGER)"];
 	
 	// Perform the search
-	NSString *query = @"INSERT INTO allAlbumsNameSearch SELECT * FROM allAlbums WHERE name LIKE ? LIMIT 100";
+	NSString *query = @"INSERT INTO allAlbumsNameSearch SELECT ROWID FROM allAlbums WHERE title LIKE ? LIMIT 100";
 	[self.db executeUpdate:query, [NSString stringWithFormat:@"%%%@%%", name]];
 	if ([self.db hadError]) {
 		DLog(@"Err %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
 	}
+	DLog(@"allAlbumsNameSearch count: %i", [self.db intForQuery:@"SELECT count(*) FROM allAlbumsNameSearch"]);
 }
 
 - (BOOL)allAlbumsIsDataLoaded
 {
 	BOOL isLoaded = NO;
-	
-	if ([self.db tableExists:@"allAlbumsCount"] && [self.db intForQuery:@"SELECT COUNT(*) FROM allAlbumsCount"] > 0)
+
+	if ([self.db intForQuery:@"SELECT COUNT(*) FROM allAlbumsCount"] > 0)
 	{
 		isLoaded = YES;
 	}
@@ -161,12 +142,7 @@
 
 - (NSUInteger)count
 {
-	if (count == NSUIntegerMax)
-	{
-		count = [self allAlbumsCount];
-	}
-	
-	return count;
+	return [self allAlbumsCount];
 }
 
 - (NSUInteger)searchCount

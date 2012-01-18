@@ -12,6 +12,7 @@
 #import "CacheSingleton.h"
 #import "Song.h"
 #import "SUSCurrentPlaylistDAO.h"
+#import "BassWrapperSingleton.h"
 
 @implementation DebugViewController
 @synthesize currentSong, nextSong;
@@ -125,7 +126,7 @@ float nextSongProgress = 0;
 		if (!settings.isJukeboxEnabled)
 		{
 			// Set the current song progress bar
-			if (!musicControls.isTempDownload)
+			if (![BassWrapperSingleton sharedInstance].isTempDownload)
 				currentSongProgress = [musicControls findCurrentSongProgress];
 			
 			nextSongProgress = [musicControls findNextSongProgress];
@@ -148,7 +149,7 @@ float nextSongProgress = 0;
 	else
 	{
 		// Set the current song progress bar
-		if (musicControls.isTempDownload)
+		if ([BassWrapperSingleton sharedInstance].isTempDownload)
 		{
 			currentSongProgressView.progress = 0.0;
 			currentSongProgressView.alpha = 0.2;

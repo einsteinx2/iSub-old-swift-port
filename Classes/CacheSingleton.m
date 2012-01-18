@@ -11,6 +11,7 @@
 #import "DatabaseSingleton.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabase+Synchronized.h"
 #import "Song.h"
 
 static CacheSingleton *sharedInstance = nil;
@@ -51,7 +52,7 @@ static CacheSingleton *sharedInstance = nil;
 - (NSUInteger)numberOfCachedSongs
 {
 	DatabaseSingleton *databaseControls = [DatabaseSingleton sharedInstance];
-	return [databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES'"];
+	return [databaseControls.songCacheDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES'"];
 }
 
 //
@@ -93,9 +94,9 @@ static CacheSingleton *sharedInstance = nil;
 		while (self.freeSpace < settings.minFreeSpace)
 		{
 			if (settings.autoDeleteCacheType == 0)
-				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
+				songMD5 = [databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
 			else
-				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY chachedDate ASC LIMIT 1"];
+				songMD5 = [databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY chachedDate ASC LIMIT 1"];
 			//DLog(@"removing %@", songMD5);
 			[Song removeSongFromCacheDbByMD5:songMD5];			
 		}
@@ -108,13 +109,13 @@ static CacheSingleton *sharedInstance = nil;
 		{
 			if (settings.autoDeleteCacheType == 0)
 			{
-				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
+				songMD5 = [databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
 			}
 			else
 			{
-				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY chachedDate ASC LIMIT 1"];
+				songMD5 = [databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY chachedDate ASC LIMIT 1"];
 			}
-			//songSize = [databaseControls.songCacheDb intForQuery:@"SELECT size FROM cachedSongs WHERE md5 = ?", songMD5];
+			//songSize = [databaseControls.songCacheDb synchronizedIntForQuery:@"SELECT size FROM cachedSongs WHERE md5 = ?", songMD5];
 			Song *aSong = [Song songFromCacheDb:songMD5];
 			// Determine the name of the file we are downloading.
 			//DLog(@"currentSongObject.path: %@", currentSongObject.path);

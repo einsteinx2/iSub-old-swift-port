@@ -17,6 +17,7 @@
 #import "NSURLConnectionDelegateQueueArtwork.h"
 #import "CustomUIAlertView.h"
 #import "NSMutableURLRequest+SUS.h"
+#import "FMDatabase+Synchronized.h"
 
 @implementation NSURLConnectionDelegateQueue
 
@@ -34,7 +35,7 @@
 
 - (BOOL) insertSong:(Song *)aSong intoGenreTable:(NSString *)table
 {
-	[databaseControls.songCacheDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO %@ (md5, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", table], [aSong.path md5], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
+	[databaseControls.songCacheDb synchronizedUpdate:[NSString stringWithFormat:@"INSERT INTO %@ (md5, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", table], [aSong.path md5], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
 	
 	if ([databaseControls.songCacheDb hadError]) {
 		DLog(@"Err inserting song into genre table %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
@@ -100,11 +101,11 @@
 	else
 	{
 		// Update the cache time
-		[databaseControls.songCacheDb executeUpdate:[NSString stringWithFormat:@"UPDATE cacheQueue SET cachedDate = %i WHERE md5 = ?", (NSUInteger)[[NSDate date] timeIntervalSince1970]], musicControls.downloadFileNameHashQueue];
+		[databaseControls.songCacheDb synchronizedUpdate:[NSString stringWithFormat:@"UPDATE cacheQueue SET cachedDate = %i WHERE md5 = ?", (NSUInteger)[[NSDate date] timeIntervalSince1970]], musicControls.downloadFileNameHashQueue];
 		
 		// Move the row from the cacheQueue to the cachedSongs table
-		[databaseControls.songCacheDb executeUpdate:@"UPDATE cacheQueue SET finished = 'YES' WHERE md5 = ?", musicControls.downloadFileNameHashQueue];
-		[databaseControls.songCacheDb executeUpdate:@"INSERT INTO cachedSongs SELECT * FROM cacheQueue WHERE md5 = ?", musicControls.downloadFileNameHashQueue];
+		[databaseControls.songCacheDb synchronizedUpdate:@"UPDATE cacheQueue SET finished = 'YES' WHERE md5 = ?", musicControls.downloadFileNameHashQueue];
+		[databaseControls.songCacheDb synchronizedUpdate:@"INSERT INTO cachedSongs SELECT * FROM cacheQueue WHERE md5 = ?", musicControls.downloadFileNameHashQueue];
 		NSArray *splitPath = [musicControls.queueSongObject.path componentsSeparatedByString:@"/"];
 		if ([splitPath count] <= 9)
 		{
@@ -115,19 +116,19 @@
 			}
 			
 			NSString *query = [NSString stringWithFormat:@"INSERT INTO cachedSongsLayout (md5, genre, segs, seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9) VALUES ('%@', '%@', %i, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [musicControls.queueSongObject.path md5], musicControls.queueSongObject.genre, [splitPath count]];
-			[databaseControls.songCacheDb executeUpdate:query, [segments objectAtIndex:0], [segments objectAtIndex:1], [segments objectAtIndex:2], [segments objectAtIndex:3], [segments objectAtIndex:4], [segments objectAtIndex:5], [segments objectAtIndex:6], [segments objectAtIndex:7], [segments objectAtIndex:8]];
+			[databaseControls.songCacheDb synchronizedUpdate:query, [segments objectAtIndex:0], [segments objectAtIndex:1], [segments objectAtIndex:2], [segments objectAtIndex:3], [segments objectAtIndex:4], [segments objectAtIndex:5], [segments objectAtIndex:6], [segments objectAtIndex:7], [segments objectAtIndex:8]];
 			
 			[segments release];
 		}
-		[databaseControls.songCacheDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", musicControls.downloadFileNameHashQueue];
+		[databaseControls.songCacheDb synchronizedUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", musicControls.downloadFileNameHashQueue];
 		
 		// Setup the genre table entries
 		if (musicControls.queueSongObject.genre)
 		{
 			// Check if the genre has a table in the database yet, if not create it and add the new genre to the genres table
-			if ([databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM genres WHERE genre = ?", musicControls.queueSongObject.genre] == 0)
+			if ([databaseControls.songCacheDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM genres WHERE genre = ?", musicControls.queueSongObject.genre] == 0)
 			{							
-				[databaseControls.songCacheDb executeUpdate:@"INSERT INTO genres (genre) VALUES (?)", musicControls.queueSongObject.genre];
+				[databaseControls.songCacheDb synchronizedUpdate:@"INSERT INTO genres (genre) VALUES (?)", musicControls.queueSongObject.genre];
 				if ([databaseControls.songCacheDb hadError]) { DLog(@"Err adding the genre %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]); }
 			}
 			

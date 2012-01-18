@@ -20,6 +20,7 @@
 #import "ServerListViewController.h"
 #import "SavedSettings.h"
 #import "FlurryAnalytics.h"
+#import "FMDatabase+Synchronized.h"
 
 @implementation GenresViewController
 
@@ -121,7 +122,7 @@
 	
 	if (viewObjects.isOfflineMode)
 	{
-		if ([databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM genres"] == 0)
+		if ([databaseControls.songCacheDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM genres"] == 0)
 		{
 			[self showNoGenresScreen];
 		}
@@ -180,7 +181,7 @@
 {
     // Return the number of rows in the section.
 	if (viewObjects.isOfflineMode)
-		return [databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM genres"];
+		return [databaseControls.songCacheDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM genres"];
 	else
 		return [databaseControls.genresDb intForQuery:@"SELECT COUNT(*) FROM genres"];
 }
@@ -200,7 +201,7 @@
 		cell.backgroundView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
 	
 	if (viewObjects.isOfflineMode) {
-		cell.genreNameLabel.text = [databaseControls.songCacheDb stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
+		cell.genreNameLabel.text = [databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
 	}
 	else {
 		cell.genreNameLabel.text = [databaseControls.genresDb stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
@@ -220,7 +221,7 @@
 		GenresArtistViewController *artistViewController = [[GenresArtistViewController alloc] initWithNibName:@"GenresArtistViewController" bundle:nil];
 		if (viewObjects.isOfflineMode) 
 		{
-			artistViewController.title = [NSString stringWithString:[databaseControls.songCacheDb stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]]];
+			artistViewController.title = [NSString stringWithString:[databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]]];
 		}
 		else
 		{
@@ -231,8 +232,8 @@
 		FMResultSet *result;
 		if (viewObjects.isOfflineMode) 
 		{
-			//result = [appDelegate.songCacheDb executeQuery:@"SELECT seg1 FROM cachedSongsLayout a INNER JOIN genresSongs b ON a.md5 = b.md5 WHERE b.genre = ? GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE", artistViewController.title];
-			result = [databaseControls.songCacheDb executeQuery:@"SELECT seg1 FROM cachedSongsLayout a INNER JOIN genresSongs b ON a.md5 = b.md5 WHERE b.genre = ? GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE", artistViewController.title];
+			//result = [appDelegate.songCacheDb synchronizedQuery:@"SELECT seg1 FROM cachedSongsLayout a INNER JOIN genresSongs b ON a.md5 = b.md5 WHERE b.genre = ? GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE", artistViewController.title];
+			result = [databaseControls.songCacheDb synchronizedQuery:@"SELECT seg1 FROM cachedSongsLayout a INNER JOIN genresSongs b ON a.md5 = b.md5 WHERE b.genre = ? GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE", artistViewController.title];
 			if ([databaseControls.songCacheDb hadError])
 				DLog(@"Error grabbing the artists for this genre... Err %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
 		}

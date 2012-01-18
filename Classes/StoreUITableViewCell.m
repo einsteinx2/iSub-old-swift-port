@@ -51,7 +51,7 @@
 
 - (void)setMyProduct:(SKProduct*)product
 {
-	self.myProduct = product;
+	myProduct = [product retain];
 	
 	titleLabel.text = [myProduct localizedTitle];
 	descLabel.text = [myProduct localizedDescription];

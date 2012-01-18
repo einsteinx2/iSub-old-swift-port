@@ -31,5 +31,17 @@
 #define ISMSNotification_BassEffectPresetLoaded @"ISMS Bass effect preset loaded"
 
 #define ISMSNotification_CurrentPlaylistShuffleToggled @"ISMS Current playlist shuffled/unshuffled"
+#define ISMSNotification_CurrentPlaylistIndexChanged @"ISMS Current playlist index changed"
+
+#define ISMSNotification_AllSongsLoadingArtists @"ISMS SUSAllSongsLoader loading artists"
+#define ISMSNotification_AllSongsLoadingAlbums @"ISMS SUSAllSongsLoader loading albums"
+#define ISMSNotification_AllSongsSorting @"ISMS SUSAllSongsLoader sorting"
+#define ISMSNotification_AllSongsArtistName @"ISMS SUSAllSongsLoader loading artist name"
+#define ISMSNotification_AllSongsAlbumName @"SUSAllSongsLoader loading album name"
+#define ISMSNotification_AllSongsSongName @"SUSAllSongsLoader loading song name"
+#define ISMSNotification_AllSongsLoadingFinished @"SUSAllSongsLoader loading finished"
+
+#define ISMSNotification_StorePurchaseComplete @"ISMS store purchase complete"
+#define ISMSNotification_StorePurchaseFailed @"ISMS store purchase failed"
 
 #endif

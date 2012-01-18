@@ -19,9 +19,6 @@ static ViewObjectsSingleton *sharedInstance = nil;
 
 @implementation ViewObjectsSingleton
 
-// Constants
-@synthesize kHorizSwipeDragMin, kVertSwipeDragMax;
-
 // XMLParser objects used to tell the parser how to parse
 @synthesize parseState, allAlbumsParseState, allSongsParseState;
 
@@ -29,17 +26,16 @@ static ViewObjectsSingleton *sharedInstance = nil;
 @synthesize homeListOfAlbums;
 
 // Artists page objects
-//@synthesize artistIndex, listOfArtists, isArtistsLoading;
 @synthesize isArtistsLoading;
 
 // Albums page objects and variables
 @synthesize currentArtistName, currentArtistId; 
 
-// All albums view objects
-@synthesize allAlbumsListOfAlbums, allAlbumsAlbumObject, allAlbumsListOfSongs, allAlbumsCurrentArtistName, allAlbumsCurrentArtistId, allAlbumsLoadingScreen, allAlbumsLoadingProgress, isSearchingAllAlbums, isAlbumsLoading;
+/*// All albums view objects
+@synthesize allAlbumsListOfAlbums, allAlbumsAlbumObject, allAlbumsListOfSongs, allAlbumsCurrentArtistName, allAlbumsCurrentArtistId, allAlbumsLoadingScreen, allAlbumsLoadingProgress, isAlbumsLoading;
 
 // All songs view objects
-@synthesize isSongsLoading;
+@synthesize isSongsLoading;*/
 
 // Playlists view objects
 @synthesize listOfPlaylists, listOfPlaylistSongs, localPlaylist, listOfLocalPlaylists, isLocalPlaylist;
@@ -416,10 +412,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 - (void)setup
 {
 	appDelegate = (iSubAppDelegate*)[[UIApplication sharedApplication] delegate];
-	
-	kHorizSwipeDragMin = 3;
-	kVertSwipeDragMax = 80;
-	
+
 	lightRed = [[UIColor colorWithRed:255/255.0 green:146/255.0 blue:115/255.0 alpha:1] retain];
 	darkRed = [[UIColor colorWithRed:226/255.0 green:0/255.0 blue:0/255.0 alpha:1] retain];
 	
@@ -449,8 +442,8 @@ static ViewObjectsSingleton *sharedInstance = nil;
 	self.isCellEnabled = YES;
 	self.isEditing = NO;
 	self.isArtistsLoading = NO;
-	self.isAlbumsLoading = NO;
-	self.isSongsLoading = NO;
+	//self.isAlbumsLoading = NO;
+	//self.isSongsLoading = NO;
 	self.isOnlineModeAlertShowing = NO;
 	self.cancelLoading = NO;
 	self.deleteButtonImage = [UIImage imageNamed:@"delete-button.png"];

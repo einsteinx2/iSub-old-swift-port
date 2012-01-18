@@ -9,7 +9,6 @@
 #import "CacheViewController.h"
 #import "CacheAlbumViewController.h"
 #import "Song.h"
-#import "NSString+md5.h"
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
@@ -26,10 +25,10 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "CacheSingleton.h"
-#import "NSString+time.h"
 #import "SUSCurrentPlaylistDAO.h"
-#import "NSString+compareWithoutIndefiniteArticles.h"
 #import "FlurryAnalytics.h"
+#import "FMDatabase+Synchronized.h"
+#import "NSString+Additions.h"
 
 @interface CacheViewController (Private)
 - (void)addNoSongsScreen;
@@ -260,7 +259,7 @@
 {	
 	[super viewWillAppear:animated];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:) name:@"storePurchaseComplete" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:) name:ISMSNotification_StorePurchaseComplete object:nil];
 	
 	self.tableView.scrollEnabled = YES;
 	[jukeboxInputBlocker removeFromSuperview];
@@ -310,7 +309,7 @@
 {
 	[super viewWillDisappear:animated];
 	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"storePurchaseComplete" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_StorePurchaseComplete object:nil];
 }
 
 - (void)segmentAction:(id)sender
@@ -322,7 +321,7 @@
 			[self editSongsAction:nil];
 		}
 		
-		DLog(@"count of cachedSongsLayout: %i", [databaseControls.songCacheDb intForQuery:@"select count(*) from cachedSongsLayout"]);
+		DLog(@"count of cachedSongsLayout: %i", [databaseControls.songCacheDb synchronizedIntForQuery:@"select count(*) from cachedSongsLayout"]);
 		
 		// Create the artist list
 		self.listOfArtists = [NSMutableArray arrayWithCapacity:1];
@@ -413,7 +412,7 @@
 		// Create the cachedSongsList table
 		[self createQueuedSongsList];
 		
-		if ([databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"] == 0)
+		if ([databaseControls.songCacheDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM cacheQueue"] == 0)
 		{
 			[self removeSaveEditButtons];
 			
@@ -435,6 +434,7 @@
 - (void)showStore
 {
 	StoreViewController *store = [[StoreViewController alloc] init];
+	DLog(@"store: %@", store);
 	[self.navigationController pushViewController:store animated:YES];
 	[store release];
 }
@@ -482,7 +482,7 @@
 	
 	[databaseControls resetCurrentPlaylistDb];
 	
-	FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout ORDER BY seg1 COLLATE NOCASE"];
+	FMResultSet *result = [databaseControls.songCacheDb synchronizedQuery:@"SELECT md5 FROM cachedSongsLayout ORDER BY seg1 COLLATE NOCASE"];
 	
 	while ([result next])
 	{
@@ -538,7 +538,7 @@
 {
 	row++;
 	Song *aSong = [[Song alloc] init];
-	FMResultSet *result = [databaseControls.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE ROWID = %i", table, row]];
+	FMResultSet *result = [databaseControls.songCacheDb synchronizedQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE ROWID = %i", table, row]];
 	if ([databaseControls.songCacheDb hadError])
 	{
 		DLog(@"Err %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
@@ -595,9 +595,9 @@
 - (void)createCachedSongsList
 {
 	// Create the cachedSongsList table
-	[databaseControls.songCacheDb executeUpdate:@"DROP TABLE cachedSongsList"];
-	[databaseControls.songCacheDb executeUpdate:@"CREATE TABLE cachedSongsList (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
-	[databaseControls.songCacheDb executeUpdate:@"INSERT INTO cachedSongsList SELECT * FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate DESC"];	
+	[databaseControls.songCacheDb synchronizedUpdate:@"DROP TABLE cachedSongsList"];
+	[databaseControls.songCacheDb synchronizedUpdate:@"CREATE TABLE cachedSongsList (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+	[databaseControls.songCacheDb synchronizedUpdate:@"INSERT INTO cachedSongsList SELECT * FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate DESC"];	
 }
 
 - (void)createQueuedSongsList
@@ -657,17 +657,17 @@
 		songsCountLabel.font = [UIFont boldSystemFontOfSize:22];
 		if (segmentedControl.selectedSegmentIndex == 0)
 		{
-			if ([databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES' AND md5 != ''"] == 1)
+			if ([databaseControls.songCacheDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES' AND md5 != ''"] == 1)
 				songsCountLabel.text = [NSString stringWithFormat:@"1 Song"];
 			else 
-				songsCountLabel.text = [NSString stringWithFormat:@"%i Songs", [databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES' AND md5 != ''"]];
+				songsCountLabel.text = [NSString stringWithFormat:@"%i Songs", [databaseControls.songCacheDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES' AND md5 != ''"]];
 		}
 		else if (segmentedControl.selectedSegmentIndex == 1)
 		{
-			if ([databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"] == 1)
+			if ([databaseControls.songCacheDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM cacheQueue"] == 1)
 				songsCountLabel.text = [NSString stringWithFormat:@"1 Song"];
 			else 
-				songsCountLabel.text = [NSString stringWithFormat:@"%i Songs", [databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"]];
+				songsCountLabel.text = [NSString stringWithFormat:@"%i Songs", [databaseControls.songCacheDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM cacheQueue"]];
 		}
 		[headerView addSubview:songsCountLabel];
 		[songsCountLabel release];
@@ -685,7 +685,7 @@
 		else if (segmentedControl.selectedSegmentIndex == 1)
 		{
 			unsigned long long combinedSize = 0;
-			FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT size FROM cacheQueue"];
+			FMResultSet *result = [databaseControls.songCacheDb synchronizedQuery:@"SELECT size FROM cacheQueue"];
 			while ([result next])
 			{
 				combinedSize += [result longLongIntForColumnIndex:0];
@@ -1074,11 +1074,11 @@
 	Song *nextSong = dataModel.nextSong;
 	
 	// Truncate the song cache genre tables
-	[databaseControls.songCacheDb executeUpdate:@"DELETE FROM genres"];
-	[databaseControls.songCacheDb executeUpdate:@"DELETE FROM genresSongs"];
+	[databaseControls.songCacheDb synchronizedUpdate:@"DELETE FROM genres"];
+	[databaseControls.songCacheDb synchronizedUpdate:@"DELETE FROM genresSongs"];
 	
 	// Delete each song off the disk and from the songCacheDb
-	FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT md5, transcodedSuffix, suffix FROM cachedSongs WHERE finished = 'YES'"];
+	FMResultSet *result = [databaseControls.songCacheDb synchronizedQuery:@"SELECT md5, transcodedSuffix, suffix FROM cachedSongs WHERE finished = 'YES'"];
 	while ([result next])
 	{
 		NSString *rowMD5 = nil;
@@ -1115,8 +1115,8 @@
 		if (skipDelete == NO)
 		{
 			// Delete the row from the cachedSongs
-			[databaseControls.songCacheDb executeUpdate:@"DELETE FROM cachedSongs WHERE md5 = ?", rowMD5];
-			[databaseControls.songCacheDb executeUpdate:@"DELETE FROM cachedSongsLayout WHERE md5 = ?", rowMD5];
+			[databaseControls.songCacheDb synchronizedUpdate:@"DELETE FROM cachedSongs WHERE md5 = ?", rowMD5];
+			[databaseControls.songCacheDb synchronizedUpdate:@"DELETE FROM cachedSongsLayout WHERE md5 = ?", rowMD5];
 			
 			// Delete the song from disk
 			NSString *fileName;
@@ -1317,7 +1317,7 @@
 		}
 		else if (segmentedControl.selectedSegmentIndex == 1)
 		{
-			return [databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"];
+			return [databaseControls.songCacheDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM cacheQueue"];
 		}
 	}
 	
@@ -1340,8 +1340,9 @@
 			cell.isIndexShowing = YES;
 		
 		// Set up the cell...
-		//[cell.artistNameLabel setText:[listOfArtists objectAtIndex:indexPath.row]];
-		[cell.artistNameLabel setText:[[listOfArtistsSections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
+		//[cell.artistNameLabel setText:[listOfArtists objectAtIndex:indexPath.row]]; gtm_stringByUnescapingFromHTML
+		NSString *name = [[listOfArtistsSections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+		[cell.artistNameLabel setText:[name gtm_stringByUnescapingFromHTML]];
 		
 		cell.backgroundView = [[[UIView alloc] init] autorelease];
 		if(indexPath.row % 2 == 0)
@@ -1374,7 +1375,7 @@
 		else
 			cell.backgroundView.backgroundColor = viewObjects.darkNormal;
 		
-		NSDate *cached = [NSDate dateWithTimeIntervalSince1970:(double)[databaseControls.songCacheDb intForQuery:@"SELECT cachedDate FROM queuedSongsList WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]]];
+		NSDate *cached = [NSDate dateWithTimeIntervalSince1970:(double)[databaseControls.songCacheDb synchronizedIntForQuery:@"SELECT cachedDate FROM queuedSongsList WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]]];
 		if ([[aSong.path md5] isEqualToString:musicControls.downloadFileNameHashQueue] && musicControls.isQueueListDownloading)
 		{
 			[cell.cacheInfoLabel setText:[NSString stringWithFormat:@"Queued %@ - Progress: %@", [NSString relativeTime:cached], [settings formatFileSize:queueDownloadProgress]]];
@@ -1446,7 +1447,7 @@ NSInteger trackSort1(id obj1, id obj2, void *context)
 			cacheAlbumViewController.segment = 2;
 			cacheAlbumViewController.seg1 = [[listOfArtistsSections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
 			DLog(@"cacheAlbumViewController.seg1: %@", cacheAlbumViewController.seg1);
-			FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT md5, segs, seg2, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", cacheAlbumViewController.seg1];
+			FMResultSet *result = [databaseControls.songCacheDb synchronizedQuery:@"SELECT md5, segs, seg2, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", cacheAlbumViewController.seg1];
 			while ([result next])
 			{
 				NSUInteger numOfSegments = [result intForColumnIndex:1];

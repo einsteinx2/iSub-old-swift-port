@@ -24,6 +24,7 @@
 #import "SUSCoverArtLargeLoader.h"
 #import "SUSLyricsDAO.h"
 #import "ViewObjectsSingleton.h"
+#import "FMDatabase+Synchronized.h"
 
 #define maxNumOfReconnects 3
 
@@ -36,7 +37,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 {
     DatabaseSingleton *databaseControls = [DatabaseSingleton sharedInstance];
     
-	[databaseControls.songCacheDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO %@ (md5, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", table], [aSong.path md5], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
+	[databaseControls.songCacheDb synchronizedUpdate:[NSString stringWithFormat:@"INSERT INTO %@ (md5, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", table], [aSong.path md5], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
 	
 	if ([databaseControls.songCacheDb hadError]) {
 		DLog(@"Err inserting song into genre table %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
@@ -45,12 +46,35 @@ static SUSStreamSingleton *sharedInstance = nil;
 	return [databaseControls.songCacheDb hadError];
 }
 
-- (void)cancelAllStreams
+- (SUSStreamHandler *)handlerForSong:(Song *)aSong
 {
 	for (SUSStreamHandler *handler in handlerStack)
 	{
-		[handler cancel];
+		if ([handler.mySong isEqualToSong:aSong])
+		{
+			return handler;
+		}
 	}
+	return nil;
+}
+
+- (void)cancelAllStreamsExcept:(SUSStreamHandler *)handlerToSkip
+{
+	for (SUSStreamHandler *handler in handlerStack)
+	{
+		if (handler != handlerToSkip)
+			[handler cancel];
+	}
+}
+
+- (void)cancelAllStreamsExceptForSong:(Song *)aSong
+{
+	[self cancelAllStreamsExcept:[self handlerForSong:aSong]];
+}
+
+- (void)cancelAllStreams
+{
+	[self cancelAllStreamsExcept:nil];
 }
 
 - (void)cancelStreamAtIndex:(NSUInteger)index
@@ -66,6 +90,27 @@ static SUSStreamSingleton *sharedInstance = nil;
 {
 	NSUInteger index = [handlerStack indexOfObject:handler];
 	[self cancelStreamAtIndex:index];
+}
+
+- (void)cancelStreamForSong:(Song *)aSong
+{
+	[self cancelStream:[self handlerForSong:aSong]];
+}
+
+- (void)removeAllStreamsExcept:(SUSStreamHandler *)handlerToSkip
+{
+	[self cancelAllStreamsExcept:handlerToSkip];
+	NSArray *handlers = [NSArray arrayWithArray:handlerStack];
+	for (SUSStreamHandler *handler in handlers)
+	{
+		if (handler != handlerToSkip)
+			[handlerStack removeObject:handler];
+	}
+}
+
+- (void)removeAllStreamsExceptForSong:(Song *)aSong
+{
+	[self removeAllStreamsExcept:[self handlerForSong:aSong]];
 }
 
 - (void)removeAllStreams
@@ -86,6 +131,11 @@ static SUSStreamSingleton *sharedInstance = nil;
 {
 	[self cancelStream:handler];
 	[handlerStack removeObject:handler];
+}
+
+- (void)removeStreamForSong:(Song *)aSong
+{
+	[self removeStream:[self handlerForSong:aSong]];
 }
 
 - (void)startHandler:(SUSStreamHandler *)handler resume:(BOOL)resume
@@ -146,12 +196,26 @@ static SUSStreamSingleton *sharedInstance = nil;
 	[self queueStreamForSong:song offset:byteOffset atIndex:[handlerStack count]];
 }
 
+- (BOOL)isSongInQueue:(Song *)aSong
+{
+	BOOL isSongInQueue = NO;
+	for (SUSStreamHandler *handler in handlerStack)
+	{
+		if ([handler.mySong isEqualToSong:aSong])
+		{
+			isSongInQueue = YES;
+			break;
+		}
+	}
+	return isSongInQueue;
+}
+
 - (void)queueStreamForNextSong
 {
 	Song *nextSong = [SUSCurrentPlaylistDAO dataModel].nextSong;
 
 	// The file doesn't exist or it's not fully cached, start downloading it from the beginning
-	if (nextSong && (!nextSong.fileExists || (!nextSong.isFullyCached && ![ViewObjectsSingleton sharedInstance].isOfflineMode)))
+	if (nextSong && ![self isSongInQueue:nextSong] && !nextSong.isFullyCached && ![ViewObjectsSingleton sharedInstance].isOfflineMode)
 	{
 		[self queueStreamForSong:nextSong];
 	}
@@ -161,10 +225,11 @@ static SUSStreamSingleton *sharedInstance = nil;
 {
 	if ([handlerStack count] < ISMSNumberOfStreamsToQueue)
 	{
-		for (int i = 0; i < ISMSNumberOfStreamsToQueue; i++)
+		NSInteger currentIndex = [SUSCurrentPlaylistDAO dataModel].currentIndex;
+		for (int i = currentIndex; i < currentIndex + ISMSNumberOfStreamsToQueue; i++)
 		{
 			Song *aSong = [[SUSCurrentPlaylistDAO dataModel] songForIndex:i];
-			if (aSong && (!aSong.fileExists || (!aSong.isFullyCached && ![ViewObjectsSingleton sharedInstance].isOfflineMode)))
+			if (aSong && ![self isSongInQueue:aSong] && !aSong.isFullyCached && ![ViewObjectsSingleton sharedInstance].isOfflineMode)
 			{
 				[self queueStreamForSong:aSong];
 			}

@@ -12,6 +12,7 @@
 #import "FMDatabase.h"
 #import "CellOverlay.h"
 #import "Song.h"
+#import "FMDatabase+Synchronized.h"
 
 @implementation CacheArtistUITableViewCell
 
@@ -85,7 +86,7 @@
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	
 	FMResultSet *result;
-	result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ?", artistNameLabel.text];
+	result = [[DatabaseSingleton sharedInstance].songCacheDb synchronizedQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ?", artistNameLabel.text];
 	
 	while ([result next])
 	{
@@ -118,7 +119,7 @@
 	
 	FMResultSet *result;
 	
-	result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text];
+	result = [[DatabaseSingleton sharedInstance].songCacheDb synchronizedQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text];
 	
 	while ([result next])
 	{

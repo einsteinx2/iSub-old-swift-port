@@ -17,10 +17,11 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "SUSCoverArtLargeDAO.h"
+#import "SavedSettings.h"
 
 #define kThrottleTimeInterval 0.1
 
-#define kMaxKilobitsPerSec3G 550
+#define kMaxKilobitsPerSec3G 500
 #define kMaxBytesPerSec3G ((kMaxKilobitsPerSec3G * 1024) / 8)
 #define kMaxBytesPerInterval3G (kMaxBytesPerSec3G * kThrottleTimeInterval)
 
@@ -34,7 +35,7 @@
 
 // Logging
 #define isProgressLoggingEnabled NO
-#define isThrottleLoggingEnabled NO
+#define isThrottleLoggingEnabled YES
 
 @implementation SUSStreamHandler
 @synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread;
@@ -58,7 +59,7 @@
 
 - (id)initWithSong:(Song *)song delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate
 {
-	return [[SUSStreamHandler alloc] initWithSong:song offset:0 delegate:theDelegate];
+	return [self initWithSong:song offset:0 delegate:theDelegate];
 }
 
 - (void)dealloc
@@ -73,9 +74,9 @@
 
 - (NSUInteger)bitrate
 {	
-	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
+	SavedSettings *settings = [SavedSettings sharedInstance];
 	
-	int bitRate = 128;
+	int bitRate;
 	
 	if (mySong.bitRate == nil)
 		bitRate = 128;
@@ -84,16 +85,16 @@
 	else
 		bitRate = [mySong.bitRate intValue] / 1000;
 	
-	if (bitRate > musicControls.maxBitrateSetting && musicControls.maxBitrateSetting != 0)
-		bitRate = musicControls.maxBitrateSetting;
-	
+	if (bitRate > settings.currentMaxBitrate && settings.currentMaxBitrate != 0)
+		bitRate = settings.currentMaxBitrate;
+		
 	return bitRate;
 }
 
 // Create the request and start the connection in loadingThread
 - (void)start:(BOOL)resume
 {
-	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
+	SavedSettings *settings = [SavedSettings sharedInstance];
 	
 	// Create the file handle
 	self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:mySong.localPath];
@@ -126,13 +127,12 @@
 	}
 	
 	NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(mySong.songId), @"id", nil];
-	if ([musicControls maxBitrateSetting] != 0)
+	if (settings.currentMaxBitrate != 0)
 	{
-		NSString *bitrate = [[NSString alloc] initWithFormat:@"%i", musicControls.maxBitrateSetting];
+		NSString *bitrate = [[NSString alloc] initWithFormat:@"%i", settings.currentMaxBitrate];
 		[parameters setObject:n2N(bitrate) forKey:@"maxBitRate"];
 		[bitrate release];
 	}
-	
 	self.request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters byteOffset:byteOffset];
 
 	loadingThread = [[NSThread alloc] initWithTarget:self selector:@selector(startConnection) object:nil];
@@ -147,6 +147,7 @@
 	NSNumber *isWifi = [[NSNumber alloc] initWithBool:[iSubAppDelegate sharedInstance].isWifi];
 	[loadingThread.threadDictionary setObject:isWifi forKey:@"isWifi"];
 	[isWifi release];
+	[loadingThread.threadDictionary setObject:[[mySong copy] autorelease] forKey:@"mySong"];
 	
 	[loadingThread start];
 	
@@ -229,6 +230,46 @@
 	bytesTransferred = 0;
 }
 
+- (double)maxBytesPerIntervalForBitrate:(double)bitrate is3G:(BOOL)is3G
+{
+	/*double maxBytesDefault = is3G ? (double)kMaxBytesPerInterval3G : (double)kMaxBytesPerIntervalWifi;
+	double bitrateForCalc = bitrate;
+	NSString *suffix = [transcodedSuffix lowercaseString];
+	if ([suffix isEqualToString:@"mp3"] || [suffix isEqualToString:@"ogg"] || [suffix isEqualToString:@"m4a"] || [suffix isEqualToString:@"aac"])
+	{
+		// This song is a lossy transcode, don't rely on the original reported bitrate, assume 320
+		bitrateForCalc = 320.0f;
+	}
+	double maxBytesPerInterval = maxBytesDefault * (bitrateForCalc / 160.0);
+	if (maxBytesPerInterval < maxBytesDefault)
+	{
+		// Don't go lower than the default
+		maxBytesPerInterval = maxBytesDefault;
+	}
+	else if (maxBytesPerInterval > (double)kMaxBytesPerIntervalWifi * 2.0)
+	{
+		// Don't go higher than twice the Wifi limit to prevent disk bandwidth issues
+		maxBytesPerInterval = (double)kMaxBytesPerIntervalWifi * 2.0;
+	}
+	
+	return maxBytesPerInterval;*/
+	
+	double maxBytesDefault = is3G ? (double)kMaxBytesPerInterval3G : (double)kMaxBytesPerIntervalWifi;
+	double maxBytesPerInterval = maxBytesDefault * (bitrate / 160.0);
+	if (maxBytesPerInterval < maxBytesDefault)
+	{
+		// Don't go lower than the default
+		maxBytesPerInterval = maxBytesDefault;
+	}
+	else if (maxBytesPerInterval > (double)kMaxBytesPerIntervalWifi * 2.0)
+	{
+		// Don't go higher than twice the Wifi limit to prevent disk bandwidth issues
+		maxBytesPerInterval = (double)kMaxBytesPerIntervalWifi * 2.0;
+	}
+	
+	return maxBytesPerInterval;
+}
+
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
 {		
 	NSMutableDictionary *threadDict = [[NSThread currentThread] threadDictionary];
@@ -279,7 +320,8 @@
 		NSTimeInterval delay = 0.0;
 		if (!isWifi && bytesTransferred > kMaxBytesPerInterval3G)
 		{
-			delay = (kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerInterval3G));
+			double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)bitrate is3G:YES];
+			delay = (kThrottleTimeInterval * ((double)bytesTransferred / maxBytesPerInterval));
 			bytesTransferred = 0;
 			
 			if (isThrottleLoggingEnabled)
@@ -287,7 +329,8 @@
 		}
 		else if (isWifi && bytesTransferred > kMaxBytesPerIntervalWifi)
 		{
-			delay = (kThrottleTimeInterval * ((double)bytesTransferred / (double)kMaxBytesPerIntervalWifi));
+			double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)bitrate is3G:NO];
+			delay = (kThrottleTimeInterval * ((double)bytesTransferred / maxBytesPerInterval));
 			bytesTransferred = 0;
 			
 			if (isThrottleLoggingEnabled)

@@ -27,6 +27,7 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "OrderedDictionary.h"
 #import "SUSServerPlaylist.h"
+#import "FMDatabase+Synchronized.h"
 
 @interface PlaylistSongsViewController (Private)
 
@@ -457,14 +458,14 @@ static NSString *kName_Error = @"error";
 	cell.backgroundView = [[[UIView alloc] init] autorelease];
 	if(indexPath.row % 2 == 0)
 	{
-		if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
+		if ([databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
 			cell.backgroundView.backgroundColor = [viewObjects currentLightColor];
 		else
 			cell.backgroundView.backgroundColor = viewObjects.lightNormal;
 	}
 	else
 	{
-		if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
+		if ([databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
 			cell.backgroundView.backgroundColor = [viewObjects currentDarkColor];
 		else
 			cell.backgroundView.backgroundColor = viewObjects.darkNormal;

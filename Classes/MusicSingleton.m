@@ -30,6 +30,7 @@
 #import "BassWrapperSingleton.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "SUSCoverArtLargeDAO.h"
+#import "FMDatabase+Synchronized.h"
 
 static MusicSingleton *sharedInstance = nil;
 
@@ -41,13 +42,10 @@ static MusicSingleton *sharedInstance = nil;
 
 // Music player objects
 //
-@synthesize queueSongObject, coverArtUrl; 
+@synthesize queueSongObject; 
 
 // Song cache stuff
 @synthesize receivedDataQueue, downloadQueue, downloadFileNameQueue, downloadFileNameHashQueue, audioFileQueue, downloadedLengthQueue, isQueueListDownloading;
-@synthesize bitRate, isTempDownload, showNowPlayingIcon;
-
-@synthesize songB;
 
 @synthesize jukeboxIsPlaying, jukeboxGain;
 
@@ -123,7 +121,7 @@ static MusicSingleton *sharedInstance = nil;
 - (Song *) nextQueuedSong
 {
 	Song *aSong = [[Song alloc] init];
-	FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT * FROM cacheQueue WHERE finished = 'NO' LIMIT 1"];
+	FMResultSet *result = [databaseControls.songCacheDb synchronizedQuery:@"SELECT * FROM cacheQueue WHERE finished = 'NO' LIMIT 1"];
 	if ([databaseControls.songCacheDb hadError]) 
 	{
 		DLog(@"Err %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
@@ -194,10 +192,10 @@ static MusicSingleton *sharedInstance = nil;
 	self.downloadFileNameQueue = queueSongObject.localPath;
 
 	// Check to see if the song is already cached
-	if ([databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE md5 = ?", downloadFileNameHashQueue])
+	if ([databaseControls.songCacheDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE md5 = ?", downloadFileNameHashQueue])
 	{
 		// Looks like the song is in the database, check if it's cached fully
-		NSString *isDownloadFinished = [databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", downloadFileNameHashQueue];
+		NSString *isDownloadFinished = [databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", downloadFileNameHashQueue];
 		if ([isDownloadFinished isEqualToString:@"YES"])
 		{
 			// The song is fully cached, so delete it from the cache queue database
@@ -235,7 +233,7 @@ static MusicSingleton *sharedInstance = nil;
 			if (doDownload)
 			{
 				// Delete the row from cachedSongs
-				[databaseControls.songCacheDb executeUpdate:@"DELETE FROM cachedSongs WHERE md5 = downloadFileNameHashQueue"];
+				[databaseControls.songCacheDb synchronizedUpdate:@"DELETE FROM cachedSongs WHERE md5 = downloadFileNameHashQueue"];
 				
 				// Remove and recreate the song file on disk
 				[[NSFileManager defaultManager] removeItemAtPath:downloadFileNameQueue error:NULL];
@@ -244,7 +242,13 @@ static MusicSingleton *sharedInstance = nil;
 				
 				// Start the download
 				NSURLConnectionDelegateQueue *connDelegateQueue = [[NSURLConnectionDelegateQueue alloc] init];
-                NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(queueSongObject.songId) forKey:@"id"];
+                NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:n2N(queueSongObject.songId) forKey:@"id"];
+				if ([SavedSettings sharedInstance].currentMaxBitrate != 0)
+				{
+					NSString *bitrate = [[NSString alloc] initWithFormat:@"%i", [SavedSettings sharedInstance].currentMaxBitrate];
+					[parameters setObject:n2N(bitrate) forKey:@"maxBitRate"];
+					[bitrate release];
+				}
                 NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters];
 				self.downloadQueue = [NSURLConnection connectionWithRequest:request delegate:connDelegateQueue];
 				[connDelegateQueue release];
@@ -294,7 +298,13 @@ static MusicSingleton *sharedInstance = nil;
 			
 			// Start the download
 			NSURLConnectionDelegateQueue *connDelegateQueue = [[NSURLConnectionDelegateQueue alloc] init];
-            NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(queueSongObject.songId) forKey:@"id"];
+			NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:n2N(queueSongObject.songId) forKey:@"id"];
+			if ([SavedSettings sharedInstance].currentMaxBitrate != 0)
+			{
+				NSString *bitrate = [[NSString alloc] initWithFormat:@"%i", [SavedSettings sharedInstance].currentMaxBitrate];
+				[parameters setObject:n2N(bitrate) forKey:@"maxBitRate"];
+				[bitrate release];
+			}
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters];
 			self.downloadQueue = [NSURLConnection connectionWithRequest:request delegate:connDelegateQueue];
 			//[connDelegateQueue release];
@@ -366,7 +376,6 @@ static MusicSingleton *sharedInstance = nil;
 	[bassWrapper stop];
 	
 	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
-	Song *nextSong = [SUSCurrentPlaylistDAO dataModel].nextSong;
 	
 	if (!currentSong)
 		return;
@@ -375,62 +384,32 @@ static MusicSingleton *sharedInstance = nil;
 	if (currentSong.isFullyCached)
 	{
 		// The song is fully cached, start streaming from the local copy
-		isTempDownload = NO;
-				
-		// Create the streamer
-		/*streamer = [[AudioStreamer alloc] initWithFileURL:[NSURL fileURLWithPath:currentSong.localPath]];
-		if (streamer)
-		{
-			streamer.fileDownloadCurrentSize = currentSong.localFileSize;
-			streamer.fileDownloadComplete = YES;
-			[streamer startWithOffsetInSecs:seconds];
-		}*/
-		// TODO: Rewrite this
-		//[bassWrapper startSong:currentSong];
-		
 		[bassWrapper start];
-		
-		//[self addAutoNextNotification];
 	}
 	
-	// The file doesn't exist or it's not fully cached, start downloading it from the middle
-	if (!currentSong.fileExists || (!currentSong.isFullyCached && !viewObjects.isOfflineMode))
-	{
-		DLog(@"file exists: %i   isFullyCached: %i   isOfflineMode: %i", currentSong.fileExists, currentSong.isFullyCached, viewObjects.isOfflineMode);
-		// Determine the byte offset
-		/*float byteOffset;
-		if (bitRate < 1000)
-			byteOffset = ((float)bitRate * 128 * seconds);
-		else
-			byteOffset = (((float)bitRate / 1000) * 128 * seconds);
-		
-		// If we're starting from within the downloaded area, start playing immediately
-		if ((int)byteOffset < currentSong.localFileSize)
-		{
-			// TODO: Rewrite this
-			//[bassWrapper startSong:currentSong withOffsetInSeconds:seconds];
-			
-			[bassWrapper start];
-		}*/
-		
-		// Start to download the rest of the song
-		[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong];
-		
-		//[self addAutoNextNotification];
-	}
+	// Only start the caching process if it's been a half second after the last request
+	// Prevents crash when skipping through playlist fast
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	[self performSelector:@selector(startSongAtOffsetInSeconds2) withObject:nil afterDelay:1.0];
+}
+
+// TODO: put this method somewhere and name it properly
+- (void)startSongAtOffsetInSeconds2
+{
+	DLog(@"running startSongAtOffsetInSeconds2");
+	SUSStreamSingleton *streamSingleton = [SUSStreamSingleton sharedInstance];
+	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+
+	// Remove all songs from the queue except the current one if it exists
+	[streamSingleton removeAllStreamsExceptForSong:currentSong];
 	
-	// The file doesn't exist or it's not fully cached, start downloading it from the middle
-	DLog(@"nextSong: %@    nextSong.fileExists: %i   nextSong.isFullyCached: %i", nextSong, nextSong.fileExists, nextSong.isFullyCached);
-	if (nextSong && (!nextSong.fileExists || (!nextSong.isFullyCached && !viewObjects.isOfflineMode)))
-	{
-		// Start to download the rest of the song
-		[[SUSStreamSingleton sharedInstance] queueStreamForSong:nextSong];
-	}
+	// Fill the stream queue
+	[streamSingleton fillStreamQueue];
 	
 	// The file is not fully cached and we're in offline mode, so complain
 	if (!currentSong.isFullyCached && viewObjects.isOfflineMode)
 	{
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Unable to resume this song in offline mode as it isn't fully cached." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Unable to play this song in offline mode as it isn't fully cached." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		alert.tag = 4;
 		[alert show];
 		[alert release];
@@ -530,79 +509,15 @@ static MusicSingleton *sharedInstance = nil;
 		
 	if (currentSong && settings.isRecover)
 	{		
-		// Check to see if the song is an m4a, if so don't resume and display message
-		BOOL isM4A = NO;
-		if (currentSong.transcodedSuffix)
-		{
-			if ([currentSong.transcodedSuffix isEqualToString:@"m4a"] || [currentSong.transcodedSuffix isEqualToString:@"aac"])
-				isM4A = YES;
-		}
-		else
-		{
-			if ([currentSong.suffix isEqualToString:@"m4a"] || [currentSong.suffix isEqualToString:@"aac"])
-				isM4A = YES;
-		}
-		
-		if (isM4A)
-		{
-			[self startSong];
-			
-			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Sorry" message:@"It's currently not possible to skip within m4a files, so the song is starting from the begining instead of resuming.\n\nYou can turn on m4a > mp3 transcoding in Subsonic to resume this song properly." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-			[alert show];
-			[alert release];
-		}
-		else
-		{
-			[self startSongAtOffsetInSeconds:[SavedSettings sharedInstance].seekTime];
-		}
+		[self startSongAtOffsetInSeconds:[SavedSettings sharedInstance].seekTime];
 	}
 	else 
 	{
-		self.bitRate = 192;
+		//self.bitRate = 192;
 	}
 }
 
 #pragma mark Helper Methods
-
-- (NSInteger) maxBitrateSetting
-{
-	int bitrateSetting;
-	if ([appDelegate.wifiReach currentReachabilityStatus] == ReachableViaWiFi)
-		bitrateSetting = [SavedSettings sharedInstance].maxBitrateWifi;
-	else
-		bitrateSetting = [SavedSettings sharedInstance].maxBitrate3G;	
-	
-	NSInteger bitrate;
-	switch (bitrateSetting)
-	{
-		case 0:
-			bitrate = 64;
-			break;
-		case 1:
-			bitrate = 96;
-			break;
-		case 2:
-			bitrate = 128;
-			break;
-		case 3:
-			bitrate = 160;
-			break;
-		case 4:
-			bitrate = 192;
-			break;
-		case 5:
-			bitrate = 224;
-			break;
-		case 6:
-			bitrate = 256;
-			break;
-		default:
-			bitrate = 0;
-			break;
-	}
-		
-	return bitrate;
-}
 
 - (BOOL)showPlayerIcon
 {
@@ -899,11 +814,8 @@ static MusicSingleton *sharedInstance = nil;
 	{
         JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
         
-        OrderedDictionary *parameters = [OrderedDictionary dictionaryWithObject:@"add" forKey:@"action"];
-		for (NSString *songId in songIds)
-		{
-            [parameters setObject:n2N(songId) forKey:@"id"];
-		}
+        NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:@"add" forKey:@"action"];
+		[parameters setObject:n2N(songIds) forKey:@"id"];
 		
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
 		
@@ -1112,7 +1024,6 @@ static MusicSingleton *sharedInstance = nil;
 	databaseControls = [DatabaseSingleton sharedInstance];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	
-	self.showNowPlayingIcon = NO;
 	self.isShuffle = NO;
 	isAutoNextNotificationOn = NO;
 	

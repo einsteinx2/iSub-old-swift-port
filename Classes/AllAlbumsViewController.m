@@ -35,13 +35,16 @@
 #import "SUSAllAlbumsDAO.h"
 #import "FlurryAnalytics.h"
 
+#import "EGORefreshTableHeaderView.h"
+#import "SUSAllSongsLoader.h"
+#import "SUSAllSongsDAO.h"
+
 @implementation AllAlbumsViewController
 
-@synthesize headerView, sectionInfo, dataModel;
+@synthesize headerView, sectionInfo, dataModel, allSongsDataModel, loadingScreen;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	
 	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
@@ -51,6 +54,8 @@
 - (void)createDataModel
 {
 	self.dataModel = [[[SUSAllAlbumsDAO alloc] init] autorelease];
+	allSongsDataModel.delegate = nil;
+	self.allSongsDataModel = [[[SUSAllSongsDAO alloc] initWithDelegate:self] autorelease];
 }
 
 - (void)viewDidLoad 
@@ -66,20 +71,27 @@
 	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
 	
 	//Set defaults
-	viewObjects.isSearchingAllAlbums = NO;
 	letUserSelectRow = YES;	
 	isSearching = NO;
 	
 	[self createDataModel];
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createDataModel) name:ISMSNotification_ServerSwitched object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doneSearching_Clicked:) name:@"endSearch" object:searchOverlayView];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadingFinishedNotification) name:ISMSNotification_AllSongsLoadingFinished object:nil];
 	
-	// Add the table fade
+	/*// Add the table fade
 	UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
 	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
 	fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	[self.tableView addSubview:fadeTop];
-	[fadeTop release];
+	[fadeTop release];*/
+	
+	// Add the pull to refresh view
+	refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
+	refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
+	[self.tableView addSubview:refreshHeaderView];
+	[refreshHeaderView release];
 	
 	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
@@ -98,7 +110,6 @@
 	reloadButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	reloadButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	reloadButton.frame = CGRectMake(0, 0, 320, 40);
-	[reloadButton addTarget:self action:@selector(reloadAction:) forControlEvents:UIControlEventTouchUpInside];
 	[headerView addSubview:reloadButton];
 	
 	countLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, 320, 30)];
@@ -109,11 +120,6 @@
 	countLabel.font = [UIFont boldSystemFontOfSize:30];
 	[headerView addSubview:countLabel];
 	[countLabel release];
-	
-	reloadImage = [[UIImageView alloc] initWithFrame:CGRectMake(20, 13, 24, 26)];
-	reloadImage.image = [UIImage imageNamed:@"reload-table.png"];
-	[headerView addSubview:reloadImage];
-	[reloadImage release];
 	
 	searchBar = [[UISearchBar  alloc] initWithFrame:CGRectMake(0, 50, 320, 40)];
 	searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -146,34 +152,14 @@
 	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 }
 
-- (void) updateMessage
-{
-	[viewObjects.allAlbumsLoadingScreen setAllMessagesText:[NSArray arrayWithObjects:@"Sorting Table", @"", @"", @"", nil]];
-}
-
-
-- (void) hideLoadingScreen
-{
-	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-	
-	self.tableView.scrollEnabled = YES;
-	[(CustomUITableView*)self.tableView setBlockInput:NO];
-	[viewObjects.allAlbumsLoadingScreen hide];
-	viewObjects.allAlbumsLoadingScreen = nil;
-	
-	[autoreleasePool release];
-}
-
-
--(void)viewWillAppear:(BOOL)animated 
+- (void)viewWillAppear:(BOOL)animated 
 {
 	[super viewWillAppear:animated];
 
 	// Don't run this while the table is updating
-	if (viewObjects.isSongsLoading)
+	if ([SUSAllSongsLoader isLoading])
 	{
-		// TODO: display the loading progress box
+		[self showLoadingScreen];
 	}
 	else
 	{
@@ -193,83 +179,35 @@
 		}
 		else
 		{
-			if (viewObjects.isAlbumsLoading)
+			self.tableView.tableHeaderView = nil;
+
+			SavedSettings *settings = [SavedSettings sharedInstance];
+			if ([[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllSongsLoading", settings.urlString]] isEqualToString:@"YES"])
 			{
-				// TODO: display the loading progress box
+				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Resume Load?" message:@"If you've reloaded the albums tab since this load started you should choose 'Restart Load'.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Restart Load", @"Resume Load", nil];
+				alert.tag = 1;
+				[alert show];
+				[alert release];
 			}
 			else
 			{
-				SavedSettings *settings = [SavedSettings sharedInstance];
-				if ([[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllSongsLoading", settings.urlString]] isEqualToString:@"YES"])
-				{
-					UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Resume Load?" message:@"If you've reloaded the albums tab since this load started you should choose 'Restart Load'.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Restart Load", @"Resume Load", nil];
-					alert.tag = 1;
-					[alert show];
-					[alert release];
-				}
-				else
-				{
-					UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Load?" message:@"This could take a while if you have a big collection.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection.\n\nNote: If you've added new artists, you should reload the Folders first." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-					alert.tag = 1;
-					[alert show];
-					[alert release];
-				}
+				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Load?" message:@"This could take a while if you have a big collection.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection.\n\nNote: If you've added new artists, you should reload the Folders first." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+				alert.tag = 1;
+				[alert show];
+				[alert release];
 			}
 		}
 	}
 	
-	/*// Don't run this while the table is updating
-	if (!viewObjects.isAlbumsLoading)
-	{
-		if(musicControls.showPlayerIcon)
-		{
-			self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
-		}
-		else
-		{
-			self.navigationItem.rightBarButtonItem = nil;
-		}
-		
-		// If the database hasn't been created or the device was shutoff during the process then create it, otherwise show the header
-		if ([databaseControls.allAlbumsDb tableExists:@"allAlbums"] == NO || [[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllAlbumsLoading", appDelegate.defaultUrl]] isEqualToString:@"YES"])
-		{
-			if([[SavedSettings sharedInstance] getTopLevelFolders] == nil)
-			{
-				CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"You must load the Folders tab first" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-				alert.tag = 4;
-				[alert show];
-				[alert release];
-			}
-			else if (viewObjects.isSongsLoading)
-			{
-				CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Please Wait" message:@"You cannot reload the Albums tab while the Songs tab is loading" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-				[alert show];
-				[alert release];
-			}
-			else
-			{
-				if ([[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllAlbumsLoading", appDelegate.defaultUrl]] isEqualToString:@"YES"])
-				{
-					UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Resume Load?" message:@"If you've reloaded the Folders tab since this load started you should choose 'Restart Load'.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Restart Load", @"Resume Load", nil];
-					[alert show];
-					[alert release];
-				}
-				else
-				{
-					UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Load?" message:@"This could take a while if you have a big collection.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection.\n\nNote: If you've added new artists, you should reload the Folders tab first." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-					[alert show];
-					[alert release];
-				}
-			}
-		}
-	}
-	else
-	{
-		[viewObjects.allAlbumsLoadingScreen.view removeFromSuperview];
-		[self.view addSubview:viewObjects.allAlbumsLoadingScreen.view];
-	}*/
+	[self.tableView reloadData];
 	
 	[FlurryAnalytics logEvent:@"AllAlbumsTab"];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	[self hideLoadingScreen];
 }
 
 
@@ -279,16 +217,12 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void)viewDidDisappear:(BOOL)animated
-{
-	[super viewDidDisappear:animated];
-	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"endSearch" object:searchOverlayView];
-}
-
 - (void)viewDidUnload {
 	// Release anything that can be recreated in viewDidLoad or on demand.
 	// e.g. self.myOutlet = nil;
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ServerSwitched object:searchOverlayView];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"endSearch" object:searchOverlayView];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_AllSongsLoadingFinished object:nil];
 }
 
 
@@ -304,7 +238,7 @@
 #pragma mark Button handling methods
 
 
-- (void) doneSearching_Clicked:(id)sender 
+- (void)doneSearching_Clicked:(id)sender 
 {
 	self.tableView.tableHeaderView = nil;
 	[self addCount];
@@ -314,7 +248,6 @@
 	
 	isSearching = NO;
 	letUserSelectRow = YES;
-	viewObjects.isSearchingAllAlbums = NO;
 	self.navigationItem.leftBarButtonItem = nil;
 	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
 	self.tableView.scrollEnabled = YES;
@@ -329,10 +262,9 @@
 }
 
 
-- (void) reloadAction:(id)sender
+- (void)reloadAction:(id)sender
 {
-	//if (!appDelegate.isArtistsLoading && !appDelegate.isSongsLoading && [[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllSongsLoading", appDelegate.defaultUrl]] isEqualToString:@"NO"])
-	if (!viewObjects.isArtistsLoading && !viewObjects.isSongsLoading)
+	if (![SUSAllSongsLoader isLoading])
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Reload?" message:@"This could take a while if you have a big collection.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection.\n\nNote: If you've added new artists, you should reload the Folders tab first." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
 		[alert show];
@@ -346,35 +278,30 @@
 	}	
 }
 
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(CustomUIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex == 1)
+	if (alertView.tag == 1)
 	{
-		[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE resumeLoad"];
-		viewObjects.allAlbumsLoadingProgress = 0;
-		viewObjects.allAlbumsLoadingScreen = [[LoadingScreen alloc] initOnView:self.view withMessage:[NSArray arrayWithObjects:@"Processing Artist:", @"", @"Total Albums:", @"", nil] blockInput:YES mainWindow:NO];
-		self.tableView.scrollEnabled = NO;
-		//DLog(@"self.tableView: %@", self.tableView);
-		[(CustomUITableView*)self.tableView setBlockInput:YES];
-		self.navigationItem.leftBarButtonItem = nil;
-		self.navigationItem.rightBarButtonItem = nil;
-		[self performSelectorInBackground:@selector(loadData) withObject:nil];
+		if (buttonIndex == 1)
+		{
+			[self showLoadingScreen];//:[NSArray arrayWithObjects:@"Processing Artist:", @"", @"Processing Album:", @"", nil]];
+			
+			[allSongsDataModel restartLoad];
+			self.tableView.tableHeaderView = nil;
+			[self.tableView reloadData];
+		}
+		else if (buttonIndex == 2)
+		{
+			[self showLoadingScreen];//:[NSArray arrayWithObjects:@"Processing Album:", @"", @"Processing Song:", @"", nil]];
+			
+			[allSongsDataModel startLoad];
+			self.tableView.tableHeaderView = nil;
+			[self.tableView reloadData];
+		}	
+		
+		[self dataSourceDidFinishLoadingNewData];
 	}
-	else if (buttonIndex == 2)
-	{
-		viewObjects.allAlbumsLoadingProgress = [databaseControls.allAlbumsDb intForQuery:@"SELECT COUNT(*) FROM allAlbumsTemp"];
-		viewObjects.allAlbumsLoadingScreen = [[LoadingScreen alloc] initOnView:self.view withMessage:[NSArray arrayWithObjects:@"Processing Artist:", @"", @"Total Albums:", @"", nil] blockInput:YES mainWindow:NO];
-		self.tableView.scrollEnabled = NO;
-		//DLog(@"self.tableView: %@", self.tableView);
-		[(CustomUITableView*)self.tableView setBlockInput:YES];
-		self.navigationItem.leftBarButtonItem = nil;
-		self.navigationItem.rightBarButtonItem = nil;
-		[self performSelectorInBackground:@selector(loadData) withObject:nil];
-	}
-	//DLog(@"loading screen bounds: %@", NSStringFromCGRect(viewObjects.allAlbumsLoadingScreen.view.bounds));
 }
-
 
 - (void) settingsAction:(id)sender 
 {
@@ -393,9 +320,92 @@
 	[streamingPlayerViewController release];
 }
 
+#pragma mark - Search
 
-#pragma mark -
-#pragma mark Tableview methods
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)theSearchBar 
+{	
+	[self.tableView.tableHeaderView retain];
+	
+	[self.tableView setContentOffset:CGPointMake(0, 50) animated:YES];
+	
+	if ([theSearchBar.text length] == 0)
+	{
+		//Add the overlay view.
+		if(searchOverlayView == nil)
+			searchOverlayView = [[SearchOverlayViewController alloc] initWithNibName:@"SearchOverlayViewController" bundle:[NSBundle mainBundle]];
+		//CGFloat y = self.tableView.contentOffset.y - searchBar.frame.origin.y + searchBar.frame.size.height;
+		CGFloat width = self.view.frame.size.width;
+		CGFloat height = self.view.frame.size.height;
+		CGRect frame = CGRectMake(0, 40, width, height);
+		searchOverlayView.view.frame = frame;
+		[self.view.superview addSubview:searchOverlayView.view];
+		
+		letUserSelectRow = NO;
+		self.tableView.scrollEnabled = NO;
+	}
+	
+	// Remove the index bar
+	isSearching = YES;
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+	
+	//Add the done button.
+	self.navigationItem.leftBarButtonItem = nil;
+	self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneSearching_Clicked:)] autorelease];
+}
+
+
+- (void)searchBar:(UISearchBar *)theSearchBar textDidChange:(NSString *)searchText
+{
+	if([searchText length] > 0) 
+	{
+		[searchOverlayView.view removeFromSuperview];
+		isSearching = YES;
+		letUserSelectRow = YES;
+		self.tableView.scrollEnabled = YES;
+		[dataModel searchForAlbumName:searchText];
+	}
+	else 
+	{
+		[self.tableView setContentOffset:CGPointMake(0, 50) animated:YES];
+		
+		//Add the overlay view.
+		if(searchOverlayView == nil)
+			searchOverlayView = [[SearchOverlayViewController alloc] initWithNibName:@"SearchOverlayViewController" bundle:[NSBundle mainBundle]];
+		CGFloat width = self.view.frame.size.width;
+		CGFloat height = self.view.frame.size.height;
+		CGRect frame = CGRectMake(0, 40, width, height);
+		searchOverlayView.view.frame = frame;
+		[self.view.superview addSubview:searchOverlayView.view];
+		
+		isSearching = NO;
+		letUserSelectRow = NO;
+		self.tableView.scrollEnabled = NO;
+		[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE allAlbumsSearch"];
+	}
+	
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+}
+
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)theSearchBar 
+{
+	[searchBar resignFirstResponder];
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView 
+{
+	if (isSearching)
+	{
+		return 1;
+	}
+	else
+	{
+		NSUInteger count = [[dataModel index] count];
+		return count;
+	}
+}
+
+#pragma mark - Tableview methods
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section 
 {
@@ -445,112 +455,13 @@
 }
 
 
-- (NSIndexPath *)tableView :(UITableView *)theTableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath 
+- (NSIndexPath *)tableView:(UITableView *)theTableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
 	if(letUserSelectRow)
 		return indexPath;
 	else
 		return nil;
 }
-
-- (void) searchBarTextDidBeginEditing:(UISearchBar *)theSearchBar 
-{	
-	[self.tableView.tableHeaderView retain];
-	
-	[self.tableView setContentOffset:CGPointMake(0, 50) animated:YES];
-	
-	if ([theSearchBar.text length] == 0)
-	{
-		//Add the overlay view.
-		if(searchOverlayView == nil)
-			searchOverlayView = [[SearchOverlayViewController alloc] initWithNibName:@"SearchOverlayViewController" bundle:[NSBundle mainBundle]];
-		//CGFloat y = self.tableView.contentOffset.y - searchBar.frame.origin.y + searchBar.frame.size.height;
-		CGFloat width = self.view.frame.size.width;
-		CGFloat height = self.view.frame.size.height;
-		CGRect frame = CGRectMake(0, 40, width, height);
-		searchOverlayView.view.frame = frame;
-		[self.view.superview addSubview:searchOverlayView.view];
-		
-		letUserSelectRow = NO;
-		self.tableView.scrollEnabled = NO;
-	}
-	
-	// Remove the index bar
-	isSearching = YES;
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
-	
-	//Add the done button.
-	self.navigationItem.leftBarButtonItem = nil;
-	self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneSearching_Clicked:)] autorelease];
-}
-
-
-- (void)searchBar:(UISearchBar *)theSearchBar textDidChange:(NSString *)searchText
-{
-	if([searchText length] > 0) 
-	{
-		[searchOverlayView.view removeFromSuperview];
-		viewObjects.isSearchingAllAlbums = YES;
-		letUserSelectRow = YES;
-		self.tableView.scrollEnabled = YES;
-		[self searchTableView];
-	}
-	else 
-	{
-		[self.tableView setContentOffset:CGPointMake(0, 50) animated:YES];
-		
-		//Add the overlay view.
-		if(searchOverlayView == nil)
-			searchOverlayView = [[SearchOverlayViewController alloc] initWithNibName:@"SearchOverlayViewController" bundle:[NSBundle mainBundle]];
-		CGFloat width = self.view.frame.size.width;
-		CGFloat height = self.view.frame.size.height;
-		CGRect frame = CGRectMake(0, 40, width, height);
-		searchOverlayView.view.frame = frame;
-		[self.view.superview addSubview:searchOverlayView.view];
-		
-		viewObjects.isSearchingAllAlbums = NO;
-		letUserSelectRow = NO;
-		self.tableView.scrollEnabled = NO;
-		[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE allAlbumsSearch"];
-	}
-	
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
-}
-
-
-- (void) searchBarSearchButtonClicked:(UISearchBar *)theSearchBar 
-{
-	[self searchTableView];
-	[searchBar resignFirstResponder];
-}
-
-- (void) searchTableView 
-{
-	// Inialize the search DB
-	[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE allAlbumsSearch"];
-	[databaseControls.allAlbumsDb executeUpdate:@"CREATE TABLE allAlbumsSearch(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];	
-		
-	// Perform the search
-	[databaseControls.allAlbumsDb executeUpdate:@"INSERT INTO allAlbumsSearch SELECT * FROM allAlbums WHERE title MATCH ? LIMIT 100", searchBar.text];
-	if ([databaseControls.allAlbumsDb hadError]) {
-		DLog(@"Err %d: %@", [databaseControls.allAlbumsDb lastErrorCode], [databaseControls.allAlbumsDb lastErrorMessage]);
-	}
-}
-
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView 
-{
-	if (isSearching)
-	{
-		return 1;
-	}
-	else
-	{
-		NSUInteger count = [[dataModel index] count];
-		return count;
-	}
-}
-
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -621,6 +532,166 @@
 		[self.tableView deselectRowAtIndexPath:indexPath animated:NO];
 	}
 }
+
+#pragma mark - Loading Display Handling
+
+- (void)registerForLoadingNotifications
+{
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLoadingScreen:) name:ISMSNotification_AllSongsLoadingArtists object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLoadingScreen:) name:ISMSNotification_AllSongsLoadingAlbums object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLoadingScreen:) name:ISMSNotification_AllSongsArtistName object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLoadingScreen:) name:ISMSNotification_AllSongsAlbumName object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLoadingScreen:) name:ISMSNotification_AllSongsSongName object:nil];
+}
+
+- (void)unregisterForLoadingNotifications
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_AllSongsLoadingArtists object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_AllSongsLoadingAlbums object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_AllSongsArtistName object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_AllSongsAlbumName object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_AllSongsSongName object:nil];
+}
+
+- (void)updateLoadingScreen:(NSNotification *)notification
+{
+	NSString *name = nil;
+	if ([notification.object isKindOfClass:[NSString class]])
+	{
+		name = [NSString stringWithString:(NSString *)notification.object];
+	}
+	
+	if ([notification.name isEqualToString:ISMSNotification_AllSongsLoadingArtists])
+	{
+		isProcessingArtists = YES;
+		loadingScreen.loadingTitle1.text = @"Processing Artist:";
+		loadingScreen.loadingTitle2.text = @"Processing Album:";
+	}
+	else if ([notification.name isEqualToString:ISMSNotification_AllSongsLoadingAlbums])
+	{
+		isProcessingArtists = NO;
+		loadingScreen.loadingTitle1.text = @"Processing Album:";
+		loadingScreen.loadingTitle2.text = @"Processing Song:";
+	}
+	else if ([notification.name isEqualToString:ISMSNotification_AllSongsSorting])
+	{
+		loadingScreen.loadingTitle1.text = @"Sorting";
+		loadingScreen.loadingTitle2.text = @"";
+		loadingScreen.loadingMessage1.text = name;
+		loadingScreen.loadingMessage2.text = @"";
+	}
+	else if ([notification.name isEqualToString:ISMSNotification_AllSongsArtistName])
+	{
+		isProcessingArtists = YES;
+		loadingScreen.loadingTitle1.text = @"Processing Artist:";
+		loadingScreen.loadingTitle2.text = @"Processing Album:";
+		loadingScreen.loadingMessage1.text = name;
+	}
+	else if ([notification.name isEqualToString:ISMSNotification_AllSongsAlbumName])
+	{
+		if (isProcessingArtists)
+			loadingScreen.loadingMessage2.text = name;
+		else
+			loadingScreen.loadingMessage1.text = name;
+	}
+	else if ([notification.name isEqualToString:ISMSNotification_AllSongsSongName])
+	{
+		isProcessingArtists = NO;
+		loadingScreen.loadingTitle1.text = @"Processing Album:";
+		loadingScreen.loadingTitle2.text = @"Processing Song:";
+		loadingScreen.loadingMessage2.text = name;
+	}
+}
+
+- (void)showLoadingScreen
+{
+	self.loadingScreen = [[[LoadingScreen alloc] initOnView:self.view withMessage:[NSArray arrayWithObjects:@"Processing Artist:", @"", @"Processing Album:", @"", nil] blockInput:YES mainWindow:NO] autorelease];
+	self.tableView.scrollEnabled = NO;
+	self.tableView.allowsSelection = NO;
+	self.navigationItem.leftBarButtonItem = nil;
+	self.navigationItem.rightBarButtonItem = nil;
+	
+	[self registerForLoadingNotifications];
+}
+
+- (void)hideLoadingScreen
+{
+	[self unregisterForLoadingNotifications];
+	
+	self.tableView.scrollEnabled = YES;
+	self.tableView.allowsSelection = YES;
+	
+	// Hide the loading screen
+	[loadingScreen hide];
+	self.loadingScreen = nil;
+}
+
+#pragma mark - LoaderDelegate methods
+
+- (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
+{
+	[self.tableView reloadData];
+	[self createDataModel];
+    [self hideLoadingScreen];
+}
+
+- (void)loadingFinished:(SUSLoader*)theLoader
+{
+	// Don't do anything, handled by the notification
+}
+
+- (void)loadingFinishedNotification
+{
+	[self.tableView reloadData];
+	[self createDataModel];
+	[self addCount];
+    [self hideLoadingScreen];
+}
+
+#pragma mark -
+#pragma mark Pull to refresh methods
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{	
+	if (scrollView.isDragging) 
+	{
+		if (refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !_reloading) 
+		{
+			[refreshHeaderView setState:EGOOPullRefreshNormal];
+		} 
+		else if (refreshHeaderView.state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !_reloading) 
+		{
+			[refreshHeaderView setState:EGOOPullRefreshPulling];
+		}
+	}
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+	if (scrollView.contentOffset.y <= - 65.0f && !_reloading) 
+	{
+		_reloading = YES;
+		[self reloadAction:nil];
+		[refreshHeaderView setState:EGOOPullRefreshLoading];
+		[UIView beginAnimations:nil context:NULL];
+		[UIView setAnimationDuration:0.2];
+		self.tableView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
+		[UIView commitAnimations];
+	}
+}
+
+- (void)dataSourceDidFinishLoadingNewData
+{
+	_reloading = NO;
+	
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:.3];
+	[self.tableView setContentInset:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
+	[UIView commitAnimations];
+	
+	[refreshHeaderView setState:EGOOPullRefreshNormal];
+}
+
 
 @end
 

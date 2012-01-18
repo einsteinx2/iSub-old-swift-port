@@ -100,10 +100,14 @@ static void destroy_versionArrays()
 	}
 	
 	// Handle special case when loading playlists
-	NSTimeInterval loadingTimeout = kLoadingTimeout;
+	NSTimeInterval loadingTimeout = ISMSLoadingTimeout;
 	if ([action isEqualToString:@"getPlaylist"])
 	{
 		loadingTimeout = 3600.0; // Timeout set to 60 mins to prevent timeout errors
+	}
+	else if ([action isEqualToString:@"ping"])
+	{
+		loadingTimeout = ISMSServerCheckTimeout;
 	}
 	
 	// Create the request

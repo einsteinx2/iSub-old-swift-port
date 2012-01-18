@@ -17,9 +17,11 @@
 #include "MusicSingleton.h"
 #import "BassEffectDAO.h"
 #import <sys/stat.h>
+#import "BassUserInfo.h"
+#import "SavedSettings.h"
 
 @implementation BassWrapperSingleton
-@synthesize isEqualizerOn, startByteOffset, isTempDownload, currPlaylistDAO;
+@synthesize isEqualizerOn, startByteOffset, isTempDownload, currPlaylistDAO, fftDataThread, isFftDataThreadToTerminate;
 
 // BASS plugins
 extern void BASSFLACplugin;
@@ -29,13 +31,13 @@ static BassWrapperSingleton *selfRef;
 static SUSCurrentPlaylistDAO *currPlaylistDAORef;
 
 // BASS stream variables
-static BOOL BASSisFilestream1 = YES;
-static HSTREAM fileStream1, fileStream2, outStream;
-static NSThread *playbackThread = nil;
+BOOL BASSisFilestream1 = YES;
+HSTREAM fileStream1, fileStream2, outStream;
+HFX volumeFx;
 
 // Equalizer variables
-static NSMutableArray *eqValueArray, *eqHandleArray;
-static float fftData[1024];
+NSMutableArray *eqValueArray, *eqHandleArray;
+float fftData[1024];
 short *lineSpecBuf;
 int lineSpecBufSize;
 
@@ -45,49 +47,59 @@ int lineSpecBufSize;
 
 #pragma mark - Decode Stream Callbacks
 
-void CALLBACK MyFileCloseProc(void *user)
+/* not used, high cpu usage. Using BASS_FX_BFX_VOLUME instead
+void CALLBACK MyStreamFreeCallback(HSYNC handle, DWORD channel, DWORD data, void *user)
 {
-	// close the file
-	FILE *file = ((ISMS_BASS_USERINFO *)user)->file;
-	fclose(file);
-	//fclose((FILE*)user);
+	// Stream is done, release the user info object
+	BassUserInfo *userInfo = (BassUserInfo *)user;
+	[userInfo release];
+}*/
+
+void CALLBACK MyFileCloseProc(void *user)
+{	
+	// Close the file handle
+	BassUserInfo *userInfo = (BassUserInfo *)user;
+	fclose(userInfo.myFileHandle);	
 }
 
-// TODO: return next song length when appropriate
-// TODO: when song is fully cached, return actual length from disk for precise seeking
 QWORD CALLBACK MyFileLenProc(void *user)
 {
 	@autoreleasepool
 	{
-		ISMS_BASS_USERINFO *userInfo = user;
-		DLog(@"user.localPath: %s", userInfo->localPath);
-		NSString *localPath = [NSString stringWithFormat:@"%s", userInfo->localPath];
-		DLog(@"localPath: %@", localPath);
-		Song *theSong = [currPlaylistDAORef currentSong];
-		DLog(@"TEST using current song: %@   localPath: %@", theSong, theSong.localPath);
-		if (![localPath isEqualToString:theSong.localPath])
+		@synchronized([BassWrapperSingleton class])
 		{
-			// It's not the current song so it's the next song
-			theSong = [currPlaylistDAORef nextSong];
-			DLog(@"TEST using next song: %@   localPath: %@", theSong, theSong.localPath);
-		}
-		
-		if (theSong.isFullyCached)
-		{
-			DLog(@"TEST song is fully cached, using size on disk");
-			// Return actual file size on disk
-			struct stat s;
-			fstat(fileno(userInfo->file), &s);
-			DLog(@"TEST file length: %llu", s.st_size);
-			return s.st_size;
-		}
-		else
-		{
-			DLog(@"TEST song not fully cached, using server reported file size");
-			// Return server reported file size
-			QWORD length = length = [theSong.size longLongValue];
-			DLog(@"TEST file length: %llu", length);
-			return length;
+			BassUserInfo *userInfo = (BassUserInfo *)user;
+			
+			Song *theSong = [currPlaylistDAORef currentSong];
+			DLog(@"TEST userInfo song: %@  localPath: %@", userInfo.mySong.title, userInfo.mySong.localPath);
+			DLog(@"TEST current song: %@   localPath: %@", theSong.title, theSong.localPath);
+			if (![userInfo.mySong isEqualToSong:theSong])
+			{
+				// It's not the current song so it's the next song
+				theSong = [currPlaylistDAORef nextSong];
+				DLog(@"TEST using next song: %@   localPath: %@", theSong, theSong.localPath);
+			}
+			
+			if (theSong.isFullyCached)
+			{
+				// Return actual file size on disk
+				QWORD size = [[[NSFileManager defaultManager] attributesOfItemAtPath:theSong.localPath error:NULL] fileSize];
+				DLog(@"TEST length: %llu, song is fully cached, using size on disk", size);
+				return size;
+				
+				// C way of getting the size
+				//struct stat s;
+				//fstat(fileno(userInfo.myFileHandle), &s);
+				//DLog(@"TEST length: %llu, song is fully cached, using size on disk", s.st_size);
+				//return s.st_size;
+			}
+			else
+			{
+				// Return server reported file size
+				QWORD length = length = [theSong.size longLongValue];
+				DLog(@"TEST length: %llu, song not fully cached, using server reported file size", length);
+				return length;
+			}
 		}
 	}
 }
@@ -95,30 +107,36 @@ QWORD CALLBACK MyFileLenProc(void *user)
 DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 {
 	// Read from the file
-	FILE *file = ((ISMS_BASS_USERINFO *)user)->file;
-	return fread(buffer, 1, length, file); 
-	//return fread(buffer, 1, length, (FILE*)user); 
+	BassUserInfo *userInfo = (BassUserInfo *)user;
+	return fread(buffer, 1, length, userInfo.myFileHandle); 
 }
 
 BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 {	
-	FILE *file = ((ISMS_BASS_USERINFO *)user)->file;
-	BOOL success = !fseek(file, offset, SEEK_SET);
-	//BOOL success = !fseek((FILE*)user, offset, SEEK_SET);
-	DLog(@"TEST seeking to offset: %llu   success: %i", offset, success);
 	// Seek to the requested offset (returns false if data not downloaded that far)
+	BassUserInfo *userInfo = (BassUserInfo *)user;
+	BOOL success = !fseek(userInfo.myFileHandle, offset, SEEK_SET);
+	
+	DLog(@"TEST seeking to offset: %llu   success: %i", offset, success);
 	return success; 
 }
 
 #pragma mark - Output Stream Callbacks
 
+void CALLBACK MyGainAdjustProc(HDSP handle, DWORD channel, void *buffer, DWORD length, void *user)
+{
+	DLog(@"gain: %f", [SavedSettings sharedInstance].gainMultiplier);
+	float *d = (float*)buffer;	
+	for(DWORD a = 0; a < length/4; a += 2)
+	{
+		d[a] *= [SavedSettings sharedInstance].gainMultiplier;
+		d[a+1] *= [SavedSettings sharedInstance].gainMultiplier;
+	}
+}
+
 DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *user)
 {
-	if (!playbackThread)
-		playbackThread = [NSThread currentThread];
-	
-	DWORD r;
-	
+	DWORD r;	
 	if (BASSisFilestream1 && BASS_ChannelIsActive(fileStream1)) 
 	{
 		// Read data from stream1
@@ -198,7 +216,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		r = BASS_STREAMPROC_END;
 		[selfRef performSelectorOnMainThread:@selector(bassFree) withObject:nil waitUntilDone:NO];
 	}
-	
+
 	return r;
 }
 
@@ -224,7 +242,7 @@ void audioRouteChangeListenerCallback (void *inUserData, AudioSessionPropertyID 
         // the recommended test for when to pause audio.
         if (routeChangeReason == kAudioSessionRouteChangeReason_OldDeviceUnavailable) 
 		{
-            [selfRef playPause];
+			[selfRef playPause];
 			
             DLog (@"Output device removed, so application audio was paused.");
         }
@@ -519,6 +537,11 @@ void BASSLogError()
 
 - (void)readEqData
 {
+	[self performSelector:@selector(readEqDataInternal) onThread:fftDataThread withObject:nil waitUntilDone:NO];
+}
+
+- (void)readEqDataInternal
+{	
 	// Get the FFT data for visualizer
 	BASS_ChannelGetData(outStream, fftData, BASS_DATA_FFT2048);
 	
@@ -593,7 +616,7 @@ void BASSLogError()
 					DLog(@"found silence length for next song, calling prepareNextSongStreamInternal:");
 					if (silence == NSUIntegerMax)
 						silence = 0;
-					[self performSelector:@selector(prepareNextSongStreamInternal:) onThread:playbackThread withObject:[NSNumber numberWithInt:silence] waitUntilDone:NO];
+					[self performSelectorOnMainThread:@selector(prepareNextSongStreamInternal:) withObject:[NSNumber numberWithInt:silence] waitUntilDone:NO];
 				}
 				BASS_Free();
 			}
@@ -609,44 +632,45 @@ void BASSLogError()
 	}
 }
 
-// playback thread
+// main thread
 - (void)prepareNextSongStreamInternal:(NSNumber *)silence
 {
-	@autoreleasepool 
+	DLog(@"preparing next song stream internally");
+	Song *nextSong = currPlaylistDAO.nextSong;
+	
+	BassUserInfo *userInfo = [[BassUserInfo alloc] init];
+	userInfo.mySong = nextSong;
+	userInfo.myFileHandle = fopen([nextSong.localPath cStringUTF8], "rb");
+	
+	BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFileSeekProc}; // callback table
+	
+	// Try hardware and software mixing
+	HSTREAM stream = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_STREAM_DECODE, &fileProcs, userInfo);
+	if(!stream) stream = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_SAMPLE_SOFTWARE|BASS_STREAM_DECODE, &fileProcs, userInfo);
+	
+	if (stream)
 	{
-		Song *nextSong = currPlaylistDAO.nextSong;
+		BASS_ChannelSetSync(stream, BASS_SYNC_FREE, 0, MyStreamFreeCallback, userInfo);
+
+		// Seek to the silence offset
+		[self seekToPositionInBytes:[silence unsignedLongLongValue] inStream:stream];
 		
-		//FILE *file = fopen([nextSong.localPath cStringUTF8], "rb");
-		const ISMS_BASS_USERINFO userInfoInit = {
-			.localPath = [nextSong.localPath cStringUTF8],
-			.file = fopen([nextSong.localPath cStringUTF8], "rb")
-		};
-		ISMS_BASS_USERINFO *userInfo = malloc(sizeof(ISMS_BASS_USERINFO));
-		*userInfo = userInfoInit;
-		BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFileSeekProc}; // callback table
-		
-		// Try hardware and software mixing
-		HSTREAM stream = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_STREAM_DECODE, &fileProcs, userInfo);
-		if(!stream) stream = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_SAMPLE_SOFTWARE|BASS_STREAM_DECODE, &fileProcs, userInfo);
-		
-		if (stream)
+		if (BASSisFilestream1)
 		{
-			// Seek to the silence offset
-			[self seekToPositionInBytes:[silence unsignedLongLongValue] inStream:stream];
-			
-			if (BASSisFilestream1)
-				fileStream2 = stream;
-			else
-				fileStream1 = stream;
+			fileStream2 = stream;
 		}
 		else
 		{
-			NSInteger errorCode = BASS_ErrorGetCode();
-			DLog(@"nextSong stream: %i error: %i - %@", stream, errorCode, NSStringFromBassErrorCode(errorCode));
+			fileStream1 = stream;
 		}
-		
-		DLog(@"nextSong: %i", stream);
 	}
+	else
+	{
+		NSInteger errorCode = BASS_ErrorGetCode();
+		DLog(@"nextSong stream: %i error: %i - %@", stream, errorCode, NSStringFromBassErrorCode(errorCode));
+	}
+	
+	DLog(@"nextSong: %i", stream);
 }
 
 - (void)startWithOffsetInBytes:(NSNumber *)byteOffset
@@ -671,12 +695,11 @@ void BASSLogError()
 	
 	if (currentSong.fileExists)
 	{	
-		const ISMS_BASS_USERINFO userInfoInit = {
-			.localPath = [currentSong.localPath cStringUTF8],
-			.file = fopen([currentSong.localPath cStringUTF8], "rb")
-		};
-		ISMS_BASS_USERINFO *userInfo = malloc(sizeof(ISMS_BASS_USERINFO));
-		*userInfo = userInfoInit;
+		BassUserInfo *userInfo = [[BassUserInfo alloc] init];
+		userInfo.mySong = currentSong;
+		userInfo.myFileHandle = fopen([currentSong.localPath cStringUTF8], "rb");
+		
+		//DLog(@"userInfo.localPath: %s ", userInfo->localPath);
 		BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFileSeekProc}; // callback table
 		
 		fileStream1 = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_STREAM_DECODE, &fileProcs, userInfo);
@@ -691,6 +714,8 @@ void BASSLogError()
 		{
 			if (fileStream1)
 			{
+				BASS_ChannelSetSync(fileStream1, BASS_SYNC_FREE, 0, MyStreamFreeCallback, userInfo);
+				
 				DLog(@"currentSong: %i", fileStream1);
 				BASSisFilestream1 = YES;
 				
@@ -706,6 +731,10 @@ void BASSLogError()
 					[self applyEqualizer:eqValueArray];
 				}
 				
+				// Add gain amplification
+				//BASS_ChannelSetDSP(outStream, (DSPPROC*)&MyGainAdjustProc, NULL, 1);
+				volumeFx = BASS_ChannelSetFX(outStream, BASS_FX_BFX_VOLUME, 1);
+								
 				BASS_ChannelPlay(outStream, FALSE);
 				
 				[self performSelectorInBackground:@selector(prepareNextSongStream) withObject:nil];
@@ -762,6 +791,13 @@ void BASSLogError()
 	}
 }
 
+- (void)bassSetGainLevel:(float)gain
+{
+	BASS_BFX_VOLUME volumeParamsInit = {0, gain};
+	BASS_BFX_VOLUME *volumeParams = &volumeParamsInit;
+	BASS_FXSetParameters(volumeFx, volumeParams);
+}
+
 - (void)bassInit:(NSUInteger)sampleRate
 {
 	isTempDownload = NO;
@@ -769,7 +805,7 @@ void BASSLogError()
 	[self bassFree];
 	
 	BASS_SetConfig(BASS_CONFIG_IOS_MIXAUDIO, 0); // Disable mixing.	To be called before BASS_Init.
-	BASS_SetConfig(BASS_CONFIG_BUFFER, ISMS_BASSBufferSize);
+	BASS_SetConfig(BASS_CONFIG_BUFFER, ISMS_BASSBufferSizeForeground);
 	BASS_SetConfig(BASS_CONFIG_FLOATDSP, true);
 	
 	// Initialize default device.
@@ -796,12 +832,21 @@ void BASSLogError()
     [self bassInit:44100];
 }
 
+- (void)bassEnterBackground
+{
+	BASS_SetConfig(BASS_CONFIG_BUFFER, ISMS_BASSBufferSizeBackground);
+}
+
+- (void)bassEnterForeground
+{
+	BASS_SetConfig(BASS_CONFIG_BUFFER, ISMS_BASSBufferSizeForeground);
+}
+
 - (BOOL)bassFree
 {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startWithOffsetInBytes:) object:nil];
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(prepareNextSongStreamInBackground) object:nil];
 	
-	playbackThread = nil;
     isTempDownload = NO;
 	BOOL success = BASS_Free();
 	outStream = 0;
@@ -855,7 +900,7 @@ void BASSLogError()
 static BassWrapperSingleton *sharedInstance = nil;
 
 - (void)setup
-{
+{	
 	selfRef = self;
 	isEqualizerOn = NO;
 	isTempDownload = NO;
@@ -868,6 +913,8 @@ static BassWrapperSingleton *sharedInstance = nil;
 	BassEffectDAO *effectDAO = [[BassEffectDAO alloc] initWithType:BassEffectType_ParametricEQ];
 	[effectDAO selectPresetId:effectDAO.selectedPresetId];
 	
+	fftDataThread = [[NSThread alloc] initWithTarget:self selector:@selector(fftDataThreadEntryPoint) object:nil];
+	[fftDataThread start];
 	if (SCREEN_SCALE() == 1.0 && !IS_IPAD())
 		lineSpecBufSize = 256 * sizeof(short);
 	else
@@ -875,6 +922,18 @@ static BassWrapperSingleton *sharedInstance = nil;
 	lineSpecBuf = malloc(lineSpecBufSize);
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStreamInBackground) name:ISMSNotification_RepeatModeChanged object:nil];
+	
+	// On iOS 4.0+ only, listen for background notification
+	if(&UIApplicationDidEnterBackgroundNotification != nil)
+	{
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bassEnterBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
+	}
+	
+	// On iOS 4.0+ only, listen for foreground notification
+	if(&UIApplicationWillEnterForegroundNotification != nil)
+	{
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bassEnterForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
+	}
 }
 
 + (BassWrapperSingleton *)sharedInstance
@@ -882,23 +941,11 @@ static BassWrapperSingleton *sharedInstance = nil;
     @synchronized(self)
     {
 		if (sharedInstance == nil)
+		{
 			[[self alloc] init];
+		}
     }
     return sharedInstance;
-}
-
-+ (id)allocWithZone:(NSZone *)zone 
-{
-    @synchronized(self) 
-	{
-        if (sharedInstance == nil) 
-		{
-            sharedInstance = [super allocWithZone:zone];
-			[sharedInstance setup];
-            return sharedInstance;  // assignment and return on first allocation
-        }
-    }
-    return nil; // on subsequent allocation attempts return nil
 }
 
 -(id)init 
@@ -937,6 +984,32 @@ static BassWrapperSingleton *sharedInstance = nil;
     return self;
 }
 
+- (void)fftDataThreadEntryPoint
+{
+	 NSAutoreleasePool* thePool = [[NSAutoreleasePool alloc] init];
+	
+	isFftDataThreadToTerminate = NO;
+
+	// Create a scheduled timer to keep runloop alive
+	NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(fftThreadEmptyMethod) userInfo:nil repeats:YES];
+	[[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
+	
+	// Start a runloop so we can call performSelector:onThread: to use this thread
+	NSTimeInterval resolution = 300.0;
+	BOOL isRunning;
+	do 
+	{
+		// Run the loop!
+		NSDate* theNextDate = [NSDate dateWithTimeIntervalSinceNow:resolution]; 
+		isRunning = [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:theNextDate]; 
+		
+		// Clear the autorelease pool after each run of the loop to prevent a memory leak
+		[thePool release];
+		thePool = [[NSAutoreleasePool alloc] init];            
+	} 
+	while(isRunning && !isFftDataThreadToTerminate);
+}
+- (void)fftThreadEmptyMethod {}
 @end
 
 

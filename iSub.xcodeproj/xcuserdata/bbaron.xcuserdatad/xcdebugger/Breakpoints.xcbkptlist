@@ -75,11 +75,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/PlaylistsViewController.m"
-         timestampString = "345862868.355603"
+         timestampString = "348111622.332301"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "404"
-         endingLineNumber = "404"
+         startingLineNumber = "405"
+         endingLineNumber = "405"
          landmarkName = "-addSaveEditButtons"
          landmarkType = "5">
       </FileBreakpoint>
@@ -145,11 +145,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/PlaylistSongsViewController.m"
-         timestampString = "344049012.606383"
+         timestampString = "348111622.332301"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "376"
-         endingLineNumber = "376"
+         startingLineNumber = "377"
+         endingLineNumber = "377"
          landmarkName = "-subsonicErrorCode:message:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -159,11 +159,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/PlaylistsViewController.m"
-         timestampString = "345862868.355603"
+         timestampString = "348346768.58797"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1332"
-         endingLineNumber = "1332"
+         startingLineNumber = "1334"
+         endingLineNumber = "1334"
          landmarkName = "-subsonicErrorCode:message:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -193,62 +193,6 @@
          startingLineNumber = "35"
          endingLineNumber = "35"
          landmarkName = "-subsonicErrorCode:message:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Classes/XMLParser.m"
-         timestampString = "344046398.410043"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "62"
-         endingLineNumber = "62"
-         landmarkName = "-subsonicErrorCode:message:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Classes/MusicSingleton.m"
-         timestampString = "345157503.003294"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "424"
-         endingLineNumber = "424"
-         landmarkName = "-startSongAtOffsetInSeconds:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Classes/MusicSingleton.m"
-         timestampString = "345157503.003294"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "377"
-         endingLineNumber = "377"
-         landmarkName = "-startSongAtOffsetInSeconds:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Classes/MusicSingleton.m"
-         timestampString = "345157503.003294"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "397"
-         endingLineNumber = "397"
-         landmarkName = "-startSongAtOffsetInSeconds:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint

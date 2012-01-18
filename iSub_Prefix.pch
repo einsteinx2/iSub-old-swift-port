@@ -19,8 +19,9 @@
 // 240.0 is the minimum URL connection timeout enforced by CFNetwork
 // Unless an HTTP Post body is created then it may default to 74.0
 // unless you reset the timeout after setting up the post body
-#define kLoadingTimeout 240.0
-#define kJukeboxTimeout 5.0
+#define ISMSLoadingTimeout 240.0
+#define ISMSJukeboxTimeout 60.0
+#define ISMSServerCheckTimeout 15.0
 
 // iPad detection
 #ifdef UI_USER_INTERFACE_IDIOM//()

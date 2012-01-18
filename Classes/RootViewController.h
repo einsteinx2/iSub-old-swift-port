@@ -24,6 +24,8 @@
 	UILabel *reloadTimeLabel;
 	IBOutlet UISearchBar *searchBar;
 	
+	UIButton *blockerButton;
+	
 	LoadingScreen *allArtistsLoadingScreen;
 	
 	SearchOverlayViewController *searchOverlayView;

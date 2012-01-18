@@ -10,6 +10,7 @@
 #import "ViewObjectsSingleton.h"
 #import "UITableViewCell+overlay.h"
 #import "CellOverlay.h"
+#import "SavedSettings.h"
 
 #define ISMSHorizSwipeDragMin 3
 #define ISMSVertSwipeDragMax 80
@@ -19,7 +20,7 @@
 
 @implementation CustomUITableView
 
-@synthesize blockInput, lastDeleteToggle, lastOverlayToggle;
+@synthesize lastDeleteToggle, lastOverlayToggle;
 
 #pragma mark Lifecycle
 
@@ -27,6 +28,7 @@
 {
 	self.lastDeleteToggle = [NSDate date];
 	self.lastOverlayToggle = [NSDate date];
+	settings = [SavedSettings sharedInstance];
 }
 
 - (id)initWithFrame:(CGRect)frame 
@@ -70,7 +72,7 @@
 {	
 	// Don't try anything when the tableview is moving
 	// and do not catch as a swipe if touch is far right (potential index control)
-	if (!blockInput && !self.decelerating && point.x < 290)
+	if (!self.decelerating && point.x < 290)
 	{
 		// Find the cell
 		UITableViewCell *cell = [self cellForRowAtIndexPath:[self indexPathForRowAtPoint:point]];
@@ -104,7 +106,7 @@
 
 - (BOOL)touchesShouldBegin:(NSSet *)touches withEvent:(UIEvent *)event inContentView:(UIView *)view 
 {
-	return !blockInput;
+	return YES;
 }
 
 #pragma mark Touch gestures for custom cell view
@@ -162,8 +164,11 @@
 			if (startTouchPosition.x < currentTouchPosition.x) 
 			{
 				// Right swipe
-				[cell showOverlay];
-				cellShowingOverlay = cell;
+				if (settings.isSwipeEnabled)
+				{
+					[cell showOverlay];
+					cellShowingOverlay = cell;
+				}
 			} 
 			else 
 			{
@@ -201,9 +206,12 @@
 	cellShowingOverlay = nil;
 
 	// Handle tap and hold
-	tapAndHoldFired = NO;
-	tapAndHoldCell = [self cellForRowAtIndexPath: [self indexPathForRowAtPoint:startTouchPosition]];
-	[self performSelector:@selector(tapAndHoldFired) withObject:nil afterDelay:ISMSTapAndHoldDelay];
+	if (settings.isTapAndHoldEnabled)
+	{
+		tapAndHoldFired = NO;
+		tapAndHoldCell = [self cellForRowAtIndexPath: [self indexPathForRowAtPoint:startTouchPosition]];
+		[self performSelector:@selector(tapAndHoldFired) withObject:nil afterDelay:ISMSTapAndHoldDelay];
+	}
 	
 	[super touchesBegan:touches withEvent:event];
 }

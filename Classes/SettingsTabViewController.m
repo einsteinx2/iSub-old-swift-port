@@ -109,6 +109,9 @@
 	
 	autoPlayerInfoSwitch.on = settings.isAutoShowSongInfoEnabled;
 	
+	enableSwipeSwitch.on = settings.isSwipeEnabled;
+	enableTapAndHoldSwitch.on = settings.isTapAndHoldEnabled;
+	
 	enableLyricsSwitch.on = settings.isLyricsEnabled;
 	
 	// Cache Settings
@@ -378,6 +381,14 @@
 		else if (sender == autoPlayerInfoSwitch)
 		{
 			settings.isAutoShowSongInfoEnabled = autoPlayerInfoSwitch.on;
+		}
+		else if (sender == enableSwipeSwitch)
+		{
+			settings.isSwipeEnabled = enableSwipeSwitch.on;
+		}
+		else if (sender == enableTapAndHoldSwitch)
+		{
+			settings.isTapAndHoldEnabled = enableTapAndHoldSwitch.on;
 		}
 		else if (sender == autoReloadArtistSwitch)
 		{

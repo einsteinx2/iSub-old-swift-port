@@ -28,7 +28,6 @@
 // Music player objects
 //
 @property (nonatomic, retain) Song *queueSongObject;
-@property (nonatomic, retain) NSURL *coverArtUrl;
 
 @property (nonatomic, retain) NSMutableData *receivedDataQueue;
 @property (nonatomic, retain) NSURLConnection *downloadQueue;
@@ -37,11 +36,6 @@
 @property (nonatomic, retain) NSFileHandle *audioFileQueue;
 @property UInt32 downloadedLengthQueue; // Keeps track of the number of bytes downloaded
 @property BOOL isQueueListDownloading;
-@property UInt32 bitRate;
-@property BOOL isTempDownload;
-@property BOOL showNowPlayingIcon;
-
-@property (nonatomic, retain) Song *songB;
 
 @property BOOL jukeboxIsPlaying;
 @property float jukeboxGain;
@@ -56,8 +50,6 @@
 - (void)startDownloadQueue;
 - (void)stopDownloadQueue;
 - (void)resumeDownloadQueue:(UInt32)byteOffset;
-
-- (NSInteger) maxBitrateSetting;
 
 - (void)startSongAtOffsetInSeconds:(NSUInteger)seconds;
 - (void)startSong;
