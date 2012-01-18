@@ -7,7 +7,26 @@
 //
 
 #import "BassUserInfo.h"
+#import "Song.h"
 
 @implementation BassUserInfo
+@synthesize mySong, myFileHandle;
 
+- (id)init
+{
+	if ((self = [super init]))
+	{
+		mySong = nil;
+		myFileHandle = NULL;
+	}
+	return self;
+}
+
+- (void)dealloc
+{
+	DLog(@"BassUserInfo dealloc called!!");
+	[mySong release]; mySong = nil;
+	myFileHandle = NULL;
+	[super dealloc];
+}
 @end

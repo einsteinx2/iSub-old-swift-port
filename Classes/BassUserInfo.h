@@ -6,8 +6,9 @@
 //  Copyright (c) 2012 Ben Baron. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
+@class Song;
 @interface BassUserInfo : NSObject
 
+@property (copy) Song *mySong;
+@property FILE *myFileHandle;
 @end

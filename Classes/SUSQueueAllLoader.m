@@ -6,7 +6,7 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-#import "SUSQueueAllDAO.h"
+#import "SUSQueueAllLoader.h"
 #import "iSubAppDelegate.h"
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
@@ -21,7 +21,7 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "SUSStreamSingleton.h"
 
-@implementation SUSQueueAllDAO
+@implementation SUSQueueAllLoader
 
 @synthesize currentPlaylist, shufflePlaylist, myArtist, folderIds;
 
@@ -34,10 +34,8 @@
 		databaseControls = [DatabaseSingleton sharedInstance];
 		viewObjects = [ViewObjectsSingleton sharedInstance];
 		
-		connection = nil;
-		receivedData = nil;
 		myArtist = nil;
-		folderIds = [[NSMutableArray arrayWithCapacity:1] retain]; 
+		folderIds = [[NSMutableArray alloc] initWithCapacity:10];
 	}
 
 	return self;
@@ -51,19 +49,26 @@
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:folderId forKey:@"id"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getMusicDirectory" andParameters:parameters];
     
-	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	if (connection)
+	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+	if (self.connection)
 	{
-		receivedData = [[NSMutableData data] retain];
+		self.receivedData = [NSMutableData data];
 	}
 }
-   
+
+- (void)startLoad
+{
+	DLog(@"must use loadData:artist:");
+}
+
+- (void)cancelLoad
+{
+	[super cancelLoad];
+	[viewObjects hideLoadingScreen];
+}
+
 - (void)finishLoad
 {
-	// Remove the processed folder from array
-    if ([folderIds count] > 0)
-        [folderIds removeObjectAtIndex:0];
-	
 	// Continue the iteration
 	if ([folderIds count] > 0)
 	{
@@ -115,7 +120,6 @@
 {	
 	[folderIds addObject:folderId];
 	self.myArtist = theArtist;
-	
 	
 	//jukeboxSongIds = [[NSMutableArray alloc] init];
 	
@@ -186,12 +190,12 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-	[receivedData setLength:0];
+	[self.receivedData setLength:0];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
 {
-    [receivedData appendData:incrementalData];
+    [self.receivedData appendData:incrementalData];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
@@ -202,8 +206,8 @@
 	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 	[alert release];
 		
-	[theConnection release]; theConnection = nil;
-	[receivedData release]; receivedData = nil;
+	self.receivedData = nil;
+	self.connection = nil;
 	
 	// Remove the processed folder from array
 	[folderIds removeObjectAtIndex:0];
@@ -216,7 +220,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
+	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:self.receivedData];
 	QueueAlbumXMLParser *parser = (QueueAlbumXMLParser *)[[QueueAlbumXMLParser alloc] initXMLParser];
 	parser.myArtist = myArtist;
 	[xmlParser setDelegate:parser];
@@ -239,23 +243,25 @@
 		[pool release];
 	}
 	
+	// Remove the processed folder from array
+	if ([folderIds count] > 0)
+		[folderIds removeObjectAtIndex:0];
+	
 	//DLog(@"parser.listOfSongs = %@", parser.listOfSongs);
 	//DLog(@"Playlist count: %i", [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"]);
 	
-	for (Album *anAlbum in parser.listOfAlbums)
+	NSUInteger maxIndex = [parser.listOfAlbums count] - 1;
+	for (int i = maxIndex; i >= 0; i--)
 	{
-		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-		
-		[folderIds addObject:anAlbum.albumId];
-		
-		[pool release];
+		NSString *albumId = [[parser.listOfAlbums objectAtIndex:i] albumId];
+		[folderIds insertObject:albumId atIndex:0];
 	}
-	
+
 	[parser release];
 	[xmlParser release];
 	
-	[theConnection release]; theConnection = nil;
-	[receivedData release]; receivedData = nil;
+	self.receivedData = nil;
+	self.connection = nil;
 	
 	// Continue the iteration
 	[self finishLoad];

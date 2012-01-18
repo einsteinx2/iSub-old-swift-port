@@ -5,19 +5,17 @@
 //  Created by Ben Baron on 1/16/11.
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
+#import "SUSLoader.h"
 
 @class iSubAppDelegate, MusicSingleton, DatabaseSingleton, ViewObjectsSingleton, Artist;
 
-@interface SUSQueueAllDAO : NSObject 
+@interface SUSQueueAllLoader : SUSLoader 
 {
 	iSubAppDelegate *appDelegate;
 	MusicSingleton *musicControls;
 	DatabaseSingleton *databaseControls;
 	ViewObjectsSingleton *viewObjects;
-	
-	NSURLConnection *connection;
-	NSMutableData *receivedData;
-	
+
 	BOOL isQueue;
 	BOOL isShuffleButton;
 	BOOL doShowPlayer;
