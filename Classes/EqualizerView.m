@@ -482,6 +482,7 @@ static void destroy_versionArrays()
 	switch (visualType)
 	{
 		case ISMSBassVisualType_line:
+			[[BassWrapperSingleton sharedInstance] startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_fft];
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			visualType = ISMSBassVisualType_skinnyBar; 
 			break;
@@ -498,6 +499,7 @@ static void destroy_versionArrays()
 		case ISMSBassVisualType_aphexFace:
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			visualType = ISMSBassVisualType_line; 
+			[[BassWrapperSingleton sharedInstance] startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_line];
 			break;
 	}
 }

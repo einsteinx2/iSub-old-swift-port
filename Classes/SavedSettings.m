@@ -322,7 +322,7 @@
 	{
 		[userDefaults setBool:YES forKey:@"isTapAndHoldEnabled"];
 		[userDefaults setBool:YES forKey:@"isSwipeEnabled"];
-		[userDefaults setFloat:1.6 forKey:@"gainMultiplier"];
+		[userDefaults setFloat:1.0 forKey:@"gainMultiplier"];
 	}
 	
 	[userDefaults synchronize];

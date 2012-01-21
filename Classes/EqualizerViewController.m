@@ -102,6 +102,8 @@
 	[super viewWillAppear:animated];
 	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
 		[self createEqViews];
+	
+	[[BassWrapperSingleton sharedInstance] startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_fft];
 }
 
 - (void)createEqViews
@@ -140,6 +142,8 @@
 	
 	[equalizerView removeFromSuperview];
 	[equalizerView release]; equalizerView = nil;
+	
+	[[BassWrapperSingleton sharedInstance] stopReadingEqData];
 }
 
 - (void)didReceiveMemoryWarning
