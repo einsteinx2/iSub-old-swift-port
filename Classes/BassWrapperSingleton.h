@@ -12,8 +12,12 @@
 #import "bassmix.h"
 #import <AudioToolbox/AudioToolbox.h>
 
-#define ISMS_BASSBufferSizeForeground 200
-#define ISMS_BASSBufferSizeBackground 1500
+//#define ISMS_BASSBufferSizeForeground 200
+//#define ISMS_BASSBufferSizeBackground 1500
+
+#define ISMS_AQBufferSizeInFrames 512
+#define ISMS_AQNumBuffers 4
+#define ISMS_defaultSampleRate 44100
 
 // Failure Retry Values
 #define RETRY_DELAY 2.0
@@ -26,22 +30,12 @@ typedef enum
 	ISMS_BASS_EQ_DATA_TYPE_line
 } ISMS_BASS_EQ_DATA_TYPE;
 
-enum 
-{
-	kBufferSizeInFrames = 512,
-	kNumBuffers = 4,
-	kSampleRate = 44100,
-};
-
 @class Song, BassParamEqValue, SUSCurrentPlaylistDAO, BassUserInfo;
 @interface BassWrapperSingleton : NSObject
 {
-	AudioStreamBasicDescription m_outFormat;
-    AudioQueueRef m_outAQ;
-    
-    AudioQueueBufferRef m_buffers[kNumBuffers];
-	BOOL m_isInitialised;
-	
+	AudioQueueRef audioQueue;
+	AudioStreamBasicDescription audioQueueOutputFormat;
+    AudioQueueBufferRef audioQueueBuffers[ISMS_AQNumBuffers];	
 	
 	// Equalizer variables
 	NSMutableArray *eqValueArray, *eqHandleArray;
@@ -55,7 +49,9 @@ enum
 	// BASS stream variables
 	BOOL BASSisFilestream1;
 	HSTREAM fileStream1;
+	HSTREAM fileStreamTempo1;
 	HSTREAM fileStream2;
+	HSTREAM fileStreamTempo2;
 	HFX volumeFx;
 }
 
@@ -70,6 +66,7 @@ enum
 - (void)seekToPositionInSeconds:(NSUInteger)seconds;
 - (void)start;
 - (void)stop;
+- (void)pause;
 - (void)playPause;
 
 // BASS methods
@@ -102,13 +99,16 @@ enum
 @property (readonly) BOOL isEqualizerOn;
 @property (readonly) NSArray *equalizerValues;
 @property QWORD startByteOffset;
-@property BOOL isTempDownload;
 @property (readonly) HSTREAM currentStream;
+@property (readonly) HSTREAM currentStreamTempo;
 @property (readonly) HSTREAM nextStream;
+@property (readonly) HSTREAM nextStreamTempo;
 @property (retain) SUSCurrentPlaylistDAO *currPlaylistDAO;
 @property (retain) NSThread *fftDataThread;
 @property BOOL isFftDataThreadToTerminate;
 @property BOOL isFastForward;
+
+@property (readonly) NSInteger audioQueueSampleRate;
 
 const char *GetCTypeString(DWORD ctype, HPLUGIN plugin);
 

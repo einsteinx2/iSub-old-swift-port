@@ -215,14 +215,34 @@ static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
 	return aSong;
 }
 
+- (Song *)prevSong
+{
+	Song *aSong = nil;
+	@synchronized(self.class)
+	{
+		if (self.currentIndex - 1 >= 0)
+			aSong = [self songForIndex:self.currentIndex-1];
+	}
+	return aSong;
+}
+
+- (Song *)currentDisplaySong
+{
+	// Either the current song, or the previous song if we're past the end of the playlist
+	Song *aSong = self.currentSong;
+	if (!aSong)
+		aSong = self.prevSong;
+	return aSong;
+}
+
 - (Song *)currentSong
 {
-	return [self songForIndex:currentIndex];
+	return [self songForIndex:self.currentIndex];	
 }
 
 - (Song *)nextSong
 {
-	switch (self.repeatMode) 
+	/*switch (self.repeatMode) 
 	{
 		case ISMSRepeatMode_RepeatOne:
 			return self.currentSong;
@@ -237,7 +257,8 @@ static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
 		default:
 			return [self songForIndex:(currentIndex + 1)];
 			break;
-	}
+	}*/
+	return [self songForIndex:self.nextIndex];
 }
 
 - (NSInteger)currentIndex
@@ -259,6 +280,29 @@ static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistIndexChanged];
 }
 
+- (NSInteger)nextIndex
+{
+	@synchronized(self.class)
+	{
+		switch (self.repeatMode) 
+		{
+			case ISMSRepeatMode_RepeatOne:
+				return currentIndex;
+				break;
+			case ISMSRepeatMode_RepeatAll:	
+				if ([self songForIndex:currentIndex + 1])
+					return currentIndex + 1;
+				else
+					return 0;
+				break;
+			case ISMSRepeatMode_Normal:
+				return currentIndex + 1;
+			default:
+				break;
+		}
+	}
+}
+
 - (NSUInteger)count
 {
 	int count = 0;
@@ -278,28 +322,38 @@ static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
 
 - (NSInteger)incrementIndex
 {
-	NSInteger index;
 	@synchronized(self.class)
 	{
+		currentIndex = self.nextIndex;
+		
+		/*Song *currentSong = nil;
 		switch (self.repeatMode) 
 		{
 			case ISMSRepeatMode_RepeatOne:
 				break;
-			case ISMSRepeatMode_RepeatAll:			
-				if (self.currentIndex + 1 >= self.count)
+			case ISMSRepeatMode_RepeatAll:
+				currentIndex++;
+				// Handle case of index being past end of playlist
+				currentSong = [self songForIndex:currentIndex];
+				if (!currentSong && currentIndex > 0)
 				{
 					currentIndex = 0;
-					break;
 				}
-			case ISMSRepeatMode_Normal:
-			default:
-				currentIndex++;
 				break;
-		}
-		index = currentIndex;
+			case ISMSRepeatMode_Normal:
+				currentIndex++;
+				// Handle case of index being past end of playlist
+				currentSong = [self songForIndex:currentIndex];
+				if (!currentSong && currentIndex > 0)
+				{
+					currentIndex -= 1;
+				}
+			default:
+				break;
+		}*/
 	}
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistIndexChanged];
-	return index;
+	return self.currentIndex;
 }
 
 - (ISMSRepeatMode)repeatMode

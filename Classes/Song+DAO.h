@@ -13,6 +13,7 @@
 
 @property BOOL isPartiallyCached;
 @property BOOL isFullyCached;
+@property (readonly) CGFloat downloadProgress;
 @property (readonly) BOOL fileExists;
 
 + (Song *)songFromDbResult:(FMResultSet *)result;

@@ -21,10 +21,13 @@ typedef enum
 - (Song *)songForIndex:(NSUInteger)index;
 - (NSInteger)incrementIndex;
 // Convenience properties
+@property (readonly) Song *prevSong;
+@property (readonly) Song *currentDisplaySong;
 @property (readonly) Song *currentSong;
 @property (readonly) Song *nextSong;
 
 @property NSInteger currentIndex;
+@property (readonly) NSInteger nextIndex;
 @property (readonly) NSUInteger count;
 
 @property (readonly) FMDatabase *db;

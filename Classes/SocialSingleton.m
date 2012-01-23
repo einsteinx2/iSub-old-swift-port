@@ -64,7 +64,7 @@ static SocialSingleton *sharedInstance = nil;
 		float scrobblePercent = settings.scrobblePercent;
 		float duration = [currentSong.duration floatValue];
 		scrobbleInterval = scrobblePercent * duration;
-		DLog(@"duration: %f    percent: %f    scrobbleInterval: %f", duration, scrobblePercent, scrobbleInterval);
+		//DLog(@"duration: %f    percent: %f    scrobbleInterval: %f", duration, scrobblePercent, scrobbleInterval);
 	}
 	self.scrobbleTimer = [NSTimer scheduledTimerWithTimeInterval:scrobbleInterval target:self selector:@selector(scrobbleSong) userInfo:nil repeats:NO];
 	
@@ -135,7 +135,7 @@ static SocialSingleton *sharedInstance = nil;
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
-	DLog(@"Subsonic cached song play notification failed\n\nError: %@", [error localizedDescription]);
+	//DLog(@"Subsonic cached song play notification failed\n\nError: %@", [error localizedDescription]);
 	[theConnection release];
 }	
 
@@ -159,7 +159,7 @@ static SocialSingleton *sharedInstance = nil;
 	{
 		if (currentSong.artist && currentSong.title)
 		{
-			DLog(@"------------- tweeting song --------------");
+			//DLog(@"------------- tweeting song --------------");
 			NSString *tweet = [NSString stringWithFormat:@"is listening to \"%@\" by %@", currentSong.title, currentSong.artist];
 			if ([tweet length] <= 140)
 				[twitterEngine sendUpdate:tweet];
@@ -168,13 +168,12 @@ static SocialSingleton *sharedInstance = nil;
 		}
 		else 
 		{
-			DLog(@"------------- not tweeting song because either no artist or no title --------------");
+			//DLog(@"------------- not tweeting song because either no artist or no title --------------");
 		}
-		
 	}
 	else 
 	{
-		DLog(@"------------- not tweeting song because no engine or not enabled --------------");
+		//DLog(@"------------- not tweeting song because no engine or not enabled --------------");
 	}
 }
 
@@ -195,7 +194,7 @@ static SocialSingleton *sharedInstance = nil;
 // SA_OAuthTwitterEngineDelegate
 - (void) storeCachedTwitterOAuthData:(NSString *)data forUsername:(NSString *)username 
 {
-	DLog(@"storeCachedTwitterOAuthData: %@ for %@", data, username);
+	//DLog(@"storeCachedTwitterOAuthData: %@ for %@", data, username);
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	
 	[defaults setObject:data forKey:@"twitterAuthData"];
@@ -204,7 +203,7 @@ static SocialSingleton *sharedInstance = nil;
 
 - (NSString *) cachedTwitterOAuthDataForUsername:(NSString *)username 
 {
-	DLog(@"cachedTwitterOAuthDataForUsername for %@", username);
+	//DLog(@"cachedTwitterOAuthDataForUsername for %@", username);
 	return [[NSUserDefaults standardUserDefaults] objectForKey:@"twitterAuthData"];
 }
 
@@ -212,13 +211,13 @@ static SocialSingleton *sharedInstance = nil;
 // SA_OAuthTwitterControllerDelegate
 - (void) OAuthTwitterController:(SA_OAuthTwitterController *)controller authenticatedWithUsername:(NSString *)username 
 {
-	DLog(@"Authenicated for %@", username);
+	//DLog(@"Authenicated for %@", username);
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"twitterAuthenticated" object:nil];
 }
 
 - (void) OAuthTwitterControllerFailed:(SA_OAuthTwitterController *)controller 
 {
-	DLog(@"Authentication Failed!");
+	//DLog(@"Authentication Failed!");
 	self.twitterEngine = nil;
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Twitter Error" message:@"Failed to authenticate user. Try logging in again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
@@ -227,7 +226,7 @@ static SocialSingleton *sharedInstance = nil;
 
 - (void) OAuthTwitterControllerCanceled:(SA_OAuthTwitterController *)controller 
 {
-	DLog(@"Authentication Canceled.");
+	//DLog(@"Authentication Canceled.");
 	self.twitterEngine = nil;
 }
 
@@ -235,12 +234,12 @@ static SocialSingleton *sharedInstance = nil;
 // TwitterEngineDelegate
 - (void) requestSucceeded:(NSString *)requestIdentifier 
 {
-	DLog(@"Request %@ succeeded", requestIdentifier);
+	//DLog(@"Request %@ succeeded", requestIdentifier);
 }
 
 - (void) requestFailed:(NSString *)requestIdentifier withError:(NSError *) error 
 {
-	DLog(@"Request %@ failed with error: %@", requestIdentifier, error);
+	//DLog(@"Request %@ failed with error: %@", requestIdentifier, error);
 }
 
 #pragma mark -

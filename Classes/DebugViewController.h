@@ -28,6 +28,9 @@
 	IBOutlet UIButton *songInfoToggleButton;
 	
 	NSTimer *updateTimer;
+	
+	float currentSongProgress;
+	float nextSongProgress;
 }
 
 @property (nonatomic, copy) Song *currentSong;

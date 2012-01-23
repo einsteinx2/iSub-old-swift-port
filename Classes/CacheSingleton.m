@@ -222,6 +222,14 @@ static CacheSingleton *sharedInstance = nil;
 	}
 }
 
+- (void)clearTempCache
+{
+	// Clear the temp cache directory
+	SavedSettings *settings = [SavedSettings sharedInstance];
+	[[NSFileManager defaultManager] removeItemAtPath:settings.tempCachePath error:NULL];
+	[[NSFileManager defaultManager] createDirectoryAtPath:settings.tempCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
+}
+
 #pragma mark - Singleton methods
 			
 - (void)setup
@@ -242,8 +250,7 @@ static CacheSingleton *sharedInstance = nil;
 		[[NSFileManager defaultManager] createDirectoryAtPath:settings.songCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
 	}
 	// Clear the temp cache directory
-	[[NSFileManager defaultManager] removeItemAtPath:settings.tempCachePath error:NULL];
-	[[NSFileManager defaultManager] createDirectoryAtPath:settings.tempCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
+	[self clearTempCache];
 	
 	// Setup the cache check
 	cacheCheckInterval = 120.0;

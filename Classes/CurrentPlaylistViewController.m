@@ -21,6 +21,7 @@
 #import "NSString+time.h"
 #import "SUSCurrentPlaylistDAO.h"
 #import "BassWrapperSingleton.h"
+#import "FMDatabase+Synchronized.h"
 
 @implementation CurrentPlaylistViewController
 @synthesize dataModel;
@@ -37,7 +38,9 @@
 	musicControls = [MusicSingleton sharedInstance];
 	databaseControls = [DatabaseSingleton sharedInstance];
 	
-	NSDate *start = [NSDate date];
+	currentPlaylistCount = 0;
+	
+	//NSDate *start = [NSDate date];
 	dataModel = [[SUSCurrentPlaylistDAO alloc] init];
 	
 	self.tableView.backgroundColor = [UIColor clearColor];
@@ -167,7 +170,7 @@
 		
 		[noPlaylistsScreen release];
 	}
-	DLog(@"end: %f", [[NSDate date] timeIntervalSinceDate:start]);
+	//DLog(@"end: %f", [[NSDate date] timeIntervalSinceDate:start]);
 }
 
 - (void)viewWillAppear:(BOOL)animated 
@@ -268,13 +271,9 @@
 		// Reload the table to correct the numbers
 		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 
-		@try 
+		if (dataModel.currentIndex >= 0 && dataModel.currentIndex < currentPlaylistCount)
 		{
 			[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:dataModel.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
-		}
-		@catch (NSException *exception) 
-		{
-			//DLog(@"main: Caught %@: %@", [exception name], [exception reason]);
 		}
 	}
 }
@@ -471,16 +470,9 @@
 - (void)selectRow
 {
 	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
-	if (dataModel.currentIndex >= 0)
+	if (dataModel.currentIndex >= 0 && dataModel.currentIndex < currentPlaylistCount)
 	{
-		@try 
-		{
-			[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:dataModel.currentIndex inSection:0] animated:YES scrollPosition:UITableViewScrollPositionMiddle];
-		}
-		@catch (NSException *exception) 
-		{
-			//DLog(@"main: Caught %@: %@", [exception name], [exception reason]);
-		}
+		[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:dataModel.currentIndex inSection:0] animated:YES scrollPosition:UITableViewScrollPositionMiddle];
 	}
 }
 
@@ -494,12 +486,16 @@
 	if ([SavedSettings sharedInstance].isPlaylistUnlocked)
 	{
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			return [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"];
+			currentPlaylistCount = [databaseControls.currentPlaylistDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"];
 		else
-			return [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
+			currentPlaylistCount = [databaseControls.currentPlaylistDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
+	}
+	else
+	{
+		currentPlaylistCount = 0;
 	}
 	
-	return 0;
+	return currentPlaylistCount;
 }
 
 

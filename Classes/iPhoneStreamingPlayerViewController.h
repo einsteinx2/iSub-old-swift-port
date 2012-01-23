@@ -7,7 +7,7 @@
 //
 
 
-@class iSubAppDelegate, MusicSingleton, DatabaseSingleton, ViewObjectsSingleton, CoverArtImageView, PageControlViewController, MPVolumeView, BassWrapperSingleton;
+@class iSubAppDelegate, MusicSingleton, DatabaseSingleton, ViewObjectsSingleton, CoverArtImageView, PageControlViewController, MPVolumeView, BassWrapperSingleton, SUSCurrentPlaylistDAO;
 
 @interface iPhoneStreamingPlayerViewController : UIViewController
 {

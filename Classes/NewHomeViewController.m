@@ -277,8 +277,7 @@
 - (void)initSongInfo
 {
 	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
-	Song *currentSong = dataModel.currentSong;
-	
+	Song *currentSong = dataModel.currentSong ? dataModel.currentSong : dataModel.prevSong;
 	
 	if (currentSong != nil)
 	{		
@@ -819,15 +818,11 @@
 		for(Song *aSong in parser.listOfSongs)
 		{
 			[aSong addToPlaylistQueue];
-			//[databaseControls insertSong:aSong intoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 		}
 		
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			[musicControls jukeboxReplacePlaylistWithLocal];
-		
-		//musicControls.currentSongObject = [databaseControls songFromDbRow:0 inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-		//musicControls.nextSongObject = [databaseControls songFromDbRow:1 inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-		
+				
 		musicControls.isShuffle = NO;
 		
 		// Hide the loading screen

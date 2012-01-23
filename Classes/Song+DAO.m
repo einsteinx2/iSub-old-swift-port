@@ -41,7 +41,11 @@
 
 - (void)setIsPartiallyCached:(BOOL)isPartiallyCached
 {
-	[self insertIntoCachedSongsTable];
+	assert(isPartiallyCached && "Can not set isPartiallyCached to to NO");
+	if (isPartiallyCached)
+	{
+		[self insertIntoCachedSongsTable];
+	}
 }
 
 - (BOOL)isFullyCached
@@ -51,25 +55,29 @@
 
 - (void)setIsFullyCached:(BOOL)isFullyCached
 {
-	[self.db synchronizedUpdate:@"UPDATE cachedSongs SET finished = 'YES' WHERE md5 = ?", [self.path md5]];
-	
-	[self insertIntoCachedSongsLayout];
-	
-	// Setup the genre table entries
-	if (self.genre)
-	{		
-		// Check if the genre has a table in the database yet, if not create it and add the new genre to the genres table
-		if ([self.db synchronizedIntForQuery:@"SELECT COUNT(*) FROM genres WHERE genre = ?", self.genre] == 0)
-		{							
-			[self.db synchronizedUpdate:@"INSERT INTO genres (genre) VALUES (?)", self.genre];
-			if ([self.db hadError])
-			{
-				DLog(@"Err adding the genre %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]); 
-			}
-		}
+	assert(isFullyCached && "Can not set isFullyCached to to NO");
+	if (isFullyCached)
+	{
+		[self.db synchronizedUpdate:@"UPDATE cachedSongs SET finished = 'YES' WHERE md5 = ?", [self.path md5]];
 		
-		// Insert the song object into the genresSongs
-		[self insertIntoGenreTable:@"genresSongs"];
+		[self insertIntoCachedSongsLayout];
+		
+		// Setup the genre table entries
+		if (self.genre)
+		{		
+			// Check if the genre has a table in the database yet, if not create it and add the new genre to the genres table
+			if ([self.db synchronizedIntForQuery:@"SELECT COUNT(*) FROM genres WHERE genre = ?", self.genre] == 0)
+			{							
+				[self.db synchronizedUpdate:@"INSERT INTO genres (genre) VALUES (?)", self.genre];
+				if ([self.db hadError])
+				{
+					DLog(@"Err adding the genre %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]); 
+				}
+			}
+			
+			// Insert the song object into the genresSongs
+			[self insertIntoGenreTable:@"genresSongs"];
+		}
 	}
 }
 
@@ -393,6 +401,36 @@
 	}
 	
 	return !hadError;
+}
+
+- (CGFloat)downloadProgress
+{
+	if (self.isFullyCached)
+		return 1.0;
+	
+	if (self.isPartiallyCached)
+	{
+		CGFloat totalSize = [self.size floatValue];
+		if (self.transcodedSuffix)
+		{
+			// This is a transcode, so we'll want to use the actual bitrate if possible
+			if ([[SUSCurrentPlaylistDAO dataModel].currentSong isEqualToSong:self])
+			{
+				// This is the current playing song, so see if BASS has an actual bitrate for it
+				if ([BassWrapperSingleton sharedInstance].bitRate > 0)
+				{
+					// Bass has a non-zero bitrate, so use that for the calculation
+					// convert to bytes per second, multiply by number of seconds
+					CGFloat byteRate = (CGFloat)[BassWrapperSingleton sharedInstance].bitRate * 1024. / 8.;
+					totalSize = byteRate * [self.duration floatValue];
+				}
+			}
+		}
+		return (CGFloat)self.localFileSize / totalSize;
+	}
+	
+	// The song hasn't started downloading yet
+	return 0.0;
 }
 
 @end

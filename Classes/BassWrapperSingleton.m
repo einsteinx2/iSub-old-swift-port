@@ -21,7 +21,7 @@
 #import "SavedSettings.h"
 
 @implementation BassWrapperSingleton
-@synthesize isEqualizerOn, startByteOffset, isTempDownload, currPlaylistDAO, fftDataThread, isFftDataThreadToTerminate, isPlaying, isFastForward;
+@synthesize isEqualizerOn, startByteOffset, currPlaylistDAO, fftDataThread, isFftDataThreadToTerminate, isPlaying, isFastForward;
 
 // BASS plugins
 extern void BASSFLACplugin;
@@ -167,6 +167,13 @@ void BASSLogError()
 
 #pragma mark - Decode Stream Callbacks
 
+void CALLBACK MyStreamStallProc(HSYNC handle, DWORD channel, DWORD data, void *user)
+{
+	if (data)
+		DLog(@"BASS stream resumed");
+	DLog(@"BASS stream stalled");
+}
+
 void CALLBACK MyStreamFreeCallback(HSYNC handle, DWORD channel, DWORD data, void *user)
 {
 	// Stream is done, release the user info object
@@ -191,22 +198,32 @@ QWORD CALLBACK MyFileLenProc(void *user)
 			SUSCurrentPlaylistDAO *currentPlaylistDAO = sharedInstance.currPlaylistDAO;
 			
 			Song *theSong = [currentPlaylistDAO currentSong];
-			if (![userInfo.mySong isEqualToSong:theSong])
+			if ([userInfo.mySong isEqualToSong:theSong])
+			{
+				// It's the current song
+				//DLog(@"Checking file length for current song");
+			}
+			else
 			{
 				// It's not the current song so it's the next song
+				//DLog(@"Checking file length for next song");
 				theSong = [currentPlaylistDAO nextSong];
 			}
 			
-			if (theSong.isFullyCached)
+			QWORD length = 0;
+			if (theSong.isFullyCached || theSong.isTempCached)
 			{
 				// Return actual file size on disk
-				return [[[NSFileManager defaultManager] attributesOfItemAtPath:theSong.localPath error:NULL] fileSize];
+				NSString *path = theSong.isTempCached ? theSong.localTempPath : theSong.localPath;
+				length = [[[NSFileManager defaultManager] attributesOfItemAtPath:path error:NULL] fileSize];
 			}
 			else
 			{
 				// Return server reported file size
-				return [theSong.size longLongValue];
+				length = [theSong.size longLongValue];
 			}
+			//DLog(@"File Length: %llu   isFullyCached: %@", length, NSStringFromBOOL(theSong.isFullyCached));
+			return length;
 		}
 	}
 }
@@ -222,7 +239,10 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 {	
 	// Seek to the requested offset (returns false if data not downloaded that far)
 	BassUserInfo *userInfo = (BassUserInfo *)user;
-	return !fseek(userInfo.myFileHandle, offset, SEEK_SET);
+	BOOL success = !fseek(userInfo.myFileHandle, offset, SEEK_SET);
+	DLog(@"File Seek to %llu  success: %@", offset, NSStringFromBOOL(success));
+	
+	return success;
 }
 
 #pragma mark - Audio Queue Services output stream callbacks
@@ -233,7 +253,10 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 	if (BASSisFilestream1 && BASS_ChannelIsActive(fileStream1)) 
 	{
 		// Read data from stream1
-		r = BASS_ChannelGetData(fileStream1, buffer, length);
+		if (fileStreamTempo1)
+			r = BASS_ChannelGetData(fileStreamTempo1, buffer, length);
+		else
+			r = BASS_ChannelGetData(fileStream1, buffer, length);			
 		
 		// Check if stream1 is now complete
 		if (!BASS_ChannelIsActive(fileStream1))
@@ -241,6 +264,8 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 			// Stream1 is done, free the stream
 			DLog(@"stream 1 is done");
 			BASS_StreamFree(fileStream1);
+			if (fileStreamTempo1) BASS_StreamFree(fileStreamTempo1);
+			fileStreamTempo1 = 0;
 			
 			// Increment current playlist index
 			[currPlaylistDAO performSelectorOnMainThread:@selector(incrementIndex) withObject:nil waitUntilDone:YES];
@@ -259,9 +284,11 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 				
 				// Read data from stream2
 				[self setStartByteOffset:0];
-				[self setIsTempDownload:NO];
 				BASSisFilestream1 = NO;
-				r = BASS_ChannelGetData(fileStream2, buffer, length);
+				if (fileStreamTempo2)
+					r = BASS_ChannelGetData(fileStreamTempo2, buffer, length);
+				else
+					r = BASS_ChannelGetData(fileStream2, buffer, length);
 				DLog(@"error code: %i", BASS_ErrorGetCode());
 				
 				// Prepare the next song for playback
@@ -272,7 +299,10 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 	else if (BASS_ChannelIsActive(fileStream2)) 
 	{
 		// Read data from stream2
-		r = BASS_ChannelGetData(fileStream2, buffer, length);
+		if (fileStreamTempo2)
+			r = BASS_ChannelGetData(fileStreamTempo2, buffer, length);
+		else
+			r = BASS_ChannelGetData(fileStream2, buffer, length);
 		
 		// Check if stream2 is now complete
 		if (!BASS_ChannelIsActive(fileStream2))
@@ -280,6 +310,8 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 			// Stream2 is done, free the stream
 			DLog(@"stream 2 is done");
 			BASS_StreamFree(fileStream2);
+			if (fileStreamTempo2) BASS_StreamFree(fileStreamTempo2);
+			fileStreamTempo2 = 0;
 			
 			// Increment current playlist index
 			[currPlaylistDAO performSelectorOnMainThread:@selector(incrementIndex) withObject:nil waitUntilDone:YES];
@@ -295,9 +327,11 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
 				
 				[self setStartByteOffset:0];
-				[self setIsTempDownload:NO];
 				BASSisFilestream1 = YES;
-				r = BASS_ChannelGetData(fileStream1, buffer, length);
+				if (fileStreamTempo1)
+					r = BASS_ChannelGetData(fileStreamTempo1, buffer, length);
+				else
+					r = BASS_ChannelGetData(fileStream1, buffer, length);
 				DLog(@"error code: %i", BASS_ErrorGetCode());
 				
 				[self prepareNextSongStreamInBackground];
@@ -317,21 +351,22 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 - (void)queueCallback:(AudioQueueRef)outAQ buffer:(AudioQueueBufferRef)outBuffer
 {	
 	// Specify how many bytes we're providing and grab the data
-    DWORD length = kBufferSizeInFrames * m_outFormat.mBytesPerFrame;
+    DWORD length = ISMS_AQBufferSizeInFrames * audioQueueOutputFormat.mBytesPerFrame;
 	DWORD actualLength = [self bassGetOutputData:outBuffer->mAudioData length:length];
-	if (self.isFastForward)
-		actualLength = [self bassGetOutputData:outBuffer->mAudioData length:length];
+	//if (self.isFastForward)
+	//	actualLength = [self bassGetOutputData:outBuffer->mAudioData length:length];
 	outBuffer->mAudioDataByteSize = actualLength;
 	
 	if (eqDataType != ISMS_BASS_EQ_DATA_TYPE_none)
 	{
+		
 		//if (doPutData)
 			BASS_StreamPutData(fftStream, outBuffer->mAudioData, outBuffer->mAudioDataByteSize);
 		//doPutData = !doPutData;
 	}
 	
     // Enqueue the buffer
-    AudioQueueEnqueueBuffer(m_outAQ, outBuffer, 0, NULL); 
+    AudioQueueEnqueueBuffer(audioQueue, outBuffer, 0, NULL); 
 }
 
 
@@ -384,6 +419,20 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue) 
 {
 	DLog(@"audio interrupted");
+	BassWrapperSingleton *selfRef = inUserData;
+	[selfRef pause];
+}
+
+void interruptionListenerCallback (void    *inUserData, UInt32  interruptionState) 
+{
+    if (interruptionState == kAudioSessionBeginInterruption) 
+	{
+		DLog(@"audio session begin interruption");		
+    } 
+	else if (interruptionState == kAudioSessionEndInterruption) 
+	{
+        DLog(@"audio session interruption ended");
+    }
 }
 
 #pragma mark - Equalizer and Visualizer Methods
@@ -649,7 +698,8 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	
 	BassUserInfo *userInfo = [[BassUserInfo alloc] init];
 	userInfo.mySong = nextSong;
-	userInfo.myFileHandle = fopen([nextSong.localPath cStringUTF8], "rb");
+	NSString *path = nextSong.isTempCached ? nextSong.localTempPath : nextSong.localPath;
+	userInfo.myFileHandle = fopen([path cStringUTF8], "rb");
 	
 	BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFileSeekProc}; // callback table
 	
@@ -687,80 +737,263 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	DLog(@"nextSong: %i", stream);
 }
 
-- (void)aqsInit
+- (NSInteger)audioQueueSampleRate
 {
-	// Create the audio queue
-	//
-	//
-	for (int buf=0; buf<kNumBuffers; buf++) 
+	Float64 sampleRate;
+	UInt32 size = sizeof(Float64);
+	OSStatus status = AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareSampleRate, &size, &sampleRate);
+	DLog(@"sample rate: %i   status: %@", (NSUInteger)sampleRate, NSStringFromOSStatus(status));
+	
+	return (NSUInteger)sampleRate;
+}
+
+- (NSInteger)bassStreamSampleRate:(HSTREAM)stream
+{
+	float sampleRate = 0;
+	BASS_ChannelGetAttribute(stream, BASS_ATTRIB_FREQ, &sampleRate);
+	DLog(@"BASS Stream sample rate: %i", (NSUInteger)sampleRate);
+	return (NSInteger)sampleRate;
+}
+
+- (NSInteger)preferredSampleRate:(NSUInteger)sampleRate
+{
+	NSInteger preferredSampleRate = 0;
+	if (sampleRate < 48000)
+		preferredSampleRate = sampleRate;
+	else if (sampleRate % 44100 == 0)
+		preferredSampleRate = 44100;
+	else
+		preferredSampleRate = 48000;
+	
+	DLog(@"sample rate: %i preferred sample rate: %i", sampleRate, preferredSampleRate);
+	
+	return preferredSampleRate;
+}
+
+// Create the audio queue
+- (BOOL)aqsInit:(NSUInteger)sampleRate
+{
+	BOOL success = YES;
+	for (int buf=0; buf<ISMS_AQNumBuffers; buf++) 
 	{
-		m_buffers[buf] = NULL;
+		audioQueueBuffers[buf] = NULL;
 	}
 	
-	m_outFormat.mSampleRate = kSampleRate;
-	m_outFormat.mFormatID = kAudioFormatLinearPCM;
-	m_outFormat.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
-	m_outFormat.mFramesPerPacket = 1;
-	m_outFormat.mChannelsPerFrame = 2;
-	m_outFormat.mBytesPerPacket = m_outFormat.mBytesPerFrame = sizeof(UInt16) * 2;
-	m_outFormat.mBitsPerChannel = 16;
-	m_outFormat.mReserved = 0;
+	DLog(@"Creating audio queue with %i sample rate", sampleRate);
+	audioQueueOutputFormat.mSampleRate = sampleRate;
+	audioQueueOutputFormat.mFormatID = kAudioFormatLinearPCM;
+	audioQueueOutputFormat.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
+	audioQueueOutputFormat.mFramesPerPacket = 1;
+	audioQueueOutputFormat.mChannelsPerFrame = 2;
+	//audioQueueOutputFormat.mBytesPerPacket = audioQueueOutputFormat.mBytesPerFrame = sizeof(UInt16) * 2;
+	audioQueueOutputFormat.mBitsPerChannel = 16;
+	audioQueueOutputFormat.mBytesPerFrame    = audioQueueOutputFormat.mChannelsPerFrame * audioQueueOutputFormat.mBitsPerChannel/8; 
+	audioQueueOutputFormat.mBytesPerPacket   = audioQueueOutputFormat.mBytesPerFrame * audioQueueOutputFormat.mFramesPerPacket;
+	//audioQueueOutputFormat.mReserved = 0;
 	
-	OSStatus result = AudioQueueNewOutput(&m_outFormat, MyQueueCallbackProc, self, NULL, NULL, 0, &m_outAQ);
+	OSStatus result = AudioQueueNewOutput(&audioQueueOutputFormat, MyQueueCallbackProc, self, NULL, kCFRunLoopCommonModes, 0, &audioQueue);
 	
 	if (result < 0)
 	{
-		printf( "ERROR: %d\n", (int)result );
+		DLog("ERROR: %lu", result);
+		success = NO;
+	}
+	else
+	{
+		// Allocate buffers for the audio
+		UInt32 bufferSizeBytes = ISMS_AQBufferSizeInFrames * audioQueueOutputFormat.mBytesPerFrame;
+		for (int buf=0; buf<ISMS_AQNumBuffers; buf++) 
+		{
+			OSStatus result = AudioQueueAllocateBuffer(audioQueue, bufferSizeBytes, &audioQueueBuffers[buf]);
+			if (result) 
+			{ 
+				DLog( "ERROR: %lu", result); 
+				success = NO;
+			}
+			else
+			{
+				// Prime the buffers
+				DLog(@"Priming audio queue buffer");
+				MyQueueCallbackProc(self, audioQueue, audioQueueBuffers[buf]);
+			}
+		}
 	}
 	
-	// Allocate buffers for the audio
-	UInt32 bufferSizeBytes = kBufferSizeInFrames * m_outFormat.mBytesPerFrame;
-	for (int buf=0; buf<kNumBuffers; buf++) 
-	{
-		OSStatus result = AudioQueueAllocateBuffer(m_outAQ, bufferSizeBytes, &m_buffers[buf]);
-		if (result) { printf( "ERROR: %d\n", (int)result); }
-		
-		// Prime the buffers
-		MyQueueCallbackProc(self, m_outAQ, m_buffers[buf]);
-	}
+	[self audioQueueSampleRate];
+	
+	return success;
 }
 
 - (BOOL)aqsStart
 {
 	DLog(@"starting audio queue");
-	OSStatus result = AudioQueueSetParameter( m_outAQ, kAudioQueueParam_Volume, 1.0 );
-    if ( result ) 
-		printf( "ERROR: %d\n", (int)result );
+	OSStatus result = AudioQueueSetParameter(audioQueue, kAudioQueueParam_Volume, 1.0);
+    if (result) printf("ERROR: %d\n", (int)result);
 	
 	// Start the queue
-	result = AudioQueueStart( m_outAQ, NULL );
-	if ( result ) 
-		printf( "ERROR: %d\n", (int)result );
+	result = AudioQueueStart(audioQueue, NULL);
+	if (result)
+	{
+		// There was an error
+		DLog("ERROR: %lu", result);
+		isPlaying = NO;
+	}
+	else
+	{
+		isPlaying = YES;
+	}
 	
-	isPlaying = YES;
-	
-	return true;
+	return isPlaying;
 }
 
 - (BOOL)aqsPause
 {
-	OSStatus result = AudioQueuePause(m_outAQ);
-	if (result) printf( "ERROR: %d\n", (int)result);
+	OSStatus result = AudioQueuePause(audioQueue);
+	if (result)
+	{
+		// There was an error
+		DLog("ERROR: %lu", result);
+	}
+	else
+	{
+		isPlaying = NO;
+	}
 	
-	isPlaying = NO;
-	
-	return true;
+	return !isPlaying;
 }
 
 - (BOOL)aqsStop
 {
-	OSStatus result = AudioQueueStop(m_outAQ, true);
-    if (result) printf( "ERROR: %d\n", (int)result);
+	OSStatus result = AudioQueueStop(audioQueue, true);
+    if (result)
+	{
+		// There was an error
+		DLog("ERROR: %lu", result);
+	}
+	else
+	{
+		isPlaying = NO;
+	}
 	
-	isPlaying = NO;
-	
-	return true;
+	return !isPlaying;
 }
+
+#pragma mark - TEST
+
+/*- (id)initWithSampleRate:(Float64)sampleRate channels:(UInt32)channels bitsPerChannel:(UInt32)bitsPerChannel packetsPerBuffer:(UInt32)packetsPerBuffer_
+{
+	if ((self = [super init]))
+	{
+		isPlaying = NO;
+		audioQueue = NULL;
+		
+		audioQueueOutputFormat.mFormatID         = kAudioFormatLinearPCM;
+		audioQueueOutputFormat.mSampleRate       = sampleRate;
+		audioQueueOutputFormat.mChannelsPerFrame = channels;
+		audioQueueOutputFormat.mBitsPerChannel   = bitsPerChannel;
+		audioQueueOutputFormat.mFramesPerPacket  = 1;  // uncompressed audio
+		audioQueueOutputFormat.mBytesPerFrame    = audioQueueOutputFormat.mChannelsPerFrame * audioQueueOutputFormat.mBitsPerChannel/8; 
+		audioQueueOutputFormat.mBytesPerPacket   = audioQueueOutputFormat.mBytesPerFrame * audioQueueOutputFormat.mFramesPerPacket;
+		audioQueueOutputFormat.mFormatFlags      = kLinearPCMFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsPacked; 
+
+		[self setUpAudio];
+	}
+	return self;
+}
+
+- (void)setUpAudio
+{
+	if (playQueue == NULL)
+	{
+		[self setUpAudioSession];
+		[self setUpPlayQueue];
+		[self setUpPlayQueueBuffers];
+	}
+}
+
+- (void)tearDownAudio
+{
+	if (playQueue != NULL)
+	{
+		[self stop];
+		[self tearDownPlayQueue];
+		[self tearDownAudioSession];
+	}
+}
+
+- (void)setUpAudioSession
+{
+	AudioSessionInitialize(NULL, NULL, interruptionListenerCallback, self);
+	
+	UInt32 sessionCategory = kAudioSessionCategory_MediaPlayback;
+	AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(sessionCategory), &sessionCategory);
+	
+	AudioSessionSetActive(true);
+}
+
+- (void)tearDownAudioSession
+{
+	AudioSessionSetActive(false);
+}
+
+- (void)setUpPlayQueue
+{
+	AudioQueueNewOutput(
+						&audioFormat,
+						playCallback,
+						self, 
+						NULL,                   // run loop
+						kCFRunLoopCommonModes,  // run loop mode
+						0,                      // flags
+						&playQueue
+						);
+	
+	self.gain = 1.0;
+}
+
+- (void)tearDownPlayQueue
+{
+	AudioQueueDispose(playQueue, YES);
+	playQueue = NULL;
+}
+
+- (void)setUpPlayQueueBuffers
+{
+	for (int t = 0; t < ISMS_AQNumBuffers; ++t)
+	{
+		AudioQueueAllocateBuffer(audioQueue, bytesPerBuffer, &audioQueueBuffers[t]);
+	}
+}
+
+- (void)primePlayQueueBuffers
+{
+	for (int t = 0; t < ISMS_AQNumBuffers; ++t)
+	{
+		MyQueueCallbackProc(self, playQueue, audioQueueBuffers[t]);
+	}
+}
+
+- (void)start
+{
+	if (!self.isPlaying)
+	{
+		playing = YES;
+		[self primePlayQueueBuffers];
+		AudioQueueStart(audioQueue, NULL);
+	}
+}
+
+- (void)stop
+{
+	if (!self.isPlaying)
+	{
+		AudioQueueStop(audioQueue, TRUE);
+		playing = NO;
+	}
+}
+*/
+
+#pragma mark - END TEST
 
 - (void)startWithOffsetInBytes:(NSNumber *)byteOffset
 {	
@@ -774,7 +1007,6 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 		return;
     
     startByteOffset = [byteOffset intValue];
-    isTempDownload = NO;
 	
 	[self bassInit];
 	
@@ -786,7 +1018,9 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	{	
 		BassUserInfo *userInfo = [[BassUserInfo alloc] init];
 		userInfo.mySong = currentSong;
-		userInfo.myFileHandle = fopen([currentSong.localPath cStringUTF8], "rb");
+		NSString *path = currentSong.isTempCached ? currentSong.localTempPath : currentSong.localPath;
+		DLog(@"path: %@", path);
+		userInfo.myFileHandle = fopen([path cStringUTF8], "rb");
 		
 		//DLog(@"userInfo.localPath: %s ", userInfo->localPath);
 		BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFileSeekProc}; // callback table
@@ -803,10 +1037,13 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 		{
 			if (fileStream1)
 			{
+				fileStreamTempo1 = 0;
 				BASSisFilestream1 = YES;
 				
 				// Add the stream free callback
 				BASS_ChannelSetSync(fileStream1, BASS_SYNC_FREE, 0, MyStreamFreeCallback, userInfo);
+				// Add the stream stall callback
+				BASS_ChannelSetSync(fileStream1, BASS_SYNC_STALL, 0, MyStreamStallProc, NULL);
 				
 				// Skip to the byte offset
 				[self seekToPositionInBytes:[byteOffset unsignedLongLongValue] inStream:fileStream1];
@@ -820,9 +1057,29 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 				// Add gain amplification
 				volumeFx = BASS_ChannelSetFX(fileStream1, BASS_FX_BFX_VOLUME, 1);
 				
-				[self aqsInit];
+				// Choose the proper sample rate
+				NSInteger streamSampleRate = [self bassStreamSampleRate:fileStream1];
+				NSInteger preferredSampleRate = [self preferredSampleRate:streamSampleRate];
+				
+				// Initialize the audio queue with the preferred sample rate
+				[self aqsInit:preferredSampleRate];
+				
+				// Check the actual sample rate and modify the stream if necessary
+				NSInteger audioQueueSampleRate = [self audioQueueSampleRate];
+				DLog(@"audioQueueSampleRate: %i   streamSampleRate: %i", audioQueueSampleRate, streamSampleRate);
+				if (audioQueueSampleRate != streamSampleRate)
+				{
+					fileStreamTempo1 = BASS_Mixer_StreamCreate(audioQueueSampleRate, 2, BASS_STREAM_DECODE|BASS_MIXER_END);
+					if (!fileStreamTempo1)
+						DLog(@"mixer error: %@", NSStringFromBassErrorCode(BASS_ErrorGetCode()));
+					BASS_Mixer_StreamAddChannel(fileStreamTempo1, fileStream1, 0);// BASS_MIXER_FILTER);
+					DLog(@"creating mixer stream: %i", fileStreamTempo1);
+				}
+				
+				// Start the audio queue
 				[self aqsStart];
 								
+				// Prepare the next song
 				[self performSelectorInBackground:@selector(prepareNextSongStream) withObject:nil];
 				
 				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
@@ -849,6 +1106,12 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	}
     
     [self bassFree];
+}
+
+- (void)pause
+{
+	if (self.isPlaying)
+		[self playPause];
 }
 
 - (void)playPause
@@ -890,50 +1153,40 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 
 - (void)bassInit:(NSUInteger)sampleRate
 {
-	isTempDownload = NO;
-    
+	// Sample rate doesn't matter now that an audio queue is used for output
+	    
+	// Destroy any existing BASS instance
 	[self bassFree];
 	
+	// Initialize BASS
 	BASS_SetConfig(BASS_CONFIG_IOS_MIXAUDIO, 0); // Disable mixing.	To be called before BASS_Init.
-	
-	/////////////////////////
-	//BASS_SetConfig(BASS_CONFIG_BUFFER, ISMS_BASSBufferSizeForeground);
-	DWORD len = BASS_GetConfig(BASS_CONFIG_UPDATEPERIOD); // get update period
-	//BASS_INFO info;
-	//BASS_GetInfo(&info); // retrieve device info
-	//len+=info.minbuf; // add the 'minbuf'
-	BASS_SetConfig(BASS_CONFIG_BUFFER, len+1); // set the buffer length
-	/////////////////////////
-	
-	BASS_SetConfig(BASS_CONFIG_FLOATDSP, true);
-	
-	// Initialize default device.
-	if (!BASS_Init(-1, sampleRate, 0, NULL, NULL)) 
+	DWORD updatePeriod = BASS_GetConfig(BASS_CONFIG_UPDATEPERIOD); // get update period
+	BASS_SetConfig(BASS_CONFIG_BUFFER, updatePeriod + 1); // set the buffer length to the minimum amount
+	BASS_SetConfig(BASS_CONFIG_FLOATDSP, true); // set DSP effects to use floating point math to avoid clipping within the effects chain
+	if (!BASS_Init(0, sampleRate, 0, NULL, NULL)) 	// Initialize default device.
 	{
 		DLog(@"Can't initialize device");
 	}
+	BASS_PluginLoad(&BASSFLACplugin, 0); // load the FLAC plugin
 	
-	BASS_PluginLoad(&BASSFLACplugin, 0);
+	// Set up audio session
+	AudioSessionInitialize(NULL, NULL, interruptionListenerCallback, self);
+	UInt32 sessionCategory = kAudioSessionCategory_MediaPlayback;
+	AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(sessionCategory), &sessionCategory);
+	AudioSessionSetActive(true);
 	
+	// Add the callbacks for headphone removal and other audio takeover
 	AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, self);
 	AudioSessionAddPropertyListener(kAudioSessionProperty_OtherAudioIsPlaying, audioInterruptionListenerCallback, self);
-
-	// Log actual sample rate
-	Float64 actualSampleRate;
-	UInt32 size = sizeof(Float64);
-	OSStatus status = AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareSampleRate, &size, &actualSampleRate);
-	NSLog(@"sample rate: %f   status: %@", actualSampleRate, NSStringFromOSStatus(status));
-	
-	m_isInitialised = true;
 }
 
 - (void)bassInit
 {
 	// Default to 44.1 KHz
-    [self bassInit:44100];
+    [self bassInit:ISMS_defaultSampleRate];
 }
 
-- (void)bassEnterBackground
+/*- (void)bassEnterBackground
 {
 	BASS_SetConfig(BASS_CONFIG_BUFFER, ISMS_BASSBufferSizeBackground);
 }
@@ -941,7 +1194,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 - (void)bassEnterForeground
 {
 	BASS_SetConfig(BASS_CONFIG_BUFFER, ISMS_BASSBufferSizeForeground);
-}
+}*/
 
 - (BOOL)bassFree
 {
@@ -949,24 +1202,16 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(prepareNextSongStreamInBackground) object:nil];
 	
 	// Audio Queue
-	//
-	//
-	if (m_isInitialised)
+	[self aqsStop];
+	if (audioQueue)
 	{
-		if (self.isPlaying)
-			[self aqsStop];
-		if (m_outAQ)
-		{
-			// AudioQueueDispose also chucks any audio buffers it has
-			AudioQueueDispose(m_outAQ, true);
-		}
-		m_isInitialised = false;
+		// AudioQueueDispose also chucks any audio buffers it has
+		DLog(@"disposing of audio queue");
+		AudioQueueDispose(audioQueue, true);
 	}
-	//
-	//
-	//
+	audioQueue = NULL;
+	AudioSessionSetActive(false);
 	
-    isTempDownload = NO;
 	BOOL success = BASS_Free();
 	fileStream1 = 0;
 	fileStream2 = 0;
@@ -998,12 +1243,16 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 
 - (double)progress
 {	
-	NSUInteger bytePosition = BASS_ChannelGetPosition(self.currentStream, BASS_POS_BYTE) + startByteOffset;
+	NSUInteger bytePosition = BASS_ChannelGetPosition(self.currentStream, BASS_POS_BYTE);// + startByteOffset;
 	double seconds = BASS_ChannelBytes2Seconds(self.currentStream, bytePosition);
-	//DLog(@"bytePosition: %i   seconds: %f", bytePosition, seconds);
 	if (seconds < 0 && self.currentStream != 0)
 		DLog(@"error: %i", BASS_ErrorGetCode());
-	return seconds;
+		
+	return seconds;// + (startByteOffset / (self.bitRate * 1024 / 8));
+	
+	/*QWORD decodedPosition = BASS_ChannelGetPosition(self.currentStream, BASS_POS_BYTE|BASS_POS_DECODE); // decoded PCM position
+	double seconds = BASS_ChannelBytes2Seconds(self.currentStream, decodedPosition);
+	return seconds;*/
 }
 
 - (HSTREAM)currentStream
@@ -1011,9 +1260,19 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	return BASSisFilestream1 ? fileStream1 : fileStream2;
 }
 
+- (HSTREAM)currentStreamTempo
+{
+	return BASSisFilestream1 ? fileStreamTempo1 : fileStreamTempo2;
+}
+
 - (HSTREAM)nextStream
 {
 	return BASSisFilestream1 ? fileStream2 : fileStream1;
+}
+
+- (HSTREAM)nextStreamTempo
+{
+	return BASSisFilestream1 ? fileStreamTempo2 : fileStreamTempo1;
 }
 
 #pragma mark - Singleton methods
@@ -1022,11 +1281,14 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 {	
 	//selfRef = self;
 	BASSisFilestream1 = YES;
+	fileStream1 = 0;
+	fileStreamTempo1 = 0;
+	fileStream2 = 0;
+	fileStreamTempo2 = 0;
 	eqDataType = ISMS_BASS_EQ_DATA_TYPE_none;
 	isFastForward = NO;
 	isPlaying = NO;
 	isEqualizerOn = NO;
-	isTempDownload = NO;
     startByteOffset = 0;
     currPlaylistDAO = [[SUSCurrentPlaylistDAO alloc] init];
     
@@ -1045,7 +1307,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStreamInBackground) name:ISMSNotification_RepeatModeChanged object:nil];
 	
-	// On iOS 4.0+ only, listen for background notification
+	/*// On iOS 4.0+ only, listen for background notification
 	if(&UIApplicationDidEnterBackgroundNotification != nil)
 	{
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bassEnterBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
@@ -1055,7 +1317,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	if(&UIApplicationWillEnterForegroundNotification != nil)
 	{
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bassEnterForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
-	}
+	}*/
 }
 
 + (BassWrapperSingleton *)sharedInstance

@@ -74,20 +74,6 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "Classes/PlaylistsViewController.m"
-         timestampString = "348111622.332301"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "405"
-         endingLineNumber = "405"
-         landmarkName = "-addSaveEditButtons"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
          filePath = "Classes/UAApplication.m"
          timestampString = "343806436.08048"
          startingColumnNumber = "9223372036854775807"
@@ -159,11 +145,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/PlaylistsViewController.m"
-         timestampString = "348346768.58797"
+         timestampString = "348878741.478608"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1334"
-         endingLineNumber = "1334"
+         startingLineNumber = "1316"
+         endingLineNumber = "1316"
          landmarkName = "-subsonicErrorCode:message:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -277,6 +263,20 @@
          startingLineNumber = "59"
          endingLineNumber = "59"
          landmarkName = "-initWithTBXMLElement:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/FMDatabase.m"
+         timestampString = "348887600.066317"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "245"
+         endingLineNumber = "245"
+         landmarkName = "-databaseExists"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

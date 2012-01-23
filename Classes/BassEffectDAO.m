@@ -32,17 +32,18 @@
 - (id)readPlist:(NSString *)fileName 
 {  
 	NSData *plistData = nil;  
-	NSError *error = nil;  
+	NSString *errorString = nil;  
 	NSPropertyListFormat format;  
 	id plist;  
 	
 	NSString *localizedPath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"plist"];  
 	plistData = [NSData dataWithContentsOfFile:localizedPath];   
 	
-	plist = [NSPropertyListSerialization propertyListWithData:plistData options:NSPropertyListImmutable format:&format error:&error];  
-	if (!plist) {  
-		NSLog(@"Error reading plist from file '%s', error = '%s'", [localizedPath UTF8String], [[error localizedDescription] UTF8String]);  
-		[error release];  
+	plist = [NSPropertyListSerialization propertyListFromData:plistData mutabilityOption:0 format:&format errorDescription:&errorString];
+	if (!plist) 
+	{  
+		NSLog(@"Error reading plist from file '%@', error = '%@'", localizedPath, errorString);  
+		[errorString release];  
 	}  
 	
 	return plist;  

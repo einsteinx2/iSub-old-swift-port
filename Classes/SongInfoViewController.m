@@ -171,7 +171,7 @@
 	
 	progressSlider.minimumValue = 0.0;
 	
-	self.currentSong = currentPlaylistDAO.currentSong;
+	self.currentSong = currentPlaylistDAO.currentDisplaySong;
 	
 	if (currentSong.duration && ![SavedSettings sharedInstance].isJukeboxEnabled)
 	{
@@ -260,7 +260,7 @@
 	@autoreleasepool
 	{
 		// Set the current song progress bar
-		if ([BassWrapperSingleton sharedInstance].isTempDownload)
+		if ([self.currentSong isTempCached])
 		{
 			downloadProgress.hidden = YES;
 		}
@@ -268,7 +268,7 @@
 		{
 			downloadProgress.hidden = NO;
 			
-			float width = ([musicControls findCurrentSongProgress] * downloadProgressWidth);
+			float width = (currentSong.downloadProgress * downloadProgressWidth);
 			if (width > downloadProgressWidth)
 			{
 				width = downloadProgressWidth;
@@ -348,7 +348,7 @@
 }
 
 
-- (IBAction) movedSlider
+- (IBAction)movedSlider
 {	
 	if (!hasMoved)
 	{		
@@ -372,12 +372,17 @@
 
 		DLog(@"byteOffset: %i", byteOffset);
 		
-		if ([BassWrapperSingleton sharedInstance].isTempDownload)
+		if ([self.currentSong isTempCached])
 		{
             [bassWrapper stop];
 			
-			//musicControls.seekTime = progressSlider.value;
-			[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong offset:byteOffset atIndex:0];
+			[[SUSStreamSingleton sharedInstance] removeStreamAtIndex:0];
+			[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong offset:byteOffset atIndex:0 isTempCache:YES];
+			if ([[SUSStreamSingleton sharedInstance].handlerStack count] > 1)
+			{
+				SUSStreamHandler *handler = [[SUSStreamSingleton sharedInstance].handlerStack firstObject];
+				[handler start];
+			}
 			
 			pauseSlider = NO;
 			hasMoved = NO;
@@ -387,7 +392,6 @@
 			if (currentSong.isFullyCached || byteOffset <= currentSong.localFileSize)
 			{
 				[bassWrapper seekToPositionInSeconds:progressSlider.value];
-				//[bassWrapper seekToPositionInBytes:byteOffset];
 				pauseSlider = NO;
 				hasMoved = NO;
 			}
@@ -490,7 +494,8 @@
             [bassWrapper stop];
 			[[SUSStreamSingleton sharedInstance] removeStreamAtIndex:0];
             DLog(@"byteOffset: %i", byteOffset);
-			[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong offset:byteOffset atIndex:0];
+			DLog(@"starting temp stream");
+			[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong offset:byteOffset atIndex:0 isTempCache:YES];
 			if ([[SUSStreamSingleton sharedInstance].handlerStack count] > 1)
 			{
 				SUSStreamHandler *handler = [[SUSStreamSingleton sharedInstance].handlerStack firstObject];

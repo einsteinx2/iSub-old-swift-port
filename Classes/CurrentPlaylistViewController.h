@@ -28,6 +28,8 @@
 	//NSTimer *songHighlightTimer;
 	
 	BOOL goToNextSong;
+	
+	NSUInteger currentPlaylistCount;
 }
 
 @property (nonatomic, retain) SUSCurrentPlaylistDAO *dataModel;

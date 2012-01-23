@@ -44,4 +44,7 @@
 #define ISMSNotification_StorePurchaseComplete @"ISMS store purchase complete"
 #define ISMSNotification_StorePurchaseFailed @"ISMS store purchase failed"
 
+#define ISMSNotification_SongCachingEnabled @"ISMS song caching enabled"
+#define ISMSNotification_SongCachingDisabled @"ISMS song caching disabled"
+
 #endif

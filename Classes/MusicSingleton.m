@@ -31,6 +31,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import "SUSCoverArtLargeDAO.h"
 #import "FMDatabase+Synchronized.h"
+#import "CacheSingleton.h"
 
 static MusicSingleton *sharedInstance = nil;
 
@@ -396,6 +397,9 @@ static MusicSingleton *sharedInstance = nil;
 // TODO: put this method somewhere and name it properly
 - (void)startSongAtOffsetInSeconds2
 {
+	// Always clear the temp cache
+	[[CacheSingleton sharedInstance] clearTempCache];
+	
 	DLog(@"running startSongAtOffsetInSeconds2");
 	SUSStreamSingleton *streamSingleton = [SUSStreamSingleton sharedInstance];
 	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
@@ -583,62 +587,6 @@ static MusicSingleton *sharedInstance = nil;
 			[trackInfo setObject:progress forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
 		
 		[MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = trackInfo;
-	}
-}
-
-// TODO: Reimplement these for libBASS
-/*- (void)removeAutoNextNotification
-{
-	if (isAutoNextNotificationOn)
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:ASStatusChangedNotification object:nil];
-	
-	isAutoNextNotificationOn = NO;
-}
-
-- (void)addAutoNextNotification
-{
-	if (!isAutoNextNotificationOn)
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackStateChanged:) name:ASStatusChangedNotification object:nil];
-	
-	isAutoNextNotificationOn = YES;
-}*/
-
-#pragma mark -
-#pragma mark Song Download Progress Methods
-
-- (float)findProgressForSong:(Song *)aSong
-{	
-	if (aSong.isFullyCached)
-		return 1.0;
-	
-	if (aSong.isPartiallyCached)
-	{
-		// The song is being downloaded right now so return the progress (note basswrapper bitrate is actually kilobitrate
-		// Convert to actual bitrate, convert to bytes per second, multiply by number of seconds
-		float totalSize = (([BassWrapperSingleton sharedInstance].bitRate * 1024.) / 8.) * [aSong.duration floatValue];
-		DLog(@"is partially cached: bitRate: %i totalSize: %f", [BassWrapperSingleton sharedInstance].bitRate, totalSize);
-		return ((float)aSong.localFileSize / totalSize);
-	}
-	
-	// The song hasn't started downloading yet
-	return 0.0;
-}
-
-- (float) findCurrentSongProgress
-{
-	@autoreleasepool 
-	{
-		SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
-		return [self findProgressForSong:dataModel.currentSong];
-	}
-}
-
-- (float) findNextSongProgress
-{
-	@autoreleasepool
-	{
-		SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
-		return [self findProgressForSong:dataModel.nextSong];
 	}
 }
 

@@ -45,7 +45,7 @@
 
 @implementation PlaylistsViewController
 
-@synthesize listOfSongs, request;
+@synthesize request;
 @synthesize serverPlaylistsDataModel, currentPlaylistDataModel;
 
 #pragma mark - Rotation
@@ -543,16 +543,9 @@
 		// Reload the table data
 		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 		
-		if (currentPlaylistCount > 0 && currentPlaylistDataModel.currentIndex >= 0)
+		if (currentPlaylistDataModel.currentIndex >= 0 && currentPlaylistDataModel.currentIndex < currentPlaylistCount)
 		{
-			@try 
-			{
-				[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPlaylistDataModel.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
-			}
-			@catch (NSException *exception) 
-			{
-				DLog(@"main: Caught %@: %@", [exception name], [exception reason]);
-			}
+			[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPlaylistDataModel.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 		}
 		
 		// Remove the no playlists overlay screen if it's showing
@@ -689,13 +682,9 @@
 			
 			// Reload the table to correct the numbers
 			[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
-			@try 
+			if (currentPlaylistDataModel.currentIndex >= 0 && currentPlaylistDataModel.currentIndex < currentPlaylistCount)
 			{
 				[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPlaylistDataModel.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
-			}
-			@catch (NSException *exception) 
-			{
-				DLog(@"main: Caught %@: %@", [exception name], [exception reason]);
 			}
 		}
 	}
@@ -1171,16 +1160,9 @@
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
 		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
-		if (currentPlaylistDataModel.currentIndex >= 0)
+		if (currentPlaylistDataModel.currentIndex >= 0 && currentPlaylistDataModel.currentIndex < currentPlaylistCount)
 		{
-			@try 
-			{
-				[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPlaylistDataModel.currentIndex inSection:0] animated:YES scrollPosition:UITableViewScrollPositionMiddle];
-			}
-			@catch (NSException *exception) 
-			{
-				DLog(@"main: Caught %@: %@", [exception name], [exception reason]);
-			}
+			[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPlaylistDataModel.currentIndex inSection:0] animated:YES scrollPosition:UITableViewScrollPositionMiddle];
 		}
 	}
 }
@@ -1605,13 +1587,9 @@ static NSString *kName_Error = @"error";
 		}
 		
 		// Highlight the current playing song
-		@try 
+		if (currentPlaylistDataModel.currentIndex >= 0 && currentPlaylistDataModel.currentIndex < currentPlaylistCount)
 		{
 			[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPlaylistDataModel.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
-		}
-		@catch (NSException *exception) 
-		{
-			DLog(@"main: Caught %@: %@", [exception name], [exception reason]);
 		}
 		
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)

@@ -37,9 +37,7 @@
 	BOOL goToNextSong;
 	
 	UInt32 currentPlaylistCount;
-	
-	NSArray *listOfSongs;
-	
+		
 	BBSimpleConnectionQueue *connectionQueue;
 	
 	BOOL savePlaylistLocal;
@@ -50,8 +48,6 @@
 	
 	//NSMutableData *receivedData;
 }
-
-@property (nonatomic, retain) NSArray *listOfSongs;
 
 @property (nonatomic, retain) NSMutableURLRequest *request;
 

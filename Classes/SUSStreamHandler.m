@@ -18,6 +18,7 @@
 #import "FMDatabaseAdditions.h"
 #import "SUSCoverArtLargeDAO.h"
 #import "SavedSettings.h"
+#import "CacheSingleton.h"
 
 #define kThrottleTimeInterval 0.1
 
@@ -35,12 +36,12 @@
 
 // Logging
 #define isProgressLoggingEnabled NO
-#define isThrottleLoggingEnabled YES
+#define isThrottleLoggingEnabled NO
 
 @implementation SUSStreamHandler
-@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread;
+@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache;
 
-- (id)initWithSong:(Song *)song offset:(NSUInteger)offset delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate
+- (id)initWithSong:(Song *)song offset:(NSUInteger)offset isTemp:(BOOL)isTemp delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate
 {
 	if ((self = [super init]))
 	{
@@ -52,14 +53,17 @@
 		loadingThread = nil;
 		request = nil;
 		connection = nil;
+		isTempCache = isTemp;
+		
+		DLog(@"starting temp stream: %@   byte offset: %i", NSStringFromBOOL(isTempCache), byteOffset);
 	}
 	
 	return self;
 }
 
-- (id)initWithSong:(Song *)song delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate
+- (id)initWithSong:(Song *)song isTemp:(BOOL)isTemp delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate
 {
-	return [self initWithSong:song offset:0 delegate:theDelegate];
+	return [self initWithSong:song offset:0 isTemp:isTemp delegate:theDelegate];
 }
 
 - (void)dealloc
@@ -70,6 +74,11 @@
 	[request release]; request = nil;
 	[connection release]; connection = nil;
 	[super dealloc];
+}
+
+- (NSString *)filePath
+{
+	return self.isTempCache ? mySong.localTempPath : mySong.localPath;
 }
 
 - (NSUInteger)bitrate
@@ -94,10 +103,17 @@
 // Create the request and start the connection in loadingThread
 - (void)start:(BOOL)resume
 {
-	SavedSettings *settings = [SavedSettings sharedInstance];
+	// Remove temp file for this song if exists
+	[[NSFileManager defaultManager] removeItemAtPath:self.mySong.localTempPath error:NULL];
 	
+	// Clear cache if this is a temp file
+	if (self.isTempCache)
+		[[CacheSingleton sharedInstance] clearTempCache];
+	
+	SavedSettings *settings = [SavedSettings sharedInstance];
+
 	// Create the file handle
-	self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:mySong.localPath];
+	self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.filePath];
 	
 	if (self.fileHandle)
 	{
@@ -110,7 +126,7 @@
 		{
 			// File exists so remove it
 			[self.fileHandle closeFile];
-			[[NSFileManager defaultManager] removeItemAtPath:mySong.localPath error:NULL];
+			[[NSFileManager defaultManager] removeItemAtPath:self.filePath error:NULL];
 		}
 	}
 	
@@ -122,8 +138,8 @@
 	{
 		// Create the file
 		totalBytesTransferred = 0;
-		[[NSFileManager defaultManager] createFileAtPath:mySong.localPath contents:[NSData data] attributes:nil];
-		self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:mySong.localPath];
+		[[NSFileManager defaultManager] createFileAtPath:self.filePath contents:[NSData data] attributes:nil];
+		self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.filePath];
 	}
 	
 	NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(mySong.songId), @"id", nil];
@@ -136,21 +152,22 @@
 	self.request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters byteOffset:byteOffset];
 
 	loadingThread = [[NSThread alloc] initWithTarget:self selector:@selector(startConnection) object:nil];
-	//[loadingThread.threadDictionary setObject:connection forKey:@"connection"];
 	
 	NSNumber *bitrate = [[NSNumber alloc] initWithInt:self.bitrate];
 	[loadingThread.threadDictionary setObject:bitrate forKey:@"bitrate"];
 	[bitrate release];
+	
 	NSDate *now = [[NSDate alloc] init];
 	[loadingThread.threadDictionary setObject:now forKey:@"throttlingDate"];
 	[now release];
+	
 	NSNumber *isWifi = [[NSNumber alloc] initWithBool:[iSubAppDelegate sharedInstance].isWifi];
 	[loadingThread.threadDictionary setObject:isWifi forKey:@"isWifi"];
 	[isWifi release];
+	
 	[loadingThread.threadDictionary setObject:[[mySong copy] autorelease] forKey:@"mySong"];
 	
 	[loadingThread start];
-	
 }
 
 - (void)start
@@ -397,12 +414,14 @@
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"No song data returned. This could be because your Subsonic API trial has expired, this song is not an mp3 and the Subsonic transcoding plugins failed, or another reason." delegate:[iSubAppDelegate sharedInstance] cancelButtonTitle:@"OK" otherButtonTitles: nil];
 		[alert show];
 		[alert release];
-		[[NSFileManager defaultManager] removeItemAtPath:mySong.localPath error:NULL];
+		[[NSFileManager defaultManager] removeItemAtPath:self.filePath error:NULL];
 	}
 	else
 	{		
 		// Mark song as cached
-		mySong.isFullyCached = YES;
+		DLog(@"connection did finish");
+		if (!isTempCache)
+			mySong.isFullyCached = YES;
 	}
 	
 	[self.delegate SUSStreamHandlerConnectionFinished:self];

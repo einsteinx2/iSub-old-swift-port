@@ -37,10 +37,10 @@
 - (void)removeStream:(SUSStreamHandler *)handler;
 - (void)removeStreamForSong:(Song *)aSong;
 
-- (void)queueStreamForSong:(Song *)song offset:(NSUInteger)byteOffset atIndex:(NSUInteger)index;
-- (void)queueStreamForSong:(Song *)song offset:(NSUInteger)byteOffset;
-- (void)queueStreamForSong:(Song *)song atIndex:(NSUInteger)index;
-- (void)queueStreamForSong:(Song *)song;
+- (void)queueStreamForSong:(Song *)song offset:(NSUInteger)byteOffset atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp;
+- (void)queueStreamForSong:(Song *)song offset:(NSUInteger)byteOffset isTempCache:(BOOL)isTemp;
+- (void)queueStreamForSong:(Song *)song atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp;
+- (void)queueStreamForSong:(Song *)song isTempCache:(BOOL)isTemp;
 
 - (void)fillStreamQueue;
 

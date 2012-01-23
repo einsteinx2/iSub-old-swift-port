@@ -129,7 +129,7 @@
 {	
 	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
 	NSString *lyrics = [dataModel loadLyricsForArtist:currentSong.artist andTitle:currentSong.title];
-	DLog(@"lyrics = %@", lyrics);
+	//DLog(@"lyrics = %@", lyrics);
 	if (!lyrics)
 		lyrics = @"\n\nNo lyrics found";
 	

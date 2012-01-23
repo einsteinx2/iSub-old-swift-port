@@ -34,6 +34,7 @@
 @interface iPhoneStreamingPlayerViewController ()
 
 @property (nonatomic, retain) UIImageView *reflectionView;
+@property (nonatomic, retain) SUSCurrentPlaylistDAO *currentPlaylist;
 
 - (UIImage *)reflectedImage:(UIImageView *)fromImage withHeight:(NSUInteger)height;
 
@@ -48,7 +49,7 @@
 
 @implementation iPhoneStreamingPlayerViewController
 
-@synthesize listOfSongs, reflectionView;
+@synthesize listOfSongs, reflectionView, currentPlaylist;
 
 static const CGFloat kDefaultReflectionFraction = 0.30;
 static const CGFloat kDefaultReflectionOpacity = 0.55;
@@ -145,6 +146,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	
 	bassWrapper = [BassWrapperSingleton sharedInstance];
+	
+	self.currentPlaylist = [SUSCurrentPlaylistDAO dataModel];
 	
 	pageControlViewController = nil;
 	
@@ -295,6 +298,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[songInfoToggleButton release]; songInfoToggleButton = nil;
 	[reflectionView release]; reflectionView = nil;
 	[pageControlViewController release]; pageControlViewController = nil;
+	[currentPlaylist release]; currentPlaylist = nil;
 	[super dealloc];
 }
 
@@ -447,7 +451,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[titleView addSubview:albumTitleLabel];
 		[albumTitleLabel release];
 		
-		Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+		Song *currentSong = currentPlaylist.currentDisplaySong;
 		
 		artistTitleLabel.text = currentSong.artist;
 		albumTitleLabel.text = currentSong.album;
@@ -469,7 +473,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {
 	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) || IS_IPAD())
 	{
-		Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+		Song *currentSong = currentPlaylist.currentDisplaySong;
 		
 		artistTitleLabel.text = currentSong.artist;
 		albumTitleLabel.text = currentSong.album;
@@ -483,8 +487,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
     
     [self setupCoverArt];
     
-	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
-	Song *currentSong = dataModel.currentSong;
+	Song *currentSong = currentPlaylist.currentDisplaySong;
     
 	// Update the icon in top right
 	if (isFlipped)
@@ -763,9 +766,8 @@ CGContextRef MyCreateBitmapContextPlayer(int pixelsWide, int pixelsHigh)
 
 - (void)setupCoverArt
 {
-    SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
     SUSCoverArtLargeDAO *artDataModel = [SUSCoverArtLargeDAO dataModel];
-	Song *currentSong = dataModel.currentSong;
+	Song *currentSong = currentPlaylist.currentDisplaySong;
     
     // Get the album art
 	if(currentSong.coverArtId)

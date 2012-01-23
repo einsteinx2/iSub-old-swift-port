@@ -11,8 +11,8 @@
 @class Song;
 @interface SUSStreamHandler : NSObject <NSURLConnectionDelegate>
 
-- (id)initWithSong:(Song *)song offset:(NSUInteger)offset delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate;
-- (id)initWithSong:(Song *)song delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate;
+- (id)initWithSong:(Song *)song offset:(NSUInteger)offset isTemp:(BOOL)isTemp delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate;
+- (id)initWithSong:(Song *)song isTemp:(BOOL)isTemp delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate;
 
 @property (nonatomic, assign) NSObject<SUSStreamHandlerDelegate> *delegate;
 @property (nonatomic, copy) Song *mySong;
@@ -32,6 +32,9 @@
 @property NSUInteger numOfReconnects;
 
 @property (nonatomic, retain) NSThread *loadingThread;
+
+@property BOOL isTempCache;
+@property (readonly) NSString *filePath;
 
 - (void)start:(BOOL)resume;
 - (void)start;

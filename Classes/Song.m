@@ -314,6 +314,22 @@
 	return [[SavedSettings sharedInstance].songCachePath stringByAppendingPathComponent:fileName];
 }
 
+- (NSString *)localTempPath
+{
+	NSString *fileName = fileName = [[path md5] stringByAppendingPathExtension:self.localSuffix];
+	return [[SavedSettings sharedInstance].tempCachePath stringByAppendingPathComponent:fileName];
+}
+
+- (BOOL)isTempCached
+{	
+	// If the song is fully cached, then it doesn't matter if there is a temp cache file
+	if (self.isFullyCached)
+		return NO;
+	
+	// Return YES if the song exists in the temp folder
+	return [[NSFileManager defaultManager] fileExistsAtPath:self.localTempPath];
+}
+
 - (unsigned long long)localFileSize
 {
 	return [[[NSFileManager defaultManager] attributesOfItemAtPath:self.localPath error:NULL] fileSize];

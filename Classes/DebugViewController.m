@@ -27,7 +27,8 @@
 	cacheControls = [CacheSingleton sharedInstance];
 	settings = [SavedSettings sharedInstance];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cacheSongObjects) name:ISMSNotification_SongPlaybackStarted object:nil];
+	currentSongProgress = 0.;
+	nextSongProgress = 0.;
 		
 	if (settings.isCacheUnlocked)
 	{
@@ -36,6 +37,12 @@
 		
 		// Setup the update timer
 		updateTimer = [NSTimer scheduledTimerWithTimeInterval:1. target:self selector:@selector(updateStatsInBackground) userInfo:nil repeats:YES];
+		
+		// Cache the song objects
+		[self cacheSongObjects];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cacheSongObjects) name:ISMSNotification_SongPlaybackStarted object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cacheSongObjects) name:ISMSNotification_SongPlaybackEnded object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cacheSongObjects) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	}
 	else
 	{
@@ -98,6 +105,10 @@
 
 - (void)dealloc
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackStarted object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackEnded object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
+	
 	[currentSong release]; currentSong = nil;
 	[nextSong release]; nextSong = nil;
 	[super dealloc];
@@ -107,17 +118,15 @@
 
 - (void)cacheSongObjects
 {
-	self.currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+	self.currentSong = [SUSCurrentPlaylistDAO dataModel].currentDisplaySong;
 	self.nextSong = [SUSCurrentPlaylistDAO dataModel].nextSong;
+	//DLog(@"currentSong: %@", self.currentSong);
 }
 
 - (void)updateStatsInBackground
 {
 	[self performSelectorInBackground:@selector(updateStats) withObject:nil];
 }
-
-float currentSongProgress = 0;
-float nextSongProgress = 0;
 
 - (void)updateStats
 {
@@ -126,10 +135,10 @@ float nextSongProgress = 0;
 		if (!settings.isJukeboxEnabled)
 		{
 			// Set the current song progress bar
-			if (![BassWrapperSingleton sharedInstance].isTempDownload)
-				currentSongProgress = [musicControls findCurrentSongProgress];
+			if (![self.currentSong isTempCached])
+				currentSongProgress = currentSong.downloadProgress;
 			
-			nextSongProgress = [musicControls findNextSongProgress];
+			nextSongProgress = nextSong.downloadProgress;
 		}
 		
 		[self performSelectorOnMainThread:@selector(updateStatsInternal) withObject:nil waitUntilDone:NO];
@@ -149,7 +158,7 @@ float nextSongProgress = 0;
 	else
 	{
 		// Set the current song progress bar
-		if ([BassWrapperSingleton sharedInstance].isTempDownload)
+		if ([self.currentSong isTempCached])
 		{
 			currentSongProgressView.progress = 0.0;
 			currentSongProgressView.alpha = 0.2;

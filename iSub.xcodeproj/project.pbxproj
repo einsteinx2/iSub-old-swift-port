@@ -3148,6 +3148,25 @@
 			name = Singletons;
 			sourceTree = "<group>";
 		};
+		535366D914CB55AC00954448 /* Audio Engine */ = {
+			isa = PBXGroup;
+			children = (
+				53B38BE01474CA0F00CD8A99 /* bass.h */,
+				539A012414773CEA00754061 /* bass_fx.h */,
+				539A012514773D3800754061 /* bassmix.h */,
+				53C16ED5149300C6002498A0 /* bassflac.h */,
+				53B38BD71474C95100CD8A99 /* BassWrapperSingleton.h */,
+				53B38BD81474C95200CD8A99 /* BassWrapperSingleton.m */,
+				536585A51478BF2500FE57A5 /* BassParamEqValue.h */,
+				536585A61478BF2600FE57A5 /* BassParamEqValue.m */,
+				536585AA1478C20700FE57A5 /* BassEffectHandle.h */,
+				536585AB1478C20800FE57A5 /* BassEffectHandle.m */,
+				53B6F4D314C645F2000ED8F5 /* BassUserInfo.h */,
+				53B6F4D414C645F2000ED8F5 /* BassUserInfo.m */,
+			);
+			name = "Audio Engine";
+			sourceTree = "<group>";
+		};
 		535B724F134CEE0A003E0E1C /* DDSocialDialog */ = {
 			isa = PBXGroup;
 			children = (
@@ -3573,18 +3592,7 @@
 				53E82A9C140721D50051D44B /* Generic */,
 				53FB066011EE1C4E008A30C7 /* SUSStream Handling */,
 				5304BCE111BD58E3000EF6F9 /* NSURLConnectionDelegates */,
-				53B38BE01474CA0F00CD8A99 /* bass.h */,
-				539A012414773CEA00754061 /* bass_fx.h */,
-				539A012514773D3800754061 /* bassmix.h */,
-				53C16ED5149300C6002498A0 /* bassflac.h */,
-				53B38BD71474C95100CD8A99 /* BassWrapperSingleton.h */,
-				53B38BD81474C95200CD8A99 /* BassWrapperSingleton.m */,
-				536585A51478BF2500FE57A5 /* BassParamEqValue.h */,
-				536585A61478BF2600FE57A5 /* BassParamEqValue.m */,
-				536585AA1478C20700FE57A5 /* BassEffectHandle.h */,
-				536585AB1478C20800FE57A5 /* BassEffectHandle.m */,
-				53B6F4D314C645F2000ED8F5 /* BassUserInfo.h */,
-				53B6F4D414C645F2000ED8F5 /* BassUserInfo.m */,
+				535366D914CB55AC00954448 /* Audio Engine */,
 			);
 			name = "Data Model";
 			sourceTree = "<group>";

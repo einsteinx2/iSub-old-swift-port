@@ -27,6 +27,8 @@
 
 @property (readonly) NSString *localSuffix;
 @property (readonly) NSString *localPath;
+@property (readonly) NSString *localTempPath;
+@property (readonly) BOOL isTempCached;
 @property (readonly) unsigned long long localFileSize;
 
 - (void)encodeWithCoder:(NSCoder *)encoder;

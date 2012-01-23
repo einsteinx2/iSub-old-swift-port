@@ -55,18 +55,13 @@
 - (void)startSong;
 - (void)playSongAtPosition:(NSInteger)position;
 - (void)nextSong;
-//- (void)nextSongAuto;
 - (void)prevSong;
 
-//- (void)checkCache;
 - (void)resumeSong;
 
 - (void)showPlayer;
 
 - (void)updateLockScreenInfo;
-
-//- (void)removeAutoNextNotification;
-//- (void)addAutoNextNotification;
 
 // Jukebox control methods
 - (void)jukeboxPlaySongAtPosition:(NSNumber *)position;
@@ -83,11 +78,5 @@
 - (void)jukeboxClearRemotePlaylist;
 - (void)jukeboxShuffle;
 - (void)jukeboxGetInfo;
-
-
-- (float) findCurrentSongProgress;
-- (float) findNextSongProgress;
-//- (unsigned long long int) findCacheSize;
-//- (unsigned long long int) findFreeSpace;
 
 @end
