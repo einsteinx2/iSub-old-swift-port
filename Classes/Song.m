@@ -320,6 +320,11 @@
 	return [[SavedSettings sharedInstance].tempCachePath stringByAppendingPathComponent:fileName];
 }
 
+- (NSString *)currentPath
+{
+	return self.isTempCached ? self.localTempPath : self.localPath;
+}
+
 - (BOOL)isTempCached
 {	
 	// If the song is fully cached, then it doesn't matter if there is a temp cache file
@@ -332,7 +337,7 @@
 
 - (unsigned long long)localFileSize
 {
-	return [[[NSFileManager defaultManager] attributesOfItemAtPath:self.localPath error:NULL] fileSize];
+	return [[[NSFileManager defaultManager] attributesOfItemAtPath:self.currentPath error:NULL] fileSize];
 }
 
 @end

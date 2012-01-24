@@ -18,8 +18,9 @@
 #define ISMS_AQBufferSizeInFrames 512
 #define ISMS_AQNumBuffers 4
 #define ISMS_defaultSampleRate 44100
+#define ISMS_AQBytesToWaitForAudioData (1024 * 160) // 5 seconds of audio in a 320kbps stream
 
-// Failure Retry Values
+// Stream create failure retry values
 #define RETRY_DELAY 2.0
 #define MIN_FILESIZE_TO_FAIL (1024 * 1024 * 3)
 
@@ -29,6 +30,17 @@ typedef enum
 	ISMS_BASS_EQ_DATA_TYPE_fft,
 	ISMS_BASS_EQ_DATA_TYPE_line
 } ISMS_BASS_EQ_DATA_TYPE;
+
+typedef enum
+{
+	ISMS_AQ_STATE_off,
+	ISMS_AQ_STATE_playing,
+	ISMS_AQ_STATE_paused,
+	ISMS_AQ_STATE_stopped,
+	ISMS_AQ_STATE_waitingForData,
+	ISMS_AQ_STATE_waitingForDataNoResume,
+	ISMS_AQ_STATE_finishedWaitingForData
+} ISMS_AQ_STATE;
 
 @class Song, BassParamEqValue, SUSCurrentPlaylistDAO, BassUserInfo;
 @interface BassWrapperSingleton : NSObject
@@ -107,6 +119,8 @@ typedef enum
 @property (retain) NSThread *fftDataThread;
 @property BOOL isFftDataThreadToTerminate;
 @property BOOL isFastForward;
+@property BOOL audioQueueShouldStopWaitingForData;
+@property ISMS_AQ_STATE audioQueueState;
 
 @property (readonly) NSInteger audioQueueSampleRate;
 

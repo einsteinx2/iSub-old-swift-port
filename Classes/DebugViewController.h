@@ -40,4 +40,6 @@
 - (void) updateStats;
 - (void)cacheSongObjects;
 
+- (void)updateStatsInBackground;
+
 @end

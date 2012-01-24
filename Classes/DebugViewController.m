@@ -33,7 +33,7 @@
 	if (settings.isCacheUnlocked)
 	{
 		// Set the fields
-		[self performSelectorInBackground:@selector(updateStatsInBackground) withObject:nil];
+		[self updateStatsInBackground];
 		
 		// Setup the update timer
 		updateTimer = [NSTimer scheduledTimerWithTimeInterval:1. target:self selector:@selector(updateStatsInBackground) userInfo:nil repeats:YES];

@@ -28,6 +28,7 @@
 @property (readonly) NSString *localSuffix;
 @property (readonly) NSString *localPath;
 @property (readonly) NSString *localTempPath;
+@property (readonly) NSString *currentPath;
 @property (readonly) BOOL isTempCached;
 @property (readonly) unsigned long long localFileSize;
 

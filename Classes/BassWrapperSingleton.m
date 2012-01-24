@@ -21,7 +21,7 @@
 #import "SavedSettings.h"
 
 @implementation BassWrapperSingleton
-@synthesize isEqualizerOn, startByteOffset, currPlaylistDAO, fftDataThread, isFftDataThreadToTerminate, isPlaying, isFastForward;
+@synthesize isEqualizerOn, startByteOffset, currPlaylistDAO, fftDataThread, isFftDataThreadToTerminate, isPlaying, isFastForward, audioQueueShouldStopWaitingForData, audioQueueState;
 
 // BASS plugins
 extern void BASSFLACplugin;
@@ -230,9 +230,87 @@ QWORD CALLBACK MyFileLenProc(void *user)
 
 DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 {
-	// Read from the file
-	BassUserInfo *userInfo = (BassUserInfo *)user;
-	return fread(buffer, 1, length, userInfo.myFileHandle);
+	@autoreleasepool
+	{
+		// Read from the file
+		BassUserInfo *userInfo = (BassUserInfo *)user;
+		DWORD bytesRead = fread(buffer, 1, length, userInfo.myFileHandle);	
+		
+		if (bytesRead < length)
+		{
+			// Don't ever block the UI thread
+			if (![[NSThread currentThread] isEqual:[NSThread mainThread]])
+			{
+				BassUserInfo *userInfo = (BassUserInfo *)user;
+				SUSCurrentPlaylistDAO *currentPlaylistDAO = sharedInstance.currPlaylistDAO;
+				
+				Song *theSong = [currentPlaylistDAO currentSong];
+				if ([userInfo.mySong isEqualToSong:theSong])
+				{
+					// It's the current song
+					//DLog(@"Checking file length for current song");
+				}
+				else
+				{
+					// It's not the current song so it's the next song
+					//DLog(@"Checking file length for next song");
+					theSong = [currentPlaylistDAO nextSong];
+				}
+				
+				if (!theSong.isFullyCached) // TODO: have something like isFullyCached for temp cached songs
+				{
+					// Set the audio queue state to waiting for data
+					sharedInstance.audioQueueState = ISMS_AQ_STATE_waitingForData;
+					
+					DLog(@"trying to read %i bytes,   bytes read: %i", length, bytesRead);
+					// Clear the EOF indicator from the stream so it will resume reading
+					// when more data is available
+					fpos_t pos; 
+					fgetpos(userInfo.myFileHandle, &pos);
+					fpos_t newpos = pos - bytesRead;
+					fsetpos(userInfo.myFileHandle, &newpos);
+					
+					[sharedInstance playPause];
+					
+					// We received less than we asked for, but the stream is not over
+					// so we'll need to wait until more of the file is ready to play
+					unsigned long long size = theSong.localFileSize;
+					unsigned long long neededSize = size + ISMS_AQBytesToWaitForAudioData;
+					NSTimeInterval sleepTime = 1.0; // Sleep for 1 second at a time
+					DLog(@"AQ asked for: %i  got: %i  file size: %llu", length, bytesRead, theSong.localFileSize);
+					while (!sharedInstance.audioQueueShouldStopWaitingForData && !theSong.isFullyCached && theSong.localFileSize < neededSize)
+					{
+						// As long as audioQueueShouldStopWaitingForData is false, the song is not fully cached, and
+						// the file size is less than the current size + 10 buffers worth of data, then wait
+						DLog(@"Not enough data, sleeping for %f", sleepTime);
+						[NSThread sleepForTimeInterval:sleepTime];
+					}
+					
+					// The loop finished, so unless audioQueueShouldStopWaitingForData is true (meaning the wait was cancelled)
+					// then call the queue callback again to enqueue more data
+					if (!sharedInstance.audioQueueShouldStopWaitingForData)
+					{
+						// Do the read again
+						bytesRead = fread(buffer, 1, length, userInfo.myFileHandle);
+						DLog(@"trying again asked for: %i  got: %i  file size: %llu", length, bytesRead, theSong.localFileSize);
+						
+						if (sharedInstance.audioQueueState != ISMS_AQ_STATE_waitingForDataNoResume)
+						{
+							sharedInstance.audioQueueState = ISMS_AQ_STATE_finishedWaitingForData;
+							[sharedInstance playPause];
+						}
+					}
+					else
+					{
+						DLog(@"wait was cancelled, not calling the queue callback again");
+						// Change the audio queue state
+						sharedInstance.audioQueueState = ISMS_AQ_STATE_finishedWaitingForData;
+					}
+				}
+			}
+		}
+		return bytesRead;
+	}
 }
 
 BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
@@ -252,11 +330,13 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 	DWORD r;	
 	if (BASSisFilestream1 && BASS_ChannelIsActive(fileStream1)) 
 	{
+		//HSTREAM stream = fileStreamTempo1 ? fileStreamTempo1 : fileStream1;
+		
 		// Read data from stream1
 		if (fileStreamTempo1)
 			r = BASS_ChannelGetData(fileStreamTempo1, buffer, length);
 		else
-			r = BASS_ChannelGetData(fileStream1, buffer, length);			
+			r = BASS_ChannelGetData(fileStream1, buffer, length);
 		
 		// Check if stream1 is now complete
 		if (!BASS_ChannelIsActive(fileStream1))
@@ -340,6 +420,7 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 	}
 	else
 	{
+		DLog(@"Stream not active, freeing BASS");
 		r = BASS_STREAMPROC_END;
 		[self performSelectorOnMainThread:@selector(bassFree) withObject:nil waitUntilDone:NO];
 	}
@@ -347,7 +428,6 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 	return r;
 }
 
-//BOOL doPutData = YES;
 - (void)queueCallback:(AudioQueueRef)outAQ buffer:(AudioQueueBufferRef)outBuffer
 {	
 	// Specify how many bytes we're providing and grab the data
@@ -357,16 +437,23 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 	//	actualLength = [self bassGetOutputData:outBuffer->mAudioData length:length];
 	outBuffer->mAudioDataByteSize = actualLength;
 	
-	if (eqDataType != ISMS_BASS_EQ_DATA_TYPE_none)
+	if (actualLength == length)
 	{
+		// We got the data we asked for, so enqueue it
+		AudioQueueEnqueueBuffer(audioQueue, outBuffer, 0, NULL); 
 		
-		//if (doPutData)
+		// Also, fill the visualizer stream with FFT data if needed
+		if (eqDataType != ISMS_BASS_EQ_DATA_TYPE_none)
+		{
 			BASS_StreamPutData(fftStream, outBuffer->mAudioData, outBuffer->mAudioDataByteSize);
-		//doPutData = !doPutData;
+		}
 	}
-	
-    // Enqueue the buffer
-    AudioQueueEnqueueBuffer(audioQueue, outBuffer, 0, NULL); 
+	else if (actualLength == BASS_STREAMPROC_END)
+	{
+		// The stream is over, we should free BASS and dispose of the audio queue
+		DLog(@"The stream is over, freeing BASS and stopping the AQ");
+		[self bassFree];
+	}
 }
 
 
@@ -1042,8 +1129,6 @@ void interruptionListenerCallback (void    *inUserData, UInt32  interruptionStat
 				
 				// Add the stream free callback
 				BASS_ChannelSetSync(fileStream1, BASS_SYNC_FREE, 0, MyStreamFreeCallback, userInfo);
-				// Add the stream stall callback
-				BASS_ChannelSetSync(fileStream1, BASS_SYNC_STALL, 0, MyStreamStallProc, NULL);
 				
 				// Skip to the byte offset
 				[self seekToPositionInBytes:[byteOffset unsignedLongLongValue] inStream:fileStream1];
@@ -1122,7 +1207,11 @@ void interruptionListenerCallback (void    *inUserData, UInt32  interruptionStat
 		//BASS_Pause();
 		[self aqsPause];
 		
-        [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackPaused];
+		if (audioQueueState != ISMS_AQ_STATE_waitingForData)
+		{
+			sharedInstance.audioQueueState = ISMS_AQ_STATE_paused;
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackPaused];
+		}
 	} 
 	else 
 	{
@@ -1133,13 +1222,23 @@ void interruptionListenerCallback (void    *inUserData, UInt32  interruptionStat
 				currPlaylistDAO.currentIndex = currPlaylistDAO.count - 1;
 			[[MusicSingleton sharedInstance] playSongAtPosition:currPlaylistDAO.currentIndex];
 		}
+		else if (audioQueueState == ISMS_AQ_STATE_waitingForData)
+		{
+			audioQueueState = ISMS_AQ_STATE_waitingForDataNoResume;
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackPaused];
+		}
 		else
 		{
 			DLog(@"Playing");
 			//BASS_Start();
 			[self aqsStart];
 			
-			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
+			if (audioQueueState != ISMS_AQ_STATE_finishedWaitingForData)
+			{
+				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
+			}
+
+			sharedInstance.audioQueueState = ISMS_AQ_STATE_playing;
 		}
 	}
 }
@@ -1280,6 +1379,8 @@ void interruptionListenerCallback (void    *inUserData, UInt32  interruptionStat
 - (void)setup
 {	
 	//selfRef = self;
+	audioQueueState = ISMS_AQ_STATE_stopped;
+	audioQueueShouldStopWaitingForData = NO;
 	BASSisFilestream1 = YES;
 	fileStream1 = 0;
 	fileStreamTempo1 = 0;
