@@ -19,7 +19,7 @@
 #import "SUSStreamHandler.h"
 #import "SUSCurrentPlaylistDAO.h"
 #import "NSArray+FirstObject.h"
-#import "BassWrapperSingleton.h"
+#import "AudioEngine.h"
 #import "SUSCoverArtLargeDAO.h"
 #import "SUSCoverArtLargeLoader.h"
 #import "SUSLyricsDAO.h"
@@ -31,7 +31,7 @@
 static SUSStreamSingleton *sharedInstance = nil;
 
 @implementation SUSStreamSingleton
-@synthesize handlerStack, lyricsDataModel;
+@synthesize handlerStack, lyricsDAO, currentPlaylistDAO, lastCachedSong;
 
 - (BOOL)insertSong:(Song *)aSong intoGenreTable:(NSString *)table
 {
@@ -39,8 +39,11 @@ static SUSStreamSingleton *sharedInstance = nil;
     
 	[databaseControls.songCacheDb synchronizedUpdate:[NSString stringWithFormat:@"INSERT INTO %@ (md5, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", table], [aSong.path md5], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
 	
-	if ([databaseControls.songCacheDb hadError]) {
-		DLog(@"Err inserting song into genre table %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
+	if ([databaseControls.songCacheDb hadError]) 
+	{
+		DLog(@"Err inserting song into genre table %d: %@", 
+			 [databaseControls.songCacheDb lastErrorCode], 
+			 [databaseControls.songCacheDb lastErrorMessage]);
 	}
 	
 	return [databaseControls.songCacheDb hadError];
@@ -63,12 +66,23 @@ static SUSStreamSingleton *sharedInstance = nil;
 	for (SUSStreamHandler *handler in handlerStack)
 	{
 		if (handler != handlerToSkip)
+		{
+			// If we're trying to resume, cancel the request
+			[NSObject cancelPreviousPerformRequestsWithTarget:self 
+													 selector:@selector(resumeHandler:)
+													   object:handler];
+			
+			// Cancel the handler
 			[handler cancel];
+		}
 	}
 }
 
 - (void)cancelAllStreamsExceptForSong:(Song *)aSong
 {
+	// Cancel any song resume requests
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	
 	[self cancelAllStreamsExcept:[self handlerForSong:aSong]];
 }
 
@@ -81,8 +95,14 @@ static SUSStreamSingleton *sharedInstance = nil;
 {
 	if (index < [handlerStack count])
 	{
+		// Find the handler object and cancel it
 		SUSStreamHandler *handler = [handlerStack objectAtIndex:index];
 		[handler cancel];
+		
+		// If we're trying to resume, cancel the request
+		[NSObject cancelPreviousPerformRequestsWithTarget:self 
+												 selector:@selector(resumeHandler:)
+												   object:handler];
 	}
 }
 
@@ -141,10 +161,19 @@ static SUSStreamSingleton *sharedInstance = nil;
 	[self removeStream:[self handlerForSong:aSong]];
 }
 
+- (void)resumeHandler:(SUSStreamHandler *)handler
+{
+	// As an added check, verify that this handler is still in the stack
+	if ([self isSongInQueue:handler.mySong])
+	{
+		[handler start:YES];
+	}
+}
+
 - (void)startHandler:(SUSStreamHandler *)handler resume:(BOOL)resume
 {
 	[handler start:resume];
-	[lyricsDataModel loadLyricsForArtist:handler.mySong.artist andTitle:handler.mySong.title];
+	[lyricsDAO loadLyricsForArtist:handler.mySong.artist andTitle:handler.mySong.title];
 }
 
 - (void)startHandler:(SUSStreamHandler *)handler
@@ -154,13 +183,17 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 #pragma mark Download
 
-- (void)queueStreamForSong:(Song *)song offset:(NSUInteger)byteOffset atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp
+- (void)queueStreamForSong:(Song *)song offset:(NSUInteger)byteOffset 
+				   atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp
 {
 	if (!song)
 		return;
 	
 	DLog(@"starting temp stream: %@   byteOffset: %i", NSStringFromBOOL(isTemp), byteOffset);
-	SUSStreamHandler *handler = [[SUSStreamHandler alloc] initWithSong:song offset:byteOffset isTemp:isTemp delegate:self];
+	SUSStreamHandler *handler = [[SUSStreamHandler alloc] initWithSong:song 
+																offset:byteOffset 
+																isTemp:isTemp
+															  delegate:self];
 	if (![handlerStack containsObject:handler])
 	{
 		[handlerStack insertObject:handler atIndex:index];
@@ -216,10 +249,11 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (void)queueStreamForNextSong
 {
-	Song *nextSong = [SUSCurrentPlaylistDAO dataModel].nextSong;
+	Song *nextSong = currentPlaylistDAO.nextSong;
 
 	// The file doesn't exist or it's not fully cached, start downloading it from the beginning
-	if (nextSong && ![self isSongInQueue:nextSong] && !nextSong.isFullyCached && ![ViewObjectsSingleton sharedInstance].isOfflineMode)
+	if (nextSong && ![self isSongInQueue:nextSong] && !nextSong.isFullyCached && 
+		![ViewObjectsSingleton sharedInstance].isOfflineMode)
 	{
 		[self queueStreamForSong:nextSong isTempCache:NO];
 	}
@@ -235,13 +269,15 @@ static SUSStreamSingleton *sharedInstance = nil;
 	
 	if ([handlerStack count] < numStreamsToQueue)
 	{
-		NSInteger currentIndex = [SUSCurrentPlaylistDAO dataModel].currentIndex;
+		NSInteger currentIndex = currentPlaylistDAO.currentIndex;
 		for (int i = currentIndex; i < currentIndex + numStreamsToQueue; i++)
 		{
-			Song *aSong = [[SUSCurrentPlaylistDAO dataModel] songForIndex:i];
-			if (aSong && ![self isSongInQueue:aSong] && !aSong.isFullyCached && ![ViewObjectsSingleton sharedInstance].isOfflineMode)
+			Song *aSong = [currentPlaylistDAO songForIndex:i];
+			if (aSong && ![self isSongInQueue:aSong] && !aSong.isFullyCached
+				&& ![ViewObjectsSingleton sharedInstance].isOfflineMode)
 			{
-				[self queueStreamForSong:aSong isTempCache:![SavedSettings sharedInstance].isSongCachingEnabled];
+				SavedSettings *settings = [SavedSettings sharedInstance];
+				[self queueStreamForSong:aSong isTempCache:!settings.isSongCachingEnabled];
 			}
 		}
 	}
@@ -250,27 +286,42 @@ static SUSStreamSingleton *sharedInstance = nil;
 - (void)songCachingToggled
 {
 	if ([SavedSettings sharedInstance].isSongCachingEnabled)
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(queueStreamForNextSong) name:ISMSNotification_SongPlaybackEnded object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self 
+												 selector:@selector(queueStreamForNextSong) 
+													 name:ISMSNotification_SongPlaybackEnded 
+												   object:nil];
 	else
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackEnded object:nil];
+		[[NSNotificationCenter defaultCenter] removeObserver:self 
+														name:ISMSNotification_SongPlaybackEnded 
+													  object:nil];
+}
+
+- (void)currentPlaylistIndexChanged
+{
+	// Verify that the last song is not constantly retrying to connect, 
+	// so the current song can download and play
+	[self removeStreamForSong:currentPlaylistDAO.prevSong];
 }
 
 #pragma mark - SUSStreamHandler delegate
 
 - (void)SUSStreamHandlerStartPlayback:(SUSStreamHandler *)handler startByteOffset:(NSUInteger)offset
 {	
-	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
-	Song *nextSong = [SUSCurrentPlaylistDAO dataModel].nextSong;
-	BassWrapperSingleton *bassWrapper = [BassWrapperSingleton sharedInstance];
+	// Update the last cached song
+	self.lastCachedSong = handler.mySong;
+	
+	Song *currentSong = currentPlaylistDAO.currentSong;
+	Song *nextSong = currentPlaylistDAO.nextSong;
+	AudioEngine *audio = [AudioEngine sharedInstance];
 	
 	DLog(@"currentSong: %@   mySong: %@", currentSong, handler.mySong);
 	if ([handler.mySong isEqualToSong:currentSong])
 	{
-		[bassWrapper startWithOffsetInBytes:[NSNumber numberWithInt:offset]];
+		[audio startWithOffsetInBytes:[NSNumber numberWithInt:offset]];
 	}
 	else if ([handler.mySong isEqualToSong:nextSong])
 	{
-		[bassWrapper prepareNextSongStream];
+		[audio prepareNextSongStream];
 	}
 }
 
@@ -282,7 +333,9 @@ static SUSStreamSingleton *sharedInstance = nil;
 		DLog(@"retrying stream handler");
 		// Less than max number of reconnections, so try again 
 		handler.numOfReconnects++;
-		[self startHandler:handler resume:YES];
+		// Retry connection after a delay to prevent a tight loop
+		[self performSelector:@selector(resumeHandler:) withObject:handler afterDelay:1.5];
+		//[self startHandler:handler resume:YES];
 	}
 	else
 	{
@@ -293,7 +346,10 @@ static SUSStreamSingleton *sharedInstance = nil;
 }
 
 - (void)SUSStreamHandlerConnectionFinished:(SUSStreamHandler *)handler
-{
+{	
+	// Update the last cached song
+	self.lastCachedSong = handler.mySong;
+	
 	DLog(@"stream handler finished: %@", handler);
 	// Remove the handler from the stack
 	[handlerStack removeObject:handler];
@@ -324,11 +380,25 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (void)setup
 {
+	lastCachedSong = nil;
     handlerStack = [[NSMutableArray alloc] initWithCapacity:0];
-	lyricsDataModel = [[SUSLyricsDAO alloc] initWithDelegate:self]; 
+	lyricsDAO = [[SUSLyricsDAO alloc] initWithDelegate:self]; 
+	currentPlaylistDAO = [[SUSCurrentPlaylistDAO alloc] init];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songCachingToggled) name:ISMSNotification_SongCachingEnabled object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songCachingToggled) name:ISMSNotification_SongCachingDisabled object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(songCachingToggled) 
+												 name:ISMSNotification_SongCachingEnabled 
+											   object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(songCachingToggled) 
+												 name:ISMSNotification_SongCachingDisabled
+											   object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(currentPlaylistIndexChanged) 
+												 name:ISMSNotification_CurrentPlaylistIndexChanged 
+											   object:nil];
 }
 
 + (SUSStreamSingleton *)sharedInstance

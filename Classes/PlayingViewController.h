@@ -6,10 +6,11 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+#import "SUSLoaderDelegate.h"
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, SUSNowPlayingDAO;
 
-@interface PlayingViewController : UITableViewController 
+@interface PlayingViewController : UITableViewController <SUSLoaderDelegate>
 {
 	iSubAppDelegate *appDelegate;
 	ViewObjectsSingleton *viewObjects;
@@ -23,5 +24,7 @@
 }
 
 @property (nonatomic, retain) UIImageView *nothingPlayingScreen;
+
+@property (nonatomic, retain) SUSNowPlayingDAO *dataModel;
 
 @end

@@ -38,7 +38,7 @@
 #import "NSString+URLEncode.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "SUSCurrentPlaylistDAO.h"
-#import "BassWrapperSingleton.h"
+#import "AudioEngine.h"
 #import "FlurryAnalytics.h"
 
 @implementation NewHomeViewController
@@ -487,7 +487,7 @@
 		}
 		else
 		{
-            [[BassWrapperSingleton sharedInstance] stop];
+            [[AudioEngine sharedInstance] stop];
 			
 			// Jukebox mode is off, turn it on
 			if (IS_IPAD())

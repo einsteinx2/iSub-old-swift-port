@@ -93,11 +93,6 @@
 	overlayView.downloadButton.alpha = .3;
 	overlayView.downloadButton.enabled = NO;
 	
-	if (musicControls.isQueueListDownloading == NO)
-	{
-		[musicControls downloadNextQueuedSong];
-	}
-	
 	[self hideOverlay];
 }*/
 
@@ -110,11 +105,6 @@
 
 	self.overlayView.downloadButton.alpha = .3;
 	self.overlayView.downloadButton.enabled = NO;
-	
-	if ([MusicSingleton sharedInstance].isQueueListDownloading == NO)
-	{
-		[[MusicSingleton sharedInstance] downloadNextQueuedSong];
-	}
 	
 	[self hideOverlay];
 }

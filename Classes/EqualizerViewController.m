@@ -9,7 +9,7 @@
 #import "EqualizerViewController.h"
 #import "EqualizerView.h"
 #import "EqualizerPointView.h"
-#import "BassWrapperSingleton.h"
+#import "AudioEngine.h"
 #import "BassParamEqValue.h"
 #import "BassEffectDAO.h"
 #import "UIView+tools.h"
@@ -103,7 +103,7 @@
 	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
 		[self createEqViews];
 	
-	[[BassWrapperSingleton sharedInstance] startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_fft];
+	[[AudioEngine sharedInstance] startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_fft];
 }
 
 - (void)createEqViews
@@ -111,7 +111,7 @@
 	[self removeEqViews];
 	
 	equalizerPointViews = [[NSMutableArray alloc] initWithCapacity:0];
-	for (BassParamEqValue *value in [BassWrapperSingleton sharedInstance].equalizerValues)
+	for (BassParamEqValue *value in [AudioEngine sharedInstance].equalizerValues)
 	{
 		DLog(@"eq handle: %i", value.handle);
 		EqualizerPointView *eqView = [[EqualizerPointView alloc] initWithEqValue:value parentSize:self.equalizerView.frame.size];
@@ -119,7 +119,7 @@
 		[self.view addSubview:eqView];
 		[eqView release];
 	}
-	DLog(@"equalizerValues: %@", [BassWrapperSingleton sharedInstance].equalizerValues);
+	DLog(@"equalizerValues: %@", [AudioEngine sharedInstance].equalizerValues);
 	DLog(@"equalizerViews: %@", equalizerPointViews);
 }
 
@@ -143,7 +143,7 @@
 	[equalizerView removeFromSuperview];
 	[equalizerView release]; equalizerView = nil;
 	
-	[[BassWrapperSingleton sharedInstance] stopReadingEqData];
+	[[AudioEngine sharedInstance] stopReadingEqData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -339,7 +339,7 @@
 {
 	DLog(@"gainSlider.value: %f", gainSlider.value);
 	[SavedSettings sharedInstance].gainMultiplier = gainSlider.value;
-	[[BassWrapperSingleton sharedInstance] bassSetGainLevel:gainSlider.value];
+	[[AudioEngine sharedInstance] bassSetGainLevel:gainSlider.value];
 }
 
 #pragma mark Touch gestures interception
@@ -362,7 +362,7 @@
 			// remove the point
 			DLog(@"double tap, remove point");
 			
-			[[BassWrapperSingleton sharedInstance] removeEqualizerValue:self.selectedView.eqValue];
+			[[AudioEngine sharedInstance] removeEqualizerValue:self.selectedView.eqValue];
 			[equalizerPointViews removeObject:self.selectedView];
 			[self.selectedView removeFromSuperview];
 			self.selectedView = nil;
@@ -386,7 +386,7 @@
 			
 			// Create the eq view
 			EqualizerPointView *eqView = [[EqualizerPointView alloc] initWithCGPoint:point parentSize:self.equalizerView.bounds.size];
-			BassParamEqValue *value = [[BassWrapperSingleton sharedInstance] addEqualizerValue:eqView.eqValue.parameters];
+			BassParamEqValue *value = [[AudioEngine sharedInstance] addEqualizerValue:eqView.eqValue.parameters];
 			eqView.eqValue = value;
 			
 			// Add the view
@@ -411,7 +411,7 @@
 		if (CGRectContainsPoint(equalizerView.frame, location))
 		{
 			self.selectedView.center = [touch locationInView:self.view];
-			[[BassWrapperSingleton sharedInstance] updateEqParameter:self.selectedView.eqValue];
+			[[AudioEngine sharedInstance] updateEqParameter:self.selectedView.eqValue];
 		}
 	}
 }
@@ -421,7 +421,7 @@
 	// Apply the EQ
 	if (self.selectedView != nil)
 	{
-		[[BassWrapperSingleton sharedInstance] updateEqParameter:self.selectedView.eqValue];
+		[[AudioEngine sharedInstance] updateEqParameter:self.selectedView.eqValue];
 		self.selectedView = nil;
 		
 		[self saveTempCustomPreset];
@@ -435,7 +435,7 @@
 
 - (IBAction)toggle:(id)sender
 {
-	if ([[BassWrapperSingleton sharedInstance] toggleEqualizer])
+	if ([[AudioEngine sharedInstance] toggleEqualizer])
 	{
 		[self removeEqViews];
 		[self createEqViews];
@@ -445,7 +445,7 @@
 
 - (void)updateToggleButton
 {
-	if([BassWrapperSingleton sharedInstance].isEqualizerOn)
+	if([AudioEngine sharedInstance].isEqualizerOn)
 	{
 		[toggleButton setTitle:@"Disable" forState:UIControlStateNormal];
 	}

@@ -19,12 +19,6 @@
 
 @property (nonatomic, retain) SA_OAuthTwitterEngine *twitterEngine;
 
-
-@property (nonatomic, retain) NSTimer *tweetTimer;
-@property BOOL shouldInvalidateTweetTimer;
-@property (nonatomic, retain) NSTimer *scrobbleTimer;
-@property BOOL shouldInvalidateScrobbleTimer;
-
 + (SocialSingleton*)sharedInstance;
 
 - (void) createTwitterEngine;

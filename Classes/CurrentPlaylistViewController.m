@@ -20,7 +20,7 @@
 #import "SavedSettings.h"
 #import "NSString+time.h"
 #import "SUSCurrentPlaylistDAO.h"
-#import "BassWrapperSingleton.h"
+#import "AudioEngine.h"
 #import "FMDatabase+Synchronized.h"
 
 @implementation CurrentPlaylistViewController
@@ -254,7 +254,7 @@
 		if (goToNextSong)
 		{
 			goToNextSong = NO;
-			if ([BassWrapperSingleton sharedInstance].isPlaying)
+			if ([AudioEngine sharedInstance].isPlaying)
 			{
 				if ([databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"] > 0)
 				{
@@ -262,7 +262,7 @@
 				}
 				else
 				{
-                    [[BassWrapperSingleton sharedInstance] stop];
+                    [[AudioEngine sharedInstance] stop];
 					// Pop to root view controller doesn't work for nav controllers inside more tab //
 				}
 			}
@@ -373,7 +373,7 @@
 			}
 			else
 			{
-                [[BassWrapperSingleton sharedInstance] stop];
+                [[AudioEngine sharedInstance] stop];
 				[databaseControls resetCurrentPlaylistDb];
 			}
 			

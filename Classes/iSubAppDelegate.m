@@ -48,7 +48,7 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "SUSStreamSingleton.h"
 
-#import "BassWrapperSingleton.h"
+#import "AudioEngine.h"
 
 #import "UIDevice+Software.h"
 
@@ -100,7 +100,7 @@
 	musicControls = [MusicSingleton sharedInstance];
 	socialControls = [SocialSingleton sharedInstance];
 	cacheControls = [CacheSingleton sharedInstance];
-    bassWrapper = [BassWrapperSingleton sharedInstance];
+    audio = [AudioEngine sharedInstance];
 	    
     introController = nil;
 	showIntro = NO;
@@ -593,8 +593,8 @@
 				if ([application backgroundTimeRemaining] < 570.0 && !musicControls.isQueueListDownloading)
 				{
 					DLog("Sleeping early, isQueueListDownloading: %i", musicControls.isQueueListDownloading);
-					if ([BassWrapperSingleton sharedInstance].isPlaying)
-						[[BassWrapperSingleton sharedInstance] playPause];
+					if ([AudioEngine sharedInstance].isPlaying)
+						[[AudioEngine sharedInstance] playPause];
 					[application endBackgroundTask:backgroundTask];
 					backgroundTask = UIBackgroundTaskInvalid;
 					break;
@@ -649,7 +649,7 @@
 	
 	[[SavedSettings sharedInstance] saveState];
 	
-	[[BassWrapperSingleton sharedInstance] bassFree];
+	[[AudioEngine sharedInstance] bassFree];
 }
 
 #pragma mark -
@@ -695,7 +695,7 @@
 	
 	viewObjects.isOfflineMode = YES;
 		
-	[bassWrapper stop];
+	[audio stop];
 	
 	[[SUSStreamSingleton sharedInstance] cancelAllStreams];
 
@@ -713,7 +713,7 @@
 		
 	viewObjects.isOfflineMode = NO;
 	
-	[bassWrapper stop];
+	[audio stop];
 	[offlineTabBarController.view removeFromSuperview];
 	[databaseControls closeAllDatabases];
 	[databaseControls initDatabases];
@@ -755,7 +755,8 @@
 		else
 		{
 			DLog(@"musicControls.isQueueListDownloading: %i", musicControls.isQueueListDownloading);
-			if (!musicControls.isQueueListDownloading) {
+			if (!musicControls.isQueueListDownloading) 
+			{
 				DLog(@"Calling [musicControls downloadNextQueuedSong]");
 				[musicControls downloadNextQueuedSong];
 			}
@@ -888,7 +889,7 @@
 				{
 					viewObjects.isOfflineMode = NO;
 					
-					[bassWrapper stop];
+					[audio stop];
 					[offlineTabBarController.view removeFromSuperview];
 					[databaseControls closeAllDatabases];
 					[databaseControls initDatabases];
@@ -900,7 +901,7 @@
 					viewObjects.isOfflineMode = YES;
 					[SavedSettings sharedInstance].isJukeboxEnabled = NO;
 					
-					[bassWrapper stop];
+					[audio stop];
 					[[SUSStreamSingleton sharedInstance] cancelAllStreams];
 					[musicControls stopDownloadQueue];
 					[mainTabBarController.view removeFromSuperview];

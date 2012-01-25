@@ -8,10 +8,15 @@
 
 #import "PlayingUITableViewCell.h"
 #import "AsynchronousImageViewCached.h"
+#import "Song+DAO.h"
+#import "Song.h"
+#import "CellOverlay.h"
+#import "DatabaseSingleton.h"
+#import "MusicSingleton.h"
 
 @implementation PlayingUITableViewCell
 
-@synthesize coverArtView, userNameLabel, nameScrollView, songNameLabel, artistNameLabel;
+@synthesize coverArtView, userNameLabel, nameScrollView, songNameLabel, artistNameLabel, mySong;
 
 #pragma mark - Lifecycle
 
@@ -58,6 +63,8 @@
 		artistNameLabel.font = [UIFont systemFontOfSize:15];
 		[nameScrollView addSubview:artistNameLabel];
 		[artistNameLabel release];
+		
+		mySong = nil;
 	}
 	
 	return self;
@@ -85,14 +92,20 @@
 
 #pragma mark - Overlay
 
-- (void) showOverlay
+- (void)downloadAction
 {
-	return;
+	[mySong addToCacheQueue];
+	
+	self.overlayView.downloadButton.alpha = .3;
+	self.overlayView.downloadButton.enabled = NO;
+	
+	[self hideOverlay];
 }
 
-- (void) hideOverlay
+- (void)queueAction
 {
-	return;
+	[[DatabaseSingleton sharedInstance] queueSong:mySong];
+	[self hideOverlay];
 }
 
 #pragma mark - Scrolling

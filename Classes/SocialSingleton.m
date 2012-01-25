@@ -15,6 +15,7 @@
 #import "SUSCurrentPlaylistDAO.h"
 #import "Song.h"
 #import "NSMutableURLRequest+SUS.h"
+#import "SUSStreamSingleton.h"
 
 // Twitter secret keys
 #define kOAuthConsumerKey				@"nYKAEcLstFYnI9EEnv6g"
@@ -23,8 +24,6 @@
 static SocialSingleton *sharedInstance = nil;
 
 @implementation SocialSingleton
-
-@synthesize tweetTimer, shouldInvalidateTweetTimer, scrobbleTimer, shouldInvalidateScrobbleTimer;
 
 // Twitter
 @synthesize twitterEngine;
@@ -35,38 +34,26 @@ static SocialSingleton *sharedInstance = nil;
 
 - (void)songStarted
 {
-	if (shouldInvalidateTweetTimer)
-	{
-		[tweetTimer invalidate];
-        [tweetTimer release];
-        tweetTimer = nil;
-	}
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
-	if (shouldInvalidateScrobbleTimer)
-	{
-		[scrobbleTimer invalidate];
-        [scrobbleTimer release];
-        scrobbleTimer = nil;
-	}
+	// Notify Subsonic of play in 10 seconds if not canceled
+	[self performSelector:@selector(notifySubsonic) withObject:nil afterDelay:10.0];
 	
-	// Start song tweeting timer for 30 seconds
-	shouldInvalidateTweetTimer = YES;
-	self.tweetTimer = [NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(tweetSong) userInfo:nil repeats:NO];
+	// Tweet in 30 seconds if not canceled
+	[self performSelector:@selector(tweetSong) withObject:nil afterDelay:30.0];
 
-	// Scrobbling timer
+	// Scrobble in 30 seconds (or settings amount) if not canceled
 	SavedSettings *settings = [SavedSettings sharedInstance];
 	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
 	Song *currentSong = dataModel.currentSong;
-	shouldInvalidateScrobbleTimer = YES;
-	NSTimeInterval scrobbleInterval = 30.0;
+	NSTimeInterval scrobbleDelay = 30.0;
 	if (currentSong.duration != nil)
 	{
 		float scrobblePercent = settings.scrobblePercent;
 		float duration = [currentSong.duration floatValue];
-		scrobbleInterval = scrobblePercent * duration;
-		//DLog(@"duration: %f    percent: %f    scrobbleInterval: %f", duration, scrobblePercent, scrobbleInterval);
+		scrobbleDelay = scrobblePercent * duration;
 	}
-	self.scrobbleTimer = [NSTimer scheduledTimerWithTimeInterval:scrobbleInterval target:self selector:@selector(scrobbleSong) userInfo:nil repeats:NO];
+	[self performSelector:@selector(scrobbleSong) withObject:nil afterDelay:scrobbleDelay];
 	
 	// If scrobbling is enabled, send "now playing" call
 	if (settings.isScrobbleEnabled)
@@ -75,13 +62,23 @@ static SocialSingleton *sharedInstance = nil;
 	}
 }
 
+- (void)notifySubsonic
+{
+	// If this song wasn't just cached, then notify Subsonic of the playback
+	Song *lastCachedSong = [SUSStreamSingleton sharedInstance].lastCachedSong;
+	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+	if (![lastCachedSong isEqualToSong:currentSong])
+	{
+		NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(currentSong.songId), @"id", nil];
+		NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters byteOffset:0];
+		[[NSURLConnection alloc] initWithRequest:request delegate:self];
+	}
+}
+
 #pragma mark - Scrobbling -
 
 - (void)scrobbleSong
-{
-	shouldInvalidateScrobbleTimer = NO;
-	scrobbleTimer = nil;
-	
+{	
 	if ([SavedSettings sharedInstance].isScrobbleEnabled)
 	{
 		SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
@@ -151,9 +148,6 @@ static SocialSingleton *sharedInstance = nil;
 	SavedSettings *settings = [SavedSettings sharedInstance];
 	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
 	Song *currentSong = dataModel.currentSong;
-	
-	shouldInvalidateTweetTimer = NO;
-	tweetTimer = nil;
 	
 	if (twitterEngine && settings.isTwitterEnabled)
 	{
@@ -260,12 +254,7 @@ static SocialSingleton *sharedInstance = nil;
 	//initialize here
 	twitterEngine = nil;
 	[self createTwitterEngine];
-	
-	tweetTimer = nil;
-	shouldInvalidateTweetTimer = NO;
-	scrobbleTimer = nil;
-	shouldInvalidateScrobbleTimer = NO;
-	
+
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songStarted) name:ISMSNotification_SongPlaybackStarted object:nil];
 }
 

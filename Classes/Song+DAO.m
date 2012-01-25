@@ -16,7 +16,7 @@
 #import "SavedSettings.h"
 #import "MusicSingleton.h"
 #import "SUSCurrentPlaylistDAO.h"
-#import "BassWrapperSingleton.h"
+#import "AudioEngine.h"
 
 @implementation Song (DAO)
 
@@ -251,6 +251,11 @@
 		DLog(@"Err adding song to cache queue %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
 	}
 	
+	if (![MusicSingleton sharedInstance].isQueueListDownloading)
+	{
+		[[MusicSingleton sharedInstance] performSelectorOnMainThread:@selector(downloadNextQueuedSong) withObject:nil waitUntilDone:NO];
+	}
+	
 	return ![self.db hadError];
 }
 
@@ -389,7 +394,7 @@
 	if (dataModel.currentSong && ![SavedSettings sharedInstance].isJukeboxEnabled &&
 		[[dataModel.currentSong.path md5] isEqualToString:md5])
 	{
-        [[BassWrapperSingleton sharedInstance] stop];
+        [[AudioEngine sharedInstance] stop];
 	}
 	
 	// Clean up genres table
@@ -417,11 +422,11 @@
 			if ([[SUSCurrentPlaylistDAO dataModel].currentSong isEqualToSong:self])
 			{
 				// This is the current playing song, so see if BASS has an actual bitrate for it
-				if ([BassWrapperSingleton sharedInstance].bitRate > 0)
+				if ([AudioEngine sharedInstance].bitRate > 0)
 				{
 					// Bass has a non-zero bitrate, so use that for the calculation
 					// convert to bytes per second, multiply by number of seconds
-					CGFloat byteRate = (CGFloat)[BassWrapperSingleton sharedInstance].bitRate * 1024. / 8.;
+					CGFloat byteRate = (CGFloat)[AudioEngine sharedInstance].bitRate * 1024. / 8.;
 					totalSize = byteRate * [self.duration floatValue];
 				}
 			}

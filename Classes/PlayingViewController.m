@@ -8,7 +8,6 @@
 
 #import "PlayingViewController.h"
 #import "PlayingUITableViewCell.h"
-#import "PlayingXMLParser.h"
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
@@ -25,12 +24,15 @@
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "FlurryAnalytics.h"
+#import "SUSNowPlayingDAO.h"
 
 @implementation PlayingViewController
 
-@synthesize nothingPlayingScreen;
+@synthesize nothingPlayingScreen, dataModel;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
+#pragma mark - Rotation Handling
+
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	
 	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
@@ -39,7 +41,10 @@
     return YES;
 }
 
-- (void)viewDidLoad {
+#pragma mark Lifecycle
+
+- (void)viewDidLoad
+{
     [super viewDidLoad];
 	
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -65,45 +70,32 @@
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fadeBottom;
+	
+	self.dataModel = [[SUSNowPlayingDAO alloc] initWithDelegate:self];
 }
 
-
-- (void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated 
+{
     [super viewWillAppear:animated];
 	
 	if(musicControls.showPlayerIcon)
 	{
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
+		UIImage *playingImage = [UIImage imageNamed:@"now-playing.png"];
+		UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithImage:playingImage
+																	   style:UIBarButtonItemStyleBordered 
+																	  target:self 
+																	  action:@selector(nowPlayingAction:)];
+		self.navigationItem.rightBarButtonItem = [buttonItem autorelease];
 	}
 	else
 	{
 		self.navigationItem.rightBarButtonItem = nil;
 	}
 	
-	viewObjects.listOfPlayingSongs = [NSMutableArray arrayWithCapacity:1];
-	//viewObjects.listOfPlayingSongs = nil, viewObjects.listOfPlayingSongs = [[NSMutableArray alloc] init];
-
-	// Load the data
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getNowPlaying" andParameters:nil];
-    
-	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	if (connection)
-	{
-		// Create the NSMutableData to hold the received data.
-		// receivedData is an instance variable declared elsewhere.
-		receivedData = [[NSMutableData alloc] initWithCapacity:0];
-		
-		// Display the loading screen
-		[viewObjects showLoadingScreenOnMainWindow];
-	} 
-	else 
-	{
-		// Inform the user that the connection failed.
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error grabbing the playing songs.\n\nThe connection could not be created" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-		[alert release];
-	}
+	[viewObjects showLoadingScreenOnMainWindow];
 	
+	[dataModel startLoad];
+		
 	[FlurryAnalytics logEvent:@"NowPlayingTab"];
 }
 
@@ -116,145 +108,143 @@
 	}
 }
 
-
 - (void)didReceiveMemoryWarning 
 {
 	// Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
 }
 
-- (void)viewDidUnload {
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
+- (void)dealloc 
+{
+    [super dealloc];
 }
 
+#pragma mark - Button Handling
 
 - (void) settingsAction:(id)sender 
 {
-	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
-	serverListViewController.hidesBottomBarWhenPushed = YES;
-	[self.navigationController pushViewController:serverListViewController animated:YES];
-	[serverListViewController release];
+	ServerListViewController *serverVC = [[ServerListViewController alloc] 
+										  initWithNibName:@"ServerListViewController" 
+												   bundle:nil];
+	serverVC.hidesBottomBarWhenPushed = YES;
+	[self.navigationController pushViewController:serverVC animated:YES];
+	[serverVC release];
 }
 
 
 - (IBAction)nowPlayingAction:(id)sender
 {
-	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-	[streamingPlayerViewController release];
+	iPhoneStreamingPlayerViewController *playerVC = [[iPhoneStreamingPlayerViewController alloc]
+													 initWithNibName:@"iPhoneStreamingPlayerViewController"
+															  bundle:nil];
+	playerVC.hidesBottomBarWhenPushed = YES;
+	[self.navigationController pushViewController:playerVC animated:YES];
+	[playerVC release];
 }
 
 
-#pragma mark Table view methods
+#pragma mark - Table View Delegate
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView 
+{
     return 1;
 }
 
 
 // Customize the number of rows in the table view.
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [viewObjects.listOfPlayingSongs count];
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
+{
+    return dataModel.count;
 }
 
 
 // Customize the appearance of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     static NSString *CellIdentifier = @"Cell";
-	PlayingUITableViewCell *cell = [[[PlayingUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+	Song *aSong = [dataModel songForIndex:indexPath.row];
 	
-    // Set up the cell...
-	NSArray *cellValue = [viewObjects.listOfPlayingSongs objectAtIndex:indexPath.row];
-	Song *aSong = [cellValue objectAtIndex:0];
+	// Create the cell
+	PlayingUITableViewCell *cell = [[PlayingUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+																 reuseIdentifier:CellIdentifier];
+	cell.selectionStyle = UITableViewCellSelectionStyleNone;
+	cell.mySong = aSong;
 	
+	// Set the cover art
 	[cell.coverArtView loadImageFromCoverArtId:aSong.coverArtId];
 	
+	// Create the background view
 	cell.backgroundView = [[[UIView alloc] init] autorelease];
 	if(indexPath.row % 2 == 0)
 		cell.backgroundView.backgroundColor = viewObjects.lightNormal;
 	else
 		cell.backgroundView.backgroundColor = viewObjects.darkNormal;
 	
-	if([[cellValue objectAtIndex:2] isEqualToString:@""])
-		[cell.userNameLabel setText:[NSString stringWithFormat:@"%@ - %i mins ago", [cellValue objectAtIndex:1], [[cellValue objectAtIndex:3] intValue]]];
+	// Set the title label
+	NSString *playTime = [dataModel playTimeForIndex:indexPath.row];
+	NSString *username = [dataModel usernameForIndex:indexPath.row];
+	NSString *playerName = [dataModel playerNameForIndex:indexPath.row];
+	
+	if (playerName)
+	{
+		NSString *text = [NSString stringWithFormat:@"%@ @ %@ - %@", username, playerName, playTime];
+		[cell.userNameLabel setText:text];
+	}
 	else
-		[cell.userNameLabel setText:[NSString stringWithFormat:@"%@ @ %@ - %i mins ago", [cellValue objectAtIndex:1], [cellValue objectAtIndex:2], [[cellValue objectAtIndex:3] intValue]]];
+	{
+		NSString *text = [NSString stringWithFormat:@"%@ - %@", username, playTime];
+		[cell.userNameLabel setText:text];
+	}
+
+	// Set the song name label
 	[cell.songNameLabel setText:aSong.title];
 	if (aSong.album)
 		[cell.artistNameLabel setText:[NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album]];
 	else
 		[cell.artistNameLabel setText:aSong.artist];
-	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	
-    return cell;
+    return [cell autorelease];
 }
 
-
-#pragma mark -
-#pragma mark Connection Delegate
-
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
-		return YES; // Self-signed cert will be accepted
+	[dataModel playSongAtIndex:indexPath.row];
 	
-	return NO;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{	
-	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+	// Show the player
+	if (IS_IPAD())
 	{
-		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"showPlayer" object:nil];
 	}
-	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+	else
+	{
+		iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
+		streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
+		[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
+		[streamingPlayerViewController release];
+	}
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-	[receivedData setLength:0];
-}
+#pragma mark - SUSLoader delegate
 
-- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
+- (void)loadingFailed:(SUSLoader *)theLoader withError:(NSError *)error
 {
-	[receivedData appendData:incrementalData];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
-{
-	// Inform the user that the connection failed.
-	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error grabbing the list of playing songs.\n\nError:%@", error.localizedDescription] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    // Inform the user that the connection failed.
+	NSString *message = [NSString stringWithFormat:@"There was an error loading the now playing list.\n\nError %i: %@", [error code], [error localizedDescription]];
+	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
 	[alert release];
 	
-	[theConnection release];
-	[receivedData release];
-	
 	[viewObjects hideLoadingScreen];
-}	
+}
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
-{	
-	// Parse the response
-	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
-	PlayingXMLParser *parser = [[PlayingXMLParser alloc] initXMLParser];
-	[xmlParser setDelegate:parser];
-	[xmlParser parse];
+- (void)loadingFinished:(SUSLoader *)theLoader
+{
+    [viewObjects hideLoadingScreen];
 	
-	[xmlParser release];
-	[parser release];
-	
-	// Hide the loading screen
-	[viewObjects hideLoadingScreen];
-	
-	// Reload the table
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES]; 
+	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 	
 	// Display the no songs overlay if 0 results
-	if ([viewObjects.listOfPlayingSongs count] == 0)
+	if (dataModel.count == 0)
 	{
 		if (isNothingPlayingScreenShowing == NO)
 		{
@@ -282,17 +272,7 @@
 			[nothingPlayingScreen release];
 		}
 	}
-	
-	[theConnection release];
-	[receivedData release];
 }
-
-- (void)dealloc {
-    [super dealloc];
-}
-
-
-
 
 @end
 

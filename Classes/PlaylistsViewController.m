@@ -32,7 +32,7 @@
 #import "SUSServerPlaylistsDAO.h"
 #import "SUSServerPlaylist.h"
 #import "SUSCurrentPlaylistDAO.h"
-#import "BassWrapperSingleton.h"
+#import "AudioEngine.h"
 #import "FlurryAnalytics.h"
 #import "FMDatabase+Synchronized.h"
 
@@ -654,7 +654,7 @@
 				}
 				else
 				{
-                    [[BassWrapperSingleton sharedInstance] stop];
+                    [[AudioEngine sharedInstance] stop];
 					self.navigationItem.rightBarButtonItem = nil;
 					
 					if (isPlaylistSaveEditShowing == YES)

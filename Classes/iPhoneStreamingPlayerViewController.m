@@ -25,7 +25,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "SavedSettings.h"
 #import "SUSCurrentPlaylistDAO.h"
-#import "BassWrapperSingleton.h"
+#import "AudioEngine.h"
 #import "EqualizerViewController.h"
 #import "SUSCoverArtLargeDAO.h"
 //#import "MarqueeLabel.h"
@@ -114,7 +114,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	}
 	else
 	{
-		if(bassWrapper.isPlaying)
+		if(audio.isPlaying)
 			[self setPauseButtonImage];
 		else
 			[self setPlayButtonImage];
@@ -145,7 +145,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	databaseControls = [DatabaseSingleton sharedInstance];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	
-	bassWrapper = [BassWrapperSingleton sharedInstance];
+	audio = [AudioEngine sharedInstance];
 	
 	self.currentPlaylist = [SUSCurrentPlaylistDAO dataModel];
 	
@@ -646,7 +646,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	}
 	else
 	{
-		[bassWrapper playPause];
+		[audio playPause];
 	}
 }
 
@@ -654,8 +654,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {
 	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
 	
-	DLog(@"track position: %f", bassWrapper.progress);
-	if (bassWrapper.progress > 10.0)
+	DLog(@"track position: %f", audio.progress);
+	if (audio.progress > 10.0)
 	{
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			[musicControls jukeboxPlaySongAtPosition:[NSNumber numberWithInt:dataModel.currentIndex]];

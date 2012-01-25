@@ -15,7 +15,7 @@
 #import "FMDatabaseAdditions.h"
 #import "FMDatabase+Synchronized.h"
 #import "NSNotificationCenter+MainThread.h"
-#import "BassWrapperSingleton.h"
+#import "AudioEngine.h"
 
 static NSUInteger currentIndex = 0;
 static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
@@ -159,7 +159,7 @@ static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
 		
 		// Correct the value of currentPlaylistPosition
 		// If the current song was deleted make sure to set goToNextSong so the next song will play
-		if ([indexesMut containsObject:[NSNumber numberWithInt:self.currentIndex]] && [BassWrapperSingleton sharedInstance].isPlaying)
+		if ([indexesMut containsObject:[NSNumber numberWithInt:self.currentIndex]] && [AudioEngine sharedInstance].isPlaying)
 		{
 			goToNextSong = YES;
 		}

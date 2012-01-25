@@ -27,7 +27,7 @@
 #import "SUSLyricsLoader.h" 
 #import "SUSStreamSingleton.h"
 #import "SUSCurrentPlaylistDAO.h"
-#import "BassWrapperSingleton.h"
+#import "AudioEngine.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "SUSCoverArtLargeDAO.h"
 #import "FMDatabase+Synchronized.h"
@@ -350,22 +350,25 @@ static MusicSingleton *sharedInstance = nil;
 
 - (void)downloadNextQueuedSong
 {
-	if (appDelegate.isWifi)
+	@synchronized(self)
 	{
-		if ([databaseControls.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
+		if (appDelegate.isWifi)
 		{
-			isQueueListDownloading = YES;
-			self.queueSongObject = nil; self.queueSongObject = [self nextQueuedSong];
-			[self startDownloadQueue];
+			if ([databaseControls.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
+			{
+				isQueueListDownloading = YES;
+				self.queueSongObject = nil; self.queueSongObject = [self nextQueuedSong];
+				[self startDownloadQueue];
+			}
+			else
+			{
+				isQueueListDownloading = NO;
+			}
 		}
 		else
 		{
 			isQueueListDownloading = NO;
 		}
-	}
-	else
-	{
-		isQueueListDownloading = NO;
 	}
 }
 
@@ -374,7 +377,7 @@ static MusicSingleton *sharedInstance = nil;
 - (void)startSongAtOffsetInSeconds:(NSUInteger)seconds
 {
 	// Destroy the streamer to start a new song
-	[bassWrapper stop];
+	[audio stop];
 	
 	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
 	
@@ -385,7 +388,7 @@ static MusicSingleton *sharedInstance = nil;
 	if (currentSong.isFullyCached)
 	{
 		// The song is fully cached, start streaming from the local copy
-		[bassWrapper start];
+		[audio startWithOffsetInBytes:nil orSeconds:[NSNumber numberWithInt:seconds]];
 	}
 	
 	// Only start the caching process if it's been a half second after the last request
@@ -447,7 +450,7 @@ static MusicSingleton *sharedInstance = nil;
 {
 	NSInteger currentIndex = [SUSCurrentPlaylistDAO dataModel].currentIndex;
 	
-	if (bassWrapper.progress > 10.0)
+	if (audio.progress > 10.0)
 	{
 		// Past 10 seconds in the song, so restart playback instead of changing songs
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -496,7 +499,7 @@ static MusicSingleton *sharedInstance = nil;
 		}
 		else
 		{
-            [bassWrapper stop];
+            [audio stop];
 			
 			[[SavedSettings sharedInstance] saveState];
 		}
@@ -506,18 +509,15 @@ static MusicSingleton *sharedInstance = nil;
 // Resume song after iSub shuts down
 - (void)resumeSong
 {	
-	return;
 	SavedSettings *settings = [SavedSettings sharedInstance];
-	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+	SUSCurrentPlaylistDAO *currentPlaylistDAO = [SUSCurrentPlaylistDAO dataModel];
+	Song *currentSong = currentPlaylistDAO.currentSong;
 	DLog(@"currentSong: %@", currentSong);
 		
 	if (currentSong && settings.isRecover)
-	{		
-		[self startSongAtOffsetInSeconds:[SavedSettings sharedInstance].seekTime];
-	}
-	else 
 	{
-		//self.bitRate = 192;
+		// The song is fully cached, so just start playing it
+		[self startSongAtOffsetInSeconds:settings.seekTime];
 	}
 }
 
@@ -554,7 +554,7 @@ static MusicSingleton *sharedInstance = nil;
 	if ([NSClassFromString(@"MPNowPlayingInfoCenter") class])  
 	{
 		/* we're on iOS 5, so set up the now playing center */
-		BassWrapperSingleton *wrapper = [BassWrapperSingleton sharedInstance];
+		AudioEngine *wrapper = [AudioEngine sharedInstance];
 		SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
 		SUSCoverArtLargeDAO *artDataModel = [SUSCoverArtLargeDAO dataModel];
 		
@@ -965,7 +965,7 @@ static MusicSingleton *sharedInstance = nil;
 	self = [super init];
 	sharedInstance = self;
 	
-	bassWrapper = [BassWrapperSingleton sharedInstance];
+	audio = [AudioEngine sharedInstance];
 	
 	//initialize here
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];

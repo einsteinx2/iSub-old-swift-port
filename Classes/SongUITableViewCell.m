@@ -116,11 +116,6 @@
 	self.overlayView.downloadButton.alpha = .3;
 	self.overlayView.downloadButton.enabled = NO;
 	
-	if ([MusicSingleton sharedInstance].isQueueListDownloading == NO)
-	{
-		[[MusicSingleton sharedInstance] downloadNextQueuedSong];
-	}
-	
 	[self hideOverlay];
 }
 

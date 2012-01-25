@@ -65,13 +65,7 @@
 	NSString *localPlaylist;
 	NSMutableArray *listOfLocalPlaylists;
 	BOOL isLocalPlaylist;
-	
-	
-	// Playing view objects
-	//
-	NSMutableArray *listOfPlayingSongs;
-	
-	
+
 	// Settings page objects
 	//
 	//NSMutableArray *serverList;
@@ -166,10 +160,6 @@
 @property (nonatomic, retain) NSString *localPlaylist;
 @property (nonatomic, retain) NSMutableArray *listOfLocalPlaylists;
 @property BOOL isLocalPlaylist;
-
-// Playing view objects
-//
-@property (nonatomic, retain) NSMutableArray *listOfPlayingSongs;
 
 // Settings page objects
 //

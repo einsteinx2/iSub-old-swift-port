@@ -13,7 +13,7 @@
 #import "Server.h"
 #import "MKStoreManager.h"
 #import "SUSCurrentPlaylistDAO.h"
-#import "BassWrapperSingleton.h"
+#import "AudioEngine.h"
 #import "iSubAppDelegate.h"
 #import "Reachability.h"
 
@@ -55,12 +55,12 @@
 	
 	// Initiallize the save state stuff
 	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
-	BassWrapperSingleton *bassWrapper = [BassWrapperSingleton sharedInstance];
+	AudioEngine *audio = [AudioEngine sharedInstance];
 	
 	if (self.isJukeboxEnabled)
 		isPlaying = NO;
 	else
-		isPlaying = bassWrapper.isPlaying;
+		isPlaying = audio.isPlaying;
 	[userDefaults setBool:isPlaying forKey:@"isPlaying"];
 	
 	isShuffle = musicControls.isShuffle;
@@ -72,7 +72,7 @@
 	repeatMode = currentPlaylistDAO.repeatMode;
 	[userDefaults setInteger:repeatMode forKey:@"repeatMode"];
 	
-	bitRate = bassWrapper.bitRate;
+	bitRate = audio.bitRate;
 	[userDefaults setInteger:bitRate forKey:@"bitRate"];
 	
 	[userDefaults synchronize];
@@ -88,17 +88,17 @@
 	//DLog(@"saveDefaults!!");
 	
 	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
-	BassWrapperSingleton *bassWrapper = [BassWrapperSingleton sharedInstance];
+	AudioEngine *audio = [AudioEngine sharedInstance];
 	SUSCurrentPlaylistDAO *currentPlaylistDAO = [SUSCurrentPlaylistDAO dataModel];
 	
 	NSInteger currentIndex = currentPlaylistDAO.currentIndex;
 		
-	if (bassWrapper.isPlaying != isPlaying)
+	if (audio.isPlaying != isPlaying)
 	{
 		if (self.isJukeboxEnabled)
 			isPlaying = NO;
 		else
-			isPlaying = bassWrapper.isPlaying;
+			isPlaying = audio.isPlaying;
 				
 		[userDefaults setBool:isPlaying forKey:@"isPlaying"];
 	}
@@ -121,13 +121,13 @@
 		[userDefaults setInteger:repeatMode forKey:@"repeatMode"];
 	}
 	
-	if (bassWrapper.bitRate != bitRate)
+	if (audio.bitRate != bitRate)
 	{
-		bitRate = bassWrapper.bitRate;
+		bitRate = audio.bitRate;
 		[userDefaults setInteger:bitRate forKey:@"bitRate"];
 	}
 	
-	self.seekTime = bassWrapper.progress;
+	self.seekTime = audio.progress;
 	
 	if (isPlaying)
 	{
@@ -836,6 +836,18 @@
 	[userDefaults setInteger:seekTime forKey:@"seekTime"];
 	[userDefaults synchronize];
 }
+
+/*- (unsigned long long)byteOffset
+{
+	return [[userDefaults objectForKey:@"byteOffset"] unsignedLongLongValue];
+}
+
+- (void)setByteOffset:(unsigned long long)byteOffset
+{
+	NSNumber *num = [NSNumber numberWithUnsignedLongLong:byteOffset];
+	[userDefaults setObject:num forKey:@"byteOffset"];
+	[userDefaults synchronize];
+}*/
 
 - (BOOL)isBasicAuthEnabled
 {

@@ -1,5 +1,5 @@
 //
-//  BassWrapperSingleton.h
+//  AudioEngine.h
 //  iSub
 //
 //  Created by Ben Baron on 11/16/11.
@@ -43,7 +43,7 @@ typedef enum
 } ISMS_AQ_STATE;
 
 @class Song, BassParamEqValue, SUSCurrentPlaylistDAO, BassUserInfo;
-@interface BassWrapperSingleton : NSObject
+@interface AudioEngine : NSObject
 {
 	AudioQueueRef audioQueue;
 	AudioStreamBasicDescription audioQueueOutputFormat;
@@ -67,11 +67,11 @@ typedef enum
 	HFX volumeFx;
 }
 
-+ (BassWrapperSingleton *)sharedInstance;
++ (AudioEngine *)sharedInstance;
 
 // Playback methods
 //
-- (void)startWithOffsetInBytes:(NSNumber *)byteOffset;
+- (void)startWithOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds;
 - (void)seekToPositionInBytes:(QWORD)bytes inStream:(HSTREAM)stream;
 - (void)seekToPositionInBytes:(QWORD)bytes;
 - (void)seekToPositionInSeconds:(NSUInteger)seconds inStream:(HSTREAM)stream;
@@ -110,7 +110,7 @@ typedef enum
 @property (readonly) double progress;
 @property (readonly) BOOL isEqualizerOn;
 @property (readonly) NSArray *equalizerValues;
-@property QWORD startByteOffset;
+@property unsigned long long startByteOffset;
 @property (readonly) HSTREAM currentStream;
 @property (readonly) HSTREAM currentStreamTempo;
 @property (readonly) HSTREAM nextStream;

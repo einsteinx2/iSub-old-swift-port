@@ -11,11 +11,14 @@
 
 #define ISMSNumberOfStreamsToQueue 2
 
-@class Song, SUSStreamHandler, SUSLyricsDAO;
+@class Song, SUSStreamHandler, SUSLyricsDAO, SUSCurrentPlaylistDAO;
 @interface SUSStreamSingleton : NSObject <SUSStreamHandlerDelegate, SUSLoaderDelegate>
 
-@property (nonatomic, retain) NSMutableArray *handlerStack;
-@property (nonatomic, retain) SUSLyricsDAO *lyricsDataModel;
+@property (retain) NSMutableArray *handlerStack;
+@property (retain) SUSLyricsDAO *lyricsDAO;
+@property (retain) SUSCurrentPlaylistDAO *currentPlaylistDAO;
+
+@property (copy) Song *lastCachedSong;
 
 + (SUSStreamSingleton *)sharedInstance;
 
@@ -43,5 +46,9 @@
 - (void)queueStreamForSong:(Song *)song isTempCache:(BOOL)isTemp;
 
 - (void)fillStreamQueue;
+
+- (void)resumeHandler:(SUSStreamHandler *)handler;
+- (void)startHandler:(SUSStreamHandler *)handler resume:(BOOL)resume;
+- (void)startHandler:(SUSStreamHandler *)handler;
 
 @end

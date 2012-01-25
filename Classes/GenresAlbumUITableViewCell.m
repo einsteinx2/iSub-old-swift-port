@@ -119,11 +119,6 @@
 				[[Song songFromGenreDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCacheQueue];
 		}
 		
-		if ([MusicSingleton sharedInstance].isQueueListDownloading == NO)
-		{
-			[[MusicSingleton sharedInstance] performSelectorOnMainThread:@selector(downloadNextQueuedSong) withObject:nil waitUntilDone:NO];
-		}
-		
 		// Hide the loading screen
 		[[ViewObjectsSingleton sharedInstance] performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:YES];
 	}

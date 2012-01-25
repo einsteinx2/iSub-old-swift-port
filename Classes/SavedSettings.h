@@ -8,7 +8,7 @@
 
 #import "BassEffectDAO.h"
 
-@class BassWrapperSingleton;
+@class AudioEngine;
 @interface SavedSettings : NSObject 
 {    
 	NSUserDefaults *userDefaults;
@@ -84,6 +84,7 @@
 // State Saving
 @property BOOL isRecover;
 @property NSUInteger seekTime;
+//@property unsigned long long byteOffset;
 
 // Document Paths
 @property (readonly) NSString *documentsPath;

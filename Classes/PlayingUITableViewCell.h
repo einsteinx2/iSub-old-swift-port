@@ -8,9 +8,10 @@
 
 #import "CustomUITableViewCell.h"
 
-@class AsynchronousImageViewCached;
+@class AsynchronousImageViewCached, Song;
 @interface PlayingUITableViewCell : CustomUITableViewCell 
 
+@property (nonatomic, copy) Song *mySong;
 @property (nonatomic, retain) AsynchronousImageViewCached *coverArtView;
 @property (nonatomic, retain) UILabel *userNameLabel;
 @property (nonatomic, retain) UIScrollView *nameScrollView;

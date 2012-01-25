@@ -13,7 +13,7 @@
 
 @implementation Song
 
-@synthesize title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix;
+@synthesize title, songId, parentId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix;
 @synthesize duration, bitRate, track, year, size;
 
 - (id)initWithTBXMLElement:(TBXMLElement *)element
@@ -22,6 +22,7 @@
 	{
 		title = nil;
 		songId = nil;
+		parentId = nil;
 		artist = nil;
 		album = nil;
 		genre = nil;
@@ -37,6 +38,8 @@
 		
 		self.title = [[TBXML valueOfAttributeNamed:@"title" forElement:element] gtm_stringByUnescapingFromHTML];
 		self.songId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
+		if ([TBXML valueOfAttributeNamed:@"parentId" forElement:element])
+			self.parentId = parentId;
 		self.artist = [[TBXML valueOfAttributeNamed:@"artist" forElement:element] gtm_stringByUnescapingFromHTML];
 		if([TBXML valueOfAttributeNamed:@"album" forElement:element])
 			self.album = [[TBXML valueOfAttributeNamed:@"album" forElement:element] gtm_stringByUnescapingFromHTML];
@@ -74,6 +77,7 @@
 	{
 		title = nil;
 		songId = nil;
+		parentId = nil;
 		artist = nil;
 		album = nil;
 		genre = nil;
@@ -92,6 +96,9 @@
 		
 		if ([attributeDict objectForKey:@"id"])
 			self.songId = [attributeDict objectForKey:@"id"];
+		
+		if ([attributeDict objectForKey:@"parentId"])
+			self.parentId = [attributeDict objectForKey:@"parentId"];
 		
 		if ([attributeDict objectForKey:@"artist"])
 			self.artist = [attributeDict objectForKey:@"artist"];
@@ -135,31 +142,33 @@
 	return self;
 }
 
--(void) encodeWithCoder: (NSCoder *) encoder
+-(void)encodeWithCoder:(NSCoder *)encoder
 {
-	[encoder encodeObject: title];
-	[encoder encodeObject: songId];
-	[encoder encodeObject: artist];
-	[encoder encodeObject: album];
-	[encoder encodeObject: genre];
-	[encoder encodeObject: coverArtId];
-	[encoder encodeObject: path];
-	[encoder encodeObject: suffix];
-	[encoder encodeObject: transcodedSuffix];
-	[encoder encodeObject: duration];
-	[encoder encodeObject: bitRate];
-	[encoder encodeObject: track];
-	[encoder encodeObject: year];
-	[encoder encodeObject: size];
+	[encoder encodeObject:title forKey:@"title"];
+	[encoder encodeObject:songId forKey:@"songId"];
+	[encoder encodeObject:parentId forKey:@"parentId"];
+	[encoder encodeObject:artist forKey:@"artist"];
+	[encoder encodeObject:album forKey:@"album"];
+	[encoder encodeObject:genre forKey:@"genre"];
+	[encoder encodeObject:coverArtId forKey:@"coverArtId"];
+	[encoder encodeObject:path forKey:@"path"];
+	[encoder encodeObject:suffix forKey:@"suffix"];
+	[encoder encodeObject:transcodedSuffix forKey:@"transcodedSuffix"];
+	[encoder encodeObject:duration forKey:@"duration"];
+	[encoder encodeObject:bitRate forKey:@"bitRate"];
+	[encoder encodeObject:track forKey:@"track"];
+	[encoder encodeObject:year forKey:@"year"];
+	[encoder encodeObject:size forKey:@"size"];
 }
 
 
--(id) initWithCoder: (NSCoder *) decoder
+-(id)initWithCoder:(NSCoder *)decoder
 {
 	if ((self = [super init]))
 	{
 		title = nil;
 		songId = nil;
+		parentId = nil;
 		artist = nil;
 		album = nil;
 		genre = nil;
@@ -173,59 +182,68 @@
 		year = nil;
 		size = nil;
 		
-		title = [[decoder decodeObject] retain];
-		songId = [[decoder decodeObject] retain];
-		artist = [[decoder decodeObject] retain];
-		album = [[decoder decodeObject] retain];
-		genre = [[decoder decodeObject] retain];
-		coverArtId = [[decoder decodeObject] retain];
-		path = [[decoder decodeObject] retain];
-		suffix = [[decoder decodeObject] retain];
-		transcodedSuffix = [[decoder decodeObject] retain];
-		duration = [[decoder decodeObject] retain];
-		bitRate = [[decoder decodeObject] retain];
-		track = [[decoder decodeObject] retain];
-		year = [[decoder decodeObject] retain];
-		size = [[decoder decodeObject] retain];
+		// Check if this object is using the new encoding
+		if ([decoder containsValueForKey:@"songId"])
+		{
+			title = [[decoder decodeObjectForKey:@"title"] retain];
+			songId = [[decoder decodeObjectForKey:@"songId"] retain];
+			parentId = [[decoder decodeObjectForKey:@"parentId"] retain];
+			artist = [[decoder decodeObjectForKey:@"artist"] retain];
+			album = [[decoder decodeObjectForKey:@"album"] retain];
+			genre = [[decoder decodeObjectForKey:@"genre"] retain];
+			coverArtId = [[decoder decodeObjectForKey:@"coverArtId"] retain];
+			path = [[decoder decodeObjectForKey:@"path"] retain];
+			suffix = [[decoder decodeObjectForKey:@"suffix"] retain];
+			transcodedSuffix = [[decoder decodeObjectForKey:@"transcodedSuffix"] retain];
+			duration =[[decoder decodeObjectForKey:@"duration"] retain];
+			bitRate = [[decoder decodeObjectForKey:@"bitRate"] retain];
+			track = [[decoder decodeObjectForKey:@"track"] retain];
+			year = [[decoder decodeObjectForKey:@"year"] retain];
+			size = [[decoder decodeObjectForKey:@"size"] retain];
+		}
+		else
+		{
+			title = [[decoder decodeObject] retain];
+			songId = [[decoder decodeObject] retain];
+			artist = [[decoder decodeObject] retain];
+			album = [[decoder decodeObject] retain];
+			genre = [[decoder decodeObject] retain];
+			coverArtId = [[decoder decodeObject] retain];
+			path = [[decoder decodeObject] retain];
+			suffix = [[decoder decodeObject] retain];
+			transcodedSuffix = [[decoder decodeObject] retain];
+			duration = [[decoder decodeObject] retain];
+			bitRate = [[decoder decodeObject] retain];
+			track = [[decoder decodeObject] retain];
+			year = [[decoder decodeObject] retain];
+			size = [[decoder decodeObject] retain];
+		}
 	}
 	
 	return self;
 }
 
 
--(id) copyWithZone: (NSZone *) zone
+-(id)copyWithZone:(NSZone *)zone
 {
 	Song *newSong = [[Song alloc] init];
-	
-	newSong.title = nil;
-	newSong.songId = nil;
-	newSong.artist = nil;
-	newSong.album = nil;
-	newSong.genre = nil;
-	newSong.coverArtId = nil;
-	newSong.path = nil;
-	newSong.suffix = nil;
-	newSong.transcodedSuffix = nil;
-	newSong.duration = nil;
-	newSong.bitRate = nil;
-	newSong.track = nil;
-	newSong.year = nil;
-	newSong.size = nil;
-	
-	newSong.title = [[title copy] autorelease];
-	newSong.songId = [[songId copy] autorelease];
-	newSong.artist = [[artist copy] autorelease];
-	newSong.album = [[album copy] autorelease];
-	newSong.genre = [[genre copy] autorelease];
-	newSong.coverArtId = [[coverArtId copy] autorelease];
-	newSong.path = [[path copy] autorelease];
-	newSong.suffix = [[suffix copy] autorelease];
-	newSong.transcodedSuffix = [[transcodedSuffix copy] autorelease];
-	newSong.duration = [[duration copy] autorelease];
-	newSong.bitRate = [[bitRate copy] autorelease];
-	newSong.track = [[track copy] autorelease];
-	newSong.year = [[year copy] autorelease];
-	newSong.size = [[size copy] autorelease];
+
+	// Can directly assign because properties have "copy" type
+	newSong.title = self.title;
+	newSong.songId = self.songId;
+	newSong.parentId = self.parentId;
+	newSong.artist = self.artist;
+	newSong.album = self.album;
+	newSong.genre = self.genre;
+	newSong.coverArtId = self.coverArtId;
+	newSong.path = self.path;
+	newSong.suffix = self.suffix;
+	newSong.transcodedSuffix = self.transcodedSuffix;
+	newSong.duration = self.duration;
+	newSong.bitRate = self.bitRate;
+	newSong.track = self.track;
+	newSong.year = self.year;
+	newSong.size = self.size;
 	
 	return newSong;
 }

@@ -12,6 +12,7 @@
 
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *songId;
+@property (nonatomic, copy) NSString *parentId;
 @property (nonatomic, copy) NSString *artist;
 @property (nonatomic, copy) NSString *album;
 @property (nonatomic, copy) NSString *genre;

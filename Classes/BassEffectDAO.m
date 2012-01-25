@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "BassWrapperSingleton.h"
+#import "AudioEngine.h"
 #import "BassEffectDAO.h"
 #import "BassEffectValue.h"
 #import "BassParamEqValue.h"
@@ -198,7 +198,7 @@ NSInteger presetSort(id preset1, id preset2, void *context)
 {
 	self.selectedPresetId = presetId;
 	
-	BassWrapperSingleton *wrapper = [BassWrapperSingleton sharedInstance];
+	AudioEngine *wrapper = [AudioEngine sharedInstance];
 	
 	if (type == BassEffectType_ParametricEQ)
 	{

@@ -40,9 +40,6 @@ static ViewObjectsSingleton *sharedInstance = nil;
 // Playlists view objects
 @synthesize listOfPlaylists, listOfPlaylistSongs, localPlaylist, listOfLocalPlaylists, isLocalPlaylist;
 
-// Playing view objects
-@synthesize listOfPlayingSongs;
-
 // Settings page objects
 @synthesize serverToEdit;
 

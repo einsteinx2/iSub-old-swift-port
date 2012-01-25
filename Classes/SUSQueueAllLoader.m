@@ -94,13 +94,6 @@
 				[[SUSStreamSingleton sharedInstance] fillStreamQueue];
 			}
 		}
-		else
-		{
-			if (musicControls.isQueueListDownloading == NO)
-			{
-				[musicControls downloadNextQueuedSong];
-			}
-		}
 		
 		[viewObjects hideLoadingScreen];
 		

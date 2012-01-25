@@ -25,7 +25,7 @@
 #import "NSString+time.h"
 #import "SUSStreamSingleton.h"
 #import "SUSCurrentPlaylistDAO.h"
-#import "BassWrapperSingleton.h"
+#import "AudioEngine.h"
 #import "NSArray+FirstObject.h"
 #import "SUSStreamHandler.h"
 #import "EqualizerViewController.h"
@@ -62,7 +62,7 @@
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	musicControls = [MusicSingleton sharedInstance];
 	databaseControls = [DatabaseSingleton sharedInstance];
-    bassWrapper = [BassWrapperSingleton sharedInstance];
+    audio = [AudioEngine sharedInstance];
     
     downloadProgress = [[UIView alloc] initWithFrame:progressSlider.frame];
 	[downloadProgress newX:0.0];
@@ -159,7 +159,7 @@
 
 - (void)updateBitrateLabel
 {
-	bitRateLabel.text = [NSString stringWithFormat:@"Bit Rate: %i kbps", bassWrapper.bitRate];
+	bitRateLabel.text = [NSString stringWithFormat:@"Bit Rate: %i kbps", audio.bitRate];
 }
 
 - (void)initInfo
@@ -187,7 +187,7 @@
 	artistLabel.text = currentSong.artist;
 	titleLabel.text = currentSong.title;
 	
-	bitRateLabel.text = [NSString stringWithFormat:@"Bit Rate: %i kbps", bassWrapper.bitRate];
+	bitRateLabel.text = [NSString stringWithFormat:@"Bit Rate: %i kbps", audio.bitRate];
 		
 	if (currentSong.duration)
 		lengthLabel.text = [NSString stringWithFormat:@"Length: %@", [NSString formatTime:[currentSong.duration floatValue]]];
@@ -295,7 +295,7 @@
 		return;
 	}
 
-	bitRateLabel.text = [NSString stringWithFormat:@"Bit Rate: %i kbps", bassWrapper.bitRate];
+	bitRateLabel.text = [NSString stringWithFormat:@"Bit Rate: %i kbps", audio.bitRate];
 	
 	if (!pauseSlider)
 	{
@@ -304,22 +304,32 @@
 			CGRect frame = self.view.frame;
 			if (frame.origin.x == 0)
 			{
-				progressSlider.value = bassWrapper.progress;
-				elapsedTimeLabel.text = [NSString formatTime:bassWrapper.progress];
-				remainingTimeLabel.text = [NSString stringWithFormat:@"-%@",[NSString formatTime:([currentSong.duration floatValue] - bassWrapper.progress)]];
+				progressSlider.value = audio.progress;
+				elapsedTimeLabel.text = [NSString formatTime:audio.progress];
+				remainingTimeLabel.text = [NSString stringWithFormat:@"-%@",[NSString formatTime:([currentSong.duration floatValue] - audio.progress)]];
 			}
 		}
 		else 
 		{
 			progressSlider.value = 0.0;
-			elapsedTimeLabel.text = [NSString formatTime:bassWrapper.progress];
+			elapsedTimeLabel.text = [NSString formatTime:audio.progress];
 			remainingTimeLabel.text = [NSString formatTime:0];
 		}*/
 		
-		NSString *elapsedTime = [NSString formatTime:bassWrapper.progress];
-		NSString *remainingTime = [NSString formatTime:([currentSong.duration floatValue] - bassWrapper.progress)];
+		NSString *elapsedTime = nil;
+		NSString *remainingTime = nil;
+		if (audio.isPlaying)
+		{
+			elapsedTime = [NSString formatTime:audio.progress];
+			remainingTime = [NSString formatTime:([currentSong.duration floatValue] - audio.progress)];
+		}
+		else
+		{
+			elapsedTime = [NSString formatTime:[SavedSettings sharedInstance].seekTime];
+			remainingTime = [NSString formatTime:([currentSong.duration floatValue] - [SavedSettings sharedInstance].seekTime)];
+		}
 		
-		progressSlider.value = bassWrapper.progress;
+		progressSlider.value = audio.progress;
 		elapsedTimeLabel.text = elapsedTime;
 		remainingTimeLabel.text =[@"-" stringByAppendingString:remainingTime];
 	}
@@ -368,13 +378,13 @@
 			progressSlider.value = newValue;
 		}
 		
-		byteOffset = bassWrapper.bitRate * 128 * progressSlider.value;
+		byteOffset = audio.bitRate * 128 * progressSlider.value;
 
 		DLog(@"byteOffset: %i", byteOffset);
 		
 		if ([self.currentSong isTempCached])
 		{
-            [bassWrapper stop];
+            [audio stop];
 			
 			[[SUSStreamSingleton sharedInstance] removeStreamAtIndex:0];
 			[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong offset:byteOffset atIndex:0 isTempCache:YES];
@@ -391,7 +401,7 @@
 		{			
 			if (currentSong.isFullyCached || byteOffset <= currentSong.localFileSize)
 			{
-				[bassWrapper seekToPositionInSeconds:progressSlider.value];
+				[audio seekToPositionInSeconds:progressSlider.value];
 				pauseSlider = NO;
 				hasMoved = NO;
 			}
@@ -491,7 +501,7 @@
 		}
 		else if(buttonIndex == 1)
 		{
-            [bassWrapper stop];
+            [audio stop];
 			[[SUSStreamSingleton sharedInstance] removeStreamAtIndex:0];
             DLog(@"byteOffset: %i", byteOffset);
 			DLog(@"starting temp stream");

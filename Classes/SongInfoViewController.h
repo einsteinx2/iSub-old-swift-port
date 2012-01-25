@@ -7,7 +7,7 @@
 //
 
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, OBSlider, Song, BassWrapperSingleton;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, OBSlider, Song, AudioEngine;
 
 @interface SongInfoViewController : UIViewController
 {
@@ -15,7 +15,7 @@
 	ViewObjectsSingleton *viewObjects;
 	MusicSingleton *musicControls;
 	DatabaseSingleton *databaseControls;
-    BassWrapperSingleton *bassWrapper;
+    AudioEngine *audio;
 		
 	UITextField *bookmarkNameTextField;
 	NSArray *bookmarkEntry;

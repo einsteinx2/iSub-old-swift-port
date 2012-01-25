@@ -12,7 +12,6 @@
 #import "CacheSingleton.h"
 #import "Song.h"
 #import "SUSCurrentPlaylistDAO.h"
-#import "BassWrapperSingleton.h"
 
 @implementation DebugViewController
 @synthesize currentSong, nextSong;

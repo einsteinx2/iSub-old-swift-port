@@ -103,12 +103,15 @@
 // Create the request and start the connection in loadingThread
 - (void)start:(BOOL)resume
 {
-	// Remove temp file for this song if exists
-	[[NSFileManager defaultManager] removeItemAtPath:self.mySong.localTempPath error:NULL];
-	
-	// Clear cache if this is a temp file
-	if (self.isTempCache)
-		[[CacheSingleton sharedInstance] clearTempCache];
+	if (!resume)
+	{
+		// Remove temp file for this song if exists
+		[[NSFileManager defaultManager] removeItemAtPath:self.mySong.localTempPath error:NULL];
+		
+		// Clear cache if this is a temp file
+		if (self.isTempCache)
+			[[CacheSingleton sharedInstance] clearTempCache];
+	}
 	
 	SavedSettings *settings = [SavedSettings sharedInstance];
 

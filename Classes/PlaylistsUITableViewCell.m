@@ -219,11 +219,6 @@
                     
                     [pool release];
                 }
-                
-                if (isDownload && [MusicSingleton sharedInstance].isQueueListDownloading == NO)
-                {
-                    [[MusicSingleton sharedInstance] downloadNextQueuedSong];
-                }
             }
         }
     }

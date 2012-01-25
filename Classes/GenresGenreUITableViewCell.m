@@ -106,11 +106,6 @@
 		}
 		[result release];
 		
-		if ([MusicSingleton sharedInstance].isQueueListDownloading == NO)
-		{
-			[[MusicSingleton sharedInstance] performSelectorOnMainThread:@selector(downloadNextQueuedSong) withObject:nil waitUntilDone:NO];
-		}
-		
 		// Hide the loading screen
 		[[ViewObjectsSingleton sharedInstance] performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:YES];
 	}

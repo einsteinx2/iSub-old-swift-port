@@ -12,7 +12,7 @@
 #import "ConstantsAndMacros.h"
 
 #import "EqualizerView.h"
-#import "BassWrapperSingleton.h"
+#import "AudioEngine.h"
 
 //CLASS IMPLEMENTATIONS:
 
@@ -232,7 +232,7 @@ static void destroy_versionArrays()
 
 - (void)drawTheEq
 {	
-	BassWrapperSingleton *wrapper = [BassWrapperSingleton sharedInstance];
+	AudioEngine *wrapper = [AudioEngine sharedInstance];
 	
 	if (!wrapper.isPlaying)
 		return;
@@ -482,7 +482,7 @@ static void destroy_versionArrays()
 	switch (visualType)
 	{
 		case ISMSBassVisualType_line:
-			[[BassWrapperSingleton sharedInstance] startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_fft];
+			[[AudioEngine sharedInstance] startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_fft];
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			visualType = ISMSBassVisualType_skinnyBar; 
 			break;
@@ -499,7 +499,7 @@ static void destroy_versionArrays()
 		case ISMSBassVisualType_aphexFace:
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			visualType = ISMSBassVisualType_line; 
-			[[BassWrapperSingleton sharedInstance] startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_line];
+			[[AudioEngine sharedInstance] startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_line];
 			break;
 	}
 }

@@ -8,7 +8,7 @@
 
 #import "SUSLoaderDelegate.h"
 
-@class iSubAppDelegate, DatabaseSingleton, ViewObjectsSingleton, Song, BBSimpleConnectionQueue, BassWrapperSingleton;
+@class iSubAppDelegate, DatabaseSingleton, ViewObjectsSingleton, Song, BBSimpleConnectionQueue, AudioEngine;
 
 @interface MusicSingleton : NSObject <SUSLoaderDelegate>
 {
@@ -18,7 +18,7 @@
 		
 	BOOL isAutoNextNotificationOn;
 	
-	BassWrapperSingleton *bassWrapper;
+	AudioEngine *audio;
 }
 
 // Audio streamer objects and variables

@@ -22,7 +22,7 @@
 #import "CustomUIAlertView.h"
 #import "Reachability.h"
 #import "SavedSettings.h"
-#import "BassWrapperSingleton.h"
+#import "AudioEngine.h"
 #import "SUSAllSongsLoader.h"
 
 @implementation ServerListViewController
@@ -289,7 +289,7 @@
 		// Stop any playing song and remove old tab bar controller from window
 		[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"recover"];
 		[[NSUserDefaults standardUserDefaults] synchronize];
-		[[BassWrapperSingleton sharedInstance] stop];
+		[[AudioEngine sharedInstance] stop];
 		settings.isJukeboxEnabled = NO;
 		
 		if (!IS_IPAD())

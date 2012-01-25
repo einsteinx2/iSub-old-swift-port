@@ -10,7 +10,7 @@
 #import "MusicSingleton.h"
 #import "iSubAppDelegate.h"
 #import "SavedSettings.h"
-#import "BassWrapperSingleton.h"
+#import "AudioEngine.h"
  
 @implementation UAApplication
 
@@ -69,7 +69,7 @@
 	}
 	else
 	{
-        [[BassWrapperSingleton sharedInstance] playPause];
+        [[AudioEngine sharedInstance] playPause];
 	}
 }
 

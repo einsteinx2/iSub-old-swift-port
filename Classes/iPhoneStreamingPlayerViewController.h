@@ -7,7 +7,7 @@
 //
 
 
-@class iSubAppDelegate, MusicSingleton, DatabaseSingleton, ViewObjectsSingleton, CoverArtImageView, PageControlViewController, MPVolumeView, BassWrapperSingleton, SUSCurrentPlaylistDAO;
+@class iSubAppDelegate, MusicSingleton, DatabaseSingleton, ViewObjectsSingleton, CoverArtImageView, PageControlViewController, MPVolumeView, AudioEngine, SUSCurrentPlaylistDAO;
 
 @interface iPhoneStreamingPlayerViewController : UIViewController
 {
@@ -43,7 +43,7 @@
 	
 	PageControlViewController *pageControlViewController;
 	
-	BassWrapperSingleton *bassWrapper;
+	AudioEngine *audio;
 }
 
 @property (nonatomic, retain) NSArray *listOfSongs;
