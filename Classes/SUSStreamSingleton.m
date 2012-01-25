@@ -317,7 +317,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 	DLog(@"currentSong: %@   mySong: %@", currentSong, handler.mySong);
 	if ([handler.mySong isEqualToSong:currentSong])
 	{
-		[audio startWithOffsetInBytes:[NSNumber numberWithInt:offset]];
+		[audio startWithOffsetInBytes:[NSNumber numberWithInt:offset] orSeconds:nil];
 	}
 	else if ([handler.mySong isEqualToSong:nextSong])
 	{

@@ -109,6 +109,7 @@
 	
 	[self loadFlurryAnalytics];
 	[self loadHockeyApp];
+	[self loadCrittercism];
 	
 	[self loadInAppPurchaseStore];
 	
@@ -359,21 +360,46 @@
 	// HockyApp Kits
 	if (IS_BETA() && IS_ADHOC() && !IS_LITE())
 	{
-		[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
-		[[BWQuincyManager sharedQuincyManager] setShowAlwaysButton:YES];
+		//[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
+		//[[BWQuincyManager sharedQuincyManager] setShowAlwaysButton:YES];
 		
 		[[BWHockeyManager sharedHockeyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
 		[[BWHockeyManager sharedHockeyManager] setAlwaysShowUpdateReminder:YES];
 	}
 	else if (IS_RELEASE())
 	{
-		if (IS_LITE())
-			[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7"];
-		else
-			[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb"];
+		//if (IS_LITE())
+		//	[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7"];
+		//else
+		//	[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb"];
 		
-		[[BWQuincyManager sharedQuincyManager] setShowAlwaysButton:YES];
+		//[[BWQuincyManager sharedQuincyManager] setShowAlwaysButton:YES];
 	}
+}
+
+- (void)loadCrittercism
+{
+	if (IS_BETA() && IS_ADHOC() && !IS_LITE())
+	{
+		[Crittercism initWithAppID:@"4f1f97d2b093150d55000093" 
+							andKey:@"4f1f97d2b093150d55000093djpi3cjr" 
+						 andSecret:@"rxpop9uqaqhfl8bzmjh7njawgs35cvok" 
+			 andMainViewController:nil];
+	}
+	else if (IS_RELEASE())
+	{
+		[Crittercism initWithAppID:@"4f1f9785b093150d5500008c" 
+							andKey:@"4f1f9785b093150d5500008cpu3zoqbu" 
+						 andSecret:@"2ayz0tlckhhu4jjsb8dzxuqmfnexcqkn"
+			 andMainViewController:nil];
+	}
+	[Crittercism sharedInstance].delegate = self;
+}
+
+-(void)crittercismDidCrashOnLastLoad
+{
+	// TODO: Do something here
+	DLog(@"App crashed on last load. Do something here.");
 }
 
 - (void)loadInAppPurchaseStore

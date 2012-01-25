@@ -25,7 +25,6 @@ static SocialSingleton *sharedInstance = nil;
 
 @implementation SocialSingleton
 
-// Twitter
 @synthesize twitterEngine;
 
 
@@ -254,7 +253,7 @@ static SocialSingleton *sharedInstance = nil;
 	//initialize here
 	twitterEngine = nil;
 	[self createTwitterEngine];
-
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songStarted) name:ISMSNotification_SongPlaybackStarted object:nil];
 }
 

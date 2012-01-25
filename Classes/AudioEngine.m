@@ -538,6 +538,21 @@ void interruptionListenerCallback (void    *inUserData, UInt32  interruptionStat
 
 #pragma mark - Audio Queue methods
 
+- (void)audioSessionInit:(NSInteger)sampleRate
+{
+	// Set up audio session
+	AudioSessionInitialize(NULL, NULL, interruptionListenerCallback, self);
+	UInt32 sessionCategory = kAudioSessionCategory_MediaPlayback;
+	AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(sessionCategory), &sessionCategory);
+	Float64 sampleRateFloat = (Float64)sampleRate;
+	AudioSessionSetProperty(kAudioSessionProperty_PreferredHardwareSampleRate, sizeof(sampleRateFloat), &sampleRateFloat);
+	AudioSessionSetActive(true);
+	
+	// Add the callbacks for headphone removal and other audio takeover
+	AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, self);
+	AudioSessionAddPropertyListener(kAudioSessionProperty_OtherAudioIsPlaying, audioInterruptionListenerCallback, self);
+}
+
 // Create the audio queue
 - (BOOL)aqsInit:(NSUInteger)sampleRate
 {
@@ -548,16 +563,14 @@ void interruptionListenerCallback (void    *inUserData, UInt32  interruptionStat
 	}
 	
 	DLog(@"Creating audio queue with %i sample rate", sampleRate);
-	audioQueueOutputFormat.mSampleRate = sampleRate;
+	audioQueueOutputFormat.mSampleRate = (Float64)sampleRate;
 	audioQueueOutputFormat.mFormatID = kAudioFormatLinearPCM;
 	audioQueueOutputFormat.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
 	audioQueueOutputFormat.mFramesPerPacket = 1;
 	audioQueueOutputFormat.mChannelsPerFrame = 2;
-	//audioQueueOutputFormat.mBytesPerPacket = audioQueueOutputFormat.mBytesPerFrame = sizeof(UInt16) * 2;
 	audioQueueOutputFormat.mBitsPerChannel = 16;
 	audioQueueOutputFormat.mBytesPerFrame    = audioQueueOutputFormat.mChannelsPerFrame * audioQueueOutputFormat.mBitsPerChannel/8; 
 	audioQueueOutputFormat.mBytesPerPacket   = audioQueueOutputFormat.mBytesPerFrame * audioQueueOutputFormat.mFramesPerPacket;
-	//audioQueueOutputFormat.mReserved = 0;
 	
 	OSStatus result = AudioQueueNewOutput(&audioQueueOutputFormat, MyQueueCallbackProc, self, NULL, kCFRunLoopCommonModes, 0, &audioQueue);
 	
@@ -681,17 +694,7 @@ void interruptionListenerCallback (void    *inUserData, UInt32  interruptionStat
 	{
 		DLog(@"Can't initialize device");
 	}
-	BASS_PluginLoad(&BASSFLACplugin, 0); // load the FLAC plugin
-	
-	// Set up audio session
-	AudioSessionInitialize(NULL, NULL, interruptionListenerCallback, self);
-	UInt32 sessionCategory = kAudioSessionCategory_MediaPlayback;
-	AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(sessionCategory), &sessionCategory);
-	AudioSessionSetActive(true);
-	
-	// Add the callbacks for headphone removal and other audio takeover
-	AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, self);
-	AudioSessionAddPropertyListener(kAudioSessionProperty_OtherAudioIsPlaying, audioInterruptionListenerCallback, self);
+	BASS_PluginLoad(&BASSFLACplugin, 0); // load the FLAC plugin	
 }
 
 - (void)bassInit
@@ -944,6 +947,7 @@ void interruptionListenerCallback (void    *inUserData, UInt32  interruptionStat
 				NSInteger preferredSampleRate = [self preferredSampleRate:streamSampleRate];
 				
 				// Initialize the audio queue with the preferred sample rate
+				[self audioSessionInit:preferredSampleRate];
 				[self aqsInit:preferredSampleRate];
 				
 				// Check the actual sample rate and modify the stream if necessary

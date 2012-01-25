@@ -509,6 +509,7 @@ static MusicSingleton *sharedInstance = nil;
 // Resume song after iSub shuts down
 - (void)resumeSong
 {	
+	return;
 	SavedSettings *settings = [SavedSettings sharedInstance];
 	SUSCurrentPlaylistDAO *currentPlaylistDAO = [SUSCurrentPlaylistDAO dataModel];
 	Song *currentSong = currentPlaylistDAO.currentSong;

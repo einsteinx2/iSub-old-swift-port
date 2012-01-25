@@ -8,10 +8,11 @@
 
 #import "MKStoreManager.h"
 #import "SUSServerChecker.h"
+#import "Crittercism.h"
 
 @class BBSplitViewController, ViewObjectsSingleton, DatabaseSingleton, MusicSingleton, SocialSingleton, MGSplitViewController, iPadMainMenu, InitialDetailViewController, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, Reachability, iPhoneStreamingPlayerViewController, SettingsViewController, RootViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController, HTTPServer, CacheSingleton, AudioEngine;
 
-@interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate, SUSServerURLCheckerDelegate> 
+@interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate, SUSServerURLCheckerDelegate, CrittercismDelegate>
 {	
 	ViewObjectsSingleton *viewObjects;
 	DatabaseSingleton *databaseControls;
@@ -112,6 +113,7 @@
 
 - (void)loadFlurryAnalytics;
 - (void)loadHockeyApp;
+- (void)loadCrittercism;
 - (void)loadInAppPurchaseStore;
 - (void)createHTTPServer;
 

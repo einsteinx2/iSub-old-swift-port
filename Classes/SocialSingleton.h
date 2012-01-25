@@ -6,8 +6,6 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-
-
 #import "SA_OAuthTwitterController.h"
 
 @class SA_OAuthTwitterEngine, Song;
