@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "SUSCurrentPlaylistDAO.h"
+#import "PlaylistSingleton.h"
 #import "Song.h"
 #import "DatabaseSingleton.h"
 #import "SavedSettings.h"
@@ -17,15 +17,8 @@
 #import "NSNotificationCenter+MainThread.h"
 #import "AudioEngine.h"
 
-static NSUInteger currentIndex = 0;
-static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
-
-@implementation SUSCurrentPlaylistDAO
-
-+ (SUSCurrentPlaylistDAO *)dataModel
-{
-	return [[[SUSCurrentPlaylistDAO alloc] init] autorelease];
-}
+@implementation PlaylistSingleton
+@synthesize shuffleIndex, normalIndex, isShuffle;
 
 #pragma mark - Private DB Methods
 
@@ -104,12 +97,12 @@ static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
 		}
 		else
 		{
-			if (musicControls.isShuffle)
+			if (self.isShuffle)
 			{
 				if ([indexesMut count] == self.count)
 				{
 					[[DatabaseSingleton sharedInstance] resetCurrentPlaylistDb];
-					musicControls.isShuffle = NO;
+					self.isShuffle = NO;
 				}
 				else
 				{
@@ -195,9 +188,6 @@ static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
 
 - (Song *)songForIndex:(NSUInteger)index
 {
-	//DLog(@"%@", [NSThread callStackSymbols]);
-	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
-	
 	Song *aSong = nil;
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
@@ -205,13 +195,12 @@ static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
 	}
 	else
 	{
-		if (musicControls.isShuffle)
+		if (self.isShuffle)
 			aSong = [Song songFromDbRow:index inTable:@"shufflePlaylist" inDatabase:self.db];
 		else
 			aSong = [Song songFromDbRow:index inTable:@"currentPlaylist" inDatabase:self.db];
 	}
 	
-	//DLog(@"aSong: %@", aSong);
 	return aSong;
 }
 
@@ -242,41 +231,56 @@ static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
 
 - (Song *)nextSong
 {
-	/*switch (self.repeatMode) 
-	{
-		case ISMSRepeatMode_RepeatOne:
-			return self.currentSong;
-			break;
-		case ISMSRepeatMode_RepeatAll:			
-			if (self.currentIndex + 1 >= self.count)
-				return [self songForIndex:0];
-			else
-				return [self songForIndex:(currentIndex + 1)];
-			break;
-		case ISMSRepeatMode_Normal:
-		default:
-			return [self songForIndex:(currentIndex + 1)];
-			break;
-	}*/
 	return [self songForIndex:self.nextIndex];
+}
+
+- (NSInteger)normalIndex
+{
+	@synchronized(self.class)
+	{
+		return normalIndex;
+	}
+}
+
+- (void)setNormalIndex:(NSInteger)index
+{
+	@synchronized(self.class)
+	{
+		normalIndex = index;
+	}
+}
+
+- (NSInteger)shuffleIndex
+{
+	@synchronized(self.class)
+	{
+		return shuffleIndex;
+	}
+}
+
+- (void)setShuffleIndex:(NSInteger)index
+{
+	@synchronized(self.class)
+	{
+		shuffleIndex = index;
+	}
 }
 
 - (NSInteger)currentIndex
 {
-	NSInteger index;
-	@synchronized(self.class)
-	{
-		index = currentIndex;
-	}
-	return index;
+	if (self.isShuffle)
+		return self.shuffleIndex;
+	
+	return self.normalIndex;
 }
 
 - (void)setCurrentIndex:(NSInteger)index
 {
-	@synchronized(self.class)
-	{
-		currentIndex = index;
-	}
+	if (self.isShuffle)
+		self.shuffleIndex = index;
+	else
+		self.normalIndex = index;
+	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistIndexChanged];
 }
 
@@ -287,16 +291,16 @@ static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
 		switch (self.repeatMode) 
 		{
 			case ISMSRepeatMode_RepeatOne:
-				return currentIndex;
+				return self.currentIndex;
 				break;
 			case ISMSRepeatMode_RepeatAll:	
-				if ([self songForIndex:currentIndex + 1])
-					return currentIndex + 1;
+				if ([self songForIndex:self.currentIndex + 1])
+					return self.currentIndex + 1;
 				else
 					return 0;
 				break;
 			case ISMSRepeatMode_Normal:
-				return currentIndex + 1;
+				return self.currentIndex + 1;
 			default:
 				break;
 		}
@@ -312,7 +316,7 @@ static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
 	}
 	else
 	{
-		if ([MusicSingleton sharedInstance].isShuffle)
+		if (self.isShuffle)
 			count = [self.db synchronizedIntForQuery:@"SELECT COUNT(*) FROM shufflePlaylist"];
 		else
 			count = [self.db synchronizedIntForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
@@ -324,46 +328,19 @@ static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
 {
 	@synchronized(self.class)
 	{
-		currentIndex = self.nextIndex;
+		self.currentIndex = self.nextIndex;
 		
-		/*Song *currentSong = nil;
-		switch (self.repeatMode) 
-		{
-			case ISMSRepeatMode_RepeatOne:
-				break;
-			case ISMSRepeatMode_RepeatAll:
-				currentIndex++;
-				// Handle case of index being past end of playlist
-				currentSong = [self songForIndex:currentIndex];
-				if (!currentSong && currentIndex > 0)
-				{
-					currentIndex = 0;
-				}
-				break;
-			case ISMSRepeatMode_Normal:
-				currentIndex++;
-				// Handle case of index being past end of playlist
-				currentSong = [self songForIndex:currentIndex];
-				if (!currentSong && currentIndex > 0)
-				{
-					currentIndex -= 1;
-				}
-			default:
-				break;
-		}*/
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistIndexChanged];
+		return self.currentIndex;
 	}
-	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistIndexChanged];
-	return self.currentIndex;
 }
 
 - (ISMSRepeatMode)repeatMode
 {
-	ISMSRepeatMode aMode;
 	@synchronized(self.class)
 	{
-		aMode = repeatMode;
+		return repeatMode;
 	}
-	return aMode;
 }
 
 - (void)setRepeatMode:(ISMSRepeatMode)mode
@@ -385,19 +362,14 @@ static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
 		MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 		SavedSettings *settings = [SavedSettings sharedInstance];
 		
-		if (musicControls.isShuffle)
+		if (self.isShuffle)
 		{
-			MusicSingleton *musicControls = [MusicSingleton sharedInstance];
-			musicControls.isShuffle = NO;
+			self.isShuffle = NO;
 			
-			if ([SavedSettings sharedInstance].isJukeboxEnabled)
+			if (settings.isJukeboxEnabled)
 			{
 				[musicControls jukeboxReplacePlaylistWithLocal];
-				//[musicControls playSongAtPosition:1];
-			}
-			else
-			{
-				[SUSCurrentPlaylistDAO dataModel].currentIndex = -1;
+				//[musicControls playSongAtPosition:];
 			}
 			
 			// Send a notification to update the playlist view
@@ -408,11 +380,11 @@ static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
 			Song *currentSong = self.currentSong;
 			
 			NSNumber *oldPlaylistPosition = [NSNumber numberWithInt:(self.currentIndex + 1)];
-			self.currentIndex = 0;
-			musicControls.isShuffle = YES;
+			self.shuffleIndex = 0;
+			self.isShuffle = YES;
 			
 			[self resetShufflePlaylist];
-			[currentSong addToShuffleQueue];
+			[currentSong addToShufflePlaylist];
 			
 			if (settings.isJukeboxEnabled)
 			{
@@ -425,16 +397,89 @@ static ISMSRepeatMode repeatMode = ISMSRepeatMode_Normal;
 			
 			if (settings.isJukeboxEnabled)
 			{
-				[musicControls performSelectorOnMainThread:@selector(jukeboxReplacePlaylistWithLocal) withObject:nil waitUntilDone:YES];
-				[musicControls performSelectorOnMainThread:@selector(jukeboxPlaySongAtPosition:) withObject:[NSNumber numberWithInt:1] waitUntilDone:YES];
+				[musicControls performSelectorOnMainThread:@selector(jukeboxReplacePlaylistWithLocal) 
+												withObject:nil 
+											 waitUntilDone:YES];
 				
-				musicControls.isShuffle = NO;
+				[musicControls performSelectorOnMainThread:@selector(jukeboxPlaySongAtPosition:)
+												withObject:[NSNumber numberWithInt:1] 
+											 waitUntilDone:YES];
+				
+				self.isShuffle = NO;
 			}
 			
 			// Send a notification to update the playlist view 
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistShuffleToggled];
 		}
 	}
+}
+
+#pragma mark - Singleton methods
+
+static PlaylistSingleton *sharedInstance = nil;
+
+- (void)setup
+{
+	shuffleIndex = 0;
+	normalIndex = 0;
+	repeatMode = ISMSRepeatMode_Normal;
+}
+
++ (PlaylistSingleton *)sharedInstance
+{
+    @synchronized(self)
+    {
+        if (sharedInstance == nil)
+			[[self alloc] init];
+    }
+    return sharedInstance;
+}
+
++ (id)allocWithZone:(NSZone *)zone 
+{
+    @synchronized(self) 
+	{
+        if (sharedInstance == nil) 
+		{
+            sharedInstance = [super allocWithZone:zone];
+			[sharedInstance setup];
+            return sharedInstance;  // assignment and return on first allocation
+        }
+    }
+    return nil; // on subsequent allocation attempts return nil
+}
+
+-(id)init 
+{
+	if ((self = [super init]))
+	{
+		[self setup];
+		sharedInstance = self;
+	}
+	
+	return self;
+}
+
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    return self;
+}
+
+- (id)retain {
+    return self;
+}
+
+- (unsigned)retainCount {
+    return UINT_MAX;  // denotes an object that cannot be released
+}
+
+- (oneway void)release {
+    //do nothing
+}
+
+- (id)autorelease {
+    return self;
 }
 
 @end

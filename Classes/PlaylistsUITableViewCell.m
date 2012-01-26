@@ -210,7 +210,7 @@
                     }
                     else
                     {
-                        [aSong addToPlaylistQueue];
+                        [aSong addToCurrentPlaylist];
                     }
                     [aSong release];
                     

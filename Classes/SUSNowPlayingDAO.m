@@ -12,6 +12,7 @@
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
 #import "SavedSettings.h"
+#import "PlaylistSingleton.h"
 
 @implementation SUSNowPlayingDAO
 @synthesize delegate, loader, nowPlayingSongDicts;
@@ -85,6 +86,7 @@
 
 - (void)playSongAtIndex:(NSUInteger)index
 {
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
 	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 	
 	// Clear the current playlist
@@ -95,7 +97,7 @@
 	
 	// Add the song to the empty playlist
 	Song *aSong = [self songForIndex:index];
-	[aSong addToPlaylistQueue];
+	[aSong addToCurrentPlaylist];
 	
 	// If jukebox mode, send song ids to server
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -106,7 +108,7 @@
 	}
 	
 	// Set player defaults
-	musicControls.isShuffle = NO;
+	currentPlaylist.isShuffle = NO;
 	
 	// Start the song
 	[musicControls playSongAtPosition:0];

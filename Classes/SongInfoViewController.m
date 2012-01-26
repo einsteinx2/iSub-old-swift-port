@@ -24,7 +24,7 @@
 #import "SavedSettings.h"
 #import "NSString+time.h"
 #import "SUSStreamSingleton.h"
-#import "SUSCurrentPlaylistDAO.h"
+#import "PlaylistSingleton.h"
 #import "AudioEngine.h"
 #import "NSArray+FirstObject.h"
 #import "SUSStreamHandler.h"
@@ -159,12 +159,12 @@
 
 - (void)updateBitrateLabel
 {
-	bitRateLabel.text = [NSString stringWithFormat:@"Bit Rate: %i kbps", audio.bitRate];
+	bitRateLabel.text = audio.bitRate < 0 ? @"" : [NSString stringWithFormat:@"Bit Rate: %i kbps", audio.bitRate];
 }
 
 - (void)initInfo
 {
-	SUSCurrentPlaylistDAO *currentPlaylistDAO = [SUSCurrentPlaylistDAO dataModel];
+	PlaylistSingleton *currentPlaylistDAO = [PlaylistSingleton sharedInstance];
 	
 	hasMoved = NO;
 	oldPosition = 0.0;
@@ -187,8 +187,8 @@
 	artistLabel.text = currentSong.artist;
 	titleLabel.text = currentSong.title;
 	
-	bitRateLabel.text = [NSString stringWithFormat:@"Bit Rate: %i kbps", audio.bitRate];
-		
+	[self updateBitrateLabel];
+			
 	if (currentSong.duration)
 		lengthLabel.text = [NSString stringWithFormat:@"Length: %@", [NSString formatTime:[currentSong.duration floatValue]]];
 	else
@@ -295,40 +295,11 @@
 		return;
 	}
 
-	bitRateLabel.text = [NSString stringWithFormat:@"Bit Rate: %i kbps", audio.bitRate];
-	
 	if (!pauseSlider)
 	{
-		/*if(currentSong.duration)
-		{
-			CGRect frame = self.view.frame;
-			if (frame.origin.x == 0)
-			{
-				progressSlider.value = audio.progress;
-				elapsedTimeLabel.text = [NSString formatTime:audio.progress];
-				remainingTimeLabel.text = [NSString stringWithFormat:@"-%@",[NSString formatTime:([currentSong.duration floatValue] - audio.progress)]];
-			}
-		}
-		else 
-		{
-			progressSlider.value = 0.0;
-			elapsedTimeLabel.text = [NSString formatTime:audio.progress];
-			remainingTimeLabel.text = [NSString formatTime:0];
-		}*/
-		
-		NSString *elapsedTime = nil;
-		NSString *remainingTime = nil;
-		if (audio.isPlaying)
-		{
-			elapsedTime = [NSString formatTime:audio.progress];
-			remainingTime = [NSString formatTime:([currentSong.duration floatValue] - audio.progress)];
-		}
-		else
-		{
-			elapsedTime = [NSString formatTime:[SavedSettings sharedInstance].seekTime];
-			remainingTime = [NSString formatTime:([currentSong.duration floatValue] - [SavedSettings sharedInstance].seekTime)];
-		}
-		
+		NSString *elapsedTime = [NSString formatTime:audio.progress];;
+		NSString *remainingTime = [NSString formatTime:([currentSong.duration floatValue] - audio.progress)];
+
 		progressSlider.value = audio.progress;
 		elapsedTimeLabel.text = elapsedTime;
 		remainingTimeLabel.text =[@"-" stringByAppendingString:remainingTime];
@@ -343,9 +314,7 @@
 
 
 - (IBAction) movingSlider
-{
-	//DLog(@"scrubbing speed: %f", progressSlider.scrubbingSpeed);
-	
+{	
 	progressLabel.hidden = NO;
 	progressLabelBackground.hidden = NO;
 	
@@ -379,15 +348,16 @@
 		}
 		
 		byteOffset = audio.bitRate * 128 * progressSlider.value;
-
-		DLog(@"byteOffset: %i", byteOffset);
 		
 		if ([self.currentSong isTempCached])
 		{
             [audio stop];
 			
+			audio.startByteOffset = byteOffset;
+			audio.startSecondsOffset = progressSlider.value;
+			
 			[[SUSStreamSingleton sharedInstance] removeStreamAtIndex:0];
-			[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong offset:byteOffset atIndex:0 isTempCache:YES];
+			[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong byteOffset:byteOffset secondsOffset:progressSlider.value atIndex:0 isTempCache:YES];
 			if ([[SUSStreamSingleton sharedInstance].handlerStack count] > 1)
 			{
 				SUSStreamHandler *handler = [[SUSStreamSingleton sharedInstance].handlerStack firstObject];
@@ -440,7 +410,7 @@
 
 - (IBAction) repeatButtonToggle
 {
-	SUSCurrentPlaylistDAO *currentPlaylistDAO = [SUSCurrentPlaylistDAO dataModel];
+	PlaylistSingleton *currentPlaylistDAO = [PlaylistSingleton sharedInstance];
 	
 	if(currentPlaylistDAO.repeatMode == 0)
 	{
@@ -502,10 +472,13 @@
 		else if(buttonIndex == 1)
 		{
             [audio stop];
+			audio.startByteOffset = byteOffset;
+			audio.startSecondsOffset = progressSlider.value;
+			
 			[[SUSStreamSingleton sharedInstance] removeStreamAtIndex:0];
             DLog(@"byteOffset: %i", byteOffset);
 			DLog(@"starting temp stream");
-			[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong offset:byteOffset atIndex:0 isTempCache:YES];
+			[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong byteOffset:byteOffset secondsOffset:progressSlider.value atIndex:0 isTempCache:YES];
 			if ([[SUSStreamSingleton sharedInstance].handlerStack count] > 1)
 			{
 				SUSStreamHandler *handler = [[SUSStreamSingleton sharedInstance].handlerStack firstObject];
@@ -561,13 +534,15 @@
 {	
 	[viewObjects showLoadingScreenOnMainWindow];
 	
-	SUSCurrentPlaylistDAO *currentPlaylistDAO = [SUSCurrentPlaylistDAO dataModel];
+	PlaylistSingleton *currentPlaylistDAO = [PlaylistSingleton sharedInstance];
 	[currentPlaylistDAO performSelectorInBackground:@selector(shuffleToggle) withObject:nil];
 }
 
 - (void)updateShuffleIcon
 {
-	if (musicControls.isShuffle)
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+	
+	if (currentPlaylist.isShuffle)
 	{
 		if (![SavedSettings sharedInstance].isJukeboxEnabled)
 		{

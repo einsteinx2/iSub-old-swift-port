@@ -79,12 +79,21 @@
 		[self updateFolders];
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFolders) name:ISMSNotification_ServerCheckPassed object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(serverSwitched) name:ISMSNotification_ServerSwitched object:nil];
     }
     return self;
 }
 
+- (void)serverSwitched
+{
+	[self selectFolderWithId:[NSNumber numberWithInteger:-1]];
+}
+
 - (void)dealloc
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ServerCheckPassed object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ServerSwitched object:nil];
+	
 	[folders release]; folders = nil;
 	
 	[borderColor release]; borderColor = nil;

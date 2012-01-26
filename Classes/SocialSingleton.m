@@ -12,7 +12,7 @@
 #import "CustomUIAlertView.h"
 
 #import "SavedSettings.h"
-#import "SUSCurrentPlaylistDAO.h"
+#import "PlaylistSingleton.h"
 #import "Song.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "SUSStreamSingleton.h"
@@ -43,7 +43,7 @@ static SocialSingleton *sharedInstance = nil;
 
 	// Scrobble in 30 seconds (or settings amount) if not canceled
 	SavedSettings *settings = [SavedSettings sharedInstance];
-	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+	PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
 	Song *currentSong = dataModel.currentSong;
 	NSTimeInterval scrobbleDelay = 30.0;
 	if (currentSong.duration != nil)
@@ -65,7 +65,7 @@ static SocialSingleton *sharedInstance = nil;
 {
 	// If this song wasn't just cached, then notify Subsonic of the playback
 	Song *lastCachedSong = [SUSStreamSingleton sharedInstance].lastCachedSong;
-	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+	Song *currentSong = [PlaylistSingleton sharedInstance].currentSong;
 	if (![lastCachedSong isEqualToSong:currentSong])
 	{
 		NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(currentSong.songId), @"id", nil];
@@ -80,7 +80,7 @@ static SocialSingleton *sharedInstance = nil;
 {	
 	if ([SavedSettings sharedInstance].isScrobbleEnabled)
 	{
-		SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+		PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
 		Song *currentSong = dataModel.currentSong;
 		[self scrobbleSong:currentSong isSubmission:YES];
 	}
@@ -145,7 +145,7 @@ static SocialSingleton *sharedInstance = nil;
 - (void)tweetSong
 {
 	SavedSettings *settings = [SavedSettings sharedInstance];
-	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+	PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
 	Song *currentSong = dataModel.currentSong;
 	
 	if (twitterEngine && settings.isTwitterEnabled)

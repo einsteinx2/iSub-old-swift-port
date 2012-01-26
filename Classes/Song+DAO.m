@@ -15,7 +15,7 @@
 #import "ViewObjectsSingleton.h"
 #import "SavedSettings.h"
 #import "MusicSingleton.h"
-#import "SUSCurrentPlaylistDAO.h"
+#import "PlaylistSingleton.h"
 #import "AudioEngine.h"
 
 @implementation Song (DAO)
@@ -259,10 +259,10 @@
 	return ![self.db hadError];
 }
 
-- (BOOL)addToPlaylistQueue
+- (BOOL)addToCurrentPlaylist
 {
 	DatabaseSingleton *dbControls = [DatabaseSingleton sharedInstance];
-	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
 
 	BOOL hadError = NO;
 	
@@ -273,7 +273,7 @@
 		if ([dbControls.currentPlaylistDb hadError])
 			hadError = YES;
 		
-		if (musicControls.isShuffle)
+		if (currentPlaylist.isShuffle)
 		{
 			[self insertIntoTable:@"jukeboxShufflePlaylist" inDatabase:dbControls.currentPlaylistDb];
 			if ([dbControls.currentPlaylistDb hadError])
@@ -286,7 +286,7 @@
 		if ([dbControls.currentPlaylistDb hadError])
 			hadError = YES;
 		
-		if (musicControls.isShuffle)
+		if (currentPlaylist.isShuffle)
 		{
 			[self insertIntoTable:@"shufflePlaylist" inDatabase:dbControls.currentPlaylistDb];
 			if ([dbControls.currentPlaylistDb hadError])
@@ -297,7 +297,7 @@
 	return !hadError;
 }
 
-- (BOOL)addToShuffleQueue
+- (BOOL)addToShufflePlaylist
 {
 	DatabaseSingleton *dbControls = [DatabaseSingleton sharedInstance];
 
@@ -388,7 +388,7 @@
 	///////// REWRITE TO CATCH THIS NSFILEMANAGER ERROR ///////////
 	[[NSFileManager defaultManager] removeItemAtPath:fileName error:NULL];
 	
-	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+	PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
 	
 	// Check if we're deleting the song that's currently playing. If so, stop the player.
 	if (dataModel.currentSong && ![SavedSettings sharedInstance].isJukeboxEnabled &&
@@ -419,7 +419,7 @@
 		if (self.transcodedSuffix)
 		{
 			// This is a transcode, so we'll want to use the actual bitrate if possible
-			if ([[SUSCurrentPlaylistDAO dataModel].currentSong isEqualToSong:self])
+			if ([[PlaylistSingleton sharedInstance].currentSong isEqualToSong:self])
 			{
 				// This is the current playing song, so see if BASS has an actual bitrate for it
 				if ([AudioEngine sharedInstance].bitRate > 0)

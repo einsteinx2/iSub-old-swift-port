@@ -31,7 +31,7 @@
 #import "OrderedDictionary.h"
 #import "SUSServerPlaylistsDAO.h"
 #import "SUSServerPlaylist.h"
-#import "SUSCurrentPlaylistDAO.h"
+#import "PlaylistSingleton.h"
 #import "AudioEngine.h"
 #import "FlurryAnalytics.h"
 #import "FMDatabase+Synchronized.h"
@@ -85,7 +85,7 @@
 	databaseControls = [DatabaseSingleton sharedInstance];
 	
 	self.serverPlaylistsDataModel = [[[SUSServerPlaylistsDAO alloc] initWithDelegate:self] autorelease];
-	self.currentPlaylistDataModel = [SUSCurrentPlaylistDAO dataModel];
+	self.currentPlaylistDataModel = [PlaylistSingleton sharedInstance];
 	
 	isNoPlaylistsScreenShowing = NO;
 	isPlaylistSaveEditShowing = NO;
@@ -828,6 +828,8 @@
 
 - (void)uploadPlaylist:(NSString*)name
 {	
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+	
 	NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(name), @"name", nil];
 	
 	NSMutableArray *songIds = [NSMutableArray arrayWithCapacity:currentPlaylistCount];
@@ -842,7 +844,7 @@
 			}
 			else
 			{
-				if (musicControls.isShuffle)
+				if (currentPlaylist.isShuffle)
 					aSong = [Song songFromDbRow:i inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
 				else
 					aSong = [Song songFromDbRow:i inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
@@ -1065,6 +1067,8 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+	
 	if ([alertView.title isEqualToString:@"Local or Server?"])
 	{
 		if (buttonIndex == 0)
@@ -1109,7 +1113,7 @@
 					
 					[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
 					if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
-					if (musicControls.isShuffle) {
+					if (currentPlaylist.isShuffle) {
 						[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM shufflePlaylist", [playlistNameTextField.text md5]]];
 					}
 					else {
@@ -1141,7 +1145,7 @@
 			
 			[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
 			if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
-			if (musicControls.isShuffle) {
+			if (currentPlaylist.isShuffle) {
 				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM shufflePlaylist", [playlistNameTextField.text md5]]];
 			}
 			else {
@@ -1162,7 +1166,7 @@
 		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 		if (currentPlaylistDataModel.currentIndex >= 0 && currentPlaylistDataModel.currentIndex < currentPlaylistCount)
 		{
-			[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPlaylistDataModel.currentIndex inSection:0] animated:YES scrollPosition:UITableViewScrollPositionMiddle];
+			[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPlaylistDataModel.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 		}
 	}
 }
@@ -1432,6 +1436,8 @@ static NSString *kName_Error = @"error";
 // Override to support rearranging the table view.
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath 
 {
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+	
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
 		NSInteger fromRow = fromIndexPath.row + 1;
@@ -1465,7 +1471,7 @@ static NSString *kName_Error = @"error";
 		}
 		else
 		{
-			if (musicControls.isShuffle)
+			if (currentPlaylist.isShuffle)
 			{
 				[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE shuffleTemp"];
 				[databaseControls.currentPlaylistDb executeUpdate:@"CREATE TABLE shuffleTemp(title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
@@ -1616,6 +1622,8 @@ static NSString *kName_Error = @"error";
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+	
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
 		static NSString *CellIdentifier = @"Cell";
@@ -1636,7 +1644,7 @@ static NSString *kName_Error = @"error";
 		}
 		else
 		{
-			if (musicControls.isShuffle)
+			if (currentPlaylist.isShuffle)
 				aSong = [Song songFromDbRow:indexPath.row inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
 			else
 				aSong = [Song songFromDbRow:indexPath.row inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];

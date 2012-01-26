@@ -98,7 +98,7 @@
 	searchY = 80;
 	dropdown = nil;
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadArtistList) name:ISMSNotification_ServerSwitched object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(serverSwitched) name:ISMSNotification_ServerSwitched object:nil];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doneSearching_Clicked:) name:@"endSearch" object:searchOverlayView];
 	
@@ -165,6 +165,8 @@
 
 - (void)dealloc 
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ServerSwitched object:nil];
+
 	dataModel.delegate = nil;
 	[dataModel release]; dataModel = nil;
 	[searchBar release]; searchBar = nil;
@@ -189,15 +191,6 @@
 	[formatter release];
 	
 }
-
-- (void)reloadArtistList
-{
-	[self createDataModel];
-	
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
-	[self updateCount];
-}
-
 
 -(void)addCount
 {	
@@ -344,6 +337,11 @@
 	}
 }
 
+- (void)serverSwitched
+{
+	[self createDataModel];
+	[self folderDropdownSelectFolder:[NSNumber numberWithInteger:-1]];
+}
 
 #pragma mark - Button handling methods
 

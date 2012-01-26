@@ -17,7 +17,7 @@
 #import "NSString+URLEncode.h"
 #import "MusicSingleton.h"
 #import "SUSStreamHandler.h"
-#import "SUSCurrentPlaylistDAO.h"
+#import "PlaylistSingleton.h"
 #import "NSArray+FirstObject.h"
 #import "AudioEngine.h"
 #import "SUSCoverArtLargeDAO.h"
@@ -31,7 +31,7 @@
 static SUSStreamSingleton *sharedInstance = nil;
 
 @implementation SUSStreamSingleton
-@synthesize handlerStack, lyricsDAO, currentPlaylistDAO, lastCachedSong;
+@synthesize handlerStack, lyricsDAO, currentPlaylistDAO, lastCachedSong, lastTempCachedSong;
 
 - (BOOL)insertSong:(Song *)aSong intoGenreTable:(NSString *)table
 {
@@ -183,15 +183,14 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 #pragma mark Download
 
-- (void)queueStreamForSong:(Song *)song offset:(NSUInteger)byteOffset 
-				   atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp
+- (void)queueStreamForSong:(Song *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp
 {
 	if (!song)
 		return;
 	
-	DLog(@"starting temp stream: %@   byteOffset: %i", NSStringFromBOOL(isTemp), byteOffset);
 	SUSStreamHandler *handler = [[SUSStreamHandler alloc] initWithSong:song 
-																offset:byteOffset 
+															byteOffset:byteOffset
+														 secondsOffset:secondsOffset
 																isTemp:isTemp
 															  delegate:self];
 	if (![handlerStack containsObject:handler])
@@ -220,17 +219,17 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (void)queueStreamForSong:(Song *)song atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp
 {	
-	[self queueStreamForSong:song offset:0 atIndex:index isTempCache:isTemp];
+	[self queueStreamForSong:song byteOffset:0 secondsOffset:0.0 atIndex:index isTempCache:isTemp];
 }
 
-- (void)queueStreamForSong:(Song *)song offset:(NSUInteger)byteOffset isTempCache:(BOOL)isTemp
+- (void)queueStreamForSong:(Song *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset isTempCache:(BOOL)isTemp
 {
-	[self queueStreamForSong:song offset:byteOffset atIndex:[handlerStack count] isTempCache:isTemp];
+	[self queueStreamForSong:song byteOffset:byteOffset secondsOffset:secondsOffset atIndex:[handlerStack count] isTempCache:isTemp];
 }
 
 - (void)queueStreamForSong:(Song *)song isTempCache:(BOOL)isTemp
 {	
-	[self queueStreamForSong:song offset:0 atIndex:[handlerStack count] isTempCache:isTemp];
+	[self queueStreamForSong:song byteOffset:0 secondsOffset:0.0 atIndex:[handlerStack count] isTempCache:isTemp];
 }
 
 - (BOOL)isSongInQueue:(Song *)aSong
@@ -305,7 +304,13 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 #pragma mark - SUSStreamHandler delegate
 
-- (void)SUSStreamHandlerStartPlayback:(SUSStreamHandler *)handler startByteOffset:(NSUInteger)offset
+- (void)SUSStreamHandlerStarted:(SUSStreamHandler *)handler
+{
+	if (handler.isTempCache)
+		self.lastTempCachedSong = nil;
+}
+
+- (void)SUSStreamHandlerStartPlayback:(SUSStreamHandler *)handler byteOffset:(unsigned long long)bytes secondsOffset:(double)seconds
 {	
 	// Update the last cached song
 	self.lastCachedSong = handler.mySong;
@@ -317,7 +322,10 @@ static SUSStreamSingleton *sharedInstance = nil;
 	DLog(@"currentSong: %@   mySong: %@", currentSong, handler.mySong);
 	if ([handler.mySong isEqualToSong:currentSong])
 	{
-		[audio startWithOffsetInBytes:[NSNumber numberWithInt:offset] orSeconds:nil];
+		//[audio startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:bytes] orSeconds:[NSNumber numberWithDouble:seconds]];
+		[audio start];
+		audio.startByteOffset = bytes;
+		audio.startSecondsOffset = seconds;
 	}
 	else if ([handler.mySong isEqualToSong:nextSong])
 	{
@@ -349,6 +357,9 @@ static SUSStreamSingleton *sharedInstance = nil;
 {	
 	// Update the last cached song
 	self.lastCachedSong = handler.mySong;
+	
+	if (handler.isTempCache)
+		self.lastTempCachedSong = handler.mySong;
 	
 	DLog(@"stream handler finished: %@", handler);
 	// Remove the handler from the stack
@@ -383,7 +394,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 	lastCachedSong = nil;
     handlerStack = [[NSMutableArray alloc] initWithCapacity:0];
 	lyricsDAO = [[SUSLyricsDAO alloc] initWithDelegate:self]; 
-	currentPlaylistDAO = [[SUSCurrentPlaylistDAO alloc] init];
+	currentPlaylistDAO = [PlaylistSingleton sharedInstance];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(songCachingToggled) 

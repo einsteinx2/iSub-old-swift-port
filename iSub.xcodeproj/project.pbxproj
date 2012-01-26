@@ -1427,9 +1427,9 @@
 		53CED25F113E2FF100B09699 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */; };
 		53CED260113E2FF100B09699 /* SubsonicServerEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53CED25E113E2FF100B09699 /* SubsonicServerEditViewController.xib */; };
 		53D123E1129EF58F00934F08 /* CoverArtImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D123E0129EF58F00934F08 /* CoverArtImageView.m */; };
-		53D74D51147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D50147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m */; };
-		53D74D52147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D50147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m */; };
-		53D74D53147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D50147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m */; };
+		53D74D51147185AB0025F8F1 /* PlaylistSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D50147185AB0025F8F1 /* PlaylistSingleton.m */; };
+		53D74D52147185AB0025F8F1 /* PlaylistSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D50147185AB0025F8F1 /* PlaylistSingleton.m */; };
+		53D74D53147185AB0025F8F1 /* PlaylistSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D50147185AB0025F8F1 /* PlaylistSingleton.m */; };
 		53D74D561471BE160025F8F1 /* Song+DAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D551471BE160025F8F1 /* Song+DAO.m */; };
 		53D74D571471BE160025F8F1 /* Song+DAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D551471BE160025F8F1 /* Song+DAO.m */; };
 		53D74D581471BE160025F8F1 /* Song+DAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D551471BE160025F8F1 /* Song+DAO.m */; };
@@ -2875,8 +2875,8 @@
 		53CED25E113E2FF100B09699 /* SubsonicServerEditViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SubsonicServerEditViewController.xib; sourceTree = "<group>"; };
 		53D123DF129EF58F00934F08 /* CoverArtImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoverArtImageView.h; sourceTree = "<group>"; };
 		53D123E0129EF58F00934F08 /* CoverArtImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoverArtImageView.m; sourceTree = "<group>"; };
-		53D74D4F147185AB0025F8F1 /* SUSCurrentPlaylistDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSCurrentPlaylistDAO.h; sourceTree = "<group>"; };
-		53D74D50147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSCurrentPlaylistDAO.m; sourceTree = "<group>"; };
+		53D74D4F147185AB0025F8F1 /* PlaylistSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistSingleton.h; sourceTree = "<group>"; };
+		53D74D50147185AB0025F8F1 /* PlaylistSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistSingleton.m; sourceTree = "<group>"; };
 		53D74D541471BE150025F8F1 /* Song+DAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Song+DAO.h"; sourceTree = "<group>"; };
 		53D74D551471BE160025F8F1 /* Song+DAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Song+DAO.m"; sourceTree = "<group>"; };
 		53D8ACB0116C47E600E5C9CB /* PageControlViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageControlViewController.h; sourceTree = "<group>"; };
@@ -3102,7 +3102,6 @@
 			children = (
 				536F9D7D119783D4002E526A /* Main */,
 				539A356513D3E46700D80554 /* Data Model */,
-				533A207C12887EB100539BAE /* XML Parsers */,
 				539797F01162CE4B00F41D8B /* View Controllers */,
 				539797F21162CE7700F41D8B /* Support Classes */,
 				539797F31162CE9300F41D8B /* Custom Objects */,
@@ -3384,8 +3383,6 @@
 		534098BA142E5DBA00455754 /* DAOs */ = {
 			isa = PBXGroup;
 			children = (
-				53D74D4F147185AB0025F8F1 /* SUSCurrentPlaylistDAO.h */,
-				53D74D50147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m */,
 				53EB49911401B71C0014E59A /* SUSRootFoldersDAO.h */,
 				53EB49921401B71C0014E59A /* SUSRootFoldersDAO.m */,
 				53E82A96140720BC0051D44B /* SUSSubFolderDAO.h */,
@@ -3439,34 +3436,6 @@
 			name = Loaders;
 			sourceTree = "<group>";
 		};
-		5347A1A6148C3800000288D8 /* DAOs */ = {
-			isa = PBXGroup;
-			children = (
-				5347A1A8148C3857000288D8 /* BassEffectDAO.h */,
-				5347A1A9148C3857000288D8 /* BassEffectDAO.m */,
-				5347A1B2148C463A000288D8 /* BassEffectValue.h */,
-				5347A1B3148C463A000288D8 /* BassEffectValue.m */,
-			);
-			name = DAOs;
-			sourceTree = "<group>";
-		};
-		5347A1A7148C3811000288D8 /* Singletons */ = {
-			isa = PBXGroup;
-			children = (
-				53E82AA214072F090051D44B /* CacheSingleton.h */,
-				53E82AA314072F090051D44B /* CacheSingleton.m */,
-				53C751D11268A43A00A4793F /* DatabaseSingleton.h */,
-				53C751D21268A43A00A4793F /* DatabaseSingleton.m */,
-				53C751CB1268A3BE00A4793F /* MusicSingleton.h */,
-				53C751CC1268A3BE00A4793F /* MusicSingleton.m */,
-				53C751CE1268A3D400A4793F /* SocialSingleton.h */,
-				53C751CF1268A3D400A4793F /* SocialSingleton.m */,
-				53C751C51268A36200A4793F /* ViewObjectsSingleton.h */,
-				53C751C61268A36200A4793F /* ViewObjectsSingleton.m */,
-			);
-			name = Singletons;
-			sourceTree = "<group>";
-		};
 		535366D914CB55AC00954448 /* Audio Engine */ = {
 			isa = PBXGroup;
 			children = (
@@ -3482,6 +3451,10 @@
 				539A012414773CEA00754061 /* bass_fx.h */,
 				539A012514773D3800754061 /* bassmix.h */,
 				53C16ED5149300C6002498A0 /* bassflac.h */,
+				5347A1A8148C3857000288D8 /* BassEffectDAO.h */,
+				5347A1A9148C3857000288D8 /* BassEffectDAO.m */,
+				5347A1B2148C463A000288D8 /* BassEffectValue.h */,
+				5347A1B3148C463A000288D8 /* BassEffectValue.m */,
 			);
 			name = "Audio Engine";
 			sourceTree = "<group>";
@@ -4039,13 +4012,12 @@
 		539A356513D3E46700D80554 /* Data Model */ = {
 			isa = PBXGroup;
 			children = (
-				5386FB8514062A390009F73F /* SavedSettings.h */,
-				5386FB8614062A3A0009F73F /* SavedSettings.m */,
+				53E82A9C140721D50051D44B /* General */,
 				53E82A9B140721BD0051D44B /* Subsonic */,
-				53E82A9C140721D50051D44B /* Generic */,
 				53FB066011EE1C4E008A30C7 /* SUSStream Handling */,
 				5304BCE111BD58E3000EF6F9 /* NSURLConnectionDelegates */,
 				535366D914CB55AC00954448 /* Audio Engine */,
+				533A207C12887EB100539BAE /* XML Parsers */,
 			);
 			name = "Data Model";
 			sourceTree = "<group>";
@@ -4591,15 +4563,27 @@
 			name = Subsonic;
 			sourceTree = "<group>";
 		};
-		53E82A9C140721D50051D44B /* Generic */ = {
+		53E82A9C140721D50051D44B /* General */ = {
 			isa = PBXGroup;
 			children = (
+				5386FB8514062A390009F73F /* SavedSettings.h */,
+				5386FB8614062A3A0009F73F /* SavedSettings.m */,
+				53D74D4F147185AB0025F8F1 /* PlaylistSingleton.h */,
+				53D74D50147185AB0025F8F1 /* PlaylistSingleton.m */,
+				53E82AA214072F090051D44B /* CacheSingleton.h */,
+				53E82AA314072F090051D44B /* CacheSingleton.m */,
+				53C751D11268A43A00A4793F /* DatabaseSingleton.h */,
+				53C751D21268A43A00A4793F /* DatabaseSingleton.m */,
+				53C751CB1268A3BE00A4793F /* MusicSingleton.h */,
+				53C751CC1268A3BE00A4793F /* MusicSingleton.m */,
+				53C751CE1268A3D400A4793F /* SocialSingleton.h */,
+				53C751CF1268A3D400A4793F /* SocialSingleton.m */,
+				53C751C51268A36200A4793F /* ViewObjectsSingleton.h */,
+				53C751C61268A36200A4793F /* ViewObjectsSingleton.m */,
 				539D6073145E0D7D0018AA90 /* ISMSUpdateChecker.h */,
 				539D6074145E0D7D0018AA90 /* ISMSUpdateChecker.m */,
-				5347A1A7148C3811000288D8 /* Singletons */,
-				5347A1A6148C3800000288D8 /* DAOs */,
 			);
-			name = Generic;
+			name = General;
 			sourceTree = "<group>";
 		};
 		53F4A070116FF44400BB8411 /* Player */ = {
@@ -6003,7 +5987,7 @@
 				53A698DA1467B34D00DCAFCB /* SUSSubFolderLoader.m in Sources */,
 				535AC24E146C8E0300E19492 /* SUSStreamSingleton.m in Sources */,
 				535AC253146C8E1D00E19492 /* SUSStreamHandler.m in Sources */,
-				53D74D51147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m in Sources */,
+				53D74D51147185AB0025F8F1 /* PlaylistSingleton.m in Sources */,
 				53D74D561471BE160025F8F1 /* Song+DAO.m in Sources */,
 				53B38BD01474C14200CD8A99 /* NSArray+FirstObject.m in Sources */,
 				53B38BD91474C95300CD8A99 /* AudioEngine.m in Sources */,
@@ -6307,7 +6291,7 @@
 				53A698DC1467B34D00DCAFCB /* SUSSubFolderLoader.m in Sources */,
 				535AC250146C8E0300E19492 /* SUSStreamSingleton.m in Sources */,
 				535AC255146C8E1D00E19492 /* SUSStreamHandler.m in Sources */,
-				53D74D53147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m in Sources */,
+				53D74D53147185AB0025F8F1 /* PlaylistSingleton.m in Sources */,
 				53D74D581471BE160025F8F1 /* Song+DAO.m in Sources */,
 				53B38BD21474C14200CD8A99 /* NSArray+FirstObject.m in Sources */,
 				53B38BDB1474C95300CD8A99 /* AudioEngine.m in Sources */,
@@ -6611,7 +6595,7 @@
 				53A698DB1467B34D00DCAFCB /* SUSSubFolderLoader.m in Sources */,
 				535AC24F146C8E0300E19492 /* SUSStreamSingleton.m in Sources */,
 				535AC254146C8E1D00E19492 /* SUSStreamHandler.m in Sources */,
-				53D74D52147185AB0025F8F1 /* SUSCurrentPlaylistDAO.m in Sources */,
+				53D74D52147185AB0025F8F1 /* PlaylistSingleton.m in Sources */,
 				53D74D571471BE160025F8F1 /* Song+DAO.m in Sources */,
 				53B38BD11474C14200CD8A99 /* NSArray+FirstObject.m in Sources */,
 				53B38BDA1474C95300CD8A99 /* AudioEngine.m in Sources */,

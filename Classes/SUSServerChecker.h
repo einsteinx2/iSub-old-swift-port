@@ -22,6 +22,7 @@
 @property (nonatomic, assign) NSObject<SUSServerURLCheckerDelegate> *delegate;
 @property (nonatomic, retain) NSMutableData *receivedData;
 @property (nonatomic, retain) NSURLRequest *request;
+@property (nonatomic, retain) NSURLConnection *connection;
 @property BOOL isNewSearchAPI;
 
 - (id)initWithDelegate:(NSObject<SUSServerURLCheckerDelegate> *)theDelegate;

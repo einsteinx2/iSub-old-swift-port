@@ -246,42 +246,29 @@
 	{
 		if (sender == recoverSegmentedControl)
 		{
-			//[appDelegate.settingsDictionary setObject:[NSNumber numberWithInt:recoverSegmentedControl.selectedSegmentIndex] forKey:@"recoverSetting"];
-			settings.recoverSetting = settings.recoverSetting;
+			settings.recoverSetting = recoverSegmentedControl.selectedSegmentIndex;
 		}
-		//else if (sender == maxBitrateSegmentedControl)
-		//{
-		//	[appDelegate.settingsDictionary setObject:[NSNumber numberWithInt:maxBitrateSegmentedControl.selectedSegmentIndex] forKey:@"maxBitrateSetting"];
-		//}
 		else if (sender == maxBitrateWifiSegmentedControl)
 		{
-			//[appDelegate.settingsDictionary setObject:[NSNumber numberWithInt:maxBitrateWifiSegmentedControl.selectedSegmentIndex] forKey:@"maxBitrateWifiSetting"];
 			settings.maxBitrateWifi = maxBitrateWifiSegmentedControl.selectedSegmentIndex;
 		}
 		else if (sender == maxBitrate3GSegmentedControl)
 		{
-			//[appDelegate.settingsDictionary setObject:[NSNumber numberWithInt:maxBitrate3GSegmentedControl.selectedSegmentIndex] forKey:@"maxBitrate3GSetting"];
 			settings.maxBitrate3G = maxBitrate3GSegmentedControl.selectedSegmentIndex;
 		}
 		else if (sender == cachingTypeSegmentedControl)
 		{
-			//[appDelegate.settingsDictionary setObject:[NSNumber numberWithInt:cachingTypeSegmentedControl.selectedSegmentIndex] forKey:@"cachingTypeSetting"];
 			settings.cachingType = cachingTypeSegmentedControl.selectedSegmentIndex;
 			[self cachingTypeToggle];
 		}
 		else if (sender == autoDeleteCacheTypeSegmentedControl)
 		{
-			//[appDelegate.settingsDictionary setObject:[NSNumber numberWithInt:autoDeleteCacheTypeSegmentedControl.selectedSegmentIndex] forKey:@"autoDeleteCacheTypeSetting"];
 			settings.autoDeleteCacheType = autoDeleteCacheTypeSegmentedControl.selectedSegmentIndex;
 		}
 		else if (sender == cacheSongCellColorSegmentedControl)
 		{
-			//[appDelegate.settingsDictionary setObject:[NSNumber numberWithInt:cacheSongCellColorSegmentedControl.selectedSegmentIndex] forKey:@"cacheSongCellColorSetting"];
 			settings.cachedSongCellColorType = cacheSongCellColorSegmentedControl.selectedSegmentIndex;
 		}
-		
-		//[[NSUserDefaults standardUserDefaults] setObject:appDelegate.settingsDictionary forKey:@"settingsDictionary"];
-		//[[NSUserDefaults standardUserDefaults] synchronize];
 	}
 }
 

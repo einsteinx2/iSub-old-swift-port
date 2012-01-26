@@ -34,5 +34,7 @@
 #define ISMSErrorCode_IncorrectCredentials		7
 #define ISMSErrorDesc_IncorrectCredentials		@"Incorrect username or password."
 
+#define ISMSErrorCode_CouldNotReachServer		8
+#define ISMSErrorDesc_CouldNotReachServer		@"Could not reach the server"
 
 #endif

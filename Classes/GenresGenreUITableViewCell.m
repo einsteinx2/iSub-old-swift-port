@@ -136,7 +136,7 @@
 		{
 			//DLog(@"adding %@", [result stringForColumnIndex:0]);
 			if ([result stringForColumnIndex:0] != nil)
-				[[Song songFromGenreDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToPlaylistQueue];
+				[[Song songFromGenreDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCurrentPlaylist];
 		}
 		[result release];
 		

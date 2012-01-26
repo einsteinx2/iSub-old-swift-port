@@ -19,7 +19,7 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "NSString+time.h"
-#import "SUSCurrentPlaylistDAO.h"
+#import "PlaylistSingleton.h"
 #import "AudioEngine.h"
 #import "FMDatabase+Synchronized.h"
 
@@ -41,7 +41,7 @@
 	currentPlaylistCount = 0;
 	
 	//NSDate *start = [NSDate date];
-	dataModel = [[SUSCurrentPlaylistDAO alloc] init];
+	dataModel = [[PlaylistSingleton alloc] init];
 	
 	self.tableView.backgroundColor = [UIColor clearColor];
 	
@@ -413,6 +413,8 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+	
     if([alertView.title isEqualToString:@"Playlist Name:"])
 	{
 		[playlistNameTextField resignFirstResponder];
@@ -426,7 +428,7 @@
 				
 				[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
 				if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
-				if (musicControls.isShuffle) {
+				if (currentPlaylist.isShuffle) {
 					[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM shufflePlaylist", [playlistNameTextField.text md5]]];
 				}
 				else {
@@ -453,7 +455,7 @@
 			
 			[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
 			if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
-			if (musicControls.isShuffle) {
+			if (currentPlaylist.isShuffle) {
 				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM shufflePlaylist", [playlistNameTextField.text md5]]];
 			}
 			else {
@@ -472,7 +474,7 @@
 	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 	if (dataModel.currentIndex >= 0 && dataModel.currentIndex < currentPlaylistCount)
 	{
-		[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:dataModel.currentIndex inSection:0] animated:YES scrollPosition:UITableViewScrollPositionMiddle];
+		[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:dataModel.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 	}
 }
 
@@ -502,6 +504,8 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {	
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+	
 	static NSString *CellIdentifier = @"Cell";
 	
 	CurrentPlaylistSongSmallUITableViewCell *cell = [[[CurrentPlaylistSongSmallUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
@@ -520,7 +524,7 @@
 	}
 	else
 	{
-		if (musicControls.isShuffle)
+		if (currentPlaylist.isShuffle)
 			aSong = [Song songFromDbRow:indexPath.row inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
 		else
 			aSong = [Song songFromDbRow:indexPath.row inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
@@ -565,6 +569,8 @@
 // Override to support rearranging the table view.
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath 
 {
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+	
 	NSInteger fromRow = fromIndexPath.row + 1;
 	NSInteger toRow = toIndexPath.row + 1;
 	
@@ -596,7 +602,7 @@
 	}
 	else
 	{
-		if (musicControls.isShuffle)
+		if (currentPlaylist.isShuffle)
 		{
 			[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE shuffleTemp"];
 			[databaseControls.currentPlaylistDb executeUpdate:@"CREATE TABLE shuffleTemp(title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];

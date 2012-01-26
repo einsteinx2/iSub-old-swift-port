@@ -24,6 +24,8 @@
 #import "NSString+time.h"
 #import "SUSStreamSingleton.h"
 #import "FlurryAnalytics.h"
+#import "Song+DAO.h"
+#import "PlaylistSingleton.h"
 
 @implementation BookmarksViewController
 
@@ -469,70 +471,10 @@
     return 1;
 }
 
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
     return [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks"];
 }
-
-
-- (Song *) songFromDbRow:(NSUInteger)row
-{
-	row++;
-	Song *aSong = [[Song alloc] init];
-	FMResultSet *result = [databaseControls.bookmarksDb executeQuery:[NSString stringWithFormat:@"SELECT * FROM bookmarks WHERE ROWID = %i", row]];
-	if ([databaseControls.bookmarksDb hadError]) 
-	{
-		DLog(@"Err %d: %@", [databaseControls.bookmarksDb lastErrorCode], [databaseControls.bookmarksDb lastErrorMessage]);
-	}
-	else
-	{
-		[result next];
-		
-		if ([result stringForColumn:@"title"] != nil)
-			aSong.title = [[result stringForColumn:@"title"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-		if ([result stringForColumn:@"songId"] != nil)
-			aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
-		if ([result stringForColumn:@"artist"] != nil)
-			aSong.artist = [[result stringForColumn:@"artist"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-		if ([result stringForColumn:@"album"] != nil)
-			aSong.album = [[result stringForColumn:@"album"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-		if ([result stringForColumn:@"genre"] != nil)
-			aSong.genre = [[result stringForColumn:@"genre"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-		if ([result stringForColumn:@"coverArtId"] != nil)
-			aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
-		if ([result stringForColumn:@"path"] != nil)
-			aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
-		if ([result stringForColumn:@"suffix"] != nil)
-			aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
-		if ([result stringForColumn:@"transcodedSuffix"] != nil)
-			aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
-		aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
-		aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
-		aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
-		aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
-		aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
-	}
-	
-	/*aSong.title = [result stringForColumnIndex:2];
-	aSong.songId = [result stringForColumnIndex:3];
-	aSong.artist = [result stringForColumnIndex:4];
-	aSong.album = [result stringForColumnIndex:5];
-	aSong.genre = [result stringForColumnIndex:6];
-	aSong.coverArtId = [result stringForColumnIndex:7];
-	aSong.path = [result stringForColumnIndex:8];
-	aSong.suffix = [result stringForColumnIndex:9];
-	aSong.transcodedSuffix = [result stringForColumnIndex:10];
-	aSong.duration = [NSNumber numberWithInt:[result intForColumnIndex:11]];
-	aSong.bitRate = [NSNumber numberWithInt:[result intForColumnIndex:12]];
-	aSong.track = [NSNumber numberWithInt:[result intForColumnIndex:13]];
-	aSong.year = [NSNumber numberWithInt:[result intForColumnIndex:14]];
-	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:15]];*/
-	
-	[result close];
-	return [aSong autorelease];
-}
-
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
@@ -548,7 +490,7 @@
 	}
 	
     // Set up the cell...
-	Song *aSong = [self songFromDbRow:indexPath.row];
+	Song *aSong = [Song songFromDbRow:indexPath.row inTable:@"bookmarks" inDatabase:databaseControls.bookmarksDb];
 	
 	[cell.coverArtView loadImageFromCoverArtId:aSong.coverArtId];
 	
@@ -578,10 +520,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	[databaseControls resetCurrentPlaylistDb];
-	[[self songFromDbRow:indexPath.row] insertIntoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
 	
-	musicControls.isShuffle = NO;
+	[databaseControls resetCurrentPlaylistDb];
+	Song *aSong = [Song songFromDbRow:indexPath.row inTable:@"bookmarks" inDatabase:databaseControls.bookmarksDb];
+	[aSong addToCurrentPlaylist];
+	
+	currentPlaylist.isShuffle = NO;
 	
 	if (IS_IPAD())
 	{
@@ -595,8 +540,29 @@
 		[streamingPlayerViewController release];
 	}
 		
-	NSUInteger offsetSeconds = [databaseControls.bookmarksDb intForQuery:@"SELECT position FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
-	[musicControls startSongAtOffsetInSeconds:offsetSeconds];
+	NSUInteger offsetSeconds = [databaseControls.bookmarksDb intForQuery:@"SELECT position FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
+	NSUInteger offsetBytes = [databaseControls.bookmarksDb intForQuery:@"SELECT bytes FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
+	
+	// Check if these are old bookmarks and don't have byteOffset saved
+	if (offsetBytes == 0 && offsetSeconds != 0)
+	{
+		// By default, use the server reported bitrate
+		NSUInteger bitrate = [aSong.bitRate intValue];
+		
+		if (aSong.transcodedSuffix)
+		{
+			// This is a transcode, guess the bitrate and byteoffset
+			NSUInteger maxBitrate = [SavedSettings sharedInstance].currentMaxBitrate == 0 ? 128 : [SavedSettings sharedInstance].currentMaxBitrate;
+			bitrate = maxBitrate < [aSong.bitRate intValue] ? maxBitrate : [aSong.bitRate intValue];
+		}
+
+		// Use the bitrate to get byteoffset
+		offsetBytes = (bitrate / 8) * offsetSeconds;
+	}
+	else
+	{
+		[musicControls startSongAtOffsetInBytes:offsetBytes andSeconds:offsetSeconds];
+	}
 }
 
 

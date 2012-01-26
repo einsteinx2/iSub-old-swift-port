@@ -112,9 +112,9 @@
 - (void)queueAction
 {
 	if ([ViewObjectsSingleton sharedInstance].isLocalPlaylist)
-		[[Song songFromDbRow:self.indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", playlistMD5] inDatabase:[DatabaseSingleton sharedInstance].localPlaylistsDb] addToPlaylistQueue];
+		[[Song songFromDbRow:self.indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", playlistMD5] inDatabase:[DatabaseSingleton sharedInstance].localPlaylistsDb] addToCurrentPlaylist];
 	else
-		[[Song songFromServerPlaylistId:playlistMD5 row:self.indexPath.row] addToPlaylistQueue];
+		[[Song songFromServerPlaylistId:playlistMD5 row:self.indexPath.row] addToCurrentPlaylist];
 	
 	[self hideOverlay];
 }

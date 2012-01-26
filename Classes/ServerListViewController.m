@@ -478,16 +478,6 @@
 		
 		// Save the plist values
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		/*if ([viewObjects.serverList count] == 0)
-		{
-			[defaults setObject:DEFAULT_URL forKey:@"url"];
-			[defaults setObject:DEFAULT_USER_NAME forKey:@"username"];
-			[defaults setObject:DEFAULT_PASSWORD forKey:@"password"];
-			
-			appDelegate.defaultUrl = [NSString stringWithString:viewObjects.serverToEdit.url];
-			appDelegate.defaultUserName = [NSString stringWithString:viewObjects.serverToEdit.username];
-			appDelegate.defaultPassword = [NSString stringWithString:viewObjects.serverToEdit.password];
-		}*/
 		[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
 		[defaults synchronize];
     }   
@@ -501,13 +491,7 @@
 }
 
 - (void)SUSServerURLCheckFailed:(SUSServerChecker *)checker withError:(NSError *)error
-{
-	DLog(@"server check failed");
-    if(!viewObjects.isOfflineMode)
-	{
-		viewObjects.isOfflineMode = YES;
-	}
-	
+{	
 	UIAlertView *alert = nil;
 	if (error.code == ISMSErrorCode_IncorrectCredentials)
 	{

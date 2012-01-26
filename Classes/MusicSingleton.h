@@ -21,12 +21,6 @@
 	AudioEngine *audio;
 }
 
-// Audio streamer objects and variables
-//
-@property BOOL isShuffle;
-
-// Music player objects
-//
 @property (nonatomic, retain) Song *queueSongObject;
 
 @property (nonatomic, retain) NSMutableData *receivedDataQueue;
@@ -51,7 +45,7 @@
 - (void)stopDownloadQueue;
 - (void)resumeDownloadQueue:(UInt32)byteOffset;
 
-- (void)startSongAtOffsetInSeconds:(NSUInteger)seconds;
+- (void)startSongAtOffsetInBytes:(unsigned long long)bytes andSeconds:(double)seconds;
 - (void)startSong;
 - (void)playSongAtPosition:(NSInteger)position;
 - (void)nextSong;

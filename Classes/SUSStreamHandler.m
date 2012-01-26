@@ -35,27 +35,26 @@
 #define kMinBytesToStartLimiting (1024 * 1024)	// Start throttling bandwidth after 1 MB downloaded for 160kbps files (adjusted accordingly by bitrate)
 
 // Logging
-#define isProgressLoggingEnabled NO
+#define isProgressLoggingEnabled YES
 #define isThrottleLoggingEnabled NO
 
 @implementation SUSStreamHandler
-@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache;
+@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, secondsOffset;
 
-- (id)initWithSong:(Song *)song offset:(NSUInteger)offset isTemp:(BOOL)isTemp delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate
+- (id)initWithSong:(Song *)song byteOffset:(unsigned long long)bOffset secondsOffset:(double)sOffset isTemp:(BOOL)isTemp delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate
 {
 	if ((self = [super init]))
 	{
 		mySong = [song copy];
 		delegate = theDelegate;
-		byteOffset = offset;
+		byteOffset = bOffset;
+		secondsOffset = sOffset;
 		isDelegateNotifiedToStartPlayback = NO;
 		numOfReconnects = 0;
 		loadingThread = nil;
 		request = nil;
 		connection = nil;
 		isTempCache = isTemp;
-		
-		DLog(@"starting temp stream: %@   byte offset: %i", NSStringFromBOOL(isTempCache), byteOffset);
 	}
 	
 	return self;
@@ -63,7 +62,7 @@
 
 - (id)initWithSong:(Song *)song isTemp:(BOOL)isTemp delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate
 {
-	return [self initWithSong:song offset:0 isTemp:isTemp delegate:theDelegate];
+	return [self initWithSong:song byteOffset:0 secondsOffset:0.0 isTemp:isTemp delegate:theDelegate];
 }
 
 - (void)dealloc
@@ -200,7 +199,8 @@
 
 - (void)startConnectionInternalSuccess
 {
-	mySong.isPartiallyCached = YES;
+	if (!isTempCache)
+		mySong.isPartiallyCached = YES;
 }
 
 - (void)startConnectionInternalFailure
@@ -290,6 +290,8 @@
 	return maxBytesPerInterval;
 }
 
+BOOL isBeginning = YES;
+
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
 {		
 	NSMutableDictionary *threadDict = [[NSThread currentThread] threadDictionary];
@@ -297,6 +299,33 @@
 	NSDate *throttlingDate = [[threadDict objectForKey:@"throttlingDate"] retain];
 	NSUInteger dataLength = [incrementalData length];
 	BOOL isWifi = [[threadDict objectForKey:@"isWifi"] boolValue];
+	
+	/*if (isBeginning && [mySong.suffix isEqualToString:@"m4a"])
+	{
+		// Check for AAC frame header
+		for (int i = 0; i < [incrementalData length]; i+=4)
+		{
+			char buffer[4]; 
+			[incrementalData getBytes:buffer range:NSMakeRange(i, 4)]; 
+			int dataSize = 0;
+			char cBuf2[4]; 
+			for(int k=0; k < 4; ++k) 
+			{ 
+				cBuf2[k] = buffer[3-k]; 
+			}
+			memcpy(&dataSize, cBuf2, 4);
+			
+			uint32_t number = (uint32_t)cBuf2;
+			DLog(@"number: %u   target: %u", number, 0xFFF95080);
+			
+			if (number == 0xFFF95080)
+			{
+				// This is the first AAC frame
+				DLog(@"First AAC frame header at position: %u", i);
+				isBeginning = NO;
+			}
+		}
+	}*/
 	
 	totalBytesTransferred += dataLength;
 	bytesTransferred += dataLength;
@@ -368,7 +397,7 @@
 // Main Thread
 - (void)startPlaybackInternal
 {
-	[self.delegate SUSStreamHandlerStartPlayback:self startByteOffset:byteOffset];
+	[self.delegate SUSStreamHandlerStartPlayback:self byteOffset:byteOffset secondsOffset:secondsOffset];
 }
 
 // loadingThread

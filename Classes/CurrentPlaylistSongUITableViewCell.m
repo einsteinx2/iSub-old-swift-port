@@ -14,6 +14,7 @@
 #import "FMDatabase.h"
 #import "Song.h"
 #import "CellOverlay.h"
+#import "PlaylistSingleton.h"
 
 @implementation CurrentPlaylistSongUITableViewCell
 
@@ -92,7 +93,9 @@
 
 - (void)downloadAction
 {
-	if ([MusicSingleton sharedInstance].isShuffle) 
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+	
+	if (currentPlaylist.isShuffle) 
 		[[Song songFromDbRow:self.indexPath.row inTable:@"shufflePlaylist" inDatabase:[DatabaseSingleton sharedInstance].currentPlaylistDb] addToCacheQueue];
 	else 
 		[[Song songFromDbRow:self.indexPath.row inTable:@"currentPlaylist" inDatabase:[DatabaseSingleton sharedInstance].currentPlaylistDb] addToCacheQueue];
@@ -105,8 +108,10 @@
 
 - (void)queueAction
 {
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+	
 	//DLog(@"queueAction");
-	if ([MusicSingleton sharedInstance].isShuffle)
+	if (currentPlaylist.isShuffle)
 	{
 		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"shufflePlaylist" inDatabase:[DatabaseSingleton sharedInstance].currentPlaylistDb];
 		[[DatabaseSingleton sharedInstance] queueSong:aSong];

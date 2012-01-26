@@ -42,7 +42,7 @@ typedef enum
 	ISMS_AQ_STATE_finishedWaitingForData
 } ISMS_AQ_STATE;
 
-@class Song, BassParamEqValue, SUSCurrentPlaylistDAO, BassUserInfo;
+@class Song, BassParamEqValue, PlaylistSingleton, BassUserInfo;
 @interface AudioEngine : NSObject
 {
 	AudioQueueRef audioQueue;
@@ -105,17 +105,18 @@ typedef enum
 - (uint32_t)bassGetOutputData:(void *)buffer length:(uint32_t)length;
 
 @property (readonly) BOOL isPlaying;
-@property (readonly) NSUInteger bitRate;
+@property (readonly) NSInteger bitRate;
 @property (readonly) QWORD currentByteOffset;
 @property (readonly) double progress;
 @property (readonly) BOOL isEqualizerOn;
 @property (readonly) NSArray *equalizerValues;
 @property unsigned long long startByteOffset;
+@property double startSecondsOffset;
 @property (readonly) HSTREAM currentStream;
 @property (readonly) HSTREAM currentStreamTempo;
 @property (readonly) HSTREAM nextStream;
 @property (readonly) HSTREAM nextStreamTempo;
-@property (retain) SUSCurrentPlaylistDAO *currPlaylistDAO;
+@property (retain) PlaylistSingleton *currPlaylistDAO;
 @property (retain) NSThread *fftDataThread;
 @property BOOL isFftDataThreadToTerminate;
 @property BOOL isFastForward;

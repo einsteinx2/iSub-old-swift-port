@@ -11,7 +11,7 @@
 #import "SavedSettings.h"
 #import "CacheSingleton.h"
 #import "Song.h"
-#import "SUSCurrentPlaylistDAO.h"
+#import "PlaylistSingleton.h"
 
 @implementation DebugViewController
 @synthesize currentSong, nextSong;
@@ -117,8 +117,8 @@
 
 - (void)cacheSongObjects
 {
-	self.currentSong = [SUSCurrentPlaylistDAO dataModel].currentDisplaySong;
-	self.nextSong = [SUSCurrentPlaylistDAO dataModel].nextSong;
+	self.currentSong = [PlaylistSingleton sharedInstance].currentDisplaySong;
+	self.nextSong = [PlaylistSingleton sharedInstance].nextSong;
 	//DLog(@"currentSong: %@", self.currentSong);
 }
 
@@ -168,7 +168,7 @@
 			currentSongProgressView.alpha = 1.0;
 		}
 		
-		SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+		PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
 		
 		// Set the next song progress bar
 		if (dataModel.nextSong.path != nil)

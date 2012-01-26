@@ -17,6 +17,7 @@
 #import "Song.h"
 #import "MusicSingleton.h"
 #import "SavedSettings.h"
+#import "PlaylistSingleton.h"
 
 @interface SUSSubFolderDAO (Private) 
 - (NSUInteger)findFirstAlbumRow;
@@ -198,6 +199,7 @@
 - (void)playSongAtDbRow:(NSUInteger)row
 {
 	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
 	
 	// Clear the current playlist
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -213,7 +215,7 @@
 		{
 			Song *aSong = [self songForTableViewRow:i];
 			//DLog(@"adding song to playlist: %@", aSong);
-			[aSong addToPlaylistQueue];
+			[aSong addToCurrentPlaylist];
 			
 			// In jukebox mode, collect the song ids to send to the server
 			if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -231,7 +233,7 @@
 	[songIds release];
 	
 	// Set player defaults
-	musicControls.isShuffle = NO;
+	currentPlaylist.isShuffle = NO;
 	
 	// Start the song
 	[musicControls playSongAtPosition:(row - songStartRow)];

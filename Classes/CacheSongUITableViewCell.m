@@ -127,7 +127,7 @@
 
 - (void)queueAction
 {	
-	[[Song songFromCacheDb:md5] addToPlaylistQueue];
+	[[Song songFromCacheDb:md5] addToCurrentPlaylist];
 
 	[self hideOverlay];
 }

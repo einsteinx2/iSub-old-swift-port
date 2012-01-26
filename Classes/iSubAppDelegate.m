@@ -282,7 +282,6 @@
     DLog(@"server check failed");
     if(!viewObjects.isOfflineMode)
 	{
-		viewObjects.isOfflineMode = YES;
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", [error code], [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Settings", nil];
 		alert.tag = 3;
 		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
@@ -396,7 +395,7 @@
 	[Crittercism sharedInstance].delegate = self;
 }
 
--(void)crittercismDidCrashOnLastLoad
+- (void)crittercismDidCrashOnLastLoad
 {
 	// TODO: Do something here
 	DLog(@"App crashed on last load. Do something here.");
@@ -913,29 +912,11 @@
 			{
 				if (viewObjects.isOfflineMode)
 				{
-					viewObjects.isOfflineMode = NO;
-					
-					[audio stop];
-					[offlineTabBarController.view removeFromSuperview];
-					[databaseControls closeAllDatabases];
-					[databaseControls initDatabases];
-					[viewObjects orderMainTabBarController];
-					[window addSubview:[mainTabBarController view]];
+					[self enterOnlineModeForce];
 				}
 				else
 				{
-					viewObjects.isOfflineMode = YES;
-					[SavedSettings sharedInstance].isJukeboxEnabled = NO;
-					
-					[audio stop];
-					[[SUSStreamSingleton sharedInstance] cancelAllStreams];
-					[musicControls stopDownloadQueue];
-					[mainTabBarController.view removeFromSuperview];
-					[databaseControls closeAllDatabases];
-					[databaseControls initDatabases];
-					[self checkServer];
-					currentTabBarController = offlineTabBarController;
-					[window addSubview:[offlineTabBarController view]];
+					[self enterOfflineModeForce];
 				}
 			}
 			

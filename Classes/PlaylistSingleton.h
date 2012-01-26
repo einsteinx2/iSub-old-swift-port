@@ -8,15 +8,20 @@
 
 typedef enum
 {
-	ISMSRepeatMode_Normal,
-	ISMSRepeatMode_RepeatOne,
-	ISMSRepeatMode_RepeatAll
+	ISMSRepeatMode_Normal = 0,
+	ISMSRepeatMode_RepeatOne = 1,
+	ISMSRepeatMode_RepeatAll = 2
 } ISMSRepeatMode;
 
 @class Song, FMDatabase;
-@interface SUSCurrentPlaylistDAO : NSObject
+@interface PlaylistSingleton : NSObject
+{
+	NSInteger shuffleIndex;
+	NSInteger normalIndex;
+	ISMSRepeatMode repeatMode;
+}
 
-+ (SUSCurrentPlaylistDAO *)dataModel;
++ (PlaylistSingleton *)sharedInstance;
 
 - (Song *)songForIndex:(NSUInteger)index;
 - (NSInteger)incrementIndex;
@@ -26,6 +31,9 @@ typedef enum
 @property (readonly) Song *currentSong;
 @property (readonly) Song *nextSong;
 
+@property NSInteger shuffleIndex;
+@property NSInteger normalIndex;
+
 @property NSInteger currentIndex;
 @property (readonly) NSInteger nextIndex;
 @property (readonly) NSUInteger count;
@@ -33,6 +41,8 @@ typedef enum
 @property (readonly) FMDatabase *db;
 
 @property ISMSRepeatMode repeatMode;
+
+@property BOOL isShuffle;
 
 - (void)deleteSongs:(NSArray *)indexes;
 - (void)shuffleToggle;

@@ -102,7 +102,7 @@
 			aSong.size = [numberFormatter numberFromString:[attributeDict objectForKey:@"size"]];
 		
 		//[listOfSongs addObject:aSong];
-		[aSong addToPlaylistQueue];
+		[aSong addToCurrentPlaylist];
 		
 		[aSong release];
 		[numberFormatter release];

@@ -28,6 +28,7 @@
 #import "OrderedDictionary.h"
 #import "SUSServerPlaylist.h"
 #import "FMDatabase+Synchronized.h"
+#import "PlaylistSingleton.h"
 
 @interface PlaylistSongsViewController (Private)
 
@@ -484,6 +485,8 @@ static NSString *kName_Error = @"error";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+	
 	if (viewObjects.isCellEnabled)
 	{		
 		// Clear the current playlist
@@ -518,7 +521,7 @@ static NSString *kName_Error = @"error";
 			[musicControls jukeboxReplacePlaylistWithLocal];
 		}
 			
-		musicControls.isShuffle = NO;
+		currentPlaylist.isShuffle = NO;
 		
 		[musicControls playSongAtPosition:indexPath.row];
 		

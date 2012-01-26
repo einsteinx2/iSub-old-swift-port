@@ -34,6 +34,7 @@
 #import "SUSAllSongsLoader.h"
 #import "FlurryAnalytics.h"
 #import "EGORefreshTableHeaderView.h"
+#import "PlaylistSingleton.h"
 
 @interface AllSongsViewController (Private)
 - (void)hideLoadingScreen;
@@ -638,6 +639,8 @@
 {
 	if (viewObjects.isCellEnabled)
 	{
+		PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+		
 		// Clear the current playlist
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			[databaseControls resetJukeboxPlaylist];
@@ -656,7 +659,7 @@
 			aSong = [dataModel songForPosition:(sectionStartIndex + indexPath.row + 1)];
 		}
 		
-		[aSong addToPlaylistQueue];
+		[aSong addToCurrentPlaylist];
 		
 		// If jukebox mode, send song id to server
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -667,7 +670,7 @@
 		}
 		
 		// Set player defaults
-		musicControls.isShuffle = NO;
+		currentPlaylist.isShuffle = NO;
 		
 		// Start the song
 		[musicControls playSongAtPosition:0];

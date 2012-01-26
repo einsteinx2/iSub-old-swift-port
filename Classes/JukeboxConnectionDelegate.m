@@ -12,7 +12,7 @@
 #import "DatabaseSingleton.h"
 #import "BBSimpleConnectionQueue.h"
 #import "CustomUIAlertView.h"
-#import "SUSCurrentPlaylistDAO.h"
+#import "PlaylistSingleton.h"
 
 @implementation JukeboxConnectionDelegate
 
@@ -87,7 +87,7 @@
 		[xmlParser setDelegate:parser];
 		[xmlParser parse];
 		
-		SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+		PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
 		
 		dataModel.currentIndex = parser.currentIndex;
 		musicControls.jukeboxGain = parser.gain;

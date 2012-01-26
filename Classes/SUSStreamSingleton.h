@@ -11,14 +11,15 @@
 
 #define ISMSNumberOfStreamsToQueue 2
 
-@class Song, SUSStreamHandler, SUSLyricsDAO, SUSCurrentPlaylistDAO;
+@class Song, SUSStreamHandler, SUSLyricsDAO, PlaylistSingleton;
 @interface SUSStreamSingleton : NSObject <SUSStreamHandlerDelegate, SUSLoaderDelegate>
 
 @property (retain) NSMutableArray *handlerStack;
 @property (retain) SUSLyricsDAO *lyricsDAO;
-@property (retain) SUSCurrentPlaylistDAO *currentPlaylistDAO;
+@property (retain) PlaylistSingleton *currentPlaylistDAO;
 
 @property (copy) Song *lastCachedSong;
+@property (copy) Song *lastTempCachedSong;
 
 + (SUSStreamSingleton *)sharedInstance;
 
@@ -40,8 +41,8 @@
 - (void)removeStream:(SUSStreamHandler *)handler;
 - (void)removeStreamForSong:(Song *)aSong;
 
-- (void)queueStreamForSong:(Song *)song offset:(NSUInteger)byteOffset atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp;
-- (void)queueStreamForSong:(Song *)song offset:(NSUInteger)byteOffset isTempCache:(BOOL)isTemp;
+- (void)queueStreamForSong:(Song *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp;
+- (void)queueStreamForSong:(Song *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset isTempCache:(BOOL)isTemp;
 - (void)queueStreamForSong:(Song *)song atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp;
 - (void)queueStreamForSong:(Song *)song isTempCache:(BOOL)isTemp;
 

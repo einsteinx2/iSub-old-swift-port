@@ -247,14 +247,14 @@
 	
 	if (isShuffle)
 	{
-		musicControls.isShuffle = YES;
+		currentPlaylist.isShuffle = YES;
 		
 		[databaseControls resetShufflePlaylist];
 		[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist ORDER BY RANDOM()"];
 	}
 	else
 	{
-		musicControls.isShuffle = NO;
+		currentPlaylist.isShuffle = NO;
 	}
 	
 	musicControls.currentPlaylistPosition = 0;

@@ -121,7 +121,7 @@
 
 - (void)queueAction
 {
-	[mySong addToPlaylistQueue];
+	[mySong addToCurrentPlaylist];
 	
 	[self hideOverlay];
 }

@@ -124,7 +124,7 @@
 	while ([result next])
 	{
 		if ([result stringForColumnIndex:0] != nil)
-			[[Song songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToPlaylistQueue];
+			[[Song songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCurrentPlaylist];
 	}
 	
 	[result close];

@@ -25,7 +25,7 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "CacheSingleton.h"
-#import "SUSCurrentPlaylistDAO.h"
+#import "PlaylistSingleton.h"
 #import "FlurryAnalytics.h"
 #import "FMDatabase+Synchronized.h"
 #import "NSString+Additions.h"
@@ -469,51 +469,51 @@
 
 - (void)loadPlayAllPlaylist:(NSString *)shuffle
 {	
-	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-	
-	musicControls.isShuffle = NO;
-	
-	BOOL isShuffle;
-	if ([shuffle isEqualToString:@"YES"])
-		isShuffle = YES;
-	else
-		isShuffle = NO;
-	
-	[databaseControls resetCurrentPlaylistDb];
-	
-	FMResultSet *result = [databaseControls.songCacheDb synchronizedQuery:@"SELECT md5 FROM cachedSongsLayout ORDER BY seg1 COLLATE NOCASE"];
-	
-	while ([result next])
-	{
-		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	@autoreleasepool 
+	{		
+		PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
 		
-		Song *aSong = [Song songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]];
+		currentPlaylist.isShuffle = NO;
 		
-		if (aSong.path)
-			[aSong addToPlaylistQueue];
+		BOOL isShuffle;
+		if ([shuffle isEqualToString:@"YES"])
+			isShuffle = YES;
+		else
+			isShuffle = NO;
 		
-		[pool release];
+		[databaseControls resetCurrentPlaylistDb];
+		
+		FMResultSet *result = [databaseControls.songCacheDb synchronizedQuery:@"SELECT md5 FROM cachedSongsLayout ORDER BY seg1 COLLATE NOCASE"];
+		
+		while ([result next])
+		{
+			NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+			
+			Song *aSong = [Song songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]];
+			
+			if (aSong.path)
+				[aSong addToCurrentPlaylist];
+			
+			[pool release];
+		}
+		
+		if (isShuffle)
+		{
+			currentPlaylist.isShuffle = YES;
+			[databaseControls shufflePlaylist];
+		}
+		else
+		{
+			currentPlaylist.isShuffle = NO;
+		}
+		
+		if ([SavedSettings sharedInstance].isJukeboxEnabled)
+			[musicControls jukeboxReplacePlaylistWithLocal];
+		
+		// Must do UI stuff in main thread
+		[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
+		[self performSelectorOnMainThread:@selector(playAllPlaySong) withObject:nil waitUntilDone:NO];	
 	}
-	
-	if (isShuffle)
-	{
-		musicControls.isShuffle = YES;
-		[databaseControls shufflePlaylist];
-	}
-	else
-	{
-		musicControls.isShuffle = NO;
-	}
-	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-		[musicControls jukeboxReplacePlaylistWithLocal];
-	
-	// Must do UI stuff in main thread
-	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
-	[self performSelectorOnMainThread:@selector(playAllPlaySong) withObject:nil waitUntilDone:NO];	
-	
-	[autoreleasePool release];
 }
 
 #pragma mark -
@@ -532,65 +532,6 @@
 		}
 	}
 }
-
-
-- (Song *) songFromDbRow:(NSUInteger)row inTable:(NSString *)table
-{
-	row++;
-	Song *aSong = [[Song alloc] init];
-	FMResultSet *result = [databaseControls.songCacheDb synchronizedQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE ROWID = %i", table, row]];
-	if ([databaseControls.songCacheDb hadError])
-	{
-		DLog(@"Err %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
-	}
-	else
-	{
-		[result next];
-		
-		if ([result stringForColumn:@"title"] != nil)
-			aSong.title = [[result stringForColumn:@"title"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-		if ([result stringForColumn:@"songId"] != nil)
-			aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
-		if ([result stringForColumn:@"artist"] != nil)
-			aSong.artist = [[result stringForColumn:@"artist"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-		if ([result stringForColumn:@"album"] != nil)
-			aSong.album = [[result stringForColumn:@"album"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-		if ([result stringForColumn:@"genre"] != nil)
-			aSong.genre = [[result stringForColumn:@"genre"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-		if ([result stringForColumn:@"coverArtId"] != nil)
-			aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
-		if ([result stringForColumn:@"path"] != nil)
-			aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
-		if ([result stringForColumn:@"suffix"] != nil)
-			aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
-		if ([result stringForColumn:@"transcodedSuffix"] != nil)
-			aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
-		aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
-		aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
-		aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
-		aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
-		aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
-	}
-	
-	/*aSong.title = [result stringForColumnIndex:4];
-	aSong.songId = [result stringForColumnIndex:5];
-	aSong.artist = [result stringForColumnIndex:6];
-	aSong.album = [result stringForColumnIndex:7];
-	aSong.genre = [result stringForColumnIndex:8];
-	aSong.coverArtId = [result stringForColumnIndex:9];
-	aSong.path = [result stringForColumnIndex:10];
-	aSong.suffix = [result stringForColumnIndex:11];
-	aSong.transcodedSuffix = [result stringForColumnIndex:12];
-	aSong.duration = [NSNumber numberWithInt:[result intForColumnIndex:13]];
-	aSong.bitRate = [NSNumber numberWithInt:[result intForColumnIndex:14]];
-	aSong.track = [NSNumber numberWithInt:[result intForColumnIndex:15]];
-	aSong.year = [NSNumber numberWithInt:[result intForColumnIndex:16]];
-	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:17]];*/
-	
-	[result close];
-	return [aSong autorelease];
-}
-
 
 - (void)createCachedSongsList
 {
@@ -1069,7 +1010,7 @@
 
 - (void)deleteCachedSongs2
 {
-	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+	PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
 	Song *currentSong = dataModel.currentSong;
 	Song *nextSong = dataModel.nextSong;
 	
@@ -1365,7 +1306,7 @@
 		}
 		
 		// Set up the cell...
-		Song *aSong = [self songFromDbRow:indexPath.row inTable:@"queuedSongsList"];
+		Song *aSong = [Song songFromDbRow:indexPath.row inTable:@"queuedSongsList" inDatabase:databaseControls.songCacheDb];
 		
 		[cell.coverArtView loadImageFromCoverArtId:aSong.coverArtId];
 		

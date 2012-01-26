@@ -15,7 +15,7 @@
 #import "FMDatabaseAdditions.h"
 #import "Song.h"
 #import "SUSLyricsDAO.h"
-#import "SUSCurrentPlaylistDAO.h"
+#import "PlaylistSingleton.h"
 
 @implementation LyricsViewController
 
@@ -127,7 +127,7 @@
 
 - (void)updateLyricsLabel
 {	
-	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+	Song *currentSong = [PlaylistSingleton sharedInstance].currentSong;
 	NSString *lyrics = [dataModel loadLyricsForArtist:currentSong.artist andTitle:currentSong.title];
 	//DLog(@"lyrics = %@", lyrics);
 	if (!lyrics)

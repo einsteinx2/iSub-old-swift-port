@@ -20,6 +20,7 @@
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "SUSStreamSingleton.h"
+#import "PlaylistSingleton.h"
 
 @implementation SUSQueueAllLoader
 
@@ -68,7 +69,7 @@
 }
 
 - (void)finishLoad
-{
+{	
 	// Continue the iteration
 	if ([folderIds count] > 0)
 	{
@@ -76,7 +77,7 @@
 	}
 	else 
 	{
-		//if (musicControls.isShuffle)
+		//if (currentPlaylist.isShuffle)
 		if (isShuffleButton)
 		{
 			// Perform the shuffle
@@ -104,7 +105,7 @@
 		
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		{
-			musicControls.isShuffle = NO;
+			[PlaylistSingleton sharedInstance].isShuffle = NO;
 		}
 	}
 }
@@ -226,7 +227,7 @@
 		
 		if (isQueue)
 		{
-			[aSong addToPlaylistQueue];
+			[aSong addToCurrentPlaylist];
 		}
 		else
 		{

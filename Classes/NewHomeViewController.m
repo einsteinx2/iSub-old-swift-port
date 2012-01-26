@@ -37,7 +37,7 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "NSString+URLEncode.h"
 #import "NSMutableURLRequest+SUS.h"
-#import "SUSCurrentPlaylistDAO.h"
+#import "PlaylistSingleton.h"
 #import "AudioEngine.h"
 #import "FlurryAnalytics.h"
 
@@ -276,7 +276,7 @@
 
 - (void)initSongInfo
 {
-	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+	PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
 	Song *currentSong = dataModel.currentSong ? dataModel.currentSong : dataModel.prevSong;
 	
 	if (currentSong != nil)
@@ -728,6 +728,8 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+	
 	if (isSearch)
 	{
 		// It's a search
@@ -817,13 +819,13 @@
 		[databaseControls resetCurrentPlaylistDb];
 		for(Song *aSong in parser.listOfSongs)
 		{
-			[aSong addToPlaylistQueue];
+			[aSong addToCurrentPlaylist];
 		}
 		
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 			[musicControls jukeboxReplacePlaylistWithLocal];
 				
-		musicControls.isShuffle = NO;
+		currentPlaylist.isShuffle = NO;
 		
 		// Hide the loading screen
 		[viewObjects hideLoadingScreen];

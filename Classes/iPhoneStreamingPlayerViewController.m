@@ -24,7 +24,7 @@
 #import "UIView+tools.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SavedSettings.h"
-#import "SUSCurrentPlaylistDAO.h"
+#import "PlaylistSingleton.h"
 #import "AudioEngine.h"
 #import "EqualizerViewController.h"
 #import "SUSCoverArtLargeDAO.h"
@@ -34,7 +34,7 @@
 @interface iPhoneStreamingPlayerViewController ()
 
 @property (nonatomic, retain) UIImageView *reflectionView;
-@property (nonatomic, retain) SUSCurrentPlaylistDAO *currentPlaylist;
+@property (nonatomic, retain) PlaylistSingleton *currentPlaylist;
 
 - (UIImage *)reflectedImage:(UIImageView *)fromImage withHeight:(NSUInteger)height;
 
@@ -147,7 +147,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	audio = [AudioEngine sharedInstance];
 	
-	self.currentPlaylist = [SUSCurrentPlaylistDAO dataModel];
+	self.currentPlaylist = [PlaylistSingleton sharedInstance];
 	
 	pageControlViewController = nil;
 	
@@ -652,7 +652,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (IBAction)prevButtonPressed:(id)sender
 {
-	SUSCurrentPlaylistDAO *dataModel = [SUSCurrentPlaylistDAO dataModel];
+	PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
 	
 	DLog(@"track position: %f", audio.progress);
 	if (audio.progress > 10.0)

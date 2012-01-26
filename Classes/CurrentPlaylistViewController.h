@@ -7,7 +7,7 @@
 //
 
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, SUSCurrentPlaylistDAO;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, PlaylistSingleton;
 
 @interface CurrentPlaylistViewController : UITableViewController 
 {
@@ -32,7 +32,7 @@
 	NSUInteger currentPlaylistCount;
 }
 
-@property (nonatomic, retain) SUSCurrentPlaylistDAO *dataModel;
+@property (nonatomic, retain) PlaylistSingleton *dataModel;
 
 - (void) selectRow;
 

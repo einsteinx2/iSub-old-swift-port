@@ -138,7 +138,7 @@
 - (void)queueAction
 {
 	//DLog(@"queueAction");
-	[[Song songFromGenreDb:md5] addToPlaylistQueue];
+	[[Song songFromGenreDb:md5] addToCurrentPlaylist];
 	
 	[self hideOverlay];
 }

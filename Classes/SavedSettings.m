@@ -12,7 +12,7 @@
 #import "Song.h"
 #import "Server.h"
 #import "MKStoreManager.h"
-#import "SUSCurrentPlaylistDAO.h"
+#import "PlaylistSingleton.h"
 #import "AudioEngine.h"
 #import "iSubAppDelegate.h"
 #import "Reachability.h"
@@ -43,132 +43,141 @@
 	return @"";
 }
 
-- (void)setupSaveState
-{
-	SUSCurrentPlaylistDAO *currentPlaylistDAO = [SUSCurrentPlaylistDAO dataModel];
-	NSInteger currentIndex = currentPlaylistDAO.currentIndex;
-	
-	//DLog(@"setting up save state");
-
-	// Load saved state first
-	[self loadState];
-	
-	// Initiallize the save state stuff
-	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
-	AudioEngine *audio = [AudioEngine sharedInstance];
-	
-	if (self.isJukeboxEnabled)
-		isPlaying = NO;
-	else
-		isPlaying = audio.isPlaying;
-	[userDefaults setBool:isPlaying forKey:@"isPlaying"];
-	
-	isShuffle = musicControls.isShuffle;
-	[userDefaults setBool:isShuffle forKey:@"isShuffle"];
-	
-	currentPlaylistPosition = currentIndex;
-	[userDefaults setInteger:currentPlaylistPosition forKey:@"currentPlaylistPosition"];
-	
-	repeatMode = currentPlaylistDAO.repeatMode;
-	[userDefaults setInteger:repeatMode forKey:@"repeatMode"];
-	
-	bitRate = audio.bitRate;
-	[userDefaults setInteger:bitRate forKey:@"bitRate"];
-	
-	[userDefaults synchronize];
-	
-	// Start the timer
-	[NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(saveState) userInfo:nil repeats:YES];
-	//DLog(@"starting the save state timer");
-}
-
-- (void)saveState
-{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	//DLog(@"saveDefaults!!");
-	
-	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
-	AudioEngine *audio = [AudioEngine sharedInstance];
-	SUSCurrentPlaylistDAO *currentPlaylistDAO = [SUSCurrentPlaylistDAO dataModel];
-	
-	NSInteger currentIndex = currentPlaylistDAO.currentIndex;
-		
-	if (audio.isPlaying != isPlaying)
-	{
-		if (self.isJukeboxEnabled)
-			isPlaying = NO;
-		else
-			isPlaying = audio.isPlaying;
-				
-		[userDefaults setBool:isPlaying forKey:@"isPlaying"];
-	}
-	
-	if (musicControls.isShuffle != isShuffle)
-	{
-		isShuffle = musicControls.isShuffle;
-		[userDefaults setBool:isShuffle forKey:@"isShuffle"];
-	}
-	
-	if (currentIndex != currentPlaylistPosition)
-	{
-		currentPlaylistPosition = currentIndex;
-		[userDefaults setInteger:currentPlaylistPosition forKey:@"currentPlaylistPosition"];
-	}
-	
-	if (currentPlaylistDAO.repeatMode != repeatMode)
-	{
-		repeatMode = currentPlaylistDAO.repeatMode;
-		[userDefaults setInteger:repeatMode forKey:@"repeatMode"];
-	}
-	
-	if (audio.bitRate != bitRate)
-	{
-		bitRate = audio.bitRate;
-		[userDefaults setInteger:bitRate forKey:@"bitRate"];
-	}
-	
-	self.seekTime = audio.progress;
-	
-	if (isPlaying)
-	{
-		if (self.recoverSetting == 0)
-			self.isRecover = YES;
-		
-		if (self.recoverSetting == 1)
-			self.isRecover = NO;
-	}
-		
-	[userDefaults synchronize];	
-	
-	[pool release];
-}
-
 - (void)loadState
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
-	SUSCurrentPlaylistDAO *currentPlaylistDAO = [SUSCurrentPlaylistDAO dataModel];
+	PlaylistSingleton *currentPlaylistDAO = [PlaylistSingleton sharedInstance];
+	AudioEngine *audio = [AudioEngine sharedInstance];
 	
 	if (self.isJukeboxEnabled)
 		isPlaying = NO;
 	else
 		isPlaying = [userDefaults boolForKey:@"isPlaying"];
-	
-	//DLog(@"loading state, isPlaying = %i", isPlaying);
-	
+		
 	isShuffle = [userDefaults boolForKey:@"isShuffle"];
-	musicControls.isShuffle = isShuffle;
+	currentPlaylistDAO.isShuffle = isShuffle;
 	
-	currentPlaylistPosition = [userDefaults integerForKey:@"currentPlaylistPosition"];
-	currentPlaylistDAO.currentIndex = currentPlaylistPosition;
+	normalPlaylistIndex = [userDefaults integerForKey:@"normalPlaylistIndex"];
+	currentPlaylistDAO.normalIndex = normalPlaylistIndex;
+	
+	shufflePlaylistIndex = [userDefaults integerForKey:@"shufflePlaylistIndex"];
+	currentPlaylistDAO.shuffleIndex = shufflePlaylistIndex;
 	
 	repeatMode = [userDefaults integerForKey:@"repeatMode"];
 	currentPlaylistDAO.repeatMode = repeatMode;
 	
 	bitRate = [userDefaults integerForKey:@"bitRate"];
+	byteOffset = self.byteOffset;
+	secondsOffset = self.seekTime;
+	isRecover = self.isRecover;
+	recoverSetting = self.recoverSetting;
+	
+	audio.startByteOffset = byteOffset;
+	audio.startSecondsOffset = secondsOffset;
+	DLog(@"startByteOffset: %llu  startSecondsOffset: %f", byteOffset, secondsOffset);
+}
+
+- (void)setupSaveState
+{	
+	// Load saved state first
+	[self loadState];
+	
+	// Start the timer
+	[NSTimer scheduledTimerWithTimeInterval:3.3 target:self selector:@selector(saveState) userInfo:nil repeats:YES];
+}
+
+- (void)saveState
+{
+	@autoreleasepool
+	{
+		AudioEngine *audio = [AudioEngine sharedInstance];
+		PlaylistSingleton *currentPlaylistDAO = [PlaylistSingleton sharedInstance];
+		BOOL isDefaultsDirty = NO;
 		
-	[pool release];
+		if (audio.isPlaying != isPlaying)
+		{
+			if (self.isJukeboxEnabled)
+				isPlaying = NO;
+			else
+				isPlaying = audio.isPlaying;
+			
+			[userDefaults setBool:isPlaying forKey:@"isPlaying"];
+			isDefaultsDirty = YES;
+		}
+		
+		if (currentPlaylistDAO.isShuffle != isShuffle)
+		{
+			isShuffle = currentPlaylistDAO.isShuffle;
+			[userDefaults setBool:isShuffle forKey:@"isShuffle"];
+			isDefaultsDirty = YES;
+		}
+		
+		if (currentPlaylistDAO.normalIndex != normalPlaylistIndex)
+		{
+			normalPlaylistIndex = currentPlaylistDAO.normalIndex;
+			[userDefaults setInteger:normalPlaylistIndex forKey:@"normalPlaylistIndex"];
+			isDefaultsDirty = YES;
+		}
+		
+		if (currentPlaylistDAO.shuffleIndex != shufflePlaylistIndex)
+		{
+			shufflePlaylistIndex = currentPlaylistDAO.shuffleIndex;
+			[userDefaults setInteger:shufflePlaylistIndex forKey:@"shufflePlaylistIndex"];
+			isDefaultsDirty = YES;
+		}
+		
+		if (currentPlaylistDAO.repeatMode != repeatMode)
+		{
+			repeatMode = currentPlaylistDAO.repeatMode;
+			[userDefaults setInteger:repeatMode forKey:@"repeatMode"];
+			isDefaultsDirty = YES;
+		}
+		
+		if (audio.bitRate != bitRate && audio.bitRate >= 0)
+		{
+			bitRate = audio.bitRate;
+			[userDefaults setInteger:bitRate forKey:@"bitRate"];
+			isDefaultsDirty = YES;
+		}
+		
+		if (secondsOffset != audio.progress)
+		{
+			secondsOffset = audio.progress;
+			[userDefaults setDouble:secondsOffset forKey:@"seekTime"];
+			isDefaultsDirty = YES;
+		}
+		
+		if (byteOffset != audio.currentByteOffset)
+		{
+			byteOffset = audio.currentByteOffset;
+			NSNumber *num = [NSNumber numberWithUnsignedLongLong:byteOffset];
+			[userDefaults setObject:num forKey:@"byteOffset"];
+			isDefaultsDirty = YES;
+		}
+				
+		BOOL newIsRecover = NO;
+		if (isPlaying)
+		{
+			if (recoverSetting == 0)
+				newIsRecover = YES;
+			else
+				newIsRecover = NO;
+		}
+		else
+		{
+			newIsRecover = NO;
+		}
+		
+		if (isRecover != newIsRecover)
+		{
+			isRecover = newIsRecover;
+			[userDefaults setBool:isRecover forKey:@"recover"];
+			isDefaultsDirty = YES;
+		}
+		
+		// Only synchronize to disk if necessary
+		if (isDefaultsDirty)
+			[userDefaults synchronize];	
+	}	
 }
 
 #pragma mark - Settings Setup
@@ -323,6 +332,13 @@
 		[userDefaults setBool:YES forKey:@"isTapAndHoldEnabled"];
 		[userDefaults setBool:YES forKey:@"isSwipeEnabled"];
 		[userDefaults setFloat:1.0 forKey:@"gainMultiplier"];
+	}
+	
+	// Removal of 3rd recovery type option
+	if (self.recoverSetting == 2)
+	{
+		// "Never" option removed, change to "Paused" option if set
+		self.recoverSetting = 1;
 	}
 	
 	[userDefaults synchronize];
@@ -498,9 +514,10 @@
 	return [userDefaults integerForKey:@"recoverSetting"];
 }
 
-- (void)setRecoverSetting:(NSInteger)recoverSetting
+- (void)setRecoverSetting:(NSInteger)setting
 {
-	[userDefaults setInteger:recoverSetting forKey:@"recoverSetting"];
+	recoverSetting = setting;
+	[userDefaults setInteger:setting forKey:@"recoverSetting"];
 	[userDefaults synchronize];
 }
 
@@ -820,34 +837,55 @@
 	return [userDefaults boolForKey:@"recover"];
 }
 
-- (void)setIsRecover:(BOOL)isRecover
+- (void)setIsRecover:(BOOL)recover
 {
-	[userDefaults setBool:isRecover forKey:@"recover"];
+	isRecover = recover;
+	[userDefaults setBool:recover forKey:@"recover"];
 	[userDefaults synchronize];
 }
 
-- (NSUInteger)seekTime
+- (double)seekTime
 {
-	return [userDefaults boolForKey:@"seekTime"];
+	return [userDefaults doubleForKey:@"seekTime"];
 }
 
-- (void)setSeekTime:(NSUInteger)seekTime
+- (void)setSeekTime:(double)seekTime
 {
-	[userDefaults setInteger:seekTime forKey:@"seekTime"];
+	secondsOffset = seekTime;
+	[userDefaults setDouble:seekTime forKey:@"seekTime"];
 	[userDefaults synchronize];
 }
 
-/*- (unsigned long long)byteOffset
+- (unsigned long long)byteOffset
 {
-	return [[userDefaults objectForKey:@"byteOffset"] unsignedLongLongValue];
+	unsigned long long retVal = [[userDefaults objectForKey:@"byteOffset"] unsignedLongLongValue];
+	return retVal;
 }
 
-- (void)setByteOffset:(unsigned long long)byteOffset
+- (void)setByteOffset:(unsigned long long)bOffset
 {
+	byteOffset = bOffset;
 	NSNumber *num = [NSNumber numberWithUnsignedLongLong:byteOffset];
 	[userDefaults setObject:num forKey:@"byteOffset"];
 	[userDefaults synchronize];
-}*/
+}
+
+- (NSInteger)bitRate
+{
+	NSInteger rate = [[userDefaults objectForKey:@"bitRate"] integerValue];
+	if (rate < 0) 
+		return 128;
+	else 
+		return rate;
+}
+
+- (void)setBitRate:(NSInteger)rate
+{
+	bitRate = rate;
+	NSNumber *num = [NSNumber numberWithInteger:bitRate];
+	[userDefaults setObject:num forKey:@"bitRate"];
+	[userDefaults synchronize];
+}
 
 - (BOOL)isBasicAuthEnabled
 {
@@ -910,11 +948,7 @@
 static SavedSettings *sharedInstance = nil;
 
 - (void)setup
-{
-	NSLog(@"SavedSettings setup called");
-	// Setup save state stuff
-	//[self setupSaveState];
-	
+{	
 	// Disable screen sleep if necessary
 	if (!self.isScreenSleepEnabled)
 		[UIApplication sharedApplication].idleTimerDisabled = YES;

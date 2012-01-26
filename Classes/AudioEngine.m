@@ -8,7 +8,7 @@
 
 #import "AudioEngine.h"
 #import "Song.h"
-#import "SUSCurrentPlaylistDAO.h"
+#import "PlaylistSingleton.h"
 #import "NSString+cStringUTF8.h"
 #import "BassParamEqValue.h"
 #import "BassEffectHandle.h"
@@ -23,7 +23,7 @@
 #import "NSMutableURLRequest+SUS.h"
 
 @implementation AudioEngine
-@synthesize isEqualizerOn, startByteOffset, currPlaylistDAO, fftDataThread, isFftDataThreadToTerminate, isPlaying, isFastForward, audioQueueShouldStopWaitingForData, audioQueueState;
+@synthesize isEqualizerOn, startByteOffset, startSecondsOffset, currPlaylistDAO, fftDataThread, isFftDataThreadToTerminate, isPlaying, isFastForward, audioQueueShouldStopWaitingForData, audioQueueState;
 
 // BASS plugins
 extern void BASSFLACplugin;
@@ -188,6 +188,9 @@ void CALLBACK MyStreamStallProc(HSYNC handle, DWORD channel, DWORD data, void *u
 
 void CALLBACK MyStreamFreeCallback(HSYNC handle, DWORD channel, DWORD data, void *user)
 {
+	if (user == NULL)
+		return;
+	
 	// Stream is done, release the user info object
 	BassUserInfo *userInfo = (BassUserInfo *)user;
 	[userInfo release];
@@ -195,19 +198,31 @@ void CALLBACK MyStreamFreeCallback(HSYNC handle, DWORD channel, DWORD data, void
 
 void CALLBACK MyFileCloseProc(void *user)
 {	
+	if (user == NULL)
+		return;
+	
 	// Close the file handle
 	BassUserInfo *userInfo = (BassUserInfo *)user;
+	if (userInfo.myFileHandle == NULL)
+		return;
+	
 	fclose(userInfo.myFileHandle);	
 }
 
 QWORD CALLBACK MyFileLenProc(void *user)
 {
+	if (user == NULL)
+		return 0;
+	
 	@autoreleasepool
 	{
 		@synchronized([AudioEngine class])
 		{
 			BassUserInfo *userInfo = (BassUserInfo *)user;
-			SUSCurrentPlaylistDAO *currentPlaylistDAO = sharedInstance.currPlaylistDAO;
+			if (userInfo.myFileHandle == NULL)
+				return 0;
+			
+			PlaylistSingleton *currentPlaylistDAO = sharedInstance.currPlaylistDAO;
 			
 			Song *theSong = [currentPlaylistDAO currentSong];
 			if ([userInfo.mySong isEqualToSong:theSong])
@@ -242,10 +257,16 @@ QWORD CALLBACK MyFileLenProc(void *user)
 
 DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 {
+	if (buffer == NULL || user == NULL)
+		return 0;
+	
 	@autoreleasepool
 	{
 		// Read from the file
 		BassUserInfo *userInfo = (BassUserInfo *)user;
+		if (userInfo.myFileHandle == NULL)
+			return 0;
+		
 		DWORD bytesRead = fread(buffer, 1, length, userInfo.myFileHandle);	
 		
 		if (bytesRead < length)
@@ -254,7 +275,7 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 			if (![[NSThread currentThread] isEqual:[NSThread mainThread]])
 			{
 				BassUserInfo *userInfo = (BassUserInfo *)user;
-				SUSCurrentPlaylistDAO *currentPlaylistDAO = sharedInstance.currPlaylistDAO;
+				PlaylistSingleton *currentPlaylistDAO = sharedInstance.currPlaylistDAO;
 				
 				Song *theSong = [currentPlaylistDAO currentSong];
 				if ([userInfo.mySong isEqualToSong:theSong])
@@ -269,7 +290,9 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 					theSong = [currentPlaylistDAO nextSong];
 				}
 				
-				if (!theSong.isFullyCached) // TODO: have something like isFullyCached for temp cached songs
+				SUSStreamSingleton *streamManager = [SUSStreamSingleton sharedInstance];
+				if (!theSong.isFullyCached 
+					|| (theSong.isTempCached && ![theSong isEqualToSong:streamManager.lastTempCachedSong]))
 				{
 					// Set the audio queue state to waiting for data
 					sharedInstance.audioQueueState = ISMS_AQ_STATE_waitingForData;
@@ -290,7 +313,8 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 					unsigned long long neededSize = size + ISMS_AQBytesToWaitForAudioData;
 					NSTimeInterval sleepTime = 1.0; // Sleep for 1 second at a time
 					DLog(@"AQ asked for: %i  got: %i  file size: %llu", length, bytesRead, theSong.localFileSize);
-					while (!sharedInstance.audioQueueShouldStopWaitingForData && !theSong.isFullyCached && theSong.localFileSize < neededSize)
+					while (!sharedInstance.audioQueueShouldStopWaitingForData 
+						   && !theSong.isFullyCached && theSong.localFileSize < neededSize)
 					{
 						// As long as audioQueueShouldStopWaitingForData is false, the song is not fully cached, and
 						// the file size is less than the current size + 10 buffers worth of data, then wait
@@ -327,9 +351,16 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 
 BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 {	
+	if (user == NULL)
+		return NO;
+	
 	// Seek to the requested offset (returns false if data not downloaded that far)
 	BassUserInfo *userInfo = (BassUserInfo *)user;
+	if (userInfo.myFileHandle == NULL)
+		return NO;
+	
 	BOOL success = !fseek(userInfo.myFileHandle, offset, SEEK_SET);
+	
 	DLog(@"File Seek to %llu  success: %@", offset, NSStringFromBOOL(success));
 	
 	return success;
@@ -705,7 +736,7 @@ void interruptionListenerCallback (void    *inUserData, UInt32  interruptionStat
 
 - (BOOL)bassFree
 {
-	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startWithOffsetInBytes:) object:nil];
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(retryStartAtOffset:) object:nil];
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(prepareNextSongStreamInBackground) object:nil];
 	
 	// Audio Queue
@@ -872,6 +903,14 @@ void interruptionListenerCallback (void    *inUserData, UInt32  interruptionStat
 	DLog(@"nextSong: %i", stream);
 }
 
+- (void)retryStartAtOffset:(NSDictionary *)parameters
+{
+	NSNumber *byteOffset = [parameters objectForKey:@"byteOffset"];
+	NSNumber *seconds = [parameters objectForKey:@"seconds"]; 
+	
+	[self startWithOffsetInBytes:byteOffset orSeconds:seconds];
+}
+
 - (void)startWithOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds
 {	
 	if (currPlaylistDAO.currentIndex >= currPlaylistDAO.count)
@@ -883,6 +922,7 @@ void interruptionListenerCallback (void    *inUserData, UInt32  interruptionStat
 		return;
     
 	startByteOffset = 0;
+	startSecondsOffset = 0;
 	
 	[self bassInit];
 	
@@ -898,6 +938,14 @@ void interruptionListenerCallback (void    *inUserData, UInt32  interruptionStat
 		DLog(@"path: %@", path);
 		userInfo.myFileHandle = fopen([path cStringUTF8], "rb");
 		
+		if (userInfo.myFileHandle == NULL)
+		{
+			// File failed to open
+			DLog(@"File failed to open");
+			[self bassFree];
+			return;
+		}
+		
 		//DLog(@"userInfo.localPath: %s ", userInfo->localPath);
 		BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFileSeekProc}; // callback table
 		
@@ -907,7 +955,12 @@ void interruptionListenerCallback (void    *inUserData, UInt32  interruptionStat
 		if (!fileStream1 && !currentSong.isFullyCached && currentSong.localFileSize < MIN_FILESIZE_TO_FAIL)
 		{
 			DLog(@"------failed to create stream, retrying in 2 seconds------");
-			[self performSelector:@selector(startWithOffsetInBytes:) withObject:byteOffset afterDelay:RETRY_DELAY];
+			NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithCapacity:2];
+			if (byteOffset)
+				[parameters setObject:byteOffset forKey:@"byteOffset"];
+			if (seconds)
+				[parameters setObject:seconds forKey:@"seconds"];
+			[self performSelector:@selector(retryStartAtOffset:) withObject:parameters afterDelay:RETRY_DELAY];
 		}
 		else
 		{
@@ -919,18 +972,22 @@ void interruptionListenerCallback (void    *inUserData, UInt32  interruptionStat
 				// Add the stream free callback
 				BASS_ChannelSetSync(fileStream1, BASS_SYNC_FREE, 0, MyStreamFreeCallback, userInfo);
 				
+				// Set byteoffsets
+				if (byteOffset)
+					startByteOffset = [byteOffset unsignedLongLongValue];
+				if (seconds)
+					startSecondsOffset = [seconds doubleValue];
+				
 				// Skip to the byte offset
 				if (byteOffset)
 				{
-					QWORD bytes = [byteOffset unsignedLongLongValue];
-					if (bytes != 0)
-						[self seekToPositionInBytes:[byteOffset unsignedLongLongValue] inStream:fileStream1];
+					if (startByteOffset > 0)
+						[self seekToPositionInBytes:startByteOffset inStream:fileStream1];
 				}
 				else if (seconds)
 				{
-					NSUInteger secs = [seconds unsignedIntValue];
-					if (secs != 0)
-						[self seekToPositionInSeconds:secs inStream:fileStream1];
+					if (startSecondsOffset > 0.0)
+						[self seekToPositionInSeconds:startSecondsOffset inStream:fileStream1];
 				}
 				
 				// Enable the equalizer if it's turned on
@@ -1021,8 +1078,7 @@ void interruptionListenerCallback (void    *inUserData, UInt32  interruptionStat
 			DLog(@"starting new stream");
 			if (currPlaylistDAO.currentIndex >= currPlaylistDAO.count)
 				currPlaylistDAO.currentIndex = currPlaylistDAO.count - 1;
-			//[[MusicSingleton sharedInstance] playSongAtPosition:currPlaylistDAO.currentIndex];
-			[[MusicSingleton sharedInstance] startSongAtOffsetInSeconds:[SavedSettings sharedInstance].seekTime];
+			[[MusicSingleton sharedInstance] startSongAtOffsetInBytes:startByteOffset andSeconds:startSecondsOffset];
 		}
 		else if (audioQueueState == ISMS_AQ_STATE_waitingForData)
 		{
@@ -1047,38 +1103,36 @@ void interruptionListenerCallback (void    *inUserData, UInt32  interruptionStat
 
 #pragma mark - Audio Engine Properties
 
-/*- (BOOL)isPlaying
-{	
-	return (BASS_ChannelIsActive(outStream) == BASS_ACTIVE_PLAYING);
-}*/
-
-- (NSUInteger)bitRate
+- (NSInteger)bitRate
 {
 	HSTREAM stream = self.currentStream;
 	
 	QWORD filePosition = BASS_StreamGetFilePosition(stream, BASS_FILEPOS_CURRENT); // current file position
 	QWORD decodedPosition = BASS_ChannelGetPosition(stream, BASS_POS_BYTE|BASS_POS_DECODE); // decoded PCM position
 	double bitrate = filePosition * 8 / BASS_ChannelBytes2Seconds(stream, decodedPosition);
-	return (NSUInteger)(bitrate / 1000);
+	
+	NSUInteger retBitrate = (NSUInteger)(bitrate / 1000);
+
+	return retBitrate > 1000000 ? -1 : retBitrate;
 }
 
 - (QWORD)currentByteOffset
 {
-	return self.bitRate * 128 * self.progress;
+	return BASS_StreamGetFilePosition(self.currentStream, BASS_FILEPOS_CURRENT) + startByteOffset;
 }
 
 - (double)progress
 {	
-	NSUInteger bytePosition = BASS_ChannelGetPosition(self.currentStream, BASS_POS_BYTE);// + startByteOffset;
-	double seconds = BASS_ChannelBytes2Seconds(self.currentStream, bytePosition);
+	NSUInteger pcmBytePosition = BASS_ChannelGetPosition(self.currentStream, BASS_POS_BYTE|BASS_POS_DECODE);// + startByteOffset;
+	double seconds = BASS_ChannelBytes2Seconds(self.currentStream, pcmBytePosition);
 	if (seconds < 0 && self.currentStream != 0)
-		DLog(@"error: %i", BASS_ErrorGetCode());
-		
-	return seconds;// + (startByteOffset / (self.bitRate * 1024 / 8));
+		BASSLogError();
 	
-	/*QWORD decodedPosition = BASS_ChannelGetPosition(self.currentStream, BASS_POS_BYTE|BASS_POS_DECODE); // decoded PCM position
-	double seconds = BASS_ChannelBytes2Seconds(self.currentStream, decodedPosition);
-	return seconds;*/
+	/*// If we started from a byte offset, calculate the seconds for that
+	if (self.bitRate > 0) // avoid a divide by 0
+		seconds += (startByteOffset / (self.bitRate * 1024 / 8));*/
+		
+	return seconds + startSecondsOffset;
 }
 
 - (HSTREAM)currentStream
@@ -1293,7 +1347,7 @@ void interruptionListenerCallback (void    *inUserData, UInt32  interruptionStat
 	isPlaying = NO;
 	isEqualizerOn = NO;
     startByteOffset = 0;
-    currPlaylistDAO = [[SUSCurrentPlaylistDAO alloc] init];
+    currPlaylistDAO = [PlaylistSingleton sharedInstance];
     
 	eqValueArray = [[NSMutableArray alloc] initWithCapacity:4];
 	eqHandleArray = [[NSMutableArray alloc] initWithCapacity:4];

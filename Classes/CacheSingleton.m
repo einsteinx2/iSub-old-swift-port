@@ -13,6 +13,7 @@
 #import "FMDatabaseAdditions.h"
 #import "FMDatabase+Synchronized.h"
 #import "Song.h"
+#import "SUSStreamSingleton.h"
 
 static CacheSingleton *sharedInstance = nil;
 
@@ -228,6 +229,7 @@ static CacheSingleton *sharedInstance = nil;
 	SavedSettings *settings = [SavedSettings sharedInstance];
 	[[NSFileManager defaultManager] removeItemAtPath:settings.tempCachePath error:NULL];
 	[[NSFileManager defaultManager] createDirectoryAtPath:settings.tempCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
+	[SUSStreamSingleton sharedInstance].lastTempCachedSong = nil;
 }
 
 #pragma mark - Singleton methods

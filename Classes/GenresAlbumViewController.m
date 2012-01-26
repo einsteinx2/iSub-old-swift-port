@@ -24,6 +24,7 @@
 #import "SavedSettings.h"
 #import "NSString+time.h"
 #import "FMDatabase+Synchronized.h"
+#import "PlaylistSingleton.h"
 
 @implementation GenresAlbumViewController
 
@@ -31,7 +32,6 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	
 	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
@@ -197,8 +197,10 @@
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+	
 	// Turn off shuffle mode in case it's on
-	musicControls.isShuffle = NO;
+	currentPlaylist.isShuffle = NO;
 	
 	// Reset the current playlist
 	[databaseControls resetCurrentPlaylistDb];
@@ -219,7 +221,7 @@
 			NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
 			Song *aSong = [Song songFromGenreDb:songIdMD5];
 			
-			[aSong addToPlaylistQueue];
+			[aSong addToCurrentPlaylist];
 		}
 		
 		[pool release];
@@ -243,8 +245,10 @@
 {	
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+	
 	// Turn off shuffle mode to reduce inserts
-	musicControls.isShuffle = NO;
+	currentPlaylist.isShuffle = NO;
 	
 	// Reset the current playlist
 	[databaseControls resetCurrentPlaylistDb];
@@ -265,7 +269,7 @@
 			NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
 			Song *aSong = [Song songFromGenreDb:songIdMD5];
 			
-			[aSong addToPlaylistQueue];
+			[aSong addToCurrentPlaylist];
 		}		
 		
 		[pool release];
@@ -280,7 +284,7 @@
 		[musicControls jukeboxReplacePlaylistWithLocal];
 	
 	// Set the isShuffle flag
-	musicControls.isShuffle = YES;
+	currentPlaylist.isShuffle = YES;
 	
 	// Hide loading screen
 	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
@@ -427,6 +431,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {	
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+	
 	if (viewObjects.isCellEnabled)
 	{
 		if (indexPath.row < [listOfAlbums count])
@@ -483,7 +489,7 @@
 				
 				Song *aSong = [Song songFromGenreDb:songMD5];
 
-				[aSong addToPlaylistQueue];
+				[aSong addToCurrentPlaylist];
 				
 				// In jukebox mode, collect the song ids to send to the server
 				if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -502,7 +508,7 @@
 			[songIds release];
 			
 			// Set player defaults
-			musicControls.isShuffle = NO;
+			currentPlaylist.isShuffle = NO;
 			
 			// Start the song
 			[musicControls playSongAtPosition:songRow];

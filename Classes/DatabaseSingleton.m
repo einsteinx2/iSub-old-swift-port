@@ -23,7 +23,7 @@
 #import "SUSQueueAllLoader.h"
 #import "SavedSettings.h"
 #import "GTMNSString+HTML.h"
-#import "SUSCurrentPlaylistDAO.h"
+#import "PlaylistSingleton.h"
 #import "SUSStreamSingleton.h"
 
 static DatabaseSingleton *sharedInstance = nil;
@@ -340,9 +340,16 @@ static DatabaseSingleton *sharedInstance = nil;
 	{
 		[bookmarksDb executeUpdate:@"PRAGMA cache_size = 1"];
 		
-		if (![bookmarksDb tableExists:@"bookmarks"]) 
+		if ([bookmarksDb tableExists:@"bookmarks"]) 
 		{
-			[bookmarksDb executeUpdate:@"CREATE TABLE bookmarks (name TEXT, position INTEGER, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+			if (![bookmarksDb columnExists:@"bookmarks" columnName:@"bytes"])
+			{
+				[bookmarksDb executeUpdate:@"ALTER TABLE bookmarks ADD COLUMN bytes INTEGER"];
+			}
+		}
+		else
+		{
+			[bookmarksDb executeUpdate:@"CREATE TABLE bookmarks (name TEXT, position INTEGER, bytes INTEGER, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
 			[bookmarksDb executeUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
 		}
 	}
@@ -648,7 +655,9 @@ static DatabaseSingleton *sharedInstance = nil;
 
 - (void)queueSong:(Song *)aSong
 {
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	SavedSettings *settings = [SavedSettings sharedInstance];
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+	if (settings.isJukeboxEnabled)
 	{
 		[aSong insertIntoTable:@"jukeboxCurrentPlaylist" inDatabase:self.currentPlaylistDb];
 		[musicControls jukeboxAddSong:aSong.songId];
@@ -656,7 +665,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	else
 	{
 		[aSong insertIntoTable:@"currentPlaylist" inDatabase:self.currentPlaylistDb];
-		if (musicControls.isShuffle)
+		if (currentPlaylist.isShuffle)
 			[aSong insertIntoTable:@"shufflePlaylist" inDatabase:self.currentPlaylistDb];
 	}
 	
@@ -670,6 +679,8 @@ static DatabaseSingleton *sharedInstance = nil;
 
 - (void)playAllSongs:(NSString *)folderId artist:(Artist *)theArtist
 {	
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+	
 	// Show loading screen
 	//[viewObjects showLoadingScreenOnMainWindow];
 	[viewObjects showAlbumLoadingScreen:appDelegate.window sender:queueAll];
@@ -678,7 +689,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	[self resetCurrentPlaylistDb];
 	
 	// Set shuffle off in case it's on
-	musicControls.isShuffle = NO;
+	currentPlaylist.isShuffle = NO;
 	
 	// Queue all the songs
 	if (queueAll == nil)
@@ -689,6 +700,8 @@ static DatabaseSingleton *sharedInstance = nil;
 
 - (void)shuffleAllSongs:(NSString *)folderId artist:(Artist *)theArtist
 {
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+	
 	// Show loading screen
 	//[viewObjects showLoadingScreenOnMainWindow];
 	[viewObjects showAlbumLoadingScreen:appDelegate.window sender:queueAll];
@@ -697,7 +710,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	[self resetCurrentPlaylistDb];
 
 	// Set shuffle on
-	musicControls.isShuffle = YES;
+	currentPlaylist.isShuffle = YES;
 	
 	// Queue all the songs
 	if (queueAll == nil)
@@ -709,9 +722,10 @@ static DatabaseSingleton *sharedInstance = nil;
 - (void)shufflePlaylist
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
 	
-	[SUSCurrentPlaylistDAO dataModel].currentIndex = 0;
-	musicControls.isShuffle = YES;
+	currentPlaylist.currentIndex = 0;
+	currentPlaylist.isShuffle = YES;
 	
 	[self resetShufflePlaylist];
 	

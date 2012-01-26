@@ -11,12 +11,13 @@
 @class Song;
 @interface SUSStreamHandler : NSObject <NSURLConnectionDelegate>
 
-- (id)initWithSong:(Song *)song offset:(NSUInteger)offset isTemp:(BOOL)isTemp delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate;
+- (id)initWithSong:(Song *)song byteOffset:(unsigned long long)bOffset secondsOffset:(double)sOffset isTemp:(BOOL)isTemp delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate;
 - (id)initWithSong:(Song *)song isTemp:(BOOL)isTemp delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate;
 
 @property (nonatomic, assign) NSObject<SUSStreamHandlerDelegate> *delegate;
 @property (nonatomic, copy) Song *mySong;
-@property NSUInteger byteOffset;
+@property unsigned long long byteOffset;
+@property double secondsOffset;
 @property (nonatomic, retain) NSURLConnection *connection;
 @property (nonatomic, retain) NSURLRequest *request;
 

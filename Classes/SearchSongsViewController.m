@@ -33,6 +33,7 @@
 #import "SavedSettings.h"
 #import "NSString+URLEncode.h"
 #import "NSMutableURLRequest+SUS.h"
+#import "PlaylistSingleton.h"
 
 @implementation SearchSongsViewController
 
@@ -195,14 +196,14 @@
 		
 	if (isShuffle)
 	{
-		musicControls.isShuffle = YES;
+		currentPlaylist.isShuffle = YES;
 		
 		[databaseControls resetShufflePlaylist];
 		[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist ORDER BY RANDOM()"];
 	}
 	else
 	{
-		musicControls.isShuffle = NO;
+		currentPlaylist.isShuffle = NO;
 	}
 	
 	musicControls.currentPlaylistPosition = 0;
@@ -488,6 +489,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {	
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+	
 	if (searchType == 0)
 	{
 		if (viewObjects.isCellEnabled && indexPath.row != [listOfArtists count])
@@ -532,7 +535,7 @@
 			{
 				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 				
-				[aSong addToPlaylistQueue];
+				[aSong addToCurrentPlaylist];
 				
 				// In jukebox mode, collect the song ids to send to the server
 				if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -551,7 +554,7 @@
 			[songIds release];
 			
 			// Set player defaults
-			musicControls.isShuffle = NO;
+			currentPlaylist.isShuffle = NO;
 			
 			// Start the song
 			[musicControls playSongAtPosition:indexPath.row];

@@ -26,9 +26,14 @@
 	// State Saving
 	BOOL isPlaying;	
 	BOOL isShuffle;
-	NSInteger currentPlaylistPosition;
+	NSInteger normalPlaylistIndex;
+	NSInteger shufflePlaylistIndex;
 	NSInteger repeatMode;
 	NSInteger bitRate;
+	unsigned long long byteOffset;
+	double secondsOffset;
+	BOOL isRecover;
+	NSInteger recoverSetting;
 }
 
 // Server Login Settings
@@ -83,8 +88,9 @@
 
 // State Saving
 @property BOOL isRecover;
-@property NSUInteger seekTime;
-//@property unsigned long long byteOffset;
+@property double seekTime;
+@property unsigned long long byteOffset;
+@property NSInteger bitRate;
 
 // Document Paths
 @property (readonly) NSString *documentsPath;

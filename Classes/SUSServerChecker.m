@@ -12,9 +12,13 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "SavedSettings.h"
 
+@interface SUSServerChecker (Private)
+- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error;
+@end
+
 @implementation SUSServerChecker
 
-@synthesize receivedData, delegate, request, isNewSearchAPI;
+@synthesize receivedData, delegate, request, isNewSearchAPI, connection;
 
 - (id)init
 {
@@ -42,13 +46,24 @@
 	NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithSUSAction:@"ping" forUrlString:urlString username:username password:password andParameters:nil];
 	[theRequest setTimeoutInterval:ISMSServerCheckTimeout];
 	self.request = theRequest;
-	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	
-	if (!connection)
+	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+	if (self.connection)
+	{
+		[self performSelector:@selector(checkTimedOut) withObject:nil afterDelay:15.0];
+	}
+	else
     {
         NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
         [delegate SUSServerURLCheckFailed:self withError:error];
     }
+}
+
+- (void)checkTimedOut
+{
+	DLog(@"check timed out");
+	[self.connection cancel];
+	NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotReachServer];
+	[self connection:self.connection didFailWithError:error];
 }
 
 #pragma mark - Connection Delegate
@@ -104,6 +119,8 @@
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {    
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	
     [theConnection release];
     self.receivedData = nil;
 	
@@ -114,6 +131,8 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	
 	DLog(@"receivedData: %@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
 	TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
     TBXMLElement *root = tbxml.rootXMLElement;

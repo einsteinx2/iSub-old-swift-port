@@ -23,7 +23,7 @@
 #import "SavedSettings.h"
 //#import "NSString+time.h"
 #import "NSMutableURLRequest+SUS.h"
-#import "SUSCurrentPlaylistDAO.h"
+#import "PlaylistSingleton.h"
 #import "FMDatabase+Synchronized.h"
 #import "NSString+Additions.h"
 
@@ -228,6 +228,8 @@
 	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+	
 	BOOL isShuffle;
 	if ([shuffle isEqualToString:@"YES"])
 		isShuffle = YES;
@@ -249,19 +251,19 @@
 	while ([result next])
 	{
 		if ([result stringForColumnIndex:0] != nil)
-			[[Song songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToPlaylistQueue];
+			[[Song songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCurrentPlaylist];
 	}
 	
 	if (isShuffle)
 	{
-		musicControls.isShuffle = YES;
+		currentPlaylist.isShuffle = YES;
 		
 		[databaseControls resetShufflePlaylist];
 		[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist ORDER BY RANDOM()"];
 	}
 	else
 	{
-		musicControls.isShuffle = NO;
+		currentPlaylist.isShuffle = NO;
 	}
 			
 	// Must do UI stuff in main thread
@@ -583,6 +585,8 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 		}
 		else
 		{
+			PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+			
 			NSUInteger a = indexPath.row - [listOfAlbums count];
 			
 			[databaseControls resetCurrentPlaylistDb];
@@ -591,15 +595,15 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 				//DLog(@"songMD5: %@", songMD5);
 				Song *aSong = [self songFromCacheDb:[song objectAtIndex:0]];
 				//DLog(@"aSong: %@", aSong);
-				[aSong addToPlaylistQueue];
+				[aSong addToCurrentPlaylist];
 				//[databaseControls insertSong:aSong intoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 			}
 						
-			musicControls.isShuffle = NO;
+			currentPlaylist.isShuffle = NO;
 			
 			[musicControls playSongAtPosition:a];
 			
-			Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+			Song *currentSong = [PlaylistSingleton sharedInstance].currentSong;
 			
 			// Grab the first bytes of the song to trick Subsonic into seeing that it's being played
             NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(currentSong.songId) forKey:@"id"];
