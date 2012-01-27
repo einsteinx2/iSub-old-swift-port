@@ -35,7 +35,7 @@
 #define kMinBytesToStartLimiting (1024 * 1024)	// Start throttling bandwidth after 1 MB downloaded for 160kbps files (adjusted accordingly by bitrate)
 
 // Logging
-#define isProgressLoggingEnabled YES
+#define isProgressLoggingEnabled NO
 #define isThrottleLoggingEnabled NO
 
 @implementation SUSStreamHandler

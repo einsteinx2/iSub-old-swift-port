@@ -473,6 +473,7 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 	return r;
 }
 
+BOOL flip = YES;
 - (void)queueCallback:(AudioQueueRef)outAQ buffer:(AudioQueueBufferRef)outBuffer
 {	
 	// Specify how many bytes we're providing and grab the data
@@ -490,7 +491,21 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 		// Also, fill the visualizer stream with FFT data if needed
 		if (eqDataType != ISMS_BASS_EQ_DATA_TYPE_none)
 		{
-			BASS_StreamPutData(fftStream, outBuffer->mAudioData, outBuffer->mAudioDataByteSize);
+			/*uint16_t *tempBuffer = malloc(sizeof(uint16_t) * (outBuffer->mAudioDataByteSize / 2));
+			
+			uint16_t sample1;
+			uint16_t sample2;
+			for (int i = 0; i < outBuffer->mAudioDataByteSize; i+=2)
+			{
+				sample1 = ((uint16_t*)outBuffer->mAudioData)[i];
+				sample2 = ((uint16_t*)outBuffer->mAudioData)[i+1];
+				tempBuffer[i/2] = (sample1 + sample2) / 2;
+			}
+			BASS_StreamPutData(fftStream, tempBuffer, outBuffer->mAudioDataByteSize / 2);*/
+			
+			if (flip)
+				BASS_StreamPutData(fftStream, outBuffer->mAudioData, outBuffer->mAudioDataByteSize);
+			flip = !flip;
 		}
 	}
 	else if (actualLength == BASS_STREAMPROC_END)
@@ -1015,8 +1030,9 @@ void interruptionListenerCallback (void    *inUserData, UInt32  interruptionStat
 					fileStreamTempo1 = BASS_Mixer_StreamCreate(audioQueueSampleRate, 2, BASS_STREAM_DECODE|BASS_MIXER_END);
 					if (!fileStreamTempo1)
 						DLog(@"mixer error: %@", NSStringFromBassErrorCode(BASS_ErrorGetCode()));
-					BASS_Mixer_StreamAddChannel(fileStreamTempo1, fileStream1, 0);// BASS_MIXER_FILTER);
+					BASS_Mixer_StreamAddChannel(fileStreamTempo1, fileStream1, BASS_MIXER_FILTER|BASS_MIXER_BUFFER|BASS_MIXER_NORAMPIN);
 					DLog(@"creating mixer stream: %i", fileStreamTempo1);
+					DLog(@"updatePeriod: %u   buffer: %u   mixer buffer %u", BASS_GetConfig(BASS_CONFIG_UPDATEPERIOD), BASS_GetConfig(BASS_CONFIG_BUFFER), BASS_GetConfig(BASS_MIXER_BUFFER));
 				}
 				
 				// Start the audio queue

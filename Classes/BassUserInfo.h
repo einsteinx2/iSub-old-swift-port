@@ -11,5 +11,5 @@
 
 @property (copy) Song *mySong;
 @property FILE *myFileHandle;
-@property AudioFileID audioFile;
+//@property AudioFileID audioFile;
 @end
