@@ -14,6 +14,7 @@
 	IBOutlet UIButton *playButton;
 	IBOutlet UIButton *nextButton;
 	IBOutlet UIButton *prevButton;
+	IBOutlet UIButton *eqButton;
 	IBOutlet UIView *volumeSlider;
 	MPVolumeView *volumeView;
 	UISlider *jukeboxVolumeView;

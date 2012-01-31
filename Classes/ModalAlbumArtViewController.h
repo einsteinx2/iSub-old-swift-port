@@ -10,12 +10,19 @@
 @class AsynchronousImageView, Album;
 
 @interface ModalAlbumArtViewController : UIViewController 
-{
-	AsynchronousImageView *albumArt;
-}
 
-@property (nonatomic, retain) AsynchronousImageView *albumArt;
+@property (nonatomic, retain) IBOutlet AsynchronousImageView *albumArt;
+@property (nonatomic, retain) IBOutlet UIView *labelHolderView;
+@property (nonatomic, retain) IBOutlet UILabel *artistLabel; 
+@property (nonatomic, retain) IBOutlet UILabel *albumLabel;
+@property (nonatomic, retain) IBOutlet UILabel *durationLabel;
+@property (nonatomic, retain) IBOutlet UILabel *trackCountLabel;
 
-- (id)initWithAlbum:(Album*)theAlbum;
+@property (nonatomic, copy) Album *myAlbum;
+@property NSUInteger numberOfTracks;
+@property NSUInteger albumLength;
+
+- (id)initWithAlbum:(Album *)theAlbum numberOfTracks:(NSUInteger)numTracks albumLength:(NSUInteger)length;
+- (IBAction)dismiss:(id)sender;
 
 @end

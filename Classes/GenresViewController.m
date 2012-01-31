@@ -28,9 +28,8 @@
 #pragma mark -
 #pragma mark View lifecycle
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	
 	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
@@ -188,11 +187,12 @@
 
 
 // Customize the appearance of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
+{
     static NSString *CellIdentifier = @"Cell";
     
-	GenresGenreUITableViewCell *cell = [[[GenresGenreUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];    
+	GenresGenreUITableViewCell *cell = [[GenresGenreUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+																		 reuseIdentifier:CellIdentifier]; 
     // Configure the cell...
     cell.backgroundView = [[[UIView alloc] init] autorelease];
 	if(indexPath.row % 2 == 0)
@@ -200,14 +200,16 @@
 	else
 		cell.backgroundView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
 	
-	if (viewObjects.isOfflineMode) {
+	if (viewObjects.isOfflineMode)
+	{
 		cell.genreNameLabel.text = [databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
 	}
-	else {
+	else
+	{
 		cell.genreNameLabel.text = [databaseControls.genresDb stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
 	}
 	
-    return cell;
+    return [cell autorelease];
 }
 
 
@@ -228,18 +230,16 @@
 			artistViewController.title = [NSString stringWithString:[databaseControls.genresDb stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]]];
 		}
 		artistViewController.listOfArtists = [NSMutableArray arrayWithCapacity:1];
-		//artistViewController.listOfArtists = [[NSMutableArray alloc] init];
+
 		FMResultSet *result;
 		if (viewObjects.isOfflineMode) 
 		{
-			//result = [appDelegate.songCacheDb synchronizedQuery:@"SELECT seg1 FROM cachedSongsLayout a INNER JOIN genresSongs b ON a.md5 = b.md5 WHERE b.genre = ? GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE", artistViewController.title];
 			result = [databaseControls.songCacheDb synchronizedQuery:@"SELECT seg1 FROM cachedSongsLayout a INNER JOIN genresSongs b ON a.md5 = b.md5 WHERE b.genre = ? GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE", artistViewController.title];
 			if ([databaseControls.songCacheDb hadError])
 				DLog(@"Error grabbing the artists for this genre... Err %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
 		}
 		else 
 		{
-			//result = [databaseControls.genresDb executeQuery:@"SELECT seg1 FROM genresLayout a INNER JOIN genresSongs b ON a.md5 = b.md5 WHERE b.genre = ? GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE", artistViewController.title];
 			result = [databaseControls.genresDb executeQuery:@"SELECT seg1 FROM genresLayout a INNER JOIN genresSongs b ON a.md5 = b.md5 WHERE b.genre = ? GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE", artistViewController.title];
 			if ([databaseControls.genresDb hadError])
 				DLog(@"Error grabbing the artists for this genre... Err %d: %@", [databaseControls.genresDb lastErrorCode], [databaseControls.genresDb lastErrorMessage]);
@@ -264,20 +264,23 @@
 #pragma mark -
 #pragma mark Memory management
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning 
+{
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
-- (void)viewDidUnload {
+- (void)viewDidUnload 
+{
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
     // For example: self.myOutlet = nil;
 }
 
 
-- (void)dealloc {
+- (void)dealloc
+{
     [super dealloc];
 }
 

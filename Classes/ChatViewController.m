@@ -27,6 +27,7 @@
 #import "SUSChatDAO.h"
 #import "NSError+ISMSError.h"
 #import "FlurryAnalytics.h"
+#import "SeparaterView.h"
 
 
 @interface ChatViewController (Private)
@@ -98,6 +99,11 @@
 	headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 82)] autorelease];
 	headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	headerView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
+	
+	CGRect sepFrame = CGRectMake(0, 0, headerView.bounds.size.width, 2);
+	SeparaterView *sepView = [[SeparaterView alloc] initWithFrame:sepFrame];
+	[headerView addSubview:sepView];
+	[sepView release];
 	
 	textInput = [[CustomUITextView alloc] initWithFrame:CGRectMake(5, 5, 240, 72)];
 	textInput.autoresizingMask = UIViewAutoresizingFlexibleWidth;

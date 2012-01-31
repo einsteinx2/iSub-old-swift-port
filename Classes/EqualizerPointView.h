@@ -9,8 +9,8 @@
 #import "bass.h"
 #import "BassParamEqValue.h"
 
-#define myWidth 40
-#define myHeight 40
+#define myWidth 30
+#define myHeight 30
 
 @class BassParamEqValue;
 @interface EqualizerPointView : UIImageView

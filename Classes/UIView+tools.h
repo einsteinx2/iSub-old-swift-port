@@ -10,14 +10,12 @@
 
 @interface UIView (tools) 
 
-- (void)addX:(float)x;
-- (void)addY:(float)y;
-- (void)addWidth:(float)width;
-- (void)addHeight:(float)height;
+@property CGFloat x;
+@property CGFloat y;
+@property CGPoint origin;
 
-- (void)newX:(float)x;
-- (void)newY:(float)y;
-- (void)newWidth:(float)width;
-- (void)newHeight:(float)height;
+@property CGFloat width;
+@property CGFloat height;
+@property CGSize size;
 
 @end

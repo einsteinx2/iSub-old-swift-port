@@ -78,65 +78,6 @@
 		self.navigationItem.rightBarButtonItem = nil;
 	}
 	
-	/*// Add the play all button + shuffle button
-	UIView *headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)] autorelease];
-	headerView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
-	
-	UIImageView *playAllImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play-all-note.png"]];
-	playAllImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-	playAllImage.frame = CGRectMake(10, 10, 19, 30);
-	[headerView addSubview:playAllImage];
-	[playAllImage release];
-	
-	UILabel *playAllLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 160, 50)];
-	playAllLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
-	playAllLabel.backgroundColor = [UIColor clearColor];
-	playAllLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
-	playAllLabel.textAlignment = UITextAlignmentCenter;
-	playAllLabel.font = [UIFont boldSystemFontOfSize:30];
-	playAllLabel.text = @"Play All";
-	[headerView addSubview:playAllLabel];
-	[playAllLabel release];
-	
-	UIButton *playAllButton = [UIButton buttonWithType:UIButtonTypeCustom];
-	playAllButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
-	playAllButton.frame = CGRectMake(0, 0, 160, 40);
-	[playAllButton addTarget:self action:@selector(playAllAction:) forControlEvents:UIControlEventTouchUpInside];
-	[headerView addSubview:playAllButton];
-	
-	UILabel *spacerLabel = [[UILabel alloc] initWithFrame:CGRectMake(158, -2, 6, 50)];
-	spacerLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-	spacerLabel.backgroundColor = [UIColor clearColor];
-	spacerLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
-	spacerLabel.font = [UIFont systemFontOfSize:40];
-	spacerLabel.text = @"|";
-	[headerView addSubview:spacerLabel];
-	[spacerLabel release];
-	
-	UIImageView *shuffleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shuffle-small.png"]];
-	shuffleImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-	shuffleImage.frame = CGRectMake(180, 12, 24, 26);
-	[headerView addSubview:shuffleImage];
-	[shuffleImage release];
-	
-	UILabel *shuffleLabel = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 160, 50)];
-	shuffleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
-	shuffleLabel.backgroundColor = [UIColor clearColor];
-	shuffleLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
-	shuffleLabel.textAlignment = UITextAlignmentCenter;
-	shuffleLabel.font = [UIFont boldSystemFontOfSize:30];
-	shuffleLabel.text = @"Shuffle";
-	[headerView addSubview:shuffleLabel];
-	[shuffleLabel release];
-	
-	UIButton *shuffleButton = [UIButton buttonWithType:UIButtonTypeCustom];
-	shuffleButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
-	shuffleButton.frame = CGRectMake(160, 0, 160, 40);
-	[shuffleButton addTarget:self action:@selector(shuffleAction:) forControlEvents:UIControlEventTouchUpInside];
-	[headerView addSubview:shuffleButton];
-	
-	self.tableView.tableHeaderView = headerView;*/
-	
 	// Add the table fade
 	UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
 	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
@@ -150,171 +91,6 @@
 	self.tableView.tableFooterView = fadeBottom;
 }
 
-/*- (void)loadPlayAllPlaylist:(NSString *)shuffle
-{
-	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-	
-	BOOL isShuffle;
-	if ([shuffle isEqualToString:@"YES"])
-		isShuffle = YES;
-	else
-		isShuffle = NO;
-	
-	[musicControls performSelectorOnMainThread:@selector(destroyStreamer) withObject:nil waitUntilDone:YES];
-	[databaseControls resetCurrentPlaylistDb];
-
-	for (Album *anAlbum in listOfAlbums)
-	{
-		// Do an XML parse for each item.
-		NSURL *url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"getMusicDirectory.view"], anAlbum.albumId]];
-		
-		ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-		[request startSynchronous];
-		if ([request error])
-		{
-			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error grabbing the album list.\n\nError: %@", [request error].localizedDescription] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-			[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-			[alert release];
-		}
-		else
-		{
-			NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:[request responseData]];
-			XMLParser *parser = [(XMLParser *)[XMLParser alloc] initXMLParser];
-			
-			parser.myId = anAlbum.albumId;
-			parser.myArtist = [Artist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
-			parser.parseState = @"albums";
-			
-			[xmlParser setDelegate:parser];
-			[xmlParser parse];
-			
-			// Add each song to playlist
-			for (Song *aSong in parser.listOfSongs)
-			{
-				[databaseControls addSongToPlaylistQueue:aSong];
-				//[databaseControls insertSong:aSong intoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-			}
-			
-			// If there are any sub-albums, recurse through them 1 level deep
-			if ([parser.listOfAlbums count] > 0)
-			{
-				for (Album *anAlbum in parser.listOfAlbums)
-				{
-					// Do an XML parse for each item.
-					NSURL *url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@%@", [appDelegate getBaseUrl:@"getMusicDirectory.view"], anAlbum.albumId]];
-					
-					ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-					[request startSynchronous];
-					if ([request error])
-					{
-						CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error grabbing the album list.\n\nError:%@", [request error].localizedDescription] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-						[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-						[alert release];
-					}
-					else
-					{
-						NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:[request responseData]];
-						XMLParser *parser2 = [(XMLParser *)[XMLParser alloc] initXMLParser];
-						
-						parser2.myId = anAlbum.albumId;
-						parser2.myArtist = [Artist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
-						parser2.parseState = @"albums";
-						
-						[xmlParser setDelegate:parser2];
-						[xmlParser parse];
-						
-						// Add each song to playlist
-						for (Song *aSong in parser2.listOfSongs)
-						{
-							[databaseControls insertSong:aSong intoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-						}
-						
-						[xmlParser release];
-						[parser2 release];
-					}
-					
-					[url release];
-				}
-			}
-			
-			[xmlParser release];
-			[parser release];
-		}
-		
-		[url release];
-	}
-	
-	if (isShuffle)
-	{
-		currentPlaylist.isShuffle = YES;
-		
-		[databaseControls resetShufflePlaylist];
-		[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist ORDER BY RANDOM()"];
-	}
-	else
-	{
-		currentPlaylist.isShuffle = NO;
-	}
-	
-	musicControls.currentPlaylistPosition = 0;
-	
-	musicControls.currentSongObject = nil;
-	musicControls.nextSongObject = nil;
-	if (isShuffle)
-	{
-		musicControls.currentSongObject = [databaseControls songFromDbRow:0 inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
-		musicControls.nextSongObject = [databaseControls songFromDbRow:1 inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
-	}
-	else
-	{
-		musicControls.currentSongObject = [databaseControls songFromDbRow:0 inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-		musicControls.nextSongObject = [databaseControls songFromDbRow:1 inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-	}
-	
-	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
-	[self performSelectorOnMainThread:@selector(playAllPlaySong) withObject:nil waitUntilDone:NO];
-	
-	[autoreleasePool release];
-}
-
-
-- (void)playAllPlaySong
-{	
-	[musicControls destroyStreamer];
-	[musicControls playPauseSong];
-	
-	if (IS_IPAD())
-	{
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"showPlayer" object:nil];
-	}
-	else
-	{
-		iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-		streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-		[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-		[streamingPlayerViewController release];
-	}
-}
-
-- (void)playAllAction:(id)sender
-{	
-	if (IS_IPAD())
-		[viewObjects showLoadingScreen:appDelegate.window blockInput:YES mainWindow:YES];
-	else
-		 [viewObjects showLoadingScreen:appDelegate.currentTabBarController.view blockInput:YES mainWindow:YES];
-	[self performSelectorInBackground:@selector(loadPlayAllPlaylist:) withObject:@"NO"];
-}
-
-- (void)shuffleAction:(id)sender
-{
-	if (IS_IPAD())
-		[viewObjects showLoadingScreen:appDelegate.window blockInput:YES mainWindow:YES];
-	else
-		[viewObjects showLoadingScreen:appDelegate.currentTabBarController.view blockInput:YES mainWindow:YES];
-	[self performSelectorInBackground:@selector(loadPlayAllPlaylist:) withObject:@"YES"];
-}*/
-
 - (void) settingsAction:(id)sender 
 {
 	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
@@ -322,7 +98,6 @@
 	[self.navigationController pushViewController:serverListViewController animated:YES];
 	[serverListViewController release];
 }
-
 
 - (IBAction)nowPlayingAction:(id)sender
 {
@@ -332,7 +107,6 @@
 	[streamingPlayerViewController release];
 }
 
-
 - (void)didReceiveMemoryWarning 
 {
 	// Releases the view if it doesn't have a superview.
@@ -340,7 +114,8 @@
 }
 
 
-- (void)viewDidUnload {
+- (void)viewDidUnload
+{
 	// Release any retained subviews of the main view.
 	// e.g. self.myOutlet = nil;
 }
@@ -461,7 +236,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {		
 	static NSString *CellIdentifier = @"Cell";
-	
+		
 	if (indexPath.row < [listOfAlbums count])
 	{
 		AllAlbumsUITableViewCell *cell = [[[AllAlbumsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
@@ -490,9 +265,7 @@
 	{
 		// This is the last cell and there could be more results, load the next 20 songs;
 		UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-		//AllAlbumsUITableViewCell *cell = [[[AllAlbumsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-		//cell.canShowOverlay = NO;
-		
+
 		// Set background color
 		cell.backgroundView = [[ViewObjectsSingleton sharedInstance] createCellBackground:indexPath.row];
 		

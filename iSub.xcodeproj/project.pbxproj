@@ -22,6 +22,27 @@
 		53049CBF119617660098582B /* AllSongsUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53049CBE119617660098582B /* AllSongsUITableViewCell.m */; };
 		5305C1DA1157EA7A00BC78F0 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 5305C1D91157EA7A00BC78F0 /* Reachability.m */; };
 		5305C2061157F4F800BC78F0 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 5305C2051157F4F800BC78F0 /* Default.png */; };
+		5306236814D3237800D320A8 /* UIBezierPath+Smoothing.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306236714D3237800D320A8 /* UIBezierPath+Smoothing.m */; };
+		5306236914D3237800D320A8 /* UIBezierPath+Smoothing.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306236714D3237800D320A8 /* UIBezierPath+Smoothing.m */; };
+		5306236A14D3237800D320A8 /* UIBezierPath+Smoothing.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306236714D3237800D320A8 /* UIBezierPath+Smoothing.m */; };
+		5306236D14D3295300D320A8 /* EqualizerPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306236C14D3295300D320A8 /* EqualizerPathView.m */; };
+		5306236E14D3295300D320A8 /* EqualizerPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306236C14D3295300D320A8 /* EqualizerPathView.m */; };
+		5306236F14D3295300D320A8 /* EqualizerPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306236C14D3295300D320A8 /* EqualizerPathView.m */; };
+		5306238014D3597E00D320A8 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5306237F14D3597E00D320A8 /* libbass.a */; };
+		5306238114D3597E00D320A8 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5306237F14D3597E00D320A8 /* libbass.a */; };
+		5306238214D3597E00D320A8 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5306237F14D3597E00D320A8 /* libbass.a */; };
+		5306238C14D4BB7E00D320A8 /* controller-equalizer.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306238A14D4BB7E00D320A8 /* controller-equalizer.png */; };
+		5306238D14D4BB7E00D320A8 /* controller-equalizer.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306238A14D4BB7E00D320A8 /* controller-equalizer.png */; };
+		5306238E14D4BB7E00D320A8 /* controller-equalizer.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306238A14D4BB7E00D320A8 /* controller-equalizer.png */; };
+		5306238F14D4BB7E00D320A8 /* controller-equalizer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306238B14D4BB7E00D320A8 /* controller-equalizer@2x.png */; };
+		5306239014D4BB7E00D320A8 /* controller-equalizer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306238B14D4BB7E00D320A8 /* controller-equalizer@2x.png */; };
+		5306239114D4BB7E00D320A8 /* controller-equalizer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306238B14D4BB7E00D320A8 /* controller-equalizer@2x.png */; };
+		5306239414D4BCAD00D320A8 /* eqView.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306239214D4BCAD00D320A8 /* eqView.png */; };
+		5306239514D4BCAD00D320A8 /* eqView.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306239214D4BCAD00D320A8 /* eqView.png */; };
+		5306239614D4BCAD00D320A8 /* eqView.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306239214D4BCAD00D320A8 /* eqView.png */; };
+		5306239714D4BCAD00D320A8 /* eqView@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306239314D4BCAD00D320A8 /* eqView@2x.png */; };
+		5306239814D4BCAD00D320A8 /* eqView@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306239314D4BCAD00D320A8 /* eqView@2x.png */; };
+		5306239914D4BCAD00D320A8 /* eqView@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306239314D4BCAD00D320A8 /* eqView@2x.png */; };
 		530AD55C116877A300AD2540 /* chat-page.png in Resources */ = {isa = PBXBuildFile; fileRef = 530AD55B116877A300AD2540 /* chat-page.png */; };
 		530AD58E116913AC00AD2540 /* now-playing.png in Resources */ = {isa = PBXBuildFile; fileRef = 530AD58D116913AC00AD2540 /* now-playing.png */; };
 		530B417211B607A200743C09 /* CacheViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 530B417011B607A200743C09 /* CacheViewController.m */; };
@@ -82,19 +103,40 @@
 		5327F58612B95D2900735119 /* StoreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5327F58412B95D2900735119 /* StoreViewController.xib */; };
 		532862DB11C573AD00B40FF0 /* UAApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 532862DA11C573AD00B40FF0 /* UAApplication.m */; };
 		532B0DE012AF0AF700E8FF4F /* NSString+rfcEncode.m in Sources */ = {isa = PBXBuildFile; fileRef = 532B0DDF12AF0AF700E8FF4F /* NSString+rfcEncode.m */; };
+		532B552714D641C500B8AA67 /* ModalAlbumArtViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 532B552614D641C500B8AA67 /* ModalAlbumArtViewController.xib */; };
+		532B552814D641C500B8AA67 /* ModalAlbumArtViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 532B552614D641C500B8AA67 /* ModalAlbumArtViewController.xib */; };
+		532B552914D641C500B8AA67 /* ModalAlbumArtViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 532B552614D641C500B8AA67 /* ModalAlbumArtViewController.xib */; };
+		532B552C14D6762100B8AA67 /* UIApplication+StatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 532B552B14D6762100B8AA67 /* UIApplication+StatusBar.m */; };
+		532B552D14D6762100B8AA67 /* UIApplication+StatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 532B552B14D6762100B8AA67 /* UIApplication+StatusBar.m */; };
+		532B552E14D6762100B8AA67 /* UIApplication+StatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 532B552B14D6762100B8AA67 /* UIApplication+StatusBar.m */; };
+		532B554214D7397000B8AA67 /* SeparaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 532B554114D7397000B8AA67 /* SeparaterView.m */; };
+		532B554314D7397000B8AA67 /* SeparaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 532B554114D7397000B8AA67 /* SeparaterView.m */; };
+		532B554414D7397000B8AA67 /* SeparaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 532B554114D7397000B8AA67 /* SeparaterView.m */; };
 		532D9B43131AE19700FD8CA7 /* CustomUIAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 532D9B42131AE19700FD8CA7 /* CustomUIAlertView.m */; };
 		532D9DE2131B682600FD8CA7 /* KeychainAccessGroups.plist in Resources */ = {isa = PBXBuildFile; fileRef = 532D9DE1131B682600FD8CA7 /* KeychainAccessGroups.plist */; };
 		532E6FCF11AB31C3000A0E3B /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 532E6FCA11AB31C3000A0E3B /* FMDatabase.m */; };
 		532E6FD011AB31C3000A0E3B /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 532E6FCC11AB31C3000A0E3B /* FMDatabaseAdditions.m */; };
 		532E6FD111AB31C3000A0E3B /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 532E6FCE11AB31C3000A0E3B /* FMResultSet.m */; };
+		5332468014D7BDFA008B35F6 /* controller-equalizer-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467B14D7BDFA008B35F6 /* controller-equalizer-ipad.png */; };
+		5332468114D7BDFA008B35F6 /* controller-equalizer-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467B14D7BDFA008B35F6 /* controller-equalizer-ipad.png */; };
+		5332468214D7BDFA008B35F6 /* controller-equalizer-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467B14D7BDFA008B35F6 /* controller-equalizer-ipad.png */; };
+		5332468314D7BDFA008B35F6 /* controller-next-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467C14D7BDFA008B35F6 /* controller-next-ipad.png */; };
+		5332468414D7BDFA008B35F6 /* controller-next-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467C14D7BDFA008B35F6 /* controller-next-ipad.png */; };
+		5332468514D7BDFA008B35F6 /* controller-next-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467C14D7BDFA008B35F6 /* controller-next-ipad.png */; };
+		5332468614D7BDFA008B35F6 /* controller-pause-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467D14D7BDFA008B35F6 /* controller-pause-ipad.png */; };
+		5332468714D7BDFA008B35F6 /* controller-pause-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467D14D7BDFA008B35F6 /* controller-pause-ipad.png */; };
+		5332468814D7BDFA008B35F6 /* controller-pause-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467D14D7BDFA008B35F6 /* controller-pause-ipad.png */; };
+		5332468914D7BDFA008B35F6 /* controller-play-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467E14D7BDFA008B35F6 /* controller-play-ipad.png */; };
+		5332468A14D7BDFA008B35F6 /* controller-play-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467E14D7BDFA008B35F6 /* controller-play-ipad.png */; };
+		5332468B14D7BDFA008B35F6 /* controller-play-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467E14D7BDFA008B35F6 /* controller-play-ipad.png */; };
+		5332468C14D7BDFA008B35F6 /* controller-previous-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467F14D7BDFA008B35F6 /* controller-previous-ipad.png */; };
+		5332468D14D7BDFA008B35F6 /* controller-previous-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467F14D7BDFA008B35F6 /* controller-previous-ipad.png */; };
+		5332468E14D7BDFA008B35F6 /* controller-previous-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467F14D7BDFA008B35F6 /* controller-previous-ipad.png */; };
 		533A2D07113C61CA00B3A376 /* AsynchronousImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 533A2D06113C61CA00B3A376 /* AsynchronousImageView.m */; };
 		533A2D83113C963300B3A376 /* controller-next.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D7F113C963300B3A376 /* controller-next.png */; };
 		533A2D84113C963300B3A376 /* controller-pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D80113C963300B3A376 /* controller-pause.png */; };
 		533A2D85113C963300B3A376 /* controller-play.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D81113C963300B3A376 /* controller-play.png */; };
 		533A2D86113C963300B3A376 /* controller-previous.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D82113C963300B3A376 /* controller-previous.png */; };
-		53400A9D1496855E00165581 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53400A9C1496855E00165581 /* libbass.a */; };
-		53400A9E1496855E00165581 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53400A9C1496855E00165581 /* libbass.a */; };
-		53400A9F1496855E00165581 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53400A9C1496855E00165581 /* libbass.a */; };
 		53400AA11496856600165581 /* libbassmix.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53400AA01496856600165581 /* libbassmix.a */; };
 		53400AA21496856600165581 /* libbassmix.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53400AA01496856600165581 /* libbassmix.a */; };
 		53400AA31496856600165581 /* libbassmix.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53400AA01496856600165581 /* libbassmix.a */; };
@@ -223,12 +265,6 @@
 		5365859314789ADA00FE57A5 /* EqualizerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5365859214789AD900FE57A5 /* EqualizerView.m */; };
 		5365859414789ADA00FE57A5 /* EqualizerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5365859214789AD900FE57A5 /* EqualizerView.m */; };
 		5365859514789ADA00FE57A5 /* EqualizerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5365859214789AD900FE57A5 /* EqualizerView.m */; };
-		5365859F1478A43E00FE57A5 /* eqView.png in Resources */ = {isa = PBXBuildFile; fileRef = 5365859D1478A43E00FE57A5 /* eqView.png */; };
-		536585A01478A43E00FE57A5 /* eqView.png in Resources */ = {isa = PBXBuildFile; fileRef = 5365859D1478A43E00FE57A5 /* eqView.png */; };
-		536585A11478A43E00FE57A5 /* eqView.png in Resources */ = {isa = PBXBuildFile; fileRef = 5365859D1478A43E00FE57A5 /* eqView.png */; };
-		536585A21478A43E00FE57A5 /* eqView@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5365859E1478A43E00FE57A5 /* eqView@2x.png */; };
-		536585A31478A43E00FE57A5 /* eqView@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5365859E1478A43E00FE57A5 /* eqView@2x.png */; };
-		536585A41478A43E00FE57A5 /* eqView@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5365859E1478A43E00FE57A5 /* eqView@2x.png */; };
 		536585A71478BF2600FE57A5 /* BassParamEqValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 536585A61478BF2600FE57A5 /* BassParamEqValue.m */; };
 		536585A81478BF2600FE57A5 /* BassParamEqValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 536585A61478BF2600FE57A5 /* BassParamEqValue.m */; };
 		536585A91478BF2600FE57A5 /* BassParamEqValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 536585A61478BF2600FE57A5 /* BassParamEqValue.m */; };
@@ -1986,6 +2022,15 @@
 		5305C1D81157EA7A00BC78F0 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		5305C1D91157EA7A00BC78F0 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		5305C2051157F4F800BC78F0 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Images/Other/Default.png; sourceTree = "<group>"; };
+		5306236614D3237800D320A8 /* UIBezierPath+Smoothing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+Smoothing.h"; sourceTree = "<group>"; };
+		5306236714D3237800D320A8 /* UIBezierPath+Smoothing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+Smoothing.m"; sourceTree = "<group>"; };
+		5306236B14D3295300D320A8 /* EqualizerPathView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EqualizerPathView.h; sourceTree = "<group>"; };
+		5306236C14D3295300D320A8 /* EqualizerPathView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EqualizerPathView.m; sourceTree = "<group>"; };
+		5306237F14D3597E00D320A8 /* libbass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbass.a; sourceTree = "<group>"; };
+		5306238A14D4BB7E00D320A8 /* controller-equalizer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-equalizer.png"; path = "Images/Player Icons/controller-equalizer.png"; sourceTree = "<group>"; };
+		5306238B14D4BB7E00D320A8 /* controller-equalizer@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-equalizer@2x.png"; path = "Images/Player Icons/controller-equalizer@2x.png"; sourceTree = "<group>"; };
+		5306239214D4BCAD00D320A8 /* eqView.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = eqView.png; path = "Images/Player Icons/eqView.png"; sourceTree = "<group>"; };
+		5306239314D4BCAD00D320A8 /* eqView@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "eqView@2x.png"; path = "Images/Player Icons/eqView@2x.png"; sourceTree = "<group>"; };
 		530AD55B116877A300AD2540 /* chat-page.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat-page.png"; sourceTree = "<group>"; };
 		530AD58D116913AC00AD2540 /* now-playing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "now-playing.png"; path = "Images/Other/now-playing.png"; sourceTree = "<group>"; };
 		530B416F11B607A200743C09 /* CacheViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CacheViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -2061,6 +2106,11 @@
 		532862DA11C573AD00B40FF0 /* UAApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UAApplication.m; sourceTree = "<group>"; };
 		532B0DDE12AF0AF700E8FF4F /* NSString+rfcEncode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+rfcEncode.h"; sourceTree = "<group>"; };
 		532B0DDF12AF0AF700E8FF4F /* NSString+rfcEncode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+rfcEncode.m"; sourceTree = "<group>"; };
+		532B552614D641C500B8AA67 /* ModalAlbumArtViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ModalAlbumArtViewController.xib; sourceTree = "<group>"; };
+		532B552A14D6762100B8AA67 /* UIApplication+StatusBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+StatusBar.h"; sourceTree = "<group>"; };
+		532B552B14D6762100B8AA67 /* UIApplication+StatusBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+StatusBar.m"; sourceTree = "<group>"; };
+		532B554014D7397000B8AA67 /* SeparaterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SeparaterView.h; sourceTree = "<group>"; };
+		532B554114D7397000B8AA67 /* SeparaterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SeparaterView.m; sourceTree = "<group>"; };
 		532D9B41131AE19700FD8CA7 /* CustomUIAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomUIAlertView.h; sourceTree = "<group>"; };
 		532D9B42131AE19700FD8CA7 /* CustomUIAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomUIAlertView.m; sourceTree = "<group>"; };
 		532D9DE1131B682600FD8CA7 /* KeychainAccessGroups.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = KeychainAccessGroups.plist; sourceTree = "<group>"; };
@@ -2070,13 +2120,17 @@
 		532E6FCC11AB31C3000A0E3B /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseAdditions.m; sourceTree = "<group>"; };
 		532E6FCD11AB31C3000A0E3B /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
 		532E6FCE11AB31C3000A0E3B /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
+		5332467B14D7BDFA008B35F6 /* controller-equalizer-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-equalizer-ipad.png"; path = "Images/Player Icons/controller-equalizer-ipad.png"; sourceTree = "<group>"; };
+		5332467C14D7BDFA008B35F6 /* controller-next-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-next-ipad.png"; path = "Images/Player Icons/controller-next-ipad.png"; sourceTree = "<group>"; };
+		5332467D14D7BDFA008B35F6 /* controller-pause-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-pause-ipad.png"; path = "Images/Player Icons/controller-pause-ipad.png"; sourceTree = "<group>"; };
+		5332467E14D7BDFA008B35F6 /* controller-play-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-play-ipad.png"; path = "Images/Player Icons/controller-play-ipad.png"; sourceTree = "<group>"; };
+		5332467F14D7BDFA008B35F6 /* controller-previous-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-previous-ipad.png"; path = "Images/Player Icons/controller-previous-ipad.png"; sourceTree = "<group>"; };
 		533A2D05113C61C900B3A376 /* AsynchronousImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AsynchronousImageView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		533A2D06113C61CA00B3A376 /* AsynchronousImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsynchronousImageView.m; sourceTree = "<group>"; };
 		533A2D7F113C963300B3A376 /* controller-next.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-next.png"; path = "Images/Player Icons/controller-next.png"; sourceTree = "<group>"; };
 		533A2D80113C963300B3A376 /* controller-pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-pause.png"; path = "Images/Player Icons/controller-pause.png"; sourceTree = "<group>"; };
 		533A2D81113C963300B3A376 /* controller-play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-play.png"; path = "Images/Player Icons/controller-play.png"; sourceTree = "<group>"; };
 		533A2D82113C963300B3A376 /* controller-previous.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-previous.png"; path = "Images/Player Icons/controller-previous.png"; sourceTree = "<group>"; };
-		53400A9C1496855E00165581 /* libbass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbass.a; sourceTree = "<group>"; };
 		53400AA01496856600165581 /* libbassmix.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbassmix.a; sourceTree = "<group>"; };
 		53400AA41496857400165581 /* libbassflac.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbassflac.a; sourceTree = "<group>"; };
 		53400AA81496858600165581 /* libbass_fx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbass_fx.a; sourceTree = "<group>"; };
@@ -2206,8 +2260,6 @@
 		536585801478920D00FE57A5 /* EqualizerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EqualizerViewController.xib; sourceTree = "<group>"; };
 		5365859114789AD800FE57A5 /* EqualizerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EqualizerView.h; sourceTree = "<group>"; };
 		5365859214789AD900FE57A5 /* EqualizerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EqualizerView.m; sourceTree = "<group>"; };
-		5365859D1478A43E00FE57A5 /* eqView.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = eqView.png; sourceTree = "<group>"; };
-		5365859E1478A43E00FE57A5 /* eqView@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "eqView@2x.png"; sourceTree = "<group>"; };
 		536585A51478BF2500FE57A5 /* BassParamEqValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassParamEqValue.h; sourceTree = "<group>"; };
 		536585A61478BF2600FE57A5 /* BassParamEqValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassParamEqValue.m; sourceTree = "<group>"; };
 		536585AA1478C20700FE57A5 /* BassEffectHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassEffectHandle.h; sourceTree = "<group>"; };
@@ -3021,12 +3073,12 @@
 				536AD29511EA7EFB00387CB0 /* libOAuth.a in Frameworks */,
 				5327F52512B955F100735119 /* StoreKit.framework in Frameworks */,
 				53F7A128131B7F3B002C829D /* Security.framework in Frameworks */,
-				53400A9D1496855E00165581 /* libbass.a in Frameworks */,
 				53400AA11496856600165581 /* libbassmix.a in Frameworks */,
 				53400AA51496857400165581 /* libbassflac.a in Frameworks */,
 				53400AA91496858600165581 /* libbass_fx.a in Frameworks */,
 				53DC4EDF149D6A9E00CC3BB4 /* libFlurryAnalytics.a in Frameworks */,
 				538239A914CFD72800DF091F /* libCrittercism_v3_1_1.a in Frameworks */,
+				5306238014D3597E00D320A8 /* libbass.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3053,12 +3105,12 @@
 				53BC285D139AF0DD00A825F1 /* libOAuth.a in Frameworks */,
 				53BC285E139AF0DD00A825F1 /* StoreKit.framework in Frameworks */,
 				53BC285F139AF0DD00A825F1 /* Security.framework in Frameworks */,
-				53400A9F1496855E00165581 /* libbass.a in Frameworks */,
 				53400AA31496856600165581 /* libbassmix.a in Frameworks */,
 				53400AA71496857500165581 /* libbassflac.a in Frameworks */,
 				53400AAB1496858600165581 /* libbass_fx.a in Frameworks */,
 				53DC4EE1149D6A9E00CC3BB4 /* libFlurryAnalytics.a in Frameworks */,
 				538239AB14CFD72800DF091F /* libCrittercism_v3_1_1.a in Frameworks */,
+				5306238214D3597E00D320A8 /* libbass.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3085,12 +3137,12 @@
 				53DCF5BE13BFEAD3009160F9 /* libOAuth.a in Frameworks */,
 				53DCF5BF13BFEAD3009160F9 /* StoreKit.framework in Frameworks */,
 				53DCF5C013BFEAD3009160F9 /* Security.framework in Frameworks */,
-				53400A9E1496855E00165581 /* libbass.a in Frameworks */,
 				53400AA21496856600165581 /* libbassmix.a in Frameworks */,
 				53400AA61496857400165581 /* libbassflac.a in Frameworks */,
 				53400AAA1496858600165581 /* libbass_fx.a in Frameworks */,
 				53DC4EE0149D6A9E00CC3BB4 /* libFlurryAnalytics.a in Frameworks */,
 				538239AA14CFD72800DF091F /* libCrittercism_v3_1_1.a in Frameworks */,
+				5306238114D3597E00D320A8 /* libbass.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3189,7 +3241,7 @@
 				536AD1D211EA628200387CB0 /* libxml2.dylib */,
 				53EB4AA51405FE1B00CBA075 /* libz.dylib */,
 				5382F65614856F3C001C14C8 /* libSystem.dylib */,
-				53400A9C1496855E00165581 /* libbass.a */,
+				5306237F14D3597E00D320A8 /* libbass.a */,
 				53400AA01496856600165581 /* libbassmix.a */,
 				53400AA41496857400165581 /* libbassflac.a */,
 				53400AA81496858600165581 /* libbass_fx.a */,
@@ -3784,6 +3836,10 @@
 				5345204D149999AB0089D9E3 /* FMDatabase+Synchronized.m */,
 				5365ABE214AFB05100C0958D /* UIDevice+Software.h */,
 				5365ABE314AFB05100C0958D /* UIDevice+Software.m */,
+				5306236614D3237800D320A8 /* UIBezierPath+Smoothing.h */,
+				5306236714D3237800D320A8 /* UIBezierPath+Smoothing.m */,
+				532B552A14D6762100B8AA67 /* UIApplication+StatusBar.h */,
+				532B552B14D6762100B8AA67 /* UIApplication+StatusBar.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -3927,8 +3983,6 @@
 		539797F41162CEB100F41D8B /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				5365859D1478A43E00FE57A5 /* eqView.png */,
-				5365859E1478A43E00FE57A5 /* eqView@2x.png */,
 				53ADBBBA133525BD0098FAE6 /* folder-dropdown-arrow.png */,
 				53ADBBBB133525BD0098FAE6 /* folder-dropdown-arrow@2x.png */,
 				53C6050812F1EF98003C6895 /* Intro screen */,
@@ -4030,9 +4084,12 @@
 				5303877311653AE80043292D /* SearchOverlayViewController.xib */,
 				53C22CCD128EE81C00FFBA67 /* ModalAlbumArtViewController.h */,
 				53C22CCE128EE81C00FFBA67 /* ModalAlbumArtViewController.m */,
+				532B552614D641C500B8AA67 /* ModalAlbumArtViewController.xib */,
 				5327F58212B95D2900735119 /* StoreViewController.h */,
 				5327F58312B95D2900735119 /* StoreViewController.m */,
 				5327F58412B95D2900735119 /* StoreViewController.xib */,
+				532B554014D7397000B8AA67 /* SeparaterView.h */,
+				532B554114D7397000B8AA67 /* SeparaterView.m */,
 			);
 			name = Reused;
 			sourceTree = "<group>";
@@ -4121,6 +4178,8 @@
 		53AAF1BE11DA913000447FF7 /* Player Icons */ = {
 			isa = PBXGroup;
 			children = (
+				5306239214D4BCAD00D320A8 /* eqView.png */,
+				5306239314D4BCAD00D320A8 /* eqView@2x.png */,
 				535B726D134D0900003E0E1C /* controller-bookmark-ipad.png */,
 				535B726E134D0900003E0E1C /* controller-bookmark-on-ipad.png */,
 				535B726F134D0900003E0E1C /* controller-repeat-all-ipad.png */,
@@ -4132,6 +4191,11 @@
 				53404FF711E94AA5004AEC41 /* controller-bookmark-on@2x.png */,
 				53404FF811E94AA5004AEC41 /* controller-bookmark.png */,
 				53404FF911E94AA5004AEC41 /* controller-bookmark@2x.png */,
+				5332467B14D7BDFA008B35F6 /* controller-equalizer-ipad.png */,
+				5332467C14D7BDFA008B35F6 /* controller-next-ipad.png */,
+				5332467D14D7BDFA008B35F6 /* controller-pause-ipad.png */,
+				5332467E14D7BDFA008B35F6 /* controller-play-ipad.png */,
+				5332467F14D7BDFA008B35F6 /* controller-previous-ipad.png */,
 				533A2D7F113C963300B3A376 /* controller-next.png */,
 				53404FE011E9487C004AEC41 /* controller-next@2x.png */,
 				533A2D80113C963300B3A376 /* controller-pause.png */,
@@ -4142,6 +4206,8 @@
 				5327F1BF12B8243C00735119 /* controller-stop@2x.png */,
 				533A2D82113C963300B3A376 /* controller-previous.png */,
 				53404FE411E9488A004AEC41 /* controller-previous@2x.png */,
+				5306238A14D4BB7E00D320A8 /* controller-equalizer.png */,
+				5306238B14D4BB7E00D320A8 /* controller-equalizer@2x.png */,
 				536D615C11442AA000DFCE56 /* controller-repeat-all.png */,
 				53404FE511E9488A004AEC41 /* controller-repeat-all@2x.png */,
 				536D615D11442AA000DFCE56 /* controller-repeat-one.png */,
@@ -4626,6 +4692,8 @@
 				5365859214789AD900FE57A5 /* EqualizerView.m */,
 				53A2BE22147DF09800E44822 /* EqualizerPointView.h */,
 				53A2BE23147DF09800E44822 /* EqualizerPointView.m */,
+				5306236B14D3295300D320A8 /* EqualizerPathView.h */,
+				5306236C14D3295300D320A8 /* EqualizerPathView.m */,
 			);
 			name = Player;
 			sourceTree = "<group>";
@@ -5034,8 +5102,6 @@
 				53BC286E139AF17B00A825F1 /* Icon@2x-Beta.png in Resources */,
 				53DCF5C913BFEB51009160F9 /* iSub-Info-Lite.plist in Resources */,
 				536585841478920D00FE57A5 /* EqualizerViewController.xib in Resources */,
-				5365859F1478A43E00FE57A5 /* eqView.png in Resources */,
-				536585A21478A43E00FE57A5 /* eqView@2x.png in Resources */,
 				53DFB307148C27080066FF94 /* downArrow.png in Resources */,
 				5347A1B8148C5044000288D8 /* BassEffectDefaultPresets.plist in Resources */,
 				538239AC14CFD72800DF091F /* crittercism-arrow-l.png in Resources */,
@@ -5111,6 +5177,16 @@
 				53823A7E14CFD72800DF091F /* CrittercismGridViewController.xib in Resources */,
 				53823A8114CFD72800DF091F /* CrittercismRootViewController.xib in Resources */,
 				53823A8414CFD72800DF091F /* CrittercismViewController.xib in Resources */,
+				5306238C14D4BB7E00D320A8 /* controller-equalizer.png in Resources */,
+				5306238F14D4BB7E00D320A8 /* controller-equalizer@2x.png in Resources */,
+				5306239414D4BCAD00D320A8 /* eqView.png in Resources */,
+				5306239714D4BCAD00D320A8 /* eqView@2x.png in Resources */,
+				532B552714D641C500B8AA67 /* ModalAlbumArtViewController.xib in Resources */,
+				5332468014D7BDFA008B35F6 /* controller-equalizer-ipad.png in Resources */,
+				5332468314D7BDFA008B35F6 /* controller-next-ipad.png in Resources */,
+				5332468614D7BDFA008B35F6 /* controller-pause-ipad.png in Resources */,
+				5332468914D7BDFA008B35F6 /* controller-play-ipad.png in Resources */,
+				5332468C14D7BDFA008B35F6 /* controller-previous-ipad.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5367,8 +5443,6 @@
 				53BC2798139AF0DD00A825F1 /* Hockey.bundle in Resources */,
 				53BC2799139AF0DD00A825F1 /* README.md in Resources */,
 				536585861478920D00FE57A5 /* EqualizerViewController.xib in Resources */,
-				536585A11478A43E00FE57A5 /* eqView.png in Resources */,
-				536585A41478A43E00FE57A5 /* eqView@2x.png in Resources */,
 				53DFB309148C27080066FF94 /* downArrow.png in Resources */,
 				5347A1BA148C5044000288D8 /* BassEffectDefaultPresets.plist in Resources */,
 				538239AE14CFD72800DF091F /* crittercism-arrow-l.png in Resources */,
@@ -5444,6 +5518,16 @@
 				53823A8014CFD72800DF091F /* CrittercismGridViewController.xib in Resources */,
 				53823A8314CFD72800DF091F /* CrittercismRootViewController.xib in Resources */,
 				53823A8614CFD72800DF091F /* CrittercismViewController.xib in Resources */,
+				5306238E14D4BB7E00D320A8 /* controller-equalizer.png in Resources */,
+				5306239114D4BB7E00D320A8 /* controller-equalizer@2x.png in Resources */,
+				5306239614D4BCAD00D320A8 /* eqView.png in Resources */,
+				5306239914D4BCAD00D320A8 /* eqView@2x.png in Resources */,
+				532B552914D641C500B8AA67 /* ModalAlbumArtViewController.xib in Resources */,
+				5332468214D7BDFA008B35F6 /* controller-equalizer-ipad.png in Resources */,
+				5332468514D7BDFA008B35F6 /* controller-next-ipad.png in Resources */,
+				5332468814D7BDFA008B35F6 /* controller-pause-ipad.png in Resources */,
+				5332468B14D7BDFA008B35F6 /* controller-play-ipad.png in Resources */,
+				5332468E14D7BDFA008B35F6 /* controller-previous-ipad.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5704,8 +5788,6 @@
 				53DCF4F913BFEAD3009160F9 /* Icon-Beta.png in Resources */,
 				53DCF4FA13BFEAD3009160F9 /* Icon@2x-Beta.png in Resources */,
 				536585851478920D00FE57A5 /* EqualizerViewController.xib in Resources */,
-				536585A01478A43E00FE57A5 /* eqView.png in Resources */,
-				536585A31478A43E00FE57A5 /* eqView@2x.png in Resources */,
 				53DFB308148C27080066FF94 /* downArrow.png in Resources */,
 				5347A1B9148C5044000288D8 /* BassEffectDefaultPresets.plist in Resources */,
 				538239AD14CFD72800DF091F /* crittercism-arrow-l.png in Resources */,
@@ -5781,6 +5863,16 @@
 				53823A7F14CFD72800DF091F /* CrittercismGridViewController.xib in Resources */,
 				53823A8214CFD72800DF091F /* CrittercismRootViewController.xib in Resources */,
 				53823A8514CFD72800DF091F /* CrittercismViewController.xib in Resources */,
+				5306238D14D4BB7E00D320A8 /* controller-equalizer.png in Resources */,
+				5306239014D4BB7E00D320A8 /* controller-equalizer@2x.png in Resources */,
+				5306239514D4BCAD00D320A8 /* eqView.png in Resources */,
+				5306239814D4BCAD00D320A8 /* eqView@2x.png in Resources */,
+				532B552814D641C500B8AA67 /* ModalAlbumArtViewController.xib in Resources */,
+				5332468114D7BDFA008B35F6 /* controller-equalizer-ipad.png in Resources */,
+				5332468414D7BDFA008B35F6 /* controller-next-ipad.png in Resources */,
+				5332468714D7BDFA008B35F6 /* controller-pause-ipad.png in Resources */,
+				5332468A14D7BDFA008B35F6 /* controller-play-ipad.png in Resources */,
+				5332468D14D7BDFA008B35F6 /* controller-previous-ipad.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6105,6 +6197,10 @@
 				53B6F4D514C645F2000ED8F5 /* BassUserInfo.m in Sources */,
 				53C0C9AD14CF570E006A8DF3 /* SUSNowPlayingLoader.m in Sources */,
 				53C0C9B214CF5D0C006A8DF3 /* SUSNowPlayingDAO.m in Sources */,
+				5306236814D3237800D320A8 /* UIBezierPath+Smoothing.m in Sources */,
+				5306236D14D3295300D320A8 /* EqualizerPathView.m in Sources */,
+				532B552C14D6762100B8AA67 /* UIApplication+StatusBar.m in Sources */,
+				532B554214D7397000B8AA67 /* SeparaterView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6409,6 +6505,10 @@
 				53B6F4D714C645F2000ED8F5 /* BassUserInfo.m in Sources */,
 				53C0C9AF14CF570E006A8DF3 /* SUSNowPlayingLoader.m in Sources */,
 				53C0C9B414CF5D0C006A8DF3 /* SUSNowPlayingDAO.m in Sources */,
+				5306236A14D3237800D320A8 /* UIBezierPath+Smoothing.m in Sources */,
+				5306236F14D3295300D320A8 /* EqualizerPathView.m in Sources */,
+				532B552E14D6762100B8AA67 /* UIApplication+StatusBar.m in Sources */,
+				532B554414D7397000B8AA67 /* SeparaterView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6713,6 +6813,10 @@
 				53B6F4D614C645F2000ED8F5 /* BassUserInfo.m in Sources */,
 				53C0C9AE14CF570E006A8DF3 /* SUSNowPlayingLoader.m in Sources */,
 				53C0C9B314CF5D0C006A8DF3 /* SUSNowPlayingDAO.m in Sources */,
+				5306236914D3237800D320A8 /* UIBezierPath+Smoothing.m in Sources */,
+				5306236E14D3295300D320A8 /* EqualizerPathView.m in Sources */,
+				532B552D14D6762100B8AA67 /* UIApplication+StatusBar.m in Sources */,
+				532B554314D7397000B8AA67 /* SeparaterView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

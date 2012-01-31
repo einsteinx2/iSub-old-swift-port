@@ -13,124 +13,126 @@
 #import "iSubAppDelegate.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabase+Synchronized.h"
 #import "Album.h"
+#import "NSString+Additions.h"
+#import "UIView+tools.h"
+#import "UIApplication+StatusBar.h"
  
 @implementation ModalAlbumArtViewController
-@synthesize albumArt;
+@synthesize albumArt, artistLabel, albumLabel, myAlbum, numberOfTracks, albumLength, durationLabel, trackCountLabel, labelHolderView;
 
-- (id)initWithAlbum:(Album*)theAlbum
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-	if ((self = [super init]))
-	{		
-		//iSubAppDelegate *appDelegate = (iSubAppDelegate*)[UIApplication sharedApplication].delegate;
-		DatabaseSingleton *databaseControls = [DatabaseSingleton sharedInstance];
+	if (!IS_IPAD())
+	{
+		[UIView beginAnimations:@"rotate" context:nil];
+		//[UIView setAnimationDelegate:self];
+		//[UIView setAnimationDidStopSelector:@selector(textScrollingStopped)];
+		[UIView setAnimationDuration:duration];
 		
-		self.view.backgroundColor = [UIColor blackColor];
+		if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation))
+		{
+			albumArt.width = 480;
+			albumArt.height = 320;
+			labelHolderView.alpha = 0.0;
+			
+		}
+		else
+		{
+			albumArt.width = 320;
+			albumArt.height = 320;
+			labelHolderView.alpha = 1.0;
+		}
 		
+		[UIView commitAnimations];
+	}
+}
+
+- (id)initWithAlbum:(Album *)theAlbum numberOfTracks:(NSUInteger)tracks albumLength:(NSUInteger)length
+{
+	if ((self = [super initWithNibName:@"ModalAlbumArtViewController" bundle:nil]))
+	{
 		if ([self respondsToSelector:@selector(setModalPresentationStyle:)])
 			self.modalPresentationStyle = UIModalPresentationFormSheet;
-		albumArt = [[AsynchronousImageView alloc] initWithFrame:CGRectMake(0, 0, 540, 540)];
-		[self.view addSubview:albumArt];
 		
-		UIButton *dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		dismissButton.frame = CGRectMake(0, 0, 540, 540);
-		[dismissButton addTarget:self action:@selector(dismissModalViewControllerAnimated:) forControlEvents:UIControlEventTouchUpInside];
-		[self.view addSubview:dismissButton];
-		
-		UILabel *artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 540, 250, 100)];
-		//artistLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		artistLabel.backgroundColor = [UIColor clearColor];
-		artistLabel.textColor = [UIColor colorWithWhite:.6 alpha:1];
-		artistLabel.textAlignment = UITextAlignmentLeft;
-		artistLabel.text = theAlbum.artistName;
-		artistLabel.font = [UIFont boldSystemFontOfSize:48];
-		artistLabel.adjustsFontSizeToFitWidth = YES;
-		[self.view addSubview:artistLabel];
-		[artistLabel release];
-		
-		UILabel *albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(260, 540, 275, 100)];
-		//albumLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		albumLabel.backgroundColor = [UIColor clearColor];
-		albumLabel.textColor = [UIColor colorWithWhite:.6 alpha:1];
-		albumLabel.textAlignment = UITextAlignmentRight;
-		albumLabel.text = theAlbum.title;
-		albumLabel.font = [UIFont boldSystemFontOfSize:36];
-		albumLabel.adjustsFontSizeToFitWidth = YES;
-		[self.view addSubview:albumLabel];
-		[albumLabel release];
-		
-		if ([databaseControls.coverArtCacheDb540 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [theAlbum.coverArtId md5]] == 1)
-		{
-			NSData *imageData = [databaseControls.coverArtCacheDb540 dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [theAlbum.coverArtId md5]];
-			albumArt.image = [UIImage imageWithData:imageData];
-		}
-		else 
-		{
-			[albumArt loadImageFromCoverArtId:theAlbum.coverArtId isForPlayer:NO];
-			//[albumArt loadImageFromURLString:[NSString stringWithFormat:@"%@%@&size=540", [appDelegate getBaseUrl:@"getCoverArt.view"], coverArtId]];
-		}		
+		myAlbum = [theAlbum copy];
+		numberOfTracks = tracks;
+		albumLength = length;
 	}
 	
 	return self;
 }
 
- // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-/*
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization.
-    }
-    return self;
-}
-*/
-
-/*
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView {
-}
-*/
-
-/*
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
-    [super viewDidLoad];
-}
-*/
-
-/*- (void)viewDidAppear:(BOOL)animated
-{
-	[super viewDidAppear:animated];
+- (void)viewDidLoad
+{	
+	if (IS_IPAD())
+	{
+		// Fix album art size for iPad
+		albumArt.width = 540;
+		albumArt.height = 540;
+		labelHolderView.height = 80;
+		labelHolderView.y = 380;
+	}
 	
-	self.view.backgroundColor = [UIColor clearColor];
-	self.view.frame = CGRectMake(0, 0, 540, 540);
-}*/
+	[UIApplication setStatusBarHidden:YES withAnimation:YES];
+	
+	artistLabel.text = myAlbum.artistName;
+	albumLabel.text = myAlbum.title;
+	durationLabel.text = [NSString formatTime:albumLength];
+	trackCountLabel.text = [NSString stringWithFormat:@"%i Tracks", numberOfTracks];
+	if (numberOfTracks == 1)
+		trackCountLabel.text = [NSString stringWithFormat:@"%i Track", numberOfTracks];
+	
+	DatabaseSingleton *databaseControls = [DatabaseSingleton sharedInstance];
+	
+	if(myAlbum.coverArtId)
+	{		
+		FMDatabase *db = IS_IPAD() ? databaseControls.coverArtCacheDb540 : databaseControls.coverArtCacheDb320;
+		
+		if ([db synchronizedIntForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [myAlbum.coverArtId md5]])
+		{
+			NSData *imageData = [db synchronizedDataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [myAlbum.coverArtId md5]];
+			albumArt.image = [UIImage imageWithData:imageData];
+		}
+		else 
+		{
+			[albumArt loadImageFromCoverArtId:myAlbum.coverArtId isForPlayer:NO];
+		}
+	}
+	else 
+	{
+		albumArt.image = [UIImage imageNamed:@"default-album-art.png"];
+	}
+}
 
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
     // Overriden to allow any orientation.
     return YES;
 }
 
+- (IBAction)dismiss:(id)sender
+{
+	[UIApplication setStatusBarHidden:NO withAnimation:YES];
+	[self dismissModalViewControllerAnimated:YES];
+}
 
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
+- (void)didReceiveMemoryWarning 
+{
     [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc. that aren't in use.
 }
 
-
-- (void)viewDidUnload {
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
-
-- (void)dealloc {
+- (void)dealloc 
+{
+	[albumArt release];
+	[albumLabel release];
+	[artistLabel release];
+	[trackCountLabel release];
+	[durationLabel release];
+	[labelHolderView release];
+	[myAlbum release];
     [super dealloc];
 }
-
 
 @end

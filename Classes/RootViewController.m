@@ -29,6 +29,7 @@
 #import "SavedSettings.h"
 #import "FlurryAnalytics.h"
 #import "SUSAllSongsLoader.h"
+#import "SeparaterView.h"
 
 @interface RootViewController (Private)
 
@@ -66,7 +67,7 @@
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:.1];
 	
-	[searchOverlayView.view addY:40.0];
+	searchOverlayView.view.y += 40.0;
  
 	[UIView commitAnimations];
 }
@@ -200,6 +201,11 @@
 	headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	headerView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
 	
+	CGRect sepFrame = CGRectMake(0, 0, headerView.bounds.size.width, 2);
+	SeparaterView *sepView = [[SeparaterView alloc] initWithFrame:sepFrame];
+	[headerView addSubview:sepView];
+	[sepView release];
+	
 	blockerButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	blockerButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	blockerButton.frame = headerView.frame;
@@ -305,8 +311,8 @@
 - (void)folderDropdownMoveViewsY:(float)y
 {
 	[self.tableView beginUpdates];
-	[self.tableView.tableHeaderView addHeight:y];
-	[searchBar addY:y];
+	self.tableView.tableHeaderView.height += y;
+	searchBar.y += y;
 	blockerButton.frame = self.tableView.tableHeaderView.frame;
 	//if (!dropdown.isOpen)
 	self.tableView.tableHeaderView = self.tableView.tableHeaderView;
@@ -524,7 +530,7 @@
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
-{
+{	
 	static NSString *CellIdentifier = @"Cell";
 	ArtistUITableViewCell *cell = [[[ArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 			

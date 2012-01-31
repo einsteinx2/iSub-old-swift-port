@@ -14,6 +14,9 @@
 #import "EqualizerView.h"
 #import "AudioEngine.h"
 
+#import "UIBezierPath+Smoothing.h"
+#import "BassParamEqValue.h"
+
 //CLASS IMPLEMENTATIONS:
 
 // A class extension to declare private methods
@@ -29,6 +32,7 @@
 @synthesize  location;
 @synthesize  previousLocation;
 @synthesize drawTimer;
+@synthesize path;
 
 static float drawInterval = 1./20.;
 static int specWidth; //256 or 512
@@ -163,7 +167,7 @@ static void destroy_versionArrays()
 		self.userInteractionEnabled = YES;
 		
 		drawTimer = nil;
-		
+				
 		//[self createBitmapToDraw];
 		
 		//[self setupPalette];

@@ -162,7 +162,7 @@
 		if (IS_IPAD())
 		{
 			helpTabViewController.view.frame = self.view.bounds;
-			[helpTabViewController.view addHeight:-40];
+			helpTabViewController.view.height -= 40.;
 		}
 		self.tableView.tableFooterView = helpTabViewController.view;
 		[helpTabViewController release];

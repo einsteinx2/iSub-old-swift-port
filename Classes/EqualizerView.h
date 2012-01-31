@@ -30,13 +30,15 @@
 	CGPoint	location;
 	CGPoint	previousLocation;
 	Boolean	firstTouch;
-	Boolean needsErase;
+	Boolean needsErase;	
 }
 
 @property(nonatomic, readwrite) CGPoint location;
 @property(nonatomic, readwrite) CGPoint previousLocation;
 
 @property (nonatomic, retain) NSTimer *drawTimer;
+
+@property (nonatomic, retain) UIBezierPath *path;
 
 - (void)erase;
 - (void)eraseBitBuffer;

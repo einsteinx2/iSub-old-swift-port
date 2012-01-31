@@ -196,7 +196,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 		[UIView setAnimationDuration:.25];
 		[UIView setAnimationDelegate:self];
 		[UIView setAnimationDidStopSelector:@selector(viewsFinishedMoving)];
-		[self addHeight:sizeIncrease];
+		self.height += sizeIncrease;
 		[delegate folderDropdownMoveViewsY:sizeIncrease];
 		[UIView commitAnimations];
 		
@@ -211,7 +211,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 		[UIView setAnimationDuration:.25];
 		[UIView setAnimationDelegate:self];
 		[UIView setAnimationDidStopSelector:@selector(viewsFinishedMoving)];
-		[self addHeight:-sizeIncrease];
+		self.height -= sizeIncrease;
 		[delegate folderDropdownMoveViewsY:-sizeIncrease];
 		[UIView commitAnimations];
 		
@@ -243,7 +243,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	{
 		isOpen = NO;
 		
-		[self addHeight:-sizeIncrease];
+		self.height -= sizeIncrease;
 		[delegate folderDropdownMoveViewsY:-sizeIncrease];
 		
 		arrowImage.transform = CATransform3DMakeRotation((M_PI / 180.0) * 0.0f, 0.0f, 0.0f, 1.0f);

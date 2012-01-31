@@ -111,6 +111,20 @@
 	[super dealloc];
 }
 
+- (NSComparisonResult)compare:(EqualizerPointView *)otherObject 
+{	
+	// Return ordered same if now the same class as me
+	if(![otherObject isKindOfClass:[EqualizerPointView class]]) return NSOrderedSame;
+		
+	CGFloat myX = self.frame.origin.x;
+	CGFloat otherX = otherObject.frame.origin.x;
+	
+	if (myX < otherX) return NSOrderedAscending;
+	if (myX > otherX) return NSOrderedDescending;
+	
+	return NSOrderedSame;
+}
+
 /*CGFloat percentXFromFrequency(NSUInteger frequency)
 {
 	return (log2(frequency) - 5) / 9;

@@ -33,37 +33,32 @@ typedef enum
 
 typedef enum
 {
-	ISMS_AQ_STATE_off,
-	ISMS_AQ_STATE_playing,
-	ISMS_AQ_STATE_paused,
-	ISMS_AQ_STATE_stopped,
-	ISMS_AQ_STATE_waitingForData,
-	ISMS_AQ_STATE_waitingForDataNoResume,
-	ISMS_AQ_STATE_finishedWaitingForData
-} ISMS_AQ_STATE;
+	ISMS_AE_STATE_off,
+	ISMS_AE_STATE_playing,
+	ISMS_AE_STATE_paused,
+	ISMS_AE_STATE_stopped,
+	ISMS_AE_STATE_waitingForData,
+	ISMS_AE_STATE_waitingForDataNoResume,
+	ISMS_AE_STATE_finishedWaitingForData
+} ISMS_AE_STATE;
 
 @class Song, BassParamEqValue, PlaylistSingleton, BassUserInfo;
 @interface AudioEngine : NSObject
 {
-	AudioQueueRef audioQueue;
-	AudioStreamBasicDescription audioQueueOutputFormat;
-    AudioQueueBufferRef audioQueueBuffers[ISMS_AQNumBuffers];	
-	
-	// Equalizer variables
+	// Equalizer
 	NSMutableArray *eqValueArray, *eqHandleArray;
 	float fftData[1024];
 	short *lineSpecBuf;
 	int lineSpecBufSize;
-	HSTREAM fftStream;
 	ISMS_BASS_EQ_DATA_TYPE eqDataType;
 	
-	
-	// BASS stream variables
+	// BASS streams
 	BOOL BASSisFilestream1;
 	HSTREAM fileStream1;
 	HSTREAM fileStreamTempo1;
 	HSTREAM fileStream2;
 	HSTREAM fileStreamTempo2;
+	HSTREAM outStream;
 	HFX volumeFx;
 }
 
@@ -103,6 +98,9 @@ typedef enum
 - (short)lineSpecData:(NSUInteger)index;
 - (void)bassSetGainLevel:(float)gain;
 - (uint32_t)bassGetOutputData:(void *)buffer length:(uint32_t)length;
+- (NSInteger)bassSampleRate;
+- (NSInteger)bassStreamSampleRate:(HSTREAM)stream;
+- (NSInteger)preferredSampleRate:(NSUInteger)sampleRate;
 
 @property (readonly) BOOL isPlaying;
 @property (readonly) NSInteger bitRate;
@@ -112,24 +110,24 @@ typedef enum
 @property (readonly) NSArray *equalizerValues;
 @property unsigned long long startByteOffset;
 @property double startSecondsOffset;
-@property (readonly) HSTREAM currentStream;
-@property (readonly) HSTREAM currentStreamTempo;
-@property (readonly) HSTREAM nextStream;
-@property (readonly) HSTREAM nextStreamTempo;
+@property HSTREAM currentStream;
+@property HSTREAM currentStreamTempo;
+@property (readonly) HSTREAM currentReadingStream;
+@property HSTREAM nextStream;
+@property HSTREAM nextStreamTempo;
+@property (readonly) HSTREAM nextReadingStream;
 @property (retain) PlaylistSingleton *currPlaylistDAO;
 @property (retain) NSThread *fftDataThread;
 @property BOOL isFftDataThreadToTerminate;
 @property BOOL isFastForward;
 @property BOOL audioQueueShouldStopWaitingForData;
-@property ISMS_AQ_STATE audioQueueState;
-
-@property (readonly) NSInteger audioQueueSampleRate;
+@property ISMS_AE_STATE state;
+@property NSInteger audioSessionSampleRate;
+@property NSInteger bassReinitSampleRate;
 
 const char *GetCTypeString(DWORD ctype, HPLUGIN plugin);
 
-
 - (void)readEqDataInternal;
-
 - (void)stopReadingEqData;
 - (void)startReadingEqData:(ISMS_BASS_EQ_DATA_TYPE)type;
 

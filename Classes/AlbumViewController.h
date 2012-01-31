@@ -8,7 +8,7 @@
 
 #import "SUSLoaderDelegate.h"
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, Artist, Album, EGORefreshTableHeaderView, SUSSubFolderDAO;
+@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, Artist, Album, EGORefreshTableHeaderView, SUSSubFolderDAO, AsynchronousImageView;
 
 @interface AlbumViewController : UITableViewController <SUSLoaderDelegate>
 {
@@ -40,8 +40,23 @@
 
 @property (nonatomic, retain) SUSSubFolderDAO *dataModel;
 
+@property (nonatomic, retain) IBOutlet UIView *playAllShuffleAllView;
+@property (nonatomic, retain) IBOutlet UIView *albumInfoView;
+@property (nonatomic, retain) IBOutlet UIView *albumInfoArtHolderView;
+@property (nonatomic, retain) IBOutlet AsynchronousImageView *albumInfoArtView;
+@property (nonatomic, retain) IBOutlet UIView *albumInfoLabelHolderView;
+@property (nonatomic, retain) IBOutlet UILabel *albumInfoArtistLabel;
+@property (nonatomic, retain) IBOutlet UILabel *albumInfoAlbumLabel;
+@property (nonatomic, retain) IBOutlet UILabel *albumInfoTrackCountLabel;
+@property (nonatomic, retain) IBOutlet UILabel *albumInfoDurationLabel; 
+
 - (AlbumViewController *)initWithArtist:(Artist *)anArtist orAlbum:(Album *)anAlbum;
 
 - (void)cancelLoad;
+
+- (IBAction)playAllAction:(id)sender;
+- (IBAction)shuffleAction:(id)sender;
+- (IBAction)expandCoverArt:(id)sender;
+
 
 @end

@@ -11,48 +11,12 @@
 
 @implementation UIView (tools)
 
-- (void)addX:(float)x
+- (CGFloat)x
 {
-    if (!isfinite(x))
-        return;
-    
-	CGRect newFrame = self.frame;
-	newFrame.origin.x += x;
-	self.frame = newFrame;
+	return self.frame.origin.x;
 }
 
-- (void)addY:(float)y
-{
-    if (!isfinite(y))
-        return;
-    
-	CGRect newFrame = self.frame;
-	newFrame.origin.y += y;
-	self.frame = newFrame;
-}
-
-- (void)addWidth:(float)width
-{
-    if (!isfinite(width))
-        return;
-    
-	CGRect newFrame = self.frame;
-	newFrame.size.width += width;
-	self.frame = newFrame;
-}
-
-- (void)addHeight:(float)height
-{
-    if (!isfinite(height))
-        return;
-    
-	CGRect newFrame = self.frame;
-	newFrame.size.height += height;
-	self.frame = newFrame;
-}
-
-
-- (void)newX:(float)x
+- (void)setX:(CGFloat)x
 {
     if (!isfinite(x))
         return;
@@ -62,7 +26,12 @@
 	self.frame = newFrame;
 }
 
-- (void)newY:(float)y
+- (CGFloat)y
+{
+	return self.frame.origin.y;
+}
+
+- (void)setY:(CGFloat)y
 {
     if (!isfinite(y))
         return;
@@ -72,7 +41,27 @@
 	self.frame = newFrame;
 }
 
-- (void)newWidth:(float)width
+- (CGPoint)origin
+{
+	return self.frame.origin;
+}
+
+- (void)setOrigin:(CGPoint)origin
+{
+	if (!isfinite(origin.x) || !isfinite(origin.y))
+		return;
+	
+	CGRect newFrame = self.frame;
+	newFrame.origin = origin;
+	self.frame = newFrame;
+}
+
+- (CGFloat)width
+{
+	return self.frame.size.width;
+}
+
+- (void)setWidth:(CGFloat)width
 {
     if (!isfinite(width))
         return;
@@ -82,13 +71,33 @@
 	self.frame = newFrame;
 }
 
-- (void)newHeight:(float)height
+- (CGFloat)height
+{
+	return self.frame.size.height;
+}
+
+- (void)setHeight:(CGFloat)height
 {
     if (!isfinite(height))
         return;
     
 	CGRect newFrame = self.frame;
 	newFrame.size.height = height;
+	self.frame = newFrame;
+}
+
+- (CGSize)size
+{
+	return self.frame.size;
+}
+
+- (void)setSize:(CGSize)size
+{
+	if (!isfinite(size.width) || !isfinite(size.height))
+		return;
+	
+	CGRect newFrame = self.frame;
+	newFrame.size = size;
 	self.frame = newFrame;
 }
 

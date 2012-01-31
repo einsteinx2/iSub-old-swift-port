@@ -33,6 +33,8 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "NSString+URLEncode.h"
 #import "SUSSubFolderDAO.h"
+#import "UIView+tools.h"
+#import "FMDatabase+Synchronized.h"
 
 @interface AlbumViewController (Private)
 - (void)dataSourceDidFinishLoadingNewData;
@@ -44,6 +46,8 @@
 @synthesize myId, myArtist, myAlbum;
 @synthesize sectionInfo;
 @synthesize dataModel;
+@synthesize playAllShuffleAllView;
+@synthesize albumInfoView, albumInfoArtHolderView, albumInfoArtView, albumInfoAlbumLabel, albumInfoArtistLabel, albumInfoDurationLabel, albumInfoLabelHolderView, albumInfoTrackCountLabel;
 
 @synthesize reloading=_reloading;
 
@@ -110,6 +114,23 @@
 {
     [super viewDidLoad];
 	
+	if (IS_IPAD())
+	{
+		// Fix some sizes for the iPad
+		CGFloat scaleFactor = 2.5;
+		CGFloat borderSize = 5.;
+		albumInfoView.height = albumInfoView.height * scaleFactor;
+		albumInfoArtHolderView.width = albumInfoArtHolderView.width * scaleFactor + borderSize;
+		albumInfoArtHolderView.height = albumInfoArtHolderView.height * scaleFactor + borderSize;
+		albumInfoLabelHolderView.x = albumInfoArtHolderView.x + albumInfoArtHolderView.width + borderSize;
+		// Set labels width to original header width, labels holder x, minus 20 point border
+		albumInfoLabelHolderView.width = 320. - albumInfoLabelHolderView.x - borderSize;
+		
+		albumInfoArtistLabel.font = albumInfoAlbumLabel.font = [UIFont boldSystemFontOfSize:40];
+		albumInfoArtistLabel.minimumFontSize = albumInfoAlbumLabel.minimumFontSize = 24;
+		albumInfoDurationLabel.font = albumInfoTrackCountLabel.font = [UIFont systemFontOfSize:30];
+	}
+	
 	// Add the pull to refresh view
 	refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
 	refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
@@ -159,6 +180,16 @@
 	[myArtist release]; myArtist = nil;
 	[myAlbum release]; myAlbum = nil;
 	
+	[playAllShuffleAllView release]; playAllShuffleAllView = nil;
+	[albumInfoView release]; albumInfoView = nil;
+	[albumInfoArtHolderView release]; albumInfoArtHolderView = nil;
+	[albumInfoArtView release]; albumInfoArtView = nil;
+	[albumInfoLabelHolderView release]; albumInfoLabelHolderView = nil;
+	[albumInfoArtistLabel release]; albumInfoArtistLabel = nil;
+	[albumInfoAlbumLabel release]; albumInfoAlbumLabel = nil;
+	[albumInfoTrackCountLabel release]; albumInfoTrackCountLabel = nil;
+	[albumInfoDurationLabel release]; albumInfoDurationLabel = nil;
+	
 	dataModel.delegate = nil;
 	[dataModel release]; dataModel = nil;
 	[super dealloc];
@@ -175,145 +206,51 @@
 
 - (void)addHeaderAndIndex
 {
-	if (IS_IPAD() && myAlbum != nil)
+	if (myAlbum)
 	{
-		UIView *headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 400, 300)] autorelease];
+		CGFloat headerHeight = albumInfoView.height + playAllShuffleAllView.height;
+		CGRect headerFrame = CGRectMake(0., 0., self.view.bounds.size.width, headerHeight);
+		UIView *headerView = [[UIView alloc] initWithFrame:headerFrame];
 		headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		headerView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
-		
-		// Cover art placeholder
-		UIView *placeholder = [[UIView alloc] initWithFrame:CGRectMake(20, 20, 240, 240)];
-		placeholder.backgroundColor = [UIColor blackColor];
-		placeholder.alpha = .90;
-		[headerView addSubview:placeholder];
-		[placeholder release];
-		
-		// Cover art loading process activity indicator
-		UIActivityIndicatorView *loadingSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-		loadingSpinner.center = placeholder.center;
-		[headerView addSubview:loadingSpinner];
-		[loadingSpinner startAnimating];
-		[loadingSpinner release];
-		
-		// Cover art
-		AsynchronousImageView *coverArtImageView = [[AsynchronousImageView alloc] initWithFrame:placeholder.frame];
-		[headerView addSubview:coverArtImageView];
-		[coverArtImageView release];
-		
+				
 		if(myAlbum.coverArtId)
-		{			
-			if ([databaseControls.coverArtCacheDb540 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [myAlbum.coverArtId md5]] == 1)
+		{		
+			FMDatabase *db = IS_IPAD() ? databaseControls.coverArtCacheDb540 : databaseControls.coverArtCacheDb320;
+			
+			if ([db synchronizedIntForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [myAlbum.coverArtId md5]])
 			{
-				NSData *imageData = [databaseControls.coverArtCacheDb540 dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [myAlbum.coverArtId md5]];
-				coverArtImageView.image = [UIImage imageWithData:imageData];
+				NSData *imageData = [db synchronizedDataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [myAlbum.coverArtId md5]];
+				albumInfoArtView.image = [UIImage imageWithData:imageData];
 			}
 			else 
 			{
-				[coverArtImageView loadImageFromCoverArtId:myAlbum.coverArtId isForPlayer:NO];
-				//[coverArtImageView loadImageFromURLString:[NSString stringWithFormat:@"%@%@&size=540", [appDelegate getBaseUrl:@"getCoverArt.view"], myAlbum.coverArtId]];
+				[albumInfoArtView loadImageFromCoverArtId:myAlbum.coverArtId isForPlayer:NO];
 			}
-			
-			UIButton *coverArtExpand = [UIButton buttonWithType:UIButtonTypeCustom];
-			coverArtExpand.frame = CGRectMake(20, 20, 240, 240);
-			[coverArtExpand addTarget:self action:@selector(expandCoverArt) forControlEvents:UIControlEventTouchUpInside];
-			[headerView addSubview:coverArtExpand];
 		}
 		else 
 		{
-			coverArtImageView.image = [UIImage imageNamed:@"default-album-art.png"];
+			albumInfoArtView.image = [UIImage imageNamed:@"default-album-art.png"];
 		}
 		
-		UILabel *artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(280, 20, 100, 60)];
-		artistLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		artistLabel.backgroundColor = [UIColor clearColor];
-		artistLabel.textAlignment = UITextAlignmentRight;
-		artistLabel.text = myAlbum.artistName;
-		artistLabel.font = [UIFont boldSystemFontOfSize:48];
-		artistLabel.adjustsFontSizeToFitWidth = YES;
-		[headerView addSubview:artistLabel];
-		[artistLabel release];
+		albumInfoArtistLabel.text = myAlbum.artistName;
+		albumInfoAlbumLabel.text = myAlbum.title;
+		albumInfoDurationLabel.text = [NSString formatTime:dataModel.folderLength];
 		
-		UILabel *albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(280, 90, 100, 40)];
-		albumLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		albumLabel.backgroundColor = [UIColor clearColor];
-		albumLabel.textAlignment = UITextAlignmentRight;
-		albumLabel.text = myAlbum.title;
-		albumLabel.font = [UIFont boldSystemFontOfSize:36];
-		albumLabel.adjustsFontSizeToFitWidth = YES;
-		[headerView addSubview:albumLabel];
-		[albumLabel release];
+		albumInfoTrackCountLabel.text = [NSString stringWithFormat:@"%i Tracks", dataModel.songsCount];
+		if (dataModel.songsCount == 1)
+			albumInfoTrackCountLabel.text = [NSString stringWithFormat:@"%i Track", dataModel.songsCount];
 		
-		UILabel *durationLabel = [[UILabel alloc] initWithFrame:CGRectMake(280, 140, 100, 20)];
-		durationLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		durationLabel.backgroundColor = [UIColor clearColor];
-		durationLabel.textAlignment = UITextAlignmentRight;
-		durationLabel.text = [NSString formatTime:dataModel.folderLength];
-		durationLabel.font = [UIFont boldSystemFontOfSize:24];
-		[headerView addSubview:durationLabel];
-		[durationLabel release];
+		[headerView addSubview:albumInfoView];
+		
+		playAllShuffleAllView.y = albumInfoView.height;
+		[headerView addSubview:playAllShuffleAllView];
 		
 		self.tableView.tableHeaderView = headerView;
+		[headerView release];
 	}
 	else
 	{
-		// Add the play all button + shuffle button
-		UIView *headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)] autorelease];
-		headerView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
-		
-		UIImageView *playAllImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play-all-note.png"]];
-		playAllImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-		playAllImage.frame = CGRectMake(10, 10, 19, 30);
-		[headerView addSubview:playAllImage];
-		[playAllImage release];
-		
-		UILabel *playAllLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 160, 50)];
-		playAllLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
-		playAllLabel.backgroundColor = [UIColor clearColor];
-		playAllLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
-		playAllLabel.textAlignment = UITextAlignmentCenter;
-		playAllLabel.font = [UIFont boldSystemFontOfSize:30];
-		playAllLabel.text = @"Play All";
-		[headerView addSubview:playAllLabel];
-		[playAllLabel release];
-		
-		UIButton *playAllButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		playAllButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
-		playAllButton.frame = CGRectMake(0, 0, 160, 40);
-		[playAllButton addTarget:self action:@selector(playAllAction:) forControlEvents:UIControlEventTouchUpInside];
-		[headerView addSubview:playAllButton];
-		
-		UILabel *spacerLabel = [[UILabel alloc] initWithFrame:CGRectMake(158, -2, 6, 50)];
-		spacerLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-		spacerLabel.backgroundColor = [UIColor clearColor];
-		spacerLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
-		spacerLabel.font = [UIFont systemFontOfSize:40];
-		spacerLabel.text = @"|";
-		[headerView addSubview:spacerLabel];
-		[spacerLabel release];
-		
-		UIImageView *shuffleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shuffle-small.png"]];
-		shuffleImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-		shuffleImage.frame = CGRectMake(180, 12, 24, 26);
-		[headerView addSubview:shuffleImage];
-		[shuffleImage release];
-		
-		UILabel *shuffleLabel = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 160, 50)];
-		shuffleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
-		shuffleLabel.backgroundColor = [UIColor clearColor];
-		shuffleLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
-		shuffleLabel.textAlignment = UITextAlignmentCenter;
-		shuffleLabel.font = [UIFont boldSystemFontOfSize:30];
-		shuffleLabel.text = @"Shuffle";
-		[headerView addSubview:shuffleLabel];
-		[shuffleLabel release];
-		
-		UIButton *shuffleButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		shuffleButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
-		shuffleButton.frame = CGRectMake(160, 0, 160, 40);
-		[shuffleButton addTarget:self action:@selector(shuffleAction:) forControlEvents:UIControlEventTouchUpInside];
-		[headerView addSubview:shuffleButton];
-		
-		self.tableView.tableHeaderView = headerView;
+		self.tableView.tableHeaderView = playAllShuffleAllView;
 	}
 	
 	self.sectionInfo = dataModel.sectionInfo;
@@ -323,22 +260,28 @@
 
 #pragma mark Actions
 
-- (void)expandCoverArt
+- (IBAction)expandCoverArt:(id)sender
 {
-	ModalAlbumArtViewController *largeArt = [[ModalAlbumArtViewController alloc] initWithAlbum:myAlbum];
-	if (IS_IPAD())
-		[appDelegate.splitView presentModalViewController:largeArt animated:YES];
-	else
-		[self presentModalViewController:largeArt animated:YES];
-	[largeArt release];
+	if(myAlbum.coverArtId)
+	{		
+		ModalAlbumArtViewController *largeArt = nil;
+		largeArt = [[ModalAlbumArtViewController alloc] initWithAlbum:myAlbum 
+													   numberOfTracks:dataModel.songsCount 
+														  albumLength:dataModel.folderLength];
+		if (IS_IPAD())
+			[appDelegate.splitView presentModalViewController:largeArt animated:YES];
+		else
+			[self presentModalViewController:largeArt animated:YES];
+		[largeArt release];
+	}
 }
 
-- (void)playAllAction:(id)sender
+- (IBAction)playAllAction:(id)sender
 {
 	[databaseControls playAllSongs:myId artist:myArtist];
 }
 
-- (void)shuffleAction:(id)sender
+- (IBAction)shuffleAction:(id)sender
 {
 	[databaseControls shuffleAllSongs:myId artist:myArtist];
 }

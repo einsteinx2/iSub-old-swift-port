@@ -14,9 +14,11 @@
 #import "BassEffectDAO.h"
 #import "UIView+tools.h"
 #import "SavedSettings.h"
+#import "EqualizerPathView.h"
+#import "NSArray+FirstObject.h"
 
 @implementation EqualizerViewController
-@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider; //drawTimer;
+@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath; //drawTimer;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -26,14 +28,28 @@
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+	
+	[UIView beginAnimations:@"rotate" context:nil];
+	[UIView setAnimationDuration:duration];
 	if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
 	{
 		[[UIApplication sharedApplication] setStatusBarHidden:NO animated:YES];
+		equalizerPath.alpha = 1.0;
+		for (EqualizerPointView *view in equalizerPointViews)
+		{
+			view.alpha = 1.0;
+		}
 	}
 	else
 	{
 		[[UIApplication sharedApplication] setStatusBarHidden:YES animated:YES];
+		equalizerPath.alpha = 0.0;
+		for (EqualizerPointView *view in equalizerPointViews)
+		{
+			view.alpha = 0.0;
+		}
 	}
+	[UIView commitAnimations];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
@@ -55,7 +71,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	
+		
 	effectDAO = [[BassEffectDAO alloc] initWithType:BassEffectType_ParametricEQ];
 
 	DLog(@"effectDAO.selectedPresetIndex: %i", effectDAO.selectedPresetIndex);
@@ -106,6 +122,66 @@
 	[[AudioEngine sharedInstance] startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_fft];
 }
 
+- (void)createAndDrawEqualizerPath
+{	
+	// Sort the points
+	NSArray *sortedPointViews = [equalizerPointViews sortedArrayUsingSelector:@selector(compare:)];
+	NSMutableArray *points = [NSMutableArray arrayWithCapacity:[sortedPointViews count]+5];
+	[points addObject:[NSValue valueWithCGPoint:CGPointMake(0.0, equalizerPath.center.y)]];
+	for (EqualizerPointView *eqView in sortedPointViews)
+	{
+		[points addObject:[NSValue valueWithCGPoint:eqView.center]];
+	}
+	[points addObject:[NSValue valueWithCGPoint:CGPointMake(equalizerPath.frame.size.width, equalizerPath.center.y)]];
+	
+	NSMutableArray *sortedPoints = [NSMutableArray arrayWithCapacity:[sortedPointViews count]+5];
+	
+	// Add "ghost" points so the path draws true(ish) to the actual eq curve
+	CGFloat octaveWidth = equalizerPath.frame.size.width / RANGE_OF_EXPONENTS;
+	CGFloat eqWidth = ((CGFloat)DEFAULT_BANDWIDTH / 12.0) * octaveWidth;
+	CGFloat halfEqWidth = eqWidth / 2.0;
+	//CGFloat halfOctaveWidth = octaveWidth / 2;
+	CGFloat centerHeight = equalizerPath.frame.size.height / 2;
+	for (int i = 0; i < [points count] - 1; i++)
+	{
+		// Add the current point to sorted points
+		[sortedPoints addObject:[points objectAtIndex:i]];
+		
+		CGPoint currentPoint = [[points objectAtIndex:i] CGPointValue];
+		CGPoint nextPoint = [[points objectAtIndex:i+1] CGPointValue];
+		
+		// Check if they are more than an octave apart
+		if (nextPoint.x - currentPoint.x > eqWidth)
+		{
+			// They are more than an octave apart, so add a ghost point at the center line
+			CGPoint ghostPoint = CGPointMake(currentPoint.x + halfEqWidth, centerHeight);
+			[sortedPoints addObject:[NSValue valueWithCGPoint:ghostPoint]];
+			
+			ghostPoint = CGPointMake(nextPoint.x - halfEqWidth, centerHeight);
+			[sortedPoints addObject:[NSValue valueWithCGPoint:ghostPoint]];
+		}
+	}
+	[sortedPoints addObject:[points lastObject]];
+	
+	// Create and start the path
+	equalizerPath.path = [UIBezierPath bezierPath];
+	[equalizerPath.path moveToPoint:CGPointMake(0.0, equalizerPath.center.y)];
+	
+	// Add the lines to the eq points
+	for (NSValue *point in sortedPoints)
+	{
+		// Add point to path
+		[equalizerPath.path addLineToPoint:point.CGPointValue];
+	}
+	
+	// Finish the path
+	[equalizerPath.path addLineToPoint:CGPointMake(equalizerPath.frame.size.width, equalizerPath.center.y)];
+	[equalizerPath.path closePath];
+	
+	// Draw the curve
+	[equalizerPath setNeedsDisplay];
+}
+
 - (void)createEqViews
 {
 	[self removeEqViews];
@@ -121,6 +197,9 @@
 	}
 	DLog(@"equalizerValues: %@", [AudioEngine sharedInstance].equalizerValues);
 	DLog(@"equalizerViews: %@", equalizerPointViews);
+
+	//Draw the path
+	[self createAndDrawEqualizerPath];
 }
 
 - (void)removeEqViews
@@ -164,7 +243,7 @@
 		[UIView setAnimationDuration:.5];
 	}
 	
-	[presetPicker addWidth:65.];
+	presetPicker.width += 65.;
 	savePresetButton.alpha = 0.;
 	
 	if (animated)
@@ -187,7 +266,7 @@
 		[UIView setAnimationDuration:.5];
 	}
 	
-	[presetPicker addWidth:-65.];
+	presetPicker.width -= 65.;
 	savePresetButton.alpha = 1.;
 	
 	if (animated)
@@ -206,7 +285,7 @@
 		[UIView setAnimationDuration:.5];
 	}
 	
-	[presetPicker addWidth:65.];
+	presetPicker.width += 65.;
 	deletePresetButton.alpha = 0.;
 	
 	if (animated)
@@ -229,7 +308,7 @@
 		[UIView setAnimationDuration:.5];
 	}
 	
-	[presetPicker addWidth:-65.];
+	presetPicker.width -= 65.;
 	deletePresetButton.alpha = 1.;
 	
 	if (animated)
@@ -366,6 +445,8 @@
 			[equalizerPointViews removeObject:self.selectedView];
 			[self.selectedView removeFromSuperview];
 			self.selectedView = nil;
+			
+			[self createAndDrawEqualizerPath];
 		}
 	}
 	else if ([touchedView isKindOfClass:[EqualizerView class]])
@@ -412,6 +493,8 @@
 		{
 			self.selectedView.center = [touch locationInView:self.view];
 			[[AudioEngine sharedInstance] updateEqParameter:self.selectedView.eqValue];
+			
+			[self createAndDrawEqualizerPath];
 		}
 	}
 }
@@ -447,11 +530,11 @@
 {
 	if([AudioEngine sharedInstance].isEqualizerOn)
 	{
-		[toggleButton setTitle:@"Disable" forState:UIControlStateNormal];
+		[toggleButton setTitle:@"EQ Off" forState:UIControlStateNormal];
 	}
 	else
 	{
-		[toggleButton setTitle:@"Enable" forState:UIControlStateNormal];
+		[toggleButton setTitle:@"EQ On" forState:UIControlStateNormal];
 	}
 }
 

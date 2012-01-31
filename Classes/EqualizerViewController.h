@@ -9,13 +9,14 @@
 #import "NWPickerField.h"
 #import "DDSocialDialog.h"
 
-@class EqualizerView, EqualizerPointView, BassParamEqValue, BassEffectDAO, NWPickerField;
+@class EqualizerView, EqualizerPointView, EqualizerPathView, BassParamEqValue, BassEffectDAO, NWPickerField;
 @interface EqualizerViewController : UIViewController <NWPickerFieldDelegate, DDSocialDialogDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, retain) IBOutlet NWPickerField *presetPicker;
 
 @property (nonatomic, retain) IBOutlet UIButton *toggleButton;
 //@property (nonatomic, retain) IBOutlet UIImageView *drawImage;
+@property (nonatomic, retain) IBOutlet EqualizerPathView *equalizerPath;
 @property (nonatomic, retain) IBOutlet EqualizerView *equalizerView;
 @property (nonatomic, retain) NSMutableArray *equalizerPointViews;
 

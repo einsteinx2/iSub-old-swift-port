@@ -16,7 +16,7 @@
 #define MIN_GAIN -15
 #define MAX_GAIN 15
 
-#define DEFAULT_BANDWIDTH 18
+#define DEFAULT_BANDWIDTH 24
 
 @interface BassParamEqValue : NSObject
 

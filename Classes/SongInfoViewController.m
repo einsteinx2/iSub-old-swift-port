@@ -65,8 +65,8 @@
     audio = [AudioEngine sharedInstance];
     
     downloadProgress = [[UIView alloc] initWithFrame:progressSlider.frame];
-	[downloadProgress newX:0.0];
-	[downloadProgress newY:0.0];
+	downloadProgress.x = 0.0;
+	downloadProgress.y = 0.0;
 	downloadProgress.backgroundColor = [UIColor whiteColor];
 	downloadProgress.alpha = 0.3;
 	downloadProgress.userInteractionEnabled = NO;
@@ -80,8 +80,8 @@
 	[self initInfo];
 	[self updateSlider];
 	
-	[self.view newY:0];
-	[self.view newX:-320];
+	self.view.y = 0;
+	self.view.x = -320;
 	
 	progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateSlider) userInfo:nil repeats:YES];
 	bitrateTimer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(updateBitrateLabel) userInfo:nil repeats:YES];
@@ -102,7 +102,7 @@
 	{
 		// Setup the update timer for the song download progress bar
 		updateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateDownloadProgressInBackground) userInfo:nil repeats:YES];
-		[downloadProgress newWidth:0.0];
+		downloadProgress.width = 0.0;
 		//[downloadProgress newX:70.0];
 		//if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
 		//	[downloadProgress addX:2.0];
@@ -280,7 +280,7 @@
 
 - (void)updateDownloadProgressInternal:(NSNumber *)width
 {
-	[downloadProgress newWidth:[width floatValue]];
+	downloadProgress.width = [width floatValue];
 }
 
 - (void)updateSlider

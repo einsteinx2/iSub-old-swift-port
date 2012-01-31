@@ -1379,12 +1379,9 @@ NSInteger trackSort1(id obj1, id obj2, void *context)
 		if (viewObjects.isCellEnabled)
 		{
 			CacheAlbumViewController *cacheAlbumViewController = [[CacheAlbumViewController alloc] initWithNibName:@"CacheAlbumViewController" bundle:nil];
-			//cacheAlbumViewController.title = [listOfArtists objectAtIndex:indexPath.row];
 			cacheAlbumViewController.title = [[listOfArtistsSections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
 			cacheAlbumViewController.listOfAlbums = [NSMutableArray arrayWithCapacity:1];
 			cacheAlbumViewController.listOfSongs = [NSMutableArray arrayWithCapacity:1];
-			//cacheAlbumViewController.listOfAlbums = [[NSMutableArray alloc] init];
-			//cacheAlbumViewController.listOfSongs = [[NSMutableArray alloc] init];
 			cacheAlbumViewController.segment = 2;
 			cacheAlbumViewController.seg1 = [[listOfArtistsSections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
 			DLog(@"cacheAlbumViewController.seg1: %@", cacheAlbumViewController.seg1);
