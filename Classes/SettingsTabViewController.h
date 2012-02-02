@@ -46,6 +46,7 @@
 	IBOutlet UISegmentedControl *maxBitrate3GSegmentedControl;
 	
 	IBOutlet UISwitch *enableLyricsSwitch;
+	IBOutlet UISwitch *enableCacheStatusSwitch;
 	IBOutlet UISwitch *autoPlayerInfoSwitch;
 	
 	IBOutlet UISwitch *enableSwipeSwitch;

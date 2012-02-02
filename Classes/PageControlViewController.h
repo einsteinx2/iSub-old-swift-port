@@ -22,7 +22,6 @@
     BOOL pageControlUsed;
 	
 	NSUInteger numberOfPages;
-	BOOL isCurrentSong;
 }
 
 @property (nonatomic, retain) IBOutlet UIScrollView *scrollView;

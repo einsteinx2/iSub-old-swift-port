@@ -39,6 +39,7 @@
 	NSUInteger reflectionHeight;
 	
 	BOOL isFlipped;
+	BOOL isExtraButtonsShowing;
 	
 	UIView *flipButtonView;
 	
@@ -48,6 +49,10 @@
 }
 
 @property (nonatomic, retain) NSArray *listOfSongs;
+
+@property (nonatomic, retain) IBOutlet UIView *extraButtons;
+@property (nonatomic, retain) IBOutlet UIImageView *extraButtonsBackground;
+@property (nonatomic, retain) IBOutlet UIButton *extraButtonsButton;
 
 - (void)setPlayButtonImage;
 - (void)setPauseButtonImage;
@@ -59,6 +64,7 @@
 - (void)createSongTitle;
 - (void)removeSongTitle;
 - (void)setSongTitle;
+- (IBAction)toggleExtraButtons:(id)sender;
 
 - (IBAction)showEq:(id)sender;
 

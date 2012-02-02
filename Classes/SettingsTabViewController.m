@@ -113,6 +113,7 @@
 	enableTapAndHoldSwitch.on = settings.isTapAndHoldEnabled;
 	
 	enableLyricsSwitch.on = settings.isLyricsEnabled;
+	enableCacheStatusSwitch.on = settings.isCacheStatusEnabled;
 	
 	// Cache Settings
 	enableSongCachingSwitch.on = settings.isSongCachingEnabled;
@@ -310,7 +311,7 @@
 	}
 }
 
-- (IBAction) switchAction:(id)sender
+- (IBAction)switchAction:(id)sender
 {
 	if ([[NSDate date] timeIntervalSinceDate:loadedTime] > 0.5)
 	{
@@ -364,6 +365,10 @@
 		else if (sender == enableLyricsSwitch)
 		{
 			settings.isLyricsEnabled = enableLyricsSwitch.on;
+		}
+		else if (sender == enableCacheStatusSwitch)
+		{
+			settings.isCacheStatusEnabled = enableCacheStatusSwitch.on;
 		}
 		else if (sender == autoPlayerInfoSwitch)
 		{

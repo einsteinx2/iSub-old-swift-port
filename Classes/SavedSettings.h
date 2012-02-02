@@ -68,6 +68,7 @@
 @property NSInteger cachedSongCellColorType;
 @property BOOL isTwitterEnabled;
 @property BOOL isLyricsEnabled;
+@property BOOL isCacheStatusEnabled;
 @property BOOL isSongsTabEnabled;
 @property BOOL isAutoShowSongInfoEnabled;
 @property BOOL isAutoReloadArtistsEnabled;

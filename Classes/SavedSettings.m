@@ -692,6 +692,17 @@
 	[userDefaults synchronize];
 }
 
+- (BOOL)isCacheStatusEnabled
+{
+	return [userDefaults boolForKey:@"isCacheStatusEnabled"];
+}
+
+- (void)setIsCacheStatusEnabled:(BOOL)isCacheStatusEnabled
+{
+	[userDefaults setBool:isCacheStatusEnabled forKey:@"isCacheStatusEnabled"];
+	[userDefaults synchronize];
+}
+
 - (BOOL)isSongsTabEnabled
 {
 	return [userDefaults boolForKey:@"enableSongsTabSetting"];

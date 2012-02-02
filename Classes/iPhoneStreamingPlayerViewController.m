@@ -28,6 +28,7 @@
 #import "AudioEngine.h"
 #import "EqualizerViewController.h"
 #import "SUSCoverArtLargeDAO.h"
+#import "UIApplication+StatusBar.h"
 //#import "MarqueeLabel.h"
 
 
@@ -50,7 +51,7 @@
 
 @implementation iPhoneStreamingPlayerViewController
 
-@synthesize listOfSongs, reflectionView, currentPlaylist, originalViewFrames;
+@synthesize listOfSongs, reflectionView, currentPlaylist, originalViewFrames, extraButtons, extraButtonsButton, extraButtonsBackground;
 
 static const CGFloat kDefaultReflectionFraction = 0.30;
 static const CGFloat kDefaultReflectionOpacity = 0.55;
@@ -93,6 +94,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	pageControlViewController = nil;
 	
 	isFlipped = NO;
+	isExtraButtonsShowing = NO;
 	
 	if (!IS_IPAD())
 		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(backAction:)] autorelease];
@@ -157,7 +159,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			nextButton.origin = CGPointMake(425, 184);
 			volumeSlider.frame = CGRectMake(300, 244, 180, 55);
 			volumeView.frame = CGRectMake(0, 0, 180, 55);
-			eqButton.origin = CGPointMake(372.5, 20);
+			//eqButton.origin = CGPointMake(372.5, 20);
 		}
 		else
 		{
@@ -246,8 +248,32 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
 	{
-		//[self setSongTitle];
 		[self createSongTitle];
+	}
+	
+	if (!IS_IPAD())
+	{
+		if (animated)
+		{
+			[UIApplication setStatusBarHidden:YES withAnimation:YES];
+			[UIView beginAnimations:nil context:nil];
+			[UIView setAnimationDuration:0.3];
+		}
+		
+		self.navigationController.navigationBar.y = 0;
+			 
+		if (animated)
+			 [UIView commitAnimations];
+	}
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+	if (!IS_IPAD())
+	{
+		//[self.navigationController setWantsFullScreenLayout:NO];
+		[UIApplication setStatusBarHidden:NO withAnimation:YES];
+		self.navigationController.navigationBar.y = 20;
 	}
 }
 
@@ -367,7 +393,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			artistLabel.alpha = 1.0;
 			albumLabel.alpha = 1.0;
 			titleLabel.alpha = 1.0;
-			eqButton.alpha = 0.1;
+			eqButton.alpha = 1.0;
 		}
 		[UIView commitAnimations];
 	}
@@ -675,6 +701,78 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 - (IBAction)nextButtonPressed:(id)sender
 {
 	[musicControls nextSong];
+}
+
+- (IBAction)toggleExtraButtons:(id)sender
+{	
+	CGFloat height = extraButtons.height;
+	CGFloat width = 280.;
+	CGFloat y = extraButtonsButton.y - ((height - extraButtonsButton.height) / 2);
+	
+	if (isExtraButtonsShowing)
+	{
+		[UIView beginAnimations:nil context:nil];
+		[UIView setAnimationDelegate:self];
+		[UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+		[UIView setAnimationDidStopSelector:@selector(toggleExtraButtonsAnimationDone)];
+		[UIView setAnimationDuration:0.3];
+		
+		CGRect frame = CGRectMake(extraButtonsButton.x + extraButtonsButton.width, y, 0, height);
+		extraButtons.frame = frame;
+		extraButtonsBackground.width = 0.;
+		
+		extraButtons.alpha = 0.;
+		for (UIView *subView in extraButtons.subviews)
+		{			
+			if (subView.tag)
+				subView.alpha = 0.;
+		}
+		
+		[UIView commitAnimations];
+	}
+	else
+	{ 
+		[self.view addSubview:extraButtons];
+		CGRect frame = CGRectMake(extraButtonsButton.x + 40., y, 0, height);
+		extraButtons.frame = frame;
+		extraButtons.alpha = 0.;
+		extraButtonsBackground.width = 0.;
+		
+		[self.view bringSubviewToFront:extraButtonsButton];
+		
+		[UIView beginAnimations:nil context:nil];
+		[UIView setAnimationDelegate:self];
+		[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+		[UIView setAnimationDidStopSelector:@selector(toggleExtraButtonsAnimationDone)];
+		[UIView setAnimationDuration:0.3];
+		
+		frame = CGRectMake(extraButtonsButton.x - width + extraButtonsButton.width, y, width, height);
+		extraButtons.frame = frame;
+		extraButtonsBackground.width = width;
+		
+		extraButtons.alpha = 1.;
+		for (UIView *subView in extraButtons.subviews)
+		{			
+			if (subView.tag)
+				subView.alpha = 1.;
+		}
+		
+		[UIView commitAnimations];
+	}
+	
+	isExtraButtonsShowing = !isExtraButtonsShowing;
+}
+
+- (void)toggleExtraButtonsAnimationDone
+{
+	if (isExtraButtonsShowing)
+	{
+		
+	}
+	else
+	{
+		[extraButtons removeFromSuperview];
+	}
 }
 
 #pragma mark Image Reflection

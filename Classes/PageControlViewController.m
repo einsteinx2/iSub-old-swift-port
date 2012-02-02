@@ -36,28 +36,17 @@
     //[super viewWillAppear:animated];
 	[super viewDidLoad];
 	
+	SavedSettings *settings = [SavedSettings sharedInstance];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideSongInfoFast) name:@"hideSongInfoFast" object:nil];
 	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideSongInfo) name:@"hideSongInfo" object:nil];
 	
 	appDelegate = (iSubAppDelegate *)[UIApplication sharedApplication].delegate; 
 	
-	//if ([[appDelegate.settingsDictionary objectForKey:@"lyricsEnabledSetting"] isEqualToString:@"YES"])
-	if ([SavedSettings sharedInstance].isLyricsEnabled)
-		numberOfPages = 4;
-	else
-		numberOfPages = 3;	
+	numberOfPages = 2;
+	if (settings.isLyricsEnabled) numberOfPages++;
+	if (settings.isCacheStatusEnabled) numberOfPages++;
 	
-	//if ([MusicControlsSingleton sharedInstance].currentSongObject)
-	//{
-	//	isCurrentSong = YES;
-	//}
-	//else
-	//{
-	//	isCurrentSong = NO;
-	//	numberOfPages -= 1;
-	//}
-	isCurrentSong = YES;
-
 	// view controllers are created lazily
     // in the meantime, load the array with placeholders which will be replaced on demand
     NSMutableArray *controllers = [[NSMutableArray alloc] init];
@@ -96,13 +85,6 @@
     [self loadScrollViewWithPage:1];
 }
 
-/*- (void)viewWillAppear:(BOOL)animated 
-{
-	NSLog(@"page control viewWillAppear called");
-	[super viewWillAppear:animated];
-	[scrollView setContentOffset:CGPointZero animated:YES];
-}*/
-
 - (void)resetScrollView
 {
 	DLog(@"PageControlViewController resetScrollView called");
@@ -115,69 +97,41 @@
     if (page < 0) return;
     if (page >= numberOfPages) return;
 	
-    // replace the placeholder if necessary
-    UIViewController *controller = (UIViewController *) [viewControllers objectAtIndex:page];
-    if ((NSNull *)controller == [NSNull null]) 
-	{
-		if (isCurrentSong == NO)
-		{
-			page += 1;
-			numberOfPages += 1;
-		}
-		
-		if (page == 0)
-		{
-			controller = [[SongInfoViewController alloc] initWithNibName:@"SongInfoViewController" bundle:nil];
-		}
-		else if (page == 1)
-		{
-			if (numberOfPages == 3)
-				controller = [[CurrentPlaylistBackgroundViewController alloc] initWithNibName:@"CurrentPlaylistBackgroundViewController" bundle:nil];
-			else if (numberOfPages)
-				controller = [[CurrentPlaylistBackgroundViewController alloc] initWithNibName:@"CurrentPlaylistBackgroundViewController" bundle:nil];
-		}
-		else if (page == 2)
-		{
-			if (numberOfPages == 3)
-				controller = [[DebugViewController alloc] initWithNibName:@"DebugViewController" bundle:nil];
-			else if (numberOfPages == 4)
-				controller = [[LyricsViewController alloc] initWithNibName:nil bundle:nil];
-		}
-		else if (page == 3)
-		{
-			if (numberOfPages == 4)
-				controller = [[DebugViewController alloc] initWithNibName:@"DebugViewController" bundle:nil];
-		}
-		
-		if (isCurrentSong == NO)
-		{
-			page -= 1;
-			numberOfPages -= 1;
-		}
+	UIViewController *controller = (UIViewController *) [viewControllers objectAtIndex:page];
+    if ((NSNull *)controller != [NSNull null]) return; 
 
-		[viewControllers replaceObjectAtIndex:page withObject:controller];
-		[controller release];
-    }
-	else
+	SavedSettings *settings = [SavedSettings sharedInstance];
+	
+    // Replace the placeholder
+	switch (page) 
 	{
-		//DLog(@"Not loading view, already loaded");
+		case 0:
+			controller = [[CurrentPlaylistBackgroundViewController alloc] initWithNibName:@"CurrentPlaylistBackgroundViewController" bundle:nil];
+			break;
+		case 1:
+			controller = [[SongInfoViewController alloc] initWithNibName:@"SongInfoViewController" bundle:nil];
+			break;
+		case 2:
+			if (settings.isLyricsEnabled)
+				controller = [[LyricsViewController alloc] initWithNibName:nil bundle:nil];
+			else if (settings.isCacheStatusEnabled)
+				controller = [[DebugViewController alloc] initWithNibName:@"DebugViewController" bundle:nil];
+			break;
+		case 3:
+			controller = [[DebugViewController alloc] initWithNibName:@"DebugViewController" bundle:nil];
+		default:
+			break;
 	}
 	
-    // add the controller's view to the scroll view
-    if (nil == controller.view.superview) 
-	{
-        //CGRect frame = CGRectMake(0, 0, scrollView.contentSize.width / numberOfPages, scrollView.contentSize.height);
-		CGRect frame = scrollView.frame;
-        frame.origin.x = frame.size.width * page;
-        frame.origin.y = 0;
-		//DLog(@"controller.view.frame: %@", NSStringFromCGRect(controller.view.frame));
-		
-		/*if ([controller isKindOfClass:[LyricsViewController class]] && IS_IPAD())
-			frame.origin.x = frame.origin.x + 220;*/
-			
-		controller.view.frame = frame;
-        [scrollView addSubview:controller.view];
-    }
+	[viewControllers replaceObjectAtIndex:page withObject:controller];
+	[controller release];
+	
+    // Add the controller's view to the scroll view
+	CGRect frame = scrollView.frame;
+	frame.origin.x = frame.size.width * page;
+	frame.origin.y = 0;
+	controller.view.frame = frame;
+	[scrollView addSubview:controller.view];
 }
 
 - (void)unloadScrollViewPage:(NSUInteger)page

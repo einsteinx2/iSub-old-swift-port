@@ -41,7 +41,7 @@
 	currentPlaylistCount = 0;
 	
 	//NSDate *start = [NSDate date];
-	dataModel = [[PlaylistSingleton alloc] init];
+	dataModel = [PlaylistSingleton sharedInstance];
 	
 	self.tableView.backgroundColor = [UIColor clearColor];
 	
@@ -215,7 +215,7 @@
 
 #pragma mark -
 
-- (void) editPlaylistAction:(id)sender
+- (void)editPlaylistAction:(id)sender
 {
 	if (self.tableView.editing == NO)
 	{
@@ -223,7 +223,6 @@
 		[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:@"showDeleteButton" object: nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:@"hideDeleteButton" object: nil];
 		viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-		//viewObjects.multiDeleteList = nil; viewObjects.multiDeleteList = [[NSMutableArray alloc] init];
 		[self.tableView setEditing:YES animated:YES];
 		editPlaylistLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
 		editPlaylistLabel.text = @"Done";
@@ -233,8 +232,6 @@
 		for (CurrentPlaylistSongSmallUITableViewCell *cell in [self.tableView visibleCells])
 		{
 			cell.durationLabel.hidden = YES;
-			//cell.songNameLabel.frame = CGRectMake(45, 0, 210, 30);
-			//cell.artistNameLabel.frame = CGRectMake(45, 27, 210, 15);
 		}
 		
 		[NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(showDeleteToggle) userInfo:nil repeats:NO];
@@ -245,7 +242,6 @@
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
 		viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-		//viewObjects.multiDeleteList = nil; viewObjects.multiDeleteList = [[NSMutableArray alloc] init];
 		[self hideDeleteButton];
 		[self.tableView setEditing:NO animated:YES];
 		editPlaylistLabel.backgroundColor = [UIColor clearColor];
