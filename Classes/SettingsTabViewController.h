@@ -9,7 +9,7 @@
 
 @class SavedSettings, iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, SocialSingleton, DatabaseSingleton;
 
-@interface SettingsTabViewController : UIViewController 
+@interface SettingsTabViewController : UIViewController <UITextFieldDelegate>
 {
 	SavedSettings *settings;
 	
@@ -56,13 +56,16 @@
 	
 	IBOutlet UILabel *enableNextSongCacheLabel;
 	IBOutlet UISwitch *enableNextSongCacheSwitch;
+	IBOutlet UILabel *enableNextSongPartialCacheLabel;
+	IBOutlet UISwitch *enableNextSongPartialCacheSwitch;
 	
 	IBOutlet UISegmentedControl *cachingTypeSegmentedControl;
 	
 	unsigned long long int totalSpace;
 	unsigned long long int freeSpace;
 	IBOutlet UILabel *cacheSpaceLabel1;
-	IBOutlet UILabel *cacheSpaceLabel2;
+	//IBOutlet UILabel *cacheSpaceLabel2;
+	IBOutlet UITextField *cacheSpaceLabel2;
 	IBOutlet UILabel *freeSpaceLabel;
 	IBOutlet UILabel *totalSpaceLabel;
 	IBOutlet UIView *totalSpaceBackground;
@@ -89,17 +92,18 @@
 
 @property (nonatomic, retain) NSDate *loadedTime;
 
-- (void) toggleCacheControlsVisibility;
-- (void) cachingTypeToggle;
-- (IBAction) segmentAction:(id)sender;
-- (IBAction) switchAction:(id)sender;
-- (IBAction) updateMinFreeSpaceLabel;
-- (IBAction) updateMinFreeSpaceSetting;
-- (IBAction) revertMinFreeSpaceSlider;
-- (IBAction) twitterButtonAction;
-- (IBAction) updateScrobblePercentLabel;
-- (IBAction) updateScrobblePercentSetting;
-- (IBAction) resetFolderCacheAction;
-- (IBAction) resetAlbumArtCacheAction;
+- (void)toggleCacheControlsVisibility;
+- (void)cachingTypeToggle;
+- (IBAction)segmentAction:(id)sender;
+- (IBAction)switchAction:(id)sender;
+- (IBAction)updateMinFreeSpaceLabel;
+- (IBAction)updateMinFreeSpaceSetting;
+- (IBAction)revertMinFreeSpaceSlider;
+- (IBAction)twitterButtonAction;
+- (IBAction)updateScrobblePercentLabel;
+- (IBAction)updateScrobblePercentSetting;
+- (IBAction)resetFolderCacheAction;
+- (IBAction)resetAlbumArtCacheAction;
+- (void)textFieldDidChange:(UITextField *)textField;
 
 @end

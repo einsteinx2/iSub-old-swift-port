@@ -94,44 +94,10 @@
 		}
 		else
 		{
-			//Initialize the Song.
-			Song *aSong = [[Song alloc] init];
-			
-			//Extract the attributes here.
-			aSong.title = [attributeDict objectForKey:@"title"];
-			aSong.songId = [attributeDict objectForKey:@"id"];
-			aSong.artist = [attributeDict objectForKey:@"artist"];
-			if([attributeDict objectForKey:@"album"])
-				aSong.album = [attributeDict objectForKey:@"album"];
-			if([attributeDict objectForKey:@"genre"])
-				aSong.genre = [attributeDict objectForKey:@"genre"];
-			if([attributeDict objectForKey:@"coverArt"])
-				aSong.coverArtId = [attributeDict objectForKey:@"coverArt"];
-			aSong.path = [attributeDict objectForKey:@"path"];
-			aSong.suffix = [attributeDict objectForKey:@"suffix"];
-			if ([attributeDict objectForKey:@"transcodedSuffix"])
-				aSong.transcodedSuffix = [attributeDict objectForKey:@"transcodedSuffix"];
-			NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-			if([attributeDict objectForKey:@"duration"])
-				aSong.duration = [numberFormatter numberFromString:[attributeDict objectForKey:@"duration"]];
-			if([attributeDict objectForKey:@"bitRate"])
-				aSong.bitRate = [numberFormatter numberFromString:[attributeDict objectForKey:@"bitRate"]];
-			if([attributeDict objectForKey:@"track"])
-				aSong.track = [numberFormatter numberFromString:[attributeDict objectForKey:@"track"]];
-			if([attributeDict objectForKey:@"year"])
-				aSong.year = [numberFormatter numberFromString:[attributeDict objectForKey:@"year"]];
-			if([attributeDict objectForKey:@"size"])
-				aSong.size = [numberFormatter numberFromString:[attributeDict objectForKey:@"size"]];
-			
-			//Add song object to lookup dictionary
+			Song *aSong = [[Song alloc] initWithAttributeDict:attributeDict];
 			if (aSong.path)
-			{
 				[self.listOfSongs addObject:aSong];
-				//DLog(@"listOfSongs count: %i", [self.listOfSongs count]);
-			}
-			
 			[aSong release];
-			[numberFormatter release];
 		}
 	}	
 }

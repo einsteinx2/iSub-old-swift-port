@@ -32,6 +32,7 @@
 @property (readonly) NSString *currentPath;
 @property (readonly) BOOL isTempCached;
 @property (readonly) unsigned long long localFileSize;
+@property (readonly) NSUInteger estimatedBitrate;
 
 - (void)encodeWithCoder:(NSCoder *)encoder;
 - (id)initWithCoder:(NSCoder *)decoder;

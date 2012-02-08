@@ -1452,6 +1452,9 @@
 		53C0C9B314CF5D0C006A8DF3 /* SUSNowPlayingDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C0C9B114CF5D0C006A8DF3 /* SUSNowPlayingDAO.m */; };
 		53C0C9B414CF5D0C006A8DF3 /* SUSNowPlayingDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C0C9B114CF5D0C006A8DF3 /* SUSNowPlayingDAO.m */; };
 		53C22CCF128EE81C00FFBA67 /* ModalAlbumArtViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C22CCE128EE81C00FFBA67 /* ModalAlbumArtViewController.m */; };
+		53C2F54314E1BF2700F4DB85 /* NSString+FileSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C2F54214E1BF2700F4DB85 /* NSString+FileSize.m */; };
+		53C2F54414E1BF2700F4DB85 /* NSString+FileSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C2F54214E1BF2700F4DB85 /* NSString+FileSize.m */; };
+		53C2F54514E1BF2700F4DB85 /* NSString+FileSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C2F54214E1BF2700F4DB85 /* NSString+FileSize.m */; };
 		53C6052212F1EFD4003C6895 /* intro-bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6051A12F1EFD4003C6895 /* intro-bottom.png */; };
 		53C6052312F1EFD4003C6895 /* intro-bottom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6051B12F1EFD4003C6895 /* intro-bottom@2x.png */; };
 		53C6052412F1EFD4003C6895 /* intro-foreground.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6051C12F1EFD4003C6895 /* intro-foreground.png */; };
@@ -2915,6 +2918,8 @@
 		53C16ED5149300C6002498A0 /* bassflac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bassflac.h; sourceTree = "<group>"; };
 		53C22CCD128EE81C00FFBA67 /* ModalAlbumArtViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModalAlbumArtViewController.h; sourceTree = "<group>"; };
 		53C22CCE128EE81C00FFBA67 /* ModalAlbumArtViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModalAlbumArtViewController.m; sourceTree = "<group>"; };
+		53C2F54114E1BF2700F4DB85 /* NSString+FileSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FileSize.h"; sourceTree = "<group>"; };
+		53C2F54214E1BF2700F4DB85 /* NSString+FileSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FileSize.m"; sourceTree = "<group>"; };
 		53C6051A12F1EFD4003C6895 /* intro-bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "intro-bottom.png"; path = "Images/Intro Screen/intro-bottom.png"; sourceTree = "<group>"; };
 		53C6051B12F1EFD4003C6895 /* intro-bottom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "intro-bottom@2x.png"; path = "Images/Intro Screen/intro-bottom@2x.png"; sourceTree = "<group>"; };
 		53C6051C12F1EFD4003C6895 /* intro-foreground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "intro-foreground.png"; path = "Images/Intro Screen/intro-foreground.png"; sourceTree = "<group>"; };
@@ -4170,6 +4175,8 @@
 				535B7243134C16FC003E0E1C /* GTMDefines.h */,
 				535B7244134C16FC003E0E1C /* GTMNSString+HTML.h */,
 				535B7245134C16FC003E0E1C /* GTMNSString+HTML.m */,
+				53C2F54114E1BF2700F4DB85 /* NSString+FileSize.h */,
+				53C2F54214E1BF2700F4DB85 /* NSString+FileSize.m */,
 			);
 			name = NSString;
 			sourceTree = "<group>";
@@ -6257,6 +6264,7 @@
 				5306236D14D3295300D320A8 /* EqualizerPathView.m in Sources */,
 				532B552C14D6762100B8AA67 /* UIApplication+StatusBar.m in Sources */,
 				532B554214D7397000B8AA67 /* SeparaterView.m in Sources */,
+				53C2F54314E1BF2700F4DB85 /* NSString+FileSize.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6565,6 +6573,7 @@
 				5306236F14D3295300D320A8 /* EqualizerPathView.m in Sources */,
 				532B552E14D6762100B8AA67 /* UIApplication+StatusBar.m in Sources */,
 				532B554414D7397000B8AA67 /* SeparaterView.m in Sources */,
+				53C2F54514E1BF2700F4DB85 /* NSString+FileSize.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6873,6 +6882,7 @@
 				5306236E14D3295300D320A8 /* EqualizerPathView.m in Sources */,
 				532B552D14D6762100B8AA67 /* UIApplication+StatusBar.m in Sources */,
 				532B554314D7397000B8AA67 /* SeparaterView.m in Sources */,
+				53C2F54414E1BF2700F4DB85 /* NSString+FileSize.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -537,7 +537,7 @@
 {
 	// Create the cachedSongsList table
 	[databaseControls.songCacheDb synchronizedUpdate:@"DROP TABLE cachedSongsList"];
-	[databaseControls.songCacheDb synchronizedUpdate:@"CREATE TABLE cachedSongsList (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+	[databaseControls.songCacheDb synchronizedUpdate:[NSString stringWithFormat:@"CREATE TABLE cachedSongsList (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, %@)", [Song standardSongColumnSchema]]];
 	[databaseControls.songCacheDb synchronizedUpdate:@"INSERT INTO cachedSongsList SELECT * FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate DESC"];	
 }
 
@@ -545,7 +545,7 @@
 {
 	// Create the queuedSongsList table
 	[databaseControls.cacheQueueDb executeUpdate:@"DROP TABLE queuedSongsList"];
-	[databaseControls.cacheQueueDb executeUpdate:@"CREATE TABLE queuedSongsList (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+	[databaseControls.cacheQueueDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE queuedSongsList (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, %@)", [Song standardSongColumnSchema]]];
 	[databaseControls.cacheQueueDb executeUpdate:@"INSERT INTO queuedSongsList SELECT * FROM cacheQueue ORDER BY cachedDate ASC"];
 }
 
@@ -621,7 +621,7 @@
 		cacheSizeLabel.font = [UIFont boldSystemFontOfSize:12];
 		if (segmentedControl.selectedSegmentIndex == 0)
 		{
-			cacheSizeLabel.text = [settings formatFileSize:cacheControls.cacheSize];
+			cacheSizeLabel.text = [NSString formatFileSize:cacheControls.cacheSize];
 		}
 		else if (segmentedControl.selectedSegmentIndex == 1)
 		{
@@ -631,7 +631,7 @@
 			{
 				combinedSize += [result longLongIntForColumnIndex:0];
 			}
-			cacheSizeLabel.text = [settings formatFileSize:combinedSize];
+			cacheSizeLabel.text = [NSString formatFileSize:combinedSize];
 		}
 		[headerView addSubview:cacheSizeLabel];
 		[cacheSizeLabel release];
@@ -1319,7 +1319,7 @@
 		NSDate *cached = [NSDate dateWithTimeIntervalSince1970:(double)[databaseControls.songCacheDb synchronizedIntForQuery:@"SELECT cachedDate FROM queuedSongsList WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]]];
 		if ([[aSong.path md5] isEqualToString:musicControls.downloadFileNameHashQueue] && musicControls.isQueueListDownloading)
 		{
-			[cell.cacheInfoLabel setText:[NSString stringWithFormat:@"Queued %@ - Progress: %@", [NSString relativeTime:cached], [settings formatFileSize:queueDownloadProgress]]];
+			[cell.cacheInfoLabel setText:[NSString stringWithFormat:@"Queued %@ - Progress: %@", [NSString relativeTime:cached], [NSString formatFileSize:queueDownloadProgress]]];
 		}
 		else if (indexPath.row == 0)
 		{

@@ -102,7 +102,9 @@
 
 - (Song *)allSongsSongForPosition:(NSUInteger)position
 {
-	Song *aSong = [[Song alloc] init];
+	return [Song songFromDbRow:position-1 inTable:@"allSongs" inDatabase:self.db];
+	
+	/*Song *aSong = [[Song alloc] init];
 	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allSongs WHERE ROWID = ?", [NSNumber numberWithInt:position]];
 	[result next];
 	if ([self.db hadError]) 
@@ -143,7 +145,7 @@
 		[aSong release]; aSong = nil;
 	}
 	
-	return [aSong autorelease];
+	return [aSong autorelease];*/
 }
 
 - (Song *)allSongsSongForPositionInSearch:(NSUInteger)position

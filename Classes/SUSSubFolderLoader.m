@@ -75,7 +75,7 @@
 
 - (BOOL)insertSongIntoFolderCache:(Song *)aSong
 {
-	[self.db executeUpdate:@"INSERT INTO songsCache (folderId, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [myId md5], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
+	[self.db executeUpdate:[NSString stringWithFormat:@"INSERT INTO songsCache (folderId, %@) VALUES (?, %@)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [myId md5], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size, aSong.parentId];
 	
 	if ([self.db hadError]) {
 		DLog(@"Err inserting song %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
@@ -207,13 +207,13 @@
                     
                     if ([[TBXML valueOfAttributeNamed:@"isDir" forElement:child] boolValue])
                     {
-                        Album *anAlbum = [[Album alloc] initWithTBXMLElement:child artistId:myArtist.artistId artistName:myArtist.name];
-                        if (![anAlbum.title isEqualToString:@".AppleDouble"])
-                        {
-                            [self insertAlbumIntoFolderCache:anAlbum];
-                            albumsCount++;
-                        }
-                        [anAlbum release];
+						Album *anAlbum = [[Album alloc] initWithTBXMLElement:child artistId:myArtist.artistId artistName:myArtist.name];
+						if (![anAlbum.title isEqualToString:@".AppleDouble"])
+						{
+							[self insertAlbumIntoFolderCache:anAlbum];
+							albumsCount++;
+						}
+						[anAlbum release];
                     }
                     else
                     {

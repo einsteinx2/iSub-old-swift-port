@@ -148,7 +148,10 @@
 }
 
 - (Song *)findSongForDbRow:(NSUInteger)row
-{
+{ 
+	return [Song songFromDbRow:row-1 inTable:@"songsCache" inDatabase:self.db];
+	
+	/*// TODO: USE THE Song DAO method and FIND OTHER PLACES THAT HAVE THEIR OWN METHODS
     Song *aSong = [[Song alloc] init];
 	FMResultSet *result = [self.db executeQuery:[NSString stringWithFormat:@"SELECT * FROM songsCache WHERE ROWID = %i", row]];
 	[result next];
@@ -193,7 +196,7 @@
 	else
 	{
 		return [aSong autorelease];
-	}
+	}*/
 }
 
 - (void)playSongAtDbRow:(NSUInteger)row
@@ -214,6 +217,7 @@
 		@autoreleasepool 
 		{
 			Song *aSong = [self songForTableViewRow:i];
+			DLog(@"song parentId: %@", aSong.parentId);
 			//DLog(@"adding song to playlist: %@", aSong);
 			[aSong addToCurrentPlaylist];
 			

@@ -18,5 +18,6 @@
 #import "NSString+TrimmingAdditions.h"
 #import "NSString+URLEncode.h"
 #import "GTMNSString+HTML.h"
+#import "NSString+FileSize.h"
 
 #endif

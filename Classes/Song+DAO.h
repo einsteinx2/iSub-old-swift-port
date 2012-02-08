@@ -15,6 +15,7 @@
 @property BOOL isFullyCached;
 @property (readonly) CGFloat downloadProgress;
 @property (readonly) BOOL fileExists;
+@property (assign) NSDate *playedDate;
 
 + (Song *)songFromDbResult:(FMResultSet *)result;
 + (Song *)songFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabase:(FMDatabase *)db;
@@ -36,5 +37,9 @@
 + (BOOL)removeSongFromCacheDbByMD5:(NSString *)md5;
 
 - (BOOL)insertIntoCachedSongsLayout;
+
++ (NSString *)standardSongColumnSchema;
++ (NSString *)standardSongColumnNames;
++ (NSString *)standardSongColumnQMarks;
 
 @end

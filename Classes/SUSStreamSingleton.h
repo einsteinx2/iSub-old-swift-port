@@ -23,7 +23,6 @@
 
 + (SUSStreamSingleton *)sharedInstance;
 
-- (BOOL)insertSong:(Song *)aSong intoGenreTable:(NSString *)table;
 - (SUSStreamHandler *)handlerForSong:(Song *)aSong;
 - (BOOL)isSongInQueue:(Song *)aSong;
 

@@ -8,13 +8,8 @@
 
 
 @interface CacheSingleton : NSObject
-{
-	NSTimeInterval cacheCheckInterval;
-	NSTimer *cacheCheckTimer;
-	
-	unsigned long long cacheSize;
-}
 
+@property (retain) NSTimer *cacheCheckTimer;
 @property NSTimeInterval cacheCheckInterval;
 @property (readonly) unsigned long long totalSpace;
 @property (readonly) unsigned long long cacheSize;

@@ -21,7 +21,7 @@
 
 @synthesize serverList, redirectUrlString;
 
-- (NSString *)formatFileSize:(unsigned long long int)size
+/*- (NSString *)formatFileSize:(unsigned long long int)size
 {
 	if (size < 1024)
 	{
@@ -41,7 +41,7 @@
 	}
 	
 	return @"";
-}
+}*/
 
 - (void)loadState
 {
@@ -341,12 +341,13 @@
 		self.recoverSetting = 1;
 	}
 	
+	// Partial caching of next song
+	if (![userDefaults objectForKey:@"isPartialCacheNextSong"])
+	{
+		self.isPartialCacheNextSong = YES;
+	}
+	
 	[userDefaults synchronize];
-}
-
-- (void)addNewSettings
-{
-	//[userDefaults 
 }
 
 - (void)memCacheDefaults
@@ -356,6 +357,8 @@
 	isPopupsEnabled = [userDefaults boolForKey:@"isPopupsEnabled"];
 	
 	gainMultiplier = [userDefaults floatForKey:@"gainMultiplier"];
+	
+	isPartialCacheNextSong = [userDefaults boolForKey:@"isPartialCacheNextSong"];
 	
 	NSString *url = [userDefaults stringForKey:@"url"];
 	if (url)
@@ -380,41 +383,59 @@
 
 - (NSString *)urlString
 {
-	return urlString;
+	@synchronized(self)
+	{
+		return urlString;
+	}
 }
 
 - (void)setUrlString:(NSString *)url
 {
-	[urlString release];
-	urlString = [url copy];
-	[userDefaults setObject:url forKey:@"url"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[urlString release];
+		urlString = [url copy];
+		[userDefaults setObject:url forKey:@"url"];
+		[userDefaults synchronize];
+	}
 }
 
 - (NSString *)username
 {
-	return username;
+	@synchronized(self)
+	{
+		return username;
+	}
 }
 
 - (void)setUsername:(NSString *)user
 {
-	[username release];
-	username = [user copy];
-	[userDefaults setObject:user forKey:@"username"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[username release];
+		username = [user copy];
+		[userDefaults setObject:user forKey:@"username"];
+		[userDefaults synchronize];
+	}
 }
 
 - (NSString *)password
 {
-	return password;
+	@synchronized(self)
+	{
+		return password;
+	}
 }
 
 - (void)setPassword:(NSString *)pass
 {
-	[password release];
-	password = [pass copy];
-	[userDefaults setObject:pass forKey:@"password"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[password release];
+		password = [pass copy];
+		[userDefaults setObject:pass forKey:@"password"];
+		[userDefaults synchronize];
+	}
 }
 
 #pragma mark - Document Folder Paths
@@ -450,24 +471,36 @@
 
 - (NSDate *)rootFoldersReloadTime
 {
-	return [userDefaults objectForKey:[NSString stringWithFormat:@"%@rootFoldersReloadTime", urlString]];
+	@synchronized(self)
+	{
+		return [userDefaults objectForKey:[NSString stringWithFormat:@"%@rootFoldersReloadTime", urlString]];
+	}
 }
 
 - (void)setRootFoldersReloadTime:(NSDate *)reloadTime
 {
-	[userDefaults setObject:reloadTime forKey:[NSString stringWithFormat:@"%@rootFoldersReloadTime", urlString]];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setObject:reloadTime forKey:[NSString stringWithFormat:@"%@rootFoldersReloadTime", urlString]];
+		[userDefaults synchronize];
+	}
 }
 
 - (NSNumber *)rootFoldersSelectedFolderId
 {
-	return [userDefaults objectForKey:[NSString stringWithFormat:@"%@rootFoldersSelectedFolder", urlString]];
+	@synchronized(self)
+	{
+		return [userDefaults objectForKey:[NSString stringWithFormat:@"%@rootFoldersSelectedFolder", urlString]];
+	}
 }
 
 - (void)setRootFoldersSelectedFolderId:(NSNumber *)folderId
 {
-	[userDefaults setObject:folderId forKey:[NSString stringWithFormat:@"%@rootFoldersSelectedFolder", urlString]];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setObject:folderId forKey:[NSString stringWithFormat:@"%@rootFoldersSelectedFolder", urlString]];
+		[userDefaults synchronize];
+	}
 }
 
 #pragma mark - Lite Version Properties
@@ -500,447 +533,661 @@
 
 - (BOOL)isForceOfflineMode
 {
-	return [userDefaults boolForKey:@"manualOfflineModeSetting"];
+	@synchronized(self)
+	{
+		return [userDefaults boolForKey:@"manualOfflineModeSetting"];
+	}
 }
 
 - (void)setIsForceOfflineMode:(BOOL)isForceOfflineMode
 {
-	[userDefaults setBool:isForceOfflineMode forKey:@"manualOfflineModeSetting"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setBool:isForceOfflineMode forKey:@"manualOfflineModeSetting"];
+		[userDefaults synchronize];
+	}
 }
 
 - (NSInteger)recoverSetting
 {
-	return [userDefaults integerForKey:@"recoverSetting"];
+	@synchronized(self)
+	{
+		return [userDefaults integerForKey:@"recoverSetting"];
+	}
 }
 
 - (void)setRecoverSetting:(NSInteger)setting
 {
-	recoverSetting = setting;
-	[userDefaults setInteger:setting forKey:@"recoverSetting"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		recoverSetting = setting;
+		[userDefaults setInteger:setting forKey:@"recoverSetting"];
+		[userDefaults synchronize];
+	}
 }
 
 - (NSInteger)maxBitrateWifi
 {
-	return [userDefaults integerForKey:@"maxBitrateWifiSetting"];
+	@synchronized(self)
+	{
+		return [userDefaults integerForKey:@"maxBitrateWifiSetting"];
+	}
 }
 
 - (void)setMaxBitrateWifi:(NSInteger)maxBitrateWifi
 {
-	[userDefaults setInteger:maxBitrateWifi forKey:@"maxBitrateWifiSetting"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setInteger:maxBitrateWifi forKey:@"maxBitrateWifiSetting"];
+		[userDefaults synchronize];
+	}
 }
 
 - (NSInteger)maxBitrate3G
 {
-	return [userDefaults integerForKey:@"maxBitrate3GSetting"];
+	@synchronized(self)
+	{
+		return [userDefaults integerForKey:@"maxBitrate3GSetting"];
+	}
 }
 
 - (void)setMaxBitrate3G:(NSInteger)maxBitrate3G
 {
-	[userDefaults setInteger:maxBitrate3G forKey:@"maxBitrate3GSetting"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setInteger:maxBitrate3G forKey:@"maxBitrate3GSetting"];
+		[userDefaults synchronize];
+	}
 }
 
 - (NSInteger)currentMaxBitrate
 {
-	NSInteger bitrate;
-	switch ([iSubAppDelegate sharedInstance].isWifi ? self.maxBitrateWifi : self.maxBitrate3G)
+	@synchronized(self)
 	{
-		case 0:
-			bitrate = 64;
-			break;
-		case 1:
-			bitrate = 96;
-			break;
-		case 2:
-			bitrate = 128;
-			break;
-		case 3:
-			bitrate = 160;
-			break;
-		case 4:
-			bitrate = 192;
-			break;
-		case 5:
-			bitrate = 224;
-			break;
-		case 6:
-			bitrate = 256;
-			break;
-		default:
-			bitrate = 0;
-			break;
+		NSInteger bitrate;
+		switch ([iSubAppDelegate sharedInstance].isWifi ? self.maxBitrateWifi : self.maxBitrate3G)
+		{
+			case 0: bitrate = 64; break;
+			case 1: bitrate = 96; break;
+			case 2: bitrate = 128; break;
+			case 3: bitrate = 160; break;
+			case 4: bitrate = 192; break;
+			case 5: bitrate = 224; break;
+			case 6: bitrate = 256; break;
+			default: bitrate = 0; break;
+		}
+		return bitrate;
 	}
-	
-	return bitrate;
 }
 
 - (BOOL)isSongCachingEnabled
 {
-	if (self.isCacheUnlocked)
-		return [userDefaults boolForKey:@"enableSongCachingSetting"];
-	else
-		return NO;
+	@synchronized(self)
+	{
+		if (self.isCacheUnlocked)
+			return [userDefaults boolForKey:@"enableSongCachingSetting"];
+		else
+			return NO;
+	}
 }
 
 - (void)setIsSongCachingEnabled:(BOOL)isSongCachingEnabled
 {
-	[userDefaults setBool:isSongCachingEnabled forKey:@"enableSongCachingSetting"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setBool:isSongCachingEnabled forKey:@"enableSongCachingSetting"];
+		[userDefaults synchronize];
+	}
 }
 
 - (BOOL)isNextSongCacheEnabled
 {
-	return [userDefaults boolForKey:@"enableNextSongCacheSetting"];
+	@synchronized(self)
+	{
+		return [userDefaults boolForKey:@"enableNextSongCacheSetting"];
+	}
 }
 
 - (void)setIsNextSongCacheEnabled:(BOOL)isNextSongCacheEnabled
 {
-	[userDefaults setBool:isNextSongCacheEnabled forKey:@"enableNextSongCacheSetting"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setBool:isNextSongCacheEnabled forKey:@"enableNextSongCacheSetting"];
+		[userDefaults synchronize];
+	}
 }
 
 - (NSInteger)cachingType
 {
-	return [userDefaults integerForKey:@"cachingTypeSetting"];
+	@synchronized(self)
+	{
+		return [userDefaults integerForKey:@"cachingTypeSetting"];
+	}
 }
 
 - (void)setCachingType:(NSInteger)cachingType
 {
-	[userDefaults setInteger:cachingType forKey:@"cachingTypeSetting"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setInteger:cachingType forKey:@"cachingTypeSetting"];
+		[userDefaults synchronize];
+	}
 }
 
 - (unsigned long long)maxCacheSize
 {
-	return [[userDefaults objectForKey:@"maxCacheSize"] unsignedLongLongValue];
+	@synchronized(self)
+	{
+		return [[userDefaults objectForKey:@"maxCacheSize"] unsignedLongLongValue];
+	}
 }
 
 - (void)setMaxCacheSize:(unsigned long long)maxCacheSize
 {
-	NSNumber *value = [NSNumber numberWithUnsignedLongLong:maxCacheSize];
-	[userDefaults setObject:value forKey:@"maxCacheSize"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		NSNumber *value = [NSNumber numberWithUnsignedLongLong:maxCacheSize];
+		[userDefaults setObject:value forKey:@"maxCacheSize"];
+		[userDefaults synchronize];
+	}
 }
 
 - (unsigned long long)minFreeSpace
 {
-	return [[userDefaults objectForKey:@"minFreeSpace"] unsignedLongLongValue];
+	@synchronized(self)
+	{
+		return [[userDefaults objectForKey:@"minFreeSpace"] unsignedLongLongValue];
+	}
 }
 
 - (void)setMinFreeSpace:(unsigned long long)minFreeSpace
 {
-	NSNumber *value = [NSNumber numberWithUnsignedLongLong:minFreeSpace];
-	[userDefaults setObject:value forKey:@"minFreeSpace"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		NSNumber *value = [NSNumber numberWithUnsignedLongLong:minFreeSpace];
+		[userDefaults setObject:value forKey:@"minFreeSpace"];
+		[userDefaults synchronize];
+	}
 }
 
 - (BOOL)isAutoDeleteCacheEnabled
 {
-	return [userDefaults boolForKey:@"autoDeleteCacheSetting"];
+	@synchronized(self)
+	{
+		return [userDefaults boolForKey:@"autoDeleteCacheSetting"];
+	}
 }
 
 - (void)setIsAutoDeleteCacheEnabled:(BOOL)isAutoDeleteCacheEnabled
 {
-	[userDefaults setBool:isAutoDeleteCacheEnabled forKey:@"autoDeleteCacheSetting"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setBool:isAutoDeleteCacheEnabled forKey:@"autoDeleteCacheSetting"];
+		[userDefaults synchronize];
+	}
 }
 
 - (NSInteger)autoDeleteCacheType
 {
-	return [userDefaults integerForKey:@"autoDeleteCacheTypeSetting"];
+	@synchronized(self)
+	{
+		return [userDefaults integerForKey:@"autoDeleteCacheTypeSetting"];
+	}
 }
 
 - (void)setAutoDeleteCacheType:(NSInteger)autoDeleteCacheType
 {
-	[userDefaults setInteger:autoDeleteCacheType forKey:@"autoDeleteCacheTypeSetting"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setInteger:autoDeleteCacheType forKey:@"autoDeleteCacheTypeSetting"];
+		[userDefaults synchronize];
+	}
 }
 
 - (NSInteger)cachedSongCellColorType
 {
-	return [userDefaults integerForKey:@"cacheSongCellColorSetting"];
+	@synchronized(self)
+	{
+		return [userDefaults integerForKey:@"cacheSongCellColorSetting"];
+	}
 }
 
 - (void)setCachedSongCellColorType:(NSInteger)cachedSongCellColorType
 {
-	[userDefaults setInteger:cachedSongCellColorType forKey:@"cacheSongCellColorSetting"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setInteger:cachedSongCellColorType forKey:@"cacheSongCellColorSetting"];
+		[userDefaults synchronize];
+	}
 }
 
 - (BOOL)isTwitterEnabled
 {
-	return [userDefaults boolForKey:@"twitterEnabledSetting"];
+	@synchronized(self)
+	{
+		return [userDefaults boolForKey:@"twitterEnabledSetting"];
+	}
 }
 
 - (void)setIsTwitterEnabled:(BOOL)isTwitterEnabled
 {
-	[userDefaults setBool:isTwitterEnabled forKey:@"twitterEnabledSetting"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setBool:isTwitterEnabled forKey:@"twitterEnabledSetting"];
+		[userDefaults synchronize];
+	}
 }
 
 - (BOOL)isLyricsEnabled
 {
-	return [userDefaults boolForKey:@"lyricsEnabledSetting"];
+	@synchronized(self)
+	{
+		return [userDefaults boolForKey:@"lyricsEnabledSetting"];
+	}
 }
 
 - (void)setIsLyricsEnabled:(BOOL)isLyricsEnabled
 {
-	[userDefaults setBool:isLyricsEnabled forKey:@"lyricsEnabledSetting"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setBool:isLyricsEnabled forKey:@"lyricsEnabledSetting"];
+		[userDefaults synchronize];
+	}
 }
 
 - (BOOL)isCacheStatusEnabled
 {
-	return [userDefaults boolForKey:@"isCacheStatusEnabled"];
+	@synchronized(self)
+	{
+		return [userDefaults boolForKey:@"isCacheStatusEnabled"];
+	}
 }
 
 - (void)setIsCacheStatusEnabled:(BOOL)isCacheStatusEnabled
 {
-	[userDefaults setBool:isCacheStatusEnabled forKey:@"isCacheStatusEnabled"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setBool:isCacheStatusEnabled forKey:@"isCacheStatusEnabled"];
+		[userDefaults synchronize];
+	}
 }
 
 - (BOOL)isSongsTabEnabled
 {
-	return [userDefaults boolForKey:@"enableSongsTabSetting"];
+	@synchronized(self)
+	{
+		return [userDefaults boolForKey:@"enableSongsTabSetting"];
+	}
 }
 
 - (void)setIsSongsTabEnabled:(BOOL)isSongsTabEnabled
 {
-	[userDefaults setBool:isSongsTabEnabled forKey:@"enableSongsTabSetting"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setBool:isSongsTabEnabled forKey:@"enableSongsTabSetting"];
+		[userDefaults synchronize];
+	}
 }
 
 - (BOOL)isAutoShowSongInfoEnabled
 {
-	return [userDefaults boolForKey:@"autoPlayerInfoSetting"];
+	@synchronized(self)
+	{
+		return [userDefaults boolForKey:@"autoPlayerInfoSetting"];
+	}
 }
 
 - (void)setIsAutoShowSongInfoEnabled:(BOOL)isAutoShowSongInfoEnabled
 {
-	[userDefaults setBool:isAutoShowSongInfoEnabled forKey:@"autoPlayerInfoSetting"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setBool:isAutoShowSongInfoEnabled forKey:@"autoPlayerInfoSetting"];
+		[userDefaults synchronize];
+	}
 }
 
 - (BOOL)isAutoReloadArtistsEnabled
 {
-	return [userDefaults boolForKey:@"autoReloadArtistsSetting"];
+	@synchronized(self)
+	{
+		return [userDefaults boolForKey:@"autoReloadArtistsSetting"];
+	}
 }
 
 - (void)setIsAutoReloadArtistsEnabled:(BOOL)isAutoReloadArtistsEnabled
 {
-	[userDefaults setBool:isAutoReloadArtistsEnabled forKey:@"autoReloadArtistsSetting"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setBool:isAutoReloadArtistsEnabled forKey:@"autoReloadArtistsSetting"];
+		[userDefaults synchronize];
+	}
 }
 
 - (float)scrobblePercent
 {
-	return [userDefaults floatForKey:@"scrobblePercentSetting"];
+	@synchronized(self)
+	{
+		return [userDefaults floatForKey:@"scrobblePercentSetting"];
+	}
 }
 
 - (void)setScrobblePercent:(float)scrobblePercent
 {
-	[userDefaults setFloat:scrobblePercent forKey:@"scrobblePercentSetting"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setFloat:scrobblePercent forKey:@"scrobblePercentSetting"];
+		[userDefaults synchronize];
+	}
 }
 
 - (BOOL)isScrobbleEnabled
 {
-	return [userDefaults boolForKey:@"enableScrobblingSetting"];
+	@synchronized(self)
+	{
+		return [userDefaults boolForKey:@"enableScrobblingSetting"];
+	}
 }
 
 - (void)setIsScrobbleEnabled:(BOOL)isScrobbleEnabled
 {
-	[userDefaults setBool:isScrobbleEnabled forKey:@"enableScrobblingSetting"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setBool:isScrobbleEnabled forKey:@"enableScrobblingSetting"];
+		[userDefaults synchronize];
+	}
 }
 
 - (BOOL)isRotationLockEnabled
 {
-	return [userDefaults boolForKey:@"lockRotationSetting"];
+	@synchronized(self)
+	{
+		return [userDefaults boolForKey:@"lockRotationSetting"];
+	}
 }
 
 - (void)setIsRotationLockEnabled:(BOOL)isRotationLockEnabled
 {
-	[userDefaults setBool:isRotationLockEnabled forKey:@"lockRotationSetting"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setBool:isRotationLockEnabled forKey:@"lockRotationSetting"];
+		[userDefaults synchronize];
+	}
 }
 
 - (BOOL)isJukeboxEnabled
 {
-	if (self.isJukeboxUnlocked)
-		return isJukeboxEnabled;
-	else
-		return NO;
+	@synchronized(self)
+	{
+		if (self.isJukeboxUnlocked)
+			return isJukeboxEnabled;
+		else
+			return NO;
+	}
 }
 
 - (void)setIsJukeboxEnabled:(BOOL)enabled
 {
-	isJukeboxEnabled = enabled;
-	[userDefaults setBool:enabled forKey:@"isJukeboxEnabled"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		isJukeboxEnabled = enabled;
+		[userDefaults setBool:enabled forKey:@"isJukeboxEnabled"];
+		[userDefaults synchronize];
+	}
 }
 
 - (BOOL)isScreenSleepEnabled
 {
-	return isScreenSleepEnabled;
+	@synchronized(self)
+	{
+		return isScreenSleepEnabled;
+	}
 }
 
 - (void)setIsScreenSleepEnabled:(BOOL)enabled
 {
-	isScreenSleepEnabled = enabled;
-	[userDefaults setBool:enabled forKey:@"isScreenSleepEnabled"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		isScreenSleepEnabled = enabled;
+		[userDefaults setBool:enabled forKey:@"isScreenSleepEnabled"];
+		[userDefaults synchronize];
+	}
 }
 
 - (BOOL)isPopupsEnabled
 {
-	return isPopupsEnabled;
+	@synchronized(self)
+	{
+		return isPopupsEnabled;
+	}
 }
 
 - (void)setIsPopupsEnabled:(BOOL)enabled
 {
-	isPopupsEnabled = enabled;
-	[userDefaults setBool:enabled forKey:@"isPopupsEnabled"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		isPopupsEnabled = enabled;
+		[userDefaults setBool:enabled forKey:@"isPopupsEnabled"];
+		[userDefaults synchronize];
+	}
 }
 
 - (BOOL)isUpdateCheckEnabled
 {
-	return [userDefaults boolForKey:@"checkUpdatesSetting"];
+	@synchronized(self)
+	{
+		return [userDefaults boolForKey:@"checkUpdatesSetting"];
+	}
 }
 
 - (void)setIsUpdateCheckEnabled:(BOOL)isUpdateCheckEnabled
 {
-	[userDefaults setBool:isUpdateCheckEnabled forKey:@"checkUpdatesSetting"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setBool:isUpdateCheckEnabled forKey:@"checkUpdatesSetting"];
+		[userDefaults synchronize];
+	}
 }
 
 - (BOOL)isUpdateCheckQuestionAsked
 {
-	return [userDefaults boolForKey:@"isUpdateCheckQuestionAsked"];
+	@synchronized(self)
+	{
+		return [userDefaults boolForKey:@"isUpdateCheckQuestionAsked"];
+	}
 }
 
 - (void)setIsUpdateCheckQuestionAsked:(BOOL)isUpdateCheckQuestionAsked
 {
-	[userDefaults setBool:isUpdateCheckQuestionAsked forKey:@"isUpdateCheckQuestionAsked"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setBool:isUpdateCheckQuestionAsked forKey:@"isUpdateCheckQuestionAsked"];
+		[userDefaults synchronize];
+	}
 }
 
 - (BOOL)isNewSearchAPI
 {
-	NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [urlString md5]];
-	return [userDefaults boolForKey:key];
+	@synchronized(self)
+	{
+		NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [urlString md5]];
+		return [userDefaults boolForKey:key];
+	}
 }
 
 - (void)setIsNewSearchAPI:(BOOL)isNewSearchAPI
 {
-	NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [urlString md5]];
-	[userDefaults setBool:isNewSearchAPI forKey:key];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [urlString md5]];
+		[userDefaults setBool:isNewSearchAPI forKey:key];
+		[userDefaults synchronize];
+	}
 }
 
 - (BOOL)isRecover
 {
-	return [userDefaults boolForKey:@"recover"];
+	@synchronized(self)
+	{
+		return [userDefaults boolForKey:@"recover"];
+	}
 }
 
 - (void)setIsRecover:(BOOL)recover
 {
-	isRecover = recover;
-	[userDefaults setBool:recover forKey:@"recover"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		isRecover = recover;
+		[userDefaults setBool:recover forKey:@"recover"];
+		[userDefaults synchronize];
+	}
 }
 
 - (double)seekTime
 {
-	return [userDefaults doubleForKey:@"seekTime"];
+	@synchronized(self)
+	{
+		return [userDefaults doubleForKey:@"seekTime"];
+	}
 }
 
 - (void)setSeekTime:(double)seekTime
 {
-	secondsOffset = seekTime;
-	[userDefaults setDouble:seekTime forKey:@"seekTime"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		secondsOffset = seekTime;
+		[userDefaults setDouble:seekTime forKey:@"seekTime"];
+		[userDefaults synchronize];
+	}
 }
 
 - (unsigned long long)byteOffset
 {
-	unsigned long long retVal = [[userDefaults objectForKey:@"byteOffset"] unsignedLongLongValue];
-	return retVal;
+	@synchronized(self)
+	{
+		unsigned long long retVal = [[userDefaults objectForKey:@"byteOffset"] unsignedLongLongValue];
+		return retVal;
+	}
 }
 
 - (void)setByteOffset:(unsigned long long)bOffset
 {
-	byteOffset = bOffset;
-	NSNumber *num = [NSNumber numberWithUnsignedLongLong:byteOffset];
-	[userDefaults setObject:num forKey:@"byteOffset"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		byteOffset = bOffset;
+		NSNumber *num = [NSNumber numberWithUnsignedLongLong:byteOffset];
+		[userDefaults setObject:num forKey:@"byteOffset"];
+		[userDefaults synchronize];
+	}
 }
 
 - (NSInteger)bitRate
 {
-	NSInteger rate = [[userDefaults objectForKey:@"bitRate"] integerValue];
-	if (rate < 0) 
-		return 128;
-	else 
-		return rate;
+	@synchronized(self)
+	{
+		NSInteger rate = [[userDefaults objectForKey:@"bitRate"] integerValue];
+		if (rate < 0) 
+			return 128;
+		else 
+			return rate;
+	}
 }
 
 - (void)setBitRate:(NSInteger)rate
 {
-	bitRate = rate;
-	NSNumber *num = [NSNumber numberWithInteger:bitRate];
-	[userDefaults setObject:num forKey:@"bitRate"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		bitRate = rate;
+		NSNumber *num = [NSNumber numberWithInteger:bitRate];
+		[userDefaults setObject:num forKey:@"bitRate"];
+		[userDefaults synchronize];
+	}
 }
 
 - (BOOL)isBasicAuthEnabled
 {
-	return [userDefaults boolForKey:@"isBasicAuthEnabled"];
+	@synchronized(self)
+	{
+		return [userDefaults boolForKey:@"isBasicAuthEnabled"];
+	}
 }
 
 - (void)setIsBasicAuthEnabled:(BOOL)isBasicAuthEnabled
 {
-	[userDefaults setBool:isBasicAuthEnabled forKey:@"isBasicAuthEnabled"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setBool:isBasicAuthEnabled forKey:@"isBasicAuthEnabled"];
+		[userDefaults synchronize];
+	}
 }
 
 - (BOOL)isTapAndHoldEnabled
 {
-	return [userDefaults boolForKey:@"isTapAndHoldEnabled"];
+	@synchronized(self)
+	{
+		return [userDefaults boolForKey:@"isTapAndHoldEnabled"];
+	}
 }
 
 - (void)setIsTapAndHoldEnabled:(BOOL)isTapAndHoldEnabled
 {
-	[userDefaults setBool:isTapAndHoldEnabled forKey:@"isTapAndHoldEnabled"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setBool:isTapAndHoldEnabled forKey:@"isTapAndHoldEnabled"];
+		[userDefaults synchronize];
+	}
 }
 
 - (BOOL)isSwipeEnabled
 {
-	return [userDefaults boolForKey:@"isSwipeEnabled"];
+	@synchronized(self)
+	{
+		return [userDefaults boolForKey:@"isSwipeEnabled"];
+	}
 }
 
 - (void)setIsSwipeEnabled:(BOOL)isSwipeEnabled
 {
-	[userDefaults setBool:isSwipeEnabled forKey:@"isSwipeEnabled"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		[userDefaults setBool:isSwipeEnabled forKey:@"isSwipeEnabled"];
+		[userDefaults synchronize];
+	}
 }
 
 - (float)gainMultiplier
 {
-	return gainMultiplier;
+	@synchronized(self)
+	{
+		return gainMultiplier;
+	}
 }
 
 - (void)setGainMultiplier:(float)multiplier
 {
-	gainMultiplier = multiplier;
-	[userDefaults setFloat:multiplier forKey:@"gainMultiplier"];
-	[userDefaults synchronize];
+	@synchronized(self)
+	{
+		gainMultiplier = multiplier;
+		[userDefaults setFloat:multiplier forKey:@"gainMultiplier"];
+		[userDefaults synchronize];
+	}
+}
+
+- (BOOL)isPartialCacheNextSong
+{
+	@synchronized(self)
+	{
+		return isPartialCacheNextSong;
+	}
+}
+
+- (void)setIsPartialCacheNextSong:(BOOL)partialCache
+{
+	@synchronized(self)
+	{
+		isPartialCacheNextSong = partialCache;
+		[userDefaults setBool:isPartialCacheNextSong forKey:@"isPartialCacheNextSong"];
+		[userDefaults synchronize];
+	}
 }
 
 // Test server details
@@ -1004,7 +1251,6 @@ static SavedSettings *sharedInstance = nil;
         if (sharedInstance == nil) 
 		{
             sharedInstance = [super allocWithZone:zone];
-			//[sharedInstance setup];
             return sharedInstance;  // assignment and return on first allocation
         }
     }

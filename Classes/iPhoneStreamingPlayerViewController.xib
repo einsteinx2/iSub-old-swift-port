@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="7.10">
 	<data>
-		<int key="IBDocument.SystemTarget">528</int>
+		<int key="IBDocument.SystemTarget">1280</int>
 		<string key="IBDocument.SystemVersion">11C74</string>
 		<string key="IBDocument.InterfaceBuilderVersion">1938</string>
 		<string key="IBDocument.AppKitVersion">1138.23</string>
@@ -372,12 +372,13 @@
 					<object class="IBUIButton" id="657687519">
 						<reference key="NSNextResponder" ref="774585933"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{9, 363}, {40, 40}}</string>
+						<string key="NSFrame">{{12, 366}, {34, 34}}</string>
 						<reference key="NSSuperview" ref="774585933"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="270403592"/>
 						<string key="NSReuseIdentifierKey">_NS:225</string>
 						<bool key="IBUIOpaque">NO</bool>
+						<float key="IBUIAlpha">0.85000002384185791</float>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
@@ -397,12 +398,13 @@
 					<object class="IBUIButton" id="968859398">
 						<reference key="NSNextResponder" ref="774585933"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{271, 363}, {40, 40}}</string>
+						<string key="NSFrame">{{274, 366}, {34, 34}}</string>
 						<reference key="NSSuperview" ref="774585933"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="1067123130"/>
 						<string key="NSReuseIdentifierKey">_NS:225</string>
 						<bool key="IBUIOpaque">NO</bool>
+						<float key="IBUIAlpha">0.85000002384185791</float>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
@@ -485,7 +487,7 @@
 					<object class="IBUIButton" id="262828578">
 						<reference key="NSNextResponder" ref="46664152"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{73, 9}, {42, 32}}</string>
+						<string key="NSFrame">{{80, 9}, {42, 32}}</string>
 						<reference key="NSSuperview" ref="46664152"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="310971181"/>
@@ -511,7 +513,7 @@
 					<object class="IBUILabel" id="310971181">
 						<reference key="NSNextResponder" ref="46664152"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{81, 22}, {34, 19}}</string>
+						<string key="NSFrame">{{93, 29}, {26, 12}}</string>
 						<reference key="NSSuperview" ref="46664152"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="388177192"/>
@@ -524,8 +526,8 @@
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<string key="IBUIText"/>
 						<object class="NSColor" key="IBUITextColor">
-							<int key="NSColorSpace">3</int>
-							<bytes key="NSWhite">MC4zNzU5MTIzOTgxAA</bytes>
+							<int key="NSColorSpace">2</int>
+							<bytes key="NSRGB">MC45NDU1NjQ1MTYxIDAuOTQ1MDkxOTg1OSAwLjk0NTA5MTk4NTkAA</bytes>
 						</object>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">1</int>
@@ -535,21 +537,21 @@
 							<string key="name">Helvetica-Bold</string>
 							<string key="family">Helvetica</string>
 							<int key="traits">2</int>
-							<double key="pointSize">22</double>
+							<double key="pointSize">18</double>
 						</object>
 						<object class="NSFont" key="IBUIFont">
 							<string key="NSName">Helvetica-Bold</string>
-							<double key="NSSize">22</double>
+							<double key="NSSize">18</double>
 							<int key="NSfFlags">16</int>
 						</object>
 					</object>
 					<object class="IBUIButton" id="388177192">
 						<reference key="NSNextResponder" ref="46664152"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{131, 3}, {45, 45}}</string>
+						<string key="NSFrame">{{146, 3}, {45, 45}}</string>
 						<reference key="NSSuperview" ref="46664152"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="826022307"/>
+						<reference key="NSNextKeyView"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 						<int key="IBUITag">131</int>
@@ -570,42 +572,13 @@
 						<reference key="IBUIFontDescription" ref="1023967723"/>
 						<reference key="IBUIFont" ref="811066212"/>
 					</object>
-					<object class="IBUIButton" id="826022307">
-						<reference key="NSNextResponder" ref="46664152"/>
-						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{191, 9}, {32, 32}}</string>
-						<reference key="NSSuperview" ref="46664152"/>
-						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
-						<string key="NSReuseIdentifierKey">_NS:225</string>
-						<bool key="IBUIOpaque">NO</bool>
-						<int key="IBUITag">191</int>
-						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<int key="IBUIContentHorizontalAlignment">0</int>
-						<int key="IBUIContentVerticalAlignment">0</int>
-						<reference key="IBUIHighlightedTitleColor" ref="760286101"/>
-						<object class="NSColor" key="IBUINormalTitleColor">
-							<int key="NSColorSpace">1</int>
-							<bytes key="NSRGB">MC4xOTYwNzg0MzQ2IDAuMzA5ODAzOTMyOSAwLjUyMTU2ODY1NgA</bytes>
-						</object>
-						<reference key="IBUINormalTitleShadowColor" ref="434975389"/>
-						<object class="NSCustomResource" key="IBUINormalImage">
-							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">controller-album.png</string>
-						</object>
-						<reference key="IBUIFontDescription" ref="95600519"/>
-						<reference key="IBUIFont" ref="811066212"/>
-					</object>
 				</object>
 				<string key="NSFrameSize">{280, 50}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="964962492"/>
 				<string key="NSReuseIdentifierKey">_NS:196</string>
-				<object class="NSColor" key="IBUIBackgroundColor">
-					<int key="NSColorSpace">3</int>
-					<bytes key="NSWhite">MCAwAA</bytes>
-				</object>
+				<reference key="IBUIBackgroundColor" ref="99263520"/>
 				<bool key="IBUIOpaque">NO</bool>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
@@ -718,6 +691,78 @@
 					<int key="connectionID">96</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">shuffleButton</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="388177192"/>
+					</object>
+					<int key="connectionID">98</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">bookmarkButton</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="262828578"/>
+					</object>
+					<int key="connectionID">99</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">bookmarkCountLabel</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="310971181"/>
+					</object>
+					<int key="connectionID">100</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">repeatButton</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="112753761"/>
+					</object>
+					<int key="connectionID">101</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">progressSlider</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="998423788"/>
+					</object>
+					<int key="connectionID">105</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">progressLabelBackground</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="879580386"/>
+					</object>
+					<int key="connectionID">112</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">progressLabel</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="959321375"/>
+					</object>
+					<int key="connectionID">113</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">elapsedTimeLabel</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="164644068"/>
+					</object>
+					<int key="connectionID">114</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">remainingTimeLabel</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="552394777"/>
+					</object>
+					<int key="connectionID">115</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">playButtonPressed:</string>
 						<reference key="source" ref="810595680"/>
@@ -764,12 +809,93 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">touchedSlider:</string>
+						<reference key="source" ref="998423788"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">1</int>
+					</object>
+					<int key="connectionID">106</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">movingSlider:</string>
+						<reference key="source" ref="998423788"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">13</int>
+					</object>
+					<int key="connectionID">109</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">movedSlider:</string>
+						<reference key="source" ref="998423788"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">110</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">movedSlider:</string>
+						<reference key="source" ref="998423788"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">8</int>
+					</object>
+					<int key="connectionID">111</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">skipBack30:</string>
+						<reference key="source" ref="512522580"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">116</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">skipForward30:</string>
+						<reference key="source" ref="955936044"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">117</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">toggleExtraButtons:</string>
 						<reference key="source" ref="968859398"/>
 						<reference key="destination" ref="372490531"/>
 						<int key="IBEventType">7</int>
 					</object>
 					<int key="connectionID">91</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">shuffleButtonToggle:</string>
+						<reference key="source" ref="388177192"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">104</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">repeatButtonToggle:</string>
+						<reference key="source" ref="112753761"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">102</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">bookmarkButtonToggle:</string>
+						<reference key="source" ref="262828578"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">103</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -909,7 +1035,6 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="964962492"/>
 							<reference ref="388177192"/>
-							<reference ref="826022307"/>
 							<reference ref="112753761"/>
 							<reference ref="262828578"/>
 							<reference ref="310971181"/>
@@ -944,11 +1069,6 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">95</int>
 						<reference key="object" ref="964962492"/>
-						<reference key="parent" ref="46664152"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">97</int>
-						<reference key="object" ref="826022307"/>
 						<reference key="parent" ref="46664152"/>
 					</object>
 				</object>
@@ -987,7 +1107,6 @@
 					<string>88.IBPluginDependency</string>
 					<string>89.IBPluginDependency</string>
 					<string>95.IBPluginDependency</string>
-					<string>97.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1021,7 +1140,6 @@
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="unlocalizedProperties">
@@ -1036,7 +1154,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">97</int>
+			<int key="maxID">119</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1064,15 +1182,33 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>bookmarkButtonToggle:</string>
+							<string>currentAlbumPressed:</string>
+							<string>movedSlider:</string>
+							<string>movingSlider:</string>
 							<string>nextButtonPressed:</string>
 							<string>playButtonPressed:</string>
 							<string>prevButtonPressed:</string>
+							<string>repeatButtonToggle:</string>
 							<string>showEq:</string>
+							<string>shuffleButtonToggle:</string>
+							<string>skipBack30:</string>
+							<string>skipForward30:</string>
 							<string>songInfoToggle:</string>
 							<string>toggleExtraButtons:</string>
+							<string>touchedSlider:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -1085,15 +1221,40 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>bookmarkButtonToggle:</string>
+							<string>currentAlbumPressed:</string>
+							<string>movedSlider:</string>
+							<string>movingSlider:</string>
 							<string>nextButtonPressed:</string>
 							<string>playButtonPressed:</string>
 							<string>prevButtonPressed:</string>
+							<string>repeatButtonToggle:</string>
 							<string>showEq:</string>
+							<string>shuffleButtonToggle:</string>
+							<string>skipBack30:</string>
+							<string>skipForward30:</string>
 							<string>songInfoToggle:</string>
 							<string>toggleExtraButtons:</string>
+							<string>touchedSlider:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBActionInfo">
+								<string key="name">bookmarkButtonToggle:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">currentAlbumPressed:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">movedSlider:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">movingSlider:</string>
+								<string key="candidateClassName">id</string>
+							</object>
 							<object class="IBActionInfo">
 								<string key="name">nextButtonPressed:</string>
 								<string key="candidateClassName">id</string>
@@ -1107,7 +1268,23 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
+								<string key="name">repeatButtonToggle:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
 								<string key="name">showEq:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">shuffleButtonToggle:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">skipBack30:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">skipForward30:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
@@ -1118,6 +1295,10 @@
 								<string key="name">toggleExtraButtons:</string>
 								<string key="candidateClassName">id</string>
 							</object>
+							<object class="IBActionInfo">
+								<string key="name">touchedSlider:</string>
+								<string key="candidateClassName">id</string>
+							</object>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="outlets">
@@ -1125,7 +1306,11 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>activityIndicator</string>
+							<string>bookmarkButton</string>
+							<string>bookmarkCountLabel</string>
 							<string>coverArtImageView</string>
+							<string>currentAlbumButton</string>
+							<string>elapsedTimeLabel</string>
 							<string>eqButton</string>
 							<string>extraButtons</string>
 							<string>extraButtonsBackground</string>
@@ -1133,14 +1318,24 @@
 							<string>nextButton</string>
 							<string>playButton</string>
 							<string>prevButton</string>
+							<string>progressLabel</string>
+							<string>progressLabelBackground</string>
+							<string>progressSlider</string>
 							<string>reflectionView</string>
+							<string>remainingTimeLabel</string>
+							<string>repeatButton</string>
+							<string>shuffleButton</string>
 							<string>songInfoToggleButton</string>
 							<string>volumeSlider</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>UIActivityIndicatorView</string>
+							<string>UIButton</string>
+							<string>UILabel</string>
 							<string>CoverArtImageView</string>
+							<string>UIButton</string>
+							<string>UILabel</string>
 							<string>UIButton</string>
 							<string>UIView</string>
 							<string>UIImageView</string>
@@ -1148,7 +1343,13 @@
 							<string>UIButton</string>
 							<string>UIButton</string>
 							<string>UIButton</string>
+							<string>UILabel</string>
 							<string>UIImageView</string>
+							<string>OBSlider</string>
+							<string>UIImageView</string>
+							<string>UILabel</string>
+							<string>UIButton</string>
+							<string>UIButton</string>
 							<string>UIButton</string>
 							<string>UIView</string>
 						</object>
@@ -1158,7 +1359,11 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>activityIndicator</string>
+							<string>bookmarkButton</string>
+							<string>bookmarkCountLabel</string>
 							<string>coverArtImageView</string>
+							<string>currentAlbumButton</string>
+							<string>elapsedTimeLabel</string>
 							<string>eqButton</string>
 							<string>extraButtons</string>
 							<string>extraButtonsBackground</string>
@@ -1166,7 +1371,13 @@
 							<string>nextButton</string>
 							<string>playButton</string>
 							<string>prevButton</string>
+							<string>progressLabel</string>
+							<string>progressLabelBackground</string>
+							<string>progressSlider</string>
 							<string>reflectionView</string>
+							<string>remainingTimeLabel</string>
+							<string>repeatButton</string>
+							<string>shuffleButton</string>
 							<string>songInfoToggleButton</string>
 							<string>volumeSlider</string>
 						</object>
@@ -1177,8 +1388,24 @@
 								<string key="candidateClassName">UIActivityIndicatorView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
+								<string key="name">bookmarkButton</string>
+								<string key="candidateClassName">UIButton</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">bookmarkCountLabel</string>
+								<string key="candidateClassName">UILabel</string>
+							</object>
+							<object class="IBToOneOutletInfo">
 								<string key="name">coverArtImageView</string>
 								<string key="candidateClassName">CoverArtImageView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">currentAlbumButton</string>
+								<string key="candidateClassName">UIButton</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">elapsedTimeLabel</string>
+								<string key="candidateClassName">UILabel</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">eqButton</string>
@@ -1209,8 +1436,32 @@
 								<string key="candidateClassName">UIButton</string>
 							</object>
 							<object class="IBToOneOutletInfo">
+								<string key="name">progressLabel</string>
+								<string key="candidateClassName">UILabel</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">progressLabelBackground</string>
+								<string key="candidateClassName">UIImageView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">progressSlider</string>
+								<string key="candidateClassName">OBSlider</string>
+							</object>
+							<object class="IBToOneOutletInfo">
 								<string key="name">reflectionView</string>
 								<string key="candidateClassName">UIImageView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">remainingTimeLabel</string>
+								<string key="candidateClassName">UILabel</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">repeatButton</string>
+								<string key="candidateClassName">UIButton</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">shuffleButton</string>
+								<string key="candidateClassName">UIButton</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">songInfoToggleButton</string>
@@ -1231,13 +1482,9 @@
 		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
-		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencies">
-			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaTouchPlugin.iPhoneOS</string>
-			<integer value="528" key="NS.object.0"/>
-		</object>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDevelopmentDependencies">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaTouchPlugin.InterfaceBuilder3</string>
-			<integer value="3000" key="NS.object.0"/>
+			<real value="3000" key="NS.object.0"/>
 		</object>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
@@ -1245,7 +1492,6 @@
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<object class="NSArray" key="dict.sortedKeys">
 				<bool key="EncodedWithXMLCoder">YES</bool>
-				<string>controller-album.png</string>
 				<string>controller-bookmark.png</string>
 				<string>controller-equalizer.png</string>
 				<string>controller-extras-background.png</string>
@@ -1259,7 +1505,6 @@
 			</object>
 			<object class="NSMutableArray" key="dict.values">
 				<bool key="EncodedWithXMLCoder">YES</bool>
-				<string>{32, 32}</string>
 				<string>{42, 32}</string>
 				<string>{40, 40}</string>
 				<string>{280, 60}</string>

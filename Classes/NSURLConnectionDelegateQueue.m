@@ -21,7 +21,7 @@
 
 @implementation NSURLConnectionDelegateQueue
 
-- (id) init
+- (id)init
 {
 	self = [super init];
 	if (self != nil)
@@ -31,17 +31,6 @@
 		databaseControls = [DatabaseSingleton sharedInstance];
 	}	
 	return self;
-}
-
-- (BOOL) insertSong:(Song *)aSong intoGenreTable:(NSString *)table
-{
-	[databaseControls.songCacheDb synchronizedUpdate:[NSString stringWithFormat:@"INSERT INTO %@ (md5, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", table], [aSong.path md5], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
-	
-	if ([databaseControls.songCacheDb hadError]) {
-		DLog(@"Err inserting song into genre table %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
-	}
-	
-	return [databaseControls.songCacheDb hadError];
 }
 
 - (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
@@ -133,7 +122,7 @@
 			}
 			
 			// Insert the song object into the appropriate genresSongs table
-			[self insertSong:musicControls.queueSongObject intoGenreTable:@"genresSongs"];
+			[musicControls.queueSongObject insertIntoGenreTable:@"genresSongs"];
 		}
 		
 		// Cache the album art if it exists

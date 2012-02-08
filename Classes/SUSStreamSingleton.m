@@ -33,22 +33,6 @@ static SUSStreamSingleton *sharedInstance = nil;
 @implementation SUSStreamSingleton
 @synthesize handlerStack, lyricsDAO, currentPlaylistDAO, lastCachedSong, lastTempCachedSong;
 
-- (BOOL)insertSong:(Song *)aSong intoGenreTable:(NSString *)table
-{
-    DatabaseSingleton *databaseControls = [DatabaseSingleton sharedInstance];
-    
-	[databaseControls.songCacheDb synchronizedUpdate:[NSString stringWithFormat:@"INSERT INTO %@ (md5, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", table], [aSong.path md5], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size];
-	
-	if ([databaseControls.songCacheDb hadError]) 
-	{
-		DLog(@"Err inserting song into genre table %d: %@", 
-			 [databaseControls.songCacheDb lastErrorCode], 
-			 [databaseControls.songCacheDb lastErrorMessage]);
-	}
-	
-	return [databaseControls.songCacheDb hadError];
-}
-
 - (SUSStreamHandler *)handlerForSong:(Song *)aSong
 {
 	for (SUSStreamHandler *handler in handlerStack)
@@ -246,7 +230,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 	return isSongInQueue;
 }
 
-- (void)queueStreamForNextSong
+/*- (void)queueStreamForNextSong
 {
 	Song *nextSong = currentPlaylistDAO.nextSong;
 
@@ -256,7 +240,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 	{
 		[self queueStreamForSong:nextSong isTempCache:NO];
 	}
-}
+}*/
 
 - (void)fillStreamQueue
 {
@@ -286,7 +270,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 {
 	if ([SavedSettings sharedInstance].isSongCachingEnabled)
 		[[NSNotificationCenter defaultCenter] addObserver:self 
-												 selector:@selector(queueStreamForNextSong) 
+												 selector:@selector(fillStreamQueue) 
 													 name:ISMSNotification_SongPlaybackEnded 
 												   object:nil];
 	else
@@ -297,6 +281,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (void)currentPlaylistIndexChanged
 {
+	// TODO: Fix this logic, it's wrong
 	// Verify that the last song is not constantly retrying to connect, 
 	// so the current song can download and play
 	[self removeStreamForSong:currentPlaylistDAO.prevSong];
@@ -348,6 +333,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 	else
 	{
 		DLog(@"removing stream handler");
+		DLog(@"handlerStack: %@", handlerStack);
 		// Tried max number of times so remove
 		[handlerStack removeObject:handler];
 	}
@@ -360,14 +346,18 @@ static SUSStreamSingleton *sharedInstance = nil;
 	
 	if (handler.isTempCache)
 		self.lastTempCachedSong = handler.mySong;
+	DLog(@"handler.isTempCache: %@   lastTempCachedSong: %@", NSStringFromBOOL(handler.isTempCache), self.lastTempCachedSong);
 	
-	DLog(@"stream handler finished: %@", handler);
 	// Remove the handler from the stack
 	[handlerStack removeObject:handler];
+	
+	DLog(@"stream handler finished: %@", handler);
+	DLog(@"handlerStack: %@", handlerStack);
 	
 	// Start the next handler which is now the first object
 	if ([handlerStack count] > 0)
 	{
+		DLog(@"starting first handler in stack");
 		SUSStreamHandler *handler = (SUSStreamHandler *)[handlerStack firstObject];
 		[self startHandler:handler];
 	}
@@ -410,6 +400,12 @@ static SUSStreamSingleton *sharedInstance = nil;
 											 selector:@selector(currentPlaylistIndexChanged) 
 												 name:ISMSNotification_CurrentPlaylistIndexChanged 
 											   object:nil];
+	
+	if ([SavedSettings sharedInstance].isSongCachingEnabled)
+		[[NSNotificationCenter defaultCenter] addObserver:self 
+												 selector:@selector(fillStreamQueue) 
+													 name:ISMSNotification_SongPlaybackEnded 
+												   object:nil];
 }
 
 + (SUSStreamSingleton *)sharedInstance
@@ -429,7 +425,6 @@ static SUSStreamSingleton *sharedInstance = nil;
         if (sharedInstance == nil) 
 		{
             sharedInstance = [super allocWithZone:zone];
-			[sharedInstance setup];
             return sharedInstance;  // assignment and return on first allocation
         }
     }

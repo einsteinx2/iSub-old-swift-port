@@ -12,6 +12,7 @@
 #import "CacheSingleton.h"
 #import "Song.h"
 #import "PlaylistSingleton.h"
+#import "NSString+Additions.h"
 
 @implementation DebugViewController
 @synthesize currentSong, nextSong;
@@ -197,19 +198,19 @@
 	if (settings.cachingType == 0)
 	{
 		cacheSettingLabel.text = @"Min Free Space:";
-		cacheSettingSizeLabel.text = [settings formatFileSize:settings.minFreeSpace];
+		cacheSettingSizeLabel.text = [NSString formatFileSize:settings.minFreeSpace];
 	}
 	else
 	{
 		cacheSettingLabel.text = @"Max Cache Size:";
-		cacheSettingSizeLabel.text = [settings formatFileSize:settings.maxCacheSize];
+		cacheSettingSizeLabel.text = [NSString formatFileSize:settings.maxCacheSize];
 	}
 	
 	// Set the free space label
-	freeSpaceLabel.text = [settings formatFileSize:cacheControls.freeSpace];
+	freeSpaceLabel.text = [NSString formatFileSize:cacheControls.freeSpace];
 	
 	// Set the cache size label
-	cacheSizeLabel.text = [settings formatFileSize:cacheControls.cacheSize];
+	cacheSizeLabel.text = [NSString formatFileSize:cacheControls.cacheSize];
 }
 
 - (IBAction) songInfoToggle

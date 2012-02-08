@@ -34,12 +34,12 @@
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		[self.db synchronizedUpdate:@"DROP TABLE jukeboxCurrentPlaylist"];
-		[self.db synchronizedUpdate:@"CREATE TABLE jukeboxCurrentPlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];	
+		[self.db synchronizedUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxCurrentPlaylist (%@)", [Song standardSongColumnSchema]]];	
 	}
 	else
 	{	
 		[self.db synchronizedUpdate:@"DROP TABLE currentPlaylist"];
-		[self.db synchronizedUpdate:@"CREATE TABLE currentPlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];	
+		[self.db synchronizedUpdate:[NSString stringWithFormat:@"CREATE TABLE currentPlaylist (%@)", [Song standardSongColumnSchema]]];	
 	}
 }
 
@@ -48,12 +48,12 @@
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		[self.db synchronizedUpdate:@"DROP TABLE jukeboxShufflePlaylist"];
-		[self.db synchronizedUpdate:@"CREATE TABLE jukeboxShufflePlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];	
+		[self.db synchronizedUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxShufflePlaylist (%@)", [Song standardSongColumnSchema]]];	
 	}
 	else
 	{	
 		[self.db synchronizedUpdate:@"DROP TABLE shufflePlaylist"];
-		[self.db synchronizedUpdate:@"CREATE TABLE shufflePlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];	
+		[self.db synchronizedUpdate:[NSString stringWithFormat:@"CREATE TABLE shufflePlaylist (%@)", [Song standardSongColumnSchema]]];	
 	}
 }
 
@@ -79,7 +79,7 @@
 			else
 			{
 				[self.db synchronizedUpdate:@"DROP TABLE IF EXISTS jukeboxTemp"];
-				[self.db synchronizedUpdate:@"CREATE TABLE jukeboxTemp(title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+				[self.db synchronizedUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxTemp(%@)", [Song standardSongColumnSchema]]];
 				
 				for (NSNumber *index in [indexesMut reverseObjectEnumerator])
 				{
@@ -107,7 +107,7 @@
 				else
 				{
 					[self.db synchronizedUpdate:@"DROP TABLE IF EXISTS shuffleTemp"];
-					[self.db synchronizedUpdate:@"CREATE TABLE shuffleTemp(title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+					[self.db synchronizedUpdate:[NSString stringWithFormat:@"CREATE TABLE shuffleTemp(%@)", [Song standardSongColumnSchema]]];
 					
 					for (NSNumber *index in [indexesMut reverseObjectEnumerator])
 					{
@@ -132,7 +132,7 @@
 				else
 				{
 					[self.db synchronizedUpdate:@"DROP TABLE currentTemp"];
-					[self.db synchronizedUpdate:@"CREATE TABLE currentTemp(title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+					[self.db synchronizedUpdate:[NSString stringWithFormat:@"CREATE TABLE currentTemp(%@)", [Song standardSongColumnSchema]]];
 					
 					for (NSNumber *index in [indexesMut reverseObjectEnumerator])
 					{
@@ -442,7 +442,6 @@ static PlaylistSingleton *sharedInstance = nil;
         if (sharedInstance == nil) 
 		{
             sharedInstance = [super allocWithZone:zone];
-			[sharedInstance setup];
             return sharedInstance;  // assignment and return on first allocation
         }
     }

@@ -8,6 +8,9 @@
 
 #import "EqualizerPointView.h"
 
+#define myWidth 30
+#define myHeight 30
+
 @implementation EqualizerPointView
 @synthesize parentSize;
 @synthesize position, handle;
@@ -16,7 +19,7 @@
 {	
 	self = [super initWithFrame:CGRectMake(0, 0, myWidth, myHeight)];
     if (self) 
-	{
+	{		
 		parentSize = size;
 		self.center = point;
 		

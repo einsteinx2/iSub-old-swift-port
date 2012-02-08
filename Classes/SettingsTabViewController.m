@@ -25,30 +25,20 @@
 #import "FMDatabase.h"
 
 #import "SavedSettings.h"
+#import "NSString+Additions.h"
 
 
 @implementation SettingsTabViewController
 
 @synthesize parentController, loadedTime;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	
 	if (settings.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
 }
-
-/*
- // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-        // Custom initialization
-    }
-    return self;
-}
-*/
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad 
@@ -117,13 +107,13 @@
 	
 	// Cache Settings
 	enableSongCachingSwitch.on = settings.isSongCachingEnabled;
-	
 	enableNextSongCacheSwitch.on = settings.isNextSongCacheEnabled;
+	enableNextSongPartialCacheSwitch.on = settings.isPartialCacheNextSong;
 		
 	totalSpace = cacheControls.totalSpace;
 	freeSpace = cacheControls.freeSpace;
-	freeSpaceLabel.text = [NSString stringWithFormat:@"Free space: %@", [settings formatFileSize:freeSpace]];
-	totalSpaceLabel.text = [NSString stringWithFormat:@"Total space: %@", [settings formatFileSize:totalSpace]];
+	freeSpaceLabel.text = [NSString stringWithFormat:@"Free space: %@", [NSString formatFileSize:freeSpace]];
+	totalSpaceLabel.text = [NSString stringWithFormat:@"Total space: %@", [NSString formatFileSize:totalSpace]];
 	float percentFree = (float) freeSpace / (float) totalSpace;
 	CGRect frame = freeSpaceBackground.frame;
 	frame.size.width = frame.size.width * percentFree;
@@ -174,17 +164,7 @@
 		cacheSongCellColorSegmentedControl.enabled = NO; cacheSongCellColorSegmentedControl.alpha = 0.5;
 	}
 	
-	/*[manualOfflineModeSwitch addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
-	[checkUpdatesSwitch addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
-	[autoReloadArtistSwitch addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
-	[enableSongsTabSwitch addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
-	[enableLyricsSwitch addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
-	[autoPlayerInfoSwitch addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
-	[enableSongCachingSwitch addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
-	[enableNextSongCacheSwitch addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
-	[cacheSpaceSlider addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
-	[autoDeleteCacheSwitch addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
-	[twitterEnabledSwitch addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];*/
+	[cacheSpaceLabel2 addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 }
 
 /*- (void)viewWillAppear:(BOOL)animated
@@ -195,7 +175,7 @@
 		manualOfflineModeSwitch.on = NO;
 }*/
 
-- (void) reloadTwitterUIElements
+- (void)reloadTwitterUIElements
 {
 	if (socialControls.twitterEngine)
 	{
@@ -221,13 +201,13 @@
 	}
 }
 
-- (void) cachingTypeToggle
+- (void)cachingTypeToggle
 {
 	if (cachingTypeSegmentedControl.selectedSegmentIndex == 0)
 	{
 		cacheSpaceLabel1.text = @"Minimum free space:";
 		//cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
-		cacheSpaceLabel2.text = [settings formatFileSize:settings.minFreeSpace];
+		cacheSpaceLabel2.text = [NSString formatFileSize:settings.minFreeSpace];
 		//cacheSpaceSlider.value = [[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] floatValue] / totalSpace;
 		cacheSpaceSlider.value = (float)settings.minFreeSpace / totalSpace;
 	}
@@ -235,13 +215,13 @@
 	{
 		cacheSpaceLabel1.text = @"Maximum cache size:";
 		//cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue]];
-		cacheSpaceLabel2.text = [settings formatFileSize:settings.maxCacheSize];
+		cacheSpaceLabel2.text = [NSString formatFileSize:settings.maxCacheSize];
 		//cacheSpaceSlider.value = [[appDelegate.settingsDictionary objectForKey:@"maxCacheSize"] floatValue] / totalSpace;
 		cacheSpaceSlider.value = (float)settings.maxCacheSize / totalSpace;
 	}
 }
 
-- (IBAction) segmentAction:(id)sender
+- (IBAction)segmentAction:(id)sender
 {
 	if ([[NSDate date] timeIntervalSinceDate:loadedTime] > 0.5)
 	{
@@ -273,13 +253,16 @@
 	}
 }
 
-- (void) toggleCacheControlsVisibility
+- (void)toggleCacheControlsVisibility
 {
 	if (enableSongCachingSwitch.on)
 	{
 		enableNextSongCacheLabel.alpha = 1;
 		enableNextSongCacheSwitch.enabled = YES;
 		enableNextSongCacheSwitch.alpha = 1;
+		enableNextSongPartialCacheLabel.alpha = 1;
+		enableNextSongPartialCacheSwitch.enabled = YES;
+		enableNextSongPartialCacheSwitch.alpha = 1;
 		cachingTypeSegmentedControl.enabled = YES;
 		cachingTypeSegmentedControl.alpha = 1;
 		cacheSpaceLabel1.alpha = 1;
@@ -291,12 +274,22 @@
 		cacheSpaceSlider.enabled = YES;
 		cacheSpaceSlider.alpha = 1;
 		cacheSpaceDescLabel.alpha = 1;
+		
+		if (!enableNextSongCacheSwitch.on)
+		{
+			enableNextSongPartialCacheLabel.alpha = .5;
+			enableNextSongPartialCacheSwitch.enabled = NO;
+			enableNextSongPartialCacheSwitch.alpha = .5;
+		}
 	}
 	else
 	{
 		enableNextSongCacheLabel.alpha = .5;
 		enableNextSongCacheSwitch.enabled = NO;
 		enableNextSongCacheSwitch.alpha = .5;
+		enableNextSongPartialCacheLabel.alpha = .5;
+		enableNextSongPartialCacheSwitch.enabled = NO;
+		enableNextSongPartialCacheSwitch.alpha = .5;
 		cachingTypeSegmentedControl.enabled = NO;
 		cachingTypeSegmentedControl.alpha = .5;
 		cacheSpaceLabel1.alpha = .5;
@@ -349,6 +342,11 @@
 		else if (sender == enableNextSongCacheSwitch)
 		{
 			settings.isNextSongCacheEnabled = enableNextSongCacheSwitch.on;
+			[self toggleCacheControlsVisibility];
+		}
+		else if (sender == enableNextSongPartialCacheSwitch)
+		{
+			settings.isPartialCacheNextSong = enableNextSongPartialCacheSwitch.on;
 		}
 		else if (sender == autoDeleteCacheSwitch)
 		{
@@ -506,33 +504,36 @@
 	}
 }
 
-- (IBAction) updateMinFreeSpaceLabel
+- (void)updateCacheSpaceSlider
 {
-	//DLog(@"cacheSpaceSlider.value: %f", cacheSpaceSlider.value);
-	cacheSpaceLabel2.text = [settings formatFileSize:(unsigned long long int) (cacheSpaceSlider.value * totalSpace)];
+	cacheSpaceSlider.value = ((double)[cacheSpaceLabel2.text fileSizeFromFormat] / (double)totalSpace);
 }
 
-- (IBAction) updateMinFreeSpaceSetting
+- (IBAction)updateMinFreeSpaceLabel
 {
-	//DLog(@"cacheSpaceSlider.value: %f", cacheSpaceSlider.value);
+	cacheSpaceLabel2.text = [NSString formatFileSize:(unsigned long long int) (cacheSpaceSlider.value * totalSpace)];
+}
+
+- (IBAction)updateMinFreeSpaceSetting
+{
 	if (cachingTypeSegmentedControl.selectedSegmentIndex == 0)
 	{
 		// Check if the user is trying to assing a higher min free space than is available space - 50MB
 		if (cacheSpaceSlider.value * totalSpace > freeSpace - 52428800)
 		{
-			//[appDelegate.settingsDictionary setObject:[NSNumber numberWithLongLong:freeSpace] forKey:@"minFreeSpace"];
-			settings.minFreeSpace = freeSpace;
-			//cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
-			cacheSpaceLabel2.text = [settings formatFileSize:settings.minFreeSpace];
-			cacheSpaceSlider.value = ( (float)freeSpace / (float)totalSpace ) - 52428800.0; // Leave 50MB space
+			settings.minFreeSpace = freeSpace - 52428800;
+			cacheSpaceSlider.value = ((float)settings.minFreeSpace / (float)totalSpace); // Leave 50MB space
+		}
+		else if (cacheSpaceSlider.value * totalSpace < 52428800)
+		{
+			settings.minFreeSpace = 52428800;
+			cacheSpaceSlider.value = ((float)settings.minFreeSpace / (float)totalSpace); // Leave 50MB space
 		}
 		else 
 		{
-			//[appDelegate.settingsDictionary setObject:[NSNumber numberWithLongLong:(unsigned long long int) (cacheSpaceSlider.value * totalSpace)] forKey:@"minFreeSpace"];
-			settings.minFreeSpace = (unsigned long long int) (cacheSpaceSlider.value * totalSpace);
-			//cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
-			cacheSpaceLabel2.text = [settings formatFileSize:settings.minFreeSpace];
+			settings.minFreeSpace = (unsigned long long int) (cacheSpaceSlider.value * (float)totalSpace);
 		}
+		//cacheSpaceLabel2.text = [NSString formatFileSize:settings.minFreeSpace];
 	}
 	else if (cachingTypeSegmentedControl.selectedSegmentIndex == 1)
 	{
@@ -540,35 +541,30 @@
 		// Check if the user is trying to assign a larger max cache size than there is available space - 50MB
 		if (cacheSpaceSlider.value * totalSpace > freeSpace - 52428800)
 		{
-			//[appDelegate.settingsDictionary setObject:[NSNumber numberWithLongLong:(freeSpace - 52428800)] forKey:@"minFreeSpace"];
-			settings.maxCacheSize = (freeSpace - 52428800);
-			//cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
-			cacheSpaceLabel2.text = [settings formatFileSize:settings.maxCacheSize];
-			cacheSpaceSlider.value = ( (float)freeSpace / (float)totalSpace ) - 52428800.0; // Leave 50MB space
+			settings.maxCacheSize = freeSpace - 52428800;
+			cacheSpaceSlider.value = ((float)settings.maxCacheSize / (float)totalSpace); // Leave 50MB space
+		}
+		else if (cacheSpaceSlider.value * totalSpace < 52428800)
+		{
+			settings.maxCacheSize = 52428800;
+			cacheSpaceSlider.value = ((float)settings.maxCacheSize / (float)totalSpace); // Leave 50MB space
 		}
 		else
 		{
-			//[appDelegate.settingsDictionary setObject:[NSNumber numberWithLongLong:(unsigned long long int) (cacheSpaceSlider.value * totalSpace)] forKey:@"maxCacheSize"];
 			settings.maxCacheSize = (unsigned long long int) (cacheSpaceSlider.value * totalSpace);
-			//cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue]];
-			cacheSpaceLabel2.text = [settings formatFileSize:settings.maxCacheSize];
 		}
+		//cacheSpaceLabel2.text = [NSString formatFileSize:settings.maxCacheSize];
 	}
-	
-	//[[NSUserDefaults standardUserDefaults] setObject:appDelegate.settingsDictionary forKey:@"settingsDictionary"];
-	//[[NSUserDefaults standardUserDefaults] synchronize];
+	[self updateMinFreeSpaceLabel];
 }
 
-- (IBAction) revertMinFreeSpaceSlider
+- (IBAction)revertMinFreeSpaceSlider
 {
-	//DLog(@"revertMinFreeSpaceSlider");
-	//cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
-	cacheSpaceLabel2.text = [settings formatFileSize:settings.minFreeSpace];
-	//cacheSpaceSlider.value = [[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] floatValue] / totalSpace;
+	cacheSpaceLabel2.text = [NSString formatFileSize:settings.minFreeSpace];
 	cacheSpaceSlider.value = (float)settings.minFreeSpace / totalSpace;
 }
 
-- (IBAction) twitterButtonAction
+- (IBAction)twitterButtonAction
 {
 	if (socialControls.twitterEngine)
 	{
@@ -590,30 +586,27 @@
 	}
 }
 
-- (IBAction) updateScrobblePercentLabel
+- (IBAction)updateScrobblePercentLabel
 {
 	NSUInteger percentInt = scrobblePercentSlider.value * 100;
 	scrobblePercentLabel.text = [NSString stringWithFormat:@"%i", percentInt];
 }
 
-- (IBAction) updateScrobblePercentSetting;
+- (IBAction)updateScrobblePercentSetting;
 {
-	//NSNumber *percent = [NSNumber numberWithFloat:scrobblePercentSlider.value];
-	//[appDelegate.settingsDictionary setObject:percent forKey:@"scrobblePercentSetting"];
 	settings.scrobblePercent = scrobblePercentSlider.value;
-	
-	//[[NSUserDefaults standardUserDefaults] setObject:appDelegate.settingsDictionary forKey:@"settingsDictionary"];
-	//[[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning 
+{
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     
     // Release any cached data, images, etc that aren't in use.
 }
 
-- (void)viewDidUnload {
+- (void)viewDidUnload 
+{
     [super viewDidUnload];
     
 	//DLog(@"settigns tab view did unload");
@@ -621,12 +614,33 @@
 	[parentController release];
 }
 
-
 - (void)dealloc 
 {
 	[loadedTime release];
     [super dealloc];
 }
 
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+	UITableView *tableView = (UITableView *)self.view.superview;
+	CGRect rect = CGRectMake(0, 500, 320, 5);
+	[tableView scrollRectToVisible:rect animated:NO];
+	rect = UIInterfaceOrientationIsPortrait(self.interfaceOrientation) ? CGRectMake(0, 1600, 320, 5) : CGRectMake(0, 1455, 320, 5);
+	[tableView scrollRectToVisible:rect animated:NO];
+}
+
+// This dismisses the keyboard when the "done" button is pressed
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+	[self updateMinFreeSpaceSetting];
+	[textField resignFirstResponder];
+	return YES;
+}
+
+- (void)textFieldDidChange:(UITextField *)textField
+{
+	[self updateCacheSpaceSlider];
+	DLog(@"file size: %llu   formatted: %@", [textField.text fileSizeFromFormat], [NSString formatFileSize:[textField.text fileSizeFromFormat]]);
+}
 
 @end

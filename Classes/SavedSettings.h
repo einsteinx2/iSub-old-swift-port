@@ -22,6 +22,7 @@
 	BOOL isJukeboxEnabled;
 	BOOL isScreenSleepEnabled;
 	float gainMultiplier;
+	BOOL isPartialCacheNextSong;
 	
 	// State Saving
 	BOOL isPlaying;	
@@ -86,6 +87,7 @@
 @property BOOL isTapAndHoldEnabled;
 @property BOOL isSwipeEnabled;
 @property float gainMultiplier;
+@property BOOL isPartialCacheNextSong;
 
 // State Saving
 @property BOOL isRecover;
@@ -104,7 +106,7 @@
 - (NSUInteger)selectedIndexForBassEffect:(BassEffectType)type;
 - (void)selectedIndexForBassEffect:(BassEffectType)type index:(NSUInteger)index isDefault:(BOOL)isDefault;*/
 
-- (NSString *)formatFileSize:(unsigned long long int)size;
+//- (NSString *)formatFileSize:(unsigned long long int)size;
 
 - (void)setupSaveState;
 - (void)loadState;

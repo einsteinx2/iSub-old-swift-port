@@ -72,7 +72,7 @@ static void destroy_versionArrays()
 		{
 			if ((NSNull *)[parameters objectForKey:key] == [NSNull null])
 			{
-				//DLog(@"Received a null parameter for key: %@ for action: %@", key, action);
+				DLog(@"Received a null parameter for key: %@ for action: %@", key, action);
 				DLog(@"Received a null parameter for key: %@ for action: %@  stack trace:\n%@", key, action, [NSThread callStackSymbols]);
 			}
 			else
@@ -98,6 +98,7 @@ static void destroy_versionArrays()
 			}
 		}
 	}
+	DLog(@"post string: %@", postString);
 	
 	// Handle special case when loading playlists
 	NSTimeInterval loadingTimeout = ISMSLoadingTimeout;

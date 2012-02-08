@@ -439,7 +439,7 @@ static void destroy_versionArrays()
 }
 
 // Releases resources when they are not longer needed.
-- (void) dealloc
+- (void)dealloc
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -462,7 +462,7 @@ static void destroy_versionArrays()
 }
 
 // Erases the screen
-- (void) erase
+- (void)erase
 {
 	[EAGLContext setCurrentContext:context];
 	

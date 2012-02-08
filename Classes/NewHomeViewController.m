@@ -403,8 +403,9 @@
 	{
 		NSDictionary *userInfo = [notification userInfo];
 		NSString *folderId = [NSString stringWithFormat:@"%i", [[userInfo objectForKey:@"folderId"] intValue]];
+		DLog(@"folderId: %@    %i", folderId, [[userInfo objectForKey:@"folderId"] intValue]);
 		
-		if (folderId < 0)
+		if ([folderId intValue] < 0)
             parameters = [NSDictionary dictionaryWithObject:@"100" forKey:@"size"];
 		else
             parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"100", @"size", n2N(folderId), @"musicFolderId", nil];
@@ -728,6 +729,8 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
+	DLog(@"received data: %@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
+	
 	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
 	
 	if (isSearch)

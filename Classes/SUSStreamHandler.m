@@ -19,6 +19,9 @@
 #import "SUSCoverArtLargeDAO.h"
 #import "SavedSettings.h"
 #import "CacheSingleton.h"
+#import "PlaylistSingleton.h"
+
+#define ISMSNumSecondsToPartialPreCache 30
 
 #define kThrottleTimeInterval 0.1
 
@@ -39,7 +42,7 @@
 #define isThrottleLoggingEnabled NO
 
 @implementation SUSStreamHandler
-@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, secondsOffset;
+@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, secondsOffset, partialPrecacheSleep;
 
 - (id)initWithSong:(Song *)song byteOffset:(unsigned long long)bOffset secondsOffset:(double)sOffset isTemp:(BOOL)isTemp delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate
 {
@@ -55,6 +58,9 @@
 		request = nil;
 		connection = nil;
 		isTempCache = isTemp;
+		partialPrecacheSleep = YES;
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playlistIndexChanged) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	}
 	
 	return self;
@@ -67,6 +73,8 @@
 
 - (void)dealloc
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
+	
 	[loadingThread release]; loadingThread = nil;
 	[fileHandle release]; fileHandle = nil;
 	[mySong release]; mySong = nil;
@@ -78,25 +86,6 @@
 - (NSString *)filePath
 {
 	return self.isTempCache ? mySong.localTempPath : mySong.localPath;
-}
-
-- (NSUInteger)bitrate
-{	
-	SavedSettings *settings = [SavedSettings sharedInstance];
-	
-	int bitRate;
-	
-	if (mySong.bitRate == nil)
-		bitRate = 128;
-	else if ([mySong.bitRate intValue] < 1000)
-		bitRate = [mySong.bitRate intValue];
-	else
-		bitRate = [mySong.bitRate intValue] / 1000;
-	
-	if (bitRate > settings.currentMaxBitrate && settings.currentMaxBitrate != 0)
-		bitRate = settings.currentMaxBitrate;
-		
-	return bitRate;
 }
 
 // Create the request and start the connection in loadingThread
@@ -155,7 +144,7 @@
 
 	loadingThread = [[NSThread alloc] initWithTarget:self selector:@selector(startConnection) object:nil];
 	
-	NSNumber *bitrate = [[NSNumber alloc] initWithInt:self.bitrate];
+	NSNumber *bitrate = [[NSNumber alloc] initWithInt:mySong.estimatedBitrate];
 	[loadingThread.threadDictionary setObject:bitrate forKey:@"bitrate"];
 	[bitrate release];
 	
@@ -169,6 +158,13 @@
 	
 	[loadingThread.threadDictionary setObject:[[mySong copy] autorelease] forKey:@"mySong"];
 	
+	[loadingThread.threadDictionary setObject:[NSNumber numberWithBool:isTempCache] forKey:@"isTempCache"];
+	
+	if ([mySong isEqualToSong:[[PlaylistSingleton sharedInstance] nextSong]])
+	{
+		[loadingThread.threadDictionary setObject:[NSNumber numberWithBool:YES] forKey:@"isNextSong"];
+	}
+		
 	[loadingThread start];
 }
 
@@ -213,6 +209,9 @@
 // Cancel the download and stop the run loop in loadingThread
 - (void)cancel
 {
+	// Pop out of infinite loop if partially pre-cached
+	self.partialPrecacheSleep = NO;
+	
 	DLog(@"request canceled");
 	[connection cancel]; 
 	[connection release]; connection = nil;
@@ -224,6 +223,12 @@
 - (void)cancelRunLoop
 {
 	CFRunLoopStop(CFRunLoopGetCurrent());
+}
+
+- (void)playlistIndexChanged
+{
+	// If this song is partially precached and sleeping, stop sleeping
+	self.partialPrecacheSleep = NO;
 }
 
 #pragma mark - Connection Delegate
@@ -300,33 +305,6 @@ BOOL isBeginning = YES;
 	NSUInteger dataLength = [incrementalData length];
 	BOOL isWifi = [[threadDict objectForKey:@"isWifi"] boolValue];
 	
-	/*if (isBeginning && [mySong.suffix isEqualToString:@"m4a"])
-	{
-		// Check for AAC frame header
-		for (int i = 0; i < [incrementalData length]; i+=4)
-		{
-			char buffer[4]; 
-			[incrementalData getBytes:buffer range:NSMakeRange(i, 4)]; 
-			int dataSize = 0;
-			char cBuf2[4]; 
-			for(int k=0; k < 4; ++k) 
-			{ 
-				cBuf2[k] = buffer[3-k]; 
-			}
-			memcpy(&dataSize, cBuf2, 4);
-			
-			uint32_t number = (uint32_t)cBuf2;
-			DLog(@"number: %u   target: %u", number, 0xFFF95080);
-			
-			if (number == 0xFFF95080)
-			{
-				// This is the first AAC frame
-				DLog(@"First AAC frame header at position: %u", i);
-				isBeginning = NO;
-			}
-		}
-	}*/
-	
 	totalBytesTransferred += dataLength;
 	bytesTransferred += dataLength;
 		
@@ -387,6 +365,23 @@ BOOL isBeginning = YES;
 		}
 		
 		[NSThread sleepForTimeInterval:delay];
+		
+		// Handle partial pre-cache next song
+		SavedSettings *settings = [SavedSettings sharedInstance];
+		BOOL isNextSong = [[threadDict objectForKey:@"isNextSong"] boolValue];
+		BOOL tempCache = [[threadDict objectForKey:@"isTempCache"] boolValue];
+		if (isNextSong && !tempCache && settings.isPartialCacheNextSong && self.partialPrecacheSleep)
+		{
+			Song *song = [threadDict objectForKey:@"mySong"];
+			NSUInteger partialPrecacheSize = (song.estimatedBitrate / 8) * ISMSNumSecondsToPartialPreCache;
+			if (totalBytesTransferred >= partialPrecacheSize)
+			{
+				while (self.partialPrecacheSleep)
+				{
+					[NSThread sleepForTimeInterval:0.1];
+				}
+			}
+		}
 		
 		NSDate *newThrottlingDate = [[NSDate alloc] init];
 		[threadDict setObject:newThrottlingDate forKey:@"throttlingDate"];

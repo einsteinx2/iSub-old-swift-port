@@ -592,34 +592,13 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			[databaseControls resetCurrentPlaylistDb];
 			for(NSArray *song in listOfSongs)
 			{
-				//DLog(@"songMD5: %@", songMD5);
 				Song *aSong = [self songFromCacheDb:[song objectAtIndex:0]];
-				//DLog(@"aSong: %@", aSong);
 				[aSong addToCurrentPlaylist];
-				//[databaseControls insertSong:aSong intoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
 			}
 						
 			currentPlaylist.isShuffle = NO;
 			
 			[musicControls playSongAtPosition:a];
-			
-			Song *currentSong = [PlaylistSingleton sharedInstance].currentSong;
-			
-			// Grab the first bytes of the song to trick Subsonic into seeing that it's being played
-            NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(currentSong.songId) forKey:@"id"];
-            NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters];
-            
-			NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:musicControls];
-			if (!connection)
-			{
-				DLog(@"Subsonic cached song play notification failed");
-			}
-			
-			// Update the playtime to now
-			NSString *query = [NSString stringWithFormat:@"UPDATE cachedSongs SET playedDate = %i WHERE md5 = '%@'", 
-														 (NSUInteger)[[NSDate date] timeIntervalSince1970], 
-														 [currentSong.songId md5]];
-			[databaseControls.songCacheDb synchronizedUpdate:query];
 			
 			if (IS_IPAD())
 			{

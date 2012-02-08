@@ -56,7 +56,7 @@
 		}
 		
 		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:.5];
+		[UIView setAnimationDuration:.25];
 		overlayView.alpha = 1.0;
 		[UIView commitAnimations];		
 		
@@ -69,7 +69,7 @@
 	if (overlayView)
 	{
 		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:.5];
+		[UIView setAnimationDuration:.25];
 		overlayView.alpha = 0.0;
 		[UIView commitAnimations];
 		

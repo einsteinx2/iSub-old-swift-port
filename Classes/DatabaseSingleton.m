@@ -101,7 +101,7 @@ static DatabaseSingleton *sharedInstance = nil;
 		}
 		if (![albumListCacheDb tableExists:@"songsCache"]) 
 		{
-			[albumListCacheDb executeUpdate:@"CREATE TABLE songsCache (folderId TEXT, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+			[albumListCacheDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE songsCache (folderId TEXT, %@)", [Song standardSongColumnSchema]]];
 			[albumListCacheDb executeUpdate:@"CREATE INDEX songsFolderId ON songsCache (folderId)"];
 		}
         if (![albumListCacheDb tableExists:@"albumsCacheCount"])
@@ -195,19 +195,19 @@ static DatabaseSingleton *sharedInstance = nil;
 		
 		if (![currentPlaylistDb tableExists:@"currentPlaylist"]) 
 		{
-			[currentPlaylistDb executeUpdate:@"CREATE TABLE currentPlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+			[currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE currentPlaylist (%@)", [Song standardSongColumnSchema]]];
 		}
 		if (![currentPlaylistDb tableExists:@"shufflePlaylist"]) 
 		{
-			[currentPlaylistDb executeUpdate:@"CREATE TABLE shufflePlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+			[currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE shufflePlaylist (%@)", [Song standardSongColumnSchema]]];
 		}
 		if (![currentPlaylistDb tableExists:@"jukeboxCurrentPlaylist"])
 		{
-			[currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxCurrentPlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+			[currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxCurrentPlaylist (%@)", [Song standardSongColumnSchema]]];
 		}
 		if (![currentPlaylistDb tableExists:@"jukeboxShufflePlaylist"]) 
 		{
-			[currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxShufflePlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+			[currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxShufflePlaylist (%@)", [Song standardSongColumnSchema]]];
 		}
 	}
 	else
@@ -255,7 +255,7 @@ static DatabaseSingleton *sharedInstance = nil;
 		
 		if (![songCacheDb tableExists:@"cachedSongs"])
 		{
-			[songCacheDb synchronizedUpdate:@"CREATE TABLE cachedSongs (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+			[songCacheDb synchronizedUpdate:[NSString stringWithFormat:@"CREATE TABLE cachedSongs (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, %@)", [Song standardSongColumnSchema]]];
 			[songCacheDb synchronizedUpdate:@"CREATE INDEX cachedDate ON cachedSongs (cachedDate DESC)"];
 			[songCacheDb synchronizedUpdate:@"CREATE INDEX playedDate ON cachedSongs (playedDate DESC)"];
 		}
@@ -280,7 +280,7 @@ static DatabaseSingleton *sharedInstance = nil;
 		}
 		if (![songCacheDb tableExists:@"genresSongs"]) 
 		{
-			[songCacheDb synchronizedUpdate:@"CREATE TABLE genresSongs (md5 TEXT UNIQUE, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+			[songCacheDb synchronizedUpdate:[NSString stringWithFormat:@"CREATE TABLE genresSongs (md5 TEXT UNIQUE, %@)", [Song standardSongColumnSchema]]];
 			[songCacheDb synchronizedUpdate:@"CREATE INDEX songGenre ON genresSongs (genre)"];
 		}
 	}
@@ -302,7 +302,7 @@ static DatabaseSingleton *sharedInstance = nil;
 		
 		if (![cacheQueueDb tableExists:@"cacheQueue"]) 
 		{
-			[cacheQueueDb executeUpdate:@"CREATE TABLE cacheQueue (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+			[cacheQueueDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE cacheQueue (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, %@)", [Song standardSongColumnSchema]]];
 			[cacheQueueDb executeUpdate:@"CREATE INDEX queueDate ON cacheQueue (cachedDate DESC)"];
 		}
 		
@@ -340,16 +340,9 @@ static DatabaseSingleton *sharedInstance = nil;
 	{
 		[bookmarksDb executeUpdate:@"PRAGMA cache_size = 1"];
 		
-		if ([bookmarksDb tableExists:@"bookmarks"]) 
+		if (![bookmarksDb tableExists:@"bookmarks"]) 
 		{
-			if (![bookmarksDb columnExists:@"bookmarks" columnName:@"bytes"])
-			{
-				[bookmarksDb executeUpdate:@"ALTER TABLE bookmarks ADD COLUMN bytes INTEGER"];
-			}
-		}
-		else
-		{
-			[bookmarksDb executeUpdate:@"CREATE TABLE bookmarks (name TEXT, position INTEGER, bytes INTEGER, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+			[bookmarksDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarks (name TEXT, position INTEGER, %@, bytes INTEGER)", [Song standardSongColumnSchema]]];
 			[bookmarksDb executeUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
 		}
 	}
@@ -357,9 +350,63 @@ static DatabaseSingleton *sharedInstance = nil;
 	{
 		DLog(@"Could not open bookmarksDb."); 
 	}
+	
+	[self updateTableDefinitions];
 }
 
-- (void) closeAllDatabases
+- (void)updateTableDefinitions
+{
+	// Add parentId column to tables if necessary
+	NSArray *parentIdDatabases = [NSArray arrayWithObjects:albumListCacheDb, currentPlaylistDb, currentPlaylistDb, currentPlaylistDb, currentPlaylistDb, songCacheDb, songCacheDb, cacheQueueDb, bookmarksDb, songCacheDb, cacheQueueDb, nil];
+	NSArray *parentIdTables = [NSArray arrayWithObjects:@"songsCache", @"currentPlaylist", @"shufflePlaylist", @"jukeboxCurrentPlaylist", @"jukeboxShufflePlaylist", @"cachedSongs", @"genresSongs", @"cacheQueue", @"bookmarks", @"cachedSongsList", @"queuedSongsList", nil];
+	NSString *columnName = @"parentId";
+	for (int i = 0; i < [parentIdDatabases count]; i++)
+	{
+		FMDatabase *db = [parentIdDatabases objectAtIndex:i];
+		NSString *table = [parentIdTables objectAtIndex:i];
+		
+		if (![db columnExists:table columnName:columnName])
+		{
+			NSString *query = [NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ TEXT", table, columnName];
+			[db executeUpdate:query];
+		}
+	}
+	
+	// Add parentId to all playlist and splaylist tables
+	NSMutableArray *playlistTableNames = [NSMutableArray arrayWithCapacity:0];
+	NSString *query = @"SELECT name FROM sqlite_master WHERE type = 'table'";
+	FMResultSet *result = [localPlaylistsDb executeQuery:query];
+	while ([result next])
+	{
+		NSString *tableName = [result stringForColumnIndex:0];
+		if ([tableName length] > 8)
+		{
+			NSString *tableNameSubstring = [tableName substringToIndex:8];
+			if ([tableNameSubstring isEqualToString:@"playlist"] ||
+				[tableNameSubstring isEqualToString:@"splaylis"])
+			{
+				[playlistTableNames addObject:tableName];
+			}
+		}
+	}
+	[result close];
+	for (NSString *table in playlistTableNames)
+	{
+		if (![localPlaylistsDb columnExists:table columnName:columnName])
+		{
+			NSString *query = [NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ TEXT", table, columnName];
+			[localPlaylistsDb executeUpdate:query];
+		}
+	}
+	
+	// Add bytes column to bookmarks table if necessary
+	if (![bookmarksDb columnExists:@"bookmarks" columnName:@"bytes"])
+	{
+		[bookmarksDb executeUpdate:@"ALTER TABLE bookmarks ADD COLUMN bytes INTEGER"];
+	}
+}
+
+- (void)closeAllDatabases
 {
 	[allAlbumsDb close]; self.allAlbumsDb = nil;
 	[allSongsDb close]; self.allSongsDb = nil;
@@ -375,7 +422,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	[bookmarksDb close]; self.bookmarksDb = nil;
 }
 
-- (void) resetCoverArtCache
+- (void)resetCoverArtCache
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
@@ -419,7 +466,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	[pool release];
 }
 
-- (void) resetFolderCache
+- (void)resetFolderCache
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
@@ -428,25 +475,51 @@ static DatabaseSingleton *sharedInstance = nil;
 	[albumListCacheDb close]; self.albumListCacheDb = nil;
 	[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@albumListCache.db", databaseFolderPath, urlStringMd5] error:NULL];
 	
+	// Setup the album list cache database
 	albumListCacheDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@albumListCache.db", databaseFolderPath, urlStringMd5]] retain];
-	[albumListCacheDb executeUpdate:@"PRAGMA cache_size = 1"];
-	if ([albumListCacheDb open] == NO) { DLog(@"Could not open albumListCacheDb."); }
-	if ([albumListCacheDb tableExists:@"albumListCache"] == NO) {
-		[albumListCacheDb executeUpdate:@"CREATE TABLE albumListCache (id TEXT PRIMARY KEY, data BLOB)"];
+	if ([albumListCacheDb open]) 
+	{ 
+		[albumListCacheDb executeUpdate:@"PRAGMA cache_size = 1"];
+		
+		if (![albumListCacheDb tableExists:@"albumListCache"]) 
+		{
+			[albumListCacheDb executeUpdate:@"CREATE TABLE albumListCache (id TEXT PRIMARY KEY, data BLOB)"];
+		}
+		if (![albumListCacheDb tableExists:@"albumsCache"]) 
+		{
+			[albumListCacheDb executeUpdate:@"CREATE TABLE albumsCache (folderId TEXT, title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
+			[albumListCacheDb executeUpdate:@"CREATE INDEX albumsFolderId ON albumsCache (folderId)"];
+		}
+		if (![albumListCacheDb tableExists:@"songsCache"]) 
+		{
+			[albumListCacheDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE songsCache (folderId TEXT, %@)", [Song standardSongColumnSchema]]];
+			[albumListCacheDb executeUpdate:@"CREATE INDEX songsFolderId ON songsCache (folderId)"];
+		}
+        if (![albumListCacheDb tableExists:@"albumsCacheCount"])
+        {
+            [albumListCacheDb executeUpdate:@"CREATE TABLE albumsCacheCount (folderId TEXT, count INTEGER)"];
+            [albumListCacheDb executeUpdate:@"CREATE INDEX albumsCacheCountFolderId ON albumsCacheCount (folderId)"];
+        }
+        if (![albumListCacheDb tableExists:@"songsCacheCount"])
+        {
+            [albumListCacheDb executeUpdate:@"CREATE TABLE songsCacheCount (folderId TEXT, count INTEGER)"];
+            [albumListCacheDb executeUpdate:@"CREATE INDEX songsCacheCountFolderId ON songsCacheCount (folderId)"];
+        }
+        if (![albumListCacheDb tableExists:@"folderLength"])
+        {
+            [albumListCacheDb executeUpdate:@"CREATE TABLE folderLength (folderId TEXT, length INTEGER)"];
+            [albumListCacheDb executeUpdate:@"CREATE INDEX folderLengthFolderId ON folderLength (folderId)"];
+        }
 	}
-	if ([albumListCacheDb tableExists:@"albumsCache"] == NO) {
-		[albumListCacheDb executeUpdate:@"CREATE TABLE albumsCache (folderId TEXT, title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
-		[albumListCacheDb executeUpdate:@"CREATE INDEX albumsFolderId ON albumsCache (folderId)"];
-	}
-	if ([albumListCacheDb tableExists:@"songsCache"] == NO) {
-		[albumListCacheDb executeUpdate:@"CREATE TABLE songsCache (folderId TEXT, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
-		[albumListCacheDb executeUpdate:@"CREATE INDEX songsFolderId ON songsCache (folderId)"];
+	else
+	{
+		DLog(@"Could not open albumListCacheDb."); 
 	}
 	
 	[pool release];
 }
 
-- (void) resetLocalPlaylistsDb
+- (void)resetLocalPlaylistsDb
 {
 	NSString *urlStringMd5 = [[[SavedSettings sharedInstance] urlString] md5];
 	
@@ -459,7 +532,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	}
 }
 
-- (void) resetCurrentPlaylistDb
+- (void)resetCurrentPlaylistDb
 {
 	NSString *urlStringMd5 = [[[SavedSettings sharedInstance] urlString] md5];
 	
@@ -467,65 +540,63 @@ static DatabaseSingleton *sharedInstance = nil;
 	[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseFolderPath, urlStringMd5] error:NULL];
 	currentPlaylistDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseFolderPath, urlStringMd5]] retain];
 	if ([currentPlaylistDb open] == NO) { DLog(@"Could not open currentPlaylistDb."); }
-	[currentPlaylistDb executeUpdate:@"CREATE TABLE currentPlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
-	[currentPlaylistDb executeUpdate:@"CREATE TABLE shufflePlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];	
-	[currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxCurrentPlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];	
-	[currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxShufflePlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];	
+	[currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE currentPlaylist (%@)", [Song standardSongColumnSchema]]];
+	[currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE shufflePlaylist (%@)", [Song standardSongColumnSchema]]];	
+	[currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxCurrentPlaylist (%@)", [Song standardSongColumnSchema]]];	
+	[currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxShufflePlaylist (%@)", [Song standardSongColumnSchema]]];	
 
 	//if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	//	[musicControls jukeboxClearPlaylist];
 }
 
-- (void) resetCurrentPlaylist
+- (void)resetCurrentPlaylist
 {
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		[currentPlaylistDb executeUpdate:@"DROP TABLE jukeboxCurrentPlaylist"];
-		[currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxCurrentPlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];	
+		[currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxCurrentPlaylist (%@)", [Song standardSongColumnSchema]]];	
 	}
 	else
 	{	
 		[currentPlaylistDb executeUpdate:@"DROP TABLE currentPlaylist"];
-		[currentPlaylistDb executeUpdate:@"CREATE TABLE currentPlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];	
+		[currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE currentPlaylist (%@)", [Song standardSongColumnSchema]]];	
 	}
 }
 
-- (void) resetShufflePlaylist
+- (void)resetShufflePlaylist
 {
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		[currentPlaylistDb executeUpdate:@"DROP TABLE jukeboxShufflePlaylist"];
-		[currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxShufflePlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];	
+		[currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxShufflePlaylist (%@)", [Song standardSongColumnSchema]]];	
 	}
 	else
 	{	
 		[currentPlaylistDb executeUpdate:@"DROP TABLE shufflePlaylist"];
-		[currentPlaylistDb executeUpdate:@"CREATE TABLE shufflePlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];	
+		[currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE shufflePlaylist (%@)", [Song standardSongColumnSchema]]];	
 	}
 }
 
-- (void) resetJukeboxPlaylist
+- (void)resetJukeboxPlaylist
 {
 	[currentPlaylistDb executeUpdate:@"DROP TABLE jukeboxCurrentPlaylist"];
-	[currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxCurrentPlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];	
+	[currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxCurrentPlaylist (%@)", [Song standardSongColumnSchema]]];	
 
 	[currentPlaylistDb executeUpdate:@"DROP TABLE jukeboxShufflePlaylist"];
-	[currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxShufflePlaylist (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];	
+	[currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxShufflePlaylist (%@)", [Song standardSongColumnSchema]]];	
 }
 
-- (void) createServerPlaylistTable:(NSString *)md5
+- (void)createServerPlaylistTable:(NSString *)md5
 {
-	//[serverPlaylistsDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)", md5]];
-	[localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE splaylist%@ (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)", md5]];
+	[localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE splaylist%@ (%@)", md5, [Song standardSongColumnSchema]]];
 }
 
-- (void) removeServerPlaylistTable:(NSString *)md5
+- (void)removeServerPlaylistTable:(NSString *)md5
 {
-	//[serverPlaylistsDb executeUpdate:[NSString stringWithFormat:@"DROP TABLE playlist%@", md5]];
 	[localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"DROP TABLE splaylist%@", md5]];
 }
 
-- (Album *) albumFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabase:(FMDatabase *)db
+- (Album *)albumFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabase:(FMDatabase *)db
 {
 	row++;
 	Album *anAlbum = nil;
@@ -557,13 +628,13 @@ static DatabaseSingleton *sharedInstance = nil;
 	return [anAlbum autorelease];
 }
 
-- (NSUInteger) serverPlaylistCount:(NSString *)md5
+- (NSUInteger)serverPlaylistCount:(NSString *)md5
 {
 	NSString *query = [NSString stringWithFormat:@"SELECT count(*) FROM splaylist%@", md5];
 	return [localPlaylistsDb intForQuery:query];
 }
 
-- (BOOL) insertAlbumIntoFolderCache:(Album *)anAlbum forId:(NSString *)folderId
+- (BOOL)insertAlbumIntoFolderCache:(Album *)anAlbum forId:(NSString *)folderId
 {
 	[albumListCacheDb executeUpdate:@"INSERT INTO albumsCache (folderId, title, albumId, coverArtId, artistName, artistId) VALUES (?, ?, ?, ?, ?, ?)", [folderId md5], anAlbum.title, anAlbum.albumId, anAlbum.coverArtId, anAlbum.artistName, anAlbum.artistId];
 	
@@ -574,7 +645,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	return ![albumListCacheDb hadError];
 }
 
-- (BOOL) insertAlbum:(Album *)anAlbum intoTable:(NSString *)table inDatabase:(FMDatabase *)db
+- (BOOL)insertAlbum:(Album *)anAlbum intoTable:(NSString *)table inDatabase:(FMDatabase *)db
 {
 	[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO %@ (title, albumId, coverArtId, artistName, artistId) VALUES (?, ?, ?, ?, ?)", table], anAlbum.title, anAlbum.albumId, anAlbum.coverArtId, anAlbum.artistName, anAlbum.artistId];
 	

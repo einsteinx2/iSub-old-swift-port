@@ -16,7 +16,7 @@
 #define ISMSVertSwipeDragMax 80
 
 #define ISMSCellEnableDelay 1.0
-#define ISMSTapAndHoldDelay 0.4
+#define ISMSTapAndHoldDelay 0.25
 
 @implementation CustomUITableView
 

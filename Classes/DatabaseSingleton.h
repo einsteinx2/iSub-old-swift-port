@@ -64,4 +64,6 @@
 - (void)shuffleAllSongs:(NSString *)folderId artist:(Artist *)theArtist;
 - (void)shufflePlaylist;
 
+- (void)updateTableDefinitions;
+
 @end

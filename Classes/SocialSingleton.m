@@ -261,7 +261,6 @@ static SocialSingleton *sharedInstance = nil;
     @synchronized(self) {
         if (sharedInstance == nil) {
             sharedInstance = [super allocWithZone:zone];
-			[sharedInstance setup];
             return sharedInstance;  // assignment and return on first allocation
         }
     }

@@ -21,9 +21,10 @@
 #import "SavedSettings.h"
 #import "SUSStreamSingleton.h"
 #import "NSMutableURLRequest+SUS.h"
+#import "MusicSingleton.h"
 
 @implementation AudioEngine
-@synthesize isEqualizerOn, startByteOffset, startSecondsOffset, currPlaylistDAO, fftDataThread, isFftDataThreadToTerminate, isPlaying, isFastForward, audioQueueShouldStopWaitingForData, state, bassReinitSampleRate;
+@synthesize isEqualizerOn, startByteOffset, startSecondsOffset, currPlaylistDAO, fftDataThread, isFftDataThreadToTerminate, isPlaying, isFastForward, audioQueueShouldStopWaitingForData, state, bassReinitSampleRate, presilenceStream;
 
 // BASS plugins
 extern void BASSFLACplugin;
@@ -134,12 +135,11 @@ void BASSLogError()
 	DLog("channel type = %x (%@)\nlength = %llu (%u:%02u)  flags: %i  freq: %i  origres: %i", i.ctype, [self stringFromStreamType:i.ctype plugin:i.plugin], bytes, time/60, time%60, i.flags, i.freq, i.origres);
 }
 
-HSTREAM presilenceStream;
 - (void)preSilenceLengthInternal:(Song *)aSong
 {
 	// Create a decode channel
 	const char *file = [aSong.localPath cStringUTF8];
-	HSTREAM presilenceStream = BASS_StreamCreateFile(FALSE, file, 0, 0, BASS_STREAM_DECODE); // create decoding channel
+	presilenceStream = BASS_StreamCreateFile(FALSE, file, 0, 0, BASS_STREAM_DECODE); // create decoding channel
 	if (!presilenceStream) presilenceStream = BASS_StreamCreateFile(FALSE, file, 0, 0, BASS_SAMPLE_SOFTWARE|BASS_STREAM_DECODE);
 }
 
@@ -147,6 +147,17 @@ HSTREAM presilenceStream;
 {
 	// Create a decode channel
 	[self performSelectorOnMainThread:@selector(preSilenceLengthInternal:) withObject:aSong waitUntilDone:YES];
+	/*if (BASS_Init(0, 44100, 0, NULL, NULL)) 	// Initialize default device.
+	{
+		// Create a decode channel
+		const char *file = [aSong.localPath cStringUTF8];
+		HSTREAM presilenceStream = BASS_StreamCreateFile(FALSE, file, 0, 0, BASS_STREAM_DECODE); // create decoding channel
+		if (!presilenceStream) presilenceStream = BASS_StreamCreateFile(FALSE, file, 0, 0, BASS_SAMPLE_SOFTWARE|BASS_STREAM_DECODE);
+	}
+	else
+	{
+		DLog(@"Can't initialize BASS in background thread");
+	}*/
 	
 	if (presilenceStream)
 	{
@@ -169,7 +180,7 @@ HSTREAM presilenceStream;
 	}
 	else
 	{
-		DLog(@"getsilencelength error: %i", BASS_ErrorGetCode());
+		BASSLogError();
 		return NSUIntegerMax;
 	}
 }
@@ -281,8 +292,7 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 				}
 				
 				SUSStreamSingleton *streamManager = [SUSStreamSingleton sharedInstance];
-				if (!theSong.isFullyCached 
-					|| (theSong.isTempCached && ![theSong isEqualToSong:streamManager.lastTempCachedSong]))
+				if (!theSong.isFullyCached)
 				{
 					// Set the audio queue state to waiting for data
 					sharedInstance.state = ISMS_AE_STATE_waitingForData;
@@ -304,12 +314,20 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 					NSTimeInterval sleepTime = 1.0; // Sleep for 1 second at a time
 					DLog(@"AQ asked for: %i  got: %i  file size: %llu", length, bytesRead, theSong.localFileSize);
 					while (!sharedInstance.audioQueueShouldStopWaitingForData 
-						   && !theSong.isFullyCached && theSong.localFileSize < neededSize)
+						   && !theSong.isFullyCached && theSong.localFileSize < neededSize
+						   && (theSong.isTempCached && ![theSong isEqualToSong:streamManager.lastTempCachedSong]))
 					{
 						// As long as audioQueueShouldStopWaitingForData is false, the song is not fully cached, and
 						// the file size is less than the current size + 10 buffers worth of data, then wait
 						DLog(@"Not enough data, sleeping for %f", sleepTime);
 						[NSThread sleepForTimeInterval:sleepTime];
+					}
+					
+					// Handle the case of a temp cached song that has ended
+					if (theSong.isTempCached && ![theSong isEqualToSong:streamManager.lastTempCachedSong])
+					{
+						sharedInstance.state = ISMS_AE_STATE_finishedWaitingForData;
+						return 0;
 					}
 					
 					// The loop finished, so unless audioQueueShouldStopWaitingForData is true (meaning the wait was cancelled)
@@ -396,10 +414,19 @@ BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFi
 			}
 			else
 			{
+				startSecondsOffset = 0;
+				startByteOffset = 0;
+				
+				// Send song start notification
+				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
+				
 				// Prepare the next song for playback
 				[self prepareNextSongStreamInBackground];
 				
 				r = [self bassGetOutputData:buffer length:length];
+				
+				// Mark the last played time in the database for cache cleanup
+				currPlaylistDAO.currentSong.playedDate = [NSDate date];
 			}
 		}
 	}
@@ -408,6 +435,14 @@ BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFi
 		DLog(@"Stream not active, freeing BASS");
 		r = BASS_STREAMPROC_END;
 		[self performSelectorOnMainThread:@selector(bassFree) withObject:nil waitUntilDone:NO];
+		
+		// Handle song caching being disabled
+		SavedSettings *settings = [SavedSettings sharedInstance];
+		if (!settings.isSongCachingEnabled || !settings.isNextSongCacheEnabled)
+		{
+			MusicSingleton *musicControls = [MusicSingleton sharedInstance];
+			[musicControls performSelectorOnMainThread:@selector(startSong) withObject:nil waitUntilDone:NO];
+		}
 	}
 	
 	return r;
@@ -838,18 +873,16 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 				}
 			}
 			
-			// Set offsets
-			if (byteOffset) startByteOffset = [byteOffset unsignedLongLongValue];
-			if (seconds) startSecondsOffset = [seconds doubleValue];
-			
 			// Skip to the byte offset
 			if (byteOffset)
 			{
+				startByteOffset = [byteOffset unsignedLongLongValue];
 				if (startByteOffset > 0)
 					[self seekToPositionInBytes:startByteOffset inStream:fileStream1];
 			}
 			else if (seconds)
 			{
+				startSecondsOffset = [seconds doubleValue];
 				if (startSecondsOffset > 0.0)
 					[self seekToPositionInSeconds:startSecondsOffset inStream:fileStream1];
 			}
@@ -877,6 +910,8 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 			
 			// Notify listeners that playback has started
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
+			
+			currentSong.playedDate = [NSDate date];
 		}
 		else if (!fileStream1 && !currentSong.isFullyCached && currentSong.localFileSize < MIN_FILESIZE_TO_FAIL)
 		{
@@ -1060,7 +1095,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	int i = 0;
 	for (BassEffectHandle *handle in eqHandleArray)
 	{
-		BASS_ChannelRemoveFX(self.currentStream, handle.effectHandle);
+		BASS_ChannelRemoveFX(stream, handle.effectHandle);
 		i++;
 	}
 	
@@ -1076,8 +1111,9 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 
 - (void)clearEqualizerValues
 {
-	[self clearEqualizerValuesFromStream:fileStream1];
-	[self clearEqualizerValuesFromStream:fileStream2];
+	//[self clearEqualizerValuesFromStream:fileStream1];
+	//[self clearEqualizerValuesFromStream:fileStream2];
+	[self clearEqualizerValuesFromStream:outStream];
 }
 
 - (void)applyEqualizerValues:(NSArray *)values toStream:(HSTREAM)stream
@@ -1102,8 +1138,9 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 
 - (void)applyEqualizerValues:(NSArray *)values
 {
-	[self applyEqualizerValues:values toStream:fileStream1];
-	[self applyEqualizerValues:values toStream:fileStream2];
+	//[self applyEqualizerValues:values toStream:fileStream1];
+	//[self applyEqualizerValues:values toStream:fileStream2];
+	[self applyEqualizerValues:values toStream:outStream];
 }
 
 - (void)updateEqParameter:(BassParamEqValue *)value

@@ -471,7 +471,6 @@ static ViewObjectsSingleton *sharedInstance = nil;
         if (sharedInstance == nil) 
 		{
             sharedInstance = [super allocWithZone:zone];
-			[sharedInstance setup];
             return sharedInstance;  // assignment and return on first allocation
         }
     }

@@ -38,8 +38,8 @@
 		
 		self.title = [[TBXML valueOfAttributeNamed:@"title" forElement:element] gtm_stringByUnescapingFromHTML];
 		self.songId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
-		if ([TBXML valueOfAttributeNamed:@"parentId" forElement:element])
-			self.parentId = parentId;
+		if ([TBXML valueOfAttributeNamed:@"parent" forElement:element])
+			self.parentId = [TBXML valueOfAttributeNamed:@"parent" forElement:element];
 		self.artist = [[TBXML valueOfAttributeNamed:@"artist" forElement:element] gtm_stringByUnescapingFromHTML];
 		if([TBXML valueOfAttributeNamed:@"album" forElement:element])
 			self.album = [[TBXML valueOfAttributeNamed:@"album" forElement:element] gtm_stringByUnescapingFromHTML];
@@ -97,8 +97,8 @@
 		if ([attributeDict objectForKey:@"id"])
 			self.songId = [attributeDict objectForKey:@"id"];
 		
-		if ([attributeDict objectForKey:@"parentId"])
-			self.parentId = [attributeDict objectForKey:@"parentId"];
+		if ([attributeDict objectForKey:@"parent"])
+			self.parentId = [attributeDict objectForKey:@"parent"];
 		
 		if ([attributeDict objectForKey:@"artist"])
 			self.artist = [attributeDict objectForKey:@"artist"];
@@ -356,6 +356,24 @@
 - (unsigned long long)localFileSize
 {
 	return [[[NSFileManager defaultManager] attributesOfItemAtPath:self.currentPath error:NULL] fileSize];
+}
+
+- (NSUInteger)estimatedBitrate
+{	
+	SavedSettings *settings = [SavedSettings sharedInstance];
+	
+	int rate;
+	if (self.bitRate == nil)
+		rate = 128;
+	else
+		rate = [self.bitRate intValue];
+	
+	if (rate > 128 && settings.currentMaxBitrate == 0)
+		rate = 128; // Subsonic default transcoding bitrate
+	else if (rate > settings.currentMaxBitrate && settings.currentMaxBitrate != 0)
+		rate = settings.currentMaxBitrate;
+	
+	return rate;
 }
 
 @end

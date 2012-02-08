@@ -116,6 +116,7 @@ typedef enum
 @property HSTREAM nextStream;
 @property HSTREAM nextStreamTempo;
 @property (readonly) HSTREAM nextReadingStream;
+@property HSTREAM presilenceStream;
 @property (retain) PlaylistSingleton *currPlaylistDAO;
 @property (retain) NSThread *fftDataThread;
 @property BOOL isFftDataThreadToTerminate;

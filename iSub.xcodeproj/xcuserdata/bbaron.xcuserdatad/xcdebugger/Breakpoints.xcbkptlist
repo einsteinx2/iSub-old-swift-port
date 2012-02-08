@@ -145,11 +145,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/PlaylistsViewController.m"
-         timestampString = "349255211.056322"
+         timestampString = "350093028.738725"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1320"
-         endingLineNumber = "1320"
+         startingLineNumber = "1319"
+         endingLineNumber = "1319"
          landmarkName = "-subsonicErrorCode:message:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -235,34 +235,6 @@
          startingLineNumber = "133"
          endingLineNumber = "133"
          landmarkName = "-updateLyricsLabel"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Classes/Song.m"
-         timestampString = "349136952.278317"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "56"
-         endingLineNumber = "56"
-         landmarkName = "-initWithTBXMLElement:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Classes/Song.m"
-         timestampString = "349136952.278317"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "62"
-         endingLineNumber = "62"
-         landmarkName = "-initWithTBXMLElement:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint

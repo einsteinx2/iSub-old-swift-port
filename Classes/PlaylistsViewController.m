@@ -20,11 +20,9 @@
 #import "PlaylistSongsViewController.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString+md5.h"
 #import "Song.h"
 #import "StoreViewController.h"
 #import "CustomUIAlertView.h"
-#import "NSString+rfcEncode.h"
 #import "TBXML.h"
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
@@ -35,6 +33,7 @@
 #import "AudioEngine.h"
 #import "FlurryAnalytics.h"
 #import "FMDatabase+Synchronized.h"
+#import "NSString+Additions.h"
 
 @interface PlaylistsViewController (Private)
 
@@ -1109,7 +1108,7 @@
 				if ([databaseControls.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists WHERE md5 = ?", [playlistNameTextField.text md5]] == 0)
 				{
 					[databaseControls.localPlaylistsDb executeUpdate:@"INSERT INTO localPlaylists (playlist, md5) VALUES (?, ?)", playlistNameTextField.text, [playlistNameTextField.text md5]];
-					[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)", [playlistNameTextField.text md5]]];
+					[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [playlistNameTextField.text md5], [Song standardSongColumnSchema]]];
 					
 					[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
 					if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
@@ -1141,7 +1140,7 @@
 		{
 			// If yes, overwrite the playlist
 			[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"DROP TABLE playlist%@", [playlistNameTextField.text md5]]];
-			[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)", [playlistNameTextField.text md5]]];
+			[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [playlistNameTextField.text md5], [Song standardSongColumnSchema]]];
 			
 			[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
 			if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
@@ -1446,7 +1445,8 @@ static NSString *kName_Error = @"error";
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		{
 			[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE jukeboxTemp"];
-			[databaseControls.currentPlaylistDb executeUpdate:@"CREATE TABLE jukeboxTemp(title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+			NSString *query = [NSString stringWithFormat:@"CREATE TABLE jukeboxTemp (%@)", [Song standardSongColumnSchema]];
+			[databaseControls.currentPlaylistDb executeUpdate:query];
 			
 			if (fromRow < toRow)
 			{
@@ -1474,7 +1474,8 @@ static NSString *kName_Error = @"error";
 			if (currentPlaylist.isShuffle)
 			{
 				[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE shuffleTemp"];
-				[databaseControls.currentPlaylistDb executeUpdate:@"CREATE TABLE shuffleTemp(title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+				NSString *query = [NSString stringWithFormat:@"CREATE TABLE shuffleTemp (%@)", [Song standardSongColumnSchema]];
+				[databaseControls.currentPlaylistDb executeUpdate:query];
 				
 				if (fromRow < toRow)
 				{
@@ -1500,7 +1501,8 @@ static NSString *kName_Error = @"error";
 			else
 			{
 				[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE currentTemp"];
-				[databaseControls.currentPlaylistDb executeUpdate:@"CREATE TABLE currentTemp(title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+				NSString *query = [NSString stringWithFormat:@"CREATE TABLE currentTemp (%@)", [Song standardSongColumnSchema]];
+				[databaseControls.currentPlaylistDb executeUpdate:query];
 				
 				if (fromRow < toRow)
 				{
@@ -1694,7 +1696,7 @@ static NSString *kName_Error = @"error";
 		}
 		cell.contentView.backgroundColor = [UIColor clearColor];
 		cell.playlistNameLabel.backgroundColor = [UIColor clearColor];
-		cell.playlistNameLabel.text = [databaseControls.localPlaylistsDb stringForQuery:@"SELECT playlist FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
+		cell.playlistNameLabel.text = [[databaseControls.localPlaylistsDb stringForQuery:@"SELECT playlist FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]] gtm_stringByUnescapingFromHTML];
 		cell.md5 = [databaseControls.localPlaylistsDb stringForQuery:@"SELECT md5 FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
 		NSUInteger songCount = [databaseControls.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", cell.md5]];
 		if (songCount == 1)
@@ -1731,7 +1733,7 @@ static NSString *kName_Error = @"error";
 		cell.contentView.backgroundColor = [UIColor clearColor];
 		cell.playlistNameLabel.backgroundColor = [UIColor clearColor];
         SUSServerPlaylist *playlist = [serverPlaylistsDataModel.serverPlaylists objectAtIndex:indexPath.row];        
-        cell.playlistNameLabel.text = [[playlist.playlistName copy] autorelease];
+        cell.playlistNameLabel.text = [playlist.playlistName gtm_stringByUnescapingFromHTML];
 		cell.backgroundView = [[[UIView alloc] init] autorelease];
 		if(indexPath.row % 2 == 0)
 			cell.backgroundView.backgroundColor = [UIColor whiteColor];

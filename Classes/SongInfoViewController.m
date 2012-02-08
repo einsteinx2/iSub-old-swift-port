@@ -30,14 +30,10 @@
 #import "SUSStreamHandler.h"
 #import "EqualizerViewController.h"
 
-//#define downloadProgressWidth (progressSlider.frame.size.width + 4)
-#define downloadProgressWidth progressSlider.frame.size.width
-
 @implementation SongInfoViewController
-@synthesize progressSlider, downloadProgress, elapsedTimeLabel, remainingTimeLabel, artistLabel, albumLabel, titleLabel, trackLabel, yearLabel, genreLabel, bitRateLabel, lengthLabel, repeatButton, bookmarkButton, shuffleButton, progressTimer, currentSong, songInfoToggleButton, progressLabelBackground, progressLabel, bookmarkCountLabel;
+@synthesize artistLabel, albumLabel, titleLabel, trackLabel, yearLabel, genreLabel, bitRateLabel, lengthLabel, currentSong, songInfoToggleButton;
 
-
-- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {	
 	NSString *name;
 	if (IS_IPAD())
@@ -63,54 +59,24 @@
 	musicControls = [MusicSingleton sharedInstance];
 	databaseControls = [DatabaseSingleton sharedInstance];
     audio = [AudioEngine sharedInstance];
-    
-    downloadProgress = [[UIView alloc] initWithFrame:progressSlider.frame];
-	downloadProgress.x = 0.0;
-	downloadProgress.y = 0.0;
-	downloadProgress.backgroundColor = [UIColor whiteColor];
-	downloadProgress.alpha = 0.3;
-	downloadProgress.userInteractionEnabled = NO;
-	[progressSlider addSubview:downloadProgress];
-	[downloadProgress release];
 
 	/////////// RESIZE PROGRESS SLIDER
 	//progressSlider.layer.transform = CATransform3DMakeScale(1.0, 2.0, 1.0);
 	/////
 	
 	[self initInfo];
-	[self updateSlider];
 	
 	self.view.y = 0;
 	self.view.x = -320;
 	
-	progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateSlider) userInfo:nil repeats:YES];
 	bitrateTimer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(updateBitrateLabel) userInfo:nil repeats:YES];
 	
-	pauseSlider = NO;
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initInfo) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initInfo) name:ISMSNotification_ServerSwitched object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateShuffleIcon) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidUnload) name:@"hideSongInfoFast" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidUnload) name:@"hideSongInfo" object:nil];
-	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-	{
-		downloadProgress.hidden = YES;
-	}
-	else
-	{
-		// Setup the update timer for the song download progress bar
-		updateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateDownloadProgressInBackground) userInfo:nil repeats:YES];
-		downloadProgress.width = 0.0;
-		//[downloadProgress newX:70.0];
-		//if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
-		//	[downloadProgress addX:2.0];
-		//DLog(@"downloadProgress.frame %@", NSStringFromCGRect(downloadProgress.frame));
-		downloadProgress.layer.cornerRadius = 5;
-		
-		[self updateDownloadProgressInBackground];
-	}
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -125,11 +91,6 @@
 	
 	// TODO: Re-enable later
 	[songInfoToggleButton release]; songInfoToggleButton = nil;
-	[progressSlider release]; progressSlider = nil;
-	[progressLabel release]; progressLabel = nil;
-	[progressLabelBackground release]; progressLabelBackground = nil;
-	[elapsedTimeLabel release]; elapsedTimeLabel = nil;
-	[remainingTimeLabel release]; remainingTimeLabel = nil;
 	[artistLabel release]; artistLabel = nil;
 	[albumLabel release]; albumLabel = nil;
 	[titleLabel release]; titleLabel = nil;
@@ -138,12 +99,8 @@
 	[genreLabel release]; genreLabel = nil;
 	[bitRateLabel release]; bitRateLabel = nil;
 	[lengthLabel release]; lengthLabel = nil;
-	[repeatButton release]; repeatButton = nil;
-	[shuffleButton release]; shuffleButton = nil;
 		
-	[progressTimer invalidate]; progressTimer = nil;
 	[bitrateTimer invalidate]; bitrateTimer = nil;
-	[updateTimer invalidate]; updateTimer = nil;
 }
 
 - (void)dealloc
@@ -166,23 +123,7 @@
 {
 	PlaylistSingleton *currentPlaylistDAO = [PlaylistSingleton sharedInstance];
 	
-	hasMoved = NO;
-	oldPosition = 0.0;
-	
-	progressSlider.minimumValue = 0.0;
-	
 	self.currentSong = currentPlaylistDAO.currentDisplaySong;
-	
-	if (currentSong.duration && ![SavedSettings sharedInstance].isJukeboxEnabled)
-	{
-		progressSlider.maximumValue = [currentSong.duration floatValue];
-		progressSlider.enabled = YES;
-	}
-	else
-	{
-		progressSlider.maximumValue = 100.0;
-		progressSlider.enabled = NO;
-	}
 		
 	artistLabel.text = currentSong.artist;
 	titleLabel.text = currentSong.title;
@@ -213,354 +154,11 @@
 		genreLabel.text = [NSString stringWithFormat:@"Genre: %@", currentSong.genre];
 	else
 		genreLabel.text = @"";
-	
-	if(currentPlaylistDAO.repeatMode == 1)
-	{
-		if (IS_IPAD())
-			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one-ipad.png"] forState:0];
-		else
-			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one.png"] forState:0];
-	}
-	else if(currentPlaylistDAO.repeatMode == 2)
-	{
-		if (IS_IPAD())
-			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all-ipad.png"] forState:0];
-		else
-			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all.png"] forState:0];
-	}
-	
-	[self updateShuffleIcon];
-	
-	NSInteger bookmarkCount = [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId];
-	if (bookmarkCount > 0)
-	{
-		bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", bookmarkCount];
-		if (IS_IPAD())
-			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on-ipad.png"];
-		else
-			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
-	}
-	else
-	{
-		bookmarkCountLabel.text = @"";
-		if(IS_IPAD())
-			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-ipad.png"];
-		else
-			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark.png"];
-	}
-}
-
-- (void)updateDownloadProgressInBackground
-{
-	[self performSelectorInBackground:@selector(updateDownloadProgress) withObject:nil];
-}
-
-- (void)updateDownloadProgress
-{
-	@autoreleasepool
-	{
-		// Set the current song progress bar
-		if ([self.currentSong isTempCached])
-		{
-			downloadProgress.hidden = YES;
-		}
-		else
-		{
-			downloadProgress.hidden = NO;
-			
-			float width = (currentSong.downloadProgress * downloadProgressWidth);
-			if (width > downloadProgressWidth)
-			{
-				width = downloadProgressWidth;
-			}
-			[self performSelectorOnMainThread:@selector(updateDownloadProgressInternal:) withObject:[NSNumber numberWithFloat:width] waitUntilDone:NO];
-		}
-	}
-}
-
-- (void)updateDownloadProgressInternal:(NSNumber *)width
-{
-	downloadProgress.width = [width floatValue];
-}
-
-- (void)updateSlider
-{	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-	{
-		elapsedTimeLabel.text = [NSString formatTime:0];
-		remainingTimeLabel.text = [NSString stringWithFormat:@"-%@",[NSString formatTime:[currentSong.duration floatValue]]];
-
-		progressSlider.value = 0.0;
-		
-		return;
-	}
-
-	if (!pauseSlider)
-	{
-		NSString *elapsedTime = [NSString formatTime:audio.progress];;
-		NSString *remainingTime = [NSString formatTime:([currentSong.duration floatValue] - audio.progress)];
-
-		progressSlider.value = audio.progress;
-		elapsedTimeLabel.text = elapsedTime;
-		remainingTimeLabel.text =[@"-" stringByAppendingString:remainingTime];
-	}
-}
-
-
-- (IBAction) touchedSlider
-{
-	pauseSlider = YES;
-}
-
-
-- (IBAction) movingSlider
-{	
-	progressLabel.hidden = NO;
-	progressLabelBackground.hidden = NO;
-	
-	CGFloat percent = progressSlider.value / progressSlider.maximumValue;
-	CGFloat x = 20 + (percent * progressSlider.frame.size.width);
-	progressLabel.center = CGPointMake(x, 15);
-	progressLabelBackground.center = CGPointMake(x - 0.5, 15.5);
-	
-	[progressLabel setText:[NSString formatTime:progressSlider.value]];
-}
-
-
-- (IBAction)movedSlider
-{	
-	if (!hasMoved)
-	{		
-		hasMoved = YES;
-		progressLabel.hidden = YES;
-		progressLabelBackground.hidden = YES;
-		
-		// Fix for skipping to end of file going to next song
-		// It seems that the max time is always off
-		if (progressSlider.value > (progressSlider.maximumValue - 8.0))
-		{
-			float newValue = progressSlider.maximumValue - 8.0;
-			
-			if (newValue < 0.0)
-				newValue = 0.0;
-			
-			progressSlider.value = newValue;
-		}
-		
-		byteOffset = audio.bitRate * 128 * progressSlider.value;
-		
-		if ([self.currentSong isTempCached])
-		{
-            [audio stop];
-			
-			audio.startByteOffset = byteOffset;
-			audio.startSecondsOffset = progressSlider.value;
-			
-			[[SUSStreamSingleton sharedInstance] removeStreamAtIndex:0];
-			[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong byteOffset:byteOffset secondsOffset:progressSlider.value atIndex:0 isTempCache:YES];
-			if ([[SUSStreamSingleton sharedInstance].handlerStack count] > 1)
-			{
-				SUSStreamHandler *handler = [[SUSStreamSingleton sharedInstance].handlerStack firstObject];
-				[handler start];
-			}
-			
-			pauseSlider = NO;
-			hasMoved = NO;
-		}
-		else 
-		{			
-			if (currentSong.isFullyCached || byteOffset <= currentSong.localFileSize)
-			{
-				[audio seekToPositionInSeconds:progressSlider.value];
-				pauseSlider = NO;
-				hasMoved = NO;
-			}
-			else
-			{
-				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Past Cache Point" message:@"You are trying to skip further than the song has cached. You can do this, but the song won't be cached. Or you can wait a little bit for the cache to catch up." delegate:self cancelButtonTitle:@"Wait" otherButtonTitles:@"OK", nil];
-				[alert show];
-				[alert release];
-			}
-		}
-	}
-}
-
-- (IBAction)skipBack30
-{
-	float newValue = 0.0;
-	if (progressSlider.value - 30.0 >= 0.0)
-	{
-		newValue = progressSlider.value - 30.0;
-	}
-	progressSlider.value = newValue;
-	[self movedSlider];
-}
-
-- (IBAction)skipForward30
-{
-	progressSlider.value = progressSlider.value + 30.0;
-	[self movedSlider];
 }
 
 - (IBAction) songInfoToggle
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"hideSongInfo" object:nil];
-}
-
-
-- (IBAction) repeatButtonToggle
-{
-	PlaylistSingleton *currentPlaylistDAO = [PlaylistSingleton sharedInstance];
-	
-	if(currentPlaylistDAO.repeatMode == 0)
-	{
-		if (IS_IPAD())
-			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one-ipad.png"] forState:0];
-		else
-			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one.png"] forState:0];
-		currentPlaylistDAO.repeatMode = 1;
-	}
-	else if(currentPlaylistDAO.repeatMode == 1)
-	{
-		if (IS_IPAD())
-			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all-ipad.png"] forState:0];
-		else
-			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all.png"] forState:0];
-		currentPlaylistDAO.repeatMode = 2;
-	}
-	else if(currentPlaylistDAO.repeatMode == 2)
-	{
-		if (IS_IPAD())
-			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-ipad.png"] forState:0];
-		else
-			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat.png"] forState:0];
-		currentPlaylistDAO.repeatMode = 0;
-	}
-}
-
-- (IBAction) bookmarkButtonToggle
-{
-	bookmarkPosition = (int)progressSlider.value;
-	
-	UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Bookmark Name:" message:@"this gets covered" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
-	bookmarkNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 22.0)];
-	[bookmarkNameTextField setBackgroundColor:[UIColor whiteColor]];
-	[myAlertView addSubview:bookmarkNameTextField];
-	if ([[[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."] objectAtIndex:0] isEqualToString:@"3"])
-	{
-		CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 100.0);
-		[myAlertView setTransform:myTransform];
-	}
-	[myAlertView show];
-	[myAlertView release];
-	[bookmarkNameTextField becomeFirstResponder];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{	
-	if ([alertView.title isEqualToString:@"Sorry"])
-	{
-		hasMoved = NO;
-	}
-	if ([alertView.title isEqualToString:@"Past Cache Point"])
-	{
-		if (buttonIndex == 0)
-		{
-			pauseSlider = NO;
-			hasMoved = NO;
-		}
-		else if(buttonIndex == 1)
-		{
-            [audio stop];
-			audio.startByteOffset = byteOffset;
-			audio.startSecondsOffset = progressSlider.value;
-			
-			[[SUSStreamSingleton sharedInstance] removeStreamAtIndex:0];
-            DLog(@"byteOffset: %i", byteOffset);
-			DLog(@"starting temp stream");
-			[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong byteOffset:byteOffset secondsOffset:progressSlider.value atIndex:0 isTempCache:YES];
-			if ([[SUSStreamSingleton sharedInstance].handlerStack count] > 1)
-			{
-				SUSStreamHandler *handler = [[SUSStreamSingleton sharedInstance].handlerStack firstObject];
-				[handler start];
-			}
-			pauseSlider = NO;
-			hasMoved = NO;
-		}
-	}
-	else if([alertView.title isEqualToString:@"Bookmark Name:"])
-	{
-		[bookmarkNameTextField resignFirstResponder];
-		//bookmarkEntry = [[NSArray alloc] initWithObjects:[bookmarkNameTextField.text copy], [appDelegate.currentSongObject copy], [NSNumber numberWithFloat:progressSlider.value], nil];
-		if(buttonIndex == 1)
-		{
-			// Check if the bookmark exists
-			if ([databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE name = ?", bookmarkNameTextField.text] == 0)
-			{
-				// Bookmark doesn't exist so save it
-				[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarks (name, position, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size];
-				bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]];
-				if (IS_IPAD())
-					bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on-ipad.png"];
-				else
-					bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
-			}
-			else
-			{
-				// Bookmark exists so ask to overwrite
-				UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Overwrite?" message:@"There is already a bookmark with this name. Overwrite it?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-				[myAlertView show];
-				[myAlertView release];
-			}
-		}
-	}
-	else if([alertView.title isEqualToString:@"Overwrite?"])
-	{
-		if(buttonIndex == 1)
-		{
-			// Overwrite the bookmark
-			[databaseControls.bookmarksDb executeUpdate:@"DELETE FROM bookmarks WHERE name = ?", bookmarkNameTextField.text];
-			[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarks (name, position, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", bookmarkNameTextField.text, [NSNumber numberWithInt:(int)progressSlider.value], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size];
-			bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]];
-			if (IS_IPAD())
-				bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on-ipad.png"];
-			else
-				bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
-		}
-	}
-}
-
-- (IBAction)shuffleButtonToggle
-{	
-	[viewObjects showLoadingScreenOnMainWindow];
-	
-	PlaylistSingleton *currentPlaylistDAO = [PlaylistSingleton sharedInstance];
-	[currentPlaylistDAO performSelectorInBackground:@selector(shuffleToggle) withObject:nil];
-}
-
-- (void)updateShuffleIcon
-{
-	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
-	
-	if (currentPlaylist.isShuffle)
-	{
-		if (![SavedSettings sharedInstance].isJukeboxEnabled)
-		{
-			if (IS_IPAD())
-				[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-on-ipad.png"] forState:0];
-			else
-				[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-on.png"] forState:0];
-		}
-	}
-	else
-	{
-		if (IS_IPAD())
-			[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-ipad.png"] forState:0];
-		else
-			[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle.png"] forState:0];
-	}
-	
-	[viewObjects hideLoadingScreen];
 }
 
 @end

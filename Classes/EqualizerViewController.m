@@ -33,7 +33,7 @@
 	[UIView setAnimationDuration:duration];
 	if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
 	{
-		[[UIApplication sharedApplication] setStatusBarHidden:NO animated:YES];
+		//[[UIApplication sharedApplication] setStatusBarHidden:NO animated:YES];
 		equalizerPath.alpha = 1.0;
 		for (EqualizerPointView *view in equalizerPointViews)
 		{
@@ -42,7 +42,7 @@
 	}
 	else
 	{
-		[[UIApplication sharedApplication] setStatusBarHidden:YES animated:YES];
+		//[[UIApplication sharedApplication] setStatusBarHidden:YES animated:YES];
 		equalizerPath.alpha = 0.0;
 		for (EqualizerPointView *view in equalizerPointViews)
 		{
@@ -116,6 +116,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
+	
+	[[UIApplication sharedApplication] setStatusBarHidden:YES animated:NO];
+	
 	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
 		[self createEqViews];
 	
@@ -186,7 +189,9 @@
 {
 	[self removeEqViews];
 	
-	equalizerPointViews = [[NSMutableArray alloc] initWithCapacity:0];
+	AudioEngine *engine = [AudioEngine sharedInstance];
+	
+	equalizerPointViews = [[NSMutableArray alloc] initWithCapacity:[[engine equalizerValues] count]];
 	for (BassParamEqValue *value in [AudioEngine sharedInstance].equalizerValues)
 	{
 		DLog(@"eq handle: %i", value.handle);
@@ -453,31 +458,35 @@
 	{
 		if ([touch tapCount] == 1)
 		{
-			[self performSelector:@selector(type:) withObject:nil afterDelay:0.25];
+			// Only change visualizers in lanscape mode, when visualier is full screen
+			if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
+				[self performSelector:@selector(type:) withObject:nil afterDelay:0.25];
 		}
 		if ([touch tapCount] == 2)
 		{
 			[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(type:) object:nil];
 			
-			// add a point
-			DLog(@"double tap, adding point");
-			
-			// Find the tap point
-			CGPoint point = [touch locationInView:self.equalizerView];
-			
-			// Create the eq view
-			EqualizerPointView *eqView = [[EqualizerPointView alloc] initWithCGPoint:point parentSize:self.equalizerView.bounds.size];
-			BassParamEqValue *value = [[AudioEngine sharedInstance] addEqualizerValue:eqView.eqValue.parameters];
-			eqView.eqValue = value;
-			
-			// Add the view
-			[equalizerPointViews addObject:eqView];
-			[self.view addSubview:eqView];
-			[eqView release];
-			
-			[self saveTempCustomPreset];
-			
-			return;
+			// Only create EQ points in portrait mode when EQ is visible
+			if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+			{
+				// add a point
+				DLog(@"double tap, adding point");
+				
+				// Find the tap point
+				CGPoint point = [touch locationInView:self.equalizerView];
+				
+				// Create the eq view
+				EqualizerPointView *eqView = [[EqualizerPointView alloc] initWithCGPoint:point parentSize:self.equalizerView.bounds.size];
+				BassParamEqValue *value = [[AudioEngine sharedInstance] addEqualizerValue:eqView.eqValue.parameters];
+				eqView.eqValue = value;
+				
+				// Add the view
+				[equalizerPointViews addObject:eqView];
+				[self.view addSubview:eqView];
+				[eqView release];
+				
+				[self saveTempCustomPreset];
+			}
 		}
 	}
 }
@@ -530,11 +539,11 @@
 {
 	if([AudioEngine sharedInstance].isEqualizerOn)
 	{
-		[toggleButton setTitle:@"EQ Off" forState:UIControlStateNormal];
+		[toggleButton setTitle:@"EQ On" forState:UIControlStateNormal];
 	}
 	else
 	{
-		[toggleButton setTitle:@"EQ On" forState:UIControlStateNormal];
+		[toggleButton setTitle:@"EQ Off" forState:UIControlStateNormal];
 	}
 }
 

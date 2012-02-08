@@ -41,7 +41,7 @@
 					<object class="IBUIView" id="347511592">
 						<reference key="NSNextResponder" ref="607013602"/>
 						<int key="NSvFlags">290</int>
-						<string key="NSFrameSize">{320, 320}</string>
+						<string key="NSFrameSize">{480, 320}</string>
 						<reference key="NSSuperview" ref="607013602"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="1065192532"/>
@@ -55,7 +55,7 @@
 					<object class="IBUIView" id="1065192532">
 						<reference key="NSNextResponder" ref="607013602"/>
 						<int key="NSvFlags">274</int>
-						<string key="NSFrameSize">{320, 320}</string>
+						<string key="NSFrameSize">{480, 160}</string>
 						<reference key="NSSuperview" ref="607013602"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="621224345"/>
@@ -70,7 +70,7 @@
 					</object>
 					<object class="IBUIButton" id="949317054">
 						<reference key="NSNextResponder" ref="607013602"/>
-						<int key="NSvFlags">268</int>
+						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{3, 418}, {100, 37}}</string>
 						<reference key="NSSuperview" ref="607013602"/>
 						<reference key="NSWindow"/>
@@ -105,8 +105,8 @@
 					</object>
 					<object class="IBUILabel" id="792157056">
 						<reference key="NSNextResponder" ref="607013602"/>
-						<int key="NSvFlags">269</int>
-						<string key="NSFrame">{{103, 411}, {6, 50}}</string>
+						<int key="NSvFlags">293</int>
+						<string key="NSFrame">{{155, 411}, {6, 50}}</string>
 						<reference key="NSSuperview" ref="607013602"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="594884267"/>
@@ -138,8 +138,8 @@
 					</object>
 					<object class="IBUIButton" id="594884267">
 						<reference key="NSNextResponder" ref="607013602"/>
-						<int key="NSvFlags">269</int>
-						<string key="NSFrame">{{111, 418}, {113, 37}}</string>
+						<int key="NSvFlags">293</int>
+						<string key="NSFrame">{{196, 418}, {113, 37}}</string>
 						<reference key="NSSuperview" ref="607013602"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="346405848"/>
@@ -160,8 +160,8 @@
 					</object>
 					<object class="IBUILabel" id="346405848">
 						<reference key="NSNextResponder" ref="607013602"/>
-						<int key="NSvFlags">269</int>
-						<string key="NSFrame">{{223, 411}, {6, 50}}</string>
+						<int key="NSvFlags">293</int>
+						<string key="NSFrame">{{336, 411}, {6, 50}}</string>
 						<reference key="NSSuperview" ref="607013602"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="1037058280"/>
@@ -186,10 +186,11 @@
 					</object>
 					<object class="IBUIButton" id="1037058280">
 						<reference key="NSNextResponder" ref="607013602"/>
-						<int key="NSvFlags">265</int>
-						<string key="NSFrame">{{233, 417}, {82, 38}}</string>
+						<int key="NSvFlags">289</int>
+						<string key="NSFrame">{{393, 417}, {82, 38}}</string>
 						<reference key="NSSuperview" ref="607013602"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:225</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -207,8 +208,8 @@
 					</object>
 					<object class="IBUITextField" id="561648492">
 						<reference key="NSNextResponder" ref="607013602"/>
-						<int key="NSvFlags">266</int>
-						<string key="NSFrame">{{20, 372}, {280, 31}}</string>
+						<int key="NSvFlags">290</int>
+						<string key="NSFrame">{{20, 372}, {440, 31}}</string>
 						<reference key="NSSuperview" ref="607013602"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="949317054"/>
@@ -243,8 +244,8 @@
 					</object>
 					<object class="IBUIView" id="621224345">
 						<reference key="NSNextResponder" ref="607013602"/>
-						<int key="NSvFlags">266</int>
-						<string key="NSFrame">{{0, 320}, {320, 1}}</string>
+						<int key="NSvFlags">290</int>
+						<string key="NSFrame">{{0, 320}, {480, 1}}</string>
 						<reference key="NSSuperview" ref="607013602"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="151441153"/>
@@ -258,8 +259,8 @@
 					</object>
 					<object class="IBUISlider" id="735940589">
 						<reference key="NSNextResponder" ref="607013602"/>
-						<int key="NSvFlags">267</int>
-						<string key="NSFrame">{{108, 334}, {193, 23}}</string>
+						<int key="NSvFlags">291</int>
+						<string key="NSFrame">{{165, 334}, {295, 23}}</string>
 						<reference key="NSSuperview" ref="607013602"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="561648492"/>
@@ -274,8 +275,8 @@
 					</object>
 					<object class="IBUILabel" id="151441153">
 						<reference key="NSNextResponder" ref="607013602"/>
-						<int key="NSvFlags">270</int>
-						<string key="NSFrame">{{21, 332}, {79, 24}}</string>
+						<int key="NSvFlags">294</int>
+						<string key="NSFrame">{{21, 332}, {121, 24}}</string>
 						<reference key="NSSuperview" ref="607013602"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="735940589"/>
@@ -304,16 +305,12 @@
 						</object>
 					</object>
 				</array>
-				<string key="NSFrameSize">{320, 480}</string>
+				<string key="NSFrameSize">{480, 320}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="347511592"/>
 				<string key="NSReuseIdentifierKey">_NS:196</string>
 				<reference key="IBUIBackgroundColor" ref="533600151"/>
-				<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
-					<int key="IBUIInterfaceOrientation">3</int>
-					<int key="interfaceOrientation">3</int>
-				</object>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
 		</array>

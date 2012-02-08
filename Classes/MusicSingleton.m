@@ -115,9 +115,9 @@ static MusicSingleton *sharedInstance = nil;
 
 #pragma mark Download Methods
 
-- (Song *) nextQueuedSong
+- (Song *)nextQueuedSong
 {
-	Song *aSong = [[Song alloc] init];
+	Song *aSong = nil;
 	FMResultSet *result = [databaseControls.songCacheDb synchronizedQuery:@"SELECT * FROM cacheQueue WHERE finished = 'NO' LIMIT 1"];
 	if ([databaseControls.songCacheDb hadError]) 
 	{
@@ -126,30 +126,7 @@ static MusicSingleton *sharedInstance = nil;
 	else
 	{
 		[result next];
-		
-		if ([result stringForColumn:@"title"] != nil)
-			aSong.title = [[result stringForColumn:@"title"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-		if ([result stringForColumn:@"songId"] != nil)
-			aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
-		if ([result stringForColumn:@"artist"] != nil)
-			aSong.artist = [[result stringForColumn:@"artist"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-		if ([result stringForColumn:@"album"] != nil)
-			aSong.album = [[result stringForColumn:@"album"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-		if ([result stringForColumn:@"genre"] != nil)
-			aSong.genre = [[result stringForColumn:@"genre"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-		if ([result stringForColumn:@"coverArtId"] != nil)
-			aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
-		if ([result stringForColumn:@"path"] != nil)
-			aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
-		if ([result stringForColumn:@"suffix"] != nil)
-			aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
-		if ([result stringForColumn:@"transcodedSuffix"] != nil)
-			aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
-		aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
-		aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
-		aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
-		aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
-		aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
+		aSong = [Song songFromDbResult:result];
 	}
 	
 	[result close];
@@ -394,6 +371,9 @@ double startSongSeconds = 0.0;
 // TODO: put this method somewhere and name it properly
 - (void)startSongAtOffsetInSeconds2
 {
+	SavedSettings *settings = [SavedSettings sharedInstance];
+	SUSStreamSingleton *streamSingleton = [SUSStreamSingleton sharedInstance];
+	
 	// Always clear the temp cache
 	[[CacheSingleton sharedInstance] clearTempCache];
 	
@@ -405,9 +385,14 @@ double startSongSeconds = 0.0;
 		// The song is fully cached, start streaming from the local copy
 		[audio startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] 
 							orSeconds:[NSNumber numberWithDouble:startSongSeconds]];
+		
+		// Fill the stream queue
+		if (!viewObjects.isOfflineMode)
+			[streamSingleton fillStreamQueue];
 	}
 	else if (!currentSong.isFullyCached && viewObjects.isOfflineMode)
 	{
+		// The song is not fully cached and this is offline mode, so warn that it can't be played
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" 
 																	message:@"Unable to play this song in offline mode as it isn't fully cached." 
 																   delegate:self 
@@ -420,14 +405,12 @@ double startSongSeconds = 0.0;
 	else
 	{
 		// Clear the stream manager
-		SavedSettings *settings = [SavedSettings sharedInstance];
-		SUSStreamSingleton *streamSingleton = [SUSStreamSingleton sharedInstance];
 		[streamSingleton removeAllStreams];
 		
 		BOOL isTempCache = NO;
 		if (startSongBytes > 0)
 			isTempCache = YES;
-		else if (!settings.isSongCachingEnabled || !settings.isCacheUnlocked)
+		else if (!settings.isSongCachingEnabled)
 			isTempCache = YES;
 		
 		// Start downloading the current song from the correct offset
@@ -438,7 +421,8 @@ double startSongSeconds = 0.0;
 								isTempCache:isTempCache];
 		
 		// Fill the stream queue
-		[streamSingleton fillStreamQueue];
+		if (settings.isSongCachingEnabled)
+			[streamSingleton fillStreamQueue];
 	}
 	
 	/*DLog(@"running startSongAtOffsetInSeconds2");
@@ -548,6 +532,7 @@ double startSongSeconds = 0.0;
 	Song *currentSong = currentPlaylistDAO.currentSong;
 		
 	DLog(@"isRecover: %@  currentSong: %@", NSStringFromBOOL(settings.isRecover), currentSong);
+	DLog(@"byteOffset: %llu   seekTime: %f", settings.byteOffset, settings.seekTime);
 	
 	if (currentSong && settings.isRecover)
 	{
@@ -1019,7 +1004,7 @@ double startSongSeconds = 0.0;
 	
 	connectionQueue = [[BBSimpleConnectionQueue alloc] init];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLockScreenInfo) name:ISMSNotification_SongPlaybackStarted object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLockScreenInfo) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLockScreenInfo) name:ISMSNotification_AlbumArtLargeDownloaded object:nil];
 	
 	return self;

@@ -321,7 +321,7 @@
 			[databaseControls.bookmarksDb executeUpdate:[NSString stringWithFormat:@"DELETE FROM bookmarks WHERE ROWID = %i", row]];
 		}
 		[databaseControls.bookmarksDb executeUpdate:@"DROP TABLE bookmarksTemp"];
-		[databaseControls.bookmarksDb executeUpdate:@"CREATE TABLE bookmarksTemp (name TEXT, position INTEGER, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+		[databaseControls.bookmarksDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarksTemp (name TEXT, position INTEGER, %@, bytes INTEGER)", [Song standardSongColumnSchema]]];
 		[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks"];
 		[databaseControls.bookmarksDb executeUpdate:@"DROP TABLE bookmarks"];
 		[databaseControls.bookmarksDb executeUpdate:@"ALTER TABLE bookmarksTemp RENAME TO bookmarks"];
@@ -350,7 +350,7 @@
 	NSInteger toRow = toIndexPath.row + 1;
 	
 	[databaseControls.bookmarksDb executeUpdate:@"DROP TABLE bookmarksTemp"];
-	[databaseControls.bookmarksDb executeUpdate:@"CREATE TABLE bookmarksTemp (name TEXT, position INTEGER, title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+	[databaseControls.bookmarksDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarksTemp (name TEXT, position INTEGER, %@, bytes INTEGER)", [Song standardSongColumnSchema]]];
 		
 	if (fromRow < toRow)
 	{
@@ -520,6 +520,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
+	// TODO: verify bookmark loading
 	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
 	
 	[databaseControls resetCurrentPlaylistDb];

@@ -26,8 +26,6 @@
 @property long totalBytesTransferred;
 @property long bytesTransferred;
 
-@property (readonly) NSUInteger bitrate;
-
 @property BOOL isDelegateNotifiedToStartPlayback;
 
 @property NSUInteger numOfReconnects;
@@ -36,6 +34,8 @@
 
 @property BOOL isTempCache;
 @property (readonly) NSString *filePath;
+
+@property BOOL partialPrecacheSleep;
 
 - (void)start:(BOOL)resume;
 - (void)start;

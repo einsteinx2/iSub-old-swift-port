@@ -183,7 +183,8 @@ static NSInteger order (id a, id b, void* context)
 	[databaseControls.allAlbumsDb executeUpdate:@"CREATE TEMPORARY TABLE allAlbumsTemp(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
 	
 	[databaseControls.allSongsDb executeUpdate:@"DROP TABLE IF EXISTS allSongsTemp"];
-	[databaseControls.allSongsDb executeUpdate:@"CREATE TEMPORARY TABLE allSongsTemp (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+	NSString *query = [NSString stringWithFormat:@"CREATE TEMPORARY TABLE allSongsTemp (%@)", [Song standardSongColumnSchema]];
+	[databaseControls.allSongsDb executeUpdate:query];
 	
 	[databaseControls.genresDb executeUpdate:@"DROP TABLE IF EXISTS genresTemp"];
 	[databaseControls.genresDb executeUpdate:@"CREATE TEMPORARY TABLE genresTemp (genre TEXT)"];
@@ -232,10 +233,13 @@ static NSInteger order (id a, id b, void* context)
 	// Create allSongs tables
 	[databaseControls.allSongsDb executeUpdate:@"CREATE TABLE resumeLoad (albumNum INTEGER, iteration INTEGER)"];
 	[databaseControls.allSongsDb executeUpdate:@"INSERT INTO resumeLoad (albumNum, iteration) VALUES (1, 0)"];
-	[databaseControls.allSongsDb executeUpdate:@"CREATE VIRTUAL TABLE allSongs USING FTS3 (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER, tokenize=porter)"];
+	NSString *query = [NSString stringWithFormat:@"CREATE VIRTUAL TABLE allSongs USING FTS3 (%@, tokenize=porter)", [Song standardSongColumnSchema]];
+	[databaseControls.allSongsDb executeUpdate:query];
 	//[databaseControls.allSongsDb executeUpdate:@"CREATE INDEX title ON allSongs (title ASC)"];
 	//[databaseControls.allSongsDb executeUpdate:@"CREATE INDEX songGenre ON allSongs (genre)"];
-	[databaseControls.allSongsDb executeUpdate:@"CREATE TABLE allSongsUnsorted (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+	
+	query = [NSString stringWithFormat:@"CREATE TABLE allSongsUnsorted (%@)", [Song standardSongColumnSchema]];
+	[databaseControls.allSongsDb executeUpdate:query];
 	//[databaseControls.allSongsDb executeUpdate:@"CREATE INDEX title ON allSongsUnsorted (title ASC)"];
 	[databaseControls.allSongsDb executeUpdate:@"CREATE TABLE allSongsCount (count INTEGER)"];
 	
@@ -339,7 +343,8 @@ static NSInteger order (id a, id b, void* context)
 	[databaseControls.allAlbumsDb executeUpdate:@"INSERT INTO allAlbums SELECT * FROM allAlbumsUnsorted ORDER BY title COLLATE NOCASE"];
 	
 	[databaseControls.allSongsDb executeUpdate:@"DROP TABLE IF EXISTS allSongs"];
-	[databaseControls.allSongsDb executeUpdate:@"CREATE VIRTUAL TABLE allSongs USING FTS3 (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER, tokenize=porter)"];
+	NSString *query = [NSString stringWithFormat:@"CREATE VIRTUAL TABLE allSongs USING FTS3 (%@, tokenize=porter)", [Song standardSongColumnSchema]];
+	[databaseControls.allSongsDb executeUpdate:query];
 	DLog(@"sorting allSongs");
 	[databaseControls.allSongsDb executeUpdate:@"INSERT INTO allSongs SELECT * FROM allSongsUnsorted ORDER BY title COLLATE NOCASE"];
 	
@@ -661,7 +666,8 @@ static NSString *kName_Error = @"error";
 								[databaseControls.allSongsDb executeUpdate:@"INSERT INTO allSongsUnsorted SELECT * FROM allSongsTemp"];
 								//[databaseControls.allSongsDb executeUpdate:@"DELETE * FROM allSongsTemp"];
 								[databaseControls.allSongsDb executeUpdate:@"DROP TABLE IF EXISTS allSongsTemp"];
-								[databaseControls.allSongsDb executeUpdate:@"CREATE TEMPORARY TABLE allSongsTemp (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+								NSString *query = [NSString stringWithFormat:@"CREATE TEMPORARY TABLE allSongsTemp (%@)", [Song standardSongColumnSchema]];
+								[databaseControls.allSongsDb executeUpdate:query];
 								tempSongsCount = 0;
 								DLog(@"allSongsTemp flush time: %f  total records: %i", [[NSDate date] timeIntervalSinceDate:startTime3], totalSongsProcessed);
 							}
@@ -766,7 +772,8 @@ static NSString *kName_Error = @"error";
 			[databaseControls.allSongsDb executeUpdate:@"INSERT INTO allSongsUnsorted SELECT * FROM allSongsTemp"];
 			//[databaseControls.allSongsDb executeUpdate:@"DELETE * FROM allSongsTemp"];
 			[databaseControls.allSongsDb executeUpdate:@"DROP TABLE IF EXISTS allSongsTemp"];
-			[databaseControls.allSongsDb executeUpdate:@"CREATE TEMPORARY TABLE allSongsTemp (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+			NSString *query = [NSString stringWithFormat:@"CREATE TEMPORARY TABLE allSongsTemp (%@)", [Song standardSongColumnSchema]];
+			[databaseControls.allSongsDb executeUpdate:query];
 			tempSongsCount = 0;
 			
 			// Flush the records to disk
@@ -826,7 +833,8 @@ static NSString *kName_Error = @"error";
 			[databaseControls.allSongsDb executeUpdate:@"INSERT INTO allSongsUnsorted SELECT * FROM allSongsTemp"];
 			//[databaseControls.allSongsDb executeUpdate:@"DELETE * FROM allSongsTemp"];
 			[databaseControls.allSongsDb executeUpdate:@"DROP TABLE IF EXISTS allSongsTemp"];
-			[databaseControls.allSongsDb executeUpdate:@"CREATE TEMPORARY TABLE allSongsTemp (title TEXT, songId TEXT, artist TEXT, album TEXT, genre TEXT, coverArtId TEXT, path TEXT, suffix TEXT, transcodedSuffix TEXT, duration INTEGER, bitRate INTEGER, track INTEGER, year INTEGER, size INTEGER)"];
+			NSString *query = [NSString stringWithFormat:@"CREATE TEMPORARY TABLE allSongsTemp (%@)", [Song standardSongColumnSchema]];
+			[databaseControls.allSongsDb executeUpdate:query];
 			tempSongsCount = 0;
 			
 			// Flush the records to disk

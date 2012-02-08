@@ -19,23 +19,30 @@ static CacheSingleton *sharedInstance = nil;
 
 @implementation CacheSingleton
 
-@synthesize cacheCheckInterval, cacheSize;
+@synthesize cacheCheckInterval, cacheSize, cacheCheckTimer;
 
 - (unsigned long long)totalSpace
 {
-	return [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:[SavedSettings sharedInstance].cachesPath error:NULL] objectForKey:NSFileSystemSize] unsignedLongLongValue];
+	NSString *path = [SavedSettings sharedInstance].cachesPath;
+	NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfFileSystemForPath:path error:NULL];
+	return [[attributes objectForKey:NSFileSystemSize] unsignedLongLongValue];
 }
 
 - (unsigned long long)freeSpace
 {
-	return [[[[NSFileManager defaultManager] attributesOfFileSystemForPath:[SavedSettings sharedInstance].cachesPath error:NULL] objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
+	NSString *path = [SavedSettings sharedInstance].cachesPath;
+	NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfFileSystemForPath:path error:NULL];
+	return [[attributes objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
 }
 
 - (void)startCacheCheckTimer
 {
 	[self stopCacheCheckTimer];
-	cacheCheckTimer = [NSTimer timerWithTimeInterval:cacheCheckInterval target:self 
-											selector:@selector(checkCache) userInfo:nil repeats:YES];
+	self.cacheCheckTimer = [NSTimer timerWithTimeInterval:cacheCheckInterval 
+												   target:self 
+												 selector:@selector(checkCache) 
+												 userInfo:nil 
+												  repeats:YES];
 }
 
 - (void)startCacheCheckTimerWithInterval:(NSTimeInterval)interval
@@ -47,7 +54,7 @@ static CacheSingleton *sharedInstance = nil;
 - (void)stopCacheCheckTimer
 {
 	[cacheCheckTimer invalidate];
-	cacheCheckTimer = nil;
+	self.cacheCheckTimer = nil;
 }
 
 - (NSUInteger)numberOfCachedSongs
@@ -59,12 +66,11 @@ static CacheSingleton *sharedInstance = nil;
 //
 // If the available space has dropped below the max cache size since last app load, adjust it.
 //
-- (void) adjustCacheSize
+- (void)adjustCacheSize
 {
 	SavedSettings *settings = [SavedSettings sharedInstance];
 	
 	// Only adjust if the user is using max cache size as option
-	//if ([[settingsDictionary objectForKey:@"cachingTypeSetting"] intValue] == 1)
 	if (settings.cachingType == 1)
 	{
 		unsigned long long freeSpace = self.freeSpace;
@@ -97,7 +103,7 @@ static CacheSingleton *sharedInstance = nil;
 			if (settings.autoDeleteCacheType == 0)
 				songMD5 = [databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
 			else
-				songMD5 = [databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY chachedDate ASC LIMIT 1"];
+				songMD5 = [databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
 			//DLog(@"removing %@", songMD5);
 			[Song removeSongFromCacheDbByMD5:songMD5];			
 		}
@@ -114,7 +120,7 @@ static CacheSingleton *sharedInstance = nil;
 			}
 			else
 			{
-				songMD5 = [databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY chachedDate ASC LIMIT 1"];
+				songMD5 = [databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
 			}
 			//songSize = [databaseControls.songCacheDb synchronizedIntForQuery:@"SELECT size FROM cachedSongs WHERE md5 = ?", songMD5];
 			Song *aSong = [Song songFromCacheDb:songMD5];
@@ -142,10 +148,8 @@ static CacheSingleton *sharedInstance = nil;
 
 - (void)findCacheSize
 {
-	//NSDate *startTime = [NSDate date];
-	
 	SavedSettings *settings = [SavedSettings sharedInstance];
-		
+	
 	unsigned long long size = 0;
 	for (NSString *path in [[NSFileManager defaultManager] subpathsAtPath:settings.songCachePath]) 
 	{
@@ -153,12 +157,9 @@ static CacheSingleton *sharedInstance = nil;
 	}
 	
 	cacheSize = size;
-	
-	//DLog(@"cache size: %i", cacheSize);
-	//DLog(@"findCacheSize took %f", [[NSDate date] timeIntervalSinceDate:startTime]); 
 }
 
-- (void) checkCache
+- (void)checkCache
 {
 	[self findCacheSize];
 	
@@ -257,8 +258,8 @@ static CacheSingleton *sharedInstance = nil;
 	// Setup the cache check
 	cacheCheckInterval = 120.0;
 	[self adjustCacheSize];
-	[self checkCache];
 	[self startCacheCheckTimer];
+	[self performSelector:@selector(checkCache) withObject:nil afterDelay:15.0];
 }
 
 + (CacheSingleton *)sharedInstance
@@ -278,7 +279,6 @@ static CacheSingleton *sharedInstance = nil;
         if (sharedInstance == nil) 
 		{
             sharedInstance = [super allocWithZone:zone];
-			[sharedInstance setup];
             return sharedInstance;  // assignment and return on first allocation
         }
     }
