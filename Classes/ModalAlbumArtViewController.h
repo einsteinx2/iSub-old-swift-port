@@ -12,6 +12,7 @@
 @interface ModalAlbumArtViewController : UIViewController 
 
 @property (nonatomic, retain) IBOutlet AsynchronousImageView *albumArt;
+@property (nonatomic, retain) IBOutlet UIImageView *albumArtReflection;
 @property (nonatomic, retain) IBOutlet UIView *labelHolderView;
 @property (nonatomic, retain) IBOutlet UILabel *artistLabel; 
 @property (nonatomic, retain) IBOutlet UILabel *albumLabel;

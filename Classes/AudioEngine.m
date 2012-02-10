@@ -24,7 +24,7 @@
 #import "MusicSingleton.h"
 
 @implementation AudioEngine
-@synthesize isEqualizerOn, startByteOffset, startSecondsOffset, currPlaylistDAO, fftDataThread, isFftDataThreadToTerminate, isPlaying, isFastForward, audioQueueShouldStopWaitingForData, state, bassReinitSampleRate, presilenceStream;
+@synthesize isEqualizerOn, startByteOffset, startSecondsOffset, currPlaylistDAO, fftDataThread, isFftDataThreadToTerminate, isPlaying, isFastForward, audioQueueShouldStopWaitingForData, state, bassReinitSampleRate, presilenceStream, bufferLengthMillis, bassUpdatePeriod;
 
 // BASS plugins
 extern void BASSFLACplugin;
@@ -536,6 +536,18 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 
 #pragma mark - BASS methods
 
+- (void)bassEnterBackground
+{
+	bufferLengthMillis = ISMS_BASSBufferSizeBackground;
+	BASS_SetConfig(BASS_CONFIG_BUFFER, bassUpdatePeriod + bufferLengthMillis);
+}
+
+- (void)bassEnterForeground
+{
+	bufferLengthMillis = ISMS_BASSBufferSizeForeground;
+	BASS_SetConfig(BASS_CONFIG_BUFFER, bassUpdatePeriod + bufferLengthMillis);
+}
+
 - (void)bassSetGainLevel:(float)gain
 {
 	BASS_BFX_VOLUME volumeParamsInit = {0, gain};
@@ -552,8 +564,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	
 	// Initialize BASS
 	BASS_SetConfig(BASS_CONFIG_IOS_MIXAUDIO, 0); // Disable mixing.	To be called before BASS_Init.
-	DWORD updatePeriod = BASS_GetConfig(BASS_CONFIG_UPDATEPERIOD); // get update period
-	BASS_SetConfig(BASS_CONFIG_BUFFER, updatePeriod + 200); // set the buffer length to the minimum amount + 200ms
+	BASS_SetConfig(BASS_CONFIG_BUFFER, bassUpdatePeriod + bufferLengthMillis); // set the buffer length to the minimum amount + 200ms
 	DLog(@"buffer size: %i", BASS_GetConfig(BASS_CONFIG_BUFFER));
 	BASS_SetConfig(BASS_CONFIG_FLOATDSP, true); // set DSP effects to use floating point math to avoid clipping within the effects chain
 	if (!BASS_Init(-1, sampleRate, 0, NULL, NULL)) 	// Initialize default device.
@@ -1262,6 +1273,8 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 
 - (void)setup
 {	
+	bassUpdatePeriod = BASS_GetConfig(BASS_CONFIG_UPDATEPERIOD);
+	bufferLengthMillis = ISMS_BASSBufferSizeForeground;
 	bassReinitSampleRate = 0;
 	state = ISMS_AE_STATE_stopped;
 	audioQueueShouldStopWaitingForData = NO;
@@ -1292,18 +1305,26 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	lineSpecBuf = malloc(lineSpecBufSize);
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStreamInBackground) name:ISMSNotification_RepeatModeChanged object:nil];
-	
-	/*// On iOS 4.0+ only, listen for background notification
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStreamInBackground) name:ISMSNotification_CurrentPlaylistOrderChanged object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStreamInBackground) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
+		
+	// On iOS 4.0+ only, listen for background notification
 	if(&UIApplicationDidEnterBackgroundNotification != nil)
 	{
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bassEnterBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
+	}
+	
+	// On iOS 4.0+ only, listen for lock notification
+	if(&UIApplicationWillResignActiveNotification != nil)
+	{
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bassEnterBackground) name:UIApplicationWillResignActiveNotification object:nil];
 	}
 	
 	// On iOS 4.0+ only, listen for foreground notification
 	if(&UIApplicationWillEnterForegroundNotification != nil)
 	{
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bassEnterForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
-	}*/
+	}
 }
 
 + (AudioEngine *)sharedInstance
@@ -1318,7 +1339,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
     return sharedInstance;
 }
 
--(id)init 
+- (id)init 
 {
 	if ((self = [super init]))
 	{

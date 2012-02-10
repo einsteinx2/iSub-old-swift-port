@@ -94,7 +94,7 @@
 		
 		// Move the row from the cacheQueue to the cachedSongs table
 		[databaseControls.songCacheDb synchronizedUpdate:@"UPDATE cacheQueue SET finished = 'YES' WHERE md5 = ?", musicControls.downloadFileNameHashQueue];
-		[databaseControls.songCacheDb synchronizedUpdate:@"INSERT INTO cachedSongs SELECT * FROM cacheQueue WHERE md5 = ?", musicControls.downloadFileNameHashQueue];
+		[databaseControls.songCacheDb synchronizedUpdate:@"REPLACE INTO cachedSongs SELECT * FROM cacheQueue WHERE md5 = ?", musicControls.downloadFileNameHashQueue];
 		NSArray *splitPath = [musicControls.queueSongObject.path componentsSeparatedByString:@"/"];
 		if ([splitPath count] <= 9)
 		{
@@ -104,7 +104,7 @@
 				[segments addObject:@""];
 			}
 			
-			NSString *query = [NSString stringWithFormat:@"INSERT INTO cachedSongsLayout (md5, genre, segs, seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9) VALUES ('%@', '%@', %i, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [musicControls.queueSongObject.path md5], musicControls.queueSongObject.genre, [splitPath count]];
+			NSString *query = [NSString stringWithFormat:@"REPLACE INTO cachedSongsLayout (md5, genre, segs, seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9) VALUES ('%@', '%@', %i, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [musicControls.queueSongObject.path md5], musicControls.queueSongObject.genre, [splitPath count]];
 			[databaseControls.songCacheDb synchronizedUpdate:query, [segments objectAtIndex:0], [segments objectAtIndex:1], [segments objectAtIndex:2], [segments objectAtIndex:3], [segments objectAtIndex:4], [segments objectAtIndex:5], [segments objectAtIndex:6], [segments objectAtIndex:7], [segments objectAtIndex:8]];
 			
 			[segments release];
@@ -130,8 +130,8 @@
 		{
             NSString *size = nil;
             NSString *artId = [[musicControls.queueSongObject.coverArtId copy] autorelease];
-            NSURLConnectionDelegateQueueArtwork *delegate = [[NSURLConnectionDelegateQueueArtwork alloc] init];
             
+			NSURLConnectionDelegateQueueArtwork *delegate = [[NSURLConnectionDelegateQueueArtwork alloc] init];
 			if ([databaseControls.coverArtCacheDb320 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", 
                  [musicControls.queueSongObject.coverArtId md5]] == 0)
 			{
@@ -158,14 +158,18 @@
 				delegate.is320 = NO;
             }
             
-            NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(size), @"size", n2N(artId), @"id", nil];
-            NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getCoverArt" andParameters:parameters];
-            
-            NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:delegate];
-            if (connection)
-            {
-                delegate.receivedData = [NSMutableData data];
-            } 
+			if (size)
+			{
+				NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(size), @"size", n2N(artId), @"id", nil];
+				NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getCoverArt" andParameters:parameters];
+				
+				NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:delegate];
+				if (connection)
+				{
+					delegate.receivedData = [NSMutableData data];
+				}
+			}
+			
             [delegate release];
 		}
 		

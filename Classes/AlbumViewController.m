@@ -35,6 +35,7 @@
 #import "SUSSubFolderDAO.h"
 #import "UIView+tools.h"
 #import "FMDatabase+Synchronized.h"
+#import "UIImageView+Reflection.h"
 
 @interface AlbumViewController (Private)
 - (void)dataSourceDidFinishLoadingNewData;
@@ -47,11 +48,11 @@
 @synthesize sectionInfo;
 @synthesize dataModel;
 @synthesize playAllShuffleAllView;
-@synthesize albumInfoView, albumInfoArtHolderView, albumInfoArtView, albumInfoAlbumLabel, albumInfoArtistLabel, albumInfoDurationLabel, albumInfoLabelHolderView, albumInfoTrackCountLabel;
+@synthesize albumInfoView, albumInfoArtHolderView, albumInfoArtView, albumInfoAlbumLabel, albumInfoArtistLabel, albumInfoDurationLabel, albumInfoLabelHolderView, albumInfoTrackCountLabel, albumInfoArtReflection;
 
 @synthesize reloading=_reloading;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	
 	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
@@ -142,6 +143,9 @@
 	fade.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 	fade.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fade;
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createReflection) name:@"createReflection"  object:nil];
+	
 }
 
 
@@ -176,6 +180,8 @@
 
 - (void)dealloc 
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"createReflection" object:nil];
+	
 	[myId release]; myId = nil;
 	[myArtist release]; myArtist = nil;
 	[myAlbum release]; myAlbum = nil;
@@ -202,6 +208,11 @@
 	[dataModel cancelLoad];
 	[self dataSourceDidFinishLoadingNewData];
 	[viewObjects hideLoadingScreen];
+}
+
+- (void)createReflection
+{
+	albumInfoArtReflection.image = [albumInfoArtView reflectedImageWithHeight:albumInfoArtReflection.height];
 }
 
 - (void)addHeaderAndIndex
@@ -244,6 +255,9 @@
 		
 		playAllShuffleAllView.y = albumInfoView.height;
 		[headerView addSubview:playAllShuffleAllView];
+		
+		// Create reflection
+		[self createReflection];
 		
 		self.tableView.tableHeaderView = headerView;
 		[headerView release];
@@ -517,7 +531,6 @@
 	
 	[refreshHeaderView setState:EGOOPullRefreshNormal];
 }
-
 
 @end
 

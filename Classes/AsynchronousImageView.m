@@ -222,10 +222,10 @@
 		self.image = [UIImage imageNamed:@"default-album-art.png"];
 	}
 	
-	if (isForPlayer)
-	{
+	//if (isForPlayer)
+	//{
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"createReflection" object:nil];
-	}
+	//}
 	
 	[data release]; data = nil;
 	[connection release]; connection = nil;

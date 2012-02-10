@@ -44,6 +44,7 @@
 @property (nonatomic, retain) IBOutlet UIView *albumInfoView;
 @property (nonatomic, retain) IBOutlet UIView *albumInfoArtHolderView;
 @property (nonatomic, retain) IBOutlet AsynchronousImageView *albumInfoArtView;
+@property (nonatomic, retain) IBOutlet UIImageView *albumInfoArtReflection;
 @property (nonatomic, retain) IBOutlet UIView *albumInfoLabelHolderView;
 @property (nonatomic, retain) IBOutlet UILabel *albumInfoArtistLabel;
 @property (nonatomic, retain) IBOutlet UILabel *albumInfoAlbumLabel;
@@ -57,6 +58,5 @@
 - (IBAction)playAllAction:(id)sender;
 - (IBAction)shuffleAction:(id)sender;
 - (IBAction)expandCoverArt:(id)sender;
-
 
 @end

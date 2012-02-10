@@ -34,6 +34,7 @@
 #import "FlurryAnalytics.h"
 #import "FMDatabase+Synchronized.h"
 #import "NSString+Additions.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @interface PlaylistsViewController (Private)
 
@@ -1604,6 +1605,9 @@ static NSString *kName_Error = @"error";
 		{
 			[musicControls jukeboxReplacePlaylistWithLocal];
 		}
+		
+		if (![SavedSettings sharedInstance].isJukeboxEnabled)
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistOrderChanged];
 	}
 }
 

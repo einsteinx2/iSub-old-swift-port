@@ -126,7 +126,7 @@
 								<string key="NSFrame">{{30, 30}, {20, 20}}</string>
 								<reference key="NSSuperview" ref="282262027"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="971798324"/>
+								<reference key="NSNextKeyView" ref="689883639"/>
 								<string key="NSReuseIdentifierKey">_NS:1030</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -168,7 +168,7 @@
 								<reference key="IBUIFont" ref="557714346"/>
 							</object>
 						</object>
-						<string key="NSFrame">{{5, 5}, {80, 80}}</string>
+						<string key="NSFrame">{{5, 2}, {80, 80}}</string>
 						<reference key="NSSuperview" ref="456970715"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="10531312"/>
@@ -180,6 +180,18 @@
 								<int key="NSID">2</int>
 							</object>
 						</object>
+						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+					</object>
+					<object class="IBUIImageView" id="689883639">
+						<reference key="NSNextResponder" ref="456970715"/>
+						<int key="NSvFlags">292</int>
+						<string key="NSFrame">{{5, 82}, {80, 8}}</string>
+						<reference key="NSSuperview" ref="456970715"/>
+						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="971798324"/>
+						<string key="NSReuseIdentifierKey">_NS:567</string>
+						<float key="IBUIAlpha">0.55000001192092896</float>
+						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 					</object>
 					<object class="IBUIView" id="971798324">
@@ -637,6 +649,14 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">albumInfoArtReflection</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="689883639"/>
+					</object>
+					<int key="connectionID">52</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">dataSource</string>
 						<reference key="source" ref="873029372"/>
 						<reference key="destination" ref="372490531"/>
@@ -715,6 +735,7 @@
 							<reference ref="971798324"/>
 							<reference ref="791380691"/>
 							<reference ref="164243232"/>
+							<reference ref="689883639"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -848,6 +869,11 @@
 						<reference key="object" ref="166204783"/>
 						<reference key="parent" ref="921345747"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">51</int>
+						<reference key="object" ref="689883639"/>
+						<reference key="parent" ref="456970715"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -885,6 +911,7 @@
 					<string>49.IBPluginDependency</string>
 					<string>50.CustomClassName</string>
 					<string>50.IBPluginDependency</string>
+					<string>51.IBPluginDependency</string>
 					<string>9.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
@@ -921,6 +948,7 @@
 					<string>SeparaterView</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="unlocalizedProperties">
@@ -935,7 +963,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">50</int>
+			<int key="maxID">52</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -988,6 +1016,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>albumInfoAlbumLabel</string>
 							<string>albumInfoArtHolderView</string>
+							<string>albumInfoArtReflection</string>
 							<string>albumInfoArtView</string>
 							<string>albumInfoArtistLabel</string>
 							<string>albumInfoDurationLabel</string>
@@ -1000,6 +1029,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>UILabel</string>
 							<string>UIView</string>
+							<string>UIImageView</string>
 							<string>AsynchronousImageView</string>
 							<string>UILabel</string>
 							<string>UILabel</string>
@@ -1015,6 +1045,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>albumInfoAlbumLabel</string>
 							<string>albumInfoArtHolderView</string>
+							<string>albumInfoArtReflection</string>
 							<string>albumInfoArtView</string>
 							<string>albumInfoArtistLabel</string>
 							<string>albumInfoDurationLabel</string>
@@ -1032,6 +1063,10 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">albumInfoArtHolderView</string>
 								<string key="candidateClassName">UIView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">albumInfoArtReflection</string>
+								<string key="candidateClassName">UIImageView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">albumInfoArtView</string>

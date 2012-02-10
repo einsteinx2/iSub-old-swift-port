@@ -431,6 +431,18 @@
 					CGFloat byteRate = (CGFloat)[AudioEngine sharedInstance].bitRate * 1024. / 8.;
 					totalSize = byteRate * [self.duration floatValue];
 				}
+				else
+				{
+					// Current playing song, but BASS has no bitrate
+					CGFloat byteRate = (CGFloat)self.estimatedBitrate * 1024. / 8.;
+					totalSize = byteRate * [self.duration floatValue];
+				}
+			}
+			else
+			{
+				// Not the current playing song, so use estimated bitrate
+				CGFloat byteRate = (CGFloat)self.estimatedBitrate * 1024. / 8.;
+				totalSize = byteRate * [self.duration floatValue];
 			}
 		}
 		return (CGFloat)self.localFileSize / totalSize;

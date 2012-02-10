@@ -18,9 +18,10 @@
 #import "NSString+Additions.h"
 #import "UIView+tools.h"
 #import "UIApplication+StatusBar.h"
+#import "UIImageView+Reflection.h"
  
 @implementation ModalAlbumArtViewController
-@synthesize albumArt, artistLabel, albumLabel, myAlbum, numberOfTracks, albumLength, durationLabel, trackCountLabel, labelHolderView;
+@synthesize albumArt, artistLabel, albumLabel, myAlbum, numberOfTracks, albumLength, durationLabel, trackCountLabel, labelHolderView, albumArtReflection;
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
@@ -104,6 +105,8 @@
 	{
 		albumArt.image = [UIImage imageNamed:@"default-album-art.png"];
 	}
+	
+	albumArtReflection.image = [albumArt reflectedImageWithHeight:albumArtReflection.height];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

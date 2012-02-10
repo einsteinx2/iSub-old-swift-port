@@ -22,6 +22,7 @@
 #import "PlaylistSingleton.h"
 #import "AudioEngine.h"
 #import "FMDatabase+Synchronized.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation CurrentPlaylistViewController
 @synthesize dataModel;
@@ -404,6 +405,9 @@
 			playlistCountLabel.text = [NSString stringWithFormat:@"1 song"];
 		else
 			playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", songCount];
+		
+		if (![SavedSettings sharedInstance].isJukeboxEnabled)
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistOrderChanged];
 	}
 }
 
@@ -723,6 +727,9 @@
 	{
 		[musicControls jukeboxReplacePlaylistWithLocal];
 	}
+	
+	if (![SavedSettings sharedInstance].isJukeboxEnabled)
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistOrderChanged];
 }
 
 

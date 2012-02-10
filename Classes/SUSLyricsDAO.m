@@ -13,6 +13,7 @@
 #import "DatabaseSingleton.h"
 #import "SUSLyricsLoader.h"
 #import <QuartzCore/QuartzCore.h>
+#import "SavedSettings.h"
 
 @implementation SUSLyricsDAO
 @synthesize loader, delegate;
@@ -50,19 +51,23 @@
 - (NSString *)loadLyricsForArtist:(NSString *)artist andTitle:(NSString *)title
 {
 	[self cancelLoad];
-	
-	self.loader = [[[SUSLyricsLoader alloc] initWithDelegate:self] autorelease];
+
     NSString *lyrics = [self lyricsForArtist:artist andTitle:title];
 	if (lyrics)
 	{
 		return lyrics;
 	}
-    else
+    else if ([SavedSettings sharedInstance].isLyricsEnabled) 
     {
+		self.loader = [[[SUSLyricsLoader alloc] initWithDelegate:self] autorelease];
         loader.artist = artist;
         loader.title = title;
         [loader startLoad];
     }
+	else
+	{
+		return @"No lyrics saved for this song";
+	}
     
     return nil;
 }

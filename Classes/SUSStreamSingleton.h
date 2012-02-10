@@ -26,14 +26,16 @@
 - (SUSStreamHandler *)handlerForSong:(Song *)aSong;
 - (BOOL)isSongInQueue:(Song *)aSong;
 
-- (void)cancelAllStreamsExcept:(SUSStreamHandler *)handlerToSkip;
+- (void)cancelAllStreamsExcept:(NSArray *)handlersToSkip;
+- (void)cancelAllStreamsExceptForSongs:(NSArray *)songsToSkip;
 - (void)cancelAllStreamsExceptForSong:(Song *)aSong;
 - (void)cancelAllStreams;
 - (void)cancelStreamAtIndex:(NSUInteger)index;
 - (void)cancelStream:(SUSStreamHandler *)handler;
 - (void)cancelStreamForSong:(Song *)aSong;
 
-- (void)removeAllStreamsExcept:(SUSStreamHandler *)handlerToSkip;
+- (void)removeAllStreamsExcept:(NSArray *)handlersToSkip;
+- (void)removeAllStreamsExceptForSongs:(NSArray *)songsToSkip;
 - (void)removeAllStreamsExceptForSong:(Song *)aSong;
 - (void)removeAllStreams;
 - (void)removeStreamAtIndex:(NSUInteger)index;

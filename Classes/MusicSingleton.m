@@ -125,17 +125,18 @@ static MusicSingleton *sharedInstance = nil;
 	}
 	else
 	{
-		[result next];
 		aSong = [Song songFromDbResult:result];
 	}
 	
 	[result close];
-	return [aSong autorelease];
+	return aSong;
 }
 
 // Start downloading the file specified in the text field.
 - (void)startDownloadQueue
 {		
+	DLog(@"queueSongObject songId: %@", queueSongObject.songId);
+	
 	Song *currentSong = [PlaylistSingleton sharedInstance].currentSong;
 	Song *nextSong = [PlaylistSingleton sharedInstance].nextSong;
 	
@@ -145,7 +146,7 @@ static MusicSingleton *sharedInstance = nil;
 	[self stopDownloadQueue];
     
     // Grab the lyrics
-	if (queueSongObject.artist && queueSongObject.title)
+	if (queueSongObject.artist && queueSongObject.title && [SavedSettings sharedInstance].isLyricsEnabled)
 	{
         SUSLyricsLoader *lyricsLoader = [[SUSLyricsLoader alloc] initWithDelegate:self];
 		DLog(@"lyricsLoader: %@", lyricsLoader);

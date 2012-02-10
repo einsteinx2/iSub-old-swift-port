@@ -183,6 +183,11 @@
 			[self incrementIndex];
 			[musicControls performSelectorOnMainThread:@selector(startSong) withObject:nil waitUntilDone:NO];
 		}
+		else
+		{
+			if (![SavedSettings sharedInstance].isJukeboxEnabled)
+				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistOrderChanged];
+		}
 	}
 }
 

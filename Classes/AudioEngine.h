@@ -12,8 +12,8 @@
 #import "bassmix.h"
 #import <AudioToolbox/AudioToolbox.h>
 
-//#define ISMS_BASSBufferSizeForeground 200
-//#define ISMS_BASSBufferSizeBackground 1500
+#define ISMS_BASSBufferSizeForeground 200
+#define ISMS_BASSBufferSizeBackground 2000
 
 #define ISMS_AQBufferSizeInFrames 512
 #define ISMS_AQNumBuffers 4
@@ -125,6 +125,8 @@ typedef enum
 @property ISMS_AE_STATE state;
 @property NSInteger audioSessionSampleRate;
 @property NSInteger bassReinitSampleRate;
+@property NSUInteger bufferLengthMillis;
+@property NSUInteger bassUpdatePeriod;
 
 const char *GetCTypeString(DWORD ctype, HPLUGIN plugin);
 

@@ -30,7 +30,8 @@
 
 #define ISMSNotification_BassEffectPresetLoaded @"ISMS Bass effect preset loaded"
 
-#define ISMSNotification_CurrentPlaylistShuffleToggled @"ISMS Current playlist shuffled/unshuffled"
+#define ISMSNotification_CurrentPlaylistOrderChanged @"ISMS Current playlist order changed"
+#define ISMSNotification_CurrentPlaylistShuffleToggled @"ISMS Current playlist shuffle toggled"
 #define ISMSNotification_CurrentPlaylistIndexChanged @"ISMS Current playlist index changed"
 
 #define ISMSNotification_AllSongsLoadingArtists @"ISMS SUSAllSongsLoader loading artists"

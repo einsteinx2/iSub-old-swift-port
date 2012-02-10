@@ -45,11 +45,11 @@ static SUSStreamSingleton *sharedInstance = nil;
 	return nil;
 }
 
-- (void)cancelAllStreamsExcept:(SUSStreamHandler *)handlerToSkip
+- (void)cancelAllStreamsExcept:(NSArray *)handlersToSkip
 {
 	for (SUSStreamHandler *handler in handlerStack)
 	{
-		if (handler != handlerToSkip)
+		if (![handlersToSkip containsObject:handler])
 		{
 			// If we're trying to resume, cancel the request
 			[NSObject cancelPreviousPerformRequestsWithTarget:self 
@@ -62,12 +62,26 @@ static SUSStreamSingleton *sharedInstance = nil;
 	}
 }
 
+- (void)cancelAllStreamsExceptForSongs:(NSArray *)songsToSkip
+{
+	NSMutableArray *handlersToSkip = [NSMutableArray arrayWithCapacity:[songsToSkip count]];
+	for (Song *aSong in songsToSkip)
+	{
+		SUSStreamHandler *handler = [self handlerForSong:aSong];
+		if (handler)
+			[handlersToSkip addObject:[self handlerForSong:aSong]];
+	}
+	[self cancelAllStreamsExcept:handlersToSkip];
+}
+
+
 - (void)cancelAllStreamsExceptForSong:(Song *)aSong
 {
 	// Cancel any song resume requests
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
-	[self cancelAllStreamsExcept:[self handlerForSong:aSong]];
+	NSArray *handlersToSkip = [NSArray arrayWithObject:[self handlerForSong:aSong]];
+	[self cancelAllStreamsExcept:handlersToSkip];
 }
 
 - (void)cancelAllStreams
@@ -101,20 +115,33 @@ static SUSStreamSingleton *sharedInstance = nil;
 	[self cancelStream:[self handlerForSong:aSong]];
 }
 
-- (void)removeAllStreamsExcept:(SUSStreamHandler *)handlerToSkip
+- (void)removeAllStreamsExcept:(NSArray *)handlersToSkip//(SUSStreamHandler *)handlerToSkip
 {
-	[self cancelAllStreamsExcept:handlerToSkip];
+	[self cancelAllStreamsExcept:handlersToSkip];
 	NSArray *handlers = [NSArray arrayWithArray:handlerStack];
 	for (SUSStreamHandler *handler in handlers)
 	{
-		if (handler != handlerToSkip)
+		if (![handlersToSkip containsObject:handler])
 			[handlerStack removeObject:handler];
 	}
 }
 
+- (void)removeAllStreamsExceptForSongs:(NSArray *)songsToSkip
+{
+	NSMutableArray *handlersToSkip = [NSMutableArray arrayWithCapacity:[songsToSkip count]];
+	for (Song *aSong in songsToSkip)
+	{
+		SUSStreamHandler *handler = [self handlerForSong:aSong];
+		if (handler) 
+			[handlersToSkip addObject:[self handlerForSong:aSong]];
+	}
+	[self removeAllStreamsExcept:handlersToSkip];
+}
+
 - (void)removeAllStreamsExceptForSong:(Song *)aSong
 {
-	[self removeAllStreamsExcept:[self handlerForSong:aSong]];
+	NSArray *handlersToSkip = [NSArray arrayWithObject:[self handlerForSong:aSong]];
+	[self removeAllStreamsExcept:handlersToSkip];
 }
 
 - (void)removeAllStreams
@@ -287,6 +314,44 @@ static SUSStreamSingleton *sharedInstance = nil;
 	[self removeStreamForSong:currentPlaylistDAO.prevSong];
 }
 
+- (void)currentPlaylistOrderChanged
+{
+	// First check to see if the upcoming song is being cached now or next
+	/*BOOL fillQueue = NO;
+	Song *nextSong = currentPlaylistDAO.nextSong;
+	if ([self isSongInQueue:nextSong])
+	{
+		if ([handlerStack count] > 0)
+		{
+			if (![[handlerStack objectAtIndex:0] isEqualToSong:nextSong])
+			{
+				if ([handlerStack count] > 1)
+				{
+					if (![[handlerStack objectAtIndex:1] isEqualToSong:nextSong])
+					{
+						fillQueue = YES;
+					}
+				}
+			}
+		}
+	}
+	
+	if (fillQueue)
+	{
+		[self removeAllStreamsExceptForSong:currentPlaylistDAO.currentSong];
+		[self fillStreamQueue];
+	}*/
+	
+	Song *currentSong = currentPlaylistDAO.currentSong;
+	Song *nextSong = currentPlaylistDAO.nextSong;
+	NSMutableArray *songsToSkip = [NSMutableArray arrayWithCapacity:2];
+	if (currentSong) [songsToSkip addObject:currentSong];
+	if (nextSong) [songsToSkip addObject:nextSong];
+	
+	[self removeAllStreamsExceptForSongs:songsToSkip];
+	[self fillStreamQueue];
+}
+
 #pragma mark - SUSStreamHandler delegate
 
 - (void)SUSStreamHandlerStarted:(SUSStreamHandler *)handler
@@ -388,24 +453,32 @@ static SUSStreamSingleton *sharedInstance = nil;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(songCachingToggled) 
-												 name:ISMSNotification_SongCachingEnabled 
-											   object:nil];
+												 name:ISMSNotification_SongCachingEnabled object:nil];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self 
 											 selector:@selector(songCachingToggled) 
-												 name:ISMSNotification_SongCachingDisabled
-											   object:nil];
+												 name:ISMSNotification_SongCachingDisabled object:nil];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self 
 											 selector:@selector(currentPlaylistIndexChanged) 
-												 name:ISMSNotification_CurrentPlaylistIndexChanged 
-											   object:nil];
+												 name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	
 	if ([SavedSettings sharedInstance].isSongCachingEnabled)
 		[[NSNotificationCenter defaultCenter] addObserver:self 
 												 selector:@selector(fillStreamQueue) 
-													 name:ISMSNotification_SongPlaybackEnded 
-												   object:nil];
+													 name:ISMSNotification_SongPlaybackEnded object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(currentPlaylistOrderChanged) 
+												 name:ISMSNotification_RepeatModeChanged object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(currentPlaylistOrderChanged) 
+												 name:ISMSNotification_CurrentPlaylistOrderChanged object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(currentPlaylistOrderChanged) 
+												 name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 }
 
 + (SUSStreamSingleton *)sharedInstance

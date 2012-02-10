@@ -29,6 +29,7 @@
 #import "FlurryAnalytics.h"
 #import "FMDatabase+Synchronized.h"
 #import "NSString+Additions.h"
+#import "AudioEngine.h"
 
 @interface CacheViewController (Private)
 - (void)addNoSongsScreen;
@@ -1011,8 +1012,6 @@
 - (void)deleteCachedSongs2
 {
 	PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
-	Song *currentSong = dataModel.currentSong;
-	Song *nextSong = dataModel.nextSong;
 	
 	// Truncate the song cache genre tables
 	[databaseControls.songCacheDb synchronizedUpdate:@"DELETE FROM genres"];
@@ -1032,41 +1031,37 @@
 		if ([result stringForColumnIndex:2] != nil)
 			suffix = [NSString stringWithString:[result stringForColumnIndex:2]];
 		
-		BOOL skipDelete = NO;
 		// Check if we're deleting the song that's currently playing. If so, skip deleting it.
+		Song *currentSong = dataModel.currentSong;
 		if (currentSong)
 		{
 			if ([[currentSong.path md5] isEqualToString:rowMD5])
 			{
-				//[appDelegate destroyStreamer];
-				skipDelete = YES;
+				[[AudioEngine sharedInstance] stop];
 			}
 		}
 		
-		// Check if we're deleting the song that's about to play. If so, skip deleting it.
+		/*// Check if we're deleting the song that's about to play. If so, skip deleting it.
+		Song *nextSong = dataModel.nextSong;
 		if (nextSong)
 		{
 			if ([[nextSong.path md5] isEqualToString:rowMD5])
 			{
-				//[appDelegate destroyStreamer];
-				skipDelete = YES;
+				[[AudioEngine sharedInstance] stop];
 			}
-		}
+		}*/
+
+		// Delete the row from the cachedSongs
+		[databaseControls.songCacheDb synchronizedUpdate:@"DELETE FROM cachedSongs WHERE md5 = ?", rowMD5];
+		[databaseControls.songCacheDb synchronizedUpdate:@"DELETE FROM cachedSongsLayout WHERE md5 = ?", rowMD5];
 		
-		if (skipDelete == NO)
-		{
-			// Delete the row from the cachedSongs
-			[databaseControls.songCacheDb synchronizedUpdate:@"DELETE FROM cachedSongs WHERE md5 = ?", rowMD5];
-			[databaseControls.songCacheDb synchronizedUpdate:@"DELETE FROM cachedSongsLayout WHERE md5 = ?", rowMD5];
-			
-			// Delete the song from disk
-			NSString *fileName;
-			if (transcodedSuffix)
-				fileName = [settings.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", rowMD5, transcodedSuffix]];
-			else
-				fileName = [settings.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", rowMD5, suffix]];
-			[[NSFileManager defaultManager] removeItemAtPath:fileName error:NULL];
-		}
+		// Delete the song from disk
+		NSString *fileName;
+		if (transcodedSuffix)
+			fileName = [settings.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", rowMD5, transcodedSuffix]];
+		else
+			fileName = [settings.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", rowMD5, suffix]];
+		[[NSFileManager defaultManager] removeItemAtPath:fileName error:NULL];
 	}
 	
 	// Reload the table
