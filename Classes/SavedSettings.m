@@ -347,6 +347,12 @@
 		self.isPartialCacheNextSong = YES;
 	}
 	
+	// Visualizer Type
+	if (![userDefaults objectForKey:@"currentVisualizerType"])
+	{
+		self.currentVisualizerType = ISMSBassVisualType_fatBar;
+	}
+	
 	[userDefaults synchronize];
 }
 
@@ -1188,6 +1194,24 @@
 		[userDefaults setBool:isPartialCacheNextSong forKey:@"isPartialCacheNextSong"];
 		[userDefaults synchronize];
 	}
+}
+
+- (ISMSBassVisualType)currentVisualizerType
+{
+	@synchronized(self)
+	{
+		return [userDefaults integerForKey:@"currentVisualizerType"];
+	}
+}
+
+- (void)setCurrentVisualizerType:(ISMSBassVisualType)currentVisualizerType
+{
+	@synchronized(self)
+	{
+		[userDefaults setInteger:currentVisualizerType forKey:@"currentVisualizerType"];
+		[userDefaults synchronize];
+	}
+
 }
 
 // Test server details

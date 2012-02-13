@@ -10,7 +10,6 @@
 #import "DatabaseSingleton.h"
 #import "ViewObjectsSingleton.h"
 #import "NSString+md5.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 
 @implementation SUSPlayerCoverArtLoader
@@ -50,7 +49,7 @@
 
 - (BOOL)isCoverArtCached
 {
-    return [self.db intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [coverArtId md5]] >= 0;
+    return [self.db synchronizedIntForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [coverArtId md5]] >= 0;
 }
 
 #pragma mark - Data loading
@@ -143,7 +142,7 @@
 {	    
     if([UIImage imageWithData:self.receivedData])
 	{
-		[self.db executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [coverArtId md5], self.receivedData];
+		[self.db synchronizedExecuteUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [coverArtId md5], self.receivedData];
 	}
 	
 	self.receivedData = nil;

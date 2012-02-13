@@ -18,7 +18,6 @@
 #import <QuartzCore/CoreAnimation.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import <CFNetwork/CFNetwork.h>
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "NSString+md5.h"
 #import "UIView+tools.h"
@@ -34,7 +33,7 @@
 #import "SUSStreamSingleton.h"
 #import "SUSStreamHandler.h"
 #import "NSArray+FirstObject.h"
-#import "FMDatabase+Synchronized.h"
+
 #import "UIImageView+Reflection.h"
 
 #define downloadProgressBorder 4.
@@ -92,7 +91,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	//[coverArtImageView.layer setCornerRadius:20];
 	
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
+	appDelegate = [iSubAppDelegate sharedInstance];
 	musicControls = [MusicSingleton sharedInstance];
 	databaseControls = [DatabaseSingleton sharedInstance];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
@@ -115,8 +114,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	downloadProgress.userInteractionEnabled = NO;
 	[progressSlider addSubview:downloadProgress];
 	[downloadProgress release];
-	
-	progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateSlider) userInfo:nil repeats:YES];
+		
+	//progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateSlider) userInfo:nil repeats:YES];
 
 	pauseSlider = NO;
 	
@@ -129,7 +128,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	else
 	{
 		// Setup the update timer for the song download progress bar
-		updateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateDownloadProgressInBackground) userInfo:nil repeats:YES];
+		//updateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateDownloadProgressInBackground) userInfo:nil repeats:YES];
 		downloadProgress.width = 0.0;
 		//[downloadProgress newX:70.0];
 		//if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
@@ -310,16 +309,23 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		if (animated)
 			 [UIView commitAnimations];
 	}
+	
+	[self performSelector:@selector(updateDownloadProgressInBackground) withObject:nil afterDelay:1.0];
+	[self performSelector:@selector(updateSlider) withObject:nil afterDelay:1.0];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+	[super viewWillDisappear:animated];
+	
 	if (!IS_IPAD())
 	{
 		//[self.navigationController setWantsFullScreenLayout:NO];
 		[UIApplication setStatusBarHidden:NO withAnimation:YES];
 		self.navigationController.navigationBar.y = 20;
 	}
+	
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -345,6 +351,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 //
 - (void)dealloc
 {	
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackEnded object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackPaused object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackStarted object:nil];
@@ -361,8 +369,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[remainingTimeLabel release]; remainingTimeLabel = nil;
 	[repeatButton release]; repeatButton = nil;
 	[shuffleButton release]; shuffleButton = nil;
-	[progressTimer invalidate]; progressTimer = nil;
-	[updateTimer invalidate]; updateTimer = nil;
+	//[progressTimer invalidate]; progressTimer = nil;
+	//[updateTimer invalidate]; updateTimer = nil;
 	
 	[pageControlViewController viewDidDisappear:NO];
 	[pageControlViewController release]; pageControlViewController = nil;
@@ -634,7 +642,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	[self updateShuffleIcon];
 	
-	NSInteger bookmarkCount = [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId];
+	NSInteger bookmarkCount = [databaseControls.bookmarksDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId];
 	if (bookmarkCount > 0)
 	{
 		bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", bookmarkCount];
@@ -788,6 +796,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	}
 	else
 	{
+		
 		[audio playPause];
 	}
 }
@@ -1071,11 +1080,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		if(buttonIndex == 1)
 		{
 			// Check if the bookmark exists
-			if ([databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE name = ?", bookmarkNameTextField.text] == 0)
+			if ([databaseControls.bookmarksDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE name = ?", bookmarkNameTextField.text] == 0)
 			{
 				// Bookmark doesn't exist so save it
-				[databaseControls.bookmarksDb synchronizedUpdate:[NSString stringWithFormat:@"INSERT INTO bookmarks (name, position, %@, bytes) VALUES (?, ?, %@, ?)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size, currentSong.parentId, [NSNumber numberWithUnsignedLongLong:bookmarkBytePosition]];
-				bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]];
+				[databaseControls.bookmarksDb synchronizedExecuteUpdate:[NSString stringWithFormat:@"INSERT INTO bookmarks (name, position, %@, bytes) VALUES (?, ?, %@, ?)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size, currentSong.parentId, [NSNumber numberWithUnsignedLongLong:bookmarkBytePosition]];
+				bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]];
 				if (IS_IPAD())
 					bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on-ipad.png"];
 				else
@@ -1095,9 +1104,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		if(buttonIndex == 1)
 		{
 			// Overwrite the bookmark
-			[databaseControls.bookmarksDb executeUpdate:@"DELETE FROM bookmarks WHERE name = ?", bookmarkNameTextField.text];
-			[databaseControls.bookmarksDb synchronizedUpdate:[NSString stringWithFormat:@"INSERT INTO bookmarks (name, position, %@, bytes) VALUES (?, ?, %@, ?)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size, currentSong.parentId, [NSNumber numberWithUnsignedLongLong:bookmarkBytePosition]];
-			bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]];
+			[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"DELETE FROM bookmarks WHERE name = ?", bookmarkNameTextField.text];
+			[databaseControls.bookmarksDb synchronizedExecuteUpdate:[NSString stringWithFormat:@"INSERT INTO bookmarks (name, position, %@, bytes) VALUES (?, ?, %@, ?)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size, currentSong.parentId, [NSNumber numberWithUnsignedLongLong:bookmarkBytePosition]];
+			bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]];
 			if (IS_IPAD())
 				bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on-ipad.png"];
 			else
@@ -1149,7 +1158,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 - (void)updateDownloadProgress
 {
 	@autoreleasepool
-	{
+	{		
 		// Set the current song progress bar
 		if ([self.currentSong isTempCached])
 		{
@@ -1178,10 +1187,12 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 - (void)updateDownloadProgressInternal:(NSNumber *)width
 {
 	downloadProgress.width = [width floatValue];
+	
+	[self performSelector:@selector(updateDownloadProgressInBackground) withObject:nil afterDelay:1.0];
 }
 
 - (void)updateSlider
-{	
+{		
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
 		elapsedTimeLabel.text = [NSString formatTime:0];
@@ -1201,6 +1212,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		elapsedTimeLabel.text = elapsedTime;
 		remainingTimeLabel.text =[@"-" stringByAppendingString:remainingTime];
 	}
+	
+	[self performSelector:@selector(updateSlider) withObject:nil afterDelay:1.0];
 }
 
 #pragma mark Image Reflection

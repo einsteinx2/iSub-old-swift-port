@@ -16,6 +16,7 @@
 
 #import "UIBezierPath+Smoothing.h"
 #import "BassParamEqValue.h"
+#import "SavedSettings.h"
 
 //CLASS IMPLEMENTATIONS:
 
@@ -47,16 +48,6 @@ typedef struct
 {
 	BYTE rgbRed, rgbGreen, rgbBlue, Aplha;
 } RGBQUAD;
-
-typedef enum
-{
-	ISMSBassVisualType_line,
-	ISMSBassVisualType_skinnyBar,
-	ISMSBassVisualType_fatBar,
-	ISMSBassVisualType_aphexFace
-} ISMSBassVisualType;
-
-ISMSBassVisualType visualType = ISMSBassVisualType_skinnyBar;
 
 static void SetupArrays()
 {
@@ -207,6 +198,8 @@ static void destroy_versionArrays()
 		glEnable(GL_POINT_SPRITE_OES);
 		glTexEnvf(GL_POINT_SPRITE_OES, GL_COORD_REPLACE_OES, GL_TRUE);
 				
+		[self changeType:[SavedSettings sharedInstance].currentVisualizerType];
+		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopEqDisplay) name:UIApplicationWillResignActiveNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startEqDisplay) name:UIApplicationDidBecomeActiveNotification object:nil];
 	}
@@ -481,31 +474,53 @@ static void destroy_versionArrays()
 	memset(specbuf, 0, (specWidth * specHeight * 4));
 }
 
-- (void)changeType
+- (void)changeType:(ISMSBassVisualType)type
 {
-	switch (visualType)
+	switch (type)
 	{
 		case ISMSBassVisualType_line:
-			[[AudioEngine sharedInstance] startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_fft];
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			visualType = ISMSBassVisualType_skinnyBar; 
-			break;
-		case ISMSBassVisualType_skinnyBar:
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			visualType = ISMSBassVisualType_fatBar;
-			break;
-		case ISMSBassVisualType_fatBar:
-            [self eraseBitBuffer];
-            specpos = 0;
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			visualType = ISMSBassVisualType_aphexFace; 
-			break;
-		case ISMSBassVisualType_aphexFace:
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			visualType = ISMSBassVisualType_line; 
 			[[AudioEngine sharedInstance] startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_line];
 			break;
+			
+		case ISMSBassVisualType_skinnyBar:
+			[[AudioEngine sharedInstance] startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_fft];
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			visualType = ISMSBassVisualType_skinnyBar; 
+			break;
+			
+		case ISMSBassVisualType_fatBar:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			visualType = ISMSBassVisualType_fatBar;
+			break;
+			
+		case ISMSBassVisualType_aphexFace:
+			[self eraseBitBuffer];
+            specpos = 0;
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			visualType = ISMSBassVisualType_aphexFace; 
+			break;
 	}
+	[SavedSettings sharedInstance].currentVisualizerType = visualType;
+	DLog(@"visualType: %i   currentVisualizerType: %i", visualType, [SavedSettings sharedInstance].currentVisualizerType);
+}
+
+- (void)changeType
+{
+	ISMSBassVisualType type = 0;
+	switch (visualType)
+	{
+		case ISMSBassVisualType_line:
+			type = ISMSBassVisualType_skinnyBar; break;
+		case ISMSBassVisualType_skinnyBar:
+			type = ISMSBassVisualType_fatBar; break;
+		case ISMSBassVisualType_fatBar:
+			type = ISMSBassVisualType_aphexFace; break;
+		case ISMSBassVisualType_aphexFace:
+			type = ISMSBassVisualType_line; break;
+	}
+	[self changeType:type];
 }
 
 @end

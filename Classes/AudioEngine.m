@@ -210,6 +210,8 @@ void CALLBACK MyFileCloseProc(void *user)
 	fclose(userInfo.myFileHandle);	
 }
 
+
+
 QWORD CALLBACK MyFileLenProc(void *user)
 {
 	if (user == NULL)
@@ -305,21 +307,33 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 					fpos_t newpos = pos - bytesRead;
 					fsetpos(userInfo.myFileHandle, &newpos);
 					
-					[sharedInstance playPause];
+					[sharedInstance performSelectorOnMainThread:@selector(playPause) withObject:nil waitUntilDone:YES];
 					
 					// We received less than we asked for, but the stream is not over
 					// so we'll need to wait until more of the file is ready to play
 					unsigned long long size = theSong.localFileSize;
-					unsigned long long neededSize = size + ISMS_AQBytesToWaitForAudioData;
-					NSTimeInterval sleepTime = 1.0; // Sleep for 1 second at a time
+					
+					// Choose either the current player bitrate, or if for some reason it is not detected
+					// properly, use the best estimated bitrate. Then use that to determine how much data
+					// to let download to continue.
+					NSUInteger bitrate = sharedInstance.bitRate > 0 ? sharedInstance.bitRate : theSong.estimatedBitrate;
+					unsigned long long bytesToWait = (bitrate / 8) * 1024 * ISMS_NumSecondsToWaitForAudioData;
+					unsigned long long neededSize = size + bytesToWait;
+					DLog(@"bitrate: %i  byterate: %i   bytesToWait: %llu   neededSize: %llu", bitrate, (bitrate/8), bytesToWait, neededSize);
+					
+					NSTimeInterval sleepTime = 0.5; // Sleep for a half second at a time
 					DLog(@"AQ asked for: %i  got: %i  file size: %llu", length, bytesRead, theSong.localFileSize);
 					while (!sharedInstance.audioQueueShouldStopWaitingForData 
-						   && !theSong.isFullyCached && theSong.localFileSize < neededSize
-						   && (theSong.isTempCached && ![theSong isEqualToSong:streamManager.lastTempCachedSong]))
+						   && !theSong.isFullyCached && theSong.localFileSize < neededSize)
 					{
+						// Handle temp cached songs ending. When they end, they are set as the last temp cached
+						// song, so we know it's done and can stop waiting for data.
+						if (theSong.isTempCached && [theSong isEqualToSong:streamManager.lastTempCachedSong])
+							break;
+						
 						// As long as audioQueueShouldStopWaitingForData is false, the song is not fully cached, and
 						// the file size is less than the current size + 10 buffers worth of data, then wait
-						DLog(@"Not enough data, sleeping for %f", sleepTime);
+						DLog(@"Not enough data, sleeping for %f   fileSize: %llu  neededSize: %llu", sleepTime, theSong.localFileSize, neededSize);
 						[NSThread sleepForTimeInterval:sleepTime];
 					}
 					
@@ -341,7 +355,7 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 						if (sharedInstance.state != ISMS_AE_STATE_waitingForDataNoResume)
 						{
 							sharedInstance.state = ISMS_AE_STATE_finishedWaitingForData;
-							[sharedInstance playPause];
+							[sharedInstance performSelectorOnMainThread:@selector(playPause) withObject:nil waitUntilDone:YES];
 						}
 					}
 					else
@@ -536,18 +550,6 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 
 #pragma mark - BASS methods
 
-- (void)bassEnterBackground
-{
-	bufferLengthMillis = ISMS_BASSBufferSizeBackground;
-	BASS_SetConfig(BASS_CONFIG_BUFFER, bassUpdatePeriod + bufferLengthMillis);
-}
-
-- (void)bassEnterForeground
-{
-	bufferLengthMillis = ISMS_BASSBufferSizeForeground;
-	BASS_SetConfig(BASS_CONFIG_BUFFER, bassUpdatePeriod + bufferLengthMillis);
-}
-
 - (void)bassSetGainLevel:(float)gain
 {
 	BASS_BFX_VOLUME volumeParamsInit = {0, gain};
@@ -575,8 +577,8 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	
 	BASS_INFO info;
 	BASS_GetInfo(&info);
-	DLog(@"bassInit:%i  bass freq: %i", sampleRate, info.freq);
-	
+	DLog(@"bassInit:%i  bass freq: %i  minrate: %i   maxrate: %i  minbuf: %i  latency:%i ", sampleRate, info.freq, info.minrate, info.maxrate, info.minbuf, info.latency);
+		
 	// Add the callbacks for headphone removal and other audio takeover
 	AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, self);
 	AudioSessionAddPropertyListener(kAudioSessionProperty_OtherAudioIsPlaying, audioInterruptionListenerCallback, self);
@@ -1274,7 +1276,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 - (void)setup
 {	
 	bassUpdatePeriod = BASS_GetConfig(BASS_CONFIG_UPDATEPERIOD);
-	bufferLengthMillis = ISMS_BASSBufferSizeForeground;
+	bufferLengthMillis = ISMS_BASSBufferSize;
 	bassReinitSampleRate = 0;
 	state = ISMS_AE_STATE_stopped;
 	audioQueueShouldStopWaitingForData = NO;
@@ -1308,7 +1310,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStreamInBackground) name:ISMSNotification_CurrentPlaylistOrderChanged object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStreamInBackground) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 		
-	// On iOS 4.0+ only, listen for background notification
+	/*// On iOS 4.0+ only, listen for background notification
 	if(&UIApplicationDidEnterBackgroundNotification != nil)
 	{
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bassEnterBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
@@ -1324,7 +1326,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	if(&UIApplicationWillEnterForegroundNotification != nil)
 	{
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bassEnterForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
-	}
+	}*/
 }
 
 + (AudioEngine *)sharedInstance

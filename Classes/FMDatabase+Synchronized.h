@@ -6,13 +6,12 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 
 @interface FMDatabase (Synchronized)
 
-- (FMResultSet *)synchronizedQuery:(NSString*)sql, ...;
-- (BOOL)synchronizedUpdate:(NSString*)sql, ...;
+- (FMResultSet *)synchronizedExecuteQuery:(NSString*)sql, ...;
+- (BOOL)synchronizedExecuteUpdate:(NSString*)sql, ...;
 
 - (int)synchronizedIntForQuery:(NSString*)objs, ...;
 - (long)synchronizedLongForQuery:(NSString*)objs, ...; 

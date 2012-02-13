@@ -6,6 +6,9 @@
 //  Copyright 2005 Flying Meat Inc.. All rights reserved.
 //
 
+#import "FMDatabase.h"
+#import "FMDatabase+Synchronized.h"
+
 @interface FMDatabase (FMDatabaseAdditions)
 
 

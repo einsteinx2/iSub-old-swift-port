@@ -7,7 +7,6 @@
 //
 
 #import "SUSNowPlayingLoader.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "TBXML.h"
 #import "DatabaseSingleton.h"

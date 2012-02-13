@@ -88,6 +88,7 @@
 @property BOOL isSwipeEnabled;
 @property float gainMultiplier;
 @property BOOL isPartialCacheNextSong;
+@property ISMSBassVisualType currentVisualizerType;
 
 // State Saving
 @property BOOL isRecover;

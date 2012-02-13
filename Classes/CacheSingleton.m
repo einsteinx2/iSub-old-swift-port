@@ -9,9 +9,8 @@
 #import "CacheSingleton.h"
 #import "SavedSettings.h"
 #import "DatabaseSingleton.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "FMDatabase+Synchronized.h"
+
 #import "Song.h"
 #import "SUSStreamSingleton.h"
 

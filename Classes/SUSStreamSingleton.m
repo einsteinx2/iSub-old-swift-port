@@ -8,7 +8,6 @@
 
 #import "SUSStreamSingleton.h"
 #import "DatabaseSingleton.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "Song.h"
 #import "NSString+md5.h"
@@ -24,7 +23,7 @@
 #import "SUSCoverArtLargeLoader.h"
 #import "SUSLyricsDAO.h"
 #import "ViewObjectsSingleton.h"
-#import "FMDatabase+Synchronized.h"
+
 
 #define maxNumOfReconnects 3
 
@@ -43,6 +42,27 @@ static SUSStreamSingleton *sharedInstance = nil;
 		}
 	}
 	return nil;
+}
+
+- (BOOL)isSongFirstInQueue:(Song *)aSong
+{
+	SUSStreamHandler *firstHandler = [handlerStack firstObject];
+	return [aSong isEqualToSong:firstHandler.mySong];
+}
+
+- (BOOL)isSongDownloading:(Song *)aSong
+{
+	return [self handlerForSong:aSong].isDownloading;
+}
+
+- (BOOL)isQueueDownloading
+{
+	for (SUSStreamHandler *handler in handlerStack)
+	{
+		if (handler.isDownloading)
+			return YES;
+	}
+	return NO;
 }
 
 - (void)cancelAllStreamsExcept:(NSArray *)handlersToSkip
@@ -115,7 +135,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 	[self cancelStream:[self handlerForSong:aSong]];
 }
 
-- (void)removeAllStreamsExcept:(NSArray *)handlersToSkip//(SUSStreamHandler *)handlerToSkip
+- (void)removeAllStreamsExcept:(NSArray *)handlersToSkip
 {
 	[self cancelAllStreamsExcept:handlersToSkip];
 	NSArray *handlers = [NSArray arrayWithArray:handlerStack];
@@ -148,6 +168,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 {
 	[self cancelAllStreams];
 	[handlerStack removeAllObjects];
+	[self saveHandlerStack];
 }
 
 - (void)removeStreamAtIndex:(NSUInteger)index
@@ -165,11 +186,18 @@ static SUSStreamSingleton *sharedInstance = nil;
 {
 	[self cancelStream:handler];
 	[handlerStack removeObject:handler];
+	
+	[self saveHandlerStack];
 }
 
 - (void)removeStreamForSong:(Song *)aSong
 {
 	[self removeStream:[self handlerForSong:aSong]];
+}
+
+- (void)resumeQueue
+{
+	[self resumeHandler:[handlerStack firstObject]];
 }
 
 - (void)resumeHandler:(SUSStreamHandler *)handler
@@ -190,6 +218,28 @@ static SUSStreamSingleton *sharedInstance = nil;
 - (void)startHandler:(SUSStreamHandler *)handler
 {
 	[self startHandler:handler resume:NO];
+}
+
+- (void)saveHandlerStack
+{
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:handlerStack];
+	if (data)
+	{
+		[[NSUserDefaults standardUserDefaults] setObject:data forKey:@"handlerStack"];
+		[[NSUserDefaults standardUserDefaults] synchronize];
+	}
+}
+
+- (void)loadHandlerStack
+{	
+	NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:@"handlerStack"];
+	if (data)
+		handlerStack = [[NSKeyedUnarchiver unarchiveObjectWithData:data] retain];
+
+	for (SUSStreamHandler *handler in handlerStack)
+	{
+		handler.delegate = self;
+	}
 }
 
 #pragma mark Download
@@ -226,6 +276,8 @@ static SUSStreamSingleton *sharedInstance = nil;
 			}
 		}
 	}
+	
+	[self saveHandlerStack];
 }
 
 - (void)queueStreamForSong:(Song *)song atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp
@@ -256,18 +308,6 @@ static SUSStreamSingleton *sharedInstance = nil;
 	}
 	return isSongInQueue;
 }
-
-/*- (void)queueStreamForNextSong
-{
-	Song *nextSong = currentPlaylistDAO.nextSong;
-
-	// The file doesn't exist or it's not fully cached, start downloading it from the beginning
-	if (nextSong && ![self isSongInQueue:nextSong] && !nextSong.isFullyCached && 
-		![ViewObjectsSingleton sharedInstance].isOfflineMode)
-	{
-		[self queueStreamForSong:nextSong isTempCache:NO];
-	}
-}*/
 
 - (void)fillStreamQueue
 {
@@ -381,6 +421,8 @@ static SUSStreamSingleton *sharedInstance = nil;
 	{
 		[audio prepareNextSongStream];
 	}
+	
+	[self saveHandlerStack];
 }
 
 - (void)SUSStreamHandlerConnectionFailed:(SUSStreamHandler *)handler withError:(NSError *)error
@@ -400,7 +442,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 		DLog(@"removing stream handler");
 		DLog(@"handlerStack: %@", handlerStack);
 		// Tried max number of times so remove
-		[handlerStack removeObject:handler];
+		[self removeStream:handler];
 	}
 }
 
@@ -414,7 +456,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 	DLog(@"handler.isTempCache: %@   lastTempCachedSong: %@", NSStringFromBOOL(handler.isTempCache), self.lastTempCachedSong);
 	
 	// Remove the handler from the stack
-	[handlerStack removeObject:handler];
+	[self removeStream:handler];
 	
 	DLog(@"stream handler finished: %@", handler);
 	DLog(@"handlerStack: %@", handlerStack);
@@ -446,8 +488,20 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (void)setup
 {
+	// Load the handler stack, it may have been full when iSub was closed
+	[self loadHandlerStack];
+	handlerStack = handlerStack ? handlerStack : [[NSMutableArray alloc] initWithCapacity:0];
+	if ([handlerStack count] > 0)
+	{
+		for (SUSStreamHandler *handler in handlerStack)
+		{
+			// Resume any handlers that were downloading when iSub closed
+			if (handler.isDownloading)
+				[handler start:YES];
+		}
+	}
+	
 	lastCachedSong = nil;
-    handlerStack = [[NSMutableArray alloc] initWithCapacity:0];
 	lyricsDAO = [[SUSLyricsDAO alloc] initWithDelegate:self]; 
 	currentPlaylistDAO = [PlaylistSingleton sharedInstance];
 	

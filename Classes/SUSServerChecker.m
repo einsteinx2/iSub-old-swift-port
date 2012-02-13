@@ -19,6 +19,7 @@
 @implementation SUSServerChecker
 
 @synthesize receivedData, delegate, request, isNewSearchAPI, connection;
+@synthesize majorVersion, minorVersion, versionString;
 
 - (id)init
 {
@@ -140,28 +141,26 @@
 	{
         if ([[TBXML elementName:root] isEqualToString:@"subsonic-response"])
         {
-			NSString *version = [TBXML valueOfAttributeNamed:@"version" forElement:root];
-			if (version)
+			self.versionString = [TBXML valueOfAttributeNamed:@"version" forElement:root];
+			if (versionString)
 			{
-				NSArray *splitVersion = [version componentsSeparatedByString:@"."];
-				if ([splitVersion count] == 1)
+				NSArray *splitVersion = [versionString componentsSeparatedByString:@"."];
+				if ([splitVersion count] > 0)
 				{
-					NSUInteger ver = [[splitVersion objectAtIndex:0] intValue];
-					if (ver >= 2)
+					self.majorVersion = [[splitVersion objectAtIndex:0] intValue];
+					if (majorVersion >= 2)
 						isNewSearchAPI = YES;
-					else
-						isNewSearchAPI = NO;
-				}
-				else if ([splitVersion count] > 1)
-				{
-					NSUInteger ver1 = [[splitVersion objectAtIndex:0] intValue];
-					NSUInteger ver2 = [[splitVersion objectAtIndex:1] intValue];
-					if ((ver1 >= 1 && ver2 >= 4) || (ver1 >= 2))
-						isNewSearchAPI = YES;
-					else
-						isNewSearchAPI = NO;
-				}				
+					
+					if ([splitVersion count] > 1)
+					{
+						self.minorVersion = [[splitVersion objectAtIndex:1] intValue];
+						if ((majorVersion >= 1 && minorVersion >= 4))
+							isNewSearchAPI = YES;
+					}	
+				}			
 			}
+			
+			DLog(@"versionString: %@   majorVersion: %i  minorVersion: %i", versionString, majorVersion, minorVersion);
 			
 			TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
 			if (error)

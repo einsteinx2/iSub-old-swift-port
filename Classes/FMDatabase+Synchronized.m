@@ -10,7 +10,7 @@
 
 @implementation FMDatabase (Synchronized)
 
-- (FMResultSet *)synchronizedQuery:(NSString*)sql, ...
+- (FMResultSet *)synchronizedExecuteQuery:(NSString*)sql, ...
 {
 	@synchronized(self)
 	{
@@ -24,7 +24,7 @@
 	}
 }
 
-- (BOOL)synchronizedUpdate:(NSString*)sql, ...
+- (BOOL)synchronizedExecuteUpdate:(NSString*)sql, ...
 {
 	@synchronized(self)
 	{

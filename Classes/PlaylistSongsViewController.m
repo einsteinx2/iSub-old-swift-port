@@ -16,7 +16,6 @@
 #import "PlaylistSongUITableViewCell.h"
 #import "AsynchronousImageViewCached.h"
 #import "Song.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "NSString+md5.h"
 #import "EGORefreshTableHeaderView.h"
@@ -27,7 +26,7 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "OrderedDictionary.h"
 #import "SUSServerPlaylist.h"
-#import "FMDatabase+Synchronized.h"
+
 #import "PlaylistSingleton.h"
 
 @interface PlaylistSongsViewController (Private)
@@ -45,7 +44,6 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	
 	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
@@ -62,7 +60,7 @@
 
     if (viewObjects.isLocalPlaylist)
 	{
-		self.title = [databaseControls.localPlaylistsDb stringForQuery:@"SELECT playlist FROM localPlaylists WHERE md5 = ?", self.md5];
+		self.title = [databaseControls.localPlaylistsDb synchronizedStringForQuery:@"SELECT playlist FROM localPlaylists WHERE md5 = ?", self.md5];
 		
 		UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
 		headerView.backgroundColor = viewObjects.darkNormal;
@@ -497,23 +495,23 @@ static NSString *kName_Error = @"error";
 		
 		if (viewObjects.isLocalPlaylist)
 		{			
-			[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
+			[databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
 			if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the localPlaylistsDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
 			if ([SavedSettings sharedInstance].isJukeboxEnabled)
 				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO jukeboxCurrentPlaylist SELECT * FROM playlist%@", self.md5]];
 			else
 				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", self.md5]];
-			[databaseControls.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
+			[databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"DETACH DATABASE currentPlaylistDb"];
 		}
 		else
 		{
-			[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
+			[databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
 			if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the localPlaylistsDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
 			if ([SavedSettings sharedInstance].isJukeboxEnabled)
 				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO jukeboxCurrentPlaylist SELECT * FROM splaylist%@", self.md5]];
 			else
 				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM splaylist%@", self.md5]];
-			[databaseControls.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
+			[databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"DETACH DATABASE currentPlaylistDb"];
 		}
 		
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)

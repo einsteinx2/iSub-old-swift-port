@@ -31,6 +31,8 @@
 	CGPoint	previousLocation;
 	Boolean	firstTouch;
 	Boolean needsErase;	
+	
+	ISMSBassVisualType visualType;
 }
 
 @property(nonatomic, readwrite) CGPoint location;
@@ -43,6 +45,7 @@
 - (void)erase;
 - (void)eraseBitBuffer;
 
+- (void)changeType:(ISMSBassVisualType)type;
 - (void)changeType;
 
 - (void)startEqDisplay;

@@ -9,9 +9,8 @@
 #import "SUSLyricsLoader.h"
 #import "TBXML.h"
 #import "DatabaseSingleton.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "FMDatabase+Synchronized.h"
+
 #import "NSString+rfcEncode.h"
 #import "NSNotificationCenter+MainThread.h"
 
@@ -65,7 +64,7 @@
 
 - (void)insertLyricsIntoDb
 {
-    [self.db synchronizedUpdate:@"INSERT INTO lyrics (artist, title, lyrics) VALUES (?, ?, ?)", artist, title, self.loadedLyrics];
+    [self.db synchronizedExecuteUpdate:@"INSERT INTO lyrics (artist, title, lyrics) VALUES (?, ?, ?)", artist, title, self.loadedLyrics];
     if ([self.db hadError]) { 
         DLog(@"Err inserting lyrics %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]); 
     }

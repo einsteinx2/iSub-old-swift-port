@@ -15,7 +15,6 @@
 #import "SearchXMLParser.h"
 #import "ViewObjectsSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "ServerListViewController.h"
 #import "ArtistUITableViewCell.h"
@@ -199,7 +198,7 @@
 		currentPlaylist.isShuffle = YES;
 		
 		[databaseControls resetShufflePlaylist];
-		[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist ORDER BY RANDOM()"];
+		[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist ORDER BY RANDOM()"];
 	}
 	else
 	{

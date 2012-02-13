@@ -11,9 +11,8 @@
 #import "DatabaseSingleton.h"
 #import "NSString+md5.h"
 #import "iSubAppDelegate.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "FMDatabase+Synchronized.h"
+
 #import "Album.h"
 #import "NSString+Additions.h"
 #import "UIView+tools.h"

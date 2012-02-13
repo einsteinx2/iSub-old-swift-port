@@ -14,7 +14,6 @@
 #import "NSError+ISMSError.h"
 #import "NSString+md5.h"
 #import "DatabaseSingleton.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "SUSCoverArtLargeDAO.h"
 #import "SavedSettings.h"
@@ -34,15 +33,15 @@
 #define kMaxBytesPerIntervalWifi (kMaxBytesPerSecWifi * kThrottleTimeInterval)
 
 #define kMinKiloBytesToStartPlayback 250
-#define kMinBytesToStartPlayback (1024 * kMinKiloBytesToStartPlayback) // Number of bytes to wait before activating the player
-#define kMinBytesToStartLimiting (1024 * 1024)	// Start throttling bandwidth after 1 MB downloaded for 160kbps files (adjusted accordingly by bitrate)
+#define kMinBytesToStartPlayback ((unsigned long long)(1024 * kMinKiloBytesToStartPlayback)) // Number of bytes to wait before activating the player
+#define kMinBytesToStartLimiting ((unsigned long long)(1024 * 1024))	// Start throttling bandwidth after 1 MB downloaded for 160kbps files (adjusted accordingly by bitrate)
 
 // Logging
 #define isProgressLoggingEnabled NO
 #define isThrottleLoggingEnabled NO
 
 @implementation SUSStreamHandler
-@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, secondsOffset, partialPrecacheSleep;
+@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, secondsOffset, partialPrecacheSleep, isDownloading;
 
 - (id)initWithSong:(Song *)song byteOffset:(unsigned long long)bOffset secondsOffset:(double)sOffset isTemp:(BOOL)isTemp delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate
 {
@@ -59,6 +58,7 @@
 		connection = nil;
 		isTempCache = isTemp;
 		partialPrecacheSleep = YES;
+		isDownloading = NO;
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playlistIndexChanged) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	}
@@ -152,14 +152,8 @@
 	[loadingThread.threadDictionary setObject:now forKey:@"throttlingDate"];
 	[now release];
 	
-	NSNumber *isWifi = [[NSNumber alloc] initWithBool:[iSubAppDelegate sharedInstance].isWifi];
-	[loadingThread.threadDictionary setObject:isWifi forKey:@"isWifi"];
-	[isWifi release];
-	
 	[loadingThread.threadDictionary setObject:[[mySong copy] autorelease] forKey:@"mySong"];
-	
 	[loadingThread.threadDictionary setObject:[NSNumber numberWithBool:isTempCache] forKey:@"isTempCache"];
-	
 	if ([mySong isEqualToSong:[[PlaylistSingleton sharedInstance] nextSong]])
 	{
 		[loadingThread.threadDictionary setObject:[NSNumber numberWithBool:YES] forKey:@"isNextSong"];
@@ -181,10 +175,11 @@
 		connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 		if (connection)
 		{
+			self.isDownloading = YES;
 			[self performSelectorOnMainThread:@selector(startConnectionInternalSuccess) withObject:nil waitUntilDone:YES];
-			DLog(@"connection starting, starting runloop");
+			DLog(@"Stream handler download starting for %@", mySong);
 			CFRunLoopRun();
-			DLog(@"run loop finished");
+			DLog(@"Stream handler finished downloading %@", mySong);
 		}
 		else
 		{
@@ -209,10 +204,12 @@
 // Cancel the download and stop the run loop in loadingThread
 - (void)cancel
 {
+	self.isDownloading = NO;
+	
 	// Pop out of infinite loop if partially pre-cached
 	self.partialPrecacheSleep = NO;
 	
-	DLog(@"request canceled");
+	DLog(@"Stream handler request canceled for %@", mySong);
 	[connection cancel]; 
 	[connection release]; connection = nil;
 	
@@ -303,7 +300,6 @@ BOOL isBeginning = YES;
 	CGFloat bitrate = [[threadDict objectForKey:@"bitrate"] floatValue];
 	NSDate *throttlingDate = [[threadDict objectForKey:@"throttlingDate"] retain];
 	NSUInteger dataLength = [incrementalData length];
-	BOOL isWifi = [[threadDict objectForKey:@"isWifi"] boolValue];
 	
 	totalBytesTransferred += dataLength;
 	bytesTransferred += dataLength;
@@ -321,9 +317,7 @@ BOOL isBeginning = YES;
 	
 	// Log progress
 	if (isProgressLoggingEnabled)
-	{
-		DLog(@"downloadedLengthA:  %lu   bytesRead: %i", totalBytesTransferred, dataLength);
-	}
+		DLog(@"downloadedLengthA:  %llu   bytesRead: %i", totalBytesTransferred, dataLength);
 	
 	// If near beginning of file, don't throttle
 	if (totalBytesTransferred < (kMinBytesToStartLimiting * (bitrate / 160.0f)))
@@ -339,13 +333,13 @@ BOOL isBeginning = YES;
 	NSTimeInterval intervalSinceLastThrottle = [now timeIntervalSinceDate:throttlingDate];
 	[throttlingDate release];
 	[now release];
-	if (intervalSinceLastThrottle > kThrottleTimeInterval && totalBytesTransferred > (kMinBytesToStartLimiting * (bitrate / 160.0f)))
+	if (intervalSinceLastThrottle > kThrottleTimeInterval && totalBytesTransferred > (unsigned long long)(kMinBytesToStartLimiting * (bitrate / 160.0f)))
 	{
 		if (isThrottleLoggingEnabled)
-			DLog(@"entering throttling if statement, interval: %f  bytes transferred: %lu  maxBytes: %f", intervalSinceLastThrottle, bytesTransferred, kMaxBytesPerInterval3G);
+			DLog(@"entering throttling if statement, interval: %f  bytes transferred: %llu  maxBytes: %f", intervalSinceLastThrottle, bytesTransferred, kMaxBytesPerInterval3G);
 		
 		NSTimeInterval delay = 0.0;
-		if (!isWifi && bytesTransferred > kMaxBytesPerInterval3G)
+		if (![iSubAppDelegate sharedInstance].isWifi && bytesTransferred > kMaxBytesPerInterval3G)
 		{
 			double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)bitrate is3G:YES];
 			delay = (kThrottleTimeInterval * ((double)bytesTransferred / maxBytesPerInterval));
@@ -354,7 +348,7 @@ BOOL isBeginning = YES;
 			if (isThrottleLoggingEnabled)
 				DLog(@"Bandwidth used is more than kMaxBytesPerInterval3G, Pausing for %f", delay);
 		}
-		else if (isWifi && bytesTransferred > kMaxBytesPerIntervalWifi)
+		else if ([iSubAppDelegate sharedInstance].isWifi && bytesTransferred > kMaxBytesPerIntervalWifi)
 		{
 			double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)bitrate is3G:NO];
 			delay = (kThrottleTimeInterval * ((double)bytesTransferred / maxBytesPerInterval));
@@ -408,6 +402,8 @@ BOOL isBeginning = YES;
 // Main Thread
 - (void)didFailInternal:(NSError *)error
 {
+	self.isDownloading = NO;
+	
 	self.connection = nil;
 	
 	// Close the file handle
@@ -429,6 +425,8 @@ BOOL isBeginning = YES;
 // Main Thread
 - (void)didFinishLoadingInternal
 {
+	self.isDownloading = NO;
+	
 	self.connection = nil;
 	
 	// Close the file handle
@@ -446,7 +444,7 @@ BOOL isBeginning = YES;
 	else
 	{		
 		// Mark song as cached
-		DLog(@"connection did finish");
+		DLog(@"Stream handler connection did finish for %@", mySong);
 		if (!isTempCache)
 			mySong.isFullyCached = YES;
 	}
@@ -478,6 +476,36 @@ BOOL isBeginning = YES;
 		return NO;
 	
 	return [self isEqualToSUSStreamHandler:other];
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+	[encoder encodeObject:mySong forKey:@"mySong"];
+	[encoder encodeInt64:byteOffset forKey:@"byteOffset"];
+	[encoder encodeDouble:secondsOffset forKey:@"secondsOffset"];
+	[encoder encodeInt32:totalBytesTransferred forKey:@"totalBytesTransferred"];
+	[encoder encodeBool:isDelegateNotifiedToStartPlayback forKey:@"isDelegateNotifiedToStartPlayback"];
+	[encoder encodeBool:isTempCache forKey:@"isTempCache"];
+	[encoder encodeBool:isDownloading forKey:@"isDownloading"];
+}
+
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+	if ((self = [super init]))
+	{		
+		mySong = [[decoder decodeObjectForKey:@"mySong"] copy];
+		byteOffset = [decoder decodeInt64ForKey:@"byteOffset"];
+		secondsOffset = [decoder decodeDoubleForKey:@"secondsOffset"];
+		totalBytesTransferred = [decoder decodeInt32ForKey:@"totalBytesTransferred"];
+		isDelegateNotifiedToStartPlayback = [decoder decodeBoolForKey:@"isDelegateNotifiedToStartPlayback"];
+		isTempCache = [decoder decodeBoolForKey:@"isTempCache"];
+		isDownloading = [decoder decodeBoolForKey:@"isDownloading"];
+	}
+	
+	return self;
 }
 
 @end

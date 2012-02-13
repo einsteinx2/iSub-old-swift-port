@@ -13,14 +13,13 @@
 #import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "NSString+md5.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "SavedSettings.h"
 #import "FlurryAnalytics.h"
-#import "FMDatabase+Synchronized.h"
+
 
 @implementation GenresViewController
 
@@ -128,7 +127,7 @@
 	}
 	else 
 	{
-		if ([databaseControls.genresDb intForQuery:@"SELECT COUNT(*) FROM genres"] == 0)
+		if ([databaseControls.genresDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM genres"] == 0)
 		{
 			[self showNoGenresScreen];
 		}
@@ -182,7 +181,7 @@
 	if (viewObjects.isOfflineMode)
 		return [databaseControls.songCacheDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM genres"];
 	else
-		return [databaseControls.genresDb intForQuery:@"SELECT COUNT(*) FROM genres"];
+		return [databaseControls.genresDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM genres"];
 }
 
 
@@ -206,7 +205,7 @@
 	}
 	else
 	{
-		cell.genreNameLabel.text = [databaseControls.genresDb stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
+		cell.genreNameLabel.text = [databaseControls.genresDb synchronizedStringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
 	}
 	
     return [cell autorelease];
@@ -227,20 +226,20 @@
 		}
 		else
 		{
-			artistViewController.title = [NSString stringWithString:[databaseControls.genresDb stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]]];
+			artistViewController.title = [NSString stringWithString:[databaseControls.genresDb synchronizedStringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]]];
 		}
 		artistViewController.listOfArtists = [NSMutableArray arrayWithCapacity:1];
 
 		FMResultSet *result;
 		if (viewObjects.isOfflineMode) 
 		{
-			result = [databaseControls.songCacheDb synchronizedQuery:@"SELECT seg1 FROM cachedSongsLayout a INNER JOIN genresSongs b ON a.md5 = b.md5 WHERE b.genre = ? GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE", artistViewController.title];
+			result = [databaseControls.songCacheDb synchronizedExecuteQuery:@"SELECT seg1 FROM cachedSongsLayout a INNER JOIN genresSongs b ON a.md5 = b.md5 WHERE b.genre = ? GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE", artistViewController.title];
 			if ([databaseControls.songCacheDb hadError])
 				DLog(@"Error grabbing the artists for this genre... Err %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
 		}
 		else 
 		{
-			result = [databaseControls.genresDb executeQuery:@"SELECT seg1 FROM genresLayout a INNER JOIN genresSongs b ON a.md5 = b.md5 WHERE b.genre = ? GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE", artistViewController.title];
+			result = [databaseControls.genresDb synchronizedExecuteQuery:@"SELECT seg1 FROM genresLayout a INNER JOIN genresSongs b ON a.md5 = b.md5 WHERE b.genre = ? GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE", artistViewController.title];
 			if ([databaseControls.genresDb hadError])
 				DLog(@"Error grabbing the artists for this genre... Err %d: %@", [databaseControls.genresDb lastErrorCode], [databaseControls.genresDb lastErrorMessage]);
 		}

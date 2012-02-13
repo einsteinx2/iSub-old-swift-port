@@ -20,7 +20,6 @@
 #import "Index.h"
 #import "Album.h"
 #import "Song.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "NSString+md5.h"
 #import "LoadingScreen.h"
@@ -468,7 +467,7 @@
 		isSearching = NO;
 		letUserSelectRow = NO;
 		self.tableView.scrollEnabled = NO;
-		[databaseControls.allSongsDb executeUpdate:@"DROP TABLE allSongsSearch"];
+		[databaseControls.allSongsDb synchronizedExecuteUpdate:@"DROP TABLE allSongsSearch"];
 	}
 	
 	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];

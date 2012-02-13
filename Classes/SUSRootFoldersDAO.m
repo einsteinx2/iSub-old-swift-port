@@ -8,7 +8,6 @@
 
 #import "SUSRootFoldersDAO.h"
 #import "DatabaseSingleton.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "GTMNSString+HTML.h"
 #import "TBXML.h"
@@ -205,7 +204,7 @@
 {
 	NSString *query = [NSString stringWithFormat:@"DELETE FROM rootFolderNameSearch", self.tableModifier];
 	[self.db executeUpdate:query];
-	//[self.db executeUpdate:@"VACUUM"];
+	//[self.db synchronizedExecuteUpdate:@"VACUUM"];
 }
 
 - (void)rootFolderPerformSearch:(NSString *)name
@@ -236,13 +235,13 @@
 + (void)setFolderDropdownFolders:(NSDictionary *)folders
 {
 	FMDatabase *database = [[DatabaseSingleton sharedInstance] albumListCacheDb];
-	[database executeUpdate:@"DROP TABLE IF EXISTS rootFolderDropdownCache (id INTEGER, name TEXT)"];
-	[database executeUpdate:@"CREATE TABLE rootFolderDropdownCache (id INTEGER, name TEXT)"];
+	[database synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS rootFolderDropdownCache (id INTEGER, name TEXT)"];
+	[database synchronizedExecuteUpdate:@"CREATE TABLE rootFolderDropdownCache (id INTEGER, name TEXT)"];
 	
 	for (NSNumber *folderId in [folders allKeys])
 	{
 		NSString *folderName = [folders objectForKey:folderId];
-		[database executeUpdate:@"INSERT INTO rootFolderDropdownCache VALUES (?, ?)", folderId, folderName];
+		[database synchronizedExecuteUpdate:@"INSERT INTO rootFolderDropdownCache VALUES (?, ?)", folderId, folderName];
 	}
 }
 
@@ -253,7 +252,7 @@
 		return nil;
 	
 	NSMutableDictionary *folders = [NSMutableDictionary dictionaryWithCapacity:0];
-	FMResultSet *result = [database executeQuery:@"SELECT * FROM rootFolderDropdownCache"];
+	FMResultSet *result = [database synchronizedExecuteQuery:@"SELECT * FROM rootFolderDropdownCache"];
 	while ([result next])
 	{
 		NSNumber *folderId = [NSNumber numberWithInt:[result intForColumn:@"id"]];
@@ -314,7 +313,7 @@
 	{
 		[indexPositions release];
 		indexPositions = [[self rootFolderIndexPositions] retain];
-		//DLog(@"indexPositions count: %i   tableModifier: %@   indexPositions: %@", [self.db intForQuery:@"SELECT count(*) FROM rootFolderIndexCache%@", self.tableModifier], self.tableModifier, indexPositions);
+		//DLog(@"indexPositions count: %i   tableModifier: %@   indexPositions: %@", [self.db synchronizedIntForQuery:@"SELECT count(*) FROM rootFolderIndexCache%@", self.tableModifier], self.tableModifier, indexPositions);
 	}
 	return indexPositions;
 }

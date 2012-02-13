@@ -7,9 +7,8 @@
 //
 
 #import "Song+DAO.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "FMDatabase+Synchronized.h"
+
 #import "DatabaseSingleton.h"
 #import "NSString+md5.h"
 #import "ViewObjectsSingleton.h"
@@ -58,7 +57,7 @@
 	assert(isFullyCached && "Can not set isFullyCached to to NO");
 	if (isFullyCached)
 	{
-		[self.db synchronizedUpdate:@"UPDATE cachedSongs SET finished = 'YES' WHERE md5 = ?", [self.path md5]];
+		[self.db synchronizedExecuteUpdate:@"UPDATE cachedSongs SET finished = 'YES' WHERE md5 = ?", [self.path md5]];
 		
 		[self insertIntoCachedSongsLayout];
 		
@@ -68,7 +67,7 @@
 			// Check if the genre has a table in the database yet, if not create it and add the new genre to the genres table
 			if ([self.db synchronizedIntForQuery:@"SELECT COUNT(*) FROM genres WHERE genre = ?", self.genre] == 0)
 			{							
-				[self.db synchronizedUpdate:@"INSERT INTO genres (genre) VALUES (?)", self.genre];
+				[self.db synchronizedExecuteUpdate:@"INSERT INTO genres (genre) VALUES (?)", self.genre];
 				if ([self.db hadError])
 				{
 					DLog(@"Err adding the genre %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]); 
@@ -126,7 +125,7 @@
 {
 	row++;
 	Song *aSong = nil;
-	FMResultSet *result = [db synchronizedQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE ROWID = %i", table, row]];
+	FMResultSet *result = [db synchronizedExecuteQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE ROWID = %i", table, row]];
 	if ([db hadError]) 
 	{
 		DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -154,7 +153,7 @@
 + (Song *)songFromDbForMD5:(NSString *)md5 inTable:(NSString *)table inDatabase:(FMDatabase *)db
 {
 	Song *aSong = nil;
-	FMResultSet *result = [db synchronizedQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE md5 = ?", table], md5];
+	FMResultSet *result = [db synchronizedExecuteQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE md5 = ?", table], md5];
 	if ([db hadError]) 
 	{
 		DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -187,7 +186,7 @@
 
 - (BOOL)insertIntoTable:(NSString *)table inDatabase:(FMDatabase *)db
 {
-	[db synchronizedUpdate:[NSString stringWithFormat:@"INSERT INTO %@ (%@) VALUES (%@)", table, [Song standardSongColumnNames], [Song standardSongColumnQMarks]], self.title, self.songId, self.artist, self.album, self.genre, self.coverArtId, self.path, self.suffix, self.transcodedSuffix, self.duration, self.bitRate, self.track, self.year, self.size, self.parentId];
+	[db synchronizedExecuteUpdate:[NSString stringWithFormat:@"INSERT INTO %@ (%@) VALUES (%@)", table, [Song standardSongColumnNames], [Song standardSongColumnQMarks]], self.title, self.songId, self.artist, self.album, self.genre, self.coverArtId, self.path, self.suffix, self.transcodedSuffix, self.duration, self.bitRate, self.track, self.year, self.size, self.parentId];
 	
 	if ([db hadError]) 
 	{
@@ -207,7 +206,7 @@
 {
 	FMDatabase *db = [DatabaseSingleton sharedInstance].albumListCacheDb;
 	
-	[db synchronizedUpdate:[NSString stringWithFormat:@"INSERT INTO songsCache (folderId, %@) VALUES (?, %@)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [folderId md5], self.title, self.songId, self.artist, self.album, self.genre, self.coverArtId, self.path, self.suffix, self.transcodedSuffix, self.duration, self.bitRate, self.track, self.year, self.size, self.parentId];
+	[db synchronizedExecuteUpdate:[NSString stringWithFormat:@"INSERT INTO songsCache (folderId, %@) VALUES (?, %@)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [folderId md5], self.title, self.songId, self.artist, self.album, self.genre, self.coverArtId, self.path, self.suffix, self.transcodedSuffix, self.duration, self.bitRate, self.track, self.year, self.size, self.parentId];
 	
 	if ([db hadError])
 	{
@@ -219,7 +218,7 @@
 
 - (BOOL)insertIntoGenreTable:(NSString *)table
 {	
-	[self.db synchronizedUpdate:[NSString stringWithFormat:@"INSERT INTO %@ (md5, %@) VALUES (?, %@)", table, [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [self.path md5], self.title, self.songId, self.artist, self.album, self.genre, self.coverArtId, self.path, self.suffix, self.transcodedSuffix, self.duration, self.bitRate, self.track, self.year, self.size, self.parentId];
+	[self.db synchronizedExecuteUpdate:[NSString stringWithFormat:@"INSERT INTO %@ (md5, %@) VALUES (?, %@)", table, [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [self.path md5], self.title, self.songId, self.artist, self.album, self.genre, self.coverArtId, self.path, self.suffix, self.transcodedSuffix, self.duration, self.bitRate, self.track, self.year, self.size, self.parentId];
 	
 	if ([self.db hadError]) 
 	{
@@ -231,7 +230,7 @@
 
 - (BOOL)insertIntoCachedSongsTable
 {
-	[self.db synchronizedUpdate:[NSString stringWithFormat:@"REPLACE INTO cachedSongs (md5, finished, cachedDate, playedDate, %@) VALUES (?, 'NO', ?, 0, %@)",  [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [self.path md5], [NSNumber numberWithInt:(NSUInteger)[[NSDate date] timeIntervalSince1970]], self.title, self.songId, self.artist, self.album, self.genre, self.coverArtId, self.path, self.suffix, self.transcodedSuffix, self.duration, self.bitRate, self.track, self.year, self.size, self.parentId];
+	[self.db synchronizedExecuteUpdate:[NSString stringWithFormat:@"REPLACE INTO cachedSongs (md5, finished, cachedDate, playedDate, %@) VALUES (?, 'NO', ?, 0, %@)",  [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [self.path md5], [NSNumber numberWithInt:(NSUInteger)[[NSDate date] timeIntervalSince1970]], self.title, self.songId, self.artist, self.album, self.genre, self.coverArtId, self.path, self.suffix, self.transcodedSuffix, self.duration, self.bitRate, self.track, self.year, self.size, self.parentId];
 	
 	if ([self.db hadError]) 
 	{
@@ -245,7 +244,7 @@
 {	
 	if ([self.db synchronizedIntForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE md5 = ? AND finished = 'YES'", [self.path md5]] == 0) 
 	{
-		[self.db synchronizedUpdate:[NSString stringWithFormat:@"INSERT INTO cacheQueue (md5, finished, cachedDate, playedDate, %@) VALUES (?, ?, ?, ?, %@)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [self.path md5], @"NO", [NSNumber numberWithInt:(NSUInteger)[[NSDate date] timeIntervalSince1970]], [NSNumber numberWithInt:0], self.title, self.songId, self.artist, self.album, self.genre, self.coverArtId, self.path, self.suffix, self.transcodedSuffix, self.duration, self.bitRate, self.track, self.year, self.size, self.parentId];
+		[self.db synchronizedExecuteUpdate:[NSString stringWithFormat:@"INSERT INTO cacheQueue (md5, finished, cachedDate, playedDate, %@) VALUES (?, ?, ?, ?, %@)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [self.path md5], @"NO", [NSNumber numberWithInt:(NSUInteger)[[NSDate date] timeIntervalSince1970]], [NSNumber numberWithInt:0], self.title, self.songId, self.artist, self.album, self.genre, self.coverArtId, self.path, self.suffix, self.transcodedSuffix, self.duration, self.bitRate, self.track, self.year, self.size, self.parentId];
 	}
 	
 	if ([self.db hadError]) 
@@ -337,7 +336,7 @@
 		}
 		
 		NSString *query = [NSString stringWithFormat:@"INSERT INTO cachedSongsLayout (md5, genre, segs, seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9) VALUES ('%@', '%@', %i, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [self.path md5], self.genre, [splitPath count]];
-		[self.db synchronizedUpdate:query, [segments objectAtIndex:0], [segments objectAtIndex:1], [segments objectAtIndex:2], [segments objectAtIndex:3], [segments objectAtIndex:4], [segments objectAtIndex:5], [segments objectAtIndex:6], [segments objectAtIndex:7], [segments objectAtIndex:8]];
+		[self.db synchronizedExecuteUpdate:query, [segments objectAtIndex:0], [segments objectAtIndex:1], [segments objectAtIndex:2], [segments objectAtIndex:3], [segments objectAtIndex:4], [segments objectAtIndex:5], [segments objectAtIndex:6], [segments objectAtIndex:7], [segments objectAtIndex:8]];
 		
 		hadError = [self.db hadError];
 		
@@ -355,7 +354,7 @@
 	BOOL hadError = NO;	
 	
 	// Get the song info
-	FMResultSet *result = [dbControls.songCacheDb synchronizedQuery:@"SELECT genre, transcodedSuffix, suffix FROM cachedSongs WHERE md5 = ?", md5];
+	FMResultSet *result = [dbControls.songCacheDb synchronizedExecuteQuery:@"SELECT genre, transcodedSuffix, suffix FROM cachedSongs WHERE md5 = ?", md5];
 	[result next];
 	NSString *genre = nil;
 	NSString *transcodedSuffix = nil;
@@ -371,13 +370,13 @@
 		hadError = YES;
 	
 	// Delete the row from the cachedSongs and genresSongs
-	[dbControls.songCacheDb synchronizedUpdate:@"DELETE FROM cachedSongs WHERE md5 = ?", md5];
+	[dbControls.songCacheDb synchronizedExecuteUpdate:@"DELETE FROM cachedSongs WHERE md5 = ?", md5];
 	if ([dbControls.songCacheDb hadError])
 		hadError = YES;
-	[dbControls.songCacheDb synchronizedUpdate:@"DELETE FROM cachedSongsLayout WHERE md5 = ?", md5];
+	[dbControls.songCacheDb synchronizedExecuteUpdate:@"DELETE FROM cachedSongsLayout WHERE md5 = ?", md5];
 	if ([dbControls.songCacheDb hadError])
 		hadError = YES;
-	[dbControls.songCacheDb synchronizedUpdate:@"DELETE FROM genresSongs WHERE md5 = ?", md5];
+	[dbControls.songCacheDb synchronizedExecuteUpdate:@"DELETE FROM genresSongs WHERE md5 = ?", md5];
 	if ([dbControls.songCacheDb hadError])
 		hadError = YES;
 	
@@ -402,7 +401,7 @@
 	// Clean up genres table
 	if ([dbControls.songCacheDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM genresSongs WHERE genre = ?", genre] == 0)
 	{
-		[dbControls.songCacheDb synchronizedUpdate:@"DELETE FROM genres WHERE genre = ?", genre];
+		[dbControls.songCacheDb synchronizedExecuteUpdate:@"DELETE FROM genres WHERE genre = ?", genre];
 		if ([dbControls.songCacheDb hadError])
 			hadError = YES;
 	}
@@ -412,12 +411,15 @@
 
 - (CGFloat)downloadProgress
 {
+	CGFloat downloadProgress = 0.;
+	
 	if (self.isFullyCached)
-		return 1.0;
+		downloadProgress = 1.;
 	
 	if (self.isPartiallyCached)
 	{
-		CGFloat totalSize = [self.size floatValue];
+		double totalSize = [self.size doubleValue];
+		DLog(@"size: %llu   size: %f", [self.size unsignedLongLongValue], [self.size doubleValue]);
 		if (self.transcodedSuffix)
 		{
 			// This is a transcode, so we'll want to use the actual bitrate if possible
@@ -445,11 +447,23 @@
 				totalSize = byteRate * [self.duration floatValue];
 			}
 		}
-		return (CGFloat)self.localFileSize / totalSize;
+		else
+		{
+			// Use estimated bitrate
+			CGFloat byteRate = (CGFloat)self.estimatedBitrate * 1024. / 8.;
+			totalSize = byteRate * [self.duration floatValue];
+		}
+		downloadProgress = (double)self.localFileSize / totalSize;
+		
+		DLog(@"downloadProgress: %f   localFileSize: %f    totalSize: %f", downloadProgress, (double)self.localFileSize, totalSize);
 	}
 	
+	// Keep within bounds
+	downloadProgress = downloadProgress < 0. ? 0. : downloadProgress;
+	downloadProgress = downloadProgress > 1. ? 1. : downloadProgress;
+	
 	// The song hasn't started downloading yet
-	return 0.0;
+	return downloadProgress;
 }
 
 - (NSDate *)playedDate
@@ -465,7 +479,7 @@
 	NSString *query = [NSString stringWithFormat:@"UPDATE cachedSongs SET playedDate = %i WHERE md5 = '%@'", 
 					   (NSUInteger)[playedDate timeIntervalSince1970], 
 					   [self.songId md5]];
-	[self.db synchronizedUpdate:query];
+	[self.db synchronizedExecuteUpdate:query];
 }
 
 + (NSString *)standardSongColumnSchema

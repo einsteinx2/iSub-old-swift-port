@@ -18,7 +18,6 @@
 #import "AsynchronousImageViewCached.h"
 #import "LocalPlaylistsUITableViewCell.h"
 #import "PlaylistSongsViewController.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "Song.h"
 #import "StoreViewController.h"
@@ -32,7 +31,7 @@
 #import "PlaylistSingleton.h"
 #import "AudioEngine.h"
 #import "FlurryAnalytics.h"
-#import "FMDatabase+Synchronized.h"
+//
 #import "NSString+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
 
@@ -230,9 +229,9 @@
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			currentPlaylistCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"];
+			currentPlaylistCount = [databaseControls.currentPlaylistDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"];
 		else
-			currentPlaylistCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
+			currentPlaylistCount = [databaseControls.currentPlaylistDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
 			
 		if (currentPlaylistCount == 1)
 			playlistCountLabel.text = [NSString stringWithFormat:@"1 song"];
@@ -298,10 +297,10 @@
 		else if (segmentedControl.selectedSegmentIndex == 1)
 		{
 			savePlaylistLabel.frame = CGRectMake(0, y, 227, 50);
-			if ([databaseControls.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists"] == 1)
+			if ([databaseControls.localPlaylistsDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM localPlaylists"] == 1)
 				savePlaylistLabel.text = [NSString stringWithFormat:@"1 playlist"];
 			else 
-				savePlaylistLabel.text = [NSString stringWithFormat:@"%i playlists", [databaseControls.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists"]];
+				savePlaylistLabel.text = [NSString stringWithFormat:@"%i playlists", [databaseControls.localPlaylistsDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM localPlaylists"]];
 		}
 		else if (segmentedControl.selectedSegmentIndex == 2)
 		{
@@ -395,10 +394,10 @@
 		}
 		else if (segmentedControl.selectedSegmentIndex == 1)
 		{
-			if ([databaseControls.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists"] == 1)
+			if ([databaseControls.localPlaylistsDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM localPlaylists"] == 1)
 				playlistCountLabel.text = [NSString stringWithFormat:@"1 playlist"];
 			else 
-				playlistCountLabel.text = [NSString stringWithFormat:@"%i playlists", [databaseControls.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists"]];
+				playlistCountLabel.text = [NSString stringWithFormat:@"%i playlists", [databaseControls.localPlaylistsDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM localPlaylists"]];
 		}
 		else if (segmentedControl.selectedSegmentIndex == 2)
 		{
@@ -524,9 +523,9 @@
 		
 		// Get the current playlist count
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			currentPlaylistCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"];
+			currentPlaylistCount = [databaseControls.currentPlaylistDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"];
 		else
-			currentPlaylistCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
+			currentPlaylistCount = [databaseControls.currentPlaylistDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
 		
 		// Clear the edit stuff if they switch tabs in the middle of editing
 		[self removeEditControls];
@@ -573,7 +572,7 @@
 		// Remove the save and edit buttons if showing
 		[self removeSaveEditButtons];
 		
-		if ([databaseControls.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists"] > 0)
+		if ([databaseControls.localPlaylistsDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM localPlaylists"] > 0)
 		{
 			// Modify the header view to include the save and edit buttons
 			[self addSaveEditButtons];
@@ -586,7 +585,7 @@
 		[self removeNoPlaylistsScreen];
 		
 		// If the list is empty, display the no playlists overlay screen
-		if ([databaseControls.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists"] == 0)
+		if ([databaseControls.localPlaylistsDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM localPlaylists"] == 0)
 		{
 			[self addNoPlaylistsScreen];
 		}
@@ -647,7 +646,7 @@
 			if (goToNextSong)
 			{
 				goToNextSong = NO;
-				currentPlaylistCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
+				currentPlaylistCount = [databaseControls.currentPlaylistDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
 				if (currentPlaylistCount > 0)
 				{
 					[musicControls nextSong];
@@ -723,7 +722,7 @@
 }
 
 
-- (void) showDeleteButton
+- (void)showDeleteButton
 {
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
@@ -904,18 +903,18 @@
 		// Sort the multiDeleteList to make sure it's accending
 		[viewObjects.multiDeleteList sortUsingSelector:@selector(compare:)];
 		
-		[databaseControls.localPlaylistsDb executeUpdate:@"DROP TABLE localPlaylistsTemp"];
-		[databaseControls.localPlaylistsDb executeUpdate:@"CREATE TABLE localPlaylistsTemp(playlist TEXT, md5 TEXT)"];
+		[databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"DROP TABLE localPlaylistsTemp"];
+		[databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"CREATE TABLE localPlaylistsTemp(playlist TEXT, md5 TEXT)"];
 		for (NSNumber *index in [viewObjects.multiDeleteList reverseObjectEnumerator])
 		{
 			NSInteger rowId = [index integerValue] + 1;
 			NSString *md5 = [databaseControls.localPlaylistsDb stringForQuery:[NSString stringWithFormat:@"SELECT md5 FROM localPlaylists WHERE ROWID = %i", rowId]];
 			[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"DROP TABLE playlist%@", md5]];
-			[databaseControls.localPlaylistsDb executeUpdate:@"DELETE FROM localPlaylists WHERE md5 = ?", md5];
+			[databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"DELETE FROM localPlaylists WHERE md5 = ?", md5];
 		}
-		[databaseControls.localPlaylistsDb executeUpdate:@"INSERT INTO localPlaylistsTemp SELECT * FROM localPlaylists"];
-		[databaseControls.localPlaylistsDb executeUpdate:@"DROP TABLE localPlaylists"];
-		[databaseControls.localPlaylistsDb executeUpdate:@"ALTER TABLE localPlaylistsTemp RENAME TO localPlaylists"];
+		[databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"INSERT INTO localPlaylistsTemp SELECT * FROM localPlaylists"];
+		[databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"DROP TABLE localPlaylists"];
+		[databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"ALTER TABLE localPlaylistsTemp RENAME TO localPlaylists"];
 		
 		// Create indexPaths from multiDeleteList and delete the rows from the tableView
 		NSMutableArray *indexes = [[NSMutableArray alloc] init];
@@ -983,7 +982,7 @@
 			if ([viewObjects.multiDeleteList count] == 0)
 			{
 				// Select all the rows
-				NSUInteger count = [databaseControls.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists"];
+				NSUInteger count = [databaseControls.localPlaylistsDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM localPlaylists"];
 				for (int i = 0; i < count; i++)
 				{
 					[viewObjects.multiDeleteList addObject:[NSNumber numberWithInt:i]];
@@ -1106,12 +1105,12 @@
 			if (savePlaylistLocal)
 			{
 				// Check if the playlist exists, if not create the playlist table and add the entry to localPlaylists table
-				if ([databaseControls.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists WHERE md5 = ?", [playlistNameTextField.text md5]] == 0)
+				if ([databaseControls.localPlaylistsDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM localPlaylists WHERE md5 = ?", [playlistNameTextField.text md5]] == 0)
 				{
-					[databaseControls.localPlaylistsDb executeUpdate:@"INSERT INTO localPlaylists (playlist, md5) VALUES (?, ?)", playlistNameTextField.text, [playlistNameTextField.text md5]];
+					[databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"INSERT INTO localPlaylists (playlist, md5) VALUES (?, ?)", playlistNameTextField.text, [playlistNameTextField.text md5]];
 					[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [playlistNameTextField.text md5], [Song standardSongColumnSchema]]];
 					
-					[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
+					[databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
 					if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
 					if (currentPlaylist.isShuffle) {
 						[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM shufflePlaylist", [playlistNameTextField.text md5]]];
@@ -1119,7 +1118,7 @@
 					else {
 						[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM currentPlaylist", [playlistNameTextField.text md5]]];
 					}
-					[databaseControls.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
+					[databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"DETACH DATABASE currentPlaylistDb"];
 				}
 				else
 				{
@@ -1143,7 +1142,7 @@
 			[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"DROP TABLE playlist%@", [playlistNameTextField.text md5]]];
 			[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [playlistNameTextField.text md5], [Song standardSongColumnSchema]]];
 			
-			[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
+			[databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
 			if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
 			if (currentPlaylist.isShuffle) {
 				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM shufflePlaylist", [playlistNameTextField.text md5]]];
@@ -1151,7 +1150,7 @@
 			else {
 				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM currentPlaylist", [playlistNameTextField.text md5]]];
 			}
-			[databaseControls.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
+			[databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"DETACH DATABASE currentPlaylistDb"];
 		}
 	}
 	
@@ -1412,7 +1411,7 @@ static NSString *kName_Error = @"error";
 	if (segmentedControl.selectedSegmentIndex == 0)
 		return currentPlaylistCount;
 	else if (segmentedControl.selectedSegmentIndex == 1)
-		return [databaseControls.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists"];
+		return [databaseControls.localPlaylistsDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM localPlaylists"];
 	else if (segmentedControl.selectedSegmentIndex == 2)
 		return [serverPlaylistsDataModel.serverPlaylists count];
 	
@@ -1445,85 +1444,85 @@ static NSString *kName_Error = @"error";
 		
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		{
-			[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE jukeboxTemp"];
+			[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"DROP TABLE jukeboxTemp"];
 			NSString *query = [NSString stringWithFormat:@"CREATE TABLE jukeboxTemp (%@)", [Song standardSongColumnSchema]];
 			[databaseControls.currentPlaylistDb executeUpdate:query];
 			
 			if (fromRow < toRow)
 			{
-				[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO jukeboxTemp SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID < ?", [NSNumber numberWithInt:fromRow]];
-				[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO jukeboxTemp SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID > ? AND ROWID <= ?", [NSNumber numberWithInt:fromRow], [NSNumber numberWithInt:toRow]];
-				[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO jukeboxTemp SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID = ?", [NSNumber numberWithInt:fromRow]];
-				[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO jukeboxTemp SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID > ?", [NSNumber numberWithInt:toRow]];
+				[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO jukeboxTemp SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID < ?", [NSNumber numberWithInt:fromRow]];
+				[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO jukeboxTemp SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID > ? AND ROWID <= ?", [NSNumber numberWithInt:fromRow], [NSNumber numberWithInt:toRow]];
+				[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO jukeboxTemp SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID = ?", [NSNumber numberWithInt:fromRow]];
+				[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO jukeboxTemp SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID > ?", [NSNumber numberWithInt:toRow]];
 				
-				[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE jukeboxCurrentPlaylist"];
-				[databaseControls.currentPlaylistDb executeUpdate:@"ALTER TABLE jukeboxTemp RENAME TO jukeboxCurrentPlaylist"];
+				[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"DROP TABLE jukeboxCurrentPlaylist"];
+				[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"ALTER TABLE jukeboxTemp RENAME TO jukeboxCurrentPlaylist"];
 			}
 			else
 			{
-				[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO jukeboxTemp SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID < ?", [NSNumber numberWithInt:toRow]];
-				[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO jukeboxTemp SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID = ?", [NSNumber numberWithInt:fromRow]];
-				[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO jukeboxTemp SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID >= ? AND ROWID < ?", [NSNumber numberWithInt:toRow], [NSNumber numberWithInt:fromRow]];
-				[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO jukeboxTemp SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID > ?", [NSNumber numberWithInt:fromRow]];
+				[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO jukeboxTemp SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID < ?", [NSNumber numberWithInt:toRow]];
+				[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO jukeboxTemp SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID = ?", [NSNumber numberWithInt:fromRow]];
+				[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO jukeboxTemp SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID >= ? AND ROWID < ?", [NSNumber numberWithInt:toRow], [NSNumber numberWithInt:fromRow]];
+				[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO jukeboxTemp SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID > ?", [NSNumber numberWithInt:fromRow]];
 				
-				[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE jukeboxCurrentPlaylist"];
-				[databaseControls.currentPlaylistDb executeUpdate:@"ALTER TABLE jukeboxTemp RENAME TO jukeboxCurrentPlaylist"];
+				[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"DROP TABLE jukeboxCurrentPlaylist"];
+				[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"ALTER TABLE jukeboxTemp RENAME TO jukeboxCurrentPlaylist"];
 			}
 		}
 		else
 		{
 			if (currentPlaylist.isShuffle)
 			{
-				[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE shuffleTemp"];
+				[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"DROP TABLE shuffleTemp"];
 				NSString *query = [NSString stringWithFormat:@"CREATE TABLE shuffleTemp (%@)", [Song standardSongColumnSchema]];
 				[databaseControls.currentPlaylistDb executeUpdate:query];
 				
 				if (fromRow < toRow)
 				{
-					[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shuffleTemp SELECT * FROM shufflePlaylist WHERE ROWID < ?", [NSNumber numberWithInt:fromRow]];
-					[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shuffleTemp SELECT * FROM shufflePlaylist WHERE ROWID > ? AND ROWID <= ?", [NSNumber numberWithInt:fromRow], [NSNumber numberWithInt:toRow]];
-					[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shuffleTemp SELECT * FROM shufflePlaylist WHERE ROWID = ?", [NSNumber numberWithInt:fromRow]];
-					[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shuffleTemp SELECT * FROM shufflePlaylist WHERE ROWID > ?", [NSNumber numberWithInt:toRow]];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO shuffleTemp SELECT * FROM shufflePlaylist WHERE ROWID < ?", [NSNumber numberWithInt:fromRow]];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO shuffleTemp SELECT * FROM shufflePlaylist WHERE ROWID > ? AND ROWID <= ?", [NSNumber numberWithInt:fromRow], [NSNumber numberWithInt:toRow]];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO shuffleTemp SELECT * FROM shufflePlaylist WHERE ROWID = ?", [NSNumber numberWithInt:fromRow]];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO shuffleTemp SELECT * FROM shufflePlaylist WHERE ROWID > ?", [NSNumber numberWithInt:toRow]];
 					
-					[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE shufflePlaylist"];
-					[databaseControls.currentPlaylistDb executeUpdate:@"ALTER TABLE shuffleTemp RENAME TO shufflePlaylist"];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"DROP TABLE shufflePlaylist"];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"ALTER TABLE shuffleTemp RENAME TO shufflePlaylist"];
 				}
 				else
 				{
-					[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shuffleTemp SELECT * FROM shufflePlaylist WHERE ROWID < ?", [NSNumber numberWithInt:toRow]];
-					[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shuffleTemp SELECT * FROM shufflePlaylist WHERE ROWID = ?", [NSNumber numberWithInt:fromRow]];
-					[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shuffleTemp SELECT * FROM shufflePlaylist WHERE ROWID >= ? AND ROWID < ?", [NSNumber numberWithInt:toRow], [NSNumber numberWithInt:fromRow]];
-					[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shuffleTemp SELECT * FROM shufflePlaylist WHERE ROWID > ?", [NSNumber numberWithInt:fromRow]];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO shuffleTemp SELECT * FROM shufflePlaylist WHERE ROWID < ?", [NSNumber numberWithInt:toRow]];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO shuffleTemp SELECT * FROM shufflePlaylist WHERE ROWID = ?", [NSNumber numberWithInt:fromRow]];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO shuffleTemp SELECT * FROM shufflePlaylist WHERE ROWID >= ? AND ROWID < ?", [NSNumber numberWithInt:toRow], [NSNumber numberWithInt:fromRow]];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO shuffleTemp SELECT * FROM shufflePlaylist WHERE ROWID > ?", [NSNumber numberWithInt:fromRow]];
 					
-					[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE shufflePlaylist"];
-					[databaseControls.currentPlaylistDb executeUpdate:@"ALTER TABLE shuffleTemp RENAME TO shufflePlaylist"];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"DROP TABLE shufflePlaylist"];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"ALTER TABLE shuffleTemp RENAME TO shufflePlaylist"];
 				}
 			}
 			else
 			{
-				[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE currentTemp"];
+				[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"DROP TABLE currentTemp"];
 				NSString *query = [NSString stringWithFormat:@"CREATE TABLE currentTemp (%@)", [Song standardSongColumnSchema]];
 				[databaseControls.currentPlaylistDb executeUpdate:query];
 				
 				if (fromRow < toRow)
 				{
-					[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO currentTemp SELECT * FROM currentPlaylist WHERE ROWID < ?", [NSNumber numberWithInt:fromRow]];
-					[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO currentTemp SELECT * FROM currentPlaylist WHERE ROWID > ? AND ROWID <= ?", [NSNumber numberWithInt:fromRow], [NSNumber numberWithInt:toRow]];
-					[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO currentTemp SELECT * FROM currentPlaylist WHERE ROWID = ?", [NSNumber numberWithInt:fromRow]];
-					[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO currentTemp SELECT * FROM currentPlaylist WHERE ROWID > ?", [NSNumber numberWithInt:toRow]];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO currentTemp SELECT * FROM currentPlaylist WHERE ROWID < ?", [NSNumber numberWithInt:fromRow]];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO currentTemp SELECT * FROM currentPlaylist WHERE ROWID > ? AND ROWID <= ?", [NSNumber numberWithInt:fromRow], [NSNumber numberWithInt:toRow]];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO currentTemp SELECT * FROM currentPlaylist WHERE ROWID = ?", [NSNumber numberWithInt:fromRow]];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO currentTemp SELECT * FROM currentPlaylist WHERE ROWID > ?", [NSNumber numberWithInt:toRow]];
 					
-					[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE currentPlaylist"];
-					[databaseControls.currentPlaylistDb executeUpdate:@"ALTER TABLE currentTemp RENAME TO currentPlaylist"];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"DROP TABLE currentPlaylist"];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"ALTER TABLE currentTemp RENAME TO currentPlaylist"];
 				}
 				else
 				{
-					[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO currentTemp SELECT * FROM currentPlaylist WHERE ROWID < ?", [NSNumber numberWithInt:toRow]];
-					[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO currentTemp SELECT * FROM currentPlaylist WHERE ROWID = ?", [NSNumber numberWithInt:fromRow]];
-					[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO currentTemp SELECT * FROM currentPlaylist WHERE ROWID >= ? AND ROWID < ?", [NSNumber numberWithInt:toRow], [NSNumber numberWithInt:fromRow]];
-					[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO currentTemp SELECT * FROM currentPlaylist WHERE ROWID > ?", [NSNumber numberWithInt:fromRow]];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO currentTemp SELECT * FROM currentPlaylist WHERE ROWID < ?", [NSNumber numberWithInt:toRow]];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO currentTemp SELECT * FROM currentPlaylist WHERE ROWID = ?", [NSNumber numberWithInt:fromRow]];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO currentTemp SELECT * FROM currentPlaylist WHERE ROWID >= ? AND ROWID < ?", [NSNumber numberWithInt:toRow], [NSNumber numberWithInt:fromRow]];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO currentTemp SELECT * FROM currentPlaylist WHERE ROWID > ?", [NSNumber numberWithInt:fromRow]];
 					
-					[databaseControls.currentPlaylistDb executeUpdate:@"DROP TABLE currentPlaylist"];
-					[databaseControls.currentPlaylistDb executeUpdate:@"ALTER TABLE currentTemp RENAME TO currentPlaylist"];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"DROP TABLE currentPlaylist"];
+					[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"ALTER TABLE currentTemp RENAME TO currentPlaylist"];
 				}
 			}
 		}
@@ -1700,8 +1699,8 @@ static NSString *kName_Error = @"error";
 		}
 		cell.contentView.backgroundColor = [UIColor clearColor];
 		cell.playlistNameLabel.backgroundColor = [UIColor clearColor];
-		cell.playlistNameLabel.text = [[databaseControls.localPlaylistsDb stringForQuery:@"SELECT playlist FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]] gtm_stringByUnescapingFromHTML];
-		cell.md5 = [databaseControls.localPlaylistsDb stringForQuery:@"SELECT md5 FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
+		cell.playlistNameLabel.text = [[databaseControls.localPlaylistsDb synchronizedStringForQuery:@"SELECT playlist FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]] gtm_stringByUnescapingFromHTML];
+		cell.md5 = [databaseControls.localPlaylistsDb synchronizedStringForQuery:@"SELECT md5 FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
 		NSUInteger songCount = [databaseControls.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", cell.md5]];
 		if (songCount == 1)
 		{
@@ -1737,7 +1736,7 @@ static NSString *kName_Error = @"error";
 		cell.contentView.backgroundColor = [UIColor clearColor];
 		cell.playlistNameLabel.backgroundColor = [UIColor clearColor];
         SUSServerPlaylist *playlist = [serverPlaylistsDataModel.serverPlaylists objectAtIndex:indexPath.row];        
-        cell.playlistNameLabel.text = [playlist.playlistName gtm_stringByUnescapingFromHTML];
+        cell.playlistNameLabel.text = playlist.playlistName;
 		cell.backgroundView = [[[UIView alloc] init] autorelease];
 		if(indexPath.row % 2 == 0)
 			cell.backgroundView.backgroundColor = [UIColor whiteColor];
@@ -1774,7 +1773,7 @@ static NSString *kName_Error = @"error";
 		else if (segmentedControl.selectedSegmentIndex == 1)
 		{
 			PlaylistSongsViewController *playlistSongsViewController = [[PlaylistSongsViewController alloc] initWithNibName:@"PlaylistSongsViewController" bundle:nil];
-			playlistSongsViewController.md5 = [databaseControls.localPlaylistsDb stringForQuery:@"SELECT md5 FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
+			playlistSongsViewController.md5 = [databaseControls.localPlaylistsDb synchronizedStringForQuery:@"SELECT md5 FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
 			[self.navigationController pushViewController:playlistSongsViewController animated:YES];
 			[playlistSongsViewController release];
 		}		
@@ -1782,7 +1781,7 @@ static NSString *kName_Error = @"error";
 		{
 			PlaylistSongsViewController *playlistSongsViewController = [[PlaylistSongsViewController alloc] initWithNibName:@"PlaylistSongsViewController" bundle:nil];
             SUSServerPlaylist *playlist = [serverPlaylistsDataModel.serverPlaylists objectAtIndex:indexPath.row];
-			playlistSongsViewController.md5 = [playlist.playlistName md5];
+			playlistSongsViewController.md5 = [[playlist.playlistName gtm_stringByUnescapingFromHTML] md5];
             playlistSongsViewController.serverPlaylist = playlist;
 			[self.navigationController pushViewController:playlistSongsViewController animated:YES];
 			[playlistSongsViewController release];		

@@ -22,7 +22,7 @@
 #import "iPadMainMenu.h"
 
 #import "NSString+md5.h"
-#import "FMDatabase.h"
+#import "FMDatabaseAdditions.h"
 
 #import "SavedSettings.h"
 #import "NSString+Additions.h"
@@ -409,17 +409,17 @@
 				
 				// Setup the allAlbums database
 				databaseControls.allAlbumsDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allAlbums.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]]];
-				[databaseControls.allAlbumsDb executeUpdate:@"PRAGMA cache_size = 1"];
+				[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"PRAGMA cache_size = 1"];
 				if ([databaseControls.allAlbumsDb open] == NO) { DLog(@"Could not open allAlbumsDb."); }
 				
 				// Setup the allSongs database
 				databaseControls.allSongsDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allSongs.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]]];
-				[databaseControls.allSongsDb executeUpdate:@"PRAGMA cache_size = 1"];
+				[databaseControls.allSongsDb synchronizedExecuteUpdate:@"PRAGMA cache_size = 1"];
 				if ([databaseControls.allSongsDb open] == NO) { DLog(@"Could not open allSongsDb."); }
 				
 				// Setup the Genres database
 				databaseControls.genresDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@genres.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]]];
-				[databaseControls.genresDb executeUpdate:@"PRAGMA cache_size = 1"];
+				[databaseControls.genresDb synchronizedExecuteUpdate:@"PRAGMA cache_size = 1"];
 				if ([databaseControls.genresDb open] == NO) { DLog(@"Could not open genresDb."); }
 			}
 			else

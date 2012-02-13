@@ -7,6 +7,7 @@
 //
 
 #import "SUSServerPlaylist.h"
+#import "NSString+Additions.h"
 
 @implementation SUSServerPlaylist
 @synthesize playlistId, playlistName;
@@ -22,7 +23,7 @@
 			self.playlistId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
 		
 		if ([TBXML valueOfAttributeNamed:@"name" forElement:element])
-			self.playlistName = [TBXML valueOfAttributeNamed:@"name" forElement:element];
+			self.playlistName = [[TBXML valueOfAttributeNamed:@"name" forElement:element] gtm_stringByUnescapingFromHTML];
 	}
 	
 	return self;

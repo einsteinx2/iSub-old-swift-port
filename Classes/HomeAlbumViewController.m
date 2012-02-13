@@ -20,7 +20,6 @@
 #import "Album.h"
 #import "Song.h"
 #import "NSString+md5.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "LoadingScreen.h"
 #import "HomeXMLParser.h"

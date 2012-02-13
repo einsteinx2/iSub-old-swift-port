@@ -17,7 +17,7 @@
 #import "DatabaseSingleton.h"
 #import "Song.h"
 #import "NSString+md5.h"
-#import "FMDatabase.h"
+#import "FMDatabaseAdditions.h"
 #import "PageControlViewController.h"
 #import "NSMutableURLRequest+SUS.h"
 
@@ -198,11 +198,11 @@
 	{
 		if (IS_IPAD())
 		{
-			[databaseControls.coverArtCacheDb540 executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [coverArtId md5], data];
+			[databaseControls.coverArtCacheDb540 synchronizedExecuteUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [coverArtId md5], data];
 		}
 		else
 		{
-			[databaseControls.coverArtCacheDb320 executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [coverArtId md5], data];
+			[databaseControls.coverArtCacheDb320 synchronizedExecuteUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [coverArtId md5], data];
 		}
 		
 		if (SCREEN_SCALE() == 2.0 && !IS_IPAD())

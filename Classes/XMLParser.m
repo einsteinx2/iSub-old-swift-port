@@ -18,7 +18,6 @@
 #import "Album.h"
 #import "Song.h"
 #import "NSString+md5.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "ViewObjectsSingleton.h"
 #import "LoadingScreen.h"
@@ -159,8 +158,8 @@
 		{
 			//Initialize the arrays.
 			[databaseControls.albumListCacheDb beginTransaction];
-			[databaseControls.albumListCacheDb executeUpdate:@"DELETE FROM albumsCache WHERE folderId = ?", [myId md5]];
-			[databaseControls.albumListCacheDb executeUpdate:@"DELETE FROM songsCache WHERE folderId = ?", [myId md5]];
+			[databaseControls.albumListCacheDb synchronizedExecuteUpdate:@"DELETE FROM albumsCache WHERE folderId = ?", [myId md5]];
+			[databaseControls.albumListCacheDb synchronizedExecuteUpdate:@"DELETE FROM songsCache WHERE folderId = ?", [myId md5]];
 			[databaseControls.albumListCacheDb commit];
 		}
 		else if( [elementName isEqualToString:@"child"] ) 

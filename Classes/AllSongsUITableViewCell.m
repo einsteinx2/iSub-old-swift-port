@@ -11,10 +11,9 @@
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
 #import "Song.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "CellOverlay.h"
-#import "FMDatabase+Synchronized.h"
+
 
 @implementation AllSongsUITableViewCell
 

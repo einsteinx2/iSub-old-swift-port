@@ -11,9 +11,8 @@
 #import "DatabaseSingleton.h"
 #import "SavedSettings.h"
 #import "MusicSingleton.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "FMDatabase+Synchronized.h"
+
 #import "NSNotificationCenter+MainThread.h"
 #import "AudioEngine.h"
 
@@ -33,13 +32,13 @@
 {
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
-		[self.db synchronizedUpdate:@"DROP TABLE jukeboxCurrentPlaylist"];
-		[self.db synchronizedUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxCurrentPlaylist (%@)", [Song standardSongColumnSchema]]];	
+		[self.db synchronizedExecuteUpdate:@"DROP TABLE jukeboxCurrentPlaylist"];
+		[self.db synchronizedExecuteUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxCurrentPlaylist (%@)", [Song standardSongColumnSchema]]];	
 	}
 	else
 	{	
-		[self.db synchronizedUpdate:@"DROP TABLE currentPlaylist"];
-		[self.db synchronizedUpdate:[NSString stringWithFormat:@"CREATE TABLE currentPlaylist (%@)", [Song standardSongColumnSchema]]];	
+		[self.db synchronizedExecuteUpdate:@"DROP TABLE currentPlaylist"];
+		[self.db synchronizedExecuteUpdate:[NSString stringWithFormat:@"CREATE TABLE currentPlaylist (%@)", [Song standardSongColumnSchema]]];	
 	}
 }
 
@@ -47,13 +46,13 @@
 {
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
-		[self.db synchronizedUpdate:@"DROP TABLE jukeboxShufflePlaylist"];
-		[self.db synchronizedUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxShufflePlaylist (%@)", [Song standardSongColumnSchema]]];	
+		[self.db synchronizedExecuteUpdate:@"DROP TABLE jukeboxShufflePlaylist"];
+		[self.db synchronizedExecuteUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxShufflePlaylist (%@)", [Song standardSongColumnSchema]]];	
 	}
 	else
 	{	
-		[self.db synchronizedUpdate:@"DROP TABLE shufflePlaylist"];
-		[self.db synchronizedUpdate:[NSString stringWithFormat:@"CREATE TABLE shufflePlaylist (%@)", [Song standardSongColumnSchema]]];	
+		[self.db synchronizedExecuteUpdate:@"DROP TABLE shufflePlaylist"];
+		[self.db synchronizedExecuteUpdate:[NSString stringWithFormat:@"CREATE TABLE shufflePlaylist (%@)", [Song standardSongColumnSchema]]];	
 	}
 }
 
@@ -78,21 +77,21 @@
 			}
 			else
 			{
-				[self.db synchronizedUpdate:@"DROP TABLE IF EXISTS jukeboxTemp"];
-				[self.db synchronizedUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxTemp(%@)", [Song standardSongColumnSchema]]];
+				[self.db synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS jukeboxTemp"];
+				[self.db synchronizedExecuteUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxTemp(%@)", [Song standardSongColumnSchema]]];
 				
 				for (NSNumber *index in [indexesMut reverseObjectEnumerator])
 				{
 					@autoreleasepool
 					{
 						NSInteger rowId = [index integerValue] + 1;
-						[self.db synchronizedUpdate:[NSString stringWithFormat:@"DELETE FROM jukeboxCurrentPlaylist WHERE ROWID = %i", rowId]];
+						[self.db synchronizedExecuteUpdate:[NSString stringWithFormat:@"DELETE FROM jukeboxCurrentPlaylist WHERE ROWID = %i", rowId]];
 					}
 				}
 				
-				[self.db synchronizedUpdate:@"INSERT INTO jukeboxTemp SELECT * FROM jukeboxCurrentPlaylist"];
-				[self.db synchronizedUpdate:@"DROP TABLE jukeboxCurrentPlaylist"];
-				[self.db synchronizedUpdate:@"ALTER TABLE jukeboxTemp RENAME TO jukeboxCurrentPlaylist"];
+				[self.db synchronizedExecuteUpdate:@"INSERT INTO jukeboxTemp SELECT * FROM jukeboxCurrentPlaylist"];
+				[self.db synchronizedExecuteUpdate:@"DROP TABLE jukeboxCurrentPlaylist"];
+				[self.db synchronizedExecuteUpdate:@"ALTER TABLE jukeboxTemp RENAME TO jukeboxCurrentPlaylist"];
 			}
 		}
 		else
@@ -106,21 +105,21 @@
 				}
 				else
 				{
-					[self.db synchronizedUpdate:@"DROP TABLE IF EXISTS shuffleTemp"];
-					[self.db synchronizedUpdate:[NSString stringWithFormat:@"CREATE TABLE shuffleTemp(%@)", [Song standardSongColumnSchema]]];
+					[self.db synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS shuffleTemp"];
+					[self.db synchronizedExecuteUpdate:[NSString stringWithFormat:@"CREATE TABLE shuffleTemp(%@)", [Song standardSongColumnSchema]]];
 					
 					for (NSNumber *index in [indexesMut reverseObjectEnumerator])
 					{
 						@autoreleasepool 
 						{
 							NSInteger rowId = [index integerValue] + 1;
-							[self.db synchronizedUpdate:[NSString stringWithFormat:@"DELETE FROM shufflePlaylist WHERE ROWID = %i", rowId]];
+							[self.db synchronizedExecuteUpdate:[NSString stringWithFormat:@"DELETE FROM shufflePlaylist WHERE ROWID = %i", rowId]];
 						}
 					}
 					
-					[self.db synchronizedUpdate:@"INSERT INTO shuffleTemp SELECT * FROM shufflePlaylist"];
-					[self.db synchronizedUpdate:@"DROP TABLE shufflePlaylist"];
-					[self.db synchronizedUpdate:@"ALTER TABLE shuffleTemp RENAME TO shufflePlaylist"];
+					[self.db synchronizedExecuteUpdate:@"INSERT INTO shuffleTemp SELECT * FROM shufflePlaylist"];
+					[self.db synchronizedExecuteUpdate:@"DROP TABLE shufflePlaylist"];
+					[self.db synchronizedExecuteUpdate:@"ALTER TABLE shuffleTemp RENAME TO shufflePlaylist"];
 				}
 			}
 			else
@@ -131,21 +130,21 @@
 				}
 				else
 				{
-					[self.db synchronizedUpdate:@"DROP TABLE currentTemp"];
-					[self.db synchronizedUpdate:[NSString stringWithFormat:@"CREATE TABLE currentTemp(%@)", [Song standardSongColumnSchema]]];
+					[self.db synchronizedExecuteUpdate:@"DROP TABLE currentTemp"];
+					[self.db synchronizedExecuteUpdate:[NSString stringWithFormat:@"CREATE TABLE currentTemp(%@)", [Song standardSongColumnSchema]]];
 					
 					for (NSNumber *index in [indexesMut reverseObjectEnumerator])
 					{
 						@autoreleasepool 
 						{
 							NSInteger rowId = [index integerValue] + 1;
-							[self.db synchronizedUpdate:[NSString stringWithFormat:@"DELETE FROM currentPlaylist WHERE ROWID = %i", rowId]];
+							[self.db synchronizedExecuteUpdate:[NSString stringWithFormat:@"DELETE FROM currentPlaylist WHERE ROWID = %i", rowId]];
 						}
 					}
 					
-					[self.db synchronizedUpdate:@"INSERT INTO currentTemp SELECT * FROM currentPlaylist"];
-					[self.db synchronizedUpdate:@"DROP TABLE currentPlaylist"];
-					[self.db synchronizedUpdate:@"ALTER TABLE currentTemp RENAME TO currentPlaylist"];
+					[self.db synchronizedExecuteUpdate:@"INSERT INTO currentTemp SELECT * FROM currentPlaylist"];
+					[self.db synchronizedExecuteUpdate:@"DROP TABLE currentPlaylist"];
+					[self.db synchronizedExecuteUpdate:@"ALTER TABLE currentTemp RENAME TO currentPlaylist"];
 				}
 			}
 		}
@@ -393,11 +392,11 @@
 			
 			if (settings.isJukeboxEnabled)
 			{
-				[self.db synchronizedUpdate:@"INSERT INTO jukeboxShufflePlaylist SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID != ? ORDER BY RANDOM()", oldPlaylistPosition];
+				[self.db synchronizedExecuteUpdate:@"INSERT INTO jukeboxShufflePlaylist SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID != ? ORDER BY RANDOM()", oldPlaylistPosition];
 			}
 			else
 			{
-				[self.db synchronizedUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist WHERE ROWID != ? ORDER BY RANDOM()", oldPlaylistPosition];
+				[self.db synchronizedExecuteUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist WHERE ROWID != ? ORDER BY RANDOM()", oldPlaylistPosition];
 			}
 			
 			if (settings.isJukeboxEnabled)

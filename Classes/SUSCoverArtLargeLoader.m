@@ -9,7 +9,6 @@
 #import "SUSCoverArtLargeLoader.h"
 #import "DatabaseSingleton.h"
 #import "NSString+md5.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "NSNotificationCenter+MainThread.h"
 
@@ -116,7 +115,7 @@
 	if([UIImage imageWithData:self.receivedData])
 	{
         DLog(@"art loading completed for: %@", coverArtId);
-        [self.db executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [coverArtId md5], self.receivedData];
+        [self.db synchronizedExecuteUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [coverArtId md5], self.receivedData];
         [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AlbumArtLargeDownloaded];
         
 		// Notify the delegate that the loading is finished

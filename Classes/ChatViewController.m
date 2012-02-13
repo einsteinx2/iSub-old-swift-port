@@ -17,7 +17,6 @@
 #import "ServerListViewController.h"
 #import "AsynchronousImageViewCached.h"
 #import "Song.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "NSString+md5.h"
 #import "EGORefreshTableHeaderView.h"

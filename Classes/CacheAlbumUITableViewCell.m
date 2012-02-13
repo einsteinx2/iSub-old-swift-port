@@ -9,8 +9,8 @@
 #import "CacheAlbumUITableViewCell.h"
 #import "ViewObjectsSingleton.h"
 #import "DatabaseSingleton.h"
-#import "FMDatabase.h"
-#import "FMDatabase+Synchronized.h"
+#import "FMDatabaseAdditions.h"
+
 #import "CellOverlay.h"
 #import "Song.h"
 
@@ -99,7 +99,7 @@
 	@autoreleasepool 
 	{
 		FMResultSet *result;
-		result = [[DatabaseSingleton sharedInstance].songCacheDb synchronizedQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text];
+		result = [[DatabaseSingleton sharedInstance].songCacheDb synchronizedExecuteQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text];
 		
 		while ([result next])
 		{
@@ -127,7 +127,7 @@
 	@autoreleasepool
 	{
 		FMResultSet *result;
-		result = [[DatabaseSingleton sharedInstance].songCacheDb synchronizedQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text];
+		result = [[DatabaseSingleton sharedInstance].songCacheDb synchronizedExecuteQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text];
 		
 		while ([result next])
 		{

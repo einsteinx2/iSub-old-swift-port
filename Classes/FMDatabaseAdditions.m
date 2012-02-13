@@ -6,7 +6,6 @@
 //  Copyright 2005 Flying Meat Inc.. All rights reserved.
 //
 
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 
 @implementation FMDatabase (FMDatabaseAdditions)
@@ -47,7 +46,7 @@
     //lower case table name
     tableName = [tableName lowercaseString];
     //search in sqlite_master table if table exists
-    FMResultSet *rs = [self executeQuery:@"select [sql] from sqlite_master where [type] = 'table' and lower(name) = ?", tableName];
+    FMResultSet *rs = [self synchronizedExecuteQuery:@"select [sql] from sqlite_master where [type] = 'table' and lower(name) = ?", tableName];
     //if at least one next exists, table exists
     returnBool = [rs next];
     //close and free object
@@ -61,7 +60,7 @@
 - (FMResultSet*)getSchema {
     
     //result colums: type[STRING], name[STRING],tbl_name[STRING],rootpage[INTEGER],sql[STRING]
-    FMResultSet *rs = [self executeQuery:@"SELECT type, name, tbl_name, rootpage, sql FROM (SELECT * FROM sqlite_master UNION ALL SELECT * FROM sqlite_temp_master) WHERE type != 'meta' AND name NOT LIKE 'sqlite_%' ORDER BY tbl_name, type DESC, name"];
+    FMResultSet *rs = [self synchronizedExecuteQuery:@"SELECT type, name, tbl_name, rootpage, sql FROM (SELECT * FROM sqlite_master UNION ALL SELECT * FROM sqlite_temp_master) WHERE type != 'meta' AND name NOT LIKE 'sqlite_%' ORDER BY tbl_name, type DESC, name"];
     
     return rs;
 }

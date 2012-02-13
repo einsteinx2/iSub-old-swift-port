@@ -24,6 +24,7 @@
 #import "SavedSettings.h"
 #import "AudioEngine.h"
 #import "SUSAllSongsLoader.h"
+#import "SUSStreamSingleton.h"
 
 @implementation ServerListViewController
 
@@ -273,6 +274,9 @@
 		
 		if ([appDelegate.wifiReach currentReachabilityStatus] == NotReachable)
 			return;
+		
+		// Cancel any caching
+		[[SUSStreamSingleton sharedInstance] removeAllStreams];
 		
 		// Cancel any tab loads
 		if ([SUSAllSongsLoader isLoading])

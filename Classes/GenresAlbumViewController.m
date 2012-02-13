@@ -17,13 +17,12 @@
 #import "Artist.h"
 #import "Album.h"
 #import "Song.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "NSString+md5.h"
 #import "AsynchronousImageViewCached.h"
 #import "SavedSettings.h"
 #import "NSString+time.h"
-#import "FMDatabase+Synchronized.h"
+
 #import "PlaylistSingleton.h"
 
 @implementation GenresAlbumViewController
@@ -208,7 +207,7 @@
 	// Get the ID of all matching records (everything in genre ordered by artist)
 	FMResultSet *result;
 	if (viewObjects.isOfflineMode)
-		result = [databaseControls.songCacheDb synchronizedQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment], seg1, self.title, genre];
+		result = [databaseControls.songCacheDb synchronizedExecuteQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment], seg1, self.title, genre];
 	else
 		result = [databaseControls.genresDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment], seg1, self.title, genre];
 	
@@ -256,7 +255,7 @@
 	// Get the ID of all matching records (everything in genre ordered by artist)
 	FMResultSet *result;
 	if (viewObjects.isOfflineMode)
-		result = [databaseControls.songCacheDb synchronizedQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment], seg1, self.title, genre];
+		result = [databaseControls.songCacheDb synchronizedExecuteQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment], seg1, self.title, genre];
 	else
 		result = [databaseControls.genresDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment], seg1, self.title, genre];
 	
@@ -349,7 +348,7 @@
 			coverArtId = [databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT coverArtId FROM genresSongs WHERE md5 = ?", md5];
 		}
 		else {
-			coverArtId = [databaseControls.genresDb stringForQuery:@"SELECT coverArtId FROM genresSongs WHERE md5 = ?", md5];
+			coverArtId = [databaseControls.genresDb synchronizedStringForQuery:@"SELECT coverArtId FROM genresSongs WHERE md5 = ?", md5];
 		}
 		NSString *name = [[listOfAlbums objectAtIndex:indexPath.row] objectAtIndex:1];
 		
@@ -447,7 +446,7 @@
 			FMResultSet *result;
 			if (viewObjects.isOfflineMode) 
 			{
-				result = [databaseControls.songCacheDb synchronizedQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), segment, (segment + 1), (segment + 1)], seg1, [[listOfAlbums objectAtIndex:indexPath.row] objectAtIndex:1], genre];
+				result = [databaseControls.songCacheDb synchronizedExecuteQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), segment, (segment + 1), (segment + 1)], seg1, [[listOfAlbums objectAtIndex:indexPath.row] objectAtIndex:1], genre];
 			}
 			else 
 			{

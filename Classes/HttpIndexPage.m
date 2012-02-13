@@ -8,7 +8,6 @@
 
 #import "HttpIndexPage.h"
 #import "DatabaseSingleton.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 
 @interface HttpIndexPage (Private) 
@@ -49,11 +48,11 @@
 	
 	// Fix for slow load problem
 	FMDatabase *db = databaseControls.songCacheDb;
-	[db executeUpdate:@"DROP TABLE IF EXISTS cachedSongsArtistList"];
-	[db executeUpdate:@"CREATE TEMP TABLE cachedSongsArtistList (artist TEXT UNIQUE)"];
-	[db executeUpdate:@"INSERT OR IGNORE INTO cachedSongsArtistList SELECT seg1 FROM cachedSongsLayout"];
+	[db synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS cachedSongsArtistList"];
+	[db synchronizedExecuteUpdate:@"CREATE TEMP TABLE cachedSongsArtistList (artist TEXT UNIQUE)"];
+	[db synchronizedExecuteUpdate:@"INSERT OR IGNORE INTO cachedSongsArtistList SELECT seg1 FROM cachedSongsLayout"];
 
-	FMResultSet *result = [db executeQuery:@"SELECT artist FROM cachedSongsArtistList ORDER BY artist COLLATE NOCASE"];
+	FMResultSet *result = [db synchronizedExecuteQuery:@"SELECT artist FROM cachedSongsArtistList ORDER BY artist COLLATE NOCASE"];
 	while ([result next])
 	{
 		//
@@ -63,7 +62,7 @@
 			[listOfArtists addObject:[NSString stringWithString:[result stringForColumnIndex:0]]]; 
 	}
 	[result close];
-	[db executeUpdate:@"DROP TABLE IF EXISTS cachedSongsArtistList"];
+	[db synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS cachedSongsArtistList"];
 	
 	return @"";
 }

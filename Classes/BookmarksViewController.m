@@ -16,7 +16,6 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "Song.h"
 #import "AsynchronousImageViewCached.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "NSString+md5.h"
 #import "CustomUIAlertView.h"
@@ -98,7 +97,7 @@
 		isNoBookmarksScreenShowing = NO;
 	}
 	
-	if ([databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks"] == 0)
+	if ([databaseControls.bookmarksDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM bookmarks"] == 0)
 	{
 		isNoBookmarksScreenShowing = YES;
 		noBookmarksScreen = [[UIImageView alloc] init];
@@ -140,10 +139,10 @@
 		bookmarkCountLabel.textColor = [UIColor whiteColor];
 		bookmarkCountLabel.textAlignment = UITextAlignmentCenter;
 		bookmarkCountLabel.font = [UIFont boldSystemFontOfSize:22];
-		if ([databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks"] == 1)
+		if ([databaseControls.bookmarksDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM bookmarks"] == 1)
 			bookmarkCountLabel.text = [NSString stringWithFormat:@"1 Bookmark"];
 		else 
-			bookmarkCountLabel.text = [NSString stringWithFormat:@"%i Bookmarks", [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks"]];
+			bookmarkCountLabel.text = [NSString stringWithFormat:@"%i Bookmarks", [databaseControls.bookmarksDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM bookmarks"]];
 		[headerView addSubview:bookmarkCountLabel];
 		[bookmarkCountLabel release];
 		
@@ -302,8 +301,8 @@
 {
 	if ([deleteBookmarksLabel.text isEqualToString:@"Clear Bookmarks"])
 	{
-		[databaseControls.bookmarksDb executeUpdate:@"DELETE FROM bookmarks"];
-		[databaseControls.bookmarksDb executeUpdate:@"VACUUM"];
+		[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"DELETE FROM bookmarks"];
+		[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"VACUUM"];
 		[self editBookmarksAction:nil];
 		
 		// Reload table data
@@ -320,12 +319,12 @@
 			int row = [index intValue] + 1;
 			[databaseControls.bookmarksDb executeUpdate:[NSString stringWithFormat:@"DELETE FROM bookmarks WHERE ROWID = %i", row]];
 		}
-		[databaseControls.bookmarksDb executeUpdate:@"DROP TABLE bookmarksTemp"];
+		[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"DROP TABLE bookmarksTemp"];
 		[databaseControls.bookmarksDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarksTemp (name TEXT, position INTEGER, %@, bytes INTEGER)", [Song standardSongColumnSchema]]];
-		[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks"];
-		[databaseControls.bookmarksDb executeUpdate:@"DROP TABLE bookmarks"];
-		[databaseControls.bookmarksDb executeUpdate:@"ALTER TABLE bookmarksTemp RENAME TO bookmarks"];
-		[databaseControls.bookmarksDb executeUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
+		[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks"];
+		[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"DROP TABLE bookmarks"];
+		[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"ALTER TABLE bookmarksTemp RENAME TO bookmarks"];
+		[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
 		
 		// Create indexPaths from multiDeleteList
 		NSMutableArray *indexes = [[NSMutableArray alloc] init];
@@ -349,30 +348,30 @@
 	NSInteger fromRow = fromIndexPath.row + 1;
 	NSInteger toRow = toIndexPath.row + 1;
 	
-	[databaseControls.bookmarksDb executeUpdate:@"DROP TABLE bookmarksTemp"];
+	[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"DROP TABLE bookmarksTemp"];
 	[databaseControls.bookmarksDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarksTemp (name TEXT, position INTEGER, %@, bytes INTEGER)", [Song standardSongColumnSchema]]];
 		
 	if (fromRow < toRow)
 	{
-		[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID < ?", [NSNumber numberWithInt:fromRow]];
-		[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID > ? AND ROWID <= ?", [NSNumber numberWithInt:fromRow], [NSNumber numberWithInt:toRow]];
-		[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:fromRow]];
-		[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID > ?", [NSNumber numberWithInt:toRow]];
+		[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID < ?", [NSNumber numberWithInt:fromRow]];
+		[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID > ? AND ROWID <= ?", [NSNumber numberWithInt:fromRow], [NSNumber numberWithInt:toRow]];
+		[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:fromRow]];
+		[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID > ?", [NSNumber numberWithInt:toRow]];
 		
-		[databaseControls.bookmarksDb executeUpdate:@"DROP TABLE bookmarks"];
-		[databaseControls.bookmarksDb executeUpdate:@"ALTER TABLE bookmarksTemp RENAME TO bookmarks"];
-		[databaseControls.bookmarksDb executeUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
+		[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"DROP TABLE bookmarks"];
+		[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"ALTER TABLE bookmarksTemp RENAME TO bookmarks"];
+		[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
 	}
 	else
 	{
-		[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID < ?", [NSNumber numberWithInt:toRow]];
-		[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:fromRow]];
-		[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID >= ? AND ROWID < ?", [NSNumber numberWithInt:toRow], [NSNumber numberWithInt:fromRow]];
-		[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID > ?", [NSNumber numberWithInt:fromRow]];
+		[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID < ?", [NSNumber numberWithInt:toRow]];
+		[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:fromRow]];
+		[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID >= ? AND ROWID < ?", [NSNumber numberWithInt:toRow], [NSNumber numberWithInt:fromRow]];
+		[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID > ?", [NSNumber numberWithInt:fromRow]];
 		
-		[databaseControls.bookmarksDb executeUpdate:@"DROP TABLE bookmarks"];
-		[databaseControls.bookmarksDb executeUpdate:@"ALTER TABLE bookmarksTemp RENAME TO bookmarks"];
-		[databaseControls.bookmarksDb executeUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
+		[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"DROP TABLE bookmarks"];
+		[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"ALTER TABLE bookmarksTemp RENAME TO bookmarks"];
+		[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
 	}
 	
 	
@@ -473,7 +472,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
-    return [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks"];
+    return [databaseControls.bookmarksDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM bookmarks"];
 }
 
 // Customize the appearance of table view cells.
@@ -500,8 +499,8 @@
 	else
 		cell.backgroundView.backgroundColor = viewObjects.darkNormal;
 	
-	NSString *name = [databaseControls.bookmarksDb stringForQuery:@"SELECT name FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
-	int position = [databaseControls.bookmarksDb intForQuery:@"SELECT position FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
+	NSString *name = [databaseControls.bookmarksDb synchronizedStringForQuery:@"SELECT name FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
+	int position = [databaseControls.bookmarksDb synchronizedIntForQuery:@"SELECT position FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
 	[cell.bookmarkNameLabel setText:[NSString stringWithFormat:@"%@ - %@", name, [NSString formatTime:(float)position]]];
 	
 	[cell.songNameLabel setText:aSong.title];
@@ -541,8 +540,8 @@
 		[streamingPlayerViewController release];
 	}
 		
-	NSUInteger offsetSeconds = [databaseControls.bookmarksDb intForQuery:@"SELECT position FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
-	NSUInteger offsetBytes = [databaseControls.bookmarksDb intForQuery:@"SELECT bytes FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
+	NSUInteger offsetSeconds = [databaseControls.bookmarksDb synchronizedIntForQuery:@"SELECT position FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
+	NSUInteger offsetBytes = [databaseControls.bookmarksDb synchronizedIntForQuery:@"SELECT bytes FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
 	
 	// Check if these are old bookmarks and don't have byteOffset saved
 	if (offsetBytes == 0 && offsetSeconds != 0)

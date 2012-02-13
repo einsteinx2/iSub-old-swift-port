@@ -19,7 +19,6 @@
 #import "Album.h"
 #import "Song.h"
 #import "NSString+md5.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "LoadingScreen.h"
 #import "NSString+hex.h"
@@ -34,7 +33,7 @@
 #import "NSString+URLEncode.h"
 #import "SUSSubFolderDAO.h"
 #import "UIView+tools.h"
-#import "FMDatabase+Synchronized.h"
+
 #import "UIImageView+Reflection.h"
 
 @interface AlbumViewController (Private)

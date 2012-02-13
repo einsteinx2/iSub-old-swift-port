@@ -24,6 +24,9 @@
 @property (nonatomic, retain) NSURLRequest *request;
 @property (nonatomic, retain) NSURLConnection *connection;
 @property BOOL isNewSearchAPI;
+@property NSUInteger majorVersion;
+@property NSUInteger minorVersion;
+@property (nonatomic, copy) NSString *versionString;
 
 - (id)initWithDelegate:(NSObject<SUSServerURLCheckerDelegate> *)theDelegate;
 

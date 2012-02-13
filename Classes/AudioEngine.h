@@ -12,17 +12,19 @@
 #import "bassmix.h"
 #import <AudioToolbox/AudioToolbox.h>
 
-#define ISMS_BASSBufferSizeForeground 200
-#define ISMS_BASSBufferSizeBackground 2000
-
-#define ISMS_AQBufferSizeInFrames 512
-#define ISMS_AQNumBuffers 4
+#define ISMS_BASSBufferSize 400
 #define ISMS_defaultSampleRate 44100
-#define ISMS_AQBytesToWaitForAudioData (1024 * 160) // 5 seconds of audio in a 320kbps stream
+
+
+//#define ISMS_AQBufferSizeInFrames 512
+//#define ISMS_AQNumBuffers 4
+//#define ISMS_AQBytesToWaitForAudioData (1024 * 160) // 5 seconds of audio in a 320kbps stream
 
 // Stream create failure retry values
 #define RETRY_DELAY 2.0
 #define MIN_FILESIZE_TO_FAIL (1024 * 1024 * 3)
+
+#define ISMS_NumSecondsToWaitForAudioData 5;
 
 typedef enum
 {

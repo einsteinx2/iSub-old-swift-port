@@ -7,7 +7,6 @@
 //
 
 #import "SUSServerPlaylistsDAO.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "DatabaseSingleton.h"
 #import "SUSServerPlaylistsLoader.h"

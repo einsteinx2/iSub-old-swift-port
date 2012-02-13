@@ -1,5 +1,5 @@
 #import "FMResultSet.h"
-#import "FMDatabase.h"
+#import "FMDatabaseAdditions.h"
 #import "unistd.h"
 
 @interface FMDatabase ()

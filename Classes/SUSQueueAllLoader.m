@@ -14,7 +14,6 @@
 #import "QueueAlbumXMLParser.h"
 #import "Album.h"
 #import "Song.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
@@ -242,7 +241,7 @@
 		[folderIds removeObjectAtIndex:0];
 	
 	//DLog(@"parser.listOfSongs = %@", parser.listOfSongs);
-	//DLog(@"Playlist count: %i", [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"]);
+	//DLog(@"Playlist count: %i", [databaseControls.currentPlaylistDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"]);
 	
 	NSUInteger maxIndex = [parser.listOfAlbums count] - 1;
 	for (int i = maxIndex; i >= 0; i--)

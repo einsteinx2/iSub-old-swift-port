@@ -1,4 +1,4 @@
-#import "FMDatabase.h"
+#import "FMDatabaseAdditions.h"
 #import "unistd.h"
 
 @implementation FMDatabase
@@ -211,7 +211,7 @@
         return NO;
     }
     
-    FMResultSet *rs = [self executeQuery:@"select name from sqlite_master where type='table'"];
+    FMResultSet *rs = [self synchronizedExecuteQuery:@"select name from sqlite_master where type='table'"];
     
     if (rs) {
         [rs close];
@@ -815,7 +815,7 @@
 }
 
 - (BOOL)rollback {
-    BOOL b = [self executeUpdate:@"ROLLBACK TRANSACTION;"];
+    BOOL b = [self synchronizedExecuteUpdate:@"ROLLBACK TRANSACTION;"];
     if (b) {
         inTransaction = NO;
     }
@@ -823,7 +823,7 @@
 }
 
 - (BOOL)commit {
-    BOOL b =  [self executeUpdate:@"COMMIT TRANSACTION;"];
+    BOOL b =  [self synchronizedExecuteUpdate:@"COMMIT TRANSACTION;"];
     if (b) {
         inTransaction = NO;
     }
@@ -831,7 +831,7 @@
 }
 
 - (BOOL)beginDeferredTransaction {
-    BOOL b =  [self executeUpdate:@"BEGIN DEFERRED TRANSACTION;"];
+    BOOL b =  [self synchronizedExecuteUpdate:@"BEGIN DEFERRED TRANSACTION;"];
     if (b) {
         inTransaction = YES;
     }
@@ -839,7 +839,7 @@
 }
 
 - (BOOL)beginTransaction {
-    BOOL b =  [self executeUpdate:@"BEGIN EXCLUSIVE TRANSACTION;"];
+    BOOL b =  [self synchronizedExecuteUpdate:@"BEGIN EXCLUSIVE TRANSACTION;"];
     if (b) {
         inTransaction = YES;
     }

@@ -64,7 +64,7 @@
 			self.year = [numberFormatter numberFromString:[TBXML valueOfAttributeNamed:@"year" forElement:element]];
 		if([TBXML valueOfAttributeNamed:@"size" forElement:element])
 			self.size = [numberFormatter numberFromString:[TBXML valueOfAttributeNamed:@"size" forElement:element]];
-		
+		DLog(@"size: %llu   size: %f", [size unsignedLongLongValue], [size doubleValue]);
 		[numberFormatter release];
 	}
 	
@@ -142,7 +142,7 @@
 	return self;
 }
 
--(void)encodeWithCoder:(NSCoder *)encoder
+- (void)encodeWithCoder:(NSCoder *)encoder
 {
 	[encoder encodeObject:title forKey:@"title"];
 	[encoder encodeObject:songId forKey:@"songId"];
@@ -162,7 +162,7 @@
 }
 
 
--(id)initWithCoder:(NSCoder *)decoder
+- (id)initWithCoder:(NSCoder *)decoder
 {
 	if ((self = [super init]))
 	{
@@ -362,17 +362,26 @@
 {	
 	SavedSettings *settings = [SavedSettings sharedInstance];
 	
-	int rate;
-	if (self.bitRate == nil)
-		rate = 128;
+	// Default to 128 if there is no bitrate for this song object (should never happen)
+	int rate = self.bitRate ? [self.bitRate intValue] : 128;
+	
+	// Check if this is being transcoded to the best of our knowledge
+	if (self.transcodedSuffix)
+	{
+		// This is probably being transcoded, so attempt to determine the bitrate
+		if (rate > 128 && settings.currentMaxBitrate == 0)
+			rate = 128; // Subsonic default transcoding bitrate
+		else if (rate > settings.currentMaxBitrate && settings.currentMaxBitrate != 0)
+			rate = settings.currentMaxBitrate;
+	}
 	else
-		rate = [self.bitRate intValue];
-	
-	if (rate > 128 && settings.currentMaxBitrate == 0)
-		rate = 128; // Subsonic default transcoding bitrate
-	else if (rate > settings.currentMaxBitrate && settings.currentMaxBitrate != 0)
-		rate = settings.currentMaxBitrate;
-	
+	{
+		// This is not being transcoded between formats, however bitrate limiting may be active
+		if (rate > settings.currentMaxBitrate && settings.currentMaxBitrate != 0)
+			rate = settings.currentMaxBitrate;
+	}
+
+	DLog(@"estimated bitrate: %i", rate);
 	return rate;
 }
 

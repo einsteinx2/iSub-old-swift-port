@@ -9,7 +9,7 @@
 #import "SUSStreamHandlerDelegate.h"
 
 @class Song;
-@interface SUSStreamHandler : NSObject <NSURLConnectionDelegate>
+@interface SUSStreamHandler : NSObject <NSURLConnectionDelegate, NSCoding>
 
 - (id)initWithSong:(Song *)song byteOffset:(unsigned long long)bOffset secondsOffset:(double)sOffset isTemp:(BOOL)isTemp delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate;
 - (id)initWithSong:(Song *)song isTemp:(BOOL)isTemp delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate;
@@ -20,22 +20,16 @@
 @property double secondsOffset;
 @property (nonatomic, retain) NSURLConnection *connection;
 @property (nonatomic, retain) NSURLRequest *request;
-
 @property (nonatomic, retain) NSFileHandle *fileHandle;
-
-@property long totalBytesTransferred;
-@property long bytesTransferred;
-
+@property unsigned long long totalBytesTransferred;
+@property unsigned long long bytesTransferred;
 @property BOOL isDelegateNotifiedToStartPlayback;
-
 @property NSUInteger numOfReconnects;
-
 @property (nonatomic, retain) NSThread *loadingThread;
-
 @property BOOL isTempCache;
 @property (readonly) NSString *filePath;
-
 @property BOOL partialPrecacheSleep;
+@property BOOL isDownloading;
 
 - (void)start:(BOOL)resume;
 - (void)start;

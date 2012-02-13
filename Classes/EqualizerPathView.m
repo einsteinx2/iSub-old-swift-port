@@ -89,7 +89,7 @@
 	[leftTicksPath stroke];
 	
 	// Smooth and draw the eq path
-    UIBezierPath *smoothPath = [path smoothedPathWithGranularity:20];
+    UIBezierPath *smoothPath = [path smoothedPathWithGranularity:1];
 	smoothPath.lineWidth = 2;
 	[smoothPath stroke];
 }

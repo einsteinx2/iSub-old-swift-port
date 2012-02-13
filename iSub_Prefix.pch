@@ -48,7 +48,7 @@
 #define IS_BETA() (false)
 #endif
 
-// Debug version build switch (activated on debug and adhoc)
+// Debug version build switch (activated only on debug builds)
 #ifdef DEBUG
 #define IS_DEBUG() (true)
 #else
@@ -94,3 +94,11 @@
 //static id n2N(id value) { return value ? value : [NSNull null]; }
 
 #define NSStringFromBOOL(value) (value ? @"YES" : @"NO")
+
+typedef enum
+{
+	ISMSBassVisualType_line		 = 0,
+	ISMSBassVisualType_skinnyBar = 1,
+	ISMSBassVisualType_fatBar	 = 2,
+	ISMSBassVisualType_aphexFace = 3
+} ISMSBassVisualType;

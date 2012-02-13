@@ -7,8 +7,8 @@
 //
 
 #import "SUSCoverArtLargeDAO.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
+
 #import "DatabaseSingleton.h"
 #import "NSString+md5.h"
 
@@ -33,7 +33,7 @@
 
 - (UIImage *)coverArtImageForId:(NSString *)coverArtId
 {
-    NSData *imageData = [self.db dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [coverArtId md5]];  \
+    NSData *imageData = [self.db synchronizedDataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [coverArtId md5]];
     if (imageData)
     {
         /*if (SCREEN_SCALE() == 2.0)
@@ -67,7 +67,7 @@
 
 - (BOOL)coverArtExistsForId:(NSString *)coverArtId
 {
-    return [self.db boolForQuery:@"SELECT count(*) FROM coverArtCache WHERE id = ?", [coverArtId md5]];
+    return [self.db synchronizedBoolForQuery:@"SELECT count(*) FROM coverArtCache WHERE id = ?", [coverArtId md5]];
 }
 
 @end

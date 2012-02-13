@@ -27,24 +27,7 @@
 	
 	// Main interface elements for iPhone
 	//
-	IBOutlet UIImageView *background;
-	UITabBarController *currentTabBarController;
-	IBOutlet UITabBarController *mainTabBarController;
-	IBOutlet UITabBarController *offlineTabBarController;
 	SettingsViewController *settingsViewController;
-	// Tab Controllers
-	IBOutlet UINavigationController *homeNavigationController;
-	IBOutlet UINavigationController *playerNavigationController;
-    IBOutlet UINavigationController *artistsNavigationController;
-	IBOutlet RootViewController *rootViewController;
-	IBOutlet UINavigationController *allAlbumsNavigationController;
-	IBOutlet UINavigationController *allSongsNavigationController;
-	IBOutlet UINavigationController *playlistsNavigationController;
-	IBOutlet UINavigationController *bookmarksNavigationController;
-	IBOutlet UINavigationController *playingNavigationController;
-	IBOutlet UINavigationController *genresNavigationController;
-	IBOutlet UINavigationController *cacheNavigationController;
-	IBOutlet UINavigationController *chatNavigationController;	
 	
 	// Main interface elements for iPad
 	//
@@ -91,6 +74,7 @@
 @property (nonatomic, retain) IBOutlet UINavigationController *genresNavigationController;
 @property (nonatomic, retain) IBOutlet UINavigationController *cacheNavigationController;
 @property (nonatomic, retain) IBOutlet UINavigationController *chatNavigationController;
+@property (nonatomic, retain) UINavigationController *supportNavigationController;
 
 // Main interface elements for iPad
 //

@@ -21,10 +21,14 @@
 @property (copy) Song *lastCachedSong;
 @property (copy) Song *lastTempCachedSong;
 
+@property (readonly) BOOL isQueueDownloading;
+
 + (SUSStreamSingleton *)sharedInstance;
 
 - (SUSStreamHandler *)handlerForSong:(Song *)aSong;
 - (BOOL)isSongInQueue:(Song *)aSong;
+- (BOOL)isSongFirstInQueue:(Song *)aSong;
+- (BOOL)isSongDownloading:(Song *)aSong;
 
 - (void)cancelAllStreamsExcept:(NSArray *)handlersToSkip;
 - (void)cancelAllStreamsExceptForSongs:(NSArray *)songsToSkip;
@@ -49,8 +53,13 @@
 
 - (void)fillStreamQueue;
 
+- (void)resumeQueue;
+
 - (void)resumeHandler:(SUSStreamHandler *)handler;
 - (void)startHandler:(SUSStreamHandler *)handler resume:(BOOL)resume;
 - (void)startHandler:(SUSStreamHandler *)handler;
+
+- (void)saveHandlerStack;
+- (void)loadHandlerStack;
 
 @end

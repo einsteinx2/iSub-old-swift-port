@@ -1458,6 +1458,21 @@
 		53C2F54314E1BF2700F4DB85 /* NSString+FileSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C2F54214E1BF2700F4DB85 /* NSString+FileSize.m */; };
 		53C2F54414E1BF2700F4DB85 /* NSString+FileSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C2F54214E1BF2700F4DB85 /* NSString+FileSize.m */; };
 		53C2F54514E1BF2700F4DB85 /* NSString+FileSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C2F54214E1BF2700F4DB85 /* NSString+FileSize.m */; };
+		53C4406814E87F5000A7DC41 /* support-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C4406614E87F5000A7DC41 /* support-tabbaricon.png */; };
+		53C4406914E87F5000A7DC41 /* support-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C4406614E87F5000A7DC41 /* support-tabbaricon.png */; };
+		53C4406A14E87F5000A7DC41 /* support-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C4406614E87F5000A7DC41 /* support-tabbaricon.png */; };
+		53C4406B14E87F5000A7DC41 /* support-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C4406714E87F5000A7DC41 /* support-tabbaricon@2x.png */; };
+		53C4406C14E87F5000A7DC41 /* support-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C4406714E87F5000A7DC41 /* support-tabbaricon@2x.png */; };
+		53C4406D14E87F5000A7DC41 /* support-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C4406714E87F5000A7DC41 /* support-tabbaricon@2x.png */; };
+		53C4407B14E87FD100A7DC41 /* SupportForumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C4407914E87FD100A7DC41 /* SupportForumViewController.m */; };
+		53C4407C14E87FD100A7DC41 /* SupportForumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C4407914E87FD100A7DC41 /* SupportForumViewController.m */; };
+		53C4407D14E87FD100A7DC41 /* SupportForumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C4407914E87FD100A7DC41 /* SupportForumViewController.m */; };
+		53C4407E14E87FD100A7DC41 /* SupportForumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53C4407A14E87FD100A7DC41 /* SupportForumViewController.xib */; };
+		53C4407F14E87FD100A7DC41 /* SupportForumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53C4407A14E87FD100A7DC41 /* SupportForumViewController.xib */; };
+		53C4408014E87FD100A7DC41 /* SupportForumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53C4407A14E87FD100A7DC41 /* SupportForumViewController.xib */; };
+		53C4408314E88C2200A7DC41 /* NSObject+ListMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C4408214E88C2200A7DC41 /* NSObject+ListMethods.m */; };
+		53C4408414E88C2200A7DC41 /* NSObject+ListMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C4408214E88C2200A7DC41 /* NSObject+ListMethods.m */; };
+		53C4408514E88C2200A7DC41 /* NSObject+ListMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C4408214E88C2200A7DC41 /* NSObject+ListMethods.m */; };
 		53C6052212F1EFD4003C6895 /* intro-bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6051A12F1EFD4003C6895 /* intro-bottom.png */; };
 		53C6052312F1EFD4003C6895 /* intro-bottom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6051B12F1EFD4003C6895 /* intro-bottom@2x.png */; };
 		53C6052412F1EFD4003C6895 /* intro-foreground.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6051C12F1EFD4003C6895 /* intro-foreground.png */; };
@@ -2925,6 +2940,13 @@
 		53C22CCE128EE81C00FFBA67 /* ModalAlbumArtViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModalAlbumArtViewController.m; sourceTree = "<group>"; };
 		53C2F54114E1BF2700F4DB85 /* NSString+FileSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FileSize.h"; sourceTree = "<group>"; };
 		53C2F54214E1BF2700F4DB85 /* NSString+FileSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FileSize.m"; sourceTree = "<group>"; };
+		53C4406614E87F5000A7DC41 /* support-tabbaricon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "support-tabbaricon.png"; path = "Images/Tab Bar Icons/support-tabbaricon.png"; sourceTree = "<group>"; };
+		53C4406714E87F5000A7DC41 /* support-tabbaricon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "support-tabbaricon@2x.png"; path = "Images/Tab Bar Icons/support-tabbaricon@2x.png"; sourceTree = "<group>"; };
+		53C4407814E87FD100A7DC41 /* SupportForumViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SupportForumViewController.h; sourceTree = "<group>"; };
+		53C4407914E87FD100A7DC41 /* SupportForumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SupportForumViewController.m; sourceTree = "<group>"; };
+		53C4407A14E87FD100A7DC41 /* SupportForumViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SupportForumViewController.xib; sourceTree = "<group>"; };
+		53C4408114E88C2200A7DC41 /* NSObject+ListMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+ListMethods.h"; sourceTree = "<group>"; };
+		53C4408214E88C2200A7DC41 /* NSObject+ListMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+ListMethods.m"; sourceTree = "<group>"; };
 		53C6051A12F1EFD4003C6895 /* intro-bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "intro-bottom.png"; path = "Images/Intro Screen/intro-bottom.png"; sourceTree = "<group>"; };
 		53C6051B12F1EFD4003C6895 /* intro-bottom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "intro-bottom@2x.png"; path = "Images/Intro Screen/intro-bottom@2x.png"; sourceTree = "<group>"; };
 		53C6051C12F1EFD4003C6895 /* intro-foreground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "intro-foreground.png"; path = "Images/Intro Screen/intro-foreground.png"; sourceTree = "<group>"; };
@@ -3880,6 +3902,8 @@
 				532B552B14D6762100B8AA67 /* UIApplication+StatusBar.m */,
 				53A7495B14E47826000AC636 /* UIImageView+Reflection.h */,
 				53A7495C14E47826000AC636 /* UIImageView+Reflection.m */,
+				53C4408114E88C2200A7DC41 /* NSObject+ListMethods.h */,
+				53C4408214E88C2200A7DC41 /* NSObject+ListMethods.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -3943,6 +3967,7 @@
 				53B52BA111ADE085005776B5 /* Genre Tab */,
 				53C0D5FC11B586B600267C27 /* Cache Tab */,
 				5379DC431219E36C00F426CD /* Chat Tab */,
+				53C4406E14E87F9000A7DC41 /* Support Tab */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -4213,6 +4238,8 @@
 				53AAF18E11DA90D800447FF7 /* cache-tabbaricon@2x.png */,
 				53BB7FB3121B97BA00BEE7E8 /* chat-tabbaricon.png */,
 				53BB7FB4121B97BA00BEE7E8 /* chat-tabbaricon@2x.png */,
+				53C4406614E87F5000A7DC41 /* support-tabbaricon.png */,
+				53C4406714E87F5000A7DC41 /* support-tabbaricon@2x.png */,
 			);
 			name = "Tab Bar Icons";
 			sourceTree = "<group>";
@@ -4590,6 +4617,16 @@
 				538229F511C98091003F1E23 /* CacheAlbumViewController.xib */,
 			);
 			name = "Cache Tab";
+			sourceTree = "<group>";
+		};
+		53C4406E14E87F9000A7DC41 /* Support Tab */ = {
+			isa = PBXGroup;
+			children = (
+				53C4407814E87FD100A7DC41 /* SupportForumViewController.h */,
+				53C4407914E87FD100A7DC41 /* SupportForumViewController.m */,
+				53C4407A14E87FD100A7DC41 /* SupportForumViewController.xib */,
+			);
+			name = "Support Tab";
 			sourceTree = "<group>";
 		};
 		53C6050812F1EF98003C6895 /* Intro screen */ = {
@@ -5243,6 +5280,9 @@
 				5327A5E214DA245600DEE1B6 /* controller-extras-background@2x.png in Resources */,
 				5327A5E714DA553B00DEE1B6 /* controller-album.png in Resources */,
 				5327A5EA14DA553B00DEE1B6 /* controller-album@2x.png in Resources */,
+				53C4406814E87F5000A7DC41 /* support-tabbaricon.png in Resources */,
+				53C4406B14E87F5000A7DC41 /* support-tabbaricon@2x.png in Resources */,
+				53C4407E14E87FD100A7DC41 /* SupportForumViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5591,6 +5631,9 @@
 				5327A5E414DA245600DEE1B6 /* controller-extras-background@2x.png in Resources */,
 				5327A5E914DA553B00DEE1B6 /* controller-album.png in Resources */,
 				5327A5EC14DA553B00DEE1B6 /* controller-album@2x.png in Resources */,
+				53C4406A14E87F5000A7DC41 /* support-tabbaricon.png in Resources */,
+				53C4406D14E87F5000A7DC41 /* support-tabbaricon@2x.png in Resources */,
+				53C4408014E87FD100A7DC41 /* SupportForumViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5943,6 +5986,9 @@
 				5327A5E314DA245600DEE1B6 /* controller-extras-background@2x.png in Resources */,
 				5327A5E814DA553B00DEE1B6 /* controller-album.png in Resources */,
 				5327A5EB14DA553B00DEE1B6 /* controller-album@2x.png in Resources */,
+				53C4406914E87F5000A7DC41 /* support-tabbaricon.png in Resources */,
+				53C4406C14E87F5000A7DC41 /* support-tabbaricon@2x.png in Resources */,
+				53C4407F14E87FD100A7DC41 /* SupportForumViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6273,6 +6319,8 @@
 				532B554214D7397000B8AA67 /* SeparaterView.m in Sources */,
 				53C2F54314E1BF2700F4DB85 /* NSString+FileSize.m in Sources */,
 				53A7495D14E47826000AC636 /* UIImageView+Reflection.m in Sources */,
+				53C4407B14E87FD100A7DC41 /* SupportForumViewController.m in Sources */,
+				53C4408314E88C2200A7DC41 /* NSObject+ListMethods.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6583,6 +6631,8 @@
 				532B554414D7397000B8AA67 /* SeparaterView.m in Sources */,
 				53C2F54514E1BF2700F4DB85 /* NSString+FileSize.m in Sources */,
 				53A7495F14E47826000AC636 /* UIImageView+Reflection.m in Sources */,
+				53C4407D14E87FD100A7DC41 /* SupportForumViewController.m in Sources */,
+				53C4408514E88C2200A7DC41 /* NSObject+ListMethods.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6893,6 +6943,8 @@
 				532B554314D7397000B8AA67 /* SeparaterView.m in Sources */,
 				53C2F54414E1BF2700F4DB85 /* NSString+FileSize.m in Sources */,
 				53A7495E14E47826000AC636 /* UIImageView+Reflection.m in Sources */,
+				53C4407C14E87FD100A7DC41 /* SupportForumViewController.m in Sources */,
+				53C4408414E88C2200A7DC41 /* NSObject+ListMethods.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7155,7 +7207,6 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = iSub_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
 					"ADHOC=1",
 					"BETA=1",
 				);

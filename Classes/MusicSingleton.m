@@ -12,7 +12,6 @@
 #import "iSubAppDelegate.h"
 #import "Song.h"
 #import "NSString+md5.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "Reachability.h"
 #import "JukeboxXMLParser.h"
@@ -30,7 +29,7 @@
 #import "AudioEngine.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "SUSCoverArtLargeDAO.h"
-#import "FMDatabase+Synchronized.h"
+
 #import "CacheSingleton.h"
 
 static MusicSingleton *sharedInstance = nil;
@@ -118,7 +117,7 @@ static MusicSingleton *sharedInstance = nil;
 - (Song *)nextQueuedSong
 {
 	Song *aSong = nil;
-	FMResultSet *result = [databaseControls.songCacheDb synchronizedQuery:@"SELECT * FROM cacheQueue WHERE finished = 'NO' LIMIT 1"];
+	FMResultSet *result = [databaseControls.songCacheDb synchronizedExecuteQuery:@"SELECT * FROM cacheQueue WHERE finished = 'NO' LIMIT 1"];
 	if ([databaseControls.songCacheDb hadError]) 
 	{
 		DLog(@"Err %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
@@ -174,10 +173,10 @@ static MusicSingleton *sharedInstance = nil;
 		if ([isDownloadFinished isEqualToString:@"YES"])
 		{
 			// The song is fully cached, so delete it from the cache queue database
-			[databaseControls.cacheQueueDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", downloadFileNameHashQueue];
+			[databaseControls.cacheQueueDb synchronizedExecuteUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", downloadFileNameHashQueue];
 			
 			// Start queuing the next song if there is one
-			if ([databaseControls.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
+			if ([databaseControls.cacheQueueDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
 			{
 				self.queueSongObject = nil; self.queueSongObject = [self nextQueuedSong];
 				[self startDownloadQueue];
@@ -208,7 +207,7 @@ static MusicSingleton *sharedInstance = nil;
 			if (doDownload)
 			{
 				// Delete the row from cachedSongs
-				[databaseControls.songCacheDb synchronizedUpdate:@"DELETE FROM cachedSongs WHERE md5 = downloadFileNameHashQueue"];
+				[databaseControls.songCacheDb synchronizedExecuteUpdate:@"DELETE FROM cachedSongs WHERE md5 = downloadFileNameHashQueue"];
 				
 				// Remove and recreate the song file on disk
 				[[NSFileManager defaultManager] removeItemAtPath:downloadFileNameQueue error:NULL];
@@ -231,10 +230,10 @@ static MusicSingleton *sharedInstance = nil;
 			else 
 			{
 				// The song will be cached by the player soon, so delete it from the cache queue database
-				[databaseControls.cacheQueueDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", downloadFileNameHashQueue];
+				[databaseControls.cacheQueueDb synchronizedExecuteUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", downloadFileNameHashQueue];
 				
 				// Start queuing the next song if there is one
-				if ([databaseControls.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
+				if ([databaseControls.cacheQueueDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
 				{
 					self.queueSongObject = nil; self.queueSongObject = [self nextQueuedSong];
 					[self startDownloadQueue];
@@ -314,7 +313,7 @@ static MusicSingleton *sharedInstance = nil;
 	}		
 	
 	// Delete the unfinished download
-	NSString *isDownloadFinished = [databaseControls.cacheQueueDb stringForQuery:@"SELECT finished FROM cacheQueue WHERE md5 = ?", downloadFileNameHashQueue];
+	NSString *isDownloadFinished = [databaseControls.cacheQueueDb synchronizedStringForQuery:@"SELECT finished FROM cacheQueue WHERE md5 = ?", downloadFileNameHashQueue];
 	if ([isDownloadFinished isEqualToString:@"NO"])
 	{		
 		// Delete the song from disk
@@ -328,7 +327,7 @@ static MusicSingleton *sharedInstance = nil;
 	{
 		if (appDelegate.isWifi)
 		{
-			if ([databaseControls.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
+			if ([databaseControls.cacheQueueDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
 			{
 				isQueueListDownloading = YES;
 				self.queueSongObject = nil; self.queueSongObject = [self nextQueuedSong];
@@ -405,25 +404,44 @@ double startSongSeconds = 0.0;
 	}
 	else
 	{
-		// Clear the stream manager
-		[streamSingleton removeAllStreams];
-		
-		BOOL isTempCache = NO;
-		if (startSongBytes > 0)
-			isTempCache = YES;
-		else if (!settings.isSongCachingEnabled)
-			isTempCache = YES;
-		
-		// Start downloading the current song from the correct offset
-		[streamSingleton queueStreamForSong:currentSong 
-								 byteOffset:startSongBytes 
-							  secondsOffset:startSongSeconds 
-									atIndex:0 
-								isTempCache:isTempCache];
-		
-		// Fill the stream queue
-		if (settings.isSongCachingEnabled)
-			[streamSingleton fillStreamQueue];
+		if ([streamSingleton isSongDownloading:currentSong])
+		{
+			// The song is caching, start streaming from the local copy
+			[audio startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] 
+								orSeconds:[NSNumber numberWithDouble:startSongSeconds]];
+		}
+		else if ([streamSingleton isSongFirstInQueue:currentSong] && ![streamSingleton isQueueDownloading])
+		{
+			// The song is first in queue, but the queue is not downloading. Probably the song was downloading
+			// when the app quit. Resume the download and start the player
+			[streamSingleton resumeQueue];
+			
+			// The song is caching, start streaming from the local copy
+			[audio startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] 
+								orSeconds:[NSNumber numberWithDouble:startSongSeconds]];
+		}
+		else
+		{
+			// Clear the stream manager
+			[streamSingleton removeAllStreams];
+			
+			BOOL isTempCache = NO;
+			if (startSongBytes > 0)
+				isTempCache = YES;
+			else if (!settings.isSongCachingEnabled)
+				isTempCache = YES;
+			
+			// Start downloading the current song from the correct offset
+			[streamSingleton queueStreamForSong:currentSong 
+									 byteOffset:startSongBytes 
+								  secondsOffset:startSongSeconds 
+										atIndex:0 
+									isTempCache:isTempCache];
+			
+			// Fill the stream queue
+			if (settings.isSongCachingEnabled)
+				[streamSingleton fillStreamQueue];
+		}
 	}
 	
 	/*DLog(@"running startSongAtOffsetInSeconds2");
@@ -512,7 +530,7 @@ double startSongSeconds = 0.0;
 	else
 	{		
 		NSInteger index = [PlaylistSingleton sharedInstance].currentIndex + 1;
-		if (index <= ([databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"] - 1))
+		if (index <= ([databaseControls.currentPlaylistDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM currentPlaylist"] - 1))
 		{
 			[PlaylistSingleton sharedInstance].currentIndex = index;
 			[self startSong];			
@@ -716,7 +734,7 @@ double startSongSeconds = 0.0;
 - (void)jukeboxNextSong
 {
 	NSInteger index = [PlaylistSingleton sharedInstance].currentIndex + 1;
-	if (index <= ([databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"] - 1))
+	if (index <= ([databaseControls.currentPlaylistDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"] - 1))
 	{		
 		[self jukeboxPlaySongAtPosition:[NSNumber numberWithInt:index]];
 		
@@ -820,9 +838,9 @@ double startSongSeconds = 0.0;
 	
 	FMResultSet *result;
 	if (currentPlaylist.isShuffle)
-		result = [databaseControls.currentPlaylistDb executeQuery:@"SELECT songId FROM jukeboxShufflePlaylist"];
+		result = [databaseControls.currentPlaylistDb synchronizedExecuteQuery:@"SELECT songId FROM jukeboxShufflePlaylist"];
 	else
-		result = [databaseControls.currentPlaylistDb executeQuery:@"SELECT songId FROM jukeboxCurrentPlaylist"];
+		result = [databaseControls.currentPlaylistDb synchronizedExecuteQuery:@"SELECT songId FROM jukeboxCurrentPlaylist"];
 	
 	while ([result next])
 	{

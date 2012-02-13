@@ -14,7 +14,6 @@
 #import "MGSplitViewController.h"
 #import "iPadMainMenu.h"
 #import "InitialDetailViewController.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "NSString+md5.h"
 #import "ServerListViewController.h"
@@ -51,7 +50,7 @@
 #import "AudioEngine.h"
 
 #import "UIDevice+Software.h"
-
+#import "NSObject+ListMethods.h"
 
 @implementation iSubAppDelegate
 
@@ -59,7 +58,7 @@
 
 // Main interface elements for iPhone
 @synthesize background, currentTabBarController, mainTabBarController, offlineTabBarController;
-@synthesize homeNavigationController, playerNavigationController, artistsNavigationController, rootViewController, allAlbumsNavigationController, allSongsNavigationController, playlistsNavigationController, bookmarksNavigationController, playingNavigationController, genresNavigationController, cacheNavigationController, chatNavigationController;
+@synthesize homeNavigationController, playerNavigationController, artistsNavigationController, rootViewController, allAlbumsNavigationController, allSongsNavigationController, playlistsNavigationController, bookmarksNavigationController, playingNavigationController, genresNavigationController, cacheNavigationController, chatNavigationController, supportNavigationController;
 
 // Main interface elemements for iPad
 @synthesize splitView, mainMenu, initialDetail;
@@ -197,6 +196,18 @@
 	{
 		// Setup the tabBarController
 		mainTabBarController.moreNavigationController.navigationBar.barStyle = UIBarStyleBlack;
+		/*// Add the support tab
+		[Crittercism showCrittercism:nil];
+		UIViewController *vc = (UIViewController *)[Crittercism sharedInstance].crittercismViewController;
+		self.supportNavigationController = [[UINavigationController alloc] initWithRootViewController:vc];
+		supportNavigationController.tabBarItem.tag = 9;
+		supportNavigationController.tabBarItem.image = [UIImage imageNamed:@"support-tabbaricon.png"];
+		supportNavigationController.tabBarItem.title = @"Support";
+		NSMutableArray *viewControllers = [NSMutableArray arrayWithArray:mainTabBarController.viewControllers];
+		[viewControllers addObject:supportNavigationController];
+		[mainTabBarController setViewControllers:viewControllers animated:NO];
+		[vc logMethods];
+		DLog(@"toolbarItems: %@", [vc toolbarItems]);*/
 		
 		//DLog(@"isOfflineMode: %i", viewObjects.isOfflineMode);
 		if (viewObjects.isOfflineMode)
@@ -209,6 +220,7 @@
 		{
 			// Recover the tab order and load the main tabBarController
 			currentTabBarController = mainTabBarController;
+			
 			//[viewObjects orderMainTabBarController]; // Do this after server check
 			[window addSubview:mainTabBarController.view];
 		}
@@ -379,6 +391,7 @@
 - (void)loadCrittercism
 {
 	if (IS_BETA() && IS_ADHOC() && !IS_LITE())
+	//if(1)
 	{
 		[Crittercism initWithAppID:@"4f1f97d2b093150d55000093" 
 							andKey:@"4f1f97d2b093150d55000093djpi3cjr" 
@@ -723,6 +736,8 @@
 	[audio stop];
 	
 	[[SUSStreamSingleton sharedInstance] cancelAllStreams];
+	
+	[musicControls stopDownloadQueue];
 
 	[mainTabBarController.view removeFromSuperview];
 	[databaseControls closeAllDatabases];
@@ -744,6 +759,7 @@
 	[databaseControls initDatabases];
 	[self checkServer];
 	[viewObjects orderMainTabBarController];
+	[musicControls downloadNextQueuedSong];
 	[window addSubview:[mainTabBarController view]];
 }
 

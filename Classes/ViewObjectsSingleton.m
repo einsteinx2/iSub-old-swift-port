@@ -14,6 +14,7 @@
 #import "MGSplitViewController.h"
 #import "iPadMainMenu.h"
 #import "SavedSettings.h"
+#import "Crittercism.h"
 
 static ViewObjectsSingleton *sharedInstance = nil;
 
