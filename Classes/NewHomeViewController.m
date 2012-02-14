@@ -284,9 +284,9 @@
 		{		
 			FMDatabase *coverArtCache = databaseControls.coverArtCacheDb320;
 			
-			if ([coverArtCache synchronizedIntForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [currentSong.coverArtId md5]] == 1)
+			if ([coverArtCache intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [currentSong.coverArtId md5]] == 1)
 			{
-				NSData *imageData = [coverArtCache synchronizedDataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [currentSong.coverArtId md5]];
+				NSData *imageData = [coverArtCache dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [currentSong.coverArtId md5]];
 				if (SCREEN_SCALE() == 2.0)
 				{
 					UIGraphicsBeginImageContextWithOptions(CGSizeMake(320.0,320.0), NO, 2.0);

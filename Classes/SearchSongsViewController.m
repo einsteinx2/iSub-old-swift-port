@@ -198,7 +198,7 @@
 		currentPlaylist.isShuffle = YES;
 		
 		[databaseControls resetShufflePlaylist];
-		[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist ORDER BY RANDOM()"];
+		[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist ORDER BY RANDOM()"];
 	}
 	else
 	{

@@ -56,15 +56,15 @@
 
 - (void)resetRootFolderTempTable
 {
-	[self.db synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS rootFolderNameCacheTemp"];
-	[self.db synchronizedExecuteUpdate:@"CREATE TEMPORARY TABLE rootFolderNameCacheTemp (id TEXT, name TEXT)"];
+	[self.db executeUpdate:@"DROP TABLE IF EXISTS rootFolderNameCacheTemp"];
+	[self.db executeUpdate:@"CREATE TEMPORARY TABLE rootFolderNameCacheTemp (id TEXT, name TEXT)"];
 	
 	tempRecordCount = 0;
 }
 
 - (BOOL)clearRootFolderTempTable
 {
-	[self.db synchronizedExecuteUpdate:@"DELETE FROM rootFolderNameCacheTemp"];
+	[self.db executeUpdate:@"DELETE FROM rootFolderNameCacheTemp"];
 	
 	return ![self.db hadError];
 }
@@ -98,7 +98,7 @@
 	[self.db executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS rootFolderIndexCache%@", self.tableModifier]];
 	[self.db executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS rootFolderNameCache%@", self.tableModifier]];
 	[self.db executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS rootFolderCount%@", self.tableModifier]];
-	//[self.db synchronizedExecuteUpdate:@"VACUUM"]; // Removed because it takes waaaaaay too long, maybe make a button in settings?
+	//[self.db executeUpdate:@"VACUUM"]; // Removed because it takes waaaaaay too long, maybe make a button in settings?
 	
 	// Create the new tables
 	NSString *query;

@@ -65,9 +65,9 @@
 {
 	NSUInteger value = 0;
 	
-	if ([self.db tableExists:@"allSongsCount"] && [self.db synchronizedIntForQuery:@"SELECT COUNT(*) FROM allSongsCount"] > 0)
+	if ([self.db tableExists:@"allSongsCount"] && [self.db intForQuery:@"SELECT COUNT(*) FROM allSongsCount"] > 0)
 	{
-		value = [self.db synchronizedIntForQuery:@"SELECT count FROM allSongsCount LIMIT 1"];
+		value = [self.db intForQuery:@"SELECT count FROM allSongsCount LIMIT 1"];
 	}
 	
 	return value;
@@ -75,7 +75,7 @@
 
 - (NSUInteger)allSongsSearchCount
 {
-	NSUInteger value = [self.db synchronizedIntForQuery:@"SELECT count(*) FROM allSongsNameSearch"];
+	NSUInteger value = [self.db intForQuery:@"SELECT count(*) FROM allSongsNameSearch"];
 	
 	return value;
 }
@@ -84,7 +84,7 @@
 {
 	NSMutableArray *indexItems = [NSMutableArray arrayWithCapacity:0];
 	
-	FMResultSet *result = [self.db synchronizedExecuteQuery:@"SELECT * FROM allSongsIndexCache"];
+	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allSongsIndexCache"];
 	while ([result next])
 	{
 		Index *item = [[Index alloc] init];
@@ -104,7 +104,7 @@
 	return [Song songFromDbRow:position-1 inTable:@"allSongs" inDatabase:self.db];
 	
 	/*Song *aSong = [[Song alloc] init];
-	FMResultSet *result = [self.db synchronizedExecuteQuery:@"SELECT * FROM allSongs WHERE ROWID = ?", [NSNumber numberWithInt:position]];
+	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allSongs WHERE ROWID = ?", [NSNumber numberWithInt:position]];
 	[result next];
 	if ([self.db hadError]) 
 	{
@@ -149,20 +149,20 @@
 
 - (Song *)allSongsSongForPositionInSearch:(NSUInteger)position
 {
-	NSUInteger rowId = [self.db synchronizedIntForQuery:@"SELECT rowIdInAllSongs FROM allSongsNameSearch WHERE ROWID = ?", [NSNumber numberWithInt:position]];
+	NSUInteger rowId = [self.db intForQuery:@"SELECT rowIdInAllSongs FROM allSongsNameSearch WHERE ROWID = ?", [NSNumber numberWithInt:position]];
 	return [self allSongsSongForPosition:rowId];
 }
 
 - (void)allSongsClearSearch
 {
-	[self.db synchronizedExecuteUpdate:@"DELETE FROM allSongsNameSearch"];
+	[self.db executeUpdate:@"DELETE FROM allSongsNameSearch"];
 }
 
 - (void)allSongsPerformSearch:(NSString *)name
 {
 	// Inialize the search DB
-	[self.db synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS allSongsNameSearch"];
-	[self.db synchronizedExecuteUpdate:@"CREATE TEMPORARY TABLE allSongsNameSearch (rowIdInAllSongs INTEGER)"];
+	[self.db executeUpdate:@"DROP TABLE IF EXISTS allSongsNameSearch"];
+	[self.db executeUpdate:@"CREATE TEMPORARY TABLE allSongsNameSearch (rowIdInAllSongs INTEGER)"];
 	
 	// Perform the search
 	NSString *query = @"INSERT INTO allSongsNameSearch SELECT ROWID FROM allSongs WHERE title LIKE ? LIMIT 100";
@@ -176,7 +176,7 @@
 {
 	BOOL isLoaded = NO;
 	
-	if ([self.db tableExists:@"allSongsCount"] && [self.db synchronizedIntForQuery:@"SELECT COUNT(*) FROM allSongsCount"] > 0)
+	if ([self.db tableExists:@"allSongsCount"] && [self.db intForQuery:@"SELECT COUNT(*) FROM allSongsCount"] > 0)
 	{
 		isLoaded = YES;
 	}
@@ -233,7 +233,7 @@
 
 - (void)allSongsRestartLoad
 {
-	[self.db synchronizedExecuteUpdate:@"CREATE TABLE restartLoad (a INTEGER)"];
+	[self.db executeUpdate:@"CREATE TABLE restartLoad (a INTEGER)"];
 }
 
 #pragma mark - Loader Manager Methods

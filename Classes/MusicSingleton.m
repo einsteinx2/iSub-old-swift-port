@@ -117,7 +117,7 @@ static MusicSingleton *sharedInstance = nil;
 - (Song *)nextQueuedSong
 {
 	Song *aSong = nil;
-	FMResultSet *result = [databaseControls.songCacheDb synchronizedExecuteQuery:@"SELECT * FROM cacheQueue WHERE finished = 'NO' LIMIT 1"];
+	FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT * FROM cacheQueue WHERE finished = 'NO' LIMIT 1"];
 	if ([databaseControls.songCacheDb hadError]) 
 	{
 		DLog(@"Err %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
@@ -166,17 +166,17 @@ static MusicSingleton *sharedInstance = nil;
 	self.downloadFileNameQueue = queueSongObject.localPath;
 
 	// Check to see if the song is already cached
-	if ([databaseControls.songCacheDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE md5 = ?", downloadFileNameHashQueue])
+	if ([databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE md5 = ?", downloadFileNameHashQueue])
 	{
 		// Looks like the song is in the database, check if it's cached fully
-		NSString *isDownloadFinished = [databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", downloadFileNameHashQueue];
+		NSString *isDownloadFinished = [databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", downloadFileNameHashQueue];
 		if ([isDownloadFinished isEqualToString:@"YES"])
 		{
 			// The song is fully cached, so delete it from the cache queue database
-			[databaseControls.cacheQueueDb synchronizedExecuteUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", downloadFileNameHashQueue];
+			[databaseControls.cacheQueueDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", downloadFileNameHashQueue];
 			
 			// Start queuing the next song if there is one
-			if ([databaseControls.cacheQueueDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
+			if ([databaseControls.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
 			{
 				self.queueSongObject = nil; self.queueSongObject = [self nextQueuedSong];
 				[self startDownloadQueue];
@@ -207,7 +207,7 @@ static MusicSingleton *sharedInstance = nil;
 			if (doDownload)
 			{
 				// Delete the row from cachedSongs
-				[databaseControls.songCacheDb synchronizedExecuteUpdate:@"DELETE FROM cachedSongs WHERE md5 = downloadFileNameHashQueue"];
+				[databaseControls.songCacheDb executeUpdate:@"DELETE FROM cachedSongs WHERE md5 = downloadFileNameHashQueue"];
 				
 				// Remove and recreate the song file on disk
 				[[NSFileManager defaultManager] removeItemAtPath:downloadFileNameQueue error:NULL];
@@ -230,10 +230,10 @@ static MusicSingleton *sharedInstance = nil;
 			else 
 			{
 				// The song will be cached by the player soon, so delete it from the cache queue database
-				[databaseControls.cacheQueueDb synchronizedExecuteUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", downloadFileNameHashQueue];
+				[databaseControls.cacheQueueDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", downloadFileNameHashQueue];
 				
 				// Start queuing the next song if there is one
-				if ([databaseControls.cacheQueueDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
+				if ([databaseControls.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
 				{
 					self.queueSongObject = nil; self.queueSongObject = [self nextQueuedSong];
 					[self startDownloadQueue];
@@ -313,7 +313,7 @@ static MusicSingleton *sharedInstance = nil;
 	}		
 	
 	// Delete the unfinished download
-	NSString *isDownloadFinished = [databaseControls.cacheQueueDb synchronizedStringForQuery:@"SELECT finished FROM cacheQueue WHERE md5 = ?", downloadFileNameHashQueue];
+	NSString *isDownloadFinished = [databaseControls.cacheQueueDb stringForQuery:@"SELECT finished FROM cacheQueue WHERE md5 = ?", downloadFileNameHashQueue];
 	if ([isDownloadFinished isEqualToString:@"NO"])
 	{		
 		// Delete the song from disk
@@ -327,7 +327,7 @@ static MusicSingleton *sharedInstance = nil;
 	{
 		if (appDelegate.isWifi)
 		{
-			if ([databaseControls.cacheQueueDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
+			if ([databaseControls.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
 			{
 				isQueueListDownloading = YES;
 				self.queueSongObject = nil; self.queueSongObject = [self nextQueuedSong];
@@ -530,7 +530,7 @@ double startSongSeconds = 0.0;
 	else
 	{		
 		NSInteger index = [PlaylistSingleton sharedInstance].currentIndex + 1;
-		if (index <= ([databaseControls.currentPlaylistDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM currentPlaylist"] - 1))
+		if (index <= ([databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"] - 1))
 		{
 			[PlaylistSingleton sharedInstance].currentIndex = index;
 			[self startSong];			
@@ -734,7 +734,7 @@ double startSongSeconds = 0.0;
 - (void)jukeboxNextSong
 {
 	NSInteger index = [PlaylistSingleton sharedInstance].currentIndex + 1;
-	if (index <= ([databaseControls.currentPlaylistDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"] - 1))
+	if (index <= ([databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"] - 1))
 	{		
 		[self jukeboxPlaySongAtPosition:[NSNumber numberWithInt:index]];
 		
@@ -838,9 +838,9 @@ double startSongSeconds = 0.0;
 	
 	FMResultSet *result;
 	if (currentPlaylist.isShuffle)
-		result = [databaseControls.currentPlaylistDb synchronizedExecuteQuery:@"SELECT songId FROM jukeboxShufflePlaylist"];
+		result = [databaseControls.currentPlaylistDb executeQuery:@"SELECT songId FROM jukeboxShufflePlaylist"];
 	else
-		result = [databaseControls.currentPlaylistDb synchronizedExecuteQuery:@"SELECT songId FROM jukeboxCurrentPlaylist"];
+		result = [databaseControls.currentPlaylistDb executeQuery:@"SELECT songId FROM jukeboxCurrentPlaylist"];
 	
 	while ([result next])
 	{

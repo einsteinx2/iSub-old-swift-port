@@ -89,11 +89,11 @@
 	else
 	{
 		// Update the cache time
-		[databaseControls.songCacheDb synchronizedExecuteUpdate:[NSString stringWithFormat:@"UPDATE cacheQueue SET cachedDate = %i WHERE md5 = ?", (NSUInteger)[[NSDate date] timeIntervalSince1970]], musicControls.downloadFileNameHashQueue];
+		[databaseControls.songCacheDb executeUpdate:[NSString stringWithFormat:@"UPDATE cacheQueue SET cachedDate = %i WHERE md5 = ?", (NSUInteger)[[NSDate date] timeIntervalSince1970]], musicControls.downloadFileNameHashQueue];
 		
 		// Move the row from the cacheQueue to the cachedSongs table
-		[databaseControls.songCacheDb synchronizedExecuteUpdate:@"UPDATE cacheQueue SET finished = 'YES' WHERE md5 = ?", musicControls.downloadFileNameHashQueue];
-		[databaseControls.songCacheDb synchronizedExecuteUpdate:@"REPLACE INTO cachedSongs SELECT * FROM cacheQueue WHERE md5 = ?", musicControls.downloadFileNameHashQueue];
+		[databaseControls.songCacheDb executeUpdate:@"UPDATE cacheQueue SET finished = 'YES' WHERE md5 = ?", musicControls.downloadFileNameHashQueue];
+		[databaseControls.songCacheDb executeUpdate:@"REPLACE INTO cachedSongs SELECT * FROM cacheQueue WHERE md5 = ?", musicControls.downloadFileNameHashQueue];
 		NSArray *splitPath = [musicControls.queueSongObject.path componentsSeparatedByString:@"/"];
 		if ([splitPath count] <= 9)
 		{
@@ -104,19 +104,19 @@
 			}
 			
 			NSString *query = [NSString stringWithFormat:@"REPLACE INTO cachedSongsLayout (md5, genre, segs, seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9) VALUES ('%@', '%@', %i, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [musicControls.queueSongObject.path md5], musicControls.queueSongObject.genre, [splitPath count]];
-			[databaseControls.songCacheDb synchronizedExecuteUpdate:query, [segments objectAtIndex:0], [segments objectAtIndex:1], [segments objectAtIndex:2], [segments objectAtIndex:3], [segments objectAtIndex:4], [segments objectAtIndex:5], [segments objectAtIndex:6], [segments objectAtIndex:7], [segments objectAtIndex:8]];
+			[databaseControls.songCacheDb executeUpdate:query, [segments objectAtIndex:0], [segments objectAtIndex:1], [segments objectAtIndex:2], [segments objectAtIndex:3], [segments objectAtIndex:4], [segments objectAtIndex:5], [segments objectAtIndex:6], [segments objectAtIndex:7], [segments objectAtIndex:8]];
 			
 			[segments release];
 		}
-		[databaseControls.songCacheDb synchronizedExecuteUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", musicControls.downloadFileNameHashQueue];
+		[databaseControls.songCacheDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", musicControls.downloadFileNameHashQueue];
 		
 		// Setup the genre table entries
 		if (musicControls.queueSongObject.genre)
 		{
 			// Check if the genre has a table in the database yet, if not create it and add the new genre to the genres table
-			if ([databaseControls.songCacheDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM genres WHERE genre = ?", musicControls.queueSongObject.genre] == 0)
+			if ([databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM genres WHERE genre = ?", musicControls.queueSongObject.genre] == 0)
 			{							
-				[databaseControls.songCacheDb synchronizedExecuteUpdate:@"INSERT INTO genres (genre) VALUES (?)", musicControls.queueSongObject.genre];
+				[databaseControls.songCacheDb executeUpdate:@"INSERT INTO genres (genre) VALUES (?)", musicControls.queueSongObject.genre];
 				if ([databaseControls.songCacheDb hadError]) { DLog(@"Err adding the genre %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]); }
 			}
 			
@@ -131,7 +131,7 @@
             NSString *artId = [[musicControls.queueSongObject.coverArtId copy] autorelease];
             
 			NSURLConnectionDelegateQueueArtwork *delegate = [[NSURLConnectionDelegateQueueArtwork alloc] init];
-			if ([databaseControls.coverArtCacheDb320 synchronizedIntForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", 
+			if ([databaseControls.coverArtCacheDb320 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", 
                  [musicControls.queueSongObject.coverArtId md5]] == 0)
 			{
 				if (SCREEN_SCALE() == 2.0)
@@ -143,7 +143,7 @@
                     size = @"320";
 				}
 			}
-			if ([databaseControls.coverArtCacheDb60 synchronizedIntForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", 
+			if ([databaseControls.coverArtCacheDb60 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", 
                  [musicControls.queueSongObject.coverArtId md5]] == 0)
 			{
 				if (SCREEN_SCALE() == 2.0)

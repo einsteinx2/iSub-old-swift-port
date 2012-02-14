@@ -92,7 +92,7 @@
 		FMResultSet *result;
 		if ([ViewObjectsSingleton sharedInstance].isOfflineMode) 
 		{
-			result = [[DatabaseSingleton sharedInstance].songCacheDb synchronizedExecuteQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE"], genreNameLabel.text];
+			result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE"], genreNameLabel.text];
 		}
 		else 
 		{
@@ -125,7 +125,7 @@
 		FMResultSet *result;
 		if ([ViewObjectsSingleton sharedInstance].isOfflineMode) 
 		{
-			result = [[DatabaseSingleton sharedInstance].songCacheDb synchronizedExecuteQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE"], genreNameLabel.text];
+			result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE"], genreNameLabel.text];
 		}
 		else 
 		{

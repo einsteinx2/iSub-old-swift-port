@@ -47,11 +47,11 @@
 {
     //Initialize the arrays.
     [self.db beginTransaction];
-    [self.db synchronizedExecuteUpdate:@"DELETE FROM albumsCache WHERE folderId = ?", [myId md5]];
-    [self.db synchronizedExecuteUpdate:@"DELETE FROM songsCache WHERE folderId = ?", [myId md5]];
-    [self.db synchronizedExecuteUpdate:@"DELETE FROM albumsCacheCount WHERE folderId = ?", [myId md5]];
-    [self.db synchronizedExecuteUpdate:@"DELETE FROM songsCacheCount WHERE folderId = ?", [myId md5]];
-    [self.db synchronizedExecuteUpdate:@"DELETE FROM folderLength WHERE folderId = ?", [myId md5]];
+    [self.db executeUpdate:@"DELETE FROM albumsCache WHERE folderId = ?", [myId md5]];
+    [self.db executeUpdate:@"DELETE FROM songsCache WHERE folderId = ?", [myId md5]];
+    [self.db executeUpdate:@"DELETE FROM albumsCacheCount WHERE folderId = ?", [myId md5]];
+    [self.db executeUpdate:@"DELETE FROM songsCacheCount WHERE folderId = ?", [myId md5]];
+    [self.db executeUpdate:@"DELETE FROM folderLength WHERE folderId = ?", [myId md5]];
     [self.db commit];
     
     if ([self.db hadError]) {
@@ -63,7 +63,7 @@
 
 - (BOOL)insertAlbumIntoFolderCache:(Album *)anAlbum
 {
-	[self.db synchronizedExecuteUpdate:@"INSERT INTO albumsCache (folderId, title, albumId, coverArtId, artistName, artistId) VALUES (?, ?, ?, ?, ?, ?)", [myId md5], anAlbum.title, anAlbum.albumId, anAlbum.coverArtId, anAlbum.artistName, anAlbum.artistId];
+	[self.db executeUpdate:@"INSERT INTO albumsCache (folderId, title, albumId, coverArtId, artistName, artistId) VALUES (?, ?, ?, ?, ?, ?)", [myId md5], anAlbum.title, anAlbum.albumId, anAlbum.coverArtId, anAlbum.artistName, anAlbum.artistId];
 	
 	if ([self.db hadError]) {
 		DLog(@"Err %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
@@ -85,7 +85,7 @@
 
 - (BOOL)insertAlbumsCount
 {
-    [self.db synchronizedExecuteUpdate:@"INSERT INTO albumsCacheCount (folderId, count) VALUES (?, ?)", [myId md5], [NSNumber numberWithInt:albumsCount]];
+    [self.db executeUpdate:@"INSERT INTO albumsCacheCount (folderId, count) VALUES (?, ?)", [myId md5], [NSNumber numberWithInt:albumsCount]];
     
     if ([self.db hadError]) {
 		DLog(@"Err inserting album count %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
@@ -96,7 +96,7 @@
 
 - (BOOL)insertSongsCount
 {
-    [self.db synchronizedExecuteUpdate:@"INSERT INTO songsCacheCount (folderId, count) VALUES (?, ?)", [myId md5], [NSNumber numberWithInt:songsCount]];
+    [self.db executeUpdate:@"INSERT INTO songsCacheCount (folderId, count) VALUES (?, ?)", [myId md5], [NSNumber numberWithInt:songsCount]];
     
     if ([self.db hadError]) {
 		DLog(@"Err inserting song count %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
@@ -107,7 +107,7 @@
 
 - (BOOL)insertFolderLength
 {
-    [self.db synchronizedExecuteUpdate:@"INSERT INTO folderLength (folderId, length) VALUES (?, ?)", [myId md5], [NSNumber numberWithInt:folderLength]];
+    [self.db executeUpdate:@"INSERT INTO folderLength (folderId, length) VALUES (?, ?)", [myId md5], [NSNumber numberWithInt:folderLength]];
     
     if ([self.db hadError]) {
 		DLog(@"Err inserting folder length %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);

@@ -60,7 +60,7 @@
 
     if (viewObjects.isLocalPlaylist)
 	{
-		self.title = [databaseControls.localPlaylistsDb synchronizedStringForQuery:@"SELECT playlist FROM localPlaylists WHERE md5 = ?", self.md5];
+		self.title = [databaseControls.localPlaylistsDb stringForQuery:@"SELECT playlist FROM localPlaylists WHERE md5 = ?", self.md5];
 		
 		UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
 		headerView.backgroundColor = viewObjects.darkNormal;
@@ -457,14 +457,14 @@ static NSString *kName_Error = @"error";
 	cell.backgroundView = [[[UIView alloc] init] autorelease];
 	if(indexPath.row % 2 == 0)
 	{
-		if ([databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
+		if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
 			cell.backgroundView.backgroundColor = [viewObjects currentLightColor];
 		else
 			cell.backgroundView.backgroundColor = viewObjects.lightNormal;
 	}
 	else
 	{
-		if ([databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
+		if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
 			cell.backgroundView.backgroundColor = [viewObjects currentDarkColor];
 		else
 			cell.backgroundView.backgroundColor = viewObjects.darkNormal;
@@ -495,23 +495,23 @@ static NSString *kName_Error = @"error";
 		
 		if (viewObjects.isLocalPlaylist)
 		{			
-			[databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
+			[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
 			if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the localPlaylistsDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
 			if ([SavedSettings sharedInstance].isJukeboxEnabled)
 				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO jukeboxCurrentPlaylist SELECT * FROM playlist%@", self.md5]];
 			else
 				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", self.md5]];
-			[databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"DETACH DATABASE currentPlaylistDb"];
+			[databaseControls.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 		}
 		else
 		{
-			[databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
+			[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
 			if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the localPlaylistsDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
 			if ([SavedSettings sharedInstance].isJukeboxEnabled)
 				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO jukeboxCurrentPlaylist SELECT * FROM splaylist%@", self.md5]];
 			else
 				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM splaylist%@", self.md5]];
-			[databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"DETACH DATABASE currentPlaylistDb"];
+			[databaseControls.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 		}
 		
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)

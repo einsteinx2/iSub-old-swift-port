@@ -190,9 +190,6 @@
 		534098A7142D491100455754 /* SUSAllSongsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 534098A6142D491100455754 /* SUSAllSongsLoader.m */; };
 		534098A8142D491100455754 /* SUSAllSongsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 534098A6142D491100455754 /* SUSAllSongsLoader.m */; };
 		534098A9142D491100455754 /* SUSAllSongsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 534098A6142D491100455754 /* SUSAllSongsLoader.m */; };
-		5345204E149999AB0089D9E3 /* FMDatabase+Synchronized.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345204D149999AB0089D9E3 /* FMDatabase+Synchronized.m */; };
-		5345204F149999AB0089D9E3 /* FMDatabase+Synchronized.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345204D149999AB0089D9E3 /* FMDatabase+Synchronized.m */; };
-		53452050149999AB0089D9E3 /* FMDatabase+Synchronized.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345204D149999AB0089D9E3 /* FMDatabase+Synchronized.m */; };
 		5345FAE01191E6A000C6EAB7 /* NSString+md5.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345FADF1191E6A000C6EAB7 /* NSString+md5.m */; };
 		5347A1AA148C3857000288D8 /* BassEffectDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 5347A1A9148C3857000288D8 /* BassEffectDAO.m */; };
 		5347A1AB148C3857000288D8 /* BassEffectDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 5347A1A9148C3857000288D8 /* BassEffectDAO.m */; };
@@ -2205,8 +2202,6 @@
 		534098A5142D491100455754 /* SUSAllSongsLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSAllSongsLoader.h; sourceTree = "<group>"; };
 		534098A6142D491100455754 /* SUSAllSongsLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSAllSongsLoader.m; sourceTree = "<group>"; };
 		534098C0142E66CB00455754 /* SUSLoaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSLoaderManager.h; sourceTree = "<group>"; };
-		5345204C149999AB0089D9E3 /* FMDatabase+Synchronized.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FMDatabase+Synchronized.h"; sourceTree = "<group>"; };
-		5345204D149999AB0089D9E3 /* FMDatabase+Synchronized.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FMDatabase+Synchronized.m"; sourceTree = "<group>"; };
 		5345FADE1191E6A000C6EAB7 /* NSString+md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+md5.h"; sourceTree = "<group>"; };
 		5345FADF1191E6A000C6EAB7 /* NSString+md5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+md5.m"; sourceTree = "<group>"; };
 		5347A1A8148C3857000288D8 /* BassEffectDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassEffectDAO.h; sourceTree = "<group>"; };
@@ -3892,8 +3887,6 @@
 				53B38BCF1474C14200CD8A99 /* NSArray+FirstObject.m */,
 				531B6D72147C416B00BA28B9 /* NSNotificationCenter+MainThread.h */,
 				531B6D73147C416B00BA28B9 /* NSNotificationCenter+MainThread.m */,
-				5345204C149999AB0089D9E3 /* FMDatabase+Synchronized.h */,
-				5345204D149999AB0089D9E3 /* FMDatabase+Synchronized.m */,
 				5365ABE214AFB05100C0958D /* UIDevice+Software.h */,
 				5365ABE314AFB05100C0958D /* UIDevice+Software.m */,
 				5306236614D3237800D320A8 /* UIBezierPath+Smoothing.h */,
@@ -6306,7 +6299,6 @@
 				53BBDA6C148EAE5D00032114 /* MGTwitterUsersLibXMLParser.m in Sources */,
 				53BBDA6F148EAE5D00032114 /* MGTwitterUsersParser.m in Sources */,
 				53BBDA72148EAE5D00032114 /* MGTwitterXMLParser.m in Sources */,
-				5345204E149999AB0089D9E3 /* FMDatabase+Synchronized.m in Sources */,
 				535A1A09149D40E6008DA9F6 /* NSString+compareWithoutIndefiniteArticles.m in Sources */,
 				5398FA4414A44591002808E1 /* CustomUITableViewCell.m in Sources */,
 				5365ABE414AFB05100C0958D /* UIDevice+Software.m in Sources */,
@@ -6618,7 +6610,6 @@
 				53BBDA6E148EAE5D00032114 /* MGTwitterUsersLibXMLParser.m in Sources */,
 				53BBDA71148EAE5D00032114 /* MGTwitterUsersParser.m in Sources */,
 				53BBDA74148EAE5D00032114 /* MGTwitterXMLParser.m in Sources */,
-				53452050149999AB0089D9E3 /* FMDatabase+Synchronized.m in Sources */,
 				535A1A0B149D40E6008DA9F6 /* NSString+compareWithoutIndefiniteArticles.m in Sources */,
 				5398FA4614A44591002808E1 /* CustomUITableViewCell.m in Sources */,
 				5365ABE614AFB05100C0958D /* UIDevice+Software.m in Sources */,
@@ -6930,7 +6921,6 @@
 				53BBDA6D148EAE5D00032114 /* MGTwitterUsersLibXMLParser.m in Sources */,
 				53BBDA70148EAE5D00032114 /* MGTwitterUsersParser.m in Sources */,
 				53BBDA73148EAE5D00032114 /* MGTwitterXMLParser.m in Sources */,
-				5345204F149999AB0089D9E3 /* FMDatabase+Synchronized.m in Sources */,
 				535A1A0A149D40E6008DA9F6 /* NSString+compareWithoutIndefiniteArticles.m in Sources */,
 				5398FA4514A44591002808E1 /* CustomUITableViewCell.m in Sources */,
 				5365ABE514AFB05100C0958D /* UIDevice+Software.m in Sources */,

@@ -120,14 +120,14 @@
 	
 	if (viewObjects.isOfflineMode)
 	{
-		if ([databaseControls.songCacheDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM genres"] == 0)
+		if ([databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM genres"] == 0)
 		{
 			[self showNoGenresScreen];
 		}
 	}
 	else 
 	{
-		if ([databaseControls.genresDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM genres"] == 0)
+		if ([databaseControls.genresDb intForQuery:@"SELECT COUNT(*) FROM genres"] == 0)
 		{
 			[self showNoGenresScreen];
 		}
@@ -179,9 +179,9 @@
 {
     // Return the number of rows in the section.
 	if (viewObjects.isOfflineMode)
-		return [databaseControls.songCacheDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM genres"];
+		return [databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM genres"];
 	else
-		return [databaseControls.genresDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM genres"];
+		return [databaseControls.genresDb intForQuery:@"SELECT COUNT(*) FROM genres"];
 }
 
 
@@ -201,11 +201,11 @@
 	
 	if (viewObjects.isOfflineMode)
 	{
-		cell.genreNameLabel.text = [databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
+		cell.genreNameLabel.text = [databaseControls.songCacheDb stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
 	}
 	else
 	{
-		cell.genreNameLabel.text = [databaseControls.genresDb synchronizedStringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
+		cell.genreNameLabel.text = [databaseControls.genresDb stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
 	}
 	
     return [cell autorelease];
@@ -222,24 +222,24 @@
 		GenresArtistViewController *artistViewController = [[GenresArtistViewController alloc] initWithNibName:@"GenresArtistViewController" bundle:nil];
 		if (viewObjects.isOfflineMode) 
 		{
-			artistViewController.title = [NSString stringWithString:[databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]]];
+			artistViewController.title = [NSString stringWithString:[databaseControls.songCacheDb stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]]];
 		}
 		else
 		{
-			artistViewController.title = [NSString stringWithString:[databaseControls.genresDb synchronizedStringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]]];
+			artistViewController.title = [NSString stringWithString:[databaseControls.genresDb stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]]];
 		}
 		artistViewController.listOfArtists = [NSMutableArray arrayWithCapacity:1];
 
 		FMResultSet *result;
 		if (viewObjects.isOfflineMode) 
 		{
-			result = [databaseControls.songCacheDb synchronizedExecuteQuery:@"SELECT seg1 FROM cachedSongsLayout a INNER JOIN genresSongs b ON a.md5 = b.md5 WHERE b.genre = ? GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE", artistViewController.title];
+			result = [databaseControls.songCacheDb executeQuery:@"SELECT seg1 FROM cachedSongsLayout a INNER JOIN genresSongs b ON a.md5 = b.md5 WHERE b.genre = ? GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE", artistViewController.title];
 			if ([databaseControls.songCacheDb hadError])
 				DLog(@"Error grabbing the artists for this genre... Err %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
 		}
 		else 
 		{
-			result = [databaseControls.genresDb synchronizedExecuteQuery:@"SELECT seg1 FROM genresLayout a INNER JOIN genresSongs b ON a.md5 = b.md5 WHERE b.genre = ? GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE", artistViewController.title];
+			result = [databaseControls.genresDb executeQuery:@"SELECT seg1 FROM genresLayout a INNER JOIN genresSongs b ON a.md5 = b.md5 WHERE b.genre = ? GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE", artistViewController.title];
 			if ([databaseControls.genresDb hadError])
 				DLog(@"Error grabbing the artists for this genre... Err %d: %@", [databaseControls.genresDb lastErrorCode], [databaseControls.genresDb lastErrorMessage]);
 		}

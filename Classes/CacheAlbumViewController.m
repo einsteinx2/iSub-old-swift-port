@@ -141,21 +141,21 @@
 	if ([listOfAlbums count] > 10)
 	{
 		FMDatabase *db = databaseControls.albumListCacheDb;
-		[db synchronizedExecuteUpdate:@"DROP TABLE IF EXSITS albumIndex"];
-		[db synchronizedExecuteUpdate:@"CREATE TEMP TABLE albumIndex (album TEXT)"];
+		[db executeUpdate:@"DROP TABLE IF EXSITS albumIndex"];
+		[db executeUpdate:@"CREATE TEMP TABLE albumIndex (album TEXT)"];
 		
 		[db beginTransaction];
 		for (NSNumber *rowId in listOfAlbums)
 		{
 			@autoreleasepool 
 			{
-				[db synchronizedExecuteUpdate:@"INSERT INTO albumIndex SELECT title FROM albumsCache WHERE rowid = ?", rowId];
+				[db executeUpdate:@"INSERT INTO albumIndex SELECT title FROM albumsCache WHERE rowid = ?", rowId];
 			}
 		}
 		[db commit];
 		
 		self.sectionInfo = [databaseControls sectionInfoFromTable:@"albumIndex" inDatabase:db withColumn:@"album"];
-		[db synchronizedExecuteUpdate:@"DROP TABLE IF EXSITS albumIndex"];
+		[db executeUpdate:@"DROP TABLE IF EXSITS albumIndex"];
 		
 		if (sectionInfo)
 		{
@@ -170,7 +170,7 @@
 
 - (void) cachedSongDeleted
 {
-	FMResultSet *result = [databaseControls.songCacheDb synchronizedExecuteQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? AND seg%i = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", segment, (segment - 1), segment, segment], seg1, self.title];
+	FMResultSet *result = [databaseControls.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? AND seg%i = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", segment, (segment - 1), segment, segment], seg1, self.title];
 	
 	self.listOfAlbums = [NSMutableArray arrayWithCapacity:1];
 	self.listOfSongs = [NSMutableArray arrayWithCapacity:1];
@@ -240,11 +240,11 @@
 	FMResultSet *result;
 	if (segment == 2)
 	{
-		result = [databaseControls.songCacheDb synchronizedExecuteQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ORDER BY seg2 COLLATE NOCASE", seg1];
+		result = [databaseControls.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ORDER BY seg2 COLLATE NOCASE", seg1];
 	}
 	else
 	{
-		result = [databaseControls.songCacheDb synchronizedExecuteQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment], seg1, self.title];
+		result = [databaseControls.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment], seg1, self.title];
 	}
 
 	while ([result next])
@@ -258,7 +258,7 @@
 		currentPlaylist.isShuffle = YES;
 		
 		[databaseControls resetShufflePlaylist];
-		[databaseControls.currentPlaylistDb synchronizedExecuteUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist ORDER BY RANDOM()"];
+		[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist ORDER BY RANDOM()"];
 	}
 	else
 	{
@@ -333,7 +333,7 @@
 - (Song *) songFromCacheDb:(NSString *)md5
 {
 	Song *aSong = [[Song alloc] init];
-	FMResultSet *result = [databaseControls.songCacheDb synchronizedExecuteQuery:@"SELECT * FROM cachedSongs WHERE md5 = ?", md5];
+	FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT * FROM cachedSongs WHERE md5 = ?", md5];
 	if ([databaseControls.songCacheDb hadError]) 
 	{
 		DLog(@"Err %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
@@ -447,15 +447,15 @@
 		cell.seg1 = self.seg1;
 		
 		NSString *md5 = [[listOfAlbums objectAtIndex:indexPath.row] objectAtIndex:0];
-		NSString *coverArtId = [databaseControls.songCacheDb synchronizedStringForQuery:@"SELECT coverArtId FROM cachedSongs WHERE md5 = ?", md5];
+		NSString *coverArtId = [databaseControls.songCacheDb stringForQuery:@"SELECT coverArtId FROM cachedSongs WHERE md5 = ?", md5];
 		NSString *name = [[listOfAlbums objectAtIndex:indexPath.row] objectAtIndex:1];
 		
 		if (coverArtId)
 		{
-			if ([databaseControls.coverArtCacheDb60 synchronizedIntForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [coverArtId md5]] == 1)
+			if ([databaseControls.coverArtCacheDb60 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [coverArtId md5]] == 1)
 			{
 				// If the image is already in the cache database, load it
-				cell.coverArtView.image = [UIImage imageWithData:[databaseControls.coverArtCacheDb60 synchronizedDataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [coverArtId md5]]];
+				cell.coverArtView.image = [UIImage imageWithData:[databaseControls.coverArtCacheDb60 dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [coverArtId md5]]];
 			}
 			else 
 			{	
@@ -545,7 +545,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			cacheAlbumViewController.segment = (self.segment + 1);
 			cacheAlbumViewController.seg1 = self.seg1;
 			//DLog(@"query: %@", [NSString stringWithFormat:@"SELECT md5, segs, seg%i FROM cachedSongsLayout WHERE seg1 = '%@' AND seg%i = '%@' GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), seg1, segment, [[listOfAlbums objectAtIndex:indexPath.row] objectAtIndex:1], (segment + 1), (segment + 1)]);
-			FMResultSet *result = [databaseControls.songCacheDb synchronizedExecuteQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? AND seg%i = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), segment, (segment + 1), (segment + 1)], seg1, [[listOfAlbums objectAtIndex:indexPath.row] objectAtIndex:1]];
+			FMResultSet *result = [databaseControls.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? AND seg%i = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), segment, (segment + 1), (segment + 1)], seg1, [[listOfAlbums objectAtIndex:indexPath.row] objectAtIndex:1]];
 			while ([result next])
 			{
 				if ([result intForColumnIndex:1] > (segment + 1))

@@ -467,7 +467,7 @@
 		isSearching = NO;
 		letUserSelectRow = NO;
 		self.tableView.scrollEnabled = NO;
-		[databaseControls.allSongsDb synchronizedExecuteUpdate:@"DROP TABLE allSongsSearch"];
+		[databaseControls.allSongsDb executeUpdate:@"DROP TABLE allSongsSearch"];
 	}
 	
 	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];

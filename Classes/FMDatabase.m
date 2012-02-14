@@ -211,7 +211,7 @@
         return NO;
     }
     
-    FMResultSet *rs = [self synchronizedExecuteQuery:@"select name from sqlite_master where type='table'"];
+    FMResultSet *rs = [self executeQuery:@"select name from sqlite_master where type='table'"];
     
     if (rs) {
         [rs close];
@@ -265,10 +265,16 @@
 
 - (sqlite_int64)lastInsertRowId {
     
-    if (inUse) {
+	/* Modification to allow thread safety by waiting for queries to finish instead of returning nothing */
+	while (inUse) {
+		DLog(@"sleeping 50 microseconds"); 
+		usleep(50);
+	}
+	
+    /*if (inUse) {
         [self warnInUse];
         return NO;
-    }
+    }*/
     [self setInUse:YES];
     
     sqlite_int64 ret = sqlite3_last_insert_rowid(db);
@@ -279,10 +285,17 @@
 }
 
 - (int)changes {
-    if (inUse) {
+	
+	/* Modification to allow thread safety by waiting for queries to finish instead of returning nothing */
+	while (inUse) {
+		DLog(@"sleeping 50 microseconds"); 
+		usleep(50);
+	}
+	
+    /*if (inUse) {
         [self warnInUse];
         return 0;
-    }
+    }*/
     
     [self setInUse:YES];
     int ret = sqlite3_changes(db);
@@ -450,10 +463,16 @@
         return 0x00;
     }
     
-    if (inUse) {
+	/* Modification to allow thread safety by waiting for queries to finish instead of returning nothing */
+	while (inUse) {
+		DLog(@"sleeping 50 microseconds"); 
+		usleep(50);
+	}
+	
+    /*if (inUse) {
         [self warnInUse];
         return 0x00;
-    }
+    }*/
     
     [self setInUse:YES];
     
@@ -602,10 +621,16 @@
         return NO;
     }
     
-    if (inUse) {
+	/* Modification to allow thread safety by waiting for queries to finish instead of returning nothing */
+	while (inUse) {
+		DLog(@"sleeping 50 microseconds"); 
+		usleep(50);
+	}
+	
+    /*if (inUse) {
         [self warnInUse];
         return NO;
-    }
+    }*/
     
     [self setInUse:YES];
     
@@ -815,7 +840,7 @@
 }
 
 - (BOOL)rollback {
-    BOOL b = [self synchronizedExecuteUpdate:@"ROLLBACK TRANSACTION;"];
+    BOOL b = [self executeUpdate:@"ROLLBACK TRANSACTION;"];
     if (b) {
         inTransaction = NO;
     }
@@ -823,7 +848,7 @@
 }
 
 - (BOOL)commit {
-    BOOL b =  [self synchronizedExecuteUpdate:@"COMMIT TRANSACTION;"];
+    BOOL b =  [self executeUpdate:@"COMMIT TRANSACTION;"];
     if (b) {
         inTransaction = NO;
     }
@@ -831,7 +856,7 @@
 }
 
 - (BOOL)beginDeferredTransaction {
-    BOOL b =  [self synchronizedExecuteUpdate:@"BEGIN DEFERRED TRANSACTION;"];
+    BOOL b =  [self executeUpdate:@"BEGIN DEFERRED TRANSACTION;"];
     if (b) {
         inTransaction = YES;
     }
@@ -839,14 +864,12 @@
 }
 
 - (BOOL)beginTransaction {
-    BOOL b =  [self synchronizedExecuteUpdate:@"BEGIN EXCLUSIVE TRANSACTION;"];
+    BOOL b =  [self executeUpdate:@"BEGIN EXCLUSIVE TRANSACTION;"];
     if (b) {
         inTransaction = YES;
     }
     return b;
 }
-
-
 
 - (BOOL)inUse {
     return inUse || inTransaction;

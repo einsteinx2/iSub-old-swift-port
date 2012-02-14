@@ -379,7 +379,7 @@
 		isSearching = NO;
 		letUserSelectRow = NO;
 		self.tableView.scrollEnabled = NO;
-		[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"DROP TABLE allAlbumsSearch"];
+		[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE allAlbumsSearch"];
 	}
 	
 	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];

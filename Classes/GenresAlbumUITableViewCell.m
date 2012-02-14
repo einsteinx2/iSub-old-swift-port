@@ -106,7 +106,7 @@
 		FMResultSet *result;
 		if ([ViewObjectsSingleton sharedInstance].isOfflineMode) 
 		{
-			result = [[DatabaseSingleton sharedInstance].songCacheDb synchronizedExecuteQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text, genre];
+			result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text, genre];
 		}
 		else 
 		{
@@ -138,7 +138,7 @@
 		FMResultSet *result;
 		if ([ViewObjectsSingleton sharedInstance].isOfflineMode) 
 		{
-			result = [[DatabaseSingleton sharedInstance].songCacheDb synchronizedExecuteQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text, genre];
+			result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text, genre];
 		}
 		else 
 		{

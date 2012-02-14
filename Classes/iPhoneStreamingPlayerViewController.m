@@ -642,7 +642,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	[self updateShuffleIcon];
 	
-	NSInteger bookmarkCount = [databaseControls.bookmarksDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId];
+	NSInteger bookmarkCount = [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId];
 	if (bookmarkCount > 0)
 	{
 		bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", bookmarkCount];
@@ -1080,11 +1080,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		if(buttonIndex == 1)
 		{
 			// Check if the bookmark exists
-			if ([databaseControls.bookmarksDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE name = ?", bookmarkNameTextField.text] == 0)
+			if ([databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE name = ?", bookmarkNameTextField.text] == 0)
 			{
 				// Bookmark doesn't exist so save it
-				[databaseControls.bookmarksDb synchronizedExecuteUpdate:[NSString stringWithFormat:@"INSERT INTO bookmarks (name, position, %@, bytes) VALUES (?, ?, %@, ?)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size, currentSong.parentId, [NSNumber numberWithUnsignedLongLong:bookmarkBytePosition]];
-				bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]];
+				[databaseControls.bookmarksDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmarks (name, position, %@, bytes) VALUES (?, ?, %@, ?)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size, currentSong.parentId, [NSNumber numberWithUnsignedLongLong:bookmarkBytePosition]];
+				bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]];
 				if (IS_IPAD())
 					bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on-ipad.png"];
 				else
@@ -1104,9 +1104,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		if(buttonIndex == 1)
 		{
 			// Overwrite the bookmark
-			[databaseControls.bookmarksDb synchronizedExecuteUpdate:@"DELETE FROM bookmarks WHERE name = ?", bookmarkNameTextField.text];
-			[databaseControls.bookmarksDb synchronizedExecuteUpdate:[NSString stringWithFormat:@"INSERT INTO bookmarks (name, position, %@, bytes) VALUES (?, ?, %@, ?)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size, currentSong.parentId, [NSNumber numberWithUnsignedLongLong:bookmarkBytePosition]];
-			bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]];
+			[databaseControls.bookmarksDb executeUpdate:@"DELETE FROM bookmarks WHERE name = ?", bookmarkNameTextField.text];
+			[databaseControls.bookmarksDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmarks (name, position, %@, bytes) VALUES (?, ?, %@, ?)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size, currentSong.parentId, [NSNumber numberWithUnsignedLongLong:bookmarkBytePosition]];
+			bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]];
 			if (IS_IPAD())
 				bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on-ipad.png"];
 			else

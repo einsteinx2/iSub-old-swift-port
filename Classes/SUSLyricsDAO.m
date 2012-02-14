@@ -44,7 +44,7 @@
 
 - (NSString *)lyricsForArtist:(NSString *)artist andTitle:(NSString *)title
 {	
-    return [self.db synchronizedStringForQuery:@"SELECT lyrics FROM lyrics WHERE artist = ? AND title = ?", artist, title];
+    return [self.db stringForQuery:@"SELECT lyrics FROM lyrics WHERE artist = ? AND title = ?", artist, title];
 }
 
 - (NSString *)loadLyricsForArtist:(NSString *)artist andTitle:(NSString *)title

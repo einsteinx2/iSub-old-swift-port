@@ -73,9 +73,9 @@
 	{
 		//DLog(@"image is good so caching it");
 		if (is320)
-			[databaseControls.coverArtCacheDb320 synchronizedExecuteUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [musicControls.queueSongObject.coverArtId md5], receivedData];
+			[databaseControls.coverArtCacheDb320 executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [musicControls.queueSongObject.coverArtId md5], receivedData];
 		else
-			[databaseControls.coverArtCacheDb60 synchronizedExecuteUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [musicControls.queueSongObject.coverArtId md5], receivedData];
+			[databaseControls.coverArtCacheDb60 executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [musicControls.queueSongObject.coverArtId md5], receivedData];
 	}
 	
 	[theConnection release];

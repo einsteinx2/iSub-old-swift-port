@@ -98,11 +98,11 @@
 		FMResultSet *result;
 		if ([ViewObjectsSingleton sharedInstance].isOfflineMode) 
 		{
-			result = [[DatabaseSingleton sharedInstance].songCacheDb synchronizedExecuteQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
+			result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
 		}
 		else 
 		{
-			result = [[DatabaseSingleton sharedInstance].genresDb synchronizedExecuteQuery:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
+			result = [[DatabaseSingleton sharedInstance].genresDb executeQuery:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
 		}
 		
 		while ([result next])
@@ -132,11 +132,11 @@
 		FMResultSet *result;
 		if ([ViewObjectsSingleton sharedInstance].isOfflineMode) 
 		{
-			result = [[DatabaseSingleton sharedInstance].songCacheDb synchronizedExecuteQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
+			result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
 		}
 		else 
 		{
-			result = [[DatabaseSingleton sharedInstance].genresDb synchronizedExecuteQuery:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
+			result = [[DatabaseSingleton sharedInstance].genresDb executeQuery:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
 		}
 		
 		while ([result next])

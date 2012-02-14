@@ -117,19 +117,19 @@
 	{
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
 		{
-			/*[databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/currentPlaylist.db", databaseControls.databaseFolderPath], @"currentPlaylistDb"];
+			/*[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/currentPlaylist.db", databaseControls.databaseFolderPath], @"currentPlaylistDb"];
 			 if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
 			 [databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", self.md5]];
-			 [databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"DETACH DATABASE currentPlaylistDb"];*/
+			 [databaseControls.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];*/
 		}
 		else
 		{
 			DatabaseSingleton *databaseControls = [DatabaseSingleton sharedInstance];
-			[databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
+			[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
 			if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
 			[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", md5]];
 			if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err performing query %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
-			[databaseControls.localPlaylistsDb synchronizedExecuteUpdate:@"DETACH DATABASE currentPlaylistDb"];
+			[databaseControls.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 		}
 		
 		[[ViewObjectsSingleton sharedInstance] performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:YES];

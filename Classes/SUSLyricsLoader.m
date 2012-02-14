@@ -64,7 +64,7 @@
 
 - (void)insertLyricsIntoDb
 {
-    [self.db synchronizedExecuteUpdate:@"INSERT INTO lyrics (artist, title, lyrics) VALUES (?, ?, ?)", artist, title, self.loadedLyrics];
+    [self.db executeUpdate:@"INSERT INTO lyrics (artist, title, lyrics) VALUES (?, ?, ?)", artist, title, self.loadedLyrics];
     if ([self.db hadError]) { 
         DLog(@"Err inserting lyrics %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]); 
     }

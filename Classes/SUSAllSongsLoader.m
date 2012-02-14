@@ -121,8 +121,8 @@ static NSInteger order (id a, id b, void* context)
 		// The albums are still loading or are just starting
 		iteration = -1;
 		
-		currentRow = [databaseControls.allAlbumsDb synchronizedIntForQuery:@"SELECT artistNum FROM resumeLoad"];
-		artistCount = [databaseControls.albumListCacheDb synchronizedIntForQuery:@"SELECT count FROM rootFolderCount_all LIMIT 1"];
+		currentRow = [databaseControls.allAlbumsDb intForQuery:@"SELECT artistNum FROM resumeLoad"];
+		artistCount = [databaseControls.albumListCacheDb intForQuery:@"SELECT count FROM rootFolderCount_all LIMIT 1"];
 		
 		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_AllSongsLoadingArtists object:nil];
 		
@@ -132,12 +132,12 @@ static NSInteger order (id a, id b, void* context)
 	{
 		// The songs are still loading or are just starting
 		
-		iteration = [databaseControls.allSongsDb synchronizedIntForQuery:@"SELECT iteration FROM resumeLoad"];
+		iteration = [databaseControls.allSongsDb intForQuery:@"SELECT iteration FROM resumeLoad"];
 		
 		if (iteration == 0)
 		{
-			currentRow = [databaseControls.allSongsDb synchronizedIntForQuery:@"SELECT albumNum FROM resumeLoad"];
-			albumCount = [databaseControls.allAlbumsDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM allAlbumsUnsorted"];
+			currentRow = [databaseControls.allSongsDb intForQuery:@"SELECT albumNum FROM resumeLoad"];
+			albumCount = [databaseControls.allAlbumsDb intForQuery:@"SELECT COUNT(*) FROM allAlbumsUnsorted"];
 			DLog(@"albumCount: %i", albumCount);
 			
 			[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_AllSongsLoadingAlbums object:nil];
@@ -146,7 +146,7 @@ static NSInteger order (id a, id b, void* context)
 		}
 		else if (iteration < 4)
 		{
-			currentRow = [databaseControls.allSongsDb synchronizedIntForQuery:@"SELECT albumNum FROM resumeLoad"];
+			currentRow = [databaseControls.allSongsDb intForQuery:@"SELECT albumNum FROM resumeLoad"];
 			albumCount = [databaseControls.allAlbumsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM subalbums%i", iteration]];
 			DLog(@"subalbums%i albumCount: %i", iteration, albumCount);
 			
@@ -159,7 +159,7 @@ static NSInteger order (id a, id b, void* context)
 			{
 				// The table is empty so do the load sort
 				iteration = 4;
-				[databaseControls.allSongsDb synchronizedExecuteUpdate:@"UPDATE resumeLoad SET albumNum = ?, iteration = ?", [NSNumber numberWithInt:0], [NSNumber numberWithInt:iteration]];
+				[databaseControls.allSongsDb executeUpdate:@"UPDATE resumeLoad SET albumNum = ?, iteration = ?", [NSNumber numberWithInt:0], [NSNumber numberWithInt:iteration]];
 				DLog(@"calling loadSort");
 				[self performSelectorInBackground:@selector(loadSort) withObject:nil];
 			}
@@ -178,18 +178,18 @@ static NSInteger order (id a, id b, void* context)
 
 - (void)createLoadTempTables
 {
-	[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS allAlbumsTemp"];
-	[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"CREATE TEMPORARY TABLE allAlbumsTemp(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
+	[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE IF EXISTS allAlbumsTemp"];
+	[databaseControls.allAlbumsDb executeUpdate:@"CREATE TEMPORARY TABLE allAlbumsTemp(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
 	
-	[databaseControls.allSongsDb synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS allSongsTemp"];
+	[databaseControls.allSongsDb executeUpdate:@"DROP TABLE IF EXISTS allSongsTemp"];
 	NSString *query = [NSString stringWithFormat:@"CREATE TEMPORARY TABLE allSongsTemp (%@)", [Song standardSongColumnSchema]];
 	[databaseControls.allSongsDb executeUpdate:query];
 	
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS genresTemp"];
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE TEMPORARY TABLE genresTemp (genre TEXT)"];
+	[databaseControls.genresDb executeUpdate:@"DROP TABLE IF EXISTS genresTemp"];
+	[databaseControls.genresDb executeUpdate:@"CREATE TEMPORARY TABLE genresTemp (genre TEXT)"];
 	
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS genresLayoutTemp"];
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE TEMPORARY TABLE genresLayoutTemp (md5 TEXT, genre TEXT, segs INTEGER, seg1 TEXT, seg2 TEXT, seg3 TEXT, seg4 TEXT, seg5 TEXT, seg6 TEXT, seg7 TEXT, seg8 TEXT, seg9 TEXT)"];
+	[databaseControls.genresDb executeUpdate:@"DROP TABLE IF EXISTS genresLayoutTemp"];
+	[databaseControls.genresDb executeUpdate:@"CREATE TEMPORARY TABLE genresLayoutTemp (md5 TEXT, genre TEXT, segs INTEGER, seg1 TEXT, seg2 TEXT, seg3 TEXT, seg4 TEXT, seg5 TEXT, seg6 TEXT, seg7 TEXT, seg8 TEXT, seg9 TEXT)"];
 }
 
 - (void)createLoadTables
@@ -202,68 +202,68 @@ static NSInteger order (id a, id b, void* context)
 	[databaseControls.allAlbumsDb close]; databaseControls.allAlbumsDb = nil;
 	[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@allAlbums.db", settings.databasePath, [settings.urlString md5]] error:NULL];
 	databaseControls.allAlbumsDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allAlbums.db", settings.databasePath, [settings.urlString md5]]];
-	[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"PRAGMA cache_size = 1"];
+	[databaseControls.allAlbumsDb executeUpdate:@"PRAGMA cache_size = 1"];
 	if ([databaseControls.allAlbumsDb open] == NO) { DLog(@"Could not open allAlbumsDb."); }
 	
 	// Create allAlbums tables
-	[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"CREATE TABLE resumeLoad (artistNum INTEGER, iteration INTEGER)"];
-	[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"INSERT INTO resumeLoad (artistNum, iteration) VALUES (1, 0)"];
-	[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"CREATE VIRTUAL TABLE allAlbums USING FTS3(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT, tokenize=porter)"];
-	//[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"CREATE INDEX title ON allAlbums (title ASC)"];
-	[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"CREATE TABLE allAlbumsUnsorted(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
-	//[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"CREATE INDEX title ON allAlbumsUnsorted (title ASC)"];
-	[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"CREATE TABLE allAlbumsCount (count INTEGER)"];
-	[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"CREATE TABLE allAlbumsUnsortedCount (count INTEGER)"];
+	[databaseControls.allAlbumsDb executeUpdate:@"CREATE TABLE resumeLoad (artistNum INTEGER, iteration INTEGER)"];
+	[databaseControls.allAlbumsDb executeUpdate:@"INSERT INTO resumeLoad (artistNum, iteration) VALUES (1, 0)"];
+	[databaseControls.allAlbumsDb executeUpdate:@"CREATE VIRTUAL TABLE allAlbums USING FTS3(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT, tokenize=porter)"];
+	//[databaseControls.allAlbumsDb executeUpdate:@"CREATE INDEX title ON allAlbums (title ASC)"];
+	[databaseControls.allAlbumsDb executeUpdate:@"CREATE TABLE allAlbumsUnsorted(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
+	//[databaseControls.allAlbumsDb executeUpdate:@"CREATE INDEX title ON allAlbumsUnsorted (title ASC)"];
+	[databaseControls.allAlbumsDb executeUpdate:@"CREATE TABLE allAlbumsCount (count INTEGER)"];
+	[databaseControls.allAlbumsDb executeUpdate:@"CREATE TABLE allAlbumsUnsortedCount (count INTEGER)"];
 	
-	[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"CREATE TABLE subalbums1 (title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
-	[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"CREATE TABLE subalbums2 (title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
-	[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"CREATE TABLE subalbums3 (title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
-	[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"CREATE TABLE subalbums4 (title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
+	[databaseControls.allAlbumsDb executeUpdate:@"CREATE TABLE subalbums1 (title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
+	[databaseControls.allAlbumsDb executeUpdate:@"CREATE TABLE subalbums2 (title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
+	[databaseControls.allAlbumsDb executeUpdate:@"CREATE TABLE subalbums3 (title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
+	[databaseControls.allAlbumsDb executeUpdate:@"CREATE TABLE subalbums4 (title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
 	
 	// Initialize allSongs db
 	[databaseControls.allSongsDb close]; databaseControls.allSongsDb = nil;
 	[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@allSongs.db", settings.databasePath, [settings.urlString md5]] error:NULL];
 	databaseControls.allSongsDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allSongs.db", settings.databasePath, [settings.urlString md5]]];
-	[databaseControls.allSongsDb synchronizedExecuteUpdate:@"PRAGMA cache_size = 1"];
+	[databaseControls.allSongsDb executeUpdate:@"PRAGMA cache_size = 1"];
 	if ([databaseControls.allSongsDb open] == NO) { DLog(@"Could not open allSongsDb."); }
-	//[databaseControls.allSongsDb synchronizedExecuteUpdate:@"PRAGMA synchronous = OFF"];
-	DLog(@"allSongsDb synchronous: %i", [databaseControls.allSongsDb synchronizedIntForQuery:@"PRAGMA synchronous"]);
+	//[databaseControls.allSongsDb executeUpdate:@"PRAGMA synchronous = OFF"];
+	DLog(@"allSongsDb synchronous: %i", [databaseControls.allSongsDb intForQuery:@"PRAGMA synchronous"]);
 	
 	// Create allSongs tables
-	[databaseControls.allSongsDb synchronizedExecuteUpdate:@"CREATE TABLE resumeLoad (albumNum INTEGER, iteration INTEGER)"];
-	[databaseControls.allSongsDb synchronizedExecuteUpdate:@"INSERT INTO resumeLoad (albumNum, iteration) VALUES (1, 0)"];
+	[databaseControls.allSongsDb executeUpdate:@"CREATE TABLE resumeLoad (albumNum INTEGER, iteration INTEGER)"];
+	[databaseControls.allSongsDb executeUpdate:@"INSERT INTO resumeLoad (albumNum, iteration) VALUES (1, 0)"];
 	NSString *query = [NSString stringWithFormat:@"CREATE VIRTUAL TABLE allSongs USING FTS3 (%@, tokenize=porter)", [Song standardSongColumnSchema]];
 	[databaseControls.allSongsDb executeUpdate:query];
-	//[databaseControls.allSongsDb synchronizedExecuteUpdate:@"CREATE INDEX title ON allSongs (title ASC)"];
-	//[databaseControls.allSongsDb synchronizedExecuteUpdate:@"CREATE INDEX songGenre ON allSongs (genre)"];
+	//[databaseControls.allSongsDb executeUpdate:@"CREATE INDEX title ON allSongs (title ASC)"];
+	//[databaseControls.allSongsDb executeUpdate:@"CREATE INDEX songGenre ON allSongs (genre)"];
 	
 	query = [NSString stringWithFormat:@"CREATE TABLE allSongsUnsorted (%@)", [Song standardSongColumnSchema]];
 	[databaseControls.allSongsDb executeUpdate:query];
-	//[databaseControls.allSongsDb synchronizedExecuteUpdate:@"CREATE INDEX title ON allSongsUnsorted (title ASC)"];
-	[databaseControls.allSongsDb synchronizedExecuteUpdate:@"CREATE TABLE allSongsCount (count INTEGER)"];
+	//[databaseControls.allSongsDb executeUpdate:@"CREATE INDEX title ON allSongsUnsorted (title ASC)"];
+	[databaseControls.allSongsDb executeUpdate:@"CREATE TABLE allSongsCount (count INTEGER)"];
 	
 	// Initialize genres db
 	[databaseControls.genresDb close]; databaseControls.genresDb = nil;
 	[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@genres.db", settings.databasePath, [settings.urlString md5]] error:NULL];
 	databaseControls.genresDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@genres.db", settings.databasePath, [settings.urlString md5]]];
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"PRAGMA cache_size = 1"];
+	[databaseControls.genresDb executeUpdate:@"PRAGMA cache_size = 1"];
 	if ([databaseControls.genresDb open] == NO) { DLog(@"Could not open genresDb."); }
 	
 	// Create genres tables
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE TABLE genres (genre TEXT UNIQUE)"];
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE TABLE genresUnsorted (genre TEXT UNIQUE)"];
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE TABLE genresLayout (md5 TEXT, genre TEXT, segs INTEGER, seg1 TEXT, seg2 TEXT, seg3 TEXT, seg4 TEXT, seg5 TEXT, seg6 TEXT, seg7 TEXT, seg8 TEXT, seg9 TEXT)"];
-	/*[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE UNIQUE INDEX md5 ON genresLayout (md5)"];
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE INDEX layoutGenre ON genresLayout (genre)"];
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE INDEX seg1 ON genresLayout (seg1)"];
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE INDEX seg2 ON genresLayout (seg2)"];
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE INDEX seg3 ON genresLayout (seg3)"];
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE INDEX seg4 ON genresLayout (seg4)"];
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE INDEX seg5 ON genresLayout (seg5)"];
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE INDEX seg6 ON genresLayout (seg6)"];
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE INDEX seg7 ON genresLayout (seg7)"];
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE INDEX seg8 ON genresLayout (seg8)"];
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE INDEX seg9 ON genresLayout (seg9)"];*/
+	[databaseControls.genresDb executeUpdate:@"CREATE TABLE genres (genre TEXT UNIQUE)"];
+	[databaseControls.genresDb executeUpdate:@"CREATE TABLE genresUnsorted (genre TEXT UNIQUE)"];
+	[databaseControls.genresDb executeUpdate:@"CREATE TABLE genresLayout (md5 TEXT, genre TEXT, segs INTEGER, seg1 TEXT, seg2 TEXT, seg3 TEXT, seg4 TEXT, seg5 TEXT, seg6 TEXT, seg7 TEXT, seg8 TEXT, seg9 TEXT)"];
+	/*[databaseControls.genresDb executeUpdate:@"CREATE UNIQUE INDEX md5 ON genresLayout (md5)"];
+	[databaseControls.genresDb executeUpdate:@"CREATE INDEX layoutGenre ON genresLayout (genre)"];
+	[databaseControls.genresDb executeUpdate:@"CREATE INDEX seg1 ON genresLayout (seg1)"];
+	[databaseControls.genresDb executeUpdate:@"CREATE INDEX seg2 ON genresLayout (seg2)"];
+	[databaseControls.genresDb executeUpdate:@"CREATE INDEX seg3 ON genresLayout (seg3)"];
+	[databaseControls.genresDb executeUpdate:@"CREATE INDEX seg4 ON genresLayout (seg4)"];
+	[databaseControls.genresDb executeUpdate:@"CREATE INDEX seg5 ON genresLayout (seg5)"];
+	[databaseControls.genresDb executeUpdate:@"CREATE INDEX seg6 ON genresLayout (seg6)"];
+	[databaseControls.genresDb executeUpdate:@"CREATE INDEX seg7 ON genresLayout (seg7)"];
+	[databaseControls.genresDb executeUpdate:@"CREATE INDEX seg8 ON genresLayout (seg8)"];
+	[databaseControls.genresDb executeUpdate:@"CREATE INDEX seg9 ON genresLayout (seg9)"];*/
 	
 	[autoreleasePool release];
 }
@@ -336,32 +336,32 @@ static NSInteger order (id a, id b, void* context)
 	//[viewObjects.allSongsLoadingScreen performSelectorOnMainThread:@selector(setAllMessagesText:) withObject:[NSArray arrayWithObjects:@"Sorting Table", @"", @"", @"", nil] waitUntilDone:NO];
 	
 	// Sort the tables
-	[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS allAlbums"];
-	[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"CREATE VIRTUAL TABLE allAlbums USING FTS3(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT, tokenize=porter)"];
+	[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE IF EXISTS allAlbums"];
+	[databaseControls.allAlbumsDb executeUpdate:@"CREATE VIRTUAL TABLE allAlbums USING FTS3(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT, tokenize=porter)"];
 	DLog(@"sorting allAlbums");
-	[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"INSERT INTO allAlbums SELECT * FROM allAlbumsUnsorted ORDER BY title COLLATE NOCASE"];
+	[databaseControls.allAlbumsDb executeUpdate:@"INSERT INTO allAlbums SELECT * FROM allAlbumsUnsorted ORDER BY title COLLATE NOCASE"];
 	
-	[databaseControls.allSongsDb synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS allSongs"];
+	[databaseControls.allSongsDb executeUpdate:@"DROP TABLE IF EXISTS allSongs"];
 	NSString *query = [NSString stringWithFormat:@"CREATE VIRTUAL TABLE allSongs USING FTS3 (%@, tokenize=porter)", [Song standardSongColumnSchema]];
 	[databaseControls.allSongsDb executeUpdate:query];
 	DLog(@"sorting allSongs");
-	[databaseControls.allSongsDb synchronizedExecuteUpdate:@"INSERT INTO allSongs SELECT * FROM allSongsUnsorted ORDER BY title COLLATE NOCASE"];
+	[databaseControls.allSongsDb executeUpdate:@"INSERT INTO allSongs SELECT * FROM allSongsUnsorted ORDER BY title COLLATE NOCASE"];
 	
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS genres"];
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE TABLE genres (genre TEXT UNIQUE)"];
+	[databaseControls.genresDb executeUpdate:@"DROP TABLE IF EXISTS genres"];
+	[databaseControls.genresDb executeUpdate:@"CREATE TABLE genres (genre TEXT UNIQUE)"];
 	DLog(@"sorting genres");
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"INSERT INTO genres SELECT * FROM genresUnsorted ORDER BY genre COLLATE NOCASE"];
+	[databaseControls.genresDb executeUpdate:@"INSERT INTO genres SELECT * FROM genresUnsorted ORDER BY genre COLLATE NOCASE"];
 	
 	// Add the keys
 	
 	// Clean up the tables
-	[databaseControls.allSongsDb synchronizedExecuteUpdate:@"UPDATE resumeLoad SET albumNum = ?, iteration = ?", [NSNumber numberWithInt:0], [NSNumber numberWithInt:5]];
-	[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"DROP TABLE allAlbumsUnsorted"];
-	[databaseControls.allSongsDb synchronizedExecuteUpdate:@"DROP TABLE allSongsUnsorted"];
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"DROP TABLE genresUnsorted"];
-	[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"DROP TABLE allAlbumsTemp"];
-	[databaseControls.allSongsDb synchronizedExecuteUpdate:@"DROP TABLE allSongsTemp"];
-	[databaseControls.genresDb synchronizedExecuteUpdate:@"DROP TABLE genresTemp"];
+	[databaseControls.allSongsDb executeUpdate:@"UPDATE resumeLoad SET albumNum = ?, iteration = ?", [NSNumber numberWithInt:0], [NSNumber numberWithInt:5]];
+	[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE allAlbumsUnsorted"];
+	[databaseControls.allSongsDb executeUpdate:@"DROP TABLE allSongsUnsorted"];
+	[databaseControls.genresDb executeUpdate:@"DROP TABLE genresUnsorted"];
+	[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE allAlbumsTemp"];
+	[databaseControls.allSongsDb executeUpdate:@"DROP TABLE allSongsTemp"];
+	[databaseControls.genresDb executeUpdate:@"DROP TABLE genresTemp"];
 
 	DLog(@"calling loadFinish");
 	[self loadFinish];
@@ -384,8 +384,8 @@ static NSInteger order (id a, id b, void* context)
     
     // Create the section info array
 	NSArray *sectionInfo = [databaseControls sectionInfoFromTable:@"allAlbums" inDatabase:databaseControls.allAlbumsDb withColumn:@"title"];
-    [databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"DROP TABLE allAlbumsIndexCache"];
-    [databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"CREATE TABLE allAlbumsIndexCache (name TEXT, position INTEGER, count INTEGER)"];
+    [databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE allAlbumsIndexCache"];
+    [databaseControls.allAlbumsDb executeUpdate:@"CREATE TABLE allAlbumsIndexCache (name TEXT, position INTEGER, count INTEGER)"];
 	for (int i = 0; i < [sectionInfo count]; i++)
     {
 		NSArray *section = [sectionInfo objectAtIndex:i];
@@ -400,25 +400,25 @@ static NSInteger order (id a, id b, void* context)
 		if (nextSection)
 			count = [NSNumber numberWithInt:([[nextSection objectAtIndex:1] intValue] - [position intValue])];
 		else
-			count = [NSNumber numberWithInt:[databaseControls.allAlbumsDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM allAlbums WHERE ROWID > ?", position]];
+			count = [NSNumber numberWithInt:[databaseControls.allAlbumsDb intForQuery:@"SELECT COUNT(*) FROM allAlbums WHERE ROWID > ?", position]];
 		
-        [databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"INSERT INTO allAlbumsIndexCache (name, position, count) VALUES (?, ?, ?)", name, position, count];
+        [databaseControls.allAlbumsDb executeUpdate:@"INSERT INTO allAlbumsIndexCache (name, position, count) VALUES (?, ?, ?)", name, position, count];
     }
 	
 	// Count the table
 	NSUInteger allAlbumsCount = 0;
-	FMResultSet *result = [databaseControls.allAlbumsDb synchronizedExecuteQuery:@"SELECT count FROM allAlbumsIndexCache"];
+	FMResultSet *result = [databaseControls.allAlbumsDb executeQuery:@"SELECT count FROM allAlbumsIndexCache"];
 	while ([result next])
 	{
 		allAlbumsCount += [result intForColumn:@"count"];
 	}
 	[result close];
-    [databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"INSERT INTO allAlbumsCount VALUES (?)", [NSNumber numberWithInt:allAlbumsCount]];
+    [databaseControls.allAlbumsDb executeUpdate:@"INSERT INTO allAlbumsCount VALUES (?)", [NSNumber numberWithInt:allAlbumsCount]];
 
 	// Create the section info array
     sectionInfo = [databaseControls sectionInfoFromTable:@"allSongs" inDatabase:databaseControls.allSongsDb withColumn:@"title"];
-    [databaseControls.allSongsDb synchronizedExecuteUpdate:@"DROP TABLE allSongsIndexCache"];
-    [databaseControls.allSongsDb synchronizedExecuteUpdate:@"CREATE TABLE allSongsIndexCache (name TEXT, position INTEGER, count INTEGER)"];
+    [databaseControls.allSongsDb executeUpdate:@"DROP TABLE allSongsIndexCache"];
+    [databaseControls.allSongsDb executeUpdate:@"CREATE TABLE allSongsIndexCache (name TEXT, position INTEGER, count INTEGER)"];
 	for (int i = 0; i < [sectionInfo count]; i++)
     {
 		NSArray *section = [sectionInfo objectAtIndex:i];
@@ -432,20 +432,20 @@ static NSInteger order (id a, id b, void* context)
 		if (nextSection)
 			count = [NSNumber numberWithInt:([[nextSection objectAtIndex:1] intValue] - [position intValue])];
 		else
-			count = [NSNumber numberWithInt:[databaseControls.allSongsDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM allSongs WHERE ROWID > ?", position]];
+			count = [NSNumber numberWithInt:[databaseControls.allSongsDb intForQuery:@"SELECT COUNT(*) FROM allSongs WHERE ROWID > ?", position]];
 		
-        [databaseControls.allSongsDb synchronizedExecuteUpdate:@"INSERT INTO allSongsIndexCache (name, position, count) VALUES (?, ?, ?)", name, position, count];
+        [databaseControls.allSongsDb executeUpdate:@"INSERT INTO allSongsIndexCache (name, position, count) VALUES (?, ?, ?)", name, position, count];
     }
 	
 	// Count the table
 	NSUInteger allSongsCount = 0;
-	result = [databaseControls.allSongsDb synchronizedExecuteQuery:@"SELECT count FROM allSongsIndexCache"];
+	result = [databaseControls.allSongsDb executeQuery:@"SELECT count FROM allSongsIndexCache"];
 	while ([result next])
 	{
 		allSongsCount += [result intForColumn:@"count"];
 	}
 	[result close];
-    [databaseControls.allSongsDb synchronizedExecuteUpdate:@"INSERT INTO allSongsCount VALUES (?)", [NSNumber numberWithInt:allSongsCount]];
+    [databaseControls.allSongsDb executeUpdate:@"INSERT INTO allSongsCount VALUES (?)", [NSNumber numberWithInt:allSongsCount]];
 	
 	// Check if loading should stop
     if (viewObjects.cancelLoading)
@@ -459,14 +459,14 @@ static NSInteger order (id a, id b, void* context)
     [defaults setObject:[NSDate date] forKey:[NSString stringWithFormat:@"%@songsReloadTime", settings.urlString]];
     [defaults synchronize];
     
-    [databaseControls.allSongsDb synchronizedExecuteUpdate:@"UPDATE resumeLoad SET albumNum = ?, iteration = ?", [NSNumber numberWithInt:0], [NSNumber numberWithInt:6]];
+    [databaseControls.allSongsDb executeUpdate:@"UPDATE resumeLoad SET albumNum = ?, iteration = ?", [NSNumber numberWithInt:0], [NSNumber numberWithInt:6]];
 	
 	[SUSAllSongsLoader setIsLoading:NO];
 	[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:[NSString stringWithFormat:@"%@isAllAlbumsLoading", settings.urlString]];
 	[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:[NSString stringWithFormat:@"%@isAllSongsLoading", settings.urlString]];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
-	[databaseControls.allSongsDb synchronizedExecuteUpdate:@"DROP TABLE resumeLoad"];
+	[databaseControls.allSongsDb executeUpdate:@"DROP TABLE resumeLoad"];
 	
 	[self performSelectorOnMainThread:@selector(informDelegateLoadingFinished) withObject:nil waitUntilDone:NO];
 	
@@ -478,7 +478,7 @@ static NSInteger order (id a, id b, void* context)
 - (NSArray *)createSectionInfo
 {
 	NSMutableArray *sections = [[NSMutableArray alloc] init];
-	FMResultSet *result = [databaseControls.allSongsDb synchronizedExecuteQuery:@"SELECT * FROM sectionInfo"];
+	FMResultSet *result = [databaseControls.allSongsDb executeQuery:@"SELECT * FROM sectionInfo"];
 	
 	while ([result next])
 	{
@@ -618,10 +618,10 @@ static NSString *kName_Error = @"error";
 							if (tempAlbumsCount == WRITE_BUFFER_AMOUNT)
 							{
 								// Flush the records to disk
-								[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"INSERT INTO allAlbumsUnsorted SELECT * FROM allAlbumsTemp"];
-								//[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"DELETE * FROM allAlbumsTemp"];
-								[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS allAlbumsTemp"];
-								[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"CREATE TEMPORARY TABLE allAlbumsTemp(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
+								[databaseControls.allAlbumsDb executeUpdate:@"INSERT INTO allAlbumsUnsorted SELECT * FROM allAlbumsTemp"];
+								//[databaseControls.allAlbumsDb executeUpdate:@"DELETE * FROM allAlbumsTemp"];
+								[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE IF EXISTS allAlbumsTemp"];
+								[databaseControls.allAlbumsDb executeUpdate:@"CREATE TEMPORARY TABLE allAlbumsTemp(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
 								tempAlbumsCount = 0;
 							}
 						}
@@ -659,9 +659,9 @@ static NSString *kName_Error = @"error";
 							if (tempSongsCount == WRITE_BUFFER_AMOUNT)
 							{
 								// Flush the records to disk
-								[databaseControls.allSongsDb synchronizedExecuteUpdate:@"INSERT INTO allSongsUnsorted SELECT * FROM allSongsTemp"];
-								//[databaseControls.allSongsDb synchronizedExecuteUpdate:@"DELETE * FROM allSongsTemp"];
-								[databaseControls.allSongsDb synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS allSongsTemp"];
+								[databaseControls.allSongsDb executeUpdate:@"INSERT INTO allSongsUnsorted SELECT * FROM allSongsTemp"];
+								//[databaseControls.allSongsDb executeUpdate:@"DELETE * FROM allSongsTemp"];
+								[databaseControls.allSongsDb executeUpdate:@"DROP TABLE IF EXISTS allSongsTemp"];
 								NSString *query = [NSString stringWithFormat:@"CREATE TEMPORARY TABLE allSongsTemp (%@)", [Song standardSongColumnSchema]];
 								[databaseControls.allSongsDb executeUpdate:query];
 								tempSongsCount = 0;
@@ -671,16 +671,16 @@ static NSString *kName_Error = @"error";
 							if (aSong.genre)
 							{
 								// Add the genre to the genre table
-								[databaseControls.genresDb synchronizedExecuteUpdate:@"INSERT INTO genresTemp (genre) VALUES (?)", aSong.genre];
+								[databaseControls.genresDb executeUpdate:@"INSERT INTO genresTemp (genre) VALUES (?)", aSong.genre];
 								tempGenresCount++;
 								
 								if (tempGenresCount == WRITE_BUFFER_AMOUNT)
 								{
 									// Flush the records to disk
-									[databaseControls.genresDb synchronizedExecuteUpdate:@"INSERT OR IGNORE INTO genresUnsorted SELECT * FROM genresTemp"];
-									//[databaseControls.genresDb synchronizedExecuteUpdate:@"DELETE * FROM genresTemp"];
-									[databaseControls.genresDb synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS genresTemp"];
-									[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE TEMPORARY TABLE genresTemp (genre TEXT)"];
+									[databaseControls.genresDb executeUpdate:@"INSERT OR IGNORE INTO genresUnsorted SELECT * FROM genresTemp"];
+									//[databaseControls.genresDb executeUpdate:@"DELETE * FROM genresTemp"];
+									[databaseControls.genresDb executeUpdate:@"DROP TABLE IF EXISTS genresTemp"];
+									[databaseControls.genresDb executeUpdate:@"CREATE TEMPORARY TABLE genresTemp (genre TEXT)"];
 									tempGenresCount = 0;
 								}
 								
@@ -701,10 +701,10 @@ static NSString *kName_Error = @"error";
 									if (tempGenresLayoutCount == WRITE_BUFFER_AMOUNT)
 									{
 										// Flush the records to disk
-										[databaseControls.genresDb synchronizedExecuteUpdate:@"INSERT OR IGNORE INTO genresLayout SELECT * FROM genresLayoutTemp"];
-										//[databaseControls.genresDb synchronizedExecuteUpdate:@"DELETE * FROM genresLayoutTemp"];
-										[databaseControls.genresDb synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS genresLayoutTemp"];
-										[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE TEMPORARY TABLE genresLayoutTemp (md5 TEXT, genre TEXT, segs INTEGER, seg1 TEXT, seg2 TEXT, seg3 TEXT, seg4 TEXT, seg5 TEXT, seg6 TEXT, seg7 TEXT, seg8 TEXT, seg9 TEXT)"];
+										[databaseControls.genresDb executeUpdate:@"INSERT OR IGNORE INTO genresLayout SELECT * FROM genresLayoutTemp"];
+										//[databaseControls.genresDb executeUpdate:@"DELETE * FROM genresLayoutTemp"];
+										[databaseControls.genresDb executeUpdate:@"DROP TABLE IF EXISTS genresLayoutTemp"];
+										[databaseControls.genresDb executeUpdate:@"CREATE TEMPORARY TABLE genresLayoutTemp (md5 TEXT, genre TEXT, segs INTEGER, seg1 TEXT, seg2 TEXT, seg3 TEXT, seg4 TEXT, seg5 TEXT, seg6 TEXT, seg7 TEXT, seg8 TEXT, seg9 TEXT)"];
 										tempGenresLayoutCount = 0;
 									}
 									
@@ -750,45 +750,45 @@ static NSString *kName_Error = @"error";
 			// Done loading artist folders
 			currentRow = 1;
 			iteration++;
-			[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"DROP TABLE resumeLoad"];
+			[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE resumeLoad"];
 			
 			// Flush the records to disk
-			[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"INSERT INTO allAlbumsUnsorted SELECT * FROM allAlbumsTemp"];
-			[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS allAlbumsTemp"];
-			[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"CREATE TEMPORARY TABLE allAlbumsTemp(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
-			//[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"DELETE * FROM allAlbumsTemp"];
+			[databaseControls.allAlbumsDb executeUpdate:@"INSERT INTO allAlbumsUnsorted SELECT * FROM allAlbumsTemp"];
+			[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE IF EXISTS allAlbumsTemp"];
+			[databaseControls.allAlbumsDb executeUpdate:@"CREATE TEMPORARY TABLE allAlbumsTemp(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
+			//[databaseControls.allAlbumsDb executeUpdate:@"DELETE * FROM allAlbumsTemp"];
 			tempAlbumsCount = 0;
 			
 			// Flush the records to disk
-			[databaseControls.allSongsDb synchronizedExecuteUpdate:@"INSERT INTO allSongsUnsorted SELECT * FROM allSongsTemp"];
-			//[databaseControls.allSongsDb synchronizedExecuteUpdate:@"DELETE * FROM allSongsTemp"];
-			[databaseControls.allSongsDb synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS allSongsTemp"];
+			[databaseControls.allSongsDb executeUpdate:@"INSERT INTO allSongsUnsorted SELECT * FROM allSongsTemp"];
+			//[databaseControls.allSongsDb executeUpdate:@"DELETE * FROM allSongsTemp"];
+			[databaseControls.allSongsDb executeUpdate:@"DROP TABLE IF EXISTS allSongsTemp"];
 			NSString *query = [NSString stringWithFormat:@"CREATE TEMPORARY TABLE allSongsTemp (%@)", [Song standardSongColumnSchema]];
 			[databaseControls.allSongsDb executeUpdate:query];
 			tempSongsCount = 0;
 			
 			// Flush the records to disk
-			[databaseControls.genresDb synchronizedExecuteUpdate:@"INSERT OR IGNORE INTO genresUnsorted SELECT * FROM genresTemp"];
-			//[databaseControls.genresDb synchronizedExecuteUpdate:@"DELETE * FROM genresTemp"];
-			[databaseControls.genresDb synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS genresTemp"];
-			[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE TEMPORARY TABLE genresTemp (genre TEXT)"];
+			[databaseControls.genresDb executeUpdate:@"INSERT OR IGNORE INTO genresUnsorted SELECT * FROM genresTemp"];
+			//[databaseControls.genresDb executeUpdate:@"DELETE * FROM genresTemp"];
+			[databaseControls.genresDb executeUpdate:@"DROP TABLE IF EXISTS genresTemp"];
+			[databaseControls.genresDb executeUpdate:@"CREATE TEMPORARY TABLE genresTemp (genre TEXT)"];
 			tempGenresCount = 0;
 			
 			// Flush the records to disk
-			[databaseControls.genresDb synchronizedExecuteUpdate:@"INSERT OR IGNORE INTO genresLayout SELECT * FROM genresLayoutTemp"];
-			//[databaseControls.genresDb synchronizedExecuteUpdate:@"DELETE * FROM genresLayoutTemp"];
-			[databaseControls.genresDb synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS genresLayoutTemp"];
-			[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE TEMPORARY TABLE genresLayoutTemp (md5 TEXT, genre TEXT, segs INTEGER, seg1 TEXT, seg2 TEXT, seg3 TEXT, seg4 TEXT, seg5 TEXT, seg6 TEXT, seg7 TEXT, seg8 TEXT, seg9 TEXT)"];
+			[databaseControls.genresDb executeUpdate:@"INSERT OR IGNORE INTO genresLayout SELECT * FROM genresLayoutTemp"];
+			//[databaseControls.genresDb executeUpdate:@"DELETE * FROM genresLayoutTemp"];
+			[databaseControls.genresDb executeUpdate:@"DROP TABLE IF EXISTS genresLayoutTemp"];
+			[databaseControls.genresDb executeUpdate:@"CREATE TEMPORARY TABLE genresLayoutTemp (md5 TEXT, genre TEXT, segs INTEGER, seg1 TEXT, seg2 TEXT, seg3 TEXT, seg4 TEXT, seg5 TEXT, seg6 TEXT, seg7 TEXT, seg8 TEXT, seg9 TEXT)"];
 			tempGenresLayoutCount = 0;
 			
-			NSUInteger count = [databaseControls.allAlbumsDb synchronizedIntForQuery:@"SELECT COUNT(*) FROM allAlbumsUnsorted"];
-			[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"INSERT INTO allAlbumsUnsortedCount VALUES (?)", [NSNumber numberWithInt:count]];
+			NSUInteger count = [databaseControls.allAlbumsDb intForQuery:@"SELECT COUNT(*) FROM allAlbumsUnsorted"];
+			[databaseControls.allAlbumsDb executeUpdate:@"INSERT INTO allAlbumsUnsortedCount VALUES (?)", [NSNumber numberWithInt:count]];
 			
 			[self startLoad];
 		}
 		else
 		{
-			[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"UPDATE resumeLoad SET artistNum = ?", [NSNumber numberWithInt:currentRow]];
+			[databaseControls.allAlbumsDb executeUpdate:@"UPDATE resumeLoad SET artistNum = ?", [NSNumber numberWithInt:currentRow]];
             
             // Load the next folder
             //
@@ -811,42 +811,42 @@ static NSString *kName_Error = @"error";
 			// This iteration is done
 			currentRow = 0;
 			iteration++;
-			[databaseControls.allSongsDb synchronizedExecuteUpdate:@"UPDATE resumeLoad SET albumNum = ?, iteration = ?", [NSNumber numberWithInt:0], [NSNumber numberWithInt:iteration]];
+			[databaseControls.allSongsDb executeUpdate:@"UPDATE resumeLoad SET albumNum = ?, iteration = ?", [NSNumber numberWithInt:0], [NSNumber numberWithInt:iteration]];
 			
 			// Flush the records to disk
-			[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"INSERT INTO allAlbumsUnsorted SELECT * FROM allAlbumsTemp"];
-			[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS allAlbumsTemp"];
-			[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"CREATE TEMPORARY TABLE allAlbumsTemp(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
-			//[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"DELETE * FROM allAlbumsTemp"];
+			[databaseControls.allAlbumsDb executeUpdate:@"INSERT INTO allAlbumsUnsorted SELECT * FROM allAlbumsTemp"];
+			[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE IF EXISTS allAlbumsTemp"];
+			[databaseControls.allAlbumsDb executeUpdate:@"CREATE TEMPORARY TABLE allAlbumsTemp(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
+			//[databaseControls.allAlbumsDb executeUpdate:@"DELETE * FROM allAlbumsTemp"];
 			tempAlbumsCount = 0;
 			
 			// Flush the records to disk
-			[databaseControls.allSongsDb synchronizedExecuteUpdate:@"INSERT INTO allSongsUnsorted SELECT * FROM allSongsTemp"];
-			//[databaseControls.allSongsDb synchronizedExecuteUpdate:@"DELETE * FROM allSongsTemp"];
-			[databaseControls.allSongsDb synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS allSongsTemp"];
+			[databaseControls.allSongsDb executeUpdate:@"INSERT INTO allSongsUnsorted SELECT * FROM allSongsTemp"];
+			//[databaseControls.allSongsDb executeUpdate:@"DELETE * FROM allSongsTemp"];
+			[databaseControls.allSongsDb executeUpdate:@"DROP TABLE IF EXISTS allSongsTemp"];
 			NSString *query = [NSString stringWithFormat:@"CREATE TEMPORARY TABLE allSongsTemp (%@)", [Song standardSongColumnSchema]];
 			[databaseControls.allSongsDb executeUpdate:query];
 			tempSongsCount = 0;
 			
 			// Flush the records to disk
-			[databaseControls.genresDb synchronizedExecuteUpdate:@"INSERT OR IGNORE INTO genresUnsorted SELECT * FROM genresTemp"];
-			//[databaseControls.genresDb synchronizedExecuteUpdate:@"DELETE * FROM genresTemp"];
-			[databaseControls.genresDb synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS genresTemp"];
-			[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE TEMPORARY TABLE genresTemp (genre TEXT)"];
+			[databaseControls.genresDb executeUpdate:@"INSERT OR IGNORE INTO genresUnsorted SELECT * FROM genresTemp"];
+			//[databaseControls.genresDb executeUpdate:@"DELETE * FROM genresTemp"];
+			[databaseControls.genresDb executeUpdate:@"DROP TABLE IF EXISTS genresTemp"];
+			[databaseControls.genresDb executeUpdate:@"CREATE TEMPORARY TABLE genresTemp (genre TEXT)"];
 			tempGenresCount = 0;
 			
 			// Flush the records to disk
-			[databaseControls.genresDb synchronizedExecuteUpdate:@"INSERT INTO genresLayout SELECT * FROM genresLayoutTemp"];
-			//[databaseControls.genresDb synchronizedExecuteUpdate:@"DELETE * FROM genresLayoutTemp"];
-			[databaseControls.genresDb synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS genresLayoutTemp"];
-			[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE TEMPORARY TABLE genresLayoutTemp (md5 TEXT, genre TEXT, segs INTEGER, seg1 TEXT, seg2 TEXT, seg3 TEXT, seg4 TEXT, seg5 TEXT, seg6 TEXT, seg7 TEXT, seg8 TEXT, seg9 TEXT)"];
+			[databaseControls.genresDb executeUpdate:@"INSERT INTO genresLayout SELECT * FROM genresLayoutTemp"];
+			//[databaseControls.genresDb executeUpdate:@"DELETE * FROM genresLayoutTemp"];
+			[databaseControls.genresDb executeUpdate:@"DROP TABLE IF EXISTS genresLayoutTemp"];
+			[databaseControls.genresDb executeUpdate:@"CREATE TEMPORARY TABLE genresLayoutTemp (md5 TEXT, genre TEXT, segs INTEGER, seg1 TEXT, seg2 TEXT, seg3 TEXT, seg4 TEXT, seg5 TEXT, seg6 TEXT, seg7 TEXT, seg8 TEXT, seg9 TEXT)"];
 			tempGenresLayoutCount = 0;
 			
 			[self startLoad];
 		}
 		else
 		{
-			[databaseControls.allSongsDb synchronizedExecuteUpdate:@"UPDATE resumeLoad SET albumNum = ?", [NSNumber numberWithInt:currentRow]];
+			[databaseControls.allSongsDb executeUpdate:@"UPDATE resumeLoad SET albumNum = ?", [NSNumber numberWithInt:currentRow]];
             
             // Load the next folder
             //

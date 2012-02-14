@@ -7,7 +7,6 @@
 //
 
 #import "FMDatabase.h"
-#import "FMDatabase+Synchronized.h"
 
 @interface FMDatabase (FMDatabaseAdditions)
 

@@ -95,27 +95,27 @@
 
 - (NSUInteger)findFirstAlbumRow
 {
-    return [self.db synchronizedIntForQuery:@"SELECT rowid FROM albumsCache WHERE folderId = ? LIMIT 1", [self.myId md5]];
+    return [self.db intForQuery:@"SELECT rowid FROM albumsCache WHERE folderId = ? LIMIT 1", [self.myId md5]];
 }
 
 - (NSUInteger)findFirstSongRow
 {
-    return [self.db synchronizedIntForQuery:@"SELECT rowid FROM songsCache WHERE folderId = ? LIMIT 1", [self.myId md5]];
+    return [self.db intForQuery:@"SELECT rowid FROM songsCache WHERE folderId = ? LIMIT 1", [self.myId md5]];
 }
 
 - (NSUInteger)findAlbumsCount
 {
-    return [self.db synchronizedIntForQuery:@"SELECT count FROM albumsCacheCount WHERE folderId = ?", [self.myId md5]];
+    return [self.db intForQuery:@"SELECT count FROM albumsCacheCount WHERE folderId = ?", [self.myId md5]];
 }
 
 - (NSUInteger)findSongsCount
 {
-    return [self.db synchronizedIntForQuery:@"SELECT count FROM songsCacheCount WHERE folderId = ?", [self.myId md5]];
+    return [self.db intForQuery:@"SELECT count FROM songsCacheCount WHERE folderId = ?", [self.myId md5]];
 }
 
 - (NSUInteger)findFolderLength
 {
-    return [self.db synchronizedIntForQuery:@"SELECT length FROM folderLength WHERE folderId = ?", [self.myId md5]];
+    return [self.db intForQuery:@"SELECT length FROM folderLength WHERE folderId = ?", [self.myId md5]];
 }
 
 - (Album *)findAlbumForDbRow:(NSUInteger)row
@@ -282,15 +282,15 @@
 	// Create the section index
 	if (albumsCount > 10)
 	{
-		[self.db synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS albumIndex"];
-		[self.db synchronizedExecuteUpdate:@"CREATE TEMPORARY TABLE albumIndex (title TEXT)"];
+		[self.db executeUpdate:@"DROP TABLE IF EXISTS albumIndex"];
+		[self.db executeUpdate:@"CREATE TEMPORARY TABLE albumIndex (title TEXT)"];
 		
-		[self.db synchronizedExecuteUpdate:@"INSERT INTO albumIndex SELECT title FROM albumsCache WHERE rowid >= ? LIMIT ?", [NSNumber numberWithInt:albumStartRow], [NSNumber numberWithInt:albumsCount]];
+		[self.db executeUpdate:@"INSERT INTO albumIndex SELECT title FROM albumsCache WHERE rowid >= ? LIMIT ?", [NSNumber numberWithInt:albumStartRow], [NSNumber numberWithInt:albumsCount]];
 		
 		DLog(@"albumStartRow: %@    albumsCount: %@", [NSNumber numberWithInt:albumStartRow], [NSNumber numberWithInt:albumsCount]);
-		DLog(@"total table count: %i", [self.db synchronizedIntForQuery:@"SELECT count(title) FROM albumsCache"]);
-		DLog(@"count in table: %i", [self.db synchronizedIntForQuery:@"SELECT count(title) FROM albumsCache WHERE rowid >= ? LIMIT ?", [NSNumber numberWithInt:albumStartRow], [NSNumber numberWithInt:albumsCount]]);
-		DLog(@"albumIndex count: %i", [self.db synchronizedIntForQuery:@"SELECT COUNT(*) FROM albumIndex"]);
+		DLog(@"total table count: %i", [self.db intForQuery:@"SELECT count(title) FROM albumsCache"]);
+		DLog(@"count in table: %i", [self.db intForQuery:@"SELECT count(title) FROM albumsCache WHERE rowid >= ? LIMIT ?", [NSNumber numberWithInt:albumStartRow], [NSNumber numberWithInt:albumsCount]]);
+		DLog(@"albumIndex count: %i", [self.db intForQuery:@"SELECT COUNT(*) FROM albumIndex"]);
 		NSArray *sectionInfo = [[DatabaseSingleton sharedInstance] sectionInfoFromTable:@"albumIndex" inDatabase:self.db withColumn:@"title"];
 		DLog(@"sectionInfo: %@", sectionInfo);
 		if (sectionInfo)
@@ -301,7 +301,7 @@
 				return sectionInfo;
 		}
 		
-		[self.db synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS albumIndex"];
+		[self.db executeUpdate:@"DROP TABLE IF EXISTS albumIndex"];
 	}
 	
 	return nil;

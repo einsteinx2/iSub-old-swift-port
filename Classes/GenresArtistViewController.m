@@ -199,9 +199,9 @@
 	// Get the ID of all matching records (everything in genre ordered by artist)
 	FMResultSet *result;
 	if (viewObjects.isOfflineMode)
-		result = [databaseControls.songCacheDb synchronizedExecuteQuery:@"SELECT md5 FROM cachedSongsLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE", self.title];
+		result = [databaseControls.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE", self.title];
 	else
-		result = [databaseControls.genresDb synchronizedExecuteQuery:@"SELECT md5 FROM genresLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE", self.title];
+		result = [databaseControls.genresDb executeQuery:@"SELECT md5 FROM genresLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE", self.title];
 	
 	while ([result next])
 	{
@@ -247,9 +247,9 @@
 	// Get the ID of all matching records (everything in genre ordered by artist)
 	FMResultSet *result;
 	if (viewObjects.isOfflineMode)
-		result = [databaseControls.songCacheDb synchronizedExecuteQuery:@"SELECT md5 FROM cachedSongsLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE", self.title];
+		result = [databaseControls.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE", self.title];
 	else
-		result = [databaseControls.genresDb synchronizedExecuteQuery:@"SELECT md5 FROM genresLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE", self.title];
+		result = [databaseControls.genresDb executeQuery:@"SELECT md5 FROM genresLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE", self.title];
 	
 	while ([result next])
 	{
@@ -348,11 +348,11 @@
 		FMResultSet *result;
 		if (viewObjects.isOfflineMode) 
 		{
-			result = [databaseControls.songCacheDb synchronizedExecuteQuery:@"SELECT md5, segs, seg2 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", [listOfArtists objectAtIndex:indexPath.row], self.title];
+			result = [databaseControls.songCacheDb executeQuery:@"SELECT md5, segs, seg2 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", [listOfArtists objectAtIndex:indexPath.row], self.title];
 		}
 		else 
 		{
-			result = [databaseControls.genresDb synchronizedExecuteQuery:@"SELECT md5, segs, seg2 FROM genresLayout WHERE seg1 = ? AND genre = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", [listOfArtists objectAtIndex:indexPath.row], self.title];
+			result = [databaseControls.genresDb executeQuery:@"SELECT md5, segs, seg2 FROM genresLayout WHERE seg1 = ? AND genre = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", [listOfArtists objectAtIndex:indexPath.row], self.title];
 		}
 		while ([result next])
 		{
