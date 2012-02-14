@@ -60,9 +60,9 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTwitterUIElements) name:@"twitterAuthenticated" object:nil];
 	
 	// Set version label
-	NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
 	NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
 #if DEBUG
+	NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
 	versionLabel.text = [NSString stringWithFormat:@"iSub version %@ build %@", build, version];
 #else
 	versionLabel.text = [NSString stringWithFormat:@"iSub version %@", version];

@@ -285,7 +285,6 @@
 			{
 				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 				
-				NSDate *startTime2 = [NSDate date];
 				NSTimeInterval dbInserts = 0;
 				sectionCount = 0;
 				rowIndex = rowCount + 1;
@@ -324,7 +323,6 @@
 				[self addRootFolderIndexToCache:rowIndex count:sectionCount name:indexName];
 				//BOOL success = [self addRootFolderIndexToCache:rowIndex count:sectionCount name:indexName];
 				//DLog(@"Adding index %@  count: %i  success: %i", indexName, sectionCount, success);
-				DLog(@"Processing index %@ time: %f dbTime: %f", indexName, [[NSDate date] timeIntervalSinceDate:startTime2], dbInserts);
 				
 				// Get the next index
 				indexElement = [TBXML nextSiblingNamed:@"index" searchFromElement:indexElement];

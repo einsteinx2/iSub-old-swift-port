@@ -122,17 +122,21 @@ NSString *NSStringFromBassErrorCode(NSInteger errorCode)
 
 void BASSLogError()
 {
+#ifdef DEBUG
 	NSInteger errorCode = BASS_ErrorGetCode();
 	DLog(@"BASS error: %i - %@", errorCode, NSStringFromBassErrorCode(errorCode));
+#endif
 }
 
 - (void)printChannelInfo:(HSTREAM)channel
 {
+#ifdef DEBUG
 	BASS_CHANNELINFO i;
 	BASS_ChannelGetInfo(fileStream1, &i);
 	QWORD bytes = BASS_ChannelGetLength(channel, BASS_POS_BYTE);
 	DWORD time = BASS_ChannelBytes2Seconds(channel, bytes);
 	DLog("channel type = %x (%@)\nlength = %llu (%u:%02u)  flags: %i  freq: %i  origres: %i", i.ctype, [self stringFromStreamType:i.ctype plugin:i.plugin], bytes, time/60, time%60, i.flags, i.freq, i.origres);
+#endif
 }
 
 - (void)preSilenceLengthInternal:(Song *)aSong
@@ -532,10 +536,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 {
 	Float64 sampleRate;
 	UInt32 size = sizeof(Float64);
-	OSStatus status = AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareSampleRate, 
-											  &size, 
-											  &sampleRate);
-	DLog(@"sample rate: %i   status: %@", (NSUInteger)sampleRate, NSStringFromOSStatus(status));
+	AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareSampleRate, &size, &sampleRate);
 	
 	return (NSUInteger)sampleRate;
 }
@@ -775,8 +776,10 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	}
 	else
 	{
+#ifdef DEBUG
 		NSInteger errorCode = BASS_ErrorGetCode();
 		DLog(@"nextSong stream: %i error: %i - %@", self.nextStream, errorCode, NSStringFromBassErrorCode(errorCode));
+#endif
 	}
 	
 	DLog(@"nextSong: %i", self.nextStream);

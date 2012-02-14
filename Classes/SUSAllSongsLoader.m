@@ -617,14 +617,12 @@ static NSString *kName_Error = @"error";
 							
 							if (tempAlbumsCount == WRITE_BUFFER_AMOUNT)
 							{
-								NSDate *startTime3 = [NSDate date];
 								// Flush the records to disk
 								[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"INSERT INTO allAlbumsUnsorted SELECT * FROM allAlbumsTemp"];
 								//[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"DELETE * FROM allAlbumsTemp"];
 								[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS allAlbumsTemp"];
 								[databaseControls.allAlbumsDb synchronizedExecuteUpdate:@"CREATE TEMPORARY TABLE allAlbumsTemp(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
 								tempAlbumsCount = 0;
-								DLog(@"allAlbumsTemp flush time: %f  total records: %i", [[NSDate date] timeIntervalSinceDate:startTime3], totalAlbumsProcessed);
 							}
 						}
 						else
@@ -660,7 +658,6 @@ static NSString *kName_Error = @"error";
 							
 							if (tempSongsCount == WRITE_BUFFER_AMOUNT)
 							{
-								NSDate *startTime3 = [NSDate date];
 								// Flush the records to disk
 								[databaseControls.allSongsDb synchronizedExecuteUpdate:@"INSERT INTO allSongsUnsorted SELECT * FROM allSongsTemp"];
 								//[databaseControls.allSongsDb synchronizedExecuteUpdate:@"DELETE * FROM allSongsTemp"];
@@ -668,7 +665,6 @@ static NSString *kName_Error = @"error";
 								NSString *query = [NSString stringWithFormat:@"CREATE TEMPORARY TABLE allSongsTemp (%@)", [Song standardSongColumnSchema]];
 								[databaseControls.allSongsDb executeUpdate:query];
 								tempSongsCount = 0;
-								DLog(@"allSongsTemp flush time: %f  total records: %i", [[NSDate date] timeIntervalSinceDate:startTime3], totalSongsProcessed);
 							}
 							
 							// If it has a genre, process that
@@ -680,14 +676,12 @@ static NSString *kName_Error = @"error";
 								
 								if (tempGenresCount == WRITE_BUFFER_AMOUNT)
 								{
-									NSDate *startTime3 = [NSDate date];
 									// Flush the records to disk
 									[databaseControls.genresDb synchronizedExecuteUpdate:@"INSERT OR IGNORE INTO genresUnsorted SELECT * FROM genresTemp"];
 									//[databaseControls.genresDb synchronizedExecuteUpdate:@"DELETE * FROM genresTemp"];
 									[databaseControls.genresDb synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS genresTemp"];
 									[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE TEMPORARY TABLE genresTemp (genre TEXT)"];
 									tempGenresCount = 0;
-									DLog(@"genresTemp flush time: %f", [[NSDate date] timeIntervalSinceDate:startTime3]);
 								}
 								
 								// Insert the song into the genresLayout table
@@ -706,14 +700,12 @@ static NSString *kName_Error = @"error";
 									
 									if (tempGenresLayoutCount == WRITE_BUFFER_AMOUNT)
 									{
-										NSDate *startTime3 = [NSDate date];
 										// Flush the records to disk
 										[databaseControls.genresDb synchronizedExecuteUpdate:@"INSERT OR IGNORE INTO genresLayout SELECT * FROM genresLayoutTemp"];
 										//[databaseControls.genresDb synchronizedExecuteUpdate:@"DELETE * FROM genresLayoutTemp"];
 										[databaseControls.genresDb synchronizedExecuteUpdate:@"DROP TABLE IF EXISTS genresLayoutTemp"];
 										[databaseControls.genresDb synchronizedExecuteUpdate:@"CREATE TEMPORARY TABLE genresLayoutTemp (md5 TEXT, genre TEXT, segs INTEGER, seg1 TEXT, seg2 TEXT, seg3 TEXT, seg4 TEXT, seg5 TEXT, seg6 TEXT, seg7 TEXT, seg8 TEXT, seg9 TEXT)"];
 										tempGenresLayoutCount = 0;
-										DLog(@"genresLayoutTemp flush time: %f", [[NSDate date] timeIntervalSinceDate:startTime3]);
 									}
 									
 									[segments release];

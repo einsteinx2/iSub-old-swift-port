@@ -106,12 +106,12 @@
 **/
 - (NSObject<HTTPResponse> *)httpResponseForMethod:(NSString *)method URI:(NSString *)path
 {
+#ifdef DEBUG
 	DLog(@"httpResponseForURI: method:%@ path:%@", method, path);
-	
 	NSData *requestData = [(NSData *)CFHTTPMessageCopySerializedMessage(request) autorelease];
-	
 	NSString *requestStr = [[[NSString alloc] initWithData:requestData encoding:NSASCIIStringEncoding] autorelease];
 	DLog(@"\n=== Request ====================\n%@\n================================", requestStr);
+#endif
 	
 	if (requestContentLength > 0)  // Process POST data
 	{

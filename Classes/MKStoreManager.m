@@ -175,12 +175,12 @@ static MKStoreManager* _sharedStoreManager;
 {
 	[self.purchasableObjects addObjectsFromArray:response.products];
 	
-#ifndef NDEBUG	
+#ifdef DEBUG
 	for(int i=0;i<[self.purchasableObjects count];i++)
 	{		
 		SKProduct *product = [self.purchasableObjects objectAtIndex:i];
 		DLog(@"Feature: %@, Cost: %f, ID: %@",[product localizedTitle],
-			  [[product price] doubleValue], [product productIdentifier]);
+			 [[product price] doubleValue], [product productIdentifier]);
 	}
 	
 	for(NSString *invalidProduct in response.invalidProductIdentifiers)
