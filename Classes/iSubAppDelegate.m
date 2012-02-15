@@ -19,7 +19,6 @@
 #import "ServerListViewController.h"
 #import "RootViewController.h"
 #import "Reachability.h"
-#import "UpdateXMLParser.h"
 #import "Album.h"
 #import "Song.h"
 #import <CoreFoundation/CoreFoundation.h>
@@ -51,6 +50,8 @@
 
 #import "UIDevice+Software.h"
 #import "NSObject+ListMethods.h"
+
+#import "ISMSUpdateChecker.h"
 
 @implementation iSubAppDelegate
 
@@ -266,7 +267,9 @@
 	}
 	else if (settings.isUpdateCheckEnabled)
 	{
-		[self performSelectorInBackground:@selector(checkForUpdate) withObject:nil];
+		ISMSUpdateChecker *updateChecker = [[ISMSUpdateChecker alloc] init];
+		[updateChecker checkForUpdate];
+		[updateChecker release];
 	}
     
     // Check if the subsonic URL is valid by attempting to access the ping.view page, 
@@ -545,38 +548,6 @@
 		
 		[self displayInfoUpdate:nil];
 	}
-}
-
-
-- (void)checkForUpdate
-{
-#if RELEASE
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-	
-	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:@"http://isubapp.com/update.xml"]];
-	[request startSynchronous];
-	if ([request error])
-	{
-		/*CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error checking for app updates." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-		[alert release];*/
-		
-		DLog(@"There was an error checking for app updates.");
-	}
-	else
-	{
-		DLog(@"%@", [[[NSString alloc] initWithData:[request responseData] encoding:NSUTF8StringEncoding] autorelease]);
-		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:[request responseData]];
-		UpdateXMLParser *parser = [(UpdateXMLParser*) [UpdateXMLParser alloc] initXMLParser];
-		[xmlParser setDelegate:parser];
-		[xmlParser parse];
-		
-		[xmlParser release];
-		[parser release];
-	}
-	
-	[autoreleasePool release];
-#endif
 }
 
 - (void)applicationWillResignActive:(UIApplication*)application
@@ -947,8 +918,6 @@
 			}
 			if (buttonIndex == 1)
 			{
-				//[musicControls resumeSong];
-				//[musicControls performSelectorInBackground:@selector(resumeSong) withObject:nil];
 				// TODO: Test this
 				[SavedSettings sharedInstance].isRecover = YES;
 				[musicControls resumeSong];

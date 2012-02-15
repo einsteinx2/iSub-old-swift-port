@@ -7,7 +7,7 @@
 //
 
 
-@class iSubAppDelegate, MusicSingleton, DatabaseSingleton, ViewObjectsSingleton, CoverArtImageView, PageControlViewController, MPVolumeView, AudioEngine, PlaylistSingleton, OBSlider, Song;
+@class iSubAppDelegate, MusicSingleton, DatabaseSingleton, PlaylistSingleton, ViewObjectsSingleton, CoverArtImageView, PageControlViewController, MPVolumeView, AudioEngine, PlaylistSingleton, OBSlider, Song;
 
 @interface iPhoneStreamingPlayerViewController : UIViewController
 {
@@ -35,6 +35,8 @@
 	MusicSingleton *musicControls;
 	DatabaseSingleton *databaseControls;
 	ViewObjectsSingleton *viewObjects;
+	PlaylistSingleton *currentPlaylist;
+	AudioEngine *audio;
 	
 	NSUInteger reflectionHeight;
 	
@@ -44,8 +46,6 @@
 	UIView *flipButtonView;
 	
 	PageControlViewController *pageControlViewController;
-	
-	AudioEngine *audio;
 	
 	uint64_t bookmarkBytePosition;
 }
@@ -108,7 +108,6 @@
 - (IBAction)skipBack30:(id)sender;
 - (IBAction)skipForward30:(id)sender;
 
-- (void)updateDownloadProgressInBackground;
 - (void)updateDownloadProgress;
 - (void)updateSlider;
 - (void)updateShuffleIcon;

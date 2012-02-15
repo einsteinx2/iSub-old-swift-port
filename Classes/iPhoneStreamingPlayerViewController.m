@@ -33,7 +33,6 @@
 #import "SUSStreamSingleton.h"
 #import "SUSStreamHandler.h"
 #import "NSArray+FirstObject.h"
-
 #import "UIImageView+Reflection.h"
 
 #define downloadProgressBorder 4.
@@ -43,7 +42,6 @@
 @interface iPhoneStreamingPlayerViewController ()
 
 @property (nonatomic, retain) UIImageView *reflectionView;
-@property (nonatomic, retain) PlaylistSingleton *currentPlaylist;
 @property (nonatomic, retain) NSDictionary *originalViewFrames;
 
 - (void)setupCoverArt;
@@ -52,12 +50,16 @@
 - (void)setPlayButtonImage;
 - (void)setPauseButtonImage;
 - (void)updateBarButtonImage;
+- (void)registerForNotifications;
+- (void)unregisterForNotifications;
+- (void)createDownloadProgressView;
+- (void)createLandscapeViews;
 
 @end
 
 @implementation iPhoneStreamingPlayerViewController
 
-@synthesize listOfSongs, reflectionView, currentPlaylist, originalViewFrames, extraButtons, extraButtonsButton, extraButtonsBackground;
+@synthesize listOfSongs, reflectionView, originalViewFrames, extraButtons, extraButtonsButton, extraButtonsBackground;
 @synthesize progressLabelBackground, progressLabel, bookmarkCountLabel, progressSlider, elapsedTimeLabel, remainingTimeLabel, shuffleButton, repeatButton, bookmarkButton, currentAlbumButton;
 @synthesize updateTimer, progressTimer, hasMoved, oldPosition, byteOffset, currentSong, pauseSlider, downloadProgress;
 @synthesize bookmarkEntry, bookmarkIndex, bookmarkNameTextField, bookmarkPosition;
@@ -89,70 +91,204 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {
 	[super viewDidLoad];
 	
-	//[coverArtImageView.layer setCornerRadius:20];
-	
+	// Setup singleton references
 	appDelegate = [iSubAppDelegate sharedInstance];
 	musicControls = [MusicSingleton sharedInstance];
 	databaseControls = [DatabaseSingleton sharedInstance];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
-	
 	audio = [AudioEngine sharedInstance];
+	currentPlaylist = [PlaylistSingleton sharedInstance];
 	
-	self.currentPlaylist = [PlaylistSingleton sharedInstance];
-	
+	// Set default values
 	pageControlViewController = nil;
-	
 	isFlipped = NO;
 	isExtraButtonsShowing = NO;
+	pauseSlider = NO;
+
+	// Create the extra views not in the XIB file
+	[self createDownloadProgressView];
+	[self createLandscapeViews];
 	
+	// Setup the navigation controller buttons
+	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"player-overlay.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(songInfoToggle:)] autorelease];
+	if (!IS_IPAD())
+		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(backAction:)] autorelease];
 	
+	// Show the song info screen automatically if the setting is enabled
+	if ([SavedSettings sharedInstance].isAutoShowSongInfoEnabled)
+	{
+		[self songInfoToggle:nil];
+	}
+	
+	// Initialize the song info
+	[self initSongInfo];
+	
+	// Setup the volume controller view
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	{
+		[musicControls jukeboxGetInfo];
+		
+		self.view.backgroundColor = viewObjects.jukeboxColor;
+		
+		CGRect frame = volumeSlider.bounds;
+		frame.size.height = volumeSlider.bounds.size.height / 2;
+		jukeboxVolumeView = [[[UISlider alloc] initWithFrame:frame] autorelease];
+		[jukeboxVolumeView addTarget:self action:@selector(jukeboxVolumeChanged:) forControlEvents:UIControlEventValueChanged];
+		jukeboxVolumeView.minimumValue = 0.0;
+		jukeboxVolumeView.maximumValue = 1.0;
+		jukeboxVolumeView.continuous = NO;
+		jukeboxVolumeView.value = musicControls.jukeboxGain;
+		[volumeSlider addSubview:jukeboxVolumeView];
+		
+		if (musicControls.jukeboxIsPlaying)
+			[self setStopButtonImage];
+		else 
+			[self setPlayButtonImage];
+	}
+	else
+	{
+		volumeView = [[[MPVolumeView alloc] initWithFrame:volumeSlider.bounds] autorelease];
+		[volumeSlider addSubview:volumeView];
+		[volumeView sizeToFit];
+		
+		if(audio.isPlaying)
+			[self setPauseButtonImage];
+		else
+			[self setPlayButtonImage];
+	}
+	
+	// Setup the cover art reflection
+	reflectionHeight = coverArtImageView.bounds.size.height * kDefaultReflectionFraction;
+	reflectionView.height = reflectionHeight;
+	reflectionView.image = [coverArtImageView reflectedImageWithHeight:reflectionHeight];
+	reflectionView.alpha = kDefaultReflectionOpacity;
+	if (isFlipped)
+		reflectionView.alpha = 0.0;
+    [activityIndicator stopAnimating];
+	
+	// Register for all notifications
+	[self registerForNotifications];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+	[super viewWillAppear:animated];
+	
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	{
+		[musicControls jukeboxGetInfo];
+		
+		self.view.backgroundColor = viewObjects.jukeboxColor;
+	}
+	else 
+	{
+		self.view.backgroundColor = [UIColor blackColor]; 
+	}
+	
+	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+	{
+		[self createSongTitle];
+	}
+	
+	if (!IS_IPAD())
+	{
+		if (animated)
+		{
+			[UIApplication setStatusBarHidden:YES withAnimation:YES];
+			[UIView beginAnimations:nil context:nil];
+			[UIView setAnimationDuration:0.3];
+		}
+		
+		self.navigationController.navigationBar.y = 0;
+			 
+		if (animated)
+			 [UIView commitAnimations];
+	}
+	
+	[self updateDownloadProgress];
+	[self updateSlider];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	
+	if (!IS_IPAD())
+	{
+		//[self.navigationController setWantsFullScreenLayout:NO];
+		[UIApplication setStatusBarHidden:NO withAnimation:YES];
+		self.navigationController.navigationBar.y = 20;
+	}
+	
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+	[super viewDidDisappear:animated];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"hideSongInfoFast" object:nil];
+}
+
+- (void)registerForNotifications
+{
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPlayButtonImage) 
+												 name:ISMSNotification_SongPlaybackEnded object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPlayButtonImage) 
+												 name:ISMSNotification_SongPlaybackPaused object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPauseButtonImage) 
+												 name:ISMSNotification_SongPlaybackStarted object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) 
+												 name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) 
+												 name:ISMSNotification_ServerSwitched object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupCoverArt) 
+												 name:ISMSNotification_AlbumArtLargeDownloaded object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateShuffleIcon) 
+												 name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songInfoToggle:) 
+												 name:@"hideSongInfo" object:nil];
+}
+
+- (void)unregisterForNotifications
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self 
+													name:ISMSNotification_SongPlaybackEnded object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self 
+													name:ISMSNotification_SongPlaybackPaused object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self 
+													name:ISMSNotification_SongPlaybackStarted object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self 
+													name:ISMSNotification_AlbumArtLargeDownloaded object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self 
+													name:ISMSNotification_ServerSwitched object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self 
+													name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self 
+													name:@"hideSongInfo" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self 
+													name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
+}
+
+- (void)createDownloadProgressView
+{
 	downloadProgress = [[UIView alloc] initWithFrame:progressSlider.frame];
 	downloadProgress.x = 0.0;
 	downloadProgress.y = 0.0;
 	downloadProgress.backgroundColor = [UIColor whiteColor];
 	downloadProgress.alpha = 0.3;
 	downloadProgress.userInteractionEnabled = NO;
+	downloadProgress.width = 0.0;
+	downloadProgress.layer.cornerRadius = 5;
 	[progressSlider addSubview:downloadProgress];
 	[downloadProgress release];
-		
-	//progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateSlider) userInfo:nil repeats:YES];
-
-	pauseSlider = NO;
-	
-	[self updateSlider];
 	
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-	{
 		downloadProgress.hidden = YES;
-	}
-	else
-	{
-		// Setup the update timer for the song download progress bar
-		//updateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateDownloadProgressInBackground) userInfo:nil repeats:YES];
-		downloadProgress.width = 0.0;
-		//[downloadProgress newX:70.0];
-		//if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
-		//	[downloadProgress addX:2.0];
-		//DLog(@"downloadProgress.frame %@", NSStringFromCGRect(downloadProgress.frame));
-		downloadProgress.layer.cornerRadius = 5;
-		
-		[self updateDownloadProgressInBackground];
-	}
-	
-	if (!IS_IPAD())
-		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(backAction:)] autorelease];
-	
-	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"player-overlay.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(songInfoToggle:)] autorelease];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPlayButtonImage) name:ISMSNotification_SongPlaybackEnded object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPlayButtonImage) name:ISMSNotification_SongPlaybackPaused object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPauseButtonImage) name:ISMSNotification_SongPlaybackStarted object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) name:ISMSNotification_ServerSwitched object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupCoverArt) name:ISMSNotification_AlbumArtLargeDownloaded object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateShuffleIcon) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songInfoToggle:) name:@"hideSongInfo" object:nil];
-	
+}
+
+- (void)createLandscapeViews
+{
 	// Setup landscape orientation if necessary
 	if (!IS_IPAD())
 	{
@@ -212,131 +348,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			titleLabel.alpha = 0.1;
 		}
 	}
-	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-	{
-		[musicControls jukeboxGetInfo];
-		
-		self.view.backgroundColor = viewObjects.jukeboxColor;
-	}
-		
-	if ([SavedSettings sharedInstance].isAutoShowSongInfoEnabled)
-	{
-		[self songInfoToggle:nil];
-	}
-	
-	[self initSongInfo];
-	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-	{
-		CGRect frame = volumeSlider.bounds;
-		frame.size.height = volumeSlider.bounds.size.height / 2;
-		jukeboxVolumeView = [[[UISlider alloc] initWithFrame:frame] autorelease];
-		[jukeboxVolumeView addTarget:self action:@selector(jukeboxVolumeChanged:) forControlEvents:UIControlEventValueChanged];
-		jukeboxVolumeView.minimumValue = 0.0;
-		jukeboxVolumeView.maximumValue = 1.0;
-		jukeboxVolumeView.continuous = NO;
-		jukeboxVolumeView.value = musicControls.jukeboxGain;
-		[volumeSlider addSubview:jukeboxVolumeView];
-	}
-	else
-	{
-		volumeView = [[[MPVolumeView alloc] initWithFrame:volumeSlider.bounds] autorelease];
-		[volumeSlider addSubview:volumeView];
-		[volumeView sizeToFit];
-	}
-	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-	{
-		if (musicControls.jukeboxIsPlaying)
-			[self setStopButtonImage];
-		else 
-			[self setPlayButtonImage];
-	}
-	else
-	{
-		if(audio.isPlaying)
-			[self setPauseButtonImage];
-		else
-			[self setPlayButtonImage];
-	}
-	
-	// determine the size of the reflection to create
-	reflectionHeight = coverArtImageView.bounds.size.height * kDefaultReflectionFraction;
-	reflectionView.height = reflectionHeight;
-	
-	// create the reflection image and assign it to the UIImageView
-	reflectionView.image = [coverArtImageView reflectedImageWithHeight:reflectionHeight];
-	reflectionView.alpha = kDefaultReflectionOpacity;
-	
-	if (isFlipped)
-		reflectionView.alpha = 0.0;
-    
-    [activityIndicator stopAnimating];
 }
-
-- (void)viewWillAppear:(BOOL)animated
-{
-	[super viewWillAppear:animated];
-	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-	{
-		[musicControls jukeboxGetInfo];
-		
-		self.view.backgroundColor = viewObjects.jukeboxColor;
-	}
-	else 
-	{
-		self.view.backgroundColor = [UIColor blackColor]; 
-	}
-	
-	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
-	{
-		[self createSongTitle];
-	}
-	
-	if (!IS_IPAD())
-	{
-		if (animated)
-		{
-			[UIApplication setStatusBarHidden:YES withAnimation:YES];
-			[UIView beginAnimations:nil context:nil];
-			[UIView setAnimationDuration:0.3];
-		}
-		
-		self.navigationController.navigationBar.y = 0;
-			 
-		if (animated)
-			 [UIView commitAnimations];
-	}
-	
-	[self performSelector:@selector(updateDownloadProgressInBackground) withObject:nil afterDelay:1.0];
-	[self performSelector:@selector(updateSlider) withObject:nil afterDelay:1.0];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-	[super viewWillDisappear:animated];
-	
-	if (!IS_IPAD())
-	{
-		//[self.navigationController setWantsFullScreenLayout:NO];
-		[UIApplication setStatusBarHidden:NO withAnimation:YES];
-		self.navigationController.navigationBar.y = 20;
-	}
-	
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-	[super viewDidDisappear:animated];
-	
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"hideSongInfoFast" object:nil];
-}
-
-#pragma mark Memory Management
-
 
 - (void)didReceiveMemoryWarning 
 {
@@ -344,23 +356,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
     [super didReceiveMemoryWarning];
 }
 
-//
-// dealloc
-//
-// Releases instance memory.
-//
 - (void)dealloc
 {	
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackEnded object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackPaused object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackStarted object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_AlbumArtLargeDownloaded object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ServerSwitched object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfo" object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
+	[self unregisterForNotifications];
 	
 	[progressSlider release]; progressSlider = nil;
 	[progressLabel release]; progressLabel = nil;
@@ -369,9 +369,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[remainingTimeLabel release]; remainingTimeLabel = nil;
 	[repeatButton release]; repeatButton = nil;
 	[shuffleButton release]; shuffleButton = nil;
-	//[progressTimer invalidate]; progressTimer = nil;
-	//[updateTimer invalidate]; updateTimer = nil;
-	
+
 	[pageControlViewController viewDidDisappear:NO];
 	[pageControlViewController release]; pageControlViewController = nil;
 	[playButton release]; playButton = nil;
@@ -784,6 +782,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[pageControlViewController release]; pageControlViewController = nil;
 }*/
 
+#pragma mark Player Controls
 
 - (IBAction)playButtonPressed:(id)sender
 {
@@ -895,8 +894,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[extraButtons removeFromSuperview];
 	}
 }
-
-#pragma mark Player Controls
 
 - (IBAction) touchedSlider:(id)sender
 {
@@ -1150,45 +1147,32 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	DLog(@"parentId: %@", currentSong.parentId);
 }
 
-- (void)updateDownloadProgressInBackground
-{
-	[self performSelectorInBackground:@selector(updateDownloadProgress) withObject:nil];
-}
-
 - (void)updateDownloadProgress
-{
-	@autoreleasepool
-	{		
-		// Set the current song progress bar
-		if ([self.currentSong isTempCached])
-		{
-			downloadProgress.hidden = YES;
-		}
-		else
-		{
-			downloadProgress.hidden = NO;
-			
-			// Keep between 0 and 1
-			float modifier = currentSong.downloadProgress;
-			modifier = modifier < 0. ? 0. : modifier;
-			modifier = modifier > 1. ? 1. : modifier;
-			
-			// Set the width based on the download progress + left border size
-			float width = (currentSong.downloadProgress * downloadProgressWidth) + downloadProgressBorder;
-			
-			// If the song is fully cached, add the right side border
-			width = modifier >= 1. ? width + downloadProgressBorder : width;
-
-			[self performSelectorOnMainThread:@selector(updateDownloadProgressInternal:) withObject:[NSNumber numberWithFloat:width] waitUntilDone:NO];
-		}
+{		
+	// Set the current song progress bar
+	if ([self.currentSong isTempCached])
+	{
+		downloadProgress.hidden = YES;
 	}
-}
+	else
+	{
+		downloadProgress.hidden = NO;
+		
+		// Keep between 0 and 1
+		float modifier = currentSong.downloadProgress;
+		modifier = modifier < 0. ? 0. : modifier;
+		modifier = modifier > 1. ? 1. : modifier;
+		
+		// Set the width based on the download progress + left border size
+		float width = (currentSong.downloadProgress * downloadProgressWidth) + downloadProgressBorder;
+		
+		// If the song is fully cached, add the right side border
+		width = modifier >= 1. ? width + downloadProgressBorder : width;
 
-- (void)updateDownloadProgressInternal:(NSNumber *)width
-{
-	downloadProgress.width = [width floatValue];
+		downloadProgress.width = width;
+	}
 	
-	[self performSelector:@selector(updateDownloadProgressInBackground) withObject:nil afterDelay:1.0];
+	[self performSelector:@selector(updateDownloadProgress) withObject:nil afterDelay:1.0];
 }
 
 - (void)updateSlider

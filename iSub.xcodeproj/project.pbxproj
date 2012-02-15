@@ -319,7 +319,6 @@
 		536D620B1144495400DFCE56 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 536D620A1144495400DFCE56 /* SystemConfiguration.framework */; };
 		536D624411444E4600DFCE56 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D624311444E4600DFCE56 /* Icon.png */; };
 		536F9F3D1197B0B9002E526A /* CurrentPlaylistSongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 536F9F3C1197B0B9002E526A /* CurrentPlaylistSongUITableViewCell.m */; };
-		5379DBB41217BAF100F426CD /* UpdateXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DBB31217BAF100F426CD /* UpdateXMLParser.m */; };
 		5379DC4F1219E48800F426CD /* ChatUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC491219E48800F426CD /* ChatUITableViewCell.m */; };
 		5379DC501219E48800F426CD /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC4B1219E48800F426CD /* ChatViewController.m */; };
 		5379DC511219E48800F426CD /* ChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5379DC4C1219E48800F426CD /* ChatViewController.xib */; };
@@ -1344,7 +1343,6 @@
 		53BC27F4139AF0DD00A825F1 /* NSString+UUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD28C11EA7EFB00387CB0 /* NSString+UUID.m */; };
 		53BC27F5139AF0DD00A825F1 /* SA_OAuthTwitterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD28F11EA7EFB00387CB0 /* SA_OAuthTwitterController.m */; };
 		53BC27F6139AF0DD00A825F1 /* SA_OAuthTwitterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD29111EA7EFB00387CB0 /* SA_OAuthTwitterEngine.m */; };
-		53BC27F7139AF0DD00A825F1 /* UpdateXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DBB31217BAF100F426CD /* UpdateXMLParser.m */; };
 		53BC27F8139AF0DD00A825F1 /* ChatUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC491219E48800F426CD /* ChatUITableViewCell.m */; };
 		53BC27F9139AF0DD00A825F1 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC4B1219E48800F426CD /* ChatViewController.m */; };
 		53BC27FB139AF0DD00A825F1 /* ChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC561219EEEB00F426CD /* ChatMessage.m */; };
@@ -1835,7 +1833,6 @@
 		53DCF55513BFEAD3009160F9 /* NSString+UUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD28C11EA7EFB00387CB0 /* NSString+UUID.m */; };
 		53DCF55613BFEAD3009160F9 /* SA_OAuthTwitterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD28F11EA7EFB00387CB0 /* SA_OAuthTwitterController.m */; };
 		53DCF55713BFEAD3009160F9 /* SA_OAuthTwitterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 536AD29111EA7EFB00387CB0 /* SA_OAuthTwitterEngine.m */; };
-		53DCF55813BFEAD3009160F9 /* UpdateXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DBB31217BAF100F426CD /* UpdateXMLParser.m */; };
 		53DCF55913BFEAD3009160F9 /* ChatUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC491219E48800F426CD /* ChatUITableViewCell.m */; };
 		53DCF55A13BFEAD3009160F9 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC4B1219E48800F426CD /* ChatViewController.m */; };
 		53DCF55C13BFEAD3009160F9 /* ChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC561219EEEB00F426CD /* ChatMessage.m */; };
@@ -2358,8 +2355,6 @@
 		536D624311444E4600DFCE56 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = "Images/App Icons/Icon.png"; sourceTree = "<group>"; };
 		536F9F3B1197B0B9002E526A /* CurrentPlaylistSongUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CurrentPlaylistSongUITableViewCell.h; sourceTree = "<group>"; };
 		536F9F3C1197B0B9002E526A /* CurrentPlaylistSongUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CurrentPlaylistSongUITableViewCell.m; sourceTree = "<group>"; };
-		5379DBB21217BAF100F426CD /* UpdateXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateXMLParser.h; sourceTree = "<group>"; };
-		5379DBB31217BAF100F426CD /* UpdateXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpdateXMLParser.m; sourceTree = "<group>"; };
 		5379DC481219E48800F426CD /* ChatUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatUITableViewCell.h; sourceTree = "<group>"; };
 		5379DC491219E48800F426CD /* ChatUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatUITableViewCell.m; sourceTree = "<group>"; };
 		5379DC4A1219E48800F426CD /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
@@ -3471,8 +3466,6 @@
 		533A207C12887EB100539BAE /* XML Parsers */ = {
 			isa = PBXGroup;
 			children = (
-				5379DBB21217BAF100F426CD /* UpdateXMLParser.h */,
-				5379DBB31217BAF100F426CD /* UpdateXMLParser.m */,
 				531D8EF711890FED00B7B040 /* QueueAlbumXMLParser.h */,
 				531D8EF811890FED00B7B040 /* QueueAlbumXMLParser.m */,
 				53BA48661284C2340010B380 /* JukeboxXMLParser.h */,
@@ -6077,7 +6070,6 @@
 				536AD2A311EA7EFB00387CB0 /* NSString+UUID.m in Sources */,
 				536AD2A411EA7EFB00387CB0 /* SA_OAuthTwitterController.m in Sources */,
 				536AD2A511EA7EFB00387CB0 /* SA_OAuthTwitterEngine.m in Sources */,
-				5379DBB41217BAF100F426CD /* UpdateXMLParser.m in Sources */,
 				5379DC4F1219E48800F426CD /* ChatUITableViewCell.m in Sources */,
 				5379DC501219E48800F426CD /* ChatViewController.m in Sources */,
 				5379DC571219EEEB00F426CD /* ChatMessage.m in Sources */,
@@ -6388,7 +6380,6 @@
 				53BC27F4139AF0DD00A825F1 /* NSString+UUID.m in Sources */,
 				53BC27F5139AF0DD00A825F1 /* SA_OAuthTwitterController.m in Sources */,
 				53BC27F6139AF0DD00A825F1 /* SA_OAuthTwitterEngine.m in Sources */,
-				53BC27F7139AF0DD00A825F1 /* UpdateXMLParser.m in Sources */,
 				53BC27F8139AF0DD00A825F1 /* ChatUITableViewCell.m in Sources */,
 				53BC27F9139AF0DD00A825F1 /* ChatViewController.m in Sources */,
 				53BC27FB139AF0DD00A825F1 /* ChatMessage.m in Sources */,
@@ -6699,7 +6690,6 @@
 				53DCF55513BFEAD3009160F9 /* NSString+UUID.m in Sources */,
 				53DCF55613BFEAD3009160F9 /* SA_OAuthTwitterController.m in Sources */,
 				53DCF55713BFEAD3009160F9 /* SA_OAuthTwitterEngine.m in Sources */,
-				53DCF55813BFEAD3009160F9 /* UpdateXMLParser.m in Sources */,
 				53DCF55913BFEAD3009160F9 /* ChatUITableViewCell.m in Sources */,
 				53DCF55A13BFEAD3009160F9 /* ChatViewController.m in Sources */,
 				53DCF55C13BFEAD3009160F9 /* ChatMessage.m in Sources */,

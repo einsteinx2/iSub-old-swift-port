@@ -10,4 +10,13 @@
 
 @interface ISMSUpdateChecker : NSObject
 
+@property (nonatomic, retain) NSMutableData *receivedData;
+@property (nonatomic, retain) NSURLRequest *request;
+@property (nonatomic, retain) NSURLConnection *connection;
+
+@property (nonatomic, copy) NSString *theNewVersion;
+@property (nonatomic, copy) NSString *message;
+
+- (void)checkForUpdate;
+
 @end
