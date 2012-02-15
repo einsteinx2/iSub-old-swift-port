@@ -12,4 +12,6 @@
 
 @property (nonatomic, retain) UIBezierPath *path;
 
+@property (nonatomic, retain) NSArray *points;
+
 @end

@@ -479,9 +479,9 @@ static void destroy_versionArrays()
 	switch (type)
 	{
 		case ISMSBassVisualType_line:
+			[[AudioEngine sharedInstance] startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_line];
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			visualType = ISMSBassVisualType_line; 
-			[[AudioEngine sharedInstance] startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_line];
 			break;
 			
 		case ISMSBassVisualType_skinnyBar:
@@ -491,11 +491,13 @@ static void destroy_versionArrays()
 			break;
 			
 		case ISMSBassVisualType_fatBar:
+			[[AudioEngine sharedInstance] startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_fft];
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			visualType = ISMSBassVisualType_fatBar;
 			break;
 			
 		case ISMSBassVisualType_aphexFace:
+			[[AudioEngine sharedInstance] startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_fft];
 			[self eraseBitBuffer];
             specpos = 0;
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

@@ -121,8 +121,6 @@
 	
 	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
 		[self createEqViews];
-	
-	[[AudioEngine sharedInstance] startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_fft];
 }
 
 - (void)createAndDrawEqualizerPath
@@ -136,6 +134,14 @@
 		[points addObject:[NSValue valueWithCGPoint:eqView.center]];
 	}
 	[points addObject:[NSValue valueWithCGPoint:CGPointMake(equalizerPath.frame.size.width, equalizerPath.center.y)]];
+	
+	//////////////////////////////////
+	
+	/*equalizerPath.points = points;
+	[equalizerPath setNeedsDisplay];
+	return;*/
+	
+	///////////////////////////////
 	
 	NSMutableArray *sortedPoints = [NSMutableArray arrayWithCapacity:[sortedPointViews count]+5];
 	
@@ -165,6 +171,8 @@
 		}
 	}
 	[sortedPoints addObject:[points lastObject]];
+	if ([[points lastObject] CGPointValue].x != equalizerPath.frame.size.width)
+		[sortedPoints addObject:[NSValue valueWithCGPoint:CGPointMake(equalizerPath.frame.size.width, equalizerPath.center.y)]];
 	
 	// Create and start the path
 	equalizerPath.path = [UIBezierPath bezierPath];
@@ -173,12 +181,30 @@
 	// Add the lines to the eq points
 	for (NSValue *point in sortedPoints)
 	{
-		// Add point to path
 		[equalizerPath.path addLineToPoint:point.CGPointValue];
 	}
+	/*for (int i = 0; i < [sortedPoints count]-1; i++)
+	{		
+		CGPoint point1 = [[sortedPoints objectAtIndex:i] CGPointValue];
+		CGPoint point2 = [[sortedPoints objectAtIndex:i+1] CGPointValue];
+		DLog(@"point1: %@   point2: %@", NSStringFromCGPoint(point1), NSStringFromCGPoint(point2));
+		
+		if (point1.y == point2.y || point1.x == point2.x)
+		{
+			[equalizerPath.path addLineToPoint:point2];
+		}
+		else
+		{
+			CGFloat x = point1.x >= point2.x ? point1.x : point2.x;
+			CGFloat y = point1.y <= point2.y ? point1.y : point2.y;
+			CGPoint control = CGPointMake(x, y);
+			DLog(@"control: %@", NSStringFromCGPoint(control));
+			[equalizerPath.path addQuadCurveToPoint:point2 controlPoint:control];
+		}
+	}*/
 	
 	// Finish the path
-	[equalizerPath.path addLineToPoint:CGPointMake(equalizerPath.frame.size.width, equalizerPath.center.y)];
+	//[equalizerPath.path addLineToPoint:CGPointMake(equalizerPath.frame.size.width, equalizerPath.center.y)];
 	[equalizerPath.path closePath];
 	
 	// Draw the curve

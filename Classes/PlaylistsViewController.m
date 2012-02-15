@@ -873,7 +873,7 @@
 	}
 }
 
-- (void) deleteAction
+- (void)deleteAction
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	

@@ -381,7 +381,6 @@
 			rate = settings.currentMaxBitrate;
 	}
 
-	DLog(@"estimated bitrate: %i", rate);
 	return rate;
 }
 

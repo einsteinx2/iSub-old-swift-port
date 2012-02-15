@@ -12,7 +12,7 @@
 
 @implementation EqualizerPathView
 
-@synthesize path;
+@synthesize path, points;
 
 - (NSString *)stringFromFrequency:(NSUInteger)frequency
 {
@@ -41,7 +41,7 @@
 							 [string lengthOfBytesUsingEncoding:NSMacOSRomanStringEncoding]);
 }
 
-- (void)drawRect:(CGRect)rect 
+- (void)drawTicksAndLabels
 {
 	// Set the draw color
 	[[UIColor colorWithWhite:1.0 alpha:0.5] setStroke];
@@ -52,7 +52,7 @@
 	CGContextSetTextMatrix(context, CGAffineTransformMake(1.0,0.0, 0.0, -1.0, 0.0, 0.0));
 	CGContextSelectFont(context, "Arial", 10.0f, kCGEncodingMacRoman);
 	CGContextSetTextDrawingMode(context, kCGTextFill);
-
+	
 	// Create freq ticks and labels
 	CGFloat bottom = self.frame.size.height;
 	CGFloat tickHeight = self.frame.size.height / 30.0;
@@ -87,11 +87,25 @@
 	}
 	leftTicksPath.lineWidth = 1;
 	[leftTicksPath stroke];
-	
-	// Smooth and draw the eq path
-    UIBezierPath *smoothPath = [path smoothedPathWithGranularity:1];
+}
+
+- (void)drawCurve
+{	
+	UIBezierPath *smoothPath = [path smoothedPathWithGranularity:40];
 	smoothPath.lineWidth = 2;
 	[smoothPath stroke];
+	
+	/*path.lineWidth = 2;
+	[path stroke];*/
+}
+
+- (void)drawRect:(CGRect)rect 
+{
+	// Draw the axis labels
+	[self drawTicksAndLabels];
+	
+	// Smooth and draw the eq path
+	[self drawCurve];
 }
 
 @end

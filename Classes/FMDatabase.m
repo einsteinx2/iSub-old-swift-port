@@ -266,15 +266,21 @@
 - (sqlite_int64)lastInsertRowId {
     
 	/* Modification to allow thread safety by waiting for queries to finish instead of returning nothing */
-	while (inUse) {
-		DLog(@"sleeping 50 microseconds"); 
-		usleep(50);
+	if (inUse) {
+		for (int i=0; i<20000; i++) {
+			// Don't sleep longer than 1 second to prevent permanent app freezes
+			if (!inUse) break;
+			
+			DLog(@"sleeping 50 microseconds"); 
+			usleep(50);
+		}
 	}
 	
-    /*if (inUse) {
+    if (inUse) {
         [self warnInUse];
         return NO;
-    }*/
+    }
+
     [self setInUse:YES];
     
     sqlite_int64 ret = sqlite3_last_insert_rowid(db);
@@ -287,15 +293,20 @@
 - (int)changes {
 	
 	/* Modification to allow thread safety by waiting for queries to finish instead of returning nothing */
-	while (inUse) {
-		DLog(@"sleeping 50 microseconds"); 
-		usleep(50);
+	if (inUse) {
+		for (int i=0; i<20000; i++) {
+			// Don't sleep longer than 1 second to prevent permanent app freezes
+			if (!inUse) break;
+			
+			DLog(@"sleeping 50 microseconds"); 
+			usleep(50);
+		}
 	}
 	
-    /*if (inUse) {
+    if (inUse) {
         [self warnInUse];
         return 0;
-    }*/
+    }
     
     [self setInUse:YES];
     int ret = sqlite3_changes(db);
@@ -462,17 +473,22 @@
     if (![self databaseExists]) {
         return 0x00;
     }
-    
+	
 	/* Modification to allow thread safety by waiting for queries to finish instead of returning nothing */
-	while (inUse) {
-		DLog(@"sleeping 50 microseconds"); 
-		usleep(50);
+	if (inUse) {
+		for (int i=0; i<20000; i++) {
+			// Don't sleep longer than 1 second to prevent permanent app freezes
+			if (!inUse) break;
+			
+			DLog(@"sleeping 50 microseconds"); 
+			usleep(50);
+		}
 	}
 	
-    /*if (inUse) {
+    if (inUse) {
         [self warnInUse];
         return 0x00;
-    }*/
+    }
     
     [self setInUse:YES];
     
@@ -622,15 +638,20 @@
     }
     
 	/* Modification to allow thread safety by waiting for queries to finish instead of returning nothing */
-	while (inUse) {
-		DLog(@"sleeping 50 microseconds"); 
-		usleep(50);
+	if (inUse) {
+		for (int i=0; i<20000; i++) {
+			// Don't sleep longer than 1 second to prevent permanent app freezes
+			if (!inUse) break;
+			
+			DLog(@"sleeping 50 microseconds"); 
+			usleep(50);
+		}
 	}
 	
-    /*if (inUse) {
+    if (inUse) {
         [self warnInUse];
         return NO;
-    }*/
+    }
     
     [self setInUse:YES];
     

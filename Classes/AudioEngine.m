@@ -350,7 +350,13 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 					
 					// The loop finished, so unless audioQueueShouldStopWaitingForData is true (meaning the wait was cancelled)
 					// then call the queue callback again to enqueue more data
-					if (!sharedInstance.audioQueueShouldStopWaitingForData)
+					if (sharedInstance.audioQueueShouldStopWaitingForData)
+					{
+						DLog(@"wait was cancelled, not calling the queue callback again");
+						// Change the audio queue state
+						sharedInstance.state = ISMS_AE_STATE_finishedWaitingForData;
+					}
+					else
 					{
 						// Do the read again
 						bytesRead = fread(buffer, 1, length, userInfo.myFileHandle);
@@ -362,12 +368,7 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 							[sharedInstance performSelectorOnMainThread:@selector(playPause) withObject:nil waitUntilDone:YES];
 						}
 					}
-					else
-					{
-						DLog(@"wait was cancelled, not calling the queue callback again");
-						// Change the audio queue state
-						sharedInstance.state = ISMS_AE_STATE_finishedWaitingForData;
-					}
+					
 				}
 			}
 		}
@@ -564,6 +565,8 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	
 	// Destroy any existing BASS instance
 	[self bassFree];
+
+	audioQueueShouldStopWaitingForData = NO;
 	
 	// Initialize BASS
 	BASS_SetConfig(BASS_CONFIG_IOS_MIXAUDIO, 0); // Disable mixing.	To be called before BASS_Init.
@@ -593,6 +596,9 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 
 - (BOOL)bassFree
 {
+	// Make sure the read data loop exits
+	audioQueueShouldStopWaitingForData = YES;
+	
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(retryStartAtOffset:) object:nil];
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(prepareNextSongStreamInBackground) object:nil];
 	

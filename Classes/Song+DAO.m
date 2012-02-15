@@ -419,7 +419,6 @@
 	if (self.isPartiallyCached)
 	{
 		double totalSize = [self.size doubleValue];
-		DLog(@"size: %llu   size: %f", [self.size unsignedLongLongValue], [self.size doubleValue]);
 		if (self.transcodedSuffix)
 		{
 			// This is a transcode, so we'll want to use the actual bitrate if possible
@@ -453,9 +452,7 @@
 			CGFloat byteRate = (CGFloat)self.estimatedBitrate * 1024. / 8.;
 			totalSize = byteRate * [self.duration floatValue];
 		}
-		downloadProgress = (double)self.localFileSize / totalSize;
-		
-		DLog(@"downloadProgress: %f   localFileSize: %f    totalSize: %f", downloadProgress, (double)self.localFileSize, totalSize);
+		downloadProgress = (double)self.localFileSize / totalSize;		
 	}
 	
 	// Keep within bounds
