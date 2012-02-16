@@ -47,55 +47,6 @@ static MusicSingleton *sharedInstance = nil;
 
 @synthesize connectionQueue;
 
-#pragma mark -
-#pragma mark Class instance methods
-#pragma mark -
-
-#pragma mark Subsonic chache notification hack and Last.fm scrobbling connection delegate
-
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
-{
-	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
-		return YES; // Self-signed cert will be accepted
-	
-	return NO;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{	
-	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
-	{
-		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
-	}
-	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-	// Do nothing
-}
-
-- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
-{
-	if ([incrementalData length] > 0)
-	{
-		// Subsonic has been notified, cancel the connection
-		[theConnection cancel];
-		[theConnection release];
-	}
-}
-
-- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
-{
-	DLog(@"Subsonic cached song play notification failed\n\nError: %@", [error localizedDescription]);
-	[theConnection release];
-}	
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
-{	
-	[theConnection release];
-}
-
 #pragma mark - Lyric Loader Delegate
 
 - (void)loadingFailed:(SUSLoader *)theLoader withError:(NSError *)error
@@ -225,6 +176,10 @@ static MusicSingleton *sharedInstance = nil;
 				}
                 NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters];
 				self.downloadQueue = [NSURLConnection connectionWithRequest:request delegate:connDelegateQueue];
+				if (self.downloadQueue)
+				{
+					[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+				}
 				[connDelegateQueue release];
 			}
 			else 
@@ -281,6 +236,10 @@ static MusicSingleton *sharedInstance = nil;
 			}
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters];
 			self.downloadQueue = [NSURLConnection connectionWithRequest:request delegate:connDelegateQueue];
+			if (self.downloadQueue)
+			{
+				[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+			}
 			//[connDelegateQueue release];
 		}
 	}
@@ -298,6 +257,10 @@ static MusicSingleton *sharedInstance = nil;
 		NSString *range = [NSString stringWithFormat:@"bytes=%i-", byteOffset];
 		[request setValue:range forHTTPHeaderField:@"Range"];
 		self.downloadQueue = [NSURLConnection connectionWithRequest:request delegate:connDelegateQueue];
+		if (self.downloadQueue)
+		{
+			[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+		}
 		[connDelegateQueue release];		
 	}
 }

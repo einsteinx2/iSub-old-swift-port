@@ -182,7 +182,7 @@ void BASSLogError()
 		// Free the channel
 		BASS_StreamFree(presilenceStream);
 		
-		DLog(@"silence: %llu", count);
+		//DLog(@"silence: %llu", count);
 		return count;
 	}
 	else
@@ -305,7 +305,7 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 					// Set the audio queue state to waiting for data
 					sharedInstance.state = ISMS_AE_STATE_waitingForData;
 					
-					DLog(@"trying to read %i bytes,   bytes read: %i", length, bytesRead);
+					//DLog(@"trying to read %i bytes,   bytes read: %i", length, bytesRead);
 					// Clear the EOF indicator from the stream so it will resume reading
 					// when more data is available
 					fpos_t pos; 
@@ -325,10 +325,10 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 					NSUInteger bitrate = sharedInstance.bitRate > 0 ? sharedInstance.bitRate : theSong.estimatedBitrate;
 					unsigned long long bytesToWait = BytesForSecondsAtBitrate(ISMS_NumSecondsToWaitForAudioData, bitrate);
 					unsigned long long neededSize = size + bytesToWait;
-					DLog(@"bitrate: %i  byterate: %i   bytesToWait: %llu   neededSize: %llu", bitrate, (bitrate/8), bytesToWait, neededSize);
+					//DLog(@"bitrate: %i  byterate: %i   bytesToWait: %llu   neededSize: %llu", bitrate, (bitrate/8), bytesToWait, neededSize);
 					
-					NSTimeInterval sleepTime = 0.5; // Sleep for a half second at a time
-					DLog(@"AQ asked for: %i  got: %i  file size: %llu", length, bytesRead, theSong.localFileSize);
+					NSTimeInterval sleepTime = 0.2; // Sleep for a half second at a time
+					//DLog(@"asked for: %i  got: %i  file size: %llu", length, bytesRead, theSong.localFileSize);
 					while (!sharedInstance.audioQueueShouldStopWaitingForData 
 						   && !theSong.isFullyCached && theSong.localFileSize < neededSize)
 					{
@@ -339,9 +339,8 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 						
 						// As long as audioQueueShouldStopWaitingForData is false, the song is not fully cached, and
 						// the file size is less than the current size + 10 buffers worth of data, then wait
-						DLog(@"Not enough data, sleeping for %f   fileSize: %llu  neededSize: %llu", sleepTime, theSong.localFileSize, neededSize);
-						usleep(100000);
-						//[NSThread sleepForTimeInterval:sleepTime];
+						//DLog(@"Not enough data, sleeping for %f   fileSize: %llu  neededSize: %llu", sleepTime, theSong.localFileSize, neededSize);
+						[NSThread sleepForTimeInterval:sleepTime];
 					}
 					
 					// Handle the case of a temp cached song that has ended
@@ -355,7 +354,7 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 					// then call the queue callback again to enqueue more data
 					if (sharedInstance.audioQueueShouldStopWaitingForData)
 					{
-						DLog(@"wait was cancelled, not calling the queue callback again");
+						//DLog(@"wait was cancelled, not calling the queue callback again");
 						// Change the audio queue state
 						//sharedInstance.state = ISMS_AE_STATE_finishedWaitingForData;
 						//return 0;
@@ -364,7 +363,7 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 					{
 						// Do the read again
 						bytesRead = fread(buffer, 1, length, userInfo.myFileHandle);
-						DLog(@"trying again asked for: %i  got: %i  file size: %llu", length, bytesRead, theSong.localFileSize);
+						//DLog(@"trying again asked for: %i  got: %i  file size: %llu", length, bytesRead, theSong.localFileSize);
 						
 						if (sharedInstance.state != ISMS_AE_STATE_waitingForDataNoResume)
 						{
@@ -414,10 +413,10 @@ BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFi
 		if (!BASS_ChannelIsActive(self.currentStream))
 		{
 			// Stream is done, free the stream
-			DLog(@"current stream: %u  currentStreamTempo: %u", self.currentStream, self.currentStreamTempo); 
+			//DLog(@"current stream: %u  currentStreamTempo: %u", self.currentStream, self.currentStreamTempo); 
 			if (self.currentStreamTempo) BASS_StreamFree(self.currentStreamTempo);
 			BASS_StreamFree(self.currentStream);
-			DLog(@"freed current stream: %u  currentStreamTempo: %u", self.currentStream, self.currentStreamTempo); 
+			//DLog(@"freed current stream: %u  currentStreamTempo: %u", self.currentStream, self.currentStreamTempo); 
 			
 			// Increment current playlist index
 			[currPlaylistDAO incrementIndex];
@@ -457,7 +456,7 @@ BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFi
 	}
 	else
 	{
-		DLog(@"Stream not active, freeing BASS");
+		//DLog(@"Stream not active, freeing BASS");
 		r = BASS_STREAMPROC_END;
 		[self performSelectorOnMainThread:@selector(bassFree) withObject:nil waitUntilDone:NO];
 		
@@ -577,7 +576,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	// Initialize BASS
 	BASS_SetConfig(BASS_CONFIG_IOS_MIXAUDIO, 0); // Disable mixing.	To be called before BASS_Init.
 	BASS_SetConfig(BASS_CONFIG_BUFFER, self.bassUpdatePeriod + self.bufferLengthMillis); // set the buffer length to the minimum amount + 200ms
-	DLog(@"buffer size: %i", BASS_GetConfig(BASS_CONFIG_BUFFER));
+	//DLog(@"buffer size: %i", BASS_GetConfig(BASS_CONFIG_BUFFER));
 	BASS_SetConfig(BASS_CONFIG_FLOATDSP, true); // set DSP effects to use floating point math to avoid clipping within the effects chain
 	if (!BASS_Init(-1, sampleRate, 0, NULL, NULL)) 	// Initialize default device.
 	{
@@ -587,7 +586,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	
 	BASS_INFO info;
 	BASS_GetInfo(&info);
-	DLog(@"bassInit:%i  bass freq: %i  minrate: %i   maxrate: %i  minbuf: %i  latency:%i ", sampleRate, info.freq, info.minrate, info.maxrate, info.minbuf, info.latency);
+	//DLog(@"bassInit:%i  bass freq: %i  minrate: %i   maxrate: %i  minbuf: %i  latency:%i ", sampleRate, info.freq, info.minrate, info.maxrate, info.minbuf, info.latency);
 		
 	// Add the callbacks for headphone removal and other audio takeover
 	AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, self);
@@ -617,17 +616,17 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 			{
 				if (self.state != ISMS_AE_STATE_waitingForData)
 				{
-					DLog(@"not waiting for data, breaking");
+					//DLog(@"not waiting for data, breaking");
 					break;
 				}
-				DLog(@"still waiting for data, sleeping");
+				//DLog(@"still waiting for data, sleeping");
 				usleep(50);
 			}
 		}
 		
-		DLog(@"freeing bass");
+		//DLog(@"freeing bass");
 		BOOL success = BASS_Free();
-		DLog(@"bass freed");
+		//DLog(@"bass freed");
 		self.fileStream1 = 0;
 		self.fileStreamTempo1 = 0;
 		self.fileStream2 = 0;
@@ -653,7 +652,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 {
 	float sampleRate = 0;
 	BASS_ChannelGetAttribute(stream, BASS_ATTRIB_FREQ, &sampleRate);
-	DLog(@"BASS Stream sample rate: %i", (NSUInteger)sampleRate);
+	//DLog(@"BASS Stream sample rate: %i", (NSUInteger)sampleRate);
 	return (NSInteger)sampleRate;
 }
 
@@ -669,7 +668,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	else
 		preferredSampleRate = 48000;
 	
-	DLog(@"sample rate: %i preferred sample rate: %i", sampleRate, preferredSampleRate);
+	//DLog(@"sample rate: %i preferred sample rate: %i", sampleRate, preferredSampleRate);
 	
 	return preferredSampleRate;
 }
@@ -695,7 +694,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 - (void)seekToPositionInSeconds:(NSUInteger)seconds inStream:(HSTREAM)stream
 {
 	NSUInteger bytes = BASS_ChannelSeconds2Bytes(stream, seconds);
-	DLog(@"seconds: %i   bytes: %i", seconds, bytes);
+	//DLog(@"seconds: %i   bytes: %i", seconds, bytes);
 	[self seekToPositionInBytes:bytes inStream:stream];
 }
 
@@ -713,10 +712,10 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	
 	self.bassReinitSampleRate = 0;
 	
-	DLog(@"preparing next song stream");
+	//DLog(@"preparing next song stream");
 	Song *nextSong = currPlaylistDAO.nextSong;
 	
-	DLog(@"nextSong.localFileSize: %llu", nextSong.localFileSize);
+	//DLog(@"nextSong.localFileSize: %llu", nextSong.localFileSize);
 	if (nextSong.localFileSize == 0)
 		return;
 	
@@ -770,14 +769,14 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	else
 	{
 #ifdef DEBUG
-		NSInteger errorCode = BASS_ErrorGetCode();
-		DLog(@"nextSong stream: %i error: %i - %@", self.nextStream, errorCode, NSStringFromBassErrorCode(errorCode));
+		//NSInteger errorCode = BASS_ErrorGetCode();
+		//DLog(@"nextSong stream: %i error: %i - %@", self.nextStream, errorCode, NSStringFromBassErrorCode(errorCode));
 #endif
 		
 		[self performSelector:@selector(prepareNextSongStream) withObject:nil afterDelay:RETRY_DELAY];
 	}
 	
-	DLog(@"nextSong: %i", self.nextStream);
+	//DLog(@"nextSong: %i", self.nextStream);
 }
 
 - (BOOL)prepareFileStream1
@@ -792,7 +791,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 		if (userInfo.myFileHandle == NULL)
 		{
 			// File failed to open
-			DLog(@"File failed to open");
+			//DLog(@"File failed to open");
 			return NO;
 		}
 				
@@ -809,7 +808,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 		}
 		
 		// Failed to create the stream
-		DLog(@"failed to create stream");
+		//DLog(@"failed to create stream");
 		return NO;
 	}
 	
@@ -838,9 +837,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	self.startSecondsOffset = 0;
 	self.BASSisFilestream1 = YES;
 	
-	DLog(@"calling bassInit");
 	[self bassInit];
-	DLog(@"bassinit finished");
 	
 	if (currentSong.fileExists)
 	{
@@ -929,7 +926,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 		else if (!self.fileStream1 && !currentSong.isFullyCached && currentSong.localFileSize < MIN_FILESIZE_TO_FAIL)
 		{
 			// Failed to create the stream, retrying
-			DLog(@"------failed to create stream, retrying in 2 seconds------");
+			//DLog(@"------failed to create stream, retrying in 2 seconds------");
 			NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithCapacity:2];
 			if (byteOffset) [parameters setObject:byteOffset forKey:@"byteOffset"];
 			if (seconds) [parameters setObject:seconds forKey:@"seconds"];
@@ -965,7 +962,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 {
 	if (self.isPlaying) 
 	{
-		DLog(@"Pausing");
+		//DLog(@"Pausing");
 		BASS_Pause();
 		self.isPlaying = NO;
 		
@@ -979,7 +976,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	{
 		if (self.currentStream == 0)
 		{
-			DLog(@"starting new stream");
+			//DLog(@"starting new stream");
 			NSInteger count = currPlaylistDAO.count;
 			if (currPlaylistDAO.currentIndex >= count) currPlaylistDAO.currentIndex = count;
 			[[MusicSingleton sharedInstance] startSongAtOffsetInBytes:startByteOffset 
@@ -992,7 +989,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 		}
 		else
 		{
-			DLog(@"Playing");
+			//DLog(@"Playing");
 			BASS_Start();
 			self.isPlaying = YES;
 			
@@ -1163,7 +1160,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 		value.handle = 0;
 	}
 	
-	DLog(@"removed %i effect channels", i);
+	//DLog(@"removed %i effect channels", i);
 	[self.eqHandleArray removeAllObjects];
 	self.isEqualizerOn = NO;
 }
@@ -1205,7 +1202,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	if (self.isEqualizerOn)
 	{
 		BASS_DX8_PARAMEQ p = value.parameters;
-		DLog(@"updating eq for handle: %i   new freq: %f   new gain: %f", value.handle, p.fCenter, p.fGain);
+		//DLog(@"updating eq for handle: %i   new freq: %f   new gain: %f", value.handle, p.fCenter, p.fGain);
 		BASS_FXSetParameters(value.handle, &p);
 	}
 }

@@ -374,9 +374,7 @@
 		cell.accessoryType = UITableViewCellAccessoryNone;
         
         Song *aSong = [self.dataModel songForTableViewRow:indexPath.row];
-		
-		DLog(@"name: %@    parentId: %@", aSong.title, aSong.parentId);
-        
+		        
 		cell.mySong = aSong;
 		
 		if ( [aSong.track intValue] != 0 )

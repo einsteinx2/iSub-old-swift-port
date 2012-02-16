@@ -30,6 +30,7 @@
 @property (readonly) NSString *filePath;
 @property BOOL partialPrecacheSleep;
 @property BOOL isDownloading;
+@property BOOL isCurrentSong;
 
 - (void)start:(BOOL)resume;
 - (void)start;

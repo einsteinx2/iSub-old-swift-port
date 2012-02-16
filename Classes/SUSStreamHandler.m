@@ -45,7 +45,7 @@
 #define isThrottleLoggingEnabled NO
 
 @implementation SUSStreamHandler
-@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, secondsOffset, partialPrecacheSleep, isDownloading;
+@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, secondsOffset, partialPrecacheSleep, isDownloading, isCurrentSong;
 
 - (void)setup
 {
@@ -178,10 +178,11 @@
 	
 	//[self.loadingThread.threadDictionary setObject:[[mySong copy] autorelease] forKey:@"mySong"];
 	[self.loadingThread.threadDictionary setObject:[NSNumber numberWithBool:isTempCache] forKey:@"isTempCache"];
-	DLog(@"mySong: %@   nextSong: %@", mySong, [[PlaylistSingleton sharedInstance] nextSong]);
-	if ([self.mySong isEqualToSong:[[PlaylistSingleton sharedInstance] nextSong]])
+	
+	DLog(@"mySong: %@   currentSong: %@", mySong, [[PlaylistSingleton sharedInstance] currentSong]);
+	if ([self.mySong isEqualToSong:[[PlaylistSingleton sharedInstance] currentSong]])
 	{
-		[self.loadingThread.threadDictionary setObject:[NSNumber numberWithBool:YES] forKey:@"isNextSong"];
+		self.isCurrentSong = YES;
 	}
 		
 	[self.loadingThread start];
@@ -201,14 +202,14 @@
 		if (self.connection)
 		{
 			self.isDownloading = YES;
-			[self performSelectorOnMainThread:@selector(startConnectionInternalSuccess) withObject:nil waitUntilDone:YES];
+			[self performSelectorOnMainThread:@selector(startConnectionInternalSuccess) withObject:nil waitUntilDone:NO];
 			DLog(@"Stream handler download starting for %@", mySong);
 			CFRunLoopRun();
 			DLog(@"Stream handler runloop finished for %@", mySong);
 		}
 		else
 		{
-			[self performSelectorOnMainThread:@selector(startConnectionInternalFailure) withObject:nil waitUntilDone:YES];
+			[self performSelectorOnMainThread:@selector(startConnectionInternalFailure) withObject:nil waitUntilDone:NO];
 		}
 	}
 }
@@ -217,12 +218,16 @@
 {
 	if (!self.isTempCache)
 		self.mySong.isPartiallyCached = YES;
+	
+	if ([self.delegate respondsToSelector:@selector(SUSStreamHandlerStarted:)])
+		[self.delegate SUSStreamHandlerStarted:self];
 }
 
 - (void)startConnectionInternalFailure
 {
 	NSError *error = [[NSError alloc] initWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
-	[self.delegate SUSStreamHandlerConnectionFailed:self withError:error];
+	if ([self.delegate respondsToSelector:@selector(SUSStreamHandlerConnectionFailed:withError:)])
+		[self.delegate SUSStreamHandlerConnectionFailed:self withError:error];
 	[error release];
 }
 
@@ -254,6 +259,11 @@
 {
 	// If this song is partially precached and sleeping, stop sleeping
 	self.partialPrecacheSleep = NO;
+	
+	if ([self.mySong isEqualToSong:[[PlaylistSingleton sharedInstance] currentSong]])
+	{
+		self.isCurrentSong = YES;
+	}
 }
 
 #pragma mark - Connection Delegate
@@ -381,25 +391,41 @@ BOOL isBeginning = YES;
 	
 	// Handle partial pre-cache next song
 	SavedSettings *settings = [SavedSettings sharedInstance];
-	BOOL isNextSong = [[threadDict objectForKey:@"isNextSong"] boolValue];
 	BOOL tempCache = [[threadDict objectForKey:@"isTempCache"] boolValue];
-	if (isNextSong && !tempCache && settings.isPartialCacheNextSong && self.partialPrecacheSleep)
+	if (!isCurrentSong && !tempCache && settings.isPartialCacheNextSong && self.partialPrecacheSleep)
 	{
 		NSUInteger partialPrecacheSize = BytesForSecondsAtBitrate(ISMSNumSecondsToPartialPreCache, self.mySong.estimatedBitrate);
 		if (totalBytesTransferred >= partialPrecacheSize)
 		{
+			[self performSelectorOnMainThread:@selector(partialPrecachePausedInternal) withObject:nil waitUntilDone:NO];
 			while (self.partialPrecacheSleep)
 			{
 				[NSThread sleepForTimeInterval:0.1];
 			}
+			[self performSelectorOnMainThread:@selector(partialPrecacheUnpausedInternal) withObject:nil waitUntilDone:NO];
 		}
 	}
 }
 
 // Main Thread
+- (void)partialPrecachePausedInternal
+{
+	if ([self.delegate respondsToSelector:@selector(SUSStreamHandlerPartialPrecachePaused:)])
+		[self.delegate SUSStreamHandlerPartialPrecachePaused:self];
+}
+
+// Main Thread
+- (void)partialPrecacheUnpausedInternal
+{
+	if ([self.delegate respondsToSelector:@selector(SUSStreamHandlerPartialPrecacheUnpaused:)])
+		[self.delegate SUSStreamHandlerPartialPrecacheUnpaused:self];
+}
+
+// Main Thread
 - (void)startPlaybackInternal
 {
-	[self.delegate SUSStreamHandlerStartPlayback:self byteOffset:byteOffset secondsOffset:secondsOffset];
+	if ([self.delegate respondsToSelector:@selector(SUSStreamHandlerStartPlayback:byteOffset:secondsOffset:)])
+		[self.delegate SUSStreamHandlerStartPlayback:self byteOffset:byteOffset secondsOffset:secondsOffset];
 }
 
 // loadingThread
@@ -423,7 +449,8 @@ BOOL isBeginning = YES;
 	[self.fileHandle closeFile];
 	self.fileHandle = nil;
 	
-	[self.delegate SUSStreamHandlerConnectionFailed:self withError:error];
+	if ([self.delegate respondsToSelector:@selector(SUSStreamHandlerConnectionFailed:withError:)])
+		[self.delegate SUSStreamHandlerConnectionFailed:self withError:error];
 }
 
 // loadingThread
@@ -464,7 +491,8 @@ BOOL isBeginning = YES;
 			mySong.isFullyCached = YES;
 	}
 	
-	[self.delegate SUSStreamHandlerConnectionFinished:self];
+	if ([self.delegate respondsToSelector:@selector(SUSStreamHandlerConnectionFinished:)])
+		[self.delegate SUSStreamHandlerConnectionFinished:self];
 }
 
 #pragma mark - Overriding equality

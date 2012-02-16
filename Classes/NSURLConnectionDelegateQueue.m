@@ -17,6 +17,7 @@
 #import "CustomUIAlertView.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "NSArray+Additions.h"
+#import "SUSStreamSingleton.h"
 
 @implementation NSURLConnectionDelegateQueue
 
@@ -70,11 +71,21 @@
 	// don't have any idea why this is necessary and isn't causing leaks
 	// The NSURLConnection seemingly isn't being released anywhere, but yet it is
 	//[theConnection release];
+	
+	if (![SUSStreamSingleton sharedInstance].isQueueDownloading)
+	{
+		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+	}
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
 	//DLog(@"connectionDidFinishLoading");
+	
+	if (![SUSStreamSingleton sharedInstance].isQueueDownloading)
+	{
+		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+	}
 	
 	// Check if the file is less than 500 bytes. If it is, then it's almost definitely an API expiration notice
 	if (musicControls.downloadedLengthQueue < 500)

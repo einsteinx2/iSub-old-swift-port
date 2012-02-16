@@ -453,8 +453,21 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (void)SUSStreamHandlerStarted:(SUSStreamHandler *)handler
 {
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+
 	if (handler.isTempCache)
 		self.lastTempCachedSong = nil;
+}
+
+- (void)SUSStreamHandlerPartialPrecachePaused:(SUSStreamHandler *)handler
+{
+	if (![MusicSingleton sharedInstance].isQueueListDownloading)
+		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+}
+
+- (void)SUSStreamHandlerPartialPrecacheUnpaused:(SUSStreamHandler *)handler
+{
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 }
 
 - (void)SUSStreamHandlerStartPlayback:(SUSStreamHandler *)handler byteOffset:(unsigned long long)bytes secondsOffset:(double)seconds
@@ -487,6 +500,9 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (void)SUSStreamHandlerConnectionFailed:(SUSStreamHandler *)handler withError:(NSError *)error
 {
+	if (![MusicSingleton sharedInstance].isQueueListDownloading)
+		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+
 	DLog(@"stream handler failed: %@", handler);
 	if (handler.numOfReconnects < maxNumOfReconnects)
 	{
@@ -508,17 +524,22 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (void)SUSStreamHandlerConnectionFinished:(SUSStreamHandler *)handler
 {	
+	if (![MusicSingleton sharedInstance].isQueueListDownloading)
+		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+	
 	// Update the last cached song
 	self.lastCachedSong = handler.mySong;
+	
+	DLog(@"stream handler finished: %@", handler);
 	
 	if (handler.isTempCache)
 		self.lastTempCachedSong = handler.mySong;
 	DLog(@"handler.isTempCache: %@   lastTempCachedSong: %@", NSStringFromBOOL(handler.isTempCache), self.lastTempCachedSong);
-	
+
 	// Remove the handler from the stack
+	DLog(@"handlerStack: %@  about to remove the stream", self.handlerStack);
 	[self removeStream:handler];
 	
-	DLog(@"stream handler finished: %@", handler);
 	DLog(@"handlerStack: %@", self.handlerStack);
 	
 	// Start the next handler which is now the first object

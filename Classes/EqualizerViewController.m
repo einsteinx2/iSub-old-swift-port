@@ -40,6 +40,13 @@
 		{
 			view.alpha = 1.0;
 		}
+		
+		UIDevice *device = [UIDevice currentDevice];
+		if (device.batteryState != UIDeviceBatteryStateCharging && device.batteryState != UIDeviceBatteryStateFull) 
+		{
+			if ([SavedSettings sharedInstance].isScreenSleepEnabled)
+				[UIApplication sharedApplication].idleTimerDisabled = NO;
+		}
 	}
 	else
 	{
@@ -49,6 +56,8 @@
 		{
 			view.alpha = 0.0;
 		}
+		
+		[UIApplication sharedApplication].idleTimerDisabled = YES;
 	}
 	[UIView commitAnimations];
 }
