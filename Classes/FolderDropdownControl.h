@@ -36,16 +36,16 @@
 	NSURLConnection *connection;
 }
 
-@property (nonatomic, retain) NSDictionary *folders;
+@property (retain) NSDictionary *folders;
 @property BOOL isOpen;
 
-@property (nonatomic, retain) NSNumber *selectedFolderId;
+@property (retain) NSNumber *selectedFolderId;
 
 // Colors
-@property (nonatomic, retain) UIColor *borderColor;
-@property (nonatomic, retain) UIColor *textColor;
-@property (nonatomic, retain) UIColor *lightColor;
-@property (nonatomic, retain) UIColor *darkColor;
+@property (retain) UIColor *borderColor;
+@property (retain) UIColor *textColor;
+@property (retain) UIColor *lightColor;
+@property (retain) UIColor *darkColor;
 
 @property (assign) id<FolderDropdownDelegate> delegate;
 

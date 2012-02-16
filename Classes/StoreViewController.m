@@ -12,6 +12,7 @@
 #import "ViewObjectsSingleton.h"
 #import "StoreUITableViewCell.h"
 #import "SavedSettings.h"
+#import "NSArray+Additions.h"
 
 @implementation StoreViewController
 
@@ -159,7 +160,7 @@
 	{
 		NSUInteger adjustedRow = indexPath.row - 1;
 		cell = [[[StoreUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-		((StoreUITableViewCell *)cell).myProduct = [storeItems objectAtIndex:adjustedRow];
+		((StoreUITableViewCell *)cell).myProduct = [storeItems objectAtIndexSafe:adjustedRow];
 	}
 	return cell;
 }
@@ -173,9 +174,9 @@
 	else
 	{
 		NSUInteger adjustedRow = indexPath.row - 1;
-		if (![MKStoreManager isFeaturePurchased:[[storeItems objectAtIndex:adjustedRow] productIdentifier]])
+		if (![MKStoreManager isFeaturePurchased:[[storeItems objectAtIndexSafe:adjustedRow] productIdentifier]])
 		{
-			[storeManager buyFeature:[[storeItems objectAtIndex:adjustedRow] productIdentifier]];
+			[storeManager buyFeature:[[storeItems objectAtIndexSafe:adjustedRow] productIdentifier]];
 			
 			[self.navigationController popToRootViewControllerAnimated:YES];
 		}

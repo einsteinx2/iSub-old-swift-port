@@ -20,7 +20,7 @@
 #import "FMDatabaseAdditions.h"
 #import "NSString+md5.h"
 #import "SavedSettings.h"
-
+#import "NSArray+Additions.h"
 #import "PlaylistSingleton.h"
 
 @implementation GenresArtistViewController
@@ -319,7 +319,7 @@
 	cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	cell.genre = self.title;
 	
-	NSString *name = [listOfArtists objectAtIndex:indexPath.row];
+	NSString *name = [listOfArtists objectAtIndexSafe:indexPath.row];
 	
 	[cell.artistNameLabel setText:name];
 	cell.backgroundView = [[[UIView alloc] init] autorelease];
@@ -337,22 +337,22 @@
 	if (viewObjects.isCellEnabled)
 	{
 		GenresAlbumViewController *genresAlbumViewController = [[GenresAlbumViewController alloc] initWithNibName:@"GenresAlbumViewController" bundle:nil];
-		genresAlbumViewController.title = [listOfArtists objectAtIndex:indexPath.row];
+		genresAlbumViewController.title = [listOfArtists objectAtIndexSafe:indexPath.row];
 		genresAlbumViewController.listOfAlbums = [NSMutableArray arrayWithCapacity:1];
 		genresAlbumViewController.listOfSongs = [NSMutableArray arrayWithCapacity:1];
 		//genresAlbumViewController.listOfAlbums = [[NSMutableArray alloc] init];
 		//genresAlbumViewController.listOfSongs = [[NSMutableArray alloc] init];
 		genresAlbumViewController.segment = 2;
-		genresAlbumViewController.seg1 = [listOfArtists objectAtIndex:indexPath.row];
+		genresAlbumViewController.seg1 = [listOfArtists objectAtIndexSafe:indexPath.row];
 		genresAlbumViewController.genre = [NSString stringWithString:self.title];
 		FMResultSet *result;
 		if (viewObjects.isOfflineMode) 
 		{
-			result = [databaseControls.songCacheDb executeQuery:@"SELECT md5, segs, seg2 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", [listOfArtists objectAtIndex:indexPath.row], self.title];
+			result = [databaseControls.songCacheDb executeQuery:@"SELECT md5, segs, seg2 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", [listOfArtists objectAtIndexSafe:indexPath.row], self.title];
 		}
 		else 
 		{
-			result = [databaseControls.genresDb executeQuery:@"SELECT md5, segs, seg2 FROM genresLayout WHERE seg1 = ? AND genre = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", [listOfArtists objectAtIndex:indexPath.row], self.title];
+			result = [databaseControls.genresDb executeQuery:@"SELECT md5, segs, seg2 FROM genresLayout WHERE seg1 = ? AND genre = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", [listOfArtists objectAtIndexSafe:indexPath.row], self.title];
 		}
 		while ([result next])
 		{

@@ -36,14 +36,14 @@
 	NSMutableArray *loadedSongMD5s;
 }
 
-@property (nonatomic, retain) NSString *parseState;
-@property (nonatomic, retain) NSString *myId;
-@property (nonatomic, retain) Artist *myArtist;
+@property (retain) NSString *parseState;
+@property (retain) NSString *myId;
+@property (retain) Artist *myArtist;
 
-@property (nonatomic, retain) NSMutableArray *indexes;
-@property (nonatomic, retain) NSMutableArray *listOfArtists;
-@property (nonatomic, retain) NSMutableArray *listOfAlbums;
-@property (nonatomic, retain) NSMutableArray *listOfSongs;
+@property (retain) NSMutableArray *indexes;
+@property (retain) NSMutableArray *listOfArtists;
+@property (retain) NSMutableArray *listOfAlbums;
+@property (retain) NSMutableArray *listOfSongs;
 
 - (id) initXMLParser;
 

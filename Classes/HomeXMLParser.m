@@ -20,6 +20,7 @@
 #import "ViewObjectsSingleton.h"
 #import "NSString+hex.h"
 #import "CustomUIAlertView.h"
+#import "NSArray+Additions.h"
 
 @implementation HomeXMLParser
 
@@ -112,14 +113,14 @@
 			}
 			
 			//DLog(@"splitPath: %@", splitPath);
-			//DLog(@"[splitPath objectAtIndex:[splitPath count] - 2]: %@", [splitPath objectAtIndex:[splitPath count] - 2]);
+			//DLog(@"[splitPath objectAtIndexSafe:[splitPath count] - 2]: %@", [splitPath objectAtIndexSafe:[splitPath count] - 2]);
 			if ([splitPath count] > 0 && [splitPath count] < 2)
 			{
-				anAlbum.artistName = [splitPath objectAtIndex:0];
+				anAlbum.artistName = [splitPath objectAtIndexSafe:0];
 			}
 			else if ([splitPath count] >= 2)
 			{
-				anAlbum.artistName = [splitPath objectAtIndex:[splitPath count] - 2];
+				anAlbum.artistName = [splitPath objectAtIndexSafe:[splitPath count] - 2];
 			}
 			else
 			{
@@ -127,7 +128,7 @@
 			}
 			
 			NSUInteger idLength = [anAlbum.albumId length];
-			NSString *albumName = [splitPath objectAtIndex:[splitPath count] - 1];
+			NSString *albumName = [splitPath objectAtIndexSafe:[splitPath count] - 1];
 			NSString *albumNameHex = [NSString stringToHex:albumName];
 			NSUInteger albumNameHexLength = [albumNameHex length];
 			NSUInteger index = idLength - albumNameHexLength;

@@ -26,20 +26,15 @@
 	IBOutlet UILabel *freeSpaceLabel;
 	
 	IBOutlet UIButton *songInfoToggleButton;
-	
-	NSTimer *updateTimer;
-	
-	float currentSongProgress;
-	float nextSongProgress;
 }
 
-@property (nonatomic, copy) Song *currentSong;
-@property (nonatomic, copy) Song *nextSong;
+@property (copy) Song *currentSong;
+@property (copy) Song *nextSong;
+@property float currentSongProgress;
+@property float nextSongProgress;
 
 - (IBAction)songInfoToggle;
-- (void) updateStats;
+- (void)updateStats;
 - (void)cacheSongObjects;
-
-- (void)updateStatsInBackground;
 
 @end

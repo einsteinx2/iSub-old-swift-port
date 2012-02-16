@@ -113,7 +113,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfoFast" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfo" object:nil];
 	
-	[dataModel cancelLoad];
+	[self.dataModel cancelLoad];
 }
 
 - (void)dealloc 

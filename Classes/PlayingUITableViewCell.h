@@ -11,11 +11,11 @@
 @class AsynchronousImageViewCached, Song;
 @interface PlayingUITableViewCell : CustomUITableViewCell 
 
-@property (nonatomic, copy) Song *mySong;
-@property (nonatomic, retain) AsynchronousImageViewCached *coverArtView;
-@property (nonatomic, retain) UILabel *userNameLabel;
-@property (nonatomic, retain) UIScrollView *nameScrollView;
-@property (nonatomic, retain) UILabel *songNameLabel;
-@property (nonatomic, retain) UILabel *artistNameLabel;
+@property (copy) Song *mySong;
+@property (retain) AsynchronousImageViewCached *coverArtView;
+@property (retain) UILabel *userNameLabel;
+@property (retain) UIScrollView *nameScrollView;
+@property (retain) UILabel *songNameLabel;
+@property (retain) UILabel *artistNameLabel;
 
 @end

@@ -16,6 +16,7 @@
 #import "SavedSettings.h"
 #import "EqualizerViewController.h"
 #import "PagingScrollView.h"
+#import "NSArray+Additions.h"
 
 @interface PageControlViewController (PrivateMethods)
 
@@ -97,7 +98,7 @@
     if (page < 0) return;
     if (page >= numberOfPages) return;
 	
-	UIViewController *controller = (UIViewController *) [viewControllers objectAtIndex:page];
+	UIViewController *controller = (UIViewController *) [viewControllers objectAtIndexSafe:page];
     if ((NSNull *)controller != [NSNull null]) return; 
 
 	SavedSettings *settings = [SavedSettings sharedInstance];
@@ -136,7 +137,7 @@
 
 - (void)unloadScrollViewPage:(NSUInteger)page
 {
-	UIViewController *controller = (UIViewController *) [viewControllers objectAtIndex:page];
+	UIViewController *controller = (UIViewController *) [viewControllers objectAtIndexSafe:page];
 	if ((NSNull *)controller != [NSNull null])
 	{
 		[controller.view removeFromSuperview];

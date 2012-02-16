@@ -159,13 +159,13 @@
 - (void)startLoad
 {	
     self.loader = [[[SUSChatLoader alloc] initWithDelegate:self] autorelease];
-    [loader startLoad];
+    [self.loader startLoad];
 }
 
 - (void)cancelLoad
 {
-    [loader cancelLoad];
-	loader.delegate = nil;
+    [self.loader cancelLoad];
+	self.loader.delegate = nil;
     self.loader = nil;
 }
 
@@ -173,10 +173,10 @@
 
 - (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
 {
-	loader.delegate = nil;
+	self.loader.delegate = nil;
 	self.loader = nil;
 	
-	if ([delegate respondsToSelector:@selector(loadingFailed:withError:)])
+	if ([self.delegate respondsToSelector:@selector(loadingFailed:withError:)])
 	{
 		[self.delegate loadingFailed:nil withError:error];
 	}
@@ -184,12 +184,12 @@
 
 - (void)loadingFinished:(SUSLoader*)theLoader
 {
-	self.chatMessages = [NSArray arrayWithArray:loader.chatMessages];
+	self.chatMessages = [NSArray arrayWithArray:self.loader.chatMessages];
 	
-	loader.delegate = nil;
+	self.loader.delegate = nil;
 	self.loader = nil;
 	
-	if ([delegate respondsToSelector:@selector(loadingFinished:)])
+	if ([self.delegate respondsToSelector:@selector(loadingFinished:)])
 	{
 		[self.delegate loadingFinished:nil];
 	}

@@ -15,7 +15,7 @@
 	ViewObjectsSingleton *viewObjects;
 }
 
-@property (nonatomic, copy) NSString *coverArtId;
+@property (copy) NSString *coverArtId;
 @property (readonly) BOOL isCoverArtCached;
 @property (readonly) FMDatabase *db;
 

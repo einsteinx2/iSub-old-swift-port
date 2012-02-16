@@ -48,20 +48,9 @@ typedef enum
 @interface AudioEngine : NSObject
 {
 	// Equalizer
-	NSMutableArray *eqValueArray, *eqHandleArray;
 	float fftData[1024];
 	short *lineSpecBuf;
 	int lineSpecBufSize;
-	ISMS_BASS_EQ_DATA_TYPE eqDataType;
-	
-	// BASS streams
-	BOOL BASSisFilestream1;
-	HSTREAM fileStream1;
-	HSTREAM fileStreamTempo1;
-	HSTREAM fileStream2;
-	HSTREAM fileStreamTempo2;
-	HSTREAM outStream;
-	HFX volumeFx;
 }
 
 + (AudioEngine *)sharedInstance;
@@ -103,12 +92,26 @@ typedef enum
 - (NSInteger)bassStreamSampleRate:(HSTREAM)stream;
 - (NSInteger)preferredSampleRate:(NSUInteger)sampleRate;
 
-@property (readonly) BOOL isPlaying;
+@property (retain) NSMutableArray *eqValueArray;
+@property (retain) NSMutableArray *eqHandleArray;
+@property ISMS_BASS_EQ_DATA_TYPE eqDataType;
+
+// BASS streams
+@property BOOL BASSisFilestream1;
+@property HSTREAM fileStream1;
+@property HSTREAM fileStreamTempo1;
+@property HSTREAM fileStream2;
+@property HSTREAM fileStreamTempo2;
+@property HSTREAM outStream;
+@property HFX volumeFx;
+
+@property BOOL isPlaying;
 @property (readonly) NSInteger bitRate;
 @property (readonly) QWORD currentByteOffset;
 @property (readonly) double progress;
-@property (readonly) BOOL isEqualizerOn;
 @property (readonly) NSArray *equalizerValues;
+
+@property BOOL isEqualizerOn;
 @property unsigned long long startByteOffset;
 @property double startSecondsOffset;
 @property HSTREAM currentStream;
@@ -128,6 +131,9 @@ typedef enum
 @property NSInteger bassReinitSampleRate;
 @property NSUInteger bufferLengthMillis;
 @property NSUInteger bassUpdatePeriod;
+
+@property (retain) NSObject *currentStreamSyncObject;
+@property (retain) NSObject *eqReadSyncObject;
 
 const char *GetCTypeString(DWORD ctype, HPLUGIN plugin);
 

@@ -22,9 +22,9 @@
 	NSMutableArray *listOfSongs;
 }
 
-@property (nonatomic, retain) Artist *myArtist;
-@property (nonatomic, retain) NSMutableArray *listOfAlbums;
-@property (nonatomic, retain) NSMutableArray *listOfSongs;
+@property (retain) Artist *myArtist;
+@property (retain) NSMutableArray *listOfAlbums;
+@property (retain) NSMutableArray *listOfSongs;
 
 - (id) initXMLParser;
 

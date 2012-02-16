@@ -10,6 +10,6 @@
 
 @interface SongInfoPlaylistCustomUITableView : UITableView 
 
-@property (nonatomic, retain) NSDate *lastDeleteToggle;
+@property (retain) NSDate *lastDeleteToggle;
 
 @end

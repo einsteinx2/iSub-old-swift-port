@@ -29,6 +29,7 @@
 
 #import "NSString+Additions.h"
 #import "AudioEngine.h"
+#import "NSArray+Additions.h"
 
 @interface CacheViewController (Private)
 - (void)addNoSongsScreen;
@@ -366,11 +367,11 @@
 			for (int i = 0; i < [sectionInfo count] - 1; i++)
 			{
 				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-				int index = [[[sectionInfo objectAtIndex:i+1] objectAtIndex:1] intValue];
+				int index = [[[sectionInfo objectAtIndexSafe:i+1] objectAtIndexSafe:1] intValue];
 				NSMutableArray *section = [NSMutableArray arrayWithCapacity:0];
 				for (int i = lastIndex; i < index; i++)
 				{
-					[section addObject:[listOfArtists objectAtIndex:i]];
+					[section addObject:[listOfArtists objectAtIndexSafe:i]];
 				}
 				[listOfArtistsSections addObject:section];
 				lastIndex = index;
@@ -379,7 +380,7 @@
 			NSMutableArray *section = [NSMutableArray arrayWithCapacity:0];
 			for (int i = lastIndex; i < [listOfArtists count]; i++)
 			{
-				[section addObject:[listOfArtists objectAtIndex:i]];
+				[section addObject:[listOfArtists objectAtIndexSafe:i]];
 			}
 			[listOfArtistsSections addObject:section];
 		}
@@ -1202,7 +1203,7 @@
 		NSMutableArray *indexes = [[[NSMutableArray alloc] init] autorelease];
 		for (int i = 0; i < [sectionInfo count]; i++)
 		{
-			[indexes addObject:[[sectionInfo objectAtIndex:i] objectAtIndex:0]];
+			[indexes addObject:[[sectionInfo objectAtIndexSafe:i] objectAtIndexSafe:0]];
 		}
 		return indexes;
 	}
@@ -1214,7 +1215,7 @@
 	
 	if (segmentedControl.selectedSegmentIndex == 0 && settings.isCacheUnlocked)
 	{
-		return [[sectionInfo objectAtIndex:section] objectAtIndex:0];
+		return [[sectionInfo objectAtIndexSafe:section] objectAtIndexSafe:0];
 	}
 	
 	return @"";
@@ -1230,7 +1231,7 @@
 		}
 		else
 		{
-			NSUInteger row = [[[sectionInfo objectAtIndex:(index - 1)] objectAtIndex:1] intValue];
+			NSUInteger row = [[[sectionInfo objectAtIndexSafe:(index - 1)] objectAtIndexSafe:1] intValue];
 			NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
 			[tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
 		}*/
@@ -1266,7 +1267,7 @@
 		if (segmentedControl.selectedSegmentIndex == 0)
 		{
 			//return [listOfArtists count];
-			return [[listOfArtistsSections objectAtIndex:section] count];
+			return [[listOfArtistsSections objectAtIndexSafe:section] count];
 		}
 		else if (segmentedControl.selectedSegmentIndex == 1)
 		{
@@ -1293,8 +1294,8 @@
 			cell.isIndexShowing = YES;
 		
 		// Set up the cell...
-		//[cell.artistNameLabel setText:[listOfArtists objectAtIndex:indexPath.row]]; gtm_stringByUnescapingFromHTML
-		NSString *name = [[listOfArtistsSections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+		//[cell.artistNameLabel setText:[listOfArtists objectAtIndexSafe:indexPath.row]]; gtm_stringByUnescapingFromHTML
+		NSString *name = [[listOfArtistsSections objectAtIndexSafe:indexPath.section] objectAtIndexSafe:indexPath.row];
 		[cell.artistNameLabel setText:[name gtm_stringByUnescapingFromHTML]];
 		
 		cell.backgroundView = [[[UIView alloc] init] autorelease];
@@ -1374,8 +1375,8 @@
 
 NSInteger trackSort1(id obj1, id obj2, void *context)
 {
-	NSUInteger track1 = [(NSNumber*)[(NSArray*)obj1 objectAtIndex:1] intValue];
-	NSUInteger track2 = [(NSNumber*)[(NSArray*)obj2 objectAtIndex:1] intValue];
+	NSUInteger track1 = [(NSNumber*)[(NSArray*)obj1 objectAtIndexSafe:1] intValue];
+	NSUInteger track2 = [(NSNumber*)[(NSArray*)obj2 objectAtIndexSafe:1] intValue];
 	if (track1 < track2)
 		return NSOrderedAscending;
 	else if (track1 == track2)
@@ -1390,12 +1391,17 @@ NSInteger trackSort1(id obj1, id obj2, void *context)
 	{
 		if (viewObjects.isCellEnabled)
 		{
+			NSString *name = nil;
+			if ([listOfArtistsSections count] > indexPath.section)
+				if ([[listOfArtistsSections objectAtIndexSafe:indexPath.section] count] > indexPath.row)
+					name = [[listOfArtistsSections objectAtIndexSafe:indexPath.section] objectAtIndexSafe:indexPath.row];
+			
 			CacheAlbumViewController *cacheAlbumViewController = [[CacheAlbumViewController alloc] initWithNibName:@"CacheAlbumViewController" bundle:nil];
-			cacheAlbumViewController.title = [[listOfArtistsSections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+			cacheAlbumViewController.title = name;
 			cacheAlbumViewController.listOfAlbums = [NSMutableArray arrayWithCapacity:1];
 			cacheAlbumViewController.listOfSongs = [NSMutableArray arrayWithCapacity:1];
 			cacheAlbumViewController.segment = 2;
-			cacheAlbumViewController.seg1 = [[listOfArtistsSections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+			cacheAlbumViewController.seg1 = name;
 			DLog(@"cacheAlbumViewController.seg1: %@", cacheAlbumViewController.seg1);
 			FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT md5, segs, seg2, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", cacheAlbumViewController.seg1];
 			while ([result next])
@@ -1414,8 +1420,8 @@ NSInteger trackSort1(id obj1, id obj2, void *context)
 					
 					/*// Sort by track number -- iOS 4.0+ only
 					[cacheAlbumViewController.listOfSongs sortUsingComparator: ^NSComparisonResult(id obj1, id obj2) {
-						NSUInteger track1 = [(NSNumber*)[(NSArray*)obj1 objectAtIndex:1] intValue];
-						NSUInteger track2 = [(NSNumber*)[(NSArray*)obj2 objectAtIndex:1] intValue];
+						NSUInteger track1 = [(NSNumber*)[(NSArray*)obj1 objectAtIndexSafe:1] intValue];
+						NSUInteger track2 = [(NSNumber*)[(NSArray*)obj2 objectAtIndexSafe:1] intValue];
 						if (track1 < track2)
 							return NSOrderedAscending;
 						else if (track1 == track2)
@@ -1428,7 +1434,7 @@ NSInteger trackSort1(id obj1, id obj2, void *context)
 					NSMutableArray *trackNumbers = [NSMutableArray arrayWithCapacity:[cacheAlbumViewController.listOfSongs count]];
 					for (NSArray *song in cacheAlbumViewController.listOfSongs)
 					{
-						NSNumber *track = [song objectAtIndex:1];
+						NSNumber *track = [song objectAtIndexSafe:1];
 						
 						if ([trackNumbers containsObject:track])
 						{

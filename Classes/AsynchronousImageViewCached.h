@@ -14,7 +14,7 @@
     NSMutableData *receivedData;
 }
 
-@property (nonatomic, retain) NSString *coverArtId;
+@property (retain) NSString *coverArtId;
 
 - (void)loadImageFromCoverArtId:(NSString *)artId;
 

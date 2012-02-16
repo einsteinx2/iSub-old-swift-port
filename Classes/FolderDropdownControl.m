@@ -14,9 +14,11 @@
 #import "NSString+md5.h"
 #import "SUSRootFoldersDAO.h"
 #import "NSMutableURLRequest+SUS.h"
+#import "NSArray+Additions.h"
+#import "NSArray+Additions.h"
 
 @implementation FolderDropdownControl
-@synthesize folders, selectedFolderId, isOpen;
+@synthesize selectedFolderId, isOpen;
 @synthesize borderColor, textColor, lightColor, darkColor;
 @synthesize delegate;
 
@@ -107,84 +109,95 @@
 
 NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 {
-    NSString *folder1 = [(NSArray*)keyVal1 objectAtIndex:1];
-	NSString *folder2 = [(NSArray*)keyVal2 objectAtIndex:1];
+    NSString *folder1 = [(NSArray*)keyVal1 objectAtIndexSafe:1];
+	NSString *folder2 = [(NSArray*)keyVal2 objectAtIndexSafe:1];
 	return [folder1 caseInsensitiveCompare:folder2];
+}
+
+- (NSDictionary *)folders
+{
+	@synchronized(self)
+	{
+		return folders;
+	}
 }
 
 - (void)setFolders:(NSDictionary *)namesAndIds
 {
-	// Set the property
-	[folders release]; folders = nil;
-	folders = [namesAndIds retain];
-	
-	// Remove old labels
-	for (UILabel *label in labels)
+	@synchronized(self)
 	{
-		[label removeFromSuperview];
-	}
-	[labels removeAllObjects];
-	
-	sizeIncrease = [folders count] * 30.0f;
-	
-	NSMutableArray *sortedValues = [NSMutableArray arrayWithCapacity:[folders count]];
-	for (NSNumber *key in [folders allKeys])
-	{
-		if ([key intValue] != -1)
+		// Set the property
+		[folders release]; folders = nil;
+		folders = [namesAndIds retain];
+		
+		// Remove old labels
+		for (UILabel *label in labels)
 		{
-			NSArray *keyValuePair = [NSArray arrayWithObjects:key, [folders objectForKey:key], nil];
-			[sortedValues addObject:keyValuePair];
+			[label removeFromSuperview];
 		}
-	}
-	
-	/*// Sort by folder name - iOS 4.0+ only
-	[sortedValues sortUsingComparator: ^NSComparisonResult(id keyVal1, id keyVal2) {
-		NSString *folder1 = [(NSArray*)keyVal1 objectAtIndex:1];
-		NSString *folder2 = [(NSArray*)keyVal2 objectAtIndex:1];
-		return [folder1 caseInsensitiveCompare:folder2];
-	}];*/
-	
-	// Sort by folder name
-	[sortedValues sortUsingFunction:folderSort2 context:NULL];
-	
-	// Add All Folders again
-	NSArray *keyValuePair = [NSArray arrayWithObjects:@"-1", @"All Folders", nil];
-	[sortedValues insertObject:keyValuePair atIndex:0];
-	
-	//DLog(@"keys: %@", [folders allKeys]);
-	//NSMutableArray *keys = [NSMutableArray arrayWithArray:[[folders allKeys] sortedArrayUsingSelector:@selector(compare:)]];
-	//DLog(@"sorted keys: %@", keys);
+		[labels removeAllObjects];
 		
-	// Process the names and create the labels/buttons
-	for (int i = 0; i < [sortedValues count]; i++)
-	{
-		NSString *folder   = [[sortedValues objectAtIndex:i] objectAtIndex:1];
-		NSUInteger tag     = [[[sortedValues objectAtIndex:i] objectAtIndex:0] intValue];
-		CGRect labelFrame  = CGRectMake(0, (i + 1) * 30, self.frame.size.width, 30);
-		CGRect buttonFrame = CGRectMake(0, 0, self.frame.size.width - 10, 20);
-
-		UILabel *folderLabel = [[UILabel alloc] initWithFrame:labelFrame];
-		folderLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		folderLabel.userInteractionEnabled = YES;
-		//folderLabel.alpha = 0.0;
-		if (i % 2 == 0)
-			folderLabel.backgroundColor = lightColor;
-		else
-			folderLabel.backgroundColor = darkColor;
-		folderLabel.textColor = textColor;
-		folderLabel.textAlignment = UITextAlignmentCenter;
-		folderLabel.font = [UIFont boldSystemFontOfSize:20];
-		folderLabel.text = folder;
-		folderLabel.tag = tag;
-		[self addSubview:folderLabel];
-		[labels addObject:folderLabel];
-		[folderLabel release];
+		sizeIncrease = [folders count] * 30.0f;
 		
-		UIButton *folderButton = [[UIButton alloc] initWithFrame:buttonFrame];
-		folderButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		[folderButton addTarget:self action:@selector(selectFolder:) forControlEvents:UIControlEventTouchUpInside];
-		[folderLabel addSubview:folderButton];
-		[folderButton release];
+		NSMutableArray *sortedValues = [NSMutableArray arrayWithCapacity:[folders count]];
+		for (NSNumber *key in [folders allKeys])
+		{
+			if ([key intValue] != -1)
+			{
+				NSArray *keyValuePair = [NSArray arrayWithObjects:key, [folders objectForKey:key], nil];
+				[sortedValues addObject:keyValuePair];
+			}
+		}
+		
+		/*// Sort by folder name - iOS 4.0+ only
+		 [sortedValues sortUsingComparator: ^NSComparisonResult(id keyVal1, id keyVal2) {
+		 NSString *folder1 = [(NSArray*)keyVal1 objectAtIndexSafe:1];
+		 NSString *folder2 = [(NSArray*)keyVal2 objectAtIndexSafe:1];
+		 return [folder1 caseInsensitiveCompare:folder2];
+		 }];*/
+		
+		// Sort by folder name
+		[sortedValues sortUsingFunction:folderSort2 context:NULL];
+		
+		// Add All Folders again
+		NSArray *keyValuePair = [NSArray arrayWithObjects:@"-1", @"All Folders", nil];
+		[sortedValues insertObject:keyValuePair atIndex:0];
+		
+		//DLog(@"keys: %@", [folders allKeys]);
+		//NSMutableArray *keys = [NSMutableArray arrayWithArray:[[folders allKeys] sortedArrayUsingSelector:@selector(compare:)]];
+		//DLog(@"sorted keys: %@", keys);
+		
+		// Process the names and create the labels/buttons
+		for (int i = 0; i < [sortedValues count]; i++)
+		{
+			NSString *folder   = [[sortedValues objectAtIndexSafe:i] objectAtIndexSafe:1];
+			NSUInteger tag     = [[[sortedValues objectAtIndexSafe:i] objectAtIndexSafe:0] intValue];
+			CGRect labelFrame  = CGRectMake(0, (i + 1) * 30, self.frame.size.width, 30);
+			CGRect buttonFrame = CGRectMake(0, 0, self.frame.size.width - 10, 20);
+			
+			UILabel *folderLabel = [[UILabel alloc] initWithFrame:labelFrame];
+			folderLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+			folderLabel.userInteractionEnabled = YES;
+			//folderLabel.alpha = 0.0;
+			if (i % 2 == 0)
+				folderLabel.backgroundColor = lightColor;
+			else
+				folderLabel.backgroundColor = darkColor;
+			folderLabel.textColor = textColor;
+			folderLabel.textAlignment = UITextAlignmentCenter;
+			folderLabel.font = [UIFont boldSystemFontOfSize:20];
+			folderLabel.text = folder;
+			folderLabel.tag = tag;
+			[self addSubview:folderLabel];
+			[labels addObject:folderLabel];
+			[folderLabel release];
+			
+			UIButton *folderButton = [[UIButton alloc] initWithFrame:buttonFrame];
+			folderButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+			[folderButton addTarget:self action:@selector(selectFolder:) forControlEvents:UIControlEventTouchUpInside];
+			[folderLabel addSubview:folderButton];
+			[folderButton release];
+		}
 	}
 }
 

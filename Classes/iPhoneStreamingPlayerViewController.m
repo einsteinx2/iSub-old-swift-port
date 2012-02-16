@@ -34,6 +34,7 @@
 #import "SUSStreamHandler.h"
 #import "NSArray+FirstObject.h"
 #import "UIImageView+Reflection.h"
+#import "NSArray+Additions.h"
 
 #define downloadProgressBorder 4.
 #define downloadProgressWidth (progressSlider.frame.size.width - (downloadProgressBorder * 2))
@@ -41,8 +42,8 @@
 
 @interface iPhoneStreamingPlayerViewController ()
 
-@property (nonatomic, retain) UIImageView *reflectionView;
-@property (nonatomic, retain) NSDictionary *originalViewFrames;
+@property (retain) UIImageView *reflectionView;
+@property (retain) NSDictionary *originalViewFrames;
 
 - (void)setupCoverArt;
 - (void)initSongInfo;
@@ -682,7 +683,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	NSArray *viewControllers = self.navigationController.viewControllers;
 	NSInteger count = [viewControllers count];
 	
-	UIViewController *backVC = [viewControllers objectAtIndex:(count - 2)];
+	UIViewController *backVC = [viewControllers objectAtIndexSafe:(count - 2)];
 	
 	[self.navigationController popToViewController:backVC animated:YES];
 }
@@ -948,7 +949,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong byteOffset:byteOffset secondsOffset:progressSlider.value atIndex:0 isTempCache:YES];
 			if ([[SUSStreamSingleton sharedInstance].handlerStack count] > 1)
 			{
-				SUSStreamHandler *handler = [[SUSStreamSingleton sharedInstance].handlerStack firstObject];
+				SUSStreamHandler *handler = [[SUSStreamSingleton sharedInstance].handlerStack firstObjectSafe];
 				[handler start];
 			}
 			
@@ -1029,7 +1030,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	bookmarkNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 22.0)];
 	[bookmarkNameTextField setBackgroundColor:[UIColor whiteColor]];
 	[myAlertView addSubview:bookmarkNameTextField];
-	if ([[[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."] objectAtIndex:0] isEqualToString:@"3"])
+	if ([[[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."] objectAtIndexSafe:0] isEqualToString:@"3"])
 	{
 		CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 100.0);
 		[myAlertView setTransform:myTransform];
@@ -1064,7 +1065,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong byteOffset:byteOffset secondsOffset:progressSlider.value atIndex:0 isTempCache:YES];
 			if ([[SUSStreamSingleton sharedInstance].handlerStack count] > 1)
 			{
-				SUSStreamHandler *handler = [[SUSStreamSingleton sharedInstance].handlerStack firstObject];
+				SUSStreamHandler *handler = [[SUSStreamSingleton sharedInstance].handlerStack firstObjectSafe];
 				[handler start];
 			}
 			pauseSlider = NO;

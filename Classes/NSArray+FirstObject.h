@@ -9,5 +9,6 @@
 @interface NSArray (FirstObject)
 
 - (id)firstObject;
+- (id)firstObjectSafe;
 
 @end

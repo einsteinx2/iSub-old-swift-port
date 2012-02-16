@@ -14,8 +14,8 @@
 
 @property (readonly) FMDatabase *db;
 
-@property (nonatomic, assign) NSObject <SUSLoaderDelegate> *delegate;
-@property (nonatomic, retain) SUSLyricsLoader *loader;
+@property (assign) NSObject <SUSLoaderDelegate> *delegate;
+@property (retain) SUSLyricsLoader *loader;
 
 - (id)initWithDelegate:(NSObject <SUSLoaderDelegate> *)theDelegate;
 - (NSString *)loadLyricsForArtist:(NSString *)artist andTitle:(NSString *)title;

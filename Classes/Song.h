@@ -10,21 +10,21 @@
 
 @interface Song : NSObject <NSCoding, NSCopying> 
 
-@property (nonatomic, copy) NSString *title;
-@property (nonatomic, copy) NSString *songId;
-@property (nonatomic, copy) NSString *parentId;
-@property (nonatomic, copy) NSString *artist;
-@property (nonatomic, copy) NSString *album;
-@property (nonatomic, copy) NSString *genre;
-@property (nonatomic, copy) NSString *coverArtId;
-@property (nonatomic, copy) NSString *path;
-@property (nonatomic, copy) NSString *suffix;
-@property (nonatomic, copy) NSString *transcodedSuffix;
-@property (nonatomic, copy) NSNumber *duration;
-@property (nonatomic, copy) NSNumber *bitRate;
-@property (nonatomic, copy) NSNumber *track;
-@property (nonatomic, copy) NSNumber *year;
-@property (nonatomic, copy) NSNumber *size;
+@property (copy) NSString *title;
+@property (copy) NSString *songId;
+@property (copy) NSString *parentId;
+@property (copy) NSString *artist;
+@property (copy) NSString *album;
+@property (copy) NSString *genre;
+@property (copy) NSString *coverArtId;
+@property (copy) NSString *path;
+@property (copy) NSString *suffix;
+@property (copy) NSString *transcodedSuffix;
+@property (copy) NSNumber *duration;
+@property (copy) NSNumber *bitRate;
+@property (copy) NSNumber *track;
+@property (copy) NSNumber *year;
+@property (copy) NSNumber *size;
 
 @property (readonly) NSString *localSuffix;
 @property (readonly) NSString *localPath;

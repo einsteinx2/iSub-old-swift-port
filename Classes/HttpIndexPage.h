@@ -17,6 +17,6 @@
     NSString *documentsDirectory;
 }
 
-@property (nonatomic, retain) NSString *documentsDirectory;
+@property (retain) NSString *documentsDirectory;
 
 @end

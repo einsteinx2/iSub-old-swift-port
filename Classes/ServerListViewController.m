@@ -25,6 +25,7 @@
 #import "AudioEngine.h"
 #import "SUSAllSongsLoader.h"
 #import "SUSStreamSingleton.h"
+#import "NSArray+Additions.h"
 
 @implementation ServerListViewController
 
@@ -76,7 +77,7 @@
 	//DLog(@"tempServerList: %@", viewObjects.tempServerList);
 	
 	self.title = @"Servers";
-	if(self != [[self.navigationController viewControllers] objectAtIndex:0])
+	if(self != [[self.navigationController viewControllers] objectAtIndexSafe:0])
 		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(saveAction:)] autorelease];
 	self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	
@@ -122,7 +123,7 @@
 {
 	if(!isEditing)
 	{
-		if(self != [[self.navigationController viewControllers] objectAtIndex:0])
+		if(self != [[self.navigationController viewControllers] objectAtIndexSafe:0])
 			self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(saveAction:)] autorelease];
 		
 	}
@@ -264,7 +265,7 @@
 	DLog(@"settings.urlString: %@   settings.redirectUrlString: %@", settings.urlString, settings.redirectUrlString);
 		
 	[self retain];
-	if(self == [[self.navigationController viewControllers] objectAtIndex:0])
+	if(self == [[self.navigationController viewControllers] objectAtIndexSafe:0])
 	{
 		[self.navigationController.view removeFromSuperview];
 	}
@@ -355,7 +356,7 @@
 	
 	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 	
-	Server *aServer = [settings.serverList objectAtIndex:indexPath.row];
+	Server *aServer = [settings.serverList objectAtIndexSafe:indexPath.row];
 	
 	// Set up the cell...
 	UILabel *serverNameLabel = [[UILabel alloc] init];
@@ -419,7 +420,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	viewObjects.serverToEdit = [settings.serverList objectAtIndex:indexPath.row];
+	viewObjects.serverToEdit = [settings.serverList objectAtIndexSafe:indexPath.row];
 	DLog(@"viewObjects.serverToEdit.url: %@", viewObjects.serverToEdit.url);
 
 	if (isEditing)
@@ -450,7 +451,7 @@
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath 
 {
-	NSArray *server = [[settings.serverList objectAtIndex:fromIndexPath.row] retain];
+	NSArray *server = [[settings.serverList objectAtIndexSafe:fromIndexPath.row] retain];
 	[settings.serverList removeObjectAtIndex:fromIndexPath.row];
 	[settings.serverList insertObject:server atIndex:toIndexPath.row];
 	[server release];
@@ -467,7 +468,7 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) 
 	{
 		// Alert user to select new default server if they deleting the default
-		if ([settings.urlString isEqualToString:[(Server *)[settings.serverList objectAtIndex:indexPath.row] url]])
+		if ([settings.urlString isEqualToString:[(Server *)[settings.serverList objectAtIndexSafe:indexPath.row] url]])
 		{
 			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Make sure to select a new server" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 			alert.tag = 4;

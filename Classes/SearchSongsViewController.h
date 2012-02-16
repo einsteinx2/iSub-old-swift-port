@@ -39,16 +39,16 @@
 	NSURLConnection *connection;
 }
 
-@property (nonatomic, retain) NSString *query;
+@property (retain) NSString *query;
 @property NSUInteger searchType;
 
-@property (nonatomic, retain) NSMutableArray *listOfArtists;
-@property (nonatomic, retain) NSMutableArray *listOfAlbums;
-@property (nonatomic, retain) NSMutableArray *listOfSongs;
+@property (retain) NSMutableArray *listOfArtists;
+@property (retain) NSMutableArray *listOfAlbums;
+@property (retain) NSMutableArray *listOfSongs;
 
 @property NSUInteger offset;
 @property BOOL isMoreResults;
 
-@property (nonatomic, retain) NSURLConnection *connection;
+@property (retain) NSURLConnection *connection;
 
 @end

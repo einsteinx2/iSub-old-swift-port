@@ -12,11 +12,11 @@
 
 @interface AllSongsUITableViewCell : CustomUITableViewCell 
 
-@property (nonatomic, retain) NSString *md5;
+@property (retain) NSString *md5;
 
-@property (nonatomic, retain) AsynchronousImageViewCached *coverArtView;
-@property (nonatomic, retain) UIScrollView *songNameScrollView;
-@property (nonatomic, retain) UILabel *songNameLabel;
-@property (nonatomic, retain) UILabel *artistNameLabel;
+@property (retain) AsynchronousImageViewCached *coverArtView;
+@property (retain) UIScrollView *songNameScrollView;
+@property (retain) UILabel *songNameLabel;
+@property (retain) UILabel *artistNameLabel;
 
 @end

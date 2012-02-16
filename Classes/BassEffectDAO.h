@@ -19,7 +19,7 @@ typedef enum
 
 @property BassEffectType type;
 @property (readonly) NSArray *presetsArray;
-@property (nonatomic, retain) NSDictionary *presets;
+@property (retain) NSDictionary *presets;
 @property (readonly) NSArray *userPresetsArray;
 @property (readonly) NSArray *userPresetsArrayMinusCustom;
 @property (readonly) NSDictionary *userPresets;

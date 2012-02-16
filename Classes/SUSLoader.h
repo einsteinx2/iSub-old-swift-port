@@ -13,9 +13,10 @@
 
 @interface SUSLoader : NSObject <NSURLConnectionDelegate>
 
-@property (nonatomic, retain) NSURLConnection *connection;
-@property (nonatomic, retain) NSMutableData *receivedData;
-@property (nonatomic, assign) NSObject<SUSLoaderDelegate> *delegate;
+@property (assign) NSObject<SUSLoaderDelegate> *delegate;
+
+@property (retain) NSURLConnection *connection;
+@property (retain) NSMutableData *receivedData;
 @property (readonly) NSError *loadError;
 @property (readonly) SUSLoaderType type;
 

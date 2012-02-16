@@ -13,9 +13,9 @@
 
 @property (readonly) FMDatabase *db;
 
-@property (nonatomic, copy) NSString *artist;
-@property (nonatomic, copy) NSString *title;
+@property (copy) NSString *artist;
+@property (copy) NSString *title;
 
-@property (nonatomic, copy) NSString *loadedLyrics;
+@property (copy) NSString *loadedLyrics;
 
 @end

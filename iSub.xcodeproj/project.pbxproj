@@ -84,6 +84,9 @@
 		531F1597126F711100F524BD /* HomeXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F1596126F711100F524BD /* HomeXMLParser.m */; };
 		531F166E126FA2E600F524BD /* HomeAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F166D126FA2E600F524BD /* HomeAlbumViewController.m */; };
 		5324C6C613345D75004E6C79 /* OBSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5324C6C513345D75004E6C79 /* OBSlider.m */; };
+		532590D614EC840D00DF4BDB /* NSArray+Safe.m in Sources */ = {isa = PBXBuildFile; fileRef = 532590D514EC840D00DF4BDB /* NSArray+Safe.m */; };
+		532590D714EC840D00DF4BDB /* NSArray+Safe.m in Sources */ = {isa = PBXBuildFile; fileRef = 532590D514EC840D00DF4BDB /* NSArray+Safe.m */; };
+		532590D814EC840D00DF4BDB /* NSArray+Safe.m in Sources */ = {isa = PBXBuildFile; fileRef = 532590D514EC840D00DF4BDB /* NSArray+Safe.m */; };
 		53260B83127D012300B745B4 /* EGORefreshTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53260B78127D012300B745B4 /* EGORefreshTableHeaderView.m */; };
 		53260B84127D012300B745B4 /* blackArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7A127D012300B745B4 /* blackArrow.png */; };
 		53260B85127D012300B745B4 /* blackArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7B127D012300B745B4 /* blackArrow@2x.png */; };
@@ -2116,6 +2119,9 @@
 		531F166D126FA2E600F524BD /* HomeAlbumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeAlbumViewController.m; sourceTree = "<group>"; };
 		5324C6C413345D75004E6C79 /* OBSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBSlider.h; sourceTree = "<group>"; };
 		5324C6C513345D75004E6C79 /* OBSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OBSlider.m; sourceTree = "<group>"; };
+		532590D414EC840D00DF4BDB /* NSArray+Safe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Safe.h"; sourceTree = "<group>"; };
+		532590D514EC840D00DF4BDB /* NSArray+Safe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Safe.m"; sourceTree = "<group>"; };
+		532590DA14EC862B00DF4BDB /* NSArray+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Additions.h"; sourceTree = "<group>"; };
 		53260B77127D012300B745B4 /* EGORefreshTableHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EGORefreshTableHeaderView.h; path = Classes/View/EGORefreshTableHeaderView.h; sourceTree = "<group>"; };
 		53260B78127D012300B745B4 /* EGORefreshTableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EGORefreshTableHeaderView.m; path = Classes/View/EGORefreshTableHeaderView.m; sourceTree = "<group>"; };
 		53260B7A127D012300B745B4 /* blackArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blackArrow.png; sourceTree = "<group>"; };
@@ -3339,6 +3345,18 @@
 			name = MGSplitViewController;
 			sourceTree = "<group>";
 		};
+		532590D914EC860100DF4BDB /* NSArray */ = {
+			isa = PBXGroup;
+			children = (
+				532590DA14EC862B00DF4BDB /* NSArray+Additions.h */,
+				532590D414EC840D00DF4BDB /* NSArray+Safe.h */,
+				532590D514EC840D00DF4BDB /* NSArray+Safe.m */,
+				53B38BCE1474C14200CD8A99 /* NSArray+FirstObject.h */,
+				53B38BCF1474C14200CD8A99 /* NSArray+FirstObject.m */,
+			);
+			name = NSArray;
+			sourceTree = "<group>";
+		};
 		53260B71127D012300B745B4 /* EGOTableViewPullRefresh */ = {
 			isa = PBXGroup;
 			children = (
@@ -3871,13 +3889,12 @@
 		5382A81812D82CE8005A3D1A /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				532590D914EC860100DF4BDB /* NSArray */,
 				53A7652914AE9A53004253D1 /* NSString */,
 				53B20D2C12C27CE000A90DD9 /* UIView+tools.h */,
 				53B20D2D12C27CE000A90DD9 /* UIView+tools.m */,
 				5382BA8B12DA4038005A3D1A /* UIDevice+Hardware.h */,
 				5382BA8C12DA4039005A3D1A /* UIDevice+Hardware.m */,
-				53B38BCE1474C14200CD8A99 /* NSArray+FirstObject.h */,
-				53B38BCF1474C14200CD8A99 /* NSArray+FirstObject.m */,
 				531B6D72147C416B00BA28B9 /* NSNotificationCenter+MainThread.h */,
 				531B6D73147C416B00BA28B9 /* NSNotificationCenter+MainThread.m */,
 				5365ABE214AFB05100C0958D /* UIDevice+Software.h */,
@@ -6305,6 +6322,7 @@
 				53A7495D14E47826000AC636 /* UIImageView+Reflection.m in Sources */,
 				53C4407B14E87FD100A7DC41 /* SupportForumViewController.m in Sources */,
 				53C4408314E88C2200A7DC41 /* NSObject+ListMethods.m in Sources */,
+				532590D614EC840D00DF4BDB /* NSArray+Safe.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6615,6 +6633,7 @@
 				53A7495F14E47826000AC636 /* UIImageView+Reflection.m in Sources */,
 				53C4407D14E87FD100A7DC41 /* SupportForumViewController.m in Sources */,
 				53C4408514E88C2200A7DC41 /* NSObject+ListMethods.m in Sources */,
+				532590D814EC840D00DF4BDB /* NSArray+Safe.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6925,6 +6944,7 @@
 				53A7495E14E47826000AC636 /* UIImageView+Reflection.m in Sources */,
 				53C4407C14E87FD100A7DC41 /* SupportForumViewController.m in Sources */,
 				53C4408414E88C2200A7DC41 /* NSObject+ListMethods.m in Sources */,
+				532590D714EC840D00DF4BDB /* NSArray+Safe.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

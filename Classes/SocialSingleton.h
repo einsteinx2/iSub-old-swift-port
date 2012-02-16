@@ -15,7 +15,7 @@
 	SA_OAuthTwitterEngine *twitterEngine;
 }
 
-@property (nonatomic, retain) SA_OAuthTwitterEngine *twitterEngine;
+@property (retain) SA_OAuthTwitterEngine *twitterEngine;
 
 + (SocialSingleton*)sharedInstance;
 

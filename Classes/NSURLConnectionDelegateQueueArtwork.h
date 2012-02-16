@@ -20,7 +20,7 @@
 	BOOL is320;
 }
 
-@property (nonatomic, retain) NSMutableData *receivedData;
+@property (retain) NSMutableData *receivedData;
 @property BOOL is320;
 
 

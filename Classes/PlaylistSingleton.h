@@ -24,6 +24,7 @@ typedef enum
 + (PlaylistSingleton *)sharedInstance;
 
 - (Song *)songForIndex:(NSUInteger)index;
+- (NSInteger)decrementIndex;
 - (NSInteger)incrementIndex;
 // Convenience properties
 @property (readonly) Song *prevSong;
@@ -35,6 +36,7 @@ typedef enum
 @property NSInteger normalIndex;
 
 @property NSInteger currentIndex;
+@property (readonly) NSInteger prevIndex;
 @property (readonly) NSInteger nextIndex;
 @property (readonly) NSUInteger count;
 

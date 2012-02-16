@@ -42,7 +42,7 @@
 	UILabel *songLabel;
 }
 
-@property (nonatomic, retain) NSMutableData *receivedData;
+@property (retain) NSMutableData *receivedData;
 
 - (IBAction)quickAlbums;
 - (IBAction)serverShuffle;

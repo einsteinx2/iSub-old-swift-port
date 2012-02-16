@@ -16,7 +16,7 @@
 #import "NSURLConnectionDelegateQueueArtwork.h"
 #import "CustomUIAlertView.h"
 #import "NSMutableURLRequest+SUS.h"
-
+#import "NSArray+Additions.h"
 
 @implementation NSURLConnectionDelegateQueue
 
@@ -104,7 +104,7 @@
 			}
 			
 			NSString *query = [NSString stringWithFormat:@"REPLACE INTO cachedSongsLayout (md5, genre, segs, seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9) VALUES ('%@', '%@', %i, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [musicControls.queueSongObject.path md5], musicControls.queueSongObject.genre, [splitPath count]];
-			[databaseControls.songCacheDb executeUpdate:query, [segments objectAtIndex:0], [segments objectAtIndex:1], [segments objectAtIndex:2], [segments objectAtIndex:3], [segments objectAtIndex:4], [segments objectAtIndex:5], [segments objectAtIndex:6], [segments objectAtIndex:7], [segments objectAtIndex:8]];
+			[databaseControls.songCacheDb executeUpdate:query, [segments objectAtIndexSafe:0], [segments objectAtIndexSafe:1], [segments objectAtIndexSafe:2], [segments objectAtIndexSafe:3], [segments objectAtIndexSafe:4], [segments objectAtIndexSafe:5], [segments objectAtIndexSafe:6], [segments objectAtIndexSafe:7], [segments objectAtIndexSafe:8]];
 			
 			[segments release];
 		}

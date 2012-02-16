@@ -15,7 +15,7 @@
 	BassParamEqValue *eqValue;
 }
 
-@property (nonatomic, retain) BassParamEqValue *eqValue;
+@property (retain) BassParamEqValue *eqValue;
 @property (readonly) NSUInteger frequency;
 @property (readonly) CGFloat gain;
 @property (readonly) HFX handle;

@@ -24,9 +24,9 @@
 	NSUInteger numberOfPages;
 }
 
-@property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
-@property (nonatomic, retain) IBOutlet UIPageControl *pageControl;
-@property (nonatomic, retain) NSMutableArray *viewControllers;
+@property (retain) IBOutlet UIScrollView *scrollView;
+@property (retain) IBOutlet UIPageControl *pageControl;
+@property (retain) NSMutableArray *viewControllers;
 
 
 - (IBAction)changePage:(id)sender;

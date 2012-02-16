@@ -12,9 +12,9 @@
 
 @interface ArtistUITableViewCell : CustomUITableViewCell 
 
-@property (nonatomic, retain) UIScrollView *artistNameScrollView;
-@property (nonatomic, retain) UILabel *artistNameLabel;
+@property (retain) UIScrollView *artistNameScrollView;
+@property (retain) UILabel *artistNameLabel;
 
-@property (nonatomic, retain) Artist *myArtist;
+@property (retain) Artist *myArtist;
 
 @end

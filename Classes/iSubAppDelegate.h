@@ -58,33 +58,33 @@
 
 // Main interface elements for iPhone
 //
-@property (nonatomic, retain) IBOutlet UIImageView *background;
-@property (nonatomic, retain) UITabBarController *currentTabBarController;
-@property (nonatomic, retain) IBOutlet UITabBarController *mainTabBarController;
-@property (nonatomic, retain) IBOutlet UITabBarController *offlineTabBarController;
-@property (nonatomic, retain) IBOutlet UINavigationController *homeNavigationController;
-@property (nonatomic, retain) IBOutlet UINavigationController *playerNavigationController;
-@property (nonatomic, retain) IBOutlet UINavigationController *artistsNavigationController;
-@property (nonatomic, retain) IBOutlet RootViewController *rootViewController;
-@property (nonatomic, retain) IBOutlet UINavigationController *allAlbumsNavigationController;
-@property (nonatomic, retain) IBOutlet UINavigationController *allSongsNavigationController;
-@property (nonatomic, retain) IBOutlet UINavigationController *playlistsNavigationController;
-@property (nonatomic, retain) IBOutlet UINavigationController *bookmarksNavigationController;
-@property (nonatomic, retain) IBOutlet UINavigationController *playingNavigationController;
-@property (nonatomic, retain) IBOutlet UINavigationController *genresNavigationController;
-@property (nonatomic, retain) IBOutlet UINavigationController *cacheNavigationController;
-@property (nonatomic, retain) IBOutlet UINavigationController *chatNavigationController;
-@property (nonatomic, retain) UINavigationController *supportNavigationController;
+@property (retain) IBOutlet UIImageView *background;
+@property (retain) UITabBarController *currentTabBarController;
+@property (retain) IBOutlet UITabBarController *mainTabBarController;
+@property (retain) IBOutlet UITabBarController *offlineTabBarController;
+@property (retain) IBOutlet UINavigationController *homeNavigationController;
+@property (retain) IBOutlet UINavigationController *playerNavigationController;
+@property (retain) IBOutlet UINavigationController *artistsNavigationController;
+@property (retain) IBOutlet RootViewController *rootViewController;
+@property (retain) IBOutlet UINavigationController *allAlbumsNavigationController;
+@property (retain) IBOutlet UINavigationController *allSongsNavigationController;
+@property (retain) IBOutlet UINavigationController *playlistsNavigationController;
+@property (retain) IBOutlet UINavigationController *bookmarksNavigationController;
+@property (retain) IBOutlet UINavigationController *playingNavigationController;
+@property (retain) IBOutlet UINavigationController *genresNavigationController;
+@property (retain) IBOutlet UINavigationController *cacheNavigationController;
+@property (retain) IBOutlet UINavigationController *chatNavigationController;
+@property (retain) UINavigationController *supportNavigationController;
 
 // Main interface elements for iPad
 //
-@property (nonatomic, retain) IBOutlet MGSplitViewController *splitView;
-@property (nonatomic, retain) IBOutlet iPadMainMenu *mainMenu;
-@property (nonatomic, retain) IBOutlet InitialDetailViewController *initialDetail;
+@property (retain) IBOutlet MGSplitViewController *splitView;
+@property (retain) IBOutlet iPadMainMenu *mainMenu;
+@property (retain) IBOutlet InitialDetailViewController *initialDetail;
 
 // Network connectivity objects and variables
 //
-@property (nonatomic, retain) Reachability *wifiReach;
+@property (retain) Reachability *wifiReach;
 @property (readonly) BOOL isWifi;
 
 // Multitasking stuff

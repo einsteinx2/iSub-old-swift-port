@@ -20,7 +20,7 @@
 #import "NSString+time.h"
 #import "PlaylistSingleton.h"
 #import "AudioEngine.h"
-
+#import "NSArray+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
 
 @implementation CurrentPlaylistViewController
@@ -49,7 +49,6 @@
 	{
 		viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 		//viewObjects.multiDeleteList = nil; viewObjects.multiDeleteList = [[NSMutableArray alloc] init];
-		goToNextSong = NO;
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
@@ -247,23 +246,6 @@
 		editPlaylistLabel.backgroundColor = [UIColor clearColor];
 		editPlaylistLabel.text = @"Edit";
 		
-		if (goToNextSong)
-		{
-			goToNextSong = NO;
-			if ([AudioEngine sharedInstance].isPlaying)
-			{
-				if ([databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"] > 0)
-				{
-					[musicControls nextSong];
-				}
-				else
-				{
-                    [[AudioEngine sharedInstance] stop];
-					// Pop to root view controller doesn't work for nav controllers inside more tab //
-				}
-			}
-		}
-		
 		// Reload the table to correct the numbers
 		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 
@@ -348,7 +330,7 @@
 			[playlistNameTextField setBackgroundColor:[UIColor whiteColor]];
 			[myAlertView addSubview:playlistNameTextField];
 			[playlistNameTextField release];
-			if ([[[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."] objectAtIndex:0] isEqualToString:@"3"])
+			if ([[[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."] objectAtIndexSafe:0] isEqualToString:@"3"])
 			{
 				CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 100.0);
 				[myAlertView setTransform:myTransform];

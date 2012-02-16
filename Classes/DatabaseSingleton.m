@@ -24,6 +24,7 @@
 #import "GTMNSString+HTML.h"
 #import "PlaylistSingleton.h"
 #import "SUSStreamSingleton.h"
+#import "NSArray+Additions.h"
 
 static DatabaseSingleton *sharedInstance = nil;
 
@@ -361,8 +362,8 @@ static DatabaseSingleton *sharedInstance = nil;
 	NSString *columnName = @"parentId";
 	for (int i = 0; i < [parentIdDatabases count]; i++)
 	{
-		FMDatabase *db = [parentIdDatabases objectAtIndex:i];
-		NSString *table = [parentIdTables objectAtIndex:i];
+		FMDatabase *db = [parentIdDatabases objectAtIndexSafe:i];
+		NSString *table = [parentIdTables objectAtIndexSafe:i];
 		
 		if (![db columnExists:table columnName:columnName])
 		{
@@ -667,11 +668,11 @@ static DatabaseSingleton *sharedInstance = nil;
 	for (NSString *title in sectionTitles)
 	{
 		NSString *row;
-		row = [database stringForQuery:[NSString stringWithFormat:@"SELECT ROWID FROM %@ WHERE %@ LIKE '%@%%' LIMIT 1", table, column, [sectionTitles objectAtIndex:i]]];
-		//DLog(@"%@", [NSString stringWithFormat:@"SELECT ROWID FROM %@ WHERE %@ LIKE '%@%%' LIMIT 1", table, column, [sectionTitles objectAtIndex:i]]);
+		row = [database stringForQuery:[NSString stringWithFormat:@"SELECT ROWID FROM %@ WHERE %@ LIKE '%@%%' LIMIT 1", table, column, [sectionTitles objectAtIndexSafe:i]]];
+		//DLog(@"%@", [NSString stringWithFormat:@"SELECT ROWID FROM %@ WHERE %@ LIKE '%@%%' LIMIT 1", table, column, [sectionTitles objectAtIndexSafe:i]]);
 		if (row != nil)
 		{
-			[sections addObject:[NSArray arrayWithObjects:[sectionTitles objectAtIndex:i], [NSNumber numberWithInt:([row intValue] - 1)], nil]];
+			[sections addObject:[NSArray arrayWithObjects:[sectionTitles objectAtIndexSafe:i], [NSNumber numberWithInt:([row intValue] - 1)], nil]];
 		}
 		
 		i++;
@@ -679,7 +680,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	
 	if ([sections count] > 0)
 	{
-		if ([[[sections objectAtIndex:0] objectAtIndex:1] intValue] > 0)
+		if ([[[sections objectAtIndexSafe:0] objectAtIndexSafe:1] intValue] > 0)
 		{
 			[sections insertObject:[NSArray arrayWithObjects:@"#", [NSNumber numberWithInt:0], nil] atIndex:0];
 		}
@@ -852,7 +853,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	queueAll = nil;
 	
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	self.databaseFolderPath = [[paths objectAtIndex: 0] stringByAppendingPathComponent:@"database"];
+	self.databaseFolderPath = [[paths objectAtIndexSafe: 0] stringByAppendingPathComponent:@"database"];
 	
 	// Make sure database directory exists, if not create them
 	BOOL isDir = YES;

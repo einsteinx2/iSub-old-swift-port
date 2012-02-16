@@ -10,9 +10,9 @@
 
 @interface GenresArtistUITableViewCell : CustomUITableViewCell 
 
-@property (nonatomic, retain) NSString *genre;
+@property (retain) NSString *genre;
 
-@property (nonatomic, retain) UIScrollView *artistNameScrollView;
-@property (nonatomic, retain) UILabel *artistNameLabel;
+@property (retain) UIScrollView *artistNameScrollView;
+@property (retain) UILabel *artistNameLabel;
 
 @end

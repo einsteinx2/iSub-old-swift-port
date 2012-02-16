@@ -27,7 +27,7 @@
 #import "NSError+ISMSError.h"
 #import "FlurryAnalytics.h"
 #import "SeparaterView.h"
-
+#import "NSArray+Additions.h"
 
 @interface ChatViewController (Private)
 - (void)dataSourceDidFinishLoadingNewData;
@@ -323,7 +323,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
 	// Automatically set the height based on the height of the message text
-	ChatMessage *aChatMessage = [dataModel.chatMessages objectAtIndex:indexPath.row];
+	ChatMessage *aChatMessage = [dataModel.chatMessages objectAtIndexSafe:indexPath.row];
 	CGSize expectedLabelSize = [aChatMessage.message sizeWithFont:[UIFont systemFontOfSize:20] constrainedToSize:CGSizeMake(310,CGFLOAT_MAX) lineBreakMode:UILineBreakModeWordWrap];
 	if (expectedLabelSize.height < 40)
 		expectedLabelSize.height = 40;
@@ -366,7 +366,7 @@
 	ChatUITableViewCell *cell = [[[ChatUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 	
     // Set up the cell...
-	ChatMessage *aChatMessage = [dataModel.chatMessages objectAtIndex:indexPath.row];
+	ChatMessage *aChatMessage = [dataModel.chatMessages objectAtIndexSafe:indexPath.row];
 	cell.userNameLabel.text = [NSString stringWithFormat:@"%@ - %@", aChatMessage.user, [self formatDate:aChatMessage.timestamp]];
 	cell.messageLabel.text = aChatMessage.message;
 	

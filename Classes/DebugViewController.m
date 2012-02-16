@@ -15,7 +15,7 @@
 #import "NSString+Additions.h"
 
 @implementation DebugViewController
-@synthesize currentSong, nextSong;
+@synthesize currentSong, nextSong, currentSongProgress, nextSongProgress;
 
 #pragma mark - Lifecycle
 
@@ -32,17 +32,17 @@
 		
 	if (settings.isCacheUnlocked)
 	{
-		// Set the fields
-		[self updateStatsInBackground];
-		
-		// Setup the update timer
-		updateTimer = [NSTimer scheduledTimerWithTimeInterval:1. target:self selector:@selector(updateStatsInBackground) userInfo:nil repeats:YES];
-		
 		// Cache the song objects
 		[self cacheSongObjects];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cacheSongObjects) name:ISMSNotification_SongPlaybackStarted object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cacheSongObjects) name:ISMSNotification_SongPlaybackEnded object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cacheSongObjects) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cacheSongObjects) 
+													 name:ISMSNotification_SongPlaybackStarted object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cacheSongObjects) 
+													 name:ISMSNotification_SongPlaybackEnded object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cacheSongObjects) 
+													 name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
+		
+		// Set the fields
+		[self updateStats];
 	}
 	else
 	{
@@ -82,7 +82,7 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {	
-	[updateTimer invalidate]; updateTimer = nil;
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
 	[currentSongProgressView release]; currentSongProgressView = nil;
 	[nextSongLabel release]; nextSongLabel = nil;
@@ -120,33 +120,19 @@
 {
 	self.currentSong = [PlaylistSingleton sharedInstance].currentDisplaySong;
 	self.nextSong = [PlaylistSingleton sharedInstance].nextSong;
-	//DLog(@"currentSong: %@", self.currentSong);
 }
-
-- (void)updateStatsInBackground
-{
-	[self performSelectorInBackground:@selector(updateStats) withObject:nil];
-}
-
+		 
 - (void)updateStats
 {
-	@autoreleasepool 
+	if (!settings.isJukeboxEnabled)
 	{
-		if (!settings.isJukeboxEnabled)
-		{
-			// Set the current song progress bar
-			if (![self.currentSong isTempCached])
-				currentSongProgress = currentSong.downloadProgress;
-			
-			nextSongProgress = nextSong.downloadProgress;
-		}
+		// Set the current song progress bar
+		if (![self.currentSong isTempCached])
+			currentSongProgress = self.currentSong.downloadProgress;
 		
-		[self performSelectorOnMainThread:@selector(updateStatsInternal) withObject:nil waitUntilDone:NO];
+		nextSongProgress = self.nextSong.downloadProgress;
 	}
-}
-			 
-- (void)updateStatsInternal
-{
+	
 	if (settings.isJukeboxEnabled)
 	{
 		currentSongProgressView.progress = 0.0;
@@ -211,9 +197,11 @@
 	
 	// Set the cache size label
 	cacheSizeLabel.text = [NSString formatFileSize:cacheControls.cacheSize];
+	
+	[self performSelector:@selector(updateStats) withObject:nil afterDelay:1.0];
 }
 
-- (IBAction) songInfoToggle
+- (IBAction)songInfoToggle
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"hideSongInfo" object:nil];
 }

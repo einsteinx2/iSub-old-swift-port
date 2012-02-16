@@ -17,10 +17,10 @@
 	SKProduct *myProduct;
 }
 
-@property (nonatomic, retain) SKProduct *myProduct;
+@property (retain) SKProduct *myProduct;
 
-@property (nonatomic, retain) UILabel *titleLabel;
-@property (nonatomic, retain) UILabel *descLabel;
-@property (nonatomic, retain) UILabel *priceLabel;
+@property (retain) UILabel *titleLabel;
+@property (retain) UILabel *descLabel;
+@property (retain) UILabel *priceLabel;
 
 @end

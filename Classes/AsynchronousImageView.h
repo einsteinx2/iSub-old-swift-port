@@ -22,7 +22,7 @@
 	BOOL isForPlayer;
 }
 
-@property (nonatomic, retain) NSString *coverArtId;
+@property (retain) NSString *coverArtId;
 @property BOOL isForPlayer;
 
 - (void)loadImageFromCoverArtId:(NSString *)artId isForPlayer:(BOOL)isPlayer;

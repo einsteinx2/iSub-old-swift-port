@@ -10,6 +10,7 @@
 #import "iSubAppDelegate.h"
 #import "NSString+md5.h"
 #import "SUSRootFoldersDAO.h"
+#import "NSArray+Additions.h"
 
 @implementation ShuffleFolderPickerViewController
 
@@ -41,8 +42,8 @@
 
 NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
 {
-    NSString *folder1 = [(NSArray*)keyVal1 objectAtIndex:1];
-	NSString *folder2 = [(NSArray*)keyVal2 objectAtIndex:1];
+    NSString *folder1 = [(NSArray*)keyVal1 objectAtIndexSafe:1];
+	NSString *folder2 = [(NSArray*)keyVal2 objectAtIndexSafe:1];
 	return [folder1 caseInsensitiveCompare:folder2];
 }
 
@@ -76,8 +77,8 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
 	
 	/*// Sort by folder name -- iOS 4.0+ only
 	[sortedFolders sortUsingComparator: ^NSComparisonResult(id keyVal1, id keyVal2) {
-		NSString *folder1 = [(NSArray*)keyVal1 objectAtIndex:1];
-		NSString *folder2 = [(NSArray*)keyVal2 objectAtIndex:1];
+		NSString *folder1 = [(NSArray*)keyVal1 objectAtIndexSafe:1];
+		NSString *folder2 = [(NSArray*)keyVal2 objectAtIndexSafe:1];
 		return [folder1 caseInsensitiveCompare:folder2];
 	}];*/
 	
@@ -147,8 +148,8 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    NSString *folder   = [[sortedFolders objectAtIndex:indexPath.row] objectAtIndex:1];
-	NSUInteger tag     = [[[sortedFolders objectAtIndex:indexPath.row] objectAtIndex:0] intValue];
+    NSString *folder   = [[sortedFolders objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1];
+	NSUInteger tag     = [[[sortedFolders objectAtIndexSafe:indexPath.row] objectAtIndexSafe:0] intValue];
 	
 	cell.textLabel.text = folder;
 	cell.tag = tag;

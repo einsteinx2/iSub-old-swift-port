@@ -23,9 +23,9 @@
 	ViewObjectsSingleton *viewObjects;
 }
 
-@property (nonatomic, retain) NSString *myId;
+@property (retain) NSString *myId;
 
-@property (nonatomic, retain) NSMutableArray *listOfAlbums;
+@property (retain) NSMutableArray *listOfAlbums;
 
 - (HomeXMLParser *) initXMLParser;
 

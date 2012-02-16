@@ -10,8 +10,8 @@
 
 @interface EqualizerPathView : UIView
 
-@property (nonatomic, retain) UIBezierPath *path;
+@property (retain) UIBezierPath *path;
 
-@property (nonatomic, retain) NSArray *points;
+@property (retain) NSArray *points;
 
 @end

@@ -40,7 +40,6 @@
 	{
         [self setup];
 		delegate = theDelegate;
-        //DLog(@"init with delegate %@", delegate);
 	}
 	
 	return self;
@@ -94,25 +93,25 @@
 
 - (BOOL)informDelegateLoadingFailed:(NSError *)error
 {
-	if ([delegate respondsToSelector:@selector(loadingFailed:withError:)])
+	if ([self.delegate respondsToSelector:@selector(loadingFailed:withError:)])
 	{
-		[delegate loadingFailed:self withError:error];
+		[self.delegate loadingFailed:self withError:error];
 		return YES;
 	}
 	
-	DLog(@"delegate (%@) did not respond to loading failed", delegate);
+	DLog(@"delegate (%@) did not respond to loading failed", self.delegate);
 	return NO;
 }
 
 - (BOOL)informDelegateLoadingFinished
 {
-	if ([delegate respondsToSelector:@selector(loadingFinished:)])
+	if ([self.delegate respondsToSelector:@selector(loadingFinished:)])
 	{
-		[delegate loadingFinished:self];
+		[self.delegate loadingFinished:self];
 		return YES;
 	}
 	
-	DLog(@"delegate (%@) did not respond to loading finished", delegate);
+	DLog(@"delegate (%@) did not respond to loading finished", self.delegate);
 	return NO;
 }
 

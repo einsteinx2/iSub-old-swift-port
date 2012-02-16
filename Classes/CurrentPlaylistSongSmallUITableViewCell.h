@@ -10,9 +10,9 @@
 
 @interface CurrentPlaylistSongSmallUITableViewCell : CustomUITableViewCell 
 
-@property (nonatomic, retain) UILabel *numberLabel;
-@property (nonatomic, retain) UILabel *songNameLabel;
-@property (nonatomic, retain) UILabel *artistNameLabel;
-@property (nonatomic, retain) UILabel *durationLabel;
+@property (retain) UILabel *numberLabel;
+@property (retain) UILabel *songNameLabel;
+@property (retain) UILabel *artistNameLabel;
+@property (retain) UILabel *durationLabel;
 
 @end

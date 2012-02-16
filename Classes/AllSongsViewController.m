@@ -34,6 +34,7 @@
 #import "FlurryAnalytics.h"
 #import "EGORefreshTableHeaderView.h"
 #import "PlaylistSingleton.h"
+#import "NSArray+Additions.h"
 
 @interface AllSongsViewController (Private)
 - (void)hideLoadingScreen;
@@ -513,7 +514,7 @@
 	
 	NSString *title = @"";
 	if ([dataModel.index count] > section)
-		title = [(Index *)[dataModel.index objectAtIndex:section] name];
+		title = [(Index *)[dataModel.index objectAtIndexSafe:section] name];
 	
 	return title;
 }
@@ -582,7 +583,7 @@
 	else 
 	{
 		if ([dataModel.index count] > section)
-			return [(Index *)[dataModel.index objectAtIndex:section] count];
+			return [(Index *)[dataModel.index objectAtIndexSafe:section] count];
 		return 0;
 	}
 }
@@ -600,7 +601,7 @@
 	}
 	else
 	{
-		NSUInteger sectionStartIndex = [(Index *)[dataModel.index objectAtIndex:indexPath.section] position];
+		NSUInteger sectionStartIndex = [(Index *)[dataModel.index objectAtIndexSafe:indexPath.section] position];
 		aSong = [dataModel songForPosition:(sectionStartIndex + indexPath.row + 1)];
 	}
 	
@@ -654,7 +655,7 @@
 		}
 		else
 		{
-			NSUInteger sectionStartIndex = [(Index *)[dataModel.index objectAtIndex:indexPath.section] position];
+			NSUInteger sectionStartIndex = [(Index *)[dataModel.index objectAtIndexSafe:indexPath.section] position];
 			aSong = [dataModel songForPosition:(sectionStartIndex + indexPath.row + 1)];
 		}
 		

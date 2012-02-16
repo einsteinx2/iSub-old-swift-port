@@ -137,24 +137,22 @@
 		if (resume)
 		{
 			// File exists so seek to end
-			totalBytesTransferred = [self.fileHandle seekToEndOfFile];
+			self.totalBytesTransferred = [self.fileHandle seekToEndOfFile];
+			self.byteOffset = self.totalBytesTransferred;
 		}
 		else
 		{
 			// File exists so remove it
 			[self.fileHandle closeFile];
+			self.fileHandle = nil;
 			[[NSFileManager defaultManager] removeItemAtPath:self.filePath error:NULL];
 		}
 	}
 	
-	if (resume)
-	{
-		byteOffset = totalBytesTransferred;
-	}
-	else
+	if (!resume)
 	{
 		// Create the file
-		totalBytesTransferred = 0;
+		self.totalBytesTransferred = 0;
 		[[NSFileManager defaultManager] createFileAtPath:self.filePath contents:[NSData data] attributes:nil];
 		self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.filePath];
 	}
@@ -168,25 +166,25 @@
 	}
 	self.request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters byteOffset:byteOffset];
 
-	loadingThread = [[NSThread alloc] initWithTarget:self selector:@selector(startConnection) object:nil];
+	self.loadingThread = [[[NSThread alloc] initWithTarget:self selector:@selector(startConnection) object:nil] autorelease];
 	
 	NSNumber *bitrate = [[NSNumber alloc] initWithInt:mySong.estimatedBitrate];
-	[loadingThread.threadDictionary setObject:bitrate forKey:@"bitrate"];
+	[self.loadingThread.threadDictionary setObject:bitrate forKey:@"bitrate"];
 	[bitrate release];
 	
 	NSDate *now = [[NSDate alloc] init];
-	[loadingThread.threadDictionary setObject:now forKey:@"throttlingDate"];
+	[self.loadingThread.threadDictionary setObject:now forKey:@"throttlingDate"];
 	[now release];
 	
-	[loadingThread.threadDictionary setObject:[[mySong copy] autorelease] forKey:@"mySong"];
-	[loadingThread.threadDictionary setObject:[NSNumber numberWithBool:isTempCache] forKey:@"isTempCache"];
+	//[self.loadingThread.threadDictionary setObject:[[mySong copy] autorelease] forKey:@"mySong"];
+	[self.loadingThread.threadDictionary setObject:[NSNumber numberWithBool:isTempCache] forKey:@"isTempCache"];
 	DLog(@"mySong: %@   nextSong: %@", mySong, [[PlaylistSingleton sharedInstance] nextSong]);
-	if ([mySong isEqualToSong:[[PlaylistSingleton sharedInstance] nextSong]])
+	if ([self.mySong isEqualToSong:[[PlaylistSingleton sharedInstance] nextSong]])
 	{
-		[loadingThread.threadDictionary setObject:[NSNumber numberWithBool:YES] forKey:@"isNextSong"];
+		[self.loadingThread.threadDictionary setObject:[NSNumber numberWithBool:YES] forKey:@"isNextSong"];
 	}
 		
-	[loadingThread start];
+	[self.loadingThread start];
 }
 
 - (void)start
@@ -199,14 +197,14 @@
 {
 	@autoreleasepool 
 	{
-		connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-		if (connection)
+		self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+		if (self.connection)
 		{
 			self.isDownloading = YES;
 			[self performSelectorOnMainThread:@selector(startConnectionInternalSuccess) withObject:nil waitUntilDone:YES];
 			DLog(@"Stream handler download starting for %@", mySong);
 			CFRunLoopRun();
-			DLog(@"Stream handler finished downloading %@", mySong);
+			DLog(@"Stream handler runloop finished for %@", mySong);
 		}
 		else
 		{
@@ -217,8 +215,8 @@
 
 - (void)startConnectionInternalSuccess
 {
-	if (!isTempCache)
-		mySong.isPartiallyCached = YES;
+	if (!self.isTempCache)
+		self.mySong.isPartiallyCached = YES;
 }
 
 - (void)startConnectionInternalFailure
@@ -237,8 +235,11 @@
 	self.partialPrecacheSleep = NO;
 	
 	DLog(@"Stream handler request canceled for %@", mySong);
-	[connection cancel]; 
-	[connection release]; connection = nil;
+	[self.connection cancel]; 
+	self.connection = nil;
+	
+	[self.fileHandle closeFile];
+	self.fileHandle = nil;
 	
 	[self performSelector:@selector(cancelRunLoop) onThread:loadingThread withObject:nil waitUntilDone:NO];
 }
@@ -276,7 +277,7 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-	bytesTransferred = 0;
+	self.bytesTransferred = 0;
 }
 
 - (double)maxBytesPerIntervalForBitrate:(double)bitrate is3G:(BOOL)is3G
@@ -306,11 +307,19 @@ BOOL isBeginning = YES;
 	NSDate *throttlingDate = [[threadDict objectForKey:@"throttlingDate"] retain];
 	NSUInteger dataLength = [incrementalData length];
 	
-	totalBytesTransferred += dataLength;
-	bytesTransferred += dataLength;
+	self.totalBytesTransferred += dataLength;
+	self.bytesTransferred += dataLength;
 		
 	// Save the data to the file
-	[fileHandle writeData:incrementalData];
+	@try
+	{
+		[fileHandle writeData:incrementalData];
+	}
+	@catch (NSException *exception) 
+	{
+		DLog(@"Failed to write to file %@, %@ - %@", self.mySong, exception.name, exception.description);
+		[self performSelectorOnMainThread:@selector(cancel) withObject:nil waitUntilDone:NO];
+	}
 	
 	// Notify delegate if enough bytes received to start playback
 	if (!isDelegateNotifiedToStartPlayback && totalBytesTransferred >= ISMSMinBytesToStartPlayback(bitrate))
@@ -376,8 +385,7 @@ BOOL isBeginning = YES;
 	BOOL tempCache = [[threadDict objectForKey:@"isTempCache"] boolValue];
 	if (isNextSong && !tempCache && settings.isPartialCacheNextSong && self.partialPrecacheSleep)
 	{
-		Song *song = [threadDict objectForKey:@"mySong"];
-		NSUInteger partialPrecacheSize = BytesForSecondsAtBitrate(ISMSNumSecondsToPartialPreCache, song.estimatedBitrate);
+		NSUInteger partialPrecacheSize = BytesForSecondsAtBitrate(ISMSNumSecondsToPartialPreCache, self.mySong.estimatedBitrate);
 		if (totalBytesTransferred >= partialPrecacheSize)
 		{
 			while (self.partialPrecacheSleep)
@@ -413,6 +421,7 @@ BOOL isBeginning = YES;
 	
 	// Close the file handle
 	[self.fileHandle closeFile];
+	self.fileHandle = nil;
 	
 	[self.delegate SUSStreamHandlerConnectionFailed:self withError:error];
 }
@@ -436,6 +445,7 @@ BOOL isBeginning = YES;
 	
 	// Close the file handle
 	[fileHandle closeFile];
+	self.fileHandle = nil;
 	
 	if (totalBytesTransferred < 500)
 	{

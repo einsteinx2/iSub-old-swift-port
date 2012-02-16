@@ -33,6 +33,7 @@
 #import "NSString+URLEncode.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "PlaylistSingleton.h"
+#import "NSArray+Additions.h"
 
 @implementation SearchSongsViewController
 
@@ -248,8 +249,8 @@
 - (void) loadPlayAllPlaylist2
 {
 	// Hide the loading screen
-	[[[appDelegate.currentTabBarController.view subviews] objectAtIndex:([[appDelegate.currentTabBarController.view subviews] count] - 1)] removeFromSuperview];
-	[[[appDelegate.currentTabBarController.view subviews] objectAtIndex:([[appDelegate.currentTabBarController.view subviews] count] - 1)] removeFromSuperview];
+	[[[appDelegate.currentTabBarController.view subviews] objectAtIndexSafe:([[appDelegate.currentTabBarController.view subviews] count] - 1)] removeFromSuperview];
+	[[[appDelegate.currentTabBarController.view subviews] objectAtIndexSafe:([[appDelegate.currentTabBarController.view subviews] count] - 1)] removeFromSuperview];
 	
 	[self playAllPlaySong];
 }
@@ -418,7 +419,7 @@
 		{
 			ArtistUITableViewCell *cell = [[[ArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 			
-			Artist *anArtist = [listOfArtists objectAtIndex:indexPath.row];
+			Artist *anArtist = [listOfArtists objectAtIndexSafe:indexPath.row];
 			cell.myArtist = anArtist;
 			
 			[cell.artistNameLabel setText:anArtist.name];
@@ -437,7 +438,7 @@
 		{
 			AlbumUITableViewCell *cell = [[[AlbumUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 			
-			Album *anAlbum = [listOfAlbums objectAtIndex:indexPath.row];
+			Album *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
 			cell.myId = anAlbum.albumId;
 			cell.myArtist = [Artist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
 			cell.isIndexShowing = NO;
@@ -469,7 +470,7 @@
 			// Configure the cell...
 			SearchSongUITableViewCell *cell = [[[SearchSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 			cell.row = indexPath.row;
-			cell.mySong = [listOfSongs objectAtIndex:indexPath.row];
+			cell.mySong = [listOfSongs objectAtIndexSafe:indexPath.row];
 			return cell;
 		}
 		else if (indexPath.row == [listOfSongs count])
@@ -494,7 +495,7 @@
 	{
 		if (viewObjects.isCellEnabled && indexPath.row != [listOfArtists count])
 		{
-			Artist *anArtist = [listOfArtists objectAtIndex:indexPath.row];
+			Artist *anArtist = [listOfArtists objectAtIndexSafe:indexPath.row];
 			AlbumViewController *albumView = [[AlbumViewController alloc] initWithArtist:anArtist orAlbum:nil];
 			
 			[self.navigationController pushViewController:albumView animated:YES];
@@ -508,7 +509,7 @@
 	{
 		if (viewObjects.isCellEnabled && indexPath.row != [listOfAlbums count])
 		{
-			Album *anAlbum = [listOfAlbums objectAtIndex:indexPath.row];
+			Album *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
 			AlbumViewController *albumView = [[AlbumViewController alloc] initWithArtist:nil orAlbum:anAlbum];
 			
 			[self.navigationController pushViewController:albumView animated:YES];

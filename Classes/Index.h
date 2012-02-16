@@ -15,7 +15,7 @@
 	NSUInteger count;
 }
 
-@property (nonatomic, retain) NSString *name;
+@property (retain) NSString *name;
 @property NSUInteger position;
 @property NSUInteger count;
 

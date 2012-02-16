@@ -16,6 +16,7 @@
 #import "SavedSettings.h"
 #import "EqualizerPathView.h"
 #import "NSArray+FirstObject.h"
+#import "NSArray+Additions.h"
 
 @implementation EqualizerViewController
 @synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath; //drawTimer;
@@ -154,10 +155,10 @@
 	for (int i = 0; i < [points count] - 1; i++)
 	{
 		// Add the current point to sorted points
-		[sortedPoints addObject:[points objectAtIndex:i]];
+		[sortedPoints addObject:[points objectAtIndexSafe:i]];
 		
-		CGPoint currentPoint = [[points objectAtIndex:i] CGPointValue];
-		CGPoint nextPoint = [[points objectAtIndex:i+1] CGPointValue];
+		CGPoint currentPoint = [[points objectAtIndexSafe:i] CGPointValue];
+		CGPoint nextPoint = [[points objectAtIndexSafe:i+1] CGPointValue];
 		
 		// Check if they are more than an octave apart
 		if (nextPoint.x - currentPoint.x > eqWidth)
@@ -185,8 +186,8 @@
 	}
 	/*for (int i = 0; i < [sortedPoints count]-1; i++)
 	{		
-		CGPoint point1 = [[sortedPoints objectAtIndex:i] CGPointValue];
-		CGPoint point2 = [[sortedPoints objectAtIndex:i+1] CGPointValue];
+		CGPoint point1 = [[sortedPoints objectAtIndexSafe:i] CGPointValue];
+		CGPoint point2 = [[sortedPoints objectAtIndexSafe:i+1] CGPointValue];
 		DLog(@"point1: %@   point2: %@", NSStringFromCGPoint(point1), NSStringFromCGPoint(point2));
 		
 		if (point1.y == point2.y || point1.x == point2.x)
@@ -409,7 +410,7 @@
 	[presetNameTextField setBackgroundColor:[UIColor whiteColor]];
 	[myAlertView addSubview:presetNameTextField];
 	[presetNameTextField release];
-	if ([[[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."] objectAtIndex:0] isEqualToString:@"3"])
+	if ([[[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."] objectAtIndexSafe:0] isEqualToString:@"3"])
 	{
 		CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 100.0);
 		[myAlertView setTransform:myTransform];
@@ -594,7 +595,7 @@
 
 - (NSString *)pickerField:(NWPickerField *)pickerField titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-	return [[effectDAO.presetsArray objectAtIndex:row] objectForKey:@"name"];
+	return [[effectDAO.presetsArray objectAtIndexSafe:row] objectForKey:@"name"];
 }
 
 - (void)pickerField:(NWPickerField *)pickerField selectedRow:(NSInteger)row inComponent:(NSInteger)component
@@ -659,7 +660,7 @@
 			cell.textLabel.text = @"New Preset";
 			break;
 		case 1:
-			preset = [effectDAO.userPresetsArrayMinusCustom objectAtIndex:indexPath.row];
+			preset = [effectDAO.userPresetsArrayMinusCustom objectAtIndexSafe:indexPath.row];
 			cell.tag = [[preset objectForKey:@"presetId"] intValue];
 			cell.textLabel.text = [preset objectForKey:@"name"];
 			break;

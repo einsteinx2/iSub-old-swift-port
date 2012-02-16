@@ -20,6 +20,6 @@
 @property (readonly) FMDatabase *db;
 @property (readonly) NSString *tableModifier;
 
-@property (nonatomic, retain) NSNumber *selectedFolderId;
+@property (retain) NSNumber *selectedFolderId;
 
 @end

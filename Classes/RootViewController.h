@@ -55,18 +55,18 @@
 
 @property(assign,getter=isReloading) BOOL reloading;
 
-@property (nonatomic, retain) UIView *headerView;
-@property (nonatomic, retain) UISearchBar *searchBar;
+@property (retain) UIView *headerView;
+@property (retain) UISearchBar *searchBar;
 
-//@property (nonatomic, retain) NSArray *indexes;
-//@property (nonatomic, retain) NSArray *folders;
-//@property (nonatomic, retain) NSMutableArray *foldersSearch;
+//@property (retain) NSArray *indexes;
+//@property (retain) NSArray *folders;
+//@property (retain) NSMutableArray *foldersSearch;
 
 @property BOOL isSearching;
 
-@property (nonatomic, retain) FolderDropdownControl *dropdown;
+@property (retain) FolderDropdownControl *dropdown;
 
-@property (nonatomic, retain) SUSRootFoldersDAO *dataModel;
+@property (retain) SUSRootFoldersDAO *dataModel;
 
 - (void) doneSearching_Clicked:(id)sender;
 

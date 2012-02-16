@@ -25,13 +25,13 @@
 	NSString *seg1;
 }
 
-@property (nonatomic, retain) NSMutableArray *listOfAlbums;
-@property (nonatomic, retain) NSMutableArray *listOfSongs;
+@property (retain) NSMutableArray *listOfAlbums;
+@property (retain) NSMutableArray *listOfSongs;
 
-@property (nonatomic, retain) NSArray *sectionInfo;
+@property (retain) NSArray *sectionInfo;
 
 
 @property NSInteger segment;
-@property (nonatomic, retain) NSString *seg1;
+@property (retain) NSString *seg1;
 
 @end

@@ -14,8 +14,8 @@
 	NSString *artistId;
 }
 
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *artistId;
+@property (retain) NSString *name;
+@property (retain) NSString *artistId;
 
 + (Artist *) artistWithName:(NSString *)theName andArtistId:(NSString *)theId;
 

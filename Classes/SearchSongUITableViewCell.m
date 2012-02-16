@@ -75,33 +75,44 @@
 	artistNameLabel.frame = newFrame;
 }
 
+- (Song *)mySong
+{
+	@synchronized(self)
+	{
+		return mySong;
+	}
+}
+
 - (void)setMySong:(Song *)aSong
 {
-	mySong = [aSong retain];
-	
-	[coverArtView loadImageFromCoverArtId:aSong.coverArtId];
-	
-	self.backgroundView = [[[UIView alloc] init] autorelease];
-	if(row % 2 == 0)
+	@synchronized(self)
 	{
-		if (mySong.isFullyCached)
-			self.backgroundView.backgroundColor = [[ViewObjectsSingleton sharedInstance] currentLightColor];
+		mySong = [aSong retain];
+		
+		[coverArtView loadImageFromCoverArtId:aSong.coverArtId];
+		
+		self.backgroundView = [[[UIView alloc] init] autorelease];
+		if(row % 2 == 0)
+		{
+			if (mySong.isFullyCached)
+				self.backgroundView.backgroundColor = [[ViewObjectsSingleton sharedInstance] currentLightColor];
+			else
+				self.backgroundView.backgroundColor = [ViewObjectsSingleton sharedInstance].lightNormal;
+		}
 		else
-			self.backgroundView.backgroundColor = [ViewObjectsSingleton sharedInstance].lightNormal;
-	}
-	else
-	{
-		if (mySong.isFullyCached)
-			self.backgroundView.backgroundColor = [[ViewObjectsSingleton sharedInstance] currentDarkColor];
+		{
+			if (mySong.isFullyCached)
+				self.backgroundView.backgroundColor = [[ViewObjectsSingleton sharedInstance] currentDarkColor];
+			else
+				self.backgroundView.backgroundColor = [ViewObjectsSingleton sharedInstance].darkNormal;
+		}
+		
+		[songNameLabel setText:aSong.title];
+		if (aSong.album)
+			[artistNameLabel setText:[NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album]];
 		else
-			self.backgroundView.backgroundColor = [ViewObjectsSingleton sharedInstance].darkNormal;
+			[artistNameLabel setText:aSong.artist];
 	}
-	
-	[songNameLabel setText:aSong.title];
-	if (aSong.album)
-		[artistNameLabel setText:[NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album]];
-	else
-		[artistNameLabel setText:aSong.artist];
 }
 
 - (void)dealloc 

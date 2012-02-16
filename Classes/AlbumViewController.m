@@ -33,7 +33,7 @@
 #import "NSString+URLEncode.h"
 #import "SUSSubFolderDAO.h"
 #import "UIView+tools.h"
-
+#import "NSArray+Additions.h"
 #import "UIImageView+Reflection.h"
 
 @interface AlbumViewController (Private)
@@ -168,7 +168,7 @@
 {
 	[super viewWillDisappear:animated];
 	
-	[dataModel cancelLoad];
+	[self.dataModel cancelLoad];
 }
 
 - (void)didReceiveMemoryWarning 
@@ -204,7 +204,7 @@
 
 - (void)cancelLoad
 {
-	[dataModel cancelLoad];
+	[self.dataModel cancelLoad];
 	[self dataSourceDidFinishLoadingNewData];
 	[viewObjects hideLoadingScreen];
 }
@@ -315,14 +315,14 @@
 	NSMutableArray *indexes = [[[NSMutableArray alloc] init] autorelease];
 	for (int i = 0; i < [sectionInfo count]; i++)
 	{
-		[indexes addObject:[[sectionInfo objectAtIndex:i] objectAtIndex:0]];
+		[indexes addObject:[[sectionInfo objectAtIndexSafe:i] objectAtIndexSafe:0]];
 	}
 	return indexes;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index 
 {
-	NSUInteger row = [[[sectionInfo objectAtIndex:index] objectAtIndex:1] intValue];
+	NSUInteger row = [[[sectionInfo objectAtIndexSafe:index] objectAtIndexSafe:1] intValue];
 	NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
 	[tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
 	

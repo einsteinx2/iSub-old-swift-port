@@ -88,7 +88,7 @@
 
 /*- (void)toggleDelete
 {
-	[[viewObjects.listOfPlaylistSongs objectAtIndex:indexPath.row] addToCacheQueue];
+	[[viewObjects.listOfPlaylistSongs objectAtIndexSafe:indexPath.row] addToCacheQueue];
 	
 	overlayView.downloadButton.alpha = .3;
 	overlayView.downloadButton.enabled = NO;

@@ -11,7 +11,7 @@
 
 @implementation StoreUITableViewCell
 
-@synthesize myProduct, titleLabel, descLabel, priceLabel;
+@synthesize titleLabel, descLabel, priceLabel;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
 {
@@ -49,28 +49,39 @@
 	return self;
 }
 
+- (SKProduct *)myProduct
+{
+	@synchronized(self)
+	{
+		return myProduct;
+	}
+}
+
 - (void)setMyProduct:(SKProduct*)product
 {
-	myProduct = [product retain];
-	
-	titleLabel.text = [myProduct localizedTitle];
-	descLabel.text = [myProduct localizedDescription];
-	
-	if ([MKStoreManager isFeaturePurchased:[myProduct productIdentifier]])
+	@synchronized(self)
 	{
-		priceLabel.textColor = [UIColor colorWithRed:0.0 green:.66 blue:0.0 alpha:1.0];
-		priceLabel.text = @"Unlocked";
+		myProduct = [product retain];
 		
-		self.contentView.alpha = .40;
-	}
-	else
-	{
-		NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-		[numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
-		[numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-		[numberFormatter setLocale:myProduct.priceLocale];
-		priceLabel.text = [numberFormatter stringFromNumber:myProduct.price];
-		[numberFormatter release];
+		titleLabel.text = [myProduct localizedTitle];
+		descLabel.text = [myProduct localizedDescription];
+		
+		if ([MKStoreManager isFeaturePurchased:[myProduct productIdentifier]])
+		{
+			priceLabel.textColor = [UIColor colorWithRed:0.0 green:.66 blue:0.0 alpha:1.0];
+			priceLabel.text = @"Unlocked";
+			
+			self.contentView.alpha = .40;
+		}
+		else
+		{
+			NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+			[numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
+			[numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+			[numberFormatter setLocale:myProduct.priceLocale];
+			priceLabel.text = [numberFormatter stringFromNumber:myProduct.price];
+			[numberFormatter release];
+		}
 	}
 }
 

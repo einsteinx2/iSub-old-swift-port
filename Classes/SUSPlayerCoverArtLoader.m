@@ -49,7 +49,7 @@
 
 - (BOOL)isCoverArtCached
 {
-    return [self.db intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [coverArtId md5]] >= 0;
+    return [self.db intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [self.coverArtId md5]] >= 0;
 }
 
 #pragma mark - Data loading
@@ -57,7 +57,7 @@
 - (void)startLoad
 {
 	// Cache the album art if it exists
-	if (coverArtId && !viewObjects.isOfflineMode)
+	if (self.coverArtId && !viewObjects.isOfflineMode)
 	{
 		NSString *size = nil;
 
@@ -77,7 +77,7 @@
             }
         }
 		
-		NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(size), @"size", n2N(coverArtId), @"id", nil];
+		NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(size), @"size", n2N(self.coverArtId), @"id", nil];
 		NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getCoverArt" andParameters:parameters];
 		
 		self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
@@ -142,7 +142,7 @@
 {	    
     if([UIImage imageWithData:self.receivedData])
 	{
-		[self.db executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [coverArtId md5], self.receivedData];
+		[self.db executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [self.coverArtId md5], self.receivedData];
 	}
 	
 	self.receivedData = nil;

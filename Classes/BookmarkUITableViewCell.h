@@ -12,10 +12,10 @@
 
 @interface BookmarkUITableViewCell : CustomUITableViewCell 
 
-@property (nonatomic, retain) AsynchronousImageViewCached *coverArtView;
-@property (nonatomic, retain) UILabel *bookmarkNameLabel;
-@property (nonatomic, retain) UIScrollView *nameScrollView;
-@property (nonatomic, retain) UILabel *songNameLabel;
-@property (nonatomic, retain) UILabel *artistNameLabel;
+@property (retain) AsynchronousImageViewCached *coverArtView;
+@property (retain) UILabel *bookmarkNameLabel;
+@property (retain) UIScrollView *nameScrollView;
+@property (retain) UILabel *songNameLabel;
+@property (retain) UILabel *artistNameLabel;
 
 @end

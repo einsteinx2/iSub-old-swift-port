@@ -38,16 +38,16 @@
 }
 
 // Server Login Settings
-@property (nonatomic, retain) NSMutableArray *serverList;
-@property (nonatomic, copy) NSString *urlString;
-@property (nonatomic, copy) NSString *username;
-@property (nonatomic, copy) NSString *password;
+@property (retain) NSMutableArray *serverList;
+@property (copy) NSString *urlString;
+@property (copy) NSString *username;
+@property (copy) NSString *password;
 
-@property (nonatomic, copy) NSString *redirectUrlString;
+@property (copy) NSString *redirectUrlString;
 
 // Root Folders Settings
-@property (nonatomic, retain) NSDate *rootFoldersReloadTime;
-@property (nonatomic, retain) NSNumber *rootFoldersSelectedFolderId;
+@property (retain) NSDate *rootFoldersReloadTime;
+@property (retain) NSNumber *rootFoldersSelectedFolderId;
 
 // Lite Version Properties
 @property (readonly) BOOL isPlaylistUnlocked;

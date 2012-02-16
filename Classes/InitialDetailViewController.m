@@ -11,8 +11,6 @@
 
 @implementation InitialDetailViewController
 
-@synthesize bgColor;
-
 /*
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -30,13 +28,22 @@
     [super viewDidLoad];
 }
 
-- (void)setBgColor:(UIColor *)color
+- (UIColor *)bgColor
 {
-	bgColor = color;
-	self.view.backgroundColor = color;
+	@synchronized(self)
+	{
+		return bgColor;
+	}
 }
 
-
+- (void)setBgColor:(UIColor *)color
+{
+	@synchronized(self)
+	{
+		bgColor = color;
+		self.view.backgroundColor = color;
+	}
+}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Overriden to allow any orientation.

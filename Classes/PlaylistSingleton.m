@@ -281,12 +281,46 @@
 
 - (void)setCurrentIndex:(NSInteger)index
 {
-	if (self.isShuffle)
+	BOOL indexChanged = NO;
+	if (self.isShuffle && self.shuffleIndex != index)
+	{
 		self.shuffleIndex = index;
-	else
+		indexChanged = YES;
+	}
+	else if (self.normalIndex != index)
+	{
 		self.normalIndex = index;
+		indexChanged = YES;
+	}
 	
-	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistIndexChanged];
+	if (indexChanged)
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistIndexChanged];
+}
+
+- (NSInteger)prevIndex
+{
+	@synchronized(self.class)
+	{
+		switch (self.repeatMode) 
+		{
+			case ISMSRepeatMode_RepeatOne:
+				return self.currentIndex;
+				break;
+			case ISMSRepeatMode_RepeatAll:	
+				if (self.currentIndex == 0)
+					return self.count - 1;
+				else
+					return self.currentIndex - 1;
+				break;
+			case ISMSRepeatMode_Normal:
+				if (self.currentIndex == 0)
+					return self.currentIndex;
+				else
+					return self.currentIndex - 1;
+			default:
+				break;
+		}
+	}
 }
 
 - (NSInteger)nextIndex
@@ -305,13 +339,17 @@
 					return 0;
 				break;
 			case ISMSRepeatMode_Normal:
-				return self.currentIndex + 1;
+				if (![self songForIndex:self.currentIndex] && ![self songForIndex:self.currentIndex + 1])
+					return self.currentIndex;
+				else
+					return self.currentIndex + 1;
 			default:
 				break;
 		}
 	}
 }
 
+// TODO: cache this into a variable and change only when needed
 - (NSUInteger)count
 {
 	int count = 0;
@@ -329,13 +367,20 @@
 	return count;
 }
 
+- (NSInteger)decrementIndex
+{
+	@synchronized(self.class)
+	{
+		self.currentIndex = self.prevIndex;
+		return self.currentIndex;
+	}
+}
+
 - (NSInteger)incrementIndex
 {
 	@synchronized(self.class)
 	{
 		self.currentIndex = self.nextIndex;
-		
-		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistIndexChanged];
 		return self.currentIndex;
 	}
 }

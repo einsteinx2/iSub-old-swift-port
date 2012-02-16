@@ -29,7 +29,7 @@
 #import "AudioEngine.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "SUSCoverArtLargeDAO.h"
-
+#import "SUSStreamHandler.h"
 #import "CacheSingleton.h"
 
 static MusicSingleton *sharedInstance = nil;
@@ -407,8 +407,13 @@ double startSongSeconds = 0.0;
 		if ([streamSingleton isSongDownloading:currentSong])
 		{
 			// The song is caching, start streaming from the local copy
-			[audio startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] 
-								orSeconds:[NSNumber numberWithDouble:startSongSeconds]];
+			SUSStreamHandler *handler = [streamSingleton handlerForSong:currentSong];
+			if (handler.isDelegateNotifiedToStartPlayback)
+			{
+				// Only start the player if the handler isn't going to do it itself
+				[audio startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] 
+									orSeconds:[NSNumber numberWithDouble:startSongSeconds]];
+			}
 		}
 		else if ([streamSingleton isSongFirstInQueue:currentSong] && ![streamSingleton isQueueDownloading])
 		{
@@ -417,8 +422,13 @@ double startSongSeconds = 0.0;
 			[streamSingleton resumeQueue];
 			
 			// The song is caching, start streaming from the local copy
-			[audio startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] 
-								orSeconds:[NSNumber numberWithDouble:startSongSeconds]];
+			SUSStreamHandler *handler = [streamSingleton handlerForSong:currentSong];
+			if (handler.isDelegateNotifiedToStartPlayback)
+			{
+				// Only start the player if the handler isn't going to do it itself
+				[audio startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] 
+									orSeconds:[NSNumber numberWithDouble:startSongSeconds]];
+			}
 		}
 		else
 		{
@@ -470,10 +480,10 @@ double startSongSeconds = 0.0;
 }
 
 - (void)playSongAtPosition:(NSInteger)position
-{
-	[[SUSStreamSingleton sharedInstance] removeAllStreams];
-	
-	[PlaylistSingleton sharedInstance].currentIndex = position;
+{	
+	currentPlaylist.currentIndex = position;
+
+	[[SUSStreamSingleton sharedInstance] removeAllStreamsExceptForSong:currentPlaylist.currentSong];
 	
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
@@ -483,64 +493,25 @@ double startSongSeconds = 0.0;
 	{		
 		[self startSong];
 	}
-	
-	//[self addAutoNextNotification];
 }
 
 - (void)prevSong
-{
-	NSInteger currentIndex = [PlaylistSingleton sharedInstance].currentIndex;
-	
+{	
 	if (audio.progress > 10.0)
 	{
 		// Past 10 seconds in the song, so restart playback instead of changing songs
-		if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			[self jukeboxPlaySongAtPosition:[NSNumber numberWithInt:currentIndex]];
-		else
-			[self playSongAtPosition:currentIndex];
+		[self playSongAtPosition:currentPlaylist.currentIndex];
 	}
 	else
 	{
 		// Within first 10 seconds, go to previous song
-		if ([SavedSettings sharedInstance].isJukeboxEnabled)
-		{
-			[self jukeboxPrevSong];
-		}
-		else
-		{
-			NSInteger index = currentIndex - 1;
-			if (index >= 0)
-			{
-				currentIndex = index;
-								
-				[self playSongAtPosition:index];
-				
-				//[self addAutoNextNotification];
-			}
-		}
+		[self playSongAtPosition:currentPlaylist.prevIndex];
 	}
 }
 
 - (void)nextSong
 {
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-	{
-		[self jukeboxNextSong];
-	}
-	else
-	{		
-		NSInteger index = [PlaylistSingleton sharedInstance].currentIndex + 1;
-		if (index <= ([databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"] - 1))
-		{
-			[PlaylistSingleton sharedInstance].currentIndex = index;
-			[self startSong];			
-		}
-		else
-		{
-            [audio stop];
-			[[SavedSettings sharedInstance] saveState];
-		}
-	}
+	[self playSongAtPosition:currentPlaylist.nextIndex];
 }
 
 // Resume song after iSub shuts down
@@ -831,9 +802,7 @@ double startSongSeconds = 0.0;
 - (void)jukeboxReplacePlaylistWithLocal
 {
 	[self jukeboxClearRemotePlaylist];
-	
-	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
-	
+		
 	NSMutableArray *songIds = [[NSMutableArray alloc] init];
 	
 	FMResultSet *result;
@@ -1016,6 +985,7 @@ double startSongSeconds = 0.0;
 	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	databaseControls = [DatabaseSingleton sharedInstance];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
+	currentPlaylist = [PlaylistSingleton sharedInstance];
 	
 	isAutoNextNotificationOn = NO;
 	

@@ -18,35 +18,28 @@
 	ViewObjectsSingleton *viewObjects;
 	DatabaseSingleton *databaseControls;
 	SavedSettings *settings;
-	
-	NSInteger iteration;
-	NSUInteger albumCount;
-	NSUInteger artistCount;
-	NSUInteger currentRow;
-	
-	Artist *currentArtist;
-	Album *currentAlbum;
-	
-	NSUInteger tempAlbumsCount;
-	NSUInteger tempSongsCount;
-	NSUInteger tempGenresCount;
-	NSUInteger tempGenresLayoutCount;
-	
-	NSUInteger totalAlbumsProcessed;
-	NSUInteger totalSongsProcessed;
-	
-	SUSRootFoldersDAO *rootFolders;
-	
-	NSDate *notificationTimeArtistAlbum;
-	NSDate *notificationTimeSong;
 }
 
-@property (nonatomic, retain) Artist *currentArtist;
-@property (nonatomic, retain) Album *currentAlbum;
-@property (nonatomic, retain) SUSRootFoldersDAO *rootFolders;
-@property (nonatomic, retain) NSDate *notificationTimeArtist;
-@property (nonatomic, retain) NSDate *notificationTimeAlbum;
-@property (nonatomic, retain) NSDate *notificationTimeSong;
+@property NSInteger iteration;
+@property NSUInteger albumCount;
+@property NSUInteger artistCount;
+@property NSUInteger currentRow;
+
+@property NSUInteger tempAlbumsCount;
+@property NSUInteger tempSongsCount;
+@property NSUInteger tempGenresCount;
+@property NSUInteger tempGenresLayoutCount;
+
+@property NSUInteger totalAlbumsProcessed;
+@property NSUInteger totalSongsProcessed;
+
+@property (retain) Artist *currentArtist;
+@property (retain) Album *currentAlbum;
+@property (retain) SUSRootFoldersDAO *rootFolders;
+@property (retain) NSDate *notificationTimeArtist;
+@property (retain) NSDate *notificationTimeAlbum;
+@property (retain) NSDate *notificationTimeSong;
+@property (retain) NSDate *notificationTimeArtistAlbum;
 
 + (BOOL)isLoading;
 + (void)setIsLoading:(BOOL)isLoading;

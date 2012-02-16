@@ -24,11 +24,11 @@
 	NSString *genre;
 }
 
-@property (nonatomic, retain) NSMutableArray *listOfAlbums;
-@property (nonatomic, retain) NSMutableArray *listOfSongs;
+@property (retain) NSMutableArray *listOfAlbums;
+@property (retain) NSMutableArray *listOfSongs;
 
 @property NSInteger segment;
-@property (nonatomic, retain) NSString *seg1;
-@property (nonatomic, retain) NSString *genre;
+@property (retain) NSString *seg1;
+@property (retain) NSString *genre;
 
 @end

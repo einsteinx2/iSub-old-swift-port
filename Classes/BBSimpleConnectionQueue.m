@@ -7,6 +7,7 @@
 //
 
 #import "BBSimpleConnectionQueue.h"
+#import "NSArray+Additions.h"
 
 @implementation BBSimpleConnectionQueue
 
@@ -48,7 +49,7 @@
 	
 	if (isRunning && [connectionStack count] > 0)
 	{
-		NSURLConnection *connection = [connectionStack objectAtIndex:0];
+		NSURLConnection *connection = [connectionStack objectAtIndexSafe:0];
 		[connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 		[connection start];
 	}
@@ -66,7 +67,7 @@
 	{
 		isRunning = YES;
 
-		NSURLConnection *connection = [connectionStack objectAtIndex:0];
+		NSURLConnection *connection = [connectionStack objectAtIndexSafe:0];
 		[connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 		[connection start];
 	}

@@ -11,8 +11,8 @@
 @interface ChatMessage : NSObject <NSCopying> 
 
 @property NSInteger timestamp;
-@property (nonatomic, copy) NSString *user;
-@property (nonatomic, copy) NSString *message;
+@property (copy) NSString *user;
+@property (copy) NSString *message;
 
 - (id)initWithTBXMLElement:(TBXMLElement *)element;
 -(id) copyWithZone: (NSZone *) zone;

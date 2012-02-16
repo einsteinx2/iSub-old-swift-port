@@ -12,12 +12,12 @@
 
 @interface PlaylistsUITableViewCell : CustomUITableViewCell 
 
-@property (nonatomic, retain) UIScrollView *playlistNameScrollView;
-@property (nonatomic, retain) UILabel *playlistNameLabel;
+@property (retain) UIScrollView *playlistNameScrollView;
+@property (retain) UILabel *playlistNameLabel;
 
-@property (nonatomic, retain) NSMutableData *receivedData;
+@property (retain) NSMutableData *receivedData;
 
-@property (nonatomic, copy) SUSServerPlaylist *serverPlaylist;
+@property (copy) SUSServerPlaylist *serverPlaylist;
 
 @property (nonatomic) BOOL isDownload;
 

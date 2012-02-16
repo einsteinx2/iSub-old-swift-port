@@ -11,6 +11,7 @@
 #import "NSError+ISMSError.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "SavedSettings.h"
+#import "NSArray+Additions.h"
 
 @interface SUSServerChecker (Private)
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error;
@@ -44,10 +45,14 @@
 {
     self.receivedData = [NSMutableData dataWithCapacity:0];
     
-	NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithSUSAction:@"ping" forUrlString:urlString username:username password:password andParameters:nil];
+	NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithSUSAction:@"ping" 
+																   forUrlString:urlString 
+																	   username:username 
+																	   password:password 
+																  andParameters:nil];
 	[theRequest setTimeoutInterval:ISMSServerCheckTimeout];
 	self.request = theRequest;
-	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+	self.connection = [NSURLConnection connectionWithRequest:self.request delegate:self];
 	if (self.connection)
 	{
 		[self performSelector:@selector(checkTimedOut) withObject:nil afterDelay:15.0];
@@ -55,7 +60,7 @@
 	else
     {
         NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
-        [delegate SUSServerURLCheckFailed:self withError:error];
+        [self.delegate SUSServerURLCheckFailed:self withError:error];
     }
 }
 
@@ -88,7 +93,7 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-	[receivedData setLength:0];
+	[self.receivedData setLength:0];
 }
 
 - (NSURLRequest *)connection:(NSURLConnection *)inConnection willSendRequest:(NSURLRequest *)inRequest redirectResponse:(NSURLResponse *)inRedirectResponse
@@ -96,12 +101,12 @@
     if (inRedirectResponse) 
     {
         // Notify the delegate
-        if ([delegate respondsToSelector:@selector(SUSServerURLCheckRedirected:redirectUrl:)])
+        if ([self.delegate respondsToSelector:@selector(SUSServerURLCheckRedirected:redirectUrl:)])
         {
-             [delegate SUSServerURLCheckRedirected:self redirectUrl:[inRequest URL]];
+             [self.delegate SUSServerURLCheckRedirected:self redirectUrl:[inRequest URL]];
         }
         
-        NSMutableURLRequest *r = [[request mutableCopy] autorelease]; // original request
+        NSMutableURLRequest *r = [[self.request mutableCopy] autorelease]; // original request
 		[r setTimeoutInterval:ISMSServerCheckTimeout];
         [r setURL:[inRequest URL]];
         return r;
@@ -115,17 +120,18 @@
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
 {
-	[receivedData appendData:incrementalData];
+	[self.receivedData appendData:incrementalData];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {    
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
-    [theConnection release];
+    self.connection = nil;
+	self.request = nil;
     self.receivedData = nil;
 	
-	[delegate SUSServerURLCheckFailed:self withError:error];
+	[self.delegate SUSServerURLCheckFailed:self withError:error];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckFailed object:nil];
 }
@@ -147,20 +153,20 @@
 				NSArray *splitVersion = [versionString componentsSeparatedByString:@"."];
 				if ([splitVersion count] > 0)
 				{
-					self.majorVersion = [[splitVersion objectAtIndex:0] intValue];
-					if (majorVersion >= 2)
-						isNewSearchAPI = YES;
+					self.majorVersion = [[splitVersion objectAtIndexSafe:0] intValue];
+					if (self.majorVersion >= 2)
+						self.isNewSearchAPI = YES;
 					
 					if ([splitVersion count] > 1)
 					{
-						self.minorVersion = [[splitVersion objectAtIndex:1] intValue];
-						if ((majorVersion >= 1 && minorVersion >= 4))
-							isNewSearchAPI = YES;
+						self.minorVersion = [[splitVersion objectAtIndexSafe:1] intValue];
+						if ((self.majorVersion >= 1 && self.minorVersion >= 4))
+							self.isNewSearchAPI = YES;
 					}	
 				}			
 			}
 			
-			DLog(@"versionString: %@   majorVersion: %i  minorVersion: %i", versionString, majorVersion, minorVersion);
+			DLog(@"versionString: %@   majorVersion: %i  minorVersion: %i", self.versionString, self.majorVersion, self.minorVersion);
 			
 			TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
 			if (error)
@@ -169,20 +175,20 @@
 				{
 					// Incorrect credentials, so fail
 					NSError *anError = [NSError errorWithISMSCode:ISMSErrorCode_IncorrectCredentials];
-					[delegate SUSServerURLCheckFailed:self withError:anError];
+					[self.delegate SUSServerURLCheckFailed:self withError:anError];
 					[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckFailed object:nil];
 				}
 				else
 				{
 					// This is a Subsonic server, so pass
-					[delegate SUSServerURLCheckPassed:self];
+					[self.delegate SUSServerURLCheckPassed:self];
 					[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckPassed object:nil];
 				}
 			}
 			else
 			{
 				// This is a Subsonic server, so pass
-				[delegate SUSServerURLCheckPassed:self];
+				[self.delegate SUSServerURLCheckPassed:self];
 				[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckPassed object:nil];
 			}
         }
@@ -190,7 +196,7 @@
         {
             // This is not a Subsonic server, so fail
             NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NotASubsonicServer];
-			[delegate SUSServerURLCheckFailed:self withError:error];
+			[self.delegate SUSServerURLCheckFailed:self withError:error];
 			[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckFailed object:nil];
         }
     }
@@ -198,17 +204,21 @@
     {
         // This is not XML, so fail
         NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NotXML];
-		[delegate SUSServerURLCheckFailed:self withError:error];
+		[self.delegate SUSServerURLCheckFailed:self withError:error];
 		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckFailed object:nil];
     }
 	[tbxml release];
     
-	[theConnection release];
+	self.receivedData = nil;
+	self.connection = nil;
     self.receivedData = nil;
 }
 
 - (void) dealloc
 {
+	[versionString release]; versionString = nil;
+	[request release]; request = nil;
+	[connection release]; connection = nil;
     [receivedData release]; receivedData = nil;
 	[super dealloc];
 }

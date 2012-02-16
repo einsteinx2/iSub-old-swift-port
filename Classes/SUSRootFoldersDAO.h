@@ -23,9 +23,9 @@
 
 @property (readonly) FMDatabase *db;
 
-@property (nonatomic, assign) id<SUSLoaderDelegate> delegate;
+@property (assign) id<SUSLoaderDelegate> delegate;
 
-@property (nonatomic, retain) SUSRootFoldersLoader *loader;
+@property (retain) SUSRootFoldersLoader *loader;
 
 @property (readonly) NSUInteger count;
 @property (readonly) NSUInteger searchCount;
@@ -35,7 +35,7 @@
 
 @property (readonly) NSString *tableModifier;
 
-@property (nonatomic, retain) NSNumber *selectedFolderId;
+@property (retain) NSNumber *selectedFolderId;
 @property (readonly) BOOL isRootFolderIdCached;
 
 + (void)setFolderDropdownFolders:(NSDictionary *)folders;

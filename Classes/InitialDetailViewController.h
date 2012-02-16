@@ -13,6 +13,6 @@
 	UIColor *bgColor;
 }
 
-@property (nonatomic, retain) UIColor *bgColor;
+@property (retain) UIColor *bgColor;
 
 @end

@@ -15,6 +15,7 @@
 #import "iPadMainMenu.h"
 #import "SavedSettings.h"
 #import "Crittercism.h"
+#import "NSArray+Additions.h"
 
 static ViewObjectsSingleton *sharedInstance = nil;
 
@@ -303,7 +304,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
     NSMutableArray *savedTabsOrderArray = [[NSMutableArray alloc] initWithCapacity:count];
     for (int i = 0; i < count; i ++)
 	{
-        [savedTabsOrderArray addObject:[NSNumber numberWithInt:[[[tabBarController.viewControllers objectAtIndex:i] tabBarItem] tag]]];
+        [savedTabsOrderArray addObject:[NSNumber numberWithInt:[[[tabBarController.viewControllers objectAtIndexSafe:i] tabBarItem] tag]]];
     }
     [[NSUserDefaults standardUserDefaults] setObject:[NSArray arrayWithArray:savedTabsOrderArray] forKey:@"mainTabBarTabsOrder"];
 	[[NSUserDefaults standardUserDefaults] synchronize];
@@ -353,10 +354,10 @@ static ViewObjectsSingleton *sharedInstance = nil;
 		NSMutableDictionary *tabsOrderDictionary = [[NSMutableDictionary alloc] initWithCapacity:count];
 		for (int i = 0; i < count; i ++) 
 		{
-			NSNumber *tag = [[NSNumber alloc] initWithInt:[[[appDelegate.mainTabBarController.viewControllers objectAtIndex:i] tabBarItem] tag]];
+			NSNumber *tag = [[NSNumber alloc] initWithInt:[[[appDelegate.mainTabBarController.viewControllers objectAtIndexSafe:i] tabBarItem] tag]];
 			[tabsOrderDictionary setObject:[NSNumber numberWithInt:i] forKey:[tag stringValue]];
 			
-			if (!needsReordering && ![(NSNumber *)[savedTabsOrderArray objectAtIndex:i] isEqualToNumber:tag]) 
+			if (!needsReordering && ![(NSNumber *)[savedTabsOrderArray objectAtIndexSafe:i] isEqualToNumber:tag]) 
 			{
 				needsReordering = YES;
 			}
@@ -368,7 +369,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 			NSMutableArray *tabsViewControllers = [[NSMutableArray alloc] initWithCapacity:count];
 			for (int i = 0; i < count; i ++) 
 			{
-				[tabsViewControllers addObject:[appDelegate.mainTabBarController.viewControllers objectAtIndex:[(NSNumber *)[tabsOrderDictionary objectForKey:[(NSNumber *)[savedTabsOrderArray objectAtIndex:i] stringValue]] intValue]]];
+				[tabsViewControllers addObject:[appDelegate.mainTabBarController.viewControllers objectAtIndexSafe:[(NSNumber *)[tabsOrderDictionary objectForKey:[(NSNumber *)[savedTabsOrderArray objectAtIndexSafe:i] stringValue]] intValue]]];
 			}
 			
 			appDelegate.mainTabBarController.viewControllers = [NSArray arrayWithArray:tabsViewControllers];

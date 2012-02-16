@@ -16,7 +16,7 @@
     NSUInteger folderLength;
 }
 
-@property (nonatomic, copy) NSString *myId;
-@property (nonatomic, copy) Artist *myArtist;
+@property (copy) NSString *myId;
+@property (copy) Artist *myArtist;
 
 @end

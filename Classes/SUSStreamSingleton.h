@@ -16,7 +16,7 @@
 
 @property (retain) NSMutableArray *handlerStack;
 @property (retain) SUSLyricsDAO *lyricsDAO;
-@property (retain) PlaylistSingleton *currentPlaylistDAO;
+@property (assign) PlaylistSingleton *currentPlaylistDAO;
 
 @property (copy) Song *lastCachedSong;
 @property (copy) Song *lastTempCachedSong;

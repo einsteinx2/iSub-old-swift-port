@@ -448,7 +448,7 @@ static NSString *kName_Error = @"error";
 	}
 	else
 	{
-		//aSong = [viewObjects.listOfPlaylistSongs objectAtIndex:indexPath.row];
+		//aSong = [viewObjects.listOfPlaylistSongs objectAtIndexSafe:indexPath.row];
 		aSong = [Song songFromServerPlaylistId:md5 row:indexPath.row];
 	}
 	

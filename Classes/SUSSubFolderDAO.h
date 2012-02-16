@@ -21,11 +21,11 @@
 
 @property (readonly) FMDatabase *db;
 
-@property (nonatomic, assign) id<SUSLoaderDelegate> delegate;
-@property (nonatomic, retain) SUSSubFolderLoader *loader;
+@property (assign) id<SUSLoaderDelegate> delegate;
+@property (retain) SUSSubFolderLoader *loader;
 
-@property (nonatomic, copy) NSString *myId;
-@property (nonatomic, copy) Artist *myArtist;
+@property (copy) NSString *myId;
+@property (copy) Artist *myArtist;
 
 @property (readonly) NSUInteger albumsCount;
 @property (readonly) NSUInteger songsCount;

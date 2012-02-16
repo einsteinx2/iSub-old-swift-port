@@ -144,7 +144,7 @@
 						if (playerName)
 							[dict setObject:playerName forKey:@"playerName"];
 						
-						[nowPlayingSongDicts addObject:dict];
+						[self.nowPlayingSongDicts addObject:dict];
 						
 						// Get the next message
 						entry = [TBXML nextSiblingNamed:@"entry" searchFromElement:entry];

@@ -16,6 +16,6 @@
 	IBOutlet UIWebView *helpWebView;
 }
 
-@property (nonatomic, retain) UIWebView *helpWebView;
+@property (retain) UIWebView *helpWebView;
 
 @end

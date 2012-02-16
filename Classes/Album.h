@@ -19,11 +19,11 @@
 	NSString *artistId;
 }
 
-@property (nonatomic, retain) NSString *title;
-@property (nonatomic, retain) NSString *albumId;
-@property (nonatomic, retain) NSString *coverArtId;
-@property (nonatomic, retain) NSString *artistName;
-@property (nonatomic, retain) NSString *artistId;
+@property (retain) NSString *title;
+@property (retain) NSString *albumId;
+@property (retain) NSString *coverArtId;
+@property (retain) NSString *artistName;
+@property (retain) NSString *artistId;
 
 - (void)encodeWithCoder:(NSCoder *)encoder;
 - (id)initWithCoder:(NSCoder *)decoder;

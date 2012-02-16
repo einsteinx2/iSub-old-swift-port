@@ -34,6 +34,7 @@
 //
 #import "NSString+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "NSArray+Additions.h"
 
 @interface PlaylistsViewController (Private)
 
@@ -45,7 +46,8 @@
 @implementation PlaylistsViewController
 
 @synthesize request;
-@synthesize serverPlaylistsDataModel, currentPlaylistDataModel;
+@synthesize serverPlaylistsDataModel;
+@synthesize currentPlaylistCount;
 
 #pragma mark - Rotation
 
@@ -74,6 +76,22 @@
 
 #pragma mark - Lifecycle
 
+- (void)registerForNotifications
+{
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentPlaylistCount) name:@"updateCurrentPlaylistCount" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:) name:ISMSNotification_StorePurchaseComplete object:nil];
+}
+
+- (void)unregisterForNotifications
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"updateCurrentPlaylistCount" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_StorePurchaseComplete object:nil];
+}
+
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
@@ -82,9 +100,9 @@
 	viewObjects = [ViewObjectsSingleton sharedInstance];
 	musicControls = [MusicSingleton sharedInstance];
 	databaseControls = [DatabaseSingleton sharedInstance];
+	currentPlaylistDataModel = [PlaylistSingleton sharedInstance];
 	
-	self.serverPlaylistsDataModel = [[[SUSServerPlaylistsDAO alloc] initWithDelegate:self] autorelease];
-	self.currentPlaylistDataModel = [PlaylistSingleton sharedInstance];
+	serverPlaylistsDataModel = [[SUSServerPlaylistsDAO alloc] initWithDelegate:self];
 	
 	isNoPlaylistsScreenShowing = NO;
 	isPlaylistSaveEditShowing = NO;
@@ -93,11 +111,8 @@
 	receivedData = nil;
 	
 	viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-	goToNextSong = NO;
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentPlaylistCount) name:@"updateCurrentPlaylistCount" object:nil];
+	[self registerForNotifications];
 
     self.title = @"Playlists";
 	
@@ -143,9 +158,7 @@
 - (void)viewWillAppear:(BOOL)animated 
 {
     [super viewWillAppear:animated];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:) name:ISMSNotification_StorePurchaseComplete object:nil];
-	
+		
 	if(musicControls.showPlayerIcon)
 	{
 		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
@@ -174,11 +187,7 @@
 {
 	[super viewWillDisappear:animated];
 	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"updateCurrentPlaylistCount" object:nil];
-	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_StorePurchaseComplete object:nil];
+	[self unregisterForNotifications];
 	
 	if (viewObjects.isEditing)
 	{
@@ -228,12 +237,9 @@
 {
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
-		if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			currentPlaylistCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"];
-		else
-			currentPlaylistCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
-			
-		if (currentPlaylistCount == 1)
+		self.currentPlaylistCount = [currentPlaylistDataModel count];
+
+		if (self.currentPlaylistCount == 1)
 			playlistCountLabel.text = [NSString stringWithFormat:@"1 song"];
 		else 
 			playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", currentPlaylistCount];
@@ -241,7 +247,7 @@
 }
 
 
-- (void) removeEditControls
+- (void)removeEditControls
 {
 	// Clear the edit stuff if they switch tabs in the middle of editing
 	if (viewObjects.isEditing)
@@ -322,7 +328,7 @@
 		playlistCountLabel.font = [UIFont boldSystemFontOfSize:12];
 		if (segmentedControl.selectedSegmentIndex == 0)
 		{
-			if (currentPlaylistCount == 1)
+			if (self.currentPlaylistCount == 1)
 				playlistCountLabel.text = [NSString stringWithFormat:@"1 song"];
 			else 
 				playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", currentPlaylistCount];
@@ -387,7 +393,7 @@
 	{
 		if (segmentedControl.selectedSegmentIndex == 0)
 		{
-			if (currentPlaylistCount == 1)
+			if (self.currentPlaylistCount == 1)
 				playlistCountLabel.text = [NSString stringWithFormat:@"1 song"];
 			else 
 				playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", currentPlaylistCount];
@@ -522,18 +528,15 @@
 		viewObjects.isLocalPlaylist = YES;
 		
 		// Get the current playlist count
-		if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			currentPlaylistCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"];
-		else
-			currentPlaylistCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
-		
+		self.currentPlaylistCount = [currentPlaylistDataModel count];
+
 		// Clear the edit stuff if they switch tabs in the middle of editing
 		[self removeEditControls];
 		
 		// Remove the save and edit buttons if showing
 		[self removeSaveEditButtons];
 		
-		if (currentPlaylistCount > 0)
+		if (self.currentPlaylistCount > 0)
 		{
 			// Modify the header view to include the save and edit buttons
 			[self addSaveEditButtons];
@@ -542,7 +545,7 @@
 		// Reload the table data
 		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 		
-		if (currentPlaylistDataModel.currentIndex >= 0 && currentPlaylistDataModel.currentIndex < currentPlaylistCount)
+		if (currentPlaylistDataModel.currentIndex >= 0 && currentPlaylistDataModel.currentIndex < self.currentPlaylistCount)
 		{
 			[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPlaylistDataModel.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 		}
@@ -551,7 +554,7 @@
 		[self removeNoPlaylistsScreen];
 		
 		// If the list is empty, display the no playlists overlay screen
-		if (currentPlaylistCount == 0)
+		if (self.currentPlaylistCount == 0)
 		{
 			[self addNoPlaylistsScreen];
 		}
@@ -614,7 +617,7 @@
 }
 
 
-- (void) editPlaylistAction:(id)sender
+- (void)editPlaylistAction:(id)sender
 {
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
@@ -643,45 +646,9 @@
 			editPlaylistLabel.backgroundColor = [UIColor clearColor];
 			editPlaylistLabel.text = @"Edit";
 			
-			if (goToNextSong)
-			{
-				goToNextSong = NO;
-				currentPlaylistCount = [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"];
-				if (currentPlaylistCount > 0)
-				{
-					[musicControls nextSong];
-				}
-				else
-				{
-                    [[AudioEngine sharedInstance] stop];
-					self.navigationItem.rightBarButtonItem = nil;
-					
-					if (isPlaylistSaveEditShowing == YES)
-					{
-						if (IS_IPAD())
-						{
-							headerView.frame = CGRectMake(0, 0, 320, 48);
-						}
-						else 
-						{
-							headerView.frame = CGRectMake(0, 0, 320, 40);
-						}
-						[savePlaylistLabel removeFromSuperview];
-						[playlistCountLabel removeFromSuperview];
-						[savePlaylistButton removeFromSuperview];
-						[spacerLabel removeFromSuperview];
-						[editPlaylistLabel removeFromSuperview];
-						[editPlaylistButton removeFromSuperview];
-						[deleteSongsLabel removeFromSuperview];
-						isPlaylistSaveEditShowing = NO;
-						self.tableView.tableHeaderView = headerView;
-					}
-				}
-			}
-			
 			// Reload the table to correct the numbers
 			[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
-			if (currentPlaylistDataModel.currentIndex >= 0 && currentPlaylistDataModel.currentIndex < currentPlaylistCount)
+			if (currentPlaylistDataModel.currentIndex >= 0 && currentPlaylistDataModel.currentIndex < self.currentPlaylistCount)
 			{
 				[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPlaylistDataModel.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 			}
@@ -831,8 +798,8 @@
 	
 	NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(name), @"name", nil];
 	
-	NSMutableArray *songIds = [NSMutableArray arrayWithCapacity:currentPlaylistCount];
-	for (int i = 0; i < currentPlaylistCount; i++)
+	NSMutableArray *songIds = [NSMutableArray arrayWithCapacity:self.currentPlaylistCount];
+	for (int i = 0; i < self.currentPlaylistCount; i++)
 	{
 		@autoreleasepool 
 		{
@@ -877,11 +844,12 @@
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
+	[self unregisterForNotifications];
+	
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
 		[currentPlaylistDataModel deleteSongs:viewObjects.multiDeleteList];
-		
-		currentPlaylistCount = currentPlaylistDataModel.count;
+		self.currentPlaylistCount = currentPlaylistDataModel.count;
 		
 		// Create indexPaths from multiDeleteList and delete the rows in the table view
 		NSMutableArray *indexes = [[NSMutableArray alloc] init];
@@ -932,6 +900,8 @@
 	
 	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
 	
+	[self registerForNotifications];
+	
 	[pool release];
 }
 
@@ -960,7 +930,7 @@
 			if ([viewObjects.multiDeleteList count] == 0)
 			{
 				// Select all the rows
-				for (int i = 0; i < currentPlaylistCount; i++)
+				for (int i = 0; i < self.currentPlaylistCount; i++)
 				{
 					[viewObjects.multiDeleteList addObject:[NSNumber numberWithInt:i]];
 				}
@@ -1020,7 +990,7 @@
 				
 				for (NSNumber *index in viewObjects.multiDeleteList)
 				{
-                    NSString *playlistId = [[serverPlaylistsDataModel.serverPlaylists objectAtIndex:[index intValue]] playlistId];
+                    NSString *playlistId = [[serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:[index intValue]] playlistId];
                     NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(playlistId) forKey:@"id"];
                     DLog(@"parameters: %@", parameters);
                     NSMutableURLRequest *aRequest = [NSMutableURLRequest requestWithSUSAction:@"deletePlaylist" andParameters:parameters];
@@ -1088,7 +1058,7 @@
 		playlistNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 22.0)];
 		[playlistNameTextField setBackgroundColor:[UIColor whiteColor]];
 		[myAlertView addSubview:playlistNameTextField];
-		if ([[[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."] objectAtIndex:0] isEqualToString:@"3"])
+		if ([[[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."] objectAtIndexSafe:0] isEqualToString:@"3"])
 		{
 			CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 100.0);
 			[myAlertView setTransform:myTransform];
@@ -1163,7 +1133,7 @@
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
 		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
-		if (currentPlaylistDataModel.currentIndex >= 0 && currentPlaylistDataModel.currentIndex < currentPlaylistCount)
+		if (currentPlaylistDataModel.currentIndex >= 0 && currentPlaylistDataModel.currentIndex < self.currentPlaylistCount)
 		{
 			[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPlaylistDataModel.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 		}
@@ -1353,7 +1323,7 @@ static NSString *kName_Error = @"error";
 // Following 2 methods handle the right side index
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView 
 {
-	if (segmentedControl.selectedSegmentIndex == 0 && currentPlaylistCount > 0)
+	if (segmentedControl.selectedSegmentIndex == 0 && self.currentPlaylistCount > 0)
 	{
 		if (viewObjects.isEditing == NO)
 		{
@@ -1386,12 +1356,12 @@ static NSString *kName_Error = @"error";
 		}
 		else if (index == 19)
 		{
-			NSInteger row = currentPlaylistCount - 1;
+			NSInteger row = self.currentPlaylistCount - 1;
 			[tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
 		}
 		else 
 		{
-			NSInteger row = currentPlaylistCount / 20 * index;
+			NSInteger row = self.currentPlaylistCount / 20 * index;
 			[tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
 			return -1;		
 		}
@@ -1409,7 +1379,7 @@ static NSString *kName_Error = @"error";
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {	
 	if (segmentedControl.selectedSegmentIndex == 0)
-		return currentPlaylistCount;
+		return self.currentPlaylistCount;
 	else if (segmentedControl.selectedSegmentIndex == 1)
 		return [databaseControls.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists"];
 	else if (segmentedControl.selectedSegmentIndex == 2)
@@ -1595,7 +1565,7 @@ static NSString *kName_Error = @"error";
 		}
 		
 		// Highlight the current playing song
-		if (currentPlaylistDataModel.currentIndex >= 0 && currentPlaylistDataModel.currentIndex < currentPlaylistCount)
+		if (currentPlaylistDataModel.currentIndex >= 0 && currentPlaylistDataModel.currentIndex < self.currentPlaylistCount)
 		{
 			[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPlaylistDataModel.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 		}
@@ -1725,7 +1695,7 @@ static NSString *kName_Error = @"error";
 		
 		PlaylistsUITableViewCell *cell = [[[PlaylistsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 		cell.indexPath = indexPath;
-        cell.serverPlaylist = [serverPlaylistsDataModel.serverPlaylists objectAtIndex:indexPath.row];
+        cell.serverPlaylist = [serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];
 		
 		cell.deleteToggleImage.hidden = !viewObjects.isEditing;
 		if ([viewObjects.multiDeleteList containsObject:[NSNumber numberWithInt:indexPath.row]])
@@ -1735,7 +1705,7 @@ static NSString *kName_Error = @"error";
 		
 		cell.contentView.backgroundColor = [UIColor clearColor];
 		cell.playlistNameLabel.backgroundColor = [UIColor clearColor];
-        SUSServerPlaylist *playlist = [serverPlaylistsDataModel.serverPlaylists objectAtIndex:indexPath.row];        
+        SUSServerPlaylist *playlist = [serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];        
         cell.playlistNameLabel.text = playlist.playlistName;
 		cell.backgroundView = [[[UIView alloc] init] autorelease];
 		if(indexPath.row % 2 == 0)
@@ -1780,7 +1750,7 @@ static NSString *kName_Error = @"error";
 		else if (segmentedControl.selectedSegmentIndex == 2)
 		{
 			PlaylistSongsViewController *playlistSongsViewController = [[PlaylistSongsViewController alloc] initWithNibName:@"PlaylistSongsViewController" bundle:nil];
-            SUSServerPlaylist *playlist = [serverPlaylistsDataModel.serverPlaylists objectAtIndex:indexPath.row];
+            SUSServerPlaylist *playlist = [serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];
 			playlistSongsViewController.md5 = [[playlist.playlistName gtm_stringByUnescapingFromHTML] md5];
             playlistSongsViewController.serverPlaylist = playlist;
 			[self.navigationController pushViewController:playlistSongsViewController animated:YES];

@@ -30,6 +30,6 @@
 - (void)addAction:(id)sender;
 - (void)segmentAction:(id)sender;
 
-@property (nonatomic, retain) NSString *theNewRedirectionUrl;
+@property (retain) NSString *theNewRedirectionUrl;
 
 @end

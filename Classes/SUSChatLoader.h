@@ -10,6 +10,6 @@
 
 @interface SUSChatLoader : SUSLoader
 
-@property (nonatomic, retain) NSMutableArray *chatMessages;
+@property (retain) NSMutableArray *chatMessages;
 
 @end

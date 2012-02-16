@@ -20,14 +20,14 @@
 	IBOutlet UIActivityIndicatorView *activityIndicator;
 }
 
-@property (nonatomic, retain) UIButton *inputBlocker;
-@property (nonatomic, retain) UIImageView *loadingScreenRectangle;
-@property (nonatomic, retain) UILabel *loadingLabel;
-@property (nonatomic, retain) UILabel *loadingTitle1;
-@property (nonatomic, retain) UILabel *loadingMessage1;
-@property (nonatomic, retain) UILabel *loadingTitle2;
-@property (nonatomic, retain) UILabel *loadingMessage2;
-@property (nonatomic, retain) UIActivityIndicatorView *activityIndicator;
+@property (retain) UIButton *inputBlocker;
+@property (retain) UIImageView *loadingScreenRectangle;
+@property (retain) UILabel *loadingLabel;
+@property (retain) UILabel *loadingTitle1;
+@property (retain) UILabel *loadingMessage1;
+@property (retain) UILabel *loadingTitle2;
+@property (retain) UILabel *loadingMessage2;
+@property (retain) UIActivityIndicatorView *activityIndicator;
 
 
 - (id)initOnView:(UIView *)view withMessage:(NSArray *)message blockInput:(BOOL)blockInput mainWindow:(BOOL)mainWindow; 

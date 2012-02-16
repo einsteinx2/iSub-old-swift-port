@@ -11,6 +11,7 @@
 #import "ViewObjectsSingleton.h"
 #import "iSubAppDelegate.h"
 #import "SavedSettings.h"
+#import "NSArray+Additions.h"
 
 @implementation SearchAllViewController
 @synthesize cellNames, listOfArtists, listOfAlbums, listOfSongs, query;
@@ -144,7 +145,7 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
 	
-	cell.textLabel.text = [cellNames objectAtIndex:indexPath.row];
+	cell.textLabel.text = [cellNames objectAtIndexSafe:indexPath.row];
 	cell.textLabel.backgroundColor = [UIColor clearColor];
 	cell.backgroundView = [[ViewObjectsSingleton sharedInstance] createCellBackground:indexPath.row];
     
@@ -196,7 +197,7 @@
 {
 	SearchSongsViewController *searchView = [[SearchSongsViewController alloc] initWithNibName:@"SearchSongsViewController" 
 																						bundle:nil];
-	NSString *type = [cellNames objectAtIndex:indexPath.row];
+	NSString *type = [cellNames objectAtIndexSafe:indexPath.row];
 	if ([type isEqualToString:@"Artists"])
 	{
 		searchView.listOfArtists = [NSMutableArray arrayWithArray:listOfArtists];

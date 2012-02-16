@@ -14,9 +14,9 @@
 	UIButton *downloadButton;
 	UIButton *queueButton;
 }
-@property (nonatomic, retain) UIButton *inputBlocker;
-@property (nonatomic, retain) UIButton *downloadButton;
-@property (nonatomic, retain) UIButton *queueButton;
+@property (retain) UIButton *inputBlocker;
+@property (retain) UIButton *downloadButton;
+@property (retain) UIButton *queueButton;
 
 + (CellOverlay*)cellOverlayWithTableCell:(UITableViewCell*)cell;
 - (id)initWithTableCell:(UITableViewCell*)cell;

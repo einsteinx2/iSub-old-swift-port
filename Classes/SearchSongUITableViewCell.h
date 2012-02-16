@@ -12,12 +12,12 @@
 
 @interface SearchSongUITableViewCell : CustomUITableViewCell 
 
-@property (nonatomic, retain) Song *mySong;
+@property (retain) Song *mySong;
 @property NSUInteger row;
 
-@property (nonatomic, retain) AsynchronousImageViewCached *coverArtView;
-@property (nonatomic, retain) UIScrollView *songNameScrollView;
-@property (nonatomic, retain) UILabel *songNameLabel;
-@property (nonatomic, retain) UILabel *artistNameLabel;
+@property (retain) AsynchronousImageViewCached *coverArtView;
+@property (retain) UIScrollView *songNameScrollView;
+@property (retain) UILabel *songNameLabel;
+@property (retain) UILabel *artistNameLabel;
 
 @end

@@ -29,8 +29,8 @@
 
 @property(assign,getter=isReloading) BOOL reloading;
 
-@property (nonatomic, copy) NSString *md5;
+@property (copy) NSString *md5;
 
-@property (nonatomic, copy) SUSServerPlaylist *serverPlaylist;
+@property (copy) SUSServerPlaylist *serverPlaylist;
 
 @end

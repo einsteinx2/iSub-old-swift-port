@@ -8,6 +8,7 @@
 
 #import "ISMSUpdateChecker.h"
 #import "TBXML.h"
+#import "NSArray+Additions.h"
 
 @implementation ISMSUpdateChecker
 @synthesize receivedData, connection, request, theNewVersion, message;
@@ -151,21 +152,21 @@
 				if (currentVersionSplit == nil || newVersionSplit == nil || [currentVersionSplit count] == 0 || [newVersionSplit count] == 0)
 					return;
 				
-				if ([[newVersionPadded objectAtIndex:0] intValue] > [[currentVersionPadded objectAtIndex:0] intValue])
+				if ([[newVersionPadded objectAtIndexSafe:0] intValue] > [[currentVersionPadded objectAtIndexSafe:0] intValue])
 				{
 					// Major version number is bigger, update is available
 					showAlert = YES;
 				}
-				else if ([[newVersionPadded objectAtIndex:0] intValue] == [[currentVersionPadded objectAtIndex:0] intValue])
+				else if ([[newVersionPadded objectAtIndexSafe:0] intValue] == [[currentVersionPadded objectAtIndexSafe:0] intValue])
 				{
-					if ([[newVersionPadded objectAtIndex:1] intValue] > [[currentVersionPadded objectAtIndex:1] intValue])
+					if ([[newVersionPadded objectAtIndexSafe:1] intValue] > [[currentVersionPadded objectAtIndexSafe:1] intValue])
 					{
 						// Update is available
 						showAlert = YES;
 					}
-					else if ([[newVersionPadded objectAtIndex:1] intValue] == [[currentVersionPadded objectAtIndex:1] intValue])
+					else if ([[newVersionPadded objectAtIndexSafe:1] intValue] == [[currentVersionPadded objectAtIndexSafe:1] intValue])
 					{
-						if ([[newVersionPadded objectAtIndex:2] intValue] > [[currentVersionPadded objectAtIndex:2] intValue])
+						if ([[newVersionPadded objectAtIndexSafe:2] intValue] > [[currentVersionPadded objectAtIndexSafe:2] intValue])
 						{
 							// Update is available
 							showAlert = YES;

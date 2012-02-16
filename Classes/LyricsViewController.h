@@ -18,8 +18,8 @@
 	DatabaseSingleton *databaseControls;
 }
 
-@property (nonatomic, retain) SUSLyricsDAO *dataModel;
-@property (nonatomic, retain) UITextView *textView;
+@property (retain) SUSLyricsDAO *dataModel;
+@property (retain) UITextView *textView;
 
 - (void)updateLyricsLabel;
 @end

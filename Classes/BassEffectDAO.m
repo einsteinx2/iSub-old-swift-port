@@ -12,6 +12,7 @@
 #import "BassParamEqValue.h"
 #import "NSArray+FirstObject.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "NSArray+Additions.h"
 
 @implementation BassEffectDAO
 @synthesize type, presets;
@@ -184,7 +185,7 @@ NSInteger presetSort(id preset1, id preset2, void *context)
 	if (valueIndex >= [self.selectedPresetValues count])
 		return nil;
 	
-	CGPoint point = CGPointFromString([self.selectedPresetValues objectAtIndex:valueIndex]);
+	CGPoint point = CGPointFromString([self.selectedPresetValues objectAtIndexSafe:valueIndex]);
 	BassEffectValue  *value = [[BassEffectValue alloc] init];
 	value.type = self.type;
 	value.percentX = point.x;
@@ -223,7 +224,7 @@ NSInteger presetSort(id preset1, id preset2, void *context)
 	if (presetIndex >= [self.presets count])
 		return;
 	
-	self.selectedPresetId = [[[self.presetsArray objectAtIndex:presetIndex] objectForKey:@"presetId"] intValue];
+	self.selectedPresetId = [[[self.presetsArray objectAtIndexSafe:presetIndex] objectForKey:@"presetId"] intValue];
 	
 	[self selectPresetId:self.selectedPresetId];
 }
@@ -253,7 +254,7 @@ NSInteger presetSort(id preset1, id preset2, void *context)
 
 - (void)deleteCustomPresetForIndex:(NSUInteger)presetIndex
 {
-	NSUInteger presetId = [[[self.presetsArray objectAtIndex:presetIndex] objectForKey:@"presetId"] intValue];
+	NSUInteger presetId = [[[self.presetsArray objectAtIndexSafe:presetIndex] objectForKey:@"presetId"] intValue];
 	[self deleteCustomPresetForId:presetId];
 }
 

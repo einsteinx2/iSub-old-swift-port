@@ -23,6 +23,7 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ViewObjectsSingleton.h"
 #import "SavedSettings.h"
+#import "NSArray+Additions.h"
 
 @implementation iPadMainMenu
 
@@ -151,8 +152,8 @@
     }
     
     // Configure the cell...
-	//DLog(@"row %i: %@", indexPath.row, [rowNames objectAtIndex:indexPath.row]);
-	cell.textLabel.text = [rowNames objectAtIndex:indexPath.row];
+	//DLog(@"row %i: %@", indexPath.row, [rowNames objectAtIndexSafe:indexPath.row]);
+	cell.textLabel.text = [rowNames objectAtIndexSafe:indexPath.row];
 	cell.textLabel.font = [UIFont boldSystemFontOfSize:36];
 	cell.textLabel.textColor = [UIColor whiteColor];
 	cell.textLabel.textAlignment = UITextAlignmentRight;

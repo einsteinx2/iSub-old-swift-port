@@ -55,11 +55,11 @@
 	BOOL showIndex;
 }
 
-@property (nonatomic, retain) NSMutableArray *listOfArtists;
-@property (nonatomic, retain) NSMutableArray *listOfArtistsSections;
-@property (nonatomic, retain) NSArray *sectionInfo;
+@property (retain) NSMutableArray *listOfArtists;
+@property (retain) NSMutableArray *listOfArtistsSections;
+@property (retain) NSArray *sectionInfo;
 
-//@property (nonatomic, retain) UIProgressView *queueDownloadProgressView;
+//@property (retain) UIProgressView *queueDownloadProgressView;
 
 - (void) editSongsAction:(id)sender;
 

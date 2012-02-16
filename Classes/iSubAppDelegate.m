@@ -52,6 +52,7 @@
 #import "NSObject+ListMethods.h"
 
 #import "ISMSUpdateChecker.h"
+#import "NSArray+Additions.h"
 
 @implementation iSubAppDelegate
 
@@ -443,7 +444,7 @@
 	httpServer = [HTTPServer new];
 	[httpServer setType:@"_http._tcp."];
 	[httpServer setConnectionClass:[MyHTTPConnection class]];
-	NSString *root = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES) objectAtIndex:0];
+	NSString *root = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES) objectAtIndexSafe:0];
 	[httpServer setDocumentRoot:[NSURL fileURLWithPath:root]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(displayInfoUpdate:) name:@"LocalhostAdressesResolved" object:nil];
 	[LocalhostAddresses performSelectorInBackground:@selector(list) withObject:nil];
@@ -452,7 +453,7 @@
 - (void)startRedirectingLogToFile
 {
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *documentsDirectory = [paths objectAtIndex:0];
+	NSString *documentsDirectory = [paths objectAtIndexSafe:0];
 	NSString *logPath = [documentsDirectory stringByAppendingPathComponent:@"console.log"];
 	freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
 }
@@ -801,7 +802,7 @@
 	
 	if (currentTabBarController.selectedIndex == 4)
 	{
-		[currentTabBarController.moreNavigationController popToViewController:[currentTabBarController.moreNavigationController.viewControllers objectAtIndex:1] animated:YES];
+		[currentTabBarController.moreNavigationController popToViewController:[currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
 		[currentTabBarController.moreNavigationController pushViewController:serverListViewController animated:YES];
 	}
 	else if (currentTabBarController.selectedIndex == NSNotFound)

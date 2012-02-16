@@ -20,7 +20,7 @@
 	FolderPickerDialog *myDialog;
 }
 
-@property (nonatomic, retain) NSMutableArray *sortedFolders;
-@property (nonatomic, assign) FolderPickerDialog *myDialog;
+@property (retain) NSMutableArray *sortedFolders;
+@property (assign) FolderPickerDialog *myDialog;
 
 @end

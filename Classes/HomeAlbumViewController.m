@@ -28,7 +28,7 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
-
+#import "NSArray+Additions.h"
 
 @implementation HomeAlbumViewController
 @synthesize listOfAlbums;
@@ -240,7 +240,7 @@
 	{
 		AllAlbumsUITableViewCell *cell = [[[AllAlbumsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 		
-		Album *anAlbum = [listOfAlbums objectAtIndex:indexPath.row];
+		Album *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
 		cell.myId = anAlbum.albumId;
 		cell.myArtist = [Artist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
 		
@@ -295,7 +295,7 @@
 {	
 	if (viewObjects.isCellEnabled && indexPath.row != [listOfAlbums count])
 	{
-		Album *anAlbum = [listOfAlbums objectAtIndex:indexPath.row];
+		Album *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
 		AlbumViewController *albumViewController = [[AlbumViewController alloc] initWithArtist:nil orAlbum:anAlbum];
 		[self.navigationController pushViewController:albumViewController animated:YES];
 		[albumViewController release];

@@ -18,6 +18,7 @@
 #import "SUSRootFoldersDAO.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "NSArray+Additions.h"
 
 @interface SUSAllSongsLoader (Private)
 
@@ -39,7 +40,10 @@ static BOOL isAllSongsLoading = NO;
 + (BOOL)isLoading { return isAllSongsLoading; }
 + (void)setIsLoading:(BOOL)isLoading { isAllSongsLoading = isLoading; }
 
-@synthesize currentArtist, currentAlbum, rootFolders, notificationTimeArtist, notificationTimeAlbum, notificationTimeSong;
+@synthesize currentArtist, currentAlbum, rootFolders, notificationTimeArtist, notificationTimeAlbum, notificationTimeSong, notificationTimeArtistAlbum;
+@synthesize iteration, artistCount, albumCount, currentRow;
+@synthesize tempAlbumsCount, tempSongsCount, tempGenresCount, tempGenresLayoutCount;
+@synthesize totalAlbumsProcessed, totalSongsProcessed;
 
 - (void)setup
 {
@@ -89,13 +93,13 @@ static NSInteger order (id a, id b, void* context)
 
 - (void)startLoad
 {
-	tempAlbumsCount = 0;
-	tempSongsCount = 0;
-	tempGenresCount = 0;
-	tempGenresLayoutCount = 0;
+	self.tempAlbumsCount = 0;
+	self.tempSongsCount = 0;
+	self.tempGenresCount = 0;
+	self.tempGenresLayoutCount = 0;
 	
-	totalAlbumsProcessed = 0;
-	totalSongsProcessed = 0;
+	self.totalAlbumsProcessed = 0;
+	self.totalSongsProcessed = 0;
 	
 	[SUSAllSongsLoader setIsLoading:YES];
 	
@@ -119,10 +123,10 @@ static NSInteger order (id a, id b, void* context)
 	if ([databaseControls.allAlbumsDb tableExists:@"resumeLoad"])
 	{
 		// The albums are still loading or are just starting
-		iteration = -1;
+		self.iteration = -1;
 		
-		currentRow = [databaseControls.allAlbumsDb intForQuery:@"SELECT artistNum FROM resumeLoad"];
-		artistCount = [databaseControls.albumListCacheDb intForQuery:@"SELECT count FROM rootFolderCount_all LIMIT 1"];
+		self.currentRow = [databaseControls.allAlbumsDb intForQuery:@"SELECT artistNum FROM resumeLoad"];
+		self.artistCount = [databaseControls.albumListCacheDb intForQuery:@"SELECT count FROM rootFolderCount_all LIMIT 1"];
 		
 		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_AllSongsLoadingArtists object:nil];
 		
@@ -132,12 +136,12 @@ static NSInteger order (id a, id b, void* context)
 	{
 		// The songs are still loading or are just starting
 		
-		iteration = [databaseControls.allSongsDb intForQuery:@"SELECT iteration FROM resumeLoad"];
+		self.iteration = [databaseControls.allSongsDb intForQuery:@"SELECT iteration FROM resumeLoad"];
 		
-		if (iteration == 0)
+		if (self.iteration == 0)
 		{
-			currentRow = [databaseControls.allSongsDb intForQuery:@"SELECT albumNum FROM resumeLoad"];
-			albumCount = [databaseControls.allAlbumsDb intForQuery:@"SELECT COUNT(*) FROM allAlbumsUnsorted"];
+			self.currentRow = [databaseControls.allSongsDb intForQuery:@"SELECT albumNum FROM resumeLoad"];
+			self.albumCount = [databaseControls.allAlbumsDb intForQuery:@"SELECT COUNT(*) FROM allAlbumsUnsorted"];
 			DLog(@"albumCount: %i", albumCount);
 			
 			[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_AllSongsLoadingAlbums object:nil];
@@ -146,11 +150,11 @@ static NSInteger order (id a, id b, void* context)
 		}
 		else if (iteration < 4)
 		{
-			currentRow = [databaseControls.allSongsDb intForQuery:@"SELECT albumNum FROM resumeLoad"];
-			albumCount = [databaseControls.allAlbumsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM subalbums%i", iteration]];
-			DLog(@"subalbums%i albumCount: %i", iteration, albumCount);
+			self.currentRow = [databaseControls.allSongsDb intForQuery:@"SELECT albumNum FROM resumeLoad"];
+			self.albumCount = [databaseControls.allAlbumsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM subalbums%i", iteration]];
+			DLog(@"subalbums%i albumCount: %i", self.iteration, self.albumCount);
 			
-			if (albumCount > 0)
+			if (self.albumCount > 0)
 			{
 				[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_AllSongsLoadingAlbums object:nil];
 				[self loadAlbumFolder];
@@ -158,18 +162,18 @@ static NSInteger order (id a, id b, void* context)
 			else
 			{
 				// The table is empty so do the load sort
-				iteration = 4;
-				[databaseControls.allSongsDb executeUpdate:@"UPDATE resumeLoad SET albumNum = ?, iteration = ?", [NSNumber numberWithInt:0], [NSNumber numberWithInt:iteration]];
+				self.iteration = 4;
+				[databaseControls.allSongsDb executeUpdate:@"UPDATE resumeLoad SET albumNum = ?, iteration = ?", [NSNumber numberWithInt:0], [NSNumber numberWithInt:self.iteration]];
 				DLog(@"calling loadSort");
 				[self performSelectorInBackground:@selector(loadSort) withObject:nil];
 			}
 		}
-		else if (iteration == 4)
+		else if (self.iteration == 4)
 		{
 			DLog(@"calling loadSort");
 			[self performSelectorInBackground:@selector(loadSort) withObject:nil];
 		}
-		else if (iteration == 5)
+		else if (self.iteration == 5)
 		{
 			[self performSelectorInBackground:@selector(loadFinish) withObject:nil];
 		}
@@ -282,31 +286,31 @@ static NSInteger order (id a, id b, void* context)
 		return;
 	}
 	
-	if (iteration == -1)
+	if (self.iteration == -1)
 	{
-		self.currentArtist = [rootFolders artistForPosition:currentRow];
-		DLog(@"current artist: %@", currentArtist.name);
+		self.currentArtist = [self.rootFolders artistForPosition:self.currentRow];
+		DLog(@"current artist: %@", self.currentArtist.name);
 		
-		[self sendArtistNotification:currentArtist.name];
+		[self sendArtistNotification:self.currentArtist.name];
 	}
 	else
 	{
-		if (iteration == 0)
-			self.currentAlbum = [databaseControls albumFromDbRow:currentRow inTable:@"allAlbumsUnsorted" inDatabase:databaseControls.allAlbumsDb];
+		if (self.iteration == 0)
+			self.currentAlbum = [databaseControls albumFromDbRow:self.currentRow inTable:@"allAlbumsUnsorted" inDatabase:databaseControls.allAlbumsDb];
 		else
-			self.currentAlbum = [databaseControls albumFromDbRow:currentRow inTable:[NSString stringWithFormat:@"subalbums%i", iteration] inDatabase:databaseControls.allAlbumsDb];
-		DLog(@"current album: %@", currentAlbum.title);
+			self.currentAlbum = [databaseControls albumFromDbRow:self.currentRow inTable:[NSString stringWithFormat:@"subalbums%i", self.iteration] inDatabase:databaseControls.allAlbumsDb];
+		DLog(@"current album: %@", self.currentAlbum.title);
 		
-		self.currentArtist = [Artist artistWithName:currentAlbum.artistName andArtistId:currentAlbum.artistId];
+		self.currentArtist = [Artist artistWithName:self.currentAlbum.artistName andArtistId:self.currentAlbum.artistId];
 		
-		[self sendAlbumNotification:currentAlbum.title];
+		[self sendAlbumNotification:self.currentAlbum.title];
 	}
 	
 	NSString *dirId = nil;
-	if (iteration == -1)
-		dirId = [[currentArtist.artistId copy] autorelease];
+	if (self.iteration == -1)
+		dirId = [[self.currentArtist.artistId copy] autorelease];
 	else
-		dirId = [[currentAlbum.albumId copy] autorelease];
+		dirId = [[self.currentAlbum.albumId copy] autorelease];
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:dirId forKey:@"id"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getMusicDirectory" andParameters:parameters];
@@ -318,13 +322,13 @@ static NSInteger order (id a, id b, void* context)
 	} 
 	else 
 	{
-		if (iteration == -1)
+		if (self.iteration == -1)
 		{
-			DLog(@"%@", [NSString stringWithFormat:@"There was an error grabbing the song list for artist: %@", currentArtist.name]);
+			DLog(@"%@", [NSString stringWithFormat:@"There was an error grabbing the song list for artist: %@", self.currentArtist.name]);
 		}
 		else
 		{
-			DLog(@"%@", [NSString stringWithFormat:@"There was an error grabbing the song list for album: %@", currentAlbum.title]);
+			DLog(@"%@", [NSString stringWithFormat:@"There was an error grabbing the song list for album: %@", self.currentAlbum.title]);
 		}
 	}
 }
@@ -388,17 +392,17 @@ static NSInteger order (id a, id b, void* context)
     [databaseControls.allAlbumsDb executeUpdate:@"CREATE TABLE allAlbumsIndexCache (name TEXT, position INTEGER, count INTEGER)"];
 	for (int i = 0; i < [sectionInfo count]; i++)
     {
-		NSArray *section = [sectionInfo objectAtIndex:i];
+		NSArray *section = [sectionInfo objectAtIndexSafe:i];
 		NSArray *nextSection = nil;
 		if (i + 1 < [sectionInfo count])
-			nextSection = [sectionInfo objectAtIndex:i+1];
+			nextSection = [sectionInfo objectAtIndexSafe:i+1];
 		
-		NSString *name = [section objectAtIndex:0];
-		NSNumber *position = [section objectAtIndex:1];
+		NSString *name = [section objectAtIndexSafe:0];
+		NSNumber *position = [section objectAtIndexSafe:1];
 		DLog(@"position: %i", [position intValue]);
 		NSNumber *count = nil;
 		if (nextSection)
-			count = [NSNumber numberWithInt:([[nextSection objectAtIndex:1] intValue] - [position intValue])];
+			count = [NSNumber numberWithInt:([[nextSection objectAtIndexSafe:1] intValue] - [position intValue])];
 		else
 			count = [NSNumber numberWithInt:[databaseControls.allAlbumsDb intForQuery:@"SELECT COUNT(*) FROM allAlbums WHERE ROWID > ?", position]];
 		
@@ -421,16 +425,16 @@ static NSInteger order (id a, id b, void* context)
     [databaseControls.allSongsDb executeUpdate:@"CREATE TABLE allSongsIndexCache (name TEXT, position INTEGER, count INTEGER)"];
 	for (int i = 0; i < [sectionInfo count]; i++)
     {
-		NSArray *section = [sectionInfo objectAtIndex:i];
+		NSArray *section = [sectionInfo objectAtIndexSafe:i];
 		NSArray *nextSection = nil;
 		if (i + 1 < [sectionInfo count])
-			nextSection = [sectionInfo objectAtIndex:i+1];
+			nextSection = [sectionInfo objectAtIndexSafe:i+1];
 		
-		NSString *name = [section objectAtIndex:0];
-		NSNumber *position = [section objectAtIndex:1];
+		NSString *name = [section objectAtIndexSafe:0];
+		NSNumber *position = [section objectAtIndexSafe:1];
 		NSNumber *count = nil;
 		if (nextSection)
-			count = [NSNumber numberWithInt:([[nextSection objectAtIndex:1] intValue] - [position intValue])];
+			count = [NSNumber numberWithInt:([[nextSection objectAtIndexSafe:1] intValue] - [position intValue])];
 		else
 			count = [NSNumber numberWithInt:[databaseControls.allSongsDb intForQuery:@"SELECT COUNT(*) FROM allSongs WHERE ROWID > ?", position]];
 		
@@ -494,7 +498,7 @@ static NSInteger order (id a, id b, void* context)
 
 - (void)sendArtistNotification:(NSString *)artistName
 {
-	if ([[NSDate date] timeIntervalSinceDate:notificationTimeArtist] > .5)
+	if ([[NSDate date] timeIntervalSinceDate:self.notificationTimeArtist] > .5)
 	{
 		self.notificationTimeArtist = [NSDate date];
 		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_AllSongsArtistName object:artistName];
@@ -503,7 +507,7 @@ static NSInteger order (id a, id b, void* context)
 
 - (void)sendAlbumNotification:(NSString *)albumTitle
 {
-	if ([[NSDate date] timeIntervalSinceDate:notificationTimeAlbum] > .5)
+	if ([[NSDate date] timeIntervalSinceDate:self.notificationTimeAlbum] > .5)
 	{
 		self.notificationTimeAlbum = [NSDate date];
 		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_AllSongsAlbumName object:albumTitle];
@@ -512,7 +516,7 @@ static NSInteger order (id a, id b, void* context)
 
 - (void)sendSongNotification:(NSString *)songTitle
 {
-	if ([[NSDate date] timeIntervalSinceDate:notificationTimeSong] > .5)
+	if ([[NSDate date] timeIntervalSinceDate:self.notificationTimeSong] > .5)
 	{
 		self.notificationTimeSong = [NSDate date];
 		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_AllSongsSongName object:songTitle];
@@ -603,37 +607,37 @@ static NSString *kName_Error = @"error";
 				if ([[TBXML valueOfAttributeNamed:@"isDir" forElement:child] isEqualToString:@"true"])
 				{
 					//Initialize the Album.
-					Album *anAlbum = [[Album alloc] initWithTBXMLElement:child artistId:currentArtist.artistId artistName:currentArtist.name];
+					Album *anAlbum = [[Album alloc] initWithTBXMLElement:child artistId:self.currentArtist.artistId artistName:self.currentArtist.name];
 					
 					// Skip if it's .AppleDouble, otherwise process it
 					if (![anAlbum.title isEqualToString:@".AppleDouble"])
 					{
-						if (iteration == -1)
+						if (self.iteration == -1)
 						{
 							// Add the album to the allAlbums table
 							[databaseControls insertAlbum:anAlbum intoTable:@"allAlbumsTemp" inDatabase:databaseControls.allAlbumsDb];
-							tempAlbumsCount++;
-							totalAlbumsProcessed++;
+							self.tempAlbumsCount++;
+							self.totalAlbumsProcessed++;
 							
-							if (tempAlbumsCount == WRITE_BUFFER_AMOUNT)
+							if (self.tempAlbumsCount == WRITE_BUFFER_AMOUNT)
 							{
 								// Flush the records to disk
 								[databaseControls.allAlbumsDb executeUpdate:@"INSERT INTO allAlbumsUnsorted SELECT * FROM allAlbumsTemp"];
 								//[databaseControls.allAlbumsDb executeUpdate:@"DELETE * FROM allAlbumsTemp"];
 								[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE IF EXISTS allAlbumsTemp"];
 								[databaseControls.allAlbumsDb executeUpdate:@"CREATE TEMPORARY TABLE allAlbumsTemp(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
-								tempAlbumsCount = 0;
+								self.tempAlbumsCount = 0;
 							}
 						}
 						else
 						{
 							//Add album object to the subalbums table to be processed in the next iteration
-							[databaseControls insertAlbum:anAlbum intoTable:[NSString stringWithFormat:@"subalbums%i", (iteration + 1)] inDatabase:databaseControls.allAlbumsDb];
+							[databaseControls insertAlbum:anAlbum intoTable:[NSString stringWithFormat:@"subalbums%i", (self.iteration + 1)] inDatabase:databaseControls.allAlbumsDb];
 						}
 					}
 					
 					// Update the loading screen message
-					if (iteration == -1)
+					if (self.iteration == -1)
 					{
 						[self sendAlbumNotification:anAlbum.title];
 					}
@@ -653,10 +657,10 @@ static NSString *kName_Error = @"error";
 						{
 							// Add the song to the allSongs table
 							[aSong insertIntoTable:@"allSongsTemp" inDatabase:databaseControls.allSongsDb];
-							tempSongsCount++;
-							totalSongsProcessed++;
+							self.tempSongsCount++;
+							self.totalSongsProcessed++;
 							
-							if (tempSongsCount == WRITE_BUFFER_AMOUNT)
+							if (self.tempSongsCount == WRITE_BUFFER_AMOUNT)
 							{
 								// Flush the records to disk
 								[databaseControls.allSongsDb executeUpdate:@"INSERT INTO allSongsUnsorted SELECT * FROM allSongsTemp"];
@@ -664,7 +668,7 @@ static NSString *kName_Error = @"error";
 								[databaseControls.allSongsDb executeUpdate:@"DROP TABLE IF EXISTS allSongsTemp"];
 								NSString *query = [NSString stringWithFormat:@"CREATE TEMPORARY TABLE allSongsTemp (%@)", [Song standardSongColumnSchema]];
 								[databaseControls.allSongsDb executeUpdate:query];
-								tempSongsCount = 0;
+								self.tempSongsCount = 0;
 							}
 							
 							// If it has a genre, process that
@@ -672,16 +676,16 @@ static NSString *kName_Error = @"error";
 							{
 								// Add the genre to the genre table
 								[databaseControls.genresDb executeUpdate:@"INSERT INTO genresTemp (genre) VALUES (?)", aSong.genre];
-								tempGenresCount++;
+								self.tempGenresCount++;
 								
-								if (tempGenresCount == WRITE_BUFFER_AMOUNT)
+								if (self.tempGenresCount == WRITE_BUFFER_AMOUNT)
 								{
 									// Flush the records to disk
 									[databaseControls.genresDb executeUpdate:@"INSERT OR IGNORE INTO genresUnsorted SELECT * FROM genresTemp"];
 									//[databaseControls.genresDb executeUpdate:@"DELETE * FROM genresTemp"];
 									[databaseControls.genresDb executeUpdate:@"DROP TABLE IF EXISTS genresTemp"];
 									[databaseControls.genresDb executeUpdate:@"CREATE TEMPORARY TABLE genresTemp (genre TEXT)"];
-									tempGenresCount = 0;
+									self.tempGenresCount = 0;
 								}
 								
 								// Insert the song into the genresLayout table
@@ -695,8 +699,8 @@ static NSString *kName_Error = @"error";
 									}
 									
 									NSString *query = @"INSERT INTO genresLayoutTemp (md5, genre, segs, seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-									[databaseControls.genresDb executeUpdate:query, [aSong.path md5], aSong.genre, [NSNumber numberWithInt:[splitPath count]], [segments objectAtIndex:0], [segments objectAtIndex:1], [segments objectAtIndex:2], [segments objectAtIndex:3], [segments objectAtIndex:4], [segments objectAtIndex:5], [segments objectAtIndex:6], [segments objectAtIndex:7], [segments objectAtIndex:8]];
-									tempGenresLayoutCount++;
+									[databaseControls.genresDb executeUpdate:query, [aSong.path md5], aSong.genre, [NSNumber numberWithInt:[splitPath count]], [segments objectAtIndexSafe:0], [segments objectAtIndexSafe:1], [segments objectAtIndexSafe:2], [segments objectAtIndexSafe:3], [segments objectAtIndexSafe:4], [segments objectAtIndexSafe:5], [segments objectAtIndexSafe:6], [segments objectAtIndexSafe:7], [segments objectAtIndexSafe:8]];
+									self.tempGenresLayoutCount++;
 									
 									if (tempGenresLayoutCount == WRITE_BUFFER_AMOUNT)
 									{
@@ -705,7 +709,7 @@ static NSString *kName_Error = @"error";
 										//[databaseControls.genresDb executeUpdate:@"DELETE * FROM genresLayoutTemp"];
 										[databaseControls.genresDb executeUpdate:@"DROP TABLE IF EXISTS genresLayoutTemp"];
 										[databaseControls.genresDb executeUpdate:@"CREATE TEMPORARY TABLE genresLayoutTemp (md5 TEXT, genre TEXT, segs INTEGER, seg1 TEXT, seg2 TEXT, seg3 TEXT, seg4 TEXT, seg5 TEXT, seg6 TEXT, seg7 TEXT, seg8 TEXT, seg9 TEXT)"];
-										tempGenresLayoutCount = 0;
+										self.tempGenresLayoutCount = 0;
 									}
 									
 									[segments release];
@@ -715,7 +719,7 @@ static NSString *kName_Error = @"error";
 					}
 					
 					// Update the loading screen message
-					if (iteration != -1)
+					if (self.iteration != -1)
 					{
 						[self sendSongNotification:aSong.title];
 					}
@@ -739,17 +743,17 @@ static NSString *kName_Error = @"error";
 	
 	// Handle the iteration
 	//
-	currentRow++;
+	self.currentRow++;
 	//DLog(@"currentRow: %i", currentRow);
 	
-	if (iteration == -1)
+	if (self.iteration == -1)
 	{
 		// Processing artist folders
-		if (currentRow == artistCount)
+		if (self.currentRow == self.artistCount)
 		{
 			// Done loading artist folders
-			currentRow = 1;
-			iteration++;
+			self.currentRow = 1;
+			self.iteration++;
 			[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE resumeLoad"];
 			
 			// Flush the records to disk
@@ -757,7 +761,7 @@ static NSString *kName_Error = @"error";
 			[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE IF EXISTS allAlbumsTemp"];
 			[databaseControls.allAlbumsDb executeUpdate:@"CREATE TEMPORARY TABLE allAlbumsTemp(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
 			//[databaseControls.allAlbumsDb executeUpdate:@"DELETE * FROM allAlbumsTemp"];
-			tempAlbumsCount = 0;
+			self.tempAlbumsCount = 0;
 			
 			// Flush the records to disk
 			[databaseControls.allSongsDb executeUpdate:@"INSERT INTO allSongsUnsorted SELECT * FROM allSongsTemp"];
@@ -765,21 +769,21 @@ static NSString *kName_Error = @"error";
 			[databaseControls.allSongsDb executeUpdate:@"DROP TABLE IF EXISTS allSongsTemp"];
 			NSString *query = [NSString stringWithFormat:@"CREATE TEMPORARY TABLE allSongsTemp (%@)", [Song standardSongColumnSchema]];
 			[databaseControls.allSongsDb executeUpdate:query];
-			tempSongsCount = 0;
+			self.tempSongsCount = 0;
 			
 			// Flush the records to disk
 			[databaseControls.genresDb executeUpdate:@"INSERT OR IGNORE INTO genresUnsorted SELECT * FROM genresTemp"];
 			//[databaseControls.genresDb executeUpdate:@"DELETE * FROM genresTemp"];
 			[databaseControls.genresDb executeUpdate:@"DROP TABLE IF EXISTS genresTemp"];
 			[databaseControls.genresDb executeUpdate:@"CREATE TEMPORARY TABLE genresTemp (genre TEXT)"];
-			tempGenresCount = 0;
+			self.tempGenresCount = 0;
 			
 			// Flush the records to disk
 			[databaseControls.genresDb executeUpdate:@"INSERT OR IGNORE INTO genresLayout SELECT * FROM genresLayoutTemp"];
 			//[databaseControls.genresDb executeUpdate:@"DELETE * FROM genresLayoutTemp"];
 			[databaseControls.genresDb executeUpdate:@"DROP TABLE IF EXISTS genresLayoutTemp"];
 			[databaseControls.genresDb executeUpdate:@"CREATE TEMPORARY TABLE genresLayoutTemp (md5 TEXT, genre TEXT, segs INTEGER, seg1 TEXT, seg2 TEXT, seg3 TEXT, seg4 TEXT, seg5 TEXT, seg6 TEXT, seg7 TEXT, seg8 TEXT, seg9 TEXT)"];
-			tempGenresLayoutCount = 0;
+			self.tempGenresLayoutCount = 0;
 			
 			NSUInteger count = [databaseControls.allAlbumsDb intForQuery:@"SELECT COUNT(*) FROM allAlbumsUnsorted"];
 			[databaseControls.allAlbumsDb executeUpdate:@"INSERT INTO allAlbumsUnsortedCount VALUES (?)", [NSNumber numberWithInt:count]];
@@ -788,15 +792,15 @@ static NSString *kName_Error = @"error";
 		}
 		else
 		{
-			[databaseControls.allAlbumsDb executeUpdate:@"UPDATE resumeLoad SET artistNum = ?", [NSNumber numberWithInt:currentRow]];
+			[databaseControls.allAlbumsDb executeUpdate:@"UPDATE resumeLoad SET artistNum = ?", [NSNumber numberWithInt:self.currentRow]];
             
             // Load the next folder
             //
-            if (iteration < 4)
+            if (self.iteration < 4)
             {
                 [self loadAlbumFolder];
             }
-            else if (iteration == 4)
+            else if (self.iteration == 4)
             {
                 DLog(@"calling loadSort");
                 [self performSelectorInBackground:@selector(loadSort) withObject:nil];
@@ -806,19 +810,19 @@ static NSString *kName_Error = @"error";
 	else
 	{
 		// Processing album folders
-		if (currentRow == albumCount)
+		if (self.currentRow == self.albumCount)
 		{
 			// This iteration is done
-			currentRow = 0;
-			iteration++;
-			[databaseControls.allSongsDb executeUpdate:@"UPDATE resumeLoad SET albumNum = ?, iteration = ?", [NSNumber numberWithInt:0], [NSNumber numberWithInt:iteration]];
+			self.currentRow = 0;
+			self.iteration++;
+			[databaseControls.allSongsDb executeUpdate:@"UPDATE resumeLoad SET albumNum = ?, iteration = ?", [NSNumber numberWithInt:0], [NSNumber numberWithInt:self.iteration]];
 			
 			// Flush the records to disk
 			[databaseControls.allAlbumsDb executeUpdate:@"INSERT INTO allAlbumsUnsorted SELECT * FROM allAlbumsTemp"];
 			[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE IF EXISTS allAlbumsTemp"];
 			[databaseControls.allAlbumsDb executeUpdate:@"CREATE TEMPORARY TABLE allAlbumsTemp(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
 			//[databaseControls.allAlbumsDb executeUpdate:@"DELETE * FROM allAlbumsTemp"];
-			tempAlbumsCount = 0;
+			self.tempAlbumsCount = 0;
 			
 			// Flush the records to disk
 			[databaseControls.allSongsDb executeUpdate:@"INSERT INTO allSongsUnsorted SELECT * FROM allSongsTemp"];
@@ -826,35 +830,35 @@ static NSString *kName_Error = @"error";
 			[databaseControls.allSongsDb executeUpdate:@"DROP TABLE IF EXISTS allSongsTemp"];
 			NSString *query = [NSString stringWithFormat:@"CREATE TEMPORARY TABLE allSongsTemp (%@)", [Song standardSongColumnSchema]];
 			[databaseControls.allSongsDb executeUpdate:query];
-			tempSongsCount = 0;
+			self.tempSongsCount = 0;
 			
 			// Flush the records to disk
 			[databaseControls.genresDb executeUpdate:@"INSERT OR IGNORE INTO genresUnsorted SELECT * FROM genresTemp"];
 			//[databaseControls.genresDb executeUpdate:@"DELETE * FROM genresTemp"];
 			[databaseControls.genresDb executeUpdate:@"DROP TABLE IF EXISTS genresTemp"];
 			[databaseControls.genresDb executeUpdate:@"CREATE TEMPORARY TABLE genresTemp (genre TEXT)"];
-			tempGenresCount = 0;
+			self.tempGenresCount = 0;
 			
 			// Flush the records to disk
 			[databaseControls.genresDb executeUpdate:@"INSERT INTO genresLayout SELECT * FROM genresLayoutTemp"];
 			//[databaseControls.genresDb executeUpdate:@"DELETE * FROM genresLayoutTemp"];
 			[databaseControls.genresDb executeUpdate:@"DROP TABLE IF EXISTS genresLayoutTemp"];
 			[databaseControls.genresDb executeUpdate:@"CREATE TEMPORARY TABLE genresLayoutTemp (md5 TEXT, genre TEXT, segs INTEGER, seg1 TEXT, seg2 TEXT, seg3 TEXT, seg4 TEXT, seg5 TEXT, seg6 TEXT, seg7 TEXT, seg8 TEXT, seg9 TEXT)"];
-			tempGenresLayoutCount = 0;
+			self.tempGenresLayoutCount = 0;
 			
 			[self startLoad];
 		}
 		else
 		{
-			[databaseControls.allSongsDb executeUpdate:@"UPDATE resumeLoad SET albumNum = ?", [NSNumber numberWithInt:currentRow]];
+			[databaseControls.allSongsDb executeUpdate:@"UPDATE resumeLoad SET albumNum = ?", [NSNumber numberWithInt:self.currentRow]];
             
             // Load the next folder
             //
-            if (iteration < 4)
+            if (self.iteration < 4)
             {
                 [self loadAlbumFolder];
             }
-            else if (iteration == 4)
+            else if (self.iteration == 4)
             {
                 DLog(@"calling loadSort");
                 [self performSelectorInBackground:@selector(loadSort) withObject:nil];

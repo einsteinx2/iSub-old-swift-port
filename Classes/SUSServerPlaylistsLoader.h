@@ -10,6 +10,6 @@
 
 @interface SUSServerPlaylistsLoader : SUSLoader
 
-@property (nonatomic, retain) NSArray *serverPlaylists;
+@property (retain) NSArray *serverPlaylists;
 
 @end

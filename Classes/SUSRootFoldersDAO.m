@@ -361,15 +361,15 @@
     [indexPositions release]; indexPositions = nil;
     [indexCounts release]; indexCounts = nil;
     
-    self.loader = [[[SUSRootFoldersLoader alloc] initWithDelegate:delegate] autorelease];
-	loader.selectedFolderId = self.selectedFolderId;
-    [loader startLoad];
+    self.loader = [[[SUSRootFoldersLoader alloc] initWithDelegate:self.delegate] autorelease];
+	self.loader.selectedFolderId = self.selectedFolderId;
+    [self.loader startLoad];
 }
 
 - (void)cancelLoad
 {
-    [loader cancelLoad];
-	loader.delegate = nil;
+    [self.loader cancelLoad];
+	self.loader.delegate = nil;
     self.loader = nil;
 }
 

@@ -26,7 +26,7 @@
 
 #import "SavedSettings.h"
 #import "NSString+Additions.h"
-
+#import "NSArray+Additions.h"
 
 @implementation SettingsTabViewController
 
@@ -323,7 +323,7 @@
 			// Handle the moreNavigationController stupidity
 			if (appDelegate.currentTabBarController.selectedIndex == 4)
 			{
-				[appDelegate.currentTabBarController.moreNavigationController popToViewController:[appDelegate.currentTabBarController.moreNavigationController.viewControllers objectAtIndex:1] animated:YES];
+				[appDelegate.currentTabBarController.moreNavigationController popToViewController:[appDelegate.currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
 			}
 			else
 			{

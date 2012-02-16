@@ -19,9 +19,9 @@
 	NSMutableArray *listOfSongs;
 }
 
-@property (nonatomic, retain) NSMutableArray *listOfArtists;
-@property (nonatomic, retain) NSMutableArray *listOfAlbums;
-@property (nonatomic, retain) NSMutableArray *listOfSongs;
+@property (retain) NSMutableArray *listOfArtists;
+@property (retain) NSMutableArray *listOfAlbums;
+@property (retain) NSMutableArray *listOfSongs;
 
 - (SearchXMLParser *) initXMLParser;
 

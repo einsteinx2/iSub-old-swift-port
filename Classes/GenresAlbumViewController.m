@@ -22,7 +22,7 @@
 #import "AsynchronousImageViewCached.h"
 #import "SavedSettings.h"
 #import "NSString+time.h"
-
+#import "NSArray+Additions.h"
 #import "PlaylistSingleton.h"
 
 @implementation GenresAlbumViewController
@@ -342,7 +342,7 @@
 		cell.seg1 = self.seg1;
 		cell.genre = genre;
 		
-		NSString *md5 = [[listOfAlbums objectAtIndex:indexPath.row] objectAtIndex:0];
+		NSString *md5 = [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:0];
 		NSString *coverArtId;
 		if (viewObjects.isOfflineMode) {
 			coverArtId = [databaseControls.songCacheDb stringForQuery:@"SELECT coverArtId FROM genresSongs WHERE md5 = ?", md5];
@@ -350,7 +350,7 @@
 		else {
 			coverArtId = [databaseControls.genresDb stringForQuery:@"SELECT coverArtId FROM genresSongs WHERE md5 = ?", md5];
 		}
-		NSString *name = [[listOfAlbums objectAtIndex:indexPath.row] objectAtIndex:1];
+		NSString *name = [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1];
 		
 		[cell.coverArtView loadImageFromCoverArtId:coverArtId];
 		
@@ -368,7 +368,7 @@
 		GenresSongUITableViewCell *cell = [[[GenresSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 		cell.accessoryType = UITableViewCellAccessoryNone;
 		NSUInteger a = indexPath.row - [listOfAlbums count];
-		cell.md5 = [listOfSongs objectAtIndex:a];
+		cell.md5 = [listOfSongs objectAtIndexSafe:a];
 		
 		Song *aSong = [Song songFromGenreDb:cell.md5];
 		
@@ -437,7 +437,7 @@
 		if (indexPath.row < [listOfAlbums count])
 		{		
 			GenresAlbumViewController *genresAlbumViewController = [[GenresAlbumViewController alloc] initWithNibName:@"GenresAlbumViewController" bundle:nil];
-			genresAlbumViewController.title = [[listOfAlbums objectAtIndex:indexPath.row] objectAtIndex:1];
+			genresAlbumViewController.title = [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1];
 			genresAlbumViewController.listOfAlbums = [NSMutableArray arrayWithCapacity:1];
 			genresAlbumViewController.listOfSongs = [NSMutableArray arrayWithCapacity:1];
 			genresAlbumViewController.segment = (self.segment + 1);
@@ -446,11 +446,11 @@
 			FMResultSet *result;
 			if (viewObjects.isOfflineMode) 
 			{
-				result = [databaseControls.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), segment, (segment + 1), (segment + 1)], seg1, [[listOfAlbums objectAtIndex:indexPath.row] objectAtIndex:1], genre];
+				result = [databaseControls.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), segment, (segment + 1), (segment + 1)], seg1, [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1], genre];
 			}
 			else 
 			{
-				result = [databaseControls.genresDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), segment, (segment + 1), (segment + 1)], seg1, [[listOfAlbums objectAtIndex:indexPath.row] objectAtIndex:1], genre];
+				result = [databaseControls.genresDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), segment, (segment + 1), (segment + 1)], seg1, [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1], genre];
 			}
 			while ([result next])
 			{

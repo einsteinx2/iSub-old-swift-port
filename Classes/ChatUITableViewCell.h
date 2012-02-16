@@ -14,7 +14,7 @@
 	UILabel *messageLabel;
 }
 
-@property (nonatomic, retain) UILabel *userNameLabel;
-@property (nonatomic, retain) UILabel *messageLabel;
+@property (retain) UILabel *userNameLabel;
+@property (retain) UILabel *messageLabel;
 
 @end

@@ -27,7 +27,7 @@
 }
 
 @property (assign) ServerTypeViewController *parentController;
-@property (nonatomic, retain) NSString *theNewRedirectUrl;
+@property (retain) NSString *theNewRedirectUrl;
 
 - (IBAction) cancelButtonPressed:(id)sender;
 - (IBAction) saveButtonPressed:(id)sender;

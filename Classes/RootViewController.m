@@ -29,6 +29,7 @@
 #import "FlurryAnalytics.h"
 #import "SUSAllSongsLoader.h"
 #import "SeparaterView.h"
+#import "NSArray+Additions.h"
 
 @interface RootViewController (Private)
 
@@ -518,7 +519,7 @@
 	{
 		if ([[dataModel indexCounts] count] > section)
 		{
-			NSUInteger count = [[[dataModel indexCounts] objectAtIndex:section] intValue];
+			NSUInteger count = [[[dataModel indexCounts] objectAtIndexSafe:section] intValue];
 			return count;
 		}
 		
@@ -543,7 +544,7 @@
 		if ([[dataModel indexPositions] count] > indexPath.section)
 		{
 			//DLog(@"indexPositions: %@", [dataModel indexPositions]);
-			NSUInteger sectionStartIndex = [[[dataModel indexPositions] objectAtIndex:indexPath.section] intValue];
+			NSUInteger sectionStartIndex = [[[dataModel indexPositions] objectAtIndexSafe:indexPath.section] intValue];
 			anArtist = [dataModel artistForPosition:(sectionStartIndex + indexPath.row)];
 		}
 	}
@@ -564,7 +565,7 @@
 	if ([[dataModel indexNames] count] == 0)
 		return @"";
 	
-	NSString *title = [[dataModel indexNames] objectAtIndex:section];
+	NSString *title = [[dataModel indexNames] objectAtIndexSafe:section];
 
 	return title;
 }
@@ -625,7 +626,7 @@
 		{	
 			if ([[dataModel indexPositions] count] > indexPath.section)
 			{
-				NSUInteger sectionStartIndex = [[[dataModel indexPositions] objectAtIndex:indexPath.section] intValue];
+				NSUInteger sectionStartIndex = [[[dataModel indexPositions] objectAtIndexSafe:indexPath.section] intValue];
 				anArtist = [dataModel artistForPosition:(sectionStartIndex + indexPath.row)];
 			}
 		}

@@ -19,12 +19,12 @@
 	NSString *query;
 }
 
-@property (nonatomic, retain) NSMutableArray *cellNames;
+@property (retain) NSMutableArray *cellNames;
 
-@property (nonatomic, retain) NSArray *listOfArtists;
-@property (nonatomic, retain) NSArray *listOfAlbums;
-@property (nonatomic, retain) NSArray *listOfSongs;
+@property (retain) NSArray *listOfArtists;
+@property (retain) NSArray *listOfAlbums;
+@property (retain) NSArray *listOfSongs;
 
-@property (nonatomic, retain) NSString *query;
+@property (retain) NSString *query;
 
 @end

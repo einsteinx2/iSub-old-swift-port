@@ -16,6 +16,7 @@
 #import "AudioEngine.h"
 #import "iSubAppDelegate.h"
 #import "Reachability.h"
+#import "NSArray+Additions.h"
 
 @implementation SavedSettings
 
@@ -190,16 +191,16 @@
 	{
 		if ([servers count] > 0)
 		{
-			if ([[servers objectAtIndex:0] isKindOfClass:[NSArray class]])
+			if ([[servers objectAtIndexSafe:0] isKindOfClass:[NSArray class]])
 			{
 				NSMutableArray *newServerList = [NSMutableArray arrayWithCapacity:0];
 				
 				for (NSArray *serverInfo in servers)
 				{
 					Server *aServer = [[Server alloc] init];
-					aServer.url = [NSString stringWithString:[serverInfo objectAtIndex:0]];
-					aServer.username = [NSString stringWithString:[serverInfo objectAtIndex:1]];
-					aServer.password = [NSString stringWithString:[serverInfo objectAtIndex:2]];
+					aServer.url = [NSString stringWithString:[serverInfo objectAtIndexSafe:0]];
+					aServer.username = [NSString stringWithString:[serverInfo objectAtIndexSafe:1]];
+					aServer.password = [NSString stringWithString:[serverInfo objectAtIndexSafe:2]];
 					aServer.type = SUBSONIC;
 					
 					[newServerList addObject:aServer];
@@ -449,7 +450,7 @@
 - (NSString *)documentsPath
 {
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	return [paths objectAtIndex: 0];
+	return [paths objectAtIndexSafe: 0];
 }
 
 - (NSString *)databasePath
@@ -460,7 +461,7 @@
 - (NSString *)cachesPath
 {
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-	return [paths objectAtIndex: 0];
+	return [paths objectAtIndexSafe: 0];
 }
 
 - (NSString *)songCachePath

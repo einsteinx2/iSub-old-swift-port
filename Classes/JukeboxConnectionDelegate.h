@@ -19,7 +19,7 @@
 	MusicSingleton *musicControls;
 }
 
-@property (nonatomic, retain) NSMutableData *receivedData;
+@property (retain) NSMutableData *receivedData;
 @property BOOL isGetInfo;
 
 @end

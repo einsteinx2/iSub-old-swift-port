@@ -59,9 +59,9 @@
     else if ([SavedSettings sharedInstance].isLyricsEnabled) 
     {
 		self.loader = [[[SUSLyricsLoader alloc] initWithDelegate:self] autorelease];
-        loader.artist = artist;
-        loader.title = title;
-        [loader startLoad];
+        self.loader.artist = artist;
+        self.loader.title = title;
+        [self.loader startLoad];
     }
 	else
 	{
@@ -80,8 +80,8 @@
 
 - (void)cancelLoad
 {
-	[loader cancelLoad];
-	loader.delegate = nil;
+	[self.loader cancelLoad];
+	self.loader.delegate = nil;
 	self.loader = nil;
 }
 
@@ -89,23 +89,23 @@
 
 - (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
 {
-	loader.delegate = nil;
+	self.loader.delegate = nil;
 	self.loader = nil;
 	
-	if ([delegate respondsToSelector:@selector(loadingFailed:withError:)])
+	if ([self.delegate respondsToSelector:@selector(loadingFailed:withError:)])
 	{
-		[delegate loadingFailed:nil withError:error];
+		[self.delegate loadingFailed:nil withError:error];
 	}
 }
 
 - (void)loadingFinished:(SUSLoader*)theLoader
 {
-	loader.delegate = nil;
+	self.loader.delegate = nil;
 	self.loader = nil;
 	
-	if ([delegate respondsToSelector:@selector(loadingFinished:)])
+	if ([self.delegate respondsToSelector:@selector(loadingFinished:)])
 	{
-		[delegate loadingFinished:nil];
+		[self.delegate loadingFinished:nil];
 	}
 }
 

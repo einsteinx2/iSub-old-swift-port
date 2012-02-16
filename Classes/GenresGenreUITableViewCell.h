@@ -10,7 +10,7 @@
 
 @interface GenresGenreUITableViewCell : CustomUITableViewCell 
 
-@property (nonatomic, retain) UIScrollView *genreNameScrollView;
-@property (nonatomic, retain) UILabel *genreNameLabel;
+@property (retain) UIScrollView *genreNameScrollView;
+@property (retain) UILabel *genreNameLabel;
 
 @end

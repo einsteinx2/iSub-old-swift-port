@@ -10,7 +10,7 @@
 
 @interface SUSCoverArtLargeLoader : SUSLoader
 
-@property (nonatomic, retain) NSString *coverArtId;
+@property (retain) NSString *coverArtId;
 
 - (void)loadCoverArtId:(NSString *)artId;
 

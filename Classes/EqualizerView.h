@@ -35,12 +35,12 @@
 	ISMSBassVisualType visualType;
 }
 
-@property(nonatomic, readwrite) CGPoint location;
-@property(nonatomic, readwrite) CGPoint previousLocation;
+@property(readwrite) CGPoint location;
+@property(readwrite) CGPoint previousLocation;
 
-@property (nonatomic, retain) NSTimer *drawTimer;
+@property (retain) NSTimer *drawTimer;
 
-@property (nonatomic, retain) UIBezierPath *path;
+@property (retain) UIBezierPath *path;
 
 - (void)erase;
 - (void)eraseBitBuffer;

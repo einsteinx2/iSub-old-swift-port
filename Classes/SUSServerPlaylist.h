@@ -10,8 +10,8 @@
 
 @interface SUSServerPlaylist : NSObject <NSCopying>
 
-@property (nonatomic, copy) NSString *playlistId;
-@property (nonatomic, copy) NSString *playlistName;
+@property (copy) NSString *playlistId;
+@property (copy) NSString *playlistName;
 
 - (id)initWithTBXMLElement:(TBXMLElement *)element;
 

@@ -17,6 +17,7 @@
 #import "SavedSettings.h"
 #import "ServerListViewController.h"
 #import "ServerTypeViewController.h"
+#import "NSArray+Additions.h"
 
 @implementation SubsonicServerEditViewController
 
@@ -143,7 +144,7 @@
 		// Pop the view back
 		if (appDelegate.currentTabBarController.selectedIndex == 4)
 		{
-			[appDelegate.currentTabBarController.moreNavigationController popToViewController:[appDelegate.currentTabBarController.moreNavigationController.viewControllers objectAtIndex:1] animated:YES];
+			[appDelegate.currentTabBarController.moreNavigationController popToViewController:[appDelegate.currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
 		}
 		else
 		{

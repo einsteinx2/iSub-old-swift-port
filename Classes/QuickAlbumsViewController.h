@@ -19,11 +19,11 @@
 	NSDictionary *titles;
 }
 
-@property (nonatomic, assign) UIViewController *parent;
+@property (assign) UIViewController *parent;
 
-@property (nonatomic, retain) NSMutableData *receivedData;
+@property (retain) NSMutableData *receivedData;
 
-@property (nonatomic, retain) NSString *modifier;
+@property (retain) NSString *modifier;
 
 - (IBAction)random;
 - (IBAction)frequent;

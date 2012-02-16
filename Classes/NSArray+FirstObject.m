@@ -7,17 +7,18 @@
 //
 
 #import "NSArray+FirstObject.h"
+#import "NSArray+Safe.h"
 
 @implementation NSArray (FirstObject)
 
 - (id)firstObject
 {
-	if ([self count] > 0)
-    {
-		return [self objectAtIndex:0];
-	}
-	
-	return nil;
+	return [self objectAtIndex:0];
+}
+
+- (id)firstObjectSafe
+{
+	return [self objectAtIndexSafe:0];
 }
 
 @end

@@ -11,10 +11,10 @@
 @interface CacheAlbumUITableViewCell : CustomUITableViewCell 
 
 @property NSInteger segment;
-@property (nonatomic, retain) NSString *seg1;
+@property (retain) NSString *seg1;
 
-@property (nonatomic, retain) UIImageView *coverArtView;
-@property (nonatomic, retain) UIScrollView *albumNameScrollView;
-@property (nonatomic, retain) UILabel *albumNameLabel;
+@property (retain) UIImageView *coverArtView;
+@property (retain) UIScrollView *albumNameScrollView;
+@property (retain) UILabel *albumNameLabel;
 
 @end

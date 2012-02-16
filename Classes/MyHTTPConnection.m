@@ -7,6 +7,7 @@
 #import "HTTPServer.h"
 #import "HTTPResponse.h"
 #import "AsyncSocket.h"
+#import "NSArray+Additions.h"
 
 @implementation MyHTTPConnection
 
@@ -119,20 +120,20 @@
 		
 		if ([multipartData count] < 2) return nil;
 		
-		NSString* postInfo = [[NSString alloc] initWithBytes:[[multipartData objectAtIndex:1] bytes]
-													  length:[[multipartData objectAtIndex:1] length]
+		NSString* postInfo = [[NSString alloc] initWithBytes:[[multipartData objectAtIndexSafe:1] bytes]
+													  length:[[multipartData objectAtIndexSafe:1] length]
 													encoding:NSUTF8StringEncoding];
 		
 		NSArray* postInfoComponents = [postInfo componentsSeparatedByString:@"; filename="];
 		postInfoComponents = [[postInfoComponents lastObject] componentsSeparatedByString:@"\""];
-		postInfoComponents = [[postInfoComponents objectAtIndex:1] componentsSeparatedByString:@"\\"];
+		postInfoComponents = [[postInfoComponents objectAtIndexSafe:1] componentsSeparatedByString:@"\\"];
 		NSString* filename = [postInfoComponents lastObject];
 		
 		if (![filename isEqualToString:@""]) //this makes sure we did not submitted upload form without selecting file
 		{
 			UInt16 separatorBytes = 0x0A0D;
 			NSMutableData* separatorData = [NSMutableData dataWithBytes:&separatorBytes length:2];
-			[separatorData appendData:[multipartData objectAtIndex:0]];
+			[separatorData appendData:[multipartData objectAtIndexSafe:0]];
 			int l = [separatorData length];
 			int count = 2;	//number of times the separator shows up at the end of file data
 			
@@ -155,7 +156,7 @@
 		}
 		
 		for (int n = 1; n < [multipartData count] - 1; n++)
-			DLog(@"%@", [[NSString alloc] initWithBytes:[[multipartData objectAtIndex:n] bytes] length:[[multipartData objectAtIndex:n] length] encoding:NSUTF8StringEncoding]);
+			DLog(@"%@", [[NSString alloc] initWithBytes:[[multipartData objectAtIndexSafe:n] bytes] length:[[multipartData objectAtIndexSafe:n] length] encoding:NSUTF8StringEncoding]);
 		
 		[postInfo release];
 		[multipartData release];
@@ -228,10 +229,10 @@
 				{
 					postHeaderOK = TRUE;
 					
-					NSString* postInfo = [[NSString alloc] initWithBytes:[[multipartData objectAtIndex:1] bytes] length:[[multipartData objectAtIndex:1] length] encoding:NSUTF8StringEncoding];
+					NSString* postInfo = [[NSString alloc] initWithBytes:[[multipartData objectAtIndexSafe:1] bytes] length:[[multipartData objectAtIndexSafe:1] length] encoding:NSUTF8StringEncoding];
 					NSArray* postInfoComponents = [postInfo componentsSeparatedByString:@"; filename="];
 					postInfoComponents = [[postInfoComponents lastObject] componentsSeparatedByString:@"\""];
-					postInfoComponents = [[postInfoComponents objectAtIndex:1] componentsSeparatedByString:@"\\"];
+					postInfoComponents = [[postInfoComponents objectAtIndexSafe:1] componentsSeparatedByString:@"\\"];
 					NSString* filename = [[[server documentRoot] path] stringByAppendingPathComponent:[postInfoComponents lastObject]];
 					NSRange fileDataRange = {dataStartIndex, [postDataChunk length] - dataStartIndex};
 					

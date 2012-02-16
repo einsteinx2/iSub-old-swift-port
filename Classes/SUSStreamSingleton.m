@@ -23,7 +23,7 @@
 #import "SUSCoverArtLargeLoader.h"
 #import "SUSLyricsDAO.h"
 #import "ViewObjectsSingleton.h"
-
+#import "NSArray+Additions.h"
 
 #define maxNumOfReconnects 3
 
@@ -34,7 +34,10 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (SUSStreamHandler *)handlerForSong:(Song *)aSong
 {
-	for (SUSStreamHandler *handler in handlerStack)
+	if (!aSong)
+		return nil;
+	
+	for (SUSStreamHandler *handler in self.handlerStack)
 	{
 		if ([handler.mySong isEqualToSong:aSong])
 		{
@@ -46,18 +49,24 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (BOOL)isSongFirstInQueue:(Song *)aSong
 {
-	SUSStreamHandler *firstHandler = [handlerStack firstObject];
+	if (!aSong)
+		return NO;
+	
+	SUSStreamHandler *firstHandler = [self.handlerStack firstObjectSafe];
 	return [aSong isEqualToSong:firstHandler.mySong];
 }
 
 - (BOOL)isSongDownloading:(Song *)aSong
 {
+	if (!aSong)
+		return NO;
+	
 	return [self handlerForSong:aSong].isDownloading;
 }
 
 - (BOOL)isQueueDownloading
 {
-	for (SUSStreamHandler *handler in handlerStack)
+	for (SUSStreamHandler *handler in self.handlerStack)
 	{
 		if (handler.isDownloading)
 			return YES;
@@ -67,7 +76,10 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (void)cancelAllStreamsExcept:(NSArray *)handlersToSkip
 {
-	for (SUSStreamHandler *handler in handlerStack)
+	if (!handlersToSkip)
+		return;
+	
+	for (SUSStreamHandler *handler in self.handlerStack)
 	{
 		if (![handlersToSkip containsObject:handler])
 		{
@@ -84,6 +96,9 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (void)cancelAllStreamsExceptForSongs:(NSArray *)songsToSkip
 {
+	if (!songsToSkip)
+		return;
+	
 	NSMutableArray *handlersToSkip = [NSMutableArray arrayWithCapacity:[songsToSkip count]];
 	for (Song *aSong in songsToSkip)
 	{
@@ -97,6 +112,9 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (void)cancelAllStreamsExceptForSong:(Song *)aSong
 {
+	if (![self handlerForSong:aSong])
+		return;
+	
 	// Cancel any song resume requests
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
@@ -111,10 +129,10 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (void)cancelStreamAtIndex:(NSUInteger)index
 {
-	if (index < [handlerStack count])
+	if (index < [self.handlerStack count])
 	{
 		// Find the handler object and cancel it
-		SUSStreamHandler *handler = [handlerStack objectAtIndex:index];
+		SUSStreamHandler *handler = [self.handlerStack objectAtIndexSafe:index];
 		[handler cancel];
 		
 		// If we're trying to resume, cancel the request
@@ -126,28 +144,49 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (void)cancelStream:(SUSStreamHandler *)handler
 {
-	NSUInteger index = [handlerStack indexOfObject:handler];
+	if (!handler)
+		return;
+	
+	NSUInteger index = [self.handlerStack indexOfObject:handler];
 	[self cancelStreamAtIndex:index];
 }
 
 - (void)cancelStreamForSong:(Song *)aSong
 {
+	if (!aSong)
+		return;
+	
 	[self cancelStream:[self handlerForSong:aSong]];
 }
 
 - (void)removeAllStreamsExcept:(NSArray *)handlersToSkip
 {
+	if (!handlersToSkip)
+		return;
+	
 	[self cancelAllStreamsExcept:handlersToSkip];
-	NSArray *handlers = [NSArray arrayWithArray:handlerStack];
+	NSArray *handlers = [NSArray arrayWithArray:self.handlerStack];
 	for (SUSStreamHandler *handler in handlers)
 	{
 		if (![handlersToSkip containsObject:handler])
-			[handlerStack removeObject:handler];
+			[self.handlerStack removeObject:handler];
+	}
+	
+	if ([self.handlerStack count] > 0)
+	{
+		SUSStreamHandler *handler = [self.handlerStack firstObject];
+		if (!handler.isDownloading)
+		{
+			[handler start];
+		}
 	}
 }
 
 - (void)removeAllStreamsExceptForSongs:(NSArray *)songsToSkip
 {
+	if (!songsToSkip)
+		return;
+	
 	NSMutableArray *handlersToSkip = [NSMutableArray arrayWithCapacity:[songsToSkip count]];
 	for (Song *aSong in songsToSkip)
 	{
@@ -160,6 +199,9 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (void)removeAllStreamsExceptForSong:(Song *)aSong
 {
+	if (![self handlerForSong:aSong])
+		return;
+	
 	NSArray *handlersToSkip = [NSArray arrayWithObject:[self handlerForSong:aSong]];
 	[self removeAllStreamsExcept:handlersToSkip];
 }
@@ -167,41 +209,50 @@ static SUSStreamSingleton *sharedInstance = nil;
 - (void)removeAllStreams
 {
 	[self cancelAllStreams];
-	[handlerStack removeAllObjects];
+	[self.handlerStack removeAllObjects];
 	[self saveHandlerStack];
 }
 
 - (void)removeStreamAtIndex:(NSUInteger)index
 {
-    DLog(@"handlerStack count: %i", [handlerStack count]);
-	if (index < [handlerStack count])
+    DLog(@"handlerStack count: %i", [self.handlerStack count]);
+	if (index < [self.handlerStack count])
 	{
 		[self cancelStreamAtIndex:index];
-		[handlerStack removeObjectAtIndex:index];
+		[self.handlerStack removeObjectAtIndex:index];
 	}
-    DLog(@"removed stream, new handlerStack count: %i", [handlerStack count]);
+    DLog(@"removed stream, new handlerStack count: %i", [self.handlerStack count]);
 }
 
 - (void)removeStream:(SUSStreamHandler *)handler
 {
-	[self cancelStream:handler];
-	[handlerStack removeObject:handler];
+	if (!handler)
+		return;
 	
+	[self cancelStream:handler];
+	[self.handlerStack removeObject:handler];
+		
 	[self saveHandlerStack];
 }
 
 - (void)removeStreamForSong:(Song *)aSong
 {
+	if (!aSong)
+		return;
+	
 	[self removeStream:[self handlerForSong:aSong]];
 }
 
 - (void)resumeQueue
 {
-	[self resumeHandler:[handlerStack firstObject]];
+	[self resumeHandler:[self.handlerStack firstObjectSafe]];
 }
 
 - (void)resumeHandler:(SUSStreamHandler *)handler
 {
+	if (!handler)
+		return; 
+	
 	// As an added check, verify that this handler is still in the stack
 	if ([self isSongInQueue:handler.mySong])
 	{
@@ -211,18 +262,24 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (void)startHandler:(SUSStreamHandler *)handler resume:(BOOL)resume
 {
+	if (!handler)
+		return;
+	
 	[handler start:resume];
 	[lyricsDAO loadLyricsForArtist:handler.mySong.artist andTitle:handler.mySong.title];
 }
 
 - (void)startHandler:(SUSStreamHandler *)handler
 {
+	if (!handler)
+		return;
+	
 	[self startHandler:handler resume:NO];
 }
 
 - (void)saveHandlerStack
 {
-	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:handlerStack];
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.handlerStack];
 	if (data)
 	{
 		[[NSUserDefaults standardUserDefaults] setObject:data forKey:@"handlerStack"];
@@ -233,10 +290,10 @@ static SUSStreamSingleton *sharedInstance = nil;
 - (void)loadHandlerStack
 {	
 	NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:@"handlerStack"];
-	if (data)
-		handlerStack = [[NSKeyedUnarchiver unarchiveObjectWithData:data] retain];
+	if (data) 
+		self.handlerStack = [NSKeyedUnarchiver unarchiveObjectWithData:data];
 
-	for (SUSStreamHandler *handler in handlerStack)
+	for (SUSStreamHandler *handler in self.handlerStack)
 	{
 		handler.delegate = self;
 	}
@@ -254,12 +311,12 @@ static SUSStreamSingleton *sharedInstance = nil;
 														 secondsOffset:secondsOffset
 																isTemp:isTemp
 															  delegate:self];
-	if (![handlerStack containsObject:handler])
+	if (![self.handlerStack containsObject:handler])
 	{
-		[handlerStack insertObject:handler atIndex:index];
+		[self.handlerStack insertObject:handler atIndex:index];
 		[handler release];
 		
-		if ([handlerStack count] == 1)
+		if ([self.handlerStack count] == 1)
 		{
 			[self startHandler:handler];
 		}
@@ -287,18 +344,18 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (void)queueStreamForSong:(Song *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset isTempCache:(BOOL)isTemp
 {
-	[self queueStreamForSong:song byteOffset:byteOffset secondsOffset:secondsOffset atIndex:[handlerStack count] isTempCache:isTemp];
+	[self queueStreamForSong:song byteOffset:byteOffset secondsOffset:secondsOffset atIndex:[self.handlerStack count] isTempCache:isTemp];
 }
 
 - (void)queueStreamForSong:(Song *)song isTempCache:(BOOL)isTemp
 {	
-	[self queueStreamForSong:song byteOffset:0 secondsOffset:0.0 atIndex:[handlerStack count] isTempCache:isTemp];
+	[self queueStreamForSong:song byteOffset:0 secondsOffset:0.0 atIndex:[self.handlerStack count] isTempCache:isTemp];
 }
 
 - (BOOL)isSongInQueue:(Song *)aSong
 {
 	BOOL isSongInQueue = NO;
-	for (SUSStreamHandler *handler in handlerStack)
+	for (SUSStreamHandler *handler in self.handlerStack)
 	{
 		if ([handler.mySong isEqualToSong:aSong])
 		{
@@ -317,7 +374,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 		numStreamsToQueue = ISMSNumberOfStreamsToQueue;
 	}
 	
-	if ([handlerStack count] < numStreamsToQueue)
+	if ([self.handlerStack count] < numStreamsToQueue)
 	{
 		NSInteger currentIndex = currentPlaylistDAO.currentIndex;
 		for (int i = currentIndex; i < currentIndex + numStreamsToQueue; i++)
@@ -361,13 +418,13 @@ static SUSStreamSingleton *sharedInstance = nil;
 	Song *nextSong = currentPlaylistDAO.nextSong;
 	if ([self isSongInQueue:nextSong])
 	{
-		if ([handlerStack count] > 0)
+		if ([self.handlerStack count] > 0)
 		{
-			if (![[handlerStack objectAtIndex:0] isEqualToSong:nextSong])
+			if (![[self.handlerStack objectAtIndexSafe:0] isEqualToSong:nextSong])
 			{
-				if ([handlerStack count] > 1)
+				if ([self.handlerStack count] > 1)
 				{
-					if (![[handlerStack objectAtIndex:1] isEqualToSong:nextSong])
+					if (![[self.handlerStack objectAtIndexSafe:1] isEqualToSong:nextSong])
 					{
 						fillQueue = YES;
 					}
@@ -413,9 +470,12 @@ static SUSStreamSingleton *sharedInstance = nil;
 	if ([handler.mySong isEqualToSong:currentSong])
 	{
 		//[audio startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:bytes] orSeconds:[NSNumber numberWithDouble:seconds]];
+		DLog(@"calling audio start");
 		[audio start];
+		DLog(@"audio start called");
 		audio.startByteOffset = bytes;
 		audio.startSecondsOffset = seconds;
+		DLog(@"set byte and second offset");
 	}
 	else if ([handler.mySong isEqualToSong:nextSong])
 	{
@@ -440,7 +500,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 	else
 	{
 		DLog(@"removing stream handler");
-		DLog(@"handlerStack: %@", handlerStack);
+		DLog(@"handlerStack: %@", self.handlerStack);
 		// Tried max number of times so remove
 		[self removeStream:handler];
 	}
@@ -459,13 +519,13 @@ static SUSStreamSingleton *sharedInstance = nil;
 	[self removeStream:handler];
 	
 	DLog(@"stream handler finished: %@", handler);
-	DLog(@"handlerStack: %@", handlerStack);
+	DLog(@"handlerStack: %@", self.handlerStack);
 	
 	// Start the next handler which is now the first object
-	if ([handlerStack count] > 0)
+	if ([self.handlerStack count] > 0)
 	{
 		DLog(@"starting first handler in stack");
-		SUSStreamHandler *handler = (SUSStreamHandler *)[handlerStack firstObject];
+		SUSStreamHandler *handler = (SUSStreamHandler *)[self.handlerStack firstObjectSafe];
 		[self startHandler:handler];
 	}
 }

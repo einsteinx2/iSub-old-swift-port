@@ -17,6 +17,7 @@
 	ViewObjectsSingleton *viewObjects;
 	MusicSingleton *musicControls;
 	DatabaseSingleton *databaseControls;
+	PlaylistSingleton *currentPlaylistDataModel;
 	
 	UIView *headerView;
 	UISegmentedControl *segmentedControl;
@@ -33,11 +34,7 @@
 	BOOL isPlaylistSaveEditShowing;
 	
 	UITextField *playlistNameTextField;
-	
-	BOOL goToNextSong;
-	
-	UInt32 currentPlaylistCount;
-		
+				
 	BBSimpleConnectionQueue *connectionQueue;
 	
 	BOOL savePlaylistLocal;
@@ -49,10 +46,9 @@
 	//NSMutableData *receivedData;
 }
 
-@property (nonatomic, retain) NSMutableURLRequest *request;
-
-@property (nonatomic, retain) PlaylistSingleton *currentPlaylistDataModel;
-@property (nonatomic, retain) SUSServerPlaylistsDAO *serverPlaylistsDataModel;
+@property (retain) NSMutableURLRequest *request;
+@property (retain) SUSServerPlaylistsDAO *serverPlaylistsDataModel;
+@property NSUInteger currentPlaylistCount;
 
 - (void)showDeleteButton;
 - (void)hideDeleteButton;

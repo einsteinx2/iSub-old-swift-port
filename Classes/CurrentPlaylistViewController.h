@@ -26,13 +26,11 @@
 	UITextField *playlistNameTextField;
 	
 	//NSTimer *songHighlightTimer;
-	
-	BOOL goToNextSong;
-	
+		
 	NSUInteger currentPlaylistCount;
 }
 
-@property (nonatomic, retain) PlaylistSingleton *dataModel;
+@property (retain) PlaylistSingleton *dataModel;
 
 - (void) selectRow;
 

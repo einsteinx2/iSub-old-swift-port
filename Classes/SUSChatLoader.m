@@ -141,7 +141,7 @@
 					
 					// Create the chat message object and add it to the array
 					ChatMessage *aChatMessage = [[ChatMessage alloc] initWithTBXMLElement:chatMessage];
-					[chatMessages addObject:aChatMessage];
+					[self.chatMessages addObject:aChatMessage];
 					[aChatMessage release];
 					
 					// Get the next message

@@ -23,8 +23,8 @@
 	NSMutableData *receivedData;
 }
 
-@property (nonatomic, retain) UIImageView *nothingPlayingScreen;
+@property (retain) UIImageView *nothingPlayingScreen;
 
-@property (nonatomic, retain) SUSNowPlayingDAO *dataModel;
+@property (retain) SUSNowPlayingDAO *dataModel;
 
 @end

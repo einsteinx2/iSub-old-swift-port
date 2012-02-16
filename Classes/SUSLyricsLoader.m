@@ -45,7 +45,7 @@
 
 - (void)startLoad
 {
-    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(artist), @"artist", n2N(title), @"title", nil];
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(self.artist), @"artist", n2N(self.title), @"title", nil];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getLyrics" andParameters:parameters];
    
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
@@ -64,7 +64,7 @@
 
 - (void)insertLyricsIntoDb
 {
-    [self.db executeUpdate:@"INSERT INTO lyrics (artist, title, lyrics) VALUES (?, ?, ?)", artist, title, self.loadedLyrics];
+    [self.db executeUpdate:@"INSERT INTO lyrics (artist, title, lyrics) VALUES (?, ?, ?)", self.artist, self.title, self.loadedLyrics];
     if ([self.db hadError]) { 
         DLog(@"Err inserting lyrics %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]); 
     }

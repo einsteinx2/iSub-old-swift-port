@@ -21,7 +21,7 @@
 	NSTimer *checkProductsTimer;
 }
 
-@property (nonatomic, retain) NSArray *storeItems;
+@property (retain) NSArray *storeItems;
 
 - (void)checkProducts;
 - (void)organizeList;

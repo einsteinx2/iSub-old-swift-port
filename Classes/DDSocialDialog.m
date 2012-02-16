@@ -42,6 +42,7 @@
  */
 
 #import "DDSocialDialog.h"
+#import "NSArray+Additions.h"
 
 static CGFloat kDDSocialDialogBorderWidth = 10;
 static CGFloat kDDSocialDialogTransitionDuration = 0.3;
@@ -187,7 +188,7 @@ static CGFloat kDDSocialDialogPadding = 10;
 	
 	UIWindow* window = [UIApplication sharedApplication].keyWindow;
 	if (!window) {
-		window = [[UIApplication sharedApplication].windows objectAtIndex:0];
+		window = [[UIApplication sharedApplication].windows objectAtIndexSafe:0];
 	}
 	
 	// Touch background to dismiss dialog

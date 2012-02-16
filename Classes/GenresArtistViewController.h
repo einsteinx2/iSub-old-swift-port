@@ -19,6 +19,6 @@
 	NSMutableArray *listOfArtists;
 }
 
-@property (nonatomic, retain) NSMutableArray *listOfArtists;
+@property (retain) NSMutableArray *listOfArtists;
 
 @end

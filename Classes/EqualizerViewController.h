@@ -12,29 +12,29 @@
 @class EqualizerView, EqualizerPointView, EqualizerPathView, BassParamEqValue, BassEffectDAO, NWPickerField;
 @interface EqualizerViewController : UIViewController <NWPickerFieldDelegate, DDSocialDialogDelegate, UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, retain) IBOutlet NWPickerField *presetPicker;
+@property (retain) IBOutlet NWPickerField *presetPicker;
 
-@property (nonatomic, retain) IBOutlet UIButton *toggleButton;
-//@property (nonatomic, retain) IBOutlet UIImageView *drawImage;
-@property (nonatomic, retain) IBOutlet EqualizerPathView *equalizerPath;
-@property (nonatomic, retain) IBOutlet EqualizerView *equalizerView;
-@property (nonatomic, retain) NSMutableArray *equalizerPointViews;
+@property (retain) IBOutlet UIButton *toggleButton;
+//@property (retain) IBOutlet UIImageView *drawImage;
+@property (retain) IBOutlet EqualizerPathView *equalizerPath;
+@property (retain) IBOutlet EqualizerView *equalizerView;
+@property (retain) NSMutableArray *equalizerPointViews;
 
-@property (nonatomic, retain) IBOutlet UISlider *gainSlider;
+@property (retain) IBOutlet UISlider *gainSlider;
 
-@property (nonatomic, retain) BassEffectDAO *effectDAO;
+@property (retain) BassEffectDAO *effectDAO;
 
-//@property (nonatomic, retain) NSTimer *drawTimer;
+//@property (retain) NSTimer *drawTimer;
 
-@property (nonatomic, assign) EqualizerPointView *selectedView;
+@property (assign) EqualizerPointView *selectedView;
 
-@property (nonatomic, retain) UIButton *deletePresetButton;
-@property (nonatomic, retain) UIButton *savePresetButton;
+@property (retain) UIButton *deletePresetButton;
+@property (retain) UIButton *savePresetButton;
 @property BOOL isSavePresetButtonShowing;
 @property BOOL isDeletePresetButtonShowing;
-@property (nonatomic, retain) UITextField *presetNameTextField;
+@property (retain) UITextField *presetNameTextField;
 
-@property (nonatomic, retain) DDSocialDialog *saveDialog;
+@property (retain) DDSocialDialog *saveDialog;
 
 
 //- (BOOL)isTouchingEqView:(UITouch *)touch;

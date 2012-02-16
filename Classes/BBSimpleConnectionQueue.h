@@ -20,7 +20,7 @@
 
 @property (readonly) NSMutableArray *connectionStack;
 @property (readonly) BOOL isRunning;
-@property (nonatomic, assign) id <BBSimpleConnectionQueueDelegate> delegate;
+@property (assign) id <BBSimpleConnectionQueueDelegate> delegate;
 
 - (void)registerConnection:(NSURLConnection *)connection;
 - (void)connectionFinished:(NSURLConnection *)connection;

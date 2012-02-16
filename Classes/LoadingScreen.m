@@ -7,7 +7,7 @@
 //
 
 #import "LoadingScreen.h"
-
+#import "NSArray+Additions.h"
 
 @implementation LoadingScreen
 
@@ -70,10 +70,10 @@
 		{
 			if ([message count] == 4)
 			{
-				self.loadingTitle1.text = [message objectAtIndex:0];
-				self.loadingMessage1.text = [message objectAtIndex:1];
-				self.loadingTitle2.text = [message objectAtIndex:2];
-				self.loadingMessage2.text = [message objectAtIndex:3];
+				self.loadingTitle1.text = [message objectAtIndexSafe:0];
+				self.loadingMessage1.text = [message objectAtIndexSafe:1];
+				self.loadingTitle2.text = [message objectAtIndexSafe:2];
+				self.loadingMessage2.text = [message objectAtIndexSafe:3];
 			}
 			else
 			{
@@ -104,10 +104,10 @@
 {
 	if ([messages count] == 4)
 	{
-		self.loadingTitle1.text = [messages objectAtIndex:0];
-		self.loadingMessage1.text = [messages objectAtIndex:1];
-		self.loadingTitle2.text = [messages objectAtIndex:2];
-		self.loadingMessage2.text = [messages objectAtIndex:3];
+		self.loadingTitle1.text = [messages objectAtIndexSafe:0];
+		self.loadingMessage1.text = [messages objectAtIndexSafe:1];
+		self.loadingTitle2.text = [messages objectAtIndexSafe:2];
+		self.loadingMessage2.text = [messages objectAtIndexSafe:3];
 	}
 	else
 	{

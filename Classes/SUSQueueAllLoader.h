@@ -28,12 +28,12 @@
 	NSMutableArray *folderIds;
 }
 
-@property (nonatomic, retain) NSString *currentPlaylist;
-@property (nonatomic, retain) NSString *shufflePlaylist;
+@property (retain) NSString *currentPlaylist;
+@property (retain) NSString *shufflePlaylist;
 
-@property (nonatomic, retain) Artist *myArtist;
+@property (retain) Artist *myArtist;
 
-@property (nonatomic, retain) NSMutableArray *folderIds;
+@property (retain) NSMutableArray *folderIds;
 
 - (void)loadData:(NSString *)folderId artist:(Artist *)theArtist;// isQueue:(BOOL)queue;
 

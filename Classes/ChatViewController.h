@@ -36,14 +36,14 @@
 	BOOL _reloading;
 }
 
-@property (nonatomic, retain) UIImageView *noChatMessagesScreen;
-@property (nonatomic, retain) NSMutableArray *chatMessages;
+@property (retain) UIImageView *noChatMessagesScreen;
+@property (retain) NSMutableArray *chatMessages;
 
 @property NSInteger lastCheck;
 
 @property(assign,getter=isReloading) BOOL reloading;
 
-@property (nonatomic, retain) SUSChatDAO *dataModel;
+@property (retain) SUSChatDAO *dataModel;
 
 
 @end

@@ -37,6 +37,7 @@
 #import "EGORefreshTableHeaderView.h"
 #import "SUSAllSongsLoader.h"
 #import "SUSAllSongsDAO.h"
+#import "NSArray+Additions.h"
 
 @implementation AllAlbumsViewController
 
@@ -414,7 +415,7 @@
 	if ([dataModel.index count] == 0)
 		return @"";
 	
-	NSString *title = [(Index *)[dataModel.index objectAtIndex:section] name];
+	NSString *title = [(Index *)[dataModel.index objectAtIndexSafe:section] name];
 	
 	return title;
 }
@@ -471,7 +472,7 @@
 	}
 	else 
 	{
-		return [(Index *)[dataModel.index objectAtIndex:section] count];
+		return [(Index *)[dataModel.index objectAtIndexSafe:section] count];
 	}
 }
 
@@ -489,7 +490,7 @@
 	}
 	else
 	{
-		NSUInteger sectionStartIndex = [(Index *)[dataModel.index objectAtIndex:indexPath.section] position];
+		NSUInteger sectionStartIndex = [(Index *)[dataModel.index objectAtIndexSafe:indexPath.section] position];
 		anAlbum = [dataModel albumForPosition:(sectionStartIndex + indexPath.row + 1)];
 	}
 	
@@ -518,7 +519,7 @@
 		}
 		else
 		{
-			NSUInteger sectionStartIndex = [(Index *)[dataModel.index objectAtIndex:indexPath.section] position];
+			NSUInteger sectionStartIndex = [(Index *)[dataModel.index objectAtIndexSafe:indexPath.section] position];
 			anAlbum = [dataModel albumForPosition:(sectionStartIndex + indexPath.row + 1)];
 		}
 		

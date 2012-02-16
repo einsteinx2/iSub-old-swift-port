@@ -15,6 +15,7 @@
 #import "Server.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
+#import "NSArray+Additions.h"
 
 #define URL @"https://streaming.one.ubuntu.com"
 
@@ -86,7 +87,7 @@
 		// Pop the view back
 		if (appDelegate.currentTabBarController.selectedIndex == 4)
 		{
-			[appDelegate.currentTabBarController.moreNavigationController popToViewController:[appDelegate.currentTabBarController.moreNavigationController.viewControllers objectAtIndex:1] animated:YES];
+			[appDelegate.currentTabBarController.moreNavigationController popToViewController:[appDelegate.currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
 		}
 		else
 		{

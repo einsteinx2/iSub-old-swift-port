@@ -19,14 +19,14 @@
 
 @interface SUSServerChecker : NSObject
 
-@property (nonatomic, assign) NSObject<SUSServerURLCheckerDelegate> *delegate;
-@property (nonatomic, retain) NSMutableData *receivedData;
-@property (nonatomic, retain) NSURLRequest *request;
-@property (nonatomic, retain) NSURLConnection *connection;
+@property (assign) NSObject<SUSServerURLCheckerDelegate> *delegate;
+@property (retain) NSMutableData *receivedData;
+@property (retain) NSURLRequest *request;
+@property (retain) NSURLConnection *connection;
 @property BOOL isNewSearchAPI;
 @property NSUInteger majorVersion;
 @property NSUInteger minorVersion;
-@property (nonatomic, copy) NSString *versionString;
+@property (copy) NSString *versionString;
 
 - (id)initWithDelegate:(NSObject<SUSServerURLCheckerDelegate> *)theDelegate;
 

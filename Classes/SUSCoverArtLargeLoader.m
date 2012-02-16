@@ -99,7 +99,7 @@
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {    
-    DLog(@"art loading failed for: %@", coverArtId);
+    DLog(@"art loading failed for: %@", self.coverArtId);
     [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AlbumArtLargeFailed];
 	
     self.receivedData = nil;
@@ -114,8 +114,8 @@
 	// Check to see if the data is a valid image. If so, use it; if not, use the default image.
 	if([UIImage imageWithData:self.receivedData])
 	{
-        DLog(@"art loading completed for: %@", coverArtId);
-        [self.db executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [coverArtId md5], self.receivedData];
+        DLog(@"art loading completed for: %@", self.coverArtId);
+        [self.db executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [self.coverArtId md5], self.receivedData];
         [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AlbumArtLargeDownloaded];
         
 		// Notify the delegate that the loading is finished
@@ -123,7 +123,7 @@
 	}
     else
     {
-        DLog(@"art loading failed for: %@", coverArtId);
+        DLog(@"art loading failed for: %@", self.coverArtId);
         [self connection:theConnection didFailWithError:nil];
     }
 	

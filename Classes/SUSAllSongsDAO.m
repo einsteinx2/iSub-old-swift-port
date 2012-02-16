@@ -252,8 +252,8 @@
 	if (![SUSAllSongsLoader isLoading])
 	{
 		[index release]; index = nil;
-		self.loader = [[[SUSAllSongsLoader alloc] initWithDelegate:delegate] autorelease];
-		[loader startLoad];
+		self.loader = [[[SUSAllSongsLoader alloc] initWithDelegate:self.delegate] autorelease];
+		[self.loader startLoad];
 	}
 }
 
@@ -261,8 +261,8 @@
 {
 	if ([SUSAllSongsLoader isLoading])
 	{
-		[loader cancelLoad];
-		loader.delegate = nil;
+		[self.loader cancelLoad];
+		self.loader.delegate = nil;
         self.loader = nil;
 	}
 }
@@ -271,10 +271,10 @@
 
 - (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
 {	
-	loader.delegate = nil;
+	self.loader.delegate = nil;
 	self.loader = nil;
 	
-	if ([delegate respondsToSelector:@selector(loadingFailed:withError:)])
+	if ([self.delegate respondsToSelector:@selector(loadingFailed:withError:)])
 	{
 		[self.delegate loadingFailed:nil withError:error];
 	}
@@ -282,10 +282,10 @@
 
 - (void)loadingFinished:(SUSLoader*)theLoader
 {	
-	loader.delegate = nil;
+	self.loader.delegate = nil;
 	self.loader = nil;
 	
-	if ([delegate respondsToSelector:@selector(loadingFinished:)])
+	if ([self.delegate respondsToSelector:@selector(loadingFinished:)])
 	{
 		[self.delegate loadingFinished:nil];
 	}

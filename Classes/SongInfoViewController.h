@@ -20,17 +20,17 @@
 	NSTimer *bitrateTimer;
 }
 
-@property (nonatomic, copy) Song *currentSong;
+@property (copy) Song *currentSong;
 
-@property (nonatomic, retain) IBOutlet UIButton *songInfoToggleButton;
-@property (nonatomic, retain) IBOutlet UILabel *artistLabel;
-@property (nonatomic, retain) IBOutlet UILabel *albumLabel;
-@property (nonatomic, retain) IBOutlet UILabel *titleLabel;
-@property (nonatomic, retain) IBOutlet UILabel *trackLabel;
-@property (nonatomic, retain) IBOutlet UILabel *yearLabel;
-@property (nonatomic, retain) IBOutlet UILabel *genreLabel;
-@property (nonatomic, retain) IBOutlet UILabel *bitRateLabel;
-@property (nonatomic, retain) IBOutlet UILabel *lengthLabel;
+@property (retain) IBOutlet UIButton *songInfoToggleButton;
+@property (retain) IBOutlet UILabel *artistLabel;
+@property (retain) IBOutlet UILabel *albumLabel;
+@property (retain) IBOutlet UILabel *titleLabel;
+@property (retain) IBOutlet UILabel *trackLabel;
+@property (retain) IBOutlet UILabel *yearLabel;
+@property (retain) IBOutlet UILabel *genreLabel;
+@property (retain) IBOutlet UILabel *bitRateLabel;
+@property (retain) IBOutlet UILabel *lengthLabel;
 
 - (void)initInfo;
 //- (void)showSongInfo;

@@ -18,8 +18,8 @@
 	SavedSettings *settings;
 }
 
-@property (nonatomic, retain) NSDate *lastDeleteToggle;
-@property (nonatomic, retain) NSDate *lastOverlayToggle;
+@property (retain) NSDate *lastDeleteToggle;
+@property (retain) NSDate *lastOverlayToggle;
 
 - (BOOL)isTouchHorizontal:(UITouch *)touch;
 - (BOOL)isTouchVertical:(UITouch *)touch;

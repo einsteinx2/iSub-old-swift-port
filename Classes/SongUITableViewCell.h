@@ -12,12 +12,12 @@
 
 @interface SongUITableViewCell : CustomUITableViewCell 
 
-@property (nonatomic, retain) Song *mySong;
+@property (retain) Song *mySong;
 
-@property (nonatomic, retain) UILabel *trackNumberLabel;
-@property (nonatomic, retain) UIScrollView *songNameScrollView;
-@property (nonatomic, retain) UILabel *songNameLabel;
-@property (nonatomic, retain) UILabel *artistNameLabel;
-@property (nonatomic, retain) UILabel *songDurationLabel;
+@property (retain) UILabel *trackNumberLabel;
+@property (retain) UIScrollView *songNameScrollView;
+@property (retain) UILabel *songNameLabel;
+@property (retain) UILabel *artistNameLabel;
+@property (retain) UILabel *songDurationLabel;
 
 @end

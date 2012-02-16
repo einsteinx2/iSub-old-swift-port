@@ -44,12 +44,12 @@
 	BOOL _reloading;
 }
 
-@property (nonatomic, retain) SUSAllSongsDAO *dataModel;
+@property (retain) SUSAllSongsDAO *dataModel;
 
-@property (nonatomic, retain) UIView *headerView;
-@property (nonatomic, retain) NSArray *sectionInfo;
+@property (retain) UIView *headerView;
+@property (retain) NSArray *sectionInfo;
 
-@property (nonatomic, retain) LoadingScreen *loadingScreen;
+@property (retain) LoadingScreen *loadingScreen;
 
 - (void) addCount;
 

@@ -18,7 +18,7 @@
 	NSArray *index;
 }
 
-@property (nonatomic, assign) id<SUSLoaderDelegate> delegate;
+@property (assign) id<SUSLoaderDelegate> delegate;
 
 @property (readonly) FMDatabase *db;
 
@@ -27,7 +27,7 @@
 @property (readonly) NSArray *index;
 @property (readonly) BOOL isDataLoaded;
 
-@property (nonatomic, retain) SUSAllSongsLoader *loader;
+@property (retain) SUSAllSongsLoader *loader;
 
 - (id)initWithDelegate:(NSObject <SUSLoaderDelegate> *)theDelegate;
 - (void)restartLoad;

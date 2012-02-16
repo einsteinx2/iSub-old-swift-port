@@ -13,6 +13,7 @@
 #import "DatabaseSingleton.h"
 #import "SavedSettings.h"
 #import "PlaylistSingleton.h"
+#import "NSArray+Additions.h"
 
 @implementation SUSNowPlayingDAO
 @synthesize delegate, loader, nowPlayingSongDicts;
@@ -42,7 +43,7 @@
 {
 	if (index < self.count)
 	{
-		NSDictionary *songDict = [nowPlayingSongDicts objectAtIndex:index];
+		NSDictionary *songDict = [nowPlayingSongDicts objectAtIndexSafe:index];
 		Song *aSong = [songDict objectForKey:@"song"];
 		return aSong;
 	}
@@ -53,7 +54,7 @@
 {
 	if (index < self.count)
 	{
-		NSDictionary *songDict = [nowPlayingSongDicts objectAtIndex:index];
+		NSDictionary *songDict = [nowPlayingSongDicts objectAtIndexSafe:index];
 		NSUInteger minutesAgo = [[songDict objectForKey:@"minutesAgo"] intValue];
 		
 		if (minutesAgo == 1)
@@ -68,7 +69,7 @@
 {
 	if (index < self.count)
 	{
-		NSDictionary *songDict = [nowPlayingSongDicts objectAtIndex:index];
+		NSDictionary *songDict = [nowPlayingSongDicts objectAtIndexSafe:index];
 		return [songDict objectForKey:@"username"];
 	}
 	return nil;
@@ -78,7 +79,7 @@
 {
 	if (index < self.count)
 	{
-		NSDictionary *songDict = [nowPlayingSongDicts objectAtIndex:index];
+		NSDictionary *songDict = [nowPlayingSongDicts objectAtIndexSafe:index];
 		return [songDict objectForKey:@"playerName"];
 	}
 	return nil;
@@ -124,13 +125,13 @@
 - (void)startLoad
 {	
     self.loader = [[[SUSNowPlayingLoader alloc] initWithDelegate:self] autorelease];
-    [loader startLoad];
+    [self.loader startLoad];
 }
 
 - (void)cancelLoad
 {
-    [loader cancelLoad];
-	loader.delegate = nil;
+    [self.loader cancelLoad];
+	self.loader.delegate = nil;
     self.loader = nil;
 }
 
@@ -138,25 +139,25 @@
 
 - (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
 {
-	loader.delegate = nil;
+	self.loader.delegate = nil;
 	self.loader = nil;
 	
-	if ([delegate respondsToSelector:@selector(loadingFailed:withError:)])
+	if ([self.delegate respondsToSelector:@selector(loadingFailed:withError:)])
 	{
-		[delegate loadingFailed:nil withError:error];
+		[self.delegate loadingFailed:nil withError:error];
 	}
 }
 
 - (void)loadingFinished:(SUSLoader*)theLoader
 {
-	self.nowPlayingSongDicts = [NSArray arrayWithArray:loader.nowPlayingSongDicts];
+	self.nowPlayingSongDicts = [NSArray arrayWithArray:self.loader.nowPlayingSongDicts];
 	
-	loader.delegate = nil;
+	self.loader.delegate = nil;
 	self.loader = nil;
 		
-	if ([delegate respondsToSelector:@selector(loadingFinished:)])
+	if ([self.delegate respondsToSelector:@selector(loadingFinished:)])
 	{
-		[delegate loadingFinished:nil];
+		[self.delegate loadingFinished:nil];
 	}
 }
 

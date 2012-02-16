@@ -8,26 +8,27 @@
 
 #import "SUSLoaderDelegate.h"
 
-@class iSubAppDelegate, DatabaseSingleton, ViewObjectsSingleton, Song, BBSimpleConnectionQueue, AudioEngine;
+@class iSubAppDelegate, DatabaseSingleton, ViewObjectsSingleton, PlaylistSingleton, Song, BBSimpleConnectionQueue, AudioEngine;
 
 @interface MusicSingleton : NSObject <SUSLoaderDelegate>
 {
 	iSubAppDelegate *appDelegate;
 	DatabaseSingleton *databaseControls;
 	ViewObjectsSingleton *viewObjects;
+	PlaylistSingleton *currentPlaylist;
 		
 	BOOL isAutoNextNotificationOn;
 	
 	AudioEngine *audio;
 }
 
-@property (nonatomic, retain) Song *queueSongObject;
+@property (retain) Song *queueSongObject;
 
-@property (nonatomic, retain) NSMutableData *receivedDataQueue;
-@property (nonatomic, retain) NSURLConnection *downloadQueue;
-@property (nonatomic, retain) NSString *downloadFileNameQueue;
-@property (nonatomic, retain) NSString *downloadFileNameHashQueue;
-@property (nonatomic, retain) NSFileHandle *audioFileQueue;
+@property (retain) NSMutableData *receivedDataQueue;
+@property (retain) NSURLConnection *downloadQueue;
+@property (retain) NSString *downloadFileNameQueue;
+@property (retain) NSString *downloadFileNameHashQueue;
+@property (retain) NSFileHandle *audioFileQueue;
 @property UInt32 downloadedLengthQueue; // Keeps track of the number of bytes downloaded
 @property BOOL isQueueListDownloading;
 
@@ -36,7 +37,7 @@
 
 @property (readonly) BOOL showPlayerIcon;
 
-@property (nonatomic, retain) BBSimpleConnectionQueue *connectionQueue;
+@property (retain) BBSimpleConnectionQueue *connectionQueue;
 
 + (MusicSingleton*)sharedInstance;
 

@@ -32,24 +32,24 @@
 
 @property(assign,getter=isReloading) BOOL reloading;
 	
-@property (nonatomic, retain) NSString *myId;
-@property (nonatomic, retain) Artist *myArtist;
-@property (nonatomic, retain) Album *myAlbum;
+@property (retain) NSString *myId;
+@property (retain) Artist *myArtist;
+@property (retain) Album *myAlbum;
 
-@property (nonatomic, retain) NSArray *sectionInfo;
+@property (retain) NSArray *sectionInfo;
 
-@property (nonatomic, retain) SUSSubFolderDAO *dataModel;
+@property (retain) SUSSubFolderDAO *dataModel;
 
-@property (nonatomic, retain) IBOutlet UIView *playAllShuffleAllView;
-@property (nonatomic, retain) IBOutlet UIView *albumInfoView;
-@property (nonatomic, retain) IBOutlet UIView *albumInfoArtHolderView;
-@property (nonatomic, retain) IBOutlet AsynchronousImageView *albumInfoArtView;
-@property (nonatomic, retain) IBOutlet UIImageView *albumInfoArtReflection;
-@property (nonatomic, retain) IBOutlet UIView *albumInfoLabelHolderView;
-@property (nonatomic, retain) IBOutlet UILabel *albumInfoArtistLabel;
-@property (nonatomic, retain) IBOutlet UILabel *albumInfoAlbumLabel;
-@property (nonatomic, retain) IBOutlet UILabel *albumInfoTrackCountLabel;
-@property (nonatomic, retain) IBOutlet UILabel *albumInfoDurationLabel; 
+@property (retain) IBOutlet UIView *playAllShuffleAllView;
+@property (retain) IBOutlet UIView *albumInfoView;
+@property (retain) IBOutlet UIView *albumInfoArtHolderView;
+@property (retain) IBOutlet AsynchronousImageView *albumInfoArtView;
+@property (retain) IBOutlet UIImageView *albumInfoArtReflection;
+@property (retain) IBOutlet UIView *albumInfoLabelHolderView;
+@property (retain) IBOutlet UILabel *albumInfoArtistLabel;
+@property (retain) IBOutlet UILabel *albumInfoAlbumLabel;
+@property (retain) IBOutlet UILabel *albumInfoTrackCountLabel;
+@property (retain) IBOutlet UILabel *albumInfoDurationLabel; 
 
 - (AlbumViewController *)initWithArtist:(Artist *)anArtist orAlbum:(Album *)anAlbum;
 

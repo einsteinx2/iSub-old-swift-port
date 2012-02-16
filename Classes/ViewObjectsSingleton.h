@@ -119,33 +119,33 @@
 
 // XMLParser objects used to tell the parser how to parse
 //
-@property (nonatomic, retain) NSString *parseState;
-@property (nonatomic, retain) NSString *allAlbumsParseState;
-@property (nonatomic, retain) NSString *allSongsParseState;
+@property (retain) NSString *parseState;
+@property (retain) NSString *allAlbumsParseState;
+@property (retain) NSString *allSongsParseState;
 
 // Home page objects
 //
-@property (nonatomic, retain) NSMutableArray *homeListOfAlbums;
+@property (retain) NSMutableArray *homeListOfAlbums;
 
 // Artists page objects
 //
-//@property (nonatomic, retain) NSArray *artistIndex;
-//@property (nonatomic, retain) NSArray *listOfArtists;
+//@property (retain) NSArray *artistIndex;
+//@property (retain) NSArray *listOfArtists;
 @property BOOL isArtistsLoading;
 
 // Albums page objects and variables
 //
-@property (nonatomic, retain) NSString *currentArtistName;
-@property (nonatomic, retain) NSString *currentArtistId;
+@property (retain) NSString *currentArtistName;
+@property (retain) NSString *currentArtistId;
 
 /*// All albums view objects
 //
-@property (nonatomic, retain) NSMutableArray *allAlbumsListOfAlbums;
-@property (nonatomic, retain) Album *allAlbumsAlbumObject;
-@property (nonatomic, retain) NSMutableArray *allAlbumsListOfSongs;
-@property (nonatomic, retain) NSString *allAlbumsCurrentArtistId;
-@property (nonatomic, retain) NSString *allAlbumsCurrentArtistName;
-@property (nonatomic, retain) LoadingScreen *allAlbumsLoadingScreen;
+@property (retain) NSMutableArray *allAlbumsListOfAlbums;
+@property (retain) Album *allAlbumsAlbumObject;
+@property (retain) NSMutableArray *allAlbumsListOfSongs;
+@property (retain) NSString *allAlbumsCurrentArtistId;
+@property (retain) NSString *allAlbumsCurrentArtistName;
+@property (retain) LoadingScreen *allAlbumsLoadingScreen;
 @property NSInteger allAlbumsLoadingProgress;
 @property BOOL isAlbumsLoading;
 
@@ -155,29 +155,29 @@
 
 // Playlists view objects
 //
-@property (nonatomic, retain) NSMutableArray *listOfPlaylists;
-@property (nonatomic, retain) NSMutableArray *listOfPlaylistSongs;
-@property (nonatomic, retain) NSString *localPlaylist;
-@property (nonatomic, retain) NSMutableArray *listOfLocalPlaylists;
+@property (retain) NSMutableArray *listOfPlaylists;
+@property (retain) NSMutableArray *listOfPlaylistSongs;
+@property (retain) NSString *localPlaylist;
+@property (retain) NSMutableArray *listOfLocalPlaylists;
 @property BOOL isLocalPlaylist;
 
 // Settings page objects
 //
-//@property (nonatomic, retain) NSMutableArray *serverList;
-@property (nonatomic, retain) Server *serverToEdit;
+//@property (retain) NSMutableArray *serverList;
+@property (retain) Server *serverToEdit;
 
 // Chat page objects
 //
-@property (nonatomic, retain) NSMutableArray *chatMessages;
+@property (retain) NSMutableArray *chatMessages;
 
 // New Stuff
 @property BOOL isCellEnabled;
-@property (nonatomic, retain) NSTimer *cellEnabledTimer;
-@property (nonatomic, retain) NSMutableArray *queueAlbumListOfAlbums;
-@property (nonatomic, retain) NSMutableArray *queueAlbumListOfSongs;
+@property (retain) NSTimer *cellEnabledTimer;
+@property (retain) NSMutableArray *queueAlbumListOfAlbums;
+@property (retain) NSMutableArray *queueAlbumListOfSongs;
 @property BOOL isEditing;
 @property BOOL isEditing2;
-@property (nonatomic, retain) NSMutableArray *multiDeleteList;
+@property (retain) NSMutableArray *multiDeleteList;
 @property BOOL isOfflineMode;
 @property BOOL isOnlineModeAlertShowing;
 @property BOOL cancelLoading;
@@ -197,14 +197,14 @@
 @property (readonly) UIColor *windowColor;
 @property (readonly) UIColor *jukeboxColor;
 
-@property (nonatomic, retain) UIImage *deleteButtonImage;
-@property (nonatomic, retain) UIImage *cacheButtonImage;
-@property (nonatomic, retain) UIImage *queueButtonImage;
+@property (retain) UIImage *deleteButtonImage;
+@property (retain) UIImage *cacheButtonImage;
+@property (retain) UIImage *queueButtonImage;
 
 
 //@property BOOL isJukebox;
 
-@property (nonatomic, retain) NSString *currentLoadingFolderId;
+@property (retain) NSString *currentLoadingFolderId;
 
 @property BOOL isSettingsShowing;
 

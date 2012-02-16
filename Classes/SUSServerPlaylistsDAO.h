@@ -14,11 +14,11 @@
 
 @property (readonly) FMDatabase *db;
 
-@property (nonatomic, assign) NSObject <SUSLoaderDelegate> *delegate;
-@property (nonatomic, retain) SUSServerPlaylistsLoader *loader;
+@property (assign) NSObject <SUSLoaderDelegate> *delegate;
+@property (retain) SUSServerPlaylistsLoader *loader;
 
 #pragma mark - Public DAO Methods
 
-@property (nonatomic, retain) NSArray *serverPlaylists;
+@property (retain) NSArray *serverPlaylists;
 
 @end
