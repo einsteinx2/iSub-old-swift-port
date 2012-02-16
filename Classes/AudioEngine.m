@@ -214,8 +214,6 @@ void CALLBACK MyFileCloseProc(void *user)
 	fclose(userInfo.myFileHandle);	
 }
 
-
-
 QWORD CALLBACK MyFileLenProc(void *user)
 {
 	if (user == NULL)
@@ -223,6 +221,7 @@ QWORD CALLBACK MyFileLenProc(void *user)
 	
 	@autoreleasepool
 	{
+		// TODO: why is this synced?
 		@synchronized([AudioEngine class])
 		{
 			BassUserInfo *userInfo = (BassUserInfo *)user;
@@ -321,7 +320,7 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 					// properly, use the best estimated bitrate. Then use that to determine how much data
 					// to let download to continue.
 					NSUInteger bitrate = sharedInstance.bitRate > 0 ? sharedInstance.bitRate : theSong.estimatedBitrate;
-					unsigned long long bytesToWait = (bitrate / 8) * 1024 * ISMS_NumSecondsToWaitForAudioData;
+					unsigned long long bytesToWait = BytesForSecondsAtBitrate(ISMS_NumSecondsToWaitForAudioData, bitrate);
 					unsigned long long neededSize = size + bytesToWait;
 					DLog(@"bitrate: %i  byterate: %i   bytesToWait: %llu   neededSize: %llu", bitrate, (bitrate/8), bytesToWait, neededSize);
 					
@@ -388,7 +387,7 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 	
 	BOOL success = !fseek(userInfo.myFileHandle, offset, SEEK_SET);
 	
-	DLog(@"File Seek to %llu  success: %@", offset, NSStringFromBOOL(success));
+	//DLog(@"File Seek to %llu  success: %@", offset, NSStringFromBOOL(success));
 	
 	return success;
 }
@@ -440,7 +439,7 @@ BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFi
 				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
 				
 				// Prepare the next song for playback
-				[self prepareNextSongStreamInBackground];
+				[self prepareNextSongStream];
 				
 				r = [self bassGetOutputData:buffer length:length];
 				
@@ -596,22 +595,25 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 
 - (BOOL)bassFree
 {
-	// Make sure the read data loop exits
-	audioQueueShouldStopWaitingForData = YES;
-	
-	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(retryStartAtOffset:) object:nil];
-	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(prepareNextSongStreamInBackground) object:nil];
-	
-	BOOL success = BASS_Free();
-	fileStream1 = 0;
-	fileStreamTempo1 = 0;
-	fileStream2 = 0;
-	fileStreamTempo2 = 0;
-	outStream = 0;
-	volumeFx = 0;
-	bassReinitSampleRate = 0;
-	
-	return success;
+	@synchronized(self)
+	{
+		// Make sure the read data loop exits
+		audioQueueShouldStopWaitingForData = YES;
+		
+		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(retryStartAtOffset:) object:nil];
+		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(prepareNextSongStream) object:nil];
+		
+		BOOL success = BASS_Free();
+		fileStream1 = 0;
+		fileStreamTempo1 = 0;
+		fileStream2 = 0;
+		fileStreamTempo2 = 0;
+		outStream = 0;
+		volumeFx = 0;
+		bassReinitSampleRate = 0;
+		
+		return success;
+	}
 }
 
 - (NSInteger)bassSampleRate
@@ -678,7 +680,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	[self seekToPositionInSeconds:seconds inStream:self.currentStream];
 }
 
-- (void)retryPrepareNextSongStreamInBackground
+/*- (void)retryPrepareNextSongStreamInBackground
 {
 	@autoreleasepool 
 	{
@@ -786,6 +788,82 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 		NSInteger errorCode = BASS_ErrorGetCode();
 		DLog(@"nextSong stream: %i error: %i - %@", self.nextStream, errorCode, NSStringFromBassErrorCode(errorCode));
 #endif
+	}
+	
+	DLog(@"nextSong: %i", self.nextStream);
+}*/
+
+- (void)prepareNextSongStream
+{
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(prepareNextSongStream) object:nil];
+	
+	if (self.nextStream)
+		BASS_StreamFree(self.nextStream);
+	
+	self.bassReinitSampleRate = 0;
+	
+	DLog(@"preparing next song stream");
+	Song *nextSong = currPlaylistDAO.nextSong;
+	
+	DLog(@"nextSong.localFileSize: %llu", nextSong.localFileSize);
+	if (nextSong.localFileSize == 0)
+		return;
+	
+	BassUserInfo *userInfo = [[BassUserInfo alloc] init];
+	userInfo.mySong = nextSong;
+	userInfo.myFileHandle = fopen([nextSong.currentPath cStringUTF8], "rb");
+	
+	// Try hardware and software mixing
+	self.nextStream = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_STREAM_DECODE, &fileProcs, userInfo);
+	if(!self.nextStream) self.nextStream = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_SAMPLE_SOFTWARE|BASS_STREAM_DECODE, &fileProcs, userInfo);
+	
+	if (self.nextStream)
+	{
+		// Set the stream free sync
+		BASS_ChannelSetSync(self.nextStream, BASS_SYNC_FREE, 0, MyStreamFreeCallback, userInfo);
+		
+		// Verify we're using the best sample rate
+		NSInteger streamSampleRate = [self bassStreamSampleRate:fileStream1];
+		NSInteger preferredSampleRate = [self preferredSampleRate:streamSampleRate];
+		NSInteger bassSampleRate = [self bassSampleRate];
+		
+		if (bassSampleRate != preferredSampleRate)
+		{
+			// Set a flag to know to re-init BASS later
+			self.bassReinitSampleRate = preferredSampleRate;
+		}
+		else
+		{
+			// Check to see if the output sample rate is the same as the stream sample rate
+			// and the stream sample rate is higher than 96KHz
+			if (bassSampleRate != streamSampleRate && streamSampleRate > 96000)
+			{
+				// It's a high sample rate file, so to prevent a lot of whitenoise, use a mixer
+				// stream and apply the resampling filter
+				self.nextStreamTempo = BASS_Mixer_StreamCreate(bassSampleRate, 
+															   2, 
+															   BASS_STREAM_DECODE|BASS_MIXER_END);
+				if (self.nextStreamTempo)
+				{
+					BASS_Mixer_StreamAddChannel(self.nextStreamTempo, 
+												self.nextStream, 
+												BASS_MIXER_FILTER|BASS_MIXER_BUFFER|BASS_MIXER_NORAMPIN);
+				}
+				else
+				{
+					BASSLogError();
+				}
+			}
+		}
+	}
+	else
+	{
+#ifdef DEBUG
+		NSInteger errorCode = BASS_ErrorGetCode();
+		DLog(@"nextSong stream: %i error: %i - %@", self.nextStream, errorCode, NSStringFromBassErrorCode(errorCode));
+#endif
+		
+		[self performSelector:@selector(prepareNextSongStream) withObject:nil afterDelay:RETRY_DELAY];
 	}
 	
 	DLog(@"nextSong: %i", self.nextStream);
@@ -928,7 +1006,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 			isPlaying = YES;
 			
 			// Prepare the next song
-			[self performSelectorInBackground:@selector(prepareNextSongStream) withObject:nil];
+			[self prepareNextSongStream];
 			
 			// Notify listeners that playback has started
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
@@ -1271,13 +1349,19 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 
 - (void)readEqDataInternal
 {
-	// Get the FFT data for visualizer
-	if (eqDataType == ISMS_BASS_EQ_DATA_TYPE_fft)
-		BASS_ChannelGetData(outStream, fftData, BASS_DATA_FFT2048);
-	
-	// Get the data for line spec visualizer
-	if (eqDataType == ISMS_BASS_EQ_DATA_TYPE_line)
-		BASS_ChannelGetData(outStream, lineSpecBuf, lineSpecBufSize);
+	@synchronized(self)
+	{
+		if (!outStream)
+			return;
+		
+		// Get the FFT data for visualizer
+		if (eqDataType == ISMS_BASS_EQ_DATA_TYPE_fft)
+			BASS_ChannelGetData(outStream, fftData, BASS_DATA_FFT2048);
+		
+		// Get the data for line spec visualizer
+		if (eqDataType == ISMS_BASS_EQ_DATA_TYPE_line)
+			BASS_ChannelGetData(outStream, lineSpecBuf, lineSpecBufSize);
+	}
 }
 
 #pragma mark - Singleton methods
@@ -1315,27 +1399,9 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 		lineSpecBufSize = 512 * sizeof(short);
 	lineSpecBuf = malloc(lineSpecBufSize);
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStreamInBackground) name:ISMSNotification_RepeatModeChanged object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStreamInBackground) name:ISMSNotification_CurrentPlaylistOrderChanged object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStreamInBackground) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
-		
-	/*// On iOS 4.0+ only, listen for background notification
-	if(&UIApplicationDidEnterBackgroundNotification != nil)
-	{
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bassEnterBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
-	}
-	
-	// On iOS 4.0+ only, listen for lock notification
-	if(&UIApplicationWillResignActiveNotification != nil)
-	{
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bassEnterBackground) name:UIApplicationWillResignActiveNotification object:nil];
-	}
-	
-	// On iOS 4.0+ only, listen for foreground notification
-	if(&UIApplicationWillEnterForegroundNotification != nil)
-	{
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bassEnterForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
-	}*/
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStream) name:ISMSNotification_RepeatModeChanged object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStream) name:ISMSNotification_CurrentPlaylistOrderChanged object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStream) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 }
 
 + (AudioEngine *)sharedInstance

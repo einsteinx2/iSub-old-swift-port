@@ -21,20 +21,24 @@
 #import "PlaylistSingleton.h"
 
 #define ISMSNumSecondsToPartialPreCache 30
+#define ISMSNumBytesToPartialPreCache(bitrate) (BytesForSecondsAtBitrate(ISMSNumSecondsToPartialPreCache, bitrate))
 
-#define kThrottleTimeInterval 0.1
+#define ISMSMinSecondsToStartPlayback 5
+#define ISMSMinBytesToStartPlayback(bitrate) (BytesForSecondsAtBitrate(ISMSMinSecondsToStartPlayback, bitrate))
 
-#define kMaxKilobitsPerSec3G 500
-#define kMaxBytesPerSec3G ((kMaxKilobitsPerSec3G * 1024) / 8)
-#define kMaxBytesPerInterval3G (kMaxBytesPerSec3G * kThrottleTimeInterval)
+#define ISMSThrottleTimeInterval 0.1
 
-#define kMaxKilobitsPerSecWifi 8000
-#define kMaxBytesPerSecWifi ((kMaxKilobitsPerSecWifi * 1024) / 8)
-#define kMaxBytesPerIntervalWifi (kMaxBytesPerSecWifi * kThrottleTimeInterval)
+#define ISMSMaxKilobitsPerSec3G 500
+#define ISMSMaxBytesPerInterval3G BytesForSecondsAtBitrate(ISMSThrottleTimeInterval, ISMSMaxKilobitsPerSec3G)
 
-#define kMinKiloBytesToStartPlayback 250
-#define kMinBytesToStartPlayback ((unsigned long long)(1024 * kMinKiloBytesToStartPlayback)) // Number of bytes to wait before activating the player
-#define kMinBytesToStartLimiting ((unsigned long long)(1024 * 1024))	// Start throttling bandwidth after 1 MB downloaded for 160kbps files (adjusted accordingly by bitrate)
+#define ISMSMaxKilobitsPerSecWifi 8000
+#define ISMSMaxBytesPerIntervalWifi BytesForSecondsAtBitrate(ISMSThrottleTimeInterval, ISMSMaxKilobitsPerSecWifi)
+
+#define ISMSMinBytesToStartLimiting(bitrate) (BytesForSecondsAtBitrate(60, bitrate))
+
+//#define kMinKiloBytesToStartPlayback 250
+//#define kMinBytesToStartPlayback ((unsigned long long)(1024 * kMinKiloBytesToStartPlayback)) // Number of bytes to wait before activating the player
+//#define kMinBytesToStartLimiting ((unsigned long long)(1024 * 1024))	// Start throttling bandwidth after 1 MB downloaded for 160kbps files (adjusted accordingly by bitrate)
 
 // Logging
 #define isProgressLoggingEnabled NO
@@ -43,22 +47,44 @@
 @implementation SUSStreamHandler
 @synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, secondsOffset, partialPrecacheSleep, isDownloading;
 
+- (void)setup
+{
+	mySong = nil;
+	delegate = nil;
+	byteOffset = 0;
+	secondsOffset = 0;
+	isDelegateNotifiedToStartPlayback = NO;
+	numOfReconnects = 0;
+	loadingThread = nil;
+	request = nil;
+	connection = nil;
+	isTempCache = NO;
+	partialPrecacheSleep = YES;
+	isDownloading = NO;
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playlistIndexChanged) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
+}
+
+- (id)init
+{
+	if ((self = [super init]))
+	{
+		[self setup];
+	}
+	return self;
+}
+
 - (id)initWithSong:(Song *)song byteOffset:(unsigned long long)bOffset secondsOffset:(double)sOffset isTemp:(BOOL)isTemp delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate
 {
 	if ((self = [super init]))
 	{
+		[self setup];
+		
 		mySong = [song copy];
 		delegate = theDelegate;
 		byteOffset = bOffset;
 		secondsOffset = sOffset;
-		isDelegateNotifiedToStartPlayback = NO;
-		numOfReconnects = 0;
-		loadingThread = nil;
-		request = nil;
-		connection = nil;
 		isTempCache = isTemp;
-		partialPrecacheSleep = YES;
-		isDownloading = NO;
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playlistIndexChanged) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	}
@@ -154,6 +180,7 @@
 	
 	[loadingThread.threadDictionary setObject:[[mySong copy] autorelease] forKey:@"mySong"];
 	[loadingThread.threadDictionary setObject:[NSNumber numberWithBool:isTempCache] forKey:@"isTempCache"];
+	DLog(@"mySong: %@   nextSong: %@", mySong, [[PlaylistSingleton sharedInstance] nextSong]);
 	if ([mySong isEqualToSong:[[PlaylistSingleton sharedInstance] nextSong]])
 	{
 		[loadingThread.threadDictionary setObject:[NSNumber numberWithBool:YES] forKey:@"isNextSong"];
@@ -254,39 +281,17 @@
 
 - (double)maxBytesPerIntervalForBitrate:(double)bitrate is3G:(BOOL)is3G
 {
-	/*double maxBytesDefault = is3G ? (double)kMaxBytesPerInterval3G : (double)kMaxBytesPerIntervalWifi;
-	double bitrateForCalc = bitrate;
-	NSString *suffix = [transcodedSuffix lowercaseString];
-	if ([suffix isEqualToString:@"mp3"] || [suffix isEqualToString:@"ogg"] || [suffix isEqualToString:@"m4a"] || [suffix isEqualToString:@"aac"])
-	{
-		// This song is a lossy transcode, don't rely on the original reported bitrate, assume 320
-		bitrateForCalc = 320.0f;
-	}
-	double maxBytesPerInterval = maxBytesDefault * (bitrateForCalc / 160.0);
-	if (maxBytesPerInterval < maxBytesDefault)
-	{
-		// Don't go lower than the default
-		maxBytesPerInterval = maxBytesDefault;
-	}
-	else if (maxBytesPerInterval > (double)kMaxBytesPerIntervalWifi * 2.0)
-	{
-		// Don't go higher than twice the Wifi limit to prevent disk bandwidth issues
-		maxBytesPerInterval = (double)kMaxBytesPerIntervalWifi * 2.0;
-	}
-	
-	return maxBytesPerInterval;*/
-	
-	double maxBytesDefault = is3G ? (double)kMaxBytesPerInterval3G : (double)kMaxBytesPerIntervalWifi;
+	double maxBytesDefault = is3G ? (double)ISMSMaxBytesPerInterval3G : (double)ISMSMaxBytesPerIntervalWifi;
 	double maxBytesPerInterval = maxBytesDefault * (bitrate / 160.0);
 	if (maxBytesPerInterval < maxBytesDefault)
 	{
 		// Don't go lower than the default
 		maxBytesPerInterval = maxBytesDefault;
 	}
-	else if (maxBytesPerInterval > (double)kMaxBytesPerIntervalWifi * 2.0)
+	else if (maxBytesPerInterval > (double)ISMSMaxBytesPerIntervalWifi * 2.0)
 	{
 		// Don't go higher than twice the Wifi limit to prevent disk bandwidth issues
-		maxBytesPerInterval = (double)kMaxBytesPerIntervalWifi * 2.0;
+		maxBytesPerInterval = (double)ISMSMaxBytesPerIntervalWifi * 2.0;
 	}
 	
 	return maxBytesPerInterval;
@@ -308,7 +313,7 @@ BOOL isBeginning = YES;
 	[fileHandle writeData:incrementalData];
 	
 	// Notify delegate if enough bytes received to start playback
-	if (!isDelegateNotifiedToStartPlayback && totalBytesTransferred >= kMinBytesToStartPlayback)
+	if (!isDelegateNotifiedToStartPlayback && totalBytesTransferred >= ISMSMinBytesToStartPlayback(bitrate))
 	{
 		isDelegateNotifiedToStartPlayback = YES;
 		//DLog(@"player told to start playback");
@@ -320,7 +325,7 @@ BOOL isBeginning = YES;
 		DLog(@"downloadedLengthA:  %llu   bytesRead: %i", totalBytesTransferred, dataLength);
 	
 	// If near beginning of file, don't throttle
-	if (totalBytesTransferred < (kMinBytesToStartLimiting * (bitrate / 160.0f)))
+	if (totalBytesTransferred < ISMSMinBytesToStartLimiting(bitrate))
 	{
 		NSDate *now = [[NSDate alloc] init];
 		[threadDict setObject:now forKey:@"throttlingDate"];
@@ -333,25 +338,25 @@ BOOL isBeginning = YES;
 	NSTimeInterval intervalSinceLastThrottle = [now timeIntervalSinceDate:throttlingDate];
 	[throttlingDate release];
 	[now release];
-	if (intervalSinceLastThrottle > kThrottleTimeInterval && totalBytesTransferred > (unsigned long long)(kMinBytesToStartLimiting * (bitrate / 160.0f)))
+	if (intervalSinceLastThrottle > ISMSThrottleTimeInterval && totalBytesTransferred > (unsigned long long)(ISMSMinBytesToStartLimiting(bitrate)))
 	{
-		if (isThrottleLoggingEnabled)
-			DLog(@"entering throttling if statement, interval: %f  bytes transferred: %llu  maxBytes: %f", intervalSinceLastThrottle, bytesTransferred, kMaxBytesPerInterval3G);
+		//if (isThrottleLoggingEnabled)
+		//	DLog(@"entering throttling if statement, interval: %f  bytes transferred: %llu  maxBytes: %f", intervalSinceLastThrottle, bytesTransferred, ISMSMaxBytesPerInterval3G(bitrate));
 		
 		NSTimeInterval delay = 0.0;
-		if (![iSubAppDelegate sharedInstance].isWifi && bytesTransferred > kMaxBytesPerInterval3G)
+		if (![iSubAppDelegate sharedInstance].isWifi && bytesTransferred > ISMSMaxBytesPerInterval3G)
 		{
 			double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)bitrate is3G:YES];
-			delay = (kThrottleTimeInterval * ((double)bytesTransferred / maxBytesPerInterval));
+			delay = (ISMSThrottleTimeInterval * ((double)bytesTransferred / maxBytesPerInterval));
 			bytesTransferred = 0;
 			
 			if (isThrottleLoggingEnabled)
 				DLog(@"Bandwidth used is more than kMaxBytesPerInterval3G, Pausing for %f", delay);
 		}
-		else if ([iSubAppDelegate sharedInstance].isWifi && bytesTransferred > kMaxBytesPerIntervalWifi)
+		else if ([iSubAppDelegate sharedInstance].isWifi && bytesTransferred > ISMSMaxBytesPerIntervalWifi)
 		{
 			double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)bitrate is3G:NO];
-			delay = (kThrottleTimeInterval * ((double)bytesTransferred / maxBytesPerInterval));
+			delay = (ISMSThrottleTimeInterval * ((double)bytesTransferred / maxBytesPerInterval));
 			bytesTransferred = 0;
 			
 			if (isThrottleLoggingEnabled)
@@ -360,26 +365,26 @@ BOOL isBeginning = YES;
 		
 		[NSThread sleepForTimeInterval:delay];
 		
-		// Handle partial pre-cache next song
-		SavedSettings *settings = [SavedSettings sharedInstance];
-		BOOL isNextSong = [[threadDict objectForKey:@"isNextSong"] boolValue];
-		BOOL tempCache = [[threadDict objectForKey:@"isTempCache"] boolValue];
-		if (isNextSong && !tempCache && settings.isPartialCacheNextSong && self.partialPrecacheSleep)
-		{
-			Song *song = [threadDict objectForKey:@"mySong"];
-			NSUInteger partialPrecacheSize = (song.estimatedBitrate / 8) * ISMSNumSecondsToPartialPreCache;
-			if (totalBytesTransferred >= partialPrecacheSize)
-			{
-				while (self.partialPrecacheSleep)
-				{
-					[NSThread sleepForTimeInterval:0.1];
-				}
-			}
-		}
-		
 		NSDate *newThrottlingDate = [[NSDate alloc] init];
 		[threadDict setObject:newThrottlingDate forKey:@"throttlingDate"];
 		[newThrottlingDate release];
+	}
+	
+	// Handle partial pre-cache next song
+	SavedSettings *settings = [SavedSettings sharedInstance];
+	BOOL isNextSong = [[threadDict objectForKey:@"isNextSong"] boolValue];
+	BOOL tempCache = [[threadDict objectForKey:@"isTempCache"] boolValue];
+	if (isNextSong && !tempCache && settings.isPartialCacheNextSong && self.partialPrecacheSleep)
+	{
+		Song *song = [threadDict objectForKey:@"mySong"];
+		NSUInteger partialPrecacheSize = BytesForSecondsAtBitrate(ISMSNumSecondsToPartialPreCache, song.estimatedBitrate);
+		if (totalBytesTransferred >= partialPrecacheSize)
+		{
+			while (self.partialPrecacheSleep)
+			{
+				[NSThread sleepForTimeInterval:0.1];
+			}
+		}
 	}
 }
 
@@ -496,6 +501,8 @@ BOOL isBeginning = YES;
 {
 	if ((self = [super init]))
 	{		
+		[self setup];
+		
 		mySong = [[decoder decodeObjectForKey:@"mySong"] copy];
 		byteOffset = [decoder decodeInt64ForKey:@"byteOffset"];
 		secondsOffset = [decoder decodeDoubleForKey:@"secondsOffset"];

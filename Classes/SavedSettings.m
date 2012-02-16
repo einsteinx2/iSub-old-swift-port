@@ -365,7 +365,7 @@
 	gainMultiplier = [userDefaults floatForKey:@"gainMultiplier"];
 	
 	isPartialCacheNextSong = [userDefaults boolForKey:@"isPartialCacheNextSong"];
-	
+		
 	NSString *url = [userDefaults stringForKey:@"url"];
 	if (url)
 	{

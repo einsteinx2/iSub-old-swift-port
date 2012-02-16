@@ -95,23 +95,9 @@
     //NSSetUncaughtExceptionHandler(&onUncaughtException);
 
 	SavedSettings *settings = [SavedSettings sharedInstance];
+	// Start the save defaults timer and mem cache initial defaults
+	[settings setupSaveState];
 	viewObjects = [ViewObjectsSingleton sharedInstance];
-	databaseControls = [DatabaseSingleton sharedInstance];
-	musicControls = [MusicSingleton sharedInstance];
-	socialControls = [SocialSingleton sharedInstance];
-	cacheControls = [CacheSingleton sharedInstance];
-    audio = [AudioEngine sharedInstance];
-	    
-    introController = nil;
-	showIntro = NO;
-	
-	DLog(@"md5: %@", [settings.urlString md5]);
-	
-	[self loadFlurryAnalytics];
-	[self loadHockeyApp];
-	[self loadCrittercism];
-	
-	[self loadInAppPurchaseStore];
 	
 	// Setup network reachability notifications
 	wifiReach = [[Reachability reachabilityForLocalWiFi] retain];
@@ -161,17 +147,28 @@
 		}
 	}
 	
-	// Initialize the databases
-	[databaseControls initDatabases];
+	databaseControls = [DatabaseSingleton sharedInstance];
+	musicControls = [MusicSingleton sharedInstance];
+	socialControls = [SocialSingleton sharedInstance];
+	cacheControls = [CacheSingleton sharedInstance];
+    audio = [AudioEngine sharedInstance];
 	
+    introController = nil;
+	showIntro = NO;
+	
+	DLog(@"md5: %@", [settings.urlString md5]);
+	
+	[self loadFlurryAnalytics];
+	[self loadHockeyApp];
+	[self loadCrittercism];
+	
+	[self loadInAppPurchaseStore];
+		
 	// Setup Twitter connection
 	if (!viewObjects.isOfflineMode && [[NSUserDefaults standardUserDefaults] objectForKey:@"twitterAuthData"])
 	{
 		[socialControls createTwitterEngine];
 	}
-	
-	// Start the save defaults timer and mem cache initial defaults
-	[settings setupSaveState];
 		
 	// Create and display UI
 	introController = nil;

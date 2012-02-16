@@ -419,6 +419,8 @@
 	if (self.isPartiallyCached)
 	{
 		double totalSize = [self.size doubleValue];
+		CGFloat bitrate = (CGFloat)self.estimatedBitrate;
+		CGFloat seconds = [self.duration floatValue];
 		if (self.transcodedSuffix)
 		{
 			// This is a transcode, so we'll want to use the actual bitrate if possible
@@ -429,29 +431,13 @@
 				{
 					// Bass has a non-zero bitrate, so use that for the calculation
 					// convert to bytes per second, multiply by number of seconds
-					CGFloat byteRate = (CGFloat)[AudioEngine sharedInstance].bitRate * 1024. / 8.;
-					totalSize = byteRate * [self.duration floatValue];
-				}
-				else
-				{
-					// Current playing song, but BASS has no bitrate
-					CGFloat byteRate = (CGFloat)self.estimatedBitrate * 1024. / 8.;
-					totalSize = byteRate * [self.duration floatValue];
+					bitrate = (CGFloat)[AudioEngine sharedInstance].bitRate;
+					seconds = [self.duration floatValue];
+					
 				}
 			}
-			else
-			{
-				// Not the current playing song, so use estimated bitrate
-				CGFloat byteRate = (CGFloat)self.estimatedBitrate * 1024. / 8.;
-				totalSize = byteRate * [self.duration floatValue];
-			}
 		}
-		else
-		{
-			// Use estimated bitrate
-			CGFloat byteRate = (CGFloat)self.estimatedBitrate * 1024. / 8.;
-			totalSize = byteRate * [self.duration floatValue];
-		}
+		totalSize = BytesForSecondsAtBitrate(bitrate, seconds);
 		downloadProgress = (double)self.localFileSize / totalSize;		
 	}
 	

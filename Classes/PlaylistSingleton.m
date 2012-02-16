@@ -235,6 +235,7 @@
 
 - (Song *)nextSong
 {
+	//DLog(@"current index: %i   nextIndex: %i   nextSong: %@", self.currentIndex, self.nextIndex, [self songForIndex:self.nextIndex]);
 	return [self songForIndex:self.nextIndex];
 }
 

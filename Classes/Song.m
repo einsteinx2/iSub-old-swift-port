@@ -361,6 +361,7 @@
 - (NSUInteger)estimatedBitrate
 {	
 	SavedSettings *settings = [SavedSettings sharedInstance];
+	NSInteger currentMaxBitrate = settings.currentMaxBitrate;
 	
 	// Default to 128 if there is no bitrate for this song object (should never happen)
 	int rate = self.bitRate ? [self.bitRate intValue] : 128;
@@ -369,16 +370,16 @@
 	if (self.transcodedSuffix)
 	{
 		// This is probably being transcoded, so attempt to determine the bitrate
-		if (rate > 128 && settings.currentMaxBitrate == 0)
+		if (rate > 128 && currentMaxBitrate == 0)
 			rate = 128; // Subsonic default transcoding bitrate
-		else if (rate > settings.currentMaxBitrate && settings.currentMaxBitrate != 0)
-			rate = settings.currentMaxBitrate;
+		else if (rate > currentMaxBitrate && currentMaxBitrate != 0)
+			rate = currentMaxBitrate;
 	}
 	else
 	{
 		// This is not being transcoded between formats, however bitrate limiting may be active
-		if (rate > settings.currentMaxBitrate && settings.currentMaxBitrate != 0)
-			rate = settings.currentMaxBitrate;
+		if (rate > currentMaxBitrate && currentMaxBitrate != 0)
+			rate = currentMaxBitrate;
 	}
 
 	return rate;

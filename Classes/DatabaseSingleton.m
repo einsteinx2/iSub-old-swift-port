@@ -860,6 +860,8 @@ static DatabaseSingleton *sharedInstance = nil;
 	{
 		[[NSFileManager defaultManager] createDirectoryAtPath:databaseFolderPath withIntermediateDirectories:YES attributes:nil error:NULL];
 	}	
+	
+	[self initDatabases];
 		
 	return self;
 }

@@ -557,7 +557,7 @@
 		}
 
 		// Use the bitrate to get byteoffset
-		offsetBytes = (bitrate / 8) * offsetSeconds;
+		offsetBytes = BytesForSecondsAtBitrate(offsetSeconds, bitrate);
 	}
 	else
 	{
