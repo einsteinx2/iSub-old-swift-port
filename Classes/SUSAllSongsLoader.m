@@ -165,17 +165,17 @@ static NSInteger order (id a, id b, void* context)
 				self.iteration = 4;
 				[databaseControls.allSongsDb executeUpdate:@"UPDATE resumeLoad SET albumNum = ?, iteration = ?", [NSNumber numberWithInt:0], [NSNumber numberWithInt:self.iteration]];
 				DLog(@"calling loadSort");
-				[self performSelectorInBackground:@selector(loadSort) withObject:nil];
+				[self loadSort];
 			}
 		}
 		else if (self.iteration == 4)
 		{
 			DLog(@"calling loadSort");
-			[self performSelectorInBackground:@selector(loadSort) withObject:nil];
+			[self loadSort];
 		}
 		else if (self.iteration == 5)
 		{
-			[self performSelectorInBackground:@selector(loadFinish) withObject:nil];
+			[self loadFinish];
 		}
 	}
 }	
@@ -333,12 +333,10 @@ static NSInteger order (id a, id b, void* context)
 	}
 }
 
-- (void)loadSort
+- (void)loadSortInternal
 {
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-	
-	//[viewObjects.allSongsLoadingScreen performSelectorOnMainThread:@selector(setAllMessagesText:) withObject:[NSArray arrayWithObjects:@"Sorting Table", @"", @"", @"", nil] waitUntilDone:NO];
-	
+		
 	// Sort the tables
 	[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE IF EXISTS allAlbums"];
 	[databaseControls.allAlbumsDb executeUpdate:@"CREATE VIRTUAL TABLE allAlbums USING FTS3(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT, tokenize=porter)"];
@@ -373,7 +371,15 @@ static NSInteger order (id a, id b, void* context)
 	[autoreleasePool release];
 }
 
-- (void)loadFinish
+- (void)loadSort
+{
+	if ([NSThread mainThread])
+		[self performSelectorInBackground:@selector(loadSortInternal) withObject:nil];
+	else
+		[self loadSortInternal];
+}
+
+- (void)loadFinishInternal
 {
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	 
@@ -382,7 +388,7 @@ static NSInteger order (id a, id b, void* context)
     {
         viewObjects.cancelLoading = NO;
 		[SUSAllSongsLoader setIsLoading:NO];
-		[self informDelegateLoadingFailed:nil];
+		[self performSelectorOnMainThread:@selector(informDelegateLoadingFailed:) withObject:nil waitUntilDone:NO];
         return;
     }
     
@@ -455,7 +461,7 @@ static NSInteger order (id a, id b, void* context)
     if (viewObjects.cancelLoading)
     {
         [SUSAllSongsLoader setIsLoading:NO];
-        [self informDelegateLoadingFailed:nil];
+		[self performSelectorOnMainThread:@selector(informDelegateLoadingFailed:) withObject:nil waitUntilDone:NO];
         return;
     }
     
@@ -479,6 +485,14 @@ static NSInteger order (id a, id b, void* context)
     [autoreleasePool release];
 }
 
+- (void)loadFinish
+{
+	if ([NSThread isMainThread])
+		[self performSelectorInBackground:@selector(loadFinishInternal) withObject:nil];
+	else
+		[self loadFinishInternal];
+}
+
 - (NSArray *)createSectionInfo
 {
 	NSMutableArray *sections = [[NSMutableArray alloc] init];
@@ -489,6 +503,7 @@ static NSInteger order (id a, id b, void* context)
 		[sections addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], 
 							 [NSNumber numberWithInt:[result intForColumnIndex:1]], nil]];
 	}
+	[result close];
 	
 	NSArray *returnArray = [NSArray arrayWithArray:sections];
 	[sections release];
@@ -803,7 +818,7 @@ static NSString *kName_Error = @"error";
             else if (self.iteration == 4)
             {
                 DLog(@"calling loadSort");
-                [self performSelectorInBackground:@selector(loadSort) withObject:nil];
+                [self loadSort];
             }
 		}
 	}
@@ -861,7 +876,7 @@ static NSString *kName_Error = @"error";
             else if (self.iteration == 4)
             {
                 DLog(@"calling loadSort");
-                [self performSelectorInBackground:@selector(loadSort) withObject:nil];
+                [self loadSort];
             }
 		}
 	}
@@ -871,9 +886,6 @@ static NSString *kName_Error = @"error";
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	//NSString *xmlResponse = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
-	//DLog(@"%@", xmlResponse);
-	//[self performSelectorInBackground:@selector(parseData:) withObject:theConnection];
 	[self parseData:theConnection];
 }
 

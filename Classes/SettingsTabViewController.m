@@ -471,15 +471,15 @@
 - (void)resetFolderCache
 {
 	[databaseControls resetFolderCache];
-	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:YES];
-	[self performSelectorOnMainThread:@selector(popFoldersTab) withObject:nil waitUntilDone:YES];
+	[viewObjects hideLoadingScreen];
+	[self popFoldersTab];
 }
 
 - (void)resetAlbumArtCache
 {
 	[databaseControls resetCoverArtCache];
-	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:YES];
-	[self performSelectorOnMainThread:@selector(popFoldersTab) withObject:nil waitUntilDone:YES];
+	[viewObjects hideLoadingScreen];
+	[self popFoldersTab];
 }
 
 - (void)popFoldersTab
@@ -494,13 +494,13 @@
 {
 	if (alertView.tag == 0 && buttonIndex == 1)
 	{
-		[viewObjects showLoadingScreenOnMainWindow];
-		[self performSelectorInBackground:@selector(resetFolderCache) withObject:nil];
+		[viewObjects showLoadingScreenOnMainWindowWithMessage:@"Processing"];
+		[self performSelector:@selector(resetFolderCache) withObject:nil afterDelay:0.05];
 	}
 	else if (alertView.tag == 1 && buttonIndex == 1)
 	{
-		[viewObjects showLoadingScreenOnMainWindow];
-		[self performSelectorInBackground:@selector(resetAlbumArtCache) withObject:nil];
+		[viewObjects showLoadingScreenOnMainWindowWithMessage:@"Processing"];
+		[self performSelector:@selector(resetAlbumArtCache) withObject:nil afterDelay:0.05];
 	}
 }
 

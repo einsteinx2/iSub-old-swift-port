@@ -235,8 +235,16 @@ static SocialSingleton *sharedInstance = nil;
 	//DLog(@"Request %@ failed with error: %@", requestIdentifier, error);
 }
 
-#pragma mark -
-#pragma mark Singleton methods
+#pragma mark - Memory management
+
+- (void)didReceiveMemoryWarning
+{
+	DLog(@"received memory warning");
+	
+	
+}
+
+#pragma mark - Singleton methods
 
 + (SocialSingleton*)sharedInstance
 {
@@ -255,6 +263,11 @@ static SocialSingleton *sharedInstance = nil;
 	[self createTwitterEngine];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songStarted) name:ISMSNotification_SongPlaybackStarted object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(didReceiveMemoryWarning) 
+												 name:UIApplicationDidReceiveMemoryWarningNotification 
+											   object:nil];
 }
 
 + (id)allocWithZone:(NSZone *)zone {

@@ -247,7 +247,7 @@
 		editPlaylistLabel.text = @"Edit";
 		
 		// Reload the table to correct the numbers
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+		[self.tableView reloadData];
 
 		if (dataModel.currentIndex >= 0 && dataModel.currentIndex < currentPlaylistCount)
 		{
@@ -374,7 +374,7 @@
 					[indexes addObject:[NSIndexPath indexPathForRow:[index integerValue] inSection:0]];
 				}
 			}
-			[self.tableView performSelectorOnMainThread:@selector(deleteRowsAtIndexPaths:withRowAnimation:) withObject:indexes waitUntilDone:YES];
+			[self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:NO];
 			[indexes release];
 			
 			[self editPlaylistAction:nil];
@@ -452,7 +452,7 @@
 
 - (void)selectRow
 {
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+	[self.tableView reloadData];
 	if (dataModel.currentIndex >= 0 && dataModel.currentIndex < currentPlaylistCount)
 	{
 		[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:dataModel.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];

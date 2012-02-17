@@ -49,11 +49,11 @@
             coverArtImageView.image = [UIImage imageWithData:imageData];
         }*/
         
-        DLog(@"Cover Art Found!!");
+        //DLog(@"Cover Art Found!!");
         return [UIImage imageWithData:imageData];
     }
     
-    DLog(@"No Cover Art Found, returning nil");
+    //DLog(@"No Cover Art Found, returning nil");
     return nil;
 }
 

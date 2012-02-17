@@ -56,4 +56,6 @@
 - (void)segmentAction:(id)sender;
 - (void)updateCurrentPlaylistCount;
 
+- (void)parseData;
+
 @end

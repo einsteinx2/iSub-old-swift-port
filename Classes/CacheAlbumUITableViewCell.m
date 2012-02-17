@@ -85,8 +85,8 @@
 
 - (void)deleteAction
 {
-	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindow];
-	[self performSelectorInBackground:@selector(deleteAllSongs) withObject:nil];
+	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindowWithMessage:@"Deleting"];
+	[self performSelector:@selector(deleteAllSongs) withObject:nil afterDelay:0.05];
 	
 	self.overlayView.downloadButton.alpha = .3;
 	self.overlayView.downloadButton.enabled = NO;
@@ -96,48 +96,44 @@
 
 - (void)deleteAllSongs
 {
-	@autoreleasepool 
+	FMResultSet *result;
+	result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text];
+	
+	while ([result next])
 	{
-		FMResultSet *result;
-		result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text];
-		
-		while ([result next])
-		{
-			if ([result stringForColumnIndex:0] != nil)
-				[Song removeSongFromCacheDbByMD5:[NSString stringWithString:[result stringForColumnIndex:0]]];
-		}
-		
-		// Reload the cached songs table
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"cachedSongDeleted" object:nil];
-		
-		// Hide the loading screen
-		[[ViewObjectsSingleton sharedInstance] performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:YES];
+		if ([result stringForColumnIndex:0] != nil)
+			[Song removeSongFromCacheDbByMD5:[NSString stringWithString:[result stringForColumnIndex:0]]];
 	}
+	[result close];
+	
+	// Reload the cached songs table
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"cachedSongDeleted" object:nil];
+	
+	// Hide the loading screen
+	[[ViewObjectsSingleton sharedInstance] hideLoadingScreen];
 }
 
 - (void)queueAction
 {
-	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindow];
-	[self performSelectorInBackground:@selector(queueAllSongs) withObject:nil];
+	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindowWithMessage:nil];
+	[self performSelector:@selector(queueAllSongs) withObject:nil afterDelay:0.05];
 	[self hideOverlay];
 }
 
 - (void)queueAllSongs
 {
-	@autoreleasepool
+	FMResultSet *result;
+	result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text];
+	
+	while ([result next])
 	{
-		FMResultSet *result;
-		result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text];
-		
-		while ([result next])
-		{
-			if ([result stringForColumnIndex:0] != nil)
-				[[Song songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCurrentPlaylist];
-		}
-		
-		// Hide the loading screen
-		[[ViewObjectsSingleton sharedInstance] performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:YES];
+		if ([result stringForColumnIndex:0] != nil)
+			[[Song songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCurrentPlaylist];
 	}
+	[result close];
+	
+	// Hide the loading screen
+	[[ViewObjectsSingleton sharedInstance] hideLoadingScreen];
 }
 
 #pragma mark - Scrolling

@@ -42,7 +42,7 @@
 {
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	alert.tag = 1;
-	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+	[alert show];
 	[alert release];
 }
 

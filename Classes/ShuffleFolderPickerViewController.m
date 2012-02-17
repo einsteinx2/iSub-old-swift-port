@@ -88,7 +88,7 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
 	// Add the All Folders entry back
 	[sortedFolders insertObject:allFoldersKeyPair atIndex:0];
 	
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+	[self.tableView reloadData];
 }
 
 - (void)viewDidUnload

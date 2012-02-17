@@ -33,4 +33,6 @@
 
 @property (copy) SUSServerPlaylist *serverPlaylist;
 
+- (void)parseData;
+
 @end

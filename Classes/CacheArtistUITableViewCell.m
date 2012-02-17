@@ -71,8 +71,8 @@
 
 - (void)deleteAction
 {	
-	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindow];
-	[self performSelectorInBackground:@selector(deleteAllSongs) withObject:nil];
+	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindowWithMessage:@"Deleting"];
+	[self performSelector:@selector(deleteAllSongs) withObject:nil afterDelay:0.05];
 	
 	self.overlayView.downloadButton.alpha = .3;
 	self.overlayView.downloadButton.enabled = NO;
@@ -82,9 +82,6 @@
 
 - (void)deleteAllSongs
 {
-	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-	
 	FMResultSet *result;
 	result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ?", artistNameLabel.text];
 	
@@ -93,30 +90,26 @@
 		if ([result stringForColumnIndex:0] != nil)
 			[Song removeSongFromCacheDbByMD5:[NSString stringWithString:[result stringForColumnIndex:0]]];
 	}
+	[result close];
 	
 	// Reload the cached songs table
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"cachedSongDeleted" object:nil];
 	
 	// Hide the loading screen	
-	[[ViewObjectsSingleton sharedInstance] performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:YES];
-	
-	[autoreleasePool release];
+	[[ViewObjectsSingleton sharedInstance] hideLoadingScreen];
 }
 
 - (void)queueAction
 {
 	[super queueAction];
 	
-	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindow];
-	[self performSelectorInBackground:@selector(queueAllSongs) withObject:nil];
+	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindowWithMessage:nil];
+	[self performSelector:@selector(queueAllSongs) withObject:nil afterDelay:0.05];
 	[self hideOverlay];
 }
 
 - (void)queueAllSongs
 {
-	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-	
 	FMResultSet *result;
 	
 	result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text];
@@ -129,9 +122,7 @@
 	
 	[result close];
 	
-	[[ViewObjectsSingleton sharedInstance] performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:YES];
-	
-	[autoreleasePool release];
+	[[ViewObjectsSingleton sharedInstance] hideLoadingScreen];
 }
 
 #pragma mark - Scrolling

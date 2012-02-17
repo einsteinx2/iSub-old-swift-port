@@ -78,7 +78,6 @@
     return self;
 }
 
-
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
@@ -105,66 +104,6 @@
 	self.tableView.tableFooterView = fadeBottom;
 }
 		
-- (void)viewWillAppear:(BOOL)animated
-{
-	[super viewWillAppear:animated];
-	
-	/*if ([listOfArtists count] > 0 || [listOfAlbums count] > 0 || [listOfSongs count] > 0)
-	{
-		// Add the play all button + shuffle button
-		UIView *headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)] autorelease];
-		headerView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
-		
-		UIImageView *playAllImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play-all-note.png"]];
-		playAllImage.frame = CGRectMake(10, 10, 19, 30);
-		[headerView addSubview:playAllImage];
-		[playAllImage release];
-		
-		UILabel *playAllLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 160, 50)];
-		playAllLabel.backgroundColor = [UIColor clearColor];
-		playAllLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
-		playAllLabel.textAlignment = UITextAlignmentCenter;
-		playAllLabel.font = [UIFont boldSystemFontOfSize:30];
-		playAllLabel.text = @"Play All";
-		[headerView addSubview:playAllLabel];
-		[playAllLabel release];
-		
-		UIButton *playAllButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		playAllButton.frame = CGRectMake(0, 0, 160, 40);
-		[playAllButton addTarget:self action:@selector(playAllAction:) forControlEvents:UIControlEventTouchUpInside];
-		[headerView addSubview:playAllButton];
-		
-		UILabel *spacerLabel = [[UILabel alloc] initWithFrame:CGRectMake(158, -2, 6, 50)];
-		spacerLabel.backgroundColor = [UIColor clearColor];
-		spacerLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
-		spacerLabel.font = [UIFont systemFontOfSize:40];
-		spacerLabel.text = @"|";
-		[headerView addSubview:spacerLabel];
-		[spacerLabel release];
-		
-		UIImageView *shuffleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shuffle-small.png"]];
-		shuffleImage.frame = CGRectMake(180, 12, 24, 26);
-		[headerView addSubview:shuffleImage];
-		[shuffleImage release];
-		
-		UILabel *shuffleLabel = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 160, 50)];
-		shuffleLabel.backgroundColor = [UIColor clearColor];
-		shuffleLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
-		shuffleLabel.textAlignment = UITextAlignmentCenter;
-		shuffleLabel.font = [UIFont boldSystemFontOfSize:30];
-		shuffleLabel.text = @"Shuffle";
-		[headerView addSubview:shuffleLabel];
-		[shuffleLabel release];
-		
-		UIButton *shuffleButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		shuffleButton.frame = CGRectMake(160, 0, 160, 40);
-		[shuffleButton addTarget:self action:@selector(shuffleAction:) forControlEvents:UIControlEventTouchUpInside];
-		[headerView addSubview:shuffleButton];
-		
-		self.tableView.tableHeaderView = headerView;
-	}*/
-}
-
 - (void) viewWillDisappear:(BOOL)animated
 {
 	[super viewWillDisappear:animated];
@@ -174,100 +113,6 @@
 	connection = nil;
 }
 
-/*- (void)loadPlayAllPlaylist:(NSString *)shuffle
-{
-	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-	
-	BOOL isShuffle;
-	if ([shuffle isEqualToString:@"YES"])
-		isShuffle = YES;
-	else
-		isShuffle = NO;
-	
-	[musicControls performSelectorOnMainThread:@selector(destroyStreamer) withObject:nil waitUntilDone:YES];
-	[databaseControls resetCurrentPlaylistDb];
-	
-	// Add each song to playlist if there are any
-	for (Song *aSong in listOfSongs)
-	{
-		[databaseControls insertSong:aSong intoTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-	}
-		
-	if (isShuffle)
-	{
-		currentPlaylist.isShuffle = YES;
-		
-		[databaseControls resetShufflePlaylist];
-		[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist ORDER BY RANDOM()"];
-	}
-	else
-	{
-		currentPlaylist.isShuffle = NO;
-	}
-	
-	musicControls.currentPlaylistPosition = 0;
-	
-	musicControls.currentSongObject = nil;
-	musicControls.nextSongObject = nil;
-	if (isShuffle)
-	{
-		musicControls.currentSongObject = [databaseControls songFromDbRow:0 inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
-		musicControls.nextSongObject = [databaseControls songFromDbRow:1 inTable:@"shufflePlaylist" inDatabase:databaseControls.currentPlaylistDb];
-	}
-	else
-	{
-		musicControls.currentSongObject = [databaseControls songFromDbRow:0 inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-		musicControls.nextSongObject = [databaseControls songFromDbRow:1 inTable:@"currentPlaylist" inDatabase:databaseControls.currentPlaylistDb];
-	}
-	
-	[self performSelectorOnMainThread:@selector(loadPlayAllPlaylist2) withObject:nil waitUntilDone:NO];	
-	
-	[autoreleasePool release];
-}
-
-
-- (void)playAllPlaySong
-{	
-	[musicControls destroyStreamer];
-	[musicControls playPauseSong];
-	
-	if (IS_IPAD())
-	{
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"showPlayer" object:nil];
-	}
-	else
-	{
-		iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-		streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-		[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-		[streamingPlayerViewController release];
-	}
-}
-
-
-- (void) loadPlayAllPlaylist2
-{
-	// Hide the loading screen
-	[[[appDelegate.currentTabBarController.view subviews] objectAtIndexSafe:([[appDelegate.currentTabBarController.view subviews] count] - 1)] removeFromSuperview];
-	[[[appDelegate.currentTabBarController.view subviews] objectAtIndexSafe:([[appDelegate.currentTabBarController.view subviews] count] - 1)] removeFromSuperview];
-	
-	[self playAllPlaySong];
-}
-
-
-- (void)playAllAction:(id)sender
-{	
-	//[viewObjects showLoadingScreen:appDelegate.currentTabBarController.view blockInput:YES mainWindow:YES];
-	//[self performSelectorInBackground:@selector(loadPlayAllPlaylist:) withObject:@"NO"];
-}
-
-- (void)shuffleAction:(id)sender
-{
-	//[viewObjects showLoadingScreen:appDelegate.currentTabBarController.view blockInput:YES mainWindow:YES];
-	//[self performSelectorInBackground:@selector(loadPlayAllPlaylist:) withObject:@"YES"];
-}*/
-
 - (void) settingsAction:(id)sender 
 {
 	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
@@ -276,7 +121,6 @@
 	[serverListViewController release];
 }
 
-
 - (IBAction)nowPlayingAction:(id)sender
 {
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
@@ -284,7 +128,6 @@
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
 	[streamingPlayerViewController release];
 }
-
 
 #pragma mark -
 #pragma mark Table view data source
@@ -323,7 +166,6 @@
 		return 60.0;
 	}
 }
-
 
 - (void)loadMoreResults
 {
@@ -368,7 +210,7 @@
 	{
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error performing the search.\n\nThe connection could not be created" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		[alert show];
 		[alert release];
 	}
 }
@@ -406,7 +248,6 @@
 	
 	return cell;
 }
-
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
@@ -482,7 +323,6 @@
 	// In case somehow no cell is created, return an empty cell
 	return [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 }
-
 
 #pragma mark -
 #pragma mark Table view delegate
@@ -616,7 +456,7 @@
 	NSString *message = [NSString stringWithFormat:@"There was an error completing the search.\n\nError:%@", error.localizedDescription];
 
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+	[alert show];
 	[alert release];
 	
 	[connection release]; connection = nil;
@@ -675,7 +515,7 @@
 	[parser release];
 	
 	// Reload the table
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+	[self.tableView reloadData];
 	isLoading = NO;
 		
 	[connection	release]; connection = nil;

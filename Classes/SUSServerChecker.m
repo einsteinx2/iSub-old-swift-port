@@ -66,7 +66,7 @@
 
 - (void)checkTimedOut
 {
-	DLog(@"check timed out");
+	//DLog(@"check timed out");
 	[self.connection cancel];
 	NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotReachServer];
 	[self connection:self.connection didFailWithError:error];
@@ -113,7 +113,7 @@
     } 
     else 
     {
-        DLog(@"returning inRequest");
+        //DLog(@"returning inRequest");
         return inRequest;
     }
 }
@@ -140,7 +140,7 @@
 {	
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
-	DLog(@"receivedData: %@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
+	//DLog(@"receivedData: %@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
 	TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
     TBXMLElement *root = tbxml.rootXMLElement;
     if (root) 
@@ -166,7 +166,7 @@
 				}			
 			}
 			
-			DLog(@"versionString: %@   majorVersion: %i  minorVersion: %i", self.versionString, self.majorVersion, self.minorVersion);
+			//DLog(@"versionString: %@   majorVersion: %i  minorVersion: %i", self.versionString, self.majorVersion, self.minorVersion);
 			
 			TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
 			if (error)

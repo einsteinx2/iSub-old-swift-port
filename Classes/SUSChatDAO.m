@@ -69,39 +69,6 @@
 		NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotSendChatMessage withExtraAttributes:dict];
 		[self.delegate loadingFailed:nil withError:error]; 
 	}
-	
-	
-	/*// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-	
-	// Form the URL and send the message
-	NSString *encodedMessage = [message stringByAddingRFC3875PercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	NSURL *url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@%@", [loader getBaseUrlString:@"addChatMessage.view"], encodedMessage]];
-	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-	[request startSynchronous];
-	if ([request error])
-	{
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error posting the message." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-		[alert release];
-		
-		// Hide the loading screen
-		[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:YES];
-	}
-	else
-	{
-		// Hide the loading screen
-		//[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:YES];
-		
-		// Connection worked, reload the table
-		[self performSelectorOnMainThread:@selector(loadData) withObject:nil waitUntilDone:NO];
-	}
-	[url release];
-	
-	[textInput performSelectorOnMainThread:@selector(setText:) withObject:@"" waitUntilDone:NO];
-	[textInput performSelectorOnMainThread:@selector(resignFirstResponder) withObject:nil waitUntilDone:NO];
-	
-	[autoreleasePool release];*/
 }
 
 #pragma mark - Connection delegate for sending messages

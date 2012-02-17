@@ -193,7 +193,7 @@
 		self.tableView.tableHeaderView = headerView;
 	}
 	
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES]; 
+	[self.tableView reloadData];
 	
 	[FlurryAnalytics logEvent:@"BookmarksTab"];
 }
@@ -256,7 +256,7 @@
 	if (self.tableView.editing == NO)
 	{
 		viewObjects.isEditing = YES;
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+		[self.tableView reloadData];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:@"showDeleteButton" object: nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:@"hideDeleteButton" object: nil];
 		viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
@@ -281,7 +281,7 @@
 		editBookmarksLabel.text = @"Edit";
 		
 		// Reload the table
-		//[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+		//[self.tableView reloadData];
 		[self viewWillAppear:NO];
 	}
 }

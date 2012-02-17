@@ -73,71 +73,30 @@ static ViewObjectsSingleton *sharedInstance = nil;
 	isCellEnabled = YES;
 }
 
-- (void)showLoadingScreenOnMainWindow
-{	
-	if (IS_IPAD())
-		[self showLoadingScreen:appDelegate.splitView.view blockInput:YES mainWindow:YES];
-	else
-		[self showLoadingScreen:appDelegate.currentTabBarController.view blockInput:YES mainWindow:YES];
+- (void)hudWasHidden:(MBProgressHUD *)hud 
+{
+    // Remove HUD from screen when the HUD was hidden
+    [HUD removeFromSuperview];
+    [HUD release]; HUD = nil;
 }
 
-- (void)showLoadingScreen:(UIView *)view blockInput:(BOOL)blockInput mainWindow:(BOOL)mainWindow
+- (void)showLoadingScreenOnMainWindowWithMessage:(NSString *)message
+{	
+	[self showLoadingScreen:appDelegate.window withMessage:message];
+}
+
+- (void)showLoadingScreen:(UIView *)view withMessage:(NSString *)message
 {
 	if (isLoadingScreenShowing)
 		return;
 	
 	isLoadingScreenShowing = YES;
 	
-	CGRect newFrame = CGRectMake(0, 0, view.bounds.size.width, view.bounds.size.height);
-	
-	loadingBackground = [[UIView alloc] init];
-	loadingBackground.frame = newFrame;
-	if (mainWindow)
-		loadingBackground.backgroundColor = [UIColor blackColor];
-	else
-		loadingBackground.backgroundColor = [UIColor clearColor];
-	loadingBackground.alpha = 0.1;
-	
-	inputBlocker = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
-	inputBlocker.frame = newFrame;
-	inputBlocker.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	inputBlocker.enabled = blockInput;
-	[loadingBackground addSubview:inputBlocker];
-	
-	loadingScreen = [[UIImageView alloc] init];
-	loadingScreen.frame = CGRectMake(0, 0, 240, 180);
-	loadingScreen.center = CGPointMake(newFrame.size.width / 2, newFrame.size.height / 2);
-	loadingScreen.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin;
-	loadingScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
-	loadingScreen.alpha = 0.1;
-	
-	loadingLabel = [[UILabel alloc] init];
-	loadingLabel.backgroundColor = [UIColor clearColor];
-	loadingLabel.textColor = [UIColor whiteColor];
-	loadingLabel.font = [UIFont boldSystemFontOfSize:32];
-	loadingLabel.textAlignment = UITextAlignmentCenter;
-	[loadingLabel setText:@"Loading"];
-	loadingLabel.frame = CGRectMake(20, 20, 200, 80);
-	[loadingScreen addSubview:loadingLabel];
-	[loadingLabel release];
-	
-	activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-	activityIndicator.frame = CGRectMake(95, 100, 50, 50);
-	[loadingScreen addSubview:activityIndicator];
-	[activityIndicator startAnimating];
-	[activityIndicator release];
-	
-	[view addSubview:loadingScreen];
-	[view bringSubviewToFront:loadingScreen];
-	[view addSubview:loadingBackground];
-	[view bringSubviewToFront:loadingBackground];
-		
-	// Animate it on screen
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.4];
-	loadingBackground.alpha = .20;
-	loadingScreen.alpha = .80;
-	[UIView commitAnimations];	
+	HUD = [[MBProgressHUD alloc] initWithView:view];
+	[appDelegate.window addSubview:HUD];
+	HUD.delegate = self;
+	HUD.labelText = message ? message : @"Loading";
+	[HUD show:YES];
 }
 
 - (void)showAlbumLoadingScreen:(UIView *)view sender:(id)sender
@@ -147,63 +106,21 @@ static ViewObjectsSingleton *sharedInstance = nil;
 	
 	isLoadingScreenShowing = YES;
 	
-	CGRect newFrame = CGRectMake(0, 0, view.bounds.size.width, view.bounds.size.height);
+	HUD = [[MBProgressHUD alloc] initWithView:appDelegate.window];
+	HUD.userInteractionEnabled = YES;
 	
-	loadingBackground = [[UIView alloc] init];
-	loadingBackground.frame = newFrame;
-	loadingBackground.backgroundColor = [UIColor clearColor];
-	loadingBackground.alpha = 0.1;
+	// TODO: verify on iPad
+	UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+	cancelButton.bounds = CGRectMake(0, 0, 1024, 1024);
+	cancelButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	[cancelButton addTarget:sender action:@selector(cancelLoad) forControlEvents:UIControlEventTouchUpInside];
+	[HUD addSubview:cancelButton];
 	
-	inputBlocker = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
-	inputBlocker.frame = newFrame;
-	inputBlocker.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	[inputBlocker addTarget:sender action:@selector(cancelLoad) forControlEvents:UIControlEventTouchUpInside];
-	[loadingBackground addSubview:inputBlocker];
-	
-	loadingScreen = [[UIImageView alloc] init];
-	loadingScreen.frame = CGRectMake(0, 0, 240, 180);
-	loadingScreen.center = CGPointMake(newFrame.size.width / 2, newFrame.size.height / 2);
-	loadingScreen.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin;
-	loadingScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
-	loadingScreen.alpha = 0.1;
-	
-	loadingLabel = [[UILabel alloc] init];
-	loadingLabel.backgroundColor = [UIColor clearColor];
-	loadingLabel.textColor = [UIColor whiteColor];
-	loadingLabel.font = [UIFont boldSystemFontOfSize:32];
-	loadingLabel.textAlignment = UITextAlignmentCenter;
-	[loadingLabel setText:@"Loading"];
-	loadingLabel.frame = CGRectMake(20, 5, 200, 80);
-	[loadingScreen addSubview:loadingLabel];
-	[loadingLabel release];
-	
-	activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-	activityIndicator.frame = CGRectMake(95, 85, 50, 50);
-	[loadingScreen addSubview:activityIndicator];
-	[activityIndicator startAnimating];
-	[activityIndicator release];
-	
-	UILabel *infoLabel = [[UILabel alloc] init];
-	infoLabel.backgroundColor = [UIColor clearColor];
-	infoLabel.textColor = [UIColor whiteColor];
-	infoLabel.font = [UIFont systemFontOfSize:16];
-	infoLabel.textAlignment = UITextAlignmentCenter;
-	[infoLabel setText:@"Tap to cancel"];
-	infoLabel.frame = CGRectMake(20, 110, 200, 80);
-	[loadingScreen addSubview:infoLabel];
-	[infoLabel release];
-	
-	[view addSubview:loadingScreen];
-	[view bringSubviewToFront:loadingScreen];
-	[view addSubview:loadingBackground];
-	[view bringSubviewToFront:loadingBackground];
-	
-	// Animate it on screen
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.4];
-	loadingBackground.alpha = .20;
-	loadingScreen.alpha = .80;
-	[UIView commitAnimations];
+	[appDelegate.window addSubview:HUD];
+	HUD.delegate = self;
+	HUD.labelText = @"Loading";
+	HUD.detailsLabelText = @"tap to cancel";
+	[HUD show:YES];
 }
 	
 - (void)hideLoadingScreen
@@ -213,30 +130,8 @@ static ViewObjectsSingleton *sharedInstance = nil;
 	
 	isLoadingScreenShowing = NO;
 	
-	// Animate it off screen
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.3];
-	[UIView setAnimationDelegate:self];
-	[UIView setAnimationDidStopSelector:@selector(loadingScreenDidFadeOut:finished:context:)];
-	loadingBackground.alpha = 0.0;
-	loadingScreen.alpha = 0.0;
-	[UIView commitAnimations];	
+	[HUD hide:YES];
 }
-
-- (void)loadingScreenDidFadeOut:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context
-{
-	if (loadingScreen != nil)
-	{
-		[loadingBackground removeFromSuperview];
-		[loadingScreen removeFromSuperview];
-		[inputBlocker removeFromSuperview];
-		
-		[loadingBackground release]; loadingBackground = nil;
-		[loadingScreen release]; loadingScreen = nil;
-		[inputBlocker release]; inputBlocker = nil;
-	}
-}
-		
 
 - (UIColor *) currentDarkColor
 {
@@ -405,8 +300,16 @@ static ViewObjectsSingleton *sharedInstance = nil;
 	return backgroundView;
 }
 
-#pragma mark -
-#pragma mark Singleton methods
+#pragma mark - Memory management
+
+- (void)didReceiveMemoryWarning
+{
+	DLog(@"received memory warning");
+	
+	
+}
+
+#pragma mark - Singleton methods
 
 - (void)setup
 {
@@ -454,6 +357,11 @@ static ViewObjectsSingleton *sharedInstance = nil;
 	
 	isNoNetworkAlertShowing = NO;
 	isLoadingScreenShowing = NO;
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(didReceiveMemoryWarning) 
+												 name:UIApplicationDidReceiveMemoryWarningNotification 
+											   object:nil];
 }
 
 + (ViewObjectsSingleton*)sharedInstance

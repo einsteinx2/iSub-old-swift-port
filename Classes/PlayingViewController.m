@@ -91,7 +91,7 @@
 		self.navigationItem.rightBarButtonItem = nil;
 	}
 	
-	[viewObjects showLoadingScreenOnMainWindow];
+	[viewObjects showLoadingScreenOnMainWindowWithMessage:nil];
 	
 	[dataModel startLoad];
 		
@@ -230,7 +230,7 @@
     // Inform the user that the connection failed.
 	NSString *message = [NSString stringWithFormat:@"There was an error loading the now playing list.\n\nError %i: %@", [error code], [error localizedDescription]];
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+	[alert show];
 	[alert release];
 	
 	[viewObjects hideLoadingScreen];
@@ -240,7 +240,7 @@
 {
     [viewObjects hideLoadingScreen];
 	
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+	[self.tableView reloadData];
 	
 	// Display the no songs overlay if 0 results
 	if (dataModel.count == 0)

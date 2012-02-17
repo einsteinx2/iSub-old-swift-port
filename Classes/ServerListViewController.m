@@ -115,7 +115,7 @@
 
 - (void)reloadTable
 {
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+	[self.tableView reloadData];
 }
 
 
@@ -142,7 +142,7 @@
 		fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		self.tableView.tableFooterView = fadeBottom;
 		
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+		[self.tableView reloadData];
 	}
 	else if (segmentedControl.selectedSegmentIndex == 1)
 	{
@@ -153,7 +153,7 @@
 		settingsTabViewController.parentController = self;
 		self.tableView.tableFooterView = settingsTabViewController.view;
 		//[settingsTabViewController release];
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+		[self.tableView reloadData];
 	}
 	else if (segmentedControl.selectedSegmentIndex == 2)
 	{
@@ -168,7 +168,7 @@
 		}
 		self.tableView.tableFooterView = helpTabViewController.view;
 		[helpTabViewController release];
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+		[self.tableView reloadData];
 	}
 }
 
@@ -430,7 +430,7 @@
 	else
 	{
 		self.theNewRedirectionUrl = nil;
-		[viewObjects showLoadingScreenOnMainWindow];
+		[viewObjects showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
 		SUSServerChecker *checker = [[SUSServerChecker alloc] initWithDelegate:self];
 		[checker checkServerUrlString:viewObjects.serverToEdit.url username:viewObjects.serverToEdit.username password:viewObjects.serverToEdit.password];
 	}
@@ -458,7 +458,7 @@
 	[[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+	[self.tableView reloadData];
 }
 
 
@@ -479,7 +479,7 @@
         // Delete the row from the data source
         [settings.serverList removeObjectAtIndex:indexPath.row];
 		[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+		[self.tableView reloadData];
 		
 		// Save the plist values
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

@@ -106,4 +106,5 @@
 - (IBAction)resetAlbumArtCacheAction;
 - (void)textFieldDidChange:(UITextField *)textField;
 
+- (void)popFoldersTab;
 @end

@@ -162,7 +162,7 @@
 			if ([sectionInfo count] < 5)
 				self.sectionInfo = nil;
 			else
-				[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+				[self.tableView reloadData];
 		}
 	}	
 }
@@ -189,6 +189,7 @@
 																  [NSString stringWithFormat:@"%i", [result intForColumnIndex:3]], nil]];
 		}
 	}
+	[result close];
 
 	// If the table is empty, pop back one view, otherwise reload the table data
 	if ([self.listOfAlbums count] + [self.listOfSongs count] == 0)
@@ -205,20 +206,20 @@
 	}
 	else
 	{
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+		[self.tableView reloadData];
 	}
 }
 
 - (void)playAllAction:(id)sender
 {	
-	[viewObjects showLoadingScreenOnMainWindow];
-	[self performSelectorInBackground:@selector(loadPlayAllPlaylist:) withObject:@"NO"];
+	[viewObjects showLoadingScreenOnMainWindowWithMessage:nil];
+	[self performSelector:@selector(loadPlayAllPlaylist:) withObject:@"NO" afterDelay:0.05];
 }
 
 - (void)shuffleAction:(id)sender
 {
-	[viewObjects showLoadingScreenOnMainWindow];
-	[self performSelectorInBackground:@selector(loadPlayAllPlaylist:) withObject:@"YES"];
+	[viewObjects showLoadingScreenOnMainWindowWithMessage:@"Shuffling"];
+	[self performSelector:@selector(loadPlayAllPlaylist:) withObject:@"YES" afterDelay:0.05];
 }
 
 
@@ -252,6 +253,7 @@
 		if ([result stringForColumnIndex:0] != nil)
 			[[Song songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCurrentPlaylist];
 	}
+	[result close];
 	
 	if (isShuffle)
 	{
@@ -328,64 +330,6 @@
 	self.listOfSongs = nil;
     [super dealloc];
 }
-
-
-- (Song *) songFromCacheDb:(NSString *)md5
-{
-	Song *aSong = [[Song alloc] init];
-	FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT * FROM cachedSongs WHERE md5 = ?", md5];
-	if ([databaseControls.songCacheDb hadError]) 
-	{
-		DLog(@"Err %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
-	}
-	else
-	{
-		[result next];
-		
-		if ([result stringForColumn:@"title"] != nil)
-			aSong.title = [[result stringForColumn:@"title"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-		if ([result stringForColumn:@"songId"] != nil)
-			aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
-		if ([result stringForColumn:@"artist"] != nil)
-			aSong.artist = [[result stringForColumn:@"artist"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-		if ([result stringForColumn:@"album"] != nil)
-			aSong.album = [[result stringForColumn:@"album"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-		if ([result stringForColumn:@"genre"] != nil)
-			aSong.genre = [[result stringForColumn:@"genre"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-		if ([result stringForColumn:@"coverArtId"] != nil)
-			aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
-		if ([result stringForColumn:@"path"] != nil)
-			aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
-		if ([result stringForColumn:@"suffix"] != nil)
-			aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
-		if ([result stringForColumn:@"transcodedSuffix"] != nil)
-			aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
-		aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
-		aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
-		aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
-		aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
-		aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
-	}
-	
-	/*aSong.title = [result stringForColumnIndex:4];
-	aSong.songId = [result stringForColumnIndex:5];
-	aSong.artist = [result stringForColumnIndex:6];
-	aSong.album = [result stringForColumnIndex:7];
-	aSong.genre = [result stringForColumnIndex:8];
-	aSong.coverArtId = [result stringForColumnIndex:9];
-	aSong.path = [result stringForColumnIndex:10];
-	aSong.suffix = [result stringForColumnIndex:11];
-	aSong.transcodedSuffix = [result stringForColumnIndex:12];
-	aSong.duration = [NSNumber numberWithInt:[result intForColumnIndex:13]];
-	aSong.bitRate = [NSNumber numberWithInt:[result intForColumnIndex:14]];
-	aSong.track = [NSNumber numberWithInt:[result intForColumnIndex:15]];
-	aSong.year = [NSNumber numberWithInt:[result intForColumnIndex:16]];
-	aSong.size = [NSNumber numberWithInt:[result intForColumnIndex:17]];*/
-	
-	[result close];
-	return [aSong autorelease];
-}
-
 
 #pragma mark Table view methods
 
@@ -485,7 +429,7 @@
 		NSUInteger a = indexPath.row - [listOfAlbums count];
 		cell.md5 = [[listOfSongs objectAtIndexSafe:a] objectAtIndexSafe:0];
 		
-		Song *aSong = [self songFromCacheDb:cell.md5];
+		Song *aSong = [Song songFromCacheDb:cell.md5];
 		
 		if (aSong.track)
 		{
@@ -578,6 +522,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 						[cacheAlbumViewController.listOfSongs sortUsingFunction:trackSort2 context:NULL];
 				}
 			}
+			[result close];
 						
 			[self.navigationController pushViewController:cacheAlbumViewController animated:YES];
 			[cacheAlbumViewController release];
@@ -591,7 +536,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			[databaseControls resetCurrentPlaylistDb];
 			for(NSArray *song in listOfSongs)
 			{
-				Song *aSong = [self songFromCacheDb:[song objectAtIndexSafe:0]];
+				Song *aSong = [Song songFromCacheDb:[song objectAtIndexSafe:0]];
 				[aSong addToCurrentPlaylist];
 			}
 						

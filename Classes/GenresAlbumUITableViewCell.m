@@ -88,10 +88,33 @@
 	}
 }
 
+- (void)downloadAllSongs
+{
+	FMResultSet *result;
+	if ([ViewObjectsSingleton sharedInstance].isOfflineMode) 
+	{
+		result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text, genre];
+	}
+	else 
+	{
+		result = [[DatabaseSingleton sharedInstance].genresDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text, genre];
+	}
+	
+	while ([result next])
+	{
+		if ([result stringForColumnIndex:0] != nil)
+			[[Song songFromGenreDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCacheQueue];
+	}
+	[result close];
+	
+	// Hide the loading screen
+	[[ViewObjectsSingleton sharedInstance] hideLoadingScreen];
+}
+
 - (void)downloadAction
 {
-	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindow];
-	[self performSelectorInBackground:@selector(downloadAllSongs) withObject:nil];
+	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindowWithMessage:nil];
+	[self performSelector:@selector(downloadAllSongs) withObject:nil afterDelay:0.05];
 	
 	self.overlayView.downloadButton.alpha = .3;
 	self.overlayView.downloadButton.enabled = NO;
@@ -99,60 +122,33 @@
 	[self hideOverlay];
 }
 
-- (void)downloadAllSongs
+- (void)queueAllSongs
 {
-	@autoreleasepool 
+	FMResultSet *result;
+	if ([ViewObjectsSingleton sharedInstance].isOfflineMode) 
 	{
-		FMResultSet *result;
-		if ([ViewObjectsSingleton sharedInstance].isOfflineMode) 
-		{
-			result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text, genre];
-		}
-		else 
-		{
-			result = [[DatabaseSingleton sharedInstance].genresDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text, genre];
-		}
-		
-		while ([result next])
-		{
-			if ([result stringForColumnIndex:0] != nil)
-				[[Song songFromGenreDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCacheQueue];
-		}
-		
-		// Hide the loading screen
-		[[ViewObjectsSingleton sharedInstance] performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:YES];
+		result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text, genre];
 	}
+	else 
+	{
+		result = [[DatabaseSingleton sharedInstance].genresDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text, genre];
+	}
+	
+	while ([result next])
+	{
+		if ([result stringForColumnIndex:0] != nil)
+			[[Song songFromGenreDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCurrentPlaylist];
+	}
+	[result close];
+	
+	[[ViewObjectsSingleton sharedInstance] hideLoadingScreen];
 }
 
 - (void)queueAction
 {
-	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindow];
-	[self performSelectorInBackground:@selector(queueAllSongs) withObject:nil];
+	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindowWithMessage:nil];
+	[self performSelector:@selector(queueAllSongs) withObject:nil afterDelay:0.05];
 	[self hideOverlay];
-}
-
-- (void)queueAllSongs
-{
-	@autoreleasepool 
-	{
-		FMResultSet *result;
-		if ([ViewObjectsSingleton sharedInstance].isOfflineMode) 
-		{
-			result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text, genre];
-		}
-		else 
-		{
-			result = [[DatabaseSingleton sharedInstance].genresDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text, genre];
-		}
-		
-		while ([result next])
-		{
-			if ([result stringForColumnIndex:0] != nil)
-				[[Song songFromGenreDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCurrentPlaylist];
-		}
-		
-		[[ViewObjectsSingleton sharedInstance] performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:YES];
-	}
 }
 
 #pragma mark - Scrolling

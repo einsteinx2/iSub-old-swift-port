@@ -132,7 +132,7 @@
 	if (!lyrics)
 		lyrics = @"\n\nNo lyrics found";
 	
-	[textView performSelectorOnMainThread:@selector(setText:) withObject:lyrics waitUntilDone:NO];
+	textView.text = lyrics;
 }
 
 /*#pragma mark - SUSLoader delegate

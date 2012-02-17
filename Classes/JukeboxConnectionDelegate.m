@@ -61,23 +61,18 @@
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
-	//if ([error code] != NSURLErrorTimedOut)
-	//{
-		[musicControls.connectionQueue connectionFinished:theConnection];
+	[musicControls.connectionQueue connectionFinished:theConnection];
 	
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error controlling the Jukebox.\n\nError %i: %@", [error code], [error localizedDescription]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-		[alert release];
-		
-		[theConnection release];
-		[receivedData release]; receivedData = nil;
-	//}
+	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error controlling the Jukebox.\n\nError %i: %@", [error code], [error localizedDescription]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	[alert show];
+	[alert release];
+	
+	[theConnection release];
+	[receivedData release]; receivedData = nil;
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
-{		
-	//DLog(@"%@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
-	
+{			
 	[musicControls.connectionQueue connectionFinished:theConnection];
 	
 	if (isGetInfo)

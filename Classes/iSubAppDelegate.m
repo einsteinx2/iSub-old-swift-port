@@ -86,6 +86,11 @@
 #pragma mark Application lifecycle
 #pragma mark -
 
+- (UIView *)mainView
+{
+	return IS_IPAD() ? splitView.view : currentTabBarController.view;
+}
+
 /*void onUncaughtException(NSException* exception)
 {
     NSLog(@"uncaught exception: %@", exception.description);
@@ -157,7 +162,7 @@
     introController = nil;
 	showIntro = NO;
 	
-	DLog(@"md5: %@", [settings.urlString md5]);
+	//DLog(@"md5: %@", [settings.urlString md5]);
 	
 	[self loadFlurryAnalytics];
 	[self loadHockeyApp];
@@ -240,8 +245,8 @@
 	// Check the server status in the background
     if (!viewObjects.isOfflineMode)
 	{
-		DLog(@"adding loading screen");
-		[viewObjects showLoadingScreenOnMainWindow];
+		//DLog(@"adding loading screen");
+		[viewObjects showLoadingScreenOnMainWindowWithMessage:nil];
 		
 		[self checkServer];
 	}
@@ -287,27 +292,27 @@
 {
     SavedSettings *settings = [SavedSettings sharedInstance];
     settings.redirectUrlString = [NSString stringWithFormat:@"%@://%@:%@", url.scheme, url.host, url.port];
-    DLog(@"redirectUrlString: %@", settings.redirectUrlString);
+    //DLog(@"redirectUrlString: %@", settings.redirectUrlString);
 }
 
 - (void)SUSServerURLCheckFailed:(SUSServerChecker *)checker withError:(NSError *)error
 {
-    DLog(@"server check failed");
+    //DLog(@"server check failed");
     if(!viewObjects.isOfflineMode)
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", [error code], [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Settings", nil];
 		alert.tag = 3;
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		[alert show];
 		[alert release];
 		
-		[self performSelectorOnMainThread:@selector(enterOfflineModeForce) withObject:nil waitUntilDone:NO];
+		[self enterOfflineModeForce];
 	}
     
     [checker release]; checker = nil;
 	
 	[SavedSettings sharedInstance].isNewSearchAPI = checker.isNewSearchAPI;
     
-    DLog(@"server verification failed, hiding loading screen");
+    //DLog(@"server verification failed, hiding loading screen");
     [viewObjects hideLoadingScreen];
 }
 
@@ -319,7 +324,7 @@
     
     [checker release]; checker = nil;
     
-    DLog(@"server verification passed, hiding loading screen");
+    //DLog(@"server verification passed, hiding loading screen");
     [viewObjects hideLoadingScreen];
 	
 	if (!IS_IPAD() && !viewObjects.isOfflineMode)
@@ -558,7 +563,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication*)application
 {
-	DLog(@"isWifi: %i", [self isWifi]);
+	//DLog(@"isWifi: %i", [self isWifi]);
 	//DLog(@"applicationDidBecomeActive called");
 	
 	//DLog(@"applicationDidBecomeActive finished");
@@ -659,9 +664,10 @@
 	[[AudioEngine sharedInstance] bassFree];
 }
 
-#pragma mark -
-#pragma mark Other methods
-#pragma mark -
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
+{
+	
+}
 
 
 #pragma mark Helper Methods
@@ -743,7 +749,7 @@
 	
 	if ([curReach currentReachabilityStatus] == NotReachable)
 	{
-		DLog(@"Reachability Changed: NotReachable");
+		//DLog(@"Reachability Changed: NotReachable");
 		//reachabilityStatus = 0;
 		//[self stopDownloadQueue];
 		
@@ -755,7 +761,7 @@
 	}
 	else if ([curReach currentReachabilityStatus] == ReachableViaWiFi || IS_3G_UNRESTRICTED)
 	{
-		DLog(@"Reachability Changed: ReachableViaWiFi");
+		//DLog(@"Reachability Changed: ReachableViaWiFi");
 		//reachabilityStatus = 2;
 		
 		if (viewObjects.isOfflineMode)
@@ -764,17 +770,17 @@
 		}
 		else
 		{
-			DLog(@"musicControls.isQueueListDownloading: %i", musicControls.isQueueListDownloading);
+			//DLog(@"musicControls.isQueueListDownloading: %i", musicControls.isQueueListDownloading);
 			if (!musicControls.isQueueListDownloading) 
 			{
-				DLog(@"Calling [musicControls downloadNextQueuedSong]");
+				//DLog(@"Calling [musicControls downloadNextQueuedSong]");
 				[musicControls downloadNextQueuedSong];
 			}
 		}
 	}
 	else if ([curReach currentReachabilityStatus] == ReachableViaWWAN)
 	{
-		DLog(@"Reachability Changed: ReachableViaWWAN");
+		//DLog(@"Reachability Changed: ReachableViaWWAN");
 		//reachabilityStatus = 1;
 		
 		if (viewObjects.isOfflineMode)
@@ -1112,7 +1118,7 @@
 		message = @"";
 	
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Purchase Successful!" message:message delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
+	[alert show];
 	[alert release];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_StorePurchaseComplete object:nil];
@@ -1121,7 +1127,7 @@
 - (void)transactionCanceled
 {
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Store" message:@"Transaction canceled. Try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
+	[alert show];
 	[alert release];
 }
 

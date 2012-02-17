@@ -543,7 +543,7 @@
 		}
 		
 		// Reload the table data
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+		[self.tableView reloadData];
 		
 		if (currentPlaylistDataModel.currentIndex >= 0 && currentPlaylistDataModel.currentIndex < self.currentPlaylistCount)
 		{
@@ -582,7 +582,7 @@
 		}
 		
 		// Reload the table data
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+		[self.tableView reloadData];
 		
 		// Remove the no playlists overlay screen if it's showing
 		[self removeNoPlaylistsScreen];
@@ -604,13 +604,13 @@
 		[self removeSaveEditButtons];
 
 		// Reload the table data
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+		[self.tableView reloadData];
 		
 		// Remove the no playlists overlay screen if it's showing
 		[self removeNoPlaylistsScreen];
 		
 		//[viewObjects showLoadingScreen:self.view blockInput:YES mainWindow:NO];
-		[viewObjects showLoadingScreenOnMainWindow];
+		[viewObjects showLoadingScreenOnMainWindowWithMessage:nil];
         
         [serverPlaylistsDataModel startLoad];
 	}
@@ -624,7 +624,7 @@
 		if (self.tableView.editing == NO)
 		{
 			viewObjects.isEditing = YES;
-			[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+			[self.tableView reloadData];
 			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:@"showDeleteButton" object: nil];
 			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:@"hideDeleteButton" object: nil];
 			viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
@@ -647,7 +647,7 @@
 			editPlaylistLabel.text = @"Edit";
 			
 			// Reload the table to correct the numbers
-			[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+			[self.tableView reloadData];
 			if (currentPlaylistDataModel.currentIndex >= 0 && currentPlaylistDataModel.currentIndex < self.currentPlaylistCount)
 			{
 				[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPlaylistDataModel.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
@@ -660,7 +660,7 @@
 		if (self.tableView.editing == NO)
 		{
 			viewObjects.isEditing = YES;
-			[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+			[self.tableView reloadData];
 			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:@"showDeleteButton" object: nil];
 			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:@"hideDeleteButton" object: nil];
 			viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
@@ -683,7 +683,7 @@
 			editPlaylistLabel.text = @"Edit";
 			
 			// Reload the table to correct the numbers
-			[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+			[self.tableView reloadData];
 		}
 	}
 }
@@ -835,15 +835,13 @@
 	{
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error saving the playlist to the server.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		[alert show];
 		[alert release];
 	}
 }
 
 - (void)deleteAction
-{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
+{	
 	[self unregisterForNotifications];
 	
 	if (segmentedControl.selectedSegmentIndex == 0)
@@ -860,11 +858,11 @@
 				[indexes addObject:[NSIndexPath indexPathForRow:[index integerValue] inSection:0]];
 			}
 		}
-		[self.tableView performSelectorOnMainThread:@selector(deleteRowsAtIndexPaths:withRowAnimation:) withObject:indexes waitUntilDone:YES];
+		[self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:YES];
 		[indexes release];
 		
-		[self performSelectorOnMainThread:@selector(editPlaylistAction:) withObject:nil waitUntilDone:YES];
-		[self performSelectorOnMainThread:@selector(segmentAction:) withObject:nil waitUntilDone:YES];
+		[self editPlaylistAction:nil];
+		[self segmentAction:nil];
 	}
 	else if (segmentedControl.selectedSegmentIndex == 1)
 	{
@@ -890,19 +888,17 @@
 		{
 			[indexes addObject:[NSIndexPath indexPathForRow:[index integerValue] inSection:0]];
 		}
-		[self.tableView performSelectorOnMainThread:@selector(deleteRowsAtIndexPaths:withRowAnimation:) withObject:indexes waitUntilDone:YES];
+		[self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:NO];
 		
 		[indexes release];
 		
-		[self performSelectorOnMainThread:@selector(editPlaylistAction:) withObject:nil waitUntilDone:YES];
-		[self performSelectorOnMainThread:@selector(segmentAction:) withObject:nil waitUntilDone:YES];
+		[self editPlaylistAction:nil];
+		[self segmentAction:nil];
 	}
 	
-	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
+	[viewObjects hideLoadingScreen];
 	
-	[self registerForNotifications];
-	
-	[pool release];
+	[self registerForNotifications];	
 }
 
 - (void)savePlaylistAction:(id)sender
@@ -934,14 +930,14 @@
 				{
 					[viewObjects.multiDeleteList addObject:[NSNumber numberWithInt:i]];
 				}
-				[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+				[self.tableView reloadData];
 				[self showDeleteButton];
 			}
 			else
 			{
 				// Delete action
-				[viewObjects showLoadingScreenOnMainWindow];
-				[self performSelectorInBackground:@selector(deleteAction) withObject:nil];
+				[viewObjects showLoadingScreenOnMainWindowWithMessage:@"Deleting"];
+				[self performSelector:@selector(deleteAction) withObject:nil afterDelay:0.05];
 			}
 		}
 	}
@@ -957,14 +953,14 @@
 				{
 					[viewObjects.multiDeleteList addObject:[NSNumber numberWithInt:i]];
 				}
-				[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+				[self.tableView reloadData];
 				[self showDeleteButton];
 			}
 			else
 			{
 				// Delete action
-				[viewObjects showLoadingScreenOnMainWindow];
-				[self performSelectorInBackground:@selector(deleteAction) withObject:nil];
+				[viewObjects showLoadingScreenOnMainWindowWithMessage:@"Deleting"];
+				[self performSelector:@selector(deleteAction) withObject:nil afterDelay:0.05];
 			}
 		}
 	}
@@ -980,7 +976,7 @@
 				{
 					[viewObjects.multiDeleteList addObject:[NSNumber numberWithInt:i]];
 				}
-				[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+				[self.tableView reloadData];
 				[self showDeleteButton];
 			}
 			else
@@ -1132,7 +1128,7 @@
 {
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+		[self.tableView reloadData];
 		if (currentPlaylistDataModel.currentIndex >= 0 && currentPlaylistDataModel.currentIndex < self.currentPlaylistCount)
 		{
 			[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:currentPlaylistDataModel.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
@@ -1149,7 +1145,7 @@
 
 - (void)loadingFinished:(SUSLoader *)theLoader
 {    
-    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+    [self.tableView reloadData];
     
     // If the list is empty, display the no playlists overlay screen
     if ([serverPlaylistsDataModel.serverPlaylists count] == 0 && isNoPlaylistsScreenShowing == NO)
@@ -1234,7 +1230,7 @@
 	
 	// Inform the user that the connection failed.
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+	[alert show];
 	[alert release];
 	
 	self.tableView.scrollEnabled = YES;
@@ -1270,7 +1266,7 @@
 {	
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
-		[self performSelectorInBackground:@selector(parseData) withObject:nil];
+		[self parseData];
 	}
 	else
 	{
@@ -1292,9 +1288,7 @@ static NSString *kName_Error = @"error";
 }
 
 - (void)parseData
-{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
+{	
 	// Parse the data
 	//
 	TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
@@ -1313,9 +1307,7 @@ static NSString *kName_Error = @"error";
 	
 	[receivedData release];
 	
-	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
-	
-	[pool release];
+	[viewObjects hideLoadingScreen];
 }
 
 #pragma mark Table view methods

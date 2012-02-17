@@ -294,9 +294,9 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 		[connection release]; connection = nil;
 	}
 	
-	DLog(@"Folder dropdown: updating folders");
+	//DLog(@"Folder dropdown: updating folders");
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getMusicFolders" andParameters:nil];
-	DLog(@"folder dropdown url: %@   body: %@  headers: %@", [[request URL] absoluteString], [[[NSString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding] autorelease], [request allHTTPHeaderFields]);
+	//DLog(@"folder dropdown url: %@   body: %@  headers: %@", [[request URL] absoluteString], [[[NSString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding] autorelease], [request allHTTPHeaderFields]);
     
 	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
@@ -310,7 +310,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 		// Inform the user that the connection failed.
 		NSString *message = [NSString stringWithFormat:@"There was an error loading the music folders for the dropdown."];
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		[alert show];
 		[alert release];
 	}
 }
@@ -349,7 +349,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	// Inform the user that the connection failed.
 	NSString *message = [NSString stringWithFormat:@"There was an error loading the music folders for the dropdown.\n\nError %i: %@", [error code], [error localizedDescription]];
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+	[alert show];
 	[alert release];
 	
 	[connection release]; connection = nil;
@@ -358,7 +358,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	DLog(@"folder dropdown connection finished: %@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
+	//DLog(@"folder dropdown connection finished: %@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
 	
 	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
 	[xmlParser setDelegate:self];

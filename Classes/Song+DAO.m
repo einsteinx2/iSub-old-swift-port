@@ -255,6 +255,7 @@
 	
 	if (![MusicSingleton sharedInstance].isQueueListDownloading)
 	{
+		// Make sure this is called from the main thread
 		[[MusicSingleton sharedInstance] performSelectorOnMainThread:@selector(downloadNextQueuedSong) withObject:nil waitUntilDone:NO];
 	}
 	
@@ -349,6 +350,15 @@
 
 + (BOOL)removeSongFromCacheDbByMD5:(NSString *)md5
 {
+	// Check if we're deleting the song that's currently playing. If so, stop the player.
+	PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
+	if (dataModel.currentSong && ![SavedSettings sharedInstance].isJukeboxEnabled &&
+		[[dataModel.currentSong.path md5] isEqualToString:md5])
+	{
+		DLog(@"stopping the player before deleting the file");
+        [[AudioEngine sharedInstance] stop];
+	}
+	
 	DatabaseSingleton *dbControls = [DatabaseSingleton sharedInstance];
 	SavedSettings *settings = [SavedSettings sharedInstance];
 	
@@ -389,15 +399,6 @@
 		fileName = [settings.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", md5, suffix]];
 	///////// REWRITE TO CATCH THIS NSFILEMANAGER ERROR ///////////
 	[[NSFileManager defaultManager] removeItemAtPath:fileName error:NULL];
-	
-	PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
-	
-	// Check if we're deleting the song that's currently playing. If so, stop the player.
-	if (dataModel.currentSong && ![SavedSettings sharedInstance].isJukeboxEnabled &&
-		[[dataModel.currentSong.path md5] isEqualToString:md5])
-	{
-        [[AudioEngine sharedInstance] stop];
-	}
 	
 	// Clean up genres table
 	if ([dbControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM genresSongs WHERE genre = ?", genre] == 0)

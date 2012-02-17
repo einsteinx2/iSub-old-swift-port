@@ -30,7 +30,7 @@
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+	[self.tableView reloadData];
 }
 
 - (void)viewDidLoad 
@@ -47,14 +47,14 @@
 	
 	if ([storeItems count] == 0)
 	{
-		[viewObjects showLoadingScreenOnMainWindow];
+		[viewObjects showLoadingScreenOnMainWindowWithMessage:nil];
 		checkProductsTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(checkProducts) userInfo:nil repeats:YES];
 		[self checkProducts];
 	}
 	else
 	{
 		[self organizeList];
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+		[self.tableView reloadData];
 	}
 }
 
@@ -89,13 +89,13 @@
 	
 	if ([storeItems count] > 0)
 	{
-		[checkProductsTimer invalidate];
+		[checkProductsTimer invalidate]; checkProductsTimer = nil;
 		
 		[viewObjects hideLoadingScreen];
 		
 		[self organizeList];
 		
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+		[self.tableView reloadData];
 	}
 }
 

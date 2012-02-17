@@ -322,7 +322,7 @@
 			[self editSongsAction:nil];
 		}
 		
-		DLog(@"count of cachedSongsLayout: %i", [databaseControls.songCacheDb intForQuery:@"select count(*) from cachedSongsLayout"]);
+		//DLog(@"count of cachedSongsLayout: %i", [databaseControls.songCacheDb intForQuery:@"select count(*) from cachedSongsLayout"]);
 		
 		// Create the artist list
 		self.listOfArtists = [NSMutableArray arrayWithCapacity:1];
@@ -341,9 +341,10 @@
 			if ([[result stringForColumnIndex:0] length] > 0)
 				[listOfArtists addObject:[NSString stringWithString:[result stringForColumnIndex:0]]]; 
 		}
+		[result close];
 		
 		[listOfArtists sortUsingSelector:@selector(caseInsensitiveCompareWithoutIndefiniteArticles:)];
-		DLog(@"listOfArtists: %@", listOfArtists);
+		//DLog(@"listOfArtists: %@", listOfArtists);
 		
 		// Create the section index
 		[db executeUpdate:@"DROP TABLE IF EXISTS cachedSongsArtistIndex"];
@@ -358,7 +359,7 @@
 		if ([sectionInfo count] < 5)
 			showIndex = NO;
 		
-		DLog(@"sectionInfo: %@", sectionInfo);
+		//DLog(@"sectionInfo: %@", sectionInfo);
 		
 		// Sort into sections		
 		if ([sectionInfo count] > 0)
@@ -385,7 +386,7 @@
 			[listOfArtistsSections addObject:section];
 		}
 
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+		[self.tableView reloadData];
 		
 		if ([listOfArtists count] == 0)
 		{
@@ -427,7 +428,7 @@
 		}		
 	}
 	
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+	[self.tableView reloadData];
 }
 
 #pragma mark - Button Handling
@@ -435,7 +436,7 @@
 - (void)showStore
 {
 	StoreViewController *store = [[StoreViewController alloc] init];
-	DLog(@"store: %@", store);
+	//DLog(@"store: %@", store);
 	[self.navigationController pushViewController:store animated:YES];
 	[store release];
 }
@@ -458,63 +459,60 @@
 
 - (void)playAllAction:(id)sender
 {	
-	[viewObjects showLoadingScreenOnMainWindow];
-	[self performSelectorInBackground:@selector(loadPlayAllPlaylist:) withObject:@"NO"];
+	[viewObjects showLoadingScreenOnMainWindowWithMessage:nil];
+	[self performSelector:@selector(loadPlayAllPlaylist:) withObject:@"NO" afterDelay:0.05];
 }
 
 - (void)shuffleAction:(id)sender
 {
-	[viewObjects showLoadingScreenOnMainWindow];
-	[self performSelectorInBackground:@selector(loadPlayAllPlaylist:) withObject:@"YES"];
+	[viewObjects showLoadingScreenOnMainWindowWithMessage:nil];
+	[self performSelector:@selector(loadPlayAllPlaylist:) withObject:@"YES" afterDelay:0.05];
 }
 
 - (void)loadPlayAllPlaylist:(NSString *)shuffle
-{	
-	@autoreleasepool 
-	{		
-		PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
-		
-		currentPlaylist.isShuffle = NO;
-		
-		BOOL isShuffle;
-		if ([shuffle isEqualToString:@"YES"])
-			isShuffle = YES;
-		else
-			isShuffle = NO;
-		
-		[databaseControls resetCurrentPlaylistDb];
-		
-		FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout ORDER BY seg1 COLLATE NOCASE"];
-		
-		while ([result next])
+{		
+	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+	
+	currentPlaylist.isShuffle = NO;
+	
+	BOOL isShuffle;
+	if ([shuffle isEqualToString:@"YES"])
+		isShuffle = YES;
+	else
+		isShuffle = NO;
+	
+	[databaseControls resetCurrentPlaylistDb];
+	
+	FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout ORDER BY seg1 COLLATE NOCASE"];
+	
+	while ([result next])
+	{			
+		@autoreleasepool 
 		{
-			NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-			
 			Song *aSong = [Song songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]];
 			
 			if (aSong.path)
 				[aSong addToCurrentPlaylist];
-			
-			[pool release];
 		}
-		
-		if (isShuffle)
-		{
-			currentPlaylist.isShuffle = YES;
-			[databaseControls shufflePlaylist];
-		}
-		else
-		{
-			currentPlaylist.isShuffle = NO;
-		}
-		
-		if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			[musicControls jukeboxReplacePlaylistWithLocal];
-		
-		// Must do UI stuff in main thread
-		[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
-		[self performSelectorOnMainThread:@selector(playAllPlaySong) withObject:nil waitUntilDone:NO];	
 	}
+	[result close];
+	
+	if (isShuffle)
+	{
+		currentPlaylist.isShuffle = YES;
+		[databaseControls shufflePlaylist];
+	}
+	else
+	{
+		currentPlaylist.isShuffle = NO;
+	}
+	
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+		[musicControls jukeboxReplacePlaylistWithLocal];
+	
+	// Must do UI stuff in main thread
+	[viewObjects hideLoadingScreen];
+	[self playAllPlaySong];	
 }
 
 #pragma mark -
@@ -529,7 +527,7 @@
 		// Reload the cells
 		if (segmentedControl.selectedSegmentIndex == 1)
 		{
-			[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+			[self.tableView reloadData];
 		}
 	}
 }
@@ -632,6 +630,7 @@
 			{
 				combinedSize += [result longLongIntForColumnIndex:0];
 			}
+			[result close];
 			cacheSizeLabel.text = [NSString formatFileSize:combinedSize];
 		}
 		[headerView addSubview:cacheSizeLabel];
@@ -917,7 +916,7 @@
 			editSongsLabel.text = @"Edit";
 			
 			// Reload the table
-			[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+			[self.tableView reloadData];
 		}
 	}
 	else if (segmentedControl.selectedSegmentIndex == 1)
@@ -949,7 +948,7 @@
 			editSongsLabel.text = @"Edit";
 			
 			// Reload the table
-			[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+			[self.tableView reloadData];
 		}
 	}
 }
@@ -961,20 +960,9 @@
 
 - (void)clearCacheQueue
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
 	// If there's a download in progress, stop it
 	[musicControls stopDownloadQueue];
-
-	[self performSelectorOnMainThread:@selector(clearCacheQueue2) withObject:nil waitUntilDone:YES];
 	
-	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
-	
-	[pool release];
-}
-
-- (void)clearCacheQueue2
-{
 	// Delete each song from the database
 	NSMutableArray *indexes = [[NSMutableArray alloc] init];
 	NSInteger rowCount = [databaseControls.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM queuedSongsList"];
@@ -993,26 +981,16 @@
 	
 	// Delete the rows from the table
 	[self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:YES];
-	//[self.tableView performSelectorOnMainThread:@selector(deleteRowsAtIndexPaths:withRowAnimation:) withObject:indexes waitUntilDone:YES];
 	[indexes release];
 	
 	// Reload the table
 	[self editSongsAction:nil];
 	[self viewWillAppear:NO];
+	
+	[viewObjects hideLoadingScreen];
 }
 
 - (void)deleteCachedSongs
-{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	[self performSelectorOnMainThread:@selector(deleteCachedSongs2) withObject:nil waitUntilDone:YES];
-	
-	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
-	
-	[pool release];
-}
-
-- (void)deleteCachedSongs2
 {
 	PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
 	
@@ -1066,28 +1044,20 @@
 			fileName = [settings.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", rowMD5, suffix]];
 		[[NSFileManager defaultManager] removeItemAtPath:fileName error:NULL];
 	}
+	[result close];
 	
 	// Reload the table
 	[self editSongsAction:nil];
 	[self viewWillAppear:NO];
+	
+	[viewObjects hideLoadingScreen];
 }
 
 - (void)deleteQueuedSongs
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
 	// Sort the multiDeleteList to make sure it's accending
 	[viewObjects.multiDeleteList sortUsingSelector:@selector(compare:)];
 	
-	[self performSelectorOnMainThread:@selector(deleteQueuedSongs2) withObject:nil waitUntilDone:YES];
-	
-	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
-
-	[pool release];
-}
-
-- (void)deleteQueuedSongs2
-{
 	// Delete each song from the database
 	NSMutableArray *indexes = [[NSMutableArray alloc] init];
 	for (NSNumber *rowNumber in viewObjects.multiDeleteList)
@@ -1119,9 +1089,11 @@
 	// Reload the table
 	[self editSongsAction:nil];
 	[self viewWillAppear:NO];
+	
+	[viewObjects hideLoadingScreen];
 }
 
-- (void) deleteSongsAction:(id)sender
+- (void)deleteSongsAction:(id)sender
 {
 	if (viewObjects.isEditing)
 	{
@@ -1129,13 +1101,13 @@
 		{
 			if (segmentedControl.selectedSegmentIndex == 0)
 			{
-				[viewObjects showLoadingScreenOnMainWindow];
-				[self performSelectorInBackground:@selector(deleteCachedSongs) withObject:nil];
+				[viewObjects showLoadingScreenOnMainWindowWithMessage:@"Deleting"];
+				[self performSelector:@selector(deleteCachedSongs) withObject:nil afterDelay:0.05];
 			}
 			else if (segmentedControl.selectedSegmentIndex == 1)
 			{
-				[viewObjects showLoadingScreenOnMainWindow];
-				[self performSelectorInBackground:@selector(clearCacheQueue) withObject:nil];
+				[viewObjects showLoadingScreenOnMainWindowWithMessage:@"Deleting"];
+				[self performSelector:@selector(clearCacheQueue) withObject:nil afterDelay:0.05];
 			}
 		}
 		else if ([deleteSongsLabel.text isEqualToString:@"Select All"])
@@ -1157,8 +1129,8 @@
 		{
 			if (segmentedControl.selectedSegmentIndex == 1)
 			{
-				[viewObjects showLoadingScreenOnMainWindow];
-				[self performSelectorInBackground:@selector(deleteQueuedSongs) withObject:nil];
+				[viewObjects showLoadingScreenOnMainWindowWithMessage:@"Deleting"];
+				[self performSelector:@selector(deleteQueuedSongs) withObject:nil afterDelay:0.05];
 			}
 		}
 	}
@@ -1402,7 +1374,7 @@ NSInteger trackSort1(id obj1, id obj2, void *context)
 			cacheAlbumViewController.listOfSongs = [NSMutableArray arrayWithCapacity:1];
 			cacheAlbumViewController.segment = 2;
 			cacheAlbumViewController.seg1 = name;
-			DLog(@"cacheAlbumViewController.seg1: %@", cacheAlbumViewController.seg1);
+			//DLog(@"cacheAlbumViewController.seg1: %@", cacheAlbumViewController.seg1);
 			FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT md5, segs, seg2, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", cacheAlbumViewController.seg1];
 			while ([result next])
 			{
@@ -1450,6 +1422,7 @@ NSInteger trackSort1(id obj1, id obj2, void *context)
 						[cacheAlbumViewController.listOfSongs sortUsingFunction:trackSort1 context:NULL];
 				}
 			}
+			[result close];
 			
 			[self.navigationController pushViewController:cacheAlbumViewController animated:YES];
 			[cacheAlbumViewController release];

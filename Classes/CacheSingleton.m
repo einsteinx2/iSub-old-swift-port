@@ -86,9 +86,7 @@ static CacheSingleton *sharedInstance = nil;
 }
 
 - (void)removeOldestCachedSongs
-{
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-	
+{	
 	SavedSettings *settings = [SavedSettings sharedInstance];
 	DatabaseSingleton *databaseControls = [DatabaseSingleton sharedInstance];
 	
@@ -136,13 +134,8 @@ static CacheSingleton *sharedInstance = nil;
 			[Song removeSongFromCacheDbByMD5:songMD5];
 			
 			size -= songSize;
-			
-			// Sleep the thread so the repeated cacheSize calls don't kill performance
-			[NSThread sleepForTimeInterval:5];
 		}
 	}
-	
-	[autoreleasePool release];
 }
 
 - (void)findCacheSize
@@ -179,7 +172,7 @@ static CacheSingleton *sharedInstance = nil;
 				settings.isSongCachingEnabled = NO;
 				
 				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"IMPORTANT" message:@"Free space is running low, but even deleting the entire cache will not bring the free space up higher than your minimum setting. Automatic song caching has been turned off.\n\nYou can re-enable it in the Settings menu (tap the gear, tap Settings at the top)" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-				[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+				[alert show];
 				[alert release];
 			}
 			else
@@ -187,13 +180,13 @@ static CacheSingleton *sharedInstance = nil;
 				// Remove the oldest cached songs until freeSpace > minFreeSpace or pop the free space low alert
 				if (settings.isAutoDeleteCacheEnabled)
 				{
-					[self performSelectorInBackground:@selector(removeOldestCachedSongs) withObject:nil];
+					[self removeOldestCachedSongs];
 				}
 				else
 				{
 					UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"Free space is running low. Delete some cached songs or lower the minimum free space setting." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 					alert.tag = 4;
-					[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+					[alert show];
 					[alert release];
 				}
 			}
@@ -208,7 +201,7 @@ static CacheSingleton *sharedInstance = nil;
 		{
 			if (settings.isAutoDeleteCacheEnabled)
 			{
-				[self performSelectorInBackground:@selector(removeOldestCachedSongs) withObject:nil];
+				[self removeOldestCachedSongs];
 			}
 			else
 			{
@@ -216,7 +209,7 @@ static CacheSingleton *sharedInstance = nil;
 				
 				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"The song cache is full. Automatic song caching has been disabled.\n\nYou can re-enable it in the Settings menu (tap the gear, tap Settings at the top)" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 				alert.tag = 4;
-				[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+				[alert show];
 				[alert release];
 			}			
 		}
@@ -230,6 +223,15 @@ static CacheSingleton *sharedInstance = nil;
 	[[NSFileManager defaultManager] removeItemAtPath:settings.tempCachePath error:NULL];
 	[[NSFileManager defaultManager] createDirectoryAtPath:settings.tempCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
 	[SUSStreamSingleton sharedInstance].lastTempCachedSong = nil;
+}
+
+#pragma mark - Memory management
+
+- (void)didReceiveMemoryWarning
+{
+	DLog(@"received memory warning");
+	
+	
 }
 
 #pragma mark - Singleton methods
@@ -258,7 +260,12 @@ static CacheSingleton *sharedInstance = nil;
 	cacheCheckInterval = 120.0;
 	[self adjustCacheSize];
 	[self startCacheCheckTimer];
-	[self performSelector:@selector(checkCache) withObject:nil afterDelay:15.0];
+	[self performSelector:@selector(checkCache) withObject:nil afterDelay:11.0];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(didReceiveMemoryWarning) 
+												 name:UIApplicationDidReceiveMemoryWarningNotification 
+											   object:nil];
 }
 
 + (CacheSingleton *)sharedInstance

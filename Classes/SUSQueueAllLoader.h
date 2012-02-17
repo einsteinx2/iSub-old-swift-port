@@ -26,6 +26,8 @@
 	Artist *myArtist;
 	
 	NSMutableArray *folderIds;
+	
+	BOOL isCancelled;
 }
 
 @property (retain) NSString *currentPlaylist;

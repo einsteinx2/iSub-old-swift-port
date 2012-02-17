@@ -97,7 +97,7 @@
 		
         if (dataModel.hasLoaded)
         {
-            [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+            [self.tableView reloadData];
             [self addHeaderAndIndex];
         }
         else
@@ -161,7 +161,7 @@
 		self.navigationItem.rightBarButtonItem = nil;
 	}
 	
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+	[self.tableView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -268,7 +268,7 @@
 	
 	self.sectionInfo = dataModel.sectionInfo;
 	if (sectionInfo)
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+		[self.tableView reloadData];
 }
 
 #pragma mark Actions
@@ -467,7 +467,7 @@
     // Inform the user that the connection failed.
 	NSString *message = [NSString stringWithFormat:@"There was an error loading the album.\n\nError %i: %@", [error code], [error localizedDescription]];
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+	[alert show];
 	[alert release];
 	
 	[viewObjects hideLoadingScreen];
@@ -479,8 +479,8 @@
 {
     [viewObjects hideLoadingScreen];
 	
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
-	[self performSelectorOnMainThread:@selector(addHeaderAndIndex) withObject:nil waitUntilDone:YES];
+	[self.tableView reloadData];
+	[self addHeaderAndIndex];
 	
 	[self dataSourceDidFinishLoadingNewData];
 }

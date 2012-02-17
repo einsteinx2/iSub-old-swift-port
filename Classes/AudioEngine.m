@@ -776,7 +776,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 		[self performSelector:@selector(prepareNextSongStream) withObject:nil afterDelay:RETRY_DELAY];
 	}
 	
-	//DLog(@"nextSong: %i", self.nextStream);
+	DLog(@"nextSong: %i", self.nextStream);
 }
 
 - (BOOL)prepareFileStream1
@@ -1322,6 +1322,15 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	}
 }
 
+#pragma mark - Memory management
+
+- (void)didReceiveMemoryWarning
+{
+	DLog(@"received memory warning");
+	
+	
+}
+
 #pragma mark - Singleton methods
 
 - (void)setup
@@ -1362,6 +1371,11 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStream) name:ISMSNotification_RepeatModeChanged object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStream) name:ISMSNotification_CurrentPlaylistOrderChanged object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStream) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(didReceiveMemoryWarning) 
+												 name:UIApplicationDidReceiveMemoryWarningNotification 
+											   object:nil];
 }
 
 + (AudioEngine *)sharedInstance

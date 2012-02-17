@@ -149,53 +149,6 @@
 - (Song *)findSongForDbRow:(NSUInteger)row
 { 
 	return [Song songFromDbRow:row-1 inTable:@"songsCache" inDatabase:self.db];
-	
-	/*// TODO: USE THE Song DAO method and FIND OTHER PLACES THAT HAVE THEIR OWN METHODS
-    Song *aSong = [[Song alloc] init];
-	FMResultSet *result = [self.db executeQuery:[NSString stringWithFormat:@"SELECT * FROM songsCache WHERE ROWID = %i", row]];
-	[result next];
-	if ([self.db hadError]) 
-	{
-		DLog(@"Err %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
-	}
-	else
-	{
-		if ([result stringForColumn:@"title"] != nil)
-			aSong.title = [NSString stringWithString:[result stringForColumn:@"title"]];
-		if ([result stringForColumn:@"songId"] != nil)
-			aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
-		if ([result stringForColumn:@"artist"] != nil)
-			aSong.artist = [NSString stringWithString:[result stringForColumn:@"artist"]];
-		if ([result stringForColumn:@"album"] != nil)
-			aSong.album = [NSString stringWithString:[result stringForColumn:@"album"]];
-		if ([result stringForColumn:@"genre"] != nil)
-			aSong.genre = [NSString stringWithString:[result stringForColumn:@"genre"]];
-		if ([result stringForColumn:@"coverArtId"] != nil)
-			aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
-		if ([result stringForColumn:@"path"] != nil)
-			aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
-		if ([result stringForColumn:@"suffix"] != nil)
-			aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
-		if ([result stringForColumn:@"transcodedSuffix"] != nil)
-			aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
-		aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
-		aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
-		aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
-		aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
-		aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
-	}
-	
-	[result close];
-	
-	if (aSong.path == nil)
-	{
-		[aSong release];
-		return nil;
-	}
-	else
-	{
-		return [aSong autorelease];
-	}*/
 }
 
 - (void)playSongAtDbRow:(NSUInteger)row
@@ -216,7 +169,7 @@
 		@autoreleasepool 
 		{
 			Song *aSong = [self songForTableViewRow:i];
-			DLog(@"song parentId: %@", aSong.parentId);
+			//DLog(@"song parentId: %@", aSong.parentId);
 			//DLog(@"adding song to playlist: %@", aSong);
 			[aSong addToCurrentPlaylist];
 			

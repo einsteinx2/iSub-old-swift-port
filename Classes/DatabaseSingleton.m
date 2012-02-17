@@ -45,7 +45,6 @@ static DatabaseSingleton *sharedInstance = nil;
 	{
 		// Setup the allAlbums database
 		allAlbumsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allAlbums.db", databaseFolderPath, urlStringMd5]] retain];
-		DLog(@"allAlbumsDb: %@", allAlbumsDb);
 		if ([allAlbumsDb open])
 		{
 			[allAlbumsDb executeUpdate:@"PRAGMA cache_size = 1"];
@@ -521,6 +520,7 @@ static DatabaseSingleton *sharedInstance = nil;
 
 - (void)resetLocalPlaylistsDb
 {
+	// TODO: delete the tables, don't delete the database file
 	NSString *urlStringMd5 = [[[SavedSettings sharedInstance] urlString] md5];
 	
 	[localPlaylistsDb close]; self.localPlaylistsDb = nil;
@@ -534,6 +534,7 @@ static DatabaseSingleton *sharedInstance = nil;
 
 - (void)resetCurrentPlaylistDb
 {
+	// TODO: delete the tables, don't delete the database file
 	NSString *urlStringMd5 = [[[SavedSettings sharedInstance] urlString] md5];
 	
 	[currentPlaylistDb close]; self.currentPlaylistDb = nil;
@@ -658,7 +659,7 @@ static DatabaseSingleton *sharedInstance = nil;
 
 - (NSArray *)sectionInfoFromTable:(NSString *)table inDatabase:(FMDatabase *)database withColumn:(NSString *)column
 {
-	DLog(@"albumIndex count: %i", [database intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM %@", table]]);
+	//DLog(@"albumIndex count: %i", [database intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM %@", table]]);
 	
 	//NSArray *sectionTitles = [[NSArray alloc] initWithObjects:@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", @"J", @"K", @"L", @"M", @"N", @"O", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", nil];
 	NSArray *sectionTitles = [[NSArray alloc] initWithObjects:@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", @"J", @"K", @"L", @"M", @"N", @"O", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z", nil];
@@ -702,7 +703,7 @@ static DatabaseSingleton *sharedInstance = nil;
 {
 	// Show loading screen
 	//[viewObjects showLoadingScreenOnMainWindow];
-	[viewObjects showAlbumLoadingScreen:appDelegate.window sender:queueAll];
+	[viewObjects showAlbumLoadingScreen:appDelegate.mainView sender:queueAll];
 	
 	// Download all the songs
 	if (queueAll == nil)
@@ -745,7 +746,7 @@ static DatabaseSingleton *sharedInstance = nil;
 
 - (void)showLoadingScreen
 {
-	[viewObjects showLoadingScreenOnMainWindow];
+	[viewObjects showLoadingScreenOnMainWindowWithMessage:nil];
 }
 
 - (void)playAllSongs:(NSString *)folderId artist:(Artist *)theArtist
@@ -813,7 +814,14 @@ static DatabaseSingleton *sharedInstance = nil;
 // New Model Stuff
 
 
+#pragma mark - Memory management
 
+- (void)didReceiveMemoryWarning
+{
+	DLog(@"received memory warning");
+	
+	
+}
 
 #pragma mark - Singleton methods
 
@@ -863,6 +871,11 @@ static DatabaseSingleton *sharedInstance = nil;
 	}	
 	
 	[self initDatabases];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(didReceiveMemoryWarning) 
+												 name:UIApplicationDidReceiveMemoryWarningNotification 
+											   object:nil];
 		
 	return self;
 }

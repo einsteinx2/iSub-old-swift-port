@@ -76,6 +76,8 @@
 @property (retain) IBOutlet UINavigationController *chatNavigationController;
 @property (retain) UINavigationController *supportNavigationController;
 
+@property (readonly) UIView *mainView;
+
 // Main interface elements for iPad
 //
 @property (retain) IBOutlet MGSplitViewController *splitView;

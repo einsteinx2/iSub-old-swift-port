@@ -77,7 +77,7 @@
 - (void)loadData
 {
 	[self.dataModel startLoad];
-	[viewObjects showLoadingScreenOnMainWindow];
+	[viewObjects showLoadingScreenOnMainWindowWithMessage:nil];
 }
 
 - (void)viewDidLoad 
@@ -238,7 +238,7 @@
 {
 	[viewObjects hideLoadingScreen];
 	
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+	[self.tableView reloadData];
 	[self dataSourceDidFinishLoadingNewData];
 	
 	if ([error code] == ISMSErrorCode_CouldNotSendChatMessage)
@@ -251,7 +251,7 @@
 {
 	[viewObjects hideLoadingScreen];
 	
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+	[self.tableView reloadData];
 	[self dataSourceDidFinishLoadingNewData];
 }
 
@@ -400,7 +400,7 @@
 			self.navigationItem.rightBarButtonItem = nil;
 		}
 		
-		[viewObjects showLoadingScreenOnMainWindow];
+		[viewObjects showLoadingScreenOnMainWindowWithMessage:@"Sending"];
 		[self.dataModel sendChatMessage:textInput.text];
 		
 		textInput.text = @"";
@@ -430,7 +430,7 @@
 	if (scrollView.contentOffset.y <= - 65.0f && !_reloading) 
 	{
 		_reloading = YES;
-		[viewObjects showLoadingScreenOnMainWindow];
+		[viewObjects showLoadingScreenOnMainWindowWithMessage:nil];
 		[self loadData];
 		[refreshHeaderView setState:EGOOPullRefreshLoading];
 		[UIView beginAnimations:nil context:NULL];

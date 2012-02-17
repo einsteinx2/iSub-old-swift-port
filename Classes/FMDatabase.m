@@ -271,7 +271,7 @@
 			// Don't sleep longer than 1 second to prevent permanent app freezes
 			if (!inUse) break;
 			
-			DLog(@"sleeping 50 microseconds"); 
+			//DLog(@"sleeping 50 microseconds"); 
 			usleep(50);
 		}
 	}
@@ -298,7 +298,7 @@
 			// Don't sleep longer than 1 second to prevent permanent app freezes
 			if (!inUse) break;
 			
-			DLog(@"sleeping 50 microseconds"); 
+			//DLog(@"sleeping 50 microseconds"); 
 			usleep(50);
 		}
 	}
@@ -480,7 +480,7 @@
 			// Don't sleep longer than 1 second to prevent permanent app freezes
 			if (!inUse) break;
 			
-			DLog(@"sleeping 50 microseconds"); 
+			//DLog(@"sleeping 50 microseconds"); 
 			usleep(50);
 		}
 	}
@@ -643,7 +643,7 @@
 			// Don't sleep longer than 1 second to prevent permanent app freezes
 			if (!inUse) break;
 			
-			DLog(@"sleeping 50 microseconds"); 
+			//DLog(@"sleeping 50 microseconds"); 
 			usleep(50);
 		}
 	}

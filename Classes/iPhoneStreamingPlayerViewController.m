@@ -573,7 +573,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {	
 	self.currentSong = currentPlaylist.currentDisplaySong;
 	
-	DLog(@"currentSong parentId: %@", currentSong.parentId);
+	//DLog(@"currentSong parentId: %@", currentSong.parentId);
 	
 	if (currentSong.parentId)
 	{
@@ -592,7 +592,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	// Update the icon in top right
 	if (isFlipped)
 	{
-		DLog(@"Updating the top right button");
+		//DLog(@"Updating the top right button");
 		[self updateBarButtonImage];
 	}
 	
@@ -659,19 +659,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark.png"];
 	}
 }
-
-/*- (void)loadJukeboxInfo
-{
-	NSAutoreleasePool *releasePool = [[NSAutoreleasePool alloc] init];
-	
-	[musicControls jukeboxGetInfo];
-		
-	//[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:YES];
-	
-	[self performSelectorOnMainThread:@selector(viewDidLoad2) withObject:nil waitUntilDone:NO];
-	
-	[releasePool release];
-}*/
 
 - (void)jukeboxVolumeChanged:(id)sender
 {
@@ -805,7 +792,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {
 	PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
 	
-	DLog(@"track position: %f", audio.progress);
+	//DLog(@"track position: %f", audio.progress);
 	if (audio.progress > 10.0)
 	{
 		if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -1060,8 +1047,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			audio.startSecondsOffset = progressSlider.value;
 			
 			[[SUSStreamSingleton sharedInstance] removeStreamAtIndex:0];
-            DLog(@"byteOffset: %i", byteOffset);
-			DLog(@"starting temp stream");
+            //DLog(@"byteOffset: %i", byteOffset);
+			//DLog(@"starting temp stream");
 			[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong byteOffset:byteOffset secondsOffset:progressSlider.value atIndex:0 isTempCache:YES];
 			if ([[SUSStreamSingleton sharedInstance].handlerStack count] > 1)
 			{
@@ -1115,9 +1102,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (IBAction)shuffleButtonToggle:(id)sender
 {	
-	[viewObjects showLoadingScreenOnMainWindow];
+	[viewObjects showLoadingScreenOnMainWindowWithMessage:@"Shuffling"];
 	
-	[currentPlaylist performSelectorInBackground:@selector(shuffleToggle) withObject:nil];
+	[currentPlaylist performSelector:@selector(shuffleToggle) withObject:nil afterDelay:0.05];
 }
 
 - (void)updateShuffleIcon

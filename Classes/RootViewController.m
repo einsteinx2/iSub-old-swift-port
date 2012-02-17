@@ -282,7 +282,7 @@
 	
 	// Inform the user that the connection failed.
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error loading the artist list.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+	[alert show];
 	[alert release];
 }
 
@@ -294,7 +294,7 @@
 	else
 		[self addCount];		
 	
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+	[self.tableView reloadData];
 	self.tableView.backgroundColor = [UIColor clearColor];
 	
 	viewObjects.isArtistsLoading = NO;
@@ -334,7 +334,7 @@
 	isSearching = NO;
 	if ([dataModel isRootFolderIdCached])
 	{
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+		[self.tableView reloadData];
 		[self updateCount];
 	}
 	else
@@ -370,7 +370,7 @@
 	
 	[dataModel clearSearchTable];
 	
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+	[self.tableView reloadData];
 	
 	[self.tableView setContentOffset:CGPointMake(0, 86) animated:YES];
 }
@@ -420,7 +420,7 @@
 	// Remove the index bar
 	isSearching = YES;
 	[dataModel clearSearchTable];
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+	[self.tableView reloadData];
 	
 	[self.tableView.tableHeaderView retain];
 
@@ -460,7 +460,7 @@
 		
 		[dataModel searchForFolderName:searchBar.text];
 		
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+		[self.tableView reloadData];
 	}
 	else 
 	{		
@@ -478,7 +478,7 @@
 		
 		[dataModel clearSearchTable];
 		
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+		[self.tableView reloadData];
 		
 		[self.tableView setContentOffset:CGPointMake(0, 86) animated:NO];
 	}

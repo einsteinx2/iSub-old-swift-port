@@ -21,18 +21,27 @@
 
 + (void)postNotificationToMainThreadWithName:(NSString *)name object:(id)object userInfo:(NSDictionary *)userInfo
 {
+	// Don't send a notification without a name
+	if (name == nil)
+		return;
+	
+	// If this is already the main thread, just call the method directly
+	if ([NSThread isMainThread])
+	{
+		[[NSNotificationCenter defaultCenter] postNotificationName:name object:object userInfo:userInfo];
+		return;
+	}
+	
+	// This is a background thread so call it from the main thread
 	@autoreleasepool 
 	{
-		if (name == nil)
-			return;
-		
 		NSMutableDictionary *info = [NSMutableDictionary dictionaryWithObject:name forKey:@"name"];
-		if (object)
-			[info setObject:object forKey:@"object"];
-		if (userInfo)
-			[info setObject:userInfo forKey:@"userInfo"];
+		if (object) [info setObject:object forKey:@"object"];
+		if (userInfo) [info setObject:userInfo forKey:@"userInfo"];
 		
-		[NSNotificationCenter performSelectorOnMainThread:@selector(postNotificationInternal:) withObject:info waitUntilDone:NO];
+		[NSNotificationCenter performSelectorOnMainThread:@selector(postNotificationInternal:) 
+											   withObject:info 
+											waitUntilDone:NO];
 	}
 }
 

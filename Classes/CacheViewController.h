@@ -63,4 +63,6 @@
 
 - (void) editSongsAction:(id)sender;
 
+- (void)playAllPlaySong;
+
 @end

@@ -34,7 +34,7 @@
 	NSString *finalMessage = [message stringByReplacingOccurrencesOfString:@"\\n" withString:@"\n"];
 	
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:finalMessage delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles:@"App Store", nil];
-	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+	[alert show];
 	[alert release];
 }
 
@@ -106,7 +106,7 @@
 {		
 	// TODO: test this
 	BOOL showAlert = NO;
-	DLog(@"receivedData: %@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
+	//DLog(@"receivedData: %@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
 	TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
     TBXMLElement *root = tbxml.rootXMLElement;
     if (root) 
@@ -116,9 +116,9 @@
 			NSString *currentVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
 			self.theNewVersion = [TBXML valueOfAttributeNamed:@"version" forElement:root];
 			self.message = [TBXML valueOfAttributeNamed:@"message" forElement:root];
-			DLog(@"currentVersion = %@", currentVersion);
-			DLog(@"theNewVersion = %@", theNewVersion);
-			DLog(@"message = %@", message);
+			//DLog(@"currentVersion = %@", currentVersion);
+			//DLog(@"theNewVersion = %@", theNewVersion);
+			//DLog(@"message = %@", message);
 			
 			NSArray *currentVersionSplit = [currentVersion componentsSeparatedByString:@"."];
 			NSArray *newVersionSplit = [theNewVersion componentsSeparatedByString:@"."];
@@ -142,10 +142,10 @@
 				}
 			}
 
-			DLog(@"currentVersionSplit: %@", currentVersionSplit);
-			DLog(@"newVersionSplit: %@", newVersionSplit);
-			DLog(@"currentVersionPadded: %@", currentVersionPadded);
-			DLog(@"newVersionPadded: %@", newVersionPadded);
+			//DLog(@"currentVersionSplit: %@", currentVersionSplit);
+			//DLog(@"newVersionSplit: %@", newVersionSplit);
+			//DLog(@"currentVersionPadded: %@", currentVersionPadded);
+			//DLog(@"newVersionPadded: %@", newVersionPadded);
 			
 			@try 
 			{

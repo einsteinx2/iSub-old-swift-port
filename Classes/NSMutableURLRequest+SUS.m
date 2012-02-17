@@ -98,7 +98,7 @@ static void destroy_versionArrays()
 			}
 		}
 	}
-	DLog(@"post string: %@", postString);
+	//DLog(@"post string: %@", postString);
 	
 	// Handle special case when loading playlists
 	NSTimeInterval loadingTimeout = ISMSLoadingTimeout;
@@ -121,7 +121,7 @@ static void destroy_versionArrays()
 	// Set the HTTP Basic Auth
 	if ([SavedSettings sharedInstance].isBasicAuthEnabled)
 	{
-		DLog(@"using basic auth!");
+		//DLog(@"using basic auth!");
 		NSString *authStr = [NSString stringWithFormat:@"%@:%@", username, password];
 		NSData *authData = [authStr dataUsingEncoding:NSASCIIStringEncoding];
 		NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64EncodingWithLineLength:0]];
@@ -134,7 +134,7 @@ static void destroy_versionArrays()
 		[request setValue:rangeString forHTTPHeaderField:@"Range"];
 	}
 	
-	DLog(@"request: %@", request);
+	//DLog(@"request: %@", request);
     
     return request;
 }

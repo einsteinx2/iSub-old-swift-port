@@ -180,7 +180,7 @@
 		if (goToNextSong)
 		{
 			[self incrementIndex];
-			[musicControls performSelectorOnMainThread:@selector(startSong) withObject:nil waitUntilDone:NO];
+			[musicControls startSong];
 		}
 		else
 		{
@@ -406,62 +406,64 @@
 }
 
 - (void)shuffleToggle
-{	
-	@autoreleasepool
-	{		
-		MusicSingleton *musicControls = [MusicSingleton sharedInstance];
-		SavedSettings *settings = [SavedSettings sharedInstance];
+{			
+	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
+	SavedSettings *settings = [SavedSettings sharedInstance];
+	
+	if (self.isShuffle)
+	{
+		self.isShuffle = NO;
 		
-		if (self.isShuffle)
+		if (settings.isJukeboxEnabled)
 		{
-			self.isShuffle = NO;
-			
-			if (settings.isJukeboxEnabled)
-			{
-				[musicControls jukeboxReplacePlaylistWithLocal];
-				//[musicControls playSongAtPosition:];
-			}
-			
-			// Send a notification to update the playlist view
-			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistShuffleToggled];
+			[musicControls jukeboxReplacePlaylistWithLocal];
+			//[musicControls playSongAtPosition:];
+		}
+		
+		// Send a notification to update the playlist view
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistShuffleToggled];
+	}
+	else
+	{
+		Song *currentSong = self.currentSong;
+		
+		NSNumber *oldPlaylistPosition = [NSNumber numberWithInt:(self.currentIndex + 1)];
+		self.shuffleIndex = 0;
+		self.isShuffle = YES;
+		
+		[self resetShufflePlaylist];
+		[currentSong addToShufflePlaylist];
+		
+		if (settings.isJukeboxEnabled)
+		{
+			[self.db executeUpdate:@"INSERT INTO jukeboxShufflePlaylist SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID != ? ORDER BY RANDOM()", oldPlaylistPosition];
 		}
 		else
 		{
-			Song *currentSong = self.currentSong;
-			
-			NSNumber *oldPlaylistPosition = [NSNumber numberWithInt:(self.currentIndex + 1)];
-			self.shuffleIndex = 0;
-			self.isShuffle = YES;
-			
-			[self resetShufflePlaylist];
-			[currentSong addToShufflePlaylist];
-			
-			if (settings.isJukeboxEnabled)
-			{
-				[self.db executeUpdate:@"INSERT INTO jukeboxShufflePlaylist SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID != ? ORDER BY RANDOM()", oldPlaylistPosition];
-			}
-			else
-			{
-				[self.db executeUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist WHERE ROWID != ? ORDER BY RANDOM()", oldPlaylistPosition];
-			}
-			
-			if (settings.isJukeboxEnabled)
-			{
-				[musicControls performSelectorOnMainThread:@selector(jukeboxReplacePlaylistWithLocal) 
-												withObject:nil 
-											 waitUntilDone:YES];
-				
-				[musicControls performSelectorOnMainThread:@selector(jukeboxPlaySongAtPosition:)
-												withObject:[NSNumber numberWithInt:1] 
-											 waitUntilDone:YES];
-				
-				self.isShuffle = NO;
-			}
-			
-			// Send a notification to update the playlist view 
-			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistShuffleToggled];
+			[self.db executeUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist WHERE ROWID != ? ORDER BY RANDOM()", oldPlaylistPosition];
 		}
+		
+		if (settings.isJukeboxEnabled)
+		{
+			[musicControls jukeboxReplacePlaylistWithLocal];
+			
+			[musicControls jukeboxPlaySongAtPosition:[NSNumber numberWithInt:1]];
+			
+			self.isShuffle = NO;
+		}
+		
+		// Send a notification to update the playlist view 
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistShuffleToggled];
 	}
+}
+
+#pragma mark - Memory management
+
+- (void)didReceiveMemoryWarning
+{
+	DLog(@"received memory warning");
+	
+	
 }
 
 #pragma mark - Singleton methods
@@ -473,6 +475,11 @@ static PlaylistSingleton *sharedInstance = nil;
 	shuffleIndex = 0;
 	normalIndex = 0;
 	repeatMode = ISMSRepeatMode_Normal;
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(didReceiveMemoryWarning) 
+												 name:UIApplicationDidReceiveMemoryWarningNotification 
+											   object:nil];
 }
 
 + (PlaylistSingleton *)sharedInstance

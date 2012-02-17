@@ -45,7 +45,7 @@
 #define isThrottleLoggingEnabled NO
 
 @implementation SUSStreamHandler
-@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, secondsOffset, partialPrecacheSleep, isDownloading, isCurrentSong;
+@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, secondsOffset, partialPrecacheSleep, isDownloading, isCurrentSong, shouldResume;
 
 - (void)setup
 {
@@ -117,19 +117,28 @@
 // Create the request and start the connection in loadingThread
 - (void)start:(BOOL)resume
 {
+	if (self.isDownloading)
+		DLog(@"STARTING HANDLER THAT IS ALREADY DOWNLOADING: %@", [NSThread callStackSymbols]);
+	
+	DLog(@"starting handler for: %@", mySong);
 	if (!resume)
 	{
+		DLog(@"removing temp file for for: %@", mySong);
 		// Remove temp file for this song if exists
 		[[NSFileManager defaultManager] removeItemAtPath:self.mySong.localTempPath error:NULL];
 		
 		// Clear cache if this is a temp file
 		if (self.isTempCache)
+		{
 			[[CacheSingleton sharedInstance] clearTempCache];
+			DLog(@"clearing the temp cache for: %@", mySong);
+		}
 	}
 	
 	SavedSettings *settings = [SavedSettings sharedInstance];
 
 	// Create the file handle
+	DLog(@"created file handle for: %@  path: %@", mySong, self.filePath);
 	self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.filePath];
 	
 	if (self.fileHandle)
@@ -137,12 +146,14 @@
 		if (resume)
 		{
 			// File exists so seek to end
+			DLog(@"seeking to end to resume for: %@  path: %@", mySong, self.filePath);
 			self.totalBytesTransferred = [self.fileHandle seekToEndOfFile];
 			self.byteOffset = self.totalBytesTransferred;
 		}
 		else
 		{
 			// File exists so remove it
+			DLog(@"not resuming, and file exists so removing it for: %@  path: %@", mySong, self.filePath);
 			[self.fileHandle closeFile];
 			self.fileHandle = nil;
 			[[NSFileManager defaultManager] removeItemAtPath:self.filePath error:NULL];
@@ -152,6 +163,7 @@
 	if (!resume)
 	{
 		// Create the file
+		DLog(@"not resuming, creating file handle for: %@  path: %@", mySong, self.filePath);
 		self.totalBytesTransferred = 0;
 		[[NSFileManager defaultManager] createFileAtPath:self.filePath contents:[NSData data] attributes:nil];
 		self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.filePath];
@@ -179,7 +191,6 @@
 	//[self.loadingThread.threadDictionary setObject:[[mySong copy] autorelease] forKey:@"mySong"];
 	[self.loadingThread.threadDictionary setObject:[NSNumber numberWithBool:isTempCache] forKey:@"isTempCache"];
 	
-	DLog(@"mySong: %@   currentSong: %@", mySong, [[PlaylistSingleton sharedInstance] currentSong]);
 	if ([self.mySong isEqualToSong:[[PlaylistSingleton sharedInstance] currentSong]])
 	{
 		self.isCurrentSong = YES;
@@ -308,8 +319,6 @@
 	return maxBytesPerInterval;
 }
 
-BOOL isBeginning = YES;
-
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
 {		
 	NSMutableDictionary *threadDict = [[NSThread currentThread] threadDictionary];
@@ -335,7 +344,7 @@ BOOL isBeginning = YES;
 	if (!isDelegateNotifiedToStartPlayback && totalBytesTransferred >= ISMSMinBytesToStartPlayback(bitrate))
 	{
 		isDelegateNotifiedToStartPlayback = YES;
-		//DLog(@"player told to start playback");
+		DLog(@"player told to start playback");
 		[self performSelectorOnMainThread:@selector(startPlaybackInternal) withObject:nil waitUntilDone:NO];
 	}
 	

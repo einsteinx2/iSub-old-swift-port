@@ -31,6 +31,7 @@
 @property BOOL partialPrecacheSleep;
 @property BOOL isDownloading;
 @property BOOL isCurrentSong;
+@property BOOL shouldResume;
 
 - (void)start:(BOOL)resume;
 - (void)start;

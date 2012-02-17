@@ -191,11 +191,8 @@
 	}	
 }
 
-
 - (void)playAllSongs
-{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
+{	
 	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
 	
 	// Turn off shuffle mode in case it's on
@@ -212,18 +209,17 @@
 		result = [databaseControls.genresDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment], seg1, self.title, genre];
 	
 	while ([result next])
-	{
-		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-		
-		if ([result stringForColumnIndex:0] != nil)
+	{		
+		@autoreleasepool 
 		{
-			NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
-			Song *aSong = [Song songFromGenreDb:songIdMD5];
-			
-			[aSong addToCurrentPlaylist];
+			if ([result stringForColumnIndex:0] != nil)
+			{
+				NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
+				Song *aSong = [Song songFromGenreDb:songIdMD5];
+				
+				[aSong addToCurrentPlaylist];
+			}
 		}
-		
-		[pool release];
 	}
 	
 	[result close];
@@ -232,18 +228,14 @@
 		[musicControls jukeboxReplacePlaylistWithLocal];
 	
 	// Hide loading screen
-	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
+	[viewObjects hideLoadingScreen];
 	
 	// Show the player
-	[self performSelectorOnMainThread:@selector(showPlayer) withObject:nil waitUntilDone:NO];
-	
-	[pool release];
+	[self showPlayer];
 }
 
 - (void)shuffleSongs
-{	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
+{		
 	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
 	
 	// Turn off shuffle mode to reduce inserts
@@ -261,17 +253,16 @@
 	
 	while ([result next])
 	{
-		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-		
-		if ([result stringForColumnIndex:0] != nil)
+		@autoreleasepool 
 		{
-			NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
-			Song *aSong = [Song songFromGenreDb:songIdMD5];
-			
-			[aSong addToCurrentPlaylist];
-		}		
-		
-		[pool release];
+			if ([result stringForColumnIndex:0] != nil)
+			{
+				NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
+				Song *aSong = [Song songFromGenreDb:songIdMD5];
+				
+				[aSong addToCurrentPlaylist];
+			}
+		}
 	}
 	
 	[result close];
@@ -286,26 +277,24 @@
 	currentPlaylist.isShuffle = YES;
 	
 	// Hide loading screen
-	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
+	[viewObjects hideLoadingScreen];
 	
 	// Show the player
-	[self performSelectorOnMainThread:@selector(showPlayer) withObject:nil waitUntilDone:NO];
-	
-	[pool release];
+	[self showPlayer];
 }
 
 - (void)playAllAction:(id)sender
 {
-	[viewObjects showLoadingScreen:self.view.superview blockInput:YES mainWindow:NO];
+	[viewObjects showLoadingScreenOnMainWindowWithMessage:nil];
 	
-	[self performSelectorInBackground:@selector(playAllSongs) withObject:nil];
+	[self performSelector:@selector(playAllSongs) withObject:nil afterDelay:0.05];
 }
 
 - (void)shuffleAction:(id)sender
 {
-	[viewObjects showLoadingScreen:self.view.superview blockInput:YES mainWindow:NO];
+	[viewObjects showLoadingScreenOnMainWindowWithMessage:@"Shuffling"];
 	
-	[self performSelectorInBackground:@selector(shuffleSongs) withObject:nil];
+	[self performSelector:@selector(shuffleSongs) withObject:nil afterDelay:0.05];
 }
 
 

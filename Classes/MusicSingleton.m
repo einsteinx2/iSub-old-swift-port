@@ -314,6 +314,10 @@ unsigned long long startSongBytes = 0;
 double startSongSeconds = 0.0;
 - (void)startSongAtOffsetInBytes:(unsigned long long)bytes andSeconds:(double)seconds
 {
+	// Only allowed to manipulate BASS from the main thread
+	if (![NSThread mainThread])
+		return;
+	
 	// Destroy the streamer to start a new song
 	[audio stop];
 	
@@ -334,6 +338,7 @@ double startSongSeconds = 0.0;
 // TODO: put this method somewhere and name it properly
 - (void)startSongAtOffsetInSeconds2
 {
+	DLog(@"startSongAtOffsetInSeconds2");
 	SavedSettings *settings = [SavedSettings sharedInstance];
 	SUSStreamSingleton *streamSingleton = [SUSStreamSingleton sharedInstance];
 	
@@ -371,7 +376,7 @@ double startSongSeconds = 0.0;
 		{
 			// The song is caching, start streaming from the local copy
 			SUSStreamHandler *handler = [streamSingleton handlerForSong:currentSong];
-			if (handler.isDelegateNotifiedToStartPlayback)
+			if (!audio.isPlaying && handler.isDelegateNotifiedToStartPlayback)
 			{
 				// Only start the player if the handler isn't going to do it itself
 				[audio startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] 
@@ -386,7 +391,7 @@ double startSongSeconds = 0.0;
 			
 			// The song is caching, start streaming from the local copy
 			SUSStreamHandler *handler = [streamSingleton handlerForSong:currentSong];
-			if (handler.isDelegateNotifiedToStartPlayback)
+			if (!audio.isPlaying && handler.isDelegateNotifiedToStartPlayback)
 			{
 				// Only start the player if the handler isn't going to do it itself
 				[audio startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] 
@@ -416,29 +421,10 @@ double startSongSeconds = 0.0;
 				[streamSingleton fillStreamQueue];
 		}
 	}
-	
-	/*DLog(@"running startSongAtOffsetInSeconds2");
-	SUSStreamSingleton *streamSingleton = [SUSStreamSingleton sharedInstance];
-	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
-
-	// Remove all songs from the queue except the current one if it exists
-	[streamSingleton removeAllStreamsExceptForSong:currentSong];
-	
-	// Fill the stream queue
-	[streamSingleton fillStreamQueue];
-	
-	// The file is not fully cached and we're in offline mode, so complain
-	if (!currentSong.isFullyCached && viewObjects.isOfflineMode)
-	{
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Unable to play this song in offline mode as it isn't fully cached." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-		alert.tag = 4;
-		[alert show];
-		[alert release];
-	}*/
 }
 
 - (void)startSong
-{
+{	
 	[self startSongAtOffsetInBytes:0 andSeconds:0.0];
 }
 
@@ -446,7 +432,10 @@ double startSongSeconds = 0.0;
 {	
 	currentPlaylist.currentIndex = position;
 
+	DLog(@"before handler stack: %@", [SUSStreamSingleton sharedInstance].handlerStack);
+	DLog(@"currentSong: %@", currentPlaylist.currentSong);
 	[[SUSStreamSingleton sharedInstance] removeAllStreamsExceptForSong:currentPlaylist.currentSong];
+	DLog(@"after handler stack: %@", [SUSStreamSingleton sharedInstance].handlerStack);
 	
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
@@ -593,7 +582,7 @@ double startSongSeconds = 0.0;
 	{
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		[alert show];
 		[alert release];
 	}
 	
@@ -618,7 +607,7 @@ double startSongSeconds = 0.0;
 	{
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		[alert show];
 		[alert release];
 	}
 	
@@ -645,7 +634,7 @@ double startSongSeconds = 0.0;
 	{
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		[alert show];
 		[alert release];
 	}
 	
@@ -702,7 +691,7 @@ double startSongSeconds = 0.0;
 	{
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		[alert show];
 		[alert release];
 	}
 	
@@ -726,7 +715,7 @@ double startSongSeconds = 0.0;
 	{
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		[alert show];
 		[alert release];
 	}
 	
@@ -754,7 +743,7 @@ double startSongSeconds = 0.0;
 		{
 			// Inform the user that the connection failed.
 			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-			[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+			[alert show];
 			[alert release];
 		}
 		
@@ -804,7 +793,7 @@ double startSongSeconds = 0.0;
 	{
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		[alert show];
 		[alert release];
 	}
 	
@@ -830,7 +819,7 @@ double startSongSeconds = 0.0;
 	{
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		[alert show];
 		[alert release];
 	}
 
@@ -854,7 +843,7 @@ double startSongSeconds = 0.0;
 	{
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		[alert show];
 		[alert release];
 	}
 	
@@ -880,7 +869,7 @@ double startSongSeconds = 0.0;
 	{
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		[alert show];
 		[alert release];
 	}
 	
@@ -907,11 +896,20 @@ double startSongSeconds = 0.0;
 	{
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		[alert show];
 		[alert release];
 	}
 	
 	[connDelegate release];
+}
+
+#pragma mark - Memory management
+
+- (void)didReceiveMemoryWarning
+{
+	DLog(@"received memory warning");
+	
+	
 }
 
 #pragma mark -
@@ -958,6 +956,11 @@ double startSongSeconds = 0.0;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLockScreenInfo) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLockScreenInfo) name:ISMSNotification_AlbumArtLargeDownloaded object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(didReceiveMemoryWarning) 
+												 name:UIApplicationDidReceiveMemoryWarningNotification 
+											   object:nil];
 	
 	return self;
 }

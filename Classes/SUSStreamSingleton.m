@@ -39,6 +39,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 	
 	for (SUSStreamHandler *handler in self.handlerStack)
 	{
+		DLog(@"handler.mySong: %@    aSong: %@", handler.mySong.title, aSong.title);
 		if ([handler.mySong isEqualToSong:aSong])
 		{
 			return handler;
@@ -74,11 +75,10 @@ static SUSStreamSingleton *sharedInstance = nil;
 	return NO;
 }
 
+// Main worker method
 - (void)cancelAllStreamsExcept:(NSArray *)handlersToSkip
 {
-	if (!handlersToSkip)
-		return;
-	
+	// Cancel the handlers
 	for (SUSStreamHandler *handler in self.handlerStack)
 	{
 		if (![handlersToSkip containsObject:handler])
@@ -92,13 +92,21 @@ static SUSStreamSingleton *sharedInstance = nil;
 			[handler cancel];
 		}
 	}
+	
+	[self saveHandlerStack];
 }
 
+// Convenience method
 - (void)cancelAllStreamsExceptForSongs:(NSArray *)songsToSkip
 {
+	// If songsToSkip == nil, just cancel all handlers
 	if (!songsToSkip)
+	{
+		[self cancelAllStreams];
 		return;
+	}
 	
+	// Gather the handler objects to cancel
 	NSMutableArray *handlersToSkip = [NSMutableArray arrayWithCapacity:[songsToSkip count]];
 	for (Song *aSong in songsToSkip)
 	{
@@ -106,27 +114,35 @@ static SUSStreamSingleton *sharedInstance = nil;
 		if (handler)
 			[handlersToSkip addObject:[self handlerForSong:aSong]];
 	}
+	
+	// Cancel the other handlers
 	[self cancelAllStreamsExcept:handlersToSkip];
 }
 
-
+// Convenience method
 - (void)cancelAllStreamsExceptForSong:(Song *)aSong
 {
+	// If aSong == nil, just cancel all handlers
 	if (![self handlerForSong:aSong])
+	{
+		[self cancelAllStreams];
 		return;
+	}
 	
-	// Cancel any song resume requests
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	
+	// Create the handler array with the one object
 	NSArray *handlersToSkip = [NSArray arrayWithObject:[self handlerForSong:aSong]];
+	
+	// Cancel the other handlers
 	[self cancelAllStreamsExcept:handlersToSkip];
 }
 
+// Convenience method
 - (void)cancelAllStreams
 {
 	[self cancelAllStreamsExcept:nil];
 }
 
+// Main worker method
 - (void)cancelStreamAtIndex:(NSUInteger)index
 {
 	if (index < [self.handlerStack count])
@@ -140,31 +156,42 @@ static SUSStreamSingleton *sharedInstance = nil;
 												 selector:@selector(resumeHandler:)
 												   object:handler];
 	}
+	
+	[self saveHandlerStack];
 }
 
+// Convenience method
 - (void)cancelStream:(SUSStreamHandler *)handler
 {
+	// If handler == nil, do nothing
 	if (!handler)
 		return;
 	
+	// Get the handler index
 	NSUInteger index = [self.handlerStack indexOfObject:handler];
+	
+	// Cancel the handler
 	[self cancelStreamAtIndex:index];
 }
 
+// Convenience method
 - (void)cancelStreamForSong:(Song *)aSong
 {
+	// If aSong == nil, do nothing
 	if (!aSong)
 		return;
 	
+	// Cancel the handler
 	[self cancelStream:[self handlerForSong:aSong]];
 }
 
+// Main worker method
 - (void)removeAllStreamsExcept:(NSArray *)handlersToSkip
 {
-	if (!handlersToSkip)
-		return;
-	
+	// Cancel the handlers
 	[self cancelAllStreamsExcept:handlersToSkip];
+	
+	// Remove the handlers
 	NSArray *handlers = [NSArray arrayWithArray:self.handlerStack];
 	for (SUSStreamHandler *handler in handlers)
 	{
@@ -172,21 +199,33 @@ static SUSStreamSingleton *sharedInstance = nil;
 			[self.handlerStack removeObject:handler];
 	}
 	
+	// Start the next handler
 	if ([self.handlerStack count] > 0)
 	{
+		// Get the first handler
 		SUSStreamHandler *handler = [self.handlerStack firstObject];
+		
+		// If it's not already downloading, start downloading
 		if (!handler.isDownloading)
 		{
 			[handler start];
 		}
 	}
+	
+	[self saveHandlerStack];
 }
 
+// Convenience method
 - (void)removeAllStreamsExceptForSongs:(NSArray *)songsToSkip
 {
+	// If songsToSkip == nil, remove all handlers
 	if (!songsToSkip)
+	{
+		[self removeAllStreams];
 		return;
+	}
 	
+	// Gather the handler objects to skip
 	NSMutableArray *handlersToSkip = [NSMutableArray arrayWithCapacity:[songsToSkip count]];
 	for (Song *aSong in songsToSkip)
 	{
@@ -194,52 +233,66 @@ static SUSStreamSingleton *sharedInstance = nil;
 		if (handler) 
 			[handlersToSkip addObject:[self handlerForSong:aSong]];
 	}
+	
+	// Remove the other handlers
 	[self removeAllStreamsExcept:handlersToSkip];
 }
 
+// Convenience method
 - (void)removeAllStreamsExceptForSong:(Song *)aSong
 {
+	// If aSong == nil, remove all handlers
 	if (![self handlerForSong:aSong])
+	{
+		[self removeAllStreams];
 		return;
+	}
 	
+	// Get the handler to skip
 	NSArray *handlersToSkip = [NSArray arrayWithObject:[self handlerForSong:aSong]];
+	
+	// Remove the other handlers
 	[self removeAllStreamsExcept:handlersToSkip];
 }
 
+// Convenience method
 - (void)removeAllStreams
 {
 	[self cancelAllStreams];
-	[self.handlerStack removeAllObjects];
-	[self saveHandlerStack];
+	[self removeAllStreamsExcept:nil];
 }
 
+// Main worker method
 - (void)removeStreamAtIndex:(NSUInteger)index
 {
-    DLog(@"handlerStack count: %i", [self.handlerStack count]);
 	if (index < [self.handlerStack count])
 	{
 		[self cancelStreamAtIndex:index];
 		[self.handlerStack removeObjectAtIndex:index];
 	}
-    DLog(@"removed stream, new handlerStack count: %i", [self.handlerStack count]);
-}
-
-- (void)removeStream:(SUSStreamHandler *)handler
-{
-	if (!handler)
-		return;
 	
-	[self cancelStream:handler];
-	[self.handlerStack removeObject:handler];
-		
 	[self saveHandlerStack];
 }
 
+// Convenience method
+- (void)removeStream:(SUSStreamHandler *)handler
+{
+	// If handler == nil, do nothing
+	if (!handler)
+		return;
+	
+	// Remove the handler
+	[self removeStreamAtIndex:[self.handlerStack indexOfObject:handler]];
+}
+
+// Convenience method
 - (void)removeStreamForSong:(Song *)aSong
 {
+	// If aSong == nil, do nothing
 	if (!aSong)
 		return;
 	
+	// Remove the handler
 	[self removeStream:[self handlerForSong:aSong]];
 }
 
@@ -413,32 +466,6 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (void)currentPlaylistOrderChanged
 {
-	// First check to see if the upcoming song is being cached now or next
-	/*BOOL fillQueue = NO;
-	Song *nextSong = currentPlaylistDAO.nextSong;
-	if ([self isSongInQueue:nextSong])
-	{
-		if ([self.handlerStack count] > 0)
-		{
-			if (![[self.handlerStack objectAtIndexSafe:0] isEqualToSong:nextSong])
-			{
-				if ([self.handlerStack count] > 1)
-				{
-					if (![[self.handlerStack objectAtIndexSafe:1] isEqualToSong:nextSong])
-					{
-						fillQueue = YES;
-					}
-				}
-			}
-		}
-	}
-	
-	if (fillQueue)
-	{
-		[self removeAllStreamsExceptForSong:currentPlaylistDAO.currentSong];
-		[self fillStreamQueue];
-	}*/
-	
 	Song *currentSong = currentPlaylistDAO.currentSong;
 	Song *nextSong = currentPlaylistDAO.nextSong;
 	NSMutableArray *songsToSkip = [NSMutableArray arrayWithCapacity:2];
@@ -492,6 +519,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 	}
 	else if ([handler.mySong isEqualToSong:nextSong])
 	{
+		DLog(@"preparing next song stream");
 		[audio prepareNextSongStream];
 	}
 	
@@ -565,6 +593,15 @@ static SUSStreamSingleton *sharedInstance = nil;
     [theLoader release];
 }
 
+#pragma mark - Memory management
+
+- (void)didReceiveMemoryWarning
+{
+	DLog(@"received memory warning");
+	
+	
+}
+
 #pragma mark - Singleton methods
 
 - (void)setup
@@ -614,6 +651,11 @@ static SUSStreamSingleton *sharedInstance = nil;
 	[[NSNotificationCenter defaultCenter] addObserver:self 
 											 selector:@selector(currentPlaylistOrderChanged) 
 												 name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(didReceiveMemoryWarning) 
+												 name:UIApplicationDidReceiveMemoryWarningNotification 
+											   object:nil];
 }
 
 + (SUSStreamSingleton *)sharedInstance

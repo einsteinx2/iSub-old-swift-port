@@ -102,49 +102,6 @@
 - (Song *)allSongsSongForPosition:(NSUInteger)position
 {
 	return [Song songFromDbRow:position-1 inTable:@"allSongs" inDatabase:self.db];
-	
-	/*Song *aSong = [[Song alloc] init];
-	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allSongs WHERE ROWID = ?", [NSNumber numberWithInt:position]];
-	[result next];
-	if ([self.db hadError]) 
-	{
-		DLog(@"Err %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
-	}
-	else
-	{
-		if ([result stringForColumn:@"title"] != nil)
-			aSong.title = [NSString stringWithString:[result stringForColumn:@"title"]];
-		if ([result stringForColumn:@"songId"] != nil)
-			aSong.songId = [NSString stringWithString:[result stringForColumn:@"songId"]];
-		if ([result stringForColumn:@"artist"] != nil)
-			aSong.artist = [NSString stringWithString:[result stringForColumn:@"artist"]];
-		if ([result stringForColumn:@"album"] != nil)
-			aSong.album = [NSString stringWithString:[result stringForColumn:@"album"]];
-		if ([result stringForColumn:@"genre"] != nil)
-			aSong.genre = [NSString stringWithString:[result stringForColumn:@"genre"]];
-		if ([result stringForColumn:@"coverArtId"] != nil)
-			aSong.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
-		if ([result stringForColumn:@"path"] != nil)
-			aSong.path = [NSString stringWithString:[result stringForColumn:@"path"]];
-		if ([result stringForColumn:@"suffix"] != nil)
-			aSong.suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
-		if ([result stringForColumn:@"transcodedSuffix"] != nil)
-			aSong.transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
-		aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
-		aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
-		aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
-		aSong.year = [NSNumber numberWithInt:[result intForColumn:@"year"]];
-		aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
-	}
-	
-	[result close];
-	
-	if (aSong.path == nil)
-	{
-		[aSong release]; aSong = nil;
-	}
-	
-	return [aSong autorelease];*/
 }
 
 - (Song *)allSongsSongForPositionInSearch:(NSUInteger)position

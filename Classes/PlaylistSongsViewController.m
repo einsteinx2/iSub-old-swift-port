@@ -100,7 +100,7 @@
 	{
         self.title = serverPlaylist.playlistName;
 		playlistCount = [databaseControls.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM splaylist%@", md5]];
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+		[self.tableView reloadData];
 		
 		// Add the pull to refresh view
 		refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
@@ -135,7 +135,7 @@
 	{
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error grabbing the playlist.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		[alert show];
 		[alert release];
 	}
 }	
@@ -243,7 +243,7 @@
 	{
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error saving the playlist to the server.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+		[alert show];
 		[alert release];
 	}
 }
@@ -295,7 +295,7 @@
 	
 	// Inform the user that the connection failed.
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+	[alert show];
 	[alert release];
 	
 	self.tableView.scrollEnabled = YES;
@@ -353,7 +353,7 @@
 		self.tableView.scrollEnabled = YES;
 
 		playlistCount = [databaseControls.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM splaylist%@", md5]];
-		[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+		[self.tableView reloadData];
 		
 		[self dataSourceDidFinishLoadingNewData];
 		
@@ -362,7 +362,7 @@
 	}
 	else
 	{
-		[self performSelectorInBackground:@selector(parseData) withObject:nil];
+		[self parseData];
 	}
 	
 	self.tableView.scrollEnabled = YES;
@@ -381,9 +381,7 @@ static NSString *kName_Error = @"error";
 }
 
 - (void)parseData
-{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
+{	
 	// Parse the data
 	//
 	TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
@@ -400,11 +398,9 @@ static NSString *kName_Error = @"error";
 	}
     [tbxml release];
 	
-	[receivedData release];
+	[receivedData release]; receivedData = nil;
 	
-	[viewObjects performSelectorOnMainThread:@selector(hideLoadingScreen) withObject:nil waitUntilDone:NO];
-	
-	[pool release];
+	[viewObjects hideLoadingScreen];
 }
 
 

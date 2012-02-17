@@ -179,7 +179,7 @@
 	
 	if ([self checkUrl:urlField.text] && [self checkUsername:usernameField.text] && [self checkPassword:passwordField.text])
 	{
-		[viewObjects showLoadingScreen:self.view blockInput:YES mainWindow:YES];
+		[viewObjects showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
 		
 		SUSServerChecker *checker = [[SUSServerChecker alloc] initWithDelegate:self];
 		[checker checkServerUrlString:urlField.text username:usernameField.text password:passwordField.text];

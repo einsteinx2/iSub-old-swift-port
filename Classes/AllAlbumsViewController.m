@@ -149,7 +149,7 @@
 	
 	self.tableView.tableHeaderView = headerView;
 	
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+	[self.tableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated 
@@ -256,7 +256,7 @@
 	[searchOverlayView release];
 	searchOverlayView = nil;
 	
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+	[self.tableView reloadData];
 	
 	[self.tableView setContentOffset:CGPointMake(0, 28) animated:YES];
 }
@@ -346,7 +346,7 @@
 	
 	// Remove the index bar
 	isSearching = YES;
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+	[self.tableView reloadData];
 	
 	//Add the done button.
 	self.navigationItem.leftBarButtonItem = nil;
@@ -383,7 +383,7 @@
 		[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE allAlbumsSearch"];
 	}
 	
-	[self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+	[self.tableView reloadData];
 }
 
 
