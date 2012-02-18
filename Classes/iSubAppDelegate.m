@@ -252,6 +252,7 @@
 	}
     
 	// Recover current state if player was interrupted
+	[SUSStreamSingleton sharedInstance];
 	[musicControls resumeSong];
 }
 

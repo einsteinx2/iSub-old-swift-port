@@ -15,11 +15,6 @@
 #define ISMS_BASSBufferSize 400
 #define ISMS_defaultSampleRate 44100
 
-
-//#define ISMS_AQBufferSizeInFrames 512
-//#define ISMS_AQNumBuffers 4
-//#define ISMS_AQBytesToWaitForAudioData (1024 * 160) // 5 seconds of audio in a 320kbps stream
-
 // Stream create failure retry values
 #define RETRY_DELAY 2.0
 #define MIN_FILESIZE_TO_FAIL (1024 * 1024 * 3)
@@ -60,8 +55,8 @@ typedef enum
 - (void)startWithOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds;
 - (void)seekToPositionInBytes:(QWORD)bytes inStream:(HSTREAM)stream;
 - (void)seekToPositionInBytes:(QWORD)bytes;
-- (void)seekToPositionInSeconds:(NSUInteger)seconds inStream:(HSTREAM)stream;
-- (void)seekToPositionInSeconds:(NSUInteger)seconds;
+- (void)seekToPositionInSeconds:(double)seconds inStream:(HSTREAM)stream;
+- (void)seekToPositionInSeconds:(double)seconds;
 - (void)start;
 - (void)stop;
 - (void)pause;
@@ -125,12 +120,12 @@ typedef enum
 @property (retain) NSThread *fftDataThread;
 @property BOOL isFftDataThreadToTerminate;
 @property BOOL isFastForward;
-@property BOOL audioQueueShouldStopWaitingForData;
 @property ISMS_AE_STATE state;
 @property NSInteger audioSessionSampleRate;
 @property NSInteger bassReinitSampleRate;
 @property NSUInteger bufferLengthMillis;
 @property NSUInteger bassUpdatePeriod;
+@property unsigned long long neededSize;
 
 @property (retain) NSObject *currentStreamSyncObject;
 @property (retain) NSObject *eqReadSyncObject;

@@ -87,7 +87,6 @@
 	}
 	else 
 	{
-		//if (currentPlaylist.isShuffle)
 		if (isShuffleButton)
 		{
 			// Perform the shuffle

@@ -42,10 +42,10 @@
 
 // Logging
 #define isProgressLoggingEnabled NO
-#define isThrottleLoggingEnabled NO
+#define isThrottleLoggingEnabled YES
 
 @implementation SUSStreamHandler
-@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, secondsOffset, partialPrecacheSleep, isDownloading, isCurrentSong, shouldResume;
+@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, bitrate, secondsOffset, partialPrecacheSleep, isDownloading, isCurrentSong, shouldResume;
 
 - (void)setup
 {
@@ -59,6 +59,7 @@
 	request = nil;
 	connection = nil;
 	isTempCache = NO;
+	bitrate = 0;
 	partialPrecacheSleep = YES;
 	isDownloading = NO;
 	
@@ -117,31 +118,18 @@
 // Create the request and start the connection in loadingThread
 - (void)start:(BOOL)resume
 {
-	if (self.isDownloading)
-	{
-		//if ([NSThread respondsToSelector:@selector(callStackSymbols)])
-		//	DLog(@"STARTING HANDLER THAT IS ALREADY DOWNLOADING: %@", [NSThread callStackSymbols]);
-	}
-	
-	//DLog(@"starting handler for: %@", mySong);
 	if (!resume)
 	{
-		//DLog(@"removing temp file for for: %@", mySong);
-		// Remove temp file for this song if exists
-		[[NSFileManager defaultManager] removeItemAtPath:self.mySong.localTempPath error:NULL];
-		
-		// Clear cache if this is a temp file
+		// Clear temp cache if this is a temp file
 		if (self.isTempCache)
 		{
 			[[CacheSingleton sharedInstance] clearTempCache];
-			//DLog(@"clearing the temp cache for: %@", mySong);
 		}
 	}
 	
 	SavedSettings *settings = [SavedSettings sharedInstance];
 
 	// Create the file handle
-	//DLog(@"created file handle for: %@  path: %@", mySong, self.filePath);
 	self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.filePath];
 	
 	if (self.fileHandle)
@@ -149,14 +137,13 @@
 		if (resume)
 		{
 			// File exists so seek to end
-			//DLog(@"seeking to end to resume for: %@  path: %@", mySong, self.filePath);
 			self.totalBytesTransferred = [self.fileHandle seekToEndOfFile];
-			self.byteOffset = self.totalBytesTransferred;
+			
+			self.byteOffset += self.totalBytesTransferred;
 		}
 		else
 		{
 			// File exists so remove it
-			//DLog(@"not resuming, and file exists so removing it for: %@  path: %@", mySong, self.filePath);
 			[self.fileHandle closeFile];
 			self.fileHandle = nil;
 			[[NSFileManager defaultManager] removeItemAtPath:self.filePath error:NULL];
@@ -166,7 +153,6 @@
 	if (!resume)
 	{
 		// Create the file
-		//DLog(@"not resuming, creating file handle for: %@  path: %@", mySong, self.filePath);
 		self.totalBytesTransferred = 0;
 		[[NSFileManager defaultManager] createFileAtPath:self.filePath contents:[NSData data] attributes:nil];
 		self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.filePath];
@@ -175,25 +161,20 @@
 	NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(mySong.songId), @"id", nil];
 	if (settings.currentMaxBitrate != 0)
 	{
-		NSString *bitrate = [[NSString alloc] initWithFormat:@"%i", settings.currentMaxBitrate];
-		[parameters setObject:n2N(bitrate) forKey:@"maxBitRate"];
-		[bitrate release];
+		NSString *maxBitRate = [[NSString alloc] initWithFormat:@"%i", settings.currentMaxBitrate];
+		[parameters setObject:n2N(maxBitRate) forKey:@"maxBitRate"];
+		[maxBitRate release];
 	}
 	self.request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters byteOffset:byteOffset];
 
 	self.loadingThread = [[[NSThread alloc] initWithTarget:self selector:@selector(startConnection) object:nil] autorelease];
 	
-	NSNumber *bitrate = [[NSNumber alloc] initWithInt:mySong.estimatedBitrate];
-	[self.loadingThread.threadDictionary setObject:bitrate forKey:@"bitrate"];
-	[bitrate release];
-	
+	self.bitrate = mySong.estimatedBitrate;
+
 	NSDate *now = [[NSDate alloc] init];
 	[self.loadingThread.threadDictionary setObject:now forKey:@"throttlingDate"];
 	[now release];
-	
-	//[self.loadingThread.threadDictionary setObject:[[mySong copy] autorelease] forKey:@"mySong"];
-	[self.loadingThread.threadDictionary setObject:[NSNumber numberWithBool:isTempCache] forKey:@"isTempCache"];
-	
+		
 	if ([self.mySong isEqualToSong:[[PlaylistSingleton sharedInstance] currentSong]])
 	{
 		self.isCurrentSong = YES;
@@ -304,10 +285,10 @@
 	self.bytesTransferred = 0;
 }
 
-- (double)maxBytesPerIntervalForBitrate:(double)bitrate is3G:(BOOL)is3G
+- (double)maxBytesPerIntervalForBitrate:(double)rate is3G:(BOOL)is3G
 {
 	double maxBytesDefault = is3G ? (double)ISMSMaxBytesPerInterval3G : (double)ISMSMaxBytesPerIntervalWifi;
-	double maxBytesPerInterval = maxBytesDefault * (bitrate / 160.0);
+	double maxBytesPerInterval = maxBytesDefault * (rate / 160.0);
 	if (maxBytesPerInterval < maxBytesDefault)
 	{
 		// Don't go lower than the default
@@ -325,7 +306,6 @@
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
 {		
 	NSMutableDictionary *threadDict = [[NSThread currentThread] threadDictionary];
-	CGFloat bitrate = [[threadDict objectForKey:@"bitrate"] floatValue];
 	NSDate *throttlingDate = [[threadDict objectForKey:@"throttlingDate"] retain];
 	NSUInteger dataLength = [incrementalData length];
 	
@@ -335,7 +315,7 @@
 	// Save the data to the file
 	@try
 	{
-		[fileHandle writeData:incrementalData];
+		[self.fileHandle writeData:incrementalData];
 	}
 	@catch (NSException *exception) 
 	{
@@ -344,24 +324,24 @@
 	}
 	
 	// Notify delegate if enough bytes received to start playback
-	if (!isDelegateNotifiedToStartPlayback && totalBytesTransferred >= ISMSMinBytesToStartPlayback(bitrate))
+	if (!self.isDelegateNotifiedToStartPlayback && self.totalBytesTransferred >= ISMSMinBytesToStartPlayback(self.bitrate))
 	{
-		isDelegateNotifiedToStartPlayback = YES;
+		self.isDelegateNotifiedToStartPlayback = YES;
 		//DLog(@"player told to start playback");
 		[self performSelectorOnMainThread:@selector(startPlaybackInternal) withObject:nil waitUntilDone:NO];
 	}
 	
 	// Log progress
 	if (isProgressLoggingEnabled)
-		DLog(@"downloadedLengthA:  %llu   bytesRead: %i", totalBytesTransferred, dataLength);
+		DLog(@"downloadedLengthA:  %llu   bytesRead: %i", self.totalBytesTransferred, dataLength);
 	
 	// If near beginning of file, don't throttle
-	if (totalBytesTransferred < ISMSMinBytesToStartLimiting(bitrate))
+	if (self.totalBytesTransferred < ISMSMinBytesToStartLimiting(self.bitrate))
 	{
 		NSDate *now = [[NSDate alloc] init];
 		[threadDict setObject:now forKey:@"throttlingDate"];
 		[now release];
-		bytesTransferred = 0;		
+		self.bytesTransferred = 0;		
 	}
 	
 	// Check if we should throttle
@@ -369,26 +349,30 @@
 	NSTimeInterval intervalSinceLastThrottle = [now timeIntervalSinceDate:throttlingDate];
 	[throttlingDate release];
 	[now release];
-	if (intervalSinceLastThrottle > ISMSThrottleTimeInterval && totalBytesTransferred > (unsigned long long)(ISMSMinBytesToStartLimiting(bitrate)))
-	{
-		//if (isThrottleLoggingEnabled)
-		//	DLog(@"entering throttling if statement, interval: %f  bytes transferred: %llu  maxBytes: %f", intervalSinceLastThrottle, bytesTransferred, ISMSMaxBytesPerInterval3G(bitrate));
-		
+	if (intervalSinceLastThrottle > ISMSThrottleTimeInterval && self.totalBytesTransferred > ISMSMinBytesToStartLimiting(self.bitrate))
+	{		
 		NSTimeInterval delay = 0.0;
-		if (![iSubAppDelegate sharedInstance].isWifi && bytesTransferred > ISMSMaxBytesPerInterval3G)
+		if (![iSubAppDelegate sharedInstance].isWifi && self.bytesTransferred > ISMSMaxBytesPerInterval3G)
 		{
-			double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)bitrate is3G:YES];
-			delay = (ISMSThrottleTimeInterval * ((double)bytesTransferred / maxBytesPerInterval));
-			bytesTransferred = 0;
+			if (isThrottleLoggingEnabled)
+				DLog(@"entering throttling if statement, interval: %f  bytes transferred: %llu  maxBytes: %f", intervalSinceLastThrottle, self.bytesTransferred, ISMSMaxBytesPerInterval3G);
+		
+			double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)self.bitrate is3G:YES];
+			delay = (ISMSThrottleTimeInterval * ((double)self.bytesTransferred / maxBytesPerInterval));
+			self.bytesTransferred = 0;
 			
 			if (isThrottleLoggingEnabled)
 				DLog(@"Bandwidth used is more than kMaxBytesPerInterval3G, Pausing for %f", delay);
 		}
-		else if ([iSubAppDelegate sharedInstance].isWifi && bytesTransferred > ISMSMaxBytesPerIntervalWifi)
+		else if ([iSubAppDelegate sharedInstance].isWifi 
+				 && self.bytesTransferred > ISMSMaxBytesPerIntervalWifi)
 		{
-			double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)bitrate is3G:NO];
-			delay = (ISMSThrottleTimeInterval * ((double)bytesTransferred / maxBytesPerInterval));
-			bytesTransferred = 0;
+			if (isThrottleLoggingEnabled)
+				DLog(@"entering throttling if statement, interval: %f  bytes transferred: %llu  maxBytes: %f", intervalSinceLastThrottle, self.bytesTransferred, ISMSMaxBytesPerIntervalWifi);
+			
+			double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)self.bitrate is3G:NO];
+			delay = (ISMSThrottleTimeInterval * ((double)self.bytesTransferred / maxBytesPerInterval));
+			self.bytesTransferred = 0;
 			
 			if (isThrottleLoggingEnabled)
 				DLog(@"Bandwidth used is more than kMaxBytesPerIntervalWifi, Pausing for %f", delay);
@@ -403,11 +387,10 @@
 	
 	// Handle partial pre-cache next song
 	SavedSettings *settings = [SavedSettings sharedInstance];
-	BOOL tempCache = [[threadDict objectForKey:@"isTempCache"] boolValue];
-	if (!isCurrentSong && !tempCache && settings.isPartialCacheNextSong && self.partialPrecacheSleep)
+	if (!self.isCurrentSong && !self.isTempCache && settings.isPartialCacheNextSong && self.partialPrecacheSleep)
 	{
 		NSUInteger partialPrecacheSize = BytesForSecondsAtBitrate(ISMSNumSecondsToPartialPreCache, self.mySong.estimatedBitrate);
-		if (totalBytesTransferred >= partialPrecacheSize)
+		if (self.totalBytesTransferred >= partialPrecacheSize)
 		{
 			[self performSelectorOnMainThread:@selector(partialPrecachePausedInternal) withObject:nil waitUntilDone:NO];
 			while (self.partialPrecacheSleep)
@@ -436,8 +419,8 @@
 // Main Thread
 - (void)startPlaybackInternal
 {
-	if ([self.delegate respondsToSelector:@selector(SUSStreamHandlerStartPlayback:byteOffset:secondsOffset:)])
-		[self.delegate SUSStreamHandlerStartPlayback:self byteOffset:byteOffset secondsOffset:secondsOffset];
+	if ([self.delegate respondsToSelector:@selector(SUSStreamHandlerStartPlayback:)])
+		[self.delegate SUSStreamHandlerStartPlayback:self];
 }
 
 // loadingThread
@@ -483,10 +466,10 @@
 	self.connection = nil;
 	
 	// Close the file handle
-	[fileHandle closeFile];
+	[self.fileHandle closeFile];
 	self.fileHandle = nil;
 	
-	if (totalBytesTransferred < 500)
+	if (self.totalBytesTransferred < 500)
 	{
 		// Show an alert and delete the file, this was not a song but an XML error
 		// TODO: Parse with TBXML and display proper error
@@ -537,13 +520,12 @@
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-	[encoder encodeObject:mySong forKey:@"mySong"];
-	[encoder encodeInt64:byteOffset forKey:@"byteOffset"];
-	[encoder encodeDouble:secondsOffset forKey:@"secondsOffset"];
-	[encoder encodeInt32:totalBytesTransferred forKey:@"totalBytesTransferred"];
-	[encoder encodeBool:isDelegateNotifiedToStartPlayback forKey:@"isDelegateNotifiedToStartPlayback"];
-	[encoder encodeBool:isTempCache forKey:@"isTempCache"];
-	[encoder encodeBool:isDownloading forKey:@"isDownloading"];
+	[encoder encodeObject:self.mySong forKey:@"mySong"];
+	[encoder encodeInt64:self.byteOffset forKey:@"byteOffset"];
+	[encoder encodeDouble:self.secondsOffset forKey:@"secondsOffset"];
+	[encoder encodeBool:self.isDelegateNotifiedToStartPlayback forKey:@"isDelegateNotifiedToStartPlayback"];
+	[encoder encodeBool:self.isTempCache forKey:@"isTempCache"];
+	[encoder encodeBool:self.isDownloading forKey:@"isDownloading"];
 }
 
 
@@ -556,7 +538,6 @@
 		mySong = [[decoder decodeObjectForKey:@"mySong"] copy];
 		byteOffset = [decoder decodeInt64ForKey:@"byteOffset"];
 		secondsOffset = [decoder decodeDoubleForKey:@"secondsOffset"];
-		totalBytesTransferred = [decoder decodeInt32ForKey:@"totalBytesTransferred"];
 		isDelegateNotifiedToStartPlayback = [decoder decodeBoolForKey:@"isDelegateNotifiedToStartPlayback"];
 		isTempCache = [decoder decodeBoolForKey:@"isTempCache"];
 		isDownloading = [decoder decodeBoolForKey:@"isDownloading"];

@@ -24,10 +24,12 @@
 #import "MusicSingleton.h"
 #import "NSArray+Additions.h"
 
+// TODO: verify secondsOffset usage
+
 @implementation AudioEngine
-@synthesize isEqualizerOn, startByteOffset, startSecondsOffset, currPlaylistDAO, fftDataThread, isFftDataThreadToTerminate, isPlaying, isFastForward, audioQueueShouldStopWaitingForData, state, bassReinitSampleRate, presilenceStream, bufferLengthMillis, bassUpdatePeriod;
+@synthesize isEqualizerOn, startByteOffset, startSecondsOffset, currPlaylistDAO, fftDataThread, isFftDataThreadToTerminate, isPlaying, isFastForward, state, bassReinitSampleRate, presilenceStream, bufferLengthMillis, bassUpdatePeriod;
 @synthesize fileStream1, fileStream2, fileStreamTempo1, fileStreamTempo2, volumeFx, outStream, BASSisFilestream1, currentStreamSyncObject;
-@synthesize eqValueArray, eqHandleArray, eqDataType, eqReadSyncObject;
+@synthesize eqValueArray, eqHandleArray, eqDataType, eqReadSyncObject, neededSize;
 
 // BASS plugins
 extern void BASSFLACplugin;
@@ -209,11 +211,11 @@ void CALLBACK MyFileCloseProc(void *user)
 	if (user == NULL)
 		return;
 	
-	// Close the file handle
 	BassUserInfo *userInfo = (BassUserInfo *)user;
 	if (userInfo.myFileHandle == NULL)
 		return;
 	
+	// Close the file handle
 	fclose(userInfo.myFileHandle);	
 }
 
@@ -227,27 +229,13 @@ QWORD CALLBACK MyFileLenProc(void *user)
 		BassUserInfo *userInfo = (BassUserInfo *)user;
 		if (userInfo.myFileHandle == NULL)
 			return 0;
-		
-		PlaylistSingleton *currentPlaylistDAO = sharedInstance.currPlaylistDAO;
-		
-		Song *theSong = [currentPlaylistDAO currentSong];
-		if ([userInfo.mySong isEqualToSong:theSong])
-		{
-			// It's the current song
-			//DLog(@"Checking file length for current song");
-		}
-		else
-		{
-			// It's not the current song so it's the next song
-			//DLog(@"Checking file length for next song");
-			theSong = [currentPlaylistDAO nextSong];
-		}
-		
+				
 		QWORD length = 0;
+		Song *theSong = userInfo.mySong;
 		if (theSong.isFullyCached || theSong.isTempCached)
 		{
 			// Return actual file size on disk
-			NSString *path = theSong.isTempCached ? theSong.localTempPath : theSong.localPath;
+			NSString *path = theSong.currentPath;
 			length = [[[NSFileManager defaultManager] attributesOfItemAtPath:path error:NULL] fileSize];
 		}
 		else
@@ -255,7 +243,7 @@ QWORD CALLBACK MyFileLenProc(void *user)
 			// Return server reported file size
 			length = [theSong.size longLongValue];
 		}
-		//DLog(@"File Length: %llu   isFullyCached: %@", length, NSStringFromBOOL(theSong.isFullyCached));
+		
 		return length;
 	}
 }
@@ -264,115 +252,61 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 {
 	if (buffer == NULL || user == NULL)
 		return 0;
+		
+	BassUserInfo *userInfo = (BassUserInfo *)user;
+	if (userInfo.myFileHandle == NULL)
+		return 0;
 	
-	@autoreleasepool
-	{
-		// Read from the file
-		BassUserInfo *userInfo = (BassUserInfo *)user;
-		if (userInfo.myFileHandle == NULL)
-			return 0;
-		
-		DWORD bytesRead = fread(buffer, 1, length, userInfo.myFileHandle);	
-		
-		if (bytesRead < length)
+	// Read from the file
+	DWORD bytesRead = fread(buffer, 1, length, userInfo.myFileHandle);	
+	
+	if (bytesRead < length)
+	{		
+		// Handle waiting for additional data
+		@autoreleasepool 
 		{
-			// Don't ever block the UI thread
-			if (![[NSThread currentThread] isEqual:[NSThread mainThread]])
+			Song *theSong = userInfo.mySong;
+			if (!theSong.isFullyCached)
 			{
-				BassUserInfo *userInfo = (BassUserInfo *)user;
-				PlaylistSingleton *currentPlaylistDAO = sharedInstance.currPlaylistDAO;
+				// Set the audio queue state to waiting for data
+				sharedInstance.state = ISMS_AE_STATE_waitingForData;
 				
-				Song *theSong = [currentPlaylistDAO currentSong];
-				if ([userInfo.mySong isEqualToSong:theSong])
+				// Check if needed size has been calculated yet
+				if (sharedInstance.neededSize == ULLONG_MAX)
 				{
-					// It's the current song
-					//DLog(@"Checking file length for current song");
+					// Choose either the current player bitrate, or if for some reason it is not detected properly, use the best estimated bitrate. Then use that to determine how much data to let download to continue.
+					unsigned long long size = theSong.localFileSize;
+					NSUInteger bitrate = sharedInstance.bitRate > 0 ? sharedInstance.bitRate : theSong.estimatedBitrate;
+					unsigned long long bytesToWait = BytesForSecondsAtBitrate(ISMS_NumSecondsToWaitForAudioData, bitrate);
+					sharedInstance.neededSize = size + bytesToWait;
+				}
+				
+				if(theSong.localFileSize < sharedInstance.neededSize)
+				{
+					// Handle temp cached songs ending. When they end, they are set as the last temp cached song, so we know it's done and can stop waiting for data.
+					SUSStreamSingleton *streamManager = [SUSStreamSingleton sharedInstance];
+					if ( !(theSong.isTempCached && [theSong isEqualToSong:streamManager.lastTempCachedSong]) )
+					{
+						// Undo the read
+						fpos_t pos; 
+						fgetpos(userInfo.myFileHandle, &pos);
+						fpos_t newpos = pos - bytesRead;
+						fsetpos(userInfo.myFileHandle, &newpos);
+						
+						// Make BASS wait
+						bytesRead = 0;
+					}
 				}
 				else
 				{
-					// It's not the current song so it's the next song
-					//DLog(@"Checking file length for next song");
-					theSong = [currentPlaylistDAO nextSong];
-				}
-				
-				SUSStreamSingleton *streamManager = [SUSStreamSingleton sharedInstance];
-				if (!theSong.isFullyCached)
-				{
-					// Set the audio queue state to waiting for data
-					sharedInstance.state = ISMS_AE_STATE_waitingForData;
-					
-					//DLog(@"trying to read %i bytes,   bytes read: %i", length, bytesRead);
-					// Clear the EOF indicator from the stream so it will resume reading
-					// when more data is available
-					fpos_t pos; 
-					fgetpos(userInfo.myFileHandle, &pos);
-					fpos_t newpos = pos - bytesRead;
-					fsetpos(userInfo.myFileHandle, &newpos);
-					
-					//[sharedInstance performSelectorOnMainThread:@selector(playPause) withObject:nil waitUntilDone:YES];
-					
-					// We received less than we asked for, but the stream is not over
-					// so we'll need to wait until more of the file is ready to play
-					unsigned long long size = theSong.localFileSize;
-					
-					// Choose either the current player bitrate, or if for some reason it is not detected
-					// properly, use the best estimated bitrate. Then use that to determine how much data
-					// to let download to continue.
-					NSUInteger bitrate = sharedInstance.bitRate > 0 ? sharedInstance.bitRate : theSong.estimatedBitrate;
-					unsigned long long bytesToWait = BytesForSecondsAtBitrate(ISMS_NumSecondsToWaitForAudioData, bitrate);
-					unsigned long long neededSize = size + bytesToWait;
-					//DLog(@"bitrate: %i  byterate: %i   bytesToWait: %llu   neededSize: %llu", bitrate, (bitrate/8), bytesToWait, neededSize);
-					
-					NSTimeInterval sleepTime = 0.2; // Sleep for a half second at a time
-					//DLog(@"asked for: %i  got: %i  file size: %llu", length, bytesRead, theSong.localFileSize);
-					while (!sharedInstance.audioQueueShouldStopWaitingForData 
-						   && !theSong.isFullyCached && theSong.localFileSize < neededSize)
-					{
-						// Handle temp cached songs ending. When they end, they are set as the last temp cached
-						// song, so we know it's done and can stop waiting for data.
-						if (theSong.isTempCached && [theSong isEqualToSong:streamManager.lastTempCachedSong])
-							break;
-						
-						// As long as audioQueueShouldStopWaitingForData is false, the song is not fully cached, and
-						// the file size is less than the current size + 10 buffers worth of data, then wait
-						DLog(@"Not enough data for %@, sleeping for %f   fileSize: %llu  neededSize: %llu", theSong.title, sleepTime, theSong.localFileSize, neededSize);
-						[NSThread sleepForTimeInterval:sleepTime];
-					}
-					
-					// Handle the case of a temp cached song that has ended
-					if (theSong.isTempCached && ![theSong isEqualToSong:streamManager.lastTempCachedSong])
-					{
-						sharedInstance.state = ISMS_AE_STATE_finishedWaitingForData;
-						return 0;
-					}
-					
-					// The loop finished, so unless audioQueueShouldStopWaitingForData is true (meaning the wait was cancelled)
-					// then call the queue callback again to enqueue more data
-					if (sharedInstance.audioQueueShouldStopWaitingForData)
-					{
-						//DLog(@"wait was cancelled, not calling the queue callback again");
-						// Change the audio queue state
-						//sharedInstance.state = ISMS_AE_STATE_finishedWaitingForData;
-						//return 0;
-					}
-					else
-					{
-						// Do the read again
-						bytesRead = fread(buffer, 1, length, userInfo.myFileHandle);
-						//DLog(@"trying again asked for: %i  got: %i  file size: %llu", length, bytesRead, theSong.localFileSize);
-						
-						if (sharedInstance.state != ISMS_AE_STATE_waitingForDataNoResume)
-						{
-							sharedInstance.state = ISMS_AE_STATE_finishedWaitingForData;
-							//[sharedInstance performSelectorOnMainThread:@selector(playPause) withObject:nil waitUntilDone:YES];
-						}
-					}
-					
+					// Reset needed size so it will be calculated again the next time the song needs to buffer
+					sharedInstance.neededSize = ULLONG_MAX;
 				}
 			}
 		}
-		return bytesRead;
 	}
+	
+	return bytesRead;
 }
 
 BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
@@ -399,70 +333,77 @@ BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFi
 - (DWORD)bassGetOutputData:(void *)buffer length:(DWORD)length
 {	
 	DWORD r;
-	
-	if (BASS_ChannelIsActive(self.currentStream))
-	{		
-		r = BASS_ChannelGetData(self.currentReadingStream, buffer, length);
-		sharedInstance.state = ISMS_AE_STATE_finishedWaitingForData;
-		
-		// Check if stream is now complete
-		if (!BASS_ChannelIsActive(self.currentStream))
-		{
-			// Stream is done, free the stream
-			//DLog(@"current stream: %u  currentStreamTempo: %u", self.currentStream, self.currentStreamTempo); 
-			if (self.currentStreamTempo) BASS_StreamFree(self.currentStreamTempo);
-			BASS_StreamFree(self.currentStream);
-			//DLog(@"freed current stream: %u  currentStreamTempo: %u", self.currentStream, self.currentStreamTempo); 
+
+	@autoreleasepool 
+	{
+		if (BASS_ChannelIsActive(self.currentStream))
+		{		
+			r = BASS_ChannelGetData(self.currentReadingStream, buffer, length);
 			
-			// Increment current playlist index
-			[currPlaylistDAO incrementIndex];
+			sharedInstance.state = ISMS_AE_STATE_finishedWaitingForData;
 			
-			// Send song end notification
-			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnded];
-			
-			// Flip the current/next streams
-			self.BASSisFilestream1 = !self.BASSisFilestream1;
-			
-			// Check if the frequency of this stream matches the BASS output
-			if (self.bassReinitSampleRate)
+			// Check if stream is now complete
+			if (!BASS_ChannelIsActive(self.currentReadingStream))
 			{
-				// The sample rates don't match, so re-init bass
-				[self performSelectorOnMainThread:@selector(start) withObject:nil waitUntilDone:NO];
+				// Stream is done, free the stream
+				//DLog(@"current stream: %u  currentStreamTempo: %u", self.currentStream, self.currentStreamTempo); 
+				if (self.currentStreamTempo) BASS_StreamFree(self.currentStreamTempo);
+				BASS_StreamFree(self.currentStream);
+				//DLog(@"freed current stream: %u  currentStreamTempo: %u", self.currentStream, self.currentStreamTempo); 
 				
-				DLog(@"Must reinit bass");
-				r = BASS_STREAMPROC_END;
-			}
-			else
-			{
-				startSecondsOffset = 0;
-				startByteOffset = 0;
+				// Increment current playlist index
+				[currPlaylistDAO incrementIndex];
 				
-				// Send song start notification
-				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
+				// Send song end notification
+				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnded];
 				
-				// Prepare the next song for playback
-				[self prepareNextSongStream];
+				// Flip the current/next streams
+				self.BASSisFilestream1 = !self.BASSisFilestream1;
 				
-				r = [self bassGetOutputData:buffer length:length];
-				sharedInstance.state = ISMS_AE_STATE_finishedWaitingForData;
+				// Reset neededSize
+				self.neededSize = ULLONG_MAX;
 				
-				// Mark the last played time in the database for cache cleanup
-				currPlaylistDAO.currentSong.playedDate = [NSDate date];
+				// Check if the frequency of this stream matches the BASS output
+				if (self.bassReinitSampleRate)
+				{
+					// The sample rates don't match, so re-init bass
+					[self performSelectorOnMainThread:@selector(start) withObject:nil waitUntilDone:NO];
+					
+					DLog(@"Must reinit bass");
+					r = BASS_STREAMPROC_END;
+				}
+				else
+				{
+					startSecondsOffset = 0;
+					startByteOffset = 0;
+					
+					// Send song start notification
+					[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
+					
+					// Prepare the next song for playback
+					[self prepareNextSongStream];
+					
+					r = [self bassGetOutputData:buffer length:length];
+					sharedInstance.state = ISMS_AE_STATE_finishedWaitingForData;
+					
+					// Mark the last played time in the database for cache cleanup
+					currPlaylistDAO.currentSong.playedDate = [NSDate date];
+				}
 			}
 		}
-	}
-	else
-	{
-		DLog(@"Stream not active, freeing BASS");
-		r = BASS_STREAMPROC_END;
-		[self performSelectorOnMainThread:@selector(bassFree) withObject:nil waitUntilDone:NO];
-		
-		// Handle song caching being disabled
-		SavedSettings *settings = [SavedSettings sharedInstance];
-		if (!settings.isSongCachingEnabled || !settings.isNextSongCacheEnabled)
+		else
 		{
-			MusicSingleton *musicControls = [MusicSingleton sharedInstance];
-			[musicControls performSelectorOnMainThread:@selector(startSong) withObject:nil waitUntilDone:NO];
+			DLog(@"Stream not active, freeing BASS");
+			r = BASS_STREAMPROC_END;
+			[self performSelectorOnMainThread:@selector(bassFree) withObject:nil waitUntilDone:NO];
+			
+			// Handle song caching being disabled
+			SavedSettings *settings = [SavedSettings sharedInstance];
+			if (!settings.isSongCachingEnabled || !settings.isNextSongCacheEnabled)
+			{
+				MusicSingleton *musicControls = [MusicSingleton sharedInstance];
+				[musicControls performSelectorOnMainThread:@selector(startSong) withObject:nil waitUntilDone:NO];
+			}
 		}
 	}
 	
@@ -567,8 +508,6 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	
 	// Destroy any existing BASS instance
 	[self bassFree];
-
-	self.audioQueueShouldStopWaitingForData = NO;
 	
 	// Initialize BASS
 	BASS_SetConfig(BASS_CONFIG_IOS_MIXAUDIO, 0); // Disable mixing.	To be called before BASS_Init.
@@ -599,31 +538,11 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 - (BOOL)bassFree
 {
 	@synchronized(eqReadSyncObject)
-	{
-		// Make sure the read data loop exits
-		self.audioQueueShouldStopWaitingForData = YES;
-		
+	{		
 		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(retryStartAtOffset:) object:nil];
 		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(prepareNextSongStream) object:nil];
 		
-		// Wait for read function to end
-		if (self.state == ISMS_AE_STATE_waitingForData)
-		{
-			for (int i = 0; i < 20000; i++)
-			{
-				if (self.state != ISMS_AE_STATE_waitingForData)
-				{
-					//DLog(@"not waiting for data, breaking");
-					break;
-				}
-				//DLog(@"still waiting for data, sleeping");
-				usleep(50);
-			}
-		}
-		
-		//DLog(@"freeing bass");
 		BOOL success = BASS_Free();
-		//DLog(@"bass freed");
 		self.fileStream1 = 0;
 		self.fileStreamTempo1 = 0;
 		self.fileStream2 = 0;
@@ -631,6 +550,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 		self.outStream = 0;
 		self.volumeFx = 0;
 		self.bassReinitSampleRate = 0;
+		self.neededSize = ULLONG_MAX;
 		
 		return success;
 	}
@@ -676,6 +596,8 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	if (BASS_ChannelSetPosition(stream, bytes, BASS_POS_BYTE))
 	{
 		self.startByteOffset = bytes;
+		
+		neededSize = ULLONG_MAX;
 	}
 	else
 	{
@@ -688,14 +610,14 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	[self seekToPositionInBytes:bytes inStream:self.currentStream];
 }
 
-- (void)seekToPositionInSeconds:(NSUInteger)seconds inStream:(HSTREAM)stream
+- (void)seekToPositionInSeconds:(double)seconds inStream:(HSTREAM)stream
 {
 	NSUInteger bytes = BASS_ChannelSeconds2Bytes(stream, seconds);
 	//DLog(@"seconds: %i   bytes: %i", seconds, bytes);
 	[self seekToPositionInBytes:bytes inStream:stream];
 }
 
-- (void)seekToPositionInSeconds:(NSUInteger)seconds
+- (void)seekToPositionInSeconds:(double)seconds
 {
 	[self seekToPositionInSeconds:seconds inStream:self.currentStream];
 }
@@ -719,11 +641,11 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	BassUserInfo *userInfo = [[BassUserInfo alloc] init];
 	userInfo.mySong = nextSong;
 	userInfo.myFileHandle = fopen([nextSong.currentPath cStringUTF8], "rb");
-	
+		
 	// Try hardware and software mixing
 	self.nextStream = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_STREAM_DECODE, &fileProcs, userInfo);
 	if(!self.nextStream) self.nextStream = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_SAMPLE_SOFTWARE|BASS_STREAM_DECODE, &fileProcs, userInfo);
-	
+		
 	if (self.nextStream)
 	{
 		// Set the stream free sync
@@ -792,6 +714,8 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 			return NO;
 		}
 				
+		neededSize = ULLONG_MAX;
+				
 		// Create the stream
 		self.fileStream1 = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_STREAM_DECODE, &fileProcs, userInfo);
 		if(!self.fileStream1) self.fileStream1 = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_SAMPLE_SOFTWARE|BASS_STREAM_DECODE, &fileProcs, userInfo);
@@ -799,11 +723,11 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 		{
 			// Add the stream free callback
 			BASS_ChannelSetSync(self.fileStream1, BASS_SYNC_FREE, 0, MyStreamFreeCallback, userInfo);
-			
+						
 			// Stream successfully created
 			return YES;
 		}
-		
+				
 		// Failed to create the stream
 		//DLog(@"failed to create stream");
 		return NO;
@@ -884,8 +808,16 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 			if (byteOffset)
 			{
 				self.startByteOffset = [byteOffset unsignedLongLongValue];
-				if (self.startByteOffset > 0)
-					[self seekToPositionInBytes:self.startByteOffset inStream:self.fileStream1];
+				
+				if (seconds)
+				{
+					[self seekToPositionInSeconds:[seconds doubleValue] inStream:self.fileStream1];
+				}
+				else
+				{
+					if (self.startByteOffset > 0)
+						[self seekToPositionInBytes:self.startByteOffset inStream:self.fileStream1];
+				}
 			}
 			else if (seconds)
 			{
@@ -920,7 +852,8 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 			
 			currentSong.playedDate = [NSDate date];
 		}
-		else if (!self.fileStream1 && !currentSong.isFullyCached && currentSong.localFileSize < MIN_FILESIZE_TO_FAIL)
+		else if (!self.fileStream1 && !currentSong.isFullyCached 
+				 && currentSong.localFileSize < MIN_FILESIZE_TO_FAIL)
 		{
 			// Failed to create the stream, retrying
 			//DLog(@"------failed to create stream, retrying in 2 seconds------");
@@ -1333,11 +1266,11 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 
 - (void)setup
 {	
+	neededSize = ULLONG_MAX;
 	bassUpdatePeriod = BASS_GetConfig(BASS_CONFIG_UPDATEPERIOD);
 	bufferLengthMillis = ISMS_BASSBufferSize;
 	bassReinitSampleRate = 0;
 	state = ISMS_AE_STATE_stopped;
-	audioQueueShouldStopWaitingForData = NO;
 	BASSisFilestream1 = YES;
 	fileStream1 = 0;
 	fileStreamTempo1 = 0;

@@ -27,6 +27,7 @@
 @property NSUInteger numOfReconnects;
 @property (retain) NSThread *loadingThread;
 @property BOOL isTempCache;
+@property NSUInteger bitrate;
 @property (readonly) NSString *filePath;
 @property BOOL partialPrecacheSleep;
 @property BOOL isDownloading;

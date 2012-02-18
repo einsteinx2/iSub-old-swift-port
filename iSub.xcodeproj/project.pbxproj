@@ -28,9 +28,6 @@
 		5306236D14D3295300D320A8 /* EqualizerPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306236C14D3295300D320A8 /* EqualizerPathView.m */; };
 		5306236E14D3295300D320A8 /* EqualizerPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306236C14D3295300D320A8 /* EqualizerPathView.m */; };
 		5306236F14D3295300D320A8 /* EqualizerPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306236C14D3295300D320A8 /* EqualizerPathView.m */; };
-		5306238014D3597E00D320A8 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5306237F14D3597E00D320A8 /* libbass.a */; };
-		5306238114D3597E00D320A8 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5306237F14D3597E00D320A8 /* libbass.a */; };
-		5306238214D3597E00D320A8 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5306237F14D3597E00D320A8 /* libbass.a */; };
 		5306238C14D4BB7E00D320A8 /* controller-equalizer.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306238A14D4BB7E00D320A8 /* controller-equalizer.png */; };
 		5306238D14D4BB7E00D320A8 /* controller-equalizer.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306238A14D4BB7E00D320A8 /* controller-equalizer.png */; };
 		5306238E14D4BB7E00D320A8 /* controller-equalizer.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306238A14D4BB7E00D320A8 /* controller-equalizer.png */; };
@@ -80,6 +77,9 @@
 		531B6D75147C416B00BA28B9 /* NSNotificationCenter+MainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B6D73147C416B00BA28B9 /* NSNotificationCenter+MainThread.m */; };
 		531B6D76147C416B00BA28B9 /* NSNotificationCenter+MainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B6D73147C416B00BA28B9 /* NSNotificationCenter+MainThread.m */; };
 		531D8EFB11890FED00B7B040 /* QueueAlbumXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 531D8EF811890FED00B7B040 /* QueueAlbumXMLParser.m */; };
+		531ECF5714EF379000F4E09E /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 531ECF5614EF379000F4E09E /* libbass.a */; };
+		531ECF5814EF379000F4E09E /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 531ECF5614EF379000F4E09E /* libbass.a */; };
+		531ECF5914EF379000F4E09E /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 531ECF5614EF379000F4E09E /* libbass.a */; };
 		531F157C126F6B5600F524BD /* NSString+hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F157B126F6B5600F524BD /* NSString+hex.m */; };
 		531F1597126F711100F524BD /* HomeXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F1596126F711100F524BD /* HomeXMLParser.m */; };
 		531F166E126FA2E600F524BD /* HomeAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F166D126FA2E600F524BD /* HomeAlbumViewController.m */; };
@@ -2065,7 +2065,6 @@
 		5306236714D3237800D320A8 /* UIBezierPath+Smoothing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+Smoothing.m"; sourceTree = "<group>"; };
 		5306236B14D3295300D320A8 /* EqualizerPathView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EqualizerPathView.h; sourceTree = "<group>"; };
 		5306236C14D3295300D320A8 /* EqualizerPathView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EqualizerPathView.m; sourceTree = "<group>"; };
-		5306237F14D3597E00D320A8 /* libbass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbass.a; sourceTree = "<group>"; };
 		5306238A14D4BB7E00D320A8 /* controller-equalizer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-equalizer.png"; path = "Images/Player Icons/controller-equalizer.png"; sourceTree = "<group>"; };
 		5306238B14D4BB7E00D320A8 /* controller-equalizer@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-equalizer@2x.png"; path = "Images/Player Icons/controller-equalizer@2x.png"; sourceTree = "<group>"; };
 		5306239214D4BCAD00D320A8 /* eqView.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = eqView.png; path = "Images/Player Icons/eqView.png"; sourceTree = "<group>"; };
@@ -2111,6 +2110,7 @@
 		531B6D73147C416B00BA28B9 /* NSNotificationCenter+MainThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNotificationCenter+MainThread.m"; sourceTree = "<group>"; };
 		531D8EF711890FED00B7B040 /* QueueAlbumXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueueAlbumXMLParser.h; sourceTree = "<group>"; };
 		531D8EF811890FED00B7B040 /* QueueAlbumXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueueAlbumXMLParser.m; sourceTree = "<group>"; };
+		531ECF5614EF379000F4E09E /* libbass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbass.a; sourceTree = "<group>"; };
 		531F157A126F6B5600F524BD /* NSString+hex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+hex.h"; sourceTree = "<group>"; };
 		531F157B126F6B5600F524BD /* NSString+hex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+hex.m"; sourceTree = "<group>"; };
 		531F1595126F711100F524BD /* HomeXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeXMLParser.h; sourceTree = "<group>"; };
@@ -3134,7 +3134,7 @@
 				53400AA91496858600165581 /* libbass_fx.a in Frameworks */,
 				53DC4EDF149D6A9E00CC3BB4 /* libFlurryAnalytics.a in Frameworks */,
 				538239A914CFD72800DF091F /* libCrittercism_v3_1_1.a in Frameworks */,
-				5306238014D3597E00D320A8 /* libbass.a in Frameworks */,
+				531ECF5714EF379000F4E09E /* libbass.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3166,7 +3166,7 @@
 				53400AAB1496858600165581 /* libbass_fx.a in Frameworks */,
 				53DC4EE1149D6A9E00CC3BB4 /* libFlurryAnalytics.a in Frameworks */,
 				538239AB14CFD72800DF091F /* libCrittercism_v3_1_1.a in Frameworks */,
-				5306238214D3597E00D320A8 /* libbass.a in Frameworks */,
+				531ECF5914EF379000F4E09E /* libbass.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3198,7 +3198,7 @@
 				53400AAA1496858600165581 /* libbass_fx.a in Frameworks */,
 				53DC4EE0149D6A9E00CC3BB4 /* libFlurryAnalytics.a in Frameworks */,
 				538239AA14CFD72800DF091F /* libCrittercism_v3_1_1.a in Frameworks */,
-				5306238114D3597E00D320A8 /* libbass.a in Frameworks */,
+				531ECF5814EF379000F4E09E /* libbass.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3297,7 +3297,7 @@
 				536AD1D211EA628200387CB0 /* libxml2.dylib */,
 				53EB4AA51405FE1B00CBA075 /* libz.dylib */,
 				5382F65614856F3C001C14C8 /* libSystem.dylib */,
-				5306237F14D3597E00D320A8 /* libbass.a */,
+				531ECF5614EF379000F4E09E /* libbass.a */,
 				53400AA01496856600165581 /* libbassmix.a */,
 				53400AA41496857400165581 /* libbassflac.a */,
 				53400AA81496858600165581 /* libbass_fx.a */,

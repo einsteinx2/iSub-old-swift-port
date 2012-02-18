@@ -497,7 +497,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 }
 
-- (void)SUSStreamHandlerStartPlayback:(SUSStreamHandler *)handler byteOffset:(unsigned long long)bytes secondsOffset:(double)seconds
+- (void)SUSStreamHandlerStartPlayback:(SUSStreamHandler *)handler
 {	
 	// Update the last cached song
 	self.lastCachedSong = handler.mySong;
@@ -509,13 +509,14 @@ static SUSStreamSingleton *sharedInstance = nil;
 	//DLog(@"currentSong: %@   mySong: %@", currentSong, handler.mySong);
 	if ([handler.mySong isEqualToSong:currentSong])
 	{
-		//[audio startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:bytes] orSeconds:[NSNumber numberWithDouble:seconds]];
-		//DLog(@"calling audio start");
 		[audio start];
-		//DLog(@"audio start called");
-		audio.startByteOffset = bytes;
-		audio.startSecondsOffset = seconds;
-		//DLog(@"set byte and second offset");
+		
+		// Only for temp cached files
+		if (handler.isTempCache)
+		{
+			audio.startByteOffset = handler.byteOffset;
+			audio.startSecondsOffset = handler.secondsOffset;;
+		}
 	}
 	else if ([handler.mySong isEqualToSong:nextSong])
 	{
@@ -611,11 +612,20 @@ static SUSStreamSingleton *sharedInstance = nil;
 	handlerStack = handlerStack ? handlerStack : [[NSMutableArray alloc] initWithCapacity:0];
 	if ([handlerStack count] > 0)
 	{
-		for (SUSStreamHandler *handler in handlerStack)
+		if ([(SUSStreamHandler *)[handlerStack firstObject] isTempCache])
 		{
-			// Resume any handlers that were downloading when iSub closed
-			if (handler.isDownloading)
-				[handler start:YES];
+			[self removeAllStreams];
+		}
+		else
+		{
+			for (SUSStreamHandler *handler in handlerStack)
+			{
+				// Resume any handlers that were downloading when iSub closed
+				if (handler.isDownloading && !handler.isTempCache)
+				{
+					[handler start:YES];
+				}
+			}
 		}
 	}
 	
