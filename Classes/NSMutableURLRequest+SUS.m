@@ -21,9 +21,9 @@ static NSArray *ver1_5_0 = nil;
 static NSArray *ver1_6_0 = nil;
 static NSSet *setOfVersions = nil;
 
-__attribute__((constructor))
-static void initialize_versionArrays() 
++ (void)initialize
 {
+	DLog(@"NSMutableURLRequest initialize called");
     ver1_0_0 = [[NSArray alloc] initWithObjects:@"ping", @"getLicense", @"getMusicFolders", @"getNowPlaying", @"getIndexes", @"getMusicDirectory", @"search", @"getPlaylists", @"getPlaylist", @"download", @"stream", @"getCoverArt", @"1.0.0", nil];
     ver1_2_0 = [[NSArray alloc] initWithObjects:@"createPlaylist", @"deletePlaylist", @"getChatMessages", @"addChatMessage", @"getAlbumList", @"getRandomSongs", @"getLyrics", @"jukeboxControl", @"1.2.0", nil];
     ver1_3_0 = [[NSArray alloc] initWithObjects:@"getUser", @"deleteUser", @"1.3.0", nil];
@@ -31,18 +31,6 @@ static void initialize_versionArrays()
     ver1_5_0 = [[NSArray alloc] initWithObjects:@"scrobble", @"1.5.0", nil];
     ver1_6_0 = [[NSArray alloc] initWithObjects:@"getPodcasts", @"getShares", @"createShare", @"updateShare", @"deleteShare", @"setRating", @"1.6.0", nil];
     setOfVersions = [[NSSet alloc] initWithObjects:ver1_0_0, ver1_2_0, ver1_3_0, ver1_4_0, ver1_5_0, ver1_6_0, nil];
-}
-
-__attribute__((destructor))
-static void destroy_versionArrays() 
-{
-    [ver1_0_0 release]; ver1_0_0 = nil;
-    [ver1_2_0 release]; ver1_2_0 = nil;
-    [ver1_3_0 release]; ver1_3_0 = nil;
-    [ver1_4_0 release]; ver1_4_0 = nil;
-    [ver1_5_0 release]; ver1_5_0 = nil;
-    [ver1_6_0 release]; ver1_6_0 = nil;
-    [setOfVersions release]; setOfVersions = nil;
 }
 
 + (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action forUrlString:(NSString *)url username:(NSString *)user password:(NSString *)pass andParameters:(NSDictionary *)parameters byteOffset:(NSUInteger)offset
@@ -72,8 +60,8 @@ static void destroy_versionArrays()
 		{
 			if ((NSNull *)[parameters objectForKey:key] == [NSNull null])
 			{
-				DLog(@"Received a null parameter for key: %@ for action: %@", key, action);
-				DLog(@"Received a null parameter for key: %@ for action: %@  stack trace:\n%@", key, action, [NSThread callStackSymbols]);
+				if ([NSThread respondsToSelector:@selector(callStackSymbols)])
+					DLog(@"Received a null parameter for key: %@ for action: %@  stack trace:\n%@", key, action, [NSThread callStackSymbols]);
 			}
 			else
 			{

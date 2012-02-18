@@ -27,19 +27,18 @@
 	//UIColor *darkGray =  [UIColor colorWithRed:255./186. green:255./191. blue:255./198. alpha:1.];
 	UIColor *lightGray = [UIColor colorWithRed:255./226. green:255./231. blue:255./238. alpha:1.];
 	
-	[[UIColor grayColor] setStroke];
-	UIBezierPath *topPath = [UIBezierPath bezierPath];
-	[topPath moveToPoint:CGPointMake(0, 0)];
-	[topPath addLineToPoint:CGPointMake(self.bounds.size.width, 0)];
-	topPath.lineWidth = 1;
-	[topPath stroke];
+	CGContextRef context = UIGraphicsGetCurrentContext(); 
+    CGContextSetStrokeColorWithColor(context, [UIColor grayColor].CGColor);
+    CGContextSetLineWidth(context, 1);
+    CGContextMoveToPoint(context, 0, 0);
+    CGContextAddLineToPoint(context, self.bounds.size.width, 0);
+    CGContextStrokePath(context);
 	
-	[lightGray setStroke];
-	UIBezierPath *bottomPath = [UIBezierPath bezierPath];
-	[bottomPath moveToPoint:CGPointMake(0, 1)];
-	[bottomPath addLineToPoint:CGPointMake(self.bounds.size.width, 1)];
-	bottomPath.lineWidth = 1;
-	[bottomPath stroke];
+	CGContextSetStrokeColorWithColor(context, lightGray.CGColor);
+    CGContextSetLineWidth(context, 1);
+    CGContextMoveToPoint(context, 0, 1);
+    CGContextAddLineToPoint(context, self.bounds.size.width, 1);
+    CGContextStrokePath(context);
 }
 
 

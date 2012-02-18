@@ -118,12 +118,15 @@
 - (void)start:(BOOL)resume
 {
 	if (self.isDownloading)
-		DLog(@"STARTING HANDLER THAT IS ALREADY DOWNLOADING: %@", [NSThread callStackSymbols]);
+	{
+		//if ([NSThread respondsToSelector:@selector(callStackSymbols)])
+		//	DLog(@"STARTING HANDLER THAT IS ALREADY DOWNLOADING: %@", [NSThread callStackSymbols]);
+	}
 	
-	DLog(@"starting handler for: %@", mySong);
+	//DLog(@"starting handler for: %@", mySong);
 	if (!resume)
 	{
-		DLog(@"removing temp file for for: %@", mySong);
+		//DLog(@"removing temp file for for: %@", mySong);
 		// Remove temp file for this song if exists
 		[[NSFileManager defaultManager] removeItemAtPath:self.mySong.localTempPath error:NULL];
 		
@@ -131,14 +134,14 @@
 		if (self.isTempCache)
 		{
 			[[CacheSingleton sharedInstance] clearTempCache];
-			DLog(@"clearing the temp cache for: %@", mySong);
+			//DLog(@"clearing the temp cache for: %@", mySong);
 		}
 	}
 	
 	SavedSettings *settings = [SavedSettings sharedInstance];
 
 	// Create the file handle
-	DLog(@"created file handle for: %@  path: %@", mySong, self.filePath);
+	//DLog(@"created file handle for: %@  path: %@", mySong, self.filePath);
 	self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.filePath];
 	
 	if (self.fileHandle)
@@ -146,14 +149,14 @@
 		if (resume)
 		{
 			// File exists so seek to end
-			DLog(@"seeking to end to resume for: %@  path: %@", mySong, self.filePath);
+			//DLog(@"seeking to end to resume for: %@  path: %@", mySong, self.filePath);
 			self.totalBytesTransferred = [self.fileHandle seekToEndOfFile];
 			self.byteOffset = self.totalBytesTransferred;
 		}
 		else
 		{
 			// File exists so remove it
-			DLog(@"not resuming, and file exists so removing it for: %@  path: %@", mySong, self.filePath);
+			//DLog(@"not resuming, and file exists so removing it for: %@  path: %@", mySong, self.filePath);
 			[self.fileHandle closeFile];
 			self.fileHandle = nil;
 			[[NSFileManager defaultManager] removeItemAtPath:self.filePath error:NULL];
@@ -163,7 +166,7 @@
 	if (!resume)
 	{
 		// Create the file
-		DLog(@"not resuming, creating file handle for: %@  path: %@", mySong, self.filePath);
+		//DLog(@"not resuming, creating file handle for: %@  path: %@", mySong, self.filePath);
 		self.totalBytesTransferred = 0;
 		[[NSFileManager defaultManager] createFileAtPath:self.filePath contents:[NSData data] attributes:nil];
 		self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.filePath];
@@ -214,9 +217,9 @@
 		{
 			self.isDownloading = YES;
 			[self performSelectorOnMainThread:@selector(startConnectionInternalSuccess) withObject:nil waitUntilDone:NO];
-			DLog(@"Stream handler download starting for %@", mySong);
+			//DLog(@"Stream handler download starting for %@", mySong);
 			CFRunLoopRun();
-			DLog(@"Stream handler runloop finished for %@", mySong);
+			//DLog(@"Stream handler runloop finished for %@", mySong);
 		}
 		else
 		{
@@ -250,7 +253,7 @@
 	// Pop out of infinite loop if partially pre-cached
 	self.partialPrecacheSleep = NO;
 	
-	DLog(@"Stream handler request canceled for %@", mySong);
+	//DLog(@"Stream handler request canceled for %@", mySong);
 	[self.connection cancel]; 
 	self.connection = nil;
 	
@@ -344,7 +347,7 @@
 	if (!isDelegateNotifiedToStartPlayback && totalBytesTransferred >= ISMSMinBytesToStartPlayback(bitrate))
 	{
 		isDelegateNotifiedToStartPlayback = YES;
-		DLog(@"player told to start playback");
+		//DLog(@"player told to start playback");
 		[self performSelectorOnMainThread:@selector(startPlaybackInternal) withObject:nil waitUntilDone:NO];
 	}
 	
@@ -495,7 +498,7 @@
 	else
 	{		
 		// Mark song as cached
-		DLog(@"Stream handler connection did finish for %@", mySong);
+		//DLog(@"Stream handler connection did finish for %@", mySong);
 		if (!isTempCache)
 			mySong.isFullyCached = YES;
 	}

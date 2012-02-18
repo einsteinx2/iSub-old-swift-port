@@ -40,7 +40,6 @@
 
 @property (retain) NSTimer *drawTimer;
 
-@property (retain) UIBezierPath *path;
 
 - (void)erase;
 - (void)eraseBitBuffer;

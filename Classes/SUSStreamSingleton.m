@@ -39,7 +39,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 	
 	for (SUSStreamHandler *handler in self.handlerStack)
 	{
-		DLog(@"handler.mySong: %@    aSong: %@", handler.mySong.title, aSong.title);
+		//DLog(@"handler.mySong: %@    aSong: %@", handler.mySong.title, aSong.title);
 		if ([handler.mySong isEqualToSong:aSong])
 		{
 			return handler;
@@ -380,7 +380,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 			SUSCoverArtLargeDAO *artDataModel = [SUSCoverArtLargeDAO dataModel];
 			if (![artDataModel coverArtExistsForId:song.coverArtId])
 			{
-				DLog(@"Cover art doesn't exist, loading for id: %@", song.coverArtId);
+				//DLog(@"Cover art doesn't exist, loading for id: %@", song.coverArtId);
 				SUSCoverArtLargeLoader *loader = [[SUSCoverArtLargeLoader alloc] initWithDelegate:self];
 				[loader loadCoverArtId:song.coverArtId];
 			}
@@ -506,20 +506,20 @@ static SUSStreamSingleton *sharedInstance = nil;
 	Song *nextSong = currentPlaylistDAO.nextSong;
 	AudioEngine *audio = [AudioEngine sharedInstance];
 	
-	DLog(@"currentSong: %@   mySong: %@", currentSong, handler.mySong);
+	//DLog(@"currentSong: %@   mySong: %@", currentSong, handler.mySong);
 	if ([handler.mySong isEqualToSong:currentSong])
 	{
 		//[audio startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:bytes] orSeconds:[NSNumber numberWithDouble:seconds]];
-		DLog(@"calling audio start");
+		//DLog(@"calling audio start");
 		[audio start];
-		DLog(@"audio start called");
+		//DLog(@"audio start called");
 		audio.startByteOffset = bytes;
 		audio.startSecondsOffset = seconds;
-		DLog(@"set byte and second offset");
+		//DLog(@"set byte and second offset");
 	}
 	else if ([handler.mySong isEqualToSong:nextSong])
 	{
-		DLog(@"preparing next song stream");
+		//DLog(@"preparing next song stream");
 		[audio prepareNextSongStream];
 	}
 	
@@ -531,10 +531,10 @@ static SUSStreamSingleton *sharedInstance = nil;
 	if (![MusicSingleton sharedInstance].isQueueListDownloading)
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 
-	DLog(@"stream handler failed: %@", handler);
+	//DLog(@"stream handler failed: %@", handler);
 	if (handler.numOfReconnects < maxNumOfReconnects)
 	{
-		DLog(@"retrying stream handler");
+		//DLog(@"retrying stream handler");
 		// Less than max number of reconnections, so try again 
 		handler.numOfReconnects++;
 		// Retry connection after a delay to prevent a tight loop
@@ -543,8 +543,8 @@ static SUSStreamSingleton *sharedInstance = nil;
 	}
 	else
 	{
-		DLog(@"removing stream handler");
-		DLog(@"handlerStack: %@", self.handlerStack);
+		//DLog(@"removing stream handler");
+		//DLog(@"handlerStack: %@", self.handlerStack);
 		// Tried max number of times so remove
 		[self removeStream:handler];
 	}
@@ -558,22 +558,22 @@ static SUSStreamSingleton *sharedInstance = nil;
 	// Update the last cached song
 	self.lastCachedSong = handler.mySong;
 	
-	DLog(@"stream handler finished: %@", handler);
+	//DLog(@"stream handler finished: %@", handler);
 	
 	if (handler.isTempCache)
 		self.lastTempCachedSong = handler.mySong;
-	DLog(@"handler.isTempCache: %@   lastTempCachedSong: %@", NSStringFromBOOL(handler.isTempCache), self.lastTempCachedSong);
+	//DLog(@"handler.isTempCache: %@   lastTempCachedSong: %@", NSStringFromBOOL(handler.isTempCache), self.lastTempCachedSong);
 
 	// Remove the handler from the stack
-	DLog(@"handlerStack: %@  about to remove the stream", self.handlerStack);
+	//DLog(@"handlerStack: %@  about to remove the stream", self.handlerStack);
 	[self removeStream:handler];
 	
-	DLog(@"handlerStack: %@", self.handlerStack);
+	//DLog(@"handlerStack: %@", self.handlerStack);
 	
 	// Start the next handler which is now the first object
 	if ([self.handlerStack count] > 0)
 	{
-		DLog(@"starting first handler in stack");
+		//DLog(@"starting first handler in stack");
 		SUSStreamHandler *handler = (SUSStreamHandler *)[self.handlerStack firstObjectSafe];
 		[self startHandler:handler];
 	}

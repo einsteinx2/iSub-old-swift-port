@@ -10,8 +10,6 @@
 
 @interface EqualizerPathView : UIView
 
-@property (retain) UIBezierPath *path;
-
 @property (retain) NSArray *points;
 
 @end

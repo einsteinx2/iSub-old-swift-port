@@ -224,43 +224,39 @@ QWORD CALLBACK MyFileLenProc(void *user)
 	
 	@autoreleasepool
 	{
-		// TODO: why is this synced?
-		@synchronized([AudioEngine class])
+		BassUserInfo *userInfo = (BassUserInfo *)user;
+		if (userInfo.myFileHandle == NULL)
+			return 0;
+		
+		PlaylistSingleton *currentPlaylistDAO = sharedInstance.currPlaylistDAO;
+		
+		Song *theSong = [currentPlaylistDAO currentSong];
+		if ([userInfo.mySong isEqualToSong:theSong])
 		{
-			BassUserInfo *userInfo = (BassUserInfo *)user;
-			if (userInfo.myFileHandle == NULL)
-				return 0;
-			
-			PlaylistSingleton *currentPlaylistDAO = sharedInstance.currPlaylistDAO;
-			
-			Song *theSong = [currentPlaylistDAO currentSong];
-			if ([userInfo.mySong isEqualToSong:theSong])
-			{
-				// It's the current song
-				//DLog(@"Checking file length for current song");
-			}
-			else
-			{
-				// It's not the current song so it's the next song
-				//DLog(@"Checking file length for next song");
-				theSong = [currentPlaylistDAO nextSong];
-			}
-			
-			QWORD length = 0;
-			if (theSong.isFullyCached || theSong.isTempCached)
-			{
-				// Return actual file size on disk
-				NSString *path = theSong.isTempCached ? theSong.localTempPath : theSong.localPath;
-				length = [[[NSFileManager defaultManager] attributesOfItemAtPath:path error:NULL] fileSize];
-			}
-			else
-			{
-				// Return server reported file size
-				length = [theSong.size longLongValue];
-			}
-			//DLog(@"File Length: %llu   isFullyCached: %@", length, NSStringFromBOOL(theSong.isFullyCached));
-			return length;
+			// It's the current song
+			//DLog(@"Checking file length for current song");
 		}
+		else
+		{
+			// It's not the current song so it's the next song
+			//DLog(@"Checking file length for next song");
+			theSong = [currentPlaylistDAO nextSong];
+		}
+		
+		QWORD length = 0;
+		if (theSong.isFullyCached || theSong.isTempCached)
+		{
+			// Return actual file size on disk
+			NSString *path = theSong.isTempCached ? theSong.localTempPath : theSong.localPath;
+			length = [[[NSFileManager defaultManager] attributesOfItemAtPath:path error:NULL] fileSize];
+		}
+		else
+		{
+			// Return server reported file size
+			length = [theSong.size longLongValue];
+		}
+		//DLog(@"File Length: %llu   isFullyCached: %@", length, NSStringFromBOOL(theSong.isFullyCached));
+		return length;
 	}
 }
 
@@ -339,7 +335,7 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 						
 						// As long as audioQueueShouldStopWaitingForData is false, the song is not fully cached, and
 						// the file size is less than the current size + 10 buffers worth of data, then wait
-						//DLog(@"Not enough data, sleeping for %f   fileSize: %llu  neededSize: %llu", sleepTime, theSong.localFileSize, neededSize);
+						DLog(@"Not enough data for %@, sleeping for %f   fileSize: %llu  neededSize: %llu", theSong.title, sleepTime, theSong.localFileSize, neededSize);
 						[NSThread sleepForTimeInterval:sleepTime];
 					}
 					
@@ -433,6 +429,7 @@ BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFi
 				// The sample rates don't match, so re-init bass
 				[self performSelectorOnMainThread:@selector(start) withObject:nil waitUntilDone:NO];
 				
+				DLog(@"Must reinit bass");
 				r = BASS_STREAMPROC_END;
 			}
 			else
@@ -456,7 +453,7 @@ BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFi
 	}
 	else
 	{
-		//DLog(@"Stream not active, freeing BASS");
+		DLog(@"Stream not active, freeing BASS");
 		r = BASS_STREAMPROC_END;
 		[self performSelectorOnMainThread:@selector(bassFree) withObject:nil waitUntilDone:NO];
 		
@@ -776,7 +773,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 		[self performSelector:@selector(prepareNextSongStream) withObject:nil afterDelay:RETRY_DELAY];
 	}
 	
-	DLog(@"nextSong: %i", self.nextStream);
+	DLog(@"nextSong: %i\n   ", self.nextStream);
 }
 
 - (BOOL)prepareFileStream1
@@ -1092,6 +1089,7 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 
 - (void)setNextStream:(HSTREAM)stream
 {
+	DLog(@"setting next stream");
 	@synchronized(currentStreamSyncObject)
 	{
 		if (self.BASSisFilestream1)

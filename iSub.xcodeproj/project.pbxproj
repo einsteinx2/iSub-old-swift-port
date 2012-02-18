@@ -1286,7 +1286,6 @@
 		53BC279D139AF0DD00A825F1 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
 		53BC279E139AF0DD00A825F1 /* Artist.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1D61139F05200107D63 /* Artist.m */; };
 		53BC279F139AF0DD00A825F1 /* Index.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1FD1139F5A500107D63 /* Index.m */; };
-		53BC27A0139AF0DD00A825F1 /* XMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D23A1139F9DC00107D63 /* XMLParser.m */; };
 		53BC27A1139AF0DD00A825F1 /* AlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D3EC113A338500107D63 /* AlbumViewController.m */; };
 		53BC27A2139AF0DD00A825F1 /* Album.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D41F113A4E2C00107D63 /* Album.m */; };
 		53BC27A3139AF0DD00A825F1 /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D5A5113A63F300107D63 /* Song.m */; };
@@ -1776,7 +1775,6 @@
 		53DCF4FE13BFEAD3009160F9 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
 		53DCF4FF13BFEAD3009160F9 /* Artist.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1D61139F05200107D63 /* Artist.m */; };
 		53DCF50013BFEAD3009160F9 /* Index.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1FD1139F5A500107D63 /* Index.m */; };
-		53DCF50113BFEAD3009160F9 /* XMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D23A1139F9DC00107D63 /* XMLParser.m */; };
 		53DCF50213BFEAD3009160F9 /* AlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D3EC113A338500107D63 /* AlbumViewController.m */; };
 		53DCF50313BFEAD3009160F9 /* Album.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D41F113A4E2C00107D63 /* Album.m */; };
 		53DCF50413BFEAD3009160F9 /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D5A5113A63F300107D63 /* Song.m */; };
@@ -1983,7 +1981,6 @@
 		53F11B7D1460FBAD0010820B /* SUSServerPlaylistsDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F11B7A1460FBAD0010820B /* SUSServerPlaylistsDAO.m */; };
 		53F2D1D71139F05200107D63 /* Artist.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1D61139F05200107D63 /* Artist.m */; };
 		53F2D1FE1139F5A500107D63 /* Index.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1FD1139F5A500107D63 /* Index.m */; };
-		53F2D23B1139F9DC00107D63 /* XMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D23A1139F9DC00107D63 /* XMLParser.m */; };
 		53F2D3EE113A338500107D63 /* AlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D3EC113A338500107D63 /* AlbumViewController.m */; };
 		53F2D3EF113A338500107D63 /* AlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F2D3ED113A338500107D63 /* AlbumViewController.xib */; };
 		53F2D420113A4E2C00107D63 /* Album.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D41F113A4E2C00107D63 /* Album.m */; };
@@ -3043,8 +3040,6 @@
 		53F2D1D61139F05200107D63 /* Artist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Artist.m; sourceTree = "<group>"; };
 		53F2D1FC1139F5A500107D63 /* Index.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Index.h; sourceTree = "<group>"; };
 		53F2D1FD1139F5A500107D63 /* Index.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Index.m; sourceTree = "<group>"; };
-		53F2D2391139F9DC00107D63 /* XMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLParser.h; sourceTree = "<group>"; };
-		53F2D23A1139F9DC00107D63 /* XMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMLParser.m; sourceTree = "<group>"; };
 		53F2D3EB113A338500107D63 /* AlbumViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumViewController.h; sourceTree = "<group>"; };
 		53F2D3EC113A338500107D63 /* AlbumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumViewController.m; sourceTree = "<group>"; };
 		53F2D3ED113A338500107D63 /* AlbumViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlbumViewController.xib; sourceTree = "<group>"; };
@@ -3493,8 +3488,6 @@
 				531D8EF811890FED00B7B040 /* QueueAlbumXMLParser.m */,
 				53BA48661284C2340010B380 /* JukeboxXMLParser.h */,
 				53BA48671284C2340010B380 /* JukeboxXMLParser.m */,
-				53F2D2391139F9DC00107D63 /* XMLParser.h */,
-				53F2D23A1139F9DC00107D63 /* XMLParser.m */,
 				531F1595126F711100F524BD /* HomeXMLParser.h */,
 				531F1596126F711100F524BD /* HomeXMLParser.m */,
 				53E75E82127123B300BC1A19 /* SearchXMLParser.h */,
@@ -3533,6 +3526,10 @@
 		534098BB142E5DC500455754 /* Loaders */ = {
 			isa = PBXGroup;
 			children = (
+				534098C0142E66CB00455754 /* SUSLoaderManager.h */,
+				539A356813D3E48C00D80554 /* SUSLoaderDelegate.h */,
+				5386FB801406243A0009F73F /* SUSLoader.h */,
+				5386FB811406243A0009F73F /* SUSLoader.m */,
 				535CB68E12E383F400389DA1 /* SUSQueueAllLoader.h */,
 				535CB68F12E383F400389DA1 /* SUSQueueAllLoader.m */,
 				535EFD82145D144400EDF867 /* SUSRootFoldersLoader.h */,
@@ -4142,10 +4139,9 @@
 			isa = PBXGroup;
 			children = (
 				53E82A9C140721D50051D44B /* General */,
-				53E82A9B140721BD0051D44B /* Subsonic */,
 				53FB066011EE1C4E008A30C7 /* SUSStream Handling */,
+				53E82A9B140721BD0051D44B /* Subsonic */,
 				5304BCE111BD58E3000EF6F9 /* NSURLConnectionDelegates */,
-				535366D914CB55AC00954448 /* Audio Engine */,
 				533A207C12887EB100539BAE /* XML Parsers */,
 			);
 			name = "Data Model";
@@ -4711,16 +4707,12 @@
 		53E82A9B140721BD0051D44B /* Subsonic */ = {
 			isa = PBXGroup;
 			children = (
-				53F98335145CD65E005A083E /* SUSServerChecker.h */,
-				53F98336145CD65E005A083E /* SUSServerChecker.m */,
-				534098C0142E66CB00455754 /* SUSLoaderManager.h */,
-				539A356813D3E48C00D80554 /* SUSLoaderDelegate.h */,
-				5386FB801406243A0009F73F /* SUSLoader.h */,
-				5386FB811406243A0009F73F /* SUSLoader.m */,
-				534098BA142E5DBA00455754 /* DAOs */,
-				534098BB142E5DC500455754 /* Loaders */,
 				53B36D7A145F95E5005538F3 /* NSMutableURLRequest+SUS.h */,
 				53B36D7B145F95E5005538F3 /* NSMutableURLRequest+SUS.m */,
+				53F98335145CD65E005A083E /* SUSServerChecker.h */,
+				53F98336145CD65E005A083E /* SUSServerChecker.m */,
+				534098BA142E5DBA00455754 /* DAOs */,
+				534098BB142E5DC500455754 /* Loaders */,
 			);
 			name = Subsonic;
 			sourceTree = "<group>";
@@ -4744,6 +4736,7 @@
 				53C751C61268A36200A4793F /* ViewObjectsSingleton.m */,
 				539D6073145E0D7D0018AA90 /* ISMSUpdateChecker.h */,
 				539D6074145E0D7D0018AA90 /* ISMSUpdateChecker.m */,
+				535366D914CB55AC00954448 /* Audio Engine */,
 			);
 			name = General;
 			sourceTree = "<group>";
@@ -6031,7 +6024,6 @@
 				28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */,
 				53F2D1D71139F05200107D63 /* Artist.m in Sources */,
 				53F2D1FE1139F5A500107D63 /* Index.m in Sources */,
-				53F2D23B1139F9DC00107D63 /* XMLParser.m in Sources */,
 				53F2D3EE113A338500107D63 /* AlbumViewController.m in Sources */,
 				53F2D420113A4E2C00107D63 /* Album.m in Sources */,
 				53F2D5A6113A63F300107D63 /* Song.m in Sources */,
@@ -6343,7 +6335,6 @@
 				53BC279D139AF0DD00A825F1 /* RootViewController.m in Sources */,
 				53BC279E139AF0DD00A825F1 /* Artist.m in Sources */,
 				53BC279F139AF0DD00A825F1 /* Index.m in Sources */,
-				53BC27A0139AF0DD00A825F1 /* XMLParser.m in Sources */,
 				53BC27A1139AF0DD00A825F1 /* AlbumViewController.m in Sources */,
 				53BC27A2139AF0DD00A825F1 /* Album.m in Sources */,
 				53BC27A3139AF0DD00A825F1 /* Song.m in Sources */,
@@ -6655,7 +6646,6 @@
 				53DCF4FE13BFEAD3009160F9 /* RootViewController.m in Sources */,
 				53DCF4FF13BFEAD3009160F9 /* Artist.m in Sources */,
 				53DCF50013BFEAD3009160F9 /* Index.m in Sources */,
-				53DCF50113BFEAD3009160F9 /* XMLParser.m in Sources */,
 				53DCF50213BFEAD3009160F9 /* AlbumViewController.m in Sources */,
 				53DCF50313BFEAD3009160F9 /* Album.m in Sources */,
 				53DCF50413BFEAD3009160F9 /* Song.m in Sources */,

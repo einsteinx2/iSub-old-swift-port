@@ -51,14 +51,14 @@ static MusicSingleton *sharedInstance = nil;
 
 - (void)loadingFailed:(SUSLoader *)theLoader withError:(NSError *)error
 {
-	DLog(@"theLoader: %@", theLoader);
+	//DLog(@"theLoader: %@", theLoader);
 	theLoader.delegate = nil;
     [theLoader release];
 }
 
 - (void)loadingFinished:(SUSLoader *)theLoader
 {
-	DLog(@"theLoader: %@", theLoader);
+	//DLog(@"theLoader: %@", theLoader);
 	theLoader.delegate = nil;
     [theLoader release];
 }
@@ -85,12 +85,12 @@ static MusicSingleton *sharedInstance = nil;
 // Start downloading the file specified in the text field.
 - (void)startDownloadQueue
 {		
-	DLog(@"queueSongObject songId: %@", queueSongObject.songId);
+	//DLog(@"queueSongObject songId: %@", queueSongObject.songId);
 	
 	Song *currentSong = [PlaylistSingleton sharedInstance].currentSong;
 	Song *nextSong = [PlaylistSingleton sharedInstance].nextSong;
 	
-	DLog(@"startDownloadQueue called");
+	//DLog(@"startDownloadQueue called");
 	
 	// Are we already downloading?  If so, stop it.
 	[self stopDownloadQueue];
@@ -99,7 +99,7 @@ static MusicSingleton *sharedInstance = nil;
 	if (queueSongObject.artist && queueSongObject.title && [SavedSettings sharedInstance].isLyricsEnabled)
 	{
         SUSLyricsLoader *lyricsLoader = [[SUSLyricsLoader alloc] initWithDelegate:self];
-		DLog(@"lyricsLoader: %@", lyricsLoader);
+		//DLog(@"lyricsLoader: %@", lyricsLoader);
         lyricsLoader.artist = queueSongObject.artist;
         lyricsLoader.title = queueSongObject.title;
         [lyricsLoader startLoad];        
@@ -338,7 +338,7 @@ double startSongSeconds = 0.0;
 // TODO: put this method somewhere and name it properly
 - (void)startSongAtOffsetInSeconds2
 {
-	DLog(@"startSongAtOffsetInSeconds2");
+	//DLog(@"startSongAtOffsetInSeconds2");
 	SavedSettings *settings = [SavedSettings sharedInstance];
 	SUSStreamSingleton *streamSingleton = [SUSStreamSingleton sharedInstance];
 	
@@ -435,7 +435,7 @@ double startSongSeconds = 0.0;
 	DLog(@"before handler stack: %@", [SUSStreamSingleton sharedInstance].handlerStack);
 	DLog(@"currentSong: %@", currentPlaylist.currentSong);
 	[[SUSStreamSingleton sharedInstance] removeAllStreamsExceptForSong:currentPlaylist.currentSong];
-	DLog(@"after handler stack: %@", [SUSStreamSingleton sharedInstance].handlerStack);
+	DLog(@"after handler stack: %@\n   ", [SUSStreamSingleton sharedInstance].handlerStack);
 	
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
@@ -474,7 +474,7 @@ double startSongSeconds = 0.0;
 	Song *currentSong = currentPlaylistDAO.currentSong;
 		
 	DLog(@"isRecover: %@  currentSong: %@", NSStringFromBOOL(settings.isRecover), currentSong);
-	DLog(@"byteOffset: %llu   seekTime: %f", settings.byteOffset, settings.seekTime);
+	DLog(@"byteOffset: %llu   seekTime: %f\n   ", settings.byteOffset, settings.seekTime);
 	
 	if (currentSong && settings.isRecover)
 	{

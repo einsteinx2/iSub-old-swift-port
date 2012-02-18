@@ -184,7 +184,9 @@
 	if ([[points lastObject] CGPointValue].x != equalizerPath.frame.size.width)
 		[sortedPoints addObject:[NSValue valueWithCGPoint:CGPointMake(equalizerPath.frame.size.width, equalizerPath.center.y)]];
 	
-	// Create and start the path
+	equalizerPath.points = sortedPoints;
+	
+	/*// Create and start the path
 	equalizerPath.path = [UIBezierPath bezierPath];
 	[equalizerPath.path moveToPoint:CGPointMake(0.0, equalizerPath.center.y)];
 	
@@ -192,7 +194,10 @@
 	for (NSValue *point in sortedPoints)
 	{
 		[equalizerPath.path addLineToPoint:point.CGPointValue];
-	}
+	}*/
+	
+	////////////////////////////////////
+	
 	/*for (int i = 0; i < [sortedPoints count]-1; i++)
 	{		
 		CGPoint point1 = [[sortedPoints objectAtIndexSafe:i] CGPointValue];
@@ -214,8 +219,7 @@
 	}*/
 	
 	// Finish the path
-	//[equalizerPath.path addLineToPoint:CGPointMake(equalizerPath.frame.size.width, equalizerPath.center.y)];
-	[equalizerPath.path closePath];
+	//[equalizerPath.path closePath];
 	
 	// Draw the curve
 	[equalizerPath setNeedsDisplay];

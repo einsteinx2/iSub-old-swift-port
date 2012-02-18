@@ -14,7 +14,6 @@
 #import "EqualizerView.h"
 #import "AudioEngine.h"
 
-#import "UIBezierPath+Smoothing.h"
 #import "BassParamEqValue.h"
 #import "SavedSettings.h"
 
@@ -33,7 +32,6 @@
 @synthesize  location;
 @synthesize  previousLocation;
 @synthesize drawTimer;
-@synthesize path;
 
 static float drawInterval = 1./20.;
 static int specWidth; //256 or 512
