@@ -7,7 +7,6 @@
 //
 
 #import "PageControlViewController.h"
-#import "SongInfoViewController.h"
 #import "CurrentPlaylistBackgroundViewController.h"
 #import "LyricsViewController.h"
 #import "DebugViewController.h"
@@ -17,6 +16,7 @@
 #import "EqualizerViewController.h"
 #import "PagingScrollView.h"
 #import "NSArray+Additions.h"
+#import "UIView+tools.h"
 
 @interface PageControlViewController (PrivateMethods)
 
@@ -28,7 +28,7 @@
 
 @implementation PageControlViewController
 
-@synthesize scrollView, pageControl, viewControllers;
+@synthesize scrollView, pageControl, viewControllers, numberOfPages, pageControlUsed, pageControlHolder;
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 //- (void)viewWillAppear:(BOOL)animated 
@@ -44,7 +44,7 @@
 	
 	appDelegate = (iSubAppDelegate *)[UIApplication sharedApplication].delegate; 
 	
-	numberOfPages = 2;
+	numberOfPages = 1;
 	if (settings.isLyricsEnabled) numberOfPages++;
 	if (settings.isCacheStatusEnabled) numberOfPages++;
 	
@@ -60,10 +60,23 @@
 	// a page is the width of the scroll view
     scrollView.pagingEnabled = YES;
 	CGSize contentSize;
+	CGFloat height;
 	if (IS_IPAD())
 		contentSize = CGSizeMake(540 * numberOfPages, 520);
 	else
-		contentSize = CGSizeMake(scrollView.bounds.size.width * numberOfPages, scrollView.bounds.size.height - 20);
+	{
+		if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation))
+		{
+			contentSize = CGSizeMake(320 * numberOfPages, numberOfPages == 1 ? 320 : 300);
+			height = numberOfPages == 1 ? 320 : 300;
+		}
+		else
+		{
+			contentSize = CGSizeMake(300 * numberOfPages, numberOfPages == 1 ? 270 : 250);
+			height = numberOfPages == 1 ? 270 : 250;
+		}
+	}
+	scrollView.height = height;
     scrollView.contentSize = contentSize;
     scrollView.showsHorizontalScrollIndicator = NO;
     scrollView.showsVerticalScrollIndicator = NO;
@@ -72,6 +85,12 @@
 	
     pageControl.numberOfPages = numberOfPages;
     pageControl.currentPage = 0;
+	
+	if (numberOfPages == 1)
+	{
+		pageControlHolder.hidden = YES;
+		pageControl.hidden = YES;
+	}
 	
 	// Load all the pages for better performance
 	/*for (int i = 0; i < numberOfPages; i++)
@@ -110,15 +129,12 @@
 			controller = [[CurrentPlaylistBackgroundViewController alloc] initWithNibName:@"CurrentPlaylistBackgroundViewController" bundle:nil];
 			break;
 		case 1:
-			controller = [[SongInfoViewController alloc] initWithNibName:@"SongInfoViewController" bundle:nil];
-			break;
-		case 2:
 			if (settings.isLyricsEnabled)
 				controller = [[LyricsViewController alloc] initWithNibName:nil bundle:nil];
 			else if (settings.isCacheStatusEnabled)
 				controller = [[DebugViewController alloc] initWithNibName:@"DebugViewController" bundle:nil];
 			break;
-		case 3:
+		case 2:
 			controller = [[DebugViewController alloc] initWithNibName:@"DebugViewController" bundle:nil];
 		default:
 			break;

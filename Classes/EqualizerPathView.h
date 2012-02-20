@@ -10,6 +10,11 @@
 
 @interface EqualizerPathView : UIView
 
-@property (retain) NSArray *points;
+@property CGPoint *points;
+@property NSUInteger numberOfPoints;
+
 
 @end
+
+static void GetFirstControlPoints(double rhs[], double x[], int length);
+static void GetCurveControlPoints(CGPoint knots[], int knotsLength, CGPoint firstControlPoints[], CGPoint secondControlPoints[]);

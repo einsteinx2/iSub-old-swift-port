@@ -18,4 +18,6 @@
 @property CGFloat height;
 @property CGSize size;
 
+@property (readonly) UIViewController *viewController;
+
 @end

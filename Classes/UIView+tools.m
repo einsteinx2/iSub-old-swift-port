@@ -101,4 +101,17 @@
 	self.frame = newFrame;
 }
 
+- (UIViewController *)viewController;
+{
+    id nextResponder = [self nextResponder];
+    if ([nextResponder isKindOfClass:[UIViewController class]]) 
+	{
+        return nextResponder;
+    } 
+	else 
+	{
+        return nil;
+    }
+}
+
 @end

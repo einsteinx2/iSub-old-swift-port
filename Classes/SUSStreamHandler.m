@@ -282,6 +282,13 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
+	if ([response isKindOfClass:[NSHTTPURLResponse class]])
+	{
+		NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+		DLog(@"allHeaderFields: %@", [httpResponse allHeaderFields]);
+		DLog(@"statusCode: %i - %@", [httpResponse statusCode], [NSHTTPURLResponse localizedStringForStatusCode:[httpResponse statusCode]]);
+	}
+	
 	self.bytesTransferred = 0;
 }
 

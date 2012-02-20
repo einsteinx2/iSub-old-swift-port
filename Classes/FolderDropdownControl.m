@@ -173,7 +173,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 			NSString *folder   = [[sortedValues objectAtIndexSafe:i] objectAtIndexSafe:1];
 			NSUInteger tag     = [[[sortedValues objectAtIndexSafe:i] objectAtIndexSafe:0] intValue];
 			CGRect labelFrame  = CGRectMake(0, (i + 1) * 30, self.frame.size.width, 30);
-			CGRect buttonFrame = CGRectMake(0, 0, self.frame.size.width - 10, 20);
+			CGRect buttonFrame = CGRectMake(0, 0, labelFrame.size.width, labelFrame.size.height);
 			
 			UILabel *folderLabel = [[UILabel alloc] initWithFrame:labelFrame];
 			folderLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -192,11 +192,11 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 			[labels addObject:folderLabel];
 			[folderLabel release];
 			
-			UIButton *folderButton = [[UIButton alloc] initWithFrame:buttonFrame];
+			UIButton *folderButton = [UIButton buttonWithType:UIButtonTypeCustom];
+			folderButton.frame = buttonFrame;
 			folderButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 			[folderButton addTarget:self action:@selector(selectFolder:) forControlEvents:UIControlEventTouchUpInside];
 			[folderLabel addSubview:folderButton];
-			[folderButton release];
 		}
 	}
 }
@@ -260,6 +260,8 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 		[delegate folderDropdownMoveViewsY:-sizeIncrease];
 		
 		arrowImage.transform = CATransform3DMakeRotation((M_PI / 180.0) * 0.0f, 0.0f, 0.0f, 1.0f);
+		
+		[delegate folderDropdownViewsFinishedMoving];
 	}
 }
 

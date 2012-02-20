@@ -11,7 +11,6 @@
 #import "DatabaseSingleton.h"
 #import "ViewObjectsSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
-#import "SongInfoViewController.h"
 #import "PageControlViewController.h"
 #import "CoverArtImageView.h"
 #import "Song.h"
@@ -41,10 +40,8 @@
 
 
 @interface iPhoneStreamingPlayerViewController ()
-
 @property (retain) UIImageView *reflectionView;
 @property (retain) NSDictionary *originalViewFrames;
-
 - (void)setupCoverArt;
 - (void)initSongInfo;
 - (void)setStopButtonImage;
@@ -55,7 +52,8 @@
 - (void)unregisterForNotifications;
 - (void)createDownloadProgressView;
 - (void)createLandscapeViews;
-
+- (void)updateFormatLabel;
+- (void)hideExtraButtons;
 @end
 
 @implementation iPhoneStreamingPlayerViewController
@@ -64,6 +62,8 @@
 @synthesize progressLabelBackground, progressLabel, bookmarkCountLabel, progressSlider, elapsedTimeLabel, remainingTimeLabel, shuffleButton, repeatButton, bookmarkButton, currentAlbumButton;
 @synthesize updateTimer, progressTimer, hasMoved, oldPosition, byteOffset, currentSong, pauseSlider, downloadProgress;
 @synthesize bookmarkEntry, bookmarkIndex, bookmarkNameTextField, bookmarkPosition;
+@synthesize coverArtHolderView, songInfoView, extraButtonsButtonOffImage, extraButtonsButtonOnImage;
+@synthesize trackLabel, genreLabel, yearLabel, formatLabel;
 
 static const CGFloat kDefaultReflectionFraction = 0.30;
 static const CGFloat kDefaultReflectionOpacity = 0.55;
@@ -100,6 +100,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	audio = [AudioEngine sharedInstance];
 	currentPlaylist = [PlaylistSingleton sharedInstance];
 	
+	extraButtonsButtonOffImage = [[UIImage imageNamed:@"controller-extras.png"] retain];
+	extraButtonsButtonOnImage = [[UIImage imageNamed:@"controller-extras-on.png"] retain];
+	
 	// Set default values
 	pageControlViewController = nil;
 	isFlipped = NO;
@@ -114,12 +117,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"player-overlay.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(songInfoToggle:)] autorelease];
 	if (!IS_IPAD())
 		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(backAction:)] autorelease];
-	
-	// Show the song info screen automatically if the setting is enabled
-	if ([SavedSettings sharedInstance].isAutoShowSongInfoEnabled)
-	{
-		[self songInfoToggle:nil];
-	}
 	
 	// Initialize the song info
 	[self initSongInfo];
@@ -140,22 +137,12 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		jukeboxVolumeView.continuous = NO;
 		jukeboxVolumeView.value = musicControls.jukeboxGain;
 		[volumeSlider addSubview:jukeboxVolumeView];
-		
-		if (musicControls.jukeboxIsPlaying)
-			[self setStopButtonImage];
-		else 
-			[self setPlayButtonImage];
 	}
 	else
 	{
 		volumeView = [[[MPVolumeView alloc] initWithFrame:volumeSlider.bounds] autorelease];
 		[volumeSlider addSubview:volumeView];
 		[volumeView sizeToFit];
-		
-		if(audio.isPlaying)
-			[self setPauseButtonImage];
-		else
-			[self setPlayButtonImage];
 	}
 	
 	// Setup the cover art reflection
@@ -169,6 +156,16 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	// Register for all notifications
 	[self registerForNotifications];
+	
+	[self extraButtonsToggleAnimated:NO saveState:NO];
+	if (![SavedSettings sharedInstance].isExtraPlayerControlsShowing)
+		[self performSelector:@selector(hideExtraButtons) withObject:nil afterDelay:4.0];
+	
+	// Show the song info screen automatically if the setting is enabled
+	if ([SavedSettings sharedInstance].isPlayerPlaylistShowing)
+	{
+		[self playlistToggleAnimated:NO saveState:NO];
+	}
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -191,7 +188,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[self createSongTitle];
 	}
 	
-	if (!IS_IPAD())
+	/*if (!IS_IPAD())
 	{
 		if (animated)
 		{
@@ -204,24 +201,46 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			 
 		if (animated)
 			 [UIView commitAnimations];
-	}
+	}*/
 	
 	[self updateDownloadProgress];
 	[self updateSlider];
+	
+	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	{
+		[musicControls jukeboxGetInfo];
+		
+		if (musicControls.jukeboxIsPlaying)
+			[self setStopButtonImage];
+		else 
+			[self setPlayButtonImage];
+	}
+	else
+	{
+		if(audio.isPlaying)
+			[self setPauseButtonImage];
+		else
+			[self setPlayButtonImage];
+	}
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
 	[super viewWillDisappear:animated];
 	
-	if (!IS_IPAD())
+	/*if (!IS_IPAD())
 	{
 		//[self.navigationController setWantsFullScreenLayout:NO];
 		[UIApplication setStatusBarHidden:NO withAnimation:YES];
 		self.navigationController.navigationBar.y = 20;
-	}
+	}*/
 	
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	if (![SavedSettings sharedInstance].isExtraPlayerControlsShowing)
+	{
+		if (isExtraButtonsShowing)
+			[self extraButtonsToggleAnimated:NO saveState:NO];
+	}
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -325,7 +344,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		NSMutableDictionary *positions = [NSMutableDictionary dictionaryWithCapacity:0];
 		[positions setObject:[NSValue valueWithCGRect:volumeSlider.frame] forKey:@"volumeSlider"];
-		[positions setObject:[NSValue valueWithCGRect:coverArtImageView.frame] forKey:@"coverArtImageView"];
+		[positions setObject:[NSValue valueWithCGRect:coverArtHolderView.frame] forKey:@"coverArtHolderView"];
 		[positions setObject:[NSValue valueWithCGRect:prevButton.frame] forKey:@"prevButton"];
 		[positions setObject:[NSValue valueWithCGRect:playButton.frame] forKey:@"playButton"];
 		[positions setObject:[NSValue valueWithCGRect:nextButton.frame] forKey:@"nextButton"];
@@ -334,13 +353,13 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
 		{
-			coverArtImageView.frame = CGRectMake(0, 0, 300, 300);
+			coverArtHolderView.frame = CGRectMake(0, 0, 300, 270);
 			prevButton.origin = CGPointMake(315, 184);
 			playButton.origin = CGPointMake(372.5, 184);
 			nextButton.origin = CGPointMake(425, 184);
 			volumeSlider.frame = CGRectMake(300, 244, 180, 55);
 			volumeView.frame = CGRectMake(0, 0, 180, 55);
-			//eqButton.origin = CGPointMake(372.5, 20);
+			eqButton.origin = CGPointMake(372.5, 20);
 		}
 		else
 		{
@@ -381,6 +400,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[songInfoToggleButton release]; songInfoToggleButton = nil;
 	[reflectionView release]; reflectionView = nil;
 	[pageControlViewController release]; pageControlViewController = nil;
+	
+	[extraButtonsButtonOffImage release]; extraButtonsButtonOffImage = nil;
+	[extraButtonsButtonOnImage release]; extraButtonsButtonOnImage = nil;
+	
 	[super dealloc];
 }
 
@@ -394,10 +417,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-	
-	//[[NSNotificationCenter defaultCenter] postNotificationName:@"hideSongInfoFast" object:nil];
-	if (isFlipped)
-		[self songInfoToggle:nil];
 	
 	if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
 	{
@@ -415,11 +434,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[UIView setAnimationDuration:duration];
 		if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
 		{
-			coverArtImageView.frame = [[originalViewFrames objectForKey:@"coverArtImageView"] CGRectValue];
+			coverArtHolderView.frame = [[originalViewFrames objectForKey:@"coverArtHolderView"] CGRectValue];
 			prevButton.frame = [[originalViewFrames objectForKey:@"prevButton"] CGRectValue];
 			playButton.frame = [[originalViewFrames objectForKey:@"playButton"] CGRectValue];
 			nextButton.frame = [[originalViewFrames objectForKey:@"nextButton"] CGRectValue];
-			//eqButton.frame = [[originalViewFrames objectForKey:@"eqButton"] CGRectValue];
+			eqButton.frame = [[originalViewFrames objectForKey:@"eqButton"] CGRectValue];
 			volumeSlider.frame = [[originalViewFrames objectForKey:@"volumeSlider"] CGRectValue];
 			
 			CGRect volumeFrame = [[originalViewFrames objectForKey:@"volumeSlider"] CGRectValue];
@@ -435,14 +454,18 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			albumLabel.alpha = 0.1;
 			titleLabel.alpha = 0.1;
 			eqButton.alpha = 1.0;
+			
+			CGFloat width = 320 * pageControlViewController.numberOfPages;
+			CGFloat height = pageControlViewController.numberOfPages == 1 ? 320 : 300;
+			pageControlViewController.scrollView.contentSize = CGSizeMake(width, height);
 		}
 		else if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation))
 		{
-			coverArtImageView.frame = CGRectMake(0, 0, 300, 300);
+			coverArtHolderView.frame = CGRectMake(0, 0, 300, 270);
 			prevButton.origin = CGPointMake(315, 184);
 			playButton.origin = CGPointMake(372.5, 184);
 			nextButton.origin = CGPointMake(425, 184);
-			//eqButton.origin = CGPointMake(372.5, 20);
+			eqButton.origin = CGPointMake(372.5, 20);
 			volumeSlider.frame = CGRectMake(300, 244, 180, 55);
 			
 			if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -456,6 +479,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			albumLabel.alpha = 1.0;
 			titleLabel.alpha = 1.0;
 			eqButton.alpha = 1.0;
+			
+			CGFloat width = 300 * pageControlViewController.numberOfPages;
+			CGFloat height = pageControlViewController.numberOfPages == 1 ? 270 : 250;
+			pageControlViewController.scrollView.contentSize = CGSizeMake(width, height);
 		}
 		[UIView commitAnimations];
 	}
@@ -596,9 +623,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[self updateBarButtonImage];
 	}
 	
-	artistLabel.text = [[currentSong.artist copy] autorelease];
-	albumLabel.text = [[currentSong.album copy] autorelease];
-	titleLabel.text = [[currentSong.title copy] autorelease];
+	artistLabel.text = currentSong.artist;
+	albumLabel.text = currentSong.album;
+	titleLabel.text = currentSong.title;
 	
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
 	{
@@ -658,6 +685,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		else
 			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark.png"];
 	}
+	
+	trackLabel.text = [currentSong.track intValue] != 0 ? [NSString stringWithFormat:@"Track %i", [currentSong.track intValue]] : @"";
+	genreLabel.text = currentSong.genre ? currentSong.genre : @"";
+	yearLabel.text = [currentSong.year intValue] != 0 ? [currentSong.year stringValue] : @"";
+	[self updateFormatLabel];
 }
 
 - (void)jukeboxVolumeChanged:(id)sender
@@ -702,7 +734,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:aView] autorelease];
 }
 
-- (IBAction)songInfoToggle:(id)sender
+- (void)playlistToggleAnimated:(BOOL)animated saveState:(BOOL)saveState
 {
 	if (!isFlipped)
 	{
@@ -718,18 +750,22 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[self updateBarButtonImage];
 		
 		// Flip the album art horizontally
-		coverArtImageView.transform = CGAffineTransformMakeScale(-1, 1);
+		coverArtHolderView.transform = CGAffineTransformMakeScale(-1, 1);
 		pageControlViewController.view.transform = CGAffineTransformMakeScale(-1, 1);
-				
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:0.40];
-		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:coverArtImageView cache:YES];
+		
+		if (animated)
+		{
+			[UIView beginAnimations:nil context:NULL];
+			[UIView setAnimationDuration:0.40];
+			[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:coverArtHolderView cache:YES];
+		}
 		
 		//[pageControlViewController resetScrollView];
-		[coverArtImageView addSubview:pageControlViewController.view];
+		[coverArtHolderView addSubview:pageControlViewController.view];
 		[reflectionView setAlpha:0.0];
 		
-		[UIView commitAnimations];
+		if (animated)
+			[UIView commitAnimations];
 		
 		//[pageControlViewController viewWillAppear:NO];
 	}
@@ -740,13 +776,16 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"player-overlay.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(songInfoToggle:)] autorelease];
 		
 		// Flip the album art horizontally
-		coverArtImageView.transform = CGAffineTransformMakeScale(1, 1);
+		coverArtHolderView.transform = CGAffineTransformMakeScale(1, 1);
 		
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:0.4];
-		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:coverArtImageView cache:YES];
-		//[UIView setAnimationDelegate:self];
-		//[UIView setAnimationDidStopSelector:@selector(releaseSongInfo:finished:context:)];
+		if (animated)
+		{
+			[UIView beginAnimations:nil context:NULL];
+			[UIView setAnimationDuration:0.4];
+			[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:coverArtHolderView cache:YES];
+			//[UIView setAnimationDelegate:self];
+			//[UIView setAnimationDidStopSelector:@selector(releaseSongInfo:finished:context:)];
+		}
 		
 		//[[[coverArtImageView subviews] lastObject] removeFromSuperview];
 		[pageControlViewController.view removeFromSuperview];
@@ -754,7 +793,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		UIGraphicsEndImageContext();
 		
-		[UIView commitAnimations];
+		if (animated)
+			[UIView commitAnimations];
 		
 		//[pageControlViewController resetScrollView];
 		
@@ -762,6 +802,14 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	}
 	
 	isFlipped = !isFlipped;
+	
+	if (saveState)
+		[SavedSettings sharedInstance].isPlayerPlaylistShowing = isFlipped;
+}
+
+- (IBAction)songInfoToggle:(id)sender
+{
+	[self playlistToggleAnimated:YES saveState:YES];
 }
 
 /*- (void)releaseSongInfo:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context
@@ -811,7 +859,110 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[musicControls nextSong];
 }
 
+/*- (void)showExtraButtonsTemporarilyAnimated
+{
+	if (!isExtraButtonsShowing)
+	{
+		[self extraButtonsToggleAnimated:YES saveState:NO];
+		[self performSelector:@selector(hideExtraButtons) withObject:nil afterDelay:5.0];
+	}
+}
+
+- (void)showExtraButtonsTemporarily
+{
+	if (!isExtraButtonsShowing)
+	{
+		[self extraButtonsToggleAnimated:NO saveState:NO];
+		[self performSelector:@selector(hideExtraButtons) withObject:nil afterDelay:5.0];
+	}
+}*/
+
+- (void)hideExtraButtons
+{
+	[self extraButtonsToggleAnimated:YES saveState:NO];
+}
+
+- (void)extraButtonsToggleAnimated:(BOOL)animated saveState:(BOOL)saveState
+{
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideExtraButtons) object:nil];
+	
+	CGPoint extraButtonsHidden = CGPointMake(0, -extraButtons.height);
+	CGPoint extraButtonsVisible = CGPointMake(0, 0);
+	
+	CGPoint songInfoViewHidden  = CGPointMake(0, coverArtHolderView.height);
+	CGPoint songInfoViewVisible = CGPointMake(0, coverArtHolderView.height - songInfoView.height);
+	
+	if (isExtraButtonsShowing)
+	{
+		[extraButtonsButton setImage:extraButtonsButtonOffImage forState:UIControlStateNormal];
+		
+		if (animated)
+		{
+			[UIView beginAnimations:nil context:nil];
+			[UIView setAnimationDelegate:self];
+			[UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+			[UIView setAnimationDidStopSelector:@selector(toggleExtraButtonsAnimationDone)];
+			[UIView setAnimationDuration:0.2];
+		}
+		
+		extraButtons.origin = extraButtonsHidden;
+		songInfoView.origin = songInfoViewHidden;
+		
+		if (animated)
+			[UIView commitAnimations];
+	}
+	else
+	{
+		[extraButtonsButton setImage:extraButtonsButtonOnImage forState:UIControlStateNormal];
+		
+		extraButtons.origin = extraButtonsHidden;
+		extraButtons.width = coverArtHolderView.width;
+		songInfoView.origin = songInfoViewHidden;
+		songInfoView.width = coverArtHolderView.width;
+		[coverArtHolderView addSubview:extraButtons];
+		[coverArtHolderView addSubview:songInfoView];
+		
+		if (isFlipped)
+			[coverArtHolderView bringSubviewToFront:pageControlViewController.view];
+		
+		[self updateFormatLabel];
+		
+		if (animated)
+		{
+			[UIView beginAnimations:nil context:nil];
+			[UIView setAnimationDelegate:self];
+			[UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+			[UIView setAnimationDidStopSelector:@selector(toggleExtraButtonsAnimationDone)];
+			[UIView setAnimationDuration:0.2];
+		}
+		
+		extraButtons.origin = extraButtonsVisible;
+		songInfoView.origin = songInfoViewVisible;
+		
+		if (animated)
+			[UIView commitAnimations];
+	}
+	
+	isExtraButtonsShowing = !isExtraButtonsShowing;
+	
+	if (saveState)
+		[SavedSettings sharedInstance].isExtraPlayerControlsShowing = isExtraButtonsShowing;
+}
+
+- (void)toggleExtraButtonsAnimationDone
+{
+	if (!isExtraButtonsShowing)
+	{
+		[extraButtons removeFromSuperview];
+		[songInfoView removeFromSuperview];
+	}
+}
+
 - (IBAction)toggleExtraButtons:(id)sender
+{	
+	[self extraButtonsToggleAnimated:YES saveState:YES];
+}
+/*- (IBAction)toggleExtraButtons:(id)sender
 {	
 	CGFloat height = extraButtons.height;
 	CGFloat width = 250.;
@@ -881,7 +1032,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	{
 		[extraButtons removeFromSuperview];
 	}
-}
+}*/
 
 - (IBAction) touchedSlider:(id)sender
 {
@@ -1185,7 +1336,20 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		remainingTimeLabel.text =[@"-" stringByAppendingString:remainingTime];
 	}
 	
+	if (isExtraButtonsShowing)
+		 [self updateFormatLabel];
+	
 	[self performSelector:@selector(updateSlider) withObject:nil afterDelay:1.0];
+}
+
+- (void)updateFormatLabel
+{
+	if ([currentSong isEqualToSong:audio.currentStreamSong] && audio.bitRate > 0)
+		formatLabel.text = [NSString stringWithFormat:@"%i kbps %@", audio.bitRate, audio.currentStreamFormat];
+	else if ([currentSong isEqualToSong:audio.currentStreamSong])
+		formatLabel.text = audio.currentStreamFormat;
+	else
+		formatLabel.text = @"";
 }
 
 #pragma mark Image Reflection
@@ -1233,7 +1397,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		eqView.modalPresentationStyle = UIModalPresentationFormSheet;
 	if ([eqView respondsToSelector:@selector(setModalTransitionStyle:)])
 		eqView.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-	[self presentModalViewController:eqView animated:YES];
+	[self.navigationController pushViewController:eqView animated:YES];
+	//[self presentModalViewController:eqView animated:YES];
 	[eqView release];
 }
 

@@ -23,6 +23,8 @@
 	BOOL isScreenSleepEnabled;
 	float gainMultiplier;
 	BOOL isPartialCacheNextSong;
+	BOOL isExtraPlayerControlsShowing;
+	BOOL isPlayerPlaylistShowing;
 	
 	// State Saving
 	BOOL isPlaying;	
@@ -71,7 +73,6 @@
 @property BOOL isLyricsEnabled;
 @property BOOL isCacheStatusEnabled;
 @property BOOL isSongsTabEnabled;
-@property BOOL isAutoShowSongInfoEnabled;
 @property BOOL isAutoReloadArtistsEnabled;
 @property float scrobblePercent;
 @property BOOL isScrobbleEnabled;
@@ -89,6 +90,10 @@
 @property float gainMultiplier;
 @property BOOL isPartialCacheNextSong;
 @property ISMSBassVisualType currentVisualizerType;
+
+@property BOOL isExtraPlayerControlsShowing;
+@property BOOL isPlayerPlaylistShowing;
+
 
 // State Saving
 @property BOOL isRecover;

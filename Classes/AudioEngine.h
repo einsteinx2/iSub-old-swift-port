@@ -28,17 +28,6 @@ typedef enum
 	ISMS_BASS_EQ_DATA_TYPE_line
 } ISMS_BASS_EQ_DATA_TYPE;
 
-typedef enum
-{
-	ISMS_AE_STATE_off,
-	ISMS_AE_STATE_playing,
-	ISMS_AE_STATE_paused,
-	ISMS_AE_STATE_stopped,
-	ISMS_AE_STATE_waitingForData,
-	ISMS_AE_STATE_waitingForDataNoResume,
-	ISMS_AE_STATE_finishedWaitingForData
-} ISMS_AE_STATE;
-
 @class Song, BassParamEqValue, PlaylistSingleton, BassUserInfo;
 @interface AudioEngine : NSObject
 {
@@ -120,12 +109,18 @@ typedef enum
 @property (retain) NSThread *fftDataThread;
 @property BOOL isFftDataThreadToTerminate;
 @property BOOL isFastForward;
-@property ISMS_AE_STATE state;
 @property NSInteger audioSessionSampleRate;
 @property NSInteger bassReinitSampleRate;
 @property NSUInteger bufferLengthMillis;
 @property NSUInteger bassUpdatePeriod;
 @property unsigned long long neededSize;
+
+@property BOOL shouldResumeFromInterruption;
+
+@property (retain) NSMutableDictionary *bassUserInfoDict;
+
+@property (readonly) Song *currentStreamSong;
+@property (readonly) NSString *currentStreamFormat;
 
 @property (retain) NSObject *currentStreamSyncObject;
 @property (retain) NSObject *eqReadSyncObject;

@@ -13,20 +13,14 @@
 @interface PageControlViewController : UIViewController <UIScrollViewDelegate>
 {
 	iSubAppDelegate *appDelegate;
-	
-	PagingScrollView *scrollView;
-	UIPageControl *pageControl;
-	NSMutableArray *viewControllers;
-	
-	// To be used when scrolls originate from the UIPageControl
-    BOOL pageControlUsed;
-	
-	NSUInteger numberOfPages;
 }
 
 @property (retain) IBOutlet UIScrollView *scrollView;
 @property (retain) IBOutlet UIPageControl *pageControl;
+@property (retain) IBOutlet UIView *pageControlHolder;
 @property (retain) NSMutableArray *viewControllers;
+@property NSUInteger numberOfPages;
+@property BOOL pageControlUsed;
 
 
 - (IBAction)changePage:(id)sender;

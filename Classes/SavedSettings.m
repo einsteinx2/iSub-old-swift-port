@@ -362,10 +362,10 @@
 	isJukeboxEnabled = [userDefaults boolForKey:@"isJukeboxEnabled"];
 	isScreenSleepEnabled = [userDefaults boolForKey:@"isScreenSleepEnabled"];
 	isPopupsEnabled = [userDefaults boolForKey:@"isPopupsEnabled"];
-	
 	gainMultiplier = [userDefaults floatForKey:@"gainMultiplier"];
-	
 	isPartialCacheNextSong = [userDefaults boolForKey:@"isPartialCacheNextSong"];
+	isExtraPlayerControlsShowing = [userDefaults boolForKey:@"isExtraPlayerControlsShowing"];
+	isPlayerPlaylistShowing = [userDefaults boolForKey:@"isPlayerPlaylistShowing"];
 		
 	NSString *url = [userDefaults stringForKey:@"url"];
 	if (url)
@@ -836,20 +836,24 @@
 	}
 }
 
-- (BOOL)isAutoShowSongInfoEnabled
+- (BOOL)isPlayerPlaylistShowing
 {
 	@synchronized(self)
 	{
-		return [userDefaults boolForKey:@"autoPlayerInfoSetting"];
+		return isPlayerPlaylistShowing;
 	}
 }
 
-- (void)setIsAutoShowSongInfoEnabled:(BOOL)isAutoShowSongInfoEnabled
+- (void)setIsPlayerPlaylistShowing:(BOOL)isEnabled
 {
 	@synchronized(self)
 	{
-		[userDefaults setBool:isAutoShowSongInfoEnabled forKey:@"autoPlayerInfoSetting"];
-		[userDefaults synchronize];
+		if (isPlayerPlaylistShowing != isEnabled)
+		{
+			isPlayerPlaylistShowing = isEnabled;
+			[userDefaults setBool:isEnabled forKey:@"isPlayerPlaylistShowing"];
+			[userDefaults synchronize];
+		}
 	}
 }
 
@@ -1213,6 +1217,27 @@
 		[userDefaults synchronize];
 	}
 
+}
+
+- (BOOL)isExtraPlayerControlsShowing
+{
+	@synchronized(self)
+	{
+		return isExtraPlayerControlsShowing;
+	}
+}
+
+- (void)setIsExtraPlayerControlsShowing:(BOOL)isShowing
+{
+	@synchronized(self)
+	{
+		if (isExtraPlayerControlsShowing != isShowing)
+		{
+			isExtraPlayerControlsShowing = isShowing;
+			[userDefaults setBool:isShowing forKey:@"isExtraPlayerControlsShowing"];
+			[userDefaults synchronize];
+		}
+	}
 }
 
 // Test server details

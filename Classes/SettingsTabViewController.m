@@ -96,9 +96,7 @@
 	
 	maxBitrateWifiSegmentedControl.selectedSegmentIndex = settings.maxBitrateWifi;
 	maxBitrate3GSegmentedControl.selectedSegmentIndex = settings.maxBitrate3G;
-	
-	autoPlayerInfoSwitch.on = settings.isAutoShowSongInfoEnabled;
-	
+		
 	enableSwipeSwitch.on = settings.isSwipeEnabled;
 	enableTapAndHoldSwitch.on = settings.isTapAndHoldEnabled;
 	
@@ -367,10 +365,6 @@
 		else if (sender == enableCacheStatusSwitch)
 		{
 			settings.isCacheStatusEnabled = enableCacheStatusSwitch.on;
-		}
-		else if (sender == autoPlayerInfoSwitch)
-		{
-			settings.isAutoShowSongInfoEnabled = autoPlayerInfoSwitch.on;
 		}
 		else if (sender == enableSwipeSwitch)
 		{

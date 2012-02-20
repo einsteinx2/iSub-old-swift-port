@@ -211,21 +211,22 @@
 
 - (void)uploadPlaylistAction:(id)sender
 {	
-    OrderedDictionary *parameters = [OrderedDictionary dictionaryWithObject:n2N(self.title) forKey:@"name"];
+	NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(self.title), @"name", nil];
     
 	NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", self.md5];
 	NSUInteger count = [databaseControls.localPlaylistsDb intForQuery:query];
+	NSMutableArray *songIds = [NSMutableArray arrayWithCapacity:count];
 	for (int i = 1; i <= count; i++)
 	{
-		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-		
-		NSString *query = [NSString stringWithFormat:@"SELECT songId FROM playlist%@ WHERE ROWID = %i", self.md5, i];
-		NSString *songId = [databaseControls.localPlaylistsDb stringForQuery:query];
-		
-        [parameters setObject:n2N(songId) forKey:@"songId"];
-        
-		[pool release];
+		@autoreleasepool 
+		{
+			NSString *query = [NSString stringWithFormat:@"SELECT songId FROM playlist%@ WHERE ROWID = %i", self.md5, i];
+			NSString *songId = [databaseControls.localPlaylistsDb stringForQuery:query];
+			
+			[songIds addObject:n2N(songId)];
+		}
 	}
+	[parameters setObject:[NSArray arrayWithArray:songIds] forKey:@"songId"];
 	
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"createPlaylist" andParameters:parameters];
 	

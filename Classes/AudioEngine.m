@@ -27,9 +27,10 @@
 // TODO: verify secondsOffset usage
 
 @implementation AudioEngine
-@synthesize isEqualizerOn, startByteOffset, startSecondsOffset, currPlaylistDAO, fftDataThread, isFftDataThreadToTerminate, isPlaying, isFastForward, state, bassReinitSampleRate, presilenceStream, bufferLengthMillis, bassUpdatePeriod;
+@synthesize isEqualizerOn, startByteOffset, startSecondsOffset, currPlaylistDAO, fftDataThread, isFftDataThreadToTerminate, isPlaying, isFastForward, bassReinitSampleRate, presilenceStream, bufferLengthMillis, bassUpdatePeriod;
 @synthesize fileStream1, fileStream2, fileStreamTempo1, fileStreamTempo2, volumeFx, outStream, BASSisFilestream1, currentStreamSyncObject;
-@synthesize eqValueArray, eqHandleArray, eqDataType, eqReadSyncObject, neededSize;
+@synthesize eqValueArray, eqHandleArray, eqDataType, eqReadSyncObject, neededSize, bassUserInfoDict;//fileStreamUserInfo1, fileStreamUserInfo2;
+@synthesize shouldResumeFromInterruption;
 
 // BASS plugins
 extern void BASSFLACplugin;
@@ -53,23 +54,62 @@ static AudioEngine *sharedInstance = nil;
 		}
 	}
 	// check built-in stream formats...
-	if (ctype==BASS_CTYPE_STREAM_OGG) return @"Ogg Vorbis";
-	if (ctype==BASS_CTYPE_STREAM_MP1) return @"MPEG layer 1";
-	if (ctype==BASS_CTYPE_STREAM_MP2) return @"MPEG layer 2";
-	if (ctype==BASS_CTYPE_STREAM_MP3) return @"MPEG layer 3";
-	if (ctype==BASS_CTYPE_STREAM_AIFF) return @"Audio IFF";
-	if (ctype==BASS_CTYPE_STREAM_WAV_PCM) return @"PCM WAVE";
-	if (ctype==BASS_CTYPE_STREAM_WAV_FLOAT) return @"Floating-point WAVE";
-	if (ctype&BASS_CTYPE_STREAM_WAV) return @"WAVE";
+	if (ctype==BASS_CTYPE_STREAM_OGG) return @"OGG";
+	if (ctype==BASS_CTYPE_STREAM_MP1) return @"MP1";
+	if (ctype==BASS_CTYPE_STREAM_MP2) return @"MP2";
+	if (ctype==BASS_CTYPE_STREAM_MP3) return @"MP3";
+	if (ctype==BASS_CTYPE_STREAM_AIFF) return @"AIFF";
+	if (ctype==BASS_CTYPE_STREAM_WAV_PCM) return @"PCM WAV";
+	if (ctype==BASS_CTYPE_STREAM_WAV_FLOAT) return @"Float WAV";
+	if (ctype&BASS_CTYPE_STREAM_WAV) return @"WAV";
 	if (ctype==BASS_CTYPE_STREAM_CA) 
 	{
 		// CoreAudio codec
-		static char buf[100];
 		const TAG_CA_CODEC *codec = (TAG_CA_CODEC*)BASS_ChannelGetTags(self.fileStream1, BASS_TAG_CA_CODEC); // get codec info
-		snprintf(buf,sizeof(buf),"CoreAudio: %s",codec->name);
-		return [NSString stringWithFormat:@"%s", buf];
+				
+		const char *type;
+		switch (codec->atype) 
+		{
+			case kAudioFormatLinearPCM:				type = "LPCM"; break;
+			case kAudioFormatAC3:					type = "AC3"; break;
+			case kAudioFormat60958AC3:				type = "AC3"; break;
+			case kAudioFormatAppleIMA4:				type = "IMA4"; break;
+			case kAudioFormatMPEG4AAC:				type = "AAC"; break;
+			case kAudioFormatMPEG4CELP:				type = "CELP"; break;
+			case kAudioFormatMPEG4HVXC:				type = "HVXC"; break;
+			case kAudioFormatMPEG4TwinVQ:			type = "TwinVQ"; break;
+			case kAudioFormatMACE3:					type = "MACE 3:1"; break;
+			case kAudioFormatMACE6:					type = "MACE 6:1"; break;
+			case kAudioFormatULaw:					type = "μLaw 2:1"; break;
+			case kAudioFormatALaw:					type = "aLaw 2:1"; break;
+			case kAudioFormatQDesign:				type = "QDMC"; break;
+			case kAudioFormatQDesign2:				type = "QDM2"; break;
+			case kAudioFormatQUALCOMM:				type = "QCPV"; break;
+			case kAudioFormatMPEGLayer1:			type = "MP1"; break;
+			case kAudioFormatMPEGLayer2:			type = "MP2"; break;
+			case kAudioFormatMPEGLayer3:			type = "MP3"; break;
+			case kAudioFormatTimeCode:				type = "TIME"; break;
+			case kAudioFormatMIDIStream:			type = "MIDI"; break;
+			case kAudioFormatParameterValueStream:	type = "APVS"; break;
+			case kAudioFormatAppleLossless:			type = "ALAC"; break;
+			case kAudioFormatMPEG4AAC_HE:			type = "AAC-HE"; break;
+			case kAudioFormatMPEG4AAC_LD:			type = "AAC-LD"; break;
+			case kAudioFormatMPEG4AAC_ELD:			type = "AAC-ELD"; break;
+			case kAudioFormatMPEG4AAC_ELD_SBR:		type = "AAC-SBR"; break;
+			case kAudioFormatMPEG4AAC_HE_V2:		type = "AAC-HEv2"; break;
+			case kAudioFormatMPEG4AAC_Spatial:		type = "AAC-S"; break;
+			case kAudioFormatAMR:					type = "AMR"; break;
+			case kAudioFormatAudible:				type = "AUDB"; break;
+			case kAudioFormatiLBC:					type = "iLBC"; break;
+			case kAudioFormatDVIIntelIMA:			type = "ADPCM"; break;
+			case kAudioFormatMicrosoftGSM:			type = "GSM"; break;
+			case kAudioFormatAES3:					type = "AES3"; break;
+			default:								type = " "; break;
+		}
+		
+		return [NSString stringWithFormat:@"%s", type];
 	}
-	return @"?";
+	return @"";
 }
 
 NSString *NSStringFromOSStatus(OSStatus errCode)
@@ -201,6 +241,10 @@ void CALLBACK MyStreamFreeCallback(HSYNC handle, DWORD channel, DWORD data, void
 	if (user == NULL)
 		return;
 	
+	// Remove the user info object from the dictionary
+	NSString *key = [NSString stringWithFormat:@"%i", channel];
+	[sharedInstance.bassUserInfoDict removeObjectForKey:key];
+	
 	// Stream is done, release the user info object
 	BassUserInfo *userInfo = (BassUserInfo *)user;
 	[userInfo release];
@@ -268,9 +312,6 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 			Song *theSong = userInfo.mySong;
 			if (!theSong.isFullyCached)
 			{
-				// Set the audio queue state to waiting for data
-				sharedInstance.state = ISMS_AE_STATE_waitingForData;
-				
 				// Check if needed size has been calculated yet
 				if (sharedInstance.neededSize == ULLONG_MAX)
 				{
@@ -340,8 +381,6 @@ BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFi
 		{		
 			r = BASS_ChannelGetData(self.currentReadingStream, buffer, length);
 			
-			sharedInstance.state = ISMS_AE_STATE_finishedWaitingForData;
-			
 			// Check if stream is now complete
 			if (!BASS_ChannelIsActive(self.currentReadingStream))
 			{
@@ -384,7 +423,6 @@ BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFi
 					[self prepareNextSongStream];
 					
 					r = [self bassGetOutputData:buffer length:length];
-					sharedInstance.state = ISMS_AE_STATE_finishedWaitingForData;
 					
 					// Mark the last played time in the database for cache cleanup
 					currPlaylistDAO.currentSong.playedDate = [NSDate date];
@@ -393,6 +431,9 @@ BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFi
 		}
 		else
 		{
+			// Send song end notification
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnded];
+			
 			DLog(@"Stream not active, freeing BASS");
 			r = BASS_STREAMPROC_END;
 			[self performSelectorOnMainThread:@selector(bassFree) withObject:nil waitUntilDone:NO];
@@ -418,10 +459,10 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 #pragma mark - Audio Session methods
 
 void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue) 
-{	
+{		
 	AudioEngine *selfRef = inUserData;
 	
-    DLog(@"audioRouteChangeListenerCallback called");
+    //DLog(@"audioRouteChangeListenerCallback called, propertyId: %lu  isMainThread: %@", inPropertyID, NSStringFromBOOL([NSThread isMainThread]));
 	
     // ensure that this callback was invoked for a route change
     if (inPropertyID != kAudioSessionProperty_AudioRouteChange) 
@@ -436,6 +477,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 		SInt32 routeChangeReason;
 		CFNumberGetValue (routeChangeReasonRef, kCFNumberSInt32Type, &routeChangeReason);
 		
+		//DLog(@"route change reason: %li", routeChangeReason);
+		
         // "Old device unavailable" indicates that a headset was unplugged, or that the
         // device was removed from a dock connector that supports audio output. This is
         // the recommended test for when to pause audio.
@@ -443,38 +486,54 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 		{
 			[selfRef playPause];
 			
-            DLog (@"Output device removed, so application audio was paused.");
+            //DLog (@"Output device removed, so application audio was paused.");
         }
 		else 
 		{
-            DLog (@"A route change occurred that does not require pausing of application audio.");
+            //DLog (@"A route change occurred that does not require pausing of application audio.");
         }
     }
 	else 
 	{	
-        DLog (@"Audio route change while application audio is stopped.");
+        //DLog (@"Audio route change while application audio is stopped.");
         return;
     }
 }
 
-void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue) 
+/*void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue) 
 {
 	DLog(@"audio interrupted");
 	AudioEngine *selfRef = inUserData;
 	[selfRef pause];
-}
+}*/
 
-/*void interruptionListenerCallback (void    *inUserData, UInt32  interruptionState) 
+void interruptionListenerCallback(void *inUserData, UInt32 interruptionState) 
 {
     if (interruptionState == kAudioSessionBeginInterruption) 
 	{
-		DLog(@"audio session begin interruption");		
+		//DLog(@"audio session begin interruption");
+		if ([sharedInstance isPlaying])
+		{
+			[sharedInstance setShouldResumeFromInterruption:YES];
+			[sharedInstance pause];
+		}
+		else
+		{
+			[sharedInstance setShouldResumeFromInterruption:NO];
+		}
     } 
 	else if (interruptionState == kAudioSessionEndInterruption) 
 	{
-        DLog(@"audio session interruption ended");
+        //DLog(@"audio session interruption ended, isPlaying: %@   isMainThread: %@", NSStringFromBOOL([sharedInstance isPlaying]), NSStringFromBOOL([NSThread isMainThread]));
+		if ([sharedInstance shouldResumeFromInterruption])
+		{
+			[sharedInstance playPause];
+			
+			// Reset the shouldResumeFromInterruption value
+			[sharedInstance setShouldResumeFromInterruption:NO];
+		}
     }
-}*/
+}
 
 - (NSInteger)audioSessionSampleRate
 {
@@ -519,14 +578,14 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 		DLog(@"Can't initialize device");
 	}
 	BASS_PluginLoad(&BASSFLACplugin, 0); // load the FLAC plugin
-	
+			
 	BASS_INFO info;
 	BASS_GetInfo(&info);
 	//DLog(@"bassInit:%i  bass freq: %i  minrate: %i   maxrate: %i  minbuf: %i  latency:%i ", sampleRate, info.freq, info.minrate, info.maxrate, info.minbuf, info.latency);
 		
 	// Add the callbacks for headphone removal and other audio takeover
 	AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, self);
-	AudioSessionAddPropertyListener(kAudioSessionProperty_OtherAudioIsPlaying, audioInterruptionListenerCallback, self);
+	//AudioSessionAddPropertyListener(kAudioSessionProperty_OtherAudioIsPlaying, audioInterruptionListenerCallback, self);
 }
 
 - (void)bassInit
@@ -551,7 +610,10 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 		self.volumeFx = 0;
 		self.bassReinitSampleRate = 0;
 		self.neededSize = ULLONG_MAX;
+		self.isPlaying = NO;
 		
+		[self.bassUserInfoDict removeAllObjects];
+				
 		return success;
 	}
 }
@@ -648,6 +710,10 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 		
 	if (self.nextStream)
 	{
+		// Add the user info object to the dictionary
+		NSString *key = [NSString stringWithFormat:@"%i", self.nextStream];
+		[self.bassUserInfoDict setObject:userInfo forKey:key];
+		
 		// Set the stream free sync
 		BASS_ChannelSetSync(self.nextStream, BASS_SYNC_FREE, 0, MyStreamFreeCallback, userInfo);
 		
@@ -721,6 +787,10 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 		if(!self.fileStream1) self.fileStream1 = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_SAMPLE_SOFTWARE|BASS_STREAM_DECODE, &fileProcs, userInfo);
 		if (self.fileStream1)
 		{
+			// Add the user info object to the dictionary
+			NSString *key = [NSString stringWithFormat:@"%i", self.fileStream1];
+			[self.bassUserInfoDict setObject:userInfo forKey:key];
+			
 			// Add the stream free callback
 			BASS_ChannelSetSync(self.fileStream1, BASS_SYNC_FREE, 0, MyStreamFreeCallback, userInfo);
 						
@@ -890,45 +960,34 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 
 - (void)playPause
 {
+	[[MusicSingleton sharedInstance] updateLockScreenInfo];
+	
 	if (self.isPlaying) 
 	{
-		//DLog(@"Pausing");
 		BASS_Pause();
 		self.isPlaying = NO;
-		
-		if (self.state != ISMS_AE_STATE_waitingForData)
-		{
-			self.state = ISMS_AE_STATE_paused;
-			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackPaused];
-		}
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackPaused];
 	} 
 	else 
 	{
 		if (self.currentStream == 0)
 		{
-			//DLog(@"starting new stream");
 			NSInteger count = currPlaylistDAO.count;
-			if (currPlaylistDAO.currentIndex >= count) currPlaylistDAO.currentIndex = count;
+			if (currPlaylistDAO.currentIndex >= count) 
+			{
+				// The playlist finished
+				currPlaylistDAO.currentIndex = count - 1;
+				startByteOffset = 0;
+				startSecondsOffset = 0.;
+			}
 			[[MusicSingleton sharedInstance] startSongAtOffsetInBytes:startByteOffset 
 														   andSeconds:startSecondsOffset];
 		}
-		else if (self.state == ISMS_AE_STATE_waitingForData)
-		{
-			self.state = ISMS_AE_STATE_waitingForDataNoResume;
-			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackPaused];
-		}
 		else
 		{
-			//DLog(@"Playing");
 			BASS_Start();
 			self.isPlaying = YES;
-			
-			if (self.state != ISMS_AE_STATE_finishedWaitingForData)
-			{
-				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
-			}
-
-			self.state = ISMS_AE_STATE_playing;
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
 		}
 	}
 }
@@ -1022,7 +1081,6 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 
 - (void)setNextStream:(HSTREAM)stream
 {
-	DLog(@"setting next stream");
 	@synchronized(currentStreamSyncObject)
 	{
 		if (self.BASSisFilestream1)
@@ -1073,6 +1131,25 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 	{
 		BASSisFilestream1 = isFilestream1;
 	}
+}
+
+- (Song *)currentStreamSong
+{
+	NSString *key = [NSString stringWithFormat:@"%i", self.currentStream];
+	BassUserInfo *userInfo = [self.bassUserInfoDict objectForKey:key];
+	return [[userInfo.mySong copy] autorelease];
+}
+
+- (NSString *)currentStreamFormat
+{
+	BASS_CHANNELINFO i;
+	BASS_ChannelGetInfo(self.fileStream1, &i);
+	//QWORD bytes = BASS_ChannelGetLength(self.currentStream, BASS_POS_BYTE);
+	//DWORD time = BASS_ChannelBytes2Seconds(self.currentStream, bytes);
+	
+	return [self stringFromStreamType:i.ctype plugin:i.plugin];
+	
+	//DLog("channel type = %x (%@)\nlength = %llu (%u:%02u)  flags: %i  freq: %i  origres: %i", i.ctype, [self stringFromStreamType:i.ctype plugin:i.plugin], bytes, time/60, time%60, i.flags, i.freq, i.origres);=
 }
 
 #pragma mark - Equalizer and Visualizer Methods
@@ -1266,11 +1343,12 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 
 - (void)setup
 {	
+	shouldResumeFromInterruption = NO;
+	bassUserInfoDict = [[NSMutableDictionary alloc] initWithCapacity:2];
 	neededSize = ULLONG_MAX;
 	bassUpdatePeriod = BASS_GetConfig(BASS_CONFIG_UPDATEPERIOD);
 	bufferLengthMillis = ISMS_BASSBufferSize;
 	bassReinitSampleRate = 0;
-	state = ISMS_AE_STATE_stopped;
 	BASSisFilestream1 = YES;
 	fileStream1 = 0;
 	fileStreamTempo1 = 0;
@@ -1307,7 +1385,29 @@ void audioInterruptionListenerCallback (void *inUserData, AudioSessionPropertyID
 											 selector:@selector(didReceiveMemoryWarning) 
 												 name:UIApplicationDidReceiveMemoryWarningNotification 
 											   object:nil];
+	
+	/*[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(enteredBackground)
+												 name:UIApplicationDidEnterBackgroundNotification 
+											   object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(enteredForeground)
+												 name:UIApplicationDidBecomeActiveNotification
+											   object:nil];
+	*/
+	AudioSessionInitialize(NULL, NULL, interruptionListenerCallback, NULL);
 }
+
+/*- (void)enteredBackground
+{
+	DLog(@"entered background");
+}
+
+- (void)enteredForeground
+{
+	DLog(@"entered foreground");
+}*/
 
 + (AudioEngine *)sharedInstance
 {

@@ -17,6 +17,7 @@
 #import "EqualizerPathView.h"
 #import "NSArray+FirstObject.h"
 #import "NSArray+Additions.h"
+#import "UIApplication+StatusBar.h"
 
 @implementation EqualizerViewController
 @synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath; //drawTimer;
@@ -34,7 +35,7 @@
 	[UIView setAnimationDuration:duration];
 	if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
 	{
-		//[[UIApplication sharedApplication] setStatusBarHidden:NO animated:YES];
+		[[UIApplication sharedApplication] setStatusBarHidden:NO animated:YES];
 		equalizerPath.alpha = 1.0;
 		for (EqualizerPointView *view in equalizerPointViews)
 		{
@@ -50,7 +51,7 @@
 	}
 	else
 	{
-		//[[UIApplication sharedApplication] setStatusBarHidden:YES animated:YES];
+		[[UIApplication sharedApplication] setStatusBarHidden:YES animated:YES];
 		equalizerPath.alpha = 0.0;
 		for (EqualizerPointView *view in equalizerPointViews)
 		{
@@ -60,6 +61,10 @@
 		[UIApplication sharedApplication].idleTimerDisabled = YES;
 	}
 	[UIView commitAnimations];
+	
+	NSUInteger count = [self.navigationController.viewControllers count];
+	UIViewController *backViewController = [self.navigationController.viewControllers objectAtIndex:count-2];
+	[backViewController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
@@ -74,6 +79,10 @@
 	{
 		[self createEqViews];
 	}
+	
+	NSUInteger count = [self.navigationController.viewControllers count];
+	UIViewController *backViewController = [self.navigationController.viewControllers objectAtIndex:count-2];
+	[backViewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
 #pragma mark - View lifecycle
@@ -126,11 +135,16 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
-	
-	[[UIApplication sharedApplication] setStatusBarHidden:YES animated:NO];
-	
+		
 	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
 		[self createEqViews];
+	else
+	{
+		[UIApplication setStatusBarHidden:YES withAnimation:NO];
+		equalizerPath.alpha = 0.0;
+	}
+
+	self.navigationController.navigationBar.hidden = YES;
 }
 
 - (void)createAndDrawEqualizerPath
@@ -184,7 +198,16 @@
 	if ([[points lastObject] CGPointValue].x != equalizerPath.frame.size.width)
 		[sortedPoints addObject:[NSValue valueWithCGPoint:CGPointMake(equalizerPath.frame.size.width, equalizerPath.center.y)]];
 	
-	equalizerPath.points = sortedPoints;
+	CGPoint pointsArray[[sortedPoints count]];
+	int i = 0;
+	for (NSValue *point in sortedPoints)
+	{
+		pointsArray[i] = point.CGPointValue;
+		i++;
+	}
+	
+	equalizerPath.points = pointsArray;
+	equalizerPath.numberOfPoints = [sortedPoints count];
 	
 	/*// Create and start the path
 	equalizerPath.path = [UIBezierPath bezierPath];
@@ -268,6 +291,8 @@
 	[equalizerView release]; equalizerView = nil;
 	
 	[[AudioEngine sharedInstance] stopReadingEqData];
+	
+	self.navigationController.navigationBar.hidden = NO;
 }
 
 - (void)didReceiveMemoryWarning
@@ -556,13 +581,15 @@
 		[[AudioEngine sharedInstance] updateEqParameter:self.selectedView.eqValue];
 		self.selectedView = nil;
 		
-		[self saveTempCustomPreset];
+		// TODO: uncomment this!
+		//[self saveTempCustomPreset];
 	}
 }
 
 - (IBAction)dismiss:(id)sender
 {
-	[self dismissModalViewControllerAnimated:YES];
+	[self.navigationController popViewControllerAnimated:YES];
+	//[self dismissModalViewControllerAnimated:YES];
 }
 
 - (IBAction)toggle:(id)sender

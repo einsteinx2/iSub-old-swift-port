@@ -55,6 +55,17 @@
 @property (retain) IBOutlet UIView *extraButtons;
 @property (retain) IBOutlet UIImageView *extraButtonsBackground;
 @property (retain) IBOutlet UIButton *extraButtonsButton;
+@property (retain) IBOutlet UIView *songInfoView;
+
+@property (retain) IBOutlet UILabel *trackLabel;
+@property (retain) IBOutlet UILabel *genreLabel;
+@property (retain) IBOutlet UILabel *yearLabel;
+@property (retain) IBOutlet UILabel *formatLabel;
+
+@property (retain) UIImage *extraButtonsButtonOffImage;
+@property (retain) UIImage *extraButtonsButtonOnImage;
+
+@property (retain) IBOutlet UIView *coverArtHolderView;
 
 @property (retain) IBOutlet UIButton *currentAlbumButton;
 @property (retain) IBOutlet UIButton *repeatButton;
@@ -94,6 +105,9 @@
 - (void)removeSongTitle;
 - (void)setSongTitle;
 - (IBAction)toggleExtraButtons:(id)sender;
+- (void)extraButtonsToggleAnimated:(BOOL)animated saveState:(BOOL)saveState;
+
+- (void)playlistToggleAnimated:(BOOL)animated saveState:(BOOL)saveState;
 
 - (IBAction)showEq:(id)sender;
 

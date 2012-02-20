@@ -139,6 +139,7 @@
 		viewObjects.isOfflineMode = NO;
 	}
 	
+	showIntro = NO;
 	if (settings.isTestServer)
 	{
 		if (viewObjects.isOfflineMode)
@@ -160,7 +161,6 @@
     audio = [AudioEngine sharedInstance];
 	
     introController = nil;
-	showIntro = NO;
 	
 	//DLog(@"md5: %@", [settings.urlString md5]);
 	
@@ -398,7 +398,6 @@
 - (void)loadCrittercism
 {
 	if (IS_BETA() && IS_ADHOC() && !IS_LITE())
-	//if(1)
 	{
 		[Crittercism initWithAppID:@"4f1f97d2b093150d55000093" 
 							andKey:@"4f1f97d2b093150d55000093djpi3cjr" 
@@ -606,8 +605,6 @@
 				if ([application backgroundTimeRemaining] < 570.0 && !musicControls.isQueueListDownloading)
 				{
 					DLog("Sleeping early, isQueueListDownloading: %i", musicControls.isQueueListDownloading);
-					if ([AudioEngine sharedInstance].isPlaying)
-						[[AudioEngine sharedInstance] playPause];
 					[application endBackgroundTask:backgroundTask];
 					backgroundTask = UIBackgroundTaskInvalid;
 					break;
@@ -648,6 +645,9 @@
 			backgroundTask = UIBackgroundTaskInvalid;
 		}
 	}
+
+	// Update the lock screen art in case were were using another app
+	[musicControls updateLockScreenInfo];
 }
 
 

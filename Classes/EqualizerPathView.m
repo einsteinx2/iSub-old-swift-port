@@ -14,7 +14,7 @@ static CGColorRef drawColor;
 
 @implementation EqualizerPathView
 
-@synthesize points; //, path;
+@synthesize points, numberOfPoints;
 
 + (void)initialize
 {
@@ -97,12 +97,58 @@ static CGColorRef drawColor;
 
 - (void)drawCurve
 {	
-	/*UIBezierPath *smoothPath = [path smoothedPathWithGranularity:40];
-	smoothPath.lineWidth = 2;
-	[smoothPath stroke];*/
+	return; 
+	/*for (int i = 0; i < self.numberOfPoints; i++)
+	{
+		DLog(@"knot %i = %@", i, NSStringFromCGPoint(self.points[i]));
+	}
+	NSLog(@"    ");
 	
-	/*path.lineWidth = 2;
-	[path stroke];*/
+	CGPoint firstControlPoints[self.numberOfPoints - 1];
+	CGPoint secondControlPoints[self.numberOfPoints - 1];
+	
+	GetCurveControlPoints(self.points, self.numberOfPoints, firstControlPoints, secondControlPoints);
+	
+	for (int i = 0; i < self.numberOfPoints - 1; i++)
+	{
+		DLog(@"firstControlPoint %i = %@", i, NSStringFromCGPoint(firstControlPoints[i]));
+	}
+	NSLog(@"    ");
+	
+	for (int i = 0; i < self.numberOfPoints - 1; i++)
+	{
+		DLog(@"secondControlPoint %i = %@", i, NSStringFromCGPoint(secondControlPoints[i]));
+	}
+	NSLog(@"    ");*/
+	
+	CGPoint firstControlPoints[self.numberOfPoints - 1];
+	CGPoint secondControlPoints[self.numberOfPoints - 1];
+	
+	GetCurveControlPoints(self.points, self.numberOfPoints, firstControlPoints, secondControlPoints);
+	
+	// Set drawing properties
+	CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetStrokeColorWithColor(context, drawColor);
+	CGContextSetFillColorWithColor(context, drawColor);
+    CGContextSetLineWidth(context, 2);
+	
+	CGContextMoveToPoint(context, self.points[0].x, self.points[0].y);
+	
+	for (int i = 1; i < self.numberOfPoints; i++)
+	{
+		DLog(@"knot %i = %@", i, NSStringFromCGPoint(self.points[i]));
+		
+		CGContextAddCurveToPoint (context,
+								  firstControlPoints[i-1].x,
+								  firstControlPoints[i-1].y,
+								  secondControlPoints[i-1].x,
+								  secondControlPoints[i-1].y,
+								  self.points[i].x,
+								  self.points[i].y
+								  );
+		//CGContextAddLineToPoint(context, self.points[i].x, self.points[i].y);
+	}
+	CGContextStrokePath(context);
 }
 
 - (void)drawRect:(CGRect)rect 
@@ -112,6 +158,89 @@ static CGColorRef drawColor;
 	
 	// Smooth and draw the eq path
 	[self drawCurve];
+}
+
+/////////////////////////////////
+
+// ControlPoints arrays are knotsLength - 1 long
+static void GetCurveControlPoints(CGPoint knots[], int knotsLength, CGPoint firstControlPoints[], CGPoint secondControlPoints[])
+{
+	if (knots == NULL)
+		return;
+	
+	int n = knotsLength - 1;
+	if (n < 1)
+		return;
+	
+	if (n == 1)
+	{ 
+		// Special case: Bezier curve should be a straight line.
+		// 3P1 = 2P0 + P3
+		firstControlPoints[0].x = (2 * knots[0].x + knots[1].x) / 3;
+		firstControlPoints[0].y = (2 * knots[0].y + knots[1].y) / 3;
+		
+		// P2 = 2P1 – P0
+		secondControlPoints[0].x = 2 * firstControlPoints[0].x - knots[0].x;
+		secondControlPoints[0].y = 2 * firstControlPoints[0].y - knots[0].y;
+		return;
+	}
+	
+	// Calculate first Bezier control points
+	// Right hand side vector
+	double rhs[n];
+	
+	// Set right hand side X values
+	for (int i = 1; i < n - 1; ++i)
+		rhs[i] = 4 * knots[i].x + 2 * knots[i + 1].x;
+	rhs[0] = knots[0].x + 2 * knots[1].x;
+	rhs[n - 1] = (8 * knots[n - 1].x + knots[n].x) / 2.0;
+	// Get first control points X-values
+	double x[n];
+	GetFirstControlPoints(rhs, x, n);
+	
+	// Set right hand side Y values
+	for (int i = 1; i < n - 1; ++i)
+		rhs[i] = 4 * knots[i].y + 2 * knots[i + 1].y;
+	rhs[0] = knots[0].y + 2 * knots[1].y;
+	rhs[n - 1] = (8 * knots[n - 1].y + knots[n].y) / 2.0;
+	// Get first control points Y-values
+	double y[n];
+	GetFirstControlPoints(rhs, y, n);
+	
+	// Fill output arrays.
+	for (int i = 0; i < n; ++i)
+	{
+		// First control point
+		firstControlPoints[i] = CGPointMake(x[i], y[i]);
+		
+		// Second control point
+		if (i < n - 1)
+			secondControlPoints[i] = CGPointMake(2 * knots[i + 1].x - x[i + 1], 2 * knots[i + 1].y - y[i + 1]);
+		else
+			secondControlPoints[i] = CGPointMake((knots[n].x + x[n - 1]) / 2, (knots[n].y + y[n - 1]) / 2);
+	}
+}
+
+// Solves a tridiagonal system for one of coordinates (x or y) of first Bezier control points.
+static void GetFirstControlPoints(double rhs[], double x[], int length)
+{
+	int n = length;
+	//double x[n]; // Solution vector.
+	double tmp[n]; // Temp workspace.
+	
+	double b = 2.0;
+	x[0] = rhs[0] / b;
+	for (int i = 1; i < n; i++) // Decomposition and forward substitution.
+	{
+		tmp[i] = 1 / b;
+		b = (i < n - 1 ? 4.0 : 3.5) - tmp[i];
+		x[i] = (rhs[i] - x[i - 1]) / b;
+	}
+	
+	for (int i = 1; i < n; i++)
+	{
+		x[n - i - 1] -= tmp[n - i] * x[n - i]; // Backsubstitution.
+	}
 }
 
 @end
