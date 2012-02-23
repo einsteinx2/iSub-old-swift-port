@@ -6,7 +6,7 @@
 //  Copyright Ben Baron 2010. All rights reserved.
 //
 
-#import "RootViewController.h"
+#import "FoldersViewController.h"
 #import "SearchOverlayViewController.h"
 #import "iSubAppDelegate.h"
 #import "MusicSingleton.h"
@@ -19,7 +19,7 @@
 #import "NSString+md5.h"
 #import "FMDatabaseAdditions.h"
 #import "ViewObjectsSingleton.h"
-#import "UIView+tools.h"
+#import "UIView+Tools.h"
 #import "CustomUIAlertView.h"
 #import "EGORefreshTableHeaderView.h"
 #import <QuartzCore/QuartzCore.h>
@@ -30,8 +30,9 @@
 #import "SUSAllSongsLoader.h"
 #import "SeparaterView.h"
 #import "NSArray+Additions.h"
+#import "UIViewController+PushViewController.h"
 
-@interface RootViewController (Private)
+@interface FoldersViewController (Private)
 
 - (void)dataSourceDidFinishLoadingNewData;
 - (void)addCount;
@@ -39,7 +40,7 @@
 
 @end
 
-@implementation RootViewController
+@implementation FoldersViewController
 
 @synthesize searchBar, headerView;
 //@synthesize indexes, folders, foldersSearch;
@@ -109,15 +110,22 @@
 	[self.tableView addSubview:refreshHeaderView];
 	[refreshHeaderView release];
 	
-	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
-	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.tableView.tableFooterView = fadeBottom;
-	
-	if (dropdown.folders == nil || [dropdown.folders count] == 2)
-		[self.tableView setContentOffset:CGPointMake(0, 86) animated:NO];
+	if (IS_IPAD())
+	{
+		self.view.backgroundColor = ISMSiPadBackgroundColor;
+	}
 	else
-		[self.tableView setContentOffset:CGPointMake(0, 50) animated:NO];
+	{		
+		if (dropdown.folders == nil || [dropdown.folders count] == 2)
+			[self.tableView setContentOffset:CGPointMake(0, 86) animated:NO];
+		else
+			[self.tableView setContentOffset:CGPointMake(0, 50) animated:NO];
+	}	
+		UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+		fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
+		fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		self.tableView.tableFooterView = fadeBottom;
+	 //}
 	
 	if ([dataModel isRootFolderIdCached])
 		[self addCount];
@@ -145,6 +153,11 @@
 	}
 	
 	[FlurryAnalytics logEvent:@"FoldersTab"];
+	
+	DLog(@"view subviews: %@", self.view.subviews);
+	DLog(@"view: %@   tableView: %@", self.view, self.tableView);
+	DLog(@"view sublayers: %@", self.view.layer.sublayers);
+	DLog(@"tableView sublayers: %@", self.tableView.layer.sublayers);
 }
 
 
@@ -364,7 +377,7 @@
 #pragma mark - Button handling methods
 
 
-- (void) doneSearching_Clicked:(id)sender 
+- (void)doneSearching_Clicked:(id)sender 
 {
 	[self updateCount];
 	
@@ -643,8 +656,7 @@
 			}
 		}
 		AlbumViewController* albumViewController = [[AlbumViewController alloc] initWithArtist:anArtist orAlbum:nil];
-				
-		[self.navigationController pushViewController:albumViewController animated:YES];
+		[self pushViewController:albumViewController];
 		[albumViewController release];
 	}
 	else

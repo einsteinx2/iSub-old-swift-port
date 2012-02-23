@@ -1,5 +1,5 @@
 //
-//  UIView-tools.h
+//  UIView+Tools.h
 //  iSub
 //
 //  Created by Ben Baron on 12/22/10.
@@ -8,16 +8,33 @@
 
 
 
-@interface UIView (tools) 
+@interface UIView (Tools) 
 
-@property CGFloat x;
-@property CGFloat y;
-@property CGPoint origin;
+@property (nonatomic) CGFloat left;
+@property (nonatomic) CGFloat top;
+@property (nonatomic) CGFloat right;
+@property (nonatomic) CGFloat bottom;
 
-@property CGFloat width;
-@property CGFloat height;
-@property CGSize size;
+@property (nonatomic) CGFloat x;
+@property (nonatomic) CGFloat y;
+@property (nonatomic) CGPoint origin;
 
-@property (readonly) UIViewController *viewController;
+@property (nonatomic) CGFloat width;
+@property (nonatomic) CGFloat height;
+@property (nonatomic) CGSize size;
+
+@property (nonatomic, readonly) UIViewController *viewController;
+
+- (void)addLeftShadowWithWidth:(CGFloat)shadowWidth alpha:(CGFloat)shadowAlpha;
+- (void)addLeftShadow;
+- (void)addRightShadowWithWidth:(CGFloat)shadowWidth alpha:(CGFloat)shadowAlpha;
+- (void)addRightShadow;
++ (CAGradientLayer *)verticalShadowWithAlpha:(CGFloat)shadowAlpha inverse:(BOOL)inverse;
+
+- (void)addBottomShadowWithWidth:(CGFloat)shadowWidth alpha:(CGFloat)shadowAlpha;
+- (void)addBottomShadow;
+- (void)addTopShadowWithWidth:(CGFloat)shadowWidth alpha:(CGFloat)shadowAlpha;
+- (void)addTopShadow;
++ (CAGradientLayer *)horizontalShadowWithAlpha:(CGFloat)shadowAlpha inverse:(BOOL)inverse;
 
 @end

@@ -14,18 +14,15 @@
 
 @class UIViewExt;
 
-@interface RootViewController : UIViewController {
+@interface iPadRootViewController : UIViewController 
+{
 	UIViewExt* rootView;
 	UIView* leftMenuView;
 	UIView* rightSlideView;
-	
-	MenuViewController* menuViewController;
-	StackScrollViewController* stackScrollViewController;
-	
 }
 
-@property (nonatomic, retain) MenuViewController* menuViewController;
-@property (nonatomic, retain) StackScrollViewController* stackScrollViewController;
+@property (retain) MenuViewController* menuViewController;
+@property (retain) StackScrollViewController* stackScrollViewController;
 
 
 @end

@@ -1,5 +1,5 @@
 //
-//  UIViewController+PushView.h
+//  UIViewController+PushViewController.h
 //  iSub
 //
 //  Created by Ben Baron on 2/20/12.
@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIViewController (PushView)
+#define ISMSiPadViewWidth 448.
+
+@interface UIViewController (PushViewController)
+
+- (void)pushViewController:(UIViewController *)viewController;
+- (void)pushViewControllerWithNavControllerOnIpad:(UIViewController *)viewController;
 
 @end

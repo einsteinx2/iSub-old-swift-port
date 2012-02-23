@@ -8,6 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum
+{
+	StackScrollViewDragNone,
+	StackScrollViewDragLeft,
+	StackScrollViewDragRight
+} StackScrollViewScrollDirection;
 
 @interface StackScrollViewController :  UIViewController <UIScrollViewDelegate, UIGestureRecognizerDelegate> {
 	
@@ -23,7 +29,8 @@
 	
 	NSMutableArray* viewControllersStack;
 	
-	NSString* dragDirection;
+	//NSString* dragDirection;
+	StackScrollViewScrollDirection dragDirection;
 	
 	CGFloat viewXPosition;		
 	CGFloat displacementPosition;

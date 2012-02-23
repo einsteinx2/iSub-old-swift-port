@@ -6,26 +6,86 @@
 //  Copyright (c) 2012 Ben Baron. All rights reserved.
 //
 
-#import "ContainerView.h"
+#import "StackContainerView.h"
+#import "NSArray+Additions.h"
+#import "UIView+Tools.h"
 
-@implementation ContainerView
+@implementation StackContainerView
+
+- (void)setup
+{
+	self.userInteractionEnabled = YES;
+
+	[self addLeftShadow];
+	[self addRightShadow];
+}
+
+- (id)init
+{
+	if ((self = [super init]))
+	{
+		[self setup];
+	}
+	return self;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
-    }
-    return self;
+	if ((self = [super initWithFrame:frame]))
+	{
+		[self setup];
+	}
+	return self;
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
+- (id)initWithCoder:(NSCoder *)aDecoder
 {
-    // Drawing code
+	if ((self = [super initWithCoder:aDecoder]))
+	{
+		[self setup];
+	}
+	return self;
 }
-*/
+
+- (UIView *)insideView
+{
+	return [self.subviews firstObjectSafe];
+}
+
+/* 
+ * Pass all touch events along to the inside view 
+ */
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event 
+{
+    [self.nextResponder touchesBegan:touches withEvent:event];
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self.nextResponder touchesMoved:touches withEvent:event];
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self.nextResponder touchesEnded:touches withEvent:event];
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self.nextResponder touchesCancelled:touches withEvent:event];
+}
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event 
+{
+	UIView *insideView = self.insideView;
+    return [insideView hitTest:[self convertPoint:point toView:insideView] withEvent:event];
+}
+
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event 
+{
+	UIView *insideView = self.insideView;
+    return [insideView pointInside:[self convertPoint:point toView:insideView] withEvent:event];
+}
 
 @end

@@ -8,15 +8,18 @@
 
 #import <UIKit/UIKit.h> 
 
-@class MenuHeaderView;
+@class iPhoneStreamingPlayerViewController;
+@interface MenuViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> 
 
-@interface MenuViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
-	UITableView*  _tableView;
-	NSMutableArray* _cellContents;
-	MenuHeaderView* _menuHeader;
-}
+@property (retain) UITableView *tableView;
+@property (retain) iPhoneStreamingPlayerViewController *playerController;
+@property (retain) NSMutableArray *cellContents;
+@property BOOL isFirstLoad;
+@property NSUInteger lastSelectedRow;
+
 - (id)initWithFrame:(CGRect)frame;
-
-@property(nonatomic, retain)UITableView* tableView;
+- (void)loadCellContents;
+- (UIView *)createHeaderView:(BOOL)withImage;
+- (UIView *)createFooterView;
 
 @end

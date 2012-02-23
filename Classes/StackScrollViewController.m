@@ -7,32 +7,39 @@
 //
 
 #import "StackScrollViewController.h"
-#import "UIViewWithShadow.h";
+#import <QuartzCore/QuartzCore.h>
+#import "UIView+Tools.h"
+#import "StackContainerView.h"
+#import "NSArray+Additions.h"
 
-const NSInteger SLIDE_VIEWS_MINUS_X_POSITION = -130;
+const NSInteger SLIDE_VIEWS_MINUS_X_POSITION = -190;//-130;
 const NSInteger SLIDE_VIEWS_START_X_POS = 0;
+const NSTimeInterval SLIDE_ANIMATION_DURATION = 0.2;
+const NSTimeInterval BOUNCE_ANIMATION_DURATION = 0.06;
+//TODO: calc bounce anim dur & dist based on distance of slide so that its the same speed per pixel
+const CGFloat BOUNCE_DISTANCE = 10.0;
 
 @implementation StackScrollViewController
 
 @synthesize slideViews, borderViews, viewControllersStack, slideStartPosition;
 
--(id)init {
-	
-	if(self= [super init]) {
-		
+-(id)init
+{
+	if((self = [super init])) 
+	{
 		viewControllersStack = [[NSMutableArray alloc] init]; 
 		borderViews = [[UIView alloc] initWithFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION - 2, -2, 2, self.view.frame.size.height)];
 		[borderViews setBackgroundColor:[UIColor clearColor]];
 		UIView* verticalLineView1 = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, borderViews.frame.size.height)] autorelease];
 		[verticalLineView1 setBackgroundColor:[UIColor whiteColor]];
 		[verticalLineView1 setTag:1];
-		[verticalLineView1 setHidden:TRUE];
+		[verticalLineView1 setHidden:YES];
 		[borderViews addSubview:verticalLineView1];
 		
 		UIView* verticalLineView2 = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 2, borderViews.frame.size.height)] autorelease];
 		[verticalLineView2 setBackgroundColor:[UIColor grayColor]];
 		[verticalLineView2 setTag:2];
-		[verticalLineView2 setHidden:TRUE];		
+		[verticalLineView2 setHidden:YES];		
 		[borderViews addSubview:verticalLineView2];
 		
 		[self.view addSubview:borderViews];
@@ -45,62 +52,88 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 		viewXPosition = 0;
 		lastTouchPoint = -1;
 		
-		dragDirection = [[NSString alloc] init];
-		dragDirection = @"";
+		dragDirection = StackScrollViewDragNone;
 		
-		viewAtLeft2=nil;
-		viewAtLeft=nil;
-		viewAtRight=nil;
-		viewAtRight2=nil;
+		viewAtLeft = nil;
+		viewAtLeft2 = nil;
+		viewAtRight = nil;
+		viewAtRight2 = nil;
 		viewAtRightAtTouchBegan = nil;
 		
 		UIPanGestureRecognizer* panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanFrom:)];
-		[panRecognizer setMaximumNumberOfTouches:1];
-		[panRecognizer setDelaysTouchesBegan:TRUE];
-		[panRecognizer setDelaysTouchesEnded:TRUE];
-		[panRecognizer setCancelsTouchesInView:TRUE];
+		panRecognizer.maximumNumberOfTouches = 1;
+		panRecognizer.delaysTouchesBegan = NO;
+		panRecognizer.delaysTouchesEnded = NO;
+		panRecognizer.cancelsTouchesInView = NO;
 		[self.view addGestureRecognizer:panRecognizer];
 		[panRecognizer release];
 		
 		[self.view addSubview:slideViews];
 		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showPlayer) 
+													 name:ISMSNotification_ShowPlayer object:nil];
 	}
 	
 	return self;
 }
 
--(void)arrangeVerticalBar {
-	
-	if ([[slideViews subviews] count] > 2) {
-		[[borderViews viewWithTag:2] setHidden:TRUE];
-		[[borderViews viewWithTag:1] setHidden:TRUE];
+- (void)showPlayer
+{
+	//TODO: this is buggy
+	return;
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:SLIDE_ANIMATION_DURATION];			
+	//[UIView setAnimationBeginsFromCurrentState:YES];
+	[UIView setAnimationTransition:UIViewAnimationTransitionNone forView:nil cache:YES];
+	for (UIView *subView in slideViews.subviews)
+	{
+		if (subView.x < 0.)
+			subView.x = 0.;
+	}
+	//if (((UIView *)[slideViews.subviews firstObjectSafe]).x < 0.)
+	{
+		
+	}
+	[UIView commitAnimations];	
+}
+
+- (void)arrangeVerticalBar 
+{
+	if ([[slideViews subviews] count] > 2) 
+	{
+		[[borderViews viewWithTag:2] setHidden:YES];
+		[[borderViews viewWithTag:1] setHidden:YES];
+		
 		NSInteger stackCount = 0;
-		if (viewAtLeft != nil ) {
+		if (viewAtLeft != nil ) 
+		{
 			stackCount = [[slideViews subviews] indexOfObject:viewAtLeft];
 		}
 		
-		if (viewAtLeft != nil && viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION) {
+		if (viewAtLeft != nil && viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION) 
+		{
 			stackCount += 1;
 		}
 		
-		if (stackCount == 2) {
-			[[borderViews viewWithTag:2] setHidden:FALSE];
+		if (stackCount == 2) 
+		{
+			[[borderViews viewWithTag:2] setHidden:YES];
 		}
-		if (stackCount >= 3) {
-			[[borderViews viewWithTag:2] setHidden:FALSE];
-			[[borderViews viewWithTag:1] setHidden:FALSE];
+		if (stackCount >= 3)
+		{
+			[[borderViews viewWithTag:2] setHidden:YES];
+			[[borderViews viewWithTag:1] setHidden:YES];
 		}
-		
-		
 	}
 }
 
 
-- (void)handlePanFrom:(UIPanGestureRecognizer *)recognizer {
-	
+- (void)handlePanFrom:(UIPanGestureRecognizer *)recognizer
+{
 	CGPoint translatedPoint = [recognizer translationInView:self.view];
 	
-	if (recognizer.state == UIGestureRecognizerStateBegan) {
+	if (recognizer.state == UIGestureRecognizerStateBegan) 
+	{
 		displacementPosition = 0;
 		positionOfViewAtRightAtTouchBegan = viewAtRight.frame.origin;
 		positionOfViewAtLeftAtTouchBegan = viewAtLeft.frame.origin;
@@ -110,10 +143,12 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 		[viewAtRight.layer removeAllAnimations];
 		[viewAtRight2.layer removeAllAnimations];
 		[viewAtLeft2.layer removeAllAnimations];
-		if (viewAtLeft2 != nil) {
+		if (viewAtLeft2 != nil) 
+		{
 			NSInteger viewAtLeft2Position = [[slideViews subviews] indexOfObject:viewAtLeft2];
-			if (viewAtLeft2Position > 0) {
-				[((UIView*)[[slideViews subviews] objectAtIndex:viewAtLeft2Position -1]) setHidden:FALSE];
+			if (viewAtLeft2Position > 0) 
+			{
+				[((UIView*)[[slideViews subviews] objectAtIndex:viewAtLeft2Position -1]) setHidden:NO];
 			}
 		}
 		
@@ -123,66 +158,83 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 	
 	CGPoint location =  [recognizer locationInView:self.view];
 	
-	if (lastTouchPoint != -1) {
-		
-		if (location.x < lastTouchPoint) {			
-			
-			if ([dragDirection isEqualToString:@"RIGHT"]) {
+	if (lastTouchPoint != -1) 
+	{
+		if (location.x < lastTouchPoint) 
+		{			
+			if (dragDirection == StackScrollViewDragRight) 
+			{
 				positionOfViewAtRightAtTouchBegan = viewAtRight.frame.origin;
 				positionOfViewAtLeftAtTouchBegan = viewAtLeft.frame.origin;
 				displacementPosition = translatedPoint.x * -1;
 			}				
 			
-			dragDirection = @"LEFT";
+			dragDirection = StackScrollViewDragLeft;
 			
-			if (viewAtRight != nil) {
-				
-				if (viewAtLeft.frame.origin.x <= SLIDE_VIEWS_MINUS_X_POSITION) {						
-					if ([[slideViews subviews] indexOfObject:viewAtRight] < ([[slideViews subviews] count]-1)) {
+			if (viewAtRight != nil) 
+			{
+				if (viewAtLeft.frame.origin.x <= SLIDE_VIEWS_MINUS_X_POSITION) 
+				{						
+					if ([[slideViews subviews] indexOfObject:viewAtRight] < ([[slideViews subviews] count]-1)) 
+					{
 						viewAtLeft2 = viewAtLeft;
 						viewAtLeft = viewAtRight;
-						[viewAtRight2 setHidden:FALSE];
+						viewAtRight2.hidden = NO;
 						viewAtRight = viewAtRight2;
-						if ([[slideViews subviews] indexOfObject:viewAtRight] < ([[slideViews subviews] count]-1)) {
+						if ([[slideViews subviews] indexOfObject:viewAtRight] < ([[slideViews subviews] count]-1))
+						{
 							viewAtRight2 = [[slideViews subviews] objectAtIndex:[[slideViews subviews] indexOfObject:viewAtRight] + 1];
-						}else {
+						}
+						else 
+						{
 							viewAtRight2 = nil;
 						}							
 						positionOfViewAtRightAtTouchBegan = viewAtRight.frame.origin;
 						positionOfViewAtLeftAtTouchBegan = viewAtLeft.frame.origin;
 						displacementPosition = translatedPoint.x * -1;							
-						if ([[slideViews subviews] indexOfObject:viewAtLeft2] > 1) {
-							[[[slideViews subviews] objectAtIndex:[[slideViews subviews] indexOfObject:viewAtLeft2] - 2] setHidden:TRUE];
+						if ([[slideViews subviews] indexOfObject:viewAtLeft2] > 1)
+						{
+							[[[slideViews subviews] objectAtIndex:[[slideViews subviews] indexOfObject:viewAtLeft2] - 2] setHidden:YES];
 						}
-						
 					}
-					
 				}
 				
-				if (viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION && viewAtRight.frame.origin.x + viewAtRight.frame.size.width > self.view.frame.size.width) {
-					if ((positionOfViewAtRightAtTouchBegan.x + translatedPoint.x + displacementPosition + viewAtRight.frame.size.width) <= self.view.frame.size.width) {
+				if (viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION && viewAtRight.frame.origin.x + viewAtRight.frame.size.width > self.view.frame.size.width) 
+				{
+					if ((positionOfViewAtRightAtTouchBegan.x + translatedPoint.x + displacementPosition + viewAtRight.frame.size.width) <= self.view.frame.size.width) 
+					{
 						[viewAtRight setFrame:CGRectMake(self.view.frame.size.width - viewAtRight.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
-					}else {
+					}
+					else
+					{
 						[viewAtRight setFrame:CGRectMake(positionOfViewAtRightAtTouchBegan.x + translatedPoint.x + displacementPosition, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
 					}
-					
 				}
-				else if (([[slideViews subviews] indexOfObject:viewAtRight] == [[slideViews subviews] count]-1) && viewAtRight.frame.origin.x <= (self.view.frame.size.width - viewAtRight.frame.size.width)) {
-					if ((positionOfViewAtRightAtTouchBegan.x + translatedPoint.x + displacementPosition) <= SLIDE_VIEWS_MINUS_X_POSITION) {
+				else if (([[slideViews subviews] indexOfObject:viewAtRight] == [[slideViews subviews] count]-1) && viewAtRight.frame.origin.x <= (self.view.frame.size.width - viewAtRight.frame.size.width)) 
+				{
+					if ((positionOfViewAtRightAtTouchBegan.x + translatedPoint.x + displacementPosition) <= SLIDE_VIEWS_MINUS_X_POSITION)
+					{
 						[viewAtRight setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
-					}else {
+					}
+					else
+					{
 						[viewAtRight setFrame:CGRectMake(positionOfViewAtRightAtTouchBegan.x + translatedPoint.x + displacementPosition, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
 					}
 				}
-				else{						
-					if (positionOfViewAtLeftAtTouchBegan.x + translatedPoint.x + displacementPosition <= SLIDE_VIEWS_MINUS_X_POSITION) {
+				else
+				{						
+					if (positionOfViewAtLeftAtTouchBegan.x + translatedPoint.x + displacementPosition <= SLIDE_VIEWS_MINUS_X_POSITION) 
+					{
 						[viewAtLeft setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
-					}else {
+					}
+					else
+					{
 						[viewAtLeft setFrame:CGRectMake(positionOfViewAtLeftAtTouchBegan.x + translatedPoint.x + displacementPosition , viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
 					}						
 					[viewAtRight setFrame:CGRectMake(viewAtLeft.frame.origin.x + viewAtLeft.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
 					
-					if (viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION) {
+					if (viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION)
+					{
 						positionOfViewAtRightAtTouchBegan = viewAtRight.frame.origin;
 						positionOfViewAtLeftAtTouchBegan = viewAtLeft.frame.origin;
 						displacementPosition = translatedPoint.x * -1;
@@ -196,30 +248,35 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 			
 			[self arrangeVerticalBar];
 			
-		}else if (location.x > lastTouchPoint) {	
-			
-			if ([dragDirection isEqualToString:@"LEFT"]) {
+		}
+		else if (location.x > lastTouchPoint) 
+		{	
+			if (dragDirection == StackScrollViewDragLeft)
+			{
 				positionOfViewAtRightAtTouchBegan = viewAtRight.frame.origin;
 				positionOfViewAtLeftAtTouchBegan = viewAtLeft.frame.origin;
 				displacementPosition = translatedPoint.x;
 			}	
 			
-			dragDirection = @"RIGHT";
+			dragDirection = StackScrollViewDragRight;
 			
-			if (viewAtLeft != nil) {
-				
-				if (viewAtRight.frame.origin.x >= self.view.frame.size.width) {
-					
-					if ([[slideViews subviews] indexOfObject:viewAtLeft] > 0) {							
-						[viewAtRight2 setHidden:TRUE];
+			if (viewAtLeft != nil) 
+			{
+				if (viewAtRight.frame.origin.x >= self.view.frame.size.width) 
+				{
+					if ([[slideViews subviews] indexOfObject:viewAtLeft] > 0) 
+					{							
+						viewAtRight2.hidden = YES;
 						viewAtRight2 = viewAtRight;
 						viewAtRight = viewAtLeft;
 						viewAtLeft = viewAtLeft2;						
-						if ([[slideViews subviews] indexOfObject:viewAtLeft] > 0) {
+						if ([[slideViews subviews] indexOfObject:viewAtLeft] > 0)
+						{
 							viewAtLeft2 = [[slideViews subviews] objectAtIndex:[[slideViews subviews] indexOfObject:viewAtLeft] - 1];
-							[viewAtLeft2 setHidden:FALSE];
+							viewAtLeft2.hidden = NO;
 						}
-						else{
+						else
+						{
 							viewAtLeft2 = nil;
 						}
 						positionOfViewAtRightAtTouchBegan = viewAtRight.frame.origin;
@@ -230,40 +287,56 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 					}
 				}
 				
-				if((viewAtRight.frame.origin.x < (viewAtLeft.frame.origin.x + viewAtLeft.frame.size.width)) && viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION){						
-					if ((positionOfViewAtRightAtTouchBegan.x + translatedPoint.x - displacementPosition) >= (viewAtLeft.frame.origin.x + viewAtLeft.frame.size.width)) {
+				if((viewAtRight.frame.origin.x < (viewAtLeft.frame.origin.x + viewAtLeft.frame.size.width)) && viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION)
+				{						
+					if ((positionOfViewAtRightAtTouchBegan.x + translatedPoint.x - displacementPosition) >= (viewAtLeft.frame.origin.x + viewAtLeft.frame.size.width)) 
+					{
 						[viewAtRight setFrame:CGRectMake(viewAtLeft.frame.origin.x + viewAtLeft.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
-					}else {
+					}
+					else 
+					{
 						[viewAtRight setFrame:CGRectMake(positionOfViewAtRightAtTouchBegan.x + translatedPoint.x - displacementPosition, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
 					}
-					
 				}
-				else if ([[slideViews subviews] indexOfObject:viewAtLeft] == 0) {
-					if (viewAtRight == nil) {
+				else if ([[slideViews subviews] indexOfObject:viewAtLeft] == 0) 
+				{
+					if (viewAtRight == nil)
+					{
 						[viewAtLeft setFrame:CGRectMake(positionOfViewAtLeftAtTouchBegan.x + translatedPoint.x - displacementPosition, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
 					}
-					else{
+					else
+					{
 						[viewAtRight setFrame:CGRectMake(positionOfViewAtRightAtTouchBegan.x + translatedPoint.x - displacementPosition, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
-						if (viewAtRight.frame.origin.x - viewAtLeft.frame.size.width < SLIDE_VIEWS_MINUS_X_POSITION) {
+						if (viewAtRight.frame.origin.x - viewAtLeft.frame.size.width < SLIDE_VIEWS_MINUS_X_POSITION) 
+						{
 							[viewAtLeft setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
-						}else{
+						}
+						else
+						{
 							[viewAtLeft setFrame:CGRectMake(viewAtRight.frame.origin.x - viewAtLeft.frame.size.width, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
 						}
 					}
 				}					
-				else{
-					if ((positionOfViewAtRightAtTouchBegan.x + translatedPoint.x - displacementPosition) >= self.view.frame.size.width) {
+				else
+				{
+					if ((positionOfViewAtRightAtTouchBegan.x + translatedPoint.x - displacementPosition) >= self.view.frame.size.width)
+					{
 						[viewAtRight setFrame:CGRectMake(self.view.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
-					}else {
+					}
+					else 
+					{
 						[viewAtRight setFrame:CGRectMake(positionOfViewAtRightAtTouchBegan.x + translatedPoint.x - displacementPosition, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
 					}
-					if (viewAtRight.frame.origin.x - viewAtLeft.frame.size.width < SLIDE_VIEWS_MINUS_X_POSITION) {
+					if (viewAtRight.frame.origin.x - viewAtLeft.frame.size.width < SLIDE_VIEWS_MINUS_X_POSITION) 
+					{
 						[viewAtLeft setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
 					}
-					else{
+					else
+					{
 						[viewAtLeft setFrame:CGRectMake(viewAtRight.frame.origin.x - viewAtLeft.frame.size.width, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
 					}
-					if (viewAtRight.frame.origin.x >= self.view.frame.size.width) {
+					if (viewAtRight.frame.origin.x >= self.view.frame.size.width) 
+					{
 						positionOfViewAtRightAtTouchBegan = viewAtRight.frame.origin;
 						positionOfViewAtLeftAtTouchBegan = viewAtLeft.frame.origin;
 						displacementPosition = translatedPoint.x;
@@ -281,42 +354,50 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 	lastTouchPoint = location.x;
 	
 	// STATE END	
-	if (recognizer.state == UIGestureRecognizerStateEnded) {
-		
-		if ([dragDirection isEqualToString:@"LEFT"]) {
-			if (viewAtRight != nil) {
-				if ([[slideViews subviews] indexOfObject:viewAtLeft] == 0 && !(viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION || viewAtLeft.frame.origin.x == SLIDE_VIEWS_START_X_POS)) {
+	if (recognizer.state == UIGestureRecognizerStateEnded) 
+	{
+		if (dragDirection == StackScrollViewDragLeft) 
+		{
+			if (viewAtRight != nil) 
+			{
+				if ([[slideViews subviews] indexOfObject:viewAtLeft] == 0 && !(viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION || viewAtLeft.frame.origin.x == SLIDE_VIEWS_START_X_POS))
+				{
 					[UIView beginAnimations:nil context:NULL];
-					[UIView setAnimationDuration:0.2];
+					[UIView setAnimationDuration:SLIDE_ANIMATION_DURATION];
 					[UIView setAnimationTransition:UIViewAnimationTransitionNone forView:nil cache:YES];
 					[UIView setAnimationBeginsFromCurrentState:YES];
-					if (viewAtLeft.frame.origin.x < SLIDE_VIEWS_START_X_POS && viewAtRight != nil) {
+					if (viewAtLeft.frame.origin.x < SLIDE_VIEWS_START_X_POS && viewAtRight != nil) 
+					{
 						[viewAtLeft setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
 						[viewAtRight setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION + viewAtLeft.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width,viewAtRight.frame.size.height)];
 					}
-					else{
-						
+					else
+					{
 						//Drop Card View Animation
-						if ((((UIView*)[[slideViews subviews] objectAtIndex:0]).frame.origin.x+200) >= (self.view.frame.origin.x + ((UIView*)[[slideViews subviews] objectAtIndex:0]).frame.size.width)) {
-							
+						if ((((UIView*)[[slideViews subviews] objectAtIndex:0]).frame.origin.x+200) >= (self.view.frame.origin.x + ((UIView*)[[slideViews subviews] objectAtIndex:0]).frame.size.width))
+						{
 							NSInteger viewControllerCount = [viewControllersStack count];
 							
-							if (viewControllerCount > 1) {
-								for (int i = 1; i < viewControllerCount; i++) {
+							if (viewControllerCount > 1) 
+							{
+								for (int i = 1; i < viewControllerCount; i++) 
+								{
 									viewXPosition = self.view.frame.size.width - [slideViews viewWithTag:i].frame.size.width;
 									[[slideViews viewWithTag:i] removeFromSuperview];
 									[viewControllersStack removeLastObject];
 								}
 								
-								[[borderViews viewWithTag:3] setHidden:TRUE];
-								[[borderViews viewWithTag:2] setHidden:TRUE];
-								[[borderViews viewWithTag:1] setHidden:TRUE];
+								[[borderViews viewWithTag:3] setHidden:YES];
+								[[borderViews viewWithTag:2] setHidden:YES];
+								[[borderViews viewWithTag:1] setHidden:YES];
 								
 							}
 							
 							// Removes the selection of row for the first slide view
-							for (UIView* tableView in [[[slideViews subviews] objectAtIndex:0] subviews]) {
-								if([tableView isKindOfClass:[UITableView class]]){
+							for (UIView* tableView in [[[slideViews subviews] objectAtIndex:0] subviews])
+							{
+								if([tableView isKindOfClass:[UITableView class]])
+								{
 									NSIndexPath* selectedRow =  [(UITableView*)tableView indexPathForSelectedRow];
 									NSArray *indexPaths = [NSArray arrayWithObjects:selectedRow, nil];
 									[(UITableView*)tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:NO];
@@ -328,24 +409,26 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 						}
 						
 						[viewAtLeft setFrame:CGRectMake(SLIDE_VIEWS_START_X_POS, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
-						if (viewAtRight != nil) {
+						if (viewAtRight != nil)
+						{
 							[viewAtRight setFrame:CGRectMake(SLIDE_VIEWS_START_X_POS + viewAtLeft.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width,viewAtRight.frame.size.height)];						
 						}
-						
 					}
 					[UIView commitAnimations];
 				}
-				else if (viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION && viewAtRight.frame.origin.x + viewAtRight.frame.size.width > self.view.frame.size.width) {
+				else if (viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION && viewAtRight.frame.origin.x + viewAtRight.frame.size.width > self.view.frame.size.width)
+				{
 					[UIView beginAnimations:nil context:NULL];
-					[UIView setAnimationDuration:0.2];
-					[UIView setAnimationTransition:UIViewAnimationCurveEaseInOut forView:nil cache:YES];
+					[UIView setAnimationDuration:SLIDE_ANIMATION_DURATION];
+					[UIView setAnimationTransition:UIViewAnimationOptionCurveEaseInOut forView:nil cache:YES];
 					[UIView setAnimationBeginsFromCurrentState:YES];
 					[viewAtRight setFrame:CGRectMake(self.view.frame.size.width - viewAtRight.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width,viewAtRight.frame.size.height)];						
 					[UIView commitAnimations];						
 				}	
-				else if (viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION && viewAtRight.frame.origin.x + viewAtRight.frame.size.width < self.view.frame.size.width) {
+				else if (viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION && viewAtRight.frame.origin.x + viewAtRight.frame.size.width < self.view.frame.size.width) 
+				{
 					[UIView beginAnimations:@"RIGHT-WITH-RIGHT" context:NULL];
-					[UIView setAnimationDuration:0.2];
+					[UIView setAnimationDuration:SLIDE_ANIMATION_DURATION];
 					[UIView setAnimationTransition:UIViewAnimationTransitionNone forView:nil cache:YES];
 					[UIView setAnimationBeginsFromCurrentState:YES];
 					[viewAtRight setFrame:CGRectMake(self.view.frame.size.width - viewAtRight.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width,viewAtRight.frame.size.height)];
@@ -353,24 +436,29 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 					[UIView setAnimationDidStopSelector:@selector(bounceBack:finished:context:)];
 					[UIView commitAnimations];
 				}
-				else if (viewAtLeft.frame.origin.x > SLIDE_VIEWS_MINUS_X_POSITION) {
-					[UIView setAnimationDuration:0.2];
-					[UIView setAnimationTransition:UIViewAnimationCurveEaseInOut forView:nil cache:YES];
+				else if (viewAtLeft.frame.origin.x > SLIDE_VIEWS_MINUS_X_POSITION)
+				{
+					[UIView setAnimationDuration:SLIDE_ANIMATION_DURATION];
+					[UIView setAnimationTransition:UIViewAnimationOptionCurveEaseInOut forView:nil cache:YES];
 					[UIView setAnimationBeginsFromCurrentState:YES];
-					if ((viewAtLeft.frame.origin.x + viewAtLeft.frame.size.width > self.view.frame.size.width) && viewAtLeft.frame.origin.x < (self.view.frame.size.width - (viewAtLeft.frame.size.width)/2)) {
+					if ((viewAtLeft.frame.origin.x + viewAtLeft.frame.size.width > self.view.frame.size.width) && viewAtLeft.frame.origin.x < (self.view.frame.size.width - (viewAtLeft.frame.size.width)/2)) 
+					{
 						[UIView beginAnimations:@"LEFT-WITH-LEFT" context:nil];
 						[viewAtLeft setFrame:CGRectMake(self.view.frame.size.width - viewAtLeft.frame.size.width, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
 						
 						//Show bounce effect
 						[viewAtRight setFrame:CGRectMake(self.view.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width,viewAtRight.frame.size.height)];						
 					}
-					else {
+					else
+					{
 						[UIView beginAnimations:@"LEFT-WITH-RIGHT" context:nil];	
 						[viewAtLeft setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
-						if (positionOfViewAtLeftAtTouchBegan.x + viewAtLeft.frame.size.width <= self.view.frame.size.width) {
+						if (positionOfViewAtLeftAtTouchBegan.x + viewAtLeft.frame.size.width <= self.view.frame.size.width)
+						{
 							[viewAtRight setFrame:CGRectMake((self.view.frame.size.width - viewAtRight.frame.size.width), viewAtRight.frame.origin.y, viewAtRight.frame.size.width,viewAtRight.frame.size.height)];						
 						}
-						else{
+						else
+						{
 							[viewAtRight setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION + viewAtLeft.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width,viewAtRight.frame.size.height)];						
 						}
 						
@@ -383,41 +471,50 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 				}
 				
 			}
-			else{
+			else
+			{
 				[UIView beginAnimations:nil context:NULL];
-				[UIView setAnimationDuration:0.2];
+				[UIView setAnimationDuration:SLIDE_ANIMATION_DURATION];
 				[UIView setAnimationBeginsFromCurrentState:YES];
 				[UIView setAnimationTransition:UIViewAnimationTransitionNone forView:nil cache:YES];
 				[viewAtLeft setFrame:CGRectMake(SLIDE_VIEWS_START_X_POS, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
 				[UIView commitAnimations];
 			}
-			
-		}else if ([dragDirection isEqualToString:@"RIGHT"]) {
-			if (viewAtLeft != nil) {
-				if ([[slideViews subviews] indexOfObject:viewAtLeft] == 0 && !(viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION || viewAtLeft.frame.origin.x == SLIDE_VIEWS_START_X_POS)) {
+		}
+		else if (dragDirection == StackScrollViewDragRight) 
+		{
+			if (viewAtLeft != nil) 
+			{
+				if ([[slideViews subviews] indexOfObject:viewAtLeft] == 0 && !(viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION || viewAtLeft.frame.origin.x == SLIDE_VIEWS_START_X_POS))
+				{
 					[UIView beginAnimations:nil context:NULL];
-					[UIView setAnimationDuration:0.2];			
+					[UIView setAnimationDuration:SLIDE_ANIMATION_DURATION];			
 					[UIView setAnimationBeginsFromCurrentState:YES];
 					[UIView setAnimationTransition:UIViewAnimationTransitionNone forView:nil cache:YES];
-					if (viewAtLeft.frame.origin.x > SLIDE_VIEWS_MINUS_X_POSITION || viewAtRight == nil) {
-						
+					if (viewAtLeft.frame.origin.x > SLIDE_VIEWS_MINUS_X_POSITION || viewAtRight == nil)
+					{
 						//Drop Card View Animation
-						if ((((UIView*)[[slideViews subviews] objectAtIndex:0]).frame.origin.x+200) >= (self.view.frame.origin.x + ((UIView*)[[slideViews subviews] objectAtIndex:0]).frame.size.width)) {
+						if ((((UIView*)[[slideViews subviews] objectAtIndex:0]).frame.origin.x+200) >= (self.view.frame.origin.x + ((UIView*)[[slideViews subviews] objectAtIndex:0]).frame.size.width)) 
+						{
 							NSInteger viewControllerCount = [viewControllersStack count];
-							if (viewControllerCount > 1) {
-								for (int i = 1; i < viewControllerCount; i++) {
+							if (viewControllerCount > 1) 
+							{
+								for (int i = 1; i < viewControllerCount; i++)
+								{
 									viewXPosition = self.view.frame.size.width - [slideViews viewWithTag:i].frame.size.width;
 									[[slideViews viewWithTag:i] removeFromSuperview];
 									[viewControllersStack removeLastObject];
 								}
-								[[borderViews viewWithTag:3] setHidden:TRUE];
-								[[borderViews viewWithTag:2] setHidden:TRUE];
-								[[borderViews viewWithTag:1] setHidden:TRUE];
+								[[borderViews viewWithTag:3] setHidden:YES];
+								[[borderViews viewWithTag:2] setHidden:YES];
+								[[borderViews viewWithTag:1] setHidden:YES];
 							}
 							
 							// Removes the selection of row for the first slide view
-							for (UIView* tableView in [[[slideViews subviews] objectAtIndex:0] subviews]) {
-								if([tableView isKindOfClass:[UITableView class]]){
+							for (UIView* tableView in [[[slideViews subviews] objectAtIndex:0] subviews]) 
+							{
+								if([tableView isKindOfClass:[UITableView class]])
+								{
 									NSIndexPath* selectedRow =  [(UITableView*)tableView indexPathForSelectedRow];
 									NSArray *indexPaths = [NSArray arrayWithObjects:selectedRow, nil];
 									[(UITableView*)tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:NO];
@@ -429,20 +526,24 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 							viewAtRight2 = nil;							 
 						}
 						[viewAtLeft setFrame:CGRectMake(SLIDE_VIEWS_START_X_POS, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
-						if (viewAtRight != nil) {
+						if (viewAtRight != nil) 
+						{
 							[viewAtRight setFrame:CGRectMake(SLIDE_VIEWS_START_X_POS + viewAtLeft.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width,viewAtRight.frame.size.height)];
 						}
 					}
-					else{
+					else
+					{
 						[viewAtLeft setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
 						[viewAtRight setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION + viewAtLeft.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width,viewAtRight.frame.size.height)];
 					}
 					[UIView commitAnimations];
 				}
-				else if (viewAtRight.frame.origin.x < self.view.frame.size.width) {
-					if((viewAtRight.frame.origin.x < (viewAtLeft.frame.origin.x + viewAtLeft.frame.size.width)) && viewAtRight.frame.origin.x < (self.view.frame.size.width - (viewAtRight.frame.size.width/2))){
+				else if (viewAtRight.frame.origin.x < self.view.frame.size.width) 
+				{
+					if((viewAtRight.frame.origin.x < (viewAtLeft.frame.origin.x + viewAtLeft.frame.size.width)) && viewAtRight.frame.origin.x < (self.view.frame.size.width - (viewAtRight.frame.size.width/2)))
+					{
 						[UIView beginAnimations:@"RIGHT-WITH-RIGHT" context:NULL];
-						[UIView setAnimationDuration:0.2];
+						[UIView setAnimationDuration:SLIDE_ANIMATION_DURATION];
 						[UIView setAnimationBeginsFromCurrentState:YES];
 						[UIView setAnimationTransition:UIViewAnimationTransitionNone forView:nil cache:YES];
 						[viewAtRight setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION + viewAtLeft.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width,viewAtRight.frame.size.height)];						
@@ -450,22 +551,26 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 						[UIView setAnimationDidStopSelector:@selector(bounceBack:finished:context:)];
 						[UIView commitAnimations];
 					}				
-					else{
-						
+					else
+					{
 						[UIView beginAnimations:@"RIGHT-WITH-LEFT" context:NULL];
-						[UIView setAnimationDuration:0.2];
+						[UIView setAnimationDuration:SLIDE_ANIMATION_DURATION];
 						[UIView setAnimationBeginsFromCurrentState:YES];
 						[UIView setAnimationTransition:UIViewAnimationTransitionNone forView:nil cache:YES];
-						if([[slideViews subviews] indexOfObject:viewAtLeft] > 0){ 
-							if (positionOfViewAtRightAtTouchBegan.x  + viewAtRight.frame.size.width <= self.view.frame.size.width) {							
+						if([[slideViews subviews] indexOfObject:viewAtLeft] > 0)
+						{ 
+							if (positionOfViewAtRightAtTouchBegan.x  + viewAtRight.frame.size.width <= self.view.frame.size.width) 
+							{							
 								[viewAtLeft setFrame:CGRectMake(self.view.frame.size.width - viewAtLeft.frame.size.width, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
 							}
-							else{							
+							else
+							{							
 								[viewAtLeft setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION + viewAtLeft2.frame.size.width, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
 							}
 							[viewAtRight setFrame:CGRectMake(self.view.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width,viewAtRight.frame.size.height)];		
 						}
-						else{
+						else
+						{
 							[viewAtLeft setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
 							[viewAtRight setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION + viewAtLeft.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width,viewAtRight.frame.size.height)];
 						}
@@ -478,23 +583,24 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 			}			
 		}
 		lastTouchPoint = -1;
-		dragDirection = @"";
-	}	
-	
+		dragDirection = StackScrollViewDragNone;
+	}
 }
 
-- (void)bounceBack:(NSString*)animationID finished:(NSNumber*)finished context:(void*)context {	
+- (void)bounceBack:(NSString*)animationID finished:(NSNumber*)finished context:(void*)context 
+{	
+	BOOL isBouncing = NO;
 	
-	BOOL isBouncing = FALSE;
-	
-	if([dragDirection isEqualToString:@""] && [finished boolValue]){
+	if(dragDirection == StackScrollViewDragNone && [finished boolValue])
+	{
 		[viewAtLeft.layer removeAllAnimations];
 		[viewAtRight.layer removeAllAnimations];
 		[viewAtRight2.layer removeAllAnimations];
 		[viewAtLeft2.layer removeAllAnimations];
-		if ([animationID isEqualToString:@"LEFT-WITH-LEFT"] && viewAtLeft2.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION) {
-			CABasicAnimation *bounceAnimation = [CABasicAnimation animationWithKeyPath:@"position.x"];
-			bounceAnimation.duration = 0.2;
+		if ([animationID isEqualToString:@"LEFT-WITH-LEFT"] && viewAtLeft2.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION)
+		{
+			CABasicAnimation *bounceAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
+			bounceAnimation.duration = BOUNCE_ANIMATION_DURATION;
 			bounceAnimation.fromValue = [NSValue valueWithCGPoint:viewAtLeft.center];
 			bounceAnimation.toValue = [NSValue valueWithCGPoint:CGPointMake(viewAtLeft.center.x -10, viewAtLeft.center.y)];
 			bounceAnimation.repeatCount = 0;
@@ -504,9 +610,9 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 			bounceAnimation.additive = NO;
 			[viewAtLeft.layer addAnimation:bounceAnimation forKey:@"bounceAnimation"];
 			
-			[viewAtRight setHidden:FALSE];
-			CABasicAnimation *bounceAnimationForRight = [CABasicAnimation animationWithKeyPath:@"position.x"];
-			bounceAnimationForRight.duration = 0.2;
+			[viewAtRight setHidden:NO];
+			CABasicAnimation *bounceAnimationForRight = [CABasicAnimation animationWithKeyPath:@"position"];
+			bounceAnimationForRight.duration = BOUNCE_ANIMATION_DURATION;
 			bounceAnimationForRight.fromValue = [NSValue valueWithCGPoint:viewAtRight.center];
 			bounceAnimationForRight.toValue = [NSValue valueWithCGPoint:CGPointMake((viewAtRight.center.x - 20), viewAtRight.center.y)];
 			bounceAnimationForRight.repeatCount = 0;
@@ -515,9 +621,11 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 			bounceAnimationForRight.removedOnCompletion = YES;
 			bounceAnimationForRight.additive = NO;
 			[viewAtRight.layer addAnimation:bounceAnimationForRight forKey:@"bounceAnimationRight"];
-		}else if ([animationID isEqualToString:@"LEFT-WITH-RIGHT"]  && viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION) {
-			CABasicAnimation *bounceAnimation = [CABasicAnimation animationWithKeyPath:@"position.x"];
-			bounceAnimation.duration = 0.2;
+		}
+		else if ([animationID isEqualToString:@"LEFT-WITH-RIGHT"]  && viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION)
+		{
+			CABasicAnimation *bounceAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
+			bounceAnimation.duration = BOUNCE_ANIMATION_DURATION;
 			bounceAnimation.fromValue = [NSValue valueWithCGPoint:viewAtRight.center];
 			bounceAnimation.toValue = [NSValue valueWithCGPoint:CGPointMake(viewAtRight.center.x -10, viewAtRight.center.y)];
 			bounceAnimation.repeatCount = 0;
@@ -528,9 +636,9 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 			[viewAtRight.layer addAnimation:bounceAnimation forKey:@"bounceAnimation"];
 			
 			
-			[viewAtRight2 setHidden:FALSE];
-			CABasicAnimation *bounceAnimationForRight2 = [CABasicAnimation animationWithKeyPath:@"position.x"];
-			bounceAnimationForRight2.duration = 0.2;
+			[viewAtRight2 setHidden:NO];
+			CABasicAnimation *bounceAnimationForRight2 = [CABasicAnimation animationWithKeyPath:@"position"];
+			bounceAnimationForRight2.duration = BOUNCE_ANIMATION_DURATION;
 			bounceAnimationForRight2.fromValue = [NSValue valueWithCGPoint:viewAtRight2.center];
 			bounceAnimationForRight2.toValue = [NSValue valueWithCGPoint:CGPointMake((viewAtRight2.center.x - 20), viewAtRight2.center.y)];
 			bounceAnimationForRight2.repeatCount = 0;
@@ -539,11 +647,14 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 			bounceAnimationForRight2.removedOnCompletion = YES;
 			bounceAnimationForRight2.additive = NO;
 			[viewAtRight2.layer addAnimation:bounceAnimationForRight2 forKey:@"bounceAnimationRight2"];
-		}else if ([animationID isEqualToString:@"RIGHT-WITH-RIGHT"]) {
-			CABasicAnimation *bounceAnimationLeft = [CABasicAnimation animationWithKeyPath:@"position.x"];
-			bounceAnimationLeft.duration = 0.2;
+		}
+		else if ([animationID isEqualToString:@"RIGHT-WITH-RIGHT"]) 
+		{
+			CABasicAnimation *bounceAnimationLeft = [CABasicAnimation animationWithKeyPath:@"position"];
+			bounceAnimationLeft.duration = BOUNCE_ANIMATION_DURATION;
 			bounceAnimationLeft.fromValue = [NSValue valueWithCGPoint:viewAtLeft.center];
-			bounceAnimationLeft.toValue = [NSValue valueWithCGPoint:CGPointMake(viewAtLeft.center.x +10, viewAtLeft.center.y)];
+			//bounceAnimationLeft.toValue = [NSValue valueWithCGPoint:CGPointMake(viewAtLeft.center.x +10, viewAtLeft.center.y)];
+			bounceAnimationLeft.toValue = [NSValue valueWithCGPoint:CGPointMake(viewAtLeft.center.x + BOUNCE_DISTANCE, viewAtLeft.center.y)];
 			bounceAnimationLeft.repeatCount = 0;
 			bounceAnimationLeft.autoreverses = YES;
 			bounceAnimationLeft.fillMode = kCAFillModeBackwards;
@@ -551,10 +662,11 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 			bounceAnimationLeft.additive = NO;
 			[viewAtLeft.layer addAnimation:bounceAnimationLeft forKey:@"bounceAnimationLeft"];
 			
-			CABasicAnimation *bounceAnimationRight = [CABasicAnimation animationWithKeyPath:@"position.x"];
-			bounceAnimationRight.duration = 0.2;
+			CABasicAnimation *bounceAnimationRight = [CABasicAnimation animationWithKeyPath:@"position"];
+			bounceAnimationRight.duration = BOUNCE_ANIMATION_DURATION;
 			bounceAnimationRight.fromValue = [NSValue valueWithCGPoint:viewAtRight.center];
-			bounceAnimationRight.toValue = [NSValue valueWithCGPoint:CGPointMake(viewAtRight.center.x +10, viewAtRight.center.y)];
+			//bounceAnimationRight.toValue = [NSValue valueWithCGPoint:CGPointMake(viewAtRight.center.x +10, viewAtRight.center.y)];
+			bounceAnimationRight.toValue = [NSValue valueWithCGPoint:CGPointMake(viewAtRight.center.x + BOUNCE_DISTANCE, viewAtRight.center.y)];
 			bounceAnimationRight.repeatCount = 0;
 			bounceAnimationRight.autoreverses = YES;
 			bounceAnimationRight.fillMode = kCAFillModeBackwards;
@@ -562,9 +674,11 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 			bounceAnimationRight.additive = NO;
 			[viewAtRight.layer addAnimation:bounceAnimationRight forKey:@"bounceAnimationRight"];
 			
-		}else if ([animationID isEqualToString:@"RIGHT-WITH-LEFT"]) {
-			CABasicAnimation *bounceAnimationLeft = [CABasicAnimation animationWithKeyPath:@"position.x"];
-			bounceAnimationLeft.duration = 0.2;
+		}
+		else if ([animationID isEqualToString:@"RIGHT-WITH-LEFT"]) 
+		{
+			CABasicAnimation *bounceAnimationLeft = [CABasicAnimation animationWithKeyPath:@"position"];
+			bounceAnimationLeft.duration = BOUNCE_ANIMATION_DURATION;
 			bounceAnimationLeft.fromValue = [NSValue valueWithCGPoint:viewAtLeft.center];
 			bounceAnimationLeft.toValue = [NSValue valueWithCGPoint:CGPointMake(viewAtLeft.center.x +10, viewAtLeft.center.y)];
 			bounceAnimationLeft.repeatCount = 0;
@@ -574,14 +688,16 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 			bounceAnimationLeft.additive = NO;
 			[viewAtLeft.layer addAnimation:bounceAnimationLeft forKey:@"bounceAnimationLeft"];
 			
-			if (viewAtLeft2 != nil) {
-				[viewAtLeft2 setHidden:FALSE];
+			if (viewAtLeft2 != nil) 
+			{
+				viewAtLeft2.hidden = NO;
 				NSInteger viewAtLeft2Position = [[slideViews subviews] indexOfObject:viewAtLeft2];
-				if (viewAtLeft2Position > 0) {
-					[((UIView*)[[slideViews subviews] objectAtIndex:viewAtLeft2Position -1]) setHidden:FALSE];
+				if (viewAtLeft2Position > 0) 
+				{
+					[((UIView*)[[slideViews subviews] objectAtIndex:viewAtLeft2Position -1]) setHidden:NO];
 				}
-				CABasicAnimation* bounceAnimationLeft2 = [CABasicAnimation animationWithKeyPath:@"position.x"];
-				bounceAnimationLeft2.duration = 0.2;
+				CABasicAnimation* bounceAnimationLeft2 = [CABasicAnimation animationWithKeyPath:@"position"];
+				bounceAnimationLeft2.duration = BOUNCE_ANIMATION_DURATION;
 				bounceAnimationLeft2.fromValue = [NSValue valueWithCGPoint:viewAtLeft2.center];
 				bounceAnimationLeft2.toValue = [NSValue valueWithCGPoint:CGPointMake(viewAtLeft2.center.x +10, viewAtLeft2.center.y)];
 				bounceAnimationLeft2.repeatCount = 0;
@@ -591,133 +707,131 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 				bounceAnimationLeft2.additive = NO;
 				[viewAtLeft2.layer addAnimation:bounceAnimationLeft2 forKey:@"bounceAnimationviewAtLeft2"];
 				[self performSelector:@selector(callArrangeVerticalBar) withObject:nil afterDelay:0.4];
-				isBouncing = TRUE;
+				isBouncing = YES;
 			}
-			
 		}
-		
 	}
 	[self arrangeVerticalBar];	
-	if ([[slideViews subviews] indexOfObject:viewAtLeft2] == 1 && isBouncing) {
-		[[borderViews viewWithTag:2] setHidden:TRUE];
+	if ([[slideViews subviews] indexOfObject:viewAtLeft2] == 1 && isBouncing)
+	{
+		[[borderViews viewWithTag:2] setHidden:YES];
 	}
 }
 
 
-- (void)callArrangeVerticalBar{
+- (void)callArrangeVerticalBar
+{
 	[self arrangeVerticalBar];
 }
 
-- (void)loadView {
+- (void)addViewInSlider:(UIViewController*)controller invokeByController:(UIViewController*)invokeByController isStackStartView:(BOOL)isStackStartView
+{
+	BOOL isContentSizeForMainViewSet = NO;
 	
-	[super loadView];
-}
-
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
-    [super viewDidLoad];
-}
-
-- (void) viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-}
-
-- (void)addViewInSlider:(UIViewController*)controller invokeByController:(UIViewController*)invokeByController isStackStartView:(BOOL)isStackStartView{
-	
-	BOOL isContentSizeForMainViewSet = FALSE;
-	
-	if (isStackStartView) {
+	if (isStackStartView) 
+	{
 		slideStartPosition = SLIDE_VIEWS_START_X_POS;
 		viewXPosition = slideStartPosition;
 		
-		for (UIView* subview in [slideViews subviews]) {
+		for (UIView* subview in [slideViews subviews])
+		{
 			[subview removeFromSuperview];
 		}
 		
-		[[borderViews viewWithTag:3] setHidden:TRUE];
-		[[borderViews viewWithTag:2] setHidden:TRUE];
-		[[borderViews viewWithTag:1] setHidden:TRUE];
+		[[borderViews viewWithTag:3] setHidden:YES];
+		[[borderViews viewWithTag:2] setHidden:YES];
+		[[borderViews viewWithTag:1] setHidden:YES];
 		[viewControllersStack removeAllObjects];
-		isContentSizeForMainViewSet = TRUE;
+		isContentSizeForMainViewSet = YES;
 	}
 	
-	
-	if([viewControllersStack count] > 1){
+	if([viewControllersStack count] > 1)
+	{
 		NSInteger indexOfViewController = [viewControllersStack
 										   indexOfObject:invokeByController]+1;
 		
-		if ([invokeByController parentViewController]) {
+		if ([invokeByController parentViewController]) 
+		{
 			indexOfViewController = [viewControllersStack
 									 indexOfObject:[invokeByController parentViewController]]+1;
 		}
 		
 		NSInteger viewControllerCount = [viewControllersStack count];
-		for (int i = indexOfViewController; i < viewControllerCount; i++) {
+		for (int i = indexOfViewController; i < viewControllerCount; i++)
+		{
 			[[slideViews viewWithTag:i] removeFromSuperview];
 			[viewControllersStack removeObjectAtIndex:indexOfViewController];
 			viewXPosition = self.view.frame.size.width - [controller view].frame.size.width;
 		}
-	}else if([viewControllersStack count] == 0) {
-		for (UIView* subview in [slideViews subviews]) {
+	}
+	else if([viewControllersStack count] == 0) 
+	{
+		for (UIView* subview in [slideViews subviews]) 
+		{
 			[subview removeFromSuperview];
-		}		[viewControllersStack removeAllObjects];
-		[[borderViews viewWithTag:3] setHidden:TRUE];
-		[[borderViews viewWithTag:2] setHidden:TRUE];
-		[[borderViews viewWithTag:1] setHidden:TRUE];
+		}		
+		[viewControllersStack removeAllObjects];
+		[[borderViews viewWithTag:3] setHidden:YES];
+		[[borderViews viewWithTag:2] setHidden:YES];
+		[[borderViews viewWithTag:1] setHidden:YES];
 	}
 		
-	if ([slideViews.subviews count] != 0) {
-		UIViewWithShadow* verticalLineView = [[[UIViewWithShadow alloc] initWithFrame:CGRectMake(-40, 0, 40 , self.view.frame.size.height)] autorelease];
-		[verticalLineView setBackgroundColor:[UIColor clearColor]];
-		[verticalLineView setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
-		[verticalLineView setClipsToBounds:NO];
-		[controller.view addSubview:verticalLineView];
-	}
+	// Create the container view -- necessary because the shadow layer does 
+	// not draw correctly on UITableViewControllers for some reason
+	StackContainerView *contView = [[StackContainerView alloc] initWithFrame:controller.view.frame];
 	
 	[viewControllersStack addObject:controller];
-	if (invokeByController !=nil) {
+	if (invokeByController !=nil) 
+	{
 		viewXPosition = invokeByController.view.frame.origin.x + invokeByController.view.frame.size.width;			
 	}
-	if ([[slideViews subviews] count] == 0) {
+	if ([[slideViews subviews] count] == 0) 
+	{
 		slideStartPosition = SLIDE_VIEWS_START_X_POS;
 		viewXPosition = slideStartPosition;
 	}
-	[[controller view] setFrame:CGRectMake(viewXPosition, 0, [controller view].frame.size.width, self.view.frame.size.height)];
+	[[controller view] setFrame:CGRectMake(0, 0, [controller view].frame.size.width, self.view.frame.size.height)];
 	
-	[controller.view setTag:([viewControllersStack count]-1)];
-	[controller viewWillAppear:FALSE];
-	[controller viewDidAppear:FALSE];
-	[slideViews addSubview:[controller view]];
+	[contView addSubview:controller.view];
+	contView.x = viewXPosition;
+	contView.tag = [viewControllersStack count] - 1;
+	[controller viewWillAppear:NO];
+	[controller viewDidAppear:NO];
+	[slideViews addSubview:contView];
+	[contView release];
 	
-	
-	if ([[slideViews subviews] count] > 0) {
-		
-		if ([[slideViews subviews] count]==1) {
+	if ([[slideViews subviews] count] > 0)
+	{
+		if ([[slideViews subviews] count]==1) 
+		{
 			viewAtLeft = [[slideViews subviews] objectAtIndex:[[slideViews subviews] count]-1];
 			viewAtLeft2 = nil;
 			viewAtRight = nil;
 			viewAtRight2 = nil;
-			
-		}else if ([[slideViews subviews] count]==2){
+		}
+		else if ([[slideViews subviews] count]==2)
+		{
 			viewAtRight = [[slideViews subviews] objectAtIndex:[[slideViews subviews] count]-1];
 			viewAtLeft = [[slideViews subviews] objectAtIndex:[[slideViews subviews] count]-2];
 			viewAtLeft2 = nil;
 			viewAtRight2 = nil;
 			
 			[UIView beginAnimations:nil context:NULL];
-			[UIView setAnimationTransition:UIViewAnimationCurveEaseInOut forView:viewAtLeft cache:YES];	
+			[UIView setAnimationTransition:UIViewAnimationOptionCurveEaseInOut forView:viewAtLeft cache:YES];	
 			[UIView setAnimationBeginsFromCurrentState:NO];	
 			[viewAtLeft setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
 			[viewAtRight setFrame:CGRectMake(self.view.frame.size.width - viewAtRight.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
 			[UIView commitAnimations];
 			slideStartPosition = SLIDE_VIEWS_MINUS_X_POSITION;
+		}
+		else 
+		{
 			
-		}else {
-			
-			if (((UIView*)[[slideViews subviews] objectAtIndex:0]).frame.origin.x > SLIDE_VIEWS_MINUS_X_POSITION) {
+			if (((UIView*)[[slideViews subviews] objectAtIndex:0]).frame.origin.x > SLIDE_VIEWS_MINUS_X_POSITION)
+			{
 				UIView* tempRight2View =[[slideViews subviews] objectAtIndex:[[slideViews subviews] count]-1];
 				[UIView beginAnimations:@"ALIGN_TO_MINIMENU" context:NULL];
-				[UIView setAnimationTransition:UIViewAnimationCurveEaseInOut forView:viewAtLeft cache:YES];	
+				[UIView setAnimationTransition:UIViewAnimationOptionCurveEaseInOut forView:viewAtLeft cache:YES];	
 				[UIView setAnimationBeginsFromCurrentState:NO];				
 				[viewAtLeft setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
 				[viewAtRight setFrame:CGRectMake(self.view.frame.size.width - viewAtRight.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
@@ -725,15 +839,17 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 				[UIView setAnimationDelegate:self];
 				[UIView setAnimationDidStopSelector:@selector(bounceBack:finished:context:)];
 				[UIView commitAnimations];
-			}else {
+			}
+			else 
+			{
 				viewAtRight = [[slideViews subviews] objectAtIndex:[[slideViews subviews] count]-1];
 				viewAtLeft = [[slideViews subviews] objectAtIndex:[[slideViews subviews] count]-2];
 				viewAtLeft2 = [[slideViews subviews] objectAtIndex:[[slideViews subviews] count]-3];
-				[viewAtLeft2 setHidden:FALSE];
+				[viewAtLeft2 setHidden:NO];
 				viewAtRight2 = nil;
 				
 				[UIView beginAnimations:nil context:NULL];
-				[UIView setAnimationTransition:UIViewAnimationCurveEaseInOut forView:viewAtLeft cache:YES];	
+				[UIView setAnimationTransition:UIViewAnimationOptionCurveEaseInOut forView:viewAtLeft cache:YES];	
 				[UIView setAnimationBeginsFromCurrentState:NO];	
 				[viewAtLeft setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
 				[viewAtRight setFrame:CGRectMake(self.view.frame.size.width - viewAtRight.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
@@ -741,8 +857,9 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 				[UIView setAnimationDidStopSelector:@selector(bounceBack:finished:context:)];
 				[UIView commitAnimations];				
 				slideStartPosition = SLIDE_VIEWS_MINUS_X_POSITION;	
-				if([[slideViews subviews] count] > 3){
-					[[[slideViews subviews] objectAtIndex:[[slideViews subviews] count]-4] setHidden:TRUE];		
+				if([[slideViews subviews] count] > 3)
+				{
+					[[[slideViews subviews] objectAtIndex:[[slideViews subviews] count]-4] setHidden:YES];		
 				}
 			}
 			
@@ -751,94 +868,181 @@ const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 	}
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
 }
 
-- (void)viewDidUnload {
+- (void)viewDidUnload
+{
 	[super viewDidUnload];
-	for (UIViewController* subController in viewControllersStack) {
+	for (UIViewController* subController in viewControllersStack) 
+	{
 		[subController viewDidUnload];
 	}
 }
 
 
-#pragma mark -
-#pragma mark Rotation support
+#pragma mark - Rotation support
 
 
 // Ensure that the view controller supports rotation and that the split view can therefore show in both portrait and landscape.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
+{
     return YES;
 }
 
 
--(void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
-	BOOL isViewOutOfScreen = FALSE; 
-	for (UIViewController* subController in viewControllersStack) {
-		if (viewAtRight != nil && [viewAtRight isEqual:subController.view]) {
-			if (viewAtRight.frame.origin.x + viewAtRight.frame.size.width <= self.view.frame.size.width) {
+-(void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+	BOOL isViewOutOfScreen = NO; 
+	/*for (UIViewController* subController in viewControllersStack)
+	{
+		if (viewAtRight != nil && [viewAtRight isEqual:subController.view]) 
+		{
+			if (viewAtRight.frame.origin.x + viewAtRight.frame.size.width <= self.view.frame.size.width) 
+			{
 				[subController.view setFrame:CGRectMake(self.view.frame.size.width - subController.view.frame.size.width, subController.view.frame.origin.y, subController.view.frame.size.width, self.view.frame.size.height)];
-			}else{
+			}
+			else
+			{
 				[subController.view setFrame:CGRectMake(viewAtLeft.frame.origin.x + viewAtLeft.frame.size.width, subController.view.frame.origin.y, subController.view.frame.size.width, self.view.frame.size.height)];
 			}
-			isViewOutOfScreen = TRUE;
+			isViewOutOfScreen = YES;
 		}
-		else if (viewAtLeft != nil && [viewAtLeft isEqual:subController.view]) {
-			if (viewAtLeft2 == nil) {
-				if(viewAtRight == nil){					
+		else if (viewAtLeft != nil && [viewAtLeft isEqual:subController.view])
+		{
+			if (viewAtLeft2 == nil) 
+			{
+				if(viewAtRight == nil)
+				{					
 					[subController.view setFrame:CGRectMake(SLIDE_VIEWS_START_X_POS, subController.view.frame.origin.y, subController.view.frame.size.width, self.view.frame.size.height)];
 				}
-				else{
+				else
+				{
 					[subController.view setFrame:CGRectMake(SLIDE_VIEWS_START_X_POS, subController.view.frame.origin.y, subController.view.frame.size.width, self.view.frame.size.height)];
 					[viewAtRight setFrame:CGRectMake(SLIDE_VIEWS_START_X_POS + subController.view.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
 				}
 			}
-			else if (viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION || viewAtLeft.frame.origin.x == SLIDE_VIEWS_START_X_POS) {
+			else if (viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION || viewAtLeft.frame.origin.x == SLIDE_VIEWS_START_X_POS) 
+			{
 				[subController.view setFrame:CGRectMake(subController.view.frame.origin.x, subController.view.frame.origin.y, subController.view.frame.size.width, self.view.frame.size.height)];
 			}
-			else {
-				if (viewAtLeft.frame.origin.x + viewAtLeft.frame.size.width == self.view.frame.size.width) {
+			else 
+			{
+				if (viewAtLeft.frame.origin.x + viewAtLeft.frame.size.width == self.view.frame.size.width) 
+				{
 					[subController.view setFrame:CGRectMake(self.view.frame.size.width - subController.view.frame.size.width, subController.view.frame.origin.y, subController.view.frame.size.width, self.view.frame.size.height)];
-				}else{
+				}
+				else
+				{
 					[subController.view setFrame:CGRectMake(viewAtLeft2.frame.origin.x + viewAtLeft2.frame.size.width, subController.view.frame.origin.y, subController.view.frame.size.width, self.view.frame.size.height)];
 				}
 			}
 		}
-		else if(!isViewOutOfScreen){
+		else if(!isViewOutOfScreen)
+		{
 			[subController.view setFrame:CGRectMake(subController.view.frame.origin.x, subController.view.frame.origin.y, subController.view.frame.size.width, self.view.frame.size.height)];
 		}
-		else {
+		else
+		{
 			[subController.view setFrame:CGRectMake(self.view.frame.size.width, subController.view.frame.origin.y, subController.view.frame.size.width, self.view.frame.size.height)];
 		}
 		
 	}
-	for (UIViewController* subController in viewControllersStack) {
+	for (UIViewController* subController in viewControllersStack) 
+	{
 		[subController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration]; 		
-		if (!((viewAtRight != nil && [viewAtRight isEqual:subController.view]) || (viewAtLeft != nil && [viewAtLeft isEqual:subController.view]) || (viewAtLeft2 != nil && [viewAtLeft2 isEqual:subController.view]))) {
-			[[subController view] setHidden:TRUE];		
+		if (!((viewAtRight != nil && [viewAtRight isEqual:subController.view]) 
+			|| (viewAtLeft != nil && [viewAtLeft isEqual:subController.view]) 
+			|| (viewAtLeft2 != nil && [viewAtLeft2 isEqual:subController.view]))) 
+		{
+			[[subController view] setHidden:YES];		
 		}
 		
-	}       	
+	}       	*/
 	
+	for (StackContainerView *contView in slideViews.subviews)
+	{
+		if (viewAtRight != nil && [viewAtRight isEqual:contView]) 
+		{
+			if (viewAtRight.frame.origin.x + viewAtRight.frame.size.width <= self.view.frame.size.width) 
+			{
+				[contView setFrame:CGRectMake(self.view.frame.size.width - contView.frame.size.width, contView.frame.origin.y, contView.frame.size.width, self.view.frame.size.height)];
+			}
+			else
+			{
+				[contView setFrame:CGRectMake(viewAtLeft.frame.origin.x + viewAtLeft.frame.size.width, contView.frame.origin.y, contView.frame.size.width, self.view.frame.size.height)];
+			}
+			isViewOutOfScreen = YES;
+		}
+		else if (viewAtLeft != nil && [viewAtLeft isEqual:contView])
+		{
+			if (viewAtLeft2 == nil) 
+			{
+				if(viewAtRight == nil)
+				{					
+					[contView setFrame:CGRectMake(SLIDE_VIEWS_START_X_POS, contView.frame.origin.y, contView.frame.size.width, self.view.frame.size.height)];
+				}
+				else
+				{
+					[contView setFrame:CGRectMake(SLIDE_VIEWS_START_X_POS, contView.frame.origin.y, contView.frame.size.width, self.view.frame.size.height)];
+					[viewAtRight setFrame:CGRectMake(SLIDE_VIEWS_START_X_POS + contView.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
+				}
+			}
+			else if (viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION || viewAtLeft.frame.origin.x == SLIDE_VIEWS_START_X_POS) 
+			{
+				[contView setFrame:CGRectMake(contView.frame.origin.x, contView.frame.origin.y, contView.frame.size.width, self.view.frame.size.height)];
+			}
+			else 
+			{
+				if (viewAtLeft.frame.origin.x + viewAtLeft.frame.size.width == self.view.frame.size.width) 
+				{
+					[contView setFrame:CGRectMake(self.view.frame.size.width - contView.frame.size.width, contView.frame.origin.y, contView.frame.size.width, self.view.frame.size.height)];
+				}
+				else
+				{
+					[contView setFrame:CGRectMake(viewAtLeft2.frame.origin.x + viewAtLeft2.frame.size.width, contView.frame.origin.y, contView.frame.size.width, self.view.frame.size.height)];
+				}
+			}
+		}
+		else if(!isViewOutOfScreen)
+		{
+			[contView setFrame:CGRectMake(contView.frame.origin.x, contView.frame.origin.y, contView.frame.size.width, self.view.frame.size.height)];
+		}
+		else
+		{
+			[contView setFrame:CGRectMake(self.view.frame.size.width, contView.frame.origin.y, contView.frame.size.width, self.view.frame.size.height)];
+		}
+		contView.insideView.size = contView.size;
+	}
+	
+	for (UIViewController* subController in viewControllersStack) 
+	{
+		[subController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+		/*if (!((viewAtRight != nil && [viewAtRight isEqual:subController.view]) 
+			  || (viewAtLeft != nil && [viewAtLeft isEqual:subController.view]) 
+			  || (viewAtLeft2 != nil && [viewAtLeft2 isEqual:subController.view]))) 
+		{
+			subController.view.hidden = YES;		
+		}*/
+	}
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {	
-	for (UIViewController* subController in viewControllersStack) {
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation 
+{	
+	for (UIViewController* subController in viewControllersStack)
+	{
 		[subController didRotateFromInterfaceOrientation:fromInterfaceOrientation];                
 	}
-	if (viewAtLeft !=nil) {
-		[viewAtLeft setHidden:FALSE];
-	}
-	if (viewAtRight !=nil) {
-		[viewAtRight setHidden:FALSE];
-	}	
-	if (viewAtLeft2 !=nil) {
-		[viewAtLeft2 setHidden:FALSE];
-	}	
+	
+	viewAtLeft.hidden = NO;
+	viewAtRight.hidden = NO;
+	viewAtLeft2.hidden = NO;
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
 	[slideViews release];
 	[viewControllersStack release];
     [super dealloc];

@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ContainerView : UIView
+@interface StackContainerView : UIView
+
+@property (nonatomic, readonly) UIView *insideView;
 
 @end
