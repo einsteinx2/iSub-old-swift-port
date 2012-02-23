@@ -25,6 +25,7 @@
 	BOOL isPartialCacheNextSong;
 	BOOL isExtraPlayerControlsShowing;
 	BOOL isPlayerPlaylistShowing;
+	NSUInteger quickSkipNumberOfSeconds;
 	
 	// State Saving
 	BOOL isPlaying;	
@@ -90,6 +91,7 @@
 @property float gainMultiplier;
 @property BOOL isPartialCacheNextSong;
 @property ISMSBassVisualType currentVisualizerType;
+@property NSUInteger quickSkipNumberOfSeconds;
 
 @property BOOL isExtraPlayerControlsShowing;
 @property BOOL isPlayerPlaylistShowing;

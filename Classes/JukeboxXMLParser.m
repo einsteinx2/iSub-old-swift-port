@@ -14,6 +14,7 @@
 #import "DatabaseSingleton.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation JukeboxXMLParser
 
@@ -42,7 +43,7 @@
 	{
 		[SavedSettings sharedInstance].isJukeboxEnabled = NO;
 		appDelegate.window.backgroundColor = [ViewObjectsSingleton sharedInstance].windowColor;
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"JukeboxTurnedOff" object:nil];
+		[NSNotificationCenter postNotificationToMainThreadWithName:@"JukeboxTurnedOff"];
 	}
 }
 

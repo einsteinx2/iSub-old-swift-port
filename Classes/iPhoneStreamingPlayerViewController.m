@@ -19,7 +19,7 @@
 #import <CFNetwork/CFNetwork.h>
 #import "FMDatabaseAdditions.h"
 #import "NSString+md5.h"
-#import "UIView+tools.h"
+#import "UIView+Tools.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SavedSettings.h"
 #import "PlaylistSingleton.h"
@@ -59,11 +59,12 @@
 @implementation iPhoneStreamingPlayerViewController
 
 @synthesize listOfSongs, reflectionView, originalViewFrames, extraButtons, extraButtonsButton, extraButtonsBackground;
-@synthesize progressLabelBackground, progressLabel, bookmarkCountLabel, progressSlider, elapsedTimeLabel, remainingTimeLabel, shuffleButton, repeatButton, bookmarkButton, currentAlbumButton;
-@synthesize updateTimer, progressTimer, hasMoved, oldPosition, byteOffset, currentSong, pauseSlider, downloadProgress;
+@synthesize bookmarkCountLabel, progressSlider, elapsedTimeLabel, remainingTimeLabel, shuffleButton, repeatButton, bookmarkButton, currentAlbumButton;
+@synthesize updateTimer, progressTimer, hasMoved, oldPosition, byteOffset, currentSong, pauseSlider, downloadProgress, sliderMultipleLabel;
 @synthesize bookmarkEntry, bookmarkIndex, bookmarkNameTextField, bookmarkPosition;
 @synthesize coverArtHolderView, songInfoView, extraButtonsButtonOffImage, extraButtonsButtonOnImage;
 @synthesize trackLabel, genreLabel, yearLabel, formatLabel;
+@synthesize quickBackLabel, quickForwLabel;
 
 static const CGFloat kDefaultReflectionFraction = 0.30;
 static const CGFloat kDefaultReflectionOpacity = 0.55;
@@ -71,21 +72,12 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 #pragma mark -
 #pragma mark Controller Life Cycle
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{	
-	NSString *name;
-	if (IS_IPAD())
-	{
-		name = @"iPhoneStreamingPlayerViewController~iPad";
-	}
+- (NSString *)stringFromSeconds:(NSUInteger)seconds
+{
+	if (seconds < 60)
+		return [NSString stringWithFormat:@"%is", seconds];
 	else
-	{
-		name = @"iPhoneStreamingPlayerViewController";
-	}
-	
-	self = [super initWithNibName:name bundle:nil];
-	
-	return self;
+		return [NSString stringWithFormat:@"%im", (seconds / 60)];
 }
 
 - (void)viewDidLoad
@@ -166,6 +158,19 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	{
 		[self playlistToggleAnimated:NO saveState:NO];
 	}
+	
+	coverArtHolderView.layer.masksToBounds = YES;
+	
+	if (IS_IPAD())
+	{
+		// Fix some positions
+		eqButton.y -= 10;
+		prevButton.y -= 10;
+		playButton.y -= 10;
+		nextButton.y -= 10;
+		extraButtonsButton.y -= 10;
+		volumeView.y += 5;
+	}
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -222,6 +227,18 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		else
 			[self setPlayButtonImage];
 	}
+	
+	NSString *imageName = audio.isEqualizerOn ? @"controller-equalizer-on.png" : @"controller-equalizer.png";
+	[eqButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+	
+	[self quickSecondsSetLabels];
+}
+
+- (void)quickSecondsSetLabels
+{
+	NSString *quickSeconds = [self stringFromSeconds:[SavedSettings sharedInstance].quickSkipNumberOfSeconds];
+	quickBackLabel.text = quickSeconds;
+	quickForwLabel.text = quickSeconds;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -243,13 +260,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	}
 }
 
-- (void)viewDidDisappear:(BOOL)animated
-{
-	[super viewDidDisappear:animated];
-	
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"hideSongInfoFast" object:nil];
-}
-
 - (void)registerForNotifications
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPlayButtonImage) 
@@ -268,6 +278,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 												 name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songInfoToggle:) 
 												 name:@"hideSongInfo" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showPlayerOverlayTemp) 
+												 name:ISMSNotification_ShowPlayer object:nil];
 }
 
 - (void)unregisterForNotifications
@@ -288,6 +300,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 													name:@"hideSongInfo" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self 
 													name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self 
+													name:ISMSNotification_ShowPlayer object:nil];
 }
 
 - (void)createDownloadProgressView
@@ -383,8 +397,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[self unregisterForNotifications];
 	
 	[progressSlider release]; progressSlider = nil;
-	[progressLabel release]; progressLabel = nil;
-	[progressLabelBackground release]; progressLabelBackground = nil;
 	[elapsedTimeLabel release]; elapsedTimeLabel = nil;
 	[remainingTimeLabel release]; remainingTimeLabel = nil;
 	[repeatButton release]; repeatButton = nil;
@@ -500,23 +512,30 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 #pragma mark Main
 
+- (void)showPlayerOverlayTemp
+{
+	if (!isFlipped && !isExtraButtonsShowing)
+	{
+		[self extraButtonsToggleAnimated:NO saveState:NO];
+		if (![SavedSettings sharedInstance].isExtraPlayerControlsShowing)
+			[self performSelector:@selector(hideExtraButtons) withObject:nil afterDelay:4.0];
+	}
+}
+
 - (void)setPlayButtonImage
 {		
-	NSString *imageName = IS_IPAD() ? @"controller-play-ipad.png" : @"controller-play.png";
-	[playButton setImage:[UIImage imageNamed:imageName] forState:0];
+	[playButton setImage:[UIImage imageNamed:@"controller-play.png"] forState:0];
 }
 
 
 - (void)setPauseButtonImage
 {
-	NSString *imageName = IS_IPAD() ? @"controller-pause-ipad.png" : @"controller-pause.png";
-	[playButton setImage:[UIImage imageNamed:imageName] forState:0];
+	[playButton setImage:[UIImage imageNamed:@"controller-pause.png"] forState:0];
 }
 
 - (void)setStopButtonImage
 {
-	NSString *imageName = IS_IPAD() ? @"controller-stop-ipad.png" : @"controller-stop.png";
-	[playButton setImage:[UIImage imageNamed:imageName] forState:0];
+	[playButton setImage:[UIImage imageNamed:@"controller-stop.png"] forState:0];
 }
  
 - (void)createSongTitle
@@ -525,11 +544,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	{
 		self.navigationItem.titleView = nil;
 		
-		float width;
-		if (IS_IPAD())
-			width = 400;
-		else
-			width = 180;
+		float width = 180;
 		
 		UIView *titleView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 40)] autorelease];
 		titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -653,17 +668,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	if(currentPlaylist.repeatMode == 1)
 	{
-		if (IS_IPAD())
-			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one-ipad.png"] forState:0];
-		else
-			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one.png"] forState:0];
+		[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one.png"] forState:0];
 	}
 	else if(currentPlaylist.repeatMode == 2)
 	{
-		if (IS_IPAD())
-			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all-ipad.png"] forState:0];
-		else
-			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all.png"] forState:0];
+		[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all.png"] forState:0];
 	}
 	
 	[self updateShuffleIcon];
@@ -672,18 +681,12 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	if (bookmarkCount > 0)
 	{
 		bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", bookmarkCount];
-		if (IS_IPAD())
-			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on-ipad.png"];
-		else
-			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
+		bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
 	}
 	else
 	{
 		bookmarkCountLabel.text = @"";
-		if(IS_IPAD())
-			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-ipad.png"];
-		else
-			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark.png"];
+		bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark.png"];
 	}
 	
 	trackLabel.text = [currentSong.track intValue] != 0 ? [NSString stringWithFormat:@"Track %i", [currentSong.track intValue]] : @"";
@@ -1034,23 +1037,47 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	}
 }*/
 
-- (IBAction) touchedSlider:(id)sender
+
+- (IBAction)touchedSlider:(id)sender
 {
 	pauseSlider = YES;
+	
+	if (self.sliderMultipleLabel == nil)
+	{
+		CGFloat width = 80;
+		CGFloat height = 20;
+		CGFloat x = (self.coverArtHolderView.width / 2) - (width / 2.);
+		CGFloat y = self.extraButtons.height;
+		CGRect frame = CGRectMake(x, y, width, height);
+		self.sliderMultipleLabel = [[[UILabel alloc] initWithFrame:frame] autorelease];
+		self.sliderMultipleLabel.textColor = [UIColor colorWithWhite:.8 alpha:1.0];
+		self.sliderMultipleLabel.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"controller-speed-tab.png"]];
+		self.sliderMultipleLabel.alpha = 0.0;
+		self.sliderMultipleLabel.font = [UIFont boldSystemFontOfSize:13.5];
+		self.sliderMultipleLabel.shadowOffset = CGSizeMake(0, 2);
+		self.sliderMultipleLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
+		self.sliderMultipleLabel.textAlignment = UITextAlignmentCenter;
+		
+		[self.coverArtHolderView addSubview:self.sliderMultipleLabel];
+	}
+	
+	OBSlider *slider = sender;
+	NSString *text = [NSString stringWithFormat:@"%@  x%.1f", [NSString formatTime:progressSlider.value], slider.scrubbingSpeed];
+	self.sliderMultipleLabel.text = text;
+	
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:0.2];
+	[UIView setAnimationTransition:UIViewAnimationOptionCurveEaseInOut forView:nil cache:YES];
+	self.sliderMultipleLabel.alpha = 1.0;
+	[UIView commitAnimations];	
 }
 
 
 - (IBAction) movingSlider:(id)sender
 {	
-	progressLabel.hidden = NO;
-	progressLabelBackground.hidden = NO;
-	
-	CGFloat percent = progressSlider.value / progressSlider.maximumValue;
-	CGFloat x = 20 + (percent * progressSlider.frame.size.width);
-	progressLabel.center = CGPointMake(x, 15);
-	progressLabelBackground.center = CGPointMake(x - 0.5, 15.5);
-	
-	[progressLabel setText:[NSString formatTime:progressSlider.value]];
+	OBSlider *slider = sender;
+	NSString *text = [NSString stringWithFormat:@"%@  x%.1f", [NSString formatTime:progressSlider.value], slider.scrubbingSpeed];
+	self.sliderMultipleLabel.text = text;
 }
 
 
@@ -1059,8 +1086,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	if (!hasMoved)
 	{		
 		hasMoved = YES;
-		progressLabel.hidden = YES;
-		progressLabelBackground.hidden = YES;
 		
 		// Fix for skipping to end of file going to next song
 		// It seems that the max time is always off
@@ -1110,14 +1135,22 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			}
 		}
 	}
+	
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:0.2];
+	[UIView setAnimationTransition:UIViewAnimationOptionCurveEaseInOut forView:nil cache:YES];
+	self.sliderMultipleLabel.alpha = 0.0;
+	[UIView commitAnimations];	
 }
 
 - (IBAction)skipBack30:(id)sender
 {
+	CGFloat seconds = (CGFloat)[SavedSettings sharedInstance].quickSkipNumberOfSeconds;
+	
 	float newValue = 0.0;
-	if (progressSlider.value - 30.0 >= 0.0)
+	if (progressSlider.value - seconds >= 0.0)
 	{
-		newValue = progressSlider.value - 30.0;
+		newValue = progressSlider.value - seconds;
 	}
 	progressSlider.value = newValue;
 	[self movedSlider:nil];
@@ -1125,7 +1158,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (IBAction)skipForward30:(id)sender
 {
-	progressSlider.value = progressSlider.value + 30.0;
+	CGFloat seconds = (CGFloat)[SavedSettings sharedInstance].quickSkipNumberOfSeconds;
+	progressSlider.value = progressSlider.value + seconds;
 	[self movedSlider:nil];
 }
 
@@ -1135,26 +1169,17 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	if(currentPlaylistDAO.repeatMode == 0)
 	{
-		if (IS_IPAD())
-			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one-ipad.png"] forState:0];
-		else
-			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one.png"] forState:0];
+		[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one.png"] forState:0];
 		currentPlaylistDAO.repeatMode = 1;
 	}
 	else if(currentPlaylistDAO.repeatMode == 1)
 	{
-		if (IS_IPAD())
-			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all-ipad.png"] forState:0];
-		else
-			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all.png"] forState:0];
+		[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all.png"] forState:0];
 		currentPlaylistDAO.repeatMode = 2;
 	}
 	else if(currentPlaylistDAO.repeatMode == 2)
 	{
-		if (IS_IPAD())
-			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-ipad.png"] forState:0];
-		else
-			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat.png"] forState:0];
+		[repeatButton setImage:[UIImage imageNamed:@"controller-repeat.png"] forState:0];
 		currentPlaylistDAO.repeatMode = 0;
 	}
 }
@@ -1221,10 +1246,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 				// Bookmark doesn't exist so save it
 				[databaseControls.bookmarksDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmarks (name, position, %@, bytes) VALUES (?, ?, %@, ?)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size, currentSong.parentId, [NSNumber numberWithUnsignedLongLong:bookmarkBytePosition]];
 				bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]];
-				if (IS_IPAD())
-					bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on-ipad.png"];
-				else
-					bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
+				bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
 			}
 			else
 			{
@@ -1243,10 +1265,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			[databaseControls.bookmarksDb executeUpdate:@"DELETE FROM bookmarks WHERE name = ?", bookmarkNameTextField.text];
 			[databaseControls.bookmarksDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmarks (name, position, %@, bytes) VALUES (?, ?, %@, ?)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size, currentSong.parentId, [NSNumber numberWithUnsignedLongLong:bookmarkBytePosition]];
 			bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]];
-			if (IS_IPAD())
-				bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on-ipad.png"];
-			else
-				bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
+			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
 		}
 	}
 }
@@ -1264,18 +1283,12 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	{
 		if (![SavedSettings sharedInstance].isJukeboxEnabled)
 		{
-			if (IS_IPAD())
-				[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-on-ipad.png"] forState:0];
-			else
-				[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-on.png"] forState:0];
+			[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-on.png"] forState:0];
 		}
 	}
 	else
 	{
-		if (IS_IPAD())
-			[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-ipad.png"] forState:0];
-		else
-			[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle.png"] forState:0];
+		[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle.png"] forState:0];
 	}
 	
 	[viewObjects hideLoadingScreen];
@@ -1288,27 +1301,28 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)updateDownloadProgress
 {		
+	return;
 	// Set the current song progress bar
 	if ([self.currentSong isTempCached])
 	{
-		downloadProgress.hidden = YES;
+		self.downloadProgress.hidden = YES;
 	}
 	else
 	{
-		downloadProgress.hidden = NO;
+		self.downloadProgress.hidden = NO;
 		
 		// Keep between 0 and 1
-		float modifier = currentSong.downloadProgress;
+		float modifier = self.currentSong.downloadProgress;
 		modifier = modifier < 0. ? 0. : modifier;
 		modifier = modifier > 1. ? 1. : modifier;
 		
 		// Set the width based on the download progress + left border size
-		float width = (currentSong.downloadProgress * downloadProgressWidth) + downloadProgressBorder;
+		float width = (self.currentSong.downloadProgress * downloadProgressWidth) + downloadProgressBorder;
 		
 		// If the song is fully cached, add the right side border
 		width = modifier >= 1. ? width + downloadProgressBorder : width;
 
-		downloadProgress.width = width;
+		self.downloadProgress.width = width;
 	}
 	
 	[self performSelector:@selector(updateDownloadProgress) withObject:nil afterDelay:1.0];

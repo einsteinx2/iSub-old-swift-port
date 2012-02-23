@@ -20,6 +20,7 @@
 #import "FMDatabaseAdditions.h"
 #import "PageControlViewController.h"
 #import "NSMutableURLRequest+SUS.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation AsynchronousImageView
 
@@ -224,7 +225,7 @@
 	
 	//if (isForPlayer)
 	//{
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"createReflection" object:nil];
+		[NSNotificationCenter postNotificationToMainThreadWithName:@"createReflection"];
 	//}
 	
 	[data release]; data = nil;

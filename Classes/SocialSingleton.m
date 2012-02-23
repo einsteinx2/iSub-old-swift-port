@@ -16,6 +16,7 @@
 #import "Song.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "SUSStreamSingleton.h"
+#import "NSNotificationCenter+MainThread.h"
 
 // Twitter secret keys
 #define kOAuthConsumerKey				@"nYKAEcLstFYnI9EEnv6g"
@@ -205,7 +206,7 @@ static SocialSingleton *sharedInstance = nil;
 - (void) OAuthTwitterController:(SA_OAuthTwitterController *)controller authenticatedWithUsername:(NSString *)username 
 {
 	//DLog(@"Authenicated for %@", username);
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"twitterAuthenticated" object:nil];
+	[NSNotificationCenter postNotificationToMainThreadWithName:@"twitterAuthenticated"];
 }
 
 - (void) OAuthTwitterControllerFailed:(SA_OAuthTwitterController *)controller 

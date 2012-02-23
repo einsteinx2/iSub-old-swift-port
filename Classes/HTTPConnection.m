@@ -6,6 +6,7 @@
 #import "DDNumber.h"
 #import "DDRange.h"
 #import "DDData.h"
+#import "NSNotificationCenter+MainThread.h"
 
 // Define chunk size used to read in data for responses
 // This is how much data will be read from disk into RAM at a time
@@ -1159,7 +1160,7 @@ static NSMutableArray *recentNonces;
 {
 	// Post notification of dead connection
 	// This will allow our server to release us from its array of connections
-	[[NSNotificationCenter defaultCenter] postNotificationName:HTTPConnectionDidDieNotification object:self];
+	[NSNotificationCenter postNotificationToMainThreadWithName:HTTPConnectionDidDieNotification object:self];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

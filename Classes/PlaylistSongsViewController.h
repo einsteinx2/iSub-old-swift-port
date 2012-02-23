@@ -16,13 +16,6 @@
 	MusicSingleton *musicControls;
 	DatabaseSingleton *databaseControls;
 
-	NSString *md5;
-	
-	NSMutableData *receivedData;
-	NSURLConnection *connection;
-	
-	NSUInteger playlistCount;
-	
 	EGORefreshTableHeaderView *refreshHeaderView;
 	BOOL _reloading;
 }
@@ -30,8 +23,11 @@
 @property(assign,getter=isReloading) BOOL reloading;
 
 @property (copy) NSString *md5;
+@property NSUInteger playlistCount;
 
 @property (copy) SUSServerPlaylist *serverPlaylist;
+@property (retain) NSMutableData *receivedData;
+@property (retain) NSURLConnection *connection;
 
 - (void)parseData;
 

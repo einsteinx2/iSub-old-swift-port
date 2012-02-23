@@ -16,7 +16,8 @@
 #import "EqualizerViewController.h"
 #import "PagingScrollView.h"
 #import "NSArray+Additions.h"
-#import "UIView+tools.h"
+#import "UIView+Tools.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @interface PageControlViewController (PrivateMethods)
 
@@ -169,7 +170,7 @@
     if (pageControlUsed) 
 	{
 		// Send a notification so the playlist view hides the edit controls
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"hideEditControls" object:nil];
+		[NSNotificationCenter postNotificationToMainThreadWithName:@"hideEditControls"];
 		
         // do nothing - the scroll was initiated from the page control, not the user dragging
         return;
@@ -195,7 +196,7 @@
 	}*/
 	
 	// Send a notification so the playlist view hides the edit controls
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"hideEditControls" object:nil];
+	[NSNotificationCenter postNotificationToMainThreadWithName:@"hideEditControls"];
 	
     // A possible optimization would be to unload the views+controllers which are no longer visible
 }

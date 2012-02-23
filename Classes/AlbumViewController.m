@@ -32,9 +32,11 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "NSString+URLEncode.h"
 #import "SUSSubFolderDAO.h"
-#import "UIView+tools.h"
+#import "UIView+Tools.h"
 #import "NSArray+Additions.h"
 #import "UIImageView+Reflection.h"
+#import "UIViewController+PushViewController.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @interface AlbumViewController (Private)
 - (void)dataSourceDidFinishLoadingNewData;
@@ -114,22 +116,14 @@
 {
     [super viewDidLoad];
 	
-	if (IS_IPAD())
-	{
-		// Fix some sizes for the iPad
-		CGFloat scaleFactor = 2.5;
-		CGFloat borderSize = 5.;
-		albumInfoView.height = albumInfoView.height * scaleFactor;
-		albumInfoArtHolderView.width = albumInfoArtHolderView.width * scaleFactor + borderSize;
-		albumInfoArtHolderView.height = albumInfoArtHolderView.height * scaleFactor + borderSize;
-		albumInfoLabelHolderView.x = albumInfoArtHolderView.x + albumInfoArtHolderView.width + borderSize;
-		// Set labels width to original header width, labels holder x, minus 20 point border
-		albumInfoLabelHolderView.width = 320. - albumInfoLabelHolderView.x - borderSize;
-		
-		albumInfoArtistLabel.font = albumInfoAlbumLabel.font = [UIFont boldSystemFontOfSize:40];
-		albumInfoArtistLabel.minimumFontSize = albumInfoAlbumLabel.minimumFontSize = 24;
-		albumInfoDurationLabel.font = albumInfoTrackCountLabel.font = [UIFont systemFontOfSize:30];
-	}
+	//else
+	//{
+		// Add the table fade
+		UIImageView *fade = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+		fade.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
+		fade.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		self.tableView.tableFooterView = fade;
+	//}
 	
 	// Add the pull to refresh view
 	refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
@@ -137,11 +131,10 @@
 	[self.tableView addSubview:refreshHeaderView];
 	[refreshHeaderView release];
 	
-	// Add the table fade
-	UIImageView *fade = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
-	fade.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-	fade.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.tableView.tableFooterView = fade;
+	if (IS_IPAD())
+	{
+		self.view.backgroundColor = ISMSiPadBackgroundColor;
+	}
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createReflection) name:@"createReflection"  object:nil];
 	
@@ -218,6 +211,24 @@
 {
 	if (myAlbum)
 	{
+		if (IS_IPAD())
+		{
+			// Fix some sizes for the iPad
+			CGFloat scaleFactor = 2.5;
+			CGFloat borderSize = 5.;
+			//albumInfoView.height = albumInfoView.height * scaleFactor;
+			albumInfoView.size = CGSizeMake(self.view.width, albumInfoView.height * scaleFactor);
+			albumInfoArtHolderView.width = albumInfoArtHolderView.width * scaleFactor + borderSize;
+			albumInfoArtHolderView.height = albumInfoArtHolderView.height * scaleFactor + borderSize;
+			albumInfoLabelHolderView.x = albumInfoArtHolderView.x + albumInfoArtHolderView.width + borderSize;
+			// Set labels width to original header width, labels holder x, minus 20 point border
+			albumInfoLabelHolderView.width = 320. - albumInfoLabelHolderView.x - borderSize;
+			
+			albumInfoArtistLabel.font = albumInfoAlbumLabel.font = [UIFont boldSystemFontOfSize:40];
+			albumInfoArtistLabel.minimumFontSize = albumInfoAlbumLabel.minimumFontSize = 24;
+			albumInfoDurationLabel.font = albumInfoTrackCountLabel.font = [UIFont systemFontOfSize:30];
+		}
+		
 		CGFloat headerHeight = albumInfoView.height + playAllShuffleAllView.height;
 		CGRect headerFrame = CGRectMake(0., 0., self.view.bounds.size.width, headerHeight);
 		UIView *headerView = [[UIView alloc] initWithFrame:headerFrame];
@@ -253,6 +264,7 @@
 		[headerView addSubview:albumInfoView];
 		
 		playAllShuffleAllView.y = albumInfoView.height;
+		//playAllShuffleAllView.width = self.view.width;
 		[headerView addSubview:playAllShuffleAllView];
 		
 		// Create reflection
@@ -282,7 +294,7 @@
 													   numberOfTracks:dataModel.songsCount 
 														  albumLength:dataModel.folderLength];
 		if (IS_IPAD())
-			[appDelegate.splitView presentModalViewController:largeArt animated:YES];
+			[appDelegate.ipadRootViewController presentModalViewController:largeArt animated:YES];
 		else
 			[self presentModalViewController:largeArt animated:YES];
 		[largeArt release];
@@ -432,8 +444,7 @@
             Album *anAlbum = [dataModel albumForTableViewRow:indexPath.row];
             			
 			AlbumViewController *albumViewController = [[AlbumViewController alloc] initWithArtist:nil orAlbum:anAlbum];	
-			
-			[self.navigationController pushViewController:albumViewController animated:YES];
+			[self pushViewController:albumViewController];
 			[albumViewController release];
 		}
 		else
@@ -443,7 +454,7 @@
 			// Show the player
 			if (IS_IPAD())
 			{
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"showPlayer" object:nil];
+				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
 			}
 			else
 			{

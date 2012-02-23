@@ -11,13 +11,10 @@
 #import "DatabaseSingleton.h"
 #import "MusicSingleton.h"
 #import "SocialSingleton.h"
-#import "MGSplitViewController.h"
-#import "iPadMainMenu.h"
-#import "InitialDetailViewController.h"
 #import "FMDatabaseAdditions.h"
 #import "NSString+md5.h"
 #import "ServerListViewController.h"
-#import "RootViewController.h"
+#import "FoldersViewController.h"
 #import "Reachability.h"
 #import "Album.h"
 #import "Song.h"
@@ -54,6 +51,9 @@
 #import "ISMSUpdateChecker.h"
 #import "NSArray+Additions.h"
 
+#import "iPadRootViewController.h"
+#import "NSNotificationCenter+MainThread.h"
+
 @implementation iSubAppDelegate
 
 @synthesize window;
@@ -63,7 +63,7 @@
 @synthesize homeNavigationController, playerNavigationController, artistsNavigationController, rootViewController, allAlbumsNavigationController, allSongsNavigationController, playlistsNavigationController, bookmarksNavigationController, playingNavigationController, genresNavigationController, cacheNavigationController, chatNavigationController, supportNavigationController;
 
 // Main interface elemements for iPad
-@synthesize splitView, mainMenu, initialDetail;
+@synthesize mainMenu, initialDetail, ipadRootViewController;
 
 // Network connectivity objects
 @synthesize wifiReach;
@@ -86,10 +86,6 @@
 #pragma mark Application lifecycle
 #pragma mark -
 
-- (UIView *)mainView
-{
-	return IS_IPAD() ? splitView.view : currentTabBarController.view;
-}
 
 /*void onUncaughtException(NSException* exception)
 {
@@ -180,19 +176,17 @@
 	introController = nil;
 	if (IS_IPAD())
 	{
-		// Setup the split view
-		[window addSubview:splitView.view];
-		splitView.showsMasterInPortrait = YES;
-		splitView.splitPosition = 220;
-		mainMenu = [[iPadMainMenu alloc] initWithNibName:@"iPadMainMenu" bundle:nil];
-		
-		splitView.masterViewController = mainMenu;
+		ipadRootViewController = [[iPadRootViewController alloc] initWithNibName:nil bundle:nil];
+		//[self.window addSubview:ipadRootViewController.view];
+		[self.window setBackgroundColor:[UIColor clearColor]];
+		[self.window addSubview:ipadRootViewController.view];
+		[self.window makeKeyAndVisible];
 		
 		if (showIntro)
 		{
 			introController = [[IntroViewController alloc] init];
 			introController.modalPresentationStyle = UIModalPresentationFormSheet;
-			[splitView presentModalViewController:introController animated:NO];
+			[ipadRootViewController presentModalViewController:introController animated:NO];
 			[introController release];
 		}
 	}
@@ -1122,7 +1116,7 @@
 	[alert show];
 	[alert release];
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_StorePurchaseComplete object:nil];
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_StorePurchaseComplete];
 }
 
 - (void)transactionCanceled

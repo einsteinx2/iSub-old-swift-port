@@ -21,6 +21,7 @@
 @property (retain) NSMutableArray *equalizerPointViews;
 
 @property (retain) IBOutlet UISlider *gainSlider;
+@property (retain) IBOutlet UILabel *gainBoostLabel;
 
 @property (retain) BassEffectDAO *effectDAO;
 

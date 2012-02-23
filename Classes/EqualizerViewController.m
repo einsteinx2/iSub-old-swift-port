@@ -12,7 +12,7 @@
 #import "AudioEngine.h"
 #import "BassParamEqValue.h"
 #import "BassEffectDAO.h"
-#import "UIView+tools.h"
+#import "UIView+Tools.h"
 #import "SavedSettings.h"
 #import "EqualizerPathView.h"
 #import "NSArray+FirstObject.h"
@@ -20,7 +20,7 @@
 #import "UIApplication+StatusBar.h"
 
 @implementation EqualizerViewController
-@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath; //drawTimer;
+@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath, gainBoostLabel; //drawTimer;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -130,6 +130,12 @@
 	}
 	
 	gainSlider.value = [SavedSettings sharedInstance].gainMultiplier;
+	
+	if (IS_IPAD())
+	{
+		gainSlider.y += 7;
+		gainBoostLabel.y += 7;
+	}
 }
 
 - (void)viewWillAppear:(BOOL)animated

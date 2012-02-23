@@ -54,19 +54,26 @@
 		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
 	
 	//Set defaults
-	//letUserSelectRow = YES;	
-
-	// Add the table fade
-	UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
-	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
-	fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	[self.tableView addSubview:fadeTop];
-	[fadeTop release];
+	//letUserSelectRow = YES;
 	
-	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
-	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.tableView.tableFooterView = fadeBottom;
+	if (IS_IPAD())
+	{
+		self.view.backgroundColor = ISMSiPadBackgroundColor;
+	}
+	//else
+	//{
+		// Add the table fade
+		UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
+		fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
+		fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		[self.tableView addSubview:fadeTop];
+		[fadeTop release];
+		
+		UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+		fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
+		fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		self.tableView.tableFooterView = fadeBottom;
+	//}
 }
 
 

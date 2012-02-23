@@ -26,8 +26,8 @@
 
 - (void)setup
 {
-	self.lastDeleteToggle = [NSDate date];
-	self.lastOverlayToggle = [NSDate date];
+	lastDeleteToggle = [[NSDate date] retain];
+	lastOverlayToggle = [[NSDate date] retain];
 	settings = [SavedSettings sharedInstance];
 }
 
@@ -95,7 +95,7 @@
 				[cell performSelector:@selector(hideOverlay) withObject:nil afterDelay:1.0];
 		}
 	}
-	
+	//return nil;
 	return [super hitTest:point withEvent:event];
 }
 
@@ -148,8 +148,8 @@
 	if (!hasSwiped) 
 	{
 		// Check if this is a full swipe
-		if (fabsf(startTouchPosition.x - currentTouchPosition.x) >= ISMSHorizSwipeDragMin &&
-			fabsf(startTouchPosition.y - currentTouchPosition.y) <= ISMSVertSwipeDragMax)
+		if (fabsf(startTouchPosition.x - currentTouchPosition.x) >= ISMSHorizSwipeDragMin 
+			&& fabsf(startTouchPosition.y - currentTouchPosition.y) <= ISMSVertSwipeDragMax)
 		{
 			hasSwiped = YES;
 			self.scrollEnabled = NO;			
@@ -164,7 +164,7 @@
 			if (startTouchPosition.x < currentTouchPosition.x) 
 			{
 				// Right swipe
-				if (settings.isSwipeEnabled)
+				if (settings.isSwipeEnabled && !IS_IPAD())
 				{
 					[cell showOverlay];
 					cellShowingOverlay = cell;

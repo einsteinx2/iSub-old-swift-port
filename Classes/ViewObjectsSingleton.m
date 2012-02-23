@@ -11,8 +11,6 @@
 #import "MKStoreManager.h"
 #import "Server.h"
 #import "UIDevice+Hardware.h"
-#import "MGSplitViewController.h"
-#import "iPadMainMenu.h"
 #import "SavedSettings.h"
 #import "Crittercism.h"
 #import "NSArray+Additions.h"

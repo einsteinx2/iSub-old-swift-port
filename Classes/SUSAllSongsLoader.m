@@ -128,7 +128,7 @@ static NSInteger order (id a, id b, void* context)
 		self.currentRow = [databaseControls.allAlbumsDb intForQuery:@"SELECT artistNum FROM resumeLoad"];
 		self.artistCount = [databaseControls.albumListCacheDb intForQuery:@"SELECT count FROM rootFolderCount_all LIMIT 1"];
 		
-		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_AllSongsLoadingArtists object:nil];
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AllSongsLoadingArtists];
 		
 		[self loadAlbumFolder];	
 	}
@@ -144,7 +144,7 @@ static NSInteger order (id a, id b, void* context)
 			self.albumCount = [databaseControls.allAlbumsDb intForQuery:@"SELECT COUNT(*) FROM allAlbumsUnsorted"];
 			DLog(@"albumCount: %i", albumCount);
 			
-			[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_AllSongsLoadingAlbums object:nil];
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AllSongsLoadingAlbums];
 			
 			[self loadAlbumFolder];
 		}
@@ -156,7 +156,7 @@ static NSInteger order (id a, id b, void* context)
 			
 			if (self.albumCount > 0)
 			{
-				[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_AllSongsLoadingAlbums object:nil];
+				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AllSongsLoadingAlbums];
 				[self loadAlbumFolder];
 			}
 			else
@@ -516,7 +516,7 @@ static NSInteger order (id a, id b, void* context)
 	if ([[NSDate date] timeIntervalSinceDate:self.notificationTimeArtist] > .5)
 	{
 		self.notificationTimeArtist = [NSDate date];
-		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_AllSongsArtistName object:artistName];
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AllSongsArtistName];
 	}
 }
 
@@ -525,7 +525,7 @@ static NSInteger order (id a, id b, void* context)
 	if ([[NSDate date] timeIntervalSinceDate:self.notificationTimeAlbum] > .5)
 	{
 		self.notificationTimeAlbum = [NSDate date];
-		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_AllSongsAlbumName object:albumTitle];
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AllSongsAlbumName];
 	}
 }
 
@@ -534,7 +534,7 @@ static NSInteger order (id a, id b, void* context)
 	if ([[NSDate date] timeIntervalSinceDate:self.notificationTimeSong] > .5)
 	{
 		self.notificationTimeSong = [NSDate date];
-		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_AllSongsSongName object:songTitle];
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AllSongsSongName];
 	}
 }
 

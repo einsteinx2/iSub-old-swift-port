@@ -16,7 +16,6 @@
 #import "DatabaseSingleton.h"
 #import "QuickAlbumsViewController.h"
 #import "ChatViewController.h"
-#import "MGSplitViewController.h"
 #import "SearchSongsViewController.h"
 #import "NSString+rfcEncode.h"
 #import "StoreViewController.h"
@@ -39,12 +38,15 @@
 #import "PlaylistSingleton.h"
 #import "AudioEngine.h"
 #import "FlurryAnalytics.h"
+#import "UIView+Tools.h"
+#import "UIViewController+PushViewController.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation NewHomeViewController
 
 @synthesize receivedData;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	
 	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
@@ -53,7 +55,7 @@
     return YES;
 }
 
-- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 	
@@ -106,6 +108,8 @@
 			[UIView commitAnimations];
 		}
 	}
+	
+	
 }
 
 - (void)viewDidLoad
@@ -155,6 +159,8 @@
 		artistLabel.minimumFontSize = 12;
 		artistLabel.adjustsFontSizeToFitWidth = YES;
 		artistLabel.textAlignment = UITextAlignmentCenter;
+		artistLabel.shadowOffset = CGSizeMake(0, 2);
+		artistLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
 		[coverArtBorder addSubview:artistLabel];
 		
 		albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 20, 220, 17)];
@@ -164,6 +170,8 @@
 		albumLabel.minimumFontSize = 12;
 		albumLabel.adjustsFontSizeToFitWidth = YES;
 		albumLabel.textAlignment = UITextAlignmentCenter;
+		albumLabel.shadowOffset = CGSizeMake(0, 2);
+		albumLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
 		[coverArtBorder addSubview:albumLabel];
 		
 		songLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 37, 220, 17)];
@@ -173,10 +181,14 @@
 		songLabel.minimumFontSize = 12;
 		songLabel.adjustsFontSizeToFitWidth = YES;
 		songLabel.textAlignment = UITextAlignmentCenter;
+		songLabel.shadowOffset = CGSizeMake(0, 2);
+		songLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
 		[coverArtBorder addSubview:songLabel];				
 		
 		[self initSongInfo];
 	}	
+	
+	//self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"backgroundImage_repeat.png"]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -225,30 +237,16 @@
 			songLabel.alpha = 0.0;
 		}
 	}
-	////////////////
-	
-	/*if (UIInterfaceOrientationIsPortrait([UIDevice currentDevice].orientation))
-	{
-		if (!IS_IPAD())
-			[[NSBundle mainBundle] loadNibNamed:@"NewHomeViewController" owner:self options:nil];
-	}
-	else if (UIInterfaceOrientationIsLandscape([UIDevice currentDevice].orientation))
-	{
-		if (!IS_IPAD())
-			[[NSBundle mainBundle] loadNibNamed:@"NewHomeViewControllerLandscape" owner:self options:nil];
-	}*/
-	
+
 	if(musicControls.showPlayerIcon)
 	{
 		playerButton.enabled = YES;
 		playerButton.alpha = 1.0;
-		//self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(player)] autorelease];
 	}
 	else
 	{
 		playerButton.enabled = NO;
 		playerButton.alpha = 0.5;
-		//self.navigationItem.rightBarButtonItem = nil;
 	}
 	
 	if ([SavedSettings sharedInstance].isJukeboxEnabled)
@@ -271,6 +269,8 @@
 	searchSegmentBackground.alpha = 0.0;
 	
 	[FlurryAnalytics logEvent:@"HomeTab"];
+	
+	DLog(@"view sublayers: %@", self.view.layer.sublayers);
 }
 
 - (void)initSongInfo
@@ -346,21 +346,21 @@
 		quickAlbums.modalPresentationStyle = UIModalPresentationFormSheet;
 	
 	if (IS_IPAD())
-		[appDelegate.splitView presentModalViewController:quickAlbums animated:YES];
+		[appDelegate.ipadRootViewController presentModalViewController:quickAlbums animated:YES];
 	else
 		[self presentModalViewController:quickAlbums animated:YES];
 	
 	[quickAlbums release];
 }
 
-- (void)pushViewController:(UIViewController *)viewController
+/*- (void)pushViewController:(UIViewController *)viewController
 {
 	// Hide the loading screen
 	[viewObjects hideLoadingScreen];
 	
 	// Push the view controller
 	[self.navigationController pushViewController:viewController animated:YES];
-}
+}*/
 
 - (IBAction)serverShuffle
 {
@@ -418,10 +418,7 @@
 		receivedData = [[NSMutableData data] retain];
 		
 		// Display the loading screen
-		if (IS_IPAD())
-			[viewObjects showAlbumLoadingScreen:appDelegate.splitView.view sender:self];
-		else
-			[viewObjects showAlbumLoadingScreen:appDelegate.currentTabBarController.view sender:self];
+		[viewObjects showAlbumLoadingScreen:appDelegate.window sender:self];
 	} 
 	else 
 	{
@@ -449,8 +446,15 @@
 - (IBAction)settings
 {
 	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
-	serverListViewController.hidesBottomBarWhenPushed = YES;
-	[self.navigationController pushViewController:serverListViewController animated:YES];
+	if (IS_IPAD())
+	{
+		[self pushViewControllerWithNavControllerOnIpad:serverListViewController];
+	}
+	else
+	{
+		serverListViewController.hidesBottomBarWhenPushed = YES;
+		[self.navigationController pushViewController:serverListViewController animated:YES];
+	}
 	[serverListViewController release];
 }
 
@@ -839,7 +843,7 @@
 		
 		if (IS_IPAD())
 		{
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"showPlayer" object:nil];
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
 		}
 		else
 		{

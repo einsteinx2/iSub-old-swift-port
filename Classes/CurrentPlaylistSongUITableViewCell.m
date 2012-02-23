@@ -15,6 +15,7 @@
 #import "Song.h"
 #import "CellOverlay.h"
 #import "PlaylistSingleton.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation CurrentPlaylistSongUITableViewCell
 
@@ -123,7 +124,7 @@
 	}
 	
 	[self hideOverlay];
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"updateCurrentPlaylistCount" object:nil];
+	[NSNotificationCenter postNotificationToMainThreadWithName:@"updateCurrentPlaylistCount"];
 	[(UITableView*)self.superview reloadData];
 }
 

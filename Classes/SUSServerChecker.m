@@ -12,6 +12,7 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "SavedSettings.h"
 #import "NSArray+Additions.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @interface SUSServerChecker (Private)
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error;
@@ -133,7 +134,7 @@
 	
 	[self.delegate SUSServerURLCheckFailed:self withError:error];
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckFailed object:nil];
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerCheckFailed];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
@@ -176,20 +177,20 @@
 					// Incorrect credentials, so fail
 					NSError *anError = [NSError errorWithISMSCode:ISMSErrorCode_IncorrectCredentials];
 					[self.delegate SUSServerURLCheckFailed:self withError:anError];
-					[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckFailed object:nil];
+					[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerCheckFailed];
 				}
 				else
 				{
 					// This is a Subsonic server, so pass
 					[self.delegate SUSServerURLCheckPassed:self];
-					[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckPassed object:nil];
+					[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerCheckPassed];
 				}
 			}
 			else
 			{
 				// This is a Subsonic server, so pass
 				[self.delegate SUSServerURLCheckPassed:self];
-				[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckPassed object:nil];
+				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerCheckPassed];
 			}
         }
         else
@@ -197,7 +198,7 @@
             // This is not a Subsonic server, so fail
             NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NotASubsonicServer];
 			[self.delegate SUSServerURLCheckFailed:self withError:error];
-			[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckFailed object:nil];
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerCheckFailed];
         }
     }
     else
@@ -205,7 +206,7 @@
         // This is not XML, so fail
         NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NotXML];
 		[self.delegate SUSServerURLCheckFailed:self withError:error];
-		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerCheckFailed object:nil];
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerCheckFailed];
     }
 	[tbxml release];
     

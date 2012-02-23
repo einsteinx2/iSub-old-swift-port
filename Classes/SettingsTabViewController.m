@@ -12,14 +12,13 @@
 #import "MusicSingleton.h"
 #import "SocialSingleton.h"
 #import "DatabaseSingleton.h"
-#import "RootViewController.h"
+#import "FoldersViewController.h"
 #import "CacheSingleton.h"
 
 #import "SA_OAuthTwitterEngine.h"
 #import "SA_OAuthTwitterController.h"
 
 #import "UIDevice+Hardware.h"
-#import "iPadMainMenu.h"
 
 #import "NSString+md5.h"
 #import "FMDatabaseAdditions.h"
@@ -27,6 +26,9 @@
 #import "SavedSettings.h"
 #import "NSString+Additions.h"
 #import "NSArray+Additions.h"
+#import "iPadRootViewController.h"
+#import "MenuViewController.h"
+#import "iPhoneStreamingPlayerViewController.h"
 
 @implementation SettingsTabViewController
 
@@ -125,6 +127,20 @@
 	autoDeleteCacheTypeSegmentedControl.selectedSegmentIndex = settings.autoDeleteCacheType;
 	
 	cacheSongCellColorSegmentedControl.selectedSegmentIndex = settings.cachedSongCellColorType;
+	
+	switch (settings.quickSkipNumberOfSeconds) 
+	{
+		case 5: quickSkipSegmentControl.selectedSegmentIndex = 0; break;
+		case 15: quickSkipSegmentControl.selectedSegmentIndex = 1; break;
+		case 30: quickSkipSegmentControl.selectedSegmentIndex = 2; break;
+		case 45: quickSkipSegmentControl.selectedSegmentIndex = 3; break;
+		case 60: quickSkipSegmentControl.selectedSegmentIndex = 4; break;
+		case 120: quickSkipSegmentControl.selectedSegmentIndex = 5; break;
+		case 300: quickSkipSegmentControl.selectedSegmentIndex = 6; break;
+		case 600: quickSkipSegmentControl.selectedSegmentIndex = 7; break;
+		case 1200: quickSkipSegmentControl.selectedSegmentIndex = 8; break;
+		default: break;
+	}
 	
 	// Twitter settings
 	if (socialControls.twitterEngine && socialControls.twitterEngine.isAuthorized)
@@ -247,6 +263,25 @@
 		else if (sender == cacheSongCellColorSegmentedControl)
 		{
 			settings.cachedSongCellColorType = cacheSongCellColorSegmentedControl.selectedSegmentIndex;
+		}
+		else if (sender == quickSkipSegmentControl)
+		{
+			switch (quickSkipSegmentControl.selectedSegmentIndex) 
+			{
+				case 0: settings.quickSkipNumberOfSeconds = 5; break;
+				case 1: settings.quickSkipNumberOfSeconds = 15; break;
+				case 2: settings.quickSkipNumberOfSeconds = 30; break;
+				case 3: settings.quickSkipNumberOfSeconds = 45; break;
+				case 4: settings.quickSkipNumberOfSeconds = 60; break;
+				case 5: settings.quickSkipNumberOfSeconds = 120; break;
+				case 6: settings.quickSkipNumberOfSeconds = 300; break;
+				case 7: settings.quickSkipNumberOfSeconds = 600; break;
+				case 8: settings.quickSkipNumberOfSeconds = 1200; break;
+				default: break;
+			}
+			
+			if (IS_IPAD())
+				[appDelegate.ipadRootViewController.menuViewController.playerController quickSecondsSetLabels];
 		}
 	}
 }
@@ -390,7 +425,7 @@
 				
 				if (IS_IPAD())
 				{
-					[appDelegate.mainMenu loadTable];
+					[appDelegate.ipadRootViewController.menuViewController loadCellContents];
 				}
 				else
 				{
@@ -421,7 +456,7 @@
 				settings.isSongsTabEnabled = NO;
 
 				if (IS_IPAD())
-					[appDelegate.mainMenu loadTable];
+					[appDelegate.ipadRootViewController.menuViewController loadCellContents];
 				else
 					[viewObjects orderMainTabBarController];
 				
@@ -573,7 +608,7 @@
 		if (controller) 
 		{
 			if (IS_IPAD())
-				[appDelegate.splitView presentModalViewController:controller animated:YES];
+				[appDelegate.ipadRootViewController presentModalViewController:controller animated:YES];
 			else
 				[self.parentController presentModalViewController:controller animated:YES];
 		}

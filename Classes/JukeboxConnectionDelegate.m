@@ -13,6 +13,7 @@
 #import "BBSimpleConnectionQueue.h"
 #import "CustomUIAlertView.h"
 #import "PlaylistSingleton.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation JukeboxConnectionDelegate
 
@@ -91,7 +92,7 @@
 		[xmlParser release];
 		[parser release];
 		
-		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_SongPlaybackStarted object:nil];
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
 	}
 	else
 	{

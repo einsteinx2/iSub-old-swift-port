@@ -13,6 +13,7 @@
 #import "Song.h"
 #import "PlaylistSingleton.h"
 #import "NSString+Additions.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation DebugViewController
 @synthesize currentSong, nextSong, currentSongProgress, nextSongProgress;
@@ -203,7 +204,7 @@
 
 - (IBAction)songInfoToggle
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"hideSongInfo" object:nil];
+	[NSNotificationCenter postNotificationToMainThreadWithName:@"hideSongInfo"];
 }
 
 @end

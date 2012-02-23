@@ -26,6 +26,7 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "OrderedDictionary.h"
 #import "SUSServerPlaylist.h"
+#import "NSNotificationCenter+MainThread.h"
 
 #import "PlaylistSingleton.h"
 
@@ -40,6 +41,7 @@
 
 @synthesize md5, serverPlaylist;
 @synthesize reloading=_reloading;
+@synthesize connection, receivedData, playlistCount; 
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
@@ -90,11 +92,14 @@
 		self.tableView.tableHeaderView = headerView;
 		[headerView release];
 		
-		UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
-		fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
-		fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		[self.tableView addSubview:fadeTop];
-		[fadeTop release];
+		if (!IS_IPAD())
+		{
+			UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
+			fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
+			fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+			[self.tableView addSubview:fadeTop];
+			[fadeTop release];
+		}
 	}
 	else
 	{
@@ -109,11 +114,20 @@
 		[refreshHeaderView release];
 	}
 	
-	// Add the table fade
-	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
-	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.tableView.tableFooterView = fadeBottom;
+
+	
+	if (IS_IPAD())
+	{
+		self.view.backgroundColor = ISMSiPadBackgroundColor;
+	}
+	//else
+	//{
+		// Add the table fade
+		UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+		fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
+		fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		self.tableView.tableFooterView = fadeBottom;
+	//}
 }
 
 -(void)loadData
@@ -121,12 +135,12 @@
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(serverPlaylist.playlistId) forKey:@"id"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getPlaylist" andParameters:parameters];
 	
-	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	if (connection)
+	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+	if (self.connection)
 	{
 		// Create the NSMutableData to hold the received data.
 		// receivedData is an instance variable declared elsewhere.
-		receivedData = [[NSMutableData data] retain];
+		self.receivedData = [NSMutableData data];
 		
 		self.tableView.scrollEnabled = NO;
 		[viewObjects showAlbumLoadingScreen:self.view sender:self];
@@ -142,7 +156,7 @@
 
 - (void)cancelLoad
 {
-	[connection cancel];
+	[self.connection cancel];
 	self.tableView.scrollEnabled = YES;
 	[viewObjects hideLoadingScreen];
 	
@@ -230,12 +244,12 @@
 	
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"createPlaylist" andParameters:parameters];
 	
-	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	if (connection)
+	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+	if (self.connection)
 	{
 		// Create the NSMutableData to hold the received data.
 		// receivedData is an instance variable declared elsewhere.
-		receivedData = [[NSMutableData data] retain];
+		self.receivedData = [NSMutableData data];
 		
 		self.tableView.scrollEnabled = NO;
 		[viewObjects showAlbumLoadingScreen:self.view sender:self];
@@ -270,12 +284,12 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-	[receivedData setLength:0];
+	[self.receivedData setLength:0];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
 {
-    [receivedData appendData:incrementalData];
+    [self.receivedData appendData:incrementalData];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
@@ -302,8 +316,8 @@
 	self.tableView.scrollEnabled = YES;
 	[viewObjects hideLoadingScreen];
 	
-	[theConnection release];
-	[receivedData release];
+	self.connection = nil;
+	self.receivedData = nil;
 	
 	[self dataSourceDidFinishLoadingNewData];
 }	
@@ -314,8 +328,7 @@
 	{
         // Parse the data
         //
-		DLog(@"%@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
-        TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
+        TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData];
         TBXMLElement *root = tbxml.rootXMLElement;
         if (root) 
         {
@@ -329,8 +342,8 @@
                 TBXMLElement *playlist = [TBXML childElementNamed:@"playlist" parentElement:root];
                 if (playlist)
                 {
-                    [databaseControls removeServerPlaylistTable:md5];
-                    [databaseControls createServerPlaylistTable:md5];
+                    [databaseControls removeServerPlaylistTable:self.md5];
+                    [databaseControls createServerPlaylistTable:self.md5];
                     
                     TBXMLElement *entry = [TBXML childElementNamed:@"entry" parentElement:playlist];
                     while (entry != nil)
@@ -338,7 +351,7 @@
                         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
                         
                         Song *aSong = [[Song alloc] initWithTBXMLElement:entry];
-                        [aSong insertIntoServerPlaylistWithPlaylistId:md5];
+                        [aSong insertIntoServerPlaylistWithPlaylistId:self.md5];
                         [aSong release];
                         
                         // Get the next message
@@ -353,12 +366,11 @@
 		
 		self.tableView.scrollEnabled = YES;
 
-		playlistCount = [databaseControls.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM splaylist%@", md5]];
+		self.playlistCount = [databaseControls.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM splaylist%@", self.md5]];
 		[self.tableView reloadData];
 		
 		[self dataSourceDidFinishLoadingNewData];
 		
-		[receivedData release];
 		[viewObjects hideLoadingScreen];
 	}
 	else
@@ -367,7 +379,8 @@
 	}
 	
 	self.tableView.scrollEnabled = YES;
-	[theConnection release];
+	self.receivedData = nil;
+	self.connection = nil;
 }
 
 static NSString *kName_Error = @"error";
@@ -398,9 +411,7 @@ static NSString *kName_Error = @"error";
 		}
 	}
     [tbxml release];
-	
-	[receivedData release]; receivedData = nil;
-	
+		
 	[viewObjects hideLoadingScreen];
 }
 
@@ -522,7 +533,7 @@ static NSString *kName_Error = @"error";
 		
 		if (IS_IPAD())
 		{
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"showPlayer" object:nil];
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
 		}
 		else
 		{

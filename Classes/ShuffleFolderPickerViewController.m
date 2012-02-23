@@ -11,6 +11,7 @@
 #import "NSString+md5.h"
 #import "SUSRootFoldersDAO.h"
 #import "NSArray+Additions.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation ShuffleFolderPickerViewController
 
@@ -164,7 +165,7 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
 	NSInteger folderId = [[tableView cellForRowAtIndexPath:indexPath] tag];
 	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:folderId] forKey:@"folderId"];
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"performServerShuffle" object:nil userInfo:userInfo];
+	[NSNotificationCenter postNotificationToMainThreadWithName:@"performServerShuffle" userInfo:userInfo];
 	
 	[myDialog dismiss:YES];
 }

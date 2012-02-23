@@ -35,6 +35,8 @@
 #import "NSString+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "NSArray+Additions.h"
+#import "UIViewController+PushViewController.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @interface PlaylistsViewController (Private)
 
@@ -145,10 +147,17 @@
 	[self.tableView addSubview:fadeTop];
 	[fadeTop release];*/
 	
-	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
-	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.tableView.tableFooterView = fadeBottom;
+	if (IS_IPAD())
+	{
+		self.view.backgroundColor = ISMSiPadBackgroundColor;
+	}
+	//else
+	//{
+		UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+		fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
+		fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		self.tableView.tableFooterView = fadeBottom;
+	//}
 	
 	connectionQueue = [[BBSimpleConnectionQueue alloc] init];
 	connectionQueue.delegate = self;
@@ -1722,7 +1731,7 @@ static NSString *kName_Error = @"error";
 						
 			if (IS_IPAD())
 			{
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"showPlayer" object:nil];
+				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
 			}
 			else
 			{
@@ -1736,7 +1745,7 @@ static NSString *kName_Error = @"error";
 		{
 			PlaylistSongsViewController *playlistSongsViewController = [[PlaylistSongsViewController alloc] initWithNibName:@"PlaylistSongsViewController" bundle:nil];
 			playlistSongsViewController.md5 = [databaseControls.localPlaylistsDb stringForQuery:@"SELECT md5 FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
-			[self.navigationController pushViewController:playlistSongsViewController animated:YES];
+			[self pushViewController:playlistSongsViewController];
 			[playlistSongsViewController release];
 		}		
 		else if (segmentedControl.selectedSegmentIndex == 2)
@@ -1745,7 +1754,7 @@ static NSString *kName_Error = @"error";
             SUSServerPlaylist *playlist = [serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];
 			playlistSongsViewController.md5 = [[playlist.playlistName gtm_stringByUnescapingFromHTML] md5];
             playlistSongsViewController.serverPlaylist = playlist;
-			[self.navigationController pushViewController:playlistSongsViewController animated:YES];
+			[self pushViewController:playlistSongsViewController];
 			[playlistSongsViewController release];		
 		}
 	}

@@ -8,7 +8,7 @@
 
 #import "MBProgressHUD.h"
 
-@class iSubAppDelegate, RootViewController, Artist, LoadingScreen, Album, AlbumViewController, Server;
+@class iSubAppDelegate, FoldersViewController, Artist, LoadingScreen, Album, AlbumViewController, Server;
 
 @interface ViewObjectsSingleton : NSObject <UITabBarControllerDelegate, UINavigationControllerDelegate, MBProgressHUDDelegate>
 {		

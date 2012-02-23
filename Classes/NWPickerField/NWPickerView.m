@@ -28,6 +28,7 @@
 
 #import "NWPickerView.h"
 #import "NWPickerField.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @interface NWPickerField(PickerViewExtension)
 // call in our picker field to now if control was hidden or not. Used
@@ -66,7 +67,7 @@
 
 -(void) sendNotification:(NSString*) notificationName {
 	NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSValue valueWithCGRect:self.bounds] forKey:UIPickerViewBoundsUserInfoKey];
-	[[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self.field userInfo:userInfo];
+	[NSNotificationCenter postNotificationToMainThreadWithName:notificationName object:self.field userInfo:userInfo];
 }
 
 -(void) toggle {

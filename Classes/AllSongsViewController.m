@@ -23,7 +23,7 @@
 #import "FMDatabaseAdditions.h"
 #import "NSString+md5.h"
 #import "LoadingScreen.h"
-#import "RootViewController.h"
+#import "FoldersViewController.h"
 #import "TBXML.h"
 #import "CustomUITableView.h"
 #import "CustomUIAlertView.h"
@@ -35,6 +35,7 @@
 #import "EGORefreshTableHeaderView.h"
 #import "PlaylistSingleton.h"
 #import "NSArray+Additions.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @interface AllSongsViewController (Private)
 - (void)hideLoadingScreen;
@@ -98,10 +99,17 @@
 	[self.tableView addSubview:refreshHeaderView];
 	[refreshHeaderView release];
 	
-	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
-	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.tableView.tableFooterView = fadeBottom;
+	if (IS_IPAD())
+	{
+		self.view.backgroundColor = ISMSiPadBackgroundColor;
+	}
+	//else
+	//{
+		UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+		fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
+		fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		self.tableView.tableFooterView = fadeBottom;
+	//}
 }
 
 - (void)viewWillAppear:(BOOL)animated 
@@ -678,7 +686,7 @@
 		// Show the player
 		if (IS_IPAD())
 		{
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"showPlayer" object:nil];
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
 		}
 		else
 		{

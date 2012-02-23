@@ -9,6 +9,7 @@
 #import "CustomUITableViewCell.h"
 #import "ViewObjectsSingleton.h"
 #import "CellOverlay.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation CustomUITableViewCell
 @synthesize isOverlayShowing, overlayView, isIndexShowing, indexPath, isSearching, deleteToggleImage, isDelete;
@@ -102,13 +103,13 @@
 	if (isDelete)
 	{
 		[[ViewObjectsSingleton sharedInstance].multiDeleteList removeObject:[NSNumber numberWithInt:indexPath.row]];
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"hideDeleteButton" object:nil];
+		[NSNotificationCenter postNotificationToMainThreadWithName:@"hideDeleteButton"];
 		deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
 	}
 	else
 	{
 		[[ViewObjectsSingleton sharedInstance].multiDeleteList addObject:[NSNumber numberWithInt:indexPath.row]];
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"showDeleteButton" object:nil];
+		[NSNotificationCenter postNotificationToMainThreadWithName:@"showDeleteButton"];
 		deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
 	}
 	

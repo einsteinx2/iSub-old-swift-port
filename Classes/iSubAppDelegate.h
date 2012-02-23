@@ -10,7 +10,7 @@
 #import "SUSServerChecker.h"
 #import "Crittercism.h"
 
-@class BBSplitViewController, ViewObjectsSingleton, DatabaseSingleton, MusicSingleton, SocialSingleton, MGSplitViewController, iPadMainMenu, InitialDetailViewController, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, Reachability, iPhoneStreamingPlayerViewController, SettingsViewController, RootViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController, HTTPServer, CacheSingleton, AudioEngine;
+@class BBSplitViewController, ViewObjectsSingleton, DatabaseSingleton, MusicSingleton, SocialSingleton, iPadRootViewController, iPadMainMenu, InitialDetailViewController, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, Reachability, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController, HTTPServer, CacheSingleton, AudioEngine;
 
 @interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate, SUSServerURLCheckerDelegate, CrittercismDelegate>
 {	
@@ -31,7 +31,6 @@
 	
 	// Main interface elements for iPad
 	//
-	IBOutlet MGSplitViewController *splitView;
 	iPadMainMenu *mainMenu;
 	InitialDetailViewController *initialDetail;
 	
@@ -65,7 +64,7 @@
 @property (retain) IBOutlet UINavigationController *homeNavigationController;
 @property (retain) IBOutlet UINavigationController *playerNavigationController;
 @property (retain) IBOutlet UINavigationController *artistsNavigationController;
-@property (retain) IBOutlet RootViewController *rootViewController;
+@property (retain) IBOutlet FoldersViewController *rootViewController;
 @property (retain) IBOutlet UINavigationController *allAlbumsNavigationController;
 @property (retain) IBOutlet UINavigationController *allSongsNavigationController;
 @property (retain) IBOutlet UINavigationController *playlistsNavigationController;
@@ -76,11 +75,11 @@
 @property (retain) IBOutlet UINavigationController *chatNavigationController;
 @property (retain) UINavigationController *supportNavigationController;
 
-@property (readonly) UIView *mainView;
+
+@property (retain) iPadRootViewController *ipadRootViewController;
 
 // Main interface elements for iPad
 //
-@property (retain) IBOutlet MGSplitViewController *splitView;
 @property (retain) IBOutlet iPadMainMenu *mainMenu;
 @property (retain) IBOutlet InitialDetailViewController *initialDetail;
 

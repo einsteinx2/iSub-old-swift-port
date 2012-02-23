@@ -354,6 +354,12 @@
 		self.currentVisualizerType = ISMSBassVisualType_fatBar;
 	}
 	
+	// Quick Skip
+	if (![userDefaults objectForKey:@"quickSkipNumberOfSeconds"])
+	{
+		self.quickSkipNumberOfSeconds = 30;
+	}
+	
 	[userDefaults synchronize];
 }
 
@@ -366,6 +372,7 @@
 	isPartialCacheNextSong = [userDefaults boolForKey:@"isPartialCacheNextSong"];
 	isExtraPlayerControlsShowing = [userDefaults boolForKey:@"isExtraPlayerControlsShowing"];
 	isPlayerPlaylistShowing = [userDefaults boolForKey:@"isPlayerPlaylistShowing"];
+	quickSkipNumberOfSeconds = [userDefaults integerForKey:@"quickSkipNumberOfSeconds"];
 		
 	NSString *url = [userDefaults stringForKey:@"url"];
 	if (url)
@@ -1235,6 +1242,27 @@
 		{
 			isExtraPlayerControlsShowing = isShowing;
 			[userDefaults setBool:isShowing forKey:@"isExtraPlayerControlsShowing"];
+			[userDefaults synchronize];
+		}
+	}
+}
+
+- (NSUInteger)quickSkipNumberOfSeconds
+{
+	@synchronized(self)
+	{
+		return quickSkipNumberOfSeconds;
+	}
+}
+
+- (void)setQuickSkipNumberOfSeconds:(NSUInteger)numSeconds
+{
+	@synchronized(self)
+	{
+		if (quickSkipNumberOfSeconds != numSeconds)
+		{
+			quickSkipNumberOfSeconds = numSeconds;
+			[userDefaults setInteger:numSeconds forKey:@"quickSkipNumberOfSeconds"];
 			[userDefaults synchronize];
 		}
 	}

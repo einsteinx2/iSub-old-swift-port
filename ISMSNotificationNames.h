@@ -48,4 +48,6 @@
 #define ISMSNotification_SongCachingEnabled @"ISMS song caching enabled"
 #define ISMSNotification_SongCachingDisabled @"ISMS song caching disabled"
 
+#define ISMSNotification_ShowPlayer @"ISMS show player"
+
 #endif

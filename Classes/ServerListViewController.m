@@ -14,11 +14,11 @@
 #import "DatabaseSingleton.h"
 #import "SettingsTabViewController.h"
 #import "HelpTabViewController.h"
-#import "RootViewController.h"
+#import "FoldersViewController.h"
 #import "Server.h"
 #import "ServerTypeViewController.h"
 #import "UbuntuServerEditViewController.h"
-#import "UIView+tools.h"
+#import "UIView+Tools.h"
 #import "CustomUIAlertView.h"
 #import "Reachability.h"
 #import "SavedSettings.h"
@@ -26,6 +26,7 @@
 #import "SUSAllSongsLoader.h"
 #import "SUSStreamSingleton.h"
 #import "NSArray+Additions.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation ServerListViewController
 
@@ -99,17 +100,24 @@
 	
 	self.tableView.tableHeaderView = headerView;
 	
-	// Add the table fade
-	UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
-	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
-	fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	[self.tableView addSubview:fadeTop];
-	[fadeTop release];
-	
-	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
-	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.tableView.tableFooterView = fadeBottom;
+	if (IS_IPAD())
+	{
+		self.view.backgroundColor = ISMSiPadBackgroundColor;
+	}
+	else
+	{
+		// Add the table fade
+		UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
+		fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
+		fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		[self.tableView addSubview:fadeTop];
+		[fadeTop release];
+		
+		UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+		fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
+		fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		self.tableView.tableFooterView = fadeBottom;
+	}
 }
 
 
@@ -123,7 +131,9 @@
 {
 	if(!isEditing)
 	{
-		if(self != [[self.navigationController viewControllers] objectAtIndexSafe:0])
+		if(self == [[self.navigationController viewControllers] firstObjectSafe])
+			self.navigationItem.leftBarButtonItem = nil;
+		else
 			self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(saveAction:)] autorelease];
 		
 	}
@@ -196,7 +206,7 @@
 	if ([serverTypeViewController respondsToSelector:@selector(setModalPresentationStyle:)])
 		serverTypeViewController.modalPresentationStyle = UIModalPresentationFormSheet;
 	if (IS_IPAD())
-		[appDelegate.splitView presentModalViewController:serverTypeViewController animated:YES];
+		[appDelegate.ipadRootViewController presentModalViewController:serverTypeViewController animated:YES];
 	else
 		[self presentModalViewController:serverTypeViewController animated:YES];
 	[serverTypeViewController release];
@@ -328,7 +338,7 @@
 		
 		appDelegate.window.backgroundColor = viewObjects.windowColor;
 		
-		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_ServerSwitched object:nil];
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerSwitched];
 	}
 }
 

@@ -25,6 +25,7 @@
 #import "PlaylistSingleton.h"
 #import "SUSStreamSingleton.h"
 #import "NSArray+Additions.h"
+#import "NSNotificationCenter+MainThread.h"
 
 static DatabaseSingleton *sharedInstance = nil;
 
@@ -703,7 +704,7 @@ static DatabaseSingleton *sharedInstance = nil;
 {
 	// Show loading screen
 	//[viewObjects showLoadingScreenOnMainWindow];
-	[viewObjects showAlbumLoadingScreen:appDelegate.mainView sender:queueAll];
+	[viewObjects showAlbumLoadingScreen:appDelegate.window sender:queueAll];
 	
 	// Download all the songs
 	if (queueAll == nil)
@@ -806,7 +807,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	else
 		[self.currentPlaylistDb executeUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist ORDER BY RANDOM()"];
 		
-	[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistShuffleToggled];
 	
 	[pool release];
 }

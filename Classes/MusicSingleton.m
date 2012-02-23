@@ -31,6 +31,7 @@
 #import "SUSCoverArtLargeDAO.h"
 #import "SUSStreamHandler.h"
 #import "CacheSingleton.h"
+#import "NSNotificationCenter+MainThread.h"
 
 static MusicSingleton *sharedInstance = nil;
 
@@ -504,7 +505,7 @@ double startSongSeconds = 0.0;
 	
 	if (IS_IPAD())
 	{
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"showPlayer" object:nil];
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
 	}
 	else
 	{
@@ -665,7 +666,7 @@ double startSongSeconds = 0.0;
 	}
 	else
 	{
-		[[NSNotificationCenter defaultCenter] postNotificationName:ISMSNotification_SongPlaybackEnded object:nil];
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnded];
 		[self jukeboxStop];
 		
 		jukeboxIsPlaying = NO;

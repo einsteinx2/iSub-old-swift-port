@@ -18,6 +18,7 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "NSArray+Additions.h"
 #import "SUSStreamSingleton.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation NSURLConnectionDelegateQueue
 
@@ -188,7 +189,7 @@
 		[musicControls.audioFileQueue closeFile];
 		
 		// Tell the cache queue view to reload
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"queuedSongDone" object:nil];
+		[NSNotificationCenter postNotificationToMainThreadWithName:@"queuedSongDone"];
 		
 		// Download the next song in the queue
 		[musicControls downloadNextQueuedSong];

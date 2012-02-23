@@ -4,6 +4,7 @@
 //
 
 #import "LocalhostAddresses.h"
+#import "NSNotificationCenter+MainThread.h"
 
 #import <ifaddrs.h>
 #import <netinet/in.h>
@@ -47,7 +48,7 @@
 	if (netIP)
 		[result setObject:netIP forKey:@"www"];
 	DLog(@"IP addresses: %@", result);
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"LocalhostAdressesResolved" object:result];
+	[NSNotificationCenter postNotificationToMainThreadWithName:@"LocalhostAdressesResolved" object:result];
 	
 	[pool release];
 }

@@ -11,13 +11,14 @@
 #import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
-#import "RootViewController.h"
+#import "FoldersViewController.h"
 #import "Server.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "ServerListViewController.h"
 #import "ServerTypeViewController.h"
 #import "NSArray+Additions.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation SubsonicServerEditViewController
 
@@ -243,8 +244,8 @@
 		[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
 		[defaults synchronize];
 		
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadServerList" object:nil];
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"showSaveButton" object:nil];
+		[NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
+		[NSNotificationCenter postNotificationToMainThreadWithName:@"showSaveButton"];
 		
 		if (parentController)
 			[parentController dismissModalViewControllerAnimated:YES];
@@ -256,7 +257,7 @@
 		{
 			userInfo = [NSDictionary dictionaryWithObject:theNewRedirectUrl forKey:@"theNewRedirectUrl"];
 		}
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"switchServer" object:nil userInfo:userInfo];
+		[NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer" userInfo:userInfo];
 	}
 	else
 	{
@@ -272,8 +273,8 @@
 		[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
 		[defaults synchronize];
 		
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadServerList" object:nil];
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"showSaveButton" object:nil];
+		[NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
+		[NSNotificationCenter postNotificationToMainThreadWithName:@"showSaveButton"];
 		
 		if (parentController)
 			[parentController dismissModalViewControllerAnimated:YES];
@@ -285,7 +286,7 @@
 		{
 			userInfo = [NSDictionary dictionaryWithObject:theNewRedirectUrl forKey:@"theNewRedirectUrl"];
 		}
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"switchServer" object:nil userInfo:userInfo];
+		[NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer" userInfo:userInfo];
 	}
 	
 	[theServer release];

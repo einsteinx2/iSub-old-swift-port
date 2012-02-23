@@ -12,6 +12,7 @@
 #import "FMDatabaseAdditions.h"
 #import "CellOverlay.h"
 #import "Song.h"
+#import "NSNotificationCenter+MainThread.h"
 
 
 @implementation CacheArtistUITableViewCell
@@ -93,7 +94,7 @@
 	[result close];
 	
 	// Reload the cached songs table
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"cachedSongDeleted" object:nil];
+	[NSNotificationCenter postNotificationToMainThreadWithName:@"cachedSongDeleted"];
 	
 	// Hide the loading screen	
 	[[ViewObjectsSingleton sharedInstance] hideLoadingScreen];

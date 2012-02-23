@@ -11,6 +11,7 @@
 #import "ServerListViewController.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "SavedSettings.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation IntroViewController
 
@@ -88,7 +89,8 @@
 
 		if (IS_IPAD())
 		{
-			[appDelegate.homeNavigationController pushViewController:serverListViewController animated:YES];
+			[NSNotificationCenter postNotificationToMainThreadWithName:@"show settings"];
+			//[appDelegate.homeNavigationController pushViewController:serverListViewController animated:YES];
 		}
 		else
 		{

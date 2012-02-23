@@ -8,6 +8,7 @@
 #import "HTTPResponse.h"
 #import "AsyncSocket.h"
 #import "NSArray+Additions.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation MyHTTPConnection
 
@@ -152,7 +153,7 @@
 			}
 			
 			DLog(@"NewFileUploaded");
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"NewFileUploaded" object:nil];
+			[NSNotificationCenter postNotificationToMainThreadWithName:@"NewFileUploaded"];
 		}
 		
 		for (int n = 1; n < [multipartData count] - 1; n++)

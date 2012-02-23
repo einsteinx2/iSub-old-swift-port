@@ -25,6 +25,7 @@
 #import "PlaylistSingleton.h"
 #import "NSArray+Additions.h"
 #import "NSString+Additions.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation CacheAlbumViewController
 
@@ -51,17 +52,24 @@
 	// Set notification receiver for when cached songs are deleted to reload the table
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cachedSongDeleted) name:@"cachedSongDeleted" object:nil];
 
-	// Add the table fade
-	UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
-	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
-	fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	[self.tableView addSubview:fadeTop];
-	[fadeTop release];
-	
-	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
-	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.tableView.tableFooterView = fadeBottom;
+	if (IS_IPAD())
+	{
+		self.view.backgroundColor = ISMSiPadBackgroundColor;
+	}
+	//else
+	//{
+		// Add the table fade
+		UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
+		fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
+		fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		[self.tableView addSubview:fadeTop];
+		[fadeTop release];
+		
+		UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+		fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
+		fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		self.tableView.tableFooterView = fadeBottom;
+	//}
 }
 
 
@@ -280,7 +288,7 @@
 	
 	if (IS_IPAD())
 	{
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"showPlayer" object:nil];
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
 	}
 	else
 	{
@@ -546,7 +554,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			
 			if (IS_IPAD())
 			{
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"showPlayer" object:nil];
+				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
 			}
 			else
 			{

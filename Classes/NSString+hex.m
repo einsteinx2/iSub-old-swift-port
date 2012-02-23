@@ -26,7 +26,7 @@
 	return [[[NSString alloc] initWithData:stringData encoding:NSASCIIStringEncoding] autorelease];
 }
 
-+ (NSString *) stringToHex:(NSString *)str
+/*+ (NSString *) stringToHex:(NSString *)str
 {	
 	NSUInteger len = [str length];
 	unichar *chars = malloc(len * sizeof(unichar));
@@ -41,6 +41,24 @@
 	free(chars);
 		
 	return [hexString autorelease];
+}*/
+
+// There is a problem with your stringToHex method - it drops leading 0s, and ignores 00s. Just as a quick fix, I made the below:
++ (NSString *) stringToHex:(NSString *)str
+{   
+    NSUInteger len = [str length];
+    unichar *chars = malloc(len * sizeof(unichar));
+    [str getCharacters:chars];
+	
+    NSMutableString *hexString = [[NSMutableString alloc] init];
+	
+    for(NSUInteger i = 0; i < len; i++ )
+    {
+        [hexString appendFormat:@"%02x", chars[i]];
+    }
+    free(chars);
+	
+    return [hexString autorelease];
 }
 
 - (NSString *) fromHex

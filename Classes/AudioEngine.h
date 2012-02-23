@@ -12,7 +12,7 @@
 #import "bassmix.h"
 #import <AudioToolbox/AudioToolbox.h>
 
-#define ISMS_BASSBufferSize 400
+#define ISMS_BASSBufferSize 600
 #define ISMS_defaultSampleRate 44100
 
 // Stream create failure retry values

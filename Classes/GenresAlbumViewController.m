@@ -24,6 +24,7 @@
 #import "NSString+time.h"
 #import "NSArray+Additions.h"
 #import "PlaylistSingleton.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation GenresAlbumViewController
 
@@ -49,19 +50,6 @@
 	//DLog(@"segment %i", segment);
 	//DLog(@"listOfAlbums: %@", listOfAlbums);
 	//DLog(@"listOfSongs: %@", listOfSongs);
-	
-	// Add the table fade
-	UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
-	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
-	fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	[self.tableView addSubview:fadeTop];
-	[fadeTop release];
-	
-	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
-	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.tableView.tableFooterView = fadeBottom;
-	
 	
 	// Add the play all button + shuffle button
 	UIView *headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)] autorelease];
@@ -121,6 +109,25 @@
 	[headerView addSubview:shuffleButton];
 	
 	self.tableView.tableHeaderView = headerView;
+	
+	if (IS_IPAD())
+	{
+		self.view.backgroundColor = ISMSiPadBackgroundColor;
+	}
+	//else
+	//{
+		// Add the table fade
+		UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
+		fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
+		fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		[self.tableView addSubview:fadeTop];
+		[fadeTop release];
+		
+		UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+		fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
+		fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		self.tableView.tableFooterView = fadeBottom;
+	//}
 }
 
 
@@ -180,7 +187,7 @@
 	
 	if (IS_IPAD())
 	{
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"showPlayer" object:nil];
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
 	}
 	else
 	{
@@ -504,7 +511,7 @@
 			// Show the player
 			if (IS_IPAD())
 			{
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"showPlayer" object:nil];
+				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
 			}
 			else
 			{

@@ -15,7 +15,7 @@
 
 #import "Album.h"
 #import "NSString+Additions.h"
-#import "UIView+tools.h"
+#import "UIView+Tools.h"
 #import "UIApplication+StatusBar.h"
 #import "UIImageView+Reflection.h"
  

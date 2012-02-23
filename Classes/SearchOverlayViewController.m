@@ -8,6 +8,7 @@
 
 #import "SearchOverlayViewController.h"
 #import "SavedSettings.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation SearchOverlayViewController
 
@@ -26,7 +27,7 @@
 	//[appDelegate.rootViewController doneSearching_Clicked:nil];
 	//[(AllAlbumsViewController *) appDelegate.allAlbumsNavigationController.topViewController doneSearching_Clicked:nil];
 	//[(AllSongsViewController *) appDelegate.allSongsNavigationController.topViewController doneSearching_Clicked:nil];
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"endSearch" object:self];
+	[NSNotificationCenter postNotificationToMainThreadWithName:@"endSearch"];
 }
 
 

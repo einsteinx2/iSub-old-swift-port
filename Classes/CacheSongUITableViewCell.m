@@ -10,6 +10,7 @@
 #import "FMDatabaseAdditions.h"
 #import "CellOverlay.h"
 #import "Song.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation CacheSongUITableViewCell
 
@@ -119,7 +120,7 @@
 	self.overlayView.downloadButton.enabled = NO;
 	
 	// Reload the cached songs table
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"cachedSongDeleted" object:nil];
+	[NSNotificationCenter postNotificationToMainThreadWithName:@"cachedSongDeleted"];
 	
 	[self hideOverlay];
 }

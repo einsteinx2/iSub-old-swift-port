@@ -57,6 +57,8 @@
 @property (retain) IBOutlet UIButton *extraButtonsButton;
 @property (retain) IBOutlet UIView *songInfoView;
 
+@property (retain) IBOutlet UILabel *sliderMultipleLabel;
+
 @property (retain) IBOutlet UILabel *trackLabel;
 @property (retain) IBOutlet UILabel *genreLabel;
 @property (retain) IBOutlet UILabel *yearLabel;
@@ -73,8 +75,6 @@
 @property (retain) IBOutlet UILabel *bookmarkCountLabel;
 @property (retain) IBOutlet UIButton *shuffleButton;
 @property (retain) IBOutlet OBSlider *progressSlider;
-@property (retain) IBOutlet UILabel *progressLabel;
-@property (retain) IBOutlet UIImageView *progressLabelBackground;
 @property (retain) IBOutlet UILabel *elapsedTimeLabel;
 @property (retain) IBOutlet UILabel *remainingTimeLabel;
 @property (retain) UIView *downloadProgress;
@@ -92,6 +92,9 @@
 @property (retain) NSArray *bookmarkEntry;
 @property (nonatomic) NSInteger bookmarkIndex;
 @property (nonatomic) int bookmarkPosition;
+
+@property (retain) IBOutlet UILabel *quickBackLabel;
+@property (retain) IBOutlet UILabel *quickForwLabel;
 
 - (void)setPlayButtonImage;
 - (void)setPauseButtonImage;
@@ -125,6 +128,8 @@
 - (void)updateDownloadProgress;
 - (void)updateSlider;
 - (void)updateShuffleIcon;
+
+- (void)quickSecondsSetLabels;
 
 
 @end

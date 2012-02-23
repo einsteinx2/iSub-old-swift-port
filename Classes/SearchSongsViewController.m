@@ -26,7 +26,6 @@
 #import "AsynchronousImageViewCached.h"
 #import "AlbumViewController.h"
 #import "UITableViewCell+overlay.h"
-#import "MGSplitViewController.h"
 #import "NSString+rfcEncode.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
@@ -34,6 +33,7 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "PlaylistSingleton.h"
 #import "NSArray+Additions.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation SearchSongsViewController
 
@@ -402,7 +402,7 @@
 			// Show the player
 			if (IS_IPAD())
 			{
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"showPlayer" object:nil];
+				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
 			}
 			else
 			{

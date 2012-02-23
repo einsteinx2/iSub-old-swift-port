@@ -85,6 +85,8 @@
 	IBOutlet UILabel *scrobblePercentLabel;
 	IBOutlet UISlider *scrobblePercentSlider;
 	
+	IBOutlet UISegmentedControl *quickSkipSegmentControl;
+	
 	NSDate *loadedTime;
 }
 

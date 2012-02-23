@@ -11,11 +11,12 @@
 #import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
-#import "RootViewController.h"
+#import "FoldersViewController.h"
 #import "Server.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "NSArray+Additions.h"
+#import "NSNotificationCenter+MainThread.h"
 
 #define URL @"https://streaming.one.ubuntu.com"
 
@@ -143,15 +144,15 @@
 			[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
 			[defaults synchronize];
 			
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadServerList" object:nil];
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"showSaveButton" object:nil];
+			[NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
+			[NSNotificationCenter postNotificationToMainThreadWithName:@"showSaveButton"];
 			
 			if (parentController)
 				[parentController dismissModalViewControllerAnimated:YES];
 			
 			[self dismissModalViewControllerAnimated:YES];
 			
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"switchServer" object:nil];
+			[NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer"];
 		}
 		else
 		{
@@ -167,15 +168,15 @@
 			[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
 			[defaults synchronize];
 			
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadServerList" object:nil];
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"showSaveButton" object:nil];
+			[NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
+			[NSNotificationCenter postNotificationToMainThreadWithName:@"showSaveButton"];
 			
 			if (parentController)
 				[parentController dismissModalViewControllerAnimated:YES];
 			
 			[self dismissModalViewControllerAnimated:YES];
 			
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"switchServer" object:nil];
+			[NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer"];
 		}
 		
 		[theServer release];

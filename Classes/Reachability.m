@@ -55,6 +55,7 @@
 #import <CoreFoundation/CoreFoundation.h>
 
 #import "Reachability.h"
+#import "NSNotificationCenter+MainThread.h"
 
 #define kShouldPrintReachabilityFlags 0
 
@@ -92,7 +93,7 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReach
 	
 	Reachability* noteObject = (Reachability*) info;
 	// Post a notification to notify the client that the network reachability changed.
-	[[NSNotificationCenter defaultCenter] postNotificationName: kReachabilityChangedNotification object: noteObject];
+	[NSNotificationCenter postNotificationToMainThreadWithName:kReachabilityChangedNotification object:noteObject];
 	
 	[myPool release];
 }

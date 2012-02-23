@@ -30,6 +30,7 @@
 #import "NSString+Additions.h"
 #import "AudioEngine.h"
 #import "NSArray+Additions.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @interface CacheViewController (Private)
 - (void)addNoSongsScreen;
@@ -254,6 +255,9 @@
 		// Set notification receiver for when network status changes to reload the table
 		[[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(segmentAction:) name:kReachabilityChangedNotification object: nil];
 	}
+	
+	if (IS_IPAD())
+		self.view.backgroundColor = ISMSiPadBackgroundColor;
 }
 
 - (void)viewWillAppear:(BOOL)animated 
@@ -1142,7 +1146,7 @@
 	
 	if (IS_IPAD())
 	{
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"showPlayer" object:nil];
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
 	}
 	else
 	{
