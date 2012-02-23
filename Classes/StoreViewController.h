@@ -8,12 +8,8 @@
 
 #import "MKStoreManager.h"
 
-@class iSubAppDelegate, ViewObjectsSingleton;
-
 @interface StoreViewController : UITableViewController
 {
-	iSubAppDelegate *appDelegate;
-	ViewObjectsSingleton *viewObjects;
 	MKStoreManager *storeManager;
 	
 	NSArray *storeItems;

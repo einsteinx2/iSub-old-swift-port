@@ -6,16 +6,6 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-
-
-@class iSubAppDelegate, MusicSingleton, DatabaseSingleton;
-
 @interface NSURLConnectionDelegateQueue : NSObject
-{
-	iSubAppDelegate *appDelegate;
-	MusicSingleton *musicControls;
-	DatabaseSingleton *databaseControls;	
-}
-
 
 @end

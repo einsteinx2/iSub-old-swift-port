@@ -6,13 +6,14 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+#define viewObjectsS [ViewObjectsSingleton sharedInstance]
+
 #import "MBProgressHUD.h"
 
-@class iSubAppDelegate, FoldersViewController, Artist, LoadingScreen, Album, AlbumViewController, Server;
+@class FoldersViewController, Artist, LoadingScreen, Album, AlbumViewController, Server;
 
 @interface ViewObjectsSingleton : NSObject <UITabBarControllerDelegate, UINavigationControllerDelegate, MBProgressHUDDelegate>
 {		
-	iSubAppDelegate *appDelegate;
 	MBProgressHUD *HUD;
 }
 

@@ -8,14 +8,10 @@
 
 #import "SUSLoaderDelegate.h"
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, SUSNowPlayingDAO;
+@class SUSNowPlayingDAO;
 
 @interface PlayingViewController : UITableViewController <SUSLoaderDelegate>
 {
-	iSubAppDelegate *appDelegate;
-	ViewObjectsSingleton *viewObjects;
-	MusicSingleton *musicControls;
-	DatabaseSingleton *databaseControls;
 	
 	BOOL isNothingPlayingScreenShowing;
 	UIImageView *nothingPlayingScreen;

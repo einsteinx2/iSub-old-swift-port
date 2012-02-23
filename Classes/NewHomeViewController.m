@@ -49,7 +49,7 @@
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	
-	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -60,7 +60,7 @@
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 	
 	//BOOL rotationDisabled = [[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"];
-	BOOL rotationDisabled = [SavedSettings sharedInstance].isRotationLockEnabled;
+	BOOL rotationDisabled = settingsS.isRotationLockEnabled;
 	
 	if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation) && !rotationDisabled)
 	{
@@ -116,10 +116,6 @@
 {
 	[super viewDidLoad];
 	
-	appDelegate = (iSubAppDelegate*)[UIApplication sharedApplication].delegate;
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicSingleton sharedInstance];
-	databaseControls = [DatabaseSingleton sharedInstance];
 	
 	searchSegment.selectedSegmentIndex = 3;
 	
@@ -195,11 +191,11 @@
 {
 	[super viewWillAppear:animated];
 	
-	viewObjects.isSettingsShowing = NO;
+	viewObjectsS.isSettingsShowing = NO;
 	
 	//////////// Handle landscape bug
 	//BOOL rotationDisabled = [[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"];
-	BOOL rotationDisabled = [SavedSettings sharedInstance].isRotationLockEnabled;
+	BOOL rotationDisabled = settingsS.isRotationLockEnabled;
 	
 	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && !rotationDisabled)
 	{
@@ -238,7 +234,7 @@
 		}
 	}
 
-	if(musicControls.showPlayerIcon)
+	if(musicS.showPlayerIcon)
 	{
 		playerButton.enabled = YES;
 		playerButton.alpha = 1.0;
@@ -249,7 +245,7 @@
 		playerButton.alpha = 0.5;
 	}
 	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
 		if (IS_IPAD())
 			[jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-on-ipad.png"] forState:UIControlStateNormal];
@@ -275,14 +271,13 @@
 
 - (void)initSongInfo
 {
-	PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
-	Song *currentSong = dataModel.currentSong ? dataModel.currentSong : dataModel.prevSong;
+	Song *currentSong = playlistS.currentSong ? playlistS.currentSong : playlistS.prevSong;
 	
 	if (currentSong != nil)
 	{		
 		if(currentSong.coverArtId)
 		{		
-			FMDatabase *coverArtCache = databaseControls.coverArtCacheDb320;
+			FMDatabase *coverArtCache = databaseS.coverArtCacheDb320;
 			
 			if ([coverArtCache intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [currentSong.coverArtId md5]] == 1)
 			{
@@ -346,7 +341,7 @@
 		quickAlbums.modalPresentationStyle = UIModalPresentationFormSheet;
 	
 	if (IS_IPAD())
-		[appDelegate.ipadRootViewController presentModalViewController:quickAlbums animated:YES];
+		[appDelegateS.ipadRootViewController presentModalViewController:quickAlbums animated:YES];
 	else
 		[self presentModalViewController:quickAlbums animated:YES];
 	
@@ -356,7 +351,7 @@
 /*- (void)pushViewController:(UIViewController *)viewController
 {
 	// Hide the loading screen
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 	
 	// Push the view controller
 	[self.navigationController pushViewController:viewController animated:YES];
@@ -366,8 +361,8 @@
 {
 	NSDictionary *folders = [SUSRootFoldersDAO folderDropdownFolders];
 	
-	/*NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [appDelegate.defaultUrl md5]];
-	NSData *archivedData = [appDelegate.settingsDictionary objectForKey:key];
+	/*NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [appDelegateS.defaultUrl md5]];
+	NSData *archivedData = [appDelegateS.settingsDictionary objectForKey:key];
 	NSDictionary *folders = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];*/
 	
 	if (folders == nil || [folders count] == 2)
@@ -418,7 +413,7 @@
 		receivedData = [[NSMutableData data] retain];
 		
 		// Display the loading screen
-		[viewObjects showAlbumLoadingScreen:appDelegate.window sender:self];
+		[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
 	} 
 	else 
 	{
@@ -432,7 +427,7 @@
 - (void)cancelLoad
 {
 	[connection cancel];
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 }
 
 - (IBAction)chat
@@ -476,33 +471,33 @@
 
 - (IBAction)jukebox
 {
-	if ([SavedSettings sharedInstance].isJukeboxUnlocked)
+	if (settingsS.isJukeboxUnlocked)
 	{
-		if ([SavedSettings sharedInstance].isJukeboxEnabled)
+		if (settingsS.isJukeboxEnabled)
 		{
 			// Jukebox mode is on, turn it off
 			if (IS_IPAD())
 				[jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off-ipad.png"] forState:UIControlStateNormal];
 			else
 				[jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off.png"] forState:UIControlStateNormal];
-			[SavedSettings sharedInstance].isJukeboxEnabled = NO;
+			settingsS.isJukeboxEnabled = NO;
 						
-			appDelegate.window.backgroundColor = viewObjects.windowColor;
+			appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
 		}
 		else
 		{
-            [[AudioEngine sharedInstance] stop];
+            [audioEngineS stop];
 			
 			// Jukebox mode is off, turn it on
 			if (IS_IPAD())
 				[jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-on-ipad.png"] forState:UIControlStateNormal];
 			else
 				[jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-on.png"] forState:UIControlStateNormal];
-			[SavedSettings sharedInstance].isJukeboxEnabled = YES;
+			settingsS.isJukeboxEnabled = YES;
 			
-			[musicControls jukeboxGetInfo];
+			[musicS jukeboxGetInfo];
 			
-			appDelegate.window.backgroundColor = viewObjects.jukeboxColor;
+			appDelegateS.window.backgroundColor = viewObjectsS.jukeboxColor;
 		}	
 	}
 	else
@@ -548,12 +543,12 @@
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)theSearchBar
 {	
-	//NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
+	//NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegateS.defaultUrl md5]];
 	
 	// Create search overlay
 	searchOverlay = [[UIView alloc] init];
-	//if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
-	if ([SavedSettings sharedInstance].isNewSearchAPI)
+	//if ([[appDelegateS.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
+	if (settingsS.isNewSearchAPI)
 	{
 		if (IS_IPAD())
 			searchOverlay.frame = CGRectMake(0, 86, 1024, 1024);
@@ -585,8 +580,8 @@
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:.5];
 	[UIView setAnimationCurve:UIViewAnimationCurveLinear];
-	//if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
-	if ([SavedSettings sharedInstance].isNewSearchAPI)
+	//if ([[appDelegateS.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
+	if (settingsS.isNewSearchAPI)
 	{
 		searchSegment.enabled = YES;
 		searchSegment.alpha = 1;
@@ -603,9 +598,9 @@
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:.3];
 	[UIView setAnimationCurve:UIViewAnimationCurveLinear];
-	//NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
-	//if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
-	if ([SavedSettings sharedInstance].isNewSearchAPI)
+	//NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegateS.defaultUrl md5]];
+	//if ([[appDelegateS.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
+	if (settingsS.isNewSearchAPI)
 	{
 		searchSegment.alpha = 0;
 		searchSegment.enabled = NO;
@@ -627,7 +622,7 @@
 	
     NSDictionary *parameters = nil;
     NSString *action = nil;
-	if ([SavedSettings sharedInstance].isNewSearchAPI)
+	if (settingsS.isNewSearchAPI)
 	{
         action = @"search2";
 		NSString *searchTermsString = [NSString stringWithFormat:@"%@*", searchTerms];
@@ -666,7 +661,7 @@
 		receivedData = [[NSMutableData data] retain];
 		
 		// Display the loading screen
-		[viewObjects showLoadingScreenOnMainWindowWithMessage:nil];
+		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 	} 
 	else 
 	{
@@ -727,14 +722,13 @@
 	[theConnection release];
 	[receivedData release];
 	
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
 	DLog(@"received data: %@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
 	
-	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
 	
 	if (isSearch)
 	{
@@ -745,13 +739,13 @@
 		[xmlParser setDelegate:parser];
 		[xmlParser parse];
 		
-		/*NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegate.defaultUrl md5]];
+		/*NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegateS.defaultUrl md5]];
 		BOOL isNewSearchAPI = NO;
-		if ([[appDelegate.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
+		if ([[appDelegateS.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
 			isNewSearchAPI = YES;
 		
 		if (isNewSearchAPI && searchSegment.selectedSegmentIndex == 3)*/
-		if ([SavedSettings sharedInstance].isNewSearchAPI && searchSegment.selectedSegmentIndex == 3)
+		if (settingsS.isNewSearchAPI && searchSegment.selectedSegmentIndex == 3)
 		{
 			SearchAllViewController *searchViewController = [[SearchAllViewController alloc] initWithNibName:@"SearchAllViewController" 
 																						   bundle:nil];
@@ -774,7 +768,7 @@
 																										  bundle:nil];
 			searchViewController.title = @"Search";
 			//if (isNewSearchAPI)
-			if ([SavedSettings sharedInstance].isNewSearchAPI)
+			if (settingsS.isNewSearchAPI)
 			{
 				if (searchSegment.selectedSegmentIndex == 0)
 				{
@@ -811,7 +805,7 @@
 		}
 		
 		// Hide the loading screen
-		[viewObjects hideLoadingScreen];
+		[viewObjectsS hideLoadingScreen];
 	}
 	else
 	{
@@ -822,21 +816,21 @@
 		[xmlParser setDelegate:parser];
 		[xmlParser parse];
 				
-		[databaseControls resetCurrentPlaylistDb];
+		[databaseS resetCurrentPlaylistDb];
 		for(Song *aSong in parser.listOfSongs)
 		{
 			[aSong addToCurrentPlaylist];
 		}
 		
-		if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			[musicControls jukeboxReplacePlaylistWithLocal];
+		if (settingsS.isJukeboxEnabled)
+			[musicS jukeboxReplacePlaylistWithLocal];
 				
-		currentPlaylist.isShuffle = NO;
+		playlistS.isShuffle = NO;
 		
 		// Hide the loading screen
-		[viewObjects hideLoadingScreen];
+		[viewObjectsS hideLoadingScreen];
 		
-		[musicControls playSongAtPosition:0];
+		[musicS playSongAtPosition:0];
 		
 		[xmlParser release];
 		[parser release];

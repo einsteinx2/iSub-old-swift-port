@@ -21,7 +21,6 @@
 {	
 	if ((self = [super init]))
 	{
-		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 		listOfArtists = [[NSMutableArray alloc] init];
 		listOfAlbums = [[NSMutableArray alloc] init];
 		listOfSongs = [[NSMutableArray alloc] init];
@@ -32,7 +31,7 @@
 
 - (void) subsonicErrorCode:(NSString *)errorCode message:(NSString *)message
 {
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:appDelegateS cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	alert.tag = 1;
 	[alert show];
 	[alert release];
@@ -41,7 +40,7 @@
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:@"There was an error parsing the XML response. Subsonic may have had an error performing the search." delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:@"There was an error parsing the XML response. Subsonic may have had an error performing the search." delegate:appDelegateS cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	alert.tag = 1;
 	[alert show];
 	[alert release];

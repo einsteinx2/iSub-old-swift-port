@@ -59,24 +59,22 @@
 
 - (void)playPauseStop
 {
-	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
-		if (musicControls.jukeboxIsPlaying)
-			[musicControls jukeboxStop];
+		if (musicS.jukeboxIsPlaying)
+			[musicS jukeboxStop];
 		else
-			[musicControls jukeboxPlay];
+			[musicS jukeboxPlay];
 	}
 	else
 	{
-        [[AudioEngine sharedInstance] playPause];
+        [audioEngineS playPause];
 	}
 }
 
 - (void)remoteControlReceivedWithEvent:(UIEvent *)event 
 {
 	//DLog(@"remoteControlReceivedWithEvent: %d", event.subtype);
-	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 	switch(event.subtype) 
 	{
 		case UIEventSubtypeRemoteControlPlay:
@@ -97,11 +95,11 @@
 			break;
 		case UIEventSubtypeRemoteControlNextTrack:
 			//DLog(@"UIEventSubtypeRemoteControlNextTrack");
-			[musicControls nextSong];
+			[musicS nextSong];
 			break;
 		case UIEventSubtypeRemoteControlPreviousTrack:
 			//DLog(@"UIEventSubtypeRemoteControlPreviousTrack");
-			[musicControls prevSong];
+			[musicS prevSong];
 			break;
 		default:
 			return;

@@ -31,7 +31,7 @@
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	
-	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -41,10 +41,6 @@
 {
     [super viewDidLoad];
 	
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicSingleton sharedInstance];
-	databaseControls = [DatabaseSingleton sharedInstance];
 	
 	//DLog(@"listOfArtists: %@", listOfArtists);
 	
@@ -132,7 +128,7 @@
 {
 	[super viewWillAppear:animated];
 	
-	if(musicControls.showPlayerIcon)
+	if(musicS.showPlayerIcon)
 	{
 		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
 	}
@@ -175,7 +171,7 @@
 - (void)showPlayer
 {
 	// Start the player	
-	[musicControls playSongAtPosition:0];
+	[musicS playSongAtPosition:0];
 	
 	if (IS_IPAD())
 	{
@@ -192,20 +188,19 @@
 
 - (void)playAllSongs
 {	
-	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
 	
 	// Turn off shuffle mode in case it's on
-	currentPlaylist.isShuffle = NO;
+	playlistS.isShuffle = NO;
 	
 	// Reset the current playlist
-	[databaseControls resetCurrentPlaylistDb];
+	[databaseS resetCurrentPlaylistDb];
 	
 	// Get the ID of all matching records (everything in genre ordered by artist)
 	FMResultSet *result;
-	if (viewObjects.isOfflineMode)
-		result = [databaseControls.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE", self.title];
+	if (viewObjectsS.isOfflineMode)
+		result = [databaseS.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE", self.title];
 	else
-		result = [databaseControls.genresDb executeQuery:@"SELECT md5 FROM genresLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE", self.title];
+		result = [databaseS.genresDb executeQuery:@"SELECT md5 FROM genresLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE", self.title];
 	
 	while ([result next])
 	{
@@ -223,11 +218,11 @@
 	
 	[result close];
 	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-		[musicControls jukeboxReplacePlaylistWithLocal];
+	if (settingsS.isJukeboxEnabled)
+		[musicS jukeboxReplacePlaylistWithLocal];
 	
 	// Hide loading screen
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 	
 	// Show the player
 	[self showPlayer];
@@ -235,20 +230,19 @@
 
 - (void)shuffleSongs
 {		
-	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
 	
 	// Turn off shuffle mode to reduce inserts
-	currentPlaylist.isShuffle = NO;
+	playlistS.isShuffle = NO;
 	
 	// Reset the current playlist
-	[databaseControls resetCurrentPlaylistDb];
+	[databaseS resetCurrentPlaylistDb];
 	
 	// Get the ID of all matching records (everything in genre ordered by artist)
 	FMResultSet *result;
-	if (viewObjects.isOfflineMode)
-		result = [databaseControls.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE", self.title];
+	if (viewObjectsS.isOfflineMode)
+		result = [databaseS.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE", self.title];
 	else
-		result = [databaseControls.genresDb executeQuery:@"SELECT md5 FROM genresLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE", self.title];
+		result = [databaseS.genresDb executeQuery:@"SELECT md5 FROM genresLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE", self.title];
 	
 	while ([result next])
 	{
@@ -267,16 +261,16 @@
 	[result close];
 	
 	// Shuffle the playlist
-	[databaseControls shufflePlaylist];
+	[databaseS shufflePlaylist];
 	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-		[musicControls jukeboxReplacePlaylistWithLocal];
+	if (settingsS.isJukeboxEnabled)
+		[musicS jukeboxReplacePlaylistWithLocal];
 	
 	// Set the isShuffle flag
-	currentPlaylist.isShuffle = YES;
+	playlistS.isShuffle = YES;
 	
 	// Hide loading screen
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 	
 	// Show the player
 	[self showPlayer];
@@ -284,14 +278,14 @@
 
 - (void)playAllAction:(id)sender
 {
-	[viewObjects showLoadingScreenOnMainWindowWithMessage:nil];
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 	
 	[self performSelector:@selector(playAllSongs) withObject:nil afterDelay:0.05];
 }
 
 - (void)shuffleAction:(id)sender
 {
-	[viewObjects showLoadingScreenOnMainWindowWithMessage:@"Shuffling"];
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Shuffling"];
 	
 	[self performSelector:@selector(shuffleSongs) withObject:nil afterDelay:0.05];
 }
@@ -330,7 +324,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {	
-	if (viewObjects.isCellEnabled)
+	if (viewObjectsS.isCellEnabled)
 	{
 		GenresAlbumViewController *genresAlbumViewController = [[GenresAlbumViewController alloc] initWithNibName:@"GenresAlbumViewController" bundle:nil];
 		genresAlbumViewController.title = [listOfArtists objectAtIndexSafe:indexPath.row];
@@ -342,13 +336,13 @@
 		genresAlbumViewController.seg1 = [listOfArtists objectAtIndexSafe:indexPath.row];
 		genresAlbumViewController.genre = [NSString stringWithString:self.title];
 		FMResultSet *result;
-		if (viewObjects.isOfflineMode) 
+		if (viewObjectsS.isOfflineMode) 
 		{
-			result = [databaseControls.songCacheDb executeQuery:@"SELECT md5, segs, seg2 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", [listOfArtists objectAtIndexSafe:indexPath.row], self.title];
+			result = [databaseS.songCacheDb executeQuery:@"SELECT md5, segs, seg2 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", [listOfArtists objectAtIndexSafe:indexPath.row], self.title];
 		}
 		else 
 		{
-			result = [databaseControls.genresDb executeQuery:@"SELECT md5, segs, seg2 FROM genresLayout WHERE seg1 = ? AND genre = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", [listOfArtists objectAtIndexSafe:indexPath.row], self.title];
+			result = [databaseS.genresDb executeQuery:@"SELECT md5, segs, seg2 FROM genresLayout WHERE seg1 = ? AND genre = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", [listOfArtists objectAtIndexSafe:indexPath.row], self.title];
 		}
 		while ([result next])
 		{

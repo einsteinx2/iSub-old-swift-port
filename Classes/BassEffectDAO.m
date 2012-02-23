@@ -198,22 +198,20 @@ NSInteger presetSort(id preset1, id preset2, void *context)
 - (void)selectPresetId:(NSUInteger)presetId
 {
 	self.selectedPresetId = presetId;
-	
-	AudioEngine *wrapper = [AudioEngine sharedInstance];
-	
+		
 	if (type == BassEffectType_ParametricEQ)
 	{
-		BOOL wasEqualizerOn = wrapper.isEqualizerOn;
-		[wrapper removeAllEqualizerValues];
+		BOOL wasEqualizerOn = audioEngineS.isEqualizerOn;
+		[audioEngineS removeAllEqualizerValues];
 		
 		for (int i = 0; i < [self.selectedPresetValues count]; i++)
 		{
 			BassEffectValue *value = [self valueForIndex:i];
-			[wrapper addEqualizerValue:BASS_DX8_PARAMEQFromPoint(value.percentX, value.percentY, DEFAULT_BANDWIDTH)];
+			[audioEngineS addEqualizerValue:BASS_DX8_PARAMEQFromPoint(value.percentX, value.percentY, DEFAULT_BANDWIDTH)];
 		}
 		
 		if (wasEqualizerOn)
-			[wrapper toggleEqualizer];
+			[audioEngineS toggleEqualizer];
 	}
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_BassEffectPresetLoaded];

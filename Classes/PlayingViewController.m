@@ -34,7 +34,7 @@
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	
-	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -46,10 +46,6 @@
 {
     [super viewDidLoad];
 	
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicSingleton sharedInstance];
-	databaseControls = [DatabaseSingleton sharedInstance];
 	
 	isNothingPlayingScreenShowing = NO;
 	
@@ -84,7 +80,7 @@
 {
     [super viewWillAppear:animated];
 	
-	if(musicControls.showPlayerIcon)
+	if(musicS.showPlayerIcon)
 	{
 		UIImage *playingImage = [UIImage imageNamed:@"now-playing.png"];
 		UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithImage:playingImage
@@ -98,7 +94,7 @@
 		self.navigationItem.rightBarButtonItem = nil;
 	}
 	
-	[viewObjects showLoadingScreenOnMainWindowWithMessage:nil];
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 	
 	[dataModel startLoad];
 		
@@ -182,9 +178,9 @@
 	// Create the background view
 	cell.backgroundView = [[[UIView alloc] init] autorelease];
 	if(indexPath.row % 2 == 0)
-		cell.backgroundView.backgroundColor = viewObjects.lightNormal;
+		cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
 	else
-		cell.backgroundView.backgroundColor = viewObjects.darkNormal;
+		cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
 	
 	// Set the title label
 	NSString *playTime = [dataModel playTimeForIndex:indexPath.row];
@@ -240,12 +236,12 @@
 	[alert show];
 	[alert release];
 	
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 }
 
 - (void)loadingFinished:(SUSLoader *)theLoader
 {
-    [viewObjects hideLoadingScreen];
+    [viewObjectsS hideLoadingScreen];
 	
 	[self.tableView reloadData];
 	

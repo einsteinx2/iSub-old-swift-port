@@ -30,7 +30,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [originalDataSource tableView:tableView cellForRowAtIndexPath:indexPath];
-    cell.backgroundView = [[ViewObjectsSingleton sharedInstance] createCellBackground:indexPath.row];
+    cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
 	//cell.textColor = [UIColor whiteColor];
     return cell;
 }

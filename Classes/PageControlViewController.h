@@ -6,13 +6,9 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-
-@class iSubAppDelegate;
-
 @class PagingScrollView;
 @interface PageControlViewController : UIViewController <UIScrollViewDelegate>
 {
-	iSubAppDelegate *appDelegate;
 }
 
 @property (retain) IBOutlet UIScrollView *scrollView;

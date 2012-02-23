@@ -27,7 +27,7 @@
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	
-	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -45,15 +45,11 @@
 		self.view.frame = frame;
 	}
 	
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicSingleton sharedInstance];
-	databaseControls = [DatabaseSingleton sharedInstance];
 	
-	if (viewObjects.serverToEdit)
+	if (viewObjectsS.serverToEdit)
 	{
-		usernameField.text = viewObjects.serverToEdit.username;
-		passwordField.text = viewObjects.serverToEdit.password;
+		usernameField.text = viewObjectsS.serverToEdit.username;
+		passwordField.text = viewObjectsS.serverToEdit.password;
 	}
 }
 
@@ -76,7 +72,7 @@
 
 - (IBAction) cancelButtonPressed:(id)sender
 {
-	viewObjects.serverToEdit = nil;
+	viewObjectsS.serverToEdit = nil;
 	
 	if (parentController)
 		[parentController dismissModalViewControllerAnimated:YES];
@@ -86,13 +82,13 @@
 	if (![[NSUserDefaults standardUserDefaults] objectForKey:@"servers"])
 	{
 		// Pop the view back
-		if (appDelegate.currentTabBarController.selectedIndex == 4)
+		if (appDelegateS.currentTabBarController.selectedIndex == 4)
 		{
-			[appDelegate.currentTabBarController.moreNavigationController popToViewController:[appDelegate.currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
+			[appDelegateS.currentTabBarController.moreNavigationController popToViewController:[appDelegateS.currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
 		}
 		else
 		{
-			[(UINavigationController*)appDelegate.currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
+			[(UINavigationController*)appDelegateS.currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
 		}
 	}
 }
@@ -100,7 +96,6 @@
 
 - (IBAction) saveButtonPressed:(id)sender
 {
-	SavedSettings *settings = [SavedSettings sharedInstance];
 	
 	if (![self checkUsername:usernameField.text])
 	{
@@ -124,24 +119,24 @@
 		theServer.password = passwordField.text;
 		theServer.type = UBUNTU_ONE;
 		
-		if (settings.serverList == nil)
-			settings.serverList = [NSMutableArray arrayWithCapacity:1];
+		if (settingsS.serverList == nil)
+			settingsS.serverList = [NSMutableArray arrayWithCapacity:1];
 		
-		if(viewObjects.serverToEdit)
+		if(viewObjectsS.serverToEdit)
 		{					
 			// Replace the entry in the server list
-			NSInteger index = [settings.serverList indexOfObject:viewObjects.serverToEdit];
-			[settings.serverList replaceObjectAtIndex:index withObject:theServer];
+			NSInteger index = [settingsS.serverList indexOfObject:viewObjectsS.serverToEdit];
+			[settingsS.serverList replaceObjectAtIndex:index withObject:theServer];
 			
 			// Update the serverToEdit to the new details
-			viewObjects.serverToEdit = theServer;
+			viewObjectsS.serverToEdit = theServer;
 			
 			// Save the plist values
 			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 			[defaults setObject:theServer.url forKey:@"url"];
 			[defaults setObject:theServer.username forKey:@"username"];
 			[defaults setObject:theServer.password forKey:@"password"];
-			[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
+			[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settingsS.serverList] forKey:@"servers"];
 			[defaults synchronize];
 			
 			[NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
@@ -157,15 +152,15 @@
 		else
 		{
 			// Create the entry in serverList
-			viewObjects.serverToEdit = theServer;
-			[settings.serverList addObject:viewObjects.serverToEdit];
+			viewObjectsS.serverToEdit = theServer;
+			[settingsS.serverList addObject:viewObjectsS.serverToEdit];
 			
 			// Save the plist values
 			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 			[defaults setObject:URL forKey:@"url"];
 			[defaults setObject:usernameField.text forKey:@"username"];
 			[defaults setObject:passwordField.text forKey:@"password"];
-			[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
+			[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settingsS.serverList] forKey:@"servers"];
 			[defaults synchronize];
 			
 			[NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];

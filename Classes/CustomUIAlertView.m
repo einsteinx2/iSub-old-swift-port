@@ -13,7 +13,7 @@
 
 - (void)show
 {
-	if ([SavedSettings sharedInstance].isPopupsEnabled)
+	if (settingsS.isPopupsEnabled)
 		[super show];
 }
 

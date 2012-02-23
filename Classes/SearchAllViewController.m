@@ -19,7 +19,7 @@
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	
-	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -147,7 +147,7 @@
 	
 	cell.textLabel.text = [cellNames objectAtIndexSafe:indexPath.row];
 	cell.textLabel.backgroundColor = [UIColor clearColor];
-	cell.backgroundView = [[ViewObjectsSingleton sharedInstance] createCellBackground:indexPath.row];
+	cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
     
     return cell;
 }

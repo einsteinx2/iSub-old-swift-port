@@ -18,7 +18,7 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
-#import "SUSStreamSingleton.h"
+#import "SUSStreamManager.h"
 #import "PlaylistSingleton.h"
 #import "NSArray+Additions.h"
 
@@ -30,11 +30,7 @@
 {
 	if ((self = [super init]))
 	{
-		appDelegate = [iSubAppDelegate sharedInstance];
-		musicControls = [MusicSingleton sharedInstance];
-		databaseControls = [DatabaseSingleton sharedInstance];
-		viewObjects = [ViewObjectsSingleton sharedInstance];
-		
+			
 		myArtist = nil;
 		folderIds = [[NSMutableArray alloc] initWithCapacity:10];
 		
@@ -72,7 +68,7 @@
 	DLog(@"cancelLoad called");
 	isCancelled = YES;
 	[super cancelLoad];
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 }
 
 - (void)finishLoad
@@ -90,31 +86,31 @@
 		if (isShuffleButton)
 		{
 			// Perform the shuffle
-			[databaseControls shufflePlaylist];
+			[databaseS shufflePlaylist];
 		}
 		
 		if (isQueue)
 		{
-			if ([SavedSettings sharedInstance].isJukeboxEnabled)
+			if (settingsS.isJukeboxEnabled)
 			{
-				[musicControls jukeboxReplacePlaylistWithLocal];
+				[musicS jukeboxReplacePlaylistWithLocal];
 			}
 			else
 			{
-				[[SUSStreamSingleton sharedInstance] fillStreamQueue];
+				[streamManagerS fillStreamQueue];
 			}
 		}
 		
-		[viewObjects hideLoadingScreen];
+		[viewObjectsS hideLoadingScreen];
 		
 		if (doShowPlayer)
 		{
-			[musicControls showPlayer];
+			[musicS showPlayer];
 		}
 		
-		if ([SavedSettings sharedInstance].isJukeboxEnabled)
+		if (settingsS.isJukeboxEnabled)
 		{
-			[PlaylistSingleton sharedInstance].isShuffle = NO;
+			playlistS.isShuffle = NO;
 		}
 	}
 }
@@ -128,7 +124,7 @@
 	
 	//jukeboxSongIds = [[NSMutableArray alloc] init];
 	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
 		self.currentPlaylist = @"jukeboxCurrentPlaylist";
 		self.shufflePlaylist = @"jukeboxShufflePlaylist";
@@ -254,7 +250,7 @@
 		[folderIds removeObjectAtIndex:0];
 	
 	//DLog(@"parser.listOfSongs = %@", parser.listOfSongs);
-	//DLog(@"Playlist count: %i", [databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"]);
+	//DLog(@"Playlist count: %i", [databaseS.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"]);
 	
 	NSUInteger maxIndex = [parser.listOfAlbums count] - 1;
 	for (int i = maxIndex; i >= 0; i--)

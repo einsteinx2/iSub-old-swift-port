@@ -1,25 +1,20 @@
 //
-//  MusicControlsSingleton.h
+//  musicSSingleton.h
 //  iSub
 //
 //  Created by Ben Baron on 10/15/10.
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+#define musicS [MusicSingleton sharedInstance]
+
 #import "SUSLoaderDelegate.h"
 
-@class iSubAppDelegate, DatabaseSingleton, ViewObjectsSingleton, PlaylistSingleton, Song, BBSimpleConnectionQueue, AudioEngine;
+@class Song, BBSimpleConnectionQueue;
 
 @interface MusicSingleton : NSObject <SUSLoaderDelegate>
-{
-	iSubAppDelegate *appDelegate;
-	DatabaseSingleton *databaseControls;
-	ViewObjectsSingleton *viewObjects;
-	PlaylistSingleton *currentPlaylist;
-		
+{		
 	BOOL isAutoNextNotificationOn;
-	
-	AudioEngine *audio;
 }
 
 @property (retain) Song *queueSongObject;

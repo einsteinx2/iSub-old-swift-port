@@ -19,7 +19,7 @@
 #import <sys/stat.h>
 #import "BassUserInfo.h"
 #import "SavedSettings.h"
-#import "SUSStreamSingleton.h"
+#import "SUSStreamManager.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "MusicSingleton.h"
 #import "NSArray+Additions.h"
@@ -27,7 +27,7 @@
 // TODO: verify secondsOffset usage
 
 @implementation AudioEngine
-@synthesize isEqualizerOn, startByteOffset, startSecondsOffset, currPlaylistDAO, fftDataThread, isFftDataThreadToTerminate, isPlaying, isFastForward, bassReinitSampleRate, presilenceStream, bufferLengthMillis, bassUpdatePeriod;
+@synthesize isEqualizerOn, startByteOffset, startSecondsOffset, fftDataThread, isFftDataThreadToTerminate, isPlaying, isFastForward, bassReinitSampleRate, presilenceStream, bufferLengthMillis, bassUpdatePeriod;
 @synthesize fileStream1, fileStream2, fileStreamTempo1, fileStreamTempo2, volumeFx, outStream, BASSisFilestream1, currentStreamSyncObject;
 @synthesize eqValueArray, eqHandleArray, eqDataType, eqReadSyncObject, neededSize, bassUserInfoDict;//fileStreamUserInfo1, fileStreamUserInfo2;
 @synthesize shouldResumeFromInterruption;
@@ -325,8 +325,7 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 				if(theSong.localFileSize < sharedInstance.neededSize)
 				{
 					// Handle temp cached songs ending. When they end, they are set as the last temp cached song, so we know it's done and can stop waiting for data.
-					SUSStreamSingleton *streamManager = [SUSStreamSingleton sharedInstance];
-					if ( !(theSong.isTempCached && [theSong isEqualToSong:streamManager.lastTempCachedSong]) )
+					if ( !(theSong.isTempCached && [theSong isEqualToSong:streamManagerS.lastTempCachedSong]) )
 					{
 						// Undo the read
 						fpos_t pos; 
@@ -391,7 +390,7 @@ BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFi
 				//DLog(@"freed current stream: %u  currentStreamTempo: %u", self.currentStream, self.currentStreamTempo); 
 				
 				// Increment current playlist index
-				[currPlaylistDAO incrementIndex];
+				[playlistS incrementIndex];
 				
 				// Send song end notification
 				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnded];
@@ -425,7 +424,7 @@ BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFi
 					r = [self bassGetOutputData:buffer length:length];
 					
 					// Mark the last played time in the database for cache cleanup
-					currPlaylistDAO.currentSong.playedDate = [NSDate date];
+					playlistS.currentSong.playedDate = [NSDate date];
 				}
 			}
 		}
@@ -439,11 +438,9 @@ BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFi
 			[self performSelectorOnMainThread:@selector(bassFree) withObject:nil waitUntilDone:NO];
 			
 			// Handle song caching being disabled
-			SavedSettings *settings = [SavedSettings sharedInstance];
-			if (!settings.isSongCachingEnabled || !settings.isNextSongCacheEnabled)
+			if (!settingsS.isSongCachingEnabled || !settingsS.isNextSongCacheEnabled)
 			{
-				MusicSingleton *musicControls = [MusicSingleton sharedInstance];
-				[musicControls performSelectorOnMainThread:@selector(startSong) withObject:nil waitUntilDone:NO];
+				[musicS performSelectorOnMainThread:@selector(startSong) withObject:nil waitUntilDone:NO];
 			}
 		}
 	}
@@ -694,7 +691,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	self.bassReinitSampleRate = 0;
 	
 	//DLog(@"preparing next song stream");
-	Song *nextSong = currPlaylistDAO.nextSong;
+	Song *nextSong = playlistS.nextSong;
 	
 	//DLog(@"nextSong.localFileSize: %llu", nextSong.localFileSize);
 	if (nextSong.localFileSize == 0)
@@ -766,7 +763,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 
 - (BOOL)prepareFileStream1
 {
-	Song *currentSong = currPlaylistDAO.currentSong;
+	Song *currentSong = playlistS.currentSong;
 	if (currentSong.fileExists)
 	{	
 		// Create the user info object for the stream
@@ -817,10 +814,10 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 
 - (void)startWithOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds
 {	
-	NSInteger count = currPlaylistDAO.count;
-	if (currPlaylistDAO.currentIndex >= count) currPlaylistDAO.currentIndex = count - 1;
+	NSInteger count = playlistS.count;
+	if (playlistS.currentIndex >= count) playlistS.currentIndex = count - 1;
 	
-	Song *currentSong = currPlaylistDAO.currentSong;
+	Song *currentSong = playlistS.currentSong;
 	if (!currentSong)
 		return;
 	
@@ -972,11 +969,11 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	{
 		if (self.currentStream == 0)
 		{
-			NSInteger count = currPlaylistDAO.count;
-			if (currPlaylistDAO.currentIndex >= count) 
+			NSInteger count = playlistS.count;
+			if (playlistS.currentIndex >= count) 
 			{
 				// The playlist finished
-				currPlaylistDAO.currentIndex = count - 1;
+				playlistS.currentIndex = count - 1;
 				startByteOffset = 0;
 				startSecondsOffset = 0.;
 			}
@@ -1360,7 +1357,6 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	isPlaying = NO;
 	isEqualizerOn = NO;
     startByteOffset = 0;
-    currPlaylistDAO = [PlaylistSingleton sharedInstance];
 	currentStreamSyncObject = [[NSObject alloc] init];
 	eqReadSyncObject = [[NSObject alloc] init];
     

@@ -24,7 +24,6 @@
 	self = [super init];
 	if (self != nil)
 	{
-		musicControls = [MusicSingleton sharedInstance];
 		
 		receivedData = [[NSMutableData data] retain];
 		
@@ -62,7 +61,7 @@
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
-	[musicControls.connectionQueue connectionFinished:theConnection];
+	[musicS.connectionQueue connectionFinished:theConnection];
 	
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error controlling the Jukebox.\n\nError %i: %@", [error code], [error localizedDescription]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
@@ -74,7 +73,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {			
-	[musicControls.connectionQueue connectionFinished:theConnection];
+	[musicS.connectionQueue connectionFinished:theConnection];
 	
 	if (isGetInfo)
 	{
@@ -82,12 +81,10 @@
 		JukeboxXMLParser *parser = (JukeboxXMLParser*)[[JukeboxXMLParser alloc] initXMLParser];
 		[xmlParser setDelegate:parser];
 		[xmlParser parse];
-		
-		PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
-		
-		dataModel.currentIndex = parser.currentIndex;
-		musicControls.jukeboxGain = parser.gain;
-		musicControls.jukeboxIsPlaying = parser.isPlaying;
+				
+		playlistS.currentIndex = parser.currentIndex;
+		musicS.jukeboxGain = parser.gain;
+		musicS.jukeboxIsPlaying = parser.isPlaying;
 		
 		[xmlParser release];
 		[parser release];
@@ -104,7 +101,7 @@
 		[xmlParser release];
 		[parser release];
 		
-		[musicControls jukeboxGetInfo];
+		[musicS jukeboxGetInfo];
 	}
 	
 	[theConnection release];

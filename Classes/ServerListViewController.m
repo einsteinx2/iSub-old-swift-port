@@ -24,7 +24,7 @@
 #import "SavedSettings.h"
 #import "AudioEngine.h"
 #import "SUSAllSongsLoader.h"
-#import "SUSStreamSingleton.h"
+#import "SUSStreamManager.h"
 #import "NSArray+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
 
@@ -35,7 +35,7 @@
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	
-	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -45,7 +45,7 @@
 {
 	[super viewWillAppear:animated];
 	
-	viewObjects.isSettingsShowing = YES;
+	viewObjectsS.isSettingsShowing = YES;
 }
 
 /* DOESN'T GET CALLED, setting isSettingShowing to NO in NewHomeViewController viewWillAppear instead
@@ -53,18 +53,13 @@
 {
 	[super viewWillDisappear:animated];
 	
-	viewObjects.isSettingsShowing = NO;
+	viewObjectsS.isSettingsShowing = NO;
 }*/
 
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
 
-    appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicSingleton sharedInstance];
-	databaseControls = [DatabaseSingleton sharedInstance];
-	settings = [SavedSettings sharedInstance];
 	
 	theNewRedirectionUrl = nil;
 	
@@ -74,15 +69,15 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSaveButton) name:@"showSaveButton" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchServer:) name:@"switchServer" object:nil];
 	
-	//viewObjects.tempServerList = [[NSMutableArray arrayWithArray:viewObjects.serverList] retain];
-	//DLog(@"tempServerList: %@", viewObjects.tempServerList);
+	//viewObjectsS.tempServerList = [[NSMutableArray arrayWithArray:viewObjectsS.serverList] retain];
+	//DLog(@"tempServerList: %@", viewObjectsS.tempServerList);
 	
 	self.title = @"Servers";
 	if(self != [[self.navigationController viewControllers] objectAtIndexSafe:0])
 		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(saveAction:)] autorelease];
 	self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	
-	if (settings.serverList == nil || [settings.serverList count] == 0)
+	if (settingsS.serverList == nil || [settingsS.serverList count] == 0)
 		[self addAction:nil];
 	
 	// Setup segmented control in the header view
@@ -200,13 +195,13 @@
 
 - (void)addAction:(id)sender
 {
-	viewObjects.serverToEdit = nil;
+	viewObjectsS.serverToEdit = nil;
 	
 	ServerTypeViewController *serverTypeViewController = [[ServerTypeViewController alloc] initWithNibName:@"ServerTypeViewController" bundle:nil];
 	if ([serverTypeViewController respondsToSelector:@selector(setModalPresentationStyle:)])
 		serverTypeViewController.modalPresentationStyle = UIModalPresentationFormSheet;
 	if (IS_IPAD())
-		[appDelegate.ipadRootViewController presentModalViewController:serverTypeViewController animated:YES];
+		[appDelegateS.ipadRootViewController presentModalViewController:serverTypeViewController animated:YES];
 	else
 		[self presentModalViewController:serverTypeViewController animated:YES];
 	[serverTypeViewController release];
@@ -233,7 +228,7 @@
 
 - (void)showServerEditScreen
 {
-	if (viewObjects.serverToEdit.type == UBUNTU_ONE)
+	if (viewObjectsS.serverToEdit.type == UBUNTU_ONE)
 	{
 		UbuntuServerEditViewController *ubuntuServerEditViewController = [[UbuntuServerEditViewController alloc] initWithNibName:@"UbuntuServerEditViewController" bundle:nil];
 		if ([ubuntuServerEditViewController respondsToSelector:@selector(setModalPresentationStyle:)])
@@ -260,19 +255,19 @@
 	
 	// Save the plist values
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults setObject:viewObjects.serverToEdit.url forKey:@"url"];
-	[defaults setObject:viewObjects.serverToEdit.username forKey:@"username"];
-	[defaults setObject:viewObjects.serverToEdit.password forKey:@"password"];
-	[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
+	[defaults setObject:viewObjectsS.serverToEdit.url forKey:@"url"];
+	[defaults setObject:viewObjectsS.serverToEdit.username forKey:@"username"];
+	[defaults setObject:viewObjectsS.serverToEdit.password forKey:@"password"];
+	[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settingsS.serverList] forKey:@"servers"];
 	[defaults synchronize];
 	
 	// Update the variables
-	settings.urlString = [NSString stringWithString:viewObjects.serverToEdit.url];
-	settings.username = [NSString stringWithString:viewObjects.serverToEdit.username];
-	settings.password = [NSString stringWithString:viewObjects.serverToEdit.password];
-    settings.redirectUrlString = self.theNewRedirectionUrl;
+	settingsS.urlString = [NSString stringWithString:viewObjectsS.serverToEdit.url];
+	settingsS.username = [NSString stringWithString:viewObjectsS.serverToEdit.username];
+	settingsS.password = [NSString stringWithString:viewObjectsS.serverToEdit.password];
+    settingsS.redirectUrlString = self.theNewRedirectionUrl;
 	
-	DLog(@"settings.urlString: %@   settings.redirectUrlString: %@", settings.urlString, settings.redirectUrlString);
+	DLog(@" settingsS.urlString: %@   settingsS.redirectUrlString: %@", settingsS.urlString, settingsS.redirectUrlString);
 		
 	[self retain];
 	if(self == [[self.navigationController viewControllers] objectAtIndexSafe:0])
@@ -283,20 +278,20 @@
 	{
 		[self.navigationController popToRootViewControllerAnimated:YES];
 		
-		if ([appDelegate.wifiReach currentReachabilityStatus] == NotReachable)
+		if ([appDelegateS.wifiReach currentReachabilityStatus] == NotReachable)
 			return;
 		
 		// Cancel any caching
-		[[SUSStreamSingleton sharedInstance] removeAllStreams];
+		[streamManagerS removeAllStreams];
 		
 		// Cancel any tab loads
 		if ([SUSAllSongsLoader isLoading])
 		{
 			DLog(@"detected all songs loading");
-			viewObjects.cancelLoading = YES;
+			viewObjectsS.cancelLoading = YES;
 		}
 		
-		while (viewObjects.cancelLoading == YES)
+		while (viewObjectsS.cancelLoading == YES)
 		{
 			DLog(@"waiting for the load to cancel before continuing");
 		}
@@ -304,39 +299,39 @@
 		// Stop any playing song and remove old tab bar controller from window
 		[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"recover"];
 		[[NSUserDefaults standardUserDefaults] synchronize];
-		[[AudioEngine sharedInstance] stop];
-		settings.isJukeboxEnabled = NO;
+		[audioEngineS stop];
+		 settingsS.isJukeboxEnabled = NO;
 		
 		if (!IS_IPAD())
-			[appDelegate.mainTabBarController.view removeFromSuperview];
+			[appDelegateS.mainTabBarController.view removeFromSuperview];
 		
 		// Reset the databases
-		[databaseControls closeAllDatabases];
+		[databaseS closeAllDatabases];
 		
-		[databaseControls initDatabases];
+		[databaseS initDatabases];
 				
-		if (viewObjects.isOfflineMode)
+		if (viewObjectsS.isOfflineMode)
 		{
-			viewObjects.isOfflineMode = NO;
+			viewObjectsS.isOfflineMode = NO;
 			
 			if (!IS_IPAD())
 			{
-				[appDelegate.offlineTabBarController.view removeFromSuperview];
-				[viewObjects orderMainTabBarController];
+				[appDelegateS.offlineTabBarController.view removeFromSuperview];
+				[viewObjectsS orderMainTabBarController];
 			}
 		}
 		
 		// Reset the tabs
 		if (IS_IPAD())
-			[appDelegate.artistsNavigationController popToRootViewControllerAnimated:NO];
+			[appDelegateS.artistsNavigationController popToRootViewControllerAnimated:NO];
 		else
-			[appDelegate.rootViewController.navigationController popToRootViewControllerAnimated:NO];
+			[appDelegateS.rootViewController.navigationController popToRootViewControllerAnimated:NO];
 				
 		// Add the tab bar controller back to the window
 		if (!IS_IPAD())
-			[appDelegate.window addSubview:[appDelegate.mainTabBarController view]];
+			[appDelegateS.window addSubview:[appDelegateS.mainTabBarController view]];
 		
-		appDelegate.window.backgroundColor = viewObjects.windowColor;
+		appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
 		
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerSwitched];
 	}
@@ -353,7 +348,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
 	if (segmentedControl.selectedSegmentIndex == 0)
-		return [settings.serverList count];
+		return [ settingsS.serverList count];
 	else
 		return 0;
 }
@@ -366,7 +361,7 @@
 	
 	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 	
-	Server *aServer = [settings.serverList objectAtIndexSafe:indexPath.row];
+	Server *aServer = [ settingsS.serverList objectAtIndexSafe:indexPath.row];
 	
 	// Set up the cell...
 	UILabel *serverNameLabel = [[UILabel alloc] init];
@@ -398,9 +393,9 @@
 	[cell.contentView addSubview:serverType];
 	[serverType release];
 	
-	if([settings.urlString isEqualToString:aServer.url] && 
-	   [settings.username isEqualToString:aServer.username] &&
-	   [settings.password isEqualToString:aServer.password])
+	if([ settingsS.urlString isEqualToString:aServer.url] && 
+	   [ settingsS.username isEqualToString:aServer.username] &&
+	   [ settingsS.password isEqualToString:aServer.password])
 	{
 		UIImageView *currentServerMarker = [[UIImageView alloc] init];
 		currentServerMarker.image = [UIImage imageNamed:@"current-server.png"];
@@ -420,9 +415,9 @@
 	
 	cell.backgroundView = [[[UIView alloc] init] autorelease];
 	if(indexPath.row % 2 == 0)
-		cell.backgroundView.backgroundColor = [viewObjects lightNormal];
+		cell.backgroundView.backgroundColor = [viewObjectsS lightNormal];
 	else
-		cell.backgroundView.backgroundColor = [viewObjects darkNormal];
+		cell.backgroundView.backgroundColor = [viewObjectsS darkNormal];
 	
 	return cell;
 }
@@ -430,8 +425,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	viewObjects.serverToEdit = [settings.serverList objectAtIndexSafe:indexPath.row];
-	DLog(@"viewObjects.serverToEdit.url: %@", viewObjects.serverToEdit.url);
+	viewObjectsS.serverToEdit = [ settingsS.serverList objectAtIndexSafe:indexPath.row];
+	DLog(@"viewObjectsS.serverToEdit.url: %@", viewObjectsS.serverToEdit.url);
 
 	if (isEditing)
 	{
@@ -440,9 +435,9 @@
 	else
 	{
 		self.theNewRedirectionUrl = nil;
-		[viewObjects showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
+		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
 		SUSServerChecker *checker = [[SUSServerChecker alloc] initWithDelegate:self];
-		[checker checkServerUrlString:viewObjects.serverToEdit.url username:viewObjects.serverToEdit.username password:viewObjects.serverToEdit.password];
+		[checker checkServerUrlString:viewObjectsS.serverToEdit.url username:viewObjectsS.serverToEdit.username password:viewObjectsS.serverToEdit.password];
 	}
 }
 
@@ -461,11 +456,11 @@
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath 
 {
-	NSArray *server = [[settings.serverList objectAtIndexSafe:fromIndexPath.row] retain];
-	[settings.serverList removeObjectAtIndex:fromIndexPath.row];
-	[settings.serverList insertObject:server atIndex:toIndexPath.row];
+	NSArray *server = [[ settingsS.serverList objectAtIndexSafe:fromIndexPath.row] retain];
+	[ settingsS.serverList removeObjectAtIndex:fromIndexPath.row];
+	[ settingsS.serverList insertObject:server atIndex:toIndexPath.row];
 	[server release];
-	[[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
+	[[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject: settingsS.serverList] forKey:@"servers"];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
 	[self.tableView reloadData];
@@ -478,7 +473,7 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) 
 	{
 		// Alert user to select new default server if they deleting the default
-		if ([settings.urlString isEqualToString:[(Server *)[settings.serverList objectAtIndexSafe:indexPath.row] url]])
+		if ([ settingsS.urlString isEqualToString:[(Server *)[ settingsS.serverList objectAtIndexSafe:indexPath.row] url]])
 		{
 			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Make sure to select a new server" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 			alert.tag = 4;
@@ -487,13 +482,13 @@
 		}
 		
         // Delete the row from the data source
-        [settings.serverList removeObjectAtIndex:indexPath.row];
+        [ settingsS.serverList removeObjectAtIndex:indexPath.row];
 		[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
 		[self.tableView reloadData];
 		
 		// Save the plist values
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
+		[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject: settingsS.serverList] forKey:@"servers"];
 		[defaults synchronize];
     }   
 }
@@ -523,24 +518,24 @@
     [checker release]; checker = nil;
 	    
     DLog(@"server verification failed, hiding loading screen");
-    [viewObjects hideLoadingScreen];
+    [viewObjectsS hideLoadingScreen];
 }
 
 - (void)SUSServerURLCheckPassed:(SUSServerChecker *)checker
 {
-	settings.isNewSearchAPI = checker.isNewSearchAPI;
+	 settingsS.isNewSearchAPI = checker.isNewSearchAPI;
     
     [checker release]; checker = nil;
 	
-	settings.urlString = [NSString stringWithString:viewObjects.serverToEdit.url];
-	settings.username = [NSString stringWithString:viewObjects.serverToEdit.username];
-	settings.password = [NSString stringWithString:viewObjects.serverToEdit.password];
-    settings.redirectUrlString = self.theNewRedirectionUrl;
+	 settingsS.urlString = [NSString stringWithString:viewObjectsS.serverToEdit.url];
+	 settingsS.username = [NSString stringWithString:viewObjectsS.serverToEdit.username];
+	 settingsS.password = [NSString stringWithString:viewObjectsS.serverToEdit.password];
+    settingsS.redirectUrlString = self.theNewRedirectionUrl;
 	
 	[self switchServer:nil];
     
     DLog(@"server verification passed, hiding loading screen");
-    [viewObjects hideLoadingScreen];
+    [viewObjectsS hideLoadingScreen];
 }
 
 - (void)SUSServerURLCheckRedirected:(SUSServerChecker *)checker redirectUrl:(NSURL *)url

@@ -7,14 +7,10 @@
 //
 
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, AsynchronousImageView;
+@class AsynchronousImageView;
 
 @interface NewHomeViewController : UIViewController
 {
-	iSubAppDelegate *appDelegate;
-	ViewObjectsSingleton *viewObjects;
-	MusicSingleton *musicControls;
-	DatabaseSingleton *databaseControls;
 	
 	IBOutlet UIButton *playerButton;
 	IBOutlet UIButton *jukeboxButton;

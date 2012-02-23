@@ -38,16 +38,13 @@
     //[super viewWillAppear:animated];
 	[super viewDidLoad];
 	
-	SavedSettings *settings = [SavedSettings sharedInstance];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideSongInfoFast) name:@"hideSongInfoFast" object:nil];
 	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideSongInfo) name:@"hideSongInfo" object:nil];
-	
-	appDelegate = (iSubAppDelegate *)[UIApplication sharedApplication].delegate; 
-	
+		
 	numberOfPages = 1;
-	if (settings.isLyricsEnabled) numberOfPages++;
-	if (settings.isCacheStatusEnabled) numberOfPages++;
+	if (settingsS.isLyricsEnabled) numberOfPages++;
+	if (settingsS.isCacheStatusEnabled) numberOfPages++;
 	
 	// view controllers are created lazily
     // in the meantime, load the array with placeholders which will be replaced on demand
@@ -121,7 +118,6 @@
 	UIViewController *controller = (UIViewController *) [viewControllers objectAtIndexSafe:page];
     if ((NSNull *)controller != [NSNull null]) return; 
 
-	SavedSettings *settings = [SavedSettings sharedInstance];
 	
     // Replace the placeholder
 	switch (page) 
@@ -130,9 +126,9 @@
 			controller = [[CurrentPlaylistBackgroundViewController alloc] initWithNibName:@"CurrentPlaylistBackgroundViewController" bundle:nil];
 			break;
 		case 1:
-			if (settings.isLyricsEnabled)
+			if (settingsS.isLyricsEnabled)
 				controller = [[LyricsViewController alloc] initWithNibName:nil bundle:nil];
-			else if (settings.isCacheStatusEnabled)
+			else if (settingsS.isCacheStatusEnabled)
 				controller = [[DebugViewController alloc] initWithNibName:@"DebugViewController" bundle:nil];
 			break;
 		case 2:

@@ -8,11 +8,9 @@
 
 #import "SUSLoader.h"
 
-@class DatabaseSingleton, ViewObjectsSingleton, FMDatabase;
+@class FMDatabase;
 @interface SUSPlayerCoverArtLoader : SUSLoader
 {
-	DatabaseSingleton *databaseControls;
-	ViewObjectsSingleton *viewObjects;
 }
 
 @property (copy) NSString *coverArtId;

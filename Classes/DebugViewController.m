@@ -24,14 +24,11 @@
 {
     [super viewDidLoad];
 	
-	musicControls = [MusicSingleton sharedInstance];
-	cacheControls = [CacheSingleton sharedInstance];
-	settings = [SavedSettings sharedInstance];
 	
 	currentSongProgress = 0.;
 	nextSongProgress = 0.;
 		
-	if (settings.isCacheUnlocked)
+	if (settingsS.isCacheUnlocked)
 	{
 		// Cache the song objects
 		[self cacheSongObjects];
@@ -119,13 +116,13 @@
 
 - (void)cacheSongObjects
 {
-	self.currentSong = [PlaylistSingleton sharedInstance].currentDisplaySong;
-	self.nextSong = [PlaylistSingleton sharedInstance].nextSong;
+	self.currentSong = playlistS.currentDisplaySong;
+	self.nextSong = playlistS.nextSong;
 }
 		 
 - (void)updateStats
 {
-	if (!settings.isJukeboxEnabled)
+	if (!settingsS.isJukeboxEnabled)
 	{
 		// Set the current song progress bar
 		if (![self.currentSong isTempCached])
@@ -134,7 +131,7 @@
 		nextSongProgress = self.nextSong.downloadProgress;
 	}
 	
-	if (settings.isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
 		currentSongProgressView.progress = 0.0;
 		currentSongProgressView.alpha = 0.2;
@@ -155,11 +152,9 @@
 			currentSongProgressView.progress = currentSongProgress;
 			currentSongProgressView.alpha = 1.0;
 		}
-		
-		PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
-		
+				
 		// Set the next song progress bar
-		if (dataModel.nextSong.path != nil)
+		if (playlistS.nextSong.path != nil)
 		{
 			// Make sure label and progress view aren't greyed out
 			nextSongLabel.alpha = 1.0;
@@ -175,29 +170,29 @@
 	}
 	
 	// Set the number of songs cached label
-	NSUInteger cachedSongs = cacheControls.numberOfCachedSongs;
+	NSUInteger cachedSongs = cacheS.numberOfCachedSongs;
 	if (cachedSongs == 1)
 		songsCachedLabel.text = @"1 song";
 	else
 		songsCachedLabel.text = [NSString stringWithFormat:@"%i songs", cachedSongs];
 	
 	// Set the cache setting labels
-	if (settings.cachingType == 0)
+	if (settingsS.cachingType == 0)
 	{
 		cacheSettingLabel.text = @"Min Free Space:";
-		cacheSettingSizeLabel.text = [NSString formatFileSize:settings.minFreeSpace];
+		cacheSettingSizeLabel.text = [NSString formatFileSize:settingsS.minFreeSpace];
 	}
 	else
 	{
 		cacheSettingLabel.text = @"Max Cache Size:";
-		cacheSettingSizeLabel.text = [NSString formatFileSize:settings.maxCacheSize];
+		cacheSettingSizeLabel.text = [NSString formatFileSize:settingsS.maxCacheSize];
 	}
 	
 	// Set the free space label
-	freeSpaceLabel.text = [NSString formatFileSize:cacheControls.freeSpace];
+	freeSpaceLabel.text = [NSString formatFileSize:cacheS.freeSpace];
 	
 	// Set the cache size label
-	cacheSizeLabel.text = [NSString formatFileSize:cacheControls.cacheSize];
+	cacheSizeLabel.text = [NSString formatFileSize:cacheS.cacheSize];
 	
 	[self performSelector:@selector(updateStats) withObject:nil afterDelay:1.0];
 }

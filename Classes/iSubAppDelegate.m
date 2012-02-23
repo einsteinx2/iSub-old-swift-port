@@ -41,7 +41,7 @@
 #import "CacheSingleton.h"
 
 #import "NSMutableURLRequest+SUS.h"
-#import "SUSStreamSingleton.h"
+#import "SUSStreamManager.h"
 
 #import "AudioEngine.h"
 
@@ -96,10 +96,8 @@
 {   
     //NSSetUncaughtExceptionHandler(&onUncaughtException);
 
-	SavedSettings *settings = [SavedSettings sharedInstance];
 	// Start the save defaults timer and mem cache initial defaults
-	[settings setupSaveState];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
+	[settingsS setupSaveState];
 	
 	// Setup network reachability notifications
 	wifiReach = [[Reachability reachabilityForLocalWiFi] retain];
@@ -112,9 +110,9 @@
 	[self batteryStateChanged:nil];	
 
 	// Handle offline mode
-	if (settings.isForceOfflineMode)
+	if (settingsS.isForceOfflineMode)
 	{
-		viewObjects.isOfflineMode = YES;
+		viewObjectsS.isOfflineMode = YES;
 		
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Offline mode switch on, entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		alert.tag = 4;
@@ -123,7 +121,7 @@
 	}
 	else if ([wifiReach currentReachabilityStatus] == NotReachable)
 	{
-		viewObjects.isOfflineMode = YES;
+		viewObjectsS.isOfflineMode = YES;
 		
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"No network detected, entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		alert.tag = 4;
@@ -132,13 +130,13 @@
 	}
 	else 
 	{
-		viewObjects.isOfflineMode = NO;
+		viewObjectsS.isOfflineMode = NO;
 	}
 	
 	showIntro = NO;
-	if (settings.isTestServer)
+	if (settingsS.isTestServer)
 	{
-		if (viewObjects.isOfflineMode)
+		if (viewObjectsS.isOfflineMode)
 		{
 			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome!" message:@"Looks like this is your first time using iSub or you haven't set up your Subsonic account info yet.\n\nYou'll need an internet connection to watch the intro video and use the included demo account." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 			[alert show];
@@ -150,11 +148,7 @@
 		}
 	}
 	
-	databaseControls = [DatabaseSingleton sharedInstance];
-	musicControls = [MusicSingleton sharedInstance];
-	socialControls = [SocialSingleton sharedInstance];
-	cacheControls = [CacheSingleton sharedInstance];
-    audio = [AudioEngine sharedInstance];
+	audioEngineS;
 	
     introController = nil;
 	
@@ -167,9 +161,9 @@
 	[self loadInAppPurchaseStore];
 		
 	// Setup Twitter connection
-	if (!viewObjects.isOfflineMode && [[NSUserDefaults standardUserDefaults] objectForKey:@"twitterAuthData"])
+	if (!viewObjectsS.isOfflineMode && [[NSUserDefaults standardUserDefaults] objectForKey:@"twitterAuthData"])
 	{
-		[socialControls createTwitterEngine];
+		[socialS createTwitterEngine];
 	}
 		
 	// Create and display UI
@@ -207,8 +201,8 @@
 		[vc logMethods];
 		DLog(@"toolbarItems: %@", [vc toolbarItems]);*/
 		
-		//DLog(@"isOfflineMode: %i", viewObjects.isOfflineMode);
-		if (viewObjects.isOfflineMode)
+		//DLog(@"isOfflineMode: %i", viewObjectsS.isOfflineMode);
+		if (viewObjectsS.isOfflineMode)
 		{
 			//DLog(@"--------------- isOfflineMode");
 			currentTabBarController = offlineTabBarController;
@@ -219,7 +213,7 @@
 			// Recover the tab order and load the main tabBarController
 			currentTabBarController = mainTabBarController;
 			
-			//[viewObjects orderMainTabBarController]; // Do this after server check
+			//[viewObjectsS orderMainTabBarController]; // Do this after server check
 			[window addSubview:mainTabBarController.view];
 		}
 		
@@ -230,32 +224,31 @@
 			[introController release];
 		}
 	}
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-		window.backgroundColor = viewObjects.jukeboxColor;
+	if (settingsS.isJukeboxEnabled)
+		window.backgroundColor = viewObjectsS.jukeboxColor;
 	else 
-		window.backgroundColor = viewObjects.windowColor;
+		window.backgroundColor = viewObjectsS.windowColor;
 	[window makeKeyAndVisible];	
 	
 	// Check the server status in the background
-    if (!viewObjects.isOfflineMode)
+    if (!viewObjectsS.isOfflineMode)
 	{
 		//DLog(@"adding loading screen");
-		[viewObjects showLoadingScreenOnMainWindowWithMessage:nil];
+		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 		
 		[self checkServer];
 	}
     
 	// Recover current state if player was interrupted
-	[SUSStreamSingleton sharedInstance];
-	[musicControls resumeSong];
+	[SUSStreamManager sharedInstance];
+	[musicS resumeSong];
 }
 
 - (void)checkServer
 {
-	SavedSettings *settings = [SavedSettings sharedInstance];
 	
 	// Ask the update question if necessary
-	if (!settings.isUpdateCheckQuestionAsked)
+	if (!settingsS.isUpdateCheckQuestionAsked)
 	{
 		// Ask to check for updates if haven't asked yet
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Update Alerts" message:@"Would you like iSub to notify you when app updates are available?\n\nYou can change this setting at any time from the settings menu." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
@@ -263,7 +256,7 @@
 		[alert show];
 		[alert release];
 	}
-	else if (settings.isUpdateCheckEnabled)
+	else if (settingsS.isUpdateCheckEnabled)
 	{
 		ISMSUpdateChecker *updateChecker = [[ISMSUpdateChecker alloc] init];
 		[updateChecker checkForUpdate];
@@ -274,10 +267,10 @@
 	// if it's not then display an alert and allow user to change settings if they want.
 	// This is in case the user is, for instance, connected to a wifi network but does not 
 	// have internet access or if the host url entered was wrong.
-    if (!viewObjects.isOfflineMode) 
+    if (!viewObjectsS.isOfflineMode) 
 	{
         SUSServerChecker *checker = [[SUSServerChecker alloc] initWithDelegate:self];
-		[checker checkServerUrlString:settings.urlString username:settings.username password:settings.password];
+		[checker checkServerUrlString:settingsS.urlString username:settingsS.username password:settingsS.password];
     }
 }
 
@@ -285,15 +278,14 @@
 
 - (void)SUSServerURLCheckRedirected:(SUSServerChecker *)checker redirectUrl:(NSURL *)url
 {
-    SavedSettings *settings = [SavedSettings sharedInstance];
-    settings.redirectUrlString = [NSString stringWithFormat:@"%@://%@:%@", url.scheme, url.host, url.port];
-    //DLog(@"redirectUrlString: %@", settings.redirectUrlString);
+    settingsS.redirectUrlString = [NSString stringWithFormat:@"%@://%@:%@", url.scheme, url.host, url.port];
+    //DLog(@"redirectUrlString: %@", settingsS.redirectUrlString);
 }
 
 - (void)SUSServerURLCheckFailed:(SUSServerChecker *)checker withError:(NSError *)error
 {
     //DLog(@"server check failed");
-    if(!viewObjects.isOfflineMode)
+    if(!viewObjectsS.isOfflineMode)
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", [error code], [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Settings", nil];
 		alert.tag = 3;
@@ -305,28 +297,28 @@
     
     [checker release]; checker = nil;
 	
-	[SavedSettings sharedInstance].isNewSearchAPI = checker.isNewSearchAPI;
+	settingsS.isNewSearchAPI = checker.isNewSearchAPI;
     
     //DLog(@"server verification failed, hiding loading screen");
-    [viewObjects hideLoadingScreen];
+    [viewObjectsS hideLoadingScreen];
 }
 
 - (void)SUSServerURLCheckPassed:(SUSServerChecker *)checker
 {
     //DLog(@"server check passed");
 	
-	[SavedSettings sharedInstance].isNewSearchAPI = checker.isNewSearchAPI;
+	settingsS.isNewSearchAPI = checker.isNewSearchAPI;
     
     [checker release]; checker = nil;
     
     //DLog(@"server verification passed, hiding loading screen");
-    [viewObjects hideLoadingScreen];
+    [viewObjectsS hideLoadingScreen];
 	
-	if (!IS_IPAD() && !viewObjects.isOfflineMode)
-		[viewObjects orderMainTabBarController];
+	if (!IS_IPAD() && !viewObjectsS.isOfflineMode)
+		[viewObjectsS orderMainTabBarController];
 	
 	// Start the queued downloads if Wifi is available
-	[musicControls downloadNextQueuedSong];
+	[musicS downloadNextQueuedSong];
 }
 
 #pragma mark -
@@ -471,7 +463,7 @@
     }
 	else
 	{
-		if ([SavedSettings sharedInstance].isScreenSleepEnabled)
+		if (settingsS.isScreenSleepEnabled)
 			[UIApplication sharedApplication].idleTimerDisabled = NO;
 	}
 }
@@ -568,7 +560,7 @@
 {
 	//DLog(@"applicationDidEnterBackground called");
 	
-	[[SavedSettings sharedInstance] saveState];
+	[settingsS saveState];
 	
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
@@ -577,8 +569,8 @@
 		backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:
 						  ^{
 							  // App is about to be put to sleep, stop the cache download queue
-							  if (musicControls.isQueueListDownloading)
-								  [musicControls stopDownloadQueue];
+							  if (musicS.isQueueListDownloading)
+								  [musicS stopDownloadQueue];
 							  
 							  // Make sure to end the background so we don't get killed by the OS
 							  [application endBackgroundTask:backgroundTask];
@@ -596,16 +588,16 @@
 				//DLog(@"backgroundTimeRemaining: %f", [application backgroundTimeRemaining]);
 				
 				// Sleep early is nothing is happening after 30 seconds
-				if ([application backgroundTimeRemaining] < 570.0 && !musicControls.isQueueListDownloading)
+				if ([application backgroundTimeRemaining] < 570.0 && !musicS.isQueueListDownloading)
 				{
-					DLog("Sleeping early, isQueueListDownloading: %i", musicControls.isQueueListDownloading);
+					DLog("Sleeping early, isQueueListDownloading: %i", musicS.isQueueListDownloading);
 					[application endBackgroundTask:backgroundTask];
 					backgroundTask = UIBackgroundTaskInvalid;
 					break;
 				}
 				
 				// Warn at 2 minute mark if cache queue is downloading
-				if ([application backgroundTimeRemaining] < 120.0 && musicControls.isQueueListDownloading)
+				if ([application backgroundTimeRemaining] < 120.0 && musicS.isQueueListDownloading)
 				{
 					UILocalNotification *localNotif = [[UILocalNotification alloc] init];
 					if (localNotif) 
@@ -641,7 +633,7 @@
 	}
 
 	// Update the lock screen art in case were were using another app
-	[musicControls updateLockScreenInfo];
+	[musicS updateLockScreenInfo];
 }
 
 
@@ -654,9 +646,9 @@
 		[[UIApplication sharedApplication] endReceivingRemoteControlEvents];
 	}
 	
-	[[SavedSettings sharedInstance] saveState];
+	[settingsS saveState];
 	
-	[[AudioEngine sharedInstance] bassFree];
+	[audioEngineS bassFree];
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
@@ -670,9 +662,9 @@
 
 - (void)enterOfflineMode
 {
-	if (viewObjects.isNoNetworkAlertShowing == NO)
+	if (viewObjectsS.isNoNetworkAlertShowing == NO)
 	{
-		viewObjects.isNoNetworkAlertShowing = YES;
+		viewObjectsS.isNoNetworkAlertShowing = YES;
 		
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"No network detected, would you like to enter offline mode? Any currently playing music will stop.\n\nIf this is just temporary connection loss, select No." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
 		alert.tag = 4;
@@ -684,9 +676,9 @@
 
 - (void)enterOnlineMode
 {
-	if (!viewObjects.isOnlineModeAlertShowing)
+	if (!viewObjectsS.isOnlineModeAlertShowing)
 	{
-		viewObjects.isOnlineModeAlertShowing = YES;
+		viewObjectsS.isOnlineModeAlertShowing = YES;
 		
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Network detected, would you like to enter online mode? Any currently playing music will stop." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
 		alert.tag = 4;
@@ -698,20 +690,20 @@
 
 - (void)enterOfflineModeForce
 {
-	if (viewObjects.isOfflineMode)
+	if (viewObjectsS.isOfflineMode)
 		return;
 	
-	viewObjects.isOfflineMode = YES;
+	viewObjectsS.isOfflineMode = YES;
 		
-	[audio stop];
+	[audioEngineS stop];
 	
-	[[SUSStreamSingleton sharedInstance] cancelAllStreams];
+	[streamManagerS cancelAllStreams];
 	
-	[musicControls stopDownloadQueue];
+	[musicS stopDownloadQueue];
 
 	[mainTabBarController.view removeFromSuperview];
-	[databaseControls closeAllDatabases];
-	[databaseControls initDatabases];
+	[databaseS closeAllDatabases];
+	[databaseS initDatabases];
 	currentTabBarController = offlineTabBarController;
 	[window addSubview:[offlineTabBarController view]];
 }
@@ -721,22 +713,22 @@
 	if ([wifiReach currentReachabilityStatus] == NotReachable)
 		return;
 		
-	viewObjects.isOfflineMode = NO;
+	viewObjectsS.isOfflineMode = NO;
 	
-	[audio stop];
+	[audioEngineS stop];
 	[offlineTabBarController.view removeFromSuperview];
-	[databaseControls closeAllDatabases];
-	[databaseControls initDatabases];
+	[databaseS closeAllDatabases];
+	[databaseS initDatabases];
 	[self checkServer];
-	[viewObjects orderMainTabBarController];
-	[musicControls downloadNextQueuedSong];
+	[viewObjectsS orderMainTabBarController];
+	[musicS downloadNextQueuedSong];
 	[window addSubview:[mainTabBarController view]];
 }
 
 
 - (void)reachabilityChanged: (NSNotification *)note
 {
-	if ([SavedSettings sharedInstance].isForceOfflineMode)
+	if (settingsS.isForceOfflineMode)
 		return;
 	
 	Reachability* curReach = [note object];
@@ -749,7 +741,7 @@
 		//[self stopDownloadQueue];
 		
 		//Change over to offline mode
-		if (!viewObjects.isOfflineMode)
+		if (!viewObjectsS.isOfflineMode)
 		{
 			[self enterOfflineMode];
 		}
@@ -759,17 +751,17 @@
 		//DLog(@"Reachability Changed: ReachableViaWiFi");
 		//reachabilityStatus = 2;
 		
-		if (viewObjects.isOfflineMode)
+		if (viewObjectsS.isOfflineMode)
 		{
 			[self enterOnlineMode];
 		}
 		else
 		{
-			//DLog(@"musicControls.isQueueListDownloading: %i", musicControls.isQueueListDownloading);
-			if (!musicControls.isQueueListDownloading) 
+			//DLog(@"musicS.isQueueListDownloading: %i", musicS.isQueueListDownloading);
+			if (!musicS.isQueueListDownloading) 
 			{
-				//DLog(@"Calling [musicControls downloadNextQueuedSong]");
-				[musicControls downloadNextQueuedSong];
+				//DLog(@"Calling [musicS downloadNextQueuedSong]");
+				[musicS downloadNextQueuedSong];
 			}
 		}
 	}
@@ -778,13 +770,13 @@
 		//DLog(@"Reachability Changed: ReachableViaWWAN");
 		//reachabilityStatus = 1;
 		
-		if (viewObjects.isOfflineMode)
+		if (viewObjectsS.isOfflineMode)
 		{
 			[self enterOnlineMode];
 		}
 		else 
 		{
-			[musicControls stopDownloadQueue];
+			[musicS stopDownloadQueue];
 		}
 	}
 }
@@ -891,12 +883,12 @@
 			
 			// Offline mode handling
 			
-			viewObjects.isOnlineModeAlertShowing = NO;
-			viewObjects.isNoNetworkAlertShowing = NO;
+			viewObjectsS.isOnlineModeAlertShowing = NO;
+			viewObjectsS.isNoNetworkAlertShowing = NO;
 			
 			if (buttonIndex == 1)
 			{
-				if (viewObjects.isOfflineMode)
+				if (viewObjectsS.isOfflineMode)
 				{
 					[self enterOnlineModeForce];
 				}
@@ -913,13 +905,13 @@
 			// Title: @"Resume?"
 			if (buttonIndex == 0)
 			{
-				//musicControls.bitRate = 192;
+				//musicS.bitRate = 192;
 			}
 			if (buttonIndex == 1)
 			{
 				// TODO: Test this
-				[SavedSettings sharedInstance].isRecover = YES;
-				[musicControls resumeSong];
+				settingsS.isRecover = YES;
+				[musicS resumeSong];
 				
 				// Reload the tab to display the Now Playing button - NOTE: DOESN'T WORK WHEN MORE TAB IS SELECTED
 				if (currentTabBarController.selectedIndex == 4)
@@ -943,14 +935,14 @@
 			// Title: @"Update Alerts"
 			if (buttonIndex == 0)
 			{
-				[SavedSettings sharedInstance].isUpdateCheckEnabled = NO;
+				settingsS.isUpdateCheckEnabled = NO;
 			}
 			else if (buttonIndex == 1)
 			{
-				[SavedSettings sharedInstance].isUpdateCheckEnabled = YES;
+				settingsS.isUpdateCheckEnabled = YES;
 			}
 			
-			[SavedSettings sharedInstance].isUpdateCheckQuestionAsked = YES;
+			settingsS.isUpdateCheckQuestionAsked = YES;
 			
 			break;
 		}
@@ -1029,19 +1021,17 @@
 #pragma mark -
 
 /*- (NSString *)getStreamURLStringForSongId:(NSString *)songId
-{	
-    SavedSettings *settings = [SavedSettings sharedInstance];
-    
+{	    
     NSString *encodedUserName = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)settings.username, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8 );
 	NSString *encodedPassword = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)settings.password, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8 );
     
-	if ([musicControls maxBitrateSetting] != 0)
+	if ([musicS maxBitrateSetting] != 0)
 	{
-		return [NSString stringWithFormat:@"%@/rest/stream.view?maxBitRate=%i&u=%@&p=%@&v=1.2.0&c=iSub&id=", settings.urlString, [musicControls maxBitrateSetting], [encodedUserName autorelease], [encodedPassword autorelease]];
+		return [NSString stringWithFormat:@"%@/rest/stream.view?maxBitRate=%i&u=%@&p=%@&v=1.2.0&c=iSub&id=", settingsS.urlString, [musicS maxBitrateSetting], [encodedUserName autorelease], [encodedPassword autorelease]];
 	}
     else
 	{
-		return [NSString stringWithFormat:@"%@/rest/stream.view?u=%@&p=%@&v=1.1.0&c=iSub&id=", settings.urlString, [encodedUserName autorelease], [encodedPassword autorelease]];
+		return [NSString stringWithFormat:@"%@/rest/stream.view?u=%@&p=%@&v=1.1.0&c=iSub&id=", settingsS.urlString, [encodedUserName autorelease], [encodedPassword autorelease]];
 	}
 }*/
 
@@ -1063,7 +1053,7 @@
 	}
 	else if ([action isEqualToString:@"stream.view"] && [[settingsDictionary objectForKey:@"maxBitrateSetting"] intValue] != 7)
 	{
-		return [NSString stringWithFormat:@"%@/rest/stream.view?maxBitRate=%i&u=%@&p=%@&v=1.2.0&c=iSub&id=", urlString, [musicControls maxBitrateSetting], [encodedUserName autorelease], [encodedPassword autorelease]];
+		return [NSString stringWithFormat:@"%@/rest/stream.view?maxBitRate=%i&u=%@&p=%@&v=1.2.0&c=iSub&id=", urlString, [musicS maxBitrateSetting], [encodedUserName autorelease], [encodedPassword autorelease]];
 	}
 	else if ([action isEqualToString:@"addChatMessage.view"])
 	{
@@ -1071,8 +1061,8 @@
 	}
 	else if ([action isEqualToString:@"getLyrics.view"])
 	{
-		NSString *encodedArtist = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)musicControls.currentSongObject.artist, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8 );
-		NSString *encodedTitle = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)musicControls.currentSongObject.title, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8 );
+		NSString *encodedArtist = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)musicS.currentSongObject.artist, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8 );
+		NSString *encodedTitle = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)musicS.currentSongObject.title, NULL, (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ", kCFStringEncodingUTF8 );
 		
 		return [NSString stringWithFormat:@"%@/rest/getLyrics.view?artist=%@&title=%@&u=%@&p=%@&v=1.2.0&c=iSub", urlString, [encodedArtist autorelease], [encodedTitle autorelease], [encodedUserName autorelease], [encodedPassword autorelease]];
 	}

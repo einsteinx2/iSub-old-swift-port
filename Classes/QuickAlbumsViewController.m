@@ -25,7 +25,7 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -45,8 +45,6 @@
 {
 	[super viewDidLoad];
 	
-	appDelegate = (iSubAppDelegate *)[UIApplication sharedApplication].delegate;
-	viewObjects = [ViewObjectsSingleton sharedInstance];
 }
 
 - (IBAction)random
@@ -87,7 +85,7 @@
 	{
 		receivedData = [[NSMutableData alloc] initWithCapacity:0];
 		
-		[viewObjects showAlbumLoadingScreen:self.view sender:self];
+		[viewObjectsS showAlbumLoadingScreen:self.view sender:self];
 	} 
 	else 
 	{
@@ -96,7 +94,7 @@
 		[alert show];
 		[alert release];
         
-        [viewObjects hideLoadingScreen];
+        [viewObjectsS hideLoadingScreen];
 	}
 }
 
@@ -151,7 +149,7 @@
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
-    [viewObjects hideLoadingScreen];
+    [viewObjectsS hideLoadingScreen];
     
     CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error grabbing the album list.\n\nError:%@", error.localizedDescription] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alert show];
@@ -180,7 +178,7 @@
     self.modifier = nil;
 	    
     if (IS_IPAD())
-		[appDelegate.homeNavigationController pushViewController:albumViewController animated:YES];
+		[appDelegateS.homeNavigationController pushViewController:albumViewController animated:YES];
 	else
 		[parent.navigationController pushViewController:albumViewController animated:YES];
     
@@ -189,7 +187,7 @@
 	self.receivedData = nil;
 	[theConnection release];
     
-    [viewObjects hideLoadingScreen];
+    [viewObjectsS hideLoadingScreen];
     [self dismissModalViewControllerAnimated:YES];
 }
 

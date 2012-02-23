@@ -22,8 +22,6 @@
 	self = [super init];
 	if (self != nil)
 	{
-		databaseControls = [DatabaseSingleton sharedInstance];
-		musicControls = [MusicSingleton sharedInstance];
 		is320 = YES;
 	}	
 	return self;
@@ -73,9 +71,9 @@
 	{
 		//DLog(@"image is good so caching it");
 		if (is320)
-			[databaseControls.coverArtCacheDb320 executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [musicControls.queueSongObject.coverArtId md5], receivedData];
+			[databaseS.coverArtCacheDb320 executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [musicS.queueSongObject.coverArtId md5], receivedData];
 		else
-			[databaseControls.coverArtCacheDb60 executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [musicControls.queueSongObject.coverArtId md5], receivedData];
+			[databaseS.coverArtCacheDb60 executeUpdate:@"INSERT INTO coverArtCache (id, data) VALUES (?, ?)", [musicS.queueSongObject.coverArtId md5], receivedData];
 	}
 	
 	[theConnection release];

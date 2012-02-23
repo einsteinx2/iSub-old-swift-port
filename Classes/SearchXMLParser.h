@@ -7,12 +7,8 @@
 //
 
 
-
-@class iSubAppDelegate;
-
 @interface SearchXMLParser : NSObject <NSXMLParserDelegate>
 {
-	iSubAppDelegate *appDelegate;
 	
 	NSMutableArray *listOfArtists;
 	NSMutableArray *listOfAlbums;

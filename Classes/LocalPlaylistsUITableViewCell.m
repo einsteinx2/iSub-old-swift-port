@@ -80,19 +80,19 @@
 
 - (void)downloadAllSongs
 {
-	int count = [[DatabaseSingleton sharedInstance].localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", md5]];
+	int count = [databaseS.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", md5]];
 	for (int i = 0; i < count; i++)
 	{
-		[[Song songFromDbRow:i inTable:[NSString stringWithFormat:@"playlist%@", md5] inDatabase:[DatabaseSingleton sharedInstance].localPlaylistsDb] addToCacheQueue];
+		[[Song songFromDbRow:i inTable:[NSString stringWithFormat:@"playlist%@", md5] inDatabase:databaseS.localPlaylistsDb] addToCacheQueue];
 	}
 	
 	// Hide the loading screen
-	[[ViewObjectsSingleton sharedInstance] hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 }
 
 - (void)downloadAction
 {
-	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindowWithMessage:nil];
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 	[self performSelector:@selector(downloadAllSongs) withObject:nil afterDelay:0.05];
 	
 	self.overlayView.downloadButton.alpha = .3;
@@ -103,30 +103,29 @@
 
 - (void)queueAllSongs
 {
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
-		/*[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/currentPlaylist.db", databaseControls.databaseFolderPath], @"currentPlaylistDb"];
-		 if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
-		 [databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", self.md5]];
-		 [databaseControls.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];*/
+		/*[databaseS.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/currentPlaylist.db", databaseS.databaseFolderPath], @"currentPlaylistDb"];
+		 if ([databaseS.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseS.localPlaylistsDb lastErrorCode], [databaseS.localPlaylistsDb lastErrorMessage]); }
+		 [databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", self.md5]];
+		 [databaseS.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];*/
 	}
 	else
 	{
-		DatabaseSingleton *databaseControls = [DatabaseSingleton sharedInstance];
-		[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
-		if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
-		[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", md5]];
-		if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err performing query %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
-		[databaseControls.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
+		[databaseS.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, [settingsS.urlString md5]], @"currentPlaylistDb"];
+		if ([databaseS.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseS.localPlaylistsDb lastErrorCode], [databaseS.localPlaylistsDb lastErrorMessage]); }
+		[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", md5]];
+		if ([databaseS.localPlaylistsDb hadError]) { DLog(@"Err performing query %d: %@", [databaseS.localPlaylistsDb lastErrorCode], [databaseS.localPlaylistsDb lastErrorMessage]); }
+		[databaseS.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 	}
 	
-	[[ViewObjectsSingleton sharedInstance] hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 }
 
 
 - (void)queueAction
 {
-	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindowWithMessage:nil];
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 	[self performSelector:@selector(queueAllSongs) withObject:nil afterDelay:0.05];
 	[self hideOverlay];
 }

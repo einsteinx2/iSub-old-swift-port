@@ -28,7 +28,7 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -47,18 +47,14 @@
 		self.view.frame = frame;
 	}
 	
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicSingleton sharedInstance];
-	databaseControls = [DatabaseSingleton sharedInstance];
 	
 	theNewRedirectUrl = nil;
 	
-	if (viewObjects.serverToEdit)
+	if (viewObjectsS.serverToEdit)
 	{
-		urlField.text = viewObjects.serverToEdit.url;
-		usernameField.text = viewObjects.serverToEdit.username;
-		passwordField.text = viewObjects.serverToEdit.password;
+		urlField.text = viewObjectsS.serverToEdit.url;
+		usernameField.text = viewObjectsS.serverToEdit.username;
+		passwordField.text = viewObjectsS.serverToEdit.password;
 	}
 }
 
@@ -133,7 +129,7 @@
 
 - (IBAction) cancelButtonPressed:(id)sender
 {
-	viewObjects.serverToEdit = nil;
+	viewObjectsS.serverToEdit = nil;
 	
 	if (parentController)
 		[parentController dismissModalViewControllerAnimated:YES];
@@ -143,13 +139,13 @@
 	if (![[NSUserDefaults standardUserDefaults] objectForKey:@"servers"])
 	{
 		// Pop the view back
-		if (appDelegate.currentTabBarController.selectedIndex == 4)
+		if (appDelegateS.currentTabBarController.selectedIndex == 4)
 		{
-			[appDelegate.currentTabBarController.moreNavigationController popToViewController:[appDelegate.currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
+			[appDelegateS.currentTabBarController.moreNavigationController popToViewController:[appDelegateS.currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
 		}
 		else
 		{
-			[(UINavigationController*)appDelegate.currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
+			[(UINavigationController*)appDelegateS.currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
 		}
 	}
 }
@@ -180,7 +176,7 @@
 	
 	if ([self checkUrl:urlField.text] && [self checkUsername:usernameField.text] && [self checkPassword:passwordField.text])
 	{
-		[viewObjects showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
+		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
 		
 		SUSServerChecker *checker = [[SUSServerChecker alloc] initWithDelegate:self];
 		[checker checkServerUrlString:urlField.text username:usernameField.text password:passwordField.text];
@@ -198,7 +194,7 @@
 - (void)SUSServerURLCheckFailed:(SUSServerChecker *)checker withError:(NSError *)error
 {
 	[checker release]; checker = nil;
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 	
 	NSString *message = @"";
 	if (error.code == ISMSErrorCode_IncorrectCredentials)
@@ -214,7 +210,7 @@
 {
 	DLog(@"server check passed");
 	[checker release]; checker = nil;
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 	
 	Server *theServer = [[Server alloc] init];
 	theServer.url = urlField.text;
@@ -222,26 +218,25 @@
 	theServer.password = passwordField.text;
 	theServer.type = SUBSONIC;
 	
-	SavedSettings *settings = [SavedSettings sharedInstance];
 	
-	if (settings.serverList == nil)
-		settings.serverList = [NSMutableArray arrayWithCapacity:1];
+	if (settingsS.serverList == nil)
+		settingsS.serverList = [NSMutableArray arrayWithCapacity:1];
 	
-	if(viewObjects.serverToEdit)
+	if(viewObjectsS.serverToEdit)
 	{					
 		// Replace the entry in the server list
-		NSInteger index = [settings.serverList indexOfObject:viewObjects.serverToEdit];
-		[settings.serverList replaceObjectAtIndex:index withObject:theServer];
+		NSInteger index = [settingsS.serverList indexOfObject:viewObjectsS.serverToEdit];
+		[settingsS.serverList replaceObjectAtIndex:index withObject:theServer];
 		
 		// Update the serverToEdit to the new details
-		viewObjects.serverToEdit = theServer;
+		viewObjectsS.serverToEdit = theServer;
 		
 		// Save the plist values
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		[defaults setObject:theServer.url forKey:@"url"];
 		[defaults setObject:theServer.username forKey:@"username"];
 		[defaults setObject:theServer.password forKey:@"password"];
-		[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
+		[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settingsS.serverList] forKey:@"servers"];
 		[defaults synchronize];
 		
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
@@ -262,15 +257,15 @@
 	else
 	{
 		// Create the entry in serverList
-		viewObjects.serverToEdit = theServer;
-		[settings.serverList addObject:viewObjects.serverToEdit];
+		viewObjectsS.serverToEdit = theServer;
+		[settingsS.serverList addObject:viewObjectsS.serverToEdit];
 		
 		// Save the plist values
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		[defaults setObject:urlField.text forKey:@"url"];
 		[defaults setObject:usernameField.text forKey:@"username"];
 		[defaults setObject:passwordField.text forKey:@"password"];
-		[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settings.serverList] forKey:@"servers"];
+		[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settingsS.serverList] forKey:@"servers"];
 		[defaults synchronize];
 		
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];

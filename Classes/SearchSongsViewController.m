@@ -47,7 +47,7 @@
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	
-	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -59,10 +59,6 @@
 	
     if (self != nil)
     {
-        appDelegate = (iSubAppDelegate *)[UIApplication sharedApplication].delegate;
-		musicControls = [MusicSingleton sharedInstance];
-		databaseControls = [DatabaseSingleton sharedInstance];
-		viewObjects = [ViewObjectsSingleton sharedInstance];
 		
 		listOfArtists = nil;
 		listOfAlbums = nil;
@@ -82,7 +78,7 @@
 {
     [super viewDidLoad];
 	
-	if(musicControls.showPlayerIcon)
+	if(musicS.showPlayerIcon)
 	{
 		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
 	}
@@ -173,7 +169,7 @@
     NSDictionary *parameters = nil;
     NSString *action = nil;
 	NSString *offsetString = [NSString stringWithFormat:@"%i", offset];
-	if ([SavedSettings sharedInstance].isNewSearchAPI)
+	if (settingsS.isNewSearchAPI)
 	{
         action = @"search2";
 		NSString *queryString = [NSString stringWithFormat:@"%@*", query];
@@ -221,7 +217,7 @@
 	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"] autorelease];
 	
 	// Set background color
-	cell.backgroundView = [[ViewObjectsSingleton sharedInstance] createCellBackground:row];
+	cell.backgroundView = [viewObjectsS createCellBackground:row];
 	
 	if (isMoreResults && !isLoading)
 	{
@@ -264,7 +260,7 @@
 			cell.myArtist = anArtist;
 			
 			[cell.artistNameLabel setText:anArtist.name];
-			cell.backgroundView = [viewObjects createCellBackground:indexPath.row];
+			cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
 			
 			return cell;
 		}
@@ -293,9 +289,9 @@
 			// Setup cell backgrond color
 			cell.backgroundView = [[[UIView alloc] init] autorelease];
 			if(indexPath.row % 2 == 0)
-				cell.backgroundView.backgroundColor = viewObjects.lightNormal;
+				cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
 			else
-				cell.backgroundView.backgroundColor = viewObjects.darkNormal;
+				cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
 			
 			return cell;
 		}
@@ -329,11 +325,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {	
-	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
 	
 	if (searchType == 0)
 	{
-		if (viewObjects.isCellEnabled && indexPath.row != [listOfArtists count])
+		if (viewObjectsS.isCellEnabled && indexPath.row != [listOfArtists count])
 		{
 			Artist *anArtist = [listOfArtists objectAtIndexSafe:indexPath.row];
 			AlbumViewController *albumView = [[AlbumViewController alloc] initWithArtist:anArtist orAlbum:nil];
@@ -347,7 +342,7 @@
 	}
 	else if (searchType == 1)
 	{
-		if (viewObjects.isCellEnabled && indexPath.row != [listOfAlbums count])
+		if (viewObjectsS.isCellEnabled && indexPath.row != [listOfAlbums count])
 		{
 			Album *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
 			AlbumViewController *albumView = [[AlbumViewController alloc] initWithArtist:nil orAlbum:anAlbum];
@@ -361,13 +356,13 @@
 	}
 	else
 	{
-		if (viewObjects.isCellEnabled && indexPath.row != [listOfSongs count])
+		if (viewObjectsS.isCellEnabled && indexPath.row != [listOfSongs count])
 		{
 			// Clear the current playlist
-			if ([SavedSettings sharedInstance].isJukeboxEnabled)
-				[databaseControls resetJukeboxPlaylist];
+			if (settingsS.isJukeboxEnabled)
+				[databaseS resetJukeboxPlaylist];
 			else
-				[databaseControls resetCurrentPlaylistDb];
+				[databaseS resetCurrentPlaylistDb];
 			
 			// Add the songs to the playlist 
 			NSMutableArray *songIds = [[NSMutableArray alloc] init];
@@ -378,26 +373,26 @@
 				[aSong addToCurrentPlaylist];
 				
 				// In jukebox mode, collect the song ids to send to the server
-				if ([SavedSettings sharedInstance].isJukeboxEnabled)
+				if (settingsS.isJukeboxEnabled)
 					[songIds addObject:aSong.songId];
 				
 				[pool release];
 			}
 			
 			// If jukebox mode, send song ids to server
-			if ([SavedSettings sharedInstance].isJukeboxEnabled)
+			if (settingsS.isJukeboxEnabled)
 			{
-				[musicControls jukeboxStop];
-				[musicControls jukeboxClearPlaylist];
-				[musicControls jukeboxAddSongs:songIds];
+				[musicS jukeboxStop];
+				[musicS jukeboxClearPlaylist];
+				[musicS jukeboxAddSongs:songIds];
 			}
 			[songIds release];
 			
 			// Set player defaults
-			currentPlaylist.isShuffle = NO;
+			playlistS.isShuffle = NO;
 			
 			// Start the song
-			[musicControls playSongAtPosition:indexPath.row];
+			[musicS playSongAtPosition:indexPath.row];
 			
 			// Show the player
 			if (IS_IPAD())
@@ -462,7 +457,7 @@
 	[connection release]; connection = nil;
 	[receivedData release];
 	
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 

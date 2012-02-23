@@ -6,18 +6,8 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-
-@class SavedSettings, iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, SocialSingleton, DatabaseSingleton;
-
 @interface SettingsTabViewController : UIViewController <UITextFieldDelegate>
-{
-	SavedSettings *settings;
-	
-	iSubAppDelegate *appDelegate;
-	ViewObjectsSingleton *viewObjects;
-	MusicSingleton *musicControls;
-	SocialSingleton *socialControls;
-	DatabaseSingleton *databaseControls;
+{	
 	
 	UIViewController *parentController;
 	

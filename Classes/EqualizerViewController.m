@@ -45,7 +45,7 @@
 		UIDevice *device = [UIDevice currentDevice];
 		if (device.batteryState != UIDeviceBatteryStateCharging && device.batteryState != UIDeviceBatteryStateFull) 
 		{
-			if ([SavedSettings sharedInstance].isScreenSleepEnabled)
+			if (settingsS.isScreenSleepEnabled)
 				[UIApplication sharedApplication].idleTimerDisabled = NO;
 		}
 	}
@@ -129,7 +129,7 @@
 		[self showDeletePresetButton:NO];
 	}
 	
-	gainSlider.value = [SavedSettings sharedInstance].gainMultiplier;
+	gainSlider.value = settingsS.gainMultiplier;
 	
 	if (IS_IPAD())
 	{
@@ -257,11 +257,9 @@
 - (void)createEqViews
 {
 	[self removeEqViews];
-	
-	AudioEngine *engine = [AudioEngine sharedInstance];
-	
-	equalizerPointViews = [[NSMutableArray alloc] initWithCapacity:[[engine equalizerValues] count]];
-	for (BassParamEqValue *value in [AudioEngine sharedInstance].equalizerValues)
+		
+	equalizerPointViews = [[NSMutableArray alloc] initWithCapacity:[[audioEngineS equalizerValues] count]];
+	for (BassParamEqValue *value in audioEngineS.equalizerValues)
 	{
 		DLog(@"eq handle: %i", value.handle);
 		EqualizerPointView *eqView = [[EqualizerPointView alloc] initWithEqValue:value parentSize:self.equalizerView.frame.size];
@@ -269,7 +267,7 @@
 		[self.view addSubview:eqView];
 		[eqView release];
 	}
-	DLog(@"equalizerValues: %@", [AudioEngine sharedInstance].equalizerValues);
+	DLog(@"equalizerValues: %@", audioEngineS.equalizerValues);
 	DLog(@"equalizerViews: %@", equalizerPointViews);
 
 	//Draw the path
@@ -296,7 +294,7 @@
 	[equalizerView removeFromSuperview];
 	[equalizerView release]; equalizerView = nil;
 	
-	[[AudioEngine sharedInstance] stopReadingEqData];
+	[audioEngineS stopReadingEqData];
 	
 	self.navigationController.navigationBar.hidden = NO;
 }
@@ -493,8 +491,8 @@
 - (IBAction)movedGainSlider:(id)sender
 {
 	DLog(@"gainSlider.value: %f", gainSlider.value);
-	[SavedSettings sharedInstance].gainMultiplier = gainSlider.value;
-	[[AudioEngine sharedInstance] bassSetGainLevel:gainSlider.value];
+	settingsS.gainMultiplier = gainSlider.value;
+	[audioEngineS bassSetGainLevel:gainSlider.value];
 }
 
 #pragma mark Touch gestures interception
@@ -517,7 +515,7 @@
 			// remove the point
 			DLog(@"double tap, remove point");
 			
-			[[AudioEngine sharedInstance] removeEqualizerValue:self.selectedView.eqValue];
+			[audioEngineS removeEqualizerValue:self.selectedView.eqValue];
 			[equalizerPointViews removeObject:self.selectedView];
 			[self.selectedView removeFromSuperview];
 			self.selectedView = nil;
@@ -548,7 +546,7 @@
 				
 				// Create the eq view
 				EqualizerPointView *eqView = [[EqualizerPointView alloc] initWithCGPoint:point parentSize:self.equalizerView.bounds.size];
-				BassParamEqValue *value = [[AudioEngine sharedInstance] addEqualizerValue:eqView.eqValue.parameters];
+				BassParamEqValue *value = [audioEngineS addEqualizerValue:eqView.eqValue.parameters];
 				eqView.eqValue = value;
 				
 				// Add the view
@@ -572,7 +570,7 @@
 		if (CGRectContainsPoint(equalizerView.frame, location))
 		{
 			self.selectedView.center = [touch locationInView:self.view];
-			[[AudioEngine sharedInstance] updateEqParameter:self.selectedView.eqValue];
+			[audioEngineS updateEqParameter:self.selectedView.eqValue];
 			
 			[self createAndDrawEqualizerPath];
 		}
@@ -584,7 +582,7 @@
 	// Apply the EQ
 	if (self.selectedView != nil)
 	{
-		[[AudioEngine sharedInstance] updateEqParameter:self.selectedView.eqValue];
+		[audioEngineS updateEqParameter:self.selectedView.eqValue];
 		self.selectedView = nil;
 		
 		// TODO: uncomment this!
@@ -600,7 +598,7 @@
 
 - (IBAction)toggle:(id)sender
 {
-	if ([[AudioEngine sharedInstance] toggleEqualizer])
+	if ([audioEngineS toggleEqualizer])
 	{
 		[self removeEqViews];
 		[self createEqViews];
@@ -610,7 +608,7 @@
 
 - (void)updateToggleButton
 {
-	if([AudioEngine sharedInstance].isEqualizerOn)
+	if(audioEngineS.isEqualizerOn)
 	{
 		[toggleButton setTitle:@"EQ On" forState:UIControlStateNormal];
 	}

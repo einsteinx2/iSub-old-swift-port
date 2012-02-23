@@ -46,7 +46,7 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -55,17 +55,13 @@
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicSingleton sharedInstance];
-	databaseControls = [DatabaseSingleton sharedInstance];
 
-    if (viewObjects.isLocalPlaylist)
+    if (viewObjectsS.isLocalPlaylist)
 	{
-		self.title = [databaseControls.localPlaylistsDb stringForQuery:@"SELECT playlist FROM localPlaylists WHERE md5 = ?", self.md5];
+		self.title = [databaseS.localPlaylistsDb stringForQuery:@"SELECT playlist FROM localPlaylists WHERE md5 = ?", self.md5];
 		
 		UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
-		headerView.backgroundColor = viewObjects.darkNormal;
+		headerView.backgroundColor = viewObjectsS.darkNormal;
 		
 		UIImageView *sendImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"upload-playlist.png"]];
 		sendImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
@@ -104,7 +100,7 @@
 	else
 	{
         self.title = serverPlaylist.playlistName;
-		playlistCount = [databaseControls.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM splaylist%@", md5]];
+		playlistCount = [databaseS.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM splaylist%@", md5]];
 		[self.tableView reloadData];
 		
 		// Add the pull to refresh view
@@ -143,7 +139,7 @@
 		self.receivedData = [NSMutableData data];
 		
 		self.tableView.scrollEnabled = NO;
-		[viewObjects showAlbumLoadingScreen:self.view sender:self];
+		[viewObjectsS showAlbumLoadingScreen:self.view sender:self];
 	} 
 	else 
 	{
@@ -158,9 +154,9 @@
 {
 	[self.connection cancel];
 	self.tableView.scrollEnabled = YES;
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 	
-	if (!viewObjects.isLocalPlaylist)
+	if (!viewObjectsS.isLocalPlaylist)
 	{
 		[self dataSourceDidFinishLoadingNewData];
 	}
@@ -170,7 +166,7 @@
 {
     [super viewWillAppear:animated];
 	
-	if(musicControls.showPlayerIcon)
+	if(musicS.showPlayerIcon)
 	{
 		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
 	}
@@ -179,10 +175,10 @@
 		self.navigationItem.rightBarButtonItem = nil;
 	}
 	
-	if (viewObjects.isLocalPlaylist)
+	if (viewObjectsS.isLocalPlaylist)
 	{
-		//appDelegate.listOfPlaylistSongs = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@%@List", appDelegate.defaultUrl, appDelegate.localPlaylist]]];
-		//appDelegate.dictOfPlaylistSongs = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@%@Dict", appDelegate.defaultUrl, appDelegate.localPlaylist]]];
+		//appDelegate.listOfPlaylistSongs = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@%@List", appDelegateS.defaultUrl, appDelegateS.localPlaylist]]];
+		//appDelegate.dictOfPlaylistSongs = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@%@Dict", appDelegateS.defaultUrl, appDelegateS.localPlaylist]]];
 	}
 	else
 	{
@@ -228,14 +224,14 @@
 	NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(self.title), @"name", nil];
     
 	NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", self.md5];
-	NSUInteger count = [databaseControls.localPlaylistsDb intForQuery:query];
+	NSUInteger count = [databaseS.localPlaylistsDb intForQuery:query];
 	NSMutableArray *songIds = [NSMutableArray arrayWithCapacity:count];
 	for (int i = 1; i <= count; i++)
 	{
 		@autoreleasepool 
 		{
 			NSString *query = [NSString stringWithFormat:@"SELECT songId FROM playlist%@ WHERE ROWID = %i", self.md5, i];
-			NSString *songId = [databaseControls.localPlaylistsDb stringForQuery:query];
+			NSString *songId = [databaseS.localPlaylistsDb stringForQuery:query];
 			
 			[songIds addObject:n2N(songId)];
 		}
@@ -252,7 +248,7 @@
 		self.receivedData = [NSMutableData data];
 		
 		self.tableView.scrollEnabled = NO;
-		[viewObjects showAlbumLoadingScreen:self.view sender:self];
+		[viewObjectsS showAlbumLoadingScreen:self.view sender:self];
 	} 
 	else 
 	{
@@ -295,7 +291,7 @@
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
 	NSString *message = @"";
-	if (viewObjects.isLocalPlaylist)
+	if (viewObjectsS.isLocalPlaylist)
 	{
 		message = [NSString stringWithFormat:@"There was an error saving the playlist to the server.\n\nError %i: %@", 
 											 [error code], 
@@ -314,7 +310,7 @@
 	[alert release];
 	
 	self.tableView.scrollEnabled = YES;
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 	
 	self.connection = nil;
 	self.receivedData = nil;
@@ -324,7 +320,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	if (!viewObjects.isLocalPlaylist)
+	if (!viewObjectsS.isLocalPlaylist)
 	{
         // Parse the data
         //
@@ -342,8 +338,8 @@
                 TBXMLElement *playlist = [TBXML childElementNamed:@"playlist" parentElement:root];
                 if (playlist)
                 {
-                    [databaseControls removeServerPlaylistTable:self.md5];
-                    [databaseControls createServerPlaylistTable:self.md5];
+                    [databaseS removeServerPlaylistTable:self.md5];
+                    [databaseS createServerPlaylistTable:self.md5];
                     
                     TBXMLElement *entry = [TBXML childElementNamed:@"entry" parentElement:playlist];
                     while (entry != nil)
@@ -366,12 +362,12 @@
 		
 		self.tableView.scrollEnabled = YES;
 
-		self.playlistCount = [databaseControls.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM splaylist%@", self.md5]];
+		self.playlistCount = [databaseS.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM splaylist%@", self.md5]];
 		[self.tableView reloadData];
 		
 		[self dataSourceDidFinishLoadingNewData];
 		
-		[viewObjects hideLoadingScreen];
+		[viewObjectsS hideLoadingScreen];
 	}
 	else
 	{
@@ -412,7 +408,7 @@ static NSString *kName_Error = @"error";
 	}
     [tbxml release];
 		
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 }
 
 
@@ -427,14 +423,14 @@ static NSString *kName_Error = @"error";
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
-	if (viewObjects.isLocalPlaylist)
+	if (viewObjectsS.isLocalPlaylist)
 	{
-		return [databaseControls.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", self.md5]];
+		return [databaseS.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", self.md5]];
 	}
 	else
 	{
 		return playlistCount;
-		//return [viewObjects.listOfPlaylistSongs count];
+		//return [viewObjectsS.listOfPlaylistSongs count];
 	}
 }
 
@@ -449,14 +445,14 @@ static NSString *kName_Error = @"error";
 	
 	// Set up the cell...
 	Song *aSong;
-	if (viewObjects.isLocalPlaylist)
+	if (viewObjectsS.isLocalPlaylist)
 	{
-		aSong = [Song songFromDbRow:indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", self.md5] inDatabase:databaseControls.localPlaylistsDb];
+		aSong = [Song songFromDbRow:indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", self.md5] inDatabase:databaseS.localPlaylistsDb];
 		//DLog(@"aSong: %@", aSong);
 	}
 	else
 	{
-		//aSong = [viewObjects.listOfPlaylistSongs objectAtIndexSafe:indexPath.row];
+		//aSong = [viewObjectsS.listOfPlaylistSongs objectAtIndexSafe:indexPath.row];
 		aSong = [Song songFromServerPlaylistId:md5 row:indexPath.row];
 	}
 	
@@ -465,17 +461,17 @@ static NSString *kName_Error = @"error";
 	cell.backgroundView = [[[UIView alloc] init] autorelease];
 	if(indexPath.row % 2 == 0)
 	{
-		if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
-			cell.backgroundView.backgroundColor = [viewObjects currentLightColor];
+		if ([databaseS.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
+			cell.backgroundView.backgroundColor = [viewObjectsS currentLightColor];
 		else
-			cell.backgroundView.backgroundColor = viewObjects.lightNormal;
+			cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
 	}
 	else
 	{
-		if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
-			cell.backgroundView.backgroundColor = [viewObjects currentDarkColor];
+		if ([databaseS.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
+			cell.backgroundView.backgroundColor = [viewObjectsS currentDarkColor];
 		else
-			cell.backgroundView.backgroundColor = viewObjects.darkNormal;
+			cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
 	}
 	
 	[cell.numberLabel setText:[NSString stringWithFormat:@"%i", (indexPath.row + 1)]];
@@ -491,45 +487,44 @@ static NSString *kName_Error = @"error";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
 	
-	if (viewObjects.isCellEnabled)
+	if (viewObjectsS.isCellEnabled)
 	{		
 		// Clear the current playlist
-		if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			[databaseControls resetJukeboxPlaylist];
+		if (settingsS.isJukeboxEnabled)
+			[databaseS resetJukeboxPlaylist];
 		else
-			[databaseControls resetCurrentPlaylistDb];
+			[databaseS resetCurrentPlaylistDb];
 		
-		if (viewObjects.isLocalPlaylist)
+		if (viewObjectsS.isLocalPlaylist)
 		{			
-			[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
-			if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the localPlaylistsDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
-			if ([SavedSettings sharedInstance].isJukeboxEnabled)
-				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO jukeboxCurrentPlaylist SELECT * FROM playlist%@", self.md5]];
+			[databaseS.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, [settingsS.urlString md5]], @"currentPlaylistDb"];
+			if ([databaseS.localPlaylistsDb hadError]) { DLog(@"Err attaching the localPlaylistsDb %d: %@", [databaseS.localPlaylistsDb lastErrorCode], [databaseS.localPlaylistsDb lastErrorMessage]); }
+			if (settingsS.isJukeboxEnabled)
+				[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO jukeboxCurrentPlaylist SELECT * FROM playlist%@", self.md5]];
 			else
-				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", self.md5]];
-			[databaseControls.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
+				[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", self.md5]];
+			[databaseS.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 		}
 		else
 		{
-			[databaseControls.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]], @"currentPlaylistDb"];
-			if ([databaseControls.localPlaylistsDb hadError]) { DLog(@"Err attaching the localPlaylistsDb %d: %@", [databaseControls.localPlaylistsDb lastErrorCode], [databaseControls.localPlaylistsDb lastErrorMessage]); }
-			if ([SavedSettings sharedInstance].isJukeboxEnabled)
-				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO jukeboxCurrentPlaylist SELECT * FROM splaylist%@", self.md5]];
+			[databaseS.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, [settingsS.urlString md5]], @"currentPlaylistDb"];
+			if ([databaseS.localPlaylistsDb hadError]) { DLog(@"Err attaching the localPlaylistsDb %d: %@", [databaseS.localPlaylistsDb lastErrorCode], [databaseS.localPlaylistsDb lastErrorMessage]); }
+			if (settingsS.isJukeboxEnabled)
+				[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO jukeboxCurrentPlaylist SELECT * FROM splaylist%@", self.md5]];
 			else
-				[databaseControls.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM splaylist%@", self.md5]];
-			[databaseControls.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
+				[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM splaylist%@", self.md5]];
+			[databaseS.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 		}
 		
-		if ([SavedSettings sharedInstance].isJukeboxEnabled)
+		if (settingsS.isJukeboxEnabled)
 		{
-			[musicControls jukeboxReplacePlaylistWithLocal];
+			[musicS jukeboxReplacePlaylistWithLocal];
 		}
 			
-		currentPlaylist.isShuffle = NO;
+		playlistS.isShuffle = NO;
 		
-		[musicControls playSongAtPosition:indexPath.row];
+		[musicS playSongAtPosition:indexPath.row];
 		
 		if (IS_IPAD())
 		{
@@ -562,7 +557,7 @@ static NSString *kName_Error = @"error";
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {	
-	if (scrollView.isDragging && !viewObjects.isLocalPlaylist) 
+	if (scrollView.isDragging && !viewObjectsS.isLocalPlaylist) 
 	{
 		if (refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !_reloading) 
 		{
@@ -578,7 +573,7 @@ static NSString *kName_Error = @"error";
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
 	
-	if (scrollView.contentOffset.y <= - 65.0f && !_reloading && !viewObjects.isLocalPlaylist) 
+	if (scrollView.contentOffset.y <= - 65.0f && !_reloading && !viewObjectsS.isLocalPlaylist) 
 	{
 		_reloading = YES;
 		//[self reloadAction:nil];

@@ -23,14 +23,14 @@
 
 - (FMDatabase *)db
 {
-    return [DatabaseSingleton sharedInstance].currentPlaylistDb;
+    return databaseS.currentPlaylistDb;
 }
 
 #pragma mark - Public DAO Methods
 
 - (void)resetCurrentPlaylist
 {
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
 		[self.db executeUpdate:@"DROP TABLE jukeboxCurrentPlaylist"];
 		[self.db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxCurrentPlaylist (%@)", [Song standardSongColumnSchema]]];	
@@ -44,7 +44,7 @@
 
 - (void)resetShufflePlaylist
 {
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
 		[self.db executeUpdate:@"DROP TABLE jukeboxShufflePlaylist"];
 		[self.db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxShufflePlaylist (%@)", [Song standardSongColumnSchema]]];	
@@ -59,9 +59,7 @@
 - (void)deleteSongs:(NSArray *)indexes
 {	
 	@autoreleasepool
-	{
-		MusicSingleton *musicControls = [MusicSingleton sharedInstance];
-		
+	{		
 		BOOL goToNextSong = NO;
 		
 		NSMutableArray *indexesMut = [NSMutableArray arrayWithArray:indexes];
@@ -69,7 +67,7 @@
 		// Sort the multiDeleteList to make sure it's accending
 		[indexesMut sortUsingSelector:@selector(compare:)];
 		
-		if ([SavedSettings sharedInstance].isJukeboxEnabled)
+		if (settingsS.isJukeboxEnabled)
 		{
 			if ([indexesMut count] == self.count)
 			{
@@ -100,7 +98,7 @@
 			{
 				if ([indexesMut count] == self.count)
 				{
-					[[DatabaseSingleton sharedInstance] resetCurrentPlaylistDb];
+					[databaseS resetCurrentPlaylistDb];
 					self.isShuffle = NO;
 				}
 				else
@@ -126,7 +124,7 @@
 			{
 				if ([indexesMut count] == self.count)
 				{
-					[[DatabaseSingleton sharedInstance] resetCurrentPlaylistDb];
+					[databaseS resetCurrentPlaylistDb];
 				}
 				else
 				{
@@ -151,7 +149,7 @@
 		
 		// Correct the value of currentPlaylistPosition
 		// If the current song was deleted make sure to set goToNextSong so the next song will play
-		if ([indexesMut containsObject:[NSNumber numberWithInt:self.currentIndex]] && [AudioEngine sharedInstance].isPlaying)
+		if ([indexesMut containsObject:[NSNumber numberWithInt:self.currentIndex]] && audioEngineS.isPlaying)
 		{
 			goToNextSong = YES;
 		}
@@ -172,19 +170,19 @@
 		if (self.currentIndex < 0)
 			self.currentIndex = 0;
 		
-		if ([SavedSettings sharedInstance].isJukeboxEnabled)
+		if (settingsS.isJukeboxEnabled)
 		{
-			[musicControls jukeboxReplacePlaylistWithLocal];
+			[musicS jukeboxReplacePlaylistWithLocal];
 		}
 		
 		if (goToNextSong)
 		{
 			[self incrementIndex];
-			[musicControls startSong];
+			[musicS startSong];
 		}
 		else
 		{
-			if (![SavedSettings sharedInstance].isJukeboxEnabled)
+			if (!settingsS.isJukeboxEnabled)
 				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistOrderChanged];
 		}
 	}
@@ -193,7 +191,7 @@
 - (Song *)songForIndex:(NSUInteger)index
 {
 	Song *aSong = nil;
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
 		aSong = [Song songFromDbRow:index inTable:@"jukeboxCurrentPlaylist" inDatabase:self.db];
 	}
@@ -353,7 +351,7 @@
 - (NSUInteger)count
 {
 	int count = 0;
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
 		count = [self.db intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"];
 	}
@@ -406,18 +404,15 @@
 }
 
 - (void)shuffleToggle
-{			
-	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
-	SavedSettings *settings = [SavedSettings sharedInstance];
-	
+{				
 	if (self.isShuffle)
 	{
 		self.isShuffle = NO;
 		
-		if (settings.isJukeboxEnabled)
+		if (settingsS.isJukeboxEnabled)
 		{
-			[musicControls jukeboxReplacePlaylistWithLocal];
-			//[musicControls playSongAtPosition:];
+			[musicS jukeboxReplacePlaylistWithLocal];
+			//[musicS playSongAtPosition:];
 		}
 		
 		// Send a notification to update the playlist view
@@ -434,7 +429,7 @@
 		[self resetShufflePlaylist];
 		[currentSong addToShufflePlaylist];
 		
-		if (settings.isJukeboxEnabled)
+		if (settingsS.isJukeboxEnabled)
 		{
 			[self.db executeUpdate:@"INSERT INTO jukeboxShufflePlaylist SELECT * FROM jukeboxCurrentPlaylist WHERE ROWID != ? ORDER BY RANDOM()", oldPlaylistPosition];
 		}
@@ -443,11 +438,11 @@
 			[self.db executeUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist WHERE ROWID != ? ORDER BY RANDOM()", oldPlaylistPosition];
 		}
 		
-		if (settings.isJukeboxEnabled)
+		if (settingsS.isJukeboxEnabled)
 		{
-			[musicControls jukeboxReplacePlaylistWithLocal];
+			[musicS jukeboxReplacePlaylistWithLocal];
 			
-			[musicControls jukeboxPlaySongAtPosition:[NSNumber numberWithInt:1]];
+			[musicS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:1]];
 			
 			self.isShuffle = NO;
 		}

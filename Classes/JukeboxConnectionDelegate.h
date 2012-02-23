@@ -16,7 +16,6 @@
 	
 	BOOL isGetInfo;
 	
-	MusicSingleton *musicControls;
 }
 
 @property (retain) NSMutableData *receivedData;

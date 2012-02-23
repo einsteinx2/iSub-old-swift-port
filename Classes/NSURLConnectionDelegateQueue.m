@@ -17,7 +17,7 @@
 #import "CustomUIAlertView.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "NSArray+Additions.h"
-#import "SUSStreamSingleton.h"
+#import "SUSStreamManager.h"
 #import "NSNotificationCenter+MainThread.h"
 
 @implementation NSURLConnectionDelegateQueue
@@ -27,9 +27,6 @@
 	self = [super init];
 	if (self != nil)
 	{
-		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-		musicControls = [MusicSingleton sharedInstance];
-		databaseControls = [DatabaseSingleton sharedInstance];
 	}	
 	return self;
 }
@@ -53,27 +50,27 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-	[musicControls.audioFileQueue truncateFileAtOffset:0];
+	[musicS.audioFileQueue truncateFileAtOffset:0];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
 {
     // Append the data chunk to the file and update the downloaded length
-	[musicControls.audioFileQueue writeData:incrementalData];	
-	musicControls.downloadedLengthQueue += [incrementalData length];
+	[musicS.audioFileQueue writeData:incrementalData];	
+	musicS.downloadedLengthQueue += [incrementalData length];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
 	//DLog(@"didFailWithError, resuming download");
-	[musicControls resumeDownloadQueue:musicControls.downloadedLengthQueue];
+	[musicS resumeDownloadQueue:musicS.downloadedLengthQueue];
 	
 	// Had to comment this out to fix an EXC_BAD_ACCESS crash, 
 	// don't have any idea why this is necessary and isn't causing leaks
 	// The NSURLConnection seemingly isn't being released anywhere, but yet it is
 	//[theConnection release];
 	
-	if (![SUSStreamSingleton sharedInstance].isQueueDownloading)
+	if (!streamManagerS.isQueueDownloading)
 	{
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 	}
@@ -83,31 +80,31 @@
 {	
 	//DLog(@"connectionDidFinishLoading");
 	
-	if (![SUSStreamSingleton sharedInstance].isQueueDownloading)
+	if (!streamManagerS.isQueueDownloading)
 	{
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 	}
 	
 	// Check if the file is less than 500 bytes. If it is, then it's almost definitely an API expiration notice
-	if (musicControls.downloadedLengthQueue < 500)
+	if (musicS.downloadedLengthQueue < 500)
 	{
 		// Show an alert and delete the file
 		UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"Notice" message:@"No song data returned. This could be because your Subsonic API trial has expired, this song is not an mp3 and the Subsonic transcoding plugins failed, or another reason." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil] autorelease];
 		alert.tag = 4;
 		[alert show];
 		[alert release];
-		[[NSFileManager defaultManager] removeItemAtPath:musicControls.downloadFileNameQueue error:NULL];
-		musicControls.isQueueListDownloading = NO;
+		[[NSFileManager defaultManager] removeItemAtPath:musicS.downloadFileNameQueue error:NULL];
+		musicS.isQueueListDownloading = NO;
 	}
 	else
 	{
 		// Update the cache time
-		[databaseControls.songCacheDb executeUpdate:[NSString stringWithFormat:@"UPDATE cacheQueue SET cachedDate = %i WHERE md5 = ?", (NSUInteger)[[NSDate date] timeIntervalSince1970]], musicControls.downloadFileNameHashQueue];
+		[databaseS.songCacheDb executeUpdate:[NSString stringWithFormat:@"UPDATE cacheQueue SET cachedDate = %i WHERE md5 = ?", (NSUInteger)[[NSDate date] timeIntervalSince1970]], musicS.downloadFileNameHashQueue];
 		
 		// Move the row from the cacheQueue to the cachedSongs table
-		[databaseControls.songCacheDb executeUpdate:@"UPDATE cacheQueue SET finished = 'YES' WHERE md5 = ?", musicControls.downloadFileNameHashQueue];
-		[databaseControls.songCacheDb executeUpdate:@"REPLACE INTO cachedSongs SELECT * FROM cacheQueue WHERE md5 = ?", musicControls.downloadFileNameHashQueue];
-		NSArray *splitPath = [musicControls.queueSongObject.path componentsSeparatedByString:@"/"];
+		[databaseS.songCacheDb executeUpdate:@"UPDATE cacheQueue SET finished = 'YES' WHERE md5 = ?", musicS.downloadFileNameHashQueue];
+		[databaseS.songCacheDb executeUpdate:@"REPLACE INTO cachedSongs SELECT * FROM cacheQueue WHERE md5 = ?", musicS.downloadFileNameHashQueue];
+		NSArray *splitPath = [musicS.queueSongObject.path componentsSeparatedByString:@"/"];
 		if ([splitPath count] <= 9)
 		{
 			NSMutableArray *segments = [[NSMutableArray alloc] initWithArray:splitPath];
@@ -116,36 +113,36 @@
 				[segments addObject:@""];
 			}
 			
-			NSString *query = [NSString stringWithFormat:@"REPLACE INTO cachedSongsLayout (md5, genre, segs, seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9) VALUES ('%@', '%@', %i, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [musicControls.queueSongObject.path md5], musicControls.queueSongObject.genre, [splitPath count]];
-			[databaseControls.songCacheDb executeUpdate:query, [segments objectAtIndexSafe:0], [segments objectAtIndexSafe:1], [segments objectAtIndexSafe:2], [segments objectAtIndexSafe:3], [segments objectAtIndexSafe:4], [segments objectAtIndexSafe:5], [segments objectAtIndexSafe:6], [segments objectAtIndexSafe:7], [segments objectAtIndexSafe:8]];
+			NSString *query = [NSString stringWithFormat:@"REPLACE INTO cachedSongsLayout (md5, genre, segs, seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9) VALUES ('%@', '%@', %i, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [musicS.queueSongObject.path md5], musicS.queueSongObject.genre, [splitPath count]];
+			[databaseS.songCacheDb executeUpdate:query, [segments objectAtIndexSafe:0], [segments objectAtIndexSafe:1], [segments objectAtIndexSafe:2], [segments objectAtIndexSafe:3], [segments objectAtIndexSafe:4], [segments objectAtIndexSafe:5], [segments objectAtIndexSafe:6], [segments objectAtIndexSafe:7], [segments objectAtIndexSafe:8]];
 			
 			[segments release];
 		}
-		[databaseControls.songCacheDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", musicControls.downloadFileNameHashQueue];
+		[databaseS.songCacheDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", musicS.downloadFileNameHashQueue];
 		
 		// Setup the genre table entries
-		if (musicControls.queueSongObject.genre)
+		if (musicS.queueSongObject.genre)
 		{
 			// Check if the genre has a table in the database yet, if not create it and add the new genre to the genres table
-			if ([databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM genres WHERE genre = ?", musicControls.queueSongObject.genre] == 0)
+			if ([databaseS.songCacheDb intForQuery:@"SELECT COUNT(*) FROM genres WHERE genre = ?", musicS.queueSongObject.genre] == 0)
 			{							
-				[databaseControls.songCacheDb executeUpdate:@"INSERT INTO genres (genre) VALUES (?)", musicControls.queueSongObject.genre];
-				if ([databaseControls.songCacheDb hadError]) { DLog(@"Err adding the genre %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]); }
+				[databaseS.songCacheDb executeUpdate:@"INSERT INTO genres (genre) VALUES (?)", musicS.queueSongObject.genre];
+				if ([databaseS.songCacheDb hadError]) { DLog(@"Err adding the genre %d: %@", [databaseS.songCacheDb lastErrorCode], [databaseS.songCacheDb lastErrorMessage]); }
 			}
 			
 			// Insert the song object into the appropriate genresSongs table
-			[musicControls.queueSongObject insertIntoGenreTable:@"genresSongs"];
+			[musicS.queueSongObject insertIntoGenreTable:@"genresSongs"];
 		}
 		
 		// Cache the album art if it exists
-		if (musicControls.queueSongObject.coverArtId)
+		if (musicS.queueSongObject.coverArtId)
 		{
             NSString *size = nil;
-            NSString *artId = [[musicControls.queueSongObject.coverArtId copy] autorelease];
+            NSString *artId = [[musicS.queueSongObject.coverArtId copy] autorelease];
             
 			NSURLConnectionDelegateQueueArtwork *delegate = [[NSURLConnectionDelegateQueueArtwork alloc] init];
-			if ([databaseControls.coverArtCacheDb320 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", 
-                 [musicControls.queueSongObject.coverArtId md5]] == 0)
+			if ([databaseS.coverArtCacheDb320 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", 
+                 [musicS.queueSongObject.coverArtId md5]] == 0)
 			{
 				if (SCREEN_SCALE() == 2.0)
 				{
@@ -156,8 +153,8 @@
                     size = @"320";
 				}
 			}
-			if ([databaseControls.coverArtCacheDb60 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", 
-                 [musicControls.queueSongObject.coverArtId md5]] == 0)
+			if ([databaseS.coverArtCacheDb60 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", 
+                 [musicS.queueSongObject.coverArtId md5]] == 0)
 			{
 				if (SCREEN_SCALE() == 2.0)
 				{
@@ -186,13 +183,13 @@
 		}
 		
 		// Close the file
-		[musicControls.audioFileQueue closeFile];
+		[musicS.audioFileQueue closeFile];
 		
 		// Tell the cache queue view to reload
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"queuedSongDone"];
 		
 		// Download the next song in the queue
-		[musicControls downloadNextQueuedSong];
+		[musicS downloadNextQueuedSong];
 	}	
 	
 	// Had to comment this out to fix an EXC_BAD_ACCESS crash, 

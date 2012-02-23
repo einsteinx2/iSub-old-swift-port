@@ -32,9 +32,6 @@
 	
     if (self != nil)
     {
-		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-		musicControls = [MusicSingleton sharedInstance];
-		databaseControls = [DatabaseSingleton sharedInstance];
 		isForPlayer = NO;
     }
 	
@@ -47,18 +44,18 @@
 
 - (void)reloadCoverArt
 {	
-	/*if(musicControls.currentSongObject.coverArtId)
+	/*if(musicS.currentSongObject.coverArtId)
 	{
-		musicControls.coverArtUrl = nil;
+		musicS.coverArtUrl = nil;
 		if (SCREEN_SCALE() == 2.0)
 		{
-			musicControls.coverArtUrl = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@%@&size=640", [appDelegate getBaseUrl:@"getCoverArt.view"], musicControls.currentSongObject.coverArtId]];
+			musicS.coverArtUrl = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@%@&size=640", [appDelegateS getBaseUrl:@"getCoverArt.view"], musicS.currentSongObject.coverArtId]];
 		}
 		else
 		{	
-			musicControls.coverArtUrl = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@%@&size=320", [appDelegate getBaseUrl:@"getCoverArt.view"], musicControls.currentSongObject.coverArtId]];
+			musicS.coverArtUrl = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@%@&size=320", [appDelegateS getBaseUrl:@"getCoverArt.view"], musicS.currentSongObject.coverArtId]];
 		}
-		[self loadImageFromURLString:[musicControls.coverArtUrl absoluteString]];
+		[self loadImageFromURLString:[musicS.coverArtUrl absoluteString]];
 	}
 	else 
 	{
@@ -120,9 +117,6 @@
 	self.coverArtId = artId;
 	self.isForPlayer = isPlayer;
 	
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	musicControls = [MusicSingleton sharedInstance];
-	databaseControls = [DatabaseSingleton sharedInstance];
 	
 	NSString *size = nil;
 	if (IS_IPAD())
@@ -199,11 +193,11 @@
 	{
 		if (IS_IPAD())
 		{
-			[databaseControls.coverArtCacheDb540 executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [coverArtId md5], data];
+			[databaseS.coverArtCacheDb540 executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [coverArtId md5], data];
 		}
 		else
 		{
-			[databaseControls.coverArtCacheDb320 executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [coverArtId md5], data];
+			[databaseS.coverArtCacheDb320 executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [coverArtId md5], data];
 		}
 		
 		if (SCREEN_SCALE() == 2.0 && !IS_IPAD())

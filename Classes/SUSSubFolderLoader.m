@@ -33,7 +33,7 @@
 
 - (FMDatabase *)db
 {
-    return [DatabaseSingleton sharedInstance].albumListCacheDb;
+    return databaseS.albumListCacheDb;
 }
 
 - (SUSLoaderType)type

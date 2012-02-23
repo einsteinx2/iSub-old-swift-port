@@ -71,7 +71,7 @@
 
 - (void)downloadAction
 {
-	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindowWithMessage:nil];
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 	
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(serverPlaylist.playlistId) forKey:@"id"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getPlaylist" andParameters:parameters];
@@ -95,7 +95,7 @@
 
 - (void)queueAction
 {
-	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindowWithMessage:nil];
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 	
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(serverPlaylist.playlistId) forKey:@"id"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getPlaylist" andParameters:parameters];
@@ -172,7 +172,7 @@
 	[theConnection release];
 	
 	// Inform the delegate that loading failed
-	[[ViewObjectsSingleton sharedInstance] hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
@@ -194,8 +194,8 @@
             if (playlist)
             {
                 NSString *md5 = [serverPlaylist.playlistName md5];
-                [[DatabaseSingleton sharedInstance] removeServerPlaylistTable:md5];
-                [[DatabaseSingleton sharedInstance] createServerPlaylistTable:md5];
+                [databaseS removeServerPlaylistTable:md5];
+                [databaseS createServerPlaylistTable:md5];
                 
                 TBXMLElement *entry = [TBXML childElementNamed:@"entry" parentElement:playlist];
                 while (entry != nil)
@@ -225,7 +225,7 @@
 	[tbxml release];
 	
 	// Hide the loading screen
-	[[ViewObjectsSingleton sharedInstance] hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 	
 	self.receivedData = nil;
 	[theConnection release];

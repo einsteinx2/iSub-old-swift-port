@@ -88,7 +88,7 @@
 
 - (FMDatabase *)db
 {
-    return [[DatabaseSingleton sharedInstance] albumListCacheDb]; 
+    return [databaseS albumListCacheDb]; 
 }
 
 #pragma mark - Private DB Methods
@@ -153,14 +153,12 @@
 
 - (void)playSongAtDbRow:(NSUInteger)row
 {
-	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
-	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
 	
 	// Clear the current playlist
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-		[[DatabaseSingleton sharedInstance] resetJukeboxPlaylist];
+	if (settingsS.isJukeboxEnabled)
+		[databaseS resetJukeboxPlaylist];
 	else
-		[[DatabaseSingleton sharedInstance] resetCurrentPlaylistDb];
+		[databaseS resetCurrentPlaylistDb];
 	
 	// Add the songs to the playlist
 	NSMutableArray *songIds = [[NSMutableArray alloc] init];
@@ -174,25 +172,25 @@
 			[aSong addToCurrentPlaylist];
 			
 			// In jukebox mode, collect the song ids to send to the server
-			if ([SavedSettings sharedInstance].isJukeboxEnabled)
+			if (settingsS.isJukeboxEnabled)
 				[songIds addObject:aSong.songId];
 		}
 	}
 	
 	// If jukebox mode, send song ids to server
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
-		[musicControls jukeboxStop];
-		[musicControls jukeboxClearPlaylist];
-		[musicControls jukeboxAddSongs:songIds];
+		[musicS jukeboxStop];
+		[musicS jukeboxClearPlaylist];
+		[musicS jukeboxAddSongs:songIds];
 	}
 	[songIds release];
 	
 	// Set player defaults
-	currentPlaylist.isShuffle = NO;
+	playlistS.isShuffle = NO;
 	
 	// Start the song
-	[musicControls playSongAtPosition:(row - songStartRow)];
+	[musicS playSongAtPosition:(row - songStartRow)];
 }
 
 #pragma mark - Public DAO Methods
@@ -244,7 +242,7 @@
 		DLog(@"total table count: %i", [self.db intForQuery:@"SELECT count(title) FROM albumsCache"]);
 		DLog(@"count in table: %i", [self.db intForQuery:@"SELECT count(title) FROM albumsCache WHERE rowid >= ? LIMIT ?", [NSNumber numberWithInt:albumStartRow], [NSNumber numberWithInt:albumsCount]]);
 		DLog(@"albumIndex count: %i", [self.db intForQuery:@"SELECT COUNT(*) FROM albumIndex"]);
-		NSArray *sectionInfo = [[DatabaseSingleton sharedInstance] sectionInfoFromTable:@"albumIndex" inDatabase:self.db withColumn:@"title"];
+		NSArray *sectionInfo = [databaseS sectionInfoFromTable:@"albumIndex" inDatabase:self.db withColumn:@"title"];
 		DLog(@"sectionInfo: %@", sectionInfo);
 		if (sectionInfo)
 		{

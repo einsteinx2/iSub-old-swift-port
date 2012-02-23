@@ -37,7 +37,7 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -49,10 +49,6 @@
 	
     if (self != nil)
     {
-		appDelegate = (iSubAppDelegate *)[UIApplication sharedApplication].delegate;
-		musicControls = [MusicSingleton sharedInstance];
-		databaseControls = [DatabaseSingleton sharedInstance];
-		viewObjects = [ViewObjectsSingleton sharedInstance];
 
 		offset = 0;
 		isMoreAlbums = YES;
@@ -68,7 +64,7 @@
 	
 	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
 
-	if(musicControls.showPlayerIcon)
+	if(musicS.showPlayerIcon)
 	{
 		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
 	}
@@ -139,7 +135,7 @@
 	{
 		self.receivedData = [NSMutableData data];
 		
-		[viewObjects showLoadingScreenOnMainWindowWithMessage:nil];
+		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 	} 
 	else 
 	{
@@ -184,7 +180,7 @@
 	self.receivedData = nil;
 	[theConnection release];
 	
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
     
     CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error doing the search.\n\nError:%@", error.localizedDescription] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alert show];
@@ -219,7 +215,7 @@
 	self.receivedData = nil;
 	[theConnection release];
 	
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 }
 
 #pragma mark Table view methods
@@ -254,9 +250,9 @@
 		// Setup cell backgrond color
 		cell.backgroundView = [[[UIView alloc] init] autorelease];
 		if(indexPath.row % 2 == 0)
-			cell.backgroundView.backgroundColor = viewObjects.lightNormal;
+			cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
 		else
-			cell.backgroundView.backgroundColor = viewObjects.darkNormal;
+			cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
 		
 		return cell;
 	}
@@ -266,7 +262,7 @@
 		UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 
 		// Set background color
-		cell.backgroundView = [[ViewObjectsSingleton sharedInstance] createCellBackground:indexPath.row];
+		cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
 		
 		if (isMoreAlbums && !isLoading)
 		{
@@ -293,7 +289,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {	
-	if (viewObjects.isCellEnabled && indexPath.row != [listOfAlbums count])
+	if (viewObjectsS.isCellEnabled && indexPath.row != [listOfAlbums count])
 	{
 		Album *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
 		AlbumViewController *albumViewController = [[AlbumViewController alloc] initWithArtist:nil orAlbum:anAlbum];

@@ -247,7 +247,7 @@
 	[cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"cache-tabbaricon.png"], kCellImage, @"Cache", kCellText, nil]];
 	[cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"chat-tabbaricon.png"], kCellImage, @"Chat", kCellText, nil]];
 	
-	if ([SavedSettings sharedInstance].isSongsTabEnabled)
+	if (settingsS.isSongsTabEnabled)
 	{
 		self.tableView.scrollEnabled = YES;
 		[cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"genres-tabbaricon.png"], kCellImage, @"Genres", kCellText, nil]];
@@ -268,9 +268,9 @@
 
 - (void)showSettings
 {
-	if ([ViewObjectsSingleton sharedInstance].isSettingsShowing == NO)
+	if (viewObjectsS.isSettingsShowing == NO)
 	{
-		[ViewObjectsSingleton sharedInstance].isSettingsShowing = YES;
+		viewObjectsS.isSettingsShowing = YES;
 		[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 		[self tableView:self.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
 		

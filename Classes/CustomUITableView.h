@@ -6,7 +6,6 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@class SavedSettings;
 @interface CustomUITableView : UITableView 
 {	
 	CGPoint startTouchPosition;
@@ -14,8 +13,6 @@
 	UITableViewCell *cellShowingOverlay;
 	BOOL tapAndHoldFired;
 	UITableViewCell *tapAndHoldCell;
-	
-	SavedSettings *settings;
 }
 
 @property (retain) NSDate *lastDeleteToggle;

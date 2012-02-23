@@ -67,7 +67,7 @@
 
 - (FMDatabase *)db
 {
-    return [[DatabaseSingleton sharedInstance] albumListCacheDb]; 
+    return [databaseS albumListCacheDb]; 
 }
 
 - (NSString *)tableModifier
@@ -234,7 +234,7 @@
 
 + (void)setFolderDropdownFolders:(NSDictionary *)folders
 {
-	FMDatabase *database = [[DatabaseSingleton sharedInstance] albumListCacheDb];
+	FMDatabase *database = [databaseS albumListCacheDb];
 	[database executeUpdate:@"DROP TABLE IF EXISTS rootFolderDropdownCache (id INTEGER, name TEXT)"];
 	[database executeUpdate:@"CREATE TABLE rootFolderDropdownCache (id INTEGER, name TEXT)"];
 	
@@ -247,7 +247,7 @@
 
 + (NSDictionary *)folderDropdownFolders
 {
-	FMDatabase *database = [[DatabaseSingleton sharedInstance] albumListCacheDb];
+	FMDatabase *database = [databaseS albumListCacheDb];
 	if (![database tableExists:@"rootFolderDropdownCache"])
 		return nil;
 	

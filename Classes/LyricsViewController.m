@@ -26,10 +26,6 @@
 {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) 
 	{		
-		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-		viewObjects = [ViewObjectsSingleton sharedInstance];
-		musicControls = [MusicSingleton sharedInstance];
-		databaseControls = [DatabaseSingleton sharedInstance];
         
         //dataModel = [[SUSLyricsDAO alloc] initWithDelegate:self];
 		dataModel = [[SUSLyricsDAO alloc] init];
@@ -54,7 +50,7 @@
 		}
 		else
 		{
-			if (viewObjects.isOfflineMode)
+			if (viewObjectsS.isOfflineMode)
 			{
 				textView.text = @"\n\nNo lyrics found";
 			}
@@ -85,7 +81,6 @@
 {
 	[super viewDidAppear:animated];
 	
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLyricsLabel) name:ISMSNotification_SongPlaybackStarted object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLyricsLabel) name:ISMSNotification_LyricsDownloaded object:nil];
@@ -126,7 +121,7 @@
 
 - (void)updateLyricsLabel
 {	
-	Song *currentSong = [PlaylistSingleton sharedInstance].currentSong;
+	Song *currentSong = playlistS.currentSong;
 	NSString *lyrics = [dataModel loadLyricsForArtist:currentSong.artist andTitle:currentSong.title];
 	//DLog(@"lyrics = %@", lyrics);
 	if (!lyrics)

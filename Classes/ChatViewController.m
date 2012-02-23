@@ -44,7 +44,7 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -77,16 +77,13 @@
 - (void)loadData
 {
 	[self.dataModel startLoad];
-	[viewObjects showLoadingScreenOnMainWindowWithMessage:nil];
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 }
 
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
 	
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicSingleton sharedInstance];
 	
 	isNoChatMessagesScreenShowing = NO;
 	
@@ -147,7 +144,7 @@
 {
     [super viewWillAppear:animated];
 	
-	if(musicControls.showPlayerIcon)
+	if(musicS.showPlayerIcon)
 	{
 		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
 	}
@@ -243,7 +240,7 @@
 
 - (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
 {
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 	
 	[self.tableView reloadData];
 	[self dataSourceDidFinishLoadingNewData];
@@ -256,7 +253,7 @@
 
 - (void)loadingFinished:(SUSLoader*)theLoader
 {
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 	
 	[self.tableView reloadData];
 	[self dataSourceDidFinishLoadingNewData];
@@ -315,7 +312,7 @@
 {	
 	[textInput resignFirstResponder];
 	
-	if(musicControls.showPlayerIcon)
+	if(musicS.showPlayerIcon)
 	{
 		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
 	}
@@ -380,11 +377,11 @@
 	cell.backgroundView = [[[UIView alloc] init] autorelease];
 	if(indexPath.row % 2 == 0)
 	{
-		cell.backgroundView.backgroundColor = viewObjects.lightNormal;
+		cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
 	}
 	else
 	{
-		cell.backgroundView.backgroundColor = viewObjects.darkNormal;
+		cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
 	}
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	
@@ -398,7 +395,7 @@
 	{
 		[textInput resignFirstResponder];
 
-		if(musicControls.showPlayerIcon)
+		if(musicS.showPlayerIcon)
 		{
 			self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
 		}
@@ -407,7 +404,7 @@
 			self.navigationItem.rightBarButtonItem = nil;
 		}
 		
-		[viewObjects showLoadingScreenOnMainWindowWithMessage:@"Sending"];
+		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Sending"];
 		[self.dataModel sendChatMessage:textInput.text];
 		
 		textInput.text = @"";
@@ -437,7 +434,7 @@
 	if (scrollView.contentOffset.y <= - 65.0f && !_reloading) 
 	{
 		_reloading = YES;
-		[viewObjects showLoadingScreenOnMainWindowWithMessage:nil];
+		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 		[self loadData];
 		[refreshHeaderView setState:EGOOPullRefreshLoading];
 		[UIView beginAnimations:nil context:NULL];

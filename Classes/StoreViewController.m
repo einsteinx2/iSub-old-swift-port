@@ -22,7 +22,7 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -37,8 +37,6 @@
 {
     [super viewDidLoad];
 
-	appDelegate = (iSubAppDelegate*)[UIApplication sharedApplication].delegate;
-	viewObjects = [ViewObjectsSingleton sharedInstance];
 	storeManager = [MKStoreManager sharedManager];
 
 	storeItems = [[NSArray alloc] initWithArray:storeManager.purchasableObjects];
@@ -47,7 +45,7 @@
 	
 	if ([storeItems count] == 0)
 	{
-		[viewObjects showLoadingScreenOnMainWindowWithMessage:nil];
+		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 		checkProductsTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(checkProducts) userInfo:nil repeats:YES];
 		[self checkProducts];
 	}
@@ -91,7 +89,7 @@
 	{
 		[checkProductsTimer invalidate]; checkProductsTimer = nil;
 		
-		[viewObjects hideLoadingScreen];
+		[viewObjectsS hideLoadingScreen];
 		
 		[self organizeList];
 		

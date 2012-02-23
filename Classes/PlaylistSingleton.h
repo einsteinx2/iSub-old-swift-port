@@ -6,6 +6,8 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
+#define playlistS [PlaylistSingleton sharedInstance]
+
 typedef enum
 {
 	ISMSRepeatMode_Normal = 0,

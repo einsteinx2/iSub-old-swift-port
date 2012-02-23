@@ -9,16 +9,10 @@
 #import "BBSimpleConnectionQueue.h"
 #import "SUSLoaderDelegate.h"
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, BBSimpleConnectionQueue, SUSServerPlaylistsDAO, PlaylistSingleton;
+@class BBSimpleConnectionQueue, SUSServerPlaylistsDAO;
 
 @interface PlaylistsViewController : UITableViewController <BBSimpleConnectionQueueDelegate, SUSLoaderDelegate>
-{
-	iSubAppDelegate *appDelegate;
-	ViewObjectsSingleton *viewObjects;
-	MusicSingleton *musicControls;
-	DatabaseSingleton *databaseControls;
-	PlaylistSingleton *currentPlaylistDataModel;
-	
+{	
 	UIView *headerView;
 	UISegmentedControl *segmentedControl;
 	UIImageView *noPlaylistsScreen;

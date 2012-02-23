@@ -33,7 +33,7 @@
 
 - (FMDatabase *)db
 {
-    return [DatabaseSingleton sharedInstance].lyricsDb;
+    return databaseS.lyricsDb;
 }
 
 - (SUSLoaderType)type

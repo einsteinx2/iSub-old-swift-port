@@ -86,7 +86,7 @@
 
 - (void)deleteAction
 {
-	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindowWithMessage:@"Deleting"];
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Deleting"];
 	[self performSelector:@selector(deleteAllSongs) withObject:nil afterDelay:0.05];
 	
 	self.overlayView.downloadButton.alpha = .3;
@@ -98,7 +98,7 @@
 - (void)deleteAllSongs
 {
 	FMResultSet *result;
-	result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text];
+	result = [databaseS.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text];
 	
 	while ([result next])
 	{
@@ -111,12 +111,12 @@
 	[NSNotificationCenter postNotificationToMainThreadWithName:@"cachedSongDeleted"];
 	
 	// Hide the loading screen
-	[[ViewObjectsSingleton sharedInstance] hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 }
 
 - (void)queueAction
 {
-	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindowWithMessage:nil];
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 	[self performSelector:@selector(queueAllSongs) withObject:nil afterDelay:0.05];
 	[self hideOverlay];
 }
@@ -124,7 +124,7 @@
 - (void)queueAllSongs
 {
 	FMResultSet *result;
-	result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text];
+	result = [databaseS.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text];
 	
 	while ([result next])
 	{
@@ -134,7 +134,7 @@
 	[result close];
 	
 	// Hide the loading screen
-	[[ViewObjectsSingleton sharedInstance] hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 }
 
 #pragma mark - Scrolling

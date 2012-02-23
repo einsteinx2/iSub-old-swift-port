@@ -12,6 +12,8 @@
 #import "bassmix.h"
 #import <AudioToolbox/AudioToolbox.h>
 
+#define audioEngineS [AudioEngine sharedInstance]
+
 #define ISMS_BASSBufferSize 600
 #define ISMS_defaultSampleRate 44100
 
@@ -28,7 +30,7 @@ typedef enum
 	ISMS_BASS_EQ_DATA_TYPE_line
 } ISMS_BASS_EQ_DATA_TYPE;
 
-@class Song, BassParamEqValue, PlaylistSingleton, BassUserInfo;
+@class Song, BassParamEqValue, BassUserInfo;
 @interface AudioEngine : NSObject
 {
 	// Equalizer
@@ -105,7 +107,6 @@ typedef enum
 @property HSTREAM nextStreamTempo;
 @property (readonly) HSTREAM nextReadingStream;
 @property HSTREAM presilenceStream;
-@property (retain) PlaylistSingleton *currPlaylistDAO;
 @property (retain) NSThread *fftDataThread;
 @property BOOL isFftDataThreadToTerminate;
 @property BOOL isFastForward;

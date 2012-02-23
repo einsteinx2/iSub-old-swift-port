@@ -8,6 +8,8 @@
 
 #import "BassEffectDAO.h"
 
+#define settingsS [SavedSettings sharedInstance]
+
 @class AudioEngine;
 @interface SavedSettings : NSObject 
 {    

@@ -37,7 +37,7 @@
 
 - (FMDatabase *)db
 {
-    return [DatabaseSingleton sharedInstance].lyricsDb;
+    return databaseS.lyricsDb;
 }
 
 #pragma mark - Public DAO Methods
@@ -56,7 +56,7 @@
 	{
 		return lyrics;
 	}
-    else if ([SavedSettings sharedInstance].isLyricsEnabled) 
+    else if (settingsS.isLyricsEnabled) 
     {
 		self.loader = [[[SUSLyricsLoader alloc] initWithDelegate:self] autorelease];
         self.loader.artist = artist;

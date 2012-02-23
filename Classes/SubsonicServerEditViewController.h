@@ -8,14 +8,10 @@
 
 #import "SUSServerChecker.h"
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, ServerTypeViewController, ServerListViewController;
+@class ServerTypeViewController, ServerListViewController;
 
 @interface SubsonicServerEditViewController : UIViewController <SUSServerURLCheckerDelegate>
 {
-	iSubAppDelegate *appDelegate;
-	ViewObjectsSingleton *viewObjects;
-	MusicSingleton *musicControls;
-	DatabaseSingleton *databaseControls;
 	
 	IBOutlet UITextField *urlField;
 	IBOutlet UITextField *usernameField;

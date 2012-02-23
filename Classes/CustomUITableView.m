@@ -28,7 +28,6 @@
 {
 	lastDeleteToggle = [[NSDate date] retain];
 	lastOverlayToggle = [[NSDate date] retain];
-	settings = [SavedSettings sharedInstance];
 }
 
 - (id)initWithFrame:(CGRect)frame 
@@ -78,7 +77,7 @@
 		UITableViewCell *cell = [self cellForRowAtIndexPath:[self indexPathForRowAtPoint:point]];
 		
 		// Handle multi delete touching
-		if ([ViewObjectsSingleton sharedInstance].isEditing &&
+		if (viewObjectsS.isEditing &&
 			point.x < 40. && [[NSDate date] timeIntervalSinceDate:lastDeleteToggle] > 0.25)
 		{
 			self.lastDeleteToggle = [NSDate date];
@@ -164,7 +163,7 @@
 			if (startTouchPosition.x < currentTouchPosition.x) 
 			{
 				// Right swipe
-				if (settings.isSwipeEnabled && !IS_IPAD())
+				if (settingsS.isSwipeEnabled && !IS_IPAD())
 				{
 					[cell showOverlay];
 					cellShowingOverlay = cell;
@@ -206,7 +205,7 @@
 	cellShowingOverlay = nil;
 
 	// Handle tap and hold
-	if (settings.isTapAndHoldEnabled)
+	if (settingsS.isTapAndHoldEnabled)
 	{
 		tapAndHoldFired = NO;
 		tapAndHoldCell = [self cellForRowAtIndexPath: [self indexPathForRowAtPoint:startTouchPosition]];

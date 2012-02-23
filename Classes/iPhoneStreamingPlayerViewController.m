@@ -29,7 +29,7 @@
 #import "UIApplication+StatusBar.h"
 #import "OBSlider.h"
 #import "NSString+Additions.h"
-#import "SUSStreamSingleton.h"
+#import "SUSStreamManager.h"
 #import "SUSStreamHandler.h"
 #import "NSArray+FirstObject.h"
 #import "UIImageView+Reflection.h"
@@ -84,14 +84,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {
 	[super viewDidLoad];
 	
-	// Setup singleton references
-	appDelegate = [iSubAppDelegate sharedInstance];
-	musicControls = [MusicSingleton sharedInstance];
-	databaseControls = [DatabaseSingleton sharedInstance];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	audio = [AudioEngine sharedInstance];
-	currentPlaylist = [PlaylistSingleton sharedInstance];
-	
 	extraButtonsButtonOffImage = [[UIImage imageNamed:@"controller-extras.png"] retain];
 	extraButtonsButtonOnImage = [[UIImage imageNamed:@"controller-extras-on.png"] retain];
 	
@@ -114,11 +106,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[self initSongInfo];
 	
 	// Setup the volume controller view
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
-		[musicControls jukeboxGetInfo];
+		[musicS jukeboxGetInfo];
 		
-		self.view.backgroundColor = viewObjects.jukeboxColor;
+		self.view.backgroundColor = viewObjectsS.jukeboxColor;
 		
 		CGRect frame = volumeSlider.bounds;
 		frame.size.height = volumeSlider.bounds.size.height / 2;
@@ -127,7 +119,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		jukeboxVolumeView.minimumValue = 0.0;
 		jukeboxVolumeView.maximumValue = 1.0;
 		jukeboxVolumeView.continuous = NO;
-		jukeboxVolumeView.value = musicControls.jukeboxGain;
+		jukeboxVolumeView.value = musicS.jukeboxGain;
 		[volumeSlider addSubview:jukeboxVolumeView];
 	}
 	else
@@ -150,11 +142,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[self registerForNotifications];
 	
 	[self extraButtonsToggleAnimated:NO saveState:NO];
-	if (![SavedSettings sharedInstance].isExtraPlayerControlsShowing)
+	if (!settingsS.isExtraPlayerControlsShowing)
 		[self performSelector:@selector(hideExtraButtons) withObject:nil afterDelay:4.0];
 	
 	// Show the song info screen automatically if the setting is enabled
-	if ([SavedSettings sharedInstance].isPlayerPlaylistShowing)
+	if (settingsS.isPlayerPlaylistShowing)
 	{
 		[self playlistToggleAnimated:NO saveState:NO];
 	}
@@ -177,11 +169,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {
 	[super viewWillAppear:animated];
 	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
-		[musicControls jukeboxGetInfo];
+		[musicS jukeboxGetInfo];
 		
-		self.view.backgroundColor = viewObjects.jukeboxColor;
+		self.view.backgroundColor = viewObjectsS.jukeboxColor;
 	}
 	else 
 	{
@@ -211,24 +203,24 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[self updateDownloadProgress];
 	[self updateSlider];
 	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
-		[musicControls jukeboxGetInfo];
+		[musicS jukeboxGetInfo];
 		
-		if (musicControls.jukeboxIsPlaying)
+		if (musicS.jukeboxIsPlaying)
 			[self setStopButtonImage];
 		else 
 			[self setPlayButtonImage];
 	}
 	else
 	{
-		if(audio.isPlaying)
+		if(audioEngineS.isPlaying)
 			[self setPauseButtonImage];
 		else
 			[self setPlayButtonImage];
 	}
 	
-	NSString *imageName = audio.isEqualizerOn ? @"controller-equalizer-on.png" : @"controller-equalizer.png";
+	NSString *imageName = audioEngineS.isEqualizerOn ? @"controller-equalizer-on.png" : @"controller-equalizer.png";
 	[eqButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
 	
 	[self quickSecondsSetLabels];
@@ -236,7 +228,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)quickSecondsSetLabels
 {
-	NSString *quickSeconds = [self stringFromSeconds:[SavedSettings sharedInstance].quickSkipNumberOfSeconds];
+	NSString *quickSeconds = [self stringFromSeconds:settingsS.quickSkipNumberOfSeconds];
 	quickBackLabel.text = quickSeconds;
 	quickForwLabel.text = quickSeconds;
 }
@@ -253,7 +245,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	}*/
 	
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	if (![SavedSettings sharedInstance].isExtraPlayerControlsShowing)
+	if (!settingsS.isExtraPlayerControlsShowing)
 	{
 		if (isExtraButtonsShowing)
 			[self extraButtonsToggleAnimated:NO saveState:NO];
@@ -317,7 +309,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[progressSlider addSubview:downloadProgress];
 	[downloadProgress release];
 	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 		downloadProgress.hidden = YES;
 }
 
@@ -457,7 +449,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			volumeFrame.origin.x = 0;
 			volumeFrame.origin.y = 0;
 			
-			if ([SavedSettings sharedInstance].isJukeboxEnabled)
+			if (settingsS.isJukeboxEnabled)
 				jukeboxVolumeView.frame = volumeFrame;
 			else
 				volumeView.frame = volumeFrame;
@@ -480,7 +472,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			eqButton.origin = CGPointMake(372.5, 20);
 			volumeSlider.frame = CGRectMake(300, 244, 180, 55);
 			
-			if ([SavedSettings sharedInstance].isJukeboxEnabled)
+			if (settingsS.isJukeboxEnabled)
 				jukeboxVolumeView.frame = CGRectMake(0, 0, 180, 22.5);
 			else
 				volumeView.frame = CGRectMake(0, 0, 180, 55);
@@ -517,7 +509,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	if (!isFlipped && !isExtraButtonsShowing)
 	{
 		[self extraButtonsToggleAnimated:NO saveState:NO];
-		if (![SavedSettings sharedInstance].isExtraPlayerControlsShowing)
+		if (!settingsS.isExtraPlayerControlsShowing)
 			[self performSelector:@selector(hideExtraButtons) withObject:nil afterDelay:4.0];
 	}
 }
@@ -613,7 +605,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)initSongInfo
 {	
-	self.currentSong = currentPlaylist.currentDisplaySong;
+	self.currentSong = playlistS.currentDisplaySong;
 	
 	//DLog(@"currentSong parentId: %@", currentSong.parentId);
 	
@@ -642,11 +634,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	albumLabel.text = currentSong.album;
 	titleLabel.text = currentSong.title;
 	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
-		jukeboxVolumeView.value = musicControls.jukeboxGain;
+		jukeboxVolumeView.value = musicS.jukeboxGain;
 		
-		if (musicControls.jukeboxIsPlaying)
+		if (musicS.jukeboxIsPlaying)
 			[self setStopButtonImage];
 		else 
 			[self setPlayButtonImage];
@@ -655,7 +647,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	hasMoved = NO;
 	oldPosition = 0.0;
 	progressSlider.minimumValue = 0.0;
-	if (currentSong.duration && ![SavedSettings sharedInstance].isJukeboxEnabled)
+	if (currentSong.duration && !settingsS.isJukeboxEnabled)
 	{
 		progressSlider.maximumValue = [currentSong.duration floatValue];
 		progressSlider.enabled = YES;
@@ -666,18 +658,18 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		progressSlider.enabled = NO;
 	}
 	
-	if(currentPlaylist.repeatMode == 1)
+	if(playlistS.repeatMode == 1)
 	{
 		[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one.png"] forState:0];
 	}
-	else if(currentPlaylist.repeatMode == 2)
+	else if(playlistS.repeatMode == 2)
 	{
 		[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all.png"] forState:0];
 	}
 	
 	[self updateShuffleIcon];
 	
-	NSInteger bookmarkCount = [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId];
+	NSInteger bookmarkCount = [databaseS.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId];
 	if (bookmarkCount > 0)
 	{
 		bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", bookmarkCount];
@@ -697,7 +689,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)jukeboxVolumeChanged:(id)sender
 {
-	[musicControls jukeboxSetVolume:jukeboxVolumeView.value];
+	[musicS jukeboxSetVolume:jukeboxVolumeView.value];
 }
 
 - (void)backAction:(id)sender
@@ -807,7 +799,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	isFlipped = !isFlipped;
 	
 	if (saveState)
-		[SavedSettings sharedInstance].isPlayerPlaylistShowing = isFlipped;
+		settingsS.isPlayerPlaylistShowing = isFlipped;
 }
 
 - (IBAction)songInfoToggle:(id)sender
@@ -825,41 +817,38 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (IBAction)playButtonPressed:(id)sender
 {
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
-		if (musicControls.jukeboxIsPlaying)
-			[musicControls jukeboxStop];
+		if (musicS.jukeboxIsPlaying)
+			[musicS jukeboxStop];
 		else
-			[musicControls jukeboxPlay];
+			[musicS jukeboxPlay];
 	}
 	else
 	{
-		
-		[audio playPause];
+		[audioEngineS playPause];
 	}
 }
 
 - (IBAction)prevButtonPressed:(id)sender
-{
-	PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
-	
-	//DLog(@"track position: %f", audio.progress);
-	if (audio.progress > 10.0)
+{	
+	//DLog(@"track position: %f", audioEngineS.progress);
+	if (audioEngineS.progress > 10.0)
 	{
-		if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			[musicControls jukeboxPlaySongAtPosition:[NSNumber numberWithInt:dataModel.currentIndex]];
+		if (settingsS.isJukeboxEnabled)
+			[musicS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:playlistS.currentIndex]];
 		else
-			[musicControls playSongAtPosition:dataModel.currentIndex];
+			[musicS playSongAtPosition:playlistS.currentIndex];
 	}
 	else
 	{
-		[musicControls prevSong];
+		[musicS prevSong];
 	}
 }
 
 - (IBAction)nextButtonPressed:(id)sender
 {
-	[musicControls nextSong];
+	[musicS nextSong];
 }
 
 /*- (void)showExtraButtonsTemporarilyAnimated
@@ -949,7 +938,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	isExtraButtonsShowing = !isExtraButtonsShowing;
 	
 	if (saveState)
-		[SavedSettings sharedInstance].isExtraPlayerControlsShowing = isExtraButtonsShowing;
+		settingsS.isExtraPlayerControlsShowing = isExtraButtonsShowing;
 }
 
 - (void)toggleExtraButtonsAnimationDone
@@ -1099,20 +1088,20 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			progressSlider.value = newValue;
 		}
 		
-		byteOffset = audio.bitRate * 128 * progressSlider.value;
+		byteOffset = audioEngineS.bitRate * 128 * progressSlider.value;
 		
 		if ([currentSong isTempCached])
 		{
-            [audio stop];
+            [audioEngineS stop];
 			
-			audio.startByteOffset = byteOffset;
-			audio.startSecondsOffset = progressSlider.value;
+			audioEngineS.startByteOffset = byteOffset;
+			audioEngineS.startSecondsOffset = progressSlider.value;
 			
-			[[SUSStreamSingleton sharedInstance] removeStreamAtIndex:0];
-			[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong byteOffset:byteOffset secondsOffset:progressSlider.value atIndex:0 isTempCache:YES];
-			if ([[SUSStreamSingleton sharedInstance].handlerStack count] > 1)
+			[streamManagerS removeStreamAtIndex:0];
+			[streamManagerS queueStreamForSong:currentSong byteOffset:byteOffset secondsOffset:progressSlider.value atIndex:0 isTempCache:YES];
+			if ([streamManagerS.handlerStack count] > 1)
 			{
-				SUSStreamHandler *handler = [[SUSStreamSingleton sharedInstance].handlerStack firstObjectSafe];
+				SUSStreamHandler *handler = [streamManagerS.handlerStack firstObjectSafe];
 				[handler start];
 			}
 			
@@ -1123,7 +1112,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		{			
 			if (currentSong.isFullyCached || byteOffset <= currentSong.localFileSize)
 			{
-				[audio seekToPositionInSeconds:progressSlider.value];
+				[audioEngineS seekToPositionInSeconds:progressSlider.value];
 				pauseSlider = NO;
 				hasMoved = NO;
 			}
@@ -1145,7 +1134,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (IBAction)skipBack30:(id)sender
 {
-	CGFloat seconds = (CGFloat)[SavedSettings sharedInstance].quickSkipNumberOfSeconds;
+	CGFloat seconds = (CGFloat)settingsS.quickSkipNumberOfSeconds;
 	
 	float newValue = 0.0;
 	if (progressSlider.value - seconds >= 0.0)
@@ -1158,36 +1147,34 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (IBAction)skipForward30:(id)sender
 {
-	CGFloat seconds = (CGFloat)[SavedSettings sharedInstance].quickSkipNumberOfSeconds;
+	CGFloat seconds = (CGFloat)settingsS.quickSkipNumberOfSeconds;
 	progressSlider.value = progressSlider.value + seconds;
 	[self movedSlider:nil];
 }
 
 - (IBAction) repeatButtonToggle:(id)sender
-{
-	PlaylistSingleton *currentPlaylistDAO = [PlaylistSingleton sharedInstance];
-	
-	if(currentPlaylistDAO.repeatMode == 0)
+{	
+	if(playlistS.repeatMode == 0)
 	{
 		[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one.png"] forState:0];
-		currentPlaylistDAO.repeatMode = 1;
+		playlistS.repeatMode = 1;
 	}
-	else if(currentPlaylistDAO.repeatMode == 1)
+	else if(playlistS.repeatMode == 1)
 	{
 		[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all.png"] forState:0];
-		currentPlaylistDAO.repeatMode = 2;
+		playlistS.repeatMode = 2;
 	}
-	else if(currentPlaylistDAO.repeatMode == 2)
+	else if(playlistS.repeatMode == 2)
 	{
 		[repeatButton setImage:[UIImage imageNamed:@"controller-repeat.png"] forState:0];
-		currentPlaylistDAO.repeatMode = 0;
+		playlistS.repeatMode = 0;
 	}
 }
 
 - (IBAction)bookmarkButtonToggle:(id)sender
 {
 	bookmarkPosition = (int)progressSlider.value;
-	bookmarkBytePosition = [AudioEngine sharedInstance].currentByteOffset;
+	bookmarkBytePosition = audioEngineS.currentByteOffset;
 	
 	UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Bookmark Name:" message:@"this gets covered" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
 	bookmarkNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 22.0)];
@@ -1218,17 +1205,17 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		}
 		else if(buttonIndex == 1)
 		{
-            [audio stop];
-			audio.startByteOffset = byteOffset;
-			audio.startSecondsOffset = progressSlider.value;
+            [audioEngineS stop];
+			audioEngineS.startByteOffset = byteOffset;
+			audioEngineS.startSecondsOffset = progressSlider.value;
 			
-			[[SUSStreamSingleton sharedInstance] removeStreamAtIndex:0];
+			[streamManagerS removeStreamAtIndex:0];
             //DLog(@"byteOffset: %i", byteOffset);
 			//DLog(@"starting temp stream");
-			[[SUSStreamSingleton sharedInstance] queueStreamForSong:currentSong byteOffset:byteOffset secondsOffset:progressSlider.value atIndex:0 isTempCache:YES];
-			if ([[SUSStreamSingleton sharedInstance].handlerStack count] > 1)
+			[streamManagerS queueStreamForSong:currentSong byteOffset:byteOffset secondsOffset:progressSlider.value atIndex:0 isTempCache:YES];
+			if ([streamManagerS.handlerStack count] > 1)
 			{
-				SUSStreamHandler *handler = [[SUSStreamSingleton sharedInstance].handlerStack firstObjectSafe];
+				SUSStreamHandler *handler = [streamManagerS.handlerStack firstObjectSafe];
 				[handler start];
 			}
 			pauseSlider = NO;
@@ -1241,11 +1228,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		if(buttonIndex == 1)
 		{
 			// Check if the bookmark exists
-			if ([databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE name = ?", bookmarkNameTextField.text] == 0)
+			if ([databaseS.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE name = ?", bookmarkNameTextField.text] == 0)
 			{
 				// Bookmark doesn't exist so save it
-				[databaseControls.bookmarksDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmarks (name, position, %@, bytes) VALUES (?, ?, %@, ?)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size, currentSong.parentId, [NSNumber numberWithUnsignedLongLong:bookmarkBytePosition]];
-				bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]];
+				[databaseS.bookmarksDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmarks (name, position, %@, bytes) VALUES (?, ?, %@, ?)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size, currentSong.parentId, [NSNumber numberWithUnsignedLongLong:bookmarkBytePosition]];
+				bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseS.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]];
 				bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
 			}
 			else
@@ -1262,9 +1249,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		if(buttonIndex == 1)
 		{
 			// Overwrite the bookmark
-			[databaseControls.bookmarksDb executeUpdate:@"DELETE FROM bookmarks WHERE name = ?", bookmarkNameTextField.text];
-			[databaseControls.bookmarksDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmarks (name, position, %@, bytes) VALUES (?, ?, %@, ?)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size, currentSong.parentId, [NSNumber numberWithUnsignedLongLong:bookmarkBytePosition]];
-			bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]];
+			[databaseS.bookmarksDb executeUpdate:@"DELETE FROM bookmarks WHERE name = ?", bookmarkNameTextField.text];
+			[databaseS.bookmarksDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmarks (name, position, %@, bytes) VALUES (?, ?, %@, ?)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size, currentSong.parentId, [NSNumber numberWithUnsignedLongLong:bookmarkBytePosition]];
+			bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseS.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]];
 			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
 		}
 	}
@@ -1272,16 +1259,16 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (IBAction)shuffleButtonToggle:(id)sender
 {	
-	[viewObjects showLoadingScreenOnMainWindowWithMessage:@"Shuffling"];
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Shuffling"];
 	
-	[currentPlaylist performSelector:@selector(shuffleToggle) withObject:nil afterDelay:0.05];
+	[playlistS performSelector:@selector(shuffleToggle) withObject:nil afterDelay:0.05];
 }
 
 - (void)updateShuffleIcon
 {	
-	if (currentPlaylist.isShuffle)
+	if (playlistS.isShuffle)
 	{
-		if (![SavedSettings sharedInstance].isJukeboxEnabled)
+		if (!settingsS.isJukeboxEnabled)
 		{
 			[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-on.png"] forState:0];
 		}
@@ -1291,7 +1278,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle.png"] forState:0];
 	}
 	
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 }
 
 - (IBAction)currentAlbumPressed:(id)sender
@@ -1330,7 +1317,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)updateSlider
 {		
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
 		elapsedTimeLabel.text = [NSString formatTime:0];
 		remainingTimeLabel.text = [NSString stringWithFormat:@"-%@",[NSString formatTime:[currentSong.duration floatValue]]];
@@ -1342,10 +1329,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	if (!pauseSlider)
 	{
-		NSString *elapsedTime = [NSString formatTime:audio.progress];;
-		NSString *remainingTime = [NSString formatTime:([currentSong.duration floatValue] - audio.progress)];
+		NSString *elapsedTime = [NSString formatTime:audioEngineS.progress];;
+		NSString *remainingTime = [NSString formatTime:([currentSong.duration floatValue] - audioEngineS.progress)];
 		
-		progressSlider.value = audio.progress;
+		progressSlider.value = audioEngineS.progress;
 		elapsedTimeLabel.text = elapsedTime;
 		remainingTimeLabel.text =[@"-" stringByAppendingString:remainingTime];
 	}
@@ -1358,10 +1345,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)updateFormatLabel
 {
-	if ([currentSong isEqualToSong:audio.currentStreamSong] && audio.bitRate > 0)
-		formatLabel.text = [NSString stringWithFormat:@"%i kbps %@", audio.bitRate, audio.currentStreamFormat];
-	else if ([currentSong isEqualToSong:audio.currentStreamSong])
-		formatLabel.text = audio.currentStreamFormat;
+	if ([currentSong isEqualToSong:audioEngineS.currentStreamSong] && audioEngineS.bitRate > 0)
+		formatLabel.text = [NSString stringWithFormat:@"%i kbps %@", audioEngineS.bitRate, audioEngineS.currentStreamFormat];
+	else if ([currentSong isEqualToSong:audioEngineS.currentStreamSong])
+		formatLabel.text = audioEngineS.currentStreamFormat;
 	else
 		formatLabel.text = @"";
 }

@@ -6,14 +6,12 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+#define databaseS [DatabaseSingleton sharedInstance]
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, FMDatabase, Artist, Album, Song, SUSQueueAllLoader;
+@class FMDatabase, Artist, Album, Song, SUSQueueAllLoader;
 
 @interface DatabaseSingleton : NSObject 
 {
-	iSubAppDelegate *appDelegate;
-	ViewObjectsSingleton *viewObjects;
-	MusicSingleton *musicControls;
 	
 	SUSQueueAllLoader *queueAll;
 }

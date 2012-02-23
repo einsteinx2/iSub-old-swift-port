@@ -45,26 +45,23 @@
 }*/
 
 - (void)loadState
-{
-	PlaylistSingleton *currentPlaylistDAO = [PlaylistSingleton sharedInstance];
-	AudioEngine *audio = [AudioEngine sharedInstance];
-	
+{	
 	if (self.isJukeboxEnabled)
 		isPlaying = NO;
 	else
 		isPlaying = [userDefaults boolForKey:@"isPlaying"];
 		
 	isShuffle = [userDefaults boolForKey:@"isShuffle"];
-	currentPlaylistDAO.isShuffle = isShuffle;
+	playlistS.isShuffle = isShuffle;
 	
 	normalPlaylistIndex = [userDefaults integerForKey:@"normalPlaylistIndex"];
-	currentPlaylistDAO.normalIndex = normalPlaylistIndex;
+	playlistS.normalIndex = normalPlaylistIndex;
 	
 	shufflePlaylistIndex = [userDefaults integerForKey:@"shufflePlaylistIndex"];
-	currentPlaylistDAO.shuffleIndex = shufflePlaylistIndex;
+	playlistS.shuffleIndex = shufflePlaylistIndex;
 	
 	repeatMode = [userDefaults integerForKey:@"repeatMode"];
-	currentPlaylistDAO.repeatMode = repeatMode;
+	playlistS.repeatMode = repeatMode;
 	
 	bitRate = [userDefaults integerForKey:@"bitRate"];
 	byteOffset = self.byteOffset;
@@ -72,8 +69,8 @@
 	isRecover = self.isRecover;
 	recoverSetting = self.recoverSetting;
 	
-	audio.startByteOffset = byteOffset;
-	audio.startSecondsOffset = secondsOffset;
+	audioEngineS.startByteOffset = byteOffset;
+	audioEngineS.startSecondsOffset = secondsOffset;
 	DLog(@"startByteOffset: %llu  startSecondsOffset: %f", byteOffset, secondsOffset);
 }
 
@@ -90,66 +87,64 @@
 {
 	@autoreleasepool
 	{
-		AudioEngine *audio = [AudioEngine sharedInstance];
-		PlaylistSingleton *currentPlaylistDAO = [PlaylistSingleton sharedInstance];
 		BOOL isDefaultsDirty = NO;
 		
-		if (audio.isPlaying != isPlaying)
+		if (audioEngineS.isPlaying != isPlaying)
 		{
 			if (self.isJukeboxEnabled)
 				isPlaying = NO;
 			else
-				isPlaying = audio.isPlaying;
+				isPlaying = audioEngineS.isPlaying;
 			
 			[userDefaults setBool:isPlaying forKey:@"isPlaying"];
 			isDefaultsDirty = YES;
 		}
 		
-		if (currentPlaylistDAO.isShuffle != isShuffle)
+		if (playlistS.isShuffle != isShuffle)
 		{
-			isShuffle = currentPlaylistDAO.isShuffle;
+			isShuffle = playlistS.isShuffle;
 			[userDefaults setBool:isShuffle forKey:@"isShuffle"];
 			isDefaultsDirty = YES;
 		}
 		
-		if (currentPlaylistDAO.normalIndex != normalPlaylistIndex)
+		if (playlistS.normalIndex != normalPlaylistIndex)
 		{
-			normalPlaylistIndex = currentPlaylistDAO.normalIndex;
+			normalPlaylistIndex = playlistS.normalIndex;
 			[userDefaults setInteger:normalPlaylistIndex forKey:@"normalPlaylistIndex"];
 			isDefaultsDirty = YES;
 		}
 		
-		if (currentPlaylistDAO.shuffleIndex != shufflePlaylistIndex)
+		if (playlistS.shuffleIndex != shufflePlaylistIndex)
 		{
-			shufflePlaylistIndex = currentPlaylistDAO.shuffleIndex;
+			shufflePlaylistIndex = playlistS.shuffleIndex;
 			[userDefaults setInteger:shufflePlaylistIndex forKey:@"shufflePlaylistIndex"];
 			isDefaultsDirty = YES;
 		}
 		
-		if (currentPlaylistDAO.repeatMode != repeatMode)
+		if (playlistS.repeatMode != repeatMode)
 		{
-			repeatMode = currentPlaylistDAO.repeatMode;
+			repeatMode = playlistS.repeatMode;
 			[userDefaults setInteger:repeatMode forKey:@"repeatMode"];
 			isDefaultsDirty = YES;
 		}
 		
-		if (audio.bitRate != bitRate && audio.bitRate >= 0)
+		if (audioEngineS.bitRate != bitRate && audioEngineS.bitRate >= 0)
 		{
-			bitRate = audio.bitRate;
+			bitRate = audioEngineS.bitRate;
 			[userDefaults setInteger:bitRate forKey:@"bitRate"];
 			isDefaultsDirty = YES;
 		}
 		
-		if (secondsOffset != audio.progress)
+		if (secondsOffset != audioEngineS.progress)
 		{
-			secondsOffset = audio.progress;
+			secondsOffset = audioEngineS.progress;
 			[userDefaults setDouble:secondsOffset forKey:@"seekTime"];
 			isDefaultsDirty = YES;
 		}
 		
-		if (byteOffset != audio.currentByteOffset)
+		if (byteOffset != audioEngineS.currentByteOffset)
 		{
-			byteOffset = audio.currentByteOffset;
+			byteOffset = audioEngineS.currentByteOffset;
 			NSNumber *num = [NSNumber numberWithUnsignedLongLong:byteOffset];
 			[userDefaults setObject:num forKey:@"byteOffset"];
 			isDefaultsDirty = YES;

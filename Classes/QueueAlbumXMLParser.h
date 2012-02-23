@@ -7,14 +7,12 @@
 //
 
 
-@class iSubAppDelegate, ViewObjectsSingleton, Artist, Album, Song;
+@class Artist, Album, Song;
 
 @interface QueueAlbumXMLParser : NSObject <NSXMLParserDelegate>
 {
 	NSMutableString *currentElementValue;
 	
-	iSubAppDelegate *appDelegate; 
-	ViewObjectsSingleton *viewObjects;
 	
 	Artist *myArtist;
 	

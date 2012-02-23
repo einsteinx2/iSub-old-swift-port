@@ -7,14 +7,10 @@
 //
 
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, EGORefreshTableHeaderView, SUSServerPlaylist;
+@class EGORefreshTableHeaderView, SUSServerPlaylist;
 
 @interface PlaylistSongsViewController : UITableViewController
 {
-	iSubAppDelegate *appDelegate;	
-	ViewObjectsSingleton *viewObjects;
-	MusicSingleton *musicControls;
-	DatabaseSingleton *databaseControls;
 
 	EGORefreshTableHeaderView *refreshHeaderView;
 	BOOL _reloading;

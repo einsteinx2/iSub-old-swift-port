@@ -23,7 +23,7 @@
 #import "SavedSettings.h"
 #import "GTMNSString+HTML.h"
 #import "PlaylistSingleton.h"
-#import "SUSStreamSingleton.h"
+#import "SUSStreamManager.h"
 #import "NSArray+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
 
@@ -39,10 +39,10 @@ static DatabaseSingleton *sharedInstance = nil;
 
 - (void)initDatabases
 {
-	NSString *urlStringMd5 = [[[SavedSettings sharedInstance] urlString] md5];
+	NSString *urlStringMd5 = [[settingsS urlString] md5];
 		
 	// Only load Albums, Songs, and Genre databases if this is a newer device
-	if ([SavedSettings sharedInstance].isSongsTabEnabled)
+	if (settingsS.isSongsTabEnabled)
 	{
 		// Setup the allAlbums database
 		allAlbumsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allAlbums.db", databaseFolderPath, urlStringMd5]] retain];
@@ -181,7 +181,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	}
 	
 	// Setup the current playlist database
-	if (viewObjects.isOfflineMode) 
+	if (viewObjectsS.isOfflineMode) 
 	{
 		currentPlaylistDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/offlineCurrentPlaylist.db", databaseFolderPath]] retain];
 	}
@@ -216,7 +216,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	}
 	
 	// Setup the local playlists database
-	if (viewObjects.isOfflineMode) 
+	if (viewObjectsS.isOfflineMode) 
 	{
 		localPlaylistsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/offlineLocalPlaylists.db", databaseFolderPath]] retain];
 	}
@@ -240,15 +240,14 @@ static DatabaseSingleton *sharedInstance = nil;
 	
 	// Setup the song cache database
 	// Check if the songCache DB is in the documents directory
-	SavedSettings *settings = [SavedSettings sharedInstance];
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	if ([fileManager fileExistsAtPath:[databaseFolderPath stringByAppendingPathComponent:@"songCache.db"]]) 
 	{
 		// The song cache Db is in the old place and needs to be moved
 		[fileManager moveItemAtURL:[NSURL fileURLWithPath:[databaseFolderPath stringByAppendingPathComponent:@"songCache.db"]]
-							 toURL:[NSURL fileURLWithPath:[settings.cachesPath stringByAppendingPathComponent:@"songCache.db"]] error:nil];
+							 toURL:[NSURL fileURLWithPath:[ settingsS.cachesPath stringByAppendingPathComponent:@"songCache.db"]] error:nil];
 	}
-	songCacheDb = [[FMDatabase databaseWithPath:[settings.cachesPath stringByAppendingPathComponent:@"songCache.db"]] retain];
+	songCacheDb = [[FMDatabase databaseWithPath:[ settingsS.cachesPath stringByAppendingPathComponent:@"songCache.db"]] retain];
 	if ([songCacheDb open])
 	{
 		[songCacheDb executeUpdate:@"PRAGMA cache_size = 1"];
@@ -289,13 +288,13 @@ static DatabaseSingleton *sharedInstance = nil;
 		DLog(@"Could not open songCacheDb."); 
 	}
 	
-	if ([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", databaseFolderPath, [settings.urlString md5]]]) 
+	if ([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", databaseFolderPath, [ settingsS.urlString md5]]]) 
 	{
 		// The song cache queue Db is in the old place and needs to be moved
-		[fileManager moveItemAtURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", databaseFolderPath, [settings.urlString md5]]] 
-							 toURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", settings.cachesPath, [settings.urlString md5]]] error:nil];
+		[fileManager moveItemAtURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", databaseFolderPath, [ settingsS.urlString md5]]] 
+							 toURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", settingsS.cachesPath, [ settingsS.urlString md5]]] error:nil];
 	}
-	cacheQueueDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", settings.cachesPath, [settings.urlString md5]]] retain];
+	cacheQueueDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", settingsS.cachesPath, [ settingsS.urlString md5]]] retain];
 	if ([cacheQueueDb open])
 	{
 		[cacheQueueDb executeUpdate:@"PRAGMA cache_size = 1"];
@@ -306,7 +305,7 @@ static DatabaseSingleton *sharedInstance = nil;
 			[cacheQueueDb executeUpdate:@"CREATE INDEX queueDate ON cacheQueue (cachedDate DESC)"];
 		}
 		
-		[songCacheDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@cacheQueue.db", settings.cachesPath, urlStringMd5], @"cacheQueueDb"];
+		[songCacheDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@cacheQueue.db", settingsS.cachesPath, urlStringMd5], @"cacheQueueDb"];
 		if ([songCacheDb hadError]) 
 		{
 			DLog(@"Err attaching the cacheQueueDb %d: %@", [songCacheDb lastErrorCode], [songCacheDb lastErrorMessage]);
@@ -470,7 +469,7 @@ static DatabaseSingleton *sharedInstance = nil;
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-	NSString *urlStringMd5 = [[[SavedSettings sharedInstance] urlString] md5];
+	NSString *urlStringMd5 = [[settingsS urlString] md5];
 	
 	[albumListCacheDb close]; self.albumListCacheDb = nil;
 	[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@albumListCache.db", databaseFolderPath, urlStringMd5] error:NULL];
@@ -522,7 +521,7 @@ static DatabaseSingleton *sharedInstance = nil;
 - (void)resetLocalPlaylistsDb
 {
 	// TODO: delete the tables, don't delete the database file
-	NSString *urlStringMd5 = [[[SavedSettings sharedInstance] urlString] md5];
+	NSString *urlStringMd5 = [[settingsS urlString] md5];
 	
 	[localPlaylistsDb close]; self.localPlaylistsDb = nil;
 	[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@localPlaylists.db", databaseFolderPath, urlStringMd5] error:NULL];
@@ -536,7 +535,7 @@ static DatabaseSingleton *sharedInstance = nil;
 - (void)resetCurrentPlaylistDb
 {
 	// TODO: delete the tables, don't delete the database file
-	NSString *urlStringMd5 = [[[SavedSettings sharedInstance] urlString] md5];
+	NSString *urlStringMd5 = [[settingsS urlString] md5];
 	
 	[currentPlaylistDb close]; self.currentPlaylistDb = nil;
 	[[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseFolderPath, urlStringMd5] error:NULL];
@@ -547,13 +546,13 @@ static DatabaseSingleton *sharedInstance = nil;
 	[currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxCurrentPlaylist (%@)", [Song standardSongColumnSchema]]];	
 	[currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxShufflePlaylist (%@)", [Song standardSongColumnSchema]]];	
 
-	//if ([SavedSettings sharedInstance].isJukeboxEnabled)
-	//	[musicControls jukeboxClearPlaylist];
+	//if (settingsS.isJukeboxEnabled)
+	//	[musicS jukeboxClearPlaylist];
 }
 
 - (void)resetCurrentPlaylist
 {
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
 		[currentPlaylistDb executeUpdate:@"DROP TABLE jukeboxCurrentPlaylist"];
 		[currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxCurrentPlaylist (%@)", [Song standardSongColumnSchema]]];	
@@ -567,7 +566,7 @@ static DatabaseSingleton *sharedInstance = nil;
 
 - (void)resetShufflePlaylist
 {
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
 		[currentPlaylistDb executeUpdate:@"DROP TABLE jukeboxShufflePlaylist"];
 		[currentPlaylistDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxShufflePlaylist (%@)", [Song standardSongColumnSchema]]];	
@@ -703,8 +702,8 @@ static DatabaseSingleton *sharedInstance = nil;
 - (void)downloadAllSongs:(NSString *)folderId artist:(Artist *)theArtist
 {
 	// Show loading screen
-	//[viewObjects showLoadingScreenOnMainWindow];
-	[viewObjects showAlbumLoadingScreen:appDelegate.window sender:queueAll];
+	//[viewObjectsS showLoadingScreenOnMainWindow];
+	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:queueAll];
 	
 	// Download all the songs
 	if (queueAll == nil)
@@ -716,8 +715,8 @@ static DatabaseSingleton *sharedInstance = nil;
 - (void)queueAllSongs:(NSString *)folderId artist:(Artist *)theArtist
 {
 	// Show loading screen
-	//[viewObjects showLoadingScreenOnMainWindow];
-	[viewObjects showAlbumLoadingScreen:appDelegate.window sender:queueAll];
+	//[viewObjectsS showLoadingScreenOnMainWindow];
+	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:queueAll];
 	
 	// Queue all the songs
 	if (queueAll == nil)
@@ -728,41 +727,38 @@ static DatabaseSingleton *sharedInstance = nil;
 
 - (void)queueSong:(Song *)aSong
 {
-	SavedSettings *settings = [SavedSettings sharedInstance];
-	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
-	if (settings.isJukeboxEnabled)
+	if ( settingsS.isJukeboxEnabled)
 	{
 		[aSong insertIntoTable:@"jukeboxCurrentPlaylist" inDatabase:self.currentPlaylistDb];
-		[musicControls jukeboxAddSong:aSong.songId];
+		[musicS jukeboxAddSong:aSong.songId];
 	}
 	else
 	{
 		[aSong insertIntoTable:@"currentPlaylist" inDatabase:self.currentPlaylistDb];
-		if (currentPlaylist.isShuffle)
+		if (playlistS.isShuffle)
 			[aSong insertIntoTable:@"shufflePlaylist" inDatabase:self.currentPlaylistDb];
 	}
 	
-	[[SUSStreamSingleton sharedInstance] fillStreamQueue];
+	[streamManagerS fillStreamQueue];
 }
 
 - (void)showLoadingScreen
 {
-	[viewObjects showLoadingScreenOnMainWindowWithMessage:nil];
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 }
 
 - (void)playAllSongs:(NSString *)folderId artist:(Artist *)theArtist
 {	
-	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
 	
 	// Show loading screen
-	//[viewObjects showLoadingScreenOnMainWindow];
-	[viewObjects showAlbumLoadingScreen:appDelegate.window sender:queueAll];
+	//[viewObjectsS showLoadingScreenOnMainWindow];
+	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:queueAll];
 	
 	// Clear the current and shuffle playlists
 	[self resetCurrentPlaylistDb];
 	
 	// Set shuffle off in case it's on
-	currentPlaylist.isShuffle = NO;
+	playlistS.isShuffle = NO;
 	
 	// Queue all the songs
 	if (queueAll == nil)
@@ -773,17 +769,16 @@ static DatabaseSingleton *sharedInstance = nil;
 
 - (void)shuffleAllSongs:(NSString *)folderId artist:(Artist *)theArtist
 {
-	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
 	
 	// Show loading screen
-	//[viewObjects showLoadingScreenOnMainWindow];
-	[viewObjects showAlbumLoadingScreen:appDelegate.window sender:queueAll];
+	//[viewObjectsS showLoadingScreenOnMainWindow];
+	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:queueAll];
 	
 	// Clear the current and shuffle playlists
 	[self resetCurrentPlaylistDb];
 
 	// Set shuffle on
-	currentPlaylist.isShuffle = YES;
+	playlistS.isShuffle = YES;
 	
 	// Queue all the songs
 	if (queueAll == nil)
@@ -795,14 +790,13 @@ static DatabaseSingleton *sharedInstance = nil;
 - (void)shufflePlaylist
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
 	
-	currentPlaylist.currentIndex = 0;
-	currentPlaylist.isShuffle = YES;
+	playlistS.currentIndex = 0;
+	playlistS.isShuffle = YES;
 	
 	[self resetShufflePlaylist];
 	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 		[self.currentPlaylistDb executeUpdate:@"INSERT INTO jukeboxShufflePlaylist SELECT * FROM jukeboxCurrentPlaylist ORDER BY RANDOM()"];
 	else
 		[self.currentPlaylistDb executeUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist ORDER BY RANDOM()"];
@@ -855,9 +849,6 @@ static DatabaseSingleton *sharedInstance = nil;
 	sharedInstance = self;
 	
 	//initialize here
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicSingleton sharedInstance];
 	
 	queueAll = nil;
 	

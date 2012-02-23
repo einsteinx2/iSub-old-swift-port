@@ -31,9 +31,6 @@
 {	
 	if ((self = [super init]))
 	{
-		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-		viewObjects = [ViewObjectsSingleton sharedInstance];
-		databaseControls = [DatabaseSingleton sharedInstance];
 		
 		listOfAlbums = [[NSMutableArray alloc] init];
 	}
@@ -47,13 +44,13 @@
 	{
 		ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
 		
-		if (appDelegate.currentTabBarController.selectedIndex == 4)
+		if (appDelegateS.currentTabBarController.selectedIndex == 4)
 		{
-			[appDelegate.currentTabBarController.moreNavigationController pushViewController:serverListViewController animated:YES];
+			[appDelegateS.currentTabBarController.moreNavigationController pushViewController:serverListViewController animated:YES];
 		}
 		else
 		{
-			[(UINavigationController*)appDelegate.currentTabBarController.selectedViewController pushViewController:serverListViewController animated:YES];
+			[(UINavigationController*)appDelegateS.currentTabBarController.selectedViewController pushViewController:serverListViewController animated:YES];
 		}
 		
 		[serverListViewController release];
@@ -63,7 +60,7 @@
 
 - (void) subsonicErrorCode:(NSString *)errorCode message:(NSString *)message
 {
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:appDelegateS cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	alert.tag = 1;
 	[alert show];
 	[alert release];
@@ -72,7 +69,7 @@
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
-	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:@"There was an error parsing the XML response. Maybe you forgot to set the right port for your server?" delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
+	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:@"There was an error parsing the XML response. Maybe you forgot to set the right port for your server?" delegate:appDelegateS cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	alert.tag = 1;
 	[alert show];
 	[alert release];

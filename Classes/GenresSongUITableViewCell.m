@@ -108,14 +108,14 @@
 	
 	if (self.isOverlayShowing)
 	{
-		if ([ViewObjectsSingleton sharedInstance].isOfflineMode)
+		if (viewObjectsS.isOfflineMode)
 		{
 			self.overlayView.downloadButton.enabled = NO;
 			self.overlayView.downloadButton.hidden = YES;
 		}
 		else
 		{
-			if ([[[DatabaseSingleton sharedInstance].songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", md5] isEqualToString:@"YES"]) 
+			if ([[databaseS.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", md5] isEqualToString:@"YES"]) 
 			{
 				self.overlayView.downloadButton.alpha = .3;
 				self.overlayView.downloadButton.enabled = NO;

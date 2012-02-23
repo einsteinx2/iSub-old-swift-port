@@ -72,7 +72,7 @@
 
 - (void)deleteAction
 {	
-	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindowWithMessage:@"Deleting"];
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Deleting"];
 	[self performSelector:@selector(deleteAllSongs) withObject:nil afterDelay:0.05];
 	
 	self.overlayView.downloadButton.alpha = .3;
@@ -84,7 +84,7 @@
 - (void)deleteAllSongs
 {
 	FMResultSet *result;
-	result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ?", artistNameLabel.text];
+	result = [databaseS.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ?", artistNameLabel.text];
 	
 	while ([result next])
 	{
@@ -97,14 +97,14 @@
 	[NSNotificationCenter postNotificationToMainThreadWithName:@"cachedSongDeleted"];
 	
 	// Hide the loading screen	
-	[[ViewObjectsSingleton sharedInstance] hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 }
 
 - (void)queueAction
 {
 	[super queueAction];
 	
-	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindowWithMessage:nil];
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 	[self performSelector:@selector(queueAllSongs) withObject:nil afterDelay:0.05];
 	[self hideOverlay];
 }
@@ -113,7 +113,7 @@
 {
 	FMResultSet *result;
 	
-	result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text];
+	result = [databaseS.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text];
 	
 	while ([result next])
 	{
@@ -123,7 +123,7 @@
 	
 	[result close];
 	
-	[[ViewObjectsSingleton sharedInstance] hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 }
 
 #pragma mark - Scrolling

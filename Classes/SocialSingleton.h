@@ -6,6 +6,8 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+#define socialS [SocialSingleton sharedInstance]
+
 #import "SA_OAuthTwitterController.h"
 
 @class SA_OAuthTwitterEngine, Song;

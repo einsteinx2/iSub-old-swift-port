@@ -7,7 +7,7 @@
 //
 
 
-@class iSubAppDelegate, MusicSingleton, DatabaseSingleton, PlaylistSingleton, ViewObjectsSingleton, CoverArtImageView, PageControlViewController, MPVolumeView, AudioEngine, PlaylistSingleton, OBSlider, Song;
+@class CoverArtImageView, PageControlViewController, MPVolumeView, OBSlider, Song;
 
 @interface iPhoneStreamingPlayerViewController : UIViewController
 {
@@ -30,14 +30,7 @@
 	UILabel *artistTitleLabel;
 	UILabel *albumTitleLabel;
 	UILabel *songTitleLabel;
-	
-	iSubAppDelegate *appDelegate;
-	MusicSingleton *musicControls;
-	DatabaseSingleton *databaseControls;
-	ViewObjectsSingleton *viewObjects;
-	PlaylistSingleton *currentPlaylist;
-	AudioEngine *audio;
-	
+		
 	NSUInteger reflectionHeight;
 	
 	BOOL isFlipped;

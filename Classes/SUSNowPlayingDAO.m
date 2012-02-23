@@ -87,32 +87,30 @@
 
 - (void)playSongAtIndex:(NSUInteger)index
 {
-	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
-	MusicSingleton *musicControls = [MusicSingleton sharedInstance];
 	
 	// Clear the current playlist
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-		[[DatabaseSingleton sharedInstance] resetJukeboxPlaylist];
+	if (settingsS.isJukeboxEnabled)
+		[databaseS resetJukeboxPlaylist];
 	else
-		[[DatabaseSingleton sharedInstance] resetCurrentPlaylistDb];
+		[databaseS resetCurrentPlaylistDb];
 	
 	// Add the song to the empty playlist
 	Song *aSong = [self songForIndex:index];
 	[aSong addToCurrentPlaylist];
 	
 	// If jukebox mode, send song ids to server
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
-		[musicControls jukeboxStop];
-		[musicControls jukeboxClearPlaylist];
-		[musicControls jukeboxAddSong:aSong.songId];
+		[musicS jukeboxStop];
+		[musicS jukeboxClearPlaylist];
+		[musicS jukeboxAddSong:aSong.songId];
 	}
 	
 	// Set player defaults
-	currentPlaylist.isShuffle = NO;
+	playlistS.isShuffle = NO;
 	
 	// Start the song
-	[musicControls playSongAtPosition:0];
+	[musicS playSongAtPosition:0];
 }
 
 #pragma mark - Loader Manager Methods

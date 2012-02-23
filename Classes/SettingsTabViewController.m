@@ -36,7 +36,7 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if (settings.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -51,13 +51,6 @@
 	//
 	self.loadedTime = [NSDate date];
 	
-	settings = [SavedSettings sharedInstance];
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicSingleton sharedInstance];
-	socialControls = [SocialSingleton sharedInstance];
-	databaseControls = [DatabaseSingleton sharedInstance];
-	CacheSingleton *cacheControls = [CacheSingleton sharedInstance];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTwitterUIElements) name:@"twitterAuthenticated" object:nil];
 	
@@ -71,64 +64,64 @@
 #endif
 	
 	// Main Settings
-	enableScrobblingSwitch.on = settings.isScrobbleEnabled;
+	enableScrobblingSwitch.on = settingsS.isScrobbleEnabled;
 	
-	//scrobblePercentSlider.value = [[appDelegate.settingsDictionary objectForKey:@"scrobblePercentSetting"] floatValue];
-	scrobblePercentSlider.value = settings.scrobblePercent;
+	//scrobblePercentSlider.value = [[appDelegateS.settingsDictionary objectForKey:@"scrobblePercentSetting"] floatValue];
+	scrobblePercentSlider.value = settingsS.scrobblePercent;
 	[self updateScrobblePercentLabel];
 	
-	manualOfflineModeSwitch.on = settings.isForceOfflineMode;
+	manualOfflineModeSwitch.on = settingsS.isForceOfflineMode;
 	
-	checkUpdatesSwitch.on = settings.isUpdateCheckEnabled;
+	checkUpdatesSwitch.on = settingsS.isUpdateCheckEnabled;
 	
-	autoReloadArtistSwitch.on = settings.isAutoReloadArtistsEnabled;
+	autoReloadArtistSwitch.on = settingsS.isAutoReloadArtistsEnabled;
 
-	disablePopupsSwitch.on = !settings.isPopupsEnabled;
+	disablePopupsSwitch.on = !settingsS.isPopupsEnabled;
 	
-	disableRotationSwitch.on = settings.isRotationLockEnabled;
+	disableRotationSwitch.on = settingsS.isRotationLockEnabled;
 	
-	disableScreenSleepSwitch.on = !settings.isScreenSleepEnabled;
+	disableScreenSleepSwitch.on = !settingsS.isScreenSleepEnabled;
 	
-	enableBasicAuthSwitch.on = settings.isBasicAuthEnabled;
+	enableBasicAuthSwitch.on = settingsS.isBasicAuthEnabled;
 	
-	enableSongsTabSwitch.on = settings.isSongsTabEnabled;
-	DLog(@"isSongsTabEnabled: %i", settings.isSongsTabEnabled);
+	enableSongsTabSwitch.on = settingsS.isSongsTabEnabled;
+	DLog(@"isSongsTabEnabled: %i", settingsS.isSongsTabEnabled);
 	
-	recoverSegmentedControl.selectedSegmentIndex = settings.recoverSetting;
+	recoverSegmentedControl.selectedSegmentIndex = settingsS.recoverSetting;
 	
-	maxBitrateWifiSegmentedControl.selectedSegmentIndex = settings.maxBitrateWifi;
-	maxBitrate3GSegmentedControl.selectedSegmentIndex = settings.maxBitrate3G;
+	maxBitrateWifiSegmentedControl.selectedSegmentIndex = settingsS.maxBitrateWifi;
+	maxBitrate3GSegmentedControl.selectedSegmentIndex = settingsS.maxBitrate3G;
 		
-	enableSwipeSwitch.on = settings.isSwipeEnabled;
-	enableTapAndHoldSwitch.on = settings.isTapAndHoldEnabled;
+	enableSwipeSwitch.on = settingsS.isSwipeEnabled;
+	enableTapAndHoldSwitch.on = settingsS.isTapAndHoldEnabled;
 	
-	enableLyricsSwitch.on = settings.isLyricsEnabled;
-	enableCacheStatusSwitch.on = settings.isCacheStatusEnabled;
+	enableLyricsSwitch.on = settingsS.isLyricsEnabled;
+	enableCacheStatusSwitch.on = settingsS.isCacheStatusEnabled;
 	
 	// Cache Settings
-	enableSongCachingSwitch.on = settings.isSongCachingEnabled;
-	enableNextSongCacheSwitch.on = settings.isNextSongCacheEnabled;
-	enableNextSongPartialCacheSwitch.on = settings.isPartialCacheNextSong;
+	enableSongCachingSwitch.on = settingsS.isSongCachingEnabled;
+	enableNextSongCacheSwitch.on = settingsS.isNextSongCacheEnabled;
+	enableNextSongPartialCacheSwitch.on = settingsS.isPartialCacheNextSong;
 		
-	totalSpace = cacheControls.totalSpace;
-	freeSpace = cacheControls.freeSpace;
+	totalSpace = cacheS.totalSpace;
+	freeSpace = cacheS.freeSpace;
 	freeSpaceLabel.text = [NSString stringWithFormat:@"Free space: %@", [NSString formatFileSize:freeSpace]];
 	totalSpaceLabel.text = [NSString stringWithFormat:@"Total space: %@", [NSString formatFileSize:totalSpace]];
 	float percentFree = (float) freeSpace / (float) totalSpace;
 	CGRect frame = freeSpaceBackground.frame;
 	frame.size.width = frame.size.width * percentFree;
 	freeSpaceBackground.frame = frame;
-	cachingTypeSegmentedControl.selectedSegmentIndex = settings.cachingType;
+	cachingTypeSegmentedControl.selectedSegmentIndex = settingsS.cachingType;
 	[self toggleCacheControlsVisibility];
 	[self cachingTypeToggle];
 	
-	autoDeleteCacheSwitch.on = settings.isAutoDeleteCacheEnabled;
+	autoDeleteCacheSwitch.on = settingsS.isAutoDeleteCacheEnabled;
 	
-	autoDeleteCacheTypeSegmentedControl.selectedSegmentIndex = settings.autoDeleteCacheType;
+	autoDeleteCacheTypeSegmentedControl.selectedSegmentIndex = settingsS.autoDeleteCacheType;
 	
-	cacheSongCellColorSegmentedControl.selectedSegmentIndex = settings.cachedSongCellColorType;
+	cacheSongCellColorSegmentedControl.selectedSegmentIndex = settingsS.cachedSongCellColorType;
 	
-	switch (settings.quickSkipNumberOfSeconds) 
+	switch (settingsS.quickSkipNumberOfSeconds) 
 	{
 		case 5: quickSkipSegmentControl.selectedSegmentIndex = 0; break;
 		case 15: quickSkipSegmentControl.selectedSegmentIndex = 1; break;
@@ -143,17 +136,17 @@
 	}
 	
 	// Twitter settings
-	if (socialControls.twitterEngine && socialControls.twitterEngine.isAuthorized)
+	if (socialS.twitterEngine && socialS.twitterEngine.isAuthorized)
 	{
 		twitterEnabledSwitch.enabled = YES;
-		if (settings.isTwitterEnabled)
+		if (settingsS.isTwitterEnabled)
 			twitterEnabledSwitch.on = YES;
 		else
 			twitterEnabledSwitch.on = NO;
 		
 		twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signout.png"];
 		
-		twitterStatusLabel.text = [NSString stringWithFormat:@"%@ signed in", [socialControls.twitterEngine username]];
+		twitterStatusLabel.text = [NSString stringWithFormat:@"%@ signed in", [socialS.twitterEngine username]];
 	}
 	else
 	{
@@ -166,7 +159,7 @@
 	}
 	
 	// Handle In App Purchase settings
-	if ([SavedSettings sharedInstance].isCacheUnlocked == NO)
+	if (settingsS.isCacheUnlocked == NO)
 	{
 		// Caching is disabled, so disable the controls
 		enableSongCachingSwitch.enabled = NO; enableSongCachingSwitch.alpha = 0.5;
@@ -183,7 +176,7 @@
 
 /*- (void)viewWillAppear:(BOOL)animated
 {
-	if ([[appDelegate.settingsDictionary objectForKey:@"manualOfflineModeSetting"] isEqualToString:@"YES"])
+	if ([[appDelegateS.settingsDictionary objectForKey:@"manualOfflineModeSetting"] isEqualToString:@"YES"])
 		manualOfflineModeSwitch.on = YES;
 	else
 		manualOfflineModeSwitch.on = NO;
@@ -191,18 +184,18 @@
 
 - (void)reloadTwitterUIElements
 {
-	if (socialControls.twitterEngine)
+	if (socialS.twitterEngine)
 	{
 		twitterEnabledSwitch.enabled = YES;
-		//if ([[appDelegate.settingsDictionary objectForKey:@"twitterEnabledSetting"] isEqualToString:@"YES"])
-		if (settings.isTwitterEnabled)
+		//if ([[appDelegateS.settingsDictionary objectForKey:@"twitterEnabledSetting"] isEqualToString:@"YES"])
+		if (settingsS.isTwitterEnabled)
 			twitterEnabledSwitch.on = YES;
 		else
 			twitterEnabledSwitch.on = NO;
 		
 		twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signout.png"];
 		
-		twitterStatusLabel.text = [NSString stringWithFormat:@"%@ signed in", [socialControls.twitterEngine username]];
+		twitterStatusLabel.text = [NSString stringWithFormat:@"%@ signed in", [socialS.twitterEngine username]];
 	}
 	else
 	{
@@ -220,18 +213,18 @@
 	if (cachingTypeSegmentedControl.selectedSegmentIndex == 0)
 	{
 		cacheSpaceLabel1.text = @"Minimum free space:";
-		//cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
-		cacheSpaceLabel2.text = [NSString formatFileSize:settings.minFreeSpace];
-		//cacheSpaceSlider.value = [[appDelegate.settingsDictionary objectForKey:@"minFreeSpace"] floatValue] / totalSpace;
-		cacheSpaceSlider.value = (float)settings.minFreeSpace / totalSpace;
+		//cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegateS.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
+		cacheSpaceLabel2.text = [NSString formatFileSize:settingsS.minFreeSpace];
+		//cacheSpaceSlider.value = [[appDelegateS.settingsDictionary objectForKey:@"minFreeSpace"] floatValue] / totalSpace;
+		cacheSpaceSlider.value = (float)settingsS.minFreeSpace / totalSpace;
 	}
 	else if (cachingTypeSegmentedControl.selectedSegmentIndex == 1)
 	{
 		cacheSpaceLabel1.text = @"Maximum cache size:";
-		//cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegate.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue]];
-		cacheSpaceLabel2.text = [NSString formatFileSize:settings.maxCacheSize];
-		//cacheSpaceSlider.value = [[appDelegate.settingsDictionary objectForKey:@"maxCacheSize"] floatValue] / totalSpace;
-		cacheSpaceSlider.value = (float)settings.maxCacheSize / totalSpace;
+		//cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegateS.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue]];
+		cacheSpaceLabel2.text = [NSString formatFileSize:settingsS.maxCacheSize];
+		//cacheSpaceSlider.value = [[appDelegateS.settingsDictionary objectForKey:@"maxCacheSize"] floatValue] / totalSpace;
+		cacheSpaceSlider.value = (float)settingsS.maxCacheSize / totalSpace;
 	}
 }
 
@@ -241,47 +234,47 @@
 	{
 		if (sender == recoverSegmentedControl)
 		{
-			settings.recoverSetting = recoverSegmentedControl.selectedSegmentIndex;
+			settingsS.recoverSetting = recoverSegmentedControl.selectedSegmentIndex;
 		}
 		else if (sender == maxBitrateWifiSegmentedControl)
 		{
-			settings.maxBitrateWifi = maxBitrateWifiSegmentedControl.selectedSegmentIndex;
+			settingsS.maxBitrateWifi = maxBitrateWifiSegmentedControl.selectedSegmentIndex;
 		}
 		else if (sender == maxBitrate3GSegmentedControl)
 		{
-			settings.maxBitrate3G = maxBitrate3GSegmentedControl.selectedSegmentIndex;
+			settingsS.maxBitrate3G = maxBitrate3GSegmentedControl.selectedSegmentIndex;
 		}
 		else if (sender == cachingTypeSegmentedControl)
 		{
-			settings.cachingType = cachingTypeSegmentedControl.selectedSegmentIndex;
+			settingsS.cachingType = cachingTypeSegmentedControl.selectedSegmentIndex;
 			[self cachingTypeToggle];
 		}
 		else if (sender == autoDeleteCacheTypeSegmentedControl)
 		{
-			settings.autoDeleteCacheType = autoDeleteCacheTypeSegmentedControl.selectedSegmentIndex;
+			settingsS.autoDeleteCacheType = autoDeleteCacheTypeSegmentedControl.selectedSegmentIndex;
 		}
 		else if (sender == cacheSongCellColorSegmentedControl)
 		{
-			settings.cachedSongCellColorType = cacheSongCellColorSegmentedControl.selectedSegmentIndex;
+			settingsS.cachedSongCellColorType = cacheSongCellColorSegmentedControl.selectedSegmentIndex;
 		}
 		else if (sender == quickSkipSegmentControl)
 		{
 			switch (quickSkipSegmentControl.selectedSegmentIndex) 
 			{
-				case 0: settings.quickSkipNumberOfSeconds = 5; break;
-				case 1: settings.quickSkipNumberOfSeconds = 15; break;
-				case 2: settings.quickSkipNumberOfSeconds = 30; break;
-				case 3: settings.quickSkipNumberOfSeconds = 45; break;
-				case 4: settings.quickSkipNumberOfSeconds = 60; break;
-				case 5: settings.quickSkipNumberOfSeconds = 120; break;
-				case 6: settings.quickSkipNumberOfSeconds = 300; break;
-				case 7: settings.quickSkipNumberOfSeconds = 600; break;
-				case 8: settings.quickSkipNumberOfSeconds = 1200; break;
+				case 0: settingsS.quickSkipNumberOfSeconds = 5; break;
+				case 1: settingsS.quickSkipNumberOfSeconds = 15; break;
+				case 2: settingsS.quickSkipNumberOfSeconds = 30; break;
+				case 3: settingsS.quickSkipNumberOfSeconds = 45; break;
+				case 4: settingsS.quickSkipNumberOfSeconds = 60; break;
+				case 5: settingsS.quickSkipNumberOfSeconds = 120; break;
+				case 6: settingsS.quickSkipNumberOfSeconds = 300; break;
+				case 7: settingsS.quickSkipNumberOfSeconds = 600; break;
+				case 8: settingsS.quickSkipNumberOfSeconds = 1200; break;
 				default: break;
 			}
 			
 			if (IS_IPAD())
-				[appDelegate.ipadRootViewController.menuViewController.playerController quickSecondsSetLabels];
+				[appDelegateS.ipadRootViewController.menuViewController.playerController quickSecondsSetLabels];
 		}
 	}
 }
@@ -343,140 +336,140 @@
 	{
 		if (sender == manualOfflineModeSwitch)
 		{
-			settings.isForceOfflineMode = manualOfflineModeSwitch.on;
+			settingsS.isForceOfflineMode = manualOfflineModeSwitch.on;
 			if (manualOfflineModeSwitch.on)
 			{
-				[appDelegate enterOfflineModeForce];
+				[appDelegateS enterOfflineModeForce];
 			}
 			else
 			{
-				[appDelegate enterOnlineModeForce];
+				[appDelegateS enterOnlineModeForce];
 			}
 			
 			// Handle the moreNavigationController stupidity
-			if (appDelegate.currentTabBarController.selectedIndex == 4)
+			if (appDelegateS.currentTabBarController.selectedIndex == 4)
 			{
-				[appDelegate.currentTabBarController.moreNavigationController popToViewController:[appDelegate.currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
+				[appDelegateS.currentTabBarController.moreNavigationController popToViewController:[appDelegateS.currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
 			}
 			else
 			{
-				[(UINavigationController*)appDelegate.currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
+				[(UINavigationController*)appDelegateS.currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
 			}
 		}
 		else if (sender == enableScrobblingSwitch)
 		{
-			settings.isScrobbleEnabled = enableScrobblingSwitch.on;
+			settingsS.isScrobbleEnabled = enableScrobblingSwitch.on;
 		}
 		else if (sender == enableSongCachingSwitch)
 		{
-			settings.isSongCachingEnabled = enableSongCachingSwitch.on;
+			settingsS.isSongCachingEnabled = enableSongCachingSwitch.on;
 			[self toggleCacheControlsVisibility];
 		}
 		else if (sender == enableNextSongCacheSwitch)
 		{
-			settings.isNextSongCacheEnabled = enableNextSongCacheSwitch.on;
+			settingsS.isNextSongCacheEnabled = enableNextSongCacheSwitch.on;
 			[self toggleCacheControlsVisibility];
 		}
 		else if (sender == enableNextSongPartialCacheSwitch)
 		{
-			settings.isPartialCacheNextSong = enableNextSongPartialCacheSwitch.on;
+			settingsS.isPartialCacheNextSong = enableNextSongPartialCacheSwitch.on;
 		}
 		else if (sender == autoDeleteCacheSwitch)
 		{
-			settings.isAutoDeleteCacheEnabled = autoDeleteCacheSwitch.on;
+			settingsS.isAutoDeleteCacheEnabled = autoDeleteCacheSwitch.on;
 		}
 		else if (sender == twitterEnabledSwitch)
 		{
-			settings.isTwitterEnabled = twitterEnabledSwitch.on;
+			settingsS.isTwitterEnabled = twitterEnabledSwitch.on;
 		}
 		else if (sender == checkUpdatesSwitch)
 		{
-			settings.isUpdateCheckEnabled = checkUpdatesSwitch.on;
+			settingsS.isUpdateCheckEnabled = checkUpdatesSwitch.on;
 		}
 		else if (sender == enableLyricsSwitch)
 		{
-			settings.isLyricsEnabled = enableLyricsSwitch.on;
+			settingsS.isLyricsEnabled = enableLyricsSwitch.on;
 		}
 		else if (sender == enableCacheStatusSwitch)
 		{
-			settings.isCacheStatusEnabled = enableCacheStatusSwitch.on;
+			settingsS.isCacheStatusEnabled = enableCacheStatusSwitch.on;
 		}
 		else if (sender == enableSwipeSwitch)
 		{
-			settings.isSwipeEnabled = enableSwipeSwitch.on;
+			settingsS.isSwipeEnabled = enableSwipeSwitch.on;
 		}
 		else if (sender == enableTapAndHoldSwitch)
 		{
-			settings.isTapAndHoldEnabled = enableTapAndHoldSwitch.on;
+			settingsS.isTapAndHoldEnabled = enableTapAndHoldSwitch.on;
 		}
 		else if (sender == autoReloadArtistSwitch)
 		{
-			settings.isAutoReloadArtistsEnabled = autoReloadArtistSwitch.on;
+			settingsS.isAutoReloadArtistsEnabled = autoReloadArtistSwitch.on;
 		}
 		else if (sender == disablePopupsSwitch)
 		{
-			settings.isPopupsEnabled = !disablePopupsSwitch.on;
+			settingsS.isPopupsEnabled = !disablePopupsSwitch.on;
 		}
 		else if (sender == enableSongsTabSwitch)
 		{
 			if (enableSongsTabSwitch.on)
 			{
-				settings.isSongsTabEnabled = YES;
+				settingsS.isSongsTabEnabled = YES;
 				
 				if (IS_IPAD())
 				{
-					[appDelegate.ipadRootViewController.menuViewController loadCellContents];
+					[appDelegateS.ipadRootViewController.menuViewController loadCellContents];
 				}
 				else
 				{
-					NSMutableArray *controllers = [NSMutableArray arrayWithArray:appDelegate.mainTabBarController.viewControllers];
-					[controllers addObject:appDelegate.allAlbumsNavigationController];
-					[controllers addObject:appDelegate.allSongsNavigationController];
-					[controllers addObject:appDelegate.genresNavigationController];
-					appDelegate.mainTabBarController.viewControllers = controllers;
+					NSMutableArray *controllers = [NSMutableArray arrayWithArray:appDelegateS.mainTabBarController.viewControllers];
+					[controllers addObject:appDelegateS.allAlbumsNavigationController];
+					[controllers addObject:appDelegateS.allSongsNavigationController];
+					[controllers addObject:appDelegateS.genresNavigationController];
+					appDelegateS.mainTabBarController.viewControllers = controllers;
 				}
 				
 				// Setup the allAlbums database
-				databaseControls.allAlbumsDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allAlbums.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]]];
-				[databaseControls.allAlbumsDb executeUpdate:@"PRAGMA cache_size = 1"];
-				if ([databaseControls.allAlbumsDb open] == NO) { DLog(@"Could not open allAlbumsDb."); }
+				databaseS.allAlbumsDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allAlbums.db", databaseS.databaseFolderPath, [settingsS.urlString md5]]];
+				[databaseS.allAlbumsDb executeUpdate:@"PRAGMA cache_size = 1"];
+				if ([databaseS.allAlbumsDb open] == NO) { DLog(@"Could not open allAlbumsDb."); }
 				
 				// Setup the allSongs database
-				databaseControls.allSongsDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allSongs.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]]];
-				[databaseControls.allSongsDb executeUpdate:@"PRAGMA cache_size = 1"];
-				if ([databaseControls.allSongsDb open] == NO) { DLog(@"Could not open allSongsDb."); }
+				databaseS.allSongsDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allSongs.db", databaseS.databaseFolderPath, [settingsS.urlString md5]]];
+				[databaseS.allSongsDb executeUpdate:@"PRAGMA cache_size = 1"];
+				if ([databaseS.allSongsDb open] == NO) { DLog(@"Could not open allSongsDb."); }
 				
 				// Setup the Genres database
-				databaseControls.genresDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@genres.db", databaseControls.databaseFolderPath, [[SavedSettings sharedInstance].urlString md5]]];
-				[databaseControls.genresDb executeUpdate:@"PRAGMA cache_size = 1"];
-				if ([databaseControls.genresDb open] == NO) { DLog(@"Could not open genresDb."); }
+				databaseS.genresDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@genres.db", databaseS.databaseFolderPath, [settingsS.urlString md5]]];
+				[databaseS.genresDb executeUpdate:@"PRAGMA cache_size = 1"];
+				if ([databaseS.genresDb open] == NO) { DLog(@"Could not open genresDb."); }
 			}
 			else
 			{
-				settings.isSongsTabEnabled = NO;
+				settingsS.isSongsTabEnabled = NO;
 
 				if (IS_IPAD())
-					[appDelegate.ipadRootViewController.menuViewController loadCellContents];
+					[appDelegateS.ipadRootViewController.menuViewController loadCellContents];
 				else
-					[viewObjects orderMainTabBarController];
+					[viewObjectsS orderMainTabBarController];
 				
-				[databaseControls.allAlbumsDb close];
-				[databaseControls.allSongsDb close];
-				[databaseControls.genresDb close];
+				[databaseS.allAlbumsDb close];
+				[databaseS.allSongsDb close];
+				[databaseS.genresDb close];
 			}
 		}
 		else if (sender == disableRotationSwitch)
 		{
-			settings.isRotationLockEnabled = disableRotationSwitch.on;
+			settingsS.isRotationLockEnabled = disableRotationSwitch.on;
 		}
 		else if (sender == disableScreenSleepSwitch)
 		{
-			settings.isScreenSleepEnabled = !disableScreenSleepSwitch.on;
+			settingsS.isScreenSleepEnabled = !disableScreenSleepSwitch.on;
 			[UIApplication sharedApplication].idleTimerDisabled = disableScreenSleepSwitch.on;
 		}
 		else if (sender == enableBasicAuthSwitch)
 		{
-			settings.isBasicAuthEnabled = enableBasicAuthSwitch.on;
+			settingsS.isBasicAuthEnabled = enableBasicAuthSwitch.on;
 		}
 	}
 }
@@ -499,36 +492,36 @@
 
 - (void)resetFolderCache
 {
-	[databaseControls resetFolderCache];
-	[viewObjects hideLoadingScreen];
+	[databaseS resetFolderCache];
+	[viewObjectsS hideLoadingScreen];
 	[self popFoldersTab];
 }
 
 - (void)resetAlbumArtCache
 {
-	[databaseControls resetCoverArtCache];
-	[viewObjects hideLoadingScreen];
+	[databaseS resetCoverArtCache];
+	[viewObjectsS hideLoadingScreen];
 	[self popFoldersTab];
 }
 
 - (void)popFoldersTab
 {
 	if (IS_IPAD())
-		[appDelegate.artistsNavigationController popToRootViewControllerAnimated:NO];
+		[appDelegateS.artistsNavigationController popToRootViewControllerAnimated:NO];
 	else
-		[appDelegate.rootViewController.navigationController popToRootViewControllerAnimated:NO];
+		[appDelegateS.rootViewController.navigationController popToRootViewControllerAnimated:NO];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
 	if (alertView.tag == 0 && buttonIndex == 1)
 	{
-		[viewObjects showLoadingScreenOnMainWindowWithMessage:@"Processing"];
+		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Processing"];
 		[self performSelector:@selector(resetFolderCache) withObject:nil afterDelay:0.05];
 	}
 	else if (alertView.tag == 1 && buttonIndex == 1)
 	{
-		[viewObjects showLoadingScreenOnMainWindowWithMessage:@"Processing"];
+		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Processing"];
 		[self performSelector:@selector(resetAlbumArtCache) withObject:nil afterDelay:0.05];
 	}
 }
@@ -550,19 +543,19 @@
 		// Check if the user is trying to assing a higher min free space than is available space - 50MB
 		if (cacheSpaceSlider.value * totalSpace > freeSpace - 52428800)
 		{
-			settings.minFreeSpace = freeSpace - 52428800;
-			cacheSpaceSlider.value = ((float)settings.minFreeSpace / (float)totalSpace); // Leave 50MB space
+			settingsS.minFreeSpace = freeSpace - 52428800;
+			cacheSpaceSlider.value = ((float)settingsS.minFreeSpace / (float)totalSpace); // Leave 50MB space
 		}
 		else if (cacheSpaceSlider.value * totalSpace < 52428800)
 		{
-			settings.minFreeSpace = 52428800;
-			cacheSpaceSlider.value = ((float)settings.minFreeSpace / (float)totalSpace); // Leave 50MB space
+			settingsS.minFreeSpace = 52428800;
+			cacheSpaceSlider.value = ((float)settingsS.minFreeSpace / (float)totalSpace); // Leave 50MB space
 		}
 		else 
 		{
-			settings.minFreeSpace = (unsigned long long int) (cacheSpaceSlider.value * (float)totalSpace);
+			settingsS.minFreeSpace = (unsigned long long int) (cacheSpaceSlider.value * (float)totalSpace);
 		}
-		//cacheSpaceLabel2.text = [NSString formatFileSize:settings.minFreeSpace];
+		//cacheSpaceLabel2.text = [NSString formatFileSize:settingsS.minFreeSpace];
 	}
 	else if (cachingTypeSegmentedControl.selectedSegmentIndex == 1)
 	{
@@ -570,45 +563,45 @@
 		// Check if the user is trying to assign a larger max cache size than there is available space - 50MB
 		if (cacheSpaceSlider.value * totalSpace > freeSpace - 52428800)
 		{
-			settings.maxCacheSize = freeSpace - 52428800;
-			cacheSpaceSlider.value = ((float)settings.maxCacheSize / (float)totalSpace); // Leave 50MB space
+			settingsS.maxCacheSize = freeSpace - 52428800;
+			cacheSpaceSlider.value = ((float)settingsS.maxCacheSize / (float)totalSpace); // Leave 50MB space
 		}
 		else if (cacheSpaceSlider.value * totalSpace < 52428800)
 		{
-			settings.maxCacheSize = 52428800;
-			cacheSpaceSlider.value = ((float)settings.maxCacheSize / (float)totalSpace); // Leave 50MB space
+			settingsS.maxCacheSize = 52428800;
+			cacheSpaceSlider.value = ((float)settingsS.maxCacheSize / (float)totalSpace); // Leave 50MB space
 		}
 		else
 		{
-			settings.maxCacheSize = (unsigned long long int) (cacheSpaceSlider.value * totalSpace);
+			settingsS.maxCacheSize = (unsigned long long int) (cacheSpaceSlider.value * totalSpace);
 		}
-		//cacheSpaceLabel2.text = [NSString formatFileSize:settings.maxCacheSize];
+		//cacheSpaceLabel2.text = [NSString formatFileSize:settingsS.maxCacheSize];
 	}
 	[self updateMinFreeSpaceLabel];
 }
 
 - (IBAction)revertMinFreeSpaceSlider
 {
-	cacheSpaceLabel2.text = [NSString formatFileSize:settings.minFreeSpace];
-	cacheSpaceSlider.value = (float)settings.minFreeSpace / totalSpace;
+	cacheSpaceLabel2.text = [NSString formatFileSize:settingsS.minFreeSpace];
+	cacheSpaceSlider.value = (float)settingsS.minFreeSpace / totalSpace;
 }
 
 - (IBAction)twitterButtonAction
 {
-	if (socialControls.twitterEngine)
+	if (socialS.twitterEngine)
 	{
-		//[appDelegate.twitterEngine endUserSession];
-		socialControls.twitterEngine = nil;
+		//[appDelegateS.twitterEngine endUserSession];
+		socialS.twitterEngine = nil;
 		[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"twitterAuthData"];
 		[self reloadTwitterUIElements];
 	}
 	else
 	{
-		UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine:socialControls.twitterEngine delegate:socialControls];
+		UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine:socialS.twitterEngine delegate:socialS];
 		if (controller) 
 		{
 			if (IS_IPAD())
-				[appDelegate.ipadRootViewController presentModalViewController:controller animated:YES];
+				[appDelegateS.ipadRootViewController presentModalViewController:controller animated:YES];
 			else
 				[self.parentController presentModalViewController:controller animated:YES];
 		}
@@ -623,7 +616,7 @@
 
 - (IBAction)updateScrobblePercentSetting;
 {
-	settings.scrobblePercent = scrobblePercentSlider.value;
+	settingsS.scrobblePercent = scrobblePercentSlider.value;
 }
 
 - (void)didReceiveMemoryWarning 

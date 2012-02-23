@@ -29,7 +29,7 @@
 
 - (FMDatabase *)db
 {
-    return [DatabaseSingleton sharedInstance].localPlaylistsDb;
+    return databaseS.localPlaylistsDb;
 }
 
 - (SUSLoaderType)type

@@ -52,10 +52,9 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
 {
     [super viewDidLoad];
 	
-	appDelegate = [iSubAppDelegate sharedInstance];
 	
-	/*NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [appDelegate.defaultUrl md5]];
-	NSData *archivedData = [appDelegate.settingsDictionary objectForKey:key];
+	/*NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [appDelegateS.defaultUrl md5]];
+	NSData *archivedData = [appDelegateS.settingsDictionary objectForKey:key];
 	NSDictionary *folders = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];*/
 	
 	NSDictionary *folders = [SUSRootFoldersDAO folderDropdownFolders];

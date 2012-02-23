@@ -196,7 +196,7 @@ static void destroy_versionArrays()
 		glEnable(GL_POINT_SPRITE_OES);
 		glTexEnvf(GL_POINT_SPRITE_OES, GL_COORD_REPLACE_OES, GL_TRUE);
 				
-		[self changeType:[SavedSettings sharedInstance].currentVisualizerType];
+		[self changeType:settingsS.currentVisualizerType];
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopEqDisplay) name:UIApplicationWillResignActiveNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startEqDisplay) name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -226,13 +226,11 @@ static void destroy_versionArrays()
 }
 
 - (void)drawTheEq
-{	
-	AudioEngine *wrapper = [AudioEngine sharedInstance];
-	
-	if (!wrapper.isPlaying)
+{		
+	if (!audioEngineS.isPlaying)
 		return;
 	
-	[wrapper readEqData];
+	[audioEngineS readEqData];
 	
 	switch(visualType)
 	{
@@ -243,7 +241,7 @@ static void destroy_versionArrays()
 			[self eraseBitBuffer];
 			for (x = 0; x < specWidth; x++) 
 			{
-				int v=(32767 - [wrapper lineSpecData:x]) * specHeight/65536; // invert and scale to fit display
+				int v=(32767 - [audioEngineS lineSpecData:x]) * specHeight/65536; // invert and scale to fit display
 				if (!x) 
 					y = v;
 				do 
@@ -264,9 +262,9 @@ static void destroy_versionArrays()
 			for (x=0;x<specWidth/2;x++) 
 			{
 #if 1
-				y=sqrt([wrapper fftData:x+1]) * 3 * specHeight - 4; // scale it (sqrt to make low values more visible)
+				y=sqrt([audioEngineS fftData:x+1]) * 3 * specHeight - 4; // scale it (sqrt to make low values more visible)
 #else
-				y=[wrapper fftData:x+1] * 10 * specHeight; // scale it (linearly)
+				y=[audioEngineS fftData:x+1] * 10 * specHeight; // scale it (linearly)
 #endif
 				if (y>specHeight) y=specHeight; // cap it
 				if (x && (y1=(y+y1)/2)) // interpolate from previous to make the display smoother
@@ -292,8 +290,8 @@ static void destroy_versionArrays()
 				
 				for (; b0 < b1; b0++)
 				{
-					if (peak < [wrapper fftData:1+b0])
-						peak = [wrapper fftData:1+b0];
+					if (peak < [audioEngineS fftData:1+b0])
+						peak = [audioEngineS fftData:1+b0];
 				}
 				
 				y = sqrt(peak) * 3 * specHeight - 4; // scale it (sqrt to make low values more visible)
@@ -315,7 +313,7 @@ static void destroy_versionArrays()
 		{
 			for (x=0; x < specHeight; x++) 
 			{
-				y = sqrt([wrapper fftData:x+1]) * 3 * 127; // scale it (sqrt to make low values more visible)
+				y = sqrt([audioEngineS fftData:x+1]) * 3 * 127; // scale it (sqrt to make low values more visible)
 				if (y > 127)
 					y = 127; // cap it
 				specbuf[(specHeight - 1 - x) * specWidth + specpos] = palette[specHeight - 1 + y]; // plot it
@@ -477,33 +475,33 @@ static void destroy_versionArrays()
 	switch (type)
 	{
 		case ISMSBassVisualType_line:
-			[[AudioEngine sharedInstance] startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_line];
+			[audioEngineS startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_line];
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			visualType = ISMSBassVisualType_line; 
 			break;
 			
 		case ISMSBassVisualType_skinnyBar:
-			[[AudioEngine sharedInstance] startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_fft];
+			[audioEngineS startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_fft];
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			visualType = ISMSBassVisualType_skinnyBar; 
 			break;
 			
 		case ISMSBassVisualType_fatBar:
-			[[AudioEngine sharedInstance] startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_fft];
+			[audioEngineS startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_fft];
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			visualType = ISMSBassVisualType_fatBar;
 			break;
 			
 		case ISMSBassVisualType_aphexFace:
-			[[AudioEngine sharedInstance] startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_fft];
+			[audioEngineS startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_fft];
 			[self eraseBitBuffer];
             specpos = 0;
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			visualType = ISMSBassVisualType_aphexFace; 
 			break;
 	}
-	[SavedSettings sharedInstance].currentVisualizerType = visualType;
-	DLog(@"visualType: %i   currentVisualizerType: %i", visualType, [SavedSettings sharedInstance].currentVisualizerType);
+	settingsS.currentVisualizerType = visualType;
+	DLog(@"visualType: %i   currentVisualizerType: %i", visualType, settingsS.currentVisualizerType);
 }
 
 - (void)changeType

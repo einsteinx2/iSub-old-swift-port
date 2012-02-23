@@ -6,14 +6,10 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, Artist, Album;
+@class Artist, Album;
 
 @interface HomeAlbumViewController : UITableViewController 
 {
-	iSubAppDelegate *appDelegate;
-	ViewObjectsSingleton *viewObjects;
-	MusicSingleton *musicControls;
-	DatabaseSingleton *databaseControls;
 		
 	NSMutableArray *listOfAlbums;
 	

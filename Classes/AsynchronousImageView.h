@@ -6,14 +6,8 @@
 //  Copyright 2009 Slava Bushtruk. All rights reserved.
 //
 
-
-@class iSubAppDelegate, MusicSingleton, DatabaseSingleton;
-
 @interface AsynchronousImageView : UIImageView 
 {
-	iSubAppDelegate *appDelegate;
-	MusicSingleton *musicControls;
-	DatabaseSingleton *databaseControls;
 	
 	NSString *coverArtId;
 	NSURLConnection *connection;

@@ -8,12 +8,10 @@
 
 
 
-@class DatabaseSingleton, MusicSingleton;
+@class MusicSingleton;
 
 @interface NSURLConnectionDelegateQueueArtwork : NSObject 
 {
-	DatabaseSingleton *databaseControls;
-	MusicSingleton *musicControls;
 	
 	NSMutableData *receivedData;
 	

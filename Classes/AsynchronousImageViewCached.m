@@ -26,20 +26,18 @@
 {
 	self.coverArtId = artId;
 	
-	DatabaseSingleton *databaseControls = [DatabaseSingleton sharedInstance];
-	ViewObjectsSingleton *viewObjects = [ViewObjectsSingleton sharedInstance];
 	
 	NSString *size = nil;
 	if (artId)
 	{
-		if ([databaseControls.coverArtCacheDb60 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [artId md5]] == 1)
+		if ([databaseS.coverArtCacheDb60 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [artId md5]] == 1)
 		{
 			// If the image is already in the cache dictionary, load it
-			self.image = [UIImage imageWithData:[databaseControls.coverArtCacheDb60 dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [artId md5]]];
+			self.image = [UIImage imageWithData:[databaseS.coverArtCacheDb60 dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [artId md5]]];
 		}
 		else 
 		{	
-			if (viewObjects.isOfflineMode)
+			if (viewObjectsS.isOfflineMode)
 			{
 				// Image not cached and we're offline so display the default image
 				self.image = [UIImage imageNamed:@"default-album-art-small.png"];
@@ -113,13 +111,11 @@
 
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
-{
-	DatabaseSingleton *databaseControls = [DatabaseSingleton sharedInstance];
-	
+{	
 	// Check to see if the data is a valid image. If so, use it; if not, use the default image.
 	if([UIImage imageWithData:receivedData])
 	{
-		[databaseControls.coverArtCacheDb60 executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [coverArtId md5], receivedData];
+		[databaseS.coverArtCacheDb60 executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [coverArtId md5], receivedData];
 
         self.image = [UIImage imageWithData:receivedData];
 	}

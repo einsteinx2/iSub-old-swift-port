@@ -7,14 +7,10 @@
 //
 #import "SUSLoader.h"
 
-@class iSubAppDelegate, MusicSingleton, DatabaseSingleton, ViewObjectsSingleton, Artist;
+@class Artist;
 
 @interface SUSQueueAllLoader : SUSLoader 
 {
-	iSubAppDelegate *appDelegate;
-	MusicSingleton *musicControls;
-	DatabaseSingleton *databaseControls;
-	ViewObjectsSingleton *viewObjects;
 
 	BOOL isQueue;
 	BOOL isShuffleButton;

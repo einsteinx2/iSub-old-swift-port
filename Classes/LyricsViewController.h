@@ -8,14 +8,10 @@
 
 //#import "SUSLoaderDelegate.h"
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, SUSLyricsDAO;
+@class SUSLyricsDAO;
 
 @interface LyricsViewController : UIViewController //<SUSLoaderDelegate>
 {
-	iSubAppDelegate *appDelegate;
-	ViewObjectsSingleton *viewObjects;
-	MusicSingleton *musicControls;
-	DatabaseSingleton *databaseControls;
 }
 
 @property (retain) SUSLyricsDAO *dataModel;

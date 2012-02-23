@@ -83,12 +83,10 @@
 	trackCountLabel.text = [NSString stringWithFormat:@"%i Tracks", numberOfTracks];
 	if (numberOfTracks == 1)
 		trackCountLabel.text = [NSString stringWithFormat:@"%i Track", numberOfTracks];
-	
-	DatabaseSingleton *databaseControls = [DatabaseSingleton sharedInstance];
-	
+		
 	if(myAlbum.coverArtId)
 	{		
-		FMDatabase *db = IS_IPAD() ? databaseControls.coverArtCacheDb540 : databaseControls.coverArtCacheDb320;
+		FMDatabase *db = IS_IPAD() ? databaseS.coverArtCacheDb540 : databaseS.coverArtCacheDb320;
 		
 		if ([db intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [myAlbum.coverArtId md5]])
 		{

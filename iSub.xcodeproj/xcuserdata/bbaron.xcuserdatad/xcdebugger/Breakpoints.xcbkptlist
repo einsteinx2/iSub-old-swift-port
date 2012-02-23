@@ -88,20 +88,6 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "Classes/HomeXMLParser.m"
-         timestampString = "351046112.50189"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "66"
-         endingLineNumber = "66"
-         landmarkName = "-subsonicErrorCode:message:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
          filePath = "Classes/JukeboxXMLParser.m"
          timestampString = "351566391.07655"
          startingColumnNumber = "9223372036854775807"
@@ -417,20 +403,6 @@
          startingLineNumber = "239"
          endingLineNumber = "239"
          landmarkName = "-nextSong"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Classes/SavedSettings.m"
-         timestampString = "351046112.50189"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "49"
-         endingLineNumber = "49"
-         landmarkName = "-loadState"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1061,20 +1033,6 @@
          startingLineNumber = "254"
          endingLineNumber = "254"
          landmarkName = "-handlePanFrom:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "351643615.410844"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "87"
-         endingLineNumber = "87"
-         landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

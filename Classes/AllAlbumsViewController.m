@@ -45,7 +45,7 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -62,10 +62,6 @@
 {
 	//DLog(@"allAlbums viewDidLoad");
     [super viewDidLoad];
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicSingleton sharedInstance];
-	databaseControls = [DatabaseSingleton sharedInstance];
 	
 	self.title = @"Albums";
 	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
@@ -151,7 +147,7 @@
 	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 	[formatter setDateStyle:NSDateFormatterMediumStyle];
 	[formatter setTimeStyle:NSDateFormatterShortStyle];
-	reloadTimeLabel.text = [NSString stringWithFormat:@"last reload: %@", [formatter stringFromDate:[defaults objectForKey:[NSString stringWithFormat:@"%@songsReloadTime", [SavedSettings sharedInstance].urlString]]]];
+	reloadTimeLabel.text = [NSString stringWithFormat:@"last reload: %@", [formatter stringFromDate:[defaults objectForKey:[NSString stringWithFormat:@"%@songsReloadTime", settingsS.urlString]]]];
 	[formatter release];
 	
 	self.tableView.tableHeaderView = headerView;
@@ -170,7 +166,7 @@
 	}
 	else
 	{
-		if(musicControls.showPlayerIcon)
+		if(musicS.showPlayerIcon)
 		{
 			self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
 		}
@@ -188,8 +184,7 @@
 		{
 			self.tableView.tableHeaderView = nil;
 
-			SavedSettings *settings = [SavedSettings sharedInstance];
-			if ([[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllSongsLoading", settings.urlString]] isEqualToString:@"YES"])
+			if ([[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllSongsLoading", settingsS.urlString]] isEqualToString:@"YES"])
 			{
 				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Resume Load?" message:@"If you've reloaded the albums tab since this load started you should choose 'Restart Load'.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Restart Load", @"Resume Load", nil];
 				alert.tag = 1;
@@ -387,7 +382,7 @@
 		isSearching = NO;
 		letUserSelectRow = NO;
 		self.tableView.scrollEnabled = NO;
-		[databaseControls.allAlbumsDb executeUpdate:@"DROP TABLE allAlbumsSearch"];
+		[databaseS.allAlbumsDb executeUpdate:@"DROP TABLE allAlbumsSearch"];
 	}
 	
 	[self.tableView reloadData];
@@ -506,7 +501,7 @@
 	
 	[cell.coverArtView loadImageFromCoverArtId:anAlbum.coverArtId];
 	
-	cell.backgroundView = [[ViewObjectsSingleton sharedInstance] createCellBackground:indexPath.row];
+	cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
 		
 	[cell.albumNameLabel setText:anAlbum.title];
 	[cell.artistNameLabel setText:anAlbum.artistName];
@@ -517,7 +512,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	if (viewObjects.isCellEnabled)
+	if (viewObjectsS.isCellEnabled)
 	{
 		Album *anAlbum = nil;
 		if(isSearching)

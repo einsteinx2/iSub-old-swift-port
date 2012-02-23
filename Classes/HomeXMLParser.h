@@ -7,20 +7,17 @@
 //
 
 
-@class iSubAppDelegate, ViewObjectsSingleton, DatabaseSingleton, Index, Artist, Album, Song;
+@class Index, Artist, Album, Song;
 
 @interface HomeXMLParser : NSObject <NSXMLParserDelegate> 
 {
 	NSMutableString *currentElementValue;
 	
-	iSubAppDelegate *appDelegate; 
-	DatabaseSingleton *databaseControls;
 	
 	NSString *myId;
 
 	NSMutableArray *listOfAlbums;
 		
-	ViewObjectsSingleton *viewObjects;
 }
 
 @property (retain) NSString *myId;

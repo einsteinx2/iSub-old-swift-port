@@ -37,7 +37,7 @@
 
 - (FMDatabase *)db
 {
-    return [[DatabaseSingleton sharedInstance] albumListCacheDb]; 
+    return [databaseS albumListCacheDb]; 
 }
 
 - (NSString *)tableModifier
@@ -349,7 +349,7 @@
 	[self rootFolderUpdateCount];
 	
 	// Save the reload time
-	[[SavedSettings sharedInstance] setRootFoldersReloadTime:[NSDate date]];
+	[settingsS setRootFoldersReloadTime:[NSDate date]];
 	
 	// Notify the delegate that the loading is finished
 	[self informDelegateLoadingFinished];

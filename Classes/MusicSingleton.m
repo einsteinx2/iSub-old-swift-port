@@ -1,5 +1,5 @@
 //
-//  MusicControlsSingleton.m
+//  musicSSingleton.m
 //  iSub
 //
 //  Created by Ben Baron on 10/15/10.
@@ -24,7 +24,7 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "OrderedDictionary.h"
 #import "SUSLyricsLoader.h" 
-#import "SUSStreamSingleton.h"
+#import "SUSStreamManager.h"
 #import "PlaylistSingleton.h"
 #import "AudioEngine.h"
 #import <MediaPlayer/MediaPlayer.h>
@@ -69,10 +69,10 @@ static MusicSingleton *sharedInstance = nil;
 - (Song *)nextQueuedSong
 {
 	Song *aSong = nil;
-	FMResultSet *result = [databaseControls.songCacheDb executeQuery:@"SELECT * FROM cacheQueue WHERE finished = 'NO' LIMIT 1"];
-	if ([databaseControls.songCacheDb hadError]) 
+	FMResultSet *result = [databaseS.songCacheDb executeQuery:@"SELECT * FROM cacheQueue WHERE finished = 'NO' LIMIT 1"];
+	if ([databaseS.songCacheDb hadError]) 
 	{
-		DLog(@"Err %d: %@", [databaseControls.songCacheDb lastErrorCode], [databaseControls.songCacheDb lastErrorMessage]);
+		DLog(@"Err %d: %@", [databaseS.songCacheDb lastErrorCode], [databaseS.songCacheDb lastErrorMessage]);
 	}
 	else
 	{
@@ -88,8 +88,8 @@ static MusicSingleton *sharedInstance = nil;
 {		
 	//DLog(@"queueSongObject songId: %@", queueSongObject.songId);
 	
-	Song *currentSong = [PlaylistSingleton sharedInstance].currentSong;
-	Song *nextSong = [PlaylistSingleton sharedInstance].nextSong;
+	Song *currentSong = playlistS.currentSong;
+	Song *nextSong = playlistS.nextSong;
 	
 	//DLog(@"startDownloadQueue called");
 	
@@ -97,7 +97,7 @@ static MusicSingleton *sharedInstance = nil;
 	[self stopDownloadQueue];
     
     // Grab the lyrics
-	if (queueSongObject.artist && queueSongObject.title && [SavedSettings sharedInstance].isLyricsEnabled)
+	if (queueSongObject.artist && queueSongObject.title && settingsS.isLyricsEnabled)
 	{
         SUSLyricsLoader *lyricsLoader = [[SUSLyricsLoader alloc] initWithDelegate:self];
 		//DLog(@"lyricsLoader: %@", lyricsLoader);
@@ -118,17 +118,17 @@ static MusicSingleton *sharedInstance = nil;
 	self.downloadFileNameQueue = queueSongObject.localPath;
 
 	// Check to see if the song is already cached
-	if ([databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE md5 = ?", downloadFileNameHashQueue])
+	if ([databaseS.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE md5 = ?", downloadFileNameHashQueue])
 	{
 		// Looks like the song is in the database, check if it's cached fully
-		NSString *isDownloadFinished = [databaseControls.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", downloadFileNameHashQueue];
+		NSString *isDownloadFinished = [databaseS.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", downloadFileNameHashQueue];
 		if ([isDownloadFinished isEqualToString:@"YES"])
 		{
 			// The song is fully cached, so delete it from the cache queue database
-			[databaseControls.cacheQueueDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", downloadFileNameHashQueue];
+			[databaseS.cacheQueueDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", downloadFileNameHashQueue];
 			
 			// Start queuing the next song if there is one
-			if ([databaseControls.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
+			if ([databaseS.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
 			{
 				self.queueSongObject = nil; self.queueSongObject = [self nextQueuedSong];
 				[self startDownloadQueue];
@@ -159,7 +159,7 @@ static MusicSingleton *sharedInstance = nil;
 			if (doDownload)
 			{
 				// Delete the row from cachedSongs
-				[databaseControls.songCacheDb executeUpdate:@"DELETE FROM cachedSongs WHERE md5 = downloadFileNameHashQueue"];
+				[databaseS.songCacheDb executeUpdate:@"DELETE FROM cachedSongs WHERE md5 = downloadFileNameHashQueue"];
 				
 				// Remove and recreate the song file on disk
 				[[NSFileManager defaultManager] removeItemAtPath:downloadFileNameQueue error:NULL];
@@ -169,9 +169,9 @@ static MusicSingleton *sharedInstance = nil;
 				// Start the download
 				NSURLConnectionDelegateQueue *connDelegateQueue = [[NSURLConnectionDelegateQueue alloc] init];
                 NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:n2N(queueSongObject.songId) forKey:@"id"];
-				if ([SavedSettings sharedInstance].currentMaxBitrate != 0)
+				if (settingsS.currentMaxBitrate != 0)
 				{
-					NSString *bitrate = [[NSString alloc] initWithFormat:@"%i", [SavedSettings sharedInstance].currentMaxBitrate];
+					NSString *bitrate = [[NSString alloc] initWithFormat:@"%i", settingsS.currentMaxBitrate];
 					[parameters setObject:n2N(bitrate) forKey:@"maxBitRate"];
 					[bitrate release];
 				}
@@ -186,10 +186,10 @@ static MusicSingleton *sharedInstance = nil;
 			else 
 			{
 				// The song will be cached by the player soon, so delete it from the cache queue database
-				[databaseControls.cacheQueueDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", downloadFileNameHashQueue];
+				[databaseS.cacheQueueDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", downloadFileNameHashQueue];
 				
 				// Start queuing the next song if there is one
-				if ([databaseControls.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
+				if ([databaseS.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
 				{
 					self.queueSongObject = nil; self.queueSongObject = [self nextQueuedSong];
 					[self startDownloadQueue];
@@ -229,9 +229,9 @@ static MusicSingleton *sharedInstance = nil;
 			// Start the download
 			NSURLConnectionDelegateQueue *connDelegateQueue = [[NSURLConnectionDelegateQueue alloc] init];
 			NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:n2N(queueSongObject.songId) forKey:@"id"];
-			if ([SavedSettings sharedInstance].currentMaxBitrate != 0)
+			if (settingsS.currentMaxBitrate != 0)
 			{
-				NSString *bitrate = [[NSString alloc] initWithFormat:@"%i", [SavedSettings sharedInstance].currentMaxBitrate];
+				NSString *bitrate = [[NSString alloc] initWithFormat:@"%i", settingsS.currentMaxBitrate];
 				[parameters setObject:n2N(bitrate) forKey:@"maxBitRate"];
 				[bitrate release];
 			}
@@ -249,7 +249,7 @@ static MusicSingleton *sharedInstance = nil;
 - (void)resumeDownloadQueue:(UInt32)byteOffset
 {
 	// Create the request and resume the download
-	if (!viewObjects.isOfflineMode)
+	if (!viewObjectsS.isOfflineMode)
 	{
 		NSURLConnectionDelegateQueue *connDelegateQueue = [[NSURLConnectionDelegateQueue alloc] init];	
         NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(queueSongObject.songId) forKey:@"id"];
@@ -277,7 +277,7 @@ static MusicSingleton *sharedInstance = nil;
 	}		
 	
 	// Delete the unfinished download
-	NSString *isDownloadFinished = [databaseControls.cacheQueueDb stringForQuery:@"SELECT finished FROM cacheQueue WHERE md5 = ?", downloadFileNameHashQueue];
+	NSString *isDownloadFinished = [databaseS.cacheQueueDb stringForQuery:@"SELECT finished FROM cacheQueue WHERE md5 = ?", downloadFileNameHashQueue];
 	if ([isDownloadFinished isEqualToString:@"NO"])
 	{		
 		// Delete the song from disk
@@ -289,9 +289,9 @@ static MusicSingleton *sharedInstance = nil;
 {
 	@synchronized(self)
 	{
-		if (appDelegate.isWifi)
+		if (appDelegateS.isWifi)
 		{
-			if ([databaseControls.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
+			if ([databaseS.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"] > 0)
 			{
 				isQueueListDownloading = YES;
 				self.queueSongObject = nil; self.queueSongObject = [self nextQueuedSong];
@@ -320,9 +320,9 @@ double startSongSeconds = 0.0;
 		return;
 	
 	// Destroy the streamer to start a new song
-	[audio stop];
+	[audioEngineS stop];
 	
-	Song *currentSong = [PlaylistSingleton sharedInstance].currentSong;
+	Song *currentSong = playlistS.currentSong;
 	
 	if (!currentSong)
 		return;
@@ -339,27 +339,24 @@ double startSongSeconds = 0.0;
 // TODO: put this method somewhere and name it properly
 - (void)startSongAtOffsetInSeconds2
 {
-	//DLog(@"startSongAtOffsetInSeconds2");
-	SavedSettings *settings = [SavedSettings sharedInstance];
-	SUSStreamSingleton *streamSingleton = [SUSStreamSingleton sharedInstance];
-	
+	//DLog(@"startSongAtOffsetInSeconds2");	
 	// Always clear the temp cache
-	[[CacheSingleton sharedInstance] clearTempCache];
+	[cacheS clearTempCache];
 	
-	Song *currentSong = [PlaylistSingleton sharedInstance].currentSong;
+	Song *currentSong = playlistS.currentSong;
 	
 	// Check to see if the song is already cached
 	if (currentSong.isFullyCached)
 	{
 		// The song is fully cached, start streaming from the local copy
-		[audio startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] 
+		[audioEngineS startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] 
 							orSeconds:[NSNumber numberWithDouble:startSongSeconds]];
 		
 		// Fill the stream queue
-		if (!viewObjects.isOfflineMode)
-			[streamSingleton fillStreamQueue];
+		if (!viewObjectsS.isOfflineMode)
+			[streamManagerS fillStreamQueue];
 	}
-	else if (!currentSong.isFullyCached && viewObjects.isOfflineMode)
+	else if (!currentSong.isFullyCached && viewObjectsS.isOfflineMode)
 	{
 		// The song is not fully cached and this is offline mode, so warn that it can't be played
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" 
@@ -373,53 +370,53 @@ double startSongSeconds = 0.0;
 	}
 	else
 	{
-		if ([streamSingleton isSongDownloading:currentSong])
+		if ([streamManagerS isSongDownloading:currentSong])
 		{
 			// The song is caching, start streaming from the local copy
-			SUSStreamHandler *handler = [streamSingleton handlerForSong:currentSong];
-			if (!audio.isPlaying && handler.isDelegateNotifiedToStartPlayback)
+			SUSStreamHandler *handler = [streamManagerS handlerForSong:currentSong];
+			if (!audioEngineS.isPlaying && handler.isDelegateNotifiedToStartPlayback)
 			{
 				// Only start the player if the handler isn't going to do it itself
-				[audio startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] 
+				[audioEngineS startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] 
 									orSeconds:[NSNumber numberWithDouble:startSongSeconds]];
 			}
 		}
-		else if ([streamSingleton isSongFirstInQueue:currentSong] && ![streamSingleton isQueueDownloading])
+		else if ([streamManagerS isSongFirstInQueue:currentSong] && ![streamManagerS isQueueDownloading])
 		{
 			// The song is first in queue, but the queue is not downloading. Probably the song was downloading
 			// when the app quit. Resume the download and start the player
-			[streamSingleton resumeQueue];
+			[streamManagerS resumeQueue];
 			
 			// The song is caching, start streaming from the local copy
-			SUSStreamHandler *handler = [streamSingleton handlerForSong:currentSong];
-			if (!audio.isPlaying && handler.isDelegateNotifiedToStartPlayback)
+			SUSStreamHandler *handler = [streamManagerS handlerForSong:currentSong];
+			if (!audioEngineS.isPlaying && handler.isDelegateNotifiedToStartPlayback)
 			{
 				// Only start the player if the handler isn't going to do it itself
-				[audio startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] 
+				[audioEngineS startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] 
 									orSeconds:[NSNumber numberWithDouble:startSongSeconds]];
 			}
 		}
 		else
 		{
 			// Clear the stream manager
-			[streamSingleton removeAllStreams];
+			[streamManagerS removeAllStreams];
 			
 			BOOL isTempCache = NO;
 			if (startSongBytes > 0)
 				isTempCache = YES;
-			else if (!settings.isSongCachingEnabled)
+			else if (!settingsS.isSongCachingEnabled)
 				isTempCache = YES;
 			
 			// Start downloading the current song from the correct offset
-			[streamSingleton queueStreamForSong:currentSong 
+			[streamManagerS queueStreamForSong:currentSong 
 									 byteOffset:startSongBytes 
 								  secondsOffset:startSongSeconds 
 										atIndex:0 
 									isTempCache:isTempCache];
 			
 			// Fill the stream queue
-			if (settings.isSongCachingEnabled)
-				[streamSingleton fillStreamQueue];
+			if (settingsS.isSongCachingEnabled)
+				[streamManagerS fillStreamQueue];
 		}
 	}
 }
@@ -431,14 +428,14 @@ double startSongSeconds = 0.0;
 
 - (void)playSongAtPosition:(NSInteger)position
 {	
-	currentPlaylist.currentIndex = position;
+	playlistS.currentIndex = position;
 
-	DLog(@"before handler stack: %@", [SUSStreamSingleton sharedInstance].handlerStack);
-	DLog(@"currentSong: %@", currentPlaylist.currentSong);
-	[[SUSStreamSingleton sharedInstance] removeAllStreamsExceptForSong:currentPlaylist.currentSong];
-	DLog(@"after handler stack: %@\n   ", [SUSStreamSingleton sharedInstance].handlerStack);
+	DLog(@"before handler stack: %@", streamManagerS.handlerStack);
+	DLog(@"currentSong: %@", playlistS.currentSong);
+	[streamManagerS removeAllStreamsExceptForSong:playlistS.currentSong];
+	DLog(@"after handler stack: %@\n   ", streamManagerS.handlerStack);
 	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
 		[self jukeboxPlaySongAtPosition:[NSNumber numberWithInt:position]];
 	}
@@ -450,41 +447,39 @@ double startSongSeconds = 0.0;
 
 - (void)prevSong
 {	
-	if (audio.progress > 10.0)
+	if (audioEngineS.progress > 10.0)
 	{
 		// Past 10 seconds in the song, so restart playback instead of changing songs
-		[self playSongAtPosition:currentPlaylist.currentIndex];
+		[self playSongAtPosition:playlistS.currentIndex];
 	}
 	else
 	{
 		// Within first 10 seconds, go to previous song
-		[self playSongAtPosition:currentPlaylist.prevIndex];
+		[self playSongAtPosition:playlistS.prevIndex];
 	}
 }
 
 - (void)nextSong
 {
-	[self playSongAtPosition:currentPlaylist.nextIndex];
+	[self playSongAtPosition:playlistS.nextIndex];
 }
 
 // Resume song after iSub shuts down
 - (void)resumeSong
 {	
-	SavedSettings *settings = [SavedSettings sharedInstance];
-	PlaylistSingleton *currentPlaylistDAO = [PlaylistSingleton sharedInstance];
-	Song *currentSong = currentPlaylistDAO.currentSong;
+	Song *currentSong = playlistS.currentSong;
 		
-	DLog(@"isRecover: %@  currentSong: %@", NSStringFromBOOL(settings.isRecover), currentSong);
-	DLog(@"byteOffset: %llu   seekTime: %f\n   ", settings.byteOffset, settings.seekTime);
+	DLog(@"isRecover: %@  currentSong: %@", NSStringFromBOOL(settingsS.isRecover), currentSong);
+	DLog(@"byteOffset: %llu   seekTime: %f\n   ", settingsS.byteOffset, settingsS.seekTime);
 	
-	if (currentSong && settings.isRecover)
+	if (currentSong && settingsS.isRecover)
 	{
-		[self startSongAtOffsetInBytes:settings.byteOffset andSeconds:settings.seekTime];
+		[self startSongAtOffsetInBytes:settingsS.byteOffset andSeconds:settingsS.seekTime];
 	}
 	else
 	{
-		audio.startByteOffset = settings.byteOffset;
-		audio.startSecondsOffset = settings.seekTime;
+		audioEngineS.startByteOffset = settingsS.byteOffset;
+		audioEngineS.startSecondsOffset = settingsS.seekTime;
 	}
 }
 
@@ -511,7 +506,7 @@ double startSongSeconds = 0.0;
 	{
 		iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 		streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-		[(UINavigationController*)appDelegate.currentTabBarController.selectedViewController pushViewController:streamingPlayerViewController animated:YES];
+		[(UINavigationController*)appDelegateS.currentTabBarController.selectedViewController pushViewController:streamingPlayerViewController animated:YES];
 		[streamingPlayerViewController release];
 	}
 }
@@ -521,11 +516,9 @@ double startSongSeconds = 0.0;
 	if ([NSClassFromString(@"MPNowPlayingInfoCenter") class])  
 	{
 		/* we're on iOS 5, so set up the now playing center */
-		AudioEngine *wrapper = [AudioEngine sharedInstance];
-		PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
 		SUSCoverArtLargeDAO *artDataModel = [SUSCoverArtLargeDAO dataModel];
 		
-		Song *currentSong = dataModel.currentSong;
+		Song *currentSong = playlistS.currentSong;
 		
 		UIImage *albumArtImage = [artDataModel coverArtImageForId:currentSong.coverArtId];
 		if (!albumArtImage)
@@ -543,13 +536,13 @@ double startSongSeconds = 0.0;
 			[trackInfo setObject:currentSong.genre forKey:MPMediaItemPropertyGenre];
 		if (currentSong.duration)
 			[trackInfo setObject:currentSong.duration forKey:MPMediaItemPropertyPlaybackDuration];
-		NSNumber *trackIndex = [NSNumber numberWithInt:dataModel.currentIndex];
+		NSNumber *trackIndex = [NSNumber numberWithInt:playlistS.currentIndex];
 		if (trackIndex)
 			[trackInfo setObject:trackIndex forKey:MPNowPlayingInfoPropertyPlaybackQueueIndex];
-		NSNumber *playlistCount = [NSNumber numberWithInt:dataModel.count];
+		NSNumber *playlistCount = [NSNumber numberWithInt:playlistS.count];
 		if (playlistCount)
 			[trackInfo setObject:playlistCount forKey:MPNowPlayingInfoPropertyPlaybackQueueCount];
-		NSNumber *progress = [NSNumber numberWithDouble:wrapper.progress];
+		NSNumber *progress = [NSNumber numberWithDouble:audioEngineS.progress];
 		if (progress)
 			[trackInfo setObject:progress forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
 		
@@ -571,10 +564,8 @@ double startSongSeconds = 0.0;
 	
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
-	{
-		PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
-		
-		dataModel.currentIndex = [position intValue];
+	{		
+		playlistS.currentIndex = [position intValue];
 		
 		[connectionQueue registerConnection:connection];
 		[connectionQueue startQueue];
@@ -646,7 +637,7 @@ double startSongSeconds = 0.0;
 
 - (void)jukeboxPrevSong
 {
-	NSInteger index = [PlaylistSingleton sharedInstance].currentIndex - 1;
+	NSInteger index = playlistS.currentIndex - 1;
 	if (index >= 0)
 	{						
 		[self jukeboxPlaySongAtPosition:[NSNumber numberWithInt:index]];
@@ -657,8 +648,8 @@ double startSongSeconds = 0.0;
 
 - (void)jukeboxNextSong
 {
-	NSInteger index = [PlaylistSingleton sharedInstance].currentIndex + 1;
-	if (index <= ([databaseControls.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"] - 1))
+	NSInteger index = playlistS.currentIndex + 1;
+	if (index <= ([databaseS.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"] - 1))
 	{		
 		[self jukeboxPlaySongAtPosition:[NSNumber numberWithInt:index]];
 		
@@ -759,10 +750,10 @@ double startSongSeconds = 0.0;
 	NSMutableArray *songIds = [[NSMutableArray alloc] init];
 	
 	FMResultSet *result;
-	if (currentPlaylist.isShuffle)
-		result = [databaseControls.currentPlaylistDb executeQuery:@"SELECT songId FROM jukeboxShufflePlaylist"];
+	if (playlistS.isShuffle)
+		result = [databaseS.currentPlaylistDb executeQuery:@"SELECT songId FROM jukeboxShufflePlaylist"];
 	else
-		result = [databaseControls.currentPlaylistDb executeQuery:@"SELECT songId FROM jukeboxCurrentPlaylist"];
+		result = [databaseS.currentPlaylistDb executeQuery:@"SELECT songId FROM jukeboxCurrentPlaylist"];
 	
 	while ([result next])
 	{
@@ -811,7 +802,7 @@ double startSongSeconds = 0.0;
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
 	{
-		[databaseControls resetJukeboxPlaylist];
+		[databaseS resetJukeboxPlaylist];
 
 		[connectionQueue registerConnection:connection];
 		[connectionQueue startQueue];
@@ -861,7 +852,7 @@ double startSongSeconds = 0.0;
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
 	{
-		[databaseControls resetJukeboxPlaylist];
+		[databaseS resetJukeboxPlaylist];
 		
 		[connectionQueue registerConnection:connection];
 		[connectionQueue startQueue];
@@ -888,7 +879,7 @@ double startSongSeconds = 0.0;
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
 	{
-		[databaseControls resetJukeboxPlaylist];
+		[databaseS resetJukeboxPlaylist];
 	
 		[connectionQueue registerConnection:connection];
 		[connectionQueue startQueue];
@@ -940,15 +931,7 @@ double startSongSeconds = 0.0;
 {
 	self = [super init];
 	sharedInstance = self;
-	
-	audio = [AudioEngine sharedInstance];
-	
-	//initialize here
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	databaseControls = [DatabaseSingleton sharedInstance];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	currentPlaylist = [PlaylistSingleton sharedInstance];
-	
+		
 	isAutoNextNotificationOn = NO;
 	
 	//[self addAutoNextNotification];

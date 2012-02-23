@@ -6,7 +6,6 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@class iSubAppDelegate;
 
 @interface SongInfoPlaylistCustomUITableView : UITableView 
 

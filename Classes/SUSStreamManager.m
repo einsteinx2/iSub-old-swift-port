@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "SUSStreamSingleton.h"
+#import "SUSStreamManager.h"
 #import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
 #import "Song.h"
@@ -27,10 +27,10 @@
 
 #define maxNumOfReconnects 3
 
-static SUSStreamSingleton *sharedInstance = nil;
+static SUSStreamManager *sharedInstance = nil;
 
-@implementation SUSStreamSingleton
-@synthesize handlerStack, lyricsDAO, currentPlaylistDAO, lastCachedSong, lastTempCachedSong;
+@implementation SUSStreamManager
+@synthesize handlerStack, lyricsDAO, lastCachedSong, lastTempCachedSong;
 
 - (SUSStreamHandler *)handlerForSong:(Song *)aSong
 {
@@ -422,22 +422,21 @@ static SUSStreamSingleton *sharedInstance = nil;
 - (void)fillStreamQueue
 {
 	NSUInteger numStreamsToQueue = 1;
-	if ([SavedSettings sharedInstance].isNextSongCacheEnabled)
+	if (settingsS.isNextSongCacheEnabled)
 	{
 		numStreamsToQueue = ISMSNumberOfStreamsToQueue;
 	}
 	
 	if ([self.handlerStack count] < numStreamsToQueue)
 	{
-		NSInteger currentIndex = currentPlaylistDAO.currentIndex;
+		NSInteger currentIndex = playlistS.currentIndex;
 		for (int i = currentIndex; i < currentIndex + numStreamsToQueue; i++)
 		{
-			Song *aSong = [currentPlaylistDAO songForIndex:i];
+			Song *aSong = [playlistS songForIndex:i];
 			if (aSong && ![self isSongInQueue:aSong] && !aSong.isFullyCached
-				&& ![ViewObjectsSingleton sharedInstance].isOfflineMode)
+				&& !viewObjectsS.isOfflineMode)
 			{
-				SavedSettings *settings = [SavedSettings sharedInstance];
-				[self queueStreamForSong:aSong isTempCache:!settings.isSongCachingEnabled];
+					[self queueStreamForSong:aSong isTempCache:!settingsS.isSongCachingEnabled];
 			}
 		}
 	}
@@ -445,7 +444,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 
 - (void)songCachingToggled
 {
-	if ([SavedSettings sharedInstance].isSongCachingEnabled)
+	if (settingsS.isSongCachingEnabled)
 		[[NSNotificationCenter defaultCenter] addObserver:self 
 												 selector:@selector(fillStreamQueue) 
 													 name:ISMSNotification_SongPlaybackEnded 
@@ -461,13 +460,13 @@ static SUSStreamSingleton *sharedInstance = nil;
 	// TODO: Fix this logic, it's wrong
 	// Verify that the last song is not constantly retrying to connect, 
 	// so the current song can download and play
-	[self removeStreamForSong:currentPlaylistDAO.prevSong];
+	[self removeStreamForSong:playlistS.prevSong];
 }
 
 - (void)currentPlaylistOrderChanged
 {
-	Song *currentSong = currentPlaylistDAO.currentSong;
-	Song *nextSong = currentPlaylistDAO.nextSong;
+	Song *currentSong = playlistS.currentSong;
+	Song *nextSong = playlistS.nextSong;
 	NSMutableArray *songsToSkip = [NSMutableArray arrayWithCapacity:2];
 	if (currentSong) [songsToSkip addObject:currentSong];
 	if (nextSong) [songsToSkip addObject:nextSong];
@@ -502,26 +501,25 @@ static SUSStreamSingleton *sharedInstance = nil;
 	// Update the last cached song
 	self.lastCachedSong = handler.mySong;
 	
-	Song *currentSong = currentPlaylistDAO.currentSong;
-	Song *nextSong = currentPlaylistDAO.nextSong;
-	AudioEngine *audio = [AudioEngine sharedInstance];
+	Song *currentSong = playlistS.currentSong;
+	Song *nextSong = playlistS.nextSong;
 	
 	//DLog(@"currentSong: %@   mySong: %@", currentSong, handler.mySong);
 	if ([handler.mySong isEqualToSong:currentSong])
 	{
-		[audio start];
+		[audioEngineS start];
 		
 		// Only for temp cached files
 		if (handler.isTempCache)
 		{
-			audio.startByteOffset = handler.byteOffset;
-			audio.startSecondsOffset = handler.secondsOffset;;
+			audioEngineS.startByteOffset = handler.byteOffset;
+			audioEngineS.startSecondsOffset = handler.secondsOffset;;
 		}
 	}
 	else if ([handler.mySong isEqualToSong:nextSong])
 	{
 		//DLog(@"preparing next song stream");
-		[audio prepareNextSongStream];
+		[audioEngineS prepareNextSongStream];
 	}
 	
 	[self saveHandlerStack];
@@ -631,7 +629,6 @@ static SUSStreamSingleton *sharedInstance = nil;
 	
 	lastCachedSong = nil;
 	lyricsDAO = [[SUSLyricsDAO alloc] initWithDelegate:self]; 
-	currentPlaylistDAO = [PlaylistSingleton sharedInstance];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(songCachingToggled) 
@@ -645,7 +642,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 											 selector:@selector(currentPlaylistIndexChanged) 
 												 name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	
-	if ([SavedSettings sharedInstance].isSongCachingEnabled)
+	if (settingsS.isSongCachingEnabled)
 		[[NSNotificationCenter defaultCenter] addObserver:self 
 												 selector:@selector(fillStreamQueue) 
 													 name:ISMSNotification_SongPlaybackEnded object:nil];
@@ -668,7 +665,7 @@ static SUSStreamSingleton *sharedInstance = nil;
 											   object:nil];
 }
 
-+ (SUSStreamSingleton *)sharedInstance
++ (SUSStreamManager *)sharedInstance
 {
     @synchronized(self)
     {

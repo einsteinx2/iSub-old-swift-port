@@ -6,15 +6,8 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton;
-
 @interface GenresViewController : UITableViewController 
 {
-	iSubAppDelegate *appDelegate;
-	ViewObjectsSingleton *viewObjects;
-	MusicSingleton *musicControls;
-	DatabaseSingleton *databaseControls;
 	
 	BOOL isNoGenresScreenShowing;
 	UIImageView *noGenresScreen;

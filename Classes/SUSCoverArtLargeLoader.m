@@ -30,9 +30,9 @@
 - (FMDatabase *)db
 {
     if (IS_IPAD())
-        return [DatabaseSingleton sharedInstance].coverArtCacheDb540;
+        return databaseS.coverArtCacheDb540;
     else
-        return [DatabaseSingleton sharedInstance].coverArtCacheDb320;
+        return databaseS.coverArtCacheDb320;
 }
 
 - (SUSLoaderType)type

@@ -66,7 +66,7 @@
 	
 	if (self.isOverlayShowing)
 	{
-		if ([ViewObjectsSingleton sharedInstance].isOfflineMode)
+		if (viewObjectsS.isOfflineMode)
 		{
 			self.overlayView.downloadButton.enabled = NO;
 			self.overlayView.downloadButton.hidden = YES;
@@ -77,13 +77,13 @@
 - (void)downloadAllSongs
 {
 	FMResultSet *result;
-	if ([ViewObjectsSingleton sharedInstance].isOfflineMode) 
+	if (viewObjectsS.isOfflineMode) 
 	{
-		result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE"], genreNameLabel.text];
+		result = [databaseS.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE"], genreNameLabel.text];
 	}
 	else 
 	{
-		result = [[DatabaseSingleton sharedInstance].genresDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE"], genreNameLabel.text];
+		result = [databaseS.genresDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE"], genreNameLabel.text];
 	}
 	
 	while ([result next])
@@ -94,12 +94,12 @@
 	[result close];
 	
 	// Hide the loading screen
-	[[ViewObjectsSingleton sharedInstance] hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 }
 
 - (void)downloadAction
 {
-	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindowWithMessage:nil];
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 	[self performSelector:@selector(downloadAllSongs) withObject:nil afterDelay:0.05];
 	
 	self.overlayView.downloadButton.alpha = .3;
@@ -111,13 +111,13 @@
 - (void)queueAllSongs
 {
 	FMResultSet *result;
-	if ([ViewObjectsSingleton sharedInstance].isOfflineMode) 
+	if (viewObjectsS.isOfflineMode) 
 	{
-		result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE"], genreNameLabel.text];
+		result = [databaseS.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE"], genreNameLabel.text];
 	}
 	else 
 	{
-		result = [[DatabaseSingleton sharedInstance].genresDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE"], genreNameLabel.text];
+		result = [databaseS.genresDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE"], genreNameLabel.text];
 	}
 	
 	while ([result next])
@@ -128,12 +128,12 @@
 	}
 	[result close];
 	
-	[[ViewObjectsSingleton sharedInstance] hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 }
 
 - (void)queueAction
 {
-	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindowWithMessage:nil];
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 	[self performSelector:@selector(queueAllSongs) withObject:nil afterDelay:0.05];
 	[self hideOverlay];
 }

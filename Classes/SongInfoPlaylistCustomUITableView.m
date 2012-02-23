@@ -39,9 +39,8 @@
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-	ViewObjectsSingleton *viewObjects = [ViewObjectsSingleton sharedInstance];
 	
-	if (viewObjects.isEditing)
+	if (viewObjectsS.isEditing)
 	{
 		if ((point.x < 40) && ([[NSDate date] timeIntervalSinceDate:lastDeleteToggle] > 0.25))
 		{

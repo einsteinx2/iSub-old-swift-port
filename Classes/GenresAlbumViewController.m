@@ -32,7 +32,7 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -42,10 +42,6 @@
 {
     [super viewDidLoad];
 	
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicSingleton sharedInstance];
-	databaseControls = [DatabaseSingleton sharedInstance];
 	
 	//DLog(@"segment %i", segment);
 	//DLog(@"listOfAlbums: %@", listOfAlbums);
@@ -135,7 +131,7 @@
 {
 	[super viewWillAppear:animated];
 	
-	if(musicControls.showPlayerIcon)
+	if(musicS.showPlayerIcon)
 	{
 		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
 	}
@@ -183,7 +179,7 @@
 - (void)showPlayer
 {
 	// Start the player	
-	[musicControls playSongAtPosition:0];
+	[musicS playSongAtPosition:0];
 	
 	if (IS_IPAD())
 	{
@@ -200,20 +196,19 @@
 
 - (void)playAllSongs
 {	
-	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
 	
 	// Turn off shuffle mode in case it's on
-	currentPlaylist.isShuffle = NO;
+	playlistS.isShuffle = NO;
 	
 	// Reset the current playlist
-	[databaseControls resetCurrentPlaylistDb];
+	[databaseS resetCurrentPlaylistDb];
 	
 	// Get the ID of all matching records (everything in genre ordered by artist)
 	FMResultSet *result;
-	if (viewObjects.isOfflineMode)
-		result = [databaseControls.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment], seg1, self.title, genre];
+	if (viewObjectsS.isOfflineMode)
+		result = [databaseS.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment], seg1, self.title, genre];
 	else
-		result = [databaseControls.genresDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment], seg1, self.title, genre];
+		result = [databaseS.genresDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment], seg1, self.title, genre];
 	
 	while ([result next])
 	{		
@@ -231,11 +226,11 @@
 	
 	[result close];
 	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-		[musicControls jukeboxReplacePlaylistWithLocal];
+	if (settingsS.isJukeboxEnabled)
+		[musicS jukeboxReplacePlaylistWithLocal];
 	
 	// Hide loading screen
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 	
 	// Show the player
 	[self showPlayer];
@@ -243,20 +238,19 @@
 
 - (void)shuffleSongs
 {		
-	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
 	
 	// Turn off shuffle mode to reduce inserts
-	currentPlaylist.isShuffle = NO;
+	playlistS.isShuffle = NO;
 	
 	// Reset the current playlist
-	[databaseControls resetCurrentPlaylistDb];
+	[databaseS resetCurrentPlaylistDb];
 	
 	// Get the ID of all matching records (everything in genre ordered by artist)
 	FMResultSet *result;
-	if (viewObjects.isOfflineMode)
-		result = [databaseControls.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment], seg1, self.title, genre];
+	if (viewObjectsS.isOfflineMode)
+		result = [databaseS.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment], seg1, self.title, genre];
 	else
-		result = [databaseControls.genresDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment], seg1, self.title, genre];
+		result = [databaseS.genresDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment], seg1, self.title, genre];
 	
 	while ([result next])
 	{
@@ -275,16 +269,16 @@
 	[result close];
 	
 	// Shuffle the playlist
-	[databaseControls shufflePlaylist];
+	[databaseS shufflePlaylist];
 	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
-		[musicControls jukeboxReplacePlaylistWithLocal];
+	if (settingsS.isJukeboxEnabled)
+		[musicS jukeboxReplacePlaylistWithLocal];
 	
 	// Set the isShuffle flag
-	currentPlaylist.isShuffle = YES;
+	playlistS.isShuffle = YES;
 	
 	// Hide loading screen
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 	
 	// Show the player
 	[self showPlayer];
@@ -292,14 +286,14 @@
 
 - (void)playAllAction:(id)sender
 {
-	[viewObjects showLoadingScreenOnMainWindowWithMessage:nil];
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 	
 	[self performSelector:@selector(playAllSongs) withObject:nil afterDelay:0.05];
 }
 
 - (void)shuffleAction:(id)sender
 {
-	[viewObjects showLoadingScreenOnMainWindowWithMessage:@"Shuffling"];
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Shuffling"];
 	
 	[self performSelector:@selector(shuffleSongs) withObject:nil afterDelay:0.05];
 }
@@ -340,11 +334,11 @@
 		
 		NSString *md5 = [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:0];
 		NSString *coverArtId;
-		if (viewObjects.isOfflineMode) {
-			coverArtId = [databaseControls.songCacheDb stringForQuery:@"SELECT coverArtId FROM genresSongs WHERE md5 = ?", md5];
+		if (viewObjectsS.isOfflineMode) {
+			coverArtId = [databaseS.songCacheDb stringForQuery:@"SELECT coverArtId FROM genresSongs WHERE md5 = ?", md5];
 		}
 		else {
-			coverArtId = [databaseControls.genresDb stringForQuery:@"SELECT coverArtId FROM genresSongs WHERE md5 = ?", md5];
+			coverArtId = [databaseS.genresDb stringForQuery:@"SELECT coverArtId FROM genresSongs WHERE md5 = ?", md5];
 		}
 		NSString *name = [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1];
 		
@@ -390,32 +384,32 @@
 			cell.songDurationLabel.text = @"";
 		
 		cell.backgroundView = [[[UIView alloc] init] autorelease];
-		if (viewObjects.isOfflineMode)
+		if (viewObjectsS.isOfflineMode)
 		{
 			if(indexPath.row % 2 == 0)
 			{
-				cell.backgroundView.backgroundColor = viewObjects.lightNormal;
+				cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
 			}
 			else
 			{
-				cell.backgroundView.backgroundColor = viewObjects.darkNormal;
+				cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
 			}	
 		}
 		else
 		{
 			if(indexPath.row % 2 == 0)
 			{
-				if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", cell.md5] != nil)
-					cell.backgroundView.backgroundColor = [viewObjects currentLightColor];
+				if ([databaseS.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", cell.md5] != nil)
+					cell.backgroundView.backgroundColor = [viewObjectsS currentLightColor];
 				else
-					cell.backgroundView.backgroundColor = viewObjects.lightNormal;
+					cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
 			}
 			else
 			{
-				if ([databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", cell.md5] != nil)
-					cell.backgroundView.backgroundColor = [viewObjects currentDarkColor];
+				if ([databaseS.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", cell.md5] != nil)
+					cell.backgroundView.backgroundColor = [viewObjectsS currentDarkColor];
 				else
-					cell.backgroundView.backgroundColor = viewObjects.darkNormal;
+					cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
 			}
 		}
 		
@@ -426,9 +420,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {	
-	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
 	
-	if (viewObjects.isCellEnabled)
+	if (viewObjectsS.isCellEnabled)
 	{
 		if (indexPath.row < [listOfAlbums count])
 		{		
@@ -440,13 +433,13 @@
 			genresAlbumViewController.seg1 = self.seg1;
 			genresAlbumViewController.genre = [NSString stringWithString:genre];
 			FMResultSet *result;
-			if (viewObjects.isOfflineMode) 
+			if (viewObjectsS.isOfflineMode) 
 			{
-				result = [databaseControls.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), segment, (segment + 1), (segment + 1)], seg1, [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1], genre];
+				result = [databaseS.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), segment, (segment + 1), (segment + 1)], seg1, [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1], genre];
 			}
 			else 
 			{
-				result = [databaseControls.genresDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), segment, (segment + 1), (segment + 1)], seg1, [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1], genre];
+				result = [databaseS.genresDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), segment, (segment + 1), (segment + 1)], seg1, [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1], genre];
 			}
 			while ([result next])
 			{
@@ -471,10 +464,10 @@
 			NSUInteger songRow = indexPath.row - [listOfAlbums count];
 			
 			// Clear the current playlist
-			if ([SavedSettings sharedInstance].isJukeboxEnabled)
-				[databaseControls resetJukeboxPlaylist];
+			if (settingsS.isJukeboxEnabled)
+				[databaseS resetJukeboxPlaylist];
 			else
-				[databaseControls resetCurrentPlaylistDb];
+				[databaseS resetCurrentPlaylistDb];
 			
 			// Add the songs to the playlist 
 			NSMutableArray *songIds = [[NSMutableArray alloc] init];
@@ -487,26 +480,26 @@
 				[aSong addToCurrentPlaylist];
 				
 				// In jukebox mode, collect the song ids to send to the server
-				if ([SavedSettings sharedInstance].isJukeboxEnabled)
+				if (settingsS.isJukeboxEnabled)
 					[songIds addObject:aSong.songId];
 				
 				[pool release];
 			}
 			
 			// If jukebox mode, send song ids to server
-			if ([SavedSettings sharedInstance].isJukeboxEnabled)
+			if (settingsS.isJukeboxEnabled)
 			{
-				[musicControls jukeboxStop];
-				[musicControls jukeboxClearPlaylist];
-				[musicControls jukeboxAddSongs:songIds];
+				[musicS jukeboxStop];
+				[musicS jukeboxClearPlaylist];
+				[musicS jukeboxAddSongs:songIds];
 			}
 			[songIds release];
 			
 			// Set player defaults
-			currentPlaylist.isShuffle = NO;
+			playlistS.isShuffle = NO;
 			
 			// Start the song
-			[musicControls playSongAtPosition:songRow];
+			[musicS playSongAtPosition:songRow];
 			
 			// Show the player
 			if (IS_IPAD())

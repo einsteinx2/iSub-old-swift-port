@@ -7,13 +7,10 @@
 //
 
 
-@class MusicSingleton, CacheSingleton, SavedSettings, Song;
+@class Song;
 
 @interface DebugViewController : UIViewController 
 {
-	MusicSingleton *musicControls;
-	CacheSingleton *cacheControls;
-	SavedSettings *settings;
 	
 	IBOutlet UIProgressView *currentSongProgressView;
 	IBOutlet UILabel *nextSongLabel;

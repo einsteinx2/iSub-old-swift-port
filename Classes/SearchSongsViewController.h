@@ -13,15 +13,8 @@
 //	2 = song
 //
 
-
-@class iSubAppDelegate, MusicSingleton, DatabaseSingleton, ViewObjectsSingleton;
-
 @interface SearchSongsViewController : UITableViewController 
 {
-	iSubAppDelegate *appDelegate;
-	MusicSingleton *musicControls;
-	DatabaseSingleton *databaseControls;
-	ViewObjectsSingleton *viewObjects;
 	
 	NSString *query;
 	NSUInteger searchType;

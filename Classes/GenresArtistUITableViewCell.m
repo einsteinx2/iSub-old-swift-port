@@ -72,7 +72,7 @@
 	[super showOverlay];
 	if (self.isOverlayShowing)
 	{
-		if ([ViewObjectsSingleton sharedInstance].isOfflineMode)
+		if (viewObjectsS.isOfflineMode)
 		{
 			self.overlayView.downloadButton.enabled = NO;
 			self.overlayView.downloadButton.hidden = YES;
@@ -83,13 +83,13 @@
 - (void)downloadAllSongs
 {
 	FMResultSet *result;
-	if ([ViewObjectsSingleton sharedInstance].isOfflineMode) 
+	if (viewObjectsS.isOfflineMode) 
 	{
-		result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
+		result = [databaseS.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
 	}
 	else 
 	{
-		result = [[DatabaseSingleton sharedInstance].genresDb executeQuery:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
+		result = [databaseS.genresDb executeQuery:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
 	}
 	
 	while ([result next])
@@ -100,12 +100,12 @@
 	[result close];
 	
 	// Hide the loading screen
-	[[ViewObjectsSingleton sharedInstance] hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 }
 
 - (void)downloadAction
 {
-	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindowWithMessage:nil];
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 	[self performSelector:@selector(downloadAllSongs) withObject:nil afterDelay:0.05];
 	
 	self.overlayView.downloadButton.alpha = .3;
@@ -117,13 +117,13 @@
 - (void)queueAllSongs
 {
 	FMResultSet *result;
-	if ([ViewObjectsSingleton sharedInstance].isOfflineMode) 
+	if (viewObjectsS.isOfflineMode) 
 	{
-		result = [[DatabaseSingleton sharedInstance].songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
+		result = [databaseS.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
 	}
 	else 
 	{
-		result = [[DatabaseSingleton sharedInstance].genresDb executeQuery:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
+		result = [databaseS.genresDb executeQuery:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
 	}
 	
 	while ([result next])
@@ -133,12 +133,12 @@
 	}
 	[result release];
 	
-	[[ViewObjectsSingleton sharedInstance] hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 }
 
 - (void)queueAction
 {
-	[[ViewObjectsSingleton sharedInstance] showLoadingScreenOnMainWindowWithMessage:nil];
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 	[self performSelector:@selector(queueAllSongs) withObject:nil afterDelay:0.05];
 	[self hideOverlay];
 }

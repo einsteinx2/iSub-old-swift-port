@@ -123,11 +123,10 @@
 		// Clear temp cache if this is a temp file
 		if (self.isTempCache)
 		{
-			[[CacheSingleton sharedInstance] clearTempCache];
+			[cacheS clearTempCache];
 		}
 	}
 	
-	SavedSettings *settings = [SavedSettings sharedInstance];
 
 	// Create the file handle
 	self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.filePath];
@@ -159,9 +158,9 @@
 	}
 	
 	NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(mySong.songId), @"id", nil];
-	if (settings.currentMaxBitrate != 0)
+	if (settingsS.currentMaxBitrate != 0)
 	{
-		NSString *maxBitRate = [[NSString alloc] initWithFormat:@"%i", settings.currentMaxBitrate];
+		NSString *maxBitRate = [[NSString alloc] initWithFormat:@"%i", settingsS.currentMaxBitrate];
 		[parameters setObject:n2N(maxBitRate) forKey:@"maxBitRate"];
 		[maxBitRate release];
 	}
@@ -175,7 +174,7 @@
 	[self.loadingThread.threadDictionary setObject:now forKey:@"throttlingDate"];
 	[now release];
 		
-	if ([self.mySong isEqualToSong:[[PlaylistSingleton sharedInstance] currentSong]])
+	if ([self.mySong isEqualToSong:[playlistS currentSong]])
 	{
 		self.isCurrentSong = YES;
 	}
@@ -255,7 +254,7 @@
 	// If this song is partially precached and sleeping, stop sleeping
 	self.partialPrecacheSleep = NO;
 	
-	if ([self.mySong isEqualToSong:[[PlaylistSingleton sharedInstance] currentSong]])
+	if ([self.mySong isEqualToSong:[playlistS currentSong]])
 	{
 		self.isCurrentSong = YES;
 	}
@@ -393,8 +392,7 @@
 	}
 	
 	// Handle partial pre-cache next song
-	SavedSettings *settings = [SavedSettings sharedInstance];
-	if (!self.isCurrentSong && !self.isTempCache && settings.isPartialCacheNextSong && self.partialPrecacheSleep)
+	if (!self.isCurrentSong && !self.isTempCache && settingsS.isPartialCacheNextSong && self.partialPrecacheSleep)
 	{
 		NSUInteger partialPrecacheSize = BytesForSecondsAtBitrate(ISMSNumSecondsToPartialPreCache, self.mySong.estimatedBitrate);
 		if (self.totalBytesTransferred >= partialPrecacheSize)

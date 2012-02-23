@@ -21,7 +21,6 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "NSString+time.h"
-#import "SUSStreamSingleton.h"
 #import "FlurryAnalytics.h"
 #import "Song+DAO.h"
 #import "PlaylistSingleton.h"
@@ -35,7 +34,7 @@
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	
-	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -47,20 +46,16 @@
 	
 	//DLog(@"Cache viewDidLoad");
 	
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicSingleton sharedInstance];
-	databaseControls = [DatabaseSingleton sharedInstance];
 	
-	viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-	//viewObjects.multiDeleteList = nil; viewObjects.multiDeleteList = [[NSMutableArray alloc] init];
+	viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+	//viewObjectsS.multiDeleteList = nil; viewObjectsS.multiDeleteList = [[NSMutableArray alloc] init];
 	isNoBookmarksScreenShowing = NO;
 	
 	self.tableView.separatorColor = [UIColor clearColor];
 	
 	self.title = @"Bookmarks";
 	
-	if (viewObjects.isOfflineMode)
+	if (viewObjectsS.isOfflineMode)
 		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
 	
 	if (IS_IPAD())
@@ -88,7 +83,7 @@
 {
     [super viewWillAppear:animated];
 	
-	if(musicControls.showPlayerIcon)
+	if(musicS.showPlayerIcon)
 	{
 		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
 	}
@@ -105,7 +100,7 @@
 		isNoBookmarksScreenShowing = NO;
 	}
 	
-	if ([databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks"] == 0)
+	if ([databaseS.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks"] == 0)
 	{
 		isNoBookmarksScreenShowing = YES;
 		noBookmarksScreen = [[UIImageView alloc] init];
@@ -121,7 +116,7 @@
 		textLabel.font = [UIFont boldSystemFontOfSize:32];
 		textLabel.textAlignment = UITextAlignmentCenter;
 		textLabel.numberOfLines = 0;
-		if (viewObjects.isOfflineMode) {
+		if (viewObjectsS.isOfflineMode) {
 			[textLabel setText:@"No Offline\nBookmarks"];
 		}
 		else {
@@ -147,10 +142,10 @@
 		bookmarkCountLabel.textColor = [UIColor whiteColor];
 		bookmarkCountLabel.textAlignment = UITextAlignmentCenter;
 		bookmarkCountLabel.font = [UIFont boldSystemFontOfSize:22];
-		if ([databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks"] == 1)
+		if ([databaseS.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks"] == 1)
 			bookmarkCountLabel.text = [NSString stringWithFormat:@"1 Bookmark"];
 		else 
-			bookmarkCountLabel.text = [NSString stringWithFormat:@"%i Bookmarks", [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks"]];
+			bookmarkCountLabel.text = [NSString stringWithFormat:@"%i Bookmarks", [databaseS.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks"]];
 		[headerView addSubview:bookmarkCountLabel];
 		[bookmarkCountLabel release];
 		
@@ -215,17 +210,17 @@
 
 - (void) showDeleteButton
 {
-	if ([viewObjects.multiDeleteList count] == 0)
+	if ([viewObjectsS.multiDeleteList count] == 0)
 	{
 		deleteBookmarksLabel.text = @"Clear Bookmarks";
 	}
-	else if ([viewObjects.multiDeleteList count] == 1)
+	else if ([viewObjectsS.multiDeleteList count] == 1)
 	{
 		deleteBookmarksLabel.text = @"Remove 1 Bookmark";
 	}
 	else
 	{
-		deleteBookmarksLabel.text = [NSString stringWithFormat:@"Remove %i Bookmarks", [viewObjects.multiDeleteList count]];
+		deleteBookmarksLabel.text = [NSString stringWithFormat:@"Remove %i Bookmarks", [viewObjectsS.multiDeleteList count]];
 	}
 	
 	bookmarkCountLabel.hidden = YES;
@@ -235,9 +230,9 @@
 
 - (void) hideDeleteButton
 {
-	if ([viewObjects.multiDeleteList count] == 0)
+	if ([viewObjectsS.multiDeleteList count] == 0)
 	{
-		if (viewObjects.isEditing == NO)
+		if (viewObjectsS.isEditing == NO)
 		{
 			bookmarkCountLabel.hidden = NO;
 			deleteBookmarksLabel.hidden = YES;
@@ -247,13 +242,13 @@
 			deleteBookmarksLabel.text = @"Clear Bookmarks";
 		}
 	}
-	else if ([viewObjects.multiDeleteList count] == 1)
+	else if ([viewObjectsS.multiDeleteList count] == 1)
 	{
 		deleteBookmarksLabel.text = @"Remove 1 Bookmark";
 	}
 	else 
 	{
-		deleteBookmarksLabel.text = [NSString stringWithFormat:@"Remove %i Bookmarks", [viewObjects.multiDeleteList count]];
+		deleteBookmarksLabel.text = [NSString stringWithFormat:@"Remove %i Bookmarks", [viewObjectsS.multiDeleteList count]];
 	}
 }
 
@@ -263,12 +258,12 @@
 {
 	if (self.tableView.editing == NO)
 	{
-		viewObjects.isEditing = YES;
+		viewObjectsS.isEditing = YES;
 		[self.tableView reloadData];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:@"showDeleteButton" object: nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:@"hideDeleteButton" object: nil];
-		viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-		//viewObjects.multiDeleteList = nil; viewObjects.multiDeleteList = [[NSMutableArray alloc] init];
+		viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+		//viewObjectsS.multiDeleteList = nil; viewObjectsS.multiDeleteList = [[NSMutableArray alloc] init];
 		[self.tableView setEditing:YES animated:YES];
 		editBookmarksLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
 		editBookmarksLabel.text = @"Done";
@@ -278,11 +273,11 @@
 	}
 	else 
 	{
-		viewObjects.isEditing = NO;
+		viewObjectsS.isEditing = NO;
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
-		viewObjects.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-		//viewObjects.multiDeleteList = nil; viewObjects.multiDeleteList = [[NSMutableArray alloc] init];
+		viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+		//viewObjectsS.multiDeleteList = nil; viewObjectsS.multiDeleteList = [[NSMutableArray alloc] init];
 		[self hideDeleteButton];
 		[self.tableView setEditing:NO animated:YES];
 		editBookmarksLabel.backgroundColor = [UIColor clearColor];
@@ -309,8 +304,8 @@
 {
 	if ([deleteBookmarksLabel.text isEqualToString:@"Clear Bookmarks"])
 	{
-		[databaseControls.bookmarksDb executeUpdate:@"DELETE FROM bookmarks"];
-		[databaseControls.bookmarksDb executeUpdate:@"VACUUM"];
+		[databaseS.bookmarksDb executeUpdate:@"DELETE FROM bookmarks"];
+		[databaseS.bookmarksDb executeUpdate:@"VACUUM"];
 		[self editBookmarksAction:nil];
 		
 		// Reload table data
@@ -319,24 +314,24 @@
 	else
 	{
 		// Sort the multiDeleteList to make sure it's accending
-		[viewObjects.multiDeleteList sortUsingSelector:@selector(compare:)];
-		//DLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
+		[viewObjectsS.multiDeleteList sortUsingSelector:@selector(compare:)];
+		//DLog(@"multiDeleteList: %@", viewObjectsS.multiDeleteList);
 		
-		for (NSNumber *index in [viewObjects.multiDeleteList reverseObjectEnumerator])
+		for (NSNumber *index in [viewObjectsS.multiDeleteList reverseObjectEnumerator])
 		{
 			int row = [index intValue] + 1;
-			[databaseControls.bookmarksDb executeUpdate:[NSString stringWithFormat:@"DELETE FROM bookmarks WHERE ROWID = %i", row]];
+			[databaseS.bookmarksDb executeUpdate:[NSString stringWithFormat:@"DELETE FROM bookmarks WHERE ROWID = %i", row]];
 		}
-		[databaseControls.bookmarksDb executeUpdate:@"DROP TABLE bookmarksTemp"];
-		[databaseControls.bookmarksDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarksTemp (name TEXT, position INTEGER, %@, bytes INTEGER)", [Song standardSongColumnSchema]]];
-		[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks"];
-		[databaseControls.bookmarksDb executeUpdate:@"DROP TABLE bookmarks"];
-		[databaseControls.bookmarksDb executeUpdate:@"ALTER TABLE bookmarksTemp RENAME TO bookmarks"];
-		[databaseControls.bookmarksDb executeUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
+		[databaseS.bookmarksDb executeUpdate:@"DROP TABLE bookmarksTemp"];
+		[databaseS.bookmarksDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarksTemp (name TEXT, position INTEGER, %@, bytes INTEGER)", [Song standardSongColumnSchema]]];
+		[databaseS.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks"];
+		[databaseS.bookmarksDb executeUpdate:@"DROP TABLE bookmarks"];
+		[databaseS.bookmarksDb executeUpdate:@"ALTER TABLE bookmarksTemp RENAME TO bookmarks"];
+		[databaseS.bookmarksDb executeUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
 		
 		// Create indexPaths from multiDeleteList
 		NSMutableArray *indexes = [[NSMutableArray alloc] init];
-		for (NSNumber *index in viewObjects.multiDeleteList)
+		for (NSNumber *index in viewObjectsS.multiDeleteList)
 		{
 			[indexes addObject:[NSIndexPath indexPathForRow:[index integerValue] inSection:0]];
 		}
@@ -356,40 +351,40 @@
 	NSInteger fromRow = fromIndexPath.row + 1;
 	NSInteger toRow = toIndexPath.row + 1;
 	
-	[databaseControls.bookmarksDb executeUpdate:@"DROP TABLE bookmarksTemp"];
-	[databaseControls.bookmarksDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarksTemp (name TEXT, position INTEGER, %@, bytes INTEGER)", [Song standardSongColumnSchema]]];
+	[databaseS.bookmarksDb executeUpdate:@"DROP TABLE bookmarksTemp"];
+	[databaseS.bookmarksDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarksTemp (name TEXT, position INTEGER, %@, bytes INTEGER)", [Song standardSongColumnSchema]]];
 		
 	if (fromRow < toRow)
 	{
-		[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID < ?", [NSNumber numberWithInt:fromRow]];
-		[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID > ? AND ROWID <= ?", [NSNumber numberWithInt:fromRow], [NSNumber numberWithInt:toRow]];
-		[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:fromRow]];
-		[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID > ?", [NSNumber numberWithInt:toRow]];
+		[databaseS.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID < ?", [NSNumber numberWithInt:fromRow]];
+		[databaseS.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID > ? AND ROWID <= ?", [NSNumber numberWithInt:fromRow], [NSNumber numberWithInt:toRow]];
+		[databaseS.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:fromRow]];
+		[databaseS.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID > ?", [NSNumber numberWithInt:toRow]];
 		
-		[databaseControls.bookmarksDb executeUpdate:@"DROP TABLE bookmarks"];
-		[databaseControls.bookmarksDb executeUpdate:@"ALTER TABLE bookmarksTemp RENAME TO bookmarks"];
-		[databaseControls.bookmarksDb executeUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
+		[databaseS.bookmarksDb executeUpdate:@"DROP TABLE bookmarks"];
+		[databaseS.bookmarksDb executeUpdate:@"ALTER TABLE bookmarksTemp RENAME TO bookmarks"];
+		[databaseS.bookmarksDb executeUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
 	}
 	else
 	{
-		[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID < ?", [NSNumber numberWithInt:toRow]];
-		[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:fromRow]];
-		[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID >= ? AND ROWID < ?", [NSNumber numberWithInt:toRow], [NSNumber numberWithInt:fromRow]];
-		[databaseControls.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID > ?", [NSNumber numberWithInt:fromRow]];
+		[databaseS.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID < ?", [NSNumber numberWithInt:toRow]];
+		[databaseS.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:fromRow]];
+		[databaseS.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID >= ? AND ROWID < ?", [NSNumber numberWithInt:toRow], [NSNumber numberWithInt:fromRow]];
+		[databaseS.bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp SELECT * FROM bookmarks WHERE ROWID > ?", [NSNumber numberWithInt:fromRow]];
 		
-		[databaseControls.bookmarksDb executeUpdate:@"DROP TABLE bookmarks"];
-		[databaseControls.bookmarksDb executeUpdate:@"ALTER TABLE bookmarksTemp RENAME TO bookmarks"];
-		[databaseControls.bookmarksDb executeUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
+		[databaseS.bookmarksDb executeUpdate:@"DROP TABLE bookmarks"];
+		[databaseS.bookmarksDb executeUpdate:@"ALTER TABLE bookmarksTemp RENAME TO bookmarks"];
+		[databaseS.bookmarksDb executeUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
 	}
 	
 	
 	// Fix the multiDeleteList to reflect the new row positions
-	//DLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
-	if ([viewObjects.multiDeleteList count] > 0)
+	//DLog(@"multiDeleteList: %@", viewObjectsS.multiDeleteList);
+	if ([viewObjectsS.multiDeleteList count] > 0)
 	{
 		NSMutableArray *tempMultiDeleteList = [[NSMutableArray alloc] init];
 		int newPosition;
-		for (NSNumber *position in viewObjects.multiDeleteList)
+		for (NSNumber *position in viewObjectsS.multiDeleteList)
 		{
 			if (fromIndexPath.row > toIndexPath.row)
 			{
@@ -430,10 +425,10 @@
 				}
 			}
 		}
-		viewObjects.multiDeleteList = [NSMutableArray arrayWithArray:tempMultiDeleteList];
+		viewObjectsS.multiDeleteList = [NSMutableArray arrayWithArray:tempMultiDeleteList];
 		[tempMultiDeleteList release];
 	}
-	//DLog(@"multiDeleteList: %@", viewObjects.multiDeleteList);
+	//DLog(@"multiDeleteList: %@", viewObjectsS.multiDeleteList);
 }
 
 
@@ -480,7 +475,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
-    return [databaseControls.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks"];
+    return [databaseS.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks"];
 }
 
 // Customize the appearance of table view cells.
@@ -490,25 +485,25 @@
 	BookmarkUITableViewCell *cell = [[[BookmarkUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 	cell.indexPath = indexPath;
 	
-	cell.deleteToggleImage.hidden = !viewObjects.isEditing;
-	if ([viewObjects.multiDeleteList containsObject:[NSNumber numberWithInt:indexPath.row]])
+	cell.deleteToggleImage.hidden = !viewObjectsS.isEditing;
+	if ([viewObjectsS.multiDeleteList containsObject:[NSNumber numberWithInt:indexPath.row]])
 	{
 		cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
 	}
 	
     // Set up the cell...
-	Song *aSong = [Song songFromDbRow:indexPath.row inTable:@"bookmarks" inDatabase:databaseControls.bookmarksDb];
+	Song *aSong = [Song songFromDbRow:indexPath.row inTable:@"bookmarks" inDatabase:databaseS.bookmarksDb];
 	
 	[cell.coverArtView loadImageFromCoverArtId:aSong.coverArtId];
 	
 	cell.backgroundView = [[[UIView alloc] init] autorelease];
 	if(indexPath.row % 2 == 0)
-		cell.backgroundView.backgroundColor = viewObjects.lightNormal;
+		cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
 	else
-		cell.backgroundView.backgroundColor = viewObjects.darkNormal;
+		cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
 	
-	NSString *name = [databaseControls.bookmarksDb stringForQuery:@"SELECT name FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
-	int position = [databaseControls.bookmarksDb intForQuery:@"SELECT position FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
+	NSString *name = [databaseS.bookmarksDb stringForQuery:@"SELECT name FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
+	int position = [databaseS.bookmarksDb intForQuery:@"SELECT position FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
 	[cell.bookmarkNameLabel setText:[NSString stringWithFormat:@"%@ - %@", name, [NSString formatTime:(float)position]]];
 	
 	[cell.songNameLabel setText:aSong.title];
@@ -527,14 +522,12 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	// TODO: verify bookmark loading
-	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
-	
-	[databaseControls resetCurrentPlaylistDb];
-	Song *aSong = [Song songFromDbRow:indexPath.row inTable:@"bookmarks" inDatabase:databaseControls.bookmarksDb];
+	// TODO: verify bookmark loading	
+	[databaseS resetCurrentPlaylistDb];
+	Song *aSong = [Song songFromDbRow:indexPath.row inTable:@"bookmarks" inDatabase:databaseS.bookmarksDb];
 	[aSong addToCurrentPlaylist];
 	
-	currentPlaylist.isShuffle = NO;
+	playlistS.isShuffle = NO;
 	
 	if (IS_IPAD())
 	{
@@ -548,8 +541,8 @@
 		[streamingPlayerViewController release];
 	}
 		
-	NSUInteger offsetSeconds = [databaseControls.bookmarksDb intForQuery:@"SELECT position FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
-	NSUInteger offsetBytes = [databaseControls.bookmarksDb intForQuery:@"SELECT bytes FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
+	NSUInteger offsetSeconds = [databaseS.bookmarksDb intForQuery:@"SELECT position FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
+	NSUInteger offsetBytes = [databaseS.bookmarksDb intForQuery:@"SELECT bytes FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
 	
 	// Check if these are old bookmarks and don't have byteOffset saved
 	if (offsetBytes == 0 && offsetSeconds != 0)
@@ -560,7 +553,7 @@
 		if (aSong.transcodedSuffix)
 		{
 			// This is a transcode, guess the bitrate and byteoffset
-			NSUInteger maxBitrate = [SavedSettings sharedInstance].currentMaxBitrate == 0 ? 128 : [SavedSettings sharedInstance].currentMaxBitrate;
+			NSUInteger maxBitrate = settingsS.currentMaxBitrate == 0 ? 128 : settingsS.currentMaxBitrate;
 			bitrate = maxBitrate < [aSong.bitRate intValue] ? maxBitrate : [aSong.bitRate intValue];
 		}
 
@@ -569,7 +562,7 @@
 	}
 	else
 	{
-		[musicControls startSongAtOffsetInBytes:offsetBytes andSeconds:offsetSeconds];
+		[musicS startSongAtOffsetInBytes:offsetBytes andSeconds:offsetSeconds];
 	}
 }
 

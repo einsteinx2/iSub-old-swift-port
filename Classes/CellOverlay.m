@@ -25,8 +25,7 @@
 	newFrame.origin.y = 0;
 	if ((self = [super initWithFrame:newFrame]))
 	{
-		ViewObjectsSingleton *viewObjects = [ViewObjectsSingleton sharedInstance];
-		
+			
 		self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.7];
 		self.alpha = 0.1;
 		self.userInteractionEnabled = YES;
@@ -45,7 +44,7 @@
 		downloadButton.alpha = .8;
 		[downloadButton addTarget:cell action:@selector(downloadAction) forControlEvents:UIControlEventTouchUpInside];
 		downloadButton.userInteractionEnabled = NO;
-		[downloadButton setImage:viewObjects.cacheButtonImage forState:UIControlStateNormal];
+		[downloadButton setImage:viewObjectsS.cacheButtonImage forState:UIControlStateNormal];
 		downloadButton.frame = CGRectMake(30, 5, 120, 40);
 		float width = self.frame.size.width == 320 ? 90.0 : (self.frame.size.width / 3.0) - 50.0;
 		downloadButton.center = CGPointMake(width, self.frame.size.height / 2);
@@ -56,7 +55,7 @@
 		queueButton.alpha = .8;
 		[queueButton addTarget:cell action:@selector(queueAction) forControlEvents:UIControlEventTouchUpInside];
 		queueButton.userInteractionEnabled = NO;
-		[queueButton setImage:viewObjects.queueButtonImage forState:UIControlStateNormal];
+		[queueButton setImage:viewObjectsS.queueButtonImage forState:UIControlStateNormal];
 		queueButton.frame = CGRectMake(170, 5, 120, 40);
 		width = self.frame.size.width == 320 ? 230.0 : ((self.frame.size.width / 3.0) * 2.0) + 40.0;
 		queueButton.center = CGPointMake(width, self.frame.size.height / 2);

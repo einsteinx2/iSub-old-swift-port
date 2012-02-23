@@ -24,7 +24,6 @@
 {
 	if ((self = [super init]))
 	{
-		databaseControls = [DatabaseSingleton sharedInstance];
 		
 		// Find documents directory
 		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -47,7 +46,7 @@
 	NSMutableArray *listOfArtists = [NSMutableArray arrayWithCapacity:1];
 	
 	// Fix for slow load problem
-	FMDatabase *db = databaseControls.songCacheDb;
+	FMDatabase *db = databaseS.songCacheDb;
 	[db executeUpdate:@"DROP TABLE IF EXISTS cachedSongsArtistList"];
 	[db executeUpdate:@"CREATE TEMP TABLE cachedSongsArtistList (artist TEXT UNIQUE)"];
 	[db executeUpdate:@"INSERT OR IGNORE INTO cachedSongsArtistList SELECT seg1 FROM cachedSongsLayout"];

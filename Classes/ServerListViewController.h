@@ -8,15 +8,10 @@
 
 #import "SUSServerChecker.h"
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, SettingsTabViewController, HelpTabViewController, SavedSettings;
+@class SettingsTabViewController, HelpTabViewController;
 
 @interface ServerListViewController : UITableViewController <SUSServerURLCheckerDelegate>
 {
-	iSubAppDelegate *appDelegate;
-	ViewObjectsSingleton *viewObjects;
-	MusicSingleton *musicControls;
-	DatabaseSingleton *databaseControls;
-	SavedSettings *settings;
 	
 	BOOL isEditing;
 	

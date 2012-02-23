@@ -33,7 +33,7 @@
 
 - (FMDatabase *)db
 {
-    return [DatabaseSingleton sharedInstance].localPlaylistsDb;
+    return databaseS.localPlaylistsDb;
 }
 
 #pragma mark - Loader Manager Methods

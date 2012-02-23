@@ -6,13 +6,8 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-
-@class iSubAppDelegate, ViewObjectsSingleton;
-
 @interface QuickAlbumsViewController : UIViewController 
 {
-	iSubAppDelegate *appDelegate;
-	ViewObjectsSingleton *viewObjects;
 	
 	UIViewController *parent;
 	

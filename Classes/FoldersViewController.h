@@ -9,16 +9,11 @@
 #import "SUSLoaderDelegate.h"
 #import "FolderDropdownDelegate.h"
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, SearchOverlayViewController, LoadingScreen, Artist, EGORefreshTableHeaderView, FolderDropdownControl, SavedSettings, SUSRootFoldersDAO;
+@class SearchOverlayViewController, LoadingScreen, Artist, EGORefreshTableHeaderView, FolderDropdownControl, SUSRootFoldersDAO;
 
 @interface FoldersViewController : UITableViewController <UISearchBarDelegate, SUSLoaderDelegate, FolderDropdownDelegate>
 {
-	iSubAppDelegate *appDelegate;
-	ViewObjectsSingleton *viewObjects;
-	MusicSingleton *musicControls;
-	
-	SavedSettings *settings;
-	
+		
 	UIView *headerView;
 	UILabel *countLabel;
 	UILabel *reloadTimeLabel;

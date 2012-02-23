@@ -10,17 +10,12 @@
 #import "SUSServerChecker.h"
 #import "Crittercism.h"
 
-@class BBSplitViewController, ViewObjectsSingleton, DatabaseSingleton, MusicSingleton, SocialSingleton, iPadRootViewController, iPadMainMenu, InitialDetailViewController, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, Reachability, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController, HTTPServer, CacheSingleton, AudioEngine;
+#define appDelegateS [iSubAppDelegate sharedInstance]
+
+@class BBSplitViewController, iPadRootViewController, iPadMainMenu, InitialDetailViewController, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, Reachability, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController, HTTPServer;
 
 @interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate, SUSServerURLCheckerDelegate, CrittercismDelegate>
-{	
-	ViewObjectsSingleton *viewObjects;
-	DatabaseSingleton *databaseControls;
-	MusicSingleton *musicControls;
-	SocialSingleton *socialControls;
-	CacheSingleton *cacheControls;
-    AudioEngine *audio;
-	
+{		
 	UIWindow *window;
 	
 	IntroViewController *introController;

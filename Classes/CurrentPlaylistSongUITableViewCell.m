@@ -93,13 +93,11 @@
 #pragma mark - Overlay
 
 - (void)downloadAction
-{
-	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
-	
-	if (currentPlaylist.isShuffle) 
-		[[Song songFromDbRow:self.indexPath.row inTable:@"shufflePlaylist" inDatabase:[DatabaseSingleton sharedInstance].currentPlaylistDb] addToCacheQueue];
+{	
+	if (playlistS.isShuffle) 
+		[[Song songFromDbRow:self.indexPath.row inTable:@"shufflePlaylist" inDatabase:databaseS.currentPlaylistDb] addToCacheQueue];
 	else 
-		[[Song songFromDbRow:self.indexPath.row inTable:@"currentPlaylist" inDatabase:[DatabaseSingleton sharedInstance].currentPlaylistDb] addToCacheQueue];
+		[[Song songFromDbRow:self.indexPath.row inTable:@"currentPlaylist" inDatabase:databaseS.currentPlaylistDb] addToCacheQueue];
 	
 	self.overlayView.downloadButton.alpha = .3;
 	self.overlayView.downloadButton.enabled = NO;
@@ -108,19 +106,17 @@
 }
 
 - (void)queueAction
-{
-	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
-	
+{	
 	//DLog(@"queueAction");
-	if (currentPlaylist.isShuffle)
+	if (playlistS.isShuffle)
 	{
-		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"shufflePlaylist" inDatabase:[DatabaseSingleton sharedInstance].currentPlaylistDb];
-		[[DatabaseSingleton sharedInstance] queueSong:aSong];
+		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"shufflePlaylist" inDatabase:databaseS.currentPlaylistDb];
+		[databaseS queueSong:aSong];
 	}
 	else
 	{
-		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"currentPlaylist" inDatabase:[DatabaseSingleton sharedInstance].currentPlaylistDb];
-		[[DatabaseSingleton sharedInstance] queueSong:aSong];
+		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"currentPlaylist" inDatabase:databaseS.currentPlaylistDb];
+		[databaseS queueSong:aSong];
 	}
 	
 	[self hideOverlay];

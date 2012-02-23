@@ -107,7 +107,7 @@ static NSSet *setOfVersions = nil;
 	[request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
 	
 	// Set the HTTP Basic Auth
-	if ([SavedSettings sharedInstance].isBasicAuthEnabled)
+	if (settingsS.isBasicAuthEnabled)
 	{
 		//DLog(@"using basic auth!");
 		NSString *authStr = [NSString stringWithFormat:@"%@:%@", username, password];
@@ -134,18 +134,17 @@ static NSSet *setOfVersions = nil;
 
 + (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action andParameters:(NSDictionary *)parameters byteOffset:(NSUInteger)offset
 {
-	SavedSettings *settings = [SavedSettings sharedInstance];
-	NSString *urlString = settings.urlString;
-	if (settings.redirectUrlString)
+	NSString *urlString = settingsS.urlString;
+	if (settingsS.redirectUrlString)
 	{
 		// The redirect URL has been found, so use it
-		urlString = settings.redirectUrlString;
+		urlString = settingsS.redirectUrlString;
 	}
 	
 	return [NSMutableURLRequest requestWithSUSAction:action 
 										forUrlString:urlString 
-											username:settings.username
-											password:settings.password 
+											username:settingsS.username
+											password:settingsS.password 
 									   andParameters:parameters 
 										  byteOffset:offset];
 }

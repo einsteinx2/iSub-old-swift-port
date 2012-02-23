@@ -95,16 +95,16 @@
 		if(row % 2 == 0)
 		{
 			if (mySong.isFullyCached)
-				self.backgroundView.backgroundColor = [[ViewObjectsSingleton sharedInstance] currentLightColor];
+				self.backgroundView.backgroundColor = [viewObjectsS currentLightColor];
 			else
-				self.backgroundView.backgroundColor = [ViewObjectsSingleton sharedInstance].lightNormal;
+				self.backgroundView.backgroundColor = viewObjectsS.lightNormal;
 		}
 		else
 		{
 			if (mySong.isFullyCached)
-				self.backgroundView.backgroundColor = [[ViewObjectsSingleton sharedInstance] currentDarkColor];
+				self.backgroundView.backgroundColor = [viewObjectsS currentDarkColor];
 			else
-				self.backgroundView.backgroundColor = [ViewObjectsSingleton sharedInstance].darkNormal;
+				self.backgroundView.backgroundColor = viewObjectsS.darkNormal;
 		}
 		
 		[songNameLabel setText:aSong.title];
@@ -150,7 +150,7 @@
 
 - (void)queueAction
 {	
-	[[DatabaseSingleton sharedInstance] queueSong:mySong];
+	[databaseS queueSong:mySong];
 	
 	[self hideOverlay];
 }

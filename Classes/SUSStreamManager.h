@@ -9,21 +9,22 @@
 #import "SUSStreamHandlerDelegate.h"
 #import "SUSLoaderDelegate.h"
 
+#define streamManagerS [SUSStreamManager sharedInstance]
+
 #define ISMSNumberOfStreamsToQueue 2
 
-@class Song, SUSStreamHandler, SUSLyricsDAO, PlaylistSingleton;
-@interface SUSStreamSingleton : NSObject <SUSStreamHandlerDelegate, SUSLoaderDelegate>
+@class Song, SUSStreamHandler, SUSLyricsDAO;
+@interface SUSStreamManager : NSObject <SUSStreamHandlerDelegate, SUSLoaderDelegate>
 
 @property (retain) NSMutableArray *handlerStack;
 @property (retain) SUSLyricsDAO *lyricsDAO;
-@property (assign) PlaylistSingleton *currentPlaylistDAO;
 
 @property (copy) Song *lastCachedSong;
 @property (copy) Song *lastTempCachedSong;
 
 @property (readonly) BOOL isQueueDownloading;
 
-+ (SUSStreamSingleton *)sharedInstance;
++ (SUSStreamManager *)sharedInstance;
 
 - (SUSStreamHandler *)handlerForSong:(Song *)aSong;
 - (BOOL)isSongInQueue:(Song *)aSong;

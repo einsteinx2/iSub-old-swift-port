@@ -6,15 +6,8 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton;
-
 @interface BookmarksViewController : UITableViewController
 {
-	iSubAppDelegate *appDelegate;
-	ViewObjectsSingleton *viewObjects;
-	MusicSingleton *musicControls;
-	DatabaseSingleton *databaseControls;
 	
 	BOOL isNoBookmarksScreenShowing;
 	UIImageView *noBookmarksScreen;

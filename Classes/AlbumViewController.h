@@ -8,14 +8,10 @@
 
 #import "SUSLoaderDelegate.h"
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, Artist, Album, EGORefreshTableHeaderView, SUSSubFolderDAO, AsynchronousImageView;
+@class Artist, Album, EGORefreshTableHeaderView, SUSSubFolderDAO, AsynchronousImageView;
 
 @interface AlbumViewController : UITableViewController <SUSLoaderDelegate>
 {
-	iSubAppDelegate *appDelegate;
-	ViewObjectsSingleton *viewObjects;
-	MusicSingleton *musicControls;
-	DatabaseSingleton *databaseControls;
 	
 	NSURLConnection *connection;
 	NSMutableData *loadingData;

@@ -42,7 +42,7 @@
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
 {
-	if ([ViewObjectsSingleton sharedInstance].isEditing)
+	if (viewObjectsS.isEditing)
 		[super setEditing:editing animated:animated]; 
 }
 
@@ -102,13 +102,13 @@
 {
 	if (isDelete)
 	{
-		[[ViewObjectsSingleton sharedInstance].multiDeleteList removeObject:[NSNumber numberWithInt:indexPath.row]];
+		[viewObjectsS.multiDeleteList removeObject:[NSNumber numberWithInt:indexPath.row]];
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"hideDeleteButton"];
 		deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
 	}
 	else
 	{
-		[[ViewObjectsSingleton sharedInstance].multiDeleteList addObject:[NSNumber numberWithInt:indexPath.row]];
+		[viewObjectsS.multiDeleteList addObject:[NSNumber numberWithInt:indexPath.row]];
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"showDeleteButton"];
 		deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
 	}

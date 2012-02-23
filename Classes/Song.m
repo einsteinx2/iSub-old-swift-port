@@ -329,13 +329,13 @@
 - (NSString *)localPath
 {
 	NSString *fileName = fileName = [[path md5] stringByAppendingPathExtension:self.localSuffix];
-	return [[SavedSettings sharedInstance].songCachePath stringByAppendingPathComponent:fileName];
+	return [settingsS.songCachePath stringByAppendingPathComponent:fileName];
 }
 
 - (NSString *)localTempPath
 {
 	NSString *fileName = fileName = [[path md5] stringByAppendingPathExtension:self.localSuffix];
-	return [[SavedSettings sharedInstance].tempCachePath stringByAppendingPathComponent:fileName];
+	return [settingsS.tempCachePath stringByAppendingPathComponent:fileName];
 }
 
 - (NSString *)currentPath
@@ -360,8 +360,7 @@
 
 - (NSUInteger)estimatedBitrate
 {	
-	SavedSettings *settings = [SavedSettings sharedInstance];
-	NSInteger currentMaxBitrate = settings.currentMaxBitrate;
+	NSInteger currentMaxBitrate = settingsS.currentMaxBitrate;
 	
 	// Default to 128 if there is no bitrate for this song object (should never happen)
 	int rate = self.bitRate ? [self.bitRate intValue] : 128;

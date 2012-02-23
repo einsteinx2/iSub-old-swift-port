@@ -7,14 +7,10 @@
 //
 
 
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, ServerTypeViewController;
+@class ServerTypeViewController;
 
 @interface UbuntuServerEditViewController : UIViewController 
 {
-	iSubAppDelegate *appDelegate;
-	ViewObjectsSingleton *viewObjects;
-	MusicSingleton *musicControls;
-	DatabaseSingleton *databaseControls;
 	
 	IBOutlet UITextField *usernameField;
 	IBOutlet UITextField *passwordField;

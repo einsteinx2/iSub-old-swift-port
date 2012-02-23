@@ -12,7 +12,7 @@
 #import "FMDatabaseAdditions.h"
 
 #import "Song.h"
-#import "SUSStreamSingleton.h"
+#import "SUSStreamManager.h"
 
 static CacheSingleton *sharedInstance = nil;
 
@@ -22,14 +22,14 @@ static CacheSingleton *sharedInstance = nil;
 
 - (unsigned long long)totalSpace
 {
-	NSString *path = [SavedSettings sharedInstance].cachesPath;
+	NSString *path = settingsS.cachesPath;
 	NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfFileSystemForPath:path error:NULL];
 	return [[attributes objectForKey:NSFileSystemSize] unsignedLongLongValue];
 }
 
 - (unsigned long long)freeSpace
 {
-	NSString *path = [SavedSettings sharedInstance].cachesPath;
+	NSString *path = settingsS.cachesPath;
 	NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfFileSystemForPath:path error:NULL];
 	return [[attributes objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
 }
@@ -58,8 +58,7 @@ static CacheSingleton *sharedInstance = nil;
 
 - (NSUInteger)numberOfCachedSongs
 {
-	DatabaseSingleton *databaseControls = [DatabaseSingleton sharedInstance];
-	return [databaseControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES'"];
+	return [databaseS.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES'"];
 }
 
 //
@@ -67,67 +66,63 @@ static CacheSingleton *sharedInstance = nil;
 //
 - (void)adjustCacheSize
 {
-	SavedSettings *settings = [SavedSettings sharedInstance];
 	
 	// Only adjust if the user is using max cache size as option
-	if (settings.cachingType == 1)
+	if (settingsS.cachingType == 1)
 	{
 		unsigned long long freeSpace = self.freeSpace;
-		unsigned long long maxCacheSize = settings.maxCacheSize;
+		unsigned long long maxCacheSize = settingsS.maxCacheSize;
 		
 		NSLog(@"adjustCacheSize:  freeSpace = %llu  maxCacheSize = %llu", freeSpace, maxCacheSize);
 		
 		if (freeSpace < maxCacheSize)
 		{
 			// Set the max cache size to 25MB less than the free space
-			settings.maxCacheSize = freeSpace - 26214400;
+			settingsS.maxCacheSize = freeSpace - 26214400;
 		}
 	}
 }
 
 - (void)removeOldestCachedSongs
-{	
-	SavedSettings *settings = [SavedSettings sharedInstance];
-	DatabaseSingleton *databaseControls = [DatabaseSingleton sharedInstance];
-	
+{		
 	NSString *songMD5 = nil;
 	
-	if (settings.cachingType == 0)
+	if (settingsS.cachingType == 0)
 	{
 		// Remove the oldest songs based on either oldest played or oldest cached until free space is more than minFreeSpace
-		while (self.freeSpace < settings.minFreeSpace)
+		while (self.freeSpace < settingsS.minFreeSpace)
 		{
-			if (settings.autoDeleteCacheType == 0)
-				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
+			if (settingsS.autoDeleteCacheType == 0)
+				songMD5 = [databaseS.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
 			else
-				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
+				songMD5 = [databaseS.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
 			//DLog(@"removing %@", songMD5);
 			[Song removeSongFromCacheDbByMD5:songMD5];			
 		}
 	}
-	else if (settings.cachingType == 1)
+	else if (settingsS.cachingType == 1)
 	{
 		// Remove the oldest songs based on either oldest played or oldest cached until cache size is less than maxCacheSize
 		unsigned long long size = self.cacheSize;
-		while (size > settings.maxCacheSize)
+		while (size > settingsS.maxCacheSize)
 		{
-			if (settings.autoDeleteCacheType == 0)
+			if (settingsS.autoDeleteCacheType == 0)
 			{
-				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
+				songMD5 = [databaseS.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
 			}
 			else
 			{
-				songMD5 = [databaseControls.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
+				songMD5 = [databaseS.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
 			}
-			//songSize = [databaseControls.songCacheDb intForQuery:@"SELECT size FROM cachedSongs WHERE md5 = ?", songMD5];
+			//songSize = [databaseS.songCacheDb intForQuery:@"SELECT size FROM cachedSongs WHERE md5 = ?", songMD5];
 			Song *aSong = [Song songFromCacheDb:songMD5];
 			// Determine the name of the file we are downloading.
 			//DLog(@"currentSongObject.path: %@", currentSongObject.path);
 			NSString *songPath = nil;
 			if (aSong.transcodedSuffix)
-				songPath = [settings.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", songMD5, aSong.transcodedSuffix]];
+				songPath = [settingsS.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", songMD5, aSong.transcodedSuffix]];
 			else
-				songPath = [settings.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", songMD5, aSong.suffix]];
+				songPath = [settingsS.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", songMD5, aSong.suffix]];
 			
 			unsigned long long songSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:songPath error:NULL] fileSize];
 			
@@ -140,12 +135,11 @@ static CacheSingleton *sharedInstance = nil;
 
 - (void)findCacheSize
 {
-	SavedSettings *settings = [SavedSettings sharedInstance];
 	
 	unsigned long long size = 0;
-	for (NSString *path in [[NSFileManager defaultManager] subpathsAtPath:settings.songCachePath]) 
+	for (NSString *path in [[NSFileManager defaultManager] subpathsAtPath:settingsS.songCachePath]) 
 	{
-		size += [[[NSFileManager defaultManager] attributesOfItemAtPath:[settings.songCachePath stringByAppendingPathComponent:path] error:NULL] fileSize];
+		size += [[[NSFileManager defaultManager] attributesOfItemAtPath:[settingsS.songCachePath stringByAppendingPathComponent:path] error:NULL] fileSize];
 	}
 	
 	cacheSize = size;
@@ -155,21 +149,19 @@ static CacheSingleton *sharedInstance = nil;
 {
 	[self findCacheSize];
 	
-	SavedSettings *settings = [SavedSettings sharedInstance];
-	
-	if (settings.cachingType == 0 && settings.isSongCachingEnabled)
+	if (settingsS.cachingType == 0 && settingsS.isSongCachingEnabled)
 	{
 		// User has chosen to limit cache by minimum free space
 		
 		// Check to see if the free space left is lower than the setting
-		if (self.freeSpace < settings.minFreeSpace)
+		if (self.freeSpace < settingsS.minFreeSpace)
 		{
 			// Check to see if the cache size + free space is still less than minFreeSpace
 			unsigned long long size = self.cacheSize;
-			if (size + self.freeSpace < settings.minFreeSpace)
+			if (size + self.freeSpace < settingsS.minFreeSpace)
 			{
 				// Looks like even removing all of the cache will not be enough so turn off caching
-				settings.isSongCachingEnabled = NO;
+				settingsS.isSongCachingEnabled = NO;
 				
 				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"IMPORTANT" message:@"Free space is running low, but even deleting the entire cache will not bring the free space up higher than your minimum setting. Automatic song caching has been turned off.\n\nYou can re-enable it in the Settings menu (tap the gear, tap Settings at the top)" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 				[alert show];
@@ -178,7 +170,7 @@ static CacheSingleton *sharedInstance = nil;
 			else
 			{
 				// Remove the oldest cached songs until freeSpace > minFreeSpace or pop the free space low alert
-				if (settings.isAutoDeleteCacheEnabled)
+				if (settingsS.isAutoDeleteCacheEnabled)
 				{
 					[self removeOldestCachedSongs];
 				}
@@ -192,20 +184,20 @@ static CacheSingleton *sharedInstance = nil;
 			}
 		}
 	}
-	else if (settings.cachingType == 1 && settings.isSongCachingEnabled)
+	else if (settingsS.cachingType == 1 && settingsS.isSongCachingEnabled)
 	{
 		// User has chosen to limit cache by maximum size
 		
 		// Check to see if the cache size is higher than the max
-		if (self.cacheSize > settings.maxCacheSize)
+		if (self.cacheSize > settingsS.maxCacheSize)
 		{
-			if (settings.isAutoDeleteCacheEnabled)
+			if (settingsS.isAutoDeleteCacheEnabled)
 			{
 				[self removeOldestCachedSongs];
 			}
 			else
 			{
-				settings.isSongCachingEnabled = NO;
+				settingsS.isSongCachingEnabled = NO;
 				
 				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"The song cache is full. Automatic song caching has been disabled.\n\nYou can re-enable it in the Settings menu (tap the gear, tap Settings at the top)" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 				alert.tag = 4;
@@ -219,10 +211,9 @@ static CacheSingleton *sharedInstance = nil;
 - (void)clearTempCache
 {
 	// Clear the temp cache directory
-	SavedSettings *settings = [SavedSettings sharedInstance];
-	[[NSFileManager defaultManager] removeItemAtPath:settings.tempCachePath error:NULL];
-	[[NSFileManager defaultManager] createDirectoryAtPath:settings.tempCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
-	[SUSStreamSingleton sharedInstance].lastTempCachedSong = nil;
+	[[NSFileManager defaultManager] removeItemAtPath:settingsS.tempCachePath error:NULL];
+	[[NSFileManager defaultManager] createDirectoryAtPath:settingsS.tempCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
+	streamManagerS.lastTempCachedSong = nil;
 }
 
 #pragma mark - Memory management
@@ -238,20 +229,19 @@ static CacheSingleton *sharedInstance = nil;
 			
 - (void)setup
 {
-	SavedSettings *settings = [SavedSettings sharedInstance];
 	NSFileManager *defaultManager = [NSFileManager defaultManager];
 	
 	// Move the cache path if necessary
-	if ([defaultManager fileExistsAtPath:[settings.documentsPath stringByAppendingPathComponent:@"songCache"]]) 
+	if ([defaultManager fileExistsAtPath:[settingsS.documentsPath stringByAppendingPathComponent:@"songCache"]]) 
 	{
 		// The song cache is in the old place, move it
-		[defaultManager moveItemAtURL:[NSURL fileURLWithPath:[settings.documentsPath stringByAppendingPathComponent:@"songCache"]] 
-								toURL:[NSURL fileURLWithPath:settings.songCachePath] error:nil];
+		[defaultManager moveItemAtURL:[NSURL fileURLWithPath:[settingsS.documentsPath stringByAppendingPathComponent:@"songCache"]] 
+								toURL:[NSURL fileURLWithPath:settingsS.songCachePath] error:nil];
 	}
 	// Make sure songCache directory exists, if not create it
-	if (![[NSFileManager defaultManager] fileExistsAtPath:settings.songCachePath]) 
+	if (![[NSFileManager defaultManager] fileExistsAtPath:settingsS.songCachePath]) 
 	{
-		[[NSFileManager defaultManager] createDirectoryAtPath:settings.songCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
+		[[NSFileManager defaultManager] createDirectoryAtPath:settingsS.songCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
 	}
 	// Clear the temp cache directory
 	[self clearTempCache];

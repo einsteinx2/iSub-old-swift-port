@@ -18,7 +18,7 @@
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	
-	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -49,8 +49,6 @@
 
 - (IBAction)buttonPress:(id)sender
 {
-	iSubAppDelegate *appDelegate = [iSubAppDelegate sharedInstance];
-
 	if (sender == introVideo)
 	{
 		NSURL *introUrl = nil;
@@ -90,12 +88,12 @@
 		if (IS_IPAD())
 		{
 			[NSNotificationCenter postNotificationToMainThreadWithName:@"show settings"];
-			//[appDelegate.homeNavigationController pushViewController:serverListViewController animated:YES];
+			//[appDelegateS.homeNavigationController pushViewController:serverListViewController animated:YES];
 		}
 		else
 		{
-			appDelegate.currentTabBarController.selectedIndex = 0;
-			[(UINavigationController*)appDelegate.currentTabBarController.selectedViewController pushViewController:serverListViewController animated:YES];
+			appDelegateS.currentTabBarController.selectedIndex = 0;
+			[(UINavigationController*)appDelegateS.currentTabBarController.selectedViewController pushViewController:serverListViewController animated:YES];
 		}
 		
 		[serverListViewController release];

@@ -11,13 +11,10 @@
 #define READ_BUFFER_AMOUNT 400
 #define WRITE_BUFFER_AMOUNT 400
 
-@class ViewObjectsSingleton, DatabaseSingleton, SavedSettings, Artist, Album, SUSRootFoldersDAO;
+@class Artist, Album, SUSRootFoldersDAO;
 
 @interface SUSAllSongsLoader : SUSLoader
 {
-	ViewObjectsSingleton *viewObjects;
-	DatabaseSingleton *databaseControls;
-	SavedSettings *settings;
 }
 
 @property NSInteger iteration;

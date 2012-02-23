@@ -104,7 +104,7 @@
 
 - (void)queueAction
 {
-	[[DatabaseSingleton sharedInstance] queueSong:mySong];
+	[databaseS queueSong:mySong];
 	[self hideOverlay];
 }
 

@@ -80,7 +80,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 
 - (void)showLoadingScreenOnMainWindowWithMessage:(NSString *)message
 {	
-	[self showLoadingScreen:appDelegate.window withMessage:message];
+	[self showLoadingScreen:appDelegateS.window withMessage:message];
 }
 
 - (void)showLoadingScreen:(UIView *)view withMessage:(NSString *)message
@@ -91,7 +91,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 	isLoadingScreenShowing = YES;
 	
 	HUD = [[MBProgressHUD alloc] initWithView:view];
-	[appDelegate.window addSubview:HUD];
+	[appDelegateS.window addSubview:HUD];
 	HUD.delegate = self;
 	HUD.labelText = message ? message : @"Loading";
 	[HUD show:YES];
@@ -104,7 +104,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 	
 	isLoadingScreenShowing = YES;
 	
-	HUD = [[MBProgressHUD alloc] initWithView:appDelegate.window];
+	HUD = [[MBProgressHUD alloc] initWithView:appDelegateS.window];
 	HUD.userInteractionEnabled = YES;
 	
 	// TODO: verify on iPad
@@ -114,7 +114,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 	[cancelButton addTarget:sender action:@selector(cancelLoad) forControlEvents:UIControlEventTouchUpInside];
 	[HUD addSubview:cancelButton];
 	
-	[appDelegate.window addSubview:HUD];
+	[appDelegateS.window addSubview:HUD];
 	HUD.delegate = self;
 	HUD.labelText = @"Loading";
 	HUD.detailsLabelText = @"tap to cancel";
@@ -133,8 +133,8 @@ static ViewObjectsSingleton *sharedInstance = nil;
 
 - (UIColor *) currentDarkColor
 {
-	//switch ([[appDelegate.settingsDictionary objectForKey:@"cacheSongCellColorSetting"] intValue])
-	switch([SavedSettings sharedInstance].cachedSongCellColorType)
+	//switch ([[appDelegateS.settingsDictionary objectForKey:@"cacheSongCellColorSetting"] intValue])
+	switch(settingsS.cachedSongCellColorType)
 	{
 		case 0:
 			return darkRed;
@@ -153,8 +153,8 @@ static ViewObjectsSingleton *sharedInstance = nil;
 
 - (UIColor *) currentLightColor
 {
-	//switch ([[appDelegate.settingsDictionary objectForKey:@"cacheSongCellColorSetting"] intValue])
-	switch([SavedSettings sharedInstance].cachedSongCellColorType)
+	//switch ([[appDelegateS.settingsDictionary objectForKey:@"cacheSongCellColorSetting"] intValue])
+	switch(settingsS.cachedSongCellColorType)
 	{
 		case 0:
 			return lightRed;
@@ -176,19 +176,19 @@ static ViewObjectsSingleton *sharedInstance = nil;
 - (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
 	if (isOfflineMode == NO)
-		[[NSUserDefaults standardUserDefaults] setInteger:appDelegate.mainTabBarController.selectedIndex forKey:@"mainTabBarControllerSelectedIndex"];
+		[[NSUserDefaults standardUserDefaults] setInteger:appDelegateS.mainTabBarController.selectedIndex forKey:@"mainTabBarControllerSelectedIndex"];
 }
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
 	if (isOfflineMode == NO)
-		[[NSUserDefaults standardUserDefaults] setInteger:appDelegate.mainTabBarController.selectedIndex forKey:@"mainTabBarControllerSelectedIndex"];
+		[[NSUserDefaults standardUserDefaults] setInteger:appDelegateS.mainTabBarController.selectedIndex forKey:@"mainTabBarControllerSelectedIndex"];
 }
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {
 	if (isOfflineMode == NO)
-		[[NSUserDefaults standardUserDefaults] setInteger:appDelegate.mainTabBarController.selectedIndex forKey:@"mainTabBarControllerSelectedIndex"];
+		[[NSUserDefaults standardUserDefaults] setInteger:appDelegateS.mainTabBarController.selectedIndex forKey:@"mainTabBarControllerSelectedIndex"];
 }
 
 - (void)tabBarController:(UITabBarController *)tabBarController didEndCustomizingViewControllers:(NSArray *)viewControllers changed:(BOOL)changed
@@ -206,25 +206,25 @@ static ViewObjectsSingleton *sharedInstance = nil;
 
 - (void) orderMainTabBarController
 {
-	appDelegate.currentTabBarController = appDelegate.mainTabBarController;
-	appDelegate.mainTabBarController.delegate = self;
+	appDelegateS.currentTabBarController = appDelegateS.mainTabBarController;
+	appDelegateS.mainTabBarController.delegate = self;
 	
 	NSArray *savedTabsOrderArray = [[[NSUserDefaults standardUserDefaults] arrayForKey:@"mainTabBarTabsOrder"] retain];
 	
 	// If this is an old device, remove Albums and Songs tabs
-	//if (![[appDelegate.settingsDictionary objectForKey:@"enableSongsTabSetting"] isEqualToString:@"YES"]) 
-	if (![SavedSettings sharedInstance].isSongsTabEnabled)
+	//if (![[appDelegateS.settingsDictionary objectForKey:@"enableSongsTabSetting"] isEqualToString:@"YES"]) 
+	if (!settingsS.isSongsTabEnabled)
 	{
-		//DLog(@"isSongsTabEnabled: %i", [SavedSettings sharedInstance].isSongsTabEnabled);
+		//DLog(@"isSongsTabEnabled: %i", settingsS.isSongsTabEnabled);
 		NSMutableArray *tabs = [[NSMutableArray alloc] init];
-		for (UIViewController *controller in appDelegate.mainTabBarController.viewControllers)
+		for (UIViewController *controller in appDelegateS.mainTabBarController.viewControllers)
 		{
 			if (controller.tabBarItem.tag != 1 && controller.tabBarItem.tag != 2 && controller.tabBarItem.tag != 6)
 			{
 				[tabs addObject:controller];
 			}
 		}
-		appDelegate.mainTabBarController.viewControllers = tabs;
+		appDelegateS.mainTabBarController.viewControllers = tabs;
 		[tabs release];
 		
 		tabs = [[NSMutableArray alloc] init];
@@ -238,7 +238,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 		savedTabsOrderArray = tabs;
 	}
 	
-	int count = appDelegate.mainTabBarController.viewControllers.count;
+	int count = appDelegateS.mainTabBarController.viewControllers.count;
 	//DLog(@"savedTabsOrderArray: %@", savedTabsOrderArray);
 	if (savedTabsOrderArray.count == count) 
 	{
@@ -247,7 +247,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 		NSMutableDictionary *tabsOrderDictionary = [[NSMutableDictionary alloc] initWithCapacity:count];
 		for (int i = 0; i < count; i ++) 
 		{
-			NSNumber *tag = [[NSNumber alloc] initWithInt:[[[appDelegate.mainTabBarController.viewControllers objectAtIndexSafe:i] tabBarItem] tag]];
+			NSNumber *tag = [[NSNumber alloc] initWithInt:[[[appDelegateS.mainTabBarController.viewControllers objectAtIndexSafe:i] tabBarItem] tag]];
 			[tabsOrderDictionary setObject:[NSNumber numberWithInt:i] forKey:[tag stringValue]];
 			
 			if (!needsReordering && ![(NSNumber *)[savedTabsOrderArray objectAtIndexSafe:i] isEqualToNumber:tag]) 
@@ -262,10 +262,10 @@ static ViewObjectsSingleton *sharedInstance = nil;
 			NSMutableArray *tabsViewControllers = [[NSMutableArray alloc] initWithCapacity:count];
 			for (int i = 0; i < count; i ++) 
 			{
-				[tabsViewControllers addObject:[appDelegate.mainTabBarController.viewControllers objectAtIndexSafe:[(NSNumber *)[tabsOrderDictionary objectForKey:[(NSNumber *)[savedTabsOrderArray objectAtIndexSafe:i] stringValue]] intValue]]];
+				[tabsViewControllers addObject:[appDelegateS.mainTabBarController.viewControllers objectAtIndexSafe:[(NSNumber *)[tabsOrderDictionary objectForKey:[(NSNumber *)[savedTabsOrderArray objectAtIndexSafe:i] stringValue]] intValue]]];
 			}
 			
-			appDelegate.mainTabBarController.viewControllers = [NSArray arrayWithArray:tabsViewControllers];
+			appDelegateS.mainTabBarController.viewControllers = [NSArray arrayWithArray:tabsViewControllers];
 			[tabsViewControllers release];
 		}
 		[tabsOrderDictionary release];
@@ -276,15 +276,15 @@ static ViewObjectsSingleton *sharedInstance = nil;
 	{
 		if ([[NSUserDefaults standardUserDefaults] integerForKey:@"mainTabBarControllerSelectedIndex"] == 2147483647) 
 		{
-			appDelegate.mainTabBarController.selectedViewController = appDelegate.mainTabBarController.moreNavigationController;
+			appDelegateS.mainTabBarController.selectedViewController = appDelegateS.mainTabBarController.moreNavigationController;
 		}
 		else 
 		{
-			appDelegate.mainTabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:@"mainTabBarControllerSelectedIndex"];
+			appDelegateS.mainTabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:@"mainTabBarControllerSelectedIndex"];
 		}
 	}
 	
-	appDelegate.mainTabBarController.moreNavigationController.delegate = self;
+	appDelegateS.mainTabBarController.moreNavigationController.delegate = self;
 }
 
 - (UIView *)createCellBackground:(NSUInteger)row
@@ -311,8 +311,6 @@ static ViewObjectsSingleton *sharedInstance = nil;
 
 - (void)setup
 {
-	appDelegate = (iSubAppDelegate*)[[UIApplication sharedApplication] delegate];
-
 	lightRed = [[UIColor colorWithRed:255/255.0 green:146/255.0 blue:115/255.0 alpha:1] retain];
 	darkRed = [[UIColor colorWithRed:226/255.0 green:0/255.0 blue:0/255.0 alpha:1] retain];
 	

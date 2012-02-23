@@ -69,7 +69,7 @@
 
 - (void)downloadAction
 {
-	[[DatabaseSingleton sharedInstance] downloadAllSongs:myArtist.artistId artist:myArtist];
+	[databaseS downloadAllSongs:myArtist.artistId artist:myArtist];
 	
 	self.overlayView.downloadButton.alpha = .3;
 	self.overlayView.downloadButton.enabled = NO;
@@ -79,7 +79,7 @@
 
 - (void)queueAction
 {
-	[[DatabaseSingleton sharedInstance] queueAllSongs:myArtist.artistId artist:myArtist];
+	[databaseS queueAllSongs:myArtist.artistId artist:myArtist];
 	[self hideOverlay];
 }
 

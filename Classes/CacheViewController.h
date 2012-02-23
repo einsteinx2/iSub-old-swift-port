@@ -6,17 +6,8 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-
-@class iSubAppDelegate, ViewObjectsSingleton, MusicSingleton, DatabaseSingleton, SavedSettings, CacheSingleton;
-
 @interface CacheViewController : UITableViewController 
 {
-	iSubAppDelegate *appDelegate;
-	ViewObjectsSingleton *viewObjects;
-	MusicSingleton *musicControls;
-	DatabaseSingleton *databaseControls;
-	CacheSingleton *cacheControls;
-	SavedSettings *settings;
 	
 	BOOL isNoSongsScreenShowing;
 	UIImageView *noSongsScreen;

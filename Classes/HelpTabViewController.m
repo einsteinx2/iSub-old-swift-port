@@ -18,7 +18,7 @@
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	
-	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -38,9 +38,8 @@
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
 	
-	if ([appDelegate.wifiReach currentReachabilityStatus] == NotReachable)
+	if ([appDelegateS.wifiReach currentReachabilityStatus] == NotReachable)
 	{
 		NSString* embedHTML = @"\
 		<html><head>\

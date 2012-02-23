@@ -15,7 +15,7 @@
 #import "PlaylistSingleton.h"
 #import "Song.h"
 #import "NSMutableURLRequest+SUS.h"
-#import "SUSStreamSingleton.h"
+#import "SUSStreamManager.h"
 #import "NSNotificationCenter+MainThread.h"
 
 // Twitter secret keys
@@ -43,20 +43,18 @@ static SocialSingleton *sharedInstance = nil;
 	[self performSelector:@selector(tweetSong) withObject:nil afterDelay:30.0];
 
 	// Scrobble in 30 seconds (or settings amount) if not canceled
-	SavedSettings *settings = [SavedSettings sharedInstance];
-	PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
-	Song *currentSong = dataModel.currentSong;
+	Song *currentSong = playlistS.currentSong;
 	NSTimeInterval scrobbleDelay = 30.0;
 	if (currentSong.duration != nil)
 	{
-		float scrobblePercent = settings.scrobblePercent;
+		float scrobblePercent = settingsS.scrobblePercent;
 		float duration = [currentSong.duration floatValue];
 		scrobbleDelay = scrobblePercent * duration;
 	}
 	[self performSelector:@selector(scrobbleSong) withObject:nil afterDelay:scrobbleDelay];
 	
 	// If scrobbling is enabled, send "now playing" call
-	if (settings.isScrobbleEnabled)
+	if (settingsS.isScrobbleEnabled)
 	{
 		[self scrobbleSong:currentSong isSubmission:NO];
 	}
@@ -65,8 +63,8 @@ static SocialSingleton *sharedInstance = nil;
 - (void)notifySubsonic
 {
 	// If this song wasn't just cached, then notify Subsonic of the playback
-	Song *lastCachedSong = [SUSStreamSingleton sharedInstance].lastCachedSong;
-	Song *currentSong = [PlaylistSingleton sharedInstance].currentSong;
+	Song *lastCachedSong = streamManagerS.lastCachedSong;
+	Song *currentSong = playlistS.currentSong;
 	if (![lastCachedSong isEqualToSong:currentSong])
 	{
 		NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(currentSong.songId), @"id", nil];
@@ -79,10 +77,9 @@ static SocialSingleton *sharedInstance = nil;
 
 - (void)scrobbleSong
 {	
-	if ([SavedSettings sharedInstance].isScrobbleEnabled)
+	if (settingsS.isScrobbleEnabled)
 	{
-		PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
-		Song *currentSong = dataModel.currentSong;
+		Song *currentSong = playlistS.currentSong;
 		[self scrobbleSong:currentSong isSubmission:YES];
 	}
 }
@@ -145,11 +142,9 @@ static SocialSingleton *sharedInstance = nil;
 
 - (void)tweetSong
 {
-	SavedSettings *settings = [SavedSettings sharedInstance];
-	PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
-	Song *currentSong = dataModel.currentSong;
+	Song *currentSong = playlistS.currentSong;
 	
-	if (twitterEngine && settings.isTwitterEnabled)
+	if (twitterEngine && settingsS.isTwitterEnabled)
 	{
 		if (currentSong.artist && currentSong.title)
 		{

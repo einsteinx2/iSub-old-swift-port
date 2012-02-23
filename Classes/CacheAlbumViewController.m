@@ -34,7 +34,7 @@
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	
-	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -44,10 +44,6 @@
 {
     [super viewDidLoad];
 	
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicSingleton sharedInstance];
-	databaseControls = [DatabaseSingleton sharedInstance];
 	
 	// Set notification receiver for when cached songs are deleted to reload the table
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cachedSongDeleted) name:@"cachedSongDeleted" object:nil];
@@ -77,7 +73,7 @@
 {
 	[super viewWillAppear:animated];
 		
-	if(musicControls.showPlayerIcon)
+	if(musicS.showPlayerIcon)
 	{
 		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
 	}
@@ -148,7 +144,7 @@
 	// Create the section index
 	if ([listOfAlbums count] > 10)
 	{
-		FMDatabase *db = databaseControls.albumListCacheDb;
+		FMDatabase *db = databaseS.albumListCacheDb;
 		[db executeUpdate:@"DROP TABLE IF EXSITS albumIndex"];
 		[db executeUpdate:@"CREATE TEMP TABLE albumIndex (album TEXT)"];
 		
@@ -162,7 +158,7 @@
 		}
 		[db commit];
 		
-		self.sectionInfo = [databaseControls sectionInfoFromTable:@"albumIndex" inDatabase:db withColumn:@"album"];
+		self.sectionInfo = [databaseS sectionInfoFromTable:@"albumIndex" inDatabase:db withColumn:@"album"];
 		[db executeUpdate:@"DROP TABLE IF EXSITS albumIndex"];
 		
 		if (sectionInfo)
@@ -178,7 +174,7 @@
 
 - (void) cachedSongDeleted
 {
-	FMResultSet *result = [databaseControls.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? AND seg%i = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", segment, (segment - 1), segment, segment], seg1, self.title];
+	FMResultSet *result = [databaseS.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? AND seg%i = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", segment, (segment - 1), segment, segment], seg1, self.title];
 	
 	self.listOfAlbums = [NSMutableArray arrayWithCapacity:1];
 	self.listOfSongs = [NSMutableArray arrayWithCapacity:1];
@@ -203,13 +199,13 @@
 	if ([self.listOfAlbums count] + [self.listOfSongs count] == 0)
 	{
 		// Handle the moreNavigationController stupidity
-		if (appDelegate.currentTabBarController.selectedIndex == 4)
+		if (appDelegateS.currentTabBarController.selectedIndex == 4)
 		{
-			[appDelegate.currentTabBarController.moreNavigationController popToViewController:[appDelegate.currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
+			[appDelegateS.currentTabBarController.moreNavigationController popToViewController:[appDelegateS.currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
 		}
 		else
 		{
-			[(UINavigationController*)appDelegate.currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
+			[(UINavigationController*)appDelegateS.currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
 		}
 	}
 	else
@@ -220,13 +216,13 @@
 
 - (void)playAllAction:(id)sender
 {	
-	[viewObjects showLoadingScreenOnMainWindowWithMessage:nil];
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 	[self performSelector:@selector(loadPlayAllPlaylist:) withObject:@"NO" afterDelay:0.05];
 }
 
 - (void)shuffleAction:(id)sender
 {
-	[viewObjects showLoadingScreenOnMainWindowWithMessage:@"Shuffling"];
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Shuffling"];
 	[self performSelector:@selector(loadPlayAllPlaylist:) withObject:@"YES" afterDelay:0.05];
 }
 
@@ -235,25 +231,23 @@
 {	
 	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-	
-	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
-	
+		
 	BOOL isShuffle;
 	if ([shuffle isEqualToString:@"YES"])
 		isShuffle = YES;
 	else
 		isShuffle = NO;
 	
-	[databaseControls resetCurrentPlaylistDb];
+	[databaseS resetCurrentPlaylistDb];
 	
 	FMResultSet *result;
 	if (segment == 2)
 	{
-		result = [databaseControls.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ORDER BY seg2 COLLATE NOCASE", seg1];
+		result = [databaseS.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ORDER BY seg2 COLLATE NOCASE", seg1];
 	}
 	else
 	{
-		result = [databaseControls.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment], seg1, self.title];
+		result = [databaseS.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment], seg1, self.title];
 	}
 
 	while ([result next])
@@ -265,14 +259,14 @@
 	
 	if (isShuffle)
 	{
-		currentPlaylist.isShuffle = YES;
+		playlistS.isShuffle = YES;
 		
-		[databaseControls resetShufflePlaylist];
-		[databaseControls.currentPlaylistDb executeUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist ORDER BY RANDOM()"];
+		[databaseS resetShufflePlaylist];
+		[databaseS.currentPlaylistDb executeUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist ORDER BY RANDOM()"];
 	}
 	else
 	{
-		currentPlaylist.isShuffle = NO;
+		playlistS.isShuffle = NO;
 	}
 			
 	// Must do UI stuff in main thread
@@ -284,7 +278,7 @@
 
 - (void)playAllPlaySong
 {	
-	[musicControls playSongAtPosition:0];
+	[musicS playSongAtPosition:0];
 	
 	if (IS_IPAD())
 	{
@@ -303,8 +297,8 @@
 - (void) loadPlayAllPlaylist2
 {
 	// Hide the loading screen
-	[[[appDelegate.currentTabBarController.view subviews] objectAtIndexSafe:([[appDelegate.currentTabBarController.view subviews] count] - 1)] removeFromSuperview];
-	[[[appDelegate.currentTabBarController.view subviews] objectAtIndexSafe:([[appDelegate.currentTabBarController.view subviews] count] - 1)] removeFromSuperview];
+	[[[appDelegateS.currentTabBarController.view subviews] objectAtIndexSafe:([[appDelegateS.currentTabBarController.view subviews] count] - 1)] removeFromSuperview];
+	[[[appDelegateS.currentTabBarController.view subviews] objectAtIndexSafe:([[appDelegateS.currentTabBarController.view subviews] count] - 1)] removeFromSuperview];
 	
 	[self playAllPlaySong];
 }
@@ -399,15 +393,15 @@
 		cell.seg1 = self.seg1;
 		
 		NSString *md5 = [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:0];
-		NSString *coverArtId = [databaseControls.songCacheDb stringForQuery:@"SELECT coverArtId FROM cachedSongs WHERE md5 = ?", md5];
+		NSString *coverArtId = [databaseS.songCacheDb stringForQuery:@"SELECT coverArtId FROM cachedSongs WHERE md5 = ?", md5];
 		NSString *name = [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1];
 		
 		if (coverArtId)
 		{
-			if ([databaseControls.coverArtCacheDb60 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [coverArtId md5]] == 1)
+			if ([databaseS.coverArtCacheDb60 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [coverArtId md5]] == 1)
 			{
 				// If the image is already in the cache database, load it
-				cell.coverArtView.image = [UIImage imageWithData:[databaseControls.coverArtCacheDb60 dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [coverArtId md5]]];
+				cell.coverArtView.image = [UIImage imageWithData:[databaseS.coverArtCacheDb60 dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [coverArtId md5]]];
 			}
 			else 
 			{	
@@ -484,7 +478,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {	
-	if (viewObjects.isCellEnabled)
+	if (viewObjectsS.isCellEnabled)
 	{
 		if (indexPath.row < [listOfAlbums count])
 		{		
@@ -497,7 +491,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			cacheAlbumViewController.segment = (self.segment + 1);
 			cacheAlbumViewController.seg1 = self.seg1;
 			//DLog(@"query: %@", [NSString stringWithFormat:@"SELECT md5, segs, seg%i FROM cachedSongsLayout WHERE seg1 = '%@' AND seg%i = '%@' GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), seg1, segment, [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1], (segment + 1), (segment + 1)]);
-			FMResultSet *result = [databaseControls.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? AND seg%i = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), segment, (segment + 1), (segment + 1)], seg1, [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1]];
+			FMResultSet *result = [databaseS.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? AND seg%i = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), segment, (segment + 1), (segment + 1)], seg1, [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1]];
 			while ([result next])
 			{
 				if ([result intForColumnIndex:1] > (segment + 1))
@@ -536,21 +530,19 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			[cacheAlbumViewController release];
 		}
 		else
-		{
-			PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
-			
+		{			
 			NSUInteger a = indexPath.row - [listOfAlbums count];
 			
-			[databaseControls resetCurrentPlaylistDb];
+			[databaseS resetCurrentPlaylistDb];
 			for(NSArray *song in listOfSongs)
 			{
 				Song *aSong = [Song songFromCacheDb:[song objectAtIndexSafe:0]];
 				[aSong addToCurrentPlaylist];
 			}
 						
-			currentPlaylist.isShuffle = NO;
+			playlistS.isShuffle = NO;
 			
-			[musicControls playSongAtPosition:a];
+			[musicS playSongAtPosition:a];
 			
 			if (IS_IPAD())
 			{

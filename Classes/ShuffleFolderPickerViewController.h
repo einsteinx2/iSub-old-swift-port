@@ -9,12 +9,9 @@
 #import "FolderPickerDialog.h"
 #import "NewHomeViewController.h"
 
-@class iSubAppDelegate;
 
 @interface ShuffleFolderPickerViewController : UITableViewController 
-{
-    iSubAppDelegate *appDelegate;
-	
+{	
 	NSMutableArray *sortedFolders;
 	
 	FolderPickerDialog *myDialog;

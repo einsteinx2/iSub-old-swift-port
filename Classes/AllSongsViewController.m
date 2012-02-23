@@ -48,7 +48,7 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	
-	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -66,11 +66,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicSingleton sharedInstance];
-	databaseControls = [DatabaseSingleton sharedInstance];
-	settings = [SavedSettings sharedInstance];
 	
 	self.title = @"Songs";
 	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
@@ -123,7 +118,7 @@
 	}
 	else
 	{
-		if(musicControls.showPlayerIcon)
+		if(musicS.showPlayerIcon)
 		{
 			self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
 		}
@@ -140,7 +135,7 @@
 		else
 		{
 			self.tableView.tableHeaderView = nil;
-			if ([[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllSongsLoading", settings.urlString]] isEqualToString:@"YES"])
+			if ([[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@isAllSongsLoading", settingsS.urlString]] isEqualToString:@"YES"])
 			{
 				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Resume Load?" message:@"If you've reloaded the albums tab since this load started you should choose 'Restart Load'.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Restart Load", @"Resume Load", nil];
 				alert.tag = 1;
@@ -213,7 +208,7 @@
 	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 	[formatter setDateStyle:NSDateFormatterMediumStyle];
 	[formatter setTimeStyle:NSDateFormatterShortStyle];
-	reloadTimeLabel.text = [NSString stringWithFormat:@"last reload: %@", [formatter stringFromDate:[defaults objectForKey:[NSString stringWithFormat:@"%@songsReloadTime", settings.urlString]]]];
+	reloadTimeLabel.text = [NSString stringWithFormat:@"last reload: %@", [formatter stringFromDate:[defaults objectForKey:[NSString stringWithFormat:@"%@songsReloadTime", settingsS.urlString]]]];
 	[formatter release];
 	
 	self.tableView.tableHeaderView = headerView;
@@ -358,7 +353,7 @@
 
 - (void)reloadAction:(id)sender
 {
-	if (!viewObjects.isArtistsLoading)
+	if (!viewObjectsS.isArtistsLoading)
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Reload?" message:@"This could take a while if you have a big collection.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection.\n\nNote: If you've added new artists or albums, you should reload the Folders and Albums tabs first." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
 		alert.tag = 1;
@@ -476,7 +471,7 @@
 		isSearching = NO;
 		letUserSelectRow = NO;
 		self.tableView.scrollEnabled = NO;
-		[databaseControls.allSongsDb executeUpdate:@"DROP TABLE allSongsSearch"];
+		[databaseS.allSongsDb executeUpdate:@"DROP TABLE allSongsSearch"];
 	}
 	
 	[self.tableView reloadData];
@@ -622,16 +617,16 @@
 	if(indexPath.row % 2 == 0)
 	{
 		if (aSong.isFullyCached)
-			cell.backgroundView.backgroundColor = [viewObjects currentLightColor];
+			cell.backgroundView.backgroundColor = [viewObjectsS currentLightColor];
 		else
-			cell.backgroundView.backgroundColor = viewObjects.lightNormal;
+			cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
 	}
 	else
 	{
 		if (aSong.isFullyCached)
-			cell.backgroundView.backgroundColor = [viewObjects currentDarkColor];
+			cell.backgroundView.backgroundColor = [viewObjectsS currentDarkColor];
 		else
-			cell.backgroundView.backgroundColor = viewObjects.darkNormal;
+			cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
 	}
 	
 	[cell.songNameLabel setText:aSong.title];
@@ -645,15 +640,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	if (viewObjects.isCellEnabled)
-	{
-		PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
-		
+	if (viewObjectsS.isCellEnabled)
+	{		
 		// Clear the current playlist
-		if ([SavedSettings sharedInstance].isJukeboxEnabled)
-			[databaseControls resetJukeboxPlaylist];
+		if (settingsS.isJukeboxEnabled)
+			[databaseS resetJukeboxPlaylist];
 		else
-			[databaseControls resetCurrentPlaylistDb];
+			[databaseS resetCurrentPlaylistDb];
 		
 		// Add selected song to the playlist
 		Song *aSong = nil;
@@ -670,18 +663,18 @@
 		[aSong addToCurrentPlaylist];
 		
 		// If jukebox mode, send song id to server
-		if ([SavedSettings sharedInstance].isJukeboxEnabled)
+		if (settingsS.isJukeboxEnabled)
 		{
-			[musicControls jukeboxStop];
-			[musicControls jukeboxClearPlaylist];
-			[musicControls jukeboxAddSong:aSong.songId];
+			[musicS jukeboxStop];
+			[musicS jukeboxClearPlaylist];
+			[musicS jukeboxAddSong:aSong.songId];
 		}
 		
 		// Set player defaults
-		currentPlaylist.isShuffle = NO;
+		playlistS.isShuffle = NO;
 		
 		// Start the song
-		[musicControls playSongAtPosition:0];
+		[musicS playSongAtPosition:0];
 		
 		// Show the player
 		if (IS_IPAD())

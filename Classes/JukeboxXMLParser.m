@@ -24,7 +24,6 @@
 {	
 	if ((self = [super init]))
 	{
-		appDelegate = (iSubAppDelegate*)[UIApplication sharedApplication].delegate;
 		listOfSongs = [[NSMutableArray alloc] init];
 	}
 	
@@ -34,22 +33,22 @@
 
 - (void) subsonicErrorCode:(NSString *)errorCode message:(NSString *)message
 {
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:appDelegateS cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	alert.tag = 1;
 	[alert show];
 	[alert release];
 	
 	if ([errorCode isEqualToString:@"50"])
 	{
-		[SavedSettings sharedInstance].isJukeboxEnabled = NO;
-		appDelegate.window.backgroundColor = [ViewObjectsSingleton sharedInstance].windowColor;
+		settingsS.isJukeboxEnabled = NO;
+		appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"JukeboxTurnedOff"];
 	}
 }
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
-	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:@"There was an error parsing the Jukebox XML response." delegate:appDelegate cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
+	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:@"There was an error parsing the Jukebox XML response." delegate:appDelegateS cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	alert.tag = 1;
 	[alert show];
 	[alert release];
@@ -69,7 +68,7 @@
 		isPlaying = [[attributeDict objectForKey:@"playing"] boolValue];
 		gain = [[attributeDict objectForKey:@"gain"] floatValue];
 		
-		[[DatabaseSingleton sharedInstance] resetJukeboxPlaylist];
+		[databaseS resetJukeboxPlaylist];
 	}
 	else if ([elementName isEqualToString:@"entry"])
 	{

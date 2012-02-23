@@ -56,7 +56,7 @@
 
 - (FMDatabase *)db
 {
-    return [[DatabaseSingleton sharedInstance] allSongsDb]; 
+    return [databaseS allSongsDb]; 
 }
 
 #pragma mark - Private Methods

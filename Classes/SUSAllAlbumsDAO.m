@@ -31,7 +31,7 @@
 
 - (FMDatabase *)db
 {
-    return [DatabaseSingleton sharedInstance].allAlbumsDb; 
+    return databaseS.allAlbumsDb; 
 }
 
 #pragma mark - Private Methods

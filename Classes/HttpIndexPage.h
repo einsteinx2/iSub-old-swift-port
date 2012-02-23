@@ -7,12 +7,8 @@
 //
 
 
-
-@class DatabaseSingleton;
-
 @interface HttpIndexPage : NSObject 
 {
-	DatabaseSingleton *databaseControls;
 	
     NSString *documentsDirectory;
 }

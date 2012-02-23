@@ -21,8 +21,6 @@
 - (void)setup
 {
     [super setup];
-	databaseControls = [DatabaseSingleton sharedInstance];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
 }
 
 - (void)dealloc
@@ -42,9 +40,9 @@
 - (FMDatabase *)db
 {
     if (IS_IPAD())
-        return [databaseControls coverArtCacheDb540];
+        return [databaseS coverArtCacheDb540];
     else
-        return [databaseControls coverArtCacheDb320];
+        return [databaseS coverArtCacheDb320];
 }
 
 - (BOOL)isCoverArtCached
@@ -57,7 +55,7 @@
 - (void)startLoad
 {
 	// Cache the album art if it exists
-	if (self.coverArtId && !viewObjects.isOfflineMode)
+	if (self.coverArtId && !viewObjectsS.isOfflineMode)
 	{
 		NSString *size = nil;
 

@@ -88,7 +88,7 @@
 
 /*- (void)toggleDelete
 {
-	[[viewObjects.listOfPlaylistSongs objectAtIndexSafe:indexPath.row] addToCacheQueue];
+	[[viewObjectsS.listOfPlaylistSongs objectAtIndexSafe:indexPath.row] addToCacheQueue];
 	
 	overlayView.downloadButton.alpha = .3;
 	overlayView.downloadButton.enabled = NO;
@@ -98,8 +98,8 @@
 
 - (void)downloadAction
 {
-	if ([ViewObjectsSingleton sharedInstance].isLocalPlaylist)
-		[[Song songFromDbRow:self.indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", playlistMD5] inDatabase:[DatabaseSingleton sharedInstance].localPlaylistsDb] addToCacheQueue];
+	if (viewObjectsS.isLocalPlaylist)
+		[[Song songFromDbRow:self.indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", playlistMD5] inDatabase:databaseS.localPlaylistsDb] addToCacheQueue];
 	else
 		[[Song songFromServerPlaylistId:playlistMD5 row:self.indexPath.row] addToCacheQueue];
 
@@ -111,8 +111,8 @@
 
 - (void)queueAction
 {
-	if ([ViewObjectsSingleton sharedInstance].isLocalPlaylist)
-		[[Song songFromDbRow:self.indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", playlistMD5] inDatabase:[DatabaseSingleton sharedInstance].localPlaylistsDb] addToCurrentPlaylist];
+	if (viewObjectsS.isLocalPlaylist)
+		[[Song songFromDbRow:self.indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", playlistMD5] inDatabase:databaseS.localPlaylistsDb] addToCurrentPlaylist];
 	else
 		[[Song songFromServerPlaylistId:playlistMD5 row:self.indexPath.row] addToCurrentPlaylist];
 	

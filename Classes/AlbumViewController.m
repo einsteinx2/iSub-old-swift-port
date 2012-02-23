@@ -56,7 +56,7 @@
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	
-	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -74,10 +74,6 @@
 	self = [super initWithNibName:@"AlbumViewController" bundle:nil];
 	if (self != nil)
 	{
-		appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-		viewObjects = [ViewObjectsSingleton sharedInstance];
-		databaseControls = [DatabaseSingleton sharedInstance];
-		musicControls = [MusicSingleton sharedInstance];
 		self.sectionInfo = nil;
 		
 		if (anArtist != nil)
@@ -104,7 +100,7 @@
         }
         else
         {
-            [viewObjects showAlbumLoadingScreen:self.view sender:self];
+            [viewObjectsS showAlbumLoadingScreen:self.view sender:self];
             [dataModel startLoad];
         }
 	}
@@ -145,7 +141,7 @@
 {	
 	[super viewWillAppear:animated];
 	
-	if(musicControls.showPlayerIcon)
+	if(musicS.showPlayerIcon)
 	{
 		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
 	}
@@ -199,7 +195,7 @@
 {
 	[self.dataModel cancelLoad];
 	[self dataSourceDidFinishLoadingNewData];
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 }
 
 - (void)createReflection
@@ -236,7 +232,7 @@
 				
 		if(myAlbum.coverArtId)
 		{		
-			FMDatabase *db = IS_IPAD() ? databaseControls.coverArtCacheDb540 : databaseControls.coverArtCacheDb320;
+			FMDatabase *db = IS_IPAD() ? databaseS.coverArtCacheDb540 : databaseS.coverArtCacheDb320;
 			
 			if ([db intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [myAlbum.coverArtId md5]])
 			{
@@ -294,7 +290,7 @@
 													   numberOfTracks:dataModel.songsCount 
 														  albumLength:dataModel.folderLength];
 		if (IS_IPAD())
-			[appDelegate.ipadRootViewController presentModalViewController:largeArt animated:YES];
+			[appDelegateS.ipadRootViewController presentModalViewController:largeArt animated:YES];
 		else
 			[self presentModalViewController:largeArt animated:YES];
 		[largeArt release];
@@ -303,12 +299,12 @@
 
 - (IBAction)playAllAction:(id)sender
 {
-	[databaseControls playAllSongs:myId artist:myArtist];
+	[databaseS playAllSongs:myId artist:myArtist];
 }
 
 - (IBAction)shuffleAction:(id)sender
 {
-	[databaseControls shuffleAllSongs:myId artist:myArtist];
+	[databaseS shuffleAllSongs:myId artist:myArtist];
 }
 
 - (IBAction)nowPlayingAction:(id)sender
@@ -373,9 +369,9 @@
 		// Setup cell backgrond color
 		cell.backgroundView = [[[UIView alloc] init] autorelease];
 		if(indexPath.row % 2 == 0)
-			cell.backgroundView.backgroundColor = viewObjects.lightNormal;
+			cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
 		else
-			cell.backgroundView.backgroundColor = viewObjects.darkNormal;
+			cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
 		
 		return cell;
 	}
@@ -410,16 +406,16 @@
 		if(indexPath.row % 2 == 0)
 		{
 			if (aSong.isFullyCached)
-				cell.backgroundView.backgroundColor = [viewObjects currentLightColor];
+				cell.backgroundView.backgroundColor = [viewObjectsS currentLightColor];
 			else
-				cell.backgroundView.backgroundColor = viewObjects.lightNormal;
+				cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
 		}
 		else
 		{
 			if (aSong.isFullyCached)
-				cell.backgroundView.backgroundColor = [viewObjects currentDarkColor];
+				cell.backgroundView.backgroundColor = [viewObjectsS currentDarkColor];
 			else
-				cell.backgroundView.backgroundColor = viewObjects.darkNormal;
+				cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
 		}
 		
 		return cell;
@@ -437,7 +433,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {	
-	if (viewObjects.isCellEnabled)
+	if (viewObjectsS.isCellEnabled)
 	{
 		if (indexPath.row < dataModel.albumsCount)
 		{
@@ -481,14 +477,14 @@
 	[alert show];
 	[alert release];
 	
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 	
 	[self dataSourceDidFinishLoadingNewData];
 }
 
 - (void)loadingFinished:(SUSLoader *)theLoader
 {
-    [viewObjects hideLoadingScreen];
+    [viewObjectsS hideLoadingScreen];
 	
 	[self.tableView reloadData];
 	[self addHeaderAndIndex];
@@ -518,7 +514,7 @@
 	if (scrollView.contentOffset.y <= - 65.0f && !_reloading) 
 	{
 		_reloading = YES;
-		[viewObjects showAlbumLoadingScreen:self.view sender:self];
+		[viewObjectsS showAlbumLoadingScreen:self.view sender:self];
 		[dataModel startLoad];
 		[refreshHeaderView setState:EGOOPullRefreshLoading];
 		[UIView beginAnimations:nil context:NULL];

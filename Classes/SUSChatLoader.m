@@ -109,7 +109,7 @@
 	[theConnection release];
 	[receivedData release];
 	
-	[viewObjects hideLoadingScreen];
+	[viewObjectsS hideLoadingScreen];
 	[self dataSourceDidFinishLoadingNewData];*/
 }	
 

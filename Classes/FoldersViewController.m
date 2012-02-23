@@ -55,7 +55,7 @@
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	if ([SavedSettings sharedInstance].isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
@@ -78,16 +78,12 @@
 - (void)createDataModel
 {
 	self.dataModel = [[[SUSRootFoldersDAO alloc] initWithDelegate:self] autorelease];
-	dataModel.selectedFolderId = [[SavedSettings sharedInstance] rootFoldersSelectedFolderId];
+	dataModel.selectedFolderId = [settingsS rootFoldersSelectedFolderId];
 }
 
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
-	appDelegate = (iSubAppDelegate *)[[UIApplication sharedApplication] delegate];
-	viewObjects = [ViewObjectsSingleton sharedInstance];
-	musicControls = [MusicSingleton sharedInstance];
-	settings = [SavedSettings sharedInstance];
 	
 	[self createDataModel];
 	
@@ -135,7 +131,7 @@
 {
 	[super viewWillAppear:animated];
 	
-	if(musicControls.showPlayerIcon)
+	if(musicS.showPlayerIcon)
 	{
 		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
 	}
@@ -144,11 +140,11 @@
 		self.navigationItem.rightBarButtonItem = nil;
 	}
 	
-	if (![SUSAllSongsLoader isLoading] && !viewObjects.isArtistsLoading)
+	if (![SUSAllSongsLoader isLoading] && !viewObjectsS.isArtistsLoading)
 	{
 		if (![dataModel isRootFolderIdCached])
 		{
-			[self loadData:[[SavedSettings sharedInstance] rootFoldersSelectedFolderId]];
+			[self loadData:[settingsS rootFoldersSelectedFolderId]];
 		}
 	}
 	
@@ -201,7 +197,7 @@
 	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 	[formatter setDateStyle:NSDateFormatterMediumStyle];
 	[formatter setTimeStyle:NSDateFormatterShortStyle];
-	reloadTimeLabel.text = [NSString stringWithFormat:@"last reload: %@", [formatter stringFromDate:[[SavedSettings sharedInstance] rootFoldersReloadTime]]];
+	reloadTimeLabel.text = [NSString stringWithFormat:@"last reload: %@", [formatter stringFromDate:[settingsS rootFoldersReloadTime]]];
 	[formatter release];
 	
 }
@@ -275,7 +271,7 @@
 {
 	[dropdown updateFolders];
 	
-	viewObjects.isArtistsLoading = YES;
+	viewObjectsS.isArtistsLoading = YES;
 	
 	allArtistsLoadingScreen = [[LoadingScreen alloc] initOnView:self.view.superview withMessage:[NSArray arrayWithObjects:@"Processing Folders", @"", @"", @"", nil]  blockInput:YES mainWindow:NO];
 	
@@ -285,7 +281,7 @@
 
 - (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
 {	
-	viewObjects.isArtistsLoading = NO;
+	viewObjectsS.isArtistsLoading = NO;
 	
 	// Hide the loading screen
 	[allArtistsLoadingScreen hide]; 
@@ -310,7 +306,7 @@
 	[self.tableView reloadData];
 	self.tableView.backgroundColor = [UIColor clearColor];
 	
-	viewObjects.isArtistsLoading = NO;
+	viewObjectsS.isArtistsLoading = NO;
 	
 	// Hide the loading screen
 	[allArtistsLoadingScreen hide]; 
@@ -352,7 +348,7 @@
 - (void)folderDropdownSelectFolder:(NSNumber *)folderId
 {
 	// Save the default
-	[SavedSettings sharedInstance].rootFoldersSelectedFolderId = folderId;
+	settingsS.rootFoldersSelectedFolderId = folderId;
 	
 	// Reload the data
 	dataModel.selectedFolderId = folderId;
@@ -404,7 +400,7 @@
 {
 	if (![SUSAllSongsLoader isLoading])
 	{
-		[self loadData:[[SavedSettings sharedInstance] rootFoldersSelectedFolderId]];
+		[self loadData:[settingsS rootFoldersSelectedFolderId]];
 	}
 	else
 	{
@@ -576,7 +572,7 @@
 	cell.myArtist = anArtist;
 	
 	[cell.artistNameLabel setText:anArtist.name];
-	cell.backgroundView = [viewObjects createCellBackground:indexPath.row];
+	cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
 		
 	return cell;
 }
@@ -639,7 +635,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	if (viewObjects.isCellEnabled)
+	if (viewObjectsS.isCellEnabled)
 	{
 		DLog(@"did indexPath.row: %i", indexPath.row);
 		Artist *anArtist = nil;
@@ -688,7 +684,7 @@
 	if (scrollView.contentOffset.y <= - 65.0f && !_reloading) 
 	{
 		_reloading = YES;
-		[self loadData:[[SavedSettings sharedInstance] rootFoldersSelectedFolderId]];
+		[self loadData:[settingsS rootFoldersSelectedFolderId]];
 		[refreshHeaderView setState:EGOOPullRefreshLoading];
 		[UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:0.2];

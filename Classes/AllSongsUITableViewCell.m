@@ -95,7 +95,7 @@
 	
 	if (self.isOverlayShowing)
 	{
-		if ([[[DatabaseSingleton sharedInstance].songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", md5] isEqualToString:@"YES"]) 
+		if ([[databaseS.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", md5] isEqualToString:@"YES"]) 
 		{
 			self.overlayView.downloadButton.alpha = .3;
 			self.overlayView.downloadButton.enabled = NO;
@@ -113,13 +113,13 @@
 {
 	if (self.isSearching) 
 	{
-		Song *aSong = [[Song songFromDbRow:self.indexPath.row inTable:@"allSongsSearch" inDatabase:[DatabaseSingleton sharedInstance].allSongsDb] retain];
+		Song *aSong = [[Song songFromDbRow:self.indexPath.row inTable:@"allSongsSearch" inDatabase:databaseS.allSongsDb] retain];
 		[aSong addToCacheQueue];
 		[aSong release];
 	}
 	else 
 	{
-		Song *aSong = [[Song songFromDbRow:self.indexPath.row inTable:@"allSongs" inDatabase:[DatabaseSingleton sharedInstance].allSongsDb] retain];
+		Song *aSong = [[Song songFromDbRow:self.indexPath.row inTable:@"allSongs" inDatabase:databaseS.allSongsDb] retain];
 		[aSong addToCacheQueue];
 		[aSong release];
 	}
@@ -134,13 +134,13 @@
 {	
 	if (self.isSearching) 
 	{
-		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"allSongsSearch" inDatabase:[DatabaseSingleton sharedInstance].allSongsDb];
-		[[DatabaseSingleton sharedInstance] queueSong:aSong];
+		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"allSongsSearch" inDatabase:databaseS.allSongsDb];
+		[databaseS queueSong:aSong];
 	}
 	else 
 	{
-		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"allSongs" inDatabase:[DatabaseSingleton sharedInstance].allSongsDb];
-		[[DatabaseSingleton sharedInstance] queueSong:aSong];
+		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"allSongs" inDatabase:databaseS.allSongsDb];
+		[databaseS queueSong:aSong];
 	}
 	
 	[self hideOverlay];

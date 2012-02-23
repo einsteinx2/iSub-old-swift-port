@@ -6,13 +6,8 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-
-
-@class iSubAppDelegate, ViewObjectsSingleton, DatabaseSingleton;
-
 @interface JukeboxXMLParser : NSObject <NSXMLParserDelegate>
 {	
-	iSubAppDelegate *appDelegate; 
 	/*DatabaseControlsSingleton *databaseControls;
 	ViewObjectsSingleton *viewObjects;*/
 

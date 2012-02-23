@@ -22,7 +22,7 @@
 
 - (FMDatabase *)db
 {
-	return [DatabaseSingleton sharedInstance].songCacheDb;
+	return databaseS.songCacheDb;
 }
 
 - (BOOL)fileExists
@@ -142,13 +142,13 @@
 
 + (Song *)songFromAllSongsDb:(NSUInteger)row inTable:(NSString *)table
 {
-	return [self songFromDbRow:row inTable:table inDatabase:[DatabaseSingleton sharedInstance].allSongsDb];
+	return [self songFromDbRow:row inTable:table inDatabase:databaseS.allSongsDb];
 }
 
 + (Song *)songFromServerPlaylistId:(NSString *)md5 row:(NSUInteger)row
 {
 	NSString *table = [NSString stringWithFormat:@"splaylist%@", md5];
-	return [self songFromDbRow:row inTable:table inDatabase:[DatabaseSingleton sharedInstance].localPlaylistsDb];
+	return [self songFromDbRow:row inTable:table inDatabase:databaseS.localPlaylistsDb];
 }
 
 + (Song *)songFromDbForMD5:(NSString *)md5 inTable:(NSString *)table inDatabase:(FMDatabase *)db
@@ -170,19 +170,19 @@
 
 + (Song *)songFromGenreDb:(NSString *)md5
 {
-	if ([ViewObjectsSingleton sharedInstance].isOfflineMode)
+	if (viewObjectsS.isOfflineMode)
 	{
-		return [self songFromDbForMD5:md5 inTable:@"genresSongs" inDatabase:[DatabaseSingleton sharedInstance].songCacheDb];
+		return [self songFromDbForMD5:md5 inTable:@"genresSongs" inDatabase:databaseS.songCacheDb];
 	}
 	else
 	{
-		return [self songFromDbForMD5:md5 inTable:@"genresSongs" inDatabase:[DatabaseSingleton sharedInstance].songCacheDb];
+		return [self songFromDbForMD5:md5 inTable:@"genresSongs" inDatabase:databaseS.songCacheDb];
 	}
 }
 
 + (Song *)songFromCacheDb:(NSString *)md5
 {
-	return [self songFromDbForMD5:md5 inTable:@"cachedSongs" inDatabase:[DatabaseSingleton sharedInstance].songCacheDb];
+	return [self songFromDbForMD5:md5 inTable:@"cachedSongs" inDatabase:databaseS.songCacheDb];
 }
 
 - (BOOL)insertIntoTable:(NSString *)table inDatabase:(FMDatabase *)db
@@ -200,12 +200,12 @@
 - (BOOL)insertIntoServerPlaylistWithPlaylistId:(NSString *)md5
 {
 	NSString *table = [NSString stringWithFormat:@"splaylist%@", md5];
-	return [self insertIntoTable:table inDatabase:[DatabaseSingleton sharedInstance].localPlaylistsDb];
+	return [self insertIntoTable:table inDatabase:databaseS.localPlaylistsDb];
 }
 
 - (BOOL)insertIntoFolderCacheForFolderId:(NSString *)folderId
 {
-	FMDatabase *db = [DatabaseSingleton sharedInstance].albumListCacheDb;
+	FMDatabase *db = databaseS.albumListCacheDb;
 	
 	[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO songsCache (folderId, %@) VALUES (?, %@)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [folderId md5], self.title, self.songId, self.artist, self.album, self.genre, self.coverArtId, self.path, self.suffix, self.transcodedSuffix, self.duration, self.bitRate, self.track, self.year, self.size, self.parentId];
 	
@@ -264,19 +264,18 @@
 
 - (BOOL)addToCurrentPlaylist
 {
-	DatabaseSingleton *dbControls = [DatabaseSingleton sharedInstance];
-	PlaylistSingleton *currentPlaylist = [PlaylistSingleton sharedInstance];
+	DatabaseSingleton *dbControls = databaseS;
 
 	BOOL hadError = NO;
 	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
 		//DLog(@"inserting %@", aSong.title);
 		[self insertIntoTable:@"jukeboxCurrentPlaylist" inDatabase:dbControls.currentPlaylistDb];
 		if ([dbControls.currentPlaylistDb hadError])
 			hadError = YES;
 		
-		if (currentPlaylist.isShuffle)
+		if (playlistS.isShuffle)
 		{
 			[self insertIntoTable:@"jukeboxShufflePlaylist" inDatabase:dbControls.currentPlaylistDb];
 			if ([dbControls.currentPlaylistDb hadError])
@@ -289,7 +288,7 @@
 		if ([dbControls.currentPlaylistDb hadError])
 			hadError = YES;
 		
-		if (currentPlaylist.isShuffle)
+		if (playlistS.isShuffle)
 		{
 			[self insertIntoTable:@"shufflePlaylist" inDatabase:dbControls.currentPlaylistDb];
 			if ([dbControls.currentPlaylistDb hadError])
@@ -302,11 +301,11 @@
 
 - (BOOL)addToShufflePlaylist
 {
-	DatabaseSingleton *dbControls = [DatabaseSingleton sharedInstance];
+	DatabaseSingleton *dbControls = databaseS;
 
 	BOOL hadError = NO;
 	
-	if ([SavedSettings sharedInstance].isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
 		[self insertIntoTable:@"jukeboxShufflePlaylist" inDatabase:dbControls.currentPlaylistDb];
 		if ([dbControls.currentPlaylistDb hadError])
@@ -351,16 +350,14 @@
 + (BOOL)removeSongFromCacheDbByMD5:(NSString *)md5
 {
 	// Check if we're deleting the song that's currently playing. If so, stop the player.
-	PlaylistSingleton *dataModel = [PlaylistSingleton sharedInstance];
-	if (dataModel.currentSong && ![SavedSettings sharedInstance].isJukeboxEnabled &&
-		[[dataModel.currentSong.path md5] isEqualToString:md5])
+	if (playlistS.currentSong && !settingsS.isJukeboxEnabled &&
+		[[playlistS.currentSong.path md5] isEqualToString:md5])
 	{
 		DLog(@"stopping the player before deleting the file");
-        [[AudioEngine sharedInstance] stop];
+        [audioEngineS stop];
 	}
 	
-	DatabaseSingleton *dbControls = [DatabaseSingleton sharedInstance];
-	SavedSettings *settings = [SavedSettings sharedInstance];
+	DatabaseSingleton *dbControls = databaseS;
 	
 	BOOL hadError = NO;	
 	
@@ -394,9 +391,9 @@
 	// Delete the song from disk
 	NSString *fileName;
 	if (transcodedSuffix)
-		fileName = [settings.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", md5, transcodedSuffix]];
+		fileName = [settingsS.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", md5, transcodedSuffix]];
 	else
-		fileName = [settings.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", md5, suffix]];
+		fileName = [settingsS.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", md5, suffix]];
 	///////// REWRITE TO CATCH THIS NSFILEMANAGER ERROR ///////////
 	[[NSFileManager defaultManager] removeItemAtPath:fileName error:NULL];
 	
@@ -426,14 +423,14 @@
 		if (self.transcodedSuffix)
 		{
 			// This is a transcode, so we'll want to use the actual bitrate if possible
-			if ([[PlaylistSingleton sharedInstance].currentSong isEqualToSong:self])
+			if ([playlistS.currentSong isEqualToSong:self])
 			{
 				// This is the current playing song, so see if BASS has an actual bitrate for it
-				if ([AudioEngine sharedInstance].bitRate > 0)
+				if (audioEngineS.bitRate > 0)
 				{
 					// Bass has a non-zero bitrate, so use that for the calculation
 					// convert to bytes per second, multiply by number of seconds
-					bitrate = (CGFloat)[AudioEngine sharedInstance].bitRate;
+					bitrate = (CGFloat)audioEngineS.bitRate;
 					seconds = [self.duration floatValue];
 					
 				}
