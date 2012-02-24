@@ -432,6 +432,47 @@
 #pragma mark -
 #pragma mark SearchBar
 
+- (void)createSearchOverlay
+{
+	searchOverlay = [[UIView alloc] init];
+	searchOverlay.frame = CGRectMake(0, 74, 480, 480);
+	searchOverlay.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	searchOverlay.backgroundColor = [UIColor colorWithWhite:0 alpha:.80];
+	searchOverlay.alpha = 0.0;
+	[self.view.superview addSubview:searchOverlay];
+	[searchOverlay release];
+	
+	dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
+	dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	[dismissButton addTarget:searchBar action:@selector(resignFirstResponder) forControlEvents:UIControlEventTouchUpInside];
+	dismissButton.frame = self.view.bounds;
+	dismissButton.enabled = NO;
+	[searchOverlay addSubview:dismissButton];
+	
+	// Animate the search overlay on screen
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:.3];
+	[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+	searchOverlay.alpha = 1;
+	dismissButton.enabled = YES;
+	[UIView commitAnimations];
+}
+
+- (void)hideSearchOverlay
+{
+	if (searchOverlay)
+	{
+		// Animate the search overlay off screen
+		[UIView beginAnimations:nil context:NULL];
+		[UIView setAnimationDuration:.3];
+		[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+		[UIView setAnimationDelegate:self];
+		[UIView setAnimationDidStopSelector:@selector(removeSearchOverlay)];
+		searchOverlay.alpha = 0;
+		dismissButton.enabled = NO;
+		[UIView commitAnimations];
+	}
+}
 
 - (void) searchBarTextDidBeginEditing:(UISearchBar *)theSearchBar 
 {
@@ -451,7 +492,7 @@
 	if ([theSearchBar.text length] == 0)
 	{
 		//Add the overlay view.
-		if(searchOverlayView == nil)
+		/*if(searchOverlayView == nil)
 			searchOverlayView = [[SearchOverlayViewController alloc] initWithNibName:@"SearchOverlayViewController" bundle:[NSBundle mainBundle]];
 		//CGFloat y = self.tableView.contentOffset.y - searchBar.frame.origin.y + searchBar.frame.size.height;
 		CGFloat width = self.view.frame.size.width;
@@ -459,7 +500,13 @@
 		//CGRect frame = CGRectMake(0, y, width, height);
 		CGRect frame = CGRectMake(0, 40, width, height);
 		searchOverlayView.view.frame = frame;
-		[self.view.superview addSubview:searchOverlayView.view];
+		[self.view.superview addSubview:searchOverlayView.view];*/
+		
+		//////////////////////
+		
+		[self createSearchOverlay];
+		
+		//////////////////////
 		
 		letUserSelectRow = NO;
 		self.tableView.scrollEnabled = NO;
@@ -475,7 +522,15 @@
 {
 	if([searchText length] > 0) 
 	{
-		[searchOverlayView.view removeFromSuperview];
+		//[searchOverlayView.view removeFromSuperview];
+		
+		/////////////////////
+		
+		[self hideSearchOverlay];
+		
+		/////////////////////
+		
+		
 		letUserSelectRow = YES;
 		self.tableView.scrollEnabled = YES;
 		
@@ -485,14 +540,20 @@
 	}
 	else 
 	{		
-		//Add the overlay view.
+		/*//Add the overlay view.
 		if(searchOverlayView == nil)
 			searchOverlayView = [[SearchOverlayViewController alloc] initWithNibName:@"SearchOverlayViewController" bundle:[NSBundle mainBundle]];
 		CGFloat width = self.view.frame.size.width;
 		CGFloat height = self.view.frame.size.height;
 		CGRect frame = CGRectMake(0, 40, width, height);
 		searchOverlayView.view.frame = frame;
-		[self.view.superview addSubview:searchOverlayView.view];
+		[self.view.superview addSubview:searchOverlayView.view];*/
+		
+		//////////////////////////
+		
+		[self createSearchOverlay];
+		
+		/////////////////////////
 		
 		letUserSelectRow = NO;
 		self.tableView.scrollEnabled = NO;
@@ -505,10 +566,21 @@
 	}
 }
 
-- (void) searchBarSearchButtonClicked:(UISearchBar *)theSearchBar 
+- (void)removeSearchOverlay
+{
+	[searchOverlay removeFromSuperview];
+	searchOverlay = nil;
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)theSearchBar 
 {
 	//[self searchTableView];
 	[searchBar resignFirstResponder];
+}
+
+- (void)searchBarTextDidEndEditing:(UISearchBar *)theSearchBar
+{
+	[self hideSearchOverlay];
 }
 
 

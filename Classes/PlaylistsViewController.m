@@ -108,8 +108,6 @@
 	
 	viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 	
-	[self registerForNotifications];
-
     self.title = @"Playlists";
 	
 	if (viewObjectsS.isOfflineMode)
@@ -184,6 +182,8 @@
 	}
 	
 	[FlurryAnalytics logEvent:@"PlaylistsTab"];
+
+	[self registerForNotifications];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

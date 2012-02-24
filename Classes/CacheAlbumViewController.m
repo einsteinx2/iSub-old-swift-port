@@ -29,7 +29,7 @@
 
 @implementation CacheAlbumViewController
 
-@synthesize listOfAlbums, listOfSongs, sectionInfo, segment, seg1;
+@synthesize listOfAlbums, listOfSongs, sectionInfo, segments;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -174,6 +174,8 @@
 
 - (void) cachedSongDeleted
 {
+	NSUInteger segment = [segments count];
+	NSString *seg1 = [segments objectAtIndexSafe:0];
 	FMResultSet *result = [databaseS.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? AND seg%i = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", segment, (segment - 1), segment, segment], seg1, self.title];
 	
 	self.listOfAlbums = [NSMutableArray arrayWithCapacity:1];
@@ -228,10 +230,10 @@
 
 
 - (void)loadPlayAllPlaylist:(NSString *)shuffle
-{	
-	// Create an autorelease pool because this method runs in a background thread and can't use the main thread's pool
-	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
-		
+{		
+	NSUInteger segment = [segments count];
+	NSString *seg1 = [segments objectAtIndexSafe:0];
+	
 	BOOL isShuffle;
 	if ([shuffle isEqualToString:@"YES"])
 		isShuffle = YES;
@@ -271,8 +273,6 @@
 			
 	// Must do UI stuff in main thread
 	[self performSelectorOnMainThread:@selector(loadPlayAllPlaylist2) withObject:nil waitUntilDone:NO];	
-	
-	[autoreleasePool release];
 }
 
 
@@ -387,10 +387,13 @@
 	// Set up the cell...
 	if (indexPath.row < [listOfAlbums count])
 	{
+		NSUInteger segment = [segments count];
+		NSString *seg1 = [segments objectAtIndexSafe:0];
+		
 		CacheAlbumUITableViewCell *cell = [[[CacheAlbumUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		cell.segment = self.segment;
-		cell.seg1 = self.seg1;
+		cell.segment = segment;
+		cell.seg1 = seg1;
 		
 		NSString *md5 = [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:0];
 		NSString *coverArtId = [databaseS.songCacheDb stringForQuery:@"SELECT coverArtId FROM cachedSongs WHERE md5 = ?", md5];
@@ -482,16 +485,31 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	{
 		if (indexPath.row < [listOfAlbums count])
 		{		
+			NSUInteger segment = [segments count] + 1;
+			
 			CacheAlbumViewController *cacheAlbumViewController = [[CacheAlbumViewController alloc] initWithNibName:@"CacheAlbumViewController" bundle:nil];
 			cacheAlbumViewController.title = [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1];
 			cacheAlbumViewController.listOfAlbums = [NSMutableArray arrayWithCapacity:1];
 			cacheAlbumViewController.listOfSongs = [NSMutableArray arrayWithCapacity:1];
 			//cacheAlbumViewController.listOfAlbums = [[NSMutableArray alloc] init];
 			//cacheAlbumViewController.listOfSongs = [[NSMutableArray alloc] init];
-			cacheAlbumViewController.segment = (self.segment + 1);
-			cacheAlbumViewController.seg1 = self.seg1;
 			//DLog(@"query: %@", [NSString stringWithFormat:@"SELECT md5, segs, seg%i FROM cachedSongsLayout WHERE seg1 = '%@' AND seg%i = '%@' GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), seg1, segment, [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1], (segment + 1), (segment + 1)]);
-			FMResultSet *result = [databaseS.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? AND seg%i = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), segment, (segment + 1), (segment + 1)], seg1, [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1]];
+			NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5, segs, seg%i, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ?", segment+1];
+			for (int i = 2; i <= segment; i++)
+			{
+				[query appendFormat:@" AND seg%i = ? ", i];
+			}
+			[query appendFormat:@"GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", segment+1, segment+1];
+			DLog(@"query: %@", query);
+			DLog(@"arguments: %@", segments);
+			
+			//FMResultSet *result = [databaseS.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? AND seg%i = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), segment, (segment + 1), (segment + 1)], seg1, [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1]];
+			
+			NSMutableArray *newSegments = [NSMutableArray arrayWithArray:segments];
+			[newSegments addObject:cacheAlbumViewController.title];
+			cacheAlbumViewController.segments = [NSArray arrayWithArray:newSegments];
+			
+			FMResultSet *result = [databaseS.songCacheDb executeQuery:query withArgumentsInArray:newSegments];
 			while ([result next])
 			{
 				if ([result intForColumnIndex:1] > (segment + 1))
@@ -523,6 +541,16 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 					if (!multipleSameTrackNumbers)
 						[cacheAlbumViewController.listOfSongs sortUsingFunction:trackSort2 context:NULL];
 				}
+				
+				/*DLog(@"seg%i: %@", segment+1, [result stringForColumnIndex:2]);
+				
+				if (!cacheAlbumViewController.segments)
+				{
+					NSMutableArray *segmentsMut = [NSMutableArray arrayWithArray:self.segments];
+					[segmentsMut addObject:[result stringForColumnIndex:2]];
+					cacheAlbumViewController.segments = [NSArray arrayWithArray:segmentsMut];
+					DLog(@"new segments: %@", segmentsMut);
+				}*/
 			}
 			[result close];
 						

@@ -13,9 +13,6 @@
 	NSMutableArray *listOfSongs;
 	
 	NSArray *sectionInfo;
-	
-	NSInteger segment;
-	NSString *seg1;
 }
 
 @property (retain) NSMutableArray *listOfAlbums;
@@ -23,8 +20,6 @@
 
 @property (retain) NSArray *sectionInfo;
 
-
-@property NSInteger segment;
-@property (retain) NSString *seg1;
+@property (retain) NSArray *segments;
 
 @end

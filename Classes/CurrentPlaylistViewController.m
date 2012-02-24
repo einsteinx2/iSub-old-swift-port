@@ -28,6 +28,22 @@
 #pragma mark -
 #pragma mark View lifecycle
 
+- (void)registerForNotifications
+{
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentPlaylistCount) name:@"updateCurrentPlaylistCount" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:) name:ISMSNotification_StorePurchaseComplete object:nil];
+}
+
+- (void)unregisterForNotifications
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"updateCurrentPlaylistCount" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_StorePurchaseComplete object:nil];
+}
+
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
@@ -40,11 +56,13 @@
 	
 	if (settingsS.isPlaylistUnlocked)
 	{
+		[self registerForNotifications];
+		
 		viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 		//viewObjectsS.multiDeleteList = nil; viewObjectsS.multiDeleteList = [[NSMutableArray alloc] init];
 		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
+		//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
+		//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 		
 		if ([databaseS.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"] > 0)
 		{
@@ -176,8 +194,9 @@
 {
     [super viewWillDisappear:animated];
 	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
+	[self unregisterForNotifications];
+	//[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
+	//[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	
 	if (viewObjectsS.isEditing)
 	{
@@ -199,6 +218,7 @@
 	// Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
 }
+
 
 - (void)dealloc 
 {
@@ -335,6 +355,8 @@
 	}
 	else 
 	{
+		[self unregisterForNotifications];
+		
 		if ([deleteSongsLabel.text isEqualToString:@"Clear Playlist"])
 		{
 			if (settingsS.isJukeboxEnabled)
@@ -382,6 +404,8 @@
 		
 		if (!settingsS.isJukeboxEnabled)
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistOrderChanged];
+		
+		[self registerForNotifications];
 	}
 }
 

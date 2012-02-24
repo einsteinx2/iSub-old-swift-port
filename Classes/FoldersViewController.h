@@ -46,6 +46,9 @@
 	//NSDictionary *folders;
 	
 	SUSRootFoldersDAO *dataModel;
+	
+	UIView *searchOverlay;
+	UIButton *dismissButton;
 }
 
 @property(assign,getter=isReloading) BOOL reloading;

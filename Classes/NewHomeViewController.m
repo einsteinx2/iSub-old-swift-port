@@ -578,8 +578,8 @@
 	
 	// Animate the segmented control on screen
 	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.5];
-	[UIView setAnimationCurve:UIViewAnimationCurveLinear];
+	[UIView setAnimationDuration:.3];
+	[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
 	//if ([[appDelegateS.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
 	if (settingsS.isNewSearchAPI)
 	{
@@ -597,7 +597,7 @@
 	// Animate the segmented control off screen
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:.3];
-	[UIView setAnimationCurve:UIViewAnimationCurveLinear];
+	[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
 	//NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegateS.defaultUrl md5]];
 	//if ([[appDelegateS.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
 	if (settingsS.isNewSearchAPI)

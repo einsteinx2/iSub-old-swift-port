@@ -320,9 +320,6 @@
 		531B6D75147C416B00BA28B9 /* NSNotificationCenter+MainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B6D73147C416B00BA28B9 /* NSNotificationCenter+MainThread.m */; };
 		531B6D76147C416B00BA28B9 /* NSNotificationCenter+MainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B6D73147C416B00BA28B9 /* NSNotificationCenter+MainThread.m */; };
 		531D8EFB11890FED00B7B040 /* QueueAlbumXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 531D8EF811890FED00B7B040 /* QueueAlbumXMLParser.m */; };
-		531ECF5714EF379000F4E09E /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 531ECF5614EF379000F4E09E /* libbass.a */; };
-		531ECF5814EF379000F4E09E /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 531ECF5614EF379000F4E09E /* libbass.a */; };
-		531ECF5914EF379000F4E09E /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 531ECF5614EF379000F4E09E /* libbass.a */; };
 		531F157C126F6B5600F524BD /* NSString+hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F157B126F6B5600F524BD /* NSString+hex.m */; };
 		531F1597126F711100F524BD /* HomeXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F1596126F711100F524BD /* HomeXMLParser.m */; };
 		531F166E126FA2E600F524BD /* HomeAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F166D126FA2E600F524BD /* HomeAlbumViewController.m */; };
@@ -522,6 +519,9 @@
 		53614ACA116432DA0088ABC0 /* ServerListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53614AC8116432DA0088ABC0 /* ServerListViewController.m */; };
 		53614ACB116432DA0088ABC0 /* ServerListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53614AC9116432DA0088ABC0 /* ServerListViewController.xib */; };
 		53614BD9116467420088ABC0 /* AllSongsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53614BD7116467420088ABC0 /* AllSongsViewController.xib */; };
+		536451E814F6FF6E000FBD85 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 536451E714F6FF6E000FBD85 /* libbass.a */; };
+		536451E914F6FF6E000FBD85 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 536451E714F6FF6E000FBD85 /* libbass.a */; };
+		536451EA14F6FF6E000FBD85 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 536451E714F6FF6E000FBD85 /* libbass.a */; };
 		536585811478920D00FE57A5 /* EqualizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5365857F1478920B00FE57A5 /* EqualizerViewController.m */; };
 		536585821478920D00FE57A5 /* EqualizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5365857F1478920B00FE57A5 /* EqualizerViewController.m */; };
 		536585831478920D00FE57A5 /* EqualizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5365857F1478920B00FE57A5 /* EqualizerViewController.m */; };
@@ -2264,7 +2264,6 @@
 		531B6D73147C416B00BA28B9 /* NSNotificationCenter+MainThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNotificationCenter+MainThread.m"; sourceTree = "<group>"; };
 		531D8EF711890FED00B7B040 /* QueueAlbumXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueueAlbumXMLParser.h; sourceTree = "<group>"; };
 		531D8EF811890FED00B7B040 /* QueueAlbumXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueueAlbumXMLParser.m; sourceTree = "<group>"; };
-		531ECF5614EF379000F4E09E /* libbass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbass.a; sourceTree = "<group>"; };
 		531F157A126F6B5600F524BD /* NSString+hex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+hex.h"; sourceTree = "<group>"; };
 		531F157B126F6B5600F524BD /* NSString+hex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+hex.m"; sourceTree = "<group>"; };
 		531F1595126F711100F524BD /* HomeXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeXMLParser.h; sourceTree = "<group>"; };
@@ -2457,6 +2456,7 @@
 		53614AC8116432DA0088ABC0 /* ServerListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerListViewController.m; sourceTree = "<group>"; };
 		53614AC9116432DA0088ABC0 /* ServerListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ServerListViewController.xib; sourceTree = "<group>"; };
 		53614BD7116467420088ABC0 /* AllSongsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AllSongsViewController.xib; sourceTree = "<group>"; };
+		536451E714F6FF6E000FBD85 /* libbass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbass.a; sourceTree = "<group>"; };
 		5365857E1478920B00FE57A5 /* EqualizerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EqualizerViewController.h; sourceTree = "<group>"; };
 		5365857F1478920B00FE57A5 /* EqualizerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EqualizerViewController.m; sourceTree = "<group>"; };
 		536585801478920D00FE57A5 /* EqualizerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EqualizerViewController.xib; sourceTree = "<group>"; };
@@ -3196,8 +3196,8 @@
 				53400AA51496857400165581 /* libbassflac.a in Frameworks */,
 				53400AA91496858600165581 /* libbass_fx.a in Frameworks */,
 				53DC4EDF149D6A9E00CC3BB4 /* libFlurryAnalytics.a in Frameworks */,
-				531ECF5714EF379000F4E09E /* libbass.a in Frameworks */,
 				5319A6BF14EFA1CA005717F0 /* libCrittercism_v3_1_3.a in Frameworks */,
+				536451E814F6FF6E000FBD85 /* libbass.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3229,8 +3229,8 @@
 				53400AA71496857500165581 /* libbassflac.a in Frameworks */,
 				53400AAB1496858600165581 /* libbass_fx.a in Frameworks */,
 				53DC4EE1149D6A9E00CC3BB4 /* libFlurryAnalytics.a in Frameworks */,
-				531ECF5914EF379000F4E09E /* libbass.a in Frameworks */,
 				5319A6C114EFA1CA005717F0 /* libCrittercism_v3_1_3.a in Frameworks */,
+				536451EA14F6FF6E000FBD85 /* libbass.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3261,9 +3261,9 @@
 				53400AA61496857400165581 /* libbassflac.a in Frameworks */,
 				53400AAA1496858600165581 /* libbass_fx.a in Frameworks */,
 				53DC4EE0149D6A9E00CC3BB4 /* libFlurryAnalytics.a in Frameworks */,
-				531ECF5814EF379000F4E09E /* libbass.a in Frameworks */,
 				5319A6C014EFA1CA005717F0 /* libCrittercism_v3_1_3.a in Frameworks */,
 				53DE598414F1933400206529 /* CoreText.framework in Frameworks */,
+				536451E914F6FF6E000FBD85 /* libbass.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3363,11 +3363,11 @@
 				536AD1D211EA628200387CB0 /* libxml2.dylib */,
 				53EB4AA51405FE1B00CBA075 /* libz.dylib */,
 				5382F65614856F3C001C14C8 /* libSystem.dylib */,
-				531ECF5614EF379000F4E09E /* libbass.a */,
 				53400AA01496856600165581 /* libbassmix.a */,
 				53400AA41496857400165581 /* libbassflac.a */,
 				53400AA81496858600165581 /* libbass_fx.a */,
 				53DC4EDE149D6A9E00CC3BB4 /* libFlurryAnalytics.a */,
+				536451E714F6FF6E000FBD85 /* libbass.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

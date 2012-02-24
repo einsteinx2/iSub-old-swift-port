@@ -722,7 +722,7 @@
 	[self checkServer];
 	[viewObjectsS orderMainTabBarController];
 	[musicS downloadNextQueuedSong];
-	[window addSubview:[mainTabBarController view]];
+	[window addSubview:mainTabBarController.view];
 }
 
 

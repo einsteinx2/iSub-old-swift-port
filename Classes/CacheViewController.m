@@ -1366,23 +1366,21 @@ NSInteger trackSort1(id obj1, id obj2, void *context)
 			cacheAlbumViewController.title = name;
 			cacheAlbumViewController.listOfAlbums = [NSMutableArray arrayWithCapacity:1];
 			cacheAlbumViewController.listOfSongs = [NSMutableArray arrayWithCapacity:1];
-			cacheAlbumViewController.segment = 2;
-			cacheAlbumViewController.seg1 = name;
 			//DLog(@"cacheAlbumViewController.seg1: %@", cacheAlbumViewController.seg1);
-			FMResultSet *result = [databaseS.songCacheDb executeQuery:@"SELECT md5, segs, seg2, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", cacheAlbumViewController.seg1];
+			FMResultSet *result = [databaseS.songCacheDb executeQuery:@"SELECT md5, segs, seg2, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", name];
 			while ([result next])
 			{
 				NSUInteger numOfSegments = [result intForColumnIndex:1];
 				
 				if (numOfSegments > 2)
 				{
-					[cacheAlbumViewController.listOfAlbums addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], 
-																							   [NSString stringWithString:[result stringForColumnIndex:2]], nil]];
+					[cacheAlbumViewController.listOfAlbums addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumn:@"md5"]], 
+																							   [NSString stringWithString:[result stringForColumn:@"seg2"]], nil]];
 				}
 				else
 				{
-					[cacheAlbumViewController.listOfSongs addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], 
-																							  [NSNumber numberWithInt:[result intForColumnIndex:3]], nil]];
+					[cacheAlbumViewController.listOfSongs addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumn:@"md5"]], 
+																							  [NSNumber numberWithInt:[result intForColumn:@"track"]], nil]];
 					
 					/*// Sort by track number -- iOS 4.0+ only
 					[cacheAlbumViewController.listOfSongs sortUsingComparator: ^NSComparisonResult(id obj1, id obj2) {
@@ -1414,6 +1412,12 @@ NSInteger trackSort1(id obj1, id obj2, void *context)
 					// Sort by track number
 					if (!multipleSameTrackNumbers)
 						[cacheAlbumViewController.listOfSongs sortUsingFunction:trackSort1 context:NULL];
+				}
+
+				if (!cacheAlbumViewController.segments)
+				{
+					NSArray *segments = [NSArray arrayWithObjects:name, nil];
+					cacheAlbumViewController.segments = segments;				
 				}
 			}
 			[result close];
