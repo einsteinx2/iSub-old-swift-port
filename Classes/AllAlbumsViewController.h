@@ -38,6 +38,9 @@
 	
 	EGORefreshTableHeaderView *refreshHeaderView;
 	BOOL _reloading;
+	
+	UIView *searchOverlay;
+	UIButton *dismissButton;
 }
 
 @property (retain) SUSAllAlbumsDAO *dataModel;

@@ -279,8 +279,7 @@ QWORD CALLBACK MyFileLenProc(void *user)
 		if (theSong.isFullyCached || theSong.isTempCached)
 		{
 			// Return actual file size on disk
-			NSString *path = theSong.currentPath;
-			length = [[[NSFileManager defaultManager] attributesOfItemAtPath:path error:NULL] fileSize];
+			length = theSong.localFileSize;
 		}
 		else
 		{
@@ -378,6 +377,7 @@ BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFi
 	{
 		if (BASS_ChannelIsActive(self.currentStream))
 		{		
+			DLog(@"getting output data");
 			r = BASS_ChannelGetData(self.currentReadingStream, buffer, length);
 			
 			// Check if stream is now complete

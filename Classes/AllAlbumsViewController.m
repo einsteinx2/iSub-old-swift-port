@@ -324,6 +324,67 @@
 
 #pragma mark - Search
 
+- (void)createSearchOverlay
+{
+	searchOverlay = [[UIView alloc] init];
+	//searchOverlay.frame = CGRectMake(0, 74, 480, 480);
+	searchOverlay.frame = CGRectMake(0, 0, 480, 480);
+	searchOverlay.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	searchOverlay.backgroundColor = [UIColor colorWithWhite:0 alpha:.80];
+	searchOverlay.alpha = 0.0;
+	//[self.view.superview addSubview:searchOverlay];
+	//[self.tableView.tableFooterView addSubview:searchOverlay];
+	self.tableView.tableFooterView = searchOverlay;//self.tableView.tableFooterView;
+	[searchOverlay release];
+	
+	dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
+	dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	[dismissButton addTarget:self action:@selector(doneSearching_Clicked:) forControlEvents:UIControlEventTouchUpInside];
+	dismissButton.frame = self.view.bounds;
+	dismissButton.enabled = NO;
+	[searchOverlay addSubview:dismissButton];
+	
+	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
+	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	[searchOverlay addSubview:fadeBottom];
+	
+	// Animate the search overlay on screen
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:.3];
+	[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+	searchOverlay.alpha = 1;
+	dismissButton.enabled = YES;
+	[UIView commitAnimations];
+}
+
+- (void)hideSearchOverlay
+{
+	if (searchOverlay)
+	{
+		// Animate the search overlay off screen
+		[UIView beginAnimations:nil context:NULL];
+		[UIView setAnimationDuration:.3];
+		[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+		[UIView setAnimationDelegate:self];
+		[UIView setAnimationDidStopSelector:@selector(removeSearchOverlay)];
+		searchOverlay.alpha = 0;
+		dismissButton.enabled = NO;
+		[UIView commitAnimations];
+	}
+}
+
+- (void)removeSearchOverlay
+{
+	[searchOverlay removeFromSuperview];
+	searchOverlay = nil;
+	
+	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
+	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	self.tableView.tableFooterView = fadeBottom;
+}
+
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)theSearchBar 
 {	
 	[self.tableView.tableHeaderView retain];
@@ -332,15 +393,7 @@
 	
 	if ([theSearchBar.text length] == 0)
 	{
-		//Add the overlay view.
-		if(searchOverlayView == nil)
-			searchOverlayView = [[SearchOverlayViewController alloc] initWithNibName:@"SearchOverlayViewController" bundle:[NSBundle mainBundle]];
-		//CGFloat y = self.tableView.contentOffset.y - searchBar.frame.origin.y + searchBar.frame.size.height;
-		CGFloat width = self.view.frame.size.width;
-		CGFloat height = self.view.frame.size.height;
-		CGRect frame = CGRectMake(0, 40, width, height);
-		searchOverlayView.view.frame = frame;
-		[self.view.superview addSubview:searchOverlayView.view];
+		[self createSearchOverlay];
 		
 		letUserSelectRow = NO;
 		self.tableView.scrollEnabled = NO;
@@ -360,7 +413,8 @@
 {
 	if([searchText length] > 0) 
 	{
-		[searchOverlayView.view removeFromSuperview];
+		[self hideSearchOverlay];
+		
 		isSearching = YES;
 		letUserSelectRow = YES;
 		self.tableView.scrollEnabled = YES;
@@ -370,14 +424,7 @@
 	{
 		[self.tableView setContentOffset:CGPointMake(0, 50) animated:YES];
 		
-		//Add the overlay view.
-		if(searchOverlayView == nil)
-			searchOverlayView = [[SearchOverlayViewController alloc] initWithNibName:@"SearchOverlayViewController" bundle:[NSBundle mainBundle]];
-		CGFloat width = self.view.frame.size.width;
-		CGFloat height = self.view.frame.size.height;
-		CGRect frame = CGRectMake(0, 40, width, height);
-		searchOverlayView.view.frame = frame;
-		[self.view.superview addSubview:searchOverlayView.view];
+		[self createSearchOverlay];
 		
 		isSearching = NO;
 		letUserSelectRow = NO;
@@ -393,6 +440,12 @@
 {
 	[searchBar resignFirstResponder];
 }
+
+- (void)searchBarTextDidEndEditing:(UISearchBar *)theSearchBar
+{
+	[self hideSearchOverlay];
+}
+
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView 
 {

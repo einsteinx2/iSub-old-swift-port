@@ -59,11 +59,11 @@
     scrollView.pagingEnabled = YES;
 	CGSize contentSize;
 	CGFloat height;
-	if (IS_IPAD())
-		contentSize = CGSizeMake(540 * numberOfPages, 520);
-	else
+	//if (IS_IPAD())
+	//	contentSize = CGSizeMake(540 * numberOfPages, 520);
+	//else
 	{
-		if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation))
+		if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) || IS_IPAD())
 		{
 			contentSize = CGSizeMake(320 * numberOfPages, numberOfPages == 1 ? 320 : 300);
 			height = numberOfPages == 1 ? 320 : 300;
