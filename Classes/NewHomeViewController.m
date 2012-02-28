@@ -41,6 +41,8 @@
 #import "UIView+Tools.h"
 #import "UIViewController+PushViewController.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "JukeboxSingleton.h"
+#import "AsynchronousImageView.h"
 
 @implementation NewHomeViewController
 
@@ -138,9 +140,9 @@
 		[self.view addSubview:coverArtBorder];
 		
 		coverArtView = [[AsynchronousImageView alloc] init];
+		coverArtView.isLarge = NO;
 		//coverArtView.frame = CGRectMake(2, 2, 56, 56);
 		coverArtView.frame = CGRectMake(0, 0, 60, 60);
-		coverArtView.isForPlayer = YES;
 		coverArtView.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
 		coverArtView.layer.borderWidth = 2.0f;
 		
@@ -265,8 +267,6 @@
 	searchSegmentBackground.alpha = 0.0;
 	
 	[FlurryAnalytics logEvent:@"HomeTab"];
-	
-	DLog(@"view sublayers: %@", self.view.layer.sublayers);
 }
 
 - (void)initSongInfo
@@ -275,34 +275,7 @@
 	
 	if (currentSong != nil)
 	{		
-		if(currentSong.coverArtId)
-		{		
-			FMDatabase *coverArtCache = databaseS.coverArtCacheDb320;
-			
-			if ([coverArtCache intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [currentSong.coverArtId md5]] == 1)
-			{
-				NSData *imageData = [coverArtCache dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [currentSong.coverArtId md5]];
-				if (SCREEN_SCALE() == 2.0)
-				{
-					UIGraphicsBeginImageContextWithOptions(CGSizeMake(320.0,320.0), NO, 2.0);
-					[[UIImage imageWithData:imageData] drawInRect:CGRectMake(0,0,320,320)];
-					coverArtView.image = UIGraphicsGetImageFromCurrentImageContext();
-					UIGraphicsEndImageContext();
-				}
-				else
-				{
-					coverArtView.image = [UIImage imageWithData:imageData];
-				}
-			}
-			else 
-			{
-				[coverArtView loadImageFromCoverArtId:currentSong.coverArtId isForPlayer:YES];
-			}
-		}
-		else 
-		{
-			coverArtView.image = [UIImage imageNamed:@"default-album-art.png"];
-		}
+		coverArtView.coverArtId = currentSong.coverArtId;
 		
 		artistLabel.text = @"";
 		albumLabel.text = @"";
@@ -495,7 +468,7 @@
 				[jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-on.png"] forState:UIControlStateNormal];
 			settingsS.isJukeboxEnabled = YES;
 			
-			[musicS jukeboxGetInfo];
+			[jukeboxS jukeboxGetInfo];
 			
 			appDelegateS.window.backgroundColor = viewObjectsS.jukeboxColor;
 		}	
@@ -823,7 +796,7 @@
 		}
 		
 		if (settingsS.isJukeboxEnabled)
-			[musicS jukeboxReplacePlaylistWithLocal];
+			[jukeboxS jukeboxReplacePlaylistWithLocal];
 				
 		playlistS.isShuffle = NO;
 		

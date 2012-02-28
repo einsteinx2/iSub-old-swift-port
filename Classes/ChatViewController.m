@@ -15,7 +15,7 @@
 #import "MusicSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
-#import "AsynchronousImageViewCached.h"
+#import "AsynchronousImageView.h"
 #import "Song.h"
 #import "FMDatabaseAdditions.h"
 #import "NSString+md5.h"

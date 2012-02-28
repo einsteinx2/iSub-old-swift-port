@@ -17,6 +17,7 @@
 #import "MusicSingleton.h"
 #import "SavedSettings.h"
 #import "PlaylistSingleton.h"
+#import "JukeboxSingleton.h"
 
 @interface SUSSubFolderDAO (Private) 
 - (NSUInteger)findFirstAlbumRow;
@@ -81,8 +82,7 @@
 {
 	[myId release]; myId = nil;
 	[myArtist release]; myArtist = nil;
-	loader.delegate = nil;
-	[loader release]; loader = nil;
+	[self cancelLoad];
 	[super dealloc];
 }
 
@@ -180,9 +180,9 @@
 	// If jukebox mode, send song ids to server
 	if (settingsS.isJukeboxEnabled)
 	{
-		[musicS jukeboxStop];
-		[musicS jukeboxClearPlaylist];
-		[musicS jukeboxAddSongs:songIds];
+		[jukeboxS jukeboxStop];
+		[jukeboxS jukeboxClearPlaylist];
+		[jukeboxS jukeboxAddSongs:songIds];
 	}
 	[songIds release];
 	
@@ -237,22 +237,11 @@
 		[self.db executeUpdate:@"CREATE TEMPORARY TABLE albumIndex (title TEXT)"];
 		
 		[self.db executeUpdate:@"INSERT INTO albumIndex SELECT title FROM albumsCache WHERE rowid >= ? LIMIT ?", [NSNumber numberWithInt:albumStartRow], [NSNumber numberWithInt:albumsCount]];
-		
-		DLog(@"albumStartRow: %@    albumsCount: %@", [NSNumber numberWithInt:albumStartRow], [NSNumber numberWithInt:albumsCount]);
-		DLog(@"total table count: %i", [self.db intForQuery:@"SELECT count(title) FROM albumsCache"]);
-		DLog(@"count in table: %i", [self.db intForQuery:@"SELECT count(title) FROM albumsCache WHERE rowid >= ? LIMIT ?", [NSNumber numberWithInt:albumStartRow], [NSNumber numberWithInt:albumsCount]]);
-		DLog(@"albumIndex count: %i", [self.db intForQuery:@"SELECT COUNT(*) FROM albumIndex"]);
 		NSArray *sectionInfo = [databaseS sectionInfoFromTable:@"albumIndex" inDatabase:self.db withColumn:@"title"];
-		DLog(@"sectionInfo: %@", sectionInfo);
-		if (sectionInfo)
-		{
-			if ([sectionInfo count] < 5)
-				return nil;
-			else
-				return sectionInfo;
-		}
 		
 		[self.db executeUpdate:@"DROP TABLE IF EXISTS albumIndex"];
+		
+		return [sectionInfo count] < 5 ? nil : sectionInfo;
 	}
 	
 	return nil;

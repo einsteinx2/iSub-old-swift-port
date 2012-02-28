@@ -14,6 +14,7 @@
 #import "CustomUIAlertView.h"
 #import "PlaylistSingleton.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "JukeboxSingleton.h"
 
 @implementation JukeboxConnectionDelegate
 
@@ -61,7 +62,7 @@
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
-	[musicS.connectionQueue connectionFinished:theConnection];
+	[jukeboxS.connectionQueue connectionFinished:theConnection];
 	
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error controlling the Jukebox.\n\nError %i: %@", [error code], [error localizedDescription]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
@@ -73,7 +74,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {			
-	[musicS.connectionQueue connectionFinished:theConnection];
+	[jukeboxS.connectionQueue connectionFinished:theConnection];
 	
 	if (isGetInfo)
 	{
@@ -83,8 +84,8 @@
 		[xmlParser parse];
 				
 		playlistS.currentIndex = parser.currentIndex;
-		musicS.jukeboxGain = parser.gain;
-		musicS.jukeboxIsPlaying = parser.isPlaying;
+		jukeboxS.jukeboxGain = parser.gain;
+		jukeboxS.jukeboxIsPlaying = parser.isPlaying;
 		
 		[xmlParser release];
 		[parser release];
@@ -101,7 +102,7 @@
 		[xmlParser release];
 		[parser release];
 		
-		[musicS jukeboxGetInfo];
+		[jukeboxS jukeboxGetInfo];
 	}
 	
 	[theConnection release];

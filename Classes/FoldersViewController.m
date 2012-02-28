@@ -149,11 +149,6 @@
 	}
 	
 	[FlurryAnalytics logEvent:@"FoldersTab"];
-	
-	DLog(@"view subviews: %@", self.view.subviews);
-	DLog(@"view: %@   tableView: %@", self.view, self.tableView);
-	DLog(@"view sublayers: %@", self.view.layer.sublayers);
-	DLog(@"tableView sublayers: %@", self.tableView.layer.sublayers);
 }
 
 

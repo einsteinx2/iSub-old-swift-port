@@ -12,7 +12,7 @@
 #import "FMDatabaseAdditions.h"
 
 #import "Song.h"
-#import "SUSStreamManager.h"
+#import "ISMSStreamManager.h"
 
 static CacheSingleton *sharedInstance = nil;
 
@@ -135,7 +135,6 @@ static CacheSingleton *sharedInstance = nil;
 
 - (void)findCacheSize
 {
-	
 	unsigned long long size = 0;
 	for (NSString *path in [[NSFileManager defaultManager] subpathsAtPath:settingsS.songCachePath]) 
 	{

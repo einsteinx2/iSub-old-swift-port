@@ -36,23 +36,18 @@
 #import "BWQuincyManager.h"
 #import "BWHockeyManager.h"
 #import "FlurryAnalytics.h"
-
 #import "SavedSettings.h"
 #import "CacheSingleton.h"
-
 #import "NSMutableURLRequest+SUS.h"
-#import "SUSStreamManager.h"
-
+#import "ISMSStreamManager.h"
 #import "AudioEngine.h"
-
 #import "UIDevice+Software.h"
 #import "NSObject+ListMethods.h"
-
 #import "ISMSUpdateChecker.h"
 #import "NSArray+Additions.h"
-
 #import "iPadRootViewController.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "ISMSCacheQueueManager.h"
 
 @implementation iSubAppDelegate
 
@@ -240,7 +235,7 @@
 	}
     
 	// Recover current state if player was interrupted
-	[SUSStreamManager sharedInstance];
+	[ISMSStreamManager sharedInstance];
 	[musicS resumeSong];
 }
 
@@ -318,7 +313,7 @@
 		[viewObjectsS orderMainTabBarController];
 	
 	// Start the queued downloads if Wifi is available
-	[musicS downloadNextQueuedSong];
+	[cacheQueueManagerS startDownloadQueue];
 }
 
 #pragma mark -
@@ -569,8 +564,8 @@
 		backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:
 						  ^{
 							  // App is about to be put to sleep, stop the cache download queue
-							  if (musicS.isQueueListDownloading)
-								  [musicS stopDownloadQueue];
+							  if (cacheQueueManagerS.isQueueDownloading)
+								  [cacheQueueManagerS stopDownloadQueue];
 							  
 							  // Make sure to end the background so we don't get killed by the OS
 							  [application endBackgroundTask:backgroundTask];
@@ -588,16 +583,16 @@
 				//DLog(@"backgroundTimeRemaining: %f", [application backgroundTimeRemaining]);
 				
 				// Sleep early is nothing is happening after 30 seconds
-				if ([application backgroundTimeRemaining] < 570.0 && !musicS.isQueueListDownloading)
+				if ([application backgroundTimeRemaining] < 570.0 && !cacheQueueManagerS.isQueueDownloading)
 				{
-					DLog("Sleeping early, isQueueListDownloading: %i", musicS.isQueueListDownloading);
+					DLog("Sleeping early, isQueueListDownloading: %i", cacheQueueManagerS.isQueueDownloading);
 					[application endBackgroundTask:backgroundTask];
 					backgroundTask = UIBackgroundTaskInvalid;
 					break;
 				}
 				
 				// Warn at 2 minute mark if cache queue is downloading
-				if ([application backgroundTimeRemaining] < 120.0 && musicS.isQueueListDownloading)
+				if ([application backgroundTimeRemaining] < 120.0 && cacheQueueManagerS.isQueueDownloading)
 				{
 					UILocalNotification *localNotif = [[UILocalNotification alloc] init];
 					if (localNotif) 
@@ -699,13 +694,15 @@
 	
 	[streamManagerS cancelAllStreams];
 	
-	[musicS stopDownloadQueue];
+	[cacheQueueManagerS stopDownloadQueue];
 
 	[mainTabBarController.view removeFromSuperview];
 	[databaseS closeAllDatabases];
 	[databaseS initDatabases];
 	currentTabBarController = offlineTabBarController;
 	[window addSubview:[offlineTabBarController view]];
+	
+	[musicS updateLockScreenInfo];
 }
 
 - (void)enterOnlineModeForce
@@ -721,8 +718,10 @@
 	[databaseS initDatabases];
 	[self checkServer];
 	[viewObjectsS orderMainTabBarController];
-	[musicS downloadNextQueuedSong];
+	[cacheQueueManagerS startDownloadQueue];
 	[window addSubview:mainTabBarController.view];
+	
+	[musicS updateLockScreenInfo];
 }
 
 
@@ -758,10 +757,10 @@
 		else
 		{
 			//DLog(@"musicS.isQueueListDownloading: %i", musicS.isQueueListDownloading);
-			if (!musicS.isQueueListDownloading) 
+			if (!cacheQueueManagerS.isQueueDownloading) 
 			{
 				//DLog(@"Calling [musicS downloadNextQueuedSong]");
-				[musicS downloadNextQueuedSong];
+				[cacheQueueManagerS startDownloadQueue];
 			}
 		}
 	}
@@ -776,7 +775,7 @@
 		}
 		else 
 		{
-			[musicS stopDownloadQueue];
+			[cacheQueueManagerS stopDownloadQueue];
 		}
 	}
 }

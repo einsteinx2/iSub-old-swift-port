@@ -1,20 +1,20 @@
 //
-//  SUSStreamConnectionDelegate.h
+//  ISMSStreamHandler.h
 //  iSub
 //
 //  Created by Benjamin Baron on 11/10/11.
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "SUSStreamHandlerDelegate.h"
+#import "ISMSStreamHandlerDelegate.h"
 
 @class Song;
-@interface SUSStreamHandler : NSObject <NSURLConnectionDelegate, NSCoding>
+@interface ISMSStreamHandler : NSObject <NSURLConnectionDelegate, NSCoding>
 
-- (id)initWithSong:(Song *)song byteOffset:(unsigned long long)bOffset secondsOffset:(double)sOffset isTemp:(BOOL)isTemp delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate;
-- (id)initWithSong:(Song *)song isTemp:(BOOL)isTemp delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate;
+- (id)initWithSong:(Song *)song byteOffset:(unsigned long long)bOffset secondsOffset:(double)sOffset isTemp:(BOOL)isTemp delegate:(NSObject<ISMSStreamHandlerDelegate> *)theDelegate;
+- (id)initWithSong:(Song *)song isTemp:(BOOL)isTemp delegate:(NSObject<ISMSStreamHandlerDelegate> *)theDelegate;
 
-@property (assign) NSObject<SUSStreamHandlerDelegate> *delegate;
+@property (assign) NSObject<ISMSStreamHandlerDelegate> *delegate;
 @property (copy) Song *mySong;
 @property unsigned long long byteOffset;
 @property double secondsOffset;

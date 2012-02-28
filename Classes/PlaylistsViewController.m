@@ -15,7 +15,7 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "PlaylistsUITableViewCell.h"
 #import "CurrentPlaylistSongUITableViewCell.h"
-#import "AsynchronousImageViewCached.h"
+#import "AsynchronousImageView.h"
 #import "LocalPlaylistsUITableViewCell.h"
 #import "PlaylistSongsViewController.h"
 #import "FMDatabaseAdditions.h"
@@ -37,6 +37,7 @@
 #import "NSArray+Additions.h"
 #import "UIViewController+PushViewController.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "JukeboxSingleton.h"
 
 @interface PlaylistsViewController (Private)
 
@@ -306,18 +307,20 @@
 		else if (segmentedControl.selectedSegmentIndex == 1)
 		{
 			savePlaylistLabel.frame = CGRectMake(0, y, 227, 50);
-			if ([databaseS.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists"] == 1)
+			NSUInteger localPlaylistsCount = [databaseS.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists"];
+			if (localPlaylistsCount == 1)
 				savePlaylistLabel.text = [NSString stringWithFormat:@"1 playlist"];
 			else 
-				savePlaylistLabel.text = [NSString stringWithFormat:@"%i playlists", [databaseS.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists"]];
+				savePlaylistLabel.text = [NSString stringWithFormat:@"%i playlists", localPlaylistsCount];
 		}
 		else if (segmentedControl.selectedSegmentIndex == 2)
 		{
 			savePlaylistLabel.frame = CGRectMake(0, y, 227, 50);
-			if ([serverPlaylistsDataModel.serverPlaylists count] == 1)
+			NSUInteger serverPlaylistsCount = [serverPlaylistsDataModel.serverPlaylists count];
+			if (serverPlaylistsCount == 1)
 				savePlaylistLabel.text = [NSString stringWithFormat:@"1 playlist"];
 			else 
-				savePlaylistLabel.text = [NSString stringWithFormat:@"%i playlists", [serverPlaylistsDataModel.serverPlaylists count]];
+				savePlaylistLabel.text = [NSString stringWithFormat:@"%i playlists", serverPlaylistsCount];
 			
 		}
 		[headerView addSubview:savePlaylistLabel];
@@ -403,22 +406,23 @@
 		}
 		else if (segmentedControl.selectedSegmentIndex == 1)
 		{
-			if ([databaseS.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists"] == 1)
+			NSUInteger localPlaylistsCount = [databaseS.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists"];
+			if (localPlaylistsCount == 1)
 				playlistCountLabel.text = [NSString stringWithFormat:@"1 playlist"];
 			else 
-				playlistCountLabel.text = [NSString stringWithFormat:@"%i playlists", [databaseS.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists"]];
+				playlistCountLabel.text = [NSString stringWithFormat:@"%i playlists", localPlaylistsCount];
 		}
 		else if (segmentedControl.selectedSegmentIndex == 2)
 		{
-			if ([serverPlaylistsDataModel.serverPlaylists count] == 1)
+			NSUInteger serverPlaylistsCount = [serverPlaylistsDataModel.serverPlaylists count];
+			if (serverPlaylistsCount == 1)
 				playlistCountLabel.text = [NSString stringWithFormat:@"1 playlist"];
 			else 
-				playlistCountLabel.text = [NSString stringWithFormat:@"%i playlists", [serverPlaylistsDataModel.serverPlaylists count]];
+				playlistCountLabel.text = [NSString stringWithFormat:@"%i playlists", serverPlaylistsCount];
 			
 		}
 	}
 }
-
 
 - (void) removeNoPlaylistsScreen
 {
@@ -429,7 +433,6 @@
 		isNoPlaylistsScreenShowing = NO;
 	}
 }
-
 
 - (void) addNoPlaylistsScreen
 {
@@ -523,7 +526,6 @@
 	[store release];
 }
 
-
 - (void)segmentAction:(id)sender
 {
 	if (segmentedControl.selectedSegmentIndex == 0)
@@ -578,7 +580,9 @@
 		// Remove the save and edit buttons if showing
 		[self removeSaveEditButtons];
 		
-		if ([databaseS.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists"] > 0)
+		NSUInteger localPlaylistsCount = [databaseS.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists"];
+		
+		if (localPlaylistsCount > 0)
 		{
 			// Modify the header view to include the save and edit buttons
 			[self addSaveEditButtons];
@@ -591,7 +595,7 @@
 		[self removeNoPlaylistsScreen];
 		
 		// If the list is empty, display the no playlists overlay screen
-		if ([databaseS.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists"] == 0)
+		if (localPlaylistsCount == 0)
 		{
 			[self addNoPlaylistsScreen];
 		}
@@ -618,7 +622,6 @@
         [serverPlaylistsDataModel startLoad];
 	}
 }
-
 
 - (void)editPlaylistAction:(id)sender
 {
@@ -691,7 +694,6 @@
 	}
 }
 
-
 - (void)showDeleteButton
 {
 	if (segmentedControl.selectedSegmentIndex == 0)
@@ -730,7 +732,6 @@
 	playlistCountLabel.hidden = YES;
 	deleteSongsLabel.hidden = NO;
 }
-
 		
 - (void) hideDeleteButton
 {
@@ -784,7 +785,6 @@
 		}
 	}
 }
-
 
 - (void) showDeleteToggle
 {
@@ -1072,7 +1072,8 @@
 			if (savePlaylistLocal)
 			{
 				// Check if the playlist exists, if not create the playlist table and add the entry to localPlaylists table
-				if ([databaseS.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists WHERE md5 = ?", [playlistNameTextField.text md5]] == 0)
+				NSString *test = [databaseS.localPlaylistsDb stringForQuery:@"SELECT md5 FROM localPlaylists WHERE md5 = ?", [playlistNameTextField.text md5]];
+				if (!test)
 				{
 					[databaseS.localPlaylistsDb executeUpdate:@"INSERT INTO localPlaylists (playlist, md5) VALUES (?, ?)", playlistNameTextField.text, [playlistNameTextField.text md5]];
 					[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [playlistNameTextField.text md5], [Song standardSongColumnSchema]]];
@@ -1564,7 +1565,7 @@ static NSString *kName_Error = @"error";
 		
 		if (settingsS.isJukeboxEnabled)
 		{
-			[musicS jukeboxReplacePlaylistWithLocal];
+			[jukeboxS jukeboxReplacePlaylistWithLocal];
 		}
 		
 		if (!settingsS.isJukeboxEnabled)
@@ -1616,7 +1617,7 @@ static NSString *kName_Error = @"error";
 				aSong = [Song songFromDbRow:indexPath.row inTable:@"currentPlaylist" inDatabase:databaseS.currentPlaylistDb];
 		}
 		
-		[cell.coverArtView loadImageFromCoverArtId:aSong.coverArtId];
+		cell.coverArtView.coverArtId = aSong.coverArtId;
 		
 		cell.numberLabel.text = [NSString stringWithFormat:@"%i", (indexPath.row + 1)];
 		
@@ -1660,7 +1661,7 @@ static NSString *kName_Error = @"error";
 		}
 		cell.contentView.backgroundColor = [UIColor clearColor];
 		cell.playlistNameLabel.backgroundColor = [UIColor clearColor];
-		cell.playlistNameLabel.text = [[databaseS.localPlaylistsDb stringForQuery:@"SELECT playlist FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]] gtm_stringByUnescapingFromHTML];
+		cell.playlistNameLabel.text = [[databaseS.localPlaylistsDb stringForQuery:@"SELECT playlist FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]] cleanString];
 		cell.md5 = [databaseS.localPlaylistsDb stringForQuery:@"SELECT md5 FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
 		NSUInteger songCount = [databaseS.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", cell.md5]];
 		if (songCount == 1)
@@ -1742,7 +1743,7 @@ static NSString *kName_Error = @"error";
 		{
 			PlaylistSongsViewController *playlistSongsViewController = [[PlaylistSongsViewController alloc] initWithNibName:@"PlaylistSongsViewController" bundle:nil];
             SUSServerPlaylist *playlist = [serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];
-			playlistSongsViewController.md5 = [[playlist.playlistName gtm_stringByUnescapingFromHTML] md5];
+			playlistSongsViewController.md5 = [[playlist.playlistName cleanString] md5];
             playlistSongsViewController.serverPlaylist = playlist;
 			[self pushViewController:playlistSongsViewController];
 			[playlistSongsViewController release];		

@@ -8,7 +8,7 @@
 
 #import "Album.h"
 #import "Artist.h"
-#import "GTMNSString+HTML.h"
+#import "NSString+Additions.h"
 
 @implementation Album
 
@@ -24,13 +24,13 @@
 		artistName = nil;
 		artistId = nil;
 		
-		self.title = [[TBXML valueOfAttributeNamed:@"title" forElement:element] gtm_stringByUnescapingFromHTML];
+		self.title = [[TBXML valueOfAttributeNamed:@"title" forElement:element] cleanString];
 		self.albumId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
 		if([TBXML valueOfAttributeNamed:@"coverArt" forElement:element])
 			self.coverArtId = [TBXML valueOfAttributeNamed:@"coverArt" forElement:element];
 		if (artistIdToSet != nil)
 			self.artistId = [NSString stringWithString:artistIdToSet];
-		self.artistName = [artistNameToSet gtm_stringByUnescapingFromHTML];
+		self.artistName = [artistNameToSet cleanString];
 	}
 	
 	return self;

@@ -23,5 +23,7 @@
 - (void)startCacheCheckTimerWithInterval:(NSTimeInterval)interval;
 - (void)stopCacheCheckTimer;
 - (void)clearTempCache;
+- (void)findCacheSize;
+
 
 @end

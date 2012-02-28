@@ -11,6 +11,7 @@
 #import "CellOverlay.h"
 #import "Song.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "CacheSingleton.h"
 
 @implementation CacheSongUITableViewCell
 
@@ -115,6 +116,8 @@
 - (void)deleteAction
 {
 	[Song removeSongFromCacheDbByMD5:md5];
+	
+	[cacheS findCacheSize];
 		
 	self.overlayView.downloadButton.alpha = .3;
 	self.overlayView.downloadButton.enabled = NO;

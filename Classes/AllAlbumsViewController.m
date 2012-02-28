@@ -16,7 +16,8 @@
 #import "ServerListViewController.h"
 #import "AlbumViewController.h"
 #import "AllAlbumsUITableViewCell.h"
-#import "AsynchronousImageViewCached.h"
+#import "AllSongsUITableViewCell.h"
+#import "AsynchronousImageView.h"
 #import "Index.h"
 #import "Artist.h"
 #import "Album.h"
@@ -552,7 +553,7 @@
 	cell.myId = anAlbum.albumId;
 	cell.myArtist = [Artist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
 	
-	[cell.coverArtView loadImageFromCoverArtId:anAlbum.coverArtId];
+	cell.coverArtView.coverArtId = anAlbum.coverArtId;
 	
 	cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
 		

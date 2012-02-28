@@ -1,12 +1,12 @@
 //
-//  SUSStreamSingleton.m
+//  ISMSStreamManager.m
 //  iSub
 //
 //  Created by Benjamin Baron on 11/10/11.
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "SUSStreamManager.h"
+#import "ISMSStreamManager.h"
 #import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
 #import "Song.h"
@@ -15,29 +15,28 @@
 #import "SavedSettings.h"
 #import "NSString+URLEncode.h"
 #import "MusicSingleton.h"
-#import "SUSStreamHandler.h"
+#import "ISMSStreamHandler.h"
 #import "PlaylistSingleton.h"
 #import "NSArray+FirstObject.h"
 #import "AudioEngine.h"
-#import "SUSCoverArtLargeDAO.h"
-#import "SUSCoverArtLargeLoader.h"
+#import "SUSCoverArtLoader.h"
 #import "SUSLyricsDAO.h"
 #import "ViewObjectsSingleton.h"
 #import "NSArray+Additions.h"
+#import "iSubAppDelegate.h"
+#import "ISMSCacheQueueManager.h"
 
 #define maxNumOfReconnects 3
 
-static SUSStreamManager *sharedInstance = nil;
-
-@implementation SUSStreamManager
+@implementation ISMSStreamManager
 @synthesize handlerStack, lyricsDAO, lastCachedSong, lastTempCachedSong;
 
-- (SUSStreamHandler *)handlerForSong:(Song *)aSong
+- (ISMSStreamHandler *)handlerForSong:(Song *)aSong
 {
 	if (!aSong)
 		return nil;
 	
-	for (SUSStreamHandler *handler in self.handlerStack)
+	for (ISMSStreamHandler *handler in self.handlerStack)
 	{
 		//DLog(@"handler.mySong: %@    aSong: %@", handler.mySong.title, aSong.title);
 		if ([handler.mySong isEqualToSong:aSong])
@@ -53,7 +52,7 @@ static SUSStreamManager *sharedInstance = nil;
 	if (!aSong)
 		return NO;
 	
-	SUSStreamHandler *firstHandler = [self.handlerStack firstObjectSafe];
+	ISMSStreamHandler *firstHandler = [self.handlerStack firstObjectSafe];
 	return [aSong isEqualToSong:firstHandler.mySong];
 }
 
@@ -67,7 +66,7 @@ static SUSStreamManager *sharedInstance = nil;
 
 - (BOOL)isQueueDownloading
 {
-	for (SUSStreamHandler *handler in self.handlerStack)
+	for (ISMSStreamHandler *handler in self.handlerStack)
 	{
 		if (handler.isDownloading)
 			return YES;
@@ -79,7 +78,7 @@ static SUSStreamManager *sharedInstance = nil;
 - (void)cancelAllStreamsExcept:(NSArray *)handlersToSkip
 {
 	// Cancel the handlers
-	for (SUSStreamHandler *handler in self.handlerStack)
+	for (ISMSStreamHandler *handler in self.handlerStack)
 	{
 		if (![handlersToSkip containsObject:handler])
 		{
@@ -110,7 +109,7 @@ static SUSStreamManager *sharedInstance = nil;
 	NSMutableArray *handlersToSkip = [NSMutableArray arrayWithCapacity:[songsToSkip count]];
 	for (Song *aSong in songsToSkip)
 	{
-		SUSStreamHandler *handler = [self handlerForSong:aSong];
+		ISMSStreamHandler *handler = [self handlerForSong:aSong];
 		if (handler)
 			[handlersToSkip addObject:[self handlerForSong:aSong]];
 	}
@@ -148,7 +147,7 @@ static SUSStreamManager *sharedInstance = nil;
 	if (index < [self.handlerStack count])
 	{
 		// Find the handler object and cancel it
-		SUSStreamHandler *handler = [self.handlerStack objectAtIndexSafe:index];
+		ISMSStreamHandler *handler = [self.handlerStack objectAtIndexSafe:index];
 		[handler cancel];
 		
 		// If we're trying to resume, cancel the request
@@ -161,7 +160,7 @@ static SUSStreamManager *sharedInstance = nil;
 }
 
 // Convenience method
-- (void)cancelStream:(SUSStreamHandler *)handler
+- (void)cancelStream:(ISMSStreamHandler *)handler
 {
 	// If handler == nil, do nothing
 	if (!handler)
@@ -193,17 +192,20 @@ static SUSStreamManager *sharedInstance = nil;
 	
 	// Remove the handlers
 	NSArray *handlers = [NSArray arrayWithArray:self.handlerStack];
-	for (SUSStreamHandler *handler in handlers)
+	for (ISMSStreamHandler *handler in handlers)
 	{
 		if (![handlersToSkip containsObject:handler])
+		{
 			[self.handlerStack removeObject:handler];
+			[handler.mySong removeFromCachedSongsTable];
+		}
 	}
 	
 	// Start the next handler
 	if ([self.handlerStack count] > 0)
 	{
 		// Get the first handler
-		SUSStreamHandler *handler = [self.handlerStack firstObject];
+		ISMSStreamHandler *handler = [self.handlerStack firstObject];
 		
 		// If it's not already downloading, start downloading
 		if (!handler.isDownloading)
@@ -229,7 +231,7 @@ static SUSStreamManager *sharedInstance = nil;
 	NSMutableArray *handlersToSkip = [NSMutableArray arrayWithCapacity:[songsToSkip count]];
 	for (Song *aSong in songsToSkip)
 	{
-		SUSStreamHandler *handler = [self handlerForSong:aSong];
+		ISMSStreamHandler *handler = [self handlerForSong:aSong];
 		if (handler) 
 			[handlersToSkip addObject:[self handlerForSong:aSong]];
 	}
@@ -268,6 +270,9 @@ static SUSStreamManager *sharedInstance = nil;
 	if (index < [self.handlerStack count])
 	{
 		[self cancelStreamAtIndex:index];
+		ISMSStreamHandler *handler = [self.handlerStack objectAtIndex:index];
+		if (!handler.mySong.isFullyCached)
+			[handler.mySong removeFromCachedSongsTable];
 		[self.handlerStack removeObjectAtIndex:index];
 	}
 	
@@ -275,7 +280,7 @@ static SUSStreamManager *sharedInstance = nil;
 }
 
 // Convenience method
-- (void)removeStream:(SUSStreamHandler *)handler
+- (void)removeStream:(ISMSStreamHandler *)handler
 {
 	// If handler == nil, do nothing
 	if (!handler)
@@ -301,7 +306,7 @@ static SUSStreamManager *sharedInstance = nil;
 	[self resumeHandler:[self.handlerStack firstObjectSafe]];
 }
 
-- (void)resumeHandler:(SUSStreamHandler *)handler
+- (void)resumeHandler:(ISMSStreamHandler *)handler
 {
 	if (!handler)
 		return; 
@@ -313,7 +318,7 @@ static SUSStreamManager *sharedInstance = nil;
 	}
 }
 
-- (void)startHandler:(SUSStreamHandler *)handler resume:(BOOL)resume
+- (void)startHandler:(ISMSStreamHandler *)handler resume:(BOOL)resume
 {
 	if (!handler)
 		return;
@@ -322,7 +327,7 @@ static SUSStreamManager *sharedInstance = nil;
 	[lyricsDAO loadLyricsForArtist:handler.mySong.artist andTitle:handler.mySong.title];
 }
 
-- (void)startHandler:(SUSStreamHandler *)handler
+- (void)startHandler:(ISMSStreamHandler *)handler
 {
 	if (!handler)
 		return;
@@ -346,7 +351,7 @@ static SUSStreamManager *sharedInstance = nil;
 	if (data) 
 		self.handlerStack = [NSKeyedUnarchiver unarchiveObjectWithData:data];
 
-	for (SUSStreamHandler *handler in self.handlerStack)
+	for (ISMSStreamHandler *handler in self.handlerStack)
 	{
 		handler.delegate = self;
 	}
@@ -359,7 +364,7 @@ static SUSStreamManager *sharedInstance = nil;
 	if (!song)
 		return;
 	
-	SUSStreamHandler *handler = [[SUSStreamHandler alloc] initWithSong:song 
+	ISMSStreamHandler *handler = [[ISMSStreamHandler alloc] initWithSong:song 
 															byteOffset:byteOffset
 														 secondsOffset:secondsOffset
 																isTemp:isTemp
@@ -377,13 +382,13 @@ static SUSStreamManager *sharedInstance = nil;
 		// Also download the album art
 		if (song.coverArtId)
 		{
-			SUSCoverArtLargeDAO *artDataModel = [SUSCoverArtLargeDAO dataModel];
-			if (![artDataModel coverArtExistsForId:song.coverArtId])
-			{
-				//DLog(@"Cover art doesn't exist, loading for id: %@", song.coverArtId);
-				SUSCoverArtLargeLoader *loader = [[SUSCoverArtLargeLoader alloc] initWithDelegate:self];
-				[loader loadCoverArtId:song.coverArtId];
-			}
+			SUSCoverArtLoader *playerArt = [[SUSCoverArtLoader alloc] initWithDelegate:self coverArtId:song.coverArtId isLarge:YES];
+			if (![playerArt downloadArtIfNotExists])
+				[playerArt release];
+			
+			SUSCoverArtLoader *tableArt = [[SUSCoverArtLoader alloc] initWithDelegate:self coverArtId:song.coverArtId isLarge:NO];
+			if (![tableArt downloadArtIfNotExists])
+				[tableArt release];
 		}
 	}
 	
@@ -408,7 +413,7 @@ static SUSStreamManager *sharedInstance = nil;
 - (BOOL)isSongInQueue:(Song *)aSong
 {
 	BOOL isSongInQueue = NO;
-	for (SUSStreamHandler *handler in self.handlerStack)
+	for (ISMSStreamHandler *handler in self.handlerStack)
 	{
 		if ([handler.mySong isEqualToSong:aSong])
 		{
@@ -475,9 +480,9 @@ static SUSStreamManager *sharedInstance = nil;
 	[self fillStreamQueue];
 }
 
-#pragma mark - SUSStreamHandler delegate
+#pragma mark - ISMSStreamHandler delegate
 
-- (void)SUSStreamHandlerStarted:(SUSStreamHandler *)handler
+- (void)ISMSStreamHandlerStarted:(ISMSStreamHandler *)handler
 {
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 
@@ -485,18 +490,18 @@ static SUSStreamManager *sharedInstance = nil;
 		self.lastTempCachedSong = nil;
 }
 
-- (void)SUSStreamHandlerPartialPrecachePaused:(SUSStreamHandler *)handler
+- (void)ISMSStreamHandlerPartialPrecachePaused:(ISMSStreamHandler *)handler
 {
-	if (![MusicSingleton sharedInstance].isQueueListDownloading)
+	if (!cacheQueueManagerS.isQueueDownloading)
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
 
-- (void)SUSStreamHandlerPartialPrecacheUnpaused:(SUSStreamHandler *)handler
+- (void)ISMSStreamHandlerPartialPrecacheUnpaused:(ISMSStreamHandler *)handler
 {
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 }
 
-- (void)SUSStreamHandlerStartPlayback:(SUSStreamHandler *)handler
+- (void)ISMSStreamHandlerStartPlayback:(ISMSStreamHandler *)handler
 {	
 	// Update the last cached song
 	self.lastCachedSong = handler.mySong;
@@ -525,9 +530,9 @@ static SUSStreamManager *sharedInstance = nil;
 	[self saveHandlerStack];
 }
 
-- (void)SUSStreamHandlerConnectionFailed:(SUSStreamHandler *)handler withError:(NSError *)error
+- (void)ISMSStreamHandlerConnectionFailed:(ISMSStreamHandler *)handler withError:(NSError *)error
 {
-	if (![MusicSingleton sharedInstance].isQueueListDownloading)
+	if (!cacheQueueManagerS.isQueueDownloading)
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 
 	//DLog(@"stream handler failed: %@", handler);
@@ -549,31 +554,41 @@ static SUSStreamManager *sharedInstance = nil;
 	}
 }
 
-- (void)SUSStreamHandlerConnectionFinished:(SUSStreamHandler *)handler
+- (void)ISMSStreamHandlerConnectionFinished:(ISMSStreamHandler *)handler
 {	
-	if (![MusicSingleton sharedInstance].isQueueListDownloading)
+	if (!cacheQueueManagerS.isQueueDownloading)
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+	
+	if (handler.totalBytesTransferred < 500)
+	{
+		// Show an alert and delete the file, this was not a song but an XML error
+		// TODO: Parse with TBXML and display proper error
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"No song data returned. This could be because your Subsonic API trial has expired, this song is not an mp3 and the Subsonic transcoding plugins failed, or another reason." delegate:appDelegateS cancelButtonTitle:@"OK" otherButtonTitles: nil];
+		[alert show];
+		[alert release];
+		[[NSFileManager defaultManager] removeItemAtPath:handler.filePath error:NULL];
+	}
+	else
+	{		
+		// Mark song as cached
+		//DLog(@"Stream handler connection did finish for %@", mySong);
+		if (!handler.isTempCache)
+			handler.mySong.isFullyCached = YES;
+	}
 	
 	// Update the last cached song
 	self.lastCachedSong = handler.mySong;
-	
-	//DLog(@"stream handler finished: %@", handler);
-	
+		
 	if (handler.isTempCache)
 		self.lastTempCachedSong = handler.mySong;
-	//DLog(@"handler.isTempCache: %@   lastTempCachedSong: %@", NSStringFromBOOL(handler.isTempCache), self.lastTempCachedSong);
-
+	
 	// Remove the handler from the stack
-	//DLog(@"handlerStack: %@  about to remove the stream", self.handlerStack);
 	[self removeStream:handler];
-	
-	//DLog(@"handlerStack: %@", self.handlerStack);
-	
+		
 	// Start the next handler which is now the first object
 	if ([self.handlerStack count] > 0)
 	{
-		//DLog(@"starting first handler in stack");
-		SUSStreamHandler *handler = (SUSStreamHandler *)[self.handlerStack firstObjectSafe];
+		ISMSStreamHandler *handler = (ISMSStreamHandler *)[self.handlerStack firstObjectSafe];
 		[self startHandler:handler];
 	}
 }
@@ -603,6 +618,8 @@ static SUSStreamManager *sharedInstance = nil;
 
 #pragma mark - Singleton methods
 
+static ISMSStreamManager *sharedInstance = nil;
+
 - (void)setup
 {
 	// Load the handler stack, it may have been full when iSub was closed
@@ -610,13 +627,13 @@ static SUSStreamManager *sharedInstance = nil;
 	handlerStack = handlerStack ? handlerStack : [[NSMutableArray alloc] initWithCapacity:0];
 	if ([handlerStack count] > 0)
 	{
-		if ([(SUSStreamHandler *)[handlerStack firstObject] isTempCache])
+		if ([(ISMSStreamHandler *)[handlerStack firstObject] isTempCache])
 		{
 			[self removeAllStreams];
 		}
 		else
 		{
-			for (SUSStreamHandler *handler in handlerStack)
+			for (ISMSStreamHandler *handler in handlerStack)
 			{
 				// Resume any handlers that were downloading when iSub closed
 				if (handler.isDownloading && !handler.isTempCache)
@@ -665,7 +682,7 @@ static SUSStreamManager *sharedInstance = nil;
 											   object:nil];
 }
 
-+ (SUSStreamManager *)sharedInstance
++ (ISMSStreamManager *)sharedInstance
 {
     @synchronized(self)
     {

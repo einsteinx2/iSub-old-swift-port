@@ -10,13 +10,14 @@
 #import "FMDatabaseAdditions.h"
 
 #import "DatabaseSingleton.h"
-#import "NSString+md5.h"
 #import "ViewObjectsSingleton.h"
 #import "SavedSettings.h"
 #import "MusicSingleton.h"
 #import "PlaylistSingleton.h"
 #import "AudioEngine.h"
 #import "NSArray+Additions.h"
+#import "ISMSCacheQueueManager.h"
+#import "NSString+Additions.h"
 
 @implementation Song (DAO)
 
@@ -31,12 +32,12 @@
 	return [[NSFileManager defaultManager] fileExistsAtPath:self.currentPath]; 
 
 	// Database check
-	//return [self.db boolForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE md5 = ?", [self.path md5]];
+	//return [self.db stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ?", [self.path md5]] ? YES : NO;
 }
 
 - (BOOL)isPartiallyCached
 {
-	return [self.db intForQuery:@"SELECT count(*) FROM cachedSongs WHERE md5 = ? AND finished = 'NO'", [self.path md5]];
+	return [self.db stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? AND finished = 'NO'", [self.path md5]] ? YES : NO;
 }
 
 - (void)setIsPartiallyCached:(BOOL)isPartiallyCached
@@ -50,34 +51,37 @@
 
 - (BOOL)isFullyCached
 {
+	//DLog(@"%@: SELECT finished FROM cachedSongs WHERE md5 = '%@'", self.title, [self.path md5]);
 	return [[self.db stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", [self.path md5]] boolValue];
 }
 
 - (void)setIsFullyCached:(BOOL)isFullyCached
 {
-	assert(isFullyCached && "Can not set isFullyCached to to NO");
+	assert(isFullyCached && "Can not set isFullyCached to NO");
 	if (isFullyCached)
 	{
-		[self.db executeUpdate:@"UPDATE cachedSongs SET finished = 'YES' WHERE md5 = ?", [self.path md5]];
+		DLog(@"%@: UPDATE cachedSongs SET finished = 'YES', cachedDate = %llu WHERE md5 = '%@'", self.title, (unsigned long long)[[NSDate date] timeIntervalSince1970], [self.path md5]);
+		[self.db executeUpdate:@"UPDATE cachedSongs SET finished = 'YES', cachedDate = ? WHERE md5 = ?", [NSNumber numberWithUnsignedLongLong:(unsigned long long)[[NSDate date] timeIntervalSince1970]], [self.path md5]];
 		
 		[self insertIntoCachedSongsLayout];
 		
 		// Setup the genre table entries
 		if (self.genre)
-		{		
+		{
 			// Check if the genre has a table in the database yet, if not create it and add the new genre to the genres table
-			if ([self.db intForQuery:@"SELECT COUNT(*) FROM genres WHERE genre = ?", self.genre] == 0)
+			NSString *genre = [self.db stringForQuery:@"SELECT genre FROM genres WHERE genre = ?", self.genre];
+			if (!genre)
 			{							
 				[self.db executeUpdate:@"INSERT INTO genres (genre) VALUES (?)", self.genre];
 				if ([self.db hadError])
-				{
 					DLog(@"Err adding the genre %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]); 
-				}
 			}
 			
-			// Insert the song object into the genresSongs
+			// Insert the song object into the appropriate genresSongs table
 			[self insertIntoGenreTable:@"genresSongs"];
 		}
+		
+		[self removeFromCacheQueue];
 	}
 }
 
@@ -88,25 +92,25 @@
 	{
 		aSong = [[Song alloc] init];
 		if ([result stringForColumn:@"title"] != nil)
-			aSong.title = [[result stringForColumn:@"title"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+			aSong.title = [[result stringForColumn:@"title"] cleanString];
 		if ([result stringForColumn:@"songId"] != nil)
-			aSong.songId = [[result stringForColumn:@"songId"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+			aSong.songId = [[result stringForColumn:@"songId"] cleanString];
 		if ([result stringForColumn:@"parentId"] != nil)
-			aSong.parentId = [[result stringForColumn:@"parentId"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+			aSong.parentId = [[result stringForColumn:@"parentId"] cleanString];
 		if ([result stringForColumn:@"artist"] != nil)
-			aSong.artist = [[result stringForColumn:@"artist"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+			aSong.artist = [[result stringForColumn:@"artist"] cleanString];
 		if ([result stringForColumn:@"album"] != nil)
-			aSong.album = [[result stringForColumn:@"album"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+			aSong.album = [[result stringForColumn:@"album"] cleanString];
 		if ([result stringForColumn:@"genre"] != nil)
-			aSong.genre = [[result stringForColumn:@"genre"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+			aSong.genre = [[result stringForColumn:@"genre"] cleanString];
 		if ([result stringForColumn:@"coverArtId"] != nil)
-			aSong.coverArtId = [[result stringForColumn:@"coverArtId"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+			aSong.coverArtId = [[result stringForColumn:@"coverArtId"] cleanString];
 		if ([result stringForColumn:@"path"] != nil)
-			aSong.path = [[result stringForColumn:@"path"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+			aSong.path = [[result stringForColumn:@"path"] cleanString];
 		if ([result stringForColumn:@"suffix"] != nil)
-			aSong.suffix = [[result stringForColumn:@"suffix"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+			aSong.suffix = [[result stringForColumn:@"suffix"] cleanString];
 		if ([result stringForColumn:@"transcodedSuffix"] != nil)
-			aSong.transcodedSuffix = [[result stringForColumn:@"transcodedSuffix"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+			aSong.transcodedSuffix = [[result stringForColumn:@"transcodedSuffix"] cleanString];
 		aSong.duration = [NSNumber numberWithInt:[result intForColumn:@"duration"]];
 		aSong.bitRate = [NSNumber numberWithInt:[result intForColumn:@"bitRate"]];
 		aSong.track = [NSNumber numberWithInt:[result intForColumn:@"track"]];
@@ -231,11 +235,38 @@
 
 - (BOOL)insertIntoCachedSongsTable
 {
-	[self.db executeUpdate:[NSString stringWithFormat:@"REPLACE INTO cachedSongs (md5, finished, cachedDate, playedDate, %@) VALUES (?, 'NO', ?, 0, %@)",  [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [self.path md5], [NSNumber numberWithInt:(NSUInteger)[[NSDate date] timeIntervalSince1970]], self.title, self.songId, self.artist, self.album, self.genre, self.coverArtId, self.path, self.suffix, self.transcodedSuffix, self.duration, self.bitRate, self.track, self.year, self.size, self.parentId];
+	[self.db executeUpdate:[NSString stringWithFormat:@"REPLACE INTO cachedSongs (md5, finished, cachedDate, playedDate, %@) VALUES (?, 'NO', ?, 0, %@)",  [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [self.path md5], [NSNumber numberWithUnsignedLongLong:(unsigned long long)[[NSDate date] timeIntervalSince1970]], self.title, self.songId, self.artist, self.album, self.genre, self.coverArtId, self.path, self.suffix, self.transcodedSuffix, self.duration, self.bitRate, self.track, self.year, self.size, self.parentId];
 	
 	if ([self.db hadError]) 
 	{
-		DLog(@"Err inserting song into genre table %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
+		DLog(@"Err inserting song into cached songs table %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
+	}
+	
+	return ![self.db hadError];
+}
+
+- (BOOL)removeFromCachedSongsTable
+{
+	//return [Song removeSongFromCacheDbByMD5:[self.path md5]];
+	
+	DLog(@"removing %@ from cachedSongs", self.title);
+	[self.db executeUpdate:@"DELETE FROM cachedSongs WHERE md5 = ?", [self.path md5]];
+	
+	if ([self.db hadError]) 
+	{
+		DLog(@"Err removing song from cached songs table %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
+	}
+	
+	return ![self.db hadError];
+}
+
+- (BOOL)removeFromCacheQueue
+{
+	[self.db executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", [self.path md5]];
+	
+	if ([self.db hadError]) 
+	{
+		DLog(@"Err removing song from cache queue table %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
 	}
 	
 	return ![self.db hadError];
@@ -243,9 +274,10 @@
 
 - (BOOL)addToCacheQueue
 {	
-	if ([self.db intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE md5 = ? AND finished = 'YES'", [self.path md5]] == 0) 
+	NSString *md5 = [self.db stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? AND finished = 'YES'", [self.path md5]];
+	if (!md5) 
 	{
-		[self.db executeUpdate:[NSString stringWithFormat:@"INSERT INTO cacheQueue (md5, finished, cachedDate, playedDate, %@) VALUES (?, ?, ?, ?, %@)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [self.path md5], @"NO", [NSNumber numberWithInt:(NSUInteger)[[NSDate date] timeIntervalSince1970]], [NSNumber numberWithInt:0], self.title, self.songId, self.artist, self.album, self.genre, self.coverArtId, self.path, self.suffix, self.transcodedSuffix, self.duration, self.bitRate, self.track, self.year, self.size, self.parentId];
+		[self.db executeUpdate:[NSString stringWithFormat:@"INSERT INTO cacheQueue (md5, finished, cachedDate, playedDate, %@) VALUES (?, ?, ?, ?, %@)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [self.path md5], @"NO", [NSNumber numberWithUnsignedLongLong:(unsigned long long)[[NSDate date] timeIntervalSince1970]], [NSNumber numberWithInt:0], self.title, self.songId, self.artist, self.album, self.genre, self.coverArtId, self.path, self.suffix, self.transcodedSuffix, self.duration, self.bitRate, self.track, self.year, self.size, self.parentId];
 	}
 	
 	if ([self.db hadError]) 
@@ -253,10 +285,13 @@
 		DLog(@"Err adding song to cache queue %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
 	}
 	
-	if (![MusicSingleton sharedInstance].isQueueListDownloading)
+	if (!cacheQueueManagerS.isQueueDownloading)
 	{
 		// Make sure this is called from the main thread
-		[[MusicSingleton sharedInstance] performSelectorOnMainThread:@selector(downloadNextQueuedSong) withObject:nil waitUntilDone:NO];
+		if ([NSThread isMainThread])
+			[cacheQueueManagerS startDownloadQueue];
+		else
+			[cacheQueueManagerS performSelectorOnMainThread:@selector(startDownloadQueue) withObject:nil waitUntilDone:NO];
 	}
 	
 	return ![self.db hadError];
@@ -398,7 +433,8 @@
 	[[NSFileManager defaultManager] removeItemAtPath:fileName error:NULL];
 	
 	// Clean up genres table
-	if ([dbControls.songCacheDb intForQuery:@"SELECT COUNT(*) FROM genresSongs WHERE genre = ?", genre] == 0)
+	NSString *genreTest = [dbControls.songCacheDb stringForQuery:@"SELECT genre FROM genresSongs WHERE genre = ? LIMIT 1", genre];
+	if (!genreTest)
 	{
 		[dbControls.songCacheDb executeUpdate:@"DELETE FROM genres WHERE genre = ?", genre];
 		if ([dbControls.songCacheDb hadError])
@@ -458,10 +494,8 @@
 
 - (void)setPlayedDate:(NSDate *)playedDate
 {
-	NSString *query = [NSString stringWithFormat:@"UPDATE cachedSongs SET playedDate = %i WHERE md5 = '%@'", 
-					   (NSUInteger)[playedDate timeIntervalSince1970], 
-					   [self.songId md5]];
-	[self.db executeUpdate:query];
+	NSString *query = @"UPDATE cachedSongs SET playedDate = ? WHERE md5 = ?";
+	[self.db executeUpdate:query, [NSNumber numberWithUnsignedLongLong:(unsigned long long)[playedDate timeIntervalSince1970]], [self.songId md5]];
 }
 
 + (NSString *)standardSongColumnSchema

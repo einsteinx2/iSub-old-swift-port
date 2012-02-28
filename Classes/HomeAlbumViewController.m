@@ -15,7 +15,7 @@
 #import "AlbumViewController.h"
 #import "AllAlbumsUITableViewCell.h"
 #import "SongUITableViewCell.h"
-#import "AsynchronousImageViewCached.h"
+#import "AsynchronousImageView.h"
 #import "Artist.h"
 #import "Album.h"
 #import "Song.h"
@@ -240,7 +240,7 @@
 		cell.myId = anAlbum.albumId;
 		cell.myArtist = [Artist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
 		
-		[cell.coverArtView loadImageFromCoverArtId:anAlbum.coverArtId];
+		cell.coverArtView.coverArtId = anAlbum.coverArtId;
 		
 		[cell.albumNameLabel setText:anAlbum.title];
 		[cell.artistNameLabel setText:anAlbum.artistName];

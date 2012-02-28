@@ -8,11 +8,11 @@
 
 #import "CustomUITableViewCell.h"
 
-@class AsynchronousImageViewCached;
+@class AsynchronousImageView;
 
 @interface BookmarkUITableViewCell : CustomUITableViewCell 
 
-@property (retain) AsynchronousImageViewCached *coverArtView;
+@property (retain) AsynchronousImageView *coverArtView;
 @property (retain) UILabel *bookmarkNameLabel;
 @property (retain) UIScrollView *nameScrollView;
 @property (retain) UILabel *songNameLabel;

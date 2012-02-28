@@ -8,7 +8,7 @@
 
 #import "CustomUITableViewCell.h"
 
-@class AsynchronousImageViewCached;
+@class AsynchronousImageView;
 
 @interface GenresAlbumUITableViewCell : CustomUITableViewCell 
 
@@ -16,7 +16,7 @@
 @property (retain) NSString *seg1;
 @property (retain) NSString *genre;
 
-@property (retain) AsynchronousImageViewCached *coverArtView;
+@property (retain) AsynchronousImageView *coverArtView;
 @property (retain) UIScrollView *albumNameScrollView;
 @property (retain) UILabel *albumNameLabel;
 

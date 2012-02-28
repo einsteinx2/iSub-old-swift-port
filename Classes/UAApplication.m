@@ -11,6 +11,7 @@
 #import "iSubAppDelegate.h"
 #import "SavedSettings.h"
 #import "AudioEngine.h"
+#import "JukeboxSingleton.h"
  
 @implementation UAApplication
 
@@ -61,10 +62,10 @@
 {
 	if (settingsS.isJukeboxEnabled)
 	{
-		if (musicS.jukeboxIsPlaying)
-			[musicS jukeboxStop];
+		if (jukeboxS.jukeboxIsPlaying)
+			[jukeboxS jukeboxStop];
 		else
-			[musicS jukeboxPlay];
+			[jukeboxS jukeboxPlay];
 	}
 	else
 	{

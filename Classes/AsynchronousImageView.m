@@ -21,23 +21,61 @@
 #import "PageControlViewController.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "SUSCoverArtDAO.h"
+#import "UIView+Tools.h"
+#import "AsynchronousImageViewDelegate.h"
 
 @implementation AsynchronousImageView
 
-@synthesize coverArtId, isForPlayer;
+@synthesize coverArtDAO, coverArtId, isLarge, activityIndicator, delegate;
 
-- (id) initWithCoder:(NSCoder*)coder
+- (id)initWithFrame:(CGRect)frame coverArtId:(NSString *)artId isLarge:(BOOL)large delegate:(NSObject<AsynchronousImageViewDelegate> *)theDelegate
 {
-    self = [super initWithCoder:(NSCoder*)coder];
-	
-    if (self != nil)
-    {
-		isForPlayer = NO;
-    }
-	
-    return self;
+	if ((self = [super initWithFrame:frame]))
+	{
+		isLarge = large;
+		self.coverArtId = artId;
+		delegate = theDelegate;
+	}
+	return self;
 }
 
+- (NSString *)coverArtId
+{
+	@synchronized(self)
+	{
+		return coverArtId;
+	}
+}
+
+- (void)setCoverArtId:(NSString *)artId
+{
+	@synchronized(self)
+	{
+		[coverArtId release];
+		coverArtId = [artId copy];
+		
+		self.coverArtDAO = [[[SUSCoverArtDAO alloc] initWithDelegate:self coverArtId:self.coverArtId isLarge:self.isLarge] autorelease];
+		if (self.coverArtDAO.isCoverArtCached)
+		{
+			self.image = self.coverArtDAO.coverArtImage;
+		}
+		else
+		{
+			self.image = self.coverArtDAO.defaultCoverArtImage;
+			
+			if (coverArtId && self.isLarge)
+			{
+				self.activityIndicator = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge] autorelease];
+				self.activityIndicator.center = CGPointMake(self.width/2, self.height/2);
+				[self addSubview:self.activityIndicator];
+				[self.activityIndicator startAnimating];
+				
+				[self.coverArtDAO startLoad];
+			}
+		}
+	}
+}
 
 #pragma mark -
 #pragma mark Handle User Input
@@ -108,127 +146,36 @@
 	}
 }
 
-#pragma mark - Load Image
-
-// TODO: rewrite this to get DB calls out of this class
-
-- (void)loadImageFromCoverArtId:(NSString *)artId isForPlayer:(BOOL)isPlayer
+- (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
 {
-	self.coverArtId = artId;
-	self.isForPlayer = isPlayer;
-	
-	
-	NSString *size = nil;
-	if (IS_IPAD())
+	self.coverArtDAO = nil;
+	if ([delegate respondsToSelector:@selector(asyncImageViewLoadingFailed:withError:)])
 	{
-        size = @"540";
+		[delegate asyncImageViewLoadingFailed:self withError:error];
 	}
-	else
-	{
-		if (SCREEN_SCALE() == 2.0)
-		{
-            size = @"640";
-		}
-		else
-		{	
-            size = @"320";
-		}
-	}
-    
-    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(size), @"size", n2N(artId), @"id", nil];
-	DLog(@"parameters: %@", parameters);
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getCoverArt" andParameters:parameters];
-	
-	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	data = [[NSMutableData data] retain];
 }
 
-
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
+- (void)loadingFinished:(SUSLoader*)theLoader
 {
-	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
-	{
-		return YES; // Self-signed cert will be accepted
-		// Note: it doesn't seem to matter what you return for a proper SSL cert, only self-signed certs
-	}
-	// If no other authentication is required, return NO for everything else
-	// Otherwise maybe YES for NSURLAuthenticationMethodDefault and etc.
-	return NO;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{	
-	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
-	{
-		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
-	}
-	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-	[data setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
-{
-    [data appendData:incrementalData];
-}
-
-
-- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
-{
-	DLog(@"Connection to album art failed");
-	self.image = [UIImage imageNamed:@"default-album-art.png"];
+	[self.activityIndicator removeFromSuperview];
+	self.activityIndicator = nil;
 	
-	[data release]; data = nil;
-	[connection release]; connection = nil;
-}	
-
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
-{	
-	// Check to see if the data is a valid image. If so, use it; if not, use the default image.
-	if([UIImage imageWithData:data])
-	{
-		if (IS_IPAD())
-		{
-			[databaseS.coverArtCacheDb540 executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [coverArtId md5], data];
-		}
-		else
-		{
-			[databaseS.coverArtCacheDb320 executeUpdate:@"INSERT OR REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [coverArtId md5], data];
-		}
-		
-		if (SCREEN_SCALE() == 2.0 && !IS_IPAD())
-		{
-			UIGraphicsBeginImageContextWithOptions(CGSizeMake(320.0,320.0), NO, 2.0);
-			[[UIImage imageWithData:data] drawInRect:CGRectMake(0,0,320,320)];
-			self.image = UIGraphicsGetImageFromCurrentImageContext();
-			UIGraphicsEndImageContext();
-		}
-		else
-		{
-			self.image = [UIImage imageWithData:data];
-		}
-	}
-	else 
-	{
-		self.image = [UIImage imageNamed:@"default-album-art.png"];
-	}
+	self.image = self.coverArtDAO.coverArtImage;
+	self.coverArtDAO = nil;
 	
-	//if (isForPlayer)
-	//{
-		[NSNotificationCenter postNotificationToMainThreadWithName:@"createReflection"];
-	//}
-	
-	[data release]; data = nil;
-	[connection release]; connection = nil;
+	if ([delegate respondsToSelector:@selector(asyncImageViewFinishedLoading:)])
+	{
+		[delegate asyncImageViewFinishedLoading:self];
+	}
 }
 
 - (void)dealloc 
 {
-	[coverArtId release];
+	[self.activityIndicator removeFromSuperview];
+	self.activityIndicator = nil;
+	
+	[coverArtDAO release]; coverArtDAO = nil;
+	[coverArtId release]; coverArtId = nil;
 	[super dealloc];
 }
 

@@ -14,6 +14,7 @@
 #import "SavedSettings.h"
 #import "PlaylistSingleton.h"
 #import "NSArray+Additions.h"
+#import "JukeboxSingleton.h"
 
 @implementation SUSNowPlayingDAO
 @synthesize delegate, loader, nowPlayingSongDicts;
@@ -101,9 +102,9 @@
 	// If jukebox mode, send song ids to server
 	if (settingsS.isJukeboxEnabled)
 	{
-		[musicS jukeboxStop];
-		[musicS jukeboxClearPlaylist];
-		[musicS jukeboxAddSong:aSong.songId];
+		[jukeboxS jukeboxStop];
+		[jukeboxS jukeboxClearPlaylist];
+		[jukeboxS jukeboxAddSong:aSong.songId];
 	}
 	
 	// Set player defaults

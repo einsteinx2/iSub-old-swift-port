@@ -10,7 +10,7 @@
 #import "TBXML.h"
 #import "FMDatabaseAdditions.h"
 #import "DatabaseSingleton.h"
-#import "GTMNSString+HTML.h"
+#import "NSString+Additions.h"
 #import "SavedSettings.h"
 
 @implementation SUSRootFoldersLoader
@@ -115,7 +115,7 @@
 - (BOOL)addRootFolderIndexToCache:(NSUInteger)position count:(NSUInteger)folderCount name:(NSString*)name
 {
 	NSString *query = [NSString stringWithFormat:@"INSERT INTO rootFolderIndexCache%@ VALUES (?, ?, ?)", self.tableModifier];
-	[self.db executeUpdate:query, [name gtm_stringByUnescapingFromHTML], [NSNumber numberWithInt:position], [NSNumber numberWithInt:folderCount]];
+	[self.db executeUpdate:query, [name cleanString], [NSNumber numberWithInt:position], [NSNumber numberWithInt:folderCount]];
 	return ![self.db hadError];
 }
 
@@ -127,7 +127,7 @@
 	if (folderId != nil && name != nil)
 	{
 		NSString *query = @"INSERT INTO rootFolderNameCacheTemp VALUES (?, ?)";
-		hadError = [self.db executeUpdate:query, folderId, [name gtm_stringByUnescapingFromHTML]];
+		hadError = [self.db executeUpdate:query, folderId, [name cleanString]];
 		tempRecordCount++;
 	}
 	

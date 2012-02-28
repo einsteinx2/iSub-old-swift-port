@@ -16,7 +16,7 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "AllSongsUITableViewCell.h"
-#import "AsynchronousImageViewCached.h"
+#import "AsynchronousImageView.h"
 #import "Index.h"
 #import "Album.h"
 #import "Song.h"
@@ -36,6 +36,7 @@
 #import "PlaylistSingleton.h"
 #import "NSArray+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "JukeboxSingleton.h"
 
 @interface AllSongsViewController (Private)
 - (void)hideLoadingScreen;
@@ -663,7 +664,7 @@
 	cell.md5 = [aSong.path md5];
 	cell.isSearching = isSearching;
 	
-	[cell.coverArtView loadImageFromCoverArtId:aSong.coverArtId];
+	cell.coverArtView.coverArtId = aSong.coverArtId;
 	
 	cell.backgroundView = [[[UIView alloc] init] autorelease];
 	if(indexPath.row % 2 == 0)
@@ -717,9 +718,9 @@
 		// If jukebox mode, send song id to server
 		if (settingsS.isJukeboxEnabled)
 		{
-			[musicS jukeboxStop];
-			[musicS jukeboxClearPlaylist];
-			[musicS jukeboxAddSong:aSong.songId];
+			[jukeboxS jukeboxStop];
+			[jukeboxS jukeboxClearPlaylist];
+			[jukeboxS jukeboxAddSong:aSong.songId];
 		}
 		
 		// Set player defaults

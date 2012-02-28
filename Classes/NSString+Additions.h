@@ -19,5 +19,6 @@
 #import "NSString+URLEncode.h"
 #import "GTMNSString+HTML.h"
 #import "NSString+FileSize.h"
+#import "NSString+Clean.h"
 
 #endif

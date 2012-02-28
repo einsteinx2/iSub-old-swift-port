@@ -7,7 +7,7 @@
 //
 
 #import "ChatMessage.h"
-#import "GTMNSString+HTML.h"
+#import "NSString+Additions.h"
 
 @implementation ChatMessage
 
@@ -25,10 +25,10 @@
 			self.timestamp = [[[TBXML valueOfAttributeNamed:@"time" forElement:element] substringToIndex:10] intValue];
 		
 		if ([TBXML valueOfAttributeNamed:@"username" forElement:element])
-			self.user = [[TBXML valueOfAttributeNamed:@"username" forElement:element] gtm_stringByUnescapingFromHTML];
+			self.user = [[TBXML valueOfAttributeNamed:@"username" forElement:element] cleanString];
 		
 		if ([TBXML valueOfAttributeNamed:@"message" forElement:element])
-			self.message = [[TBXML valueOfAttributeNamed:@"message" forElement:element] gtm_stringByUnescapingFromHTML];
+			self.message = [[TBXML valueOfAttributeNamed:@"message" forElement:element] cleanString];
 	}
 	
 	return self;

@@ -75,6 +75,9 @@
 		labelHolderView.y = 380;
 	}
 	
+	albumArt.isLarge = YES;
+	albumArt.delegate = self;
+	
 	[UIApplication setStatusBarHidden:YES withAnimation:YES];
 	
 	artistLabel.text = myAlbum.artistName;
@@ -83,25 +86,8 @@
 	trackCountLabel.text = [NSString stringWithFormat:@"%i Tracks", numberOfTracks];
 	if (numberOfTracks == 1)
 		trackCountLabel.text = [NSString stringWithFormat:@"%i Track", numberOfTracks];
-		
-	if(myAlbum.coverArtId)
-	{		
-		FMDatabase *db = IS_IPAD() ? databaseS.coverArtCacheDb540 : databaseS.coverArtCacheDb320;
-		
-		if ([db intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [myAlbum.coverArtId md5]])
-		{
-			NSData *imageData = [db dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [myAlbum.coverArtId md5]];
-			albumArt.image = [UIImage imageWithData:imageData];
-		}
-		else 
-		{
-			[albumArt loadImageFromCoverArtId:myAlbum.coverArtId isForPlayer:NO];
-		}
-	}
-	else 
-	{
-		albumArt.image = [UIImage imageNamed:@"default-album-art.png"];
-	}
+	
+	albumArt.coverArtId = self.myAlbum.coverArtId;
 	
 	albumArtReflection.image = [albumArt reflectedImageWithHeight:albumArtReflection.height];
 }
@@ -133,6 +119,11 @@
 	[labelHolderView release];
 	[myAlbum release];
     [super dealloc];
+}
+
+- (void)asyncImageViewFinishedLoading:(AsynchronousImageView *)asyncImageView
+{
+	albumArtReflection.image = [albumArt reflectedImageWithHeight:albumArtReflection.height];
 }
 
 @end

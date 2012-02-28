@@ -14,7 +14,8 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "AlbumUITableViewCell.h"
 #import "SongUITableViewCell.h"
-#import "AsynchronousImageViewCached.h"
+#import "AllSongsUITableViewCell.h"
+#import "AsynchronousImageView.h"
 #import "Artist.h"
 #import "Album.h"
 #import "Song.h"
@@ -229,25 +230,9 @@
 		CGRect headerFrame = CGRectMake(0., 0., self.view.bounds.size.width, headerHeight);
 		UIView *headerView = [[UIView alloc] initWithFrame:headerFrame];
 		headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-				
-		if(myAlbum.coverArtId)
-		{		
-			FMDatabase *db = IS_IPAD() ? databaseS.coverArtCacheDb540 : databaseS.coverArtCacheDb320;
-			
-			if ([db intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [myAlbum.coverArtId md5]])
-			{
-				NSData *imageData = [db dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [myAlbum.coverArtId md5]];
-				albumInfoArtView.image = [UIImage imageWithData:imageData];
-			}
-			else 
-			{
-				[albumInfoArtView loadImageFromCoverArtId:myAlbum.coverArtId isForPlayer:NO];
-			}
-		}
-		else 
-		{
-			albumInfoArtView.image = [UIImage imageNamed:@"default-album-art.png"];
-		}
+		
+		albumInfoArtView.isLarge = YES;
+		albumInfoArtView.coverArtId = myAlbum.coverArtId;
 		
 		albumInfoArtistLabel.text = myAlbum.artistName;
 		albumInfoAlbumLabel.text = myAlbum.title;
@@ -360,7 +345,7 @@
 		if (sectionInfo)
 			cell.isIndexShowing = YES;
 		
-		[cell.coverArtView loadImageFromCoverArtId:anAlbum.coverArtId];
+		cell.coverArtView.coverArtId = anAlbum.coverArtId;
 		
 		[cell.albumNameLabel setText:anAlbum.title];
 		
@@ -382,6 +367,7 @@
 		cell.accessoryType = UITableViewCellAccessoryNone;
         
         Song *aSong = [self.dataModel songForTableViewRow:indexPath.row];
+		DLog(@"aSong.path: %@   md5: %@", aSong.path, [aSong.path md5]);
 		        
 		cell.mySong = aSong;
 		

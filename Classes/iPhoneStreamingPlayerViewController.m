@@ -12,7 +12,7 @@
 #import "ViewObjectsSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "PageControlViewController.h"
-#import "CoverArtImageView.h"
+#import "AsynchronousImageView.h"
 #import "Song.h"
 #import <QuartzCore/CoreAnimation.h>
 #import <MediaPlayer/MediaPlayer.h>
@@ -25,15 +25,16 @@
 #import "PlaylistSingleton.h"
 #import "AudioEngine.h"
 #import "EqualizerViewController.h"
-#import "SUSCoverArtLargeDAO.h"
+#import "SUSCoverArtDAO.h"
 #import "UIApplication+StatusBar.h"
 #import "OBSlider.h"
 #import "NSString+Additions.h"
-#import "SUSStreamManager.h"
-#import "SUSStreamHandler.h"
+#import "ISMSStreamManager.h"
+#import "ISMSStreamHandler.h"
 #import "NSArray+FirstObject.h"
 #import "UIImageView+Reflection.h"
 #import "NSArray+Additions.h"
+#import "JukeboxSingleton.h"
 
 #define downloadProgressBorder 4.
 #define downloadProgressWidth (progressSlider.frame.size.width - (downloadProgressBorder * 2))
@@ -42,7 +43,7 @@
 @interface iPhoneStreamingPlayerViewController ()
 @property (retain) UIImageView *reflectionView;
 @property (retain) NSDictionary *originalViewFrames;
-- (void)setupCoverArt;
+- (void)createReflection;
 - (void)initSongInfo;
 - (void)setStopButtonImage;
 - (void)setPlayButtonImage;
@@ -84,6 +85,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {
 	[super viewDidLoad];
 	
+	DLog(@"coverArtImageView class: %@", NSStringFromClass(coverArtImageView.class));
+	
 	extraButtonsButtonOffImage = [[UIImage imageNamed:@"controller-extras.png"] retain];
 	extraButtonsButtonOnImage = [[UIImage imageNamed:@"controller-extras-on.png"] retain];
 	
@@ -92,6 +95,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	isFlipped = NO;
 	isExtraButtonsShowing = NO;
 	pauseSlider = NO;
+	
+	coverArtImageView.isLarge = YES;
+	coverArtImageView.delegate = self;
 
 	// Create the extra views not in the XIB file
 	[self createDownloadProgressView];
@@ -108,7 +114,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	// Setup the volume controller view
 	if (settingsS.isJukeboxEnabled)
 	{
-		[musicS jukeboxGetInfo];
+		[jukeboxS jukeboxGetInfo];
 		
 		self.view.backgroundColor = viewObjectsS.jukeboxColor;
 		
@@ -119,7 +125,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		jukeboxVolumeView.minimumValue = 0.0;
 		jukeboxVolumeView.maximumValue = 1.0;
 		jukeboxVolumeView.continuous = NO;
-		jukeboxVolumeView.value = musicS.jukeboxGain;
+		jukeboxVolumeView.value = jukeboxS.jukeboxGain;
 		[volumeSlider addSubview:jukeboxVolumeView];
 	}
 	else
@@ -161,7 +167,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		playButton.y -= 10;
 		nextButton.y -= 10;
 		extraButtonsButton.y -= 10;
-		volumeView.y += 5;
+		volumeSlider.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin;
+		volumeSlider.y += 5;
 	}
 }
 
@@ -171,7 +178,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	if (settingsS.isJukeboxEnabled)
 	{
-		[musicS jukeboxGetInfo];
+		[jukeboxS jukeboxGetInfo];
 		
 		self.view.backgroundColor = viewObjectsS.jukeboxColor;
 	}
@@ -205,9 +212,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	if (settingsS.isJukeboxEnabled)
 	{
-		[musicS jukeboxGetInfo];
+		[jukeboxS jukeboxGetInfo];
 		
-		if (musicS.jukeboxIsPlaying)
+		if (jukeboxS.jukeboxIsPlaying)
 			[self setStopButtonImage];
 		else 
 			[self setPlayButtonImage];
@@ -252,6 +259,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	}
 }
 
+- (void)asyncImageViewFinishedLoading:(AsynchronousImageView *)asyncImageView
+{
+	[self createReflection];
+}
+
 - (void)registerForNotifications
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPlayButtonImage) 
@@ -264,8 +276,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 												 name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) 
 												 name:ISMSNotification_ServerSwitched object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupCoverArt) 
-												 name:ISMSNotification_AlbumArtLargeDownloaded object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateShuffleIcon) 
 												 name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songInfoToggle:) 
@@ -282,8 +292,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 													name:ISMSNotification_SongPlaybackPaused object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self 
 													name:ISMSNotification_SongPlaybackStarted object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self 
-													name:ISMSNotification_AlbumArtLargeDownloaded object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self 
 													name:ISMSNotification_ServerSwitched object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self 
@@ -621,7 +629,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	}
 	
     [self setSongTitle];
-    [self setupCoverArt];
+	coverArtImageView.coverArtId = currentSong.coverArtId;
+    [self createReflection];
     
 	// Update the icon in top right
 	if (isFlipped)
@@ -636,9 +645,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	if (settingsS.isJukeboxEnabled)
 	{
-		jukeboxVolumeView.value = musicS.jukeboxGain;
+		jukeboxVolumeView.value = jukeboxS.jukeboxGain;
 		
-		if (musicS.jukeboxIsPlaying)
+		if (jukeboxS.jukeboxIsPlaying)
 			[self setStopButtonImage];
 		else 
 			[self setPlayButtonImage];
@@ -689,7 +698,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)jukeboxVolumeChanged:(id)sender
 {
-	[musicS jukeboxSetVolume:jukeboxVolumeView.value];
+	[jukeboxS jukeboxSetVolume:jukeboxVolumeView.value];
 }
 
 - (void)backAction:(id)sender
@@ -819,10 +828,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {
 	if (settingsS.isJukeboxEnabled)
 	{
-		if (musicS.jukeboxIsPlaying)
-			[musicS jukeboxStop];
+		if (jukeboxS.jukeboxIsPlaying)
+			[jukeboxS jukeboxStop];
 		else
-			[musicS jukeboxPlay];
+			[jukeboxS jukeboxPlay];
 	}
 	else
 	{
@@ -836,7 +845,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	if (audioEngineS.progress > 10.0)
 	{
 		if (settingsS.isJukeboxEnabled)
-			[musicS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:playlistS.currentIndex]];
+			[jukeboxS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:playlistS.currentIndex]];
 		else
 			[musicS playSongAtPosition:playlistS.currentIndex];
 	}
@@ -1101,7 +1110,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			[streamManagerS queueStreamForSong:currentSong byteOffset:byteOffset secondsOffset:progressSlider.value atIndex:0 isTempCache:YES];
 			if ([streamManagerS.handlerStack count] > 1)
 			{
-				SUSStreamHandler *handler = [streamManagerS.handlerStack firstObjectSafe];
+				ISMSStreamHandler *handler = [streamManagerS.handlerStack firstObjectSafe];
 				[handler start];
 			}
 			
@@ -1215,7 +1224,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			[streamManagerS queueStreamForSong:currentSong byteOffset:byteOffset secondsOffset:progressSlider.value atIndex:0 isTempCache:YES];
 			if ([streamManagerS.handlerStack count] > 1)
 			{
-				SUSStreamHandler *handler = [streamManagerS.handlerStack firstObjectSafe];
+				ISMSStreamHandler *handler = [streamManagerS.handlerStack firstObjectSafe];
 				[handler start];
 			}
 			pauseSlider = NO;
@@ -1288,7 +1297,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)updateDownloadProgress
 {		
-	return;
 	// Set the current song progress bar
 	if ([self.currentSong isTempCached])
 	{
@@ -1329,10 +1337,12 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	if (!pauseSlider)
 	{
-		NSString *elapsedTime = [NSString formatTime:audioEngineS.progress];;
-		NSString *remainingTime = [NSString formatTime:([currentSong.duration floatValue] - audioEngineS.progress)];
+		CGFloat progress = [currentSong isEqualToSong:audioEngineS.currentStreamSong] ? audioEngineS.progress : 0.;
 		
-		progressSlider.value = audioEngineS.progress;
+		NSString *elapsedTime = [NSString formatTime:progress];;
+		NSString *remainingTime = [NSString formatTime:([currentSong.duration floatValue] - progress)];
+		
+		progressSlider.value = progress;
 		elapsedTimeLabel.text = elapsedTime;
 		remainingTimeLabel.text =[@"-" stringByAppendingString:remainingTime];
 	}
@@ -1355,31 +1365,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 #pragma mark Image Reflection
 
-- (void)setupCoverArt
-{
-    SUSCoverArtLargeDAO *artDataModel = [SUSCoverArtLargeDAO dataModel];
-    
-    // Get the album art
-	if(currentSong.coverArtId)
-	{
-        UIImage *albumArt = [artDataModel coverArtImageForId:currentSong.coverArtId];
-        if (albumArt)
-        {
-            coverArtImageView.image = albumArt;
-            //[activityIndicator stopAnimating];
-        }
-        else
-        {
-            coverArtImageView.image = artDataModel.defaultCoverArt;
-            //[activityIndicator startAnimating];
-        }
-	}
-	else 
-	{
-        coverArtImageView.image = artDataModel.defaultCoverArt;		
-        //[activityIndicator stopAnimating];
-	}
-
+- (void)createReflection
+{	
     // Create reflection
 	reflectionView.image = [coverArtImageView reflectedImageWithHeight:reflectionHeight];
 	if (isFlipped)

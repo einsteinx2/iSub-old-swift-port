@@ -6,10 +6,11 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+#import "AsynchronousImageViewDelegate.h"
 
-@class CoverArtImageView, PageControlViewController, MPVolumeView, OBSlider, Song;
+@class AsynchronousImageView, PageControlViewController, MPVolumeView, OBSlider, Song;
 
-@interface iPhoneStreamingPlayerViewController : UIViewController
+@interface iPhoneStreamingPlayerViewController : UIViewController <AsynchronousImageViewDelegate>
 {
 	IBOutlet UIButton *playButton;
 	IBOutlet UIButton *nextButton;
@@ -18,7 +19,7 @@
 	IBOutlet UIView *volumeSlider;
 	MPVolumeView *volumeView;
 	UISlider *jukeboxVolumeView;
-	IBOutlet CoverArtImageView *coverArtImageView;
+	IBOutlet AsynchronousImageView *coverArtImageView;
 	IBOutlet UIImageView *reflectionView;
 	IBOutlet UIButton *songInfoToggleButton;
     IBOutlet UIActivityIndicatorView *activityIndicator;

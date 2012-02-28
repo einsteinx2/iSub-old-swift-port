@@ -16,6 +16,7 @@
 #define ISMSNotification_SongPlaybackEnded @"ISMS Song Playback End"
 #define ISMSNotification_SongPlaybackFailed @"ISMS Song Playback Failed"
 
+// TODO: remove these
 #define ISMSNotification_AlbumArtLargeDownloaded @"ISMS Album art downloaded"
 #define ISMSNotification_AlbumArtLargeFailed @"ISMS Album art failed to download"
 
@@ -49,5 +50,8 @@
 #define ISMSNotification_SongCachingDisabled @"ISMS song caching disabled"
 
 #define ISMSNotification_ShowPlayer @"ISMS show player"
+
+#define ISMSNotification_CacheQueueSongDownloaded @"ISMS cache queue song downloaded"
+
 
 #endif

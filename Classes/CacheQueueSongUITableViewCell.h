@@ -8,11 +8,11 @@
 
 #include "CustomUITableViewCell.h"
 
-@class AsynchronousImageViewCached;
+@class AsynchronousImageView;
 
 @interface CacheQueueSongUITableViewCell : CustomUITableViewCell 
 
-@property (retain) AsynchronousImageViewCached *coverArtView;
+@property (retain) AsynchronousImageView *coverArtView;
 @property (retain) UILabel *cacheInfoLabel;
 @property (retain) UIScrollView *nameScrollView;
 @property (retain) UILabel *songNameLabel;

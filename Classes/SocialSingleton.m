@@ -15,7 +15,7 @@
 #import "PlaylistSingleton.h"
 #import "Song.h"
 #import "NSMutableURLRequest+SUS.h"
-#import "SUSStreamManager.h"
+#import "ISMSStreamManager.h"
 #import "NSNotificationCenter+MainThread.h"
 
 // Twitter secret keys

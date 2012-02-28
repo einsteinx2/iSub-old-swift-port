@@ -6,10 +6,11 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+#import "AsynchronousImageViewDelegate.h"
 
 @class AsynchronousImageView, Album;
 
-@interface ModalAlbumArtViewController : UIViewController 
+@interface ModalAlbumArtViewController : UIViewController <AsynchronousImageViewDelegate>
 
 @property (retain) IBOutlet AsynchronousImageView *albumArt;
 @property (retain) IBOutlet UIImageView *albumArtReflection;

@@ -24,7 +24,7 @@
 #import "SavedSettings.h"
 #import "AudioEngine.h"
 #import "SUSAllSongsLoader.h"
-#import "SUSStreamManager.h"
+#import "ISMSStreamManager.h"
 #import "NSArray+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
 

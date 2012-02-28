@@ -44,7 +44,6 @@
 				<string key="NSFrame">{{0, 20}, {320, 460}}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
-				<reference key="NSNextKeyView"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">3</int>
 					<bytes key="NSWhite">MSAwAA</bytes>
@@ -224,7 +223,6 @@
 								<nil key="IBUIHighlightedColor"/>
 								<int key="IBUIBaselineAdjustment">1</int>
 								<float key="IBUIMinimumFontSize">16</float>
-								<int key="IBUITextAlignment">1</int>
 								<object class="IBUIFontDescription" key="IBUIFontDescription" id="419473237">
 									<int key="type">2</int>
 									<double key="pointSize">20</double>
@@ -260,7 +258,6 @@
 								<nil key="IBUIHighlightedColor"/>
 								<int key="IBUIBaselineAdjustment">1</int>
 								<float key="IBUIMinimumFontSize">16</float>
-								<int key="IBUITextAlignment">1</int>
 								<reference key="IBUIFontDescription" ref="419473237"/>
 								<reference key="IBUIFont" ref="105909273"/>
 							</object>
@@ -270,7 +267,6 @@
 								<string key="NSFrame">{{112, 55}, {112, 25}}</string>
 								<reference key="NSSuperview" ref="971798324"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:328</string>
 								<object class="NSColor" key="IBUIBackgroundColor">
 									<int key="NSColorSpace">3</int>
@@ -290,7 +286,7 @@
 								<int key="IBUIBaselineAdjustment">1</int>
 								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
 								<float key="IBUIMinimumFontSize">10</float>
-								<int key="IBUITextAlignment">1</int>
+								<int key="IBUITextAlignment">2</int>
 								<object class="IBUIFontDescription" key="IBUIFontDescription" id="62230865">
 									<int key="type">1</int>
 									<double key="pointSize">20</double>
@@ -327,7 +323,6 @@
 								<int key="IBUIBaselineAdjustment">1</int>
 								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
 								<float key="IBUIMinimumFontSize">10</float>
-								<int key="IBUITextAlignment">1</int>
 								<reference key="IBUIFontDescription" ref="62230865"/>
 								<reference key="IBUIFont" ref="828000808"/>
 							</object>
@@ -461,7 +456,6 @@
 						<string key="NSFrame">{{180, 12}, {24, 26}}</string>
 						<reference key="NSSuperview" ref="921345747"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:567</string>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>

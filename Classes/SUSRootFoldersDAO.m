@@ -9,7 +9,7 @@
 #import "SUSRootFoldersDAO.h"
 #import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
-#import "GTMNSString+HTML.h"
+#import "NSString+Additions.h"
 #import "TBXML.h"
 #import "Artist.h"
 #import "Index.h"
@@ -58,8 +58,7 @@
 	[indexPositions release]; indexPositions = nil;
 	[indexCounts release]; indexCounts = nil;
 	[selectedFolderId release]; selectedFolderId = nil;
-	loader.delegate = nil;
-    [loader release]; loader = nil;
+	[self cancelLoad];
 	[super dealloc];
 }
 
@@ -87,7 +86,7 @@
 - (BOOL)addRootFolderToCache:(NSString*)folderId name:(NSString*)name
 {
 	NSString *query = [NSString stringWithFormat:@"INSERT INTO rootFolderNameCache%@ VALUES (?, ?)", self.tableModifier];
-	[self.db executeUpdate:query, folderId, [name gtm_stringByUnescapingFromHTML]];
+	[self.db executeUpdate:query, folderId, [name cleanString]];
 	return ![self.db hadError];
 }
 
@@ -308,12 +307,10 @@
 
 - (NSArray *)indexPositions
 {
-	//DLog(@"indexPositions: %@", indexPositions);
 	if (indexPositions == nil || [indexPositions count] == 0)
 	{
 		[indexPositions release];
 		indexPositions = [[self rootFolderIndexPositions] retain];
-		//DLog(@"indexPositions count: %i   tableModifier: %@   indexPositions: %@", [self.db intForQuery:@"SELECT count(*) FROM rootFolderIndexCache%@", self.tableModifier], self.tableModifier, indexPositions);
 	}
 	return indexPositions;
 }

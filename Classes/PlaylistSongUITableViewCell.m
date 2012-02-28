@@ -7,7 +7,7 @@
 //
 
 #import "PlaylistSongUITableViewCell.h"
-#import "AsynchronousImageViewCached.h"
+#import "AsynchronousImageView.h"
 #import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
@@ -22,7 +22,8 @@
 {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) 
 	{
-		coverArtView = [[AsynchronousImageViewCached alloc] init];
+		coverArtView = [[AsynchronousImageView alloc] init];
+		coverArtView.isLarge = NO;
 		[self.contentView addSubview:coverArtView];
 		[coverArtView release];
 		

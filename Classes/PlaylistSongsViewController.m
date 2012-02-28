@@ -14,7 +14,7 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "PlaylistSongUITableViewCell.h"
-#import "AsynchronousImageViewCached.h"
+#import "AsynchronousImageView.h"
 #import "Song.h"
 #import "FMDatabaseAdditions.h"
 #import "NSString+md5.h"
@@ -29,6 +29,7 @@
 #import "NSNotificationCenter+MainThread.h"
 
 #import "PlaylistSingleton.h"
+#import "JukeboxSingleton.h"
 
 @interface PlaylistSongsViewController (Private)
 
@@ -456,7 +457,7 @@ static NSString *kName_Error = @"error";
 		aSong = [Song songFromServerPlaylistId:md5 row:indexPath.row];
 	}
 	
-	[cell.coverArtView loadImageFromCoverArtId:aSong.coverArtId];
+	cell.coverArtView.coverArtId = aSong.coverArtId;
 	
 	cell.backgroundView = [[[UIView alloc] init] autorelease];
 	if(indexPath.row % 2 == 0)
@@ -519,7 +520,7 @@ static NSString *kName_Error = @"error";
 		
 		if (settingsS.isJukeboxEnabled)
 		{
-			[musicS jukeboxReplacePlaylistWithLocal];
+			[jukeboxS jukeboxReplacePlaylistWithLocal];
 		}
 			
 		playlistS.isShuffle = NO;

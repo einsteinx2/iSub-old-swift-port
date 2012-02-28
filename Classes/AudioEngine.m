@@ -19,7 +19,7 @@
 #import <sys/stat.h>
 #import "BassUserInfo.h"
 #import "SavedSettings.h"
-#import "SUSStreamManager.h"
+#import "ISMSStreamManager.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "MusicSingleton.h"
 #import "NSArray+Additions.h"
@@ -303,6 +303,8 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 	// Read from the file
 	DWORD bytesRead = fread(buffer, 1, length, userInfo.myFileHandle);	
 	
+	//return bytesRead; // return here to always report actual file length
+	
 	if (bytesRead < length)
 	{		
 		// Handle waiting for additional data
@@ -377,7 +379,7 @@ BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFi
 	{
 		if (BASS_ChannelIsActive(self.currentStream))
 		{		
-			DLog(@"getting output data");
+			//DLog(@"getting output data");
 			r = BASS_ChannelGetData(self.currentReadingStream, buffer, length);
 			
 			// Check if stream is now complete
@@ -751,8 +753,8 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	else
 	{
 #ifdef DEBUG
-		//NSInteger errorCode = BASS_ErrorGetCode();
-		//DLog(@"nextSong stream: %i error: %i - %@", self.nextStream, errorCode, NSStringFromBassErrorCode(errorCode));
+		NSInteger errorCode = BASS_ErrorGetCode();
+		DLog(@"nextSong stream: %i error: %i - %@", self.nextStream, errorCode, NSStringFromBassErrorCode(errorCode));
 #endif
 		
 		[self performSelector:@selector(prepareNextSongStream) withObject:nil afterDelay:RETRY_DELAY];
@@ -956,9 +958,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 }
 
 - (void)playPause
-{
-	[[MusicSingleton sharedInstance] updateLockScreenInfo];
-	
+{	
 	if (self.isPlaying) 
 	{
 		BASS_Pause();
@@ -977,8 +977,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 				startByteOffset = 0;
 				startSecondsOffset = 0.;
 			}
-			[[MusicSingleton sharedInstance] startSongAtOffsetInBytes:startByteOffset 
-														   andSeconds:startSecondsOffset];
+			[musicS startSongAtOffsetInBytes:startByteOffset andSeconds:startSecondsOffset];
 		}
 		else
 		{
@@ -987,6 +986,8 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
 		}
 	}
+	
+	[musicS updateLockScreenInfo];
 }
 
 #pragma mark - Audio Engine Properties

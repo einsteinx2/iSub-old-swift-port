@@ -23,7 +23,7 @@
 			self.playlistId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
 		
 		if ([TBXML valueOfAttributeNamed:@"name" forElement:element])
-			self.playlistName = [[TBXML valueOfAttributeNamed:@"name" forElement:element] gtm_stringByUnescapingFromHTML];
+			self.playlistName = [[TBXML valueOfAttributeNamed:@"name" forElement:element] cleanString];
 	}
 	
 	return self;

@@ -14,7 +14,7 @@
 #import "DatabaseSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
-#import "AsynchronousImageViewCached.h"
+#import "AsynchronousImageView.h"
 #import "Song.h"
 #import "FMDatabaseAdditions.h"
 #import "NSString+md5.h"
@@ -173,7 +173,7 @@
 	cell.mySong = aSong;
 	
 	// Set the cover art
-	[cell.coverArtView loadImageFromCoverArtId:aSong.coverArtId];
+	cell.coverArtView.coverArtId = aSong.coverArtId;
 	
 	// Create the background view
 	cell.backgroundView = [[[UIView alloc] init] autorelease];

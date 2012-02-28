@@ -296,10 +296,8 @@
 
 - (void) loadPlayAllPlaylist2
 {
-	// Hide the loading screen
-	[[[appDelegateS.currentTabBarController.view subviews] objectAtIndexSafe:([[appDelegateS.currentTabBarController.view subviews] count] - 1)] removeFromSuperview];
-	[[[appDelegateS.currentTabBarController.view subviews] objectAtIndexSafe:([[appDelegateS.currentTabBarController.view subviews] count] - 1)] removeFromSuperview];
-	
+	[viewObjectsS hideLoadingScreen];
+
 	[self playAllPlaySong];
 }
 
@@ -401,7 +399,8 @@
 		
 		if (coverArtId)
 		{
-			if ([databaseS.coverArtCacheDb60 intForQuery:@"SELECT COUNT(*) FROM coverArtCache WHERE id = ?", [coverArtId md5]] == 1)
+			NSString *test = [databaseS.coverArtCacheDb60 stringForQuery:@"SELECT id FROM coverArtCache WHERE id = ?", [coverArtId md5]];
+			if (test)
 			{
 				// If the image is already in the cache database, load it
 				cell.coverArtView.image = [UIImage imageWithData:[databaseS.coverArtCacheDb60 dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [coverArtId md5]]];
@@ -418,7 +417,7 @@
 			cell.coverArtView.image = [UIImage imageNamed:@"default-album-art-small.png"];
 		}
 		
-		[cell.albumNameLabel setText:[name gtm_stringByUnescapingFromHTML]];
+		[cell.albumNameLabel setText:[name cleanString]];
 		cell.backgroundView = [[[UIView alloc] init] autorelease];
 		if(indexPath.row % 2 == 0)
 			cell.backgroundView.backgroundColor = [UIColor whiteColor];

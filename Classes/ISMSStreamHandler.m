@@ -1,12 +1,12 @@
 //
-//  SUSStreamConnectionDelegate.m
+//  ISMSStreamHandler.m
 //  iSub
 //
 //  Created by Benjamin Baron on 11/10/11.
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "SUSStreamHandler.h"
+#import "ISMSStreamHandler.h"
 #import "MusicSingleton.h"
 #import "Song.h"
 #import "iSubAppDelegate.h"
@@ -15,12 +15,12 @@
 #import "NSString+md5.h"
 #import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
-#import "SUSCoverArtLargeDAO.h"
+#import "SUSCoverArtLoader.h"
 #import "SavedSettings.h"
 #import "CacheSingleton.h"
 #import "PlaylistSingleton.h"
 
-#define ISMSNumSecondsToPartialPreCache 30
+#define ISMSNumSecondsToPartialPreCache 45
 #define ISMSNumBytesToPartialPreCache(bitrate) (BytesForSecondsAtBitrate(ISMSNumSecondsToPartialPreCache, bitrate))
 
 #define ISMSMinSecondsToStartPlayback 5
@@ -42,9 +42,9 @@
 
 // Logging
 #define isProgressLoggingEnabled NO
-#define isThrottleLoggingEnabled YES
+#define isThrottleLoggingEnabled NO
 
-@implementation SUSStreamHandler
+@implementation ISMSStreamHandler
 @synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, bitrate, secondsOffset, partialPrecacheSleep, isDownloading, isCurrentSong, shouldResume;
 
 - (void)setup
@@ -75,7 +75,7 @@
 	return self;
 }
 
-- (id)initWithSong:(Song *)song byteOffset:(unsigned long long)bOffset secondsOffset:(double)sOffset isTemp:(BOOL)isTemp delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate
+- (id)initWithSong:(Song *)song byteOffset:(unsigned long long)bOffset secondsOffset:(double)sOffset isTemp:(BOOL)isTemp delegate:(NSObject<ISMSStreamHandlerDelegate> *)theDelegate
 {
 	if ((self = [super init]))
 	{
@@ -93,7 +93,7 @@
 	return self;
 }
 
-- (id)initWithSong:(Song *)song isTemp:(BOOL)isTemp delegate:(NSObject<SUSStreamHandlerDelegate> *)theDelegate
+- (id)initWithSong:(Song *)song isTemp:(BOOL)isTemp delegate:(NSObject<ISMSStreamHandlerDelegate> *)theDelegate
 {
 	return [self initWithSong:song byteOffset:0 secondsOffset:0.0 isTemp:isTemp delegate:theDelegate];
 }
@@ -213,15 +213,15 @@
 	if (!self.isTempCache)
 		self.mySong.isPartiallyCached = YES;
 	
-	if ([self.delegate respondsToSelector:@selector(SUSStreamHandlerStarted:)])
-		[self.delegate SUSStreamHandlerStarted:self];
+	if ([self.delegate respondsToSelector:@selector(ISMSStreamHandlerStarted:)])
+		[self.delegate ISMSStreamHandlerStarted:self];
 }
 
 - (void)startConnectionInternalFailure
 {
 	NSError *error = [[NSError alloc] initWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
-	if ([self.delegate respondsToSelector:@selector(SUSStreamHandlerConnectionFailed:withError:)])
-		[self.delegate SUSStreamHandlerConnectionFailed:self withError:error];
+	if ([self.delegate respondsToSelector:@selector(ISMSStreamHandlerConnectionFailed:withError:)])
+		[self.delegate ISMSStreamHandlerConnectionFailed:self withError:error];
 	[error release];
 }
 
@@ -239,7 +239,7 @@
 	
 	[self.fileHandle closeFile];
 	self.fileHandle = nil;
-	
+		
 	[self performSelector:@selector(cancelRunLoop) onThread:loadingThread withObject:nil waitUntilDone:NO];
 }
 
@@ -281,12 +281,12 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-	if ([response isKindOfClass:[NSHTTPURLResponse class]])
+	/*if ([response isKindOfClass:[NSHTTPURLResponse class]])
 	{
 		NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
 		DLog(@"allHeaderFields: %@", [httpResponse allHeaderFields]);
 		DLog(@"statusCode: %i - %@", [httpResponse statusCode], [NSHTTPURLResponse localizedStringForStatusCode:[httpResponse statusCode]]);
-	}
+	}*/
 	
 	self.bytesTransferred = 0;
 }
@@ -410,22 +410,22 @@
 // Main Thread
 - (void)partialPrecachePausedInternal
 {
-	if ([self.delegate respondsToSelector:@selector(SUSStreamHandlerPartialPrecachePaused:)])
-		[self.delegate SUSStreamHandlerPartialPrecachePaused:self];
+	if ([self.delegate respondsToSelector:@selector(ISMSStreamHandlerPartialPrecachePaused:)])
+		[self.delegate ISMSStreamHandlerPartialPrecachePaused:self];
 }
 
 // Main Thread
 - (void)partialPrecacheUnpausedInternal
 {
-	if ([self.delegate respondsToSelector:@selector(SUSStreamHandlerPartialPrecacheUnpaused:)])
-		[self.delegate SUSStreamHandlerPartialPrecacheUnpaused:self];
+	if ([self.delegate respondsToSelector:@selector(ISMSStreamHandlerPartialPrecacheUnpaused:)])
+		[self.delegate ISMSStreamHandlerPartialPrecacheUnpaused:self];
 }
 
 // Main Thread
 - (void)startPlaybackInternal
 {
-	if ([self.delegate respondsToSelector:@selector(SUSStreamHandlerStartPlayback:)])
-		[self.delegate SUSStreamHandlerStartPlayback:self];
+	if ([self.delegate respondsToSelector:@selector(ISMSStreamHandlerStartPlayback:)])
+		[self.delegate ISMSStreamHandlerStartPlayback:self];
 }
 
 // loadingThread
@@ -449,8 +449,8 @@
 	[self.fileHandle closeFile];
 	self.fileHandle = nil;
 	
-	if ([self.delegate respondsToSelector:@selector(SUSStreamHandlerConnectionFailed:withError:)])
-		[self.delegate SUSStreamHandlerConnectionFailed:self withError:error];
+	if ([self.delegate respondsToSelector:@selector(ISMSStreamHandlerConnectionFailed:withError:)])
+		[self.delegate ISMSStreamHandlerConnectionFailed:self withError:error];
 }
 
 // loadingThread
@@ -474,25 +474,8 @@
 	[self.fileHandle closeFile];
 	self.fileHandle = nil;
 	
-	if (self.totalBytesTransferred < 500)
-	{
-		// Show an alert and delete the file, this was not a song but an XML error
-		// TODO: Parse with TBXML and display proper error
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"No song data returned. This could be because your Subsonic API trial has expired, this song is not an mp3 and the Subsonic transcoding plugins failed, or another reason." delegate:[iSubAppDelegate sharedInstance] cancelButtonTitle:@"OK" otherButtonTitles: nil];
-		[alert show];
-		[alert release];
-		[[NSFileManager defaultManager] removeItemAtPath:self.filePath error:NULL];
-	}
-	else
-	{		
-		// Mark song as cached
-		//DLog(@"Stream handler connection did finish for %@", mySong);
-		if (!isTempCache)
-			mySong.isFullyCached = YES;
-	}
-	
-	if ([self.delegate respondsToSelector:@selector(SUSStreamHandlerConnectionFinished:)])
-		[self.delegate SUSStreamHandlerConnectionFinished:self];
+	if ([self.delegate respondsToSelector:@selector(ISMSStreamHandlerConnectionFinished:)])
+		[self.delegate ISMSStreamHandlerConnectionFinished:self];
 }
 
 #pragma mark - Overriding equality
@@ -502,7 +485,7 @@
 	return [mySong.songId hash];
 }
 
-- (BOOL)isEqualToSUSStreamHandler:(SUSStreamHandler	*)otherHandler 
+- (BOOL)isEqualToISMSStreamHandler:(ISMSStreamHandler *)otherHandler 
 {
 	if (self == otherHandler)
 		return YES;
@@ -518,7 +501,7 @@
 	if (!other || ![other isKindOfClass:[self class]])
 		return NO;
 	
-	return [self isEqualToSUSStreamHandler:other];
+	return [self isEqualToISMSStreamHandler:other];
 }
 
 #pragma mark - NSCoding

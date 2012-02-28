@@ -23,7 +23,7 @@
 #import "Album.h"
 #import "Song.h"
 #import "NSString+md5.h"
-#import "AsynchronousImageViewCached.h"
+#import "AsynchronousImageView.h"
 #import "AlbumViewController.h"
 #import "UITableViewCell+overlay.h"
 #import "NSString+rfcEncode.h"
@@ -34,6 +34,7 @@
 #import "PlaylistSingleton.h"
 #import "NSArray+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "JukeboxSingleton.h"
 
 @implementation SearchSongsViewController
 
@@ -280,7 +281,7 @@
 			cell.myArtist = [Artist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
 			cell.isIndexShowing = NO;
 			
-			[cell.coverArtView loadImageFromCoverArtId:anAlbum.coverArtId];
+			cell.coverArtView.coverArtId = anAlbum.coverArtId;
 			
 			[cell.albumNameLabel setText:anAlbum.title];
 			
@@ -382,9 +383,9 @@
 			// If jukebox mode, send song ids to server
 			if (settingsS.isJukeboxEnabled)
 			{
-				[musicS jukeboxStop];
-				[musicS jukeboxClearPlaylist];
-				[musicS jukeboxAddSongs:songIds];
+				[jukeboxS jukeboxStop];
+				[jukeboxS jukeboxClearPlaylist];
+				[jukeboxS jukeboxAddSongs:songIds];
 			}
 			[songIds release];
 			

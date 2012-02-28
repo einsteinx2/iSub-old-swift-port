@@ -7,8 +7,7 @@
 //
 
 #import "Song.h"
-#import "GTMNSString+HTML.h"
-#import "NSString+md5.h"
+#import "NSString+Additions.h"
 #import "SavedSettings.h"
 
 @implementation Song
@@ -36,18 +35,18 @@
 		year = nil;
 		size = nil;
 		
-		self.title = [[TBXML valueOfAttributeNamed:@"title" forElement:element] gtm_stringByUnescapingFromHTML];
+		self.title = [[TBXML valueOfAttributeNamed:@"title" forElement:element] cleanString];
 		self.songId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
 		if ([TBXML valueOfAttributeNamed:@"parent" forElement:element])
 			self.parentId = [TBXML valueOfAttributeNamed:@"parent" forElement:element];
-		self.artist = [[TBXML valueOfAttributeNamed:@"artist" forElement:element] gtm_stringByUnescapingFromHTML];
+		self.artist = [[TBXML valueOfAttributeNamed:@"artist" forElement:element] cleanString];
 		if([TBXML valueOfAttributeNamed:@"album" forElement:element])
-			self.album = [[TBXML valueOfAttributeNamed:@"album" forElement:element] gtm_stringByUnescapingFromHTML];
+			self.album = [[TBXML valueOfAttributeNamed:@"album" forElement:element] cleanString];
 		if([TBXML valueOfAttributeNamed:@"genre" forElement:element])
-			self.genre = [[TBXML valueOfAttributeNamed:@"genre" forElement:element] gtm_stringByUnescapingFromHTML];
+			self.genre = [[TBXML valueOfAttributeNamed:@"genre" forElement:element] cleanString];
 		if([TBXML valueOfAttributeNamed:@"coverArt" forElement:element])
 			self.coverArtId = [TBXML valueOfAttributeNamed:@"coverArt" forElement:element];
-		self.path = [TBXML valueOfAttributeNamed:@"path" forElement:element];
+		self.path = [[TBXML valueOfAttributeNamed:@"path" forElement:element] cleanString];
 		self.suffix = [TBXML valueOfAttributeNamed:@"suffix" forElement:element];
 		if ([TBXML valueOfAttributeNamed:@"transcodedSuffix" forElement:element])
 			self.transcodedSuffix = [TBXML valueOfAttributeNamed:@"transcodedSuffix" forElement:element];
@@ -346,8 +345,8 @@
 - (BOOL)isTempCached
 {	
 	// If the song is fully cached, then it doesn't matter if there is a temp cache file
-	if (self.isFullyCached)
-		return NO;
+	//if (self.isFullyCached)
+	//	return NO;
 	
 	// Return YES if the song exists in the temp folder
 	return [[NSFileManager defaultManager] fileExistsAtPath:self.localTempPath];

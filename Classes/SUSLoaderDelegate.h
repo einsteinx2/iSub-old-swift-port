@@ -14,8 +14,7 @@ typedef enum
     SUSLoaderType_AllSongs,
     SUSLoaderType_Chat,
     SUSLoaderType_Lyrics,
-    SUSLoaderType_PlayerCoverArt,
-    SUSLoaderType_TableCellCoverArt,
+    SUSLoaderType_CoverArt,
     SUSLoaderType_ServerPlaylist,
 	SUSLoaderType_NowPlaying
 } SUSLoaderType;

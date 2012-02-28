@@ -141,6 +141,8 @@ static NSSet *setOfVersions = nil;
 		urlString = settingsS.redirectUrlString;
 	}
 	
+	DLog(@"username: %@   password: %@", settingsS.username, settingsS.password);
+	
 	return [NSMutableURLRequest requestWithSUSAction:action 
 										forUrlString:urlString 
 											username:settingsS.username

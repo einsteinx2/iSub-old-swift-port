@@ -23,6 +23,7 @@
 #import "NSArray+Additions.h"
 #import "PlaylistSingleton.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "JukeboxSingleton.h"
 
 @implementation GenresArtistViewController
 
@@ -219,7 +220,7 @@
 	[result close];
 	
 	if (settingsS.isJukeboxEnabled)
-		[musicS jukeboxReplacePlaylistWithLocal];
+		[jukeboxS jukeboxReplacePlaylistWithLocal];
 	
 	// Hide loading screen
 	[viewObjectsS hideLoadingScreen];
@@ -264,7 +265,7 @@
 	[databaseS shufflePlaylist];
 	
 	if (settingsS.isJukeboxEnabled)
-		[musicS jukeboxReplacePlaylistWithLocal];
+		[jukeboxS jukeboxReplacePlaylistWithLocal];
 	
 	// Set the isShuffle flag
 	playlistS.isShuffle = YES;

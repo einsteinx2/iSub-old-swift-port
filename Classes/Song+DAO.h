@@ -31,9 +31,12 @@
 - (BOOL)insertIntoCachedSongsTable;
 
 - (BOOL)addToCacheQueue;
+- (BOOL)removeFromCacheQueue;
+
 - (BOOL)addToCurrentPlaylist;
 - (BOOL)addToShufflePlaylist;
 
+- (BOOL)removeFromCachedSongsTable;
 + (BOOL)removeSongFromCacheDbByMD5:(NSString *)md5;
 
 - (BOOL)insertIntoCachedSongsLayout;

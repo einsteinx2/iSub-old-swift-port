@@ -7,7 +7,7 @@
 //
 
 #import "AllSongsUITableViewCell.h"
-#import "AsynchronousImageViewCached.h"
+#import "AsynchronousImageView.h"
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
 #import "Song.h"
@@ -28,7 +28,8 @@
 		self.isSearching = NO;
 		self.isOverlayShowing = NO;
 		
-		coverArtView = [[AsynchronousImageViewCached alloc] init];
+		coverArtView = [[AsynchronousImageView alloc] init];
+		coverArtView.isLarge = NO;
 		[self.contentView addSubview:coverArtView];
 		[coverArtView release];
 		

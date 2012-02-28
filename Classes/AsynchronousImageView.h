@@ -5,20 +5,18 @@
 //  Created by Слава on 22.10.09.
 //  Copyright 2009 Slava Bushtruk. All rights reserved.
 //
+#import "SUSLoaderDelegate.h"
 
-@interface AsynchronousImageView : UIImageView 
-{
-	
-	NSString *coverArtId;
-	NSURLConnection *connection;
-	NSMutableData *data;
-	
-	BOOL isForPlayer;
-}
+@protocol AsynchronousImageViewDelegate;
+@class SUSCoverArtDAO;
+@interface AsynchronousImageView : UIImageView <SUSLoaderDelegate>
 
-@property (retain) NSString *coverArtId;
-@property BOOL isForPlayer;
+@property (assign) NSObject<AsynchronousImageViewDelegate> *delegate;
+@property (copy) NSString *coverArtId;
+@property (retain) SUSCoverArtDAO *coverArtDAO;
+@property BOOL isLarge;
+@property (retain) UIActivityIndicatorView *activityIndicator;
 
-- (void)loadImageFromCoverArtId:(NSString *)artId isForPlayer:(BOOL)isPlayer;
+- (id)initWithFrame:(CGRect)frame coverArtId:(NSString *)artId isLarge:(BOOL)large delegate:(NSObject<AsynchronousImageViewDelegate> *)theDelegate;
 
 @end

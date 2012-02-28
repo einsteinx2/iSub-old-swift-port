@@ -15,7 +15,7 @@
 #import "ServerListViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "Song.h"
-#import "AsynchronousImageViewCached.h"
+#import "AsynchronousImageView.h"
 #import "FMDatabaseAdditions.h"
 #import "NSString+md5.h"
 #import "CustomUIAlertView.h"
@@ -100,7 +100,8 @@
 		isNoBookmarksScreenShowing = NO;
 	}
 	
-	if ([databaseS.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks"] == 0)
+	NSUInteger bookmarksCount = [databaseS.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks"];
+	if (bookmarksCount == 0)
 	{
 		isNoBookmarksScreenShowing = YES;
 		noBookmarksScreen = [[UIImageView alloc] init];
@@ -142,10 +143,10 @@
 		bookmarkCountLabel.textColor = [UIColor whiteColor];
 		bookmarkCountLabel.textAlignment = UITextAlignmentCenter;
 		bookmarkCountLabel.font = [UIFont boldSystemFontOfSize:22];
-		if ([databaseS.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks"] == 1)
+		if (bookmarksCount == 1)
 			bookmarkCountLabel.text = [NSString stringWithFormat:@"1 Bookmark"];
 		else 
-			bookmarkCountLabel.text = [NSString stringWithFormat:@"%i Bookmarks", [databaseS.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks"]];
+			bookmarkCountLabel.text = [NSString stringWithFormat:@"%i Bookmarks", bookmarksCount];
 		[headerView addSubview:bookmarkCountLabel];
 		[bookmarkCountLabel release];
 		
@@ -494,7 +495,7 @@
     // Set up the cell...
 	Song *aSong = [Song songFromDbRow:indexPath.row inTable:@"bookmarks" inDatabase:databaseS.bookmarksDb];
 	
-	[cell.coverArtView loadImageFromCoverArtId:aSong.coverArtId];
+	cell.coverArtView.coverArtId = aSong.coverArtId;
 	
 	cell.backgroundView = [[[UIView alloc] init] autorelease];
 	if(indexPath.row % 2 == 0)

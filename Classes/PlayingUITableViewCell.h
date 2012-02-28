@@ -8,11 +8,11 @@
 
 #import "CustomUITableViewCell.h"
 
-@class AsynchronousImageViewCached, Song;
+@class AsynchronousImageView, Song;
 @interface PlayingUITableViewCell : CustomUITableViewCell 
 
 @property (copy) Song *mySong;
-@property (retain) AsynchronousImageViewCached *coverArtView;
+@property (retain) AsynchronousImageView *coverArtView;
 @property (retain) UILabel *userNameLabel;
 @property (retain) UIScrollView *nameScrollView;
 @property (retain) UILabel *songNameLabel;

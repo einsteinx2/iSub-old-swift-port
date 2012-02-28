@@ -1,20 +1,20 @@
 //
-//  SUSStreamSingleton.h
+//  ISMSStreamManager.h
 //  iSub
 //
 //  Created by Benjamin Baron on 11/10/11.
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "SUSStreamHandlerDelegate.h"
+#import "ISMSStreamHandlerDelegate.h"
 #import "SUSLoaderDelegate.h"
 
-#define streamManagerS [SUSStreamManager sharedInstance]
+#define streamManagerS [ISMSStreamManager sharedInstance]
 
 #define ISMSNumberOfStreamsToQueue 2
 
-@class Song, SUSStreamHandler, SUSLyricsDAO;
-@interface SUSStreamManager : NSObject <SUSStreamHandlerDelegate, SUSLoaderDelegate>
+@class Song, ISMSStreamHandler, SUSLyricsDAO;
+@interface ISMSStreamManager : NSObject <ISMSStreamHandlerDelegate, SUSLoaderDelegate>
 
 @property (retain) NSMutableArray *handlerStack;
 @property (retain) SUSLyricsDAO *lyricsDAO;
@@ -24,9 +24,9 @@
 
 @property (readonly) BOOL isQueueDownloading;
 
-+ (SUSStreamManager *)sharedInstance;
++ (ISMSStreamManager *)sharedInstance;
 
-- (SUSStreamHandler *)handlerForSong:(Song *)aSong;
+- (ISMSStreamHandler *)handlerForSong:(Song *)aSong;
 - (BOOL)isSongInQueue:(Song *)aSong;
 - (BOOL)isSongFirstInQueue:(Song *)aSong;
 - (BOOL)isSongDownloading:(Song *)aSong;
@@ -36,7 +36,7 @@
 - (void)cancelAllStreamsExceptForSong:(Song *)aSong;
 - (void)cancelAllStreams;
 - (void)cancelStreamAtIndex:(NSUInteger)index;
-- (void)cancelStream:(SUSStreamHandler *)handler;
+- (void)cancelStream:(ISMSStreamHandler *)handler;
 - (void)cancelStreamForSong:(Song *)aSong;
 
 - (void)removeAllStreamsExcept:(NSArray *)handlersToSkip;
@@ -44,7 +44,7 @@
 - (void)removeAllStreamsExceptForSong:(Song *)aSong;
 - (void)removeAllStreams;
 - (void)removeStreamAtIndex:(NSUInteger)index;
-- (void)removeStream:(SUSStreamHandler *)handler;
+- (void)removeStream:(ISMSStreamHandler *)handler;
 - (void)removeStreamForSong:(Song *)aSong;
 
 - (void)queueStreamForSong:(Song *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp;
@@ -56,9 +56,9 @@
 
 - (void)resumeQueue;
 
-- (void)resumeHandler:(SUSStreamHandler *)handler;
-- (void)startHandler:(SUSStreamHandler *)handler resume:(BOOL)resume;
-- (void)startHandler:(SUSStreamHandler *)handler;
+- (void)resumeHandler:(ISMSStreamHandler *)handler;
+- (void)startHandler:(ISMSStreamHandler *)handler resume:(BOOL)resume;
+- (void)startHandler:(ISMSStreamHandler *)handler;
 
 - (void)saveHandlerStack;
 - (void)loadHandlerStack;

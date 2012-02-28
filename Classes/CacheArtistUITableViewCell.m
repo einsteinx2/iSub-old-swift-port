@@ -13,7 +13,7 @@
 #import "CellOverlay.h"
 #import "Song.h"
 #import "NSNotificationCenter+MainThread.h"
-
+#import "CacheSingleton.h"
 
 @implementation CacheArtistUITableViewCell
 
@@ -92,6 +92,8 @@
 			[Song removeSongFromCacheDbByMD5:[NSString stringWithString:[result stringForColumnIndex:0]]];
 	}
 	[result close];
+	
+	[cacheS findCacheSize];
 	
 	// Reload the cached songs table
 	[NSNotificationCenter postNotificationToMainThreadWithName:@"cachedSongDeleted"];

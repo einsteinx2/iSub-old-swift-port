@@ -8,13 +8,13 @@
 
 #include "CustomUITableViewCell.h"
 
-@class AsynchronousImageViewCached;
+@class AsynchronousImageView;
 
 @interface AllSongsUITableViewCell : CustomUITableViewCell 
 
 @property (retain) NSString *md5;
 
-@property (retain) AsynchronousImageViewCached *coverArtView;
+@property (retain) AsynchronousImageView *coverArtView;
 @property (retain) UIScrollView *songNameScrollView;
 @property (retain) UILabel *songNameLabel;
 @property (retain) UILabel *artistNameLabel;

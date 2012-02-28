@@ -7,7 +7,7 @@
 //
 
 #import "BookmarkUITableViewCell.h"
-#import "AsynchronousImageViewCached.h"
+#import "AsynchronousImageView.h"
 
 @implementation BookmarkUITableViewCell
 
@@ -19,7 +19,8 @@
 {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) 
 	{
-		coverArtView = [[AsynchronousImageViewCached alloc] init];
+		coverArtView = [[AsynchronousImageView alloc] init];
+		coverArtView.isLarge = NO;
 		[self.contentView addSubview:coverArtView];
 		[coverArtView release];
 		

@@ -19,12 +19,14 @@
 #import "Song.h"
 #import "FMDatabaseAdditions.h"
 #import "NSString+md5.h"
-#import "AsynchronousImageViewCached.h"
+#import "AllSongsUITableViewCell.h"
+#import "AsynchronousImageView.h"
 #import "SavedSettings.h"
 #import "NSString+time.h"
 #import "NSArray+Additions.h"
 #import "PlaylistSingleton.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "JukeboxSingleton.h"
 
 @implementation GenresAlbumViewController
 
@@ -227,7 +229,7 @@
 	[result close];
 	
 	if (settingsS.isJukeboxEnabled)
-		[musicS jukeboxReplacePlaylistWithLocal];
+		[jukeboxS jukeboxReplacePlaylistWithLocal];
 	
 	// Hide loading screen
 	[viewObjectsS hideLoadingScreen];
@@ -272,7 +274,7 @@
 	[databaseS shufflePlaylist];
 	
 	if (settingsS.isJukeboxEnabled)
-		[musicS jukeboxReplacePlaylistWithLocal];
+		[jukeboxS jukeboxReplacePlaylistWithLocal];
 	
 	// Set the isShuffle flag
 	playlistS.isShuffle = YES;
@@ -342,7 +344,7 @@
 		}
 		NSString *name = [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1];
 		
-		[cell.coverArtView loadImageFromCoverArtId:coverArtId];
+		cell.coverArtView.coverArtId = coverArtId;
 		
 		[cell.albumNameLabel setText:name];
 		cell.backgroundView = [[[UIView alloc] init] autorelease];
@@ -489,9 +491,9 @@
 			// If jukebox mode, send song ids to server
 			if (settingsS.isJukeboxEnabled)
 			{
-				[musicS jukeboxStop];
-				[musicS jukeboxClearPlaylist];
-				[musicS jukeboxAddSongs:songIds];
+				[jukeboxS jukeboxStop];
+				[jukeboxS jukeboxClearPlaylist];
+				[jukeboxS jukeboxAddSongs:songIds];
 			}
 			[songIds release];
 			

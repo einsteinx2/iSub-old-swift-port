@@ -22,6 +22,7 @@
 #import "AudioEngine.h"
 #import "NSArray+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "JukeboxSingleton.h"
 
 @implementation CurrentPlaylistViewController
 
@@ -362,7 +363,7 @@
 			if (settingsS.isJukeboxEnabled)
 			{
 				[databaseS resetJukeboxPlaylist];
-				[musicS jukeboxClearPlaylist];
+				[jukeboxS jukeboxClearPlaylist];
 			}
 			else
 			{
@@ -722,7 +723,7 @@
 	
 	if (settingsS.isJukeboxEnabled)
 	{
-		[musicS jukeboxReplacePlaylistWithLocal];
+		[jukeboxS jukeboxReplacePlaylistWithLocal];
 	}
 	
 	if (!settingsS.isJukeboxEnabled)

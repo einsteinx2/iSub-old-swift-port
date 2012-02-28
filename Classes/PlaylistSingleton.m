@@ -15,6 +15,7 @@
 
 #import "NSNotificationCenter+MainThread.h"
 #import "AudioEngine.h"
+#import "JukeboxSingleton.h"
 
 @implementation PlaylistSingleton
 @synthesize shuffleIndex, normalIndex, isShuffle;
@@ -172,7 +173,7 @@
 		
 		if (settingsS.isJukeboxEnabled)
 		{
-			[musicS jukeboxReplacePlaylistWithLocal];
+			[jukeboxS jukeboxReplacePlaylistWithLocal];
 		}
 		
 		if (goToNextSong)
@@ -411,7 +412,7 @@
 		
 		if (settingsS.isJukeboxEnabled)
 		{
-			[musicS jukeboxReplacePlaylistWithLocal];
+			[jukeboxS jukeboxReplacePlaylistWithLocal];
 			//[musicS playSongAtPosition:];
 		}
 		
@@ -440,9 +441,9 @@
 		
 		if (settingsS.isJukeboxEnabled)
 		{
-			[musicS jukeboxReplacePlaylistWithLocal];
+			[jukeboxS jukeboxReplacePlaylistWithLocal];
 			
-			[musicS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:1]];
+			[jukeboxS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:1]];
 			
 			self.isShuffle = NO;
 		}

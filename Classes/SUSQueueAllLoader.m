@@ -18,9 +18,10 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
-#import "SUSStreamManager.h"
+#import "ISMSStreamManager.h"
 #import "PlaylistSingleton.h"
 #import "NSArray+Additions.h"
+#import "JukeboxSingleton.h"
 
 @implementation SUSQueueAllLoader
 
@@ -93,7 +94,7 @@
 		{
 			if (settingsS.isJukeboxEnabled)
 			{
-				[musicS jukeboxReplacePlaylistWithLocal];
+				[jukeboxS jukeboxReplacePlaylistWithLocal];
 			}
 			else
 			{
@@ -248,9 +249,6 @@
 	// Remove the processed folder from array
 	if ([folderIds count] > 0)
 		[folderIds removeObjectAtIndex:0];
-	
-	//DLog(@"parser.listOfSongs = %@", parser.listOfSongs);
-	//DLog(@"Playlist count: %i", [databaseS.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"]);
 	
 	NSUInteger maxIndex = [parser.listOfAlbums count] - 1;
 	for (int i = maxIndex; i >= 0; i--)

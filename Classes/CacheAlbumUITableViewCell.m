@@ -14,6 +14,7 @@
 #import "CellOverlay.h"
 #import "Song.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "CacheSingleton.h"
 
 @implementation CacheAlbumUITableViewCell
 
@@ -107,6 +108,8 @@
 	}
 	[result close];
 	
+	[cacheS findCacheSize];
+		
 	// Reload the cached songs table
 	[NSNotificationCenter postNotificationToMainThreadWithName:@"cachedSongDeleted"];
 	
