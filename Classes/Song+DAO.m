@@ -29,8 +29,10 @@
 - (BOOL)fileExists
 {
 	// Filesystem check
-	return [[NSFileManager defaultManager] fileExistsAtPath:self.currentPath]; 
-
+	BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:self.currentPath]; 
+	DLog(@"fileExists: %@  at path: %@", NSStringFromBOOL(fileExists), self.currentPath);
+	return fileExists;
+	
 	// Database check
 	//return [self.db stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ?", [self.path md5]] ? YES : NO;
 }

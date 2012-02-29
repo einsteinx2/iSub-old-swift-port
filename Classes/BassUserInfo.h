@@ -11,5 +11,11 @@
 
 @property (copy) Song *mySong;
 @property FILE *myFileHandle;
-//@property AudioFileID audioFile;
+@property BOOL shouldBreakWaitLoop;
+@property unsigned long long neededSize;
+@property BOOL isWaiting;
+@property (copy) NSString *writePath;
+@property (readonly) unsigned long long localFileSize;
+@property BOOL isTempCached;
+
 @end

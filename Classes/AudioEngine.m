@@ -29,8 +29,9 @@
 @implementation AudioEngine
 @synthesize isEqualizerOn, startByteOffset, startSecondsOffset, fftDataThread, isFftDataThreadToTerminate, isPlaying, isFastForward, bassReinitSampleRate, presilenceStream, bufferLengthMillis, bassUpdatePeriod;
 @synthesize fileStream1, fileStream2, fileStreamTempo1, fileStreamTempo2, volumeFx, outStream, BASSisFilestream1, currentStreamSyncObject;
-@synthesize eqValueArray, eqHandleArray, eqDataType, eqReadSyncObject, neededSize, bassUserInfoDict;//fileStreamUserInfo1, fileStreamUserInfo2;
+@synthesize eqValueArray, eqHandleArray, eqDataType, eqReadSyncObject, bassUserInfoDict;//fileStreamUserInfo1, fileStreamUserInfo2;
 @synthesize shouldResumeFromInterruption;
+@synthesize startSongThread;
 
 // BASS plugins
 extern void BASSFLACplugin;
@@ -42,7 +43,7 @@ static AudioEngine *sharedInstance = nil;
 
 - (NSString *)stringFromStreamType:(DWORD)ctype plugin:(HPLUGIN)plugin
 {
-	if (plugin) 
+	/*if (plugin) 
 	{ 
 		// using a plugin
 		const BASS_PLUGININFO *pinfo=BASS_PluginGetInfo(plugin); // get plugin info
@@ -52,8 +53,10 @@ static AudioEngine *sharedInstance = nil;
 			if (pinfo->formats[a].ctype==ctype) // found a "ctype" match...
 				return [NSString stringWithFormat:@"%s", pinfo->formats[a].name]; // return it's name
 		}
-	}
+	}*/ 
 	// check built-in stream formats...
+	if (ctype==BASS_CTYPE_STREAM_FLAC) return @"FLAC";
+	if (ctype==BASS_CTYPE_STREAM_FLAC_OGG) return @"FLAC";
 	if (ctype==BASS_CTYPE_STREAM_OGG) return @"OGG";
 	if (ctype==BASS_CTYPE_STREAM_MP1) return @"MP1";
 	if (ctype==BASS_CTYPE_STREAM_MP2) return @"MP2";
@@ -238,16 +241,16 @@ void BASSLogError()
 
 void CALLBACK MyStreamFreeCallback(HSYNC handle, DWORD channel, DWORD data, void *user)
 {
-	if (user == NULL)
-		return;
-	
-	// Remove the user info object from the dictionary
-	NSString *key = [NSString stringWithFormat:@"%i", channel];
-	[sharedInstance.bassUserInfoDict removeObjectForKey:key];
-	
-	// Stream is done, release the user info object
-	BassUserInfo *userInfo = (BassUserInfo *)user;
-	[userInfo release];
+	@autoreleasepool 
+	{
+		// Stream is done, remove the user info object from the dictionary
+		DLog(@"removing user info from dict");
+		DLog(@"%@", sharedInstance.bassUserInfoDict);
+		[sharedInstance removeUserInfoForStream:channel];
+		BassUserInfo *userInfo = (BassUserInfo*)user;
+		[userInfo release];
+		DLog(@"%@", sharedInstance.bassUserInfoDict);
+	}
 }
 
 void CALLBACK MyFileCloseProc(void *user)
@@ -255,12 +258,19 @@ void CALLBACK MyFileCloseProc(void *user)
 	if (user == NULL)
 		return;
 	
+	// Get the user info object
 	BassUserInfo *userInfo = (BassUserInfo *)user;
-	if (userInfo.myFileHandle == NULL)
-		return;
+	
+	// Tell the read wait loop to break in case it's waiting
+	userInfo.shouldBreakWaitLoop = YES;
+	
+	@autoreleasepool {
+		DLog(@"closing file: %@", userInfo.mySong.title);
+	}
 	
 	// Close the file handle
-	fclose(userInfo.myFileHandle);	
+	if (userInfo.myFileHandle != NULL)
+		fclose(userInfo.myFileHandle);	
 }
 
 QWORD CALLBACK MyFileLenProc(void *user)
@@ -276,7 +286,7 @@ QWORD CALLBACK MyFileLenProc(void *user)
 				
 		QWORD length = 0;
 		Song *theSong = userInfo.mySong;
-		if (theSong.isFullyCached || theSong.isTempCached)
+		if (theSong.isFullyCached || userInfo.isTempCached)
 		{
 			// Return actual file size on disk
 			length = theSong.localFileSize;
@@ -287,6 +297,7 @@ QWORD CALLBACK MyFileLenProc(void *user)
 			length = [theSong.size longLongValue];
 		}
 		
+		DLog(@"checking %@ length: %llu", theSong.title, length);
 		return length;
 	}
 }
@@ -301,48 +312,71 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 		return 0;
 	
 	// Read from the file
-	DWORD bytesRead = fread(buffer, 1, length, userInfo.myFileHandle);	
-	
-	//return bytesRead; // return here to always report actual file length
+	DWORD bytesRead = fread(buffer, 1, length, userInfo.myFileHandle);
 	
 	if (bytesRead < length)
 	{		
+		userInfo.isWaiting = YES;
+		
+		DLog(@"progress: %f  bytesRead: %u  length needed: %u", sharedInstance.progress, bytesRead, length);
+		
+		// Undo the read
+		fpos_t pos; 
+		fgetpos(userInfo.myFileHandle, &pos);
+		fpos_t newpos = pos - bytesRead;
+		fsetpos(userInfo.myFileHandle, &newpos);
+		bytesRead = 0;
+		
 		// Handle waiting for additional data
 		@autoreleasepool 
 		{
 			Song *theSong = userInfo.mySong;
 			if (!theSong.isFullyCached)
 			{
-				// Check if needed size has been calculated yet
-				if (sharedInstance.neededSize == ULLONG_MAX)
-				{
-					// Choose either the current player bitrate, or if for some reason it is not detected properly, use the best estimated bitrate. Then use that to determine how much data to let download to continue.
-					unsigned long long size = theSong.localFileSize;
-					NSUInteger bitrate = sharedInstance.bitRate > 0 ? sharedInstance.bitRate : theSong.estimatedBitrate;
-					unsigned long long bytesToWait = BytesForSecondsAtBitrate(ISMS_NumSecondsToWaitForAudioData, bitrate);
-					sharedInstance.neededSize = size + bytesToWait;
-				}
+				// Calculate the needed size:
+				// Choose either the current player bitrate, or if for some reason it is not detected properly, use the best estimated bitrate. Then use that to determine how much data to let download to continue.
+				unsigned long long size = theSong.localFileSize;
+				NSUInteger bitrate = sharedInstance.bitRate > 0 ? sharedInstance.bitRate : theSong.estimatedBitrate;
+				unsigned long long bytesToWait = BytesForSecondsAtBitrate(ISMS_NumSecondsToWaitForAudioData, bitrate);
+				userInfo.neededSize = size + bytesToWait;
+				DLog(@"waiting for %llu   neededSize: %llu", bytesToWait, userInfo.neededSize);
 				
-				if(theSong.localFileSize < sharedInstance.neededSize)
+				NSTimeInterval totalSleepTime = 0.0;
+				static const NSTimeInterval sleepTime = 0.01;
+				static const NSTimeInterval fileSizeCheckWait = 1.0;
+				while (1)
 				{
-					// Handle temp cached songs ending. When they end, they are set as the last temp cached song, so we know it's done and can stop waiting for data.
-					if ( !(theSong.isTempCached && [theSong isEqualToSong:streamManagerS.lastTempCachedSong]) )
-					{
-						// Undo the read
-						fpos_t pos; 
-						fgetpos(userInfo.myFileHandle, &pos);
-						fpos_t newpos = pos - bytesRead;
-						fsetpos(userInfo.myFileHandle, &newpos);
+					// Check if we should break every 100th of a second
+					[NSThread sleepForTimeInterval:sleepTime];
+					totalSleepTime += sleepTime;
+					if (userInfo.shouldBreakWaitLoop)
+						break;
 						
-						// Make BASS wait
-						bytesRead = 0;
+					// Only check the file size every half a second
+					if (totalSleepTime >= fileSizeCheckWait)
+					{
+						totalSleepTime = 0.0;
+						
+						// If the song has finished caching, we can stop waiting
+						if (theSong.isFullyCached)
+							break;
+						
+						// Handle temp cached songs ending. When they end, they are set as the last temp cached song, so we know it's done and can stop waiting for data.
+						if (theSong.isTempCached && [theSong isEqualToSong:streamManagerS.lastTempCachedSong])
+							break;
+						
+						// If enough of the file has downloaded, break the loop
+						if (userInfo.localFileSize >= userInfo.neededSize)
+							break;
 					}
 				}
-				else
-				{
-					// Reset needed size so it will be calculated again the next time the song needs to buffer
-					sharedInstance.neededSize = ULLONG_MAX;
-				}
+				userInfo.isWaiting = NO;
+				userInfo.shouldBreakWaitLoop = NO;
+				
+				DLog(@"done waiting");
+				
+				// Do the read again
+				bytesRead = fread(buffer, 1, length, userInfo.myFileHandle);
 			}
 		}
 	}
@@ -362,12 +396,12 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 	
 	BOOL success = !fseek(userInfo.myFileHandle, offset, SEEK_SET);
 	
-	//DLog(@"File Seek to %llu  success: %@", offset, NSStringFromBOOL(success));
+	DLog(@"File Seek to %llu  success: %@", offset, NSStringFromBOOL(success));
 	
 	return success;
 }
 
-BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFileSeekProc};
+static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFileSeekProc};
 
 #pragma mark - Output stream callbacks
 
@@ -399,10 +433,7 @@ BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFi
 				
 				// Flip the current/next streams
 				self.BASSisFilestream1 = !self.BASSisFilestream1;
-				
-				// Reset neededSize
-				self.neededSize = ULLONG_MAX;
-				
+
 				// Check if the frequency of this stream matches the BASS output
 				if (self.bassReinitSampleRate)
 				{
@@ -597,8 +628,8 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 {
 	@synchronized(eqReadSyncObject)
 	{		
-		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(retryStartAtOffset:) object:nil];
-		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(prepareNextSongStream) object:nil];
+		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startWithOffsetInBytesorSecondsInternal:) object:nil];
+		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(prepareNextSongStreamInternal) object:nil];
 		
 		BOOL success = BASS_Free();
 		self.fileStream1 = 0;
@@ -608,7 +639,6 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		self.outStream = 0;
 		self.volumeFx = 0;
 		self.bassReinitSampleRate = 0;
-		self.neededSize = ULLONG_MAX;
 		self.isPlaying = NO;
 		
 		[self.bassUserInfoDict removeAllObjects];
@@ -658,7 +688,12 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	{
 		self.startByteOffset = bytes;
 		
-		neededSize = ULLONG_MAX;
+		BassUserInfo *userInfo = [self userInfoForStream:stream];
+		userInfo.neededSize = ULLONG_MAX;
+		if (userInfo.isWaiting)
+		{
+			userInfo.shouldBreakWaitLoop = YES;
+		}
 	}
 	else
 	{
@@ -685,7 +720,15 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 
 - (void)prepareNextSongStream
 {
-	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(prepareNextSongStream) object:nil];
+	[self performSelector:@selector(prepareNextSongStreamInternal) 
+				 onThread:startSongThread 
+			   withObject:nil 
+			waitUntilDone:NO];
+}
+
+- (void)prepareNextSongStreamInternal
+{
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(prepareNextSongStreamInternal) object:nil];
 	
 	if (self.nextStream)
 		BASS_StreamFree(self.nextStream);
@@ -701,17 +744,18 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	
 	BassUserInfo *userInfo = [[BassUserInfo alloc] init];
 	userInfo.mySong = nextSong;
-	userInfo.myFileHandle = fopen([nextSong.currentPath cStringUTF8], "rb");
-		
+	userInfo.writePath = nextSong.currentPath;
+	userInfo.isTempCached = nextSong.isTempCached;
+	userInfo.myFileHandle = fopen([userInfo.writePath cStringUTF8], "rb");
+	
 	// Try hardware and software mixing
-	self.nextStream = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_STREAM_DECODE, &fileProcs, userInfo);
-	if(!self.nextStream) self.nextStream = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_SAMPLE_SOFTWARE|BASS_STREAM_DECODE, &fileProcs, userInfo);
-		
+	self.nextStream = BASS_StreamCreateFileUser(STREAMFILE_BUFFER, BASS_STREAM_DECODE, &fileProcs, userInfo);
+	if(!self.nextStream) self.nextStream = BASS_StreamCreateFileUser(STREAMFILE_BUFFER, BASS_SAMPLE_SOFTWARE|BASS_STREAM_DECODE, &fileProcs, userInfo);
+	
 	if (self.nextStream)
 	{
 		// Add the user info object to the dictionary
-		NSString *key = [NSString stringWithFormat:@"%i", self.nextStream];
-		[self.bassUserInfoDict setObject:userInfo forKey:key];
+		[self setUserInfo:userInfo forStream:self.nextStream];
 		
 		// Set the stream free sync
 		BASS_ChannelSetSync(self.nextStream, BASS_SYNC_FREE, 0, MyStreamFreeCallback, userInfo);
@@ -757,7 +801,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		DLog(@"nextSong stream: %i error: %i - %@", self.nextStream, errorCode, NSStringFromBassErrorCode(errorCode));
 #endif
 		
-		[self performSelector:@selector(prepareNextSongStream) withObject:nil afterDelay:RETRY_DELAY];
+		[self performSelector:@selector(prepareNextSongStreamInternal) withObject:nil afterDelay:RETRY_DELAY];
 	}
 	
 	DLog(@"nextSong: %i\n   ", self.nextStream);
@@ -771,24 +815,23 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		// Create the user info object for the stream
 		BassUserInfo *userInfo = [[BassUserInfo alloc] init];
 		userInfo.mySong = currentSong;
-		userInfo.myFileHandle = fopen([currentSong.currentPath cStringUTF8], "rb");
+		userInfo.writePath = currentSong.currentPath;
+		userInfo.isTempCached = currentSong.isTempCached;
+		userInfo.myFileHandle = fopen([userInfo.writePath cStringUTF8], "rb");
 		if (userInfo.myFileHandle == NULL)
 		{
 			// File failed to open
 			//DLog(@"File failed to open");
 			return NO;
 		}
-				
-		neededSize = ULLONG_MAX;
-				
+		
 		// Create the stream
-		self.fileStream1 = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_STREAM_DECODE, &fileProcs, userInfo);
-		if(!self.fileStream1) self.fileStream1 = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_SAMPLE_SOFTWARE|BASS_STREAM_DECODE, &fileProcs, userInfo);
+		self.fileStream1 = BASS_StreamCreateFileUser(STREAMFILE_BUFFER, BASS_STREAM_DECODE, &fileProcs, userInfo);
+		if(!self.fileStream1) self.fileStream1 = BASS_StreamCreateFileUser(STREAMFILE_BUFFER, BASS_SAMPLE_SOFTWARE|BASS_STREAM_DECODE, &fileProcs, userInfo);
 		if (self.fileStream1)
 		{
 			// Add the user info object to the dictionary
-			NSString *key = [NSString stringWithFormat:@"%i", self.fileStream1];
-			[self.bassUserInfoDict setObject:userInfo forKey:key];
+			[self setUserInfo:userInfo forStream:self.fileStream1];
 			
 			// Add the stream free callback
 			BASS_ChannelSetSync(self.fileStream1, BASS_SYNC_FREE, 0, MyStreamFreeCallback, userInfo);
@@ -806,22 +849,31 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	return NO;
 }
 
-- (void)retryStartAtOffset:(NSDictionary *)parameters
-{
-	NSNumber *byteOffset = [parameters objectForKey:@"byteOffset"];
-	NSNumber *seconds = [parameters objectForKey:@"seconds"]; 
-	
-	[self startWithOffsetInBytes:byteOffset orSeconds:seconds];
-}
-
+// Run in background to prevent pausing the main thread
 - (void)startWithOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds
 {	
+	NSMutableDictionary *bytesOrSeconds = [NSMutableDictionary dictionaryWithCapacity:2];
+	if (byteOffset) [bytesOrSeconds setObject:byteOffset forKey:@"byteOffset"];
+	if (seconds) [bytesOrSeconds setObject:seconds forKey:@"seconds"];
+	
+	[self performSelector:@selector(startWithOffsetInBytesorSecondsInternal:) 
+				 onThread:startSongThread 
+			   withObject:bytesOrSeconds 
+			waitUntilDone:NO];
+}
+
+// Runs in background thread
+- (void)startWithOffsetInBytesorSecondsInternal:(NSDictionary *)bytesOrSeconds
+{
 	NSInteger count = playlistS.count;
 	if (playlistS.currentIndex >= count) playlistS.currentIndex = count - 1;
 	
 	Song *currentSong = playlistS.currentSong;
 	if (!currentSong)
 		return;
+	
+	NSNumber *byteOffset = [bytesOrSeconds objectForKey:@"byteOffset"];
+	NSNumber *seconds = [bytesOrSeconds objectForKey:@"seconds"]; 
 	
 	self.startByteOffset = 0;
 	self.startSecondsOffset = 0;
@@ -925,11 +977,8 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 				 && currentSong.localFileSize < MIN_FILESIZE_TO_FAIL)
 		{
 			// Failed to create the stream, retrying
-			//DLog(@"------failed to create stream, retrying in 2 seconds------");
-			NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithCapacity:2];
-			if (byteOffset) [parameters setObject:byteOffset forKey:@"byteOffset"];
-			if (seconds) [parameters setObject:seconds forKey:@"seconds"];
-			[self performSelector:@selector(retryStartAtOffset:) withObject:parameters afterDelay:RETRY_DELAY];
+			DLog(@"------failed to create stream, retrying in 2 seconds------");
+			[self performSelector:@selector(startWithOffsetInBytesorSecondsInternal:) withObject:bytesOrSeconds afterDelay:RETRY_DELAY];
 		}
 	}
 }
@@ -1133,8 +1182,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 
 - (Song *)currentStreamSong
 {
-	NSString *key = [NSString stringWithFormat:@"%i", self.currentStream];
-	BassUserInfo *userInfo = [self.bassUserInfoDict objectForKey:key];
+	BassUserInfo *userInfo = [self userInfoForStream:self.currentStream];
 	return [[userInfo.mySong copy] autorelease];
 }
 
@@ -1148,6 +1196,24 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	return [self stringFromStreamType:i.ctype plugin:i.plugin];
 	
 	//DLog("channel type = %x (%@)\nlength = %llu (%u:%02u)  flags: %i  freq: %i  origres: %i", i.ctype, [self stringFromStreamType:i.ctype plugin:i.plugin], bytes, time/60, time%60, i.flags, i.freq, i.origres);=
+}
+
+- (BassUserInfo *)userInfoForStream:(HSTREAM)stream
+{
+	NSString *key = [NSString stringWithFormat:@"%i", stream];
+	return [bassUserInfoDict objectForKey:key];
+}
+
+- (void)setUserInfo:(BassUserInfo *)userInfo forStream:(HSTREAM)stream
+{
+	NSString *key = [NSString stringWithFormat:@"%i", stream];
+	[bassUserInfoDict setObject:userInfo forKey:key];
+}
+
+- (void)removeUserInfoForStream:(HSTREAM)stream
+{
+	NSString *key = [NSString stringWithFormat:@"%i", stream];
+	[bassUserInfoDict removeObjectForKey:key];
 }
 
 #pragma mark - Equalizer and Visualizer Methods
@@ -1341,9 +1407,11 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 
 - (void)setup
 {	
+	startSongThread = [[NSThread alloc] initWithTarget:self selector:@selector(startSongThreadEntryPoint) object:nil];
+	[startSongThread start];
+	
 	shouldResumeFromInterruption = NO;
 	bassUserInfoDict = [[NSMutableDictionary alloc] initWithCapacity:2];
-	neededSize = ULLONG_MAX;
 	bassUpdatePeriod = BASS_GetConfig(BASS_CONFIG_UPDATEPERIOD);
 	bufferLengthMillis = ISMS_BASSBufferSize;
 	bassReinitSampleRate = 0;
@@ -1480,5 +1548,32 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	while(isRunning && !self.isFftDataThreadToTerminate);
 }
 - (void)fftThreadEmptyMethod {}
+
+- (void)startSongThreadEntryPoint
+{
+	NSAutoreleasePool* thePool = [[NSAutoreleasePool alloc] init];
+	
+	self.isFftDataThreadToTerminate = NO;
+	
+	// Create a scheduled timer to keep runloop alive
+	NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(startSongEmptyMethod) userInfo:nil repeats:YES];
+	[[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
+	
+	// Start a runloop so we can call performSelector:onThread: to use this thread
+	NSTimeInterval resolution = 300.0;
+	BOOL isRunning;
+	do 
+	{
+		// Run the loop!
+		NSDate* theNextDate = [NSDate dateWithTimeIntervalSinceNow:resolution]; 
+		isRunning = [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:theNextDate]; 
+		
+		// Clear the autorelease pool after each run of the loop to prevent a memory leak
+		[thePool release];
+		thePool = [[NSAutoreleasePool alloc] init];            
+	} 
+	while(isRunning && !self.isFftDataThreadToTerminate);
+}
+- (void)startSongEmptyMethod {}
 
 @end

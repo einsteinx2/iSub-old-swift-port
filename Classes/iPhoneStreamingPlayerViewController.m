@@ -35,6 +35,7 @@
 #import "UIImageView+Reflection.h"
 #import "NSArray+Additions.h"
 #import "JukeboxSingleton.h"
+#import "CALayer+ImageFromLayer.h"
 
 #define downloadProgressBorder 4.
 #define downloadProgressWidth (progressSlider.frame.size.width - (downloadProgressBorder * 2))
@@ -1042,20 +1043,30 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	if (self.sliderMultipleLabel == nil)
 	{
+		// Create the label
 		CGFloat width = 80;
-		CGFloat height = 20;
+		CGFloat height = 18;
 		CGFloat x = (self.coverArtHolderView.width / 2) - (width / 2.);
-		CGFloat y = self.extraButtons.height;
+		CGFloat y = self.songInfoView.y - height;
 		CGRect frame = CGRectMake(x, y, width, height);
 		self.sliderMultipleLabel = [[[UILabel alloc] initWithFrame:frame] autorelease];
 		self.sliderMultipleLabel.textColor = [UIColor colorWithWhite:.8 alpha:1.0];
-		self.sliderMultipleLabel.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"controller-speed-tab.png"]];
 		self.sliderMultipleLabel.alpha = 0.0;
 		self.sliderMultipleLabel.font = [UIFont boldSystemFontOfSize:13.5];
 		self.sliderMultipleLabel.shadowOffset = CGSizeMake(0, 2);
 		self.sliderMultipleLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
 		self.sliderMultipleLabel.textAlignment = UITextAlignmentCenter;
 		
+		// Create the label background
+		CGFloat cornerRadius = 4.;
+		CGRect backgroundFrame = CGRectMake(0., 0., self.sliderMultipleLabel.width, self.sliderMultipleLabel.height + cornerRadius);
+		CALayer *backgroundLayer = [[CALayer alloc] init];
+		backgroundLayer.frame = backgroundFrame;
+		backgroundLayer.backgroundColor = [UIColor colorWithWhite:0 alpha:.72].CGColor;
+		backgroundLayer.cornerRadius = cornerRadius;
+		self.sliderMultipleLabel.backgroundColor = [UIColor colorWithPatternImage:[backgroundLayer imageFromLayer]];
+		[backgroundLayer release];
+
 		[self.coverArtHolderView addSubview:self.sliderMultipleLabel];
 	}
 	

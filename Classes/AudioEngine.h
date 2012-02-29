@@ -41,6 +41,56 @@ typedef enum
 
 + (AudioEngine *)sharedInstance;
 
+@property (retain) NSMutableArray *eqValueArray;
+@property (retain) NSMutableArray *eqHandleArray;
+@property ISMS_BASS_EQ_DATA_TYPE eqDataType;
+
+// BASS streams
+@property BOOL BASSisFilestream1;
+@property HSTREAM fileStream1;
+@property HSTREAM fileStreamTempo1;
+@property HSTREAM fileStream2;
+@property HSTREAM fileStreamTempo2;
+@property HSTREAM outStream;
+@property HFX volumeFx;
+
+@property BOOL isPlaying;
+@property (readonly) NSInteger bitRate;
+@property (readonly) QWORD currentByteOffset;
+@property (readonly) double progress;
+@property (readonly) NSArray *equalizerValues;
+
+@property BOOL isEqualizerOn;
+@property unsigned long long startByteOffset;
+@property double startSecondsOffset;
+@property HSTREAM currentStream;
+@property HSTREAM currentStreamTempo;
+@property (readonly) HSTREAM currentReadingStream;
+@property HSTREAM nextStream;
+@property HSTREAM nextStreamTempo;
+@property (readonly) HSTREAM nextReadingStream;
+@property HSTREAM presilenceStream;
+@property (retain) NSThread *fftDataThread;
+@property BOOL isFftDataThreadToTerminate;
+@property BOOL isFastForward;
+@property NSInteger audioSessionSampleRate;
+@property NSInteger bassReinitSampleRate;
+@property NSUInteger bufferLengthMillis;
+@property NSUInteger bassUpdatePeriod;
+@property (retain) NSThread *startSongThread;
+
+@property BOOL shouldResumeFromInterruption;
+
+@property (retain) NSMutableDictionary *bassUserInfoDict;
+
+@property (readonly) Song *currentStreamSong;
+@property (readonly) NSString *currentStreamFormat;
+
+@property (retain) NSObject *currentStreamSyncObject;
+@property (retain) NSObject *eqReadSyncObject;
+
+const char *GetCTypeString(DWORD ctype, HPLUGIN plugin);
+
 // Playback methods
 //
 - (void)startWithOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds;
@@ -78,58 +128,12 @@ typedef enum
 - (NSInteger)bassStreamSampleRate:(HSTREAM)stream;
 - (NSInteger)preferredSampleRate:(NSUInteger)sampleRate;
 
-@property (retain) NSMutableArray *eqValueArray;
-@property (retain) NSMutableArray *eqHandleArray;
-@property ISMS_BASS_EQ_DATA_TYPE eqDataType;
-
-// BASS streams
-@property BOOL BASSisFilestream1;
-@property HSTREAM fileStream1;
-@property HSTREAM fileStreamTempo1;
-@property HSTREAM fileStream2;
-@property HSTREAM fileStreamTempo2;
-@property HSTREAM outStream;
-@property HFX volumeFx;
-
-@property BOOL isPlaying;
-@property (readonly) NSInteger bitRate;
-@property (readonly) QWORD currentByteOffset;
-@property (readonly) double progress;
-@property (readonly) NSArray *equalizerValues;
-
-@property BOOL isEqualizerOn;
-@property unsigned long long startByteOffset;
-@property double startSecondsOffset;
-@property HSTREAM currentStream;
-@property HSTREAM currentStreamTempo;
-@property (readonly) HSTREAM currentReadingStream;
-@property HSTREAM nextStream;
-@property HSTREAM nextStreamTempo;
-@property (readonly) HSTREAM nextReadingStream;
-@property HSTREAM presilenceStream;
-@property (retain) NSThread *fftDataThread;
-@property BOOL isFftDataThreadToTerminate;
-@property BOOL isFastForward;
-@property NSInteger audioSessionSampleRate;
-@property NSInteger bassReinitSampleRate;
-@property NSUInteger bufferLengthMillis;
-@property NSUInteger bassUpdatePeriod;
-@property unsigned long long neededSize;
-
-@property BOOL shouldResumeFromInterruption;
-
-@property (retain) NSMutableDictionary *bassUserInfoDict;
-
-@property (readonly) Song *currentStreamSong;
-@property (readonly) NSString *currentStreamFormat;
-
-@property (retain) NSObject *currentStreamSyncObject;
-@property (retain) NSObject *eqReadSyncObject;
-
-const char *GetCTypeString(DWORD ctype, HPLUGIN plugin);
-
 - (void)readEqDataInternal;
 - (void)stopReadingEqData;
 - (void)startReadingEqData:(ISMS_BASS_EQ_DATA_TYPE)type;
+
+- (BassUserInfo *)userInfoForStream:(HSTREAM)stream;
+- (void)setUserInfo:(BassUserInfo *)userInfo forStream:(HSTREAM)stream;
+- (void)removeUserInfoForStream:(HSTREAM)stream;
 
 @end

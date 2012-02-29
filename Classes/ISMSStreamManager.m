@@ -82,6 +82,12 @@
 	{
 		if (![handlersToSkip containsObject:handler])
 		{
+			if (handler.isDownloading)
+			{
+				if (!cacheQueueManagerS.isQueueDownloading)
+					[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+			}
+			
 			// If we're trying to resume, cancel the request
 			[NSObject cancelPreviousPerformRequestsWithTarget:self 
 													 selector:@selector(resumeHandler:)
@@ -148,6 +154,13 @@
 	{
 		// Find the handler object and cancel it
 		ISMSStreamHandler *handler = [self.handlerStack objectAtIndexSafe:index];
+		
+		if (handler.isDownloading)
+		{
+			if (!cacheQueueManagerS.isQueueDownloading)
+				[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+		}
+		
 		[handler cancel];
 		
 		// If we're trying to resume, cancel the request
@@ -270,6 +283,7 @@
 	if (index < [self.handlerStack count])
 	{
 		[self cancelStreamAtIndex:index];
+		
 		ISMSStreamHandler *handler = [self.handlerStack objectAtIndex:index];
 		if (!handler.mySong.isFullyCached)
 			[handler.mySong removeFromCachedSongsTable];
@@ -509,7 +523,8 @@
 	Song *currentSong = playlistS.currentSong;
 	Song *nextSong = playlistS.nextSong;
 	
-	//DLog(@"currentSong: %@   mySong: %@", currentSong, handler.mySong);
+	DLog(@"starting playback for %@  file size: %llu", handler.mySong, handler.totalBytesTransferred);
+	
 	if ([handler.mySong isEqualToSong:currentSong])
 	{
 		[audioEngineS start];

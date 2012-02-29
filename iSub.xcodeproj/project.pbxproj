@@ -572,6 +572,9 @@
 		53733C7514FC6075001D8104 /* NSString+Clean.m in Sources */ = {isa = PBXBuildFile; fileRef = 53733C7414FC6073001D8104 /* NSString+Clean.m */; };
 		53733C7614FC6075001D8104 /* NSString+Clean.m in Sources */ = {isa = PBXBuildFile; fileRef = 53733C7414FC6073001D8104 /* NSString+Clean.m */; };
 		53733C7714FC6075001D8104 /* NSString+Clean.m in Sources */ = {isa = PBXBuildFile; fileRef = 53733C7414FC6073001D8104 /* NSString+Clean.m */; };
+		53733C8114FDBD62001D8104 /* CALayer+ImageFromLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53733C8014FDBD62001D8104 /* CALayer+ImageFromLayer.m */; };
+		53733C8214FDBD62001D8104 /* CALayer+ImageFromLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53733C8014FDBD62001D8104 /* CALayer+ImageFromLayer.m */; };
+		53733C8314FDBD62001D8104 /* CALayer+ImageFromLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53733C8014FDBD62001D8104 /* CALayer+ImageFromLayer.m */; };
 		5379DC4F1219E48800F426CD /* ChatUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC491219E48800F426CD /* ChatUITableViewCell.m */; };
 		5379DC501219E48800F426CD /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC4B1219E48800F426CD /* ChatViewController.m */; };
 		5379DC511219E48800F426CD /* ChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5379DC4C1219E48800F426CD /* ChatViewController.xib */; };
@@ -2510,6 +2513,8 @@
 		53733C6F14FC4B09001D8104 /* ISMSCacheQueueManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSCacheQueueManager.m; sourceTree = "<group>"; };
 		53733C7314FC6072001D8104 /* NSString+Clean.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Clean.h"; sourceTree = "<group>"; };
 		53733C7414FC6073001D8104 /* NSString+Clean.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Clean.m"; sourceTree = "<group>"; };
+		53733C7F14FDBD62001D8104 /* CALayer+ImageFromLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+ImageFromLayer.h"; sourceTree = "<group>"; };
+		53733C8014FDBD62001D8104 /* CALayer+ImageFromLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+ImageFromLayer.m"; sourceTree = "<group>"; };
 		5379DC481219E48800F426CD /* ChatUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatUITableViewCell.h; sourceTree = "<group>"; };
 		5379DC491219E48800F426CD /* ChatUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatUITableViewCell.m; sourceTree = "<group>"; };
 		5379DC4A1219E48800F426CD /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
@@ -3964,6 +3969,8 @@
 				53A7495C14E47826000AC636 /* UIImageView+Reflection.m */,
 				53C4408114E88C2200A7DC41 /* NSObject+ListMethods.h */,
 				53C4408214E88C2200A7DC41 /* NSObject+ListMethods.m */,
+				53733C7F14FDBD62001D8104 /* CALayer+ImageFromLayer.h */,
+				53733C8014FDBD62001D8104 /* CALayer+ImageFromLayer.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -6429,6 +6436,7 @@
 				53733C6014F8630F001D8104 /* JukeboxSingleton.m in Sources */,
 				53733C7014FC4B09001D8104 /* ISMSCacheQueueManager.m in Sources */,
 				53733C7514FC6075001D8104 /* NSString+Clean.m in Sources */,
+				53733C8114FDBD62001D8104 /* CALayer+ImageFromLayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6739,6 +6747,7 @@
 				53733C6214F8630F001D8104 /* JukeboxSingleton.m in Sources */,
 				53733C7214FC4B09001D8104 /* ISMSCacheQueueManager.m in Sources */,
 				53733C7714FC6075001D8104 /* NSString+Clean.m in Sources */,
+				53733C8314FDBD62001D8104 /* CALayer+ImageFromLayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7049,6 +7058,7 @@
 				53733C6114F8630F001D8104 /* JukeboxSingleton.m in Sources */,
 				53733C7114FC4B09001D8104 /* ISMSCacheQueueManager.m in Sources */,
 				53733C7614FC6075001D8104 /* NSString+Clean.m in Sources */,
+				53733C8214FDBD62001D8104 /* CALayer+ImageFromLayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

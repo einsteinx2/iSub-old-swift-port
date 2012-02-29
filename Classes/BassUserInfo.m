@@ -10,7 +10,7 @@
 #import "Song.h"
 
 @implementation BassUserInfo
-@synthesize mySong, myFileHandle;
+@synthesize mySong, myFileHandle, shouldBreakWaitLoop, neededSize, isWaiting, writePath, isTempCached;
 
 - (id)init
 {
@@ -18,6 +18,9 @@
 	{
 		mySong = nil;
 		myFileHandle = NULL;
+		shouldBreakWaitLoop = NO;
+		neededSize = ULLONG_MAX;
+		isWaiting = NO;
 	}
 	return self;
 }
@@ -29,4 +32,10 @@
 	myFileHandle = NULL;
 	[super dealloc];
 }
+
+- (unsigned long long)localFileSize
+{
+	return [[[NSFileManager defaultManager] attributesOfItemAtPath:self.writePath error:NULL] fileSize];
+}
+
 @end

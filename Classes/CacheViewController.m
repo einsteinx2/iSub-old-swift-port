@@ -567,14 +567,14 @@
 	if (isSaveEditShowing == YES)
 	{
 		isSaveEditShowing = NO;
-		[songsCountLabel removeFromSuperview];
-		[deleteSongsButton removeFromSuperview];
-		[spacerLabel removeFromSuperview];
-		[editSongsLabel removeFromSuperview];
-		[editSongsButton removeFromSuperview];
-		[deleteSongsLabel removeFromSuperview];
-		[cacheSizeLabel removeFromSuperview];
-		[headerView2 removeFromSuperview];
+		[songsCountLabel removeFromSuperview]; songsCountLabel = nil;
+		[deleteSongsButton removeFromSuperview]; deleteSongsButton = nil;
+		[spacerLabel removeFromSuperview]; spacerLabel = nil;
+		[editSongsLabel removeFromSuperview]; editSongsLabel = nil;
+		[editSongsButton removeFromSuperview]; editSongsButton = nil;
+		[deleteSongsLabel removeFromSuperview]; deleteSongsLabel = nil;
+		[cacheSizeLabel removeFromSuperview]; cacheSizeLabel = nil;
+		[headerView2 removeFromSuperview]; headerView2 = nil;
 		
 		/*[playAllImage removeFromSuperview];
 		[playAllLabel removeFromSuperview];

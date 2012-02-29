@@ -332,6 +332,7 @@
 	// Notify delegate if enough bytes received to start playback
 	if (!self.isDelegateNotifiedToStartPlayback && self.totalBytesTransferred >= ISMSMinBytesToStartPlayback(self.bitrate))
 	{
+		DLog(@"telling player to start, min bytes: %u, total bytes: %llu, bitrate: %u", ISMSMinBytesToStartPlayback(self.bitrate), self.totalBytesTransferred, self.bitrate);
 		self.isDelegateNotifiedToStartPlayback = YES;
 		//DLog(@"player told to start playback");
 		[self performSelectorOnMainThread:@selector(startPlaybackInternal) withObject:nil waitUntilDone:NO];

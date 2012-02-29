@@ -206,7 +206,11 @@
 
 - (void)addHeaderAndIndex
 {
-	if (myAlbum)
+	if (dataModel.songsCount == 0 && dataModel.albumsCount == 0)
+	{
+		self.tableView.tableHeaderView = nil;
+	}
+	else if (myAlbum)
 	{
 		if (IS_IPAD())
 		{
