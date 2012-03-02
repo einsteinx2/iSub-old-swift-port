@@ -191,10 +191,13 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-    static NSString *CellIdentifier = @"Cell";
-    
-	GenresGenreUITableViewCell *cell = [[GenresGenreUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
-																		 reuseIdentifier:CellIdentifier]; 
+	static NSString *cellIdentifier = @"GenresGenreCell";
+	GenresGenreUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	if (!cell)
+	{
+		cell = [[GenresGenreUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+	}
+
     // Configure the cell...
     cell.backgroundView = [[[UIView alloc] init] autorelease];
 	if(indexPath.row % 2 == 0)
@@ -220,6 +223,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {	
+	if (!indexPath)
+		return;
+	
 	if (viewObjectsS.isCellEnabled)
 	{
 		GenresArtistViewController *artistViewController = [[GenresArtistViewController alloc] initWithNibName:@"GenresArtistViewController" bundle:nil];

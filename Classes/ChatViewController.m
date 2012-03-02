@@ -9,7 +9,6 @@
 #import "ChatViewController.h"
 #import "ChatUITableViewCell.h"
 #import "ChatMessage.h"
-#import "SearchOverlayViewController.h"
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
@@ -366,9 +365,14 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-    static NSString *CellIdentifier = @"Cell";
-	ChatUITableViewCell *cell = [[[ChatUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-	
+	static NSString *cellIdentifier = @"ChatCell";
+	ChatUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	if (!cell)
+	{
+		cell = [[ChatUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+	}
+
     // Set up the cell...
 	ChatMessage *aChatMessage = [dataModel.chatMessages objectAtIndexSafe:indexPath.row];
 	cell.userNameLabel.text = [NSString stringWithFormat:@"%@ - %@", aChatMessage.user, [self formatDate:aChatMessage.timestamp]];
@@ -383,7 +387,6 @@
 	{
 		cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
 	}
-	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	
     return cell;
 }

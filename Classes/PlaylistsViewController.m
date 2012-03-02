@@ -62,18 +62,21 @@
     return YES;
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
 	if (!IS_IPAD() && isNoPlaylistsScreenShowing)
 	{
-		if (UIInterfaceOrientationIsPortrait(fromInterfaceOrientation))
+		[UIView beginAnimations:nil context:NULL];
+		[UIView setAnimationDuration:duration];
+		if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
 		{
-			noPlaylistsScreen.transform = CGAffineTransformTranslate(noPlaylistsScreen.transform, 0.0, 23.0);
+			noPlaylistsScreen.transform = CGAffineTransformTranslate(noPlaylistsScreen.transform, 0.0, -23.0);
 		}
 		else
 		{
-			noPlaylistsScreen.transform = CGAffineTransformTranslate(noPlaylistsScreen.transform, 0.0, -110.0);
+			noPlaylistsScreen.transform = CGAffineTransformTranslate(noPlaylistsScreen.transform, 0.0, 110.0);
 		}
+		[UIView commitAnimations];
 	}
 }
 
@@ -460,7 +463,7 @@
 			textLabel.text = @"No Songs\nQueued";
 			textLabel.frame = CGRectMake(20, 0, 200, 100);
 		}
-		else if (segmentedControl.selectedSegmentIndex == 1)
+		else if (segmentedControl.selectedSegmentIndex == 1 || segmentedControl.selectedSegmentIndex == 2)
 		{
 			textLabel.text = @"No Playlists\nFound";
 			textLabel.frame = CGRectMake(20, 20, 200, 140);
@@ -550,9 +553,18 @@
 		// Reload the table data
 		[self.tableView reloadData];
 		
+		// TODO: do this for iPad as well, different minScrollRow values
+		NSUInteger minScrollRow = 5;
+		if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
+			minScrollRow = 2;
+		
+		UITableViewScrollPosition scrollPosition = UITableViewScrollPositionNone;
+		if (playlistS.currentIndex > minScrollRow)
+			scrollPosition = UITableViewScrollPositionMiddle;
+		
 		if (playlistS.currentIndex >= 0 && playlistS.currentIndex < self.currentPlaylistCount)
 		{
-			[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:playlistS.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
+			[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:playlistS.currentIndex inSection:0] animated:NO scrollPosition:scrollPosition];
 		}
 		
 		// Remove the no playlists overlay screen if it's showing
@@ -1152,7 +1164,9 @@
     // If the list is empty, display the no playlists overlay screen
     if ([serverPlaylistsDataModel.serverPlaylists count] == 0 && isNoPlaylistsScreenShowing == NO)
     {
-        isNoPlaylistsScreenShowing = YES;
+		[self addNoPlaylistsScreen];
+		
+        /*isNoPlaylistsScreenShowing = YES;
         noPlaylistsScreen = [[UIImageView alloc] init];
         noPlaylistsScreen.frame = CGRectMake(40, 100, 240, 180);
         noPlaylistsScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
@@ -1171,7 +1185,7 @@
         
         [self.view addSubview:noPlaylistsScreen];
         
-        [noPlaylistsScreen release];
+        [noPlaylistsScreen release];*/
     }
     else
     {
@@ -1590,14 +1604,18 @@ static NSString *kName_Error = @"error";
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
-		static NSString *CellIdentifier = @"Cell";
-		CurrentPlaylistSongUITableViewCell *cell = [[[CurrentPlaylistSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+		static NSString *cellIdentifier = @"CurrentPlaylistSongCell";
+		CurrentPlaylistSongUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		if (!cell)
+		{
+			cell = [[CurrentPlaylistSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+		}
 		cell.indexPath = indexPath;
 		
 		cell.deleteToggleImage.hidden = !viewObjectsS.isEditing;
+		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
 		if ([viewObjectsS.multiDeleteList containsObject:[NSNumber numberWithInt:indexPath.row]])
 		{
 			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
@@ -1648,13 +1666,17 @@ static NSString *kName_Error = @"error";
 	}
 	else if (segmentedControl.selectedSegmentIndex == 1)
 	{
-		static NSString *CellIdentifier = @"Cell";
-		
-		LocalPlaylistsUITableViewCell *cell = [[[LocalPlaylistsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+		static NSString *cellIdentifier = @"LocalPlaylistsCell";
+		LocalPlaylistsUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		if (!cell)
+		{
+			cell = [[LocalPlaylistsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+		}
 		cell.indexPath = indexPath;
 		
 		// Set up the cell...
 		cell.deleteToggleImage.hidden = !viewObjectsS.isEditing;
+		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
 		if ([viewObjectsS.multiDeleteList containsObject:[NSNumber numberWithInt:indexPath.row]])
 		{
 			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
@@ -1683,13 +1705,17 @@ static NSString *kName_Error = @"error";
 	}
 	else if (segmentedControl.selectedSegmentIndex == 2)
 	{
-		static NSString *CellIdentifier = @"Cell";
-		
-		PlaylistsUITableViewCell *cell = [[[PlaylistsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+		static NSString *cellIdentifier = @"PlaylistsCell";
+		PlaylistsUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		if (!cell)
+		{
+			cell = [[PlaylistsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+		}
 		cell.indexPath = indexPath;
         cell.serverPlaylist = [serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];
 		
 		cell.deleteToggleImage.hidden = !viewObjectsS.isEditing;
+		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
 		if ([viewObjectsS.multiDeleteList containsObject:[NSNumber numberWithInt:indexPath.row]])
 		{
 			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
@@ -1714,6 +1740,9 @@ static NSString *kName_Error = @"error";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
+	if (!indexPath)
+		return;
+	
 	if (viewObjectsS.isCellEnabled)
 	{
 		if (segmentedControl.selectedSegmentIndex == 0)

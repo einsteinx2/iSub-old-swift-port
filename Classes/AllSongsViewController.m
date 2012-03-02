@@ -8,7 +8,6 @@
 
 
 #import "AllSongsViewController.h"
-#import "SearchOverlayViewController.h"
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
@@ -79,7 +78,6 @@
 	[self createDataModel];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createDataModel) name:ISMSNotification_ServerSwitched object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doneSearching_Clicked:) name:@"endSearch" object:searchOverlayView];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadingFinishedNotification) name:ISMSNotification_AllSongsLoadingFinished object:nil];
 
 	// Add the table fade
@@ -227,7 +225,6 @@
 	// Release anything that can be recreated in viewDidLoad or on demand.
 	// e.g. self.myOutlet = nil;
 	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"endSearch" object:searchOverlayView];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ServerSwitched object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_AllSongsLoadingFinished object:nil];
 }
@@ -237,7 +234,6 @@
 	dataModel.delegate = nil;
 	[dataModel release]; dataModel = nil;
 	[searchBar release]; searchBar = nil;
-	[searchOverlayView release]; searchOverlayView = nil;
 	[url release]; url = nil;
     [super dealloc];
 }
@@ -544,9 +540,7 @@
 	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
 	self.tableView.scrollEnabled = YES;
 	
-	[searchOverlayView.view removeFromSuperview];
-	[searchOverlayView release];
-	searchOverlayView = nil;
+	[self hideSearchOverlay];
 	
 	[self.tableView reloadData];
 	
@@ -646,8 +640,12 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	static NSString *CellIdentifier = @"Cell";
-	AllSongsUITableViewCell *cell = [[[AllSongsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+	static NSString *cellIdentifier = @"AllSongsCell";
+	AllSongsUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	if (!cell)
+	{
+		cell = [[AllSongsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+	}
 	cell.indexPath = indexPath;
 	
 	Song *aSong = nil;
@@ -693,6 +691,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
+	if (!indexPath)
+		return;
+	
 	if (viewObjectsS.isCellEnabled)
 	{		
 		// Clear the current playlist

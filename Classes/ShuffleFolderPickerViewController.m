@@ -141,15 +141,15 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+    static NSString *cellIdentifier = @"ShuffleFolderPickerCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (!cell) 
+	{
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
-    NSString *folder   = [[sortedFolders objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1];
-	NSUInteger tag     = [[[sortedFolders objectAtIndexSafe:indexPath.row] objectAtIndexSafe:0] intValue];
+    NSString *folder = [[sortedFolders objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1];
+	NSUInteger tag = [[[sortedFolders objectAtIndexSafe:indexPath.row] objectAtIndexSafe:0] intValue];
 	
 	cell.textLabel.text = folder;
 	cell.tag = tag;

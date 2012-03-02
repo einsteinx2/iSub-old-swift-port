@@ -231,9 +231,10 @@
 		}
 		
 		CGFloat headerHeight = albumInfoView.height + playAllShuffleAllView.height;
-		CGRect headerFrame = CGRectMake(0., 0., self.view.bounds.size.width, headerHeight);
+		CGRect headerFrame = CGRectMake(0., 0., 320, headerHeight);
+		DLog(@"headerFrame: %@", NSStringFromCGRect(headerFrame));
 		UIView *headerView = [[UIView alloc] initWithFrame:headerFrame];
-		headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		//headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		
 		albumInfoArtView.isLarge = YES;
 		albumInfoArtView.coverArtId = myAlbum.coverArtId;
@@ -335,13 +336,17 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {		
-	static NSString *CellIdentifier = @"Cell";
-	
 	// Set up the cell...
 	if (indexPath.row < dataModel.albumsCount)
 	{
-		AlbumUITableViewCell *cell = [[[AlbumUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-
+		static NSString *cellIdentifier = @"AlbumCell";
+		AlbumUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		if (!cell)
+		{
+			cell = [[AlbumUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		}
+		
         Album *anAlbum = [self.dataModel albumForTableViewRow:indexPath.row];
         
         cell.myId = anAlbum.albumId;
@@ -352,9 +357,7 @@
 		cell.coverArtView.coverArtId = anAlbum.coverArtId;
 		
 		[cell.albumNameLabel setText:anAlbum.title];
-		
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		
+				
 		// Setup cell backgrond color
 		cell.backgroundView = [[[UIView alloc] init] autorelease];
 		if(indexPath.row % 2 == 0)
@@ -366,9 +369,14 @@
 	}
 	else
 	{
-		SongUITableViewCell *cell = [[[SongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+		static NSString *cellIdentifier = @"SongCell";
+		SongUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		if (!cell)
+		{
+			cell = [[SongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell.accessoryType = UITableViewCellAccessoryNone;
+		}
 		cell.indexPath = indexPath;
-		cell.accessoryType = UITableViewCellAccessoryNone;
         
         Song *aSong = [self.dataModel songForTableViewRow:indexPath.row];
 		DLog(@"aSong.path: %@   md5: %@", aSong.path, [aSong.path md5]);
@@ -423,6 +431,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {	
+	if (!indexPath)
+		return;
+	
 	if (viewObjectsS.isCellEnabled)
 	{
 		if (indexPath.row < dataModel.albumsCount)

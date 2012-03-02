@@ -57,7 +57,7 @@
 {
     [super layoutSubviews];
 	
-	self.deleteToggleImage.frame = CGRectMake(4.0, 18.5, 23.0, 23.0);
+	//self.deleteToggleImage.frame = CGRectMake(4.0, 18.5, 23.0, 23.0);
 	
 	// Automatically set the width based on the width of the text
 	playlistNameLabel.frame = CGRectMake(0, 0, 290, 44);

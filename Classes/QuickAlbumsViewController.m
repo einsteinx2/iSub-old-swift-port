@@ -14,6 +14,7 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
+#import "UIView+Tools.h"
 
 @interface QuickAlbumsViewController (Private)
 - (void)albumLoad:(NSString*)modifier;
@@ -22,6 +23,7 @@
 @implementation QuickAlbumsViewController
 
 @synthesize parent, receivedData, modifier;
+@synthesize randomButton, frequentButton, newestButton, recentButton, cancelButton;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -29,6 +31,31 @@
 		return NO;
 	
     return YES;
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:duration];
+	
+	if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation))
+	{
+		randomButton.y += 16.;
+		frequentButton.y += 16.;
+		newestButton.y += 16.;
+		recentButton.y += 16.;
+		cancelButton.y += 12.;
+	}
+	else
+	{
+		randomButton.y -= 16.;
+		frequentButton.y -= 16.;
+		newestButton.y -= 16.;
+		recentButton.y -= 16.;
+		cancelButton.y -= 12.;
+	}
+	
+	[UIView commitAnimations];
 }
 
 - (id)init
@@ -45,6 +72,14 @@
 {
 	[super viewDidLoad];
 	
+	if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
+	{
+		randomButton.y += 16.;
+		frequentButton.y += 16.;
+		newestButton.y += 16.;
+		recentButton.y += 16.;
+		cancelButton.y += 12.;
+	}
 }
 
 - (IBAction)random
@@ -114,6 +149,11 @@
 
 - (void)dealloc 
 {
+	[randomButton release]; randomButton = nil;
+	[frequentButton release]; frequentButton = nil;
+	[newestButton release]; newestButton = nil;
+	[recentButton release]; recentButton = nil;
+	[cancelButton release]; cancelButton = nil;
     [titles release]; titles = nil;
     [super dealloc];	
 }

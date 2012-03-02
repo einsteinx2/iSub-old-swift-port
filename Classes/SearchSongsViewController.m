@@ -248,15 +248,18 @@
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
-{
-    static NSString *CellIdentifier = @"Cell";
-    
+{    
 	if (searchType == 0)
 	{
 		if (indexPath.row < [listOfArtists count])
 		{
-			ArtistUITableViewCell *cell = [[[ArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-			
+			static NSString *cellIdentifier = @"ArtistCell";
+			ArtistUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+			if (!cell)
+			{
+				cell = [[ArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			}
+						
 			Artist *anArtist = [listOfArtists objectAtIndexSafe:indexPath.row];
 			cell.myArtist = anArtist;
 			
@@ -274,8 +277,14 @@
 	{
 		if (indexPath.row < [listOfAlbums count])
 		{
-			AlbumUITableViewCell *cell = [[[AlbumUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-			
+			static NSString *cellIdentifier = @"AlbumCell";
+			AlbumUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+			if (!cell)
+			{
+				cell = [[AlbumUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+				cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+			}
+						
 			Album *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
 			cell.myId = anAlbum.albumId;
 			cell.myArtist = [Artist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
@@ -285,7 +294,6 @@
 			
 			[cell.albumNameLabel setText:anAlbum.title];
 			
-			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 			
 			// Setup cell backgrond color
 			cell.backgroundView = [[[UIView alloc] init] autorelease];
@@ -305,8 +313,13 @@
 	{
 		if (indexPath.row < [listOfSongs count])
 		{
-			// Configure the cell...
-			SearchSongUITableViewCell *cell = [[[SearchSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+			static NSString *cellIdentifier = @"SearchSongCell";
+			SearchSongUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+			if (!cell)
+			{
+				cell = [[SearchSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			}
+			
 			cell.row = indexPath.row;
 			cell.mySong = [listOfSongs objectAtIndexSafe:indexPath.row];
 			return cell;
@@ -318,7 +331,8 @@
 	}
 	
 	// In case somehow no cell is created, return an empty cell
-	return [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+	static NSString *cellIdentifier = @"EmptyCell";
+	return [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
 }
 
 #pragma mark -
@@ -326,6 +340,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {	
+	if (!indexPath)
+		return;
 	
 	if (searchType == 0)
 	{

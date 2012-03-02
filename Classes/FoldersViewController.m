@@ -7,7 +7,6 @@
 //
 
 #import "FoldersViewController.h"
-#import "SearchOverlayViewController.h"
 #import "iSubAppDelegate.h"
 #import "MusicSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
@@ -61,18 +60,6 @@
     return YES;
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-	
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.1];
-	
-	searchOverlayView.view.y += 40.0;
- 
-	[UIView commitAnimations];
-}
-
 #pragma mark - Lifecycle
 
 - (void)createDataModel
@@ -97,9 +84,7 @@
 	dropdown = nil;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(serverSwitched) name:ISMSNotification_ServerSwitched object:nil];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doneSearching_Clicked:) name:@"endSearch" object:searchOverlayView];
-	
+		
 	// Add the pull to refresh view
 	refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
 	refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
@@ -159,15 +144,6 @@
 }
 
 
-- (void)viewDidUnload {
-	// Release anything that can be recreated in viewDidLoad or on demand.
-	// e.g. self.myOutlet = nil;
-	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"endSearch" object:searchOverlayView];
-    
-}
-
-
 - (void)dealloc 
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ServerSwitched object:nil];
@@ -175,7 +151,6 @@
 	dataModel.delegate = nil;
 	[dataModel release]; dataModel = nil;
 	[searchBar release]; searchBar = nil;
-	[searchOverlayView release]; searchOverlayView = nil;
 	[dropdown release]; dropdown = nil;
     [super dealloc];
 }
@@ -367,30 +342,6 @@
 
 #pragma mark - Button handling methods
 
-
-- (void)doneSearching_Clicked:(id)sender 
-{
-	[self updateCount];
-	
-	searchBar.text = @"";
-	[searchBar resignFirstResponder];
-	
-	letUserSelectRow = YES;
-	isSearching = NO;
-	self.navigationItem.leftBarButtonItem = nil;
-	self.tableView.scrollEnabled = YES;
-	
-	[searchOverlayView.view removeFromSuperview];
-	[searchOverlayView release];
-	searchOverlayView = nil;
-	
-	[dataModel clearSearchTable];
-	
-	[self.tableView reloadData];
-	
-	[self.tableView setContentOffset:CGPointMake(0, 86) animated:YES];
-}
-
 - (void) reloadAction:(id)sender
 {
 	if (![SUSAllSongsLoader isLoading])
@@ -556,6 +507,26 @@
 	[self hideSearchOverlay];
 }
 
+- (void)doneSearching_Clicked:(id)sender 
+{
+	[self updateCount];
+	
+	searchBar.text = @"";
+	[searchBar resignFirstResponder];
+	
+	letUserSelectRow = YES;
+	isSearching = NO;
+	self.navigationItem.leftBarButtonItem = nil;
+	self.tableView.scrollEnabled = YES;
+	
+	[self hideSearchOverlay];
+	
+	[dataModel clearSearchTable];
+	
+	[self.tableView reloadData];
+	
+	[self.tableView setContentOffset:CGPointMake(0, 86) animated:YES];
+}
 
 #pragma mark TableView
 
@@ -597,9 +568,13 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {	
-	static NSString *CellIdentifier = @"Cell";
-	ArtistUITableViewCell *cell = [[[ArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-			
+	static NSString *cellIdentifier = @"ArtistCell";
+	ArtistUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	if (!cell)
+	{
+		cell = [[ArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+	}
+
 	Artist *anArtist = nil;
 	if(isSearching)
 	{
@@ -680,6 +655,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
+	if (!indexPath)
+		return;
+	
 	if (viewObjectsS.isCellEnabled)
 	{
 		DLog(@"did indexPath.row: %i", indexPath.row);

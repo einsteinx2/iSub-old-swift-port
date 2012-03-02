@@ -323,13 +323,16 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {	
-	static NSString *CellIdentifier = @"Cell";
-	
 	// Set up the cell...
 	if (indexPath.row < [listOfAlbums count])
 	{
-		GenresAlbumUITableViewCell *cell = [[[GenresAlbumUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		static NSString *cellIdentifier = @"GenresAlbumCell";
+		GenresAlbumUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		if (!cell)
+		{
+			cell = [[GenresAlbumUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		}
 		cell.segment = self.segment;
 		cell.seg1 = self.seg1;
 		cell.genre = genre;
@@ -357,8 +360,14 @@
 	}
 	else
 	{
-		GenresSongUITableViewCell *cell = [[[GenresSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-		cell.accessoryType = UITableViewCellAccessoryNone;
+		static NSString *cellIdentifier = @"GenresSongCell";
+		GenresSongUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		if (!cell)
+		{
+			cell = [[GenresSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell.accessoryType = UITableViewCellAccessoryNone;
+		}
+		
 		NSUInteger a = indexPath.row - [listOfAlbums count];
 		cell.md5 = [listOfSongs objectAtIndexSafe:a];
 		
@@ -422,6 +431,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {	
+	if (!indexPath)
+		return;
 	
 	if (viewObjectsS.isCellEnabled)
 	{

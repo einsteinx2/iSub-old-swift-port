@@ -56,6 +56,25 @@
 	CGRect newFrame = artistNameLabel.frame;
 	newFrame.size.width = expectedLabelSize.width;
 	artistNameLabel.frame = newFrame;
+
+}
+
+- (void)toggleDelete
+{
+	if (self.isDelete)
+	{
+		[viewObjectsS.multiDeleteList removeObject:self.artistNameLabel.text];
+		[NSNotificationCenter postNotificationToMainThreadWithName:@"hideDeleteButton"];
+		self.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
+	}
+	else
+	{
+		[viewObjectsS.multiDeleteList addObject:self.artistNameLabel.text];
+		[NSNotificationCenter postNotificationToMainThreadWithName:@"showDeleteButton"];
+		self.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
+	}
+	
+	self.isDelete = !self.isDelete;
 }
 
 #pragma mark - Overlay

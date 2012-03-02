@@ -504,13 +504,17 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {	
+	static NSString *cellIdentifier = @"CurrentPlaylistSongSmallCell";
+    CurrentPlaylistSongSmallUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (!cell) 
+	{
+        cell = [[CurrentPlaylistSongSmallUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    }
 	
-	static NSString *CellIdentifier = @"Cell";
-	
-	CurrentPlaylistSongSmallUITableViewCell *cell = [[[CurrentPlaylistSongSmallUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     cell.indexPath = indexPath;
 	
 	cell.deleteToggleImage.hidden = !viewObjectsS.isEditing;
+	cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
 	if ([viewObjectsS.multiDeleteList containsObject:[NSNumber numberWithInt:indexPath.row]])
 	{
 		cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
@@ -744,6 +748,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
+	if (!indexPath)
+		return;
+	
 	[musicS playSongAtPosition:indexPath.row];
 }
 

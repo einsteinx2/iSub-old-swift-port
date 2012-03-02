@@ -48,10 +48,10 @@
 - (Song *)currentQueuedSongInDb
 {
 	Song *aSong = nil;
-	FMResultSet *result = [databaseS.songCacheDb executeQuery:@"SELECT * FROM cacheQueue WHERE finished = 'NO' LIMIT 1"];
-	if ([databaseS.songCacheDb hadError]) 
+	FMResultSet *result = [databaseS.cacheQueueDb executeQuery:@"SELECT * FROM cacheQueue WHERE finished = 'NO' LIMIT 1"];
+	if ([databaseS.cacheQueueDb hadError]) 
 	{
-		DLog(@"Err %d: %@", [databaseS.songCacheDb lastErrorCode], [databaseS.songCacheDb lastErrorMessage]);
+		DLog(@"Err %d: %@", [databaseS.cacheQueueDb lastErrorCode], [databaseS.cacheQueueDb lastErrorMessage]);
 	}
 	else
 	{

@@ -379,16 +379,20 @@
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
-{	
-	static NSString *CellIdentifier = @"Cell";
-	
+{		
 	// Set up the cell...
 	if (indexPath.row < [listOfAlbums count])
 	{
 		NSUInteger segment = [segments count];
 		NSString *seg1 = [segments objectAtIndexSafe:0];
 		
-		CacheAlbumUITableViewCell *cell = [[[CacheAlbumUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+		static NSString *cellIdentifier = @"CacheAlbumCell";
+		CacheAlbumUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		if (!cell)
+		{
+			cell = [[CacheAlbumUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+		}
+		
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		cell.segment = segment;
 		cell.seg1 = seg1;
@@ -428,8 +432,14 @@
 	}
 	else
 	{
-		CacheSongUITableViewCell *cell = [[[CacheSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-		cell.accessoryType = UITableViewCellAccessoryNone;
+		static NSString *cellIdentifier = @"CacheSongCell";
+		CacheSongUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		if (!cell)
+		{
+			cell = [[CacheSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell.accessoryType = UITableViewCellAccessoryNone;
+		}
+		
 		NSUInteger a = indexPath.row - [listOfAlbums count];
 		cell.md5 = [[listOfSongs objectAtIndexSafe:a] objectAtIndexSafe:0];
 		
@@ -480,6 +490,9 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {	
+	if (!indexPath)
+		return;
+	
 	if (viewObjectsS.isCellEnabled)
 	{
 		if (indexPath.row < [listOfAlbums count])

@@ -303,14 +303,14 @@ static DatabaseSingleton *sharedInstance = nil;
 		if (![cacheQueueDb tableExists:@"cacheQueue"]) 
 		{
 			[cacheQueueDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE cacheQueue (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, %@)", [Song standardSongColumnSchema]]];
-			[cacheQueueDb executeUpdate:@"CREATE INDEX queueDate ON cacheQueue (cachedDate DESC)"];
+			//[cacheQueueDb executeUpdate:@"CREATE INDEX queueDate ON cacheQueue (cachedDate DESC)"];
 		}
 		
-		[songCacheDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@cacheQueue.db", settingsS.cachesPath, urlStringMd5], @"cacheQueueDb"];
+		/*[songCacheDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@cacheQueue.db", settingsS.cachesPath, urlStringMd5], @"cacheQueueDb"];
 		if ([songCacheDb hadError]) 
 		{
 			DLog(@"Err attaching the cacheQueueDb %d: %@", [songCacheDb lastErrorCode], [songCacheDb lastErrorMessage]);
-		}
+		}*/
 	}
 	else
 	{ 

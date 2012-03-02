@@ -68,7 +68,7 @@
 {
     [super layoutSubviews];
 	
-	self.deleteToggleImage.frame = CGRectMake(4, 28.5, 23, 23);
+	//self.deleteToggleImage.frame = CGRectMake(4, 28.5, 23, 23);
 	coverArtView.frame = CGRectMake(0, 20, 60, 60);
 	
 	// Automatically set the width based on the width of the text

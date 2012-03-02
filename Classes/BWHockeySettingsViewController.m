@@ -172,8 +172,9 @@
     }
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:requiredIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:cellStyle reuseIdentifier:requiredIdentifier] autorelease];
+    if (cell == nil) 
+	{
+        cell = [[UITableViewCell alloc] initWithStyle:cellStyle reuseIdentifier:requiredIdentifier];
     }
     
     cell.accessoryType = UITableViewCellAccessoryNone;

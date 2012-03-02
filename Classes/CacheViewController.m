@@ -34,18 +34,18 @@
 #import "JukeboxSingleton.h"
 #import "ISMSCacheQueueManager.h"
 
-@interface CacheViewController (Private)
+@interface CacheViewController ()
 - (void)addNoSongsScreen;
 - (void)segmentAction:(id)sender;
 - (void)removeSaveEditButtons;
 - (void)addSaveEditButtons;
 - (void)removeNoSongsScreen;
-- (void)createQueuedSongsList;
+@property NSUInteger cacheQueueCount;
 @end
 
 @implementation CacheViewController
 
-@synthesize listOfArtists, listOfArtistsSections, sectionInfo;
+@synthesize listOfArtists, listOfArtistsSections, sectionInfo, cacheQueueCount;
 
 #pragma mark - Rotation handling
 
@@ -58,22 +58,44 @@
     return YES;
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
 	if (!IS_IPAD() && isNoSongsScreenShowing)
 	{
-		if (UIInterfaceOrientationIsPortrait(fromInterfaceOrientation))
+		[UIView beginAnimations:nil context:NULL];
+		[UIView setAnimationDuration:duration];
+		if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
 		{
-			noSongsScreen.transform = CGAffineTransformTranslate(noSongsScreen.transform, 0.0, 23.0);
+			noSongsScreen.transform = CGAffineTransformTranslate(noSongsScreen.transform, 0.0, -23.0);
 		}
 		else
 		{
-			noSongsScreen.transform = CGAffineTransformTranslate(noSongsScreen.transform, 0.0, -110.0);
+			noSongsScreen.transform = CGAffineTransformTranslate(noSongsScreen.transform, 0.0, 110.0);
 		}
+		[UIView commitAnimations];
 	}
 }
 
 #pragma mark - View lifecycle
+
+- (void)registerForNotifications
+{
+	// Set notification receiver for when queued songs finish downloading to reload the table
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTable) name:ISMSNotification_CacheQueueSongDownloaded object:nil];
+	
+	// Set notification receiver for when cached songs are deleted to reload the table
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTable) name:@"cachedSongDeleted" object:nil];
+	
+	// Set notification receiver for when network status changes to reload the table
+	[[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(segmentAction:) name:kReachabilityChangedNotification object: nil];
+}
+
+- (void)unregisterForNotifications
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CacheQueueSongDownloaded object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"cachedSongDeleted" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
+}
 
 - (void)viewDidLoad 
 {
@@ -243,27 +265,13 @@
 		// Setup the update timer
 		updateTimer = [NSTimer scheduledTimerWithTimeInterval:.25 target:self selector:@selector(updateQueueDownloadProgress) userInfo:nil repeats:YES];
 		
-		// Set notification receiver for when queued songs finish downloading to reload the table
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(segmentAction:) name:ISMSNotification_CacheQueueSongDownloaded object:nil];
-		
-		// Set notification receiver for when cached songs are deleted to reload the table
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(segmentAction:) name:@"cachedSongDeleted" object:nil];
-		
-		// Set notification receiver for when network status changes to reload the table
-		[[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(segmentAction:) name:kReachabilityChangedNotification object: nil];
+		[self registerForNotifications];
 	}
 	
 	if (IS_IPAD())
 		self.view.backgroundColor = ISMSiPadBackgroundColor;
 	
 	[self updateCacheSizeLabel];
-}
-
-- (void)viewWillAppear:(BOOL)animated 
-{	
-	[super viewWillAppear:animated];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:) name:ISMSNotification_StorePurchaseComplete object:nil];
 	
 	self.tableView.scrollEnabled = YES;
 	[jukeboxInputBlocker removeFromSuperview];
@@ -305,6 +313,15 @@
 		self.tableView.tableHeaderView.hidden = YES;
 		[self addNoSongsScreen];
 	}
+}
+
+- (void)viewWillAppear:(BOOL)animated 
+{	
+	[super viewWillAppear:animated];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:) name:ISMSNotification_StorePurchaseComplete object:nil];
+	
+	[self reloadTable];
 	
 	[FlurryAnalytics logEvent:@"CacheTab"];
 }
@@ -314,6 +331,28 @@
 	[super viewWillDisappear:animated];
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_StorePurchaseComplete object:nil];
+}
+
+- (void)didReceiveMemoryWarning 
+{
+    // Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+    
+    // Relinquish ownership any cached data, images, etc that aren't in use.
+}
+
+- (void)viewDidUnload
+{
+    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
+    // For example: self.myOutlet = nil;
+	
+	[self unregisterForNotifications];
+	[updateTimer invalidate]; updateTimer = nil;
+}
+
+- (void)dealloc
+{
+    [super dealloc];
 }
 
 - (void)segmentAction:(id)sender
@@ -409,26 +448,18 @@
 	}
 	else if (segmentedControl.selectedSegmentIndex == 1)
 	{
+		[self reloadTable];
+		
 		if (self.tableView.editing)
 		{
 			[self editSongsAction:nil];
 		}
 		
-		// Create the cachedSongsList table
-		[self createQueuedSongsList];
-		
-		if ([databaseS.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"] == 0)
-		{
-			[self removeSaveEditButtons];
-			
-			[self addNoSongsScreen];
-		}
-		else
+		if (self.cacheQueueCount > 0)
 		{
 			[self removeNoSongsScreen];
-			
 			[self addSaveEditButtons];
-		}		
+		}
 	}
 	
 	[self.tableView reloadData];
@@ -518,6 +549,58 @@
 
 #pragma mark -
 
+- (void)reloadTable
+{
+	if (segmentedControl.selectedSegmentIndex == 0)
+	{
+		[self segmentAction:nil];
+	}
+	else
+	{
+		[databaseS.cacheQueueDb executeUpdate:@"DROP TABLE IF EXISTS cacheQueueList"];
+		//[databaseS.cacheQueueDb executeUpdate:[NSString stringWithFormat:@"CREATE TEMP TABLE cacheQueueList (md5 TEXT, finished TEXT, cachedDate INTEGER, playedDate INTEGER, %@)", [Song standardSongColumnSchema]]];
+		[databaseS.cacheQueueDb executeUpdate:@"CREATE TEMP TABLE cacheQueueList (md5 TEXT)"];
+		[databaseS.cacheQueueDb executeUpdate:@"INSERT INTO cacheQueueList SELECT md5 FROM cacheQueue"];
+		
+		if (self.tableView.isEditing)
+		{
+			NSArray *multiDeleteList = [NSArray arrayWithArray:viewObjectsS.multiDeleteList];
+			for (NSString *md5 in multiDeleteList)
+			{
+				NSString *dbMd5 = [databaseS.cacheQueueDb stringForQuery:@"SELECT md5 FROM cacheQueueList WHERE md5 = ?", md5];
+				DLog(@"md5: %@   dbMD5: %@", md5, dbMd5);
+				if (!dbMd5) 
+					[viewObjectsS.multiDeleteList removeObject:md5];
+			}
+		}
+		
+		self.cacheQueueCount = [databaseS.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM cacheQueueList"];
+		if (self.cacheQueueCount == 0)
+		{
+			[self removeSaveEditButtons];	
+			[self addNoSongsScreen];
+		}
+		else
+		{
+			if (isSaveEditShowing)
+			{
+				if (self.cacheQueueCount == 1)
+					songsCountLabel.text = [NSString stringWithFormat:@"1 Song"];
+				else 
+					songsCountLabel.text = [NSString stringWithFormat:@"%i Songs", self.cacheQueueCount];
+			}
+			else
+			{
+				[self addSaveEditButtons];
+			}
+			
+			if (isNoSongsScreenShowing)
+				[self removeNoSongsScreen];
+		}
+		[self.tableView reloadData];
+	}
+}
+
 - (void)updateCacheSizeLabel
 {
 	if (segmentedControl.selectedSegmentIndex == 0)
@@ -533,33 +616,21 @@
 
 - (void)updateQueueDownloadProgress
 {
-	//if (queueDownloadProgressView != nil && appDelegateS.isQueueListDownloading)
-	if (cacheQueueManagerS.isQueueDownloading)
-	{		
-		queueDownloadProgress = cacheQueueManagerS.currentQueuedSong.localFileSize;
+	if (segmentedControl.selectedSegmentIndex == 1 && cacheQueueManagerS.isQueueDownloading)
+	{	
+		/*queueDownloadProgress = cacheQueueManagerS.currentQueuedSong.localFileSize;
 		
 		// Reload the cells
 		if (segmentedControl.selectedSegmentIndex == 1)
 		{
 			[self.tableView reloadData];
-		}
+		}*/
+		
+		queueDownloadProgress = cacheQueueManagerS.currentQueuedSong.localFileSize;
+		CacheQueueSongUITableViewCell *cell = (CacheQueueSongUITableViewCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+		NSDate *cached = [NSDate dateWithTimeIntervalSince1970:[databaseS.cacheQueueDb doubleForQuery:@"SELECT cachedDate FROM cacheQueue WHERE ROWID = 1"]];
+		cell.cacheInfoLabel.text = [NSString stringWithFormat:@"Queued %@ - Progress: %@", [NSString relativeTime:cached], [NSString formatFileSize:queueDownloadProgress]];
 	}
-}
-
-- (void)createCachedSongsList
-{
-	// Create the cachedSongsList table
-	[databaseS.songCacheDb executeUpdate:@"DROP TABLE cachedSongsList"];
-	[databaseS.songCacheDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE cachedSongsList (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, %@)", [Song standardSongColumnSchema]]];
-	[databaseS.songCacheDb executeUpdate:@"INSERT INTO cachedSongsList SELECT * FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate DESC"];	
-}
-
-- (void)createQueuedSongsList
-{
-	// Create the queuedSongsList table
-	[databaseS.cacheQueueDb executeUpdate:@"DROP TABLE queuedSongsList"];
-	[databaseS.cacheQueueDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE queuedSongsList (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, %@)", [Song standardSongColumnSchema]]];
-	[databaseS.cacheQueueDb executeUpdate:@"INSERT INTO queuedSongsList SELECT * FROM cacheQueue ORDER BY cachedDate ASC"];
 }
 
 - (void)removeSaveEditButtons
@@ -619,11 +690,10 @@
 		}
 		else if (segmentedControl.selectedSegmentIndex == 1)
 		{
-			NSUInteger queuedSongsCount = [databaseS.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"];
-			if (queuedSongsCount == 1)
+			if (self.cacheQueueCount == 1)
 				songsCountLabel.text = [NSString stringWithFormat:@"1 Song"];
 			else 
-				songsCountLabel.text = [NSString stringWithFormat:@"%i Songs", queuedSongsCount];
+				songsCountLabel.text = [NSString stringWithFormat:@"%i Songs", self.cacheQueueCount];
 		}
 		[headerView addSubview:songsCountLabel];
 		[songsCountLabel release];
@@ -643,14 +713,16 @@
 		}
 		else if (segmentedControl.selectedSegmentIndex == 1)
 		{
-			unsigned long long combinedSize = 0;
-			FMResultSet *result = [databaseS.songCacheDb executeQuery:@"SELECT size FROM cacheQueue"];
+			/*unsigned long long combinedSize = 0;
+			FMResultSet *result = [databaseS.cacheQueueDb executeQuery:@"SELECT size FROM cacheQueue"];
 			while ([result next])
 			{
 				combinedSize += [result longLongIntForColumnIndex:0];
 			}
 			[result close];
-			cacheSizeLabel.text = [NSString formatFileSize:combinedSize];
+			cacheSizeLabel.text = [NSString formatFileSize:combinedSize];*/
+			
+			cacheSizeLabel.text = @"";
 		}
 		[headerView addSubview:cacheSizeLabel];
 		[cacheSizeLabel release];
@@ -850,46 +922,57 @@
 {
 	if ([viewObjectsS.multiDeleteList count] == 0)
 	{
-		if (segmentedControl.selectedSegmentIndex == 0)
-			deleteSongsLabel.text = @"Delete All Songs";
-		else
-			deleteSongsLabel.text = @"Select All";
+		deleteSongsLabel.text = @"Select All";
 	}
 	else if ([viewObjectsS.multiDeleteList count] == 1)
 	{
-		deleteSongsLabel.text = @"Delete 1 Song  ";
+		if (segmentedControl.selectedSegmentIndex == 0)
+			deleteSongsLabel.text = @"Delete 1 Folder  ";
+		else
+			deleteSongsLabel.text = @"Delete 1 Song  ";
 	}
 	else
 	{
-		deleteSongsLabel.text = [NSString stringWithFormat:@"Delete %i Songs", [viewObjectsS.multiDeleteList count]];
+		if (segmentedControl.selectedSegmentIndex == 0)
+			deleteSongsLabel.text = [NSString stringWithFormat:@"Delete %i Folders", [viewObjectsS.multiDeleteList count]];
+		else
+			deleteSongsLabel.text = [NSString stringWithFormat:@"Delete %i Songs", [viewObjectsS.multiDeleteList count]];
 	}
 	
 	songsCountLabel.hidden = YES;
+	cacheSizeLabel.hidden = YES;
 	deleteSongsLabel.hidden = NO;
 }
 
 
-- (void) hideDeleteButton
+- (void)hideDeleteButton
 {
 	if ([viewObjectsS.multiDeleteList count] == 0)
 	{
 		if (viewObjectsS.isEditing == NO)
 		{
 			songsCountLabel.hidden = NO;
+			cacheSizeLabel.hidden = NO;
 			deleteSongsLabel.hidden = YES;
 		}
 		else
 		{
-			deleteSongsLabel.text = @"Delete All Songs";
+			deleteSongsLabel.text = @"Select All";
 		}
 	}
 	else if ([viewObjectsS.multiDeleteList count] == 1)
 	{
-		deleteSongsLabel.text = @"Delete 1 Song  ";
+		if (segmentedControl.selectedSegmentIndex == 0)
+			deleteSongsLabel.text = @"Delete 1 Folder  ";
+		else
+			deleteSongsLabel.text = @"Delete 1 Song  ";
 	}
 	else 
 	{
-		deleteSongsLabel.text = [NSString stringWithFormat:@"Delete %i Songs", [viewObjectsS.multiDeleteList count]];
+		if (segmentedControl.selectedSegmentIndex == 0)
+			deleteSongsLabel.text = [NSString stringWithFormat:@"Delete %i Folders", [viewObjectsS.multiDeleteList count]];
+		else
+			deleteSongsLabel.text = [NSString stringWithFormat:@"Delete %i Songs", [viewObjectsS.multiDeleteList count]];
 	}
 }
 
@@ -904,7 +987,7 @@
 }
 
 
-- (void) editSongsAction:(id)sender
+- (void)editSongsAction:(id)sender
 {
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
@@ -914,45 +997,12 @@
 			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:@"showDeleteButton" object: nil];
 			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:@"hideDeleteButton" object: nil];
 			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-			//viewObjectsS.multiDeleteList = nil; viewObjectsS.multiDeleteList = [[NSMutableArray alloc] init];
-			editSongsLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
-			editSongsLabel.text = @"Done";
-			[self showDeleteButton];
-			
-			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Note" message:@"You can swipe to the right on any artist, album, or song and tap the delete button to remove them individually." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-			[alert show];
-			[alert release];
-		}
-		else 
-		{
-			viewObjectsS.isEditing = NO;
-			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
-			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
-			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-			//viewObjectsS.multiDeleteList = nil; viewObjectsS.multiDeleteList = [[NSMutableArray alloc] init];
-			[self hideDeleteButton];
-			editSongsLabel.backgroundColor = [UIColor clearColor];
-			editSongsLabel.text = @"Edit";
-			
-			// Reload the table
-			[self.tableView reloadData];
-		}
-	}
-	else if (segmentedControl.selectedSegmentIndex == 1)
-	{
-		if (self.tableView.editing == NO)
-		{
-			viewObjectsS.isEditing = YES;
-			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:@"showDeleteButton" object: nil];
-			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:@"hideDeleteButton" object: nil];
-			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-			//viewObjectsS.multiDeleteList = nil; viewObjectsS.multiDeleteList = [[NSMutableArray alloc] init];
 			[self.tableView setEditing:YES animated:YES];
 			editSongsLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
 			editSongsLabel.text = @"Done";
 			[self showDeleteButton];
 			
-			[NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(showDeleteToggle) userInfo:nil repeats:NO];
+			[self performSelector:@selector(showDeleteToggle) withObject:nil afterDelay:0.3];
 		}
 		else 
 		{
@@ -970,6 +1020,37 @@
 			[self.tableView reloadData];
 		}
 	}
+	else if (segmentedControl.selectedSegmentIndex == 1)
+	{
+		if (self.tableView.editing == NO)
+		{
+			viewObjectsS.isEditing = YES;
+			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:@"showDeleteButton" object: nil];
+			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:@"hideDeleteButton" object: nil];
+			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+			[self.tableView setEditing:YES animated:YES];
+			editSongsLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
+			editSongsLabel.text = @"Done";
+			[self showDeleteButton];
+			
+			[self performSelector:@selector(showDeleteToggle) withObject:nil afterDelay:0.3];
+		}
+		else 
+		{
+			viewObjectsS.isEditing = NO;
+			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
+			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
+			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+			[self hideDeleteButton];
+			[self.tableView setEditing:NO animated:YES];
+			editSongsLabel.backgroundColor = [UIColor clearColor];
+			editSongsLabel.text = @"Edit";
+			
+			// Reload the table
+			[self reloadTable];
+			//[self.tableView reloadData];
+		}
+	}
 }
 
 - (void)deleteRowsAtIndexPathsWithAnimation:(NSArray *)indexes
@@ -977,183 +1058,113 @@
 	[self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:YES];
 }
 
-- (void)clearCacheQueue
-{
-	// If there's a download in progress, stop it
-	[cacheQueueManagerS stopDownloadQueue];
-	
-	// Delete each song from the database
-	NSMutableArray *indexes = [[NSMutableArray alloc] init];
-	NSInteger rowCount = [databaseS.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM queuedSongsList"];
-	for (int row = 1; row <= rowCount; row++)
-	{
-		NSInteger tableRow = row - 1;
-		NSString *rowMD5 = [databaseS.cacheQueueDb stringForQuery:@"SELECT md5 FROM queuedSongsList WHERE ROWID = ?", [NSNumber numberWithInt:row]];
-		
-		// Delete the row from the cacheQueue
-		[databaseS.cacheQueueDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", rowMD5];
-		[databaseS.cacheQueueDb executeUpdate:@"DELETE FROM queuedSongsList WHERE md5 = ?", rowMD5];
-		
-		// Add the row to the index array
-		[indexes addObject:[NSIndexPath indexPathForRow:tableRow inSection:0]];
-	}
-	
-	// Delete the rows from the table
-	[self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:YES];
-	[indexes release];
-	
-	// Reload the table
-	[self editSongsAction:nil];
-	[self viewWillAppear:NO];
-	
-	[viewObjectsS hideLoadingScreen];
-}
-
 - (void)deleteCachedSongs
 {	
-	// Truncate the song cache genre tables
-	[databaseS.songCacheDb executeUpdate:@"DELETE FROM genres"];
-	[databaseS.songCacheDb executeUpdate:@"DELETE FROM genresSongs"];
+	[self unregisterForNotifications];
 	
-	// Delete each song off the disk and from the songCacheDb
-	FMResultSet *result = [databaseS.songCacheDb executeQuery:@"SELECT md5, transcodedSuffix, suffix FROM cachedSongs WHERE finished = 'YES'"];
-	while ([result next])
+	for (NSString *folderName in viewObjectsS.multiDeleteList)
 	{
-		NSString *rowMD5 = nil;
-		NSString *transcodedSuffix = nil;
-		NSString *suffix = nil;
-		if ([result stringForColumnIndex:0] != nil)
-			rowMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
-		if ([result stringForColumnIndex:1] != nil)
-			transcodedSuffix = [NSString stringWithString:[result stringForColumnIndex:1]];
-		if ([result stringForColumnIndex:2] != nil)
-			suffix = [NSString stringWithString:[result stringForColumnIndex:2]];
+		FMResultSet *result;
+		result = [databaseS.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ?", folderName];
 		
-		// Check if we're deleting the song that's currently playing. If so, skip deleting it.
-		Song *currentSong = playlistS.currentSong;
-		if (currentSong)
+		while ([result next])
 		{
-			if ([[currentSong.path md5] isEqualToString:rowMD5])
-			{
-				[audioEngineS stop];
-			}
+			if ([result stringForColumnIndex:0] != nil)
+				[Song removeSongFromCacheDbByMD5:[NSString stringWithString:[result stringForColumnIndex:0]]];
 		}
-		
-		/*// Check if we're deleting the song that's about to play. If so, skip deleting it.
-		Song *nextSong = dataModel.nextSong;
-		if (nextSong)
-		{
-			if ([[nextSong.path md5] isEqualToString:rowMD5])
-			{
-				[audioEngineS stop];
-			}
-		}*/
-
-		// Delete the row from the cachedSongs
-		[databaseS.songCacheDb executeUpdate:@"DELETE FROM cachedSongs WHERE md5 = ?", rowMD5];
-		[databaseS.songCacheDb executeUpdate:@"DELETE FROM cachedSongsLayout WHERE md5 = ?", rowMD5];
-		
-		// Delete the song from disk
-		NSString *fileName;
-		if (transcodedSuffix)
-			fileName = [settingsS.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", rowMD5, transcodedSuffix]];
-		else
-			fileName = [settingsS.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", rowMD5, suffix]];
-		[[NSFileManager defaultManager] removeItemAtPath:fileName error:NULL];
-	}
-	[result close];
+		[result close];
+	}	
+	
+	[self segmentAction:nil];
 	
 	[cacheS findCacheSize];
 	
-	// Reload the table
-	[self editSongsAction:nil];
-	[self viewWillAppear:NO];
-	
 	[viewObjectsS hideLoadingScreen];
+	
+	[self registerForNotifications];
 }
 
 - (void)deleteQueuedSongs
 {
+	[self unregisterForNotifications];
+	
 	// Sort the multiDeleteList to make sure it's accending
 	[viewObjectsS.multiDeleteList sortUsingSelector:@selector(compare:)];
 	
 	// Delete each song from the database
-	NSMutableArray *indexes = [[NSMutableArray alloc] init];
-	for (NSNumber *rowNumber in viewObjectsS.multiDeleteList)
+	for (NSString *md5 in viewObjectsS.multiDeleteList)
 	{
-		NSInteger row = [rowNumber intValue] + 1;
-		NSString *rowMD5 = [databaseS.cacheQueueDb stringForQuery:@"SELECT md5 FROM queuedSongsList WHERE ROWID = ?", [NSNumber numberWithInt:row]];
-		
 		// Check if we're deleting the song that's currently caching. If so, stop the download.
 		if (cacheQueueManagerS.currentQueuedSong)
 		{
-			if ([[cacheQueueManagerS.currentQueuedSong.path md5] isEqualToString:rowMD5])
+			if ([[cacheQueueManagerS.currentQueuedSong.path md5] isEqualToString:md5])
 			{
 				[cacheQueueManagerS stopDownloadQueue];
 			}
 		}
 		
-		// Delete the row from the cachedSongs
-		[databaseS.cacheQueueDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", rowMD5];
-		[databaseS.cacheQueueDb executeUpdate:@"DELETE FROM queuedSongsList WHERE md5 = ?", rowMD5];
-		
-		// Add the row to the index array
-		[indexes addObject:[NSIndexPath indexPathForRow:[rowNumber intValue] inSection:0]];
-	}
-	
-	// Delete the rows from the table
-	[self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:YES];
-	[indexes release];
+		// Delete the row from the cacheQueue
+		[databaseS.cacheQueueDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", md5];
+	}		
 	
 	// Reload the table
 	[self editSongsAction:nil];
-	[self viewWillAppear:NO];
 	
 	if (!cacheQueueManagerS.isQueueDownloading)
 		[cacheQueueManagerS startDownloadQueue];
 	
 	[viewObjectsS hideLoadingScreen];
+	
+	[self registerForNotifications];
 }
 
 - (void)deleteSongsAction:(id)sender
 {
 	if (viewObjectsS.isEditing)
 	{
-		if ([deleteSongsLabel.text isEqualToString:@"Delete All Songs"])
+		if ([deleteSongsLabel.text isEqualToString:@"Select All"])
 		{
 			if (segmentedControl.selectedSegmentIndex == 0)
 			{
-				[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Deleting"];
-				[self performSelector:@selector(deleteCachedSongs) withObject:nil afterDelay:0.05];
-			}
-			else if (segmentedControl.selectedSegmentIndex == 1)
-			{
-				[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Deleting"];
-				[self performSelector:@selector(clearCacheQueue) withObject:nil afterDelay:0.05];
-			}
-		}
-		else if ([deleteSongsLabel.text isEqualToString:@"Select All"])
-		{
-			if (segmentedControl.selectedSegmentIndex == 1)
-			{
-				NSUInteger queuedSongsCount = [databaseS.songCacheDb intForQuery:@"SELECT COUNT(*) FROM queuedSongsList"];
+				NSUInteger count = 0;
+				for (NSArray *section in listOfArtistsSections)
+				{
+					count += [section count];
+				}
 				
 				// Select all the rows
-				for (int i = 0; i < queuedSongsCount; i++)
+				for (int i = 0; i < count; i++)
 				{
-					[viewObjectsS.multiDeleteList addObject:[NSNumber numberWithInt:i]];
+					for (NSArray *section in listOfArtistsSections)
+					{
+						for (NSString *folderName in section)
+						{
+							[viewObjectsS.multiDeleteList addObject:folderName];
+						}
+					}
 				}
-				[self.tableView reloadData];
-				[self showDeleteButton];
 			}
+			else
+			{
+				// Select all the rows
+				FMResultSet *result = [databaseS.cacheQueueDb executeQuery:@"SELECT md5 FROM cacheQueueList"];
+				while ([result next])
+				{
+					NSString *md5 = [result stringForColumnIndex:0];
+					if (md5) [viewObjectsS.multiDeleteList addObject:md5];
+				}
+			}
+			
+			[self.tableView reloadData];
+			[self showDeleteButton];
 		}
 		else
 		{
-			if (segmentedControl.selectedSegmentIndex == 1)
-			{
-				[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Deleting"];
+			[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Deleting"];
+			if (segmentedControl.selectedSegmentIndex == 0)
+				[self performSelector:@selector(deleteCachedSongs) withObject:nil afterDelay:0.05];
+			else
 				[self performSelector:@selector(deleteQueuedSongs) withObject:nil afterDelay:0.05];
-			}
 		}
 	}
 }
@@ -1266,7 +1277,7 @@
 		}
 		else if (segmentedControl.selectedSegmentIndex == 1)
 		{
-			return [databaseS.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cacheQueue"];
+			return self.cacheQueueCount;
 		}
 	}
 	
@@ -1279,17 +1290,26 @@
 {    
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
-		static NSString *CellIdentifier = @"Cell";
+		static NSString *cellIdentifier = @"CacheArtistCell";
+		CacheArtistUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		if (!cell)
+		{
+			cell = [[CacheArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+		}
+
+		NSString *name = [[listOfArtistsSections objectAtIndexSafe:indexPath.section] objectAtIndexSafe:indexPath.row];
 		
-		CacheArtistUITableViewCell *cell = [[[CacheArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-		//cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		//cell.indexPath = indexPath;
+		cell.deleteToggleImage.hidden = !viewObjectsS.isEditing;
+		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
+		if ([viewObjectsS.multiDeleteList containsObject:name])
+		{
+			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
+		}
 		
 		if (showIndex)
 			cell.isIndexShowing = YES;
 		
 		// Set up the cell...
-		NSString *name = [[listOfArtistsSections objectAtIndexSafe:indexPath.section] objectAtIndexSafe:indexPath.row];
 		[cell.artistNameLabel setText:[name cleanString]];
 		
 		cell.backgroundView = [[[UIView alloc] init] autorelease];
@@ -1302,18 +1322,27 @@
 	}
 	else
 	{
-		static NSString *CellIdentifier = @"Cell";
-		CacheQueueSongUITableViewCell *cell = [[[CacheQueueSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+		static NSString *cellIdentifier = @"CacheQueueCell";
+		CacheQueueSongUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		if (!cell)
+		{
+			cell = [[CacheQueueSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+		}
 		cell.indexPath = indexPath;
-		
+
+		// Set up the cell...
+		FMResultSet *result = [databaseS.cacheQueueDb executeQuery:@"SELECT * FROM cacheQueue JOIN cacheQueueList USING(md5) WHERE cacheQueueList.ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
+		Song *aSong = [Song songFromDbResult:result];
+		NSDate *cached = [NSDate dateWithTimeIntervalSince1970:[result doubleForColumn:@"cachedDate"]];
+		cell.md5 = [result stringForColumn:@"md5"];
+		[result close];
+
 		cell.deleteToggleImage.hidden = !viewObjectsS.isEditing;
-		if ([viewObjectsS.multiDeleteList containsObject:[NSNumber numberWithInt:indexPath.row]])
+		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
+		if ([viewObjectsS.multiDeleteList containsObject:cell.md5])
 		{
 			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
 		}
-		
-		// Set up the cell...
-		Song *aSong = [Song songFromDbRow:indexPath.row inTable:@"queuedSongsList" inDatabase:databaseS.songCacheDb];
 		
 		cell.coverArtView.coverArtId = aSong.coverArtId;
 		
@@ -1323,25 +1352,27 @@
 		else
 			cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
 		
-		NSDate *cached = [NSDate dateWithTimeIntervalSince1970:(double)[databaseS.songCacheDb intForQuery:@"SELECT cachedDate FROM queuedSongsList WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]]];
-		if ([aSong isEqualToSong:cacheQueueManagerS.currentQueuedSong] && cacheQueueManagerS.isQueueDownloading)
+		if (indexPath.row == 0)
 		{
-			[cell.cacheInfoLabel setText:[NSString stringWithFormat:@"Queued %@ - Progress: %@", [NSString relativeTime:cached], [NSString formatFileSize:queueDownloadProgress]]];
-		}
-		else if (indexPath.row == 0)
-		{
-			[cell.cacheInfoLabel setText:[NSString stringWithFormat:@"Queued %@ - Progress: Need Wifi", [NSString relativeTime:cached]]];
+			if ([aSong isEqualToSong:cacheQueueManagerS.currentQueuedSong] && cacheQueueManagerS.isQueueDownloading)
+			{
+				cell.cacheInfoLabel.text = [NSString stringWithFormat:@"Queued %@ - Progress: %@", [NSString relativeTime:cached], [NSString formatFileSize:queueDownloadProgress]];
+			}
+			else
+			{
+				cell.cacheInfoLabel.text = [NSString stringWithFormat:@"Queued %@ - Progress: Need Wifi", [NSString relativeTime:cached]];
+			}
 		}
 		else
 		{
-			[cell.cacheInfoLabel setText:[NSString stringWithFormat:@"Queued %@ - Progress: Waiting...", [NSString relativeTime:cached]]];
+			cell.cacheInfoLabel.text = [NSString stringWithFormat:@"Queued %@ - Progress: Waiting...", [NSString relativeTime:cached]];
 		}
 		
-		[cell.songNameLabel setText:aSong.title];
+		cell.songNameLabel.text = aSong.title;
 		if (aSong.album)
-			[cell.artistNameLabel setText:[NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album]];
+			cell.artistNameLabel.text = [NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album];
 		else
-			[cell.artistNameLabel setText:aSong.artist];
+			cell.artistNameLabel.text = aSong.artist;
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		
 		return cell;
@@ -1462,33 +1493,6 @@ NSInteger trackSort1(id obj1, id obj2, void *context)
 		}
 	}
 }
-
-
-#pragma mark -
-#pragma mark Memory management
-
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Relinquish ownership any cached data, images, etc that aren't in use.
-}
-
-- (void)viewDidUnload {
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-    // For example: self.myOutlet = nil;
-	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CacheQueueSongDownloaded object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"cachedSongDeleted" object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
-	[updateTimer invalidate]; updateTimer = nil;
-}
-
-
-- (void)dealloc {
-    [super dealloc];
-}
-
 
 @end
 

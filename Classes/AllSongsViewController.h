@@ -8,7 +8,7 @@
 
 #import "SUSLoaderDelegate.h"
 
-@class SearchOverlayViewController, Song, Album, SUSAllSongsDAO, LoadingScreen, EGORefreshTableHeaderView;
+@class Song, Album, SUSAllSongsDAO, LoadingScreen, EGORefreshTableHeaderView;
 
 @interface AllSongsViewController : UITableViewController <UISearchBarDelegate, SUSLoaderDelegate> 
 {
@@ -23,7 +23,6 @@
 	UILabel *reloadTimeLabel;
 	IBOutlet UISearchBar *searchBar;
 	
-	SearchOverlayViewController *searchOverlayView;
 	BOOL letUserSelectRow;
 	NSURL *url;
 		

@@ -9,10 +9,11 @@
 #import "CacheQueueSongUITableViewCell.h"
 #import "AsynchronousImageView.h"
 #import "ViewObjectsSingleton.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation CacheQueueSongUITableViewCell
 
-@synthesize coverArtView, cacheInfoLabel, nameScrollView, songNameLabel, artistNameLabel;
+@synthesize coverArtView, cacheInfoLabel, nameScrollView, songNameLabel, artistNameLabel, md5;
 
 #pragma mark - Lifecycle
 
@@ -69,7 +70,7 @@
 {	
     [super layoutSubviews];
 	
-	self.deleteToggleImage.frame = CGRectMake(4, 28.5, 23, 23);
+	//self.deleteToggleImage.frame = CGRectMake(4, 28.5, 23, 23);
 	coverArtView.frame = CGRectMake(0, 20, 60, 60);
 	
 	// Automatically set the width based on the width of the text
@@ -85,6 +86,24 @@
 	newFrame.size.width = expectedLabelSize.width;
 	artistNameLabel.frame = newFrame;
 	
+}
+
+- (void)toggleDelete
+{
+	if (self.isDelete)
+	{
+		[viewObjectsS.multiDeleteList removeObject:self.md5];
+		[NSNotificationCenter postNotificationToMainThreadWithName:@"hideDeleteButton"];
+		self.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
+	}
+	else
+	{
+		[viewObjectsS.multiDeleteList addObject:self.md5];
+		[NSNotificationCenter postNotificationToMainThreadWithName:@"showDeleteButton"];
+		self.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
+	}
+	
+	self.isDelete = !self.isDelete;
 }
 
 #pragma mark - Overlay

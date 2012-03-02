@@ -7,7 +7,6 @@
 //
 
 #import "AllAlbumsViewController.h"
-#import "SearchOverlayViewController.h"
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
@@ -74,7 +73,6 @@
 	[self createDataModel];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createDataModel) name:ISMSNotification_ServerSwitched object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doneSearching_Clicked:) name:@"endSearch" object:searchOverlayView];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadingFinishedNotification) name:ISMSNotification_AllSongsLoadingFinished object:nil];
 	
 	/*// Add the table fade
@@ -223,15 +221,12 @@
 - (void)viewDidUnload {
 	// Release anything that can be recreated in viewDidLoad or on demand.
 	// e.g. self.myOutlet = nil;
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ServerSwitched object:searchOverlayView];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"endSearch" object:searchOverlayView];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_AllSongsLoadingFinished object:nil];
 }
 
 
 - (void)dealloc {
 	[searchBar release];
-	[searchOverlayView release];
 	[url release];
     [super dealloc];
 }
@@ -239,31 +234,6 @@
 
 #pragma mark -
 #pragma mark Button handling methods
-
-
-- (void)doneSearching_Clicked:(id)sender 
-{
-	self.tableView.tableHeaderView = nil;
-	[self addCount];
-	
-	searchBar.text = @"";
-	[searchBar resignFirstResponder];
-	
-	isSearching = NO;
-	letUserSelectRow = YES;
-	self.navigationItem.leftBarButtonItem = nil;
-	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
-	self.tableView.scrollEnabled = YES;
-	
-	[searchOverlayView.view removeFromSuperview];
-	[searchOverlayView release];
-	searchOverlayView = nil;
-	
-	[self.tableView reloadData];
-	
-	[self.tableView setContentOffset:CGPointMake(0, 28) animated:YES];
-}
-
 
 - (void)reloadAction:(id)sender
 {
@@ -447,6 +417,26 @@
 	[self hideSearchOverlay];
 }
 
+- (void)doneSearching_Clicked:(id)sender 
+{
+	self.tableView.tableHeaderView = nil;
+	[self addCount];
+	
+	searchBar.text = @"";
+	[searchBar resignFirstResponder];
+	
+	isSearching = NO;
+	letUserSelectRow = YES;
+	self.navigationItem.leftBarButtonItem = nil;
+	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
+	self.tableView.scrollEnabled = YES;
+	
+	[self hideSearchOverlay];
+	
+	[self.tableView reloadData];
+	
+	[self.tableView setContentOffset:CGPointMake(0, 28) animated:YES];
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView 
 {
@@ -536,9 +526,14 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	static NSString *CellIdentifier = @"Cell";
-	AllAlbumsUITableViewCell *cell = [[[AllAlbumsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-	
+	static NSString *cellIdentifier = @"AllAlbumsCell";
+	AllAlbumsUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	if (!cell)
+	{
+		cell = [[AllAlbumsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+	}
+	cell.accessoryType = UITableViewCellAccessoryNone;
+		
 	Album *anAlbum = nil;
 	if(isSearching)
 	{
@@ -566,6 +561,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
+	if (!indexPath)
+		return;
+	
 	if (viewObjectsS.isCellEnabled)
 	{
 		Album *anAlbum = nil;

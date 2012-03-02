@@ -8,19 +8,23 @@
 
 #import "SUSLoaderDelegate.h"
 
-@class SUSNowPlayingDAO;
+@class SUSNowPlayingDAO, EGORefreshTableHeaderView;
 
 @interface PlayingViewController : UITableViewController <SUSLoaderDelegate>
 {
-	
 	BOOL isNothingPlayingScreenShowing;
 	UIImageView *nothingPlayingScreen;
 	
 	NSMutableData *receivedData;
+	
+	EGORefreshTableHeaderView *refreshHeaderView;
+	BOOL _reloading;
 }
 
 @property (retain) UIImageView *nothingPlayingScreen;
 
 @property (retain) SUSNowPlayingDAO *dataModel;
+
+@property(assign,getter=isReloading) BOOL reloading;
 
 @end

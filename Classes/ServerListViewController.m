@@ -348,7 +348,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
 	if (segmentedControl.selectedSegmentIndex == 0)
-		return [ settingsS.serverList count];
+		return [settingsS.serverList count];
 	else
 		return 0;
 }
@@ -357,11 +357,14 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	static NSString *CellIdentifier = @"Cell";
+	static NSString *cellIdentifier = @"ServerListCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (!cell) 
+	{
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    }
 	
-	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-	
-	Server *aServer = [ settingsS.serverList objectAtIndexSafe:indexPath.row];
+	Server *aServer = [settingsS.serverList objectAtIndexSafe:indexPath.row];
 	
 	// Set up the cell...
 	UILabel *serverNameLabel = [[UILabel alloc] init];
@@ -425,6 +428,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
+	if (!indexPath)
+		return;
+	
 	viewObjectsS.serverToEdit = [ settingsS.serverList objectAtIndexSafe:indexPath.row];
 	DLog(@"viewObjectsS.serverToEdit.url: %@", viewObjectsS.serverToEdit.url);
 

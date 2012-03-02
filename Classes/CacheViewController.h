@@ -53,8 +53,9 @@
 //@property (retain) UIProgressView *queueDownloadProgressView;
 
 - (void)updateCacheSizeLabel;
-- (void) editSongsAction:(id)sender;
+- (void)editSongsAction:(id)sender;
 
 - (void)playAllPlaySong;
+- (void)reloadTable;
 
 @end

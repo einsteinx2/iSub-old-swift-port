@@ -17,5 +17,6 @@
 @property (retain) UIScrollView *nameScrollView;
 @property (retain) UILabel *songNameLabel;
 @property (retain) UILabel *artistNameLabel;
+@property (copy) NSString *md5;
 
 @end

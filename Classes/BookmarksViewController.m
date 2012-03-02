@@ -482,11 +482,16 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-    static NSString *CellIdentifier = @"Cell";
-	BookmarkUITableViewCell *cell = [[[BookmarkUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+	static NSString *cellIdentifier = @"BookmarkCell";
+	BookmarkUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	if (!cell)
+	{
+		cell = [[BookmarkUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+	}
 	cell.indexPath = indexPath;
 	
 	cell.deleteToggleImage.hidden = !viewObjectsS.isEditing;
+	cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
 	if ([viewObjectsS.multiDeleteList containsObject:[NSNumber numberWithInt:indexPath.row]])
 	{
 		cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
@@ -523,6 +528,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
+	if (!indexPath)
+		return;
+	
 	// TODO: verify bookmark loading	
 	[databaseS resetCurrentPlaylistDb];
 	Song *aSong = [Song songFromDbRow:indexPath.row inTable:@"bookmarks" inDatabase:databaseS.bookmarksDb];

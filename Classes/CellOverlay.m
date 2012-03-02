@@ -69,7 +69,7 @@
 	inputBlocker.userInteractionEnabled = YES;
 	downloadButton.userInteractionEnabled = YES;
 	queueButton.userInteractionEnabled = YES;
-	NSLog(@"enabling buttons - download: %@   queue: %@", NSStringFromBOOL(downloadButton.userInteractionEnabled), NSStringFromBOOL(queueButton.userInteractionEnabled));
+	DLog(@"enabling buttons - download: %@   queue: %@", NSStringFromBOOL(downloadButton.userInteractionEnabled), NSStringFromBOOL(queueButton.userInteractionEnabled));
 }
 
 @end

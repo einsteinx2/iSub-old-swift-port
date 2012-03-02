@@ -9,11 +9,10 @@
 #import "CustomUITextView.h"
 #import "SUSLoaderDelegate.h"
 
-@class SearchOverlayViewController, CustomUITextView, EGORefreshTableHeaderView, SUSChatDAO;
+@class CustomUITextView, EGORefreshTableHeaderView, SUSChatDAO;
 
 @interface ChatViewController : UITableViewController <UITextViewDelegate, SUSLoaderDelegate> 
 {
-	
 	UIView *headerView;
 	CustomUITextView *textInput;
 	

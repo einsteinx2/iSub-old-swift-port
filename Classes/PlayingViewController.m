@@ -24,10 +24,16 @@
 #import "FlurryAnalytics.h"
 #import "SUSNowPlayingDAO.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "EGORefreshTableHeaderView.h"
+
+@interface PlayingViewController (Private)
+- (void)dataSourceDidFinishLoadingNewData;
+@end
 
 @implementation PlayingViewController
 
 @synthesize nothingPlayingScreen, dataModel;
+@synthesize reloading=_reloading;
 
 #pragma mark - Rotation Handling
 
@@ -60,20 +66,24 @@
 	{
 		self.view.backgroundColor = ISMSiPadBackgroundColor;
 	}
-	//else
-	//{
-		// Add the table fade
-		UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
-		fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
-		fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		[self.tableView addSubview:fadeTop];
-		[fadeTop release];
+	
+	/*// Add the table fade
+	UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
+	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
+	fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	[self.tableView addSubview:fadeTop];
+	[fadeTop release];*/
+	
+	// Add the pull to refresh view
+	refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
+	refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
+	[self.tableView addSubview:refreshHeaderView];
+	[refreshHeaderView release];
 		
-		UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
-		fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-		fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		self.tableView.tableFooterView = fadeBottom;
-	//}
+	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
+	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	self.tableView.tableFooterView = fadeBottom;
 }
 
 - (void)viewWillAppear:(BOOL)animated 
@@ -163,13 +173,15 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-	Song *aSong = [dataModel songForIndex:indexPath.row];
+	static NSString *cellIdentifier = @"PlayingCell";
+	PlayingUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	if (!cell)
+	{
+		cell = [[PlayingUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+	}
 	
-	// Create the cell
-	PlayingUITableViewCell *cell = [[PlayingUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
-																 reuseIdentifier:CellIdentifier];
-	cell.selectionStyle = UITableViewCellSelectionStyleNone;
+	Song *aSong = [dataModel songForIndex:indexPath.row];
 	cell.mySong = aSong;
 	
 	// Set the cover art
@@ -210,6 +222,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+	if (!indexPath)
+		return;
+	
 	[dataModel playSongAtIndex:indexPath.row];
 	
 	// Show the player
@@ -237,6 +252,8 @@
 	[alert release];
 	
 	[viewObjectsS hideLoadingScreen];
+	
+	[self dataSourceDidFinishLoadingNewData];
 }
 
 - (void)loadingFinished:(SUSLoader *)theLoader
@@ -244,6 +261,7 @@
     [viewObjectsS hideLoadingScreen];
 	
 	[self.tableView reloadData];
+	[self dataSourceDidFinishLoadingNewData];
 	
 	// Display the no songs overlay if 0 results
 	if (dataModel.count == 0)
@@ -274,6 +292,50 @@
 			[nothingPlayingScreen release];
 		}
 	}
+}
+
+#pragma mark - Pull to refresh methods
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{	
+	if (scrollView.isDragging) 
+	{
+		if (refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !_reloading) 
+		{
+			[refreshHeaderView setState:EGOOPullRefreshNormal];
+		} 
+		else if (refreshHeaderView.state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !_reloading) 
+		{
+			[refreshHeaderView setState:EGOOPullRefreshPulling];
+		}
+	}
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+	if (scrollView.contentOffset.y <= - 65.0f && !_reloading) 
+	{
+		_reloading = YES;
+		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
+		[dataModel startLoad];
+		[refreshHeaderView setState:EGOOPullRefreshLoading];
+		[UIView beginAnimations:nil context:NULL];
+		[UIView setAnimationDuration:0.2];
+		self.tableView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
+		[UIView commitAnimations];
+	}
+}
+
+- (void)dataSourceDidFinishLoadingNewData
+{
+	_reloading = NO;
+	
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:.3];
+	[self.tableView setContentInset:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
+	[UIView commitAnimations];
+	
+	[refreshHeaderView setState:EGOOPullRefreshNormal];
 }
 
 @end

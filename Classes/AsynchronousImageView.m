@@ -52,6 +52,13 @@
 {
 	@synchronized(self)
 	{
+		if (self.coverArtDAO)
+		{
+			[self.coverArtDAO cancelLoad];
+			self.coverArtDAO.delegate = nil;
+			self.coverArtDAO = nil;
+		}
+		
 		[coverArtId release];
 		coverArtId = [artId copy];
 		
@@ -70,9 +77,8 @@
 				self.activityIndicator.center = CGPointMake(self.width/2, self.height/2);
 				[self addSubview:self.activityIndicator];
 				[self.activityIndicator startAnimating];
-				
-				[self.coverArtDAO startLoad];
 			}
+			[self.coverArtDAO startLoad];
 		}
 	}
 }
@@ -81,7 +87,7 @@
 #pragma mark Handle User Input
 
 - (void)reloadCoverArt
-{	
+{
 	/*if(musicS.currentSongObject.coverArtId)
 	{
 		musicS.coverArtUrl = nil;

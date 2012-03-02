@@ -230,11 +230,15 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {		
-	static NSString *CellIdentifier = @"Cell";
-		
 	if (indexPath.row < [listOfAlbums count])
 	{
-		AllAlbumsUITableViewCell *cell = [[[AllAlbumsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+		static NSString *cellIdentifier = @"AllAlbumsCell";
+		AllAlbumsUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		if (!cell)
+		{
+			cell = [[AllAlbumsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+		}
+		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		
 		Album *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
 		cell.myId = anAlbum.albumId;
@@ -244,8 +248,6 @@
 		
 		[cell.albumNameLabel setText:anAlbum.title];
 		[cell.artistNameLabel setText:anAlbum.artistName];
-		
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		
 		// Setup cell backgrond color
 		cell.backgroundView = [[[UIView alloc] init] autorelease];
@@ -259,7 +261,12 @@
 	else if (indexPath.row == [listOfAlbums count])
 	{
 		// This is the last cell and there could be more results, load the next 20 songs;
-		UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+		static NSString *cellIdentifier = @"HomeAlbumLoadCell";
+		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		if (!cell)
+		{
+			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+		}		
 
 		// Set background color
 		cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
@@ -284,11 +291,15 @@
 	}
 	
 	// In case somehow no cell is created, return an empty cell
-	return [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+	static NSString *cellIdentifier = @"EmptyCell";
+	return [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {	
+	if (!indexPath)
+		return;
+	
 	if (viewObjectsS.isCellEnabled && indexPath.row != [listOfAlbums count])
 	{
 		Album *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];

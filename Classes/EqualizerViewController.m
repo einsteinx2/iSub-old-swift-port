@@ -20,11 +20,11 @@
 #import "UIApplication+StatusBar.h"
 
 @implementation EqualizerViewController
-@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath, gainBoostLabel; //drawTimer;
+@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath, gainBoostLabel, isPresetPickerShowing, controlsContainer; //drawTimer;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-	return YES;
+	return !self.isPresetPickerShowing;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -48,6 +48,12 @@
 			if (settingsS.isScreenSleepEnabled)
 				[UIApplication sharedApplication].idleTimerDisabled = NO;
 		}
+		
+		if (!IS_IPAD())
+		{
+			self.controlsContainer.alpha = 1.0;
+			self.controlsContainer.userInteractionEnabled = YES;
+		}
 	}
 	else
 	{
@@ -59,6 +65,12 @@
 		}
 		
 		[UIApplication sharedApplication].idleTimerDisabled = YES;
+		
+		if (!IS_IPAD())
+		{
+			self.controlsContainer.alpha = 0.0;
+			self.controlsContainer.userInteractionEnabled = NO;
+		}
 	}
 	[UIView commitAnimations];
 	
@@ -85,7 +97,68 @@
 	[backViewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
+- (void)createOverlay
+{
+	overlay = [[UIView alloc] init];
+	//searchOverlay.frame = CGRectMake(0, 74, 480, 480);
+	overlay.frame = self.view.frame;
+	overlay.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	overlay.backgroundColor = [UIColor colorWithWhite:0 alpha:.80];
+	overlay.alpha = 0.0;
+	[self.view insertSubview:overlay belowSubview:self.controlsContainer];
+	[overlay release];
+	
+	dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
+	dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	[dismissButton addTarget:presetPicker action:@selector(resignFirstResponder) forControlEvents:UIControlEventTouchUpInside];
+	dismissButton.frame = self.view.bounds;
+	dismissButton.enabled = NO;
+	[overlay addSubview:dismissButton];
+
+	// Animate the search overlay on screen
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:.3];
+	[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+	overlay.alpha = 1;
+	dismissButton.enabled = YES;
+	[UIView commitAnimations];
+}
+
+- (void)hideOverlay
+{
+	if (overlay)
+	{
+		// Animate the search overlay off screen
+		[UIView beginAnimations:nil context:NULL];
+		[UIView setAnimationDuration:.3];
+		[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+		[UIView setAnimationDelegate:self];
+		[UIView setAnimationDidStopSelector:@selector(removeOverlay)];
+		overlay.alpha = 0;
+		dismissButton.enabled = NO;
+		[UIView commitAnimations];
+	}
+}
+
+- (void)removeOverlay
+{
+	[overlay removeFromSuperview];
+	overlay = nil;
+}
+
 #pragma mark - View lifecycle
+
+- (void)pickerWillShown
+{
+	[self createOverlay];
+	self.isPresetPickerShowing = YES;
+}
+
+- (void)pickerWillHide
+{
+	[self hideOverlay];
+	self.isPresetPickerShowing = NO;
+}
 
 - (void)viewDidLoad
 {
@@ -101,6 +174,8 @@
 	[self.equalizerView startEqDisplay];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createEqViews) name:ISMSNotification_BassEffectPresetLoaded object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pickerWillShown) name:UIPickerViewWillShownNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pickerWillHide) name:UIPickerViewWillHideNotification object:nil];
 	
 	isSavePresetButtonShowing = NO;
 	self.savePresetButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -264,7 +339,8 @@
 		DLog(@"eq handle: %i", value.handle);
 		EqualizerPointView *eqView = [[EqualizerPointView alloc] initWithEqValue:value parentSize:self.equalizerView.frame.size];
 		[equalizerPointViews addObject:eqView];
-		[self.view addSubview:eqView];
+		[self.view insertSubview:eqView belowSubview:self.controlsContainer];
+		//[self.view addSubview:eqView];
 		[eqView release];
 	}
 	DLog(@"equalizerValues: %@", audioEngineS.equalizerValues);
@@ -694,8 +770,8 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	static NSString *CellIdentifier = @"Cell";
-	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+	static NSString *cellIdentifier = @"Cell";
+	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
 	
 	NSDictionary *preset = nil;
 	switch (indexPath.section) 

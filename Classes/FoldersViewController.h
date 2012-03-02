@@ -9,7 +9,7 @@
 #import "SUSLoaderDelegate.h"
 #import "FolderDropdownDelegate.h"
 
-@class SearchOverlayViewController, LoadingScreen, Artist, EGORefreshTableHeaderView, FolderDropdownControl, SUSRootFoldersDAO;
+@class LoadingScreen, Artist, EGORefreshTableHeaderView, FolderDropdownControl, SUSRootFoldersDAO;
 
 @interface FoldersViewController : UITableViewController <UISearchBarDelegate, SUSLoaderDelegate, FolderDropdownDelegate>
 {
@@ -18,23 +18,13 @@
 	UILabel *countLabel;
 	UILabel *reloadTimeLabel;
 	IBOutlet UISearchBar *searchBar;
-	
 	UIButton *blockerButton;
-	
 	LoadingScreen *allArtistsLoadingScreen;
-	
-	SearchOverlayViewController *searchOverlayView;
 	BOOL letUserSelectRow;
 	
 	BOOL isSearching;
 	
 	BOOL isCountShowing;
-	
-	//NSArray *indexes;
-	//NSArray *folders;
-	//NSMutableArray *foldersSearch;
-	
-	//NSMutableData *receivedData;
 
 	EGORefreshTableHeaderView *refreshHeaderView;
 	BOOL _reloading;
@@ -42,9 +32,7 @@
 	NSUInteger searchY;
 	
 	FolderDropdownControl *dropdown;
-	
-	//NSDictionary *folders;
-	
+		
 	SUSRootFoldersDAO *dataModel;
 	
 	UIView *searchOverlay;

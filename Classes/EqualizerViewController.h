@@ -11,7 +11,13 @@
 
 @class EqualizerView, EqualizerPointView, EqualizerPathView, BassParamEqValue, BassEffectDAO, NWPickerField;
 @interface EqualizerViewController : UIViewController <NWPickerFieldDelegate, DDSocialDialogDelegate, UITableViewDelegate, UITableViewDataSource>
+{
+	UIView *overlay;
+	UIButton *dismissButton;
+}
+@property (retain) IBOutlet UIView *controlsContainer;
 
+@property BOOL isPresetPickerShowing;
 @property (retain) IBOutlet NWPickerField *presetPicker;
 
 @property (retain) IBOutlet UIButton *toggleButton;

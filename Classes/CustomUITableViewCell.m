@@ -34,6 +34,15 @@
     return self;
 }
 
+- (void)layoutSubviews
+{
+	[super layoutSubviews];
+	
+	CGRect oldFrame = self.deleteToggleImage.frame;
+	CGFloat newY = (self.frame.size.height / 2.) - (oldFrame.size.height / 2.);
+	self.deleteToggleImage.frame = CGRectMake(5.0, newY, oldFrame.size.width, oldFrame.size.height);
+}
+
 - (void)dealloc
 {
 	[overlayView release]; overlayView = nil;

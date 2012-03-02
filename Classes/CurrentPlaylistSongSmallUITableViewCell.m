@@ -71,7 +71,7 @@
 {
     [super layoutSubviews];
 	
-	self.deleteToggleImage.frame = CGRectMake(4, 11, 23, 23);
+	//self.deleteToggleImage.frame = CGRectMake(4, 11, 23, 23);
 	numberLabel.frame = CGRectMake(2, 0, 40, 45);
 }
 

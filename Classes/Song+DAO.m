@@ -264,14 +264,16 @@
 
 - (BOOL)removeFromCacheQueue
 {
-	[self.db executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", [self.path md5]];
+	[databaseS.cacheQueueDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", [self.path md5]];
 	
-	if ([self.db hadError]) 
+	BOOL success = YES;
+	if ([databaseS.cacheQueueDb hadError]) 
 	{
-		DLog(@"Err removing song from cache queue table %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
+		success = NO;
+		DLog(@"Err removing song from cache queue table %d: %@", [databaseS.cacheQueueDb lastErrorCode], [databaseS.cacheQueueDb lastErrorMessage]);
 	}
 	
-	return ![self.db hadError];
+	return success;
 }
 
 - (BOOL)addToCacheQueue
@@ -279,12 +281,12 @@
 	NSString *md5 = [self.db stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? AND finished = 'YES'", [self.path md5]];
 	if (!md5) 
 	{
-		[self.db executeUpdate:[NSString stringWithFormat:@"INSERT INTO cacheQueue (md5, finished, cachedDate, playedDate, %@) VALUES (?, ?, ?, ?, %@)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [self.path md5], @"NO", [NSNumber numberWithUnsignedLongLong:(unsigned long long)[[NSDate date] timeIntervalSince1970]], [NSNumber numberWithInt:0], self.title, self.songId, self.artist, self.album, self.genre, self.coverArtId, self.path, self.suffix, self.transcodedSuffix, self.duration, self.bitRate, self.track, self.year, self.size, self.parentId];
+		[databaseS.cacheQueueDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO cacheQueue (md5, finished, cachedDate, playedDate, %@) VALUES (?, ?, ?, ?, %@)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [self.path md5], @"NO", [NSNumber numberWithUnsignedLongLong:(unsigned long long)[[NSDate date] timeIntervalSince1970]], [NSNumber numberWithInt:0], self.title, self.songId, self.artist, self.album, self.genre, self.coverArtId, self.path, self.suffix, self.transcodedSuffix, self.duration, self.bitRate, self.track, self.year, self.size, self.parentId];
 	}
 	
-	if ([self.db hadError]) 
+	if ([databaseS.cacheQueueDb hadError]) 
 	{
-		DLog(@"Err adding song to cache queue %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
+		DLog(@"Err adding song to cache queue %d: %@", [databaseS.cacheQueueDb lastErrorCode], [databaseS.cacheQueueDb lastErrorMessage]);
 	}
 	
 	if (!cacheQueueManagerS.isQueueDownloading)
