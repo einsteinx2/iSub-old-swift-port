@@ -260,20 +260,6 @@
          timestampString = "352082272.310964"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "386"
-         endingLineNumber = "386"
-         landmarkName = "-loadCrittercism"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Classes/iSubAppDelegate.m"
-         timestampString = "352082272.310964"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
          startingLineNumber = "389"
          endingLineNumber = "389"
          landmarkName = "-loadCrittercism"

@@ -380,9 +380,9 @@
 {
 	if (IS_BETA() && IS_ADHOC() && !IS_LITE())
 	{
-		[Crittercism initWithAppID:@"4f1f97d2b093150d55000093" 
-							andKey:@"4f1f97d2b093150d55000093djpi3cjr" 
-						 andSecret:@"rxpop9uqaqhfl8bzmjh7njawgs35cvok" 
+		[Crittercism initWithAppID:@"4f504545b093157173000017" 
+							andKey:@"4f504545b093157173000017lh4java7"
+						 andSecret:@"trzmcvolbfqgnphhisc8jdvunqy2es5b" 
 			 andMainViewController:nil];
 	}
 	else if (IS_RELEASE())

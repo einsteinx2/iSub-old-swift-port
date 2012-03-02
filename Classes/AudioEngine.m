@@ -336,7 +336,8 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 				// Calculate the needed size:
 				// Choose either the current player bitrate, or if for some reason it is not detected properly, use the best estimated bitrate. Then use that to determine how much data to let download to continue.
 				unsigned long long size = theSong.localFileSize;
-				NSUInteger bitrate = sharedInstance.bitRate > 0 ? sharedInstance.bitRate : theSong.estimatedBitrate;
+				//NSUInteger bitrate = sharedInstance.bitRate > 0 ? sharedInstance.bitRate : theSong.estimatedBitrate;
+				NSUInteger bitrate = theSong.estimatedBitrate;
 				unsigned long long bytesToWait = BytesForSecondsAtBitrate(ISMS_NumSecondsToWaitForAudioData, bitrate);
 				userInfo.neededSize = size + bytesToWait;
 				DLog(@"waiting for %llu   neededSize: %llu", bytesToWait, userInfo.neededSize);
