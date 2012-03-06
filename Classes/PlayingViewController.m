@@ -83,7 +83,7 @@
 	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.tableView.tableFooterView = fadeBottom;
+	self.tableView.tableFooterView = fadeBottom;	
 }
 
 - (void)viewWillAppear:(BOOL)animated 
@@ -107,13 +107,13 @@
 	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 	
 	[dataModel startLoad];
-		
+	
 	[FlurryAnalytics logEvent:@"NowPlayingTab"];
 }
 
 -(void)viewWillDisappear:(BOOL)animated
 {
-	if (isNothingPlayingScreenShowing == YES)
+	if (isNothingPlayingScreenShowing)
 	{
 		[nothingPlayingScreen removeFromSuperview];
 		isNothingPlayingScreenShowing = NO;
@@ -211,13 +211,13 @@
 	}
 
 	// Set the song name label
-	[cell.songNameLabel setText:aSong.title];
+	cell.songNameLabel.text = aSong.title;
 	if (aSong.album)
-		[cell.artistNameLabel setText:[NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album]];
+		cell.artistNameLabel.text = [NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album];
 	else
-		[cell.artistNameLabel setText:aSong.artist];
+		cell.artistNameLabel.text = aSong.artist;
 	
-    return [cell autorelease];
+    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -266,7 +266,7 @@
 	// Display the no songs overlay if 0 results
 	if (dataModel.count == 0)
 	{
-		if (isNothingPlayingScreenShowing == NO)
+		if (!isNothingPlayingScreenShowing)
 		{
 			isNothingPlayingScreenShowing = YES;
 			nothingPlayingScreen = [[UIImageView alloc] init];
@@ -290,6 +290,14 @@
 			[self.view addSubview:nothingPlayingScreen];
 			
 			[nothingPlayingScreen release];
+		}
+	}
+	else
+	{
+		if (isNothingPlayingScreenShowing)
+		{
+			isNothingPlayingScreenShowing = NO;
+			[nothingPlayingScreen removeFromSuperview];
 		}
 	}
 }

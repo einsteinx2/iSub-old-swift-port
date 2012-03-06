@@ -199,11 +199,10 @@
 	//[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	//[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	
-	if (viewObjectsS.isEditing)
+	if (self.tableView.editing)
 	{
 		// Clear the edit stuff if they switch tabs in the middle of editing
 		viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-		viewObjectsS.isEditing = NO;
 		self.tableView.editing = NO;
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
@@ -230,9 +229,8 @@
 
 - (void)editPlaylistAction:(id)sender
 {
-	if (self.tableView.editing == NO)
+	if (!self.tableView.editing)
 	{
-		viewObjectsS.isEditing = YES;
 		[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:@"showDeleteButton" object: nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:@"hideDeleteButton" object: nil];
 		viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
@@ -251,7 +249,6 @@
 	}
 	else 
 	{
-		viewObjectsS.isEditing = NO;
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
 		viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
@@ -300,7 +297,7 @@
 {
 	if ([viewObjectsS.multiDeleteList count] == 0)
 	{
-		if (viewObjectsS.isEditing == NO)
+		if (!self.tableView.editing)
 		{
 			savePlaylistLabel.hidden = NO;
 			playlistCountLabel.hidden = NO;
@@ -330,11 +327,11 @@
 	}
 }
 
-- (void) savePlaylistAction:(id)sender
+- (void)savePlaylistAction:(id)sender
 {
 	if (deleteSongsLabel.hidden == YES)
 	{
-		if (viewObjectsS.isEditing == NO)
+		if (!self.tableView.editing)
 		{
 			savePlaylistLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
 			playlistCountLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
@@ -513,7 +510,7 @@
 	
     cell.indexPath = indexPath;
 	
-	cell.deleteToggleImage.hidden = !viewObjectsS.isEditing;
+	cell.deleteToggleImage.hidden = !self.tableView.editing;
 	cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
 	if ([viewObjectsS.multiDeleteList containsObject:[NSNumber numberWithInt:indexPath.row]])
 	{
@@ -544,7 +541,7 @@
 	cell.durationLabel.text = [NSString formatTime:[aSong.duration floatValue]];	
 	
 	// Hide the duration labels if editing
-	if (viewObjectsS.isEditing)
+	if (self.tableView.editing)
 	{
 		cell.durationLabel.hidden = YES;
 	}

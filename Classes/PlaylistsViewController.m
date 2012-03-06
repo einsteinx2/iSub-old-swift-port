@@ -196,11 +196,10 @@
 	
 	[self unregisterForNotifications];
 	
-	if (viewObjectsS.isEditing)
+	if (self.tableView.editing)
 	{
 		// Clear the edit stuff if they switch tabs in the middle of editing
 		viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-		viewObjectsS.isEditing = NO;
 		self.tableView.editing = NO;
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
@@ -213,10 +212,6 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void)viewDidUnload {
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
-}
 
 #pragma mark - Button Handling
 
@@ -257,10 +252,9 @@
 - (void)removeEditControls
 {
 	// Clear the edit stuff if they switch tabs in the middle of editing
-	if (viewObjectsS.isEditing)
+	if (self.tableView.editing)
 	{
 		viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-		viewObjectsS.isEditing = NO;
 		self.tableView.editing = NO;
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
@@ -639,9 +633,8 @@
 {
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
-		if (self.tableView.editing == NO)
+		if (!self.tableView.editing)
 		{
-			viewObjectsS.isEditing = YES;
 			[self.tableView reloadData];
 			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:@"showDeleteButton" object: nil];
 			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:@"hideDeleteButton" object: nil];
@@ -655,7 +648,6 @@
 		}
 		else 
 		{
-			viewObjectsS.isEditing = NO;
 			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
 			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
 			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
@@ -675,9 +667,8 @@
 	else if (segmentedControl.selectedSegmentIndex == 1 ||
 			 segmentedControl.selectedSegmentIndex == 2)
 	{
-		if (self.tableView.editing == NO)
+		if (!self.tableView.editing)
 		{
-			viewObjectsS.isEditing = YES;
 			[self.tableView reloadData];
 			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:@"showDeleteButton" object: nil];
 			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:@"hideDeleteButton" object: nil];
@@ -691,7 +682,6 @@
 		}
 		else 
 		{
-			viewObjectsS.isEditing = NO;
 			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
 			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
 			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
@@ -751,7 +741,7 @@
 	{
 		if ([viewObjectsS.multiDeleteList count] == 0)
 		{
-			if (viewObjectsS.isEditing == NO)
+			if (!self.tableView.editing)
 			{
 				savePlaylistLabel.hidden = NO;
 				playlistCountLabel.hidden = NO;
@@ -776,7 +766,7 @@
 	{
 		if ([viewObjectsS.multiDeleteList count] == 0)
 		{
-			if (viewObjectsS.isEditing == NO)
+			if (!self.tableView.editing)
 			{
 				savePlaylistLabel.hidden = NO;
 				playlistCountLabel.hidden = NO;
@@ -921,7 +911,7 @@
 	{
 		if (deleteSongsLabel.hidden == YES)
 		{
-			if (viewObjectsS.isEditing == NO)
+			if (!self.tableView.editing)
 			{
 				savePlaylistLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
 				playlistCountLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
@@ -1333,7 +1323,7 @@ static NSString *kName_Error = @"error";
 {
 	if (segmentedControl.selectedSegmentIndex == 0 && self.currentPlaylistCount > 0)
 	{
-		if (viewObjectsS.isEditing == NO)
+		if (!self.tableView.editing)
 		{
 			NSMutableArray *searchIndexes = [[[NSMutableArray alloc] init] autorelease];
 			for (int x = 0; x < 20; x++)
@@ -1614,7 +1604,7 @@ static NSString *kName_Error = @"error";
 		}
 		cell.indexPath = indexPath;
 		
-		cell.deleteToggleImage.hidden = !viewObjectsS.isEditing;
+		cell.deleteToggleImage.hidden = !self.tableView.editing;
 		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
 		if ([viewObjectsS.multiDeleteList containsObject:[NSNumber numberWithInt:indexPath.row]])
 		{
@@ -1675,7 +1665,7 @@ static NSString *kName_Error = @"error";
 		cell.indexPath = indexPath;
 		
 		// Set up the cell...
-		cell.deleteToggleImage.hidden = !viewObjectsS.isEditing;
+		cell.deleteToggleImage.hidden = !self.tableView.editing;
 		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
 		if ([viewObjectsS.multiDeleteList containsObject:[NSNumber numberWithInt:indexPath.row]])
 		{
@@ -1714,7 +1704,7 @@ static NSString *kName_Error = @"error";
 		cell.indexPath = indexPath;
         cell.serverPlaylist = [serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];
 		
-		cell.deleteToggleImage.hidden = !viewObjectsS.isEditing;
+		cell.deleteToggleImage.hidden = !self.tableView.editing;
 		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
 		if ([viewObjectsS.multiDeleteList containsObject:[NSNumber numberWithInt:indexPath.row]])
 		{

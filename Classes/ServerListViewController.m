@@ -219,13 +219,6 @@
     [super didReceiveMemoryWarning];
 }
 
-
-- (void)viewDidUnload {
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
-	//DLog(@"server list view controller view did unload");
-}
-
 - (void)showServerEditScreen
 {
 	if (viewObjectsS.serverToEdit.type == UBUNTU_ONE)
@@ -270,7 +263,7 @@
 	DLog(@" settingsS.urlString: %@   settingsS.redirectUrlString: %@", settingsS.urlString, settingsS.redirectUrlString);
 		
 	[self retain];
-	if(self == [[self.navigationController viewControllers] objectAtIndexSafe:0])
+	if(self == [[self.navigationController viewControllers] objectAtIndexSafe:0] && !IS_IPAD())
 	{
 		[self.navigationController.view removeFromSuperview];
 	}
@@ -322,9 +315,7 @@
 		}
 		
 		// Reset the tabs
-		if (IS_IPAD())
-			[appDelegateS.artistsNavigationController popToRootViewControllerAnimated:NO];
-		else
+		if (!IS_IPAD())
 			[appDelegateS.rootViewController.navigationController popToRootViewControllerAnimated:NO];
 				
 		// Add the tab bar controller back to the window

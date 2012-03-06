@@ -83,14 +83,14 @@
 {
 	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 	
-	if (UIInterfaceOrientationIsPortrait(fromInterfaceOrientation))
+	/*if (UIInterfaceOrientationIsPortrait(fromInterfaceOrientation))
 	{
 		[self removeEqViews];
 	}
 	else
 	{
 		[self createEqViews];
-	}
+	}*/
 	
 	NSUInteger count = [self.navigationController.viewControllers count];
 	UIViewController *backViewController = [self.navigationController.viewControllers objectAtIndex:count-2];
@@ -163,6 +163,19 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+	
+	/*CGRect frame;
+	if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation) && !IS_IPAD())
+	{
+		frame = CGRectMake(0, 0, 480, 320);
+	}
+	else
+	{
+		frame = CGRectMake(0, 0, 320, 320);
+	}
+	equalizerView = [[EqualizerView alloc] initWithFrame:frame];
+	equalizerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
+	[self.view addSubview:equalizerView];*/
 		
 	effectDAO = [[BassEffectDAO alloc] initWithType:BassEffectType_ParametricEQ];
 
@@ -211,18 +224,29 @@
 		gainSlider.y += 7;
 		gainBoostLabel.y += 7;
 	}
+	
+	if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation) && !IS_IPAD())
+	{
+		self.controlsContainer.alpha = 0.0;
+		self.controlsContainer.userInteractionEnabled = NO;
+	}
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
 		
-	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
-		[self createEqViews];
-	else
+	[self createEqViews];
+	
+	if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
 	{
 		[UIApplication setStatusBarHidden:YES withAnimation:NO];
 		equalizerPath.alpha = 0.0;
+		
+		for (EqualizerPointView *view in equalizerPointViews)
+		{
+			view.alpha = 0.0;
+		}
 	}
 
 	self.navigationController.navigationBar.hidden = YES;
@@ -770,7 +794,7 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	static NSString *cellIdentifier = @"Cell";
+	static NSString *cellIdentifier = @"NoResuse";
 	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
 	
 	NSDictionary *preset = nil;

@@ -12,7 +12,6 @@
 
 @interface ServerListViewController : UITableViewController <SUSServerURLCheckerDelegate>
 {
-	
 	BOOL isEditing;
 	
 	UIView *headerView;

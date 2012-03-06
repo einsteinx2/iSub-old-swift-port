@@ -64,16 +64,9 @@
     // Relinquish ownership any cached data, images, etc. that aren't in use.
 }
 
-- (void)viewDidUnload {
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-    // For example: self.myOutlet = nil;
-	
-	[[NSNotificationCenter defaultCenter] removeObserver:self.tableView name:ISMSNotification_StorePurchaseComplete object:nil];
-}
-
-
 - (void)dealloc 
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self.tableView name:ISMSNotification_StorePurchaseComplete object:nil];
 	[storeItems release];
     [super dealloc];
 }
@@ -146,7 +139,7 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	static NSString *cellIdentifier = @"Cell";
+	static NSString *cellIdentifier = @"NoReuse";
 	
 	UITableViewCell *cell = nil;
 	if (indexPath.row == 0)

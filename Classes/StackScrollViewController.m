@@ -77,6 +77,11 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 	return self;
 }
 
+- (UIView *)slideViewAtIndex:(NSUInteger)index
+{
+	return (UIView *)[[slideViews subviews] objectAtIndexSafe:index];
+}
+
 - (void)showPlayer
 {
 	//TODO: this is buggy
@@ -374,17 +379,18 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 					else
 					{
 						//Drop Card View Animation
-						if ((((UIView*)[[slideViews subviews] objectAtIndex:0]).frame.origin.x+200) >= (self.view.frame.origin.x + ((UIView*)[[slideViews subviews] objectAtIndex:0]).frame.size.width))
+						if (([self slideViewAtIndex:0].frame.origin.x + 200) >= (self.view.frame.origin.x + [self slideViewAtIndex:0].frame.size.width))
 						{
 							NSInteger viewControllerCount = [viewControllersStack count];
 							
 							if (viewControllerCount > 1) 
 							{
-								for (int i = 1; i < viewControllerCount; i++) 
+								for (int i = viewControllerCount - 1; i >= 1; i--)
 								{
-									viewXPosition = self.view.frame.size.width - [slideViews viewWithTag:i].frame.size.width;
-									[[slideViews viewWithTag:i] removeFromSuperview];
-									[viewControllersStack removeLastObject];
+									UIView *viewToRemove = [self slideViewAtIndex:i];
+									viewXPosition = self.view.frame.size.width - viewToRemove.frame.size.width;
+									[viewToRemove removeFromSuperview];
+									[viewControllersStack removeObjectAtIndex:i];
 								}
 								
 								[[borderViews viewWithTag:3] setHidden:YES];
@@ -494,16 +500,17 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 					if (viewAtLeft.frame.origin.x > SLIDE_VIEWS_MINUS_X_POSITION || viewAtRight == nil)
 					{
 						//Drop Card View Animation
-						if ((((UIView*)[[slideViews subviews] objectAtIndex:0]).frame.origin.x+200) >= (self.view.frame.origin.x + ((UIView*)[[slideViews subviews] objectAtIndex:0]).frame.size.width)) 
+						if (([self slideViewAtIndex:0].frame.origin.x + 200) >= (self.view.frame.origin.x + [self slideViewAtIndex:0].frame.size.width)) 
 						{
 							NSInteger viewControllerCount = [viewControllersStack count];
 							if (viewControllerCount > 1) 
 							{
-								for (int i = 1; i < viewControllerCount; i++)
-								{
-									viewXPosition = self.view.frame.size.width - [slideViews viewWithTag:i].frame.size.width;
-									[[slideViews viewWithTag:i] removeFromSuperview];
-									[viewControllersStack removeLastObject];
+								for (int i = viewControllerCount - 1; i >= 1; i--) 
+								{									
+									UIView *viewToRemove = [self slideViewAtIndex:i];
+									viewXPosition = self.view.frame.size.width - viewToRemove.frame.size.width;
+									[viewToRemove removeFromSuperview];
+									[viewControllersStack removeObjectAtIndex:i];
 								}
 								[[borderViews viewWithTag:3] setHidden:YES];
 								[[borderViews viewWithTag:2] setHidden:YES];
@@ -724,6 +731,11 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 	[self arrangeVerticalBar];
 }
 
+- (void)addViewInSlider:(UIViewController*)controller
+{
+	[self addViewInSlider:controller invokeByController:[self.viewControllersStack lastObject] isStackStartView:NO];
+}
+
 - (void)addViewInSlider:(UIViewController*)controller invokeByController:(UIViewController*)invokeByController isStackStartView:(BOOL)isStackStartView
 {
 	BOOL isContentSizeForMainViewSet = NO;
@@ -757,10 +769,11 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 		}
 		
 		NSInteger viewControllerCount = [viewControllersStack count];
-		for (int i = indexOfViewController; i < viewControllerCount; i++)
+		for (int i = viewControllerCount - 1; i >= indexOfViewController; i--)
 		{
-			[[slideViews viewWithTag:i] removeFromSuperview];
-			[viewControllersStack removeObjectAtIndex:indexOfViewController];
+			UIView *viewToRemove = [self slideViewAtIndex:i];
+			[viewToRemove removeFromSuperview];
+			[viewControllersStack removeObjectAtIndex:i];
 			viewXPosition = self.view.frame.size.width - [controller view].frame.size.width;
 		}
 	}
@@ -795,9 +808,24 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 	[contView addSubview:controller.view];
 	contView.x = viewXPosition;
 	contView.tag = [viewControllersStack count] - 1;
-	[controller viewWillAppear:NO];
-	[controller viewDidAppear:NO];
+	//[controller viewWillAppear:NO];
+	//[controller viewDidAppear:NO];
+	
+	NSLog(@"  ");
+	for (UIView *subView in [slideViews subviews])
+	{
+		NSLog(@"subView.tag: %i", subView.tag);
+	}
+	NSLog(@"  ");
+	
 	[slideViews addSubview:contView];
+	
+	NSLog(@"  ");
+	for (UIView *subView in [slideViews subviews])
+	{
+		NSLog(@"subView.tag: %i", subView.tag);
+	}
+	NSLog(@"  ");
 	[contView release];
 	
 	if ([[slideViews subviews] count] > 0)

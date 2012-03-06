@@ -57,8 +57,6 @@
 @property (retain) NSTimer *cellEnabledTimer;
 @property (retain) NSMutableArray *queueAlbumListOfAlbums;
 @property (retain) NSMutableArray *queueAlbumListOfSongs;
-@property BOOL isEditing;
-@property BOOL isEditing2;
 @property (retain) NSMutableArray *multiDeleteList;
 @property BOOL isOfflineMode;
 @property BOOL isOnlineModeAlertShowing;

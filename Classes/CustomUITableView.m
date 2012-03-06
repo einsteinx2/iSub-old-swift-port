@@ -77,7 +77,7 @@
 		UITableViewCell *cell = [self cellForRowAtIndexPath:[self indexPathForRowAtPoint:point]];
 		
 		// Handle multi delete touching
-		if (viewObjectsS.isEditing &&
+		if (self.editing &&
 			point.x < 40. && [[NSDate date] timeIntervalSinceDate:lastDeleteToggle] > 0.25)
 		{
 			self.lastDeleteToggle = [NSDate date];
@@ -245,7 +245,7 @@
 	{
 		// Select the cell if this was a touch not a swipe or tap and hold
 		CGPoint currentTouchPosition = [[touches anyObject] locationInView:self];
-		if (currentTouchPosition.x > 40.)
+		if ((self.editing && currentTouchPosition.x > 40.) || !self.editing)
 		{
 			UITableViewCell *cell = [self cellForRowAtIndexPath: [self indexPathForRowAtPoint:currentTouchPosition]];
 			[self selectRowAtIndexPath:[self indexPathForCell:cell] animated:NO scrollPosition:UITableViewScrollPositionNone];

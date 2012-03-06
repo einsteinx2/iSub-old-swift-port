@@ -41,7 +41,7 @@
 	
 	PageControlViewController *pageControlViewController;
 	
-	uint64_t bookmarkBytePosition;
+	uint64_t bookmarkBytePosition;	
 }
 
 @property (retain) NSArray *listOfSongs;
@@ -89,6 +89,8 @@
 
 @property (retain) IBOutlet UILabel *quickBackLabel;
 @property (retain) IBOutlet UILabel *quickForwLabel;
+
+@property (retain) UISwipeGestureRecognizer *swipeDetector;
 
 - (void)setPlayButtonImage;
 - (void)setPauseButtonImage;

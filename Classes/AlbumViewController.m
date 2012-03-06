@@ -232,7 +232,6 @@
 		
 		CGFloat headerHeight = albumInfoView.height + playAllShuffleAllView.height;
 		CGRect headerFrame = CGRectMake(0., 0., 320, headerHeight);
-		DLog(@"headerFrame: %@", NSStringFromCGRect(headerFrame));
 		UIView *headerView = [[UIView alloc] initWithFrame:headerFrame];
 		//headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		
@@ -379,7 +378,6 @@
 		cell.indexPath = indexPath;
         
         Song *aSong = [self.dataModel songForTableViewRow:indexPath.row];
-		DLog(@"aSong.path: %@   md5: %@", aSong.path, [aSong.path md5]);
 		        
 		cell.mySong = aSong;
 		

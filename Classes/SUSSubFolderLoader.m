@@ -216,14 +216,18 @@
                     }
                     else
                     {
-                        Song *aSong = [[Song alloc] initWithTBXMLElement:child];
-                        if (aSong.path)
-                        {
-                            [self insertSongIntoFolderCache:aSong];
-                            songsCount++;
-                            folderLength += [aSong.duration intValue];
-                        }
-                        [aSong release];
+						BOOL isVideo = [[TBXML valueOfAttributeNamed:@"isVideo" forElement:child] boolValue]; 
+						if (!isVideo)
+						{
+							Song *aSong = [[Song alloc] initWithTBXMLElement:child];
+							if (aSong.path)
+							{
+								[self insertSongIntoFolderCache:aSong];
+								songsCount++;
+								folderLength += [aSong.duration intValue];
+							}
+							[aSong release];
+						}
                     }
 					
 					// Get the next message

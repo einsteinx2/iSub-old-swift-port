@@ -19,6 +19,8 @@
 #import "ServerTypeViewController.h"
 #import "NSArray+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "iPadRootViewController.h"
+#import "MenuViewController.h"
 
 @implementation SubsonicServerEditViewController
 
@@ -62,11 +64,6 @@
 {
 	// Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-}
-
-- (void)viewDidUnload {
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
 }
 
 - (void)dealloc {
@@ -276,6 +273,9 @@
 		
 		[self dismissModalViewControllerAnimated:YES];
 		
+		if (IS_IPAD())
+			[appDelegateS.ipadRootViewController.menuViewController showHome];
+				
 		NSDictionary *userInfo = nil;
 		if (theNewRedirectUrl)
 		{

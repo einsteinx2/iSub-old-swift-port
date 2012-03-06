@@ -29,7 +29,7 @@
 
 @implementation PageControlViewController
 
-@synthesize scrollView, pageControl, viewControllers, numberOfPages, pageControlUsed, pageControlHolder;
+@synthesize scrollView, pageControl, viewControllers, numberOfPages, pageControlUsed, pageControlHolder, swipeDetector;
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 //- (void)viewWillAppear:(BOOL)animated 
@@ -38,10 +38,6 @@
     //[super viewWillAppear:animated];
 	[super viewDidLoad];
 	
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideSongInfoFast) name:@"hideSongInfoFast" object:nil];
-	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideSongInfo) name:@"hideSongInfo" object:nil];
-		
 	numberOfPages = 1;
 	if (settingsS.isLyricsEnabled) numberOfPages++;
 	if (settingsS.isCacheStatusEnabled) numberOfPages++;
@@ -59,20 +55,17 @@
     scrollView.pagingEnabled = YES;
 	CGSize contentSize;
 	CGFloat height;
-	//if (IS_IPAD())
-	//	contentSize = CGSizeMake(540 * numberOfPages, 520);
-	//else
+	if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) || IS_IPAD())
 	{
-		if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) || IS_IPAD())
-		{
-			contentSize = CGSizeMake(320 * numberOfPages, numberOfPages == 1 ? 320 : 300);
-			height = numberOfPages == 1 ? 320 : 300;
-		}
-		else
-		{
-			contentSize = CGSizeMake(300 * numberOfPages, numberOfPages == 1 ? 270 : 250);
-			height = numberOfPages == 1 ? 270 : 250;
-		}
+		contentSize = CGSizeMake(320 * numberOfPages, numberOfPages == 1 ? 320 : 300);
+		height = numberOfPages == 1 ? 320 : 300;
+	}
+	else
+	{
+		contentSize = CGSizeMake(300 * numberOfPages, numberOfPages == 1 ? 270 : 250);
+		height = numberOfPages == 1 ? 320 : 300;
+		//contentSize = CGSizeMake(300 * numberOfPages, numberOfPages == 1 ? 270 : 250);
+		//height = numberOfPages == 1 ? 270 : 250;
 	}
 	scrollView.height = height;
     scrollView.contentSize = contentSize;
@@ -101,6 +94,32 @@
     // load the page on either side to avoid flashes when the user starts scrolling
 	[self loadScrollViewWithPage:0];
     [self loadScrollViewWithPage:1];
+	
+	// Only add the gesture recognizer on iOS 3.2 and above where it is supported
+	if (NSClassFromString(@"UISwipeGestureRecognizer"))
+	{
+		swipeDetector = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(hideSongInfo)];
+		if ([swipeDetector respondsToSelector:@selector(locationInView:)]) 
+		{
+			swipeDetector.delegate = (id<UIGestureRecognizerDelegate>)self;
+			swipeDetector.direction = UISwipeGestureRecognizerDirectionRight;
+			[scrollView addGestureRecognizer:swipeDetector];
+		}
+		else
+		{
+			[swipeDetector release]; swipeDetector = nil;
+		}
+	}
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+	return YES;
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+	return YES;
 }
 
 - (void)resetScrollView
@@ -117,7 +136,6 @@
 	
 	UIViewController *controller = (UIViewController *) [viewControllers objectAtIndexSafe:page];
     if ((NSNull *)controller != [NSNull null]) return; 
-
 	
     // Replace the placeholder
 	switch (page) 
@@ -141,9 +159,10 @@
 	[controller release];
 	
     // Add the controller's view to the scroll view
-	CGRect frame = scrollView.frame;
+	/*CGRect frame = scrollView.frame;
 	frame.origin.x = frame.size.width * page;
-	frame.origin.y = 0;
+	frame.origin.y = 0;*/
+	CGRect frame = CGRectMake(self.scrollView.frame.size.width * page, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
 	controller.view.frame = frame;
 	[scrollView addSubview:controller.view];
 }
@@ -195,6 +214,21 @@
 	[NSNotificationCenter postNotificationToMainThreadWithName:@"hideEditControls"];
 	
     // A possible optimization would be to unload the views+controllers which are no longer visible
+	
+	
+	
+	/*if (NSClassFromString(@"UISwipeGestureRecognizer"))
+	{
+		if (page == 0 || page == numberOfPages-1)
+		{
+			UISwipeGestureRecognizerDirection direction = UISwipeGestureRecognizerDirectionLeft;
+			if (page == 0) direction = UISwipeGestureRecognizerDirectionRight;
+			
+			swipeDetector.direction = direction;
+			//[self createSwipeDetector:controller.view direction:direction];
+			//[self createSwipeDetectorWithDirection:direction];
+		}
+	}*/
 }
 
 
@@ -229,32 +263,10 @@
     pageControlUsed = YES;
 }
 
-
-- (void) showSongInfo
-{
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.20];
-	
-	self.view.alpha = 1.0;
-}
- 
- 
 - (void) hideSongInfo
 {
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.50];
-	
-	self.view.alpha = 0.0;
-	
-	[UIView commitAnimations];
+	[NSNotificationCenter postNotificationToMainThreadWithName:@"hideSongInfo"];
 }
- 
- 
-- (void) hideSongInfoFast
-{	
-	[self.view removeFromSuperview];
-}
-
 
 - (void)didReceiveMemoryWarning 
 {
@@ -265,9 +277,6 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
 	[super viewDidDisappear:animated];
-		
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfoFast" object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideSongInfo" object:nil];
 	
 	for (UIViewController *subView in viewControllers)
 	{
@@ -283,6 +292,13 @@
 
 - (void)dealloc 
 {
+	[scrollView removeGestureRecognizer:swipeDetector];
+	[swipeDetector release]; swipeDetector = nil;
+	[scrollView release]; scrollView = nil;
+	[pageControl release]; pageControl = nil;
+	[pageControlHolder release]; pageControlHolder = nil;
+	[viewControllers release]; viewControllers = nil;
+	
     [super dealloc];
 }
 

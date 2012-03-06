@@ -110,15 +110,12 @@
 -(void)oneTap
 {
 	DLog(@"Single tap");
-	PageControlViewController *pageControlViewController = [[PageControlViewController alloc] initWithNibName:@"PageControlViewController" bundle:nil];
-	[self addSubview:pageControlViewController.view];
-	[pageControlViewController showSongInfo];
 }
 
 -(void)twoTaps
 {
 	DLog(@"Double tap");
-	[self reloadCoverArt];
+	//[self reloadCoverArt];
 }
 
 -(void)threeTaps

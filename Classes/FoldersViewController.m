@@ -289,30 +289,31 @@
 
 - (void)folderDropdownMoveViewsY:(float)y
 {
-	[self.tableView beginUpdates];
+	//[self.tableView beginUpdates];
 	self.tableView.tableHeaderView.height += y;
 	searchBar.y += y;
 	blockerButton.frame = self.tableView.tableHeaderView.frame;
 	
-	for (UIView *subView in self.tableView.subviews)
+	/*for (UIView *subView in self.tableView.subviews)
 	{
 		if (subView != self.tableView.tableHeaderView && subView != refreshHeaderView)
 			subView.y += y;
-	}
+	}*/
 	
 	/*for (UITableViewCell *cell in self.tableView.visibleCells)
 	{
 		cell.y += y;
-	}*/
+	}*/	
+	//[self.tableView endUpdates];
 	
 	self.tableView.tableHeaderView = self.tableView.tableHeaderView;
-	[self.tableView endUpdates];
 }
 
 - (void)folderDropdownViewsFinishedMoving
 {
-	self.tableView.tableHeaderView = self.tableView.tableHeaderView;
-	[self.tableView setNeedsLayout];
+	//self.tableView.tableHeaderView = self.tableView.tableHeaderView;
+	/*[self.tableView setNeedsLayout];
+	[self.tableView reloadData];*/
 }
 
 - (void)folderDropdownSelectFolder:(NSNumber *)folderId

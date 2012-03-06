@@ -148,58 +148,75 @@ static void destroy_versionArrays()
 	return [CAEAGLLayer class];
 }
 
+- (id)setup
+{
+	self.userInteractionEnabled = YES;
+	
+	drawTimer = nil;
+	
+	//[self createBitmapToDraw];
+	
+	//[self setupPalette];
+	
+	CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
+	
+	eaglLayer.opaque = YES;
+	// In this application, we want to retain the EAGLDrawable contents after a call to presentRenderbuffer.
+	eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
+									[NSNumber numberWithBool:YES], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
+	
+	context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
+	
+	if (!context || ![EAGLContext setCurrentContext:context])
+	{
+		[self release];
+		return nil;
+	}
+	
+	// Use OpenGL ES to generate a name for the texture.
+	glGenTextures(1, &imageTexture);
+	// Bind the texture name. 
+	glBindTexture(GL_TEXTURE_2D, imageTexture);
+	// Set the texture parameters to use a minifying filter and a linear filer (weighted average)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	
+	//Set up OpenGL states
+	glMatrixMode(GL_PROJECTION);
+	CGRect frame = self.bounds;
+	glOrthof(0, frame.size.width, 0, frame.size.height, -1, 1);
+	glViewport(0, 0, frame.size.width, frame.size.height);
+	glMatrixMode(GL_MODELVIEW);
+	
+	glDisable(GL_DITHER);
+	glEnable(GL_TEXTURE_2D);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnable(GL_POINT_SPRITE_OES);
+	glTexEnvf(GL_POINT_SPRITE_OES, GL_COORD_REPLACE_OES, GL_TRUE);
+	
+	[self changeType:settingsS.currentVisualizerType];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopEqDisplay) name:UIApplicationWillResignActiveNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startEqDisplay) name:UIApplicationDidBecomeActiveNotification object:nil];
+	
+	return self;
+}
+
 // The GL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:
 - (id)initWithCoder:(NSCoder*)coder 
 {
     if ((self = [super initWithCoder:coder]))
 	{
-		self.userInteractionEnabled = YES;
-		
-		drawTimer = nil;
-				
-		//[self createBitmapToDraw];
-		
-		//[self setupPalette];
-		
-		CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
-		
-		eaglLayer.opaque = YES;
-		// In this application, we want to retain the EAGLDrawable contents after a call to presentRenderbuffer.
-		eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
-										[NSNumber numberWithBool:YES], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
-		
-		context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
-		
-		if (!context || ![EAGLContext setCurrentContext:context])
-		{
-			[self release];
-			return nil;
-		}
+		return [self setup];
+	}
 	
-		// Use OpenGL ES to generate a name for the texture.
-		glGenTextures(1, &imageTexture);
-		// Bind the texture name. 
-		glBindTexture(GL_TEXTURE_2D, imageTexture);
-		// Set the texture parameters to use a minifying filter and a linear filer (weighted average)
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		
-		//Set up OpenGL states
-		glMatrixMode(GL_PROJECTION);
-		CGRect frame = self.bounds;
-		glOrthof(0, frame.size.width, 0, frame.size.height, -1, 1);
-		glViewport(0, 0, frame.size.width, frame.size.height);
-		glMatrixMode(GL_MODELVIEW);
-		
-		glDisable(GL_DITHER);
-		glEnable(GL_TEXTURE_2D);
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnable(GL_POINT_SPRITE_OES);
-		glTexEnvf(GL_POINT_SPRITE_OES, GL_COORD_REPLACE_OES, GL_TRUE);
-				
-		[self changeType:settingsS.currentVisualizerType];
-		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopEqDisplay) name:UIApplicationWillResignActiveNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startEqDisplay) name:UIApplicationDidBecomeActiveNotification object:nil];
+	return self;
+}
+
+- (id)initWithFrame:(CGRect)frame
+{
+	if ((self = [super initWithFrame:frame]))
+	{
+		return [self setup];
 	}
 	
 	return self;
@@ -366,10 +383,20 @@ static void destroy_versionArrays()
 -(void)layoutSubviews
 {
 	DLog(@"self.layer.frame: %@", NSStringFromCGRect(self.layer.frame));
-	self.layer.frame = self.frame;
-	DLog(@"self.layer.frame: %@", NSStringFromCGRect(self.layer.frame));
+	//self.layer.frame = self.frame;
+	//DLog(@"self.layer.frame: %@", NSStringFromCGRect(self.layer.frame));
+	NSLog(@"  ");
 	
 	[EAGLContext setCurrentContext:context];
+	
+	glMatrixMode(GL_PROJECTION);
+    CGRect frame = self.bounds;
+    CGFloat scaleFactor = self.contentScaleFactor;
+    glLoadIdentity();
+    glOrthof(0, frame.size.width * scaleFactor, 0, frame.size.height * scaleFactor, -1, 1);
+    glViewport(0, 0, frame.size.width * scaleFactor, frame.size.height * scaleFactor);
+    glMatrixMode(GL_MODELVIEW);
+	
 	[self destroyFramebuffer];
 	[self createFramebuffer];
 	

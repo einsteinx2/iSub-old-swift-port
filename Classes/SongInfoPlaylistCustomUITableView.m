@@ -39,8 +39,7 @@
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-	
-	if (viewObjectsS.isEditing)
+	if (self.editing)
 	{
 		if ((point.x < 40) && ([[NSDate date] timeIntervalSinceDate:lastDeleteToggle] > 0.25))
 		{

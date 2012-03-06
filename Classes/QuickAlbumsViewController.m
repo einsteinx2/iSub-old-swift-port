@@ -15,6 +15,9 @@
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "UIView+Tools.h"
+#import "iPadRootViewController.h"
+#import "StackScrollViewController.h"
+#import "UIViewController+PushViewController.h"
 
 @interface QuickAlbumsViewController (Private)
 - (void)albumLoad:(NSString*)modifier;
@@ -133,19 +136,13 @@
 	}
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     
     // Release any cached data, images, etc that aren't in use.
 }
-
-- (void)viewDidUnload {
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
 
 - (void)dealloc 
 {
@@ -218,9 +215,16 @@
     self.modifier = nil;
 	    
     if (IS_IPAD())
-		[appDelegateS.homeNavigationController pushViewController:albumViewController animated:YES];
+	{
+		albumViewController.view.width = ISMSiPadViewWidth;
+		albumViewController.view.layer.cornerRadius = ISMSiPadCornerRadius;
+		albumViewController.view.layer.masksToBounds = YES;
+		[appDelegateS.ipadRootViewController.stackScrollViewController addViewInSlider:albumViewController];
+	}
 	else
+	{
 		[parent.navigationController pushViewController:albumViewController animated:YES];
+	}
     
 	[albumViewController release];	
     

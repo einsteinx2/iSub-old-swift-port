@@ -21,5 +21,6 @@
 - (void)loadCellContents;
 - (UIView *)createHeaderView:(BOOL)withImage;
 - (UIView *)createFooterView;
+- (void)showHome;
 
 @end

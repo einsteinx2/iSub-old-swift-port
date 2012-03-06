@@ -14,7 +14,7 @@
 
 #define audioEngineS [AudioEngine sharedInstance]
 
-#define ISMS_BASSBufferSize 600
+#define ISMS_BASSBufferSize 800
 #define ISMS_defaultSampleRate 44100
 
 // Stream create failure retry values

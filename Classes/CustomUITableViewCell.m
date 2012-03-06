@@ -51,7 +51,7 @@
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
 {
-	if (viewObjectsS.isEditing)
+	//if (viewObjectsS.isEditing)
 		[super setEditing:editing animated:animated]; 
 }
 
@@ -59,32 +59,37 @@
 {
 	if (!isOverlayShowing)
 	{
-		if (!overlayView)
-		{
-			self.overlayView = [CellOverlay cellOverlayWithTableCell:self];
-			[self.contentView addSubview:overlayView];
-		}
+		self.overlayView = [CellOverlay cellOverlayWithTableCell:self];
+		[self.contentView addSubview:self.overlayView];
 		
 		[UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:.25];
-		overlayView.alpha = 1.0;
+		self.overlayView.alpha = 1.0;
 		[UIView commitAnimations];		
 		
-		isOverlayShowing = YES;
+		self.isOverlayShowing = YES;
 	}
 }
 
 - (void)hideOverlay
 {
-	if (overlayView)
+	if (self.overlayView)
 	{
 		[UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:.25];
-		overlayView.alpha = 0.0;
+		[UIView setAnimationDelegate:self];
+		[UIView setAnimationDidStopSelector:@selector(overlayHidden)];
+		self.overlayView.alpha = 0.0;
 		[UIView commitAnimations];
 		
-		isOverlayShowing = NO;
+		self.isOverlayShowing = NO;
 	}
+}
+
+- (void)overlayHidden
+{
+	[self.overlayView removeFromSuperview];
+	self.overlayView = nil;
 }
 
 - (void)downloadAction
@@ -109,20 +114,20 @@
 
 - (void)toggleDelete
 {
-	if (isDelete)
+	if (self.isDelete)
 	{
 		[viewObjectsS.multiDeleteList removeObject:[NSNumber numberWithInt:indexPath.row]];
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"hideDeleteButton"];
-		deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
+		self.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
 	}
 	else
 	{
 		[viewObjectsS.multiDeleteList addObject:[NSNumber numberWithInt:indexPath.row]];
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"showDeleteButton"];
-		deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
+		self.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
 	}
 	
-	isDelete = !isDelete;
+	self.isDelete = !self.isDelete;
 }
 
 @end

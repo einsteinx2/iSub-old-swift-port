@@ -67,6 +67,7 @@
 @synthesize coverArtHolderView, songInfoView, extraButtonsButtonOffImage, extraButtonsButtonOnImage;
 @synthesize trackLabel, genreLabel, yearLabel, formatLabel;
 @synthesize quickBackLabel, quickForwLabel;
+@synthesize swipeDetector;
 
 static const CGFloat kDefaultReflectionFraction = 0.30;
 static const CGFloat kDefaultReflectionOpacity = 0.55;
@@ -170,6 +171,21 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		extraButtonsButton.y -= 10;
 		volumeSlider.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin;
 		volumeSlider.y += 5;
+	}
+	
+	// Only add the gesture recognizer on iOS 3.2 and above where it is supported
+	if (NSClassFromString(@"UISwipeGestureRecognizer"))
+	{
+		swipeDetector = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(songInfoToggle:)];
+		if ([swipeDetector respondsToSelector:@selector(locationInView:)]) 
+		{
+			swipeDetector.direction = UISwipeGestureRecognizerDirectionLeft;
+			[songInfoToggleButton addGestureRecognizer:swipeDetector];
+		}
+		else
+		{
+			[swipeDetector release]; swipeDetector = nil;
+		}
 	}
 }
 
@@ -281,8 +297,14 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 												 name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songInfoToggle:) 
 												 name:@"hideSongInfo" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showPlayerOverlayTemp) 
-												 name:ISMSNotification_ShowPlayer object:nil];
+	
+	if (IS_IPAD())
+	{
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showPlayerOverlayTemp) 
+													 name:ISMSNotification_ShowPlayer object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) 
+													 name:ISMSNotification_ShowPlayer object:nil];
+	}
 }
 
 - (void)unregisterForNotifications
@@ -301,8 +323,12 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 													name:@"hideSongInfo" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self 
 													name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self 
-													name:ISMSNotification_ShowPlayer object:nil];
+	
+	if (IS_IPAD())
+	{
+		[[NSNotificationCenter defaultCenter] removeObserver:self 
+														name:ISMSNotification_ShowPlayer object:nil];
+	}	
 }
 
 - (void)createDownloadProgressView
@@ -416,6 +442,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	[extraButtonsButtonOffImage release]; extraButtonsButtonOffImage = nil;
 	[extraButtonsButtonOnImage release]; extraButtonsButtonOnImage = nil;
+	
+	[swipeDetector release]; swipeDetector = nil;
 	
 	[super dealloc];
 }
@@ -767,7 +795,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		//[pageControlViewController resetScrollView];
 		[coverArtHolderView addSubview:pageControlViewController.view];
-		[reflectionView setAlpha:0.0];
+		reflectionView.alpha = 0.0;
+		
+		extraButtonsButton.alpha = 0.0;
+		extraButtonsButton.enabled = NO;
 		
 		if (animated)
 			[UIView commitAnimations];
@@ -794,7 +825,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		//[[[coverArtImageView subviews] lastObject] removeFromSuperview];
 		[pageControlViewController.view removeFromSuperview];
-		[reflectionView setAlpha:kDefaultReflectionOpacity];
+		reflectionView.alpha = kDefaultReflectionOpacity;
+		
+		extraButtonsButton.alpha = 1.0;
+		extraButtonsButton.enabled = YES;
 		
 		UIGraphicsEndImageContext();
 		
@@ -1348,7 +1382,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	if (!pauseSlider)
 	{
-		CGFloat progress = [currentSong isEqualToSong:audioEngineS.currentStreamSong] ? audioEngineS.progress : 0.;
+		double progress = [currentSong isEqualToSong:audioEngineS.currentStreamSong] ? audioEngineS.progress : 0.;
 		
 		NSString *elapsedTime = [NSString formatTime:progress];;
 		NSString *remainingTime = [NSString formatTime:([currentSong.duration floatValue] - progress)];

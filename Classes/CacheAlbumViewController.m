@@ -26,6 +26,7 @@
 #import "NSArray+Additions.h"
 #import "NSString+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "UIViewController+PushViewController.h"
 
 @implementation CacheAlbumViewController
 
@@ -317,13 +318,6 @@
     [super didReceiveMemoryWarning];
 }
 
-
-- (void)viewDidUnload {
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
-}
-
-
 - (void)dealloc 
 {
 	self.listOfAlbums = nil;
@@ -565,8 +559,9 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 				}*/
 			}
 			[result close];
-						
-			[self.navigationController pushViewController:cacheAlbumViewController animated:YES];
+			
+			[self pushViewController:cacheAlbumViewController];
+			//[self.navigationController pushViewController:cacheAlbumViewController animated:YES];
 			[cacheAlbumViewController release];
 		}
 		else

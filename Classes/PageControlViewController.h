@@ -18,11 +18,11 @@
 @property NSUInteger numberOfPages;
 @property BOOL pageControlUsed;
 
+@property (retain) UISwipeGestureRecognizer *swipeDetector;
+
 
 - (IBAction)changePage:(id)sender;
-- (void)showSongInfo;
 - (void)hideSongInfo;
-- (void)hideSongInfoFast;
 - (void)resetScrollView;
 
 @end

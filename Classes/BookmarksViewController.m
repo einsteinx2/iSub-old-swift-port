@@ -233,7 +233,7 @@
 {
 	if ([viewObjectsS.multiDeleteList count] == 0)
 	{
-		if (viewObjectsS.isEditing == NO)
+		if (!self.tableView.editing)
 		{
 			bookmarkCountLabel.hidden = NO;
 			deleteBookmarksLabel.hidden = YES;
@@ -255,11 +255,10 @@
 
 
 
-- (void) editBookmarksAction:(id)sender
+- (void)editBookmarksAction:(id)sender
 {
 	if (self.tableView.editing == NO)
 	{
-		viewObjectsS.isEditing = YES;
 		[self.tableView reloadData];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:@"showDeleteButton" object: nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:@"hideDeleteButton" object: nil];
@@ -274,7 +273,6 @@
 	}
 	else 
 	{
-		viewObjectsS.isEditing = NO;
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
 		viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
@@ -490,7 +488,7 @@
 	}
 	cell.indexPath = indexPath;
 	
-	cell.deleteToggleImage.hidden = !viewObjectsS.isEditing;
+	cell.deleteToggleImage.hidden = !self.tableView.editing;
 	cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
 	if ([viewObjectsS.multiDeleteList containsObject:[NSNumber numberWithInt:indexPath.row]])
 	{
@@ -585,11 +583,6 @@
     [super didReceiveMemoryWarning];
 }
 
-
-- (void)viewDidUnload {
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-    // For example: self.myOutlet = nil;
-}
 
 
 - (void)dealloc {

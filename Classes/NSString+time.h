@@ -8,7 +8,7 @@
 
 @interface NSString (time)
 
-+ (NSString *)formatTime:(float)seconds;
++ (NSString *)formatTime:(double)seconds;
 + (NSString *)relativeTime:(NSDate *)date;
 
 @end

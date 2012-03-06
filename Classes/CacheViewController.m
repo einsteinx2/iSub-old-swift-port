@@ -26,13 +26,13 @@
 #import "CacheSingleton.h"
 #import "PlaylistSingleton.h"
 #import "FlurryAnalytics.h"
-
 #import "NSString+Additions.h"
 #import "AudioEngine.h"
 #import "NSArray+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
 #import "ISMSCacheQueueManager.h"
+#import "UIViewController+PushViewController.h"
 
 @interface CacheViewController ()
 - (void)addNoSongsScreen;
@@ -124,7 +124,7 @@
 	
 	headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)] autorelease];
 	headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
-	segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Cached", @"Queue", nil]];
+	segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Cached", @"Downloading", nil]];
 	[segmentedControl addTarget:self action:@selector(segmentAction:) forControlEvents:UIControlEventValueChanged];
 	
 	segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
@@ -270,9 +270,7 @@
 	
 	if (IS_IPAD())
 		self.view.backgroundColor = ISMSiPadBackgroundColor;
-	
-	[self updateCacheSizeLabel];
-	
+		
 	self.tableView.scrollEnabled = YES;
 	[jukeboxInputBlocker removeFromSuperview];
 	jukeboxInputBlocker = nil;
@@ -330,6 +328,10 @@
 {
 	[super viewWillDisappear:animated];
 	
+	[self unregisterForNotifications];
+	[updateTimer invalidate]; updateTimer = nil;
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateCacheSizeLabel) object:nil];
+	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_StorePurchaseComplete object:nil];
 }
 
@@ -339,15 +341,6 @@
     [super didReceiveMemoryWarning];
     
     // Relinquish ownership any cached data, images, etc that aren't in use.
-}
-
-- (void)viewDidUnload
-{
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-    // For example: self.myOutlet = nil;
-	
-	[self unregisterForNotifications];
-	[updateTimer invalidate]; updateTimer = nil;
 }
 
 - (void)dealloc
@@ -475,7 +468,7 @@
 	[store release];
 }
 
-- (void) settingsAction:(id)sender 
+- (void)settingsAction:(id)sender 
 {
 	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
 	serverListViewController.hidesBottomBarWhenPushed = YES;
@@ -562,7 +555,7 @@
 		[databaseS.cacheQueueDb executeUpdate:@"CREATE TEMP TABLE cacheQueueList (md5 TEXT)"];
 		[databaseS.cacheQueueDb executeUpdate:@"INSERT INTO cacheQueueList SELECT md5 FROM cacheQueue"];
 		
-		if (self.tableView.isEditing)
+		if (self.tableView.editing)
 		{
 			NSArray *multiDeleteList = [NSArray arrayWithArray:viewObjectsS.multiDeleteList];
 			for (NSString *md5 in multiDeleteList)
@@ -645,6 +638,7 @@
 		[editSongsButton removeFromSuperview]; editSongsButton = nil;
 		[deleteSongsLabel removeFromSuperview]; deleteSongsLabel = nil;
 		[cacheSizeLabel removeFromSuperview]; cacheSizeLabel = nil;
+		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateCacheSizeLabel) object:nil];
 		[headerView2 removeFromSuperview]; headerView2 = nil;
 		
 		/*[playAllImage removeFromSuperview];
@@ -726,6 +720,7 @@
 		}
 		[headerView addSubview:cacheSizeLabel];
 		[cacheSizeLabel release];
+		[self updateCacheSizeLabel];
 		
 		deleteSongsButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		deleteSongsButton.frame = CGRectMake(0, y, 230, 50);
@@ -949,7 +944,7 @@
 {
 	if ([viewObjectsS.multiDeleteList count] == 0)
 	{
-		if (viewObjectsS.isEditing == NO)
+		if (!self.tableView.editing)
 		{
 			songsCountLabel.hidden = NO;
 			cacheSizeLabel.hidden = NO;
@@ -991,9 +986,8 @@
 {
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
-		if (viewObjectsS.isEditing == NO)
+		if (!self.tableView.editing)
 		{
-			viewObjectsS.isEditing = YES;
 			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:@"showDeleteButton" object: nil];
 			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:@"hideDeleteButton" object: nil];
 			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
@@ -1006,7 +1000,6 @@
 		}
 		else 
 		{
-			viewObjectsS.isEditing = NO;
 			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
 			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
 			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
@@ -1022,9 +1015,8 @@
 	}
 	else if (segmentedControl.selectedSegmentIndex == 1)
 	{
-		if (self.tableView.editing == NO)
+		if (!self.tableView.editing)
 		{
-			viewObjectsS.isEditing = YES;
 			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:@"showDeleteButton" object: nil];
 			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:@"hideDeleteButton" object: nil];
 			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
@@ -1037,7 +1029,6 @@
 		}
 		else 
 		{
-			viewObjectsS.isEditing = NO;
 			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
 			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
 			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
@@ -1120,7 +1111,7 @@
 
 - (void)deleteSongsAction:(id)sender
 {
-	if (viewObjectsS.isEditing)
+	if (self.tableView.editing)
 	{
 		if ([deleteSongsLabel.text isEqualToString:@"Select All"])
 		{
@@ -1299,7 +1290,7 @@
 
 		NSString *name = [[listOfArtistsSections objectAtIndexSafe:indexPath.section] objectAtIndexSafe:indexPath.row];
 		
-		cell.deleteToggleImage.hidden = !viewObjectsS.isEditing;
+		cell.deleteToggleImage.hidden = !self.tableView.editing;
 		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
 		if ([viewObjectsS.multiDeleteList containsObject:name])
 		{
@@ -1337,7 +1328,7 @@
 		cell.md5 = [result stringForColumn:@"md5"];
 		[result close];
 
-		cell.deleteToggleImage.hidden = !viewObjectsS.isEditing;
+		cell.deleteToggleImage.hidden = !self.tableView.editing;
 		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
 		if ([viewObjectsS.multiDeleteList containsObject:cell.md5])
 		{
@@ -1356,16 +1347,16 @@
 		{
 			if ([aSong isEqualToSong:cacheQueueManagerS.currentQueuedSong] && cacheQueueManagerS.isQueueDownloading)
 			{
-				cell.cacheInfoLabel.text = [NSString stringWithFormat:@"Queued %@ - Progress: %@", [NSString relativeTime:cached], [NSString formatFileSize:queueDownloadProgress]];
+				cell.cacheInfoLabel.text = [NSString stringWithFormat:@"Added %@ - Progress: %@", [NSString relativeTime:cached], [NSString formatFileSize:queueDownloadProgress]];
 			}
 			else
 			{
-				cell.cacheInfoLabel.text = [NSString stringWithFormat:@"Queued %@ - Progress: Need Wifi", [NSString relativeTime:cached]];
+				cell.cacheInfoLabel.text = [NSString stringWithFormat:@"Added %@ - Progress: Need Wifi", [NSString relativeTime:cached]];
 			}
 		}
 		else
 		{
-			cell.cacheInfoLabel.text = [NSString stringWithFormat:@"Queued %@ - Progress: Waiting...", [NSString relativeTime:cached]];
+			cell.cacheInfoLabel.text = [NSString stringWithFormat:@"Added %@ - Progress: Waiting...", [NSString relativeTime:cached]];
 		}
 		
 		cell.songNameLabel.text = aSong.title;
@@ -1484,7 +1475,8 @@ NSInteger trackSort1(id obj1, id obj2, void *context)
 			}
 			[result close];
 			
-			[self.navigationController pushViewController:cacheAlbumViewController animated:YES];
+			[self pushViewController:cacheAlbumViewController];
+			//[self.navigationController pushViewController:cacheAlbumViewController animated:YES];
 			[cacheAlbumViewController release];
 		}
 		else

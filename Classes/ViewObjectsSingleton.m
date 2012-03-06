@@ -47,7 +47,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 @synthesize chatMessages;
 
 // New stuff
-@synthesize isCellEnabled, cellEnabledTimer, queueAlbumListOfAlbums, queueAlbumListOfSongs, isEditing, isEditing2, multiDeleteList, isOfflineMode, isOnlineModeAlertShowing, cancelLoading;
+@synthesize isCellEnabled, cellEnabledTimer, queueAlbumListOfAlbums, queueAlbumListOfSongs, multiDeleteList, isOfflineMode, isOnlineModeAlertShowing, cancelLoading;
 
 // Cell colors
 @synthesize lightRed, darkRed, lightYellow, darkYellow, lightGreen, darkGreen, lightBlue, darkBlue, lightNormal, darkNormal, windowColor, jukeboxColor;
@@ -338,7 +338,6 @@ static ViewObjectsSingleton *sharedInstance = nil;
 	jukeboxColor = [[UIColor colorWithRed:140.0/255.0 green:0.0 blue:0.0 alpha:1.0] retain];
 	
 	self.isCellEnabled = YES;
-	self.isEditing = NO;
 	self.isArtistsLoading = NO;
 	//self.isAlbumsLoading = NO;
 	//self.isSongsLoading = NO;

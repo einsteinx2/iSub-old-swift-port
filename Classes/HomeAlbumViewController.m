@@ -73,6 +73,11 @@
 		self.navigationItem.rightBarButtonItem = nil;
 	}
 	
+	if (IS_IPAD())
+	{
+		self.view.backgroundColor = ISMSiPadBackgroundColor;
+	}
+	
 	// Add the table fade
 	UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
 	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
@@ -107,14 +112,6 @@
 	// Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
 }
-
-
-- (void)viewDidUnload
-{
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
-}
-
 
 - (void)dealloc 
 {
@@ -270,6 +267,7 @@
 
 		// Set background color
 		cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
+		cell.textLabel.backgroundColor = cell.backgroundView.backgroundColor;
 		
 		if (isMoreAlbums && !isLoading)
 		{

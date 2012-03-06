@@ -10,13 +10,15 @@
 
 @implementation NSString (time)
 
-+ (NSString *)formatTime:(float)seconds
-{
++ (NSString *)formatTime:(double)seconds
+{	
 	if (seconds <= 0)
 		return @"0:00";
+
+	NSUInteger roundedSeconds = ceil(seconds);
 	
-	int mins = (int) seconds / 60;
-	int secs = (int) seconds % 60;
+	int mins = (int) roundedSeconds / 60;
+	int secs = (int) roundedSeconds % 60;
 	if (secs < 10)
 		return [NSString stringWithFormat:@"%i:0%i", mins, secs];
 	else

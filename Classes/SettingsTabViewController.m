@@ -627,17 +627,11 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
-- (void)viewDidUnload 
-{
-    [super viewDidUnload];
-    
-	//DLog(@"settigns tab view did unload");
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"twitterAuthenticated" object:nil];
-	[parentController release];
-}
-
 - (void)dealloc 
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"twitterAuthenticated" object:nil];
+	[parentController release];
+	
 	[loadedTime release];
     [super dealloc];
 }

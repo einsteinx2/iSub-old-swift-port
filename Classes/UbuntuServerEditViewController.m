@@ -17,6 +17,8 @@
 #import "SavedSettings.h"
 #import "NSArray+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "iPadRootViewController.h"
+#import "MenuViewController.h"
 
 #define URL @"https://streaming.one.ubuntu.com"
 
@@ -166,10 +168,14 @@
 			[NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
 			[NSNotificationCenter postNotificationToMainThreadWithName:@"showSaveButton"];
 			
+			[self dismissModalViewControllerAnimated:YES];
+			
 			if (parentController)
 				[parentController dismissModalViewControllerAnimated:YES];
-			
-			[self dismissModalViewControllerAnimated:YES];
+
+			if (IS_IPAD())
+				[appDelegateS.ipadRootViewController.menuViewController showHome];
+				
 			
 			[NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer"];
 		}
@@ -201,13 +207,6 @@
 	// Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
 }
-
-- (void)viewDidUnload 
-{
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
-}
-
 
 - (void)dealloc 
 {

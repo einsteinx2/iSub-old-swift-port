@@ -51,7 +51,6 @@
 		if ([TBXML valueOfAttributeNamed:@"transcodedSuffix" forElement:element])
 			self.transcodedSuffix = [TBXML valueOfAttributeNamed:@"transcodedSuffix" forElement:element];
 		
-		DLog(@"title: %@", self.title);
 		NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
 		if([TBXML valueOfAttributeNamed:@"duration" forElement:element])
 			self.duration = [numberFormatter numberFromString:[TBXML valueOfAttributeNamed:@"duration" forElement:element]];
@@ -63,7 +62,6 @@
 			self.year = [numberFormatter numberFromString:[TBXML valueOfAttributeNamed:@"year" forElement:element]];
 		if([TBXML valueOfAttributeNamed:@"size" forElement:element])
 			self.size = [numberFormatter numberFromString:[TBXML valueOfAttributeNamed:@"size" forElement:element]];
-		DLog(@"size: %llu   size: %f", [size unsignedLongLongValue], [size doubleValue]);
 		[numberFormatter release];
 	}
 	

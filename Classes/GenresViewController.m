@@ -214,7 +214,7 @@
 		cell.genreNameLabel.text = [databaseS.genresDb stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
 	}
 	
-    return [cell autorelease];
+    return cell;
 }
 
 
@@ -279,13 +279,6 @@
     
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
-
-- (void)viewDidUnload 
-{
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-    // For example: self.myOutlet = nil;
-}
-
 
 - (void)dealloc
 {

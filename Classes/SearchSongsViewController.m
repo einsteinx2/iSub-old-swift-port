@@ -215,7 +215,7 @@
 - (UITableViewCell *)createLoadingCell:(NSUInteger)row
 {
 	// This is the last cell and there could be more results, load the next 20 results;
-	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"] autorelease];
+	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NoReuse"] autorelease];
 	
 	// Set background color
 	cell.backgroundView = [viewObjectsS createCellBackground:row];
@@ -545,13 +545,6 @@
     
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
-
-- (void)viewDidUnload 
-{
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-    // For example: self.myOutlet = nil;
-}
-
 
 - (void)dealloc 
 {

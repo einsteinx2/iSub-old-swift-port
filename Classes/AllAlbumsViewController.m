@@ -218,14 +218,8 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void)viewDidUnload {
-	// Release anything that can be recreated in viewDidLoad or on demand.
-	// e.g. self.myOutlet = nil;
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_AllSongsLoadingFinished object:nil];
-}
-
-
 - (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_AllSongsLoadingFinished object:nil];
 	[searchBar release];
 	[url release];
     [super dealloc];
