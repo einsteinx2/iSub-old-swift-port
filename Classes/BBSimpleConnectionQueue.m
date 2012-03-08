@@ -84,6 +84,7 @@
 	
 	for (NSURLConnection *connection in connectionStack)
 	{
+		[connection cancel];
 		[connection release];
 	}
 	

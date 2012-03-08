@@ -33,7 +33,7 @@
 @implementation HomeAlbumViewController
 @synthesize listOfAlbums;
 @synthesize offset, isMoreAlbums, modifier;
-@synthesize receivedData;
+@synthesize receivedData, connection;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -127,12 +127,12 @@
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"size", n2N(modifier), @"type", n2N(offsetString), @"offset", nil];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getAlbumList" andParameters:parameters];
 	
-    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	if (connection)
+    self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+	if (self.connection)
 	{
 		self.receivedData = [NSMutableData data];
 		
-		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
+		[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
 	} 
 	else 
 	{
@@ -141,6 +141,14 @@
 		[alert show];
 		[alert release];
 	}
+}
+
+- (void)cancelLoad
+{
+	[self.connection cancel];
+	self.connection = nil;
+	self.receivedData = nil;
+	[viewObjectsS hideLoadingScreen];
 }
 
 #pragma mark - Connection Delegate
@@ -175,7 +183,7 @@
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
 	self.receivedData = nil;
-	[theConnection release];
+	self.connection = nil;
 	
 	[viewObjectsS hideLoadingScreen];
     
@@ -210,7 +218,7 @@
     isLoading = NO;
     
 	self.receivedData = nil;
-	[theConnection release];
+	self.connection = nil;
 	
 	[viewObjectsS hideLoadingScreen];
 }

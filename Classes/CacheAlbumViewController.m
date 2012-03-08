@@ -26,11 +26,25 @@
 #import "NSArray+Additions.h"
 #import "NSString+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
-#import "UIViewController+PushViewController.h"
+#import "UIViewController+PushViewControllerCustom.h"
+#import "iPadRootViewController.h"
+#import "StackScrollViewController.h"
 
 @implementation CacheAlbumViewController
 
 @synthesize listOfAlbums, listOfSongs, sectionInfo, segments;
+
+NSInteger trackSort2(id obj1, id obj2, void *context)
+{
+	NSUInteger track1 = [(NSNumber*)[(NSArray*)obj1 objectAtIndexSafe:1] intValue];
+	NSUInteger track2 = [(NSNumber*)[(NSArray*)obj2 objectAtIndexSafe:1] intValue];
+	if (track1 < track2)
+		return NSOrderedAscending;
+	else if (track1 == track2)
+		return NSOrderedSame;
+	else
+		return NSOrderedDescending;
+}
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -44,10 +58,6 @@
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
-	
-	
-	// Set notification receiver for when cached songs are deleted to reload the table
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cachedSongDeleted) name:@"cachedSongDeleted" object:nil];
 
 	if (IS_IPAD())
 	{
@@ -170,45 +180,87 @@
 				[self.tableView reloadData];
 		}
 	}	
+	
+	// Set notification receiver for when cached songs are deleted to reload the table
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cachedSongDeleted) name:@"cachedSongDeleted" object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"cachedSongDeleted" object:nil];
 }
 
 
-- (void) cachedSongDeleted
+- (void)cachedSongDeleted
 {
 	NSUInteger segment = [segments count];
-	NSString *seg1 = [segments objectAtIndexSafe:0];
-	FMResultSet *result = [databaseS.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? AND seg%i = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", segment, (segment - 1), segment, segment], seg1, self.title];
 	
 	self.listOfAlbums = [NSMutableArray arrayWithCapacity:1];
 	self.listOfSongs = [NSMutableArray arrayWithCapacity:1];
-	//self.listOfAlbums = nil; self.listOfAlbums = [[NSMutableArray alloc] init];
-	//self.listOfSongs = nil; self.listOfSongs = [[NSMutableArray alloc] init];
+	
+	NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5, segs, seg%i, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? ", segment+1];
+	for (int i = 2; i <= segment; i++)
+	{
+		[query appendFormat:@" AND seg%i = ? ", i];
+	}
+	[query appendFormat:@"GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", segment+1, segment+1];
+	
+	FMResultSet *result = [databaseS.songCacheDb executeQuery:query withArgumentsInArray:segments];
+	
 	while ([result next])
 	{
-		if ([result intForColumnIndex:1] > segment)
+		if ([result intForColumnIndex:1] > (segment + 1))
 		{
-			[self.listOfAlbums addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], 
-																   [NSString stringWithString:[result stringForColumnIndex:2]], nil]];
+			NSArray *albumEntry = [NSArray arrayWithObjects:[result stringForColumnIndex:0], [result stringForColumnIndex:2], nil];
+			[self.listOfAlbums addObject:albumEntry];
 		}
 		else
 		{
-			[self.listOfSongs addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], 
-																  [NSString stringWithFormat:@"%i", [result intForColumnIndex:3]], nil]];
+			NSArray *songEntry = [NSArray arrayWithObjects:[result stringForColumnIndex:0], [NSNumber numberWithInt:[result intForColumnIndex:3]], nil];
+			[self.listOfSongs addObject:songEntry];
+			
+			BOOL multipleSameTrackNumbers = NO;
+			NSMutableArray *trackNumbers = [NSMutableArray arrayWithCapacity:[self.listOfSongs count]];
+			for (NSArray *song in self.listOfSongs)
+			{
+				NSNumber *track = [song objectAtIndexSafe:1];
+				
+				if ([trackNumbers containsObject:track])
+				{
+					multipleSameTrackNumbers = YES;
+					break;
+				}
+				
+				[trackNumbers addObject:track];
+			}
+			
+			// Sort by track number
+			if (!multipleSameTrackNumbers)
+				[self.listOfSongs sortUsingFunction:trackSort2 context:NULL];
 		}
 	}
 	[result close];
-
+	
 	// If the table is empty, pop back one view, otherwise reload the table data
 	if ([self.listOfAlbums count] + [self.listOfSongs count] == 0)
 	{
-		// Handle the moreNavigationController stupidity
-		if (appDelegateS.currentTabBarController.selectedIndex == 4)
+		if (IS_IPAD())
 		{
-			[appDelegateS.currentTabBarController.moreNavigationController popToViewController:[appDelegateS.currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
+			// TODO: implement this properly
+			//[appDelegateS.ipadRootViewController.stackScrollViewController popToRootViewController];
 		}
 		else
 		{
-			[(UINavigationController*)appDelegateS.currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
+			// Handle the moreNavigationController stupidity
+			if (appDelegateS.currentTabBarController.selectedIndex == 4)
+			{
+				[appDelegateS.currentTabBarController.moreNavigationController popToViewController:[appDelegateS.currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
+			}
+			else
+			{
+				[(UINavigationController*)appDelegateS.currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
+			}
 		}
 	}
 	else
@@ -233,7 +285,6 @@
 - (void)loadPlayAllPlaylist:(NSString *)shuffle
 {		
 	NSUInteger segment = [segments count];
-	NSString *seg1 = [segments objectAtIndexSafe:0];
 	
 	BOOL isShuffle;
 	if ([shuffle isEqualToString:@"YES"])
@@ -243,16 +294,14 @@
 	
 	[databaseS resetCurrentPlaylistDb];
 	
-	FMResultSet *result;
-	if (segment == 2)
+	NSMutableString *query = [NSMutableString stringWithString:@"SELECT md5 FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? "];
+	for (int i = 2; i <= segment; i++)
 	{
-		result = [databaseS.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ORDER BY seg2 COLLATE NOCASE", seg1];
+		[query appendFormat:@" AND seg%i = ? ", i];
 	}
-	else
-	{
-		result = [databaseS.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment], seg1, self.title];
-	}
-
+	[query appendFormat:@"ORDER BY seg%i COLLATE NOCASE", segment];
+	
+	FMResultSet *result = [databaseS.songCacheDb executeQuery:query withArgumentsInArray:segments];
 	while ([result next])
 	{
 		if ([result stringForColumnIndex:0] != nil)
@@ -295,7 +344,7 @@
 }
 
 
-- (void) loadPlayAllPlaylist2
+- (void)loadPlayAllPlaylist2
 {
 	[viewObjectsS hideLoadingScreen];
 
@@ -377,8 +426,8 @@
 	// Set up the cell...
 	if (indexPath.row < [listOfAlbums count])
 	{
-		NSUInteger segment = [segments count];
-		NSString *seg1 = [segments objectAtIndexSafe:0];
+		//NSUInteger segment = [segments count];
+		//NSString *seg1 = [segments objectAtIndexSafe:0];
 		
 		static NSString *cellIdentifier = @"CacheAlbumCell";
 		CacheAlbumUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -388,8 +437,10 @@
 		}
 		
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		cell.segment = segment;
-		cell.seg1 = seg1;
+		//cell.segment = segment;
+		//cell.seg1 = seg1;
+		cell.segments = [NSArray arrayWithArray:segments];
+		DLog(@"segments: %@", cell.segments);
 		
 		NSString *md5 = [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:0];
 		NSString *coverArtId = [databaseS.songCacheDb stringForQuery:@"SELECT coverArtId FROM cachedSongs WHERE md5 = ?", md5];
@@ -470,18 +521,6 @@
 	}
 }
 
-NSInteger trackSort2(id obj1, id obj2, void *context)
-{
-	NSUInteger track1 = [(NSNumber*)[(NSArray*)obj1 objectAtIndexSafe:1] intValue];
-	NSUInteger track2 = [(NSNumber*)[(NSArray*)obj2 objectAtIndexSafe:1] intValue];
-	if (track1 < track2)
-		return NSOrderedAscending;
-	else if (track1 == track2)
-		return NSOrderedSame;
-	else
-		return NSOrderedDescending;
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {	
 	if (!indexPath)
@@ -497,36 +536,32 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			cacheAlbumViewController.title = [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1];
 			cacheAlbumViewController.listOfAlbums = [NSMutableArray arrayWithCapacity:1];
 			cacheAlbumViewController.listOfSongs = [NSMutableArray arrayWithCapacity:1];
-			//cacheAlbumViewController.listOfAlbums = [[NSMutableArray alloc] init];
-			//cacheAlbumViewController.listOfSongs = [[NSMutableArray alloc] init];
-			//DLog(@"query: %@", [NSString stringWithFormat:@"SELECT md5, segs, seg%i FROM cachedSongsLayout WHERE seg1 = '%@' AND seg%i = '%@' GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), seg1, segment, [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1], (segment + 1), (segment + 1)]);
-			NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5, segs, seg%i, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ?", segment+1];
+
+			NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5, segs, seg%i, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? ", segment+1];
 			for (int i = 2; i <= segment; i++)
 			{
 				[query appendFormat:@" AND seg%i = ? ", i];
 			}
 			[query appendFormat:@"GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", segment+1, segment+1];
 			DLog(@"query: %@", query);
-			DLog(@"arguments: %@", segments);
-			
-			//FMResultSet *result = [databaseS.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5, segs, seg%i, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? AND seg%i = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), segment, (segment + 1), (segment + 1)], seg1, [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1]];
-			
+
 			NSMutableArray *newSegments = [NSMutableArray arrayWithArray:segments];
 			[newSegments addObject:cacheAlbumViewController.title];
 			cacheAlbumViewController.segments = [NSArray arrayWithArray:newSegments];
+			DLog(@"newSegments: %@", newSegments);
 			
 			FMResultSet *result = [databaseS.songCacheDb executeQuery:query withArgumentsInArray:newSegments];
 			while ([result next])
 			{
 				if ([result intForColumnIndex:1] > (segment + 1))
 				{
-					[cacheAlbumViewController.listOfAlbums addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], 
-																							   [NSString stringWithString:[result stringForColumnIndex:2]], nil]];
+					NSArray *albumEntry = [NSArray arrayWithObjects:[result stringForColumnIndex:0], [result stringForColumnIndex:2], nil];
+					[cacheAlbumViewController.listOfAlbums addObject:albumEntry];
 				}
 				else
 				{
-					[cacheAlbumViewController.listOfSongs addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], 
-																							  [NSNumber numberWithInt:[result intForColumnIndex:3]], nil]];
+					NSArray *songEntry = [NSArray arrayWithObjects:[result stringForColumnIndex:0], [NSNumber numberWithInt:[result intForColumnIndex:3]], nil];
+					[cacheAlbumViewController.listOfSongs addObject:songEntry];
 					
 					BOOL multipleSameTrackNumbers = NO;
 					NSMutableArray *trackNumbers = [NSMutableArray arrayWithCapacity:[cacheAlbumViewController.listOfSongs count]];
@@ -547,21 +582,10 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 					if (!multipleSameTrackNumbers)
 						[cacheAlbumViewController.listOfSongs sortUsingFunction:trackSort2 context:NULL];
 				}
-				
-				/*DLog(@"seg%i: %@", segment+1, [result stringForColumnIndex:2]);
-				
-				if (!cacheAlbumViewController.segments)
-				{
-					NSMutableArray *segmentsMut = [NSMutableArray arrayWithArray:self.segments];
-					[segmentsMut addObject:[result stringForColumnIndex:2]];
-					cacheAlbumViewController.segments = [NSArray arrayWithArray:segmentsMut];
-					DLog(@"new segments: %@", segmentsMut);
-				}*/
 			}
 			[result close];
 			
-			[self pushViewController:cacheAlbumViewController];
-			//[self.navigationController pushViewController:cacheAlbumViewController animated:YES];
+			[self pushViewControllerCustom:cacheAlbumViewController];
 			[cacheAlbumViewController release];
 		}
 		else

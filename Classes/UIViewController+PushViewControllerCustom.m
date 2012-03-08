@@ -1,20 +1,20 @@
 //
-//  UIViewController+PushViewController.m
+//  UIViewController+PushViewControllerCustom.m
 //  iSub
 //
 //  Created by Ben Baron on 2/20/12.
 //  Copyright (c) 2012 Ben Baron. All rights reserved.
 //
 
-#import "UIViewController+PushViewController.h"
+#import "UIViewController+PushViewControllerCustom.h"
 #import "iSubAppDelegate.h"
 #import "iPadRootViewController.h"
 #import "StackScrollViewController.h"
 #import "UIView+Tools.h"
 
-@implementation UIViewController (PushViewController)
+@implementation UIViewController (PushViewControllerCustom)
 
-- (void)pushViewController:(UIViewController *)viewController
+- (void)pushViewControllerCustom:(UIViewController *)viewController
 {
 	if (IS_IPAD())
 	{
@@ -30,7 +30,7 @@
 	}
 }
 
-- (void)pushViewControllerWithNavControllerOnIpad:(UIViewController *)viewController
+- (void)pushViewControllerCustomWithNavControllerOnIpad:(UIViewController *)viewController
 {
 	if (IS_IPAD())
 	{
@@ -38,12 +38,12 @@
 		nav.navigationBar.tintColor = [UIColor blackColor];
 		
 		viewController.view.width = ISMSiPadViewWidth;
-		[self pushViewController:nav];
+		[self pushViewControllerCustom:nav];
 		[nav release];
 	}
 	else
 	{
-		[self pushViewController:viewController];
+		[self pushViewControllerCustom:viewController];
 	}
 }
 

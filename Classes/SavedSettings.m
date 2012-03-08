@@ -621,8 +621,8 @@
 			case 2: bitrate = 128; break;
 			case 3: bitrate = 160; break;
 			case 4: bitrate = 192; break;
-			case 5: bitrate = 224; break;
-			case 6: bitrate = 256; break;
+			case 5: bitrate = 256; break;
+			case 6: bitrate = 320; break;
 			default: bitrate = 0; break;
 		}
 		return bitrate;

@@ -57,5 +57,6 @@
 
 - (void)playAllPlaySong;
 - (void)reloadTable;
+- (void)updateQueueDownloadProgress;
 
 @end

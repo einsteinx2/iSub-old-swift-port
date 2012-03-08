@@ -104,11 +104,18 @@
 		self.navigationItem.rightBarButtonItem = nil;
 	}
 	
-	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
+	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
 	
 	[dataModel startLoad];
 	
 	[FlurryAnalytics logEvent:@"NowPlayingTab"];
+}
+
+- (void)cancelLoad
+{
+	[self.dataModel cancelLoad];
+	[viewObjectsS hideLoadingScreen];
+	[self dataSourceDidFinishLoadingNewData];
 }
 
 -(void)viewWillDisappear:(BOOL)animated

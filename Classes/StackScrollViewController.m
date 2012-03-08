@@ -731,6 +731,27 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 	[self arrangeVerticalBar];
 }
 
+/*- (void)popTopViewController
+{
+	NSUInteger index = [viewControllersStack count]-1;
+	UIView *viewToRemove = [self slideViewAtIndex:index];
+	[viewToRemove removeFromSuperview];
+	[viewControllersStack removeObjectAtIndex:index];
+	viewXPosition = self.view.frame.size.width - [[viewControllersStack firstObjectSafe] view].frame.size.width;
+}
+
+- (void)popToRootViewController
+{
+	NSInteger viewControllerCount = [viewControllersStack count];
+	for (int i = viewControllerCount - 1; i >= 1; i--)
+	{
+		UIView *viewToRemove = [self slideViewAtIndex:i];
+		[viewToRemove removeFromSuperview];
+		[viewControllersStack removeObjectAtIndex:i];
+		viewXPosition = self.view.frame.size.width - [[viewControllersStack firstObjectSafe] view].frame.size.width;
+	}
+}*/
+
 - (void)addViewInSlider:(UIViewController*)controller
 {
 	[self addViewInSlider:controller invokeByController:[self.viewControllersStack lastObject] isStackStartView:NO];

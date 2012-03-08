@@ -36,7 +36,7 @@
 #import "UIView+Tools.h"
 #import "NSArray+Additions.h"
 #import "UIImageView+Reflection.h"
-#import "UIViewController+PushViewController.h"
+#import "UIViewController+PushViewControllerCustom.h"
 #import "NSNotificationCenter+MainThread.h"
 
 @interface AlbumViewController (Private)
@@ -439,7 +439,7 @@
             Album *anAlbum = [dataModel albumForTableViewRow:indexPath.row];
             			
 			AlbumViewController *albumViewController = [[AlbumViewController alloc] initWithArtist:nil orAlbum:anAlbum];	
-			[self pushViewController:albumViewController];
+			[self pushViewControllerCustom:albumViewController];
 			[albumViewController release];
 		}
 		else

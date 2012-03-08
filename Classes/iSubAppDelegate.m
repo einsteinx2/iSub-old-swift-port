@@ -46,6 +46,7 @@
 #import "ISMSUpdateChecker.h"
 #import "NSArray+Additions.h"
 #import "iPadRootViewController.h"
+#import "MenuViewController.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "ISMSCacheQueueManager.h"
 
@@ -166,7 +167,6 @@
 	if (IS_IPAD())
 	{
 		ipadRootViewController = [[iPadRootViewController alloc] initWithNibName:nil bundle:nil];
-		//[self.window addSubview:ipadRootViewController.view];
 		[self.window setBackgroundColor:[UIColor clearColor]];
 		[self.window addSubview:ipadRootViewController.view];
 		[self.window makeKeyAndVisible];
@@ -696,11 +696,23 @@
 	
 	[cacheQueueManagerS stopDownloadQueue];
 
-	[mainTabBarController.view removeFromSuperview];
+	if (IS_IPAD())
+		[ipadRootViewController.menuViewController toggleOfflineMode];
+	else
+		[mainTabBarController.view removeFromSuperview];
+	
 	[databaseS closeAllDatabases];
 	[databaseS initDatabases];
-	currentTabBarController = offlineTabBarController;
-	[window addSubview:[offlineTabBarController view]];
+	
+	if (IS_IPAD())
+	{
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
+	}
+	else
+	{
+		currentTabBarController = offlineTabBarController;
+		[window addSubview:offlineTabBarController.view];
+	}
 	
 	[musicS updateLockScreenInfo];
 }
@@ -713,13 +725,26 @@
 	viewObjectsS.isOfflineMode = NO;
 	
 	[audioEngineS stop];
-	[offlineTabBarController.view removeFromSuperview];
+	
+	if (IS_IPAD())
+		[ipadRootViewController.menuViewController toggleOfflineMode];
+	else
+		[offlineTabBarController.view removeFromSuperview];
+	
 	[databaseS closeAllDatabases];
 	[databaseS initDatabases];
 	[self checkServer];
-	[viewObjectsS orderMainTabBarController];
 	[cacheQueueManagerS startDownloadQueue];
-	[window addSubview:mainTabBarController.view];
+	
+	if (IS_IPAD())
+	{
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
+	}
+	else
+	{
+		[viewObjectsS orderMainTabBarController];
+		[window addSubview:mainTabBarController.view];
+	}
 	
 	[musicS updateLockScreenInfo];
 }
@@ -731,7 +756,7 @@
 		return;
 	
 	Reachability* curReach = [note object];
-	NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
+	NSParameterAssert([curReach isKindOfClass:[Reachability class]]);
 	
 	if ([curReach currentReachabilityStatus] == NotReachable)
 	{

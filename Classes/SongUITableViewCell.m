@@ -79,10 +79,7 @@
 - (void)layoutSubviews 
 {
     [super layoutSubviews];
-	
-	//self.trackNumberLabel.frame = CGRectMake(0, 4, 30, 41);
-	//self.songNameScrollView.frame = CGRectMake(35, 0, 235, 50);
-	
+
 	// Automatically set the width based on the width of the text
 	songNameLabel.frame = CGRectMake(0, 0, 235, 37);
 	CGSize expectedLabelSize = [songNameLabel.text sizeWithFont:songNameLabel.font constrainedToSize:CGSizeMake(1000,60) lineBreakMode:songNameLabel.lineBreakMode]; 

@@ -39,14 +39,14 @@
 #import "AudioEngine.h"
 #import "FlurryAnalytics.h"
 #import "UIView+Tools.h"
-#import "UIViewController+PushViewController.h"
+#import "UIViewController+PushViewControllerCustom.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
 #import "AsynchronousImageView.h"
 
 @implementation NewHomeViewController
 
-@synthesize receivedData;
+@synthesize receivedData, connection;
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -380,10 +380,10 @@
 
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getRandomSongs" andParameters:parameters];
     
-	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	if (connection)
+	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+	if (self.connection)
 	{
-		receivedData = [[NSMutableData data] retain];
+		self.receivedData = [NSMutableData data];
 		
 		// Display the loading screen
 		[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
@@ -399,7 +399,9 @@
 
 - (void)cancelLoad
 {
-	[connection cancel];
+	[self.connection cancel];
+	self.connection = nil;
+	self.receivedData = nil;
 	[viewObjectsS hideLoadingScreen];
 }
 
@@ -416,7 +418,7 @@
 	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
 	if (IS_IPAD())
 	{
-		[self pushViewControllerWithNavControllerOnIpad:serverListViewController];
+		[self pushViewControllerCustomWithNavControllerOnIpad:serverListViewController];
 	}
 	else
 	{

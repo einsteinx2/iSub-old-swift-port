@@ -26,7 +26,8 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "UIView+Tools.h"
 #import "NSArray+Additions.h"
-#import "UIViewController+PushViewController.h"
+#import "UIViewController+PushViewControllerCustom.h"
+#import "ServerListViewController.h"
 
 #define kCellText @"CellText"
 #define kCellImage @"CellImage"
@@ -36,6 +37,13 @@
 
 #pragma mark -
 #pragma mark View lifecycle
+
+- (void)toggleOfflineMode
+{
+	self.isFirstLoad = YES;
+	[self loadCellContents];
+	[self viewDidAppear:YES];
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -170,7 +178,7 @@
 	
 }
 
--(void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+-(void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
 	[super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }
@@ -237,21 +245,33 @@
 {
 	self.tableView.scrollEnabled = NO;
 	
-	cellContents = [[NSMutableArray alloc] init];
-	[cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"home-tabbaricon.png"], kCellImage, @"Home", kCellText, nil]];
-	[cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"folders-tabbaricon.png"], kCellImage, @"Folders", kCellText, nil]];
-	[cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"playlists-tabbaricon.png"], kCellImage, @"Playlists", kCellText, nil]];
-	[cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"playing-tabbaricon.png"], kCellImage, @"Now Playing", kCellText, nil]];
-	[cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"bookmarks-tabbaricon.png"], kCellImage, @"Bookmarks", kCellText, nil]];
-	[cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"cache-tabbaricon.png"], kCellImage, @"Cache", kCellText, nil]];
-	[cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"chat-tabbaricon.png"], kCellImage, @"Chat", kCellText, nil]];
+	self.cellContents = [NSMutableArray arrayWithCapacity:10];
 	
-	if (settingsS.isSongsTabEnabled)
+	if (viewObjectsS.isOfflineMode)
 	{
-		self.tableView.scrollEnabled = YES;
-		[cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"genres-tabbaricon.png"], kCellImage, @"Genres", kCellText, nil]];
-		[cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"albums-tabbaricon.png"], kCellImage, @"Albums", kCellText, nil]];
-		[cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"songs-tabbaricon.png"], kCellImage, @"Songs", kCellText, nil]];
+		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"folders-tabbaricon.png"], kCellImage, @"Folders", kCellText, nil]];
+		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"genres-tabbaricon.png"], kCellImage, @"Genres", kCellText, nil]];
+		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"playlists-tabbaricon.png"], kCellImage, @"Playlists", kCellText, nil]];
+		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"bookmarks-tabbaricon.png"], kCellImage, @"Bookmarks", kCellText, nil]];
+		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"settings-tabbaricon.png"], kCellImage, @"Settings", kCellText, nil]];
+	}
+	else
+	{
+		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"home-tabbaricon.png"], kCellImage, @"Home", kCellText, nil]];
+		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"folders-tabbaricon.png"], kCellImage, @"Folders", kCellText, nil]];
+		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"playlists-tabbaricon.png"], kCellImage, @"Playlists", kCellText, nil]];
+		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"playing-tabbaricon.png"], kCellImage, @"Now Playing", kCellText, nil]];
+		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"bookmarks-tabbaricon.png"], kCellImage, @"Bookmarks", kCellText, nil]];
+		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"cache-tabbaricon.png"], kCellImage, @"Cache", kCellText, nil]];
+		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"chat-tabbaricon.png"], kCellImage, @"Chat", kCellText, nil]];
+		
+		if (settingsS.isSongsTabEnabled)
+		{
+			self.tableView.scrollEnabled = YES;
+			[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"genres-tabbaricon.png"], kCellImage, @"Genres", kCellText, nil]];
+			[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"albums-tabbaricon.png"], kCellImage, @"Albums", kCellText, nil]];
+			[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"songs-tabbaricon.png"], kCellImage, @"Songs", kCellText, nil]];
+		}
 	}
 	
 	[self.tableView reloadData];
@@ -339,19 +359,35 @@
 	// Present the view controller
 	//
 	UIViewController *controller;
-	switch (indexPath.row) 
+	
+	if (viewObjectsS.isOfflineMode)
 	{
-		case 0: controller = [[NewHomeViewController alloc] initWithNibName:@"NewHomeViewController~iPad" bundle:nil]; break;
-		case 1: controller = [[FoldersViewController alloc] initWithNibName:@"FoldersViewController" bundle:nil]; break;
-		case 2: controller = [[PlaylistsViewController alloc] initWithNibName:@"PlaylistsViewController" bundle:nil]; break;
-		case 3: controller = [[PlayingViewController alloc] initWithNibName:@"PlayingViewController" bundle:nil]; break;
-		case 4: controller = [[BookmarksViewController alloc] initWithNibName:@"BookmarksViewController" bundle:nil]; break;
-		case 5: controller = [[CacheViewController alloc] initWithNibName:@"CacheViewController" bundle:nil]; break;
-		case 6: controller = [[ChatViewController alloc] initWithNibName:@"ChatViewController" bundle:nil]; break;
-		case 7: controller = [[GenresViewController alloc] initWithNibName:@"GenresViewController" bundle:nil]; break;
-		case 8: controller = [[AllAlbumsViewController alloc] initWithNibName:@"AllAlbumsViewController" bundle:nil]; break;
-		case 9: controller = [[AllSongsViewController alloc] initWithNibName:@"AllSongsViewController" bundle:nil]; break;
-		default: controller = nil;
+		switch (indexPath.row) 
+		{
+			case 0: controller = [[CacheViewController alloc] initWithNibName:@"CacheViewController" bundle:nil]; break;
+			case 1: controller = [[GenresViewController alloc] initWithNibName:@"GenresViewController" bundle:nil]; break;
+			case 2: controller = [[PlaylistsViewController alloc] initWithNibName:@"PlaylistsViewController" bundle:nil]; break;
+			case 3: controller = [[BookmarksViewController alloc] initWithNibName:@"BookmarksViewController" bundle:nil]; break;
+			case 4: controller = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil]; break;
+			default: controller = nil;
+		}
+	}
+	else
+	{
+		switch (indexPath.row) 
+		{
+			case 0: controller = [[NewHomeViewController alloc] initWithNibName:@"NewHomeViewController~iPad" bundle:nil]; break;
+			case 1: controller = [[FoldersViewController alloc] initWithNibName:@"FoldersViewController" bundle:nil]; break;
+			case 2: controller = [[PlaylistsViewController alloc] initWithNibName:@"PlaylistsViewController" bundle:nil]; break;
+			case 3: controller = [[PlayingViewController alloc] initWithNibName:@"PlayingViewController" bundle:nil]; break;
+			case 4: controller = [[BookmarksViewController alloc] initWithNibName:@"BookmarksViewController" bundle:nil]; break;
+			case 5: controller = [[CacheViewController alloc] initWithNibName:@"CacheViewController" bundle:nil]; break;
+			case 6: controller = [[ChatViewController alloc] initWithNibName:@"ChatViewController" bundle:nil]; break;
+			case 7: controller = [[GenresViewController alloc] initWithNibName:@"GenresViewController" bundle:nil]; break;
+			case 8: controller = [[AllAlbumsViewController alloc] initWithNibName:@"AllAlbumsViewController" bundle:nil]; break;
+			case 9: controller = [[AllSongsViewController alloc] initWithNibName:@"AllSongsViewController" bundle:nil]; break;
+			default: controller = nil;
+		}
 	}
 	
 	controller.view.width = ISMSiPadViewWidth;

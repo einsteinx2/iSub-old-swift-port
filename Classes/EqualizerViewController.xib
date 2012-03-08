@@ -136,40 +136,6 @@
 								<float key="IBUIMinValue">1</float>
 								<float key="IBUIMaxValue">4</float>
 							</object>
-							<object class="IBUITextField" id="561648492">
-								<reference key="NSNextResponder" ref="969854825"/>
-								<int key="NSvFlags">298</int>
-								<string key="NSFrame">{{20, 54}, {280, 31}}</string>
-								<reference key="NSSuperview" ref="969854825"/>
-								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="949317054"/>
-								<string key="NSReuseIdentifierKey">_NS:304</string>
-								<bool key="IBUIOpaque">NO</bool>
-								<bool key="IBUIClipsSubviews">YES</bool>
-								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<int key="IBUIContentVerticalAlignment">0</int>
-								<string key="IBUIText"/>
-								<int key="IBUIBorderStyle">3</int>
-								<object class="NSColor" key="IBUITextColor">
-									<int key="NSColorSpace">3</int>
-									<bytes key="NSWhite">MAA</bytes>
-									<reference key="NSCustomColorSpace" ref="145595332"/>
-								</object>
-								<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
-								<float key="IBUIMinimumFontSize">17</float>
-								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
-									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								</object>
-								<object class="IBUIFontDescription" key="IBUIFontDescription">
-									<int key="type">1</int>
-									<double key="pointSize">14</double>
-								</object>
-								<object class="NSFont" key="IBUIFont">
-									<string key="NSName">Helvetica</string>
-									<double key="NSSize">14</double>
-									<int key="NSfFlags">16</int>
-								</object>
-							</object>
 							<object class="IBUIButton" id="949317054">
 								<reference key="NSNextResponder" ref="969854825"/>
 								<int key="NSvFlags">300</int>
@@ -306,6 +272,40 @@
 								<reference key="IBUINormalTitleShadowColor" ref="13418143"/>
 								<reference key="IBUIFontDescription" ref="742502493"/>
 								<reference key="IBUIFont" ref="658778827"/>
+							</object>
+							<object class="IBUITextField" id="561648492">
+								<reference key="NSNextResponder" ref="969854825"/>
+								<int key="NSvFlags">298</int>
+								<string key="NSFrame">{{20, 54}, {280, 31}}</string>
+								<reference key="NSSuperview" ref="969854825"/>
+								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView" ref="949317054"/>
+								<string key="NSReuseIdentifierKey">_NS:304</string>
+								<bool key="IBUIOpaque">NO</bool>
+								<bool key="IBUIClipsSubviews">YES</bool>
+								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+								<int key="IBUIContentVerticalAlignment">0</int>
+								<string key="IBUIText"/>
+								<int key="IBUIBorderStyle">3</int>
+								<object class="NSColor" key="IBUITextColor">
+									<int key="NSColorSpace">3</int>
+									<bytes key="NSWhite">MAA</bytes>
+									<reference key="NSCustomColorSpace" ref="145595332"/>
+								</object>
+								<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
+								<float key="IBUIMinimumFontSize">17</float>
+								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
+									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+								</object>
+								<object class="IBUIFontDescription" key="IBUIFontDescription">
+									<int key="type">1</int>
+									<double key="pointSize">14</double>
+								</object>
+								<object class="NSFont" key="IBUIFont">
+									<string key="NSName">Helvetica</string>
+									<double key="NSSize">14</double>
+									<int key="NSfFlags">16</int>
+								</object>
 							</object>
 						</array>
 						<string key="NSFrame">{{0, 320}, {320, 140}}</string>
@@ -499,11 +499,11 @@
 						<array class="NSMutableArray" key="children">
 							<reference ref="151441153"/>
 							<reference ref="735940589"/>
-							<reference ref="561648492"/>
 							<reference ref="949317054"/>
 							<reference ref="792157056"/>
 							<reference ref="594884267"/>
 							<reference ref="346405848"/>
+							<reference ref="561648492"/>
 							<reference ref="1037058280"/>
 						</array>
 						<reference key="parent" ref="607013602"/>

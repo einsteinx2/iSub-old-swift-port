@@ -18,7 +18,7 @@
 
 @implementation CacheAlbumUITableViewCell
 
-@synthesize segment, seg1, coverArtView, albumNameScrollView, albumNameLabel;
+@synthesize segments, coverArtView, albumNameScrollView, albumNameLabel;
 
 #pragma mark - Overlay
 
@@ -67,7 +67,8 @@
 
 - (void)dealloc 
 {
-	[seg1 release]; seg1 = nil;
+	[segments release]; segments = nil;
+	//[seg1 release]; seg1 = nil;
 
     [super dealloc];
 }
@@ -98,8 +99,19 @@
 
 - (void)deleteAllSongs
 {
-	FMResultSet *result;
-	result = [databaseS.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text];
+	NSMutableArray *newSegments = [NSMutableArray arrayWithArray:segments];
+	[newSegments addObject:self.albumNameLabel.text];
+	
+	NSUInteger segment = [newSegments count];
+
+	NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ", segment+1];
+	for (int i = 2; i <= segment; i++)
+	{
+		[query appendFormat:@" AND seg%i = ? ", i];
+	}
+	[query appendFormat:@"ORDER BY seg%i COLLATE NOCASE", segment+1, segment+1];
+	
+	FMResultSet *result = [databaseS.songCacheDb executeQuery:query withArgumentsInArray:newSegments];
 	
 	while ([result next])
 	{
@@ -126,8 +138,19 @@
 
 - (void)queueAllSongs
 {
-	FMResultSet *result;
-	result = [databaseS.songCacheDb executeQuery:[NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)], seg1, albumNameLabel.text];
+	NSMutableArray *newSegments = [NSMutableArray arrayWithArray:segments];
+	[newSegments addObject:self.albumNameLabel.text];
+	
+	NSUInteger segment = [newSegments count];
+	
+	NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ", segment+1];
+	for (int i = 2; i <= segment; i++)
+	{
+		[query appendFormat:@" AND seg%i = ? ", i];
+	}
+	[query appendFormat:@"ORDER BY seg%i COLLATE NOCASE", segment+1, segment+1];
+	
+	FMResultSet *result = [databaseS.songCacheDb executeQuery:query withArgumentsInArray:newSegments];
 	
 	while ([result next])
 	{

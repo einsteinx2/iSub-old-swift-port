@@ -9,7 +9,7 @@
 #import "SUSLoaderDelegate.h"
 #import "FolderDropdownDelegate.h"
 
-@class LoadingScreen, Artist, EGORefreshTableHeaderView, FolderDropdownControl, SUSRootFoldersDAO;
+@class Artist, EGORefreshTableHeaderView, FolderDropdownControl, SUSRootFoldersDAO;
 
 @interface FoldersViewController : UITableViewController <UISearchBarDelegate, SUSLoaderDelegate, FolderDropdownDelegate>
 {
@@ -19,7 +19,6 @@
 	UILabel *reloadTimeLabel;
 	IBOutlet UISearchBar *searchBar;
 	UIButton *blockerButton;
-	LoadingScreen *allArtistsLoadingScreen;
 	BOOL letUserSelectRow;
 	
 	BOOL isSearching;

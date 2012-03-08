@@ -26,6 +26,7 @@
 	if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) 
 	{		
 		artistNameScrollView = [[UIScrollView alloc] init];
+		artistNameScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		artistNameScrollView.showsVerticalScrollIndicator = NO;
 		artistNameScrollView.showsHorizontalScrollIndicator = NO;
 		artistNameScrollView.userInteractionEnabled = NO;

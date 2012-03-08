@@ -23,6 +23,7 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "MusicSingleton.h"
 #import "NSArray+Additions.h"
+#import "SocialSingleton.h"
 
 // TODO: verify secondsOffset usage
 
@@ -32,6 +33,7 @@
 @synthesize eqValueArray, eqHandleArray, eqDataType, eqReadSyncObject, bassUserInfoDict;//fileStreamUserInfo1, fileStreamUserInfo2;
 @synthesize shouldResumeFromInterruption;
 @synthesize startSongThread;
+@synthesize hasTweeted, hasNotifiedSubsonic, hasScrobbled;
 
 // BASS plugins
 extern void BASSFLACplugin;
@@ -406,6 +408,34 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 
 #pragma mark - Output stream callbacks
 
+- (void)clearSocial
+{
+	self.hasTweeted = NO;
+	self.hasScrobbled = NO;
+	self.hasNotifiedSubsonic = NO;
+}
+
+- (void)handleSocial
+{
+	if (!self.hasTweeted && self.progress >= socialS.tweetDelay)
+	{
+		self.hasTweeted = YES;
+		[socialS tweetSong];
+	}
+	
+	if (!self.hasScrobbled && self.progress >= socialS.scrobbleDelay)
+	{
+		self.hasScrobbled = YES;
+		[socialS scrobbleSongAsSubmission];
+	}
+	
+	if (!self.hasNotifiedSubsonic && self.progress >= socialS.subsonicDelay)
+	{
+		self.hasNotifiedSubsonic = YES;
+		[socialS notifySubsonic];
+	}
+}
+
 - (DWORD)bassGetOutputData:(void *)buffer length:(DWORD)length
 {	
 	DWORD r;
@@ -417,6 +447,8 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 			//DLog(@"getting output data");
 			r = BASS_ChannelGetData(self.currentReadingStream, buffer, length);
 			
+			[self handleSocial];
+						
 			// Check if stream is now complete
 			if (!BASS_ChannelIsActive(self.currentReadingStream))
 			{
@@ -425,6 +457,8 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 				if (self.currentStreamTempo) BASS_StreamFree(self.currentStreamTempo);
 				BASS_StreamFree(self.currentStream);
 				//DLog(@"freed current stream: %u  currentStreamTempo: %u", self.currentStream, self.currentStreamTempo); 
+				
+				[self clearSocial];
 				
 				// Increment current playlist index
 				[playlistS incrementIndex];
@@ -456,6 +490,8 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 					[self prepareNextSongStream];
 					
 					r = [self bassGetOutputData:buffer length:length];
+					
+					if (r) [socialS scrobbleSongAsPlaying];
 					
 					// Mark the last played time in the database for cache cleanup
 					playlistS.currentSong.playedDate = [NSDate date];
@@ -641,6 +677,8 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		self.volumeFx = 0;
 		self.bassReinitSampleRate = 0;
 		self.isPlaying = NO;
+		
+		[self clearSocial];
 		
 		[self.bassUserInfoDict removeAllObjects];
 				
@@ -966,6 +1004,9 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 			BASS_ChannelPlay(self.outStream, FALSE);
 			self.isPlaying = YES;
 			
+			// This is a new song so notify Last.FM that it's playing
+			[socialS scrobbleSongAsPlaying];
+			
 			// Prepare the next song
 			[self prepareNextSongStream];
 			
@@ -1041,6 +1082,11 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 }
 
 #pragma mark - Audio Engine Properties
+
+- (BOOL)isStarted
+{
+	return self.currentStream;
+}
 
 - (NSInteger)bitRate
 {

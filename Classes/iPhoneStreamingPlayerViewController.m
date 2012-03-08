@@ -1152,7 +1152,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			audioEngineS.startSecondsOffset = progressSlider.value;
 			
 			[streamManagerS removeStreamAtIndex:0];
-			[streamManagerS queueStreamForSong:currentSong byteOffset:byteOffset secondsOffset:progressSlider.value atIndex:0 isTempCache:YES];
+			[streamManagerS queueStreamForSong:currentSong byteOffset:byteOffset secondsOffset:progressSlider.value atIndex:0 isTempCache:YES isStartDownload:YES];
 			if ([streamManagerS.handlerStack count] > 1)
 			{
 				ISMSStreamHandler *handler = [streamManagerS.handlerStack firstObjectSafe];
@@ -1266,7 +1266,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			[streamManagerS removeStreamAtIndex:0];
             //DLog(@"byteOffset: %i", byteOffset);
 			//DLog(@"starting temp stream");
-			[streamManagerS queueStreamForSong:currentSong byteOffset:byteOffset secondsOffset:progressSlider.value atIndex:0 isTempCache:YES];
+			[streamManagerS queueStreamForSong:currentSong byteOffset:byteOffset secondsOffset:progressSlider.value atIndex:0 isTempCache:YES isStartDownload:YES];
 			if ([streamManagerS.handlerStack count] > 1)
 			{
 				ISMSStreamHandler *handler = [streamManagerS.handlerStack firstObjectSafe];
@@ -1426,12 +1426,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[self songInfoToggle:nil];
 	
 	EqualizerViewController *eqView = [[EqualizerViewController alloc] initWithNibName:@"EqualizerViewController" bundle:nil];
-	if ([eqView respondsToSelector:@selector(setModalPresentationStyle:)])
-		eqView.modalPresentationStyle = UIModalPresentationFormSheet;
-	if ([eqView respondsToSelector:@selector(setModalTransitionStyle:)])
-		eqView.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 	[self.navigationController pushViewController:eqView animated:YES];
-	//[self presentModalViewController:eqView animated:YES];
 	[eqView release];
 }
 

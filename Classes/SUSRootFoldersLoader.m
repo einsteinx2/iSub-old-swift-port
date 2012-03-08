@@ -175,12 +175,6 @@
 	}
 }
 
-// TODO Add cancel load
-- (void)cancelLoad
-{
-    [super cancelLoad];
-}
-
 #pragma mark Connection Delegate
 
 - (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 

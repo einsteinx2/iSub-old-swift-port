@@ -154,6 +154,8 @@
 - (void)cancelLoad
 {
 	[self.connection cancel];
+	self.connection = nil;
+	self.receivedData = nil;
 	self.tableView.scrollEnabled = YES;
 	[viewObjectsS hideLoadingScreen];
 	

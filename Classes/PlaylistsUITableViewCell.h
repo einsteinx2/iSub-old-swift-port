@@ -15,10 +15,13 @@
 @property (retain) UIScrollView *playlistNameScrollView;
 @property (retain) UILabel *playlistNameLabel;
 
+@property (retain) NSURLConnection *connection;
 @property (retain) NSMutableData *receivedData;
 
 @property (copy) SUSServerPlaylist *serverPlaylist;
 
 @property (nonatomic) BOOL isDownload;
+
+- (void)cancelLoad;
 
 @end

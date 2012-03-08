@@ -20,7 +20,7 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "0"
-         filePath = "/Volumes/Backup/Dropbox/iPhone Dev/iSub/trunk/Classes/CustomScrollView.m"
+         filePath = "../../../../Backup/Dropbox/iPhone Dev/iSub/trunk/Classes/CustomScrollView.m"
          timestampString = "321765736.940174"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
@@ -117,11 +117,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/PlaylistsViewController.m"
-         timestampString = "352690152.766862"
+         timestampString = "352761591.923741"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1298"
-         endingLineNumber = "1298"
+         startingLineNumber = "1283"
+         endingLineNumber = "1283"
          landmarkName = "-parseData"
          landmarkType = "5">
       </FileBreakpoint>
@@ -439,11 +439,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/PlaylistsViewController.m"
-         timestampString = "352690152.766862"
+         timestampString = "352761591.923741"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1386"
-         endingLineNumber = "1386"
+         startingLineNumber = "1371"
+         endingLineNumber = "1371"
          landmarkName = "-tableView:numberOfRowsInSection:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -453,11 +453,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/PlaylistsViewController.m"
-         timestampString = "352690152.766862"
+         timestampString = "352761591.923741"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1609"
-         endingLineNumber = "1609"
+         startingLineNumber = "1594"
+         endingLineNumber = "1594"
          landmarkName = "-tableView:cellForRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -537,11 +537,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "352178517.453776"
+         timestampString = "352848536.608098"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1099"
-         endingLineNumber = "1099"
+         startingLineNumber = "1145"
+         endingLineNumber = "1145"
          landmarkName = "-currentStreamTempo"
          landmarkType = "5">
       </FileBreakpoint>
@@ -551,11 +551,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "352178517.453776"
+         timestampString = "352848536.608098"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1110"
-         endingLineNumber = "1110"
+         startingLineNumber = "1156"
+         endingLineNumber = "1156"
          landmarkName = "-setCurrentStreamTempo:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -565,11 +565,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "352178517.453776"
+         timestampString = "352848536.608098"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1112"
-         endingLineNumber = "1112"
+         startingLineNumber = "1158"
+         endingLineNumber = "1158"
          landmarkName = "-setCurrentStreamTempo:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -579,11 +579,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "352178517.453776"
+         timestampString = "352848536.608098"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1117"
-         endingLineNumber = "1117"
+         startingLineNumber = "1163"
+         endingLineNumber = "1163"
          landmarkName = "-currentReadingStream"
          landmarkType = "5">
       </FileBreakpoint>
@@ -593,11 +593,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "352178517.453776"
+         timestampString = "352848536.608098"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1100"
-         endingLineNumber = "1100"
+         startingLineNumber = "1146"
+         endingLineNumber = "1146"
          landmarkName = "-currentStreamTempo"
          landmarkType = "5">
       </FileBreakpoint>
@@ -607,11 +607,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "352178517.453776"
+         timestampString = "352848536.608098"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1104"
-         endingLineNumber = "1104"
+         startingLineNumber = "1150"
+         endingLineNumber = "1150"
          landmarkName = "-setCurrentStreamTempo:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -621,11 +621,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "352178517.453776"
+         timestampString = "352848536.608098"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "394"
-         endingLineNumber = "394"
+         startingLineNumber = "396"
+         endingLineNumber = "396"
          landmarkName = "MyFileSeekProc()"
          landmarkType = "7">
       </FileBreakpoint>
@@ -1041,11 +1041,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "352178517.453776"
+         timestampString = "352848536.608098"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "425"
-         endingLineNumber = "425"
+         startingLineNumber = "457"
+         endingLineNumber = "457"
          landmarkName = "-bassGetOutputData:length:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1055,11 +1055,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "352178517.453776"
+         timestampString = "352848536.608098"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "410"
-         endingLineNumber = "410"
+         startingLineNumber = "440"
+         endingLineNumber = "440"
          landmarkName = "-bassGetOutputData:length:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1069,11 +1069,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "352178517.453776"
+         timestampString = "352848536.608098"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "456"
-         endingLineNumber = "456"
+         startingLineNumber = "490"
+         endingLineNumber = "490"
          landmarkName = "-bassGetOutputData:length:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1083,11 +1083,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "352178517.453776"
+         timestampString = "352848536.608098"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "418"
-         endingLineNumber = "418"
+         startingLineNumber = "451"
+         endingLineNumber = "451"
          landmarkName = "-bassGetOutputData:length:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1615,11 +1615,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "352178517.453776"
+         timestampString = "352848536.608098"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "266"
-         endingLineNumber = "266"
+         startingLineNumber = "268"
+         endingLineNumber = "268"
          landmarkName = "MyFileCloseProc()"
          landmarkType = "7">
       </FileBreakpoint>
@@ -1648,8 +1648,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "383"
          endingLineNumber = "383"
-         landmarkName = "-estimatedBitrate"
-         landmarkType = "5">
+         landmarkName = "@implementation Song"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -1685,11 +1685,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "352178517.453776"
+         timestampString = "352848536.608098"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "321"
-         endingLineNumber = "321"
+         startingLineNumber = "323"
+         endingLineNumber = "323"
          landmarkName = "MyFileReadProc()"
          landmarkType = "7">
       </FileBreakpoint>
@@ -1699,11 +1699,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "352178517.453776"
+         timestampString = "352848536.608098"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "315"
-         endingLineNumber = "315"
+         startingLineNumber = "317"
+         endingLineNumber = "317"
          landmarkName = "MyFileReadProc()"
          landmarkType = "7">
       </FileBreakpoint>
@@ -1713,11 +1713,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "352178517.453776"
+         timestampString = "352848536.608098"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "812"
-         endingLineNumber = "812"
+         startingLineNumber = "850"
+         endingLineNumber = "850"
          landmarkName = "-prepareFileStream1"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1741,11 +1741,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "352178517.453776"
+         timestampString = "352848536.608098"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "353"
-         endingLineNumber = "353"
+         startingLineNumber = "355"
+         endingLineNumber = "355"
          landmarkName = "MyFileReadProc()"
          landmarkType = "7">
       </FileBreakpoint>
@@ -1783,11 +1783,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/CacheViewController.m"
-         timestampString = "352690247.714706"
+         timestampString = "352850739.836942"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1258"
-         endingLineNumber = "1258"
+         startingLineNumber = "1208"
+         endingLineNumber = "1208"
          landmarkName = "@implementation CacheViewController"
          landmarkType = "3">
       </FileBreakpoint>
@@ -1797,11 +1797,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/CacheViewController.m"
-         timestampString = "352690247.714706"
+         timestampString = "352850739.836942"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "548"
-         endingLineNumber = "548"
+         startingLineNumber = "452"
+         endingLineNumber = "452"
          landmarkName = "-reloadTable"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1811,11 +1811,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/CacheViewController.m"
-         timestampString = "352690247.714706"
+         timestampString = "352850739.836942"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "549"
-         endingLineNumber = "549"
+         startingLineNumber = "453"
+         endingLineNumber = "453"
          landmarkName = "-reloadTable"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1825,11 +1825,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/CacheViewController.m"
-         timestampString = "352690247.714706"
+         timestampString = "352850739.836942"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1304"
-         endingLineNumber = "1304"
+         startingLineNumber = "1254"
+         endingLineNumber = "1254"
          landmarkName = "-tableView:cellForRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1839,11 +1839,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/CacheViewController.m"
-         timestampString = "352690247.714706"
+         timestampString = "352850739.836942"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1303"
-         endingLineNumber = "1303"
+         startingLineNumber = "1253"
+         endingLineNumber = "1253"
          landmarkName = "-tableView:cellForRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1965,11 +1965,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/CacheViewController.m"
-         timestampString = "352690247.714706"
+         timestampString = "352850739.836942"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "848"
-         endingLineNumber = "848"
+         startingLineNumber = "800"
+         endingLineNumber = "800"
          landmarkName = "-addNoSongsScreen"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1979,11 +1979,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/CacheViewController.m"
-         timestampString = "352690247.714706"
+         timestampString = "352850739.836942"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1145"
-         endingLineNumber = "1145"
+         startingLineNumber = "1095"
+         endingLineNumber = "1095"
          landmarkName = "-deleteSongsAction:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1993,11 +1993,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/CacheViewController.m"
-         timestampString = "352690247.714706"
+         timestampString = "352850739.836942"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1321"
-         endingLineNumber = "1321"
+         startingLineNumber = "1271"
+         endingLineNumber = "1271"
          landmarkName = "-tableView:cellForRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2007,11 +2007,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/CacheViewController.m"
-         timestampString = "352690247.714706"
+         timestampString = "352850739.836942"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "566"
-         endingLineNumber = "566"
+         startingLineNumber = "532"
+         endingLineNumber = "532"
          landmarkName = "-reloadTable"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2021,11 +2021,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/CacheViewController.m"
-         timestampString = "352690247.714706"
+         timestampString = "352850739.836942"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "580"
-         endingLineNumber = "580"
+         startingLineNumber = "546"
+         endingLineNumber = "546"
          landmarkName = "-reloadTable"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2035,11 +2035,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/CacheViewController.m"
-         timestampString = "352690247.714706"
+         timestampString = "352850739.836942"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "587"
-         endingLineNumber = "587"
+         startingLineNumber = "553"
+         endingLineNumber = "553"
          landmarkName = "-reloadTable"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2119,11 +2119,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/FoldersViewController.m"
-         timestampString = "352684539.01801"
+         timestampString = "352773157.011561"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "73"
-         endingLineNumber = "73"
+         startingLineNumber = "72"
+         endingLineNumber = "72"
          landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2133,11 +2133,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/FoldersViewController.m"
-         timestampString = "352684545.526296"
+         timestampString = "352773157.011561"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "77"
-         endingLineNumber = "77"
+         startingLineNumber = "76"
+         endingLineNumber = "76"
          landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2147,11 +2147,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/DatabaseSingleton.m"
-         timestampString = "352684637.187553"
+         timestampString = "352846574.820211"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "44"
-         endingLineNumber = "44"
+         startingLineNumber = "45"
+         endingLineNumber = "45"
          landmarkName = "-initDatabases"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2189,11 +2189,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/MenuViewController.m"
-         timestampString = "352688546.9427"
+         timestampString = "352850136.120824"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "334"
-         endingLineNumber = "334"
+         startingLineNumber = "354"
+         endingLineNumber = "354"
          landmarkName = "-tableView:didSelectRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2203,11 +2203,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/MenuViewController.m"
-         timestampString = "352688559.196411"
+         timestampString = "352850136.120824"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "339"
-         endingLineNumber = "339"
+         startingLineNumber = "359"
+         endingLineNumber = "359"
          landmarkName = "-showControllerForIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2231,11 +2231,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/CacheViewController.m"
-         timestampString = "352690247.714706"
+         timestampString = "352850739.836942"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "642"
-         endingLineNumber = "642"
+         startingLineNumber = "600"
+         endingLineNumber = "600"
          landmarkName = "-removeSaveEditButtons"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2245,11 +2245,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/CacheViewController.m"
-         timestampString = "352690247.714706"
+         timestampString = "352850739.836942"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "640"
-         endingLineNumber = "640"
+         startingLineNumber = "598"
+         endingLineNumber = "598"
          landmarkName = "-removeSaveEditButtons"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2259,11 +2259,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/CacheViewController.m"
-         timestampString = "352690247.714706"
+         timestampString = "352850739.836942"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "695"
-         endingLineNumber = "695"
+         startingLineNumber = "646"
+         endingLineNumber = "646"
          landmarkName = "-addSaveEditButtons"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2273,11 +2273,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/FoldersViewController.m"
-         timestampString = "352689845.478801"
+         timestampString = "352773157.011561"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "149"
-         endingLineNumber = "149"
+         startingLineNumber = "148"
+         endingLineNumber = "148"
          landmarkName = "-dealloc"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2301,11 +2301,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/StackScrollViewController.m"
-         timestampString = "352696182.698048"
+         timestampString = "352769738.125169"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "777"
-         endingLineNumber = "777"
+         startingLineNumber = "798"
+         endingLineNumber = "798"
          landmarkName = "-addViewInSlider:invokeByController:isStackStartView:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2324,7 +2324,7 @@
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
-         shouldBeEnabled = "Yes"
+         shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
@@ -2343,11 +2343,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/FoldersViewController.m"
-         timestampString = "352700159.159804"
+         timestampString = "352773157.011561"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "315"
-         endingLineNumber = "315"
+         startingLineNumber = "320"
+         endingLineNumber = "320"
          landmarkName = "-folderDropdownViewsFinishedMoving"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2433,6 +2433,216 @@
          startingLineNumber = "227"
          endingLineNumber = "227"
          landmarkName = "-scrollViewDidScroll:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/CacheViewController.m"
+         timestampString = "352850739.836942"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "451"
+         endingLineNumber = "451"
+         landmarkName = "-reloadTable"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/CacheAlbumViewController.m"
+         timestampString = "352767591.282269"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "85"
+         endingLineNumber = "85"
+         landmarkName = "-viewWillAppear:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/CacheViewController.m"
+         timestampString = "352850739.836942"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "579"
+         endingLineNumber = "579"
+         landmarkName = "-updateQueueDownloadProgress"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/CacheViewController.m"
+         timestampString = "352850739.836942"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "230"
+         endingLineNumber = "230"
+         landmarkName = "-viewDidLoad"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/CacheViewController.m"
+         timestampString = "352850739.836942"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "1301"
+         endingLineNumber = "1301"
+         landmarkName = "-tableView:cellForRowAtIndexPath:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/CacheViewController.m"
+         timestampString = "352850739.836942"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "1305"
+         endingLineNumber = "1305"
+         landmarkName = "-tableView:cellForRowAtIndexPath:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/CacheViewController.m"
+         timestampString = "352850739.836942"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "1310"
+         endingLineNumber = "1310"
+         landmarkName = "-tableView:cellForRowAtIndexPath:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/CacheViewController.m"
+         timestampString = "352850739.836942"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "959"
+         endingLineNumber = "959"
+         landmarkName = "-editSongsAction:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/CacheViewController.m"
+         timestampString = "352850739.836942"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "941"
+         endingLineNumber = "941"
+         landmarkName = "-editSongsAction:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/SUSRootFoldersDAO.m"
+         timestampString = "352772593.104394"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "310"
+         endingLineNumber = "310"
+         landmarkName = "-indexPositions"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/SUSRootFoldersDAO.m"
+         timestampString = "352772594.588343"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "312"
+         endingLineNumber = "312"
+         landmarkName = "-indexPositions"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/SUSRootFoldersDAO.m"
+         timestampString = "352772670.137487"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "313"
+         endingLineNumber = "313"
+         landmarkName = "-indexPositions"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/MenuViewController.m"
+         timestampString = "352850136.120824"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "367"
+         endingLineNumber = "367"
+         landmarkName = "-showControllerForIndexPath:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/CacheViewController.m"
+         timestampString = "352850739.836942"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "1232"
+         endingLineNumber = "1232"
+         landmarkName = "-tableView:cellForRowAtIndexPath:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/NWPickerField/NWPickerField.m"
+         timestampString = "352860759.133589"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "108"
+         endingLineNumber = "108"
+         landmarkName = "-didMoveToSuperview"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

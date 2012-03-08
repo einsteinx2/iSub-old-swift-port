@@ -6,6 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+#import "iSubAppDelegate.h"
 #import "PlaylistsUITableViewCell.h"
 #import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
@@ -21,7 +22,7 @@
 
 @implementation PlaylistsUITableViewCell
 
-@synthesize receivedData;
+@synthesize receivedData, connection;
 @synthesize playlistNameScrollView, playlistNameLabel;
 @synthesize serverPlaylist, isDownload;
 
@@ -71,15 +72,15 @@
 
 - (void)downloadAction
 {
-	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
+	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
 	
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(serverPlaylist.playlistId) forKey:@"id"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getPlaylist" andParameters:parameters];
     
-    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	if (connection)
+    self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+	if (self.connection)
 	{
-        isDownload = YES;
+        self.isDownload = YES;
 		self.receivedData = [NSMutableData dataWithCapacity:0];
 	} 
 	else 
@@ -95,15 +96,15 @@
 
 - (void)queueAction
 {
-	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
+	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
 	
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(serverPlaylist.playlistId) forKey:@"id"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getPlaylist" andParameters:parameters];
     
-    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	if (connection)
+    self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+	if (self.connection)
 	{
-        isDownload = NO;
+        self.isDownload = NO;
 		self.receivedData = [NSMutableData dataWithCapacity:0];
 	} 
 	else 
@@ -112,6 +113,14 @@
 	}
     
 	[self hideOverlay];
+}
+
+- (void)cancelLoad
+{
+	[self.connection cancel];
+	self.connection = nil;
+	self.receivedData = nil;
+	[viewObjectsS hideLoadingScreen];
 }
 
 #pragma mark - Scrolling

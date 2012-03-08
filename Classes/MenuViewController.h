@@ -23,4 +23,6 @@
 - (UIView *)createFooterView;
 - (void)showHome;
 
+- (void)toggleOfflineMode;
+
 @end

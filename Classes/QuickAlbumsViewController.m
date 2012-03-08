@@ -17,7 +17,7 @@
 #import "UIView+Tools.h"
 #import "iPadRootViewController.h"
 #import "StackScrollViewController.h"
-#import "UIViewController+PushViewController.h"
+#import "UIViewController+PushViewControllerCustom.h"
 
 @interface QuickAlbumsViewController (Private)
 - (void)albumLoad:(NSString*)modifier;

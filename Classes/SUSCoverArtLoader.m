@@ -108,12 +108,6 @@
 	}
 }
 
-// TODO Add cancel load
-- (void)cancelLoad
-{
-    [super cancelLoad];
-}
-
 #pragma mark - Connection Delegate
 
 - (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
@@ -159,8 +153,8 @@
 	{
         DLog(@"art loading completed for: %@", self.coverArtId);
         [self.db executeUpdate:@"REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [self.coverArtId md5], self.receivedData];
-		//if (isLarge)
-		//	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AlbumArtLargeDownloaded];
+		if (isLarge)
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AlbumArtLargeDownloaded];
         
 		// Notify the delegate that the loading is finished
 		[self informDelegateLoadingFinished];

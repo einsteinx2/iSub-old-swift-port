@@ -13,7 +13,6 @@
 #import "ServerListViewController.h"
 #import "AlbumViewController.h"
 #import "Artist.h"
-#import "LoadingScreen.h"
 #import "ArtistUITableViewCell.h"
 #import "NSString+md5.h"
 #import "FMDatabaseAdditions.h"
@@ -29,7 +28,7 @@
 #import "SUSAllSongsLoader.h"
 #import "SeparaterView.h"
 #import "NSArray+Additions.h"
-#import "UIViewController+PushViewController.h"
+#import "UIViewController+PushViewControllerCustom.h"
 
 @interface FoldersViewController (Private)
 
@@ -237,13 +236,21 @@
 	self.tableView.tableHeaderView = headerView;
 }
 
+- (void)cancelLoad
+{
+	[dataModel cancelLoad];
+	[viewObjectsS hideLoadingScreen];
+	[self dataSourceDidFinishLoadingNewData];
+}
+
 -(void)loadData:(NSNumber *)folderId 
 {
 	[dropdown updateFolders];
 	
 	viewObjectsS.isArtistsLoading = YES;
 	
-	allArtistsLoadingScreen = [[LoadingScreen alloc] initOnView:self.view.superview withMessage:[NSArray arrayWithObjects:@"Processing Folders", @"", @"", @"", nil]  blockInput:YES mainWindow:NO];
+	//allArtistsLoadingScreen = [[LoadingScreen alloc] initOnView:self.view.superview withMessage:[NSArray arrayWithObjects:@"Processing Folders", @"", @"", @"", nil]  blockInput:YES mainWindow:NO];
+	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
 	
 	dataModel.selectedFolderId = folderId;
 	[dataModel startLoad];
@@ -254,8 +261,7 @@
 	viewObjectsS.isArtistsLoading = NO;
 	
 	// Hide the loading screen
-	[allArtistsLoadingScreen hide]; 
-	[allArtistsLoadingScreen release]; allArtistsLoadingScreen = nil;
+	[viewObjectsS hideLoadingScreen];
 	
 	[self dataSourceDidFinishLoadingNewData];
 	
@@ -279,8 +285,7 @@
 	viewObjectsS.isArtistsLoading = NO;
 	
 	// Hide the loading screen
-	[allArtistsLoadingScreen hide]; 
-	[allArtistsLoadingScreen release]; allArtistsLoadingScreen = nil;
+	[viewObjectsS hideLoadingScreen];
 	
 	[self dataSourceDidFinishLoadingNewData];
 }
@@ -676,7 +681,7 @@
 			}
 		}
 		AlbumViewController* albumViewController = [[AlbumViewController alloc] initWithArtist:anArtist orAlbum:nil];
-		[self pushViewController:albumViewController];
+		[self pushViewControllerCustom:albumViewController];
 		[albumViewController release];
 	}
 	else

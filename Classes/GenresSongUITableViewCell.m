@@ -26,6 +26,7 @@
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]))
 	{		
 		trackNumberLabel = [[UILabel alloc] init];
+		trackNumberLabel.frame = CGRectMake(0, 4, 30, 41);
 		trackNumberLabel.backgroundColor = [UIColor clearColor];
 		trackNumberLabel.textAlignment = UITextAlignmentCenter;
 		trackNumberLabel.font = [UIFont boldSystemFontOfSize:22];
@@ -35,6 +36,8 @@
 		[trackNumberLabel release];
 		
 		songNameScrollView = [[UIScrollView alloc] init];
+		songNameScrollView.frame = CGRectMake(35, 0, 235, 50);
+		songNameScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		songNameScrollView.showsVerticalScrollIndicator = NO;
 		songNameScrollView.showsHorizontalScrollIndicator = NO;
 		songNameScrollView.userInteractionEnabled = NO;
@@ -58,6 +61,8 @@
 		[artistNameLabel release];
 		
 		songDurationLabel = [[UILabel alloc] init];
+		songDurationLabel.frame = CGRectMake(270, 0, 45, 41);
+		songDurationLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		songDurationLabel.backgroundColor = [UIColor clearColor];
 		songDurationLabel.textAlignment = UITextAlignmentRight;
 		songDurationLabel.font = [UIFont systemFontOfSize:16];
@@ -75,9 +80,6 @@
 {
     [super layoutSubviews];
 	
-	trackNumberLabel.frame = CGRectMake(0, 4, 30, 41);
-	songNameScrollView.frame = CGRectMake(35, 0, 235, 50);
-	
 	// Automatically set the width based on the width of the text
 	songNameLabel.frame = CGRectMake(0, 0, 235, 37);
 	CGSize expectedLabelSize = [songNameLabel.text sizeWithFont:songNameLabel.font constrainedToSize:CGSizeMake(1000,60) lineBreakMode:songNameLabel.lineBreakMode]; 
@@ -90,8 +92,6 @@
 	newFrame = artistNameLabel.frame;
 	newFrame.size.width = expectedLabelSize.width;
 	artistNameLabel.frame = newFrame;
-	
-	songDurationLabel.frame = CGRectMake(270, 0, 45, 41);
 }
 
 - (void)dealloc 

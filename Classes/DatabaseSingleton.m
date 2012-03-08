@@ -27,6 +27,7 @@
 #import "NSArray+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
+#import "AudioEngine.h"
 
 static DatabaseSingleton *sharedInstance = nil;
 
@@ -659,7 +660,6 @@ static DatabaseSingleton *sharedInstance = nil;
 - (void)downloadAllSongs:(NSString *)folderId artist:(Artist *)theArtist
 {
 	// Show loading screen
-	//[viewObjectsS showLoadingScreenOnMainWindow];
 	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:queueAll];
 	
 	// Download all the songs
@@ -672,7 +672,6 @@ static DatabaseSingleton *sharedInstance = nil;
 - (void)queueAllSongs:(NSString *)folderId artist:(Artist *)theArtist
 {
 	// Show loading screen
-	//[viewObjectsS showLoadingScreenOnMainWindow];
 	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:queueAll];
 	
 	// Queue all the songs
@@ -684,7 +683,7 @@ static DatabaseSingleton *sharedInstance = nil;
 
 - (void)queueSong:(Song *)aSong
 {
-	if ( settingsS.isJukeboxEnabled)
+	if (settingsS.isJukeboxEnabled)
 	{
 		[aSong insertIntoTable:@"jukeboxCurrentPlaylist" inDatabase:self.currentPlaylistDb];
 		[jukeboxS jukeboxAddSong:aSong.songId];
@@ -696,19 +695,12 @@ static DatabaseSingleton *sharedInstance = nil;
 			[aSong insertIntoTable:@"shufflePlaylist" inDatabase:self.currentPlaylistDb];
 	}
 	
-	[streamManagerS fillStreamQueue];
-}
-
-- (void)showLoadingScreen
-{
-	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
+	[streamManagerS fillStreamQueue:audioEngineS.isStarted];
 }
 
 - (void)playAllSongs:(NSString *)folderId artist:(Artist *)theArtist
-{	
-	
+{
 	// Show loading screen
-	//[viewObjectsS showLoadingScreenOnMainWindow];
 	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:queueAll];
 	
 	// Clear the current and shuffle playlists
@@ -728,7 +720,6 @@ static DatabaseSingleton *sharedInstance = nil;
 {
 	
 	// Show loading screen
-	//[viewObjectsS showLoadingScreenOnMainWindow];
 	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:queueAll];
 	
 	// Clear the current and shuffle playlists

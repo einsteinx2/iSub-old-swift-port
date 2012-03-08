@@ -32,7 +32,32 @@ static SocialSingleton *sharedInstance = nil;
 #pragma mark -
 #pragma mark Class instance methods
 
-- (void)songStarted
+- (NSTimeInterval)scrobbleDelay
+{
+	// Scrobble in 30 seconds (or settings amount) if not canceled
+	Song *currentSong = playlistS.currentSong;
+	NSTimeInterval scrobbleDelay = 30.0;
+	if (currentSong.duration != nil)
+	{
+		float scrobblePercent = settingsS.scrobblePercent;
+		float duration = [currentSong.duration floatValue];
+		scrobbleDelay = scrobblePercent * duration;
+	}
+	
+	return scrobbleDelay;
+}
+
+- (NSTimeInterval)subsonicDelay
+{
+	return 10.0;
+}
+
+- (NSTimeInterval)tweetDelay
+{
+	return 30.0;
+}
+
+/*- (void)songStarted
 {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
@@ -58,29 +83,45 @@ static SocialSingleton *sharedInstance = nil;
 	{
 		[self scrobbleSong:currentSong isSubmission:NO];
 	}
-}
+}*/
 
 - (void)notifySubsonic
 {
 	// If this song wasn't just cached, then notify Subsonic of the playback
 	Song *lastCachedSong = streamManagerS.lastCachedSong;
 	Song *currentSong = playlistS.currentSong;
+	DLog(@"Asked to notify Subsonic about %@ ", currentSong.title);
 	if (![lastCachedSong isEqualToSong:currentSong])
 	{
 		NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(currentSong.songId), @"id", nil];
 		NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters byteOffset:0];
 		[[NSURLConnection alloc] initWithRequest:request delegate:self];
+		DLog(@"notified Subsonic about %@", currentSong.title);
 	}
 }
 
 #pragma mark - Scrobbling -
 
-- (void)scrobbleSong
+- (void)scrobbleSongAsSubmission
 {	
+	DLog(@"Asked to scrobble %@ as submission", playlistS.currentSong.title);
 	if (settingsS.isScrobbleEnabled)
 	{
 		Song *currentSong = playlistS.currentSong;
 		[self scrobbleSong:currentSong isSubmission:YES];
+		DLog(@"Scrobbled %@ as submission", currentSong.title);
+	}
+}
+
+- (void)scrobbleSongAsPlaying
+{
+	DLog(@"Asked to scrobble %@ as playing", playlistS.currentSong.title);
+	// If scrobbling is enabled, send "now playing" call
+	if (settingsS.isScrobbleEnabled)
+	{
+		Song *currentSong = playlistS.currentSong;
+		[self scrobbleSong:currentSong isSubmission:NO];
+		DLog(@"Scrobbled %@ as playing", currentSong.title);
 	}
 }
 
@@ -144,6 +185,8 @@ static SocialSingleton *sharedInstance = nil;
 {
 	Song *currentSong = playlistS.currentSong;
 	
+	DLog(@"Asked to tweet %@", currentSong.title);
+	
 	if (twitterEngine && settingsS.isTwitterEnabled)
 	{
 		if (currentSong.artist && currentSong.title)
@@ -154,6 +197,8 @@ static SocialSingleton *sharedInstance = nil;
 				[twitterEngine sendUpdate:tweet];
 			else
 				[twitterEngine sendUpdate:[tweet substringToIndex:140]];
+			
+			DLog(@"Tweeted %@", currentSong.title);
 		}
 		else 
 		{
@@ -166,7 +211,7 @@ static SocialSingleton *sharedInstance = nil;
 	}
 }
 
-- (void) createTwitterEngine
+- (void)createTwitterEngine
 {
 	if (twitterEngine)
 		return;
@@ -181,7 +226,7 @@ static SocialSingleton *sharedInstance = nil;
 
 //=============================================================================================================================
 // SA_OAuthTwitterEngineDelegate
-- (void) storeCachedTwitterOAuthData:(NSString *)data forUsername:(NSString *)username 
+- (void)storeCachedTwitterOAuthData:(NSString *)data forUsername:(NSString *)username 
 {
 	//DLog(@"storeCachedTwitterOAuthData: %@ for %@", data, username);
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -198,13 +243,13 @@ static SocialSingleton *sharedInstance = nil;
 
 //=============================================================================================================================
 // SA_OAuthTwitterControllerDelegate
-- (void) OAuthTwitterController:(SA_OAuthTwitterController *)controller authenticatedWithUsername:(NSString *)username 
+- (void)OAuthTwitterController:(SA_OAuthTwitterController *)controller authenticatedWithUsername:(NSString *)username 
 {
 	//DLog(@"Authenicated for %@", username);
 	[NSNotificationCenter postNotificationToMainThreadWithName:@"twitterAuthenticated"];
 }
 
-- (void) OAuthTwitterControllerFailed:(SA_OAuthTwitterController *)controller 
+- (void)OAuthTwitterControllerFailed:(SA_OAuthTwitterController *)controller 
 {
 	//DLog(@"Authentication Failed!");
 	self.twitterEngine = nil;
@@ -213,7 +258,7 @@ static SocialSingleton *sharedInstance = nil;
 	[alert release];
 }
 
-- (void) OAuthTwitterControllerCanceled:(SA_OAuthTwitterController *)controller 
+- (void)OAuthTwitterControllerCanceled:(SA_OAuthTwitterController *)controller 
 {
 	//DLog(@"Authentication Canceled.");
 	self.twitterEngine = nil;
@@ -221,12 +266,12 @@ static SocialSingleton *sharedInstance = nil;
 
 //=============================================================================================================================
 // TwitterEngineDelegate
-- (void) requestSucceeded:(NSString *)requestIdentifier 
+- (void)requestSucceeded:(NSString *)requestIdentifier 
 {
 	//DLog(@"Request %@ succeeded", requestIdentifier);
 }
 
-- (void) requestFailed:(NSString *)requestIdentifier withError:(NSError *) error 
+- (void)requestFailed:(NSString *)requestIdentifier withError:(NSError *) error 
 {
 	//DLog(@"Request %@ failed with error: %@", requestIdentifier, error);
 }
@@ -258,7 +303,7 @@ static SocialSingleton *sharedInstance = nil;
 	twitterEngine = nil;
 	[self createTwitterEngine];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songStarted) name:ISMSNotification_SongPlaybackStarted object:nil];
+	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songStarted) name:ISMSNotification_SongPlaybackStarted object:nil];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self 
 											 selector:@selector(didReceiveMemoryWarning) 
@@ -266,9 +311,12 @@ static SocialSingleton *sharedInstance = nil;
 											   object:nil];
 }
 
-+ (id)allocWithZone:(NSZone *)zone {
-    @synchronized(self) {
-        if (sharedInstance == nil) {
++ (id)allocWithZone:(NSZone *)zone 
+{
+    @synchronized(self) 
+	{
+        if (sharedInstance == nil) 
+		{
             sharedInstance = [super allocWithZone:zone];
             return sharedInstance;  // assignment and return on first allocation
         }
@@ -291,19 +339,23 @@ static SocialSingleton *sharedInstance = nil;
     return self;
 }
 
-- (id)retain {
+- (id)retain
+{
     return self;
 }
 
-- (unsigned)retainCount {
+- (unsigned)retainCount 
+{
     return UINT_MAX;  // denotes an object that cannot be released
 }
 
-- (oneway void)release {
+- (oneway void)release 
+{
     //do nothing
 }
 
-- (id)autorelease {
+- (id)autorelease 
+{
     return self;
 }
 

@@ -19,6 +19,7 @@
 #import "ServerListViewController.h"
 #import "SavedSettings.h"
 #import "FlurryAnalytics.h"
+#import "UIViewController+PushViewControllerCustom.h"
 
 
 @implementation GenresViewController
@@ -259,7 +260,7 @@
 		}
 		[result close];
 		
-		[self.navigationController pushViewController:artistViewController animated:YES];
+		[self pushViewControllerCustom:artistViewController];
 		[artistViewController release];
 	}
 	else

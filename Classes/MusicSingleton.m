@@ -83,7 +83,7 @@ double startSongSeconds = 0.0;
 		
 		// Fill the stream queue
 		if (!viewObjectsS.isOfflineMode)
-			[streamManagerS fillStreamQueue];
+			[streamManagerS fillStreamQueue:audioEngineS.isStarted];
 	}
 	else if (!currentSong.isFullyCached && viewObjectsS.isOfflineMode)
 	{
@@ -141,11 +141,12 @@ double startSongSeconds = 0.0;
 									 byteOffset:startSongBytes 
 								  secondsOffset:startSongSeconds 
 										atIndex:0 
-									isTempCache:isTempCache];
+									isTempCache:isTempCache
+								isStartDownload:YES];
 			
 			// Fill the stream queue
 			if (settingsS.isSongCachingEnabled)
-				[streamManagerS fillStreamQueue];
+				[streamManagerS fillStreamQueue:audioEngineS.isStarted];
 		}
 	}
 }

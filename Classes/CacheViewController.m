@@ -32,7 +32,7 @@
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
 #import "ISMSCacheQueueManager.h"
-#import "UIViewController+PushViewController.h"
+#import "UIViewController+PushViewControllerCustom.h"
 
 @interface CacheViewController ()
 - (void)addNoSongsScreen;
@@ -141,18 +141,22 @@
 	if (viewObjectsS.isOfflineMode) 
 	{
 		headerView.frame = CGRectMake(0, 0, 320, 50);
+		headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		
 		headerView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
+		headerView2.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		headerView2.backgroundColor = viewObjectsS.darkNormal;
 		[headerView addSubview:headerView2];
 		[headerView2 release];
 		
 		playAllImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play-all-note.png"]];
+		playAllImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		playAllImage.frame = CGRectMake(10, 10, 19, 30);
 		[headerView2 addSubview:playAllImage];
 		[playAllImage release];
 		
 		playAllLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 160, 50)];
+		playAllLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
 		playAllLabel.backgroundColor = [UIColor clearColor];
 		playAllLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
 		playAllLabel.textAlignment = UITextAlignmentCenter;
@@ -162,6 +166,7 @@
 		[playAllLabel release];
 		
 		playAllButton = [UIButton buttonWithType:UIButtonTypeCustom];
+		playAllButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
 		playAllButton.frame = CGRectMake(0, 0, 160, 40);
 		[playAllButton addTarget:self action:@selector(playAllAction:) forControlEvents:UIControlEventTouchUpInside];
 		[headerView2 addSubview:playAllButton];
@@ -171,15 +176,18 @@
 		spacerLabel2.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
 		spacerLabel2.font = [UIFont systemFontOfSize:40];
 		spacerLabel2.text = @"|";
+		spacerLabel2.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		[headerView2 addSubview:spacerLabel2];
 		[spacerLabel2 release];
 		
 		shuffleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shuffle-small.png"]];
+		shuffleImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		shuffleImage.frame = CGRectMake(180, 12, 24, 26);
 		[headerView2 addSubview:shuffleImage];
 		[shuffleImage release];
 		
 		shuffleLabel = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 160, 50)];
+		shuffleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
 		shuffleLabel.backgroundColor = [UIColor clearColor];
 		shuffleLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
 		shuffleLabel.textAlignment = UITextAlignmentCenter;
@@ -189,6 +197,7 @@
 		[shuffleLabel release];
 		
 		shuffleButton = [UIButton buttonWithType:UIButtonTypeCustom];
+		shuffleButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
 		shuffleButton.frame = CGRectMake(160, 0, 160, 40);
 		[shuffleButton addTarget:self action:@selector(shuffleAction:) forControlEvents:UIControlEventTouchUpInside];
 		[headerView2 addSubview:shuffleButton];
@@ -202,52 +211,6 @@
 	}
 	
 	self.tableView.tableHeaderView = headerView;
-	
-	
-	/*// Setup segmented control in the header view
-	UIView *spacerView;
-	if (viewObjectsS.isOfflineMode) 
-	{
-		spacerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 0)] autorelease];
-		headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 0)] autorelease];
-	}
-	else
-	{
-		if (IS_IPAD())
-		{
-			spacerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 48)] autorelease];
-			headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 48)] autorelease];
-		}
-		else
-		{
-			spacerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)] autorelease];
-			headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)] autorelease];
-		}
-	}
-	spacerView.backgroundColor = [UIColor clearColor];
-	headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
-	segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Cached", @"Queue", nil]];
-	[segmentedControl addTarget:self action:@selector(segmentAction:) forControlEvents:UIControlEventValueChanged];
-	if (IS_IPAD())
-	{
-		segmentedControl.segmentedControlStyle = UISegmentedControlStyleBezeled;
-		segmentedControl.frame = CGRectMake(5, 4, 310, 40);
-	}
-	else 
-	{
-		segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
-		segmentedControl.frame = CGRectMake(5, 2, 310, 36);
-	}
-	segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	segmentedControl.tintColor = [UIColor colorWithWhite:.57 alpha:1];
-	segmentedControl.selectedSegmentIndex = 0;
-	if (viewObjectsS.isOfflineMode) 
-	{
-		segmentedControl.hidden = YES;
-	}
-	[headerView addSubview:segmentedControl];
-	self.tableView.tableHeaderView = spacerView;
-	[self.tableView.superview addSubview:headerView];*/
 	
 	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
@@ -263,9 +226,9 @@
 		self.title = @"Cache";
 		
 		// Setup the update timer
-		updateTimer = [NSTimer scheduledTimerWithTimeInterval:.25 target:self selector:@selector(updateQueueDownloadProgress) userInfo:nil repeats:YES];
+		[self updateQueueDownloadProgress];
 		
-		[self registerForNotifications];
+		//[self registerForNotifications];
 	}
 	
 	if (IS_IPAD())
@@ -317,9 +280,14 @@
 {	
 	[super viewWillAppear:animated];
 	
+	[self registerForNotifications];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:) name:ISMSNotification_StorePurchaseComplete object:nil];
 	
 	[self reloadTable];
+	
+	[self updateQueueDownloadProgress];
+	[self updateCacheSizeLabel];
 	
 	[FlurryAnalytics logEvent:@"CacheTab"];
 }
@@ -329,7 +297,7 @@
 	[super viewWillDisappear:animated];
 	
 	[self unregisterForNotifications];
-	[updateTimer invalidate]; updateTimer = nil;
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateQueueDownloadProgress) object:nil];
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateCacheSizeLabel) object:nil];
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_StorePurchaseComplete object:nil];
@@ -356,72 +324,8 @@
 		{
 			[self editSongsAction:nil];
 		}
-				
-		// Create the artist list
-		self.listOfArtists = [NSMutableArray arrayWithCapacity:1];
-		self.listOfArtistsSections = [NSMutableArray arrayWithCapacity:28];
 		
-		// Fix for slow load problem (EDIT: Looks like it didn't actually work :(
-		FMDatabase *db = databaseS.songCacheDb;
-		[db executeUpdate:@"DROP TABLE IF EXISTS cachedSongsArtistList"];
-		[db executeUpdate:@"CREATE TEMP TABLE cachedSongsArtistList (artist TEXT UNIQUE)"];
-		[db executeUpdate:@"INSERT OR IGNORE INTO cachedSongsArtistList SELECT seg1 FROM cachedSongsLayout"];
-		
-		FMResultSet *result = [db executeQuery:@"SELECT artist FROM cachedSongsArtistList ORDER BY artist COLLATE NOCASE"];
-		while ([result next])
-		{
-			// Cover up for blank insert problem
-			if ([[result stringForColumnIndex:0] length] > 0)
-				[listOfArtists addObject:[NSString stringWithString:[result stringForColumnIndex:0]]]; 
-		}
-		[result close];
-		
-		[listOfArtists sortUsingSelector:@selector(caseInsensitiveCompareWithoutIndefiniteArticles:)];
-		//DLog(@"listOfArtists: %@", listOfArtists);
-		
-		// Create the section index
-		[db executeUpdate:@"DROP TABLE IF EXISTS cachedSongsArtistIndex"];
-		[db executeUpdate:@"CREATE TEMP TABLE cachedSongsArtistIndex (artist TEXT)"];
-		DLog(@"listOfArtists: %@", listOfArtists);
-		for (NSString *artist in listOfArtists)
-		{
-			[db executeUpdate:@"INSERT INTO cachedSongsArtistIndex (artist) VALUES (?)", [artist stringWithoutIndefiniteArticle], nil];
-		}
-		self.sectionInfo = nil; 
-		self.sectionInfo = [databaseS sectionInfoFromTable:@"cachedSongsArtistIndex" inDatabase:db withColumn:@"artist"];
-		DLog(@"sectionInfo: %@", sectionInfo);
-		showIndex = YES;
-		if ([sectionInfo count] < 5)
-			showIndex = NO;
-		
-		//DLog(@"sectionInfo: %@", sectionInfo);
-		
-		// Sort into sections		
-		if ([sectionInfo count] > 0)
-		{
-			int lastIndex = 0;
-			for (int i = 0; i < [sectionInfo count] - 1; i++)
-			{
-				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-				int index = [[[sectionInfo objectAtIndexSafe:i+1] objectAtIndexSafe:1] intValue];
-				NSMutableArray *section = [NSMutableArray arrayWithCapacity:0];
-				for (int i = lastIndex; i < index; i++)
-				{
-					[section addObject:[listOfArtists objectAtIndexSafe:i]];
-				}
-				[listOfArtistsSections addObject:section];
-				lastIndex = index;
-				[pool release];
-			}
-			NSMutableArray *section = [NSMutableArray arrayWithCapacity:0];
-			for (int i = lastIndex; i < [listOfArtists count]; i++)
-			{
-				[section addObject:[listOfArtists objectAtIndexSafe:i]];
-			}
-			[listOfArtistsSections addObject:section];
-		}
-
-		[self.tableView reloadData];
+		[self reloadTable];
 		
 		if ([listOfArtists count] == 0)
 		{
@@ -441,12 +345,12 @@
 	}
 	else if (segmentedControl.selectedSegmentIndex == 1)
 	{
-		[self reloadTable];
-		
 		if (self.tableView.editing)
 		{
 			[self editSongsAction:nil];
 		}
+		
+		[self reloadTable];
 		
 		if (self.cacheQueueCount > 0)
 		{
@@ -546,7 +450,69 @@
 {
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
-		[self segmentAction:nil];
+		// Create the artist list
+		self.listOfArtists = [NSMutableArray arrayWithCapacity:1];
+		self.listOfArtistsSections = [NSMutableArray arrayWithCapacity:28];
+		
+		// Fix for slow load problem (EDIT: Looks like it didn't actually work :(
+		FMDatabase *db = databaseS.songCacheDb;
+		[db executeUpdate:@"DROP TABLE IF EXISTS cachedSongsArtistList"];
+		[db executeUpdate:@"CREATE TEMP TABLE cachedSongsArtistList (artist TEXT UNIQUE)"];
+		[db executeUpdate:@"INSERT OR IGNORE INTO cachedSongsArtistList SELECT seg1 FROM cachedSongsLayout"];
+		
+		FMResultSet *result = [db executeQuery:@"SELECT artist FROM cachedSongsArtistList ORDER BY artist COLLATE NOCASE"];
+		while ([result next])
+		{
+			// Cover up for blank insert problem
+			if ([[result stringForColumnIndex:0] length] > 0)
+				[listOfArtists addObject:[NSString stringWithString:[result stringForColumnIndex:0]]]; 
+		}
+		[result close];
+		
+		[listOfArtists sortUsingSelector:@selector(caseInsensitiveCompareWithoutIndefiniteArticles:)];
+		//DLog(@"listOfArtists: %@", listOfArtists);
+		
+		// Create the section index
+		[db executeUpdate:@"DROP TABLE IF EXISTS cachedSongsArtistIndex"];
+		[db executeUpdate:@"CREATE TEMP TABLE cachedSongsArtistIndex (artist TEXT)"];
+		DLog(@"listOfArtists: %@", listOfArtists);
+		for (NSString *artist in listOfArtists)
+		{
+			[db executeUpdate:@"INSERT INTO cachedSongsArtistIndex (artist) VALUES (?)", [artist stringWithoutIndefiniteArticle], nil];
+		}
+		self.sectionInfo = nil; 
+		self.sectionInfo = [databaseS sectionInfoFromTable:@"cachedSongsArtistIndex" inDatabase:db withColumn:@"artist"];
+		DLog(@"sectionInfo: %@", sectionInfo);
+		showIndex = YES;
+		if ([sectionInfo count] < 5)
+			showIndex = NO;
+		
+		//DLog(@"sectionInfo: %@", sectionInfo);
+		
+		// Sort into sections		
+		if ([sectionInfo count] > 0)
+		{
+			int lastIndex = 0;
+			for (int i = 0; i < [sectionInfo count] - 1; i++)
+			{
+				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+				int index = [[[sectionInfo objectAtIndexSafe:i+1] objectAtIndexSafe:1] intValue];
+				NSMutableArray *section = [NSMutableArray arrayWithCapacity:0];
+				for (int i = lastIndex; i < index; i++)
+				{
+					[section addObject:[listOfArtists objectAtIndexSafe:i]];
+				}
+				[listOfArtistsSections addObject:section];
+				lastIndex = index;
+				[pool release];
+			}
+			NSMutableArray *section = [NSMutableArray arrayWithCapacity:0];
+			for (int i = lastIndex; i < [listOfArtists count]; i++)
+			{
+				[section addObject:[listOfArtists objectAtIndexSafe:i]];
+			}
+			[listOfArtistsSections addObject:section];
+		}
 	}
 	else
 	{
@@ -590,8 +556,9 @@
 			if (isNoSongsScreenShowing)
 				[self removeNoSongsScreen];
 		}
-		[self.tableView reloadData];
 	}
+	
+	[self.tableView reloadData];
 }
 
 - (void)updateCacheSizeLabel
@@ -611,19 +578,10 @@
 {
 	if (segmentedControl.selectedSegmentIndex == 1 && cacheQueueManagerS.isQueueDownloading)
 	{	
-		/*queueDownloadProgress = cacheQueueManagerS.currentQueuedSong.localFileSize;
-		
-		// Reload the cells
-		if (segmentedControl.selectedSegmentIndex == 1)
-		{
-			[self.tableView reloadData];
-		}*/
-		
-		queueDownloadProgress = cacheQueueManagerS.currentQueuedSong.localFileSize;
-		CacheQueueSongUITableViewCell *cell = (CacheQueueSongUITableViewCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-		NSDate *cached = [NSDate dateWithTimeIntervalSince1970:[databaseS.cacheQueueDb doubleForQuery:@"SELECT cachedDate FROM cacheQueue WHERE ROWID = 1"]];
-		cell.cacheInfoLabel.text = [NSString stringWithFormat:@"Queued %@ - Progress: %@", [NSString relativeTime:cached], [NSString formatFileSize:queueDownloadProgress]];
+		[self reloadTable];
 	}
+	
+	[self performSelector:@selector(updateQueueDownloadProgress) withObject:nil afterDelay:1.];
 }
 
 - (void)removeSaveEditButtons
@@ -641,13 +599,6 @@
 		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateCacheSizeLabel) object:nil];
 		[headerView2 removeFromSuperview]; headerView2 = nil;
 		
-		/*[playAllImage removeFromSuperview];
-		[playAllLabel removeFromSuperview];
-		[playAllButton removeFromSuperview];
-		[spacerLabel2 removeFromSuperview];
-		[shuffleImage removeFromSuperview];
-		[shuffleLabel removeFromSuperview];
-		[shuffleButton removeFromSuperview];*/
 		headerView.frame = CGRectMake(0, 0, 320, 44);
 		
 		self.tableView.tableHeaderView = headerView;
@@ -720,6 +671,7 @@
 		}
 		[headerView addSubview:cacheSizeLabel];
 		[cacheSizeLabel release];
+		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateCacheSizeLabel) object:nil];
 		[self updateCacheSizeLabel];
 		
 		deleteSongsButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -1003,9 +955,8 @@
 			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
 			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
 			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-			//viewObjectsS.multiDeleteList = nil; viewObjectsS.multiDeleteList = [[NSMutableArray alloc] init];
-			[self hideDeleteButton];
 			[self.tableView setEditing:NO animated:YES];
+			[self hideDeleteButton];
 			editSongsLabel.backgroundColor = [UIColor clearColor];
 			editSongsLabel.text = @"Edit";
 			
@@ -1039,7 +990,6 @@
 			
 			// Reload the table
 			[self reloadTable];
-			//[self.tableView reloadData];
 		}
 	}
 }
@@ -1056,7 +1006,7 @@
 	for (NSString *folderName in viewObjectsS.multiDeleteList)
 	{
 		FMResultSet *result;
-		result = [databaseS.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ?", folderName];
+		result = [databaseS.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ", folderName];
 		
 		while ([result next])
 		{
@@ -1347,6 +1297,7 @@
 		{
 			if ([aSong isEqualToSong:cacheQueueManagerS.currentQueuedSong] && cacheQueueManagerS.isQueueDownloading)
 			{
+				queueDownloadProgress = cacheQueueManagerS.currentQueuedSong.localFileSize;
 				cell.cacheInfoLabel.text = [NSString stringWithFormat:@"Added %@ - Progress: %@", [NSString relativeTime:cached], [NSString formatFileSize:queueDownloadProgress]];
 			}
 			else
@@ -1475,7 +1426,7 @@ NSInteger trackSort1(id obj1, id obj2, void *context)
 			}
 			[result close];
 			
-			[self pushViewController:cacheAlbumViewController];
+			[self pushViewControllerCustom:cacheAlbumViewController];
 			//[self.navigationController pushViewController:cacheAlbumViewController animated:YES];
 			[cacheAlbumViewController release];
 		}

@@ -436,8 +436,8 @@
 							<string>128</string>
 							<string>160</string>
 							<string>192</string>
-							<string>224</string>
 							<string>256</string>
+							<string>320</string>
 							<string>None</string>
 						</object>
 						<object class="NSMutableArray" key="IBSegmentWidths">
@@ -504,8 +504,8 @@
 							<string>128</string>
 							<string>160</string>
 							<string>192</string>
-							<string>224</string>
 							<string>256</string>
+							<string>320</string>
 							<string>None</string>
 						</object>
 						<object class="NSMutableArray" key="IBSegmentWidths">
@@ -3022,6 +3022,7 @@
 					<string>133.IBPluginDependency</string>
 					<string>134.IBPluginDependency</string>
 					<string>137.IBPluginDependency</string>
+					<string>137.IUISegmentedControlInspectorSelectedSegmentMetadataKey</string>
 					<string>139.IBPluginDependency</string>
 					<string>140.IBPluginDependency</string>
 					<string>143.IBPluginDependency</string>
@@ -3079,6 +3080,7 @@
 					<string>53.IBPluginDependency</string>
 					<string>55.IBPluginDependency</string>
 					<string>6.IBPluginDependency</string>
+					<string>6.IUISegmentedControlInspectorSelectedSegmentMetadataKey</string>
 					<string>61.IBPluginDependency</string>
 					<string>63.IBPluginDependency</string>
 					<string>64.IBPluginDependency</string>
@@ -3106,6 +3108,7 @@
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<integer value="5"/>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -3163,6 +3166,7 @@
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<integer value="5"/>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>

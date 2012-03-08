@@ -32,6 +32,8 @@
 		[coverArtView release];
 		
 		albumNameScrollView = [[UIScrollView alloc] init];
+		albumNameScrollView.frame = CGRectMake(65, 0, 230, 60);
+		albumNameScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		albumNameScrollView.showsVerticalScrollIndicator = NO;
 		albumNameScrollView.showsHorizontalScrollIndicator = NO;
 		albumNameScrollView.userInteractionEnabled = NO;
@@ -50,12 +52,9 @@
 	return self;
 }
 
-- (void)layoutSubview 
+- (void)layoutSubviews
 {	
     [super layoutSubviews];
-	
-	self.contentView.frame = CGRectMake(0, 0, 320, 60);
-	albumNameScrollView.frame = CGRectMake(65, 0, 230, 60);
 	
 	// Automatically set the width based on the width of the text
 	albumNameLabel.frame = CGRectMake(0, 0, 230, 60);

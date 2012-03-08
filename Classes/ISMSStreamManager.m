@@ -373,7 +373,7 @@
 
 #pragma mark Download
 
-- (void)queueStreamForSong:(Song *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp
+- (void)queueStreamForSong:(Song *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload
 {
 	if (!song)
 		return;
@@ -388,7 +388,7 @@
 		[self.handlerStack insertObject:handler atIndex:index];
 		[handler release];
 		
-		if ([self.handlerStack count] == 1)
+		if ([self.handlerStack count] == 1 && isStartDownload)
 		{
 			[self startHandler:handler];
 		}
@@ -409,19 +409,19 @@
 	[self saveHandlerStack];
 }
 
-- (void)queueStreamForSong:(Song *)song atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp
+- (void)queueStreamForSong:(Song *)song atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload
 {	
-	[self queueStreamForSong:song byteOffset:0 secondsOffset:0.0 atIndex:index isTempCache:isTemp];
+	[self queueStreamForSong:song byteOffset:0 secondsOffset:0.0 atIndex:index isTempCache:isTemp isStartDownload:isStartDownload];
 }
 
-- (void)queueStreamForSong:(Song *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset isTempCache:(BOOL)isTemp
+- (void)queueStreamForSong:(Song *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload
 {
-	[self queueStreamForSong:song byteOffset:byteOffset secondsOffset:secondsOffset atIndex:[self.handlerStack count] isTempCache:isTemp];
+	[self queueStreamForSong:song byteOffset:byteOffset secondsOffset:secondsOffset atIndex:[self.handlerStack count] isTempCache:isTemp isStartDownload:isStartDownload];
 }
 
-- (void)queueStreamForSong:(Song *)song isTempCache:(BOOL)isTemp
+- (void)queueStreamForSong:(Song *)song isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload
 {	
-	[self queueStreamForSong:song byteOffset:0 secondsOffset:0.0 atIndex:[self.handlerStack count] isTempCache:isTemp];
+	[self queueStreamForSong:song byteOffset:0 secondsOffset:0.0 atIndex:[self.handlerStack count] isTempCache:isTemp isStartDownload:isStartDownload];
 }
 
 - (BOOL)isSongInQueue:(Song *)aSong
@@ -438,8 +438,8 @@
 	return isSongInQueue;
 }
 
-- (void)fillStreamQueue
-{
+- (void)fillStreamQueue:(BOOL)isStartDownload
+{	
 	NSUInteger numStreamsToQueue = 1;
 	if (settingsS.isNextSongCacheEnabled)
 	{
@@ -455,10 +455,15 @@
 			if (aSong && ![self isSongInQueue:aSong] && !aSong.isFullyCached
 				&& !viewObjectsS.isOfflineMode)
 			{
-					[self queueStreamForSong:aSong isTempCache:!settingsS.isSongCachingEnabled];
+					[self queueStreamForSong:aSong isTempCache:!settingsS.isSongCachingEnabled isStartDownload:isStartDownload];
 			}
 		}
 	}
+}
+
+- (void)fillStreamQueue
+{
+	[self fillStreamQueue:YES];
 }
 
 - (void)songCachingToggled
@@ -491,7 +496,7 @@
 	if (nextSong) [songsToSkip addObject:nextSong];
 	
 	[self removeAllStreamsExceptForSongs:songsToSkip];
-	[self fillStreamQueue];
+	[self fillStreamQueue:audioEngineS.isStarted];
 }
 
 #pragma mark - ISMSStreamHandler delegate

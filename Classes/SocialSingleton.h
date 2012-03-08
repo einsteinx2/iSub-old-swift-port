@@ -19,10 +19,17 @@
 
 @property (retain) SA_OAuthTwitterEngine *twitterEngine;
 
+@property (readonly) NSTimeInterval scrobbleDelay;
+@property (readonly) NSTimeInterval subsonicDelay;
+@property (readonly) NSTimeInterval tweetDelay;
+
 + (SocialSingleton*)sharedInstance;
+- (void)createTwitterEngine;
 
-- (void) createTwitterEngine;
-
+- (void)scrobbleSongAsPlaying;
+- (void)scrobbleSongAsSubmission;
 - (void)scrobbleSong:(Song *)aSong isSubmission:(BOOL)isSubmission;
+- (void)tweetSong;
+- (void)notifySubsonic;
 
 @end

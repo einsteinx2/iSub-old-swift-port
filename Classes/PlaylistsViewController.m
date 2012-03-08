@@ -35,7 +35,7 @@
 #import "NSString+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "NSArray+Additions.h"
-#import "UIViewController+PushViewController.h"
+#import "UIViewController+PushViewControllerCustom.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
 
@@ -622,9 +622,7 @@
 		// Remove the no playlists overlay screen if it's showing
 		[self removeNoPlaylistsScreen];
 		
-		//[viewObjectsS showLoadingScreen:self.view blockInput:YES mainWindow:NO];
-		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
-        
+        [viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
         [serverPlaylistsDataModel startLoad];
 	}
 }
@@ -1027,9 +1025,17 @@
 	}
 	else
 	{
-		[connectionQueue clearQueue];
-		
-		[self connectionQueueDidFinish:connectionQueue];
+		if (connectionQueue.isRunning)
+		{
+			[connectionQueue clearQueue];
+			
+			[self connectionQueueDidFinish:connectionQueue];
+		}
+		else
+		{
+			[serverPlaylistsDataModel cancelLoad];
+			[viewObjectsS hideLoadingScreen];
+		}
 	}
 }
 
@@ -1155,27 +1161,6 @@
     if ([serverPlaylistsDataModel.serverPlaylists count] == 0 && isNoPlaylistsScreenShowing == NO)
     {
 		[self addNoPlaylistsScreen];
-		
-        /*isNoPlaylistsScreenShowing = YES;
-        noPlaylistsScreen = [[UIImageView alloc] init];
-        noPlaylistsScreen.frame = CGRectMake(40, 100, 240, 180);
-        noPlaylistsScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
-        noPlaylistsScreen.alpha = .80;
-        
-        UILabel *textLabel = [[UILabel alloc] init];
-        textLabel.backgroundColor = [UIColor clearColor];
-        textLabel.textColor = [UIColor whiteColor];
-        textLabel.font = [UIFont boldSystemFontOfSize:32];
-        textLabel.textAlignment = UITextAlignmentCenter;
-        textLabel.numberOfLines = 0;
-        [textLabel setText:@"No Playlists\nFound"];
-        textLabel.frame = CGRectMake(20, 20, 200, 140);
-        [noPlaylistsScreen addSubview:textLabel];
-        [textLabel release];
-        
-        [self.view addSubview:noPlaylistsScreen];
-        
-        [noPlaylistsScreen release];*/
     }
     else
     {
@@ -1755,7 +1740,7 @@ static NSString *kName_Error = @"error";
 		{
 			PlaylistSongsViewController *playlistSongsViewController = [[PlaylistSongsViewController alloc] initWithNibName:@"PlaylistSongsViewController" bundle:nil];
 			playlistSongsViewController.md5 = [databaseS.localPlaylistsDb stringForQuery:@"SELECT md5 FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
-			[self pushViewController:playlistSongsViewController];
+			[self pushViewControllerCustom:playlistSongsViewController];
 			[playlistSongsViewController release];
 		}		
 		else if (segmentedControl.selectedSegmentIndex == 2)
@@ -1764,7 +1749,7 @@ static NSString *kName_Error = @"error";
             SUSServerPlaylist *playlist = [serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];
 			playlistSongsViewController.md5 = [[playlist.playlistName cleanString] md5];
             playlistSongsViewController.serverPlaylist = playlist;
-			[self pushViewController:playlistSongsViewController];
+			[self pushViewControllerCustom:playlistSongsViewController];
 			[playlistSongsViewController release];		
 		}
 	}

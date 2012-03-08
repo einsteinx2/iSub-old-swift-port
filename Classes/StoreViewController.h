@@ -22,4 +22,6 @@
 - (void)checkProducts;
 - (void)organizeList;
 
+- (void)cancelLoad;
+
 @end

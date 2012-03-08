@@ -24,6 +24,7 @@
 #import "PlaylistSingleton.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
+#import "UIViewController+PushViewControllerCustom.h"
 
 @implementation GenresArtistViewController
 
@@ -329,8 +330,6 @@
 		genresAlbumViewController.title = [listOfArtists objectAtIndexSafe:indexPath.row];
 		genresAlbumViewController.listOfAlbums = [NSMutableArray arrayWithCapacity:1];
 		genresAlbumViewController.listOfSongs = [NSMutableArray arrayWithCapacity:1];
-		//genresAlbumViewController.listOfAlbums = [[NSMutableArray alloc] init];
-		//genresAlbumViewController.listOfSongs = [[NSMutableArray alloc] init];
 		genresAlbumViewController.segment = 2;
 		genresAlbumViewController.seg1 = [listOfArtists objectAtIndexSafe:indexPath.row];
 		genresAlbumViewController.genre = [NSString stringWithString:self.title];
@@ -357,7 +356,7 @@
 		}
 		[result close];
 		
-		[self.navigationController pushViewController:genresAlbumViewController animated:YES];
+		[self pushViewControllerCustom:genresAlbumViewController];
 		[genresAlbumViewController release];
 	}
 	else

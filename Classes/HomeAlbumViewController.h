@@ -20,11 +20,14 @@
 }
 
 @property (retain) NSMutableData *receivedData;
+@property (retain) NSURLConnection *connection;
 
 @property (retain) NSMutableArray *listOfAlbums;
 
 @property (retain) NSString *modifier;
 @property NSUInteger offset;
 @property BOOL isMoreAlbums;
+
+- (void)cancelLoad;
 
 @end

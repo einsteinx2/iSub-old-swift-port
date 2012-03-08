@@ -30,6 +30,7 @@
 		[coverArtView release];
 		
 		songNameScrollView = [[UIScrollView alloc] init];
+		songNameScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		songNameScrollView.showsVerticalScrollIndicator = NO;
 		songNameScrollView.showsHorizontalScrollIndicator = NO;
 		songNameScrollView.userInteractionEnabled = NO;

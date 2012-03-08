@@ -11,7 +11,7 @@
 
 @class Artist, FMDatabase, SUSRootFoldersLoader;
 
-@interface SUSRootFoldersDAO : NSObject <SUSLoaderManager>
+@interface SUSRootFoldersDAO : NSObject <SUSLoaderManager, SUSLoaderDelegate>
 {		
 	NSUInteger count;
 	NSUInteger searchCount;

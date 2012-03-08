@@ -55,10 +55,15 @@ typedef enum
 @property HFX volumeFx;
 
 @property BOOL isPlaying;
+@property (readonly) BOOL isStarted;
 @property (readonly) NSInteger bitRate;
 @property (readonly) QWORD currentByteOffset;
 @property (readonly) double progress;
 @property (readonly) NSArray *equalizerValues;
+
+@property BOOL hasTweeted;
+@property BOOL hasNotifiedSubsonic;
+@property BOOL hasScrobbled;
 
 @property BOOL isEqualizerOn;
 @property unsigned long long startByteOffset;

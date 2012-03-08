@@ -27,4 +27,6 @@
 
 @property(assign,getter=isReloading) BOOL reloading;
 
+- (void)cancelLoad;
+
 @end

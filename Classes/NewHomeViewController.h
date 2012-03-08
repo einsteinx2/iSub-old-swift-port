@@ -21,8 +21,6 @@
 	UIButton *dismissButton;
 	
 	BOOL isSearch;
-	NSURLConnection *connection;
-	NSMutableData *receivedData;
 	
 	IBOutlet UILabel *quickLabel;
 	IBOutlet UILabel *shuffleLabel;
@@ -38,6 +36,7 @@
 	UILabel *songLabel;
 }
 
+@property (retain) NSURLConnection *connection;
 @property (retain) NSMutableData *receivedData;
 
 - (IBAction)quickAlbums;
@@ -50,5 +49,7 @@
 - (void)initSongInfo;
 
 - (void)performServerShuffle:(NSNotification*)notification;
+
+- (void)cancelLoad;
 
 @end

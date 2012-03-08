@@ -24,20 +24,17 @@
 #import "NSString+md5.h"
 #import "LoadingScreen.h"
 #import "FoldersViewController.h"
-
 #import "SA_OAuthTwitterEngine.h"
-
 #import "CustomUITableView.h"
 #import "CustomUIAlertView.h"
-
 #import "SavedSettings.h"
 #import "SUSAllAlbumsDAO.h"
 #import "FlurryAnalytics.h"
-
 #import "EGORefreshTableHeaderView.h"
 #import "SUSAllSongsLoader.h"
 #import "SUSAllSongsDAO.h"
 #import "NSArray+Additions.h"
+#import "UIViewController+PushViewControllerCustom.h"
 
 @implementation AllAlbumsViewController
 
@@ -572,7 +569,7 @@
 		}
 		
 		AlbumViewController* albumViewController = [[AlbumViewController alloc] initWithArtist:nil orAlbum:anAlbum];
-		[self.navigationController pushViewController:albumViewController animated:YES];
+		[self pushViewControllerCustom:albumViewController];
 		[albumViewController release];
 	}
 	else

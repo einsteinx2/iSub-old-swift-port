@@ -354,11 +354,7 @@
 
 - (void)startLoad
 {
-    [indexNames release]; indexNames = nil;
-    [indexPositions release]; indexPositions = nil;
-    [indexCounts release]; indexCounts = nil;
-    
-    self.loader = [[[SUSRootFoldersLoader alloc] initWithDelegate:self.delegate] autorelease];
+    self.loader = [[[SUSRootFoldersLoader alloc] initWithDelegate:self] autorelease];
 	self.loader.selectedFolderId = self.selectedFolderId;
     [self.loader startLoad];
 }
@@ -368,6 +364,34 @@
     [self.loader cancelLoad];
 	self.loader.delegate = nil;
     self.loader = nil;
+}
+
+#pragma mark - Loader Delegate Methods
+
+- (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
+{
+	self.loader.delegate = nil;
+	self.loader = nil;
+	
+	if ([self.delegate respondsToSelector:@selector(loadingFailed:withError:)])
+	{
+		[self.delegate loadingFailed:nil withError:error];
+	}
+}
+
+- (void)loadingFinished:(SUSLoader*)theLoader
+{
+	self.loader.delegate = nil;
+	self.loader = nil;
+		
+	[indexNames release]; indexNames = nil;
+    [indexPositions release]; indexPositions = nil;
+    [indexCounts release]; indexCounts = nil;
+	
+	if ([self.delegate respondsToSelector:@selector(loadingFinished:)])
+	{
+		[self.delegate loadingFinished:nil];
+	}
 }
 
 @end

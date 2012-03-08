@@ -41,5 +41,6 @@
 
 @property (retain) SUSChatDAO *dataModel;
 
+- (void)cancelLoad;
 
 @end

@@ -103,7 +103,7 @@
 - (void)deleteAllSongs
 {
 	FMResultSet *result;
-	result = [databaseS.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ?", artistNameLabel.text];
+	result = [databaseS.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ", artistNameLabel.text];
 	
 	while ([result next])
 	{

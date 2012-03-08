@@ -51,5 +51,6 @@
 - (void)updateCurrentPlaylistCount;
 
 - (void)parseData;
+- (void)cancelLoad;
 
 @end

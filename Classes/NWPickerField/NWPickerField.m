@@ -127,10 +127,35 @@ NSString* UIPickerViewDidHideNotification = @"UIPickerViewDidHideNotification";
 	
     // set our default format string.
 	self.formatString = @"%@";
+	
+	///////////////////// Added by Ben Baron to be compatible with iPad
+		
+	// calculate our hidden rect.
+	CGRect pickerHiddenFrame = self.superview.bounds;
+	pickerHiddenFrame.origin.y = pickerHiddenFrame.size.height+216;
+	pickerHiddenFrame.size.height = 216;
+	
+	// calucate our visible rect
+	CGRect pickerVisibleFrame = self.superview.bounds;
+	pickerVisibleFrame.origin.y = self.superview.bounds.size.height - 216;
+	pickerVisibleFrame.size.height = 216;
+	
+	// tell the picker view the frames.
+	pickerView.hiddenFrame = pickerHiddenFrame;
+	pickerView.visibleFrame = pickerVisibleFrame;
+	
+	// set the initial frame so its hidden.
+	pickerView.frame = pickerHiddenFrame;
+	
+	// add the picker view to the superview
+	[self.superview addSubview:pickerView];
+	
+	/////////////////////
 }
 
 -(void) didMoveToWindow {
-	UIWindow* appWindow = [self window];
+	
+	/*UIWindow* appWindow = [self window];
     
     // the app window can be null when being popped off 
     // the controller stack.
@@ -162,7 +187,7 @@ NSString* UIPickerViewDidHideNotification = @"UIPickerViewDidHideNotification";
         // select the first items in each component by default.
         //for (component = 0; component < [pickerView numberOfComponents]; component++) 
 		//   [self selectRow:0 inComponent:component animated:NO];
-    }
+    }*/
 }
 
 

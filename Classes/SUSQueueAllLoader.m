@@ -22,6 +22,7 @@
 #import "PlaylistSingleton.h"
 #import "NSArray+Additions.h"
 #import "JukeboxSingleton.h"
+#import "AudioEngine.h"
 
 @implementation SUSQueueAllLoader
 
@@ -98,7 +99,7 @@
 			}
 			else
 			{
-				[streamManagerS fillStreamQueue];
+				[streamManagerS fillStreamQueue:audioEngineS.isStarted];
 			}
 		}
 		

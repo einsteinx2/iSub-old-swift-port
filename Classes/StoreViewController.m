@@ -45,7 +45,7 @@
 	
 	if ([storeItems count] == 0)
 	{
-		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
+		[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
 		checkProductsTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(checkProducts) userInfo:nil repeats:YES];
 		[self checkProducts];
 	}
@@ -72,6 +72,12 @@
 }
 
 #pragma mark - Store
+
+- (void)cancelLoad
+{
+	[checkProductsTimer invalidate]; checkProductsTimer = nil;
+	[viewObjectsS hideLoadingScreen];
+}
 
 - (void)checkProducts
 {

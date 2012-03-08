@@ -27,6 +27,7 @@
 #import "PlaylistSingleton.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
+#import "UIViewController+PushViewControllerCustom.h"
 
 @implementation GenresAlbumViewController
 
@@ -339,10 +340,11 @@
 			coverArtId = [databaseS.genresDb stringForQuery:@"SELECT coverArtId FROM genresSongs WHERE md5 = ?", md5];
 		}
 		NSString *name = [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1];
+		cell.albumNameLabel.text = name;
+		DLog(@"name: %@", name);
 		
 		cell.coverArtView.coverArtId = coverArtId;
 		
-		[cell.albumNameLabel setText:name];
 		cell.backgroundView = [[[UIView alloc] init] autorelease];
 		if(indexPath.row % 2 == 0)
 			cell.backgroundView.backgroundColor = [UIColor whiteColor];
@@ -460,8 +462,8 @@
 				}
 			}
 			[result close];
-						
-			[self.navigationController pushViewController:genresAlbumViewController animated:YES];
+			
+			[self pushViewControllerCustom:genresAlbumViewController];
 			[genresAlbumViewController release];
 		}
 		else

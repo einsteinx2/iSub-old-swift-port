@@ -76,7 +76,13 @@
 - (void)loadData
 {
 	[self.dataModel startLoad];
-	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
+	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
+}
+
+- (void)cancelLoad
+{
+	[self.dataModel cancelLoad];
+	[viewObjectsS hideLoadingScreen];
 }
 
 - (void)viewDidLoad 
