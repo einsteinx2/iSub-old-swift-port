@@ -17,6 +17,7 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "ISMSStreamManager.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "ViewObjectsSingleton.h"
 
 // Twitter secret keys
 #define kOAuthConsumerKey				@"nYKAEcLstFYnI9EEnv6g"
@@ -87,16 +88,19 @@ static SocialSingleton *sharedInstance = nil;
 
 - (void)notifySubsonic
 {
-	// If this song wasn't just cached, then notify Subsonic of the playback
-	Song *lastCachedSong = streamManagerS.lastCachedSong;
-	Song *currentSong = playlistS.currentSong;
-	DLog(@"Asked to notify Subsonic about %@ ", currentSong.title);
-	if (![lastCachedSong isEqualToSong:currentSong])
+	if (!viewObjectsS.isOfflineMode)
 	{
-		NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(currentSong.songId), @"id", nil];
-		NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters byteOffset:0];
-		[[NSURLConnection alloc] initWithRequest:request delegate:self];
-		DLog(@"notified Subsonic about %@", currentSong.title);
+		// If this song wasn't just cached, then notify Subsonic of the playback
+		Song *lastCachedSong = streamManagerS.lastCachedSong;
+		Song *currentSong = playlistS.currentSong;
+		DLog(@"Asked to notify Subsonic about %@ ", currentSong.title);
+		if (![lastCachedSong isEqualToSong:currentSong])
+		{
+			NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(currentSong.songId), @"id", nil];
+			NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters byteOffset:0];
+			[[NSURLConnection alloc] initWithRequest:request delegate:self];
+			DLog(@"notified Subsonic about %@", currentSong.title);
+		}
 	}
 }
 
@@ -105,7 +109,7 @@ static SocialSingleton *sharedInstance = nil;
 - (void)scrobbleSongAsSubmission
 {	
 	DLog(@"Asked to scrobble %@ as submission", playlistS.currentSong.title);
-	if (settingsS.isScrobbleEnabled)
+	if (settingsS.isScrobbleEnabled && !viewObjectsS.isOfflineMode)
 	{
 		Song *currentSong = playlistS.currentSong;
 		[self scrobbleSong:currentSong isSubmission:YES];
@@ -117,7 +121,7 @@ static SocialSingleton *sharedInstance = nil;
 {
 	DLog(@"Asked to scrobble %@ as playing", playlistS.currentSong.title);
 	// If scrobbling is enabled, send "now playing" call
-	if (settingsS.isScrobbleEnabled)
+	if (settingsS.isScrobbleEnabled && !viewObjectsS.isOfflineMode)
 	{
 		Song *currentSong = playlistS.currentSong;
 		[self scrobbleSong:currentSong isSubmission:NO];
@@ -127,11 +131,14 @@ static SocialSingleton *sharedInstance = nil;
 
 - (void)scrobbleSong:(Song*)aSong isSubmission:(BOOL)isSubmission
 {
-    NSString *isSubmissionString = [NSString stringWithFormat:@"%i", isSubmission];
-    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(aSong.songId), @"id", n2N(isSubmissionString), @"submission", nil];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"scrobble" andParameters:parameters];
-    
-	[[NSURLConnection alloc] initWithRequest:request delegate:self];
+	if (settingsS.isScrobbleEnabled && !viewObjectsS.isOfflineMode)
+	{
+		NSString *isSubmissionString = [NSString stringWithFormat:@"%i", isSubmission];
+		NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(aSong.songId), @"id", n2N(isSubmissionString), @"submission", nil];
+		NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"scrobble" andParameters:parameters];
+		
+		[[NSURLConnection alloc] initWithRequest:request delegate:self];
+	}
 }
 
 #pragma mark Subsonic chache notification hack and Last.fm scrobbling connection delegate
@@ -187,7 +194,7 @@ static SocialSingleton *sharedInstance = nil;
 	
 	DLog(@"Asked to tweet %@", currentSong.title);
 	
-	if (twitterEngine && settingsS.isTwitterEnabled)
+	if (twitterEngine && settingsS.isTwitterEnabled && !viewObjectsS.isOfflineMode)
 	{
 		if (currentSong.artist && currentSong.title)
 		{

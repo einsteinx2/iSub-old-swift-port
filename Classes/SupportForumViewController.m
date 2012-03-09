@@ -8,6 +8,7 @@
 
 #import "SupportForumViewController.h"
 #import "Crittercism.h"
+#import "SavedSettings.h"
 
 @implementation SupportForumViewController
 
@@ -52,8 +53,12 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
+	if (settingsS.isRotationLockEnabled && interfaceOrientation != UIInterfaceOrientationPortrait)
+		return NO;
+	return YES;
+	
     // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    //return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 @end

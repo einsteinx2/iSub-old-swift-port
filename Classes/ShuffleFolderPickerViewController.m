@@ -12,6 +12,7 @@
 #import "SUSRootFoldersDAO.h"
 #import "NSArray+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "SavedSettings.h"
 
 @implementation ShuffleFolderPickerViewController
 
@@ -113,8 +114,12 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
+	if (settingsS.isRotationLockEnabled && interfaceOrientation != UIInterfaceOrientationPortrait)
+		return NO;
+	return YES;
+	
     // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    //return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 #pragma mark - Table view data source

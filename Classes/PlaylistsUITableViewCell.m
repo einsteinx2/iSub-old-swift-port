@@ -33,6 +33,8 @@
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) 
 	{		
 		isDownload = NO;
+		receivedData = nil;
+		connection = nil;
 		
 		playlistNameScrollView = [[UIScrollView alloc] init];
 		playlistNameScrollView.frame = CGRectMake(5, 10, 310, 44);
@@ -178,7 +180,7 @@
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
 	self.receivedData = nil;
-	[theConnection release];
+	self.connection = nil;
 	
 	// Inform the delegate that loading failed
 	[viewObjectsS hideLoadingScreen];
@@ -237,7 +239,7 @@
 	[viewObjectsS hideLoadingScreen];
 	
 	self.receivedData = nil;
-	[theConnection release];
+	self.connection = nil;
 }
 
 @end

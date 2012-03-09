@@ -649,8 +649,8 @@
 			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
 			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
 			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-			[self hideDeleteButton];
 			[self.tableView setEditing:NO animated:YES];
+			[self hideDeleteButton];
 			editPlaylistLabel.backgroundColor = [UIColor clearColor];
 			editPlaylistLabel.text = @"Edit";
 			

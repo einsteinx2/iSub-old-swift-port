@@ -36,6 +36,7 @@
 #import "NSArray+Additions.h"
 #import "JukeboxSingleton.h"
 #import "CALayer+ImageFromLayer.h"
+#import "SavedSettings.h"
 
 #define downloadProgressBorder 4.
 #define downloadProgressWidth (progressSlider.frame.size.width - (downloadProgressBorder * 2))
@@ -452,6 +453,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+		return NO;
+	
     return YES;
 }
 

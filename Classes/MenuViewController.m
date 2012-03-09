@@ -221,6 +221,9 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
 {
+	if (settingsS.isRotationLockEnabled && interfaceOrientation != UIInterfaceOrientationPortrait)
+		return NO;
+	
     // Override to allow orientations other than the default portrait orientation.
     return YES;
 }

@@ -722,6 +722,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 
 - (void)seekToPositionInBytes:(QWORD)bytes inStream:(HSTREAM)stream
 {
+	DLog(@"Seeking to %llu bytes", bytes);
 	//DLog(@"fileStream1: %i   fileStream2: %i    currentStream: %i", fileStream1, fileStream2, self.currentStream);
 	if (BASS_ChannelSetPosition(stream, bytes, BASS_POS_BYTE))
 	{
@@ -747,8 +748,8 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 
 - (void)seekToPositionInSeconds:(double)seconds inStream:(HSTREAM)stream
 {
-	NSUInteger bytes = BASS_ChannelSeconds2Bytes(stream, seconds);
-	//DLog(@"seconds: %i   bytes: %i", seconds, bytes);
+	QWORD bytes = BASS_ChannelSeconds2Bytes(stream, seconds);
+	DLog(@"seeking to seconds: %f which is bytes: %llu", seconds, bytes);
 	[self seekToPositionInBytes:bytes inStream:stream];
 }
 
@@ -911,8 +912,8 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	if (!currentSong)
 		return;
 	
-	NSNumber *byteOffset = [bytesOrSeconds objectForKey:@"byteOffset"];
-	NSNumber *seconds = [bytesOrSeconds objectForKey:@"seconds"]; 
+	//NSNumber *byteOffset = [bytesOrSeconds objectForKey:@"byteOffset"];
+	//NSNumber *seconds = [bytesOrSeconds objectForKey:@"seconds"]; 
 	
 	self.startByteOffset = 0;
 	self.startSecondsOffset = 0;
@@ -964,28 +965,6 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 				}
 			}
 			
-			// Skip to the byte offset
-			if (byteOffset)
-			{
-				self.startByteOffset = [byteOffset unsignedLongLongValue];
-				
-				if (seconds)
-				{
-					[self seekToPositionInSeconds:[seconds doubleValue] inStream:self.fileStream1];
-				}
-				else
-				{
-					if (self.startByteOffset > 0)
-						[self seekToPositionInBytes:self.startByteOffset inStream:self.fileStream1];
-				}
-			}
-			else if (seconds)
-			{
-				self.startSecondsOffset = [seconds doubleValue];
-				if (self.startSecondsOffset > 0.0)
-					[self seekToPositionInSeconds:self.startSecondsOffset inStream:self.fileStream1];
-			}
-			
 			// Create the output stream
 			BASS_CHANNELINFO info;
 			BASS_ChannelGetInfo(self.currentReadingStream, &info);
@@ -1000,20 +979,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 			// Add gain amplification
 			self.volumeFx = BASS_ChannelSetFX(self.outStream, BASS_FX_BFX_VOLUME, 1);
 			
-			// Start playback
-			BASS_ChannelPlay(self.outStream, FALSE);
-			self.isPlaying = YES;
-			
-			// This is a new song so notify Last.FM that it's playing
-			[socialS scrobbleSongAsPlaying];
-			
-			// Prepare the next song
-			[self prepareNextSongStream];
-			
-			// Notify listeners that playback has started
-			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
-			
-			currentSong.playedDate = [NSDate date];
+			[self performSelector:@selector(startWithOffsetInBytesorSecondsInternal2:) withObject:bytesOrSeconds afterDelay:0.5];
 		}
 		else if (!self.fileStream1 && !currentSong.isFullyCached 
 				 && currentSong.localFileSize < MIN_FILESIZE_TO_FAIL)
@@ -1023,6 +989,50 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 			[self performSelector:@selector(startWithOffsetInBytesorSecondsInternal:) withObject:bytesOrSeconds afterDelay:RETRY_DELAY];
 		}
 	}
+}
+
+// This is needed because of a bug in BASS that makes it fail to seek if done immediately, must wait a half second
+- (void)startWithOffsetInBytesorSecondsInternal2:(NSDictionary *)bytesOrSeconds
+{
+	NSNumber *byteOffset = [bytesOrSeconds objectForKey:@"byteOffset"];
+	NSNumber *seconds = [bytesOrSeconds objectForKey:@"seconds"]; 
+	
+	// Skip to the byte offset
+	if (byteOffset)
+	{
+		self.startByteOffset = [byteOffset unsignedLongLongValue];
+		
+		if (seconds)
+		{
+			[self seekToPositionInSeconds:[seconds doubleValue] inStream:self.fileStream1];
+		}
+		else
+		{
+			if (self.startByteOffset > 0)
+				[self seekToPositionInBytes:self.startByteOffset inStream:self.fileStream1];
+		}
+	}
+	else if (seconds)
+	{
+		self.startSecondsOffset = [seconds doubleValue];
+		if (self.startSecondsOffset > 0.0)
+			[self seekToPositionInSeconds:self.startSecondsOffset inStream:self.fileStream1];
+	}
+
+	// Start playback
+	BASS_ChannelPlay(self.outStream, FALSE);
+	self.isPlaying = YES;
+			
+	// This is a new song so notify Last.FM that it's playing
+	[socialS scrobbleSongAsPlaying];
+	
+	// Prepare the next song
+	[self prepareNextSongStream];
+	
+	// Notify listeners that playback has started
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
+	
+	playlistS.currentSong.playedDate = [NSDate date];
 }
 
 - (void)start

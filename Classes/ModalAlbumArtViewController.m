@@ -18,6 +18,7 @@
 #import "UIView+Tools.h"
 #import "UIApplication+StatusBar.h"
 #import "UIImageView+Reflection.h"
+#import "SavedSettings.h"
  
 @implementation ModalAlbumArtViewController
 @synthesize albumArt, artistLabel, albumLabel, myAlbum, numberOfTracks, albumLength, durationLabel, trackCountLabel, labelHolderView, albumArtReflection;
@@ -94,6 +95,9 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
+	if (settingsS.isRotationLockEnabled && interfaceOrientation != UIInterfaceOrientationPortrait)
+		return NO;
+	
     // Overriden to allow any orientation.
     return YES;
 }

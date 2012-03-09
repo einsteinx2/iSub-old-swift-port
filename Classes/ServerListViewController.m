@@ -34,7 +34,6 @@
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	
 	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
@@ -139,6 +138,8 @@
 {
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
+		self.title = @"Servers";
+		
 		self.tableView.scrollEnabled = YES;
 		self.navigationItem.rightBarButtonItem = self.editButtonItem;
 		
@@ -151,6 +152,8 @@
 	}
 	else if (segmentedControl.selectedSegmentIndex == 1)
 	{
+		self.title = @"Settings";
+		
 		self.tableView.scrollEnabled = YES;
 		[self setEditing:NO animated:NO];
 		self.navigationItem.rightBarButtonItem = nil;
@@ -162,6 +165,8 @@
 	}
 	else if (segmentedControl.selectedSegmentIndex == 2)
 	{
+		self.title = @"Help";
+		
 		self.tableView.scrollEnabled = NO;
 		[self setEditing:NO animated:NO];
 		self.navigationItem.rightBarButtonItem = nil;

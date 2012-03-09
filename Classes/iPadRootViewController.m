@@ -11,6 +11,7 @@
 
 #import "MenuViewController.h"
 #import "StackScrollViewController.h"
+#import "SavedSettings.h"
 
 
 @interface UIViewExt : UIView
@@ -104,6 +105,9 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
+	if (settingsS.isRotationLockEnabled && interfaceOrientation != UIInterfaceOrientationPortrait)
+		return NO;
+	
     // Overriden to allow any orientation.
     return YES;
 }

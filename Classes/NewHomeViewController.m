@@ -50,7 +50,6 @@
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
-	
 	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
@@ -64,7 +63,7 @@
 	//BOOL rotationDisabled = [[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"];
 	BOOL rotationDisabled = settingsS.isRotationLockEnabled;
 	
-	if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation) && !rotationDisabled)
+	if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
 	{
 		if (!IS_IPAD())
 		{

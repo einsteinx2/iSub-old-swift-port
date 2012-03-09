@@ -11,6 +11,7 @@
 #import "UIView+Tools.h"
 #import "StackContainerView.h"
 #import "NSArray+Additions.h"
+#import "SavedSettings.h"
 
 const NSInteger SLIDE_VIEWS_MINUS_X_POSITION = -190;//-130;
 const NSInteger SLIDE_VIEWS_START_X_POS = 0;
@@ -938,6 +939,9 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 // Ensure that the view controller supports rotation and that the split view can therefore show in both portrait and landscape.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
 {
+	if (settingsS.isRotationLockEnabled && interfaceOrientation != UIInterfaceOrientationPortrait)
+		return NO;
+	
     return YES;
 }
 
