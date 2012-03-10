@@ -563,7 +563,8 @@
 {
 	UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"New Preset Name:" message:@"      \n      " delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
 	myAlertView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
-	presetNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 22.0)];
+	presetNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 24.0)];
+	presetNameTextField.layer.cornerRadius = 3.;
 	[presetNameTextField setBackgroundColor:[UIColor whiteColor]];
 	[myAlertView addSubview:presetNameTextField];
 	[presetNameTextField release];
@@ -708,7 +709,6 @@
 		[audioEngineS updateEqParameter:self.selectedView.eqValue];
 		self.selectedView = nil;
 		
-		// TODO: uncomment this!
 		[self saveTempCustomPreset];
 	}
 }

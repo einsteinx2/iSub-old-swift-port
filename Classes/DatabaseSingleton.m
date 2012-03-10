@@ -343,7 +343,8 @@ static DatabaseSingleton *sharedInstance = nil;
 		
 		if (![bookmarksDb tableExists:@"bookmarks"]) 
 		{
-			[bookmarksDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarks (name TEXT, position INTEGER, %@, bytes INTEGER)", [Song standardSongColumnSchema]]];
+			//[bookmarksDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarks (name TEXT, position INTEGER, %@, bytes INTEGER)", [Song standardSongColumnSchema]]];
+			[bookmarksDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarks (bookmarkId INTEGER PRIMARY KEY, playlistIndex INTEGER, name TEXT, position INTEGER, %@, bytes INTEGER)", [Song standardSongColumnSchema]]];
 			[bookmarksDb executeUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
 		}
 	}
@@ -358,8 +359,8 @@ static DatabaseSingleton *sharedInstance = nil;
 - (void)updateTableDefinitions
 {
 	// Add parentId column to tables if necessary
-	NSArray *parentIdDatabases = [NSArray arrayWithObjects:albumListCacheDb, currentPlaylistDb, currentPlaylistDb, currentPlaylistDb, currentPlaylistDb, songCacheDb, songCacheDb, cacheQueueDb, bookmarksDb, songCacheDb, cacheQueueDb, nil];
-	NSArray *parentIdTables = [NSArray arrayWithObjects:@"songsCache", @"currentPlaylist", @"shufflePlaylist", @"jukeboxCurrentPlaylist", @"jukeboxShufflePlaylist", @"cachedSongs", @"genresSongs", @"cacheQueue", @"bookmarks", @"cachedSongsList", @"queuedSongsList", nil];
+	NSArray *parentIdDatabases = [NSArray arrayWithObjects:albumListCacheDb, currentPlaylistDb, currentPlaylistDb, currentPlaylistDb, currentPlaylistDb, songCacheDb, songCacheDb, cacheQueueDb, songCacheDb, cacheQueueDb, nil];
+	NSArray *parentIdTables = [NSArray arrayWithObjects:@"songsCache", @"currentPlaylist", @"shufflePlaylist", @"jukeboxCurrentPlaylist", @"jukeboxShufflePlaylist", @"cachedSongs", @"genresSongs", @"cacheQueue", @"cachedSongsList", @"queuedSongsList", nil];
 	NSString *columnName = @"parentId";
 	for (int i = 0; i < [parentIdDatabases count]; i++)
 	{
@@ -400,10 +401,20 @@ static DatabaseSingleton *sharedInstance = nil;
 		}
 	}
 	
-	// Add bytes column to bookmarks table if necessary
-	if (![bookmarksDb columnExists:@"bookmarks" columnName:@"bytes"])
+	// Update the bookmarks table to new format
+	if (![bookmarksDb columnExists:@"bookmarks" columnName:@"bookmarkId"])
 	{
-		[bookmarksDb executeUpdate:@"ALTER TABLE bookmarks ADD COLUMN bytes INTEGER"];
+		// Create the new table
+		[databaseS.bookmarksDb executeUpdate:@"DROP TABLE IF EXISTS bookmarksTemp"];
+		[bookmarksDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarksTemp (bookmarkId INTEGER PRIMARY KEY, playlistIndex INTEGER, name TEXT, position INTEGER, %@, bytes INTEGER)", [Song standardSongColumnSchema]]];
+		
+		// Move the records
+		[bookmarksDb executeUpdate:@"INSERT INTO bookmarksTemp (playlistIndex, name, position, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) SELECT 0, name, position, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size FROM bookmarks"];
+		
+		// Swap the tables
+		[bookmarksDb executeUpdate:@"DROP TABLE IF EXISTS bookmarks"];
+		[bookmarksDb executeUpdate:@"ALTER TABLE bookmarksTemp RENAME TO bookmarks"];	
+		[bookmarksDb executeUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
 	}
 }
 

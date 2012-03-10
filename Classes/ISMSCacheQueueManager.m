@@ -70,7 +70,7 @@
 	[self stopDownloadQueue];
 	
 	// For simplicity sake, just make sure we never go under 50 MB and let the cache check process take care of the rest
-	if (cacheS.freeSpace <= BytesToMB(50))
+	if (cacheS.freeSpace <= BytesToMB(25))
 		return;
 	
 	DLog(@"starting download queue");
@@ -209,7 +209,7 @@
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
 {	
 	// For simplicity sake, just make sure we never go under 50 MB and let the cache check process take care of the rest
-	if (cacheS.freeSpace <= BytesToMB(50))
+	if (cacheS.freeSpace <= BytesToMB(25))
 	{
 		[self stopDownloadQueue];
 		return;

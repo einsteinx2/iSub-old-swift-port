@@ -337,7 +337,8 @@
 			playlistCountLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
 			
 			UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Playlist Name:" message:@"this gets covered" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
-			playlistNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 22.0)];
+			playlistNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 24.0)];
+			playlistNameTextField.layer.cornerRadius = 3.;
 			[playlistNameTextField setBackgroundColor:[UIColor whiteColor]];
 			[myAlertView addSubview:playlistNameTextField];
 			[playlistNameTextField release];

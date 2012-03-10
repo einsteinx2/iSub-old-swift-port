@@ -62,15 +62,15 @@ static CacheSingleton *sharedInstance = nil;
 	// Only adjust if the user is using max cache size as option
 	if (settingsS.cachingType == ISMSCachingType_maxSize)
 	{
-		unsigned long long freeSpace = self.freeSpace;
+		unsigned long long possibleSize = self.freeSpace + self.cacheSize;
 		unsigned long long maxCacheSize = settingsS.maxCacheSize;
 		
-		NSLog(@"adjustCacheSize:  freeSpace = %llu  maxCacheSize = %llu", freeSpace, maxCacheSize);
+		NSLog(@"adjustCacheSize:  possibleSize = %llu  maxCacheSize = %llu", possibleSize, maxCacheSize);
 		
-		if (freeSpace < maxCacheSize)
+		if (possibleSize < maxCacheSize)
 		{
 			// Set the max cache size to 25MB less than the free space
-			settingsS.maxCacheSize = freeSpace - 26214400;
+			settingsS.maxCacheSize = possibleSize - BytesToMB(25);
 		}
 	}
 }
@@ -147,6 +147,9 @@ static CacheSingleton *sharedInstance = nil;
 - (void)checkCache
 {
 	[self findCacheSize];
+	
+	// Adjust the cache size if needed
+	[self adjustCacheSize];
 	
 	if (settingsS.cachingType == ISMSCachingType_minSpace && settingsS.isSongCachingEnabled)
 	{		
@@ -244,9 +247,6 @@ static CacheSingleton *sharedInstance = nil;
 	}
 	// Clear the temp cache directory
 	[self clearTempCache];
-	
-	// Adjust the cache size if needed
-	[self adjustCacheSize];
 
 	// Setup the cache check interval
 	cacheCheckInterval = 60.0;

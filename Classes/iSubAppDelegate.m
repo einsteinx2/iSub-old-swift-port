@@ -404,7 +404,6 @@
 
 - (void)crittercismDidCrashOnLastLoad
 {
-	// TODO: Do something here
 	DLog(@"App crashed on last load. Do something here.");
 }
 
@@ -926,36 +925,6 @@
 				else
 				{
 					[self enterOfflineModeForce];
-				}
-			}
-			
-			break;
-		}
-		case 5:
-		{
-			// Title: @"Resume?"
-			if (buttonIndex == 0)
-			{
-				//musicS.bitRate = 192;
-			}
-			if (buttonIndex == 1)
-			{
-				// TODO: Test this
-				settingsS.isRecover = YES;
-				[musicS resumeSong];
-				
-				// Reload the tab to display the Now Playing button - NOTE: DOESN'T WORK WHEN MORE TAB IS SELECTED
-				if (currentTabBarController.selectedIndex == 4)
-				{
-					[[currentTabBarController.moreNavigationController topViewController] viewWillAppear:NO];				
-				}
-				else if (currentTabBarController.selectedIndex == NSNotFound)
-				{
-					[[currentTabBarController.moreNavigationController topViewController] viewWillAppear:NO];
-				}
-				else
-				{
-					[[(UINavigationController*)currentTabBarController.selectedViewController topViewController] viewWillAppear:NO];				
 				}
 			}
 			

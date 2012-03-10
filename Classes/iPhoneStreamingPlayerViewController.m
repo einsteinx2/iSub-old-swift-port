@@ -1235,7 +1235,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	bookmarkBytePosition = audioEngineS.currentByteOffset;
 	
 	UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Bookmark Name:" message:@"this gets covered" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
-	bookmarkNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 22.0)];
+	bookmarkNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 24.0)];
+	bookmarkNameTextField.layer.cornerRadius = 3.;
 	[bookmarkNameTextField setBackgroundColor:[UIColor whiteColor]];
 	[myAlertView addSubview:bookmarkNameTextField];
 	if ([[[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."] objectAtIndexSafe:0] isEqualToString:@"3"])
@@ -1246,6 +1247,40 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[myAlertView show];
 	[myAlertView release];
 	[bookmarkNameTextField becomeFirstResponder];
+}
+
+- (void)saveBookmark
+{
+	[databaseS.bookmarksDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmarks (playlistIndex, name, position, %@, bytes) VALUES (?, ?, ?, %@, ?)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [NSNumber numberWithInt:playlistS.currentIndex], bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size, currentSong.parentId, [NSNumber numberWithUnsignedLongLong:bookmarkBytePosition]];
+	
+	NSInteger bookmarkId = [databaseS.bookmarksDb intForQuery:@"SELECT MAX(bookmarkId) FROM bookmarks"]; 
+	
+	NSString *tableName = nil;
+	if (settingsS.isJukeboxEnabled)
+	{
+		tableName = @"jukeboxCurrentPlaylist";
+		if (playlistS.isShuffle) 
+			tableName = @"jukeboxShufflePlaylist";
+	}
+	else 
+	{
+		tableName = @"currentPlaylist";
+		if (playlistS.isShuffle) 
+			tableName = @"shufflePlaylist";
+	}
+	
+	// Save the playlist
+	NSString *dbName = viewObjectsS.isOfflineMode ? @"%@/offlineCurrentPlaylist.db" : @"%@/%@currentPlaylist.db";
+	[databaseS.bookmarksDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:dbName, settingsS.databasePath, [[settingsS urlString] md5]], @"currentPlaylistDb"];
+	
+	[databaseS.bookmarksDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmark%i (%@)", bookmarkId, [Song standardSongColumnSchema]]];
+	
+	[databaseS.bookmarksDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmark%i SELECT * FROM currentPlaylistDb.%@", bookmarkId, tableName]]; 
+	
+	[databaseS.bookmarksDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
+	
+	bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseS.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]];
+	bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -1286,19 +1321,17 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		if(buttonIndex == 1)
 		{
 			// Check if the bookmark exists
-			if ([databaseS.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE name = ?", bookmarkNameTextField.text] == 0)
-			{
-				// Bookmark doesn't exist so save it
-				[databaseS.bookmarksDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmarks (name, position, %@, bytes) VALUES (?, ?, %@, ?)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size, currentSong.parentId, [NSNumber numberWithUnsignedLongLong:bookmarkBytePosition]];
-				bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseS.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]];
-				bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
-			}
-			else
+			if ([databaseS.bookmarksDb stringForQuery:@"SELECT name FROM bookmarks WHERE name = ? LIMIT 1", bookmarkNameTextField.text])
 			{
 				// Bookmark exists so ask to overwrite
 				UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Overwrite?" message:@"There is already a bookmark with this name. Overwrite it?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
 				[myAlertView show];
 				[myAlertView release];
+			}
+			else
+			{
+				// Bookmark doesn't exist so save it
+				[self saveBookmark];
 			}
 		}
 	}
@@ -1307,10 +1340,12 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		if(buttonIndex == 1)
 		{
 			// Overwrite the bookmark
+			NSUInteger bookmarkId = [databaseS.bookmarksDb intForQuery:@"SELECT bookmarkId FROM bookmarks WHERE name = ?", bookmarkNameTextField.text];
+			
 			[databaseS.bookmarksDb executeUpdate:@"DELETE FROM bookmarks WHERE name = ?", bookmarkNameTextField.text];
-			[databaseS.bookmarksDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmarks (name, position, %@, bytes) VALUES (?, ?, %@, ?)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size, currentSong.parentId, [NSNumber numberWithUnsignedLongLong:bookmarkBytePosition]];
-			bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseS.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]];
-			bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
+			[databaseS.bookmarksDb executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS bookmark%i", bookmarkId]];
+			
+			[self saveBookmark];
 		}
 	}
 }

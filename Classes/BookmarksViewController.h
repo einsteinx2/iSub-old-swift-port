@@ -7,8 +7,7 @@
 //
 
 @interface BookmarksViewController : UITableViewController
-{
-	
+{	
 	BOOL isNoBookmarksScreenShowing;
 	UIImageView *noBookmarksScreen;
 	
@@ -20,5 +19,7 @@
 	UILabel *editBookmarksLabel;
 	UIButton *editBookmarksButton;
 }
+
+@property (retain) NSArray *bookmarkIds;
 
 @end
