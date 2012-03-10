@@ -22,7 +22,7 @@
 
 @synthesize myArtist, listOfAlbums, listOfSongs;
 
-- (id) initXMLParser 
+- (id)initXMLParser 
 {	
 	if ((self = [super init]))
 	{
@@ -35,7 +35,7 @@
     return self;
 }
 
-- (void) subsonicErrorCode:(NSString *)errorCode message:(NSString *)message
+- (void)subsonicErrorCode:(NSString *)errorCode message:(NSString *)message
 {
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	alert.tag = 1;

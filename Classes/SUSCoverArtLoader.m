@@ -86,9 +86,16 @@
 		{
 			NSString *size = nil;
 			if (isLarge)
-				size = IS_IPAD() ? @"540" : (SCREEN_SCALE() == 2.0 ? @"640" : @"320");
+			{
+				if (IS_IPAD())
+					size = SCREEN_SCALE() == 2.0 ? @"1080" : @"540";
+				else
+					size = SCREEN_SCALE() == 2.0 ? @"640" : @"320";
+			}
 			else
+			{
 				size = SCREEN_SCALE() == 2.0 ? @"120" : @"60";
+			}
 			
 			NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(size), @"size", n2N(self.coverArtId), @"id", nil];
 			NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getCoverArt" andParameters:parameters];
