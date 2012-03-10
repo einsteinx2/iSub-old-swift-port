@@ -355,6 +355,7 @@
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Please Wait" message:@"You cannot reload the Songs tab while the Folders or Albums tabs are loading" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
 		[alert release];
+		[self dataSourceDidFinishLoadingNewData];
 	}
 }
 
@@ -383,7 +384,7 @@
 	{
 		if (buttonIndex == 1)
 		{
-			[self showLoadingScreen];//:[NSArray arrayWithObjects:@"Processing Artist:", @"", @"Processing Album:", @"", nil]];
+			[self showLoadingScreen];
 			
 			[dataModel restartLoad];
 			self.tableView.tableHeaderView = nil;
@@ -391,7 +392,7 @@
 		}
 		else if (buttonIndex == 2)
 		{
-			[self showLoadingScreen];//:[NSArray arrayWithObjects:@"Processing Album:", @"", @"Processing Song:", @"", nil]];
+			[self showLoadingScreen];
 			
 			[dataModel startLoad];
 			self.tableView.tableHeaderView = nil;

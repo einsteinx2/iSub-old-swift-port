@@ -177,7 +177,7 @@
 		songsCachedLabel.text = [NSString stringWithFormat:@"%i songs", cachedSongs];
 	
 	// Set the cache setting labels
-	if (settingsS.cachingType == 0)
+	if (settingsS.cachingType == ISMSCachingType_minSpace)
 	{
 		cacheSettingLabel.text = @"Min Free Space:";
 		cacheSettingSizeLabel.text = [NSString formatFileSize:settingsS.minFreeSpace];

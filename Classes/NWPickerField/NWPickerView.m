@@ -80,6 +80,9 @@
         // send the notification that we are about to show.
 		[self sendNotification:UIPickerViewWillShownNotification];
 		
+		// Make sure this is the top view so it covers everything
+		[self.superview bringSubviewToFront:self];
+		
         // set up our animation
 		[UIView beginAnimations:nil context:nil];
 		[UIView setAnimationDuration:.25];

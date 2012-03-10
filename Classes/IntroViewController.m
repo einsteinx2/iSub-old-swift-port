@@ -80,7 +80,6 @@
 		if (IS_IPAD())
 		{
 			[NSNotificationCenter postNotificationToMainThreadWithName:@"show settings"];
-			//[appDelegateS.homeNavigationController pushViewController:serverListViewController animated:YES];
 		}
 		else
 		{

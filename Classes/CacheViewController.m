@@ -570,6 +570,10 @@
 			cacheSizeLabel.text = [NSString formatFileSize:cacheS.cacheSize];
 	}
 	
+	// Make sure this didn't get called multiple times
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateCacheSizeLabel) object:nil];
+	
+	// Call again in a couple seconds
 	[self performSelector:@selector(updateCacheSizeLabel) withObject:nil afterDelay:2.0];
 }
 
@@ -580,6 +584,10 @@
 		[self reloadTable];
 	}
 	
+	// Make sure this didn't get called multiple times
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateQueueDownloadProgress) object:nil];
+	
+	// Call again in a second
 	[self performSelector:@selector(updateQueueDownloadProgress) withObject:nil afterDelay:1.];
 }
 
@@ -1021,6 +1029,9 @@
 	
 	[viewObjectsS hideLoadingScreen];
 	
+	if (!cacheQueueManagerS.isQueueDownloading)
+		[cacheQueueManagerS startDownloadQueue];
+	
 	[self registerForNotifications];
 }
 
@@ -1298,6 +1309,10 @@
 			{
 				queueDownloadProgress = cacheQueueManagerS.currentQueuedSong.localFileSize;
 				cell.cacheInfoLabel.text = [NSString stringWithFormat:@"Added %@ - Progress: %@", [NSString relativeTime:cached], [NSString formatFileSize:queueDownloadProgress]];
+			}
+			else if (appDelegateS.isWifi)
+			{
+				cell.cacheInfoLabel.text = [NSString stringWithFormat:@"Added %@ - Progress: Waiting...", [NSString relativeTime:cached]];
 			}
 			else
 			{

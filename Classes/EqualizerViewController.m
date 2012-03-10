@@ -201,7 +201,7 @@
 	[savePresetButton addTarget:self action:@selector(promptToSaveCustomPreset) forControlEvents:UIControlEventTouchUpInside];
 	savePresetButton.alpha = 0.;
 	savePresetButton.enabled = NO;
-	[self.view addSubview:savePresetButton];
+	[self.controlsContainer addSubview:savePresetButton];
 	
 	self.deletePresetButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 	deletePresetButton.frame = CGRectMake(f.origin.x + f.size.width - 60., f.origin.y, 60., 30.);
@@ -209,7 +209,7 @@
 	[deletePresetButton addTarget:self action:@selector(promptToDeleteCustomPreset) forControlEvents:UIControlEventTouchUpInside];
 	deletePresetButton.alpha = 0.;
 	deletePresetButton.enabled = NO;
-	[self.view addSubview:deletePresetButton];
+	[self.controlsContainer addSubview:deletePresetButton];
 	
 	if (effectDAO.selectedPresetId == BassEffectTempCustomPresetId)
 	{
@@ -253,6 +253,18 @@
 	}
 
 	self.navigationController.navigationBar.hidden = YES;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+	if (settingsS.isShouldShowEQViewInstructions)
+	{
+		NSString *title = [NSString stringWithFormat:@"Instructions"];
+		UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:title message:@"Double tap to create a new EQ point and double tap any existing EQ points to remove them." delegate:self cancelButtonTitle:@"Don't Show Again" otherButtonTitles:@"OK", nil];
+		myAlertView.tag = 3;
+		[myAlertView show];
+		[myAlertView release];
+	}
 }
 
 - (void)createAndDrawEqualizerPath
@@ -563,6 +575,7 @@
 	myAlertView.tag = 2;
 	[myAlertView show];
 	[myAlertView release];
+	[presetNameTextField becomeFirstResponder];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -577,7 +590,7 @@
 			[presetPicker selectRow:effectDAO.selectedPresetIndex inComponent:0 animated:YES];
 		}
 	}
-	else
+	else if (alertView.tag == 2)
 	{
 		// Save the preset
 		if (buttonIndex)
@@ -587,6 +600,13 @@
 			[effectDAO deleteTempCustomPreset];
 			[presetPicker reloadAllComponents];
 			[presetPicker selectRow:effectDAO.selectedPresetIndex inComponent:0 animated:YES];
+		}
+	}
+	else if (alertView.tag == 3)
+	{
+		if (buttonIndex == 0)
+		{
+			settingsS.isShouldShowEQViewInstructions = NO;
 		}
 	}
 }
@@ -689,7 +709,7 @@
 		self.selectedView = nil;
 		
 		// TODO: uncomment this!
-		//[self saveTempCustomPreset];
+		[self saveTempCustomPreset];
 	}
 }
 
@@ -713,11 +733,11 @@
 {
 	if(audioEngineS.isEqualizerOn)
 	{
-		[toggleButton setTitle:@"EQ On" forState:UIControlStateNormal];
+		[toggleButton setTitle:@"Turn EQ On" forState:UIControlStateNormal];
 	}
 	else
 	{
-		[toggleButton setTitle:@"EQ Off" forState:UIControlStateNormal];
+		[toggleButton setTitle:@"Turn EQ Off" forState:UIControlStateNormal];
 	}
 }
 

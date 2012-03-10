@@ -11,6 +11,7 @@
 #import "Album.h"
 #import "FMDatabaseAdditions.h"
 #import "DatabaseSingleton.h"
+#import "SUSAllSongsLoader.h"
 
 @implementation SUSAllAlbumsDAO
 
@@ -141,6 +142,9 @@
 
 - (NSUInteger)count
 {
+	if ([SUSAllSongsLoader isLoading])
+		return 0;
+	
 	return [self allAlbumsCount];
 }
 
@@ -151,6 +155,9 @@
 
 - (NSArray *)index
 {
+	if ([SUSAllSongsLoader isLoading])
+		return nil;
+	
 	if (index == nil)
 	{
 		index = [[self allAlbumsIndex] retain];

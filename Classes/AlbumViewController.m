@@ -23,7 +23,6 @@
 #import "FMDatabaseAdditions.h"
 #import "LoadingScreen.h"
 #import "NSString+hex.h"
-#import "AsynchronousImageView.h"
 #import "EGORefreshTableHeaderView.h"
 #import "ModalAlbumArtViewController.h"
 #import "CustomUIAlertView.h"
@@ -112,15 +111,14 @@
 {
     [super viewDidLoad];
 	
-	//else
-	//{
-		// Add the table fade
-		UIImageView *fade = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
-		fade.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-		fade.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		self.tableView.tableFooterView = fade;
-	//}
+	albumInfoArtView.delegate = self;
 	
+	// Add the table fade
+	UIImageView *fade = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+	fade.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
+	fade.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	self.tableView.tableFooterView = fade;
+		
 	// Add the pull to refresh view
 	refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
 	refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
@@ -203,6 +201,12 @@
 	albumInfoArtReflection.image = [albumInfoArtView reflectedImageWithHeight:albumInfoArtReflection.height];
 }
 
+- (void)asyncImageViewFinishedLoading:(AsynchronousImageView *)asyncImageView
+{
+	// Make sure to set the reflection again once the art loads
+	[self createReflection];
+}
+
 - (void)addHeaderAndIndex
 {
 	if (dataModel.songsCount == 0 && dataModel.albumsCount == 0)
@@ -211,7 +215,7 @@
 	}
 	else if (myAlbum)
 	{
-		if (IS_IPAD())
+		/*if (IS_IPAD())
 		{
 			// Fix some sizes for the iPad
 			CGFloat scaleFactor = 2.5;
@@ -227,14 +231,27 @@
 			albumInfoArtistLabel.font = albumInfoAlbumLabel.font = [UIFont boldSystemFontOfSize:40];
 			albumInfoArtistLabel.minimumFontSize = albumInfoAlbumLabel.minimumFontSize = 24;
 			albumInfoDurationLabel.font = albumInfoTrackCountLabel.font = [UIFont systemFontOfSize:30];
+		}*/
+		
+		if (!self.tableView.tableHeaderView)
+		{
+			CGFloat headerHeight = albumInfoView.height + playAllShuffleAllView.height;
+			CGRect headerFrame = CGRectMake(0., 0., 320, headerHeight);
+			UIView *headerView = [[UIView alloc] initWithFrame:headerFrame];
+			//headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+			
+			albumInfoArtView.isLarge = YES;
+			
+			[headerView addSubview:albumInfoView];
+			
+			playAllShuffleAllView.y = albumInfoView.height;
+			//playAllShuffleAllView.width = self.view.width;
+			[headerView addSubview:playAllShuffleAllView];
+			
+			self.tableView.tableHeaderView = headerView;
+			[headerView release];
 		}
 		
-		CGFloat headerHeight = albumInfoView.height + playAllShuffleAllView.height;
-		CGRect headerFrame = CGRectMake(0., 0., 320, headerHeight);
-		UIView *headerView = [[UIView alloc] initWithFrame:headerFrame];
-		//headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		
-		albumInfoArtView.isLarge = YES;
 		albumInfoArtView.coverArtId = myAlbum.coverArtId;
 		
 		albumInfoArtistLabel.text = myAlbum.artistName;
@@ -245,17 +262,8 @@
 		if (dataModel.songsCount == 1)
 			albumInfoTrackCountLabel.text = [NSString stringWithFormat:@"%i Track", dataModel.songsCount];
 		
-		[headerView addSubview:albumInfoView];
-		
-		playAllShuffleAllView.y = albumInfoView.height;
-		//playAllShuffleAllView.width = self.view.width;
-		[headerView addSubview:playAllShuffleAllView];
-		
 		// Create reflection
 		[self createReflection];
-		
-		self.tableView.tableHeaderView = headerView;
-		[headerView release];
 	}
 	else
 	{

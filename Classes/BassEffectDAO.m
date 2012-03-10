@@ -52,6 +52,8 @@
 
 - (void)setup
 {
+	DLog(@"default presets: %@", self.defaultPresets);
+	DLog(@"user presets: %@", self.userPresets);
 	NSMutableDictionary *presetsDict = [NSMutableDictionary dictionaryWithCapacity:0];
 	
 	[presetsDict addEntriesFromDictionary:self.defaultPresets];
@@ -110,13 +112,14 @@ NSInteger presetSort(id preset1, id preset2, void *context)
 {
 	NSMutableArray *presetsArray = [NSMutableArray arrayWithCapacity:0];
 	NSDictionary *userPresets = self.userPresets;
+		
 	for (NSString *key in [userPresets allKeys])
 	{
 		if ([[[userPresets objectForKey:key] objectForKey:@"presetId"] intValue] != BassEffectTempCustomPresetId)
 			[presetsArray addObject:[userPresets objectForKey:key]];
 	}
 	
-	return [presetsArray sortedArrayUsingFunction:presetSort context:NULL];
+	return [presetsArray count] ? [presetsArray sortedArrayUsingFunction:presetSort context:NULL] : nil;
 }
 
 - (NSDictionary *)defaultPresets

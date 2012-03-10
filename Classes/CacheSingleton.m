@@ -13,12 +13,14 @@
 
 #import "Song.h"
 #import "ISMSStreamManager.h"
+#import "NSNotificationCenter+MainThread.h"
+#import "ISMSCacheQueueManager.h"
 
 static CacheSingleton *sharedInstance = nil;
 
 @implementation CacheSingleton
 
-@synthesize cacheCheckInterval, cacheSize, cacheCheckTimer;
+@synthesize cacheCheckInterval, cacheSize;//, cacheCheckTimer;
 
 - (unsigned long long)totalSpace
 {
@@ -34,26 +36,17 @@ static CacheSingleton *sharedInstance = nil;
 	return [[attributes objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
 }
 
-- (void)startCacheCheckTimer
-{
-	[self stopCacheCheckTimer];
-	self.cacheCheckTimer = [NSTimer timerWithTimeInterval:cacheCheckInterval 
-												   target:self 
-												 selector:@selector(checkCache) 
-												 userInfo:nil 
-												  repeats:YES];
-}
-
 - (void)startCacheCheckTimerWithInterval:(NSTimeInterval)interval
 {
 	cacheCheckInterval = interval;
-	[self startCacheCheckTimer];
+	[self stopCacheCheckTimer];
+	
+	[self checkCache];
 }
 
 - (void)stopCacheCheckTimer
 {
-	[cacheCheckTimer invalidate];
-	self.cacheCheckTimer = nil;
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(checkCache) object:nil];
 }
 
 - (NSUInteger)numberOfCachedSongs
@@ -66,9 +59,8 @@ static CacheSingleton *sharedInstance = nil;
 //
 - (void)adjustCacheSize
 {
-	
 	// Only adjust if the user is using max cache size as option
-	if (settingsS.cachingType == 1)
+	if (settingsS.cachingType == ISMSCachingType_maxSize)
 	{
 		unsigned long long freeSpace = self.freeSpace;
 		unsigned long long maxCacheSize = settingsS.maxCacheSize;
@@ -87,7 +79,7 @@ static CacheSingleton *sharedInstance = nil;
 {		
 	NSString *songMD5 = nil;
 	
-	if (settingsS.cachingType == 0)
+	if (settingsS.cachingType == ISMSCachingType_minSpace)
 	{
 		// Remove the oldest songs based on either oldest played or oldest cached until free space is more than minFreeSpace
 		while (self.freeSpace < settingsS.minFreeSpace)
@@ -96,11 +88,11 @@ static CacheSingleton *sharedInstance = nil;
 				songMD5 = [databaseS.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
 			else
 				songMD5 = [databaseS.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
-			//DLog(@"removing %@", songMD5);
+			DLog(@"removing %@", songMD5);
 			[Song removeSongFromCacheDbByMD5:songMD5];			
 		}
 	}
-	else if (settingsS.cachingType == 1)
+	else if (settingsS.cachingType == ISMSCachingType_maxSize)
 	{
 		// Remove the oldest songs based on either oldest played or oldest cached until cache size is less than maxCacheSize
 		unsigned long long size = self.cacheSize;
@@ -126,11 +118,17 @@ static CacheSingleton *sharedInstance = nil;
 			
 			unsigned long long songSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:songPath error:NULL] fileSize];
 			
+			DLog(@"removing %@", songMD5);
 			[Song removeSongFromCacheDbByMD5:songMD5];
 			
 			size -= songSize;
 		}
 	}
+	
+	[self findCacheSize];
+	
+	if (!cacheQueueManagerS.isQueueDownloading)
+		[cacheQueueManagerS startDownloadQueue];
 }
 
 - (void)findCacheSize
@@ -142,16 +140,16 @@ static CacheSingleton *sharedInstance = nil;
 	}
 	
 	cacheSize = size;
+	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CacheSizeChecked];
 }
 
 - (void)checkCache
 {
 	[self findCacheSize];
 	
-	if (settingsS.cachingType == 0 && settingsS.isSongCachingEnabled)
-	{
-		// User has chosen to limit cache by minimum free space
-		
+	if (settingsS.cachingType == ISMSCachingType_minSpace && settingsS.isSongCachingEnabled)
+	{		
 		// Check to see if the free space left is lower than the setting
 		if (self.freeSpace < settingsS.minFreeSpace)
 		{
@@ -183,10 +181,8 @@ static CacheSingleton *sharedInstance = nil;
 			}
 		}
 	}
-	else if (settingsS.cachingType == 1 && settingsS.isSongCachingEnabled)
-	{
-		// User has chosen to limit cache by maximum size
-		
+	else if (settingsS.cachingType == ISMSCachingType_maxSize && settingsS.isSongCachingEnabled)
+	{		
 		// Check to see if the cache size is higher than the max
 		if (self.cacheSize > settingsS.maxCacheSize)
 		{
@@ -205,6 +201,10 @@ static CacheSingleton *sharedInstance = nil;
 			}			
 		}
 	}
+	
+	[self stopCacheCheckTimer];
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(checkCache) object:nil];
+	[self performSelector:@selector(checkCache) withObject:nil afterDelay:cacheCheckInterval];
 }
 
 - (void)clearTempCache
@@ -245,10 +245,13 @@ static CacheSingleton *sharedInstance = nil;
 	// Clear the temp cache directory
 	[self clearTempCache];
 	
-	// Setup the cache check
-	cacheCheckInterval = 120.0;
+	// Adjust the cache size if needed
 	[self adjustCacheSize];
-	[self startCacheCheckTimer];
+
+	// Setup the cache check interval
+	cacheCheckInterval = 60.0;
+	
+	// Do the first check sooner
 	[self performSelector:@selector(checkCache) withObject:nil afterDelay:11.0];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self 

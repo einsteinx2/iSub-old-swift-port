@@ -47,6 +47,11 @@
 		}
 		
 		[UIView commitAnimations];
+		
+		if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation))
+			[UIApplication setStatusBarHidden:YES withAnimation:YES];
+		else 
+			[UIApplication setStatusBarHidden:NO withAnimation:YES];
 	}
 }
 
@@ -72,14 +77,16 @@
 		// Fix album art size for iPad
 		albumArt.width = 540;
 		albumArt.height = 540;
-		labelHolderView.height = 80;
-		labelHolderView.y = 380;
+		albumArtReflection.y = 540;
+		albumArtReflection.width = 540;
+		labelHolderView.height = 125;
+		labelHolderView.y = 500;
 	}
 	
 	albumArt.isLarge = YES;
 	albumArt.delegate = self;
 	
-	[UIApplication setStatusBarHidden:YES withAnimation:YES];
+	//[UIApplication setStatusBarHidden:YES withAnimation:YES];
 	
 	artistLabel.text = myAlbum.artistName;
 	albumLabel.text = myAlbum.title;
@@ -91,6 +98,19 @@
 	albumArt.coverArtId = self.myAlbum.coverArtId;
 	
 	albumArtReflection.image = [albumArt reflectedImageWithHeight:albumArtReflection.height];
+	
+	if (!IS_IPAD())
+	{
+		if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
+		{
+			[UIApplication setStatusBarHidden:YES withAnimation:YES];
+			albumArt.width = 480;
+		}
+		else
+		{
+			[UIApplication setStatusBarHidden:NO withAnimation:YES];
+		}
+	}
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -104,7 +124,9 @@
 
 - (IBAction)dismiss:(id)sender
 {
-	[UIApplication setStatusBarHidden:NO withAnimation:YES];
+	if (!IS_IPAD())
+		[UIApplication setStatusBarHidden:NO withAnimation:YES];
+	
 	[self dismissModalViewControllerAnimated:YES];
 }
 

@@ -7,10 +7,11 @@
 //
 
 #import "SUSLoaderDelegate.h"
+#import "AsynchronousImageViewDelegate.h"
 
 @class Artist, Album, EGORefreshTableHeaderView, SUSSubFolderDAO, AsynchronousImageView;
 
-@interface AlbumViewController : UITableViewController <SUSLoaderDelegate>
+@interface AlbumViewController : UITableViewController <SUSLoaderDelegate, AsynchronousImageViewDelegate>
 {
 	
 	NSURLConnection *connection;

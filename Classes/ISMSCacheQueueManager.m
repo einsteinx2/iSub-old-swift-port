@@ -22,6 +22,7 @@
 #import "iSubAppDelegate.h"
 #import "ISMSStreamManager.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "CacheSingleton.h"
 
 @implementation ISMSCacheQueueManager
 @synthesize isQueueDownloading, currentQueuedSong;
@@ -67,7 +68,11 @@
 {
 	// Are we already downloading?  If so, stop it.
 	[self stopDownloadQueue];
-
+	
+	// For simplicity sake, just make sure we never go under 50 MB and let the cache check process take care of the rest
+	if (cacheS.freeSpace <= BytesToMB(50))
+		return;
+	
 	DLog(@"starting download queue");
 	
 	// Check if there's another queued song and that were are on Wifi
@@ -116,7 +121,7 @@
 		[bitrate release];
 	}
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters];
-	self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)
 	{
 		self.downloadLength = 0;
@@ -168,6 +173,7 @@
 	self.isQueueDownloading = NO;
 	
 	[self.connection cancel];
+	DLog(@"self.connection: %@", self.connection);
 	self.connection = nil;
 	self.fileHandle = nil;
 	[[NSFileManager defaultManager] removeItemAtPath:self.currentQueuedSong.localPath error:NULL];
@@ -201,7 +207,14 @@
 }
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
-{
+{	
+	// For simplicity sake, just make sure we never go under 50 MB and let the cache check process take care of the rest
+	if (cacheS.freeSpace <= BytesToMB(50))
+	{
+		[self stopDownloadQueue];
+		return;
+	}
+	
 	// Save the data to the file
 	@try
 	{
@@ -232,6 +245,8 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
+	DLog(@"theConnection: %@", theConnection);
+	
 	DLog(@"queue download finished: %@", self.currentQueuedSong.title);
 	if (!streamManagerS.isQueueDownloading) 
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;

@@ -231,6 +231,7 @@
 	if (![SUSAllSongsLoader isLoading])
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Reload?" message:@"This could take a while if you have a big collection.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection.\n\nNote: If you've added new artists, you should reload the Folders tab first." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+		alert.tag = 1;
 		[alert show];
 		[alert release];
 	}
@@ -239,6 +240,7 @@
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Please Wait" message:@"You cannot reload the Albums tab while the Folders or Songs tabs are loading" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
 		[alert release];
+		[self dataSourceDidFinishLoadingNewData];
 	}	
 }
 

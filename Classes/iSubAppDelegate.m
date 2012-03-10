@@ -149,7 +149,9 @@
 		}
 	}
 	
+	// Make sure audio engine and cache singletons get loaded
 	audioEngineS;
+	cacheS;
 	
     introController = nil;
 	

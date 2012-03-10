@@ -510,28 +510,31 @@ static NSInteger order (id a, id b, void* context)
 
 - (void)sendArtistNotification:(NSString *)artistName
 {
-	if ([[NSDate date] timeIntervalSinceDate:self.notificationTimeArtist] > .5)
+	if ([[NSDate date] timeIntervalSinceDate:self.notificationTimeArtist] > 1.)
 	{
 		self.notificationTimeArtist = [NSDate date];
-		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AllSongsArtistName];
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AllSongsArtistName 
+															object:[[artistName copy] autorelease]];
 	}
 }
 
 - (void)sendAlbumNotification:(NSString *)albumTitle
 {
-	if ([[NSDate date] timeIntervalSinceDate:self.notificationTimeAlbum] > .5)
+	if ([[NSDate date] timeIntervalSinceDate:self.notificationTimeAlbum] > 1.)
 	{
 		self.notificationTimeAlbum = [NSDate date];
-		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AllSongsAlbumName];
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AllSongsAlbumName
+															object:[[albumTitle copy] autorelease]];
 	}
 }
 
 - (void)sendSongNotification:(NSString *)songTitle
 {
-	if ([[NSDate date] timeIntervalSinceDate:self.notificationTimeSong] > .5)
+	if ([[NSDate date] timeIntervalSinceDate:self.notificationTimeSong] > 1.)
 	{
 		self.notificationTimeSong = [NSDate date];
-		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AllSongsSongName];
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AllSongsSongName
+															object:[[songTitle copy] autorelease]];
 	}
 }
 

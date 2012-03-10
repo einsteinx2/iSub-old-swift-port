@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#define BassEffectTempCustomPresetId 10000
+#define BassEffectTempCustomPresetId 1000000
 #define BassEffectUserPresetStartId 1000
 
 typedef enum 

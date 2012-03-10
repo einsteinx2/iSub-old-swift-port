@@ -24,6 +24,10 @@
 #define ISMSJukeboxTimeout 60.0
 #define ISMSServerCheckTimeout 15.0
 
+#define BytesToKB(value) (value * 1024)
+#define BytesToMB(value) (BytesToKB(value) * 1024)
+#define BytesToGB(value) (BytesToMB(value) * 1024)
+
 // iPad detection
 #ifdef UI_USER_INTERFACE_IDIOM//()
 #define IS_IPAD() (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)

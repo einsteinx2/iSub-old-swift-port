@@ -9,8 +9,6 @@
 //  Modified by Ben Baron for the iSub project.
 //
 
-// TODO: Make sure this class still works with songAtTimeOfLoad removed
-
 #import "AsynchronousImageView.h"
 #import "iSubAppDelegate.h"
 #import "MusicSingleton.h"

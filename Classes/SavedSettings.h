@@ -10,6 +10,12 @@
 
 #define settingsS [SavedSettings sharedInstance]
 
+typedef enum 
+{
+	ISMSCachingType_minSpace = 0,
+	ISMSCachingType_maxSize = 1
+} ISMSCachingType;
+
 @class AudioEngine;
 @interface SavedSettings : NSObject 
 {    
@@ -98,6 +104,7 @@
 @property BOOL isExtraPlayerControlsShowing;
 @property BOOL isPlayerPlaylistShowing;
 
+@property BOOL isShouldShowEQViewInstructions;
 
 // State Saving
 @property BOOL isRecover;

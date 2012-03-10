@@ -10,7 +10,7 @@
 
 @interface CacheSingleton : NSObject
 
-@property (retain) NSTimer *cacheCheckTimer;
+//@property (retain) NSTimer *cacheCheckTimer;
 @property NSTimeInterval cacheCheckInterval;
 @property (readonly) unsigned long long totalSpace;
 @property (readonly) unsigned long long cacheSize;
@@ -19,7 +19,7 @@
 
 + (CacheSingleton *)sharedInstance;
 
-- (void)startCacheCheckTimer;
+//- (void)startCacheCheckTimer;
 - (void)startCacheCheckTimerWithInterval:(NSTimeInterval)interval;
 - (void)stopCacheCheckTimer;
 - (void)clearTempCache;

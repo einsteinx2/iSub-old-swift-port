@@ -15,6 +15,7 @@
 #import "Song.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "CacheSingleton.h"
+#import "ISMSCacheQueueManager.h"
 
 @implementation CacheAlbumUITableViewCell
 
@@ -124,6 +125,9 @@
 		
 	// Reload the cached songs table
 	[NSNotificationCenter postNotificationToMainThreadWithName:@"cachedSongDeleted"];
+	
+	if (!cacheQueueManagerS.isQueueDownloading)
+		[cacheQueueManagerS startDownloadQueue];
 	
 	// Hide the loading screen
 	[viewObjectsS hideLoadingScreen];

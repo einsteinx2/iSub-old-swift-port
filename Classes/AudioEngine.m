@@ -25,8 +25,6 @@
 #import "NSArray+Additions.h"
 #import "SocialSingleton.h"
 
-// TODO: verify secondsOffset usage
-
 @implementation AudioEngine
 @synthesize isEqualizerOn, startByteOffset, startSecondsOffset, fftDataThread, isFftDataThreadToTerminate, isPlaying, isFastForward, bassReinitSampleRate, presilenceStream, bufferLengthMillis, bassUpdatePeriod;
 @synthesize fileStream1, fileStream2, fileStreamTempo1, fileStreamTempo2, volumeFx, outStream, BASSisFilestream1, currentStreamSyncObject;
@@ -1493,7 +1491,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	
 	fftDataThread = [[NSThread alloc] initWithTarget:self selector:@selector(fftDataThreadEntryPoint) object:nil];
 	[fftDataThread start];
-	if (SCREEN_SCALE() == 1.0 && !IS_IPAD())
+	if (SCREEN_SCALE() == 1.0)// && !IS_IPAD())
 		lineSpecBufSize = 256 * sizeof(short);
 	else
 		lineSpecBufSize = 512 * sizeof(short);

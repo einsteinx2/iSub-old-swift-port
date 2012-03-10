@@ -355,6 +355,11 @@
 		self.quickSkipNumberOfSeconds = 30;
 	}
 	
+	if (![userDefaults objectForKey:@"isShouldShowEQViewInstructions"])
+	{
+		self.isShouldShowEQViewInstructions = YES;
+	}
+	
 	[userDefaults synchronize];
 }
 
@@ -1260,6 +1265,23 @@
 			[userDefaults setInteger:numSeconds forKey:@"quickSkipNumberOfSeconds"];
 			[userDefaults synchronize];
 		}
+	}
+}
+
+- (BOOL)isShouldShowEQViewInstructions
+{
+	@synchronized(self)
+	{
+		return [userDefaults boolForKey:@"isShouldShowEQViewInstructions"];
+	}
+}
+
+- (void)setIsShouldShowEQViewInstructions:(BOOL)isShouldShowEQViewInstructions
+{
+	@synchronized(self)
+	{
+		[userDefaults setBool:isShouldShowEQViewInstructions forKey:@"isShouldShowEQViewInstructions"];
+		[userDefaults synchronize];
 	}
 }
 

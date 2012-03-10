@@ -49,7 +49,7 @@ typedef struct
 
 static void SetupArrays()
 {
-	if (SCREEN_SCALE() == 1.0 && !IS_IPAD())
+	if (SCREEN_SCALE() == 1.0)// && !IS_IPAD())
 		specWidth = specHeight = 256;
 	else
 		specWidth = specHeight = 512;

@@ -110,28 +110,32 @@
 {
     if(height == 0)
 		return nil;
+	
+	CGFloat theWidth = self.bounds.size.width * SCREEN_SCALE();
+	CGFloat theHeight = height * SCREEN_SCALE();
     
 	// create a bitmap graphics context the size of the image
-	CGSize size = CGSizeMake(self.bounds.size.width, height);
+	CGSize size = CGSizeMake(theWidth, theHeight);
 	CGContextRef mainViewContentContext = [self createReflectionBitmapContext:size];
 	
 	// create a 2 bit CGImage containing a gradient that will be used for masking the 
 	// main view content to create the 'fade' of the reflection.  The CGImageCreateWithMask
 	// function will stretch the bitmap image as required, so we can create a 1 pixel wide gradient
-	CGImageRef gradientMaskImage = [self createGradientImageRef:CGSizeMake(1, height)];
+	CGImageRef gradientMaskImage = [self createGradientImageRef:CGSizeMake(1, theHeight)];
 	
 	// create an image by masking the bitmap of the mainView content with the gradient view
 	// then release the  pre-masked content bitmap and the gradient bitmap
-	CGContextClipToMask(mainViewContentContext, CGRectMake(0.0, 0.0, self.bounds.size.width, height), gradientMaskImage);
+	CGContextClipToMask(mainViewContentContext, CGRectMake(0.0, 0.0, theWidth, theHeight), gradientMaskImage);
 	CGImageRelease(gradientMaskImage);
 	
 	// In order to grab the part of the image that we want to render, we move the context origin to the
 	// height of the image that we want to capture, then we flip the context so that the image draws upside down.
-	CGContextTranslateCTM(mainViewContentContext, 0.0, height);
+	CGContextTranslateCTM(mainViewContentContext, 0.0, theHeight);
 	CGContextScaleCTM(mainViewContentContext, 1.0, -1.0);
 	
 	// draw the image into the bitmap context
-	CGContextDrawImage(mainViewContentContext, self.bounds, self.image.CGImage);
+	CGRect frame = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width * SCREEN_SCALE(), self.bounds.size.height * SCREEN_SCALE());
+	CGContextDrawImage(mainViewContentContext, frame, self.image.CGImage);
 	
 	// create CGImageRef of the main view bitmap content, and then release that bitmap context
 	CGImageRef reflectionImage = CGBitmapContextCreateImage(mainViewContentContext);

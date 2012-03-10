@@ -445,6 +445,9 @@
 			hadError = YES;
 	}
 	
+	if (!cacheQueueManagerS.isQueueDownloading)
+		[cacheQueueManagerS startDownloadQueue];
+	
 	return !hadError;
 }
 

@@ -145,6 +145,9 @@
 
 - (NSUInteger)count
 {
+	if ([SUSAllSongsLoader isLoading])
+		return 0;
+	
 	return [self allSongsCount];
 }
 
@@ -155,6 +158,9 @@
 
 - (NSArray *)index
 {
+	if ([SUSAllSongsLoader isLoading])
+		return nil;
+	
 	if (index == nil)
 	{
 		index = [[self allSongsIndex] retain];

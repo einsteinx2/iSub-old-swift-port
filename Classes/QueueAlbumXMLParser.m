@@ -35,7 +35,6 @@
     return self;
 }
 
-
 - (void) subsonicErrorCode:(NSString *)errorCode message:(NSString *)message
 {
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
@@ -51,7 +50,6 @@
 	[alert show];
 	[alert release];
 }
-
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName 
   namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName 
@@ -92,10 +90,14 @@
 		}
 		else
 		{
-			Song *aSong = [[Song alloc] initWithAttributeDict:attributeDict];
-			if (aSong.path)
-				[self.listOfSongs addObject:aSong];
-			[aSong release];
+			BOOL isVideo = [[attributeDict objectForKey:@"isVideo"] boolValue];
+			if (!isVideo)
+			{
+				Song *aSong = [[Song alloc] initWithAttributeDict:attributeDict];
+				if (aSong.path)
+					[self.listOfSongs addObject:aSong];
+				[aSong release];
+			}
 		}
 	}	
 }
