@@ -18,9 +18,10 @@
 #import "NSArray+FirstObject.h"
 #import "NSArray+Additions.h"
 #import "UIApplication+StatusBar.h"
+#import "SnappySlider.h"
 
 @implementation EqualizerViewController
-@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath, gainBoostLabel, isPresetPickerShowing, controlsContainer; //drawTimer;
+@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath, gainBoostLabel, isPresetPickerShowing, controlsContainer, gainBoostAmountLabel, lastGainValue; //drawTimer;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -220,19 +221,25 @@
 		[self showDeletePresetButton:NO];
 	}
 	
-	gainSlider.value = settingsS.gainMultiplier;
+	NSArray *detents = [NSArray arrayWithObjects:[NSNumber numberWithFloat:1.], [NSNumber numberWithFloat:2.], [NSNumber numberWithFloat:3.], nil];
+	self.gainSlider.snapDistance = .13;
+	self.gainSlider.detents = detents;
+	self.gainSlider.value = settingsS.gainMultiplier;
+	self.lastGainValue = self.gainSlider.value;
+	self.gainBoostAmountLabel.text = [NSString stringWithFormat:@"%.1fx", self.gainSlider.value];
 	
 	if (IS_IPAD())
 	{
-		gainSlider.y += 7;
-		gainBoostLabel.y += 7;
+		self.gainSlider.y += 7;
+		self.gainBoostLabel.y += 7;
+		self.gainBoostAmountLabel.y += 7;
 	}
 	
 	if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation) && !IS_IPAD())
 	{
 		self.controlsContainer.alpha = 0.0;
 		self.controlsContainer.userInteractionEnabled = NO;
-	}
+	}	
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -614,9 +621,19 @@
 
 - (IBAction)movedGainSlider:(id)sender
 {
-	DLog(@"gainSlider.value: %f", gainSlider.value);
-	settingsS.gainMultiplier = gainSlider.value;
-	[audioEngineS bassSetGainLevel:gainSlider.value];
+	CGFloat gainValue = self.gainSlider.value;
+	CGFloat minValue = self.gainSlider.minimumValue;
+	CGFloat maxValue = self.gainSlider.maximumValue;
+	
+	settingsS.gainMultiplier = gainValue;
+	[audioEngineS bassSetGainLevel:gainValue];
+	
+	CGFloat difference = fabsf(gainValue - self.lastGainValue);
+	if (difference >= .1 || gainValue == minValue || gainValue == maxValue)
+	{
+		gainBoostAmountLabel.text = [NSString stringWithFormat:@"%.1fx", gainValue];
+		lastGainValue = gainValue;
+	}
 }
 
 #pragma mark Touch gestures interception
@@ -733,11 +750,13 @@
 {
 	if(audioEngineS.isEqualizerOn)
 	{
-		[toggleButton setTitle:@"Turn EQ On" forState:UIControlStateNormal];
+		[toggleButton setTitle:@"EQ is ON" forState:UIControlStateNormal];
+		toggleButton.titleLabel.textColor = [UIColor colorWithRed:255./98. green:255./180. blue:255./224. alpha:1.];
 	}
 	else
 	{
-		[toggleButton setTitle:@"Turn EQ Off" forState:UIControlStateNormal];
+		[toggleButton setTitle:@"EQ is OFF" forState:UIControlStateNormal];
+		toggleButton.titleLabel.textColor = [UIColor colorWithWhite:.75 alpha:1.];
 	}
 }
 

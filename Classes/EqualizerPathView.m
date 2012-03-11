@@ -35,9 +35,11 @@ static CGColorRef drawColor;
 	if ((int)gain == 0)
 		return [NSString stringWithFormat:@"%.0fdB", gain];
 	if (gain == (int)gain)
-		return [NSString stringWithFormat:@"%.0f", gain];
+		//return [NSString stringWithFormat:@"%.0f", gain];
+		return [NSString stringWithFormat:@"%.0fdB", gain];
 	
-	return [NSString stringWithFormat:@"%.1f", gain];
+	//return [NSString stringWithFormat:@"%.1f", gain];
+	return [NSString stringWithFormat:@"%.1fdB", gain];
 }
 
 - (void)drawTextLabelAtPoint:(CGPoint)point withString:(NSString *)string

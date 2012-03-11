@@ -408,14 +408,21 @@
 {				
 	if (self.isShuffle)
 	{
+		NSString *songId = self.currentSong.songId;
+
 		self.isShuffle = NO;
+		
+		// Find the track position in the regular playlist
+		NSString *tableName = settingsS.isJukeboxEnabled ? @"jukeboxCurrentPlaylist" : @"currentPlaylist";
+		NSString *query = [NSString stringWithFormat:@"SELECT ROWID FROM %@ WHERE songId = ? LIMIT 1", tableName];
+		self.currentIndex = [self.db intForQuery:query, songId] - 1;
 		
 		if (settingsS.isJukeboxEnabled)
 		{
 			[jukeboxS jukeboxReplacePlaylistWithLocal];
 			//[musicS playSongAtPosition:];
 		}
-		
+				
 		// Send a notification to update the playlist view
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistShuffleToggled];
 	}

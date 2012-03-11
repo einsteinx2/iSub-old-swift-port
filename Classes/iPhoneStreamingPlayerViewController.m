@@ -294,6 +294,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 												 name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) 
 												 name:ISMSNotification_ServerSwitched object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) 
+												 name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateShuffleIcon) 
 												 name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songInfoToggle:) 

@@ -318,6 +318,7 @@
 		[userDefaults setBool:NO forKey:@"checkUpdatesSetting"];
 		[userDefaults setBool:NO forKey:@"isUpdateCheckQuestionAsked"];
 		[userDefaults setBool:NO forKey:@"isBasicAuthEnabled"];
+		[userDefaults setBool:YES forKey:@"checkUpdatesSetting"];
 		
 		[self convertFromOldSettingsType];
 	}

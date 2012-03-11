@@ -484,8 +484,17 @@
 		}
 		
         // Delete the row from the data source
-        [ settingsS.serverList removeObjectAtIndex:indexPath.row];
-		[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [settingsS.serverList removeObjectAtIndex:indexPath.row];
+		
+		@try
+		{
+			[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
+		}
+		@catch (NSException *exception) 
+		{
+			DLog(@"Exception: %@ - %@", exception.name, exception.reason);
+		}
+		
 		[self.tableView reloadData];
 		
 		// Save the plist values

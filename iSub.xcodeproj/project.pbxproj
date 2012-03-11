@@ -1990,6 +1990,12 @@
 		53DFB310148C27080066FF94 /* NWPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DFB306148C27080066FF94 /* NWPickerView.m */; };
 		53DFB311148C27080066FF94 /* NWPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DFB306148C27080066FF94 /* NWPickerView.m */; };
 		53DFB312148C27080066FF94 /* NWPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DFB306148C27080066FF94 /* NWPickerView.m */; };
+		53E6093A150C4E5300FD86E6 /* UIViewController+IsVisible.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E60939150C4E5300FD86E6 /* UIViewController+IsVisible.m */; };
+		53E6093B150C4E5300FD86E6 /* UIViewController+IsVisible.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E60939150C4E5300FD86E6 /* UIViewController+IsVisible.m */; };
+		53E6093C150C4E5300FD86E6 /* UIViewController+IsVisible.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E60939150C4E5300FD86E6 /* UIViewController+IsVisible.m */; };
+		53E60945150C6DB000FD86E6 /* SnappySlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E60944150C6DB000FD86E6 /* SnappySlider.m */; };
+		53E60946150C6DB000FD86E6 /* SnappySlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E60944150C6DB000FD86E6 /* SnappySlider.m */; };
+		53E60947150C6DB000FD86E6 /* SnappySlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E60944150C6DB000FD86E6 /* SnappySlider.m */; };
 		53E75C361270013D00BC1A19 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53E75C351270013D00BC1A19 /* MainWindow-iPad.xib */; };
 		53E75E84127123B300BC1A19 /* SearchXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E75E83127123B300BC1A19 /* SearchXMLParser.m */; };
 		53E82A98140720BC0051D44B /* SUSSubFolderDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E82A97140720BC0051D44B /* SUSSubFolderDAO.m */; };
@@ -3066,6 +3072,12 @@
 		53DFB304148C27080066FF94 /* NWPickerField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NWPickerField.m; sourceTree = "<group>"; };
 		53DFB305148C27080066FF94 /* NWPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NWPickerView.h; sourceTree = "<group>"; };
 		53DFB306148C27080066FF94 /* NWPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NWPickerView.m; sourceTree = "<group>"; };
+		53E60938150C4E5300FD86E6 /* UIViewController+IsVisible.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+IsVisible.h"; sourceTree = "<group>"; };
+		53E60939150C4E5300FD86E6 /* UIViewController+IsVisible.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+IsVisible.m"; sourceTree = "<group>"; };
+		53E6093D150C4F8100FD86E6 /* Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macros.h; sourceTree = "<group>"; };
+		53E6093E150C4FC500FD86E6 /* Categories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Categories.h; sourceTree = "<group>"; };
+		53E60943150C6DB000FD86E6 /* SnappySlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SnappySlider.h; path = "../../Snappy-Slider/Classes/SnappySlider.h"; sourceTree = "<group>"; };
+		53E60944150C6DB000FD86E6 /* SnappySlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SnappySlider.m; path = "../../Snappy-Slider/Classes/SnappySlider.m"; sourceTree = "<group>"; };
 		53E75C351270013D00BC1A19 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "../Resources-iPad/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		53E75E82127123B300BC1A19 /* SearchXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchXMLParser.h; sourceTree = "<group>"; };
 		53E75E83127123B300BC1A19 /* SearchXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchXMLParser.m; sourceTree = "<group>"; };
@@ -3301,6 +3313,7 @@
 				53B15EB2145D02EC007A04F6 /* NSError+ISMSError.h */,
 				53B15EB3145D02EC007A04F6 /* NSError+ISMSError.m */,
 				537A466F14783F3E004591C9 /* ISMSNotificationNames.h */,
+				53E6093D150C4F8100FD86E6 /* Macros.h */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -3946,6 +3959,7 @@
 		5382A81812D82CE8005A3D1A /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				53E6093E150C4FC500FD86E6 /* Categories.h */,
 				532590D914EC860100DF4BDB /* NSArray */,
 				53A7652914AE9A53004253D1 /* NSString */,
 				53B20D2C12C27CE000A90DD9 /* UIView+Tools.h */,
@@ -3966,6 +3980,8 @@
 				53C4408214E88C2200A7DC41 /* NSObject+ListMethods.m */,
 				53733C7F14FDBD62001D8104 /* CALayer+ImageFromLayer.h */,
 				53733C8014FDBD62001D8104 /* CALayer+ImageFromLayer.m */,
+				53E60938150C4E5300FD86E6 /* UIViewController+IsVisible.h */,
+				53E60939150C4E5300FD86E6 /* UIViewController+IsVisible.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -4061,6 +4077,8 @@
 				53DC4EE2149D6ACB00CC3BB4 /* FlurryAnalytics.h */,
 				532590FF14EE22C100DF4BDB /* MBProgressHUD.h */,
 				5325910014EE22C400DF4BDB /* MBProgressHUD.m */,
+				53E60943150C6DB000FD86E6 /* SnappySlider.h */,
+				53E60944150C6DB000FD86E6 /* SnappySlider.m */,
 			);
 			name = "Support Classes";
 			sourceTree = "<group>";
@@ -6429,6 +6447,8 @@
 				53733C7014FC4B09001D8104 /* ISMSCacheQueueManager.m in Sources */,
 				53733C7514FC6075001D8104 /* NSString+Clean.m in Sources */,
 				53733C8114FDBD62001D8104 /* CALayer+ImageFromLayer.m in Sources */,
+				53E6093A150C4E5300FD86E6 /* UIViewController+IsVisible.m in Sources */,
+				53E60945150C6DB000FD86E6 /* SnappySlider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6739,6 +6759,8 @@
 				53733C7214FC4B09001D8104 /* ISMSCacheQueueManager.m in Sources */,
 				53733C7714FC6075001D8104 /* NSString+Clean.m in Sources */,
 				53733C8314FDBD62001D8104 /* CALayer+ImageFromLayer.m in Sources */,
+				53E6093C150C4E5300FD86E6 /* UIViewController+IsVisible.m in Sources */,
+				53E60947150C6DB000FD86E6 /* SnappySlider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7049,6 +7071,8 @@
 				53733C7114FC4B09001D8104 /* ISMSCacheQueueManager.m in Sources */,
 				53733C7614FC6075001D8104 /* NSString+Clean.m in Sources */,
 				53733C8214FDBD62001D8104 /* CALayer+ImageFromLayer.m in Sources */,
+				53E6093B150C4E5300FD86E6 /* UIViewController+IsVisible.m in Sources */,
+				53E60946150C6DB000FD86E6 /* SnappySlider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

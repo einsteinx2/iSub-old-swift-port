@@ -9,7 +9,7 @@
 #import "NWPickerField.h"
 #import "DDSocialDialog.h"
 
-@class EqualizerView, EqualizerPointView, EqualizerPathView, BassParamEqValue, BassEffectDAO, NWPickerField;
+@class EqualizerView, EqualizerPointView, EqualizerPathView, BassParamEqValue, BassEffectDAO, NWPickerField, SnappySlider;
 @interface EqualizerViewController : UIViewController <NWPickerFieldDelegate, DDSocialDialogDelegate, UITableViewDelegate, UITableViewDataSource>
 {
 	UIView *overlay;
@@ -26,8 +26,10 @@
 @property (retain) IBOutlet EqualizerView *equalizerView;
 @property (retain) NSMutableArray *equalizerPointViews;
 
-@property (retain) IBOutlet UISlider *gainSlider;
+@property (retain) IBOutlet SnappySlider *gainSlider;
+@property (retain) IBOutlet UILabel *gainBoostAmountLabel;
 @property (retain) IBOutlet UILabel *gainBoostLabel;
+@property CGFloat lastGainValue;
 
 @property (retain) BassEffectDAO *effectDAO;
 

@@ -25,7 +25,7 @@
 
 @implementation QuickAlbumsViewController
 
-@synthesize parent, receivedData, modifier;
+@synthesize parent, connection, receivedData, modifier;
 @synthesize randomButton, frequentButton, newestButton, recentButton, cancelButton;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
@@ -111,6 +111,13 @@
 	[self dismissModalViewControllerAnimated:YES];
 }
 
+- (void)cancelLoad
+{
+	[self.connection cancel];
+	self.connection = nil;
+	self.receivedData = nil;
+}
+
 - (void)albumLoad:(NSString*)theModifier
 {		
     self.modifier = theModifier;
@@ -118,10 +125,10 @@
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"size", n2N(modifier), @"type", nil];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getAlbumList" andParameters:parameters];
     
-    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	if (connection)
+    self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+	if (self.connection)
 	{
-		receivedData = [[NSMutableData alloc] initWithCapacity:0];
+		self.receivedData = [NSMutableData dataWithCapacity:0];
 		
 		[viewObjectsS showAlbumLoadingScreen:self.view sender:self];
 	} 
@@ -193,7 +200,7 @@
     [alert release];
     
 	self.receivedData = nil;
-	[theConnection release];
+	self.connection = nil;
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
@@ -229,7 +236,7 @@
 	[albumViewController release];	
     
 	self.receivedData = nil;
-	[theConnection release];
+	self.connection = nil;
     
     [viewObjectsS hideLoadingScreen];
     [self dismissModalViewControllerAnimated:YES];

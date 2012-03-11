@@ -117,8 +117,8 @@
 		
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Offline mode switch on, entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		alert.tag = 4;
-		[alert show];
-		[alert release];
+		[alert performSelector:@selector(show) withObject:nil afterDelay:1.1];
+		[alert performSelector:@selector(release) withObject:nil afterDelay:1.6];
 	}
 	else if ([wifiReach currentReachabilityStatus] == NotReachable)
 	{
@@ -126,8 +126,8 @@
 		
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"No network detected, entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		alert.tag = 4;
-		[alert show];
-		[alert release];
+		[alert performSelector:@selector(show) withObject:nil afterDelay:1.1];
+		[alert performSelector:@selector(release) withObject:nil afterDelay:1.6];
 	}
 	else 
 	{
@@ -140,8 +140,8 @@
 		if (viewObjectsS.isOfflineMode)
 		{
 			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome!" message:@"Looks like this is your first time using iSub or you haven't set up your Subsonic account info yet.\n\nYou'll need an internet connection to watch the intro video and use the included demo account." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-			[alert show];
-			[alert release];
+			[alert performSelector:@selector(show) withObject:nil afterDelay:1.0];
+			[alert performSelector:@selector(release) withObject:nil afterDelay:1.5];
 		}
 		else
 		{
@@ -248,8 +248,7 @@
 
 - (void)checkServer
 {
-	
-	// Ask the update question if necessary
+	/*// Ask the update question if necessary
 	if (!settingsS.isUpdateCheckQuestionAsked)
 	{
 		// Ask to check for updates if haven't asked yet
@@ -259,11 +258,11 @@
 		[alert release];
 	}
 	else if (settingsS.isUpdateCheckEnabled)
-	{
+	{*/
 		ISMSUpdateChecker *updateChecker = [[ISMSUpdateChecker alloc] init];
 		[updateChecker checkForUpdate];
 		[updateChecker release];
-	}
+	/*}*/
     
     // Check if the subsonic URL is valid by attempting to access the ping.view page, 
 	// if it's not then display an alert and allow user to change settings if they want.

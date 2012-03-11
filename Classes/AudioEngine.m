@@ -343,8 +343,10 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 				DLog(@"waiting for %llu   neededSize: %llu", bytesToWait, userInfo.neededSize);
 				
 				NSTimeInterval totalSleepTime = 0.0;
-				static const NSTimeInterval sleepTime = 0.01;
-				static const NSTimeInterval fileSizeCheckWait = 1.0;
+				#define sleepTime 0.01
+				#define fileSizeCheckWait 1.0
+				//static const NSTimeInterval sleepTime = 0.01;
+				//static const NSTimeInterval fileSizeCheckWait = 1.0;
 				while (1)
 				{
 					// Check if we should break every 100th of a second
@@ -1342,7 +1344,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	
 	if (self.isEqualizerOn)
 	{
-		HFX handle = BASS_ChannelSetFX(self.currentStream, BASS_FX_DX8_PARAMEQ, 0);
+		HFX handle = BASS_ChannelSetFX(self.outStream, BASS_FX_DX8_PARAMEQ, 0);
 		BASS_FXSetParameters(handle, &value);
 		eqValue.handle = handle;
 		
@@ -1357,7 +1359,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	if (self.isEqualizerOn)
 	{
 		// Disable the effect channel
-		BASS_ChannelRemoveFX(self.currentStream, value.handle);
+		BASS_ChannelRemoveFX(self.outStream, value.handle);
 	}
 	
 	// Remove the handle

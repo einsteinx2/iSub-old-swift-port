@@ -33,6 +33,7 @@
 #import "JukeboxSingleton.h"
 #import "ISMSCacheQueueManager.h"
 #import "UIViewController+PushViewControllerCustom.h"
+#import "UIViewController+IsVisible.h"
 
 @interface CacheViewController ()
 - (void)addNoSongsScreen;
@@ -99,6 +100,8 @@
 - (void)viewDidLoad 
 {
 	[super viewDidLoad];
+	
+	DLog(@"isVisible: %@", NSStringFromBOOL(self.isVisible));
 	
 	//DLog(@"Cache viewDidLoad");
 	
@@ -279,6 +282,8 @@
 {	
 	[super viewWillAppear:animated];
 	
+	DLog(@"isVisible: %@", NSStringFromBOOL(self.isVisible));
+	
 	[self registerForNotifications];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:) name:ISMSNotification_StorePurchaseComplete object:nil];
@@ -294,6 +299,8 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
 	[super viewWillDisappear:animated];
+	
+	DLog(@"isVisible: %@", NSStringFromBOOL(self.isVisible));
 	
 	[self unregisterForNotifications];
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateQueueDownloadProgress) object:nil];
@@ -317,6 +324,8 @@
 
 - (void)segmentAction:(id)sender
 {
+	DLog(@"isVisible: %@", NSStringFromBOOL(self.isVisible));
+	
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
 		if (self.tableView.editing)
@@ -511,6 +520,15 @@
 				[section addObject:[listOfArtists objectAtIndexSafe:i]];
 			}
 			[listOfArtistsSections addObject:section];
+		}
+		
+		if (isSaveEditShowing)
+		{
+			NSUInteger cachedSongsCount = [databaseS.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES' AND md5 != ''"];
+			if ([databaseS.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES' AND md5 != ''"] == 1)
+				songsCountLabel.text = [NSString stringWithFormat:@"1 Song"];
+			else 
+				songsCountLabel.text = [NSString stringWithFormat:@"%i Songs", cachedSongsCount];
 		}
 	}
 	else
@@ -1003,7 +1021,14 @@
 
 - (void)deleteRowsAtIndexPathsWithAnimation:(NSArray *)indexes
 {
-	[self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:YES];
+	@try
+	{
+		[self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:YES];
+	}
+	@catch (NSException *exception) 
+	{
+		DLog(@"Exception: %@ - %@", exception.name, exception.reason);
+	}
 }
 
 - (void)deleteCachedSongs

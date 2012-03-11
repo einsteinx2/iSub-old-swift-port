@@ -13,6 +13,7 @@
 }
 
 @property (assign) UIViewController *parent;
+@property (retain) NSURLConnection *connection;
 @property (retain) NSMutableData *receivedData;
 @property (retain) NSString *modifier;
 
@@ -28,5 +29,7 @@
 - (IBAction)newest;
 - (IBAction)recent;
 - (IBAction)cancel;
+
+- (void)cancelLoad;
 
 @end

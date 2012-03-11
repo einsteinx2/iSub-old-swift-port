@@ -13,8 +13,8 @@
 #define MAX_FREQUENCY 16384
 #define RANGE_OF_EXPONENTS 9
 
-#define MIN_GAIN -15
-#define MAX_GAIN 15
+#define MIN_GAIN -6
+#define MAX_GAIN 6
 
 #define DEFAULT_BANDWIDTH 24
 

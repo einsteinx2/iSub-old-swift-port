@@ -860,7 +860,16 @@
 				[indexes addObject:[NSIndexPath indexPathForRow:[index integerValue] inSection:0]];
 			}
 		}
-		[self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:YES];
+		
+		@try
+		{
+			[self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:YES];
+		}
+		@catch (NSException *exception) 
+		{
+			DLog(@"Exception: %@ - %@", exception.name, exception.reason);
+		}
+		
 		[indexes release];
 		
 		[self editPlaylistAction:nil];
@@ -890,7 +899,15 @@
 		{
 			[indexes addObject:[NSIndexPath indexPathForRow:[index integerValue] inSection:0]];
 		}
-		[self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:NO];
+	
+		@try
+		{
+			[self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:YES];
+		}
+		@catch (NSException *exception) 
+		{
+			DLog(@"Exception: %@ - %@", exception.name, exception.reason);
+		}
 		
 		[indexes release];
 		

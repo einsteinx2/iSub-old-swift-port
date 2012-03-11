@@ -281,12 +281,12 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-	/*if ([response isKindOfClass:[NSHTTPURLResponse class]])
+	if ([response isKindOfClass:[NSHTTPURLResponse class]])
 	{
 		NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
 		DLog(@"allHeaderFields: %@", [httpResponse allHeaderFields]);
 		DLog(@"statusCode: %i - %@", [httpResponse statusCode], [NSHTTPURLResponse localizedStringForStatusCode:[httpResponse statusCode]]);
-	}*/
+	}
 	
 	self.bytesTransferred = 0;
 }
@@ -432,6 +432,8 @@
 // loadingThread
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
+	DLog(@"Connection Failed for %@", mySong.title);
+	
 	// Perform these operations on the main thread
 	[self performSelectorOnMainThread:@selector(didFailInternal:) withObject:error waitUntilDone:YES];
 	
@@ -457,6 +459,7 @@
 // loadingThread
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {		
+	DLog(@"Connection Finished Successfully for %@", mySong.title);
 	// Perform these operations on the main thread
 	[self performSelectorOnMainThread:@selector(didFinishLoadingInternal) withObject:nil waitUntilDone:YES];
 	
