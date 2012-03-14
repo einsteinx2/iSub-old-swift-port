@@ -51,7 +51,9 @@
 
 #define ISMSNotification_CacheQueueSongDownloaded @"ISMS cache queue song downloaded"
 
-#define ISMSNotification_CacheSizeChecked @"ISMS chache size checked"
+#define ISMSNotification_CacheSizeChecked @"ISMS cache size checked"
+
+#define ISMSNotification_ShowQuickAlbumsList @"ISMS show quick albums list"
 
 
 #endif

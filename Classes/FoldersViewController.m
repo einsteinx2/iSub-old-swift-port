@@ -171,7 +171,13 @@
 	
 }
 
--(void)addCount
+- (void)removeCount
+{
+	self.tableView.tableHeaderView = nil;
+	isCountShowing = NO;
+}
+
+- (void)addCount
 {	
 	isCountShowing = YES;
 	
@@ -343,6 +349,12 @@
 - (void)serverSwitched
 {
 	[self createDataModel];
+	if (![dataModel isRootFolderIdCached])
+	{
+		[self.tableView reloadData];
+		[self removeCount];
+	}
+	
 	[self folderDropdownSelectFolder:[NSNumber numberWithInteger:-1]];
 }
 

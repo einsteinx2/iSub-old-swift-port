@@ -537,6 +537,7 @@
 		// Only for temp cached files
 		if (handler.isTempCache)
 		{
+			DLog(@"byteOffset: %llu   secondsOffset: %f", handler.byteOffset, handler.secondsOffset);
 			audioEngineS.startByteOffset = handler.byteOffset;
 			audioEngineS.startSecondsOffset = handler.secondsOffset;;
 		}

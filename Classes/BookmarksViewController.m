@@ -26,6 +26,7 @@
 #import "PlaylistSingleton.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "NSArray+Safe.h"
+#import "UIViewController+PushViewControllerCustom.h"
 
 @implementation BookmarksViewController
 @synthesize bookmarkIds;
@@ -613,17 +614,7 @@
 		[aSong addToCurrentPlaylist];
 	}
 		
-	if (IS_IPAD())
-	{
-		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
-	}
-	else
-	{
-		iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-		streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-		[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-		[streamingPlayerViewController release];
-	}
+	[self showPlayer];
 	
 	// Check if these are old bookmarks and don't have byteOffset saved
 	if (offsetBytes == 0 && offsetSeconds != 0)

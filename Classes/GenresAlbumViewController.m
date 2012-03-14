@@ -507,18 +507,7 @@
 			// Start the song
 			[musicS playSongAtPosition:songRow];
 			
-			// Show the player
-			if (IS_IPAD())
-			{
-				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
-			}
-			else
-			{
-				iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-				streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-				[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-				[streamingPlayerViewController release];
-			}
+			[self showPlayer];
 		}
 	}
 	else

@@ -12,7 +12,6 @@
 #import "Server.h"
 #import "UIDevice+Hardware.h"
 #import "SavedSettings.h"
-#import "Crittercism.h"
 #import "NSArray+Additions.h"
 
 static ViewObjectsSingleton *sharedInstance = nil;

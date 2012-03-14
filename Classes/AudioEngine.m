@@ -286,6 +286,7 @@ QWORD CALLBACK MyFileLenProc(void *user)
 				
 		QWORD length = 0;
 		Song *theSong = userInfo.mySong;
+		//length = theSong.localFileSize;
 		if (theSong.isFullyCached || userInfo.isTempCached)
 		{
 			// Return actual file size on disk
@@ -297,7 +298,7 @@ QWORD CALLBACK MyFileLenProc(void *user)
 			length = [theSong.size longLongValue];
 		}
 		
-		DLog(@"checking %@ length: %llu", theSong.title, length);
+		//DLog(@"checking %@ length: %llu", theSong.title, length);
 		return length;
 	}
 }
@@ -314,74 +315,14 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 	// Read from the file
 	DWORD bytesRead = fread(buffer, 1, length, userInfo.myFileHandle);
 	
-	if (bytesRead < length)
-	{		
-		userInfo.isWaiting = YES;
-		
-		DLog(@"progress: %f  bytesRead: %u  length needed: %u", sharedInstance.progress, bytesRead, length);
-		
-		// Undo the read
+	// If no bytes were read, reset the EOF marker
+	if (!bytesRead)
+	{
 		fpos_t pos; 
 		fgetpos(userInfo.myFileHandle, &pos);
-		fpos_t newpos = pos - bytesRead;
-		fsetpos(userInfo.myFileHandle, &newpos);
-		bytesRead = 0;
-		
-		// Handle waiting for additional data
-		@autoreleasepool 
-		{
-			Song *theSong = userInfo.mySong;
-			if (!theSong.isFullyCached)
-			{
-				// Calculate the needed size:
-				// Choose either the current player bitrate, or if for some reason it is not detected properly, use the best estimated bitrate. Then use that to determine how much data to let download to continue.
-				unsigned long long size = theSong.localFileSize;
-				//NSUInteger bitrate = sharedInstance.bitRate > 0 ? sharedInstance.bitRate : theSong.estimatedBitrate;
-				NSUInteger bitrate = theSong.estimatedBitrate;
-				unsigned long long bytesToWait = BytesForSecondsAtBitrate(ISMS_NumSecondsToWaitForAudioData, bitrate);
-				userInfo.neededSize = size + bytesToWait;
-				DLog(@"waiting for %llu   neededSize: %llu", bytesToWait, userInfo.neededSize);
-				
-				NSTimeInterval totalSleepTime = 0.0;
-				#define sleepTime 0.01
-				#define fileSizeCheckWait 1.0
-				//static const NSTimeInterval sleepTime = 0.01;
-				//static const NSTimeInterval fileSizeCheckWait = 1.0;
-				while (1)
-				{
-					// Check if we should break every 100th of a second
-					[NSThread sleepForTimeInterval:sleepTime];
-					totalSleepTime += sleepTime;
-					if (userInfo.shouldBreakWaitLoop)
-						break;
-						
-					// Only check the file size every half a second
-					if (totalSleepTime >= fileSizeCheckWait)
-					{
-						totalSleepTime = 0.0;
-						
-						// If the song has finished caching, we can stop waiting
-						if (theSong.isFullyCached)
-							break;
-						
-						// Handle temp cached songs ending. When they end, they are set as the last temp cached song, so we know it's done and can stop waiting for data.
-						if (theSong.isTempCached && [theSong isEqualToSong:streamManagerS.lastTempCachedSong])
-							break;
-						
-						// If enough of the file has downloaded, break the loop
-						if (userInfo.localFileSize >= userInfo.neededSize)
-							break;
-					}
-				}
-				userInfo.isWaiting = NO;
-				userInfo.shouldBreakWaitLoop = NO;
-				
-				DLog(@"done waiting");
-				
-				// Do the read again
-				bytesRead = fread(buffer, 1, length, userInfo.myFileHandle);
-			}
-		}
+		//fpos_t newpos = pos - bytesRead;
+		//fsetpos(userInfo.myFileHandle, &newpos);
+		fsetpos(userInfo.myFileHandle, &pos);
 	}
 	
 	return bytesRead;
@@ -399,7 +340,7 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 	
 	BOOL success = !fseek(userInfo.myFileHandle, offset, SEEK_SET);
 	
-	DLog(@"File Seek to %llu  success: %@", offset, NSStringFromBOOL(success));
+	//DLog(@"File Seek to %llu  success: %@", offset, NSStringFromBOOL(success));
 	
 	return success;
 }
@@ -446,6 +387,72 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 		{		
 			//DLog(@"getting output data");
 			r = BASS_ChannelGetData(self.currentReadingStream, buffer, length);
+			//DLog(@"bytes returned: %u", r);
+						
+			if (BASS_ChannelIsActive(self.currentReadingStream) && !r)
+			{	
+				BassUserInfo *userInfo = [self userInfoForStream:self.currentStream];
+				userInfo.isWaiting = YES;
+				
+				//DLog(@"progress: %f  bytesRead: %u  length needed: %u", sharedInstance.progress, bytesRead, length);
+				
+				// Handle waiting for additional data
+				@autoreleasepool 
+				{
+					Song *theSong = userInfo.mySong;
+					if (!theSong.isFullyCached)
+					{
+						// Calculate the needed size:
+						// Choose either the current player bitrate, or if for some reason it is not detected properly, use the best estimated bitrate. Then use that to determine how much data to let download to continue.
+						unsigned long long size = theSong.localFileSize;
+						//NSUInteger bitrate = sharedInstance.bitRate > 0 ? sharedInstance.bitRate : theSong.estimatedBitrate;
+						NSUInteger bitrate = theSong.estimatedBitrate;
+						unsigned long long bytesToWait = BytesForSecondsAtBitrate(settingsS.audioEngineBufferNumberOfSeconds, bitrate);
+						DLog(@"audioEngineBufferNumberOfSeconds: %u", settingsS.audioEngineBufferNumberOfSeconds);
+						userInfo.neededSize = size + bytesToWait;
+						DLog(@"waiting for %llu   neededSize: %llu", bytesToWait, userInfo.neededSize);
+						
+						NSTimeInterval totalSleepTime = 0.0;
+						#define sleepTime 0.01
+						#define fileSizeCheckWait 1.0
+						//static const NSTimeInterval sleepTime = 0.01;
+						//static const NSTimeInterval fileSizeCheckWait = 1.0;
+						while (YES)
+						{
+							// Check if we should break every 100th of a second
+							[NSThread sleepForTimeInterval:sleepTime];
+							totalSleepTime += sleepTime;
+							if (userInfo.shouldBreakWaitLoop)
+								break;
+							
+							// Only check the file size every half a second
+							if (totalSleepTime >= fileSizeCheckWait)
+							{
+								totalSleepTime = 0.0;
+								
+								// If the song has finished caching, we can stop waiting
+								if (theSong.isFullyCached)
+									break;
+								
+								// Handle temp cached songs ending. When they end, they are set as the last temp cached song, so we know it's done and can stop waiting for data.
+								if (theSong.isTempCached && [theSong isEqualToSong:streamManagerS.lastTempCachedSong])
+									break;
+								
+								// If enough of the file has downloaded, break the loop
+								if (userInfo.localFileSize >= userInfo.neededSize)
+									break;
+							}
+						}
+						userInfo.isWaiting = NO;
+						userInfo.shouldBreakWaitLoop = NO;
+						
+						DLog(@"done waiting");
+						
+						// Do the read again
+						//bytesRead = fread(buffer, 1, length, userInfo.myFileHandle);
+					}
+				}
+			}
 			
 			[self handleSocial];
 						
@@ -668,6 +675,9 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startWithOffsetInBytesorSecondsInternal:) object:nil];
 		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(prepareNextSongStreamInternal) object:nil];
 		
+		[self userInfoForStream:self.currentStream].shouldBreakWaitLoop = YES;
+		[self userInfoForStream:self.nextStream].shouldBreakWaitLoop = YES;
+		
 		BOOL success = BASS_Free();
 		self.fileStream1 = 0;
 		self.fileStreamTempo1 = 0;
@@ -749,7 +759,6 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 - (void)seekToPositionInSeconds:(double)seconds inStream:(HSTREAM)stream
 {
 	QWORD bytes = BASS_ChannelSeconds2Bytes(stream, seconds);
-	DLog(@"seeking to seconds: %f which is bytes: %llu", seconds, bytes);
 	[self seekToPositionInBytes:bytes inStream:stream];
 }
 
@@ -789,8 +798,8 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	userInfo.myFileHandle = fopen([userInfo.writePath cStringUTF8], "rb");
 	
 	// Try hardware and software mixing
-	self.nextStream = BASS_StreamCreateFileUser(STREAMFILE_BUFFER, BASS_STREAM_DECODE, &fileProcs, userInfo);
-	if(!self.nextStream) self.nextStream = BASS_StreamCreateFileUser(STREAMFILE_BUFFER, BASS_SAMPLE_SOFTWARE|BASS_STREAM_DECODE, &fileProcs, userInfo);
+	self.nextStream = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_STREAM_DECODE, &fileProcs, userInfo);
+	if(!self.nextStream) self.nextStream = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_SAMPLE_SOFTWARE|BASS_STREAM_DECODE, &fileProcs, userInfo);
 	
 	if (self.nextStream)
 	{
@@ -866,8 +875,8 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		}
 		
 		// Create the stream
-		self.fileStream1 = BASS_StreamCreateFileUser(STREAMFILE_BUFFER, BASS_STREAM_DECODE, &fileProcs, userInfo);
-		if(!self.fileStream1) self.fileStream1 = BASS_StreamCreateFileUser(STREAMFILE_BUFFER, BASS_SAMPLE_SOFTWARE|BASS_STREAM_DECODE, &fileProcs, userInfo);
+		self.fileStream1 = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_STREAM_DECODE, &fileProcs, userInfo);
+		if(!self.fileStream1) self.fileStream1 = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_SAMPLE_SOFTWARE|BASS_STREAM_DECODE, &fileProcs, userInfo);
 		if (self.fileStream1)
 		{
 			// Add the user info object to the dictionary
@@ -912,8 +921,8 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	if (!currentSong)
 		return;
 	
-	//NSNumber *byteOffset = [bytesOrSeconds objectForKey:@"byteOffset"];
-	//NSNumber *seconds = [bytesOrSeconds objectForKey:@"seconds"]; 
+	NSNumber *byteOffset = [bytesOrSeconds objectForKey:@"byteOffset"];
+	NSNumber *seconds = [bytesOrSeconds objectForKey:@"seconds"]; 
 	
 	self.startByteOffset = 0;
 	self.startSecondsOffset = 0;
@@ -979,7 +988,42 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 			// Add gain amplification
 			self.volumeFx = BASS_ChannelSetFX(self.outStream, BASS_FX_BFX_VOLUME, 1);
 			
-			[self performSelector:@selector(startWithOffsetInBytesorSecondsInternal2:) withObject:bytesOrSeconds afterDelay:0.5];
+			// Skip to the byte offset
+			if (byteOffset)
+			{
+				self.startByteOffset = [byteOffset unsignedLongLongValue];
+				
+				if (seconds)
+				{
+					[self seekToPositionInSeconds:[seconds doubleValue] inStream:self.fileStream1];
+				}
+				else
+				{
+					if (self.startByteOffset > 0)
+						[self seekToPositionInBytes:self.startByteOffset inStream:self.fileStream1];
+				}
+			}
+			else if (seconds)
+			{
+				self.startSecondsOffset = [seconds doubleValue];
+				if (self.startSecondsOffset > 0.0)
+					[self seekToPositionInSeconds:self.startSecondsOffset inStream:self.fileStream1];
+			}
+			
+			// Start playback
+			BASS_ChannelPlay(self.outStream, FALSE);
+			self.isPlaying = YES;
+			
+			// This is a new song so notify Last.FM that it's playing
+			[socialS scrobbleSongAsPlaying];
+			
+			// Prepare the next song
+			[self prepareNextSongStream];
+			
+			// Notify listeners that playback has started
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
+			
+			playlistS.currentSong.playedDate = [NSDate date];
 		}
 		else if (!self.fileStream1 && !currentSong.isFullyCached 
 				 && currentSong.localFileSize < MIN_FILESIZE_TO_FAIL)
@@ -989,50 +1033,6 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 			[self performSelector:@selector(startWithOffsetInBytesorSecondsInternal:) withObject:bytesOrSeconds afterDelay:RETRY_DELAY];
 		}
 	}
-}
-
-// This is needed because of a bug in BASS that makes it fail to seek if done immediately, must wait a half second
-- (void)startWithOffsetInBytesorSecondsInternal2:(NSDictionary *)bytesOrSeconds
-{
-	NSNumber *byteOffset = [bytesOrSeconds objectForKey:@"byteOffset"];
-	NSNumber *seconds = [bytesOrSeconds objectForKey:@"seconds"]; 
-	
-	// Skip to the byte offset
-	if (byteOffset)
-	{
-		self.startByteOffset = [byteOffset unsignedLongLongValue];
-		
-		if (seconds)
-		{
-			[self seekToPositionInSeconds:[seconds doubleValue] inStream:self.fileStream1];
-		}
-		else
-		{
-			if (self.startByteOffset > 0)
-				[self seekToPositionInBytes:self.startByteOffset inStream:self.fileStream1];
-		}
-	}
-	else if (seconds)
-	{
-		self.startSecondsOffset = [seconds doubleValue];
-		if (self.startSecondsOffset > 0.0)
-			[self seekToPositionInSeconds:self.startSecondsOffset inStream:self.fileStream1];
-	}
-
-	// Start playback
-	BASS_ChannelPlay(self.outStream, FALSE);
-	self.isPlaying = YES;
-			
-	// This is a new song so notify Last.FM that it's playing
-	[socialS scrobbleSongAsPlaying];
-	
-	// Prepare the next song
-	[self prepareNextSongStream];
-	
-	// Notify listeners that playback has started
-	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
-	
-	playlistS.currentSong.playedDate = [NSDate date];
 }
 
 - (void)start
@@ -1101,8 +1101,9 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 - (NSInteger)bitRate
 {
 	HSTREAM stream = self.currentStream;
-	
-	QWORD startFilePosition = BASS_StreamGetFilePosition(stream, BASS_FILEPOS_START);
+		
+	//QWORD startFilePosition = BASS_StreamGetFilePosition(stream, BASS_FILEPOS_START);
+	QWORD startFilePosition = 0;
 	QWORD currentFilePosition = BASS_StreamGetFilePosition(stream, BASS_FILEPOS_CURRENT);
 	
 	QWORD filePosition = currentFilePosition - startFilePosition;
@@ -1110,8 +1111,14 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	double bitrate = filePosition * 8 / BASS_ChannelBytes2Seconds(stream, decodedPosition);
 	
 	NSUInteger retBitrate = (NSUInteger)(bitrate / 1000);
-
+	
 	return retBitrate > 1000000 ? -1 : retBitrate;
+	
+	//float time = BASS_ChannelBytes2Seconds(stream, BASS_ChannelGetLength(stream, BASS_POS_BYTE|BASS_POS_DECODE)); // playback duration
+	//double len = BASS_StreamGetFilePosition(stream, BASS_FILEPOS_END); // file length
+	//DWORD bitrate = (DWORD)(len / (125. * self.progress) + 0.5); // bitrate (Kbps)
+
+	return bitrate;
 }
 
 - (QWORD)currentByteOffset

@@ -35,6 +35,7 @@
 #import "NSArray+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
+#import "UIViewController+PushViewControllerCustom.h"
 
 @implementation SearchSongsViewController
 
@@ -349,7 +350,8 @@
 			Artist *anArtist = [listOfArtists objectAtIndexSafe:indexPath.row];
 			AlbumViewController *albumView = [[AlbumViewController alloc] initWithArtist:anArtist orAlbum:nil];
 			
-			[self.navigationController pushViewController:albumView animated:YES];
+			[self pushViewControllerCustom:albumView];
+			//[self.navigationController pushViewController:albumView animated:YES];
 			
 			[albumView release];
 			
@@ -363,7 +365,8 @@
 			Album *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
 			AlbumViewController *albumView = [[AlbumViewController alloc] initWithArtist:nil orAlbum:anAlbum];
 			
-			[self.navigationController pushViewController:albumView animated:YES];
+			[self pushViewControllerCustom:albumView];
+			//[self.navigationController pushViewController:albumView animated:YES];
 			
 			[albumView release];
 			
@@ -410,18 +413,7 @@
 			// Start the song
 			[musicS playSongAtPosition:indexPath.row];
 			
-			// Show the player
-			if (IS_IPAD())
-			{
-				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
-			}
-			else
-			{
-				iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-				streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-				[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-				[streamingPlayerViewController release];
-			}
+			[self showPlayer];
 			
 			return;
 		}

@@ -25,6 +25,7 @@
 #import "SUSNowPlayingDAO.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "EGORefreshTableHeaderView.h"
+#import "UIViewController+PushViewControllerCustom.h"
 
 @interface PlayingViewController (Private)
 - (void)dataSourceDidFinishLoadingNewData;
@@ -233,18 +234,7 @@
 	
 	[dataModel playSongAtIndex:indexPath.row];
 	
-	// Show the player
-	if (IS_IPAD())
-	{
-		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
-	}
-	else
-	{
-		iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-		streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-		[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-		[streamingPlayerViewController release];
-	}
+	[self showPlayer];
 }
 
 #pragma mark - SUSLoader delegate

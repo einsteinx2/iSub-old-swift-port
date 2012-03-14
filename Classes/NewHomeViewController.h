@@ -46,6 +46,8 @@
 - (IBAction)jukebox;
 - (IBAction)chat;
 
+- (IBAction)support:(id)sender;
+
 - (void)initSongInfo;
 
 - (void)performServerShuffle:(NSNotification*)notification;

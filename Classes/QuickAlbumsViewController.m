@@ -18,6 +18,7 @@
 #import "iPadRootViewController.h"
 #import "StackScrollViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @interface QuickAlbumsViewController (Private)
 - (void)albumLoad:(NSString*)modifier;
@@ -220,8 +221,10 @@
     [parser release];
     
     self.modifier = nil;
+	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowQuickAlbumsList object:albumViewController];
 	    
-    if (IS_IPAD())
+    /*if (IS_IPAD())
 	{
 		albumViewController.view.width = ISMSiPadViewWidth;
 		albumViewController.view.layer.cornerRadius = ISMSiPadCornerRadius;
@@ -231,9 +234,9 @@
 	else
 	{
 		[parent.navigationController pushViewController:albumViewController animated:YES];
-	}
-    
-	[albumViewController release];	
+	}*/
+	//[self pushViewControllerCustom:albumViewController];
+	//[albumViewController release];	
     
 	self.receivedData = nil;
 	self.connection = nil;

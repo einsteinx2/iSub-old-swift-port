@@ -8,13 +8,14 @@
 
 #import "MKStoreManager.h"
 #import "SUSServerChecker.h"
-#import "Crittercism.h"
+#import <MessageUI/MessageUI.h>
+#import <MessageUI/MFMailComposeViewController.h>
 
 #define appDelegateS [iSubAppDelegate sharedInstance]
 
-@class BBSplitViewController, iPadRootViewController, iPadMainMenu, InitialDetailViewController, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, Reachability, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController, HTTPServer;
+@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, Reachability, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController, HTTPServer;
 
-@interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate, SUSServerURLCheckerDelegate, CrittercismDelegate>
+@interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate, SUSServerURLCheckerDelegate, MFMailComposeViewControllerDelegate>
 {		
 	UIWindow *window;
 	
@@ -23,11 +24,6 @@
 	// Main interface elements for iPhone
 	//
 	SettingsViewController *settingsViewController;
-	
-	// Main interface elements for iPad
-	//
-	iPadMainMenu *mainMenu;
-	InitialDetailViewController *initialDetail;
 	
 	// Network connectivity objects
 	//
@@ -73,11 +69,6 @@
 
 @property (retain) iPadRootViewController *ipadRootViewController;
 
-// Main interface elements for iPad
-//
-@property (retain) IBOutlet iPadMainMenu *mainMenu;
-@property (retain) IBOutlet InitialDetailViewController *initialDetail;
-
 // Network connectivity objects and variables
 //
 @property (retain) Reachability *wifiReach;
@@ -93,12 +84,14 @@
 
 - (void)loadFlurryAnalytics;
 - (void)loadHockeyApp;
-- (void)loadCrittercism;
+//- (void)loadCrittercism;
 - (void)loadInAppPurchaseStore;
 - (void)createHTTPServer;
 
 - (void)reachabilityChanged: (NSNotification *)note;
 - (NSInteger)getHour;
+
+- (void)showSettings;
 
 //- (BOOL)isWifi;
 

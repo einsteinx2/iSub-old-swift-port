@@ -72,7 +72,7 @@
 	}
 	else if (sender == ownServer)
 	{
-		ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
+		/*ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
 		serverListViewController.hidesBottomBarWhenPushed = YES;
 		
 		[self dismissModalViewControllerAnimated:NO];
@@ -87,7 +87,10 @@
 			[(UINavigationController*)appDelegateS.currentTabBarController.selectedViewController pushViewController:serverListViewController animated:YES];
 		}
 		
-		[serverListViewController release];
+		[serverListViewController release];*/
+		
+		[self dismissModalViewControllerAnimated:NO];
+		[appDelegateS showSettings];
 	}
 }
 

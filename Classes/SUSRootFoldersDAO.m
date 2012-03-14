@@ -15,6 +15,7 @@
 #import "Index.h"
 #import "SavedSettings.h"
 #import "SUSRootFoldersLoader.h"
+#import "Song+DAO.h"
 
 @implementation SUSRootFoldersDAO
 
@@ -387,6 +388,24 @@
 	[indexNames release]; indexNames = nil;
     [indexPositions release]; indexPositions = nil;
     [indexCounts release]; indexCounts = nil;
+	
+	// Force all subfolders to reload
+	[databaseS.albumListCacheDb executeUpdate:@"DROP TABLE IF EXISTS albumListCache"];
+	[databaseS.albumListCacheDb executeUpdate:@"DROP TABLE IF EXISTS albumsCache"];
+	[databaseS.albumListCacheDb executeUpdate:@"DROP TABLE IF EXISTS albumsCacheCount"];
+	[databaseS.albumListCacheDb executeUpdate:@"DROP TABLE IF EXISTS songsCacheCount"];
+	[databaseS.albumListCacheDb executeUpdate:@"DROP TABLE IF EXISTS folderLength"];
+	[databaseS.albumListCacheDb executeUpdate:@"CREATE TABLE albumListCache (id TEXT PRIMARY KEY, data BLOB)"];
+	[databaseS.albumListCacheDb executeUpdate:@"CREATE TABLE albumsCache (folderId TEXT, title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
+	[databaseS.albumListCacheDb executeUpdate:@"CREATE INDEX albumsFolderId ON albumsCache (folderId)"];
+	[databaseS.albumListCacheDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE songsCache (folderId TEXT, %@)", [Song standardSongColumnSchema]]];
+	[databaseS.albumListCacheDb executeUpdate:@"CREATE INDEX songsFolderId ON songsCache (folderId)"];
+	[databaseS.albumListCacheDb executeUpdate:@"CREATE TABLE albumsCacheCount (folderId TEXT, count INTEGER)"];
+	[databaseS.albumListCacheDb executeUpdate:@"CREATE INDEX albumsCacheCountFolderId ON albumsCacheCount (folderId)"];
+	[databaseS.albumListCacheDb executeUpdate:@"CREATE TABLE songsCacheCount (folderId TEXT, count INTEGER)"];
+	[databaseS.albumListCacheDb executeUpdate:@"CREATE INDEX songsCacheCountFolderId ON songsCacheCount (folderId)"];
+	[databaseS.albumListCacheDb executeUpdate:@"CREATE TABLE folderLength (folderId TEXT, length INTEGER)"];
+	[databaseS.albumListCacheDb executeUpdate:@"CREATE INDEX folderLengthFolderId ON folderLength (folderId)"];
 	
 	if ([self.delegate respondsToSelector:@selector(loadingFinished:)])
 	{

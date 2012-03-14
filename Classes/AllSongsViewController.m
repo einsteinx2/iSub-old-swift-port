@@ -36,6 +36,7 @@
 #import "NSArray+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
+#import "UIViewController+PushViewControllerCustom.h"
 
 @interface AllSongsViewController (Private)
 - (void)hideLoadingScreen;
@@ -724,18 +725,7 @@
 		// Start the song
 		[musicS playSongAtPosition:0];
 		
-		// Show the player
-		if (IS_IPAD())
-		{
-			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
-		}
-		else
-		{
-			iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-			streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-			[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-			[streamingPlayerViewController release];
-		}
+		[self showPlayer];
 	}
 	else
 	{

@@ -149,6 +149,9 @@
 
 - (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
 {
+	[self.activityIndicator removeFromSuperview];
+	self.activityIndicator = nil;
+	
 	self.coverArtDAO = nil;
 	if ([delegate respondsToSelector:@selector(asyncImageViewLoadingFailed:withError:)])
 	{

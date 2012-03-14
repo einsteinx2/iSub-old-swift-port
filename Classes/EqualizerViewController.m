@@ -240,6 +240,8 @@
 		self.controlsContainer.alpha = 0.0;
 		self.controlsContainer.userInteractionEnabled = NO;
 	}	
+	
+	overlay = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -385,8 +387,12 @@
 		DLog(@"eq handle: %i", value.handle);
 		EqualizerPointView *eqView = [[EqualizerPointView alloc] initWithEqValue:value parentSize:self.equalizerView.frame.size];
 		[equalizerPointViews addObject:eqView];
-		[self.view insertSubview:eqView belowSubview:self.controlsContainer];
-		//[self.view addSubview:eqView];
+		
+		[self.view insertSubview:eqView aboveSubview:equalizerPath];
+		//if (overlay)
+		//	[self.view insertSubview:eqView belowSubview:overlay];
+		//else
+		//	[self.view insertSubview:eqView belowSubview:self.controlsContainer];
 		[eqView release];
 	}
 	DLog(@"equalizerValues: %@", audioEngineS.equalizerValues);
@@ -786,7 +792,7 @@
 
 - (void)pickerField:(NWPickerField *)pickerField selectedRow:(NSInteger)row inComponent:(NSInteger)component
 {
-	[pickerField resignFirstResponder];
+	//[pickerField resignFirstResponder];
 	
 	[effectDAO selectPresetAtIndex:row];
 	

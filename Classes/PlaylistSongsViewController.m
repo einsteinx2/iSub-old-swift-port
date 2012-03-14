@@ -30,6 +30,7 @@
 
 #import "PlaylistSingleton.h"
 #import "JukeboxSingleton.h"
+#import "UIViewController+PushViewControllerCustom.h"
 
 @interface PlaylistSongsViewController (Private)
 
@@ -528,17 +529,7 @@ static NSString *kName_Error = @"error";
 		
 		[musicS playSongAtPosition:indexPath.row];
 		
-		if (IS_IPAD())
-		{
-			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
-		}
-		else
-		{
-			iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-			streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-			[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-			[streamingPlayerViewController release];
-		}
+		[self showPlayer];
 	}
 	else
 	{

@@ -1064,24 +1064,40 @@
 {
 	[self unregisterForNotifications];
 	
+	//NSDate *date = [NSDate date];
 	// Sort the multiDeleteList to make sure it's accending
 	[viewObjectsS.multiDeleteList sortUsingSelector:@selector(compare:)];
+	//DLog(@"1: %f", [[NSDate date] timeIntervalSinceDate:date]);
+	//date = [NSDate date];
+	
+	[databaseS.cacheQueueDb executeUpdate:@"BEGIN"];
 	
 	// Delete each song from the database
 	for (NSString *md5 in viewObjectsS.multiDeleteList)
 	{
-		// Check if we're deleting the song that's currently caching. If so, stop the download.
-		if (cacheQueueManagerS.currentQueuedSong)
+		//NSDate *inside = [NSDate date];
+		if (cacheQueueManagerS.isQueueDownloading)
 		{
-			if ([[cacheQueueManagerS.currentQueuedSong.path md5] isEqualToString:md5])
+			// Check if we're deleting the song that's currently caching. If so, stop the download.
+			if (cacheQueueManagerS.currentQueuedSong)
 			{
-				[cacheQueueManagerS stopDownloadQueue];
+				if ([[cacheQueueManagerS.currentQueuedSong.path md5] isEqualToString:md5])
+				{
+					[cacheQueueManagerS stopDownloadQueue];
+				}
 			}
 		}
 		
 		// Delete the row from the cacheQueue
 		[databaseS.cacheQueueDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", md5];
-	}		
+		
+		//DLog(@"inside: %f", [[NSDate date] timeIntervalSinceDate:inside]);
+	}
+	
+	[databaseS.cacheQueueDb executeUpdate:@"COMMIT"];
+	
+	//DLog(@"2: %f", [[NSDate date] timeIntervalSinceDate:date]);
+	//date = [NSDate date];
 	
 	// Reload the table
 	[self editSongsAction:nil];
@@ -1149,17 +1165,7 @@
 {	
 	[musicS playSongAtPosition:0];
 	
-	if (IS_IPAD())
-	{
-		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
-	}
-	else
-	{
-		iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-		streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-		[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-		[streamingPlayerViewController release];
-	}
+	[self showPlayer];
 }
 
 

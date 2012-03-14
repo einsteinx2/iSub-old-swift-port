@@ -519,7 +519,8 @@
 - (void)showStore
 {
 	StoreViewController *store = [[StoreViewController alloc] init];
-	[self.navigationController pushViewController:store animated:YES];
+	[self pushViewControllerCustom:store];
+	//[self.navigationController pushViewController:store animated:YES];
 	[store release];
 }
 
@@ -1742,17 +1743,7 @@ static NSString *kName_Error = @"error";
 		{
 			[musicS playSongAtPosition:indexPath.row];
 						
-			if (IS_IPAD())
-			{
-				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
-			}
-			else
-			{
-				iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-				streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-				[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-				[streamingPlayerViewController release];
-			}
+			[self showPlayer];
 		}
 		else if (segmentedControl.selectedSegmentIndex == 1)
 		{

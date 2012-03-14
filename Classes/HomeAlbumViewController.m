@@ -29,6 +29,7 @@
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "NSArray+Additions.h"
+#import "UIViewController+PushViewControllerCustom.h"
 
 @implementation HomeAlbumViewController
 @synthesize listOfAlbums;
@@ -310,7 +311,8 @@
 	{
 		Album *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
 		AlbumViewController *albumViewController = [[AlbumViewController alloc] initWithArtist:nil orAlbum:anAlbum];
-		[self.navigationController pushViewController:albumViewController animated:YES];
+		[self pushViewControllerCustom:albumViewController];
+		//[self.navigationController pushViewController:albumViewController animated:YES];
 		[albumViewController release];
 	}
 	else

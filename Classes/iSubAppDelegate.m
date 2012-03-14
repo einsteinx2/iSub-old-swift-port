@@ -59,7 +59,7 @@
 @synthesize homeNavigationController, playerNavigationController, artistsNavigationController, rootViewController, allAlbumsNavigationController, allSongsNavigationController, playlistsNavigationController, bookmarksNavigationController, playingNavigationController, genresNavigationController, cacheNavigationController, chatNavigationController, supportNavigationController;
 
 // Main interface elemements for iPad
-@synthesize mainMenu, initialDetail, ipadRootViewController;
+@synthesize ipadRootViewController;
 
 // Network connectivity objects
 @synthesize wifiReach;
@@ -159,7 +159,7 @@
 	
 	[self loadFlurryAnalytics];
 	[self loadHockeyApp];
-	[self loadCrittercism];
+	//[self loadCrittercism];
 	
 	[self loadInAppPurchaseStore];
 		
@@ -363,28 +363,36 @@
 - (void)loadHockeyApp
 {
 	// HockyApp Kits
-	if (IS_BETA() && IS_ADHOC() && !IS_LITE())
+	//if (IS_BETA() && IS_ADHOC() && !IS_LITE())
+	if (1)
 	{
-		//[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
-		//[[BWQuincyManager sharedQuincyManager] setShowAlwaysButton:YES];
+		[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
 		
 		[[BWHockeyManager sharedHockeyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
-		[[BWHockeyManager sharedHockeyManager] setAlwaysShowUpdateReminder:YES];
+		[[BWHockeyManager sharedHockeyManager] setAlwaysShowUpdateReminder:NO];
 	}
 	else if (IS_RELEASE())
 	{
-		//if (IS_LITE())
-		//	[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7"];
-		//else
-		//	[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb"];
-		
-		//[[BWQuincyManager sharedQuincyManager] setShowAlwaysButton:YES];
+		if (IS_LITE())
+			[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7"];
+		else
+			[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb"];
+	}
+	[[BWQuincyManager sharedQuincyManager] setAutoSubmitCrashReport:YES];
+	
+	if ([[BWQuincyManager sharedQuincyManager] didCrashInLastSession])
+	{
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh no!" message:@"It looks like iSub crashed! Well never fear, iSub support is happy to help. \n\nWould you like to send an email to support?" delegate:self cancelButtonTitle:@"No Thanks" otherButtonTitles:@"Send Email", @"Visit iSub Forum", nil];
+		alert.tag = 7;
+		[alert performSelector:@selector(show) withObject:nil afterDelay:2.];
+		[alert performSelector:@selector(release) withObject:nil afterDelay:3.];
 	}
 }
 
-- (void)loadCrittercism
+/*- (void)loadCrittercism
 {
-	if (IS_BETA() && IS_ADHOC() && !IS_LITE())
+	//if (IS_BETA() && IS_ADHOC() && !IS_LITE())
+	if (1)
 	{
 		[Crittercism initWithAppID:@"4f504545b093157173000017" 
 							andKey:@"4f504545b093157173000017lh4java7"
@@ -398,13 +406,18 @@
 						 andSecret:@"2ayz0tlckhhu4jjsb8dzxuqmfnexcqkn"
 			 andMainViewController:nil];
 	}
-	[Crittercism sharedInstance].delegate = self;
+	[Crittercism sharedInstance].delegate = (id<CrittercismDelegate>)self;
 }
 
 - (void)crittercismDidCrashOnLastLoad
 {
 	DLog(@"App crashed on last load. Do something here.");
-}
+	
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh no! :(" message:@"It looks like iSub crashed recently!\n\nWell never fear, iSub support is happy to help. \n\nWould you like to send an email to support?" delegate:self cancelButtonTitle:@"No Thanks" otherButtonTitles:@"Yes Please", nil];
+	alert.tag = 7;
+	[alert show];
+	[alert release];
+}*/
 
 - (void)loadInAppPurchaseStore
 {
@@ -820,25 +833,32 @@
 
 - (void)showSettings
 {
-	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
-	
-	if (currentTabBarController.selectedIndex == 4)
+	if (IS_IPAD())
 	{
-		[currentTabBarController.moreNavigationController popToViewController:[currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
-		[currentTabBarController.moreNavigationController pushViewController:serverListViewController animated:YES];
-	}
-	else if (currentTabBarController.selectedIndex == NSNotFound)
-	{
-		[currentTabBarController.moreNavigationController popToRootViewControllerAnimated:YES];
-		[currentTabBarController.moreNavigationController pushViewController:serverListViewController animated:YES];
+		[ipadRootViewController.menuViewController showSettings];
 	}
 	else
 	{
-		[(UINavigationController*)currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
-		[(UINavigationController*)currentTabBarController.selectedViewController pushViewController:serverListViewController animated:YES];
+		ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
+		
+		if (currentTabBarController.selectedIndex == 4)
+		{
+			[currentTabBarController.moreNavigationController popToViewController:[currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
+			[currentTabBarController.moreNavigationController pushViewController:serverListViewController animated:YES];
+		}
+		else if (currentTabBarController.selectedIndex == NSNotFound)
+		{
+			[currentTabBarController.moreNavigationController popToRootViewControllerAnimated:YES];
+			[currentTabBarController.moreNavigationController pushViewController:serverListViewController animated:YES];
+		}
+		else
+		{
+			[(UINavigationController*)currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
+			[(UINavigationController*)currentTabBarController.selectedViewController pushViewController:serverListViewController animated:YES];
+		}
+		
+		[serverListViewController release];
 	}
-	
-	[serverListViewController release];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -850,7 +870,9 @@
 			// Title: @"Subsonic Error"
 			if(buttonIndex == 1)
 			{
-				if (IS_IPAD())
+				[self showSettings];
+				
+				/*if (IS_IPAD())
 				{
 					[mainMenu showSettings];
 				}
@@ -868,7 +890,7 @@
 					}
 					
 					[serverListViewController release];
-				}
+				}*/
 			}
 			
 			break;
@@ -945,7 +967,72 @@
 			
 			break;
 		}
+		case 7:
+		{
+			// Title: Oh no! :(
+			if (buttonIndex == 1)
+			{
+				if ([MFMailComposeViewController canSendMail])
+				{
+					MFMailComposeViewController *mailer = [[MFMailComposeViewController alloc] init];
+					[mailer setMailComposeDelegate:self];
+					[mailer setToRecipients:[NSArray arrayWithObject:@"support@isubapp.com"]];
+					
+					if ([BWQuincyManager sharedQuincyManager].didCrashInLastSession)
+					{
+						// Set version label
+						NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
+						NSString *formattedVersion = nil;
+						if (IS_RELEASE())
+						{
+							formattedVersion = version;
+						}
+						else 
+						{
+							NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+							formattedVersion = [NSString stringWithFormat:@"%@ build %@", build, version];
+						}
+						
+						NSString *subject = [NSString stringWithFormat:@"I had a crash in iSub %@ :(", formattedVersion];
+						[mailer setSubject:subject];
+						
+						[mailer setMessageBody:@"Here's what I was doing when iSub crashed..." isHTML:NO];
+					}
+					else 
+					{
+						[mailer setSubject:@"I need some help with iSub :)"];
+					}
+					
+					if (IS_IPAD())
+						[self.ipadRootViewController presentModalViewController:mailer animated:YES];
+					else
+						[self.currentTabBarController presentModalViewController:mailer animated:YES];
+					
+					[mailer release];
+				}
+				else
+				{
+					UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Uh Oh!" message:@"It looks like you don't have an email account set up, but you can reach support from your computer by emailing support@isubapp.com" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+					[alert show];
+					[alert release];
+				}
+			}
+			else if (buttonIndex == 2)
+			{
+				NSString *urlString = IS_IPAD() ? @"http://isubapp.com/forum" : @"http://isubapp.com/vanilla";
+				NSURL *url = [NSURL URLWithString:urlString];
+				[[UIApplication sharedApplication] openURL:url];
+			}
+		}
 	}
+}
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error 
+{   
+	if (IS_IPAD())
+		[self.ipadRootViewController dismissModalViewControllerAnimated:YES];
+	else
+		[self.currentTabBarController dismissModalViewControllerAnimated:YES];
 }
 
 

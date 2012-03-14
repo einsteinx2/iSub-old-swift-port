@@ -361,6 +361,12 @@
 		self.isShouldShowEQViewInstructions = YES;
 	}
 	
+	if (![userDefaults objectForKey:@"audioEngineStartNumberOfSeconds"])
+	{
+		self.audioEngineStartNumberOfSeconds = 10;
+		self.audioEngineBufferNumberOfSeconds = 10;
+	}
+	
 	[userDefaults synchronize];
 }
 
@@ -374,6 +380,8 @@
 	isExtraPlayerControlsShowing = [userDefaults boolForKey:@"isExtraPlayerControlsShowing"];
 	isPlayerPlaylistShowing = [userDefaults boolForKey:@"isPlayerPlaylistShowing"];
 	quickSkipNumberOfSeconds = [userDefaults integerForKey:@"quickSkipNumberOfSeconds"];
+	audioEngineBufferNumberOfSeconds = [userDefaults integerForKey:@"audioEngineBufferNumberOfSeconds"];
+	audioEngineStartNumberOfSeconds = [userDefaults integerForKey:@"audioEngineStartNumberOfSeconds"];
 		
 	NSString *url = [userDefaults stringForKey:@"url"];
 	if (url)
@@ -1283,6 +1291,48 @@
 	{
 		[userDefaults setBool:isShouldShowEQViewInstructions forKey:@"isShouldShowEQViewInstructions"];
 		[userDefaults synchronize];
+	}
+}
+
+- (NSUInteger)audioEngineStartNumberOfSeconds
+{
+	@synchronized(self)
+	{
+		return audioEngineStartNumberOfSeconds;
+	}
+}
+
+- (void)setAudioEngineStartNumberOfSeconds:(NSUInteger)numSeconds
+{
+	@synchronized(self)
+	{
+		if (audioEngineStartNumberOfSeconds != numSeconds)
+		{
+			audioEngineStartNumberOfSeconds = numSeconds;
+			[userDefaults setInteger:numSeconds forKey:@"audioEngineStartNumberOfSeconds"];
+			[userDefaults synchronize];
+		}
+	}
+}
+
+- (NSUInteger)audioEngineBufferNumberOfSeconds
+{
+	@synchronized(self)
+	{
+		return audioEngineBufferNumberOfSeconds;
+	}
+}
+
+- (void)setAudioEngineBufferNumberOfSeconds:(NSUInteger)numSeconds
+{
+	@synchronized(self)
+	{
+		if (audioEngineBufferNumberOfSeconds != numSeconds)
+		{
+			audioEngineBufferNumberOfSeconds = numSeconds;
+			[userDefaults setInteger:numSeconds forKey:@"audioEngineBufferNumberOfSeconds"];
+			[userDefaults synchronize];
+		}
 	}
 }
 

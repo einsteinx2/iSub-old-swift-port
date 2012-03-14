@@ -205,7 +205,7 @@ NSString* UIPickerViewDidHideNotification = @"UIPickerViewDidHideNotification";
 #pragma mark UIPickerView wrappers
 #pragma mark -
 
--(void) selectRow:(NSInteger)row inComponent:(NSInteger)component animated:(BOOL)animated 
+-(void)selectRow:(NSInteger)row inComponent:(NSInteger)component animated:(BOOL)animated 
 {
 	// when selection is given then make sure we update our edit control and the picker.
 	[pickerView selectRow:row inComponent:component animated:animated];

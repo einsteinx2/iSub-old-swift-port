@@ -23,8 +23,8 @@
 #define ISMSNumSecondsToPartialPreCache 45
 #define ISMSNumBytesToPartialPreCache(bitrate) (BytesForSecondsAtBitrate(ISMSNumSecondsToPartialPreCache, bitrate))
 
-#define ISMSMinSecondsToStartPlayback 5
-#define ISMSMinBytesToStartPlayback(bitrate) (BytesForSecondsAtBitrate(ISMSMinSecondsToStartPlayback, bitrate))
+//#define ISMSMinSecondsToStartPlayback 5
+#define ISMSMinBytesToStartPlayback(bitrate) (BytesForSecondsAtBitrate(settingsS.audioEngineStartNumberOfSeconds, bitrate))
 
 #define ISMSThrottleTimeInterval 0.1
 
@@ -433,6 +433,7 @@
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
 	DLog(@"Connection Failed for %@", mySong.title);
+	DLog(@"error domain: %@  code: %i description: %@", error.domain, error.code, error.description);
 	
 	// Perform these operations on the main thread
 	[self performSelectorOnMainThread:@selector(didFailInternal:) withObject:error waitUntilDone:YES];

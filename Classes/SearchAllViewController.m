@@ -12,6 +12,7 @@
 #import "iSubAppDelegate.h"
 #import "SavedSettings.h"
 #import "NSArray+Additions.h"
+#import "UIViewController+PushViewControllerCustom.h"
 
 @implementation SearchAllViewController
 @synthesize cellNames, listOfArtists, listOfAlbums, listOfSongs, query;
@@ -211,7 +212,8 @@
 	
 	searchView.query = query;
 	
-	[self.navigationController pushViewController:searchView animated:YES];
+	//[self.navigationController pushViewController:searchView animated:YES];
+	[self pushViewControllerCustom:searchView];
 	[searchView release];
 }
 

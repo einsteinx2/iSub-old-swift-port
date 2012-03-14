@@ -22,6 +22,7 @@
 - (UIView *)createHeaderView:(BOOL)withImage;
 - (UIView *)createFooterView;
 - (void)showHome;
+- (void)showSettings;
 
 - (void)toggleOfflineMode;
 

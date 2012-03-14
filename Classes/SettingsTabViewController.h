@@ -77,6 +77,9 @@
 	
 	IBOutlet UISegmentedControl *quickSkipSegmentControl;
 	
+	IBOutlet UISegmentedControl *secondsToStartPlayerSegmentControl;
+	IBOutlet UISegmentedControl *secondsToBufferSegmentControl;
+	
 	NSDate *loadedTime;
 }
 

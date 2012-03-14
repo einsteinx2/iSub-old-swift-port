@@ -18,6 +18,7 @@
 #import "NSArray+Additions.h"
 #import "ISMSCacheQueueManager.h"
 #import "NSString+Additions.h"
+#import "iSubAppDelegate.h"
 
 @implementation Song (DAO)
 
@@ -289,7 +290,7 @@
 		DLog(@"Err adding song to cache queue %d: %@", [databaseS.cacheQueueDb lastErrorCode], [databaseS.cacheQueueDb lastErrorMessage]);
 	}
 	
-	if (!cacheQueueManagerS.isQueueDownloading)
+	if (!cacheQueueManagerS.isQueueDownloading && appDelegateS.isWifi)
 	{
 		// Make sure this is called from the main thread
 		if ([NSThread isMainThread])

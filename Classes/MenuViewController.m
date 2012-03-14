@@ -95,7 +95,7 @@
 	
 		[self.view addSubview:tableView];
 		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSettings) name:@"show settings" object:nil];
+		//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSettings) name:@"show settings" object:nil];
 	}
     return self;
 }
@@ -267,6 +267,7 @@
 		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"bookmarks-tabbaricon.png"], kCellImage, @"Bookmarks", kCellText, nil]];
 		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"cache-tabbaricon.png"], kCellImage, @"Cache", kCellText, nil]];
 		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"chat-tabbaricon.png"], kCellImage, @"Chat", kCellText, nil]];
+		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"settings-tabbaricon.png"], kCellImage, @"Settings", kCellText, nil]];
 		
 		if (settingsS.isSongsTabEnabled)
 		{
@@ -293,12 +294,9 @@
 	if (viewObjectsS.isSettingsShowing == NO)
 	{
 		viewObjectsS.isSettingsShowing = YES;
-		[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
-		[self tableView:self.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-		
-		DLog(@"stack: %@", [iSubAppDelegate sharedInstance].ipadRootViewController.stackScrollViewController.viewControllersStack);
-		NewHomeViewController *home = [[iSubAppDelegate sharedInstance].ipadRootViewController.stackScrollViewController.viewControllersStack firstObjectSafe];
-		[home performSelector:@selector(settings) withObject:nil afterDelay:0.5];		
+		NSUInteger row = viewObjectsS.isOfflineMode ? 4 : 7;
+		[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
+		[self tableView:self.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
 	}
 }
 
@@ -371,7 +369,15 @@
 			case 1: controller = [[GenresViewController alloc] initWithNibName:@"GenresViewController" bundle:nil]; break;
 			case 2: controller = [[PlaylistsViewController alloc] initWithNibName:@"PlaylistsViewController" bundle:nil]; break;
 			case 3: controller = [[BookmarksViewController alloc] initWithNibName:@"BookmarksViewController" bundle:nil]; break;
-			case 4: controller = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil]; break;
+			case 4:
+			{
+				ServerListViewController *settings = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
+				UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:settings];
+				navController.navigationBar.tintColor = [UIColor blackColor];
+				[settings release];
+				controller = (UIViewController *)navController;
+				break;
+			}
 			default: controller = nil;
 		}
 	}
@@ -379,16 +385,25 @@
 	{
 		switch (indexPath.row) 
 		{
-			case 0: controller = [[NewHomeViewController alloc] initWithNibName:@"NewHomeViewController~iPad" bundle:nil]; break;
+			case 0: controller = [[NewHomeViewController alloc] initWithNibName:@"NewHomeViewController-iPad" bundle:nil]; break;
 			case 1: controller = [[FoldersViewController alloc] initWithNibName:@"FoldersViewController" bundle:nil]; break;
 			case 2: controller = [[PlaylistsViewController alloc] initWithNibName:@"PlaylistsViewController" bundle:nil]; break;
 			case 3: controller = [[PlayingViewController alloc] initWithNibName:@"PlayingViewController" bundle:nil]; break;
 			case 4: controller = [[BookmarksViewController alloc] initWithNibName:@"BookmarksViewController" bundle:nil]; break;
 			case 5: controller = [[CacheViewController alloc] initWithNibName:@"CacheViewController" bundle:nil]; break;
 			case 6: controller = [[ChatViewController alloc] initWithNibName:@"ChatViewController" bundle:nil]; break;
-			case 7: controller = [[GenresViewController alloc] initWithNibName:@"GenresViewController" bundle:nil]; break;
-			case 8: controller = [[AllAlbumsViewController alloc] initWithNibName:@"AllAlbumsViewController" bundle:nil]; break;
-			case 9: controller = [[AllSongsViewController alloc] initWithNibName:@"AllSongsViewController" bundle:nil]; break;
+			case 7:
+			{
+				ServerListViewController *settings = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
+				UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:settings];
+				navController.navigationBar.tintColor = [UIColor blackColor];
+				[settings release];
+				controller = (UIViewController *)navController;
+				 break;
+			}
+			case 8: controller = [[GenresViewController alloc] initWithNibName:@"GenresViewController" bundle:nil]; break;
+			case 9: controller = [[AllAlbumsViewController alloc] initWithNibName:@"AllAlbumsViewController" bundle:nil]; break;
+			case 10: controller = [[AllSongsViewController alloc] initWithNibName:@"AllSongsViewController" bundle:nil]; break;
 			default: controller = nil;
 		}
 	}

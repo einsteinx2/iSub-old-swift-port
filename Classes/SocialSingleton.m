@@ -29,7 +29,6 @@ static SocialSingleton *sharedInstance = nil;
 
 @synthesize twitterEngine;
 
-
 #pragma mark -
 #pragma mark Class instance methods
 
@@ -93,13 +92,13 @@ static SocialSingleton *sharedInstance = nil;
 		// If this song wasn't just cached, then notify Subsonic of the playback
 		Song *lastCachedSong = streamManagerS.lastCachedSong;
 		Song *currentSong = playlistS.currentSong;
-		DLog(@"Asked to notify Subsonic about %@ ", currentSong.title);
+		//DLog(@"Asked to notify Subsonic about %@ ", currentSong.title);
 		if (![lastCachedSong isEqualToSong:currentSong])
 		{
 			NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(currentSong.songId), @"id", nil];
 			NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters byteOffset:0];
 			[[NSURLConnection alloc] initWithRequest:request delegate:self];
-			DLog(@"notified Subsonic about %@", currentSong.title);
+			//DLog(@"notified Subsonic about %@", currentSong.title);
 		}
 	}
 }
@@ -170,6 +169,7 @@ static SocialSingleton *sharedInstance = nil;
 	if ([incrementalData length] > 0)
 	{
 		// Subsonic has been notified, cancel the connection
+		DLog(@"Subsonic has been notified, cancel the connection");
 		[theConnection cancel];
 		[theConnection release];
 	}

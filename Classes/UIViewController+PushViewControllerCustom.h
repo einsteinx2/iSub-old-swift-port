@@ -15,4 +15,6 @@
 - (void)pushViewControllerCustom:(UIViewController *)viewController;
 - (void)pushViewControllerCustomWithNavControllerOnIpad:(UIViewController *)viewController;
 
+- (void)showPlayer;
+
 @end

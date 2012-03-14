@@ -21,7 +21,7 @@
 #define RETRY_DELAY 2.0
 #define MIN_FILESIZE_TO_FAIL (1024 * 1024 * 3)
 
-#define ISMS_NumSecondsToWaitForAudioData 5
+//#define ISMS_NumSecondsToWaitForAudioData 5
 
 typedef enum
 {

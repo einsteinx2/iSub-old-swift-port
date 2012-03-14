@@ -11,6 +11,8 @@
 #import "iPadRootViewController.h"
 #import "StackScrollViewController.h"
 #import "UIView+Tools.h"
+#import "NSNotificationCenter+MainThread.h"
+#import "iPhoneStreamingPlayerViewController.h"
 
 @implementation UIViewController (PushViewControllerCustom)
 
@@ -44,6 +46,22 @@
 	else
 	{
 		[self pushViewControllerCustom:viewController];
+	}
+}
+
+- (void)showPlayer
+{
+	// Show the player
+	if (IS_IPAD())
+	{
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
+	}
+	else
+	{
+		iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
+		streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
+		[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
+		[streamingPlayerViewController release];
 	}
 }
 

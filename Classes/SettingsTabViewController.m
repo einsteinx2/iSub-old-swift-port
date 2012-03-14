@@ -172,6 +172,34 @@
 	}
 	
 	[cacheSpaceLabel2 addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+	
+	switch (settingsS.audioEngineStartNumberOfSeconds) 
+	{
+		case 5: secondsToStartPlayerSegmentControl.selectedSegmentIndex = 0; break;
+		case 10: secondsToStartPlayerSegmentControl.selectedSegmentIndex = 1; break;
+		case 15: secondsToStartPlayerSegmentControl.selectedSegmentIndex = 2; break;
+		case 20: secondsToStartPlayerSegmentControl.selectedSegmentIndex = 3; break;
+		case 25: secondsToStartPlayerSegmentControl.selectedSegmentIndex = 4; break;
+		case 30: secondsToStartPlayerSegmentControl.selectedSegmentIndex = 5; break;
+		case 45: secondsToStartPlayerSegmentControl.selectedSegmentIndex = 6; break;
+		case 60: secondsToStartPlayerSegmentControl.selectedSegmentIndex = 7; break;
+		case 120: secondsToStartPlayerSegmentControl.selectedSegmentIndex = 8; break;
+		default: break;
+	}
+	
+	switch (settingsS.audioEngineBufferNumberOfSeconds) 
+	{
+		case 5: secondsToBufferSegmentControl.selectedSegmentIndex = 0; break;
+		case 10: secondsToBufferSegmentControl.selectedSegmentIndex = 1; break;
+		case 15: secondsToBufferSegmentControl.selectedSegmentIndex = 2; break;
+		case 20: secondsToBufferSegmentControl.selectedSegmentIndex = 3; break;
+		case 25: secondsToBufferSegmentControl.selectedSegmentIndex = 4; break;
+		case 30: secondsToBufferSegmentControl.selectedSegmentIndex = 5; break;
+		case 45: secondsToBufferSegmentControl.selectedSegmentIndex = 6; break;
+		case 60: secondsToBufferSegmentControl.selectedSegmentIndex = 7; break;
+		case 120: secondsToBufferSegmentControl.selectedSegmentIndex = 8; break;
+		default: break;
+	}
 }
 
 /*- (void)viewWillAppear:(BOOL)animated
@@ -275,6 +303,38 @@
 			
 			if (IS_IPAD())
 				[appDelegateS.ipadRootViewController.menuViewController.playerController quickSecondsSetLabels];
+		}
+		else if (sender == secondsToStartPlayerSegmentControl)
+		{
+			switch (secondsToStartPlayerSegmentControl.selectedSegmentIndex) 
+			{
+				case 0: settingsS.audioEngineStartNumberOfSeconds = 5; break;
+				case 1: settingsS.audioEngineStartNumberOfSeconds = 10; break;
+				case 2: settingsS.audioEngineStartNumberOfSeconds = 15; break;
+				case 3: settingsS.audioEngineStartNumberOfSeconds = 20; break;
+				case 4: settingsS.audioEngineStartNumberOfSeconds = 25; break;
+				case 5: settingsS.audioEngineStartNumberOfSeconds = 30; break;
+				case 6: settingsS.audioEngineStartNumberOfSeconds = 45; break;
+				case 7: settingsS.audioEngineStartNumberOfSeconds = 60; break;
+				case 8: settingsS.audioEngineStartNumberOfSeconds = 120; break;
+				default: break;
+			}
+		}
+		else if (sender == secondsToBufferSegmentControl)
+		{
+			switch (secondsToBufferSegmentControl.selectedSegmentIndex) 
+			{
+				case 0: settingsS.audioEngineBufferNumberOfSeconds = 5; break;
+				case 1: settingsS.audioEngineBufferNumberOfSeconds = 10; break;
+				case 2: settingsS.audioEngineBufferNumberOfSeconds = 15; break;
+				case 3: settingsS.audioEngineBufferNumberOfSeconds = 20; break;
+				case 4: settingsS.audioEngineBufferNumberOfSeconds = 25; break;
+				case 5: settingsS.audioEngineBufferNumberOfSeconds = 30; break;
+				case 6: settingsS.audioEngineBufferNumberOfSeconds = 45; break;
+				case 7: settingsS.audioEngineBufferNumberOfSeconds = 60; break;
+				case 8: settingsS.audioEngineBufferNumberOfSeconds = 120; break;
+				default: break;
+			}
 		}
 	}
 }

@@ -117,7 +117,6 @@
 {
 	[super viewDidLoad];
 	
-	
 	searchSegment.selectedSegmentIndex = 3;
 	
 	self.title = @"Home";
@@ -127,6 +126,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) name:ISMSNotification_SongPlaybackStarted object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) name:ISMSNotification_ServerSwitched object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(performServerShuffle:) name:@"performServerShuffle" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showQuickAlbumsList:) name:ISMSNotification_ShowQuickAlbumsList object:nil];
 
 	if (!IS_IPAD())
 	{
@@ -234,8 +234,17 @@
 			songLabel.alpha = 0.0;
 		}
 	}
-
+	
 	if(musicS.showPlayerIcon)
+	{
+		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
+	}
+	else
+	{
+		self.navigationItem.rightBarButtonItem = nil;
+	}
+
+	/*if(musicS.showPlayerIcon)
 	{
 		playerButton.enabled = YES;
 		playerButton.alpha = 1.0;
@@ -244,7 +253,7 @@
 	{
 		playerButton.enabled = NO;
 		playerButton.alpha = 0.5;
-	}
+	}*/
 	
 	if (settingsS.isJukeboxEnabled)
 	{
@@ -330,7 +339,7 @@
 }*/
 
 - (IBAction)serverShuffle
-{
+{	
 	NSDictionary *folders = [SUSRootFoldersDAO folderDropdownFolders];
 	
 	/*NSString *key = [NSString stringWithFormat:@"folderDropdownCache%@", [appDelegateS.defaultUrl md5]];
@@ -435,6 +444,23 @@
 	[streamingPlayerViewController release];
 }
 
+- (IBAction)support:(id)sender
+{	
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Support" message:@"iSub support is happy to help with any issues you may have! \n\nWould you like to send an email to support or visit the iSub forum?" delegate:appDelegateS cancelButtonTitle:@"Not Now" otherButtonTitles:@"Send Email", @"iSub Forum", nil];
+	alert.tag = 7;
+	[alert show];
+	[alert release];
+	//[Crittercism showCrittercism:self];
+}
+
+- (void)nowPlayingAction:(id)sender
+{
+	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
+	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
+	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
+	[streamingPlayerViewController release];
+}
+
 - (void)jukeboxOff
 {
 	if (IS_IPAD())
@@ -477,11 +503,20 @@
 	else
 	{
 		StoreViewController *store = [[StoreViewController alloc] init];
-		[self.navigationController pushViewController:store animated:YES];
+		[self pushViewControllerCustom:store];
+		//[self.navigationController pushViewController:store animated:YES];
 		[store release];
 	}
 }
 
+- (void)showQuickAlbumsList:(NSNotification *)notification
+{
+	if ([notification.object isKindOfClass:[UIViewController class]])
+	{
+		[self pushViewControllerCustom:(UIViewController *)notification.object];
+		[notification.object release];
+	}
+}
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
@@ -496,6 +531,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackStarted object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ServerSwitched object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"performServerShuffle" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ShowQuickAlbumsList object:nil];
 	
 	[coverArtBorder release];
 	[coverArtView release];
@@ -622,10 +658,10 @@
 		
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:action andParameters:parameters];
     
-	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	if (connection)
+	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+	if (self.connection)
 	{
-		receivedData = [[NSMutableData data] retain];
+		self.receivedData = [NSMutableData dataWithLength:0];
 		
 		// Display the loading screen
 		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
@@ -661,12 +697,12 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-	[receivedData setLength:0];
+	[self.receivedData setLength:0];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
 {
-	[receivedData appendData:incrementalData];
+	[self.receivedData appendData:incrementalData];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
@@ -686,8 +722,8 @@
 	[alert show];
 	[alert release];
 	
-	[theConnection release];
-	[receivedData release];
+	self.connection = nil;
+	self.receivedData = nil;
 	
 	[viewObjectsS hideLoadingScreen];
 }	
@@ -725,7 +761,8 @@
 			[xmlParser release];
 			[parser release];
 			
-			[self.navigationController pushViewController:searchViewController animated:YES];
+			//[self.navigationController pushViewController:searchViewController animated:YES];
+			[self pushViewControllerCustom:searchViewController];
 			
 			[searchViewController release];
 		}
@@ -766,7 +803,8 @@
 			[xmlParser release];
 			[parser release];
 			
-			[self.navigationController pushViewController:searchViewController animated:YES];
+			[self pushViewControllerCustom:searchViewController];
+			//[self.navigationController pushViewController:searchViewController animated:YES];
 			
 			[searchViewController release];
 		}
@@ -802,21 +840,11 @@
 		[xmlParser release];
 		[parser release];
 		
-		if (IS_IPAD())
-		{
-			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
-		}
-		else
-		{
-			iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-			streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-			[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-			[streamingPlayerViewController release];
-		}
+		[self showPlayer];
 	}
 	
-	[theConnection release];
-	[receivedData release];
+	self.connection = nil;
+	self.receivedData = nil;
 }
 
 

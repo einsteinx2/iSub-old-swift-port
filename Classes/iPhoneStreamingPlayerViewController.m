@@ -1354,7 +1354,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (IBAction)shuffleButtonToggle:(id)sender
 {	
-	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Shuffling"];
+	NSString *message = playlistS.isShuffle ? @"Unshuffling" : @"Shuffling";
+	[viewObjectsS showLoadingScreenOnMainWindowWithMessage:message];
 	
 	[playlistS performSelector:@selector(shuffleToggle) withObject:nil afterDelay:0.05];
 }
