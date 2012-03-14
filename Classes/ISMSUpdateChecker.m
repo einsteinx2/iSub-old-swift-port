@@ -16,7 +16,7 @@
 - (void)checkForUpdate
 {
     self.receivedData = [NSMutableData dataWithCapacity:0];
-	self.request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://isubapp.com/update.xml"]];
+	self.request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://isubapp.com/update_test.xml"]];
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (!self.connection)
 	{
@@ -43,7 +43,7 @@
 	if(buttonIndex == 1)
 	{
 		//http://itunes.apple.com/us/app/isub-music-streamer/id362920532?mt=8&ls=1
-		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms://itunes.com/apps/isubmusicstreamer"]];
+		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://itunes.com/apps/isubmusicstreamer"]];
 		//[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftwareUpdate?id=id362920532"]];
 	}
 	

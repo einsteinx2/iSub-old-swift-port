@@ -55,5 +55,7 @@
 
 #define ISMSNotification_ShowQuickAlbumsList @"ISMS show quick albums list"
 
+#define ISMSNotification_EnteringOfflineMode @"ISMS entering offline mode"
+#define ISMSNotification_EnteringOnlineMode @"ISMS entering online mode"
 
 #endif

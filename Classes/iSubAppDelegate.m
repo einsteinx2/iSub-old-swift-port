@@ -363,8 +363,7 @@
 - (void)loadHockeyApp
 {
 	// HockyApp Kits
-	//if (IS_BETA() && IS_ADHOC() && !IS_LITE())
-	if (1)
+	if (IS_BETA() && IS_ADHOC() && !IS_LITE())
 	{
 		[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
 		
@@ -706,6 +705,8 @@
 	if (viewObjectsS.isOfflineMode)
 		return;
 	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_EnteringOfflineMode];
+	
 	viewObjectsS.isOfflineMode = YES;
 		
 	[audioEngineS stop];
@@ -739,6 +740,8 @@
 {
 	if ([wifiReach currentReachabilityStatus] == NotReachable)
 		return;
+	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_EnteringOnlineMode];
 		
 	viewObjectsS.isOfflineMode = NO;
 	

@@ -39,6 +39,21 @@
 		sunkenLogo.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissFast) name:ISMSNotification_EnteringOfflineMode object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_EnteringOfflineMode object:nil];
+}
+
+- (void)dismissFast
+{
+	[self dismissModalViewControllerAnimated:NO];
+}
+
 - (IBAction)buttonPress:(id)sender
 {
 	if (sender == introVideo)
