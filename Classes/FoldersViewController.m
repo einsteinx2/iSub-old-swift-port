@@ -286,7 +286,9 @@
 		[self addCount];		
 	
 	[self.tableView reloadData];
-	self.tableView.backgroundColor = [UIColor clearColor];
+	
+	if (!IS_IPAD())
+		self.tableView.backgroundColor = [UIColor clearColor];
 	
 	viewObjectsS.isArtistsLoading = NO;
 	

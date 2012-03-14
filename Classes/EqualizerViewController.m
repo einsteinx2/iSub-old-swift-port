@@ -39,7 +39,7 @@
 	[UIView setAnimationDuration:duration];
 	if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
 	{
-		[[UIApplication sharedApplication] setStatusBarHidden:NO animated:YES];
+		[UIApplication setStatusBarHidden:NO withAnimation:YES];
 		equalizerPath.alpha = 1.0;
 		for (EqualizerPointView *view in equalizerPointViews)
 		{
@@ -61,7 +61,7 @@
 	}
 	else
 	{
-		[[UIApplication sharedApplication] setStatusBarHidden:YES animated:YES];
+		[UIApplication setStatusBarHidden:YES withAnimation:YES];
 		equalizerPath.alpha = 0.0;
 		for (EqualizerPointView *view in equalizerPointViews)
 		{

@@ -27,6 +27,8 @@
 #import "ISMSStreamManager.h"
 #import "NSArray+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "iPadRootViewController.h"
+#import "MenuViewController.h"
 
 @implementation ServerListViewController
 
@@ -302,6 +304,24 @@
 		[audioEngineS stop];
 		 settingsS.isJukeboxEnabled = NO;
 		
+		if (viewObjectsS.isOfflineMode)
+		{
+			viewObjectsS.isOfflineMode = NO;
+			
+			if (IS_IPAD())
+			{
+				[appDelegateS.ipadRootViewController.menuViewController toggleOfflineMode];
+			}
+			else
+			{
+				for (UIView *subview in appDelegateS.window.subviews)
+				{
+					[subview removeFromSuperview];
+				}
+				[viewObjectsS orderMainTabBarController];
+			}
+		}
+		
 		if (!IS_IPAD())
 			[appDelegateS.mainTabBarController.view removeFromSuperview];
 		
@@ -309,17 +329,6 @@
 		[databaseS closeAllDatabases];
 		
 		[databaseS initDatabases];
-				
-		if (viewObjectsS.isOfflineMode)
-		{
-			viewObjectsS.isOfflineMode = NO;
-			
-			if (!IS_IPAD())
-			{
-				[appDelegateS.offlineTabBarController.view removeFromSuperview];
-				[viewObjectsS orderMainTabBarController];
-			}
-		}
 		
 		// Reset the tabs
 		if (!IS_IPAD())

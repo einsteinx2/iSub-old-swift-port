@@ -16,7 +16,7 @@
 - (void)checkForUpdate
 {
     self.receivedData = [NSMutableData dataWithCapacity:0];
-	self.request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://isubapp.com/update_test.xml"]];
+	self.request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://isubapp.com/update.xml"]];
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (!self.connection)
 	{

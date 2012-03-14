@@ -117,6 +117,7 @@
 	[self.connection cancel];
 	self.connection = nil;
 	self.receivedData = nil;
+	[viewObjectsS hideLoadingScreen];
 }
 
 - (void)albumLoad:(NSString*)theModifier
@@ -131,7 +132,7 @@
 	{
 		self.receivedData = [NSMutableData dataWithCapacity:0];
 		
-		[viewObjectsS showAlbumLoadingScreen:self.view sender:self];
+		[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
 	} 
 	else 
 	{
