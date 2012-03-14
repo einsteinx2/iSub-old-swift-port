@@ -9,15 +9,6 @@
 @class Artist, Album;
 
 @interface HomeAlbumViewController : UITableViewController 
-{
-		
-	NSMutableArray *listOfAlbums;
-	
-	NSString *searchModifier;
-	NSUInteger offset;
-	BOOL isMoreAlbums;
-	BOOL isLoading;
-}
 
 @property (retain) NSMutableData *receivedData;
 @property (retain) NSURLConnection *connection;
@@ -27,6 +18,7 @@
 @property (retain) NSString *modifier;
 @property NSUInteger offset;
 @property BOOL isMoreAlbums;
+@property BOOL isLoading;
 
 - (void)cancelLoad;
 

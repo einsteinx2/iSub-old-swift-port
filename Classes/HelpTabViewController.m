@@ -13,33 +13,23 @@
 
 @implementation HelpTabViewController
 
-@synthesize helpWebView;
+@synthesize helpWebView, loadingIndicator;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	
     return YES;
 }
-/*
- // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-        // Custom initialization
-    }
-    return self;
-}
-*/
-
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
-	
+		
 	if ([appDelegateS.wifiReach currentReachabilityStatus] == NotReachable)
-	{
+	{		
 		NSString* embedHTML = @"\
 		<html><head>\
 		<style type=\"text/css\">\
@@ -62,21 +52,58 @@
 	}
 	else
 	{	
+		[loadingIndicator startAnimating];
+		
 		NSString *helpUrlString = @"http://isubapp.com/iphoneHelp/index-3.0.html";
 		NSURL *helpUrl = [NSURL URLWithString:helpUrlString];
 		NSURLRequest *request = [NSURLRequest requestWithURL:helpUrl];
+		helpWebView.delegate = self;
 		[helpWebView loadRequest:request];
 	}
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+	[loadingIndicator stopAnimating];
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+	[loadingIndicator stopAnimating];
+	
+	NSString* embedHTML = @"\
+	<html><head>\
+	<style type=\"text/css\">\
+	body {\
+	width: 100%;\
+	margin: 0;\
+	padding: 0 0 20px 0;\
+	background: #111 url(data:image/gif;base64,R0lGODlhAQBKAdUAABEREREREhERExERFBESGRESFxESFRESFhESGBETHhETHRESGhEUJREWNhEUKBEUKREVLREWOBEVLxEVMhETIxESGxETIREUJBETHxETIhEWMxEUKhEVLBEUJhESHBEVMRETIBEWNBEVLhEWNxEUJxEVMBEWNREWOREUKxERFREVKxETHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAAAAAAALAAAAAABAEoBAAaPwJMwQiyOjseGcmlqmkJQqGZKnVivn2y2xC1JvmCRWAwpmzlotEqFam/e74d87qjbSXh8Z79n+P8XgYIUhIUZh4gWiosgjY0YkJEJk5QJCpeYCisenJwVn6ALoqMLBKanpgiqqwgFrq+uB7KzBwa2twYpKQO8vb4CwMHCAgHFxsfFAMrLzM3Oz9DR0tPUykEAOw==) top left repeat-x;\
+	font-size: 1.3em;\
+	color: #fff;\
+	font-family: Arial, Helvetica, sans-serif;\
+	text-align: center;\
+	}\
+	</style>\
+	</head>\
+	<body>\
+	There was an error loading the help content. Please try again later.\
+	</body></html>";
+	[helpWebView loadHTMLString:embedHTML baseURL:nil];
+}
+
+- (void)didReceiveMemoryWarning 
+{
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     
     // Release any cached data, images, etc that aren't in use.
 }
 
-- (void)dealloc {
+- (void)dealloc 
+{
+	helpWebView.delegate = nil;
+	[helpWebView release]; helpWebView = nil;
     [super dealloc];
 }
 

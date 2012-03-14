@@ -42,6 +42,8 @@
 @property NSUInteger offset;
 @property BOOL isMoreResults;
 
+@property BOOL isLoading;
+
 @property (retain) NSURLConnection *connection;
 
 @end

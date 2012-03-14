@@ -34,7 +34,7 @@
 @implementation HomeAlbumViewController
 @synthesize listOfAlbums;
 @synthesize offset, isMoreAlbums, modifier;
-@synthesize receivedData, connection;
+@synthesize receivedData, connection, isLoading;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -122,6 +122,10 @@
 
 - (void)loadMoreResults
 {	
+	if (self.isLoading)
+		return;
+	
+	self.isLoading = YES;
 	offset += 20;
 	
 	NSString *offsetString = [NSString stringWithFormat:@"%i", offset];
@@ -133,7 +137,7 @@
 	{
 		self.receivedData = [NSMutableData data];
 		
-		[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
+		//[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
 	} 
 	else 
 	{
@@ -149,7 +153,8 @@
 	[self.connection cancel];
 	self.connection = nil;
 	self.receivedData = nil;
-	[viewObjectsS hideLoadingScreen];
+	self.isLoading = NO;
+	//[viewObjectsS hideLoadingScreen];
 }
 
 #pragma mark - Connection Delegate
@@ -186,7 +191,9 @@
 	self.receivedData = nil;
 	self.connection = nil;
 	
-	[viewObjectsS hideLoadingScreen];
+	self.isLoading = NO;
+	
+	//[viewObjectsS hideLoadingScreen];
     
     CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error doing the search.\n\nError:%@", error.localizedDescription] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alert show];
@@ -216,12 +223,12 @@
     
     // Reload the table
     [self.tableView reloadData];
-    isLoading = NO;
+    self.isLoading = NO;
     
 	self.receivedData = nil;
 	self.connection = nil;
 	
-	[viewObjectsS hideLoadingScreen];
+	//[viewObjectsS hideLoadingScreen];
 }
 
 #pragma mark Table view methods
@@ -268,26 +275,22 @@
 	{
 		// This is the last cell and there could be more results, load the next 20 songs;
 		static NSString *cellIdentifier = @"HomeAlbumLoadCell";
-		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-		if (!cell)
-		{
-			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-		}		
+		UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
 
 		// Set background color
 		cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
 		cell.textLabel.backgroundColor = cell.backgroundView.backgroundColor;
 		
-		if (isMoreAlbums && !isLoading)
+		if (self.isMoreAlbums)
 		{
-			isLoading = YES;
 			cell.textLabel.text = @"Loading more results...";
 			UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
 			indicator.center = CGPointMake(300, 30);
 			[cell addSubview:indicator];
 			[indicator startAnimating];
 			[indicator release];
-            [self loadMoreResults];
+			
+			[self loadMoreResults];
 		}
 		else 
 		{

@@ -26,4 +26,7 @@
 
 @property (retain) NSString *theNewRedirectionUrl;
 
+@property (retain) SettingsTabViewController *settingsTabViewController;
+@property (retain) HelpTabViewController *helpTabViewController;
+
 @end

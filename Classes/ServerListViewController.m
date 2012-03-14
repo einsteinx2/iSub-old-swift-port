@@ -30,7 +30,7 @@
 
 @implementation ServerListViewController
 
-@synthesize theNewRedirectionUrl;
+@synthesize theNewRedirectionUrl, settingsTabViewController, helpTabViewController;
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -136,6 +136,10 @@
 
 - (void)segmentAction:(id)sender
 {
+	self.settingsTabViewController.parentController = nil;
+	self.settingsTabViewController = nil;
+	self.helpTabViewController = nil;
+	
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
 		self.title = @"Servers";
@@ -157,10 +161,9 @@
 		self.tableView.scrollEnabled = YES;
 		[self setEditing:NO animated:NO];
 		self.navigationItem.rightBarButtonItem = nil;
-		SettingsTabViewController *settingsTabViewController = [[SettingsTabViewController alloc] initWithNibName:@"SettingsTabViewController" bundle:nil];
-		settingsTabViewController.parentController = self;
+		self.settingsTabViewController = [[[SettingsTabViewController alloc] initWithNibName:@"SettingsTabViewController" bundle:nil] autorelease];
+		self.settingsTabViewController.parentController = self;
 		self.tableView.tableFooterView = settingsTabViewController.view;
-		//[settingsTabViewController release];
 		[self.tableView reloadData];
 	}
 	else if (segmentedControl.selectedSegmentIndex == 2)
@@ -170,14 +173,13 @@
 		self.tableView.scrollEnabled = NO;
 		[self setEditing:NO animated:NO];
 		self.navigationItem.rightBarButtonItem = nil;
-		HelpTabViewController *helpTabViewController = [[HelpTabViewController alloc] initWithNibName:@"HelpTabViewController" bundle:nil];
+		self.helpTabViewController = [[[HelpTabViewController alloc] initWithNibName:@"HelpTabViewController" bundle:nil] autorelease];
 		if (IS_IPAD())
 		{
-			helpTabViewController.view.frame = self.view.bounds;
-			helpTabViewController.view.height -= 40.;
+			self.helpTabViewController.view.frame = self.view.bounds;
+			self.helpTabViewController.view.height -= 40.;
 		}
 		self.tableView.tableFooterView = helpTabViewController.view;
-		[helpTabViewController release];
 		[self.tableView reloadData];
 	}
 }
@@ -503,6 +505,8 @@
 
 - (void)dealloc 
 {
+	[settingsTabViewController release]; settingsTabViewController = nil;
+	[helpTabViewController release]; helpTabViewController = nil;
 	[theNewRedirectionUrl release]; theNewRedirectionUrl = nil;
     [super dealloc];
 }

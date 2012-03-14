@@ -6,8 +6,9 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@interface HelpTabViewController : UIViewController 
+@interface HelpTabViewController : UIViewController <UIWebViewDelegate>
 
-@property (retain) UIWebView *helpWebView;
+@property (retain) IBOutlet UIWebView *helpWebView;
+@property (retain) IBOutlet UIActivityIndicatorView *loadingIndicator;
 
 @end

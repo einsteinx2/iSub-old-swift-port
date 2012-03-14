@@ -41,7 +41,7 @@
 
 @synthesize query, searchType;
 @synthesize listOfArtists, listOfAlbums, listOfSongs, offset, isMoreResults;
-@synthesize connection;
+@synthesize connection, isLoading;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -166,6 +166,11 @@
 
 - (void)loadMoreResults
 {
+	if (self.isLoading)
+		return;
+	
+	self.isLoading = YES;
+	
 	offset += 20;
     NSDictionary *parameters = nil;
     NSString *action = nil;
@@ -220,15 +225,15 @@
 	// Set background color
 	cell.backgroundView = [viewObjectsS createCellBackground:row];
 	
-	if (isMoreResults && !isLoading)
+	if (isMoreResults)
 	{
-		isLoading = YES;
 		cell.textLabel.text = @"Loading more results...";
 		UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
 		indicator.center = CGPointMake(300, 30);
 		[cell addSubview:indicator];
 		[indicator startAnimating];
 		[indicator release];
+		
 		[self loadMoreResults];
 	}
 	else 
@@ -465,7 +470,7 @@
 	[connection release]; connection = nil;
 	[receivedData release];
 	
-	[viewObjectsS hideLoadingScreen];
+	self.isLoading = NO;
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
@@ -519,7 +524,7 @@
 	
 	// Reload the table
 	[self.tableView reloadData];
-	isLoading = NO;
+	self.isLoading = NO;
 		
 	[connection	release]; connection = nil;
 	[receivedData release];

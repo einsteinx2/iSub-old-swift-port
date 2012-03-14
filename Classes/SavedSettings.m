@@ -211,7 +211,7 @@
 	else
 	{
 		if (servers != nil)
-			serverList = [NSKeyedUnarchiver unarchiveObjectWithData:servers];
+			self.serverList = [NSKeyedUnarchiver unarchiveObjectWithData:servers];
 	}
 	
 	// Convert the old settings format over

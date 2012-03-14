@@ -2063,11 +2063,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/ServerListViewController.m"
-         timestampString = "352939546.988185"
+         timestampString = "353378936.632258"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "309"
-         endingLineNumber = "309"
+         startingLineNumber = "311"
+         endingLineNumber = "311"
          landmarkName = "-switchServer:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -3738,6 +3738,19 @@
          endingLineNumber = "397"
          landmarkName = "@implementation iSubAppDelegate"
          landmarkType = "3">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Classes/NSMutableURLRequest+SUS.m"
+         timestampString = "353379973.308367"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "38"
+         endingLineNumber = "38"
+         landmarkName = "+requestWithSUSAction:forUrlString:username:password:andParameters:byteOffset:"
+         landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
    <SymbolicBreakpoints>
