@@ -175,6 +175,8 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	            
+	DLog(@"%@", [[[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding] autorelease]);
+	
     // Parse the data
 	//
 	TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData];

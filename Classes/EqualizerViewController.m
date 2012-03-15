@@ -19,6 +19,7 @@
 #import "NSArray+Additions.h"
 #import "UIApplication+StatusBar.h"
 #import "SnappySlider.h"
+#import "NWPickerView.h"
 
 @implementation EqualizerViewController
 @synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath, gainBoostLabel, isPresetPickerShowing, controlsContainer, gainBoostAmountLabel, lastGainValue; //drawTimer;
@@ -154,12 +155,35 @@
 
 - (void)pickerWillShown
 {
+	controlsContainer.y -= 60;
+	controlsContainer.height += 60;
+	
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:.3];
+	for (UIView *subview in controlsContainer.subviews)
+	{
+		if (![subview isKindOfClass:[NWPickerView class]])
+			subview.hidden = YES;
+	}
+	[UIView commitAnimations];
+	
 	[self createOverlay];
 	self.isPresetPickerShowing = YES;
 }
 
 - (void)pickerWillHide
 {
+	controlsContainer.y += 60;
+	controlsContainer.height -= 60;
+	
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:.3];
+	for (UIView *subview in controlsContainer.subviews)
+	{
+		subview.hidden = NO;
+	}
+	[UIView commitAnimations];
+	
 	[self hideOverlay];
 	self.isPresetPickerShowing = NO;
 }
@@ -279,102 +303,28 @@
 - (void)createAndDrawEqualizerPath
 {	
 	// Sort the points
-	NSArray *sortedPointViews = [equalizerPointViews sortedArrayUsingSelector:@selector(compare:)];
-	NSMutableArray *points = [NSMutableArray arrayWithCapacity:[sortedPointViews count]+5];
-	[points addObject:[NSValue valueWithCGPoint:CGPointMake(0.0, equalizerPath.center.y)]];
-	for (EqualizerPointView *eqView in sortedPointViews)
+	NSUInteger length = [equalizerPointViews count];
+	CGPoint *points = malloc(sizeof(CGPoint) * [equalizerPointViews count]);
+	//for (EqualizerPointView *eqView in equalizerPointViews)
+	for (int i = 0; i < length; i++)
+	{
+		EqualizerPointView *eqView = [equalizerPointViews objectAtIndex:i];
+		points[i] = eqView.center;
+	}
+	//equalizerPath.points = points;
+	//equalizerPath.length = length;
+	
+	[equalizerPath setPoints:points length:length];
+	
+	/*NSMutableArray *points = [NSMutableArray arrayWithCapacity:[equalizerPointViews count]];
+	for (EqualizerPointView *eqView in equalizerPointViews)
 	{
 		[points addObject:[NSValue valueWithCGPoint:eqView.center]];
 	}
-	[points addObject:[NSValue valueWithCGPoint:CGPointMake(equalizerPath.frame.size.width, equalizerPath.center.y)]];
-	
-	//////////////////////////////////
-	
-	/*equalizerPath.points = points;
-	[equalizerPath setNeedsDisplay];
-	return;*/
-	
-	///////////////////////////////
-	
-	NSMutableArray *sortedPoints = [NSMutableArray arrayWithCapacity:[sortedPointViews count]+5];
-	
-	// Add "ghost" points so the path draws true(ish) to the actual eq curve
-	CGFloat octaveWidth = equalizerPath.frame.size.width / RANGE_OF_EXPONENTS;
-	CGFloat eqWidth = ((CGFloat)DEFAULT_BANDWIDTH / 12.0) * octaveWidth;
-	CGFloat halfEqWidth = eqWidth / 2.0;
-	//CGFloat halfOctaveWidth = octaveWidth / 2;
-	CGFloat centerHeight = equalizerPath.frame.size.height / 2;
-	for (int i = 0; i < [points count] - 1; i++)
-	{
-		// Add the current point to sorted points
-		[sortedPoints addObject:[points objectAtIndexSafe:i]];
-		
-		CGPoint currentPoint = [[points objectAtIndexSafe:i] CGPointValue];
-		CGPoint nextPoint = [[points objectAtIndexSafe:i+1] CGPointValue];
-		
-		// Check if they are more than an octave apart
-		if (nextPoint.x - currentPoint.x > eqWidth)
-		{
-			// They are more than an octave apart, so add a ghost point at the center line
-			CGPoint ghostPoint = CGPointMake(currentPoint.x + halfEqWidth, centerHeight);
-			[sortedPoints addObject:[NSValue valueWithCGPoint:ghostPoint]];
-			
-			ghostPoint = CGPointMake(nextPoint.x - halfEqWidth, centerHeight);
-			[sortedPoints addObject:[NSValue valueWithCGPoint:ghostPoint]];
-		}
-	}
-	[sortedPoints addObject:[points lastObject]];
-	if ([[points lastObject] CGPointValue].x != equalizerPath.frame.size.width)
-		[sortedPoints addObject:[NSValue valueWithCGPoint:CGPointMake(equalizerPath.frame.size.width, equalizerPath.center.y)]];
-	
-	CGPoint pointsArray[[sortedPoints count]];
-	int i = 0;
-	for (NSValue *point in sortedPoints)
-	{
-		pointsArray[i] = point.CGPointValue;
-		i++;
-	}
-	
-	equalizerPath.points = pointsArray;
-	equalizerPath.numberOfPoints = [sortedPoints count];
-	
-	/*// Create and start the path
-	equalizerPath.path = [UIBezierPath bezierPath];
-	[equalizerPath.path moveToPoint:CGPointMake(0.0, equalizerPath.center.y)];
-	
-	// Add the lines to the eq points
-	for (NSValue *point in sortedPoints)
-	{
-		[equalizerPath.path addLineToPoint:point.CGPointValue];
-	}*/
-	
-	////////////////////////////////////
-	
-	/*for (int i = 0; i < [sortedPoints count]-1; i++)
-	{		
-		CGPoint point1 = [[sortedPoints objectAtIndexSafe:i] CGPointValue];
-		CGPoint point2 = [[sortedPoints objectAtIndexSafe:i+1] CGPointValue];
-		DLog(@"point1: %@   point2: %@", NSStringFromCGPoint(point1), NSStringFromCGPoint(point2));
-		
-		if (point1.y == point2.y || point1.x == point2.x)
-		{
-			[equalizerPath.path addLineToPoint:point2];
-		}
-		else
-		{
-			CGFloat x = point1.x >= point2.x ? point1.x : point2.x;
-			CGFloat y = point1.y <= point2.y ? point1.y : point2.y;
-			CGPoint control = CGPointMake(x, y);
-			DLog(@"control: %@", NSStringFromCGPoint(control));
-			[equalizerPath.path addQuadCurveToPoint:point2 controlPoint:control];
-		}
-	}*/
-	
-	// Finish the path
-	//[equalizerPath.path closePath];
-	
+	equalizerPath.points = points;*/
+
 	// Draw the curve
-	[equalizerPath setNeedsDisplay];
+	//[equalizerPath setNeedsDisplay];
 }
 
 - (void)createEqViews

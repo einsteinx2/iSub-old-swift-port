@@ -69,6 +69,7 @@
 @synthesize trackLabel, genreLabel, yearLabel, formatLabel;
 @synthesize quickBackLabel, quickForwLabel;
 @synthesize swipeDetector;
+@synthesize lastProgress;
 
 static const CGFloat kDefaultReflectionFraction = 0.30;
 static const CGFloat kDefaultReflectionOpacity = 0.55;
@@ -426,6 +427,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	[self unregisterForNotifications];
 	
+	coverArtImageView.delegate = nil;
+	
 	[progressSlider release]; progressSlider = nil;
 	[elapsedTimeLabel release]; elapsedTimeLabel = nil;
 	[remainingTimeLabel release]; remainingTimeLabel = nil;
@@ -650,6 +653,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {	
 	self.currentSong = playlistS.currentDisplaySong;
 	
+	lastProgress = 0;
+	
 	//DLog(@"currentSong parentId: %@", currentSong.parentId);
 	
 	if (currentSong.parentId)
@@ -665,6 +670,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
     [self setSongTitle];
 	coverArtImageView.coverArtId = currentSong.coverArtId;
+	DLog(@"player coverArtId: %@", currentSong.coverArtId);
     [self createReflection];
     
 	// Update the icon in top right
@@ -805,6 +811,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		extraButtonsButton.alpha = 0.0;
 		extraButtonsButton.enabled = NO;
+		extraButtons.alpha = 0.0;
+		songInfoView.alpha = 0.0;
 		
 		if (animated)
 			[UIView commitAnimations];
@@ -835,6 +843,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		extraButtonsButton.alpha = 1.0;
 		extraButtonsButton.enabled = YES;
+		extraButtons.alpha = 1.0;
+		songInfoView.alpha = 1.0;
 		
 		UIGraphicsEndImageContext();
 		
@@ -1414,30 +1424,43 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {		
 	if (settingsS.isJukeboxEnabled)
 	{
-		elapsedTimeLabel.text = [NSString formatTime:0];
-		remainingTimeLabel.text = [NSString stringWithFormat:@"-%@",[NSString formatTime:[currentSong.duration floatValue]]];
-		
-		progressSlider.value = 0.0;
-		
-		return;
+		if (lastProgress != [currentSong.duration intValue])
+		{
+			elapsedTimeLabel.text = [NSString formatTime:0];
+			remainingTimeLabel.text = [NSString stringWithFormat:@"-%@",[NSString formatTime:[currentSong.duration floatValue]]];
+			
+			progressSlider.value = 0.0;
+		}
 	}
-	
-	if (!pauseSlider)
+	else 
 	{
-		double progress = [currentSong isEqualToSong:audioEngineS.currentStreamSong] ? audioEngineS.progress : 0.;
+		if (!pauseSlider)
+		{
+			double progress = 0;
+			if (audioEngineS.isPlaying)
+				progress = audioEngineS.progress;
+			else
+				progress = [currentSong isEqualToSong:audioEngineS.currentStreamSong] ? audioEngineS.progress : 0.;
+			
+			if (lastProgress != ceil(progress))
+			{
+				lastProgress = ceil(progress);
+				
+				NSString *elapsedTime = [NSString formatTime:progress];;
+				NSString *remainingTime = [NSString formatTime:([currentSong.duration doubleValue] - progress)];
+				
+				progressSlider.value = progress;
+				elapsedTimeLabel.text = elapsedTime;
+				remainingTimeLabel.text =[@"-" stringByAppendingString:remainingTime];
+			}
+		}
 		
-		NSString *elapsedTime = [NSString formatTime:progress];;
-		NSString *remainingTime = [NSString formatTime:([currentSong.duration floatValue] - progress)];
-		
-		progressSlider.value = progress;
-		elapsedTimeLabel.text = elapsedTime;
-		remainingTimeLabel.text =[@"-" stringByAppendingString:remainingTime];
+		if (isExtraButtonsShowing)
+			[self updateFormatLabel];
 	}
 	
-	if (isExtraButtonsShowing)
-		 [self updateFormatLabel];
-	
-	[self performSelector:@selector(updateSlider) withObject:nil afterDelay:1.0];
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateSlider) object:nil];
+	[self performSelector:@selector(updateSlider) withObject:nil afterDelay:1];
 }
 
 - (void)updateFormatLabel

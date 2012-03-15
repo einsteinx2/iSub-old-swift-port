@@ -66,6 +66,17 @@
 	return self;
 }
 
+- (void)dealloc
+{
+	coverArtView.delegate = nil;
+	coverArtView = nil;
+	cacheInfoLabel = nil;
+	nameScrollView = nil;
+	songNameLabel = nil;
+	artistNameLabel = nil;
+	[super dealloc];
+}
+
 - (void)layoutSubviews
 {	
     [super layoutSubviews];

@@ -30,6 +30,25 @@ typedef enum
 	ISMS_BASS_EQ_DATA_TYPE_line
 } ISMS_BASS_EQ_DATA_TYPE;
 
+
+typedef struct
+{
+	void *buffer;
+	DWORD length;
+	BOOL isFilled;
+	//BOOL hasRead;
+} ISMS_AudioBuffer;
+
+typedef struct
+{
+	ISMS_AudioBuffer **buffers;
+	DWORD readPosition;
+	DWORD writePosition;
+	DWORD length;
+	DWORD freeSlots;
+	DWORD bufferSize;
+} ISMS_RingBuffer;
+
 @class Song, BassParamEqValue, BassUserInfo;
 @interface AudioEngine : NSObject
 {
@@ -37,6 +56,11 @@ typedef enum
 	float fftData[1024];
 	short *lineSpecBuf;
 	int lineSpecBufSize;
+	
+	ISMS_RingBuffer *ringBuffer;
+	DWORD buffersTilSongEnd;
+	QWORD buffersUsedSinceSongEnd;
+	BOOL songEnded;
 }
 
 + (AudioEngine *)sharedInstance;
@@ -93,6 +117,7 @@ typedef enum
 
 @property (retain) NSObject *currentStreamSyncObject;
 @property (retain) NSObject *eqReadSyncObject;
+@property (retain) NSObject *ringBufferSyncObject;
 
 const char *GetCTypeString(DWORD ctype, HPLUGIN plugin);
 

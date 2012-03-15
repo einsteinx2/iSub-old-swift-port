@@ -175,8 +175,10 @@
 
 - (void)dealloc 
 {
-	[self.activityIndicator removeFromSuperview];
-	self.activityIndicator = nil;
+	delegate = nil;
+	
+	[activityIndicator removeFromSuperview];
+	[activityIndicator release]; activityIndicator = nil;
 	
 	[coverArtDAO release]; coverArtDAO = nil;
 	[coverArtId release]; coverArtId = nil;

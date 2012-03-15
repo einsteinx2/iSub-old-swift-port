@@ -92,6 +92,8 @@
 
 @property (retain) UISwipeGestureRecognizer *swipeDetector;
 
+@property NSUInteger lastProgress;
+
 - (void)setPlayButtonImage;
 - (void)setPauseButtonImage;
 - (IBAction)songInfoToggle:(id)sender;

@@ -137,7 +137,8 @@ NSString* UIPickerViewDidHideNotification = @"UIPickerViewDidHideNotification";
 	
 	// calucate our visible rect
 	CGRect pickerVisibleFrame = self.superview.bounds;
-	pickerVisibleFrame.origin.y = self.superview.bounds.size.height - 216;
+	// TODO: don't hard code the 60 value
+	pickerVisibleFrame.origin.y = self.superview.bounds.size.height - 216 + 60;
 	pickerVisibleFrame.size.height = 216;
 	
 	// tell the picker view the frames.

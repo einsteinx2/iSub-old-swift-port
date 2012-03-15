@@ -9,12 +9,11 @@
 #import <Foundation/Foundation.h>
 
 @interface EqualizerPathView : UIView
+{
+	CGPoint *points;
+	NSUInteger length;
+}
 
-@property CGPoint *points;
-@property NSUInteger numberOfPoints;
-
+- (void)setPoints:(CGPoint *)thePoints length:(NSUInteger)theLength;
 
 @end
-
-static void GetFirstControlPoints(double rhs[], double x[], int length);
-static void GetCurveControlPoints(CGPoint knots[], int knotsLength, CGPoint firstControlPoints[], CGPoint secondControlPoints[]);

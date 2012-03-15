@@ -74,6 +74,11 @@
 
 - (void)dealloc 
 {
+	coverArtView.delegate = nil;
+	coverArtView = nil;
+	albumNameScrollView = nil;
+	albumNameLabel = nil;
+	
 	[myId release]; myId = nil;
 	[myArtist release]; myArtist = nil;
 	

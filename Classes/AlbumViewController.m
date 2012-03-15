@@ -168,6 +168,8 @@
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"createReflection" object:nil];
 	
+	albumInfoArtView.delegate = nil;
+	
 	[myId release]; myId = nil;
 	[myArtist release]; myArtist = nil;
 	[myAlbum release]; myAlbum = nil;
@@ -213,39 +215,19 @@
 	{
 		self.tableView.tableHeaderView = nil;
 	}
-	else if (myAlbum)
+	else if (myAlbum && dataModel.songsCount)
 	{
-		/*if (IS_IPAD())
-		{
-			// Fix some sizes for the iPad
-			CGFloat scaleFactor = 2.5;
-			CGFloat borderSize = 5.;
-			//albumInfoView.height = albumInfoView.height * scaleFactor;
-			albumInfoView.size = CGSizeMake(self.view.width, albumInfoView.height * scaleFactor);
-			albumInfoArtHolderView.width = albumInfoArtHolderView.width * scaleFactor + borderSize;
-			albumInfoArtHolderView.height = albumInfoArtHolderView.height * scaleFactor + borderSize;
-			albumInfoLabelHolderView.x = albumInfoArtHolderView.x + albumInfoArtHolderView.width + borderSize;
-			// Set labels width to original header width, labels holder x, minus 20 point border
-			albumInfoLabelHolderView.width = 320. - albumInfoLabelHolderView.x - borderSize;
-			
-			albumInfoArtistLabel.font = albumInfoAlbumLabel.font = [UIFont boldSystemFontOfSize:40];
-			albumInfoArtistLabel.minimumFontSize = albumInfoAlbumLabel.minimumFontSize = 24;
-			albumInfoDurationLabel.font = albumInfoTrackCountLabel.font = [UIFont systemFontOfSize:30];
-		}*/
-		
 		if (!self.tableView.tableHeaderView)
 		{
 			CGFloat headerHeight = albumInfoView.height + playAllShuffleAllView.height;
 			CGRect headerFrame = CGRectMake(0., 0., 320, headerHeight);
 			UIView *headerView = [[UIView alloc] initWithFrame:headerFrame];
-			//headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 			
 			albumInfoArtView.isLarge = YES;
 			
 			[headerView addSubview:albumInfoView];
 			
 			playAllShuffleAllView.y = albumInfoView.height;
-			//playAllShuffleAllView.width = self.view.width;
 			[headerView addSubview:playAllShuffleAllView];
 			
 			self.tableView.tableHeaderView = headerView;
@@ -253,6 +235,8 @@
 		}
 		
 		albumInfoArtView.coverArtId = myAlbum.coverArtId;
+		
+		DLog(@"player coverArtId: %@", myAlbum.coverArtId);
 		
 		albumInfoArtistLabel.text = myAlbum.artistName;
 		albumInfoAlbumLabel.text = myAlbum.title;

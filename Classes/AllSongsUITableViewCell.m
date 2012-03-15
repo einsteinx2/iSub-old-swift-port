@@ -83,6 +83,12 @@
 
 - (void)dealloc
 {
+	coverArtView.delegate = nil;
+	coverArtView = nil;
+	songNameScrollView = nil;
+	songNameLabel = nil;
+	artistNameLabel = nil;
+	
 	[md5 release]; md5 = nil;
 	
     [super dealloc];
