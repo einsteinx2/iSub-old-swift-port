@@ -57,7 +57,7 @@
 
 - (void)showOverlay
 {
-	if (!isOverlayShowing)
+	if (!self.isOverlayShowing)
 	{
 		self.overlayView = [CellOverlay cellOverlayWithTableCell:self];
 		[self.contentView addSubview:self.overlayView];
@@ -88,8 +88,11 @@
 
 - (void)overlayHidden
 {
-	[self.overlayView removeFromSuperview];
-	self.overlayView = nil;
+	if (!self.isOverlayShowing)
+	{
+		[self.overlayView removeFromSuperview];
+		self.overlayView = nil;
+	}	
 }
 
 - (void)downloadAction

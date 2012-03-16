@@ -361,6 +361,9 @@
 		5379DC501219E48800F426CD /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC4B1219E48800F426CD /* ChatViewController.m */; };
 		5379DC511219E48800F426CD /* ChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5379DC4C1219E48800F426CD /* ChatViewController.xib */; };
 		5379DC571219EEEB00F426CD /* ChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC561219EEEB00F426CD /* ChatMessage.m */; };
+		537D916A151315D300BFEE30 /* libFlurryAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 537D9169151315D300BFEE30 /* libFlurryAnalytics.a */; };
+		537D916B151315D300BFEE30 /* libFlurryAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 537D9169151315D300BFEE30 /* libFlurryAnalytics.a */; };
+		537D916C151315D300BFEE30 /* libFlurryAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 537D9169151315D300BFEE30 /* libFlurryAnalytics.a */; };
 		537DE2D9113F008C00875852 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DE2D8113F008C00875852 /* CoreFoundation.framework */; };
 		537E9A0A14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */; };
 		537E9A0B14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */; };
@@ -467,7 +470,6 @@
 		53A7495D14E47826000AC636 /* UIImageView+Reflection.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7495C14E47826000AC636 /* UIImageView+Reflection.m */; };
 		53A7495E14E47826000AC636 /* UIImageView+Reflection.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7495C14E47826000AC636 /* UIImageView+Reflection.m */; };
 		53A7495F14E47826000AC636 /* UIImageView+Reflection.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7495C14E47826000AC636 /* UIImageView+Reflection.m */; };
-		53A77FC7128E3648005D2D65 /* UITableViewCell+overlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A77FC6128E3648005D2D65 /* UITableViewCell+overlay.m */; };
 		53A77FCD128E38E7005D2D65 /* CellOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A77FCC128E38E7005D2D65 /* CellOverlay.m */; };
 		53AA300411461A04003E57E3 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AA300311461A04003E57E3 /* background.png */; };
 		53AAB77A12B98699007EA08B /* StoreUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53AAB77912B98699007EA08B /* StoreUITableViewCell.m */; };
@@ -1163,7 +1165,6 @@
 		53BC280E139AF0DD00A825F1 /* JukeboxXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BA48671284C2340010B380 /* JukeboxXMLParser.m */; };
 		53BC280F139AF0DD00A825F1 /* NewHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BA49411285BD7A0010B380 /* NewHomeViewController.m */; };
 		53BC2810139AF0DD00A825F1 /* QuickAlbumsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BA497B1285D5B10010B380 /* QuickAlbumsViewController.m */; };
-		53BC2813139AF0DD00A825F1 /* UITableViewCell+overlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A77FC6128E3648005D2D65 /* UITableViewCell+overlay.m */; };
 		53BC2814139AF0DD00A825F1 /* CellOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A77FCC128E38E7005D2D65 /* CellOverlay.m */; };
 		53BC2815139AF0DD00A825F1 /* ModalAlbumArtViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C22CCE128EE81C00FFBA67 /* ModalAlbumArtViewController.m */; };
 		53BC2817139AF0DD00A825F1 /* NSString+rfcEncode.m in Sources */ = {isa = PBXBuildFile; fileRef = 532B0DDF12AF0AF700E8FF4F /* NSString+rfcEncode.m */; };
@@ -1380,9 +1381,6 @@
 		53D8ACB4116C47E600E5C9CB /* PageControlViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53D8ACB2116C47E600E5C9CB /* PageControlViewController.xib */; };
 		53D9996E12D40C4000A97412 /* NSDataAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D9996B12D40C4000A97412 /* NSDataAdditions.m */; };
 		53D9996F12D40C4000A97412 /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D9996D12D40C4000A97412 /* TBXML.m */; };
-		53DC4EDF149D6A9E00CC3BB4 /* libFlurryAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DC4EDE149D6A9E00CC3BB4 /* libFlurryAnalytics.a */; };
-		53DC4EE0149D6A9E00CC3BB4 /* libFlurryAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DC4EDE149D6A9E00CC3BB4 /* libFlurryAnalytics.a */; };
-		53DC4EE1149D6A9E00CC3BB4 /* libFlurryAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DC4EDE149D6A9E00CC3BB4 /* libFlurryAnalytics.a */; };
 		53DCF3FE13BFEAD3009160F9 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		53DCF3FF13BFEAD3009160F9 /* FoldersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* FoldersViewController.xib */; };
 		53DCF40013BFEAD3009160F9 /* AlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F2D3ED113A338500107D63 /* AlbumViewController.xib */; };
@@ -1701,7 +1699,6 @@
 		53DCF56F13BFEAD3009160F9 /* JukeboxXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BA48671284C2340010B380 /* JukeboxXMLParser.m */; };
 		53DCF57013BFEAD3009160F9 /* NewHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BA49411285BD7A0010B380 /* NewHomeViewController.m */; };
 		53DCF57113BFEAD3009160F9 /* QuickAlbumsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BA497B1285D5B10010B380 /* QuickAlbumsViewController.m */; };
-		53DCF57413BFEAD3009160F9 /* UITableViewCell+overlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A77FC6128E3648005D2D65 /* UITableViewCell+overlay.m */; };
 		53DCF57513BFEAD3009160F9 /* CellOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A77FCC128E38E7005D2D65 /* CellOverlay.m */; };
 		53DCF57613BFEAD3009160F9 /* ModalAlbumArtViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C22CCE128EE81C00FFBA67 /* ModalAlbumArtViewController.m */; };
 		53DCF57813BFEAD3009160F9 /* NSString+rfcEncode.m in Sources */ = {isa = PBXBuildFile; fileRef = 532B0DDF12AF0AF700E8FF4F /* NSString+rfcEncode.m */; };
@@ -2233,6 +2230,8 @@
 		5379DC551219EEEB00F426CD /* ChatMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ChatMessage.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		5379DC561219EEEB00F426CD /* ChatMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatMessage.m; sourceTree = "<group>"; };
 		537A466F14783F3E004591C9 /* ISMSNotificationNames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSNotificationNames.h; sourceTree = "<group>"; };
+		537D9168151315D300BFEE30 /* FlurryAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlurryAnalytics.h; sourceTree = "<group>"; };
+		537D9169151315D300BFEE30 /* libFlurryAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFlurryAnalytics.a; sourceTree = "<group>"; };
 		537DE2D8113F008C00875852 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		537E9A0814F323EE006CB0BC /* UIViewController+PushViewControllerCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+PushViewControllerCustom.h"; sourceTree = "<group>"; };
 		537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+PushViewControllerCustom.m"; sourceTree = "<group>"; };
@@ -2339,8 +2338,6 @@
 		53A7495B14E47826000AC636 /* UIImageView+Reflection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+Reflection.h"; sourceTree = "<group>"; };
 		53A7495C14E47826000AC636 /* UIImageView+Reflection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+Reflection.m"; sourceTree = "<group>"; };
 		53A7652A14AE9A94004253D1 /* NSString+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Additions.h"; sourceTree = "<group>"; };
-		53A77FC5128E3648005D2D65 /* UITableViewCell+overlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+overlay.h"; sourceTree = "<group>"; };
-		53A77FC6128E3648005D2D65 /* UITableViewCell+overlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+overlay.m"; sourceTree = "<group>"; };
 		53A77FCB128E38E7005D2D65 /* CellOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellOverlay.h; sourceTree = "<group>"; };
 		53A77FCC128E38E7005D2D65 /* CellOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellOverlay.m; sourceTree = "<group>"; };
 		53AA300311461A04003E57E3 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = Images/Other/background.png; sourceTree = "<group>"; };
@@ -2771,8 +2768,6 @@
 		53D9996B12D40C4000A97412 /* NSDataAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDataAdditions.m; sourceTree = "<group>"; };
 		53D9996C12D40C4000A97412 /* TBXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBXML.h; sourceTree = "<group>"; };
 		53D9996D12D40C4000A97412 /* TBXML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBXML.m; sourceTree = "<group>"; };
-		53DC4EDE149D6A9E00CC3BB4 /* libFlurryAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFlurryAnalytics.a; sourceTree = "<group>"; };
-		53DC4EE2149D6ACB00CC3BB4 /* FlurryAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlurryAnalytics.h; sourceTree = "<group>"; };
 		53DCF5C613BFEAD3009160F9 /* iSub Lite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Lite.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53DCF5C813BFEB51009160F9 /* iSub-Info-Lite.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "iSub-Info-Lite.plist"; sourceTree = "<group>"; };
 		53DE597814F18E7A00206529 /* AUIAnimatableLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUIAnimatableLabel.h; sourceTree = "<group>"; };
@@ -2913,9 +2908,9 @@
 				53400AA11496856600165581 /* libbassmix.a in Frameworks */,
 				53400AA51496857400165581 /* libbassflac.a in Frameworks */,
 				53400AA91496858600165581 /* libbass_fx.a in Frameworks */,
-				53DC4EDF149D6A9E00CC3BB4 /* libFlurryAnalytics.a in Frameworks */,
 				536451E814F6FF6E000FBD85 /* libbass.a in Frameworks */,
 				53C7FF6D150FD79B008DA51C /* CrashReporter.framework in Frameworks */,
+				537D916A151315D300BFEE30 /* libFlurryAnalytics.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2947,9 +2942,9 @@
 				53400AA31496856600165581 /* libbassmix.a in Frameworks */,
 				53400AA71496857500165581 /* libbassflac.a in Frameworks */,
 				53400AAB1496858600165581 /* libbass_fx.a in Frameworks */,
-				53DC4EE1149D6A9E00CC3BB4 /* libFlurryAnalytics.a in Frameworks */,
 				536451EA14F6FF6E000FBD85 /* libbass.a in Frameworks */,
 				53C7FF6F150FD79B008DA51C /* CrashReporter.framework in Frameworks */,
+				537D916C151315D300BFEE30 /* libFlurryAnalytics.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2980,10 +2975,10 @@
 				53400AA21496856600165581 /* libbassmix.a in Frameworks */,
 				53400AA61496857400165581 /* libbassflac.a in Frameworks */,
 				53400AAA1496858600165581 /* libbass_fx.a in Frameworks */,
-				53DC4EE0149D6A9E00CC3BB4 /* libFlurryAnalytics.a in Frameworks */,
 				53DE598414F1933400206529 /* CoreText.framework in Frameworks */,
 				536451E914F6FF6E000FBD85 /* libbass.a in Frameworks */,
 				53C7FF6E150FD79B008DA51C /* CrashReporter.framework in Frameworks */,
+				537D916B151315D300BFEE30 /* libFlurryAnalytics.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3089,7 +3084,6 @@
 				53400AA01496856600165581 /* libbassmix.a */,
 				53400AA41496857400165581 /* libbassflac.a */,
 				53400AA81496858600165581 /* libbass_fx.a */,
-				53DC4EDE149D6A9E00CC3BB4 /* libFlurryAnalytics.a */,
 				536451E714F6FF6E000FBD85 /* libbass.a */,
 			);
 			name = Frameworks;
@@ -3211,8 +3205,6 @@
 				5348A59A11879C3A0078994D /* CustomUITableView.m */,
 				5398FA4214A4458F002808E1 /* CustomUITableViewCell.h */,
 				5398FA4314A44590002808E1 /* CustomUITableViewCell.m */,
-				53A77FC5128E3648005D2D65 /* UITableViewCell+overlay.h */,
-				53A77FC6128E3648005D2D65 /* UITableViewCell+overlay.m */,
 				53A77FCB128E38E7005D2D65 /* CellOverlay.h */,
 				53A77FCC128E38E7005D2D65 /* CellOverlay.m */,
 				534E43B51155659A000B4134 /* AlbumUITableViewCell.h */,
@@ -3533,6 +3525,15 @@
 			name = "Chat Tab";
 			sourceTree = "<group>";
 		};
+		537D9167151315D300BFEE30 /* FlurryAnalytics */ = {
+			isa = PBXGroup;
+			children = (
+				537D9168151315D300BFEE30 /* FlurryAnalytics.h */,
+				537D9169151315D300BFEE30 /* libFlurryAnalytics.a */,
+			);
+			path = FlurryAnalytics;
+			sourceTree = SOURCE_ROOT;
+		};
 		5382A81712D82CD8005A3D1A /* FMDB */ = {
 			isa = PBXGroup;
 			children = (
@@ -3655,6 +3656,7 @@
 				53D9996912D40C4000A97412 /* TBXML */,
 				53C7FDB1150F256A008DA51C /* HockeyKit */,
 				53C7FF64150FD79A008DA51C /* QuincyKit */,
+				537D9167151315D300BFEE30 /* FlurryAnalytics */,
 				5305C1D81157EA7A00BC78F0 /* Reachability.h */,
 				5305C1D91157EA7A00BC78F0 /* Reachability.m */,
 				53B52A9611ADB7AD005776B5 /* sqlite3.h */,
@@ -3663,7 +3665,6 @@
 				5324C6C513345D75004E6C79 /* OBSlider.m */,
 				53F11B741460F96D0010820B /* OrderedDictionary.h */,
 				53F11B751460F96D0010820B /* OrderedDictionary.m */,
-				53DC4EE2149D6ACB00CC3BB4 /* FlurryAnalytics.h */,
 				532590FF14EE22C100DF4BDB /* MBProgressHUD.h */,
 				5325910014EE22C400DF4BDB /* MBProgressHUD.m */,
 				53E60943150C6DB000FD86E6 /* SnappySlider.h */,
@@ -5632,7 +5633,6 @@
 				53BA48681284C2340010B380 /* JukeboxXMLParser.m in Sources */,
 				53BA49431285BD7A0010B380 /* NewHomeViewController.m in Sources */,
 				53BA497D1285D5B10010B380 /* QuickAlbumsViewController.m in Sources */,
-				53A77FC7128E3648005D2D65 /* UITableViewCell+overlay.m in Sources */,
 				53A77FCD128E38E7005D2D65 /* CellOverlay.m in Sources */,
 				53C22CCF128EE81C00FFBA67 /* ModalAlbumArtViewController.m in Sources */,
 				532B0DE012AF0AF700E8FF4F /* NSString+rfcEncode.m in Sources */,
@@ -5944,7 +5944,6 @@
 				53BC280E139AF0DD00A825F1 /* JukeboxXMLParser.m in Sources */,
 				53BC280F139AF0DD00A825F1 /* NewHomeViewController.m in Sources */,
 				53BC2810139AF0DD00A825F1 /* QuickAlbumsViewController.m in Sources */,
-				53BC2813139AF0DD00A825F1 /* UITableViewCell+overlay.m in Sources */,
 				53BC2814139AF0DD00A825F1 /* CellOverlay.m in Sources */,
 				53BC2815139AF0DD00A825F1 /* ModalAlbumArtViewController.m in Sources */,
 				53BC2817139AF0DD00A825F1 /* NSString+rfcEncode.m in Sources */,
@@ -6256,7 +6255,6 @@
 				53DCF56F13BFEAD3009160F9 /* JukeboxXMLParser.m in Sources */,
 				53DCF57013BFEAD3009160F9 /* NewHomeViewController.m in Sources */,
 				53DCF57113BFEAD3009160F9 /* QuickAlbumsViewController.m in Sources */,
-				53DCF57413BFEAD3009160F9 /* UITableViewCell+overlay.m in Sources */,
 				53DCF57513BFEAD3009160F9 /* CellOverlay.m in Sources */,
 				53DCF57613BFEAD3009160F9 /* ModalAlbumArtViewController.m in Sources */,
 				53DCF57813BFEAD3009160F9 /* NSString+rfcEncode.m in Sources */,
@@ -6518,7 +6516,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
-					"\"$(SRCROOT)/CrittercismSDK\"",
+					"\"$(SRCROOT)/FlurryAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -6566,7 +6564,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
-					"\"$(SRCROOT)/CrittercismSDK\"",
+					"\"$(SRCROOT)/FlurryAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -6657,7 +6655,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
-					"\"$(SRCROOT)/CrittercismSDK\"",
+					"\"$(SRCROOT)/FlurryAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -6714,7 +6712,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
-					"\"$(SRCROOT)/CrittercismSDK\"",
+					"\"$(SRCROOT)/FlurryAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -6771,7 +6769,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
-					"\"$(SRCROOT)/CrittercismSDK\"",
+					"\"$(SRCROOT)/FlurryAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -6825,7 +6823,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
-					"\"$(SRCROOT)/CrittercismSDK\"",
+					"\"$(SRCROOT)/FlurryAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -6877,7 +6875,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
-					"\"$(SRCROOT)/CrittercismSDK\"",
+					"\"$(SRCROOT)/FlurryAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -6931,7 +6929,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
-					"\"$(SRCROOT)/CrittercismSDK\"",
+					"\"$(SRCROOT)/FlurryAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -6981,7 +6979,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
 					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
-					"\"$(SRCROOT)/CrittercismSDK\"",
+					"\"$(SRCROOT)/FlurryAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",

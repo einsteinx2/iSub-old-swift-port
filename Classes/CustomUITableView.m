@@ -8,7 +8,7 @@
 
 #import "CustomUITableView.h"
 #import "ViewObjectsSingleton.h"
-#import "UITableViewCell+overlay.h"
+#import "CustomUITableViewCell.h"
 #import "CellOverlay.h"
 #import "SavedSettings.h"
 
@@ -63,7 +63,12 @@
 	for (UITableViewCell *cell in self.visibleCells) 
 	{
 		if (cell != cellToSkip)
-			[cell hideOverlay];
+		{
+			if ([cell isKindOfClass:[CustomUITableViewCell class]])
+			{
+				[(CustomUITableViewCell *)cell hideOverlay];
+			}
+		}
 	}
 }
 
@@ -81,7 +86,10 @@
 			point.x < 40. && [[NSDate date] timeIntervalSinceDate:lastDeleteToggle] > 0.25)
 		{
 			self.lastDeleteToggle = [NSDate date];
-			[cell toggleDelete];
+			if ([cell isKindOfClass:[CustomUITableViewCell class]])
+			{
+				[(CustomUITableViewCell *)cell toggleDelete];
+			}
 		}
 		
 		// Remove overlays
@@ -90,8 +98,13 @@
 			self.lastOverlayToggle = [NSDate date];
 			
 			[self hideAllOverlays:cell];
-			if ([cell isOverlayShowing])
-				[cell performSelector:@selector(hideOverlay) withObject:nil afterDelay:1.0];
+			
+			if ([cell isKindOfClass:[CustomUITableViewCell class]])
+			{
+				if ([(CustomUITableViewCell *)cell isOverlayShowing])
+					[cell performSelector:@selector(hideOverlay) withObject:nil afterDelay:1.0];
+			}
+			
 		}
 	}
 	//return nil;
@@ -165,14 +178,20 @@
 				// Right swipe
 				if (settingsS.isSwipeEnabled && !IS_IPAD())
 				{
-					[cell showOverlay];
+					if ([cell isKindOfClass:[CustomUITableViewCell class]])
+					{
+						[(CustomUITableViewCell *)cell showOverlay];
+					}
 					cellShowingOverlay = cell;
 				}
 			} 
 			else 
 			{
-				// Left Swipe				
-				[cell scrollLabels];
+				// Left Swipe
+				if ([cell isKindOfClass:[CustomUITableViewCell class]])
+				{
+					[(CustomUITableViewCell *)cell scrollLabels];
+				}
 			}
 		} 
 		else 
@@ -185,7 +204,10 @@
 - (void)tapAndHoldFired
 {
     tapAndHoldFired = YES;
-	[tapAndHoldCell showOverlay];
+	if ([tapAndHoldCell isKindOfClass:[CustomUITableViewCell class]])
+	{
+		[(CustomUITableViewCell *)tapAndHoldCell showOverlay];
+	}
 	cellShowingOverlay = tapAndHoldCell;
 }
 
@@ -239,7 +261,10 @@
 	if (tapAndHoldFired || hasSwiped)
 	{
 		// Enable the buttons if the overlay is showing
-		[[cellShowingOverlay overlayView] enableButtons];
+		if ([cellShowingOverlay isKindOfClass:[CustomUITableViewCell class]])
+		{
+			[[(CustomUITableViewCell *)cellShowingOverlay overlayView] enableButtons];
+		}
 	}
 	else
 	{
@@ -265,7 +290,10 @@
 	self.scrollEnabled = YES;
 	hasSwiped = NO;
 	
-	[[cellShowingOverlay overlayView] enableButtons];
+	if ([cellShowingOverlay isKindOfClass:[CustomUITableViewCell class]])
+	{
+		[[(CustomUITableViewCell *)cellShowingOverlay overlayView] enableButtons];
+	}
 	
 	[super touchesCancelled:touches withEvent:event];
 }

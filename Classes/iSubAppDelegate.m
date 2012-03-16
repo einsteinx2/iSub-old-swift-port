@@ -248,22 +248,10 @@
 
 - (void)checkServer
 {
-	/*// Ask the update question if necessary
-	if (!settingsS.isUpdateCheckQuestionAsked)
-	{
-		// Ask to check for updates if haven't asked yet
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Update Alerts" message:@"Would you like iSub to notify you when app updates are available?\n\nYou can change this setting at any time from the settings menu." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
-		alert.tag = 6;
-		[alert show];
-		[alert release];
-	}
-	else if (settingsS.isUpdateCheckEnabled)
-	{*/
-		ISMSUpdateChecker *updateChecker = [[ISMSUpdateChecker alloc] init];
-		[updateChecker checkForUpdate];
-		[updateChecker release];
-	/*}*/
-    
+	ISMSUpdateChecker *updateChecker = [[ISMSUpdateChecker alloc] init];
+	[updateChecker checkForUpdate];
+	[updateChecker release];
+
     // Check if the subsonic URL is valid by attempting to access the ping.view page, 
 	// if it's not then display an alert and allow user to change settings if they want.
 	// This is in case the user is, for instance, connected to a wifi network but does not 
@@ -273,6 +261,11 @@
         SUSServerChecker *checker = [[SUSServerChecker alloc] initWithDelegate:self];
 		[checker checkServerUrlString:settingsS.urlString username:settingsS.username password:settingsS.password];
     }
+	
+	// Do a server check every half hour
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(checkServer) object:nil];
+	NSTimeInterval delay = 30 * 60; // 30 minutes
+	[self performSelector:@selector(checkServer) withObject:nil afterDelay:delay];
 }
 
 #pragma mark - SUS Server Check Delegate
@@ -280,12 +273,11 @@
 - (void)SUSServerURLCheckRedirected:(SUSServerChecker *)checker redirectUrl:(NSURL *)url
 {
     settingsS.redirectUrlString = [NSString stringWithFormat:@"%@://%@:%@", url.scheme, url.host, url.port];
-    //DLog(@"redirectUrlString: %@", settingsS.redirectUrlString);
+    DLog(@"redirectUrlString: %@", settingsS.redirectUrlString);
 }
 
 - (void)SUSServerURLCheckFailed:(SUSServerChecker *)checker withError:(NSError *)error
 {
-    //DLog(@"server check failed");
     if(!viewObjectsS.isOfflineMode)
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", [error code], [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Settings", nil];
@@ -300,7 +292,6 @@
 	
 	settingsS.isNewSearchAPI = checker.isNewSearchAPI;
     
-    //DLog(@"server verification failed, hiding loading screen");
     [viewObjectsS hideLoadingScreen];
 }
 
@@ -796,6 +787,8 @@
 		//DLog(@"Reachability Changed: ReachableViaWiFi");
 		//reachabilityStatus = 2;
 		
+		[self checkServer];
+		
 		if (viewObjectsS.isOfflineMode)
 		{
 			[self enterOnlineMode];
@@ -812,6 +805,8 @@
 	}
 	else if ([curReach currentReachabilityStatus] == ReachableViaWWAN)
 	{
+		[self checkServer];
+		
 		//DLog(@"Reachability Changed: ReachableViaWWAN");
 		//reachabilityStatus = 1;
 		

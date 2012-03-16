@@ -25,7 +25,6 @@
 #import "NSString+md5.h"
 #import "AsynchronousImageView.h"
 #import "AlbumViewController.h"
-#import "UITableViewCell+overlay.h"
 #import "NSString+rfcEncode.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"

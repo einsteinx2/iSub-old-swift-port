@@ -21,6 +21,7 @@
 #import "NSString+hex.h"
 #import "CustomUIAlertView.h"
 #import "NSArray+Additions.h"
+#import "NSString+Additions.h"
 
 @implementation HomeXMLParser
 
@@ -91,10 +92,10 @@
 			Album *anAlbum = [[Album alloc] init];
 			
 			//Extract the attributes here.
-			anAlbum.title = [attributeDict objectForKey:@"title"];
-			anAlbum.albumId = [attributeDict objectForKey:@"id"];
+			anAlbum.title = [[attributeDict objectForKey:@"title"] cleanString];
+			anAlbum.albumId = [[attributeDict objectForKey:@"id"] cleanString];
 			if([attributeDict objectForKey:@"coverArt"])
-				anAlbum.coverArtId = [attributeDict objectForKey:@"coverArt"];
+				anAlbum.coverArtId = [[attributeDict objectForKey:@"coverArt"] cleanString];
 
 			// Synthesize the artist name and artist id from the album id
 			NSString *path = [NSString stringFromHex:anAlbum.albumId];

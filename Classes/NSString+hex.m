@@ -23,7 +23,7 @@
 		[stringData appendBytes:&whole_byte length:1]; 
 	}
 	
-	return [[[NSString alloc] initWithData:stringData encoding:NSASCIIStringEncoding] autorelease];
+	return [[[NSString alloc] initWithData:stringData encoding:NSUTF8StringEncoding] autorelease];
 }
 
 /*+ (NSString *) stringToHex:(NSString *)str

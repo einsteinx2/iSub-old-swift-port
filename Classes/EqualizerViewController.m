@@ -707,12 +707,16 @@
 	if(audioEngineS.isEqualizerOn)
 	{
 		[toggleButton setTitle:@"EQ is ON" forState:UIControlStateNormal];
-		toggleButton.titleLabel.textColor = [UIColor colorWithRed:255./98. green:255./180. blue:255./224. alpha:1.];
+		UIColor *blue = [UIColor colorWithRed:98./255. green:180./255. blue:223./255. alpha:1.];
+		[toggleButton setTitleColor:blue forState:UIControlStateNormal];
+		toggleButton.titleLabel.font = [UIFont boldSystemFontOfSize:24];
 	}
 	else
 	{
 		[toggleButton setTitle:@"EQ is OFF" forState:UIControlStateNormal];
-		toggleButton.titleLabel.textColor = [UIColor colorWithWhite:.75 alpha:1.];
+		UIColor *grey = [UIColor colorWithWhite:.75 alpha:1.];
+		[toggleButton setTitleColor:grey forState:UIControlStateNormal];
+		toggleButton.titleLabel.font = [UIFont boldSystemFontOfSize:20];
 	}
 }
 

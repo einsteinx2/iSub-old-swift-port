@@ -811,8 +811,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		extraButtonsButton.alpha = 0.0;
 		extraButtonsButton.enabled = NO;
-		extraButtons.alpha = 0.0;
-		songInfoView.alpha = 0.0;
+		//extraButtons.alpha = 0.0;
+		//songInfoView.alpha = 0.0;
 		
 		if (animated)
 			[UIView commitAnimations];
@@ -843,8 +843,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		extraButtonsButton.alpha = 1.0;
 		extraButtonsButton.enabled = YES;
-		extraButtons.alpha = 1.0;
-		songInfoView.alpha = 1.0;
+		//extraButtons.alpha = 1.0;
+		//songInfoView.alpha = 1.0;
 		
 		UIGraphicsEndImageContext();
 		

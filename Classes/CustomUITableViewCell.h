@@ -30,4 +30,6 @@
 
 - (void)scrollLabels;
 
+- (void)toggleDelete;
+
 @end

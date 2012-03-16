@@ -24,7 +24,6 @@
 #import "LoadingScreen.h"
 #import "HomeXMLParser.h"
 #import "ServerListViewController.h"
-#import "UITableViewCell+overlay.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"

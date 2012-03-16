@@ -263,6 +263,7 @@ void CALLBACK MyFileCloseProc(void *user)
 	
 	// Tell the read wait loop to break in case it's waiting
 	userInfo.shouldBreakWaitLoop = YES;
+	userInfo.shouldBreakWaitLoopForever = YES;
 	
 	@autoreleasepool {
 		DLog(@"closing file: %@", userInfo.mySong.title);
@@ -287,7 +288,11 @@ QWORD CALLBACK MyFileLenProc(void *user)
 		QWORD length = 0;
 		Song *theSong = userInfo.mySong;
 		//length = theSong.localFileSize;
-		if (theSong.isFullyCached || userInfo.isTempCached)
+		if (userInfo.shouldBreakWaitLoopForever)
+		{
+			return 0;
+		}
+		else if (theSong.isFullyCached || userInfo.isTempCached)
 		{
 			// Return actual file size on disk
 			length = theSong.localFileSize;
@@ -314,15 +319,21 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 	
 	// Read from the file
 	DWORD bytesRead = fread(buffer, 1, length, userInfo.myFileHandle);
+	//DLog(@"bytesRead: %u", bytesRead);
 	
 	// If no bytes were read, reset the EOF marker
 	if (!bytesRead)
 	{
-		fpos_t pos; 
+		fpos_t pos;
 		fgetpos(userInfo.myFileHandle, &pos);
 		//fpos_t newpos = pos - bytesRead;
 		//fsetpos(userInfo.myFileHandle, &newpos);
 		fsetpos(userInfo.myFileHandle, &pos);
+	}
+	
+	if (!bytesRead && userInfo.isSongStarted)
+	{
+		userInfo.isFileUnderrun = YES;
 	}
 	
 	return bytesRead;
@@ -340,6 +351,12 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 	
 	BOOL success = !fseek(userInfo.myFileHandle, offset, SEEK_SET);
 	
+	if (offset == 0)
+	{
+		userInfo.isSongStarted = YES;
+		if ([[sharedInstance stringFromStreamType:userInfo.myStream plugin:0] isEqualToString:@"FLAC"])
+			userInfo.isFlac = YES;
+	}
 	//DLog(@"File Seek to %llu  success: %@", offset, NSStringFromBOOL(success));
 	
 	return success;
@@ -456,20 +473,11 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 	}
 }
 
-/*- (void)invalidateRingBufferCache
-{
-	@synchronized(ringBufferSyncObject)
-	{
-		ringBuffer->writePosition = ringBuffer->readPosition;
-	}
-}*/
-
 - (void)clearAudioBuffer:(ISMS_AudioBuffer *)audioBuffer
 {
 	if (audioBuffer->isFilled)
 		free(audioBuffer->buffer);
 	
-	//audioBuffer->hasRead = YES;
 	audioBuffer->isFilled = NO;
 }
 
@@ -482,12 +490,9 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 	{
 		ISMS_AudioBuffer *audioBuffer = ringBuffer->buffers[ringBuffer->writePosition];
 		[self clearAudioBuffer:audioBuffer];
-		
-		DLog(@"filling buffer: %u", ringBuffer->writePosition);
-		
+				
 		audioBuffer->buffer = buffer;
 		audioBuffer->length = length;
-		//audioBuffer->hasRead = NO;
 		audioBuffer->isFilled = YES;
 		
 		if (songEnded)
@@ -642,16 +647,26 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 			//DLog(@"getting output data");
 			
 			// Fill the buffer if there are empty slots
+			DLog(@"ringbuffer free slots: %u", ringBuffer->freeSlots);
 			if (ringBuffer->freeSlots > 0)
 			{
 				void *tempBuffer = malloc(sizeof(char) * ringBuffer->bufferSize);
 				DWORD tempLength = BASS_ChannelGetData(self.currentReadingStream, tempBuffer, ringBuffer->bufferSize);
 				
-				// Wait for more data if necessary
-				if (BASS_ChannelIsActive(self.currentReadingStream) && !tempLength && !ringBuffer->freeSlots)
-				{	
-					BassUserInfo *userInfo = [self userInfoForStream:self.currentStream];
+				BassUserInfo *userInfo = [self userInfoForStream:self.currentStream];
+				BOOL shouldPause = NO;
+				if (userInfo.isFlac && BASS_ChannelIsActive(self.currentReadingStream) && userInfo.isFileUnderrun)
+					shouldPause = YES;
+				else if (!userInfo.isFlac && BASS_ChannelIsActive(self.currentReadingStream) && tempLength < ringBuffer->bufferSize && ringBuffer->freeSlots == ringBuffer->length)
+					shouldPause = YES;
+				
+				//if (BASS_ChannelIsActive(self.currentReadingStream) && tempLength < ringBuffer->bufferSize && ringBuffer->freeSlots == ringBuffer->length)
+				//if (BASS_ChannelIsActive(self.currentReadingStream) && userInfo.isFileUnderrun)
+				if (shouldPause)
+				{						
+					//BassUserInfo *userInfo = [self userInfoForStream:self.currentStream];
 					userInfo.isWaiting = YES;
+					userInfo.isFileUnderrun = NO;
 					
 					//DLog(@"progress: %f  bytesRead: %u  length needed: %u", sharedInstance.progress, bytesRead, length);
 					
@@ -678,7 +693,7 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 							// Check if we should break every 100th of a second
 							[NSThread sleepForTimeInterval:sleepTime];
 							totalSleepTime += sleepTime;
-							if (userInfo.shouldBreakWaitLoop)
+							if (userInfo.shouldBreakWaitLoop || userInfo.shouldBreakWaitLoopForever)
 								break;
 							
 							// Only check the file size every half a second
@@ -712,7 +727,6 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 					}
 				}
 				
-				DLog(@"%u", tempLength);
 				[self fillBuffer:tempBuffer length:tempLength];
 			}
 			
@@ -723,7 +737,7 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 						
 			// Check if stream is now complete
 			if (!BASS_ChannelIsActive(self.currentReadingStream))
-			{
+			{				
 				// Stream is done, free the stream
 				//DLog(@"current stream: %u  currentStreamTempo: %u", self.currentStream, self.currentStreamTempo); 
 				if (self.currentStreamTempo) BASS_StreamFree(self.currentStreamTempo);
@@ -760,7 +774,7 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 			r = [self readBuffer:buffer length:length];
 		}
 		else
-		{
+		{			
 			// Send song end notification
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnded];
 			
@@ -884,7 +898,10 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 
 - (void)bassSetGainLevel:(float)gain
 {
-	BASS_BFX_VOLUME volumeParamsInit = {0, gain};
+	CGFloat modifiedGainValue = self.isEqualizerOn ? gain - ISMS_EqualizerGainReduction : gain;
+	modifiedGainValue = modifiedGainValue < 0. ? 0. : modifiedGainValue;
+	
+	BASS_BFX_VOLUME volumeParamsInit = {0, modifiedGainValue};
 	BASS_BFX_VOLUME *volumeParams = &volumeParamsInit;
 	BASS_FXSetParameters(self.volumeFx, volumeParams);
 }
@@ -929,8 +946,10 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startWithOffsetInBytesorSecondsInternal:) object:nil];
 		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(prepareNextSongStreamInternal) object:nil];
 		
-		[self userInfoForStream:self.currentStream].shouldBreakWaitLoop = YES;
-		[self userInfoForStream:self.nextStream].shouldBreakWaitLoop = YES;
+		[self userInfoForStream:self.currentStream].shouldBreakWaitLoopForever = YES;
+		[self userInfoForStream:self.nextStream].shouldBreakWaitLoopForever = YES;
+		DLog(@"current stream userinfo: %@  should break: %@", [self userInfoForStream:self.currentStream], NSStringFromBOOL([self userInfoForStream:self.currentStream].shouldBreakWaitLoopForever));
+		DLog(@"next stream userinfo: %@  should break: %@", [self userInfoForStream:self.nextStream], NSStringFromBOOL([self userInfoForStream:self.nextStream].shouldBreakWaitLoopForever));
 		
 		BOOL success = BASS_Free();
 		self.fileStream1 = 0;
@@ -1555,6 +1574,8 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 
 - (void)setUserInfo:(BassUserInfo *)userInfo forStream:(HSTREAM)stream
 {
+	userInfo.myStream = stream;
+	
 	NSString *key = [NSString stringWithFormat:@"%i", stream];
 	[bassUserInfoDict setObject:userInfo forKey:key];
 }
@@ -1681,11 +1702,13 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	if (self.isEqualizerOn)
 	{
 		[self clearEqualizerValues];
+		[self bassSetGainLevel:settingsS.gainMultiplier];
 		return NO;
 	}
 	else
 	{
 		[self applyEqualizerValues:self.eqValueArray];
+		[self bassSetGainLevel:settingsS.gainMultiplier];
 		return YES;
 	}
 }
