@@ -250,9 +250,11 @@
 
 - (BOOL)removeFromCachedSongsTable
 {
-	//return [Song removeSongFromCacheDbByMD5:[self.path md5]];
+	return [Song removeSongFromCacheDbByMD5:[self.path md5]];
 	
-	DLog(@"removing %@ from cachedSongs", self.title);
+	// TODO: Figure out why the fuck I was doing this instead of calling the class method
+	// this causes an orphaned file to be created whenever a stream is canceled part-way done
+	/*DLog(@"removing %@ from cachedSongs", self.title);
 	[self.db executeUpdate:@"DELETE FROM cachedSongs WHERE md5 = ?", [self.path md5]];
 	
 	if ([self.db hadError]) 
@@ -260,7 +262,7 @@
 		DLog(@"Err removing song from cached songs table %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
 	}
 	
-	return ![self.db hadError];
+	return ![self.db hadError];*/
 }
 
 - (BOOL)removeFromCacheQueue

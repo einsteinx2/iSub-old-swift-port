@@ -234,7 +234,6 @@
 
 - (Song *)nextSong
 {
-	//DLog(@"current index: %i   nextIndex: %i   nextSong: %@", self.currentIndex, self.nextIndex, [self songForIndex:self.nextIndex]);
 	return [self songForIndex:self.nextIndex];
 }
 
@@ -345,6 +344,36 @@
 			default:
 				break;
 		}
+	}
+}
+
+- (NSUInteger)indexForOffsetFromCurrentIndex:(NSUInteger)offset
+{
+	@synchronized(self.class)
+	{
+		NSUInteger index = self.currentIndex;
+		switch (self.repeatMode) 
+		{
+			case ISMSRepeatMode_RepeatAll:	
+				for (int i = 0; i < offset; i++)
+				{
+					index = [self songForIndex:index + 1] ? index + 1 : 0;
+				}
+				break;
+			case ISMSRepeatMode_Normal:
+				for (int i = 0; i < offset; i++)
+				{
+					if (![self songForIndex:index] && ![self songForIndex:index + 1])
+						index = index;
+					else
+						index++;
+				}
+				break;
+			default:
+				break;
+		}
+		
+		return index;
 	}
 }
 

@@ -45,7 +45,7 @@
 #define isThrottleLoggingEnabled NO
 
 @implementation ISMSStreamHandler
-@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, bitrate, secondsOffset, partialPrecacheSleep, isDownloading, isCurrentSong, shouldResume;
+@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, bitrate, secondsOffset, partialPrecacheSleep, isDownloading, isCurrentSong, shouldResume, contentLength;
 
 - (void)setup
 {
@@ -62,6 +62,7 @@
 	bitrate = 0;
 	partialPrecacheSleep = YES;
 	isDownloading = NO;
+	contentLength = ULLONG_MAX;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playlistIndexChanged) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 }
@@ -158,6 +159,7 @@
 	}
 	
 	NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(mySong.songId), @"id", nil];
+	[parameters setObject:@"true" forKey:@"estimateContentLength"];
 	if (settingsS.currentMaxBitrate != 0)
 	{
 		NSString *maxBitRate = [[NSString alloc] initWithFormat:@"%i", settingsS.currentMaxBitrate];
@@ -262,7 +264,7 @@
 
 #pragma mark - Connection Delegate
 
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
+- (BOOL)connection:(NSURLConnection *)theConnection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
 {
 	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
 		return YES; // Self-signed cert will be accepted
@@ -270,7 +272,7 @@
 	return NO;
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+- (void)connection:(NSURLConnection *)theConnection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {	
 	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
 	{
@@ -279,16 +281,36 @@
 	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+- (void)connection:(NSURLConnection *)theConnection didReceiveResponse:(NSURLResponse *)response
 {
-#ifdef DEBUG
 	if ([response isKindOfClass:[NSHTTPURLResponse class]])
 	{
 		NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
 		DLog(@"allHeaderFields: %@", [httpResponse allHeaderFields]);
 		DLog(@"statusCode: %i - %@", [httpResponse statusCode], [NSHTTPURLResponse localizedStringForStatusCode:[httpResponse statusCode]]);
+		
+		if ([httpResponse statusCode] >= 500)
+		{
+			// This is a failure, cancel the connection and call the didFail delegate method
+			[self.connection cancel];
+			[self connection:self.connection didFailWithError:nil];
+		}
+		else
+		{
+			if (self.contentLength == ULLONG_MAX)
+			{
+				// Set the content length if it isn't set already, only set the first connection, not on retries
+				NSString *contentLengthString = [[httpResponse allHeaderFields] objectForKey:@"Content-Length"];
+				if (contentLengthString)
+				{
+					NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+					self.contentLength = [[formatter numberFromString:contentLengthString] unsignedLongLongValue];
+					[formatter release];
+				}
+			}
+		}
 	}
-#endif
+	
 	self.bytesTransferred = 0;
 }
 
@@ -462,8 +484,19 @@
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {		
 	DLog(@"Connection Finished Successfully for %@", mySong.title);
-	// Perform these operations on the main thread
-	[self performSelectorOnMainThread:@selector(didFinishLoadingInternal) withObject:nil waitUntilDone:YES];
+	DLog(@"localSize: %llu   contentLength: %llu", mySong.localFileSize, self.contentLength);
+	
+	// Check to see if we're within 100K of the contentLength (to allow some leeway for contentLength estimation of transcoded songs
+	if (self.contentLength != ULLONG_MAX && mySong.localFileSize < self.contentLength - BytesToKB(100))
+	{
+		// This is a failed connection that didn't call didFailInternal for some reason, so call didFailWithError
+		[self connection:theConnection didFailWithError:nil];
+	}
+	else 
+	{
+		// Perform these operations on the main thread
+		[self performSelectorOnMainThread:@selector(didFinishLoadingInternal) withObject:nil waitUntilDone:YES];
+	}
 	
 	// Stop the run loop so the thread can die
 	[self cancelRunLoop];
@@ -520,6 +553,7 @@
 	[encoder encodeBool:self.isDelegateNotifiedToStartPlayback forKey:@"isDelegateNotifiedToStartPlayback"];
 	[encoder encodeBool:self.isTempCache forKey:@"isTempCache"];
 	[encoder encodeBool:self.isDownloading forKey:@"isDownloading"];
+	[encoder encodeInt64:self.contentLength forKey:@"contentLength"];
 }
 
 
@@ -535,6 +569,7 @@
 		isDelegateNotifiedToStartPlayback = [decoder decodeBoolForKey:@"isDelegateNotifiedToStartPlayback"];
 		isTempCache = [decoder decodeBoolForKey:@"isTempCache"];
 		isDownloading = [decoder decodeBoolForKey:@"isDownloading"];
+		contentLength = [decoder decodeInt64ForKey:@"contentLength"];
 	}
 	
 	return self;

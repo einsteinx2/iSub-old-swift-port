@@ -49,6 +49,7 @@ typedef struct
 	DWORD length;
 	DWORD freeSlots;
 	DWORD bufferSize;
+	BOOL stopFilling;
 } ISMS_RingBuffer;
 
 @class Song, BassParamEqValue, BassUserInfo;
@@ -66,6 +67,8 @@ typedef struct
 }
 
 + (AudioEngine *)sharedInstance;
+
+@property (retain) NSThread *ringBufferThread;
 
 @property (retain) NSMutableArray *eqValueArray;
 @property (retain) NSMutableArray *eqHandleArray;

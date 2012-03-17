@@ -26,7 +26,7 @@
 
 @implementation ISMSCacheQueueManager
 @synthesize isQueueDownloading, currentQueuedSong;
-@synthesize fileHandle, downloadLength, connection;
+@synthesize fileHandle, downloadLength, connection, contentLength;
 
 #pragma mark - Lyric Loader Delegate
 
@@ -114,6 +114,7 @@
 	
 	// Start the download
 	NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:n2N(self.currentQueuedSong.songId) forKey:@"id"];
+	[parameters setObject:@"true" forKey:@"estimateContentLength"];
 	if (settingsS.currentMaxBitrate != 0)
 	{
 		NSString *bitrate = [[NSString alloc] initWithFormat:@"%i", settingsS.currentMaxBitrate];
@@ -124,6 +125,7 @@
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)
 	{
+		self.contentLength = ULLONG_MAX;
 		self.downloadLength = 0;
 		self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.currentQueuedSong.localPath];
 
@@ -154,7 +156,8 @@
 	// Create the request and resume the download
 	if (!viewObjectsS.isOfflineMode)
 	{
-        NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(self.currentQueuedSong.songId) forKey:@"id"];
+        NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:n2N(self.currentQueuedSong.songId) forKey:@"id"];
+		[parameters setObject:@"true" forKey:@"estimateContentLength"];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters];
         
 		NSString *range = [NSString stringWithFormat:@"bytes=%i-", [byteOffset unsignedIntValue]];
@@ -171,12 +174,14 @@
 {
 	DLog(@"stopping download queue");
 	self.isQueueDownloading = NO;
-	
+		
 	[self.connection cancel];
 	DLog(@"self.connection: %@", self.connection);
 	self.connection = nil;
 	self.fileHandle = nil;
 	[[NSFileManager defaultManager] removeItemAtPath:self.currentQueuedSong.localPath error:NULL];
+	
+	self.contentLength = ULLONG_MAX;
 	
 	if (!streamManagerS.isQueueDownloading) 
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
@@ -201,8 +206,36 @@
 	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+- (void)connection:(NSURLConnection *)theConnection didReceiveResponse:(NSURLResponse *)response
 {
+	if ([response isKindOfClass:[NSHTTPURLResponse class]])
+	{
+		NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+		DLog(@"allHeaderFields: %@", [httpResponse allHeaderFields]);
+		DLog(@"statusCode: %i - %@", [httpResponse statusCode], [NSHTTPURLResponse localizedStringForStatusCode:[httpResponse statusCode]]);
+		
+		if ([httpResponse statusCode] >= 500)
+		{
+			// This is a failure, cancel the connection and call the didFail delegate method
+			[self.connection cancel];
+			[self connection:self.connection didFailWithError:nil];
+		}
+		else
+		{
+			if (self.contentLength == ULLONG_MAX)
+			{
+				// Set the content length if it isn't set already, only set the first connection, not on retries
+				NSString *contentLengthString = [[httpResponse allHeaderFields] objectForKey:@"Content-Length"];
+				if (contentLengthString)
+				{
+					NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+					self.contentLength = [[formatter numberFromString:contentLengthString] unsignedLongLongValue];
+					[formatter release];
+				}
+			}
+		}
+	}
+	
 	[self.fileHandle truncateFileAtOffset:0];
 }
 
@@ -246,37 +279,45 @@
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
 	DLog(@"theConnection: %@", theConnection);
-	
 	DLog(@"queue download finished: %@", self.currentQueuedSong.title);
-	if (!streamManagerS.isQueueDownloading) 
-		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 	
-	// Check if the file is less than 500 bytes. If it is, then it's almost definitely an API expiration notice
-	if (self.downloadLength < 500)
+	// Check to see if we're within 100K of the contentLength (to allow some leeway for contentLength estimation of transcoded songs
+	if (self.contentLength != ULLONG_MAX && currentQueuedSong.localFileSize < self.contentLength - BytesToKB(100))
 	{
-		// Show an alert and delete the file
-		UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"Notice" message:@"No song data returned. This could be because your Subsonic API trial has expired, this song is not an mp3 and the Subsonic transcoding plugins failed, or another reason." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil] autorelease];
-		alert.tag = 4;
-		[alert show];
-		[alert release];
-		[[NSFileManager defaultManager] removeItemAtPath:self.currentQueuedSong.localPath error:NULL];
-		self.isQueueDownloading = NO;
+		[self connection:self.connection didFailWithError:nil];
 	}
 	else
 	{
-		self.currentQueuedSong.isFullyCached = YES;
-		[self.currentQueuedSong removeFromCacheQueue];
-		self.currentQueuedSong = nil;
+		if (!streamManagerS.isQueueDownloading) 
+			[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 		
-		// Close the file
-		[self.fileHandle closeFile];
-		self.fileHandle = nil;
-		
-		// Tell the cache queue view to reload
-		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CacheQueueSongDownloaded];
-		
-		// Download the next song in the queue
-		[self startDownloadQueue];
+		// Check if the file is less than 500 bytes. If it is, then it's almost definitely an API expiration notice
+		if (self.downloadLength < 500)
+		{
+			// Show an alert and delete the file
+			UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"Notice" message:@"No song data returned. This could be because your Subsonic API trial has expired, this song is not an mp3 and the Subsonic transcoding plugins failed, or another reason." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil] autorelease];
+			alert.tag = 4;
+			[alert show];
+			[alert release];
+			[[NSFileManager defaultManager] removeItemAtPath:self.currentQueuedSong.localPath error:NULL];
+			self.isQueueDownloading = NO;
+		}
+		else
+		{
+			self.currentQueuedSong.isFullyCached = YES;
+			[self.currentQueuedSong removeFromCacheQueue];
+			self.currentQueuedSong = nil;
+			
+			// Close the file
+			[self.fileHandle closeFile];
+			self.fileHandle = nil;
+			
+			// Tell the cache queue view to reload
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CacheQueueSongDownloaded];
+			
+			// Download the next song in the queue
+			[self startDownloadQueue];
+		}
 	}
 	
 	self.connection = nil;
@@ -297,6 +338,8 @@ static ISMSCacheQueueManager *sharedInstance = nil;
 
 - (void)setup
 {
+	self.contentLength = ULLONG_MAX;
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self 
 											 selector:@selector(didReceiveMemoryWarning) 
 												 name:UIApplicationDidReceiveMemoryWarningNotification 

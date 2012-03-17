@@ -244,15 +244,17 @@ static void destroy_versionArrays()
 
 - (void)drawTheEq
 {		
-	if (!audioEngineS.isPlaying)
+	if (!audioEngineS.isPlaying || visualType == ISMSBassVisualType_none)
 		return;
 	
 	[audioEngineS readEqData];
 	
 	switch(visualType)
 	{
-			int x, y, y1;
-			
+		int x, y, y1;
+		
+		case ISMSBassVisualType_none:
+			break;
 		case ISMSBassVisualType_line:
 		{
 			[self eraseBitBuffer];
@@ -484,7 +486,7 @@ static void destroy_versionArrays()
 	
 	//Clear the buffer
 	glBindFramebufferOES(GL_FRAMEBUFFER_OES, viewFramebuffer);
-	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glClearColor(0., 0., 0., 0.);
 	glClear(GL_COLOR_BUFFER_BIT);
 	
 	//Display the buffer
@@ -501,6 +503,13 @@ static void destroy_versionArrays()
 {
 	switch (type)
 	{
+		case ISMSBassVisualType_none:
+			[audioEngineS stopReadingEqData];
+			[self eraseBitBuffer];
+			[self erase];
+			visualType = ISMSBassVisualType_none;
+			break;
+			
 		case ISMSBassVisualType_line:
 			[audioEngineS startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_line];
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -536,7 +545,7 @@ static void destroy_versionArrays()
 	ISMSBassVisualType type = 0;
 	switch (visualType)
 	{
-		case ISMSBassVisualType_line:
+		case ISMSBassVisualType_none:
 			type = ISMSBassVisualType_skinnyBar; break;
 		case ISMSBassVisualType_skinnyBar:
 			type = ISMSBassVisualType_fatBar; break;
@@ -544,6 +553,8 @@ static void destroy_versionArrays()
 			type = ISMSBassVisualType_aphexFace; break;
 		case ISMSBassVisualType_aphexFace:
 			type = ISMSBassVisualType_line; break;
+		case ISMSBassVisualType_line:
+			type = ISMSBassVisualType_none; break;
 	}
 	[self changeType:type];
 }

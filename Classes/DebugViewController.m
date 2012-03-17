@@ -154,7 +154,7 @@
 		}
 				
 		// Set the next song progress bar
-		if (playlistS.nextSong.path != nil)
+		if (self.nextSong.path != nil)
 		{
 			// Make sure label and progress view aren't greyed out
 			nextSongLabel.alpha = 1.0;

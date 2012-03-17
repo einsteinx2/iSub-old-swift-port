@@ -28,6 +28,10 @@ typedef enum
 - (Song *)songForIndex:(NSUInteger)index;
 - (NSInteger)decrementIndex;
 - (NSInteger)incrementIndex;
+
+
+- (NSUInteger)indexForOffsetFromCurrentIndex:(NSUInteger)offset;
+
 // Convenience properties
 @property (readonly) Song *prevSong;
 @property (readonly) Song *currentDisplaySong;

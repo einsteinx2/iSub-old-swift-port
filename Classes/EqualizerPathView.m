@@ -9,16 +9,47 @@
 #import "EqualizerPathView.h"
 #import "UIBezierPath+Smoothing.h"
 #import "BassParamEqValue.h"
+#import "AudioEngine.h"
 
 static CGColorRef strokeColor;
-static CGColorRef fillColor;
+static CGColorRef fillColorOff;
+static CGColorRef fillColorOn;
 
 @implementation EqualizerPathView
 
 + (void)initialize
 {
-	strokeColor = [[UIColor alloc] initWithWhite:1. alpha:.5].CGColor;	
-	fillColor = [[UIColor alloc] initWithWhite:1. alpha:.25].CGColor;
+	strokeColor  = [[UIColor alloc] initWithWhite:1. alpha:.5].CGColor;
+	
+	fillColorOff = [[UIColor alloc] initWithWhite:1. alpha:.25].CGColor;
+	fillColorOn  = [[UIColor alloc] initWithRed:98./255. green:180./255. blue:223./255. alpha:.50].CGColor;
+}
+
+- (id)init
+{
+	if ((self = [super init]))
+	{
+		points = NULL;
+	}
+	return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+	if ((self = [super initWithCoder:aDecoder]))
+	{
+		points = NULL;
+	}
+	return self;
+}
+
+- (id)initWithFrame:(CGRect)frame
+{
+	if ((self = [super initWithFrame:frame]))
+	{
+		points = NULL;
+	}
+	return self;
 }
 
 - (NSString *)stringFromFrequency:(NSUInteger)frequency
@@ -104,7 +135,7 @@ static CGColorRef fillColor;
 	CGFloat halfEqWidth = eqWidth / 2.0;
 		
 	CGContextRef context = UIGraphicsGetCurrentContext();
-	CGContextSetFillColorWithColor(context, fillColor);
+	CGContextSetFillColorWithColor(context, audioEngineS.isEqualizerOn ? fillColorOn : fillColorOff);
 	CGContextSetBlendMode(context, kCGBlendModeLighten);
 	
 	for (int i = 0; i < length; i++)
@@ -123,21 +154,22 @@ static CGColorRef fillColor;
 		CGContextAddQuadCurveToPoint(context, control.x, control.y, end.x, end.y);
 		CGContextFillPath(context);
 	}
-	
-	free(points);
 }
 
 - (void)drawRect:(CGRect)rect 
 {
 	// Draw the axis labels
 	[self drawTicksAndLabels];
-	
+		
 	// Smooth and draw the eq path
 	[self drawCurve];
 }
 
 - (void)setPoints:(CGPoint *)thePoints length:(NSUInteger)theLength
 {
+	if (points != NULL)
+		free(points);
+	
 	points = thePoints;
 	length = theLength;
 	

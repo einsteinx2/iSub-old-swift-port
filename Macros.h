@@ -99,10 +99,11 @@
 
 typedef enum
 {
-	ISMSBassVisualType_line		 = 0,
-	ISMSBassVisualType_skinnyBar = 1,
-	ISMSBassVisualType_fatBar	 = 2,
-	ISMSBassVisualType_aphexFace = 3
+	ISMSBassVisualType_none		 = 0,
+	ISMSBassVisualType_line		 = 1,
+	ISMSBassVisualType_skinnyBar = 2,
+	ISMSBassVisualType_fatBar	 = 3,
+	ISMSBassVisualType_aphexFace = 4
 } ISMSBassVisualType;
 
 #endif

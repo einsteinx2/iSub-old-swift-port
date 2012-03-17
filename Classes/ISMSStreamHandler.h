@@ -33,6 +33,7 @@
 @property BOOL isDownloading;
 @property BOOL isCurrentSong;
 @property BOOL shouldResume;
+@property unsigned long long contentLength;
 
 - (void)start:(BOOL)resume;
 - (void)start;

@@ -700,6 +700,8 @@
 		[self createEqViews];
 	}
 	[self updateToggleButton];
+	
+	[equalizerPath setNeedsDisplay];
 }
 
 - (void)updateToggleButton

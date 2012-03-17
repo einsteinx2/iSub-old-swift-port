@@ -26,7 +26,7 @@
 #import "iSubAppDelegate.h"
 #import "ISMSCacheQueueManager.h"
 
-#define maxNumOfReconnects 3
+#define maxNumOfReconnects 5
 
 @implementation ISMSStreamManager
 @synthesize handlerStack, lyricsDAO, lastCachedSong, lastTempCachedSong;

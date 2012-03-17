@@ -21,6 +21,8 @@
 @property (retain) NSFileHandle *fileHandle;
 @property (retain) NSURLConnection *connection;
 
+@property unsigned long long contentLength;
+
 + (ISMSCacheQueueManager *)sharedInstance;
 
 - (void)startDownloadQueue;
