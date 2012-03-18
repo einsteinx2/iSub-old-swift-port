@@ -34,6 +34,7 @@
 @property BOOL isCurrentSong;
 @property BOOL shouldResume;
 @property unsigned long long contentLength;
+@property NSInteger maxBitrateSetting;
 
 - (void)start:(BOOL)resume;
 - (void)start;

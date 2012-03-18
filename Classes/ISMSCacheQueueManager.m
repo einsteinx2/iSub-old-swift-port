@@ -187,6 +187,18 @@
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
 
+- (void)removeCurrentSong
+{
+	if (self.isQueueDownloading)
+		[self stopDownloadQueue];
+	
+	NSString *md5 = [self.currentQueuedSong.path md5];
+	[databaseS.cacheQueueDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", md5];
+	
+	if (!self.isQueueDownloading)
+		[self startDownloadQueue];
+}
+
 #pragma mark - NSURLConnectionDelegate
 
 - (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 

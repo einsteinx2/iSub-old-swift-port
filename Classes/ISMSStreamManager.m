@@ -25,6 +25,7 @@
 #import "NSArray+Additions.h"
 #import "iSubAppDelegate.h"
 #import "ISMSCacheQueueManager.h"
+#import "NSNotificationCenter+MainThread.h"
 
 #define maxNumOfReconnects 5
 
@@ -612,6 +613,8 @@
 		ISMSStreamHandler *handler = (ISMSStreamHandler *)[self.handlerStack firstObjectSafe];
 		[self startHandler:handler];
 	}
+	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_StreamHandlerSongDownloaded];
 }
 
 #pragma mark - SUSLoader handler

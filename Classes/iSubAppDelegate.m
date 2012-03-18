@@ -346,8 +346,10 @@
 		[FlurryAnalytics setSecureTransportEnabled:YES];
 		
 		// Send the firmware version
-		NSDictionary *params = [NSDictionary dictionaryWithObject:[[UIDevice currentDevice] completeVersionString] forKey:@"FirmwareVersion"];
-		[FlurryAnalytics logEvent:@"FirmwareVersion" withParameters:params];
+		UIDevice *device = [UIDevice currentDevice];
+		NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:[device completeVersionString], @"FirmwareVersion", 
+																		  [device platform], @"HardwareVersion", nil];
+		[FlurryAnalytics logEvent:@"DeviceInfo" withParameters:params];
 	}
 }
 

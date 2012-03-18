@@ -32,6 +32,7 @@
 @synthesize  location;
 @synthesize  previousLocation;
 @synthesize drawTimer;
+@synthesize visualType;
 
 static float drawInterval = 1./20.;
 static int specWidth; //256 or 512

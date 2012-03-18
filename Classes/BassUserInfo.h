@@ -20,6 +20,7 @@
 @property BOOL isTempCached;
 @property BOOL isSongStarted;
 @property BOOL isFileUnderrun;
+@property BOOL wasFileJustUnderrun;
 @property uint32_t myStream;
 @property BOOL isFlac;
 @end

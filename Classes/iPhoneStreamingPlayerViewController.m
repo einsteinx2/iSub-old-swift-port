@@ -101,7 +101,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	pauseSlider = NO;
 	
 	coverArtImageView.isLarge = YES;
-	coverArtImageView.delegate = self;
+	//coverArtImageView.delegate = self;
 
 	// Create the extra views not in the XIB file
 	[self createDownloadProgressView];
@@ -394,6 +394,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[positions setObject:[NSValue valueWithCGRect:playButton.frame] forKey:@"playButton"];
 		[positions setObject:[NSValue valueWithCGRect:nextButton.frame] forKey:@"nextButton"];
 		[positions setObject:[NSValue valueWithCGRect:eqButton.frame] forKey:@"eqButton"];
+		[positions setObject:[NSValue valueWithCGRect:extraButtonsButton.frame] forKey:@"extraButtonsButton"];
 		self.originalViewFrames = [NSDictionary dictionaryWithDictionary:positions];
 		
 		if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
@@ -404,7 +405,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			nextButton.origin = CGPointMake(425, 184);
 			volumeSlider.frame = CGRectMake(300, 244, 180, 55);
 			volumeView.frame = CGRectMake(0, 0, 180, 55);
-			eqButton.origin = CGPointMake(372.5, 20);
+			eqButton.origin = CGPointMake(328, 20);
+			extraButtonsButton.origin = CGPointMake(418, 20);
 		}
 		else
 		{
@@ -489,6 +491,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			playButton.frame = [[originalViewFrames objectForKey:@"playButton"] CGRectValue];
 			nextButton.frame = [[originalViewFrames objectForKey:@"nextButton"] CGRectValue];
 			eqButton.frame = [[originalViewFrames objectForKey:@"eqButton"] CGRectValue];
+			extraButtonsButton.frame = [[originalViewFrames objectForKey:@"extraButtonsButton"] CGRectValue];
 			volumeSlider.frame = [[originalViewFrames objectForKey:@"volumeSlider"] CGRectValue];
 			
 			CGRect volumeFrame = [[originalViewFrames objectForKey:@"volumeSlider"] CGRectValue];
@@ -503,7 +506,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			artistLabel.alpha = 0.1;
 			albumLabel.alpha = 0.1;
 			titleLabel.alpha = 0.1;
-			eqButton.alpha = 1.0;
 			
 			CGFloat width = 320 * pageControlViewController.numberOfPages;
 			CGFloat height = pageControlViewController.numberOfPages == 1 ? 320 : 300;
@@ -515,7 +517,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			prevButton.origin = CGPointMake(315, 184);
 			playButton.origin = CGPointMake(372.5, 184);
 			nextButton.origin = CGPointMake(425, 184);
-			eqButton.origin = CGPointMake(372.5, 20);
+			eqButton.origin = CGPointMake(328, 20);
+			extraButtonsButton.origin = CGPointMake(418, 20);
 			volumeSlider.frame = CGRectMake(300, 244, 180, 55);
 			
 			if (settingsS.isJukeboxEnabled)
@@ -528,7 +531,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			artistLabel.alpha = 1.0;
 			albumLabel.alpha = 1.0;
 			titleLabel.alpha = 1.0;
-			eqButton.alpha = 1.0;
 			
 			CGFloat width = 300 * pageControlViewController.numberOfPages;
 			CGFloat height = pageControlViewController.numberOfPages == 1 ? 270 : 250;
@@ -653,7 +655,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {	
 	self.currentSong = playlistS.currentDisplaySong;
 	
-	lastProgress = 0;
+	lastProgress = NSUIntegerMax;
 	
 	//DLog(@"currentSong parentId: %@", currentSong.parentId);
 	
@@ -904,11 +906,14 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	{
 		[musicS prevSong];
 	}
+	
+	[self initSongInfo];
 }
 
 - (IBAction)nextButtonPressed:(id)sender
 {
 	[musicS nextSong];
+	[self initSongInfo];
 }
 
 /*- (void)showExtraButtonsTemporarilyAnimated
@@ -1441,6 +1446,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 				progress = audioEngineS.progress;
 			else
 				progress = [currentSong isEqualToSong:audioEngineS.currentStreamSong] ? audioEngineS.progress : 0.;
+			//progress = audioEngineS.progress;
 			
 			if (lastProgress != ceil(progress))
 			{

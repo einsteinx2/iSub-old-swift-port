@@ -50,6 +50,7 @@
 #define ISMSNotification_ShowPlayer @"ISMS show player"
 
 #define ISMSNotification_CacheQueueSongDownloaded @"ISMS cache queue song downloaded"
+#define ISMSNotification_StreamHandlerSongDownloaded @"ISMS stream handler song downloaded"
 
 #define ISMSNotification_CacheSizeChecked @"ISMS cache size checked"
 

@@ -81,6 +81,7 @@
 - (void)registerForNotifications
 {
 	// Set notification receiver for when queued songs finish downloading to reload the table
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTable) name:ISMSNotification_StreamHandlerSongDownloaded object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTable) name:ISMSNotification_CacheQueueSongDownloaded object:nil];
 	
 	// Set notification receiver for when cached songs are deleted to reload the table
@@ -92,6 +93,7 @@
 
 - (void)unregisterForNotifications
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_StreamHandlerSongDownloaded object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CacheQueueSongDownloaded object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"cachedSongDeleted" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
@@ -262,20 +264,6 @@
 	{
 		self.navigationItem.rightBarButtonItem = nil;
 	}
-	
-	// Reload the data in case it changed
-	if (settingsS.isCacheUnlocked)
-	{
-		self.tableView.tableHeaderView.hidden = NO;
-		
-		segmentedControl.selectedSegmentIndex = 0;
-		[self segmentAction:nil];
-	}
-	else
-	{
-		self.tableView.tableHeaderView.hidden = YES;
-		[self addNoSongsScreen];
-	}
 }
 
 - (void)viewWillAppear:(BOOL)animated 
@@ -294,6 +282,39 @@
 	[self updateCacheSizeLabel];
 	
 	[FlurryAnalytics logEvent:@"CacheTab"];
+	
+	// Reload the data in case it changed
+	if (settingsS.isCacheUnlocked)
+	{
+		self.tableView.tableHeaderView.hidden = NO;
+		
+		segmentedControl.selectedSegmentIndex = 0;
+		[self segmentAction:nil];
+	}
+	else
+	{
+		self.tableView.tableHeaderView.hidden = YES;
+		[self addNoSongsScreen];
+	}
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+	[super viewDidAppear:animated];
+	
+	// Must do this here as well or the no songs overlay will be off sometimes
+	if (settingsS.isCacheUnlocked)
+	{
+		self.tableView.tableHeaderView.hidden = NO;
+		
+		segmentedControl.selectedSegmentIndex = 0;
+		[self segmentAction:nil];
+	}
+	else
+	{
+		self.tableView.tableHeaderView.hidden = YES;
+		[self addNoSongsScreen];
+	}
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -339,6 +360,7 @@
 		{
 			[self removeSaveEditButtons];
 			
+			[self addNoSongsScreen];
 			[self addNoSongsScreen];
 		}
 		else 
@@ -554,6 +576,7 @@
 		if (self.cacheQueueCount == 0)
 		{
 			[self removeSaveEditButtons];	
+			[self addNoSongsScreen];
 			[self addNoSongsScreen];
 		}
 		else
@@ -1118,21 +1141,13 @@
 		{
 			if (segmentedControl.selectedSegmentIndex == 0)
 			{
-				NSUInteger count = 0;
+				// Select all the rows
 				for (NSArray *section in listOfArtistsSections)
 				{
-					count += [section count];
-				}
-				
-				// Select all the rows
-				for (int i = 0; i < count; i++)
-				{
-					for (NSArray *section in listOfArtistsSections)
+					for (NSString *folderName in section)
 					{
-						for (NSString *folderName in section)
-						{
-							[viewObjectsS.multiDeleteList addObject:folderName];
-						}
+						DLog(@"folderName: %@", folderName);
+						[viewObjectsS.multiDeleteList addObject:folderName];
 					}
 				}
 			}

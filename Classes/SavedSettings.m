@@ -347,7 +347,7 @@
 	// Visualizer Type
 	if (![userDefaults objectForKey:@"currentVisualizerType"])
 	{
-		self.currentVisualizerType = ISMSBassVisualType_fatBar;
+		self.currentVisualizerType = ISMSBassVisualType_none;
 	}
 	
 	// Quick Skip

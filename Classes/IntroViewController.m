@@ -87,25 +87,10 @@
 	}
 	else if (sender == ownServer)
 	{
-		/*ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
-		serverListViewController.hidesBottomBarWhenPushed = YES;
-		
 		[self dismissModalViewControllerAnimated:NO];
-
-		if (IS_IPAD())
-		{
-			[NSNotificationCenter postNotificationToMainThreadWithName:@"show settings"];
-		}
-		else
-		{
-			appDelegateS.currentTabBarController.selectedIndex = 0;
-			[(UINavigationController*)appDelegateS.currentTabBarController.selectedViewController pushViewController:serverListViewController animated:YES];
-		}
 		
-		[serverListViewController release];*/
-		
-		[self dismissModalViewControllerAnimated:NO];
-		[appDelegateS showSettings];
+		// Hack to get this working on iOS 4, can't call it directly because it doesn't detect the selected tab correctly
+		[appDelegateS performSelector:@selector(showSettings) withObject:nil afterDelay:1.0];
 	}
 }
 

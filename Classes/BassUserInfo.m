@@ -10,7 +10,7 @@
 #import "Song.h"
 
 @implementation BassUserInfo
-@synthesize mySong, myFileHandle, shouldBreakWaitLoop, neededSize, isWaiting, writePath, isTempCached, shouldBreakWaitLoopForever, isSongStarted, isFileUnderrun, isFlac, myStream;
+@synthesize mySong, myFileHandle, shouldBreakWaitLoop, neededSize, isWaiting, writePath, isTempCached, shouldBreakWaitLoopForever, isSongStarted, isFileUnderrun, wasFileJustUnderrun, isFlac, myStream;
 
 - (id)init
 {

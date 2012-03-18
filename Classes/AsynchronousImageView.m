@@ -153,9 +153,9 @@
 	self.activityIndicator = nil;
 	
 	self.coverArtDAO = nil;
-	if ([delegate respondsToSelector:@selector(asyncImageViewLoadingFailed:withError:)])
+	if ([self.delegate respondsToSelector:@selector(asyncImageViewLoadingFailed:withError:)])
 	{
-		[delegate asyncImageViewLoadingFailed:self withError:error];
+		[self.delegate asyncImageViewLoadingFailed:self withError:error];
 	}
 }
 
@@ -164,12 +164,15 @@
 	[self.activityIndicator removeFromSuperview];
 	self.activityIndicator = nil;
 	
+	DLog(@"isLarge: %@", NSStringFromBOOL(self.isLarge));
+	DLog(@"delegate: %@", self.delegate);
+	
 	self.image = self.coverArtDAO.coverArtImage;
 	self.coverArtDAO = nil;
 	
-	if ([delegate respondsToSelector:@selector(asyncImageViewFinishedLoading:)])
+	if ([self.delegate respondsToSelector:@selector(asyncImageViewFinishedLoading:)])
 	{
-		[delegate asyncImageViewFinishedLoading:self];
+		[self.delegate asyncImageViewFinishedLoading:self];
 	}
 }
 

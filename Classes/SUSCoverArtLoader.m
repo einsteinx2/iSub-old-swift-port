@@ -15,6 +15,19 @@
 
 @implementation SUSCoverArtLoader
 
+static NSMutableArray *loadingImageNames;
+static NSObject *syncObject;
+
+__attribute__((constructor))
+static void initialize_navigationBarImages() 
+{
+	loadingImageNames = [[NSMutableArray alloc] init];
+	syncObject = [[NSObject alloc] init];
+}
+
+#define ISMSNotification_CoverArtFinishedInternal @"ISMS cover art finished internal notification"
+#define ISMSNotification_CoverArtFailedInternal @"ISMS cover art failed internal notification"
+
 @synthesize coverArtId, isLarge;
 
 #pragma mark - Lifecycle
@@ -25,18 +38,50 @@
 	{
 		isLarge = large;
 		coverArtId = [artId copy];
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(coverArtDownloadFinished:) name:ISMSNotification_CoverArtFinishedInternal object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(coverArtDownloadFailed:) name:ISMSNotification_CoverArtFailedInternal object:nil];
 	}
 	return self;
 }
 
 - (void)dealloc
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CoverArtFinishedInternal object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CoverArtFailedInternal object:nil];
 	[super dealloc];
 }
 
 - (SUSLoaderType)type
 {
     return SUSLoaderType_CoverArt;
+}
+
+- (void)coverArtDownloadFinished:(NSNotification *)notification
+{
+	if ([notification.object isKindOfClass:[NSString class]])
+	{
+		if ([self.coverArtId isEqualToString:notification.object])
+		{
+			// My art download finished, so notify my delegate
+			[self informDelegateLoadingFinished];
+			
+			if (isLarge)
+				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AlbumArtLargeDownloaded];
+		}
+	}
+}
+
+- (void)coverArtDownloadFailed:(NSNotification *)notification
+{
+	if ([notification.object isKindOfClass:[NSString class]])
+	{
+		if ([self.coverArtId isEqualToString:notification.object])
+		{
+			// My art download failed, so notify my delegate
+			[self informDelegateLoadingFailed:nil];
+		}
+	}
 }
 
 #pragma mark - Private DB Methods
@@ -80,36 +125,44 @@
 
 - (void)startLoad
 {
-	if (self.coverArtId && !viewObjectsS.isOfflineMode)
+	@synchronized(syncObject)
 	{
-		if (![self isCoverArtCached])
+		if (self.coverArtId && !viewObjectsS.isOfflineMode)
 		{
-			NSString *size = nil;
-			if (isLarge)
+			if (![self isCoverArtCached])
 			{
-				if (IS_IPAD())
-					size = SCREEN_SCALE() == 2.0 ? @"1080" : @"540";
-				else
-					size = SCREEN_SCALE() == 2.0 ? @"640" : @"320";
-			}
-			else
-			{
-				size = SCREEN_SCALE() == 2.0 ? @"120" : @"60";
-			}
-			
-			NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(size), @"size", n2N(self.coverArtId), @"id", nil];
-			NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getCoverArt" andParameters:parameters];
-			
-			self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
-			if (self.connection)
-			{
-				self.receivedData = [NSMutableData data];
-			} 
-			else 
-			{
-				// Inform the delegate that the loading failed.
-				NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
-				[self informDelegateLoadingFailed:error];
+				if (![loadingImageNames containsObject:self.coverArtId])
+				{
+					// This art is not loading, so start loading it
+					
+					NSString *size = nil;
+					if (isLarge)
+					{
+						if (IS_IPAD())
+							size = SCREEN_SCALE() == 2.0 ? @"1080" : @"540";
+						else
+							size = SCREEN_SCALE() == 2.0 ? @"640" : @"320";
+					}
+					else
+					{
+						size = SCREEN_SCALE() == 2.0 ? @"120" : @"60";
+					}
+					
+					NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(size), @"size", n2N(self.coverArtId), @"id", nil];
+					NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getCoverArt" andParameters:parameters];
+					
+					self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+					if (self.connection)
+					{
+						self.receivedData = [NSMutableData data];
+					} 
+					else 
+					{
+						// Inform the delegate that the loading failed.
+						NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
+						[self informDelegateLoadingFailed:error];
+					}
+				}
 			}
 		}
 	}
@@ -150,28 +203,34 @@
 	self.connection = nil;
 	
 	// Inform the delegate that loading failed
-	[self informDelegateLoadingFailed:error];
+	//[self informDelegateLoadingFailed:error];
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CoverArtFinishedInternal object:[[self.coverArtId copy] autorelease]];
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
-{	    
+{
 	// Check to see if the data is a valid image. If so, use it; if not, use the default image.
 	if([UIImage imageWithData:self.receivedData])
 	{
         DLog(@"art loading completed for: %@", self.coverArtId);
         [self.db executeUpdate:@"REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [self.coverArtId md5], self.receivedData];
-		if (isLarge)
+		
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CoverArtFinishedInternal object:[[self.coverArtId copy] autorelease]];
+		
+		/*if (isLarge)
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AlbumArtLargeDownloaded];
         
 		// Notify the delegate that the loading is finished
-		[self informDelegateLoadingFinished];
+		[self informDelegateLoadingFinished];*/
 	}
     else
     {
         DLog(@"art loading failed for: %@", self.coverArtId);
 		
-        // Inform the delegate that loading failed
-		[self informDelegateLoadingFailed:nil];
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CoverArtFinishedInternal object:[[self.coverArtId copy] autorelease]];
+		
+       /* // Inform the delegate that loading failed
+		[self informDelegateLoadingFailed:nil];*/
     }
 
 	self.receivedData = nil;

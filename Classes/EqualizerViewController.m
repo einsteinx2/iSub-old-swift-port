@@ -22,7 +22,7 @@
 #import "NWPickerView.h"
 
 @implementation EqualizerViewController
-@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath, gainBoostLabel, isPresetPickerShowing, controlsContainer, gainBoostAmountLabel, lastGainValue; //drawTimer;
+@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath, gainBoostLabel, isPresetPickerShowing, controlsContainer, gainBoostAmountLabel, lastGainValue, wasVisualizerOffBeforeRotation; //drawTimer;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -58,6 +58,11 @@
 		{
 			self.controlsContainer.alpha = 1.0;
 			self.controlsContainer.userInteractionEnabled = YES;
+			
+			if (self.wasVisualizerOffBeforeRotation)
+			{
+				[equalizerView changeType:ISMSBassVisualType_none];
+			}
 		}
 	}
 	else
@@ -75,6 +80,12 @@
 		{
 			self.controlsContainer.alpha = 0.0;
 			self.controlsContainer.userInteractionEnabled = NO;
+			
+			self.wasVisualizerOffBeforeRotation = (equalizerView.visualType == ISMSBassVisualType_none);
+			if (self.wasVisualizerOffBeforeRotation)
+			{
+				[equalizerView changeType];
+			}
 		}
 	}
 	[UIView commitAnimations];
@@ -263,6 +274,12 @@
 	{
 		self.controlsContainer.alpha = 0.0;
 		self.controlsContainer.userInteractionEnabled = NO;
+		
+		self.wasVisualizerOffBeforeRotation = (equalizerView.visualType == ISMSBassVisualType_none);
+		if (self.wasVisualizerOffBeforeRotation)
+		{
+			[equalizerView changeType];
+		}
 	}	
 	
 	overlay = nil;

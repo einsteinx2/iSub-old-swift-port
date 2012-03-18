@@ -48,6 +48,7 @@ typedef struct
 	DWORD writePosition;
 	DWORD length;
 	DWORD freeSlots;
+	DWORD filledSlots;
 	DWORD bufferSize;
 	BOOL stopFilling;
 } ISMS_RingBuffer;
@@ -64,6 +65,10 @@ typedef struct
 	DWORD buffersTilSongEnd;
 	QWORD buffersUsedSinceSongEnd;
 	BOOL songEnded;
+	
+	
+	//dispatch_source_t startSongRetryTimer;
+	//dispatch_source_t nextSongRetryTimer;
 }
 
 + (AudioEngine *)sharedInstance;
@@ -117,7 +122,7 @@ typedef struct
 
 @property (retain) NSMutableDictionary *bassUserInfoDict;
 
-@property (readonly) Song *currentStreamSong;
+@property (retain) Song *currentStreamSong;
 @property (readonly) NSString *currentStreamFormat;
 
 @property (retain) NSObject *currentStreamSyncObject;
@@ -170,5 +175,7 @@ const char *GetCTypeString(DWORD ctype, HPLUGIN plugin);
 - (BassUserInfo *)userInfoForStream:(HSTREAM)stream;
 - (void)setUserInfo:(BassUserInfo *)userInfo forStream:(HSTREAM)stream;
 - (void)removeUserInfoForStream:(HSTREAM)stream;
+
+- (NSUInteger)estimatedBitrate;
 
 @end

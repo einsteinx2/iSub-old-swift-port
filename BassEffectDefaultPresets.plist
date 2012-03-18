@@ -34,6 +34,23 @@
 			<key>presetId</key>
 			<integer>1</integer>
             <key>name</key>
+            <string>Bass Reduce</string>
+            <key>isDefault</key>
+            <true/>
+            <key>values</key>
+            <array>
+				<string>{0.00, 0.8251}</string>
+				<string>{0.11, 0.75}</string>
+				<string>{0.22, 0.675}</string>
+				<string>{0.33, 0.6}</string>
+            </array>
+        </dict>
+		
+		<key>2</key>
+        <dict>
+			<key>presetId</key>
+			<integer>2</integer>
+            <key>name</key>
             <string>Treble Boost</string>
             <key>isDefault</key>
             <true/>
@@ -46,10 +63,27 @@
             </array>
         </dict>
 		
-		<key>2</key>
+		<key>3</key>
         <dict>
 			<key>presetId</key>
-			<integer>2</integer>
+			<integer>3</integer>
+            <key>name</key>
+            <string>Treble Reduce</string>
+            <key>isDefault</key>
+            <true/>
+            <key>values</key>
+            <array>
+				<string>{0.66, 0.6}</string>
+				<string>{0.77, 0.675}</string>
+				<string>{0.88, 0.75}</string>
+				<string>{1.00, 0.8251}</string>
+            </array>
+        </dict>
+		
+		<key>4</key>
+        <dict>
+			<key>presetId</key>
+			<integer>4</integer>
             <key>name</key>
             <string>Small Speaker</string>
             <key>isDefault</key>
@@ -68,10 +102,10 @@
             </array>
         </dict>
 		
-		<key>3</key>
+		<key>5</key>
         <dict>
 			<key>presetId</key>
-			<integer>3</integer>
+			<integer>5</integer>
             <key>name</key>
             <string>Electronic</string>
             <key>isDefault</key>
@@ -89,10 +123,10 @@
             </array>
         </dict>
 		
-		<key>4</key>
+		<key>6</key>
         <dict>
 			<key>presetId</key>
-			<integer>4</integer>
+			<integer>6</integer>
             <key>name</key>
             <string>Hip Hop</string>
             <key>isDefault</key>
@@ -112,10 +146,10 @@
             </array>
         </dict>
 		
-		<key>5</key>
+		<key>7</key>
         <dict>
 			<key>presetId</key>
-			<integer>5</integer>
+			<integer>7</integer>
             <key>name</key>
             <string>Rock</string>
             <key>isDefault</key>
@@ -134,10 +168,10 @@
             </array>
         </dict>
 		
-		<key>6</key>
+		<key>8</key>
         <dict>
 			<key>presetId</key>
-			<integer>6</integer>
+			<integer>8</integer>
             <key>name</key>
             <string>Pop</string>
             <key>isDefault</key>

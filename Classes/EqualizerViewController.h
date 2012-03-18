@@ -45,6 +45,8 @@
 
 @property (retain) DDSocialDialog *saveDialog;
 
+@property BOOL wasVisualizerOffBeforeRotation;
+
 
 //- (BOOL)isTouchingEqView:(UITouch *)touch;
 

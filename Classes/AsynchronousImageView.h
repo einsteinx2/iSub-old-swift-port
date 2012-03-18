@@ -11,7 +11,7 @@
 @class SUSCoverArtDAO;
 @interface AsynchronousImageView : UIImageView <SUSLoaderDelegate>
 
-@property (assign) NSObject<AsynchronousImageViewDelegate> *delegate;
+@property (assign) IBOutlet NSObject<AsynchronousImageViewDelegate> *delegate;
 @property (copy) NSString *coverArtId;
 @property (retain) SUSCoverArtDAO *coverArtDAO;
 @property BOOL isLarge;

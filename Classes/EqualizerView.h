@@ -30,15 +30,15 @@
 	CGPoint	location;
 	CGPoint	previousLocation;
 	Boolean	firstTouch;
-	Boolean needsErase;	
-	
-	ISMSBassVisualType visualType;
+	Boolean needsErase;
 }
 
 @property(readwrite) CGPoint location;
 @property(readwrite) CGPoint previousLocation;
 
 @property (retain) NSTimer *drawTimer;
+
+@property ISMSBassVisualType visualType;
 
 
 - (void)erase;

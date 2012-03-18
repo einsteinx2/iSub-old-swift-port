@@ -1791,6 +1791,9 @@
 		53DE59A314F1A7B000206529 /* controller-forw30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DE599314F1A7B000206529 /* controller-forw30@2x.png */; };
 		53DE59A414F1A7B000206529 /* controller-forw30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DE599314F1A7B000206529 /* controller-forw30@2x.png */; };
 		53DE59A514F1A7B000206529 /* controller-forw30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DE599314F1A7B000206529 /* controller-forw30@2x.png */; };
+		53DF2FB915153023005160C5 /* NSObject+GCDExtention.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DF2FB815153023005160C5 /* NSObject+GCDExtention.m */; };
+		53DF2FBA15153023005160C5 /* NSObject+GCDExtention.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DF2FB815153023005160C5 /* NSObject+GCDExtention.m */; };
+		53DF2FBB15153023005160C5 /* NSObject+GCDExtention.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DF2FB815153023005160C5 /* NSObject+GCDExtention.m */; };
 		53DF310711D3EE26007552A4 /* GenresGenreUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DF310611D3EE26007552A4 /* GenresGenreUITableViewCell.m */; };
 		53DFB307148C27080066FF94 /* downArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DFB300148C27080066FF94 /* downArrow.png */; };
 		53DFB308148C27080066FF94 /* downArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DFB300148C27080066FF94 /* downArrow.png */; };
@@ -2783,6 +2786,8 @@
 		53DE599114F1A7B000206529 /* controller-extras-on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-extras-on@2x.png"; path = "Images/Player Icons/controller-extras-on@2x.png"; sourceTree = "<group>"; };
 		53DE599214F1A7B000206529 /* controller-forw30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-forw30.png"; path = "Images/Player Icons/controller-forw30.png"; sourceTree = "<group>"; };
 		53DE599314F1A7B000206529 /* controller-forw30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-forw30@2x.png"; path = "Images/Player Icons/controller-forw30@2x.png"; sourceTree = "<group>"; };
+		53DF2FB715153023005160C5 /* NSObject+GCDExtention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+GCDExtention.h"; sourceTree = "<group>"; };
+		53DF2FB815153023005160C5 /* NSObject+GCDExtention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+GCDExtention.m"; sourceTree = "<group>"; };
 		53DF310511D3EE26007552A4 /* GenresGenreUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenresGenreUITableViewCell.h; sourceTree = "<group>"; };
 		53DF310611D3EE26007552A4 /* GenresGenreUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenresGenreUITableViewCell.m; sourceTree = "<group>"; };
 		53DFB300148C27080066FF94 /* downArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = downArrow.png; sourceTree = "<group>"; };
@@ -3712,6 +3717,8 @@
 				53A45493133D710C00741030 /* HttpIndexPage.m */,
 				53EC1804146760E000601C2D /* SUSServerPlaylist.h */,
 				53EC1805146760E000601C2D /* SUSServerPlaylist.m */,
+				53DF2FB715153023005160C5 /* NSObject+GCDExtention.h */,
+				53DF2FB815153023005160C5 /* NSObject+GCDExtention.m */,
 			);
 			name = "Custom Objects";
 			sourceTree = "<group>";
@@ -5855,6 +5862,7 @@
 				53C7FDEE150F256B008DA51C /* UIImage+HockeyAdditions.m in Sources */,
 				53C7FDF4150F256B008DA51C /* JSONKit.m in Sources */,
 				53C7FF6A150FD79B008DA51C /* BWQuincyManager.m in Sources */,
+				53DF2FB915153023005160C5 /* NSObject+GCDExtention.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6166,6 +6174,7 @@
 				53C7FDF0150F256B008DA51C /* UIImage+HockeyAdditions.m in Sources */,
 				53C7FDF6150F256B008DA51C /* JSONKit.m in Sources */,
 				53C7FF6C150FD79B008DA51C /* BWQuincyManager.m in Sources */,
+				53DF2FBB15153023005160C5 /* NSObject+GCDExtention.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6477,6 +6486,7 @@
 				53C7FDEF150F256B008DA51C /* UIImage+HockeyAdditions.m in Sources */,
 				53C7FDF5150F256B008DA51C /* JSONKit.m in Sources */,
 				53C7FF6B150FD79B008DA51C /* BWQuincyManager.m in Sources */,
+				53DF2FBA15153023005160C5 /* NSObject+GCDExtention.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

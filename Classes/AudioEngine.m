@@ -24,6 +24,7 @@
 #import "MusicSingleton.h"
 #import "NSArray+Additions.h"
 #import "SocialSingleton.h"
+#import "NSObject+GCDExtention.h"
 
 @implementation AudioEngine
 @synthesize isEqualizerOn, startByteOffset, startSecondsOffset, fftDataThread, isFftDataThreadToTerminate, isPlaying, isFastForward, bassReinitSampleRate, presilenceStream, bufferLengthMillis, bassUpdatePeriod;
@@ -33,12 +34,16 @@
 @synthesize startSongThread;
 @synthesize hasTweeted, hasNotifiedSubsonic, hasScrobbled;
 @synthesize ringBufferThread;
+@synthesize currentStreamSong;
 
 // BASS plugins
 extern void BASSFLACplugin;
 
 // Singleton object
 static AudioEngine *sharedInstance = nil;
+
+#define startSongRetryTimer @"startSong"
+#define nextSongRetryTimer @"nextSong"
 
 #pragma mark - Helper Functions
 
@@ -69,7 +74,7 @@ static AudioEngine *sharedInstance = nil;
 	if (ctype==BASS_CTYPE_STREAM_CA) 
 	{
 		// CoreAudio codec
-		const TAG_CA_CODEC *codec = (TAG_CA_CODEC*)BASS_ChannelGetTags(self.fileStream1, BASS_TAG_CA_CODEC); // get codec info
+		const TAG_CA_CODEC *codec = (TAG_CA_CODEC*)BASS_ChannelGetTags(self.currentStream, BASS_TAG_CA_CODEC); // get codec info
 				
 		const char *type;
 		switch (codec->atype) 
@@ -327,15 +332,18 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 	{
 		fpos_t pos;
 		fgetpos(userInfo.myFileHandle, &pos);
+		DLog(@"bytesRead: %u   pos: %llu", bytesRead, pos);
 		//fpos_t newpos = pos - bytesRead;
 		//fsetpos(userInfo.myFileHandle, &newpos);
 		fsetpos(userInfo.myFileHandle, &pos);
 	}
 	
-	if (!bytesRead && userInfo.isSongStarted)
+	if (bytesRead < length && userInfo.isSongStarted && !userInfo.wasFileJustUnderrun)
 	{
 		userInfo.isFileUnderrun = YES;
 	}
+	
+	userInfo.wasFileJustUnderrun = NO;
 	
 	return bytesRead;
 }
@@ -352,12 +360,14 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 	
 	BOOL success = !fseek(userInfo.myFileHandle, offset, SEEK_SET);
 	
+	DLog(@"seeking to %llu", offset);
 	if (offset == 0)
-	{
 		userInfo.isSongStarted = YES;
-		if ([[sharedInstance stringFromStreamType:userInfo.myStream plugin:0] isEqualToString:@"FLAC"])
-			userInfo.isFlac = YES;
-	}
+	
+	//DLog(@"[sharedInstance stringFromStreamType:userInfo.myStream plugin:0]: %@", [sharedInstance stringFromStreamType:userInfo.myStream plugin:0]);
+	if ([[sharedInstance stringFromStreamType:userInfo.myStream plugin:0] isEqualToString:@"FLAC"])
+		userInfo.isFlac = YES;
+	
 	//DLog(@"File Seek to %llu  success: %@", offset, NSStringFromBOOL(success));
 	
 	return success;
@@ -403,7 +413,8 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 	@synchronized(ringBufferSyncObject)
 	{
 		ringBuffer = (ISMS_RingBuffer *) malloc(sizeof(ISMS_RingBuffer));
-		ringBuffer->length = ringBuffer->freeSlots = 13;
+		ringBuffer->length = ringBuffer->freeSlots = 10;
+		ringBuffer->filledSlots = 0;
 		ringBuffer->buffers = malloc(sizeof(ISMS_AudioBuffer) * ringBuffer->length);
 		ringBuffer->readPosition = 0;
 		ringBuffer->writePosition = 0;
@@ -432,6 +443,7 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 		ringBuffer->readPosition = 0;
 		ringBuffer->writePosition = 0;
 		ringBuffer->freeSlots = ringBuffer->length;
+		ringBuffer->filledSlots = 0;
 	}
 }
 
@@ -459,6 +471,7 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 	@synchronized(ringBufferSyncObject)
 	{
 		ringBuffer->freeSlots--;
+		ringBuffer->filledSlots++;
 		
 		ringBuffer->writePosition++;
 		if (ringBuffer->writePosition >= ringBuffer->length)
@@ -471,6 +484,7 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 	@synchronized(ringBufferSyncObject)
 	{
 		ringBuffer->freeSlots++;
+		ringBuffer->filledSlots--;
 		
 		ringBuffer->readPosition++;
 		if (ringBuffer->readPosition >= ringBuffer->length)
@@ -502,7 +516,7 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 		audioBuffer->buffer = buffer;
 		audioBuffer->length = length;
 		audioBuffer->isFilled = YES;
-		
+				
 		[self advanceRingBufferWritePosition];
 	}
 }
@@ -629,6 +643,7 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 	
 	if (self.isPlaying)
 	{
+		self.currentStreamSong = playlistS.currentSong;
 		startSecondsOffset = 0;
 		startByteOffset = 0;
 		
@@ -650,6 +665,79 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 			waitUntilDone:NO];
 }
 
+- (NSUInteger)estimatedBitrate
+{
+	BASS_CHANNELINFO i;
+	BASS_ChannelGetInfo(self.currentStream, &i);
+	Song *songForStream = [[self userInfoForStream:self.currentStream] mySong];
+	
+	// Default to the player bitrate
+	NSUInteger bitrate = self.bitRate;
+	
+	// Check the current stream format, and make sure that the bitrate is in the correct range
+	// otherwise use the song's estimated bitrate instead (to keep something like a 10000 kbitrate on an mp3 from being used for buffering)
+	switch (i.ctype) 
+	{
+		case BASS_CTYPE_STREAM_WAV_PCM:
+		case BASS_CTYPE_STREAM_WAV_FLOAT:
+		case BASS_CTYPE_STREAM_WAV:
+		case BASS_CTYPE_STREAM_AIFF:
+		case BASS_CTYPE_STREAM_FLAC:
+		case BASS_CTYPE_STREAM_FLAC_OGG:
+			if (bitrate < 330 || bitrate > 12000)
+				bitrate = songForStream.estimatedBitrate;
+			break;
+		
+		case BASS_CTYPE_STREAM_OGG:	
+		case BASS_CTYPE_STREAM_MP1:
+		case BASS_CTYPE_STREAM_MP2:
+		case BASS_CTYPE_STREAM_MP3:
+			if (bitrate > 450)
+				bitrate = songForStream.estimatedBitrate;
+			break;	
+			
+		case BASS_CTYPE_STREAM_CA:
+		{
+			const TAG_CA_CODEC *codec = (TAG_CA_CODEC*)BASS_ChannelGetTags(self.currentStream, BASS_TAG_CA_CODEC);
+			switch (codec->atype) 
+			{
+				case kAudioFormatLinearPCM:	
+				case kAudioFormatAppleLossless:
+					if (bitrate < 330 || bitrate > 12000)
+						bitrate = songForStream.estimatedBitrate;
+					break;
+					
+				case kAudioFormatMPEG4AAC:
+				case kAudioFormatMPEG4AAC_HE:
+				case kAudioFormatMPEG4AAC_LD:
+				case kAudioFormatMPEG4AAC_ELD:
+				case kAudioFormatMPEG4AAC_ELD_SBR:
+				case kAudioFormatMPEG4AAC_HE_V2:
+				case kAudioFormatMPEG4AAC_Spatial:
+				case kAudioFormatMPEGLayer1:
+				case kAudioFormatMPEGLayer2:
+				case kAudioFormatMPEGLayer3:
+					if (bitrate > 450)
+						bitrate = songForStream.estimatedBitrate;
+					break;
+				
+				// If we can't detect the format, use the estimated bitrate instead of player to be safe
+				default:
+					bitrate = songForStream.estimatedBitrate;
+					break;
+			}
+			break;
+		}
+		
+		// If we can't detect the format, use the estimated bitrate instead of player to be safe
+		default:
+			bitrate = songForStream.estimatedBitrate;
+			break;
+	}
+	
+	return bitrate;
+}
+
 - (void)keepRingBufferFilledInternal
 {
 	if (ringBuffer->stopFilling)
@@ -657,23 +745,22 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 	
 	if (ringBuffer->freeSlots > 0)
 	{
-		//DLog(@"ringbuffer free slots: %u", ringBuffer->freeSlots);
+		DLog(@"ringbuffer free slots: %u", ringBuffer->freeSlots);
 		if (BASS_ChannelIsActive(self.currentStream))
 		{
-			/*
+			/* 
 			 * Read data to fill the buffer
 			 */ 
 			
 			// Fill the buffer if there are empty slots
-			
 			void *tempBuffer = malloc(sizeof(char) * ringBuffer->bufferSize);
 			DWORD tempLength = BASS_ChannelGetData(self.currentReadingStream, tempBuffer, ringBuffer->bufferSize);
 			if (tempLength) 
+			{
+				BassUserInfo *userInfo = [self userInfoForStream:self.currentStream];
+				userInfo.isSongStarted = YES;
 				[self fillBuffer:tempBuffer length:tempLength];
-			
-			BassUserInfo *userInfo = [self userInfoForStream:self.currentStream];
-			BOOL shouldPause = NO;
-			BOOL isFlac = userInfo.isFlac;
+			}
 			
 			// Check if stream is now complete
 			if (!BASS_ChannelIsActive(self.currentStream))
@@ -700,7 +787,7 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 				}
 				
 				buffersUsedSinceSongEnd = 0;
-				buffersTilSongEnd = ringBuffer->length - ringBuffer->freeSlots;
+				buffersTilSongEnd = ringBuffer->filledSlots;
 				songEnded = YES;
 			}
 			
@@ -709,18 +796,23 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 			 */ 
 			
 			// If this is FLAC, we need to watch for the flag stating that reads had to be retried in the read proc
-			if (isFlac && userInfo.isFileUnderrun && BASS_ChannelIsActive(self.currentReadingStream))
+			//BOOL isFlac = userInfo.isFlac;
+			/*if (isFlac && userInfo.isFileUnderrun && BASS_ChannelIsActive(self.currentReadingStream))
 				shouldPause = YES;
 			
 			// If this is anything else, we just watch for less than the bufferSize being returned
-			if (!isFlac && tempLength < ringBuffer->bufferSize && ringBuffer->freeSlots == ringBuffer->length && BASS_ChannelIsActive(self.currentReadingStream))
-				shouldPause = YES;
+			if (!isFlac && tempLength < ringBuffer->bufferSize && BASS_ChannelIsActive(self.currentReadingStream))
+				shouldPause = YES;*/
+			
+			BassUserInfo *userInfo = [self userInfoForStream:self.currentStream];
+			BOOL shouldPause = (userInfo.isFileUnderrun && BASS_ChannelIsActive(self.currentReadingStream));
 			
 			if (shouldPause)
 			{
 				// Mark the stream as waiting
 				userInfo.isWaiting = YES;
 				userInfo.isFileUnderrun = NO;
+				userInfo.wasFileJustUnderrun = YES;
 				
 				// Handle waiting for additional data
 				Song *theSong = userInfo.mySong;
@@ -731,7 +823,8 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 					// use the best estimated bitrate. Then use that to determine how much data to let download to continue.
 					
 					unsigned long long size = theSong.localFileSize;
-					NSUInteger bitrate = theSong.estimatedBitrate;
+					NSUInteger bitrate = [self estimatedBitrate];
+					
 					unsigned long long bytesToWait = BytesForSecondsAtBitrate(settingsS.audioEngineBufferNumberOfSeconds, bitrate);
 					userInfo.neededSize = size + bytesToWait;
 					
@@ -974,17 +1067,33 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
     [self bassInit:ISMS_defaultSampleRate];
 }
 
-- (void)cancelRequests
+/*- (void)cancelRequests
 {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+}*/
+
+- (void)cancelDispatchTimer:(dispatch_source_t)timer 
+{ 
+	if (!timer)	
+		return; 
+	dispatch_source_cancel(timer); 
+	dispatch_release(timer);
 }
 
 - (BOOL)bassFree
 {
 	@synchronized(eqReadSyncObject)
 	{		
-		[self performSelector:@selector(cancelRequests) onThread:startSongThread withObject:nil waitUntilDone:NO];		
-		[self performSelector:@selector(cancelRequests) onThread:ringBufferThread withObject:nil waitUntilDone:NO];
+		//[self performSelector:@selector(cancelRequests) onThread:startSongThread withObject:nil waitUntilDone:NO];		
+		//[self performSelector:@selector(cancelRequests) onThread:ringBufferThread withObject:nil waitUntilDone:NO];
+		
+		//[self cancelDispatchTimer:startSongRetryTimer];
+		//startSongRetryTimer = nil;
+		//[self cancelDispatchTimer:nextSongRetryTimer];
+		//nextSongRetryTimer = nil;
+		
+		[NSObject gcdCancelTimerBlockWithName:startSongRetryTimer];
+		[NSObject gcdCancelTimerBlockWithName:nextSongRetryTimer];
 		
 		ringBuffer->stopFilling = YES;
 		[self userInfoForStream:self.currentStream].shouldBreakWaitLoopForever = YES;
@@ -1001,6 +1110,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		self.volumeFx = 0;
 		self.bassReinitSampleRate = 0;
 		self.isPlaying = NO;
+		self.currentStreamSong = nil;
 		
 		buffersTilSongEnd = 0;
 		buffersUsedSinceSongEnd = 0;
@@ -1055,33 +1165,42 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	DLog(@"Seeking to %llu bytes", bytes);
 	//DLog(@"fileStream1: %i   fileStream2: %i    currentStream: %i", fileStream1, fileStream2, self.currentStream);
 	
-	BOOL didPause = NO;
-	
-	if (self.isPlaying)
+	if (songEnded)
 	{
-		[self pause];
-		didPause = YES;
-	}
-	
-	if (BASS_ChannelSetPosition(stream, bytes, BASS_POS_BYTE))
-	{
-		self.startByteOffset = bytes;
-		
-		BassUserInfo *userInfo = [self userInfoForStream:stream];
-		userInfo.neededSize = ULLONG_MAX;
-		if (userInfo.isWaiting)
-		{
-			userInfo.shouldBreakWaitLoop = YES;
-		}
-		
-		[self clearRingBuffer];
-		
-		if (didPause)
-			[self playPause];
+		songEnded = NO;
+		[self bassFree];
+		[self startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:bytes] orSeconds:nil];
 	}
 	else
 	{
-		BASSLogError();
+		BOOL didPause = NO;
+		
+		if (self.isPlaying)
+		{
+			[self pause];
+			didPause = YES;
+		}
+		
+		if (BASS_ChannelSetPosition(stream, bytes, BASS_POS_BYTE))
+		{
+			self.startByteOffset = bytes;
+			
+			BassUserInfo *userInfo = [self userInfoForStream:stream];
+			userInfo.neededSize = ULLONG_MAX;
+			if (userInfo.isWaiting)
+			{
+				userInfo.shouldBreakWaitLoop = YES;
+			}
+			
+			[self clearRingBuffer];
+			
+			if (didPause)
+				[self playPause];
+		}
+		else
+		{
+			BASSLogError();
+		}
 	}
 }
 
@@ -1193,7 +1312,19 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		DLog(@"nextSong stream: %i error: %i - %@", self.nextStream, errorCode, NSStringFromBassErrorCode(errorCode));
 #endif
 		
-		[self performSelector:@selector(prepareNextSongStreamInternal:) withObject:nextSong afterDelay:RETRY_DELAY];
+		//RunBlockAfterDelay(^{ [self prepareNextSongStream:nextSong]; }, RETRY_DELAY);
+		
+		[self gcdTimerPerformBlockInMainQueue:^{ [self prepareNextSongStream:nextSong]; } afterDelay:RETRY_DELAY withName:nextSongRetryTimer];
+		
+		/*nextSongRetryTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+		dispatch_source_set_timer(nextSongRetryTimer, dispatch_time(DISPATCH_TIME_NOW, RETRY_DELAY * NSEC_PER_SEC), DISPATCH_TIME_FOREVER, 0);
+		dispatch_source_set_event_handler(nextSongRetryTimer, ^{
+			[self prepareNextSongStream:nextSong];
+			[self cancelDispatchTimer:nextSongRetryTimer];		
+			nextSongRetryTimer = nil;
+		});
+		dispatch_resume(nextSongRetryTimer);*/
+		
 	}
 	
 	DLog(@"nextSong: %i\n   ", self.nextStream);
@@ -1252,6 +1383,12 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 				 onThread:startSongThread 
 			   withObject:bytesOrSeconds 
 			waitUntilDone:NO];
+}
+
+void RunBlockAfterDelay(void (^block)(void), NSTimeInterval delay)
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*delay),
+				   dispatch_get_main_queue(), block);
 }
 
 // Runs in background thread
@@ -1364,9 +1501,10 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 			BASS_ChannelPlay(self.outStream, FALSE);
 			self.isPlaying = YES;
 			
+			self.currentStreamSong = playlistS.currentSong;
+			
 			buffersTilSongEnd = 0;
 			buffersUsedSinceSongEnd = 0;
-			songEnded = NO;
 			
 			// This is a new song so notify Last.FM that it's playing
 			[socialS scrobbleSongAsPlaying];
@@ -1383,8 +1521,19 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 				 && currentSong.localFileSize < MIN_FILESIZE_TO_FAIL)
 		{
 			// Failed to create the stream, retrying
-			DLog(@"------failed to create stream, retrying in 2 seconds------");
-			[self performSelector:@selector(startWithOffsetInBytesorSecondsInternal:) withObject:bytesOrSeconds afterDelay:RETRY_DELAY];
+			DLog(@"------failed to create stream, retrying in 2 seconds------");	
+			
+			[self gcdTimerPerformBlockInMainQueue:^{ [self startWithOffsetInBytes:byteOffset orSeconds:seconds]; } afterDelay:RETRY_DELAY withName:startSongRetryTimer];
+			
+			/*startSongRetryTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+			dispatch_source_set_timer(startSongRetryTimer, dispatch_time(DISPATCH_TIME_NOW, RETRY_DELAY * NSEC_PER_SEC), DISPATCH_TIME_FOREVER, 0);
+			dispatch_source_set_event_handler(startSongRetryTimer, ^{
+				[self startWithOffsetInBytes:byteOffset orSeconds:seconds];
+				[self cancelDispatchTimer:startSongRetryTimer];	
+				startSongRetryTimer = nil;
+			});
+			dispatch_resume(startSongRetryTimer);*/
+			//RunBlockAfterDelay(^{ [self startWithOffsetInBytes:byteOffset orSeconds:seconds]; }, RETRY_DELAY);
 		}
 	}
 }
@@ -1482,7 +1631,10 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 
 - (double)progress
 {	
-	DWORD filledBuffers = ringBuffer->length - ringBuffer->freeSlots;
+	if (!self.currentStream)
+		return 0;
+	
+	DWORD filledBuffers = ringBuffer->filledSlots;
 	QWORD bytesInBuffer = filledBuffers * ringBuffer->bufferSize;
 	
 	NSUInteger pcmBytePosition = BASS_ChannelGetPosition(self.currentStream, BASS_POS_BYTE|BASS_POS_DECODE);// + startByteOffset;
@@ -1601,11 +1753,11 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	}
 }
 
-- (Song *)currentStreamSong
+/*- (Song *)currentStreamSong
 {
 	BassUserInfo *userInfo = [self userInfoForStream:self.currentStream];
 	return [[userInfo.mySong copy] autorelease];
-}
+}*/
 
 - (NSString *)currentStreamFormat
 {
@@ -1832,6 +1984,9 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 
 - (void)setup
 {	
+	//startSongRetryTimer = nil;
+	//nextSongRetryTimer = nil;
+	
 	ringBufferThread = [[NSThread alloc] initWithTarget:self selector:@selector(ringBufferThreadEntryPoint) object:nil];
 	[ringBufferThread start];
 	

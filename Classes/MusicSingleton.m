@@ -33,6 +33,7 @@
 #import "CacheSingleton.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
+#import "ISMSCacheQueueManager.h"
 
 static MusicSingleton *sharedInstance = nil;
 
@@ -47,6 +48,8 @@ double startSongSeconds = 0.0;
 	// Only allowed to manipulate BASS from the main thread
 	if (![NSThread mainThread])
 		return;
+
+	DLog(@"starting song at offset");
 	
 	// Destroy the streamer to start a new song
 	[audioEngineS stop];
@@ -99,6 +102,12 @@ double startSongSeconds = 0.0;
 	}
 	else
 	{
+		if ([cacheQueueManagerS.currentQueuedSong isEqualToSong:currentSong])
+		{
+			// The cache queue is downloading this song, remove it before continuing
+			[cacheQueueManagerS removeCurrentSong];
+		}
+		
 		if ([streamManagerS isSongDownloading:currentSong])
 		{
 			// The song is caching, start streaming from the local copy
@@ -277,6 +286,10 @@ double startSongSeconds = 0.0;
 		
 		[MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = trackInfo;
 	}
+	
+	// Run this every 30 seconds to update the progress and keep it in sync
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateLockScreenInfo) object:nil];
+	[self performSelector:@selector(updateLockScreenInfo) withObject:nil afterDelay:30.0];
 }
 
 #pragma mark - Memory management

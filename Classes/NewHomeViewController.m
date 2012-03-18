@@ -423,7 +423,8 @@
 
 - (IBAction)settings
 {
-	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
+	[appDelegateS showSettings];
+	/*ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
 	if (IS_IPAD())
 	{
 		[self pushViewControllerCustomWithNavControllerOnIpad:serverListViewController];
@@ -433,7 +434,7 @@
 		serverListViewController.hidesBottomBarWhenPushed = YES;
 		[self.navigationController pushViewController:serverListViewController animated:YES];
 	}
-	[serverListViewController release];
+	[serverListViewController release];*/
 }
 
 - (IBAction)player

@@ -464,7 +464,13 @@
 	if (self.isPartiallyCached)
 	{
 		double totalSize = [self.size doubleValue];
+		
 		CGFloat bitrate = (CGFloat)self.estimatedBitrate;
+		if (audioEngineS.isPlaying)
+		{
+			bitrate = [audioEngineS estimatedBitrate];
+		}
+		
 		CGFloat seconds = [self.duration floatValue];
 		if (self.transcodedSuffix)
 		{

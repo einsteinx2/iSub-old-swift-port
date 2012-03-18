@@ -45,7 +45,7 @@
 #define isThrottleLoggingEnabled NO
 
 @implementation ISMSStreamHandler
-@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, bitrate, secondsOffset, partialPrecacheSleep, isDownloading, isCurrentSong, shouldResume, contentLength;
+@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, bitrate, secondsOffset, partialPrecacheSleep, isDownloading, isCurrentSong, shouldResume, contentLength, maxBitrateSetting;
 
 - (void)setup
 {
@@ -63,6 +63,7 @@
 	partialPrecacheSleep = YES;
 	isDownloading = NO;
 	contentLength = ULLONG_MAX;
+	maxBitrateSetting = NSIntegerMax;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playlistIndexChanged) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 }
@@ -160,9 +161,15 @@
 	
 	NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(mySong.songId), @"id", nil];
 	[parameters setObject:@"true" forKey:@"estimateContentLength"];
-	if (settingsS.currentMaxBitrate != 0)
+	
+	if (self.maxBitrateSetting == NSIntegerMax)
 	{
-		NSString *maxBitRate = [[NSString alloc] initWithFormat:@"%i", settingsS.currentMaxBitrate];
+		self.maxBitrateSetting = settingsS.currentMaxBitrate;
+	}
+	
+	if (self.maxBitrateSetting != 0)
+	{
+		NSString *maxBitRate = [[NSString alloc] initWithFormat:@"%i", self.maxBitrateSetting];
 		[parameters setObject:n2N(maxBitRate) forKey:@"maxBitRate"];
 		[maxBitRate release];
 	}
@@ -554,6 +561,7 @@
 	[encoder encodeBool:self.isTempCache forKey:@"isTempCache"];
 	[encoder encodeBool:self.isDownloading forKey:@"isDownloading"];
 	[encoder encodeInt64:self.contentLength forKey:@"contentLength"];
+	[encoder encodeInt32:self.maxBitrateSetting forKey:@"maxBitrateSetting"];
 }
 
 
@@ -570,6 +578,7 @@
 		isTempCache = [decoder decodeBoolForKey:@"isTempCache"];
 		isDownloading = [decoder decodeBoolForKey:@"isDownloading"];
 		contentLength = [decoder decodeInt64ForKey:@"contentLength"];
+		maxBitrateSetting = [decoder decodeInt32ForKey:@"maxBitrateSetting"];
 	}
 	
 	return self;

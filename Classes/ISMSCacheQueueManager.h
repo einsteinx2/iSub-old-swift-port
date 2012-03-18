@@ -29,4 +29,6 @@
 - (void)stopDownloadQueue;
 - (void)resumeDownloadQueue:(NSNumber *)byteOffset;
 
+- (void)removeCurrentSong;
+
 @end
