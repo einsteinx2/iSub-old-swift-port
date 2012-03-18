@@ -216,8 +216,10 @@
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_AllSongsLoadingFinished object:nil];
-	[searchBar release];
-	[url release];
+	[dataModel release]; dataModel = nil;
+	[allSongsDataModel release]; allSongsDataModel = nil;
+	[searchBar release]; searchBar = nil;
+	[url release]; url = nil;
     [super dealloc];
 }
 

@@ -118,6 +118,9 @@
 		53260B89127D012300B745B4 /* grayArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7F127D012300B745B4 /* grayArrow@2x.png */; };
 		53260B8A127D012300B745B4 /* whiteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B80127D012300B745B4 /* whiteArrow.png */; };
 		53260B8B127D012300B745B4 /* whiteArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B81127D012300B745B4 /* whiteArrow@2x.png */; };
+		5326E0751515CEC600B73E61 /* SnappySlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326E0741515CEC600B73E61 /* SnappySlider.m */; };
+		5326E0761515CEC600B73E61 /* SnappySlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326E0741515CEC600B73E61 /* SnappySlider.m */; };
+		5326E0771515CEC600B73E61 /* SnappySlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326E0741515CEC600B73E61 /* SnappySlider.m */; };
 		5327A5D314DA1E4400DEE1B6 /* controller-extras.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327A5D114DA1E4400DEE1B6 /* controller-extras.png */; };
 		5327A5D414DA1E4400DEE1B6 /* controller-extras.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327A5D114DA1E4400DEE1B6 /* controller-extras.png */; };
 		5327A5D514DA1E4400DEE1B6 /* controller-extras.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327A5D114DA1E4400DEE1B6 /* controller-extras.png */; };
@@ -1810,9 +1813,6 @@
 		53E6093A150C4E5300FD86E6 /* UIViewController+IsVisible.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E60939150C4E5300FD86E6 /* UIViewController+IsVisible.m */; };
 		53E6093B150C4E5300FD86E6 /* UIViewController+IsVisible.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E60939150C4E5300FD86E6 /* UIViewController+IsVisible.m */; };
 		53E6093C150C4E5300FD86E6 /* UIViewController+IsVisible.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E60939150C4E5300FD86E6 /* UIViewController+IsVisible.m */; };
-		53E60945150C6DB000FD86E6 /* SnappySlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E60944150C6DB000FD86E6 /* SnappySlider.m */; };
-		53E60946150C6DB000FD86E6 /* SnappySlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E60944150C6DB000FD86E6 /* SnappySlider.m */; };
-		53E60947150C6DB000FD86E6 /* SnappySlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E60944150C6DB000FD86E6 /* SnappySlider.m */; };
 		53E75C361270013D00BC1A19 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53E75C351270013D00BC1A19 /* MainWindow-iPad.xib */; };
 		53E75E84127123B300BC1A19 /* SearchXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E75E83127123B300BC1A19 /* SearchXMLParser.m */; };
 		53E82A98140720BC0051D44B /* SUSSubFolderDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E82A97140720BC0051D44B /* SUSSubFolderDAO.m */; };
@@ -1989,6 +1989,8 @@
 		53260B7F127D012300B745B4 /* grayArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "grayArrow@2x.png"; sourceTree = "<group>"; };
 		53260B80127D012300B745B4 /* whiteArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteArrow.png; sourceTree = "<group>"; };
 		53260B81127D012300B745B4 /* whiteArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteArrow@2x.png"; sourceTree = "<group>"; };
+		5326E0731515CEC600B73E61 /* SnappySlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnappySlider.h; sourceTree = "<group>"; };
+		5326E0741515CEC600B73E61 /* SnappySlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnappySlider.m; sourceTree = "<group>"; };
 		5327A5D114DA1E4400DEE1B6 /* controller-extras.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-extras.png"; path = "Images/Player Icons/controller-extras.png"; sourceTree = "<group>"; };
 		5327A5D214DA1E4400DEE1B6 /* controller-extras@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-extras@2x.png"; path = "Images/Player Icons/controller-extras@2x.png"; sourceTree = "<group>"; };
 		5327A5D914DA221100DEE1B6 /* controller-extras-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-extras-ipad.png"; path = "Images/Player Icons/controller-extras-ipad.png"; sourceTree = "<group>"; };
@@ -2801,8 +2803,6 @@
 		53E60939150C4E5300FD86E6 /* UIViewController+IsVisible.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+IsVisible.m"; sourceTree = "<group>"; };
 		53E6093D150C4F8100FD86E6 /* Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macros.h; sourceTree = "<group>"; };
 		53E6093E150C4FC500FD86E6 /* Categories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Categories.h; sourceTree = "<group>"; };
-		53E60943150C6DB000FD86E6 /* SnappySlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SnappySlider.h; path = "../../Snappy-Slider/Classes/SnappySlider.h"; sourceTree = "<group>"; };
-		53E60944150C6DB000FD86E6 /* SnappySlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SnappySlider.m; path = "../../Snappy-Slider/Classes/SnappySlider.m"; sourceTree = "<group>"; };
 		53E75C351270013D00BC1A19 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "../Resources-iPad/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		53E75E82127123B300BC1A19 /* SearchXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchXMLParser.h; sourceTree = "<group>"; };
 		53E75E83127123B300BC1A19 /* SearchXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchXMLParser.m; sourceTree = "<group>"; };
@@ -3672,8 +3672,8 @@
 				53F11B751460F96D0010820B /* OrderedDictionary.m */,
 				532590FF14EE22C100DF4BDB /* MBProgressHUD.h */,
 				5325910014EE22C400DF4BDB /* MBProgressHUD.m */,
-				53E60943150C6DB000FD86E6 /* SnappySlider.h */,
-				53E60944150C6DB000FD86E6 /* SnappySlider.m */,
+				5326E0731515CEC600B73E61 /* SnappySlider.h */,
+				5326E0741515CEC600B73E61 /* SnappySlider.m */,
 			);
 			name = "Support Classes";
 			sourceTree = "<group>";
@@ -5849,7 +5849,6 @@
 				53733C7514FC6075001D8104 /* NSString+Clean.m in Sources */,
 				53733C8114FDBD62001D8104 /* CALayer+ImageFromLayer.m in Sources */,
 				53E6093A150C4E5300FD86E6 /* UIViewController+IsVisible.m in Sources */,
-				53E60945150C6DB000FD86E6 /* SnappySlider.m in Sources */,
 				53C7FDD3150F256B008DA51C /* BWApp.m in Sources */,
 				53C7FDD6150F256B008DA51C /* BWGlobal.m in Sources */,
 				53C7FDD9150F256B008DA51C /* BWHockeyManager.m in Sources */,
@@ -5863,6 +5862,7 @@
 				53C7FDF4150F256B008DA51C /* JSONKit.m in Sources */,
 				53C7FF6A150FD79B008DA51C /* BWQuincyManager.m in Sources */,
 				53DF2FB915153023005160C5 /* NSObject+GCDExtention.m in Sources */,
+				5326E0751515CEC600B73E61 /* SnappySlider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6161,7 +6161,6 @@
 				53733C7714FC6075001D8104 /* NSString+Clean.m in Sources */,
 				53733C8314FDBD62001D8104 /* CALayer+ImageFromLayer.m in Sources */,
 				53E6093C150C4E5300FD86E6 /* UIViewController+IsVisible.m in Sources */,
-				53E60947150C6DB000FD86E6 /* SnappySlider.m in Sources */,
 				53C7FDD5150F256B008DA51C /* BWApp.m in Sources */,
 				53C7FDD8150F256B008DA51C /* BWGlobal.m in Sources */,
 				53C7FDDB150F256B008DA51C /* BWHockeyManager.m in Sources */,
@@ -6175,6 +6174,7 @@
 				53C7FDF6150F256B008DA51C /* JSONKit.m in Sources */,
 				53C7FF6C150FD79B008DA51C /* BWQuincyManager.m in Sources */,
 				53DF2FBB15153023005160C5 /* NSObject+GCDExtention.m in Sources */,
+				5326E0771515CEC600B73E61 /* SnappySlider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6473,7 +6473,6 @@
 				53733C7614FC6075001D8104 /* NSString+Clean.m in Sources */,
 				53733C8214FDBD62001D8104 /* CALayer+ImageFromLayer.m in Sources */,
 				53E6093B150C4E5300FD86E6 /* UIViewController+IsVisible.m in Sources */,
-				53E60946150C6DB000FD86E6 /* SnappySlider.m in Sources */,
 				53C7FDD4150F256B008DA51C /* BWApp.m in Sources */,
 				53C7FDD7150F256B008DA51C /* BWGlobal.m in Sources */,
 				53C7FDDA150F256B008DA51C /* BWHockeyManager.m in Sources */,
@@ -6487,6 +6486,7 @@
 				53C7FDF5150F256B008DA51C /* JSONKit.m in Sources */,
 				53C7FF6B150FD79B008DA51C /* BWQuincyManager.m in Sources */,
 				53DF2FBA15153023005160C5 /* NSObject+GCDExtention.m in Sources */,
+				5326E0761515CEC600B73E61 /* SnappySlider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -44,8 +44,6 @@
 	uint64_t bookmarkBytePosition;	
 }
 
-@property (retain) NSArray *listOfSongs;
-
 @property (retain) IBOutlet UIView *extraButtons;
 @property (retain) IBOutlet UIImageView *extraButtonsBackground;
 @property (retain) IBOutlet UIButton *extraButtonsButton;

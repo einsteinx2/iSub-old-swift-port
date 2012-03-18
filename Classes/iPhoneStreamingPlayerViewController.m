@@ -61,7 +61,7 @@
 
 @implementation iPhoneStreamingPlayerViewController
 
-@synthesize listOfSongs, reflectionView, originalViewFrames, extraButtons, extraButtonsButton, extraButtonsBackground;
+@synthesize reflectionView, originalViewFrames, extraButtons, extraButtonsButton, extraButtonsBackground;
 @synthesize bookmarkCountLabel, progressSlider, elapsedTimeLabel, remainingTimeLabel, shuffleButton, repeatButton, bookmarkButton, currentAlbumButton;
 @synthesize updateTimer, progressTimer, hasMoved, oldPosition, byteOffset, currentSong, pauseSlider, downloadProgress, sliderMultipleLabel;
 @synthesize bookmarkEntry, bookmarkIndex, bookmarkNameTextField, bookmarkPosition;
@@ -337,7 +337,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)createDownloadProgressView
 {
-	downloadProgress = [[UIView alloc] initWithFrame:progressSlider.frame];
+	self.downloadProgress = [[[UIView alloc] initWithFrame:progressSlider.frame] autorelease];
 	downloadProgress.x = 0.0;
 	downloadProgress.y = 0.0;
 	downloadProgress.backgroundColor = [UIColor whiteColor];
@@ -346,7 +346,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	downloadProgress.width = 0.0;
 	downloadProgress.layer.cornerRadius = 5;
 	[progressSlider addSubview:downloadProgress];
-	[downloadProgress release];
 	
 	if (settingsS.isJukeboxEnabled)
 		downloadProgress.hidden = YES;
@@ -431,12 +430,33 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	coverArtImageView.delegate = nil;
 	
+	[extraButtons release]; extraButtons = nil;
+	[extraButtonsBackground release]; extraButtonsBackground = nil;
+	[songInfoView release]; songInfoView = nil;
+	[sliderMultipleLabel release]; sliderMultipleLabel = nil;
+	[trackLabel release]; trackLabel = nil;
+	[genreLabel release]; genreLabel = nil;
+	[yearLabel release]; yearLabel = nil;
+	[formatLabel release]; formatLabel = nil;
+	[extraButtonsButtonOffImage release]; extraButtonsButtonOffImage = nil;
+	[extraButtonsButtonOnImage release]; extraButtonsButtonOnImage = nil;
+	
+	[coverArtHolderView release]; coverArtHolderView = nil;
+	[currentAlbumButton release]; currentAlbumButton = nil;
+	[repeatButton release]; repeatButton = nil;
+	[bookmarkButton release]; bookmarkButton = nil;
+	[bookmarkCountLabel release]; bookmarkCountLabel = nil;
+	[shuffleButton release]; shuffleButton = nil;
 	[progressSlider release]; progressSlider = nil;
 	[elapsedTimeLabel release]; elapsedTimeLabel = nil;
 	[remainingTimeLabel release]; remainingTimeLabel = nil;
-	[repeatButton release]; repeatButton = nil;
-	[shuffleButton release]; shuffleButton = nil;
 
+	[downloadProgress release]; downloadProgress = nil;
+	[bookmarkNameTextField release]; bookmarkNameTextField = nil;
+	[bookmarkEntry release]; bookmarkEntry = nil;
+	[quickBackLabel release]; quickBackLabel = nil;
+	[quickForwLabel release]; quickForwLabel = nil;
+	
 	[pageControlViewController viewDidDisappear:NO];
 	[pageControlViewController release]; pageControlViewController = nil;
 	[playButton release]; playButton = nil;
@@ -447,9 +467,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[songInfoToggleButton release]; songInfoToggleButton = nil;
 	[reflectionView release]; reflectionView = nil;
 	[pageControlViewController release]; pageControlViewController = nil;
-	
-	[extraButtonsButtonOffImage release]; extraButtonsButtonOffImage = nil;
-	[extraButtonsButtonOnImage release]; extraButtonsButtonOnImage = nil;
 	
 	[swipeDetector release]; swipeDetector = nil;
 	

@@ -255,6 +255,7 @@ static void destroy_versionArrays()
 		int x, y, y1;
 		
 		case ISMSBassVisualType_none:
+		case ISMSBassVisualType_maxValue:
 			break;
 		case ISMSBassVisualType_line:
 		{
@@ -536,12 +537,33 @@ static void destroy_versionArrays()
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			visualType = ISMSBassVisualType_aphexFace; 
 			break;
+			
+		case ISMSBassVisualType_maxValue:
+			break;
 	}
 	settingsS.currentVisualizerType = visualType;
 	DLog(@"visualType: %i   currentVisualizerType: %i", visualType, settingsS.currentVisualizerType);
 }
 
-- (void)changeType
+- (void)nextType
+{
+	int newType = self.visualType + 1;
+	if (newType == ISMSBassVisualType_maxValue)
+		newType = 0;
+	
+	[self changeType:newType];
+}
+
+- (void)prevType
+{
+	int newType = self.visualType - 1;
+	if (newType < 0)
+		newType = ISMSBassVisualType_maxValue - 1;
+	
+	[self changeType:newType];
+}
+
+/*- (void)changeType
 {
 	ISMSBassVisualType type = 0;
 	switch (visualType)
@@ -558,6 +580,6 @@ static void destroy_versionArrays()
 			type = ISMSBassVisualType_none; break;
 	}
 	[self changeType:type];
-}
+}*/
 
 @end

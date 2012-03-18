@@ -22,7 +22,7 @@
 #import "NWPickerView.h"
 
 @implementation EqualizerViewController
-@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath, gainBoostLabel, isPresetPickerShowing, controlsContainer, gainBoostAmountLabel, lastGainValue, wasVisualizerOffBeforeRotation; //drawTimer;
+@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath, gainBoostLabel, isPresetPickerShowing, controlsContainer, gainBoostAmountLabel, lastGainValue, wasVisualizerOffBeforeRotation, swipeDetectorLeft, swipeDetectorRight; //drawTimer;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -84,7 +84,7 @@
 			self.wasVisualizerOffBeforeRotation = (equalizerView.visualType == ISMSBassVisualType_none);
 			if (self.wasVisualizerOffBeforeRotation)
 			{
-				[equalizerView changeType];
+				[equalizerView nextType];
 			}
 		}
 	}
@@ -160,6 +160,28 @@
 {
 	[overlay removeFromSuperview];
 	overlay = nil;
+}
+
+- (void)dealloc
+{
+	[controlsContainer release]; controlsContainer = nil;
+	[presetPicker release]; presetPicker = nil;
+	[toggleButton release]; toggleButton = nil;
+	[equalizerPath release]; equalizerPath = nil;
+	[equalizerView release]; equalizerView = nil;
+	[equalizerPointViews release]; equalizerPointViews = nil;
+	[gainSlider release]; gainSlider = nil;
+	[gainBoostAmountLabel release]; gainBoostAmountLabel = nil;
+	[gainBoostLabel release]; gainBoostLabel = nil;	
+	[effectDAO release]; effectDAO = nil;
+	[deletePresetButton release]; deletePresetButton = nil;
+	[savePresetButton release]; savePresetButton = nil;
+	[presetNameTextField release]; presetNameTextField = nil;
+	[saveDialog release]; saveDialog = nil;
+	[swipeDetectorLeft release]; swipeDetectorLeft = nil;
+	[swipeDetectorRight release]; swipeDetectorRight = nil;
+	
+	[super dealloc];
 }
 
 #pragma mark - View lifecycle
@@ -278,11 +300,19 @@
 		self.wasVisualizerOffBeforeRotation = (equalizerView.visualType == ISMSBassVisualType_none);
 		if (self.wasVisualizerOffBeforeRotation)
 		{
-			[equalizerView changeType];
+			[equalizerView nextType];
 		}
 	}	
 	
 	overlay = nil;
+	
+	swipeDetectorLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:equalizerView action:@selector(nextType)];
+	swipeDetectorLeft.direction = UISwipeGestureRecognizerDirectionLeft;
+	[equalizerView addGestureRecognizer:swipeDetectorLeft];
+
+	swipeDetectorRight = [[UISwipeGestureRecognizer alloc] initWithTarget:equalizerView action:@selector(prevType)];
+	swipeDetectorRight.direction = UISwipeGestureRecognizerDirectionRight;
+	[equalizerView addGestureRecognizer:swipeDetectorRight];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -639,12 +669,12 @@
 	}
 	else if ([touchedView isKindOfClass:[EqualizerView class]])
 	{
-		if ([touch tapCount] == 1)
+		/*if ([touch tapCount] == 1)
 		{
 			// Only change visualizers in lanscape mode, when visualier is full screen
 			if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
 				[self performSelector:@selector(type:) withObject:nil afterDelay:0.25];
-		}
+		}*/
 		if ([touch tapCount] == 2)
 		{
 			[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(type:) object:nil];
@@ -741,7 +771,7 @@
 
 - (IBAction)type:(id)sender
 {
-	[equalizerView changeType];
+	[equalizerView nextType];
 }
 
 #pragma mark -

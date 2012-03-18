@@ -45,7 +45,9 @@
 - (void)eraseBitBuffer;
 
 - (void)changeType:(ISMSBassVisualType)type;
-- (void)changeType;
+//- (void)changeType;
+- (void)nextType;
+- (void)prevType;
 
 - (void)startEqDisplay;
 - (void)stopEqDisplay;

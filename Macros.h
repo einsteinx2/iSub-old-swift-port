@@ -103,7 +103,8 @@ typedef enum
 	ISMSBassVisualType_line		 = 1,
 	ISMSBassVisualType_skinnyBar = 2,
 	ISMSBassVisualType_fatBar	 = 3,
-	ISMSBassVisualType_aphexFace = 4
+	ISMSBassVisualType_aphexFace = 4,
+	ISMSBassVisualType_maxValue  = 5
 } ISMSBassVisualType;
 
 #endif

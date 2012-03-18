@@ -173,11 +173,13 @@
 	[myId release]; myId = nil;
 	[myArtist release]; myArtist = nil;
 	[myAlbum release]; myAlbum = nil;
+	[sectionInfo release]; sectionInfo = nil;
 	
 	[playAllShuffleAllView release]; playAllShuffleAllView = nil;
 	[albumInfoView release]; albumInfoView = nil;
 	[albumInfoArtHolderView release]; albumInfoArtHolderView = nil;
 	[albumInfoArtView release]; albumInfoArtView = nil;
+	[albumInfoArtReflection release]; albumInfoArtReflection = nil;
 	[albumInfoLabelHolderView release]; albumInfoLabelHolderView = nil;
 	[albumInfoArtistLabel release]; albumInfoArtistLabel = nil;
 	[albumInfoAlbumLabel release]; albumInfoAlbumLabel = nil;

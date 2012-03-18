@@ -47,6 +47,8 @@
 
 @property BOOL wasVisualizerOffBeforeRotation;
 
+@property (retain) UISwipeGestureRecognizer *swipeDetectorLeft;
+@property (retain) UISwipeGestureRecognizer *swipeDetectorRight;
 
 //- (BOOL)isTouchingEqView:(UITouch *)touch;
 
