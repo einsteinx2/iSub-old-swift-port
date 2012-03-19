@@ -136,7 +136,7 @@
 	}
 	
 	// Twitter settings
-	if (socialS.twitterEngine && socialS.twitterEngine.isAuthorized)
+	if (socialS.twitterEngine.isAuthorized)
 	{
 		twitterEnabledSwitch.enabled = YES;
 		if (settingsS.isTwitterEnabled)
@@ -648,15 +648,16 @@
 
 - (IBAction)twitterButtonAction
 {
-	if (socialS.twitterEngine)
+	if (socialS.twitterEngine.isAuthorized)
 	{
-		//[appDelegateS.twitterEngine endUserSession];
-		socialS.twitterEngine = nil;
-		[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"twitterAuthData"];
+		[socialS destroyTwitterEngine];
 		[self reloadTwitterUIElements];
 	}
 	else
 	{
+		if (!socialS.twitterEngine)
+			[socialS createTwitterEngine];
+		
 		UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine:socialS.twitterEngine delegate:socialS];
 		if (controller) 
 		{

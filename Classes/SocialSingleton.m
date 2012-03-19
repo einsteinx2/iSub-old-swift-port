@@ -194,7 +194,7 @@ static SocialSingleton *sharedInstance = nil;
 	
 	DLog(@"Asked to tweet %@", currentSong.title);
 	
-	if (twitterEngine && settingsS.isTwitterEnabled && !viewObjectsS.isOfflineMode)
+	if (twitterEngine.isAuthorized && settingsS.isTwitterEnabled && !viewObjectsS.isOfflineMode)
 	{
 		if (currentSong.artist && currentSong.title)
 		{
@@ -205,7 +205,7 @@ static SocialSingleton *sharedInstance = nil;
 			else
 				[twitterEngine sendUpdate:[tweet substringToIndex:140]];
 			
-			DLog(@"Tweeted %@", currentSong.title);
+			DLog(@"Tweeted: %@", tweet);
 		}
 		else 
 		{
@@ -232,6 +232,17 @@ static SocialSingleton *sharedInstance = nil;
 }
 
 //=============================================================================================================================
+
+- (void)destroyTwitterEngine
+{
+	[self.twitterEngine endUserSession];
+	self.twitterEngine = nil;
+	
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[defaults removeObjectForKey:@"twitterAuthData"];
+	[defaults synchronize];
+}
+
 // SA_OAuthTwitterEngineDelegate
 - (void)storeCachedTwitterOAuthData:(NSString *)data forUsername:(NSString *)username 
 {

@@ -25,6 +25,7 @@
 
 + (SocialSingleton*)sharedInstance;
 - (void)createTwitterEngine;
+- (void)destroyTwitterEngine;
 
 - (void)scrobbleSongAsPlaying;
 - (void)scrobbleSongAsSubmission;

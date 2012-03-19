@@ -442,7 +442,7 @@
 	
 	[databaseS resetCurrentPlaylistDb];
 	
-	FMResultSet *result = [databaseS.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout ORDER BY seg1 COLLATE NOCASE"];
+	FMResultSet *result = [databaseS.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout ORDER BY seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9 COLLATE NOCASE"];
 	
 	while ([result next])
 	{			
