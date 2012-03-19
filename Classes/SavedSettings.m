@@ -1337,7 +1337,7 @@
 }
 
 // Test server details
-#define DEFAULT_URL @"http://isubapp.com:9000"
+#define DEFAULT_URL @"http://isubapp.com:9001"
 #define DEFAULT_USER_NAME @"isub-guest"
 #define DEFAULT_PASSWORD @"1sub1snumb3r0n3"
 
