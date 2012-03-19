@@ -195,6 +195,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {
 	[super viewWillAppear:animated];
 	
+	//[UIApplication setStatusBarHidden:NO withAnimation:NO];
+	
 	if (settingsS.isJukeboxEnabled)
 	{
 		[jukeboxS jukeboxGetInfo];

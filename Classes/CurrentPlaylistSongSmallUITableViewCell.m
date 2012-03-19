@@ -10,7 +10,7 @@
 
 @implementation CurrentPlaylistSongSmallUITableViewCell
 
-@synthesize numberLabel, songNameLabel, artistNameLabel, durationLabel;
+@synthesize numberLabel, songNameLabel, artistNameLabel, durationLabel, nowPlayingImageView;
 
 #pragma mark - Lifecycle
 
@@ -22,6 +22,7 @@
 		self.contentView.backgroundColor = [UIColor clearColor];
 		
 		numberLabel = [[UILabel alloc] init];
+		numberLabel.frame = CGRectMake(2, 0, 40, 45);
 		numberLabel.backgroundColor = [UIColor clearColor];
 		numberLabel.textAlignment = UITextAlignmentCenter;
 		numberLabel.textColor = [UIColor whiteColor];
@@ -29,7 +30,11 @@
 		numberLabel.adjustsFontSizeToFitWidth = YES;
 		numberLabel.minimumFontSize = 12;
 		[self.contentView addSubview:numberLabel];
-		[numberLabel release];
+		
+		nowPlayingImageView = [[UIImageView alloc] initWithImage:self.nowPlayingImageWhite];
+		nowPlayingImageView.center = numberLabel.center;
+		nowPlayingImageView.hidden = YES;
+		[self.contentView addSubview:nowPlayingImageView];
 		
 		songNameLabel = [[UILabel alloc] init];
 		songNameLabel.frame = CGRectMake(45, 0, 235, 30);
@@ -39,7 +44,6 @@
 		songNameLabel.textColor = [UIColor whiteColor];
 		songNameLabel.font = [UIFont boldSystemFontOfSize:18];
 		[self.contentView addSubview:songNameLabel];
-		[songNameLabel release];
 		
 		artistNameLabel = [[UILabel alloc] init];
 		artistNameLabel.frame = CGRectMake(45, 27, 235, 15);
@@ -49,7 +53,6 @@
 		artistNameLabel.textColor = [UIColor whiteColor];
 		artistNameLabel.font = [UIFont systemFontOfSize:12];
 		[self.contentView addSubview:artistNameLabel];
-		[artistNameLabel release];
 		
 		durationLabel = [[UILabel alloc] init];
 		durationLabel.frame = CGRectMake(270, 0, 45, 41);
@@ -61,18 +64,20 @@
 		durationLabel.adjustsFontSizeToFitWidth = YES;
 		durationLabel.minimumFontSize = 12;
 		[self.contentView addSubview:durationLabel];
-		[durationLabel release];
 	}
 	
 	return self;
 }
 
-- (void)layoutSubviews 
+- (void)dealloc
 {
-    [super layoutSubviews];
+	[numberLabel release]; numberLabel = nil;
+	[nowPlayingImageView release]; nowPlayingImageView = nil;
+	[songNameLabel release]; songNameLabel = nil;
+	[artistNameLabel release]; artistNameLabel = nil;
+	[durationLabel release]; durationLabel = nil;
 	
-	//self.deleteToggleImage.frame = CGRectMake(4, 11, 23, 23);
-	numberLabel.frame = CGRectMake(2, 0, 40, 45);
+	[super dealloc];
 }
 
 #pragma mark - Overlay

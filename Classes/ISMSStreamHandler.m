@@ -139,7 +139,6 @@
 		{
 			// File exists so seek to end
 			self.totalBytesTransferred = [self.fileHandle seekToEndOfFile];
-			
 			self.byteOffset += self.totalBytesTransferred;
 		}
 		else
@@ -347,94 +346,103 @@
 	
 	self.totalBytesTransferred += dataLength;
 	self.bytesTransferred += dataLength;
+	
+	if (self.fileHandle)
+	{
+		// Save the data to the file
+		@try
+		{
+			[self.fileHandle writeData:incrementalData];
+		}
+		@catch (NSException *exception) 
+		{
+			DLog(@"Failed to write to file %@, %@ - %@", self.mySong, exception.name, exception.description);
+			[self performSelectorOnMainThread:@selector(cancel) withObject:nil waitUntilDone:NO];
+		}
 		
-	// Save the data to the file
-	@try
-	{
-		[self.fileHandle writeData:incrementalData];
-	}
-	@catch (NSException *exception) 
-	{
-		DLog(@"Failed to write to file %@, %@ - %@", self.mySong, exception.name, exception.description);
-		[self performSelectorOnMainThread:@selector(cancel) withObject:nil waitUntilDone:NO];
-	}
-	
-	// Notify delegate if enough bytes received to start playback
-	if (!self.isDelegateNotifiedToStartPlayback && self.totalBytesTransferred >= ISMSMinBytesToStartPlayback(self.bitrate))
-	{
-		DLog(@"telling player to start, min bytes: %u, total bytes: %llu, bitrate: %u", ISMSMinBytesToStartPlayback(self.bitrate), self.totalBytesTransferred, self.bitrate);
-		self.isDelegateNotifiedToStartPlayback = YES;
-		//DLog(@"player told to start playback");
-		[self performSelectorOnMainThread:@selector(startPlaybackInternal) withObject:nil waitUntilDone:NO];
-	}
-	
-	// Log progress
-	if (isProgressLoggingEnabled)
-		DLog(@"downloadedLengthA:  %llu   bytesRead: %i", self.totalBytesTransferred, dataLength);
-	
-	// If near beginning of file, don't throttle
-	if (self.totalBytesTransferred < ISMSMinBytesToStartLimiting(self.bitrate))
-	{
+		// Notify delegate if enough bytes received to start playback
+		if (!self.isDelegateNotifiedToStartPlayback && self.totalBytesTransferred >= ISMSMinBytesToStartPlayback(self.bitrate))
+		{
+			DLog(@"telling player to start, min bytes: %u, total bytes: %llu, bitrate: %u", ISMSMinBytesToStartPlayback(self.bitrate), self.totalBytesTransferred, self.bitrate);
+			self.isDelegateNotifiedToStartPlayback = YES;
+			//DLog(@"player told to start playback");
+			[self performSelectorOnMainThread:@selector(startPlaybackInternal) withObject:nil waitUntilDone:NO];
+		}
+		
+		// Log progress
+		if (isProgressLoggingEnabled)
+			DLog(@"downloadedLengthA:  %llu   bytesRead: %i", self.totalBytesTransferred, dataLength);
+		
+		// If near beginning of file, don't throttle
+		if (self.totalBytesTransferred < ISMSMinBytesToStartLimiting(self.bitrate))
+		{
+			NSDate *now = [[NSDate alloc] init];
+			[threadDict setObject:now forKey:@"throttlingDate"];
+			[now release];
+			self.bytesTransferred = 0;		
+		}
+		
+		// Check if we should throttle
 		NSDate *now = [[NSDate alloc] init];
-		[threadDict setObject:now forKey:@"throttlingDate"];
+		NSTimeInterval intervalSinceLastThrottle = [now timeIntervalSinceDate:throttlingDate];
+		[throttlingDate release];
 		[now release];
-		self.bytesTransferred = 0;		
-	}
-	
-	// Check if we should throttle
-	NSDate *now = [[NSDate alloc] init];
-	NSTimeInterval intervalSinceLastThrottle = [now timeIntervalSinceDate:throttlingDate];
-	[throttlingDate release];
-	[now release];
-	if (intervalSinceLastThrottle > ISMSThrottleTimeInterval && self.totalBytesTransferred > ISMSMinBytesToStartLimiting(self.bitrate))
-	{		
-		NSTimeInterval delay = 0.0;
-		if (![iSubAppDelegate sharedInstance].isWifi && self.bytesTransferred > ISMSMaxBytesPerInterval3G)
-		{
-			if (isThrottleLoggingEnabled)
-				DLog(@"entering throttling if statement, interval: %f  bytes transferred: %llu  maxBytes: %f", intervalSinceLastThrottle, self.bytesTransferred, ISMSMaxBytesPerInterval3G);
-		
-			double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)self.bitrate is3G:YES];
-			delay = (ISMSThrottleTimeInterval * ((double)self.bytesTransferred / maxBytesPerInterval));
-			self.bytesTransferred = 0;
-			
-			if (isThrottleLoggingEnabled)
-				DLog(@"Bandwidth used is more than kMaxBytesPerInterval3G, Pausing for %f", delay);
-		}
-		else if ([iSubAppDelegate sharedInstance].isWifi 
-				 && self.bytesTransferred > ISMSMaxBytesPerIntervalWifi)
-		{
-			if (isThrottleLoggingEnabled)
-				DLog(@"entering throttling if statement, interval: %f  bytes transferred: %llu  maxBytes: %f", intervalSinceLastThrottle, self.bytesTransferred, ISMSMaxBytesPerIntervalWifi);
-			
-			double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)self.bitrate is3G:NO];
-			delay = (ISMSThrottleTimeInterval * ((double)self.bytesTransferred / maxBytesPerInterval));
-			self.bytesTransferred = 0;
-			
-			if (isThrottleLoggingEnabled)
-				DLog(@"Bandwidth used is more than kMaxBytesPerIntervalWifi, Pausing for %f", delay);
-		}
-		
-		[NSThread sleepForTimeInterval:delay];
-		
-		NSDate *newThrottlingDate = [[NSDate alloc] init];
-		[threadDict setObject:newThrottlingDate forKey:@"throttlingDate"];
-		[newThrottlingDate release];
-	}
-	
-	// Handle partial pre-cache next song
-	if (!self.isCurrentSong && !self.isTempCache && settingsS.isPartialCacheNextSong && self.partialPrecacheSleep)
-	{
-		NSUInteger partialPrecacheSize = BytesForSecondsAtBitrate(ISMSNumSecondsToPartialPreCache, self.mySong.estimatedBitrate);
-		if (self.totalBytesTransferred >= partialPrecacheSize)
-		{
-			[self performSelectorOnMainThread:@selector(partialPrecachePausedInternal) withObject:nil waitUntilDone:NO];
-			while (self.partialPrecacheSleep)
+		if (intervalSinceLastThrottle > ISMSThrottleTimeInterval && self.totalBytesTransferred > ISMSMinBytesToStartLimiting(self.bitrate))
+		{		
+			NSTimeInterval delay = 0.0;
+			if (![iSubAppDelegate sharedInstance].isWifi && self.bytesTransferred > ISMSMaxBytesPerInterval3G)
 			{
-				[NSThread sleepForTimeInterval:0.1];
+				if (isThrottleLoggingEnabled)
+					DLog(@"entering throttling if statement, interval: %f  bytes transferred: %llu  maxBytes: %f", intervalSinceLastThrottle, self.bytesTransferred, ISMSMaxBytesPerInterval3G);
+				
+				double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)self.bitrate is3G:YES];
+				delay = (ISMSThrottleTimeInterval * ((double)self.bytesTransferred / maxBytesPerInterval));
+				self.bytesTransferred = 0;
+				
+				if (isThrottleLoggingEnabled)
+					DLog(@"Bandwidth used is more than kMaxBytesPerInterval3G, Pausing for %f", delay);
 			}
-			[self performSelectorOnMainThread:@selector(partialPrecacheUnpausedInternal) withObject:nil waitUntilDone:NO];
+			else if ([iSubAppDelegate sharedInstance].isWifi 
+					 && self.bytesTransferred > ISMSMaxBytesPerIntervalWifi)
+			{
+				if (isThrottleLoggingEnabled)
+					DLog(@"entering throttling if statement, interval: %f  bytes transferred: %llu  maxBytes: %f", intervalSinceLastThrottle, self.bytesTransferred, ISMSMaxBytesPerIntervalWifi);
+				
+				double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)self.bitrate is3G:NO];
+				delay = (ISMSThrottleTimeInterval * ((double)self.bytesTransferred / maxBytesPerInterval));
+				self.bytesTransferred = 0;
+				
+				if (isThrottleLoggingEnabled)
+					DLog(@"Bandwidth used is more than kMaxBytesPerIntervalWifi, Pausing for %f", delay);
+			}
+			
+			[NSThread sleepForTimeInterval:delay];
+			
+			NSDate *newThrottlingDate = [[NSDate alloc] init];
+			[threadDict setObject:newThrottlingDate forKey:@"throttlingDate"];
+			[newThrottlingDate release];
 		}
+		
+		// Handle partial pre-cache next song
+		if (!self.isCurrentSong && !self.isTempCache && settingsS.isPartialCacheNextSong && self.partialPrecacheSleep)
+		{
+			NSUInteger partialPrecacheSize = BytesForSecondsAtBitrate(ISMSNumSecondsToPartialPreCache, self.mySong.estimatedBitrate);
+			if (self.totalBytesTransferred >= partialPrecacheSize)
+			{
+				[self performSelectorOnMainThread:@selector(partialPrecachePausedInternal) withObject:nil waitUntilDone:NO];
+				while (self.partialPrecacheSleep)
+				{
+					[NSThread sleepForTimeInterval:0.1];
+				}
+				[self performSelectorOnMainThread:@selector(partialPrecacheUnpausedInternal) withObject:nil waitUntilDone:NO];
+			}
+		}
+	}
+	else
+	{
+		// There is no file handle for some reason, cancel the connection
+		[self.connection cancel];
+		[self connection:self.connection didFailWithError:nil];
 	}
 }
 

@@ -49,6 +49,7 @@
 #import "MenuViewController.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "ISMSCacheQueueManager.h"
+#import "NSObject+GCDExtention.h"
 
 @implementation iSubAppDelegate
 
@@ -104,6 +105,7 @@
 	wifiReach = [[Reachability reachabilityForLocalWiFi] retain];
 	[wifiReach startNotifier];
 	[[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reachabilityChanged:) name: kReachabilityChangedNotification object:nil];
+	[wifiReach currentReachabilityStatus];
 	
 	// Check battery state and register for notifications
 	[UIDevice currentDevice].batteryMonitoringEnabled = YES;
@@ -763,15 +765,8 @@
 	[musicS updateLockScreenInfo];
 }
 
-
-- (void)reachabilityChanged: (NSNotification *)note
-{
-	if (settingsS.isForceOfflineMode)
-		return;
-	
-	Reachability* curReach = [note object];
-	NSParameterAssert([curReach isKindOfClass:[Reachability class]]);
-	
+- (void)reachabilityChangedInternal:(Reachability *)curReach
+{	
 	if ([curReach currentReachabilityStatus] == NotReachable)
 	{
 		//DLog(@"Reachability Changed: NotReachable");
@@ -820,6 +815,26 @@
 		{
 			[cacheQueueManagerS stopDownloadQueue];
 		}
+	}
+}
+
+
+- (void)reachabilityChanged: (NSNotification *)note
+{
+	if (settingsS.isForceOfflineMode)
+		return;
+	
+	if ([[note object] isKindOfClass:[Reachability class]])
+	{
+		// Cancel any previous requests
+		[NSObject gcdCancelTimerBlockWithName:@"Reachability Changed"];
+		
+		// Perform the actual check in two seconds to make sure it's the last message received
+		// this prevents a bug where the status changes from wifi to not reachable, but first it receives
+		// some messages saying it's still on wifi, then gets the not reachable messages
+		[self gcdTimerPerformBlockInMainQueue:^{
+			[self reachabilityChangedInternal:[note object]];
+		} afterDelay:2.0 withName:@"Reachability Changed"];
 	}
 }
 

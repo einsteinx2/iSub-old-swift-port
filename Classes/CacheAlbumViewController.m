@@ -291,12 +291,61 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	
 	[databaseS resetCurrentPlaylistDb];
 	
-	NSMutableString *query = [NSMutableString stringWithString:@"SELECT md5 FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? "];
+	/*NSMutableString *query = [NSMutableString stringWithString:@"SELECT md5 FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? "];
 	for (int i = 2; i <= segment; i++)
 	{
 		[query appendFormat:@" AND seg%i = ? ", i];
 	}
 	[query appendFormat:@"ORDER BY seg%i COLLATE NOCASE", segment];
+	DLog(@"query: %@", query);
+	DLog(@"segments: %@", segments);
+	
+	FMResultSet *result = [databaseS.songCacheDb executeQuery:query withArgumentsInArray:segments];
+	while ([result next])
+	{
+		if ([result stringForColumnIndex:0] != nil)
+			[[Song songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCurrentPlaylist];
+	}
+	[result close];*/ // Original code
+	
+	// Go through any subalbums first
+	for (NSArray *album in self.listOfAlbums)
+	{
+		NSString *albumName = [album objectAtIndexSafe:1];
+		
+		NSMutableString *query = [NSMutableString stringWithString:@"SELECT md5 FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? "];
+		for (int i = 2; i <= segment; i++)
+		{
+			[query appendFormat:@" AND seg%i = ? ", i];
+		}
+		[query appendFormat:@" AND seg%i = ? ", segment+1];
+		[query appendFormat:@"ORDER BY seg%i, track COLLATE NOCASE", segment+1];
+		
+		NSMutableArray *newSegments = [NSMutableArray arrayWithArray:segments];
+		[newSegments addObject:albumName];
+		
+		DLog(@"query: %@", query);
+		DLog(@"segments: %@", newSegments);
+		
+		FMResultSet *result = [databaseS.songCacheDb executeQuery:query withArgumentsInArray:newSegments];
+		while ([result next])
+		{
+			if ([result stringForColumnIndex:0] != nil)
+				[[Song songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCurrentPlaylist];
+		}
+		[result close];
+	}
+	
+	// Then go through the songs in the current album
+	NSMutableString *query = [NSMutableString stringWithString:@"SELECT md5 FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? "];
+	for (int i = 2; i <= segment; i++)
+	{
+		[query appendFormat:@" AND seg%i = ? ", i];
+	}
+	[query appendFormat:@" AND segs = %i", segment+1];
+	[query appendFormat:@"ORDER BY seg%i COLLATE NOCASE", segment];
+	DLog(@"query: %@", query);
+	DLog(@"segments: %@", segments);
 	
 	FMResultSet *result = [databaseS.songCacheDb executeQuery:query withArgumentsInArray:segments];
 	while ([result next])
@@ -305,6 +354,40 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			[[Song songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCurrentPlaylist];
 	}
 	[result close];
+	
+	/*FMResultSet *result = [databaseS.songCacheDb executeQuery:query withArgumentsInArray:newSegments];
+	while ([result next])
+	{
+		if ([result intForColumnIndex:1] > (segment + 1))
+		{
+			NSArray *albumEntry = [NSArray arrayWithObjects:[result stringForColumnIndex:0], [result stringForColumnIndex:2], nil];
+			[cacheAlbumViewController.listOfAlbums addObject:albumEntry];
+		}
+		else
+		{
+			NSArray *songEntry = [NSArray arrayWithObjects:[result stringForColumnIndex:0], [NSNumber numberWithInt:[result intForColumnIndex:3]], nil];
+			[cacheAlbumViewController.listOfSongs addObject:songEntry];
+			
+			BOOL multipleSameTrackNumbers = NO;
+			NSMutableArray *trackNumbers = [NSMutableArray arrayWithCapacity:[cacheAlbumViewController.listOfSongs count]];
+			for (NSArray *song in cacheAlbumViewController.listOfSongs)
+			{
+				NSNumber *track = [song objectAtIndexSafe:1];
+				
+				if ([trackNumbers containsObject:track])
+				{
+					multipleSameTrackNumbers = YES;
+					break;
+				}
+				
+				[trackNumbers addObject:track];
+			}
+			
+			// Sort by track number
+			if (!multipleSameTrackNumbers)
+				[cacheAlbumViewController.listOfSongs sortUsingFunction:trackSort2 context:NULL];
+		}
+	}*/
 	
 	if (isShuffle)
 	{

@@ -84,6 +84,8 @@
 
 - (void)registerForNotifications
 {
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_BassInitialized object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_BassFreed object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentPlaylistCount) name:@"updateCurrentPlaylistCount" object:nil];
@@ -92,6 +94,8 @@
 
 - (void)unregisterForNotifications
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_BassInitialized object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_BassFreed object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"updateCurrentPlaylistCount" object:nil];
@@ -1631,7 +1635,17 @@ static NSString *kName_Error = @"error";
 		
 		cell.coverArtView.coverArtId = aSong.coverArtId;
 		
-		cell.numberLabel.text = [NSString stringWithFormat:@"%i", (indexPath.row + 1)];
+		if (indexPath.row == playlistS.currentIndex && !audioEngineS.isBassFreed)
+		{
+			cell.nowPlayingImageView.hidden = NO;
+			cell.numberLabel.hidden = YES;
+		}
+		else 
+		{
+			cell.nowPlayingImageView.hidden = YES;
+			cell.numberLabel.hidden = NO;
+			cell.numberLabel.text = [NSString stringWithFormat:@"%i", (indexPath.row + 1)];
+		}
 		
 		cell.songNameLabel.text = aSong.title;
 		

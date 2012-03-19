@@ -63,7 +63,7 @@ static void PrintReachabilityFlags(SCNetworkReachabilityFlags    flags, const ch
 {
 #if kShouldPrintReachabilityFlags
 	
-    //DLog(@"Reachability Flag Status: %c%c %c%c%c%c%c%c%c %s\n",
+    DLog(@"Reachability Flag Status: %c%c %c%c%c%c%c%c%c %s\n",
 			(flags & kSCNetworkReachabilityFlagsIsWWAN)				  ? 'W' : '-',
 			(flags & kSCNetworkReachabilityFlagsReachable)            ? 'R' : '-',
 			
@@ -286,6 +286,8 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReach
 			retVal = [self networkStatusForFlags: flags];
 		}
 	}
+	
+	PrintReachabilityFlags(flags, "");
 	return retVal;
 }
 @end

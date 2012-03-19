@@ -14,5 +14,6 @@
 @property (retain) UILabel *songNameLabel;
 @property (retain) UILabel *artistNameLabel;
 @property (retain) UILabel *durationLabel;
+@property (retain) UIImageView *nowPlayingImageView;
 
 @end

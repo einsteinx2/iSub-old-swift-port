@@ -129,6 +129,8 @@ typedef struct
 @property (retain) NSObject *eqReadSyncObject;
 @property (retain) NSObject *ringBufferSyncObject;
 
+@property BOOL isBassFreed;
+
 const char *GetCTypeString(DWORD ctype, HPLUGIN plugin);
 
 // Playback methods

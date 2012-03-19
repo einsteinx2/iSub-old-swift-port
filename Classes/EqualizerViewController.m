@@ -20,9 +20,12 @@
 #import "UIApplication+StatusBar.h"
 #import "SnappySlider.h"
 #import "NWPickerView.h"
+#import "NSObject+GCDExtention.h"
 
 @implementation EqualizerViewController
-@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath, gainBoostLabel, isPresetPickerShowing, controlsContainer, gainBoostAmountLabel, lastGainValue, wasVisualizerOffBeforeRotation, swipeDetectorLeft, swipeDetectorRight; //drawTimer;
+@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath, gainBoostLabel, isPresetPickerShowing, controlsContainer, gainBoostAmountLabel, lastGainValue, wasVisualizerOffBeforeRotation, swipeDetectorLeft, swipeDetectorRight, landscapeButtonsHolder; //drawTimer;
+
+#define hidePickerTimer @"EqualizerViewController hide picker timer"
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -63,6 +66,9 @@
 			{
 				[equalizerView changeType:ISMSBassVisualType_none];
 			}
+			
+			/*if (self.landscapeButtonsHolder.superview)
+				[self hideLandscapeVisualizerButtons];*/
 		}
 	}
 	else
@@ -113,6 +119,12 @@
 	[backViewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
+- (void)dismissPicker
+{
+	[presetPicker resignFirstResponder];
+	[NSObject gcdCancelTimerBlockWithName:hidePickerTimer];
+}
+
 - (void)createOverlay
 {
 	overlay = [[UIView alloc] init];
@@ -126,7 +138,7 @@
 	
 	dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	[dismissButton addTarget:presetPicker action:@selector(resignFirstResponder) forControlEvents:UIControlEventTouchUpInside];
+	[dismissButton addTarget:self action:@selector(dismissPicker) forControlEvents:UIControlEventTouchUpInside];
 	dismissButton.frame = self.view.bounds;
 	dismissButton.enabled = NO;
 	[overlay addSubview:dismissButton];
@@ -164,6 +176,7 @@
 
 - (void)dealloc
 {
+	[landscapeButtonsHolder release]; landscapeButtonsHolder = nil;
 	[controlsContainer release]; controlsContainer = nil;
 	[presetPicker release]; presetPicker = nil;
 	[toggleButton release]; toggleButton = nil;
@@ -185,6 +198,33 @@
 }
 
 #pragma mark - View lifecycle
+
+/*- (void)showLandscapeVisualizerButtons
+{
+	if (self.landscapeButtonsHolder.superview)
+		return;
+	
+	self.landscapeButtonsHolder.alpha = 0.0;
+	[self.view addSubview:self.landscapeButtonsHolder];
+	[UIView animateWithDuration:0.3 animations:^{
+		self.landscapeButtonsHolder.alpha = 1.0;
+	}completion: ^(BOOL finished){
+		[self performSelector:@selector(hideLandscapeVisualizerButtons) withObject:nil afterDelay:5.0];
+	}];
+}
+
+- (void)hideLandscapeVisualizerButtons
+{
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideLandscapeVisualizerButtons) object:nil];
+	
+	[UIView animateWithDuration:0.3  
+	animations: ^{
+		self.landscapeButtonsHolder.alpha = 0.0;
+	}				 
+	completion: ^(BOOL finished){
+		[self.landscapeButtonsHolder removeFromSuperview];
+	}];
+}*/
 
 - (void)pickerWillShown
 {
@@ -642,7 +682,7 @@
 #pragma mark Touch gestures interception
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
+{	
 	// Detect touch anywhere
 	UITouch *touch = [touches anyObject];
 	DLog(@"touch began");
@@ -667,13 +707,22 @@
 			[self createAndDrawEqualizerPath];
 		}
 	}
+	/*else if (touchedView == self.landscapeButtonsHolder)
+	{
+		[self hideLandscapeVisualizerButtons];
+	}*/
 	else if ([touchedView isKindOfClass:[EqualizerView class]])
 	{
 		/*if ([touch tapCount] == 1)
 		{
+			if (!IS_IPAD() && UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
+			{
+				[self showLandscapeVisualizerButtons];
+			}
+			
 			// Only change visualizers in lanscape mode, when visualier is full screen
-			if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
-				[self performSelector:@selector(type:) withObject:nil afterDelay:0.25];
+			//if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
+			//	[self performSelector:@selector(type:) withObject:nil afterDelay:0.25];
 		}*/
 		if ([touch tapCount] == 2)
 		{
@@ -735,6 +784,7 @@
 
 - (IBAction)dismiss:(id)sender
 {
+	//[UIApplication setStatusBarHidden:NO withAnimation:NO];
 	[self.navigationController popViewControllerAnimated:YES];
 	//[self dismissModalViewControllerAnimated:YES];
 }
@@ -818,6 +868,12 @@
 	{
 		[self hideDeletePresetButton:YES];
 	}
+	
+	// Dismiss the picker view after a few seconds
+	[NSObject gcdCancelTimerBlockWithName:hidePickerTimer];
+	[self gcdTimerPerformBlockInMainQueue:^{
+		[presetPicker resignFirstResponder];
+	} afterDelay:5.0 withName:hidePickerTimer];
 }
 
 #pragma mark - TableView delegate for save dialog -

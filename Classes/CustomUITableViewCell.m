@@ -14,6 +14,9 @@
 @implementation CustomUITableViewCell
 @synthesize isOverlayShowing, overlayView, isIndexShowing, indexPath, isSearching, deleteToggleImage, isDelete;
 
+static UIImage *nowPlayingImageBlack = nil;
+static UIImage *nowPlayingImageWhite = nil;
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -131,6 +134,22 @@
 	}
 	
 	self.isDelete = !self.isDelete;
+}
+
+- (UIImage *)nowPlayingImageBlack
+{
+	if (!nowPlayingImageBlack)
+		nowPlayingImageBlack = [[UIImage imageNamed:@"playing-cell-icon.png"] retain];
+	
+	return nowPlayingImageBlack;
+}
+
+- (UIImage *)nowPlayingImageWhite
+{
+	if (!nowPlayingImageWhite)
+		nowPlayingImageWhite = [[UIImage imageNamed:@"playing-cell-icon-white.png"] retain];
+	
+	return nowPlayingImageWhite;
 }
 
 @end

@@ -19,7 +19,7 @@
 
 @implementation CurrentPlaylistSongUITableViewCell
 
-@synthesize coverArtView, numberLabel, nameScrollView, songNameLabel, artistNameLabel;
+@synthesize coverArtView, numberLabel, nameScrollView, songNameLabel, artistNameLabel, nowPlayingImageView;
 
 #pragma mark - Lifecycle
 
@@ -28,18 +28,23 @@
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) 
 	{		
 		coverArtView = [[AsynchronousImageView alloc] init];
+		coverArtView.frame = CGRectMake(0, 0, 60, 60);
 		coverArtView.isLarge = NO;
 		[self.contentView addSubview:coverArtView];
-		[coverArtView release];
 		
 		numberLabel = [[UILabel alloc] init];
+		numberLabel.frame = CGRectMake(62, 0, 40, 60);
 		numberLabel.backgroundColor = [UIColor clearColor];
 		numberLabel.textAlignment = UITextAlignmentCenter;
 		numberLabel.font = [UIFont boldSystemFontOfSize:30];
 		numberLabel.adjustsFontSizeToFitWidth = YES;
 		numberLabel.minimumFontSize = 12;
 		[self.contentView addSubview:numberLabel];
-		[numberLabel release];		
+		
+		nowPlayingImageView = [[UIImageView alloc] initWithImage:self.nowPlayingImageBlack];
+		nowPlayingImageView.center = numberLabel.center;
+		nowPlayingImageView.hidden = YES;
+		[self.contentView addSubview:nowPlayingImageView];
 				
 		nameScrollView = [[UIScrollView alloc] init];
 		nameScrollView.frame = CGRectMake(105, 0, 210, 60);
@@ -49,33 +54,39 @@
 		nameScrollView.userInteractionEnabled = NO;
 		nameScrollView.decelerationRate = UIScrollViewDecelerationRateFast;
 		[self.contentView addSubview:nameScrollView];
-		[nameScrollView release];
 		
 		songNameLabel = [[UILabel alloc] init];
 		songNameLabel.backgroundColor = [UIColor clearColor];
 		songNameLabel.textAlignment = UITextAlignmentLeft; // default
 		songNameLabel.font = [UIFont boldSystemFontOfSize:20];
 		[nameScrollView addSubview:songNameLabel];
-		[songNameLabel release];
 		
 		artistNameLabel = [[UILabel alloc] init];
 		artistNameLabel.backgroundColor = [UIColor clearColor];
 		artistNameLabel.textAlignment = UITextAlignmentLeft; // default
 		artistNameLabel.font = [UIFont systemFontOfSize:15];
 		[nameScrollView addSubview:artistNameLabel];
-		[artistNameLabel release];
 	}
 	
 	return self;
 }
 
+- (void)dealloc
+{
+	[coverArtView release]; coverArtView = nil;
+	[numberLabel release]; numberLabel = nil;
+	[nameScrollView release]; nameScrollView = nil;
+	[songNameLabel release]; songNameLabel = nil;
+	[artistNameLabel release]; artistNameLabel = nil;
+	[nowPlayingImageView release]; nowPlayingImageView = nil;
+	
+	[super dealloc];
+}
+
+
 - (void)layoutSubviews 
 {
     [super layoutSubviews];
-	
-	//self.deleteToggleImage.frame = CGRectMake(4.0, 18.5, 23.0, 23.0);
-	coverArtView.frame = CGRectMake(0, 0, 60, 60);
-	numberLabel.frame = CGRectMake(62, 0, 40, 60);
 	
 	// Automatically set the width based on the width of the text
 	songNameLabel.frame = CGRectMake(0, 0, 190, 40);

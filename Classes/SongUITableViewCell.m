@@ -17,7 +17,7 @@
 
 @implementation SongUITableViewCell
 
-@synthesize mySong, trackNumberLabel, songNameScrollView, songNameLabel, artistNameLabel, songDurationLabel;
+@synthesize mySong, trackNumberLabel, songNameScrollView, songNameLabel, artistNameLabel, songDurationLabel, nowPlayingImageView;
 
 #pragma mark - Lifecycle
 
@@ -33,7 +33,11 @@
 		trackNumberLabel.adjustsFontSizeToFitWidth = YES;
 		trackNumberLabel.minimumFontSize = 16;
 		[self.contentView addSubview:trackNumberLabel];
-		[trackNumberLabel release];
+		
+		nowPlayingImageView = [[UIImageView alloc] initWithImage:self.nowPlayingImageBlack];
+		nowPlayingImageView.center = trackNumberLabel.center;
+		nowPlayingImageView.hidden = YES;
+		[self.contentView addSubview:nowPlayingImageView];
 		
 		songNameScrollView = [[UIScrollView alloc] init];
 		songNameScrollView.frame = CGRectMake(35, 0, 235, 50);
@@ -43,14 +47,12 @@
 		songNameScrollView.userInteractionEnabled = NO;
 		songNameScrollView.decelerationRate = UIScrollViewDecelerationRateFast;
 		[self.contentView addSubview:songNameScrollView];
-		[songNameScrollView release];
 		
 		songNameLabel = [[UILabel alloc] init];
 		songNameLabel.backgroundColor = [UIColor clearColor];
 		songNameLabel.textAlignment = UITextAlignmentLeft;
 		songNameLabel.font = [UIFont systemFontOfSize:20];
 		[songNameScrollView addSubview:songNameLabel];
-		[songNameLabel release];
 		
 		artistNameLabel = [[UILabel alloc] init];
 		artistNameLabel.backgroundColor = [UIColor clearColor];
@@ -58,7 +60,6 @@
 		artistNameLabel.font = [UIFont systemFontOfSize:13];
 		artistNameLabel.textColor = [UIColor colorWithWhite:.4 alpha:1];
 		[songNameScrollView addSubview:artistNameLabel];
-		[artistNameLabel release];
 		
 		songDurationLabel = [[UILabel alloc] init];
 		songDurationLabel.frame = CGRectMake(270, 0, 45, 41);
@@ -70,7 +71,6 @@
 		songDurationLabel.minimumFontSize = 12;
 		songDurationLabel.textColor = [UIColor grayColor];
 		[self.contentView addSubview:songDurationLabel];
-		[songDurationLabel release];
 	}
 	
 	return self;
@@ -99,6 +99,13 @@
 - (void)dealloc 
 {
 	[mySong release]; mySong = nil;
+
+	[trackNumberLabel release]; trackNumberLabel = nil;
+	[nowPlayingImageView release]; nowPlayingImageView = nil;
+	[songNameScrollView release]; songNameScrollView = nil;
+	[songNameLabel release]; songNameLabel = nil;
+	[artistNameLabel release]; artistNameLabel = nil;
+	[songDurationLabel release]; songDurationLabel = nil;
 	
 	[super dealloc];
 }

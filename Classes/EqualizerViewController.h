@@ -50,6 +50,8 @@
 @property (retain) UISwipeGestureRecognizer *swipeDetectorLeft;
 @property (retain) UISwipeGestureRecognizer *swipeDetectorRight;
 
+@property (retain) IBOutlet UIView *landscapeButtonsHolder;
+
 //- (BOOL)isTouchingEqView:(UITouch *)touch;
 
 //- (CGPoint)centerForBassEqValue:(BassParamEqValue *)value;

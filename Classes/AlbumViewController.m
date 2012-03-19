@@ -37,6 +37,7 @@
 #import "UIImageView+Reflection.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "AudioEngine.h"
 
 @interface AlbumViewController (Private)
 - (void)dataSourceDidFinishLoadingNewData;
@@ -374,10 +375,21 @@
 		        
 		cell.mySong = aSong;
 		
-		if ( [aSong.track intValue] != 0 )
-			cell.trackNumberLabel.text = [NSString stringWithFormat:@"%i", [aSong.track intValue]];
-		else
-			cell.trackNumberLabel.text = @"";
+		if ([aSong isEqualToSong:audioEngineS.currentStreamSong])
+		{
+			cell.nowPlayingImageView.hidden = NO;
+			cell.trackNumberLabel.hidden = YES;
+		}
+		else 
+		{
+			cell.nowPlayingImageView.hidden = YES;
+			cell.trackNumberLabel.hidden = NO;
+			
+			if ( [aSong.track intValue] != 0 )
+				cell.trackNumberLabel.text = [NSString stringWithFormat:@"%i", [aSong.track intValue]];
+			else
+				cell.trackNumberLabel.text = @"";
+		}
 		
 		cell.songNameLabel.text = aSong.title;
 		

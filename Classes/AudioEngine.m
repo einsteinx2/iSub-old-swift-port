@@ -35,6 +35,7 @@
 @synthesize hasTweeted, hasNotifiedSubsonic, hasScrobbled;
 @synthesize ringBufferThread;
 @synthesize currentStreamSong;
+@synthesize isBassFreed;
 
 // BASS plugins
 extern void BASSFLACplugin;
@@ -75,45 +76,48 @@ static AudioEngine *sharedInstance = nil;
 	{
 		// CoreAudio codec
 		const TAG_CA_CODEC *codec = (TAG_CA_CODEC*)BASS_ChannelGetTags(self.currentStream, BASS_TAG_CA_CODEC); // get codec info
-				
-		const char *type;
-		switch (codec->atype) 
+		
+		const char *type = " ";
+		if (codec != NULL)
 		{
-			case kAudioFormatLinearPCM:				type = "LPCM"; break;
-			case kAudioFormatAC3:					type = "AC3"; break;
-			case kAudioFormat60958AC3:				type = "AC3"; break;
-			case kAudioFormatAppleIMA4:				type = "IMA4"; break;
-			case kAudioFormatMPEG4AAC:				type = "AAC"; break;
-			case kAudioFormatMPEG4CELP:				type = "CELP"; break;
-			case kAudioFormatMPEG4HVXC:				type = "HVXC"; break;
-			case kAudioFormatMPEG4TwinVQ:			type = "TwinVQ"; break;
-			case kAudioFormatMACE3:					type = "MACE 3:1"; break;
-			case kAudioFormatMACE6:					type = "MACE 6:1"; break;
-			case kAudioFormatULaw:					type = "μLaw 2:1"; break;
-			case kAudioFormatALaw:					type = "aLaw 2:1"; break;
-			case kAudioFormatQDesign:				type = "QDMC"; break;
-			case kAudioFormatQDesign2:				type = "QDM2"; break;
-			case kAudioFormatQUALCOMM:				type = "QCPV"; break;
-			case kAudioFormatMPEGLayer1:			type = "MP1"; break;
-			case kAudioFormatMPEGLayer2:			type = "MP2"; break;
-			case kAudioFormatMPEGLayer3:			type = "MP3"; break;
-			case kAudioFormatTimeCode:				type = "TIME"; break;
-			case kAudioFormatMIDIStream:			type = "MIDI"; break;
-			case kAudioFormatParameterValueStream:	type = "APVS"; break;
-			case kAudioFormatAppleLossless:			type = "ALAC"; break;
-			case kAudioFormatMPEG4AAC_HE:			type = "AAC-HE"; break;
-			case kAudioFormatMPEG4AAC_LD:			type = "AAC-LD"; break;
-			case kAudioFormatMPEG4AAC_ELD:			type = "AAC-ELD"; break;
-			case kAudioFormatMPEG4AAC_ELD_SBR:		type = "AAC-SBR"; break;
-			case kAudioFormatMPEG4AAC_HE_V2:		type = "AAC-HEv2"; break;
-			case kAudioFormatMPEG4AAC_Spatial:		type = "AAC-S"; break;
-			case kAudioFormatAMR:					type = "AMR"; break;
-			case kAudioFormatAudible:				type = "AUDB"; break;
-			case kAudioFormatiLBC:					type = "iLBC"; break;
-			case kAudioFormatDVIIntelIMA:			type = "ADPCM"; break;
-			case kAudioFormatMicrosoftGSM:			type = "GSM"; break;
-			case kAudioFormatAES3:					type = "AES3"; break;
-			default:								type = " "; break;
+			switch (codec->atype) 
+			{
+				case kAudioFormatLinearPCM:				type = "LPCM"; break;
+				case kAudioFormatAC3:					type = "AC3"; break;
+				case kAudioFormat60958AC3:				type = "AC3"; break;
+				case kAudioFormatAppleIMA4:				type = "IMA4"; break;
+				case kAudioFormatMPEG4AAC:				type = "AAC"; break;
+				case kAudioFormatMPEG4CELP:				type = "CELP"; break;
+				case kAudioFormatMPEG4HVXC:				type = "HVXC"; break;
+				case kAudioFormatMPEG4TwinVQ:			type = "TwinVQ"; break;
+				case kAudioFormatMACE3:					type = "MACE 3:1"; break;
+				case kAudioFormatMACE6:					type = "MACE 6:1"; break;
+				case kAudioFormatULaw:					type = "μLaw 2:1"; break;
+				case kAudioFormatALaw:					type = "aLaw 2:1"; break;
+				case kAudioFormatQDesign:				type = "QDMC"; break;
+				case kAudioFormatQDesign2:				type = "QDM2"; break;
+				case kAudioFormatQUALCOMM:				type = "QCPV"; break;
+				case kAudioFormatMPEGLayer1:			type = "MP1"; break;
+				case kAudioFormatMPEGLayer2:			type = "MP2"; break;
+				case kAudioFormatMPEGLayer3:			type = "MP3"; break;
+				case kAudioFormatTimeCode:				type = "TIME"; break;
+				case kAudioFormatMIDIStream:			type = "MIDI"; break;
+				case kAudioFormatParameterValueStream:	type = "APVS"; break;
+				case kAudioFormatAppleLossless:			type = "ALAC"; break;
+				case kAudioFormatMPEG4AAC_HE:			type = "AAC-HE"; break;
+				case kAudioFormatMPEG4AAC_LD:			type = "AAC-LD"; break;
+				case kAudioFormatMPEG4AAC_ELD:			type = "AAC-ELD"; break;
+				case kAudioFormatMPEG4AAC_ELD_SBR:		type = "AAC-SBR"; break;
+				case kAudioFormatMPEG4AAC_HE_V2:		type = "AAC-HEv2"; break;
+				case kAudioFormatMPEG4AAC_Spatial:		type = "AAC-S"; break;
+				case kAudioFormatAMR:					type = "AMR"; break;
+				case kAudioFormatAudible:				type = "AUDB"; break;
+				case kAudioFormatiLBC:					type = "iLBC"; break;
+				case kAudioFormatDVIIntelIMA:			type = "ADPCM"; break;
+				case kAudioFormatMicrosoftGSM:			type = "GSM"; break;
+				case kAudioFormatAES3:					type = "AES3"; break;
+				default:								type = " "; break;
+			}
 		}
 		
 		return [NSString stringWithFormat:@"%s", type];
@@ -1059,6 +1063,10 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	//AudioSessionAddPropertyListener(kAudioSessionProperty_OtherAudioIsPlaying, audioInterruptionListenerCallback, self);
 	
 	ringBuffer->stopFilling = NO;
+	
+	self.isBassFreed = NO;
+	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_BassInitialized];
 }
 
 - (void)bassInit
@@ -1115,12 +1123,15 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		buffersTilSongEnd = 0;
 		buffersUsedSinceSongEnd = 0;
 		songEnded = NO;
+		self.isBassFreed = YES;
 		
 		[self clearRingBuffer];
 		
 		[self clearSocial];
 		
 		[self.bassUserInfoDict removeAllObjects];
+		
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_BassFreed];
 				
 		return success;
 	}
@@ -1984,8 +1995,7 @@ void RunBlockAfterDelay(void (^block)(void), NSTimeInterval delay)
 
 - (void)setup
 {	
-	//startSongRetryTimer = nil;
-	//nextSongRetryTimer = nil;
+	isBassFreed = YES;
 	
 	ringBufferThread = [[NSThread alloc] initWithTarget:self selector:@selector(ringBufferThreadEntryPoint) object:nil];
 	[ringBufferThread start];

@@ -21,6 +21,9 @@
 @property (retain) UIImageView *deleteToggleImage;
 @property BOOL isDelete;
 
+@property (readonly) UIImage *nowPlayingImageBlack;
+@property (readonly) UIImage *nowPlayingImageWhite;
+
 - (void)showOverlay;
 - (void)hideOverlay;
 

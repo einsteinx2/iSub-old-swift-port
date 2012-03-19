@@ -59,4 +59,7 @@
 #define ISMSNotification_EnteringOfflineMode @"ISMS entering offline mode"
 #define ISMSNotification_EnteringOnlineMode @"ISMS entering online mode"
 
+#define ISMSNotification_BassInitialized @"ISMS bass initialized"
+#define ISMSNotification_BassFreed @"ISMS bass freed"
+
 #endif

@@ -39,9 +39,9 @@
 	
 	for (ISMSStreamHandler *handler in self.handlerStack)
 	{
-		//DLog(@"handler.mySong: %@    aSong: %@", handler.mySong.title, aSong.title);
 		if ([handler.mySong isEqualToSong:aSong])
 		{
+			DLog(@"handler.mySong: %@    aSong: %@", handler.mySong.title, aSong.title);
 			return handler;
 		}
 	}
@@ -453,10 +453,16 @@
 		for (int i = currentIndex; i < currentIndex + numStreamsToQueue; i++)
 		{
 			Song *aSong = [playlistS songForIndex:i];
-			if (aSong && ![self isSongInQueue:aSong] && !aSong.isFullyCached
-				&& !viewObjectsS.isOfflineMode)
+			if (aSong && ![self isSongInQueue:aSong] && !aSong.isFullyCached && !viewObjectsS.isOfflineMode)
 			{
-					[self queueStreamForSong:aSong isTempCache:!settingsS.isSongCachingEnabled isStartDownload:isStartDownload];
+				// The cache queue is downloading this song, remove it before continuing
+				if ([cacheQueueManagerS.currentQueuedSong isEqualToSong:aSong])
+				{
+					[cacheQueueManagerS removeCurrentSong];
+				}	
+				
+				// Queue the song for download
+				[self queueStreamForSong:aSong isTempCache:!settingsS.isSongCachingEnabled isStartDownload:isStartDownload];
 			}
 		}
 	}

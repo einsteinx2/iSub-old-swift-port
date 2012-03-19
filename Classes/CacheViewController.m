@@ -288,7 +288,7 @@
 	{
 		self.tableView.tableHeaderView.hidden = NO;
 		
-		segmentedControl.selectedSegmentIndex = 0;
+		//segmentedControl.selectedSegmentIndex = 0;
 		[self segmentAction:nil];
 	}
 	else
@@ -307,7 +307,7 @@
 	{
 		self.tableView.tableHeaderView.hidden = NO;
 		
-		segmentedControl.selectedSegmentIndex = 0;
+		//segmentedControl.selectedSegmentIndex = 0;
 		[self segmentAction:nil];
 	}
 	else
@@ -942,21 +942,21 @@
 
 - (void)hideDeleteButton
 {
+	if (!self.tableView.editing)
+	{
+		songsCountLabel.hidden = NO;
+		cacheSizeLabel.hidden = NO;
+		deleteSongsLabel.hidden = YES;
+		return;
+	}
+	
 	if ([viewObjectsS.multiDeleteList count] == 0)
 	{
-		if (!self.tableView.editing)
-		{
-			songsCountLabel.hidden = NO;
-			cacheSizeLabel.hidden = NO;
-			deleteSongsLabel.hidden = YES;
-		}
-		else
-		{
-			deleteSongsLabel.text = @"Select All";
-		}
+		deleteSongsLabel.text = @"Select All";
 	}
 	else if ([viewObjectsS.multiDeleteList count] == 1)
 	{
+		
 		if (segmentedControl.selectedSegmentIndex == 0)
 			deleteSongsLabel.text = @"Delete 1 Folder  ";
 		else
@@ -1031,8 +1031,8 @@
 			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
 			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
 			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-			[self hideDeleteButton];
 			[self.tableView setEditing:NO animated:YES];
+			[self hideDeleteButton];
 			editSongsLabel.backgroundColor = [UIColor clearColor];
 			editSongsLabel.text = @"Edit";
 			
@@ -1121,7 +1121,7 @@
 	
 	//DLog(@"2: %f", [[NSDate date] timeIntervalSinceDate:date]);
 	//date = [NSDate date];
-	
+		
 	// Reload the table
 	[self editSongsAction:nil];
 	

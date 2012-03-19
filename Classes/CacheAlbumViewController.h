@@ -8,7 +8,6 @@
 
 @interface CacheAlbumViewController : UITableViewController 
 {
-	
 	NSMutableArray *listOfAlbums;
 	NSMutableArray *listOfSongs;
 	
