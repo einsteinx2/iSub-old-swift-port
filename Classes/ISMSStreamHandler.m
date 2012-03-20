@@ -41,9 +41,9 @@
 //#define kMinBytesToStartLimiting ((unsigned long long)(1024 * 1024))	// Start throttling bandwidth after 1 MB downloaded for 160kbps files (adjusted accordingly by bitrate)
 
 // Logging
-#define isProgressLoggingEnabled NO
-#define isThrottleLoggingEnabled YES
-#define isSpeedLoggingEnabled YES
+#define isProgressLoggingEnabled 0
+#define isThrottleLoggingEnabled 0
+#define isSpeedLoggingEnabled 0
 
 @implementation ISMSStreamHandler
 @synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, bitrate, secondsOffset, partialPrecacheSleep, isDownloading, isCurrentSong, shouldResume, contentLength, maxBitrateSetting, speedLoggingDate, speedLoggingLastSize, isCanceled;
@@ -455,6 +455,7 @@
 		}
 	}
 	
+#if isSpeedLoggingEnabled
 	if (isSpeedLoggingEnabled)
 	{
 		NSTimeInterval speedInteval = [[NSDate date] timeIntervalSinceDate:self.speedLoggingDate];
@@ -472,6 +473,7 @@
 			self.speedLoggingDate = [NSDate date];
 		}
 	}
+#endif
 }
 
 // Main Thread
