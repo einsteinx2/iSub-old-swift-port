@@ -42,10 +42,11 @@
 
 // Logging
 #define isProgressLoggingEnabled NO
-#define isThrottleLoggingEnabled NO
+#define isThrottleLoggingEnabled YES
+#define isSpeedLoggingEnabled YES
 
 @implementation ISMSStreamHandler
-@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, bitrate, secondsOffset, partialPrecacheSleep, isDownloading, isCurrentSong, shouldResume, contentLength, maxBitrateSetting;
+@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, bitrate, secondsOffset, partialPrecacheSleep, isDownloading, isCurrentSong, shouldResume, contentLength, maxBitrateSetting, speedLoggingDate, speedLoggingLastSize, isCanceled;
 
 - (void)setup
 {
@@ -237,6 +238,7 @@
 - (void)cancel
 {
 	self.isDownloading = NO;
+	self.isCanceled = YES;
 	
 	// Pop out of infinite loop if partially pre-cached
 	self.partialPrecacheSleep = NO;
@@ -339,7 +341,19 @@
 }
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
-{		
+{	
+	if (self.isCanceled)
+		return;
+	
+	if (isSpeedLoggingEnabled)
+	{
+		if (!self.speedLoggingDate)
+		{
+			self.speedLoggingDate = [NSDate date];
+			self.speedLoggingLastSize = self.totalBytesTransferred;
+		}
+	}
+	
 	NSMutableDictionary *threadDict = [[NSThread currentThread] threadDictionary];
 	NSDate *throttlingDate = [[threadDict objectForKey:@"throttlingDate"] retain];
 	NSUInteger dataLength = [incrementalData length];
@@ -388,35 +402,28 @@
 		[throttlingDate release];
 		[now release];
 		if (intervalSinceLastThrottle > ISMSThrottleTimeInterval && self.totalBytesTransferred > ISMSMinBytesToStartLimiting(self.bitrate))
-		{		
+		{
 			NSTimeInterval delay = 0.0;
-			if (![iSubAppDelegate sharedInstance].isWifi && self.bytesTransferred > ISMSMaxBytesPerInterval3G)
+			
+			double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)self.bitrate is3G:!appDelegateS.isWifi];
+			double numberOfIntervals = intervalSinceLastThrottle / ISMSThrottleTimeInterval;
+			double maxBytesPerTotalInterval = maxBytesPerInterval * numberOfIntervals;
+			
+			if (self.bytesTransferred > maxBytesPerTotalInterval)
 			{
-				if (isThrottleLoggingEnabled)
-					DLog(@"entering throttling if statement, interval: %f  bytes transferred: %llu  maxBytes: %f", intervalSinceLastThrottle, self.bytesTransferred, ISMSMaxBytesPerInterval3G);
+				double speedDifferenceFactor = (double)self.bytesTransferred / maxBytesPerTotalInterval;
+				delay = (speedDifferenceFactor * intervalSinceLastThrottle) - intervalSinceLastThrottle;
 				
-				double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)self.bitrate is3G:YES];
-				delay = (ISMSThrottleTimeInterval * ((double)self.bytesTransferred / maxBytesPerInterval));
+				if (isThrottleLoggingEnabled)
+					DLog(@"Pausing for %f  interval: %f  bytesTransferred: %llu maxBytes: %f", delay, intervalSinceLastThrottle, self.bytesTransferred, maxBytesPerTotalInterval);
+				
 				self.bytesTransferred = 0;
-				
-				if (isThrottleLoggingEnabled)
-					DLog(@"Bandwidth used is more than kMaxBytesPerInterval3G, Pausing for %f", delay);
-			}
-			else if ([iSubAppDelegate sharedInstance].isWifi 
-					 && self.bytesTransferred > ISMSMaxBytesPerIntervalWifi)
-			{
-				if (isThrottleLoggingEnabled)
-					DLog(@"entering throttling if statement, interval: %f  bytes transferred: %llu  maxBytes: %f", intervalSinceLastThrottle, self.bytesTransferred, ISMSMaxBytesPerIntervalWifi);
-				
-				double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)self.bitrate is3G:NO];
-				delay = (ISMSThrottleTimeInterval * ((double)self.bytesTransferred / maxBytesPerInterval));
-				self.bytesTransferred = 0;
-				
-				if (isThrottleLoggingEnabled)
-					DLog(@"Bandwidth used is more than kMaxBytesPerIntervalWifi, Pausing for %f", delay);
 			}
 			
 			[NSThread sleepForTimeInterval:delay];
+			
+			if (self.isCanceled)
+				return;
 			
 			NSDate *newThrottlingDate = [[NSDate alloc] init];
 			[threadDict setObject:newThrottlingDate forKey:@"throttlingDate"];
@@ -440,9 +447,30 @@
 	}
 	else
 	{
-		// There is no file handle for some reason, cancel the connection
-		[self.connection cancel];
-		[self connection:self.connection didFailWithError:nil];
+		if (!self.isCanceled)
+		{
+			// There is no file handle for some reason, cancel the connection
+			[self.connection cancel];
+			[self connection:self.connection didFailWithError:nil];
+		}
+	}
+	
+	if (isSpeedLoggingEnabled)
+	{
+		NSTimeInterval speedInteval = [[NSDate date] timeIntervalSinceDate:self.speedLoggingDate];
+		
+		// Check every 10 seconds
+		if (speedInteval >= 10.0)
+		{
+			unsigned long long transferredSinceLastCheck = self.totalBytesTransferred - self.speedLoggingLastSize;
+			
+			double speedInBytes = (double)transferredSinceLastCheck / speedInteval;
+			double speedInKbytes = speedInBytes / 1024.;
+			DLog(@"rate: %f  speedInterval: %f  transferredSinceLastCheck: %llu", speedInKbytes, speedInteval, transferredSinceLastCheck);
+			
+			self.speedLoggingLastSize = self.totalBytesTransferred;
+			self.speedLoggingDate = [NSDate date];
+		}
 	}
 }
 
@@ -511,10 +539,10 @@
 	{
 		// Perform these operations on the main thread
 		[self performSelectorOnMainThread:@selector(didFinishLoadingInternal) withObject:nil waitUntilDone:YES];
+		
+		// Stop the run loop so the thread can die
+		[self cancelRunLoop];
 	}
-	
-	// Stop the run loop so the thread can die
-	[self cancelRunLoop];
 }
 
 // Main Thread

@@ -23,6 +23,7 @@
 #import "NSArray+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
+#import "StoreViewController.h"
 
 @implementation CurrentPlaylistViewController
 
@@ -36,7 +37,6 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentPlaylistCount) name:@"updateCurrentPlaylistCount" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:) name:ISMSNotification_StorePurchaseComplete object:nil];
 }
 
 - (void)unregisterForNotifications
@@ -156,6 +156,7 @@
 		self.tableView.separatorColor = [UIColor clearColor];
 		
 		UIImageView *noPlaylistsScreen = [[UIImageView alloc] init];
+		noPlaylistsScreen.userInteractionEnabled = YES;
 		noPlaylistsScreen.frame = CGRectMake(40, 80, 240, 180);
 		noPlaylistsScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
 		
@@ -181,11 +182,21 @@
 		[noPlaylistsScreen addSubview:textLabel2];
 		[textLabel2 release];
 		
+		UIButton *storeLauncher = [UIButton buttonWithType:UIButtonTypeCustom];
+		storeLauncher.frame = CGRectMake(0, 0, noPlaylistsScreen.frame.size.width, noPlaylistsScreen.frame.size.height);
+		[storeLauncher addTarget:self action:@selector(showStore) forControlEvents:UIControlEventTouchUpInside];
+		[noPlaylistsScreen addSubview:storeLauncher];
+		
 		[self.view addSubview:noPlaylistsScreen];
 		
 		[noPlaylistsScreen release];
 	}
 	//DLog(@"end: %f", [[NSDate date] timeIntervalSinceDate:start]);
+}
+
+- (void)showStore
+{
+	[NSNotificationCenter postNotificationToMainThreadWithName:@"player show store"];
 }
 
 - (void)viewWillAppear:(BOOL)animated 

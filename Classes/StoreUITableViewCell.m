@@ -20,7 +20,7 @@
 		myProduct = nil;
 		
 		titleLabel = [[UILabel alloc] init];
-		titleLabel.frame = CGRectMake(10, 10, 250, 20);
+		titleLabel.frame = CGRectMake(10, 10, 250, 25);
 		titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 		titleLabel.font = [UIFont boldSystemFontOfSize:20];
 		titleLabel.textColor = [UIColor blackColor];

@@ -280,21 +280,23 @@
 
 - (void)SUSServerURLCheckFailed:(SUSServerChecker *)checker withError:(NSError *)error
 {
+	[viewObjectsS hideLoadingScreen];
+	
     if(!viewObjectsS.isOfflineMode)
 	{
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", [error code], [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Settings", nil];
+		/*UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", [error code], [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Settings", nil];
 		alert.tag = 3;
 		[alert show];
 		[alert release];
 		
-		[self enterOfflineModeForce];
+		[self enterOfflineModeForce];*/
+		
+		[self enterOfflineMode];
 	}
     
     [checker release]; checker = nil;
 	
 	settingsS.isNewSearchAPI = checker.isNewSearchAPI;
-    
-    [viewObjectsS hideLoadingScreen];
 }
 
 - (void)SUSServerURLCheckPassed:(SUSServerChecker *)checker
@@ -594,8 +596,8 @@
 			{
 				//DLog(@"backgroundTimeRemaining: %f", [application backgroundTimeRemaining]);
 				
-				// Sleep early is nothing is happening after 30 seconds
-				if ([application backgroundTimeRemaining] < 570.0 && !cacheQueueManagerS.isQueueDownloading)
+				// Sleep early is nothing is happening after 500 seconds
+				if ([application backgroundTimeRemaining] < 200.0 && !cacheQueueManagerS.isQueueDownloading)
 				{
 					DLog("Sleeping early, isQueueListDownloading: %i", cacheQueueManagerS.isQueueDownloading);
 					[application endBackgroundTask:backgroundTask];
@@ -673,7 +675,7 @@
 	{
 		viewObjectsS.isNoNetworkAlertShowing = YES;
 		
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"No network detected, would you like to enter offline mode? Any currently playing music will stop.\n\nIf this is just temporary connection loss, select No." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Server unavailable, would you like to enter offline mode? Any currently playing music will stop.\n\nIf this is just temporary connection loss, select No." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
 		alert.tag = 4;
 		[alert show];
 		[alert release];

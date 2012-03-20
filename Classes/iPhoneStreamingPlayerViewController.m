@@ -37,6 +37,8 @@
 #import "JukeboxSingleton.h"
 #import "CALayer+ImageFromLayer.h"
 #import "SavedSettings.h"
+#import "StoreViewController.h"
+#import "UIViewController+PushViewControllerCustom.h"
 
 #define downloadProgressBorder 4.
 #define downloadProgressWidth (progressSlider.frame.size.width - (downloadProgressBorder * 2))
@@ -83,6 +85,17 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		return [NSString stringWithFormat:@"%is", seconds];
 	else
 		return [NSString stringWithFormat:@"%im", (seconds / 60)];
+}
+
+- (void)showStore
+{	
+	if (isFlipped)
+		[self songInfoToggle:nil];
+	
+	StoreViewController *store = [[StoreViewController alloc] init];
+	[self pushViewControllerCustom:store];
+	//[self.navigationController pushViewController:store animated:YES];
+	[store release];
 }
 
 - (void)viewDidLoad
@@ -311,6 +324,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) 
 													 name:ISMSNotification_ShowPlayer object:nil];
 	}
+	else
+	{
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showStore) name:@"player show store" object:nil];
+	}
 }
 
 - (void)unregisterForNotifications
@@ -335,6 +352,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[[NSNotificationCenter defaultCenter] removeObserver:self 
 														name:ISMSNotification_ShowPlayer object:nil];
 	}	
+	else
+	{
+		[[NSNotificationCenter defaultCenter] removeObserver:self 
+														name:@"player show store" object:nil];
+	}
 }
 
 - (void)createDownloadProgressView

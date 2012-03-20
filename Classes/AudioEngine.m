@@ -743,7 +743,7 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 		{
 			@autoreleasepool 
 			{
-				DLog(@"ringbuffer free slots: %u", ringBuffer->freeSlots);
+				//DLog(@"ringbuffer free slots: %u", ringBuffer->freeSlots);
 				if (BASS_ChannelIsActive(self.currentStream))
 				{
 					/* 

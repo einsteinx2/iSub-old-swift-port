@@ -46,7 +46,14 @@
 	{
 		// Display the unlock cache feature screen
 		
+		for (UIView *subView in self.view.subviews)
+		{
+			subView.hidden = YES;
+		}
+		songInfoToggleButton.enabled = NO;
+		
 		UIImageView *noCacheScreen = [[UIImageView alloc] init];
+		noCacheScreen.userInteractionEnabled = YES;
 		noCacheScreen.frame = CGRectMake(40, 80, 240, 180);
 		noCacheScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
 		
@@ -72,11 +79,22 @@
 		[noCacheScreen addSubview:textLabel2];
 		[textLabel2 release];
 		
+		UIButton *storeLauncher = [UIButton buttonWithType:UIButtonTypeCustom];
+		storeLauncher.frame = CGRectMake(0, 0, noCacheScreen.frame.size.width, noCacheScreen.frame.size.height);
+		[storeLauncher addTarget:self action:@selector(showStore) forControlEvents:UIControlEventTouchUpInside];
+		[noCacheScreen addSubview:storeLauncher];
+		
 		[self.view addSubview:noCacheScreen];
 		
 		[noCacheScreen release];
 	}
 }
+
+- (void)showStore
+{
+	[NSNotificationCenter postNotificationToMainThreadWithName:@"player show store"];
+}
+
 
 - (void)viewDidDisappear:(BOOL)animated
 {	

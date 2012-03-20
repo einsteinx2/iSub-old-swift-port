@@ -484,6 +484,8 @@
 			settingsS.isJukeboxEnabled = NO;
 						
 			appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
+			
+			[FlurryAnalytics logEvent:@"JukeboxDisabled"];
 		}
 		else
 		{
@@ -499,6 +501,8 @@
 			[jukeboxS jukeboxGetInfo];
 			
 			appDelegateS.window.backgroundColor = viewObjectsS.jukeboxColor;
+			
+			[FlurryAnalytics logEvent:@"JukeboxEnabled"];
 		}	
 	}
 	else

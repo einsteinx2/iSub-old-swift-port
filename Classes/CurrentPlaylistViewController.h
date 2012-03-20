@@ -8,7 +8,6 @@
 
 @interface CurrentPlaylistViewController : UITableViewController 
 {
-	
 	UIView *headerView;
 	UILabel *savePlaylistLabel;
 	UILabel *deleteSongsLabel;

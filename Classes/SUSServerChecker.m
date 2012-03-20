@@ -56,7 +56,7 @@
 	self.connection = [NSURLConnection connectionWithRequest:self.request delegate:self];
 	if (self.connection)
 	{
-		[self performSelector:@selector(checkTimedOut) withObject:nil afterDelay:15.0];
+		[self performSelector:@selector(checkTimedOut) withObject:nil afterDelay:25.0];
 	}
 	else
     {

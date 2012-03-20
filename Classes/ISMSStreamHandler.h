@@ -35,6 +35,9 @@
 @property BOOL shouldResume;
 @property unsigned long long contentLength;
 @property NSInteger maxBitrateSetting;
+@property (retain) NSDate *speedLoggingDate;
+@property unsigned long long speedLoggingLastSize;
+@property BOOL isCanceled;
 
 - (void)start:(BOOL)resume;
 - (void)start;
