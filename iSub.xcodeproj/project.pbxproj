@@ -130,6 +130,60 @@
 		53260B89127D012300B745B4 /* grayArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7F127D012300B745B4 /* grayArrow@2x.png */; };
 		53260B8A127D012300B745B4 /* whiteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B80127D012300B745B4 /* whiteArrow.png */; };
 		53260B8B127D012300B745B4 /* whiteArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B81127D012300B745B4 /* whiteArrow@2x.png */; };
+		532661261521930500DE39C1 /* BWApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326610C1521930500DE39C1 /* BWApp.m */; };
+		532661271521930500DE39C1 /* BWApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326610C1521930500DE39C1 /* BWApp.m */; };
+		532661281521930500DE39C1 /* BWApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326610C1521930500DE39C1 /* BWApp.m */; };
+		532661291521930500DE39C1 /* BWGlobal.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326610E1521930500DE39C1 /* BWGlobal.m */; };
+		5326612A1521930600DE39C1 /* BWGlobal.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326610E1521930500DE39C1 /* BWGlobal.m */; };
+		5326612B1521930600DE39C1 /* BWGlobal.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326610E1521930500DE39C1 /* BWGlobal.m */; };
+		5326612C1521930600DE39C1 /* BWHockeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661101521930500DE39C1 /* BWHockeyManager.m */; };
+		5326612D1521930600DE39C1 /* BWHockeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661101521930500DE39C1 /* BWHockeyManager.m */; };
+		5326612E1521930600DE39C1 /* BWHockeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661101521930500DE39C1 /* BWHockeyManager.m */; };
+		5326612F1521930600DE39C1 /* BWHockeySettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661121521930500DE39C1 /* BWHockeySettingsViewController.m */; };
+		532661301521930600DE39C1 /* BWHockeySettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661121521930500DE39C1 /* BWHockeySettingsViewController.m */; };
+		532661311521930600DE39C1 /* BWHockeySettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661121521930500DE39C1 /* BWHockeySettingsViewController.m */; };
+		532661321521930600DE39C1 /* BWHockeyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661141521930500DE39C1 /* BWHockeyViewController.m */; };
+		532661331521930600DE39C1 /* BWHockeyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661141521930500DE39C1 /* BWHockeyViewController.m */; };
+		532661341521930600DE39C1 /* BWHockeyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661141521930500DE39C1 /* BWHockeyViewController.m */; };
+		532661351521930600DE39C1 /* NSString+HockeyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661171521930500DE39C1 /* NSString+HockeyAdditions.m */; };
+		532661361521930600DE39C1 /* NSString+HockeyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661171521930500DE39C1 /* NSString+HockeyAdditions.m */; };
+		532661371521930600DE39C1 /* NSString+HockeyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661171521930500DE39C1 /* NSString+HockeyAdditions.m */; };
+		532661381521930600DE39C1 /* PSAppStoreHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661191521930500DE39C1 /* PSAppStoreHeader.m */; };
+		532661391521930600DE39C1 /* PSAppStoreHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661191521930500DE39C1 /* PSAppStoreHeader.m */; };
+		5326613A1521930600DE39C1 /* PSAppStoreHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661191521930500DE39C1 /* PSAppStoreHeader.m */; };
+		5326613B1521930600DE39C1 /* PSStoreButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326611B1521930500DE39C1 /* PSStoreButton.m */; };
+		5326613C1521930600DE39C1 /* PSStoreButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326611B1521930500DE39C1 /* PSStoreButton.m */; };
+		5326613D1521930600DE39C1 /* PSStoreButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326611B1521930500DE39C1 /* PSStoreButton.m */; };
+		5326613E1521930600DE39C1 /* PSWebTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326611D1521930500DE39C1 /* PSWebTableViewCell.m */; };
+		5326613F1521930600DE39C1 /* PSWebTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326611D1521930500DE39C1 /* PSWebTableViewCell.m */; };
+		532661401521930600DE39C1 /* PSWebTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326611D1521930500DE39C1 /* PSWebTableViewCell.m */; };
+		532661411521930600DE39C1 /* UIImage+HockeyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326611F1521930500DE39C1 /* UIImage+HockeyAdditions.m */; };
+		532661421521930600DE39C1 /* UIImage+HockeyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326611F1521930500DE39C1 /* UIImage+HockeyAdditions.m */; };
+		532661431521930600DE39C1 /* UIImage+HockeyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326611F1521930500DE39C1 /* UIImage+HockeyAdditions.m */; };
+		532661441521930600DE39C1 /* Hockey.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 532661201521930500DE39C1 /* Hockey.bundle */; };
+		532661451521930600DE39C1 /* Hockey.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 532661201521930500DE39C1 /* Hockey.bundle */; };
+		532661461521930600DE39C1 /* Hockey.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 532661201521930500DE39C1 /* Hockey.bundle */; };
+		532661471521930600DE39C1 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661231521930500DE39C1 /* JSONKit.m */; };
+		532661481521930600DE39C1 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661231521930500DE39C1 /* JSONKit.m */; };
+		532661491521930600DE39C1 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661231521930500DE39C1 /* JSONKit.m */; };
+		5326614A1521930600DE39C1 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 532661241521930500DE39C1 /* README.md */; };
+		5326614B1521930600DE39C1 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 532661241521930500DE39C1 /* README.md */; };
+		5326614C1521930600DE39C1 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 532661241521930500DE39C1 /* README.md */; };
+		5326614D1521930600DE39C1 /* README.mkdown in Resources */ = {isa = PBXBuildFile; fileRef = 532661251521930500DE39C1 /* README.mkdown */; };
+		5326614E1521930600DE39C1 /* README.mkdown in Resources */ = {isa = PBXBuildFile; fileRef = 532661251521930500DE39C1 /* README.mkdown */; };
+		5326614F1521930600DE39C1 /* README.mkdown in Resources */ = {isa = PBXBuildFile; fileRef = 532661251521930500DE39C1 /* README.mkdown */; };
+		532661561521930E00DE39C1 /* BWQuincyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661521521930E00DE39C1 /* BWQuincyManager.m */; };
+		532661571521930E00DE39C1 /* BWQuincyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661521521930E00DE39C1 /* BWQuincyManager.m */; };
+		532661581521930E00DE39C1 /* BWQuincyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661521521930E00DE39C1 /* BWQuincyManager.m */; };
+		532661591521930E00DE39C1 /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 532661531521930E00DE39C1 /* CrashReporter.framework */; };
+		5326615A1521930E00DE39C1 /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 532661531521930E00DE39C1 /* CrashReporter.framework */; };
+		5326615B1521930E00DE39C1 /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 532661531521930E00DE39C1 /* CrashReporter.framework */; };
+		5326615C1521930E00DE39C1 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 532661541521930E00DE39C1 /* LICENSE.txt */; };
+		5326615D1521930E00DE39C1 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 532661541521930E00DE39C1 /* LICENSE.txt */; };
+		5326615E1521930E00DE39C1 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 532661541521930E00DE39C1 /* LICENSE.txt */; };
+		5326615F1521930E00DE39C1 /* Quincy.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 532661551521930E00DE39C1 /* Quincy.bundle */; };
+		532661601521930E00DE39C1 /* Quincy.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 532661551521930E00DE39C1 /* Quincy.bundle */; };
+		532661611521930E00DE39C1 /* Quincy.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 532661551521930E00DE39C1 /* Quincy.bundle */; };
 		5326E0751515CEC600B73E61 /* SnappySlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326E0741515CEC600B73E61 /* SnappySlider.m */; };
 		5326E0761515CEC600B73E61 /* SnappySlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326E0741515CEC600B73E61 /* SnappySlider.m */; };
 		5326E0771515CEC600B73E61 /* SnappySlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326E0741515CEC600B73E61 /* SnappySlider.m */; };
@@ -1094,60 +1148,6 @@
 		53C7FDAE150F1DE7008DA51C /* home-support@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FDA4150F1DE7008DA51C /* home-support@2x.png */; };
 		53C7FDAF150F1DE7008DA51C /* home-support@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FDA4150F1DE7008DA51C /* home-support@2x.png */; };
 		53C7FDB0150F1DE7008DA51C /* home-support@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FDA4150F1DE7008DA51C /* home-support@2x.png */; };
-		53C7FDD3150F256B008DA51C /* BWApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDB3150F256A008DA51C /* BWApp.m */; };
-		53C7FDD4150F256B008DA51C /* BWApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDB3150F256A008DA51C /* BWApp.m */; };
-		53C7FDD5150F256B008DA51C /* BWApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDB3150F256A008DA51C /* BWApp.m */; };
-		53C7FDD6150F256B008DA51C /* BWGlobal.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDB5150F256A008DA51C /* BWGlobal.m */; };
-		53C7FDD7150F256B008DA51C /* BWGlobal.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDB5150F256A008DA51C /* BWGlobal.m */; };
-		53C7FDD8150F256B008DA51C /* BWGlobal.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDB5150F256A008DA51C /* BWGlobal.m */; };
-		53C7FDD9150F256B008DA51C /* BWHockeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDB7150F256A008DA51C /* BWHockeyManager.m */; };
-		53C7FDDA150F256B008DA51C /* BWHockeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDB7150F256A008DA51C /* BWHockeyManager.m */; };
-		53C7FDDB150F256B008DA51C /* BWHockeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDB7150F256A008DA51C /* BWHockeyManager.m */; };
-		53C7FDDC150F256B008DA51C /* BWHockeySettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDB9150F256A008DA51C /* BWHockeySettingsViewController.m */; };
-		53C7FDDD150F256B008DA51C /* BWHockeySettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDB9150F256A008DA51C /* BWHockeySettingsViewController.m */; };
-		53C7FDDE150F256B008DA51C /* BWHockeySettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDB9150F256A008DA51C /* BWHockeySettingsViewController.m */; };
-		53C7FDDF150F256B008DA51C /* BWHockeyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDBB150F256A008DA51C /* BWHockeyViewController.m */; };
-		53C7FDE0150F256B008DA51C /* BWHockeyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDBB150F256A008DA51C /* BWHockeyViewController.m */; };
-		53C7FDE1150F256B008DA51C /* BWHockeyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDBB150F256A008DA51C /* BWHockeyViewController.m */; };
-		53C7FDE2150F256B008DA51C /* NSString+HockeyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDBE150F256A008DA51C /* NSString+HockeyAdditions.m */; };
-		53C7FDE3150F256B008DA51C /* NSString+HockeyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDBE150F256A008DA51C /* NSString+HockeyAdditions.m */; };
-		53C7FDE4150F256B008DA51C /* NSString+HockeyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDBE150F256A008DA51C /* NSString+HockeyAdditions.m */; };
-		53C7FDE5150F256B008DA51C /* PSAppStoreHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDC0150F256A008DA51C /* PSAppStoreHeader.m */; };
-		53C7FDE6150F256B008DA51C /* PSAppStoreHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDC0150F256A008DA51C /* PSAppStoreHeader.m */; };
-		53C7FDE7150F256B008DA51C /* PSAppStoreHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDC0150F256A008DA51C /* PSAppStoreHeader.m */; };
-		53C7FDE8150F256B008DA51C /* PSStoreButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDC2150F256A008DA51C /* PSStoreButton.m */; };
-		53C7FDE9150F256B008DA51C /* PSStoreButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDC2150F256A008DA51C /* PSStoreButton.m */; };
-		53C7FDEA150F256B008DA51C /* PSStoreButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDC2150F256A008DA51C /* PSStoreButton.m */; };
-		53C7FDEB150F256B008DA51C /* PSWebTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDC4150F256A008DA51C /* PSWebTableViewCell.m */; };
-		53C7FDEC150F256B008DA51C /* PSWebTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDC4150F256A008DA51C /* PSWebTableViewCell.m */; };
-		53C7FDED150F256B008DA51C /* PSWebTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDC4150F256A008DA51C /* PSWebTableViewCell.m */; };
-		53C7FDEE150F256B008DA51C /* UIImage+HockeyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDC6150F256A008DA51C /* UIImage+HockeyAdditions.m */; };
-		53C7FDEF150F256B008DA51C /* UIImage+HockeyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDC6150F256A008DA51C /* UIImage+HockeyAdditions.m */; };
-		53C7FDF0150F256B008DA51C /* UIImage+HockeyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDC6150F256A008DA51C /* UIImage+HockeyAdditions.m */; };
-		53C7FDF1150F256B008DA51C /* Hockey.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FDC7150F256A008DA51C /* Hockey.bundle */; };
-		53C7FDF2150F256B008DA51C /* Hockey.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FDC7150F256A008DA51C /* Hockey.bundle */; };
-		53C7FDF3150F256B008DA51C /* Hockey.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FDC7150F256A008DA51C /* Hockey.bundle */; };
-		53C7FDF4150F256B008DA51C /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDCA150F256A008DA51C /* JSONKit.m */; };
-		53C7FDF5150F256B008DA51C /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDCA150F256A008DA51C /* JSONKit.m */; };
-		53C7FDF6150F256B008DA51C /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FDCA150F256A008DA51C /* JSONKit.m */; };
-		53C7FDF7150F256B008DA51C /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FDCB150F256A008DA51C /* README.md */; };
-		53C7FDF8150F256B008DA51C /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FDCB150F256A008DA51C /* README.md */; };
-		53C7FDF9150F256B008DA51C /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FDCB150F256A008DA51C /* README.md */; };
-		53C7FDFA150F256B008DA51C /* README.mkdown in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FDCC150F256A008DA51C /* README.mkdown */; };
-		53C7FDFB150F256B008DA51C /* README.mkdown in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FDCC150F256A008DA51C /* README.mkdown */; };
-		53C7FDFC150F256B008DA51C /* README.mkdown in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FDCC150F256A008DA51C /* README.mkdown */; };
-		53C7FF6A150FD79B008DA51C /* BWQuincyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FF66150FD79A008DA51C /* BWQuincyManager.m */; };
-		53C7FF6B150FD79B008DA51C /* BWQuincyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FF66150FD79A008DA51C /* BWQuincyManager.m */; };
-		53C7FF6C150FD79B008DA51C /* BWQuincyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C7FF66150FD79A008DA51C /* BWQuincyManager.m */; };
-		53C7FF6D150FD79B008DA51C /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53C7FF67150FD79B008DA51C /* CrashReporter.framework */; };
-		53C7FF6E150FD79B008DA51C /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53C7FF67150FD79B008DA51C /* CrashReporter.framework */; };
-		53C7FF6F150FD79B008DA51C /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53C7FF67150FD79B008DA51C /* CrashReporter.framework */; };
-		53C7FF70150FD79B008DA51C /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FF68150FD79B008DA51C /* LICENSE.txt */; };
-		53C7FF71150FD79B008DA51C /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FF68150FD79B008DA51C /* LICENSE.txt */; };
-		53C7FF72150FD79B008DA51C /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FF68150FD79B008DA51C /* LICENSE.txt */; };
-		53C7FF73150FD79B008DA51C /* Quincy.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FF69150FD79B008DA51C /* Quincy.bundle */; };
-		53C7FF74150FD79B008DA51C /* Quincy.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FF69150FD79B008DA51C /* Quincy.bundle */; };
-		53C7FF75150FD79B008DA51C /* Quincy.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FF69150FD79B008DA51C /* Quincy.bundle */; };
 		53CC217E132DC79F003521B5 /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53CC217D132DC79F003521B5 /* Entitlements.plist */; };
 		53CED25F113E2FF100B09699 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */; };
 		53CED260113E2FF100B09699 /* SubsonicServerEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53CED25E113E2FF100B09699 /* SubsonicServerEditViewController.xib */; };
@@ -1762,6 +1762,36 @@
 		53260B7F127D012300B745B4 /* grayArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "grayArrow@2x.png"; sourceTree = "<group>"; };
 		53260B80127D012300B745B4 /* whiteArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteArrow.png; sourceTree = "<group>"; };
 		53260B81127D012300B745B4 /* whiteArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteArrow@2x.png"; sourceTree = "<group>"; };
+		5326610B1521930500DE39C1 /* BWApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWApp.h; sourceTree = "<group>"; };
+		5326610C1521930500DE39C1 /* BWApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWApp.m; sourceTree = "<group>"; };
+		5326610D1521930500DE39C1 /* BWGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWGlobal.h; sourceTree = "<group>"; };
+		5326610E1521930500DE39C1 /* BWGlobal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWGlobal.m; sourceTree = "<group>"; };
+		5326610F1521930500DE39C1 /* BWHockeyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWHockeyManager.h; sourceTree = "<group>"; };
+		532661101521930500DE39C1 /* BWHockeyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWHockeyManager.m; sourceTree = "<group>"; };
+		532661111521930500DE39C1 /* BWHockeySettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWHockeySettingsViewController.h; sourceTree = "<group>"; };
+		532661121521930500DE39C1 /* BWHockeySettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWHockeySettingsViewController.m; sourceTree = "<group>"; };
+		532661131521930500DE39C1 /* BWHockeyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWHockeyViewController.h; sourceTree = "<group>"; };
+		532661141521930500DE39C1 /* BWHockeyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWHockeyViewController.m; sourceTree = "<group>"; };
+		532661161521930500DE39C1 /* NSString+HockeyAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+HockeyAdditions.h"; sourceTree = "<group>"; };
+		532661171521930500DE39C1 /* NSString+HockeyAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+HockeyAdditions.m"; sourceTree = "<group>"; };
+		532661181521930500DE39C1 /* PSAppStoreHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSAppStoreHeader.h; sourceTree = "<group>"; };
+		532661191521930500DE39C1 /* PSAppStoreHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSAppStoreHeader.m; sourceTree = "<group>"; };
+		5326611A1521930500DE39C1 /* PSStoreButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSStoreButton.h; sourceTree = "<group>"; };
+		5326611B1521930500DE39C1 /* PSStoreButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSStoreButton.m; sourceTree = "<group>"; };
+		5326611C1521930500DE39C1 /* PSWebTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSWebTableViewCell.h; sourceTree = "<group>"; };
+		5326611D1521930500DE39C1 /* PSWebTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSWebTableViewCell.m; sourceTree = "<group>"; };
+		5326611E1521930500DE39C1 /* UIImage+HockeyAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+HockeyAdditions.h"; sourceTree = "<group>"; };
+		5326611F1521930500DE39C1 /* UIImage+HockeyAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+HockeyAdditions.m"; sourceTree = "<group>"; };
+		532661201521930500DE39C1 /* Hockey.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Hockey.bundle; sourceTree = "<group>"; };
+		532661221521930500DE39C1 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
+		532661231521930500DE39C1 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
+		532661241521930500DE39C1 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		532661251521930500DE39C1 /* README.mkdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.mkdown; sourceTree = "<group>"; };
+		532661511521930E00DE39C1 /* BWQuincyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWQuincyManager.h; sourceTree = "<group>"; };
+		532661521521930E00DE39C1 /* BWQuincyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWQuincyManager.m; sourceTree = "<group>"; };
+		532661531521930E00DE39C1 /* CrashReporter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CrashReporter.framework; sourceTree = "<group>"; };
+		532661541521930E00DE39C1 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		532661551521930E00DE39C1 /* Quincy.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Quincy.bundle; sourceTree = "<group>"; };
 		5326E0731515CEC600B73E61 /* SnappySlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnappySlider.h; sourceTree = "<group>"; };
 		5326E0741515CEC600B73E61 /* SnappySlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnappySlider.m; sourceTree = "<group>"; };
 		5327A5D114DA1E4400DEE1B6 /* controller-extras.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-extras.png"; path = "Images/Player Icons/controller-extras.png"; sourceTree = "<group>"; };
@@ -2326,36 +2356,6 @@
 		53C7FDA2150F1DE7008DA51C /* home-support-ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-support-ipad@2x.png"; path = "Images/Home Screen/home-support-ipad@2x.png"; sourceTree = "<group>"; };
 		53C7FDA3150F1DE7008DA51C /* home-support.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-support.png"; path = "Images/Home Screen/home-support.png"; sourceTree = "<group>"; };
 		53C7FDA4150F1DE7008DA51C /* home-support@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-support@2x.png"; path = "Images/Home Screen/home-support@2x.png"; sourceTree = "<group>"; };
-		53C7FDB2150F256A008DA51C /* BWApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWApp.h; sourceTree = "<group>"; };
-		53C7FDB3150F256A008DA51C /* BWApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWApp.m; sourceTree = "<group>"; };
-		53C7FDB4150F256A008DA51C /* BWGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWGlobal.h; sourceTree = "<group>"; };
-		53C7FDB5150F256A008DA51C /* BWGlobal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWGlobal.m; sourceTree = "<group>"; };
-		53C7FDB6150F256A008DA51C /* BWHockeyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWHockeyManager.h; sourceTree = "<group>"; };
-		53C7FDB7150F256A008DA51C /* BWHockeyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWHockeyManager.m; sourceTree = "<group>"; };
-		53C7FDB8150F256A008DA51C /* BWHockeySettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWHockeySettingsViewController.h; sourceTree = "<group>"; };
-		53C7FDB9150F256A008DA51C /* BWHockeySettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWHockeySettingsViewController.m; sourceTree = "<group>"; };
-		53C7FDBA150F256A008DA51C /* BWHockeyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWHockeyViewController.h; sourceTree = "<group>"; };
-		53C7FDBB150F256A008DA51C /* BWHockeyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWHockeyViewController.m; sourceTree = "<group>"; };
-		53C7FDBD150F256A008DA51C /* NSString+HockeyAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+HockeyAdditions.h"; sourceTree = "<group>"; };
-		53C7FDBE150F256A008DA51C /* NSString+HockeyAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+HockeyAdditions.m"; sourceTree = "<group>"; };
-		53C7FDBF150F256A008DA51C /* PSAppStoreHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSAppStoreHeader.h; sourceTree = "<group>"; };
-		53C7FDC0150F256A008DA51C /* PSAppStoreHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSAppStoreHeader.m; sourceTree = "<group>"; };
-		53C7FDC1150F256A008DA51C /* PSStoreButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSStoreButton.h; sourceTree = "<group>"; };
-		53C7FDC2150F256A008DA51C /* PSStoreButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSStoreButton.m; sourceTree = "<group>"; };
-		53C7FDC3150F256A008DA51C /* PSWebTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSWebTableViewCell.h; sourceTree = "<group>"; };
-		53C7FDC4150F256A008DA51C /* PSWebTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSWebTableViewCell.m; sourceTree = "<group>"; };
-		53C7FDC5150F256A008DA51C /* UIImage+HockeyAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+HockeyAdditions.h"; sourceTree = "<group>"; };
-		53C7FDC6150F256A008DA51C /* UIImage+HockeyAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+HockeyAdditions.m"; sourceTree = "<group>"; };
-		53C7FDC7150F256A008DA51C /* Hockey.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Hockey.bundle; sourceTree = "<group>"; };
-		53C7FDC9150F256A008DA51C /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
-		53C7FDCA150F256A008DA51C /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
-		53C7FDCB150F256A008DA51C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
-		53C7FDCC150F256A008DA51C /* README.mkdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.mkdown; sourceTree = "<group>"; };
-		53C7FF65150FD79A008DA51C /* BWQuincyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWQuincyManager.h; sourceTree = "<group>"; };
-		53C7FF66150FD79A008DA51C /* BWQuincyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWQuincyManager.m; sourceTree = "<group>"; };
-		53C7FF67150FD79B008DA51C /* CrashReporter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CrashReporter.framework; sourceTree = "<group>"; };
-		53C7FF68150FD79B008DA51C /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
-		53C7FF69150FD79B008DA51C /* Quincy.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Quincy.bundle; sourceTree = "<group>"; };
 		53CC217D132DC79F003521B5 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		53CED25C113E2FF100B09699 /* SubsonicServerEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubsonicServerEditViewController.h; sourceTree = "<group>"; };
 		53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubsonicServerEditViewController.m; sourceTree = "<group>"; };
@@ -2511,9 +2511,9 @@
 				53400AA51496857400165581 /* libbassflac.a in Frameworks */,
 				53400AA91496858600165581 /* libbass_fx.a in Frameworks */,
 				536451E814F6FF6E000FBD85 /* libbass.a in Frameworks */,
-				53C7FF6D150FD79B008DA51C /* CrashReporter.framework in Frameworks */,
 				537D916A151315D300BFEE30 /* libFlurryAnalytics.a in Frameworks */,
 				53A7E4FD1516DB1D002DA214 /* libOAuth.a in Frameworks */,
+				532661591521930E00DE39C1 /* CrashReporter.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2545,9 +2545,9 @@
 				53400AA71496857500165581 /* libbassflac.a in Frameworks */,
 				53400AAB1496858600165581 /* libbass_fx.a in Frameworks */,
 				536451EA14F6FF6E000FBD85 /* libbass.a in Frameworks */,
-				53C7FF6F150FD79B008DA51C /* CrashReporter.framework in Frameworks */,
 				537D916C151315D300BFEE30 /* libFlurryAnalytics.a in Frameworks */,
 				53A7E4FF1516DB1D002DA214 /* libOAuth.a in Frameworks */,
+				5326615B1521930E00DE39C1 /* CrashReporter.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2579,9 +2579,9 @@
 				53400AAA1496858600165581 /* libbass_fx.a in Frameworks */,
 				53DE598414F1933400206529 /* CoreText.framework in Frameworks */,
 				536451E914F6FF6E000FBD85 /* libbass.a in Frameworks */,
-				53C7FF6E150FD79B008DA51C /* CrashReporter.framework in Frameworks */,
 				537D916B151315D300BFEE30 /* libFlurryAnalytics.a in Frameworks */,
 				53A7E4FE1516DB1D002DA214 /* libOAuth.a in Frameworks */,
+				5326615A1521930E00DE39C1 /* CrashReporter.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2762,6 +2762,66 @@
 			);
 			path = Resources;
 			sourceTree = "<group>";
+		};
+		5326610A1521930500DE39C1 /* HockeyKit */ = {
+			isa = PBXGroup;
+			children = (
+				5326610B1521930500DE39C1 /* BWApp.h */,
+				5326610C1521930500DE39C1 /* BWApp.m */,
+				5326610D1521930500DE39C1 /* BWGlobal.h */,
+				5326610E1521930500DE39C1 /* BWGlobal.m */,
+				5326610F1521930500DE39C1 /* BWHockeyManager.h */,
+				532661101521930500DE39C1 /* BWHockeyManager.m */,
+				532661111521930500DE39C1 /* BWHockeySettingsViewController.h */,
+				532661121521930500DE39C1 /* BWHockeySettingsViewController.m */,
+				532661131521930500DE39C1 /* BWHockeyViewController.h */,
+				532661141521930500DE39C1 /* BWHockeyViewController.m */,
+				532661151521930500DE39C1 /* Helper */,
+				532661201521930500DE39C1 /* Hockey.bundle */,
+				532661211521930500DE39C1 /* JSON */,
+				532661251521930500DE39C1 /* README.mkdown */,
+			);
+			path = HockeyKit;
+			sourceTree = SOURCE_ROOT;
+		};
+		532661151521930500DE39C1 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				532661161521930500DE39C1 /* NSString+HockeyAdditions.h */,
+				532661171521930500DE39C1 /* NSString+HockeyAdditions.m */,
+				532661181521930500DE39C1 /* PSAppStoreHeader.h */,
+				532661191521930500DE39C1 /* PSAppStoreHeader.m */,
+				5326611A1521930500DE39C1 /* PSStoreButton.h */,
+				5326611B1521930500DE39C1 /* PSStoreButton.m */,
+				5326611C1521930500DE39C1 /* PSWebTableViewCell.h */,
+				5326611D1521930500DE39C1 /* PSWebTableViewCell.m */,
+				5326611E1521930500DE39C1 /* UIImage+HockeyAdditions.h */,
+				5326611F1521930500DE39C1 /* UIImage+HockeyAdditions.m */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		532661211521930500DE39C1 /* JSON */ = {
+			isa = PBXGroup;
+			children = (
+				532661221521930500DE39C1 /* JSONKit.h */,
+				532661231521930500DE39C1 /* JSONKit.m */,
+				532661241521930500DE39C1 /* README.md */,
+			);
+			path = JSON;
+			sourceTree = "<group>";
+		};
+		532661501521930E00DE39C1 /* QuincyKit */ = {
+			isa = PBXGroup;
+			children = (
+				532661511521930E00DE39C1 /* BWQuincyManager.h */,
+				532661521521930E00DE39C1 /* BWQuincyManager.m */,
+				532661531521930E00DE39C1 /* CrashReporter.framework */,
+				532661541521930E00DE39C1 /* LICENSE.txt */,
+				532661551521930E00DE39C1 /* Quincy.bundle */,
+			);
+			path = QuincyKit;
+			sourceTree = SOURCE_ROOT;
 		};
 		5327F4EC12B9533A00735119 /* MKStoreManager */ = {
 			isa = PBXGroup;
@@ -3161,10 +3221,10 @@
 				5327F4EC12B9533A00735119 /* MKStoreManager */,
 				53260B71127D012300B745B4 /* EGOTableViewPullRefresh */,
 				53D9996912D40C4000A97412 /* TBXML */,
-				53C7FDB1150F256A008DA51C /* HockeyKit */,
-				53C7FF64150FD79A008DA51C /* QuincyKit */,
 				537D9167151315D300BFEE30 /* FlurryAnalytics */,
 				53A7E4BB1516DB1D002DA214 /* Twitter+OAuth */,
+				5326610A1521930500DE39C1 /* HockeyKit */,
+				532661501521930E00DE39C1 /* QuincyKit */,
 				5305C1D81157EA7A00BC78F0 /* Reachability.h */,
 				5305C1D91157EA7A00BC78F0 /* Reachability.m */,
 				53B52A9611ADB7AD005776B5 /* sqlite3.h */,
@@ -3675,66 +3735,6 @@
 			);
 			name = "Intro Screen";
 			sourceTree = "<group>";
-		};
-		53C7FDB1150F256A008DA51C /* HockeyKit */ = {
-			isa = PBXGroup;
-			children = (
-				53C7FDB2150F256A008DA51C /* BWApp.h */,
-				53C7FDB3150F256A008DA51C /* BWApp.m */,
-				53C7FDB4150F256A008DA51C /* BWGlobal.h */,
-				53C7FDB5150F256A008DA51C /* BWGlobal.m */,
-				53C7FDB6150F256A008DA51C /* BWHockeyManager.h */,
-				53C7FDB7150F256A008DA51C /* BWHockeyManager.m */,
-				53C7FDB8150F256A008DA51C /* BWHockeySettingsViewController.h */,
-				53C7FDB9150F256A008DA51C /* BWHockeySettingsViewController.m */,
-				53C7FDBA150F256A008DA51C /* BWHockeyViewController.h */,
-				53C7FDBB150F256A008DA51C /* BWHockeyViewController.m */,
-				53C7FDBC150F256A008DA51C /* Helper */,
-				53C7FDC7150F256A008DA51C /* Hockey.bundle */,
-				53C7FDC8150F256A008DA51C /* JSON */,
-				53C7FDCC150F256A008DA51C /* README.mkdown */,
-			);
-			path = HockeyKit;
-			sourceTree = SOURCE_ROOT;
-		};
-		53C7FDBC150F256A008DA51C /* Helper */ = {
-			isa = PBXGroup;
-			children = (
-				53C7FDBD150F256A008DA51C /* NSString+HockeyAdditions.h */,
-				53C7FDBE150F256A008DA51C /* NSString+HockeyAdditions.m */,
-				53C7FDBF150F256A008DA51C /* PSAppStoreHeader.h */,
-				53C7FDC0150F256A008DA51C /* PSAppStoreHeader.m */,
-				53C7FDC1150F256A008DA51C /* PSStoreButton.h */,
-				53C7FDC2150F256A008DA51C /* PSStoreButton.m */,
-				53C7FDC3150F256A008DA51C /* PSWebTableViewCell.h */,
-				53C7FDC4150F256A008DA51C /* PSWebTableViewCell.m */,
-				53C7FDC5150F256A008DA51C /* UIImage+HockeyAdditions.h */,
-				53C7FDC6150F256A008DA51C /* UIImage+HockeyAdditions.m */,
-			);
-			path = Helper;
-			sourceTree = "<group>";
-		};
-		53C7FDC8150F256A008DA51C /* JSON */ = {
-			isa = PBXGroup;
-			children = (
-				53C7FDC9150F256A008DA51C /* JSONKit.h */,
-				53C7FDCA150F256A008DA51C /* JSONKit.m */,
-				53C7FDCB150F256A008DA51C /* README.md */,
-			);
-			path = JSON;
-			sourceTree = "<group>";
-		};
-		53C7FF64150FD79A008DA51C /* QuincyKit */ = {
-			isa = PBXGroup;
-			children = (
-				53C7FF65150FD79A008DA51C /* BWQuincyManager.h */,
-				53C7FF66150FD79A008DA51C /* BWQuincyManager.m */,
-				53C7FF67150FD79B008DA51C /* CrashReporter.framework */,
-				53C7FF68150FD79B008DA51C /* LICENSE.txt */,
-				53C7FF69150FD79B008DA51C /* Quincy.bundle */,
-			);
-			path = QuincyKit;
-			sourceTree = SOURCE_ROOT;
 		};
 		53D9996912D40C4000A97412 /* TBXML */ = {
 			isa = PBXGroup;
@@ -4300,11 +4300,6 @@
 				53C7FDA8150F1DE7008DA51C /* home-support-ipad@2x.png in Resources */,
 				53C7FDAB150F1DE7008DA51C /* home-support.png in Resources */,
 				53C7FDAE150F1DE7008DA51C /* home-support@2x.png in Resources */,
-				53C7FDF1150F256B008DA51C /* Hockey.bundle in Resources */,
-				53C7FDF7150F256B008DA51C /* README.md in Resources */,
-				53C7FDFA150F256B008DA51C /* README.mkdown in Resources */,
-				53C7FF70150FD79B008DA51C /* LICENSE.txt in Resources */,
-				53C7FF73150FD79B008DA51C /* Quincy.bundle in Resources */,
 				530A5F851516703F0081A83A /* playing-cell-icon.png in Resources */,
 				530A5F881516703F0081A83A /* playing-cell-icon@2x.png in Resources */,
 				530A5F8D15167CBA0081A83A /* playing-cell-icon-white.png in Resources */,
@@ -4312,6 +4307,11 @@
 				53A7E4F71516DB1D002DA214 /* jQueryInject.txt in Resources */,
 				53A7E4FA1516DB1D002DA214 /* jQueryInjectLandscape.txt in Resources */,
 				53A7E5301516DB1D002DA214 /* twitter_load.png in Resources */,
+				532661441521930600DE39C1 /* Hockey.bundle in Resources */,
+				5326614A1521930600DE39C1 /* README.md in Resources */,
+				5326614D1521930600DE39C1 /* README.mkdown in Resources */,
+				5326615C1521930E00DE39C1 /* LICENSE.txt in Resources */,
+				5326615F1521930E00DE39C1 /* Quincy.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4603,11 +4603,6 @@
 				53C7FDAA150F1DE7008DA51C /* home-support-ipad@2x.png in Resources */,
 				53C7FDAD150F1DE7008DA51C /* home-support.png in Resources */,
 				53C7FDB0150F1DE7008DA51C /* home-support@2x.png in Resources */,
-				53C7FDF3150F256B008DA51C /* Hockey.bundle in Resources */,
-				53C7FDF9150F256B008DA51C /* README.md in Resources */,
-				53C7FDFC150F256B008DA51C /* README.mkdown in Resources */,
-				53C7FF72150FD79B008DA51C /* LICENSE.txt in Resources */,
-				53C7FF75150FD79B008DA51C /* Quincy.bundle in Resources */,
 				530A5F871516703F0081A83A /* playing-cell-icon.png in Resources */,
 				530A5F8A1516703F0081A83A /* playing-cell-icon@2x.png in Resources */,
 				530A5F8F15167CBA0081A83A /* playing-cell-icon-white.png in Resources */,
@@ -4615,6 +4610,11 @@
 				53A7E4F91516DB1D002DA214 /* jQueryInject.txt in Resources */,
 				53A7E4FC1516DB1D002DA214 /* jQueryInjectLandscape.txt in Resources */,
 				53A7E5321516DB1D002DA214 /* twitter_load.png in Resources */,
+				532661461521930600DE39C1 /* Hockey.bundle in Resources */,
+				5326614C1521930600DE39C1 /* README.md in Resources */,
+				5326614F1521930600DE39C1 /* README.mkdown in Resources */,
+				5326615E1521930E00DE39C1 /* LICENSE.txt in Resources */,
+				532661611521930E00DE39C1 /* Quincy.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4910,11 +4910,6 @@
 				53C7FDA9150F1DE7008DA51C /* home-support-ipad@2x.png in Resources */,
 				53C7FDAC150F1DE7008DA51C /* home-support.png in Resources */,
 				53C7FDAF150F1DE7008DA51C /* home-support@2x.png in Resources */,
-				53C7FDF2150F256B008DA51C /* Hockey.bundle in Resources */,
-				53C7FDF8150F256B008DA51C /* README.md in Resources */,
-				53C7FDFB150F256B008DA51C /* README.mkdown in Resources */,
-				53C7FF71150FD79B008DA51C /* LICENSE.txt in Resources */,
-				53C7FF74150FD79B008DA51C /* Quincy.bundle in Resources */,
 				530A5F861516703F0081A83A /* playing-cell-icon.png in Resources */,
 				530A5F891516703F0081A83A /* playing-cell-icon@2x.png in Resources */,
 				530A5F8E15167CBA0081A83A /* playing-cell-icon-white.png in Resources */,
@@ -4922,6 +4917,11 @@
 				53A7E4F81516DB1D002DA214 /* jQueryInject.txt in Resources */,
 				53A7E4FB1516DB1D002DA214 /* jQueryInjectLandscape.txt in Resources */,
 				53A7E5311516DB1D002DA214 /* twitter_load.png in Resources */,
+				532661451521930600DE39C1 /* Hockey.bundle in Resources */,
+				5326614B1521930600DE39C1 /* README.md in Resources */,
+				5326614E1521930600DE39C1 /* README.mkdown in Resources */,
+				5326615D1521930E00DE39C1 /* LICENSE.txt in Resources */,
+				532661601521930E00DE39C1 /* Quincy.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5143,18 +5143,6 @@
 				53733C7514FC6075001D8104 /* NSString+Clean.m in Sources */,
 				53733C8114FDBD62001D8104 /* CALayer+ImageFromLayer.m in Sources */,
 				53E6093A150C4E5300FD86E6 /* UIViewController+IsVisible.m in Sources */,
-				53C7FDD3150F256B008DA51C /* BWApp.m in Sources */,
-				53C7FDD6150F256B008DA51C /* BWGlobal.m in Sources */,
-				53C7FDD9150F256B008DA51C /* BWHockeyManager.m in Sources */,
-				53C7FDDC150F256B008DA51C /* BWHockeySettingsViewController.m in Sources */,
-				53C7FDDF150F256B008DA51C /* BWHockeyViewController.m in Sources */,
-				53C7FDE2150F256B008DA51C /* NSString+HockeyAdditions.m in Sources */,
-				53C7FDE5150F256B008DA51C /* PSAppStoreHeader.m in Sources */,
-				53C7FDE8150F256B008DA51C /* PSStoreButton.m in Sources */,
-				53C7FDEB150F256B008DA51C /* PSWebTableViewCell.m in Sources */,
-				53C7FDEE150F256B008DA51C /* UIImage+HockeyAdditions.m in Sources */,
-				53C7FDF4150F256B008DA51C /* JSONKit.m in Sources */,
-				53C7FF6A150FD79B008DA51C /* BWQuincyManager.m in Sources */,
 				53DF2FB915153023005160C5 /* NSObject+GCDExtention.m in Sources */,
 				5326E0751515CEC600B73E61 /* SnappySlider.m in Sources */,
 				53A7E5001516DB1D002DA214 /* MGTwitterEngine.m in Sources */,
@@ -5173,6 +5161,18 @@
 				53A7E5271516DB1D002DA214 /* NSString+UUID.m in Sources */,
 				53A7E52A1516DB1D002DA214 /* SA_OAuthTwitterController.m in Sources */,
 				53A7E52D1516DB1D002DA214 /* SA_OAuthTwitterEngine.m in Sources */,
+				532661261521930500DE39C1 /* BWApp.m in Sources */,
+				532661291521930500DE39C1 /* BWGlobal.m in Sources */,
+				5326612C1521930600DE39C1 /* BWHockeyManager.m in Sources */,
+				5326612F1521930600DE39C1 /* BWHockeySettingsViewController.m in Sources */,
+				532661321521930600DE39C1 /* BWHockeyViewController.m in Sources */,
+				532661351521930600DE39C1 /* NSString+HockeyAdditions.m in Sources */,
+				532661381521930600DE39C1 /* PSAppStoreHeader.m in Sources */,
+				5326613B1521930600DE39C1 /* PSStoreButton.m in Sources */,
+				5326613E1521930600DE39C1 /* PSWebTableViewCell.m in Sources */,
+				532661411521930600DE39C1 /* UIImage+HockeyAdditions.m in Sources */,
+				532661471521930600DE39C1 /* JSONKit.m in Sources */,
+				532661561521930E00DE39C1 /* BWQuincyManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5374,18 +5374,6 @@
 				53733C7714FC6075001D8104 /* NSString+Clean.m in Sources */,
 				53733C8314FDBD62001D8104 /* CALayer+ImageFromLayer.m in Sources */,
 				53E6093C150C4E5300FD86E6 /* UIViewController+IsVisible.m in Sources */,
-				53C7FDD5150F256B008DA51C /* BWApp.m in Sources */,
-				53C7FDD8150F256B008DA51C /* BWGlobal.m in Sources */,
-				53C7FDDB150F256B008DA51C /* BWHockeyManager.m in Sources */,
-				53C7FDDE150F256B008DA51C /* BWHockeySettingsViewController.m in Sources */,
-				53C7FDE1150F256B008DA51C /* BWHockeyViewController.m in Sources */,
-				53C7FDE4150F256B008DA51C /* NSString+HockeyAdditions.m in Sources */,
-				53C7FDE7150F256B008DA51C /* PSAppStoreHeader.m in Sources */,
-				53C7FDEA150F256B008DA51C /* PSStoreButton.m in Sources */,
-				53C7FDED150F256B008DA51C /* PSWebTableViewCell.m in Sources */,
-				53C7FDF0150F256B008DA51C /* UIImage+HockeyAdditions.m in Sources */,
-				53C7FDF6150F256B008DA51C /* JSONKit.m in Sources */,
-				53C7FF6C150FD79B008DA51C /* BWQuincyManager.m in Sources */,
 				53DF2FBB15153023005160C5 /* NSObject+GCDExtention.m in Sources */,
 				5326E0771515CEC600B73E61 /* SnappySlider.m in Sources */,
 				53A7E5021516DB1D002DA214 /* MGTwitterEngine.m in Sources */,
@@ -5404,6 +5392,18 @@
 				53A7E5291516DB1D002DA214 /* NSString+UUID.m in Sources */,
 				53A7E52C1516DB1D002DA214 /* SA_OAuthTwitterController.m in Sources */,
 				53A7E52F1516DB1D002DA214 /* SA_OAuthTwitterEngine.m in Sources */,
+				532661281521930500DE39C1 /* BWApp.m in Sources */,
+				5326612B1521930600DE39C1 /* BWGlobal.m in Sources */,
+				5326612E1521930600DE39C1 /* BWHockeyManager.m in Sources */,
+				532661311521930600DE39C1 /* BWHockeySettingsViewController.m in Sources */,
+				532661341521930600DE39C1 /* BWHockeyViewController.m in Sources */,
+				532661371521930600DE39C1 /* NSString+HockeyAdditions.m in Sources */,
+				5326613A1521930600DE39C1 /* PSAppStoreHeader.m in Sources */,
+				5326613D1521930600DE39C1 /* PSStoreButton.m in Sources */,
+				532661401521930600DE39C1 /* PSWebTableViewCell.m in Sources */,
+				532661431521930600DE39C1 /* UIImage+HockeyAdditions.m in Sources */,
+				532661491521930600DE39C1 /* JSONKit.m in Sources */,
+				532661581521930E00DE39C1 /* BWQuincyManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5605,18 +5605,6 @@
 				53733C7614FC6075001D8104 /* NSString+Clean.m in Sources */,
 				53733C8214FDBD62001D8104 /* CALayer+ImageFromLayer.m in Sources */,
 				53E6093B150C4E5300FD86E6 /* UIViewController+IsVisible.m in Sources */,
-				53C7FDD4150F256B008DA51C /* BWApp.m in Sources */,
-				53C7FDD7150F256B008DA51C /* BWGlobal.m in Sources */,
-				53C7FDDA150F256B008DA51C /* BWHockeyManager.m in Sources */,
-				53C7FDDD150F256B008DA51C /* BWHockeySettingsViewController.m in Sources */,
-				53C7FDE0150F256B008DA51C /* BWHockeyViewController.m in Sources */,
-				53C7FDE3150F256B008DA51C /* NSString+HockeyAdditions.m in Sources */,
-				53C7FDE6150F256B008DA51C /* PSAppStoreHeader.m in Sources */,
-				53C7FDE9150F256B008DA51C /* PSStoreButton.m in Sources */,
-				53C7FDEC150F256B008DA51C /* PSWebTableViewCell.m in Sources */,
-				53C7FDEF150F256B008DA51C /* UIImage+HockeyAdditions.m in Sources */,
-				53C7FDF5150F256B008DA51C /* JSONKit.m in Sources */,
-				53C7FF6B150FD79B008DA51C /* BWQuincyManager.m in Sources */,
 				53DF2FBA15153023005160C5 /* NSObject+GCDExtention.m in Sources */,
 				5326E0761515CEC600B73E61 /* SnappySlider.m in Sources */,
 				53A7E5011516DB1D002DA214 /* MGTwitterEngine.m in Sources */,
@@ -5635,6 +5623,18 @@
 				53A7E5281516DB1D002DA214 /* NSString+UUID.m in Sources */,
 				53A7E52B1516DB1D002DA214 /* SA_OAuthTwitterController.m in Sources */,
 				53A7E52E1516DB1D002DA214 /* SA_OAuthTwitterEngine.m in Sources */,
+				532661271521930500DE39C1 /* BWApp.m in Sources */,
+				5326612A1521930600DE39C1 /* BWGlobal.m in Sources */,
+				5326612D1521930600DE39C1 /* BWHockeyManager.m in Sources */,
+				532661301521930600DE39C1 /* BWHockeySettingsViewController.m in Sources */,
+				532661331521930600DE39C1 /* BWHockeyViewController.m in Sources */,
+				532661361521930600DE39C1 /* NSString+HockeyAdditions.m in Sources */,
+				532661391521930600DE39C1 /* PSAppStoreHeader.m in Sources */,
+				5326613C1521930600DE39C1 /* PSStoreButton.m in Sources */,
+				5326613F1521930600DE39C1 /* PSWebTableViewCell.m in Sources */,
+				532661421521930600DE39C1 /* UIImage+HockeyAdditions.m in Sources */,
+				532661481521930600DE39C1 /* JSONKit.m in Sources */,
+				532661571521930E00DE39C1 /* BWQuincyManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

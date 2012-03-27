@@ -10,12 +10,13 @@
 #import "SUSServerChecker.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
+#import "BWHockeyManager.h"
 
 #define appDelegateS [iSubAppDelegate sharedInstance]
 
 @class BBSplitViewController, iPadRootViewController, InitialDetailViewController, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, Reachability, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController, HTTPServer;
 
-@interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate, SUSServerURLCheckerDelegate, MFMailComposeViewControllerDelegate>
+@interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate, SUSServerURLCheckerDelegate, MFMailComposeViewControllerDelegate, BWHockeyManagerDelegate>
 {		
 	UIWindow *window;
 	

@@ -366,6 +366,7 @@
 		
 		[[BWHockeyManager sharedHockeyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
 		[[BWHockeyManager sharedHockeyManager] setAlwaysShowUpdateReminder:NO];
+		[[BWHockeyManager sharedHockeyManager] setDelegate:self];
 	}
 	else if (IS_RELEASE())
 	{
@@ -383,6 +384,16 @@
 		[alert performSelector:@selector(show) withObject:nil afterDelay:2.];
 		[alert performSelector:@selector(release) withObject:nil afterDelay:3.];
 	}
+}
+
+- (NSString *)customDeviceIdentifier 
+{
+#ifdef ADHOC
+    if ([[UIDevice currentDevice] respondsToSelector:@selector(uniqueIdentifier)])
+		return [[UIDevice currentDevice] performSelector:@selector(uniqueIdentifier)];
+#endif
+	
+	return nil;
 }
 
 /*- (void)loadCrittercism
