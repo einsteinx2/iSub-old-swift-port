@@ -398,7 +398,7 @@
 {
 	StoreViewController *store = [[StoreViewController alloc] init];
 	//DLog(@"store: %@", store);
-	[self.navigationController pushViewController:store animated:YES];
+	[self pushViewControllerCustom:store];
 	[store release];
 }
 

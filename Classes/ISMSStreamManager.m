@@ -26,6 +26,7 @@
 #import "iSubAppDelegate.h"
 #import "ISMSCacheQueueManager.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "NSObject+GCDExtention.h"
 
 #define maxNumOfReconnects 5
 
@@ -286,7 +287,7 @@
 		[self cancelStreamAtIndex:index];
 		
 		ISMSStreamHandler *handler = [self.handlerStack objectAtIndex:index];
-		if (!handler.mySong.isFullyCached)
+		if (!handler.mySong.isFullyCached && !handler.mySong.isTempCached)
 			[handler.mySong removeFromCachedSongsTable];
 		[self.handlerStack removeObjectAtIndex:index];
 	}
@@ -544,9 +545,12 @@
 		// Only for temp cached files
 		if (handler.isTempCache)
 		{
-			DLog(@"byteOffset: %llu   secondsOffset: %f", handler.byteOffset, handler.secondsOffset);
-			audioEngineS.startByteOffset = handler.byteOffset;
-			audioEngineS.startSecondsOffset = handler.secondsOffset;;
+			// TODO: get rid of this ugly hack
+			[self gcdTimerPerformBlockInMainQueue:^{
+				DLog(@"byteOffset: %llu   secondsOffset: %f", handler.byteOffset, handler.secondsOffset);
+				audioEngineS.startByteOffset = handler.byteOffset;
+				audioEngineS.startSecondsOffset = handler.secondsOffset;
+			} afterDelay:1.0 withName:@"temp song set byteOffset/seconds"];
 		}
 	}
 	else if ([handler.mySong isEqualToSong:nextSong])

@@ -8,12 +8,6 @@
 
 
 @interface SearchXMLParser : NSObject <NSXMLParserDelegate>
-{
-	
-	NSMutableArray *listOfArtists;
-	NSMutableArray *listOfAlbums;
-	NSMutableArray *listOfSongs;
-}
 
 @property (retain) NSMutableArray *listOfArtists;
 @property (retain) NSMutableArray *listOfAlbums;

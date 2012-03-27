@@ -15,21 +15,7 @@
 
 @interface SearchSongsViewController : UITableViewController 
 {
-	
-	NSString *query;
-	NSUInteger searchType;
-	
-	NSMutableArray *listOfArtists;
-	NSMutableArray *listOfAlbums;
-	NSMutableArray *listOfSongs;
-	
-	NSUInteger offset;
-	BOOL isMoreResults;
-	BOOL isLoading;
-	
-	NSMutableData *receivedData;
-	
-	NSURLConnection *connection;
+	NSMutableData *receivedData;	
 }
 
 @property (retain) NSString *query;

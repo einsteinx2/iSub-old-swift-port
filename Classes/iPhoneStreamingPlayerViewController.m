@@ -1206,7 +1206,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		byteOffset = audioEngineS.bitRate * 128 * progressSlider.value;
 		
-		if ([currentSong isTempCached])
+		if (currentSong.isTempCached)
 		{
             [audioEngineS stop];
 			

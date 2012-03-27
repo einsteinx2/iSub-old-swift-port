@@ -875,6 +875,7 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 	
 	if (songEnded)
 	{
+		DLog(@"buffersUsedSinceSongEnd: %llu   buffersTilSongEnd: %u", buffersUsedSinceSongEnd, buffersTilSongEnd);
 		if (buffersUsedSinceSongEnd >= buffersTilSongEnd)
 		{
 			[self songEnded];
@@ -884,6 +885,10 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 	int32_t bytesRead = [self readBuffer:buffer length:length];
 	if (bytesRead < 0)
 	{
+		// If we never called songEnded, do it now
+		if (songEnded)
+			[self songEnded];
+		
 		if (self.bassReinitSampleRate)
 		{
 			// The stream should end, but only because we need to re-init BASS for the next song

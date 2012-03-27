@@ -17,7 +17,7 @@
 
 @synthesize listOfArtists, listOfAlbums, listOfSongs;
 
-- (id) initXMLParser 
+- (id)initXMLParser 
 {	
 	if ((self = [super init]))
 	{
@@ -100,10 +100,10 @@
 
 - (void) dealloc 
 {
-	[super dealloc];
 	[listOfArtists release];
 	[listOfAlbums release];
 	[listOfSongs release];
+	[super dealloc];
 }
 
 @end

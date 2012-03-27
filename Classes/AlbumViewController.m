@@ -150,6 +150,9 @@
 	}
 	
 	[self.tableView reloadData];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(reloadData) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(reloadData) name:ISMSNotification_SongPlaybackStarted object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -157,6 +160,9 @@
 	[super viewWillDisappear:animated];
 	
 	[self.dataModel cancelLoad];
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self.tableView name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];	
+	[[NSNotificationCenter defaultCenter] removeObserver:self.tableView name:ISMSNotification_SongPlaybackStarted object:nil];	
 }
 
 - (void)didReceiveMemoryWarning 
