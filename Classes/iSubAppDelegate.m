@@ -274,8 +274,27 @@
 
 - (void)SUSServerURLCheckRedirected:(SUSServerChecker *)checker redirectUrl:(NSURL *)url
 {
-    settingsS.redirectUrlString = [NSString stringWithFormat:@"%@://%@:%@", url.scheme, url.host, url.port];
-    DLog(@"redirectUrlString: %@", settingsS.redirectUrlString);
+	NSMutableString *redirectUrlString = [NSMutableString stringWithFormat:@"%@://%@", url.scheme, url.host];
+	if (url.port)
+		[redirectUrlString appendFormat:@":%@", url.port];
+	
+	if ([url.pathComponents count] > 3)
+	{
+		for (NSString *component in url.pathComponents)
+		{
+			if ([component isEqualToString:@"rest"])
+				break;
+			
+			if (![component isEqualToString:@"/"])
+			{
+				[redirectUrlString appendFormat:@"/%@", component];
+			}
+		}
+	}
+	
+	DLog(@"redirectUrlString: %@", redirectUrlString);
+	
+	settingsS.redirectUrlString = [NSString stringWithString:redirectUrlString];
 }
 
 - (void)SUSServerURLCheckFailed:(SUSServerChecker *)checker withError:(NSError *)error
