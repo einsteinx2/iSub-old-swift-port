@@ -35,7 +35,7 @@ static NSSet *setOfVersions = nil;
 
 + (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action forUrlString:(NSString *)url username:(NSString *)user password:(NSString *)pass andParameters:(NSDictionary *)parameters byteOffset:(NSUInteger)offset
 {
-	NSString *urlString = [NSString stringWithFormat:@"%@/rest/%@.view", url, action];
+	NSMutableString *urlString = [NSMutableString stringWithFormat:@"%@/rest/%@.view", url, action];
 	NSString *username = [user URLEncodeString];
 	NSString *password = [pass URLEncodeString];
 	NSString *version = nil;
@@ -99,12 +99,26 @@ static NSSet *setOfVersions = nil;
 		loadingTimeout = ISMSServerCheckTimeout;
 	}
 	
+	if ([url isEqualToString:@"https://streaming.one.ubuntu.com"])
+	{
+		// This is Ubuntu One, send as GET request
+		[urlString appendFormat:@"?%@", postString];
+	}
+	
 	// Create the request
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString] 
 									  cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData 
 								  timeoutInterval:loadingTimeout];
-	[request setHTTPMethod:@"POST"]; 
-	[request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
+	
+	if ([url isEqualToString:@"https://streaming.one.ubuntu.com"])
+	{
+		[request setHTTPMethod:@"GET"]; 
+	}
+	else
+	{
+		[request setHTTPMethod:@"POST"]; 
+		[request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
+	}
 	
 	// Set the HTTP Basic Auth
 	if (settingsS.isBasicAuthEnabled)
