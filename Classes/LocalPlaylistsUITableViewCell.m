@@ -32,7 +32,6 @@
 		playlistCountLabel.font = [UIFont systemFontOfSize:16];
 		playlistCountLabel.textColor = [UIColor colorWithWhite:.45 alpha:1];
 		[self.contentView addSubview:playlistCountLabel];
-		[playlistCountLabel release];
 		
 		playlistNameScrollView = [[UIScrollView alloc] init];
 		playlistNameScrollView.frame = CGRectMake(5, 0, 310, 44);
@@ -42,16 +41,24 @@
 		playlistNameScrollView.userInteractionEnabled = NO;
 		playlistNameScrollView.decelerationRate = UIScrollViewDecelerationRateFast;
 		[self.contentView addSubview:playlistNameScrollView];
-		[playlistNameScrollView release];
 		
 		playlistNameLabel = [[UILabel alloc] init];
 		playlistNameLabel.backgroundColor = [UIColor clearColor];
 		playlistNameLabel.textAlignment = UITextAlignmentLeft; // default
 		playlistNameLabel.font = [UIFont boldSystemFontOfSize:20];
 		[playlistNameScrollView addSubview:playlistNameLabel];
-		[playlistNameLabel release];
     }
     return self;
+}
+
+- (void)dealloc 
+{
+	[md5 release]; md5 = nil;
+	[playlistCountLabel release]; playlistCountLabel = nil;
+	[playlistNameScrollView release]; playlistNameScrollView = nil;
+	[playlistNameLabel release]; playlistNameLabel = nil;
+	
+	[super dealloc];
 }
 
 - (void)layoutSubviews 
@@ -67,13 +74,6 @@
 	CGRect newFrame = playlistNameLabel.frame;
 	newFrame.size.width = expectedLabelSize.width;
 	playlistNameLabel.frame = newFrame;
-}
-
-- (void)dealloc 
-{
-	[md5 release]; md5 = nil;
-	
-	[super dealloc];
 }
 
 #pragma mark - Overlay

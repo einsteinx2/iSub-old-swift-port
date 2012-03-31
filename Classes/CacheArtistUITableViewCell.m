@@ -34,17 +34,22 @@
 		artistNameScrollView.userInteractionEnabled = NO;
 		artistNameScrollView.decelerationRate = UIScrollViewDecelerationRateFast;
 		[self.contentView addSubview:artistNameScrollView];
-		[artistNameScrollView release];
 		
 		artistNameLabel = [[UILabel alloc] init];
 		artistNameLabel.backgroundColor = [UIColor clearColor];
 		artistNameLabel.textAlignment = UITextAlignmentLeft; // default
 		artistNameLabel.font = [UIFont boldSystemFontOfSize:20];
 		[artistNameScrollView addSubview:artistNameLabel];
-		[artistNameLabel release];
 	}
 	
 	return self;
+}
+
+- (void)dealloc
+{
+	[artistNameScrollView release]; artistNameScrollView = nil;
+	[artistNameLabel release]; artistNameLabel = nil; 
+	[super dealloc];
 }
 
 - (void)layoutSubviews 

@@ -11,7 +11,7 @@
 
 @implementation StoreUITableViewCell
 
-@synthesize titleLabel, descLabel, priceLabel;
+@synthesize titleLabel, descLabel, priceLabel, myProduct;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
 {
@@ -49,6 +49,16 @@
 	return self;
 }
 
+- (void)dealloc 
+{
+	[myProduct release]; myProduct = nil;
+	[titleLabel release]; titleLabel = nil;
+	[descLabel release]; descLabel = nil;
+	[priceLabel release]; priceLabel = nil;
+	
+    [super dealloc];
+}
+
 - (SKProduct *)myProduct
 {
 	@synchronized(self)
@@ -84,13 +94,5 @@
 		}
 	}
 }
-
-- (void)dealloc 
-{
-	[myProduct release]; myProduct = nil;
-
-    [super dealloc];
-}
-
 
 @end

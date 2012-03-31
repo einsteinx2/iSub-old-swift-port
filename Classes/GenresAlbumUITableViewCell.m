@@ -29,7 +29,6 @@
 		coverArtView = [[AsynchronousImageView alloc] init];
 		coverArtView.isLarge = NO;
 		[self.contentView addSubview:coverArtView];
-		[coverArtView release];
 		
 		albumNameScrollView = [[UIScrollView alloc] init];
 		albumNameScrollView.frame = CGRectMake(65, 0, 230, 60);
@@ -39,14 +38,12 @@
 		albumNameScrollView.userInteractionEnabled = NO;
 		albumNameScrollView.decelerationRate = UIScrollViewDecelerationRateFast;
 		[self.contentView addSubview:albumNameScrollView];
-		[albumNameScrollView release];
 		
 		albumNameLabel = [[UILabel alloc] init];
 		albumNameLabel.backgroundColor = [UIColor clearColor];
 		albumNameLabel.textAlignment = UITextAlignmentLeft; // default
 		albumNameLabel.font = [UIFont boldSystemFontOfSize:20];
 		[albumNameScrollView addSubview:albumNameLabel];
-		[albumNameLabel release];
 	}
 	
 	return self;
@@ -70,6 +67,10 @@
 {
 	[seg1 release]; seg1 = nil;
 	[genre release]; genre = nil;
+	[coverArtView release]; coverArtView = nil;
+	[albumNameScrollView release]; albumNameScrollView = nil;
+	[albumNameLabel release]; albumNameLabel = nil;
+
     [super dealloc];
 }
 

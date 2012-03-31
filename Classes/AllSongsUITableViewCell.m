@@ -31,7 +31,6 @@
 		coverArtView = [[AsynchronousImageView alloc] init];
 		coverArtView.isLarge = NO;
 		[self.contentView addSubview:coverArtView];
-		[coverArtView release];
 		
 		songNameScrollView = [[UIScrollView alloc] init];
 		songNameScrollView.frame = CGRectMake(65, 0, 255, 60);
@@ -41,21 +40,18 @@
 		songNameScrollView.userInteractionEnabled = NO;
 		songNameScrollView.decelerationRate = UIScrollViewDecelerationRateFast;
 		[self.contentView addSubview:songNameScrollView];
-		[songNameScrollView release];
 		
 		songNameLabel = [[UILabel alloc] init];
 		songNameLabel.backgroundColor = [UIColor clearColor];
 		songNameLabel.textAlignment = UITextAlignmentLeft; // default
 		songNameLabel.font = [UIFont boldSystemFontOfSize:20];
 		[songNameScrollView addSubview:songNameLabel];
-		[songNameLabel release];
 		
 		artistNameLabel = [[UILabel alloc] init];
 		artistNameLabel.backgroundColor = [UIColor clearColor];
 		artistNameLabel.textAlignment = UITextAlignmentLeft; // default
 		artistNameLabel.font = [UIFont systemFontOfSize:15];
 		[songNameScrollView addSubview:artistNameLabel];
-		[artistNameLabel release];
 	}
 	
 	return self;
@@ -84,10 +80,10 @@
 - (void)dealloc
 {
 	coverArtView.delegate = nil;
-	coverArtView = nil;
-	songNameScrollView = nil;
-	songNameLabel = nil;
-	artistNameLabel = nil;
+	[coverArtView release]; coverArtView = nil;
+	[songNameScrollView release]; songNameScrollView = nil;
+	[songNameLabel release]; songNameLabel = nil;
+	[artistNameLabel release]; artistNameLabel = nil;
 	
 	[md5 release]; md5 = nil;
 	

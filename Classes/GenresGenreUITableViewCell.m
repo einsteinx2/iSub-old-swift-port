@@ -33,17 +33,23 @@
 		genreNameScrollView.userInteractionEnabled = NO;
 		genreNameScrollView.decelerationRate = UIScrollViewDecelerationRateFast;
 		[self.contentView addSubview:genreNameScrollView];
-		[genreNameScrollView release];
 		
 		genreNameLabel = [[UILabel alloc] init];
 		genreNameLabel.backgroundColor = [UIColor clearColor];
 		genreNameLabel.textAlignment = UITextAlignmentLeft; // default
 		genreNameLabel.font = [UIFont boldSystemFontOfSize:20];
 		[genreNameScrollView addSubview:genreNameLabel];
-		[genreNameLabel release];
 	}
 	
 	return self;
+}
+
+- (void)dealloc
+{
+	[genreNameScrollView release]; genreNameScrollView = nil;
+	[genreNameLabel release]; genreNameLabel = nil;
+	
+	[super dealloc];
 }
 
 - (void)layoutSubviews 

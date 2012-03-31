@@ -9,13 +9,6 @@
 #import <StoreKit/StoreKit.h>
 
 @interface StoreUITableViewCell : UITableViewCell 
-{
-	UILabel *titleLabel;
-	UILabel *descLabel;
-	UILabel *priceLabel;
-	
-	SKProduct *myProduct;
-}
 
 @property (retain) SKProduct *myProduct;
 

@@ -9,10 +9,6 @@
 #import "CustomUITableViewCell.h"
 
 @interface ChatUITableViewCell : CustomUITableViewCell 
-{
-	UILabel *userNameLabel;
-	UILabel *messageLabel;
-}
 
 @property (retain) UILabel *userNameLabel;
 @property (retain) UILabel *messageLabel;

@@ -22,7 +22,6 @@
 		coverArtView = [[AsynchronousImageView alloc] init];
 		coverArtView.isLarge = NO;
 		[self.contentView addSubview:coverArtView];
-		[coverArtView release];
 		
 		bookmarkNameLabel = [[UILabel alloc] init];
 		bookmarkNameLabel.frame = CGRectMake(0, 0, 320, 20);
@@ -33,7 +32,6 @@
 		bookmarkNameLabel.font = [UIFont boldSystemFontOfSize:10];
 		bookmarkNameLabel.textColor = [UIColor whiteColor];
 		[self.contentView addSubview:bookmarkNameLabel];
-		[bookmarkNameLabel release];
 		
 		nameScrollView = [[UIScrollView alloc] init];
 		nameScrollView.frame = CGRectMake(65, 20, 245, 55);
@@ -44,21 +42,18 @@
 		nameScrollView.userInteractionEnabled = NO;
 		nameScrollView.decelerationRate = UIScrollViewDecelerationRateFast;
 		[self.contentView addSubview:nameScrollView];
-		[nameScrollView release];
 		
 		songNameLabel = [[UILabel alloc] init];
 		songNameLabel.backgroundColor = [UIColor clearColor];
 		songNameLabel.textAlignment = UITextAlignmentLeft; // default
 		songNameLabel.font = [UIFont boldSystemFontOfSize:20];
 		[nameScrollView addSubview:songNameLabel];
-		[songNameLabel release];
 		
 		artistNameLabel = [[UILabel alloc] init];
 		artistNameLabel.backgroundColor = [UIColor clearColor];
 		artistNameLabel.textAlignment = UITextAlignmentLeft; // default
 		artistNameLabel.font = [UIFont systemFontOfSize:15];
 		[nameScrollView addSubview:artistNameLabel];
-		[artistNameLabel release];
 	}
 	
 	return self;
@@ -67,11 +62,11 @@
 - (void)dealloc
 {
 	coverArtView.delegate = nil;
-	coverArtView = nil;
-	bookmarkNameLabel = nil;
-	nameScrollView = nil;
-	songNameLabel = nil;
-	artistNameLabel = nil;
+	[coverArtView release]; coverArtView = nil;
+	[bookmarkNameLabel release]; bookmarkNameLabel = nil;
+	[nameScrollView release]; nameScrollView = nil;
+	[songNameLabel release]; songNameLabel = nil;
+	[artistNameLabel release]; artistNameLabel = nil;
 	[super dealloc];
 }
 

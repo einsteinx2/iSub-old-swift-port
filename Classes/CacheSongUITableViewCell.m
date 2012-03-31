@@ -23,6 +23,8 @@
 {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) 
 	{		
+		md5 = nil;
+		
 		trackNumberLabel = [[UILabel alloc] init];
 		trackNumberLabel.backgroundColor = [UIColor clearColor];
 		trackNumberLabel.textAlignment = UITextAlignmentCenter;
@@ -30,7 +32,6 @@
 		trackNumberLabel.adjustsFontSizeToFitWidth = YES;
 		trackNumberLabel.minimumFontSize = 16;
 		[self.contentView addSubview:trackNumberLabel];
-		[trackNumberLabel release];
 		
 		songNameScrollView = [[UIScrollView alloc] init];
 		songNameScrollView.frame = CGRectMake(35, 0, 235, 50);
@@ -40,14 +41,12 @@
 		songNameScrollView.userInteractionEnabled = NO;
 		songNameScrollView.decelerationRate = UIScrollViewDecelerationRateFast;
 		[self.contentView addSubview:songNameScrollView];
-		[songNameScrollView release];
 		
 		songNameLabel = [[UILabel alloc] init];
 		songNameLabel.backgroundColor = [UIColor clearColor];
 		songNameLabel.textAlignment = UITextAlignmentLeft;
 		songNameLabel.font = [UIFont systemFontOfSize:20];
 		[songNameScrollView addSubview:songNameLabel];
-		[songNameLabel release];
 		
 		artistNameLabel = [[UILabel alloc] init];
 		artistNameLabel.backgroundColor = [UIColor clearColor];
@@ -55,7 +54,6 @@
 		artistNameLabel.font = [UIFont systemFontOfSize:13];
 		artistNameLabel.textColor = [UIColor colorWithWhite:.4 alpha:1];
 		[songNameScrollView addSubview:artistNameLabel];
-		[artistNameLabel release];
 		
 		songDurationLabel = [[UILabel alloc] init];
 		songDurationLabel.frame = CGRectMake(270, 0, 45, 41);
@@ -67,10 +65,22 @@
 		songDurationLabel.minimumFontSize = 12;
 		songDurationLabel.textColor = [UIColor grayColor];
 		[self.contentView addSubview:songDurationLabel];
-		[songDurationLabel release];
 	}
 	
 	return self;
+}
+
+- (void)dealloc 
+{
+	[md5 release]; md5 = nil;
+	[trackNumberLabel release]; trackNumberLabel = nil;
+	[songNameScrollView release]; songNameScrollView = nil;
+	[songNameLabel release]; songNameLabel = nil;
+	[artistNameLabel release]; artistNameLabel = nil;
+	[songDurationLabel release]; songDurationLabel = nil;
+
+	
+	[super dealloc];
 }
 
 - (void)layoutSubviews 
@@ -91,13 +101,6 @@
 	newFrame = artistNameLabel.frame;
 	newFrame.size.width = expectedLabelSize.width;
 	artistNameLabel.frame = newFrame;
-}
-
-- (void)dealloc 
-{
-	[md5 release]; md5 = nil;
-
-	[super dealloc];
 }
 
 #pragma mark - Overlay

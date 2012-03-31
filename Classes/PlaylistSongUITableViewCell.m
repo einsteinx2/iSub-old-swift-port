@@ -22,10 +22,11 @@
 {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) 
 	{
+		playlistMD5 = nil;
+		
 		coverArtView = [[AsynchronousImageView alloc] init];
 		coverArtView.isLarge = NO;
 		[self.contentView addSubview:coverArtView];
-		[coverArtView release];
 		
 		numberLabel = [[UILabel alloc] init];
 		numberLabel.backgroundColor = [UIColor clearColor];
@@ -34,7 +35,6 @@
 		numberLabel.adjustsFontSizeToFitWidth = YES;
 		numberLabel.minimumFontSize = 12;
 		[self.contentView addSubview:numberLabel];
-		[numberLabel release];		
 		
 		nameScrollView = [[UIScrollView alloc] init];
 		nameScrollView.frame = CGRectMake(105, 0, 205, 60);
@@ -44,24 +44,34 @@
 		nameScrollView.userInteractionEnabled = NO;
 		nameScrollView.decelerationRate = UIScrollViewDecelerationRateFast;
 		[self.contentView addSubview:nameScrollView];
-		[nameScrollView release];
 		
 		songNameLabel = [[UILabel alloc] init];
 		songNameLabel.backgroundColor = [UIColor clearColor];
 		songNameLabel.textAlignment = UITextAlignmentLeft; // default
 		songNameLabel.font = [UIFont boldSystemFontOfSize:20];
 		[nameScrollView addSubview:songNameLabel];
-		[songNameLabel release];
 		
 		artistNameLabel = [[UILabel alloc] init];
 		artistNameLabel.backgroundColor = [UIColor clearColor];
 		artistNameLabel.textAlignment = UITextAlignmentLeft; // default
 		artistNameLabel.font = [UIFont systemFontOfSize:15];
 		[nameScrollView addSubview:artistNameLabel];
-		[artistNameLabel release];
 	}
 	
 	return self;
+}
+
+- (void)dealloc
+{
+	[playlistMD5 release]; playlistMD5 = nil;
+	coverArtView.delegate = nil;
+	[coverArtView release]; coverArtView = nil;
+	[numberLabel release]; numberLabel = nil;
+	[nameScrollView release]; nameScrollView = nil;
+	[songNameLabel release]; songNameLabel = nil;
+	[artistNameLabel release]; artistNameLabel = nil;
+	
+	[super dealloc];
 }
 
 - (void)layoutSubviews

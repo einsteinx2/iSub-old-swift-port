@@ -31,7 +31,6 @@ static UIImage *nowPlayingImageWhite = nil;
 		
 		deleteToggleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"unselected.png"]];
 		[self addSubview:deleteToggleImage];
-		[deleteToggleImage release];
 		deleteToggleImage.hidden = YES;
     }
     return self;
@@ -48,6 +47,8 @@ static UIImage *nowPlayingImageWhite = nil;
 
 - (void)dealloc
 {
+	[indexPath release]; indexPath = nil;
+	[deleteToggleImage release]; deleteToggleImage = nil;
 	[overlayView release]; overlayView = nil;
 	[super dealloc];
 }

@@ -27,7 +27,6 @@
 		userNameLabel.font = [UIFont boldSystemFontOfSize:10];
 		userNameLabel.textColor = [UIColor whiteColor];
 		[self.contentView addSubview:userNameLabel];
-		[userNameLabel release];
 		
 		messageLabel = [[UILabel alloc] init];
 		messageLabel.frame = CGRectMake(5, 20, 310, 55);
@@ -38,10 +37,16 @@
 		messageLabel.lineBreakMode = UILineBreakModeWordWrap;
 		messageLabel.numberOfLines = 0;
 		[self.contentView addSubview:messageLabel];
-		[messageLabel release];
 	}
 	
 	return self;
+}
+
+- (void)dealloc
+{
+	[userNameLabel release]; userNameLabel = nil;
+	[messageLabel release]; messageLabel = nil;
+	[super dealloc];
 }
 
 - (void)layoutSubviews

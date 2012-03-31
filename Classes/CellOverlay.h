@@ -9,11 +9,7 @@
 
 
 @interface CellOverlay : UIView 
-{
-	UIButton *inputBlocker;
-	UIButton *downloadButton;
-	UIButton *queueButton;
-}
+
 @property (retain) UIButton *inputBlocker;
 @property (retain) UIButton *downloadButton;
 @property (retain) UIButton *queueButton;

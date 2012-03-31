@@ -35,6 +35,7 @@
 		isDownload = NO;
 		receivedData = nil;
 		connection = nil;
+		serverPlaylist = nil;
 		
 		playlistNameScrollView = [[UIScrollView alloc] init];
 		playlistNameScrollView.frame = CGRectMake(5, 10, 310, 44);
@@ -44,16 +45,25 @@
 		playlistNameScrollView.userInteractionEnabled = NO;
 		playlistNameScrollView.decelerationRate = UIScrollViewDecelerationRateFast;
 		[self.contentView addSubview:playlistNameScrollView];
-		[playlistNameScrollView release];
 		
 		playlistNameLabel = [[UILabel alloc] init];
 		playlistNameLabel.backgroundColor = [UIColor clearColor];
 		playlistNameLabel.textAlignment = UITextAlignmentLeft; // default
 		playlistNameLabel.font = [UIFont boldSystemFontOfSize:20];
 		[playlistNameScrollView addSubview:playlistNameLabel];
-		[playlistNameLabel release];
     }
     return self;
+}
+
+- (void)dealloc
+{
+	[receivedData release]; receivedData = nil;
+	[connection release]; connection = nil;
+	[playlistNameScrollView release]; playlistNameScrollView = nil;
+	[playlistNameLabel release]; playlistNameLabel = nil;
+	[serverPlaylist release]; serverPlaylist = nil;
+	
+	[super dealloc];
 }
 
 - (void)layoutSubviews 

@@ -24,10 +24,11 @@
 {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]))
 	{
+		mySong = nil;
+		
 		coverArtView = [[AsynchronousImageView alloc] init];
 		coverArtView.isLarge = NO;
 		[self.contentView addSubview:coverArtView];
-		[coverArtView release];
 		
 		userNameLabel = [[UILabel alloc] init];
 		userNameLabel.frame = CGRectMake(0, 0, 320, 20);
@@ -38,7 +39,6 @@
 		userNameLabel.font = [UIFont boldSystemFontOfSize:10];
 		userNameLabel.textColor = [UIColor whiteColor];
 		[self.contentView addSubview:userNameLabel];
-		[userNameLabel release];
 		
 		nameScrollView = [[UIScrollView alloc] init];
 		nameScrollView.frame = CGRectMake(65, 20, 245, 55);
@@ -49,26 +49,36 @@
 		nameScrollView.userInteractionEnabled = NO;
 		nameScrollView.decelerationRate = UIScrollViewDecelerationRateFast;
 		[self.contentView addSubview:nameScrollView];
-		[nameScrollView release];
 		
 		songNameLabel = [[UILabel alloc] init];
 		songNameLabel.backgroundColor = [UIColor clearColor];
 		songNameLabel.textAlignment = UITextAlignmentLeft; // default
 		songNameLabel.font = [UIFont boldSystemFontOfSize:20];
 		[nameScrollView addSubview:songNameLabel];
-		[songNameLabel release];
 		
 		artistNameLabel = [[UILabel alloc] init];
 		artistNameLabel.backgroundColor = [UIColor clearColor];
 		artistNameLabel.textAlignment = UITextAlignmentLeft; // default
 		artistNameLabel.font = [UIFont systemFontOfSize:15];
 		[nameScrollView addSubview:artistNameLabel];
-		[artistNameLabel release];
 		
 		mySong = nil;
 	}
 	
 	return self;
+}
+
+- (void)dealloc
+{
+	[mySong release]; mySong = nil;
+	coverArtView.delegate = nil;
+	[coverArtView release]; coverArtView = nil;
+	[userNameLabel release]; userNameLabel = nil;
+	[nameScrollView release]; nameScrollView = nil;
+	[songNameLabel release]; songNameLabel = nil;
+	[artistNameLabel release]; artistNameLabel = nil;
+
+	[super dealloc];
 }
 
 - (void)layoutSubviews 
