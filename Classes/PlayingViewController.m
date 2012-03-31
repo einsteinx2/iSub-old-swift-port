@@ -60,7 +60,7 @@
 	self.title = @"Now Playing";
 	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
 	
-	self.dataModel = [[SUSNowPlayingDAO alloc] initWithDelegate:self];
+	self.dataModel = [[[SUSNowPlayingDAO alloc] initWithDelegate:self] autorelease];
 	
 	if (IS_IPAD())
 	{

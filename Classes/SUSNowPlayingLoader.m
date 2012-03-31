@@ -127,6 +127,7 @@
 						
 						Song *aSong = [[Song alloc] initWithTBXMLElement:entry];
 						[dict setObject:aSong forKey:@"song"];
+						[aSong release];
 						
 						NSString *username = [TBXML valueOfAttributeNamed:@"username" forElement:entry];
 						if (username)

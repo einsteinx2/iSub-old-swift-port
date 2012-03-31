@@ -132,7 +132,7 @@
 		if ([result stringForColumnIndex:0] != nil)
 			[[Song songFromGenreDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCurrentPlaylist];
 	}
-	[result release];
+	[result close];
 	
 	[viewObjectsS hideLoadingScreen];
 }

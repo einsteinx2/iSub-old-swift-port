@@ -74,6 +74,8 @@
 			[self presentMoviePlayerViewControllerAnimated:moviePlayer];
 			// This line might be needed
 			[moviePlayer.moviePlayer play];
+			
+			// TODO, 
 		} 
 		else 
 		{

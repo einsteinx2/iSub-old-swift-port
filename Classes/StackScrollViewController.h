@@ -39,14 +39,7 @@ typedef enum
 	
 	CGPoint positionOfViewAtRightAtTouchBegan;
 	CGPoint positionOfViewAtLeftAtTouchBegan;
-	
-	
-
 }
-
-//- (void)popToRootViewController;
-//- (void)popTopViewController;
-
 
 - (void)addViewInSlider:(UIViewController*)controller;
 - (void)addViewInSlider:(UIViewController*)controller invokeByController:(UIViewController*)invokeByController isStackStartView:(BOOL)isStackStartView;

@@ -29,8 +29,7 @@
 	GLuint	imageTexture;
 	CGPoint	location;
 	CGPoint	previousLocation;
-	Boolean	firstTouch;
-	Boolean needsErase;
+	BOOL needsErase;
 }
 
 @property(readwrite) CGPoint location;

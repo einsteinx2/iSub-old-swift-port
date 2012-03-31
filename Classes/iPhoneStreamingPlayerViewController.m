@@ -147,9 +147,13 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	}
 	else
 	{
-		volumeView = [[[MPVolumeView alloc] initWithFrame:volumeSlider.bounds] autorelease];
+		//volumeSlider.backgroundColor = [UIColor greenColor];
+		CGRect newFrame = CGRectMake(10, 0, volumeSlider.width-20, volumeSlider.height);
+		//CGRect newFrame = CGRectMake(volumeSlider.x, volumeSlider.y-10, volumeSlider.width, 30);
+		volumeView = [[[MPVolumeView alloc] initWithFrame:newFrame] autorelease];
 		[volumeSlider addSubview:volumeView];
-		[volumeView sizeToFit];
+		//[self.view addSubview:volumeView];
+		//[volumeView sizeToFit];
 	}
 	
 	// Setup the cover art reflection

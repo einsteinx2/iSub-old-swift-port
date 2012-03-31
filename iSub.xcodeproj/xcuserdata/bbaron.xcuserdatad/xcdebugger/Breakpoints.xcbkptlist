@@ -565,11 +565,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "353888832.120896"
+         timestampString = "354850299.691332"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "502"
-         endingLineNumber = "502"
+         startingLineNumber = "506"
+         endingLineNumber = "506"
          landmarkName = "-shouldAutorotateToInterfaceOrientation:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -929,11 +929,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "353888832.120896"
+         timestampString = "354850299.691332"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "813"
-         endingLineNumber = "813"
+         startingLineNumber = "817"
+         endingLineNumber = "817"
          landmarkName = "-updateBarButtonImage"
          landmarkType = "5">
       </FileBreakpoint>
@@ -943,11 +943,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "353888832.120896"
+         timestampString = "354850299.691332"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "810"
-         endingLineNumber = "810"
+         startingLineNumber = "814"
+         endingLineNumber = "814"
          landmarkName = "-updateBarButtonImage"
          landmarkType = "5">
       </FileBreakpoint>
@@ -957,11 +957,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "353888832.120896"
+         timestampString = "354850299.691332"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "816"
-         endingLineNumber = "816"
+         startingLineNumber = "820"
+         endingLineNumber = "820"
          landmarkName = "-updateBarButtonImage"
          landmarkType = "5">
       </FileBreakpoint>
@@ -971,11 +971,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "353888832.120896"
+         timestampString = "354850299.691332"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "826"
-         endingLineNumber = "826"
+         startingLineNumber = "830"
+         endingLineNumber = "830"
          landmarkName = "-playlistToggleAnimated:saveState:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -985,11 +985,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "353888832.120896"
+         timestampString = "354850299.691332"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "841"
-         endingLineNumber = "841"
+         startingLineNumber = "845"
+         endingLineNumber = "845"
          landmarkName = "-playlistToggleAnimated:saveState:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -999,11 +999,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "353888832.120896"
+         timestampString = "354850299.691332"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "832"
-         endingLineNumber = "832"
+         startingLineNumber = "836"
+         endingLineNumber = "836"
          landmarkName = "-playlistToggleAnimated:saveState:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1013,11 +1013,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "353888832.120896"
+         timestampString = "354850299.691332"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "847"
-         endingLineNumber = "847"
+         startingLineNumber = "851"
+         endingLineNumber = "851"
          landmarkName = "-playlistToggleAnimated:saveState:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1027,11 +1027,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "353888832.120896"
+         timestampString = "354850299.691332"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1439"
-         endingLineNumber = "1439"
+         startingLineNumber = "1443"
+         endingLineNumber = "1443"
          landmarkName = "-currentAlbumPressed:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1041,11 +1041,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "353888832.120896"
+         timestampString = "354850299.691332"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1431"
-         endingLineNumber = "1431"
+         startingLineNumber = "1435"
+         endingLineNumber = "1435"
          landmarkName = "-updateShuffleIcon"
          landmarkType = "5">
       </FileBreakpoint>
@@ -2007,11 +2007,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "353888832.120896"
+         timestampString = "354850299.691332"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "890"
-         endingLineNumber = "890"
+         startingLineNumber = "894"
+         endingLineNumber = "894"
          landmarkName = "-playlistToggleAnimated:saveState:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5277,11 +5277,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "353888832.120896"
+         timestampString = "354850299.691332"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "827"
-         endingLineNumber = "827"
+         startingLineNumber = "831"
+         endingLineNumber = "831"
          landmarkName = "-playlistToggleAnimated:saveState:"
          landmarkType = "5">
       </FileBreakpoint>

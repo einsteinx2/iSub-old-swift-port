@@ -462,9 +462,7 @@
 		downloadProgress = 1.;
 	
 	if (self.isPartiallyCached)
-	{
-		double totalSize = [self.size doubleValue];
-		
+	{		
 		CGFloat bitrate = (CGFloat)self.estimatedBitrate;
 		if (audioEngineS.isPlaying)
 		{
@@ -488,7 +486,7 @@
 				}
 			}
 		}
-		totalSize = BytesForSecondsAtBitrate(bitrate, seconds);
+		double totalSize = BytesForSecondsAtBitrate(bitrate, seconds);
 		downloadProgress = (double)self.localFileSize / totalSize;		
 	}
 	

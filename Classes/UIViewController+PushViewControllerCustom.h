@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-#define ISMSiPadViewWidth 448.
+#define ISMSiPadViewWidth 387.
+//448.
 
 @interface UIViewController (PushViewControllerCustom)
 

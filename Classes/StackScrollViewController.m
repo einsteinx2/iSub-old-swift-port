@@ -13,7 +13,7 @@
 #import "NSArray+Additions.h"
 #import "SavedSettings.h"
 
-const NSInteger SLIDE_VIEWS_MINUS_X_POSITION = -190;//-130;
+const NSInteger SLIDE_VIEWS_MINUS_X_POSITION = 0;//-190;//-130;
 const NSInteger SLIDE_VIEWS_START_X_POS = 0;
 const NSTimeInterval SLIDE_ANIMATION_DURATION = 0.2;
 const NSTimeInterval BOUNCE_ANIMATION_DURATION = 0.06;
@@ -379,7 +379,7 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 					}
 					else
 					{
-						//Drop Card View Animation
+						/*//Drop Card View Animation
 						if (([self slideViewAtIndex:0].frame.origin.x + 200) >= (self.view.frame.origin.x + [self slideViewAtIndex:0].frame.size.width))
 						{
 							NSInteger viewControllerCount = [viewControllersStack count];
@@ -413,7 +413,7 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 							viewAtLeft2 = nil;
 							viewAtRight = nil;
 							viewAtRight2 = nil;							 
-						}
+						}*/
 						
 						[viewAtLeft setFrame:CGRectMake(SLIDE_VIEWS_START_X_POS, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
 						if (viewAtRight != nil)
@@ -500,7 +500,7 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 					[UIView setAnimationTransition:UIViewAnimationTransitionNone forView:nil cache:YES];
 					if (viewAtLeft.frame.origin.x > SLIDE_VIEWS_MINUS_X_POSITION || viewAtRight == nil)
 					{
-						//Drop Card View Animation
+						/*//Drop Card View Animation
 						if (([self slideViewAtIndex:0].frame.origin.x + 200) >= (self.view.frame.origin.x + [self slideViewAtIndex:0].frame.size.width)) 
 						{
 							NSInteger viewControllerCount = [viewControllersStack count];
@@ -532,7 +532,7 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 							viewAtLeft2 = nil;
 							viewAtRight = nil;
 							viewAtRight2 = nil;							 
-						}
+						}*/
 						[viewAtLeft setFrame:CGRectMake(SLIDE_VIEWS_START_X_POS, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
 						if (viewAtRight != nil) 
 						{
@@ -759,9 +759,7 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 }
 
 - (void)addViewInSlider:(UIViewController*)controller invokeByController:(UIViewController*)invokeByController isStackStartView:(BOOL)isStackStartView
-{
-	BOOL isContentSizeForMainViewSet = NO;
-	
+{	
 	if (isStackStartView) 
 	{
 		slideStartPosition = SLIDE_VIEWS_START_X_POS;
@@ -776,7 +774,6 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 		[[borderViews viewWithTag:2] setHidden:YES];
 		[[borderViews viewWithTag:1] setHidden:YES];
 		[viewControllersStack removeAllObjects];
-		isContentSizeForMainViewSet = YES;
 	}
 	
 	if([viewControllersStack count] > 1)
