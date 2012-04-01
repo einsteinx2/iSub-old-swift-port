@@ -73,8 +73,6 @@ typedef struct
 
 + (AudioEngine *)sharedInstance;
 
-@property (retain) NSThread *ringBufferThread;
-
 @property (retain) NSMutableArray *eqValueArray;
 @property (retain) NSMutableArray *eqHandleArray;
 @property ISMS_BASS_EQ_DATA_TYPE eqDataType;
@@ -109,8 +107,6 @@ typedef struct
 @property HSTREAM nextStreamTempo;
 @property (readonly) HSTREAM nextReadingStream;
 @property HSTREAM presilenceStream;
-@property (retain) NSThread *fftDataThread;
-@property BOOL isFftDataThreadToTerminate;
 @property BOOL isFastForward;
 @property NSInteger audioSessionSampleRate;
 @property NSInteger bassReinitSampleRate;
@@ -170,7 +166,6 @@ const char *GetCTypeString(DWORD ctype, HPLUGIN plugin);
 - (NSInteger)bassStreamSampleRate:(HSTREAM)stream;
 - (NSInteger)preferredSampleRate:(NSUInteger)sampleRate;
 
-- (void)readEqDataInternal;
 - (void)stopReadingEqData;
 - (void)startReadingEqData:(ISMS_BASS_EQ_DATA_TYPE)type;
 

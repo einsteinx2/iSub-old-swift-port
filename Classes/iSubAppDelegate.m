@@ -398,7 +398,7 @@
 	
 	if ([[BWQuincyManager sharedQuincyManager] didCrashInLastSession])
 	{
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh no!" message:@"It looks like iSub crashed! Well never fear, iSub support is happy to help. \n\nWould you like to send an email to support?" delegate:self cancelButtonTitle:@"No Thanks" otherButtonTitles:@"Send Email", @"Visit iSub Forum", nil];
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh no! iSub crashed!" message:@"iSub support has received your anonymous crash logs and they will be investigated. \n\nWould you also like to send an email to support with more details?" delegate:self cancelButtonTitle:@"No Thanks" otherButtonTitles:@"Send Email", @"Visit iSub Forum", nil];
 		alert.tag = 7;
 		[alert performSelector:@selector(show) withObject:nil afterDelay:2.];
 		[alert performSelector:@selector(release) withObject:nil afterDelay:3.];

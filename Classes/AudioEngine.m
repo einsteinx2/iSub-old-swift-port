@@ -27,13 +27,12 @@
 #import "NSObject+GCDExtention.h"
 
 @implementation AudioEngine
-@synthesize isEqualizerOn, startByteOffset, startSecondsOffset, fftDataThread, isFftDataThreadToTerminate, isPlaying, isFastForward, bassReinitSampleRate, presilenceStream, bufferLengthMillis, bassUpdatePeriod;
+@synthesize isEqualizerOn, startByteOffset, startSecondsOffset, isPlaying, isFastForward, bassReinitSampleRate, presilenceStream, bufferLengthMillis, bassUpdatePeriod;
 @synthesize fileStream1, fileStream2, fileStreamTempo1, fileStreamTempo2, volumeFx, outStream, BASSisFilestream1, currentStreamSyncObject, ringBufferSyncObject;
 @synthesize eqValueArray, eqHandleArray, eqDataType, eqReadSyncObject, bassUserInfoDict;//fileStreamUserInfo1, fileStreamUserInfo2;
 @synthesize shouldResumeFromInterruption;
 @synthesize startSongThread;
 @synthesize hasTweeted, hasNotifiedSubsonic, hasScrobbled;
-@synthesize ringBufferThread;
 @synthesize currentStreamSong;
 @synthesize isBassFreed;
 
@@ -654,14 +653,6 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 	}
 }
 
-- (void)keepRingBufferFilled
-{
-	[self performSelector:@selector(keepRingBufferFilledInternal) 
-				 onThread:ringBufferThread 
-			   withObject:nil 
-			waitUntilDone:NO];
-}
-
 - (NSUInteger)estimatedBitrate
 {
 	BASS_CHANNELINFO i;
@@ -735,138 +726,139 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 	return bitrate;
 }
 
-- (void)keepRingBufferFilledInternal
+- (void)keepRingBufferFilled
 {
-	while (!ringBuffer->stopFilling)
-	{
-		if (ringBuffer->freeSlots > 0)
+	dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+	
+	dispatch_async(queue, 
+	^{
+		while (!ringBuffer->stopFilling)
 		{
-			@autoreleasepool 
+			if (ringBuffer->freeSlots > 0)
 			{
-				//DLog(@"ringbuffer free slots: %u", ringBuffer->freeSlots);
-				if (BASS_ChannelIsActive(self.currentStream))
+				@autoreleasepool 
 				{
-					/* 
-					 * Read data to fill the buffer
-					 */ 
-					
-					// Fill the buffer if there are empty slots
-					void *tempBuffer = malloc(sizeof(char) * ringBuffer->bufferSize);
-					DWORD tempLength = BASS_ChannelGetData(self.currentReadingStream, tempBuffer, ringBuffer->bufferSize);
-					if (tempLength) 
+					//DLog(@"ringbuffer free slots: %u", ringBuffer->freeSlots);
+					if (BASS_ChannelIsActive(self.currentStream))
 					{
-						BassUserInfo *userInfo = [self userInfoForStream:self.currentStream];
-						userInfo.isSongStarted = YES;
-						[self fillBuffer:tempBuffer length:tempLength];
-					}
-					
-					// Check if stream is now complete
-					if (!BASS_ChannelIsActive(self.currentStream))
-					{
-						// Stream is done, free the stream
-						if (self.currentStreamTempo) BASS_StreamFree(self.currentStreamTempo);
-						BASS_StreamFree(self.currentStream);
+						/* 
+						 * Read data to fill the buffer
+						 */ 
 						
-						// Flip the current/next streams
-						self.BASSisFilestream1 = !self.BASSisFilestream1;
-						
-						// Check if the frequency of this stream matches the BASS output
-						if (!self.bassReinitSampleRate)
+						// Fill the buffer if there are empty slots
+						void *tempBuffer = malloc(sizeof(char) * ringBuffer->bufferSize);
+						DWORD tempLength = BASS_ChannelGetData(self.currentReadingStream, tempBuffer, ringBuffer->bufferSize);
+						if (tempLength) 
 						{
-							// Prepare the next song for playback (in this case, 2 songs ahead because the index hasn't switched yet)
-							NSUInteger index = [playlistS indexForOffsetFromCurrentIndex:2];
-							Song *nextSong = [playlistS songForIndex:index];
-							
-							//DLog(@"index: %u", index);
-							//DLog(@"nextSong: %@", nextSong);
-							
-							if (nextSong)
-								[self prepareNextSongStream:nextSong];
+							BassUserInfo *userInfo = [self userInfoForStream:self.currentStream];
+							userInfo.isSongStarted = YES;
+							[self fillBuffer:tempBuffer length:tempLength];
 						}
 						
-						buffersUsedSinceSongEnd = 0;
-						buffersTilSongEnd = ringBuffer->filledSlots;
-						songEnded = YES;
-					}
-					
-					/*
-					 * Handle pausing to wait for more data
-					 */ 
-					
-					BassUserInfo *userInfo = [self userInfoForStream:self.currentStream];					
-					if (userInfo.isFileUnderrun && BASS_ChannelIsActive(self.currentReadingStream))
-					{
-						// Mark the stream as waiting
-						userInfo.isWaiting = YES;
-						userInfo.isFileUnderrun = NO;
-						userInfo.wasFileJustUnderrun = YES;
-						
-						// Handle waiting for additional data
-						Song *theSong = userInfo.mySong;
-						if (!theSong.isFullyCached)
+						// Check if stream is now complete
+						if (!BASS_ChannelIsActive(self.currentStream))
 						{
-							// Calculate the needed size:
-							// Choose either the current player bitrate, or if for some reason it is not detected properly, 
-							// use the best estimated bitrate. Then use that to determine how much data to let download to continue.
+							// Stream is done, free the stream
+							if (self.currentStreamTempo) BASS_StreamFree(self.currentStreamTempo);
+							BASS_StreamFree(self.currentStream);
 							
-							unsigned long long size = theSong.localFileSize;
-							NSUInteger bitrate = [self estimatedBitrate];
+							// Flip the current/next streams
+							self.BASSisFilestream1 = !self.BASSisFilestream1;
 							
-							unsigned long long bytesToWait = BytesForSecondsAtBitrate(settingsS.audioEngineBufferNumberOfSeconds, bitrate);
-							userInfo.neededSize = size + bytesToWait;
-							
-							DLog(@"audioEngineBufferNumberOfSeconds: %u", settingsS.audioEngineBufferNumberOfSeconds);
-							DLog(@"waiting for %llu   neededSize: %llu", bytesToWait, userInfo.neededSize);
-							
-							// Sleep for 10000 microseconds, or 1/100th of a second
-							#define sleepTime 10000
-							// Check file size every second, so 1000000 microseconds
-							#define fileSizeCheckWait 1000000
-							QWORD totalSleepTime = 0;
-							while (YES)
+							// Check if the frequency of this stream matches the BASS output
+							if (!self.bassReinitSampleRate)
 							{
-								// Check if we should break every 100th of a second
-								usleep(sleepTime);
-								totalSleepTime += sleepTime;
-								if (userInfo.shouldBreakWaitLoop || userInfo.shouldBreakWaitLoopForever)
-									break;
+								// Prepare the next song for playback (in this case, 2 songs ahead because the index hasn't switched yet)
+								NSUInteger index = [playlistS indexForOffsetFromCurrentIndex:2];
+								Song *nextSong = [playlistS songForIndex:index];
 								
-								// Only check the file size every second
-								if (totalSleepTime >= fileSizeCheckWait)
+								//DLog(@"index: %u", index);
+								//DLog(@"nextSong: %@", nextSong);
+								
+								if (nextSong)
+									[self prepareNextSongStream:nextSong];
+							}
+							
+							buffersUsedSinceSongEnd = 0;
+							buffersTilSongEnd = ringBuffer->filledSlots;
+							songEnded = YES;
+						}
+						
+						/*
+						 * Handle pausing to wait for more data
+						 */ 
+						
+						BassUserInfo *userInfo = [self userInfoForStream:self.currentStream];					
+						if (userInfo.isFileUnderrun && BASS_ChannelIsActive(self.currentReadingStream))
+						{
+							// Mark the stream as waiting
+							userInfo.isWaiting = YES;
+							userInfo.isFileUnderrun = NO;
+							userInfo.wasFileJustUnderrun = YES;
+							
+							// Handle waiting for additional data
+							Song *theSong = userInfo.mySong;
+							if (!theSong.isFullyCached)
+							{
+								// Calculate the needed size:
+								// Choose either the current player bitrate, or if for some reason it is not detected properly, 
+								// use the best estimated bitrate. Then use that to determine how much data to let download to continue.
+								
+								unsigned long long size = theSong.localFileSize;
+								NSUInteger bitrate = [self estimatedBitrate];
+								
+								unsigned long long bytesToWait = BytesForSecondsAtBitrate(settingsS.audioEngineBufferNumberOfSeconds, bitrate);
+								userInfo.neededSize = size + bytesToWait;
+								
+								DLog(@"audioEngineBufferNumberOfSeconds: %u", settingsS.audioEngineBufferNumberOfSeconds);
+								DLog(@"waiting for %llu   neededSize: %llu", bytesToWait, userInfo.neededSize);
+								
+								// Sleep for 10000 microseconds, or 1/100th of a second
+								#define sleepTime 10000
+								// Check file size every second, so 1000000 microseconds
+								#define fileSizeCheckWait 1000000
+								QWORD totalSleepTime = 0;
+								while (YES)
 								{
-									@autoreleasepool 
+									// Check if we should break every 100th of a second
+									usleep(sleepTime);
+									totalSleepTime += sleepTime;
+									if (userInfo.shouldBreakWaitLoop || userInfo.shouldBreakWaitLoopForever)
+										break;
+									
+									// Only check the file size every second
+									if (totalSleepTime >= fileSizeCheckWait)
 									{
-										totalSleepTime = 0;
-										
-										// If enough of the file has downloaded, break the loop
-										if (userInfo.localFileSize >= userInfo.neededSize)
-											break;
-										// Handle temp cached songs ending. When they end, they are set as the last temp cached song, so we know it's done and can stop waiting for data.
-										else if (theSong.isTempCached && [theSong isEqualToSong:streamManagerS.lastTempCachedSong])
-											break;
-										// If the song has finished caching, we can stop waiting
-										else if (theSong.isFullyCached)
-											break;
+										@autoreleasepool 
+										{
+											totalSleepTime = 0;
+											
+											// If enough of the file has downloaded, break the loop
+											if (userInfo.localFileSize >= userInfo.neededSize)
+												break;
+											// Handle temp cached songs ending. When they end, they are set as the last temp cached song, so we know it's done and can stop waiting for data.
+											else if (theSong.isTempCached && [theSong isEqualToSong:streamManagerS.lastTempCachedSong])
+												break;
+											// If the song has finished caching, we can stop waiting
+											else if (theSong.isFullyCached)
+												break;
+										}
 									}
 								}
+								userInfo.isWaiting = NO;
+								userInfo.shouldBreakWaitLoop = NO;
+								
+								DLog(@"done waiting");
 							}
-							userInfo.isWaiting = NO;
-							userInfo.shouldBreakWaitLoop = NO;
-							
-							DLog(@"done waiting");
 						}
 					}
 				}
 			}
+			
+			// Sleep for 1/100th of a second to prevent a tight loop
+			usleep(50000);
 		}
-		
-		// Sleep for 1/100th of a second to prevent a tight loop
-		usleep(50000);
-	}
-	
-	// Run again in 1/10th of a second to prevent a tight loop
-	//NSTimeInterval delay = 0.1;
-	//[self performSelector:@selector(keepRingBufferFilledInternal) withObject:nil afterDelay:delay];
+	});
 }
 
 - (DWORD)bassGetOutputData:(void *)buffer length:(DWORD)length
@@ -1084,15 +1076,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 - (BOOL)bassFree
 {
 	@synchronized(eqReadSyncObject)
-	{		
-		//[self performSelector:@selector(cancelRequests) onThread:startSongThread withObject:nil waitUntilDone:NO];		
-		//[self performSelector:@selector(cancelRequests) onThread:ringBufferThread withObject:nil waitUntilDone:NO];
-		
-		//[self cancelDispatchTimer:startSongRetryTimer];
-		//startSongRetryTimer = nil;
-		//[self cancelDispatchTimer:nextSongRetryTimer];
-		//nextSongRetryTimer = nil;
-		
+	{
 		[NSObject gcdCancelTimerBlockWithName:startSongRetryTimer];
 		[NSObject gcdCancelTimerBlockWithName:nextSongRetryTimer];
 		
@@ -1316,19 +1300,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		DLog(@"nextSong stream: %i error: %i - %@", self.nextStream, errorCode, NSStringFromBassErrorCode(errorCode));
 #endif
 		
-		//RunBlockAfterDelay(^{ [self prepareNextSongStream:nextSong]; }, RETRY_DELAY);
-		
 		[self gcdTimerPerformBlockInMainQueue:^{ [self prepareNextSongStream:nextSong]; } afterDelay:RETRY_DELAY withName:nextSongRetryTimer];
-		
-		/*nextSongRetryTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
-		dispatch_source_set_timer(nextSongRetryTimer, dispatch_time(DISPATCH_TIME_NOW, RETRY_DELAY * NSEC_PER_SEC), DISPATCH_TIME_FOREVER, 0);
-		dispatch_source_set_event_handler(nextSongRetryTimer, ^{
-			[self prepareNextSongStream:nextSong];
-			[self cancelDispatchTimer:nextSongRetryTimer];		
-			nextSongRetryTimer = nil;
-		});
-		dispatch_resume(nextSongRetryTimer);*/
-		
 	}
 	
 	DLog(@"nextSong: %i\n   ", self.nextStream);
@@ -1528,16 +1500,6 @@ void RunBlockAfterDelay(void (^block)(void), NSTimeInterval delay)
 			DLog(@"------failed to create stream, retrying in 2 seconds------");	
 			
 			[self gcdTimerPerformBlockInMainQueue:^{ [self startWithOffsetInBytes:byteOffset orSeconds:seconds]; } afterDelay:RETRY_DELAY withName:startSongRetryTimer];
-			
-			/*startSongRetryTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
-			dispatch_source_set_timer(startSongRetryTimer, dispatch_time(DISPATCH_TIME_NOW, RETRY_DELAY * NSEC_PER_SEC), DISPATCH_TIME_FOREVER, 0);
-			dispatch_source_set_event_handler(startSongRetryTimer, ^{
-				[self startWithOffsetInBytes:byteOffset orSeconds:seconds];
-				[self cancelDispatchTimer:startSongRetryTimer];	
-				startSongRetryTimer = nil;
-			});
-			dispatch_resume(startSongRetryTimer);*/
-			//RunBlockAfterDelay(^{ [self startWithOffsetInBytes:byteOffset orSeconds:seconds]; }, RETRY_DELAY);
 		}
 	}
 }
@@ -1955,24 +1917,24 @@ void RunBlockAfterDelay(void (^block)(void), NSTimeInterval delay)
 
 - (void)readEqData
 {
-	[self performSelector:@selector(readEqDataInternal) onThread:fftDataThread withObject:nil waitUntilDone:NO];
-}
-
-- (void)readEqDataInternal
-{
-	@synchronized(eqReadSyncObject)
-	{
-		if (!self.outStream)
-			return;
-		
-		// Get the FFT data for visualizer
-		if (self.eqDataType == ISMS_BASS_EQ_DATA_TYPE_fft)
-			BASS_ChannelGetData(self.outStream, fftData, BASS_DATA_FFT2048);
-		
-		// Get the data for line spec visualizer
-		if (self.eqDataType == ISMS_BASS_EQ_DATA_TYPE_line)
-			BASS_ChannelGetData(self.outStream, lineSpecBuf, lineSpecBufSize);
-	}
+	dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+	
+	dispatch_async(queue, 
+	^{
+		@synchronized(eqReadSyncObject)
+		{
+			if (!self.outStream)
+				return;
+			
+			// Get the FFT data for visualizer
+			if (self.eqDataType == ISMS_BASS_EQ_DATA_TYPE_fft)
+				BASS_ChannelGetData(self.outStream, fftData, BASS_DATA_FFT2048);
+			
+			// Get the data for line spec visualizer
+			if (self.eqDataType == ISMS_BASS_EQ_DATA_TYPE_line)
+				BASS_ChannelGetData(self.outStream, lineSpecBuf, lineSpecBufSize);
+		}
+	});
 }
 
 #pragma mark - Memory management
@@ -1989,9 +1951,6 @@ void RunBlockAfterDelay(void (^block)(void), NSTimeInterval delay)
 - (void)setup
 {	
 	isBassFreed = YES;
-	
-	ringBufferThread = [[NSThread alloc] initWithTarget:self selector:@selector(ringBufferThreadEntryPoint) object:nil];
-	[ringBufferThread start];
 	
 	startSongThread = [[NSThread alloc] initWithTarget:self selector:@selector(startSongThreadEntryPoint) object:nil];
 	[startSongThread start];
@@ -2023,8 +1982,6 @@ void RunBlockAfterDelay(void (^block)(void), NSTimeInterval delay)
 	BassEffectDAO *effectDAO = [[BassEffectDAO alloc] initWithType:BassEffectType_ParametricEQ];
 	[effectDAO selectPresetId:effectDAO.selectedPresetId];
 	
-	fftDataThread = [[NSThread alloc] initWithTarget:self selector:@selector(fftDataThreadEntryPoint) object:nil];
-	[fftDataThread start];
 	if (SCREEN_SCALE() == 1.0)// && !IS_IPAD())
 		lineSpecBufSize = 256 * sizeof(short);
 	else
@@ -2111,39 +2068,10 @@ void RunBlockAfterDelay(void (^block)(void), NSTimeInterval delay)
     return self;
 }
 
-- (void)fftDataThreadEntryPoint
-{
-	NSAutoreleasePool* thePool = [[NSAutoreleasePool alloc] init];
-	
-	self.isFftDataThreadToTerminate = NO;
-
-	// Create a scheduled timer to keep runloop alive
-	NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(fftThreadEmptyMethod) userInfo:nil repeats:YES];
-	[[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
-	
-	// Start a runloop so we can call performSelector:onThread: to use this thread
-	NSTimeInterval resolution = 300.0;
-	BOOL isRunning;
-	do 
-	{
-		// Run the loop!
-		NSDate* theNextDate = [NSDate dateWithTimeIntervalSinceNow:resolution]; 
-		isRunning = [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:theNextDate]; 
-		
-		// Clear the autorelease pool after each run of the loop to prevent a memory leak
-		[thePool release];
-		thePool = [[NSAutoreleasePool alloc] init];            
-	} 
-	while(isRunning && !self.isFftDataThreadToTerminate);
-}
-- (void)fftThreadEmptyMethod {}
-
 - (void)startSongThreadEntryPoint
 {
 	NSAutoreleasePool* thePool = [[NSAutoreleasePool alloc] init];
-	
-	self.isFftDataThreadToTerminate = NO;
-	
+		
 	// Create a scheduled timer to keep runloop alive
 	NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(startSongEmptyMethod) userInfo:nil repeats:YES];
 	[[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
@@ -2161,35 +2089,8 @@ void RunBlockAfterDelay(void (^block)(void), NSTimeInterval delay)
 		[thePool release];
 		thePool = [[NSAutoreleasePool alloc] init];            
 	} 
-	while(isRunning && !self.isFftDataThreadToTerminate);
+	while(isRunning);
 }
 - (void)startSongEmptyMethod {}
-
-- (void)ringBufferThreadEntryPoint
-{
-	NSAutoreleasePool *thePool = [[NSAutoreleasePool alloc] init];
-	
-	self.isFftDataThreadToTerminate = NO;
-	
-	// Create a scheduled timer to keep runloop alive
-	NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(ringBufferEmptyMethod) userInfo:nil repeats:YES];
-	[[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
-	
-	// Start a runloop so we can call performSelector:onThread: to use this thread
-	NSTimeInterval resolution = 300.0;
-	BOOL isRunning;
-	do 
-	{
-		// Run the loop!
-		NSDate* theNextDate = [NSDate dateWithTimeIntervalSinceNow:resolution]; 
-		isRunning = [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:theNextDate]; 
-		
-		// Clear the autorelease pool after each run of the loop to prevent a memory leak
-		[thePool release];
-		thePool = [[NSAutoreleasePool alloc] init];            
-	} 
-	while(isRunning && !self.isFftDataThreadToTerminate);
-}
-- (void)ringBufferEmptyMethod {}
 
 @end
