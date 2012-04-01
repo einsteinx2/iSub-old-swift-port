@@ -15,7 +15,6 @@
 }
 
 @property (retain) NSDate *lastDeleteToggle;
-//@property (retain) NSDate *lastTouchTime;
 
 - (BOOL)isTouchHorizontal:(UITouch *)touch;
 - (BOOL)isTouchVertical:(UITouch *)touch;

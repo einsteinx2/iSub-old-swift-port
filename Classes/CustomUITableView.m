@@ -18,18 +18,15 @@
 #define ISMSCellEnableDelay 1.0
 #define ISMSTapAndHoldDelay 0.25
 
-//#define ISMSHideOverlayDelay 1.0
-
 @implementation CustomUITableView
 
-@synthesize lastDeleteToggle;//, lastTouchTime;
+@synthesize lastDeleteToggle;
 
 #pragma mark Lifecycle
 
 - (void)setup
 {
 	lastDeleteToggle = [[NSDate date] retain];
-	//lastTouchTime = [[NSDate date] retain];
 }
 
 - (id)initWithFrame:(CGRect)frame 
@@ -53,7 +50,6 @@
 - (void)dealloc 
 {
     [lastDeleteToggle release]; lastDeleteToggle = nil;
-    //[lastTouchTime release]; lastTouchTime = nil;
     [super dealloc];
 }
 
@@ -95,7 +91,7 @@
 		}
 		
 		// Remove overlays
-		if (!hasSwiped)// && [[NSDate date] timeIntervalSinceDate:lastTouchTime] > ISMSHideOverlayDelay) 
+		if (!hasSwiped)
 		{			
 			[self hideAllOverlays:cell];
 			
@@ -157,7 +153,7 @@
     CGPoint currentTouchPosition = [[touches anyObject] locationInView:self];
 	UITableViewCell *cell = [self cellForRowAtIndexPath: [self indexPathForRowAtPoint:currentTouchPosition]];
 	
-	if (!hasSwiped)// && [[NSDate date] timeIntervalSinceDate:lastTouchTime] > ISMSHideOverlayDelay) 
+	if (!hasSwiped) 
 	{
 		// Check if this is a full swipe
 		if (fabsf(startTouchPosition.x - currentTouchPosition.x) >= ISMSHorizSwipeDragMin 
@@ -218,7 +214,6 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event 
 {	
-	DLog(@"touches began");
 	self.allowsSelection = NO;
 	self.scrollEnabled = YES;
 		
@@ -239,7 +234,6 @@
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event 
 {	
-	DLog(@"touches moved");
 	// Cancel the tap and hold if user moves finger
 	[self cancelTapAndHold];
 	
@@ -254,7 +248,6 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event 
 {
-	DLog(@"touchesEnded");
 	self.allowsSelection = YES;
 	self.scrollEnabled = YES;
 	
@@ -286,7 +279,6 @@
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-	DLog(@"touches cancelled");
     [self cancelTapAndHold];
 	
 	self.allowsSelection = YES;
