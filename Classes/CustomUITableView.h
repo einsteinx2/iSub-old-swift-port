@@ -11,12 +11,11 @@
 	CGPoint startTouchPosition;
 	BOOL hasSwiped;
 	UITableViewCell *cellShowingOverlay;
-	BOOL tapAndHoldFired;
 	UITableViewCell *tapAndHoldCell;
 }
 
 @property (retain) NSDate *lastDeleteToggle;
-@property (retain) NSDate *lastOverlayToggle;
+//@property (retain) NSDate *lastTouchTime;
 
 - (BOOL)isTouchHorizontal:(UITouch *)touch;
 - (BOOL)isTouchVertical:(UITouch *)touch;

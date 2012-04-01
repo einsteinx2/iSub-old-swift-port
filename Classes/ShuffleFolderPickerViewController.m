@@ -143,7 +143,7 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) 
 	{
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
     }
     
     NSString *folder = [[sortedFolders objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1];

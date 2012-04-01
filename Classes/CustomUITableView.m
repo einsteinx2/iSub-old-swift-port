@@ -18,16 +18,18 @@
 #define ISMSCellEnableDelay 1.0
 #define ISMSTapAndHoldDelay 0.25
 
+//#define ISMSHideOverlayDelay 1.0
+
 @implementation CustomUITableView
 
-@synthesize lastDeleteToggle, lastOverlayToggle;
+@synthesize lastDeleteToggle;//, lastTouchTime;
 
 #pragma mark Lifecycle
 
 - (void)setup
 {
 	lastDeleteToggle = [[NSDate date] retain];
-	lastOverlayToggle = [[NSDate date] retain];
+	//lastTouchTime = [[NSDate date] retain];
 }
 
 - (id)initWithFrame:(CGRect)frame 
@@ -51,7 +53,7 @@
 - (void)dealloc 
 {
     [lastDeleteToggle release]; lastDeleteToggle = nil;
-    [lastOverlayToggle release]; lastOverlayToggle = nil;
+    //[lastTouchTime release]; lastTouchTime = nil;
     [super dealloc];
 }
 
@@ -93,10 +95,8 @@
 		}
 		
 		// Remove overlays
-		if ([[NSDate date] timeIntervalSinceDate:lastOverlayToggle] > 0.5) 
-		{
-			self.lastOverlayToggle = [NSDate date];
-			
+		if (!hasSwiped)// && [[NSDate date] timeIntervalSinceDate:lastTouchTime] > ISMSHideOverlayDelay) 
+		{			
 			[self hideAllOverlays:cell];
 			
 			if ([cell isKindOfClass:[CustomUITableViewCell class]])
@@ -157,12 +157,12 @@
     CGPoint currentTouchPosition = [[touches anyObject] locationInView:self];
 	UITableViewCell *cell = [self cellForRowAtIndexPath: [self indexPathForRowAtPoint:currentTouchPosition]];
 	
-	if (!hasSwiped) 
+	if (!hasSwiped)// && [[NSDate date] timeIntervalSinceDate:lastTouchTime] > ISMSHideOverlayDelay) 
 	{
 		// Check if this is a full swipe
 		if (fabsf(startTouchPosition.x - currentTouchPosition.x) >= ISMSHorizSwipeDragMin 
 			&& fabsf(startTouchPosition.y - currentTouchPosition.y) <= ISMSVertSwipeDragMax)
-		{
+		{			
 			hasSwiped = YES;
 			self.scrollEnabled = NO;			
 			
@@ -203,7 +203,7 @@
 
 - (void)tapAndHoldFired
 {
-    tapAndHoldFired = YES;
+    hasSwiped = YES;
 	if ([tapAndHoldCell isKindOfClass:[CustomUITableViewCell class]])
 	{
 		[(CustomUITableViewCell *)tapAndHoldCell showOverlay];
@@ -218,6 +218,7 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event 
 {	
+	DLog(@"touches began");
 	self.allowsSelection = NO;
 	self.scrollEnabled = YES;
 		
@@ -229,7 +230,6 @@
 	// Handle tap and hold
 	if (settingsS.isTapAndHoldEnabled)
 	{
-		tapAndHoldFired = NO;
 		tapAndHoldCell = [self cellForRowAtIndexPath: [self indexPathForRowAtPoint:startTouchPosition]];
 		[self performSelector:@selector(tapAndHoldFired) withObject:nil afterDelay:ISMSTapAndHoldDelay];
 	}
@@ -239,6 +239,7 @@
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event 
 {	
+	DLog(@"touches moved");
 	// Cancel the tap and hold if user moves finger
 	[self cancelTapAndHold];
 	
@@ -253,12 +254,13 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event 
 {
+	DLog(@"touchesEnded");
 	self.allowsSelection = YES;
 	self.scrollEnabled = YES;
 	
 	[self cancelTapAndHold];
 
-	if (tapAndHoldFired || hasSwiped)
+	if (hasSwiped)
 	{
 		// Enable the buttons if the overlay is showing
 		if ([cellShowingOverlay isKindOfClass:[CustomUITableViewCell class]])
@@ -278,12 +280,13 @@
 		}
 	}
 	hasSwiped = NO;
-	
+		
 	[super touchesEnded:touches withEvent:event];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
+	DLog(@"touches cancelled");
     [self cancelTapAndHold];
 	
 	self.allowsSelection = YES;
@@ -294,7 +297,7 @@
 	{
 		[[(CustomUITableViewCell *)cellShowingOverlay overlayView] enableButtons];
 	}
-	
+		
 	[super touchesCancelled:touches withEvent:event];
 }
 
