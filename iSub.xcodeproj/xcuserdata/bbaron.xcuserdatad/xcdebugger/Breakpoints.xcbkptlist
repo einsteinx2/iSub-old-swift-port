@@ -4834,11 +4834,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/EqualizerViewController.m"
-         timestampString = "353805036.272807"
+         timestampString = "355100687.950565"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "823"
-         endingLineNumber = "823"
+         startingLineNumber = "825"
+         endingLineNumber = "825"
          landmarkName = "-type:"
          landmarkType = "5">
       </FileBreakpoint>

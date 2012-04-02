@@ -176,6 +176,8 @@
 
 - (void)dealloc
 {
+	[NSObject gcdCancelTimerBlockWithName:hidePickerTimer];
+	
 	[landscapeButtonsHolder release]; landscapeButtonsHolder = nil;
 	[controlsContainer release]; controlsContainer = nil;
 	[presetPicker release]; presetPicker = nil;

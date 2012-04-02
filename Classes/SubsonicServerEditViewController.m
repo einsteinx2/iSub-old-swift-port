@@ -96,9 +96,22 @@
 	}
 	else
 	{
-		if (![[url substringToIndex:7] isEqualToString:@"http://"] && ![[url substringToIndex:8] isEqualToString:@"https://"])
+		if (![[url substringToIndex:7] isEqualToString:@"http://"])
 		{
-			urlField.text = [NSString stringWithFormat:@"http://%@", url];
+			BOOL addHttp = NO;
+			if ([url length] >= 8)
+			{
+				if (![[url substringToIndex:8] isEqualToString:@"https://"])
+					addHttp = YES;
+			}
+			else 
+			{
+				addHttp = YES;
+			}
+			
+			if (addHttp)
+				urlField.text = [NSString stringWithFormat:@"http://%@", url];
+			
 			return YES;
 		}
 	}
