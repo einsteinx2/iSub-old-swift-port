@@ -74,9 +74,9 @@
 {
 	NSString *tableModifier = @"_all";
 	
-	if (selectedFolderId != nil && [selectedFolderId intValue] != -1)
+	if (selectedFolderId != nil && [self.selectedFolderId intValue] != -1)
 	{
-		tableModifier = [NSString stringWithFormat:@"_%@", [selectedFolderId stringValue]];
+		tableModifier = [NSString stringWithFormat:@"_%@", [self.selectedFolderId stringValue]];
 	}
 	
 	return tableModifier;
@@ -266,18 +266,24 @@
 
 - (NSNumber *)selectedFolderId
 {
-	if (selectedFolderId == nil)
-		return [NSNumber numberWithInt:-1];
-	else
-		return selectedFolderId;
+	@synchronized(self)
+	{
+		if (selectedFolderId == nil)
+			return [NSNumber numberWithInt:-1];
+		else
+			return selectedFolderId;
+	}
 }
 
 - (void)setSelectedFolderId:(NSNumber *)newSelectedFolderId
 {
-	selectedFolderId = newSelectedFolderId;
-	[indexNames release]; indexNames = nil;
-	[indexCounts release]; indexCounts = nil;
-	[indexPositions release]; indexPositions = nil;
+	@synchronized(self)
+	{
+		selectedFolderId = newSelectedFolderId;
+		[indexNames release]; indexNames = nil;
+		[indexCounts release]; indexCounts = nil;
+		[indexPositions release]; indexPositions = nil;
+	}
 }
 
 - (BOOL)isRootFolderIdCached

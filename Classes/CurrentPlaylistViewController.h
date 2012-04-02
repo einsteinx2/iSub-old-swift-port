@@ -14,13 +14,21 @@
 	UILabel *playlistCountLabel;
 	UIButton *savePlaylistButton;
 	UILabel *editPlaylistLabel;
-	
-	UITextField *playlistNameTextField;
-	
+		
 	//NSTimer *songHighlightTimer;
 		
 	NSUInteger currentPlaylistCount;
+	
+	BOOL savePlaylistLocal;
+	
+	NSMutableData *receivedData;
+	NSURLConnection *connection;
+	NSMutableURLRequest *request;
 }
+
+@property (retain) NSMutableURLRequest *request;
+
+@property (retain) UITextField *playlistNameTextField;
 
 - (void) selectRow;
 

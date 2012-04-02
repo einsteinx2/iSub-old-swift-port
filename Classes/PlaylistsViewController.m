@@ -51,6 +51,7 @@
 @synthesize request;
 @synthesize serverPlaylistsDataModel;
 @synthesize currentPlaylistCount;
+@synthesize playlistNameTextField;
 
 #pragma mark - Rotation
 
@@ -1064,7 +1065,6 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-	
 	if ([alertView.title isEqualToString:@"Local or Server?"])
 	{
 		if (buttonIndex == 0)
@@ -1082,7 +1082,7 @@
 		
 		UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Playlist Name:" message:@"      \n      " delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
 		myAlertView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
-		playlistNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 24.0)];
+		self.playlistNameTextField = [[[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 24.0)] autorelease];
 		playlistNameTextField.layer.cornerRadius = 3.;
 		[playlistNameTextField setBackgroundColor:[UIColor whiteColor]];
 		[myAlertView addSubview:playlistNameTextField];
@@ -1129,7 +1129,18 @@
 			}
 			else
 			{
-				[self uploadPlaylist:playlistNameTextField.text];
+				NSString *tableName = [NSString stringWithFormat:@"splaylist%@", [playlistNameTextField.text md5]];
+				if ([databaseS.localPlaylistsDb tableExists:tableName])
+				{
+					// If it exists, ask to overwrite
+					UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Overwrite?" message:@"There is already a playlist with this name. Would you like to overwrite it?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+					[myAlertView show];
+					[myAlertView release];
+				}
+				else 
+				{
+					[self uploadPlaylist:playlistNameTextField.text];
+				}
 			}
 		}
 	}
@@ -1137,19 +1148,29 @@
 	{
 		if(buttonIndex == 1)
 		{
-			// If yes, overwrite the playlist
-			[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"DROP TABLE playlist%@", [playlistNameTextField.text md5]]];
-			[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [playlistNameTextField.text md5], [Song standardSongColumnSchema]]];
+			if (savePlaylistLocal)
+			{
+				// If yes, overwrite the playlist
+				[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"DROP TABLE playlist%@", [playlistNameTextField.text md5]]];
+				[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [playlistNameTextField.text md5], [Song standardSongColumnSchema]]];
+				
+				[databaseS.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, [settingsS.urlString md5]], @"currentPlaylistDb"];
+				if ([databaseS.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseS.localPlaylistsDb lastErrorCode], [databaseS.localPlaylistsDb lastErrorMessage]); }
+				if (playlistS.isShuffle) {
+					[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM shufflePlaylist", [playlistNameTextField.text md5]]];
+				}
+				else 
+				{
+					[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM currentPlaylist", [playlistNameTextField.text md5]]];
+				}
+				[databaseS.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
+			}
+			else
+			{
+				[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"DROP TABLE splaylist%@", [playlistNameTextField.text md5]]];
 			
-			[databaseS.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, [settingsS.urlString md5]], @"currentPlaylistDb"];
-			if ([databaseS.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseS.localPlaylistsDb lastErrorCode], [databaseS.localPlaylistsDb lastErrorMessage]); }
-			if (playlistS.isShuffle) {
-				[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM shufflePlaylist", [playlistNameTextField.text md5]]];
+				[self uploadPlaylist:playlistNameTextField.text];
 			}
-			else {
-				[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM currentPlaylist", [playlistNameTextField.text md5]]];
-			}
-			[databaseS.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 		}
 	}
 	
@@ -1788,6 +1809,7 @@ static NSString *kName_Error = @"error";
 	serverPlaylistsDataModel.delegate = nil;
 	[serverPlaylistsDataModel release]; serverPlaylistsDataModel = nil;
 	[connectionQueue release]; connectionQueue = nil;
+	[playlistNameTextField release]; playlistNameTextField = nil;
     [super dealloc];
 }
 

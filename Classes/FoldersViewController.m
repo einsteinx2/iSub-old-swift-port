@@ -232,7 +232,7 @@
 	{
 		dropdown.folders = [NSDictionary dictionaryWithObject:@"All Folders" forKey:[NSNumber numberWithInt:-1]];
 	}
-	[dropdown selectFolderWithId:[dataModel selectedFolderId]];
+	[dropdown selectFolderWithId:dataModel.selectedFolderId];
 	
 	[headerView addSubview:dropdown];
 	[dropdown release];

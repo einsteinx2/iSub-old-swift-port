@@ -273,19 +273,18 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	//DLog(@"Folder selected: %@ -- %i", label.text, label.tag);
 	
 	self.selectedFolderId = [NSNumber numberWithInt:label.tag];
-	NSLog(@"%@", [folders objectForKey:selectedFolderId]);
-	selectedFolderLabel.text = [folders objectForKey:selectedFolderId];
+	selectedFolderLabel.text = [folders objectForKey:self.selectedFolderId];
 	//[self toggleDropdown:nil];
 	[self closeDropdownFast];
 	
 	// Call the delegate method
-	[delegate folderDropdownSelectFolder:selectedFolderId];	
+	[delegate folderDropdownSelectFolder:self.selectedFolderId];	
 }
 
 - (void)selectFolderWithId:(NSNumber *)folderId
 {
 	self.selectedFolderId = folderId;
-	selectedFolderLabel.text = [folders objectForKey:selectedFolderId];
+	selectedFolderLabel.text = [folders objectForKey:self.selectedFolderId];
 }
 
 - (void)updateFolders

@@ -26,9 +26,7 @@
 	UILabel *editPlaylistLabel;
 	UIButton *editPlaylistButton;
 	BOOL isPlaylistSaveEditShowing;
-	
-	UITextField *playlistNameTextField;
-				
+					
 	BBSimpleConnectionQueue *connectionQueue;
 	
 	BOOL savePlaylistLocal;
@@ -43,6 +41,8 @@
 @property (retain) NSMutableURLRequest *request;
 @property (retain) SUSServerPlaylistsDAO *serverPlaylistsDataModel;
 @property NSUInteger currentPlaylistCount;
+
+@property (retain) UITextField *playlistNameTextField;
 
 - (void)showDeleteButton;
 - (void)hideDeleteButton;

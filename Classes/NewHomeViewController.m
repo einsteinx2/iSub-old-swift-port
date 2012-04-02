@@ -126,7 +126,6 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) name:ISMSNotification_SongPlaybackStarted object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) name:ISMSNotification_ServerSwitched object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(performServerShuffle:) name:@"performServerShuffle" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showQuickAlbumsList:) name:ISMSNotification_ShowQuickAlbumsList object:nil];
 
 	if (!IS_IPAD())
 	{
@@ -514,15 +513,6 @@
 	}
 }
 
-- (void)showQuickAlbumsList:(NSNotification *)notification
-{
-	if ([notification.object isKindOfClass:[UIViewController class]])
-	{
-		[self pushViewControllerCustom:(UIViewController *)notification.object];
-		[notification.object release];
-	}
-}
-
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
@@ -536,7 +526,6 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackStarted object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ServerSwitched object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"performServerShuffle" object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ShowQuickAlbumsList object:nil];
 	
 	[coverArtBorder release];
 	[coverArtView release];

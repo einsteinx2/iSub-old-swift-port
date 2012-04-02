@@ -24,8 +24,11 @@
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
 #import "StoreViewController.h"
+#import "NSMutableURLRequest+SUS.h"
 
 @implementation CurrentPlaylistViewController
+
+@synthesize playlistNameTextField, request;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -237,6 +240,7 @@
 
 - (void)dealloc 
 {
+	[playlistNameTextField release]; playlistNameTextField = nil;
     [super dealloc];
 }
 
@@ -348,23 +352,13 @@
 	{
 		if (!self.tableView.editing)
 		{
-			savePlaylistLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
-			playlistCountLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
-			
-			UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Playlist Name:" message:@"this gets covered" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
-			playlistNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 24.0)];
-			playlistNameTextField.layer.cornerRadius = 3.;
-			[playlistNameTextField setBackgroundColor:[UIColor whiteColor]];
-			[myAlertView addSubview:playlistNameTextField];
-			[playlistNameTextField release];
-			if ([[[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."] objectAtIndexSafe:0] isEqualToString:@"3"])
-			{
-				CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 100.0);
-				[myAlertView setTransform:myTransform];
-			}
+			UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Local or Server?" 
+																  message:@"Would you like to save this playlist to your device or to your Subsonic server?" 
+																 delegate:self 
+														cancelButtonTitle:nil
+														otherButtonTitles:@"Local", @"Server", nil];
 			[myAlertView show];
 			[myAlertView release];
-			[playlistNameTextField becomeFirstResponder];
 		}
 	}
 	else 
@@ -432,38 +426,130 @@
 	}
 }
 
+- (void)uploadPlaylist:(NSString*)name
+{	
+	NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(name), @"name", nil];
+	
+	NSMutableArray *songIds = [NSMutableArray arrayWithCapacity:currentPlaylistCount];
+	for (int i = 0; i < currentPlaylistCount; i++)
+	{
+		@autoreleasepool 
+		{
+			Song *aSong = nil;
+			if (settingsS.isJukeboxEnabled)
+			{
+				aSong = [Song songFromDbRow:i inTable:@"jukeboxCurrentPlaylist" inDatabase:databaseS.currentPlaylistDb];
+			}
+			else
+			{
+				if (playlistS.isShuffle)
+					aSong = [Song songFromDbRow:i inTable:@"shufflePlaylist" inDatabase:databaseS.currentPlaylistDb];
+				else
+					aSong = [Song songFromDbRow:i inTable:@"currentPlaylist" inDatabase:databaseS.currentPlaylistDb];
+			}
+			
+			[songIds addObject:n2N(aSong.songId)];
+		}
+	}
+	[parameters setObject:[NSArray arrayWithArray:songIds] forKey:@"songId"];
+	
+	self.request = [NSMutableURLRequest requestWithSUSAction:@"createPlaylist" andParameters:parameters];
+	
+	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	if (connection)
+	{
+		receivedData = [[NSMutableData data] retain];
+		
+		self.tableView.scrollEnabled = NO;
+		[viewObjectsS showAlbumLoadingScreen:self.view sender:self];
+	} 
+	else 
+	{
+		// Inform the user that the connection failed.
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error saving the playlist to the server.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		[alert show];
+		[alert release];
+	}
+}
+
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-	
-    if([alertView.title isEqualToString:@"Playlist Name:"])
+    if ([alertView.title isEqualToString:@"Local or Server?"])
+	{
+		if (buttonIndex == 0)
+		{
+			savePlaylistLocal = YES;
+		}
+		else if (buttonIndex == 1)
+		{
+			savePlaylistLocal = NO;
+		}
+		else if (buttonIndex == 2)
+		{
+			return;
+		}
+		
+		UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Playlist Name:" message:@"      \n      " delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
+		myAlertView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
+		self.playlistNameTextField = [[[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 24.0)] autorelease];
+		playlistNameTextField.layer.cornerRadius = 3.;
+		[playlistNameTextField setBackgroundColor:[UIColor whiteColor]];
+		[myAlertView addSubview:playlistNameTextField];
+		if ([[[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."] objectAtIndexSafe:0] isEqualToString:@"3"])
+		{
+			CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 100.0);
+			[myAlertView setTransform:myTransform];
+		}
+		[myAlertView show];
+		[myAlertView release];
+		[playlistNameTextField becomeFirstResponder];
+	}
+    else if([alertView.title isEqualToString:@"Playlist Name:"])
 	{
 		[playlistNameTextField resignFirstResponder];
 		if(buttonIndex == 1)
 		{
-			// Check if the playlist exists, if not create the playlist table and add the entry to localPlaylists table
-			if ([databaseS.localPlaylistsDb intForQuery:@"SELECT COUNT(*) FROM localPlaylists WHERE md5 = ?", [playlistNameTextField.text md5]] == 0)
+			if (savePlaylistLocal)
 			{
-				[databaseS.localPlaylistsDb executeUpdate:@"INSERT INTO localPlaylists (playlist, md5) VALUES (?, ?)", playlistNameTextField.text, [playlistNameTextField.text md5]];
-				[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [playlistNameTextField.text md5], [Song standardSongColumnSchema]]];
-				
-				[databaseS.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, [settingsS.urlString md5]], @"currentPlaylistDb"];
-				if ([databaseS.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseS.localPlaylistsDb lastErrorCode], [databaseS.localPlaylistsDb lastErrorMessage]); }
-				if (playlistS.isShuffle) 
+				// Check if the playlist exists, if not create the playlist table and add the entry to localPlaylists table
+				NSString *test = [databaseS.localPlaylistsDb stringForQuery:@"SELECT md5 FROM localPlaylists WHERE md5 = ?", [playlistNameTextField.text md5]];
+				if (!test)
 				{
-					[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM shufflePlaylist", [playlistNameTextField.text md5]]];
+					[databaseS.localPlaylistsDb executeUpdate:@"INSERT INTO localPlaylists (playlist, md5) VALUES (?, ?)", playlistNameTextField.text, [playlistNameTextField.text md5]];
+					[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [playlistNameTextField.text md5], [Song standardSongColumnSchema]]];
+					
+					[databaseS.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, [settingsS.urlString md5]], @"currentPlaylistDb"];
+					if ([databaseS.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseS.localPlaylistsDb lastErrorCode], [databaseS.localPlaylistsDb lastErrorMessage]); }
+					if (playlistS.isShuffle) {
+						[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM shufflePlaylist", [playlistNameTextField.text md5]]];
+					}
+					else {
+						[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM currentPlaylist", [playlistNameTextField.text md5]]];
+					}
+					[databaseS.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 				}
-				else 
+				else
 				{
-					[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM currentPlaylist", [playlistNameTextField.text md5]]];
+					// If it exists, ask to overwrite
+					UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Overwrite?" message:@"There is already a playlist with this name. Would you like to overwrite it?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+					[myAlertView show];
+					[myAlertView release];
 				}
-				[databaseS.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 			}
 			else
 			{
-				// If it exists, ask to overwrite
-				UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Overwrite?" message:@"There is already a playlist with this name. Would you like to overwrite it?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-				[myAlertView show];
-				[myAlertView release];
+				NSString *tableName = [NSString stringWithFormat:@"splaylist%@", [playlistNameTextField.text md5]];
+				if ([databaseS.localPlaylistsDb tableExists:tableName])
+				{
+					// If it exists, ask to overwrite
+					UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Overwrite?" message:@"There is already a playlist with this name. Would you like to overwrite it?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+					[myAlertView show];
+					[myAlertView release];
+				}
+				else 
+				{
+					[self uploadPlaylist:playlistNameTextField.text];
+				}
 			}
 		}
 	}
@@ -472,18 +558,27 @@
 		if(buttonIndex == 1)
 		{
 			// If yes, overwrite the playlist
-			[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"DROP TABLE playlist%@", [playlistNameTextField.text md5]]];
-			[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [playlistNameTextField.text md5], [Song standardSongColumnSchema]]];
-			
-			[databaseS.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, [settingsS.urlString md5]], @"currentPlaylistDb"];
-			if ([databaseS.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseS.localPlaylistsDb lastErrorCode], [databaseS.localPlaylistsDb lastErrorMessage]); }
-			if (playlistS.isShuffle) {
-				[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM shufflePlaylist", [playlistNameTextField.text md5]]];
+			if (savePlaylistLocal)
+			{
+				[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"DROP TABLE playlist%@", [playlistNameTextField.text md5]]];
+				[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [playlistNameTextField.text md5], [Song standardSongColumnSchema]]];
+				
+				[databaseS.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, [settingsS.urlString md5]], @"currentPlaylistDb"];
+				if ([databaseS.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseS.localPlaylistsDb lastErrorCode], [databaseS.localPlaylistsDb lastErrorMessage]); }
+				if (playlistS.isShuffle) {
+					[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM shufflePlaylist", [playlistNameTextField.text md5]]];
+				}
+				else {
+					[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM currentPlaylist", [playlistNameTextField.text md5]]];
+				}
+				[databaseS.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 			}
-			else {
-				[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM currentPlaylist", [playlistNameTextField.text md5]]];
+			else
+			{
+				[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"DROP TABLE splaylist%@", [playlistNameTextField.text md5]]];
+				
+				[self uploadPlaylist:playlistNameTextField.text];
 			}
-			[databaseS.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 		}
 	}
 	
@@ -786,6 +881,111 @@
 	
 	[musicS playSongAtPosition:indexPath.row];
 }
+
+#pragma mark - Connection Delegate
+
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
+{
+	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
+		return YES; // Self-signed cert will be accepted
+	
+	return NO;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{	
+	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+	{
+		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
+	}
+	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+	[receivedData setLength:0];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
+{
+	[receivedData appendData:incrementalData];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
+{
+	NSString *message = @"";
+	message = [NSString stringWithFormat:@"There was an error saving the playlist to the server.\n\nError %i: %@", 
+			   [error code], 
+			   [error localizedDescription]];
+	
+	// Inform the user that the connection failed.
+	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	[alert show];
+	[alert release];
+	
+	self.tableView.scrollEnabled = YES;
+	[viewObjectsS hideLoadingScreen];
+	
+	[connection release]; connection = nil;
+	
+	[receivedData release]; receivedData = nil;
+}	
+
+- (NSURLRequest *)connection: (NSURLConnection *)inConnection willSendRequest:(NSURLRequest *)inRequest redirectResponse:(NSURLResponse *)inRedirectResponse;
+{
+    if (inRedirectResponse) 
+	{
+        NSMutableURLRequest *newRequest = [[request mutableCopy] autorelease];
+        [newRequest setURL:[inRequest URL]];
+        return newRequest;
+    } 
+	else 
+	{
+        return inRequest;
+    }
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
+{	
+	[self parseData];
+	
+	self.tableView.scrollEnabled = YES;
+	[connection release]; connection = nil;
+}
+
+static NSString *kName_Error = @"error";
+
+- (void) subsonicErrorCode:(NSString *)errorCode message:(NSString *)message
+{
+	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+	alert.tag = 1;
+	[alert show];
+	[alert release];
+}
+
+- (void)parseData
+{	
+	// Parse the data
+	//
+	TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
+    TBXMLElement *root = tbxml.rootXMLElement;
+    if (root) 
+	{
+		TBXMLElement *error = [TBXML childElementNamed:kName_Error parentElement:root];
+		if (error)
+		{
+			NSString *code = [TBXML valueOfAttributeNamed:@"code" forElement:error];
+			NSString *message = [TBXML valueOfAttributeNamed:@"message" forElement:error];
+			[self subsonicErrorCode:code message:message];
+		}
+	}
+    [tbxml release];
+	
+	[receivedData release]; receivedData = nil;
+	
+	[viewObjectsS hideLoadingScreen];
+}
+
 
 @end
 

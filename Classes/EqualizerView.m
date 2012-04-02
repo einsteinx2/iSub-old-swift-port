@@ -344,7 +344,7 @@ static void destroy_versionArrays()
 			for (x = 0; x < specHeight; x++)
 			{
 				specbuf[x * specWidth + specpos] = palette[specHeight+126];
-				if (SCREEN_SCALE() == 2.0)
+				if (SCREEN_SCALE() == 2.0 && x * specWidth + specpos + 1 < specWidth * specHeight * 4 && specHeight+126 < (specHeight + 128) * 4)
 					specbuf[x * specWidth + specpos + 1] = palette[specHeight+126];
 			}
 			break;

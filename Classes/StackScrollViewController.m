@@ -603,7 +603,9 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 	{
 		[viewAtLeft.layer removeAllAnimations];
 		[viewAtRight.layer removeAllAnimations];
-		[viewAtRight2.layer removeAllAnimations];
+		// TODO: get rid of this hack and figure out the actual cause of the problem. Somehow viewAtRight2 is being released
+		if ([viewAtRight2 respondsToSelector:@selector(layer)])
+			[viewAtRight2.layer removeAllAnimations];
 		[viewAtLeft2.layer removeAllAnimations];
 		if ([animationID isEqualToString:@"LEFT-WITH-LEFT"] && viewAtLeft2.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION)
 		{

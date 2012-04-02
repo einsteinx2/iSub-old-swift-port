@@ -309,7 +309,7 @@ static NSInteger order (id a, id b, void* context)
 	else
 		dirId = [[self.currentAlbum.albumId copy] autorelease];
     
-    NSDictionary *parameters = [NSDictionary dictionaryWithObject:dirId forKey:@"id"];
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(dirId) forKey:@"id"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getMusicDirectory" andParameters:parameters];
     
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];

@@ -223,21 +223,8 @@
     
     self.modifier = nil;
 	
-	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowQuickAlbumsList object:albumViewController];
-	    
-    /*if (IS_IPAD())
-	{
-		albumViewController.view.width = ISMSiPadViewWidth;
-		albumViewController.view.layer.cornerRadius = ISMSiPadCornerRadius;
-		albumViewController.view.layer.masksToBounds = YES;
-		[appDelegateS.ipadRootViewController.stackScrollViewController addViewInSlider:albumViewController];
-	}
-	else
-	{
-		[parent.navigationController pushViewController:albumViewController animated:YES];
-	}*/
-	//[self pushViewControllerCustom:albumViewController];
-	//[albumViewController release];	
+	[parent pushViewControllerCustom:albumViewController];
+	[albumViewController release];
     
 	self.receivedData = nil;
 	self.connection = nil;

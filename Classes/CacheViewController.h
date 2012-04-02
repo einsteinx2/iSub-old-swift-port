@@ -16,7 +16,6 @@
 	UIView *headerView2;
 	UISegmentedControl *segmentedControl;
 	UILabel *songsCountLabel;
-	UILabel *cacheSizeLabel;
 	UIButton *deleteSongsButton;
 	UILabel *deleteSongsLabel;
 	UILabel *spacerLabel;
@@ -49,6 +48,8 @@
 @property (retain) NSMutableArray *listOfArtists;
 @property (retain) NSMutableArray *listOfArtistsSections;
 @property (retain) NSArray *sectionInfo;
+
+@property (retain) UILabel *cacheSizeLabel;
 
 //@property (retain) UIProgressView *queueDownloadProgressView;
 

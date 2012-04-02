@@ -46,7 +46,7 @@
 
 @implementation CacheViewController
 
-@synthesize listOfArtists, listOfArtistsSections, sectionInfo, cacheQueueCount;
+@synthesize listOfArtists, listOfArtistsSections, sectionInfo, cacheQueueCount, cacheSizeLabel;
 
 #pragma mark - Rotation handling
 
@@ -107,7 +107,7 @@
 	
 	//DLog(@"Cache viewDidLoad");
 	
-	cacheSizeLabel = nil;
+	self.cacheSizeLabel = nil;
 	
 	jukeboxInputBlocker = nil;
 	
@@ -340,6 +340,7 @@
 
 - (void)dealloc
 {
+	[cacheSizeLabel release]; cacheSizeLabel = nil;
     [super dealloc];
 }
 
@@ -606,9 +607,9 @@
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
 		if (cacheS.cacheSize <= 0)
-			cacheSizeLabel.text = @"";
+			self.cacheSizeLabel.text = @"";
 		else
-			cacheSizeLabel.text = [NSString formatFileSize:cacheS.cacheSize];
+			self.cacheSizeLabel.text = [NSString formatFileSize:cacheS.cacheSize];
 	}
 	
 	// Make sure this didn't get called multiple times
@@ -643,7 +644,7 @@
 		[editSongsLabel removeFromSuperview]; editSongsLabel = nil;
 		[editSongsButton removeFromSuperview]; editSongsButton = nil;
 		[deleteSongsLabel removeFromSuperview]; deleteSongsLabel = nil;
-		[cacheSizeLabel removeFromSuperview]; cacheSizeLabel = nil;
+		[self.cacheSizeLabel removeFromSuperview]; self.cacheSizeLabel = nil;
 		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateCacheSizeLabel) object:nil];
 		[headerView2 removeFromSuperview]; headerView2 = nil;
 		
@@ -691,18 +692,18 @@
 		[headerView addSubview:songsCountLabel];
 		[songsCountLabel release];
 		
-		cacheSizeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, y + 33, 227, 14)];
-		cacheSizeLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
-		cacheSizeLabel.backgroundColor = [UIColor clearColor];
-		cacheSizeLabel.textColor = [UIColor whiteColor];
-		cacheSizeLabel.textAlignment = UITextAlignmentCenter;
-		cacheSizeLabel.font = [UIFont boldSystemFontOfSize:12];
+		self.cacheSizeLabel = [[[UILabel alloc] initWithFrame:CGRectMake(0, y + 33, 227, 14)] autorelease];
+		self.cacheSizeLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+		self.cacheSizeLabel.backgroundColor = [UIColor clearColor];
+		self.cacheSizeLabel.textColor = [UIColor whiteColor];
+		self.cacheSizeLabel.textAlignment = UITextAlignmentCenter;
+		self.cacheSizeLabel.font = [UIFont boldSystemFontOfSize:12];
 		if (segmentedControl.selectedSegmentIndex == 0)
 		{
 			if (cacheS.cacheSize <= 0)
-				cacheSizeLabel.text = @"";
+				self.cacheSizeLabel.text = @"";
 			else
-				cacheSizeLabel.text = [NSString formatFileSize:cacheS.cacheSize];
+				self.cacheSizeLabel.text = [NSString formatFileSize:cacheS.cacheSize];
 		}
 		else if (segmentedControl.selectedSegmentIndex == 1)
 		{
@@ -715,10 +716,9 @@
 			[result close];
 			cacheSizeLabel.text = [NSString formatFileSize:combinedSize];*/
 			
-			cacheSizeLabel.text = @"";
+			self.cacheSizeLabel.text = @"";
 		}
-		[headerView addSubview:cacheSizeLabel];
-		[cacheSizeLabel release];
+		[headerView addSubview:self.cacheSizeLabel];
 		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateCacheSizeLabel) object:nil];
 		[self updateCacheSizeLabel];
 		
@@ -935,7 +935,7 @@
 	}
 	
 	songsCountLabel.hidden = YES;
-	cacheSizeLabel.hidden = YES;
+	self.cacheSizeLabel.hidden = YES;
 	deleteSongsLabel.hidden = NO;
 }
 
@@ -945,7 +945,7 @@
 	if (!self.tableView.editing)
 	{
 		songsCountLabel.hidden = NO;
-		cacheSizeLabel.hidden = NO;
+		self.cacheSizeLabel.hidden = NO;
 		deleteSongsLabel.hidden = YES;
 		return;
 	}
