@@ -15,6 +15,7 @@
 #import "PlaylistSingleton.h"
 #import "NSArray+Additions.h"
 #import "JukeboxSingleton.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation SUSNowPlayingDAO
 @synthesize delegate, loader, nowPlayingSongDicts;
@@ -112,6 +113,8 @@
 	
 	// Start the song
 	[musicS playSongAtPosition:0];
+	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 }
 
 #pragma mark - Loader Manager Methods

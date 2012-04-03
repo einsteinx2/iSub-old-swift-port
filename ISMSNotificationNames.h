@@ -32,6 +32,7 @@
 #define ISMSNotification_CurrentPlaylistOrderChanged @"ISMS Current playlist order changed"
 #define ISMSNotification_CurrentPlaylistShuffleToggled @"ISMS Current playlist shuffle toggled"
 #define ISMSNotification_CurrentPlaylistIndexChanged @"ISMS Current playlist index changed"
+#define ISMSNotification_CurrentPlaylistSongsQueued @"ISMS Current playlist songs queued"
 
 #define ISMSNotification_AllSongsLoadingArtists @"ISMS SUSAllSongsLoader loading artists"
 #define ISMSNotification_AllSongsLoadingAlbums @"ISMS SUSAllSongsLoader loading albums"
@@ -59,5 +60,7 @@
 
 #define ISMSNotification_BassInitialized @"ISMS bass initialized"
 #define ISMSNotification_BassFreed @"ISMS bass freed"
+
+#define ISMSNotification_LargeSongInfoToggle @"ISMS large song info toggle"
 
 #endif

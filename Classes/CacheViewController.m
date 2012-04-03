@@ -470,6 +470,8 @@
 	if (settingsS.isJukeboxEnabled)
 		[jukeboxS jukeboxReplacePlaylistWithLocal];
 	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+	
 	// Must do UI stuff in main thread
 	[viewObjectsS hideLoadingScreen];
 	[self playAllPlaySong];	

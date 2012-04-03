@@ -28,7 +28,7 @@
 
 @implementation CurrentPlaylistViewController
 
-@synthesize playlistNameTextField, request;
+@synthesize playlistNameTextField, request, currentPlaylistCount;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -40,6 +40,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentPlaylistCount) name:@"updateCurrentPlaylistCount" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songsQueued) name:ISMSNotification_CurrentPlaylistSongsQueued object:nil];
 }
 
 - (void)unregisterForNotifications
@@ -50,15 +51,13 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"updateCurrentPlaylistCount" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_StorePurchaseComplete object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistSongsQueued object:nil];
 }
 
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
-	
-	
-	currentPlaylistCount = 0;
-	
+		
 	//NSDate *start = [NSDate date];	
 	self.tableView.backgroundColor = [UIColor clearColor];
 	
@@ -97,13 +96,10 @@
 		playlistCountLabel.textColor = [UIColor whiteColor];
 		playlistCountLabel.textAlignment = UITextAlignmentCenter;
 		playlistCountLabel.font = [UIFont boldSystemFontOfSize:12];
-		NSUInteger songCount = playlistS.count;
-		if (songCount == 1)
-			playlistCountLabel.text = [NSString stringWithFormat:@"1 song"];
-		else
-			playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", songCount];
 		[headerView addSubview:playlistCountLabel];
 		[playlistCountLabel release];
+		
+		[self updateCurrentPlaylistCount];
 		
 		savePlaylistButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		savePlaylistButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
@@ -195,6 +191,8 @@
 		[noPlaylistsScreen release];
 	}
 	//DLog(@"end: %f", [[NSDate date] timeIntervalSinceDate:start]);
+	
+	[self.tableView reloadData];
 }
 
 - (void)showStore
@@ -245,6 +243,22 @@
 }
 
 #pragma mark -
+
+- (void)songsQueued
+{
+	[self updateCurrentPlaylistCount];
+	[self.tableView reloadData];
+}
+
+- (void)updateCurrentPlaylistCount
+{
+	self.currentPlaylistCount = [playlistS count];
+		
+	if (self.currentPlaylistCount == 1)
+		playlistCountLabel.text = [NSString stringWithFormat:@"1 song"];
+	else 
+		playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", currentPlaylistCount];
+}
 
 - (void)editPlaylistAction:(id)sender
 {
@@ -601,7 +615,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
-    // Return the number of rows in the section.
+    /*// Return the number of rows in the section.
 	if (settingsS.isPlaylistUnlocked)
 	{
 		if (settingsS.isJukeboxEnabled)
@@ -612,9 +626,9 @@
 	else
 	{
 		currentPlaylistCount = 0;
-	}
+	}*/
 	
-	return currentPlaylistCount;
+	return self.currentPlaylistCount;
 }
 
 

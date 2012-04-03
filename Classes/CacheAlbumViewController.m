@@ -345,6 +345,8 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 {
 	[viewObjectsS hideLoadingScreen];
 
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+	
 	[self playAllPlaySong];
 }
 
@@ -599,6 +601,8 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			playlistS.isShuffle = NO;
 			
 			[musicS playSongAtPosition:a];
+			
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 			
 			[self showPlayer];
 		}

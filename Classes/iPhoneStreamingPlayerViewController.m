@@ -72,6 +72,7 @@
 @synthesize quickBackLabel, quickForwLabel;
 @synthesize swipeDetector;
 @synthesize lastProgress;
+@synthesize largeOverlayArtist, largeOverlaySong, largeOverlayAlbum, largeOverlayView;
 
 static const CGFloat kDefaultReflectionFraction = 0.30;
 static const CGFloat kDefaultReflectionOpacity = 0.55;
@@ -302,6 +303,15 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[self createReflection];
 }
 
+- (void)largeSongInfoWasToggled
+{
+	if (isExtraButtonsShowing)
+	{
+		[self extraButtonsToggleAnimated:NO saveState:NO];
+		[self extraButtonsToggleAnimated:NO saveState:NO];
+	}
+}
+
 - (void)registerForNotifications
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPlayButtonImage) 
@@ -320,6 +330,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 												 name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songInfoToggle:) 
 												 name:@"hideSongInfo" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(largeSongInfoWasToggled) name:ISMSNotification_LargeSongInfoToggle object:nil];
 	
 	if (IS_IPAD())
 	{
@@ -350,6 +361,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 													name:@"hideSongInfo" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self 
 													name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_LargeSongInfoToggle object:nil];
 	
 	if (IS_IPAD())
 	{
@@ -386,25 +398,15 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	{
 		artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(305, 60, 170, 30)];
 		artistLabel.backgroundColor = [UIColor clearColor];
-		artistLabel.textColor = [UIColor whiteColor];
-		artistLabel.font = [UIFont boldSystemFontOfSize:24];
+		artistLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
+		artistLabel.font = [UIFont boldSystemFontOfSize:22];
 		artistLabel.adjustsFontSizeToFitWidth = YES;
 		artistLabel.textAlignment = UITextAlignmentCenter;
 		[self.view addSubview:artistLabel];
 		[self.view sendSubviewToBack:artistLabel];
 		[artistLabel release];
 		
-		albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(305, 90, 170, 30)];
-		albumLabel.backgroundColor = [UIColor clearColor];
-		albumLabel.textColor = [UIColor whiteColor];
-		albumLabel.font = [UIFont systemFontOfSize:24];
-		albumLabel.adjustsFontSizeToFitWidth = YES;
-		albumLabel.textAlignment = UITextAlignmentCenter;
-		[self.view addSubview:albumLabel];
-		[self.view sendSubviewToBack:albumLabel];
-		[albumLabel release];
-		
-		titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(305, 120, 170, 30)];
+		titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(305, 90, 170, 30)];
 		titleLabel.backgroundColor = [UIColor clearColor];
 		titleLabel.textColor = [UIColor whiteColor];
 		titleLabel.font = [UIFont boldSystemFontOfSize:24];
@@ -413,6 +415,16 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[self.view addSubview:titleLabel];
 		[self.view sendSubviewToBack:titleLabel];
 		[titleLabel	release];
+		
+		albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(305, 120, 170, 30)];
+		albumLabel.backgroundColor = [UIColor clearColor];
+		albumLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
+		albumLabel.font = [UIFont systemFontOfSize:22];
+		albumLabel.adjustsFontSizeToFitWidth = YES;
+		albumLabel.textAlignment = UITextAlignmentCenter;
+		[self.view addSubview:albumLabel];
+		[self.view sendSubviewToBack:albumLabel];
+		[albumLabel release];
 		
 		NSMutableDictionary *positions = [NSMutableDictionary dictionaryWithCapacity:0];
 		[positions setObject:[NSValue valueWithCGRect:volumeSlider.frame] forKey:@"volumeSlider"];
@@ -497,6 +509,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[pageControlViewController release]; pageControlViewController = nil;
 	
 	[swipeDetector release]; swipeDetector = nil;
+	
+	[largeOverlayArtist release]; largeOverlayArtist = nil;
+	[largeOverlayAlbum release]; largeOverlayAlbum = nil;
+	[largeOverlaySong release]; largeOverlaySong = nil;
 	
 	[super dealloc];
 }
@@ -638,9 +654,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		CGRect songFrame   = CGRectMake(0, 10, width, 15);
 		CGRect albumFrame  = CGRectMake(0, 23, width, 15);
 		
-		NSUInteger artistSize = 12;
-		NSUInteger albumSize  = 11;
+		NSUInteger artistSize = 11;
 		NSUInteger songSize   = 12;
+		NSUInteger albumSize  = 11;
 		
 		artistTitleLabel = [[UILabel alloc] initWithFrame:artistFrame];
 		artistTitleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -730,6 +746,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	artistLabel.text = currentSong.artist;
 	albumLabel.text = currentSong.album;
 	titleLabel.text = currentSong.title;
+	
+	largeOverlayArtist.text = currentSong.artist;
+	largeOverlayAlbum.text = currentSong.album;
+	largeOverlaySong.text = currentSong.title;
 	
 	if (settingsS.isJukeboxEnabled)
 	{
@@ -1009,9 +1029,18 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		extraButtons.origin = extraButtonsHidden;
 		songInfoView.origin = songInfoViewHidden;
-		
+		largeOverlayView.alpha = 0.0;
+
 		if (animated)
+		{
 			[UIView commitAnimations];
+		}
+		else
+		{
+			[extraButtons removeFromSuperview];
+			[songInfoView removeFromSuperview];
+			[largeOverlayView removeFromSuperview];
+		}
 	}
 	else
 	{
@@ -1021,6 +1050,14 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		extraButtons.width = coverArtHolderView.width;
 		songInfoView.origin = songInfoViewHidden;
 		songInfoView.width = coverArtHolderView.width;
+		if (settingsS.isShowLargeSongInfoInPlayer)
+		{
+			//largeOverlayView.origin = CGPointMake(0, extraButtons.height);
+			//largeOverlayView.width = coverArtImageView.width;
+			largeOverlayView.frame = CGRectMake(0, extraButtons.height, coverArtImageView.width, coverArtImageView.height - extraButtons.height - songInfoView.height);
+			largeOverlayView.alpha = 0.0;
+			[coverArtImageView addSubview:largeOverlayView];
+		}
 		[coverArtHolderView addSubview:extraButtons];
 		[coverArtHolderView addSubview:songInfoView];
 		
@@ -1040,6 +1077,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		extraButtons.origin = extraButtonsVisible;
 		songInfoView.origin = songInfoViewVisible;
+		largeOverlayView.alpha = 1.0;
 		
 		if (animated)
 			[UIView commitAnimations];
@@ -1057,6 +1095,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	{
 		[extraButtons removeFromSuperview];
 		[songInfoView removeFromSuperview];
+		[largeOverlayView removeFromSuperview];
 	}
 }
 

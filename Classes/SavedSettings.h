@@ -36,6 +36,7 @@ typedef enum
 	NSUInteger quickSkipNumberOfSeconds;
 	NSUInteger audioEngineStartNumberOfSeconds;
 	NSUInteger audioEngineBufferNumberOfSeconds;
+	BOOL isShowLargeSongInfoInPlayer;
 	
 	// State Saving
 	BOOL isPlaying;	
@@ -109,6 +110,8 @@ typedef enum
 @property BOOL isPlayerPlaylistShowing;
 
 @property BOOL isShouldShowEQViewInstructions;
+
+@property BOOL isShowLargeSongInfoInPlayer;
 
 // State Saving
 @property BOOL isRecover;

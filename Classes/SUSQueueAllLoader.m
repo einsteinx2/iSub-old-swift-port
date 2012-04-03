@@ -23,6 +23,7 @@
 #import "NSArray+Additions.h"
 #import "JukeboxSingleton.h"
 #import "AudioEngine.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation SUSQueueAllLoader
 
@@ -266,6 +267,9 @@
 	
 	// Continue the iteration
 	//[self performSelector:@selector(finishLoad) withObject:nil afterDelay:0.05];
+	if (isQueue)
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+	
 	[self finishLoad];
 }
 

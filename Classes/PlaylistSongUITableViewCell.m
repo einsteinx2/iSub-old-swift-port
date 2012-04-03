@@ -13,6 +13,7 @@
 #import "DatabaseSingleton.h"
 #import "CellOverlay.h"
 #import "Song.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation PlaylistSongUITableViewCell
 
@@ -126,6 +127,8 @@
 		[[Song songFromDbRow:self.indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", playlistMD5] inDatabase:databaseS.localPlaylistsDb] addToCurrentPlaylist];
 	else
 		[[Song songFromServerPlaylistId:playlistMD5 row:self.indexPath.row] addToCurrentPlaylist];
+	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 	
 	[self hideOverlay];
 }

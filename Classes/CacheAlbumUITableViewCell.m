@@ -161,6 +161,8 @@
 	}
 	[result close];
 	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+	
 	// Hide the loading screen
 	[viewObjectsS hideLoadingScreen];
 }

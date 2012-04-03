@@ -134,6 +134,8 @@
 - (void)queueAction
 {	
 	[[Song songFromCacheDb:md5] addToCurrentPlaylist];
+	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 
 	[self hideOverlay];
 }

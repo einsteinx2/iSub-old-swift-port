@@ -16,9 +16,7 @@
 	UILabel *editPlaylistLabel;
 		
 	//NSTimer *songHighlightTimer;
-		
-	NSUInteger currentPlaylistCount;
-	
+			
 	BOOL savePlaylistLocal;
 	
 	NSMutableData *receivedData;
@@ -29,6 +27,8 @@
 @property (retain) NSMutableURLRequest *request;
 
 @property (retain) UITextField *playlistNameTextField;
+
+@property NSUInteger currentPlaylistCount;
 
 - (void) selectRow;
 

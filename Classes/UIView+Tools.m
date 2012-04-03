@@ -77,8 +77,8 @@
 - (void)addBottomShadowWithWidth:(CGFloat)shadowWidth alpha:(CGFloat)shadowAlpha
 {
 	// Draw the shadows
-	CAGradientLayer *bottomShadow = [UIView verticalShadowWithAlpha:shadowAlpha inverse:YES];
-	bottomShadow.frame = CGRectMake(-shadowWidth, 0, shadowWidth + ISMSiPadCornerRadius, 1024.);
+	CAGradientLayer *bottomShadow = [UIView horizontalShadowWithAlpha:shadowAlpha inverse:NO];
+	bottomShadow.frame = CGRectMake(0, self.height, self.width, shadowWidth);
 	[self.layer insertSublayer:bottomShadow atIndex:0];
 }
 
@@ -89,8 +89,8 @@
 
 - (void)addTopShadowWithWidth:(CGFloat)shadowWidth alpha:(CGFloat)shadowAlpha
 {
-	CAGradientLayer *topShadow = [UIView verticalShadowWithAlpha:shadowAlpha inverse:NO];
-	topShadow.frame = CGRectMake(self.width - ISMSiPadCornerRadius, 0, DEFAULT_SHADOW_WIDTH + ISMSiPadCornerRadius, 1024.);
+	CAGradientLayer *topShadow = [UIView horizontalShadowWithAlpha:shadowAlpha inverse:YES];
+	topShadow.frame = CGRectMake(0, 0 - shadowWidth, self.width, shadowWidth);
 	[self.layer insertSublayer:topShadow atIndex:0];
 }
 

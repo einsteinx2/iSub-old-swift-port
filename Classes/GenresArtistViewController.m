@@ -216,6 +216,8 @@
 	// Hide loading screen
 	[viewObjectsS hideLoadingScreen];
 	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+	
 	// Show the player
 	[self showPlayer];
 }
@@ -263,6 +265,8 @@
 	
 	// Hide loading screen
 	[viewObjectsS hideLoadingScreen];
+	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 	
 	// Show the player
 	[self showPlayer];

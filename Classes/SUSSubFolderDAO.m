@@ -18,6 +18,7 @@
 #import "SavedSettings.h"
 #import "PlaylistSingleton.h"
 #import "JukeboxSingleton.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @interface SUSSubFolderDAO (Private) 
 - (NSUInteger)findFirstAlbumRow;
@@ -153,7 +154,6 @@
 
 - (void)playSongAtDbRow:(NSUInteger)row
 {
-	
 	// Clear the current playlist
 	if (settingsS.isJukeboxEnabled)
 		[databaseS resetJukeboxPlaylist];
@@ -191,6 +191,8 @@
 	
 	// Start the song
 	[musicS playSongAtPosition:(row - songStartRow)];
+	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 }
 
 #pragma mark - Public DAO Methods

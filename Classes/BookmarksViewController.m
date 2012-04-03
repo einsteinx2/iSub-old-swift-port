@@ -612,6 +612,8 @@
 	{
 		[aSong addToCurrentPlaylist];
 	}
+	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 		
 	[self showPlayer];
 	

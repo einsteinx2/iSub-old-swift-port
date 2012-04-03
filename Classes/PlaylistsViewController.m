@@ -91,6 +91,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentPlaylistCount) name:@"updateCurrentPlaylistCount" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:) name:ISMSNotification_StorePurchaseComplete object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songsQueued) name:ISMSNotification_CurrentPlaylistSongsQueued object:nil];
 }
 
 - (void)unregisterForNotifications
@@ -101,6 +102,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"updateCurrentPlaylistCount" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_StorePurchaseComplete object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistSongsQueued object:nil];
 }
 
 - (void)viewDidLoad 
@@ -239,6 +241,11 @@
 
 #pragma mark -
 
+- (void)songsQueued
+{
+	[self updateCurrentPlaylistCount];
+	[self.tableView reloadData];
+}
 
 - (void)updateCurrentPlaylistCount
 {
@@ -689,8 +696,8 @@
 			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
 			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
 			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-			[self hideDeleteButton];
 			[self.tableView setEditing:NO animated:YES];
+			[self hideDeleteButton];
 			editPlaylistLabel.backgroundColor = [UIColor clearColor];
 			editPlaylistLabel.text = @"Edit";
 			

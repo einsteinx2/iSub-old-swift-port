@@ -382,6 +382,7 @@
 	quickSkipNumberOfSeconds = [userDefaults integerForKey:@"quickSkipNumberOfSeconds"];
 	audioEngineBufferNumberOfSeconds = [userDefaults integerForKey:@"audioEngineBufferNumberOfSeconds"];
 	audioEngineStartNumberOfSeconds = [userDefaults integerForKey:@"audioEngineStartNumberOfSeconds"];
+	isShowLargeSongInfoInPlayer = [userDefaults boolForKey:@"isShowLargeSongInfoInPlayer"];
 		
 	NSString *url = [userDefaults stringForKey:@"url"];
 	if (url)
@@ -1331,6 +1332,27 @@
 		{
 			audioEngineBufferNumberOfSeconds = numSeconds;
 			[userDefaults setInteger:numSeconds forKey:@"audioEngineBufferNumberOfSeconds"];
+			[userDefaults synchronize];
+		}
+	}
+}
+
+- (BOOL)isShowLargeSongInfoInPlayer
+{
+	@synchronized(self)
+	{
+		return isShowLargeSongInfoInPlayer;
+	}
+}
+
+- (void)setIsShowLargeSongInfoInPlayer:(BOOL)isShow
+{
+	@synchronized(self)
+	{
+		if (isShowLargeSongInfoInPlayer != isShow)
+		{
+			isShowLargeSongInfoInPlayer = isShow;
+			[userDefaults setBool:isShow forKey:@"isShowLargeSongInfoInPlayer"];
 			[userDefaults synchronize];
 		}
 	}

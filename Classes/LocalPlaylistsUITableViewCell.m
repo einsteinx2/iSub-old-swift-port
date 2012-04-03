@@ -15,6 +15,7 @@
 #import "Song.h"
 #import "CellOverlay.h"
 #import "SavedSettings.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation LocalPlaylistsUITableViewCell
 
@@ -117,6 +118,8 @@
 		[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", md5]];
 		if ([databaseS.localPlaylistsDb hadError]) { DLog(@"Err performing query %d: %@", [databaseS.localPlaylistsDb lastErrorCode], [databaseS.localPlaylistsDb lastErrorMessage]); }
 		[databaseS.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
+		
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 	}
 	
 	[viewObjectsS hideLoadingScreen];

@@ -92,6 +92,11 @@
 
 @property NSUInteger lastProgress;
 
+@property (retain) IBOutlet UIView *largeOverlayView;
+@property (retain) IBOutlet UILabel *largeOverlayArtist;
+@property (retain) IBOutlet UILabel *largeOverlaySong;
+@property (retain) IBOutlet UILabel *largeOverlayAlbum;
+
 - (void)setPlayButtonImage;
 - (void)setPauseButtonImage;
 - (IBAction)songInfoToggle:(id)sender;

@@ -226,6 +226,8 @@
 	// Hide loading screen
 	[viewObjectsS hideLoadingScreen];
 	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+	
 	// Show the player
 	[self showPlayer];
 }
@@ -273,6 +275,8 @@
 	
 	// Hide loading screen
 	[viewObjectsS hideLoadingScreen];
+	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 	
 	// Show the player
 	[self showPlayer];
@@ -506,6 +510,8 @@
 			
 			// Start the song
 			[musicS playSongAtPosition:songRow];
+			
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 			
 			[self showPlayer];
 		}

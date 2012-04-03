@@ -14,6 +14,7 @@
 #import "Song.h"
 #import "NSString+md5.h"
 #import "CellOverlay.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation SongUITableViewCell
 
@@ -125,6 +126,8 @@
 - (void)queueAction
 {
 	[mySong addToCurrentPlaylist];
+	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 	
 	[self hideOverlay];
 }

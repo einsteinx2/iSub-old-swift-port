@@ -80,6 +80,8 @@
 	IBOutlet UISegmentedControl *secondsToStartPlayerSegmentControl;
 	IBOutlet UISegmentedControl *secondsToBufferSegmentControl;
 	
+	IBOutlet UISwitch *showLargeSongInfoSwitch;
+	
 	NSDate *loadedTime;
 }
 

@@ -29,6 +29,7 @@
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation SettingsTabViewController
 
@@ -95,6 +96,7 @@
 	enableSwipeSwitch.on = settingsS.isSwipeEnabled;
 	enableTapAndHoldSwitch.on = settingsS.isTapAndHoldEnabled;
 	
+	showLargeSongInfoSwitch.on = settingsS.isShowLargeSongInfoInPlayer;
 	enableLyricsSwitch.on = settingsS.isLyricsEnabled;
 	enableCacheStatusSwitch.on = settingsS.isCacheStatusEnabled;
 	
@@ -445,6 +447,11 @@
 		else if (sender == checkUpdatesSwitch)
 		{
 			settingsS.isUpdateCheckEnabled = checkUpdatesSwitch.on;
+		}
+		else if (sender == showLargeSongInfoSwitch)
+		{
+			settingsS.isShowLargeSongInfoInPlayer = showLargeSongInfoSwitch.on;
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_LargeSongInfoToggle];
 		}
 		else if (sender == enableLyricsSwitch)
 		{

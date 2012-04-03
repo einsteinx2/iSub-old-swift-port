@@ -19,6 +19,7 @@
 #import "CustomUIAlertView.h"
 #import "Song.h"
 #import "TBXML.h"
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation PlaylistsUITableViewCell
 
@@ -250,6 +251,9 @@
 	
 	self.receivedData = nil;
 	self.connection = nil;
+	
+	if (!isDownload)
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 }
 
 @end

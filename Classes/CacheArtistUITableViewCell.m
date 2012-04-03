@@ -153,6 +153,8 @@
 	
 	[result close];
 	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+	
 	[viewObjectsS hideLoadingScreen];
 }
 

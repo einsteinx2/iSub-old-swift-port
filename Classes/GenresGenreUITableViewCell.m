@@ -13,7 +13,7 @@
 #import "FMDatabaseAdditions.h"
 #import "CellOverlay.h"
 #import "Song.h"
-
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation GenresGenreUITableViewCell
 
@@ -133,6 +133,8 @@
 			[[Song songFromGenreDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCurrentPlaylist];
 	}
 	[result close];
+	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 	
 	[viewObjectsS hideLoadingScreen];
 }

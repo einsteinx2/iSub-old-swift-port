@@ -13,7 +13,7 @@
 #import "FMDatabaseAdditions.h"
 #import "CellOverlay.h"
 #import "Song.h"
-
+#import "NSNotificationCenter+MainThread.h"
 
 @implementation GenresSongUITableViewCell
 
@@ -139,6 +139,8 @@
 {
 	//DLog(@"queueAction");
 	[[Song songFromGenreDb:md5] addToCurrentPlaylist];
+	
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 	
 	[self hideOverlay];
 }

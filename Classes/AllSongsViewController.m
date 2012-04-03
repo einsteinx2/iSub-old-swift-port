@@ -725,6 +725,8 @@
 		// Start the song
 		[musicS playSongAtPosition:0];
 		
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+		
 		[self showPlayer];
 	}
 	else

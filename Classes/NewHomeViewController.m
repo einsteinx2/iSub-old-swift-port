@@ -834,6 +834,8 @@
 		[xmlParser release];
 		[parser release];
 		
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+		
 		[self showPlayer];
 	}
 	
