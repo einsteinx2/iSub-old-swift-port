@@ -4839,8 +4839,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "841"
          endingLineNumber = "841"
-         landmarkName = "-type:"
-         landmarkType = "5">
+         landmarkName = "@implementation EqualizerViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
