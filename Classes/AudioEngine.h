@@ -53,7 +53,7 @@ typedef struct
 	BOOL stopFilling;
 } ISMS_RingBuffer;
 
-@class Song, BassParamEqValue, BassUserInfo;
+@class Song, BassParamEqValue, BassUserInfo, GCDTimer;
 @interface AudioEngine : NSObject
 {
 	// Equalizer
@@ -65,10 +65,6 @@ typedef struct
 	DWORD buffersTilSongEnd;
 	QWORD buffersUsedSinceSongEnd;
 	BOOL songEnded;
-	
-	
-	//dispatch_source_t startSongRetryTimer;
-	//dispatch_source_t nextSongRetryTimer;
 }
 
 + (AudioEngine *)sharedInstance;
@@ -126,6 +122,9 @@ typedef struct
 @property (retain) NSObject *ringBufferSyncObject;
 
 @property BOOL isBassFreed;
+
+//@property (retain) GCDTimer *nextSongRetryTimer;
+//@property (retain) GCDTimer *startSongRetryTimer;
 
 const char *GetCTypeString(DWORD ctype, HPLUGIN plugin);
 

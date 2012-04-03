@@ -506,6 +506,9 @@
 		539D6075145E0D7D0018AA90 /* ISMSUpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 539D6074145E0D7D0018AA90 /* ISMSUpdateChecker.m */; };
 		539D6076145E0D7D0018AA90 /* ISMSUpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 539D6074145E0D7D0018AA90 /* ISMSUpdateChecker.m */; };
 		539D6077145E0D7D0018AA90 /* ISMSUpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 539D6074145E0D7D0018AA90 /* ISMSUpdateChecker.m */; };
+		53A17061152A7BC200822521 /* GCDTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A17060152A7BC200822521 /* GCDTimer.m */; };
+		53A17062152A7BC200822521 /* GCDTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A17060152A7BC200822521 /* GCDTimer.m */; };
+		53A17063152A7BC200822521 /* GCDTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A17060152A7BC200822521 /* GCDTimer.m */; };
 		53A2213611A8489900C1ACD4 /* cache-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A2213411A8489900C1ACD4 /* cache-button.png */; };
 		53A2213711A8489900C1ACD4 /* queue-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A2213511A8489900C1ACD4 /* queue-button.png */; };
 		53A2BE24147DF09800E44822 /* EqualizerPointView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A2BE23147DF09800E44822 /* EqualizerPointView.m */; };
@@ -2087,6 +2090,8 @@
 		539B3091145E78AE00D06475 /* SUSLyricsDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSLyricsDAO.m; sourceTree = "<group>"; };
 		539D6073145E0D7D0018AA90 /* ISMSUpdateChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSUpdateChecker.h; sourceTree = "<group>"; };
 		539D6074145E0D7D0018AA90 /* ISMSUpdateChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSUpdateChecker.m; sourceTree = "<group>"; };
+		53A1705F152A7BC200822521 /* GCDTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDTimer.h; sourceTree = "<group>"; };
+		53A17060152A7BC200822521 /* GCDTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDTimer.m; sourceTree = "<group>"; };
 		53A2213411A8489900C1ACD4 /* cache-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cache-button.png"; path = "Images/Other/cache-button.png"; sourceTree = "<group>"; };
 		53A2213511A8489900C1ACD4 /* queue-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "queue-button.png"; path = "Images/Other/queue-button.png"; sourceTree = "<group>"; };
 		53A2BE22147DF09800E44822 /* EqualizerPointView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EqualizerPointView.h; sourceTree = "<group>"; };
@@ -3282,6 +3287,8 @@
 				53EC1805146760E000601C2D /* SUSServerPlaylist.m */,
 				53DF2FB715153023005160C5 /* NSObject+GCDExtention.h */,
 				53DF2FB815153023005160C5 /* NSObject+GCDExtention.m */,
+				53A1705F152A7BC200822521 /* GCDTimer.h */,
+				53A17060152A7BC200822521 /* GCDTimer.m */,
 			);
 			name = "Custom Objects";
 			sourceTree = "<group>";
@@ -5173,6 +5180,7 @@
 				532661411521930600DE39C1 /* UIImage+HockeyAdditions.m in Sources */,
 				532661471521930600DE39C1 /* JSONKit.m in Sources */,
 				532661561521930E00DE39C1 /* BWQuincyManager.m in Sources */,
+				53A17061152A7BC200822521 /* GCDTimer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5404,6 +5412,7 @@
 				532661431521930600DE39C1 /* UIImage+HockeyAdditions.m in Sources */,
 				532661491521930600DE39C1 /* JSONKit.m in Sources */,
 				532661581521930E00DE39C1 /* BWQuincyManager.m in Sources */,
+				53A17063152A7BC200822521 /* GCDTimer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5635,6 +5644,7 @@
 				532661421521930600DE39C1 /* UIImage+HockeyAdditions.m in Sources */,
 				532661481521930600DE39C1 /* JSONKit.m in Sources */,
 				532661571521930E00DE39C1 /* BWQuincyManager.m in Sources */,
+				53A17062152A7BC200822521 /* GCDTimer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

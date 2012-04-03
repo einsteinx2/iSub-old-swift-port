@@ -25,6 +25,7 @@
 #import "NSArray+Additions.h"
 #import "SocialSingleton.h"
 #import "NSObject+GCDExtention.h"
+//#import "GCDTimer.h"
 
 @implementation AudioEngine
 @synthesize isEqualizerOn, startByteOffset, startSecondsOffset, isPlaying, isFastForward, bassReinitSampleRate, presilenceStream, bufferLengthMillis, bassUpdatePeriod;
@@ -35,6 +36,7 @@
 @synthesize hasTweeted, hasNotifiedSubsonic, hasScrobbled;
 @synthesize currentStreamSong;
 @synthesize isBassFreed;
+//@synthesize startSongRetryTimer, nextSongRetryTimer;
 
 // BASS plugins
 extern void BASSFLACplugin;
@@ -1077,6 +1079,11 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 {
 	@synchronized(eqReadSyncObject)
 	{
+		//[self.startSongRetryTimer gcdCancelTimerBlock];
+		//self.startSongRetryTimer = nil;
+		//[self.nextSongRetryTimer gcdCancelTimerBlock];
+		//self.nextSongRetryTimer = nil;
+		
 		[NSObject gcdCancelTimerBlockWithName:startSongRetryTimer];
 		[NSObject gcdCancelTimerBlockWithName:nextSongRetryTimer];
 		
@@ -1300,6 +1307,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		DLog(@"nextSong stream: %i error: %i - %@", self.nextStream, errorCode, NSStringFromBassErrorCode(errorCode));
 #endif
 		
+		//self.nextSongRetryTimer = [GCDTimer gcdTimerInMainQueueAfterDelay:RETRY_DELAY performBlock:^{ [self prepareNextSongStream:nextSong]; }];
 		[self gcdTimerPerformBlockInMainQueue:^{ [self prepareNextSongStream:nextSong]; } afterDelay:RETRY_DELAY withName:nextSongRetryTimer];
 	}
 	
@@ -1499,6 +1507,7 @@ void RunBlockAfterDelay(void (^block)(void), NSTimeInterval delay)
 			// Failed to create the stream, retrying
 			DLog(@"------failed to create stream, retrying in 2 seconds------");	
 			
+			//self.startSongRetryTimer = [GCDTimer gcdTimerInMainQueueAfterDelay:RETRY_DELAY performBlock:^{ [self startWithOffsetInBytes:byteOffset orSeconds:seconds]; }];
 			[self gcdTimerPerformBlockInMainQueue:^{ [self startWithOffsetInBytes:byteOffset orSeconds:seconds]; } afterDelay:RETRY_DELAY withName:startSongRetryTimer];
 		}
 	}

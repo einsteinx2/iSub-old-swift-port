@@ -6,8 +6,6 @@
 //  Copyright (c) 2012 Ben Baron. All rights reserved.
 //
 
-
-
 @interface NSObject (GCDExtention)
 
 - (BOOL)gcdTimerPerformBlock:(void (^)(void))block inQueue:(dispatch_queue_t)queue afterDelay:(NSTimeInterval)delay withName:(NSString *)name;

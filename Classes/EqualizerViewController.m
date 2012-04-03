@@ -21,9 +21,11 @@
 #import "SnappySlider.h"
 #import "NWPickerView.h"
 #import "NSObject+GCDExtention.h"
+#import "NSNotificationCenter+MainThread.h"
+//#import "GCDTimer.h"
 
 @implementation EqualizerViewController
-@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath, gainBoostLabel, isPresetPickerShowing, controlsContainer, gainBoostAmountLabel, lastGainValue, wasVisualizerOffBeforeRotation, swipeDetectorLeft, swipeDetectorRight, landscapeButtonsHolder; //drawTimer;
+@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath, gainBoostLabel, isPresetPickerShowing, controlsContainer, gainBoostAmountLabel, lastGainValue, wasVisualizerOffBeforeRotation, swipeDetectorLeft, swipeDetectorRight, landscapeButtonsHolder;//, hidePickerTimer; //drawTimer;
 
 #define hidePickerTimer @"EqualizerViewController hide picker timer"
 
@@ -122,6 +124,7 @@
 - (void)dismissPicker
 {
 	[presetPicker resignFirstResponder];
+	//self.hidePickerTimer = nil;
 	[NSObject gcdCancelTimerBlockWithName:hidePickerTimer];
 }
 
@@ -177,6 +180,7 @@
 - (void)dealloc
 {
 	[NSObject gcdCancelTimerBlockWithName:hidePickerTimer];
+	//[hidePickerTimer release]; hidePickerTimer = nil;
 	
 	[landscapeButtonsHolder release]; landscapeButtonsHolder = nil;
 	[controlsContainer release]; controlsContainer = nil;
@@ -244,10 +248,18 @@
 	
 	[self createOverlay];
 	self.isPresetPickerShowing = YES;
+	
+	// Dismiss the picker view after a few seconds
+	[NSObject gcdCancelTimerBlockWithName:hidePickerTimer];
+	[self gcdTimerPerformBlockInMainQueue:^{
+		[NSNotificationCenter postNotificationToMainThreadWithName:@"hidePresetPicker"];
+	} afterDelay:5.0 withName:hidePickerTimer];
 }
 
 - (void)pickerWillHide
 {
+	[NSObject gcdCancelTimerBlockWithName:hidePickerTimer];
+	
 	controlsContainer.y += 60;
 	controlsContainer.height -= 60;
 	
@@ -288,10 +300,6 @@
 	[self updateToggleButton];
 	
 	[self.equalizerView startEqDisplay];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createEqViews) name:ISMSNotification_BassEffectPresetLoaded object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pickerWillShown) name:UIPickerViewWillShownNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pickerWillHide) name:UIPickerViewWillHideNotification object:nil];
 	
 	isSavePresetButtonShowing = NO;
 	self.savePresetButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -375,6 +383,11 @@
 	}
 
 	self.navigationController.navigationBar.hidden = YES;
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createEqViews) name:ISMSNotification_BassEffectPresetLoaded object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pickerWillShown) name:UIPickerViewWillShownNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pickerWillHide) name:UIPickerViewWillHideNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:presetPicker selector:@selector(resignFirstResponder) name:@"hidePresetPicker" object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -452,7 +465,12 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+	[NSObject gcdCancelTimerBlockWithName:hidePickerTimer];
+	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_BassEffectPresetLoaded object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIPickerViewWillShownNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIPickerViewWillHideNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hidePresetPicker" object:nil];
 	
 	[self removeEqViews];
 	
@@ -871,10 +889,14 @@
 		[self hideDeletePresetButton:YES];
 	}
 	
+	/*self.hidePickerTimer = [GCDTimer gcdTimerInMainQueueAfterDelay:5.0 performBlock:^{
+		[NSNotificationCenter postNotificationToMainThreadWithName:@"hidePresetPicker"];
+	}];*/
+	
 	// Dismiss the picker view after a few seconds
 	[NSObject gcdCancelTimerBlockWithName:hidePickerTimer];
 	[self gcdTimerPerformBlockInMainQueue:^{
-		[presetPicker resignFirstResponder];
+		[NSNotificationCenter postNotificationToMainThreadWithName:@"hidePresetPicker"];
 	} afterDelay:5.0 withName:hidePickerTimer];
 }
 

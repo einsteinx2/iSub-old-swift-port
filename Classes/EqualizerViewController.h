@@ -9,7 +9,7 @@
 #import "NWPickerField.h"
 #import "DDSocialDialog.h"
 
-@class EqualizerView, EqualizerPointView, EqualizerPathView, BassParamEqValue, BassEffectDAO, NWPickerField, SnappySlider;
+@class EqualizerView, EqualizerPointView, EqualizerPathView, BassParamEqValue, BassEffectDAO, NWPickerField, SnappySlider;//, GCDTimer;
 @interface EqualizerViewController : UIViewController <NWPickerFieldDelegate, DDSocialDialogDelegate, UITableViewDelegate, UITableViewDataSource>
 {
 	UIView *overlay;
@@ -51,6 +51,8 @@
 @property (retain) UISwipeGestureRecognizer *swipeDetectorRight;
 
 @property (retain) IBOutlet UIView *landscapeButtonsHolder;
+
+//@property (retain) GCDTimer *hidePickerTimer;
 
 //- (BOOL)isTouchingEqView:(UITouch *)touch;
 
