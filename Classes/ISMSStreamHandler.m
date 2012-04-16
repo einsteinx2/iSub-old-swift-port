@@ -36,6 +36,8 @@
 
 #define ISMSMinBytesToStartLimiting(bitrate) (BytesForSecondsAtBitrate(60, bitrate))
 
+#define ISMSMaxContentLengthFailures 1
+
 //#define kMinKiloBytesToStartPlayback 250
 //#define kMinBytesToStartPlayback ((unsigned long long)(1024 * kMinKiloBytesToStartPlayback)) // Number of bytes to wait before activating the player
 //#define kMinBytesToStartLimiting ((unsigned long long)(1024 * 1024))	// Start throttling bandwidth after 1 MB downloaded for 160kbps files (adjusted accordingly by bitrate)
@@ -46,7 +48,7 @@
 #define isSpeedLoggingEnabled 0
 
 @implementation ISMSStreamHandler
-@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, bitrate, secondsOffset, partialPrecacheSleep, isDownloading, isCurrentSong, shouldResume, contentLength, maxBitrateSetting, speedLoggingDate, speedLoggingLastSize, isCanceled;
+@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, bitrate, secondsOffset, partialPrecacheSleep, isDownloading, isCurrentSong, shouldResume, contentLength, maxBitrateSetting, speedLoggingDate, speedLoggingLastSize, isCanceled, numberOfContentLengthFailures;
 
 - (void)setup
 {
@@ -65,6 +67,7 @@
 	isDownloading = NO;
 	contentLength = ULLONG_MAX;
 	maxBitrateSetting = NSIntegerMax;
+	numberOfContentLengthFailures = 0;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playlistIndexChanged) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 }
@@ -532,8 +535,9 @@
 	DLog(@"localSize: %llu   contentLength: %llu", mySong.localFileSize, self.contentLength);
 	
 	// Check to see if we're within 100K of the contentLength (to allow some leeway for contentLength estimation of transcoded songs
-	if (self.contentLength != ULLONG_MAX && mySong.localFileSize < self.contentLength - BytesToKB(100))
+	if (self.contentLength != ULLONG_MAX && mySong.localFileSize < self.contentLength - BytesToKB(100) && self.numberOfContentLengthFailures < ISMSMaxContentLengthFailures)
 	{
+		self.numberOfContentLengthFailures++;
 		// This is a failed connection that didn't call didFailInternal for some reason, so call didFailWithError
 		[self connection:theConnection didFailWithError:nil];
 	}

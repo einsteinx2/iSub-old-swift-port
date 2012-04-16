@@ -22,6 +22,7 @@
 @property (retain) NSURLConnection *connection;
 
 @property unsigned long long contentLength;
+@property NSUInteger numberOfContentLengthFailures;
 
 + (ISMSCacheQueueManager *)sharedInstance;
 

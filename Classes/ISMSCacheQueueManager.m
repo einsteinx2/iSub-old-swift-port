@@ -24,9 +24,11 @@
 #import "NSNotificationCenter+MainThread.h"
 #import "CacheSingleton.h"
 
+#define ISMSMaxContentLengthFailures 1
+
 @implementation ISMSCacheQueueManager
 @synthesize isQueueDownloading, currentQueuedSong;
-@synthesize fileHandle, downloadLength, connection, contentLength;
+@synthesize fileHandle, downloadLength, connection, contentLength, numberOfContentLengthFailures;
 
 #pragma mark - Lyric Loader Delegate
 
@@ -126,6 +128,7 @@
 	if (self.connection)
 	{
 		self.contentLength = ULLONG_MAX;
+		self.numberOfContentLengthFailures = 0;
 		self.downloadLength = 0;
 		self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.currentQueuedSong.localPath];
 
@@ -182,6 +185,7 @@
 	[[NSFileManager defaultManager] removeItemAtPath:self.currentQueuedSong.localPath error:NULL];
 	
 	self.contentLength = ULLONG_MAX;
+	self.numberOfContentLengthFailures = 0;
 	
 	if (!streamManagerS.isQueueDownloading) 
 		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
@@ -294,8 +298,9 @@
 	DLog(@"queue download finished: %@", self.currentQueuedSong.title);
 	
 	// Check to see if we're within 100K of the contentLength (to allow some leeway for contentLength estimation of transcoded songs
-	if (self.contentLength != ULLONG_MAX && currentQueuedSong.localFileSize < self.contentLength - BytesToKB(100))
+	if (self.contentLength != ULLONG_MAX && currentQueuedSong.localFileSize < self.contentLength - BytesToKB(100) && self.numberOfContentLengthFailures < ISMSMaxContentLengthFailures)
 	{
+		self.numberOfContentLengthFailures++;
 		[self connection:self.connection didFailWithError:nil];
 	}
 	else

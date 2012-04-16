@@ -38,6 +38,7 @@
 @property (retain) NSDate *speedLoggingDate;
 @property unsigned long long speedLoggingLastSize;
 @property BOOL isCanceled;
+@property NSUInteger numberOfContentLengthFailures;
 
 - (void)start:(BOOL)resume;
 - (void)start;
