@@ -11,38 +11,40 @@
 @class AsynchronousImageView, PageControlViewController, MPVolumeView, OBSlider, Song;
 
 @interface iPhoneStreamingPlayerViewController : UIViewController <AsynchronousImageViewDelegate>
-{
-	IBOutlet UIButton *playButton;
-	IBOutlet UIButton *nextButton;
-	IBOutlet UIButton *prevButton;
-	IBOutlet UIButton *eqButton;
-	IBOutlet UIView *volumeSlider;
-	MPVolumeView *volumeView;
-	UISlider *jukeboxVolumeView;
-	IBOutlet AsynchronousImageView *coverArtImageView;
-	IBOutlet UIImageView *reflectionView;
-	IBOutlet UIButton *songInfoToggleButton;
-    IBOutlet UIActivityIndicatorView *activityIndicator;
-	
-	UILabel *artistLabel;
-	UILabel *albumLabel;
-	UILabel *titleLabel;
-	
-	UILabel *artistTitleLabel;
-	UILabel *albumTitleLabel;
-	UILabel *songTitleLabel;
-		
-	NSUInteger reflectionHeight;
-	
-	BOOL isFlipped;
-	BOOL isExtraButtonsShowing;
-	
-	UIView *flipButtonView;
-	
-	PageControlViewController *pageControlViewController;
-	
-	uint64_t bookmarkBytePosition;	
-}
+
+@property NSUInteger reflectionHeight;
+@property BOOL isFlipped;
+@property BOOL isExtraButtonsShowing;
+@property (retain) PageControlViewController *pageControlViewController;
+@property uint64_t bookmarkBytePosition;	
+
+@property (retain) MPVolumeView *volumeView;
+@property (retain) UISlider *jukeboxVolumeView;
+
+@property (retain) UILabel *artistTitleLabel;
+@property (retain) UILabel *albumTitleLabel;
+@property (retain) UILabel *songTitleLabel;
+
+
+
+@property (retain) IBOutlet UIButton *playButton;
+@property (retain) IBOutlet UIButton *nextButton;
+@property (retain) IBOutlet UIButton *prevButton;
+@property (retain) IBOutlet UIButton *eqButton;
+@property (retain) IBOutlet UIView *volumeSlider;
+@property (retain) IBOutlet AsynchronousImageView *coverArtImageView;
+@property (retain) IBOutlet UIImageView *reflectionView;
+@property (retain) IBOutlet UIButton *songInfoToggleButton;
+@property (retain) IBOutlet UIActivityIndicatorView *activityIndicator;
+
+
+
+@property (retain) UILabel *artistLabel;
+@property (retain) UILabel *albumLabel;
+@property (retain) UILabel *titleLabel;
+
+
+
 
 @property (retain) IBOutlet UIView *extraButtons;
 @property (retain) IBOutlet UIImageView *extraButtonsBackground;

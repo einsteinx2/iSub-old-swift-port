@@ -203,7 +203,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
     [savedTabsOrderArray release];
 }
 
-- (void) orderMainTabBarController
+- (void)orderMainTabBarController
 {
 	appDelegateS.currentTabBarController = appDelegateS.mainTabBarController;
 	appDelegateS.mainTabBarController.delegate = self;

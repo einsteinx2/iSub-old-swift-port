@@ -45,7 +45,6 @@
 
 
 @interface iPhoneStreamingPlayerViewController ()
-@property (retain) UIImageView *reflectionView;
 @property (retain) NSDictionary *originalViewFrames;
 - (void)createReflection;
 - (void)initSongInfo;
@@ -63,7 +62,7 @@
 
 @implementation iPhoneStreamingPlayerViewController
 
-@synthesize reflectionView, originalViewFrames, extraButtons, extraButtonsButton, extraButtonsBackground;
+@synthesize originalViewFrames, extraButtons, extraButtonsButton, extraButtonsBackground;
 @synthesize bookmarkCountLabel, progressSlider, elapsedTimeLabel, remainingTimeLabel, shuffleButton, repeatButton, bookmarkButton, currentAlbumButton;
 @synthesize updateTimer, progressTimer, hasMoved, oldPosition, byteOffset, currentSong, pauseSlider, downloadProgress, sliderMultipleLabel;
 @synthesize bookmarkEntry, bookmarkIndex, bookmarkNameTextField, bookmarkPosition;
@@ -73,6 +72,13 @@
 @synthesize swipeDetector;
 @synthesize lastProgress;
 @synthesize largeOverlayArtist, largeOverlaySong, largeOverlayAlbum, largeOverlayView;
+
+@synthesize artistLabel, albumLabel, titleLabel;
+@synthesize playButton, nextButton, prevButton, eqButton, volumeSlider, coverArtImageView, reflectionView, songInfoToggleButton, activityIndicator;
+@synthesize artistTitleLabel, albumTitleLabel, songTitleLabel;
+@synthesize volumeView, jukeboxVolumeView;
+@synthesize reflectionHeight, isFlipped, isExtraButtonsShowing, pageControlViewController, bookmarkBytePosition;
+
 
 static const CGFloat kDefaultReflectionFraction = 0.30;
 static const CGFloat kDefaultReflectionOpacity = 0.55;
@@ -109,7 +115,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	extraButtonsButtonOnImage = [[UIImage imageNamed:@"controller-extras-on.png"] retain];
 	
 	// Set default values
-	pageControlViewController = nil;
+	self.pageControlViewController = nil;
 	isFlipped = NO;
 	isExtraButtonsShowing = NO;
 	pauseSlider = NO;
@@ -138,21 +144,21 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		CGRect frame = volumeSlider.bounds;
 		frame.size.height = volumeSlider.bounds.size.height / 2;
-		jukeboxVolumeView = [[[UISlider alloc] initWithFrame:frame] autorelease];
-		[jukeboxVolumeView addTarget:self action:@selector(jukeboxVolumeChanged:) forControlEvents:UIControlEventValueChanged];
-		jukeboxVolumeView.minimumValue = 0.0;
-		jukeboxVolumeView.maximumValue = 1.0;
-		jukeboxVolumeView.continuous = NO;
-		jukeboxVolumeView.value = jukeboxS.jukeboxGain;
-		[volumeSlider addSubview:jukeboxVolumeView];
+		self.jukeboxVolumeView = [[[UISlider alloc] initWithFrame:frame] autorelease];
+		[self.jukeboxVolumeView addTarget:self action:@selector(jukeboxVolumeChanged:) forControlEvents:UIControlEventValueChanged];
+		self.jukeboxVolumeView.minimumValue = 0.0;
+		self.jukeboxVolumeView.maximumValue = 1.0;
+		self.jukeboxVolumeView.continuous = NO;
+		self.jukeboxVolumeView.value = jukeboxS.jukeboxGain;
+		[self.volumeSlider addSubview:self.jukeboxVolumeView];
 	}
 	else
 	{
 		//volumeSlider.backgroundColor = [UIColor greenColor];
 		CGRect newFrame = CGRectMake(10, 0, volumeSlider.width-20, volumeSlider.height);
 		//CGRect newFrame = CGRectMake(volumeSlider.x, volumeSlider.y-10, volumeSlider.width, 30);
-		volumeView = [[[MPVolumeView alloc] initWithFrame:newFrame] autorelease];
-		[volumeSlider addSubview:volumeView];
+		self.volumeView = [[[MPVolumeView alloc] initWithFrame:newFrame] autorelease];
+		[self.volumeSlider addSubview:self.volumeView];
 		//[self.view addSubview:volumeView];
 		//[volumeView sizeToFit];
 	}
@@ -396,35 +402,32 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	// Setup landscape orientation if necessary
 	if (!IS_IPAD())
 	{
-		artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(305, 60, 170, 30)];
-		artistLabel.backgroundColor = [UIColor clearColor];
-		artistLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
-		artistLabel.font = [UIFont boldSystemFontOfSize:22];
-		artistLabel.adjustsFontSizeToFitWidth = YES;
-		artistLabel.textAlignment = UITextAlignmentCenter;
-		[self.view addSubview:artistLabel];
-		[self.view sendSubviewToBack:artistLabel];
-		[artistLabel release];
+		self.artistLabel = [[[UILabel alloc] initWithFrame:CGRectMake(305, 60, 170, 30)] autorelease];
+		self.artistLabel.backgroundColor = [UIColor clearColor];
+		self.artistLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
+		self.artistLabel.font = [UIFont boldSystemFontOfSize:22];
+		self.artistLabel.adjustsFontSizeToFitWidth = YES;
+		self.artistLabel.textAlignment = UITextAlignmentCenter;
+		[self.view addSubview:self.artistLabel];
+		[self.view sendSubviewToBack:self.artistLabel];
 		
-		titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(305, 90, 170, 30)];
-		titleLabel.backgroundColor = [UIColor clearColor];
-		titleLabel.textColor = [UIColor whiteColor];
-		titleLabel.font = [UIFont boldSystemFontOfSize:24];
-		titleLabel.adjustsFontSizeToFitWidth = YES;
-		titleLabel.textAlignment = UITextAlignmentCenter;
-		[self.view addSubview:titleLabel];
-		[self.view sendSubviewToBack:titleLabel];
-		[titleLabel	release];
+		self.titleLabel = [[[UILabel alloc] initWithFrame:CGRectMake(305, 90, 170, 30)] autorelease];
+		self.titleLabel.backgroundColor = [UIColor clearColor];
+		self.titleLabel.textColor = [UIColor whiteColor];
+		self.titleLabel.font = [UIFont boldSystemFontOfSize:24];
+		self.titleLabel.adjustsFontSizeToFitWidth = YES;
+		self.titleLabel.textAlignment = UITextAlignmentCenter;
+		[self.view addSubview:self.titleLabel];
+		[self.view sendSubviewToBack:self.titleLabel];
 		
-		albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(305, 120, 170, 30)];
-		albumLabel.backgroundColor = [UIColor clearColor];
-		albumLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
-		albumLabel.font = [UIFont systemFontOfSize:22];
-		albumLabel.adjustsFontSizeToFitWidth = YES;
-		albumLabel.textAlignment = UITextAlignmentCenter;
-		[self.view addSubview:albumLabel];
-		[self.view sendSubviewToBack:albumLabel];
-		[albumLabel release];
+		self.albumLabel = [[[UILabel alloc] initWithFrame:CGRectMake(305, 120, 170, 30)] autorelease];
+		self.albumLabel.backgroundColor = [UIColor clearColor];
+		self.albumLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
+		self.albumLabel.font = [UIFont systemFontOfSize:22];
+		self.albumLabel.adjustsFontSizeToFitWidth = YES;
+		self.albumLabel.textAlignment = UITextAlignmentCenter;
+		[self.view addSubview:self.albumLabel];
+		[self.view sendSubviewToBack:self.albumLabel];
 		
 		NSMutableDictionary *positions = [NSMutableDictionary dictionaryWithCapacity:0];
 		[positions setObject:[NSValue valueWithCGRect:volumeSlider.frame] forKey:@"volumeSlider"];
@@ -438,20 +441,20 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
 		{
-			coverArtHolderView.frame = CGRectMake(0, 0, 300, 270);
-			prevButton.origin = CGPointMake(315, 184);
-			playButton.origin = CGPointMake(372.5, 184);
-			nextButton.origin = CGPointMake(425, 184);
-			volumeSlider.frame = CGRectMake(300, 244, 180, 55);
-			volumeView.frame = CGRectMake(0, 0, 180, 55);
-			eqButton.origin = CGPointMake(328, 20);
-			extraButtonsButton.origin = CGPointMake(418, 20);
+			self.coverArtHolderView.frame = CGRectMake(0, 0, 300, 270);
+			self.prevButton.origin = CGPointMake(315, 184);
+			self.playButton.origin = CGPointMake(372.5, 184);
+			self.nextButton.origin = CGPointMake(425, 184);
+			self.volumeSlider.frame = CGRectMake(300, 244, 180, 55);
+			self.volumeView.frame = CGRectMake(0, 0, 180, 55);
+			self.eqButton.origin = CGPointMake(328, 20);
+			self.extraButtonsButton.origin = CGPointMake(418, 20);
 		}
 		else
 		{
-			artistLabel.alpha = 0.1;
-			albumLabel.alpha = 0.1;
-			titleLabel.alpha = 0.1;
+			self.artistLabel.alpha = 0.1;
+			self.albumLabel.alpha = 0.1;
+			self.titleLabel.alpha = 0.1;
 		}
 	}
 }
@@ -467,6 +470,19 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
 	[self unregisterForNotifications];
+	
+	[volumeView release]; volumeView = nil;
+	[jukeboxVolumeView release]; jukeboxVolumeView = nil;
+	
+	[artistTitleLabel release]; artistTitleLabel = nil;
+	[albumTitleLabel release]; albumTitleLabel = nil;
+	[titleLabel release]; titleLabel = nil;
+	
+	
+	[artistLabel release]; artistLabel = nil;
+	[albumLabel release]; albumLabel = nil;
+	[titleLabel release]; titleLabel = nil;
+	
 	
 	coverArtImageView.delegate = nil;
 	
@@ -505,8 +521,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[volumeSlider release]; volumeSlider = nil;
 	[coverArtImageView release]; coverArtImageView = nil;
 	[songInfoToggleButton release]; songInfoToggleButton = nil;
+	[activityIndicator release]; activityIndicator = nil;
 	[reflectionView release]; reflectionView = nil;
-	[pageControlViewController release]; pageControlViewController = nil;
 	
 	[swipeDetector release]; swipeDetector = nil;
 	
@@ -547,51 +563,51 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[UIView setAnimationDuration:duration];
 		if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
 		{
-			coverArtHolderView.frame = [[originalViewFrames objectForKey:@"coverArtHolderView"] CGRectValue];
-			prevButton.frame = [[originalViewFrames objectForKey:@"prevButton"] CGRectValue];
-			playButton.frame = [[originalViewFrames objectForKey:@"playButton"] CGRectValue];
-			nextButton.frame = [[originalViewFrames objectForKey:@"nextButton"] CGRectValue];
-			eqButton.frame = [[originalViewFrames objectForKey:@"eqButton"] CGRectValue];
-			extraButtonsButton.frame = [[originalViewFrames objectForKey:@"extraButtonsButton"] CGRectValue];
-			volumeSlider.frame = [[originalViewFrames objectForKey:@"volumeSlider"] CGRectValue];
+			self.coverArtHolderView.frame = [[self.originalViewFrames objectForKey:@"coverArtHolderView"] CGRectValue];
+			self.prevButton.frame = [[self.originalViewFrames objectForKey:@"prevButton"] CGRectValue];
+			self.playButton.frame = [[self.originalViewFrames objectForKey:@"playButton"] CGRectValue];
+			self.nextButton.frame = [[self.originalViewFrames objectForKey:@"nextButton"] CGRectValue];
+			self.eqButton.frame = [[self.originalViewFrames objectForKey:@"eqButton"] CGRectValue];
+			self.extraButtonsButton.frame = [[self.originalViewFrames objectForKey:@"extraButtonsButton"] CGRectValue];
+			self.volumeSlider.frame = [[self.originalViewFrames objectForKey:@"volumeSlider"] CGRectValue];
 			
-			CGRect volumeFrame = [[originalViewFrames objectForKey:@"volumeSlider"] CGRectValue];
+			CGRect volumeFrame = [[self.originalViewFrames objectForKey:@"volumeSlider"] CGRectValue];
 			volumeFrame.origin.x = 0;
 			volumeFrame.origin.y = 0;
 			
 			if (settingsS.isJukeboxEnabled)
-				jukeboxVolumeView.frame = volumeFrame;
+				self.jukeboxVolumeView.frame = volumeFrame;
 			else
-				volumeView.frame = volumeFrame;
+				self.volumeView.frame = volumeFrame;
 			
-			artistLabel.alpha = 0.1;
-			albumLabel.alpha = 0.1;
-			titleLabel.alpha = 0.1;
+			self.artistLabel.alpha = 0.1;
+			self.albumLabel.alpha = 0.1;
+			self.titleLabel.alpha = 0.1;
 			
-			CGFloat width = 320 * pageControlViewController.numberOfPages;
-			CGFloat height = pageControlViewController.numberOfPages == 1 ? 320 : 300;
-			pageControlViewController.scrollView.contentSize = CGSizeMake(width, height);
+			CGFloat width = 320 * self.pageControlViewController.numberOfPages;
+			CGFloat height = self.pageControlViewController.numberOfPages == 1 ? 320 : 300;
+			self.pageControlViewController.scrollView.contentSize = CGSizeMake(width, height);
 		}
 		else if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation))
 		{
-			coverArtHolderView.frame = CGRectMake(0, 0, 300, 270);
-			prevButton.origin = CGPointMake(315, 184);
-			playButton.origin = CGPointMake(372.5, 184);
-			nextButton.origin = CGPointMake(425, 184);
-			eqButton.origin = CGPointMake(328, 20);
-			extraButtonsButton.origin = CGPointMake(418, 20);
-			volumeSlider.frame = CGRectMake(300, 244, 180, 55);
+			self.coverArtHolderView.frame = CGRectMake(0, 0, 300, 270);
+			self.prevButton.origin = CGPointMake(315, 184);
+			self.playButton.origin = CGPointMake(372.5, 184);
+			self.nextButton.origin = CGPointMake(425, 184);
+			self.eqButton.origin = CGPointMake(328, 20);
+			self.extraButtonsButton.origin = CGPointMake(418, 20);
+			self.volumeSlider.frame = CGRectMake(300, 244, 180, 55);
 			
 			if (settingsS.isJukeboxEnabled)
-				jukeboxVolumeView.frame = CGRectMake(0, 0, 180, 22.5);
+				self.jukeboxVolumeView.frame = CGRectMake(0, 0, 180, 22.5);
 			else
-				volumeView.frame = CGRectMake(0, 0, 180, 55);
+				self.volumeView.frame = CGRectMake(0, 0, 180, 55);
 			
 			self.navigationItem.titleView = nil;
 			
-			artistLabel.alpha = 1.0;
-			albumLabel.alpha = 1.0;
-			titleLabel.alpha = 1.0;
+			self.artistLabel.alpha = 1.0;
+			self.albumLabel.alpha = 1.0;
+			self.titleLabel.alpha = 1.0;
 			
 			CGFloat width = 300 * pageControlViewController.numberOfPages;
 			CGFloat height = pageControlViewController.numberOfPages == 1 ? 270 : 250;
@@ -658,37 +674,34 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		NSUInteger songSize   = 12;
 		NSUInteger albumSize  = 11;
 		
-		artistTitleLabel = [[UILabel alloc] initWithFrame:artistFrame];
-		artistTitleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		artistTitleLabel.backgroundColor = [UIColor clearColor];
-		artistTitleLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
-		artistTitleLabel.font = [UIFont boldSystemFontOfSize:artistSize];
-		artistTitleLabel.textAlignment = UITextAlignmentCenter;
-		[titleView addSubview:artistTitleLabel];
-		[artistTitleLabel release];
+		self.artistTitleLabel = [[[UILabel alloc] initWithFrame:artistFrame] autorelease];
+		self.artistTitleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		self.artistTitleLabel.backgroundColor = [UIColor clearColor];
+		self.artistTitleLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
+		self.artistTitleLabel.font = [UIFont boldSystemFontOfSize:artistSize];
+		self.artistTitleLabel.textAlignment = UITextAlignmentCenter;
+		[titleView addSubview:self.artistTitleLabel];
 		
-		songTitleLabel = [[UILabel alloc] initWithFrame:songFrame];
+		self.songTitleLabel = [[[UILabel alloc] initWithFrame:songFrame] autorelease];
 		//MarqueeLabel *song = [[MarqueeLabel alloc] initWithFrame:songFrame andRate:50.0 andBufer:6.0];
-		songTitleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		songTitleLabel.backgroundColor = [UIColor clearColor];
-		songTitleLabel.textColor = [UIColor whiteColor];
-		songTitleLabel.font = [UIFont boldSystemFontOfSize:songSize];
-		songTitleLabel.textAlignment = UITextAlignmentCenter;
-		[titleView addSubview:songTitleLabel];
-		[songTitleLabel release];
+		self.songTitleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		self.songTitleLabel.backgroundColor = [UIColor clearColor];
+		self.songTitleLabel.textColor = [UIColor whiteColor];
+		self.songTitleLabel.font = [UIFont boldSystemFontOfSize:songSize];
+		self.songTitleLabel.textAlignment = UITextAlignmentCenter;
+		[titleView addSubview:self.songTitleLabel];
 		
-		albumTitleLabel = [[UILabel alloc] initWithFrame:albumFrame];
-		albumTitleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		albumTitleLabel.backgroundColor = [UIColor clearColor];
-		albumTitleLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
-		albumTitleLabel.font = [UIFont boldSystemFontOfSize:albumSize];
-		albumTitleLabel.textAlignment = UITextAlignmentCenter;
-		[titleView addSubview:albumTitleLabel];
-		[albumTitleLabel release];
+		self.albumTitleLabel = [[UILabel alloc] initWithFrame:albumFrame];
+		self.albumTitleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		self.albumTitleLabel.backgroundColor = [UIColor clearColor];
+		self.albumTitleLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
+		self.albumTitleLabel.font = [UIFont boldSystemFontOfSize:albumSize];
+		self.albumTitleLabel.textAlignment = UITextAlignmentCenter;
+		[titleView addSubview:self.albumTitleLabel];
 				
-		artistTitleLabel.text = currentSong.artist;
-		albumTitleLabel.text = currentSong.album;
-		songTitleLabel.text = currentSong.title;
+		self.artistTitleLabel.text = self.currentSong.artist;
+		self.albumTitleLabel.text = self.currentSong.album;
+		self.songTitleLabel.text = self.currentSong.title;
 		
 		self.navigationItem.titleView = titleView;		
 	}
@@ -697,18 +710,18 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 - (void)removeSongTitle
 {
 	self.navigationItem.titleView = nil;
-	artistTitleLabel = nil;
-	albumTitleLabel = nil;
-	songTitleLabel = nil;
+	self.artistTitleLabel = nil;
+	self.albumTitleLabel = nil;
+	self.songTitleLabel = nil;
 }
 
 - (void)setSongTitle
 {
 	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) || IS_IPAD())
 	{		
-		artistTitleLabel.text = currentSong.artist;
-		albumTitleLabel.text = currentSong.album;
-		songTitleLabel.text = currentSong.title;
+		self.artistTitleLabel.text = self.currentSong.artist;
+		self.albumTitleLabel.text = self.currentSong.album;
+		self.songTitleLabel.text = self.currentSong.title;
 	}
 }
 
@@ -743,17 +756,17 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[self updateBarButtonImage];
 	}
 	
-	artistLabel.text = currentSong.artist;
-	albumLabel.text = currentSong.album;
-	titleLabel.text = currentSong.title;
+	self.artistLabel.text = currentSong.artist;
+	self.albumLabel.text = currentSong.album;
+	self.titleLabel.text = currentSong.title;
 	
-	largeOverlayArtist.text = currentSong.artist;
-	largeOverlayAlbum.text = currentSong.album;
-	largeOverlaySong.text = currentSong.title;
+	self.largeOverlayArtist.text = currentSong.artist;
+	self.largeOverlayAlbum.text = currentSong.album;
+	self.largeOverlaySong.text = currentSong.title;
 	
 	if (settingsS.isJukeboxEnabled)
 	{
-		jukeboxVolumeView.value = jukeboxS.jukeboxGain;
+		self.jukeboxVolumeView.value = jukeboxS.jukeboxGain;
 		
 		if (jukeboxS.jukeboxIsPlaying)
 			[self setStopButtonImage];
@@ -798,15 +811,15 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark.png"];
 	}
 	
-	trackLabel.text = [currentSong.track intValue] != 0 ? [NSString stringWithFormat:@"Track %i", [currentSong.track intValue]] : @"";
-	genreLabel.text = currentSong.genre ? currentSong.genre : @"";
-	yearLabel.text = [currentSong.year intValue] != 0 ? [currentSong.year stringValue] : @"";
+	self.trackLabel.text = [self.currentSong.track intValue] != 0 ? [NSString stringWithFormat:@"Track %i", [self.currentSong.track intValue]] : @"";
+	self.genreLabel.text = self.currentSong.genre ? self.currentSong.genre : @"";
+	self.yearLabel.text = [self.currentSong.year intValue] != 0 ? [self.currentSong.year stringValue] : @"";
 	[self updateFormatLabel];
 }
 
 - (void)jukeboxVolumeChanged:(id)sender
 {
-	[jukeboxS jukeboxSetVolume:jukeboxVolumeView.value];
+	[jukeboxS jukeboxSetVolume:self.jukeboxVolumeView.value];
 }
 
 - (void)backAction:(id)sender
@@ -852,32 +865,32 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	{
 		songInfoToggleButton.userInteractionEnabled = NO;
 		
-		if (!pageControlViewController)
+		if (!self.pageControlViewController)
 		{
-			pageControlViewController = [[PageControlViewController alloc] initWithNibName:@"PageControlViewController" bundle:nil];
-			pageControlViewController.view.frame = CGRectMake (0, 0, coverArtImageView.frame.size.width, coverArtImageView.frame.size.height);
+			self.pageControlViewController = [[[PageControlViewController alloc] initWithNibName:@"PageControlViewController" bundle:nil] autorelease];
+			self.pageControlViewController.view.frame = CGRectMake (0, 0, coverArtImageView.frame.size.width, coverArtImageView.frame.size.height);
 		}
 		
 		// Set the icon in the top right
 		[self updateBarButtonImage];
 		
 		// Flip the album art horizontally
-		coverArtHolderView.transform = CGAffineTransformMakeScale(-1, 1);
-		pageControlViewController.view.transform = CGAffineTransformMakeScale(-1, 1);
+		self.coverArtHolderView.transform = CGAffineTransformMakeScale(-1, 1);
+		self.pageControlViewController.view.transform = CGAffineTransformMakeScale(-1, 1);
 		
 		if (animated)
 		{
 			[UIView beginAnimations:nil context:NULL];
 			[UIView setAnimationDuration:0.40];
-			[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:coverArtHolderView cache:YES];
+			[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:self.coverArtHolderView cache:YES];
 		}
 		
 		//[pageControlViewController resetScrollView];
-		[coverArtHolderView addSubview:pageControlViewController.view];
-		reflectionView.alpha = 0.0;
+		[self.coverArtHolderView addSubview:self.pageControlViewController.view];
+		self.reflectionView.alpha = 0.0;
 		
-		extraButtonsButton.alpha = 0.0;
-		extraButtonsButton.enabled = NO;
+		self.extraButtonsButton.alpha = 0.0;
+		self.extraButtonsButton.enabled = NO;
 		//extraButtons.alpha = 0.0;
 		//songInfoView.alpha = 0.0;
 		
@@ -888,12 +901,12 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	}
 	else
 	{
-		songInfoToggleButton.userInteractionEnabled = YES;
+		self.songInfoToggleButton.userInteractionEnabled = YES;
 		
 		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"player-overlay.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(songInfoToggle:)] autorelease];
 		
 		// Flip the album art horizontally
-		coverArtHolderView.transform = CGAffineTransformMakeScale(1, 1);
+		self.coverArtHolderView.transform = CGAffineTransformMakeScale(1, 1);
 		
 		if (animated)
 		{
@@ -905,11 +918,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		}
 		
 		//[[[coverArtImageView subviews] lastObject] removeFromSuperview];
-		[pageControlViewController.view removeFromSuperview];
-		reflectionView.alpha = kDefaultReflectionOpacity;
+		[self.pageControlViewController.view removeFromSuperview];
+		self.reflectionView.alpha = kDefaultReflectionOpacity;
 		
-		extraButtonsButton.alpha = 1.0;
-		extraButtonsButton.enabled = YES;
+		self.extraButtonsButton.alpha = 1.0;
+		self.extraButtonsButton.enabled = YES;
 		//extraButtons.alpha = 1.0;
 		//songInfoView.alpha = 1.0;
 		
@@ -920,13 +933,13 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		//[pageControlViewController resetScrollView];
 		
-		[pageControlViewController release]; pageControlViewController = nil;
+		self.pageControlViewController = nil;
 	}
 	
-	isFlipped = !isFlipped;
+	self.isFlipped = !self.isFlipped;
 	
 	if (saveState)
-		settingsS.isPlayerPlaylistShowing = isFlipped;
+		settingsS.isPlayerPlaylistShowing = self.isFlipped;
 }
 
 - (IBAction)songInfoToggle:(id)sender
@@ -1044,25 +1057,25 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	}
 	else
 	{
-		[extraButtonsButton setImage:extraButtonsButtonOnImage forState:UIControlStateNormal];
+		[self.extraButtonsButton setImage:self.extraButtonsButtonOnImage forState:UIControlStateNormal];
 		
-		extraButtons.origin = extraButtonsHidden;
-		extraButtons.width = coverArtHolderView.width;
-		songInfoView.origin = songInfoViewHidden;
-		songInfoView.width = coverArtHolderView.width;
+		self.extraButtons.origin = extraButtonsHidden;
+		self.extraButtons.width = self.coverArtHolderView.width;
+		self.songInfoView.origin = songInfoViewHidden;
+		self.songInfoView.width = self.coverArtHolderView.width;
 		if (settingsS.isShowLargeSongInfoInPlayer)
 		{
 			//largeOverlayView.origin = CGPointMake(0, extraButtons.height);
 			//largeOverlayView.width = coverArtImageView.width;
-			largeOverlayView.frame = CGRectMake(0, extraButtons.height, coverArtImageView.width, coverArtImageView.height - extraButtons.height - songInfoView.height);
-			largeOverlayView.alpha = 0.0;
-			[coverArtImageView addSubview:largeOverlayView];
+			self.largeOverlayView.frame = CGRectMake(0, extraButtons.height, coverArtImageView.width, coverArtImageView.height - extraButtons.height - songInfoView.height);
+			self.largeOverlayView.alpha = 0.0;
+			[self.coverArtImageView addSubview:self.largeOverlayView];
 		}
-		[coverArtHolderView addSubview:extraButtons];
-		[coverArtHolderView addSubview:songInfoView];
+		[self.coverArtHolderView addSubview:self.extraButtons];
+		[self.coverArtHolderView addSubview:self.songInfoView];
 		
-		if (isFlipped)
-			[coverArtHolderView bringSubviewToFront:pageControlViewController.view];
+		if (self.isFlipped)
+			[self.coverArtHolderView bringSubviewToFront:self.pageControlViewController.view];
 		
 		[self updateFormatLabel];
 		
@@ -1075,27 +1088,27 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			[UIView setAnimationDuration:0.2];
 		}
 		
-		extraButtons.origin = extraButtonsVisible;
-		songInfoView.origin = songInfoViewVisible;
-		largeOverlayView.alpha = 1.0;
+		self.extraButtons.origin = extraButtonsVisible;
+		self.songInfoView.origin = songInfoViewVisible;
+		self.largeOverlayView.alpha = 1.0;
 		
 		if (animated)
 			[UIView commitAnimations];
 	}
 	
-	isExtraButtonsShowing = !isExtraButtonsShowing;
+	self.isExtraButtonsShowing = !self.isExtraButtonsShowing;
 	
 	if (saveState)
-		settingsS.isExtraPlayerControlsShowing = isExtraButtonsShowing;
+		settingsS.isExtraPlayerControlsShowing = self.isExtraButtonsShowing;
 }
 
 - (void)toggleExtraButtonsAnimationDone
 {
-	if (!isExtraButtonsShowing)
+	if (!self.isExtraButtonsShowing)
 	{
-		[extraButtons removeFromSuperview];
-		[songInfoView removeFromSuperview];
-		[largeOverlayView removeFromSuperview];
+		[self.extraButtons removeFromSuperview];
+		[self.songInfoView removeFromSuperview];
+		[self.largeOverlayView removeFromSuperview];
 	}
 }
 

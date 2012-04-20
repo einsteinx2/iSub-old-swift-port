@@ -209,22 +209,22 @@
 		if (viewObjectsS.isOfflineMode)
 		{
 			//DLog(@"--------------- isOfflineMode");
-			currentTabBarController = offlineTabBarController;
-			[window addSubview:offlineTabBarController.view];
+			self.currentTabBarController = self.offlineTabBarController;
+			[self.window addSubview:self.offlineTabBarController.view];
 		}
 		else 
 		{
 			// Recover the tab order and load the main tabBarController
-			currentTabBarController = mainTabBarController;
+			self.currentTabBarController = self.mainTabBarController;
 			
 			//[viewObjectsS orderMainTabBarController]; // Do this after server check
-			[window addSubview:mainTabBarController.view];
+			[self.window addSubview:self.mainTabBarController.view];
 		}
 		
 		if (showIntro)
 		{
 			introController = [[IntroViewController alloc] init];
-			[currentTabBarController presentModalViewController:introController animated:NO];
+			[self.currentTabBarController presentModalViewController:introController animated:NO];
 			[introController release];
 		}
 	}
@@ -743,9 +743,9 @@
 	[cacheQueueManagerS stopDownloadQueue];
 
 	if (IS_IPAD())
-		[ipadRootViewController.menuViewController toggleOfflineMode];
+		[self.ipadRootViewController.menuViewController toggleOfflineMode];
 	else
-		[mainTabBarController.view removeFromSuperview];
+		[self.mainTabBarController.view removeFromSuperview];
 	
 	[databaseS closeAllDatabases];
 	[databaseS initDatabases];
@@ -756,8 +756,8 @@
 	}
 	else
 	{
-		currentTabBarController = offlineTabBarController;
-		[window addSubview:offlineTabBarController.view];
+		self.currentTabBarController = self.offlineTabBarController;
+		[self.window addSubview:self.offlineTabBarController.view];
 	}
 	
 	[musicS updateLockScreenInfo];
@@ -775,9 +775,9 @@
 	[audioEngineS stop];
 	
 	if (IS_IPAD())
-		[ipadRootViewController.menuViewController toggleOfflineMode];
+		[self.ipadRootViewController.menuViewController toggleOfflineMode];
 	else
-		[offlineTabBarController.view removeFromSuperview];
+		[self.offlineTabBarController.view removeFromSuperview];
 	
 	[databaseS closeAllDatabases];
 	[databaseS initDatabases];

@@ -249,11 +249,11 @@
 	[self createOverlay];
 	self.isPresetPickerShowing = YES;
 	
-	// Dismiss the picker view after a few seconds
+	/*// Dismiss the picker view after a few seconds
 	[NSObject gcdCancelTimerBlockWithName:hidePickerTimer];
 	[self gcdTimerPerformBlockInMainQueue:^{
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"hidePresetPicker"];
-	} afterDelay:5.0 withName:hidePickerTimer];
+	} afterDelay:5.0 withName:hidePickerTimer];*/
 }
 
 - (void)pickerWillHide
@@ -633,11 +633,10 @@
 {
 	UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"New Preset Name:" message:@"      \n      " delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
 	myAlertView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
-	presetNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 24.0)];
-	presetNameTextField.layer.cornerRadius = 3.;
-	[presetNameTextField setBackgroundColor:[UIColor whiteColor]];
-	[myAlertView addSubview:presetNameTextField];
-	[presetNameTextField release];
+	self.presetNameTextField = [[[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 24.0)] autorelease];
+	self.presetNameTextField.layer.cornerRadius = 3.;
+	[self.presetNameTextField setBackgroundColor:[UIColor whiteColor]];
+	[myAlertView addSubview:self.presetNameTextField];
 	if ([[[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."] objectAtIndexSafe:0] isEqualToString:@"3"])
 	{
 		CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 100.0);
@@ -646,7 +645,7 @@
 	myAlertView.tag = 2;
 	[myAlertView show];
 	[myAlertView release];
-	[presetNameTextField becomeFirstResponder];
+	[self.presetNameTextField becomeFirstResponder];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -893,11 +892,11 @@
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"hidePresetPicker"];
 	}];*/
 	
-	// Dismiss the picker view after a few seconds
+	/*// Dismiss the picker view after a few seconds
 	[NSObject gcdCancelTimerBlockWithName:hidePickerTimer];
 	[self gcdTimerPerformBlockInMainQueue:^{
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"hidePresetPicker"];
-	} afterDelay:5.0 withName:hidePickerTimer];
+	} afterDelay:5.0 withName:hidePickerTimer];*/
 }
 
 #pragma mark - TableView delegate for save dialog -
