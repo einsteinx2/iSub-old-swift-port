@@ -47,7 +47,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	if (settingsS.isSongsTabEnabled)
 	{
 		// Setup the allAlbums database
-		allAlbumsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allAlbums.db", databaseFolderPath, urlStringMd5]] retain];
+		allAlbumsDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allAlbums.db", databaseFolderPath, urlStringMd5]];
 		if ([allAlbumsDb open])
 		{
 			[allAlbumsDb executeUpdate:@"PRAGMA cache_size = 1"];
@@ -58,7 +58,7 @@ static DatabaseSingleton *sharedInstance = nil;
 		}
 		
 		// Setup the allSongs database
-		allSongsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allSongs.db", databaseFolderPath, urlStringMd5]] retain];
+		allSongsDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allSongs.db", databaseFolderPath, urlStringMd5]];
 		if ([allSongsDb open])
 		{
 			[allSongsDb executeUpdate:@"PRAGMA cache_size = 1"];
@@ -69,7 +69,7 @@ static DatabaseSingleton *sharedInstance = nil;
 		}
 		
 		// Setup the Genres database
-		genresDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@genres.db", databaseFolderPath, urlStringMd5]] retain];
+		genresDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@genres.db", databaseFolderPath, urlStringMd5]];
 		if ([genresDb open])
 		{
 			[genresDb executeUpdate:@"PRAGMA cache_size = 1"];
@@ -87,7 +87,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	}
 	
 	// Setup the album list cache database
-	albumListCacheDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@albumListCache.db", databaseFolderPath, urlStringMd5]] retain];
+	albumListCacheDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@albumListCache.db", databaseFolderPath, urlStringMd5]];
 	if ([albumListCacheDb open]) 
 	{ 
 		[albumListCacheDb executeUpdate:@"PRAGMA cache_size = 1"];
@@ -131,7 +131,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	if (IS_IPAD())
 	{
 		// Only load large album art DB if this is an iPad
-		coverArtCacheDb540 = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/coverArtCache540.db", databaseFolderPath]] retain];
+		coverArtCacheDb540 = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/coverArtCache540.db", databaseFolderPath]];
 		
 		if ([coverArtCacheDb540 open])
 		{
@@ -150,7 +150,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	else
 	{
 		// Only load small album art DB if this is not an iPad
-		coverArtCacheDb320 = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/coverArtCache320.db", databaseFolderPath]] retain];
+		coverArtCacheDb320 = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/coverArtCache320.db", databaseFolderPath]];
 		if ([coverArtCacheDb320 open])
 		{
 			[coverArtCacheDb320 executeUpdate:@"PRAGMA cache_size = 1"];
@@ -167,7 +167,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	}
 	
 	// Setup album cell cover art cache database
-	coverArtCacheDb60 = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/coverArtCache60.db", databaseFolderPath]] retain];
+	coverArtCacheDb60 = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/coverArtCache60.db", databaseFolderPath]];
 	if ([coverArtCacheDb60 open])
 	{
 		[coverArtCacheDb60 executeUpdate:@"PRAGMA cache_size = 1"];
@@ -185,11 +185,11 @@ static DatabaseSingleton *sharedInstance = nil;
 	// Setup the current playlist database
 	if (viewObjectsS.isOfflineMode) 
 	{
-		currentPlaylistDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/offlineCurrentPlaylist.db", databaseFolderPath]] retain];
+		currentPlaylistDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/offlineCurrentPlaylist.db", databaseFolderPath]];
 	}
 	else 
 	{
-		currentPlaylistDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseFolderPath, urlStringMd5]] retain];
+		currentPlaylistDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseFolderPath, urlStringMd5]];
 	}
 	if ([currentPlaylistDb open])
 	{
@@ -220,11 +220,11 @@ static DatabaseSingleton *sharedInstance = nil;
 	// Setup the local playlists database
 	if (viewObjectsS.isOfflineMode) 
 	{
-		localPlaylistsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/offlineLocalPlaylists.db", databaseFolderPath]] retain];
+		localPlaylistsDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/offlineLocalPlaylists.db", databaseFolderPath]];
 	}
 	else 
 	{
-		localPlaylistsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@localPlaylists.db", databaseFolderPath, urlStringMd5]] retain];
+		localPlaylistsDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@localPlaylists.db", databaseFolderPath, urlStringMd5]];
 	}
 	if ([localPlaylistsDb open])
 	{
@@ -249,7 +249,7 @@ static DatabaseSingleton *sharedInstance = nil;
 		[fileManager moveItemAtURL:[NSURL fileURLWithPath:[databaseFolderPath stringByAppendingPathComponent:@"songCache.db"]]
 							 toURL:[NSURL fileURLWithPath:[ settingsS.cachesPath stringByAppendingPathComponent:@"songCache.db"]] error:nil];
 	}
-	songCacheDb = [[FMDatabase databaseWithPath:[ settingsS.cachesPath stringByAppendingPathComponent:@"songCache.db"]] retain];
+	songCacheDb = [FMDatabase databaseWithPath:[ settingsS.cachesPath stringByAppendingPathComponent:@"songCache.db"]];
 	if ([songCacheDb open])
 	{
 		[songCacheDb executeUpdate:@"PRAGMA cache_size = 1"];
@@ -296,7 +296,7 @@ static DatabaseSingleton *sharedInstance = nil;
 		[fileManager moveItemAtURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", databaseFolderPath, [ settingsS.urlString md5]]] 
 							 toURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", settingsS.cachesPath, [ settingsS.urlString md5]]] error:nil];
 	}
-	cacheQueueDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", settingsS.cachesPath, [ settingsS.urlString md5]]] retain];
+	cacheQueueDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", settingsS.cachesPath, [ settingsS.urlString md5]]];
 	if ([cacheQueueDb open])
 	{
 		[cacheQueueDb executeUpdate:@"PRAGMA cache_size = 1"];
@@ -319,7 +319,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	}
 		
 	// Setup the lyrics database
-	lyricsDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/lyrics.db", databaseFolderPath]] retain];
+	lyricsDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/lyrics.db", databaseFolderPath]];
 	if ([lyricsDb open])
 	{
 		[lyricsDb executeUpdate:@"PRAGMA cache_size = 1"];
@@ -336,7 +336,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	}
 	
 	// Setup the bookmarks database
-	bookmarksDb = [[FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@bookmarks.db", databaseFolderPath, urlStringMd5]] retain];
+	bookmarksDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@bookmarks.db", databaseFolderPath, urlStringMd5]];
 	if ([bookmarksDb open])
 	{
 		[bookmarksDb executeUpdate:@"PRAGMA cache_size = 1"];
@@ -594,7 +594,7 @@ static DatabaseSingleton *sharedInstance = nil;
 	}
 	[result close];
 	
-	return [anAlbum autorelease];
+	return anAlbum;
 }
 
 - (NSUInteger)serverPlaylistCount:(NSString *)md5
@@ -661,8 +661,6 @@ static DatabaseSingleton *sharedInstance = nil;
 	}
 	
 	NSArray *returnArray = [NSArray arrayWithArray:sections];
-	[sectionTitles release];
-	[sections release];
 	
 	return returnArray;
 }
@@ -748,21 +746,21 @@ static DatabaseSingleton *sharedInstance = nil;
 
 - (void)shufflePlaylist
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	@autoreleasepool {
 	
-	playlistS.currentIndex = 0;
-	playlistS.isShuffle = YES;
-	
-	[self resetShufflePlaylist];
-	
-	if (settingsS.isJukeboxEnabled)
-		[self.currentPlaylistDb executeUpdate:@"INSERT INTO jukeboxShufflePlaylist SELECT * FROM jukeboxCurrentPlaylist ORDER BY RANDOM()"];
-	else
-		[self.currentPlaylistDb executeUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist ORDER BY RANDOM()"];
+		playlistS.currentIndex = 0;
+		playlistS.isShuffle = YES;
 		
-	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistShuffleToggled];
+		[self resetShufflePlaylist];
+		
+		if (settingsS.isJukeboxEnabled)
+			[self.currentPlaylistDb executeUpdate:@"INSERT INTO jukeboxShufflePlaylist SELECT * FROM jukeboxCurrentPlaylist ORDER BY RANDOM()"];
+		else
+			[self.currentPlaylistDb executeUpdate:@"INSERT INTO shufflePlaylist SELECT * FROM currentPlaylist ORDER BY RANDOM()"];
+			
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistShuffleToggled];
 	
-	[pool release];
+	}
 }
 
 // New Model Stuff
@@ -784,7 +782,7 @@ static DatabaseSingleton *sharedInstance = nil;
     @synchronized(self)
     {
         if (sharedInstance == nil)
-			[[self alloc] init];
+			sharedInstance = [[self alloc] init];
     }
     return sharedInstance;
 }
@@ -837,7 +835,7 @@ static DatabaseSingleton *sharedInstance = nil;
     return self;
 }
 
-- (id)retain {
+/*- (id)retain {
     return self;
 }
 
@@ -851,6 +849,6 @@ static DatabaseSingleton *sharedInstance = nil;
 
 - (id)autorelease {
     return self;
-}
+}*/
 
 @end

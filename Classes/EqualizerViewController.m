@@ -137,7 +137,6 @@
 	overlay.backgroundColor = [UIColor colorWithWhite:0 alpha:.80];
 	overlay.alpha = 0.0;
 	[self.view insertSubview:overlay belowSubview:self.controlsContainer];
-	[overlay release];
 	
 	dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -182,25 +181,7 @@
 	[NSObject gcdCancelTimerBlockWithName:hidePickerTimer];
 	//[hidePickerTimer release]; hidePickerTimer = nil;
 	
-	[landscapeButtonsHolder release]; landscapeButtonsHolder = nil;
-	[controlsContainer release]; controlsContainer = nil;
-	[presetPicker release]; presetPicker = nil;
-	[toggleButton release]; toggleButton = nil;
-	[equalizerPath release]; equalizerPath = nil;
-	[equalizerView release]; equalizerView = nil;
-	[equalizerPointViews release]; equalizerPointViews = nil;
-	[gainSlider release]; gainSlider = nil;
-	[gainBoostAmountLabel release]; gainBoostAmountLabel = nil;
-	[gainBoostLabel release]; gainBoostLabel = nil;	
-	[effectDAO release]; effectDAO = nil;
-	[deletePresetButton release]; deletePresetButton = nil;
-	[savePresetButton release]; savePresetButton = nil;
-	[presetNameTextField release]; presetNameTextField = nil;
-	[saveDialog release]; saveDialog = nil;
-	[swipeDetectorLeft release]; swipeDetectorLeft = nil;
-	[swipeDetectorRight release]; swipeDetectorRight = nil;
 	
-	[super dealloc];
 }
 
 #pragma mark - View lifecycle
@@ -398,7 +379,6 @@
 		UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:title message:@"Double tap to create a new EQ point and double tap any existing EQ points to remove them." delegate:self cancelButtonTitle:@"Don't Show Again" otherButtonTitles:@"OK", nil];
 		myAlertView.tag = 3;
 		[myAlertView show];
-		[myAlertView release];
 	}
 }
 
@@ -445,7 +425,6 @@
 		//	[self.view insertSubview:eqView belowSubview:overlay];
 		//else
 		//	[self.view insertSubview:eqView belowSubview:self.controlsContainer];
-		[eqView release];
 	}
 	DLog(@"equalizerValues: %@", audioEngineS.equalizerValues);
 	DLog(@"equalizerViews: %@", equalizerPointViews);
@@ -460,7 +439,7 @@
 	{
 		[eqView removeFromSuperview];
 	}
-	[equalizerPointViews release]; equalizerPointViews = nil;
+	 equalizerPointViews = nil;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -477,7 +456,7 @@
 	[self.equalizerView stopEqDisplay];
 	
 	[equalizerView removeFromSuperview];
-	[equalizerView release]; equalizerView = nil;
+	 equalizerView = nil;
 	
 	[audioEngineS stopReadingEqData];
 	
@@ -600,7 +579,6 @@
 	UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:title message:@"Are you sure you want to delete this preset?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Delete", nil];
 	myAlertView.tag = 1;
 	[myAlertView show];
-	[myAlertView release];
 }
 
 - (void)promptToSaveCustomPreset
@@ -619,9 +597,7 @@
 		saveTable.dataSource = self;
 		saveTable.delegate = self;
 		[saveDialog.contentView addSubview:saveTable];
-		[saveTable release];
 		[saveDialog show];
-		[saveDialog release];
 	}
 	else
 	{
@@ -633,7 +609,7 @@
 {
 	UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"New Preset Name:" message:@"      \n      " delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
 	myAlertView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
-	self.presetNameTextField = [[[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 24.0)] autorelease];
+	self.presetNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 24.0)];
 	self.presetNameTextField.layer.cornerRadius = 3.;
 	[self.presetNameTextField setBackgroundColor:[UIColor whiteColor]];
 	[myAlertView addSubview:self.presetNameTextField];
@@ -644,7 +620,6 @@
 	}
 	myAlertView.tag = 2;
 	[myAlertView show];
-	[myAlertView release];
 	[self.presetNameTextField becomeFirstResponder];
 }
 
@@ -764,7 +739,6 @@
 				// Add the view
 				[equalizerPointViews addObject:eqView];
 				[self.view addSubview:eqView];
-				[eqView release];
 				
 				[self saveTempCustomPreset];
 			}
@@ -925,7 +899,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
 	static NSString *cellIdentifier = @"NoResuse";
-	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+	UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 	
 	NSDictionary *preset = nil;
 	switch (indexPath.section) 

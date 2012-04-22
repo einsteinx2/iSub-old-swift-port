@@ -41,7 +41,6 @@
 		
 		viewController.view.width = ISMSiPadViewWidth;
 		[self pushViewControllerCustom:nav];
-		[nav release];
 	}
 	else
 	{
@@ -61,7 +60,6 @@
 		iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 		streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 		[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-		[streamingPlayerViewController release];
 	}
 }
 

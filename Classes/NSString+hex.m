@@ -12,7 +12,7 @@
 
 + (NSString *) stringFromHex:(NSString *)str 
 {	
-	NSMutableData *stringData = [[[NSMutableData alloc] init] autorelease];
+	NSMutableData *stringData = [[NSMutableData alloc] init];
 	unsigned char whole_byte;
 	char byte_chars[3] = {'\0','\0','\0'};
 	int i;
@@ -23,7 +23,7 @@
 		[stringData appendBytes:&whole_byte length:1]; 
 	}
 	
-	return [[[NSString alloc] initWithData:stringData encoding:NSUTF8StringEncoding] autorelease];
+	return [[NSString alloc] initWithData:stringData encoding:NSUTF8StringEncoding];
 }
 
 /*+ (NSString *) stringToHex:(NSString *)str
@@ -58,7 +58,7 @@
     }
     free(chars);
 	
-    return [hexString autorelease];
+    return hexString;
 }
 
 - (NSString *) fromHex

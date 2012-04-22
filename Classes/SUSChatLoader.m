@@ -22,11 +22,6 @@
 	chatMessages = nil;
 }
 
-- (void)dealloc
-{
-	[chatMessages release]; chatMessages = nil;
-	[super dealloc];
-}
 
 - (SUSLoaderType)type
 {
@@ -137,22 +132,20 @@
 				TBXMLElement *chatMessage = [TBXML childElementNamed:@"chatMessage" parentElement:chatMessagesElement];
 				while (chatMessage != nil)
 				{
-					NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+					@autoreleasepool {
 					
 					// Create the chat message object and add it to the array
-					ChatMessage *aChatMessage = [[ChatMessage alloc] initWithTBXMLElement:chatMessage];
-					[self.chatMessages addObject:aChatMessage];
-					[aChatMessage release];
+						ChatMessage *aChatMessage = [[ChatMessage alloc] initWithTBXMLElement:chatMessage];
+						[self.chatMessages addObject:aChatMessage];
+						
+						// Get the next message
+						chatMessage = [TBXML nextSiblingNamed:@"chatMessage" searchFromElement:chatMessage];
 					
-					// Get the next message
-					chatMessage = [TBXML nextSiblingNamed:@"chatMessage" searchFromElement:chatMessage];
-					
-					[pool release];
+					}
 				}
 			}
 		}
 	}
-	[tbxml release];
 	
 	self.receivedData = nil;
 	self.connection = nil;

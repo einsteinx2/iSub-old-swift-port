@@ -46,14 +46,13 @@
 	//DLog(@"listOfArtists: %@", listOfArtists);
 	
 	// Add the play all button + shuffle button
-	UIView *headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)] autorelease];
+	UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
 	headerView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
 	
 	UIImageView *playAllImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play-all-note.png"]];
 	playAllImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 	playAllImage.frame = CGRectMake(10, 10, 19, 30);
 	[headerView addSubview:playAllImage];
-	[playAllImage release];
 	
 	UILabel *playAllLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 160, 50)];
 	playAllLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
@@ -63,7 +62,6 @@
 	playAllLabel.font = [UIFont boldSystemFontOfSize:30];
 	playAllLabel.text = @"Play All";
 	[headerView addSubview:playAllLabel];
-	[playAllLabel release];
 	
 	UIButton *playAllButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	playAllButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
@@ -78,13 +76,11 @@
 	spacerLabel.font = [UIFont systemFontOfSize:40];
 	spacerLabel.text = @"|";
 	[headerView addSubview:spacerLabel];
-	[spacerLabel release];
 	
 	UIImageView *shuffleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shuffle-small.png"]];
 	shuffleImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 	shuffleImage.frame = CGRectMake(180, 12, 24, 26);
 	[headerView addSubview:shuffleImage];
-	[shuffleImage release];
 	
 	UILabel *shuffleLabel = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 160, 50)];
 	shuffleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
@@ -94,7 +90,6 @@
 	shuffleLabel.font = [UIFont boldSystemFontOfSize:30];
 	shuffleLabel.text = @"Shuffle";
 	[headerView addSubview:shuffleLabel];
-	[shuffleLabel release];
 	
 	UIButton *shuffleButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	shuffleButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
@@ -114,9 +109,8 @@
 	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
 	fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	[self.tableView addSubview:fadeTop];
-	[fadeTop release];
 		
-	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fadeBottom;
@@ -129,7 +123,7 @@
 	
 	if(musicS.showPlayerIcon)
 	{
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
+		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
 	}
 	else
 	{
@@ -143,7 +137,6 @@
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-	[streamingPlayerViewController release];
 }
 
 
@@ -153,12 +146,6 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void)dealloc 
-{
-	[listOfArtists release];
-	//self.listOfArtists = nil;
-    [super dealloc];
-}
 
 - (void)showPlayer
 {
@@ -174,7 +161,6 @@
 		iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 		streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 		[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-		[streamingPlayerViewController release];
 	}
 }
 
@@ -302,7 +288,7 @@
 	GenresArtistUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	if (!cell)
 	{
-		cell = [[[GenresArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+		cell = [[GenresArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	}
 	cell.genre = self.title;
@@ -310,7 +296,7 @@
 	NSString *name = [listOfArtists objectAtIndexSafe:indexPath.row];
 	
 	[cell.artistNameLabel setText:name];
-	cell.backgroundView = [[[UIView alloc] init] autorelease];
+	cell.backgroundView = [[UIView alloc] init];
 	if(indexPath.row % 2 == 0)
 		cell.backgroundView.backgroundColor = [UIColor whiteColor];
 	else
@@ -358,7 +344,6 @@
 		[result close];
 		
 		[self pushViewControllerCustom:genresAlbumViewController];
-		[genresAlbumViewController release];
 	}
 	else
 	{

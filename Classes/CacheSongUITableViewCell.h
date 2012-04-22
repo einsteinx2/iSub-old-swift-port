@@ -10,12 +10,12 @@
 
 @interface CacheSongUITableViewCell : CustomUITableViewCell 
 
-@property (retain) NSString *md5;
+@property (copy) NSString *md5;
 
-@property (retain) UILabel *trackNumberLabel;
-@property (retain) UIScrollView *songNameScrollView;
-@property (retain) UILabel *songNameLabel;
-@property (retain) UILabel *artistNameLabel;
-@property (retain) UILabel *songDurationLabel;
+@property (strong) UILabel *trackNumberLabel;
+@property (strong) UIScrollView *songNameScrollView;
+@property (strong) UILabel *songNameLabel;
+@property (strong) UILabel *artistNameLabel;
+@property (strong) UILabel *songDurationLabel;
 
 @end

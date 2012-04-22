@@ -72,11 +72,6 @@
     return self;
 }
 
--(void) dealloc
-{
-    [textLayer release];
-    [super dealloc];
-}
 
 -(UIColor *)textColor
 {

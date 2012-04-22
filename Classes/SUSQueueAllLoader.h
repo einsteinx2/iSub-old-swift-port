@@ -11,27 +11,19 @@
 
 @interface SUSQueueAllLoader : SUSLoader 
 {
-
 	BOOL isQueue;
 	BOOL isShuffleButton;
 	BOOL doShowPlayer;
 	
-	NSString *currentPlaylist;
-	NSString *shufflePlaylist;
-		
-	Artist *myArtist;
-	
-	NSMutableArray *folderIds;
-	
 	BOOL isCancelled;
 }
 
-@property (retain) NSString *currentPlaylist;
-@property (retain) NSString *shufflePlaylist;
+@property (copy) NSString *currentPlaylist;
+@property (copy) NSString *shufflePlaylist;
 
-@property (retain) Artist *myArtist;
+@property (strong) Artist *myArtist;
 
-@property (retain) NSMutableArray *folderIds;
+@property (strong) NSMutableArray *folderIds;
 
 - (void)loadData:(NSString *)folderId artist:(Artist *)theArtist;// isQueue:(BOOL)queue;
 

@@ -36,8 +36,8 @@
 	UILabel *songLabel;
 }
 
-@property (retain) NSURLConnection *connection;
-@property (retain) NSMutableData *receivedData;
+@property (strong) NSURLConnection *connection;
+@property (strong) NSMutableData *receivedData;
 
 - (IBAction)quickAlbums;
 - (IBAction)serverShuffle;

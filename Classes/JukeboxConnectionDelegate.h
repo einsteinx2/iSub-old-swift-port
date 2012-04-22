@@ -18,7 +18,7 @@
 	
 }
 
-@property (retain) NSMutableData *receivedData;
+@property (strong) NSMutableData *receivedData;
 @property BOOL isGetInfo;
 
 @end

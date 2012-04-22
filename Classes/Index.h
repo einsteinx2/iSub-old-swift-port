@@ -9,13 +9,8 @@
 
 
 @interface Index : NSObject 
-{
-	NSString *name;
-	NSUInteger position;
-	NSUInteger count;
-}
 
-@property (retain) NSString *name;
+@property (copy) NSString *name;
 @property NSUInteger position;
 @property NSUInteger count;
 

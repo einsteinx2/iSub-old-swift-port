@@ -37,7 +37,6 @@
     NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:description, NSLocalizedDescriptionKey, nil];
     
     self = [self initWithDomain:ISMSErrorDomain code:code userInfo:dict];
-    [dict release];
     
     return self;
 }
@@ -49,19 +48,18 @@
     [dict addEntriesFromDictionary:attributes];
     
     self = [self initWithDomain:ISMSErrorDomain code:code userInfo:dict];
-    [dict release];
     
     return self;
 }
 
 + (NSError *)errorWithISMSCode:(NSInteger)code
 {
-    return [[[NSError alloc] initWithISMSCode:code] autorelease];
+    return [[NSError alloc] initWithISMSCode:code];
 }
 
 + (NSError *)errorWithISMSCode:(NSInteger)code withExtraAttributes:(NSDictionary *)attributes
 {
-    return [[[NSError alloc] initWithISMSCode:code withExtraAttributes:attributes] autorelease];
+    return [[NSError alloc] initWithISMSCode:code withExtraAttributes:attributes];
 }
 
 /*+ (NSError *)errorWithISMSCode:(NSInteger)code

@@ -11,11 +11,7 @@
 @class Song, Album, SUSAllSongsDAO, LoadingScreen, EGORefreshTableHeaderView;
 
 @interface AllSongsViewController : UITableViewController <UISearchBarDelegate, SUSLoaderDelegate> 
-{
-	
-	SUSAllSongsDAO *dataModel;
-	
-	UIView *headerView;
+{		
 	UIButton *reloadButton;
 	UILabel *reloadLabel;
 	UIImageView *reloadImage;
@@ -27,9 +23,7 @@
 	NSURL *url;
 		
 	NSInteger numberOfRows;
-	
-	NSArray *sectionInfo;
-	
+		
 	BOOL isSearching;
 		
 	BOOL isProcessingArtists;
@@ -41,12 +35,12 @@
 	UIButton *dismissButton;
 }
 
-@property (retain) SUSAllSongsDAO *dataModel;
+@property (strong) SUSAllSongsDAO *dataModel;
 
-@property (retain) UIView *headerView;
-@property (retain) NSArray *sectionInfo;
+@property (strong) UIView *headerView;
+@property (strong) NSArray *sectionInfo;
 
-@property (retain) LoadingScreen *loadingScreen;
+@property (strong) LoadingScreen *loadingScreen;
 
 - (void) addCount;
 

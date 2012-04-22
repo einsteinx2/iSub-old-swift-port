@@ -27,10 +27,6 @@
 	[super setup];
 }
 
-- (void)dealloc
-{
-	[super dealloc];
-}
 
 - (SUSLoaderType)type
 {
@@ -127,7 +123,6 @@
 						
 						Song *aSong = [[Song alloc] initWithTBXMLElement:entry];
 						[dict setObject:aSong forKey:@"song"];
-						[aSong release];
 						
 						NSString *username = [TBXML valueOfAttributeNamed:@"username" forElement:entry];
 						if (username)
@@ -160,7 +155,6 @@
             }
 		}
 	}
-	[tbxml release];
 	
 	self.receivedData = nil;
 	self.connection = nil;

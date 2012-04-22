@@ -69,16 +69,6 @@
 	return self;
 }
 
-- (void)dealloc
-{
-	[numberLabel release]; numberLabel = nil;
-	[nowPlayingImageView release]; nowPlayingImageView = nil;
-	[songNameLabel release]; songNameLabel = nil;
-	[artistNameLabel release]; artistNameLabel = nil;
-	[durationLabel release]; durationLabel = nil;
-	
-	[super dealloc];
-}
 
 #pragma mark - Overlay
 

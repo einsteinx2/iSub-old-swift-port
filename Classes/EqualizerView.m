@@ -170,7 +170,6 @@ static void destroy_versionArrays()
 	
 	if (!context || ![EAGLContext setCurrentContext:context])
 	{
-		[self release];
 		return nil;
 	}
 	
@@ -464,7 +463,7 @@ static void destroy_versionArrays()
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 	
-	[drawTimer invalidate]; drawTimer = nil;
+	[drawTimer invalidate]; 
 	
 	if (imageTexture)
 	{
@@ -477,8 +476,6 @@ static void destroy_versionArrays()
 		[EAGLContext setCurrentContext:nil];
 	}
 	
-	[context release];
-	[super dealloc];
 }
 
 // Erases the screen

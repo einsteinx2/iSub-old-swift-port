@@ -57,10 +57,9 @@
 			self.coverArtDAO = nil;
 		}
 		
-		[coverArtId release];
 		coverArtId = [artId copy];
 		
-		self.coverArtDAO = [[[SUSCoverArtDAO alloc] initWithDelegate:self coverArtId:self.coverArtId isLarge:self.isLarge] autorelease];
+		self.coverArtDAO = [[SUSCoverArtDAO alloc] initWithDelegate:self coverArtId:self.coverArtId isLarge:self.isLarge];
 		if (self.coverArtDAO.isCoverArtCached)
 		{
 			self.image = self.coverArtDAO.coverArtImage;
@@ -71,7 +70,7 @@
 			
 			if (coverArtId && self.isLarge)
 			{
-				self.activityIndicator = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge] autorelease];
+				self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
 				self.activityIndicator.center = CGPointMake(self.width/2, self.height/2);
 				[self addSubview:self.activityIndicator];
 				[self.activityIndicator startAnimating];
@@ -181,11 +180,8 @@
 	delegate = nil;
 	
 	[activityIndicator removeFromSuperview];
-	[activityIndicator release]; activityIndicator = nil;
 	
-	[coverArtDAO release]; coverArtDAO = nil;
-	[coverArtId release]; coverArtId = nil;
-	[super dealloc];
+	 coverArtId = nil;
 }
 
 @end

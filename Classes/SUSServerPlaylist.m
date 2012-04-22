@@ -42,11 +42,5 @@
     return [self.playlistName caseInsensitiveCompare:otherObject.playlistName];
 }
 
-- (void)dealloc 
-{
-	[playlistId release]; playlistId = nil;
-	[playlistName release]; playlistName = nil;
-	[super dealloc];
-}
 
 @end

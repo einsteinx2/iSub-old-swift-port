@@ -38,11 +38,11 @@
 	//NSMutableData *receivedData;
 }
 
-@property (retain) NSMutableURLRequest *request;
-@property (retain) SUSServerPlaylistsDAO *serverPlaylistsDataModel;
+@property (strong) NSMutableURLRequest *request;
+@property (strong) SUSServerPlaylistsDAO *serverPlaylistsDataModel;
 @property NSUInteger currentPlaylistCount;
 
-@property (retain) UITextField *playlistNameTextField;
+@property (strong) UITextField *playlistNameTextField;
 
 - (void)showDeleteButton;
 - (void)hideDeleteButton;

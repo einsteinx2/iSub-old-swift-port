@@ -10,9 +10,9 @@
 
 @interface CellOverlay : UIView 
 
-@property (retain) UIButton *inputBlocker;
-@property (retain) UIButton *downloadButton;
-@property (retain) UIButton *queueButton;
+@property (strong) UIButton *inputBlocker;
+@property (strong) UIButton *downloadButton;
+@property (strong) UIButton *queueButton;
 
 + (CellOverlay*)cellOverlayWithTableCell:(UITableViewCell*)cell;
 - (id)initWithTableCell:(UITableViewCell*)cell;

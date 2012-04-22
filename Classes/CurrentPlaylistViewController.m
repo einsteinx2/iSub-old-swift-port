@@ -88,7 +88,6 @@
 		savePlaylistLabel.font = [UIFont boldSystemFontOfSize:22];
 		savePlaylistLabel.text = @"Save Playlist";
 		[headerView addSubview:savePlaylistLabel];
-		[savePlaylistLabel release];
 		
 		playlistCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 33, 227, 14)];
 		playlistCountLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
@@ -97,7 +96,6 @@
 		playlistCountLabel.textAlignment = UITextAlignmentCenter;
 		playlistCountLabel.font = [UIFont boldSystemFontOfSize:12];
 		[headerView addSubview:playlistCountLabel];
-		[playlistCountLabel release];
 		
 		[self updateCurrentPlaylistCount];
 		
@@ -115,7 +113,6 @@
 		spacerLabel.font = [UIFont systemFontOfSize:40];
 		spacerLabel.text = @"|";
 		[headerView addSubview:spacerLabel];
-		[spacerLabel release];	
 		
 		editPlaylistLabel = [[UILabel alloc] initWithFrame:CGRectMake(244, 0, 76, 50)];
 		editPlaylistLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
@@ -125,7 +122,6 @@
 		editPlaylistLabel.font = [UIFont boldSystemFontOfSize:22];
 		editPlaylistLabel.text = @"Edit";
 		[headerView addSubview:editPlaylistLabel];
-		[editPlaylistLabel release];
 		
 		UIButton *editPlaylistButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		editPlaylistButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
@@ -144,7 +140,6 @@
 		deleteSongsLabel.text = @"Remove # Songs";
 		deleteSongsLabel.hidden = YES;
 		[headerView addSubview:deleteSongsLabel];
-		[deleteSongsLabel release];	
 		
 		self.tableView.tableHeaderView = headerView;
 		
@@ -168,7 +163,6 @@
 		textLabel.text = @"Playlists\nLocked";
 		textLabel.frame = CGRectMake(20, 0, 200, 100);
 		[noPlaylistsScreen addSubview:textLabel];
-		[textLabel release];
 		
 		UILabel *textLabel2 = [[UILabel alloc] init];
 		textLabel2.backgroundColor = [UIColor clearColor];
@@ -179,7 +173,6 @@
 		textLabel2.text = @"Tap to purchase the ability to view, create, and manage playlists";
 		textLabel2.frame = CGRectMake(20, 100, 200, 60);
 		[noPlaylistsScreen addSubview:textLabel2];
-		[textLabel2 release];
 		
 		UIButton *storeLauncher = [UIButton buttonWithType:UIButtonTypeCustom];
 		storeLauncher.frame = CGRectMake(0, 0, noPlaylistsScreen.frame.size.width, noPlaylistsScreen.frame.size.height);
@@ -188,7 +181,6 @@
 		
 		[self.view addSubview:noPlaylistsScreen];
 		
-		[noPlaylistsScreen release];
 	}
 	//DLog(@"end: %f", [[NSDate date] timeIntervalSinceDate:start]);
 	
@@ -226,7 +218,7 @@
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideEditControls" object:nil];
 	
-	[headerView release]; headerView = nil;
+	 headerView = nil;
 }
 
 - (void)didReceiveMemoryWarning 
@@ -236,11 +228,6 @@
 }
 
 
-- (void)dealloc 
-{
-	[playlistNameTextField release]; playlistNameTextField = nil;
-    [super dealloc];
-}
 
 #pragma mark -
 
@@ -372,7 +359,6 @@
 														cancelButtonTitle:nil
 														otherButtonTitles:@"Local", @"Server", nil];
 			[myAlertView show];
-			[myAlertView release];
 		}
 	}
 	else 
@@ -421,7 +407,6 @@
 				DLog(@"Exception: %@ - %@", exception.name, exception.reason);
 			}
 		
-			[indexes release];
 			
 			[self editPlaylistAction:nil];
 		}
@@ -472,7 +457,7 @@
 	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
 	{
-		receivedData = [[NSMutableData data] retain];
+		receivedData = [NSMutableData data];
 		
 		self.tableView.scrollEnabled = NO;
 		[viewObjectsS showAlbumLoadingScreen:self.view sender:self];
@@ -482,7 +467,6 @@
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error saving the playlist to the server.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 }
 
@@ -505,7 +489,7 @@
 		
 		UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Playlist Name:" message:@"      \n      " delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
 		myAlertView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
-		self.playlistNameTextField = [[[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 24.0)] autorelease];
+		self.playlistNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 24.0)];
 		playlistNameTextField.layer.cornerRadius = 3.;
 		[playlistNameTextField setBackgroundColor:[UIColor whiteColor]];
 		[myAlertView addSubview:playlistNameTextField];
@@ -515,7 +499,6 @@
 			[myAlertView setTransform:myTransform];
 		}
 		[myAlertView show];
-		[myAlertView release];
 		[playlistNameTextField becomeFirstResponder];
 	}
     else if([alertView.title isEqualToString:@"Playlist Name:"])
@@ -547,7 +530,6 @@
 					// If it exists, ask to overwrite
 					UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Overwrite?" message:@"There is already a playlist with this name. Would you like to overwrite it?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
 					[myAlertView show];
-					[myAlertView release];
 				}
 			}
 			else
@@ -558,7 +540,6 @@
 					// If it exists, ask to overwrite
 					UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Overwrite?" message:@"There is already a playlist with this name. Would you like to overwrite it?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
 					[myAlertView show];
-					[myAlertView release];
 				}
 				else 
 				{
@@ -639,7 +620,7 @@
     CurrentPlaylistSongSmallUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) 
 	{
-        cell = [[[CurrentPlaylistSongSmallUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+        cell = [[CurrentPlaylistSongSmallUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
 	
     cell.indexPath = indexPath;
@@ -847,7 +828,6 @@
 			}
 		}
 		viewObjectsS.multiDeleteList = [NSMutableArray arrayWithArray:tempMultiDeleteList];
-		[tempMultiDeleteList release];
 	}
 	
 	// Correct the value of currentPlaylistPosition
@@ -935,21 +915,20 @@
 	// Inform the user that the connection failed.
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
-	[alert release];
 	
 	self.tableView.scrollEnabled = YES;
 	[viewObjectsS hideLoadingScreen];
 	
-	[connection release]; connection = nil;
+	 connection = nil;
 	
-	[receivedData release]; receivedData = nil;
+	 receivedData = nil;
 }	
 
 - (NSURLRequest *)connection: (NSURLConnection *)inConnection willSendRequest:(NSURLRequest *)inRequest redirectResponse:(NSURLResponse *)inRedirectResponse;
 {
     if (inRedirectResponse) 
 	{
-        NSMutableURLRequest *newRequest = [[request mutableCopy] autorelease];
+        NSMutableURLRequest *newRequest = [request mutableCopy];
         [newRequest setURL:[inRequest URL]];
         return newRequest;
     } 
@@ -964,7 +943,7 @@
 	[self parseData];
 	
 	self.tableView.scrollEnabled = YES;
-	[connection release]; connection = nil;
+	 connection = nil;
 }
 
 static NSString *kName_Error = @"error";
@@ -974,7 +953,6 @@ static NSString *kName_Error = @"error";
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
 	alert.tag = 1;
 	[alert show];
-	[alert release];
 }
 
 - (void)parseData
@@ -993,9 +971,8 @@ static NSString *kName_Error = @"error";
 			[self subsonicErrorCode:code message:message];
 		}
 	}
-    [tbxml release];
 	
-	[receivedData release]; receivedData = nil;
+	 receivedData = nil;
 	
 	[viewObjectsS hideLoadingScreen];
 }

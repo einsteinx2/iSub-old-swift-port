@@ -32,14 +32,14 @@
 	BOOL _reloading;
 }
 
-@property (retain) UIImageView *noChatMessagesScreen;
-@property (retain) NSMutableArray *chatMessages;
+@property (strong) UIImageView *noChatMessagesScreen;
+@property (strong) NSMutableArray *chatMessages;
 
 @property NSInteger lastCheck;
 
 @property(assign,getter=isReloading) BOOL reloading;
 
-@property (retain) SUSChatDAO *dataModel;
+@property (strong) SUSChatDAO *dataModel;
 
 - (void)cancelLoad;
 

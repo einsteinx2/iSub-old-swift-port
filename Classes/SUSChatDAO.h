@@ -12,13 +12,13 @@
 @class SUSChatLoader;
 @interface SUSChatDAO : NSObject <SUSLoaderManager, SUSLoaderDelegate>
 
-@property (retain) SUSChatLoader *loader;
-@property (assign) NSObject <SUSLoaderDelegate> *delegate;
+@property (strong) SUSChatLoader *loader;
+@property (unsafe_unretained) NSObject <SUSLoaderDelegate> *delegate;
 
-@property (retain) NSArray *chatMessages;
+@property (strong) NSArray *chatMessages;
 
-@property (retain) NSURLConnection *connection;
-@property (retain) NSMutableData *receivedData;
+@property (strong) NSURLConnection *connection;
+@property (strong) NSMutableData *receivedData;
 
 - (void)sendChatMessage:(NSString *)message;
 

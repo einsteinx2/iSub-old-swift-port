@@ -45,12 +45,6 @@
 	return self;
 }
 
-- (void)dealloc
-{
-	[artistNameScrollView release]; artistNameScrollView = nil;
-	[artistNameLabel release]; artistNameLabel = nil; 
-	[super dealloc];
-}
 
 - (void)layoutSubviews 
 {	

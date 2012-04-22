@@ -51,12 +51,8 @@
 
 - (void)dealloc 
 {
-	[myProduct release]; myProduct = nil;
-	[titleLabel release]; titleLabel = nil;
-	[descLabel release]; descLabel = nil;
-	[priceLabel release]; priceLabel = nil;
+	 myProduct = nil;
 	
-    [super dealloc];
 }
 
 - (SKProduct *)myProduct
@@ -71,7 +67,7 @@
 {
 	@synchronized(self)
 	{
-		myProduct = [product retain];
+		myProduct = product;
 		
 		titleLabel.text = [myProduct localizedTitle];
 		descLabel.text = [myProduct localizedDescription];
@@ -90,7 +86,6 @@
 			[numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
 			[numberFormatter setLocale:myProduct.priceLocale];
 			priceLabel.text = [numberFormatter stringFromNumber:myProduct.price];
-			[numberFormatter release];
 		}
 	}
 }

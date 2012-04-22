@@ -135,17 +135,6 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void)dealloc 
-{
-	[albumArt release];
-	[albumLabel release];
-	[artistLabel release];
-	[trackCountLabel release];
-	[durationLabel release];
-	[labelHolderView release];
-	[myAlbum release];
-    [super dealloc];
-}
 
 - (void)asyncImageViewFinishedLoading:(AsynchronousImageView *)asyncImageView
 {

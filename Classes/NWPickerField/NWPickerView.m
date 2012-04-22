@@ -45,7 +45,6 @@
 
 -(void) dealloc {
     field = nil;
-    [super dealloc];
 }
 
 

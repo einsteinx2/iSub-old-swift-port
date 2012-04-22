@@ -55,7 +55,7 @@ body { font: 13px 'Helvetica Neue', Helvetica; word-wrap:break-word; padding:8px
 	if(webViewContent_) {
     CGRect webViewRect = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
 		if(!webView_) {
-			webView_ = [[[UIWebView alloc] initWithFrame:webViewRect] retain];
+			webView_ = [[UIWebView alloc] initWithFrame:webViewRect];
 			[self addSubview:webView_];
 			webView_.hidden = YES;
 			webView_.backgroundColor = self.cellBackgroundColor;
@@ -101,7 +101,6 @@ body { font: 13px 'Helvetica Neue', Helvetica; word-wrap:break-word; padding:8px
 		webView_.delegate = nil;
 		[webView_ resignFirstResponder];
 		[webView_ removeFromSuperview];
-		[webView_ release];
 	}
 	webView_ = nil;
 	[self setNeedsDisplay];
@@ -110,8 +109,7 @@ body { font: 13px 'Helvetica Neue', Helvetica; word-wrap:break-word; padding:8px
 
 - (void)setWebViewContent:(NSString *)aWebViewContent {
   if (webViewContent_ != aWebViewContent) {
-    [webViewContent_ release];
-    webViewContent_ = [aWebViewContent retain];
+    webViewContent_ = aWebViewContent;
     
     // add basic accessiblity (prevents "snarfed from ivar layout") logs
     self.accessibilityLabel = aWebViewContent;
@@ -131,8 +129,6 @@ body { font: 13px 'Helvetica Neue', Helvetica; word-wrap:break-word; padding:8px
 
 - (void)dealloc {
   [self removeWebView];
-  [webViewContent_ release];
-  [super dealloc];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

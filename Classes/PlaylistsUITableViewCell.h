@@ -12,11 +12,11 @@
 
 @interface PlaylistsUITableViewCell : CustomUITableViewCell 
 
-@property (retain) UIScrollView *playlistNameScrollView;
-@property (retain) UILabel *playlistNameLabel;
+@property (strong) UIScrollView *playlistNameScrollView;
+@property (strong) UILabel *playlistNameLabel;
 
-@property (retain) NSURLConnection *connection;
-@property (retain) NSMutableData *receivedData;
+@property (strong) NSURLConnection *connection;
+@property (strong) NSMutableData *receivedData;
 
 @property (copy) SUSServerPlaylist *serverPlaylist;
 

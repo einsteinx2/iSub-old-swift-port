@@ -49,7 +49,6 @@
         [controllers addObject:[NSNull null]];
     }
     self.viewControllers = controllers;
-    [controllers release];
 	
 	// a page is the width of the scroll view
     scrollView.pagingEnabled = YES;
@@ -107,7 +106,7 @@
 		}
 		else
 		{
-			[swipeDetector release]; swipeDetector = nil;
+			 swipeDetector = nil;
 		}
 	}
 }
@@ -156,7 +155,6 @@
 	}
 	
 	[viewControllers replaceObjectAtIndex:page withObject:controller];
-	[controller release];
 	
     // Add the controller's view to the scroll view
 	/*CGRect frame = scrollView.frame;
@@ -287,19 +285,13 @@
 		}
 	}
 	
-	[viewControllers release]; viewControllers = nil;
+	 viewControllers = nil;
 }
 
 - (void)dealloc 
 {
 	[scrollView removeGestureRecognizer:swipeDetector];
-	[swipeDetector release]; swipeDetector = nil;
-	[scrollView release]; scrollView = nil;
-	[pageControl release]; pageControl = nil;
-	[pageControlHolder release]; pageControlHolder = nil;
-	[viewControllers release]; viewControllers = nil;
 	
-    [super dealloc];
 }
 
 @end

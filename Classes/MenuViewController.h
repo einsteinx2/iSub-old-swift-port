@@ -11,9 +11,9 @@
 @class iPhoneStreamingPlayerViewController;
 @interface MenuViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> 
 
-@property (retain) UITableView *tableView;
-@property (retain) iPhoneStreamingPlayerViewController *playerController;
-@property (retain) NSMutableArray *cellContents;
+@property (strong) UITableView *tableView;
+@property (strong) iPhoneStreamingPlayerViewController *playerController;
+@property (strong) NSMutableArray *cellContents;
 @property BOOL isFirstLoad;
 @property NSUInteger lastSelectedRow;
 

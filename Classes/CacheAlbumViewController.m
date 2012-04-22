@@ -68,9 +68,8 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
 	fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	[self.tableView addSubview:fadeTop];
-	[fadeTop release];
 		
-	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fadeBottom;
@@ -83,7 +82,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 		
 	if(musicS.showPlayerIcon)
 	{
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
+		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
 	}
 	else
 	{
@@ -91,14 +90,13 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	}
 		
 	// Add the play all button + shuffle button
-	UIView *headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)] autorelease];
+	UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
 	headerView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
 	
 	UIImageView *playAllImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play-all-note.png"]];
 	playAllImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 	playAllImage.frame = CGRectMake(10, 10, 19, 30);
 	[headerView addSubview:playAllImage];
-	[playAllImage release];
 	
 	UILabel *playAllLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 160, 50)];
 	playAllLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
@@ -108,7 +106,6 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	playAllLabel.font = [UIFont boldSystemFontOfSize:30];
 	playAllLabel.text = @"Play All";
 	[headerView addSubview:playAllLabel];
-	[playAllLabel release];
 	
 	UIButton *playAllButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	playAllButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
@@ -123,13 +120,11 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	spacerLabel.font = [UIFont systemFontOfSize:40];
 	spacerLabel.text = @"|";
 	[headerView addSubview:spacerLabel];
-	[spacerLabel release];
 	
 	UIImageView *shuffleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shuffle-small.png"]];
 	shuffleImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 	shuffleImage.frame = CGRectMake(180, 12, 24, 26);
 	[headerView addSubview:shuffleImage];
-	[shuffleImage release];
 	
 	UILabel *shuffleLabel = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 160, 50)];
 	shuffleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
@@ -139,7 +134,6 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	shuffleLabel.font = [UIFont boldSystemFontOfSize:30];
 	shuffleLabel.text = @"Shuffle";
 	[headerView addSubview:shuffleLabel];
-	[shuffleLabel release];
 	
 	UIButton *shuffleButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	shuffleButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
@@ -336,7 +330,6 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 		iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 		streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 		[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-		[streamingPlayerViewController release];
 	}
 }
 
@@ -356,7 +349,6 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-	[streamingPlayerViewController release];
 }
 
 
@@ -366,19 +358,13 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
     [super didReceiveMemoryWarning];
 }
 
-- (void)dealloc 
-{
-	self.listOfAlbums = nil;
-	self.listOfSongs = nil;
-    [super dealloc];
-}
 
 #pragma mark Table view methods
 
 // Following 2 methods handle the right side index
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView 
 {
-	NSMutableArray *indexes = [[[NSMutableArray alloc] init] autorelease];
+	NSMutableArray *indexes = [[NSMutableArray alloc] init];
 	for (int i = 0; i < [sectionInfo count]; i++)
 	{
 		[indexes addObject:[[sectionInfo objectAtIndexSafe:i] objectAtIndexSafe:0]];
@@ -432,7 +418,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 		CacheAlbumUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[[CacheAlbumUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+			cell = [[CacheAlbumUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 		}
 		
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -466,7 +452,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 		}
 		
 		[cell.albumNameLabel setText:[name cleanString]];
-		cell.backgroundView = [[[UIView alloc] init] autorelease];
+		cell.backgroundView = [[UIView alloc] init];
 		if(indexPath.row % 2 == 0)
 			cell.backgroundView.backgroundColor = [UIColor whiteColor];
 		else
@@ -480,7 +466,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 		CacheSongUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[[CacheSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+			cell = [[CacheSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 			cell.accessoryType = UITableViewCellAccessoryNone;
 		}
 		
@@ -510,7 +496,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 		else
 			cell.songDurationLabel.text = @"";
 		
-		cell.backgroundView = [[[UIView alloc] init] autorelease];
+		cell.backgroundView = [[UIView alloc] init];
 		if(indexPath.row % 2 == 0)
 			cell.backgroundView.backgroundColor = [UIColor whiteColor];
 		else
@@ -585,7 +571,6 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			[result close];
 			
 			[self pushViewControllerCustom:cacheAlbumViewController];
-			[cacheAlbumViewController release];
 		}
 		else
 		{			

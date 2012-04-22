@@ -24,9 +24,9 @@
 	NSMutableURLRequest *request;
 }
 
-@property (retain) NSMutableURLRequest *request;
+@property (strong) NSMutableURLRequest *request;
 
-@property (retain) UITextField *playlistNameTextField;
+@property (strong) UITextField *playlistNameTextField;
 
 @property NSUInteger currentPlaylistCount;
 

@@ -31,8 +31,6 @@
 - (void)dealloc
 {
 	loader.delegate = nil;
-    [loader release]; loader = nil;
-    [super dealloc];
 }
 
 - (FMDatabase *)db
@@ -58,7 +56,7 @@
 	}
     else if (settingsS.isLyricsEnabled) 
     {
-		self.loader = [[[SUSLyricsLoader alloc] initWithDelegate:self] autorelease];
+		self.loader = [[SUSLyricsLoader alloc] initWithDelegate:self];
         self.loader.artist = artist;
         self.loader.title = title;
         [self.loader startLoad];

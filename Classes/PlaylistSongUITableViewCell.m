@@ -64,15 +64,8 @@
 
 - (void)dealloc
 {
-	[playlistMD5 release]; playlistMD5 = nil;
 	coverArtView.delegate = nil;
-	[coverArtView release]; coverArtView = nil;
-	[numberLabel release]; numberLabel = nil;
-	[nameScrollView release]; nameScrollView = nil;
-	[songNameLabel release]; songNameLabel = nil;
-	[artistNameLabel release]; artistNameLabel = nil;
 	
-	[super dealloc];
 }
 
 - (void)layoutSubviews

@@ -32,9 +32,7 @@
 - (void)dealloc
 {
 	DLog(@"BassUserInfo dealloc called!!");
-	[mySong release]; mySong = nil;
 	myFileHandle = NULL;
-	[super dealloc];
 }
 
 - (unsigned long long)localFileSize

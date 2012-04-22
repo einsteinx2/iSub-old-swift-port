@@ -17,9 +17,9 @@
     NSUInteger tempRecordCount;
 }
 
-@property (readonly) FMDatabase *db;
-@property (readonly) NSString *tableModifier;
+@property (unsafe_unretained, readonly) FMDatabase *db;
+@property (unsafe_unretained, readonly) NSString *tableModifier;
 
-@property (retain) NSNumber *selectedFolderId;
+@property (strong) NSNumber *selectedFolderId;
 
 @end

@@ -10,12 +10,10 @@
 
 @class SUSLyricsDAO;
 
-@interface LyricsViewController : UIViewController //<SUSLoaderDelegate>
-{
-}
+@interface LyricsViewController : UIViewController
 
-@property (retain) SUSLyricsDAO *dataModel;
-@property (retain) UITextView *textView;
+@property (strong) SUSLyricsDAO *dataModel;
+@property (strong) UITextView *textView;
 
 - (void)updateLyricsLabel;
 @end

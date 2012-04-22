@@ -19,10 +19,10 @@
 
 @interface SUSServerChecker : NSObject
 
-@property (assign) NSObject<SUSServerURLCheckerDelegate> *delegate;
-@property (retain) NSMutableData *receivedData;
-@property (retain) NSURLRequest *request;
-@property (retain) NSURLConnection *connection;
+@property (unsafe_unretained) NSObject<SUSServerURLCheckerDelegate> *delegate;
+@property (strong) NSMutableData *receivedData;
+@property (strong) NSURLRequest *request;
+@property (strong) NSURLConnection *connection;
 @property BOOL isNewSearchAPI;
 @property NSUInteger majorVersion;
 @property NSUInteger minorVersion;

@@ -8,20 +8,19 @@
 
 @interface QuickAlbumsViewController : UIViewController 
 {	
-	UIViewController *parent;	
 	NSDictionary *titles;
 }
 
-@property (assign) UIViewController *parent;
-@property (retain) NSURLConnection *connection;
-@property (retain) NSMutableData *receivedData;
-@property (retain) NSString *modifier;
+@property (unsafe_unretained) UIViewController *parent;
+@property (strong) NSURLConnection *connection;
+@property (strong) NSMutableData *receivedData;
+@property (strong) NSString *modifier;
 
-@property (retain) IBOutlet UIButton *randomButton;
-@property (retain) IBOutlet UIButton *frequentButton;
-@property (retain) IBOutlet UIButton *newestButton;
-@property (retain) IBOutlet UIButton *recentButton;
-@property (retain) IBOutlet UIButton *cancelButton;
+@property (strong) IBOutlet UIButton *randomButton;
+@property (strong) IBOutlet UIButton *frequentButton;
+@property (strong) IBOutlet UIButton *newestButton;
+@property (strong) IBOutlet UIButton *recentButton;
+@property (strong) IBOutlet UIButton *cancelButton;
 
 
 - (IBAction)random;

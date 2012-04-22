@@ -26,7 +26,7 @@
 
 - (void)setup
 {
-	lastDeleteToggle = [[NSDate date] retain];
+	lastDeleteToggle = [NSDate date];
 }
 
 - (id)initWithFrame:(CGRect)frame 
@@ -47,11 +47,6 @@
 	return self;
 }
 
-- (void)dealloc 
-{
-    [lastDeleteToggle release]; lastDeleteToggle = nil;
-    [super dealloc];
-}
 
 #pragma mark Touch gestures interception
 

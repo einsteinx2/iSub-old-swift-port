@@ -49,7 +49,6 @@ static void initialize_navigationBarImages()
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CoverArtFinishedInternal object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CoverArtFailedInternal object:nil];
-	[super dealloc];
 }
 
 - (SUSLoaderType)type
@@ -204,7 +203,7 @@ static void initialize_navigationBarImages()
 	
 	// Inform the delegate that loading failed
 	//[self informDelegateLoadingFailed:error];
-	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CoverArtFinishedInternal object:[[self.coverArtId copy] autorelease]];
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CoverArtFinishedInternal object:[self.coverArtId copy]];
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
@@ -215,7 +214,7 @@ static void initialize_navigationBarImages()
         DLog(@"art loading completed for: %@", self.coverArtId);
         [self.db executeUpdate:@"REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [self.coverArtId md5], self.receivedData];
 		
-		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CoverArtFinishedInternal object:[[self.coverArtId copy] autorelease]];
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CoverArtFinishedInternal object:[self.coverArtId copy]];
 		
 		/*if (isLarge)
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AlbumArtLargeDownloaded];
@@ -227,7 +226,7 @@ static void initialize_navigationBarImages()
     {
         DLog(@"art loading failed for: %@", self.coverArtId);
 		
-		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CoverArtFinishedInternal object:[[self.coverArtId copy] autorelease]];
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CoverArtFinishedInternal object:[self.coverArtId copy]];
 		
        /* // Inform the delegate that loading failed
 		[self informDelegateLoadingFailed:nil];*/

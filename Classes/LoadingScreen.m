@@ -193,10 +193,6 @@
 	[self.view removeFromSuperview];
 }
 
-- (void)dealloc
-{
-    [super dealloc];
-}
 
 
 @end

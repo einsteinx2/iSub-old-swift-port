@@ -59,15 +59,9 @@
 }
 
 + (id)dataWithLabel:(NSString*)aLabel colors:(NSArray*)aColors enabled:(BOOL)flag {
-  return [[[[self class] alloc] initWithLabel:aLabel colors:aColors enabled:flag] autorelease];
+  return [[[self class] alloc] initWithLabel:aLabel colors:aColors enabled:flag];
 }
 
-- (void)dealloc {
-  [label_ release];
-  [colors_ release];
-  
-  [super dealloc];
-}
 @end
 
 
@@ -201,7 +195,7 @@
 		[self.layer addSublayer:topBorderLayer];
     
     // main gradient layer
-    gradient_ = [[CAGradientLayer layer] retain];
+    gradient_ = [CAGradientLayer layer];
     gradient_.locations = [NSArray arrayWithObjects:[NSNumber numberWithFloat:0.0], [NSNumber numberWithFloat:1.0], nil];//[NSNumber numberWithFloat:0.500], [NSNumber numberWithFloat:0.5001],
 		gradient_.frame = CGRectMake(0.75, 0.75, CGRectGetWidth(frame) - 1.5, CGRectGetHeight(frame) - 1.5);
 		gradient_.cornerRadius = 2.5;
@@ -219,12 +213,6 @@
   return self;
 }
 
-- (void)dealloc {
-  [buttonData_ release];
-  [gradient_ release];
-  
-  [super dealloc];
-}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
@@ -263,8 +251,7 @@
 
 - (void)setButtonData:(PSStoreButtonData *)aButtonData animated:(BOOL)animated {
   if (buttonData_ != aButtonData) {
-    [buttonData_ release];
-    buttonData_ = [aButtonData retain];
+    buttonData_ = aButtonData;
   }
   
   [self updateButtonAnimated:animated];

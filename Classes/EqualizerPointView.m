@@ -65,7 +65,7 @@
 		
 		self.userInteractionEnabled = YES;
 		
-		eqValue = [value retain];
+		eqValue = value;
     }
     return self;
 }
@@ -95,8 +95,7 @@
 
 - (void)setEqValue:(BassParamEqValue *)value
 {
-	[eqValue release]; 
-	eqValue = [value retain];
+	eqValue = value;
 }
 
 - (BassParamEqValue *)eqValue
@@ -110,8 +109,7 @@
 
 - (void)dealloc
 {
-	[eqValue release]; eqValue = nil;
-	[super dealloc];
+	 eqValue = nil;
 }
 
 - (NSComparisonResult)compare:(EqualizerPointView *)otherObject 

@@ -62,7 +62,6 @@
 			self.year = [numberFormatter numberFromString:[TBXML valueOfAttributeNamed:@"year" forElement:element]];
 		if([TBXML valueOfAttributeNamed:@"size" forElement:element])
 			self.size = [numberFormatter numberFromString:[TBXML valueOfAttributeNamed:@"size" forElement:element]];
-		[numberFormatter release];
 	}
 	
 	return self;
@@ -133,7 +132,6 @@
 		
 		if ([attributeDict objectForKey:@"size"])
 			self.size = [numberFormatter numberFromString:[attributeDict objectForKey:@"size"]];
-		[numberFormatter release];
 	}
 	
 	return self;
@@ -182,38 +180,38 @@
 		// Check if this object is using the new encoding
 		if ([decoder containsValueForKey:@"songId"])
 		{
-			title = [[decoder decodeObjectForKey:@"title"] retain];
-			songId = [[decoder decodeObjectForKey:@"songId"] retain];
-			parentId = [[decoder decodeObjectForKey:@"parentId"] retain];
-			artist = [[decoder decodeObjectForKey:@"artist"] retain];
-			album = [[decoder decodeObjectForKey:@"album"] retain];
-			genre = [[decoder decodeObjectForKey:@"genre"] retain];
-			coverArtId = [[decoder decodeObjectForKey:@"coverArtId"] retain];
-			path = [[decoder decodeObjectForKey:@"path"] retain];
-			suffix = [[decoder decodeObjectForKey:@"suffix"] retain];
-			transcodedSuffix = [[decoder decodeObjectForKey:@"transcodedSuffix"] retain];
-			duration =[[decoder decodeObjectForKey:@"duration"] retain];
-			bitRate = [[decoder decodeObjectForKey:@"bitRate"] retain];
-			track = [[decoder decodeObjectForKey:@"track"] retain];
-			year = [[decoder decodeObjectForKey:@"year"] retain];
-			size = [[decoder decodeObjectForKey:@"size"] retain];
+			title = [decoder decodeObjectForKey:@"title"];
+			songId = [decoder decodeObjectForKey:@"songId"];
+			parentId = [decoder decodeObjectForKey:@"parentId"];
+			artist = [decoder decodeObjectForKey:@"artist"];
+			album = [decoder decodeObjectForKey:@"album"];
+			genre = [decoder decodeObjectForKey:@"genre"];
+			coverArtId = [decoder decodeObjectForKey:@"coverArtId"];
+			path = [decoder decodeObjectForKey:@"path"];
+			suffix = [decoder decodeObjectForKey:@"suffix"];
+			transcodedSuffix = [decoder decodeObjectForKey:@"transcodedSuffix"];
+			duration =[decoder decodeObjectForKey:@"duration"];
+			bitRate = [decoder decodeObjectForKey:@"bitRate"];
+			track = [decoder decodeObjectForKey:@"track"];
+			year = [decoder decodeObjectForKey:@"year"];
+			size = [decoder decodeObjectForKey:@"size"];
 		}
 		else
 		{
-			title = [[decoder decodeObject] retain];
-			songId = [[decoder decodeObject] retain];
-			artist = [[decoder decodeObject] retain];
-			album = [[decoder decodeObject] retain];
-			genre = [[decoder decodeObject] retain];
-			coverArtId = [[decoder decodeObject] retain];
-			path = [[decoder decodeObject] retain];
-			suffix = [[decoder decodeObject] retain];
-			transcodedSuffix = [[decoder decodeObject] retain];
-			duration = [[decoder decodeObject] retain];
-			bitRate = [[decoder decodeObject] retain];
-			track = [[decoder decodeObject] retain];
-			year = [[decoder decodeObject] retain];
-			size = [[decoder decodeObject] retain];
+			title = [decoder decodeObject];
+			songId = [decoder decodeObject];
+			artist = [decoder decodeObject];
+			album = [decoder decodeObject];
+			genre = [decoder decodeObject];
+			coverArtId = [decoder decodeObject];
+			path = [decoder decodeObject];
+			suffix = [decoder decodeObject];
+			transcodedSuffix = [decoder decodeObject];
+			duration = [decoder decodeObject];
+			bitRate = [decoder decodeObject];
+			track = [decoder decodeObject];
+			year = [decoder decodeObject];
+			size = [decoder decodeObject];
 		}
 	}
 	
@@ -252,25 +250,6 @@
 }
 
 
-- (void) dealloc 
-{	
-	[title release]; title = nil;
-	[songId release]; songId = nil;
-	[artist release]; artist = nil;
-	[album release]; album = nil;
-	[genre release]; genre = nil;
-	[coverArtId release]; coverArtId = nil;
-	[path release]; path = nil;
-	[suffix release]; suffix = nil;
-	[transcodedSuffix release]; transcodedSuffix = nil;
-	[duration release]; duration = nil;
-	[bitRate release]; bitRate = nil;
-	[track release]; track = nil;
-	[year release]; year = nil;
-	[size release]; size = nil;
-	
-	[super dealloc];
-}
 
 - (NSUInteger)hash
 {

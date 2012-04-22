@@ -19,10 +19,10 @@
     NSUInteger songsCount;
 }
 
-@property (readonly) FMDatabase *db;
+@property (unsafe_unretained, readonly) FMDatabase *db;
 
-@property (assign) id<SUSLoaderDelegate> delegate;
-@property (retain) SUSSubFolderLoader *loader;
+@property (unsafe_unretained) id<SUSLoaderDelegate> delegate;
+@property (strong) SUSSubFolderLoader *loader;
 
 @property (copy) NSString *myId;
 @property (copy) Artist *myArtist;
@@ -33,7 +33,7 @@
 @property (readonly) BOOL hasLoaded;
 @property (readonly) NSUInteger folderLength;
 
-@property (readonly) NSArray *sectionInfo;
+@property (unsafe_unretained, readonly) NSArray *sectionInfo;
 
 - (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate;
 - (id)initWithDelegate:(id<SUSLoaderDelegate>)theDelegate andId:(NSString *)folderId andArtist:(Artist *)anArtist;

@@ -52,15 +52,6 @@
     return self;
 }
 
-- (void)dealloc 
-{
-	[md5 release]; md5 = nil;
-	[playlistCountLabel release]; playlistCountLabel = nil;
-	[playlistNameScrollView release]; playlistNameScrollView = nil;
-	[playlistNameLabel release]; playlistNameLabel = nil;
-	
-	[super dealloc];
-}
 
 - (void)layoutSubviews 
 {

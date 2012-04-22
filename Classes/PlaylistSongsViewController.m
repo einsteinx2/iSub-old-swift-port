@@ -69,7 +69,6 @@
 		sendImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		sendImage.frame = CGRectMake(23, 11, 24, 24);
 		[headerView addSubview:sendImage];
-		[sendImage release];
 		
 		UILabel *sendLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 320, 50)];
 		sendLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
@@ -79,7 +78,6 @@
 		sendLabel.font = [UIFont boldSystemFontOfSize:30];
 		sendLabel.text = @"Save to Server";
 		[headerView addSubview:sendLabel];
-		[sendLabel release];
 		
 		UIButton *sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		sendButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
@@ -88,7 +86,6 @@
 		[headerView addSubview:sendButton];
 		
 		self.tableView.tableHeaderView = headerView;
-		[headerView release];
 		
 		if (!IS_IPAD())
 		{
@@ -96,7 +93,6 @@
 			fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
 			fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 			[self.tableView addSubview:fadeTop];
-			[fadeTop release];
 		}
 	}
 	else
@@ -109,7 +105,6 @@
 		refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
 		refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
 		[self.tableView addSubview:refreshHeaderView];
-		[refreshHeaderView release];
 	}
 	
 
@@ -120,7 +115,7 @@
 	}
 	
 	// Add the table fade
-	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fadeBottom;
@@ -146,7 +141,6 @@
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error grabbing the playlist.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 }	
 
@@ -170,7 +164,7 @@
 	
 	if(musicS.showPlayerIcon)
 	{
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
+		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
 	}
 	else
 	{
@@ -203,7 +197,6 @@
 	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
 	serverListViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:serverListViewController animated:YES];
-	[serverListViewController release];
 }
 
 
@@ -212,7 +205,6 @@
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-	[streamingPlayerViewController release];  
 }
 
 - (void)uploadPlaylistAction:(id)sender
@@ -251,7 +243,6 @@
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error saving the playlist to the server.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 }
 
@@ -303,7 +294,6 @@
 	// Inform the user that the connection failed.
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
-	[alert release];
 	
 	self.tableView.scrollEnabled = YES;
 	[viewObjectsS hideLoadingScreen];
@@ -340,21 +330,19 @@
                     TBXMLElement *entry = [TBXML childElementNamed:@"entry" parentElement:playlist];
                     while (entry != nil)
                     {
-                        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+                        @autoreleasepool {
                         
-                        Song *aSong = [[Song alloc] initWithTBXMLElement:entry];
-                        [aSong insertIntoServerPlaylistWithPlaylistId:self.md5];
-                        [aSong release];
+                            Song *aSong = [[Song alloc] initWithTBXMLElement:entry];
+                            [aSong insertIntoServerPlaylistWithPlaylistId:self.md5];
+                            
+                            // Get the next message
+                            entry = [TBXML nextSiblingNamed:@"entry" searchFromElement:entry];
                         
-                        // Get the next message
-                        entry = [TBXML nextSiblingNamed:@"entry" searchFromElement:entry];
-                        
-                        [pool release];
+                        }
                     }
                 }
             }
         }
-		[tbxml release];
 		
 		self.tableView.scrollEnabled = YES;
 
@@ -382,7 +370,6 @@ static NSString *kName_Error = @"error";
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
 	alert.tag = 1;
 	[alert show];
-	[alert release];
 	//DLog(@"Subsonic error %@:  %@", errorCode, message);
 }
 
@@ -402,7 +389,6 @@ static NSString *kName_Error = @"error";
 			[self subsonicErrorCode:code message:message];
 		}
 	}
-    [tbxml release];
 		
 	[viewObjectsS hideLoadingScreen];
 }
@@ -438,7 +424,7 @@ static NSString *kName_Error = @"error";
 	PlaylistSongUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	if (!cell)
 	{
-		cell = [[[PlaylistSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+		cell = [[PlaylistSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 	}
 	
 	cell.indexPath = indexPath;
@@ -459,7 +445,7 @@ static NSString *kName_Error = @"error";
 	
 	cell.coverArtView.coverArtId = aSong.coverArtId;
 	
-	cell.backgroundView = [[[UIView alloc] init] autorelease];
+	cell.backgroundView = [[UIView alloc] init];
 	if(indexPath.row % 2 == 0)
 	{
 		if ([databaseS.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
@@ -538,11 +524,6 @@ static NSString *kName_Error = @"error";
 }
 
 
-- (void)dealloc 
-{
-    [serverPlaylist release]; serverPlaylist = nil;
-    [super dealloc];
-}
 
 
 #pragma mark -

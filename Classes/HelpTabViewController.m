@@ -103,8 +103,6 @@
 - (void)dealloc 
 {
 	helpWebView.delegate = nil;
-	[helpWebView release]; helpWebView = nil;
-    [super dealloc];
 }
 
 

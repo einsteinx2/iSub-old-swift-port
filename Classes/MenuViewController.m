@@ -57,9 +57,7 @@
 		UIView *shade = [[UIView alloc] initWithFrame:self.view.frame];
 		shade.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
 		[background addSubview:shade];
-		[shade release];
 		[self.view addSubview:background];
-		[background release];
 		
 		playerController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 		UINavigationController *playerNav = [[UINavigationController alloc] initWithRootViewController:playerController];
@@ -121,7 +119,6 @@
 		imageView.layer.shouldRasterize = YES;
 		imageView.image = [UIImage imageNamed:@"default-album-art.png"];
 		[headerView addSubview:imageView];
-		[imageView release];
 		
 		UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 11, self.view.width - 70, 48)];
 		textLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
@@ -131,17 +128,15 @@
 		textLabel.backgroundColor = [UIColor clearColor];
 		textLabel.text = @"iSub Music Streamer";
 		[headerView addSubview:textLabel];
-		[textLabel release];
 	}
 	
 	UIView* bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 1)];//69, self.view.width, 1)];
 	bottomLine.backgroundColor = [UIColor colorWithWhite:0. alpha:0.25];
 	[headerView addSubview:bottomLine];
-	[bottomLine release];
 	
 	//self.tableView.tableHeaderView = headerView;
 	//[headerView release];
-	return [headerView autorelease];
+	return headerView;
 }
 
 - (UIView *)createFooterView
@@ -151,17 +146,15 @@
 	UIView* topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 1)];
 	topLine.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.25];
 	[footerView addSubview:topLine];
-	[topLine release];
 	
 	UIImageView *watermark = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, self.view.width, 175)];
 	watermark.contentMode = UIViewContentModeCenter;
 	watermark.image = [UIImage imageNamed:@"intro-sunkenlogo.png"];
 	[footerView addSubview:watermark];
-	[watermark release];
 	
 	//self.tableView.tableFooterView = footerView;
 	//[footerView release];
-	return [footerView autorelease];
+	return footerView;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -326,7 +319,7 @@
 	MenuTableViewCell *cell = (MenuTableViewCell*)[self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) 
 	{
-        cell = [[[MenuTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+        cell = [[MenuTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
 	
 	cell.textLabel.text = [[cellContents objectAtIndex:indexPath.row] objectForKey:kCellText];
@@ -372,7 +365,6 @@
 				ServerListViewController *settings = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
 				UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:settings];
 				navController.navigationBar.tintColor = [UIColor blackColor];
-				[settings release];
 				controller = (UIViewController *)navController;
 				break;
 			}
@@ -393,7 +385,6 @@
 				ServerListViewController *settings = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
 				UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:settings];
 				navController.navigationBar.tintColor = [UIColor blackColor];
-				[settings release];
 				controller = (UIViewController *)navController;
 				break;
 			}
@@ -416,7 +407,6 @@
 	controller.view.layer.cornerRadius = ISMSiPadCornerRadius;
 	controller.view.layer.masksToBounds = YES;
 	[[iSubAppDelegate sharedInstance].ipadRootViewController.stackScrollViewController addViewInSlider:controller invokeByController:self isStackStartView:YES];
-	[controller release];
 	
 	lastSelectedRow = indexPath.row;
 }
@@ -428,12 +418,6 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void)dealloc 
-{
-	[cellContents release]; cellContents = nil;
-	[tableView release]; tableView = nil;
-    [super dealloc];
-}
 
 @end
 

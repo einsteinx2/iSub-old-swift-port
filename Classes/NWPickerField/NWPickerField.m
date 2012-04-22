@@ -96,12 +96,7 @@ NSString* UIPickerViewDidHideNotification = @"UIPickerViewDidHideNotification";
 	delegate = nil;
 	
     // clean up..
-	[pickerView release];
-	[componentStrings release];
-	[formatString release];
-	[indicator release];
 	
-	[super dealloc];
 }
 
 -(void) didMoveToSuperview {
@@ -228,8 +223,6 @@ NSString* UIPickerViewDidHideNotification = @"UIPickerViewDidHideNotification";
 	NSInteger item = 0;
 	
     // if we have component strings release them.
-    if (componentStrings != nil)
-        [componentStrings release];
     
 	componentStrings = [[NSMutableArray alloc] init];
 	

@@ -519,7 +519,7 @@ static PlaylistSingleton *sharedInstance = nil;
     @synchronized(self)
     {
         if (sharedInstance == nil)
-			[[self alloc] init];
+			sharedInstance = [[self alloc] init];
     }
     return sharedInstance;
 }
@@ -554,7 +554,7 @@ static PlaylistSingleton *sharedInstance = nil;
     return self;
 }
 
-- (id)retain {
+/*- (id)retain {
     return self;
 }
 
@@ -568,6 +568,6 @@ static PlaylistSingleton *sharedInstance = nil;
 
 - (id)autorelease {
     return self;
-}
+}*/
 
 @end

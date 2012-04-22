@@ -102,7 +102,7 @@
 	[settingsS setupSaveState];
 	
 	// Setup network reachability notifications
-	wifiReach = [[Reachability reachabilityForLocalWiFi] retain];
+	self.wifiReach = [Reachability reachabilityForLocalWiFi];
 	[wifiReach startNotifier];
 	[[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reachabilityChanged:) name: kReachabilityChangedNotification object:nil];
 	[wifiReach currentReachabilityStatus];
@@ -120,7 +120,6 @@
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Offline mode switch on, entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		alert.tag = 4;
 		[alert performSelector:@selector(show) withObject:nil afterDelay:1.1];
-		[alert performSelector:@selector(release) withObject:nil afterDelay:1.6];
 	}
 	else if ([wifiReach currentReachabilityStatus] == NotReachable)
 	{
@@ -129,7 +128,6 @@
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"No network detected, entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		alert.tag = 4;
 		[alert performSelector:@selector(show) withObject:nil afterDelay:1.1];
-		[alert performSelector:@selector(release) withObject:nil afterDelay:1.6];
 	}
 	else 
 	{
@@ -143,7 +141,6 @@
 		{
 			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome!" message:@"Looks like this is your first time using iSub or you haven't set up your Subsonic account info yet.\n\nYou'll need an internet connection to watch the intro video and use the included demo account." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 			[alert performSelector:@selector(show) withObject:nil afterDelay:1.0];
-			[alert performSelector:@selector(release) withObject:nil afterDelay:1.5];
 		}
 		else
 		{
@@ -185,7 +182,6 @@
 			introController = [[IntroViewController alloc] init];
 			introController.modalPresentationStyle = UIModalPresentationFormSheet;
 			[ipadRootViewController presentModalViewController:introController animated:NO];
-			[introController release];
 		}
 	}
 	else
@@ -225,7 +221,6 @@
 		{
 			introController = [[IntroViewController alloc] init];
 			[self.currentTabBarController presentModalViewController:introController animated:NO];
-			[introController release];
 		}
 	}
 	if (settingsS.isJukeboxEnabled)
@@ -252,7 +247,6 @@
 {
 	ISMSUpdateChecker *updateChecker = [[ISMSUpdateChecker alloc] init];
 	[updateChecker checkForUpdate];
-	[updateChecker release];
 
     // Check if the subsonic URL is valid by attempting to access the ping.view page, 
 	// if it's not then display an alert and allow user to change settings if they want.
@@ -313,7 +307,7 @@
 		[self enterOfflineMode];
 	}
     
-    [checker release]; checker = nil;
+     checker = nil;
 	
 	settingsS.isNewSearchAPI = checker.isNewSearchAPI;
 }
@@ -324,7 +318,7 @@
 	
 	settingsS.isNewSearchAPI = checker.isNewSearchAPI;
     
-    [checker release]; checker = nil;
+     checker = nil;
     
     //DLog(@"server verification passed, hiding loading screen");
     [viewObjectsS hideLoadingScreen];
@@ -401,7 +395,6 @@
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh no! iSub crashed!" message:@"iSub support has received your anonymous crash logs and they will be investigated. \n\nWould you also like to send an email to support with more details?" delegate:self cancelButtonTitle:@"No Thanks" otherButtonTitles:@"Send Email", @"Visit iSub Forum", nil];
 		alert.tag = 7;
 		[alert performSelector:@selector(show) withObject:nil afterDelay:2.];
-		[alert performSelector:@selector(release) withObject:nil afterDelay:3.];
 	}
 }
 
@@ -513,7 +506,6 @@
 	
 	if(notification)
 	{
-		[addresses release];
 		addresses = [[notification object] copy];
 		DLog(@"addresses: %@", addresses);
 	}
@@ -644,7 +636,6 @@
 						localNotif.alertBody = NSLocalizedString(@"Songs are still caching. Please return to iSub within 2 minutes, or it will be put to sleep and your song caching will be paused.", nil);
 						localNotif.alertAction = NSLocalizedString(@"Open iSub", nil);
 						[application presentLocalNotificationNow:localNotif];
-						[localNotif release];
 						break;
 					}
 				}
@@ -708,7 +699,6 @@
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Server unavailable, would you like to enter offline mode? Any currently playing music will stop.\n\nIf this is just temporary connection loss, select No." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
 		alert.tag = 4;
 		[alert show];
-		[alert release];
 	}
 }
 
@@ -722,7 +712,6 @@
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Network detected, would you like to enter online mode? Any currently playing music will stop." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
 		alert.tag = 4;
 		[alert show];
-		[alert release];
 	}
 }
 
@@ -904,7 +893,6 @@
 			[(UINavigationController*)currentTabBarController.selectedViewController pushViewController:serverListViewController animated:YES];
 		}
 		
-		[serverListViewController release];
 	}
 }
 
@@ -1055,13 +1043,11 @@
 					else
 						[self.currentTabBarController presentModalViewController:mailer animated:YES];
 					
-					[mailer release];
 				}
 				else
 				{
 					UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Uh Oh!" message:@"It looks like you don't have an email account set up, but you can reach support from your computer by emailing support@isubapp.com" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 					[alert show];
-					[alert release];
 				}
 			}
 			else if (buttonIndex == 2)
@@ -1145,7 +1131,6 @@
 	//NSInteger min = [dateComponents minute];
 	//NSInteger sec = [dateComponents second];
 	
-	[calendar release];
 	return [dateComponents hour];
 }
 
@@ -1237,7 +1222,6 @@
 	
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Purchase Successful!" message:message delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 	[alert show];
-	[alert release];
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_StorePurchaseComplete];
 }
@@ -1246,7 +1230,6 @@
 {
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Store" message:@"Transaction canceled. Try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 	[alert show];
-	[alert release];
 }
 
 
@@ -1257,18 +1240,6 @@
 //
 // Not necessary in the application delegate, all memory is automatically reclaimed by OS on closing
 //
-- (void)dealloc 
-{	
-	//[wwanReach release];
-	[wifiReach release];
-	
-	//[defaultUrl release];
-	//[defaultUserName release];
-	//[defaultPassword release];
-	//[cachedIP release];
-	
-	[super dealloc];
-}
 
 
 @end

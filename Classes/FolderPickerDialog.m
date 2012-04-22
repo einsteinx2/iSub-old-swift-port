@@ -87,7 +87,7 @@ static CGFloat kDDSocialDialogPadding = 10;
 		self.contentMode = UIViewContentModeRedraw;
 		
 		UIColor* color = [UIColor colorWithRed:167.0/255 green:184.0/255 blue:216.0/255 alpha:1];
-		closeButton_ = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+		closeButton_ = [UIButton buttonWithType:UIButtonTypeCustom];
 		[closeButton_ setTitle:@"X" forState:UIControlStateNormal];
 		[closeButton_ setTitleColor:color forState:UIControlStateNormal];
 		[closeButton_ setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
@@ -141,11 +141,9 @@ static CGFloat kDDSocialDialogPadding = 10;
 
 - (void)dealloc {
 	
-	[closeButton_ release], closeButton_ = nil;
-	[titleLabel_ release], titleLabel_ = nil;
-	[touchInterceptingControl_ release], touchInterceptingControl_ = nil;
-	[folderPicker_ release]; folderPicker_ = nil;
-    [super dealloc];
+	closeButton_ = nil;
+	titleLabel_ = nil;
+	touchInterceptingControl_ = nil;
 }
 
 #pragma mark -

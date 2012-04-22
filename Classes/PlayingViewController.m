@@ -60,7 +60,7 @@
 	self.title = @"Now Playing";
 	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
 	
-	self.dataModel = [[[SUSNowPlayingDAO alloc] initWithDelegate:self] autorelease];
+	self.dataModel = [[SUSNowPlayingDAO alloc] initWithDelegate:self];
 	
 	if (IS_IPAD())
 	{
@@ -78,9 +78,8 @@
 	refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
 	refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
 	[self.tableView addSubview:refreshHeaderView];
-	[refreshHeaderView release];
 		
-	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fadeBottom;	
@@ -97,7 +96,7 @@
 																	   style:UIBarButtonItemStyleBordered 
 																	  target:self 
 																	  action:@selector(nowPlayingAction:)];
-		self.navigationItem.rightBarButtonItem = [buttonItem autorelease];
+		self.navigationItem.rightBarButtonItem = buttonItem;
 	}
 	else
 	{
@@ -133,10 +132,6 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void)dealloc 
-{
-    [super dealloc];
-}
 
 #pragma mark - Button Handling
 
@@ -147,7 +142,6 @@
 												   bundle:nil];
 	serverVC.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:serverVC animated:YES];
-	[serverVC release];
 }
 
 
@@ -158,7 +152,6 @@
 															  bundle:nil];
 	playerVC.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:playerVC animated:YES];
-	[playerVC release];
 }
 
 
@@ -184,7 +177,7 @@
 	PlayingUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	if (!cell)
 	{
-		cell = [[[PlayingUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+		cell = [[PlayingUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	}
 	
@@ -195,7 +188,7 @@
 	cell.coverArtView.coverArtId = aSong.coverArtId;
 	
 	// Create the background view
-	cell.backgroundView = [[[UIView alloc] init] autorelease];
+	cell.backgroundView = [[UIView alloc] init];
 	if(indexPath.row % 2 == 0)
 		cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
 	else
@@ -245,7 +238,6 @@
 	NSString *message = [NSString stringWithFormat:@"There was an error loading the now playing list.\n\nError %i: %@", [error code], [error localizedDescription]];
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
-	[alert release];
 	
 	[viewObjectsS hideLoadingScreen];
 	
@@ -281,11 +273,9 @@
 			[textLabel setText:@"Nothing Playing\non the\nServer"];
 			textLabel.frame = CGRectMake(15, 15, 210, 150);
 			[nothingPlayingScreen addSubview:textLabel];
-			[textLabel release];
 			
 			[self.view addSubview:nothingPlayingScreen];
 			
-			[nothingPlayingScreen release];
 		}
 	}
 	else

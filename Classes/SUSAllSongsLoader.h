@@ -14,8 +14,6 @@
 @class Artist, Album, SUSRootFoldersDAO;
 
 @interface SUSAllSongsLoader : SUSLoader
-{
-}
 
 @property NSInteger iteration;
 @property NSUInteger albumCount;
@@ -30,13 +28,13 @@
 @property NSUInteger totalAlbumsProcessed;
 @property NSUInteger totalSongsProcessed;
 
-@property (retain) Artist *currentArtist;
-@property (retain) Album *currentAlbum;
-@property (retain) SUSRootFoldersDAO *rootFolders;
-@property (retain) NSDate *notificationTimeArtist;
-@property (retain) NSDate *notificationTimeAlbum;
-@property (retain) NSDate *notificationTimeSong;
-@property (retain) NSDate *notificationTimeArtistAlbum;
+@property (strong) Artist *currentArtist;
+@property (strong) Album *currentAlbum;
+@property (strong) SUSRootFoldersDAO *rootFolders;
+@property (strong) NSDate *notificationTimeArtist;
+@property (strong) NSDate *notificationTimeAlbum;
+@property (strong) NSDate *notificationTimeSong;
+@property (strong) NSDate *notificationTimeArtistAlbum;
 
 + (BOOL)isLoading;
 + (void)setIsLoading:(BOOL)isLoading;

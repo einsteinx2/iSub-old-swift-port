@@ -16,8 +16,8 @@
 @class Song, ISMSStreamHandler, SUSLyricsDAO;
 @interface ISMSStreamManager : NSObject <ISMSStreamHandlerDelegate, SUSLoaderDelegate>
 
-@property (retain) NSMutableArray *handlerStack;
-@property (retain) SUSLyricsDAO *lyricsDAO;
+@property (strong) NSMutableArray *handlerStack;
+@property (strong) SUSLyricsDAO *lyricsDAO;
 
 @property (copy) Song *lastCachedSong;
 @property (copy) Song *lastTempCachedSong;

@@ -22,7 +22,6 @@
 - (void)dealloc
 {
 	[self gcdCancelTimerBlock];
-	[super dealloc];
 }
 
 + (id)gcdTimerInQueue:(dispatch_queue_t)queue afterDelay:(NSTimeInterval)delay performBlock:(void (^)(void))block
@@ -31,7 +30,7 @@
 	
 	[aTimer createTimerInQueue:queue afterDelay:delay performBlock:block];
 	
-	return [aTimer autorelease];
+	return aTimer;
 }
 
 + (id)gcdTimerInMainQueueAfterDelay:(NSTimeInterval)delay performBlock:(void (^)(void))block
@@ -51,7 +50,7 @@
 	
 	// As per: http://stackoverflow.com/questions/8906026/synchronizing-a-block-within-a-block
 	// remember to call [block copy] otherwise it is not correctly retained because block are created on stack and destroyed when exit scope and unless you call copy it will not move to heap even retain is called.
-	block = [[block copy] autorelease];
+	block = [block copy];
 	
 	//Create the timer
 	timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);

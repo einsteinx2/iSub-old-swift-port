@@ -17,7 +17,7 @@
 // creates vertical shadow
 + (CAGradientLayer *)verticalShadowWithAlpha:(CGFloat)shadowAlpha inverse:(BOOL)inverse
 {
-	CAGradientLayer *newShadow = [[[CAGradientLayer alloc] init] autorelease];
+	CAGradientLayer *newShadow = [[CAGradientLayer alloc] init];
     newShadow.startPoint = CGPointMake(0, 0.5);
     newShadow.endPoint = CGPointMake(1.0, 0.5);
 	CGColorRef darkColor  = (CGColorRef)CFRetain([UIColor colorWithWhite:0.0f alpha:shadowAlpha].CGColor);
@@ -59,7 +59,7 @@
 
 + (CAGradientLayer *)horizontalShadowWithAlpha:(CGFloat)shadowAlpha inverse:(BOOL)inverse
 {
-	CAGradientLayer *newShadow = [[[CAGradientLayer alloc] init] autorelease];
+	CAGradientLayer *newShadow = [[CAGradientLayer alloc] init];
     newShadow.startPoint = CGPointMake(0.5, 0);
     newShadow.endPoint = CGPointMake(0.5, 1.0);
 	CGColorRef darkColor  = (CGColorRef)CFRetain([UIColor colorWithWhite:0.0f alpha:shadowAlpha].CGColor);

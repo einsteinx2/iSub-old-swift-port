@@ -30,24 +30,24 @@
 	UIColor *lightColor;
 	UIColor *darkColor;
 	
-	id<FolderDropdownDelegate> delegate;
+	id<FolderDropdownDelegate> __unsafe_unretained delegate;
 	
 	NSMutableData *receivedData;
 	NSURLConnection *connection;
 }
 
-@property (retain) NSDictionary *folders;
+@property (strong) NSDictionary *folders;
 @property BOOL isOpen;
 
-@property (retain) NSNumber *selectedFolderId;
+@property (strong) NSNumber *selectedFolderId;
 
 // Colors
-@property (retain) UIColor *borderColor;
-@property (retain) UIColor *textColor;
-@property (retain) UIColor *lightColor;
-@property (retain) UIColor *darkColor;
+@property (strong) UIColor *borderColor;
+@property (strong) UIColor *textColor;
+@property (strong) UIColor *lightColor;
+@property (strong) UIColor *darkColor;
 
-@property (assign) id<FolderDropdownDelegate> delegate;
+@property (unsafe_unretained) id<FolderDropdownDelegate> delegate;
 
 - (void)selectFolderWithId:(NSNumber *)folderId;
 - (void)updateFolders;

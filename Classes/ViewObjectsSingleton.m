@@ -74,7 +74,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 {
     // Remove HUD from screen when the HUD was hidden
     [HUD removeFromSuperview];
-    [HUD release]; HUD = nil;
+     HUD = nil;
 }
 
 - (void)showLoadingScreenOnMainWindowWithMessage:(NSString *)message
@@ -200,7 +200,6 @@ static ViewObjectsSingleton *sharedInstance = nil;
     }
     [[NSUserDefaults standardUserDefaults] setObject:[NSArray arrayWithArray:savedTabsOrderArray] forKey:@"mainTabBarTabsOrder"];
 	[[NSUserDefaults standardUserDefaults] synchronize];
-    [savedTabsOrderArray release];
 }
 
 - (void)orderMainTabBarController
@@ -208,7 +207,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 	appDelegateS.currentTabBarController = appDelegateS.mainTabBarController;
 	appDelegateS.mainTabBarController.delegate = self;
 	
-	NSArray *savedTabsOrderArray = [[[NSUserDefaults standardUserDefaults] arrayForKey:@"mainTabBarTabsOrder"] retain];
+	NSArray *savedTabsOrderArray = [[NSUserDefaults standardUserDefaults] arrayForKey:@"mainTabBarTabsOrder"];
 	
 	// If this is an old device, remove Albums and Songs tabs
 	//if (![[appDelegateS.settingsDictionary objectForKey:@"enableSongsTabSetting"] isEqualToString:@"YES"]) 
@@ -224,7 +223,6 @@ static ViewObjectsSingleton *sharedInstance = nil;
 			}
 		}
 		appDelegateS.mainTabBarController.viewControllers = tabs;
-		[tabs release];
 		
 		tabs = [[NSMutableArray alloc] init];
 		for (NSNumber *tag in savedTabsOrderArray)
@@ -253,7 +251,6 @@ static ViewObjectsSingleton *sharedInstance = nil;
 			{
 				needsReordering = YES;
 			}
-			[tag release];
 		}
 		
 		if (needsReordering) 
@@ -265,11 +262,8 @@ static ViewObjectsSingleton *sharedInstance = nil;
 			}
 			
 			appDelegateS.mainTabBarController.viewControllers = [NSArray arrayWithArray:tabsViewControllers];
-			[tabsViewControllers release];
 		}
-		[tabsOrderDictionary release];
 	}
-	[savedTabsOrderArray release];
 	
 	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"mainTabBarControllerSelectedIndex"]) 
 	{
@@ -288,7 +282,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
 
 - (UIView *)createCellBackground:(NSUInteger)row
 {
-	UIView *backgroundView = [[[UIView alloc] init] autorelease];
+	UIView *backgroundView = [[UIView alloc] init];
 	if(row % 2 == 0)
 		backgroundView.backgroundColor = lightNormal;
 	else
@@ -310,31 +304,31 @@ static ViewObjectsSingleton *sharedInstance = nil;
 
 - (void)setup
 {
-	lightRed = [[UIColor colorWithRed:255/255.0 green:146/255.0 blue:115/255.0 alpha:1] retain];
-	darkRed = [[UIColor colorWithRed:226/255.0 green:0/255.0 blue:0/255.0 alpha:1] retain];
+	lightRed = [UIColor colorWithRed:255/255.0 green:146/255.0 blue:115/255.0 alpha:1];
+	darkRed = [UIColor colorWithRed:226/255.0 green:0/255.0 blue:0/255.0 alpha:1];
 	
-	lightYellow = [[UIColor colorWithRed:255/255.0 green:233/255.0 blue:115/255.0 alpha:1] retain];
-	darkYellow = [[UIColor colorWithRed:255/255.0 green:215/255.0 blue:0/255.0 alpha:1] retain];
+	lightYellow = [UIColor colorWithRed:255/255.0 green:233/255.0 blue:115/255.0 alpha:1];
+	darkYellow = [UIColor colorWithRed:255/255.0 green:215/255.0 blue:0/255.0 alpha:1];
 	
-	lightGreen = [[UIColor colorWithRed:169/255.0 green:241/255.0 blue:108/255.0 alpha:1] retain];
-	darkGreen = [[UIColor colorWithRed:103/255.0 green:227/255.0 blue:0/255.0 alpha:1] retain];
+	lightGreen = [UIColor colorWithRed:169/255.0 green:241/255.0 blue:108/255.0 alpha:1];
+	darkGreen = [UIColor colorWithRed:103/255.0 green:227/255.0 blue:0/255.0 alpha:1];
 	
 	//lightBlue = [[UIColor colorWithRed:100/255.0 green:168/255.0 blue:209/255.0 alpha:1] retain];
 	//darkBlue = [[UIColor colorWithRed:9/255.0 green:105/255.0 blue:162/255.0 alpha:1] retain];
 	
-	lightBlue = [[UIColor colorWithRed:87/255.0 green:198/255.0 blue:255/255.0 alpha:1] retain];
-	darkBlue = [[UIColor colorWithRed:28/255.0 green:163/255.0 blue:255/255.0 alpha:1] retain];
+	lightBlue = [UIColor colorWithRed:87/255.0 green:198/255.0 blue:255/255.0 alpha:1];
+	darkBlue = [UIColor colorWithRed:28/255.0 green:163/255.0 blue:255/255.0 alpha:1];
 	
 	//lightBlue = [[UIColor colorWithRed:14/255.0 green:148/255.0 blue:218/255.0 alpha:1] retain];
 	//darkBlue = [[UIColor colorWithRed:54/255.0 green:142/255.0 blue:188/255.0 alpha:1] retain];
 	
-	lightNormal = [[UIColor whiteColor] retain];
-	darkNormal = [[UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1] retain];
+	lightNormal = [UIColor whiteColor];
+	darkNormal = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
 	
 	//windowColor = [[UIColor colorWithRed:241.0/255.0 green:246.0/255.0 blue:253.0/255.0 alpha:1] retain];
 	//windowColor = [[UIColor colorWithRed:206.0/255.0 green:211.0/255.0 blue:218.0/255.0 alpha:1] retain];
-	windowColor = [[UIColor colorWithWhite:.3 alpha:1] retain];
-	jukeboxColor = [[UIColor colorWithRed:140.0/255.0 green:0.0 blue:0.0 alpha:1.0] retain];
+	windowColor = [UIColor colorWithWhite:.3 alpha:1];
+	jukeboxColor = [UIColor colorWithRed:140.0/255.0 green:0.0 blue:0.0 alpha:1.0];
 	
 	self.isCellEnabled = YES;
 	self.isArtistsLoading = NO;
@@ -363,7 +357,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
     @synchronized(self)
     {
 		if (sharedInstance == nil)
-			[[self alloc] init];
+			sharedInstance = [[ViewObjectsSingleton alloc] init];
     }
     return sharedInstance;
 }
@@ -398,7 +392,7 @@ static ViewObjectsSingleton *sharedInstance = nil;
     return self;
 }
 
-- (id)retain 
+/*- (id)retain 
 {
     return self;
 }
@@ -416,6 +410,6 @@ static ViewObjectsSingleton *sharedInstance = nil;
 - (id)autorelease 
 {
     return self;
-}
+}*/
 
 @end

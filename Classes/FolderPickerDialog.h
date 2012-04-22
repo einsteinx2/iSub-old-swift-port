@@ -59,8 +59,8 @@
 	ShuffleFolderPickerViewController *folderPicker_;
 }
 
-@property (readonly, retain) UILabel *titleLabel;
-@property (readonly, retain) ShuffleFolderPickerViewController *folderPicker;
+@property (readonly) UILabel *titleLabel;
+@property (readonly) ShuffleFolderPickerViewController *folderPicker;
 
 - (id)initWithFrame:(CGRect)frame;
 - (void)dismiss:(BOOL)animated;

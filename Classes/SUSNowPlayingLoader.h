@@ -10,6 +10,6 @@
 
 @interface SUSNowPlayingLoader : SUSLoader
 
-@property (retain) NSMutableArray *nowPlayingSongDicts;
+@property (strong) NSMutableArray *nowPlayingSongDicts;
 
 @end

@@ -18,17 +18,11 @@
 
 
 @interface Server : NSObject <NSCoding>
-{
-	NSString *url;
-	NSString *username;
-	NSString *password;
-	NSString *type;
-}
 
-@property (retain) NSString *url;
-@property (retain) NSString *username;
-@property (retain) NSString *password;
-@property (retain) NSString *type;
+@property (copy) NSString *url;
+@property (copy) NSString *username;
+@property (copy) NSString *password;
+@property (copy) NSString *type;
 
 
 @end

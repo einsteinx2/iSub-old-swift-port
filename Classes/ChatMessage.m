@@ -45,12 +45,6 @@
 }
 
 
-- (void)dealloc 
-{
-	[user release]; user = nil;
-	[message release]; message = nil;
-	[super dealloc];
-}
 
 
 @end

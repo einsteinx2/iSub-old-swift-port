@@ -122,10 +122,10 @@
     self.title = @"Playlists";
 	
 	if (viewObjectsS.isOfflineMode)
-		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
+		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)];
 	
 	// Setup segmented control in the header view
-	headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)] autorelease];
+	headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
 	headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
 	
 	if (viewObjectsS.isOfflineMode)
@@ -156,7 +156,7 @@
 	}
 	//else
 	//{
-		UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+		UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
 		fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 		fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		self.tableView.tableFooterView = fadeBottom;
@@ -173,7 +173,7 @@
 		
 	if(musicS.showPlayerIcon)
 	{
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
+		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
 	}
 	else
 	{
@@ -227,7 +227,6 @@
 	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
 	serverListViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:serverListViewController animated:YES];
-	[serverListViewController release];
 }
 
 
@@ -236,7 +235,6 @@
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-	[streamingPlayerViewController release];
 }
 
 #pragma mark -
@@ -333,7 +331,6 @@
 			
 		}
 		[headerView addSubview:savePlaylistLabel];
-		[savePlaylistLabel release];
 		
 		playlistCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, y + 33, 227, 14)];
 		playlistCountLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
@@ -349,7 +346,6 @@
 				playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", currentPlaylistCount];
 		}
 		[headerView addSubview:playlistCountLabel];
-		[playlistCountLabel release];
 		
 		savePlaylistButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		savePlaylistButton.frame = CGRectMake(0, y, 230, 40);
@@ -364,7 +360,6 @@
 		spacerLabel.font = [UIFont systemFontOfSize:40];
 		spacerLabel.text = @"|";
 		[headerView addSubview:spacerLabel];
-		[spacerLabel release];	
 		
 		editPlaylistLabel = [[UILabel alloc] initWithFrame:CGRectMake(234, y, 86, 50)];
 		editPlaylistLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
@@ -374,7 +369,6 @@
 		editPlaylistLabel.font = [UIFont boldSystemFontOfSize:22];
 		editPlaylistLabel.text = @"Edit";
 		[headerView addSubview:editPlaylistLabel];
-		[editPlaylistLabel release];
 		
 		editPlaylistButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		editPlaylistButton.frame = CGRectMake(234, y, 86, 40);
@@ -400,7 +394,6 @@
 		}
 		deleteSongsLabel.hidden = YES;
 		[headerView addSubview:deleteSongsLabel];
-		[deleteSongsLabel release];
 		
 		self.tableView.tableHeaderView = headerView;
 	}
@@ -481,7 +474,6 @@
 		textLabel.frame = CGRectMake(20, 0, 200, 100);
 	}
 	[noPlaylistsScreen addSubview:textLabel];
-	[textLabel release];
 	
 	UILabel *textLabel2 = [[UILabel alloc] init];
 	textLabel2.backgroundColor = [UIColor clearColor];
@@ -504,7 +496,6 @@
 		textLabel2.frame = CGRectMake(20, 100, 200, 60);
 	}
 	[noPlaylistsScreen addSubview:textLabel2];
-	[textLabel2 release];
 	
 	if (!settingsS.isPlaylistUnlocked)
 	{
@@ -516,7 +507,6 @@
 	
 	[self.view addSubview:noPlaylistsScreen];
 	
-	[noPlaylistsScreen release];
 	
 	if (!IS_IPAD())
 	{
@@ -533,7 +523,6 @@
 	StoreViewController *store = [[StoreViewController alloc] init];
 	[self pushViewControllerCustom:store];
 	//[self.navigationController pushViewController:store animated:YES];
-	[store release];
 }
 
 - (void)segmentAction:(id)sender
@@ -841,7 +830,7 @@
 	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (connection)
 	{
-		receivedData = [[NSMutableData data] retain];
+		receivedData = [NSMutableData data];
 		
 		self.tableView.scrollEnabled = NO;
 		[viewObjectsS showAlbumLoadingScreen:self.view sender:self];
@@ -851,7 +840,6 @@
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error saving the playlist to the server.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 }
 
@@ -883,7 +871,6 @@
 			DLog(@"Exception: %@ - %@", exception.name, exception.reason);
 		}
 		
-		[indexes release];
 		
 		[self editPlaylistAction:nil];
 		[self segmentAction:nil];
@@ -922,7 +909,6 @@
 			DLog(@"Exception: %@ - %@", exception.name, exception.reason);
 		}
 		
-		[indexes release];
 		
 		[self editPlaylistAction:nil];
 		[self segmentAction:nil];
@@ -950,7 +936,6 @@
 															cancelButtonTitle:nil
 															otherButtonTitles:@"Local", @"Server", nil];
 				[myAlertView show];
-				[myAlertView release];
 			}
 		}
 		else 
@@ -1089,7 +1074,7 @@
 		
 		UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Playlist Name:" message:@"      \n      " delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
 		myAlertView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
-		self.playlistNameTextField = [[[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 24.0)] autorelease];
+		self.playlistNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 24.0)];
 		playlistNameTextField.layer.cornerRadius = 3.;
 		[playlistNameTextField setBackgroundColor:[UIColor whiteColor]];
 		[myAlertView addSubview:playlistNameTextField];
@@ -1099,7 +1084,6 @@
 			[myAlertView setTransform:myTransform];
 		}
 		[myAlertView show];
-		[myAlertView release];
 		[playlistNameTextField becomeFirstResponder];
 	}
     else if([alertView.title isEqualToString:@"Playlist Name:"])
@@ -1131,7 +1115,6 @@
 					// If it exists, ask to overwrite
 					UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Overwrite?" message:@"There is already a playlist with this name. Would you like to overwrite it?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
 					[myAlertView show];
-					[myAlertView release];
 				}
 			}
 			else
@@ -1142,7 +1125,6 @@
 					// If it exists, ask to overwrite
 					UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Overwrite?" message:@"There is already a playlist with this name. Would you like to overwrite it?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
 					[myAlertView show];
-					[myAlertView release];
 				}
 				else 
 				{
@@ -1273,16 +1255,13 @@
 	// Inform the user that the connection failed.
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
-	[alert release];
 	
 	self.tableView.scrollEnabled = YES;
 	[viewObjectsS hideLoadingScreen];
 	
-	[theConnection release];
 	
 	if (segmentedControl.selectedSegmentIndex == 0)
 	{
-		[receivedData release];
 	}
 	else
 	{
@@ -1294,7 +1273,7 @@
 {
     if (inRedirectResponse) 
 	{
-        NSMutableURLRequest *newRequest = [[request mutableCopy] autorelease];
+        NSMutableURLRequest *newRequest = [request mutableCopy];
         [newRequest setURL:[inRequest URL]];
         return newRequest;
     } 
@@ -1316,7 +1295,6 @@
 	}
 	
 	self.tableView.scrollEnabled = YES;
-	[theConnection release];
 }
 
 static NSString *kName_Error = @"error";
@@ -1326,7 +1304,6 @@ static NSString *kName_Error = @"error";
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
 	alert.tag = 1;
 	[alert show];
-	[alert release];
 }
 
 - (void)parseData
@@ -1345,9 +1322,7 @@ static NSString *kName_Error = @"error";
 			[self subsonicErrorCode:code message:message];
 		}
 	}
-    [tbxml release];
 	
-	[receivedData release];
 	
 	[viewObjectsS hideLoadingScreen];
 }
@@ -1361,7 +1336,7 @@ static NSString *kName_Error = @"error";
 	{
 		if (!self.tableView.editing)
 		{
-			NSMutableArray *searchIndexes = [[[NSMutableArray alloc] init] autorelease];
+			NSMutableArray *searchIndexes = [[NSMutableArray alloc] init];
 			for (int x = 0; x < 20; x++)
 			{
 				[searchIndexes addObject:@"●"];
@@ -1577,7 +1552,6 @@ static NSString *kName_Error = @"error";
 				}
 			}
 			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithArray:tempMultiDeleteList];
-			[tempMultiDeleteList release];
 		}
 		
 		// Correct the value of currentPlaylistPosition
@@ -1636,7 +1610,7 @@ static NSString *kName_Error = @"error";
 		CurrentPlaylistSongUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[[CurrentPlaylistSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+			cell = [[CurrentPlaylistSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 		}
 		cell.indexPath = indexPath;
 		
@@ -1682,7 +1656,7 @@ static NSString *kName_Error = @"error";
 		else
 			cell.artistNameLabel.text = aSong.artist;
 		
-		cell.backgroundView = [[[UIView alloc] init] autorelease];
+		cell.backgroundView = [[UIView alloc] init];
 		if(indexPath.row % 2 == 0)
 		{
 			if ([databaseS.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
@@ -1706,7 +1680,7 @@ static NSString *kName_Error = @"error";
 		LocalPlaylistsUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[[LocalPlaylistsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+			cell = [[LocalPlaylistsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 		}
 		cell.indexPath = indexPath;
 		
@@ -1730,7 +1704,7 @@ static NSString *kName_Error = @"error";
 		{
 			cell.playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", songCount];
 		}
-		cell.backgroundView = [[[UIView alloc] init] autorelease];
+		cell.backgroundView = [[UIView alloc] init];
 		if(indexPath.row % 2 == 0)
 			cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
 		else
@@ -1745,7 +1719,7 @@ static NSString *kName_Error = @"error";
 		PlaylistsUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[[PlaylistsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+			cell = [[PlaylistsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 		}
 		cell.indexPath = indexPath;
         cell.serverPlaylist = [serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];
@@ -1761,7 +1735,7 @@ static NSString *kName_Error = @"error";
 		cell.playlistNameLabel.backgroundColor = [UIColor clearColor];
         SUSServerPlaylist *playlist = [serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];        
         cell.playlistNameLabel.text = playlist.playlistName;
-		cell.backgroundView = [[[UIView alloc] init] autorelease];
+		cell.backgroundView = [[UIView alloc] init];
 		if(indexPath.row % 2 == 0)
 			cell.backgroundView.backgroundColor = [UIColor whiteColor];
 		else
@@ -1792,7 +1766,6 @@ static NSString *kName_Error = @"error";
 			PlaylistSongsViewController *playlistSongsViewController = [[PlaylistSongsViewController alloc] initWithNibName:@"PlaylistSongsViewController" bundle:nil];
 			playlistSongsViewController.md5 = [databaseS.localPlaylistsDb stringForQuery:@"SELECT md5 FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
 			[self pushViewControllerCustom:playlistSongsViewController];
-			[playlistSongsViewController release];
 		}		
 		else if (segmentedControl.selectedSegmentIndex == 2)
 		{
@@ -1801,7 +1774,6 @@ static NSString *kName_Error = @"error";
 			playlistSongsViewController.md5 = [[playlist.playlistName cleanString] md5];
             playlistSongsViewController.serverPlaylist = playlist;
 			[self pushViewControllerCustom:playlistSongsViewController];
-			[playlistSongsViewController release];		
 		}
 	}
 	else
@@ -1814,10 +1786,7 @@ static NSString *kName_Error = @"error";
 - (void)dealloc 
 {
 	serverPlaylistsDataModel.delegate = nil;
-	[serverPlaylistsDataModel release]; serverPlaylistsDataModel = nil;
-	[connectionQueue release]; connectionQueue = nil;
-	[playlistNameTextField release]; playlistNameTextField = nil;
-    [super dealloc];
+	 connectionQueue = nil;
 }
 
 

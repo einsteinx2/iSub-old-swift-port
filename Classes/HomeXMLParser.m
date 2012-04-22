@@ -54,9 +54,7 @@
 			[(UINavigationController*)appDelegateS.currentTabBarController.selectedViewController pushViewController:serverListViewController animated:YES];
 		}
 		
-		[serverListViewController release];
 	}	
-	[self release];
 }
 
 - (void) subsonicErrorCode:(NSString *)errorCode message:(NSString *)message
@@ -64,7 +62,6 @@
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:appDelegateS cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	alert.tag = 1;
 	[alert show];
-	[alert release];
 }
 
 
@@ -73,7 +70,6 @@
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:@"There was an error parsing the XML response. Maybe you forgot to set the right port for your server?" delegate:appDelegateS cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	alert.tag = 1;
 	[alert show];
-	[alert release];
 }
 
 
@@ -138,7 +134,6 @@
 				[listOfAlbums addObject:anAlbum];
 			}
 						
-			[anAlbum release];
 		}
 	}
 }
@@ -160,13 +155,5 @@
 }
 
 
-- (void) dealloc 
-{
-	[myId release];
-	[listOfAlbums release];
-	[currentElementValue release];
-
-	[super dealloc];
-}
 
 @end

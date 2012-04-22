@@ -47,12 +47,12 @@ extern NSString* UIPickerViewDidHideNotification;
 	NSString* formatString;
 	UIImageView* indicator;
 	
-	id<NWPickerFieldDelegate> delegate;
+	id<NWPickerFieldDelegate> __unsafe_unretained delegate;
 	
 	BOOL didFinishLoading;
 }
 
-@property(nonatomic,assign) IBOutlet id delegate;
+@property(nonatomic,unsafe_unretained) IBOutlet id delegate;
 @property(nonatomic, copy) NSString* formatString;
 
 -(void) selectRow:(NSInteger)row inComponent:(NSInteger)component animated:(BOOL)animated;

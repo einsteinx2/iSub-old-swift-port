@@ -36,14 +36,12 @@
 {
 	//DLog(@"theLoader: %@", theLoader);
 	theLoader.delegate = nil;
-    [theLoader release];
 }
 
 - (void)loadingFinished:(SUSLoader *)theLoader
 {
 	//DLog(@"theLoader: %@", theLoader);
 	theLoader.delegate = nil;
-    [theLoader release];
 }
 
 #pragma mark Download Methods
@@ -121,7 +119,6 @@
 	{
 		NSString *bitrate = [[NSString alloc] initWithFormat:@"%i", settingsS.currentMaxBitrate];
 		[parameters setObject:n2N(bitrate) forKey:@"maxBitRate"];
-		[bitrate release];
 	}
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters];
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
@@ -142,14 +139,16 @@
 			SUSCoverArtLoader *playerArt = [[SUSCoverArtLoader alloc] initWithDelegate:self 
 																			coverArtId:coverArtId
 																			   isLarge:YES];
-			if (![playerArt downloadArtIfNotExists])
-				[playerArt release];
+			[playerArt downloadArtIfNotExists];
+			//if (![playerArt downloadArtIfNotExists])
+			//	;
 			
 			SUSCoverArtLoader *tableArt = [[SUSCoverArtLoader alloc] initWithDelegate:self
 																		   coverArtId:coverArtId 
 																			  isLarge:NO];
-			if (![tableArt downloadArtIfNotExists])
-				[tableArt release];
+			[tableArt downloadArtIfNotExists];
+			//if (![tableArt downloadArtIfNotExists])
+			//	;
 		}
 	}
 }
@@ -246,7 +245,6 @@
 				{
 					NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 					self.contentLength = [[formatter numberFromString:contentLengthString] unsignedLongLongValue];
-					[formatter release];
 				}
 			}
 		}
@@ -315,7 +313,6 @@
 			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"No song data returned. This could be because your Subsonic API trial has expired, this song is not an mp3 and the Subsonic transcoding plugins failed, or another reason." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
 			alert.tag = 4;
 			[alert show];
-			[alert release];
 			[[NSFileManager defaultManager] removeItemAtPath:self.currentQueuedSong.localPath error:NULL];
 			self.isQueueDownloading = NO;
 		}
@@ -368,7 +365,7 @@ static ISMSCacheQueueManager *sharedInstance = nil;
     @synchronized(self)
     {
         if (sharedInstance == nil)
-			[[self alloc] init];
+			sharedInstance = [[self alloc] init];
     }
     return sharedInstance;
 }
@@ -403,7 +400,7 @@ static ISMSCacheQueueManager *sharedInstance = nil;
     return self;
 }
 
-- (id)retain 
+/*- (id)retain 
 {
     return self;
 }
@@ -421,6 +418,6 @@ static ISMSCacheQueueManager *sharedInstance = nil;
 - (id)autorelease 
 {
     return self;
-}
+}*/
 
 @end

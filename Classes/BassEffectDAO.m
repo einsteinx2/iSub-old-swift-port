@@ -44,7 +44,6 @@
 	if (!plist) 
 	{  
 		NSLog(@"Error reading plist from file '%@', error = '%@'", localizedPath, errorString);  
-		[errorString release];  
 	}  
 	
 	return plist;  
@@ -195,7 +194,7 @@ NSInteger presetSort(id preset1, id preset2, void *context)
 	value.percentY = point.y;
 	value.isDefault = [[self.selectedPreset objectForKey:@"isDefault"] boolValue];
 	
-	return [value autorelease];
+	return value;
 }
 
 - (void)selectPresetId:(NSUInteger)presetId

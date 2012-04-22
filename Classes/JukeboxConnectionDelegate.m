@@ -26,7 +26,7 @@
 	if (self != nil)
 	{
 		
-		receivedData = [[NSMutableData data] retain];
+		receivedData = [[NSMutableData alloc] init];
 		
 		isGetInfo = NO;
 	}	
@@ -66,10 +66,8 @@
 	
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error controlling the Jukebox.\n\nError %i: %@", [error code], [error localizedDescription]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
-	[alert release];
 	
-	[theConnection release];
-	[receivedData release]; receivedData = nil;
+	 receivedData = nil;
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
@@ -87,8 +85,6 @@
 		jukeboxS.jukeboxGain = parser.gain;
 		jukeboxS.jukeboxIsPlaying = parser.isPlaying;
 		
-		[xmlParser release];
-		[parser release];
 		
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
 	}
@@ -99,20 +95,12 @@
 		[xmlParser setDelegate:parser];
 		[xmlParser parse];
 		
-		[xmlParser release];
-		[parser release];
 		
 		[jukeboxS jukeboxGetInfo];
 	}
 	
-	[theConnection release];
-	[receivedData release]; receivedData = nil;
+	 receivedData = nil;
 }
 
-- (void) dealloc
-{
-	[super dealloc];
-	[receivedData release];
-}
 
 @end

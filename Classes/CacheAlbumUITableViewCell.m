@@ -63,14 +63,6 @@
 	coverArtView.frame = CGRectMake(0, 0, 60, 60);
 }
 
-- (void)dealloc 
-{
-	[segments release]; segments = nil;
-	[coverArtView release]; coverArtView = nil;
-	[albumNameScrollView release]; albumNameScrollView = nil;
-	[albumNameLabel release]; albumNameLabel = nil;
-    [super dealloc];
-}
 
 #pragma mark - Overlay
 

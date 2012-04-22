@@ -120,13 +120,13 @@
 	
 	if (viewObjectsS.isOfflineMode)
 	{
-		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] 
+		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] 
 																				  style:UIBarButtonItemStyleBordered 
 																				 target:self 
-																				 action:@selector(settingsAction:)] autorelease];
+																				 action:@selector(settingsAction:)];
 	}
 	
-	headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)] autorelease];
+	headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
 	headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
 	segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Cached", @"Downloading", nil]];
 	[segmentedControl addTarget:self action:@selector(segmentAction:) forControlEvents:UIControlEventValueChanged];
@@ -151,13 +151,11 @@
 		headerView2.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		headerView2.backgroundColor = viewObjectsS.darkNormal;
 		[headerView addSubview:headerView2];
-		[headerView2 release];
 		
 		playAllImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play-all-note.png"]];
 		playAllImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		playAllImage.frame = CGRectMake(10, 10, 19, 30);
 		[headerView2 addSubview:playAllImage];
-		[playAllImage release];
 		
 		playAllLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 160, 50)];
 		playAllLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
@@ -167,7 +165,6 @@
 		playAllLabel.font = [UIFont boldSystemFontOfSize:30];
 		playAllLabel.text = @"Play All";
 		[headerView2 addSubview:playAllLabel];
-		[playAllLabel release];
 		
 		playAllButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		playAllButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
@@ -182,13 +179,11 @@
 		spacerLabel2.text = @"|";
 		spacerLabel2.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		[headerView2 addSubview:spacerLabel2];
-		[spacerLabel2 release];
 		
 		shuffleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shuffle-small.png"]];
 		shuffleImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		shuffleImage.frame = CGRectMake(180, 12, 24, 26);
 		[headerView2 addSubview:shuffleImage];
-		[shuffleImage release];
 		
 		shuffleLabel = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 160, 50)];
 		shuffleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
@@ -198,7 +193,6 @@
 		shuffleLabel.font = [UIFont boldSystemFontOfSize:30];
 		shuffleLabel.text = @"Shuffle";
 		[headerView2 addSubview:shuffleLabel];
-		[shuffleLabel release];
 		
 		shuffleButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		shuffleButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
@@ -211,12 +205,11 @@
 		fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
 		fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		[self.tableView addSubview:fadeTop];
-		[fadeTop release];
 	}
 	
 	self.tableView.tableHeaderView = headerView;
 	
-	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fadeBottom;
@@ -253,12 +246,11 @@
 		colorView.backgroundColor = [UIColor blackColor];
 		colorView.alpha = 0.5;
 		[jukeboxInputBlocker addSubview:colorView];
-		[colorView release];
 	}
 	
 	if(musicS.showPlayerIcon)
 	{
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
+		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
 	}
 	else
 	{
@@ -338,11 +330,6 @@
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
-- (void)dealloc
-{
-	[cacheSizeLabel release]; cacheSizeLabel = nil;
-    [super dealloc];
-}
 
 - (void)segmentAction:(id)sender
 {
@@ -400,7 +387,6 @@
 	StoreViewController *store = [[StoreViewController alloc] init];
 	//DLog(@"store: %@", store);
 	[self pushViewControllerCustom:store];
-	[store release];
 }
 
 - (void)settingsAction:(id)sender 
@@ -408,7 +394,6 @@
 	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
 	serverListViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:serverListViewController animated:YES];
-	[serverListViewController release];
 }
 
 - (IBAction)nowPlayingAction:(id)sender
@@ -416,7 +401,6 @@
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-	[streamingPlayerViewController release];
 }
 
 - (void)playAllAction:(id)sender
@@ -528,16 +512,16 @@
 			int lastIndex = 0;
 			for (int i = 0; i < [sectionInfo count] - 1; i++)
 			{
-				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-				int index = [[[sectionInfo objectAtIndexSafe:i+1] objectAtIndexSafe:1] intValue];
-				NSMutableArray *section = [NSMutableArray arrayWithCapacity:0];
-				for (int i = lastIndex; i < index; i++)
-				{
-					[section addObject:[listOfArtists objectAtIndexSafe:i]];
+				@autoreleasepool {
+					int index = [[[sectionInfo objectAtIndexSafe:i+1] objectAtIndexSafe:1] intValue];
+					NSMutableArray *section = [NSMutableArray arrayWithCapacity:0];
+					for (int i = lastIndex; i < index; i++)
+					{
+						[section addObject:[listOfArtists objectAtIndexSafe:i]];
+					}
+					[listOfArtistsSections addObject:section];
+					lastIndex = index;
 				}
-				[listOfArtistsSections addObject:section];
-				lastIndex = index;
-				[pool release];
 			}
 			NSMutableArray *section = [NSMutableArray arrayWithCapacity:0];
 			for (int i = lastIndex; i < [listOfArtists count]; i++)
@@ -692,9 +676,8 @@
 				songsCountLabel.text = [NSString stringWithFormat:@"%i Songs", self.cacheQueueCount];
 		}
 		[headerView addSubview:songsCountLabel];
-		[songsCountLabel release];
 		
-		self.cacheSizeLabel = [[[UILabel alloc] initWithFrame:CGRectMake(0, y + 33, 227, 14)] autorelease];
+		self.cacheSizeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, y + 33, 227, 14)];
 		self.cacheSizeLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 		self.cacheSizeLabel.backgroundColor = [UIColor clearColor];
 		self.cacheSizeLabel.textColor = [UIColor whiteColor];
@@ -737,7 +720,6 @@
 		spacerLabel.font = [UIFont systemFontOfSize:40];
 		spacerLabel.text = @"|";
 		[headerView addSubview:spacerLabel];
-		[spacerLabel release];	
 		
 		editSongsLabel = [[UILabel alloc] initWithFrame:CGRectMake(234, y, 86, 50)];
 		editSongsLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
@@ -747,7 +729,6 @@
 		editSongsLabel.font = [UIFont boldSystemFontOfSize:22];
 		editSongsLabel.text = @"Edit";
 		[headerView addSubview:editSongsLabel];
-		[editSongsLabel release];
 		
 		editSongsButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		editSongsButton.frame = CGRectMake(234, y, 86, 40);
@@ -766,7 +747,6 @@
 		deleteSongsLabel.text = @"Delete # Songs";
 		deleteSongsLabel.hidden = YES;
 		[headerView addSubview:deleteSongsLabel];
-		[deleteSongsLabel release];
 		
 		headerView2 = nil;
 		if (segmentedControl.selectedSegmentIndex == 0)
@@ -775,13 +755,11 @@
 			headerView2.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 			headerView2.backgroundColor = viewObjectsS.darkNormal;
 			[headerView addSubview:headerView2];
-			[headerView2 release];
 			
 			playAllImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play-all-note.png"]];
 			playAllImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 			playAllImage.frame = CGRectMake(10, 10, 19, 30);
 			[headerView2 addSubview:playAllImage];
-			[playAllImage release];
 			
 			playAllLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 160, 50)];
 			playAllLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
@@ -791,7 +769,6 @@
 			playAllLabel.font = [UIFont boldSystemFontOfSize:30];
 			playAllLabel.text = @"Play All";
 			[headerView2 addSubview:playAllLabel];
-			[playAllLabel release];
 			
 			playAllButton = [UIButton buttonWithType:UIButtonTypeCustom];
 			playAllButton.frame = CGRectMake(0, 0, 160, 40);
@@ -806,13 +783,11 @@
 			spacerLabel2.font = [UIFont systemFontOfSize:40];
 			spacerLabel2.text = @"|";
 			[headerView2 addSubview:spacerLabel2];
-			[spacerLabel2 release];
 			
 			shuffleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shuffle-small.png"]];
 			shuffleImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 			shuffleImage.frame = CGRectMake(180, 12, 24, 26);
 			[headerView2 addSubview:shuffleImage];
-			[shuffleImage release];
 			
 			shuffleLabel = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 160, 50)];
 			shuffleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
@@ -822,7 +797,6 @@
 			shuffleLabel.font = [UIFont boldSystemFontOfSize:30];
 			shuffleLabel.text = @"Shuffle";
 			[headerView2 addSubview:shuffleLabel];
-			[shuffleLabel release];
 			
 			shuffleButton = [UIButton buttonWithType:UIButtonTypeCustom];
 			shuffleButton.frame = CGRectMake(160, 0, 160, 40);
@@ -880,7 +854,6 @@
 			textLabel.frame = CGRectMake(20, 0, 200, 100);
 		}
 		[noSongsScreen addSubview:textLabel];
-		[textLabel release];
 		
 		if (settingsS.isCacheUnlocked == NO)
 		{
@@ -893,7 +866,6 @@
 			textLabel2.text = @"Tap to purchase the ability to cache songs for better streaming performance and offline playback";
 			textLabel2.frame = CGRectMake(20, 90, 200, 70);
 			[noSongsScreen addSubview:textLabel2];
-			[textLabel2 release];
 			
 			UIButton *storeLauncher = [UIButton buttonWithType:UIButtonTypeCustom];
 			storeLauncher.frame = CGRectMake(0, 0, noSongsScreen.frame.size.width, noSongsScreen.frame.size.height);
@@ -903,7 +875,6 @@
 		
 		[self.view addSubview:noSongsScreen];
 		
-		[noSongsScreen release];
 		
 		if (!IS_IPAD())
 		{
@@ -1205,7 +1176,7 @@
 {
 	if (segmentedControl.selectedSegmentIndex == 0 && settingsS.isCacheUnlocked && showIndex)
 	{
-		NSMutableArray *indexes = [[[NSMutableArray alloc] init] autorelease];
+		NSMutableArray *indexes = [[NSMutableArray alloc] init];
 		for (int i = 0; i < [sectionInfo count]; i++)
 		{
 			[indexes addObject:[[sectionInfo objectAtIndexSafe:i] objectAtIndexSafe:0]];
@@ -1293,7 +1264,7 @@
 		CacheArtistUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[[CacheArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+			cell = [[CacheArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 		}
 
 		NSString *name = [[listOfArtistsSections objectAtIndexSafe:indexPath.section] objectAtIndexSafe:indexPath.row];
@@ -1311,7 +1282,7 @@
 		// Set up the cell...
 		[cell.artistNameLabel setText:[name cleanString]];
 		
-		cell.backgroundView = [[[UIView alloc] init] autorelease];
+		cell.backgroundView = [[UIView alloc] init];
 		if(indexPath.row % 2 == 0)
 			cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
 		else
@@ -1325,7 +1296,7 @@
 		CacheQueueSongUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[[CacheQueueSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+			cell = [[CacheQueueSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 		}
 		cell.indexPath = indexPath;
 
@@ -1345,7 +1316,7 @@
 		
 		cell.coverArtView.coverArtId = aSong.coverArtId;
 		
-		cell.backgroundView = [[[UIView alloc] init] autorelease];
+		cell.backgroundView = [[UIView alloc] init];
 		if(indexPath.row % 2 == 0)
 			cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
 		else
@@ -1490,7 +1461,6 @@ NSInteger trackSort1(id obj1, id obj2, void *context)
 			
 			[self pushViewControllerCustom:cacheAlbumViewController];
 			//[self.navigationController pushViewController:cacheAlbumViewController animated:YES];
-			[cacheAlbumViewController release];
 		}
 		else
 		{

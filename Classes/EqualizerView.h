@@ -35,7 +35,7 @@
 @property(readwrite) CGPoint location;
 @property(readwrite) CGPoint previousLocation;
 
-@property (retain) NSTimer *drawTimer;
+@property (strong) NSTimer *drawTimer;
 
 @property ISMSBassVisualType visualType;
 

@@ -9,9 +9,9 @@
 
 @interface SearchXMLParser : NSObject <NSXMLParserDelegate>
 
-@property (retain) NSMutableArray *listOfArtists;
-@property (retain) NSMutableArray *listOfAlbums;
-@property (retain) NSMutableArray *listOfSongs;
+@property (strong) NSMutableArray *listOfArtists;
+@property (strong) NSMutableArray *listOfAlbums;
+@property (strong) NSMutableArray *listOfSongs;
 
 - (SearchXMLParser *) initXMLParser;
 

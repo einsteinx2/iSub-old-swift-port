@@ -134,9 +134,5 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void)dealloc 
-{
-    [super dealloc];
-}
 
 @end

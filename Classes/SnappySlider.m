@@ -57,7 +57,6 @@
 	
 	NSArray *newDetents = [[v sortedArrayUsingSelector:@selector(compare:)] copy];
 	
-	[detents release];
 	detents = newDetents;
 	
 	if (nil != rawDetents)
@@ -100,7 +99,6 @@
 {
 	self.detents = nil;
 	free(rawDetents);
-	[super dealloc];
 }
 
 @end

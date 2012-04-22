@@ -66,7 +66,7 @@
 
 	if(musicS.showPlayerIcon)
 	{
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
+		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
 	}
 	else
 	{
@@ -83,9 +83,8 @@
 	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
 	fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	[self.tableView addSubview:fadeTop];
-	[fadeTop release];
 	
-	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fadeBottom;
@@ -96,7 +95,6 @@
 	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
 	serverListViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:serverListViewController animated:YES];
-	[serverListViewController release];
 }
 
 - (IBAction)nowPlayingAction:(id)sender
@@ -104,7 +102,6 @@
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-	[streamingPlayerViewController release];
 }
 
 - (void)didReceiveMemoryWarning 
@@ -113,11 +110,6 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void)dealloc 
-{
-	[listOfAlbums release];
-	[super dealloc];
-}
 
 - (void)loadMoreResults
 {	
@@ -143,7 +135,6 @@
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error doing the search.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 }
 
@@ -196,7 +187,6 @@
     
     CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error doing the search.\n\nError:%@", error.localizedDescription] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alert show];
-    [alert release];
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
@@ -217,8 +207,6 @@
         [listOfAlbums addObjectsFromArray:parser.listOfAlbums];
     }
     
-    [xmlParser release];
-    [parser release];
     
     // Reload the table
     [self.tableView reloadData];
@@ -248,7 +236,7 @@
 		AllAlbumsUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[[AllAlbumsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+			cell = [[AllAlbumsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 		}
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		
@@ -262,7 +250,7 @@
 		[cell.artistNameLabel setText:anAlbum.artistName];
 		
 		// Setup cell backgrond color
-		cell.backgroundView = [[[UIView alloc] init] autorelease];
+		cell.backgroundView = [[UIView alloc] init];
 		if(indexPath.row % 2 == 0)
 			cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
 		else
@@ -274,7 +262,7 @@
 	{
 		// This is the last cell and there could be more results, load the next 20 songs;
 		static NSString *cellIdentifier = @"HomeAlbumLoadCell";
-		UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+		UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 
 		// Set background color
 		cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
@@ -287,7 +275,6 @@
 			indicator.center = CGPointMake(300, 30);
 			[cell addSubview:indicator];
 			[indicator startAnimating];
-			[indicator release];
 			
 			[self loadMoreResults];
 		}
@@ -301,7 +288,7 @@
 	
 	// In case somehow no cell is created, return an empty cell
 	static NSString *cellIdentifier = @"EmptyCell";
-	return [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+	return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -315,7 +302,6 @@
 		AlbumViewController *albumViewController = [[AlbumViewController alloc] initWithArtist:nil orAlbum:anAlbum];
 		[self pushViewControllerCustom:albumViewController];
 		//[self.navigationController pushViewController:albumViewController animated:YES];
-		[albumViewController release];
 	}
 	else
 	{

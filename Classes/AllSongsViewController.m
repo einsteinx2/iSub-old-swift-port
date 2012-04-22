@@ -59,7 +59,7 @@
 - (void)createDataModel
 {
 	dataModel.delegate = nil;
-	self.dataModel = [[[SUSAllSongsDAO alloc] init] autorelease];
+	self.dataModel = [[SUSAllSongsDAO alloc] init];
 	dataModel.delegate = self;
 }
 
@@ -91,7 +91,6 @@
 	refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
 	refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
 	[self.tableView addSubview:refreshHeaderView];
-	[refreshHeaderView release];
 	
 	if (IS_IPAD())
 	{
@@ -99,7 +98,7 @@
 	}
 	//else
 	//{
-		UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+		UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
 		fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 		fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		self.tableView.tableFooterView = fadeBottom;
@@ -119,7 +118,7 @@
 	{
 		if(musicS.showPlayerIcon)
 		{
-			self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
+			self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
 		}
 		else
 		{
@@ -139,14 +138,12 @@
 				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Resume Load?" message:@"If you've reloaded the albums tab since this load started you should choose 'Restart Load'.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Restart Load", @"Resume Load", nil];
 				alert.tag = 1;
 				[alert show];
-				[alert release];
 			}
 			else
 			{
 				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Load?" message:@"This could take a while if you have a big collection.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection.\n\nNote: If you've added new artists, you should reload the Folders first." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
 				alert.tag = 1;
 				[alert show];
-				[alert release];
 			}
 		}
 	}
@@ -166,7 +163,7 @@
 - (void)addCount
 {
 	// Build the search and reload view
-	headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 90)] autorelease];
+	headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 90)];
 	headerView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
 	
 	reloadButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -182,7 +179,6 @@
 	countLabel.textAlignment = UITextAlignmentCenter;
 	countLabel.font = [UIFont boldSystemFontOfSize:30];
 	[headerView addSubview:countLabel];
-	[countLabel release];
 
 	searchBar = [[UISearchBar  alloc] initWithFrame:CGRectMake(0, 50, 320, 40)];
 	searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -190,7 +186,6 @@
 	searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
 	searchBar.placeholder = @"Song name";
 	[headerView addSubview:searchBar];
-	[searchBar release];
 	
 	reloadTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 36, 320, 12)];
 	reloadTimeLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -199,7 +194,6 @@
 	reloadTimeLabel.textAlignment = UITextAlignmentCenter;
 	reloadTimeLabel.font = [UIFont systemFontOfSize:11];
 	[headerView addSubview:reloadTimeLabel];
-	[reloadTimeLabel release];
 	
 	countLabel.text = [NSString stringWithFormat:@"%i Songs", dataModel.count];
 	
@@ -208,7 +202,6 @@
 	[formatter setDateStyle:NSDateFormatterMediumStyle];
 	[formatter setTimeStyle:NSDateFormatterShortStyle];
 	reloadTimeLabel.text = [NSString stringWithFormat:@"last reload: %@", [formatter stringFromDate:[defaults objectForKey:[NSString stringWithFormat:@"%@songsReloadTime", settingsS.urlString]]]];
-	[formatter release];
 	
 	self.tableView.tableHeaderView = headerView;
 	[self.tableView reloadData];
@@ -226,10 +219,8 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_AllSongsLoadingFinished object:nil];
 	
 	dataModel.delegate = nil;
-	[dataModel release]; dataModel = nil;
-	[searchBar release]; searchBar = nil;
-	[url release]; url = nil;
-    [super dealloc];
+	 searchBar = nil;
+	 url = nil;
 }
 
 #pragma mark - LoaderDelegate methods
@@ -319,7 +310,7 @@
 
 - (void)showLoadingScreen
 {
-	self.loadingScreen = [[[LoadingScreen alloc] initOnView:self.view withMessage:[NSArray arrayWithObjects:@"Processing Artist:", @"", @"Processing Album:", @"", nil] blockInput:YES mainWindow:NO] autorelease];
+	self.loadingScreen = [[LoadingScreen alloc] initOnView:self.view withMessage:[NSArray arrayWithObjects:@"Processing Artist:", @"", @"Processing Album:", @"", nil] blockInput:YES mainWindow:NO];
 	self.tableView.scrollEnabled = NO;
 	self.tableView.allowsSelection = NO;
 	self.navigationItem.leftBarButtonItem = nil;
@@ -349,13 +340,11 @@
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Reload?" message:@"This could take a while if you have a big collection.\n\nIMPORTANT: Make sure to plug in your device to keep the app active if you have a large collection.\n\nNote: If you've added new artists or albums, you should reload the Folders and Albums tabs first." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
 		alert.tag = 1;
 		[alert show];
-		[alert release];
 	}
 	else
 	{
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Please Wait" message:@"You cannot reload the Songs tab while the Folders or Albums tabs are loading" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 		[self dataSourceDidFinishLoadingNewData];
 	}
 }
@@ -365,7 +354,6 @@
 	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
 	serverListViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:serverListViewController animated:YES];
-	[serverListViewController release];
 }
 
 
@@ -374,7 +362,6 @@
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-	[streamingPlayerViewController release];
 }
 
 #pragma mark - UIAlertView delegate
@@ -417,7 +404,6 @@
 	//[self.view.superview addSubview:searchOverlay];
 	//[self.tableView.tableFooterView addSubview:searchOverlay];
 	self.tableView.tableFooterView = searchOverlay;//self.tableView.tableFooterView;
-	[searchOverlay release];
 	
 	dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -426,7 +412,7 @@
 	dismissButton.enabled = NO;
 	[searchOverlay addSubview:dismissButton];
 	
-	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	[searchOverlay addSubview:fadeBottom];
@@ -461,7 +447,7 @@
 	[searchOverlay removeFromSuperview];
 	searchOverlay = nil;
 	
-	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fadeBottom;
@@ -469,7 +455,7 @@
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)theSearchBar 
 {	
-	[self.tableView.tableHeaderView retain];
+	//self.tableView.tableHeaderView;
 	
 	[self.tableView setContentOffset:CGPointMake(0, 50) animated:YES];
 	
@@ -487,7 +473,7 @@
 	
 	//Add the done button.
 	self.navigationItem.leftBarButtonItem = nil;
-	self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneSearching_Clicked:)] autorelease];
+	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneSearching_Clicked:)];
 }
 
 - (void)searchBar:(UISearchBar *)theSearchBar textDidChange:(NSString *)searchText
@@ -639,7 +625,7 @@
 	AllSongsUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	if (!cell)
 	{
-		cell = [[[AllSongsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+		cell = [[AllSongsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 	}
 	cell.indexPath = indexPath;
 	
@@ -659,7 +645,7 @@
 	
 	cell.coverArtView.coverArtId = aSong.coverArtId;
 	
-	cell.backgroundView = [[[UIView alloc] init] autorelease];
+	cell.backgroundView = [[UIView alloc] init];
 	if(indexPath.row % 2 == 0)
 	{
 		if (aSong.isFullyCached)

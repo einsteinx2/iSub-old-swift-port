@@ -43,6 +43,7 @@
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
 #import "AsynchronousImageView.h"
+#import "iPadRootViewController.h"
 
 @implementation NewHomeViewController
 
@@ -130,7 +131,7 @@
 	if (!IS_IPAD())
 	{
 		//coverArtBorder = [[UIView alloc] initWithFrame:CGRectMake(15, 180, 290, 60)];
-		coverArtBorder = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+		coverArtBorder = [UIButton buttonWithType:UIButtonTypeCustom];
 		coverArtBorder.frame = CGRectMake(15, 177, 290, 60);
 		coverArtBorder.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
 		coverArtBorder.layer.borderWidth = 2.0f;
@@ -236,7 +237,7 @@
 	
 	if(musicS.showPlayerIcon)
 	{
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
+		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
 	}
 	else
 	{
@@ -290,17 +291,17 @@
 		
 		if (currentSong.artist)
 		{
-			artistLabel.text = [[currentSong.artist copy] autorelease];
+			artistLabel.text = [currentSong.artist copy];
 		}
 		
 		if (currentSong.album)
 		{
-			albumLabel.text = [[currentSong.album copy] autorelease];
+			albumLabel.text = [currentSong.album copy];
 		}
 		
 		if (currentSong.title)
 		{
-			songLabel.text = [[currentSong.title copy] autorelease];
+			songLabel.text = [currentSong.title copy];
 		}
 	}
 	else
@@ -325,7 +326,6 @@
 	else
 		[self presentModalViewController:quickAlbums animated:YES];
 	
-	[quickAlbums release];
 }
 
 /*- (void)pushViewController:(UIViewController *)viewController
@@ -360,7 +360,6 @@
 		FolderPickerDialog *blankDialog = [[FolderPickerDialog alloc] initWithFrame:CGRectMake(0, 0, 300, height)];
 		blankDialog.titleLabel.text = @"Folder to Shuffle";
 		[blankDialog show];
-		[blankDialog release];
 	}
 }
 
@@ -400,7 +399,6 @@
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error creating the server shuffle list.\n\nThe connection could not be created" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 }
 
@@ -417,7 +415,6 @@
 	ChatViewController *chat = [[ChatViewController alloc] initWithNibName:@"ChatViewController" bundle:nil];
 	//playlists.isHomeTab = YES;
 	[self.navigationController pushViewController:chat animated:YES];
-	[chat release];
 }
 
 - (IBAction)settings
@@ -441,7 +438,6 @@
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-	[streamingPlayerViewController release];
 }
 
 - (IBAction)support:(id)sender
@@ -449,7 +445,6 @@
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Support" message:@"iSub support is happy to help with any issues you may have! \n\nWould you like to send an email to support or visit the iSub forum?" delegate:appDelegateS cancelButtonTitle:@"Not Now" otherButtonTitles:@"Send Email", @"iSub Forum", nil];
 	alert.tag = 7;
 	[alert show];
-	[alert release];
 	//[Crittercism showCrittercism:self];
 }
 
@@ -458,7 +453,6 @@
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-	[streamingPlayerViewController release];
 }
 
 - (void)jukeboxOff
@@ -509,7 +503,6 @@
 		StoreViewController *store = [[StoreViewController alloc] init];
 		[self pushViewControllerCustom:store];
 		//[self.navigationController pushViewController:store animated:YES];
-		[store release];
 	}
 }
 
@@ -527,12 +520,6 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ServerSwitched object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"performServerShuffle" object:nil];
 	
-	[coverArtBorder release];
-	[coverArtView release];
-	[artistLabel release];
-	[albumLabel release];
-	[songLabel release];
-    [super dealloc];
 }
 
 #pragma mark -
@@ -564,7 +551,6 @@
 	searchOverlay.backgroundColor = [UIColor colorWithWhite:0 alpha:.80];
 	searchOverlay.alpha = 0.0;
 	[self.view addSubview:searchOverlay];
-	[searchOverlay release];
 		
 	dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -665,7 +651,6 @@
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error performing the search.\n\nThe connection could not be created" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 }
 
@@ -714,7 +699,6 @@
 	
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
-	[alert release];
 	
 	self.connection = nil;
 	self.receivedData = nil;
@@ -724,7 +708,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	DLog(@"received data: %@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
+	DLog(@"received data: %@", [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
 	
 	
 	if (isSearch)
@@ -752,13 +736,10 @@
 			
 			searchViewController.query = [NSString stringWithFormat:@"%@*", searchBar.text];
 			
-			[xmlParser release];
-			[parser release];
 			
 			//[self.navigationController pushViewController:searchViewController animated:YES];
 			[self pushViewControllerCustom:searchViewController];
 			
-			[searchViewController release];
 		}
 		else
 		{
@@ -794,13 +775,10 @@
 				searchViewController.query = searchBar.text;
 			}
 			
-			[xmlParser release];
-			[parser release];
 			
 			[self pushViewControllerCustom:searchViewController];
 			//[self.navigationController pushViewController:searchViewController animated:YES];
 			
-			[searchViewController release];
 		}
 		
 		// Hide the loading screen
@@ -831,8 +809,6 @@
 		
 		[musicS playSongAtPosition:0];
 		
-		[xmlParser release];
-		[parser release];
 		
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 		

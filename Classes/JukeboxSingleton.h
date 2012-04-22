@@ -15,7 +15,7 @@
 
 @property BOOL jukeboxIsPlaying;
 @property float jukeboxGain;
-@property (retain) BBSimpleConnectionQueue *connectionQueue;
+@property (strong) BBSimpleConnectionQueue *connectionQueue;
 
 + (JukeboxSingleton *)sharedInstance;
 

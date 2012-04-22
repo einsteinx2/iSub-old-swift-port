@@ -12,10 +12,10 @@
 @class SUSLyricsLoader, FMDatabase;
 @interface SUSLyricsDAO : NSObject <SUSLoaderDelegate, SUSLoaderManager>
 
-@property (readonly) FMDatabase *db;
+@property (unsafe_unretained, readonly) FMDatabase *db;
 
-@property (assign) NSObject <SUSLoaderDelegate> *delegate;
-@property (retain) SUSLyricsLoader *loader;
+@property (unsafe_unretained) NSObject <SUSLoaderDelegate> *delegate;
+@property (strong) SUSLyricsLoader *loader;
 
 - (id)initWithDelegate:(NSObject <SUSLoaderDelegate> *)theDelegate;
 - (NSString *)loadLyricsForArtist:(NSString *)artist andTitle:(NSString *)title;

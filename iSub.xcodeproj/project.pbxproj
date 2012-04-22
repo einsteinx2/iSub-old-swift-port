@@ -48,7 +48,7 @@
 		5304FC6114F30A6A00A2AD42 /* underPageBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 5304FC6014F30A6900A2AD42 /* underPageBackground.png */; };
 		5304FC6214F30A6A00A2AD42 /* underPageBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 5304FC6014F30A6900A2AD42 /* underPageBackground.png */; };
 		5304FC6314F30A6A00A2AD42 /* underPageBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 5304FC6014F30A6900A2AD42 /* underPageBackground.png */; };
-		5305C1DA1157EA7A00BC78F0 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 5305C1D91157EA7A00BC78F0 /* Reachability.m */; };
+		5305C1DA1157EA7A00BC78F0 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 5305C1D91157EA7A00BC78F0 /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5305C2061157F4F800BC78F0 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 5305C2051157F4F800BC78F0 /* Default.png */; };
 		5306236814D3237800D320A8 /* UIBezierPath+Smoothing.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306236714D3237800D320A8 /* UIBezierPath+Smoothing.m */; };
 		5306236914D3237800D320A8 /* UIBezierPath+Smoothing.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306236714D3237800D320A8 /* UIBezierPath+Smoothing.m */; };
@@ -130,25 +130,25 @@
 		53260B89127D012300B745B4 /* grayArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7F127D012300B745B4 /* grayArrow@2x.png */; };
 		53260B8A127D012300B745B4 /* whiteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B80127D012300B745B4 /* whiteArrow.png */; };
 		53260B8B127D012300B745B4 /* whiteArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B81127D012300B745B4 /* whiteArrow@2x.png */; };
-		532661261521930500DE39C1 /* BWApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326610C1521930500DE39C1 /* BWApp.m */; };
+		532661261521930500DE39C1 /* BWApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326610C1521930500DE39C1 /* BWApp.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		532661271521930500DE39C1 /* BWApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326610C1521930500DE39C1 /* BWApp.m */; };
 		532661281521930500DE39C1 /* BWApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326610C1521930500DE39C1 /* BWApp.m */; };
-		532661291521930500DE39C1 /* BWGlobal.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326610E1521930500DE39C1 /* BWGlobal.m */; };
+		532661291521930500DE39C1 /* BWGlobal.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326610E1521930500DE39C1 /* BWGlobal.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5326612A1521930600DE39C1 /* BWGlobal.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326610E1521930500DE39C1 /* BWGlobal.m */; };
 		5326612B1521930600DE39C1 /* BWGlobal.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326610E1521930500DE39C1 /* BWGlobal.m */; };
-		5326612C1521930600DE39C1 /* BWHockeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661101521930500DE39C1 /* BWHockeyManager.m */; };
+		5326612C1521930600DE39C1 /* BWHockeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661101521930500DE39C1 /* BWHockeyManager.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5326612D1521930600DE39C1 /* BWHockeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661101521930500DE39C1 /* BWHockeyManager.m */; };
 		5326612E1521930600DE39C1 /* BWHockeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661101521930500DE39C1 /* BWHockeyManager.m */; };
-		5326612F1521930600DE39C1 /* BWHockeySettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661121521930500DE39C1 /* BWHockeySettingsViewController.m */; };
+		5326612F1521930600DE39C1 /* BWHockeySettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661121521930500DE39C1 /* BWHockeySettingsViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		532661301521930600DE39C1 /* BWHockeySettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661121521930500DE39C1 /* BWHockeySettingsViewController.m */; };
 		532661311521930600DE39C1 /* BWHockeySettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661121521930500DE39C1 /* BWHockeySettingsViewController.m */; };
-		532661321521930600DE39C1 /* BWHockeyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661141521930500DE39C1 /* BWHockeyViewController.m */; };
+		532661321521930600DE39C1 /* BWHockeyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661141521930500DE39C1 /* BWHockeyViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		532661331521930600DE39C1 /* BWHockeyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661141521930500DE39C1 /* BWHockeyViewController.m */; };
 		532661341521930600DE39C1 /* BWHockeyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661141521930500DE39C1 /* BWHockeyViewController.m */; };
-		532661351521930600DE39C1 /* NSString+HockeyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661171521930500DE39C1 /* NSString+HockeyAdditions.m */; };
+		532661351521930600DE39C1 /* NSString+HockeyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661171521930500DE39C1 /* NSString+HockeyAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		532661361521930600DE39C1 /* NSString+HockeyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661171521930500DE39C1 /* NSString+HockeyAdditions.m */; };
 		532661371521930600DE39C1 /* NSString+HockeyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661171521930500DE39C1 /* NSString+HockeyAdditions.m */; };
-		532661381521930600DE39C1 /* PSAppStoreHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661191521930500DE39C1 /* PSAppStoreHeader.m */; };
+		532661381521930600DE39C1 /* PSAppStoreHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661191521930500DE39C1 /* PSAppStoreHeader.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		532661391521930600DE39C1 /* PSAppStoreHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661191521930500DE39C1 /* PSAppStoreHeader.m */; };
 		5326613A1521930600DE39C1 /* PSAppStoreHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661191521930500DE39C1 /* PSAppStoreHeader.m */; };
 		5326613B1521930600DE39C1 /* PSStoreButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326611B1521930500DE39C1 /* PSStoreButton.m */; };
@@ -157,13 +157,13 @@
 		5326613E1521930600DE39C1 /* PSWebTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326611D1521930500DE39C1 /* PSWebTableViewCell.m */; };
 		5326613F1521930600DE39C1 /* PSWebTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326611D1521930500DE39C1 /* PSWebTableViewCell.m */; };
 		532661401521930600DE39C1 /* PSWebTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326611D1521930500DE39C1 /* PSWebTableViewCell.m */; };
-		532661411521930600DE39C1 /* UIImage+HockeyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326611F1521930500DE39C1 /* UIImage+HockeyAdditions.m */; };
+		532661411521930600DE39C1 /* UIImage+HockeyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326611F1521930500DE39C1 /* UIImage+HockeyAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		532661421521930600DE39C1 /* UIImage+HockeyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326611F1521930500DE39C1 /* UIImage+HockeyAdditions.m */; };
 		532661431521930600DE39C1 /* UIImage+HockeyAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5326611F1521930500DE39C1 /* UIImage+HockeyAdditions.m */; };
 		532661441521930600DE39C1 /* Hockey.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 532661201521930500DE39C1 /* Hockey.bundle */; };
 		532661451521930600DE39C1 /* Hockey.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 532661201521930500DE39C1 /* Hockey.bundle */; };
 		532661461521930600DE39C1 /* Hockey.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 532661201521930500DE39C1 /* Hockey.bundle */; };
-		532661471521930600DE39C1 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661231521930500DE39C1 /* JSONKit.m */; };
+		532661471521930600DE39C1 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661231521930500DE39C1 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		532661481521930600DE39C1 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661231521930500DE39C1 /* JSONKit.m */; };
 		532661491521930600DE39C1 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661231521930500DE39C1 /* JSONKit.m */; };
 		5326614A1521930600DE39C1 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 532661241521930500DE39C1 /* README.md */; };
@@ -172,7 +172,7 @@
 		5326614D1521930600DE39C1 /* README.mkdown in Resources */ = {isa = PBXBuildFile; fileRef = 532661251521930500DE39C1 /* README.mkdown */; };
 		5326614E1521930600DE39C1 /* README.mkdown in Resources */ = {isa = PBXBuildFile; fileRef = 532661251521930500DE39C1 /* README.mkdown */; };
 		5326614F1521930600DE39C1 /* README.mkdown in Resources */ = {isa = PBXBuildFile; fileRef = 532661251521930500DE39C1 /* README.mkdown */; };
-		532661561521930E00DE39C1 /* BWQuincyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661521521930E00DE39C1 /* BWQuincyManager.m */; };
+		532661561521930E00DE39C1 /* BWQuincyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661521521930E00DE39C1 /* BWQuincyManager.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		532661571521930E00DE39C1 /* BWQuincyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661521521930E00DE39C1 /* BWQuincyManager.m */; };
 		532661581521930E00DE39C1 /* BWQuincyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 532661521521930E00DE39C1 /* BWQuincyManager.m */; };
 		532661591521930E00DE39C1 /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 532661531521930E00DE39C1 /* CrashReporter.framework */; };
@@ -211,13 +211,13 @@
 		5327F0F812B8110E00735119 /* JukeboxConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F0F712B8110E00735119 /* JukeboxConnectionDelegate.m */; };
 		5327F1C012B8243C00735119 /* controller-stop.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327F1BE12B8243C00735119 /* controller-stop.png */; };
 		5327F1C112B8243C00735119 /* controller-stop@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327F1BF12B8243C00735119 /* controller-stop@2x.png */; };
-		5327F4F912B9534400735119 /* MKStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F4F612B9534400735119 /* MKStoreManager.m */; };
-		5327F4FA12B9534400735119 /* MKStoreObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F4F812B9534400735119 /* MKStoreObserver.m */; };
+		5327F4F912B9534400735119 /* MKStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F4F612B9534400735119 /* MKStoreManager.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		5327F4FA12B9534400735119 /* MKStoreObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F4F812B9534400735119 /* MKStoreObserver.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5327F52512B955F100735119 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5327F52412B955F100735119 /* StoreKit.framework */; };
 		5327F58512B95D2900735119 /* StoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5327F58312B95D2900735119 /* StoreViewController.m */; };
 		5327F58612B95D2900735119 /* StoreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5327F58412B95D2900735119 /* StoreViewController.xib */; };
 		532862DB11C573AD00B40FF0 /* UAApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 532862DA11C573AD00B40FF0 /* UAApplication.m */; };
-		532B0DE012AF0AF700E8FF4F /* NSString+rfcEncode.m in Sources */ = {isa = PBXBuildFile; fileRef = 532B0DDF12AF0AF700E8FF4F /* NSString+rfcEncode.m */; };
+		532B0DE012AF0AF700E8FF4F /* NSString+rfcEncode.m in Sources */ = {isa = PBXBuildFile; fileRef = 532B0DDF12AF0AF700E8FF4F /* NSString+rfcEncode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		532B552714D641C500B8AA67 /* ModalAlbumArtViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 532B552614D641C500B8AA67 /* ModalAlbumArtViewController.xib */; };
 		532B552814D641C500B8AA67 /* ModalAlbumArtViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 532B552614D641C500B8AA67 /* ModalAlbumArtViewController.xib */; };
 		532B552914D641C500B8AA67 /* ModalAlbumArtViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 532B552614D641C500B8AA67 /* ModalAlbumArtViewController.xib */; };
@@ -229,9 +229,9 @@
 		532B554414D7397000B8AA67 /* SeparaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 532B554114D7397000B8AA67 /* SeparaterView.m */; };
 		532D9B43131AE19700FD8CA7 /* CustomUIAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 532D9B42131AE19700FD8CA7 /* CustomUIAlertView.m */; };
 		532D9DE2131B682600FD8CA7 /* KeychainAccessGroups.plist in Resources */ = {isa = PBXBuildFile; fileRef = 532D9DE1131B682600FD8CA7 /* KeychainAccessGroups.plist */; };
-		532E6FCF11AB31C3000A0E3B /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 532E6FCA11AB31C3000A0E3B /* FMDatabase.m */; };
-		532E6FD011AB31C3000A0E3B /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 532E6FCC11AB31C3000A0E3B /* FMDatabaseAdditions.m */; };
-		532E6FD111AB31C3000A0E3B /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 532E6FCE11AB31C3000A0E3B /* FMResultSet.m */; };
+		532E6FCF11AB31C3000A0E3B /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 532E6FCA11AB31C3000A0E3B /* FMDatabase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		532E6FD011AB31C3000A0E3B /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 532E6FCC11AB31C3000A0E3B /* FMDatabaseAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		532E6FD111AB31C3000A0E3B /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 532E6FCE11AB31C3000A0E3B /* FMResultSet.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5332468014D7BDFA008B35F6 /* controller-equalizer-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467B14D7BDFA008B35F6 /* controller-equalizer-ipad.png */; };
 		5332468114D7BDFA008B35F6 /* controller-equalizer-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467B14D7BDFA008B35F6 /* controller-equalizer-ipad.png */; };
 		5332468214D7BDFA008B35F6 /* controller-equalizer-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467B14D7BDFA008B35F6 /* controller-equalizer-ipad.png */; };
@@ -321,7 +321,7 @@
 		535AC253146C8E1D00E19492 /* ISMSStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 535AC252146C8E1D00E19492 /* ISMSStreamHandler.m */; };
 		535AC254146C8E1D00E19492 /* ISMSStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 535AC252146C8E1D00E19492 /* ISMSStreamHandler.m */; };
 		535AC255146C8E1D00E19492 /* ISMSStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 535AC252146C8E1D00E19492 /* ISMSStreamHandler.m */; };
-		535B7246134C16FC003E0E1C /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7245134C16FC003E0E1C /* GTMNSString+HTML.m */; };
+		535B7246134C16FC003E0E1C /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7245134C16FC003E0E1C /* GTMNSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		535B7254134CEE1E003E0E1C /* DDSocialDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7251134CEE1E003E0E1C /* DDSocialDialog.m */; };
 		535B7255134CEE1E003E0E1C /* DDSocialLoginDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7253134CEE1E003E0E1C /* DDSocialLoginDialog.m */; };
 		535B726A134CFB0E003E0E1C /* FolderPickerDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7269134CFB0A003E0E1C /* FolderPickerDialog.m */; };
@@ -481,7 +481,7 @@
 		538C720A127D115500A296C0 /* shuffle-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C7208127D115500A296C0 /* shuffle-small.png */; };
 		538C720B127D115500A296C0 /* shuffle-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C7209127D115500A296C0 /* shuffle-small@2x.png */; };
 		538DF6E812CC25C300DB6D8C /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 538DF6E712CC25C300DB6D8C /* Server.m */; };
-		538F646A137105610049C6ED /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 538F6469137105610049C6ED /* SFHFKeychainUtils.m */; };
+		538F646A137105610049C6ED /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 538F6469137105610049C6ED /* SFHFKeychainUtils.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		539796E41162B68800F41D8B /* AllAlbumsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 539796E31162B68800F41D8B /* AllAlbumsViewController.m */; };
 		539797FA1162D3F100F41D8B /* AllAlbumsUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 539797F91162D3F100F41D8B /* AllAlbumsUITableViewCell.m */; };
 		539797FE1162D4D200F41D8B /* AllAlbumsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 539797FD1162D4D200F41D8B /* AllAlbumsViewController.xib */; };
@@ -517,17 +517,17 @@
 		53A2BE28147DF13600E44822 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A2BE27147DF13600E44822 /* OpenGLES.framework */; };
 		53A2BE29147DF14300E44822 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A2BE27147DF13600E44822 /* OpenGLES.framework */; };
 		53A2BE2A147DF14600E44822 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A2BE27147DF13600E44822 /* OpenGLES.framework */; };
-		53A4548A133D6F8200741030 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A4547B133D6F8200741030 /* AsyncSocket.m */; };
+		53A4548A133D6F8200741030 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A4547B133D6F8200741030 /* AsyncSocket.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A4548B133D6F8200741030 /* DDData.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A4547D133D6F8200741030 /* DDData.m */; };
 		53A4548C133D6F8200741030 /* DDNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A4547F133D6F8200741030 /* DDNumber.m */; };
 		53A4548D133D6F8200741030 /* DDRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45481133D6F8200741030 /* DDRange.m */; };
-		53A4548E133D6F8200741030 /* HTTPAuthenticationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45483133D6F8200741030 /* HTTPAuthenticationRequest.m */; };
-		53A4548F133D6F8200741030 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45485133D6F8200741030 /* HTTPConnection.m */; };
-		53A45490133D6F8200741030 /* HTTPResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45487133D6F8200741030 /* HTTPResponse.m */; };
-		53A45491133D6F8200741030 /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45489133D6F8200741030 /* HTTPServer.m */; };
-		53A45494133D710C00741030 /* HttpIndexPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45493133D710C00741030 /* HttpIndexPage.m */; };
-		53A4549D133D75E900741030 /* MyHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A4549C133D75E300741030 /* MyHTTPConnection.m */; };
-		53A454AF133D7E2800741030 /* LocalhostAddresses.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A454AE133D7E2700741030 /* LocalhostAddresses.m */; };
+		53A4548E133D6F8200741030 /* HTTPAuthenticationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45483133D6F8200741030 /* HTTPAuthenticationRequest.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		53A4548F133D6F8200741030 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45485133D6F8200741030 /* HTTPConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		53A45490133D6F8200741030 /* HTTPResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45487133D6F8200741030 /* HTTPResponse.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		53A45491133D6F8200741030 /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45489133D6F8200741030 /* HTTPServer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		53A45494133D710C00741030 /* HttpIndexPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45493133D710C00741030 /* HttpIndexPage.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		53A4549D133D75E900741030 /* MyHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A4549C133D75E300741030 /* MyHTTPConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		53A454AF133D7E2800741030 /* LocalhostAddresses.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A454AE133D7E2700741030 /* LocalhostAddresses.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A698DA1467B34D00DCAFCB /* SUSSubFolderLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A698D91467B34D00DCAFCB /* SUSSubFolderLoader.m */; };
 		53A698DB1467B34D00DCAFCB /* SUSSubFolderLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A698D91467B34D00DCAFCB /* SUSSubFolderLoader.m */; };
 		53A698DC1467B34D00DCAFCB /* SUSSubFolderLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A698D91467B34D00DCAFCB /* SUSSubFolderLoader.m */; };
@@ -544,52 +544,52 @@
 		53A7E4FD1516DB1D002DA214 /* libOAuth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A7E4BF1516DB1D002DA214 /* libOAuth.a */; };
 		53A7E4FE1516DB1D002DA214 /* libOAuth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A7E4BF1516DB1D002DA214 /* libOAuth.a */; };
 		53A7E4FF1516DB1D002DA214 /* libOAuth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A7E4BF1516DB1D002DA214 /* libOAuth.a */; };
-		53A7E5001516DB1D002DA214 /* MGTwitterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4D21516DB1D002DA214 /* MGTwitterEngine.m */; };
+		53A7E5001516DB1D002DA214 /* MGTwitterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4D21516DB1D002DA214 /* MGTwitterEngine.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A7E5011516DB1D002DA214 /* MGTwitterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4D21516DB1D002DA214 /* MGTwitterEngine.m */; };
 		53A7E5021516DB1D002DA214 /* MGTwitterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4D21516DB1D002DA214 /* MGTwitterEngine.m */; };
-		53A7E5031516DB1D002DA214 /* MGTwitterHTTPURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4D61516DB1D002DA214 /* MGTwitterHTTPURLConnection.m */; };
+		53A7E5031516DB1D002DA214 /* MGTwitterHTTPURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4D61516DB1D002DA214 /* MGTwitterHTTPURLConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A7E5041516DB1D002DA214 /* MGTwitterHTTPURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4D61516DB1D002DA214 /* MGTwitterHTTPURLConnection.m */; };
 		53A7E5051516DB1D002DA214 /* MGTwitterHTTPURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4D61516DB1D002DA214 /* MGTwitterHTTPURLConnection.m */; };
-		53A7E5061516DB1D002DA214 /* MGTwitterLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4D81516DB1D002DA214 /* MGTwitterLibXMLParser.m */; };
+		53A7E5061516DB1D002DA214 /* MGTwitterLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4D81516DB1D002DA214 /* MGTwitterLibXMLParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A7E5071516DB1D002DA214 /* MGTwitterLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4D81516DB1D002DA214 /* MGTwitterLibXMLParser.m */; };
 		53A7E5081516DB1D002DA214 /* MGTwitterLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4D81516DB1D002DA214 /* MGTwitterLibXMLParser.m */; };
-		53A7E5091516DB1D002DA214 /* MGTwitterMessagesLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4DA1516DB1D002DA214 /* MGTwitterMessagesLibXMLParser.m */; };
+		53A7E5091516DB1D002DA214 /* MGTwitterMessagesLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4DA1516DB1D002DA214 /* MGTwitterMessagesLibXMLParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A7E50A1516DB1D002DA214 /* MGTwitterMessagesLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4DA1516DB1D002DA214 /* MGTwitterMessagesLibXMLParser.m */; };
 		53A7E50B1516DB1D002DA214 /* MGTwitterMessagesLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4DA1516DB1D002DA214 /* MGTwitterMessagesLibXMLParser.m */; };
-		53A7E50C1516DB1D002DA214 /* MGTwitterMessagesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4DC1516DB1D002DA214 /* MGTwitterMessagesParser.m */; };
+		53A7E50C1516DB1D002DA214 /* MGTwitterMessagesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4DC1516DB1D002DA214 /* MGTwitterMessagesParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A7E50D1516DB1D002DA214 /* MGTwitterMessagesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4DC1516DB1D002DA214 /* MGTwitterMessagesParser.m */; };
 		53A7E50E1516DB1D002DA214 /* MGTwitterMessagesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4DC1516DB1D002DA214 /* MGTwitterMessagesParser.m */; };
-		53A7E50F1516DB1D002DA214 /* MGTwitterMiscLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4DE1516DB1D002DA214 /* MGTwitterMiscLibXMLParser.m */; };
+		53A7E50F1516DB1D002DA214 /* MGTwitterMiscLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4DE1516DB1D002DA214 /* MGTwitterMiscLibXMLParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A7E5101516DB1D002DA214 /* MGTwitterMiscLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4DE1516DB1D002DA214 /* MGTwitterMiscLibXMLParser.m */; };
 		53A7E5111516DB1D002DA214 /* MGTwitterMiscLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4DE1516DB1D002DA214 /* MGTwitterMiscLibXMLParser.m */; };
-		53A7E5121516DB1D002DA214 /* MGTwitterMiscParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4E01516DB1D002DA214 /* MGTwitterMiscParser.m */; };
+		53A7E5121516DB1D002DA214 /* MGTwitterMiscParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4E01516DB1D002DA214 /* MGTwitterMiscParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A7E5131516DB1D002DA214 /* MGTwitterMiscParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4E01516DB1D002DA214 /* MGTwitterMiscParser.m */; };
 		53A7E5141516DB1D002DA214 /* MGTwitterMiscParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4E01516DB1D002DA214 /* MGTwitterMiscParser.m */; };
-		53A7E5151516DB1D002DA214 /* MGTwitterStatusesLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4E41516DB1D002DA214 /* MGTwitterStatusesLibXMLParser.m */; };
+		53A7E5151516DB1D002DA214 /* MGTwitterStatusesLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4E41516DB1D002DA214 /* MGTwitterStatusesLibXMLParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A7E5161516DB1D002DA214 /* MGTwitterStatusesLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4E41516DB1D002DA214 /* MGTwitterStatusesLibXMLParser.m */; };
 		53A7E5171516DB1D002DA214 /* MGTwitterStatusesLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4E41516DB1D002DA214 /* MGTwitterStatusesLibXMLParser.m */; };
-		53A7E5181516DB1D002DA214 /* MGTwitterStatusesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4E61516DB1D002DA214 /* MGTwitterStatusesParser.m */; };
+		53A7E5181516DB1D002DA214 /* MGTwitterStatusesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4E61516DB1D002DA214 /* MGTwitterStatusesParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A7E5191516DB1D002DA214 /* MGTwitterStatusesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4E61516DB1D002DA214 /* MGTwitterStatusesParser.m */; };
 		53A7E51A1516DB1D002DA214 /* MGTwitterStatusesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4E61516DB1D002DA214 /* MGTwitterStatusesParser.m */; };
-		53A7E51B1516DB1D002DA214 /* MGTwitterUsersLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4E81516DB1D002DA214 /* MGTwitterUsersLibXMLParser.m */; };
+		53A7E51B1516DB1D002DA214 /* MGTwitterUsersLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4E81516DB1D002DA214 /* MGTwitterUsersLibXMLParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A7E51C1516DB1D002DA214 /* MGTwitterUsersLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4E81516DB1D002DA214 /* MGTwitterUsersLibXMLParser.m */; };
 		53A7E51D1516DB1D002DA214 /* MGTwitterUsersLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4E81516DB1D002DA214 /* MGTwitterUsersLibXMLParser.m */; };
-		53A7E51E1516DB1D002DA214 /* MGTwitterUsersParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4EA1516DB1D002DA214 /* MGTwitterUsersParser.m */; };
+		53A7E51E1516DB1D002DA214 /* MGTwitterUsersParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4EA1516DB1D002DA214 /* MGTwitterUsersParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A7E51F1516DB1D002DA214 /* MGTwitterUsersParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4EA1516DB1D002DA214 /* MGTwitterUsersParser.m */; };
 		53A7E5201516DB1D002DA214 /* MGTwitterUsersParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4EA1516DB1D002DA214 /* MGTwitterUsersParser.m */; };
-		53A7E5211516DB1D002DA214 /* MGTwitterXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4EC1516DB1D002DA214 /* MGTwitterXMLParser.m */; };
+		53A7E5211516DB1D002DA214 /* MGTwitterXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4EC1516DB1D002DA214 /* MGTwitterXMLParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A7E5221516DB1D002DA214 /* MGTwitterXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4EC1516DB1D002DA214 /* MGTwitterXMLParser.m */; };
 		53A7E5231516DB1D002DA214 /* MGTwitterXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4EC1516DB1D002DA214 /* MGTwitterXMLParser.m */; };
 		53A7E5241516DB1D002DA214 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4EE1516DB1D002DA214 /* NSData+Base64.m */; };
 		53A7E5251516DB1D002DA214 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4EE1516DB1D002DA214 /* NSData+Base64.m */; };
 		53A7E5261516DB1D002DA214 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4EE1516DB1D002DA214 /* NSData+Base64.m */; };
-		53A7E5271516DB1D002DA214 /* NSString+UUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4F01516DB1D002DA214 /* NSString+UUID.m */; };
+		53A7E5271516DB1D002DA214 /* NSString+UUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4F01516DB1D002DA214 /* NSString+UUID.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A7E5281516DB1D002DA214 /* NSString+UUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4F01516DB1D002DA214 /* NSString+UUID.m */; };
 		53A7E5291516DB1D002DA214 /* NSString+UUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4F01516DB1D002DA214 /* NSString+UUID.m */; };
-		53A7E52A1516DB1D002DA214 /* SA_OAuthTwitterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4F31516DB1D002DA214 /* SA_OAuthTwitterController.m */; };
+		53A7E52A1516DB1D002DA214 /* SA_OAuthTwitterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4F31516DB1D002DA214 /* SA_OAuthTwitterController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A7E52B1516DB1D002DA214 /* SA_OAuthTwitterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4F31516DB1D002DA214 /* SA_OAuthTwitterController.m */; };
 		53A7E52C1516DB1D002DA214 /* SA_OAuthTwitterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4F31516DB1D002DA214 /* SA_OAuthTwitterController.m */; };
-		53A7E52D1516DB1D002DA214 /* SA_OAuthTwitterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4F51516DB1D002DA214 /* SA_OAuthTwitterEngine.m */; };
+		53A7E52D1516DB1D002DA214 /* SA_OAuthTwitterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4F51516DB1D002DA214 /* SA_OAuthTwitterEngine.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A7E52E1516DB1D002DA214 /* SA_OAuthTwitterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4F51516DB1D002DA214 /* SA_OAuthTwitterEngine.m */; };
 		53A7E52F1516DB1D002DA214 /* SA_OAuthTwitterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4F51516DB1D002DA214 /* SA_OAuthTwitterEngine.m */; };
 		53A7E5301516DB1D002DA214 /* twitter_load.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A7E4F61516DB1D002DA214 /* twitter_load.png */; };
@@ -655,13 +655,13 @@
 		53B36D7C145F95E5005538F3 /* NSMutableURLRequest+SUS.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B36D7B145F95E5005538F3 /* NSMutableURLRequest+SUS.m */; };
 		53B36D7D145F95E5005538F3 /* NSMutableURLRequest+SUS.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B36D7B145F95E5005538F3 /* NSMutableURLRequest+SUS.m */; };
 		53B36D7E145F95E5005538F3 /* NSMutableURLRequest+SUS.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B36D7B145F95E5005538F3 /* NSMutableURLRequest+SUS.m */; };
-		53B36D81145F9F29005538F3 /* NSString+URLEncode.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B36D80145F9F29005538F3 /* NSString+URLEncode.m */; };
+		53B36D81145F9F29005538F3 /* NSString+URLEncode.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B36D80145F9F29005538F3 /* NSString+URLEncode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53B36D82145F9F29005538F3 /* NSString+URLEncode.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B36D80145F9F29005538F3 /* NSString+URLEncode.m */; };
 		53B36D83145F9F29005538F3 /* NSString+URLEncode.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B36D80145F9F29005538F3 /* NSString+URLEncode.m */; };
 		53B38BD01474C14200CD8A99 /* NSArray+FirstObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B38BCF1474C14200CD8A99 /* NSArray+FirstObject.m */; };
 		53B38BD11474C14200CD8A99 /* NSArray+FirstObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B38BCF1474C14200CD8A99 /* NSArray+FirstObject.m */; };
 		53B38BD21474C14200CD8A99 /* NSArray+FirstObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B38BCF1474C14200CD8A99 /* NSArray+FirstObject.m */; };
-		53B38BD91474C95300CD8A99 /* AudioEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B38BD81474C95200CD8A99 /* AudioEngine.m */; };
+		53B38BD91474C95300CD8A99 /* AudioEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B38BD81474C95200CD8A99 /* AudioEngine.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53B38BDA1474C95300CD8A99 /* AudioEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B38BD81474C95200CD8A99 /* AudioEngine.m */; };
 		53B38BDB1474C95300CD8A99 /* AudioEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B38BD81474C95200CD8A99 /* AudioEngine.m */; };
 		53B38C12147593FA00CD8A99 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53B38C11147593F900CD8A99 /* AVFoundation.framework */; };
@@ -1536,7 +1536,7 @@
 		53DE597C14F18E7A00206529 /* AUIAnimatableLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DE597914F18E7A00206529 /* AUIAnimatableLabel.m */; };
 		53DE597D14F18E7A00206529 /* AUIAnimatableLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DE597914F18E7A00206529 /* AUIAnimatableLabel.m */; };
 		53DE597E14F18E7A00206529 /* AUIAnimatableLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DE597914F18E7A00206529 /* AUIAnimatableLabel.m */; };
-		53DE597F14F18E7A00206529 /* UIFont+CoreTextExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DE597B14F18E7A00206529 /* UIFont+CoreTextExtensions.m */; };
+		53DE597F14F18E7A00206529 /* UIFont+CoreTextExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DE597B14F18E7A00206529 /* UIFont+CoreTextExtensions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53DE598014F18E7A00206529 /* UIFont+CoreTextExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DE597B14F18E7A00206529 /* UIFont+CoreTextExtensions.m */; };
 		53DE598114F18E7A00206529 /* UIFont+CoreTextExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DE597B14F18E7A00206529 /* UIFont+CoreTextExtensions.m */; };
 		53DE598314F1932C00206529 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DE598214F1932C00206529 /* CoreText.framework */; };
@@ -1573,7 +1573,7 @@
 		53DFB307148C27080066FF94 /* downArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DFB300148C27080066FF94 /* downArrow.png */; };
 		53DFB308148C27080066FF94 /* downArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DFB300148C27080066FF94 /* downArrow.png */; };
 		53DFB309148C27080066FF94 /* downArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DFB300148C27080066FF94 /* downArrow.png */; };
-		53DFB30A148C27080066FF94 /* NSString+NSArrayExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DFB302148C27080066FF94 /* NSString+NSArrayExtension.m */; };
+		53DFB30A148C27080066FF94 /* NSString+NSArrayExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DFB302148C27080066FF94 /* NSString+NSArrayExtension.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53DFB30B148C27080066FF94 /* NSString+NSArrayExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DFB302148C27080066FF94 /* NSString+NSArrayExtension.m */; };
 		53DFB30C148C27080066FF94 /* NSString+NSArrayExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DFB302148C27080066FF94 /* NSString+NSArrayExtension.m */; };
 		53DFB30D148C27080066FF94 /* NWPickerField.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DFB304148C27080066FF94 /* NWPickerField.m */; };
@@ -5660,6 +5660,7 @@
 					armv6,
 					armv7,
 				);
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -5682,8 +5683,6 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
-					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 					"\"$(SRCROOT)/FlurryAnalytics\"",
 					"\"$(SRCROOT)/Twitter+OAuth/Libraries & Headers\"",
 				);
@@ -5711,6 +5710,7 @@
 					armv6,
 					armv7,
 				);
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
@@ -5731,8 +5731,6 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
-					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 					"\"$(SRCROOT)/FlurryAnalytics\"",
 					"\"$(SRCROOT)/Twitter+OAuth/Libraries & Headers\"",
 				);
@@ -5798,6 +5796,7 @@
 					armv6,
 					armv7,
 				);
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Datastar Consulting Services, Inc.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Datastar Consulting Services, Inc.";
 				COPY_PHASE_STRIP = NO;
@@ -5823,8 +5822,6 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/Classes/Twitter+OAuth/SAOAuthTwitterEngine\"",
-					"\"$(SRCROOT)/Classes/Twitter+OAuth/Libraries & Headers\"",
 					"\"$(SRCROOT)/FlurryAnalytics\"",
 					"\"$(SRCROOT)/Twitter+OAuth/Libraries & Headers\"",
 				);

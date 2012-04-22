@@ -34,12 +34,12 @@
 @private
 	CGRect hiddenFrame;
 	CGRect visibleFrame;
-	NWPickerField* field;
+	NWPickerField* __unsafe_unretained field;
 }
 
 @property(nonatomic, assign) CGRect hiddenFrame;
 @property(nonatomic, assign) CGRect visibleFrame;
-@property(nonatomic, assign) NWPickerField* field;
+@property(nonatomic, unsafe_unretained) NWPickerField* field;
 
 -(void) toggle;
 

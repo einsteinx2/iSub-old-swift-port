@@ -47,7 +47,6 @@
 - (void)dealloc
 {
 	[self cancelLoad];
-	[super dealloc];
 }
 
 #pragma mark - Public DAO Methods
@@ -124,7 +123,7 @@
 
 - (void)startLoad
 {	
-    self.loader = [[[SUSChatLoader alloc] initWithDelegate:self] autorelease];
+    self.loader = [[SUSChatLoader alloc] initWithDelegate:self];
     [self.loader startLoad];
 }
 

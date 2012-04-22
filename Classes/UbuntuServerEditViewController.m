@@ -18,6 +18,7 @@
 #import "NSArray+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "iPadRootViewController.h"
+#import "ServerTypeViewController.h"
 #import "MenuViewController.h"
 
 #define URL @"https://streaming.one.ubuntu.com"
@@ -102,14 +103,12 @@
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a username" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 	
 	if (![self checkPassword:passwordField.text])
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a password" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 	
 	if ([self checkUsername:usernameField.text] && [self checkPassword:passwordField.text])
@@ -179,7 +178,6 @@
 			[NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer"];
 		}
 		
-		[theServer release];
 	}
 }
 
@@ -207,13 +205,5 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void)dealloc 
-{
-	[usernameField release];
-	[passwordField release];
-	[cancelButton release];
-	[saveButton release];
-    [super dealloc];
-}
 
 @end

@@ -10,10 +10,10 @@
 
 @interface CacheAlbumUITableViewCell : CustomUITableViewCell 
 
-@property (retain) NSArray *segments;
+@property (strong) NSArray *segments;
 
-@property (retain) UIImageView *coverArtView;
-@property (retain) UIScrollView *albumNameScrollView;
-@property (retain) UILabel *albumNameLabel;
+@property (strong) UIImageView *coverArtView;
+@property (strong) UIScrollView *albumNameScrollView;
+@property (strong) UILabel *albumNameLabel;
 
 @end

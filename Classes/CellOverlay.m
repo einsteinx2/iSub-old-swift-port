@@ -15,7 +15,7 @@
 
 + (CellOverlay*)cellOverlayWithTableCell:(UITableViewCell*)cell
 {
-	return [[[CellOverlay alloc] initWithTableCell:cell] autorelease];
+	return [[CellOverlay alloc] initWithTableCell:cell];
 }
 
 - (id)initWithTableCell:(UITableViewCell*)cell
@@ -32,14 +32,14 @@
 		
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		
-		inputBlocker = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+		inputBlocker = [UIButton buttonWithType:UIButtonTypeCustom];
 		inputBlocker.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		[inputBlocker addTarget:cell action:@selector(blockerAction) forControlEvents:UIControlEventTouchUpInside];
 		inputBlocker.frame = self.frame;
 		inputBlocker.userInteractionEnabled = NO;
 		[self addSubview:inputBlocker];
 		
-		downloadButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+		downloadButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		downloadButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		downloadButton.alpha = .8;
 		[downloadButton addTarget:cell action:@selector(downloadAction) forControlEvents:UIControlEventTouchUpInside];
@@ -50,7 +50,7 @@
 		downloadButton.center = CGPointMake(width, self.frame.size.height / 2);
 		[inputBlocker addSubview:downloadButton];
 		
-		queueButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+		queueButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		queueButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		queueButton.alpha = .8;
 		[queueButton addTarget:cell action:@selector(queueAction) forControlEvents:UIControlEventTouchUpInside];
@@ -64,14 +64,6 @@
 	return self;
 }
 
-- (void)dealloc
-{
-	[inputBlocker release]; inputBlocker = nil;
-	[downloadButton release]; downloadButton = nil;
-	[queueButton release]; queueButton = nil;
-	
-	[super dealloc];
-}
 
 - (void)enableButtons
 {

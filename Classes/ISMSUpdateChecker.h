@@ -10,9 +10,9 @@
 
 @interface ISMSUpdateChecker : NSObject
 
-@property (retain) NSMutableData *receivedData;
-@property (retain) NSURLRequest *request;
-@property (retain) NSURLConnection *connection;
+@property (strong) NSMutableData *receivedData;
+@property (strong) NSURLRequest *request;
+@property (strong) NSURLConnection *connection;
 
 @property (copy) NSString *theNewVersion;
 @property (copy) NSString *message;

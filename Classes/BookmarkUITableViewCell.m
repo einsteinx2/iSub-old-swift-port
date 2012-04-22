@@ -62,12 +62,6 @@
 - (void)dealloc
 {
 	coverArtView.delegate = nil;
-	[coverArtView release]; coverArtView = nil;
-	[bookmarkNameLabel release]; bookmarkNameLabel = nil;
-	[nameScrollView release]; nameScrollView = nil;
-	[songNameLabel release]; songNameLabel = nil;
-	[artistNameLabel release]; artistNameLabel = nil;
-	[super dealloc];
 }
 
 - (void)layoutSubviews

@@ -81,10 +81,10 @@
 
 - (void)dealloc
 {
-	[myId release]; myId = nil;
-	[myArtist release]; myArtist = nil;
+	//[myId release]; myId = nil;
+	//[myArtist release]; myArtist = nil;
 	[self cancelLoad];
-	[super dealloc];
+	//[super dealloc];
 }
 
 - (FMDatabase *)db
@@ -143,7 +143,7 @@
 	}
 	[result close];
 	
-	return [anAlbum autorelease];
+	return anAlbum;
 
 }
 
@@ -184,7 +184,6 @@
 		[jukeboxS jukeboxClearPlaylist];
 		[jukeboxS jukeboxAddSongs:songIds];
 	}
-	[songIds release];
 	
 	// Set player defaults
 	playlistS.isShuffle = NO;
@@ -258,7 +257,7 @@
 
 - (void)startLoad
 {	
-    self.loader = [[[SUSSubFolderLoader alloc] initWithDelegate:self] autorelease];
+    self.loader = [[SUSSubFolderLoader alloc] initWithDelegate:self];
     self.loader.myId = self.myId;
     self.loader.myArtist = self.myArtist;
     [self.loader startLoad];

@@ -8,14 +8,10 @@
 
 #import "TBXML.h"
 
-@interface Artist : NSObject <NSCoding, NSCopying> {
-	
-	NSString *name;
-	NSString *artistId;
-}
+@interface Artist : NSObject <NSCoding, NSCopying>
 
-@property (retain) NSString *name;
-@property (retain) NSString *artistId;
+@property (copy) NSString *name;
+@property (copy) NSString *artistId;
 
 + (Artist *) artistWithName:(NSString *)theName andArtistId:(NSString *)theId;
 

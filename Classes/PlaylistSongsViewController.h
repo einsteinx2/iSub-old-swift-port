@@ -22,8 +22,8 @@
 @property NSUInteger playlistCount;
 
 @property (copy) SUSServerPlaylist *serverPlaylist;
-@property (retain) NSMutableData *receivedData;
-@property (retain) NSURLConnection *connection;
+@property (strong) NSMutableData *receivedData;
+@property (strong) NSURLConnection *connection;
 
 - (void)parseData;
 

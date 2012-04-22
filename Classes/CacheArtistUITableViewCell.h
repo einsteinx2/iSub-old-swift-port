@@ -10,7 +10,7 @@
 
 @interface CacheArtistUITableViewCell : CustomUITableViewCell 
 
-@property (retain) UIScrollView *artistNameScrollView;
-@property (retain) UILabel *artistNameLabel;
+@property (strong) UIScrollView *artistNameScrollView;
+@property (strong) UILabel *artistNameLabel;
 
 @end

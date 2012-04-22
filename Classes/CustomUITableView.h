@@ -14,7 +14,7 @@
 	UITableViewCell *tapAndHoldCell;
 }
 
-@property (retain) NSDate *lastDeleteToggle;
+@property (strong) NSDate *lastDeleteToggle;
 
 - (BOOL)isTouchHorizontal:(UITouch *)touch;
 - (BOOL)isTouchVertical:(UITouch *)touch;

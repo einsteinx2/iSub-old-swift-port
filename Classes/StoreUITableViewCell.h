@@ -10,10 +10,10 @@
 
 @interface StoreUITableViewCell : UITableViewCell 
 
-@property (retain) SKProduct *myProduct;
+@property (strong) SKProduct *myProduct;
 
-@property (retain) UILabel *titleLabel;
-@property (retain) UILabel *descLabel;
-@property (retain) UILabel *priceLabel;
+@property (strong) UILabel *titleLabel;
+@property (strong) UILabel *descLabel;
+@property (strong) UILabel *priceLabel;
 
 @end

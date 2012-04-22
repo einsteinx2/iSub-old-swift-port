@@ -27,8 +27,6 @@
 - (void)dealloc
 {
 	loader.delegate = nil;
-    [loader release]; loader = nil;
-    [super dealloc];
 }
 
 - (FMDatabase *)db
@@ -45,7 +43,7 @@
 
 - (void)startLoad
 {	
-    self.loader = [[[SUSServerPlaylistsLoader alloc] initWithDelegate:self] autorelease];
+    self.loader = [[SUSServerPlaylistsLoader alloc] initWithDelegate:self];
     [self.loader startLoad];
 }
 

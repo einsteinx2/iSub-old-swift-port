@@ -24,9 +24,9 @@
 - (void)addAction:(id)sender;
 - (void)segmentAction:(id)sender;
 
-@property (retain) NSString *theNewRedirectionUrl;
+@property (copy) NSString *theNewRedirectionUrl;
 
-@property (retain) SettingsTabViewController *settingsTabViewController;
-@property (retain) HelpTabViewController *helpTabViewController;
+@property (strong) SettingsTabViewController *settingsTabViewController;
+@property (strong) HelpTabViewController *helpTabViewController;
 
 @end

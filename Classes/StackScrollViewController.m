@@ -31,13 +31,13 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 		viewControllersStack = [[NSMutableArray alloc] init]; 
 		borderViews = [[UIView alloc] initWithFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION - 2, -2, 2, self.view.frame.size.height)];
 		[borderViews setBackgroundColor:[UIColor clearColor]];
-		UIView* verticalLineView1 = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, borderViews.frame.size.height)] autorelease];
+		UIView* verticalLineView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, borderViews.frame.size.height)];
 		[verticalLineView1 setBackgroundColor:[UIColor whiteColor]];
 		[verticalLineView1 setTag:1];
 		[verticalLineView1 setHidden:YES];
 		[borderViews addSubview:verticalLineView1];
 		
-		UIView* verticalLineView2 = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 2, borderViews.frame.size.height)] autorelease];
+		UIView* verticalLineView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2, borderViews.frame.size.height)];
 		[verticalLineView2 setBackgroundColor:[UIColor grayColor]];
 		[verticalLineView2 setTag:2];
 		[verticalLineView2 setHidden:YES];		
@@ -67,7 +67,6 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 		panRecognizer.delaysTouchesEnded = NO;
 		panRecognizer.cancelsTouchesInView = NO;
 		[self.view addGestureRecognizer:panRecognizer];
-		[panRecognizer release];
 		
 		[self.view addSubview:slideViews];
 		
@@ -847,7 +846,6 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 		NSLog(@"subView.tag: %i", subView.tag);
 	}
 	NSLog(@"  ");
-	[contView release];
 	
 	if ([[slideViews subviews] count] > 0)
 	{
@@ -1093,12 +1091,6 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 	viewAtLeft2.hidden = NO;
 }
 
-- (void)dealloc
-{
-	[slideViews release];
-	[viewControllersStack release];
-    [super dealloc];
-}
 
 
 @end

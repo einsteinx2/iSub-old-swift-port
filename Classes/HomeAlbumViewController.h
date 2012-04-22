@@ -10,12 +10,12 @@
 
 @interface HomeAlbumViewController : UITableViewController 
 
-@property (retain) NSMutableData *receivedData;
-@property (retain) NSURLConnection *connection;
+@property (strong) NSMutableData *receivedData;
+@property (strong) NSURLConnection *connection;
 
-@property (retain) NSMutableArray *listOfAlbums;
+@property (strong) NSMutableArray *listOfAlbums;
 
-@property (retain) NSString *modifier;
+@property (copy) NSString *modifier;
 @property NSUInteger offset;
 @property BOOL isMoreAlbums;
 @property BOOL isLoading;

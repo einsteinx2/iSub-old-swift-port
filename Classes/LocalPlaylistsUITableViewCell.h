@@ -10,10 +10,10 @@
 
 @interface LocalPlaylistsUITableViewCell : CustomUITableViewCell 
 
-@property (retain) NSString *md5;
+@property (copy) NSString *md5;
 
-@property (retain) UILabel *playlistCountLabel;
-@property (retain) UIScrollView *playlistNameScrollView;
-@property (retain) UILabel *playlistNameLabel;
+@property (strong) UILabel *playlistCountLabel;
+@property (strong) UIScrollView *playlistNameScrollView;
+@property (strong) UILabel *playlistNameLabel;
 
 @end

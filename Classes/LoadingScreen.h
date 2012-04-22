@@ -9,25 +9,15 @@
 
 
 @interface LoadingScreen : UIViewController
-{
-	IBOutlet UIButton *inputBlocker;
-	IBOutlet UIImageView *loadingScreenRectangle;
-	IBOutlet UILabel *loadingLabel;
-	IBOutlet UILabel *loadingTitle1;
-	IBOutlet UILabel *loadingMessage1;
-	IBOutlet UILabel *loadingTitle2;
-	IBOutlet UILabel *loadingMessage2;
-	IBOutlet UIActivityIndicatorView *activityIndicator;
-}
 
-@property (retain) UIButton *inputBlocker;
-@property (retain) UIImageView *loadingScreenRectangle;
-@property (retain) UILabel *loadingLabel;
-@property (retain) UILabel *loadingTitle1;
-@property (retain) UILabel *loadingMessage1;
-@property (retain) UILabel *loadingTitle2;
-@property (retain) UILabel *loadingMessage2;
-@property (retain) UIActivityIndicatorView *activityIndicator;
+@property (strong) UIButton *inputBlocker;
+@property (strong) UIImageView *loadingScreenRectangle;
+@property (strong) UILabel *loadingLabel;
+@property (strong) UILabel *loadingTitle1;
+@property (strong) UILabel *loadingMessage1;
+@property (strong) UILabel *loadingTitle2;
+@property (strong) UILabel *loadingMessage2;
+@property (strong) UIActivityIndicatorView *activityIndicator;
 
 
 - (id)initOnView:(UIView *)view withMessage:(NSArray *)message blockInput:(BOOL)blockInput mainWindow:(BOOL)mainWindow; 

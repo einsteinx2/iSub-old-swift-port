@@ -71,17 +71,6 @@
 	return self;
 }
 
-- (void)dealloc
-{
-	[coverArtView release]; coverArtView = nil;
-	[numberLabel release]; numberLabel = nil;
-	[nameScrollView release]; nameScrollView = nil;
-	[songNameLabel release]; songNameLabel = nil;
-	[artistNameLabel release]; artistNameLabel = nil;
-	[nowPlayingImageView release]; nowPlayingImageView = nil;
-	
-	[super dealloc];
-}
 
 
 - (void)layoutSubviews 

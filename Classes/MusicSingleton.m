@@ -98,7 +98,6 @@ double startSongSeconds = 0.0;
 														  otherButtonTitles:nil];
 		alert.tag = 4;
 		[alert show];
-		[alert release];
 	}
 	else
 	{
@@ -246,7 +245,6 @@ double startSongSeconds = 0.0;
 		iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 		streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 		[(UINavigationController*)appDelegateS.currentTabBarController.selectedViewController pushViewController:streamingPlayerViewController animated:YES];
-		[streamingPlayerViewController release];
 	}
 }
 
@@ -261,7 +259,7 @@ double startSongSeconds = 0.0;
 		
 		UIImage *albumArtImage = artDataModel.coverArtImage;
 		
-		MPMediaItemArtwork *albumArt = [[[MPMediaItemArtwork alloc] initWithImage:albumArtImage] autorelease];
+		MPMediaItemArtwork *albumArt = [[MPMediaItemArtwork alloc] initWithImage:albumArtImage];
 		
 		NSMutableDictionary *trackInfo = [NSMutableDictionary dictionaryWithObject:albumArt forKey:MPMediaItemPropertyArtwork];
 		if (currentSong.title)
@@ -309,7 +307,7 @@ double startSongSeconds = 0.0;
     @synchronized(self)
     {
 		if (sharedInstance == nil)
-			[[self alloc] init];
+			sharedInstance = [[self alloc] init];
     }
     return sharedInstance;
 }
@@ -349,7 +347,7 @@ double startSongSeconds = 0.0;
     return self;
 }
 
-- (id)retain {
+/*- (id)retain {
     return self;
 }
 
@@ -363,6 +361,6 @@ double startSongSeconds = 0.0;
 
 - (id)autorelease {
     return self;
-}
+}*/
 
 @end

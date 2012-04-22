@@ -17,7 +17,7 @@
 	SA_OAuthTwitterEngine *twitterEngine;
 }
 
-@property (retain) SA_OAuthTwitterEngine *twitterEngine;
+@property (strong) SA_OAuthTwitterEngine *twitterEngine;
 
 @property (readonly) NSTimeInterval scrobbleDelay;
 @property (readonly) NSTimeInterval subsonicDelay;

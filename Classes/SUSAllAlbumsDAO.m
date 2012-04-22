@@ -70,7 +70,6 @@
 		item.position = [result intForColumn:@"position"];
 		item.count = [result intForColumn:@"count"];
 		[indexItems addObject:item];
-		[item release];
 	}
 	[result close];
 	
@@ -79,7 +78,7 @@
 
 - (Album *)allAlbumsAlbumForPosition:(NSUInteger)position
 {
-	Album *anAlbum = [[[Album alloc] init] autorelease];
+	Album *anAlbum = [[Album alloc] init];
 	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allAlbums WHERE ROWID = ?", [NSNumber numberWithInt:position]];
 	while ([result next])
 	{
@@ -160,7 +159,7 @@
 	
 	if (index == nil)
 	{
-		index = [[self allAlbumsIndex] retain];
+		index = [self allAlbumsIndex];
 	}
 	
 	return index;

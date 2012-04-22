@@ -40,7 +40,6 @@
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	alert.tag = 1;
 	[alert show];
-	[alert release];
 }
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
@@ -48,7 +47,6 @@
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:@"There was an error parsing the XML response. Maybe you forgot to set the right port for your server?" delegate:appDelegateS cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	alert.tag = 1;
 	[alert show];
-	[alert release];
 }
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName 
@@ -86,7 +84,6 @@
 			//DLog(@"%@", anAlbum.artistId);
 			//DLog(@"  ");
 			
-			[anAlbum release];
 		}
 		else
 		{
@@ -96,7 +93,6 @@
 				Song *aSong = [[Song alloc] initWithAttributeDict:attributeDict];
 				if (aSong.path)
 					[self.listOfSongs addObject:aSong];
-				[aSong release];
 			}
 		}
 	}	
@@ -119,13 +115,5 @@
 }
 
 
-- (void) dealloc 
-{
-	[myArtist release];
-	[currentElementValue release];
-	[listOfAlbums release];
-	[listOfSongs release];
-	[super dealloc];
-}
 
 @end

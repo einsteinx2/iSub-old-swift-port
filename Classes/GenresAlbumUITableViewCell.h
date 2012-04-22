@@ -13,11 +13,11 @@
 @interface GenresAlbumUITableViewCell : CustomUITableViewCell 
 
 @property NSInteger segment;
-@property (retain) NSString *seg1;
-@property (retain) NSString *genre;
+@property (copy) NSString *seg1;
+@property (copy) NSString *genre;
 
-@property (retain) AsynchronousImageView *coverArtView;
-@property (retain) UIScrollView *albumNameScrollView;
-@property (retain) UILabel *albumNameLabel;
+@property (strong) AsynchronousImageView *coverArtView;
+@property (strong) UIScrollView *albumNameScrollView;
+@property (strong) UILabel *albumNameLabel;
 
 @end

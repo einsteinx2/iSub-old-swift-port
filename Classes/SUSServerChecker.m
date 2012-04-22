@@ -107,7 +107,7 @@
              [self.delegate SUSServerURLCheckRedirected:self redirectUrl:[inRequest URL]];
         }
         
-        NSMutableURLRequest *r = [[self.request mutableCopy] autorelease]; // original request
+        NSMutableURLRequest *r = [self.request mutableCopy]; // original request
 		[r setTimeoutInterval:ISMSServerCheckTimeout];
         [r setURL:[inRequest URL]];
         return r;
@@ -208,20 +208,11 @@
 		[self.delegate SUSServerURLCheckFailed:self withError:error];
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerCheckFailed];
     }
-	[tbxml release];
     
 	self.receivedData = nil;
 	self.connection = nil;
     self.receivedData = nil;
 }
 
-- (void) dealloc
-{
-	[versionString release]; versionString = nil;
-	[request release]; request = nil;
-	[connection release]; connection = nil;
-    [receivedData release]; receivedData = nil;
-	[super dealloc];
-}
 
 @end

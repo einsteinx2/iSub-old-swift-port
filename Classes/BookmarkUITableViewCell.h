@@ -12,10 +12,10 @@
 
 @interface BookmarkUITableViewCell : CustomUITableViewCell 
 
-@property (retain) AsynchronousImageView *coverArtView;
-@property (retain) UILabel *bookmarkNameLabel;
-@property (retain) UIScrollView *nameScrollView;
-@property (retain) UILabel *songNameLabel;
-@property (retain) UILabel *artistNameLabel;
+@property (strong) AsynchronousImageView *coverArtView;
+@property (strong) UILabel *bookmarkNameLabel;
+@property (strong) UIScrollView *nameScrollView;
+@property (strong) UILabel *songNameLabel;
+@property (strong) UILabel *artistNameLabel;
 
 @end

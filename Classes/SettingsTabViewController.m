@@ -546,7 +546,6 @@
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Reset Album Folder Cache" message:@"Are you sure you want to do this? This clears just the cached folder listings, not the cached songs" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
 	alert.tag = 0;
 	[alert show];
-	[alert release];
 }
 
 - (IBAction)resetAlbumArtCacheAction
@@ -554,7 +553,6 @@
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Reset Album Art Cache" message:@"Are you sure you want to do this? This will clear all saved album art." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
 	alert.tag = 1;
 	[alert show];
-	[alert release];
 }
 
 - (void)resetFolderCache
@@ -698,10 +696,7 @@
 - (void)dealloc 
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"twitterAuthenticated" object:nil];
-	[parentController release];
 	
-	[loadedTime release];
-    [super dealloc];
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField

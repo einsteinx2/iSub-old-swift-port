@@ -45,13 +45,6 @@ static UIImage *nowPlayingImageWhite = nil;
 	self.deleteToggleImage.frame = CGRectMake(5.0, newY, oldFrame.size.width, oldFrame.size.height);
 }
 
-- (void)dealloc
-{
-	[indexPath release]; indexPath = nil;
-	[deleteToggleImage release]; deleteToggleImage = nil;
-	[overlayView release]; overlayView = nil;
-	[super dealloc];
-}
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
 {
@@ -140,7 +133,7 @@ static UIImage *nowPlayingImageWhite = nil;
 - (UIImage *)nowPlayingImageBlack
 {
 	if (!nowPlayingImageBlack)
-		nowPlayingImageBlack = [[UIImage imageNamed:@"playing-cell-icon.png"] retain];
+		nowPlayingImageBlack = [UIImage imageNamed:@"playing-cell-icon.png"];
 	
 	return nowPlayingImageBlack;
 }
@@ -148,7 +141,7 @@ static UIImage *nowPlayingImageWhite = nil;
 - (UIImage *)nowPlayingImageWhite
 {
 	if (!nowPlayingImageWhite)
-		nowPlayingImageWhite = [[UIImage imageNamed:@"playing-cell-icon-white.png"] retain];
+		nowPlayingImageWhite = [UIImage imageNamed:@"playing-cell-icon-white.png"];
 	
 	return nowPlayingImageWhite;
 }

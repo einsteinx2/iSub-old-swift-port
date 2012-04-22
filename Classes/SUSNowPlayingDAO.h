@@ -12,10 +12,10 @@
 @class SUSNowPlayingLoader, Song;
 @interface SUSNowPlayingDAO : NSObject <SUSLoaderDelegate, SUSLoaderManager>
 
-@property (assign) id<SUSLoaderDelegate> delegate;
-@property (retain) SUSNowPlayingLoader *loader;
+@property (unsafe_unretained) id<SUSLoaderDelegate> delegate;
+@property (strong) SUSNowPlayingLoader *loader;
 
-@property (retain) NSArray *nowPlayingSongDicts;
+@property (strong) NSArray *nowPlayingSongDicts;
 
 @property (readonly) NSUInteger count;
 

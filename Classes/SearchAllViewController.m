@@ -40,16 +40,6 @@
 }
 
 
-- (void)dealloc
-{
-	[cellNames release]; cellNames = nil;
-	[listOfArtists release]; listOfArtists = nil;
-	[listOfAlbums release]; listOfAlbums = nil;
-	[listOfSongs release]; listOfSongs = nil;
-	[query release]; query = nil;
-	
-    [super dealloc];
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -87,9 +77,8 @@
 	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
 	fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	[self.tableView addSubview:fadeTop];
-	[fadeTop release];
 	
-	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fadeBottom;
@@ -135,7 +124,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) 
 	{
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
 	
 	cell.textLabel.text = [cellNames objectAtIndexSafe:indexPath.row];
@@ -214,7 +203,6 @@
 	
 	//[self.navigationController pushViewController:searchView animated:YES];
 	[self pushViewControllerCustom:searchView];
-	[searchView release];
 }
 
 @end

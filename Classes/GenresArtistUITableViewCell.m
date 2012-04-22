@@ -59,13 +59,6 @@
 	artistNameLabel.frame = newFrame;
 }
 
-- (void)dealloc 
-{
-	[genre release]; genre = nil;
-	[artistNameScrollView release]; artistNameScrollView = nil;
-	[artistNameLabel release]; artistNameLabel = nil;
-    [super dealloc];
-}
 
 #pragma mark - Overlay
 

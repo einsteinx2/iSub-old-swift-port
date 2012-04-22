@@ -70,18 +70,6 @@
 	return self;
 }
 
-- (void)dealloc 
-{
-	[md5 release]; md5 = nil;
-	[trackNumberLabel release]; trackNumberLabel = nil;
-	[songNameScrollView release]; songNameScrollView = nil;
-	[songNameLabel release]; songNameLabel = nil;
-	[artistNameLabel release]; artistNameLabel = nil;
-	[songDurationLabel release]; songDurationLabel = nil;
-
-	
-	[super dealloc];
-}
 
 - (void)layoutSubviews 
 {

@@ -35,9 +35,6 @@
 	unsigned long long int queueDownloadProgress;
 	NSTimer *updateTimer;
 	
-	NSMutableArray *listOfArtists;
-	NSMutableArray *listOfArtistsSections;
-	NSArray *sectionInfo;
 	NSUInteger rowCounter;
 		
 	UIButton *jukeboxInputBlocker;
@@ -45,11 +42,11 @@
 	BOOL showIndex;
 }
 
-@property (retain) NSMutableArray *listOfArtists;
-@property (retain) NSMutableArray *listOfArtistsSections;
-@property (retain) NSArray *sectionInfo;
+@property (strong) NSMutableArray *listOfArtists;
+@property (strong) NSMutableArray *listOfArtistsSections;
+@property (strong) NSArray *sectionInfo;
 
-@property (retain) UILabel *cacheSizeLabel;
+@property (strong) UILabel *cacheSizeLabel;
 
 //@property (retain) UIProgressView *queueDownloadProgressView;
 

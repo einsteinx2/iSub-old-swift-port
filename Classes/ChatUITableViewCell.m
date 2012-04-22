@@ -42,12 +42,6 @@
 	return self;
 }
 
-- (void)dealloc
-{
-	[userNameLabel release]; userNameLabel = nil;
-	[messageLabel release]; messageLabel = nil;
-	[super dealloc];
-}
 
 - (void)layoutSubviews
 {

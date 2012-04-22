@@ -25,10 +25,5 @@
 	return self;
 }
 
-- (void)dealloc
-{
-	[name release]; name = nil;
-	[super dealloc];
-}
 
 @end

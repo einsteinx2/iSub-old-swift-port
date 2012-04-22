@@ -23,7 +23,7 @@
 
 + (BassEffectHandle *)handleWithEffectHandle:(HFX)handle
 {
-	return [[[BassEffectHandle alloc] initWithEffectHandle:handle] autorelease];
+	return [[BassEffectHandle alloc] initWithEffectHandle:handle];
 }
 
 - (NSUInteger)hash

@@ -12,11 +12,11 @@
 
 @interface AlbumUITableViewCell : CustomUITableViewCell 
 
-@property (retain) NSString *myId;
-@property (retain) Artist *myArtist;
+@property (copy) NSString *myId;
+@property (strong) Artist *myArtist;
 
-@property (retain) AsynchronousImageView *coverArtView;
-@property (retain) UIScrollView *albumNameScrollView;
-@property (retain) UILabel *albumNameLabel;
+@property (strong) AsynchronousImageView *coverArtView;
+@property (strong) UIScrollView *albumNameScrollView;
+@property (strong) UILabel *albumNameLabel;
 
 @end

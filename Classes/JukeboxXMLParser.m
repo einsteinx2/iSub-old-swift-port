@@ -36,7 +36,6 @@
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:appDelegateS cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	alert.tag = 1;
 	[alert show];
-	[alert release];
 	
 	if ([errorCode isEqualToString:@"50"])
 	{
@@ -51,7 +50,6 @@
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Subsonic Error" message:@"There was an error parsing the Jukebox XML response." delegate:appDelegateS cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	alert.tag = 1;
 	[alert show];
-	[alert release];
 }
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName 
@@ -75,17 +73,10 @@
 		Song *aSong = [[Song alloc] initWithAttributeDict:attributeDict];
 		if (aSong.path)
 			[aSong addToCurrentPlaylist];
-		[aSong release];
 	}
 }
 
 
 
-- (void)dealloc
-{
-	[listOfSongs release];
-
-	[super dealloc];
-}
 
 @end

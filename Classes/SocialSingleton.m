@@ -97,7 +97,8 @@ static SocialSingleton *sharedInstance = nil;
 		{
 			NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(currentSong.songId), @"id", nil];
 			NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters byteOffset:0];
-			[[NSURLConnection alloc] initWithRequest:request delegate:self];
+			NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+			NSLog(@"%@", conn);
 			//DLog(@"notified Subsonic about %@", currentSong.title);
 		}
 	}
@@ -136,7 +137,8 @@ static SocialSingleton *sharedInstance = nil;
 		NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(aSong.songId), @"id", n2N(isSubmissionString), @"submission", nil];
 		NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"scrobble" andParameters:parameters];
 		
-		[[NSURLConnection alloc] initWithRequest:request delegate:self];
+		NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+		NSLog(@"%@", conn);
 	}
 }
 
@@ -171,19 +173,16 @@ static SocialSingleton *sharedInstance = nil;
 		// Subsonic has been notified, cancel the connection
 		DLog(@"Subsonic has been notified, cancel the connection");
 		[theConnection cancel];
-		[theConnection release];
 	}
 }
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
 	//DLog(@"Subsonic cached song play notification failed\n\nError: %@", [error localizedDescription]);
-	[theConnection release];
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	[theConnection release];
 }
 
 #pragma mark - Twitter -
@@ -273,7 +272,6 @@ static SocialSingleton *sharedInstance = nil;
 	self.twitterEngine = nil;
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Twitter Error" message:@"Failed to authenticate user. Try logging in again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 	[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
-	[alert release];
 }
 
 - (void)OAuthTwitterControllerCanceled:(SA_OAuthTwitterController *)controller 
@@ -310,7 +308,7 @@ static SocialSingleton *sharedInstance = nil;
     @synchronized(self)
     {
         if (sharedInstance == nil)
-			[[self alloc] init];
+			sharedInstance = [[self alloc] init];
     }
     return sharedInstance;
 }
@@ -357,7 +355,7 @@ static SocialSingleton *sharedInstance = nil;
     return self;
 }
 
-- (id)retain
+/*- (id)retain
 {
     return self;
 }
@@ -375,6 +373,6 @@ static SocialSingleton *sharedInstance = nil;
 - (id)autorelease 
 {
     return self;
-}
+}*/
 
 @end

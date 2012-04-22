@@ -31,7 +31,7 @@
 		dataModel = [[SUSLyricsDAO alloc] init];
 		
         // Custom initialization
-		self.view = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 300)] autorelease];
+		self.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 300)];
 		self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		
 		textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 45, 320, 255)];
@@ -62,7 +62,6 @@
 		}*/
 		[self updateLyricsLabel];
 		[self.view addSubview:textView];
-		[textView release];
 		
 		UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
 		titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -72,7 +71,6 @@
 		titleLabel.textAlignment = UITextAlignmentCenter;
 		titleLabel.text = @"Lyrics";
 		[self.view addSubview:titleLabel];
-		[titleLabel release];	
     }
     return self;
 }
@@ -111,8 +109,6 @@
 - (void)dealloc 
 {
 	dataModel.delegate = nil;
-	[dataModel release]; dataModel = nil;
-    [super dealloc];
     
 }
 

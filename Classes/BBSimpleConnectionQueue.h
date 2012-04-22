@@ -15,12 +15,12 @@
 		
 	BOOL isRunning;
 	
-	id <BBSimpleConnectionQueueDelegate> delegate;
+	id <BBSimpleConnectionQueueDelegate> __unsafe_unretained delegate;
 }
 
 @property (readonly) NSMutableArray *connectionStack;
 @property (readonly) BOOL isRunning;
-@property (assign) id <BBSimpleConnectionQueueDelegate> delegate;
+@property (unsafe_unretained) id <BBSimpleConnectionQueueDelegate> delegate;
 
 - (void)registerConnection:(NSURLConnection *)connection;
 - (void)connectionFinished:(NSURLConnection *)connection;

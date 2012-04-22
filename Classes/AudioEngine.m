@@ -258,7 +258,7 @@ void CALLBACK MyStreamFreeCallback(HSYNC handle, DWORD channel, DWORD data, void
 		DLog(@"removing user info from dict");
 		DLog(@"%@", sharedInstance.bassUserInfoDict);
 		[sharedInstance removeUserInfoForStream:channel];
-		BassUserInfo *userInfo = (BassUserInfo*)user;
+		BassUserInfo *userInfo = (__bridge BassUserInfo*)user;
 		[userInfo release];
 		DLog(@"%@", sharedInstance.bassUserInfoDict);
 	}

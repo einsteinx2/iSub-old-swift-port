@@ -38,6 +38,7 @@
 #import "UIViewController+PushViewControllerCustom.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "AudioEngine.h"
+#import "iPadRootViewController.h"
 
 @interface AlbumViewController (Private)
 - (void)dataSourceDidFinishLoadingNewData;
@@ -91,7 +92,7 @@
 			self.myAlbum = anAlbum;
 		}
 		
-		self.dataModel = [[[SUSSubFolderDAO alloc] initWithDelegate:self andId:self.myId andArtist:self.myArtist] autorelease];
+		self.dataModel = [[SUSSubFolderDAO alloc] initWithDelegate:self andId:self.myId andArtist:self.myArtist];
 		
         if (dataModel.hasLoaded)
         {
@@ -115,7 +116,7 @@
 	albumInfoArtView.delegate = self;
 	
 	// Add the table fade
-	UIImageView *fade = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+	UIImageView *fade = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
 	fade.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 	fade.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fade;
@@ -124,7 +125,6 @@
 	refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
 	refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
 	[self.tableView addSubview:refreshHeaderView];
-	[refreshHeaderView release];
 	
 	if (IS_IPAD())
 	{
@@ -142,7 +142,7 @@
 	
 	if(musicS.showPlayerIcon)
 	{
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
+		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
 	}
 	else
 	{
@@ -177,25 +177,9 @@
 	
 	albumInfoArtView.delegate = nil;
 	
-	[myId release]; myId = nil;
-	[myArtist release]; myArtist = nil;
-	[myAlbum release]; myAlbum = nil;
-	[sectionInfo release]; sectionInfo = nil;
 	
-	[playAllShuffleAllView release]; playAllShuffleAllView = nil;
-	[albumInfoView release]; albumInfoView = nil;
-	[albumInfoArtHolderView release]; albumInfoArtHolderView = nil;
-	[albumInfoArtView release]; albumInfoArtView = nil;
-	[albumInfoArtReflection release]; albumInfoArtReflection = nil;
-	[albumInfoLabelHolderView release]; albumInfoLabelHolderView = nil;
-	[albumInfoArtistLabel release]; albumInfoArtistLabel = nil;
-	[albumInfoAlbumLabel release]; albumInfoAlbumLabel = nil;
-	[albumInfoTrackCountLabel release]; albumInfoTrackCountLabel = nil;
-	[albumInfoDurationLabel release]; albumInfoDurationLabel = nil;
 	
 	dataModel.delegate = nil;
-	[dataModel release]; dataModel = nil;
-	[super dealloc];
 }
 
 #pragma mark Loading
@@ -240,7 +224,6 @@
 			[headerView addSubview:playAllShuffleAllView];
 			
 			self.tableView.tableHeaderView = headerView;
-			[headerView release];
 		}
 		
 		albumInfoArtView.coverArtId = myAlbum.coverArtId;
@@ -282,7 +265,6 @@
 			[appDelegateS.ipadRootViewController presentModalViewController:largeArt animated:YES];
 		else
 			[self presentModalViewController:largeArt animated:YES];
-		[largeArt release];
 	}
 }
 
@@ -301,7 +283,6 @@
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-	[streamingPlayerViewController release];
 }
 
 #pragma mark Table view methods
@@ -309,7 +290,7 @@
 // Following 2 methods handle the right side index
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView 
 {
-	NSMutableArray *indexes = [[[NSMutableArray alloc] init] autorelease];
+	NSMutableArray *indexes = [[NSMutableArray alloc] init];
 	for (int i = 0; i < [sectionInfo count]; i++)
 	{
 		[indexes addObject:[[sectionInfo objectAtIndexSafe:i] objectAtIndexSafe:0]];
@@ -342,7 +323,7 @@
 		AlbumUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[[AlbumUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+			cell = [[AlbumUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		}
 		
@@ -358,7 +339,7 @@
 		[cell.albumNameLabel setText:anAlbum.title];
 				
 		// Setup cell backgrond color
-		cell.backgroundView = [[[UIView alloc] init] autorelease];
+		cell.backgroundView = [[UIView alloc] init];
 		if(indexPath.row % 2 == 0)
 			cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
 		else
@@ -372,7 +353,7 @@
 		SongUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[[SongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+			cell = [[SongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 			cell.accessoryType = UITableViewCellAccessoryNone;
 		}
 		cell.indexPath = indexPath;
@@ -409,7 +390,7 @@
 		else
 			cell.songDurationLabel.text = @"";
 		
-		cell.backgroundView = [[[UIView alloc] init] autorelease];
+		cell.backgroundView = [[UIView alloc] init];
 		if(indexPath.row % 2 == 0)
 		{
 			if (aSong.isFullyCached)
@@ -451,7 +432,6 @@
             			
 			AlbumViewController *albumViewController = [[AlbumViewController alloc] initWithArtist:nil orAlbum:anAlbum];	
 			[self pushViewControllerCustom:albumViewController];
-			[albumViewController release];
 		}
 		else
 		{
@@ -467,7 +447,6 @@
 				iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 				streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 				[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-				[streamingPlayerViewController release];
 			}
 		}
 	}
@@ -485,7 +464,6 @@
 	NSString *message = [NSString stringWithFormat:@"There was an error loading the album.\n\nError %i: %@", [error code], [error localizedDescription]];
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
-	[alert release];
 	
 	[viewObjectsS hideLoadingScreen];
 	

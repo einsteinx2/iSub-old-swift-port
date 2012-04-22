@@ -12,22 +12,17 @@
 @class FMDatabase, Song, SUSAllSongsLoader;
 
 @interface SUSAllSongsDAO : NSObject <SUSLoaderManager, SUSLoaderDelegate>
-{
-	id<SUSLoaderDelegate> delegate;
-		
-	NSArray *index;
-}
 
-@property (assign) id<SUSLoaderDelegate> delegate;
+@property (unsafe_unretained) id<SUSLoaderDelegate> delegate;
 
-@property (readonly) FMDatabase *db;
+@property (unsafe_unretained, readonly) FMDatabase *db;
 
 @property (readonly) NSUInteger count;
 @property (readonly) NSUInteger searchCount;
-@property (readonly) NSArray *index;
+@property (unsafe_unretained, readonly) NSArray *index;
 @property (readonly) BOOL isDataLoaded;
 
-@property (retain) SUSAllSongsLoader *loader;
+@property (strong) SUSAllSongsLoader *loader;
 
 - (id)initWithDelegate:(NSObject <SUSLoaderDelegate> *)theDelegate;
 - (void)restartLoad;

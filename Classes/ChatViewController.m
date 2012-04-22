@@ -70,7 +70,7 @@
 
 - (void)createDataModel
 {
-	self.dataModel = [[[SUSChatDAO alloc] initWithDelegate:self] autorelease];
+	self.dataModel = [[SUSChatDAO alloc] initWithDelegate:self];
 }
 
 - (void)loadData
@@ -97,21 +97,19 @@
 	self.title = @"Chat";
 
 	// Create text input box in header
-	headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 82)] autorelease];
+	headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 82)];
 	headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	headerView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
 	
 	CGRect sepFrame = CGRectMake(0, 0, headerView.bounds.size.width, 2);
 	SeparaterView *sepView = [[SeparaterView alloc] initWithFrame:sepFrame];
 	[headerView addSubview:sepView];
-	[sepView release];
 	
 	textInput = [[CustomUITextView alloc] initWithFrame:CGRectMake(5, 5, 240, 72)];
 	textInput.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	textInput.font = [UIFont systemFontOfSize:16];
 	textInput.delegate = self;
 	[headerView addSubview:textInput];
-	[textInput release];
 	
 	UIButton *sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	sendButton.frame = CGRectMake(252, 11, 60, 60);
@@ -127,7 +125,6 @@
 	refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
 	refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
 	[self.tableView addSubview:refreshHeaderView];
-	[refreshHeaderView release];
 	
 	if (IS_IPAD())
 	{
@@ -135,7 +132,7 @@
 	}
 
 	// Add the table fade
-	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fadeBottom;
@@ -149,7 +146,7 @@
 	
 	if(musicS.showPlayerIcon)
 	{
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
+		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
 	}
 	else
 	{
@@ -198,11 +195,9 @@
 		[textLabel setText:@"No Chat Messages\non the\nServer"];
 		textLabel.frame = CGRectMake(15, 15, 210, 150);
 		[noChatMessagesScreen addSubview:textLabel];
-		[textLabel release];
 		
 		[self.view addSubview:noChatMessagesScreen];
 		
-		[noChatMessagesScreen release];
 		
 		if (!IS_IPAD())
 		{
@@ -223,7 +218,6 @@
 	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
 	serverListViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:serverListViewController animated:YES];
-	[serverListViewController release];
 }
 
 - (IBAction)nowPlayingAction:(id)sender
@@ -231,7 +225,6 @@
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-	[streamingPlayerViewController release];
 }
 
 #pragma mark - SUSLoader delegate
@@ -245,7 +238,7 @@
 	
 	if ([error code] == ISMSErrorCode_CouldNotSendChatMessage)
 	{
-		textInput.text = [[[[error userInfo] objectForKey:@"message"] copy] autorelease];
+		textInput.text = [[[error userInfo] objectForKey:@"message"] copy];
 	}
 }
 
@@ -272,7 +265,6 @@
 	chatMessageOverlay.backgroundColor = [UIColor colorWithWhite:0 alpha:.80];
 	chatMessageOverlay.alpha = 0.0;
 	[self.view addSubview:chatMessageOverlay];
-	[chatMessageOverlay release];
 	
 	dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -291,7 +283,7 @@
 	
 	
 	//Add the done button.
-	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneSearching_Clicked:)] autorelease];
+	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneSearching_Clicked:)];
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView
@@ -312,7 +304,7 @@
 	
 	if(musicS.showPlayerIcon)
 	{
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
+		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
 	}
 	else
 	{
@@ -355,7 +347,6 @@
 	formatter.timeStyle = kCFDateFormatterShortStyle;
 	formatter.locale = [NSLocale currentLocale];
 	NSString *formattedDate = [formatter stringFromDate:date];
-	[formatter release];
 	
 	return formattedDate;
 }
@@ -368,7 +359,7 @@
 	ChatUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	if (!cell)
 	{
-		cell = [[[ChatUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+		cell = [[ChatUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	}
 
@@ -377,7 +368,7 @@
 	cell.userNameLabel.text = [NSString stringWithFormat:@"%@ - %@", aChatMessage.user, [self formatDate:aChatMessage.timestamp]];
 	cell.messageLabel.text = aChatMessage.message;
 	
-	cell.backgroundView = [[[UIView alloc] init] autorelease];
+	cell.backgroundView = [[UIView alloc] init];
 	if(indexPath.row % 2 == 0)
 	{
 		cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
@@ -399,7 +390,7 @@
 
 		if(musicS.showPlayerIcon)
 		{
-			self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
+			self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
 		}
 		else
 		{
@@ -461,8 +452,6 @@
 - (void)dealloc 
 {
 	dataModel.delegate = nil;
-	[dataModel release]; dataModel = nil;
-    [super dealloc];
 }
 
 

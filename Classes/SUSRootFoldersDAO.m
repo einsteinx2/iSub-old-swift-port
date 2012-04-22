@@ -55,12 +55,8 @@
 
 - (void)dealloc
 {
-	[indexNames release]; indexNames = nil;
-	[indexPositions release]; indexPositions = nil;
-	[indexCounts release]; indexCounts = nil;
-	[selectedFolderId release]; selectedFolderId = nil;
+	 selectedFolderId = nil;
 	[self cancelLoad];
-	[super dealloc];
 }
 
 #pragma mark - Properties
@@ -280,9 +276,9 @@
 	@synchronized(self)
 	{
 		selectedFolderId = newSelectedFolderId;
-		[indexNames release]; indexNames = nil;
-		[indexCounts release]; indexCounts = nil;
-		[indexPositions release]; indexPositions = nil;
+		 indexNames = nil;
+		 indexCounts = nil;
+		 indexPositions = nil;
 	}
 }
 
@@ -305,8 +301,7 @@
 {
 	if (indexNames == nil || [indexNames count] == 0)
 	{
-		[indexNames release];
-		indexNames = [[self rootFolderIndexNames] retain];
+		indexNames = [self rootFolderIndexNames];
 	}
 	
 	return indexNames;
@@ -316,8 +311,7 @@
 {
 	if (indexPositions == nil || [indexPositions count] == 0)
 	{
-		[indexPositions release];
-		indexPositions = [[self rootFolderIndexPositions] retain];
+		indexPositions = [self rootFolderIndexPositions];
 	}
 	return indexPositions;
 }
@@ -326,7 +320,7 @@
 {
 	if (indexCounts == nil)
 	{
-		indexCounts = [[self rootFolderIndexCounts] retain];
+		indexCounts = [self rootFolderIndexCounts];
 	}
 	
 	return indexCounts;
@@ -361,7 +355,7 @@
 
 - (void)startLoad
 {
-    self.loader = [[[SUSRootFoldersLoader alloc] initWithDelegate:self] autorelease];
+    self.loader = [[SUSRootFoldersLoader alloc] initWithDelegate:self];
 	self.loader.selectedFolderId = self.selectedFolderId;
     [self.loader startLoad];
 }
@@ -391,9 +385,9 @@
 	self.loader.delegate = nil;
 	self.loader = nil;
 		
-	[indexNames release]; indexNames = nil;
-    [indexPositions release]; indexPositions = nil;
-    [indexCounts release]; indexCounts = nil;
+	 indexNames = nil;
+     indexPositions = nil;
+     indexCounts = nil;
 	
 	// Force all subfolders to reload
 	[databaseS.albumListCacheDb executeUpdate:@"DROP TABLE IF EXISTS albumListCache"];

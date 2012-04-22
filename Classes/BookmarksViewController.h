@@ -20,6 +20,6 @@
 	UIButton *editBookmarksButton;
 }
 
-@property (retain) NSArray *bookmarkIds;
+@property (strong) NSArray *bookmarkIds;
 
 @end

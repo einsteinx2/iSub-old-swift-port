@@ -21,11 +21,11 @@
 	NSUInteger tempRecordCount;
 }
 
-@property (readonly) FMDatabase *db;
+@property (unsafe_unretained, readonly) FMDatabase *db;
 
-@property (assign) id<SUSLoaderDelegate> delegate;
+@property (unsafe_unretained) id<SUSLoaderDelegate> delegate;
 
-@property (retain) SUSRootFoldersLoader *loader;
+@property (strong) SUSRootFoldersLoader *loader;
 
 @property (readonly) NSUInteger count;
 @property (readonly) NSUInteger searchCount;
@@ -33,9 +33,9 @@
 @property (readonly) NSArray *indexPositions;
 @property (readonly) NSArray *indexCounts;
 
-@property (readonly) NSString *tableModifier;
+@property (unsafe_unretained, readonly) NSString *tableModifier;
 
-@property (retain) NSNumber *selectedFolderId;
+@property (strong) NSNumber *selectedFolderId;
 @property (readonly) BOOL isRootFolderIdCached;
 
 + (void)setFolderDropdownFolders:(NSDictionary *)folders;

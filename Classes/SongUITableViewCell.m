@@ -77,19 +77,6 @@
 	return self;
 }
 
-- (void)dealloc 
-{
-	[mySong release]; mySong = nil;
-	
-	[trackNumberLabel release]; trackNumberLabel = nil;
-	[nowPlayingImageView release]; nowPlayingImageView = nil;
-	[songNameScrollView release]; songNameScrollView = nil;
-	[songNameLabel release]; songNameLabel = nil;
-	[artistNameLabel release]; artistNameLabel = nil;
-	[songDurationLabel release]; songDurationLabel = nil;
-	
-	[super dealloc];
-}
 
 - (void)layoutSubviews 
 {

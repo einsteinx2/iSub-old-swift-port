@@ -11,16 +11,13 @@
 
 @interface UbuntuServerEditViewController : UIViewController 
 {
-	
 	IBOutlet UITextField *usernameField;
 	IBOutlet UITextField *passwordField;
 	IBOutlet UIButton *cancelButton;
-	IBOutlet UIButton *saveButton;
-	
-	ServerTypeViewController *parentController;
+	IBOutlet UIButton *saveButton;	
 }
 
-@property (assign) ServerTypeViewController *parentController;
+@property (unsafe_unretained) ServerTypeViewController *parentController;
 
 - (IBAction) cancelButtonPressed:(id)sender;
 - (IBAction) saveButtonPressed:(id)sender;

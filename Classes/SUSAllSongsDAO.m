@@ -15,7 +15,7 @@
 
 @implementation SUSAllSongsDAO
 
-@synthesize loader, delegate;
+@synthesize loader, delegate, index;
 
 - (void)setup
 {
@@ -47,11 +47,8 @@
 
 - (void)dealloc
 {
-	loader.delegate = nil;
-	[loader release]; loader = nil;
-	[index release]; index = nil;
-	
-	[super dealloc];
+	loader.delegate = nil;	
+	index = nil;
 }
 
 - (FMDatabase *)db
@@ -92,7 +89,6 @@
 		item.position = [result intForColumn:@"position"];
 		item.count = [result intForColumn:@"count"];
 		[indexItems addObject:item];
-		[item release];
 	}
 	[result close];
 	
@@ -163,7 +159,7 @@
 	
 	if (index == nil)
 	{
-		index = [[self allSongsIndex] retain];
+		index = [self allSongsIndex];
 	}
 	
 	return index;
@@ -214,8 +210,8 @@
 {
 	if (![SUSAllSongsLoader isLoading])
 	{
-		[index release]; index = nil;
-		self.loader = [[[SUSAllSongsLoader alloc] initWithDelegate:self.delegate] autorelease];
+		 index = nil;
+		self.loader = [[SUSAllSongsLoader alloc] initWithDelegate:self.delegate];
 		[self.loader startLoad];
 	}
 }

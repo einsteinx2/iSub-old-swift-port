@@ -12,12 +12,12 @@
 
 @interface PlaylistSongUITableViewCell : CustomUITableViewCell 
 
-@property (retain) NSString *playlistMD5;
+@property (copy) NSString *playlistMD5;
 
-@property (retain) AsynchronousImageView *coverArtView;
-@property (retain) UILabel *numberLabel;
-@property (retain) UIScrollView *nameScrollView;
-@property (retain) UILabel *songNameLabel;
-@property (retain) UILabel *artistNameLabel;
+@property (strong) AsynchronousImageView *coverArtView;
+@property (strong) UILabel *numberLabel;
+@property (strong) UIScrollView *nameScrollView;
+@property (strong) UILabel *songNameLabel;
+@property (strong) UILabel *artistNameLabel;
 
 @end

@@ -10,6 +10,6 @@
 
 @interface SUSServerPlaylistsLoader : SUSLoader
 
-@property (retain) NSArray *serverPlaylists;
+@property (strong) NSArray *serverPlaylists;
 
 @end

@@ -18,18 +18,18 @@
 	NSMutableData *receivedData;	
 }
 
-@property (retain) NSString *query;
+@property (copy) NSString *query;
 @property NSUInteger searchType;
 
-@property (retain) NSMutableArray *listOfArtists;
-@property (retain) NSMutableArray *listOfAlbums;
-@property (retain) NSMutableArray *listOfSongs;
+@property (strong) NSMutableArray *listOfArtists;
+@property (strong) NSMutableArray *listOfAlbums;
+@property (strong) NSMutableArray *listOfSongs;
 
 @property NSUInteger offset;
 @property BOOL isMoreResults;
 
 @property BOOL isLoading;
 
-@property (retain) NSURLConnection *connection;
+@property (strong) NSURLConnection *connection;
 
 @end

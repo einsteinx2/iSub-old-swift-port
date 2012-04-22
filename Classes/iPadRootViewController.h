@@ -21,8 +21,8 @@
 	UIView* rightSlideView;
 }
 
-@property (retain) MenuViewController* menuViewController;
-@property (retain) StackScrollViewController* stackScrollViewController;
+@property (strong) MenuViewController* menuViewController;
+@property (strong) StackScrollViewController* stackScrollViewController;
 
 
 @end

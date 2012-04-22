@@ -388,7 +388,6 @@
 	if (![self.handlerStack containsObject:handler])
 	{
 		[self.handlerStack insertObject:handler atIndex:index];
-		[handler release];
 		
 		if ([self.handlerStack count] == 1 && isStartDownload)
 		{
@@ -399,12 +398,14 @@
 		if (song.coverArtId)
 		{
 			SUSCoverArtLoader *playerArt = [[SUSCoverArtLoader alloc] initWithDelegate:self coverArtId:song.coverArtId isLarge:YES];
-			if (![playerArt downloadArtIfNotExists])
-				[playerArt release];
+			[playerArt downloadArtIfNotExists];
+			//if (![playerArt downloadArtIfNotExists])
+			//	;
 			
 			SUSCoverArtLoader *tableArt = [[SUSCoverArtLoader alloc] initWithDelegate:self coverArtId:song.coverArtId isLarge:NO];
-			if (![tableArt downloadArtIfNotExists])
-				[tableArt release];
+			[tableArt downloadArtIfNotExists];
+			//if (![tableArt downloadArtIfNotExists])
+			//	;
 		}
 	}
 	
@@ -597,7 +598,6 @@
 		// TODO: Parse with TBXML and display proper error
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"No song data returned. This could be because your Subsonic API trial has expired, this song is not an mp3 and the Subsonic transcoding plugins failed, or another reason." delegate:appDelegateS cancelButtonTitle:@"OK" otherButtonTitles: nil];
 		[alert show];
-		[alert release];
 		[[NSFileManager defaultManager] removeItemAtPath:handler.filePath error:NULL];
 	}
 	else
@@ -632,13 +632,11 @@
 - (void)loadingFailed:(SUSLoader *)theLoader withError:(NSError *)error
 {
 	theLoader.delegate = nil;
-    [theLoader release];
 }
 
 - (void)loadingFinished:(SUSLoader *)theLoader
 {
 	theLoader.delegate = nil;
-    [theLoader release];
 }
 
 #pragma mark - Memory management
@@ -721,7 +719,7 @@ static ISMSStreamManager *sharedInstance = nil;
     @synchronized(self)
     {
         if (sharedInstance == nil)
-			[[self alloc] init];
+			sharedInstance = [[self alloc] init];
     }
     return sharedInstance;
 }
@@ -756,7 +754,7 @@ static ISMSStreamManager *sharedInstance = nil;
     return self;
 }
 
-- (id)retain 
+/*- (id)retain 
 {
     return self;
 }
@@ -774,7 +772,7 @@ static ISMSStreamManager *sharedInstance = nil;
 - (id)autorelease 
 {
     return self;
-}
+}*/
 
 
 @end

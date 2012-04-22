@@ -63,7 +63,7 @@
 
 - (void)createDataModel
 {
-	self.dataModel = [[[SUSRootFoldersDAO alloc] initWithDelegate:self] autorelease];
+	self.dataModel = [[SUSRootFoldersDAO alloc] initWithDelegate:self];
 	dataModel.selectedFolderId = [settingsS rootFoldersSelectedFolderId];
 }
 
@@ -88,7 +88,6 @@
 	refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
 	refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
 	[self.tableView addSubview:refreshHeaderView];
-	[refreshHeaderView release];
 	
 	if (IS_IPAD())
 	{
@@ -101,7 +100,7 @@
 		else
 			[self.tableView setContentOffset:CGPointMake(0, 50) animated:NO];
 	}	
-		UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+		UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
 		fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 		fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		self.tableView.tableFooterView = fadeBottom;
@@ -117,7 +116,7 @@
 	
 	if(musicS.showPlayerIcon)
 	{
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
+		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
 	}
 	else
 	{
@@ -148,10 +147,6 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ServerSwitched object:nil];
 
 	dataModel.delegate = nil;
-	[dataModel release]; dataModel = nil;
-	[searchBar release]; searchBar = nil;
-	[dropdown release]; dropdown = nil;
-    [super dealloc];
 }
 
 #pragma mark - Loading
@@ -167,7 +162,6 @@
 	[formatter setDateStyle:NSDateFormatterMediumStyle];
 	[formatter setTimeStyle:NSDateFormatterShortStyle];
 	reloadTimeLabel.text = [NSString stringWithFormat:@"last reload: %@", [formatter stringFromDate:[settingsS rootFoldersReloadTime]]];
-	[formatter release];
 	
 }
 
@@ -181,14 +175,13 @@
 {	
 	isCountShowing = YES;
 	
-	headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 126)] autorelease];
+	headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 126)];
 	headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	headerView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
 	
 	CGRect sepFrame = CGRectMake(0, 0, headerView.bounds.size.width, 2);
 	SeparaterView *sepView = [[SeparaterView alloc] initWithFrame:sepFrame];
 	[headerView addSubview:sepView];
-	[sepView release];
 	
 	blockerButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	blockerButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -202,7 +195,6 @@
 	countLabel.textAlignment = UITextAlignmentCenter;
 	countLabel.font = [UIFont boldSystemFontOfSize:30];
 	[headerView addSubview:countLabel];
-	[countLabel release];
 	
 	reloadTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 36, 320, 12)];
 	reloadTimeLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -211,7 +203,6 @@
 	reloadTimeLabel.textAlignment = UITextAlignmentCenter;
 	reloadTimeLabel.font = [UIFont systemFontOfSize:11];
 	[headerView addSubview:reloadTimeLabel];
-	[reloadTimeLabel release];	
 	
 	searchBar = [[UISearchBar  alloc] initWithFrame:CGRectMake(0, 86, 320, 40)];
 	searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -219,7 +210,6 @@
 	searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
 	searchBar.placeholder = @"Folder name";
 	[headerView addSubview:searchBar];
-	[searchBar release];
 	
 	self.dropdown = [[FolderDropdownControl alloc] initWithFrame:CGRectMake(50, 53, 220, 30)];
 	dropdown.delegate = self;
@@ -235,7 +225,6 @@
 	[dropdown selectFolderWithId:dataModel.selectedFolderId];
 	
 	[headerView addSubview:dropdown];
-	[dropdown release];
 	
 	[self updateCount];
 	
@@ -274,7 +263,6 @@
 	// Inform the user that the connection failed.
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error loading the artist list.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
-	[alert release];
 }
 
 - (void)loadingFinished:(SUSLoader*)theLoader
@@ -372,7 +360,6 @@
 	{
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Please Wait" message:@"You cannot reload the Artists tab while the Albums or Songs tabs are loading" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 }
 
@@ -382,7 +369,6 @@
 	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
 	serverListViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:serverListViewController animated:YES];
-	[serverListViewController release];
 }
 
 
@@ -391,7 +377,6 @@
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-	[streamingPlayerViewController release];
 }
 
 
@@ -409,7 +394,6 @@
 	//[self.view.superview addSubview:searchOverlay];
 	//[self.tableView.tableFooterView addSubview:searchOverlay];
 	self.tableView.tableFooterView = searchOverlay;//self.tableView.tableFooterView;
-	[searchOverlay release];
 	
 	dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -418,7 +402,7 @@
 	dismissButton.enabled = NO;
 	[searchOverlay addSubview:dismissButton];
 	
-	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	[searchOverlay addSubview:fadeBottom];
@@ -453,7 +437,7 @@
 	[searchOverlay removeFromSuperview];
 	searchOverlay = nil;
 	
-	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fadeBottom;
@@ -469,7 +453,7 @@
 	[dataModel clearSearchTable];
 	[self.tableView reloadData];
 	
-	[self.tableView.tableHeaderView retain];
+	//self.tableView.tableHeaderView;
 
 	[dropdown closeDropdownFast];
 	[self.tableView setContentOffset:CGPointMake(0, 86) animated:YES];
@@ -484,7 +468,7 @@
 	
 	//Add the done button.
 	self.navigationItem.leftBarButtonItem = nil;
-	self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneSearching_Clicked:)] autorelease];
+	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneSearching_Clicked:)];
 }
 
 
@@ -592,7 +576,7 @@
 	ArtistUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	if (!cell)
 	{
-		cell = [[[ArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+		cell = [[ArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 	}
 
 	Artist *anArtist = nil;
@@ -696,7 +680,6 @@
 		}
 		AlbumViewController* albumViewController = [[AlbumViewController alloc] initWithArtist:anArtist orAlbum:nil];
 		[self pushViewControllerCustom:albumViewController];
-		[albumViewController release];
 	}
 	else
 	{

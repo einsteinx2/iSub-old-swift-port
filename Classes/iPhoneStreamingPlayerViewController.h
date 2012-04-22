@@ -15,66 +15,66 @@
 @property NSUInteger reflectionHeight;
 @property BOOL isFlipped;
 @property BOOL isExtraButtonsShowing;
-@property (retain) PageControlViewController *pageControlViewController;
+@property (strong) PageControlViewController *pageControlViewController;
 @property uint64_t bookmarkBytePosition;	
 
-@property (retain) MPVolumeView *volumeView;
-@property (retain) UISlider *jukeboxVolumeView;
+@property (strong) MPVolumeView *volumeView;
+@property (strong) UISlider *jukeboxVolumeView;
 
-@property (retain) UILabel *artistTitleLabel;
-@property (retain) UILabel *albumTitleLabel;
-@property (retain) UILabel *songTitleLabel;
-
-
-
-@property (retain) IBOutlet UIButton *playButton;
-@property (retain) IBOutlet UIButton *nextButton;
-@property (retain) IBOutlet UIButton *prevButton;
-@property (retain) IBOutlet UIButton *eqButton;
-@property (retain) IBOutlet UIView *volumeSlider;
-@property (retain) IBOutlet AsynchronousImageView *coverArtImageView;
-@property (retain) IBOutlet UIImageView *reflectionView;
-@property (retain) IBOutlet UIButton *songInfoToggleButton;
-@property (retain) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (strong) UILabel *artistTitleLabel;
+@property (strong) UILabel *albumTitleLabel;
+@property (strong) UILabel *songTitleLabel;
 
 
 
-@property (retain) UILabel *artistLabel;
-@property (retain) UILabel *albumLabel;
-@property (retain) UILabel *titleLabel;
+@property (strong) IBOutlet UIButton *playButton;
+@property (strong) IBOutlet UIButton *nextButton;
+@property (strong) IBOutlet UIButton *prevButton;
+@property (strong) IBOutlet UIButton *eqButton;
+@property (strong) IBOutlet UIView *volumeSlider;
+@property (strong) IBOutlet AsynchronousImageView *coverArtImageView;
+@property (strong) IBOutlet UIImageView *reflectionView;
+@property (strong) IBOutlet UIButton *songInfoToggleButton;
+@property (strong) IBOutlet UIActivityIndicatorView *activityIndicator;
+
+
+
+@property (strong) UILabel *artistLabel;
+@property (strong) UILabel *albumLabel;
+@property (strong) UILabel *titleLabel;
 
 
 
 
-@property (retain) IBOutlet UIView *extraButtons;
-@property (retain) IBOutlet UIImageView *extraButtonsBackground;
-@property (retain) IBOutlet UIButton *extraButtonsButton;
-@property (retain) IBOutlet UIView *songInfoView;
+@property (strong) IBOutlet UIView *extraButtons;
+@property (strong) IBOutlet UIImageView *extraButtonsBackground;
+@property (strong) IBOutlet UIButton *extraButtonsButton;
+@property (strong) IBOutlet UIView *songInfoView;
 
-@property (retain) IBOutlet UILabel *sliderMultipleLabel;
+@property (strong) IBOutlet UILabel *sliderMultipleLabel;
 
-@property (retain) IBOutlet UILabel *trackLabel;
-@property (retain) IBOutlet UILabel *genreLabel;
-@property (retain) IBOutlet UILabel *yearLabel;
-@property (retain) IBOutlet UILabel *formatLabel;
+@property (strong) IBOutlet UILabel *trackLabel;
+@property (strong) IBOutlet UILabel *genreLabel;
+@property (strong) IBOutlet UILabel *yearLabel;
+@property (strong) IBOutlet UILabel *formatLabel;
 
-@property (retain) UIImage *extraButtonsButtonOffImage;
-@property (retain) UIImage *extraButtonsButtonOnImage;
+@property (strong) UIImage *extraButtonsButtonOffImage;
+@property (strong) UIImage *extraButtonsButtonOnImage;
 
-@property (retain) IBOutlet UIView *coverArtHolderView;
+@property (strong) IBOutlet UIView *coverArtHolderView;
 
-@property (retain) IBOutlet UIButton *currentAlbumButton;
-@property (retain) IBOutlet UIButton *repeatButton;
-@property (retain) IBOutlet UIButton *bookmarkButton;
-@property (retain) IBOutlet UILabel *bookmarkCountLabel;
-@property (retain) IBOutlet UIButton *shuffleButton;
-@property (retain) IBOutlet OBSlider *progressSlider;
-@property (retain) IBOutlet UILabel *elapsedTimeLabel;
-@property (retain) IBOutlet UILabel *remainingTimeLabel;
-@property (retain) UIView *downloadProgress;
+@property (strong) IBOutlet UIButton *currentAlbumButton;
+@property (strong) IBOutlet UIButton *repeatButton;
+@property (strong) IBOutlet UIButton *bookmarkButton;
+@property (strong) IBOutlet UILabel *bookmarkCountLabel;
+@property (strong) IBOutlet UIButton *shuffleButton;
+@property (strong) IBOutlet OBSlider *progressSlider;
+@property (strong) IBOutlet UILabel *elapsedTimeLabel;
+@property (strong) IBOutlet UILabel *remainingTimeLabel;
+@property (strong) UIView *downloadProgress;
 
-@property (retain) NSTimer *updateTimer;
-@property (retain) NSTimer *progressTimer;
+@property (strong) NSTimer *updateTimer;
+@property (strong) NSTimer *progressTimer;
 @property (nonatomic) BOOL pauseSlider;
 @property (nonatomic) BOOL hasMoved;
 @property (nonatomic) float oldPosition;
@@ -82,22 +82,22 @@
 
 @property (copy) Song *currentSong;
 
-@property (retain) UITextField *bookmarkNameTextField;
-@property (retain) NSArray *bookmarkEntry;
+@property (strong) UITextField *bookmarkNameTextField;
+@property (strong) NSArray *bookmarkEntry;
 @property (nonatomic) NSInteger bookmarkIndex;
 @property (nonatomic) int bookmarkPosition;
 
-@property (retain) IBOutlet UILabel *quickBackLabel;
-@property (retain) IBOutlet UILabel *quickForwLabel;
+@property (strong) IBOutlet UILabel *quickBackLabel;
+@property (strong) IBOutlet UILabel *quickForwLabel;
 
-@property (retain) UISwipeGestureRecognizer *swipeDetector;
+@property (strong) UISwipeGestureRecognizer *swipeDetector;
 
 @property NSUInteger lastProgress;
 
-@property (retain) IBOutlet UIView *largeOverlayView;
-@property (retain) IBOutlet UILabel *largeOverlayArtist;
-@property (retain) IBOutlet UILabel *largeOverlaySong;
-@property (retain) IBOutlet UILabel *largeOverlayAlbum;
+@property (strong) IBOutlet UIView *largeOverlayView;
+@property (strong) IBOutlet UILabel *largeOverlayArtist;
+@property (strong) IBOutlet UILabel *largeOverlaySong;
+@property (strong) IBOutlet UILabel *largeOverlayAlbum;
 
 - (void)setPlayButtonImage;
 - (void)setPauseButtonImage;

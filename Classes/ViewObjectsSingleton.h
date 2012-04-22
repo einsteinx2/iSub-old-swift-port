@@ -19,13 +19,13 @@
 
 // XMLParser objects used to tell the parser how to parse
 //
-@property (retain) NSString *parseState;
-@property (retain) NSString *allAlbumsParseState;
-@property (retain) NSString *allSongsParseState;
+@property (copy) NSString *parseState;
+@property (copy) NSString *allAlbumsParseState;
+@property (copy) NSString *allSongsParseState;
 
 // Home page objects
 //
-@property (retain) NSMutableArray *homeListOfAlbums;
+@property (strong) NSMutableArray *homeListOfAlbums;
 
 // Artists page objects
 //
@@ -33,31 +33,31 @@
 
 // Albums page objects and variables
 //
-@property (retain) NSString *currentArtistName;
-@property (retain) NSString *currentArtistId;
+@property (copy) NSString *currentArtistName;
+@property (copy) NSString *currentArtistId;
 
 // Playlists view objects
 //
-@property (retain) NSMutableArray *listOfPlaylists;
-@property (retain) NSMutableArray *listOfPlaylistSongs;
-@property (retain) NSString *localPlaylist;
-@property (retain) NSMutableArray *listOfLocalPlaylists;
+@property (strong) NSMutableArray *listOfPlaylists;
+@property (strong) NSMutableArray *listOfPlaylistSongs;
+@property (copy) NSString *localPlaylist;
+@property (strong) NSMutableArray *listOfLocalPlaylists;
 @property BOOL isLocalPlaylist;
 
 // Settings page objects
 //
-@property (retain) Server *serverToEdit;
+@property (strong) Server *serverToEdit;
 
 // Chat page objects
 //
-@property (retain) NSMutableArray *chatMessages;
+@property (strong) NSMutableArray *chatMessages;
 
 // New Stuff
 @property BOOL isCellEnabled;
-@property (retain) NSTimer *cellEnabledTimer;
-@property (retain) NSMutableArray *queueAlbumListOfAlbums;
-@property (retain) NSMutableArray *queueAlbumListOfSongs;
-@property (retain) NSMutableArray *multiDeleteList;
+@property (strong) NSTimer *cellEnabledTimer;
+@property (strong) NSMutableArray *queueAlbumListOfAlbums;
+@property (strong) NSMutableArray *queueAlbumListOfSongs;
+@property (strong) NSMutableArray *multiDeleteList;
 @property BOOL isOfflineMode;
 @property BOOL isOnlineModeAlertShowing;
 @property BOOL cancelLoading;
@@ -77,14 +77,14 @@
 @property (readonly) UIColor *windowColor;
 @property (readonly) UIColor *jukeboxColor;
 
-@property (retain) UIImage *deleteButtonImage;
-@property (retain) UIImage *cacheButtonImage;
-@property (retain) UIImage *queueButtonImage;
+@property (strong) UIImage *deleteButtonImage;
+@property (strong) UIImage *cacheButtonImage;
+@property (strong) UIImage *queueButtonImage;
 
 
 //@property BOOL isJukebox;
 
-@property (retain) NSString *currentLoadingFolderId;
+@property (copy) NSString *currentLoadingFolderId;
 
 @property BOOL isSettingsShowing;
 

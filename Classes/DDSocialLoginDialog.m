@@ -46,8 +46,8 @@
 @interface DDSocialLoginDialog ()
 @property (nonatomic, copy) NSString *username;
 @property (nonatomic, copy) NSString *password;
-@property (nonatomic, readonly, retain) UITextField *usernameField;
-@property (nonatomic, readonly, retain) UITextField *passwordField;
+@property (nonatomic, readonly) UITextField *usernameField;
+@property (nonatomic, readonly) UITextField *passwordField;
 @end
 
 @implementation DDSocialLoginDialog
@@ -91,17 +91,16 @@
 - (void)dealloc {
 	
 	delegate_ = nil;
-	[username_ release], username_ = nil;
-	[password_ release], password_ = nil;
+	username_ = nil;
+	password_ = nil;
 	
 	usernameField_.delegate = nil;
-	[usernameField_ release], usernameField_ = nil;
+	usernameField_ = nil;
 	passwordField_.delegate = nil;
-	[passwordField_ release], passwordField_ = nil;
+	passwordField_ = nil;
 	tableView_.delegate = nil;
 	tableView_.dataSource = nil;
-	[tableView_ release], tableView_ = nil;
-    [super dealloc];
+	tableView_ = nil;
 }
 
 #pragma mark -
@@ -169,7 +168,7 @@
     UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
 	{
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
 	
 	if (indexPath.section == 0) {

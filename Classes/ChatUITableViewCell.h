@@ -10,7 +10,7 @@
 
 @interface ChatUITableViewCell : CustomUITableViewCell 
 
-@property (retain) UILabel *userNameLabel;
-@property (retain) UILabel *messageLabel;
+@property (strong) UILabel *userNameLabel;
+@property (strong) UILabel *messageLabel;
 
 @end

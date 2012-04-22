@@ -57,13 +57,6 @@
 	}
 }
 
-- (void)dealloc
-{
-	[artistNameScrollView release]; artistNameScrollView = nil;
-	[artistNameLabel release]; artistNameLabel = nil;
-	[myArtist release]; myArtist = nil;
-	[super dealloc];
-}
 
 #pragma mark - Overlay
 

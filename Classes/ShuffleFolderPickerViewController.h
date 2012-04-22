@@ -14,10 +14,10 @@
 {	
 	NSMutableArray *sortedFolders;
 	
-	FolderPickerDialog *myDialog;
+	FolderPickerDialog *__unsafe_unretained myDialog;
 }
 
-@property (retain) NSMutableArray *sortedFolders;
-@property (assign) FolderPickerDialog *myDialog;
+@property (strong) NSMutableArray *sortedFolders;
+@property (unsafe_unretained) FolderPickerDialog *myDialog;
 
 @end

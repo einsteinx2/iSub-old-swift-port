@@ -23,7 +23,7 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
 	[playlistView viewDidDisappear:NO];
-	[playlistView release]; playlistView = nil;
+	 playlistView = nil;
 }
 
 - (void)didReceiveMemoryWarning 
@@ -32,9 +32,5 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void)dealloc 
-{
-    [super dealloc];
-}
 
 @end

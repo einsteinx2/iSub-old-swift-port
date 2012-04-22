@@ -52,7 +52,7 @@ typedef enum
 }
 
 // Server Login Settings
-@property (retain) NSMutableArray *serverList;
+@property (strong) NSMutableArray *serverList;
 @property (copy) NSString *urlString;
 @property (copy) NSString *username;
 @property (copy) NSString *password;
@@ -60,8 +60,8 @@ typedef enum
 @property (copy) NSString *redirectUrlString;
 
 // Root Folders Settings
-@property (retain) NSDate *rootFoldersReloadTime;
-@property (retain) NSNumber *rootFoldersSelectedFolderId;
+@property (strong) NSDate *rootFoldersReloadTime;
+@property (strong) NSNumber *rootFoldersSelectedFolderId;
 
 // Lite Version Properties
 @property (readonly) BOOL isPlaylistUnlocked;
@@ -120,11 +120,11 @@ typedef enum
 @property NSInteger bitRate;
 
 // Document Paths
-@property (readonly) NSString *documentsPath;
-@property (readonly) NSString *databasePath;
-@property (readonly) NSString *cachesPath;
-@property (readonly) NSString *songCachePath;
-@property (readonly) NSString *tempCachePath;
+@property (unsafe_unretained, readonly) NSString *documentsPath;
+@property (unsafe_unretained, readonly) NSString *databasePath;
+@property (unsafe_unretained, readonly) NSString *cachesPath;
+@property (unsafe_unretained, readonly) NSString *songCachePath;
+@property (unsafe_unretained, readonly) NSString *tempCachePath;
 
 /*- (BOOL)isSelectedIndexForBassEffectADefault:(BassEffectType)type;
 - (NSUInteger)selectedIndexForBassEffect:(BassEffectType)type;

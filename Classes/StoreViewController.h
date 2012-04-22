@@ -17,7 +17,7 @@
 	NSTimer *checkProductsTimer;
 }
 
-@property (retain) NSArray *storeItems;
+@property (strong) NSArray *storeItems;
 
 - (void)checkProducts;
 - (void)organizeList;

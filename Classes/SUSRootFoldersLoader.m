@@ -22,11 +22,6 @@
     [super setup];
 }
 
-- (void)dealloc
-{
-	[selectedFolderId release]; selectedFolderId = nil;
-	[super dealloc];
-}
 
 - (SUSLoaderType)type
 {
@@ -158,7 +153,7 @@
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getIndexes" andParameters:parameters];
     DLog(@"loading folders url: %@", [[request URL] absoluteString]);
-	DLog(@"loading folders body: %@", [[[NSString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding] autorelease]);
+	DLog(@"loading folders body: %@", [[NSString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding]);
 	DLog(@"loading folders header: %@", [request allHTTPHeaderFields]);
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)
@@ -247,24 +242,24 @@
 			TBXMLElement *shortcutElement = [TBXML childElementNamed:@"shortcut" parentElement:indexesElement];
 			while (shortcutElement != nil)
 			{
-				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+				@autoreleasepool {
 				
-				rowIndex = 1;
-				rowCount++;
-				sectionCount++;
+					rowIndex = 1;
+					rowCount++;
+					sectionCount++;
                 
-				// Parse the shortcut
-				NSString *folderId = [TBXML valueOfAttributeNamed:@"id" forElement:shortcutElement];
-				NSString *name = [TBXML valueOfAttributeNamed:@"name" forElement:shortcutElement];
-				//DLog(@"id: %@  name: %@", folderId, name);
+					// Parse the shortcut
+					NSString *folderId = [TBXML valueOfAttributeNamed:@"id" forElement:shortcutElement];
+					NSString *name = [TBXML valueOfAttributeNamed:@"name" forElement:shortcutElement];
+					//DLog(@"id: %@  name: %@", folderId, name);
+					
+					// Add the record to the cache
+					[self addRootFolderToTempCache:folderId name:name];
+					
+					// Get the next shortcut
+					shortcutElement = [TBXML nextSiblingNamed:@"shortcut" searchFromElement:shortcutElement];
 				
-				// Add the record to the cache
-				[self addRootFolderToTempCache:folderId name:name];
-				
-				// Get the next shortcut
-				shortcutElement = [TBXML nextSiblingNamed:@"shortcut" searchFromElement:shortcutElement];
-				
-				[pool release];
+				}
 			}
 			
 			if (rowIndex > 0)
@@ -277,51 +272,51 @@
 			TBXMLElement *indexElement = [TBXML childElementNamed:@"index" parentElement:indexesElement];
 			while (indexElement != nil)
 			{
-				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+				@autoreleasepool {
 				
-				NSTimeInterval dbInserts = 0;
-				sectionCount = 0;
-				rowIndex = rowCount + 1;
-				
-				// Loop through the artist elements
-				TBXMLElement *artistElement = [TBXML childElementNamed:@"artist" parentElement:indexElement];
-				while (artistElement != nil)
-				{
-					NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+					NSTimeInterval dbInserts = 0;
+					sectionCount = 0;
+					rowIndex = rowCount + 1;
 					
-					rowCount++;
-					sectionCount++;
-					
-					// Create the artist object and add it to the 
-					// array for this section if not named .AppleDouble
-					if (![[TBXML valueOfAttributeNamed:@"name" forElement:artistElement] isEqualToString:@".AppleDouble"])
+					// Loop through the artist elements
+					TBXMLElement *artistElement = [TBXML childElementNamed:@"artist" parentElement:indexElement];
+					while (artistElement != nil)
 					{
-						// Parse the top level folder
-						NSString *folderId = [TBXML valueOfAttributeNamed:@"id" forElement:artistElement];
-						NSString *name = [TBXML valueOfAttributeNamed:@"name" forElement:artistElement];
-						//DLog(@"id: %@  name: %@", folderId, name);
+						@autoreleasepool {
 						
-						// Add the folder to the DB
-						NSDate *startTime3 = [NSDate date];
-						[self addRootFolderToTempCache:folderId name:name];
-						dbInserts += [[NSDate date] timeIntervalSinceDate:startTime3];
+							rowCount++;
+							sectionCount++;
+							
+							// Create the artist object and add it to the 
+							// array for this section if not named .AppleDouble
+							if (![[TBXML valueOfAttributeNamed:@"name" forElement:artistElement] isEqualToString:@".AppleDouble"])
+							{
+								// Parse the top level folder
+								NSString *folderId = [TBXML valueOfAttributeNamed:@"id" forElement:artistElement];
+								NSString *name = [TBXML valueOfAttributeNamed:@"name" forElement:artistElement];
+								//DLog(@"id: %@  name: %@", folderId, name);
+								
+								// Add the folder to the DB
+								NSDate *startTime3 = [NSDate date];
+								[self addRootFolderToTempCache:folderId name:name];
+								dbInserts += [[NSDate date] timeIntervalSinceDate:startTime3];
+							}
+							
+							// Get the next artist
+							artistElement = [TBXML nextSiblingNamed:@"artist" searchFromElement:artistElement];
+						
+						}
 					}
 					
-					// Get the next artist
-					artistElement = [TBXML nextSiblingNamed:@"artist" searchFromElement:artistElement];
+					NSString *indexName = [TBXML valueOfAttributeNamed:@"name" forElement:indexElement];
+					[self addRootFolderIndexToCache:rowIndex count:sectionCount name:indexName];
+					//BOOL success = [self addRootFolderIndexToCache:rowIndex count:sectionCount name:indexName];
+					//DLog(@"Adding index %@  count: %i  success: %i", indexName, sectionCount, success);
 					
-					[pool release];
+					// Get the next index
+					indexElement = [TBXML nextSiblingNamed:@"index" searchFromElement:indexElement];
+				
 				}
-				
-				NSString *indexName = [TBXML valueOfAttributeNamed:@"name" forElement:indexElement];
-				[self addRootFolderIndexToCache:rowIndex count:sectionCount name:indexName];
-				//BOOL success = [self addRootFolderIndexToCache:rowIndex count:sectionCount name:indexName];
-				//DLog(@"Adding index %@  count: %i  success: %i", indexName, sectionCount, success);
-				
-				// Get the next index
-				indexElement = [TBXML nextSiblingNamed:@"index" searchFromElement:indexElement];
-				
-				[pool release];
 			}
 		}
 	}
@@ -331,7 +326,6 @@
 	[self resetRootFolderTempTable];
 	
 	// Release the XML parser
-	[tbxml release];
 	
 	//DLog(@"Folders load time: %f", [[NSDate date] timeIntervalSinceDate:startTime]);
 	

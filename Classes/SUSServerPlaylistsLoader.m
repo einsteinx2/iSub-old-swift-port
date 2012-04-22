@@ -22,10 +22,6 @@
 	[super setup];
 }
 
-- (void)dealloc
-{
-	[super dealloc];
-}
 
 - (FMDatabase *)db
 {
@@ -124,16 +120,15 @@
 				TBXMLElement *playlist = [TBXML childElementNamed:@"playlist" parentElement:playlists];
 				while (playlist != nil)
 				{
-					NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+					@autoreleasepool {
                     
                     SUSServerPlaylist *serverPlaylist = [[SUSServerPlaylist alloc] initWithTBXMLElement:playlist];
                     [tempArray addObject:serverPlaylist];
-                    [serverPlaylist release];
 					
 					// Get the next message
 					playlist = [TBXML nextSiblingNamed:@"playlist" searchFromElement:playlist];
 					
-					[pool release];
+					}
 				}
                 
                 // Sort the array
@@ -149,7 +144,6 @@
 		// Inform the delegate that loading failed
 		[self informDelegateLoadingFailed:nil];
 	}
-	[tbxml release];
 	
 	self.receivedData = nil;
 	self.connection = nil;

@@ -80,7 +80,7 @@
 	
 	if(musicS.showPlayerIcon)
 	{
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
+		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
 	}
 	else
 	{
@@ -92,9 +92,8 @@
 	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
 	fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	[self.tableView addSubview:fadeTop];
-	[fadeTop release];
 	
-	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fadeBottom;
@@ -105,7 +104,6 @@
 	[super viewWillDisappear:animated];
 	
 	[connection cancel];
-	[connection release];
 	connection = nil;
 }
 
@@ -114,7 +112,6 @@
 	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
 	serverListViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:serverListViewController animated:YES];
-	[serverListViewController release];
 }
 
 - (IBAction)nowPlayingAction:(id)sender
@@ -122,7 +119,6 @@
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-	[streamingPlayerViewController release];
 }
 
 #pragma mark -
@@ -212,14 +208,13 @@
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error performing the search.\n\nThe connection could not be created" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 }
 
 - (UITableViewCell *)createLoadingCell:(NSUInteger)row
 {
 	// This is the last cell and there could be more results, load the next 20 results;
-	UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NoReuse"] autorelease];
+	UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NoReuse"];
 	
 	// Set background color
 	cell.backgroundView = [viewObjectsS createCellBackground:row];
@@ -231,7 +226,6 @@
 		indicator.center = CGPointMake(300, 30);
 		[cell addSubview:indicator];
 		[indicator startAnimating];
-		[indicator release];
 		
 		[self loadMoreResults];
 	}
@@ -261,7 +255,7 @@
 			ArtistUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 			if (!cell)
 			{
-				cell = [[[ArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+				cell = [[ArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 			}
 						
 			Artist *anArtist = [listOfArtists objectAtIndexSafe:indexPath.row];
@@ -285,7 +279,7 @@
 			AlbumUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 			if (!cell)
 			{
-				cell = [[[AlbumUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+				cell = [[AlbumUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 				cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 			}
 						
@@ -300,7 +294,7 @@
 			
 			
 			// Setup cell backgrond color
-			cell.backgroundView = [[[UIView alloc] init] autorelease];
+			cell.backgroundView = [[UIView alloc] init];
 			if(indexPath.row % 2 == 0)
 				cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
 			else
@@ -321,7 +315,7 @@
 			SearchSongUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 			if (!cell)
 			{
-				cell = [[[SearchSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+				cell = [[SearchSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 			}
 			
 			cell.row = indexPath.row;
@@ -336,7 +330,7 @@
 	
 	// In case somehow no cell is created, return an empty cell
 	static NSString *cellIdentifier = @"EmptyCell";
-	return [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+	return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 }
 
 #pragma mark -
@@ -357,7 +351,6 @@
 			[self pushViewControllerCustom:albumView];
 			//[self.navigationController pushViewController:albumView animated:YES];
 			
-			[albumView release];
 			
 			return;
 		}
@@ -372,7 +365,6 @@
 			[self pushViewControllerCustom:albumView];
 			//[self.navigationController pushViewController:albumView animated:YES];
 			
-			[albumView release];
 			
 			return;
 		}
@@ -391,15 +383,15 @@
 			NSMutableArray *songIds = [[NSMutableArray alloc] init];
 			for (Song *aSong in listOfSongs)
 			{
-				NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+				@autoreleasepool {
 				
-				[aSong addToCurrentPlaylist];
+					[aSong addToCurrentPlaylist];
+					
+					// In jukebox mode, collect the song ids to send to the server
+					if (settingsS.isJukeboxEnabled)
+						[songIds addObject:aSong.songId];
 				
-				// In jukebox mode, collect the song ids to send to the server
-				if (settingsS.isJukeboxEnabled)
-					[songIds addObject:aSong.songId];
-				
-				[pool release];
+				}
 			}
 			
 			// If jukebox mode, send song ids to server
@@ -409,7 +401,6 @@
 				[jukeboxS jukeboxClearPlaylist];
 				[jukeboxS jukeboxAddSongs:songIds];
 			}
-			[songIds release];
 			
 			// Set player defaults
 			playlistS.isShuffle = NO;
@@ -466,10 +457,8 @@
 
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
-	[alert release];
 	
-	[connection release]; connection = nil;
-	[receivedData release];
+	 connection = nil;
 	
 	self.isLoading = NO;
 }	
@@ -520,15 +509,12 @@
 	}
 	
 		
-	[xmlParser release];
-	[parser release];
 	
 	// Reload the table
 	[self.tableView reloadData];
 	self.isLoading = NO;
 		
-	[connection	release]; connection = nil;
-	[receivedData release];
+	 connection = nil;
 }
 
 
@@ -543,15 +529,6 @@
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
-- (void)dealloc 
-{
-    [super dealloc];
-	
-	[query release];
-	[listOfArtists release];
-	[listOfAlbums release];
-	[listOfSongs release];
-}
 
 
 @end

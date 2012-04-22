@@ -25,7 +25,7 @@
 
 + (BassParamEqValue *)valueWithParams:(BASS_DX8_PARAMEQ)params handle:(HFX)theHandle arrayIndex:(NSUInteger)index
 {
-	return [[[BassParamEqValue alloc] initWithParameters:params handle:theHandle arrayIndex:index] autorelease];
+	return [[BassParamEqValue alloc] initWithParameters:params handle:theHandle arrayIndex:index];
 }
 
 - (id)initWithParameters:(BASS_DX8_PARAMEQ)params
@@ -35,7 +35,7 @@
 
 + (BassParamEqValue *)valueWithParams:(BASS_DX8_PARAMEQ)params
 {
-	return [[[BassParamEqValue alloc] initWithParameters:params handle:0 arrayIndex:NSUIntegerMax] autorelease];
+	return [[BassParamEqValue alloc] initWithParameters:params handle:0 arrayIndex:NSUIntegerMax];
 }
 
 - (id)initWithParameters:(BASS_DX8_PARAMEQ)params arrayIndex:(NSUInteger)index
@@ -45,7 +45,7 @@
 
 + (BassParamEqValue *)valueWithParams:(BASS_DX8_PARAMEQ)params arrayIndex:(NSUInteger)index
 {
-	return [[[BassParamEqValue alloc] initWithParameters:params handle:0 arrayIndex:index] autorelease];
+	return [[BassParamEqValue alloc] initWithParameters:params handle:0 arrayIndex:index];
 }
 
 - (float)frequency

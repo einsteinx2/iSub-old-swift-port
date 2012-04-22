@@ -15,42 +15,42 @@
 	UIView *overlay;
 	UIButton *dismissButton;
 }
-@property (retain) IBOutlet UIView *controlsContainer;
+@property (strong) IBOutlet UIView *controlsContainer;
 
 @property BOOL isPresetPickerShowing;
-@property (retain) IBOutlet NWPickerField *presetPicker;
+@property (strong) IBOutlet NWPickerField *presetPicker;
 
-@property (retain) IBOutlet UIButton *toggleButton;
+@property (strong) IBOutlet UIButton *toggleButton;
 //@property (retain) IBOutlet UIImageView *drawImage;
-@property (retain) IBOutlet EqualizerPathView *equalizerPath;
-@property (retain) IBOutlet EqualizerView *equalizerView;
-@property (retain) NSMutableArray *equalizerPointViews;
+@property (strong) IBOutlet EqualizerPathView *equalizerPath;
+@property (strong) IBOutlet EqualizerView *equalizerView;
+@property (strong) NSMutableArray *equalizerPointViews;
 
-@property (retain) IBOutlet SnappySlider *gainSlider;
-@property (retain) IBOutlet UILabel *gainBoostAmountLabel;
-@property (retain) IBOutlet UILabel *gainBoostLabel;
+@property (strong) IBOutlet SnappySlider *gainSlider;
+@property (strong) IBOutlet UILabel *gainBoostAmountLabel;
+@property (strong) IBOutlet UILabel *gainBoostLabel;
 @property CGFloat lastGainValue;
 
-@property (retain) BassEffectDAO *effectDAO;
+@property (strong) BassEffectDAO *effectDAO;
 
 //@property (retain) NSTimer *drawTimer;
 
-@property (assign) EqualizerPointView *selectedView;
+@property (unsafe_unretained) EqualizerPointView *selectedView;
 
-@property (retain) UIButton *deletePresetButton;
-@property (retain) UIButton *savePresetButton;
+@property (strong) UIButton *deletePresetButton;
+@property (strong) UIButton *savePresetButton;
 @property BOOL isSavePresetButtonShowing;
 @property BOOL isDeletePresetButtonShowing;
-@property (retain) UITextField *presetNameTextField;
+@property (strong) UITextField *presetNameTextField;
 
-@property (retain) DDSocialDialog *saveDialog;
+@property (strong) DDSocialDialog *saveDialog;
 
 @property BOOL wasVisualizerOffBeforeRotation;
 
-@property (retain) UISwipeGestureRecognizer *swipeDetectorLeft;
-@property (retain) UISwipeGestureRecognizer *swipeDetectorRight;
+@property (strong) UISwipeGestureRecognizer *swipeDetectorLeft;
+@property (strong) UISwipeGestureRecognizer *swipeDetectorRight;
 
-@property (retain) IBOutlet UIView *landscapeButtonsHolder;
+@property (strong) IBOutlet UIView *landscapeButtonsHolder;
 
 //@property (retain) GCDTimer *hidePickerTimer;
 

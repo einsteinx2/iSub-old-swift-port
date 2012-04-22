@@ -70,15 +70,8 @@
 
 - (void)dealloc
 {
-	[mySong release]; mySong = nil;
 	coverArtView.delegate = nil;
-	[coverArtView release]; coverArtView = nil;
-	[userNameLabel release]; userNameLabel = nil;
-	[nameScrollView release]; nameScrollView = nil;
-	[songNameLabel release]; songNameLabel = nil;
-	[artistNameLabel release]; artistNameLabel = nil;
 
-	[super dealloc];
 }
 
 - (void)layoutSubviews 

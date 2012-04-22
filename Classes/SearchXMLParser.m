@@ -34,7 +34,6 @@
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:appDelegateS cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	alert.tag = 1;
 	[alert show];
-	[alert release];
 }
 
 
@@ -43,7 +42,6 @@
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:@"There was an error parsing the XML response. Subsonic may have had an error performing the search." delegate:appDelegateS cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	alert.tag = 1;
 	[alert show];
-	[alert release];
 }
 
 
@@ -62,7 +60,6 @@
 				[listOfSongs addObject:aSong];
 			}
 		
-			[aSong release];
 		}
 	}
 	else if ([elementName isEqualToString:@"album"])
@@ -71,7 +68,6 @@
 		
 		[listOfAlbums addObject:anAlbum];
 		
-		[anAlbum release];
 	}
 	else if ([elementName isEqualToString:@"artist"])
 	{
@@ -79,7 +75,6 @@
 		
 		[listOfArtists addObject:anArtist];
 		
-		[anArtist release];
 	}
 }
 
@@ -98,12 +93,5 @@
 }
 
 
-- (void) dealloc 
-{
-	[listOfArtists release];
-	[listOfAlbums release];
-	[listOfSongs release];
-	[super dealloc];
-}
 
 @end

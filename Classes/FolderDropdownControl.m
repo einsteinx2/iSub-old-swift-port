@@ -28,18 +28,18 @@
     if (self) 
 	{
 		delegate = nil;
-		selectedFolderId = [[NSNumber numberWithInt:-1] retain];
-		folders = [[SUSRootFoldersDAO folderDropdownFolders] retain];
+		selectedFolderId = [NSNumber numberWithInt:-1];
+		folders = [SUSRootFoldersDAO folderDropdownFolders];
 		updatedfolders = nil;
 		labels = [[NSMutableArray alloc] init];
 		isOpen = NO;
 		connection = nil;
 		receivedData = nil;
 		
-		borderColor = [[UIColor colorWithRed:156.0/255.0 green:161.0/255.0 blue:168.0/255.0 alpha:1] retain];
-		textColor   = [[UIColor colorWithRed:106.0/255.0 green:111.0/255.0 blue:118.0/255.0 alpha:1] retain];
-		lightColor  = [[UIColor colorWithRed:206.0/255.0 green:211.0/255.0 blue:218.0/255.0 alpha:1] retain];
-		darkColor   = [[UIColor colorWithRed:196.0/255.0 green:201.0/255.0 blue:208.0/255.0 alpha:1] retain];
+		borderColor = [UIColor colorWithRed:156.0/255.0 green:161.0/255.0 blue:168.0/255.0 alpha:1];
+		textColor   = [UIColor colorWithRed:106.0/255.0 green:111.0/255.0 blue:118.0/255.0 alpha:1];
+		lightColor  = [UIColor colorWithRed:206.0/255.0 green:211.0/255.0 blue:218.0/255.0 alpha:1];
+		darkColor   = [UIColor colorWithRed:196.0/255.0 green:201.0/255.0 blue:208.0/255.0 alpha:1];
 		
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		self.userInteractionEnabled = YES;
@@ -58,25 +58,21 @@
 		selectedFolderLabel.font = [UIFont boldSystemFontOfSize:20];
 		selectedFolderLabel.text = @"All Folders";
 		[self addSubview:selectedFolderLabel];
-		[selectedFolderLabel release];
 		
 		UIView *arrowImageView = [[UIView alloc] initWithFrame:CGRectMake(193, 7, 18, 18)];
 		arrowImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 		[self addSubview:arrowImageView];
-		[arrowImageView release];
 		
 		arrowImage = [[CALayer alloc] init];
 		arrowImage.frame = CGRectMake(0, 0, 18, 18);
 		arrowImage.contentsGravity = kCAGravityResizeAspect;
 		arrowImage.contents = (id)[UIImage imageNamed:@"folder-dropdown-arrow.png"].CGImage;
 		[[arrowImageView layer] addSublayer:arrowImage];
-		[arrowImage release];
 		
 		UIButton *dropdownButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 220, 30)];
 		dropdownButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		[dropdownButton addTarget:self action:@selector(toggleDropdown:) forControlEvents:UIControlEventTouchUpInside];
 		[self addSubview:dropdownButton];
-		[dropdownButton release];
 		
 		[self updateFolders];
 		
@@ -96,15 +92,10 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ServerCheckPassed object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ServerSwitched object:nil];
 	
-	[folders release]; folders = nil;
+	 folders = nil;
 	
-	[borderColor release]; borderColor = nil;
-	[textColor release]; textColor = nil;
-	[lightColor release]; lightColor = nil;
-	[darkColor release]; darkColor = nil;
 	
-	[labels release]; labels = nil;
-    [super dealloc];
+	 labels = nil;
 }
 
 NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
@@ -127,8 +118,8 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	@synchronized(self)
 	{
 		// Set the property
-		[folders release]; folders = nil;
-		folders = [namesAndIds retain];
+		 folders = nil;
+		folders = namesAndIds;
 		
 		// Remove old labels
 		for (UILabel *label in labels)
@@ -190,7 +181,6 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 			folderLabel.tag = tag;
 			[self addSubview:folderLabel];
 			[labels addObject:folderLabel];
-			[folderLabel release];
 			
 			UIButton *folderButton = [UIButton buttonWithType:UIButtonTypeCustom];
 			folderButton.frame = buttonFrame;
@@ -292,7 +282,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	if (connection)
 	{
 		[connection cancel]; 
-		[connection release]; connection = nil;
+		 connection = nil;
 	}
 	
 	//DLog(@"Folder dropdown: updating folders");
@@ -312,7 +302,6 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 		NSString *message = [NSString stringWithFormat:@"There was an error loading the music folders for the dropdown."];
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 }
 
@@ -351,10 +340,8 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	NSString *message = [NSString stringWithFormat:@"There was an error loading the music folders for the dropdown.\n\nError %i: %@", [error code], [error localizedDescription]];
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
-	[alert release];
 	
-	[connection release]; connection = nil;
-	[receivedData release];
+	 connection = nil;
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
@@ -364,10 +351,8 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
 	[xmlParser setDelegate:self];
 	[xmlParser parse];
-	[xmlParser release];
 	
-	[connection release]; connection = nil;
-	[receivedData release];
+	 connection = nil;
 }
 
 #pragma XMLParser delegate
@@ -406,7 +391,6 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 		// Save the default
 		[SUSRootFoldersDAO setFolderDropdownFolders:self.folders];
 		
-		[updatedfolders release];
 	}
 }
 

@@ -11,7 +11,7 @@
 @class FMDatabase;
 @interface SUSLyricsLoader : SUSLoader
 
-@property (readonly) FMDatabase *db;
+@property (unsafe_unretained, readonly) FMDatabase *db;
 
 @property (copy) NSString *artist;
 @property (copy) NSString *title;

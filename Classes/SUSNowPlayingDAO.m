@@ -126,7 +126,7 @@
 
 - (void)startLoad
 {	
-    self.loader = [[[SUSNowPlayingLoader alloc] initWithDelegate:self] autorelease];
+    self.loader = [[SUSNowPlayingLoader alloc] initWithDelegate:self];
     [self.loader startLoad];
 }
 

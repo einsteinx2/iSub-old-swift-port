@@ -19,7 +19,7 @@
 }
 
 @property (assign, readonly) float scrubbingSpeed;
-@property (retain) NSArray *scrubbingSpeeds;
-@property (retain) NSArray *scrubbingSpeedChangePositions;
+@property (strong) NSArray *scrubbingSpeeds;
+@property (strong) NSArray *scrubbingSpeedChangePositions;
 
 @end

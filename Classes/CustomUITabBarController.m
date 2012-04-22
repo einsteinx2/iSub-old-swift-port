@@ -32,9 +32,8 @@
 		fadeTop.frame =CGRectMake(0, -10, tableView.bounds.size.width, 10);
 		fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		[tableView addSubview:fadeTop];
-		[fadeTop release];
 		
-		UIImageView *fade = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+		UIImageView *fade = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
 		fade.frame = CGRectMake(0, 0, tableView.bounds.size.width, 10);
 		fade.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		tableView.tableFooterView = fade;

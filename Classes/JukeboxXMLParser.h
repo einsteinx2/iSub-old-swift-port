@@ -22,7 +22,7 @@
 @property BOOL isPlaying;
 @property float gain;
 
-@property (retain) NSMutableArray *listOfSongs;
+@property (strong) NSMutableArray *listOfSongs;
 
 - (id) initXMLParser;
 

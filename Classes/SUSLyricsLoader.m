@@ -28,7 +28,6 @@
 - (void)dealloc
 {
 	self.delegate = nil;
-	[super dealloc];
 }
 
 - (FMDatabase *)db
@@ -169,7 +168,6 @@
 		
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_LyricsFailed];
     }
-	[tbxml release];
 	
 	self.receivedData = nil;
 	self.connection = nil;

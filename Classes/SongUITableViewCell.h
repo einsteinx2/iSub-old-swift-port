@@ -14,11 +14,11 @@
 
 @property (copy) Song *mySong;
 
-@property (retain) UILabel *trackNumberLabel;
-@property (retain) UIScrollView *songNameScrollView;
-@property (retain) UILabel *songNameLabel;
-@property (retain) UILabel *artistNameLabel;
-@property (retain) UILabel *songDurationLabel;
-@property (retain) UIImageView *nowPlayingImageView;
+@property (strong) UILabel *trackNumberLabel;
+@property (strong) UIScrollView *songNameScrollView;
+@property (strong) UILabel *songNameLabel;
+@property (strong) UILabel *artistNameLabel;
+@property (strong) UILabel *songDurationLabel;
+@property (strong) UIImageView *nowPlayingImageView;
 
 @end

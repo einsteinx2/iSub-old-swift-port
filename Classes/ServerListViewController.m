@@ -75,14 +75,14 @@
 	
 	self.title = @"Servers";
 	if(self != [[self.navigationController viewControllers] objectAtIndexSafe:0])
-		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(saveAction:)] autorelease];
+		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(saveAction:)];
 	self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	
 	if (settingsS.serverList == nil || [settingsS.serverList count] == 0)
 		[self addAction:nil];
 	
 	// Setup segmented control in the header view
-	headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)] autorelease];
+	headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
 	headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
 	
 	segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Servers", @"Settings", @"Help", nil]];
@@ -107,9 +107,8 @@
 		fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
 		fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		[self.tableView addSubview:fadeTop];
-		[fadeTop release];
 		
-		UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+		UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
 		fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 		fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		self.tableView.tableFooterView = fadeBottom;
@@ -130,7 +129,7 @@
 		if(self == [[self.navigationController viewControllers] firstObjectSafe])
 			self.navigationItem.leftBarButtonItem = nil;
 		else
-			self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(saveAction:)] autorelease];
+			self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(saveAction:)];
 		
 	}
 }
@@ -149,7 +148,7 @@
 		self.tableView.scrollEnabled = YES;
 		self.navigationItem.rightBarButtonItem = self.editButtonItem;
 		
-		UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+		UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
 		fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 		fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		self.tableView.tableFooterView = fadeBottom;
@@ -163,7 +162,7 @@
 		self.tableView.scrollEnabled = YES;
 		[self setEditing:NO animated:NO];
 		self.navigationItem.rightBarButtonItem = nil;
-		self.settingsTabViewController = [[[SettingsTabViewController alloc] initWithNibName:@"SettingsTabViewController" bundle:nil] autorelease];
+		self.settingsTabViewController = [[SettingsTabViewController alloc] initWithNibName:@"SettingsTabViewController" bundle:nil];
 		self.settingsTabViewController.parentController = self;
 		self.tableView.tableFooterView = settingsTabViewController.view;
 		[self.tableView reloadData];
@@ -175,7 +174,7 @@
 		self.tableView.scrollEnabled = NO;
 		[self setEditing:NO animated:NO];
 		self.navigationItem.rightBarButtonItem = nil;
-		self.helpTabViewController = [[[HelpTabViewController alloc] initWithNibName:@"HelpTabViewController" bundle:nil] autorelease];
+		self.helpTabViewController = [[HelpTabViewController alloc] initWithNibName:@"HelpTabViewController" bundle:nil];
 		if (IS_IPAD())
 		{
 			self.helpTabViewController.view.frame = self.view.bounds;
@@ -193,7 +192,7 @@
     if(editing)
     {
 		isEditing = YES;
-		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addAction:)] autorelease];
+		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addAction:)];
     }
     else
     {
@@ -213,7 +212,6 @@
 		[appDelegateS.ipadRootViewController presentModalViewController:serverTypeViewController animated:YES];
 	else
 		[self presentModalViewController:serverTypeViewController animated:YES];
-	[serverTypeViewController release];
 }
 
 - (void)saveAction:(id)sender
@@ -236,7 +234,6 @@
 		if ([ubuntuServerEditViewController respondsToSelector:@selector(setModalPresentationStyle:)])
 			ubuntuServerEditViewController.modalPresentationStyle = UIModalPresentationFormSheet;
 		[self presentModalViewController:ubuntuServerEditViewController animated:YES];
-		[ubuntuServerEditViewController release];
 	}
 	else // Default to Subsonic
 	{
@@ -244,7 +241,6 @@
 		if ([subsonicServerEditViewController respondsToSelector:@selector(setModalPresentationStyle:)])
 			subsonicServerEditViewController.modalPresentationStyle = UIModalPresentationFormSheet;
 		[self presentModalViewController:subsonicServerEditViewController animated:YES];
-		[subsonicServerEditViewController release];
 	}
 }
 
@@ -271,7 +267,6 @@
 	
 	DLog(@" settingsS.urlString: %@   settingsS.redirectUrlString: %@", settingsS.urlString, settingsS.redirectUrlString);
 		
-	[self retain];
 	if(self == [[self.navigationController viewControllers] objectAtIndexSafe:0] && !IS_IPAD())
 	{
 		[self.navigationController.view removeFromSuperview];
@@ -365,7 +360,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
 	static NSString *cellIdentifier = @"ServerListCell";
-    UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 	
 	Server *aServer = [settingsS.serverList objectAtIndexSafe:indexPath.row];
 	
@@ -377,7 +372,6 @@
 	serverNameLabel.font = [UIFont boldSystemFontOfSize:20];
 	[serverNameLabel setText:aServer.url];
 	[cell.contentView addSubview:serverNameLabel];
-	[serverNameLabel release];
 	
 	UILabel *detailsLabel = [[UILabel alloc] init];
 	detailsLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -386,7 +380,6 @@
 	detailsLabel.font = [UIFont systemFontOfSize:15];
 	[detailsLabel setText:[NSString stringWithFormat:@"username: %@", aServer.username]];
 	[cell.contentView addSubview:detailsLabel];
-	[detailsLabel release];
 	
 	UIImage *typeImage = nil;
 	if ([aServer.type isEqualToString:SUBSONIC])
@@ -397,7 +390,6 @@
 	UIImageView *serverType = [[UIImageView alloc] initWithImage:typeImage];
 	serverType.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 	[cell.contentView addSubview:serverType];
-	[serverType release];
 	
 	if([ settingsS.urlString isEqualToString:aServer.url] && 
 	   [ settingsS.username isEqualToString:aServer.username] &&
@@ -406,7 +398,6 @@
 		UIImageView *currentServerMarker = [[UIImageView alloc] init];
 		currentServerMarker.image = [UIImage imageNamed:@"current-server.png"];
 		[cell.contentView addSubview:currentServerMarker];
-		[currentServerMarker release];
 		
 		currentServerMarker.frame = CGRectMake(3, 12, 26, 26);
 		serverNameLabel.frame = CGRectMake(35, 0, 236, 25);
@@ -419,7 +410,7 @@
 	}
 	serverType.frame = CGRectMake(271, 3, 44, 44);
 	
-	cell.backgroundView = [[[UIView alloc] init] autorelease];
+	cell.backgroundView = [[UIView alloc] init];
 	if(indexPath.row % 2 == 0)
 		cell.backgroundView.backgroundColor = [viewObjectsS lightNormal];
 	else
@@ -465,10 +456,9 @@
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath 
 {
-	NSArray *server = [[ settingsS.serverList objectAtIndexSafe:fromIndexPath.row] retain];
+	NSArray *server = [ settingsS.serverList objectAtIndexSafe:fromIndexPath.row];
 	[ settingsS.serverList removeObjectAtIndex:fromIndexPath.row];
 	[ settingsS.serverList insertObject:server atIndex:toIndexPath.row];
-	[server release];
 	[[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject: settingsS.serverList] forKey:@"servers"];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
@@ -487,7 +477,6 @@
 			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Make sure to select a new server" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 			alert.tag = 4;
 			[alert show];
-			[alert release];
 		}
 		
         // Delete the row from the data source
@@ -512,13 +501,6 @@
 }
 
 
-- (void)dealloc 
-{
-	[settingsTabViewController release]; settingsTabViewController = nil;
-	[helpTabViewController release]; helpTabViewController = nil;
-	[theNewRedirectionUrl release]; theNewRedirectionUrl = nil;
-    [super dealloc];
-}
 
 - (void)SUSServerURLCheckFailed:(SUSServerChecker *)checker withError:(NSError *)error
 {	
@@ -533,9 +515,8 @@
 	}
 	alert.tag = 3;
 	[alert show];
-	[alert release];	
     
-    [checker release]; checker = nil;
+     checker = nil;
 	    
     DLog(@"server verification failed, hiding loading screen");
     [viewObjectsS hideLoadingScreen];
@@ -545,7 +526,7 @@
 {
 	 settingsS.isNewSearchAPI = checker.isNewSearchAPI;
     
-    [checker release]; checker = nil;
+     checker = nil;
 	
 	 settingsS.urlString = [NSString stringWithString:viewObjectsS.serverToEdit.url];
 	 settingsS.username = [NSString stringWithString:viewObjectsS.serverToEdit.username];

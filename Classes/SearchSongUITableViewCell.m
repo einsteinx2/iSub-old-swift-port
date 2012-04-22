@@ -54,14 +54,9 @@
 
 - (void)dealloc 
 {
-	[mySong release]; mySong = nil;
+	 mySong = nil;
 	coverArtView.delegate = nil;
-	[coverArtView release]; coverArtView = nil;
-	[songNameScrollView release]; songNameScrollView = nil;
-	[songNameLabel release]; songNameLabel = nil;
-	[artistNameLabel release]; artistNameLabel = nil;
 	
-    [super dealloc];
 }
 
 
@@ -102,7 +97,7 @@
 		
 		coverArtView.coverArtId = mySong.coverArtId;
 		
-		self.backgroundView = [[[UIView alloc] init] autorelease];
+		self.backgroundView = [[UIView alloc] init];
 		if(row % 2 == 0)
 		{
 			if (mySong.isFullyCached)

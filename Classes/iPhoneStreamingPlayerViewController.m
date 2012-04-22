@@ -45,7 +45,7 @@
 
 
 @interface iPhoneStreamingPlayerViewController ()
-@property (retain) NSDictionary *originalViewFrames;
+@property (strong) NSDictionary *originalViewFrames;
 - (void)createReflection;
 - (void)initSongInfo;
 - (void)setStopButtonImage;
@@ -102,7 +102,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	StoreViewController *store = [[StoreViewController alloc] init];
 	[self pushViewControllerCustom:store];
 	//[self.navigationController pushViewController:store animated:YES];
-	[store release];
 }
 
 - (void)viewDidLoad
@@ -111,8 +110,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	DLog(@"coverArtImageView class: %@", NSStringFromClass(coverArtImageView.class));
 	
-	extraButtonsButtonOffImage = [[UIImage imageNamed:@"controller-extras.png"] retain];
-	extraButtonsButtonOnImage = [[UIImage imageNamed:@"controller-extras-on.png"] retain];
+	extraButtonsButtonOffImage = [UIImage imageNamed:@"controller-extras.png"];
+	extraButtonsButtonOnImage = [UIImage imageNamed:@"controller-extras-on.png"];
 	
 	// Set default values
 	self.pageControlViewController = nil;
@@ -128,9 +127,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[self createLandscapeViews];
 	
 	// Setup the navigation controller buttons
-	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"player-overlay.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(songInfoToggle:)] autorelease];
+	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"player-overlay.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(songInfoToggle:)];
 	if (!IS_IPAD())
-		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(backAction:)] autorelease];
+		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(backAction:)];
 	
 	// Initialize the song info
 	[self initSongInfo];
@@ -144,7 +143,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		CGRect frame = volumeSlider.bounds;
 		frame.size.height = volumeSlider.bounds.size.height / 2;
-		self.jukeboxVolumeView = [[[UISlider alloc] initWithFrame:frame] autorelease];
+		self.jukeboxVolumeView = [[UISlider alloc] initWithFrame:frame];
 		[self.jukeboxVolumeView addTarget:self action:@selector(jukeboxVolumeChanged:) forControlEvents:UIControlEventValueChanged];
 		self.jukeboxVolumeView.minimumValue = 0.0;
 		self.jukeboxVolumeView.maximumValue = 1.0;
@@ -157,7 +156,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		//volumeSlider.backgroundColor = [UIColor greenColor];
 		CGRect newFrame = CGRectMake(10, 0, volumeSlider.width-20, volumeSlider.height);
 		//CGRect newFrame = CGRectMake(volumeSlider.x, volumeSlider.y-10, volumeSlider.width, 30);
-		self.volumeView = [[[MPVolumeView alloc] initWithFrame:newFrame] autorelease];
+		self.volumeView = [[MPVolumeView alloc] initWithFrame:newFrame];
 		[self.volumeSlider addSubview:self.volumeView];
 		//[self.view addSubview:volumeView];
 		//[volumeView sizeToFit];
@@ -210,7 +209,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		}
 		else
 		{
-			[swipeDetector release]; swipeDetector = nil;
+			 swipeDetector = nil;
 		}
 	}
 }
@@ -383,7 +382,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)createDownloadProgressView
 {
-	self.downloadProgress = [[[UIView alloc] initWithFrame:progressSlider.frame] autorelease];
+	self.downloadProgress = [[UIView alloc] initWithFrame:progressSlider.frame];
 	downloadProgress.x = 0.0;
 	downloadProgress.y = 0.0;
 	downloadProgress.backgroundColor = [UIColor whiteColor];
@@ -402,7 +401,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	// Setup landscape orientation if necessary
 	if (!IS_IPAD())
 	{
-		self.artistLabel = [[[UILabel alloc] initWithFrame:CGRectMake(305, 60, 170, 30)] autorelease];
+		self.artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(305, 60, 170, 30)];
 		self.artistLabel.backgroundColor = [UIColor clearColor];
 		self.artistLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
 		self.artistLabel.font = [UIFont boldSystemFontOfSize:22];
@@ -411,7 +410,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[self.view addSubview:self.artistLabel];
 		[self.view sendSubviewToBack:self.artistLabel];
 		
-		self.titleLabel = [[[UILabel alloc] initWithFrame:CGRectMake(305, 90, 170, 30)] autorelease];
+		self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(305, 90, 170, 30)];
 		self.titleLabel.backgroundColor = [UIColor clearColor];
 		self.titleLabel.textColor = [UIColor whiteColor];
 		self.titleLabel.font = [UIFont boldSystemFontOfSize:24];
@@ -420,7 +419,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[self.view addSubview:self.titleLabel];
 		[self.view sendSubviewToBack:self.titleLabel];
 		
-		self.albumLabel = [[[UILabel alloc] initWithFrame:CGRectMake(305, 120, 170, 30)] autorelease];
+		self.albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(305, 120, 170, 30)];
 		self.albumLabel.backgroundColor = [UIColor clearColor];
 		self.albumLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
 		self.albumLabel.font = [UIFont systemFontOfSize:22];
@@ -471,66 +470,20 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	[self unregisterForNotifications];
 	
-	[volumeView release]; volumeView = nil;
-	[jukeboxVolumeView release]; jukeboxVolumeView = nil;
-	
-	[artistTitleLabel release]; artistTitleLabel = nil;
-	[albumTitleLabel release]; albumTitleLabel = nil;
-	[titleLabel release]; titleLabel = nil;
 	
 	
-	[artistLabel release]; artistLabel = nil;
-	[albumLabel release]; albumLabel = nil;
-	[titleLabel release]; titleLabel = nil;
+	
 	
 	
 	coverArtImageView.delegate = nil;
 	
-	[extraButtons release]; extraButtons = nil;
-	[extraButtonsBackground release]; extraButtonsBackground = nil;
-	[songInfoView release]; songInfoView = nil;
-	[sliderMultipleLabel release]; sliderMultipleLabel = nil;
-	[trackLabel release]; trackLabel = nil;
-	[genreLabel release]; genreLabel = nil;
-	[yearLabel release]; yearLabel = nil;
-	[formatLabel release]; formatLabel = nil;
-	[extraButtonsButtonOffImage release]; extraButtonsButtonOffImage = nil;
-	[extraButtonsButtonOnImage release]; extraButtonsButtonOnImage = nil;
 	
-	[coverArtHolderView release]; coverArtHolderView = nil;
-	[currentAlbumButton release]; currentAlbumButton = nil;
-	[repeatButton release]; repeatButton = nil;
-	[bookmarkButton release]; bookmarkButton = nil;
-	[bookmarkCountLabel release]; bookmarkCountLabel = nil;
-	[shuffleButton release]; shuffleButton = nil;
-	[progressSlider release]; progressSlider = nil;
-	[elapsedTimeLabel release]; elapsedTimeLabel = nil;
-	[remainingTimeLabel release]; remainingTimeLabel = nil;
 
-	[downloadProgress release]; downloadProgress = nil;
-	[bookmarkNameTextField release]; bookmarkNameTextField = nil;
-	[bookmarkEntry release]; bookmarkEntry = nil;
-	[quickBackLabel release]; quickBackLabel = nil;
-	[quickForwLabel release]; quickForwLabel = nil;
 	
 	[pageControlViewController viewDidDisappear:NO];
-	[pageControlViewController release]; pageControlViewController = nil;
-	[playButton release]; playButton = nil;
-	[nextButton release]; nextButton = nil;
-	[prevButton release]; prevButton = nil;
-	[volumeSlider release]; volumeSlider = nil;
-	[coverArtImageView release]; coverArtImageView = nil;
-	[songInfoToggleButton release]; songInfoToggleButton = nil;
-	[activityIndicator release]; activityIndicator = nil;
-	[reflectionView release]; reflectionView = nil;
 	
-	[swipeDetector release]; swipeDetector = nil;
 	
-	[largeOverlayArtist release]; largeOverlayArtist = nil;
-	[largeOverlayAlbum release]; largeOverlayAlbum = nil;
-	[largeOverlaySong release]; largeOverlaySong = nil;
 	
-	[super dealloc];
 }
 
 #pragma mark Rotation
@@ -663,7 +616,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		float width = 180;
 		
-		UIView *titleView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 40)] autorelease];
+		UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 40)];
 		titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		
 		CGRect artistFrame = CGRectMake(0, -2, width, 15);
@@ -674,7 +627,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		NSUInteger songSize   = 12;
 		NSUInteger albumSize  = 11;
 		
-		self.artistTitleLabel = [[[UILabel alloc] initWithFrame:artistFrame] autorelease];
+		self.artistTitleLabel = [[UILabel alloc] initWithFrame:artistFrame];
 		self.artistTitleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		self.artistTitleLabel.backgroundColor = [UIColor clearColor];
 		self.artistTitleLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
@@ -682,7 +635,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		self.artistTitleLabel.textAlignment = UITextAlignmentCenter;
 		[titleView addSubview:self.artistTitleLabel];
 		
-		self.songTitleLabel = [[[UILabel alloc] initWithFrame:songFrame] autorelease];
+		self.songTitleLabel = [[UILabel alloc] initWithFrame:songFrame];
 		//MarqueeLabel *song = [[MarqueeLabel alloc] initWithFrame:songFrame andRate:50.0 andBufer:6.0];
 		self.songTitleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		self.songTitleLabel.backgroundColor = [UIColor clearColor];
@@ -843,10 +796,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	UIImage *cover = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
 	
-	UIView *aView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0,34.0, 30.0)] autorelease];
+	UIView *aView = [[UIView alloc] initWithFrame:CGRectMake(0, 0,34.0, 30.0)];
 	aView.layer.cornerRadius = 4;
 	
-	UIImageView *coverView = [[[UIImageView alloc] initWithImage:cover] autorelease];
+	UIImageView *coverView = [[UIImageView alloc] initWithImage:cover];
 	coverView.frame = CGRectMake(2, 0,30.0, 30.0);
 	//coverView.userInteractionEnabled = YES;
 	[aView addSubview:coverView];
@@ -856,7 +809,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[action addTarget:self action:@selector(songInfoToggle:) forControlEvents:UIControlEventTouchUpInside];
 	[aView addSubview:action];
 	
-	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:aView] autorelease];
+	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:aView];
 }
 
 - (void)playlistToggleAnimated:(BOOL)animated saveState:(BOOL)saveState
@@ -867,7 +820,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		if (!self.pageControlViewController)
 		{
-			self.pageControlViewController = [[[PageControlViewController alloc] initWithNibName:@"PageControlViewController" bundle:nil] autorelease];
+			self.pageControlViewController = [[PageControlViewController alloc] initWithNibName:@"PageControlViewController" bundle:nil];
 			self.pageControlViewController.view.frame = CGRectMake (0, 0, coverArtImageView.frame.size.width, coverArtImageView.frame.size.height);
 		}
 		
@@ -903,7 +856,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	{
 		self.songInfoToggleButton.userInteractionEnabled = YES;
 		
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"player-overlay.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(songInfoToggle:)] autorelease];
+		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"player-overlay.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(songInfoToggle:)];
 		
 		// Flip the album art horizontally
 		self.coverArtHolderView.transform = CGAffineTransformMakeScale(1, 1);
@@ -1201,7 +1154,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		CGFloat x = (self.coverArtHolderView.width / 2) - (width / 2.);
 		CGFloat y = self.songInfoView.y - height;
 		CGRect frame = CGRectMake(x, y, width, height);
-		self.sliderMultipleLabel = [[[UILabel alloc] initWithFrame:frame] autorelease];
+		self.sliderMultipleLabel = [[UILabel alloc] initWithFrame:frame];
 		self.sliderMultipleLabel.textColor = [UIColor colorWithWhite:.8 alpha:1.0];
 		self.sliderMultipleLabel.alpha = 0.0;
 		self.sliderMultipleLabel.font = [UIFont boldSystemFontOfSize:13.5];
@@ -1217,7 +1170,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		backgroundLayer.backgroundColor = [UIColor colorWithWhite:0 alpha:.72].CGColor;
 		backgroundLayer.cornerRadius = cornerRadius;
 		self.sliderMultipleLabel.backgroundColor = [UIColor colorWithPatternImage:[backgroundLayer imageFromLayer]];
-		[backgroundLayer release];
 
 		[self.coverArtHolderView addSubview:self.sliderMultipleLabel];
 	}
@@ -1292,7 +1244,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			{
 				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Past Cache Point" message:@"You are trying to skip further than the song has cached. You can do this, but the song won't be cached. Or you can wait a little bit for the cache to catch up." delegate:self cancelButtonTitle:@"Wait" otherButtonTitles:@"OK", nil];
 				[alert show];
-				[alert release];
 			}
 		}
 	}
@@ -1359,7 +1310,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[myAlertView setTransform:myTransform];
 	}
 	[myAlertView show];
-	[myAlertView release];
 	[bookmarkNameTextField becomeFirstResponder];
 }
 
@@ -1440,7 +1390,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 				// Bookmark exists so ask to overwrite
 				UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Overwrite?" message:@"There is already a bookmark with this name. Overwrite it?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
 				[myAlertView show];
-				[myAlertView release];
 			}
 			else
 			{
@@ -1595,7 +1544,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	EqualizerViewController *eqView = [[EqualizerViewController alloc] initWithNibName:@"EqualizerViewController" bundle:nil];
 	[self.navigationController pushViewController:eqView animated:YES];
-	[eqView release];
 }
 
 

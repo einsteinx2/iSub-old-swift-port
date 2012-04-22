@@ -20,7 +20,6 @@
 		UIView* bgView = [[UIView alloc] init];
 		bgView.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.25f];
 		self.selectedBackgroundView = bgView;
-		[bgView release];
 				
 		self.textLabel.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
 		self.textLabel.shadowOffset = CGSizeMake(0, 2);
@@ -31,12 +30,10 @@
 		UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 1)];
 		topLine.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.25];
 		[self.textLabel.superview addSubview:topLine];
-		[topLine release];
 		
 		UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 43, self.bounds.size.width, 1)];
 		bottomLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.25];
 		[self.textLabel.superview addSubview:bottomLine];
-		[bottomLine release];
 		
 		glowView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 43)];
 		glowView.image = [UIImage imageNamed:@"glow.png"];
@@ -69,9 +66,4 @@
 	}
 }
 
-- (void)dealloc
-{
-	[glowView release];
-	[super dealloc];
-}
 @end

@@ -21,9 +21,9 @@
 	BOOL _reloading;
 }
 
-@property (retain) UIImageView *nothingPlayingScreen;
+@property (strong) UIImageView *nothingPlayingScreen;
 
-@property (retain) SUSNowPlayingDAO *dataModel;
+@property (strong) SUSNowPlayingDAO *dataModel;
 
 @property(assign,getter=isReloading) BOOL reloading;
 

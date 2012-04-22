@@ -40,8 +40,8 @@
 
 @property(assign,getter=isReloading) BOOL reloading;
 
-@property (retain) UIView *headerView;
-@property (retain) UISearchBar *searchBar;
+@property (strong) UIView *headerView;
+@property (strong) UISearchBar *searchBar;
 
 //@property (retain) NSArray *indexes;
 //@property (retain) NSArray *folders;
@@ -49,9 +49,9 @@
 
 @property BOOL isSearching;
 
-@property (retain) FolderDropdownControl *dropdown;
+@property (strong) FolderDropdownControl *dropdown;
 
-@property (retain) SUSRootFoldersDAO *dataModel;
+@property (strong) SUSRootFoldersDAO *dataModel;
 
 - (void) doneSearching_Clicked:(id)sender;
 

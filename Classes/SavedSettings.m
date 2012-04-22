@@ -199,7 +199,6 @@
 					aServer.type = SUBSONIC;
 					
 					[newServerList addObject:aServer];
-					[aServer release];
 				}
 				
 				self.serverList = newServerList;
@@ -417,7 +416,6 @@
 {
 	@synchronized(self)
 	{
-		[urlString release];
 		urlString = [url copy];
 		[userDefaults setObject:url forKey:@"url"];
 		[userDefaults synchronize];
@@ -436,7 +434,6 @@
 {
 	@synchronized(self)
 	{
-		[username release];
 		username = [user copy];
 		[userDefaults setObject:user forKey:@"username"];
 		[userDefaults synchronize];
@@ -455,7 +452,6 @@
 {
 	@synchronized(self)
 	{
-		[password release];
 		password = [pass copy];
 		[userDefaults setObject:pass forKey:@"password"];
 		[userDefaults synchronize];
@@ -1379,7 +1375,7 @@ static SavedSettings *sharedInstance = nil;
 	if (!self.isScreenSleepEnabled)
 		[UIApplication sharedApplication].idleTimerDisabled = YES;
 	
-	userDefaults = [[NSUserDefaults standardUserDefaults] retain];
+	userDefaults = [NSUserDefaults standardUserDefaults];
 	serverList = nil;
 	urlString = [[NSString alloc] initWithString:DEFAULT_URL];
 	username = [[NSString alloc] initWithString:DEFAULT_USER_NAME];
@@ -1407,7 +1403,7 @@ static SavedSettings *sharedInstance = nil;
     @synchronized(self)
     {
 		if (sharedInstance == nil)
-			[[self alloc] init];
+			sharedInstance = [[self alloc] init];
     }
     return sharedInstance;
 }
@@ -1441,7 +1437,7 @@ static SavedSettings *sharedInstance = nil;
     return self;
 }
 
-- (id)retain 
+/*- (id)retain 
 {
     return self;
 }
@@ -1459,6 +1455,6 @@ static SavedSettings *sharedInstance = nil;
 - (id)autorelease 
 {
     return self;
-}
+}*/
 
 @end

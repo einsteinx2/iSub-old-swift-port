@@ -18,12 +18,10 @@
 	IBOutlet UITextField *passwordField;
 	IBOutlet UIButton *cancelButton;
 	IBOutlet UIButton *saveButton;
-		
-	ServerTypeViewController *parentController;
 }
 
-@property (assign) ServerTypeViewController *parentController;
-@property (retain) NSString *theNewRedirectUrl;
+@property (unsafe_unretained) ServerTypeViewController *parentController;
+@property (copy) NSString *theNewRedirectUrl;
 
 - (IBAction) cancelButtonPressed:(id)sender;
 - (IBAction) saveButtonPressed:(id)sender;

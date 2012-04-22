@@ -33,7 +33,7 @@
 	}
 	
 	// Does not contain an article
-	return [[self copy] autorelease];
+	return [self copy];
 }
 
 - (NSComparisonResult)compareWithoutIndefiniteArticles:(NSString *)otherString

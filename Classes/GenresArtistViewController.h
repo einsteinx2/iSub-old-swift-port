@@ -7,11 +7,7 @@
 //
 
 @interface GenresArtistViewController : UITableViewController 
-{
-	
-	NSMutableArray *listOfArtists;
-}
 
-@property (retain) NSMutableArray *listOfArtists;
+@property (strong) NSMutableArray *listOfArtists;
 
 @end

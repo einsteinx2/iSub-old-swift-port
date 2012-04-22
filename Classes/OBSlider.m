@@ -29,12 +29,6 @@
 @synthesize beganTrackingLocation;
 
 
-- (void) dealloc
-{
-    self.scrubbingSpeeds = nil;
-    self.scrubbingSpeedChangePositions = nil;
-    [super dealloc];
-}
 
 
 - (id) initWithFrame:(CGRect)frame

@@ -45,10 +45,8 @@
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 	
-	[connDelegate release];
 }
 
 
@@ -70,10 +68,8 @@
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 	
-	[connDelegate release];
 	
 	jukeboxIsPlaying = YES;
 }
@@ -97,10 +93,8 @@
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 	
-	[connDelegate release];
 	
 	jukeboxIsPlaying = NO;
 }
@@ -154,10 +148,8 @@
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 	
-	[connDelegate release];
 }
 
 - (void)jukeboxAddSong:(NSString*)songId
@@ -178,10 +170,8 @@
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 	
-	[connDelegate release];
 }
 
 - (void)jukeboxAddSongs:(NSArray*)songIds
@@ -206,10 +196,8 @@
 			// Inform the user that the connection failed.
 			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 			[alert show];
-			[alert release];
 		}
 		
-		[connDelegate release];
 	}
 }
 
@@ -234,7 +222,6 @@
 	
 	[self jukeboxAddSongs:songIds];
 	
-	[songIds release];
 }
 
 
@@ -256,10 +243,8 @@
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 	
-	[connDelegate release];
 }
 
 - (void)jukeboxClearPlaylist
@@ -282,10 +267,8 @@
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 	
-	[connDelegate release];
 }
 
 - (void)jukeboxClearRemotePlaylist
@@ -306,10 +289,8 @@
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 	
-	[connDelegate release];
 }
 
 - (void)jukeboxShuffle
@@ -332,10 +313,8 @@
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 	
-	[connDelegate release];
 }
 
 - (void)jukeboxGetInfo
@@ -359,10 +338,8 @@
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 	
-	[connDelegate release];
 }
 
 #pragma mark - Memory management
@@ -393,7 +370,7 @@ static JukeboxSingleton *sharedInstance = nil;
     @synchronized(self)
     {
         if (sharedInstance == nil)
-			[[self alloc] init];
+			sharedInstance = [[self alloc] init];
     }
     return sharedInstance;
 }
@@ -428,7 +405,7 @@ static JukeboxSingleton *sharedInstance = nil;
     return self;
 }
 
-- (id)retain {
+/*- (id)retain {
     return self;
 }
 
@@ -442,6 +419,6 @@ static JukeboxSingleton *sharedInstance = nil;
 
 - (id)autorelease {
     return self;
-}
+}*/
 
 @end

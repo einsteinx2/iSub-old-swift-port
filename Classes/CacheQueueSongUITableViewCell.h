@@ -12,11 +12,11 @@
 
 @interface CacheQueueSongUITableViewCell : CustomUITableViewCell 
 
-@property (retain) AsynchronousImageView *coverArtView;
-@property (retain) UILabel *cacheInfoLabel;
-@property (retain) UIScrollView *nameScrollView;
-@property (retain) UILabel *songNameLabel;
-@property (retain) UILabel *artistNameLabel;
+@property (strong) AsynchronousImageView *coverArtView;
+@property (strong) UILabel *cacheInfoLabel;
+@property (strong) UIScrollView *nameScrollView;
+@property (strong) UILabel *songNameLabel;
+@property (strong) UILabel *artistNameLabel;
 @property (copy) NSString *md5;
 
 @end

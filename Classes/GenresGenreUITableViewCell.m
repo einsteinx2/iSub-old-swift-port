@@ -44,13 +44,6 @@
 	return self;
 }
 
-- (void)dealloc
-{
-	[genreNameScrollView release]; genreNameScrollView = nil;
-	[genreNameLabel release]; genreNameLabel = nil;
-	
-	[super dealloc];
-}
 
 - (void)layoutSubviews 
 {	

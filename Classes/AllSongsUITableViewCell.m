@@ -80,14 +80,8 @@
 - (void)dealloc
 {
 	coverArtView.delegate = nil;
-	[coverArtView release]; coverArtView = nil;
-	[songNameScrollView release]; songNameScrollView = nil;
-	[songNameLabel release]; songNameLabel = nil;
-	[artistNameLabel release]; artistNameLabel = nil;
 	
-	[md5 release]; md5 = nil;
 	
-    [super dealloc];
 }
 
 #pragma mark - Overlay
@@ -116,15 +110,13 @@
 {
 	if (self.isSearching) 
 	{
-		Song *aSong = [[Song songFromDbRow:self.indexPath.row inTable:@"allSongsSearch" inDatabase:databaseS.allSongsDb] retain];
+		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"allSongsSearch" inDatabase:databaseS.allSongsDb];
 		[aSong addToCacheQueue];
-		[aSong release];
 	}
 	else 
 	{
-		Song *aSong = [[Song songFromDbRow:self.indexPath.row inTable:@"allSongs" inDatabase:databaseS.allSongsDb] retain];
+		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"allSongs" inDatabase:databaseS.allSongsDb];
 		[aSong addToCacheQueue];
-		[aSong release];
 	}
 	
 	self.overlayView.downloadButton.alpha = .3;

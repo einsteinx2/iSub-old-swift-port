@@ -26,10 +26,6 @@
 	[super setup];
 }
 
-- (void)dealloc
-{
-	[super dealloc];
-}
 
 - (FMDatabase *)db
 {
@@ -175,7 +171,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	            
-	DLog(@"%@", [[[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding] autorelease]);
+	DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
 	
     // Parse the data
 	//
@@ -204,7 +200,7 @@
 				TBXMLElement *child = [TBXML childElementNamed:@"child" parentElement:directory];
 				while (child != nil)
 				{
-					NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+					@autoreleasepool {
                     
                     if ([[TBXML valueOfAttributeNamed:@"isDir" forElement:child] boolValue])
                     {
@@ -214,7 +210,6 @@
 							[self insertAlbumIntoFolderCache:anAlbum];
 							albumsCount++;
 						}
-						[anAlbum release];
                     }
                     else
                     {
@@ -228,14 +223,13 @@
 								songsCount++;
 								folderLength += [aSong.duration intValue];
 							}
-							[aSong release];
 						}
                     }
 					
 					// Get the next message
 					child = [TBXML nextSiblingNamed:@"child" searchFromElement:child];
 					
-					[pool release];
+					}
 				}
                 
                 [self insertAlbumsCount];
@@ -250,7 +244,6 @@
             }
 		}
 	}
-	[tbxml release];
 	
 	self.receivedData = nil;
 	self.connection = nil;

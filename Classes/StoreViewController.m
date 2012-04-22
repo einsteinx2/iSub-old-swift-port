@@ -67,8 +67,6 @@
 - (void)dealloc 
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self.tableView name:ISMSNotification_StorePurchaseComplete object:nil];
-	[storeItems release];
-    [super dealloc];
 }
 
 #pragma mark - Store
@@ -81,7 +79,6 @@
 
 - (void)checkProducts
 {
-	[storeItems release];
 	storeItems = [[NSArray alloc] initWithArray:storeManager.purchasableObjects];
 	
 	if ([storeItems count] > 0)
@@ -115,7 +112,6 @@
 	
 	[sorted addObjectsFromArray:temp];
 	
-	[storeItems release];
 	storeItems = [[NSArray alloc] initWithArray:sorted];
 }
 
@@ -150,13 +146,13 @@
 	UITableViewCell *cell = nil;
 	if (indexPath.row == 0)
 	{
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 		cell.textLabel.text = @"Restore previous purchases";
 	}
 	else
 	{
 		NSUInteger adjustedRow = indexPath.row - 1;
-		cell = [[[StoreUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+		cell = [[StoreUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 		((StoreUITableViewCell *)cell).myProduct = [storeItems objectAtIndexSafe:adjustedRow];
 	}
 	return cell;

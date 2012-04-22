@@ -16,21 +16,21 @@
 	SUSQueueAllLoader *queueAll;
 }
 
-@property (retain) NSString *databaseFolderPath;
-@property (retain) FMDatabase *allAlbumsDb;
-@property (retain) FMDatabase *allSongsDb;
-@property (retain) FMDatabase *coverArtCacheDb540;
-@property (retain) FMDatabase *coverArtCacheDb320;
-@property (retain) FMDatabase *coverArtCacheDb60;
-@property (retain) FMDatabase *albumListCacheDb;
-@property (retain) FMDatabase *genresDb;
-@property (retain) FMDatabase *currentPlaylistDb;
-@property (retain) FMDatabase *localPlaylistsDb;
-@property (retain) FMDatabase *serverPlaylistsDb;
-@property (retain) FMDatabase *songCacheDb;
-@property (retain) FMDatabase *cacheQueueDb;
-@property (retain) FMDatabase *lyricsDb;
-@property (retain) FMDatabase *bookmarksDb;
+@property (strong) NSString *databaseFolderPath;
+@property (strong) FMDatabase *allAlbumsDb;
+@property (strong) FMDatabase *allSongsDb;
+@property (strong) FMDatabase *coverArtCacheDb540;
+@property (strong) FMDatabase *coverArtCacheDb320;
+@property (strong) FMDatabase *coverArtCacheDb60;
+@property (strong) FMDatabase *albumListCacheDb;
+@property (strong) FMDatabase *genresDb;
+@property (strong) FMDatabase *currentPlaylistDb;
+@property (strong) FMDatabase *localPlaylistsDb;
+@property (strong) FMDatabase *serverPlaylistsDb;
+@property (strong) FMDatabase *songCacheDb;
+@property (strong) FMDatabase *cacheQueueDb;
+@property (strong) FMDatabase *lyricsDb;
+@property (strong) FMDatabase *bookmarksDb;
 
 + (DatabaseSingleton*)sharedInstance;
 

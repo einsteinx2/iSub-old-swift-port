@@ -57,7 +57,7 @@
 	self.title = @"Bookmarks";
 	
 	if (viewObjectsS.isOfflineMode)
-		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
+		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)];
 	
 	if (IS_IPAD())
 	{
@@ -71,7 +71,7 @@
 	[self.tableView addSubview:fadeTop];
 	[fadeTop release];*/
 		
-	UIImageView *fadeBottom = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]] autorelease];
+	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
 	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
 	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.tableView.tableFooterView = fadeBottom;
@@ -84,7 +84,7 @@
 	
 	if(musicS.showPlayerIcon)
 	{
-		self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)] autorelease];
+		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
 	}
 	else
 	{
@@ -124,16 +124,14 @@
 		}
 		textLabel.frame = CGRectMake(20, 20, 200, 140);
 		[noBookmarksScreen addSubview:textLabel];
-		[textLabel release];
 		
 		[self.view addSubview:noBookmarksScreen];
 		
-		[noBookmarksScreen release];
 	}
 	else
 	{
 		// Add the header
-		headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)] autorelease];
+		headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
 		headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
 		
 		bookmarkCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 230, 50)];
@@ -147,7 +145,6 @@
 		else 
 			bookmarkCountLabel.text = [NSString stringWithFormat:@"%i Bookmarks", bookmarksCount];
 		[headerView addSubview:bookmarkCountLabel];
-		[bookmarkCountLabel release];
 		
 		deleteBookmarksButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		deleteBookmarksButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
@@ -162,7 +159,6 @@
 		spacerLabel.font = [UIFont systemFontOfSize:40];
 		spacerLabel.text = @"|";
 		[headerView addSubview:spacerLabel];
-		[spacerLabel release];	
 		
 		editBookmarksLabel = [[UILabel alloc] initWithFrame:CGRectMake(234, 0, 86, 50)];
 		editBookmarksLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
@@ -172,7 +168,6 @@
 		editBookmarksLabel.font = [UIFont boldSystemFontOfSize:22];
 		editBookmarksLabel.text = @"Edit";
 		[headerView addSubview:editBookmarksLabel];
-		[editBookmarksLabel release];
 		
 		editBookmarksButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		editBookmarksButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
@@ -191,7 +186,6 @@
 		deleteBookmarksLabel.text = @"Remove # Bookmarks";
 		deleteBookmarksLabel.hidden = YES;
 		[headerView addSubview:deleteBookmarksLabel];
-		[deleteBookmarksLabel release];
 		
 		self.tableView.tableHeaderView = headerView;
 	}
@@ -219,7 +213,6 @@
 	[result close];
 	
 	self.bookmarkIds = [NSArray arrayWithArray:bookmarkIdsTemp];
-	[bookmarkIdsTemp release];
 }
 
 - (void)showDeleteButton
@@ -351,7 +344,6 @@
 			DLog(@"Exception: %@ - %@", exception.name, exception.reason);
 		}
 		
-		[indexes release];
 		
 		[self editBookmarksAction:nil];
 	}
@@ -465,7 +457,6 @@
 	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
 	serverListViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:serverListViewController animated:YES];
-	[serverListViewController release];
 }
 
 
@@ -474,7 +465,6 @@
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-	[streamingPlayerViewController release];
 }
 
 
@@ -499,7 +489,7 @@
 	BookmarkUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	if (!cell)
 	{
-		cell = [[[BookmarkUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+		cell = [[BookmarkUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 	}
 	cell.indexPath = indexPath;
 	
@@ -518,7 +508,7 @@
 	
 	cell.coverArtView.coverArtId = aSong.coverArtId;
 	
-	cell.backgroundView = [[[UIView alloc] init] autorelease];
+	cell.backgroundView = [[UIView alloc] init];
 	if(indexPath.row % 2 == 0)
 		cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
 	else
@@ -649,11 +639,6 @@
 
 
 
-- (void)dealloc 
-{	
-	[bookmarkIds release]; bookmarkIds = nil;
-	[super dealloc];
-}
 
 
 @end

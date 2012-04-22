@@ -22,7 +22,7 @@
 	anArtist.name = theName;
 	anArtist.artistId = theId;
 	
-	return [anArtist autorelease];
+	return anArtist;
 }
 
 - (id) initWithAttributeDict:(NSDictionary *)attributeDict
@@ -73,8 +73,8 @@
 		name = nil;
 		artistId = nil;
 		
-		name = [[decoder decodeObject] retain];
-		artistId = [[decoder decodeObject] retain];
+		name = [decoder decodeObject];
+		artistId = [decoder decodeObject];
 	}
 	
 	return self;
@@ -87,8 +87,8 @@
 	newArtist.name = nil;
 	newArtist.artistId = nil;
 	
-	newArtist.name = [[name copy] autorelease];
-	newArtist.artistId = [[artistId copy] autorelease];
+	newArtist.name = [name copy];
+	newArtist.artistId = [artistId copy];
 	
 	return newArtist;
 }
@@ -98,11 +98,5 @@
 	return [NSString stringWithFormat:@"%@: name: %@, artistId: %@", [super description], name, artistId];
 }
 
-- (void) dealloc 
-{	
-	[name release]; name = nil;
-	[artistId release]; artistId = nil;
-	[super dealloc];
-}
 
 @end

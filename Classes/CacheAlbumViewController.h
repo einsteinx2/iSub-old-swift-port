@@ -7,18 +7,12 @@
 //
 
 @interface CacheAlbumViewController : UITableViewController 
-{
-	NSMutableArray *listOfAlbums;
-	NSMutableArray *listOfSongs;
-	
-	NSArray *sectionInfo;
-}
 
-@property (retain) NSMutableArray *listOfAlbums;
-@property (retain) NSMutableArray *listOfSongs;
+@property (strong) NSMutableArray *listOfAlbums;
+@property (strong) NSMutableArray *listOfSongs;
 
-@property (retain) NSArray *sectionInfo;
+@property (strong) NSArray *sectionInfo;
 
-@property (retain) NSArray *segments;
+@property (strong) NSArray *segments;
 
 @end

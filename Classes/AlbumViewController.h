@@ -17,36 +17,30 @@
 	NSURLConnection *connection;
 	NSMutableData *loadingData;
 	
-	NSString *myId;
-	Artist *myArtist;
-	Album *myAlbum;
-	
-	NSArray *sectionInfo;
-	
 	EGORefreshTableHeaderView *refreshHeaderView;
 	BOOL _reloading;
 }
 
 @property(assign,getter=isReloading) BOOL reloading;
 	
-@property (retain) NSString *myId;
-@property (retain) Artist *myArtist;
-@property (retain) Album *myAlbum;
+@property (copy) NSString *myId;
+@property (strong) Artist *myArtist;
+@property (strong) Album *myAlbum;
 
-@property (retain) NSArray *sectionInfo;
+@property (strong) NSArray *sectionInfo;
 
-@property (retain) SUSSubFolderDAO *dataModel;
+@property (strong) SUSSubFolderDAO *dataModel;
 
-@property (retain) IBOutlet UIView *playAllShuffleAllView;
-@property (retain) IBOutlet UIView *albumInfoView;
-@property (retain) IBOutlet UIView *albumInfoArtHolderView;
-@property (retain) IBOutlet AsynchronousImageView *albumInfoArtView;
-@property (retain) IBOutlet UIImageView *albumInfoArtReflection;
-@property (retain) IBOutlet UIView *albumInfoLabelHolderView;
-@property (retain) IBOutlet UILabel *albumInfoArtistLabel;
-@property (retain) IBOutlet UILabel *albumInfoAlbumLabel;
-@property (retain) IBOutlet UILabel *albumInfoTrackCountLabel;
-@property (retain) IBOutlet UILabel *albumInfoDurationLabel; 
+@property (strong) IBOutlet UIView *playAllShuffleAllView;
+@property (strong) IBOutlet UIView *albumInfoView;
+@property (strong) IBOutlet UIView *albumInfoArtHolderView;
+@property (strong) IBOutlet AsynchronousImageView *albumInfoArtView;
+@property (strong) IBOutlet UIImageView *albumInfoArtReflection;
+@property (strong) IBOutlet UIView *albumInfoLabelHolderView;
+@property (strong) IBOutlet UILabel *albumInfoArtistLabel;
+@property (strong) IBOutlet UILabel *albumInfoAlbumLabel;
+@property (strong) IBOutlet UILabel *albumInfoTrackCountLabel;
+@property (strong) IBOutlet UILabel *albumInfoDurationLabel; 
 
 - (AlbumViewController *)initWithArtist:(Artist *)anArtist orAlbum:(Album *)anAlbum;
 

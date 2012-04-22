@@ -10,7 +10,7 @@
 
 @interface GenresGenreUITableViewCell : CustomUITableViewCell 
 
-@property (retain) UIScrollView *genreNameScrollView;
-@property (retain) UILabel *genreNameLabel;
+@property (strong) UIScrollView *genreNameScrollView;
+@property (strong) UILabel *genreNameLabel;
 
 @end

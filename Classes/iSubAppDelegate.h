@@ -45,34 +45,34 @@
 
 - (void)startStopServer;
 
-@property (nonatomic, retain) IBOutlet UIWindow *window;
+@property (nonatomic) IBOutlet UIWindow *window;
 
 // Main interface elements for iPhone
 //
-@property (retain) IBOutlet UIImageView *background;
-@property (retain) UITabBarController *currentTabBarController;
-@property (retain) IBOutlet UITabBarController *mainTabBarController;
-@property (retain) IBOutlet UITabBarController *offlineTabBarController;
-@property (retain) IBOutlet UINavigationController *homeNavigationController;
-@property (retain) IBOutlet UINavigationController *playerNavigationController;
-@property (retain) IBOutlet UINavigationController *artistsNavigationController;
-@property (retain) IBOutlet FoldersViewController *rootViewController;
-@property (retain) IBOutlet UINavigationController *allAlbumsNavigationController;
-@property (retain) IBOutlet UINavigationController *allSongsNavigationController;
-@property (retain) IBOutlet UINavigationController *playlistsNavigationController;
-@property (retain) IBOutlet UINavigationController *bookmarksNavigationController;
-@property (retain) IBOutlet UINavigationController *playingNavigationController;
-@property (retain) IBOutlet UINavigationController *genresNavigationController;
-@property (retain) IBOutlet UINavigationController *cacheNavigationController;
-@property (retain) IBOutlet UINavigationController *chatNavigationController;
-@property (retain) UINavigationController *supportNavigationController;
+@property (strong) IBOutlet UIImageView *background;
+@property (strong) UITabBarController *currentTabBarController;
+@property (strong) IBOutlet UITabBarController *mainTabBarController;
+@property (strong) IBOutlet UITabBarController *offlineTabBarController;
+@property (strong) IBOutlet UINavigationController *homeNavigationController;
+@property (strong) IBOutlet UINavigationController *playerNavigationController;
+@property (strong) IBOutlet UINavigationController *artistsNavigationController;
+@property (strong) IBOutlet FoldersViewController *rootViewController;
+@property (strong) IBOutlet UINavigationController *allAlbumsNavigationController;
+@property (strong) IBOutlet UINavigationController *allSongsNavigationController;
+@property (strong) IBOutlet UINavigationController *playlistsNavigationController;
+@property (strong) IBOutlet UINavigationController *bookmarksNavigationController;
+@property (strong) IBOutlet UINavigationController *playingNavigationController;
+@property (strong) IBOutlet UINavigationController *genresNavigationController;
+@property (strong) IBOutlet UINavigationController *cacheNavigationController;
+@property (strong) IBOutlet UINavigationController *chatNavigationController;
+@property (strong) UINavigationController *supportNavigationController;
 
 
-@property (retain) iPadRootViewController *ipadRootViewController;
+@property (strong) iPadRootViewController *ipadRootViewController;
 
 // Network connectivity objects and variables
 //
-@property (retain) Reachability *wifiReach;
+@property (strong) Reachability *wifiReach;
 @property (readonly) BOOL isWifi;
 
 // Multitasking stuff

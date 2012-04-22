@@ -33,10 +33,10 @@ typedef enum
 - (NSUInteger)indexForOffsetFromCurrentIndex:(NSUInteger)offset;
 
 // Convenience properties
-@property (readonly) Song *prevSong;
-@property (readonly) Song *currentDisplaySong;
-@property (readonly) Song *currentSong;
-@property (readonly) Song *nextSong;
+@property (unsafe_unretained, readonly) Song *prevSong;
+@property (unsafe_unretained, readonly) Song *currentDisplaySong;
+@property (unsafe_unretained, readonly) Song *currentSong;
+@property (unsafe_unretained, readonly) Song *nextSong;
 
 @property NSInteger shuffleIndex;
 @property NSInteger normalIndex;
@@ -46,7 +46,7 @@ typedef enum
 @property (readonly) NSInteger nextIndex;
 @property (readonly) NSUInteger count;
 
-@property (readonly) FMDatabase *db;
+@property (unsafe_unretained, readonly) FMDatabase *db;
 
 @property ISMSRepeatMode repeatMode;
 

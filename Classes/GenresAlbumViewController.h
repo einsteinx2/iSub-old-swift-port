@@ -17,11 +17,11 @@
 	NSString *genre;
 }
 
-@property (retain) NSMutableArray *listOfAlbums;
-@property (retain) NSMutableArray *listOfSongs;
+@property (strong) NSMutableArray *listOfAlbums;
+@property (strong) NSMutableArray *listOfSongs;
 
 @property NSInteger segment;
-@property (retain) NSString *seg1;
-@property (retain) NSString *genre;
+@property (copy) NSString *seg1;
+@property (copy) NSString *genre;
 
 @end

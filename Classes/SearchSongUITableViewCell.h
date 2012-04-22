@@ -15,9 +15,9 @@
 @property (copy) Song *mySong;
 @property NSUInteger row;
 
-@property (retain) AsynchronousImageView *coverArtView;
-@property (retain) UIScrollView *songNameScrollView;
-@property (retain) UILabel *songNameLabel;
-@property (retain) UILabel *artistNameLabel;
+@property (strong) AsynchronousImageView *coverArtView;
+@property (strong) UIScrollView *songNameScrollView;
+@property (strong) UILabel *songNameLabel;
+@property (strong) UILabel *artistNameLabel;
 
 @end

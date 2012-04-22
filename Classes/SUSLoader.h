@@ -13,11 +13,11 @@
 
 @interface SUSLoader : NSObject <NSURLConnectionDelegate>
 
-@property (assign) NSObject<SUSLoaderDelegate> *delegate;
+@property (unsafe_unretained) NSObject<SUSLoaderDelegate> *delegate;
 
-@property (retain) NSURLConnection *connection;
-@property (retain) NSMutableData *receivedData;
-@property (readonly) NSError *loadError;
+@property (strong) NSURLConnection *connection;
+@property (strong) NSMutableData *receivedData;
+@property (unsafe_unretained, readonly) NSError *loadError;
 @property (readonly) SUSLoaderType type;
 
 - (void)setup;

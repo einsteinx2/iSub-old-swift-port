@@ -15,11 +15,11 @@
 
 @property BOOL isQueueDownloading;
 @property (copy) Song *currentQueuedSong;
-@property (readonly) Song *currentQueuedSongInDb;
+@property (unsafe_unretained, readonly) Song *currentQueuedSongInDb;
 @property NSUInteger downloadLength;
 
-@property (retain) NSFileHandle *fileHandle;
-@property (retain) NSURLConnection *connection;
+@property (strong) NSFileHandle *fileHandle;
+@property (strong) NSURLConnection *connection;
 
 @property unsigned long long contentLength;
 @property NSUInteger numberOfContentLengthFailures;

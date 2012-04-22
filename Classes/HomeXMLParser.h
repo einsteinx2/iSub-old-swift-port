@@ -11,18 +11,12 @@
 
 @interface HomeXMLParser : NSObject <NSXMLParserDelegate> 
 {
-	NSMutableString *currentElementValue;
-	
-	
-	NSString *myId;
-
-	NSMutableArray *listOfAlbums;
-		
+	NSMutableString *currentElementValue;	
 }
 
-@property (retain) NSString *myId;
+@property (copy) NSString *myId;
 
-@property (retain) NSMutableArray *listOfAlbums;
+@property (strong) NSMutableArray *listOfAlbums;
 
 - (HomeXMLParser *) initXMLParser;
 

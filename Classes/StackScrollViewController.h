@@ -45,10 +45,10 @@ typedef enum
 - (void)addViewInSlider:(UIViewController*)controller invokeByController:(UIViewController*)invokeByController isStackStartView:(BOOL)isStackStartView;
 - (void)bounceBack:(NSString*)animationID finished:(NSNumber*)finished context:(void*)context;
 
-@property (nonatomic, retain) UIView* slideViews;
-@property (nonatomic, retain) UIView* borderViews;
+@property (nonatomic) UIView* slideViews;
+@property (nonatomic) UIView* borderViews;
 @property (nonatomic, assign) CGFloat slideStartPosition;
-@property (nonatomic, assign) NSMutableArray* viewControllersStack;
+@property (nonatomic) NSMutableArray* viewControllersStack;
 
 
 

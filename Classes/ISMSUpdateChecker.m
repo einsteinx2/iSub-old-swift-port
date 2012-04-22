@@ -25,7 +25,6 @@
 	}
 	
 	// Take ownership of self to allow connection to finish and alertview button to be pressed
-	[self retain];
 }
 
 - (void)showAlert
@@ -35,7 +34,6 @@
 	
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:finalMessage delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles:@"App Store", nil];
 	[alert show];
-	[alert release];
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex 
@@ -47,7 +45,6 @@
 		//[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftwareUpdate?id=id362920532"]];
 	}
 	
-	[self release];
 }
 
 #pragma mark - Connection Delegate
@@ -78,7 +75,7 @@
 {
     if (inRedirectResponse) 
     {
-        NSMutableURLRequest *r = [[request mutableCopy] autorelease]; // original request
+        NSMutableURLRequest *r = [request mutableCopy]; // original request
         [r setURL:[inRequest URL]];
         return r;
     } 
@@ -99,7 +96,6 @@
     self.receivedData = nil;
 	self.request = nil;
 
-	[self release];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
@@ -180,7 +176,6 @@
 			}
 		}
 	}
-	[tbxml release];
     
 	self.connection = nil;
     self.receivedData = nil;
@@ -189,7 +184,7 @@
 	if (showAlert)
 		[self showAlert];
 	else
-		[self release];
+		;
 }
 
 @end

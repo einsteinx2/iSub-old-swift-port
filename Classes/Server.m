@@ -38,10 +38,10 @@
 {
 	if ((self = [super init]))
 	{
-		url = [[decoder decodeObject] retain];
-		username = [[decoder decodeObject] retain];
-		password = [[decoder decodeObject] retain];
-		type = [[decoder decodeObject] retain];
+		url = [decoder decodeObject];
+		username = [decoder decodeObject];
+		password = [decoder decodeObject];
+		type = [decoder decodeObject];
 	}
 	
 	return self;
@@ -53,14 +53,5 @@
 }
 
 
-- (void)dealloc
-{
-	[url release];
-	[username release];
-	[password release];
-	[type release];
-	
-	[super dealloc];
-}
 
 @end

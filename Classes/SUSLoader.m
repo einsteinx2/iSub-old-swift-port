@@ -45,11 +45,6 @@
 	return self;
 }
 
-- (void)dealloc
-{
-	[loadError release]; loadError = nil;
-    [super dealloc];
-}
 
 - (SUSLoaderType)type
 {

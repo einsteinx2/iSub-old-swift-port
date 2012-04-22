@@ -56,16 +56,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-	[receivedData release]; receivedData = nil;
-	[connection release]; connection = nil;
-	[playlistNameScrollView release]; playlistNameScrollView = nil;
-	[playlistNameLabel release]; playlistNameLabel = nil;
-	[serverPlaylist release]; serverPlaylist = nil;
-	
-	[super dealloc];
-}
 
 - (void)layoutSubviews 
 {
@@ -222,29 +212,27 @@
                 TBXMLElement *entry = [TBXML childElementNamed:@"entry" parentElement:playlist];
                 while (entry != nil)
                 {
-                    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+                    @autoreleasepool {
                     
-                    Song *aSong = [[Song alloc] initWithTBXMLElement:entry];
-                    [aSong insertIntoServerPlaylistWithPlaylistId:md5];
-                    if (isDownload)
-                    {
-                        [aSong addToCacheQueue];
+                        Song *aSong = [[Song alloc] initWithTBXMLElement:entry];
+                        [aSong insertIntoServerPlaylistWithPlaylistId:md5];
+                        if (isDownload)
+                        {
+                            [aSong addToCacheQueue];
+                        }
+                        else
+                        {
+                            [aSong addToCurrentPlaylist];
+                        }
+                        
+                        // Get the next message
+                        entry = [TBXML nextSiblingNamed:@"entry" searchFromElement:entry];
+                    
                     }
-                    else
-                    {
-                        [aSong addToCurrentPlaylist];
-                    }
-                    [aSong release];
-                    
-                    // Get the next message
-                    entry = [TBXML nextSiblingNamed:@"entry" searchFromElement:entry];
-                    
-                    [pool release];
                 }
             }
         }
     }
-	[tbxml release];
 	
 	// Hide the loading screen
 	[viewObjectsS hideLoadingScreen];

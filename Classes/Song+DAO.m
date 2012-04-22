@@ -123,10 +123,10 @@
 	
 	if ([aSong path] == nil)
 	{
-		[aSong release]; aSong = nil;
+		 aSong = nil;
 	}
 	
-	return [aSong autorelease];
+	return aSong;
 }
 
 + (Song *)songFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabase:(FMDatabase *)db
@@ -383,7 +383,6 @@
 		
 		hadError = [self.db hadError];
 		
-		[segments release];
 	}
 	
 	return !hadError;

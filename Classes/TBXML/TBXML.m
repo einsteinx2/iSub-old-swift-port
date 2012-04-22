@@ -49,23 +49,23 @@
 @synthesize rootXMLElement;
 
 + (id)tbxmlWithURL:(NSURL*)aURL {
-	return [[[TBXML alloc] initWithURL:aURL] autorelease];
+	return [[TBXML alloc] initWithURL:aURL];
 }
 
 + (id)tbxmlWithXMLString:(NSString*)aXMLString {
-	return [[[TBXML alloc] initWithXMLString:aXMLString] autorelease];
+	return [[TBXML alloc] initWithXMLString:aXMLString];
 }
 
 + (id)tbxmlWithXMLData:(NSData*)aData {
-	return [[[TBXML alloc] initWithXMLData:aData] autorelease];
+	return [[TBXML alloc] initWithXMLData:aData];
 }
 
 + (id)tbxmlWithXMLFile:(NSString*)aXMLFile {
-	return [[[TBXML alloc] initWithXMLFile:aXMLFile] autorelease];
+	return [[TBXML alloc] initWithXMLFile:aXMLFile];
 }
 
 + (id)tbxmlWithXMLFile:(NSString*)aXMLFile fileExtension:(NSString*)aFileExtension {
-	return [[[TBXML alloc] initWithXMLFile:aXMLFile fileExtension:aFileExtension] autorelease];
+	return [[TBXML alloc] initWithXMLFile:aXMLFile fileExtension:aFileExtension];
 }
 
 - (id)init {
@@ -552,7 +552,6 @@
 		}
 	}
 	
-	[super dealloc];
 }
 
 - (TBXMLElement*) nextAvailableElement {

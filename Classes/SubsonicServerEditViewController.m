@@ -66,15 +66,6 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void)dealloc {
-	[theNewRedirectUrl release]; theNewRedirectUrl = nil;
-	[urlField release];
-	[usernameField release];
-	[passwordField release];
-	[cancelButton release];
-	[saveButton release];
-    [super dealloc];
-}
 
 #pragma mark - Button handling
 
@@ -167,21 +158,18 @@
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"The URL must be in the format: http://mywebsite.com:port/folder\n\nBoth the :port and /folder are optional" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 	
 	if (![self checkUsername:usernameField.text])
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a username" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 	
 	if (![self checkPassword:passwordField.text])
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a password" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
 	}
 	
 	if ([self checkUrl:urlField.text] && [self checkUsername:usernameField.text] && [self checkPassword:passwordField.text])
@@ -222,7 +210,7 @@
 
 - (void)SUSServerURLCheckFailed:(SUSServerChecker *)checker withError:(NSError *)error
 {
-	[checker release]; checker = nil;
+	 checker = nil;
 	[viewObjectsS hideLoadingScreen];
 	
 	NSString *message = @"";
@@ -232,13 +220,12 @@
 		message = [NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\nError code %i:\n%@", [error code], [error localizedDescription]];
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
-	[alert release];
 }	
 	
 - (void)SUSServerURLCheckPassed:(SUSServerChecker *)checker
 {
 	DLog(@"server check passed");
-	[checker release]; checker = nil;
+	 checker = nil;
 	[viewObjectsS hideLoadingScreen];
 	
 	Server *theServer = [[Server alloc] init];
@@ -316,7 +303,6 @@
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer" userInfo:userInfo];
 	}
 	
-	[theServer release];
 }
 
 #pragma mark - UITextField delegate

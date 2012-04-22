@@ -139,7 +139,6 @@
 		// Inform the user that the connection failed.
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error loading the albums.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
-		[alert release];
         
         [viewObjectsS hideLoadingScreen];
 	}
@@ -155,13 +154,7 @@
 
 - (void)dealloc 
 {
-	[randomButton release]; randomButton = nil;
-	[frequentButton release]; frequentButton = nil;
-	[newestButton release]; newestButton = nil;
-	[recentButton release]; recentButton = nil;
-	[cancelButton release]; cancelButton = nil;
-    [titles release]; titles = nil;
-    [super dealloc];	
+     titles = nil;
 }
 
 #pragma mark - Connection Delegate
@@ -199,7 +192,6 @@
     
     CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error grabbing the album list.\n\nError:%@", error.localizedDescription] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alert show];
-    [alert release];
     
 	self.receivedData = nil;
 	self.connection = nil;
@@ -218,13 +210,10 @@
     albumViewController.listOfAlbums = [NSMutableArray arrayWithArray:parser.listOfAlbums];
     albumViewController.modifier = modifier;
     
-    [xmlParser release];
-    [parser release];
     
     self.modifier = nil;
 	
 	[parent pushViewControllerCustom:albumViewController];
-	[albumViewController release];
     
 	self.receivedData = nil;
 	self.connection = nil;

@@ -12,15 +12,15 @@
 @class FMDatabase, SUSCoverArtLoader;
 @interface SUSCoverArtDAO : NSObject <SUSLoaderDelegate, SUSLoaderManager>
 
-@property (assign) NSObject<SUSLoaderDelegate> *delegate;
-@property (retain) SUSCoverArtLoader *loader;
-@property (readonly) FMDatabase *db;
+@property (unsafe_unretained) NSObject<SUSLoaderDelegate> *delegate;
+@property (strong) SUSCoverArtLoader *loader;
+@property (unsafe_unretained, readonly) FMDatabase *db;
 
 @property (copy) NSString *coverArtId;
 @property BOOL isLarge;
 
-@property (readonly) UIImage *coverArtImage;
-@property (readonly) UIImage *defaultCoverArtImage;
+@property (unsafe_unretained, readonly) UIImage *coverArtImage;
+@property (unsafe_unretained, readonly) UIImage *defaultCoverArtImage;
 @property (readonly) BOOL isCoverArtCached;
 
 - (id)initWithDelegate:(NSObject<SUSLoaderDelegate> *)theDelegate;

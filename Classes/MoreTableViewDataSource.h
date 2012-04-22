@@ -10,11 +10,8 @@
 
 
 @interface MoreTableViewDataSource : NSObject <UITableViewDataSource>
-{
-    id<UITableViewDataSource> originalDataSource;
-}
 
-@property (retain) id<UITableViewDataSource> originalDataSource;
+@property (strong) id<UITableViewDataSource> originalDataSource;
 
 - (MoreTableViewDataSource *)initWithDataSource:(id<UITableViewDataSource>) dataSource;
 

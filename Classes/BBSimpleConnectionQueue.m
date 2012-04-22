@@ -27,12 +27,6 @@
 	return self;
 }
 
-- (void)dealloc
-{
-	[connectionStack release];
-	
-	[super dealloc];
-}
 
 - (void)registerConnection:(NSURLConnection *)connection
 {
@@ -85,7 +79,6 @@
 	for (NSURLConnection *connection in connectionStack)
 	{
 		[connection cancel];
-		[connection release];
 	}
 	
 	[connectionStack removeAllObjects];

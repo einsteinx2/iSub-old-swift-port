@@ -11,11 +11,11 @@
 @class SUSCoverArtDAO;
 @interface AsynchronousImageView : UIImageView <SUSLoaderDelegate>
 
-@property (assign) IBOutlet NSObject<AsynchronousImageViewDelegate> *delegate;
+@property (unsafe_unretained) IBOutlet NSObject<AsynchronousImageViewDelegate> *delegate;
 @property (copy) NSString *coverArtId;
-@property (retain) SUSCoverArtDAO *coverArtDAO;
+@property (strong) SUSCoverArtDAO *coverArtDAO;
 @property BOOL isLarge;
-@property (retain) UIActivityIndicatorView *activityIndicator;
+@property (strong) UIActivityIndicatorView *activityIndicator;
 
 - (id)initWithFrame:(CGRect)frame coverArtId:(NSString *)artId isLarge:(BOOL)large delegate:(NSObject<AsynchronousImageViewDelegate> *)theDelegate;
 

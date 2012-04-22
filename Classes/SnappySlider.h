@@ -30,7 +30,7 @@
 	CGFloat *rawDetents;
 }
 
-@property (nonatomic, retain) NSArray *detents;
+@property (nonatomic) NSArray *detents;
 @property (nonatomic) CGFloat snapDistance;
 
 @end

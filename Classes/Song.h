@@ -26,10 +26,10 @@
 @property (copy) NSNumber *year;
 @property (copy) NSNumber *size;
 
-@property (readonly) NSString *localSuffix;
-@property (readonly) NSString *localPath;
-@property (readonly) NSString *localTempPath;
-@property (readonly) NSString *currentPath;
+@property (unsafe_unretained, readonly) NSString *localSuffix;
+@property (unsafe_unretained, readonly) NSString *localPath;
+@property (unsafe_unretained, readonly) NSString *localTempPath;
+@property (unsafe_unretained, readonly) NSString *currentPath;
 @property (readonly) BOOL isTempCached;
 @property (readonly) unsigned long long localFileSize;
 @property (readonly) NSUInteger estimatedBitrate;

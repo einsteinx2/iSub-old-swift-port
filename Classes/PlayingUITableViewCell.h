@@ -12,10 +12,10 @@
 @interface PlayingUITableViewCell : CustomUITableViewCell 
 
 @property (copy) Song *mySong;
-@property (retain) AsynchronousImageView *coverArtView;
-@property (retain) UILabel *userNameLabel;
-@property (retain) UIScrollView *nameScrollView;
-@property (retain) UILabel *songNameLabel;
-@property (retain) UILabel *artistNameLabel;
+@property (strong) AsynchronousImageView *coverArtView;
+@property (strong) UILabel *userNameLabel;
+@property (strong) UIScrollView *nameScrollView;
+@property (strong) UILabel *songNameLabel;
+@property (strong) UILabel *artistNameLabel;
 
 @end

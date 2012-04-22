@@ -12,13 +12,13 @@
 @class SUSServerPlaylistsLoader, FMDatabase;
 @interface SUSServerPlaylistsDAO : NSObject <SUSLoaderDelegate, SUSLoaderManager>
 
-@property (readonly) FMDatabase *db;
+@property (unsafe_unretained, readonly) FMDatabase *db;
 
-@property (assign) NSObject <SUSLoaderDelegate> *delegate;
-@property (retain) SUSServerPlaylistsLoader *loader;
+@property (unsafe_unretained) NSObject <SUSLoaderDelegate> *delegate;
+@property (strong) SUSServerPlaylistsLoader *loader;
 
 #pragma mark - Public DAO Methods
 
-@property (retain) NSArray *serverPlaylists;
+@property (strong) NSArray *serverPlaylists;
 
 @end

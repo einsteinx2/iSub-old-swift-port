@@ -10,10 +10,10 @@
 
 @interface CurrentPlaylistSongSmallUITableViewCell : CustomUITableViewCell 
 
-@property (retain) UILabel *numberLabel;
-@property (retain) UILabel *songNameLabel;
-@property (retain) UILabel *artistNameLabel;
-@property (retain) UILabel *durationLabel;
-@property (retain) UIImageView *nowPlayingImageView;
+@property (strong) UILabel *numberLabel;
+@property (strong) UILabel *songNameLabel;
+@property (strong) UILabel *artistNameLabel;
+@property (strong) UILabel *durationLabel;
+@property (strong) UIImageView *nowPlayingImageView;
 
 @end

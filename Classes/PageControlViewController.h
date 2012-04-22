@@ -11,14 +11,14 @@
 {
 }
 
-@property (retain) IBOutlet UIScrollView *scrollView;
-@property (retain) IBOutlet UIPageControl *pageControl;
-@property (retain) IBOutlet UIView *pageControlHolder;
-@property (retain) NSMutableArray *viewControllers;
+@property (strong) IBOutlet UIScrollView *scrollView;
+@property (strong) IBOutlet UIPageControl *pageControl;
+@property (strong) IBOutlet UIView *pageControlHolder;
+@property (strong) NSMutableArray *viewControllers;
 @property NSUInteger numberOfPages;
 @property BOOL pageControlUsed;
 
-@property (retain) UISwipeGestureRecognizer *swipeDetector;
+@property (strong) UISwipeGestureRecognizer *swipeDetector;
 
 
 - (IBAction)changePage:(id)sender;

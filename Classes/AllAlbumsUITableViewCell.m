@@ -74,7 +74,7 @@
 - (void)dealloc
 {
 	coverArtView.delegate = nil;
-	[coverArtView release]; coverArtView = nil;
+	/*[coverArtView release]; coverArtView = nil;
 	[albumNameScrollView release]; albumNameScrollView = nil;
 	[albumNameLabel release]; albumNameLabel = nil;
 	[artistNameLabel release]; artistNameLabel = nil;
@@ -82,7 +82,7 @@
 	[myId release]; myId = nil;
 	[myArtist release]; myArtist = nil;
 	
-    [super dealloc];
+    [super dealloc];*/
 }
 
 #pragma mark - Overlay

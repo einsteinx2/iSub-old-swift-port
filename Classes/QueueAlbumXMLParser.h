@@ -12,17 +12,11 @@
 @interface QueueAlbumXMLParser : NSObject <NSXMLParserDelegate>
 {
 	NSMutableString *currentElementValue;
-	
-	
-	Artist *myArtist;
-	
-	NSMutableArray *listOfAlbums;
-	NSMutableArray *listOfSongs;
 }
 
-@property (retain) Artist *myArtist;
-@property (retain) NSMutableArray *listOfAlbums;
-@property (retain) NSMutableArray *listOfSongs;
+@property (strong) Artist *myArtist;
+@property (strong) NSMutableArray *listOfAlbums;
+@property (strong) NSMutableArray *listOfSongs;
 
 - (id) initXMLParser;
 

@@ -85,9 +85,9 @@
 	NSDate *loadedTime;
 }
 
-@property (retain) UIViewController *parentController;
+@property (strong) UIViewController *parentController;
 
-@property (retain) NSDate *loadedTime;
+@property (strong) NSDate *loadedTime;
 
 - (void)toggleCacheControlsVisibility;
 - (void)cachingTypeToggle;

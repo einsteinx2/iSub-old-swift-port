@@ -66,7 +66,6 @@
 		textLabel.text = @"Caching\nLocked";
 		textLabel.frame = CGRectMake(20, 0, 200, 100);
 		[noCacheScreen addSubview:textLabel];
-		[textLabel release];
 		
 		UILabel *textLabel2 = [[UILabel alloc] init];
 		textLabel2.backgroundColor = [UIColor clearColor];
@@ -77,7 +76,6 @@
 		textLabel2.text = @"Tap to purchase the ability to cache songs for better streaming performance and offline playback";
 		textLabel2.frame = CGRectMake(20, 90, 200, 70);
 		[noCacheScreen addSubview:textLabel2];
-		[textLabel2 release];
 		
 		UIButton *storeLauncher = [UIButton buttonWithType:UIButtonTypeCustom];
 		storeLauncher.frame = CGRectMake(0, 0, noCacheScreen.frame.size.width, noCacheScreen.frame.size.height);
@@ -86,7 +84,6 @@
 		
 		[self.view addSubview:noCacheScreen];
 		
-		[noCacheScreen release];
 	}
 }
 
@@ -100,17 +97,17 @@
 {	
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
-	[currentSongProgressView release]; currentSongProgressView = nil;
-	[nextSongLabel release]; nextSongLabel = nil;
-	[nextSongProgressView release]; nextSongProgressView = nil;
+	 currentSongProgressView = nil;
+	 nextSongLabel = nil;
+	 nextSongProgressView = nil;
 	
-	[songsCachedLabel release]; songsCachedLabel = nil;
-	[cacheSizeLabel release]; cacheSizeLabel = nil;
-	[cacheSettingLabel release]; cacheSettingLabel = nil;
-	[cacheSettingSizeLabel release]; cacheSettingSizeLabel = nil;
-	[freeSpaceLabel release]; freeSpaceLabel = nil;
+	 songsCachedLabel = nil;
+	 cacheSizeLabel = nil;
+	 cacheSettingLabel = nil;
+	 cacheSettingSizeLabel = nil;
+	 freeSpaceLabel = nil;
 	
-	[songInfoToggleButton release]; songInfoToggleButton = nil;
+	 songInfoToggleButton = nil;
 }
 
 - (void)didReceiveMemoryWarning 
@@ -125,9 +122,6 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackEnded object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	
-	[currentSong release]; currentSong = nil;
-	[nextSong release]; nextSong = nil;
-	[super dealloc];
 }
 
 #pragma mark -

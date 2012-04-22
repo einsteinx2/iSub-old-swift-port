@@ -208,7 +208,6 @@
 	NSString *message = [NSString stringWithFormat:@"There was an error loading the album.\n\nError %i: %@", [error code], [error localizedDescription]];
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
-	[alert release];
 		
 	self.receivedData = nil;
 	self.connection = nil;
@@ -234,18 +233,18 @@
 	// Add each song to playlist
 	for (Song *aSong in parser.listOfSongs)
 	{
-		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+		@autoreleasepool {
 		
-		if (isQueue)
-		{
-			[aSong addToCurrentPlaylist];
-		}
-		else
-		{
-			[aSong addToCacheQueue];
-		}
+			if (isQueue)
+			{
+				[aSong addToCurrentPlaylist];
+			}
+			else
+			{
+				[aSong addToCacheQueue];
+			}
 		
-		[pool release];
+		}
 	}
 	
 	// Remove the processed folder from array
@@ -259,8 +258,6 @@
 		[folderIds insertObject:albumId atIndex:0];
 	}
 
-	[parser release];
-	[xmlParser release];
 	
 	self.receivedData = nil;
 	self.connection = nil;
@@ -276,7 +273,7 @@
 
 #pragma mark Memory Management
 
-- (void)dealloc
+/*- (void)dealloc
 {
 	[currentPlaylist release]; currentPlaylist = nil;
 	[shufflePlaylist release]; shufflePlaylist = nil;
@@ -284,7 +281,7 @@
 	
 	
 	[super dealloc];
-}
+}*/
 
 
 @end

@@ -20,7 +20,7 @@
 #import "CacheSingleton.h"
 #import "PlaylistSingleton.h"
 
-#define ISMSNumSecondsToPartialPreCache 45
+#define ISMSNumSecondsToPartialPreCache 60
 #define ISMSNumBytesToPartialPreCache(bitrate) (BytesForSecondsAtBitrate(ISMSNumSecondsToPartialPreCache, bitrate))
 
 //#define ISMSMinSecondsToStartPlayback 5
@@ -108,12 +108,6 @@
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	
-	[loadingThread release]; loadingThread = nil;
-	[fileHandle release]; fileHandle = nil;
-	[mySong release]; mySong = nil;
-	[request release]; request = nil;
-	[connection release]; connection = nil;
-	[super dealloc];
 }
 
 - (NSString *)filePath
@@ -174,17 +168,15 @@
 	{
 		NSString *maxBitRate = [[NSString alloc] initWithFormat:@"%i", self.maxBitrateSetting];
 		[parameters setObject:n2N(maxBitRate) forKey:@"maxBitRate"];
-		[maxBitRate release];
 	}
 	self.request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters byteOffset:byteOffset];
 
-	self.loadingThread = [[[NSThread alloc] initWithTarget:self selector:@selector(startConnection) object:nil] autorelease];
+	self.loadingThread = [[NSThread alloc] initWithTarget:self selector:@selector(startConnection) object:nil];
 	
 	self.bitrate = mySong.estimatedBitrate;
 
 	NSDate *now = [[NSDate alloc] init];
 	[self.loadingThread.threadDictionary setObject:now forKey:@"throttlingDate"];
-	[now release];
 		
 	if ([self.mySong isEqualToSong:[playlistS currentSong]])
 	{
@@ -234,7 +226,6 @@
 	NSError *error = [[NSError alloc] initWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
 	if ([self.delegate respondsToSelector:@selector(ISMSStreamHandlerConnectionFailed:withError:)])
 		[self.delegate ISMSStreamHandlerConnectionFailed:self withError:error];
-	[error release];
 }
 
 // Cancel the download and stop the run loop in loadingThread
@@ -316,7 +307,6 @@
 				{
 					NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 					self.contentLength = [[formatter numberFromString:contentLengthString] unsignedLongLongValue];
-					[formatter release];
 				}
 			}
 		}
@@ -358,7 +348,7 @@
 	}
 	
 	NSMutableDictionary *threadDict = [[NSThread currentThread] threadDictionary];
-	NSDate *throttlingDate = [[threadDict objectForKey:@"throttlingDate"] retain];
+	NSDate *throttlingDate = [threadDict objectForKey:@"throttlingDate"];
 	NSUInteger dataLength = [incrementalData length];
 	
 	self.totalBytesTransferred += dataLength;
@@ -395,15 +385,12 @@
 		{
 			NSDate *now = [[NSDate alloc] init];
 			[threadDict setObject:now forKey:@"throttlingDate"];
-			[now release];
 			self.bytesTransferred = 0;		
 		}
 		
 		// Check if we should throttle
 		NSDate *now = [[NSDate alloc] init];
 		NSTimeInterval intervalSinceLastThrottle = [now timeIntervalSinceDate:throttlingDate];
-		[throttlingDate release];
-		[now release];
 		if (intervalSinceLastThrottle > ISMSThrottleTimeInterval && self.totalBytesTransferred > ISMSMinBytesToStartLimiting(self.bitrate))
 		{
 			NSTimeInterval delay = 0.0;
@@ -430,7 +417,6 @@
 			
 			NSDate *newThrottlingDate = [[NSDate alloc] init];
 			[threadDict setObject:newThrottlingDate forKey:@"throttlingDate"];
-			[newThrottlingDate release];
 		}
 		
 		// Handle partial pre-cache next song

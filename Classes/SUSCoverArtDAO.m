@@ -39,7 +39,6 @@
 - (void)dealloc
 {
 	[self cancelLoad];
-	[super dealloc];
 }
 
 #pragma mark - Private DB Methods
@@ -95,7 +94,7 @@
 
 - (void)startLoad
 {	
-    self.loader = [[[SUSCoverArtLoader alloc] initWithDelegate:self coverArtId:self.coverArtId isLarge:self.isLarge] autorelease];
+    self.loader = [[SUSCoverArtLoader alloc] initWithDelegate:self coverArtId:self.coverArtId isLarge:self.isLarge];
     [self.loader startLoad];
 }
 

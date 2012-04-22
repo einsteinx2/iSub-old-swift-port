@@ -8,7 +8,7 @@
 
 @interface HelpTabViewController : UIViewController <UIWebViewDelegate>
 
-@property (retain) IBOutlet UIWebView *helpWebView;
-@property (retain) IBOutlet UIActivityIndicatorView *loadingIndicator;
+@property (strong) IBOutlet UIWebView *helpWebView;
+@property (strong) IBOutlet UIActivityIndicatorView *loadingIndicator;
 
 @end
