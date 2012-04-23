@@ -15,6 +15,7 @@
 #import "DatabaseSingleton.h"
 #import "CacheQueueSongUITableViewCell.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabaseQueueAdditions.h"
 #import "AsynchronousImageView.h"
 #import "ServerListViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
@@ -427,19 +428,22 @@
 	
 	[databaseS resetCurrentPlaylistDb];
 	
-	FMResultSet *result = [databaseS.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout ORDER BY seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9 COLLATE NOCASE"];
-	
-	while ([result next])
-	{			
-		@autoreleasepool 
-		{
-			Song *aSong = [Song songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]];
-			
-			if (aSong.path)
-				[aSong addToCurrentPlaylist];
+	[databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)
+	{
+		FMResultSet *result = [db executeQuery:@"SELECT md5 FROM cachedSongsLayout ORDER BY seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9 COLLATE NOCASE"];
+		
+		while ([result next])
+		{			
+			@autoreleasepool 
+			{
+				Song *aSong = [Song songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]];
+				
+				if (aSong.path)
+					[aSong addToCurrentPlaylist];
+			}
 		}
-	}
-	[result close];
+		[result close];
+	}];
 	
 	if (isShuffle)
 	{
@@ -472,33 +476,35 @@
 		self.listOfArtistsSections = [NSMutableArray arrayWithCapacity:28];
 		
 		// Fix for slow load problem (EDIT: Looks like it didn't actually work :(
-		FMDatabase *db = databaseS.songCacheDb;
-		[db executeUpdate:@"DROP TABLE IF EXISTS cachedSongsArtistList"];
-		[db executeUpdate:@"CREATE TEMP TABLE cachedSongsArtistList (artist TEXT UNIQUE)"];
-		[db executeUpdate:@"INSERT OR IGNORE INTO cachedSongsArtistList SELECT seg1 FROM cachedSongsLayout"];
-		
-		FMResultSet *result = [db executeQuery:@"SELECT artist FROM cachedSongsArtistList ORDER BY artist COLLATE NOCASE"];
-		while ([result next])
+		[databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)
 		{
-			// Cover up for blank insert problem
-			if ([[result stringForColumnIndex:0] length] > 0)
-				[listOfArtists addObject:[NSString stringWithString:[result stringForColumnIndex:0]]]; 
-		}
-		[result close];
+			[db executeUpdate:@"DROP TABLE IF EXISTS cachedSongsArtistList"];
+			[db executeUpdate:@"CREATE TEMP TABLE cachedSongsArtistList (artist TEXT UNIQUE)"];
+			[db executeUpdate:@"INSERT OR IGNORE INTO cachedSongsArtistList SELECT seg1 FROM cachedSongsLayout"];
+			
+			FMResultSet *result = [db executeQuery:@"SELECT artist FROM cachedSongsArtistList ORDER BY artist COLLATE NOCASE"];
+			while ([result next])
+			{
+				// Cover up for blank insert problem
+				if ([[result stringForColumnIndex:0] length] > 0)
+					[listOfArtists addObject:[NSString stringWithString:[result stringForColumnIndex:0]]]; 
+			}
+			[result close];
+			
+			[listOfArtists sortUsingSelector:@selector(caseInsensitiveCompareWithoutIndefiniteArticles:)];
+			//DLog(@"listOfArtists: %@", listOfArtists);
+			
+			// Create the section index
+			[db executeUpdate:@"DROP TABLE IF EXISTS cachedSongsArtistIndex"];
+			[db executeUpdate:@"CREATE TEMP TABLE cachedSongsArtistIndex (artist TEXT)"];
+			DLog(@"listOfArtists: %@", listOfArtists);
+			for (NSString *artist in listOfArtists)
+			{
+				[db executeUpdate:@"INSERT INTO cachedSongsArtistIndex (artist) VALUES (?)", [artist stringWithoutIndefiniteArticle], nil];
+			}
+		}];
 		
-		[listOfArtists sortUsingSelector:@selector(caseInsensitiveCompareWithoutIndefiniteArticles:)];
-		//DLog(@"listOfArtists: %@", listOfArtists);
-		
-		// Create the section index
-		[db executeUpdate:@"DROP TABLE IF EXISTS cachedSongsArtistIndex"];
-		[db executeUpdate:@"CREATE TEMP TABLE cachedSongsArtistIndex (artist TEXT)"];
-		DLog(@"listOfArtists: %@", listOfArtists);
-		for (NSString *artist in listOfArtists)
-		{
-			[db executeUpdate:@"INSERT INTO cachedSongsArtistIndex (artist) VALUES (?)", [artist stringWithoutIndefiniteArticle], nil];
-		}
-		self.sectionInfo = nil; 
-		self.sectionInfo = [databaseS sectionInfoFromTable:@"cachedSongsArtistIndex" inDatabase:db withColumn:@"artist"];
+		self.sectionInfo = [databaseS sectionInfoFromTable:@"cachedSongsArtistIndex" inDatabaseQueue:databaseS.songCacheDbQueue withColumn:@"artist"];
 		DLog(@"sectionInfo: %@", sectionInfo);
 		showIndex = YES;
 		if ([sectionInfo count] < 5)
@@ -533,8 +539,8 @@
 		
 		if (isSaveEditShowing)
 		{
-			NSUInteger cachedSongsCount = [databaseS.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES' AND md5 != ''"];
-			if ([databaseS.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES' AND md5 != ''"] == 1)
+			NSUInteger cachedSongsCount = [databaseS.songCacheDbQueue intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES' AND md5 != ''"];
+			if ([databaseS.songCacheDbQueue intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES' AND md5 != ''"] == 1)
 				songsCountLabel.text = [NSString stringWithFormat:@"1 Song"];
 			else 
 				songsCountLabel.text = [NSString stringWithFormat:@"%i Songs", cachedSongsCount];
@@ -542,24 +548,27 @@
 	}
 	else
 	{
-		[databaseS.cacheQueueDb executeUpdate:@"DROP TABLE IF EXISTS cacheQueueList"];
-		//[databaseS.cacheQueueDb executeUpdate:[NSString stringWithFormat:@"CREATE TEMP TABLE cacheQueueList (md5 TEXT, finished TEXT, cachedDate INTEGER, playedDate INTEGER, %@)", [Song standardSongColumnSchema]]];
-		[databaseS.cacheQueueDb executeUpdate:@"CREATE TEMP TABLE cacheQueueList (md5 TEXT)"];
-		[databaseS.cacheQueueDb executeUpdate:@"INSERT INTO cacheQueueList SELECT md5 FROM cacheQueue"];
-		
-		if (self.tableView.editing)
+		[databaseS.cacheQueueDbQueue inDatabase:^(FMDatabase *db)
 		{
-			NSArray *multiDeleteList = [NSArray arrayWithArray:viewObjectsS.multiDeleteList];
-			for (NSString *md5 in multiDeleteList)
+			[db executeUpdate:@"DROP TABLE IF EXISTS cacheQueueList"];
+			//[databaseS.cacheQueueDb executeUpdate:[NSString stringWithFormat:@"CREATE TEMP TABLE cacheQueueList (md5 TEXT, finished TEXT, cachedDate INTEGER, playedDate INTEGER, %@)", [Song standardSongColumnSchema]]];
+			[db executeUpdate:@"CREATE TEMP TABLE cacheQueueList (md5 TEXT)"];
+			[db executeUpdate:@"INSERT INTO cacheQueueList SELECT md5 FROM cacheQueue"];
+			
+			if (self.tableView.editing)
 			{
-				NSString *dbMd5 = [databaseS.cacheQueueDb stringForQuery:@"SELECT md5 FROM cacheQueueList WHERE md5 = ?", md5];
-				DLog(@"md5: %@   dbMD5: %@", md5, dbMd5);
-				if (!dbMd5) 
-					[viewObjectsS.multiDeleteList removeObject:md5];
+				NSArray *multiDeleteList = [NSArray arrayWithArray:viewObjectsS.multiDeleteList];
+				for (NSString *md5 in multiDeleteList)
+				{
+					NSString *dbMd5 = [db stringForQuery:@"SELECT md5 FROM cacheQueueList WHERE md5 = ?", md5];
+					DLog(@"md5: %@   dbMD5: %@", md5, dbMd5);
+					if (!dbMd5) 
+						[viewObjectsS.multiDeleteList removeObject:md5];
+				}
 			}
-		}
+		}];
 		
-		self.cacheQueueCount = [databaseS.cacheQueueDb intForQuery:@"SELECT COUNT(*) FROM cacheQueueList"];
+		self.cacheQueueCount = [databaseS.cacheQueueDbQueue intForQuery:@"SELECT COUNT(*) FROM cacheQueueList"];
 		if (self.cacheQueueCount == 0)
 		{
 			[self removeSaveEditButtons];	
@@ -662,8 +671,8 @@
 		songsCountLabel.font = [UIFont boldSystemFontOfSize:22];
 		if (segmentedControl.selectedSegmentIndex == 0)
 		{
-			NSUInteger cachedSongsCount = [databaseS.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES' AND md5 != ''"];
-			if ([databaseS.songCacheDb intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES' AND md5 != ''"] == 1)
+			NSUInteger cachedSongsCount = [databaseS.songCacheDbQueue intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES' AND md5 != ''"];
+			if ([databaseS.songCacheDbQueue intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES' AND md5 != ''"] == 1)
 				songsCountLabel.text = [NSString stringWithFormat:@"1 Song"];
 			else 
 				songsCountLabel.text = [NSString stringWithFormat:@"%i Songs", cachedSongsCount];
@@ -1033,15 +1042,17 @@
 	
 	for (NSString *folderName in viewObjectsS.multiDeleteList)
 	{
-		FMResultSet *result;
-		result = [databaseS.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ", folderName];
-		
-		while ([result next])
+		[databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)
 		{
-			if ([result stringForColumnIndex:0] != nil)
-				[Song removeSongFromCacheDbByMD5:[NSString stringWithString:[result stringForColumnIndex:0]]];
-		}
-		[result close];
+			FMResultSet *result = [db executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ", folderName];
+			
+			while ([result next])
+			{
+				if ([result stringForColumnIndex:0] != nil)
+					[Song removeSongFromCacheDbByMD5:[NSString stringWithString:[result stringForColumnIndex:0]]];
+			}
+			[result close];
+		}];
 	}	
 	
 	[self segmentAction:nil];
@@ -1065,9 +1076,7 @@
 	[viewObjectsS.multiDeleteList sortUsingSelector:@selector(compare:)];
 	//DLog(@"1: %f", [[NSDate date] timeIntervalSinceDate:date]);
 	//date = [NSDate date];
-	
-	[databaseS.cacheQueueDb executeUpdate:@"BEGIN"];
-	
+		
 	// Delete each song from the database
 	for (NSString *md5 in viewObjectsS.multiDeleteList)
 	{
@@ -1085,13 +1094,14 @@
 		}
 		
 		// Delete the row from the cacheQueue
-		[databaseS.cacheQueueDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", md5];
+		[databaseS.cacheQueueDbQueue inDatabase:^(FMDatabase *db)
+		{
+			[db executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", md5];
+		}];
 		
 		//DLog(@"inside: %f", [[NSDate date] timeIntervalSinceDate:inside]);
 	}
-	
-	[databaseS.cacheQueueDb executeUpdate:@"COMMIT"];
-	
+		
 	//DLog(@"2: %f", [[NSDate date] timeIntervalSinceDate:date]);
 	//date = [NSDate date];
 		
@@ -1127,12 +1137,15 @@
 			else
 			{
 				// Select all the rows
-				FMResultSet *result = [databaseS.cacheQueueDb executeQuery:@"SELECT md5 FROM cacheQueueList"];
-				while ([result next])
+				[databaseS.cacheQueueDbQueue inDatabase:^(FMDatabase *db)
 				{
-					NSString *md5 = [result stringForColumnIndex:0];
-					if (md5) [viewObjectsS.multiDeleteList addObject:md5];
-				}
+					FMResultSet *result = [db executeQuery:@"SELECT md5 FROM cacheQueueList"];
+					while ([result next])
+					{
+						NSString *md5 = [result stringForColumnIndex:0];
+						if (md5) [viewObjectsS.multiDeleteList addObject:md5];
+					}
+				}];
 			}
 			
 			[self.tableView reloadData];
@@ -1300,13 +1313,18 @@
 		}
 		cell.indexPath = indexPath;
 
-		// Set up the cell...
-		FMResultSet *result = [databaseS.cacheQueueDb executeQuery:@"SELECT * FROM cacheQueue JOIN cacheQueueList USING(md5) WHERE cacheQueueList.ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
-		Song *aSong = [Song songFromDbResult:result];
-		NSDate *cached = [NSDate dateWithTimeIntervalSince1970:[result doubleForColumn:@"cachedDate"]];
-		cell.md5 = [result stringForColumn:@"md5"];
-		[result close];
-
+		__block Song *aSong;
+		__block NSDate *cached;
+		
+		[databaseS.cacheQueueDbQueue inDatabase:^(FMDatabase *db)
+		{
+			FMResultSet *result = [db executeQuery:@"SELECT * FROM cacheQueue JOIN cacheQueueList USING(md5) WHERE cacheQueueList.ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
+			aSong = [Song songFromDbResult:result];
+			cached = [NSDate dateWithTimeIntervalSince1970:[result doubleForColumn:@"cachedDate"]];
+			cell.md5 = [result stringForColumn:@"md5"];
+			[result close];
+		}];
+		
 		cell.deleteToggleImage.hidden = !self.tableView.editing;
 		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
 		if ([viewObjectsS.multiDeleteList containsObject:cell.md5])
@@ -1404,60 +1422,64 @@ NSInteger trackSort1(id obj1, id obj2, void *context)
 			cacheAlbumViewController.listOfAlbums = [NSMutableArray arrayWithCapacity:1];
 			cacheAlbumViewController.listOfSongs = [NSMutableArray arrayWithCapacity:1];
 			//DLog(@"cacheAlbumViewController.seg1: %@", cacheAlbumViewController.seg1);
-			FMResultSet *result = [databaseS.songCacheDb executeQuery:@"SELECT md5, segs, seg2, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", name];
-			while ([result next])
+			
+			[databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)
 			{
-				NSUInteger numOfSegments = [result intForColumnIndex:1];
-				
-				if (numOfSegments > 2)
+				FMResultSet *result = [db executeQuery:@"SELECT md5, segs, seg2, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", name];
+				while ([result next])
 				{
-					[cacheAlbumViewController.listOfAlbums addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumn:@"md5"]], 
-																							   [NSString stringWithString:[result stringForColumn:@"seg2"]], nil]];
-				}
-				else
-				{
-					[cacheAlbumViewController.listOfSongs addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumn:@"md5"]], 
-																							  [NSNumber numberWithInt:[result intForColumn:@"track"]], nil]];
+					NSUInteger numOfSegments = [result intForColumnIndex:1];
 					
-					/*// Sort by track number -- iOS 4.0+ only
-					[cacheAlbumViewController.listOfSongs sortUsingComparator: ^NSComparisonResult(id obj1, id obj2) {
-						NSUInteger track1 = [(NSNumber*)[(NSArray*)obj1 objectAtIndexSafe:1] intValue];
-						NSUInteger track2 = [(NSNumber*)[(NSArray*)obj2 objectAtIndexSafe:1] intValue];
-						if (track1 < track2)
-							return NSOrderedAscending;
-						else if (track1 == track2)
-							return NSOrderedSame;
-						else
-							return NSOrderedDescending;
-					}];*/
-					
-					BOOL multipleSameTrackNumbers = NO;
-					NSMutableArray *trackNumbers = [NSMutableArray arrayWithCapacity:[cacheAlbumViewController.listOfSongs count]];
-					for (NSArray *song in cacheAlbumViewController.listOfSongs)
+					if (numOfSegments > 2)
 					{
-						NSNumber *track = [song objectAtIndexSafe:1];
+						[cacheAlbumViewController.listOfAlbums addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumn:@"md5"]], 
+																		  [NSString stringWithString:[result stringForColumn:@"seg2"]], nil]];
+					}
+					else
+					{
+						[cacheAlbumViewController.listOfSongs addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumn:@"md5"]], 
+																		 [NSNumber numberWithInt:[result intForColumn:@"track"]], nil]];
 						
-						if ([trackNumbers containsObject:track])
+						/*// Sort by track number -- iOS 4.0+ only
+						 [cacheAlbumViewController.listOfSongs sortUsingComparator: ^NSComparisonResult(id obj1, id obj2) {
+						 NSUInteger track1 = [(NSNumber*)[(NSArray*)obj1 objectAtIndexSafe:1] intValue];
+						 NSUInteger track2 = [(NSNumber*)[(NSArray*)obj2 objectAtIndexSafe:1] intValue];
+						 if (track1 < track2)
+						 return NSOrderedAscending;
+						 else if (track1 == track2)
+						 return NSOrderedSame;
+						 else
+						 return NSOrderedDescending;
+						 }];*/
+						
+						BOOL multipleSameTrackNumbers = NO;
+						NSMutableArray *trackNumbers = [NSMutableArray arrayWithCapacity:[cacheAlbumViewController.listOfSongs count]];
+						for (NSArray *song in cacheAlbumViewController.listOfSongs)
 						{
-							multipleSameTrackNumbers = YES;
-							break;
+							NSNumber *track = [song objectAtIndexSafe:1];
+							
+							if ([trackNumbers containsObject:track])
+							{
+								multipleSameTrackNumbers = YES;
+								break;
+							}
+							
+							[trackNumbers addObject:track];
 						}
 						
-						[trackNumbers addObject:track];
+						// Sort by track number
+						if (!multipleSameTrackNumbers)
+							[cacheAlbumViewController.listOfSongs sortUsingFunction:trackSort1 context:NULL];
 					}
 					
-					// Sort by track number
-					if (!multipleSameTrackNumbers)
-						[cacheAlbumViewController.listOfSongs sortUsingFunction:trackSort1 context:NULL];
+					if (!cacheAlbumViewController.segments)
+					{
+						NSArray *segments = [NSArray arrayWithObjects:name, nil];
+						cacheAlbumViewController.segments = segments;				
+					}
 				}
-
-				if (!cacheAlbumViewController.segments)
-				{
-					NSArray *segments = [NSArray arrayWithObjects:name, nil];
-					cacheAlbumViewController.segments = segments;				
-				}
-			}
-			[result close];
+				[result close];
+			}];
 			
 			[self pushViewControllerCustom:cacheAlbumViewController];
 			//[self.navigationController pushViewController:cacheAlbumViewController animated:YES];

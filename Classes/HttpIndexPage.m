@@ -43,7 +43,7 @@
 
 - (NSString *)createIndexPage
 {
-	NSMutableArray *listOfArtists = [NSMutableArray arrayWithCapacity:1];
+	/*NSMutableArray *listOfArtists = [NSMutableArray arrayWithCapacity:1];
 	
 	// Fix for slow load problem
 	FMDatabase *db = databaseS.songCacheDb;
@@ -61,7 +61,7 @@
 			[listOfArtists addObject:[NSString stringWithString:[result stringForColumnIndex:0]]]; 
 	}
 	[result close];
-	[db executeUpdate:@"DROP TABLE IF EXISTS cachedSongsArtistList"];
+	[db executeUpdate:@"DROP TABLE IF EXISTS cachedSongsArtistList"];*/
 	
 	return @"";
 }

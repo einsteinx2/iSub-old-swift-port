@@ -15,6 +15,7 @@
 #import "DatabaseSingleton.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabaseQueueAdditions.h"
 #import "NSNotificationCenter+MainThread.h"
 
 @implementation JukeboxSingleton
@@ -113,7 +114,7 @@
 - (void)jukeboxNextSong
 {
 	NSInteger index = playlistS.currentIndex + 1;
-	if (index <= ([databaseS.currentPlaylistDb intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"] - 1))
+	if (index <= ([databaseS.currentPlaylistDbQueue intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"] - 1))
 	{		
 		[self jukeboxPlaySongAtPosition:[NSNumber numberWithInt:index]];
 		
@@ -205,23 +206,25 @@
 {
 	[self jukeboxClearRemotePlaylist];
 	
-	NSMutableArray *songIds = [[NSMutableArray alloc] init];
+	__block NSMutableArray *songIds = [[NSMutableArray alloc] init];
 	
-	FMResultSet *result;
-	if (playlistS.isShuffle)
-		result = [databaseS.currentPlaylistDb executeQuery:@"SELECT songId FROM jukeboxShufflePlaylist"];
-	else
-		result = [databaseS.currentPlaylistDb executeQuery:@"SELECT songId FROM jukeboxCurrentPlaylist"];
-	
-	while ([result next])
+	[databaseS.currentPlaylistDbQueue inDatabase:^(FMDatabase *db)
 	{
-		if ([result stringForColumnIndex:0] != nil)
-			[songIds addObject:[NSString stringWithString:[result stringForColumnIndex:0]]];
-	}
-	[result close];
+		FMResultSet *result;
+		if (playlistS.isShuffle)
+			result = [db executeQuery:@"SELECT songId FROM jukeboxShufflePlaylist"];
+		else
+			result = [db executeQuery:@"SELECT songId FROM jukeboxCurrentPlaylist"];
+		
+		while ([result next])
+		{
+			if ([result stringForColumnIndex:0] != nil)
+				[songIds addObject:[NSString stringWithString:[result stringForColumnIndex:0]]];
+		}
+		[result close];
+	}];
 	
 	[self jukeboxAddSongs:songIds];
-	
 }
 
 

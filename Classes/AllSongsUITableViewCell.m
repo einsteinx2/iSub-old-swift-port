@@ -12,6 +12,7 @@
 #import "DatabaseSingleton.h"
 #import "Song.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabaseQueueAdditions.h"
 #import "CellOverlay.h"
 
 
@@ -92,7 +93,7 @@
 	
 	if (self.isOverlayShowing)
 	{
-		if ([[databaseS.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", md5] isEqualToString:@"YES"]) 
+		if ([[databaseS.songCacheDbQueue stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", md5] isEqualToString:@"YES"]) 
 		{
 			self.overlayView.downloadButton.alpha = .3;
 			self.overlayView.downloadButton.enabled = NO;
@@ -110,12 +111,12 @@
 {
 	if (self.isSearching) 
 	{
-		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"allSongsSearch" inDatabase:databaseS.allSongsDb];
+		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"allSongsSearch" inDatabaseQueue:databaseS.allSongsDbQueue];
 		[aSong addToCacheQueue];
 	}
 	else 
 	{
-		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"allSongs" inDatabase:databaseS.allSongsDb];
+		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"allSongs" inDatabaseQueue:databaseS.allSongsDbQueue];
 		[aSong addToCacheQueue];
 	}
 	
@@ -129,12 +130,12 @@
 {	
 	if (self.isSearching) 
 	{
-		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"allSongsSearch" inDatabase:databaseS.allSongsDb];
+		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"allSongsSearch" inDatabaseQueue:databaseS.allSongsDbQueue];
 		[databaseS queueSong:aSong];
 	}
 	else 
 	{
-		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"allSongs" inDatabase:databaseS.allSongsDb];
+		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"allSongs" inDatabaseQueue:databaseS.allSongsDbQueue];
 		[databaseS queueSong:aSong];
 	}
 	

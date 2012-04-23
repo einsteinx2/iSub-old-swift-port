@@ -11,6 +11,7 @@
 #import "DatabaseSingleton.h"
 #import "GenresSongUITableViewCell.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabaseQueueAdditions.h"
 #import "CellOverlay.h"
 #import "Song.h"
 #import "NSNotificationCenter+MainThread.h"
@@ -105,7 +106,7 @@
 		}
 		else
 		{
-			if ([[databaseS.songCacheDb stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", md5] isEqualToString:@"YES"]) 
+			if ([[databaseS.songCacheDbQueue stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", md5] isEqualToString:@"YES"]) 
 			{
 				self.overlayView.downloadButton.alpha = .3;
 				self.overlayView.downloadButton.enabled = NO;

@@ -258,8 +258,8 @@ void CALLBACK MyStreamFreeCallback(HSYNC handle, DWORD channel, DWORD data, void
 		DLog(@"removing user info from dict");
 		DLog(@"%@", sharedInstance.bassUserInfoDict);
 		[sharedInstance removeUserInfoForStream:channel];
-		BassUserInfo *userInfo = (__bridge BassUserInfo*)user;
-		[userInfo release];
+		//BassUserInfo *userInfo = (__bridge BassUserInfo*)user;
+		//[userInfo release];
 		DLog(@"%@", sharedInstance.bassUserInfoDict);
 	}
 }
@@ -270,7 +270,7 @@ void CALLBACK MyFileCloseProc(void *user)
 		return;
 	
 	// Get the user info object
-	BassUserInfo *userInfo = (BassUserInfo *)user;
+	BassUserInfo *userInfo = (__bridge BassUserInfo *)user;
 	
 	// Tell the read wait loop to break in case it's waiting
 	userInfo.shouldBreakWaitLoop = YES;
@@ -292,7 +292,7 @@ QWORD CALLBACK MyFileLenProc(void *user)
 	
 	@autoreleasepool
 	{
-		BassUserInfo *userInfo = (BassUserInfo *)user;
+		BassUserInfo *userInfo = (__bridge BassUserInfo *)user;
 		if (userInfo.myFileHandle == NULL)
 			return 0;
 				
@@ -324,7 +324,7 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 	if (buffer == NULL || user == NULL)
 		return 0;
 		
-	BassUserInfo *userInfo = (BassUserInfo *)user;
+	BassUserInfo *userInfo = (__bridge BassUserInfo *)user;
 	if (userInfo.myFileHandle == NULL)
 		return 0;
 	
@@ -359,7 +359,7 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 		return NO;
 	
 	// Seek to the requested offset (returns false if data not downloaded that far)
-	BassUserInfo *userInfo = (BassUserInfo *)user;
+	BassUserInfo *userInfo = (__bridge BassUserInfo *)user;
 	if (userInfo.myFileHandle == NULL)
 		return NO;
 	
@@ -918,16 +918,14 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 #pragma mark - Audio Session methods
 
 void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue) 
-{		
-	AudioEngine *selfRef = inUserData;
-	
+{			
     //DLog(@"audioRouteChangeListenerCallback called, propertyId: %lu  isMainThread: %@", inPropertyID, NSStringFromBOOL([NSThread isMainThread]));
 	
     // ensure that this callback was invoked for a route change
     if (inPropertyID != kAudioSessionProperty_AudioRouteChange) 
 		return;
 	
-	if ([selfRef isPlaying])
+	if ([sharedInstance isPlaying])
 	{
 		// Determines the reason for the route change, to ensure that it is not
 		// because of a category change.
@@ -943,7 +941,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         // the recommended test for when to pause audio.
         if (routeChangeReason == kAudioSessionRouteChangeReason_OldDeviceUnavailable) 
 		{
-			[selfRef playPause];
+			[sharedInstance playPause];
 			
             //DLog (@"Output device removed, so application audio was paused.");
         }
@@ -1046,7 +1044,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	//DLog(@"bassInit:%i  bass freq: %i  minrate: %i   maxrate: %i  minbuf: %i  latency:%i ", sampleRate, info.freq, info.minrate, info.maxrate, info.minbuf, info.latency);
 		
 	// Add the callbacks for headphone removal and other audio takeover
-	AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, self);
+	AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, NULL);
 	//AudioSessionAddPropertyListener(kAudioSessionProperty_OtherAudioIsPlaying, audioInterruptionListenerCallback, self);
 	
 	ringBuffer->stopFilling = NO;
@@ -1255,8 +1253,8 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	userInfo.myFileHandle = fopen([userInfo.writePath cStringUTF8], "rb");
 	
 	// Try hardware and software mixing
-	self.nextStream = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_STREAM_DECODE, &fileProcs, userInfo);
-	if(!self.nextStream) self.nextStream = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_SAMPLE_SOFTWARE|BASS_STREAM_DECODE, &fileProcs, userInfo);
+	self.nextStream = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_STREAM_DECODE, &fileProcs, (__bridge void *)userInfo);
+	if(!self.nextStream) self.nextStream = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_SAMPLE_SOFTWARE|BASS_STREAM_DECODE, &fileProcs, (__bridge void *)userInfo);
 	
 	if (self.nextStream)
 	{
@@ -1264,7 +1262,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		[self setUserInfo:userInfo forStream:self.nextStream];
 		
 		// Set the stream free sync
-		BASS_ChannelSetSync(self.nextStream, BASS_SYNC_FREE, 0, MyStreamFreeCallback, userInfo);
+		BASS_ChannelSetSync(self.nextStream, BASS_SYNC_FREE, 0, MyStreamFreeCallback, (__bridge void *)userInfo);
 		
 		// Verify we're using the best sample rate
 		NSInteger streamSampleRate = [self bassStreamSampleRate:self.fileStream1];
@@ -1333,15 +1331,15 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		}
 		
 		// Create the stream
-		self.fileStream1 = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_STREAM_DECODE, &fileProcs, userInfo);
-		if(!self.fileStream1) self.fileStream1 = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_SAMPLE_SOFTWARE|BASS_STREAM_DECODE, &fileProcs, userInfo);
+		self.fileStream1 = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_STREAM_DECODE, &fileProcs, (__bridge void*)userInfo);
+		if(!self.fileStream1) self.fileStream1 = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_SAMPLE_SOFTWARE|BASS_STREAM_DECODE, &fileProcs, (__bridge void *)userInfo);
 		if (self.fileStream1)
 		{
 			// Add the user info object to the dictionary
 			[self setUserInfo:userInfo forStream:self.fileStream1];
 			
 			// Add the stream free callback
-			BASS_ChannelSetSync(self.fileStream1, BASS_SYNC_FREE, 0, MyStreamFreeCallback, userInfo);
+			BASS_ChannelSetSync(self.fileStream1, BASS_SYNC_FREE, 0, MyStreamFreeCallback, (__bridge void*)userInfo);
 						
 			// Stream successfully created
 			return YES;
@@ -2035,7 +2033,7 @@ void RunBlockAfterDelay(void (^block)(void), NSTimeInterval delay)
     {
 		if (sharedInstance == nil)
 		{
-			[[self alloc] init];
+			sharedInstance = [[self alloc] init];
 		}
     }
     return sharedInstance;
@@ -2057,30 +2055,8 @@ void RunBlockAfterDelay(void (^block)(void), NSTimeInterval delay)
     return self;
 }
 
-- (id)retain 
-{
-    return self;
-}
-
-- (unsigned)retainCount 
-{
-    return UINT_MAX;  // denotes an object that cannot be released
-}
-
-- (oneway void)release 
-{
-    //do nothing
-}
-
-- (id)autorelease 
-{
-    return self;
-}
-
 - (void)startSongThreadEntryPoint
-{
-	NSAutoreleasePool* thePool = [[NSAutoreleasePool alloc] init];
-		
+{		
 	// Create a scheduled timer to keep runloop alive
 	NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(startSongEmptyMethod) userInfo:nil repeats:YES];
 	[[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
@@ -2090,13 +2066,13 @@ void RunBlockAfterDelay(void (^block)(void), NSTimeInterval delay)
 	BOOL isRunning;
 	do 
 	{
-		// Run the loop!
-		NSDate* theNextDate = [NSDate dateWithTimeIntervalSinceNow:resolution]; 
-		isRunning = [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:theNextDate]; 
-		
 		// Clear the autorelease pool after each run of the loop to prevent a memory leak
-		[thePool release];
-		thePool = [[NSAutoreleasePool alloc] init];            
+		@autoreleasepool 
+		{
+			// Run the loop!
+			NSDate* theNextDate = [NSDate dateWithTimeIntervalSinceNow:resolution]; 
+			isRunning = [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:theNextDate]; 
+		}        
 	} 
 	while(isRunning);
 }

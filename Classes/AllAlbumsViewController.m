@@ -34,6 +34,7 @@
 #import "SUSAllSongsDAO.h"
 #import "NSArray+Additions.h"
 #import "UIViewController+PushViewControllerCustom.h"
+#import "FMDatabaseQueueAdditions.h"
 
 @implementation AllAlbumsViewController
 
@@ -379,7 +380,10 @@
 		isSearching = NO;
 		letUserSelectRow = NO;
 		self.tableView.scrollEnabled = NO;
-		[databaseS.allAlbumsDb executeUpdate:@"DROP TABLE allAlbumsSearch"];
+		[databaseS.allAlbumsDbQueue inDatabase:^(FMDatabase *db)
+		{
+			[db executeUpdate:@"DROP TABLE allAlbumsSearch"];
+		}];
 	}
 	
 	[self.tableView reloadData];

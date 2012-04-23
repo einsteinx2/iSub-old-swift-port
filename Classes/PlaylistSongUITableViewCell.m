@@ -14,6 +14,7 @@
 #import "CellOverlay.h"
 #import "Song.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "FMDatabaseQueueAdditions.h"
 
 @implementation PlaylistSongUITableViewCell
 
@@ -104,7 +105,7 @@
 - (void)downloadAction
 {
 	if (viewObjectsS.isLocalPlaylist)
-		[[Song songFromDbRow:self.indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", playlistMD5] inDatabase:databaseS.localPlaylistsDb] addToCacheQueue];
+		[[Song songFromDbRow:self.indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", playlistMD5] inDatabaseQueue:databaseS.localPlaylistsDbQueue] addToCacheQueue];
 	else
 		[[Song songFromServerPlaylistId:playlistMD5 row:self.indexPath.row] addToCacheQueue];
 
@@ -117,7 +118,7 @@
 - (void)queueAction
 {
 	if (viewObjectsS.isLocalPlaylist)
-		[[Song songFromDbRow:self.indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", playlistMD5] inDatabase:databaseS.localPlaylistsDb] addToCurrentPlaylist];
+		[[Song songFromDbRow:self.indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", playlistMD5] inDatabaseQueue:databaseS.localPlaylistsDbQueue] addToCurrentPlaylist];
 	else
 		[[Song songFromServerPlaylistId:playlistMD5 row:self.indexPath.row] addToCurrentPlaylist];
 	

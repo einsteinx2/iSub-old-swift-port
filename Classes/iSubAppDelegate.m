@@ -737,7 +737,7 @@
 		[self.mainTabBarController.view removeFromSuperview];
 	
 	[databaseS closeAllDatabases];
-	[databaseS initDatabases];
+	[databaseS setupDatabases];
 	
 	if (IS_IPAD())
 	{
@@ -769,7 +769,7 @@
 		[self.offlineTabBarController.view removeFromSuperview];
 	
 	[databaseS closeAllDatabases];
-	[databaseS initDatabases];
+	[databaseS setupDatabases];
 	[self checkServer];
 	[cacheQueueManagerS startDownloadQueue];
 	

@@ -46,8 +46,6 @@ typedef enum
 @property (readonly) NSInteger nextIndex;
 @property (readonly) NSUInteger count;
 
-@property (unsafe_unretained, readonly) FMDatabase *db;
-
 @property ISMSRepeatMode repeatMode;
 
 @property BOOL isShuffle;

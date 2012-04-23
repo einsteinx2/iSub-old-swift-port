@@ -323,7 +323,7 @@
 		// Reset the databases
 		[databaseS closeAllDatabases];
 		
-		[databaseS initDatabases];
+		[databaseS setupDatabases];
 		
 		// Reset the tabs
 		if (!IS_IPAD())

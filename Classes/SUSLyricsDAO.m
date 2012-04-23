@@ -8,6 +8,7 @@
 
 #import "SUSLyricsDAO.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabaseQueueAdditions.h"
 
 #import "DatabaseSingleton.h"
 #import "SUSLyricsLoader.h"
@@ -33,16 +34,16 @@
 	loader.delegate = nil;
 }
 
-- (FMDatabase *)db
+- (FMDatabaseQueue *)dbQueue
 {
-    return databaseS.lyricsDb;
+	return databaseS.lyricsDbQueue;
 }
 
 #pragma mark - Public DAO Methods
 
 - (NSString *)lyricsForArtist:(NSString *)artist andTitle:(NSString *)title
 {	
-    return [self.db stringForQuery:@"SELECT lyrics FROM lyrics WHERE artist = ? AND title = ?", artist, title];
+    return [self.dbQueue stringForQuery:@"SELECT lyrics FROM lyrics WHERE artist = ? AND title = ?", artist, title];
 }
 
 - (NSString *)loadLyricsForArtist:(NSString *)artist andTitle:(NSString *)title

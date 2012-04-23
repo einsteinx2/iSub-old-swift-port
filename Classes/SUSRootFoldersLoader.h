@@ -17,7 +17,6 @@
     NSUInteger tempRecordCount;
 }
 
-@property (unsafe_unretained, readonly) FMDatabase *db;
 @property (unsafe_unretained, readonly) NSString *tableModifier;
 
 @property (strong) NSNumber *selectedFolderId;

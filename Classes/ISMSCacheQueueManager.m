@@ -13,8 +13,8 @@
 #import "DatabaseSingleton.h"
 #import "PlaylistSingleton.h"
 #import "SavedSettings.h"
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabaseQueueAdditions.h"
 #import "SUSLyricsLoader.h"
 #import "NSString+Additions.h"
 #import "SUSCoverArtLoader.h"
@@ -48,18 +48,21 @@
 
 - (Song *)currentQueuedSongInDb
 {
-	Song *aSong = nil;
-	FMResultSet *result = [databaseS.cacheQueueDb executeQuery:@"SELECT * FROM cacheQueue WHERE finished = 'NO' LIMIT 1"];
-	if ([databaseS.cacheQueueDb hadError]) 
+	__block Song *aSong = nil;
+	[databaseS.cacheQueueDbQueue inDatabase:^(FMDatabase *db)
 	{
-		DLog(@"Err %d: %@", [databaseS.cacheQueueDb lastErrorCode], [databaseS.cacheQueueDb lastErrorMessage]);
-	}
-	else
-	{
-		aSong = [Song songFromDbResult:result];
-	}
-	
-	[result close];
+		FMResultSet *result = [db executeQuery:@"SELECT * FROM cacheQueue WHERE finished = 'NO' LIMIT 1"];
+		if ([db hadError]) 
+		{
+			DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+		}
+		else
+		{
+			aSong = [Song songFromDbResult:result];
+		}
+		
+		[result close];
+	}];
 	return aSong;
 }
 
@@ -196,7 +199,10 @@
 		[self stopDownloadQueue];
 	
 	NSString *md5 = [self.currentQueuedSong.path md5];
-	[databaseS.cacheQueueDb executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", md5];
+	[databaseS.cacheQueueDbQueue inDatabase:^(FMDatabase *db)
+	{
+		[db executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", md5];
+	}];
 	
 	if (!self.isQueueDownloading)
 		[self startDownloadQueue];

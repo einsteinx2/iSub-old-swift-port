@@ -8,6 +8,7 @@
 
 #import "SUSServerPlaylistsDAO.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabaseQueueAdditions.h"
 #import "DatabaseSingleton.h"
 #import "SUSServerPlaylistsLoader.h"
 
@@ -29,9 +30,9 @@
 	loader.delegate = nil;
 }
 
-- (FMDatabase *)db
+- (FMDatabaseQueue *)dbQueue
 {
-    return databaseS.localPlaylistsDb;
+    return databaseS.localPlaylistsDbQueue;
 }
 
 #pragma mark - Loader Manager Methods

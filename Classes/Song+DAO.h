@@ -8,7 +8,7 @@
 
 #import "Song.h"
 
-@class FMDatabase, FMResultSet;
+@class FMDatabase, FMDatabaseQueue, FMResultSet;
 @interface Song (DAO)
 
 @property BOOL isPartiallyCached;
@@ -18,13 +18,13 @@
 @property (assign) NSDate *playedDate;
 
 + (Song *)songFromDbResult:(FMResultSet *)result;
-+ (Song *)songFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabase:(FMDatabase *)db;
-+ (Song *)songFromDbForMD5:(NSString *)md5 inTable:(NSString *)table inDatabase:(FMDatabase *)db;
++ (Song *)songFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabaseQueue:(FMDatabaseQueue *)dbQueue;
++ (Song *)songFromDbForMD5:(NSString *)md5 inTable:(NSString *)table inDatabaseQueue:(FMDatabaseQueue *)dbQueue;
 + (Song *)songFromGenreDb:(NSString *)md5;
 + (Song *)songFromCacheDb:(NSString *)md5;
 + (Song *)songFromServerPlaylistId:(NSString *)md5 row:(NSUInteger)row;
 
-- (BOOL)insertIntoTable:(NSString *)table inDatabase:(FMDatabase *)db;
+- (BOOL)insertIntoTable:(NSString *)table inDatabaseQueue:(FMDatabaseQueue *)dbQueue;
 - (BOOL)insertIntoServerPlaylistWithPlaylistId:(NSString *)md5;
 - (BOOL)insertIntoFolderCacheForFolderId:(NSString *)folderId;
 - (BOOL)insertIntoGenreTable:(NSString *)table;

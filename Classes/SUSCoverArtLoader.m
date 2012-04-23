@@ -11,6 +11,7 @@
 #import "ViewObjectsSingleton.h"
 #import "NSString+md5.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabaseQueueAdditions.h"
 #import "NSNotificationCenter+MainThread.h"
 
 @implementation SUSCoverArtLoader
@@ -87,24 +88,21 @@ static void initialize_navigationBarImages()
 
 #pragma mark - Properties
 
-- (FMDatabase *)db
+- (FMDatabaseQueue *)dbQueue
 {
 	if (isLarge)
 	{
-		if (IS_IPAD())
-			return [databaseS coverArtCacheDb540];
-		else
-			return [databaseS coverArtCacheDb320];
+		return IS_IPAD() ? databaseS.coverArtCacheDb540Queue : databaseS.coverArtCacheDb320Queue;
 	}
 	else
 	{
-		return [databaseS coverArtCacheDb60];
+		return databaseS.coverArtCacheDb60Queue;
 	}
 }
 
 - (BOOL)isCoverArtCached
 {
-	return [self.db stringForQuery:@"SELECT id FROM coverArtCache WHERE id = ?", [self.coverArtId md5]] ? YES : NO;
+	return [self.dbQueue stringForQuery:@"SELECT id FROM coverArtCache WHERE id = ?", [self.coverArtId md5]] ? YES : NO;
 }
 
 #pragma mark - Data loading
@@ -212,7 +210,10 @@ static void initialize_navigationBarImages()
 	if([UIImage imageWithData:self.receivedData])
 	{
         DLog(@"art loading completed for: %@", self.coverArtId);
-        [self.db executeUpdate:@"REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [self.coverArtId md5], self.receivedData];
+		[self.dbQueue inDatabase:^(FMDatabase *db)
+		{
+			[db executeUpdate:@"REPLACE INTO coverArtCache (id, data) VALUES (?, ?)", [self.coverArtId md5], self.receivedData];
+		}];
 		
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CoverArtFinishedInternal object:[self.coverArtId copy]];
 		

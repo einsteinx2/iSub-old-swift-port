@@ -15,13 +15,8 @@
 {		
 	NSUInteger count;
 	NSUInteger searchCount;
-	
-	NSNumber *selectedFolderId;
-	
 	NSUInteger tempRecordCount;
 }
-
-@property (unsafe_unretained, readonly) FMDatabase *db;
 
 @property (unsafe_unretained) id<SUSLoaderDelegate> delegate;
 

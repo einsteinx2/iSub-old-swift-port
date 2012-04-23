@@ -17,6 +17,7 @@
 #import "AsynchronousImageView.h"
 #import "Song.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabaseQueueAdditions.h"
 #import "NSString+md5.h"
 #import "EGORefreshTableHeaderView.h"
 #import "CustomUIAlertView.h"
@@ -60,7 +61,7 @@
 
     if (viewObjectsS.isLocalPlaylist)
 	{
-		self.title = [databaseS.localPlaylistsDb stringForQuery:@"SELECT playlist FROM localPlaylists WHERE md5 = ?", self.md5];
+		self.title = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT playlist FROM localPlaylists WHERE md5 = ?", self.md5];
 		
 		UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
 		headerView.backgroundColor = viewObjectsS.darkNormal;
@@ -98,7 +99,7 @@
 	else
 	{
         self.title = serverPlaylist.playlistName;
-		playlistCount = [databaseS.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM splaylist%@", md5]];
+		playlistCount = [databaseS.localPlaylistsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM splaylist%@", md5]];
 		[self.tableView reloadData];
 		
 		// Add the pull to refresh view
@@ -212,14 +213,14 @@
 	NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(self.title), @"name", nil];
     
 	NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", self.md5];
-	NSUInteger count = [databaseS.localPlaylistsDb intForQuery:query];
+	NSUInteger count = [databaseS.localPlaylistsDbQueue intForQuery:query];
 	NSMutableArray *songIds = [NSMutableArray arrayWithCapacity:count];
 	for (int i = 1; i <= count; i++)
 	{
 		@autoreleasepool 
 		{
 			NSString *query = [NSString stringWithFormat:@"SELECT songId FROM playlist%@ WHERE ROWID = %i", self.md5, i];
-			NSString *songId = [databaseS.localPlaylistsDb stringForQuery:query];
+			NSString *songId = [databaseS.localPlaylistsDbQueue stringForQuery:query];
 			
 			[songIds addObject:n2N(songId)];
 		}
@@ -346,7 +347,7 @@
 		
 		self.tableView.scrollEnabled = YES;
 
-		self.playlistCount = [databaseS.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM splaylist%@", self.md5]];
+		self.playlistCount = [databaseS.localPlaylistsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM splaylist%@", self.md5]];
 		[self.tableView reloadData];
 		
 		[self dataSourceDidFinishLoadingNewData];
@@ -407,7 +408,7 @@ static NSString *kName_Error = @"error";
 {
 	if (viewObjectsS.isLocalPlaylist)
 	{
-		return [databaseS.localPlaylistsDb intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", self.md5]];
+		return [databaseS.localPlaylistsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", self.md5]];
 	}
 	else
 	{
@@ -434,7 +435,7 @@ static NSString *kName_Error = @"error";
 	Song *aSong;
 	if (viewObjectsS.isLocalPlaylist)
 	{
-		aSong = [Song songFromDbRow:indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", self.md5] inDatabase:databaseS.localPlaylistsDb];
+		aSong = [Song songFromDbRow:indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", self.md5] inDatabaseQueue:databaseS.localPlaylistsDbQueue];
 		//DLog(@"aSong: %@", aSong);
 	}
 	else
@@ -448,14 +449,14 @@ static NSString *kName_Error = @"error";
 	cell.backgroundView = [[UIView alloc] init];
 	if(indexPath.row % 2 == 0)
 	{
-		if ([databaseS.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
+		if ([databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
 			cell.backgroundView.backgroundColor = [viewObjectsS currentLightColor];
 		else
 			cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
 	}
 	else
 	{
-		if ([databaseS.songCacheDb stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
+		if ([databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
 			cell.backgroundView.backgroundColor = [viewObjectsS currentDarkColor];
 		else
 			cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
@@ -485,26 +486,29 @@ static NSString *kName_Error = @"error";
 		else
 			[databaseS resetCurrentPlaylistDb];
 		
-		if (viewObjectsS.isLocalPlaylist)
-		{			
-			[databaseS.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, [settingsS.urlString md5]], @"currentPlaylistDb"];
-			if ([databaseS.localPlaylistsDb hadError]) { DLog(@"Err attaching the localPlaylistsDb %d: %@", [databaseS.localPlaylistsDb lastErrorCode], [databaseS.localPlaylistsDb lastErrorMessage]); }
-			if (settingsS.isJukeboxEnabled)
-				[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO jukeboxCurrentPlaylist SELECT * FROM playlist%@", self.md5]];
-			else
-				[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", self.md5]];
-			[databaseS.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
-		}
-		else
+		[databaseS.localPlaylistsDbQueue inDatabase:^(FMDatabase *db)
 		{
-			[databaseS.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, [settingsS.urlString md5]], @"currentPlaylistDb"];
-			if ([databaseS.localPlaylistsDb hadError]) { DLog(@"Err attaching the localPlaylistsDb %d: %@", [databaseS.localPlaylistsDb lastErrorCode], [databaseS.localPlaylistsDb lastErrorMessage]); }
-			if (settingsS.isJukeboxEnabled)
-				[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO jukeboxCurrentPlaylist SELECT * FROM splaylist%@", self.md5]];
+			if (viewObjectsS.isLocalPlaylist)
+			{			
+				[db executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, [settingsS.urlString md5]], @"currentPlaylistDb"];
+				if ([db hadError]) { DLog(@"Err attaching the localPlaylistsDb %d: %@", [db lastErrorCode], [db lastErrorMessage]); }
+				if (settingsS.isJukeboxEnabled)
+					[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO jukeboxCurrentPlaylist SELECT * FROM playlist%@", self.md5]];
+				else
+					[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", self.md5]];
+				[db executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
+			}
 			else
-				[databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM splaylist%@", self.md5]];
-			[databaseS.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
-		}
+			{
+				[db executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, [settingsS.urlString md5]], @"currentPlaylistDb"];
+				if ([db hadError]) { DLog(@"Err attaching the localPlaylistsDb %d: %@", [db lastErrorCode], [db lastErrorMessage]); }
+				if (settingsS.isJukeboxEnabled)
+					[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO jukeboxCurrentPlaylist SELECT * FROM splaylist%@", self.md5]];
+				else
+					[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM splaylist%@", self.md5]];
+				[db executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
+			}
+		}];
 		
 		if (settingsS.isJukeboxEnabled)
 		{

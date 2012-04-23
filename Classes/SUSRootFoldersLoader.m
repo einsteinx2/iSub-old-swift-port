@@ -9,6 +9,7 @@
 #import "SUSRootFoldersLoader.h"
 #import "TBXML.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabaseQueueAdditions.h"
 #import "DatabaseSingleton.h"
 #import "NSString+Additions.h"
 #import "SavedSettings.h"
@@ -30,9 +31,9 @@
 
 #pragma mark - Properties
 
-- (FMDatabase *)db
+- (FMDatabaseQueue *)dbQueue
 {
-    return [databaseS albumListCacheDb]; 
+    return databaseS.albumListCacheDbQueue; 
 }
 
 - (NSString *)tableModifier
@@ -51,79 +52,107 @@
 
 - (void)resetRootFolderTempTable
 {
-	[self.db executeUpdate:@"DROP TABLE IF EXISTS rootFolderNameCacheTemp"];
-	[self.db executeUpdate:@"CREATE TEMPORARY TABLE rootFolderNameCacheTemp (id TEXT, name TEXT)"];
+	[self.dbQueue inDatabase:^(FMDatabase *db)
+	{
+		[db executeUpdate:@"DROP TABLE IF EXISTS rootFolderNameCacheTemp"];
+		[db executeUpdate:@"CREATE TEMPORARY TABLE rootFolderNameCacheTemp (id TEXT, name TEXT)"];
+	}];
 	
 	tempRecordCount = 0;
 }
 
 - (BOOL)clearRootFolderTempTable
 {
-	[self.db executeUpdate:@"DELETE FROM rootFolderNameCacheTemp"];
-	
-	return ![self.db hadError];
+	__block BOOL hadError;
+	[self.dbQueue inDatabase:^(FMDatabase *db)
+	{
+		[db executeUpdate:@"DELETE FROM rootFolderNameCacheTemp"];
+		hadError = [db hadError];
+	}];
+	return !hadError;
 }
 
 - (NSUInteger)rootFolderUpdateCount
 {
-	NSString *query = [NSString stringWithFormat:@"DELETE FROM rootFolderCount%@", self.tableModifier];
-	[self.db executeUpdate:query];
-	
-	query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM rootFolderNameCache%@", self.tableModifier];
-	NSNumber *folderCount = [NSNumber numberWithInt:[self.db intForQuery:query]];
-	
-	query = [NSString stringWithFormat:@"INSERT INTO rootFolderCount%@ VALUES (?)", self.tableModifier];
-	[self.db executeUpdate:query, folderCount];
-	
+	__block NSNumber *folderCount = nil;
+	[self.dbQueue inDatabase:^(FMDatabase *db)
+	{
+		NSString *query = [NSString stringWithFormat:@"DELETE FROM rootFolderCount%@", self.tableModifier];
+		[db executeUpdate:query];
+		
+		query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM rootFolderNameCache%@", self.tableModifier];
+		folderCount = [NSNumber numberWithInt:[db intForQuery:query]];
+		
+		query = [NSString stringWithFormat:@"INSERT INTO rootFolderCount%@ VALUES (?)", self.tableModifier];
+		[db executeUpdate:query, folderCount];
+
+	}];
 	return [folderCount intValue];
 }
 
 - (BOOL)moveRootFolderTempTableRecordsToMainCache
 {
-	DLog(@"tableModifier: %@", self.tableModifier);
-	NSString *query = @"INSERT INTO rootFolderNameCache%@ SELECT * FROM rootFolderNameCacheTemp";
-	[self.db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
+	__block BOOL hadError;
+	[self.dbQueue inDatabase:^(FMDatabase *db)
+	{
+		DLog(@"tableModifier: %@", self.tableModifier);
+		NSString *query = @"INSERT INTO rootFolderNameCache%@ SELECT * FROM rootFolderNameCacheTemp";
+		[db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
+		hadError = [db hadError];
+	}];
 	
-	return ![self.db hadError];
+	return !hadError;
 }
 
 - (void)resetRootFolderCache
 {    
-	// Delete the old tables
-	[self.db executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS rootFolderIndexCache%@", self.tableModifier]];
-	[self.db executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS rootFolderNameCache%@", self.tableModifier]];
-	[self.db executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS rootFolderCount%@", self.tableModifier]];
-	//[self.db executeUpdate:@"VACUUM"]; // Removed because it takes waaaaaay too long, maybe make a button in settings?
-	
-	// Create the new tables
-	NSString *query;
-	query = @"CREATE TABLE rootFolderIndexCache%@ (name TEXT PRIMARY KEY, position INTEGER, count INTEGER)";
-	[self.db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
-	query = @"CREATE VIRTUAL TABLE rootFolderNameCache%@ USING FTS3 (id TEXT PRIMARY KEY, name TEXT, tokenize=porter)";
-	[self.db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
-	query = @"CREATE INDEX name ON rootFolderNameCache%@ (name ASC)";
-	[self.db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
-	query = @"CREATE TABLE rootFolderCount%@ (count INTEGER)";
-	[self.db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
+	[self.dbQueue inDatabase:^(FMDatabase *db)
+	{
+		// Delete the old tables
+		[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS rootFolderIndexCache%@", self.tableModifier]];
+		[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS rootFolderNameCache%@", self.tableModifier]];
+		[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS rootFolderCount%@", self.tableModifier]];
+		//[self.db executeUpdate:@"VACUUM"]; // Removed because it takes waaaaaay too long, maybe make a button in settings?
+		
+		// Create the new tables
+		NSString *query;
+		query = @"CREATE TABLE rootFolderIndexCache%@ (name TEXT PRIMARY KEY, position INTEGER, count INTEGER)";
+		[db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
+		query = @"CREATE VIRTUAL TABLE rootFolderNameCache%@ USING FTS3 (id TEXT PRIMARY KEY, name TEXT, tokenize=porter)";
+		[db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
+		query = @"CREATE INDEX name ON rootFolderNameCache%@ (name ASC)";
+		[db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
+		query = @"CREATE TABLE rootFolderCount%@ (count INTEGER)";
+		[db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
+	}];
 }
 
 - (BOOL)addRootFolderIndexToCache:(NSUInteger)position count:(NSUInteger)folderCount name:(NSString*)name
 {
-	NSString *query = [NSString stringWithFormat:@"INSERT INTO rootFolderIndexCache%@ VALUES (?, ?, ?)", self.tableModifier];
-	[self.db executeUpdate:query, [name cleanString], [NSNumber numberWithInt:position], [NSNumber numberWithInt:folderCount]];
-	return ![self.db hadError];
+	__block BOOL hadError;
+	[self.dbQueue inDatabase:^(FMDatabase *db)
+	{
+		NSString *query = [NSString stringWithFormat:@"INSERT INTO rootFolderIndexCache%@ VALUES (?, ?, ?)", self.tableModifier];
+		[db executeUpdate:query, [name cleanString], [NSNumber numberWithInt:position], [NSNumber numberWithInt:folderCount]];
+		hadError = [db hadError];
+	}];
+	return !hadError;
 }
 
 - (BOOL)addRootFolderToTempCache:(NSString*)folderId name:(NSString*)name
 {
-	BOOL hadError = NO;
-	
+	__block BOOL hadError = NO;
 	// Add the shortcut to the DB
 	if (folderId != nil && name != nil)
 	{
-		NSString *query = @"INSERT INTO rootFolderNameCacheTemp VALUES (?, ?)";
-		hadError = [self.db executeUpdate:query, folderId, [name cleanString]];
-		tempRecordCount++;
+		[self.dbQueue inDatabase:^(FMDatabase *db)
+		{
+			 
+			NSString *query = @"INSERT INTO rootFolderNameCacheTemp VALUES (?, ?)";
+			[db executeUpdate:query, folderId, [name cleanString]];
+			hadError = [db hadError];
+			tempRecordCount++;
+		}];
 	}
 	
 	// Flush temp records to main cache if necessary

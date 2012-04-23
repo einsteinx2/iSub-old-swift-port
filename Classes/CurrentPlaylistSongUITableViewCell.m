@@ -96,9 +96,9 @@
 - (void)downloadAction
 {	
 	if (playlistS.isShuffle) 
-		[[Song songFromDbRow:self.indexPath.row inTable:@"shufflePlaylist" inDatabase:databaseS.currentPlaylistDb] addToCacheQueue];
+		[[Song songFromDbRow:self.indexPath.row inTable:@"shufflePlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue] addToCacheQueue];
 	else 
-		[[Song songFromDbRow:self.indexPath.row inTable:@"currentPlaylist" inDatabase:databaseS.currentPlaylistDb] addToCacheQueue];
+		[[Song songFromDbRow:self.indexPath.row inTable:@"currentPlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue] addToCacheQueue];
 	
 	self.overlayView.downloadButton.alpha = .3;
 	self.overlayView.downloadButton.enabled = NO;
@@ -111,12 +111,12 @@
 	//DLog(@"queueAction");
 	if (playlistS.isShuffle)
 	{
-		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"shufflePlaylist" inDatabase:databaseS.currentPlaylistDb];
+		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"shufflePlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
 		[databaseS queueSong:aSong];
 	}
 	else
 	{
-		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"currentPlaylist" inDatabase:databaseS.currentPlaylistDb];
+		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"currentPlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
 		[databaseS queueSong:aSong];
 	}
 	

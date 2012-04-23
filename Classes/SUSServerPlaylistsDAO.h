@@ -12,8 +12,6 @@
 @class SUSServerPlaylistsLoader, FMDatabase;
 @interface SUSServerPlaylistsDAO : NSObject <SUSLoaderDelegate, SUSLoaderManager>
 
-@property (unsafe_unretained, readonly) FMDatabase *db;
-
 @property (unsafe_unretained) NSObject <SUSLoaderDelegate> *delegate;
 @property (strong) SUSServerPlaylistsLoader *loader;
 

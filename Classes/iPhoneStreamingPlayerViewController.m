@@ -39,6 +39,7 @@
 #import "SavedSettings.h"
 #import "StoreViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
+#import "FMDatabaseQueue.h"
 
 #define downloadProgressBorder 4.
 #define downloadProgressWidth (progressSlider.frame.size.width - (downloadProgressBorder * 2))
@@ -752,7 +753,12 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	[self updateShuffleIcon];
 	
-	NSInteger bookmarkCount = [databaseS.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId];
+	__block NSInteger bookmarkCount;
+	[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
+	{
+		bookmarkCount = [db intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]; 
+	}];
+	
 	if (bookmarkCount > 0)
 	{
 		bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", bookmarkCount];
@@ -1315,35 +1321,41 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)saveBookmark
 {
-	[databaseS.bookmarksDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmarks (playlistIndex, name, position, %@, bytes) VALUES (?, ?, ?, %@, ?)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [NSNumber numberWithInt:playlistS.currentIndex], bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size, currentSong.parentId, [NSNumber numberWithUnsignedLongLong:bookmarkBytePosition]];
-	
-	NSInteger bookmarkId = [databaseS.bookmarksDb intForQuery:@"SELECT MAX(bookmarkId) FROM bookmarks"]; 
-	
-	NSString *tableName = nil;
-	if (settingsS.isJukeboxEnabled)
+	__block NSUInteger bookmarksCount;
+	[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
 	{
-		tableName = @"jukeboxCurrentPlaylist";
-		if (playlistS.isShuffle) 
-			tableName = @"jukeboxShufflePlaylist";
-	}
-	else 
-	{
-		tableName = @"currentPlaylist";
-		if (playlistS.isShuffle) 
-			tableName = @"shufflePlaylist";
-	}
+		[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmarks (playlistIndex, name, position, %@, bytes) VALUES (?, ?, ?, %@, ?)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [NSNumber numberWithInt:playlistS.currentIndex], bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size, currentSong.parentId, [NSNumber numberWithUnsignedLongLong:bookmarkBytePosition]];
+		
+		NSInteger bookmarkId = [db intForQuery:@"SELECT MAX(bookmarkId) FROM bookmarks"]; 
+		
+		NSString *tableName = nil;
+		if (settingsS.isJukeboxEnabled)
+		{
+			tableName = @"jukeboxCurrentPlaylist";
+			if (playlistS.isShuffle) 
+				tableName = @"jukeboxShufflePlaylist";
+		}
+		else 
+		{
+			tableName = @"currentPlaylist";
+			if (playlistS.isShuffle) 
+				tableName = @"shufflePlaylist";
+		}
+		
+		// Save the playlist
+		NSString *dbName = viewObjectsS.isOfflineMode ? @"%@/offlineCurrentPlaylist.db" : @"%@/%@currentPlaylist.db";
+		[db executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:dbName, settingsS.databasePath, [[settingsS urlString] md5]], @"currentPlaylistDb"];
+		
+		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmark%i (%@)", bookmarkId, [Song standardSongColumnSchema]]];
+		
+		[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmark%i SELECT * FROM currentPlaylistDb.%@", bookmarkId, tableName]]; 
+		
+		bookmarksCount = [db intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId];
+		
+		[db executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
+	}];
 	
-	// Save the playlist
-	NSString *dbName = viewObjectsS.isOfflineMode ? @"%@/offlineCurrentPlaylist.db" : @"%@/%@currentPlaylist.db";
-	[databaseS.bookmarksDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:dbName, settingsS.databasePath, [[settingsS urlString] md5]], @"currentPlaylistDb"];
-	
-	[databaseS.bookmarksDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmark%i (%@)", bookmarkId, [Song standardSongColumnSchema]]];
-	
-	[databaseS.bookmarksDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmark%i SELECT * FROM currentPlaylistDb.%@", bookmarkId, tableName]]; 
-	
-	[databaseS.bookmarksDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
-	
-	bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", [databaseS.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId]];
+	bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", bookmarksCount];
 	bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
 }
 
@@ -1384,8 +1396,14 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[bookmarkNameTextField resignFirstResponder];
 		if(buttonIndex == 1)
 		{
+			__block BOOL exists;
+			[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
+			{
+				exists = [db intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE name = ? LIMIT 1", bookmarkNameTextField.text];
+			}];
+			
 			// Check if the bookmark exists
-			if ([databaseS.bookmarksDb stringForQuery:@"SELECT name FROM bookmarks WHERE name = ? LIMIT 1", bookmarkNameTextField.text])
+			if (exists)
 			{
 				// Bookmark exists so ask to overwrite
 				UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Overwrite?" message:@"There is already a bookmark with this name. Overwrite it?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
@@ -1403,10 +1421,13 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		if(buttonIndex == 1)
 		{
 			// Overwrite the bookmark
-			NSUInteger bookmarkId = [databaseS.bookmarksDb intForQuery:@"SELECT bookmarkId FROM bookmarks WHERE name = ?", bookmarkNameTextField.text];
-			
-			[databaseS.bookmarksDb executeUpdate:@"DELETE FROM bookmarks WHERE name = ?", bookmarkNameTextField.text];
-			[databaseS.bookmarksDb executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS bookmark%i", bookmarkId]];
+			[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
+			{
+				NSUInteger bookmarkId = [db intForQuery:@"SELECT bookmarkId FROM bookmarks WHERE name = ?", bookmarkNameTextField.text];
+				
+				[db executeUpdate:@"DELETE FROM bookmarks WHERE name = ?", bookmarkNameTextField.text];
+				[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS bookmark%i", bookmarkId]];
+			}];
 			
 			[self saveBookmark];
 		}

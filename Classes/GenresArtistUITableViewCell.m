@@ -11,6 +11,7 @@
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabaseQueueAdditions.h"
 #import "CellOverlay.h"
 #import "Song.h"
 #import "NSNotificationCenter+MainThread.h"
@@ -77,22 +78,30 @@
 
 - (void)downloadAllSongs
 {
-	FMResultSet *result;
-	if (viewObjectsS.isOfflineMode) 
+	FMDatabaseQueue *dbQueue;
+	NSString *query;
+	
+	if (viewObjectsS.isOfflineMode)
 	{
-		result = [databaseS.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
+		dbQueue = databaseS.songCacheDbQueue;
+		query = @"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE";
 	}
-	else 
+	else
 	{
-		result = [databaseS.genresDb executeQuery:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
+		dbQueue = databaseS.genresDbQueue;
+		query = @"SELECT md5 FROM genresLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE";
 	}
 	
-	while ([result next])
+	[dbQueue inDatabase:^(FMDatabase *db)
 	{
-		if ([result stringForColumnIndex:0] != nil)
-			[[Song songFromGenreDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCacheQueue];
-	}
-	[result close];
+		FMResultSet *result = [db executeQuery:query, artistNameLabel.text, genre];
+		while ([result next])
+		{
+			if ([result stringForColumnIndex:0] != nil)
+				[[Song songFromGenreDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCacheQueue];
+		}
+		[result close];
+	}];
 	
 	// Hide the loading screen
 	[viewObjectsS hideLoadingScreen];
@@ -111,22 +120,30 @@
 
 - (void)queueAllSongs
 {
-	FMResultSet *result;
-	if (viewObjectsS.isOfflineMode) 
+	FMDatabaseQueue *dbQueue;
+	NSString *query;
+	
+	if (viewObjectsS.isOfflineMode)
 	{
-		result = [databaseS.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
+		dbQueue = databaseS.songCacheDbQueue;
+		query = @"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE";
 	}
-	else 
+	else
 	{
-		result = [databaseS.genresDb executeQuery:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text, genre];
+		dbQueue = databaseS.genresDbQueue;
+		query = @"SELECT md5 FROM genresLayout WHERE seg1 = ? AND genre = ? ORDER BY seg2 COLLATE NOCASE";
 	}
 	
-	while ([result next])
+	[dbQueue inDatabase:^(FMDatabase *db)
 	{
-		if ([result stringForColumnIndex:0] != nil)
-			[[Song songFromGenreDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCurrentPlaylist];
-	}
-	[result close];
+		FMResultSet *result = [db executeQuery:query, artistNameLabel.text, genre];
+		while ([result next])
+		{
+			if ([result stringForColumnIndex:0] != nil)
+				[[Song songFromGenreDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCurrentPlaylist];
+		}
+		[result close];
+	}];
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 	

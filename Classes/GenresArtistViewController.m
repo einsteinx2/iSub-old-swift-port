@@ -18,6 +18,7 @@
 #import "Album.h"
 #import "Song.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabaseQueueAdditions.h"
 #import "NSString+md5.h"
 #import "SavedSettings.h"
 #import "NSArray+Additions.h"
@@ -173,28 +174,39 @@
 	// Reset the current playlist
 	[databaseS resetCurrentPlaylistDb];
 	
-	// Get the ID of all matching records (everything in genre ordered by artist)
-	FMResultSet *result;
-	if (viewObjectsS.isOfflineMode)
-		result = [databaseS.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE", self.title];
-	else
-		result = [databaseS.genresDb executeQuery:@"SELECT md5 FROM genresLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE", self.title];
+	FMDatabaseQueue *dbQueue;
+	NSString *query;
 	
-	while ([result next])
+	if (viewObjectsS.isOfflineMode)
 	{
-		@autoreleasepool
-		{
-			if ([result stringForColumnIndex:0] != nil)
-			{
-				NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
-				Song *aSong = [Song songFromGenreDb:songIdMD5];
-				
-				[aSong addToCurrentPlaylist];
-			}	
-		}
+		dbQueue = databaseS.songCacheDbQueue;
+		query = @"SELECT md5 FROM cachedSongsLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE";
+	}
+	else
+	{
+		dbQueue = databaseS.genresDbQueue;
+		query = @"SELECT md5 FROM genresLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE";
 	}
 	
-	[result close];
+	[dbQueue inDatabase:^(FMDatabase *db)
+	{
+		// Get the ID of all matching records (everything in genre ordered by artist)
+		FMResultSet *result = [db executeQuery:query, self.title];
+		while ([result next])
+		{
+			@autoreleasepool
+			{
+				if ([result stringForColumnIndex:0] != nil)
+				{
+					NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
+					Song *aSong = [Song songFromGenreDb:songIdMD5];
+					
+					[aSong addToCurrentPlaylist];
+				}	
+			}
+		}
+		[result close];
+	}];
 	
 	if (settingsS.isJukeboxEnabled)
 		[jukeboxS jukeboxReplacePlaylistWithLocal];
@@ -218,27 +230,37 @@
 	[databaseS resetCurrentPlaylistDb];
 	
 	// Get the ID of all matching records (everything in genre ordered by artist)
-	FMResultSet *result;
+	FMDatabaseQueue *dbQueue;
+	NSString *query;
 	if (viewObjectsS.isOfflineMode)
-		result = [databaseS.songCacheDb executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE", self.title];
-	else
-		result = [databaseS.genresDb executeQuery:@"SELECT md5 FROM genresLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE", self.title];
-	
-	while ([result next])
 	{
-		@autoreleasepool 
-		{
-			if ([result stringForColumnIndex:0] != nil)
-			{
-				NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
-				Song *aSong = [Song songFromGenreDb:songIdMD5];
-				
-				[aSong addToCurrentPlaylist];
-			}
-		}
+		dbQueue = databaseS.songCacheDbQueue;
+		query = @"SELECT md5 FROM cachedSongsLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE";
+	}
+	else
+	{
+		dbQueue = databaseS.genresDbQueue;
+		query = @"SELECT md5 FROM genresLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE";
 	}
 	
-	[result close];
+	[dbQueue inDatabase:^(FMDatabase *db)
+	{
+		 FMResultSet *result = [db executeQuery:query, self.title];
+		while ([result next])
+		{
+			@autoreleasepool 
+			{
+				if ([result stringForColumnIndex:0] != nil)
+				{
+					NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
+					Song *aSong = [Song songFromGenreDb:songIdMD5];
+					
+					[aSong addToCurrentPlaylist];
+				}
+			}
+		}
+		[result close];
+	}];
 	
 	// Shuffle the playlist
 	[databaseS shufflePlaylist];
@@ -320,28 +342,37 @@
 		genresAlbumViewController.segment = 2;
 		genresAlbumViewController.seg1 = [listOfArtists objectAtIndexSafe:indexPath.row];
 		genresAlbumViewController.genre = [NSString stringWithString:self.title];
-		FMResultSet *result;
-		if (viewObjectsS.isOfflineMode) 
+		
+		FMDatabaseQueue *dbQueue;
+		NSString *query;
+		if (viewObjectsS.isOfflineMode)
 		{
-			result = [databaseS.songCacheDb executeQuery:@"SELECT md5, segs, seg2 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", [listOfArtists objectAtIndexSafe:indexPath.row], self.title];
+			dbQueue = databaseS.songCacheDbQueue;
+			query = @"SELECT md5, segs, seg2 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE";
 		}
-		else 
+		else
 		{
-			result = [databaseS.genresDb executeQuery:@"SELECT md5, segs, seg2 FROM genresLayout WHERE seg1 = ? AND genre = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE", [listOfArtists objectAtIndexSafe:indexPath.row], self.title];
+			dbQueue = databaseS.genresDbQueue;
+			query = @"SELECT md5, segs, seg2 FROM genresLayout WHERE seg1 = ? AND genre = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE";
 		}
-		while ([result next])
+		
+		[dbQueue inDatabase:^(FMDatabase *db)
 		{
-			if ([result intForColumnIndex:1] > 2)
+			FMResultSet *result = [db executeQuery:query, [listOfArtists objectAtIndexSafe:indexPath.row], self.title];
+			while ([result next])
 			{
-				[genresAlbumViewController.listOfAlbums addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], 
-																							[NSString stringWithString:[result stringForColumnIndex:2]], nil]];
+				if ([result intForColumnIndex:1] > 2)
+				{
+					[genresAlbumViewController.listOfAlbums addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], 
+																	   [NSString stringWithString:[result stringForColumnIndex:2]], nil]];
+				}
+				else
+				{
+					[genresAlbumViewController.listOfSongs addObject:[NSString stringWithString:[result stringForColumnIndex:0]]];
+				}
 			}
-			else
-			{
-				[genresAlbumViewController.listOfSongs addObject:[NSString stringWithString:[result stringForColumnIndex:0]]];
-			}
-		}
-		[result close];
+			[result close];
+		}];
 		
 		[self pushViewControllerCustom:genresAlbumViewController];
 	}

@@ -22,6 +22,7 @@
 
 #import "NSString+md5.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabaseQueueAdditions.h"
 
 #import "SavedSettings.h"
 #import "NSString+Additions.h"
@@ -496,20 +497,7 @@
 					appDelegateS.mainTabBarController.viewControllers = controllers;
 				}
 				
-				// Setup the allAlbums database
-				databaseS.allAlbumsDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allAlbums.db", databaseS.databaseFolderPath, [settingsS.urlString md5]]];
-				[databaseS.allAlbumsDb executeUpdate:@"PRAGMA cache_size = 1"];
-				if ([databaseS.allAlbumsDb open] == NO) { DLog(@"Could not open allAlbumsDb."); }
-				
-				// Setup the allSongs database
-				databaseS.allSongsDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@allSongs.db", databaseS.databaseFolderPath, [settingsS.urlString md5]]];
-				[databaseS.allSongsDb executeUpdate:@"PRAGMA cache_size = 1"];
-				if ([databaseS.allSongsDb open] == NO) { DLog(@"Could not open allSongsDb."); }
-				
-				// Setup the Genres database
-				databaseS.genresDb = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@genres.db", databaseS.databaseFolderPath, [settingsS.urlString md5]]];
-				[databaseS.genresDb executeUpdate:@"PRAGMA cache_size = 1"];
-				if ([databaseS.genresDb open] == NO) { DLog(@"Could not open genresDb."); }
+				[databaseS setupAllSongsDb];
 			}
 			else
 			{
@@ -520,9 +508,12 @@
 				else
 					[viewObjectsS orderMainTabBarController];
 				
-				[databaseS.allAlbumsDb close];
-				[databaseS.allSongsDb close];
-				[databaseS.genresDb close];
+				[databaseS.allAlbumsDbQueue close];
+				databaseS.allAlbumsDbQueue = nil;
+				[databaseS.allSongsDbQueue close];
+				databaseS.allSongsDbQueue = nil;
+				[databaseS.genresDbQueue close];
+				databaseS.genresDbQueue = nil;
 			}
 		}
 		else if (sender == disableRotationSwitch)

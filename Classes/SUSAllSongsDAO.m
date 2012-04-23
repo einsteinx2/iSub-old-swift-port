@@ -12,6 +12,7 @@
 #import "Song.h"
 #import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabaseQueueAdditions.h"
 
 @implementation SUSAllSongsDAO
 
@@ -51,9 +52,9 @@
 	index = nil;
 }
 
-- (FMDatabase *)db
+- (FMDatabaseQueue *)dbQueue
 {
-    return [databaseS allSongsDb]; 
+	return databaseS.allSongsDbQueue;
 }
 
 #pragma mark - Private Methods
@@ -62,9 +63,9 @@
 {
 	NSUInteger value = 0;
 	
-	if ([self.db tableExists:@"allSongsCount"] && [self.db intForQuery:@"SELECT COUNT(*) FROM allSongsCount"] > 0)
+	if ([self.dbQueue tableExists:@"allSongsCount"] && [self.dbQueue intForQuery:@"SELECT COUNT(*) FROM allSongsCount"] > 0)
 	{
-		value = [self.db intForQuery:@"SELECT count FROM allSongsCount LIMIT 1"];
+		value = [self.dbQueue intForQuery:@"SELECT count FROM allSongsCount LIMIT 1"];
 	}
 	
 	return value;
@@ -72,64 +73,70 @@
 
 - (NSUInteger)allSongsSearchCount
 {
-	NSUInteger value = [self.db intForQuery:@"SELECT count(*) FROM allSongsNameSearch"];
+	NSUInteger value = [self.dbQueue intForQuery:@"SELECT count(*) FROM allSongsNameSearch"];
 	
 	return value;
 }
 
 - (NSArray *)allSongsIndex
 {
-	NSMutableArray *indexItems = [NSMutableArray arrayWithCapacity:0];
-	
-	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allSongsIndexCache"];
-	while ([result next])
+	__block NSMutableArray *indexItems = [NSMutableArray arrayWithCapacity:0];
+	[self.dbQueue inDatabase:^(FMDatabase *db)
 	{
-		Index *item = [[Index alloc] init];
-		item.name = [result stringForColumn:@"name"];
-		item.position = [result intForColumn:@"position"];
-		item.count = [result intForColumn:@"count"];
-		[indexItems addObject:item];
-	}
-	[result close];
-	
+		FMResultSet *result = [db executeQuery:@"SELECT * FROM allSongsIndexCache"];
+		while ([result next])
+		{
+			Index *item = [[Index alloc] init];
+			item.name = [result stringForColumn:@"name"];
+			item.position = [result intForColumn:@"position"];
+			item.count = [result intForColumn:@"count"];
+			[indexItems addObject:item];
+		}
+		[result close];
+	}];
 	return [NSArray arrayWithArray:indexItems];
 }
 
 - (Song *)allSongsSongForPosition:(NSUInteger)position
 {
-	return [Song songFromDbRow:position-1 inTable:@"allSongs" inDatabase:self.db];
+	return [Song songFromDbRow:position-1 inTable:@"allSongs" inDatabaseQueue:self.dbQueue];
 }
 
 - (Song *)allSongsSongForPositionInSearch:(NSUInteger)position
 {
-	NSUInteger rowId = [self.db intForQuery:@"SELECT rowIdInAllSongs FROM allSongsNameSearch WHERE ROWID = ?", [NSNumber numberWithInt:position]];
+	NSUInteger rowId = [self.dbQueue intForQuery:@"SELECT rowIdInAllSongs FROM allSongsNameSearch WHERE ROWID = ?", [NSNumber numberWithInt:position]];
 	return [self allSongsSongForPosition:rowId];
 }
 
 - (void)allSongsClearSearch
 {
-	[self.db executeUpdate:@"DELETE FROM allSongsNameSearch"];
+	[self.dbQueue inDatabase:^(FMDatabase *db)
+	{
+		[db executeUpdate:@"DELETE FROM allSongsNameSearch"];
+	}];	
 }
 
 - (void)allSongsPerformSearch:(NSString *)name
 {
-	// Inialize the search DB
-	[self.db executeUpdate:@"DROP TABLE IF EXISTS allSongsNameSearch"];
-	[self.db executeUpdate:@"CREATE TEMPORARY TABLE allSongsNameSearch (rowIdInAllSongs INTEGER)"];
-	
-	// Perform the search
-	NSString *query = @"INSERT INTO allSongsNameSearch SELECT ROWID FROM allSongs WHERE title LIKE ? LIMIT 100";
-	[self.db executeUpdate:query, [NSString stringWithFormat:@"%%%@%%", name]];
-	if ([self.db hadError]) {
-		DLog(@"Err %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
-	}
+	[self.dbQueue inDatabase:^(FMDatabase *db)
+	{
+		// Inialize the search DB
+		[db executeUpdate:@"DROP TABLE IF EXISTS allSongsNameSearch"];
+		[db executeUpdate:@"CREATE TEMPORARY TABLE allSongsNameSearch (rowIdInAllSongs INTEGER)"];
+		
+		// Perform the search
+		NSString *query = @"INSERT INTO allSongsNameSearch SELECT ROWID FROM allSongs WHERE title LIKE ? LIMIT 100";
+		[db executeUpdate:query, [NSString stringWithFormat:@"%%%@%%", name]];
+		if ([db hadError])
+			DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+	}];
 }
 
 - (BOOL)allSongsIsDataLoaded
 {
 	BOOL isLoaded = NO;
 	
-	if ([self.db tableExists:@"allSongsCount"] && [self.db intForQuery:@"SELECT COUNT(*) FROM allSongsCount"] > 0)
+	if ([self.dbQueue tableExists:@"allSongsCount"] && [self.dbQueue intForQuery:@"SELECT COUNT(*) FROM allSongsCount"] > 0)
 	{
 		isLoaded = YES;
 	}
@@ -192,7 +199,10 @@
 
 - (void)allSongsRestartLoad
 {
-	[self.db executeUpdate:@"CREATE TABLE restartLoad (a INTEGER)"];
+	[self.dbQueue inDatabase:^(FMDatabase *db)
+	{
+		[db executeUpdate:@"CREATE TABLE restartLoad (a INTEGER)"];
+	}];
 }
 
 #pragma mark - Loader Manager Methods

@@ -15,8 +15,6 @@
 
 @property (unsafe_unretained) id<SUSLoaderDelegate> delegate;
 
-@property (unsafe_unretained, readonly) FMDatabase *db;
-
 @property (readonly) NSUInteger count;
 @property (readonly) NSUInteger searchCount;
 @property (unsafe_unretained, readonly) NSArray *index;

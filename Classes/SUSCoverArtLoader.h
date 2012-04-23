@@ -13,7 +13,6 @@
 
 @property (copy) NSString *coverArtId;
 @property (readonly) BOOL isCoverArtCached;
-@property (unsafe_unretained, readonly) FMDatabase *db;
 @property BOOL isLarge;
 
 - (id)initWithDelegate:(NSObject<SUSLoaderDelegate>*)delegate coverArtId:(NSString *)artId isLarge:(BOOL)large;

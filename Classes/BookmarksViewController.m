@@ -26,6 +26,8 @@
 #import "NSNotificationCenter+MainThread.h"
 #import "NSArray+Safe.h"
 #import "UIViewController+PushViewControllerCustom.h"
+#import "FMDatabaseQueue.h"
+#import "FMDatabaseQueueAdditions.h"
 
 @implementation BookmarksViewController
 @synthesize bookmarkIds;
@@ -99,7 +101,7 @@
 		isNoBookmarksScreenShowing = NO;
 	}
 	
-	NSUInteger bookmarksCount = [databaseS.bookmarksDb intForQuery:@"SELECT COUNT(*) FROM bookmarks"];
+	NSUInteger bookmarksCount = [databaseS.bookmarksDbQueue intForQuery:@"SELECT COUNT(*) FROM bookmarks"];
 	if (bookmarksCount == 0)
 	{
 		isNoBookmarksScreenShowing = YES;
@@ -204,13 +206,16 @@
 
 - (void)loadBookmarkIds
 {
-	NSMutableArray *bookmarkIdsTemp = [[NSMutableArray alloc] initWithCapacity:0];
-	FMResultSet *result = [databaseS.bookmarksDb executeQuery:@"SELECT bookmarkId FROM bookmarks"];
-	while ([result next])
+	__block NSMutableArray *bookmarkIdsTemp = [[NSMutableArray alloc] initWithCapacity:0];
+	[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
 	{
-		[bookmarkIdsTemp addObject:[NSNumber numberWithInt:[result intForColumnIndex:0]]];
-	}
-	[result close];
+		FMResultSet *result = [db executeQuery:@"SELECT bookmarkId FROM bookmarks"];
+		while ([result next])
+		{
+			[bookmarkIdsTemp addObject:[NSNumber numberWithInt:[result intForColumnIndex:0]]];
+		}
+		[result close];
+	}];
 	
 	self.bookmarkIds = [NSArray arrayWithArray:bookmarkIdsTemp];
 }
@@ -309,10 +314,13 @@
 {
 	if ([deleteBookmarksLabel.text isEqualToString:@"Clear Bookmarks"])
 	{
-		[databaseS.bookmarksDb executeUpdate:@"DROP TABLE IF EXISTS bookmarks"];
-		[databaseS.bookmarksDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarks (bookmarkId INTEGER PRIMARY KEY, playlistIndex INTEGER, name TEXT, position INTEGER, %@, bytes INTEGER)", [Song standardSongColumnSchema]]];
-		[databaseS.bookmarksDb executeUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
-		
+		[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
+		{
+			[db executeUpdate:@"DROP TABLE IF EXISTS bookmarks"];
+			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarks (bookmarkId INTEGER PRIMARY KEY, playlistIndex INTEGER, name TEXT, position INTEGER, %@, bytes INTEGER)", [Song standardSongColumnSchema]]];
+			[db executeUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
+		}];
+				
 		[self editBookmarksAction:nil];
 		
 		// Reload table data
@@ -323,7 +331,10 @@
 		for (NSNumber *index in viewObjectsS.multiDeleteList)
 		{
 			NSNumber *bookmarkId = [self.bookmarkIds objectAtIndex:[index intValue]];
-			[databaseS.bookmarksDb executeUpdate:@"DELETE FROM bookmarks WHERE bookmarkId = ?", bookmarkId];
+			[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
+			{
+				 [db executeUpdate:@"DELETE FROM bookmarks WHERE bookmarkId = ?", bookmarkId];
+			}];
 		}
 		
 		[self loadBookmarkIds];
@@ -501,11 +512,18 @@
 	}
 	
     // Set up the cell...
-	FMResultSet *result = [databaseS.bookmarksDb executeQuery:@"SELECT * FROM bookmarks WHERE bookmarkId = ?", [self.bookmarkIds objectAtIndexSafe:indexPath.row]];
-	Song *aSong = [Song songFromDbResult:result];
-	[result close];
-	//Song *aSong = [Song songFromDbRow:indexPath.row inTable:@"bookmarks" inDatabase:databaseS.bookmarksDb];
-	
+	__block Song *aSong;
+	__block NSString *name = nil;
+	__block int position = 0;
+	[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
+	{
+		FMResultSet *result = [db executeQuery:@"SELECT * FROM bookmarks WHERE bookmarkId = ?", [self.bookmarkIds objectAtIndexSafe:indexPath.row]];
+		aSong = [Song songFromDbResult:result];
+		name = [result stringForColumn:@"name"];
+		position = [result intForColumn:@"position"];
+		[result close];
+	}];
+		
 	cell.coverArtView.coverArtId = aSong.coverArtId;
 	
 	cell.backgroundView = [[UIView alloc] init];
@@ -514,19 +532,6 @@
 	else
 		cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
 	
-	NSString *name = nil;
-	int position = 0;
-	result = [databaseS.bookmarksDb executeQuery:@"SELECT * FROM bookmarks WHERE bookmarkId = ?", [self.bookmarkIds objectAtIndexSafe:indexPath.row]];
-	if ([result next])
-	{
-		name = [result stringForColumn:@"name"];
-		position = [result intForColumn:@"position"];
-	}
-	[result close];
-	
-	
-	//NSString *name = [databaseS.bookmarksDb stringForQuery:@"SELECT name FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
-	//int position = [databaseS.bookmarksDb intForQuery:@"SELECT position FROM bookmarks WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
 	[cell.bookmarkNameLabel setText:[NSString stringWithFormat:@"%@ - %@", name, [NSString formatTime:(float)position]]];
 	
 	[cell.songNameLabel setText:aSong.title];
@@ -551,57 +556,48 @@
 	[databaseS resetCurrentPlaylistDb];
 	playlistS.isShuffle = NO;
 	
-	FMResultSet *result = [databaseS.bookmarksDb executeQuery:@"SELECT * FROM bookmarks WHERE bookmarkId = ?", [self.bookmarkIds objectAtIndexSafe:indexPath.row]];
-	NSUInteger bookmarkId = 0;
-	NSUInteger playlistIndex = 0;
-	NSUInteger offsetSeconds = 0;
-	NSUInteger offsetBytes = 0;
-	if ([result next])
+	__block NSUInteger bookmarkId = 0;
+	__block NSUInteger playlistIndex = 0;
+	__block NSUInteger offsetSeconds = 0;
+	__block NSUInteger offsetBytes = 0;
+	__block Song *aSong;
+	
+	[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
 	{
+		FMResultSet *result = [db executeQuery:@"SELECT * FROM bookmarks WHERE bookmarkId = ?", [self.bookmarkIds objectAtIndexSafe:indexPath.row]];
+		aSong = [Song songFromDbResult:result];
 		bookmarkId = [result intForColumn:@"bookmarkId"];
 		playlistIndex = [result intForColumn:@"playlistIndex"];
 		offsetSeconds = [result intForColumn:@"position"];
 		offsetBytes = [result intForColumn:@"bytes"];
-	}
-	[result close];
-	
-	playlistS.currentIndex = playlistIndex;
-	
-	result = [databaseS.bookmarksDb executeQuery:@"SELECT * FROM bookmarks WHERE bookmarkId = ?", [self.bookmarkIds objectAtIndexSafe:indexPath.row]];
-	Song *aSong = [Song songFromDbResult:result];
-	[result close];
-	//Song *aSong = [Song songFromDbRow:indexPath.row inTable:@"bookmarks" inDatabase:databaseS.bookmarksDb];
+		[result close];
+		
+		result = [db executeQuery:@"SELECT * FROM bookmarks WHERE bookmarkId = ?", [self.bookmarkIds objectAtIndexSafe:indexPath.row]];
+		;
+		[result close];
+	}];
 		
 	// See if there's a playlist table for this bookmark
-	if ([databaseS.bookmarksDb tableExists:[NSString stringWithFormat:@"bookmark%i", bookmarkId]])
-	{
-		/*NSString *tableName = nil;
-		if (settingsS.isJukeboxEnabled)
-		{
-			tableName = @"jukeboxCurrentPlaylist";
-			if (playlistS.isShuffle) 
-				tableName = @"jukeboxShufflePlaylist";
-		}
-		else 
-		{
-			tableName = @"currentPlaylist";
-			if (playlistS.isShuffle) 
-				tableName = @"shufflePlaylist";
-		}*/
-		NSString *tableName = @"currentPlaylist";
-		
+	if ([databaseS.bookmarksDbQueue tableExists:[NSString stringWithFormat:@"bookmark%i", bookmarkId]])
+	{		
 		// Save the playlist
 		NSString *dbName = viewObjectsS.isOfflineMode ? @"%@/offlineCurrentPlaylist.db" : @"%@/%@currentPlaylist.db";
-		[databaseS.bookmarksDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:dbName, settingsS.databasePath, [[settingsS urlString] md5]], @"currentPlaylistDb"];
-				
-		[databaseS.bookmarksDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylistDb.%@ SELECT * FROM bookmark%i", tableName, bookmarkId]]; 
 		
-		[databaseS.bookmarksDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
+		[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
+		{
+			[db executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:dbName, settingsS.databasePath, [[settingsS urlString] md5]], @"currentPlaylistDb"];
+			
+			[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylistDb.currentPlaylist SELECT * FROM bookmark%i", bookmarkId]]; 
+			
+			[db executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
+		}];
 	}
 	else 
 	{
 		[aSong addToCurrentPlaylist];
 	}
+	
+	playlistS.currentIndex = playlistIndex;
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 		

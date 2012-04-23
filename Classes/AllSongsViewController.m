@@ -37,6 +37,7 @@
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
 #import "UIViewController+PushViewControllerCustom.h"
+#import "FMDatabaseQueueAdditions.h"
 
 @interface AllSongsViewController (Private)
 - (void)hideLoadingScreen;
@@ -496,7 +497,10 @@
 		isSearching = NO;
 		letUserSelectRow = NO;
 		self.tableView.scrollEnabled = NO;
-		[databaseS.allSongsDb executeUpdate:@"DROP TABLE allSongsSearch"];
+		[databaseS.allSongsDbQueue inDatabase:^(FMDatabase *db)
+		{
+			 [db executeUpdate:@"DROP TABLE allSongsSearch"];
+		}];
 	}
 	
 	[self.tableView reloadData];

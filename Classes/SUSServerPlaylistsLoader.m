@@ -8,6 +8,7 @@
 
 #import "SUSServerPlaylistsLoader.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabaseQueueAdditions.h"
 #import "DatabaseSingleton.h"
 #import "TBXML.h"
 #import "SUSServerPlaylist.h"
@@ -23,9 +24,9 @@
 }
 
 
-- (FMDatabase *)db
+- (FMDatabaseQueue *)dbQueue
 {
-    return databaseS.localPlaylistsDb;
+    return databaseS.localPlaylistsDbQueue;
 }
 
 - (SUSLoaderType)type

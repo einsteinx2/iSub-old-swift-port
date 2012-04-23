@@ -10,6 +10,7 @@
 #import "TBXML.h"
 #import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabaseQueueAdditions.h"
 
 #import "NSString+rfcEncode.h"
 #import "NSNotificationCenter+MainThread.h"
@@ -30,9 +31,9 @@
 	self.delegate = nil;
 }
 
-- (FMDatabase *)db
+- (FMDatabaseQueue *)dbQueue
 {
-    return databaseS.lyricsDb;
+    return databaseS.lyricsDbQueue;
 }
 
 - (SUSLoaderType)type
@@ -63,10 +64,12 @@
 
 - (void)insertLyricsIntoDb
 {
-    [self.db executeUpdate:@"INSERT INTO lyrics (artist, title, lyrics) VALUES (?, ?, ?)", self.artist, self.title, self.loadedLyrics];
-    if ([self.db hadError]) { 
-        DLog(@"Err inserting lyrics %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]); 
-    }
+	[self.dbQueue inDatabase:^(FMDatabase *db)
+	{
+		[db executeUpdate:@"INSERT INTO lyrics (artist, title, lyrics) VALUES (?, ?, ?)", self.artist, self.title, self.loadedLyrics];
+		if ([db hadError]) 
+			DLog(@"Err inserting lyrics %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+	}];
 }
 
 #pragma mark - Connection Delegate

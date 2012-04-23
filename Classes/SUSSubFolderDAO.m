@@ -9,7 +9,7 @@
 #import "SUSSubFolderDAO.h"
 #import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
-#import "FMResultSet.h"
+#import "FMDatabaseQueueAdditions.h"
 #import "SUSSubFolderLoader.h"
 #import "NSString+md5.h"
 #import "Album.h"
@@ -87,69 +87,68 @@
 	//[super dealloc];
 }
 
-- (FMDatabase *)db
+- (FMDatabaseQueue *)dbQueue
 {
-    return [databaseS albumListCacheDb]; 
+	return databaseS.albumListCacheDbQueue;
 }
 
 #pragma mark - Private DB Methods
 
 - (NSUInteger)findFirstAlbumRow
 {
-    return [self.db intForQuery:@"SELECT rowid FROM albumsCache WHERE folderId = ? LIMIT 1", [self.myId md5]];
+    return [self.dbQueue intForQuery:@"SELECT rowid FROM albumsCache WHERE folderId = ? LIMIT 1", [self.myId md5]];
 }
 
 - (NSUInteger)findFirstSongRow
 {
-    return [self.db intForQuery:@"SELECT rowid FROM songsCache WHERE folderId = ? LIMIT 1", [self.myId md5]];
+    return [self.dbQueue intForQuery:@"SELECT rowid FROM songsCache WHERE folderId = ? LIMIT 1", [self.myId md5]];
 }
 
 - (NSUInteger)findAlbumsCount
 {
-    return [self.db intForQuery:@"SELECT count FROM albumsCacheCount WHERE folderId = ?", [self.myId md5]];
+    return [self.dbQueue intForQuery:@"SELECT count FROM albumsCacheCount WHERE folderId = ?", [self.myId md5]];
 }
 
 - (NSUInteger)findSongsCount
 {
-    return [self.db intForQuery:@"SELECT count FROM songsCacheCount WHERE folderId = ?", [self.myId md5]];
+    return [self.dbQueue intForQuery:@"SELECT count FROM songsCacheCount WHERE folderId = ?", [self.myId md5]];
 }
 
 - (NSUInteger)findFolderLength
 {
-    return [self.db intForQuery:@"SELECT length FROM folderLength WHERE folderId = ?", [self.myId md5]];
+    return [self.dbQueue intForQuery:@"SELECT length FROM folderLength WHERE folderId = ?", [self.myId md5]];
 }
 
 - (Album *)findAlbumForDbRow:(NSUInteger)row
 {
-    Album *anAlbum = [[Album alloc] init];
-	FMResultSet *result = [self.db executeQuery:[NSString stringWithFormat:@"SELECT * FROM albumsCache WHERE ROWID = %i", row]];
-	[result next];
-	if ([self.db hadError]) 
+    __block Album *anAlbum = nil;
+	
+	[self.dbQueue inDatabase:^(FMDatabase *db)
 	{
-		DLog(@"Err %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
-	}
-	else
-	{
-		if ([result stringForColumn:@"title"] != nil)
-			anAlbum.title = [NSString stringWithString:[result stringForColumn:@"title"]];
-		if ([result stringForColumn:@"albumId"] != nil)
-			anAlbum.albumId = [NSString stringWithString:[result stringForColumn:@"albumId"]];
-		if ([result stringForColumn:@"coverArtId"] != nil)
-			anAlbum.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
-		if ([result stringForColumn:@"artistName"] != nil)
-			anAlbum.artistName = [NSString stringWithString:[result stringForColumn:@"artistName"]];
-		if ([result stringForColumn:@"artistId"] != nil)
-			anAlbum.artistId = [NSString stringWithString:[result stringForColumn:@"artistId"]];
-	}
-	[result close];
+		FMResultSet *result = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM albumsCache WHERE ROWID = %i", row]];
+		[result next];
+		if ([db hadError]) 
+		{
+			DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+		}
+		else
+		{
+			anAlbum = [[Album alloc] init];
+			anAlbum.title = [result stringForColumn:@"title"];
+			anAlbum.albumId = [result stringForColumn:@"albumId"];
+			anAlbum.coverArtId = [result stringForColumn:@"coverArtId"];
+			anAlbum.artistName = [result stringForColumn:@"artistName"];
+			anAlbum.artistId = [result stringForColumn:@"artistId"];
+		}
+		[result close];
+	}];
 	
 	return anAlbum;
-
 }
 
 - (Song *)findSongForDbRow:(NSUInteger)row
 { 
-	return [Song songFromDbRow:row-1 inTable:@"songsCache" inDatabase:self.db];
+	return [Song songFromDbRow:row-1 inTable:@"songsCache" inDatabaseQueue:self.dbQueue];
 }
 
 - (void)playSongAtDbRow:(NSUInteger)row
@@ -234,13 +233,17 @@
 	// Create the section index
 	if (albumsCount > 10)
 	{
-		[self.db executeUpdate:@"DROP TABLE IF EXISTS albumIndex"];
-		[self.db executeUpdate:@"CREATE TEMPORARY TABLE albumIndex (title TEXT)"];
-		
-		[self.db executeUpdate:@"INSERT INTO albumIndex SELECT title FROM albumsCache WHERE rowid >= ? LIMIT ?", [NSNumber numberWithInt:albumStartRow], [NSNumber numberWithInt:albumsCount]];
-		NSArray *sectionInfo = [databaseS sectionInfoFromTable:@"albumIndex" inDatabase:self.db withColumn:@"title"];
-		
-		[self.db executeUpdate:@"DROP TABLE IF EXISTS albumIndex"];
+		__block NSArray *sectionInfo;
+		[self.dbQueue inDatabase:^(FMDatabase *db)
+		{
+			[db executeUpdate:@"DROP TABLE IF EXISTS albumIndex"];
+			[db executeUpdate:@"CREATE TEMPORARY TABLE albumIndex (title TEXT)"];
+			
+			[db executeUpdate:@"INSERT INTO albumIndex SELECT title FROM albumsCache WHERE rowid >= ? LIMIT ?", [NSNumber numberWithInt:albumStartRow], [NSNumber numberWithInt:albumsCount]];
+			
+			sectionInfo = [databaseS sectionInfoFromTable:@"albumIndex" inDatabase:db withColumn:@"title"];
+			[db executeUpdate:@"DROP TABLE IF EXISTS albumIndex"];
+		}];
 		
 		return [sectionInfo count] < 5 ? nil : sectionInfo;
 	}

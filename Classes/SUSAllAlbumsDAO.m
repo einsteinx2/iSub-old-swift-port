@@ -10,10 +10,12 @@
 #import "Index.h"
 #import "Album.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabaseQueueAdditions.h"
 #import "DatabaseSingleton.h"
 #import "SUSAllSongsLoader.h"
 
 @implementation SUSAllAlbumsDAO
+@synthesize index;
 
 - (void)setup
 {
@@ -30,9 +32,9 @@
     return self;
 }
 
-- (FMDatabase *)db
+- (FMDatabaseQueue *)dbQueue
 {
-    return databaseS.allAlbumsDb; 
+    return databaseS.allAlbumsDbQueue; 
 }
 
 #pragma mark - Private Methods
@@ -41,9 +43,9 @@
 {
 	NSUInteger value = 0;
 	
-	if ([self.db tableExists:@"allAlbumsCount"] && [self.db intForQuery:@"SELECT COUNT(*) FROM allAlbumsCount"] > 0)
+	if ([self.dbQueue tableExists:@"allAlbumsCount"] && [self.dbQueue intForQuery:@"SELECT COUNT(*) FROM allAlbumsCount"] > 0)
 	{
-		value = [self.db intForQuery:@"SELECT count FROM allAlbumsCount LIMIT 1"];
+		value = [self.dbQueue intForQuery:@"SELECT count FROM allAlbumsCount LIMIT 1"];
 	}
 	
 	return value;
@@ -51,91 +53,99 @@
 
 - (NSUInteger)allAlbumsSearchCount
 {
-	[self.db executeUpdate:@"CREATE TEMPORARY TABLE IF NOT EXISTS allAlbumsNameSearch (rowIdInAllAlbums INTEGER)"];
-	NSUInteger value = [self.db intForQuery:@"SELECT count(*) FROM allAlbumsNameSearch"];
-	
-	DLog(@"allAlbumsNameSearch count: %i   value: %i", [self.db intForQuery:@"SELECT count(*) FROM allAlbumsNameSearch"], value);
+	__block NSUInteger value;
+	[self.dbQueue inDatabase:^(FMDatabase *db)
+	{
+		[db executeUpdate:@"CREATE TEMPORARY TABLE IF NOT EXISTS allAlbumsNameSearch (rowIdInAllAlbums INTEGER)"];
+		NSUInteger value = [db intForQuery:@"SELECT count(*) FROM allAlbumsNameSearch"];
+		
+		DLog(@"allAlbumsNameSearch count: %i   value: %i", [db intForQuery:@"SELECT count(*) FROM allAlbumsNameSearch"], value);
+	}];
 	return value;
 }
 
 - (NSArray *)allAlbumsIndex
 {
-	NSMutableArray *indexItems = [NSMutableArray arrayWithCapacity:0];
-	
-	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allAlbumsIndexCache"];
-	while ([result next])
+	__block NSMutableArray *indexItems = [NSMutableArray arrayWithCapacity:0];
+	[self.dbQueue inDatabase:^(FMDatabase *db)
 	{
-		Index *item = [[Index alloc] init];
-		item.name = [result stringForColumn:@"name"];
-		item.position = [result intForColumn:@"position"];
-		item.count = [result intForColumn:@"count"];
-		[indexItems addObject:item];
-	}
-	[result close];
-	
+		FMResultSet *result = [db executeQuery:@"SELECT * FROM allAlbumsIndexCache"];
+		while ([result next])
+		{
+			Index *item = [[Index alloc] init];
+			item.name = [result stringForColumn:@"name"];
+			item.position = [result intForColumn:@"position"];
+			item.count = [result intForColumn:@"count"];
+			[indexItems addObject:item];
+		}
+		[result close];
+	}];
 	return [NSArray arrayWithArray:indexItems];
 }
 
 - (Album *)allAlbumsAlbumForPosition:(NSUInteger)position
 {
-	Album *anAlbum = [[Album alloc] init];
-	FMResultSet *result = [self.db executeQuery:@"SELECT * FROM allAlbums WHERE ROWID = ?", [NSNumber numberWithInt:position]];
-	while ([result next])
-	{
-		if ([result stringForColumn:@"title"] != nil)
-			anAlbum.title = [NSString stringWithString:[result stringForColumn:@"title"]];
-		if ([result stringForColumn:@"albumId"] != nil)
-			anAlbum.albumId = [NSString stringWithString:[result stringForColumn:@"albumId"]];
-		if ([result stringForColumn:@"coverArtId"] != nil)
-			anAlbum.coverArtId = [NSString stringWithString:[result stringForColumn:@"coverArtId"]];
-		if ([result stringForColumn:@"artistName"] != nil)
-			anAlbum.artistName = [NSString stringWithString:[result stringForColumn:@"artistName"]];
-		if ([result stringForColumn:@"artistId"] != nil)
-			anAlbum.artistId = [NSString stringWithString:[result stringForColumn:@"artistId"]];
-	}
-	[result close];
-	
+	__block Album *anAlbum = nil;
+	[self.dbQueue inDatabase:^(FMDatabase *db)
+	{		
+		FMResultSet *result = [db executeQuery:@"SELECT * FROM allAlbums WHERE ROWID = ?", [NSNumber numberWithInt:position]];
+		if ([result next])
+		{
+			anAlbum = [[Album alloc] init];
+			anAlbum.title = [result stringForColumn:@"title"];
+			anAlbum.albumId = [result stringForColumn:@"albumId"];
+			anAlbum.coverArtId = [result stringForColumn:@"coverArtId"];
+			anAlbum.artistName = [result stringForColumn:@"artistName"];
+			anAlbum.artistId = [result stringForColumn:@"artistId"];
+		}
+		[result close];
+	}];
+		
 	return anAlbum;
 }
 
 - (Album *)allAlbumsAlbumForPositionInSearch:(NSUInteger)position
 {
-	NSUInteger rowId = [self.db intForQuery:@"SELECT rowIdInAllAlbums FROM allAlbumsNameSearch WHERE ROWID = ?", [NSNumber numberWithInt:position]];
+	NSUInteger rowId = [self.dbQueue intForQuery:@"SELECT rowIdInAllAlbums FROM allAlbumsNameSearch WHERE ROWID = ?", [NSNumber numberWithInt:position]];
 	return [self allAlbumsAlbumForPosition:rowId];
 }
 
 - (void)allAlbumsClearSearch
 {
-	[self.db executeUpdate:@"DELETE FROM allAlbumsNameSearch"];
+	[self.dbQueue inDatabase:^(FMDatabase *db)
+	{
+		[db executeUpdate:@"DELETE FROM allAlbumsNameSearch"];
+	}];
 }
 
 - (void)allAlbumsPerformSearch:(NSString *)name
 {
-	// Inialize the search DB
-	[self.db executeUpdate:@"DROP TABLE IF EXISTS allAlbumsNameSearch"];
-	[self.db executeUpdate:@"CREATE TEMPORARY TABLE allAlbumsNameSearch (rowIdInAllAlbums INTEGER)"];
-	
-	// Perform the search
-	NSString *query = @"INSERT INTO allAlbumsNameSearch SELECT ROWID FROM allAlbums WHERE title LIKE ? LIMIT 100";
-	[self.db executeUpdate:query, [NSString stringWithFormat:@"%%%@%%", name]];
-	if ([self.db hadError]) {
-		DLog(@"Err %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
-	}
-	DLog(@"allAlbumsNameSearch count: %i", [self.db intForQuery:@"SELECT count(*) FROM allAlbumsNameSearch"]);
+	[self.dbQueue inDatabase:^(FMDatabase *db)
+	{
+		// Inialize the search DB
+		[db executeUpdate:@"DROP TABLE IF EXISTS allAlbumsNameSearch"];
+		[db executeUpdate:@"CREATE TEMPORARY TABLE allAlbumsNameSearch (rowIdInAllAlbums INTEGER)"];
+		
+		// Perform the search
+		NSString *query = @"INSERT INTO allAlbumsNameSearch SELECT ROWID FROM allAlbums WHERE title LIKE ? LIMIT 100";
+		[db executeUpdate:query, [NSString stringWithFormat:@"%%%@%%", name]];
+		if ([db hadError])
+			DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+		DLog(@"allAlbumsNameSearch count: %i", [db intForQuery:@"SELECT count(*) FROM allAlbumsNameSearch"]);
+	}];
 }
 
 - (BOOL)allAlbumsIsDataLoaded
 {
 	BOOL isLoaded = NO;
 
-	if ([self.db intForQuery:@"SELECT COUNT(*) FROM allAlbumsCount"] > 0)
+	if ([self.dbQueue intForQuery:@"SELECT COUNT(*) FROM allAlbumsCount"] > 0)
 	{
 		isLoaded = YES;
 	}
 	
 	return isLoaded;
 }
-
 
 #pragma mark - Public DAO Methods
 

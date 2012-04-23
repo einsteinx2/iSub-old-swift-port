@@ -14,7 +14,6 @@
 
 @property (unsafe_unretained) NSObject<SUSLoaderDelegate> *delegate;
 @property (strong) SUSCoverArtLoader *loader;
-@property (unsafe_unretained, readonly) FMDatabase *db;
 
 @property (copy) NSString *coverArtId;
 @property BOOL isLarge;

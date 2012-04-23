@@ -8,6 +8,7 @@
 
 #import "SUSSubFolderLoader.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabaseQueueAdditions.h"
 #import "TBXML.h"
 #import "DatabaseSingleton.h"
 #import "NSMutableURLRequest+SUS.h"
@@ -27,9 +28,9 @@
 }
 
 
-- (FMDatabase *)db
+- (FMDatabaseQueue *)dbQueue
 {
-    return databaseS.albumListCacheDb;
+    return databaseS.albumListCacheDbQueue;
 }
 
 - (SUSLoaderType)type
@@ -41,75 +42,99 @@
 
 - (BOOL)resetDb
 {
-    //Initialize the arrays.
-    [self.db beginTransaction];
-    [self.db executeUpdate:@"DELETE FROM albumsCache WHERE folderId = ?", [myId md5]];
-    [self.db executeUpdate:@"DELETE FROM songsCache WHERE folderId = ?", [myId md5]];
-    [self.db executeUpdate:@"DELETE FROM albumsCacheCount WHERE folderId = ?", [myId md5]];
-    [self.db executeUpdate:@"DELETE FROM songsCacheCount WHERE folderId = ?", [myId md5]];
-    [self.db executeUpdate:@"DELETE FROM folderLength WHERE folderId = ?", [myId md5]];
-    [self.db commit];
+	__block BOOL hadError;
+	[self.dbQueue inDatabase:^(FMDatabase *db)
+	{
+		//Initialize the arrays.
+		[db beginTransaction];
+		[db executeUpdate:@"DELETE FROM albumsCache WHERE folderId = ?", [myId md5]];
+		[db executeUpdate:@"DELETE FROM songsCache WHERE folderId = ?", [myId md5]];
+		[db executeUpdate:@"DELETE FROM albumsCacheCount WHERE folderId = ?", [myId md5]];
+		[db executeUpdate:@"DELETE FROM songsCacheCount WHERE folderId = ?", [myId md5]];
+		[db executeUpdate:@"DELETE FROM folderLength WHERE folderId = ?", [myId md5]];
+		[db commit];
+		
+		hadError = [db hadError];
+		if (hadError)
+			DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+	}];
     
-    if ([self.db hadError]) {
-		DLog(@"Err %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
-	}
-	
-	return ![self.db hadError];
+	return !hadError;
 }
 
 - (BOOL)insertAlbumIntoFolderCache:(Album *)anAlbum
 {
-	[self.db executeUpdate:@"INSERT INTO albumsCache (folderId, title, albumId, coverArtId, artistName, artistId) VALUES (?, ?, ?, ?, ?, ?)", [myId md5], anAlbum.title, anAlbum.albumId, anAlbum.coverArtId, anAlbum.artistName, anAlbum.artistId];
+	__block BOOL hadError;
+	[self.dbQueue inDatabase:^(FMDatabase *db)
+	{
+		[db executeUpdate:@"INSERT INTO albumsCache (folderId, title, albumId, coverArtId, artistName, artistId) VALUES (?, ?, ?, ?, ?, ?)", [myId md5], anAlbum.title, anAlbum.albumId, anAlbum.coverArtId, anAlbum.artistName, anAlbum.artistId];
+		
+		hadError = [db hadError];
+		if (hadError)
+			DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+	}];
 	
-	if ([self.db hadError]) {
-		DLog(@"Err %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
-	}
-	
-	return ![self.db hadError];
+	return !hadError;
 }
 
 - (BOOL)insertSongIntoFolderCache:(Song *)aSong
 {
-	[self.db executeUpdate:[NSString stringWithFormat:@"INSERT INTO songsCache (folderId, %@) VALUES (?, %@)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [myId md5], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size, aSong.parentId];
+	__block BOOL hadError;
+	[self.dbQueue inDatabase:^(FMDatabase *db)
+	{
+		[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO songsCache (folderId, %@) VALUES (?, %@)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [myId md5], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size, aSong.parentId];
+		
+		hadError = [db hadError];
+		if (hadError)
+			DLog(@"Err inserting song %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+	}];
 	
-	if ([self.db hadError]) {
-		DLog(@"Err inserting song %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
-	}
-	
-	return ![self.db hadError];
+	return !hadError;
 }
 
 - (BOOL)insertAlbumsCount
 {
-    [self.db executeUpdate:@"INSERT INTO albumsCacheCount (folderId, count) VALUES (?, ?)", [myId md5], [NSNumber numberWithInt:albumsCount]];
+	__block BOOL hadError;
+	[self.dbQueue inDatabase:^(FMDatabase *db)
+	{
+		[db executeUpdate:@"INSERT INTO albumsCacheCount (folderId, count) VALUES (?, ?)", [myId md5], [NSNumber numberWithInt:albumsCount]];
+		
+		hadError = [db hadError];
+		if ([db hadError])
+			DLog(@"Err inserting album count %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+	}];
     
-    if ([self.db hadError]) {
-		DLog(@"Err inserting album count %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
-	}
-	
-	return ![self.db hadError];
+	return !hadError;
 }
 
 - (BOOL)insertSongsCount
 {
-    [self.db executeUpdate:@"INSERT INTO songsCacheCount (folderId, count) VALUES (?, ?)", [myId md5], [NSNumber numberWithInt:songsCount]];
-    
-    if ([self.db hadError]) {
-		DLog(@"Err inserting song count %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
-	}
-	
-	return ![self.db hadError];
+	__block BOOL hadError;
+	[self.dbQueue inDatabase:^(FMDatabase *db)
+	{
+		[db executeUpdate:@"INSERT INTO songsCacheCount (folderId, count) VALUES (?, ?)", [myId md5], [NSNumber numberWithInt:songsCount]];
+		
+		hadError = [db hadError];
+		if (hadError)
+			DLog(@"Err inserting song count %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+	}];
+    	
+	return !hadError;
 }
 
 - (BOOL)insertFolderLength
 {
-    [self.db executeUpdate:@"INSERT INTO folderLength (folderId, length) VALUES (?, ?)", [myId md5], [NSNumber numberWithInt:folderLength]];
-    
-    if ([self.db hadError]) {
-		DLog(@"Err inserting folder length %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
-	}
-	
-	return ![self.db hadError];
+	__block BOOL hadError;
+	[self.dbQueue inDatabase:^(FMDatabase *db)
+	{
+		[db executeUpdate:@"INSERT INTO folderLength (folderId, length) VALUES (?, ?)", [myId md5], [NSNumber numberWithInt:folderLength]];
+		
+		hadError = [db hadError];
+		if ([db hadError])
+			DLog(@"Err inserting folder length %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+	}];
+   
+	return !hadError;
 }
 
 #pragma mark - Loader Methods

@@ -8,6 +8,7 @@
 
 #import "SUSCoverArtDAO.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabaseQueueAdditions.h"
 
 #import "DatabaseSingleton.h"
 #import "NSString+md5.h"
@@ -43,19 +44,19 @@
 
 #pragma mark - Private DB Methods
 
-- (FMDatabase *)db
+- (FMDatabaseQueue *)dbQueue
 {
 	if (isLarge)
-		return IS_IPAD() ? databaseS.coverArtCacheDb540 : databaseS.coverArtCacheDb320;
+		return IS_IPAD() ? databaseS.coverArtCacheDb540Queue : databaseS.coverArtCacheDb320Queue;
 	else
-		return databaseS.coverArtCacheDb60;
+		return databaseS.coverArtCacheDb60Queue;
 }
 
 #pragma mark - Public DAO methods
 
 - (UIImage *)coverArtImage
 {
-    NSData *imageData = [self.db dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [coverArtId md5]];
+    NSData *imageData = [self.dbQueue dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [coverArtId md5]];
     return imageData ? [UIImage imageWithData:imageData] : self.defaultCoverArtImage;
 }
 
@@ -72,7 +73,7 @@
 	if (!coverArtId) 
 		return NO;
 	
-    return [self.db stringForQuery:@"SELECT id FROM coverArtCache WHERE id = ?", [coverArtId md5]] ? YES : NO;
+    return [self.dbQueue stringForQuery:@"SELECT id FROM coverArtCache WHERE id = ?", [coverArtId md5]] ? YES : NO;
 }
 
 - (void)downloadArtIfNotExists

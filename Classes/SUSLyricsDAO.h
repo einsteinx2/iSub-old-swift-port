@@ -12,8 +12,6 @@
 @class SUSLyricsLoader, FMDatabase;
 @interface SUSLyricsDAO : NSObject <SUSLoaderDelegate, SUSLoaderManager>
 
-@property (unsafe_unretained, readonly) FMDatabase *db;
-
 @property (unsafe_unretained) NSObject <SUSLoaderDelegate> *delegate;
 @property (strong) SUSLyricsLoader *loader;
 

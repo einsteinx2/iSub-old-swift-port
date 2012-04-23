@@ -10,6 +10,7 @@
 #import "ViewObjectsSingleton.h"
 #import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabaseQueueAdditions.h"
 
 #import "CellOverlay.h"
 #import "Song.h"
@@ -102,14 +103,16 @@
 	}
 	[query appendFormat:@"ORDER BY seg%i COLLATE NOCASE", segment+1, segment+1];
 	
-	FMResultSet *result = [databaseS.songCacheDb executeQuery:query withArgumentsInArray:newSegments];
-	
-	while ([result next])
+	[databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)
 	{
-		if ([result stringForColumnIndex:0] != nil)
-			[Song removeSongFromCacheDbByMD5:[NSString stringWithString:[result stringForColumnIndex:0]]];
-	}
-	[result close];
+		FMResultSet *result = [db executeQuery:query withArgumentsInArray:newSegments];
+		while ([result next])
+		{
+			if ([result stringForColumnIndex:0] != nil)
+				[Song removeSongFromCacheDbByMD5:[NSString stringWithString:[result stringForColumnIndex:0]]];
+		}
+		[result close];
+	}];
 	
 	[cacheS findCacheSize];
 		
@@ -144,14 +147,16 @@
 	}
 	[query appendFormat:@"ORDER BY seg%i COLLATE NOCASE", segment+1, segment+1];
 	
-	FMResultSet *result = [databaseS.songCacheDb executeQuery:query withArgumentsInArray:newSegments];
-	
-	while ([result next])
+	[databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)
 	{
-		if ([result stringForColumnIndex:0] != nil)
-			[[Song songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCurrentPlaylist];
-	}
-	[result close];
+		FMResultSet *result = [db executeQuery:query withArgumentsInArray:newSegments];
+		while ([result next])
+		{
+			if ([result stringForColumnIndex:0] != nil)
+				[[Song songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCurrentPlaylist];
+		}
+		[result close];
+	}];
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 	

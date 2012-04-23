@@ -9,11 +9,6 @@
 @class FMDatabase, Album;
 
 @interface SUSAllAlbumsDAO : NSObject
-{	
-	NSArray *index;
-}
-
-@property (unsafe_unretained, readonly) FMDatabase *db;
 
 @property (readonly) NSUInteger count;
 @property (readonly) NSUInteger searchCount;

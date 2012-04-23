@@ -19,8 +19,6 @@
     NSUInteger songsCount;
 }
 
-@property (unsafe_unretained, readonly) FMDatabase *db;
-
 @property (unsafe_unretained) id<SUSLoaderDelegate> delegate;
 @property (strong) SUSSubFolderLoader *loader;
 
