@@ -6,7 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#define musicS [MusicSingleton sharedInstance]
+#define musicS ((MusicSingleton *)[MusicSingleton sharedInstance])
 
 #import "SUSLoaderDelegate.h"
 
@@ -19,7 +19,7 @@
 
 @property (readonly) BOOL showPlayerIcon;
 
-+ (MusicSingleton*)sharedInstance;
++ (id)sharedInstance;
 
 - (void)startSongAtOffsetInBytes:(unsigned long long)bytes andSeconds:(double)seconds;
 - (void)startSong;

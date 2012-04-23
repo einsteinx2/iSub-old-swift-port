@@ -8,7 +8,7 @@
 
 #import "BassEffectDAO.h"
 
-#define settingsS [SavedSettings sharedInstance]
+#define settingsS ((SavedSettings *)[SavedSettings sharedInstance])
 
 typedef enum 
 {
@@ -136,6 +136,6 @@ typedef enum
 - (void)loadState;
 - (void)saveState;
 
-+ (SavedSettings *)sharedInstance;
++ (id)sharedInstance;
 
 @end

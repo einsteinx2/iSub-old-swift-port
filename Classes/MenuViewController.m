@@ -33,7 +33,7 @@
 #define kCellImage @"CellImage"
 
 @implementation MenuViewController
-@synthesize tableView, cellContents, isFirstLoad, lastSelectedRow, playerController;
+@synthesize tableView, cellContents, isFirstLoad, lastSelectedRow, playerController, playerNavController;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -60,18 +60,13 @@
 		[self.view addSubview:background];
 		
 		playerController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-		UINavigationController *playerNav = [[UINavigationController alloc] initWithRootViewController:playerController];
-		playerNav.view.frame = CGRectMake(0, 0, 320, 440);
-		playerNav.view.bottom = self.view.bottom;
-		playerNav.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-		playerNav.navigationBar.tintColor = [UIColor blackColor];
-		//[playerContainer addSubview:playerNav.view];
+		playerNavController = [[UINavigationController alloc] initWithRootViewController:playerController];
+		playerNavController.view.frame = CGRectMake(0, 0, 320, 440);
+		playerNavController.view.bottom = self.view.bottom;
+		playerNavController.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+		playerNavController.navigationBar.tintColor = [UIColor blackColor];		
+		[self.view addSubview:playerNavController.view];
 		
-		[self.view addSubview:playerNav.view];
-		//[playerNav.view addTopShadowWithWidth:35. alpha:1.];
-		//[playerNav.view addTopShadow];
-		//[playerContainer release];
-				
 		// Create the menu
 		[self loadCellContents];
 		tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 565.) style:UITableViewStylePlain];
@@ -81,7 +76,6 @@
 		tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
 		tableView.backgroundColor = [UIColor clearColor];
 		tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-		
 		
 		// Create the header and footer
 		UIView *headerView = [self createHeaderView:NO];

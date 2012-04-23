@@ -304,14 +304,14 @@
 
 - (NSString *)localPath
 {
-	NSString *fileName = fileName = [[path md5] stringByAppendingPathExtension:self.localSuffix];
-	return [settingsS.songCachePath stringByAppendingPathComponent:fileName];
+	NSString *fileName = self.localSuffix ? [[path md5] stringByAppendingPathExtension:self.localSuffix] : nil;
+	return fileName ? [settingsS.songCachePath stringByAppendingPathComponent:fileName] : nil;
 }
 
 - (NSString *)localTempPath
 {
-	NSString *fileName = fileName = [[path md5] stringByAppendingPathExtension:self.localSuffix];
-	return [settingsS.tempCachePath stringByAppendingPathComponent:fileName];
+	NSString *fileName = self.localSuffix ? [[path md5] stringByAppendingPathExtension:self.localSuffix] : nil;
+	return fileName ? [settingsS.tempCachePath stringByAppendingPathComponent:fileName] : nil;
 }
 
 - (NSString *)currentPath

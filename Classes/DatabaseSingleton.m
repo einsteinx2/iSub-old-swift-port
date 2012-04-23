@@ -30,8 +30,6 @@
 #import "JukeboxSingleton.h"
 #import "AudioEngine.h"
 
-static DatabaseSingleton *sharedInstance = nil;
-
 @implementation DatabaseSingleton
 
 @synthesize databaseFolderPath, queueAll;
@@ -800,38 +798,10 @@ static DatabaseSingleton *sharedInstance = nil;
 
 #pragma mark - Singleton methods
 
-+ (DatabaseSingleton*)sharedInstance
+- (void)setup 
 {
-    @synchronized(self)
-    {
-        if (sharedInstance == nil)
-			sharedInstance = [[self alloc] init];
-    }
-    return sharedInstance;
-}
-
-+ (id)allocWithZone:(NSZone *)zone 
-{
-    @synchronized(self) 
-	{
-        if (sharedInstance == nil) 
-		{
-            sharedInstance = [super allocWithZone:zone];
-            return sharedInstance;  // assignment and return on first allocation
-        }
-    }
-    return nil; // on subsequent allocation attempts return nil
-}
-	
--(id)init 
-{
-	self = [super init];
-	sharedInstance = self;
-	
-	//initialize here
-	
 	queueAll = [[SUSQueueAllLoader alloc] init];
-		
+	
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	self.databaseFolderPath = [[paths objectAtIndexSafe: 0] stringByAppendingPathComponent:@"database"];
 	
@@ -848,30 +818,17 @@ static DatabaseSingleton *sharedInstance = nil;
 											 selector:@selector(didReceiveMemoryWarning) 
 												 name:UIApplicationDidReceiveMemoryWarningNotification 
 											   object:nil];
-		
-	return self;
 }
-	
 
-- (id)copyWithZone:(NSZone *)zone
++ (id)sharedInstance
 {
-    return self;
+    static DatabaseSingleton *sharedInstance = nil;
+    static dispatch_once_t once = 0;
+    dispatch_once(&once, ^{
+		sharedInstance = [[self alloc] init];
+		[sharedInstance setup];
+	});
+    return sharedInstance;
 }
-
-/*- (id)retain {
-    return self;
-}
-
-- (unsigned)retainCount {
-    return UINT_MAX;  // denotes an object that cannot be released
-}
-
-- (oneway void)release {
-    //do nothing
-}
-
-- (id)autorelease {
-    return self;
-}*/
 
 @end

@@ -6,7 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#define databaseS [DatabaseSingleton sharedInstance]
+#define databaseS ((DatabaseSingleton *)[DatabaseSingleton sharedInstance])
 
 @class FMDatabase, FMDatabaseQueue, Artist, Album, Song, SUSQueueAllLoader;
 
@@ -30,7 +30,7 @@
 
 @property (strong) SUSQueueAllLoader *queueAll;
 
-+ (DatabaseSingleton*)sharedInstance;
++ (id)sharedInstance;
 
 - (void)setupDatabases;
 - (void)closeAllDatabases;

@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#define playlistS [PlaylistSingleton sharedInstance]
+#define playlistS ((PlaylistSingleton *)[PlaylistSingleton sharedInstance])
 
 typedef enum
 {
@@ -23,7 +23,7 @@ typedef enum
 	ISMSRepeatMode repeatMode;
 }
 
-+ (PlaylistSingleton *)sharedInstance;
++ (id)sharedInstance;
 
 - (Song *)songForIndex:(NSUInteger)index;
 - (NSInteger)decrementIndex;

@@ -6,7 +6,7 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-#define cacheS [CacheSingleton sharedInstance]
+#define cacheS ((CacheSingleton *)[CacheSingleton sharedInstance])
 
 @interface CacheSingleton : NSObject
 
@@ -17,7 +17,7 @@
 @property (readonly) unsigned long long freeSpace;
 @property (readonly) NSUInteger numberOfCachedSongs;
 
-+ (CacheSingleton *)sharedInstance;
++ (id)sharedInstance;
 
 //- (void)startCacheCheckTimer;
 - (void)startCacheCheckTimerWithInterval:(NSTimeInterval)interval;

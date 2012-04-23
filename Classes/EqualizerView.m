@@ -383,7 +383,7 @@ static void destroy_versionArrays()
 // If our view is resized, we'll be asked to layout subviews.
 // This is the perfect opportunity to also update the framebuffer so that it is
 // the same size as our display area.
--(void)layoutSubviews
+- (void)layoutSubviews
 {
 	DLog(@"self.layer.frame: %@", NSStringFromCGRect(self.layer.frame));
 	//self.layer.frame = self.frame;

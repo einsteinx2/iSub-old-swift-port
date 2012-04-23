@@ -1367,8 +1367,6 @@
 
 #pragma mark - Singleton methods
 
-static SavedSettings *sharedInstance = nil;
-
 - (void)setup
 {	
 	// Disable screen sleep if necessary
@@ -1398,63 +1396,15 @@ static SavedSettings *sharedInstance = nil;
 	[self memCacheDefaults];
 }
 
-+ (SavedSettings *)sharedInstance
++ (id)sharedInstance
 {
-    @synchronized(self)
-    {
-		if (sharedInstance == nil)
-			sharedInstance = [[self alloc] init];
-    }
+    static SavedSettings *sharedInstance = nil;
+    static dispatch_once_t once = 0;
+    dispatch_once(&once, ^{
+		sharedInstance = [[self alloc] init];
+		[sharedInstance setup];
+	});
     return sharedInstance;
 }
-
-+ (id)allocWithZone:(NSZone *)zone 
-{
-    @synchronized(self) 
-	{
-        if (sharedInstance == nil) 
-		{
-            sharedInstance = [super allocWithZone:zone];
-            return sharedInstance;  // assignment and return on first allocation
-        }
-    }
-    return nil; // on subsequent allocation attempts return nil
-}
-
--(id)init 
-{
-	if ((self = [super init]))
-	{
-		sharedInstance = self;
-		[self setup];
-	}
-	
-	return self;
-}
-
-- (id)copyWithZone:(NSZone *)zone
-{
-    return self;
-}
-
-/*- (id)retain 
-{
-    return self;
-}
-
-- (unsigned)retainCount 
-{
-    return UINT_MAX;  // denotes an object that cannot be released
-}
-
-- (oneway void)release 
-{
-    //do nothing
-}
-
-- (id)autorelease 
-{
-    return self;
-}*/
 
 @end

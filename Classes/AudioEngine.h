@@ -12,7 +12,7 @@
 #import "bassmix.h"
 #import <AudioToolbox/AudioToolbox.h>
 
-#define audioEngineS [AudioEngine sharedInstance]
+#define audioEngineS ((AudioEngine *)[AudioEngine sharedInstance])
 
 #define ISMS_BASSBufferSize 800
 #define ISMS_defaultSampleRate 44100
@@ -67,7 +67,7 @@ typedef struct
 	BOOL songEnded;
 }
 
-+ (AudioEngine *)sharedInstance;
++ (id)sharedInstance;
 
 @property (retain) NSMutableArray *eqValueArray;
 @property (retain) NSMutableArray *eqHandleArray;

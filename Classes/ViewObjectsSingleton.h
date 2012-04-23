@@ -6,7 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#define viewObjectsS [ViewObjectsSingleton sharedInstance]
+#define viewObjectsS ((ViewObjectsSingleton *)[ViewObjectsSingleton sharedInstance])
 
 #import "MBProgressHUD.h"
 
@@ -64,18 +64,18 @@
 
 // Cell colors
 //
-@property (readonly) UIColor *lightRed;
-@property (readonly) UIColor *darkRed;
-@property (readonly) UIColor *lightYellow;
-@property (readonly) UIColor *darkYellow;
-@property (readonly) UIColor *lightGreen;
-@property (readonly) UIColor *darkGreen;
-@property (readonly) UIColor *lightBlue;
-@property (readonly) UIColor *darkBlue;
-@property (readonly) UIColor *lightNormal;
-@property (readonly) UIColor *darkNormal;
-@property (readonly) UIColor *windowColor;
-@property (readonly) UIColor *jukeboxColor;
+@property (strong) UIColor *lightRed;
+@property (strong) UIColor *darkRed;
+@property (strong) UIColor *lightYellow;
+@property (strong) UIColor *darkYellow;
+@property (strong) UIColor *lightGreen;
+@property (strong) UIColor *darkGreen;
+@property (strong) UIColor *lightBlue;
+@property (strong) UIColor *darkBlue;
+@property (strong) UIColor *lightNormal;
+@property (strong) UIColor *darkNormal;
+@property (strong) UIColor *windowColor;
+@property (strong) UIColor *jukeboxColor;
 
 @property (strong) UIImage *deleteButtonImage;
 @property (strong) UIImage *cacheButtonImage;
@@ -92,7 +92,7 @@
 
 @property BOOL isLoadingScreenShowing;
 
-+ (ViewObjectsSingleton*)sharedInstance;
++ (id)sharedInstance;
 
 - (void)orderMainTabBarController;
 

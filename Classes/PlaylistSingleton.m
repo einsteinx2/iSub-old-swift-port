@@ -519,8 +519,6 @@
 
 #pragma mark - Singleton methods
 
-static PlaylistSingleton *sharedInstance = nil;
-
 - (void)setup
 {
 	shuffleIndex = 0;
@@ -533,60 +531,15 @@ static PlaylistSingleton *sharedInstance = nil;
 											   object:nil];
 }
 
-+ (PlaylistSingleton *)sharedInstance
++ (id)sharedInstance
 {
-    @synchronized(self)
-    {
-        if (sharedInstance == nil)
-			sharedInstance = [[self alloc] init];
-    }
+    static PlaylistSingleton *sharedInstance = nil;
+    static dispatch_once_t once = 0;
+    dispatch_once(&once, ^{
+		sharedInstance = [[self alloc] init];
+		[sharedInstance setup];
+	});
     return sharedInstance;
 }
-
-+ (id)allocWithZone:(NSZone *)zone 
-{
-    @synchronized(self) 
-	{
-        if (sharedInstance == nil) 
-		{
-            sharedInstance = [super allocWithZone:zone];
-            return sharedInstance;  // assignment and return on first allocation
-        }
-    }
-    return nil; // on subsequent allocation attempts return nil
-}
-
--(id)init 
-{
-	if ((self = [super init]))
-	{
-		[self setup];
-		sharedInstance = self;
-	}
-	
-	return self;
-}
-
-
-- (id)copyWithZone:(NSZone *)zone
-{
-    return self;
-}
-
-/*- (id)retain {
-    return self;
-}
-
-- (unsigned)retainCount {
-    return UINT_MAX;  // denotes an object that cannot be released
-}
-
-- (oneway void)release {
-    //do nothing
-}
-
-- (id)autorelease {
-    return self;
-}*/
 
 @end

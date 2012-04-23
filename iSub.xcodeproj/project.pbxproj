@@ -466,6 +466,9 @@
 		53880A9314608DBA00C7DE62 /* SUSCoverArtLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53880A9214608DBA00C7DE62 /* SUSCoverArtLoader.m */; };
 		53880A9414608DBA00C7DE62 /* SUSCoverArtLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53880A9214608DBA00C7DE62 /* SUSCoverArtLoader.m */; };
 		53880A9514608DBA00C7DE62 /* SUSCoverArtLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53880A9214608DBA00C7DE62 /* SUSCoverArtLoader.m */; };
+		5388461A1545F2960074080E /* ISMSNetworkIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 538846191545F2940074080E /* ISMSNetworkIndicator.m */; };
+		5388461B1545F2960074080E /* ISMSNetworkIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 538846191545F2940074080E /* ISMSNetworkIndicator.m */; };
+		5388461C1545F2960074080E /* ISMSNetworkIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 538846191545F2940074080E /* ISMSNetworkIndicator.m */; };
 		5388A2F01198741E0049BA9E /* LocalPlaylistsUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5388A2EF1198741E0049BA9E /* LocalPlaylistsUITableViewCell.m */; };
 		5388A3B4119899260049BA9E /* BookmarksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5388A3B2119899260049BA9E /* BookmarksViewController.m */; };
 		5388A3B5119899260049BA9E /* BookmarksViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5388A3B3119899260049BA9E /* BookmarksViewController.xib */; };
@@ -2049,6 +2052,8 @@
 		5386FB8614062A3A0009F73F /* SavedSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedSettings.m; sourceTree = "<group>"; };
 		53880A9114608DBA00C7DE62 /* SUSCoverArtLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSCoverArtLoader.h; sourceTree = "<group>"; };
 		53880A9214608DBA00C7DE62 /* SUSCoverArtLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSCoverArtLoader.m; sourceTree = "<group>"; };
+		538846181545F2910074080E /* ISMSNetworkIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; path = ISMSNetworkIndicator.h; sourceTree = "<group>"; };
+		538846191545F2940074080E /* ISMSNetworkIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSNetworkIndicator.m; sourceTree = "<group>"; };
 		5388A2EE1198741E0049BA9E /* LocalPlaylistsUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalPlaylistsUITableViewCell.h; sourceTree = "<group>"; };
 		5388A2EF1198741E0049BA9E /* LocalPlaylistsUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalPlaylistsUITableViewCell.m; sourceTree = "<group>"; };
 		5388A3B1119899260049BA9E /* BookmarksViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BookmarksViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -3059,8 +3064,6 @@
 		53733C6D14FC4AC4001D8104 /* ISMSCacheQueueManager */ = {
 			isa = PBXGroup;
 			children = (
-				53733C6E14FC4B09001D8104 /* ISMSCacheQueueManager.h */,
-				53733C6F14FC4B09001D8104 /* ISMSCacheQueueManager.m */,
 			);
 			name = ISMSCacheQueueManager;
 			sourceTree = "<group>";
@@ -3841,6 +3844,8 @@
 				53733C5F14F8630F001D8104 /* JukeboxSingleton.m */,
 				539D6073145E0D7D0018AA90 /* ISMSUpdateChecker.h */,
 				539D6074145E0D7D0018AA90 /* ISMSUpdateChecker.m */,
+				538846181545F2910074080E /* ISMSNetworkIndicator.h */,
+				538846191545F2940074080E /* ISMSNetworkIndicator.m */,
 				535366D914CB55AC00954448 /* Audio Engine */,
 			);
 			name = General;
@@ -3940,6 +3945,8 @@
 			children = (
 				535AC24C146C8E0300E19492 /* ISMSStreamManager.h */,
 				535AC24D146C8E0300E19492 /* ISMSStreamManager.m */,
+				53733C6E14FC4B09001D8104 /* ISMSCacheQueueManager.h */,
+				53733C6F14FC4B09001D8104 /* ISMSCacheQueueManager.m */,
 				535AC251146C8E1D00E19492 /* ISMSStreamHandler.h */,
 				535AC252146C8E1D00E19492 /* ISMSStreamHandler.m */,
 				53F663CB1470CAB20020D0A3 /* ISMSStreamHandlerDelegate.h */,
@@ -5205,6 +5212,7 @@
 				53C035E61544B9D800034569 /* FMDatabaseQueue.m in Sources */,
 				53C035E91544B9D800034569 /* FMResultSet.m in Sources */,
 				53C035EE1544D3AE00034569 /* FMDatabaseQueueAdditions.m in Sources */,
+				5388461A1545F2960074080E /* ISMSNetworkIndicator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5440,6 +5448,7 @@
 				53C035E81544B9D800034569 /* FMDatabaseQueue.m in Sources */,
 				53C035EB1544B9D800034569 /* FMResultSet.m in Sources */,
 				53C035F01544D3AE00034569 /* FMDatabaseQueueAdditions.m in Sources */,
+				5388461C1545F2960074080E /* ISMSNetworkIndicator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5675,6 +5684,7 @@
 				53C035E71544B9D800034569 /* FMDatabaseQueue.m in Sources */,
 				53C035EA1544B9D800034569 /* FMResultSet.m in Sources */,
 				53C035EF1544D3AE00034569 /* FMDatabaseQueueAdditions.m in Sources */,
+				5388461B1545F2960074080E /* ISMSNetworkIndicator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

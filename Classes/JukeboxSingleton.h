@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define jukeboxS [JukeboxSingleton sharedInstance]
+#define jukeboxS ((JukeboxSingleton *)[JukeboxSingleton sharedInstance])
 
 @class BBSimpleConnectionQueue;
 @interface JukeboxSingleton : NSObject
@@ -17,7 +17,7 @@
 @property float jukeboxGain;
 @property (strong) BBSimpleConnectionQueue *connectionQueue;
 
-+ (JukeboxSingleton *)sharedInstance;
++ (id)sharedInstance;
 
 // Jukebox control methods
 - (void)jukeboxPlaySongAtPosition:(NSNumber *)position;

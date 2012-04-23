@@ -9,7 +9,7 @@
 #import "ISMSStreamHandlerDelegate.h"
 #import "SUSLoaderDelegate.h"
 
-#define streamManagerS [ISMSStreamManager sharedInstance]
+#define streamManagerS ((ISMSStreamManager *)[ISMSStreamManager sharedInstance])
 
 #define ISMSNumberOfStreamsToQueue 2
 
@@ -24,7 +24,7 @@
 
 @property (readonly) BOOL isQueueDownloading;
 
-+ (ISMSStreamManager *)sharedInstance;
++ (id)sharedInstance;
 
 - (ISMSStreamHandler *)handlerForSong:(Song *)aSong;
 - (BOOL)isSongInQueue:(Song *)aSong;

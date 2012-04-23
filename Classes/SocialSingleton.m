@@ -23,8 +23,6 @@
 #define kOAuthConsumerKey				@"nYKAEcLstFYnI9EEnv6g"
 #define kOAuthConsumerSecret			@"wXSWVvY7GN1e8Z2KFaR9A5skZKtHzpchvMS7Elpu0"
 
-static SocialSingleton *sharedInstance = nil;
-
 @implementation SocialSingleton
 
 @synthesize twitterEngine;
@@ -303,16 +301,6 @@ static SocialSingleton *sharedInstance = nil;
 
 #pragma mark - Singleton methods
 
-+ (SocialSingleton*)sharedInstance
-{
-    @synchronized(self)
-    {
-        if (sharedInstance == nil)
-			sharedInstance = [[self alloc] init];
-    }
-    return sharedInstance;
-}
-
 - (void)setup
 {
 	//initialize here
@@ -327,52 +315,15 @@ static SocialSingleton *sharedInstance = nil;
 											   object:nil];
 }
 
-+ (id)allocWithZone:(NSZone *)zone 
++ (id)sharedInstance
 {
-    @synchronized(self) 
-	{
-        if (sharedInstance == nil) 
-		{
-            sharedInstance = [super allocWithZone:zone];
-            return sharedInstance;  // assignment and return on first allocation
-        }
-    }
-    return nil; // on subsequent allocation attempts return nil
+    static SocialSingleton *sharedInstance = nil;
+    static dispatch_once_t once = 0;
+    dispatch_once(&once, ^{
+		sharedInstance = [[self alloc] init];
+		[sharedInstance setup];
+	});
+    return sharedInstance;
 }
-
--(id)init 
-{
-	self = [super init];
-	sharedInstance = self;
-	
-	[self setup];
-	
-	return self;
-}
-
-- (id)copyWithZone:(NSZone *)zone
-{
-    return self;
-}
-
-/*- (id)retain
-{
-    return self;
-}
-
-- (unsigned)retainCount 
-{
-    return UINT_MAX;  // denotes an object that cannot be released
-}
-
-- (oneway void)release 
-{
-    //do nothing
-}
-
-- (id)autorelease 
-{
-    return self;
-}*/
 
 @end

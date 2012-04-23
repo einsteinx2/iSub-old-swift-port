@@ -14,8 +14,6 @@
 #import "SavedSettings.h"
 #import "NSArray+Additions.h"
 
-static ViewObjectsSingleton *sharedInstance = nil;
-
 @implementation ViewObjectsSingleton
 
 // XMLParser objects used to tell the parser how to parse
@@ -304,31 +302,31 @@ static ViewObjectsSingleton *sharedInstance = nil;
 
 - (void)setup
 {
-	lightRed = [UIColor colorWithRed:255/255.0 green:146/255.0 blue:115/255.0 alpha:1];
-	darkRed = [UIColor colorWithRed:226/255.0 green:0/255.0 blue:0/255.0 alpha:1];
+	self.lightRed = [UIColor colorWithRed:255/255.0 green:146/255.0 blue:115/255.0 alpha:1];
+	self.darkRed = [UIColor colorWithRed:226/255.0 green:0/255.0 blue:0/255.0 alpha:1];
 	
-	lightYellow = [UIColor colorWithRed:255/255.0 green:233/255.0 blue:115/255.0 alpha:1];
-	darkYellow = [UIColor colorWithRed:255/255.0 green:215/255.0 blue:0/255.0 alpha:1];
+	self.lightYellow = [UIColor colorWithRed:255/255.0 green:233/255.0 blue:115/255.0 alpha:1];
+	self.darkYellow = [UIColor colorWithRed:255/255.0 green:215/255.0 blue:0/255.0 alpha:1];
 	
-	lightGreen = [UIColor colorWithRed:169/255.0 green:241/255.0 blue:108/255.0 alpha:1];
-	darkGreen = [UIColor colorWithRed:103/255.0 green:227/255.0 blue:0/255.0 alpha:1];
+	self.lightGreen = [UIColor colorWithRed:169/255.0 green:241/255.0 blue:108/255.0 alpha:1];
+	self.darkGreen = [UIColor colorWithRed:103/255.0 green:227/255.0 blue:0/255.0 alpha:1];
 	
 	//lightBlue = [[UIColor colorWithRed:100/255.0 green:168/255.0 blue:209/255.0 alpha:1] retain];
 	//darkBlue = [[UIColor colorWithRed:9/255.0 green:105/255.0 blue:162/255.0 alpha:1] retain];
 	
-	lightBlue = [UIColor colorWithRed:87/255.0 green:198/255.0 blue:255/255.0 alpha:1];
-	darkBlue = [UIColor colorWithRed:28/255.0 green:163/255.0 blue:255/255.0 alpha:1];
+	self.lightBlue = [UIColor colorWithRed:87/255.0 green:198/255.0 blue:255/255.0 alpha:1];
+	self.darkBlue = [UIColor colorWithRed:28/255.0 green:163/255.0 blue:255/255.0 alpha:1];
 	
 	//lightBlue = [[UIColor colorWithRed:14/255.0 green:148/255.0 blue:218/255.0 alpha:1] retain];
 	//darkBlue = [[UIColor colorWithRed:54/255.0 green:142/255.0 blue:188/255.0 alpha:1] retain];
 	
-	lightNormal = [UIColor whiteColor];
-	darkNormal = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
+	self.lightNormal = [UIColor whiteColor];
+	self.darkNormal = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
 	
 	//windowColor = [[UIColor colorWithRed:241.0/255.0 green:246.0/255.0 blue:253.0/255.0 alpha:1] retain];
 	//windowColor = [[UIColor colorWithRed:206.0/255.0 green:211.0/255.0 blue:218.0/255.0 alpha:1] retain];
-	windowColor = [UIColor colorWithWhite:.3 alpha:1];
-	jukeboxColor = [UIColor colorWithRed:140.0/255.0 green:0.0 blue:0.0 alpha:1.0];
+	self.windowColor = [UIColor colorWithWhite:.3 alpha:1];
+	self.jukeboxColor = [UIColor colorWithRed:140.0/255.0 green:0.0 blue:0.0 alpha:1.0];
 	
 	self.isCellEnabled = YES;
 	self.isArtistsLoading = NO;
@@ -352,64 +350,15 @@ static ViewObjectsSingleton *sharedInstance = nil;
 											   object:nil];
 }
 
-+ (ViewObjectsSingleton*)sharedInstance
++ (id)sharedInstance
 {
-    @synchronized(self)
-    {
-		if (sharedInstance == nil)
-			sharedInstance = [[ViewObjectsSingleton alloc] init];
-    }
+    static ViewObjectsSingleton *sharedInstance = nil;
+    static dispatch_once_t once = 0;
+    dispatch_once(&once, ^{
+		sharedInstance = [[self alloc] init];
+		[sharedInstance setup];
+	});
     return sharedInstance;
 }
-
-+ (id)allocWithZone:(NSZone *)zone 
-{
-    @synchronized(self) 
-	{
-        if (sharedInstance == nil) 
-		{
-            sharedInstance = [super allocWithZone:zone];
-            return sharedInstance;  // assignment and return on first allocation
-        }
-    }
-    return nil; // on subsequent allocation attempts return nil
-}
-
--(id)init 
-{
-	if ((self = [super init]))
-	{
-		sharedInstance = self;
-		
-		[self setup];
-	}
-	
-	return self;
-}
-
-- (id)copyWithZone:(NSZone *)zone
-{
-    return self;
-}
-
-/*- (id)retain 
-{
-    return self;
-}
-
-- (unsigned)retainCount 
-{
-    return UINT_MAX;  // denotes an object that cannot be released
-}
-
-- (oneway void)release 
-{
-    //do nothing
-}
-
-- (id)autorelease 
-{
-    return self;
-}*/
 
 @end

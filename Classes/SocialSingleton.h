@@ -6,7 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#define socialS [SocialSingleton sharedInstance]
+#define socialS ((SocialSingleton *)[SocialSingleton sharedInstance])
 
 #import "SA_OAuthTwitterController.h"
 
@@ -23,7 +23,7 @@
 @property (readonly) NSTimeInterval subsonicDelay;
 @property (readonly) NSTimeInterval tweetDelay;
 
-+ (SocialSingleton*)sharedInstance;
++ (id)sharedInstance;
 - (void)createTwitterEngine;
 - (void)destroyTwitterEngine;
 

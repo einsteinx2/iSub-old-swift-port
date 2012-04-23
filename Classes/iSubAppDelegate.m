@@ -149,8 +149,8 @@
 	}
 	
 	// Make sure audio engine and cache singletons get loaded
-	audioEngineS;
-	cacheS;
+	[AudioEngine sharedInstance];
+	[CacheSingleton sharedInstance];
 	
     introController = nil;
 	

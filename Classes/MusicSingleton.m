@@ -35,8 +35,6 @@
 #import "JukeboxSingleton.h"
 #import "ISMSCacheQueueManager.h"
 
-static MusicSingleton *sharedInstance = nil;
-
 @implementation MusicSingleton
 
 #pragma mark Control Methods
@@ -302,35 +300,12 @@ double startSongSeconds = 0.0;
 #pragma mark -
 #pragma mark Singleton methods
 
-+ (MusicSingleton*)sharedInstance
+- (void)setup 
 {
-    @synchronized(self)
-    {
-		if (sharedInstance == nil)
-			sharedInstance = [[self alloc] init];
-    }
-    return sharedInstance;
-}
-
-+ (id)allocWithZone:(NSZone *)zone {
-    @synchronized(self) {
-        if (sharedInstance == nil) {
-            sharedInstance = [super allocWithZone:zone];
-            return sharedInstance;  // assignment and return on first allocation
-        }
-    }
-    return nil; // on subsequent allocation attempts return nil
-}
-
--(id)init 
-{
-	self = [super init];
-	sharedInstance = self;
-		
 	isAutoNextNotificationOn = NO;
 	
 	//[self addAutoNextNotification];
-		
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLockScreenInfo) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLockScreenInfo) name:ISMSNotification_AlbumArtLargeDownloaded object:nil];
 	
@@ -338,29 +313,17 @@ double startSongSeconds = 0.0;
 											 selector:@selector(didReceiveMemoryWarning) 
 												 name:UIApplicationDidReceiveMemoryWarningNotification 
 											   object:nil];
-	
-	return self;
 }
 
-- (id)copyWithZone:(NSZone *)zone
++ (id)sharedInstance
 {
-    return self;
+    static MusicSingleton *sharedInstance = nil;
+    static dispatch_once_t once = 0;
+    dispatch_once(&once, ^{
+		sharedInstance = [[self alloc] init];
+		[sharedInstance setup];
+	});
+    return sharedInstance;
 }
-
-/*- (id)retain {
-    return self;
-}
-
-- (unsigned)retainCount {
-    return UINT_MAX;  // denotes an object that cannot be released
-}
-
-- (oneway void)release {
-    //do nothing
-}
-
-- (id)autorelease {
-    return self;
-}*/
 
 @end

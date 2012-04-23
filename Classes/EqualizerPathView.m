@@ -19,10 +19,10 @@ static CGColorRef fillColorOn;
 
 + (void)initialize
 {
-	strokeColor  = [[UIColor alloc] initWithWhite:1. alpha:.5].CGColor;
+	strokeColor  = CGColorRetain([[UIColor alloc] initWithWhite:1. alpha:.5].CGColor);
 	
-	fillColorOff = [[UIColor alloc] initWithWhite:1. alpha:.25].CGColor;
-	fillColorOn  = [[UIColor alloc] initWithRed:98./255. green:180./255. blue:223./255. alpha:.50].CGColor;
+	fillColorOff = CGColorRetain([[UIColor alloc] initWithWhite:1. alpha:.25].CGColor);
+	fillColorOn  = CGColorRetain([[UIColor alloc] initWithRed:98./255. green:180./255. blue:223./255. alpha:.50].CGColor);
 }
 
 - (id)init

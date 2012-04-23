@@ -23,12 +23,13 @@
 #import "ISMSStreamManager.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "CacheSingleton.h"
+#import "ISMSStreamHandler.h"
 
-#define ISMSMaxContentLengthFailures 1
+#define maxNumOfReconnects 5
 
 @implementation ISMSCacheQueueManager
-@synthesize isQueueDownloading, currentQueuedSong;
-@synthesize fileHandle, downloadLength, connection, contentLength, numberOfContentLengthFailures;
+@synthesize isQueueDownloading, currentQueuedSong, currentStreamHandler;
+//@synthesize fileHandle, downloadLength, connection, contentLength, numberOfContentLengthFailures;
 
 #pragma mark - Lyric Loader Delegate
 
@@ -83,12 +84,11 @@
 	if (!self.currentQueuedSong || (!appDelegateS.isWifi && !IS_3G_UNRESTRICTED) || viewObjectsS.isOfflineMode)
 		return;
 	
-	// Check if the song is fully cached, if it is remove it from the queue and return
-	Song *currentSong = playlistS.currentSong;
-	Song *nextSong = playlistS.nextSong;
+	// Check if the song is fully cached or if it's the current or next song in the regular stream queue
+	// if it is remove it from the queue and return
 	if (self.currentQueuedSong.isFullyCached
-		|| [currentSong isEqualToSong:self.currentQueuedSong]
-		|| [nextSong isEqualToSong:self.currentQueuedSong])
+		|| [self.currentQueuedSong isEqualToSong:playlistS.currentSong]
+		|| [self.currentQueuedSong isEqualToSong:playlistS.nextSong])
 	{
 		// The song is fully cached, so delete it from the cache queue database
 		[self.currentQueuedSong removeFromCacheQueue];
@@ -109,51 +109,26 @@
         lyricsLoader.title = self.currentQueuedSong.title;
         [lyricsLoader startLoad];        
 	}
-				
-	// Create new file on disk
-	[self.currentQueuedSong removeFromCachedSongsTable];
-	[[NSFileManager defaultManager] removeItemAtPath:self.currentQueuedSong.localPath error:NULL];
-	[[NSFileManager defaultManager] createFileAtPath:self.currentQueuedSong.localPath contents:[NSData data] attributes:nil];
 	
-	// Start the download
-	NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:n2N(self.currentQueuedSong.songId) forKey:@"id"];
-	[parameters setObject:@"true" forKey:@"estimateContentLength"];
-	if (settingsS.currentMaxBitrate != 0)
+	// Download the art
+	if (self.currentQueuedSong.coverArtId)
 	{
-		NSString *bitrate = [[NSString alloc] initWithFormat:@"%i", settingsS.currentMaxBitrate];
-		[parameters setObject:n2N(bitrate) forKey:@"maxBitRate"];
-	}
-	NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters];
-	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
-	if (self.connection)
-	{
-		self.contentLength = ULLONG_MAX;
-		self.numberOfContentLengthFailures = 0;
-		self.downloadLength = 0;
-		self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.currentQueuedSong.localPath];
-
-		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+		NSString *coverArtId = self.currentQueuedSong.coverArtId;
+		SUSCoverArtLoader *playerArt = [[SUSCoverArtLoader alloc] initWithDelegate:self 
+																		coverArtId:coverArtId
+																		   isLarge:YES];
+		[playerArt downloadArtIfNotExists];
 		
-		[self.currentQueuedSong insertIntoCachedSongsTable];
-		
-		if (self.currentQueuedSong.coverArtId)
-		{
-			NSString *coverArtId = self.currentQueuedSong.coverArtId;
-			SUSCoverArtLoader *playerArt = [[SUSCoverArtLoader alloc] initWithDelegate:self 
-																			coverArtId:coverArtId
-																			   isLarge:YES];
-			[playerArt downloadArtIfNotExists];
-			//if (![playerArt downloadArtIfNotExists])
-			//	;
-			
-			SUSCoverArtLoader *tableArt = [[SUSCoverArtLoader alloc] initWithDelegate:self
-																		   coverArtId:coverArtId 
-																			  isLarge:NO];
-			[tableArt downloadArtIfNotExists];
-			//if (![tableArt downloadArtIfNotExists])
-			//	;
-		}
+		SUSCoverArtLoader *tableArt = [[SUSCoverArtLoader alloc] initWithDelegate:self
+																	   coverArtId:coverArtId 
+																		  isLarge:NO];
+		[tableArt downloadArtIfNotExists];
 	}
+	
+	// Create the stream handler
+	self.currentStreamHandler = [[ISMSStreamHandler alloc] initWithSong:self.currentQueuedSong isTemp:NO delegate:self];
+	self.currentStreamHandler.partialPrecacheSleep = NO;
+	[self.currentStreamHandler start];
 }
 
 - (void)resumeDownloadQueue:(NSNumber *)byteOffset
@@ -161,17 +136,7 @@
 	// Create the request and resume the download
 	if (!viewObjectsS.isOfflineMode)
 	{
-        NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:n2N(self.currentQueuedSong.songId) forKey:@"id"];
-		[parameters setObject:@"true" forKey:@"estimateContentLength"];
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters];
-        
-		NSString *range = [NSString stringWithFormat:@"bytes=%i-", [byteOffset unsignedIntValue]];
-		[request setValue:range forHTTPHeaderField:@"Range"];
-		self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
-		if (self.connection)
-		{
-			[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-		}
+		[self.currentStreamHandler start:YES];
 	}
 }
 
@@ -179,18 +144,9 @@
 {
 	DLog(@"stopping download queue");
 	self.isQueueDownloading = NO;
-		
-	[self.connection cancel];
-	DLog(@"self.connection: %@", self.connection);
-	self.connection = nil;
-	self.fileHandle = nil;
-	[[NSFileManager defaultManager] removeItemAtPath:self.currentQueuedSong.localPath error:NULL];
 	
-	self.contentLength = ULLONG_MAX;
-	self.numberOfContentLengthFailures = 0;
-	
-	if (!streamManagerS.isQueueDownloading) 
-		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+	[self.currentStreamHandler cancel];
+	self.currentStreamHandler = nil;
 }
 
 - (void)removeCurrentSong
@@ -198,17 +154,68 @@
 	if (self.isQueueDownloading)
 		[self stopDownloadQueue];
 	
-	NSString *md5 = [self.currentQueuedSong.path md5];
-	[databaseS.cacheQueueDbQueue inDatabase:^(FMDatabase *db)
-	{
-		[db executeUpdate:@"DELETE FROM cacheQueue WHERE md5 = ?", md5];
-	}];
+	[self.currentQueuedSong removeFromCacheQueue];
 	
 	if (!self.isQueueDownloading)
 		[self startDownloadQueue];
 }
 
-#pragma mark - NSURLConnectionDelegate
+#pragma mark - ISMSStreamHandler Delegate
+
+- (void)ISMSStreamHandlerPartialPrecachePaused:(ISMSStreamHandler *)handler
+{
+	// Don't ever partial pre-cache
+	handler.partialPrecacheSleep = NO;
+}
+
+- (void)ISMSStreamHandlerConnectionFailed:(ISMSStreamHandler *)handler withError:(NSError *)error
+{
+	if (handler.numOfReconnects < maxNumOfReconnects)
+	{
+		// Less than max number of reconnections, so try again 
+		handler.numOfReconnects++;
+		// Retry connection after a delay to prevent a tight loop
+		[self performSelector:@selector(resumeDownloadQueue:) withObject:nil afterDelay:2.0];
+	}
+	else
+	{
+		// Tried max number of times so remove
+		[self.currentQueuedSong removeFromCacheQueue];
+		self.currentStreamHandler = nil;
+		[self startDownloadQueue];
+	}
+}
+
+- (void)ISMSStreamHandlerConnectionFinished:(ISMSStreamHandler *)handler
+{
+	if (handler.totalBytesTransferred < 500)
+	{
+		// Show an alert and delete the file, this was not a song but an XML error
+		// TODO: Parse with TBXML and display proper error
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"No song data returned. This could be because your Subsonic API trial has expired, this song is not an mp3 and the Subsonic transcoding plugins failed, or another reason." delegate:appDelegateS cancelButtonTitle:@"OK" otherButtonTitles: nil];
+		[alert show];
+		[[NSFileManager defaultManager] removeItemAtPath:handler.filePath error:NULL];
+	}
+	else
+	{		
+		// Mark song as cached
+		self.currentQueuedSong.isFullyCached = YES;
+		[self.currentQueuedSong removeFromCacheQueue];
+		self.currentQueuedSong = nil;
+		
+		// Remove the stream handler
+		self.currentStreamHandler = nil;
+		
+		// Tell the cache queue view to reload
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CacheQueueSongDownloaded];
+		
+		// Download the next song in the queue
+		[self startDownloadQueue];
+	}
+}
+
+
+/*#pragma mark - NSURLConnectionDelegate
 
 - (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
 {
@@ -341,7 +348,7 @@
 	}
 	
 	self.connection = nil;
-}
+}*/
 
 #pragma mark - Memory management
 
@@ -354,11 +361,9 @@
 
 #pragma mark - Singleton methods
 
-static ISMSCacheQueueManager *sharedInstance = nil;
-
 - (void)setup
 {
-	self.contentLength = ULLONG_MAX;
+	//self.contentLength = ULLONG_MAX;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self 
 											 selector:@selector(didReceiveMemoryWarning) 
@@ -366,64 +371,15 @@ static ISMSCacheQueueManager *sharedInstance = nil;
 											   object:nil];
 }
 
-+ (ISMSCacheQueueManager *)sharedInstance
++ (id)sharedInstance
 {
-    @synchronized(self)
-    {
-        if (sharedInstance == nil)
-			sharedInstance = [[self alloc] init];
-    }
+    static ISMSCacheQueueManager *sharedInstance = nil;
+    static dispatch_once_t once = 0;
+    dispatch_once(&once, ^{
+		sharedInstance = [[self alloc] init];
+		[sharedInstance setup];
+	});
     return sharedInstance;
 }
-
-+ (id)allocWithZone:(NSZone *)zone 
-{
-    @synchronized(self) 
-	{
-        if (sharedInstance == nil) 
-		{
-            sharedInstance = [super allocWithZone:zone];
-            return sharedInstance;  // assignment and return on first allocation
-        }
-    }
-    return nil; // on subsequent allocation attempts return nil
-}
-
--(id)init 
-{
-	if ((self = [super init]))
-	{
-		[self setup];
-		sharedInstance = self;
-	}
-    
-	return self;
-}
-
-
-- (id)copyWithZone:(NSZone *)zone
-{
-    return self;
-}
-
-/*- (id)retain 
-{
-    return self;
-}
-
-- (unsigned)retainCount 
-{
-    return UINT_MAX;  // denotes an object that cannot be released
-}
-
-- (oneway void)release 
-{
-    //do nothing
-}
-
-- (id)autorelease 
-{
-    return self;
-}*/
 
 @end

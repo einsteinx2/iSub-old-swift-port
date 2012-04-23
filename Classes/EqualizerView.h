@@ -32,8 +32,8 @@
 	BOOL needsErase;
 }
 
-@property(readwrite) CGPoint location;
-@property(readwrite) CGPoint previousLocation;
+@property (readwrite) CGPoint location;
+@property (readwrite) CGPoint previousLocation;
 
 @property (strong) NSTimer *drawTimer;
 

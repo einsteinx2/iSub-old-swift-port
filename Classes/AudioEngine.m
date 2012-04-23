@@ -1367,11 +1367,11 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 			waitUntilDone:NO];
 }
 
-void RunBlockAfterDelay(void (^block)(void), NSTimeInterval delay)
+/*void RunBlockAfterDelay(void (^block)(void), NSTimeInterval delay)
 {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*delay),
 				   dispatch_get_main_queue(), block);
-}
+}*/
 
 // Runs in background thread
 - (void)startWithOffsetInBytesorSecondsInternal:(NSDictionary *)bytesOrSeconds
@@ -1987,7 +1987,12 @@ void RunBlockAfterDelay(void (^block)(void), NSTimeInterval delay)
 	eqValueArray = [[NSMutableArray alloc] initWithCapacity:4];
 	eqHandleArray = [[NSMutableArray alloc] initWithCapacity:4];
 	BassEffectDAO *effectDAO = [[BassEffectDAO alloc] initWithType:BassEffectType_ParametricEQ];
-	[effectDAO selectPresetId:effectDAO.selectedPresetId];
+	dispatch_async(dispatch_get_main_queue(), ^{
+		// Must do this inside a dispatch_async or it will deadlock because this method
+		// calls [AudioEngine sharedInstance] and it causes a deadlock because we're currently
+		// inside the dispatch_once inside that method
+		[effectDAO selectPresetId:effectDAO.selectedPresetId];
+	});
 	
 	if (SCREEN_SCALE() == 1.0)// && !IS_IPAD())
 		lineSpecBufSize = 256 * sizeof(short);
@@ -2027,32 +2032,14 @@ void RunBlockAfterDelay(void (^block)(void), NSTimeInterval delay)
 	DLog(@"entered foreground");
 }*/
 
-+ (AudioEngine *)sharedInstance
++ (id)sharedInstance
 {
-    @synchronized(self)
-    {
-		if (sharedInstance == nil)
-		{
-			sharedInstance = [[self alloc] init];
-		}
-    }
+    static dispatch_once_t once = 0;
+    dispatch_once(&once, ^{
+		sharedInstance = [[self alloc] init];
+		[sharedInstance setup];
+	});
     return sharedInstance;
-}
-
-- (id)init 
-{
-	if ((self = [super init]))
-	{
-		sharedInstance = self;
-		[self setup];
-	}
-	
-	return self;
-}
-
-- (id)copyWithZone:(NSZone *)zone
-{
-    return self;
 }
 
 - (void)startSongThreadEntryPoint

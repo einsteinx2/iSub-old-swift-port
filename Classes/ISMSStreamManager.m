@@ -512,21 +512,8 @@
 
 - (void)ISMSStreamHandlerStarted:(ISMSStreamHandler *)handler
 {
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-
 	if (handler.isTempCache)
 		self.lastTempCachedSong = nil;
-}
-
-- (void)ISMSStreamHandlerPartialPrecachePaused:(ISMSStreamHandler *)handler
-{
-	if (!cacheQueueManagerS.isQueueDownloading)
-		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-}
-
-- (void)ISMSStreamHandlerPartialPrecacheUnpaused:(ISMSStreamHandler *)handler
-{
-	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 }
 
 - (void)ISMSStreamHandlerStartPlayback:(ISMSStreamHandler *)handler
@@ -565,9 +552,6 @@
 
 - (void)ISMSStreamHandlerConnectionFailed:(ISMSStreamHandler *)handler withError:(NSError *)error
 {
-	if (!cacheQueueManagerS.isQueueDownloading)
-		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-
 	//DLog(@"stream handler failed: %@", handler);
 	if (handler.numOfReconnects < maxNumOfReconnects)
 	{
@@ -589,9 +573,6 @@
 
 - (void)ISMSStreamHandlerConnectionFinished:(ISMSStreamHandler *)handler
 {	
-	if (!cacheQueueManagerS.isQueueDownloading)
-		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-	
 	if (handler.totalBytesTransferred < 500)
 	{
 		// Show an alert and delete the file, this was not a song but an XML error
@@ -645,12 +626,9 @@
 {
 	DLog(@"received memory warning");
 	
-	
 }
 
 #pragma mark - Singleton methods
-
-static ISMSStreamManager *sharedInstance = nil;
 
 - (void)setup
 {
@@ -714,65 +692,16 @@ static ISMSStreamManager *sharedInstance = nil;
 											   object:nil];
 }
 
-+ (ISMSStreamManager *)sharedInstance
++ (id)sharedInstance
 {
-    @synchronized(self)
-    {
-        if (sharedInstance == nil)
-			sharedInstance = [[self alloc] init];
-    }
+    static ISMSStreamManager *sharedInstance = nil;
+    static dispatch_once_t once = 0;
+    dispatch_once(&once, ^{
+		sharedInstance = [[self alloc] init];
+		[sharedInstance setup];
+	});
     return sharedInstance;
 }
-
-+ (id)allocWithZone:(NSZone *)zone 
-{
-    @synchronized(self) 
-	{
-        if (sharedInstance == nil) 
-		{
-            sharedInstance = [super allocWithZone:zone];
-            return sharedInstance;  // assignment and return on first allocation
-        }
-    }
-    return nil; // on subsequent allocation attempts return nil
-}
-
--(id)init 
-{
-	if ((self = [super init]))
-	{
-		[self setup];
-		sharedInstance = self;
-	}
-    
-	return self;
-}
-
-
-- (id)copyWithZone:(NSZone *)zone
-{
-    return self;
-}
-
-/*- (id)retain 
-{
-    return self;
-}
-
-- (unsigned)retainCount 
-{
-    return UINT_MAX;  // denotes an object that cannot be released
-}
-
-- (oneway void)release 
-{
-    //do nothing
-}
-
-- (id)autorelease 
-{
-    return self;
-}*/
 
 
 @end

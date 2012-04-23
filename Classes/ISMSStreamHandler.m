@@ -19,6 +19,7 @@
 #import "SavedSettings.h"
 #import "CacheSingleton.h"
 #import "PlaylistSingleton.h"
+#import "ISMSNetworkIndicator.h"
 
 #define ISMSNumSecondsToPartialPreCache 60
 #define ISMSNumBytesToPartialPreCache(bitrate) (BytesForSecondsAtBitrate(ISMSNumSecondsToPartialPreCache, bitrate))
@@ -107,7 +108,6 @@
 - (void)dealloc
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
-	
 }
 
 - (NSString *)filePath
@@ -126,7 +126,6 @@
 			[cacheS clearTempCache];
 		}
 	}
-	
 
 	// Create the file handle
 	self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.filePath];
@@ -217,12 +216,14 @@
 	if (!self.isTempCache)
 		self.mySong.isPartiallyCached = YES;
 	
+	[ISMSNetworkIndicator usingNetwork];
+	
 	if ([self.delegate respondsToSelector:@selector(ISMSStreamHandlerStarted:)])
 		[self.delegate ISMSStreamHandlerStarted:self];
 }
 
 - (void)startConnectionInternalFailure
-{
+{	
 	NSError *error = [[NSError alloc] initWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
 	if ([self.delegate respondsToSelector:@selector(ISMSStreamHandlerConnectionFailed:withError:)])
 		[self.delegate ISMSStreamHandlerConnectionFailed:self withError:error];
@@ -245,6 +246,8 @@
 	self.fileHandle = nil;
 		
 	[self performSelector:@selector(cancelRunLoop) onThread:loadingThread withObject:nil waitUntilDone:NO];
+	
+	[ISMSNetworkIndicator doneUsingNetwork];
 }
 
 // Stop the current run loop
@@ -258,7 +261,7 @@
 	// If this song is partially precached and sleeping, stop sleeping
 	self.partialPrecacheSleep = NO;
 	
-	if ([self.mySong isEqualToSong:[playlistS currentSong]])
+	if ([self.mySong isEqualToSong:playlistS.currentSong])
 	{
 		self.isCurrentSong = YES;
 	}
@@ -468,6 +471,8 @@
 // Main Thread
 - (void)partialPrecachePausedInternal
 {
+	[ISMSNetworkIndicator doneUsingNetwork];
+	
 	if ([self.delegate respondsToSelector:@selector(ISMSStreamHandlerPartialPrecachePaused:)])
 		[self.delegate ISMSStreamHandlerPartialPrecachePaused:self];
 }
@@ -475,6 +480,8 @@
 // Main Thread
 - (void)partialPrecacheUnpausedInternal
 {
+	[ISMSNetworkIndicator usingNetwork];
+	
 	if ([self.delegate respondsToSelector:@selector(ISMSStreamHandlerPartialPrecacheUnpaused:)])
 		[self.delegate ISMSStreamHandlerPartialPrecacheUnpaused:self];
 }
@@ -510,6 +517,8 @@
 	[self.fileHandle closeFile];
 	self.fileHandle = nil;
 	
+	[ISMSNetworkIndicator doneUsingNetwork];
+	
 	if ([self.delegate respondsToSelector:@selector(ISMSStreamHandlerConnectionFailed:withError:)])
 		[self.delegate ISMSStreamHandlerConnectionFailed:self withError:error];
 }
@@ -519,7 +528,7 @@
 {		
 	DLog(@"Connection Finished Successfully for %@", mySong.title);
 	DLog(@"localSize: %llu   contentLength: %llu", mySong.localFileSize, self.contentLength);
-	
+		
 	// Check to see if we're within 100K of the contentLength (to allow some leeway for contentLength estimation of transcoded songs
 	if (self.contentLength != ULLONG_MAX && mySong.localFileSize < self.contentLength - BytesToKB(100) && self.numberOfContentLengthFailures < ISMSMaxContentLengthFailures)
 	{
@@ -547,6 +556,8 @@
 	// Close the file handle
 	[self.fileHandle closeFile];
 	self.fileHandle = nil;
+	
+	[ISMSNetworkIndicator doneUsingNetwork];
 	
 	if ([self.delegate respondsToSelector:@selector(ISMSStreamHandlerConnectionFinished:)])
 		[self.delegate ISMSStreamHandlerConnectionFinished:self];
