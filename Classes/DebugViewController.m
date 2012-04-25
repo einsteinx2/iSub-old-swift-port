@@ -118,10 +118,7 @@
 
 - (void)dealloc
 {
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackStarted object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackEnded object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
-	
+	[[NSNotificationCenter defaultCenter] removeObserver:self];	
 }
 
 #pragma mark -

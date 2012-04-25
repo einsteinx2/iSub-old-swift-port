@@ -469,22 +469,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {	
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
-	[self unregisterForNotifications];
-	
-	
-	
-	
-	
-	
+	[pageControlViewController viewDidDisappear:NO];
 	coverArtImageView.delegate = nil;
 	
-	
-
-	
-	[pageControlViewController viewDidDisappear:NO];
-	
-	
-	
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark Rotation

@@ -7,14 +7,18 @@
 //
 
 #import "UIView+Tools.h"
-
+#import "CALayer+SublayerWithName.h"
 
 @implementation UIView (Tools)
 
 #define DEFAULT_SHADOW_ALPHA 0.5
 #define DEFAULT_SHADOW_WIDTH 17.0
 
-// creates vertical shadow
+#define ISMSLeftShadowName @"ISMS Left Shadow"
+#define ISMSRightShadowName @"ISMS Right Shadow"
+#define ISMSTopShadowName @"ISMS Top Shadow"
+#define ISMSBottomShadowName @"ISMS Bottom Shadow"
+
 + (CAGradientLayer *)verticalShadowWithAlpha:(CGFloat)shadowAlpha inverse:(BOOL)inverse
 {
 	CAGradientLayer *newShadow = [[CAGradientLayer alloc] init];
@@ -34,9 +38,11 @@
 
 - (void)addLeftShadowWithWidth:(CGFloat)shadowWidth alpha:(CGFloat)shadowAlpha
 {
-	// Draw the shadows
+	[self removeLeftShadow];
+	
 	CAGradientLayer *leftShadow = [UIView verticalShadowWithAlpha:shadowAlpha inverse:YES];
 	leftShadow.frame = CGRectMake(-shadowWidth, 0, shadowWidth + ISMSiPadCornerRadius, 1024.);
+	leftShadow.name = ISMSLeftShadowName;
 	[self.layer insertSublayer:leftShadow atIndex:0];
 }
 
@@ -45,16 +51,29 @@
 	[self addLeftShadowWithWidth:DEFAULT_SHADOW_WIDTH alpha:DEFAULT_SHADOW_ALPHA];
 }
 
+- (void)removeLeftShadow
+{
+	[[self.layer sublayerWithName:ISMSLeftShadowName] removeFromSuperlayer];
+}
+
 - (void)addRightShadowWithWidth:(CGFloat)shadowWidth alpha:(CGFloat)shadowAlpha
 {
+	[self removeRightShadow];
+	
 	CAGradientLayer *rightShadow = [UIView verticalShadowWithAlpha:shadowAlpha inverse:NO];
 	rightShadow.frame = CGRectMake(self.width - ISMSiPadCornerRadius, 0, DEFAULT_SHADOW_WIDTH + ISMSiPadCornerRadius, 1024.);
+	rightShadow.name = ISMSRightShadowName;
 	[self.layer insertSublayer:rightShadow atIndex:0];
 }
 
 - (void)addRightShadow
 {
 	[self addRightShadowWithWidth:DEFAULT_SHADOW_WIDTH alpha:DEFAULT_SHADOW_ALPHA];
+}
+
+- (void)removeRightShadow
+{
+	[[self.layer sublayerWithName:ISMSRightShadowName] removeFromSuperlayer];
 }
 
 + (CAGradientLayer *)horizontalShadowWithAlpha:(CGFloat)shadowAlpha inverse:(BOOL)inverse
@@ -76,9 +95,11 @@
 
 - (void)addBottomShadowWithWidth:(CGFloat)shadowWidth alpha:(CGFloat)shadowAlpha
 {
-	// Draw the shadows
+	[self removeBottomShadow];
+	
 	CAGradientLayer *bottomShadow = [UIView horizontalShadowWithAlpha:shadowAlpha inverse:NO];
 	bottomShadow.frame = CGRectMake(0, self.height, self.width, shadowWidth);
+	bottomShadow.name = ISMSBottomShadowName;
 	[self.layer insertSublayer:bottomShadow atIndex:0];
 }
 
@@ -87,16 +108,29 @@
 	[self addBottomShadowWithWidth:DEFAULT_SHADOW_WIDTH alpha:DEFAULT_SHADOW_ALPHA];
 }
 
+- (void)removeBottomShadow
+{
+	[[self.layer sublayerWithName:ISMSBottomShadowName] removeFromSuperlayer];
+}
+
 - (void)addTopShadowWithWidth:(CGFloat)shadowWidth alpha:(CGFloat)shadowAlpha
 {
+	[self removeTopShadow];
+	
 	CAGradientLayer *topShadow = [UIView horizontalShadowWithAlpha:shadowAlpha inverse:YES];
 	topShadow.frame = CGRectMake(0, 0 - shadowWidth, self.width, shadowWidth);
+	topShadow.name = ISMSTopShadowName;
 	[self.layer insertSublayer:topShadow atIndex:0];
 }
 
 - (void)addTopShadow
 {
 	[self addTopShadowWithWidth:DEFAULT_SHADOW_WIDTH alpha:DEFAULT_SHADOW_ALPHA];
+}
+
+- (void)removeTopShadow
+{
+	[[self.layer sublayerWithName:ISMSTopShadowName] removeFromSuperlayer];
 }
 
 - (CGFloat)left 

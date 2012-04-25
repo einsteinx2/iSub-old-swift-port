@@ -39,6 +39,9 @@
 @property unsigned long long speedLoggingLastSize;
 @property BOOL isCanceled;
 @property NSUInteger numberOfContentLengthFailures;
+@property BOOL isPartialPrecacheSleeping;
+@property NSUInteger secondsToPartialPrecache;
+@property BOOL tempBreakPartialPrecache;
 
 - (void)start:(BOOL)resume;
 - (void)start;

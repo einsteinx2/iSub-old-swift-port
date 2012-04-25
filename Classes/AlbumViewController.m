@@ -39,6 +39,7 @@
 #import "NSNotificationCenter+MainThread.h"
 #import "AudioEngine.h"
 #import "iPadRootViewController.h"
+#import "UITableView+Shadows.h"
 
 @interface AlbumViewController (Private)
 - (void)dataSourceDidFinishLoadingNewData;
@@ -53,7 +54,7 @@
 @synthesize playAllShuffleAllView;
 @synthesize albumInfoView, albumInfoArtHolderView, albumInfoArtView, albumInfoAlbumLabel, albumInfoArtistLabel, albumInfoDurationLabel, albumInfoLabelHolderView, albumInfoTrackCountLabel, albumInfoArtReflection;
 
-@synthesize reloading=_reloading;
+@synthesize reloading, refreshHeaderView;
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -115,16 +116,12 @@
 	
 	albumInfoArtView.delegate = self;
 	
-	// Add the table fade
-	UIImageView *fade = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
-	fade.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-	fade.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.tableView.tableFooterView = fade;
+	[self.tableView addFooterShadow];
 		
 	// Add the pull to refresh view
-	refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
-	refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
-	[self.tableView addSubview:refreshHeaderView];
+	self.refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
+	self.refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
+	[self.tableView addSubview:self.refreshHeaderView];
 	
 	if (IS_IPAD())
 	{
@@ -132,11 +129,10 @@
 	}
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createReflection) name:@"createReflection"  object:nil];
-	
 }
 
 
--(void)viewWillAppear:(BOOL)animated 
+- (void)viewWillAppear:(BOOL)animated 
 {	
 	[super viewWillAppear:animated];
 	
@@ -150,7 +146,7 @@
 	}
 	
 	[self.tableView reloadData];
-	
+		
 	[[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(reloadData) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(reloadData) name:ISMSNotification_SongPlaybackStarted object:nil];
 }
@@ -173,12 +169,10 @@
 
 - (void)dealloc 
 {
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"createReflection" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[[NSNotificationCenter defaultCenter] removeObserver:self.tableView];
 	
 	albumInfoArtView.delegate = nil;
-	
-	
-	
 	dataModel.delegate = nil;
 }
 
@@ -189,6 +183,9 @@
 	[self.dataModel cancelLoad];
 	[self dataSourceDidFinishLoadingNewData];
 	[viewObjectsS hideLoadingScreen];
+	
+	if (self.dataModel.songsCount == 0 && self.dataModel.albumsCount == 0)
+		[self.tableView removeFooterShadow];
 }
 
 - (void)createReflection
@@ -207,6 +204,7 @@
 	if (dataModel.songsCount == 0 && dataModel.albumsCount == 0)
 	{
 		self.tableView.tableHeaderView = nil;
+		[self.tableView removeFooterShadow];
 	}
 	else if (myAlbum && dataModel.songsCount)
 	{
@@ -240,10 +238,13 @@
 		
 		// Create reflection
 		[self createReflection];
+		
+		[self.tableView addFooterShadow];
 	}
 	else
 	{
 		self.tableView.tableHeaderView = playAllShuffleAllView;
+		[self.tableView addFooterShadow];
 	}
 	
 	self.sectionInfo = dataModel.sectionInfo;
@@ -468,6 +469,9 @@
 	[viewObjectsS hideLoadingScreen];
 	
 	[self dataSourceDidFinishLoadingNewData];
+	
+	if (self.dataModel.songsCount == 0 && self.dataModel.albumsCount == 0)
+		[self.tableView removeBottomShadow];
 }
 
 - (void)loadingFinished:(SUSLoader *)theLoader
@@ -486,25 +490,25 @@
 {	
 	if (scrollView.isDragging) 
 	{
-		if (refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !_reloading) 
+		if (self.refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !self.reloading) 
 		{
-			[refreshHeaderView setState:EGOOPullRefreshNormal];
+			[self.refreshHeaderView setState:EGOOPullRefreshNormal];
 		} 
-		else if (refreshHeaderView.state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !_reloading) 
+		else if (self.refreshHeaderView.state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !self.reloading) 
 		{
-			[refreshHeaderView setState:EGOOPullRefreshPulling];
+			[self.refreshHeaderView setState:EGOOPullRefreshPulling];
 		}
 	}
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-	if (scrollView.contentOffset.y <= - 65.0f && !_reloading) 
+	if (scrollView.contentOffset.y <= - 65.0f && !self.reloading) 
 	{
-		_reloading = YES;
+		self.reloading = YES;
 		[viewObjectsS showAlbumLoadingScreen:self.view sender:self];
-		[dataModel startLoad];
-		[refreshHeaderView setState:EGOOPullRefreshLoading];
+		[self.dataModel startLoad];
+		[self.refreshHeaderView setState:EGOOPullRefreshLoading];
 		[UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:0.2];
 		self.tableView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
@@ -514,7 +518,7 @@
 
 - (void)dataSourceDidFinishLoadingNewData
 {
-	_reloading = NO;
+	self.reloading = NO;
 	
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:.3];

@@ -48,6 +48,7 @@
 @implementation NewHomeViewController
 
 @synthesize receivedData, connection;
+@synthesize playerButton, jukeboxButton, searchBar, searchSegment, searchSegmentBackground, searchOverlay, dismissButton, isSearch, quickLabel, shuffleLabel, jukeboxLabel, settingsLabel, chatLabel, playerLabel, coverArtBorder, coverArtView, artistLabel, albumLabel, songLabel;
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -72,18 +73,18 @@
 			[UIView beginAnimations:nil context:NULL];
 			[UIView setAnimationDuration:.3];
 			[UIView setAnimationCurve:UIViewAnimationCurveLinear];
-			quickLabel.alpha = 1.0;
-			shuffleLabel.alpha = 1.0;
-			jukeboxLabel.alpha = 1.0;
-			settingsLabel.alpha = 1.0;
-			chatLabel.alpha = 1.0;
-			playerLabel.alpha = 1.0;
+			self.quickLabel.alpha = 1.0;
+			self.shuffleLabel.alpha = 1.0;
+			self.jukeboxLabel.alpha = 1.0;
+			self.settingsLabel.alpha = 1.0;
+			self.chatLabel.alpha = 1.0;
+			self.playerLabel.alpha = 1.0;
 			
-			coverArtBorder.alpha = 1.0;
-			coverArtView.alpha = 1.0;
-			artistLabel.alpha = 1.0;
-			albumLabel.alpha = 1.0;
-			songLabel.alpha = 1.0;
+			self.coverArtBorder.alpha = 1.0;
+			self.coverArtView.alpha = 1.0;
+			self.artistLabel.alpha = 1.0;
+			self.albumLabel.alpha = 1.0;
+			self.songLabel.alpha = 1.0;
 			[UIView commitAnimations];
 		}
 	}
@@ -95,30 +96,28 @@
 			[UIView beginAnimations:nil context:NULL];
 			[UIView setAnimationDuration:.3];
 			[UIView setAnimationCurve:UIViewAnimationCurveLinear];
-			quickLabel.alpha = 0.0;
-			shuffleLabel.alpha = 0.0;
-			jukeboxLabel.alpha = 0.0;
-			settingsLabel.alpha = 0.0;
-			chatLabel.alpha = 0.0;
-			playerLabel.alpha = 0.0;
+			self.quickLabel.alpha = 0.0;
+			self.shuffleLabel.alpha = 0.0;
+			self.jukeboxLabel.alpha = 0.0;
+			self.settingsLabel.alpha = 0.0;
+			self.chatLabel.alpha = 0.0;
+			self.playerLabel.alpha = 0.0;
 			
-			coverArtBorder.alpha = 0.0;
-			coverArtView.alpha = 0.0;
-			artistLabel.alpha = 0.0;
-			albumLabel.alpha = 0.0;
-			songLabel.alpha = 0.0;
+			self.coverArtBorder.alpha = 0.0;
+			self.coverArtView.alpha = 0.0;
+			self.artistLabel.alpha = 0.0;
+			self.albumLabel.alpha = 0.0;
+			self.songLabel.alpha = 0.0;
 			[UIView commitAnimations];
 		}
 	}
-	
-	
 }
 
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
 	
-	searchSegment.selectedSegmentIndex = 3;
+	self.searchSegment.selectedSegmentIndex = 3;
 	
 	self.title = @"Home";
 	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settings)] autorelease];
@@ -131,56 +130,56 @@
 	if (!IS_IPAD())
 	{
 		//coverArtBorder = [[UIView alloc] initWithFrame:CGRectMake(15, 180, 290, 60)];
-		coverArtBorder = [UIButton buttonWithType:UIButtonTypeCustom];
-		coverArtBorder.frame = CGRectMake(15, 177, 290, 60);
-		coverArtBorder.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
-		coverArtBorder.layer.borderWidth = 2.0f;
-		[coverArtBorder addTarget:self action:@selector(player) forControlEvents:UIControlEventTouchUpInside];
-		[self.view addSubview:coverArtBorder];
+		self.coverArtBorder = [UIButton buttonWithType:UIButtonTypeCustom];
+		self.coverArtBorder.frame = CGRectMake(15, 177, 290, 60);
+		self.coverArtBorder.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
+		self.coverArtBorder.layer.borderWidth = 2.0f;
+		[self.coverArtBorder addTarget:self action:@selector(player) forControlEvents:UIControlEventTouchUpInside];
+		[self.view addSubview:self.coverArtBorder];
 		
-		coverArtView = [[AsynchronousImageView alloc] init];
-		coverArtView.isLarge = NO;
+		self.coverArtView = [[AsynchronousImageView alloc] init];
+		self.coverArtView.isLarge = NO;
 		//coverArtView.frame = CGRectMake(2, 2, 56, 56);
-		coverArtView.frame = CGRectMake(0, 0, 60, 60);
-		coverArtView.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
-		coverArtView.layer.borderWidth = 2.0f;
+		self.coverArtView.frame = CGRectMake(0, 0, 60, 60);
+		self.coverArtView.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
+		self.coverArtView.layer.borderWidth = 2.0f;
 		
 		//[coverArtBorder addSubview:coverArtView];
 		//[self.view addSubview:coverArtBorder];
-		[coverArtBorder addSubview:coverArtView];
+		[self.coverArtBorder addSubview:self.coverArtView];
 		
-		artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 3, 220, 17)];
-		artistLabel.backgroundColor = [UIColor clearColor];
-		artistLabel.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
-		artistLabel.font = [UIFont boldSystemFontOfSize:17];
-		artistLabel.minimumFontSize = 12;
-		artistLabel.adjustsFontSizeToFitWidth = YES;
-		artistLabel.textAlignment = UITextAlignmentCenter;
-		artistLabel.shadowOffset = CGSizeMake(0, 2);
-		artistLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
-		[coverArtBorder addSubview:artistLabel];
+		self.artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 3, 220, 17)];
+		self.artistLabel.backgroundColor = [UIColor clearColor];
+		self.artistLabel.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
+		self.artistLabel.font = [UIFont boldSystemFontOfSize:17];
+		self.artistLabel.minimumFontSize = 12;
+		self.artistLabel.adjustsFontSizeToFitWidth = YES;
+		self.artistLabel.textAlignment = UITextAlignmentCenter;
+		self.artistLabel.shadowOffset = CGSizeMake(0, 2);
+		self.artistLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
+		[self.coverArtBorder addSubview:self.artistLabel];
 		
-		albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 20, 220, 17)];
-		albumLabel.backgroundColor = [UIColor clearColor];
-		albumLabel.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
-		albumLabel.font = [UIFont systemFontOfSize:17];
-		albumLabel.minimumFontSize = 12;
-		albumLabel.adjustsFontSizeToFitWidth = YES;
-		albumLabel.textAlignment = UITextAlignmentCenter;
-		albumLabel.shadowOffset = CGSizeMake(0, 2);
-		albumLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
-		[coverArtBorder addSubview:albumLabel];
+		self.albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 20, 220, 17)];
+		self.albumLabel.backgroundColor = [UIColor clearColor];
+		self.albumLabel.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
+		self.albumLabel.font = [UIFont systemFontOfSize:17];
+		self.albumLabel.minimumFontSize = 12;
+		self.albumLabel.adjustsFontSizeToFitWidth = YES;
+		self.albumLabel.textAlignment = UITextAlignmentCenter;
+		self.albumLabel.shadowOffset = CGSizeMake(0, 2);
+		self.albumLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
+		[self.coverArtBorder addSubview:self.albumLabel];
 		
-		songLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 37, 220, 17)];
-		songLabel.backgroundColor = [UIColor clearColor];
-		songLabel.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
-		songLabel.font = [UIFont boldSystemFontOfSize:17];
-		songLabel.minimumFontSize = 12;
-		songLabel.adjustsFontSizeToFitWidth = YES;
-		songLabel.textAlignment = UITextAlignmentCenter;
-		songLabel.shadowOffset = CGSizeMake(0, 2);
-		songLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
-		[coverArtBorder addSubview:songLabel];				
+		self.songLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 37, 220, 17)];
+		self.songLabel.backgroundColor = [UIColor clearColor];
+		self.songLabel.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
+		self.songLabel.font = [UIFont boldSystemFontOfSize:17];
+		self.songLabel.minimumFontSize = 12;
+		self.songLabel.adjustsFontSizeToFitWidth = YES;
+		self.songLabel.textAlignment = UITextAlignmentCenter;
+		self.songLabel.shadowOffset = CGSizeMake(0, 2);
+		self.songLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
+		[self.coverArtBorder addSubview:self.songLabel];				
 		
 		[self initSongInfo];
 	}	
@@ -202,36 +201,36 @@
 	{
 		if (!IS_IPAD())
 		{
-			quickLabel.alpha = 1.0;
-			shuffleLabel.alpha = 1.0;
-			jukeboxLabel.alpha = 1.0;
-			settingsLabel.alpha = 1.0;
-			chatLabel.alpha = 1.0;
-			playerLabel.alpha = 1.0;
+			self.quickLabel.alpha = 1.0;
+			self.shuffleLabel.alpha = 1.0;
+			self.jukeboxLabel.alpha = 1.0;
+			self.settingsLabel.alpha = 1.0;
+			self.chatLabel.alpha = 1.0;
+			self.playerLabel.alpha = 1.0;
 			
-			coverArtBorder.alpha = 1.0;
-			coverArtView.alpha = 1.0;
-			artistLabel.alpha = 1.0;
-			albumLabel.alpha = 1.0;
-			songLabel.alpha = 1.0;
+			self.coverArtBorder.alpha = 1.0;
+			self.coverArtView.alpha = 1.0;
+			self.artistLabel.alpha = 1.0;
+			self.albumLabel.alpha = 1.0;
+			self.songLabel.alpha = 1.0;
 		}
 	}
 	else if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation) && !rotationDisabled)
 	{
 		if (!IS_IPAD())
 		{
-			quickLabel.alpha = 0.0;
-			shuffleLabel.alpha = 0.0;
-			jukeboxLabel.alpha = 0.0;
-			settingsLabel.alpha = 0.0;
-			chatLabel.alpha = 0.0;
-			playerLabel.alpha = 0.0;
+			self.quickLabel.alpha = 0.0;
+			self.shuffleLabel.alpha = 0.0;
+			self.jukeboxLabel.alpha = 0.0;
+			self.settingsLabel.alpha = 0.0;
+			self.chatLabel.alpha = 0.0;
+			self.playerLabel.alpha = 0.0;
 			
-			coverArtBorder.alpha = 0.0;
-			coverArtView.alpha = 0.0;
-			artistLabel.alpha = 0.0;
-			albumLabel.alpha = 0.0;
-			songLabel.alpha = 0.0;
+			self.coverArtBorder.alpha = 0.0;
+			self.coverArtView.alpha = 0.0;
+			self.artistLabel.alpha = 0.0;
+			self.albumLabel.alpha = 0.0;
+			self.songLabel.alpha = 0.0;
 		}
 	}
 	
@@ -258,21 +257,21 @@
 	if (settingsS.isJukeboxEnabled)
 	{
 		if (IS_IPAD())
-			[jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-on-ipad.png"] forState:UIControlStateNormal];
+			[self.jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-on-ipad.png"] forState:UIControlStateNormal];
 		else
-			[jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-on.png"] forState:UIControlStateNormal];
+			[self.jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-on.png"] forState:UIControlStateNormal];
 	}
 	else
 	{
 		if (IS_IPAD())
-			[jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off-ipad.png"] forState:UIControlStateNormal];
+			[self.jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off-ipad.png"] forState:UIControlStateNormal];
 		else
-			[jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off.png"] forState:UIControlStateNormal];
+			[self.jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off.png"] forState:UIControlStateNormal];
 	}
 	
-	searchSegment.alpha = 0.0;
-	searchSegment.enabled = NO;
-	searchSegmentBackground.alpha = 0.0;
+	self.searchSegment.alpha = 0.0;
+	self.searchSegment.enabled = NO;
+	self.searchSegmentBackground.alpha = 0.0;
 	
 	[FlurryAnalytics logEvent:@"HomeTab"];
 }
@@ -283,33 +282,33 @@
 	
 	if (currentSong != nil)
 	{		
-		coverArtView.coverArtId = currentSong.coverArtId;
+		self.coverArtView.coverArtId = currentSong.coverArtId;
 		
-		artistLabel.text = @"";
-		albumLabel.text = @"";
-		songLabel.text = @"";
+		self.artistLabel.text = @"";
+		self.albumLabel.text = @"";
+		self.songLabel.text = @"";
 		
 		if (currentSong.artist)
 		{
-			artistLabel.text = [currentSong.artist copy];
+			self.artistLabel.text = [currentSong.artist copy];
 		}
 		
 		if (currentSong.album)
 		{
-			albumLabel.text = [currentSong.album copy];
+			self.albumLabel.text = [currentSong.album copy];
 		}
 		
 		if (currentSong.title)
 		{
-			songLabel.text = [currentSong.title copy];
+			self.songLabel.text = [currentSong.title copy];
 		}
 	}
 	else
 	{
-		coverArtView.image = [UIImage imageNamed:@"default-album-art.png"];
-		artistLabel.text = @"Use the Folders tab to find music";
-		albumLabel.text = @"";
-		songLabel.text = @"";
+		self.coverArtView.image = [UIImage imageNamed:@"default-album-art.png"];
+		self.artistLabel.text = @"Use the Folders tab to find music";
+		self.albumLabel.text = @"";
+		self.songLabel.text = @"";
 	}
 }
 
@@ -327,15 +326,6 @@
 		[self presentModalViewController:quickAlbums animated:YES];
 	
 }
-
-/*- (void)pushViewController:(UIViewController *)viewController
-{
-	// Hide the loading screen
-	[viewObjectsS hideLoadingScreen];
-	
-	// Push the view controller
-	[self.navigationController pushViewController:viewController animated:YES];
-}*/
 
 - (IBAction)serverShuffle
 {	
@@ -366,7 +356,7 @@
 - (void)performServerShuffle:(NSNotification*)notification 
 {
 	// Start the 100 record open search to create shuffle list
-	isSearch = NO;
+	self.isSearch = NO;
 	NSDictionary *parameters = nil;
 	if (notification == nil)
 	{
@@ -458,9 +448,9 @@
 - (void)jukeboxOff
 {
 	if (IS_IPAD())
-		[jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off-ipad.png"] forState:UIControlStateNormal];
+		[self.jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off-ipad.png"] forState:UIControlStateNormal];
 	else
-		[jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off.png"] forState:UIControlStateNormal];
+		[self.jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off.png"] forState:UIControlStateNormal];
 }
 
 - (IBAction)jukebox
@@ -471,9 +461,9 @@
 		{
 			// Jukebox mode is on, turn it off
 			if (IS_IPAD())
-				[jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off-ipad.png"] forState:UIControlStateNormal];
+				[self.jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off-ipad.png"] forState:UIControlStateNormal];
 			else
-				[jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off.png"] forState:UIControlStateNormal];
+				[self.jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off.png"] forState:UIControlStateNormal];
 			settingsS.isJukeboxEnabled = NO;
 						
 			appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
@@ -486,9 +476,9 @@
 			
 			// Jukebox mode is off, turn it on
 			if (IS_IPAD())
-				[jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-on-ipad.png"] forState:UIControlStateNormal];
+				[self.jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-on-ipad.png"] forState:UIControlStateNormal];
 			else
-				[jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-on.png"] forState:UIControlStateNormal];
+				[self.jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-on.png"] forState:UIControlStateNormal];
 			settingsS.isJukeboxEnabled = YES;
 			
 			[jukeboxS jukeboxGetInfo];
@@ -515,11 +505,7 @@
 
 - (void)dealloc 
 {
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"JukeboxTurnedOff" object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackStarted object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ServerSwitched object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"performServerShuffle" object:nil];
-	
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark -
@@ -530,34 +516,34 @@
 	//NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", [appDelegateS.defaultUrl md5]];
 	
 	// Create search overlay
-	searchOverlay = [[UIView alloc] init];
+	self.searchOverlay = [[UIView alloc] init];
 	//if ([[appDelegateS.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
 	if (settingsS.isNewSearchAPI)
 	{
 		if (IS_IPAD())
-			searchOverlay.frame = CGRectMake(0, 86, 1024, 1024);
+			self.searchOverlay.frame = CGRectMake(0, 86, 1024, 1024);
 		else
-			searchOverlay.frame = CGRectMake(0, 82, 480, 480);
+			self.searchOverlay.frame = CGRectMake(0, 82, 480, 480);
 	}
 	else
 	{
 		if (IS_IPAD())
-			searchOverlay.frame = CGRectMake(0, 44, 1024, 1024);
+			self.searchOverlay.frame = CGRectMake(0, 44, 1024, 1024);
 		else
-			searchOverlay.frame = CGRectMake(0, 44, 480, 480);
+			self.searchOverlay.frame = CGRectMake(0, 44, 480, 480);
 	}
 	
-	searchOverlay.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	searchOverlay.backgroundColor = [UIColor colorWithWhite:0 alpha:.80];
-	searchOverlay.alpha = 0.0;
-	[self.view addSubview:searchOverlay];
+	self.searchOverlay.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	self.searchOverlay.backgroundColor = [UIColor colorWithWhite:0 alpha:.80];
+	self.searchOverlay.alpha = 0.0;
+	[self.view addSubview:self.searchOverlay];
 		
-	dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
-	dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	[dismissButton addTarget:searchBar action:@selector(resignFirstResponder) forControlEvents:UIControlEventTouchUpInside];
-	dismissButton.frame = self.view.bounds;
-	dismissButton.enabled = NO;
-	[searchOverlay addSubview:dismissButton];
+	self.dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
+	self.dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	[self.dismissButton addTarget:self.searchBar action:@selector(resignFirstResponder) forControlEvents:UIControlEventTouchUpInside];
+	self.dismissButton.frame = self.view.bounds;
+	self.dismissButton.enabled = NO;
+	[self.searchOverlay addSubview:self.dismissButton];
 	
 	// Animate the segmented control on screen
 	[UIView beginAnimations:nil context:NULL];
@@ -566,12 +552,12 @@
 	//if ([[appDelegateS.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
 	if (settingsS.isNewSearchAPI)
 	{
-		searchSegment.enabled = YES;
-		searchSegment.alpha = 1;
-		searchSegmentBackground.alpha = 1;
+		self.searchSegment.enabled = YES;
+		self.searchSegment.alpha = 1;
+		self.searchSegmentBackground.alpha = 1;
 	}
-	searchOverlay.alpha = 1;
-	dismissButton.enabled = YES;
+	self.searchOverlay.alpha = 1;
+	self.dismissButton.enabled = YES;
 	[UIView commitAnimations];
 }
 
@@ -585,20 +571,20 @@
 	//if ([[appDelegateS.settingsDictionary objectForKey:key] isEqualToString:@"YES"])
 	if (settingsS.isNewSearchAPI)
 	{
-		searchSegment.alpha = 0;
-		searchSegment.enabled = NO;
-		searchSegmentBackground.alpha = 0;
+		self.searchSegment.alpha = 0;
+		self.searchSegment.enabled = NO;
+		self.searchSegmentBackground.alpha = 0;
 	}
-	searchOverlay.alpha = 0;
-	dismissButton.enabled = NO;
+	self.searchOverlay.alpha = 0;
+	self.dismissButton.enabled = NO;
 	[UIView commitAnimations];
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)theSearchBar
 {
-	isSearch = YES;
+	self.isSearch = YES;
 	
-	[searchBar resignFirstResponder];
+	[self.searchBar resignFirstResponder];
 	
 	NSString *searchTerms = [searchBar.text stringByTrimmingLeadingAndTrailingWhitespace];
 	DLog(@"-%@-", searchTerms);
@@ -609,12 +595,12 @@
 	{
         action = @"search2";
 		NSString *searchTermsString = [NSString stringWithFormat:@"%@*", searchTerms];
-		if (searchSegment.selectedSegmentIndex == 0)
+		if (self.searchSegment.selectedSegmentIndex == 0)
 		{
             parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"artistCount", @"0", @"albumCount", @"0", @"songCount", 
                           n2N(searchTermsString), @"query", nil];
 		}
-		else if (searchSegment.selectedSegmentIndex == 1)
+		else if (self.searchSegment.selectedSegmentIndex == 1)
 		{
             parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"0", @"artistCount", @"20", @"albumCount", @"0", @"songCount", 
                           n2N(searchTermsString), @"query", nil];
@@ -749,17 +735,17 @@
 			//if (isNewSearchAPI)
 			if (settingsS.isNewSearchAPI)
 			{
-				if (searchSegment.selectedSegmentIndex == 0)
+				if (self.searchSegment.selectedSegmentIndex == 0)
 				{
 					searchViewController.listOfArtists = [NSMutableArray arrayWithArray:parser.listOfArtists];
 					//DLog(@"%@", searchViewController.listOfArtists);
 				}
-				else if (searchSegment.selectedSegmentIndex == 1)
+				else if (self.searchSegment.selectedSegmentIndex == 1)
 				{
 					searchViewController.listOfAlbums = [NSMutableArray arrayWithArray:parser.listOfAlbums];
 					//DLog(@"%@", searchViewController.listOfAlbums);
 				}
-				else if (searchSegment.selectedSegmentIndex == 2)
+				else if (self.searchSegment.selectedSegmentIndex == 2)
 				{
 					searchViewController.listOfSongs = [NSMutableArray arrayWithArray:parser.listOfSongs];
 					//DLog(@"%@", searchViewController.listOfSongs);

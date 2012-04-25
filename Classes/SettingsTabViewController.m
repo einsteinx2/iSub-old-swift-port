@@ -686,8 +686,7 @@
 
 - (void)dealloc 
 {
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"twitterAuthenticated" object:nil];
-	
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField

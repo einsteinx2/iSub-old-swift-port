@@ -66,7 +66,7 @@
 
 - (void)dealloc 
 {
-	[[NSNotificationCenter defaultCenter] removeObserver:self.tableView name:ISMSNotification_StorePurchaseComplete object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self.tableView];
 }
 
 #pragma mark - Store

@@ -63,4 +63,6 @@
 - (void)saveHandlerStack;
 - (void)loadHandlerStack;
 
+- (void)downloadMoreOfPrecacheStream;
+
 @end

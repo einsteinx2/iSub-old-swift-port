@@ -200,9 +200,9 @@
     [self setNeedsDisplay];
 }
 
--(void) setVerticalTextAlignment:(AUITextVerticalAlignment)newVerticalTextAlignment
+-(void) setVerticalTextAlignment:(AUITextVerticalAlignment)nVerticalTextAlignment
 {
-    verticalTextAlignment = newVerticalTextAlignment;
+    verticalTextAlignment = nVerticalTextAlignment;
     [self setNeedsLayout];
 }
 
@@ -213,9 +213,9 @@
     if (self.adjustsFontSizeToFitWidth)
     {
         // Calculate the new font size:
-        CGFloat newFontSize;
-        [textLayer.string sizeWithFont:self.font minFontSize:self.minimumFontSize actualFontSize:&newFontSize forWidth:self.bounds.size.width lineBreakMode:self.lineBreakMode];
-        self.font = [UIFont fontWithName:self.font.fontName size:newFontSize];
+        CGFloat fontSize;
+        [textLayer.string sizeWithFont:self.font minFontSize:self.minimumFontSize actualFontSize:&fontSize forWidth:self.bounds.size.width lineBreakMode:self.lineBreakMode];
+        self.font = [UIFont fontWithName:self.font.fontName size:fontSize];
     }
     
     // Resize the text so that the text will be vertically aligned according to the set alignment
@@ -223,22 +223,22 @@
                               constrainedToSize:self.bounds.size 
                                   lineBreakMode:self.lineBreakMode];
     
-    CGRect newLayerFrame = self.layer.bounds;
-    newLayerFrame.size.height = stringSize.height;
+    CGRect layerFrame = self.layer.bounds;
+    layerFrame.size.height = stringSize.height;
     switch (self.verticalTextAlignment) {
         case AUITextVerticalAlignmentCenter:
-                newLayerFrame.origin.y = (self.bounds.size.height - stringSize.height) / 2;        
+                layerFrame.origin.y = (self.bounds.size.height - stringSize.height) / 2;        
             break;
         case AUITextVerticalAlignmentTop:
-            newLayerFrame.origin.y = 0;
+            layerFrame.origin.y = 0;
             break;
         case AUITextVerticalAlignmentBottom:
-            newLayerFrame.origin.y = (self.bounds.size.height - stringSize.height);
+            layerFrame.origin.y = (self.bounds.size.height - stringSize.height);
             break;
         default:
             break;
     }
-    textLayer.frame = newLayerFrame;
+    textLayer.frame = layerFrame;
 
     // TODO: Handle numberOfLines
     

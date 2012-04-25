@@ -10,18 +10,15 @@
 
 @implementation UIImageView (Reflection)
 
-- (CGImageRef)createGradientImageRef:(CGSize)size
+CGImageRef CreateGradientImageRef(CGSize size)
 {
-	int pixelsWide = size.width;
-	int pixelsHigh = size.height;
-	
 	CGImageRef theCGImage = NULL;
 	
 	// gradient is always black-white and the mask must be in the gray colorspace
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
 	
 	// create the bitmap context
-	CGContextRef gradientBitmapContext = CGBitmapContextCreate(NULL, pixelsWide, pixelsHigh,
+	CGContextRef gradientBitmapContext = CGBitmapContextCreate(NULL, size.width, size.height,
 															   8, 0, colorSpace, kCGImageAlphaNone);
 	
 	// define the start and end grayscale values (with the alpha, even though
@@ -34,7 +31,7 @@
 	
 	// create the start and end points for the gradient vector (straight down)
 	CGPoint gradientStartPoint = CGPointZero;
-	CGPoint gradientEndPoint = CGPointMake(0, pixelsHigh);
+	CGPoint gradientEndPoint = CGPointMake(0, size.height);
 	
 	// draw the gradient into the gray bitmap context
 	CGContextDrawLinearGradient(gradientBitmapContext, grayScaleGradient, gradientStartPoint,
@@ -49,14 +46,12 @@
     return theCGImage;
 }
 
-- (CGContextRef)createReflectionBitmapContext:(CGSize)size
+CGContextRef CreateReflectionBitmapContext(CGSize size)
 {
-	int pixelsWide = size.width;
-	int pixelsHigh = size.height;
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 	
 	// create the bitmap context
-	CGContextRef bitmapContext = CGBitmapContextCreate (NULL, pixelsWide, pixelsHigh, 8,
+	CGContextRef bitmapContext = CGBitmapContextCreate (NULL, size.width, size.height, 8,
 														0, colorSpace,
 														// this will give us an optimal BGRA format for the device:
 														(kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst));
@@ -75,12 +70,12 @@
     
 	// create a bitmap graphics context the size of the image
 	CGSize size = CGSizeMake(theWidth, theHeight);
-	CGContextRef mainViewContentContext = [self createReflectionBitmapContext:size];
+	CGContextRef mainViewContentContext = CreateReflectionBitmapContext(size);
 	
 	// create a 2 bit CGImage containing a gradient that will be used for masking the 
 	// main view content to create the 'fade' of the reflection.  The CGImageCreateWithMask
 	// function will stretch the bitmap image as required, so we can create a 1 pixel wide gradient
-	CGImageRef gradientMaskImage = [self createGradientImageRef:CGSizeMake(1, theHeight)];
+	CGImageRef gradientMaskImage = CreateGradientImageRef(CGSizeMake(1, theHeight));
 	
 	// create an image by masking the bitmap of the mainView content with the gradient view
 	// then release the  pre-masked content bitmap and the gradient bitmap

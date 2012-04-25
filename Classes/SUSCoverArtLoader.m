@@ -14,7 +14,13 @@
 #import "FMDatabaseQueueAdditions.h"
 #import "NSNotificationCenter+MainThread.h"
 
+@interface SUSCoverArtLoader()
+// Keep strong reference to self so we don't die until done downloading when used standalone
+@property (strong) SUSCoverArtLoader *selfRef;
+@end
+
 @implementation SUSCoverArtLoader
+@synthesize selfRef;
 
 static NSMutableArray *loadingImageNames;
 static NSObject *syncObject;
@@ -48,8 +54,7 @@ static void initialize_navigationBarImages()
 
 - (void)dealloc
 {
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CoverArtFinishedInternal object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CoverArtFailedInternal object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (SUSLoaderType)type
@@ -124,6 +129,7 @@ static void initialize_navigationBarImages()
 {
 	@synchronized(syncObject)
 	{
+		self.selfRef = self;
 		if (self.coverArtId && !viewObjectsS.isOfflineMode)
 		{
 			if (![self isCoverArtCached])
@@ -158,6 +164,8 @@ static void initialize_navigationBarImages()
 						// Inform the delegate that the loading failed.
 						NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
 						[self informDelegateLoadingFailed:error];
+						
+						self.selfRef = nil;
 					}
 				}
 			}
@@ -202,6 +210,8 @@ static void initialize_navigationBarImages()
 	// Inform the delegate that loading failed
 	//[self informDelegateLoadingFailed:error];
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CoverArtFinishedInternal object:[self.coverArtId copy]];
+	
+	self.selfRef = nil;
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
@@ -235,6 +245,8 @@ static void initialize_navigationBarImages()
 
 	self.receivedData = nil;
 	self.connection = nil;
+	
+	self.selfRef = nil;
 }
 
 @end

@@ -13,13 +13,16 @@
 //	2 = song
 //
 
+typedef enum {
+	ISMSSearchSongsSearchType_Artists = 0,
+	ISMSSearchSongsSearchType_Albums,
+	ISMSSearchSongsSearchType_Songs
+} ISMSSearchSongsSearchType;
+
 @interface SearchSongsViewController : UITableViewController 
-{
-	NSMutableData *receivedData;	
-}
 
 @property (copy) NSString *query;
-@property NSUInteger searchType;
+@property ISMSSearchSongsSearchType searchType;
 
 @property (strong) NSMutableArray *listOfArtists;
 @property (strong) NSMutableArray *listOfAlbums;
@@ -31,5 +34,6 @@
 @property BOOL isLoading;
 
 @property (strong) NSURLConnection *connection;
+@property (strong) NSMutableData *receivedData;	
 
 @end

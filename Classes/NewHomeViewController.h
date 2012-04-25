@@ -10,31 +10,29 @@
 @class AsynchronousImageView;
 
 @interface NewHomeViewController : UIViewController
-{
-	
-	IBOutlet UIButton *playerButton;
-	IBOutlet UIButton *jukeboxButton;
-	IBOutlet UISearchBar *searchBar;
-	IBOutlet UISegmentedControl *searchSegment;
-	IBOutlet UIView *searchSegmentBackground;
-	UIView *searchOverlay;
-	UIButton *dismissButton;
-	
-	BOOL isSearch;
-	
-	IBOutlet UILabel *quickLabel;
-	IBOutlet UILabel *shuffleLabel;
-	IBOutlet UILabel *jukeboxLabel;
-	IBOutlet UILabel *settingsLabel;
-	IBOutlet UILabel *chatLabel;
-	IBOutlet UILabel *playerLabel;
-	
-	UIButton *coverArtBorder;
-	AsynchronousImageView *coverArtView;
-	UILabel *artistLabel;
-	UILabel *albumLabel;
-	UILabel *songLabel;
-}
+
+@property (strong) IBOutlet UIButton *playerButton;
+@property (strong) IBOutlet UIButton *jukeboxButton;
+@property (strong) IBOutlet UISearchBar *searchBar;
+@property (strong) IBOutlet UISegmentedControl *searchSegment;
+@property (strong) IBOutlet UIView *searchSegmentBackground;
+@property (strong) UIView *searchOverlay;
+@property (strong) UIButton *dismissButton;
+
+@property BOOL isSearch;
+
+@property (strong) IBOutlet UILabel *quickLabel;
+@property (strong) IBOutlet UILabel *shuffleLabel;
+@property (strong) IBOutlet UILabel *jukeboxLabel;
+@property (strong) IBOutlet UILabel *settingsLabel;
+@property (strong) IBOutlet UILabel *chatLabel;
+@property (strong) IBOutlet UILabel *playerLabel;
+
+@property (strong) UIButton *coverArtBorder;
+@property (strong) AsynchronousImageView *coverArtView;
+@property (strong) UILabel *artistLabel;
+@property (strong) UILabel *albumLabel;
+@property (strong) UILabel *songLabel;
 
 @property (strong) NSURLConnection *connection;
 @property (strong) NSMutableData *receivedData;

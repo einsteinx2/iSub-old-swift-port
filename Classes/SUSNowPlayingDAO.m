@@ -31,6 +31,13 @@
     return self;
 }
 
+- (void)dealloc
+{
+	[loader cancelLoad];
+	loader.delegate = nil;
+    loader = nil;
+}
+
 #pragma mark - Public DAO Methods
 
 - (NSUInteger)count

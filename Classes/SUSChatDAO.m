@@ -46,7 +46,9 @@
 
 - (void)dealloc
 {
-	[self cancelLoad];
+	[loader cancelLoad];
+	loader.delegate = nil;
+    loader = nil;
 }
 
 #pragma mark - Public DAO Methods

@@ -281,12 +281,12 @@ NSInteger presetSort(id preset1, id preset2, void *context)
 		[mutableUserPresets addEntriesFromDictionary:self.userPresets];
 	
 	// Add new temp custom preset
-	NSMutableDictionary *newPresetDict = [NSMutableDictionary dictionaryWithCapacity:0];
-	[newPresetDict setObject:[NSNumber numberWithInt:presetId] forKey:@"presetId"];
-	[newPresetDict setObject:name forKey:@"name"];
-	[newPresetDict setObject:arrayOfPoints forKey:@"values"];
-	[newPresetDict setObject:[NSNumber numberWithBool:NO] forKey:@"isDefault"];
-	[mutableUserPresets setObject:newPresetDict forKey:[[NSNumber numberWithInt:presetId] stringValue]];
+	NSMutableDictionary *presetDict = [NSMutableDictionary dictionaryWithCapacity:0];
+	[presetDict setObject:[NSNumber numberWithInt:presetId] forKey:@"presetId"];
+	[presetDict setObject:name forKey:@"name"];
+	[presetDict setObject:arrayOfPoints forKey:@"values"];
+	[presetDict setObject:[NSNumber numberWithBool:NO] forKey:@"isDefault"];
+	[mutableUserPresets setObject:presetDict forKey:[[NSNumber numberWithInt:presetId] stringValue]];
 	[mutableAllUserPresets setObject:mutableUserPresets forKey:[[NSNumber numberWithInt:type] stringValue]];
 	[defaults setObject:mutableAllUserPresets forKey:@"BassEffectUserPresets"];
 	[defaults synchronize];

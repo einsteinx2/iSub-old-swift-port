@@ -13,6 +13,7 @@
 #import "SavedSettings.h"
 #import "NSArray+Additions.h"
 #import "UIViewController+PushViewControllerCustom.h"
+#import "UITableView+Shadows.h"
 
 @implementation SearchAllViewController
 @synthesize cellNames, listOfArtists, listOfAlbums, listOfSongs, query;
@@ -24,22 +25,6 @@
 	
     return YES;
 }
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-	if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]))
-	{
-		cellNames = nil;
-		listOfArtists = nil;
-		listOfAlbums = nil;
-		listOfSongs = nil;
-		query = nil;
-	}
-	
-	return self;
-}
-
-
 
 - (void)didReceiveMemoryWarning
 {
@@ -57,51 +42,23 @@
 	
 	self.cellNames = [NSMutableArray arrayWithCapacity:3];
 	
-	if ([listOfArtists count] > 0)
+	if (self.listOfArtists.count > 0)
 	{
 		[cellNames addObject:@"Artists"];
 	}
 	
-	if ([listOfAlbums count] > 0)
+	if (self.listOfAlbums.count > 0)
 	{
 		[cellNames addObject:@"Albums"];
 	}
 	
-	if ([listOfSongs count] > 0)
+	if (self.listOfSongs.count > 0)
 	{
 		[cellNames addObject:@"Songs"];
 	}
 	
-	// Add the table fade
-	UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
-	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
-	fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	[self.tableView addSubview:fadeTop];
-	
-	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
-	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.tableView.tableFooterView = fadeBottom;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
+	[self.tableView addHeaderShadow];
+	[self.tableView addFooterShadow];
 }
 
 #pragma mark - Table view data source
@@ -115,7 +72,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [cellNames count];
+    return self.cellNames.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -134,45 +91,6 @@
     return cell;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -186,17 +104,17 @@
 	if ([type isEqualToString:@"Artists"])
 	{
 		searchView.listOfArtists = [NSMutableArray arrayWithArray:listOfArtists];
-		searchView.searchType = 0;
+		searchView.searchType = ISMSSearchSongsSearchType_Artists;
 	}
 	else if ([type isEqualToString:@"Albums"])
 	{
 		searchView.listOfAlbums = [NSMutableArray arrayWithArray:listOfAlbums];
-		searchView.searchType = 1;
+		searchView.searchType = ISMSSearchSongsSearchType_Albums;
 	}
 	else if ([type isEqualToString:@"Songs"])
 	{
 		searchView.listOfSongs = [NSMutableArray arrayWithArray:listOfSongs];
-		searchView.searchType = 2;
+		searchView.searchType = ISMSSearchSongsSearchType_Songs;
 	}
 	
 	searchView.query = query;

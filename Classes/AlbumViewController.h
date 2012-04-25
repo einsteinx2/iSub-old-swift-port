@@ -12,16 +12,9 @@
 @class Artist, Album, EGORefreshTableHeaderView, SUSSubFolderDAO, AsynchronousImageView;
 
 @interface AlbumViewController : UITableViewController <SUSLoaderDelegate, AsynchronousImageViewDelegate>
-{
-	
-	NSURLConnection *connection;
-	NSMutableData *loadingData;
-	
-	EGORefreshTableHeaderView *refreshHeaderView;
-	BOOL _reloading;
-}
 
-@property(assign,getter=isReloading) BOOL reloading;
+@property (strong) EGORefreshTableHeaderView *refreshHeaderView;
+@property BOOL reloading;
 	
 @property (copy) NSString *myId;
 @property (strong) Artist *myArtist;

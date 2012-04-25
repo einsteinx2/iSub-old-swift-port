@@ -51,9 +51,9 @@
 	
 	if (expectedLabelSize.width > 280)
 	{
-		CGRect newFrame = artistNameLabel.frame;
-		newFrame.size.width = expectedLabelSize.width;
-		artistNameLabel.frame = newFrame;
+		CGRect frame = artistNameLabel.frame;
+		frame.size.width = expectedLabelSize.width;
+		artistNameLabel.frame = frame;
 	}
 }
 

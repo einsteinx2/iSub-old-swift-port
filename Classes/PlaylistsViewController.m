@@ -39,6 +39,7 @@
 #import "UIViewController+PushViewControllerCustom.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
+#import "UITableView+Shadows.h"
 
 @interface PlaylistsViewController (Private)
 
@@ -144,24 +145,12 @@
 	
 	self.tableView.tableHeaderView = headerView;
 	
-	// Add the table fade
-	/*UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
-	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
-	fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	[self.tableView addSubview:fadeTop];
-	[fadeTop release];*/
-	
 	if (IS_IPAD())
 	{
 		self.view.backgroundColor = ISMSiPadBackgroundColor;
 	}
-	//else
-	//{
-		UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
-		fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-		fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		self.tableView.tableFooterView = fadeBottom;
-	//}
+	
+	[self.tableView addFooterShadow];
 	
 	connectionQueue = [[BBSimpleConnectionQueue alloc] init];
 	connectionQueue.delegate = self;
@@ -1796,8 +1785,9 @@ static NSString *kName_Error = @"error";
 
 - (void)dealloc 
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	serverPlaylistsDataModel.delegate = nil;
-	 connectionQueue = nil;
+	connectionQueue = nil;
 }
 
 

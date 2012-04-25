@@ -9,6 +9,7 @@
 #import "CustomUITabBarController.h"
 #import "MoreTableViewDataSource.h"
 #import "ViewObjectsSingleton.h"
+#import "UITableView+Shadows.h"
 
 @implementation CustomUITabBarController
 
@@ -27,16 +28,8 @@
         moreTableViewDataSource = [[MoreTableViewDataSource alloc] initWithDataSource:tableView.dataSource];
         tableView.dataSource = moreTableViewDataSource;
 		
-		// Add the table fade
-		UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
-		fadeTop.frame =CGRectMake(0, -10, tableView.bounds.size.width, 10);
-		fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		[tableView addSubview:fadeTop];
-		
-		UIImageView *fade = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
-		fade.frame = CGRectMake(0, 0, tableView.bounds.size.width, 10);
-		fade.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		tableView.tableFooterView = fade;
+		[tableView addHeaderShadow];
+		[tableView addFooterShadow];
     }
 }
 

@@ -178,6 +178,8 @@
 
 - (void)dealloc
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[[NSNotificationCenter defaultCenter] removeObserver:presetPicker];
 	[NSObject gcdCancelTimerBlockWithName:hidePickerTimer];
 	//[hidePickerTimer release]; hidePickerTimer = nil;
 	

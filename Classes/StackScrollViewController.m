@@ -77,6 +77,11 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 	return self;
 }
 
+- (void)dealloc
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (UIView *)slideViewAtIndex:(NSUInteger)index
 {
 	return (UIView *)[[slideViews subviews] objectAtIndexSafe:index];

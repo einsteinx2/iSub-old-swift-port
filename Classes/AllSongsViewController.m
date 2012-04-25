@@ -38,6 +38,7 @@
 #import "JukeboxSingleton.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "FMDatabaseQueueAdditions.h"
+#import "UITableView+Shadows.h"
 
 @interface AllSongsViewController (Private)
 - (void)hideLoadingScreen;
@@ -80,13 +81,6 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createDataModel) name:ISMSNotification_ServerSwitched object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadingFinishedNotification) name:ISMSNotification_AllSongsLoadingFinished object:nil];
-
-	// Add the table fade
-	/*UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
-	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
-	fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	[self.tableView addSubview:fadeTop];
-	[fadeTop release];*/
 	
 	// Add the pull to refresh view
 	refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
@@ -97,13 +91,8 @@
 	{
 		self.view.backgroundColor = ISMSiPadBackgroundColor;
 	}
-	//else
-	//{
-		UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
-		fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-		fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		self.tableView.tableFooterView = fadeBottom;
-	//}
+	
+	[self.tableView addFooterShadow];
 }
 
 - (void)viewWillAppear:(BOOL)animated 
@@ -216,12 +205,11 @@
 
 - (void)dealloc 
 {
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ServerSwitched object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_AllSongsLoadingFinished object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
 	dataModel.delegate = nil;
-	 searchBar = nil;
-	 url = nil;
+	searchBar = nil;
+	url = nil;
 }
 
 #pragma mark - LoaderDelegate methods
@@ -413,11 +401,6 @@
 	dismissButton.enabled = NO;
 	[searchOverlay addSubview:dismissButton];
 	
-	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
-	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	[searchOverlay addSubview:fadeBottom];
-	
 	// Animate the search overlay on screen
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:.3];
@@ -448,10 +431,7 @@
 	[searchOverlay removeFromSuperview];
 	searchOverlay = nil;
 	
-	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
-	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.tableView.tableFooterView = fadeBottom;
+	[self.tableView addFooterShadow];
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)theSearchBar 

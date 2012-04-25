@@ -9,33 +9,18 @@
 #import "FolderDropdownDelegate.h"
 
 @interface FolderDropdownControl : UIView <NSXMLParserDelegate>
-{
-	CALayer *arrowImage;
-	
-	float sizeIncrease;
-	
-	NSDictionary *folders;
-	NSMutableDictionary *updatedfolders;
-	NSNumber *selectedFolderId;
-	
-	UILabel *selectedFolderLabel;
-	
-	NSMutableArray *labels;
-	
-	BOOL isOpen;
-	
-	// Colors
-	UIColor *borderColor;
-	UIColor *textColor;
-	UIColor *lightColor;
-	UIColor *darkColor;
-	
-	id<FolderDropdownDelegate> __unsafe_unretained delegate;
-	
-	NSMutableData *receivedData;
-	NSURLConnection *connection;
-}
 
+@property (strong) CALayer *arrowImage;
+
+@property CGFloat sizeIncrease;
+
+@property (strong) NSMutableDictionary *updatedfolders;	
+@property (strong) UILabel *selectedFolderLabel;
+
+@property (strong) NSMutableData *receivedData;
+@property (strong) NSURLConnection *connection;
+
+@property (strong) NSMutableArray *labels;
 @property (strong) NSDictionary *folders;
 @property BOOL isOpen;
 

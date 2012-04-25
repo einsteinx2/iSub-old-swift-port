@@ -871,28 +871,27 @@
 {
 	if (IS_IPAD())
 	{
-		[ipadRootViewController.menuViewController showSettings];
+		[self.ipadRootViewController.menuViewController showSettings];
 	}
 	else
 	{
 		ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
 		
-		if (currentTabBarController.selectedIndex == 4)
+		if (self.currentTabBarController.selectedIndex == 4)
 		{
-			[currentTabBarController.moreNavigationController popToViewController:[currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
-			[currentTabBarController.moreNavigationController pushViewController:serverListViewController animated:YES];
+			[self.currentTabBarController.moreNavigationController popToViewController:[currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
+			[self.currentTabBarController.moreNavigationController pushViewController:serverListViewController animated:YES];
 		}
-		else if (currentTabBarController.selectedIndex == NSNotFound)
+		else if (self.currentTabBarController.selectedIndex == NSNotFound)
 		{
-			[currentTabBarController.moreNavigationController popToRootViewControllerAnimated:YES];
-			[currentTabBarController.moreNavigationController pushViewController:serverListViewController animated:YES];
+			[self.currentTabBarController.moreNavigationController popToRootViewControllerAnimated:YES];
+			[self.currentTabBarController.moreNavigationController pushViewController:serverListViewController animated:YES];
 		}
 		else
 		{
-			[(UINavigationController*)currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
-			[(UINavigationController*)currentTabBarController.selectedViewController pushViewController:serverListViewController animated:YES];
+			[(UINavigationController*)self.currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
+			[(UINavigationController*)self.currentTabBarController.selectedViewController pushViewController:serverListViewController animated:YES];
 		}
-		
 	}
 }
 

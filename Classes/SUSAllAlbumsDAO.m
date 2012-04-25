@@ -57,7 +57,7 @@
 	[self.dbQueue inDatabase:^(FMDatabase *db)
 	{
 		[db executeUpdate:@"CREATE TEMPORARY TABLE IF NOT EXISTS allAlbumsNameSearch (rowIdInAllAlbums INTEGER)"];
-		NSUInteger value = [db intForQuery:@"SELECT count(*) FROM allAlbumsNameSearch"];
+		value = [db intForQuery:@"SELECT count(*) FROM allAlbumsNameSearch"];
 		
 		DLog(@"allAlbumsNameSearch count: %i   value: %i", [db intForQuery:@"SELECT count(*) FROM allAlbumsNameSearch"], value);
 	}];

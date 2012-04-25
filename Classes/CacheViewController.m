@@ -35,6 +35,7 @@
 #import "ISMSCacheQueueManager.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "UIViewController+IsVisible.h"
+#import "UITableView+Shadows.h"
 
 @interface CacheViewController ()
 - (void)addNoSongsScreen;
@@ -78,6 +79,11 @@
 }
 
 #pragma mark - View lifecycle
+
+- (void)dealloc
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 - (void)registerForNotifications
 {
@@ -200,20 +206,12 @@
 		shuffleButton.frame = CGRectMake(160, 0, 160, 40);
 		[shuffleButton addTarget:self action:@selector(shuffleAction:) forControlEvents:UIControlEventTouchUpInside];
 		[headerView2 addSubview:shuffleButton];
-		
-		// Add the top fade
-		UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
-		fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
-		fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		[self.tableView addSubview:fadeTop];
 	}
 	
 	self.tableView.tableHeaderView = headerView;
 	
-	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
-	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.tableView.tableFooterView = fadeBottom;
+	[self.tableView addHeaderShadow];
+	[self.tableView addFooterShadow];
 	
 	if (viewObjectsS.isOfflineMode)
 	{

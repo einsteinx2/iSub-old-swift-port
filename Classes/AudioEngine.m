@@ -36,6 +36,7 @@
 @synthesize hasTweeted, hasNotifiedSubsonic, hasScrobbled;
 @synthesize currentStreamSong;
 @synthesize isBassFreed;
+@synthesize waitLoopUserInfo;
 //@synthesize startSongRetryTimer, nextSongRetryTimer;
 
 // BASS plugins
@@ -258,8 +259,6 @@ void CALLBACK MyStreamFreeCallback(HSYNC handle, DWORD channel, DWORD data, void
 		DLog(@"removing user info from dict");
 		DLog(@"%@", sharedInstance.bassUserInfoDict);
 		[sharedInstance removeUserInfoForStream:channel];
-		//BassUserInfo *userInfo = (__bridge BassUserInfo*)user;
-		//[userInfo release];
 		DLog(@"%@", sharedInstance.bassUserInfoDict);
 	}
 }
@@ -518,16 +517,16 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 - (void)resizeAudioBuffer:(ISMS_AudioBuffer *)audioBuffer bytesRead:(DWORD)bytesRead
 {
 	// Create a new buffer to hold the remaining data
-	DWORD newLength = audioBuffer->length - bytesRead;
-	void *newBuffer = malloc(sizeof(char) * newLength);
+	DWORD length = audioBuffer->length - bytesRead;
+	void *buffer = malloc(sizeof(char) * length);
 	
 	// Copy in the remaining data
-	memcpy(newBuffer, audioBuffer->buffer + bytesRead, newLength);
+	memcpy(buffer, audioBuffer->buffer + bytesRead, length);
 	
 	// Replace the old buffer
 	free(audioBuffer->buffer);
-	audioBuffer->buffer = newBuffer;
-	audioBuffer->length = newLength;
+	audioBuffer->buffer = buffer;
+	audioBuffer->length = length;
 }
 
 - (ISMS_AudioBuffer *)currentReadBuffer
@@ -793,6 +792,11 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 						BassUserInfo *userInfo = [self userInfoForStream:self.currentStream];					
 						if (userInfo.isFileUnderrun && BASS_ChannelIsActive(self.currentReadingStream))
 						{
+							// Get a strong reference to the current song's userInfo object, so that
+							// if the stream is freed while the wait loop is sleeping, the object will
+							// still be around to respond to shouldBreakWaitLoop
+							self.waitLoopUserInfo = userInfo;
+							
 							// Mark the stream as waiting
 							userInfo.isWaiting = YES;
 							userInfo.isFileUnderrun = NO;
@@ -847,11 +851,13 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 										}
 									}
 								}
-								userInfo.isWaiting = NO;
-								userInfo.shouldBreakWaitLoop = NO;
 								
 								DLog(@"done waiting");
 							}
+							
+							userInfo.isWaiting = NO;
+							userInfo.shouldBreakWaitLoop = NO;
+							self.waitLoopUserInfo = nil;
 						}
 					}
 				}
@@ -1086,10 +1092,18 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		[NSObject gcdCancelTimerBlockWithName:nextSongRetryTimer];
 		
 		ringBuffer->stopFilling = YES;
-		[self userInfoForStream:self.currentStream].shouldBreakWaitLoopForever = YES;
-		[self userInfoForStream:self.nextStream].shouldBreakWaitLoopForever = YES;
-		DLog(@"current stream userinfo: %@  should break: %@", [self userInfoForStream:self.currentStream], NSStringFromBOOL([self userInfoForStream:self.currentStream].shouldBreakWaitLoopForever));
-		DLog(@"next stream userinfo: %@  should break: %@", [self userInfoForStream:self.nextStream], NSStringFromBOOL([self userInfoForStream:self.nextStream].shouldBreakWaitLoopForever));
+		
+		BassUserInfo *currentStreamUserInfo = [self userInfoForStream:self.currentStream];
+		BassUserInfo *nextStreamUserInfo = [self userInfoForStream:self.nextStream];
+		currentStreamUserInfo.shouldBreakWaitLoopForever = YES;
+		nextStreamUserInfo.shouldBreakWaitLoopForever = YES;
+		
+		/*// Wait for the wait loop to finish so that shouldBreakWaitLoop doesn't
+		// get checked after the userInfo object is released
+		while (currentStreamUserInfo.isWaiting || nextStreamUserInfo.isWaiting)
+		{
+			usleep(sleepTime);
+		}*/
 		
 		BOOL success = BASS_Free();
 		self.fileStream1 = 0;
@@ -1304,6 +1318,10 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		NSInteger errorCode = BASS_ErrorGetCode();
 		DLog(@"nextSong stream: %i error: %i - %@", self.nextStream, errorCode, NSStringFromBassErrorCode(errorCode));
 #endif
+		
+		// If the stream is currently stuck in the wait loop for partial precaching
+		// tell the stream manager to download a few more seconds of data
+		[streamManagerS downloadMoreOfPrecacheStream];
 		
 		//self.nextSongRetryTimer = [GCDTimer gcdTimerInMainQueueAfterDelay:RETRY_DELAY performBlock:^{ [self prepareNextSongStream:nextSong]; }];
 		[self gcdTimerPerformBlockInMainQueue:^{ [self prepareNextSongStream:nextSong]; } afterDelay:RETRY_DELAY withName:nextSongRetryTimer];
@@ -1829,8 +1847,8 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 
 - (BassParamEqValue *)addEqualizerValue:(BASS_DX8_PARAMEQ)value
 {
-	NSUInteger newIndex = [self.eqValueArray count];
-	BassParamEqValue *eqValue = [BassParamEqValue valueWithParams:value arrayIndex:newIndex];
+	NSUInteger index = [self.eqValueArray count];
+	BassParamEqValue *eqValue = [BassParamEqValue valueWithParams:value arrayIndex:index];
 	[self.eqValueArray addObject:eqValue];
 	
 	if (self.isEqualizerOn)

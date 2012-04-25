@@ -152,7 +152,7 @@ static CGFloat kDDSocialDialogPadding = 10;
 }
 
 - (void)dealloc {
-	
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	dialogDelegate_ = nil;
 	closeButton_ = nil;
 	titleLabel_ = nil;

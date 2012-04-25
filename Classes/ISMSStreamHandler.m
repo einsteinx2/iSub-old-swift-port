@@ -21,10 +21,9 @@
 #import "PlaylistSingleton.h"
 #import "ISMSNetworkIndicator.h"
 
-#define ISMSNumSecondsToPartialPreCache 60
-#define ISMSNumBytesToPartialPreCache(bitrate) (BytesForSecondsAtBitrate(ISMSNumSecondsToPartialPreCache, bitrate))
+#define ISMSNumSecondsToPartialPreCacheDefault 20
+#define ISMSNumBytesToPartialPreCache(bitrate) (BytesForSecondsAtBitrate(self.secondsToPartialPrecache, bitrate))
 
-//#define ISMSMinSecondsToStartPlayback 5
 #define ISMSMinBytesToStartPlayback(bitrate) (BytesForSecondsAtBitrate(settingsS.audioEngineStartNumberOfSeconds, bitrate))
 
 #define ISMSThrottleTimeInterval 0.1
@@ -49,7 +48,7 @@
 #define isSpeedLoggingEnabled 0
 
 @implementation ISMSStreamHandler
-@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, bitrate, secondsOffset, partialPrecacheSleep, isDownloading, isCurrentSong, shouldResume, contentLength, maxBitrateSetting, speedLoggingDate, speedLoggingLastSize, isCanceled, numberOfContentLengthFailures;
+@synthesize totalBytesTransferred, bytesTransferred, mySong, connection, byteOffset, delegate, fileHandle, isDelegateNotifiedToStartPlayback, numOfReconnects, request, loadingThread, isTempCache, bitrate, secondsOffset, partialPrecacheSleep, isDownloading, isCurrentSong, shouldResume, contentLength, maxBitrateSetting, speedLoggingDate, speedLoggingLastSize, isCanceled, numberOfContentLengthFailures, isPartialPrecacheSleeping, secondsToPartialPrecache, tempBreakPartialPrecache;
 
 - (void)setup
 {
@@ -65,10 +64,13 @@
 	isTempCache = NO;
 	bitrate = 0;
 	partialPrecacheSleep = YES;
+	isPartialPrecacheSleeping = NO;
 	isDownloading = NO;
 	contentLength = ULLONG_MAX;
 	maxBitrateSetting = NSIntegerMax;
 	numberOfContentLengthFailures = 0;
+	secondsToPartialPrecache = ISMSNumSecondsToPartialPreCacheDefault;
+	tempBreakPartialPrecache = NO;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playlistIndexChanged) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 }
@@ -107,7 +109,7 @@
 
 - (void)dealloc
 {
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (NSString *)filePath
@@ -259,12 +261,11 @@
 - (void)playlistIndexChanged
 {
 	// If this song is partially precached and sleeping, stop sleeping
-	self.partialPrecacheSleep = NO;
+	if (self.isPartialPrecacheSleeping)
+		self.partialPrecacheSleep = NO;
 	
 	if ([self.mySong isEqualToSong:playlistS.currentSong])
-	{
 		self.isCurrentSong = YES;
-	}
 }
 
 #pragma mark - Connection Delegate
@@ -425,14 +426,15 @@
 		// Handle partial pre-cache next song
 		if (!self.isCurrentSong && !self.isTempCache && settingsS.isPartialCacheNextSong && self.partialPrecacheSleep)
 		{
-			NSUInteger partialPrecacheSize = BytesForSecondsAtBitrate(ISMSNumSecondsToPartialPreCache, self.mySong.estimatedBitrate);
+			NSUInteger partialPrecacheSize = ISMSNumBytesToPartialPreCache(self.mySong.estimatedBitrate);
 			if (self.totalBytesTransferred >= partialPrecacheSize)
 			{
 				[self performSelectorOnMainThread:@selector(partialPrecachePausedInternal) withObject:nil waitUntilDone:NO];
-				while (self.partialPrecacheSleep)
+				while (self.partialPrecacheSleep && !self.tempBreakPartialPrecache)
 				{
 					[NSThread sleepForTimeInterval:0.1];
 				}
+				self.tempBreakPartialPrecache = NO;
 				[self performSelectorOnMainThread:@selector(partialPrecacheUnpausedInternal) withObject:nil waitUntilDone:NO];
 			}
 		}
@@ -471,6 +473,8 @@
 // Main Thread
 - (void)partialPrecachePausedInternal
 {
+	self.isPartialPrecacheSleeping = YES;
+	
 	[ISMSNetworkIndicator doneUsingNetwork];
 	
 	if ([self.delegate respondsToSelector:@selector(ISMSStreamHandlerPartialPrecachePaused:)])
@@ -480,6 +484,8 @@
 // Main Thread
 - (void)partialPrecacheUnpausedInternal
 {
+	self.isPartialPrecacheSleeping = NO;
+	
 	[ISMSNetworkIndicator usingNetwork];
 	
 	if ([self.delegate respondsToSelector:@selector(ISMSStreamHandlerPartialPrecacheUnpaused:)])

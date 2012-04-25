@@ -9,6 +9,7 @@
 #import "Song.h"
 #import "NSString+Additions.h"
 #import "SavedSettings.h"
+#include <sys/stat.h>
 
 @implementation Song
 
@@ -331,7 +332,14 @@
 
 - (unsigned long long)localFileSize
 {
-	return [[[NSFileManager defaultManager] attributesOfItemAtPath:self.currentPath error:NULL] fileSize];
+	// Using C instead of Cocoa because of a weird crash on iOS 5 devices in the audio engine
+	// Asked question here: http://stackoverflow.com/questions/10289536/sigsegv-segv-accerr-crash-in-nsfileattributes-dealloc-when-autoreleasepool-is-dr
+	// Still waiting for an answer on what the crash could be, so this is my temporary "solution"
+	struct stat st;
+	stat(self.currentPath.cStringUTF8, &st);
+	return st.st_size;
+	
+	//return [[[NSFileManager defaultManager] attributesOfItemAtPath:self.currentPath error:NULL] fileSize];
 }
 
 - (NSUInteger)estimatedBitrate

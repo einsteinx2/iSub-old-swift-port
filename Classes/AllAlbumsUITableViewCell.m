@@ -60,15 +60,15 @@
 	// Automatically set the width based on the width of the text
 	albumNameLabel.frame = CGRectMake(0, 0, 230, 35);
 	CGSize expectedLabelSize = [albumNameLabel.text sizeWithFont:albumNameLabel.font constrainedToSize:CGSizeMake(1000,35) lineBreakMode:albumNameLabel.lineBreakMode]; 
-	CGRect newFrame = albumNameLabel.frame;
-	newFrame.size.width = expectedLabelSize.width;
-	albumNameLabel.frame = newFrame;
+	CGRect frame = albumNameLabel.frame;
+	frame.size.width = expectedLabelSize.width;
+	albumNameLabel.frame = frame;
 	
 	artistNameLabel.frame = CGRectMake(0, 35, 230, 20);
 	expectedLabelSize = [artistNameLabel.text sizeWithFont:artistNameLabel.font constrainedToSize:CGSizeMake(1000,35) lineBreakMode:artistNameLabel.lineBreakMode]; 
-	newFrame = artistNameLabel.frame;
-	newFrame.size.width = expectedLabelSize.width;
-	artistNameLabel.frame = newFrame;
+	frame = artistNameLabel.frame;
+	frame.size.width = expectedLabelSize.width;
+	artistNameLabel.frame = frame;
 }
 
 - (void)dealloc

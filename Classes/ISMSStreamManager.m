@@ -508,6 +508,22 @@
 	[self fillStreamQueue:audioEngineS.isStarted];
 }
 
+- (void)downloadMoreOfPrecacheStream
+{
+	if (self.isQueueDownloading)
+	{
+		ISMSStreamHandler *currentHandler = [handlerStack objectAtIndexSafe:0];
+		if (currentHandler.isPartialPrecacheSleeping)
+		{
+			// Allow 10 more seconds of audio data to download
+			currentHandler.secondsToPartialPrecache += 10;
+			
+			// Break the wait loop, but leave partial precaching on
+			currentHandler.tempBreakPartialPrecache = YES;
+		}
+	}
+}
+
 #pragma mark - ISMSStreamHandler delegate
 
 - (void)ISMSStreamHandlerStarted:(ISMSStreamHandler *)handler

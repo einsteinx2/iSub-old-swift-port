@@ -7,11 +7,10 @@
 //
 
 @interface QuickAlbumsViewController : UIViewController 
-{	
-	NSDictionary *titles;
-}
 
 @property (unsafe_unretained) UIViewController *parent;
+
+@property (strong) NSDictionary *titles;
 @property (strong) NSURLConnection *connection;
 @property (strong) NSMutableData *receivedData;
 @property (strong) NSString *modifier;

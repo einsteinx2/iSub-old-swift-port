@@ -109,7 +109,7 @@
 - (void)dealloc 
 {
 	dataModel.delegate = nil;
-    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)updateLyricsLabel

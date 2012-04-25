@@ -35,12 +35,13 @@
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
 #import "UIViewController+PushViewControllerCustom.h"
+#import "UITableView+Shadows.h"
 
 @implementation SearchSongsViewController
 
 @synthesize query, searchType;
 @synthesize listOfArtists, listOfAlbums, listOfSongs, offset, isMoreResults;
-@synthesize connection, isLoading;
+@synthesize connection, isLoading, receivedData;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -55,22 +56,12 @@
 
 - (id)initWithNibName:(NSString *)n bundle:(NSBundle *)b;
 {
-    self = [super initWithNibName:n bundle:b];
-	
-    if (self != nil)
+    if ((self = [super initWithNibName:n bundle:b]))
     {
-		
-		listOfArtists = nil;
-		listOfAlbums = nil;
-		listOfSongs = nil;
-		
 		offset = 0;
 		isMoreResults = YES;
 		isLoading = NO;
-		
-		connection = nil;
     }
-	
     return self;
 }
 
@@ -87,24 +78,16 @@
 		self.navigationItem.rightBarButtonItem = nil;
 	}
 	
-	// Add the table fade
-	UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
-	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
-	fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	[self.tableView addSubview:fadeTop];
-	
-	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
-	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.tableView.tableFooterView = fadeBottom;
+	[self.tableView addHeaderShadow];
+	[self.tableView addFooterShadow];
 }
 		
-- (void) viewWillDisappear:(BOOL)animated
+- (void)viewWillDisappear:(BOOL)animated
 {
 	[super viewWillDisappear:animated];
 	
-	[connection cancel];
-	connection = nil;
+	[self.connection cancel];
+	self.connection = nil;
 }
 
 - (void) settingsAction:(id)sender 
@@ -133,23 +116,23 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
-	if (searchType == 0)
+	if (self.searchType == ISMSSearchSongsSearchType_Artists)
 	{
-		return [listOfArtists count] + 1;
+		return self.listOfArtists.count + 1;
 	}
-	else if (searchType == 1)
+	else if (searchType == ISMSSearchSongsSearchType_Albums)
 	{
-		return [listOfAlbums count] + 1;
+		return self.listOfAlbums.count + 1;
 	}
 	else
 	{
-		return [listOfSongs count] + 1;
+		return self.listOfSongs.count + 1;
 	}
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if (searchType == 0)
+	if (self.searchType == ISMSSearchSongsSearchType_Artists)
 	{
 		return 44.0;
 	}
@@ -166,7 +149,7 @@
 	
 	self.isLoading = YES;
 	
-	offset += 20;
+	self.offset += 20;
     NSDictionary *parameters = nil;
     NSString *action = nil;
 	NSString *offsetString = [NSString stringWithFormat:@"%i", offset];
@@ -174,20 +157,22 @@
 	{
         action = @"search2";
 		NSString *queryString = [NSString stringWithFormat:@"%@*", query];
-		if (searchType == 0)
+		switch (self.searchType) 
 		{
-            parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"artistCount", @"0", @"albumCount", @"0", @"songCount", 
-                          n2N(queryString), @"query", n2N(offsetString), @"artistOffset", nil];
-		}
-		else if (searchType == 1)
-		{
-            parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"0", @"artistCount", @"20", @"albumCount", @"0", @"songCount", 
-                          n2N(queryString), @"query", n2N(offsetString), @"albumOffset", nil];
-		}
-		else
-		{
-            parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"0", @"artistCount", @"0", @"albumCount", @"20", @"songCount", 
-                          n2N(queryString), @"query", n2N(offsetString), @"songOffset", nil];
+			case ISMSSearchSongsSearchType_Artists:
+				parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"artistCount", @"0", @"albumCount", @"0", @"songCount", 
+							  n2N(queryString), @"query", n2N(offsetString), @"artistOffset", nil];
+				break;
+			case ISMSSearchSongsSearchType_Albums:
+				parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"0", @"artistCount", @"20", @"albumCount", @"0", @"songCount", 
+							  n2N(queryString), @"query", n2N(offsetString), @"albumOffset", nil];
+				break;
+			case ISMSSearchSongsSearchType_Songs:
+				parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"0", @"artistCount", @"0", @"albumCount", @"20", @"songCount", 
+							  n2N(queryString), @"query", n2N(offsetString), @"songOffset", nil];
+				break;
+			default:
+				break;
 		}
 	}
 	else
@@ -199,9 +184,9 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:action andParameters:parameters];
 
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
-	if (connection)
+	if (self.connection)
 	{
-		receivedData = [[NSMutableData alloc] initWithCapacity:0];
+		self.receivedData = [[NSMutableData alloc] initWithCapacity:0];
 	} 
 	else 
 	{
@@ -231,7 +216,7 @@
 	}
 	else 
 	{
-		if ([listOfArtists count] > 0 || [listOfAlbums count] > 0 || [listOfSongs count] > 0)
+		if (self.listOfArtists.count > 0 || self.listOfAlbums.count > 0 || self.listOfSongs.count > 0)
 		{			
 			cell.textLabel.text = @"No more search results";
 		}
@@ -247,9 +232,9 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {    
-	if (searchType == 0)
+	if (self.searchType == ISMSSearchSongsSearchType_Artists)
 	{
-		if (indexPath.row < [listOfArtists count])
+		if (indexPath.row < self.listOfArtists.count)
 		{
 			static NSString *cellIdentifier = @"ArtistCell";
 			ArtistUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -258,7 +243,7 @@
 				cell = [[ArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 			}
 						
-			Artist *anArtist = [listOfArtists objectAtIndexSafe:indexPath.row];
+			Artist *anArtist = [self.listOfArtists objectAtIndexSafe:indexPath.row];
 			cell.myArtist = anArtist;
 			
 			[cell.artistNameLabel setText:anArtist.name];
@@ -266,14 +251,14 @@
 			
 			return cell;
 		}
-		else if (indexPath.row == [listOfArtists count])
+		else if (indexPath.row == self.listOfArtists.count)
 		{
 			return [self createLoadingCell:indexPath.row];
 		}
 	}
-	else if (searchType == 1)
+	else if (self.searchType == ISMSSearchSongsSearchType_Albums)
 	{
-		if (indexPath.row < [listOfAlbums count])
+		if (indexPath.row < self.listOfAlbums.count)
 		{
 			static NSString *cellIdentifier = @"AlbumCell";
 			AlbumUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -283,7 +268,7 @@
 				cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 			}
 						
-			Album *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
+			Album *anAlbum = [self.listOfAlbums objectAtIndexSafe:indexPath.row];
 			cell.myId = anAlbum.albumId;
 			cell.myArtist = [Artist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
 			cell.isIndexShowing = NO;
@@ -309,7 +294,7 @@
 	}
 	else
 	{
-		if (indexPath.row < [listOfSongs count])
+		if (indexPath.row < self.listOfSongs.count)
 		{
 			static NSString *cellIdentifier = @"SearchSongCell";
 			SearchSongUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -319,10 +304,10 @@
 			}
 			
 			cell.row = indexPath.row;
-			cell.mySong = [listOfSongs objectAtIndexSafe:indexPath.row];
+			cell.mySong = [self.listOfSongs objectAtIndexSafe:indexPath.row];
 			return cell;
 		}
-		else if (indexPath.row == [listOfSongs count])
+		else if (indexPath.row == self.listOfSongs.count)
 		{
 			return [self createLoadingCell:indexPath.row];
 		}
@@ -341,9 +326,9 @@
 	if (!indexPath)
 		return;
 	
-	if (searchType == 0)
+	if (self.searchType == ISMSSearchSongsSearchType_Artists)
 	{
-		if (viewObjectsS.isCellEnabled && indexPath.row != [listOfArtists count])
+		if (viewObjectsS.isCellEnabled && indexPath.row != self.listOfArtists.count)
 		{
 			Artist *anArtist = [listOfArtists objectAtIndexSafe:indexPath.row];
 			AlbumViewController *albumView = [[AlbumViewController alloc] initWithArtist:anArtist orAlbum:nil];
@@ -351,13 +336,12 @@
 			[self pushViewControllerCustom:albumView];
 			//[self.navigationController pushViewController:albumView animated:YES];
 			
-			
 			return;
 		}
 	}
-	else if (searchType == 1)
+	else if (self.searchType == ISMSSearchSongsSearchType_Albums)
 	{
-		if (viewObjectsS.isCellEnabled && indexPath.row != [listOfAlbums count])
+		if (viewObjectsS.isCellEnabled && indexPath.row != self.listOfAlbums.count)
 		{
 			Album *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
 			AlbumViewController *albumView = [[AlbumViewController alloc] initWithArtist:nil orAlbum:anAlbum];
@@ -365,13 +349,12 @@
 			[self pushViewControllerCustom:albumView];
 			//[self.navigationController pushViewController:albumView animated:YES];
 			
-			
 			return;
 		}
 	}
 	else
 	{
-		if (viewObjectsS.isCellEnabled && indexPath.row != [listOfSongs count])
+		if (viewObjectsS.isCellEnabled && indexPath.row != self.listOfSongs.count)
 		{
 			// Clear the current playlist
 			if (settingsS.isJukeboxEnabled)
@@ -474,7 +457,7 @@
 	
 	//DLog(@"parser.listOfSongs:\n%@", parser.listOfSongs);
 	
-	if (searchType == 0)
+	if (searchType == ISMSSearchSongsSearchType_Artists)
 	{
 		if ([parser.listOfArtists count] == 0)
 		{
@@ -485,7 +468,7 @@
 			[listOfArtists addObjectsFromArray:parser.listOfArtists];
 		}
 	}
-	else if (searchType == 1)
+	else if (searchType == ISMSSearchSongsSearchType_Albums)
 	{
 		if ([parser.listOfAlbums count] == 0)
 		{
@@ -496,7 +479,7 @@
 			[listOfAlbums addObjectsFromArray:parser.listOfAlbums];
 		}
 	}
-	else if (searchType == 2)
+	else if (searchType == ISMSSearchSongsSearchType_Songs)
 	{
 		if ([parser.listOfSongs count] == 0)
 		{
@@ -508,13 +491,12 @@
 		}
 	}
 	
-		
-	
 	// Reload the table
 	[self.tableView reloadData];
 	self.isLoading = NO;
-		
-	 connection = nil;
+	
+	self.receivedData = nil;
+	self.connection = nil;
 }
 
 

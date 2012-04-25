@@ -70,9 +70,6 @@
 {
 	if ((self = [super init]))
 	{
-		name = nil;
-		artistId = nil;
-		
 		name = [decoder decodeObject];
 		artistId = [decoder decodeObject];
 	}
@@ -82,15 +79,12 @@
 
 -(id) copyWithZone: (NSZone *) zone
 {
-	Artist *newArtist = [[Artist alloc] init];
+	Artist *anArtist = [[Artist alloc] init];
 	
-	newArtist.name = nil;
-	newArtist.artistId = nil;
+	anArtist.name = [name copy];
+	anArtist.artistId = [artistId copy];
 	
-	newArtist.name = [name copy];
-	newArtist.artistId = [artistId copy];
-	
-	return newArtist;
+	return anArtist;
 }
 
 - (NSString *)description

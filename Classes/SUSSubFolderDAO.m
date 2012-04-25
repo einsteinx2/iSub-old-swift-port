@@ -81,10 +81,9 @@
 
 - (void)dealloc
 {
-	//[myId release]; myId = nil;
-	//[myArtist release]; myArtist = nil;
-	[self cancelLoad];
-	//[super dealloc];
+	[loader cancelLoad];
+	loader.delegate = nil;
+    loader = nil;
 }
 
 - (FMDatabaseQueue *)dbQueue

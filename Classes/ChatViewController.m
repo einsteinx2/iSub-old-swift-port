@@ -27,6 +27,7 @@
 #import "FlurryAnalytics.h"
 #import "SeparaterView.h"
 #import "NSArray+Additions.h"
+#import "UITableView+Shadows.h"
 
 @interface ChatViewController (Private)
 - (void)dataSourceDidFinishLoadingNewData;
@@ -131,11 +132,7 @@
 		self.view.backgroundColor = ISMSiPadBackgroundColor;
 	}
 
-	// Add the table fade
-	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
-	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.tableView.tableFooterView = fadeBottom;
+	[self.tableView addFooterShadow];
 	
 	[self createDataModel];
 }

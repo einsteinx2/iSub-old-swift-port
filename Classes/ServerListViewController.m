@@ -29,6 +29,7 @@
 #import "NSNotificationCenter+MainThread.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
+#import "UITableView+Shadows.h"
 
 @implementation ServerListViewController
 
@@ -40,6 +41,11 @@
 		return NO;
 	
     return YES;
+}
+
+- (void)dealloc
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -102,16 +108,8 @@
 	}
 	else
 	{
-		// Add the table fade
-		UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
-		fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
-		fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		[self.tableView addSubview:fadeTop];
-		
-		UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
-		fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-		fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		self.tableView.tableFooterView = fadeBottom;
+		[self.tableView addHeaderShadow];
+		[self.tableView addFooterShadow];
 	}
 }
 
@@ -148,10 +146,7 @@
 		self.tableView.scrollEnabled = YES;
 		self.navigationItem.rightBarButtonItem = self.editButtonItem;
 		
-		UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
-		fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-		fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		self.tableView.tableFooterView = fadeBottom;
+		[self.tableView addFooterShadow];
 		
 		[self.tableView reloadData];
 	}
@@ -165,6 +160,7 @@
 		self.settingsTabViewController = [[SettingsTabViewController alloc] initWithNibName:@"SettingsTabViewController" bundle:nil];
 		self.settingsTabViewController.parentController = self;
 		self.tableView.tableFooterView = settingsTabViewController.view;
+		[self.tableView addFooterShadow];
 		[self.tableView reloadData];
 	}
 	else if (segmentedControl.selectedSegmentIndex == 2)
@@ -181,6 +177,7 @@
 			self.helpTabViewController.view.height -= 40.;
 		}
 		self.tableView.tableFooterView = helpTabViewController.view;
+		[self.tableView addFooterShadow];
 		[self.tableView reloadData];
 	}
 }

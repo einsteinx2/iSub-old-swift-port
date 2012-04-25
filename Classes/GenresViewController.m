@@ -21,7 +21,7 @@
 #import "SavedSettings.h"
 #import "FlurryAnalytics.h"
 #import "UIViewController+PushViewControllerCustom.h"
-
+#import "UITableView+Shadows.h"
 
 @implementation GenresViewController
 
@@ -59,16 +59,9 @@
 		self.view.backgroundColor = ISMSiPadBackgroundColor;
 	}
 
-	// Add the table fade
-	UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
-	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
-	fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	[self.tableView addSubview:fadeTop];
+	[self.tableView addHeaderShadow];
 		
-	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
-	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.tableView.tableFooterView = fadeBottom;
+	[self.tableView addFooterShadow];
 }
 
 
@@ -226,11 +219,13 @@
 		GenresArtistViewController *artistViewController = [[GenresArtistViewController alloc] initWithNibName:@"GenresArtistViewController" bundle:nil];
 		if (viewObjectsS.isOfflineMode) 
 		{
-			artistViewController.title = [NSString stringWithString:[databaseS.songCacheDbQueue stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]]];
+			NSString *title = [databaseS.songCacheDbQueue stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
+			artistViewController.title = [NSString stringWithString:title ? title : @""];
 		}
 		else
 		{
-			artistViewController.title = [NSString stringWithString:[databaseS.genresDbQueue stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]]];
+			NSString *title = [databaseS.genresDbQueue stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
+			artistViewController.title = [NSString stringWithString:title ? title : @""];
 		}
 		artistViewController.listOfArtists = [NSMutableArray arrayWithCapacity:1];
 

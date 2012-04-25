@@ -109,12 +109,6 @@
 {
 	if ((self = [super init]))
 	{
-		title = nil;
-		albumId = nil;
-		coverArtId = nil;
-		artistName = nil;
-		artistId = nil;
-		
 		title = [decoder decodeObject];
 		albumId = [decoder decodeObject];
 		coverArtId = [decoder decodeObject];
@@ -128,21 +122,15 @@
 
 -(id) copyWithZone: (NSZone *) zone
 {
-	Album *newAlbum = [[Album alloc] init];
+	Album *anAlbum = [[Album alloc] init];
 	
-	newAlbum.title = nil;
-	newAlbum.albumId = nil;
-	newAlbum.coverArtId = nil;
-	newAlbum.artistName = nil;
-	newAlbum.artistId = nil;
+	anAlbum.title = [title copy];
+	anAlbum.albumId = [albumId copy];
+	anAlbum.coverArtId = [coverArtId copy];
+	anAlbum.artistName = [artistName copy];
+	anAlbum.artistId = [artistId copy];
 	
-	newAlbum.title = [title copy];
-	newAlbum.albumId = [albumId copy];
-	newAlbum.coverArtId = [coverArtId copy];
-	newAlbum.artistName = [artistName copy];
-	newAlbum.artistId = [artistId copy];
-	
-	return newAlbum;
+	return anAlbum;
 }
 
 - (NSString *)description

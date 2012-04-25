@@ -343,7 +343,8 @@ static void destroy_versionArrays()
 			for (x = 0; x < specHeight; x++)
 			{
 				specbuf[x * specWidth + specpos] = palette[specHeight+126];
-				if (SCREEN_SCALE() == 2.0 && x * specWidth + specpos + 1 < specWidth * specHeight * 4 && specHeight+126 < (specHeight + 128) * 4)
+				
+				if (SCREEN_SCALE() == 2.0 && specpos + 1 < specWidth)
 					specbuf[x * specWidth + specpos + 1] = palette[specHeight+126];
 			}
 			break;
@@ -460,8 +461,7 @@ static void destroy_versionArrays()
 // Releases resources when they are not longer needed.
 - (void)dealloc
 {
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
 	[drawTimer invalidate]; 
 	

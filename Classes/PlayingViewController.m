@@ -26,6 +26,7 @@
 #import "NSNotificationCenter+MainThread.h"
 #import "EGORefreshTableHeaderView.h"
 #import "UIViewController+PushViewControllerCustom.h"
+#import "UITableView+Shadows.h"
 
 @interface PlayingViewController (Private)
 - (void)dataSourceDidFinishLoadingNewData;
@@ -67,22 +68,12 @@
 		self.view.backgroundColor = ISMSiPadBackgroundColor;
 	}
 	
-	/*// Add the table fade
-	UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
-	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
-	fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	[self.tableView addSubview:fadeTop];
-	[fadeTop release];*/
-	
 	// Add the pull to refresh view
 	refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
 	refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
 	[self.tableView addSubview:refreshHeaderView];
 		
-	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
-	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.tableView.tableFooterView = fadeBottom;	
+	[self.tableView addFooterShadow];	
 }
 
 - (void)viewWillAppear:(BOOL)animated 

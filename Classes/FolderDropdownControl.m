@@ -18,28 +18,24 @@
 #import "NSArray+Additions.h"
 
 @implementation FolderDropdownControl
-@synthesize selectedFolderId, isOpen;
+@synthesize selectedFolderId, isOpen, labels, folders;
 @synthesize borderColor, textColor, lightColor, darkColor;
-@synthesize delegate;
+@synthesize delegate, receivedData, connection;
+@synthesize selectedFolderLabel, arrowImage, sizeIncrease, updatedfolders;
 
 - (id)initWithFrame:(CGRect)frame 
 {
     self = [super initWithFrame:frame];
     if (self) 
 	{
-		delegate = nil;
 		selectedFolderId = [NSNumber numberWithInt:-1];
 		folders = [SUSRootFoldersDAO folderDropdownFolders];
-		updatedfolders = nil;
 		labels = [[NSMutableArray alloc] init];
 		isOpen = NO;
-		connection = nil;
-		receivedData = nil;
-		
-		borderColor = [UIColor colorWithRed:156.0/255.0 green:161.0/255.0 blue:168.0/255.0 alpha:1];
-		textColor   = [UIColor colorWithRed:106.0/255.0 green:111.0/255.0 blue:118.0/255.0 alpha:1];
-		lightColor  = [UIColor colorWithRed:206.0/255.0 green:211.0/255.0 blue:218.0/255.0 alpha:1];
-		darkColor   = [UIColor colorWithRed:196.0/255.0 green:201.0/255.0 blue:208.0/255.0 alpha:1];
+		borderColor = [[UIColor alloc] initWithRed:156.0/255.0 green:161.0/255.0 blue:168.0/255.0 alpha:1];
+		textColor   = [[UIColor alloc] initWithRed:106.0/255.0 green:111.0/255.0 blue:118.0/255.0 alpha:1];
+		lightColor  = [[UIColor alloc] initWithRed:206.0/255.0 green:211.0/255.0 blue:218.0/255.0 alpha:1];
+		darkColor   = [[UIColor alloc] initWithRed:196.0/255.0 green:201.0/255.0 blue:208.0/255.0 alpha:1];
 		
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		self.userInteractionEnabled = YES;
@@ -89,13 +85,7 @@
 
 - (void)dealloc
 {
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ServerCheckPassed object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ServerSwitched object:nil];
-	
-	 folders = nil;
-	
-	
-	 labels = nil;
+	[[NSNotificationCenter defaultCenter] removeObserver:self];	
 }
 
 NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
@@ -118,15 +108,15 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	@synchronized(self)
 	{
 		// Set the property
-		 folders = nil;
+		folders = nil;
 		folders = namesAndIds;
 		
 		// Remove old labels
-		for (UILabel *label in labels)
+		for (UILabel *label in self.labels)
 		{
 			[label removeFromSuperview];
 		}
-		[labels removeAllObjects];
+		[self.labels removeAllObjects];
 		
 		sizeIncrease = [folders count] * 30.0f;
 		
@@ -180,7 +170,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 			folderLabel.text = folder;
 			folderLabel.tag = tag;
 			[self addSubview:folderLabel];
-			[labels addObject:folderLabel];
+			[self.labels addObject:folderLabel];
 			
 			UIButton *folderButton = [UIButton buttonWithType:UIButtonTypeCustom];
 			folderButton.frame = buttonFrame;
@@ -195,41 +185,40 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 {
 	if (!isOpen)
 	{
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:.25];
-		[UIView setAnimationDelegate:self];
-		[UIView setAnimationDidStopSelector:@selector(viewsFinishedMoving)];
-		self.height += sizeIncrease;
-		[delegate folderDropdownMoveViewsY:sizeIncrease];
-		[UIView commitAnimations];
-		
+		[UIView animateWithDuration:.25 animations:^
+		{
+			self.height += sizeIncrease;
+			[self.delegate folderDropdownMoveViewsY:self.sizeIncrease];
+		} 
+		completion:^(BOOL finished)
+		{
+			[self.delegate folderDropdownViewsFinishedMoving];
+		}];
+				
 		[CATransaction begin];
 		[CATransaction setAnimationDuration:.25];
-		arrowImage.transform = CATransform3DMakeRotation((M_PI / 180.0) * -60.0f, 0.0f, 0.0f, 1.0f);
+		self.arrowImage.transform = CATransform3DMakeRotation((M_PI / 180.0) * -60.0f, 0.0f, 0.0f, 1.0f);
 		[CATransaction commit];
 	}
 	else
 	{
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:.25];
-		[UIView setAnimationDelegate:self];
-		[UIView setAnimationDidStopSelector:@selector(viewsFinishedMoving)];
-		self.height -= sizeIncrease;
-		[delegate folderDropdownMoveViewsY:-sizeIncrease];
-		[UIView commitAnimations];
+		[UIView animateWithDuration:.25 animations:^
+		{
+			self.height -= self.sizeIncrease;
+			[self.delegate folderDropdownMoveViewsY:-self.sizeIncrease];
+		}
+		completion:^(BOOL finished)
+		{
+			[self.delegate folderDropdownViewsFinishedMoving];
+		}];
 		
 		[CATransaction begin];
 		[CATransaction setAnimationDuration:.25];
-		arrowImage.transform = CATransform3DMakeRotation((M_PI / 180.0) * 0.0f, 0.0f, 0.0f, 1.0f);
+		self.arrowImage.transform = CATransform3DMakeRotation((M_PI / 180.0) * 0.0f, 0.0f, 0.0f, 1.0f);
 		[CATransaction commit];
 	}
 	
 	isOpen = !isOpen;
-}
-
-- (void)viewsFinishedMoving
-{
-	[delegate folderDropdownViewsFinishedMoving];
 }
 
 - (void)closeDropdown
@@ -247,11 +236,11 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 		isOpen = NO;
 		
 		self.height -= sizeIncrease;
-		[delegate folderDropdownMoveViewsY:-sizeIncrease];
+		[self.delegate folderDropdownMoveViewsY:-sizeIncrease];
 		
 		arrowImage.transform = CATransform3DMakeRotation((M_PI / 180.0) * 0.0f, 0.0f, 0.0f, 1.0f);
 		
-		[delegate folderDropdownViewsFinishedMoving];
+		[self.delegate folderDropdownViewsFinishedMoving];
 	}
 }
 
@@ -263,38 +252,35 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	//DLog(@"Folder selected: %@ -- %i", label.text, label.tag);
 	
 	self.selectedFolderId = [NSNumber numberWithInt:label.tag];
-	selectedFolderLabel.text = [folders objectForKey:self.selectedFolderId];
+	self.selectedFolderLabel.text = [folders objectForKey:self.selectedFolderId];
 	//[self toggleDropdown:nil];
 	[self closeDropdownFast];
 	
 	// Call the delegate method
-	[delegate folderDropdownSelectFolder:self.selectedFolderId];	
+	[self.delegate folderDropdownSelectFolder:self.selectedFolderId];	
 }
 
 - (void)selectFolderWithId:(NSNumber *)folderId
 {
 	self.selectedFolderId = folderId;
-	selectedFolderLabel.text = [folders objectForKey:self.selectedFolderId];
+	self.selectedFolderLabel.text = [folders objectForKey:self.selectedFolderId];
 }
 
 - (void)updateFolders
 {    
-	if (connection)
-	{
-		[connection cancel]; 
-		 connection = nil;
-	}
+	[self.connection cancel];
+	self.connection = nil;
 	
 	//DLog(@"Folder dropdown: updating folders");
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getMusicFolders" andParameters:nil];
 	//DLog(@"folder dropdown url: %@   body: %@  headers: %@", [[request URL] absoluteString], [[[NSString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding] autorelease], [request allHTTPHeaderFields]);
     
-	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	if (connection)
+	self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	if (self.connection)
 	{
 		// Create the NSMutableData to hold the received data.
 		// receivedData is an instance variable declared elsewhere.
-		receivedData = [[NSMutableData alloc] initWithCapacity:0];
+		self.receivedData = [[NSMutableData alloc] initWithCapacity:0];
 	} 
 	else 
 	{		
@@ -326,12 +312,12 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-	[receivedData setLength:0];
+	[self.receivedData setLength:0];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
 {
-    [receivedData appendData:incrementalData];
+    [self.receivedData appendData:incrementalData];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
@@ -341,7 +327,8 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
 	
-	 connection = nil;
+	self.receivedData = nil;
+	self.connection = nil;
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
@@ -352,7 +339,8 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	[xmlParser setDelegate:self];
 	[xmlParser parse];
 	
-	 connection = nil;
+	self.receivedData = nil;
+	self.connection = nil;
 }
 
 #pragma XMLParser delegate

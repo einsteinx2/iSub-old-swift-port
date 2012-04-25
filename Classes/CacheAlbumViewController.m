@@ -31,6 +31,7 @@
 #import "iPadRootViewController.h"
 #import "StackScrollViewController.h"
 #import "FMDatabaseQueueAdditions.h"
+#import "UITableView+Shadows.h"
 
 @implementation CacheAlbumViewController
 
@@ -66,15 +67,9 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	}
 	
 	// Add the table fade
-	UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
-	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
-	fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	[self.tableView addSubview:fadeTop];
+	[self.tableView addHeaderShadow];
 		
-	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
-	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.tableView.tableFooterView = fadeBottom;
+	[self.tableView addFooterShadow];
 }
 
 
@@ -376,6 +371,10 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
     [super didReceiveMemoryWarning];
 }
 
+- (void)dealloc
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 #pragma mark Table view methods
 

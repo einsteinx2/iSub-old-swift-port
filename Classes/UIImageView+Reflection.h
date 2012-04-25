@@ -10,8 +10,6 @@
 
 @interface UIImageView (Reflection)
 
-- (CGImageRef)createGradientImageRef:(CGSize)size;
-- (CGContextRef)createReflectionBitmapContext:(CGSize)size;
 - (UIImage *)reflectedImageWithHeight:(NSUInteger)height;
 
 @end

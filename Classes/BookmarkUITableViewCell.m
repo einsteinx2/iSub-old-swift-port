@@ -74,15 +74,15 @@
 	// Automatically set the width based on the width of the text
 	songNameLabel.frame = CGRectMake(0, 0, 245, 35);
 	CGSize expectedLabelSize = [songNameLabel.text sizeWithFont:songNameLabel.font constrainedToSize:CGSizeMake(1000,35) lineBreakMode:songNameLabel.lineBreakMode]; 
-	CGRect newFrame = songNameLabel.frame;
-	newFrame.size.width = expectedLabelSize.width;
-	songNameLabel.frame = newFrame;
+	CGRect frame = songNameLabel.frame;
+	frame.size.width = expectedLabelSize.width;
+	songNameLabel.frame = frame;
 	
 	artistNameLabel.frame = CGRectMake(0, 35, 245, 20);
 	expectedLabelSize = [artistNameLabel.text sizeWithFont:artistNameLabel.font constrainedToSize:CGSizeMake(1000,20) lineBreakMode:artistNameLabel.lineBreakMode]; 
-	newFrame = artistNameLabel.frame;
-	newFrame.size.width = expectedLabelSize.width;
-	artistNameLabel.frame = newFrame;
+	frame = artistNameLabel.frame;
+	frame.size.width = expectedLabelSize.width;
+	artistNameLabel.frame = frame;
 }
 
 #pragma mark - Overlay

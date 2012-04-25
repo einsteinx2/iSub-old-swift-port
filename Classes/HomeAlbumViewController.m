@@ -29,6 +29,7 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "NSArray+Additions.h"
 #import "UIViewController+PushViewControllerCustom.h"
+#import "UITableView+Shadows.h"
 
 @implementation HomeAlbumViewController
 @synthesize listOfAlbums;
@@ -78,16 +79,9 @@
 		self.view.backgroundColor = ISMSiPadBackgroundColor;
 	}
 	
-	// Add the table fade
-	UIImageView *fadeTop = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-top.png"]];
-	fadeTop.frame =CGRectMake(0, -10, self.tableView.bounds.size.width, 10);
-	fadeTop.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	[self.tableView addSubview:fadeTop];
+	[self.tableView addHeaderShadow];
 	
-	UIImageView *fadeBottom = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"table-fade-bottom.png"]];
-	fadeBottom.frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 10);
-	fadeBottom.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.tableView.tableFooterView = fadeBottom;
+	[self.tableView addFooterShadow];
 }
 
 - (void) settingsAction:(id)sender 

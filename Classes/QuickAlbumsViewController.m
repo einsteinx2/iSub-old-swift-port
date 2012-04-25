@@ -26,7 +26,7 @@
 
 @implementation QuickAlbumsViewController
 
-@synthesize parent, connection, receivedData, modifier;
+@synthesize parent, titles, connection, receivedData, modifier;
 @synthesize randomButton, frequentButton, newestButton, recentButton, cancelButton;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
@@ -44,19 +44,19 @@
 	
 	if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation))
 	{
-		randomButton.y += 16.;
-		frequentButton.y += 16.;
-		newestButton.y += 16.;
-		recentButton.y += 16.;
-		cancelButton.y += 12.;
+		self.randomButton.y += 16.;
+		self.frequentButton.y += 16.;
+		self.newestButton.y += 16.;
+		self.recentButton.y += 16.;
+		self.cancelButton.y += 12.;
 	}
 	else
 	{
-		randomButton.y -= 16.;
-		frequentButton.y -= 16.;
-		newestButton.y -= 16.;
-		recentButton.y -= 16.;
-		cancelButton.y -= 12.;
+		self.randomButton.y -= 16.;
+		self.frequentButton.y -= 16.;
+		self.newestButton.y -= 16.;
+		self.recentButton.y -= 16.;
+		self.cancelButton.y -= 12.;
 	}
 	
 	[UIView commitAnimations];
@@ -66,7 +66,7 @@
 {	
 	if ((self = [super initWithNibName:@"QuickAlbumsViewController" bundle:nil]))
     {
-        titles = [[NSDictionary alloc] initWithObjectsAndKeys:@"Recently Played", @"recent", @"Frequently Played", @"frequent", @"Newest Albums", @"newest", @"Random Albums", @"random", nil];
+		self.titles = [[NSDictionary alloc] initWithObjectsAndKeys:@"Recently Played", @"recent", @"Frequently Played", @"frequent", @"Newest Albums", @"newest", @"Random Albums", @"random", nil];
     }
 	
 	return self;
@@ -78,11 +78,11 @@
 	
 	if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
 	{
-		randomButton.y += 16.;
-		frequentButton.y += 16.;
-		newestButton.y += 16.;
-		recentButton.y += 16.;
-		cancelButton.y += 12.;
+		self.randomButton.y += 16.;
+		self.frequentButton.y += 16.;
+		self.newestButton.y += 16.;
+		self.recentButton.y += 16.;
+		self.cancelButton.y += 12.;
 	}
 }
 
@@ -106,7 +106,6 @@
 	[self albumLoad:@"recent"];
 }
 
-
 - (IBAction)cancel
 {
 	[self dismissModalViewControllerAnimated:YES];
@@ -124,7 +123,7 @@
 {		
     self.modifier = theModifier;
     
-    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"size", n2N(modifier), @"type", nil];
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"size", n2N(self.modifier), @"type", nil];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getAlbumList" andParameters:parameters];
     
     self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
@@ -150,11 +149,6 @@
     [super didReceiveMemoryWarning];
     
     // Release any cached data, images, etc that aren't in use.
-}
-
-- (void)dealloc 
-{
-     titles = nil;
 }
 
 #pragma mark - Connection Delegate
@@ -200,7 +194,7 @@
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
     HomeAlbumViewController *albumViewController = [[HomeAlbumViewController alloc] initWithNibName:@"HomeAlbumViewController" bundle:nil];
-	albumViewController.title = [titles objectForKey:modifier];
+	albumViewController.title = [self.titles objectForKey:self.modifier];
 	
     NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:self.receivedData];
     HomeXMLParser *parser = [[HomeXMLParser alloc] initXMLParser];
@@ -208,12 +202,12 @@
     [xmlParser parse];
     
     albumViewController.listOfAlbums = [NSMutableArray arrayWithArray:parser.listOfAlbums];
-    albumViewController.modifier = modifier;
+    albumViewController.modifier = self.modifier;
     
     
     self.modifier = nil;
 	
-	[parent pushViewControllerCustom:albumViewController];
+	[self.parent pushViewControllerCustom:albumViewController];
     
 	self.receivedData = nil;
 	self.connection = nil;

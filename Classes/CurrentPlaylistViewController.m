@@ -34,6 +34,11 @@
 #pragma mark -
 #pragma mark View lifecycle
 
+- (void)dealloc
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)registerForNotifications
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_BassInitialized object:nil];

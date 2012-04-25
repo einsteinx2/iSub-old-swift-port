@@ -57,9 +57,9 @@
 	// Automatically set the width based on the width of the text
 	albumNameLabel.frame = CGRectMake(0, 0, 230, 60);
 	CGSize expectedLabelSize = [albumNameLabel.text sizeWithFont:albumNameLabel.font constrainedToSize:CGSizeMake(1000,60) lineBreakMode:albumNameLabel.lineBreakMode]; 
-	CGRect newFrame = albumNameLabel.frame;
-	newFrame.size.width = expectedLabelSize.width;
-	albumNameLabel.frame = newFrame;
+	CGRect frame = albumNameLabel.frame;
+	frame.size.width = expectedLabelSize.width;
+	albumNameLabel.frame = frame;
 	
 	coverArtView.frame = CGRectMake(0, 0, 60, 60);
 }

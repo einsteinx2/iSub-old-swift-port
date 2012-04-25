@@ -12,42 +12,23 @@
 @class Artist, EGORefreshTableHeaderView, FolderDropdownControl, SUSRootFoldersDAO;
 
 @interface FoldersViewController : UITableViewController <UISearchBarDelegate, SUSLoaderDelegate, FolderDropdownDelegate>
-{
-		
-	UIView *headerView;
-	UILabel *countLabel;
-	UILabel *reloadTimeLabel;
-	IBOutlet UISearchBar *searchBar;
-	UIButton *blockerButton;
-	BOOL letUserSelectRow;
-	
-	BOOL isSearching;
-	
-	BOOL isCountShowing;
 
-	EGORefreshTableHeaderView *refreshHeaderView;
-	BOOL _reloading;
-	
-	NSUInteger searchY;
-	
-	FolderDropdownControl *dropdown;
-		
-	SUSRootFoldersDAO *dataModel;
-	
-	UIView *searchOverlay;
-	UIButton *dismissButton;
-}
+@property BOOL letUserSelectRow;
+@property BOOL isSearching;
+@property BOOL isCountShowing;
 
-@property(assign,getter=isReloading) BOOL reloading;
+@property (strong) EGORefreshTableHeaderView *refreshHeaderView;
+@property (assign, getter=isReloading) BOOL reloading;
 
 @property (strong) UIView *headerView;
 @property (strong) UISearchBar *searchBar;
+@property (strong) UILabel *countLabel;
+@property (strong) UILabel *reloadTimeLabel;
+@property (strong) UIButton *blockerButton;
 
-//@property (retain) NSArray *indexes;
-//@property (retain) NSArray *folders;
-//@property (retain) NSMutableArray *foldersSearch;
-
-@property BOOL isSearching;
+@property NSUInteger searchY;
+@property (strong) UIView *searchOverlay;
+@property (strong) UIButton *dismissButton;
 
 @property (strong) FolderDropdownControl *dropdown;
 

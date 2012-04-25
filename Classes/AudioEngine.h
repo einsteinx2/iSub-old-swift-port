@@ -69,8 +69,8 @@ typedef struct
 
 + (id)sharedInstance;
 
-@property (retain) NSMutableArray *eqValueArray;
-@property (retain) NSMutableArray *eqHandleArray;
+@property (strong) NSMutableArray *eqValueArray;
+@property (strong) NSMutableArray *eqHandleArray;
 @property ISMS_BASS_EQ_DATA_TYPE eqDataType;
 
 // BASS streams
@@ -108,18 +108,20 @@ typedef struct
 @property NSInteger bassReinitSampleRate;
 @property NSUInteger bufferLengthMillis;
 @property NSUInteger bassUpdatePeriod;
-@property (retain) NSThread *startSongThread;
+@property (strong) NSThread *startSongThread;
 
 @property BOOL shouldResumeFromInterruption;
 
-@property (retain) NSMutableDictionary *bassUserInfoDict;
+@property (strong) NSMutableDictionary *bassUserInfoDict;
 
-@property (retain) Song *currentStreamSong;
+@property (strong) Song *currentStreamSong;
 @property (readonly) NSString *currentStreamFormat;
 
-@property (retain) NSObject *currentStreamSyncObject;
-@property (retain) NSObject *eqReadSyncObject;
-@property (retain) NSObject *ringBufferSyncObject;
+@property (strong) NSObject *currentStreamSyncObject;
+@property (strong) NSObject *eqReadSyncObject;
+@property (strong) NSObject *ringBufferSyncObject;
+
+@property (strong) BassUserInfo *waitLoopUserInfo;
 
 @property BOOL isBassFreed;
 
