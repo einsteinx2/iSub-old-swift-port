@@ -13,28 +13,27 @@
 
 @interface FoldersViewController : UITableViewController <UISearchBarDelegate, SUSLoaderDelegate, FolderDropdownDelegate>
 
-@property BOOL letUserSelectRow;
-@property BOOL isSearching;
-@property BOOL isCountShowing;
+@property (nonatomic) BOOL letUserSelectRow;
+@property (nonatomic) BOOL isSearching;
+@property (nonatomic) BOOL isCountShowing;
 
-@property (strong) EGORefreshTableHeaderView *refreshHeaderView;
-@property (assign, getter=isReloading) BOOL reloading;
+@property (nonatomic, strong) EGORefreshTableHeaderView *refreshHeaderView;
+@property (nonatomic, getter=isReloading) BOOL reloading;
 
-@property (strong) UIView *headerView;
-@property (strong) UISearchBar *searchBar;
-@property (strong) UILabel *countLabel;
-@property (strong) UILabel *reloadTimeLabel;
-@property (strong) UIButton *blockerButton;
+@property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, strong) UISearchBar *searchBar;
+@property (nonatomic, strong) UILabel *countLabel;
+@property (nonatomic, strong) UILabel *reloadTimeLabel;
+@property (nonatomic, strong) UIButton *blockerButton;
 
-@property NSUInteger searchY;
-@property (strong) UIView *searchOverlay;
-@property (strong) UIButton *dismissButton;
+@property (nonatomic, strong) UIView *searchOverlay;
+@property (nonatomic, strong) UIButton *dismissButton;
 
-@property (strong) FolderDropdownControl *dropdown;
+@property (nonatomic, strong) FolderDropdownControl *dropdown;
 
-@property (strong) SUSRootFoldersDAO *dataModel;
+@property (nonatomic, strong) SUSRootFoldersDAO *dataModel;
 
-- (void) doneSearching_Clicked:(id)sender;
+- (void)doneSearching_Clicked:(id)sender;
 
 // Loader Delegate Methods
 - (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error;

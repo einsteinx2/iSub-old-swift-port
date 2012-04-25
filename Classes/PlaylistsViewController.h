@@ -12,37 +12,33 @@
 @class BBSimpleConnectionQueue, SUSServerPlaylistsDAO;
 
 @interface PlaylistsViewController : UITableViewController <BBSimpleConnectionQueueDelegate, SUSLoaderDelegate>
-{	
-	UIView *headerView;
-	UISegmentedControl *segmentedControl;
-	UIImageView *noPlaylistsScreen;
-	BOOL isNoPlaylistsScreenShowing;
-	
-	UILabel *savePlaylistLabel;
-	UILabel *playlistCountLabel;
-	UIButton *savePlaylistButton;
-	UILabel *deleteSongsLabel;
-	UILabel *spacerLabel;
-	UILabel *editPlaylistLabel;
-	UIButton *editPlaylistButton;
-	BOOL isPlaylistSaveEditShowing;
-					
-	BBSimpleConnectionQueue *connectionQueue;
-	
-	BOOL savePlaylistLocal;
-	
-	NSMutableData *receivedData;
-	NSURLConnection *connection;
-	NSMutableURLRequest *request;
-	
-	//NSMutableData *receivedData;
-}
 
-@property (strong) NSMutableURLRequest *request;
-@property (strong) SUSServerPlaylistsDAO *serverPlaylistsDataModel;
-@property NSUInteger currentPlaylistCount;
+@property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, strong) UISegmentedControl *segmentedControl;
+@property (nonatomic, strong) UIImageView *noPlaylistsScreen;
+@property (nonatomic) BOOL isNoPlaylistsScreenShowing;
 
-@property (strong) UITextField *playlistNameTextField;
+@property (nonatomic, strong) UILabel *savePlaylistLabel;
+@property (nonatomic, strong) UILabel *playlistCountLabel;
+@property (nonatomic, strong) UIButton *savePlaylistButton;
+@property (nonatomic, strong) UILabel *deleteSongsLabel;
+@property (nonatomic, strong) UILabel *spacerLabel;
+@property (nonatomic, strong) UILabel *editPlaylistLabel;
+@property (nonatomic, strong) UIButton *editPlaylistButton;
+@property (nonatomic) BOOL isPlaylistSaveEditShowing;
+
+@property (nonatomic, strong) BBSimpleConnectionQueue *connectionQueue;
+
+@property (nonatomic) BOOL savePlaylistLocal;
+
+@property (nonatomic, strong) NSMutableData *receivedData;
+@property (nonatomic, strong) NSURLConnection *connection;
+@property (nonatomic, strong) NSMutableURLRequest *request;
+
+@property (nonatomic, strong) SUSServerPlaylistsDAO *serverPlaylistsDataModel;
+@property (nonatomic) NSUInteger currentPlaylistCount;
+
+@property (nonatomic, strong) UITextField *playlistNameTextField;
 
 - (void)showDeleteButton;
 - (void)hideDeleteButton;

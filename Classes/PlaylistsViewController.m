@@ -54,6 +54,7 @@
 @synthesize serverPlaylistsDataModel;
 @synthesize currentPlaylistCount;
 @synthesize playlistNameTextField;
+@synthesize headerView, segmentedControl, noPlaylistsScreen, isNoPlaylistsScreenShowing, savePlaylistLabel, playlistCountLabel, savePlaylistLocal, savePlaylistButton, deleteSongsLabel, spacerLabel, editPlaylistLabel, editPlaylistButton, isPlaylistSaveEditShowing, connectionQueue, receivedData, connection;
 
 #pragma mark - Rotation
 
@@ -73,11 +74,11 @@
 		[UIView setAnimationDuration:duration];
 		if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
 		{
-			noPlaylistsScreen.transform = CGAffineTransformTranslate(noPlaylistsScreen.transform, 0.0, -23.0);
+			self.noPlaylistsScreen.transform = CGAffineTransformTranslate(self.noPlaylistsScreen.transform, 0.0, -23.0);
 		}
 		else
 		{
-			noPlaylistsScreen.transform = CGAffineTransformTranslate(noPlaylistsScreen.transform, 0.0, 110.0);
+			self.noPlaylistsScreen.transform = CGAffineTransformTranslate(self.noPlaylistsScreen.transform, 0.0, 110.0);
 		}
 		[UIView commitAnimations];
 	}
@@ -111,13 +112,13 @@
 {
     [super viewDidLoad];
 		
-	serverPlaylistsDataModel = [[SUSServerPlaylistsDAO alloc] initWithDelegate:self];
+	self.serverPlaylistsDataModel = [[SUSServerPlaylistsDAO alloc] initWithDelegate:self];
 	
-	isNoPlaylistsScreenShowing = NO;
-	isPlaylistSaveEditShowing = NO;
-	savePlaylistLocal = NO;
+	self.isNoPlaylistsScreenShowing = NO;
+	self.isPlaylistSaveEditShowing = NO;
+	self.savePlaylistLocal = NO;
 	
-	receivedData = nil;
+	self.receivedData = nil;
 	
 	viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 	
@@ -127,23 +128,23 @@
 		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)];
 	
 	// Setup segmented control in the header view
-	headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-	headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
+	self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+	self.headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
 	
 	if (viewObjectsS.isOfflineMode)
-		segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Current", @"Offline Playlists", nil]];
+		self.segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Current", @"Offline Playlists", nil]];
 	else
-		segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Current", @"Local", @"Server", nil]];
+		self.segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Current", @"Local", @"Server", nil]];
 	
-	segmentedControl.frame = CGRectMake(5, 5, 310, 36);
-	segmentedControl.selectedSegmentIndex = 0;
-	segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
-	segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	segmentedControl.tintColor = [UIColor colorWithWhite:.57 alpha:1];
-	[segmentedControl addTarget:self action:@selector(segmentAction:) forControlEvents:UIControlEventValueChanged];
-	[headerView addSubview:segmentedControl];
+	self.segmentedControl.frame = CGRectMake(5, 5, 310, 36);
+	self.segmentedControl.selectedSegmentIndex = 0;
+	self.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
+	self.segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	self.segmentedControl.tintColor = [UIColor colorWithWhite:.57 alpha:1];
+	[self.segmentedControl addTarget:self action:@selector(segmentAction:) forControlEvents:UIControlEventValueChanged];
+	[self.headerView addSubview:self.segmentedControl];
 	
-	self.tableView.tableHeaderView = headerView;
+	self.tableView.tableHeaderView = self.headerView;
 	
 	if (IS_IPAD())
 	{
@@ -152,8 +153,8 @@
 	
 	[self.tableView addFooterShadow];
 	
-	connectionQueue = [[BBSimpleConnectionQueue alloc] init];
-	connectionQueue.delegate = self;
+	self.connectionQueue = [[BBSimpleConnectionQueue alloc] init];
+	self.connectionQueue.delegate = self;
 }
 
 
@@ -237,14 +238,14 @@
 
 - (void)updateCurrentPlaylistCount
 {
-	if (segmentedControl.selectedSegmentIndex == 0)
+	if (self.segmentedControl.selectedSegmentIndex == 0)
 	{
 		self.currentPlaylistCount = [playlistS count];
 
 		if (self.currentPlaylistCount == 1)
-			playlistCountLabel.text = [NSString stringWithFormat:@"1 song"];
+			self.playlistCountLabel.text = [NSString stringWithFormat:@"1 song"];
 		else 
-			playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", currentPlaylistCount];
+			self.playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", self.currentPlaylistCount];
 	}
 }
 
@@ -265,152 +266,152 @@
 - (void) removeSaveEditButtons
 {
 	// Remove the save and edit buttons if showing
-	if (isPlaylistSaveEditShowing == YES)
+	if (self.isPlaylistSaveEditShowing == YES)
 	{
-		headerView.frame = CGRectMake(0, 0, 320, 44);
-		[savePlaylistLabel removeFromSuperview];
-		[playlistCountLabel removeFromSuperview];
-		[savePlaylistButton removeFromSuperview];
-		[spacerLabel removeFromSuperview];
-		[editPlaylistLabel removeFromSuperview];
-		[editPlaylistButton removeFromSuperview];
-		[deleteSongsLabel removeFromSuperview];
-		isPlaylistSaveEditShowing = NO;
-		self.tableView.tableHeaderView = headerView;
+		self.headerView.frame = CGRectMake(0, 0, 320, 44);
+		[self.savePlaylistLabel removeFromSuperview];
+		[self.playlistCountLabel removeFromSuperview];
+		[self.savePlaylistButton removeFromSuperview];
+		[self.spacerLabel removeFromSuperview];
+		[self.editPlaylistLabel removeFromSuperview];
+		[self.editPlaylistButton removeFromSuperview];
+		[self.deleteSongsLabel removeFromSuperview];
+		self.isPlaylistSaveEditShowing = NO;
+		self.tableView.tableHeaderView = self.headerView;
 	}
 }
 
 
 - (void) addSaveEditButtons
 {
-	if (isPlaylistSaveEditShowing == NO)
+	if (self.isPlaylistSaveEditShowing == NO)
 	{
 		// Modify the header view to include the save and edit buttons
-		isPlaylistSaveEditShowing = YES;
-		headerView.frame = CGRectMake(0, 0, 320, 95);
+		self.isPlaylistSaveEditShowing = YES;
+		self.headerView.frame = CGRectMake(0, 0, 320, 95);
 		
 		int y = 45;
 		
-		savePlaylistLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, y, 227, 34)];
-		savePlaylistLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
-		savePlaylistLabel.backgroundColor = [UIColor clearColor];
-		savePlaylistLabel.textColor = [UIColor whiteColor];
-		savePlaylistLabel.textAlignment = UITextAlignmentCenter;
-		savePlaylistLabel.font = [UIFont boldSystemFontOfSize:22];
-		if (segmentedControl.selectedSegmentIndex == 0)
+		self.savePlaylistLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, y, 227, 34)];
+		self.savePlaylistLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+		self.savePlaylistLabel.backgroundColor = [UIColor clearColor];
+		self.savePlaylistLabel.textColor = [UIColor whiteColor];
+		self.savePlaylistLabel.textAlignment = UITextAlignmentCenter;
+		self.savePlaylistLabel.font = [UIFont boldSystemFontOfSize:22];
+		if (self.segmentedControl.selectedSegmentIndex == 0)
 		{
-			savePlaylistLabel.text = @"Save Playlist";
+			self.savePlaylistLabel.text = @"Save Playlist";
 		}
-		else if (segmentedControl.selectedSegmentIndex == 1)
+		else if (self.segmentedControl.selectedSegmentIndex == 1)
 		{
-			savePlaylistLabel.frame = CGRectMake(0, y, 227, 50);
+			self.savePlaylistLabel.frame = CGRectMake(0, y, 227, 50);
 			NSUInteger localPlaylistsCount = [databaseS.localPlaylistsDbQueue intForQuery:@"SELECT COUNT(*) FROM localPlaylists"];
 			if (localPlaylistsCount == 1)
-				savePlaylistLabel.text = [NSString stringWithFormat:@"1 playlist"];
+				self.savePlaylistLabel.text = [NSString stringWithFormat:@"1 playlist"];
 			else 
-				savePlaylistLabel.text = [NSString stringWithFormat:@"%i playlists", localPlaylistsCount];
+				self.savePlaylistLabel.text = [NSString stringWithFormat:@"%i playlists", localPlaylistsCount];
 		}
-		else if (segmentedControl.selectedSegmentIndex == 2)
+		else if (self.segmentedControl.selectedSegmentIndex == 2)
 		{
-			savePlaylistLabel.frame = CGRectMake(0, y, 227, 50);
-			NSUInteger serverPlaylistsCount = [serverPlaylistsDataModel.serverPlaylists count];
+			self.savePlaylistLabel.frame = CGRectMake(0, y, 227, 50);
+			NSUInteger serverPlaylistsCount = [self.serverPlaylistsDataModel.serverPlaylists count];
 			if (serverPlaylistsCount == 1)
-				savePlaylistLabel.text = [NSString stringWithFormat:@"1 playlist"];
+				self.savePlaylistLabel.text = [NSString stringWithFormat:@"1 playlist"];
 			else 
-				savePlaylistLabel.text = [NSString stringWithFormat:@"%i playlists", serverPlaylistsCount];
+				self.savePlaylistLabel.text = [NSString stringWithFormat:@"%i playlists", serverPlaylistsCount];
 			
 		}
-		[headerView addSubview:savePlaylistLabel];
+		[self.headerView addSubview:self.savePlaylistLabel];
 		
-		playlistCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, y + 33, 227, 14)];
-		playlistCountLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
-		playlistCountLabel.backgroundColor = [UIColor clearColor];
-		playlistCountLabel.textColor = [UIColor whiteColor];
-		playlistCountLabel.textAlignment = UITextAlignmentCenter;
-		playlistCountLabel.font = [UIFont boldSystemFontOfSize:12];
-		if (segmentedControl.selectedSegmentIndex == 0)
+		self.playlistCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, y + 33, 227, 14)];
+		self.playlistCountLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+		self.playlistCountLabel.backgroundColor = [UIColor clearColor];
+		self.playlistCountLabel.textColor = [UIColor whiteColor];
+		self.playlistCountLabel.textAlignment = UITextAlignmentCenter;
+		self.playlistCountLabel.font = [UIFont boldSystemFontOfSize:12];
+		if (self.segmentedControl.selectedSegmentIndex == 0)
 		{
 			if (self.currentPlaylistCount == 1)
-				playlistCountLabel.text = [NSString stringWithFormat:@"1 song"];
+				self.playlistCountLabel.text = [NSString stringWithFormat:@"1 song"];
 			else 
-				playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", currentPlaylistCount];
+				self.playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", self.currentPlaylistCount];
 		}
-		[headerView addSubview:playlistCountLabel];
+		[self.headerView addSubview:self.playlistCountLabel];
 		
-		savePlaylistButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		savePlaylistButton.frame = CGRectMake(0, y, 230, 40);
-		savePlaylistButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
-		[savePlaylistButton addTarget:self action:@selector(savePlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
-		[headerView addSubview:savePlaylistButton];
+		self.savePlaylistButton = [UIButton buttonWithType:UIButtonTypeCustom];
+		self.savePlaylistButton.frame = CGRectMake(0, y, 230, 40);
+		self.savePlaylistButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+		[self.savePlaylistButton addTarget:self action:@selector(savePlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
+		[self.headerView addSubview:self.savePlaylistButton];
 		
-		spacerLabel = [[UILabel alloc] initWithFrame:CGRectMake(226, y, 6, 50)];
-		spacerLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-		spacerLabel.backgroundColor = [UIColor clearColor];
-		spacerLabel.textColor = [UIColor whiteColor];
-		spacerLabel.font = [UIFont systemFontOfSize:40];
-		spacerLabel.text = @"|";
-		[headerView addSubview:spacerLabel];
+		self.spacerLabel = [[UILabel alloc] initWithFrame:CGRectMake(226, y, 6, 50)];
+		self.spacerLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+		self.spacerLabel.backgroundColor = [UIColor clearColor];
+		self.spacerLabel.textColor = [UIColor whiteColor];
+		self.spacerLabel.font = [UIFont systemFontOfSize:40];
+		self.spacerLabel.text = @"|";
+		[self.headerView addSubview:self.spacerLabel];
 		
-		editPlaylistLabel = [[UILabel alloc] initWithFrame:CGRectMake(234, y, 86, 50)];
-		editPlaylistLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
-		editPlaylistLabel.backgroundColor = [UIColor clearColor];
-		editPlaylistLabel.textColor = [UIColor whiteColor];
-		editPlaylistLabel.textAlignment = UITextAlignmentCenter;
-		editPlaylistLabel.font = [UIFont boldSystemFontOfSize:22];
-		editPlaylistLabel.text = @"Edit";
-		[headerView addSubview:editPlaylistLabel];
+		self.editPlaylistLabel = [[UILabel alloc] initWithFrame:CGRectMake(234, y, 86, 50)];
+		self.editPlaylistLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
+		self.editPlaylistLabel.backgroundColor = [UIColor clearColor];
+		self.editPlaylistLabel.textColor = [UIColor whiteColor];
+		self.editPlaylistLabel.textAlignment = UITextAlignmentCenter;
+		self.editPlaylistLabel.font = [UIFont boldSystemFontOfSize:22];
+		self.editPlaylistLabel.text = @"Edit";
+		[self.headerView addSubview:self.editPlaylistLabel];
 		
-		editPlaylistButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		editPlaylistButton.frame = CGRectMake(234, y, 86, 40);
-		editPlaylistButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
-		[editPlaylistButton addTarget:self action:@selector(editPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
-		[headerView addSubview:editPlaylistButton];	
+		self.editPlaylistButton = [UIButton buttonWithType:UIButtonTypeCustom];
+		self.editPlaylistButton.frame = CGRectMake(234, y, 86, 40);
+		self.editPlaylistButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
+		[self.editPlaylistButton addTarget:self action:@selector(editPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
+		[self.headerView addSubview:self.editPlaylistButton];	
 		
-		deleteSongsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, y, 227, 50)];
-		deleteSongsLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
-		deleteSongsLabel.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:.5];
-		deleteSongsLabel.textColor = [UIColor whiteColor];
-		deleteSongsLabel.textAlignment = UITextAlignmentCenter;
-		deleteSongsLabel.font = [UIFont boldSystemFontOfSize:22];
-		deleteSongsLabel.adjustsFontSizeToFitWidth = YES;
-		deleteSongsLabel.minimumFontSize = 12;
-		if (segmentedControl.selectedSegmentIndex == 0)
+		self.deleteSongsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, y, 227, 50)];
+		self.deleteSongsLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+		self.deleteSongsLabel.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:.5];
+		self.deleteSongsLabel.textColor = [UIColor whiteColor];
+		self.deleteSongsLabel.textAlignment = UITextAlignmentCenter;
+		self.deleteSongsLabel.font = [UIFont boldSystemFontOfSize:22];
+		self.deleteSongsLabel.adjustsFontSizeToFitWidth = YES;
+		self.deleteSongsLabel.minimumFontSize = 12;
+		if (self.segmentedControl.selectedSegmentIndex == 0)
 		{
-			deleteSongsLabel.text = @"Remove # Songs";
+			self.deleteSongsLabel.text = @"Remove # Songs";
 		}
-		else if (segmentedControl.selectedSegmentIndex == 1)
+		else if (self.segmentedControl.selectedSegmentIndex == 1)
 		{
-			deleteSongsLabel.text = @"Remove # Playlists";
+			self.deleteSongsLabel.text = @"Remove # Playlists";
 		}
-		deleteSongsLabel.hidden = YES;
-		[headerView addSubview:deleteSongsLabel];
+		self.deleteSongsLabel.hidden = YES;
+		[self.headerView addSubview:self.deleteSongsLabel];
 		
-		self.tableView.tableHeaderView = headerView;
+		self.tableView.tableHeaderView = self.headerView;
 	}
 	else
 	{
-		if (segmentedControl.selectedSegmentIndex == 0)
+		if (self.segmentedControl.selectedSegmentIndex == 0)
 		{
 			if (self.currentPlaylistCount == 1)
-				playlistCountLabel.text = [NSString stringWithFormat:@"1 song"];
+				self.playlistCountLabel.text = [NSString stringWithFormat:@"1 song"];
 			else 
-				playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", currentPlaylistCount];
+				self.playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", self.currentPlaylistCount];
 		}
-		else if (segmentedControl.selectedSegmentIndex == 1)
+		else if (self.segmentedControl.selectedSegmentIndex == 1)
 		{
 			NSUInteger localPlaylistsCount = [databaseS.localPlaylistsDbQueue intForQuery:@"SELECT COUNT(*) FROM localPlaylists"];
 			if (localPlaylistsCount == 1)
-				playlistCountLabel.text = [NSString stringWithFormat:@"1 playlist"];
+				self.playlistCountLabel.text = [NSString stringWithFormat:@"1 playlist"];
 			else 
-				playlistCountLabel.text = [NSString stringWithFormat:@"%i playlists", localPlaylistsCount];
+				self.playlistCountLabel.text = [NSString stringWithFormat:@"%i playlists", localPlaylistsCount];
 		}
-		else if (segmentedControl.selectedSegmentIndex == 2)
+		else if (self.segmentedControl.selectedSegmentIndex == 2)
 		{
-			NSUInteger serverPlaylistsCount = [serverPlaylistsDataModel.serverPlaylists count];
+			NSUInteger serverPlaylistsCount = [self.serverPlaylistsDataModel.serverPlaylists count];
 			if (serverPlaylistsCount == 1)
-				playlistCountLabel.text = [NSString stringWithFormat:@"1 playlist"];
+				self.playlistCountLabel.text = [NSString stringWithFormat:@"1 playlist"];
 			else 
-				playlistCountLabel.text = [NSString stringWithFormat:@"%i playlists", serverPlaylistsCount];
+				self.playlistCountLabel.text = [NSString stringWithFormat:@"%i playlists", serverPlaylistsCount];
 			
 		}
 	}
@@ -419,10 +420,10 @@
 - (void) removeNoPlaylistsScreen
 {
 	// Remove the no playlists overlay screen if it's showing
-	if (isNoPlaylistsScreenShowing)
+	if (self.isNoPlaylistsScreenShowing)
 	{
-		[noPlaylistsScreen removeFromSuperview];
-		isNoPlaylistsScreenShowing = NO;
+		[self.noPlaylistsScreen removeFromSuperview];
+		self.isNoPlaylistsScreenShowing = NO;
 	}
 }
 
@@ -430,14 +431,14 @@
 {
 	[self removeNoPlaylistsScreen];
 	
-	isNoPlaylistsScreenShowing = YES;
-	noPlaylistsScreen = [[UIImageView alloc] init];
-	noPlaylistsScreen.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
-	noPlaylistsScreen.frame = CGRectMake(40, 100, 240, 180);
-	noPlaylistsScreen.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 2);
-	noPlaylistsScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
-	noPlaylistsScreen.alpha = .80;
-	noPlaylistsScreen.userInteractionEnabled = YES;
+	self.isNoPlaylistsScreenShowing = YES;
+	self.noPlaylistsScreen = [[UIImageView alloc] init];
+	self.noPlaylistsScreen.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
+	self.noPlaylistsScreen.frame = CGRectMake(40, 100, 240, 180);
+	self.noPlaylistsScreen.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 2);
+	self.noPlaylistsScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
+	self.noPlaylistsScreen.alpha = .80;
+	self.noPlaylistsScreen.userInteractionEnabled = YES;
 	
 	UILabel *textLabel = [[UILabel alloc] init];
 	textLabel.backgroundColor = [UIColor clearColor];
@@ -447,12 +448,12 @@
 	textLabel.numberOfLines = 0;
 	if (settingsS.isPlaylistUnlocked)
 	{
-		if (segmentedControl.selectedSegmentIndex == 0)
+		if (self.segmentedControl.selectedSegmentIndex == 0)
 		{
 			textLabel.text = @"No Songs\nQueued";
 			textLabel.frame = CGRectMake(20, 0, 200, 100);
 		}
-		else if (segmentedControl.selectedSegmentIndex == 1 || segmentedControl.selectedSegmentIndex == 2)
+		else if (self.segmentedControl.selectedSegmentIndex == 1 || self.segmentedControl.selectedSegmentIndex == 2)
 		{
 			textLabel.text = @"No Playlists\nFound";
 			textLabel.frame = CGRectMake(20, 20, 200, 140);
@@ -463,7 +464,7 @@
 		textLabel.text = @"Playlists\nLocked";
 		textLabel.frame = CGRectMake(20, 0, 200, 100);
 	}
-	[noPlaylistsScreen addSubview:textLabel];
+	[self.noPlaylistsScreen addSubview:textLabel];
 	
 	UILabel *textLabel2 = [[UILabel alloc] init];
 	textLabel2.backgroundColor = [UIColor clearColor];
@@ -473,7 +474,7 @@
 	textLabel2.numberOfLines = 0;
 	if (settingsS.isPlaylistUnlocked)
 	{
-		if (segmentedControl.selectedSegmentIndex == 0)
+		if (self.segmentedControl.selectedSegmentIndex == 0)
 		{
 			
 			textLabel2.text = @"Swipe to the right on any song, album, or artist to bring up the Queue button";
@@ -485,17 +486,17 @@
 		textLabel2.text = @"Tap to purchase the ability to view, create, and manage playlists";
 		textLabel2.frame = CGRectMake(20, 100, 200, 60);
 	}
-	[noPlaylistsScreen addSubview:textLabel2];
+	[self.noPlaylistsScreen addSubview:textLabel2];
 	
 	if (!settingsS.isPlaylistUnlocked)
 	{
 		UIButton *storeLauncher = [UIButton buttonWithType:UIButtonTypeCustom];
-		storeLauncher.frame = CGRectMake(0, 0, noPlaylistsScreen.frame.size.width, noPlaylistsScreen.frame.size.height);
+		storeLauncher.frame = CGRectMake(0, 0, self.noPlaylistsScreen.frame.size.width, self.noPlaylistsScreen.frame.size.height);
 		[storeLauncher addTarget:self action:@selector(showStore) forControlEvents:UIControlEventTouchUpInside];
-		[noPlaylistsScreen addSubview:storeLauncher];
+		[self.noPlaylistsScreen addSubview:storeLauncher];
 	}
 	
-	[self.view addSubview:noPlaylistsScreen];
+	[self.view addSubview:self.noPlaylistsScreen];
 	
 	
 	if (!IS_IPAD())
@@ -503,7 +504,7 @@
 		if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
 		{
 			//noPlaylistsScreen.transform = CGAffineTransformScale(noPlaylistsScreen.transform, 0.75, 0.75);
-			noPlaylistsScreen.transform = CGAffineTransformTranslate(noPlaylistsScreen.transform, 0.0, 23.0);
+			self.noPlaylistsScreen.transform = CGAffineTransformTranslate(self.noPlaylistsScreen.transform, 0.0, 23.0);
 		}
 	}
 }
@@ -563,12 +564,12 @@
 		}
 		
 		// If the list is empty remove the Save/Edit bar
-		if (currentPlaylistCount == 0)
+		if (self.currentPlaylistCount == 0)
 		{
 			[self removeSaveEditButtons];
 		}
 	}
-	else if(segmentedControl.selectedSegmentIndex == 1)
+	else if(self.segmentedControl.selectedSegmentIndex == 1)
 	{
 		viewObjectsS.isLocalPlaylist = YES;
 		
@@ -598,7 +599,7 @@
 			[self addNoPlaylistsScreen];
 		}
 	}
-	else if(segmentedControl.selectedSegmentIndex == 2)
+	else if(self.segmentedControl.selectedSegmentIndex == 2)
 	{
 		viewObjectsS.isLocalPlaylist = NO;
 		
@@ -615,13 +616,13 @@
 		[self removeNoPlaylistsScreen];
 		
         [viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
-        [serverPlaylistsDataModel startLoad];
+        [self.serverPlaylistsDataModel startLoad];
 	}
 }
 
 - (void)editPlaylistAction:(id)sender
 {
-	if (segmentedControl.selectedSegmentIndex == 0)
+	if (self.segmentedControl.selectedSegmentIndex == 0)
 	{
 		if (!self.tableView.editing)
 		{
@@ -630,8 +631,8 @@
 			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:@"hideDeleteButton" object: nil];
 			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 			[self.tableView setEditing:YES animated:YES];
-			editPlaylistLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
-			editPlaylistLabel.text = @"Done";
+			self.editPlaylistLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
+			self.editPlaylistLabel.text = @"Done";
 			[self showDeleteButton];
 			
 			[NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(showDeleteToggle) userInfo:nil repeats:NO];
@@ -643,8 +644,8 @@
 			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 			[self.tableView setEditing:NO animated:YES];
 			[self hideDeleteButton];
-			editPlaylistLabel.backgroundColor = [UIColor clearColor];
-			editPlaylistLabel.text = @"Edit";
+			self.editPlaylistLabel.backgroundColor = [UIColor clearColor];
+			self.editPlaylistLabel.text = @"Edit";
 			
 			// Reload the table to correct the numbers
 			[self.tableView reloadData];
@@ -654,8 +655,8 @@
 			}
 		}
 	}
-	else if (segmentedControl.selectedSegmentIndex == 1 ||
-			 segmentedControl.selectedSegmentIndex == 2)
+	else if (self.segmentedControl.selectedSegmentIndex == 1 ||
+			 self.segmentedControl.selectedSegmentIndex == 2)
 	{
 		if (!self.tableView.editing)
 		{
@@ -664,8 +665,8 @@
 			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:@"hideDeleteButton" object: nil];
 			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 			[self.tableView setEditing:YES animated:YES];
-			editPlaylistLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
-			editPlaylistLabel.text = @"Done";
+			self.editPlaylistLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
+			self.editPlaylistLabel.text = @"Done";
 			[self showDeleteButton];
 			
 			[NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(showDeleteToggle) userInfo:nil repeats:NO];
@@ -677,8 +678,8 @@
 			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 			[self.tableView setEditing:NO animated:YES];
 			[self hideDeleteButton];
-			editPlaylistLabel.backgroundColor = [UIColor clearColor];
-			editPlaylistLabel.text = @"Edit";
+			self.editPlaylistLabel.backgroundColor = [UIColor clearColor];
+			self.editPlaylistLabel.text = @"Edit";
 			
 			// Reload the table to correct the numbers
 			[self.tableView reloadData];
@@ -688,92 +689,92 @@
 
 - (void)showDeleteButton
 {
-	if (segmentedControl.selectedSegmentIndex == 0)
+	if (self.segmentedControl.selectedSegmentIndex == 0)
 	{
 		if ([viewObjectsS.multiDeleteList count] == 0)
 		{
-			deleteSongsLabel.text = @"Select All";
+			self.deleteSongsLabel.text = @"Select All";
 		}
 		else if ([viewObjectsS.multiDeleteList count] == 1)
 		{
-			deleteSongsLabel.text = @"Remove 1 Song  ";
+			self.deleteSongsLabel.text = @"Remove 1 Song  ";
 		}
 		else
 		{
-			deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %i Songs", [viewObjectsS.multiDeleteList count]];
+			self.deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %i Songs", [viewObjectsS.multiDeleteList count]];
 		}
 	}
-	else if (segmentedControl.selectedSegmentIndex == 1 ||
-			 segmentedControl.selectedSegmentIndex == 2)
+	else if (self.segmentedControl.selectedSegmentIndex == 1 ||
+			 self.segmentedControl.selectedSegmentIndex == 2)
 	{
 		if ([viewObjectsS.multiDeleteList count] == 0)
 		{
-			deleteSongsLabel.text = @"Select All";
+			self.deleteSongsLabel.text = @"Select All";
 		}
 		else if ([viewObjectsS.multiDeleteList count] == 1)
 		{
-			deleteSongsLabel.text = @"Remove 1 Playlist";
+			self.deleteSongsLabel.text = @"Remove 1 Playlist";
 		}
 		else
 		{
-			deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %i Playlists", [viewObjectsS.multiDeleteList count]];
+			self.deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %i Playlists", [viewObjectsS.multiDeleteList count]];
 		}
 	}
 	
-	savePlaylistLabel.hidden = YES;
-	playlistCountLabel.hidden = YES;
-	deleteSongsLabel.hidden = NO;
+	self.savePlaylistLabel.hidden = YES;
+	self.playlistCountLabel.hidden = YES;
+	self.deleteSongsLabel.hidden = NO;
 }
 		
 - (void) hideDeleteButton
 {
-	if (segmentedControl.selectedSegmentIndex == 0)
+	if (self.segmentedControl.selectedSegmentIndex == 0)
 	{
 		if ([viewObjectsS.multiDeleteList count] == 0)
 		{
 			if (!self.tableView.editing)
 			{
-				savePlaylistLabel.hidden = NO;
-				playlistCountLabel.hidden = NO;
-				deleteSongsLabel.hidden = YES;
+				self.savePlaylistLabel.hidden = NO;
+				self.playlistCountLabel.hidden = NO;
+				self.deleteSongsLabel.hidden = YES;
 			}
 			else
 			{
-				deleteSongsLabel.text = @"Clear Playlist";
+				self.deleteSongsLabel.text = @"Clear Playlist";
 			}
 		}
 		else if ([viewObjectsS.multiDeleteList count] == 1)
 		{
-			deleteSongsLabel.text = @"Remove 1 Song  ";
+			self.deleteSongsLabel.text = @"Remove 1 Song  ";
 		}
 		else 
 		{
-			deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %i Songs", [viewObjectsS.multiDeleteList count]];
+			self.deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %i Songs", [viewObjectsS.multiDeleteList count]];
 		}
 	}
-	else if (segmentedControl.selectedSegmentIndex == 1 ||
-			 segmentedControl.selectedSegmentIndex == 2)
+	else if (self.segmentedControl.selectedSegmentIndex == 1 ||
+			 self.segmentedControl.selectedSegmentIndex == 2)
 	{
 		if ([viewObjectsS.multiDeleteList count] == 0)
 		{
 			if (!self.tableView.editing)
 			{
-				savePlaylistLabel.hidden = NO;
-				playlistCountLabel.hidden = NO;
-				deleteSongsLabel.hidden = YES;
+				self.savePlaylistLabel.hidden = NO;
+				self.playlistCountLabel.hidden = NO;
+				self.deleteSongsLabel.hidden = YES;
 			}
 			else
 			{
-				deleteSongsLabel.text = @"Clear Playlists";
+				self.deleteSongsLabel.text = @"Clear Playlists";
 			}
 		}
 		else if ([viewObjectsS.multiDeleteList count] == 1)
 		{
-			deleteSongsLabel.text = @"Remove 1 Playlist";
+			self.deleteSongsLabel.text = @"Remove 1 Playlist";
 		}
 		else 
 		{
-			deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %i Playlists", [viewObjectsS.multiDeleteList count]];
+			self.deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %i Playlists", [viewObjectsS.multiDeleteList count]];
 		}
 	}
 }
@@ -789,7 +790,6 @@
 
 - (void)uploadPlaylist:(NSString*)name
 {	
-	
 	NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(name), @"name", nil];
 	
 	NSMutableArray *songIds = [NSMutableArray arrayWithCapacity:self.currentPlaylistCount];
@@ -817,10 +817,10 @@
 
 	self.request = [NSMutableURLRequest requestWithSUSAction:@"createPlaylist" andParameters:parameters];
 	
-	connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	if (connection)
+	self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	if (self.connection)
 	{
-		receivedData = [NSMutableData data];
+		self.receivedData = [NSMutableData data];
 		
 		self.tableView.scrollEnabled = NO;
 		[viewObjectsS showAlbumLoadingScreen:self.view sender:self];
@@ -837,7 +837,7 @@
 {	
 	[self unregisterForNotifications];
 	
-	if (segmentedControl.selectedSegmentIndex == 0)
+	if (self.segmentedControl.selectedSegmentIndex == 0)
 	{
 		[playlistS deleteSongs:viewObjectsS.multiDeleteList];
 		self.currentPlaylistCount = playlistS.count;
@@ -861,11 +861,10 @@
 			DLog(@"Exception: %@ - %@", exception.name, exception.reason);
 		}
 		
-		
 		[self editPlaylistAction:nil];
 		[self segmentAction:nil];
 	}
-	else if (segmentedControl.selectedSegmentIndex == 1)
+	else if (self.segmentedControl.selectedSegmentIndex == 1)
 	{
 		// Sort the multiDeleteList to make sure it's accending
 		[viewObjectsS.multiDeleteList sortUsingSelector:@selector(compare:)];
@@ -914,14 +913,14 @@
 
 - (void)savePlaylistAction:(id)sender
 {
-	if (segmentedControl.selectedSegmentIndex == 0)
+	if (self.segmentedControl.selectedSegmentIndex == 0)
 	{
-		if (deleteSongsLabel.hidden == YES)
+		if (self.deleteSongsLabel.hidden == YES)
 		{
 			if (!self.tableView.editing)
 			{
-				savePlaylistLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
-				playlistCountLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
+				self.savePlaylistLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
+				self.playlistCountLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
 				
 				UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Local or Server?" 
 																	  message:@"Would you like to save this playlist to your device or to your Subsonic server?" 
@@ -951,9 +950,9 @@
 			}
 		}
 	}
-	else if (segmentedControl.selectedSegmentIndex == 1)
+	else if (self.segmentedControl.selectedSegmentIndex == 1)
 	{
-		if (deleteSongsLabel.hidden == NO)
+		if (self.deleteSongsLabel.hidden == NO)
 		{
 			if ([viewObjectsS.multiDeleteList count] == 0)
 			{
@@ -974,14 +973,14 @@
 			}
 		}
 	}
-	else if (segmentedControl.selectedSegmentIndex == 2)
+	else if (self.segmentedControl.selectedSegmentIndex == 2)
 	{
-		if (deleteSongsLabel.hidden == NO)
+		if (self.deleteSongsLabel.hidden == NO)
 		{
 			if ([viewObjectsS.multiDeleteList count] == 0)
 			{
 				// Select all the rows
-				NSUInteger count = [serverPlaylistsDataModel.serverPlaylists count];
+				NSUInteger count = [self.serverPlaylistsDataModel.serverPlaylists count];
 				for (int i = 0; i < count; i++)
 				{
 					[viewObjectsS.multiDeleteList addObject:[NSNumber numberWithInt:i]];
@@ -996,16 +995,16 @@
 				
 				for (NSNumber *index in viewObjectsS.multiDeleteList)
 				{
-                    NSString *playlistId = [[serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:[index intValue]] playlistId];
+                    NSString *playlistId = [[self.serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:[index intValue]] playlistId];
                     NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(playlistId) forKey:@"id"];
                     DLog(@"parameters: %@", parameters);
                     NSMutableURLRequest *aRequest = [NSMutableURLRequest requestWithSUSAction:@"deletePlaylist" andParameters:parameters];
                     
-					connection = [[NSURLConnection alloc] initWithRequest:aRequest delegate:self startImmediately:NO];
-					if (connection)
+					self.connection = [[NSURLConnection alloc] initWithRequest:aRequest delegate:self startImmediately:NO];
+					if (self.connection)
 					{
-						[connectionQueue registerConnection:connection];
-						[connectionQueue startQueue];
+						[self.connectionQueue registerConnection:self.connection];
+						[self.connectionQueue startQueue];
 					} 
 					else 
 					{
@@ -1027,21 +1026,21 @@
 
 - (void)cancelLoad
 {
-	if (segmentedControl.selectedSegmentIndex == 0)
+	if (self.segmentedControl.selectedSegmentIndex == 0)
 	{
-		[connection cancel];
+		[self.connection cancel];
 	}
 	else
 	{
-		if (connectionQueue.isRunning)
+		if (self.connectionQueue.isRunning)
 		{
-			[connectionQueue clearQueue];
+			[self.connectionQueue clearQueue];
 			
-			[self connectionQueueDidFinish:connectionQueue];
+			[self connectionQueueDidFinish:self.connectionQueue];
 		}
 		else
 		{
-			[serverPlaylistsDataModel cancelLoad];
+			[self.serverPlaylistsDataModel cancelLoad];
 			[viewObjectsS hideLoadingScreen];
 		}
 	}
@@ -1054,11 +1053,11 @@
 	{
 		if (buttonIndex == 0)
 		{
-			savePlaylistLocal = YES;
+			self.savePlaylistLocal = YES;
 		}
 		else if (buttonIndex == 1)
 		{
-			savePlaylistLocal = NO;
+			self.savePlaylistLocal = NO;
 		}
 		else if (buttonIndex == 2)
 		{
@@ -1068,39 +1067,39 @@
 		UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Playlist Name:" message:@"      \n      " delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
 		myAlertView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
 		self.playlistNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 24.0)];
-		playlistNameTextField.layer.cornerRadius = 3.;
-		[playlistNameTextField setBackgroundColor:[UIColor whiteColor]];
-		[myAlertView addSubview:playlistNameTextField];
+		self.playlistNameTextField.layer.cornerRadius = 3.;
+		[self.playlistNameTextField setBackgroundColor:[UIColor whiteColor]];
+		[myAlertView addSubview:self.playlistNameTextField];
 		if ([[[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."] objectAtIndexSafe:0] isEqualToString:@"3"])
 		{
 			CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 100.0);
 			[myAlertView setTransform:myTransform];
 		}
 		[myAlertView show];
-		[playlistNameTextField becomeFirstResponder];
+		[self.playlistNameTextField becomeFirstResponder];
 	}
     else if([alertView.title isEqualToString:@"Playlist Name:"])
 	{
-		[playlistNameTextField resignFirstResponder];
+		[self.playlistNameTextField resignFirstResponder];
 		if(buttonIndex == 1)
 		{
-			if (savePlaylistLocal)
+			if (self.savePlaylistLocal)
 			{
 				// Check if the playlist exists, if not create the playlist table and add the entry to localPlaylists table
-				NSString *test = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT md5 FROM localPlaylists WHERE md5 = ?", [playlistNameTextField.text md5]];
+				NSString *test = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT md5 FROM localPlaylists WHERE md5 = ?", [self.playlistNameTextField.text md5]];
 				if (!test)
 				{
 					[databaseS.localPlaylistsDbQueue inDatabase:^(FMDatabase *db)
 					{
-						[db executeUpdate:@"INSERT INTO localPlaylists (playlist, md5) VALUES (?, ?)", playlistNameTextField.text, [playlistNameTextField.text md5]];
-						[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [playlistNameTextField.text md5], [Song standardSongColumnSchema]]];
+						[db executeUpdate:@"INSERT INTO localPlaylists (playlist, md5) VALUES (?, ?)", self.playlistNameTextField.text, [self.playlistNameTextField.text md5]];
+						[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [self.playlistNameTextField.text md5], [Song standardSongColumnSchema]]];
 						
 						[db executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, [settingsS.urlString md5]], @"currentPlaylistDb"];
 						if ([db hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [db lastErrorCode], [db lastErrorMessage]); }
 						if (playlistS.isShuffle)
-							[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM shufflePlaylist", [playlistNameTextField.text md5]]];
+							[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM shufflePlaylist", [self.playlistNameTextField.text md5]]];
 						else
-							[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM currentPlaylist", [playlistNameTextField.text md5]]];
+							[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM currentPlaylist", [self.playlistNameTextField.text md5]]];
 						[db executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 					}];
 				}
@@ -1113,7 +1112,7 @@
 			}
 			else
 			{
-				NSString *tableName = [NSString stringWithFormat:@"splaylist%@", [playlistNameTextField.text md5]];
+				NSString *tableName = [NSString stringWithFormat:@"splaylist%@", [self.playlistNameTextField.text md5]];
 				if ([databaseS.localPlaylistsDbQueue tableExists:tableName])
 				{
 					// If it exists, ask to overwrite
@@ -1122,7 +1121,7 @@
 				}
 				else 
 				{
-					[self uploadPlaylist:playlistNameTextField.text];
+					[self uploadPlaylist:self.playlistNameTextField.text];
 				}
 			}
 		}
@@ -1131,20 +1130,20 @@
 	{
 		if(buttonIndex == 1)
 		{
-			if (savePlaylistLocal)
+			if (self.savePlaylistLocal)
 			{
 				[databaseS.localPlaylistsDbQueue inDatabase:^(FMDatabase *db)
 				{
 					// If yes, overwrite the playlist
-					[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE playlist%@", [playlistNameTextField.text md5]]];
-					[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [playlistNameTextField.text md5], [Song standardSongColumnSchema]]];
+					[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE playlist%@", [self.playlistNameTextField.text md5]]];
+					[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [self.playlistNameTextField.text md5], [Song standardSongColumnSchema]]];
 					
 					[db executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, [settingsS.urlString md5]], @"currentPlaylistDb"];
 					if ([db hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [db lastErrorCode], [db lastErrorMessage]); }
 					if (playlistS.isShuffle)
-						[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM shufflePlaylist", [playlistNameTextField.text md5]]];
+						[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM shufflePlaylist", [self.playlistNameTextField.text md5]]];
 					else 
-						[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM currentPlaylist", [playlistNameTextField.text md5]]];
+						[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM currentPlaylist", [self.playlistNameTextField.text md5]]];
 					[db executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 				}];				
 			}
@@ -1152,7 +1151,7 @@
 			{
 				[databaseS.localPlaylistsDbQueue inDatabase:^(FMDatabase *db)
 				{
-					[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE splaylist%@", [playlistNameTextField.text md5]]];
+					[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE splaylist%@", [self.playlistNameTextField.text md5]]];
 				}];
 				
 				[self uploadPlaylist:playlistNameTextField.text];
@@ -1160,8 +1159,8 @@
 		}
 	}
 	
-	savePlaylistLabel.backgroundColor = [UIColor clearColor];
-	playlistCountLabel.backgroundColor = [UIColor clearColor];
+	self.savePlaylistLabel.backgroundColor = [UIColor clearColor];
+	self.playlistCountLabel.backgroundColor = [UIColor clearColor];
 }
 
 - (void)selectRow
@@ -1188,7 +1187,7 @@
     [self.tableView reloadData];
     
     // If the list is empty, display the no playlists overlay screen
-    if ([serverPlaylistsDataModel.serverPlaylists count] == 0 && isNoPlaylistsScreenShowing == NO)
+    if ([self.serverPlaylistsDataModel.serverPlaylists count] == 0 && self.isNoPlaylistsScreenShowing == NO)
     {
 		[self addNoPlaylistsScreen];
     }
@@ -1229,14 +1228,14 @@
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
 {
-	if (segmentedControl.selectedSegmentIndex == 0)
-		[receivedData appendData:incrementalData];
+	if (self.segmentedControl.selectedSegmentIndex == 0)
+		[self.receivedData appendData:incrementalData];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
 	NSString *message = @"";
-	if (segmentedControl.selectedSegmentIndex == 0)
+	if (self.segmentedControl.selectedSegmentIndex == 0)
 	{
 		message = [NSString stringWithFormat:@"There was an error saving the playlist to the server.\n\nError %i: %@", 
 				   [error code], 
@@ -1257,12 +1256,12 @@
 	[viewObjectsS hideLoadingScreen];
 	
 	
-	if (segmentedControl.selectedSegmentIndex == 0)
+	if (self.segmentedControl.selectedSegmentIndex == 0)
 	{
 	}
 	else
 	{
-		[connectionQueue connectionFinished:theConnection];
+		[self.connectionQueue connectionFinished:theConnection];
 	}
 }	
 
@@ -1270,7 +1269,7 @@
 {
     if (inRedirectResponse) 
 	{
-        NSMutableURLRequest *newRequest = [request mutableCopy];
+        NSMutableURLRequest *newRequest = [self.request mutableCopy];
         [newRequest setURL:[inRequest URL]];
         return newRequest;
     } 
@@ -1282,13 +1281,13 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	if (segmentedControl.selectedSegmentIndex == 0)
+	if (self.segmentedControl.selectedSegmentIndex == 0)
 	{
 		[self parseData];
 	}
 	else
 	{
-		[connectionQueue connectionFinished:theConnection];
+		[self.connectionQueue connectionFinished:theConnection];
 	}
 	
 	self.tableView.scrollEnabled = YES;
@@ -1329,7 +1328,7 @@ static NSString *kName_Error = @"error";
 // Following 2 methods handle the right side index
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView 
 {
-	if (segmentedControl.selectedSegmentIndex == 0 && self.currentPlaylistCount > 0)
+	if (self.segmentedControl.selectedSegmentIndex == 0 && self.currentPlaylistCount > 0)
 	{
 		if (!self.tableView.editing)
 		{
@@ -1354,7 +1353,7 @@ static NSString *kName_Error = @"error";
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index 
 {
-	if (segmentedControl.selectedSegmentIndex == 0)
+	if (self.segmentedControl.selectedSegmentIndex == 0)
 	{
 		if (index == 0)
 		{
@@ -1389,7 +1388,7 @@ static NSString *kName_Error = @"error";
 	else if (segmentedControl.selectedSegmentIndex == 1)
 		return [databaseS.localPlaylistsDbQueue intForQuery:@"SELECT COUNT(*) FROM localPlaylists"];
 	else if (segmentedControl.selectedSegmentIndex == 2)
-		return [serverPlaylistsDataModel.serverPlaylists count];
+		return self.serverPlaylistsDataModel.serverPlaylists.count;
 	
 	return 0;
 }
@@ -1412,7 +1411,7 @@ static NSString *kName_Error = @"error";
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath 
 {
 	
-	if (segmentedControl.selectedSegmentIndex == 0)
+	if (self.segmentedControl.selectedSegmentIndex == 0)
 	{
 		NSInteger fromRow = fromIndexPath.row + 1;
 		NSInteger toRow = toIndexPath.row + 1;
@@ -1591,11 +1590,11 @@ static NSString *kName_Error = @"error";
 // Override to support conditional rearranging of the table view.
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	if (segmentedControl.selectedSegmentIndex == 0)
+	if (self.segmentedControl.selectedSegmentIndex == 0)
 		return YES;
-	else if (segmentedControl.selectedSegmentIndex == 1)
+	else if (self.segmentedControl.selectedSegmentIndex == 1)
 		return NO; //this will be changed to YES and will be fully editable
-	else if (segmentedControl.selectedSegmentIndex == 2)
+	else if (self.segmentedControl.selectedSegmentIndex == 2)
 		return NO;
 	
 	return NO;
@@ -1722,7 +1721,7 @@ static NSString *kName_Error = @"error";
 			cell = [[PlaylistsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 		}
 		cell.indexPath = indexPath;
-        cell.serverPlaylist = [serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];
+        cell.serverPlaylist = [self.serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];
 		
 		cell.deleteToggleImage.hidden = !self.tableView.editing;
 		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
@@ -1733,7 +1732,7 @@ static NSString *kName_Error = @"error";
 		
 		cell.contentView.backgroundColor = [UIColor clearColor];
 		cell.playlistNameLabel.backgroundColor = [UIColor clearColor];
-        SUSServerPlaylist *playlist = [serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];        
+        SUSServerPlaylist *playlist = [self.serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];        
         cell.playlistNameLabel.text = playlist.playlistName;
 		cell.backgroundView = [[UIView alloc] init];
 		if(indexPath.row % 2 == 0)
@@ -1786,8 +1785,8 @@ static NSString *kName_Error = @"error";
 - (void)dealloc 
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	serverPlaylistsDataModel.delegate = nil;
-	connectionQueue = nil;
+	self.serverPlaylistsDataModel.delegate = nil;
+	self.connectionQueue = nil;
 }
 
 

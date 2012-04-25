@@ -12,17 +12,17 @@
 
 @interface ModalAlbumArtViewController : UIViewController <AsynchronousImageViewDelegate>
 
-@property (strong) IBOutlet AsynchronousImageView *albumArt;
-@property (strong) IBOutlet UIImageView *albumArtReflection;
-@property (strong) IBOutlet UIView *labelHolderView;
-@property (strong) IBOutlet UILabel *artistLabel; 
-@property (strong) IBOutlet UILabel *albumLabel;
-@property (strong) IBOutlet UILabel *durationLabel;
-@property (strong) IBOutlet UILabel *trackCountLabel;
+@property (nonatomic, strong) IBOutlet AsynchronousImageView *albumArt;
+@property (nonatomic, strong) IBOutlet UIImageView *albumArtReflection;
+@property (nonatomic, strong) IBOutlet UIView *labelHolderView;
+@property (nonatomic, strong) IBOutlet UILabel *artistLabel; 
+@property (nonatomic, strong) IBOutlet UILabel *albumLabel;
+@property (nonatomic, strong) IBOutlet UILabel *durationLabel;
+@property (nonatomic, strong) IBOutlet UILabel *trackCountLabel;
 
-@property (copy) Album *myAlbum;
-@property NSUInteger numberOfTracks;
-@property NSUInteger albumLength;
+@property (nonatomic, copy) Album *myAlbum;
+@property (nonatomic) NSUInteger numberOfTracks;
+@property (nonatomic) NSUInteger albumLength;
 
 - (id)initWithAlbum:(Album *)theAlbum numberOfTracks:(NSUInteger)numTracks albumLength:(NSUInteger)length;
 - (IBAction)dismiss:(id)sender;

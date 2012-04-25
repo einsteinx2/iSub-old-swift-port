@@ -7,48 +7,38 @@
 //
 
 @interface CacheViewController : UITableViewController 
-{
-	
-	BOOL isNoSongsScreenShowing;
-	UIImageView *noSongsScreen;
-	
-	UIView *headerView;
-	UIView *headerView2;
-	UISegmentedControl *segmentedControl;
-	UILabel *songsCountLabel;
-	UIButton *deleteSongsButton;
-	UILabel *deleteSongsLabel;
-	UILabel *spacerLabel;
-	UILabel *editSongsLabel;
-	UIButton *editSongsButton;
-	BOOL isSaveEditShowing;
-	
-	UIImageView *playAllImage;
-	UILabel *playAllLabel;
-	UIButton *playAllButton;
-	UILabel *spacerLabel2;
-	UIImageView *shuffleImage;
-	UILabel *shuffleLabel;
-	UIButton *shuffleButton;
-	
-	//UIProgressView *queueDownloadProgressView;
-	unsigned long long int queueDownloadProgress;
-	NSTimer *updateTimer;
-	
-	NSUInteger rowCounter;
-		
-	UIButton *jukeboxInputBlocker;
-	
-	BOOL showIndex;
-}
 
-@property (strong) NSMutableArray *listOfArtists;
-@property (strong) NSMutableArray *listOfArtistsSections;
-@property (strong) NSArray *sectionInfo;
+@property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, strong) UIView *headerView2;
+@property (nonatomic, strong) UISegmentedControl *segmentedControl;
+@property (nonatomic, strong) UILabel *songsCountLabel;
+@property (nonatomic, strong) UIButton *deleteSongsButton;
+@property (nonatomic, strong) UILabel *deleteSongsLabel;
+@property (nonatomic, strong) UILabel *spacerLabel;
+@property (nonatomic, strong) UILabel *editSongsLabel;
+@property (nonatomic, strong) UIButton *editSongsButton;
+@property (nonatomic) BOOL isSaveEditShowing;
 
-@property (strong) UILabel *cacheSizeLabel;
+@property (nonatomic, strong) UIImageView *playAllImage;
+@property (nonatomic, strong) UILabel *playAllLabel;
+@property (nonatomic, strong) UIButton *playAllButton;
+@property (nonatomic, strong) UILabel *spacerLabel2;
+@property (nonatomic, strong) UIImageView *shuffleImage;
+@property (nonatomic, strong) UILabel *shuffleLabel;
+@property (nonatomic, strong) UIButton *shuffleButton;
 
-//@property (retain) UIProgressView *queueDownloadProgressView;
+@property (nonatomic) BOOL isNoSongsScreenShowing;
+@property (nonatomic, strong) UIImageView *noSongsScreen;
+
+@property (nonatomic, strong) UIButton *jukeboxInputBlocker;
+
+@property (nonatomic) BOOL showIndex;
+
+@property (nonatomic, strong) NSMutableArray *listOfArtists;
+@property (nonatomic, strong) NSMutableArray *listOfArtistsSections;
+@property (nonatomic, strong) NSArray *sectionInfo;
+
+@property (nonatomic, strong) UILabel *cacheSizeLabel;
 
 - (void)updateCacheSizeLabel;
 - (void)editSongsAction:(id)sender;

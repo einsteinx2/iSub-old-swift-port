@@ -10,29 +10,29 @@
 
 @interface FolderDropdownControl : UIView <NSXMLParserDelegate>
 
-@property (strong) CALayer *arrowImage;
+@property (nonatomic, strong) CALayer *arrowImage;
 
-@property CGFloat sizeIncrease;
+@property (nonatomic) CGFloat sizeIncrease;
 
-@property (strong) NSMutableDictionary *updatedfolders;	
-@property (strong) UILabel *selectedFolderLabel;
+@property (nonatomic, strong) NSMutableDictionary *updatedfolders;	
+@property (nonatomic, strong) UILabel *selectedFolderLabel;
 
-@property (strong) NSMutableData *receivedData;
-@property (strong) NSURLConnection *connection;
+@property (nonatomic, strong) NSMutableData *receivedData;
+@property (nonatomic, strong) NSURLConnection *connection;
 
-@property (strong) NSMutableArray *labels;
-@property (strong) NSDictionary *folders;
-@property BOOL isOpen;
+@property (nonatomic, strong) NSMutableArray *labels;
+@property (nonatomic, strong) NSDictionary *folders;
+@property (nonatomic) BOOL isOpen;
 
-@property (strong) NSNumber *selectedFolderId;
+@property (nonatomic, strong) NSNumber *selectedFolderId;
 
 // Colors
-@property (strong) UIColor *borderColor;
-@property (strong) UIColor *textColor;
-@property (strong) UIColor *lightColor;
-@property (strong) UIColor *darkColor;
+@property (nonatomic, strong) UIColor *borderColor;
+@property (nonatomic, strong) UIColor *textColor;
+@property (nonatomic, strong) UIColor *lightColor;
+@property (nonatomic, strong) UIColor *darkColor;
 
-@property (unsafe_unretained) id<FolderDropdownDelegate> delegate;
+@property (nonatomic, unsafe_unretained) id<FolderDropdownDelegate> delegate;
 
 - (void)selectFolderWithId:(NSNumber *)folderId;
 - (void)updateFolders;

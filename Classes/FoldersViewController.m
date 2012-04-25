@@ -49,7 +49,7 @@
 @synthesize dataModel;
 @synthesize countLabel, reloadTimeLabel, blockerButton;
 @synthesize searchOverlay, dismissButton;
-@synthesize searchY, letUserSelectRow, isCountShowing;
+@synthesize letUserSelectRow, isCountShowing;
 
 #pragma mark - Rotation
 
@@ -81,7 +81,6 @@
 	self.isSearching = NO;
 	self.letUserSelectRow = YES;	
 	self.isCountShowing = NO;
-	self.searchY = 80;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(serverSwitched) name:ISMSNotification_ServerSwitched object:nil];
 		

@@ -97,97 +97,91 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 
 - (NSDictionary *)folders
 {
-	@synchronized(self)
-	{
-		return folders;
-	}
+	return folders;
 }
 
 - (void)setFolders:(NSDictionary *)namesAndIds
 {
-	@synchronized(self)
+	// Set the property
+	folders = nil;
+	folders = namesAndIds;
+	
+	// Remove old labels
+	for (UILabel *label in self.labels)
 	{
-		// Set the property
-		folders = nil;
-		folders = namesAndIds;
-		
-		// Remove old labels
-		for (UILabel *label in self.labels)
+		[label removeFromSuperview];
+	}
+	[self.labels removeAllObjects];
+	
+	self.sizeIncrease = [folders count] * 30.0f;
+	
+	NSMutableArray *sortedValues = [NSMutableArray arrayWithCapacity:folders.count];
+	for (NSNumber *key in [folders allKeys])
+	{
+		if ([key intValue] != -1)
 		{
-			[label removeFromSuperview];
+			NSArray *keyValuePair = [NSArray arrayWithObjects:key, [folders objectForKey:key], nil];
+			[sortedValues addObject:keyValuePair];
 		}
-		[self.labels removeAllObjects];
+	}
+	
+	/*// Sort by folder name - iOS 4.0+ only
+	 [sortedValues sortUsingComparator: ^NSComparisonResult(id keyVal1, id keyVal2) {
+	 NSString *folder1 = [(NSArray*)keyVal1 objectAtIndexSafe:1];
+	 NSString *folder2 = [(NSArray*)keyVal2 objectAtIndexSafe:1];
+	 return [folder1 caseInsensitiveCompare:folder2];
+	 }];*/
+	
+	// Sort by folder name
+	[sortedValues sortUsingFunction:folderSort2 context:NULL];
+	
+	// Add All Folders again
+	NSArray *keyValuePair = [NSArray arrayWithObjects:@"-1", @"All Folders", nil];
+	[sortedValues insertObject:keyValuePair atIndex:0];
+	
+	//DLog(@"keys: %@", [folders allKeys]);
+	//NSMutableArray *keys = [NSMutableArray arrayWithArray:[[folders allKeys] sortedArrayUsingSelector:@selector(compare:)]];
+	//DLog(@"sorted keys: %@", keys);
+	
+	// Process the names and create the labels/buttons
+	for (int i = 0; i < [sortedValues count]; i++)
+	{
+		NSString *folder   = [[sortedValues objectAtIndexSafe:i] objectAtIndexSafe:1];
+		NSUInteger tag     = [[[sortedValues objectAtIndexSafe:i] objectAtIndexSafe:0] intValue];
+		CGRect labelFrame  = CGRectMake(0, (i + 1) * 30, self.frame.size.width, 30);
+		CGRect buttonFrame = CGRectMake(0, 0, labelFrame.size.width, labelFrame.size.height);
 		
-		sizeIncrease = [folders count] * 30.0f;
+		UILabel *folderLabel = [[UILabel alloc] initWithFrame:labelFrame];
+		folderLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		folderLabel.userInteractionEnabled = YES;
+		//folderLabel.alpha = 0.0;
+		if (i % 2 == 0)
+			folderLabel.backgroundColor = self.lightColor;
+		else
+			folderLabel.backgroundColor = self.darkColor;
+		folderLabel.textColor = self.textColor;
+		folderLabel.textAlignment = UITextAlignmentCenter;
+		folderLabel.font = [UIFont boldSystemFontOfSize:20];
+		folderLabel.text = folder;
+		folderLabel.tag = tag;
+		[self addSubview:folderLabel];
+		[self.labels addObject:folderLabel];
 		
-		NSMutableArray *sortedValues = [NSMutableArray arrayWithCapacity:[folders count]];
-		for (NSNumber *key in [folders allKeys])
-		{
-			if ([key intValue] != -1)
-			{
-				NSArray *keyValuePair = [NSArray arrayWithObjects:key, [folders objectForKey:key], nil];
-				[sortedValues addObject:keyValuePair];
-			}
-		}
-		
-		/*// Sort by folder name - iOS 4.0+ only
-		 [sortedValues sortUsingComparator: ^NSComparisonResult(id keyVal1, id keyVal2) {
-		 NSString *folder1 = [(NSArray*)keyVal1 objectAtIndexSafe:1];
-		 NSString *folder2 = [(NSArray*)keyVal2 objectAtIndexSafe:1];
-		 return [folder1 caseInsensitiveCompare:folder2];
-		 }];*/
-		
-		// Sort by folder name
-		[sortedValues sortUsingFunction:folderSort2 context:NULL];
-		
-		// Add All Folders again
-		NSArray *keyValuePair = [NSArray arrayWithObjects:@"-1", @"All Folders", nil];
-		[sortedValues insertObject:keyValuePair atIndex:0];
-		
-		//DLog(@"keys: %@", [folders allKeys]);
-		//NSMutableArray *keys = [NSMutableArray arrayWithArray:[[folders allKeys] sortedArrayUsingSelector:@selector(compare:)]];
-		//DLog(@"sorted keys: %@", keys);
-		
-		// Process the names and create the labels/buttons
-		for (int i = 0; i < [sortedValues count]; i++)
-		{
-			NSString *folder   = [[sortedValues objectAtIndexSafe:i] objectAtIndexSafe:1];
-			NSUInteger tag     = [[[sortedValues objectAtIndexSafe:i] objectAtIndexSafe:0] intValue];
-			CGRect labelFrame  = CGRectMake(0, (i + 1) * 30, self.frame.size.width, 30);
-			CGRect buttonFrame = CGRectMake(0, 0, labelFrame.size.width, labelFrame.size.height);
-			
-			UILabel *folderLabel = [[UILabel alloc] initWithFrame:labelFrame];
-			folderLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-			folderLabel.userInteractionEnabled = YES;
-			//folderLabel.alpha = 0.0;
-			if (i % 2 == 0)
-				folderLabel.backgroundColor = lightColor;
-			else
-				folderLabel.backgroundColor = darkColor;
-			folderLabel.textColor = textColor;
-			folderLabel.textAlignment = UITextAlignmentCenter;
-			folderLabel.font = [UIFont boldSystemFontOfSize:20];
-			folderLabel.text = folder;
-			folderLabel.tag = tag;
-			[self addSubview:folderLabel];
-			[self.labels addObject:folderLabel];
-			
-			UIButton *folderButton = [UIButton buttonWithType:UIButtonTypeCustom];
-			folderButton.frame = buttonFrame;
-			folderButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-			[folderButton addTarget:self action:@selector(selectFolder:) forControlEvents:UIControlEventTouchUpInside];
-			[folderLabel addSubview:folderButton];
-		}
+		UIButton *folderButton = [UIButton buttonWithType:UIButtonTypeCustom];
+		folderButton.frame = buttonFrame;
+		folderButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		[folderButton addTarget:self action:@selector(selectFolder:) forControlEvents:UIControlEventTouchUpInside];
+		[folderLabel addSubview:folderButton];
 	}
 }
 
 - (void)toggleDropdown:(id)sender
 {
-	if (!isOpen)
+	if (!self.isOpen)
 	{
 		[UIView animateWithDuration:.25 animations:^
 		{
-			self.height += sizeIncrease;
+			self.height += self.sizeIncrease;
 			[self.delegate folderDropdownMoveViewsY:self.sizeIncrease];
 		} 
 		completion:^(BOOL finished)
@@ -223,7 +217,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 
 - (void)closeDropdown
 {
-	if (isOpen)
+	if (self.isOpen)
 	{
 		[self toggleDropdown:nil];
 	}
@@ -231,14 +225,14 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 
 - (void)closeDropdownFast
 {
-	if (isOpen)
+	if (self.isOpen)
 	{
-		isOpen = NO;
+		self.isOpen = NO;
 		
-		self.height -= sizeIncrease;
-		[self.delegate folderDropdownMoveViewsY:-sizeIncrease];
+		self.height -= self.sizeIncrease;
+		[self.delegate folderDropdownMoveViewsY:-self.sizeIncrease];
 		
-		arrowImage.transform = CATransform3DMakeRotation((M_PI / 180.0) * 0.0f, 0.0f, 0.0f, 1.0f);
+		self.arrowImage.transform = CATransform3DMakeRotation((M_PI / 180.0) * 0.0f, 0.0f, 0.0f, 1.0f);
 		
 		[self.delegate folderDropdownViewsFinishedMoving];
 	}
@@ -335,7 +329,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 {	
 	//DLog(@"folder dropdown connection finished: %@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
 	
-	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
+	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:self.receivedData];
 	[xmlParser setDelegate:self];
 	[xmlParser parse];
 	
@@ -356,16 +350,16 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 {
 	if([elementName isEqualToString:@"musicFolders"])
 	{
-		updatedfolders = [[NSMutableDictionary alloc] init];
+		self.updatedfolders = [[NSMutableDictionary alloc] init];
 		
-		[updatedfolders setObject:@"All Folders" forKey:[NSNumber numberWithInt:-1]];
+		[self.updatedfolders setObject:@"All Folders" forKey:[NSNumber numberWithInt:-1]];
 	}
 	else if ([elementName isEqualToString:@"musicFolder"])
 	{
 		NSNumber *folderId = [NSNumber numberWithInt:[[attributeDict objectForKey:@"id"] intValue]];
 		NSString *folderName = [attributeDict objectForKey:@"name"];
 		
-		[updatedfolders setObject:folderName forKey:folderId];
+		[self.updatedfolders setObject:folderName forKey:folderId];
 	}
 }
 
@@ -374,7 +368,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 {
 	if([elementName isEqualToString:@"musicFolders"])
 	{
-		self.folders = [NSDictionary dictionaryWithDictionary:updatedfolders];
+		self.folders = [NSDictionary dictionaryWithDictionary:self.updatedfolders];
 		
 		// Save the default
 		[SUSRootFoldersDAO setFolderDropdownFolders:self.folders];

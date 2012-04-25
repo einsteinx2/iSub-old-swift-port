@@ -19,9 +19,7 @@
 #import "Song.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
-//#import "NSString+md5.h"
 #import "SavedSettings.h"
-//#import "NSString+time.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "PlaylistSingleton.h"
 #import "NSArray+Additions.h"
@@ -141,7 +139,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	self.tableView.tableHeaderView = headerView;
 	
 	// Create the section index
-	if ([listOfAlbums count] > 10)
+	if (self.listOfAlbums.count > 10)
 	{
 		__block NSArray *secInfo = nil;
 		[databaseS.albumListCacheDbQueue inDatabase:^(FMDatabase *db)
@@ -150,7 +148,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			[db executeUpdate:@"CREATE TEMP TABLE albumIndex (album TEXT)"];
 			
 			[db beginTransaction];
-			for (NSNumber *rowId in listOfAlbums)
+			for (NSNumber *rowId in self.listOfAlbums)
 			{
 				@autoreleasepool 
 				{
@@ -166,7 +164,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 		if (secInfo)
 		{
 			self.sectionInfo = [NSArray arrayWithArray:secInfo];
-			if ([sectionInfo count] < 5)
+			if ([self.sectionInfo count] < 5)
 				self.sectionInfo = nil;
 			else
 				[self.tableView reloadData];
@@ -190,7 +188,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 
 - (void)cachedSongDeleted
 {
-	NSUInteger segment = [segments count];
+	NSUInteger segment = self.segments.count;
 	
 	self.listOfAlbums = [NSMutableArray arrayWithCapacity:1];
 	self.listOfSongs = [NSMutableArray arrayWithCapacity:1];
@@ -241,7 +239,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	}];
 	
 	// If the table is empty, pop back one view, otherwise reload the table data
-	if ([self.listOfAlbums count] + [self.listOfSongs count] == 0)
+	if (self.listOfAlbums.count + self.listOfSongs.count == 0)
 	{
 		if (IS_IPAD())
 		{
@@ -284,11 +282,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 {		
 	NSUInteger segment = [segments count];
 	
-	BOOL isShuffle;
-	if ([shuffle isEqualToString:@"YES"])
-		isShuffle = YES;
-	else
-		isShuffle = NO;
+	BOOL isShuffle = [shuffle isEqualToString:@"YES"] ? YES : NO;
 	
 	[databaseS resetCurrentPlaylistDb];
 	
@@ -382,9 +376,9 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView 
 {
 	NSMutableArray *indexes = [[NSMutableArray alloc] init];
-	for (int i = 0; i < [sectionInfo count]; i++)
+	for (int i = 0; i < self.sectionInfo.count; i++)
 	{
-		[indexes addObject:[[sectionInfo objectAtIndexSafe:i] objectAtIndexSafe:0]];
+		[indexes addObject:[[self.sectionInfo objectAtIndexSafe:i] objectAtIndexSafe:0]];
 	}
 	return indexes;
 }
@@ -397,7 +391,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	}
 	else
 	{
-		NSUInteger row = [[[sectionInfo objectAtIndexSafe:(index - 1)] objectAtIndexSafe:1] intValue];
+		NSUInteger row = [[[self.sectionInfo objectAtIndexSafe:(index - 1)] objectAtIndexSafe:1] intValue];
 		NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
 		[tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
 	}
@@ -408,17 +402,14 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
-	return ([self.listOfAlbums count] + [self.listOfSongs count]);
+	return (self.listOfAlbums.count + self.listOfSongs.count);
 }
 
 
 // Customize the height of individual rows to make the album rows taller to accomidate the album art.
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	if (indexPath.row < [listOfAlbums count])
-		return 60.0;
-	else
-		return 50.0;
+	return indexPath.row < self.listOfAlbums.count ? 60.0 : 50.0;
 }
 
 
@@ -426,7 +417,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {		
 	// Set up the cell...
-	if (indexPath.row < [listOfAlbums count])
+	if (indexPath.row < self.listOfAlbums.count)
 	{
 		//NSUInteger segment = [segments count];
 		//NSString *seg1 = [segments objectAtIndexSafe:0];
@@ -441,12 +432,12 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		//cell.segment = segment;
 		//cell.seg1 = seg1;
-		cell.segments = [NSArray arrayWithArray:segments];
+		cell.segments = [NSArray arrayWithArray:self.segments];
 		DLog(@"segments: %@", cell.segments);
 		
-		NSString *md5 = [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:0];
+		NSString *md5 = [[self.listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:0];
 		NSString *coverArtId = [databaseS.songCacheDbQueue stringForQuery:@"SELECT coverArtId FROM cachedSongs WHERE md5 = ?", md5];
-		NSString *name = [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1];
+		NSString *name = [[self.listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1];
 		
 		if (coverArtId)
 		{
@@ -487,8 +478,8 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			cell.accessoryType = UITableViewCellAccessoryNone;
 		}
 		
-		NSUInteger a = indexPath.row - [listOfAlbums count];
-		cell.md5 = [[listOfSongs objectAtIndexSafe:a] objectAtIndexSafe:0];
+		NSUInteger a = indexPath.row - self.listOfAlbums.count;
+		cell.md5 = [[self.listOfSongs objectAtIndexSafe:a] objectAtIndexSafe:0];
 		
 		Song *aSong = [Song songFromCacheDb:cell.md5];
 		
@@ -530,7 +521,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	
 	if (viewObjectsS.isCellEnabled)
 	{
-		if (indexPath.row < [listOfAlbums count])
+		if (indexPath.row < self.listOfAlbums.count)
 		{		
 			NSUInteger segment = [segments count] + 1;
 			
@@ -594,10 +585,10 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 		}
 		else
 		{			
-			NSUInteger a = indexPath.row - [listOfAlbums count];
+			NSUInteger a = indexPath.row - self.listOfAlbums.count;
 			
 			[databaseS resetCurrentPlaylistDb];
-			for(NSArray *song in listOfSongs)
+			for(NSArray *song in self.listOfSongs)
 			{
 				Song *aSong = [Song songFromCacheDb:[song objectAtIndexSafe:0]];
 				[aSong addToCurrentPlaylist];

@@ -13,27 +13,27 @@
 
 @interface AlbumViewController : UITableViewController <SUSLoaderDelegate, AsynchronousImageViewDelegate>
 
-@property (strong) EGORefreshTableHeaderView *refreshHeaderView;
-@property BOOL reloading;
+@property (nonatomic, strong) EGORefreshTableHeaderView *refreshHeaderView;
+@property (nonatomic) BOOL reloading;
 	
-@property (copy) NSString *myId;
-@property (strong) Artist *myArtist;
-@property (strong) Album *myAlbum;
+@property (nonatomic, copy) NSString *myId;
+@property (nonatomic, strong) Artist *myArtist;
+@property (nonatomic, strong) Album *myAlbum;
 
-@property (strong) NSArray *sectionInfo;
+@property (nonatomic, strong) NSArray *sectionInfo;
 
-@property (strong) SUSSubFolderDAO *dataModel;
+@property (nonatomic, strong) SUSSubFolderDAO *dataModel;
 
-@property (strong) IBOutlet UIView *playAllShuffleAllView;
-@property (strong) IBOutlet UIView *albumInfoView;
-@property (strong) IBOutlet UIView *albumInfoArtHolderView;
-@property (strong) IBOutlet AsynchronousImageView *albumInfoArtView;
-@property (strong) IBOutlet UIImageView *albumInfoArtReflection;
-@property (strong) IBOutlet UIView *albumInfoLabelHolderView;
-@property (strong) IBOutlet UILabel *albumInfoArtistLabel;
-@property (strong) IBOutlet UILabel *albumInfoAlbumLabel;
-@property (strong) IBOutlet UILabel *albumInfoTrackCountLabel;
-@property (strong) IBOutlet UILabel *albumInfoDurationLabel; 
+@property (nonatomic, strong) IBOutlet UIView *playAllShuffleAllView;
+@property (nonatomic, strong) IBOutlet UIView *albumInfoView;
+@property (nonatomic, strong) IBOutlet UIView *albumInfoArtHolderView;
+@property (nonatomic, strong) IBOutlet AsynchronousImageView *albumInfoArtView;
+@property (nonatomic, strong) IBOutlet UIImageView *albumInfoArtReflection;
+@property (nonatomic, strong) IBOutlet UIView *albumInfoLabelHolderView;
+@property (nonatomic, strong) IBOutlet UILabel *albumInfoArtistLabel;
+@property (nonatomic, strong) IBOutlet UILabel *albumInfoAlbumLabel;
+@property (nonatomic, strong) IBOutlet UILabel *albumInfoTrackCountLabel;
+@property (nonatomic, strong) IBOutlet UILabel *albumInfoDurationLabel; 
 
 - (AlbumViewController *)initWithArtist:(Artist *)anArtist orAlbum:(Album *)anAlbum;
 

@@ -8,11 +8,10 @@
 
 @interface CacheAlbumViewController : UITableViewController 
 
-@property (strong) NSMutableArray *listOfAlbums;
-@property (strong) NSMutableArray *listOfSongs;
+@property (nonatomic, strong) NSMutableArray *listOfAlbums;
+@property (nonatomic, strong) NSMutableArray *listOfSongs;
 
-@property (strong) NSArray *sectionInfo;
-
-@property (strong) NSArray *segments;
+@property (nonatomic, strong) NSArray *sectionInfo;
+@property (nonatomic, strong) NSArray *segments;
 
 @end
