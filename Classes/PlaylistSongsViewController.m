@@ -44,7 +44,7 @@
 @implementation PlaylistSongsViewController
 
 @synthesize md5, serverPlaylist;
-@synthesize reloading=_reloading;
+@synthesize reloading, refreshHeaderView;
 @synthesize connection, receivedData, playlistCount; 
 
 
@@ -96,13 +96,13 @@
 	}
 	else
 	{
-        self.title = serverPlaylist.playlistName;
+        self.title = self.serverPlaylist.playlistName;
 		playlistCount = [databaseS.localPlaylistsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM splaylist%@", md5]];
 		[self.tableView reloadData];
 		
 		// Add the pull to refresh view
-		refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
-		refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
+		self.refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
+		self.refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
 		[self.tableView addSubview:refreshHeaderView];
 	}
 	
@@ -173,7 +173,7 @@
 	}
 	else
 	{
-		if (playlistCount == 0)
+		if (self.playlistCount == 0)
 		{
 			[self loadData];
 		}
@@ -531,13 +531,13 @@ static NSString *kName_Error = @"error";
 {	
 	if (scrollView.isDragging && !viewObjectsS.isLocalPlaylist) 
 	{
-		if (refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !_reloading) 
+		if (self.refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !self.reloading) 
 		{
-			[refreshHeaderView setState:EGOOPullRefreshNormal];
+			[self.refreshHeaderView setState:EGOOPullRefreshNormal];
 		} 
-		else if (refreshHeaderView.state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !_reloading) 
+		else if (self.refreshHeaderView.state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !self.reloading) 
 		{
-			[refreshHeaderView setState:EGOOPullRefreshPulling];
+			[self.refreshHeaderView setState:EGOOPullRefreshPulling];
 		}
 	}
 }
@@ -545,12 +545,12 @@ static NSString *kName_Error = @"error";
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
 	
-	if (scrollView.contentOffset.y <= - 65.0f && !_reloading && !viewObjectsS.isLocalPlaylist) 
+	if (scrollView.contentOffset.y <= - 65.0f && !self.reloading && !viewObjectsS.isLocalPlaylist) 
 	{
-		_reloading = YES;
+		self.reloading = YES;
 		//[self reloadAction:nil];
 		[self loadData];
-		[refreshHeaderView setState:EGOOPullRefreshLoading];
+		[self.refreshHeaderView setState:EGOOPullRefreshLoading];
 		[UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:0.2];
 		self.tableView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
@@ -560,14 +560,14 @@ static NSString *kName_Error = @"error";
 
 - (void)dataSourceDidFinishLoadingNewData
 {
-	_reloading = NO;
+	self.reloading = NO;
 	
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:.3];
 	[self.tableView setContentInset:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
 	[UIView commitAnimations];
 	
-	[refreshHeaderView setState:EGOOPullRefreshNormal];
+	[self.refreshHeaderView setState:EGOOPullRefreshNormal];
 }
 
 

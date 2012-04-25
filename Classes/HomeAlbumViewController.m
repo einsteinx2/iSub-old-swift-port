@@ -111,7 +111,7 @@
 		return;
 	
 	self.isLoading = YES;
-	offset += 20;
+	self.offset += 20;
 	
 	NSString *offsetString = [NSString stringWithFormat:@"%i", offset];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"size", n2N(modifier), @"type", n2N(offsetString), @"offset", nil];
@@ -186,14 +186,14 @@
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
     NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:self.receivedData];
-    HomeXMLParser *parser = (HomeXMLParser*)[[HomeXMLParser alloc] initXMLParser];
+    HomeXMLParser *parser = [[HomeXMLParser alloc] initXMLParser];
     [xmlParser setDelegate:parser];
     [xmlParser parse];
     
     if ([parser.listOfAlbums count] == 0)
     {
         // There are no more songs
-        isMoreAlbums = NO;
+		self.isMoreAlbums = NO;
     }
     else 
     {
@@ -217,14 +217,14 @@
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
-	return [listOfAlbums count] + 1;
+	return self.listOfAlbums.count + 1;
 }
 
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {		
-	if (indexPath.row < [listOfAlbums count])
+	if (indexPath.row < self.listOfAlbums.count)
 	{
 		static NSString *cellIdentifier = @"AllAlbumsCell";
 		AllAlbumsUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -252,7 +252,7 @@
 		
 		return cell;
 	}
-	else if (indexPath.row == [listOfAlbums count])
+	else if (indexPath.row == self.listOfAlbums.count)
 	{
 		// This is the last cell and there could be more results, load the next 20 songs;
 		static NSString *cellIdentifier = @"HomeAlbumLoadCell";
@@ -290,7 +290,7 @@
 	if (!indexPath)
 		return;
 	
-	if (viewObjectsS.isCellEnabled && indexPath.row != [listOfAlbums count])
+	if (viewObjectsS.isCellEnabled && indexPath.row != self.listOfAlbums.count)
 	{
 		Album *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
 		AlbumViewController *albumViewController = [[AlbumViewController alloc] initWithArtist:nil orAlbum:anAlbum];

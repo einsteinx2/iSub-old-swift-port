@@ -7,19 +7,18 @@
 //
 
 @interface BookmarksViewController : UITableViewController
-{	
-	BOOL isNoBookmarksScreenShowing;
-	UIImageView *noBookmarksScreen;
-	
-	UIView *headerView;
-	UILabel *bookmarkCountLabel;
-	UIButton *deleteBookmarksButton;
-	UILabel *deleteBookmarksLabel;
-	UILabel *spacerLabel;
-	UILabel *editBookmarksLabel;
-	UIButton *editBookmarksButton;
-}
 
-@property (strong) NSArray *bookmarkIds;
+@property (nonatomic) BOOL isNoBookmarksScreenShowing;
+@property (nonatomic, strong) UIImageView *noBookmarksScreen;
+
+@property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, strong) UILabel *bookmarkCountLabel;
+@property (nonatomic, strong) UIButton *deleteBookmarksButton;
+@property (nonatomic, strong) UILabel *deleteBookmarksLabel;
+@property (nonatomic, strong) UILabel *spacerLabel;
+@property (nonatomic, strong) UILabel *editBookmarksLabel;
+@property (nonatomic, strong) UIButton *editBookmarksButton;
+
+@property (nonatomic, strong) NSArray *bookmarkIds;
 
 @end

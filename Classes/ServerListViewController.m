@@ -34,6 +34,7 @@
 @implementation ServerListViewController
 
 @synthesize theNewRedirectionUrl, settingsTabViewController, helpTabViewController;
+@synthesize isEditing, headerView, segmentedControl;
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -68,7 +69,7 @@
     [super viewDidLoad];
 
 	
-	theNewRedirectionUrl = nil;
+	self.theNewRedirectionUrl = nil;
 	
 	self.tableView.allowsSelectionDuringEditing = YES;
 	
@@ -88,19 +89,19 @@
 		[self addAction:nil];
 	
 	// Setup segmented control in the header view
-	headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
-	headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
+	self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
+	self.headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
 	
-	segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Servers", @"Settings", @"Help", nil]];
-	segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	[segmentedControl addTarget:self action:@selector(segmentAction:) forControlEvents:UIControlEventValueChanged];
-	segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
-	segmentedControl.frame = CGRectMake(5, 2, 310, 36);
-	segmentedControl.tintColor = [UIColor colorWithWhite:.57 alpha:1];
-	segmentedControl.selectedSegmentIndex = 0;
-	[headerView addSubview:segmentedControl];
+	self.segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Servers", @"Settings", @"Help", nil]];
+	self.segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	[self.segmentedControl addTarget:self action:@selector(segmentAction:) forControlEvents:UIControlEventValueChanged];
+	self.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
+	self.segmentedControl.frame = CGRectMake(5, 2, 310, 36);
+	self.segmentedControl.tintColor = [UIColor colorWithWhite:.57 alpha:1];
+	self.segmentedControl.selectedSegmentIndex = 0;
+	[self.headerView addSubview:self.segmentedControl];
 	
-	self.tableView.tableHeaderView = headerView;
+	self.tableView.tableHeaderView = self.headerView;
 	
 	if (IS_IPAD())
 	{
@@ -122,7 +123,7 @@
 
 - (void)showSaveButton
 {
-	if(!isEditing)
+	if(!self.isEditing)
 	{
 		if(self == [[self.navigationController viewControllers] firstObjectSafe])
 			self.navigationItem.leftBarButtonItem = nil;
@@ -139,7 +140,7 @@
 	self.settingsTabViewController = nil;
 	self.helpTabViewController = nil;
 	
-	if (segmentedControl.selectedSegmentIndex == 0)
+	if (self.segmentedControl.selectedSegmentIndex == 0)
 	{
 		self.title = @"Servers";
 		
@@ -150,7 +151,7 @@
 		
 		[self.tableView reloadData];
 	}
-	else if (segmentedControl.selectedSegmentIndex == 1)
+	else if (self.segmentedControl.selectedSegmentIndex == 1)
 	{
 		self.title = @"Settings";
 		
@@ -176,7 +177,7 @@
 			self.helpTabViewController.view.frame = self.view.bounds;
 			self.helpTabViewController.view.height -= 40.;
 		}
-		self.tableView.tableFooterView = helpTabViewController.view;
+		self.tableView.tableFooterView = self.helpTabViewController.view;
 		[self.tableView addFooterShadow];
 		[self.tableView reloadData];
 	}
@@ -188,12 +189,12 @@
     [super setEditing:editing animated:animate];
     if(editing)
     {
-		isEditing = YES;
+		self.isEditing = YES;
 		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addAction:)];
     }
     else
     {
-		isEditing = NO;
+		self.isEditing = NO;
 		[self showSaveButton];
     }
 }
@@ -346,8 +347,8 @@
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
-	if (segmentedControl.selectedSegmentIndex == 0)
-		return [settingsS.serverList count];
+	if (self.segmentedControl.selectedSegmentIndex == 0)
+		return settingsS.serverList.count;
 	else
 		return 0;
 }
@@ -388,9 +389,9 @@
 	serverType.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 	[cell.contentView addSubview:serverType];
 	
-	if([ settingsS.urlString isEqualToString:aServer.url] && 
-	   [ settingsS.username isEqualToString:aServer.username] &&
-	   [ settingsS.password isEqualToString:aServer.password])
+	if([settingsS.urlString isEqualToString:aServer.url] && 
+	   [settingsS.username isEqualToString:aServer.username] &&
+	   [settingsS.password isEqualToString:aServer.password])
 	{
 		UIImageView *currentServerMarker = [[UIImageView alloc] init];
 		currentServerMarker.image = [UIImage imageNamed:@"current-server.png"];
@@ -422,10 +423,10 @@
 	if (!indexPath)
 		return;
 	
-	viewObjectsS.serverToEdit = [ settingsS.serverList objectAtIndexSafe:indexPath.row];
+	viewObjectsS.serverToEdit = [settingsS.serverList objectAtIndexSafe:indexPath.row];
 	DLog(@"viewObjectsS.serverToEdit.url: %@", viewObjectsS.serverToEdit.url);
 
-	if (isEditing)
+	if (self.isEditing)
 	{
 		[self showServerEditScreen];
 	}
@@ -444,18 +445,16 @@
     return YES;
 }
 
-
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath 
 {
 	return YES;
 }
 
-
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath 
 {
 	NSArray *server = [ settingsS.serverList objectAtIndexSafe:fromIndexPath.row];
-	[ settingsS.serverList removeObjectAtIndex:fromIndexPath.row];
-	[ settingsS.serverList insertObject:server atIndex:toIndexPath.row];
+	[settingsS.serverList removeObjectAtIndex:fromIndexPath.row];
+	[settingsS.serverList insertObject:server atIndex:toIndexPath.row];
 	[[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject: settingsS.serverList] forKey:@"servers"];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
@@ -464,8 +463,8 @@
 
 
 // Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath 
+{
     if (editingStyle == UITableViewCellEditingStyleDelete) 
 	{
 		// Alert user to select new default server if they deleting the default
@@ -497,8 +496,6 @@
     }   
 }
 
-
-
 - (void)SUSServerURLCheckFailed:(SUSServerChecker *)checker withError:(NSError *)error
 {	
 	UIAlertView *alert = nil;
@@ -513,7 +510,7 @@
 	alert.tag = 3;
 	[alert show];
     
-     checker = nil;
+	checker = nil;
 	    
     DLog(@"server verification failed, hiding loading screen");
     [viewObjectsS hideLoadingScreen];
@@ -521,13 +518,13 @@
 
 - (void)SUSServerURLCheckPassed:(SUSServerChecker *)checker
 {
-	 settingsS.isNewSearchAPI = checker.isNewSearchAPI;
+	settingsS.isNewSearchAPI = checker.isNewSearchAPI;
     
-     checker = nil;
+	checker = nil;
 	
-	 settingsS.urlString = [NSString stringWithString:viewObjectsS.serverToEdit.url];
-	 settingsS.username = [NSString stringWithString:viewObjectsS.serverToEdit.username];
-	 settingsS.password = [NSString stringWithString:viewObjectsS.serverToEdit.password];
+	settingsS.urlString = [NSString stringWithString:viewObjectsS.serverToEdit.url];
+	settingsS.username = [NSString stringWithString:viewObjectsS.serverToEdit.username];
+	settingsS.password = [NSString stringWithString:viewObjectsS.serverToEdit.password];
     settingsS.redirectUrlString = self.theNewRedirectionUrl;
 	
 	[self switchServer:nil];

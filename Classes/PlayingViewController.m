@@ -35,7 +35,8 @@
 @implementation PlayingViewController
 
 @synthesize nothingPlayingScreen, dataModel;
-@synthesize reloading=_reloading;
+@synthesize reloading, refreshHeaderView;
+@synthesize isNothingPlayingScreenShowing, receivedData;
 
 #pragma mark - Rotation Handling
 
@@ -53,8 +54,7 @@
 {
     [super viewDidLoad];
 	
-	
-	isNothingPlayingScreenShowing = NO;
+	self.isNothingPlayingScreenShowing = NO;
 	
 	self.tableView.separatorColor = [UIColor clearColor];
 	
@@ -69,9 +69,9 @@
 	}
 	
 	// Add the pull to refresh view
-	refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
-	refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
-	[self.tableView addSubview:refreshHeaderView];
+	self.refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
+	self.refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
+	[self.tableView addSubview:self.refreshHeaderView];
 		
 	[self.tableView addFooterShadow];	
 }
@@ -96,7 +96,7 @@
 	
 	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
 	
-	[dataModel startLoad];
+	[self.dataModel startLoad];
 	
 	[FlurryAnalytics logEvent:@"NowPlayingTab"];
 }
@@ -110,10 +110,10 @@
 
 -(void)viewWillDisappear:(BOOL)animated
 {
-	if (isNothingPlayingScreenShowing)
+	if (self.isNothingPlayingScreenShowing)
 	{
-		[nothingPlayingScreen removeFromSuperview];
-		isNothingPlayingScreenShowing = NO;
+		[self.nothingPlayingScreen removeFromSuperview];
+		self.isNothingPlayingScreenShowing = NO;
 	}
 }
 
@@ -157,7 +157,7 @@
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
-    return dataModel.count;
+    return self.dataModel.count;
 }
 
 
@@ -172,7 +172,7 @@
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	}
 	
-	Song *aSong = [dataModel songForIndex:indexPath.row];
+	Song *aSong = [self.dataModel songForIndex:indexPath.row];
 	cell.mySong = aSong;
 	
 	// Set the cover art
@@ -186,9 +186,9 @@
 		cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
 	
 	// Set the title label
-	NSString *playTime = [dataModel playTimeForIndex:indexPath.row];
-	NSString *username = [dataModel usernameForIndex:indexPath.row];
-	NSString *playerName = [dataModel playerNameForIndex:indexPath.row];
+	NSString *playTime = [self.dataModel playTimeForIndex:indexPath.row];
+	NSString *username = [self.dataModel usernameForIndex:indexPath.row];
+	NSString *playerName = [self.dataModel playerNameForIndex:indexPath.row];
 	
 	if (playerName)
 	{
@@ -216,7 +216,7 @@
 	if (!indexPath)
 		return;
 	
-	[dataModel playSongAtIndex:indexPath.row];
+	[self.dataModel playSongAtIndex:indexPath.row];
 	
 	[self showPlayer];
 }
@@ -243,17 +243,17 @@
 	[self dataSourceDidFinishLoadingNewData];
 	
 	// Display the no songs overlay if 0 results
-	if (dataModel.count == 0)
+	if (self.dataModel.count == 0)
 	{
-		if (!isNothingPlayingScreenShowing)
+		if (!self.isNothingPlayingScreenShowing)
 		{
-			isNothingPlayingScreenShowing = YES;
-			nothingPlayingScreen = [[UIImageView alloc] init];
-			nothingPlayingScreen.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
-			nothingPlayingScreen.frame = CGRectMake(40, 100, 240, 180);
-			nothingPlayingScreen.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 2);
-			nothingPlayingScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
-			nothingPlayingScreen.alpha = .80;
+			self.isNothingPlayingScreenShowing = YES;
+			self.nothingPlayingScreen = [[UIImageView alloc] init];
+			self.nothingPlayingScreen.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
+			self.nothingPlayingScreen.frame = CGRectMake(40, 100, 240, 180);
+			self.nothingPlayingScreen.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 2);
+			self.nothingPlayingScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
+			self.nothingPlayingScreen.alpha = .80;
 			
 			UILabel *textLabel = [[UILabel alloc] init];
 			textLabel.backgroundColor = [UIColor clearColor];
@@ -263,18 +263,18 @@
 			textLabel.numberOfLines = 0;
 			[textLabel setText:@"Nothing Playing\non the\nServer"];
 			textLabel.frame = CGRectMake(15, 15, 210, 150);
-			[nothingPlayingScreen addSubview:textLabel];
+			[self.nothingPlayingScreen addSubview:textLabel];
 			
-			[self.view addSubview:nothingPlayingScreen];
+			[self.view addSubview:self.nothingPlayingScreen];
 			
 		}
 	}
 	else
 	{
-		if (isNothingPlayingScreenShowing)
+		if (self.isNothingPlayingScreenShowing)
 		{
-			isNothingPlayingScreenShowing = NO;
-			[nothingPlayingScreen removeFromSuperview];
+			self.isNothingPlayingScreenShowing = NO;
+			[self.nothingPlayingScreen removeFromSuperview];
 		}
 	}
 }
@@ -285,25 +285,25 @@
 {	
 	if (scrollView.isDragging) 
 	{
-		if (refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !_reloading) 
+		if (self.refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !self.reloading) 
 		{
-			[refreshHeaderView setState:EGOOPullRefreshNormal];
+			[self.refreshHeaderView setState:EGOOPullRefreshNormal];
 		} 
-		else if (refreshHeaderView.state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !_reloading) 
+		else if (self.refreshHeaderView.state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !self.reloading) 
 		{
-			[refreshHeaderView setState:EGOOPullRefreshPulling];
+			[self.refreshHeaderView setState:EGOOPullRefreshPulling];
 		}
 	}
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-	if (scrollView.contentOffset.y <= - 65.0f && !_reloading) 
+	if (scrollView.contentOffset.y <= - 65.0f && !self.reloading) 
 	{
-		_reloading = YES;
+		self.reloading = YES;
 		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
-		[dataModel startLoad];
-		[refreshHeaderView setState:EGOOPullRefreshLoading];
+		[self.dataModel startLoad];
+		[self.refreshHeaderView setState:EGOOPullRefreshLoading];
 		[UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:0.2];
 		self.tableView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
@@ -313,14 +313,14 @@
 
 - (void)dataSourceDidFinishLoadingNewData
 {
-	_reloading = NO;
+	self.reloading = NO;
 	
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:.3];
 	[self.tableView setContentInset:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
 	[UIView commitAnimations];
 	
-	[refreshHeaderView setState:EGOOPullRefreshNormal];
+	[self.refreshHeaderView setState:EGOOPullRefreshNormal];
 }
 
 @end

@@ -7,11 +7,10 @@
 //
 
 @interface ServerTypeViewController : UIViewController 
-{
-	IBOutlet UIButton *subsonicButton;
-	IBOutlet UIButton *ubuntuButton;
-	IBOutlet UIButton *cancelButton;
-}
+
+@property (nonatomic, strong) IBOutlet UIButton *subsonicButton;
+@property (nonatomic, strong) IBOutlet UIButton *ubuntuButton;
+@property (nonatomic, strong) IBOutlet UIButton *cancelButton;
 
 - (IBAction) buttonAction:(id)sender;
 

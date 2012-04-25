@@ -11,17 +11,15 @@
 @class ServerTypeViewController, ServerListViewController;
 
 @interface SubsonicServerEditViewController : UIViewController <SUSServerURLCheckerDelegate>
-{
-	
-	IBOutlet UITextField *urlField;
-	IBOutlet UITextField *usernameField;
-	IBOutlet UITextField *passwordField;
-	IBOutlet UIButton *cancelButton;
-	IBOutlet UIButton *saveButton;
-}
 
-@property (unsafe_unretained) ServerTypeViewController *parentController;
-@property (copy) NSString *theNewRedirectUrl;
+@property (nonatomic, strong) IBOutlet UITextField *urlField;
+@property (nonatomic, strong) IBOutlet UITextField *usernameField;
+@property (nonatomic, strong) IBOutlet UITextField *passwordField;
+@property (nonatomic, strong) IBOutlet UIButton *cancelButton;
+@property (nonatomic, strong) IBOutlet UIButton *saveButton;
+
+@property (nonatomic, unsafe_unretained) ServerTypeViewController *parentController;
+@property (nonatomic, copy) NSString *theNewRedirectUrl;
 
 - (IBAction) cancelButtonPressed:(id)sender;
 - (IBAction) saveButtonPressed:(id)sender;

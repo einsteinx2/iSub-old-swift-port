@@ -7,87 +7,80 @@
 //
 
 @interface SettingsTabViewController : UIViewController <UITextFieldDelegate>
-{	
-	
-	UIViewController *parentController;
-	
-	IBOutlet UILabel *versionLabel;
-	
-	IBOutlet UISwitch *manualOfflineModeSwitch;
-	
-	IBOutlet UISwitch *checkUpdatesSwitch;
-	
-	IBOutlet UISwitch *autoReloadArtistSwitch;
-	
-	IBOutlet UISwitch *disablePopupsSwitch;
-	
-	IBOutlet UISwitch *disableRotationSwitch;
-	
-	IBOutlet UISwitch *disableScreenSleepSwitch;
-	
-	IBOutlet UISwitch *enableBasicAuthSwitch;
-	
-	IBOutlet UISwitch *enableSongsTabSwitch;
-	IBOutlet UILabel *enableSongsTabLabel;
-	IBOutlet UILabel *enableSongsTabDesc;
-	
-	IBOutlet UISegmentedControl *recoverSegmentedControl;
-	IBOutlet UISegmentedControl *maxBitrateWifiSegmentedControl;
-	IBOutlet UISegmentedControl *maxBitrate3GSegmentedControl;
-	
-	IBOutlet UISwitch *enableLyricsSwitch;
-	IBOutlet UISwitch *enableCacheStatusSwitch;
-	IBOutlet UISwitch *autoPlayerInfoSwitch;
-	
-	IBOutlet UISwitch *enableSwipeSwitch;
-	IBOutlet UISwitch *enableTapAndHoldSwitch;
-	
-	IBOutlet UISwitch *enableSongCachingSwitch;
-	
-	IBOutlet UILabel *enableNextSongCacheLabel;
-	IBOutlet UISwitch *enableNextSongCacheSwitch;
-	IBOutlet UILabel *enableNextSongPartialCacheLabel;
-	IBOutlet UISwitch *enableNextSongPartialCacheSwitch;
-	
-	IBOutlet UISegmentedControl *cachingTypeSegmentedControl;
-	
-	unsigned long long int totalSpace;
-	unsigned long long int freeSpace;
-	IBOutlet UILabel *cacheSpaceLabel1;
-	//IBOutlet UILabel *cacheSpaceLabel2;
-	IBOutlet UITextField *cacheSpaceLabel2;
-	IBOutlet UILabel *freeSpaceLabel;
-	IBOutlet UILabel *totalSpaceLabel;
-	IBOutlet UIView *totalSpaceBackground;
-	IBOutlet UIView *freeSpaceBackground;
-	IBOutlet UISlider *cacheSpaceSlider;
-	IBOutlet UILabel *cacheSpaceDescLabel;
-	
-	IBOutlet UISwitch *autoDeleteCacheSwitch;
-	IBOutlet UISegmentedControl *autoDeleteCacheTypeSegmentedControl;
-	IBOutlet UISegmentedControl *cacheSongCellColorSegmentedControl;
-	
-	IBOutlet UIButton *twitterSigninButton;
-	IBOutlet UILabel *twitterStatusLabel;
-	IBOutlet UISwitch *twitterEnabledSwitch;
-	
-	IBOutlet UISwitch *enableScrobblingSwitch;
-	IBOutlet UILabel *scrobblePercentLabel;
-	IBOutlet UISlider *scrobblePercentSlider;
-	
-	IBOutlet UISegmentedControl *quickSkipSegmentControl;
-	
-	IBOutlet UISegmentedControl *secondsToStartPlayerSegmentControl;
-	IBOutlet UISegmentedControl *secondsToBufferSegmentControl;
-	
-	IBOutlet UISwitch *showLargeSongInfoSwitch;
-	
-	NSDate *loadedTime;
-}
 
-@property (strong) UIViewController *parentController;
+@property (nonatomic, strong) UIViewController *parentController;
 
-@property (strong) NSDate *loadedTime;
+@property (nonatomic, strong) IBOutlet UILabel *versionLabel;
+
+@property (nonatomic, strong) IBOutlet UISwitch *manualOfflineModeSwitch;
+
+@property (nonatomic, strong) IBOutlet UISwitch *checkUpdatesSwitch;
+
+@property (nonatomic, strong) IBOutlet UISwitch *autoReloadArtistSwitch;
+
+@property (nonatomic, strong) IBOutlet UISwitch *disablePopupsSwitch;
+
+@property (nonatomic, strong) IBOutlet UISwitch *disableRotationSwitch;
+
+@property (nonatomic, strong) IBOutlet UISwitch *disableScreenSleepSwitch;
+
+@property (nonatomic, strong) IBOutlet UISwitch *enableBasicAuthSwitch;
+
+@property (nonatomic, strong) IBOutlet UISwitch *enableSongsTabSwitch;
+@property (nonatomic, strong) IBOutlet UILabel *enableSongsTabLabel;
+@property (nonatomic, strong) IBOutlet UILabel *enableSongsTabDesc;
+
+@property (nonatomic, strong) IBOutlet UISegmentedControl *recoverSegmentedControl;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *maxBitrateWifiSegmentedControl;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *maxBitrate3GSegmentedControl;
+
+@property (nonatomic, strong) IBOutlet UISwitch *enableLyricsSwitch;
+@property (nonatomic, strong) IBOutlet UISwitch *enableCacheStatusSwitch;
+@property (nonatomic, strong) IBOutlet UISwitch *autoPlayerInfoSwitch;
+
+@property (nonatomic, strong) IBOutlet UISwitch *enableSwipeSwitch;
+@property (nonatomic, strong) IBOutlet UISwitch *enableTapAndHoldSwitch;
+
+@property (nonatomic, strong) IBOutlet UISwitch *enableSongCachingSwitch;
+
+@property (nonatomic, strong) IBOutlet UILabel *enableNextSongCacheLabel;
+@property (nonatomic, strong) IBOutlet UISwitch *enableNextSongCacheSwitch;
+@property (nonatomic, strong) IBOutlet UILabel *enableNextSongPartialCacheLabel;
+@property (nonatomic, strong) IBOutlet UISwitch *enableNextSongPartialCacheSwitch;
+
+@property (nonatomic, strong) IBOutlet UISegmentedControl *cachingTypeSegmentedControl;
+
+@property (nonatomic) unsigned long long int totalSpace;
+@property (nonatomic) unsigned long long int freeSpace;
+@property (nonatomic) IBOutlet UILabel *cacheSpaceLabel1;
+@property (nonatomic, strong) IBOutlet UITextField *cacheSpaceLabel2;
+@property (nonatomic, strong) IBOutlet UILabel *freeSpaceLabel;
+@property (nonatomic, strong) IBOutlet UILabel *totalSpaceLabel;
+@property (nonatomic, strong) IBOutlet UIView *totalSpaceBackground;
+@property (nonatomic, strong) IBOutlet UIView *freeSpaceBackground;
+@property (nonatomic, strong) IBOutlet UISlider *cacheSpaceSlider;
+@property (nonatomic, strong) IBOutlet UILabel *cacheSpaceDescLabel;
+
+@property (nonatomic, strong) IBOutlet UISwitch *autoDeleteCacheSwitch;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *autoDeleteCacheTypeSegmentedControl;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *cacheSongCellColorSegmentedControl;
+
+@property (nonatomic, strong) IBOutlet UIButton *twitterSigninButton;
+@property (nonatomic, strong) IBOutlet UILabel *twitterStatusLabel;
+@property (nonatomic, strong) IBOutlet UISwitch *twitterEnabledSwitch;
+
+@property (nonatomic, strong) IBOutlet UISwitch *enableScrobblingSwitch;
+@property (nonatomic, strong) IBOutlet UILabel *scrobblePercentLabel;
+@property (nonatomic, strong) IBOutlet UISlider *scrobblePercentSlider;
+
+@property (nonatomic, strong) IBOutlet UISegmentedControl *quickSkipSegmentControl;
+
+@property (nonatomic, strong) IBOutlet UISegmentedControl *secondsToStartPlayerSegmentControl;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *secondsToBufferSegmentControl;
+
+@property (nonatomic, strong) IBOutlet UISwitch *showLargeSongInfoSwitch;
+
+@property (nonatomic, strong) NSDate *loadedTime;
 
 - (void)toggleCacheControlsVisibility;
 - (void)cachingTypeToggle;

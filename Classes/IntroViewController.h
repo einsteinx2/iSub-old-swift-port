@@ -9,13 +9,12 @@
 
 
 @interface IntroViewController : UIViewController 
-{
-	IBOutlet UIButton *introVideo;
-	IBOutlet UIButton *testServer;
-	IBOutlet UIButton *ownServer;
-	
-	IBOutlet UIImageView *sunkenLogo;
-}
+
+@property (nonatomic, strong) IBOutlet UIButton *introVideo;
+@property (nonatomic, strong) IBOutlet UIButton *testServer;
+@property (nonatomic, strong) IBOutlet UIButton *ownServer;
+
+@property (nonatomic, strong) IBOutlet UIImageView *sunkenLogo;
 
 - (IBAction)buttonPress:(id)sender;
 

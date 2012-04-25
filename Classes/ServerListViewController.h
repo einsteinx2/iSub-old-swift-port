@@ -11,22 +11,18 @@
 @class SettingsTabViewController, HelpTabViewController;
 
 @interface ServerListViewController : UITableViewController <SUSServerURLCheckerDelegate>
-{
-	BOOL isEditing;
-	
-	UIView *headerView;
-	UISegmentedControl *segmentedControl;
-	
-	//SettingsTabViewController *settingsTabViewController;
-	//HelpTabViewController *helpTabViewController;
-}
+
+@property (nonatomic) BOOL isEditing;
+
+@property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, strong) UISegmentedControl *segmentedControl;
+
+@property (nonatomic, copy) NSString *theNewRedirectionUrl;
+
+@property (nonatomic, strong) SettingsTabViewController *settingsTabViewController;
+@property (nonatomic, strong) HelpTabViewController *helpTabViewController;
 
 - (void)addAction:(id)sender;
 - (void)segmentAction:(id)sender;
-
-@property (copy) NSString *theNewRedirectionUrl;
-
-@property (strong) SettingsTabViewController *settingsTabViewController;
-@property (strong) HelpTabViewController *helpTabViewController;
 
 @end

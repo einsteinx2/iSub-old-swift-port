@@ -25,7 +25,7 @@
 
 @implementation UbuntuServerEditViewController
 
-@synthesize parentController;
+@synthesize parentController, usernameField, passwordField, saveButton, cancelButton;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -40,44 +40,36 @@
 {
     [super viewDidLoad];
 	
-	if (!parentController)
+	if (!self.parentController)
 	{
 		CGRect frame = self.view.frame;
 		frame.origin.y = 20;
 		self.view.frame = frame;
 	}
 	
-	
 	if (viewObjectsS.serverToEdit)
 	{
-		usernameField.text = viewObjectsS.serverToEdit.username;
-		passwordField.text = viewObjectsS.serverToEdit.password;
+		self.usernameField.text = viewObjectsS.serverToEdit.username;
+		self.passwordField.text = viewObjectsS.serverToEdit.password;
 	}
 }
 
-- (BOOL) checkUsername:(NSString *)username
+- (BOOL)checkUsername:(NSString *)username
 {
-	if ([username length] > 0)
-		return YES;
-	
-	return NO;
+	return username.length > 0;
 }
 
-- (BOOL) checkPassword:(NSString *)password
+- (BOOL)checkPassword:(NSString *)password
 {
-	if ([password length] > 0)
-		return YES;
-	
-	return NO;
+	return password.length > 0;
 }
 
-
-- (IBAction) cancelButtonPressed:(id)sender
+- (IBAction)cancelButtonPressed:(id)sender
 {
 	viewObjectsS.serverToEdit = nil;
 	
-	if (parentController)
-		[parentController dismissModalViewControllerAnimated:YES];
+	if (self.parentController)
+		[self.parentController dismissModalViewControllerAnimated:YES];
 	
 	[self dismissModalViewControllerAnimated:YES];
 	
@@ -97,26 +89,25 @@
 
 
 - (IBAction) saveButtonPressed:(id)sender
-{
-	
-	if (![self checkUsername:usernameField.text])
+{	
+	if (![self checkUsername:self.usernameField.text])
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a username" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		[alert show];
 	}
 	
-	if (![self checkPassword:passwordField.text])
+	if (![self checkPassword:self.passwordField.text])
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a password" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		[alert show];
 	}
 	
-	if ([self checkUsername:usernameField.text] && [self checkPassword:passwordField.text])
+	if ([self checkUsername:self.usernameField.text] && [self checkPassword:self.passwordField.text])
 	{
 		Server *theServer = [[Server alloc] init];
 		theServer.url = URL;
-		theServer.username = usernameField.text;
-		theServer.password = passwordField.text;
+		theServer.username = self.usernameField.text;
+		theServer.password = self.passwordField.text;
 		theServer.type = UBUNTU_ONE;
 		
 		if (settingsS.serverList == nil)
@@ -142,8 +133,8 @@
 			[NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
 			[NSNotificationCenter postNotificationToMainThreadWithName:@"showSaveButton"];
 			
-			if (parentController)
-				[parentController dismissModalViewControllerAnimated:YES];
+			if (self.parentController)
+				[self.parentController dismissModalViewControllerAnimated:YES];
 			
 			[self dismissModalViewControllerAnimated:YES];
 			
@@ -158,8 +149,8 @@
 			// Save the plist values
 			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 			[defaults setObject:URL forKey:@"url"];
-			[defaults setObject:usernameField.text forKey:@"username"];
-			[defaults setObject:passwordField.text forKey:@"password"];
+			[defaults setObject:self.usernameField.text forKey:@"username"];
+			[defaults setObject:self.passwordField.text forKey:@"password"];
 			[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settingsS.serverList] forKey:@"servers"];
 			[defaults synchronize];
 			
@@ -168,8 +159,8 @@
 			
 			[self dismissModalViewControllerAnimated:YES];
 			
-			if (parentController)
-				[parentController dismissModalViewControllerAnimated:YES];
+			if (self.parentController)
+				[self.parentController dismissModalViewControllerAnimated:YES];
 
 			if (IS_IPAD())
 				[appDelegateS.ipadRootViewController.menuViewController showHome];
@@ -185,19 +176,18 @@
 // This dismisses the keyboard when the "done" button is pressed
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-	[usernameField resignFirstResponder];
-	[passwordField resignFirstResponder];
+	[self.usernameField resignFirstResponder];
+	[self.passwordField resignFirstResponder];
 	return YES;
 }
 
 // This dismisses the keyboard when any area outside the keyboard is touched
 - (void) touchesBegan :(NSSet *) touches withEvent:(UIEvent *)event
 {
-	[usernameField resignFirstResponder];
-	[passwordField resignFirstResponder];
-	[super touchesBegan:touches withEvent:event ];
+	[self.usernameField resignFirstResponder];
+	[self.passwordField resignFirstResponder];
+	[super touchesBegan:touches withEvent:event];
 }
-
 
 - (void)didReceiveMemoryWarning 
 {

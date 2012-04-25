@@ -11,31 +11,31 @@
 
 @interface NewHomeViewController : UIViewController
 
-@property (strong) IBOutlet UIButton *playerButton;
-@property (strong) IBOutlet UIButton *jukeboxButton;
-@property (strong) IBOutlet UISearchBar *searchBar;
-@property (strong) IBOutlet UISegmentedControl *searchSegment;
-@property (strong) IBOutlet UIView *searchSegmentBackground;
-@property (strong) UIView *searchOverlay;
-@property (strong) UIButton *dismissButton;
+@property (nonatomic, strong) IBOutlet UIButton *playerButton;
+@property (nonatomic, strong) IBOutlet UIButton *jukeboxButton;
+@property (nonatomic, strong) IBOutlet UISearchBar *searchBar;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *searchSegment;
+@property (nonatomic, strong) IBOutlet UIView *searchSegmentBackground;
+@property (nonatomic, strong) UIView *searchOverlay;
+@property (nonatomic, strong) UIButton *dismissButton;
 
-@property BOOL isSearch;
+@property (nonatomic) BOOL isSearch;
 
-@property (strong) IBOutlet UILabel *quickLabel;
-@property (strong) IBOutlet UILabel *shuffleLabel;
-@property (strong) IBOutlet UILabel *jukeboxLabel;
-@property (strong) IBOutlet UILabel *settingsLabel;
-@property (strong) IBOutlet UILabel *chatLabel;
-@property (strong) IBOutlet UILabel *playerLabel;
+@property (nonatomic, strong) IBOutlet UILabel *quickLabel;
+@property (nonatomic, strong) IBOutlet UILabel *shuffleLabel;
+@property (nonatomic, strong) IBOutlet UILabel *jukeboxLabel;
+@property (nonatomic, strong) IBOutlet UILabel *settingsLabel;
+@property (nonatomic, strong) IBOutlet UILabel *chatLabel;
+@property (nonatomic, strong) IBOutlet UILabel *playerLabel;
 
-@property (strong) UIButton *coverArtBorder;
-@property (strong) AsynchronousImageView *coverArtView;
-@property (strong) UILabel *artistLabel;
-@property (strong) UILabel *albumLabel;
-@property (strong) UILabel *songLabel;
+@property (nonatomic, strong) UIButton *coverArtBorder;
+@property (nonatomic, strong) AsynchronousImageView *coverArtView;
+@property (nonatomic, strong) UILabel *artistLabel;
+@property (nonatomic, strong) UILabel *albumLabel;
+@property (nonatomic, strong) UILabel *songLabel;
 
-@property (strong) NSURLConnection *connection;
-@property (strong) NSMutableData *receivedData;
+@property (nonatomic, strong) NSURLConnection *connection;
+@property (nonatomic, strong) NSMutableData *receivedData;
 
 - (IBAction)quickAlbums;
 - (IBAction)serverShuffle;

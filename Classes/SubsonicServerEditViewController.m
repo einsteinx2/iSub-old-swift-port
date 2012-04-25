@@ -25,6 +25,7 @@
 @implementation SubsonicServerEditViewController
 
 @synthesize parentController, theNewRedirectUrl;
+@synthesize urlField, usernameField, passwordField, cancelButton, saveButton;
 
 #pragma mark - Rotation
 
@@ -42,45 +43,37 @@
 {
     [super viewDidLoad];
 	
-	if (!parentController)
+	if (!self.parentController)
 	{
 		CGRect frame = self.view.frame;
 		frame.origin.y = 20;
 		self.view.frame = frame;
 	}
 	
-	
-	theNewRedirectUrl = nil;
+	self.theNewRedirectUrl = nil;
 	
 	if (viewObjectsS.serverToEdit)
 	{
-		urlField.text = viewObjectsS.serverToEdit.url;
-		usernameField.text = viewObjectsS.serverToEdit.username;
-		passwordField.text = viewObjectsS.serverToEdit.password;
+		self.urlField.text = viewObjectsS.serverToEdit.url;
+		self.usernameField.text = viewObjectsS.serverToEdit.username;
+		self.passwordField.text = viewObjectsS.serverToEdit.password;
 	}
 }
 
-- (void)didReceiveMemoryWarning 
-{
-	// Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-}
-
-
 #pragma mark - Button handling
 
-- (BOOL) checkUrl:(NSString *)url
+- (BOOL)checkUrl:(NSString *)url
 {
-	if ([url length] == 0)
+	if (url.length == 0)
 		return NO;
 	
-	if ([[url substringFromIndex:([url length] - 1)] isEqualToString:@"/"])
+	if ([[url substringFromIndex:(url.length - 1)] isEqualToString:@"/"])
 	{
 		urlField.text = [url substringToIndex:([url length] - 1)];
 		return YES;
 	}
 	
-	if ([url length] < 7)
+	if (url.length < 7)
 	{
 		urlField.text = [NSString stringWithFormat:@"http://%@", url];
 		return YES;
@@ -90,7 +83,7 @@
 		if (![[url substringToIndex:7] isEqualToString:@"http://"])
 		{
 			BOOL addHttp = NO;
-			if ([url length] >= 8)
+			if (url.length >= 8)
 			{
 				if (![[url substringToIndex:8] isEqualToString:@"https://"])
 					addHttp = YES;
@@ -110,30 +103,22 @@
 	return YES;
 }
 
-
-- (BOOL) checkUsername:(NSString *)username
+- (BOOL)checkUsername:(NSString *)username
 {
-	if ([username length] > 0)
-		return YES;
-	else
-		return NO;
+	return username.length > 0;
 }
 
-- (BOOL) checkPassword:(NSString *)password
+- (BOOL)checkPassword:(NSString *)password
 {
-	if ([password length] > 0)
-		return YES;
-	else
-		return NO;
+	return password.length > 0;
 }
-
 
 - (IBAction) cancelButtonPressed:(id)sender
 {
 	viewObjectsS.serverToEdit = nil;
 	
-	if (parentController)
-		[parentController dismissModalViewControllerAnimated:YES];
+	if (self.parentController)
+		[self.parentController dismissModalViewControllerAnimated:YES];
 	
 	[self dismissModalViewControllerAnimated:YES];
 	
@@ -210,7 +195,7 @@
 
 - (void)SUSServerURLCheckFailed:(SUSServerChecker *)checker withError:(NSError *)error
 {
-	 checker = nil;
+	checker = nil;
 	[viewObjectsS hideLoadingScreen];
 	
 	NSString *message = @"";
@@ -229,13 +214,12 @@
 	[viewObjectsS hideLoadingScreen];
 	
 	Server *theServer = [[Server alloc] init];
-	theServer.url = urlField.text;
-	theServer.username = usernameField.text;
-	theServer.password = passwordField.text;
+	theServer.url = self.urlField.text;
+	theServer.username = self.usernameField.text;
+	theServer.password = self.passwordField.text;
 	theServer.type = SUBSONIC;
 	
-	
-	if (settingsS.serverList == nil)
+	if (!settingsS.serverList)
 		settingsS.serverList = [NSMutableArray arrayWithCapacity:1];
 	
 	if(viewObjectsS.serverToEdit)
@@ -258,15 +242,15 @@
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"showSaveButton"];
 		
-		if (parentController)
-			[parentController dismissModalViewControllerAnimated:YES];
+		if (self.parentController)
+			[self.parentController dismissModalViewControllerAnimated:YES];
 		
 		[self dismissModalViewControllerAnimated:YES];
 		
 		NSDictionary *userInfo = nil;
-		if (theNewRedirectUrl)
+		if (self.theNewRedirectUrl)
 		{
-			userInfo = [NSDictionary dictionaryWithObject:theNewRedirectUrl forKey:@"theNewRedirectUrl"];
+			userInfo = [NSDictionary dictionaryWithObject:self.theNewRedirectUrl forKey:@"theNewRedirectUrl"];
 		}
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer" userInfo:userInfo];
 	}
@@ -278,17 +262,17 @@
 		
 		// Save the plist values
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		[defaults setObject:urlField.text forKey:@"url"];
-		[defaults setObject:usernameField.text forKey:@"username"];
-		[defaults setObject:passwordField.text forKey:@"password"];
+		[defaults setObject:self.urlField.text forKey:@"url"];
+		[defaults setObject:self.usernameField.text forKey:@"username"];
+		[defaults setObject:self.passwordField.text forKey:@"password"];
 		[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settingsS.serverList] forKey:@"servers"];
 		[defaults synchronize];
 		
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"showSaveButton"];
 		
-		if (parentController)
-			[parentController dismissModalViewControllerAnimated:YES];
+		if (self.parentController)
+			[self.parentController dismissModalViewControllerAnimated:YES];
 		
 		[self dismissModalViewControllerAnimated:YES];
 		
@@ -296,9 +280,9 @@
 			[appDelegateS.ipadRootViewController.menuViewController showHome];
 				
 		NSDictionary *userInfo = nil;
-		if (theNewRedirectUrl)
+		if (self.theNewRedirectUrl)
 		{
-			userInfo = [NSDictionary dictionaryWithObject:theNewRedirectUrl forKey:@"theNewRedirectUrl"];
+			userInfo = [NSDictionary dictionaryWithObject:self.theNewRedirectUrl forKey:@"theNewRedirectUrl"];
 		}
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer" userInfo:userInfo];
 	}
@@ -310,19 +294,19 @@
 // This dismisses the keyboard when the "done" button is pressed
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-	[urlField resignFirstResponder];
-	[usernameField resignFirstResponder];
-	[passwordField resignFirstResponder];
+	[self.urlField resignFirstResponder];
+	[self.usernameField resignFirstResponder];
+	[self.passwordField resignFirstResponder];
 	return YES;
 }
 
 // This dismisses the keyboard when any area outside the keyboard is touched
 - (void) touchesBegan :(NSSet *) touches withEvent:(UIEvent *)event
 {
-	[urlField resignFirstResponder];
-	[usernameField resignFirstResponder];
-	[passwordField resignFirstResponder];
-	[super touchesBegan:touches withEvent:event ];
+	[self.urlField resignFirstResponder];
+	[self.usernameField resignFirstResponder];
+	[self.passwordField resignFirstResponder];
+	[super touchesBegan:touches withEvent:event];
 }
 
 @end

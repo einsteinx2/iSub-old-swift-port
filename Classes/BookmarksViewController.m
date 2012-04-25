@@ -32,6 +32,7 @@
 
 @implementation BookmarksViewController
 @synthesize bookmarkIds;
+@synthesize isNoBookmarksScreenShowing, noBookmarksScreen, headerView, bookmarkCountLabel, deleteBookmarksLabel, deleteBookmarksButton, spacerLabel, editBookmarksLabel, editBookmarksButton;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -55,10 +56,9 @@
 	
 	//DLog(@"Cache viewDidLoad");
 	
-	
 	viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 	//viewObjectsS.multiDeleteList = nil; viewObjectsS.multiDeleteList = [[NSMutableArray alloc] init];
-	isNoBookmarksScreenShowing = NO;
+	self.isNoBookmarksScreenShowing = NO;
 	
 	self.tableView.separatorColor = [UIColor clearColor];
 	
@@ -91,22 +91,22 @@
 	
 	self.tableView.tableHeaderView = nil;
 	
-	if (isNoBookmarksScreenShowing == YES)
+	if (self.isNoBookmarksScreenShowing == YES)
 	{
-		[noBookmarksScreen removeFromSuperview];
-		isNoBookmarksScreenShowing = NO;
+		[self.noBookmarksScreen removeFromSuperview];
+		self.isNoBookmarksScreenShowing = NO;
 	}
 	
 	NSUInteger bookmarksCount = [databaseS.bookmarksDbQueue intForQuery:@"SELECT COUNT(*) FROM bookmarks"];
 	if (bookmarksCount == 0)
 	{
-		isNoBookmarksScreenShowing = YES;
-		noBookmarksScreen = [[UIImageView alloc] init];
-		noBookmarksScreen.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
-		noBookmarksScreen.frame = CGRectMake(40, 100, 240, 180);
-		noBookmarksScreen.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 2);
-		noBookmarksScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
-		noBookmarksScreen.alpha = .80;
+		self.isNoBookmarksScreenShowing = YES;
+		self.noBookmarksScreen = [[UIImageView alloc] init];
+		self.noBookmarksScreen.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
+		self.noBookmarksScreen.frame = CGRectMake(40, 100, 240, 180);
+		self.noBookmarksScreen.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 2);
+		self.noBookmarksScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
+		self.noBookmarksScreen.alpha = .80;
 		
 		UILabel *textLabel = [[UILabel alloc] init];
 		textLabel.backgroundColor = [UIColor clearColor];
@@ -121,71 +121,71 @@
 			[textLabel setText:@"No Saved\nBookmarks"];
 		}
 		textLabel.frame = CGRectMake(20, 20, 200, 140);
-		[noBookmarksScreen addSubview:textLabel];
+		[self.noBookmarksScreen addSubview:textLabel];
 		
-		[self.view addSubview:noBookmarksScreen];
+		[self.view addSubview:self.noBookmarksScreen];
 		
 	}
 	else
 	{
 		// Add the header
-		headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
-		headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
+		self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
+		self.headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
 		
-		bookmarkCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 230, 50)];
-		bookmarkCountLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
-		bookmarkCountLabel.backgroundColor = [UIColor clearColor];
-		bookmarkCountLabel.textColor = [UIColor whiteColor];
-		bookmarkCountLabel.textAlignment = UITextAlignmentCenter;
-		bookmarkCountLabel.font = [UIFont boldSystemFontOfSize:22];
+		self.bookmarkCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 230, 50)];
+		self.bookmarkCountLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+		self.bookmarkCountLabel.backgroundColor = [UIColor clearColor];
+		self.bookmarkCountLabel.textColor = [UIColor whiteColor];
+		self.bookmarkCountLabel.textAlignment = UITextAlignmentCenter;
+		self.bookmarkCountLabel.font = [UIFont boldSystemFontOfSize:22];
 		if (bookmarksCount == 1)
-			bookmarkCountLabel.text = [NSString stringWithFormat:@"1 Bookmark"];
+			self.bookmarkCountLabel.text = [NSString stringWithFormat:@"1 Bookmark"];
 		else 
-			bookmarkCountLabel.text = [NSString stringWithFormat:@"%i Bookmarks", bookmarksCount];
-		[headerView addSubview:bookmarkCountLabel];
+			self.bookmarkCountLabel.text = [NSString stringWithFormat:@"%i Bookmarks", bookmarksCount];
+		[self.headerView addSubview:self.bookmarkCountLabel];
 		
-		deleteBookmarksButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		deleteBookmarksButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
-		deleteBookmarksButton.frame = CGRectMake(0, 0, 230, 50);
-		[deleteBookmarksButton addTarget:self action:@selector(deleteBookmarksAction:) forControlEvents:UIControlEventTouchUpInside];
-		[headerView addSubview:deleteBookmarksButton];
+		self.deleteBookmarksButton = [UIButton buttonWithType:UIButtonTypeCustom];
+		self.deleteBookmarksButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+		self.deleteBookmarksButton.frame = CGRectMake(0, 0, 230, 50);
+		[self.deleteBookmarksButton addTarget:self action:@selector(deleteBookmarksAction:) forControlEvents:UIControlEventTouchUpInside];
+		[self.headerView addSubview:self.deleteBookmarksButton];
 		
-		spacerLabel = [[UILabel alloc] initWithFrame:CGRectMake(226, 0, 6, 50)];
-		spacerLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-		spacerLabel.backgroundColor = [UIColor clearColor];
-		spacerLabel.textColor = [UIColor whiteColor];
-		spacerLabel.font = [UIFont systemFontOfSize:40];
-		spacerLabel.text = @"|";
-		[headerView addSubview:spacerLabel];
+		self.spacerLabel = [[UILabel alloc] initWithFrame:CGRectMake(226, 0, 6, 50)];
+		self.spacerLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+		self.spacerLabel.backgroundColor = [UIColor clearColor];
+		self.spacerLabel.textColor = [UIColor whiteColor];
+		self.spacerLabel.font = [UIFont systemFontOfSize:40];
+		self.spacerLabel.text = @"|";
+		[self.headerView addSubview:self.spacerLabel];
 		
-		editBookmarksLabel = [[UILabel alloc] initWithFrame:CGRectMake(234, 0, 86, 50)];
-		editBookmarksLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
-		editBookmarksLabel.backgroundColor = [UIColor clearColor];
-		editBookmarksLabel.textColor = [UIColor whiteColor];
-		editBookmarksLabel.textAlignment = UITextAlignmentCenter;
-		editBookmarksLabel.font = [UIFont boldSystemFontOfSize:22];
-		editBookmarksLabel.text = @"Edit";
-		[headerView addSubview:editBookmarksLabel];
+		self.editBookmarksLabel = [[UILabel alloc] initWithFrame:CGRectMake(234, 0, 86, 50)];
+		self.editBookmarksLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
+		self.editBookmarksLabel.backgroundColor = [UIColor clearColor];
+		self.editBookmarksLabel.textColor = [UIColor whiteColor];
+		self.editBookmarksLabel.textAlignment = UITextAlignmentCenter;
+		self.editBookmarksLabel.font = [UIFont boldSystemFontOfSize:22];
+		self.editBookmarksLabel.text = @"Edit";
+		[self.headerView addSubview:self.editBookmarksLabel];
 		
-		editBookmarksButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		editBookmarksButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
-		editBookmarksButton.frame = CGRectMake(234, 0, 86, 40);
-		[editBookmarksButton addTarget:self action:@selector(editBookmarksAction:) forControlEvents:UIControlEventTouchUpInside];
-		[headerView addSubview:editBookmarksButton];	
+		self.editBookmarksButton = [UIButton buttonWithType:UIButtonTypeCustom];
+		self.editBookmarksButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
+		self.editBookmarksButton.frame = CGRectMake(234, 0, 86, 40);
+		[self.editBookmarksButton addTarget:self action:@selector(editBookmarksAction:) forControlEvents:UIControlEventTouchUpInside];
+		[self.headerView addSubview:self.editBookmarksButton];	
 		
-		deleteBookmarksLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 227, 50)];
-		deleteBookmarksLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
-		deleteBookmarksLabel.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:.5];
-		deleteBookmarksLabel.textColor = [UIColor whiteColor];
-		deleteBookmarksLabel.textAlignment = UITextAlignmentCenter;
-		deleteBookmarksLabel.font = [UIFont boldSystemFontOfSize:22];
-		deleteBookmarksLabel.adjustsFontSizeToFitWidth = YES;
-		deleteBookmarksLabel.minimumFontSize = 12;
-		deleteBookmarksLabel.text = @"Remove # Bookmarks";
-		deleteBookmarksLabel.hidden = YES;
-		[headerView addSubview:deleteBookmarksLabel];
+		self.deleteBookmarksLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 227, 50)];
+		self.deleteBookmarksLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+		self.deleteBookmarksLabel.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:.5];
+		self.deleteBookmarksLabel.textColor = [UIColor whiteColor];
+		self.deleteBookmarksLabel.textAlignment = UITextAlignmentCenter;
+		self.deleteBookmarksLabel.font = [UIFont boldSystemFontOfSize:22];
+		self.deleteBookmarksLabel.adjustsFontSizeToFitWidth = YES;
+		self.deleteBookmarksLabel.minimumFontSize = 12;
+		self.deleteBookmarksLabel.text = @"Remove # Bookmarks";
+		self.deleteBookmarksLabel.hidden = YES;
+		[self.headerView addSubview:self.deleteBookmarksLabel];
 		
-		self.tableView.tableHeaderView = headerView;
+		self.tableView.tableHeaderView = self.headerView;
 	}
 	
 	[self loadBookmarkIds];
@@ -220,43 +220,43 @@
 {
 	if ([viewObjectsS.multiDeleteList count] == 0)
 	{
-		deleteBookmarksLabel.text = @"Clear Bookmarks";
+		self.deleteBookmarksLabel.text = @"Clear Bookmarks";
 	}
 	else if ([viewObjectsS.multiDeleteList count] == 1)
 	{
-		deleteBookmarksLabel.text = @"Remove 1 Bookmark";
+		self.deleteBookmarksLabel.text = @"Remove 1 Bookmark";
 	}
 	else
 	{
-		deleteBookmarksLabel.text = [NSString stringWithFormat:@"Remove %i Bookmarks", [viewObjectsS.multiDeleteList count]];
+		self.deleteBookmarksLabel.text = [NSString stringWithFormat:@"Remove %i Bookmarks", [viewObjectsS.multiDeleteList count]];
 	}
 	
-	bookmarkCountLabel.hidden = YES;
-	deleteBookmarksLabel.hidden = NO;
+	self.bookmarkCountLabel.hidden = YES;
+	self.deleteBookmarksLabel.hidden = NO;
 }
 
 
 - (void)hideDeleteButton
 {
-	if ([viewObjectsS.multiDeleteList count] == 0)
+	if (viewObjectsS.multiDeleteList.count == 0)
 	{
 		if (!self.tableView.editing)
 		{
-			bookmarkCountLabel.hidden = NO;
-			deleteBookmarksLabel.hidden = YES;
+			self.bookmarkCountLabel.hidden = NO;
+			self.deleteBookmarksLabel.hidden = YES;
 		}
 		else
 		{
-			deleteBookmarksLabel.text = @"Clear Bookmarks";
+			self.deleteBookmarksLabel.text = @"Clear Bookmarks";
 		}
 	}
-	else if ([viewObjectsS.multiDeleteList count] == 1)
+	else if (viewObjectsS.multiDeleteList.count == 1)
 	{
-		deleteBookmarksLabel.text = @"Remove 1 Bookmark";
+		self.deleteBookmarksLabel.text = @"Remove 1 Bookmark";
 	}
 	else 
 	{
-		deleteBookmarksLabel.text = [NSString stringWithFormat:@"Remove %i Bookmarks", [viewObjectsS.multiDeleteList count]];
+		self.deleteBookmarksLabel.text = [NSString stringWithFormat:@"Remove %i Bookmarks", [viewObjectsS.multiDeleteList count]];
 	}
 }
 
@@ -272,8 +272,8 @@
 		viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 		//viewObjectsS.multiDeleteList = nil; viewObjectsS.multiDeleteList = [[NSMutableArray alloc] init];
 		[self.tableView setEditing:YES animated:YES];
-		editBookmarksLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
-		editBookmarksLabel.text = @"Done";
+		self.editBookmarksLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
+		self.editBookmarksLabel.text = @"Done";
 		[self showDeleteButton];
 		
 		[NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(showDeleteToggle) userInfo:nil repeats:NO];
@@ -286,8 +286,8 @@
 		//viewObjectsS.multiDeleteList = nil; viewObjectsS.multiDeleteList = [[NSMutableArray alloc] init];
 		[self hideDeleteButton];
 		[self.tableView setEditing:NO animated:YES];
-		editBookmarksLabel.backgroundColor = [UIColor clearColor];
-		editBookmarksLabel.text = @"Edit";
+		self.editBookmarksLabel.backgroundColor = [UIColor clearColor];
+		self.editBookmarksLabel.text = @"Edit";
 		
 		// Reload the table
 		//[self.tableView reloadData];
@@ -296,7 +296,7 @@
 }
 
 
-- (void) showDeleteToggle
+- (void)showDeleteToggle
 {
 	// Show the delete toggle for already visible cells
 	for (id cell in self.tableView.visibleCells) 
@@ -308,7 +308,7 @@
 
 - (void)deleteBookmarksAction:(id)sender
 {
-	if ([deleteBookmarksLabel.text isEqualToString:@"Clear Bookmarks"])
+	if ([self.deleteBookmarksLabel.text isEqualToString:@"Clear Bookmarks"])
 	{
 		[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
 		{
@@ -486,7 +486,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
-    return [self.bookmarkIds count];
+    return self.bookmarkIds.count;
 }
 
 // Customize the appearance of table view cells.

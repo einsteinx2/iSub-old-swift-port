@@ -11,21 +11,16 @@
 @class SUSNowPlayingDAO, EGORefreshTableHeaderView;
 
 @interface PlayingViewController : UITableViewController <SUSLoaderDelegate>
-{
-	BOOL isNothingPlayingScreenShowing;
-	UIImageView *nothingPlayingScreen;
-	
-	NSMutableData *receivedData;
-	
-	EGORefreshTableHeaderView *refreshHeaderView;
-	BOOL _reloading;
-}
 
-@property (strong) UIImageView *nothingPlayingScreen;
+@property (nonatomic) BOOL isNothingPlayingScreenShowing;
+@property (nonatomic, strong) UIImageView *nothingPlayingScreen;
 
-@property (strong) SUSNowPlayingDAO *dataModel;
+@property (nonatomic, strong) NSMutableData *receivedData;
 
-@property(assign,getter=isReloading) BOOL reloading;
+@property (nonatomic, strong) SUSNowPlayingDAO *dataModel;
+
+@property (nonatomic, strong) EGORefreshTableHeaderView *refreshHeaderView;
+@property (nonatomic) BOOL reloading;
 
 - (void)cancelLoad;
 

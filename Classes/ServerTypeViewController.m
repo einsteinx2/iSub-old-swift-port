@@ -13,6 +13,7 @@
 #import "SavedSettings.h"
 
 @implementation ServerTypeViewController
+@synthesize subsonicButton, ubuntuButton, cancelButton;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -22,25 +23,11 @@
     return YES;
 }
 
-
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad 
-{
-    [super viewDidLoad];
-}
-
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc. that aren't in use.
-}
-
 - (IBAction)buttonAction:(id)sender
 {
 	UIView *subView = nil;
 
-	if (sender == subsonicButton)
+	if (sender == self.subsonicButton)
 	{
 		SubsonicServerEditViewController *subsonicServerEditViewController = [[SubsonicServerEditViewController alloc] initWithNibName:@"SubsonicServerEditViewController" bundle:nil];
 		subsonicServerEditViewController.parentController = self;
@@ -48,7 +35,7 @@
 		subsonicServerEditViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		subView = subsonicServerEditViewController.view;
 	}
-	else if (sender == ubuntuButton)
+	else if (sender == self.ubuntuButton)
 	{
 		UbuntuServerEditViewController *ubuntuServerEditViewController = [[UbuntuServerEditViewController alloc] initWithNibName:@"UbuntuServerEditViewController" bundle:nil];
 		ubuntuServerEditViewController.parentController = self;
@@ -57,7 +44,7 @@
 		[self.view addSubview:ubuntuServerEditViewController.view];
 		subView = ubuntuServerEditViewController.view;
 	}
-	else if (sender == cancelButton)
+	else if (sender == self.cancelButton)
 	{
 		[self dismissModalViewControllerAnimated:YES];
 		return;

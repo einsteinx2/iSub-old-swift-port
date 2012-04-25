@@ -282,7 +282,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 {		
 	NSUInteger segment = [segments count];
 	
-	BOOL isShuffle = [shuffle isEqualToString:@"YES"] ? YES : NO;
+	BOOL isShuffle = [shuffle isEqualToString:@"YES"];
 	
 	[databaseS resetCurrentPlaylistDb];
 	

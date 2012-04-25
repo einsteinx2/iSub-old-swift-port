@@ -34,7 +34,7 @@
 
 @implementation SettingsTabViewController
 
-@synthesize parentController, loadedTime;
+@synthesize parentController, versionLabel, manualOfflineModeSwitch, checkUpdatesSwitch, autoReloadArtistSwitch, disablePopupsSwitch, disableRotationSwitch, disableScreenSleepSwitch, enableBasicAuthSwitch, enableSongsTabSwitch, enableSongsTabLabel, enableSongsTabDesc, recoverSegmentedControl, maxBitrateWifiSegmentedControl, maxBitrate3GSegmentedControl, enableLyricsSwitch, enableCacheStatusSwitch, autoPlayerInfoSwitch, enableSwipeSwitch, enableTapAndHoldSwitch, enableSongCachingSwitch, enableNextSongCacheLabel, enableNextSongCacheSwitch, enableNextSongPartialCacheLabel, enableNextSongPartialCacheSwitch, cachingTypeSegmentedControl, totalSpace, freeSpace, cacheSpaceLabel1, cacheSpaceLabel2, freeSpaceLabel, totalSpaceLabel, totalSpaceBackground, freeSpaceBackground, cacheSpaceSlider, cacheSpaceDescLabel, autoDeleteCacheSwitch, autoDeleteCacheTypeSegmentedControl, cacheSongCellColorSegmentedControl, twitterSigninButton, twitterStatusLabel, twitterEnabledSwitch, enableScrobblingSwitch, scrobblePercentLabel, scrobblePercentSlider, quickSkipSegmentControl, secondsToStartPlayerSegmentControl, secondsToBufferSegmentControl, showLargeSongInfoSwitch, loadedTime;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -60,202 +60,194 @@
 	NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
 #if DEBUG
 	NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-	versionLabel.text = [NSString stringWithFormat:@"iSub version %@ build %@", build, version];
+	self.versionLabel.text = [NSString stringWithFormat:@"iSub version %@ build %@", build, version];
 #else
 	versionLabel.text = [NSString stringWithFormat:@"iSub version %@", version];
 #endif
 	
 	// Main Settings
-	enableScrobblingSwitch.on = settingsS.isScrobbleEnabled;
+	self.enableScrobblingSwitch.on = settingsS.isScrobbleEnabled;
 	
 	//scrobblePercentSlider.value = [[appDelegateS.settingsDictionary objectForKey:@"scrobblePercentSetting"] floatValue];
-	scrobblePercentSlider.value = settingsS.scrobblePercent;
+	self.scrobblePercentSlider.value = settingsS.scrobblePercent;
 	[self updateScrobblePercentLabel];
 	
-	manualOfflineModeSwitch.on = settingsS.isForceOfflineMode;
+	self.manualOfflineModeSwitch.on = settingsS.isForceOfflineMode;
 	
-	checkUpdatesSwitch.on = settingsS.isUpdateCheckEnabled;
+	self.checkUpdatesSwitch.on = settingsS.isUpdateCheckEnabled;
 	
-	autoReloadArtistSwitch.on = settingsS.isAutoReloadArtistsEnabled;
+	self.autoReloadArtistSwitch.on = settingsS.isAutoReloadArtistsEnabled;
 
-	disablePopupsSwitch.on = !settingsS.isPopupsEnabled;
+	self.disablePopupsSwitch.on = !settingsS.isPopupsEnabled;
 	
-	disableRotationSwitch.on = settingsS.isRotationLockEnabled;
+	self.disableRotationSwitch.on = settingsS.isRotationLockEnabled;
 	
-	disableScreenSleepSwitch.on = !settingsS.isScreenSleepEnabled;
+	self.disableScreenSleepSwitch.on = !settingsS.isScreenSleepEnabled;
 	
-	enableBasicAuthSwitch.on = settingsS.isBasicAuthEnabled;
+	self.enableBasicAuthSwitch.on = settingsS.isBasicAuthEnabled;
 	
-	enableSongsTabSwitch.on = settingsS.isSongsTabEnabled;
+	self.enableSongsTabSwitch.on = settingsS.isSongsTabEnabled;
 	DLog(@"isSongsTabEnabled: %i", settingsS.isSongsTabEnabled);
 	
-	recoverSegmentedControl.selectedSegmentIndex = settingsS.recoverSetting;
+	self.recoverSegmentedControl.selectedSegmentIndex = settingsS.recoverSetting;
 	
-	maxBitrateWifiSegmentedControl.selectedSegmentIndex = settingsS.maxBitrateWifi;
-	maxBitrate3GSegmentedControl.selectedSegmentIndex = settingsS.maxBitrate3G;
+	self.maxBitrateWifiSegmentedControl.selectedSegmentIndex = settingsS.maxBitrateWifi;
+	self.maxBitrate3GSegmentedControl.selectedSegmentIndex = settingsS.maxBitrate3G;
 		
-	enableSwipeSwitch.on = settingsS.isSwipeEnabled;
-	enableTapAndHoldSwitch.on = settingsS.isTapAndHoldEnabled;
+	self.enableSwipeSwitch.on = settingsS.isSwipeEnabled;
+	self.enableTapAndHoldSwitch.on = settingsS.isTapAndHoldEnabled;
 	
-	showLargeSongInfoSwitch.on = settingsS.isShowLargeSongInfoInPlayer;
-	enableLyricsSwitch.on = settingsS.isLyricsEnabled;
-	enableCacheStatusSwitch.on = settingsS.isCacheStatusEnabled;
+	self.showLargeSongInfoSwitch.on = settingsS.isShowLargeSongInfoInPlayer;
+	self.enableLyricsSwitch.on = settingsS.isLyricsEnabled;
+	self.enableCacheStatusSwitch.on = settingsS.isCacheStatusEnabled;
 	
 	// Cache Settings
-	enableSongCachingSwitch.on = settingsS.isSongCachingEnabled;
-	enableNextSongCacheSwitch.on = settingsS.isNextSongCacheEnabled;
-	enableNextSongPartialCacheSwitch.on = settingsS.isPartialCacheNextSong;
+	self.enableSongCachingSwitch.on = settingsS.isSongCachingEnabled;
+	self.enableNextSongCacheSwitch.on = settingsS.isNextSongCacheEnabled;
+	self.enableNextSongPartialCacheSwitch.on = settingsS.isPartialCacheNextSong;
 		
-	totalSpace = cacheS.totalSpace;
-	freeSpace = cacheS.freeSpace;
-	freeSpaceLabel.text = [NSString stringWithFormat:@"Free space: %@", [NSString formatFileSize:freeSpace]];
-	totalSpaceLabel.text = [NSString stringWithFormat:@"Total space: %@", [NSString formatFileSize:totalSpace]];
-	float percentFree = (float) freeSpace / (float) totalSpace;
-	CGRect frame = freeSpaceBackground.frame;
+	self.totalSpace = cacheS.totalSpace;
+	self.freeSpace = cacheS.freeSpace;
+	self.freeSpaceLabel.text = [NSString stringWithFormat:@"Free space: %@", [NSString formatFileSize:freeSpace]];
+	self.totalSpaceLabel.text = [NSString stringWithFormat:@"Total space: %@", [NSString formatFileSize:totalSpace]];
+	float percentFree = (float) self.freeSpace / (float) self.totalSpace;
+	CGRect frame = self.freeSpaceBackground.frame;
 	frame.size.width = frame.size.width * percentFree;
-	freeSpaceBackground.frame = frame;
-	cachingTypeSegmentedControl.selectedSegmentIndex = settingsS.cachingType;
+	self.freeSpaceBackground.frame = frame;
+	self.cachingTypeSegmentedControl.selectedSegmentIndex = settingsS.cachingType;
 	[self toggleCacheControlsVisibility];
 	[self cachingTypeToggle];
 	
-	autoDeleteCacheSwitch.on = settingsS.isAutoDeleteCacheEnabled;
+	self.autoDeleteCacheSwitch.on = settingsS.isAutoDeleteCacheEnabled;
 	
-	autoDeleteCacheTypeSegmentedControl.selectedSegmentIndex = settingsS.autoDeleteCacheType;
+	self.autoDeleteCacheTypeSegmentedControl.selectedSegmentIndex = settingsS.autoDeleteCacheType;
 	
-	cacheSongCellColorSegmentedControl.selectedSegmentIndex = settingsS.cachedSongCellColorType;
+	self.cacheSongCellColorSegmentedControl.selectedSegmentIndex = settingsS.cachedSongCellColorType;
 	
 	switch (settingsS.quickSkipNumberOfSeconds) 
 	{
-		case 5: quickSkipSegmentControl.selectedSegmentIndex = 0; break;
-		case 15: quickSkipSegmentControl.selectedSegmentIndex = 1; break;
-		case 30: quickSkipSegmentControl.selectedSegmentIndex = 2; break;
-		case 45: quickSkipSegmentControl.selectedSegmentIndex = 3; break;
-		case 60: quickSkipSegmentControl.selectedSegmentIndex = 4; break;
-		case 120: quickSkipSegmentControl.selectedSegmentIndex = 5; break;
-		case 300: quickSkipSegmentControl.selectedSegmentIndex = 6; break;
-		case 600: quickSkipSegmentControl.selectedSegmentIndex = 7; break;
-		case 1200: quickSkipSegmentControl.selectedSegmentIndex = 8; break;
+		case 5: self.quickSkipSegmentControl.selectedSegmentIndex = 0; break;
+		case 15: self.quickSkipSegmentControl.selectedSegmentIndex = 1; break;
+		case 30: self.quickSkipSegmentControl.selectedSegmentIndex = 2; break;
+		case 45: self.quickSkipSegmentControl.selectedSegmentIndex = 3; break;
+		case 60: self.quickSkipSegmentControl.selectedSegmentIndex = 4; break;
+		case 120: self.quickSkipSegmentControl.selectedSegmentIndex = 5; break;
+		case 300: self.quickSkipSegmentControl.selectedSegmentIndex = 6; break;
+		case 600: self.quickSkipSegmentControl.selectedSegmentIndex = 7; break;
+		case 1200: self.quickSkipSegmentControl.selectedSegmentIndex = 8; break;
 		default: break;
 	}
 	
 	// Twitter settings
 	if (socialS.twitterEngine.isAuthorized)
 	{
-		twitterEnabledSwitch.enabled = YES;
+		self.twitterEnabledSwitch.enabled = YES;
 		if (settingsS.isTwitterEnabled)
-			twitterEnabledSwitch.on = YES;
+			self.twitterEnabledSwitch.on = YES;
 		else
-			twitterEnabledSwitch.on = NO;
+			self.twitterEnabledSwitch.on = NO;
 		
-		twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signout.png"];
+		self.twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signout.png"];
 		
-		twitterStatusLabel.text = [NSString stringWithFormat:@"%@ signed in", [socialS.twitterEngine username]];
+		self.twitterStatusLabel.text = [NSString stringWithFormat:@"%@ signed in", [socialS.twitterEngine username]];
 	}
 	else
 	{
-		twitterEnabledSwitch.on = NO;
-		twitterEnabledSwitch.enabled = NO;
+		self.twitterEnabledSwitch.on = NO;
+		self.twitterEnabledSwitch.enabled = NO;
 		
-		twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signin.png"];
+		self.twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signin.png"];
 		
-		twitterStatusLabel.text = @"Signed out";
+		self.twitterStatusLabel.text = @"Signed out";
 	}
 	
 	// Handle In App Purchase settings
 	if (settingsS.isCacheUnlocked == NO)
 	{
 		// Caching is disabled, so disable the controls
-		enableSongCachingSwitch.enabled = NO; enableSongCachingSwitch.alpha = 0.5;
-		enableNextSongCacheSwitch.enabled = NO; enableNextSongCacheSwitch.alpha = 0.5;
-		cachingTypeSegmentedControl.enabled = NO; cachingTypeSegmentedControl.alpha = 0.5;
-		cacheSpaceSlider.enabled = NO; cacheSpaceSlider.alpha = 0.5;
-		autoDeleteCacheSwitch.enabled = NO; autoDeleteCacheSwitch.alpha = 0.5;
-		autoDeleteCacheTypeSegmentedControl.enabled = NO; autoDeleteCacheTypeSegmentedControl.alpha = 0.5;
-		cacheSongCellColorSegmentedControl.enabled = NO; cacheSongCellColorSegmentedControl.alpha = 0.5;
+		self.enableSongCachingSwitch.enabled = NO; self.enableSongCachingSwitch.alpha = 0.5;
+		self.enableNextSongCacheSwitch.enabled = NO; self.enableNextSongCacheSwitch.alpha = 0.5;
+		self.cachingTypeSegmentedControl.enabled = NO; self.cachingTypeSegmentedControl.alpha = 0.5;
+		self.cacheSpaceSlider.enabled = NO; self.cacheSpaceSlider.alpha = 0.5;
+		self.autoDeleteCacheSwitch.enabled = NO; self.autoDeleteCacheSwitch.alpha = 0.5;
+		self.autoDeleteCacheTypeSegmentedControl.enabled = NO; self.autoDeleteCacheTypeSegmentedControl.alpha = 0.5;
+		self.cacheSongCellColorSegmentedControl.enabled = NO; self.cacheSongCellColorSegmentedControl.alpha = 0.5;
 	}
 	
 	[cacheSpaceLabel2 addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 	
 	switch (settingsS.audioEngineStartNumberOfSeconds) 
 	{
-		case 5: secondsToStartPlayerSegmentControl.selectedSegmentIndex = 0; break;
-		case 10: secondsToStartPlayerSegmentControl.selectedSegmentIndex = 1; break;
-		case 15: secondsToStartPlayerSegmentControl.selectedSegmentIndex = 2; break;
-		case 20: secondsToStartPlayerSegmentControl.selectedSegmentIndex = 3; break;
-		case 25: secondsToStartPlayerSegmentControl.selectedSegmentIndex = 4; break;
-		case 30: secondsToStartPlayerSegmentControl.selectedSegmentIndex = 5; break;
-		case 45: secondsToStartPlayerSegmentControl.selectedSegmentIndex = 6; break;
-		case 60: secondsToStartPlayerSegmentControl.selectedSegmentIndex = 7; break;
-		case 120: secondsToStartPlayerSegmentControl.selectedSegmentIndex = 8; break;
+		case 5: self.secondsToStartPlayerSegmentControl.selectedSegmentIndex = 0; break;
+		case 10: self.secondsToStartPlayerSegmentControl.selectedSegmentIndex = 1; break;
+		case 15: self.secondsToStartPlayerSegmentControl.selectedSegmentIndex = 2; break;
+		case 20: self.secondsToStartPlayerSegmentControl.selectedSegmentIndex = 3; break;
+		case 25: self.secondsToStartPlayerSegmentControl.selectedSegmentIndex = 4; break;
+		case 30: self.secondsToStartPlayerSegmentControl.selectedSegmentIndex = 5; break;
+		case 45: self.secondsToStartPlayerSegmentControl.selectedSegmentIndex = 6; break;
+		case 60: self.secondsToStartPlayerSegmentControl.selectedSegmentIndex = 7; break;
+		case 120: self.secondsToStartPlayerSegmentControl.selectedSegmentIndex = 8; break;
 		default: break;
 	}
 	
 	switch (settingsS.audioEngineBufferNumberOfSeconds) 
 	{
-		case 5: secondsToBufferSegmentControl.selectedSegmentIndex = 0; break;
-		case 10: secondsToBufferSegmentControl.selectedSegmentIndex = 1; break;
-		case 15: secondsToBufferSegmentControl.selectedSegmentIndex = 2; break;
-		case 20: secondsToBufferSegmentControl.selectedSegmentIndex = 3; break;
-		case 25: secondsToBufferSegmentControl.selectedSegmentIndex = 4; break;
-		case 30: secondsToBufferSegmentControl.selectedSegmentIndex = 5; break;
-		case 45: secondsToBufferSegmentControl.selectedSegmentIndex = 6; break;
-		case 60: secondsToBufferSegmentControl.selectedSegmentIndex = 7; break;
-		case 120: secondsToBufferSegmentControl.selectedSegmentIndex = 8; break;
+		case 5: self.secondsToBufferSegmentControl.selectedSegmentIndex = 0; break;
+		case 10: self.secondsToBufferSegmentControl.selectedSegmentIndex = 1; break;
+		case 15: self.secondsToBufferSegmentControl.selectedSegmentIndex = 2; break;
+		case 20: self.secondsToBufferSegmentControl.selectedSegmentIndex = 3; break;
+		case 25: self.secondsToBufferSegmentControl.selectedSegmentIndex = 4; break;
+		case 30: self.secondsToBufferSegmentControl.selectedSegmentIndex = 5; break;
+		case 45: self.secondsToBufferSegmentControl.selectedSegmentIndex = 6; break;
+		case 60: self.secondsToBufferSegmentControl.selectedSegmentIndex = 7; break;
+		case 120: self.secondsToBufferSegmentControl.selectedSegmentIndex = 8; break;
 		default: break;
 	}
 }
-
-/*- (void)viewWillAppear:(BOOL)animated
-{
-	if ([[appDelegateS.settingsDictionary objectForKey:@"manualOfflineModeSetting"] isEqualToString:@"YES"])
-		manualOfflineModeSwitch.on = YES;
-	else
-		manualOfflineModeSwitch.on = NO;
-}*/
 
 - (void)reloadTwitterUIElements
 {
 	if (socialS.twitterEngine)
 	{
-		twitterEnabledSwitch.enabled = YES;
+		self.twitterEnabledSwitch.enabled = YES;
 		//if ([[appDelegateS.settingsDictionary objectForKey:@"twitterEnabledSetting"] isEqualToString:@"YES"])
 		if (settingsS.isTwitterEnabled)
-			twitterEnabledSwitch.on = YES;
+			self.twitterEnabledSwitch.on = YES;
 		else
-			twitterEnabledSwitch.on = NO;
+			self.twitterEnabledSwitch.on = NO;
 		
-		twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signout.png"];
+		self.twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signout.png"];
 		
-		twitterStatusLabel.text = [NSString stringWithFormat:@"%@ signed in", [socialS.twitterEngine username]];
+		self.twitterStatusLabel.text = [NSString stringWithFormat:@"%@ signed in", [socialS.twitterEngine username]];
 	}
 	else
 	{
-		twitterEnabledSwitch.on = NO;
-		twitterEnabledSwitch.enabled = NO;
+		self.twitterEnabledSwitch.on = NO;
+		self.twitterEnabledSwitch.enabled = NO;
 		
-		twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signin.png"];
+		self.twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signin.png"];
 
-		twitterStatusLabel.text = @"Signed out";
+		self.twitterStatusLabel.text = @"Signed out";
 	}
 }
 
 - (void)cachingTypeToggle
 {
-	if (cachingTypeSegmentedControl.selectedSegmentIndex == 0)
+	if (self.cachingTypeSegmentedControl.selectedSegmentIndex == 0)
 	{
-		cacheSpaceLabel1.text = @"Minimum free space:";
-		//cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegateS.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
-		cacheSpaceLabel2.text = [NSString formatFileSize:settingsS.minFreeSpace];
-		//cacheSpaceSlider.value = [[appDelegateS.settingsDictionary objectForKey:@"minFreeSpace"] floatValue] / totalSpace;
-		cacheSpaceSlider.value = (float)settingsS.minFreeSpace / totalSpace;
+		self.cacheSpaceLabel1.text = @"Minimum free space:";
+		//self.cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegateS.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
+		self.cacheSpaceLabel2.text = [NSString formatFileSize:settingsS.minFreeSpace];
+		//self.cacheSpaceSlider.value = [[appDelegateS.settingsDictionary objectForKey:@"minFreeSpace"] floatValue] / totalSpace;
+		self.cacheSpaceSlider.value = (float)settingsS.minFreeSpace / self.totalSpace;
 	}
 	else if (cachingTypeSegmentedControl.selectedSegmentIndex == 1)
 	{
-		cacheSpaceLabel1.text = @"Maximum cache size:";
-		//cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegateS.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue]];
-		cacheSpaceLabel2.text = [NSString formatFileSize:settingsS.maxCacheSize];
-		//cacheSpaceSlider.value = [[appDelegateS.settingsDictionary objectForKey:@"maxCacheSize"] floatValue] / totalSpace;
-		cacheSpaceSlider.value = (float)settingsS.maxCacheSize / totalSpace;
+		self.cacheSpaceLabel1.text = @"Maximum cache size:";
+		//self.cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegateS.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue]];
+		self.cacheSpaceLabel2.text = [NSString formatFileSize:settingsS.maxCacheSize];
+		//self.cacheSpaceSlider.value = [[appDelegateS.settingsDictionary objectForKey:@"maxCacheSize"] floatValue] / totalSpace;
+		self.cacheSpaceSlider.value = (float)settingsS.maxCacheSize / self.totalSpace;
 	}
 }
 
@@ -263,34 +255,34 @@
 {
 	if ([[NSDate date] timeIntervalSinceDate:loadedTime] > 0.5)
 	{
-		if (sender == recoverSegmentedControl)
+		if (sender == self.recoverSegmentedControl)
 		{
-			settingsS.recoverSetting = recoverSegmentedControl.selectedSegmentIndex;
+			settingsS.recoverSetting = self.recoverSegmentedControl.selectedSegmentIndex;
 		}
-		else if (sender == maxBitrateWifiSegmentedControl)
+		else if (sender == self.maxBitrateWifiSegmentedControl)
 		{
-			settingsS.maxBitrateWifi = maxBitrateWifiSegmentedControl.selectedSegmentIndex;
+			settingsS.maxBitrateWifi = self.maxBitrateWifiSegmentedControl.selectedSegmentIndex;
 		}
-		else if (sender == maxBitrate3GSegmentedControl)
+		else if (sender == self.maxBitrate3GSegmentedControl)
 		{
-			settingsS.maxBitrate3G = maxBitrate3GSegmentedControl.selectedSegmentIndex;
+			settingsS.maxBitrate3G = self.maxBitrate3GSegmentedControl.selectedSegmentIndex;
 		}
-		else if (sender == cachingTypeSegmentedControl)
+		else if (sender == self.cachingTypeSegmentedControl)
 		{
-			settingsS.cachingType = cachingTypeSegmentedControl.selectedSegmentIndex;
+			settingsS.cachingType = self.cachingTypeSegmentedControl.selectedSegmentIndex;
 			[self cachingTypeToggle];
 		}
-		else if (sender == autoDeleteCacheTypeSegmentedControl)
+		else if (sender == self.autoDeleteCacheTypeSegmentedControl)
 		{
-			settingsS.autoDeleteCacheType = autoDeleteCacheTypeSegmentedControl.selectedSegmentIndex;
+			settingsS.autoDeleteCacheType = self.autoDeleteCacheTypeSegmentedControl.selectedSegmentIndex;
 		}
-		else if (sender == cacheSongCellColorSegmentedControl)
+		else if (sender == self.cacheSongCellColorSegmentedControl)
 		{
-			settingsS.cachedSongCellColorType = cacheSongCellColorSegmentedControl.selectedSegmentIndex;
+			settingsS.cachedSongCellColorType = self.cacheSongCellColorSegmentedControl.selectedSegmentIndex;
 		}
-		else if (sender == quickSkipSegmentControl)
+		else if (sender == self.quickSkipSegmentControl)
 		{
-			switch (quickSkipSegmentControl.selectedSegmentIndex) 
+			switch (self.quickSkipSegmentControl.selectedSegmentIndex) 
 			{
 				case 0: settingsS.quickSkipNumberOfSeconds = 5; break;
 				case 1: settingsS.quickSkipNumberOfSeconds = 15; break;
@@ -307,9 +299,9 @@
 			if (IS_IPAD())
 				[appDelegateS.ipadRootViewController.menuViewController.playerController quickSecondsSetLabels];
 		}
-		else if (sender == secondsToStartPlayerSegmentControl)
+		else if (sender == self.secondsToStartPlayerSegmentControl)
 		{
-			switch (secondsToStartPlayerSegmentControl.selectedSegmentIndex) 
+			switch (self.secondsToStartPlayerSegmentControl.selectedSegmentIndex) 
 			{
 				case 0: settingsS.audioEngineStartNumberOfSeconds = 5; break;
 				case 1: settingsS.audioEngineStartNumberOfSeconds = 10; break;
@@ -323,9 +315,9 @@
 				default: break;
 			}
 		}
-		else if (sender == secondsToBufferSegmentControl)
+		else if (sender == self.secondsToBufferSegmentControl)
 		{
-			switch (secondsToBufferSegmentControl.selectedSegmentIndex) 
+			switch (self.secondsToBufferSegmentControl.selectedSegmentIndex) 
 			{
 				case 0: settingsS.audioEngineBufferNumberOfSeconds = 5; break;
 				case 1: settingsS.audioEngineBufferNumberOfSeconds = 10; break;
@@ -344,63 +336,63 @@
 
 - (void)toggleCacheControlsVisibility
 {
-	if (enableSongCachingSwitch.on)
+	if (self.enableSongCachingSwitch.on)
 	{
-		enableNextSongCacheLabel.alpha = 1;
-		enableNextSongCacheSwitch.enabled = YES;
-		enableNextSongCacheSwitch.alpha = 1;
-		enableNextSongPartialCacheLabel.alpha = 1;
-		enableNextSongPartialCacheSwitch.enabled = YES;
-		enableNextSongPartialCacheSwitch.alpha = 1;
-		cachingTypeSegmentedControl.enabled = YES;
-		cachingTypeSegmentedControl.alpha = 1;
-		cacheSpaceLabel1.alpha = 1;
-		cacheSpaceLabel2.alpha = 1;
-		freeSpaceLabel.alpha = 1;
-		totalSpaceLabel.alpha = 1;
-		totalSpaceBackground.alpha = .7;
-		freeSpaceBackground.alpha = .7;
-		cacheSpaceSlider.enabled = YES;
-		cacheSpaceSlider.alpha = 1;
-		cacheSpaceDescLabel.alpha = 1;
+		self.enableNextSongCacheLabel.alpha = 1;
+		self.enableNextSongCacheSwitch.enabled = YES;
+		self.enableNextSongCacheSwitch.alpha = 1;
+		self.enableNextSongPartialCacheLabel.alpha = 1;
+		self.enableNextSongPartialCacheSwitch.enabled = YES;
+		self.enableNextSongPartialCacheSwitch.alpha = 1;
+		self.cachingTypeSegmentedControl.enabled = YES;
+		self.cachingTypeSegmentedControl.alpha = 1;
+		self.cacheSpaceLabel1.alpha = 1;
+		self.cacheSpaceLabel2.alpha = 1;
+		self.freeSpaceLabel.alpha = 1;
+		self.totalSpaceLabel.alpha = 1;
+		self.totalSpaceBackground.alpha = .7;
+		self.freeSpaceBackground.alpha = .7;
+		self.cacheSpaceSlider.enabled = YES;
+		self.cacheSpaceSlider.alpha = 1;
+		self.cacheSpaceDescLabel.alpha = 1;
 		
-		if (!enableNextSongCacheSwitch.on)
+		if (!self.enableNextSongCacheSwitch.on)
 		{
-			enableNextSongPartialCacheLabel.alpha = .5;
-			enableNextSongPartialCacheSwitch.enabled = NO;
-			enableNextSongPartialCacheSwitch.alpha = .5;
+			self.enableNextSongPartialCacheLabel.alpha = .5;
+			self.enableNextSongPartialCacheSwitch.enabled = NO;
+			self.enableNextSongPartialCacheSwitch.alpha = .5;
 		}
 	}
 	else
 	{
-		enableNextSongCacheLabel.alpha = .5;
-		enableNextSongCacheSwitch.enabled = NO;
-		enableNextSongCacheSwitch.alpha = .5;
-		enableNextSongPartialCacheLabel.alpha = .5;
-		enableNextSongPartialCacheSwitch.enabled = NO;
-		enableNextSongPartialCacheSwitch.alpha = .5;
-		cachingTypeSegmentedControl.enabled = NO;
-		cachingTypeSegmentedControl.alpha = .5;
-		cacheSpaceLabel1.alpha = .5;
-		cacheSpaceLabel2.alpha = .5;
-		freeSpaceLabel.alpha = .5;
-		totalSpaceLabel.alpha = .5;
-		totalSpaceBackground.alpha = .3;
-		freeSpaceBackground.alpha = .3;
-		cacheSpaceSlider.enabled = NO;
-		cacheSpaceSlider.alpha = .5;
-		cacheSpaceDescLabel.alpha = .5;
+		self.enableNextSongCacheLabel.alpha = .5;
+		self.enableNextSongCacheSwitch.enabled = NO;
+		self.enableNextSongCacheSwitch.alpha = .5;
+		self.enableNextSongPartialCacheLabel.alpha = .5;
+		self.enableNextSongPartialCacheSwitch.enabled = NO;
+		self.enableNextSongPartialCacheSwitch.alpha = .5;
+		self.cachingTypeSegmentedControl.enabled = NO;
+		self.cachingTypeSegmentedControl.alpha = .5;
+		self.cacheSpaceLabel1.alpha = .5;
+		self.cacheSpaceLabel2.alpha = .5;
+		self.freeSpaceLabel.alpha = .5;
+		self.totalSpaceLabel.alpha = .5;
+		self.totalSpaceBackground.alpha = .3;
+		self.freeSpaceBackground.alpha = .3;
+		self.cacheSpaceSlider.enabled = NO;
+		self.cacheSpaceSlider.alpha = .5;
+		self.cacheSpaceDescLabel.alpha = .5;
 	}
 }
 
 - (IBAction)switchAction:(id)sender
 {
-	if ([[NSDate date] timeIntervalSinceDate:loadedTime] > 0.5)
+	if ([[NSDate date] timeIntervalSinceDate:self.loadedTime] > 0.5)
 	{
-		if (sender == manualOfflineModeSwitch)
+		if (sender == self.manualOfflineModeSwitch)
 		{
-			settingsS.isForceOfflineMode = manualOfflineModeSwitch.on;
-			if (manualOfflineModeSwitch.on)
+			settingsS.isForceOfflineMode = self.manualOfflineModeSwitch.on;
+			if (self.manualOfflineModeSwitch.on)
 			{
 				[appDelegateS enterOfflineModeForce];
 			}
@@ -419,68 +411,68 @@
 				[(UINavigationController*)appDelegateS.currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
 			}
 		}
-		else if (sender == enableScrobblingSwitch)
+		else if (sender == self.enableScrobblingSwitch)
 		{
-			settingsS.isScrobbleEnabled = enableScrobblingSwitch.on;
+			settingsS.isScrobbleEnabled = self.enableScrobblingSwitch.on;
 		}
-		else if (sender == enableSongCachingSwitch)
+		else if (sender == self.enableSongCachingSwitch)
 		{
-			settingsS.isSongCachingEnabled = enableSongCachingSwitch.on;
+			settingsS.isSongCachingEnabled = self.enableSongCachingSwitch.on;
 			[self toggleCacheControlsVisibility];
 		}
-		else if (sender == enableNextSongCacheSwitch)
+		else if (sender == self.enableNextSongCacheSwitch)
 		{
-			settingsS.isNextSongCacheEnabled = enableNextSongCacheSwitch.on;
+			settingsS.isNextSongCacheEnabled = self.enableNextSongCacheSwitch.on;
 			[self toggleCacheControlsVisibility];
 		}
-		else if (sender == enableNextSongPartialCacheSwitch)
+		else if (sender == self.enableNextSongPartialCacheSwitch)
 		{
-			settingsS.isPartialCacheNextSong = enableNextSongPartialCacheSwitch.on;
+			settingsS.isPartialCacheNextSong = self.enableNextSongPartialCacheSwitch.on;
 		}
-		else if (sender == autoDeleteCacheSwitch)
+		else if (sender == self.autoDeleteCacheSwitch)
 		{
-			settingsS.isAutoDeleteCacheEnabled = autoDeleteCacheSwitch.on;
+			settingsS.isAutoDeleteCacheEnabled = self.autoDeleteCacheSwitch.on;
 		}
-		else if (sender == twitterEnabledSwitch)
+		else if (sender == self.twitterEnabledSwitch)
 		{
-			settingsS.isTwitterEnabled = twitterEnabledSwitch.on;
+			settingsS.isTwitterEnabled = self.twitterEnabledSwitch.on;
 		}
-		else if (sender == checkUpdatesSwitch)
+		else if (sender == self.checkUpdatesSwitch)
 		{
-			settingsS.isUpdateCheckEnabled = checkUpdatesSwitch.on;
+			settingsS.isUpdateCheckEnabled = self.checkUpdatesSwitch.on;
 		}
-		else if (sender == showLargeSongInfoSwitch)
+		else if (sender == self.showLargeSongInfoSwitch)
 		{
-			settingsS.isShowLargeSongInfoInPlayer = showLargeSongInfoSwitch.on;
+			settingsS.isShowLargeSongInfoInPlayer = self.showLargeSongInfoSwitch.on;
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_LargeSongInfoToggle];
 		}
-		else if (sender == enableLyricsSwitch)
+		else if (sender == self.enableLyricsSwitch)
 		{
-			settingsS.isLyricsEnabled = enableLyricsSwitch.on;
+			settingsS.isLyricsEnabled = self.enableLyricsSwitch.on;
 		}
-		else if (sender == enableCacheStatusSwitch)
+		else if (sender == self.enableCacheStatusSwitch)
 		{
-			settingsS.isCacheStatusEnabled = enableCacheStatusSwitch.on;
+			settingsS.isCacheStatusEnabled = self.enableCacheStatusSwitch.on;
 		}
-		else if (sender == enableSwipeSwitch)
+		else if (sender == self.enableSwipeSwitch)
 		{
-			settingsS.isSwipeEnabled = enableSwipeSwitch.on;
+			settingsS.isSwipeEnabled = self.enableSwipeSwitch.on;
 		}
-		else if (sender == enableTapAndHoldSwitch)
+		else if (sender == self.enableTapAndHoldSwitch)
 		{
-			settingsS.isTapAndHoldEnabled = enableTapAndHoldSwitch.on;
+			settingsS.isTapAndHoldEnabled = self.enableTapAndHoldSwitch.on;
 		}
-		else if (sender == autoReloadArtistSwitch)
+		else if (sender == self.autoReloadArtistSwitch)
 		{
-			settingsS.isAutoReloadArtistsEnabled = autoReloadArtistSwitch.on;
+			settingsS.isAutoReloadArtistsEnabled = self.autoReloadArtistSwitch.on;
 		}
-		else if (sender == disablePopupsSwitch)
+		else if (sender == self.disablePopupsSwitch)
 		{
-			settingsS.isPopupsEnabled = !disablePopupsSwitch.on;
+			settingsS.isPopupsEnabled = !self.disablePopupsSwitch.on;
 		}
-		else if (sender == enableSongsTabSwitch)
+		else if (sender == self.enableSongsTabSwitch)
 		{
-			if (enableSongsTabSwitch.on)
+			if (self.enableSongsTabSwitch.on)
 			{
 				settingsS.isSongsTabEnabled = YES;
 				
@@ -516,18 +508,18 @@
 				databaseS.genresDbQueue = nil;
 			}
 		}
-		else if (sender == disableRotationSwitch)
+		else if (sender == self.disableRotationSwitch)
 		{
-			settingsS.isRotationLockEnabled = disableRotationSwitch.on;
+			settingsS.isRotationLockEnabled = self.disableRotationSwitch.on;
 		}
-		else if (sender == disableScreenSleepSwitch)
+		else if (sender == self.disableScreenSleepSwitch)
 		{
-			settingsS.isScreenSleepEnabled = !disableScreenSleepSwitch.on;
-			[UIApplication sharedApplication].idleTimerDisabled = disableScreenSleepSwitch.on;
+			settingsS.isScreenSleepEnabled = !self.disableScreenSleepSwitch.on;
+			[UIApplication sharedApplication].idleTimerDisabled = self.disableScreenSleepSwitch.on;
 		}
-		else if (sender == enableBasicAuthSwitch)
+		else if (sender == self.enableBasicAuthSwitch)
 		{
-			settingsS.isBasicAuthEnabled = enableBasicAuthSwitch.on;
+			settingsS.isBasicAuthEnabled = self.enableBasicAuthSwitch.on;
 		}
 	}
 }
@@ -584,52 +576,52 @@
 
 - (void)updateCacheSpaceSlider
 {
-	cacheSpaceSlider.value = ((double)[cacheSpaceLabel2.text fileSizeFromFormat] / (double)totalSpace);
+	self.cacheSpaceSlider.value = ((double)[self.cacheSpaceLabel2.text fileSizeFromFormat] / (double)self.totalSpace);
 }
 
 - (IBAction)updateMinFreeSpaceLabel
 {
-	cacheSpaceLabel2.text = [NSString formatFileSize:(unsigned long long int) (cacheSpaceSlider.value * totalSpace)];
+	self.cacheSpaceLabel2.text = [NSString formatFileSize:(unsigned long long int) (self.cacheSpaceSlider.value * self.totalSpace)];
 }
 
 - (IBAction)updateMinFreeSpaceSetting
 {
-	if (cachingTypeSegmentedControl.selectedSegmentIndex == 0)
+	if (self.cachingTypeSegmentedControl.selectedSegmentIndex == 0)
 	{
 		// Check if the user is trying to assing a higher min free space than is available space - 50MB
-		if (cacheSpaceSlider.value * totalSpace > freeSpace - 52428800)
+		if (self.cacheSpaceSlider.value * self.totalSpace > self.freeSpace - 52428800)
 		{
-			settingsS.minFreeSpace = freeSpace - 52428800;
-			cacheSpaceSlider.value = ((float)settingsS.minFreeSpace / (float)totalSpace); // Leave 50MB space
+			settingsS.minFreeSpace = self.freeSpace - 52428800;
+			self.cacheSpaceSlider.value = ((float)settingsS.minFreeSpace / (float)self.totalSpace); // Leave 50MB space
 		}
-		else if (cacheSpaceSlider.value * totalSpace < 52428800)
+		else if (self.cacheSpaceSlider.value * self.totalSpace < 52428800)
 		{
 			settingsS.minFreeSpace = 52428800;
-			cacheSpaceSlider.value = ((float)settingsS.minFreeSpace / (float)totalSpace); // Leave 50MB space
+			self.cacheSpaceSlider.value = ((float)settingsS.minFreeSpace / (float)self.totalSpace); // Leave 50MB space
 		}
 		else 
 		{
-			settingsS.minFreeSpace = (unsigned long long int) (cacheSpaceSlider.value * (float)totalSpace);
+			settingsS.minFreeSpace = (unsigned long long int) (self.cacheSpaceSlider.value * (float)self.totalSpace);
 		}
 		//cacheSpaceLabel2.text = [NSString formatFileSize:settingsS.minFreeSpace];
 	}
-	else if (cachingTypeSegmentedControl.selectedSegmentIndex == 1)
+	else if (self.cachingTypeSegmentedControl.selectedSegmentIndex == 1)
 	{
 		
 		// Check if the user is trying to assign a larger max cache size than there is available space - 50MB
-		if (cacheSpaceSlider.value * totalSpace > freeSpace - 52428800)
+		if (self.cacheSpaceSlider.value * self.totalSpace > self.freeSpace - 52428800)
 		{
-			settingsS.maxCacheSize = freeSpace - 52428800;
-			cacheSpaceSlider.value = ((float)settingsS.maxCacheSize / (float)totalSpace); // Leave 50MB space
+			settingsS.maxCacheSize = self.freeSpace - 52428800;
+			self.cacheSpaceSlider.value = ((float)settingsS.maxCacheSize / (float)self.totalSpace); // Leave 50MB space
 		}
 		else if (cacheSpaceSlider.value * totalSpace < 52428800)
 		{
 			settingsS.maxCacheSize = 52428800;
-			cacheSpaceSlider.value = ((float)settingsS.maxCacheSize / (float)totalSpace); // Leave 50MB space
+			self.cacheSpaceSlider.value = ((float)settingsS.maxCacheSize / (float)self.totalSpace); // Leave 50MB space
 		}
 		else
 		{
-			settingsS.maxCacheSize = (unsigned long long int) (cacheSpaceSlider.value * totalSpace);
+			settingsS.maxCacheSize = (unsigned long long int) (self.cacheSpaceSlider.value * self.totalSpace);
 		}
 		//cacheSpaceLabel2.text = [NSString formatFileSize:settingsS.maxCacheSize];
 	}
@@ -638,8 +630,8 @@
 
 - (IBAction)revertMinFreeSpaceSlider
 {
-	cacheSpaceLabel2.text = [NSString formatFileSize:settingsS.minFreeSpace];
-	cacheSpaceSlider.value = (float)settingsS.minFreeSpace / totalSpace;
+	self.cacheSpaceLabel2.text = [NSString formatFileSize:settingsS.minFreeSpace];
+	self.cacheSpaceSlider.value = (float)settingsS.minFreeSpace / self.totalSpace;
 }
 
 - (IBAction)twitterButtonAction
@@ -667,13 +659,13 @@
 
 - (IBAction)updateScrobblePercentLabel
 {
-	NSUInteger percentInt = scrobblePercentSlider.value * 100;
-	scrobblePercentLabel.text = [NSString stringWithFormat:@"%i", percentInt];
+	NSUInteger percentInt = self.scrobblePercentSlider.value * 100;
+	self.scrobblePercentLabel.text = [NSString stringWithFormat:@"%i", percentInt];
 }
 
 - (IBAction)updateScrobblePercentSetting;
 {
-	settingsS.scrobblePercent = scrobblePercentSlider.value;
+	settingsS.scrobblePercent = self.scrobblePercentSlider.value;
 }
 
 - (void)didReceiveMemoryWarning 

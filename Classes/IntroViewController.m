@@ -14,6 +14,7 @@
 #import "NSNotificationCenter+MainThread.h"
 
 @implementation IntroViewController
+@synthesize introVideo, testServer, ownServer, sunkenLogo;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -61,7 +62,7 @@
 
 - (IBAction)buttonPress:(id)sender
 {
-	if (sender == introVideo)
+	if (sender == self.introVideo)
 	{
 		NSURL *introUrl = nil;
 		if (IS_IPAD())
@@ -88,11 +89,11 @@
 			[moviePlayer play];
 		}	
 	}
-	else if (sender == testServer)
+	else if (sender == self.testServer)
 	{
 		[self dismissModalViewControllerAnimated:YES];
 	}
-	else if (sender == ownServer)
+	else if (sender == self.ownServer)
 	{
 		[self dismissModalViewControllerAnimated:NO];
 		

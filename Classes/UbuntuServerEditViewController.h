@@ -10,12 +10,11 @@
 @class ServerTypeViewController;
 
 @interface UbuntuServerEditViewController : UIViewController 
-{
-	IBOutlet UITextField *usernameField;
-	IBOutlet UITextField *passwordField;
-	IBOutlet UIButton *cancelButton;
-	IBOutlet UIButton *saveButton;	
-}
+
+@property (nonatomic, strong) IBOutlet UITextField *usernameField;
+@property (nonatomic, strong) IBOutlet UITextField *passwordField;
+@property (nonatomic, strong) IBOutlet UIButton *cancelButton;
+@property (nonatomic, strong) IBOutlet UIButton *saveButton;	
 
 @property (unsafe_unretained) ServerTypeViewController *parentController;
 

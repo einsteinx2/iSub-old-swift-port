@@ -10,13 +10,9 @@
 @class EGORefreshTableHeaderView, SUSServerPlaylist;
 
 @interface PlaylistSongsViewController : UITableViewController
-{
 
-	EGORefreshTableHeaderView *refreshHeaderView;
-	BOOL _reloading;
-}
-
-@property(assign,getter=isReloading) BOOL reloading;
+@property (strong) EGORefreshTableHeaderView *refreshHeaderView;
+@property(nonatomic) BOOL reloading;
 
 @property (copy) NSString *md5;
 @property NSUInteger playlistCount;
