@@ -12,6 +12,8 @@
 @property (nonatomic, strong) IBOutlet UIButton *ubuntuButton;
 @property (nonatomic, strong) IBOutlet UIButton *cancelButton;
 
+@property (nonatomic, strong) UIViewController *serverEditViewController;
+
 - (IBAction) buttonAction:(id)sender;
 
 @end

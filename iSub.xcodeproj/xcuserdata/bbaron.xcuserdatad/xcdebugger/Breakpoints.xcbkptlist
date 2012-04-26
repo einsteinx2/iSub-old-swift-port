@@ -4765,8 +4765,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "48"
          endingLineNumber = "48"
-         landmarkName = "-nowPlayingImageBlack"
-         landmarkType = "5">
+         landmarkName = "@implementation CustomUITableViewCell"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"

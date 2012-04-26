@@ -13,7 +13,7 @@
 #import "SavedSettings.h"
 
 @implementation ServerTypeViewController
-@synthesize subsonicButton, ubuntuButton, cancelButton;
+@synthesize subsonicButton, ubuntuButton, cancelButton, serverEditViewController;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -34,6 +34,7 @@
 		subsonicServerEditViewController.view.frame = self.view.bounds;
 		subsonicServerEditViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		subView = subsonicServerEditViewController.view;
+		self.serverEditViewController = subsonicServerEditViewController;
 	}
 	else if (sender == self.ubuntuButton)
 	{
@@ -42,6 +43,7 @@
 		ubuntuServerEditViewController.view.frame = self.view.bounds;
 		ubuntuServerEditViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		[self.view addSubview:ubuntuServerEditViewController.view];
+		self.serverEditViewController = ubuntuServerEditViewController;
 		subView = ubuntuServerEditViewController.view;
 	}
 	else if (sender == self.cancelButton)
@@ -58,8 +60,5 @@
 	
 	[UIView commitAnimations];
 }
-
-
-
 
 @end
