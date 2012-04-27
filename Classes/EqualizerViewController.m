@@ -20,9 +20,8 @@
 #import "UIApplication+StatusBar.h"
 #import "SnappySlider.h"
 #import "NWPickerView.h"
-#import "NSObject+GCDExtention.h"
 #import "NSNotificationCenter+MainThread.h"
-//#import "GCDTimer.h"
+#import "GCDWrapper.h"
 
 @implementation EqualizerViewController
 @synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath, gainBoostLabel, isPresetPickerShowing, controlsContainer, gainBoostAmountLabel, lastGainValue, wasVisualizerOffBeforeRotation, swipeDetectorLeft, swipeDetectorRight, landscapeButtonsHolder;//, hidePickerTimer; //drawTimer;
@@ -125,7 +124,7 @@
 {
 	[presetPicker resignFirstResponder];
 	//self.hidePickerTimer = nil;
-	[NSObject gcdCancelTimerBlockWithName:hidePickerTimer];
+	[GCDWrapper cancelTimerBlockWithName:hidePickerTimer];
 }
 
 - (void)createOverlay
@@ -180,7 +179,7 @@
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[[NSNotificationCenter defaultCenter] removeObserver:presetPicker];
-	[NSObject gcdCancelTimerBlockWithName:hidePickerTimer];
+	[GCDWrapper cancelTimerBlockWithName:hidePickerTimer];
 	//[hidePickerTimer release]; hidePickerTimer = nil;
 	
 	
@@ -241,7 +240,7 @@
 
 - (void)pickerWillHide
 {
-	[NSObject gcdCancelTimerBlockWithName:hidePickerTimer];
+	[GCDWrapper cancelTimerBlockWithName:hidePickerTimer];
 	
 	controlsContainer.y += 60;
 	controlsContainer.height -= 60;
@@ -446,7 +445,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-	[NSObject gcdCancelTimerBlockWithName:hidePickerTimer];
+	[GCDWrapper cancelTimerBlockWithName:hidePickerTimer];
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_BassEffectPresetLoaded object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIPickerViewWillShownNotification object:nil];

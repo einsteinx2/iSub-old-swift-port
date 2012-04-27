@@ -422,6 +422,18 @@
 		537D916A151315D300BFEE30 /* libFlurryAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 537D9169151315D300BFEE30 /* libFlurryAnalytics.a */; };
 		537D916B151315D300BFEE30 /* libFlurryAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 537D9169151315D300BFEE30 /* libFlurryAnalytics.a */; };
 		537D916C151315D300BFEE30 /* libFlurryAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 537D9169151315D300BFEE30 /* libFlurryAnalytics.a */; };
+		537D954B1549DC9700EB043D /* GCDWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 537D954A1549DC9700EB043D /* GCDWrapper.m */; };
+		537D954C1549DC9700EB043D /* GCDWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 537D954A1549DC9700EB043D /* GCDWrapper.m */; };
+		537D954D1549DC9700EB043D /* GCDWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 537D954A1549DC9700EB043D /* GCDWrapper.m */; };
+		537D95511549ECEC00EB043D /* libbass_ape.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 537D954E1549ECEC00EB043D /* libbass_ape.a */; };
+		537D95521549ECEC00EB043D /* libbass_ape.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 537D954E1549ECEC00EB043D /* libbass_ape.a */; };
+		537D95531549ECEC00EB043D /* libbass_ape.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 537D954E1549ECEC00EB043D /* libbass_ape.a */; };
+		537D95541549ECEC00EB043D /* libbass_mpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 537D954F1549ECEC00EB043D /* libbass_mpc.a */; };
+		537D95551549ECEC00EB043D /* libbass_mpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 537D954F1549ECEC00EB043D /* libbass_mpc.a */; };
+		537D95561549ECEC00EB043D /* libbass_mpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 537D954F1549ECEC00EB043D /* libbass_mpc.a */; };
+		537D95571549ECEC00EB043D /* libbasswv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 537D95501549ECEC00EB043D /* libbasswv.a */; };
+		537D95581549ECEC00EB043D /* libbasswv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 537D95501549ECEC00EB043D /* libbasswv.a */; };
+		537D95591549ECEC00EB043D /* libbasswv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 537D95501549ECEC00EB043D /* libbasswv.a */; };
 		537DE2D9113F008C00875852 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DE2D8113F008C00875852 /* CoreFoundation.framework */; };
 		537E9A0A14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */; };
 		537E9A0B14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */; };
@@ -1572,9 +1584,6 @@
 		53DE59A314F1A7B000206529 /* controller-forw30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DE599314F1A7B000206529 /* controller-forw30@2x.png */; };
 		53DE59A414F1A7B000206529 /* controller-forw30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DE599314F1A7B000206529 /* controller-forw30@2x.png */; };
 		53DE59A514F1A7B000206529 /* controller-forw30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DE599314F1A7B000206529 /* controller-forw30@2x.png */; };
-		53DF2FB915153023005160C5 /* NSObject+GCDExtention.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DF2FB815153023005160C5 /* NSObject+GCDExtention.m */; };
-		53DF2FBA15153023005160C5 /* NSObject+GCDExtention.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DF2FB815153023005160C5 /* NSObject+GCDExtention.m */; };
-		53DF2FBB15153023005160C5 /* NSObject+GCDExtention.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DF2FB815153023005160C5 /* NSObject+GCDExtention.m */; };
 		53DF310711D3EE26007552A4 /* GenresGenreUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DF310611D3EE26007552A4 /* GenresGenreUITableViewCell.m */; };
 		53DFB307148C27080066FF94 /* downArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DFB300148C27080066FF94 /* downArrow.png */; };
 		53DFB308148C27080066FF94 /* downArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DFB300148C27080066FF94 /* downArrow.png */; };
@@ -1845,9 +1854,9 @@
 		533A2D80113C963300B3A376 /* controller-pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-pause.png"; path = "Images/Player Icons/controller-pause.png"; sourceTree = "<group>"; };
 		533A2D81113C963300B3A376 /* controller-play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-play.png"; path = "Images/Player Icons/controller-play.png"; sourceTree = "<group>"; };
 		533A2D82113C963300B3A376 /* controller-previous.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-previous.png"; path = "Images/Player Icons/controller-previous.png"; sourceTree = "<group>"; };
-		53400AA01496856600165581 /* libbassmix.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbassmix.a; sourceTree = "<group>"; };
-		53400AA41496857400165581 /* libbassflac.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbassflac.a; sourceTree = "<group>"; };
-		53400AA81496858600165581 /* libbass_fx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbass_fx.a; sourceTree = "<group>"; };
+		53400AA01496856600165581 /* libbassmix.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbassmix.a; path = ../libbassmix.a; sourceTree = "<group>"; };
+		53400AA41496857400165581 /* libbassflac.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbassflac.a; path = ../libbassflac.a; sourceTree = "<group>"; };
+		53400AA81496858600165581 /* libbass_fx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbass_fx.a; path = ../libbass_fx.a; sourceTree = "<group>"; };
 		53404FE011E9487C004AEC41 /* controller-next@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-next@2x.png"; path = "Images/Player Icons/controller-next@2x.png"; sourceTree = "<group>"; };
 		53404FE211E9488A004AEC41 /* controller-pause@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-pause@2x.png"; path = "Images/Player Icons/controller-pause@2x.png"; sourceTree = "<group>"; };
 		53404FE311E9488A004AEC41 /* controller-play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-play@2x.png"; path = "Images/Player Icons/controller-play@2x.png"; sourceTree = "<group>"; };
@@ -1964,7 +1973,7 @@
 		53614AC8116432DA0088ABC0 /* ServerListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerListViewController.m; sourceTree = "<group>"; };
 		53614AC9116432DA0088ABC0 /* ServerListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ServerListViewController.xib; sourceTree = "<group>"; };
 		53614BD7116467420088ABC0 /* AllSongsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AllSongsViewController.xib; sourceTree = "<group>"; };
-		536451E714F6FF6E000FBD85 /* libbass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbass.a; sourceTree = "<group>"; };
+		536451E714F6FF6E000FBD85 /* libbass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbass.a; path = ../libbass.a; sourceTree = "<group>"; };
 		5365857E1478920B00FE57A5 /* EqualizerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EqualizerViewController.h; sourceTree = "<group>"; };
 		5365857F1478920B00FE57A5 /* EqualizerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EqualizerViewController.m; sourceTree = "<group>"; };
 		536585801478920D00FE57A5 /* EqualizerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EqualizerViewController.xib; sourceTree = "<group>"; };
@@ -2016,6 +2025,14 @@
 		537A466F14783F3E004591C9 /* ISMSNotificationNames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSNotificationNames.h; sourceTree = "<group>"; };
 		537D9168151315D300BFEE30 /* FlurryAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlurryAnalytics.h; sourceTree = "<group>"; };
 		537D9169151315D300BFEE30 /* libFlurryAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFlurryAnalytics.a; sourceTree = "<group>"; };
+		537D95491549DC9700EB043D /* GCDWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDWrapper.h; sourceTree = "<group>"; };
+		537D954A1549DC9700EB043D /* GCDWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDWrapper.m; sourceTree = "<group>"; };
+		537D954E1549ECEC00EB043D /* libbass_ape.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbass_ape.a; path = ../libbass_ape.a; sourceTree = "<group>"; };
+		537D954F1549ECEC00EB043D /* libbass_mpc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbass_mpc.a; path = ../libbass_mpc.a; sourceTree = "<group>"; };
+		537D95501549ECEC00EB043D /* libbasswv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbasswv.a; path = ../libbasswv.a; sourceTree = "<group>"; };
+		537D955B154A223B00EB043D /* basswv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = basswv.h; sourceTree = "<group>"; };
+		537D955C154A225F00EB043D /* bass_ape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bass_ape.h; sourceTree = "<group>"; };
+		537D955D154A228700EB043D /* bass_mpc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bass_mpc.h; sourceTree = "<group>"; };
 		537DE2D8113F008C00875852 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		537E9A0814F323EE006CB0BC /* UIViewController+PushViewControllerCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+PushViewControllerCustom.h"; sourceTree = "<group>"; };
 		537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+PushViewControllerCustom.m"; sourceTree = "<group>"; };
@@ -2405,8 +2422,6 @@
 		53DE599114F1A7B000206529 /* controller-extras-on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-extras-on@2x.png"; path = "Images/Player Icons/controller-extras-on@2x.png"; sourceTree = "<group>"; };
 		53DE599214F1A7B000206529 /* controller-forw30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-forw30.png"; path = "Images/Player Icons/controller-forw30.png"; sourceTree = "<group>"; };
 		53DE599314F1A7B000206529 /* controller-forw30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-forw30@2x.png"; path = "Images/Player Icons/controller-forw30@2x.png"; sourceTree = "<group>"; };
-		53DF2FB715153023005160C5 /* NSObject+GCDExtention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+GCDExtention.h"; sourceTree = "<group>"; };
-		53DF2FB815153023005160C5 /* NSObject+GCDExtention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+GCDExtention.m"; sourceTree = "<group>"; };
 		53DF310511D3EE26007552A4 /* GenresGenreUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenresGenreUITableViewCell.h; sourceTree = "<group>"; };
 		53DF310611D3EE26007552A4 /* GenresGenreUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenresGenreUITableViewCell.m; sourceTree = "<group>"; };
 		53DFB300148C27080066FF94 /* downArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = downArrow.png; sourceTree = "<group>"; };
@@ -2533,6 +2548,9 @@
 				537D916A151315D300BFEE30 /* libFlurryAnalytics.a in Frameworks */,
 				53A7E4FD1516DB1D002DA214 /* libOAuth.a in Frameworks */,
 				532661591521930E00DE39C1 /* CrashReporter.framework in Frameworks */,
+				537D95511549ECEC00EB043D /* libbass_ape.a in Frameworks */,
+				537D95541549ECEC00EB043D /* libbass_mpc.a in Frameworks */,
+				537D95571549ECEC00EB043D /* libbasswv.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2567,6 +2585,9 @@
 				537D916C151315D300BFEE30 /* libFlurryAnalytics.a in Frameworks */,
 				53A7E4FF1516DB1D002DA214 /* libOAuth.a in Frameworks */,
 				5326615B1521930E00DE39C1 /* CrashReporter.framework in Frameworks */,
+				537D95531549ECEC00EB043D /* libbass_ape.a in Frameworks */,
+				537D95561549ECEC00EB043D /* libbass_mpc.a in Frameworks */,
+				537D95591549ECEC00EB043D /* libbasswv.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2601,6 +2622,9 @@
 				537D916B151315D300BFEE30 /* libFlurryAnalytics.a in Frameworks */,
 				53A7E4FE1516DB1D002DA214 /* libOAuth.a in Frameworks */,
 				5326615A1521930E00DE39C1 /* CrashReporter.framework in Frameworks */,
+				537D95521549ECEC00EB043D /* libbass_ape.a in Frameworks */,
+				537D95551549ECEC00EB043D /* libbass_mpc.a in Frameworks */,
+				537D95581549ECEC00EB043D /* libbasswv.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2703,10 +2727,6 @@
 				536AD1D211EA628200387CB0 /* libxml2.dylib */,
 				53EB4AA51405FE1B00CBA075 /* libz.dylib */,
 				5382F65614856F3C001C14C8 /* libSystem.dylib */,
-				53400AA01496856600165581 /* libbassmix.a */,
-				53400AA41496857400165581 /* libbassflac.a */,
-				53400AA81496858600165581 /* libbass_fx.a */,
-				536451E714F6FF6E000FBD85 /* libbass.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -3013,6 +3033,7 @@
 		535366D914CB55AC00954448 /* Audio Engine */ = {
 			isa = PBXGroup;
 			children = (
+				537D955A154A21F700EB043D /* BASS 2.4 */,
 				53B38BD71474C95100CD8A99 /* AudioEngine.h */,
 				53B38BD81474C95200CD8A99 /* AudioEngine.m */,
 				536585A51478BF2500FE57A5 /* BassParamEqValue.h */,
@@ -3021,10 +3042,6 @@
 				536585AB1478C20800FE57A5 /* BassEffectHandle.m */,
 				53B6F4D314C645F2000ED8F5 /* BassUserInfo.h */,
 				53B6F4D414C645F2000ED8F5 /* BassUserInfo.m */,
-				53B38BE01474CA0F00CD8A99 /* bass.h */,
-				539A012414773CEA00754061 /* bass_fx.h */,
-				539A012514773D3800754061 /* bassmix.h */,
-				53C16ED5149300C6002498A0 /* bassflac.h */,
 				5347A1A8148C3857000288D8 /* BassEffectDAO.h */,
 				5347A1A9148C3857000288D8 /* BassEffectDAO.m */,
 				5347A1B2148C463A000288D8 /* BassEffectValue.h */,
@@ -3119,6 +3136,27 @@
 			);
 			path = FlurryAnalytics;
 			sourceTree = SOURCE_ROOT;
+		};
+		537D955A154A21F700EB043D /* BASS 2.4 */ = {
+			isa = PBXGroup;
+			children = (
+				53B38BE01474CA0F00CD8A99 /* bass.h */,
+				539A012414773CEA00754061 /* bass_fx.h */,
+				539A012514773D3800754061 /* bassmix.h */,
+				53C16ED5149300C6002498A0 /* bassflac.h */,
+				537D955B154A223B00EB043D /* basswv.h */,
+				537D955C154A225F00EB043D /* bass_ape.h */,
+				537D955D154A228700EB043D /* bass_mpc.h */,
+				53400AA01496856600165581 /* libbassmix.a */,
+				53400AA41496857400165581 /* libbassflac.a */,
+				53400AA81496858600165581 /* libbass_fx.a */,
+				536451E714F6FF6E000FBD85 /* libbass.a */,
+				537D954E1549ECEC00EB043D /* libbass_ape.a */,
+				537D954F1549ECEC00EB043D /* libbass_mpc.a */,
+				537D95501549ECEC00EB043D /* libbasswv.a */,
+			);
+			name = "BASS 2.4";
+			sourceTree = "<group>";
 		};
 		5382A81812D82CE8005A3D1A /* Categories */ = {
 			isa = PBXGroup;
@@ -3288,10 +3326,10 @@
 				53A45493133D710C00741030 /* HttpIndexPage.m */,
 				53EC1804146760E000601C2D /* SUSServerPlaylist.h */,
 				53EC1805146760E000601C2D /* SUSServerPlaylist.m */,
-				53DF2FB715153023005160C5 /* NSObject+GCDExtention.h */,
-				53DF2FB815153023005160C5 /* NSObject+GCDExtention.m */,
 				53A1705F152A7BC200822521 /* GCDTimer.h */,
 				53A17060152A7BC200822521 /* GCDTimer.m */,
+				537D95491549DC9700EB043D /* GCDWrapper.h */,
+				537D954A1549DC9700EB043D /* GCDWrapper.m */,
 			);
 			name = "Custom Objects";
 			sourceTree = "<group>";
@@ -5157,7 +5195,6 @@
 				53733C7514FC6075001D8104 /* NSString+Clean.m in Sources */,
 				53733C8114FDBD62001D8104 /* CALayer+ImageFromLayer.m in Sources */,
 				53E6093A150C4E5300FD86E6 /* UIViewController+IsVisible.m in Sources */,
-				53DF2FB915153023005160C5 /* NSObject+GCDExtention.m in Sources */,
 				5326E0751515CEC600B73E61 /* SnappySlider.m in Sources */,
 				53A7E5001516DB1D002DA214 /* MGTwitterEngine.m in Sources */,
 				53A7E5031516DB1D002DA214 /* MGTwitterHTTPURLConnection.m in Sources */,
@@ -5197,6 +5234,7 @@
 				5388461A1545F2960074080E /* ISMSNetworkIndicator.m in Sources */,
 				5388462315465E6A0074080E /* CALayer+SublayerWithName.m in Sources */,
 				538846281546638F0074080E /* UITableView+Shadows.m in Sources */,
+				537D954B1549DC9700EB043D /* GCDWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5395,7 +5433,6 @@
 				53733C7714FC6075001D8104 /* NSString+Clean.m in Sources */,
 				53733C8314FDBD62001D8104 /* CALayer+ImageFromLayer.m in Sources */,
 				53E6093C150C4E5300FD86E6 /* UIViewController+IsVisible.m in Sources */,
-				53DF2FBB15153023005160C5 /* NSObject+GCDExtention.m in Sources */,
 				5326E0771515CEC600B73E61 /* SnappySlider.m in Sources */,
 				53A7E5021516DB1D002DA214 /* MGTwitterEngine.m in Sources */,
 				53A7E5051516DB1D002DA214 /* MGTwitterHTTPURLConnection.m in Sources */,
@@ -5435,6 +5472,7 @@
 				5388461C1545F2960074080E /* ISMSNetworkIndicator.m in Sources */,
 				5388462515465E6A0074080E /* CALayer+SublayerWithName.m in Sources */,
 				5388462A1546638F0074080E /* UITableView+Shadows.m in Sources */,
+				537D954D1549DC9700EB043D /* GCDWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5633,7 +5671,6 @@
 				53733C7614FC6075001D8104 /* NSString+Clean.m in Sources */,
 				53733C8214FDBD62001D8104 /* CALayer+ImageFromLayer.m in Sources */,
 				53E6093B150C4E5300FD86E6 /* UIViewController+IsVisible.m in Sources */,
-				53DF2FBA15153023005160C5 /* NSObject+GCDExtention.m in Sources */,
 				5326E0761515CEC600B73E61 /* SnappySlider.m in Sources */,
 				53A7E5011516DB1D002DA214 /* MGTwitterEngine.m in Sources */,
 				53A7E5041516DB1D002DA214 /* MGTwitterHTTPURLConnection.m in Sources */,
@@ -5673,6 +5710,7 @@
 				5388461B1545F2960074080E /* ISMSNetworkIndicator.m in Sources */,
 				5388462415465E6A0074080E /* CALayer+SublayerWithName.m in Sources */,
 				538846291546638F0074080E /* UITableView+Shadows.m in Sources */,
+				537D954C1549DC9700EB043D /* GCDWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

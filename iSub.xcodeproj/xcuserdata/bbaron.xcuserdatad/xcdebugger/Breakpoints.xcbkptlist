@@ -425,11 +425,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "356933865.545359"
+         timestampString = "357166481.925238"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1675"
-         endingLineNumber = "1675"
+         startingLineNumber = "1671"
+         endingLineNumber = "1671"
          landmarkName = "-setCurrentStreamTempo:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -439,67 +439,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "356933865.545359"
+         timestampString = "357166481.925238"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1686"
-         endingLineNumber = "1686"
-         landmarkName = "-nextStream"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Classes/AudioEngine.m"
-         timestampString = "356933865.545359"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1688"
-         endingLineNumber = "1688"
-         landmarkName = "-nextStream"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Classes/AudioEngine.m"
-         timestampString = "356933865.545359"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1693"
-         endingLineNumber = "1693"
-         landmarkName = "-setNextStream:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Classes/AudioEngine.m"
-         timestampString = "356933865.545359"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1676"
-         endingLineNumber = "1676"
-         landmarkName = "@implementation AudioEngine"
-         landmarkType = "3">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Classes/AudioEngine.m"
-         timestampString = "356933865.545359"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1680"
-         endingLineNumber = "1680"
+         startingLineNumber = "1682"
+         endingLineNumber = "1682"
          landmarkName = "-currentReadingStream"
          landmarkType = "5">
       </FileBreakpoint>
@@ -509,11 +453,67 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "356933865.545359"
+         timestampString = "357166481.925238"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "363"
-         endingLineNumber = "363"
+         startingLineNumber = "1684"
+         endingLineNumber = "1684"
+         landmarkName = "-nextStream"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/AudioEngine.m"
+         timestampString = "357166481.925238"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "1689"
+         endingLineNumber = "1689"
+         landmarkName = "-nextStream"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/AudioEngine.m"
+         timestampString = "357166481.925238"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "1672"
+         endingLineNumber = "1672"
+         landmarkName = "-setCurrentStreamTempo:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/AudioEngine.m"
+         timestampString = "357166481.925238"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "1676"
+         endingLineNumber = "1676"
+         landmarkName = "-currentReadingStream"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Classes/AudioEngine.m"
+         timestampString = "357165693.404864"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "353"
+         endingLineNumber = "353"
          landmarkName = "MyFileSeekProc()"
          landmarkType = "7">
       </FileBreakpoint>
@@ -1307,11 +1307,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "356933865.545359"
+         timestampString = "357165693.404864"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "279"
-         endingLineNumber = "279"
+         startingLineNumber = "269"
+         endingLineNumber = "269"
          landmarkName = "MyFileCloseProc()"
          landmarkType = "7">
       </FileBreakpoint>
@@ -1363,11 +1363,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "356933865.545359"
+         timestampString = "357166481.925238"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1347"
-         endingLineNumber = "1347"
+         startingLineNumber = "1343"
+         endingLineNumber = "1343"
          landmarkName = "-prepareFileStream1"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5051,8 +5051,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "540"
          endingLineNumber = "540"
-         landmarkName = "-resetFolderCacheAction"
-         landmarkType = "5">
+         landmarkName = "@implementation SettingsTabViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -5064,19 +5064,19 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "540"
          endingLineNumber = "540"
-         landmarkName = "-resetFolderCacheAction"
-         landmarkType = "5">
+         landmarkName = "@implementation SettingsTabViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "356933865.545359"
+         timestampString = "357165693.404864"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "347"
-         endingLineNumber = "347"
+         startingLineNumber = "337"
+         endingLineNumber = "337"
          landmarkName = "MyFileReadProc()"
          landmarkType = "7">
       </FileBreakpoint>
@@ -5261,6 +5261,45 @@
          endingLineNumber = "1555"
          landmarkName = "-showEq:"
          landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Classes/AudioEngine.m"
+         timestampString = "357166481.925238"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "1374"
+         endingLineNumber = "1374"
+         landmarkName = "@implementation AudioEngine"
+         landmarkType = "3">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Classes/AudioEngine.m"
+         timestampString = "357166481.925238"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "1393"
+         endingLineNumber = "1393"
+         landmarkName = "@implementation AudioEngine"
+         landmarkType = "3">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Classes/AudioEngine.m"
+         timestampString = "357166481.925238"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "1392"
+         endingLineNumber = "1392"
+         landmarkName = "@implementation AudioEngine"
+         landmarkType = "3">
       </FileBreakpoint>
    </FileBreakpoints>
    <SymbolicBreakpoints>

@@ -26,7 +26,7 @@
 #import "iSubAppDelegate.h"
 #import "ISMSCacheQueueManager.h"
 #import "NSNotificationCenter+MainThread.h"
-#import "NSObject+GCDExtention.h"
+#import "GCDWrapper.h"
 
 #define maxNumOfReconnects 5
 
@@ -550,11 +550,12 @@
 		if (handler.isTempCache)
 		{
 			// TODO: get rid of this ugly hack
-			[self gcdTimerPerformBlockInMainQueue:^{
-				DLog(@"byteOffset: %llu   secondsOffset: %f", handler.byteOffset, handler.secondsOffset);
-				audioEngineS.startByteOffset = handler.byteOffset;
-				audioEngineS.startSecondsOffset = handler.secondsOffset;
-			} afterDelay:1.0 withName:@"temp song set byteOffset/seconds"];
+			[GCDWrapper runInMainThreadAfterDelay:1.0 block:
+			 ^{
+				 DLog(@"byteOffset: %llu   secondsOffset: %f", handler.byteOffset, handler.secondsOffset);
+				 audioEngineS.startByteOffset = handler.byteOffset;
+				 audioEngineS.startSecondsOffset = handler.secondsOffset;
+			 }];
 		}
 	}
 	else if ([handler.mySong isEqualToSong:nextSong])

@@ -11,13 +11,13 @@
 
 @implementation UITableView (Shadows)
 
-#define SHADOW_ALPHA 0.3
-#define SHADOW_WIDTH 14.0
+#define SHADOW_ALPHA 0.25
+#define SHADOW_WIDTH 10.0
 
 - (void)addFooterShadow
 {
 	if (!self.tableFooterView)
-		self.tableFooterView = [[UIView alloc] init];
+		self.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, 0)];
 	
 	[self.tableFooterView addBottomShadowWithWidth:SHADOW_WIDTH alpha:SHADOW_ALPHA];
 }

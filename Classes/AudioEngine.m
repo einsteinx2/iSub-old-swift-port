@@ -24,8 +24,7 @@
 #import "MusicSingleton.h"
 #import "NSArray+Additions.h"
 #import "SocialSingleton.h"
-#import "NSObject+GCDExtention.h"
-//#import "GCDTimer.h"
+#import "GCDWrapper.h"
 
 @implementation AudioEngine
 @synthesize isEqualizerOn, startByteOffset, startSecondsOffset, isPlaying, isFastForward, bassReinitSampleRate, presilenceStream, bufferLengthMillis, bassUpdatePeriod;
@@ -40,7 +39,7 @@
 //@synthesize startSongRetryTimer, nextSongRetryTimer;
 
 // BASS plugins
-extern void BASSFLACplugin;
+extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 
 // Singleton object
 static AudioEngine *sharedInstance = nil;
@@ -64,6 +63,9 @@ static AudioEngine *sharedInstance = nil;
 		}
 	}*/ 
 	// check built-in stream formats...
+	if (ctype==BASS_CTYPE_STREAM_WV) return @"WV";
+	if (ctype==BASS_CTYPE_STREAM_MPC) return @"MPC";
+	if (ctype==BASS_CTYPE_STREAM_APE) return @"APE";
 	if (ctype==BASS_CTYPE_STREAM_FLAC) return @"FLAC";
 	if (ctype==BASS_CTYPE_STREAM_FLAC_OGG) return @"FLAC";
 	if (ctype==BASS_CTYPE_STREAM_OGG) return @"OGG";
@@ -210,18 +212,7 @@ void BASSLogError()
 - (QWORD)preSilenceLengthForSong:(Song *)aSong
 {
 	// Create a decode channel
-	[self performSelectorOnMainThread:@selector(preSilenceLengthInternal:) withObject:aSong waitUntilDone:YES];
-	/*if (BASS_Init(0, 44100, 0, NULL, NULL)) 	// Initialize default device.
-	{
-		// Create a decode channel
-		const char *file = [aSong.localPath cStringUTF8];
-		HSTREAM presilenceStream = BASS_StreamCreateFile(FALSE, file, 0, 0, BASS_STREAM_DECODE); // create decoding channel
-		if (!presilenceStream) presilenceStream = BASS_StreamCreateFile(FALSE, file, 0, 0, BASS_SAMPLE_SOFTWARE|BASS_STREAM_DECODE);
-	}
-	else
-	{
-		DLog(@"Can't initialize BASS in background thread");
-	}*/
+	[GCDWrapper runInMainThreadAndWaitUntilDone:YES block:^{ [self preSilenceLengthInternal:aSong]; }];
 	
 	if (presilenceStream)
 	{
@@ -729,9 +720,7 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 
 - (void)keepRingBufferFilled
 {
-	dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-	
-	dispatch_async(queue, 
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), 
 	^{
 		while (!ringBuffer->stopFilling)
 		{
@@ -767,7 +756,7 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 							self.BASSisFilestream1 = !self.BASSisFilestream1;
 							
 							// Check if the frequency of this stream matches the BASS output
-							if (!self.bassReinitSampleRate)
+							if (self.bassReinitSampleRate == NO)
 							{
 								// Prepare the next song for playback (in this case, 2 songs ahead because the index hasn't switched yet)
 								NSUInteger index = [playlistS indexForOffsetFromCurrentIndex:2];
@@ -889,10 +878,12 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 		if (songEnded)
 			[self songEnded];
 		
-		if (self.bassReinitSampleRate)
+		// Account for the bass output buffer and convert from milliseconds to seconds
+		NSTimeInterval delay = (double)ISMS_BASSBufferSize / 1000.;
+		if (self.bassReinitSampleRate > 0)
 		{
 			// The stream should end, but only because we need to re-init BASS for the next song
-			[self performSelectorOnMainThread:@selector(start) withObject:nil waitUntilDone:NO];
+			[GCDWrapper runInMainThreadAfterDelay:delay block:^{ [self start]; }];
 			DLog(@"Must reinit bass");
 		}
 		else
@@ -901,12 +892,12 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnded];
 			
 			DLog(@"Stream not active, freeing BASS");
-			[self performSelectorOnMainThread:@selector(bassFree) withObject:nil waitUntilDone:NO];
+			[GCDWrapper runInMainThreadAfterDelay:delay block:^{ [self bassFree]; }];
 			
 			// Handle song caching being disabled
 			if (!settingsS.isSongCachingEnabled || !settingsS.isNextSongCacheEnabled)
 			{
-				[musicS performSelectorOnMainThread:@selector(startSong) withObject:nil waitUntilDone:NO];
+				[GCDWrapper runInMainThreadAfterDelay:delay+.1 block:^{ [musicS startSong]; }];
 			}
 		}
 		
@@ -1043,7 +1034,10 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	{
 		DLog(@"Can't initialize device");
 	}
-	BASS_PluginLoad(&BASSFLACplugin, 0); // load the FLAC plugin
+	BASS_PluginLoad(&BASSFLACplugin, 0); // load the Flac plugin
+	BASS_PluginLoad(&BASSWVplugin, 0); // load the WavePack plugin
+	BASS_PluginLoad(&BASS_APEplugin, 0); // load the Monkey's Audio plugin
+	BASS_PluginLoad(&BASS_MPCplugin, 0); // load the MusePack plugin
 			
 	BASS_INFO info;
 	BASS_GetInfo(&info);
@@ -1088,8 +1082,8 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		//[self.nextSongRetryTimer gcdCancelTimerBlock];
 		//self.nextSongRetryTimer = nil;
 		
-		[NSObject gcdCancelTimerBlockWithName:startSongRetryTimer];
-		[NSObject gcdCancelTimerBlockWithName:nextSongRetryTimer];
+		[GCDWrapper cancelTimerBlockWithName:startSongRetryTimer];
+		[GCDWrapper cancelTimerBlockWithName:nextSongRetryTimer];
 		
 		ringBuffer->stopFilling = YES;
 		
@@ -1279,14 +1273,17 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		BASS_ChannelSetSync(self.nextStream, BASS_SYNC_FREE, 0, MyStreamFreeCallback, (__bridge void *)userInfo);
 		
 		// Verify we're using the best sample rate
-		NSInteger streamSampleRate = [self bassStreamSampleRate:self.fileStream1];
+		NSInteger streamSampleRate = [self bassStreamSampleRate:self.nextStream];
 		NSInteger preferredSampleRate = [self preferredSampleRate:streamSampleRate];
 		NSInteger bassSampleRate = [self bassSampleRate];
+		DLog(@"streamRate: %i  prefRate: %i  bassRate: %i:", streamSampleRate, preferredSampleRate, bassSampleRate);
 		
 		if (bassSampleRate != preferredSampleRate)
 		{
-			// Set a flag to know to re-init BASS later
+			DLog(@"bass does not equal pref");
+			// Set a flag to know to re-init BASS later and free the stream
 			self.bassReinitSampleRate = preferredSampleRate;
+			BASS_StreamFree(self.nextStream);
 		}
 		else
 		{
@@ -1323,8 +1320,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		// tell the stream manager to download a few more seconds of data
 		[streamManagerS downloadMoreOfPrecacheStream];
 		
-		//self.nextSongRetryTimer = [GCDTimer gcdTimerInMainQueueAfterDelay:RETRY_DELAY performBlock:^{ [self prepareNextSongStream:nextSong]; }];
-		[self gcdTimerPerformBlockInMainQueue:^{ [self prepareNextSongStream:nextSong]; } afterDelay:RETRY_DELAY withName:nextSongRetryTimer];
+		[GCDWrapper timerInMainQueueAfterDelay:RETRY_DELAY withName:nextSongRetryTimer performBlock:^{ [self prepareNextSongStream:nextSong]; }];
 	}
 	
 	DLog(@"nextSong: %i\n   ", self.nextStream);
@@ -1523,8 +1519,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 			// Failed to create the stream, retrying
 			DLog(@"------failed to create stream, retrying in 2 seconds------");	
 			
-			//self.startSongRetryTimer = [GCDTimer gcdTimerInMainQueueAfterDelay:RETRY_DELAY performBlock:^{ [self startWithOffsetInBytes:byteOffset orSeconds:seconds]; }];
-			[self gcdTimerPerformBlockInMainQueue:^{ [self startWithOffsetInBytes:byteOffset orSeconds:seconds]; } afterDelay:RETRY_DELAY withName:startSongRetryTimer];
+			[GCDWrapper timerInMainQueueAfterDelay:RETRY_DELAY withName:startSongRetryTimer performBlock:^{ [self startWithOffsetInBytes:byteOffset orSeconds:seconds]; }];
 		}
 	}
 }

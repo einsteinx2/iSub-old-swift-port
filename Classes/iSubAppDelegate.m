@@ -49,7 +49,7 @@
 #import "MenuViewController.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "ISMSCacheQueueManager.h"
-#import "NSObject+GCDExtention.h"
+#import "GCDWrapper.h"
 
 @implementation iSubAppDelegate
 
@@ -845,17 +845,18 @@
 	if (settingsS.isForceOfflineMode)
 		return;
 	
-	if ([[note object] isKindOfClass:[Reachability class]])
+	if ([note.object isKindOfClass:[Reachability class]])
 	{
 		// Cancel any previous requests
-		[NSObject gcdCancelTimerBlockWithName:@"Reachability Changed"];
+		[GCDWrapper cancelTimerBlockWithName:@"Reachability Changed"];
 		
 		// Perform the actual check in two seconds to make sure it's the last message received
 		// this prevents a bug where the status changes from wifi to not reachable, but first it receives
 		// some messages saying it's still on wifi, then gets the not reachable messages
-		[self gcdTimerPerformBlockInMainQueue:^{
-			[self reachabilityChangedInternal:[note object]];
-		} afterDelay:2.0 withName:@"Reachability Changed"];
+		[GCDWrapper timerInMainQueueAfterDelay:2.0 withName:@"Reachability Changed" performBlock:
+		 ^{
+			 [self reachabilityChangedInternal:note.object];
+		 }];
 	}
 }
 

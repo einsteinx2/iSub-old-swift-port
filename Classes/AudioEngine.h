@@ -9,6 +9,9 @@
 #import "bass.h"
 #import "bassflac.h"
 #import "bass_fx.h"
+#import "bass_ape.h"
+#import "bass_mpc.h"
+#import "basswv.h"
 #import "bassmix.h"
 #import <AudioToolbox/AudioToolbox.h>
 
