@@ -20,6 +20,7 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "NSArray+Additions.h"
+#import "GCDWrapper.h"
 
 @interface SUSAllSongsLoader (Private)
 
@@ -404,7 +405,7 @@ static NSInteger order (id a, id b, void* context)
         {
             viewObjectsS.cancelLoading = NO;
 			[SUSAllSongsLoader setIsLoading:NO];
-			[self performSelectorOnMainThread:@selector(informDelegateLoadingFailed:) withObject:nil waitUntilDone:NO];
+			[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self informDelegateLoadingFailed:nil]; }];
             return;
         }
         
@@ -484,7 +485,7 @@ static NSInteger order (id a, id b, void* context)
         if (viewObjectsS.cancelLoading)
         {
             [SUSAllSongsLoader setIsLoading:NO];
-			[self performSelectorOnMainThread:@selector(informDelegateLoadingFailed:) withObject:nil waitUntilDone:NO];
+			[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self informDelegateLoadingFailed:nil]; }];
             return;
         }
         
@@ -503,7 +504,7 @@ static NSInteger order (id a, id b, void* context)
 		[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:[NSString stringWithFormat:@"%@isAllSongsLoading", settingsS.urlString]];
 		[[NSUserDefaults standardUserDefaults] synchronize];
 		
-		[self performSelectorOnMainThread:@selector(informDelegateLoadingFinished) withObject:nil waitUntilDone:NO];
+		[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self informDelegateLoadingFinished]; }];
 		
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AllSongsLoadingFinished];
     }

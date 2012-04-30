@@ -30,6 +30,7 @@
 #import "StackScrollViewController.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "UITableView+Shadows.h"
+#import "GCDWrapper.h"
 
 @implementation CacheAlbumViewController
 
@@ -320,7 +321,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	}
 			
 	// Must do UI stuff in main thread
-	[self performSelectorOnMainThread:@selector(loadPlayAllPlaylist2) withObject:nil waitUntilDone:NO];	
+	[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^ { [self loadPlayAllPlaylist2]; }];
 }
 
 

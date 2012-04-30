@@ -20,6 +20,7 @@
 #import "CacheSingleton.h"
 #import "PlaylistSingleton.h"
 #import "ISMSNetworkIndicator.h"
+#import "GCDWrapper.h"
 
 #define ISMSNumSecondsToPartialPreCacheDefault 20
 #define ISMSNumBytesToPartialPreCache(bitrate) (BytesForSecondsAtBitrate(self.secondsToPartialPrecache, bitrate))
@@ -201,14 +202,14 @@
 		if (self.connection)
 		{
 			self.isDownloading = YES;
-			[self performSelectorOnMainThread:@selector(startConnectionInternalSuccess) withObject:nil waitUntilDone:NO];
+			[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self startConnectionInternalSuccess]; }];
 			//DLog(@"Stream handler download starting for %@", mySong);
 			CFRunLoopRun();
 			//DLog(@"Stream handler runloop finished for %@", mySong);
 		}
 		else
 		{
-			[self performSelectorOnMainThread:@selector(startConnectionInternalFailure) withObject:nil waitUntilDone:NO];
+			[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self startConnectionInternalFailure]; }];
 		}
 	}
 }
@@ -368,7 +369,7 @@
 		@catch (NSException *exception) 
 		{
 			DLog(@"Failed to write to file %@, %@ - %@", self.mySong, exception.name, exception.description);
-			[self performSelectorOnMainThread:@selector(cancel) withObject:nil waitUntilDone:NO];
+			[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self cancel]; }];
 		}
 		
 		// Notify delegate if enough bytes received to start playback
@@ -377,7 +378,7 @@
 			DLog(@"telling player to start, min bytes: %u, total bytes: %llu, bitrate: %u", ISMSMinBytesToStartPlayback(self.bitrate), self.totalBytesTransferred, self.bitrate);
 			self.isDelegateNotifiedToStartPlayback = YES;
 			//DLog(@"player told to start playback");
-			[self performSelectorOnMainThread:@selector(startPlaybackInternal) withObject:nil waitUntilDone:NO];
+			[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self startPlaybackInternal]; }];
 		}
 		
 		// Log progress
@@ -429,13 +430,13 @@
 			NSUInteger partialPrecacheSize = ISMSNumBytesToPartialPreCache(self.mySong.estimatedBitrate);
 			if (self.totalBytesTransferred >= partialPrecacheSize)
 			{
-				[self performSelectorOnMainThread:@selector(partialPrecachePausedInternal) withObject:nil waitUntilDone:NO];
+				[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self partialPrecachePausedInternal]; }];
 				while (self.partialPrecacheSleep && !self.tempBreakPartialPrecache)
 				{
 					[NSThread sleepForTimeInterval:0.1];
 				}
 				self.tempBreakPartialPrecache = NO;
-				[self performSelectorOnMainThread:@selector(partialPrecacheUnpausedInternal) withObject:nil waitUntilDone:NO];
+				[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self partialPrecacheUnpausedInternal]; }];
 			}
 		}
 	}
@@ -506,7 +507,7 @@
 	DLog(@"error domain: %@  code: %i description: %@", error.domain, error.code, error.description);
 	
 	// Perform these operations on the main thread
-	[self performSelectorOnMainThread:@selector(didFailInternal:) withObject:error waitUntilDone:YES];
+	[GCDWrapper runInMainThreadAndWaitUntilDone:YES block:^{ [self didFailInternal:error]; }];
 	
 	// Stop the run loop so the thread can die
 	[self cancelRunLoop];
@@ -545,7 +546,7 @@
 	else 
 	{
 		// Perform these operations on the main thread
-		[self performSelectorOnMainThread:@selector(didFinishLoadingInternal) withObject:nil waitUntilDone:YES];
+		[GCDWrapper runInMainThreadAndWaitUntilDone:YES block:^{ [self didFinishLoadingInternal]; }];
 		
 		// Stop the run loop so the thread can die
 		[self cancelRunLoop];

@@ -860,7 +860,7 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 
 - (DWORD)bassGetOutputData:(void *)buffer length:(DWORD)length
 {	
-	[self performSelectorOnMainThread:@selector(handleSocial) withObject:nil waitUntilDone:NO];
+	[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self handleSocial]; }];
 	
 	if (songEnded)
 	{
@@ -1607,7 +1607,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	//double len = BASS_StreamGetFilePosition(stream, BASS_FILEPOS_END); // file length
 	//DWORD bitrate = (DWORD)(len / (125. * self.progress) + 0.5); // bitrate (Kbps)
 
-	return bitrate;
+	//return bitrate;
 }
 
 - (QWORD)currentByteOffset
@@ -1629,6 +1629,12 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		return [playlistS.currentSong.duration doubleValue] + seconds;
 
 	return seconds + startSecondsOffset;
+}
+
+- (double)currentStreamDuration
+{
+	QWORD len = BASS_ChannelGetLength(self.currentStream, BASS_POS_BYTE); // the length in bytes
+	return BASS_ChannelBytes2Seconds(self.currentStream, len); // the length in seconds
 }
 
 - (HSTREAM)currentStream

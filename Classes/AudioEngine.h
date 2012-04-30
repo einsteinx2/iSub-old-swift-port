@@ -90,6 +90,7 @@ typedef struct
 @property (readonly) NSInteger bitRate;
 @property (readonly) QWORD currentByteOffset;
 @property (readonly) double progress;
+@property (readonly) double currentStreamDuration;
 @property (readonly) NSArray *equalizerValues;
 
 @property BOOL hasTweeted;

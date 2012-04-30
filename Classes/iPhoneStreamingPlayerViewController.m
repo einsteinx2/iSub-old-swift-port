@@ -719,14 +719,14 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	hasMoved = NO;
 	oldPosition = 0.0;
 	progressSlider.minimumValue = 0.0;
-	if (currentSong.duration && !settingsS.isJukeboxEnabled)
+	if (!settingsS.isJukeboxEnabled && currentSong.duration && [currentSong.duration intValue] > 0)
 	{
 		progressSlider.maximumValue = [currentSong.duration floatValue];
 		progressSlider.enabled = YES;
 	}
 	else
 	{
-		progressSlider.maximumValue = 100.0;
+		progressSlider.maximumValue = 0.0;
 		progressSlider.enabled = NO;
 	}
 	
@@ -1496,19 +1496,33 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	{
 		if (!pauseSlider)
 		{
+			// Handle the case where Subsonic didn't detect the song length
+			if ((!currentSong.duration || [currentSong.duration intValue] <= 0) &&
+					 currentSong.isFullyCached && audioEngineS.isStarted)
+			{
+				progressSlider.maximumValue = audioEngineS.currentStreamDuration;
+				progressSlider.enabled = YES;
+			}
+			
 			double progress = 0;
 			if (audioEngineS.isPlaying)
 				progress = audioEngineS.progress;
 			else
 				progress = [currentSong isEqualToSong:audioEngineS.currentStreamSong] ? audioEngineS.progress : 0.;
-			//progress = audioEngineS.progress;
 			
 			if (lastProgress != ceil(progress))
 			{
 				lastProgress = ceil(progress);
 				
-				NSString *elapsedTime = [NSString formatTime:progress];;
+				NSString *elapsedTime = [NSString formatTime:progress];
 				NSString *remainingTime = [NSString formatTime:([currentSong.duration doubleValue] - progress)];
+				
+				// Handle the case where Subsonic didn't detect the song length
+				if ((!currentSong.duration || [currentSong.duration intValue] <= 0) &&
+					currentSong.isFullyCached && audioEngineS.isStarted)
+				{
+					remainingTime = [NSString formatTime:(audioEngineS.currentStreamDuration - progress)];
+				}
 				
 				progressSlider.value = progress;
 				elapsedTimeLabel.text = elapsedTime;

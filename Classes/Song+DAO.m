@@ -20,6 +20,7 @@
 #import "ISMSCacheQueueManager.h"
 #import "NSString+Additions.h"
 #import "iSubAppDelegate.h"
+#import "GCDWrapper.h"
 
 @implementation Song (DAO)
 
@@ -366,7 +367,7 @@
 		if ([NSThread isMainThread])
 			[cacheQueueManagerS startDownloadQueue];
 		else
-			[cacheQueueManagerS performSelectorOnMainThread:@selector(startDownloadQueue) withObject:nil waitUntilDone:NO];
+			[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [cacheQueueManagerS startDownloadQueue]; }];
 	}
 	
 	return !hadError;

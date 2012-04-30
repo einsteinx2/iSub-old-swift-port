@@ -181,7 +181,7 @@
 	
 	[activityIndicator removeFromSuperview];
 	
-	 coverArtId = nil;
+	coverArtId = nil;
 }
 
 @end
