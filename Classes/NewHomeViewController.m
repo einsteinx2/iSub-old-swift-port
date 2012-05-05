@@ -38,7 +38,6 @@
 #import "PlaylistSingleton.h"
 #import "AudioEngine.h"
 #import "FlurryAnalytics.h"
-#import "UIView+Tools.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
@@ -782,7 +781,7 @@
 		[databaseS resetCurrentPlaylistDb];
 		for(Song *aSong in parser.listOfSongs)
 		{
-			[aSong addToCurrentPlaylist];
+			[aSong addToCurrentPlaylistDbQueue];
 		}
 		
 		if (settingsS.isJukeboxEnabled)

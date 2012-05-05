@@ -20,26 +20,28 @@
 + (Song *)songFromDbResult:(FMResultSet *)result;
 + (Song *)songFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabaseQueue:(FMDatabaseQueue *)dbQueue;
 + (Song *)songFromDbForMD5:(NSString *)md5 inTable:(NSString *)table inDatabaseQueue:(FMDatabaseQueue *)dbQueue;
-+ (Song *)songFromGenreDb:(NSString *)md5;
-+ (Song *)songFromCacheDb:(NSString *)md5;
++ (Song *)songFromGenreDb:(FMDatabase *)db md5:(NSString *)md5;
++ (Song *)songFromGenreDbQueue:(NSString *)md5;
++ (Song *)songFromCacheDb:(FMDatabase *)db md5:(NSString *)md5;
++ (Song *)songFromCacheDbQueue:(NSString *)md5;
 + (Song *)songFromServerPlaylistId:(NSString *)md5 row:(NSUInteger)row;
 
 - (BOOL)insertIntoTable:(NSString *)table inDatabaseQueue:(FMDatabaseQueue *)dbQueue;
 - (BOOL)insertIntoServerPlaylistWithPlaylistId:(NSString *)md5;
 - (BOOL)insertIntoFolderCacheForFolderId:(NSString *)folderId;
-- (BOOL)insertIntoGenreTable:(NSString *)table;
-- (BOOL)insertIntoCachedSongsTable;
+- (BOOL)insertIntoGenreTableDbQueue:(NSString *)table;
+- (BOOL)insertIntoCachedSongsTableDbQueue;
 
-- (BOOL)addToCacheQueue;
-- (BOOL)removeFromCacheQueue;
+- (BOOL)addToCacheQueueDbQueue;
+- (BOOL)removeFromCacheQueueDbQueue;
 
-- (BOOL)addToCurrentPlaylist;
-- (BOOL)addToShufflePlaylist;
+- (BOOL)addToCurrentPlaylistDbQueue;
+- (BOOL)addToShufflePlaylistDbQueue;
 
-- (BOOL)removeFromCachedSongsTable;
-+ (BOOL)removeSongFromCacheDbByMD5:(NSString *)md5;
+- (BOOL)removeFromCachedSongsTableDbQueue;
++ (BOOL)removeSongFromCacheDbQueueByMD5:(NSString *)md5;
 
-- (BOOL)insertIntoCachedSongsLayout;
+- (BOOL)insertIntoCachedSongsLayoutDbQueue;
 
 + (NSString *)standardSongColumnSchema;
 + (NSString *)standardSongColumnNames;

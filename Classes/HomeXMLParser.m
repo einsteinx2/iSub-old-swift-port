@@ -21,7 +21,6 @@
 #import "NSString+hex.h"
 #import "CustomUIAlertView.h"
 #import "NSArray+Additions.h"
-#import "NSString+Additions.h"
 
 @implementation HomeXMLParser
 

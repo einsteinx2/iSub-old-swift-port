@@ -98,7 +98,7 @@
 	[self removeBottomShadow];
 	
 	CAGradientLayer *bottomShadow = [UIView horizontalShadowWithAlpha:shadowAlpha inverse:NO];
-	bottomShadow.frame = CGRectMake(0, self.height, self.width, shadowWidth);
+	bottomShadow.frame = CGRectMake(0, self.height, 1024., shadowWidth);
 	bottomShadow.name = ISMSBottomShadowName;
 	[self.layer insertSublayer:bottomShadow atIndex:0];
 }

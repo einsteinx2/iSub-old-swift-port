@@ -17,7 +17,6 @@
 #import "NSString+md5.h"
 #import "FMDatabaseAdditions.h"
 #import "ViewObjectsSingleton.h"
-#import "UIView+Tools.h"
 #import "CustomUIAlertView.h"
 #import "EGORefreshTableHeaderView.h"
 #import <QuartzCore/QuartzCore.h>
@@ -27,9 +26,7 @@
 #import "FlurryAnalytics.h"
 #import "SUSAllSongsLoader.h"
 #import "SeparaterView.h"
-#import "NSArray+Additions.h"
 #import "UIViewController+PushViewControllerCustom.h"
-#import "UITableView+Shadows.h"
 
 @interface FoldersViewController (Private)
 

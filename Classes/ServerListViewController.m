@@ -18,7 +18,6 @@
 #import "Server.h"
 #import "ServerTypeViewController.h"
 #import "UbuntuServerEditViewController.h"
-#import "UIView+Tools.h"
 #import "CustomUIAlertView.h"
 #import "Reachability.h"
 #import "SavedSettings.h"
@@ -29,7 +28,6 @@
 #import "NSNotificationCenter+MainThread.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
-#import "UITableView+Shadows.h"
 
 @implementation ServerListViewController
 

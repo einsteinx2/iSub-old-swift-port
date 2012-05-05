@@ -106,7 +106,7 @@
 
 - (void)deleteAction
 {
-	[Song removeSongFromCacheDbByMD5:md5];
+	[Song removeSongFromCacheDbQueueByMD5:md5];
 	
 	[cacheS findCacheSize];
 		
@@ -121,7 +121,7 @@
 
 - (void)queueAction
 {	
-	[[Song songFromCacheDb:md5] addToCurrentPlaylist];
+	[[Song songFromCacheDbQueue:md5] addToCurrentPlaylistDbQueue];
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 

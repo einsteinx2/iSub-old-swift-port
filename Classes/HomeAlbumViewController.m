@@ -29,7 +29,6 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "NSArray+Additions.h"
 #import "UIViewController+PushViewControllerCustom.h"
-#import "UITableView+Shadows.h"
 
 @implementation HomeAlbumViewController
 @synthesize listOfAlbums;

@@ -20,7 +20,6 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "SUSCoverArtDAO.h"
-#import "UIView+Tools.h"
 #import "AsynchronousImageViewDelegate.h"
 
 @implementation AsynchronousImageView

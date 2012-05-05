@@ -102,7 +102,7 @@
 
 - (void)downloadAction
 {
-	[mySong addToCacheQueue];
+	[mySong addToCacheQueueDbQueue];
 	
 	self.overlayView.downloadButton.alpha = .3;
 	self.overlayView.downloadButton.enabled = NO;
@@ -112,7 +112,7 @@
 
 - (void)queueAction
 {
-	[mySong addToCurrentPlaylist];
+	[mySong addToCurrentPlaylistDbQueue];
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 	

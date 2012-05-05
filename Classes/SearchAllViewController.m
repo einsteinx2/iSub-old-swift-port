@@ -13,7 +13,6 @@
 #import "SavedSettings.h"
 #import "NSArray+Additions.h"
 #import "UIViewController+PushViewControllerCustom.h"
-#import "UITableView+Shadows.h"
 
 @implementation SearchAllViewController
 @synthesize cellNames, listOfArtists, listOfAlbums, listOfSongs, query;

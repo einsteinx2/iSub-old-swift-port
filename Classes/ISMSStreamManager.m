@@ -212,7 +212,7 @@
 		if (![handlersToSkip containsObject:handler])
 		{
 			[self.handlerStack removeObject:handler];
-			[handler.mySong removeFromCachedSongsTable];
+			[handler.mySong removeFromCachedSongsTableDbQueue];
 		}
 	}
 	
@@ -288,7 +288,7 @@
 		
 		ISMSStreamHandler *handler = [self.handlerStack objectAtIndex:index];
 		if (!handler.mySong.isFullyCached && !handler.mySong.isTempCached)
-			[handler.mySong removeFromCachedSongsTable];
+			[handler.mySong removeFromCachedSongsTableDbQueue];
 		[self.handlerStack removeObjectAtIndex:index];
 	}
 	

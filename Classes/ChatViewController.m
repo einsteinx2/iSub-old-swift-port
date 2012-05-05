@@ -26,8 +26,6 @@
 #import "NSError+ISMSError.h"
 #import "FlurryAnalytics.h"
 #import "SeparaterView.h"
-#import "NSArray+Additions.h"
-#import "UITableView+Shadows.h"
 
 @interface ChatViewController (Private)
 - (void)dataSourceDidFinishLoadingNewData;

@@ -12,7 +12,6 @@
 #import "BassParamEqValue.h"
 #import "NSArray+FirstObject.h"
 #import "NSNotificationCenter+MainThread.h"
-#import "NSArray+Additions.h"
 
 @implementation BassEffectDAO
 @synthesize type, presets;

@@ -14,7 +14,6 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
-#import "UIView+Tools.h"
 #import "iPadRootViewController.h"
 #import "StackScrollViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"

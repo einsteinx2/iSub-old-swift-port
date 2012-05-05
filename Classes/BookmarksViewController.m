@@ -28,7 +28,6 @@
 #import "UIViewController+PushViewControllerCustom.h"
 #import "FMDatabaseQueue.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "UITableView+Shadows.h"
 
 @implementation BookmarksViewController
 @synthesize bookmarkIds;
@@ -202,7 +201,7 @@
 
 - (void)loadBookmarkIds
 {
-	__block NSMutableArray *bookmarkIdsTemp = [[NSMutableArray alloc] initWithCapacity:0];
+	NSMutableArray *bookmarkIdsTemp = [[NSMutableArray alloc] initWithCapacity:0];
 	[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
 	{
 		FMResultSet *result = [db executeQuery:@"SELECT bookmarkId FROM bookmarks"];
@@ -590,7 +589,7 @@
 	}
 	else 
 	{
-		[aSong addToCurrentPlaylist];
+		[aSong addToCurrentPlaylistDbQueue];
 	}
 	
 	playlistS.currentIndex = playlistIndex;

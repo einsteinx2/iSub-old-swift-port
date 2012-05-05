@@ -16,30 +16,12 @@
 
 @implementation SUSAllSongsDAO
 
-@synthesize loader, delegate, index;
-
-- (void)setup
-{
-	delegate = nil;
-	loader = nil;
-	index = nil;
-}
-
-- (id)init
-{
-    if ((self = [super init]))
-	{
-        [self setup];
-    }
-    
-    return self;
-}
+@synthesize loader, delegate;
 
 - (id)initWithDelegate:(NSObject <SUSLoaderDelegate> *)theDelegate
 {
     if ((self = [super init]))
 	{
-		[self setup];
 		delegate = theDelegate;
     }
     
@@ -50,8 +32,6 @@
 {
 	[loader cancelLoad];
 	loader.delegate = nil;
-    loader = nil;	
-	index = nil;
 }
 
 - (FMDatabaseQueue *)dbQueue
@@ -82,7 +62,7 @@
 
 - (NSArray *)allSongsIndex
 {
-	__block NSMutableArray *indexItems = [NSMutableArray arrayWithCapacity:0];
+	NSMutableArray *indexItems = [NSMutableArray arrayWithCapacity:0];
 	[self.dbQueue inDatabase:^(FMDatabase *db)
 	{
 		FMResultSet *result = [db executeQuery:@"SELECT * FROM allSongsIndexCache"];

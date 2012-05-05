@@ -48,13 +48,18 @@
 {
 	// Calling dispatch_sync to the main queue from the main thread can cause a deadlock,
 	// so just run the block
-	if ([NSThread isMainThread] && shouldWait)
+	if ([NSThread isMainThread])
 	{
 		block();
 		return;
 	}
 	
 	[self runInQueue:dispatch_get_main_queue() waitUntilDone:shouldWait block:block];
+}
+
++ (void)runInBackground:(void (^)(void))block
+{
+	[self runInQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0) waitUntilDone:NO block:block];
 }
 
 #pragma mark - Timers

@@ -26,7 +26,6 @@
 #import "NSNotificationCenter+MainThread.h"
 #import "EGORefreshTableHeaderView.h"
 #import "UIViewController+PushViewControllerCustom.h"
-#import "UITableView+Shadows.h"
 
 @interface PlayingViewController (Private)
 - (void)dataSourceDidFinishLoadingNewData;

@@ -480,7 +480,7 @@
 		self.isShuffle = YES;
 		
 		[self resetShufflePlaylist];
-		[currentSong addToShufflePlaylist];
+		[currentSong addToShufflePlaylistDbQueue];
 		
 		[self.dbQueue inDatabase:^(FMDatabase *db)
 		{

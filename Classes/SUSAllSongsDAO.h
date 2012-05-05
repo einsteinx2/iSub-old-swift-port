@@ -12,7 +12,9 @@
 @class FMDatabase, Song, SUSAllSongsLoader;
 
 @interface SUSAllSongsDAO : NSObject <SUSLoaderManager, SUSLoaderDelegate>
-
+{
+	__strong NSArray *index;
+}
 @property (unsafe_unretained) id<SUSLoaderDelegate> delegate;
 
 @property (readonly) NSUInteger count;

@@ -7,7 +7,6 @@
 //
 
 #import "SUSServerPlaylist.h"
-#import "NSString+Additions.h"
 
 @implementation SUSServerPlaylist
 @synthesize playlistId, playlistName;

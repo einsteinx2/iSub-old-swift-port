@@ -22,14 +22,11 @@
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "PlaylistSingleton.h"
-#import "NSArray+Additions.h"
-#import "NSString+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "iPadRootViewController.h"
 #import "StackScrollViewController.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "UITableView+Shadows.h"
 #import "GCDWrapper.h"
 
 @implementation CacheAlbumViewController
@@ -300,7 +297,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 		while ([result next])
 		{
 			if ([result stringForColumnIndex:0] != nil)
-				[[Song songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCurrentPlaylist];
+				[[Song songFromCacheDb:db md5:[result stringForColumnIndex:0]] addToCurrentPlaylistDbQueue];
 		}
 		[result close];
 	}];
@@ -482,7 +479,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 		NSUInteger a = indexPath.row - self.listOfAlbums.count;
 		cell.md5 = [[self.listOfSongs objectAtIndexSafe:a] objectAtIndexSafe:0];
 		
-		Song *aSong = [Song songFromCacheDb:cell.md5];
+		Song *aSong = [Song songFromCacheDbQueue:cell.md5];
 		
 		if (aSong.track)
 		{
@@ -589,10 +586,10 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			NSUInteger a = indexPath.row - self.listOfAlbums.count;
 			
 			[databaseS resetCurrentPlaylistDb];
-			for(NSArray *song in self.listOfSongs)
+			for (NSArray *song in self.listOfSongs)
 			{
-				Song *aSong = [Song songFromCacheDb:[song objectAtIndexSafe:0]];
-				[aSong addToCurrentPlaylist];
+				Song *aSong = [Song songFromCacheDbQueue:[song objectAtIndexSafe:0]];
+				[aSong addToCurrentPlaylistDbQueue];
 			}
 						
 			playlistS.isShuffle = NO;

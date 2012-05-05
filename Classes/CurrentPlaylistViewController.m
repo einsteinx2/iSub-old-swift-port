@@ -21,7 +21,6 @@
 #import "NSString+time.h"
 #import "PlaylistSingleton.h"
 #import "AudioEngine.h"
-#import "NSArray+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
 #import "StoreViewController.h"

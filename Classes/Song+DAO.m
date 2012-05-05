@@ -18,7 +18,6 @@
 #import "AudioEngine.h"
 #import "NSArray+Additions.h"
 #import "ISMSCacheQueueManager.h"
-#import "NSString+Additions.h"
 #import "iSubAppDelegate.h"
 #import "GCDWrapper.h"
 
@@ -55,7 +54,7 @@
 	assert(isPartiallyCached && "Can not set isPartiallyCached to to NO");
 	if (isPartiallyCached)
 	{
-		[self insertIntoCachedSongsTable];
+		[self insertIntoCachedSongsTableDbQueue];
 	}
 }
 
@@ -81,7 +80,7 @@
 			[db executeUpdate:@"UPDATE cachedSongs SET finished = 'YES', cachedDate = ? WHERE md5 = ?", [NSNumber numberWithUnsignedLongLong:(unsigned long long)[[NSDate date] timeIntervalSince1970]], [self.path md5]];
 		}];
 		
-		[self insertIntoCachedSongsLayout];
+		[self insertIntoCachedSongsLayoutDbQueue];
 		
 		// Setup the genre table entries
 		if (self.genre)
@@ -99,10 +98,10 @@
 			}];
 			
 			// Insert the song object into the appropriate genresSongs table
-			[self insertIntoGenreTable:@"genresSongs"];
+			[self insertIntoGenreTableDbQueue:@"genresSongs"];
 		}
 		
-		[self removeFromCacheQueue];
+		[self removeFromCacheQueueDbQueue];
 	}
 }
 
@@ -213,13 +212,23 @@
 	return aSong;
 }
 
-+ (Song *)songFromGenreDb:(NSString *)md5
++ (Song *)songFromGenreDb:(FMDatabase *)db md5:(NSString *)md5
+{
+	return [Song songFromDbForMD5:md5 inTable:@"genresSongs" inDatabase:db];
+}
+
++ (Song *)songFromGenreDbQueue:(NSString *)md5
 {
 	FMDatabaseQueue *dbQueue = viewObjectsS.isOfflineMode ? databaseS.songCacheDbQueue : databaseS.genresDbQueue;
 	return [Song songFromDbForMD5:md5 inTable:@"genresSongs" inDatabaseQueue:dbQueue];
 }
 
-+ (Song *)songFromCacheDb:(NSString *)md5
++ (Song *)songFromCacheDb:(FMDatabase *)db md5:(NSString *)md5
+{
+	return [self songFromDbForMD5:md5 inTable:@"cachedSongs" inDatabase:db];
+}
+
++ (Song *)songFromCacheDbQueue:(NSString *)md5
 {
 	return [self songFromDbForMD5:md5 inTable:@"cachedSongs" inDatabaseQueue:databaseS.songCacheDbQueue];
 }
@@ -268,7 +277,7 @@
 	return !hadError;
 }
 
-- (BOOL)insertIntoGenreTable:(NSString *)table
+- (BOOL)insertIntoGenreTableDbQueue:(NSString *)table
 {	
 	__block BOOL hadError;
 	[self.dbQueue inDatabase:^(FMDatabase *db)
@@ -285,7 +294,7 @@
 	return !hadError;
 }
 
-- (BOOL)insertIntoCachedSongsTable
+- (BOOL)insertIntoCachedSongsTableDbQueue
 {
 	__block BOOL hadError;
 	[self.dbQueue inDatabase:^(FMDatabase *db)
@@ -301,9 +310,9 @@
 	return !hadError;
 }
 
-- (BOOL)removeFromCachedSongsTable
+- (BOOL)removeFromCachedSongsTableDbQueue
 {
-	return [Song removeSongFromCacheDbByMD5:[self.path md5]];
+	return [Song removeSongFromCacheDbQueueByMD5:[self.path md5]];
 	
 	// TODO: Figure out why the fuck I was doing this instead of calling the class method
 	// this causes an orphaned file to be created whenever a stream is canceled part-way done
@@ -318,7 +327,7 @@
 	return ![self.db hadError];*/
 }
 
-- (BOOL)removeFromCacheQueue
+- (BOOL)removeFromCacheQueueDbQueue
 {
 	__block BOOL hadError;
 	[databaseS.cacheQueueDbQueue inDatabase:^(FMDatabase *db)
@@ -334,7 +343,7 @@
 	return !hadError;
 }
 
-- (BOOL)addToCacheQueue
+- (BOOL)addToCacheQueueDbQueue
 {	
 	__block BOOL hadError;
 	__block NSString *md5;
@@ -373,7 +382,7 @@
 	return !hadError;
 }
 
-- (BOOL)addToCurrentPlaylist
+- (BOOL)addToCurrentPlaylistDbQueue
 {
 	BOOL success = YES;
 	
@@ -404,7 +413,7 @@
 	return success;
 }
 
-- (BOOL)addToShufflePlaylist
+- (BOOL)addToShufflePlaylistDbQueue
 {
 	BOOL success = YES;
 	
@@ -422,7 +431,7 @@
 	return success;
 }
 
-- (BOOL)insertIntoCachedSongsLayout
+- (BOOL)insertIntoCachedSongsLayoutDbQueue
 {
 	// Save the offline view layout info
 	NSArray *splitPath = [self.path componentsSeparatedByString:@"/"];
@@ -449,7 +458,7 @@
 	return !hadError;
 }
 
-+ (BOOL)removeSongFromCacheDbByMD5:(NSString *)md5
++ (BOOL)removeSongFromCacheDbQueueByMD5:(NSString *)md5
 {
 	// Check if we're deleting the song that's currently playing. If so, stop the player.
 	if (playlistS.currentSong && !settingsS.isJukeboxEnabled &&

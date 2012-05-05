@@ -167,7 +167,7 @@
 			Song *aSong = [self songForTableViewRow:i];
 			//DLog(@"song parentId: %@", aSong.parentId);
 			//DLog(@"adding song to playlist: %@", aSong);
-			[aSong addToCurrentPlaylist];
+			[aSong addToCurrentPlaylistDbQueue];
 			
 			// In jukebox mode, collect the song ids to send to the server
 			if (settingsS.isJukeboxEnabled)

@@ -105,9 +105,9 @@
 - (void)downloadAction
 {
 	if (viewObjectsS.isLocalPlaylist)
-		[[Song songFromDbRow:self.indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", playlistMD5] inDatabaseQueue:databaseS.localPlaylistsDbQueue] addToCacheQueue];
+		[[Song songFromDbRow:self.indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", playlistMD5] inDatabaseQueue:databaseS.localPlaylistsDbQueue] addToCacheQueueDbQueue];
 	else
-		[[Song songFromServerPlaylistId:playlistMD5 row:self.indexPath.row] addToCacheQueue];
+		[[Song songFromServerPlaylistId:playlistMD5 row:self.indexPath.row] addToCacheQueueDbQueue];
 
 	self.overlayView.downloadButton.alpha = .3;
 	self.overlayView.downloadButton.enabled = NO;
@@ -118,9 +118,9 @@
 - (void)queueAction
 {
 	if (viewObjectsS.isLocalPlaylist)
-		[[Song songFromDbRow:self.indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", playlistMD5] inDatabaseQueue:databaseS.localPlaylistsDbQueue] addToCurrentPlaylist];
+		[[Song songFromDbRow:self.indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", playlistMD5] inDatabaseQueue:databaseS.localPlaylistsDbQueue] addToCurrentPlaylistDbQueue];
 	else
-		[[Song songFromServerPlaylistId:playlistMD5 row:self.indexPath.row] addToCurrentPlaylist];
+		[[Song songFromServerPlaylistId:playlistMD5 row:self.indexPath.row] addToCurrentPlaylistDbQueue];
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 	

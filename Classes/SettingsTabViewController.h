@@ -92,7 +92,6 @@
 - (IBAction)twitterButtonAction;
 - (IBAction)updateScrobblePercentLabel;
 - (IBAction)updateScrobblePercentSetting;
-- (IBAction)resetFolderCacheAction;
 - (IBAction)resetAlbumArtCacheAction;
 - (void)textFieldDidChange:(UITextField *)textField;
 

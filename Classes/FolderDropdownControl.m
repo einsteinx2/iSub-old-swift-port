@@ -8,14 +8,11 @@
 
 #import "FolderDropdownControl.h"
 #import <QuartzCore/QuartzCore.h>
-#import "UIView+Tools.h"
 #import "iSubAppDelegate.h"
 #import "CustomUIAlertView.h"
 #import "NSString+md5.h"
 #import "SUSRootFoldersDAO.h"
 #import "NSMutableURLRequest+SUS.h"
-#import "NSArray+Additions.h"
-#import "NSArray+Additions.h"
 
 @implementation FolderDropdownControl
 @synthesize selectedFolderId, isOpen, labels, folders;

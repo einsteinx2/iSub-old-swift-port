@@ -72,7 +72,7 @@
 	{
 		Song *aSong = [[Song alloc] initWithAttributeDict:attributeDict];
 		if (aSong.path)
-			[aSong addToCurrentPlaylist];
+			[aSong addToCurrentPlaylistDbQueue];
 	}
 }
 

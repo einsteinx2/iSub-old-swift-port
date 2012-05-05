@@ -42,7 +42,6 @@
  */
 
 #import "DDSocialDialog.h"
-#import "NSArray+Additions.h"
 
 static CGFloat kDDSocialDialogBorderWidth = 10;
 static CGFloat kDDSocialDialogTransitionDuration = 0.3;

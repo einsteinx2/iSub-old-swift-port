@@ -57,7 +57,7 @@
 
 // Main interface elements for iPhone
 @synthesize background, currentTabBarController, mainTabBarController, offlineTabBarController;
-@synthesize homeNavigationController, playerNavigationController, artistsNavigationController, rootViewController, allAlbumsNavigationController, allSongsNavigationController, playlistsNavigationController, bookmarksNavigationController, playingNavigationController, genresNavigationController, cacheNavigationController, chatNavigationController, supportNavigationController;
+@synthesize homeNavigationController, playerNavigationController, artistsNavigationController, rootViewController, allAlbumsNavigationController, allSongsNavigationController, playlistsNavigationController, bookmarksNavigationController, playingNavigationController, genresNavigationController, cacheNavigationController, chatNavigationController, supportNavigationController, serverChecker;
 
 // Main interface elemements for iPad
 @synthesize ipadRootViewController;
@@ -233,6 +233,7 @@
     if (!viewObjectsS.isOfflineMode)
 	{
 		//DLog(@"adding loading screen");
+		[viewObjectsS showAlbumLoadingScreen:self.window sender:self];
 		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 		
 		[self checkServer];
@@ -241,6 +242,13 @@
 	// Recover current state if player was interrupted
 	[ISMSStreamManager sharedInstance];
 	[musicS resumeSong];
+}
+
+// Check server cancel load
+- (void)cancelLoad
+{
+	[self.serverChecker cancelLoad];
+	[viewObjectsS hideLoadingScreen];
 }
 
 - (void)checkServer
@@ -254,8 +262,10 @@
 	// have internet access or if the host url entered was wrong.
     if (!viewObjectsS.isOfflineMode) 
 	{
-        SUSServerChecker *checker = [[SUSServerChecker alloc] initWithDelegate:self];
-		[checker checkServerUrlString:settingsS.urlString username:settingsS.username password:settingsS.password];
+        self.serverChecker = [[SUSServerChecker alloc] initWithDelegate:self];
+		[self.serverChecker checkServerUrlString:settingsS.urlString 
+										username:settingsS.username 
+										password:settingsS.password];
     }
 	
 	// Do a server check every half hour
@@ -307,7 +317,7 @@
 		[self enterOfflineMode];
 	}
     
-     checker = nil;
+	self.serverChecker = nil;
 	
 	settingsS.isNewSearchAPI = checker.isNewSearchAPI;
 }
@@ -318,7 +328,7 @@
 	
 	settingsS.isNewSearchAPI = checker.isNewSearchAPI;
     
-     checker = nil;
+    self.serverChecker = nil;
     
     //DLog(@"server verification passed, hiding loading screen");
     [viewObjectsS hideLoadingScreen];

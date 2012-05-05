@@ -76,7 +76,7 @@
 	int count = [databaseS.localPlaylistsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", md5]];
 	for (int i = 0; i < count; i++)
 	{
-		[[Song songFromDbRow:i inTable:[NSString stringWithFormat:@"playlist%@", md5] inDatabaseQueue:databaseS.localPlaylistsDbQueue] addToCacheQueue];
+		[[Song songFromDbRow:i inTable:[NSString stringWithFormat:@"playlist%@", md5] inDatabaseQueue:databaseS.localPlaylistsDbQueue] addToCacheQueueDbQueue];
 	}
 	
 	// Hide the loading screen

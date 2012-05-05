@@ -27,15 +27,11 @@
 #import "CacheSingleton.h"
 #import "PlaylistSingleton.h"
 #import "FlurryAnalytics.h"
-#import "NSString+Additions.h"
 #import "AudioEngine.h"
-#import "NSArray+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
 #import "ISMSCacheQueueManager.h"
 #import "UIViewController+PushViewControllerCustom.h"
-#import "UIViewController+IsVisible.h"
-#import "UITableView+Shadows.h"
 
 @interface CacheViewController ()
 - (void)addNoSongsScreen;
@@ -432,15 +428,14 @@
 	[databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)
 	{
 		FMResultSet *result = [db executeQuery:@"SELECT md5 FROM cachedSongsLayout ORDER BY seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9 COLLATE NOCASE"];
-		
 		while ([result next])
 		{			
 			@autoreleasepool 
 			{
-				Song *aSong = [Song songFromCacheDb:[NSString stringWithString:[result stringForColumnIndex:0]]];
+				Song *aSong = [Song songFromCacheDb:db md5:[result stringForColumnIndex:0]];
 				
 				if (aSong.path)
-					[aSong addToCurrentPlaylist];
+					[aSong addToCurrentPlaylistDbQueue];
 			}
 		}
 		[result close];
@@ -1054,6 +1049,7 @@
 {	
 	[self unregisterForNotifications];
 	
+	NSMutableArray *songMd5s = [[NSMutableArray alloc] initWithCapacity:0];
 	for (NSString *folderName in viewObjectsS.multiDeleteList)
 	{
 		[databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)
@@ -1063,11 +1059,16 @@
 			while ([result next])
 			{
 				if ([result stringForColumnIndex:0] != nil)
-					[Song removeSongFromCacheDbByMD5:[NSString stringWithString:[result stringForColumnIndex:0]]];
+					[songMd5s addObject:[result stringForColumnIndex:0]];
 			}
 			[result close];
 		}];
 	}	
+			
+	for (NSString *md5 in songMd5s)
+	{
+		[Song removeSongFromCacheDbQueueByMD5:md5];
+	}
 	
 	[self segmentAction:nil];
 	

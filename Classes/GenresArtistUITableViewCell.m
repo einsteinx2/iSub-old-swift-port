@@ -98,7 +98,7 @@
 		while ([result next])
 		{
 			if ([result stringForColumnIndex:0] != nil)
-				[[Song songFromGenreDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCacheQueue];
+				[[Song songFromGenreDb:db md5:[result stringForColumnIndex:0]] addToCacheQueueDbQueue];
 		}
 		[result close];
 	}];
@@ -140,7 +140,7 @@
 		while ([result next])
 		{
 			if ([result stringForColumnIndex:0] != nil)
-				[[Song songFromGenreDb:[NSString stringWithString:[result stringForColumnIndex:0]]] addToCurrentPlaylist];
+				[[Song songFromGenreDb:db md5:[result stringForColumnIndex:0]] addToCurrentPlaylistDbQueue];
 		}
 		[result close];
 	}];

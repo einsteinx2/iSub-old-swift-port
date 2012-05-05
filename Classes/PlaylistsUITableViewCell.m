@@ -218,11 +218,11 @@
                         [aSong insertIntoServerPlaylistWithPlaylistId:md5];
                         if (isDownload)
                         {
-                            [aSong addToCacheQueue];
+                            [aSong addToCacheQueueDbQueue];
                         }
                         else
                         {
-                            [aSong addToCurrentPlaylist];
+                            [aSong addToCurrentPlaylistDbQueue];
                         }
                         
                         // Get the next message

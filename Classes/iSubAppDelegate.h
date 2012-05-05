@@ -45,6 +45,8 @@
 
 - (void)startStopServer;
 
+@property (strong) SUSServerChecker *serverChecker;
+
 @property (nonatomic) IBOutlet UIWindow *window;
 
 // Main interface elements for iPhone

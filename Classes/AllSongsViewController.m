@@ -33,12 +33,10 @@
 #import "FlurryAnalytics.h"
 #import "EGORefreshTableHeaderView.h"
 #import "PlaylistSingleton.h"
-#import "NSArray+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "UITableView+Shadows.h"
 
 @interface AllSongsViewController (Private)
 - (void)hideLoadingScreen;
@@ -679,7 +677,7 @@
 			aSong = [dataModel songForPosition:(sectionStartIndex + indexPath.row + 1)];
 		}
 		
-		[aSong addToCurrentPlaylist];
+		[aSong addToCurrentPlaylistDbQueue];
 		
 		// If jukebox mode, send song id to server
 		if (settingsS.isJukeboxEnabled)

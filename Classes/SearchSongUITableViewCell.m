@@ -139,7 +139,7 @@
 
 - (void)downloadAction
 {
-	[mySong addToCacheQueue];
+	[mySong addToCacheQueueDbQueue];
 	
 	self.overlayView.downloadButton.alpha = .3;
 	self.overlayView.downloadButton.enabled = NO;

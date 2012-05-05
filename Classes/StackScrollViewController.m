@@ -8,7 +8,6 @@
 
 #import "StackScrollViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "UIView+Tools.h"
 #import "StackContainerView.h"
 #import "NSArray+Additions.h"
 #import "SavedSettings.h"

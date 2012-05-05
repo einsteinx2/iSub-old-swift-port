@@ -32,7 +32,6 @@
 #import "PlaylistSingleton.h"
 #import "JukeboxSingleton.h"
 #import "UIViewController+PushViewControllerCustom.h"
-#import "UITableView+Shadows.h"
 
 @interface PlaylistSongsViewController (Private)
 

@@ -73,6 +73,11 @@
 	[self connection:self.connection didFailWithError:error];
 }
 
+- (void)cancelLoad
+{
+	[self checkTimedOut];
+}
+
 #pragma mark - Connection Delegate
 
 - (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 

@@ -19,6 +19,7 @@
 // Run now
 + (void)runInQueue:(dispatch_queue_t)queue waitUntilDone:(BOOL)shouldWait block:(void (^)(void))block;
 + (void)runInMainThreadAndWaitUntilDone:(BOOL)shouldWait block:(void (^)(void))block;
++ (void)runInBackground:(void (^)(void))block;
 
 // Timers
 + (BOOL)timerInQueue:(dispatch_queue_t)queue afterDelay:(NSTimeInterval)delay withName:(NSString *)name performBlock:(void (^)(void))block;

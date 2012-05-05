@@ -117,7 +117,7 @@
 
 - (void)downloadAction
 {
-	[[Song songFromGenreDb:md5] addToCacheQueue];	
+	[[Song songFromGenreDbQueue:md5] addToCacheQueueDbQueue];	
 		
 	self.overlayView.downloadButton.alpha = .3;
 	self.overlayView.downloadButton.enabled = NO;
@@ -128,7 +128,7 @@
 - (void)queueAction
 {
 	//DLog(@"queueAction");
-	[[Song songFromGenreDb:md5] addToCurrentPlaylist];
+	[[Song songFromGenreDbQueue:md5] addToCurrentPlaylistDbQueue];
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 	

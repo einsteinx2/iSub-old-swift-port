@@ -8,7 +8,6 @@
 
 #import "Album.h"
 #import "Artist.h"
-#import "NSString+Additions.h"
 
 @implementation Album
 

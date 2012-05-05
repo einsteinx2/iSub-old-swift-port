@@ -12,10 +12,7 @@
 @interface BBSimpleConnectionQueue : NSObject 
 {
 	NSMutableArray *connectionStack;
-		
 	BOOL isRunning;
-	
-	id <BBSimpleConnectionQueueDelegate> __unsafe_unretained delegate;
 }
 
 @property (readonly) NSMutableArray *connectionStack;

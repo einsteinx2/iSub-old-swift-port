@@ -24,7 +24,6 @@
 #import "CacheViewController.h"
 #import "ChatViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
-#import "UIView+Tools.h"
 #import "NSArray+Additions.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "ServerListViewController.h"

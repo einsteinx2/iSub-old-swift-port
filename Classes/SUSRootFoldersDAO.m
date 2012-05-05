@@ -10,7 +10,6 @@
 #import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "NSString+Additions.h"
 #import "TBXML.h"
 #import "Artist.h"
 #import "Index.h"

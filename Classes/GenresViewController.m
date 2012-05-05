@@ -21,7 +21,6 @@
 #import "SavedSettings.h"
 #import "FlurryAnalytics.h"
 #import "UIViewController+PushViewControllerCustom.h"
-#import "UITableView+Shadows.h"
 
 @implementation GenresViewController
 

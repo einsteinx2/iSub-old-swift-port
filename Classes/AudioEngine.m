@@ -22,7 +22,6 @@
 #import "ISMSStreamManager.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "MusicSingleton.h"
-#import "NSArray+Additions.h"
 #import "SocialSingleton.h"
 #import "GCDWrapper.h"
 

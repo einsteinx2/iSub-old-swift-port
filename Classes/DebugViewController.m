@@ -12,7 +12,6 @@
 #import "CacheSingleton.h"
 #import "Song.h"
 #import "PlaylistSingleton.h"
-#import "NSString+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
 
 @implementation DebugViewController

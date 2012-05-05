@@ -23,13 +23,12 @@
 #import "AsynchronousImageView.h"
 #import "SavedSettings.h"
 #import "NSString+time.h"
-#import "NSArray+Additions.h"
 #import "PlaylistSingleton.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "UITableView+Shadows.h"
+#import "GCDWrapper.h"
 
 @implementation GenresAlbumViewController
 
@@ -199,9 +198,9 @@
 				if ([result stringForColumnIndex:0] != nil)
 				{
 					NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
-					Song *aSong = [Song songFromGenreDb:songIdMD5];
+					Song *aSong = [Song songFromGenreDb:db md5:songIdMD5];
 					
-					[aSong addToCurrentPlaylist];
+					[aSong addToCurrentPlaylistDbQueue];
 				}
 			}
 		}
@@ -253,10 +252,9 @@
 			{
 				if ([result stringForColumnIndex:0] != nil)
 				{
-					NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
-					Song *aSong = [Song songFromGenreDb:songIdMD5];
-					
-					[aSong addToCurrentPlaylist];
+					NSString *songIdMD5 = [result stringForColumnIndex:0];
+					Song *aSong = [Song songFromGenreDb:db md5:songIdMD5];
+					[aSong addToCurrentPlaylistDbQueue];
 				}
 			}
 		}
@@ -367,7 +365,7 @@
 		NSUInteger a = indexPath.row - [listOfAlbums count];
 		cell.md5 = [listOfSongs objectAtIndexSafe:a];
 		
-		Song *aSong = [Song songFromGenreDb:cell.md5];
+		Song *aSong = [Song songFromGenreDbQueue:cell.md5];
 		
 		if (aSong.track)
 		{
@@ -492,9 +490,9 @@
 			{
 				@autoreleasepool {
 				
-					Song *aSong = [Song songFromGenreDb:songMD5];
+					Song *aSong = [Song songFromGenreDbQueue:songMD5];
 
-					[aSong addToCurrentPlaylist];
+					[aSong addToCurrentPlaylistDbQueue];
 					
 					// In jukebox mode, collect the song ids to send to the server
 					if (settingsS.isJukeboxEnabled)

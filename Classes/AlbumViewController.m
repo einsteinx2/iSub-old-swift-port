@@ -32,14 +32,11 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "NSString+URLEncode.h"
 #import "SUSSubFolderDAO.h"
-#import "UIView+Tools.h"
-#import "NSArray+Additions.h"
 #import "UIImageView+Reflection.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "AudioEngine.h"
 #import "iPadRootViewController.h"
-#import "UITableView+Shadows.h"
 
 @interface AlbumViewController (Private)
 - (void)dataSourceDidFinishLoadingNewData;

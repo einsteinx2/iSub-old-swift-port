@@ -112,12 +112,12 @@
 	if (self.isSearching) 
 	{
 		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"allSongsSearch" inDatabaseQueue:databaseS.allSongsDbQueue];
-		[aSong addToCacheQueue];
+		[aSong addToCacheQueueDbQueue];
 	}
 	else 
 	{
 		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"allSongs" inDatabaseQueue:databaseS.allSongsDbQueue];
-		[aSong addToCacheQueue];
+		[aSong addToCacheQueueDbQueue];
 	}
 	
 	self.overlayView.downloadButton.alpha = .3;

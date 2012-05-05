@@ -11,7 +11,6 @@
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "DatabaseSingleton.h"
-#import "NSString+Additions.h"
 #import "SavedSettings.h"
 
 @implementation SUSRootFoldersLoader

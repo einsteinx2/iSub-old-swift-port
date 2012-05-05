@@ -96,9 +96,9 @@
 - (void)downloadAction
 {	
 	if (playlistS.isShuffle) 
-		[[Song songFromDbRow:self.indexPath.row inTable:@"shufflePlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue] addToCacheQueue];
+		[[Song songFromDbRow:self.indexPath.row inTable:@"shufflePlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue] addToCacheQueueDbQueue];
 	else 
-		[[Song songFromDbRow:self.indexPath.row inTable:@"currentPlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue] addToCacheQueue];
+		[[Song songFromDbRow:self.indexPath.row inTable:@"currentPlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue] addToCacheQueueDbQueue];
 	
 	self.overlayView.downloadButton.alpha = .3;
 	self.overlayView.downloadButton.enabled = NO;

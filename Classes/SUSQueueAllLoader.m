@@ -233,17 +233,16 @@
 	// Add each song to playlist
 	for (Song *aSong in parser.listOfSongs)
 	{
-		@autoreleasepool {
-		
+		@autoreleasepool 
+		{
 			if (isQueue)
 			{
-				[aSong addToCurrentPlaylist];
+				[aSong addToCurrentPlaylistDbQueue];
 			}
 			else
 			{
-				[aSong addToCacheQueue];
+				[aSong addToCacheQueueDbQueue];
 			}
-		
 		}
 	}
 	

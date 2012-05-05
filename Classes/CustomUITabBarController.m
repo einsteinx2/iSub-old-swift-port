@@ -9,7 +9,6 @@
 #import "CustomUITabBarController.h"
 #import "MoreTableViewDataSource.h"
 #import "ViewObjectsSingleton.h"
-#import "UITableView+Shadows.h"
 
 @implementation CustomUITabBarController
 

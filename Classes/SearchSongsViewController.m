@@ -35,7 +35,6 @@
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
 #import "UIViewController+PushViewControllerCustom.h"
-#import "UITableView+Shadows.h"
 
 @implementation SearchSongsViewController
 
@@ -368,7 +367,7 @@
 			{
 				@autoreleasepool {
 				
-					[aSong addToCurrentPlaylist];
+					[aSong addToCurrentPlaylistDbQueue];
 					
 					// In jukebox mode, collect the song ids to send to the server
 					if (settingsS.isJukeboxEnabled)

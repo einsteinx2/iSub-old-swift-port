@@ -17,7 +17,7 @@
 - (void)addFooterShadow
 {
 	if (!self.tableFooterView)
-		self.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, 0)];
+		self.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, 0.)];
 	
 	[self.tableFooterView addBottomShadowWithWidth:SHADOW_WIDTH alpha:SHADOW_ALPHA];
 }

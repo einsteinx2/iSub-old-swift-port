@@ -32,10 +32,8 @@
 #import "EGORefreshTableHeaderView.h"
 #import "SUSAllSongsLoader.h"
 #import "SUSAllSongsDAO.h"
-#import "NSArray+Additions.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "UITableView+Shadows.h"
 
 @implementation AllAlbumsViewController
 

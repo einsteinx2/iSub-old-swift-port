@@ -16,7 +16,6 @@
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "SUSLyricsLoader.h"
-#import "NSString+Additions.h"
 #import "SUSCoverArtLoader.h"
 #import "ViewObjectsSingleton.h"
 #import "iSubAppDelegate.h"
@@ -91,7 +90,7 @@
 		|| [self.currentQueuedSong isEqualToSong:playlistS.nextSong])
 	{
 		// The song is fully cached, so delete it from the cache queue database
-		[self.currentQueuedSong removeFromCacheQueue];
+		[self.currentQueuedSong removeFromCacheQueueDbQueue];
 		
 		// Continue the queue
 		[self startDownloadQueue];
@@ -154,7 +153,7 @@
 	if (self.isQueueDownloading)
 		[self stopDownloadQueue];
 	
-	[self.currentQueuedSong removeFromCacheQueue];
+	[self.currentQueuedSong removeFromCacheQueueDbQueue];
 	
 	if (!self.isQueueDownloading)
 		[self startDownloadQueue];
@@ -180,7 +179,7 @@
 	else
 	{
 		// Tried max number of times so remove
-		[self.currentQueuedSong removeFromCacheQueue];
+		[self.currentQueuedSong removeFromCacheQueueDbQueue];
 		self.currentStreamHandler = nil;
 		[self startDownloadQueue];
 	}
@@ -200,7 +199,7 @@
 	{		
 		// Mark song as cached
 		self.currentQueuedSong.isFullyCached = YES;
-		[self.currentQueuedSong removeFromCacheQueue];
+		[self.currentQueuedSong removeFromCacheQueueDbQueue];
 		self.currentQueuedSong = nil;
 		
 		// Remove the stream handler

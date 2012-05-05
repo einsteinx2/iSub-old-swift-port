@@ -32,4 +32,6 @@
 
 - (void)checkServerUrlString:(NSString *)urlString username:(NSString *)username password:(NSString *)password;
 
+- (void)cancelLoad;
+
 @end

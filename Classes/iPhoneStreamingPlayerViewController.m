@@ -19,7 +19,6 @@
 #import <CFNetwork/CFNetwork.h>
 #import "FMDatabaseAdditions.h"
 #import "NSString+md5.h"
-#import "UIView+Tools.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SavedSettings.h"
 #import "PlaylistSingleton.h"
@@ -28,7 +27,6 @@
 #import "SUSCoverArtDAO.h"
 #import "UIApplication+StatusBar.h"
 #import "OBSlider.h"
-#import "NSString+Additions.h"
 #import "ISMSStreamManager.h"
 #import "ISMSStreamHandler.h"
 #import "NSArray+FirstObject.h"

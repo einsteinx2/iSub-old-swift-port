@@ -7,7 +7,6 @@
 //
 
 #import "BBSimpleConnectionQueue.h"
-#import "NSArray+Additions.h"
 
 @implementation BBSimpleConnectionQueue
 

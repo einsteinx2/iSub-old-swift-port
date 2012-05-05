@@ -105,7 +105,7 @@
 	
 	// Add the song to the empty playlist
 	Song *aSong = [self songForIndex:index];
-	[aSong addToCurrentPlaylist];
+	[aSong addToCurrentPlaylistDbQueue];
 	
 	// If jukebox mode, send song ids to server
 	if (settingsS.isJukeboxEnabled)

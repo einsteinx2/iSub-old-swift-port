@@ -14,8 +14,6 @@
 #import "FMDatabaseAdditions.h"
 
 #import "Album.h"
-#import "NSString+Additions.h"
-#import "UIView+Tools.h"
 #import "UIApplication+StatusBar.h"
 #import "UIImageView+Reflection.h"
 #import "SavedSettings.h"

@@ -21,12 +21,10 @@
 #import "FMDatabaseQueueAdditions.h"
 #import "NSString+md5.h"
 #import "SavedSettings.h"
-#import "NSArray+Additions.h"
 #import "PlaylistSingleton.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
 #import "UIViewController+PushViewControllerCustom.h"
-#import "UITableView+Shadows.h"
 
 @implementation GenresArtistViewController
 
@@ -193,9 +191,9 @@
 				if ([result stringForColumnIndex:0] != nil)
 				{
 					NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
-					Song *aSong = [Song songFromGenreDb:songIdMD5];
+					Song *aSong = [Song songFromGenreDb:db md5:songIdMD5];
 					
-					[aSong addToCurrentPlaylist];
+					[aSong addToCurrentPlaylistDbQueue];
 				}	
 			}
 		}
@@ -246,10 +244,8 @@
 			{
 				if ([result stringForColumnIndex:0] != nil)
 				{
-					NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
-					Song *aSong = [Song songFromGenreDb:songIdMD5];
-					
-					[aSong addToCurrentPlaylist];
+					Song *aSong = [Song songFromGenreDb:db md5:[result stringForColumnIndex:0]];
+					[aSong addToCurrentPlaylistDbQueue];
 				}
 			}
 		}

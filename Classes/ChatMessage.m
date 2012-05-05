@@ -7,7 +7,6 @@
 //
 
 #import "ChatMessage.h"
-#import "NSString+Additions.h"
 
 @implementation ChatMessage
 

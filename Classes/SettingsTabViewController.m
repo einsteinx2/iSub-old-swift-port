@@ -25,7 +25,6 @@
 #import "FMDatabaseQueueAdditions.h"
 
 #import "SavedSettings.h"
-#import "NSString+Additions.h"
 #import "NSArray+Additions.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
@@ -522,13 +521,6 @@
 			settingsS.isBasicAuthEnabled = self.enableBasicAuthSwitch.on;
 		}
 	}
-}
-
-- (IBAction)resetFolderCacheAction
-{
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Reset Album Folder Cache" message:@"Are you sure you want to do this? This clears just the cached folder listings, not the cached songs" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-	alert.tag = 0;
-	[alert show];
 }
 
 - (IBAction)resetAlbumArtCacheAction
