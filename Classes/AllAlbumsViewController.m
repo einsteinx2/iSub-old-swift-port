@@ -28,7 +28,6 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "SUSAllAlbumsDAO.h"
-#import "FlurryAnalytics.h"
 #import "EGORefreshTableHeaderView.h"
 #import "SUSAllSongsLoader.h"
 #import "SUSAllSongsDAO.h"

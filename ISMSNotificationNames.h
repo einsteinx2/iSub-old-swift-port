@@ -63,4 +63,7 @@
 
 #define ISMSNotification_LargeSongInfoToggle @"ISMS large song info toggle"
 
+#define ISMSNotification_JukeboxEnabled @"ISMS jukebox enabled"
+#define ISMSNotification_JukeboxDisabled @"ISMS jukebox disabled"
+
 #endif

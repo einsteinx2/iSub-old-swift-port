@@ -24,7 +24,6 @@
 #import "SavedSettings.h"
 #import "SUSChatDAO.h"
 #import "NSError+ISMSError.h"
-#import "FlurryAnalytics.h"
 #import "SeparaterView.h"
 
 @interface ChatViewController (Private)

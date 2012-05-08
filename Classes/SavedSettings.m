@@ -382,6 +382,7 @@
 	audioEngineBufferNumberOfSeconds = [userDefaults integerForKey:@"audioEngineBufferNumberOfSeconds"];
 	audioEngineStartNumberOfSeconds = [userDefaults integerForKey:@"audioEngineStartNumberOfSeconds"];
 	isShowLargeSongInfoInPlayer = [userDefaults boolForKey:@"isShowLargeSongInfoInPlayer"];
+	isLockScreenArtEnabled = [userDefaults boolForKey:@"isLockScreenArtEnabled"];
 		
 	NSString *url = [userDefaults stringForKey:@"url"];
 	if (url)
@@ -1349,6 +1350,27 @@
 		{
 			isShowLargeSongInfoInPlayer = isShow;
 			[userDefaults setBool:isShow forKey:@"isShowLargeSongInfoInPlayer"];
+			[userDefaults synchronize];
+		}
+	}
+}
+
+- (BOOL)isLockScreenArtEnabled
+{
+	@synchronized(self)
+	{
+		return isLockScreenArtEnabled;
+	}
+}
+
+- (void)setIsLockScreenArtEnabled:(BOOL)isEnabled
+{
+	@synchronized(self)
+	{
+		if (isLockScreenArtEnabled != isEnabled)
+		{
+			isLockScreenArtEnabled = isEnabled;
+			[userDefaults setBool:isEnabled forKey:@"isLockScreenArtEnabled"];
 			[userDefaults synchronize];
 		}
 	}

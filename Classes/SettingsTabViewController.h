@@ -80,6 +80,12 @@
 
 @property (nonatomic, strong) IBOutlet UISwitch *showLargeSongInfoSwitch;
 
+@property (nonatomic, strong) IBOutlet UISwitch *enableLockScreenArt;
+
+@property (nonatomic, strong) IBOutlet UILabel *enableLockArtLabel;
+@property (nonatomic, strong) IBOutlet UILabel *swipeCellsLabel;
+@property (nonatomic, strong) IBOutlet UILabel *tapHoldCellsLabel;
+
 @property (nonatomic, strong) NSDate *loadedTime;
 
 - (void)toggleCacheControlsVisibility;

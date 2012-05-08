@@ -20,7 +20,6 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "NSString+time.h"
-#import "FlurryAnalytics.h"
 #import "Song+DAO.h"
 #import "PlaylistSingleton.h"
 #import "NSNotificationCenter+MainThread.h"

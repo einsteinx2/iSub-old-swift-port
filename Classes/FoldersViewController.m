@@ -23,7 +23,6 @@
 #import "FolderDropdownControl.h"
 #import "SUSRootFoldersDAO.h"
 #import "SavedSettings.h"
-#import "FlurryAnalytics.h"
 #import "SUSAllSongsLoader.h"
 #import "SeparaterView.h"
 #import "UIViewController+PushViewControllerCustom.h"

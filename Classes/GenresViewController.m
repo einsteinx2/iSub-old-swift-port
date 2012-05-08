@@ -19,7 +19,6 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "SavedSettings.h"
-#import "FlurryAnalytics.h"
 #import "UIViewController+PushViewControllerCustom.h"
 
 @implementation GenresViewController

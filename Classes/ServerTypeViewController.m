@@ -35,6 +35,8 @@
 		subsonicServerEditViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		subView = subsonicServerEditViewController.view;
 		self.serverEditViewController = subsonicServerEditViewController;
+		
+		[FlurryAnalytics logEvent:@"ServerType" withParameters:[NSDictionary dictionaryWithObject:@"Subsonic" forKey:@"type"]];
 	}
 	else if (sender == self.ubuntuButton)
 	{
@@ -45,6 +47,8 @@
 		[self.view addSubview:ubuntuServerEditViewController.view];
 		self.serverEditViewController = ubuntuServerEditViewController;
 		subView = ubuntuServerEditViewController.view;
+		
+		[FlurryAnalytics logEvent:@"ServerType" withParameters:[NSDictionary dictionaryWithObject:@"UbuntuOne" forKey:@"type"]];
 	}
 	else if (sender == self.cancelButton)
 	{

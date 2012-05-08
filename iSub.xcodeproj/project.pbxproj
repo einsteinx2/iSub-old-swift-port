@@ -1881,6 +1881,7 @@
 		534098C0142E66CB00455754 /* SUSLoaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSLoaderManager.h; sourceTree = "<group>"; };
 		5345FADE1191E6A000C6EAB7 /* NSString+md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+md5.h"; sourceTree = "<group>"; };
 		5345FADF1191E6A000C6EAB7 /* NSString+md5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+md5.m"; sourceTree = "<group>"; };
+		5346C20315598A950038A5F8 /* Imports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Imports.h; sourceTree = "<group>"; };
 		5347A1A8148C3857000288D8 /* BassEffectDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassEffectDAO.h; sourceTree = "<group>"; };
 		5347A1A9148C3857000288D8 /* BassEffectDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassEffectDAO.m; sourceTree = "<group>"; };
 		5347A1B2148C463A000288D8 /* BassEffectValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassEffectValue.h; sourceTree = "<group>"; };
@@ -2677,6 +2678,7 @@
 				53B15EB3145D02EC007A04F6 /* NSError+ISMSError.m */,
 				537A466F14783F3E004591C9 /* ISMSNotificationNames.h */,
 				53E6093D150C4F8100FD86E6 /* Macros.h */,
+				5346C20315598A950038A5F8 /* Imports.h */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -3072,13 +3074,6 @@
 			name = Main;
 			sourceTree = "<group>";
 		};
-		53733C6D14FC4AC4001D8104 /* ISMSCacheQueueManager */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = ISMSCacheQueueManager;
-			sourceTree = "<group>";
-		};
 		5373A71A1164F6FE000E3FD8 /* Folders Tab */ = {
 			isa = PBXGroup;
 			children = (
@@ -3424,7 +3419,6 @@
 			children = (
 				53E82A9C140721D50051D44B /* General */,
 				53FB066011EE1C4E008A30C7 /* ISMSStreamManager */,
-				53733C6D14FC4AC4001D8104 /* ISMSCacheQueueManager */,
 				53E82A9B140721BD0051D44B /* Subsonic */,
 				5304BCE111BD58E3000EF6F9 /* NSURLConnectionDelegates */,
 				533A207C12887EB100539BAE /* XML Parsers */,

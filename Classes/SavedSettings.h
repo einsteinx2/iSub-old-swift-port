@@ -37,6 +37,7 @@ typedef enum
 	NSUInteger audioEngineStartNumberOfSeconds;
 	NSUInteger audioEngineBufferNumberOfSeconds;
 	BOOL isShowLargeSongInfoInPlayer;
+	BOOL isLockScreenArtEnabled;
 	
 	// State Saving
 	BOOL isPlaying;	
@@ -112,6 +113,8 @@ typedef enum
 @property BOOL isShouldShowEQViewInstructions;
 
 @property BOOL isShowLargeSongInfoInPlayer;
+
+@property BOOL isLockScreenArtEnabled;
 
 // State Saving
 @property BOOL isRecover;

@@ -37,7 +37,6 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "PlaylistSingleton.h"
 #import "AudioEngine.h"
-#import "FlurryAnalytics.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
@@ -121,7 +120,7 @@
 	self.title = @"Home";
 	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settings)] autorelease];
 
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jukeboxOff) name:@"JukeboxTurnedOff" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jukeboxOff) name:ISMSNotification_JukeboxDisabled object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) name:ISMSNotification_SongPlaybackStarted object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) name:ISMSNotification_ServerSwitched object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(performServerShuffle:) name:@"performServerShuffle" object:nil];
@@ -467,6 +466,8 @@
 						
 			appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
 			
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_JukeboxDisabled];
+			
 			[FlurryAnalytics logEvent:@"JukeboxDisabled"];
 		}
 		else
@@ -483,6 +484,8 @@
 			[jukeboxS jukeboxGetInfo];
 			
 			appDelegateS.window.backgroundColor = viewObjectsS.jukeboxColor;
+			
+			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_JukeboxEnabled];
 			
 			[FlurryAnalytics logEvent:@"JukeboxEnabled"];
 		}	

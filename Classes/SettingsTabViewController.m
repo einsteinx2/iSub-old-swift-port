@@ -33,7 +33,7 @@
 
 @implementation SettingsTabViewController
 
-@synthesize parentController, versionLabel, manualOfflineModeSwitch, checkUpdatesSwitch, autoReloadArtistSwitch, disablePopupsSwitch, disableRotationSwitch, disableScreenSleepSwitch, enableBasicAuthSwitch, enableSongsTabSwitch, enableSongsTabLabel, enableSongsTabDesc, recoverSegmentedControl, maxBitrateWifiSegmentedControl, maxBitrate3GSegmentedControl, enableLyricsSwitch, enableCacheStatusSwitch, autoPlayerInfoSwitch, enableSwipeSwitch, enableTapAndHoldSwitch, enableSongCachingSwitch, enableNextSongCacheLabel, enableNextSongCacheSwitch, enableNextSongPartialCacheLabel, enableNextSongPartialCacheSwitch, cachingTypeSegmentedControl, totalSpace, freeSpace, cacheSpaceLabel1, cacheSpaceLabel2, freeSpaceLabel, totalSpaceLabel, totalSpaceBackground, freeSpaceBackground, cacheSpaceSlider, cacheSpaceDescLabel, autoDeleteCacheSwitch, autoDeleteCacheTypeSegmentedControl, cacheSongCellColorSegmentedControl, twitterSigninButton, twitterStatusLabel, twitterEnabledSwitch, enableScrobblingSwitch, scrobblePercentLabel, scrobblePercentSlider, quickSkipSegmentControl, secondsToStartPlayerSegmentControl, secondsToBufferSegmentControl, showLargeSongInfoSwitch, loadedTime;
+@synthesize parentController, versionLabel, manualOfflineModeSwitch, checkUpdatesSwitch, autoReloadArtistSwitch, disablePopupsSwitch, disableRotationSwitch, disableScreenSleepSwitch, enableBasicAuthSwitch, enableSongsTabSwitch, enableSongsTabLabel, enableSongsTabDesc, recoverSegmentedControl, maxBitrateWifiSegmentedControl, maxBitrate3GSegmentedControl, enableLyricsSwitch, enableCacheStatusSwitch, autoPlayerInfoSwitch, enableSwipeSwitch, enableTapAndHoldSwitch, enableSongCachingSwitch, enableNextSongCacheLabel, enableNextSongCacheSwitch, enableNextSongPartialCacheLabel, enableNextSongPartialCacheSwitch, cachingTypeSegmentedControl, totalSpace, freeSpace, cacheSpaceLabel1, cacheSpaceLabel2, freeSpaceLabel, totalSpaceLabel, totalSpaceBackground, freeSpaceBackground, cacheSpaceSlider, cacheSpaceDescLabel, autoDeleteCacheSwitch, autoDeleteCacheTypeSegmentedControl, cacheSongCellColorSegmentedControl, twitterSigninButton, twitterStatusLabel, twitterEnabledSwitch, enableScrobblingSwitch, scrobblePercentLabel, scrobblePercentSlider, quickSkipSegmentControl, secondsToStartPlayerSegmentControl, secondsToBufferSegmentControl, showLargeSongInfoSwitch, loadedTime, enableLockScreenArt, enableLockArtLabel, swipeCellsLabel, tapHoldCellsLabel;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -63,6 +63,31 @@
 #else
 	versionLabel.text = [NSString stringWithFormat:@"iSub version %@", version];
 #endif
+	
+	// Hide elements
+	if (IS_IPAD())
+	{
+		self.swipeCellsLabel.hidden = self.tapHoldCellsLabel.hidden = YES;
+		self.enableSwipeSwitch.hidden = self.enableTapAndHoldSwitch.hidden = YES;
+		self.enableSwipeSwitch.enabled = self.enableTapAndHoldSwitch.enabled = NO;
+		
+		CGFloat y = self.autoReloadArtistSwitch.y;
+		for (UIView *view in self.view.subviews)
+		{
+			if (view.y > y+10.) view.y -= 70.;
+		}
+	}
+	if (![NSClassFromString(@"MPNowPlayingInfoCenter") class])
+	{
+		self.enableLockArtLabel.hidden = self.enableLockScreenArt.hidden = YES;
+		self.enableLockScreenArt.enabled = NO;
+		
+		CGFloat y = self.enableCacheStatusSwitch.y;
+		for (UIView *view in self.view.subviews)
+		{
+			if (view.y > y+10.) view.y -= 35.;
+		}
+	}
 	
 	// Main Settings
 	self.enableScrobblingSwitch.on = settingsS.isScrobbleEnabled;
@@ -99,6 +124,7 @@
 	self.showLargeSongInfoSwitch.on = settingsS.isShowLargeSongInfoInPlayer;
 	self.enableLyricsSwitch.on = settingsS.isLyricsEnabled;
 	self.enableCacheStatusSwitch.on = settingsS.isCacheStatusEnabled;
+	self.enableLockScreenArt.on = settingsS.isLockScreenArtEnabled;
 	
 	// Cache Settings
 	self.enableSongCachingSwitch.on = settingsS.isSongCachingEnabled;
@@ -519,6 +545,10 @@
 		else if (sender == self.enableBasicAuthSwitch)
 		{
 			settingsS.isBasicAuthEnabled = self.enableBasicAuthSwitch.on;
+		}
+		else if (sender == self.enableLockScreenArt)
+		{
+			settingsS.isLockScreenArtEnabled = self.enableLockScreenArt.on;
 		}
 	}
 }

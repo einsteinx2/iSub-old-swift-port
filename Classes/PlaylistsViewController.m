@@ -31,7 +31,6 @@
 #import "SUSServerPlaylist.h"
 #import "PlaylistSingleton.h"
 #import "AudioEngine.h"
-#import "FlurryAnalytics.h"
 //
 #import "NSNotificationCenter+MainThread.h"
 #import "NSArray+Additions.h"

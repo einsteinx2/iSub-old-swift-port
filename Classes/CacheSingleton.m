@@ -242,7 +242,9 @@
 		[[NSFileManager defaultManager] createDirectoryAtPath:settingsS.songCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
 	}
 	// Clear the temp cache directory
-	[self clearTempCache];
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[self clearTempCache];
+	});
 
 	// Setup the cache check interval
 	cacheCheckInterval = 60.0;

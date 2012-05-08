@@ -35,7 +35,6 @@
 #import "SFHFKeychainUtils.h"
 #import "BWQuincyManager.h"
 #import "BWHockeyManager.h"
-#import "FlurryAnalytics.h"
 #import "SavedSettings.h"
 #import "CacheSingleton.h"
 #import "NSMutableURLRequest+SUS.h"

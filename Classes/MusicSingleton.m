@@ -251,15 +251,9 @@ double startSongSeconds = 0.0;
 	if ([NSClassFromString(@"MPNowPlayingInfoCenter") class])  
 	{
 		/* we're on iOS 5, so set up the now playing center */
+		NSMutableDictionary *trackInfo = [NSMutableDictionary dictionaryWithCapacity:10];
+		
 		Song *currentSong = playlistS.currentSong;
-
-		SUSCoverArtDAO *artDataModel = [[SUSCoverArtDAO alloc] initWithDelegate:nil coverArtId:currentSong.coverArtId isLarge:YES];
-		
-		UIImage *albumArtImage = artDataModel.coverArtImage;
-		
-		MPMediaItemArtwork *albumArt = [[MPMediaItemArtwork alloc] initWithImage:albumArtImage];
-		
-		NSMutableDictionary *trackInfo = [NSMutableDictionary dictionaryWithObject:albumArt forKey:MPMediaItemPropertyArtwork];
 		if (currentSong.title)
 			[trackInfo setObject:currentSong.title forKey:MPMediaItemPropertyTitle];
 		if (currentSong.album)
@@ -279,6 +273,13 @@ double startSongSeconds = 0.0;
 		NSNumber *progress = [NSNumber numberWithDouble:audioEngineS.progress];
 		if (progress)
 			[trackInfo setObject:progress forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
+		
+		if (settingsS.isLockScreenArtEnabled)
+		{
+			SUSCoverArtDAO *artDataModel = [[SUSCoverArtDAO alloc] initWithDelegate:nil coverArtId:currentSong.coverArtId isLarge:YES];
+			[trackInfo setObject:[[MPMediaItemArtwork alloc] initWithImage:artDataModel.coverArtImage] 
+						  forKey:MPMediaItemPropertyArtwork];
+		}
 		
 		[MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = trackInfo;
 	}

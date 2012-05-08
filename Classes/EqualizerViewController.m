@@ -343,6 +343,8 @@
 	swipeDetectorRight = [[UISwipeGestureRecognizer alloc] initWithTarget:equalizerView action:@selector(prevType)];
 	swipeDetectorRight.direction = UISwipeGestureRecognizerDirectionRight;
 	[equalizerView addGestureRecognizer:swipeDetectorRight];
+	
+	[FlurryAnalytics logEvent:@"Equalizer"];
 }
 
 - (void)viewWillAppear:(BOOL)animated

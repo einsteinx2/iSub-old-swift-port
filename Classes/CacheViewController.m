@@ -26,7 +26,6 @@
 #import "SavedSettings.h"
 #import "CacheSingleton.h"
 #import "PlaylistSingleton.h"
-#import "FlurryAnalytics.h"
 #import "AudioEngine.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"

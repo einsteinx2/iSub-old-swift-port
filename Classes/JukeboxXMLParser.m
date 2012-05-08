@@ -41,7 +41,7 @@
 	{
 		settingsS.isJukeboxEnabled = NO;
 		appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
-		[NSNotificationCenter postNotificationToMainThreadWithName:@"JukeboxTurnedOff"];
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_JukeboxDisabled];
 	}
 }
 

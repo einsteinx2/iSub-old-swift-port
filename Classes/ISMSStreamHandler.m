@@ -545,6 +545,13 @@
 	}
 	else 
 	{
+		// Make sure the player is told to start
+		if (!self.isDelegateNotifiedToStartPlayback)
+		{
+			self.isDelegateNotifiedToStartPlayback = YES;
+			[GCDWrapper runInMainThreadAndWaitUntilDone:YES block:^{ [self startPlaybackInternal]; }];
+		}
+		
 		// Perform these operations on the main thread
 		[GCDWrapper runInMainThreadAndWaitUntilDone:YES block:^{ [self didFinishLoadingInternal]; }];
 		

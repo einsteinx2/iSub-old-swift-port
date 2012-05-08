@@ -21,7 +21,6 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
-#import "FlurryAnalytics.h"
 #import "SUSNowPlayingDAO.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "EGORefreshTableHeaderView.h"

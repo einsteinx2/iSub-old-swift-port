@@ -107,6 +107,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {
 	[super viewDidLoad];
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jukeboxToggled) name:ISMSNotification_JukeboxDisabled object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jukeboxToggled) name:ISMSNotification_JukeboxEnabled object:nil];
+	
 	DLog(@"coverArtImageView class: %@", NSStringFromClass(coverArtImageView.class));
 	
 	extraButtonsButtonOffImage = [UIImage imageNamed:@"controller-extras.png"];
@@ -133,33 +136,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	// Initialize the song info
 	[self initSongInfo];
 	
-	// Setup the volume controller view
-	if (settingsS.isJukeboxEnabled)
-	{
-		[jukeboxS jukeboxGetInfo];
-		
-		self.view.backgroundColor = viewObjectsS.jukeboxColor;
-		
-		CGRect frame = volumeSlider.bounds;
-		frame.size.height = volumeSlider.bounds.size.height / 2;
-		self.jukeboxVolumeView = [[UISlider alloc] initWithFrame:frame];
-		[self.jukeboxVolumeView addTarget:self action:@selector(jukeboxVolumeChanged:) forControlEvents:UIControlEventValueChanged];
-		self.jukeboxVolumeView.minimumValue = 0.0;
-		self.jukeboxVolumeView.maximumValue = 1.0;
-		self.jukeboxVolumeView.continuous = NO;
-		self.jukeboxVolumeView.value = jukeboxS.jukeboxGain;
-		[self.volumeSlider addSubview:self.jukeboxVolumeView];
-	}
-	else
-	{
-		//volumeSlider.backgroundColor = [UIColor greenColor];
-		CGRect newFrame = CGRectMake(10, 0, volumeSlider.width-20, volumeSlider.height);
-		//CGRect newFrame = CGRectMake(volumeSlider.x, volumeSlider.y-10, volumeSlider.width, 30);
-		self.volumeView = [[MPVolumeView alloc] initWithFrame:newFrame];
-		[self.volumeSlider addSubview:self.volumeView];
-		//[self.view addSubview:volumeView];
-		//[volumeView sizeToFit];
-	}
+	[self jukeboxToggled];
 	
 	// Setup the cover art reflection
 	reflectionHeight = coverArtImageView.bounds.size.height * kDefaultReflectionFraction;
@@ -762,6 +739,45 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[self updateFormatLabel];
 }
 
+- (void)jukeboxToggled
+{
+	// Setup the volume controller view
+	if (settingsS.isJukeboxEnabled)
+	{
+		// Remove the regular volume control if there
+		[self.volumeView removeFromSuperview];
+		self.volumeView = nil;
+		
+		[jukeboxS jukeboxGetInfo];
+		
+		self.view.backgroundColor = viewObjectsS.jukeboxColor;
+		
+		CGRect frame = volumeSlider.bounds;
+		frame.size.height = volumeSlider.bounds.size.height / 2;
+		self.jukeboxVolumeView = [[UISlider alloc] initWithFrame:frame];
+		[self.jukeboxVolumeView addTarget:self action:@selector(jukeboxVolumeChanged:) forControlEvents:UIControlEventValueChanged];
+		self.jukeboxVolumeView.minimumValue = 0.0;
+		self.jukeboxVolumeView.maximumValue = 1.0;
+		self.jukeboxVolumeView.continuous = NO;
+		self.jukeboxVolumeView.value = jukeboxS.jukeboxGain;
+		[self.volumeSlider addSubview:self.jukeboxVolumeView];
+	}
+	else
+	{
+		// Remove the jukebox volume control if there
+		[self.jukeboxVolumeView removeFromSuperview];
+		self.jukeboxVolumeView = nil;
+		
+		//volumeSlider.backgroundColor = [UIColor greenColor];
+		CGRect newFrame = CGRectMake(10, 0, volumeSlider.width-20, volumeSlider.height);
+		//CGRect newFrame = CGRectMake(volumeSlider.x, volumeSlider.y-10, volumeSlider.width, 30);
+		self.volumeView = [[MPVolumeView alloc] initWithFrame:newFrame];
+		[self.volumeSlider addSubview:self.volumeView];
+		//[self.view addSubview:volumeView];
+		//[volumeView sizeToFit];
+	}
+}
+
 - (void)jukeboxVolumeChanged:(id)sender
 {
 	[jukeboxS jukeboxSetVolume:self.jukeboxVolumeView.value];
@@ -1258,6 +1274,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	}
 	progressSlider.value = newValue;
 	[self movedSlider:nil];
+	
+	[FlurryAnalytics logEvent:@"QuickSkip"];
 }
 
 - (IBAction)skipForward30:(id)sender
@@ -1265,6 +1283,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	CGFloat seconds = (CGFloat)settingsS.quickSkipNumberOfSeconds;
 	progressSlider.value = progressSlider.value + seconds;
 	[self movedSlider:nil];
+	
+	[FlurryAnalytics logEvent:@"QuickSkip"];
 }
 
 - (IBAction) repeatButtonToggle:(id)sender

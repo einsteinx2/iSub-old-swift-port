@@ -11,11 +11,5 @@
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
     #import <QuartzCore/QuartzCore.h>
-    #import "Categories.h"
+    #import "Imports.h"
 #endif
-
-#import "ISMSNotificationNames.h"
-#import "ISMSErrorDomain.h"
-#import "SUSErrorDomain.h"
-
-#import "Macros.h"
