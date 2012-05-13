@@ -1034,9 +1034,9 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		DLog(@"Can't initialize device");
 	}
 	BASS_PluginLoad(&BASSFLACplugin, 0); // load the Flac plugin
-	BASS_PluginLoad(&BASSWVplugin, 0); // load the WavePack plugin
-	BASS_PluginLoad(&BASS_APEplugin, 0); // load the Monkey's Audio plugin
-	BASS_PluginLoad(&BASS_MPCplugin, 0); // load the MusePack plugin
+	//BASS_PluginLoad(&BASSWVplugin, 0); // load the WavePack plugin
+	//BASS_PluginLoad(&BASS_APEplugin, 0); // load the Monkey's Audio plugin
+	//BASS_PluginLoad(&BASS_MPCplugin, 0); // load the MusePack plugin
 			
 	BASS_INFO info;
 	BASS_GetInfo(&info);

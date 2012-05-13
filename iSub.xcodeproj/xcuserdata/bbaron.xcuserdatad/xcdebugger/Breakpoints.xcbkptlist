@@ -416,8 +416,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1715"
          endingLineNumber = "1715"
-         landmarkName = "@implementation AudioEngine"
-         landmarkType = "3">
+         landmarkName = "-setNextStreamTempo:"
+         landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -430,7 +430,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1726"
          endingLineNumber = "1726"
-         landmarkName = "-nextStream"
+         landmarkName = "-nextReadingStream"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -444,7 +444,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1728"
          endingLineNumber = "1728"
-         landmarkName = "-nextStream"
+         landmarkName = "-nextReadingStream"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -458,7 +458,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1733"
          endingLineNumber = "1733"
-         landmarkName = "-setNextStream:"
+         landmarkName = "-BASSisFilestream1"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -472,7 +472,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1716"
          endingLineNumber = "1716"
-         landmarkName = "-currentReadingStream"
+         landmarkName = "-setNextStreamTempo:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -486,7 +486,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1720"
          endingLineNumber = "1720"
-         landmarkName = "-currentReadingStream"
+         landmarkName = "-setNextStreamTempo:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1354,8 +1354,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1382"
          endingLineNumber = "1382"
-         landmarkName = "-prepareFileStream1"
-         landmarkType = "5">
+         landmarkName = "@implementation AudioEngine"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -5258,7 +5258,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1413"
          endingLineNumber = "1413"
-         landmarkName = "-startWithOffsetInBytes:orSeconds:"
+         landmarkName = "-startWithOffsetInBytesorSecondsInternal:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -5427,7 +5427,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "662"
          endingLineNumber = "662"
-         landmarkName = "-songEnded"
+         landmarkName = "-estimatedBitrate"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -5440,7 +5440,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "656"
          endingLineNumber = "656"
-         landmarkName = "-songEnded"
+         landmarkName = "-estimatedBitrate"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

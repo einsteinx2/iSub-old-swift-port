@@ -49,6 +49,10 @@
 {
 	@synchronized(self)
 	{
+		// Make sure old activity indicator is gone
+		[self.activityIndicator removeFromSuperview];
+		self.activityIndicator = nil;
+		
 		if (self.coverArtDAO)
 		{
 			[self.coverArtDAO cancelLoad];
@@ -172,15 +176,6 @@
 	{
 		[self.delegate asyncImageViewFinishedLoading:self];
 	}
-}
-
-- (void)dealloc 
-{
-	delegate = nil;
-	
-	[activityIndicator removeFromSuperview];
-	
-	coverArtId = nil;
 }
 
 @end
