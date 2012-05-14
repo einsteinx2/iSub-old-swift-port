@@ -14,15 +14,12 @@
 @property (nonatomic) BOOL isIndexShowing;
 @property (nonatomic) BOOL isOverlayShowing;
 @property (strong) CellOverlay *overlayView;
-
 @property (strong) NSIndexPath *indexPath;
 @property (nonatomic) BOOL isSearching;
-
 @property (strong) UIImageView *deleteToggleImage;
 @property BOOL isDelete;
-
-@property (unsafe_unretained, readonly) UIImage *nowPlayingImageBlack;
-@property (unsafe_unretained, readonly) UIImage *nowPlayingImageWhite;
+- (UIImage *)nowPlayingImageBlack;
+- (UIImage *)nowPlayingImageWhite;
 
 - (void)showOverlay;
 - (void)hideOverlay;

@@ -18,22 +18,18 @@
 @property (nonatomic, strong) IBOutlet UIView *searchSegmentBackground;
 @property (nonatomic, strong) UIView *searchOverlay;
 @property (nonatomic, strong) UIButton *dismissButton;
-
 @property (nonatomic) BOOL isSearch;
-
 @property (nonatomic, strong) IBOutlet UILabel *quickLabel;
 @property (nonatomic, strong) IBOutlet UILabel *shuffleLabel;
 @property (nonatomic, strong) IBOutlet UILabel *jukeboxLabel;
 @property (nonatomic, strong) IBOutlet UILabel *settingsLabel;
 @property (nonatomic, strong) IBOutlet UILabel *chatLabel;
 @property (nonatomic, strong) IBOutlet UILabel *playerLabel;
-
 @property (nonatomic, strong) UIButton *coverArtBorder;
 @property (nonatomic, strong) AsynchronousImageView *coverArtView;
 @property (nonatomic, strong) UILabel *artistLabel;
 @property (nonatomic, strong) UILabel *albumLabel;
 @property (nonatomic, strong) UILabel *songLabel;
-
 @property (nonatomic, strong) NSURLConnection *connection;
 @property (nonatomic, strong) NSMutableData *receivedData;
 

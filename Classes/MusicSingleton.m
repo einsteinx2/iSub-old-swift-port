@@ -36,6 +36,7 @@
 #import "ISMSCacheQueueManager.h"
 
 @implementation MusicSingleton
+@synthesize isAutoNextNotificationOn;
 
 #pragma mark Control Methods
 
@@ -303,10 +304,6 @@ double startSongSeconds = 0.0;
 
 - (void)setup 
 {
-	isAutoNextNotificationOn = NO;
-	
-	//[self addAutoNextNotification];
-	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLockScreenInfo) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLockScreenInfo) name:ISMSNotification_AlbumArtLargeDownloaded object:nil];
 	

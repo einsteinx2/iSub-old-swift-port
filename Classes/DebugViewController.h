@@ -10,20 +10,18 @@
 @class Song;
 
 @interface DebugViewController : UIViewController 
-{
-	
-	IBOutlet UIProgressView *currentSongProgressView;
-	IBOutlet UILabel *nextSongLabel;
-	IBOutlet UIProgressView *nextSongProgressView;
-	
-	IBOutlet UILabel *songsCachedLabel;
-	IBOutlet UILabel *cacheSizeLabel;
-	IBOutlet UILabel *cacheSettingLabel;
-	IBOutlet UILabel *cacheSettingSizeLabel;
-	IBOutlet UILabel *freeSpaceLabel;
-	
-	IBOutlet UIButton *songInfoToggleButton;
-}
+
+@property (strong) IBOutlet UIProgressView *currentSongProgressView;
+@property (strong) IBOutlet UILabel *nextSongLabel;
+@property (strong) IBOutlet UIProgressView *nextSongProgressView;
+
+@property (strong) IBOutlet UILabel *songsCachedLabel;
+@property (strong) IBOutlet UILabel *cacheSizeLabel;
+@property (strong) IBOutlet UILabel *cacheSettingLabel;
+@property (strong) IBOutlet UILabel *cacheSettingSizeLabel;
+@property (strong) IBOutlet UILabel *freeSpaceLabel;
+
+@property (strong) IBOutlet UIButton *songInfoToggleButton;
 
 @property (copy) Song *currentSong;
 @property (copy) Song *nextSong;

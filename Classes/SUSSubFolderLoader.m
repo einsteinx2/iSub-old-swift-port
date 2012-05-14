@@ -18,15 +18,9 @@
 #import "NSString+md5.h"
 
 @implementation SUSSubFolderLoader
-@synthesize myId, myArtist;
+@synthesize myId, myArtist, albumsCount, songsCount, folderLength;
 
 #pragma mark - Lifecycle
-
-- (void)setup
-{
-	[super setup];
-}
-
 
 - (FMDatabaseQueue *)dbQueue
 {

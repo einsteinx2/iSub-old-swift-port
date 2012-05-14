@@ -16,7 +16,7 @@
 
 @implementation StoreViewController
 
-@synthesize storeItems;
+@synthesize storeItems, storeManager, checkProductsTimer;
 
 #pragma mark - View lifecycle
 
@@ -37,16 +37,16 @@
 {
     [super viewDidLoad];
 
-	storeManager = [MKStoreManager sharedManager];
+	self.storeManager = [MKStoreManager sharedManager];
 
-	storeItems = [[NSArray alloc] initWithArray:storeManager.purchasableObjects];
+	self.storeItems = [[NSArray alloc] initWithArray:self.storeManager.purchasableObjects];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(reloadData) name:ISMSNotification_StorePurchaseComplete object:nil];
 	
-	if ([storeItems count] == 0)
+	if (self.storeItems.count == 0)
 	{
 		[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
-		checkProductsTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(checkProducts) userInfo:nil repeats:YES];
+		self.checkProductsTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(checkProducts) userInfo:nil repeats:YES];
 		[self checkProducts];
 	}
 	else
@@ -79,11 +79,12 @@
 
 - (void)checkProducts
 {
-	storeItems = [[NSArray alloc] initWithArray:storeManager.purchasableObjects];
+	self.storeItems = [[NSArray alloc] initWithArray:storeManager.purchasableObjects];
 	
-	if ([storeItems count] > 0)
+	if (self.storeItems.count > 0)
 	{
-		[checkProductsTimer invalidate]; checkProductsTimer = nil;
+		[self.checkProductsTimer invalidate]; 
+		self.checkProductsTimer = nil;
 		
 		[viewObjectsS hideLoadingScreen];
 		
@@ -112,7 +113,7 @@
 	
 	[sorted addObjectsFromArray:temp];
 	
-	storeItems = [[NSArray alloc] initWithArray:sorted];
+	self.storeItems = [[NSArray alloc] initWithArray:sorted];
 }
 
 #pragma mark - Table view data source
@@ -134,7 +135,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [storeItems count] + 1;
+    return self.storeItems.count + 1;
 }
 
 
@@ -162,14 +163,14 @@
 {
 	if (indexPath.row == 0)
 	{
-		[storeManager restorePreviousTransactions];
+		[self.storeManager restorePreviousTransactions];
 	}
 	else
 	{
 		NSUInteger adjustedRow = indexPath.row - 1;
-		if (![MKStoreManager isFeaturePurchased:[[storeItems objectAtIndexSafe:adjustedRow] productIdentifier]])
+		if (![MKStoreManager isFeaturePurchased:[[self.storeItems objectAtIndexSafe:adjustedRow] productIdentifier]])
 		{
-			[storeManager buyFeature:[[storeItems objectAtIndexSafe:adjustedRow] productIdentifier]];
+			[self.storeManager buyFeature:[[self.storeItems objectAtIndexSafe:adjustedRow] productIdentifier]];
 			
 			[self.navigationController popToRootViewControllerAnimated:YES];
 		}

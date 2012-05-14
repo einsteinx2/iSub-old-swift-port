@@ -14,12 +14,11 @@
 @implementation SUSLoader
 
 @synthesize connection, receivedData;
-@synthesize delegate, loadError;
+@synthesize delegate;
 
 - (void)setup
 {
-    loadError = nil;
-    delegate = nil;
+    
 }
 
 - (id)init

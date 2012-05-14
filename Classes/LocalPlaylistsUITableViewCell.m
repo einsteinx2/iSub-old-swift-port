@@ -59,24 +59,24 @@
     [super layoutSubviews];
 	
 	//self.deleteToggleImage.frame = CGRectMake(4.0, 18.5, 23.0, 23.0);
-	playlistCountLabel.frame = CGRectMake(5, 35, 320, 20);
+	self.playlistCountLabel.frame = CGRectMake(5, 35, 320, 20);
 	
 	// Automatically set the width based on the width of the text
-	playlistNameLabel.frame = CGRectMake(0, 0, 290, 44);
-	CGSize expectedLabelSize = [playlistNameLabel.text sizeWithFont:playlistNameLabel.font constrainedToSize:CGSizeMake(1000,44) lineBreakMode:playlistNameLabel.lineBreakMode]; 
-	CGRect newFrame = playlistNameLabel.frame;
+	self.playlistNameLabel.frame = CGRectMake(0, 0, 290, 44);
+	CGSize expectedLabelSize = [self.playlistNameLabel.text sizeWithFont:self.playlistNameLabel.font constrainedToSize:CGSizeMake(1000,44) lineBreakMode:self.playlistNameLabel.lineBreakMode]; 
+	CGRect newFrame = self.playlistNameLabel.frame;
 	newFrame.size.width = expectedLabelSize.width;
-	playlistNameLabel.frame = newFrame;
+	self.playlistNameLabel.frame = newFrame;
 }
 
 #pragma mark - Overlay
 
 - (void)downloadAllSongs
 {
-	int count = [databaseS.localPlaylistsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", md5]];
+	int count = [databaseS.localPlaylistsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", self.md5]];
 	for (int i = 0; i < count; i++)
 	{
-		[[Song songFromDbRow:i inTable:[NSString stringWithFormat:@"playlist%@", md5] inDatabaseQueue:databaseS.localPlaylistsDbQueue] addToCacheQueueDbQueue];
+		[[Song songFromDbRow:i inTable:[NSString stringWithFormat:@"playlist%@", self.md5] inDatabaseQueue:databaseS.localPlaylistsDbQueue] addToCacheQueueDbQueue];
 	}
 	
 	// Hide the loading screen
@@ -132,13 +132,13 @@
 
 - (void)scrollLabels
 {
-	if (playlistNameLabel.frame.size.width > playlistNameScrollView.frame.size.width)
+	if (self.playlistNameLabel.frame.size.width > self.playlistNameScrollView.frame.size.width)
 	{
 		[UIView beginAnimations:@"scroll" context:nil];
 		[UIView setAnimationDelegate:self];
 		[UIView setAnimationDidStopSelector:@selector(textScrollingStopped)];
-		[UIView setAnimationDuration:playlistNameLabel.frame.size.width/150.];
-		playlistNameScrollView.contentOffset = CGPointMake(playlistNameLabel.frame.size.width - playlistNameScrollView.frame.size.width + 10, 0);
+		[UIView setAnimationDuration:self.playlistNameLabel.frame.size.width/150.];
+		self.playlistNameScrollView.contentOffset = CGPointMake(self.playlistNameLabel.frame.size.width - self.playlistNameScrollView.frame.size.width + 10, 0);
 		[UIView commitAnimations];
 	}
 }
@@ -146,8 +146,8 @@
 - (void)textScrollingStopped
 {
 	[UIView beginAnimations:@"scroll" context:nil];
-	[UIView setAnimationDuration:playlistNameLabel.frame.size.width/150.];
-	playlistNameScrollView.contentOffset = CGPointZero;
+	[UIView setAnimationDuration:self.playlistNameLabel.frame.size.width/150.];
+	self.playlistNameScrollView.contentOffset = CGPointZero;
 	[UIView commitAnimations];
 }
 

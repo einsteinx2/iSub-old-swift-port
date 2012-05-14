@@ -23,16 +23,12 @@ typedef enum {
 
 @property (copy) NSString *query;
 @property ISMSSearchSongsSearchType searchType;
-
 @property (strong) NSMutableArray *listOfArtists;
 @property (strong) NSMutableArray *listOfAlbums;
 @property (strong) NSMutableArray *listOfSongs;
-
 @property NSUInteger offset;
 @property BOOL isMoreResults;
-
 @property BOOL isLoading;
-
 @property (strong) NSURLConnection *connection;
 @property (strong) NSMutableData *receivedData;	
 

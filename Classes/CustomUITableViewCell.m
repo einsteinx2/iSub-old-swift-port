@@ -14,8 +14,8 @@
 @implementation CustomUITableViewCell
 @synthesize isOverlayShowing, overlayView, isIndexShowing, indexPath, isSearching, deleteToggleImage, isDelete;
 
-static UIImage *nowPlayingImageBlack = nil;
-static UIImage *nowPlayingImageWhite = nil;
+static __strong UIImage *nowPlayingImageBlack = nil;
+static __strong UIImage *nowPlayingImageWhite = nil;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {

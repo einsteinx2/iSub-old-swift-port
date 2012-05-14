@@ -17,7 +17,6 @@
 
 @property (strong) NSURLConnection *connection;
 @property (strong) NSMutableData *receivedData;
-@property (unsafe_unretained, readonly) NSError *loadError;
 @property (readonly) SUSLoaderType type;
 
 - (void)setup;

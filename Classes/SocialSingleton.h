@@ -13,9 +13,6 @@
 @class SA_OAuthTwitterEngine, Song;
 
 @interface SocialSingleton : NSObject <SA_OAuthTwitterControllerDelegate>
-{
-	SA_OAuthTwitterEngine *twitterEngine;
-}
 
 @property (strong) SA_OAuthTwitterEngine *twitterEngine;
 

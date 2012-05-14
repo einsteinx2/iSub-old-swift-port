@@ -13,12 +13,10 @@
 @class FMDatabase;
 
 @interface SUSRootFoldersLoader : SUSLoader
-{
-    NSUInteger tempRecordCount;
-}
 
-@property (unsafe_unretained, readonly) NSString *tableModifier;
-
+@property NSUInteger tempRecordCount;
 @property (strong) NSNumber *selectedFolderId;
+
+- (NSString *)tableModifier;
 
 @end

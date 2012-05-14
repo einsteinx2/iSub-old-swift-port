@@ -9,8 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface MenuTableViewCell : UITableViewCell
-{
-	UIImageView *glowView;
-}
-@property(nonatomic) UIImageView *glowView;
+
+@property (nonatomic) UIImageView *glowView;
+
 @end

@@ -30,7 +30,7 @@
 
 @implementation SUSSubFolderDAO
 @synthesize delegate, loader, myId, myArtist;
-@synthesize albumsCount, songsCount, folderLength;
+@synthesize albumsCount, songsCount, folderLength, albumStartRow, songStartRow;
 
 #pragma mark - Lifecycle
 
@@ -51,7 +51,6 @@
 	{
 		[self setup];
     }
-    
     return self;
 }
 
@@ -62,7 +61,6 @@
 		self.delegate = theDelegate;
 		[self setup];
     }
-    
     return self;
 }
 
@@ -75,7 +73,6 @@
 		self.myArtist = anArtist;
 		[self setup];
     }
-    
     return self;
 }
 
@@ -83,7 +80,6 @@
 {
 	[loader cancelLoad];
 	loader.delegate = nil;
-    loader = nil;
 }
 
 - (FMDatabaseQueue *)dbQueue
@@ -187,7 +183,7 @@
 	playlistS.isShuffle = NO;
 	
 	// Start the song
-	[musicS playSongAtPosition:(row - songStartRow)];
+	[musicS playSongAtPosition:(row - self.songStartRow)];
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 }
@@ -196,7 +192,7 @@
 
 - (BOOL)hasLoaded
 {
-    if (albumsCount > 0 || songsCount > 0)
+    if (self.albumsCount > 0 || self.songsCount > 0)
         return YES;
     
     return NO;
@@ -204,33 +200,33 @@
 
 - (NSUInteger)totalCount
 {
-    return albumsCount + songsCount;
+    return self.albumsCount + self.songsCount;
 }
 
 - (Album *)albumForTableViewRow:(NSUInteger)row
 {
-    NSUInteger dbRow = albumStartRow + row;
+    NSUInteger dbRow = self.albumStartRow + row;
     
     return [self findAlbumForDbRow:dbRow];
 }
 
 - (Song *)songForTableViewRow:(NSUInteger)row
 {
-    NSUInteger dbRow = songStartRow + (row - albumsCount);
+    NSUInteger dbRow = self.songStartRow + (row - self.albumsCount);
     
     return [self findSongForDbRow:dbRow];
 }
 
 - (void)playSongAtTableViewRow:(NSUInteger)row
 {
-	NSUInteger dbRow = songStartRow + (row - albumsCount);
+	NSUInteger dbRow = songStartRow + (row - self.albumsCount);
 	[self playSongAtDbRow:dbRow];
 }
 
 - (NSArray *)sectionInfo
 {
 	// Create the section index
-	if (albumsCount > 10)
+	if (self.albumsCount > 10)
 	{
 		__block NSArray *sectionInfo;
 		[self.dbQueue inDatabase:^(FMDatabase *db)
@@ -238,7 +234,7 @@
 			[db executeUpdate:@"DROP TABLE IF EXISTS albumIndex"];
 			[db executeUpdate:@"CREATE TEMPORARY TABLE albumIndex (title TEXT)"];
 			
-			[db executeUpdate:@"INSERT INTO albumIndex SELECT title FROM albumsCache WHERE rowid >= ? LIMIT ?", [NSNumber numberWithInt:albumStartRow], [NSNumber numberWithInt:albumsCount]];
+			[db executeUpdate:@"INSERT INTO albumIndex SELECT title FROM albumsCache WHERE rowid >= ? LIMIT ?", [NSNumber numberWithInt:self.albumStartRow], [NSNumber numberWithInt:self.albumsCount]];
 			
 			sectionInfo = [databaseS sectionInfoFromTable:@"albumIndex" inDatabase:db withColumn:@"title"];
 			[db executeUpdate:@"DROP TABLE IF EXISTS albumIndex"];

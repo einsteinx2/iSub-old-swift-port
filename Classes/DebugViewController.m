@@ -16,6 +16,7 @@
 
 @implementation DebugViewController
 @synthesize currentSong, nextSong, currentSongProgress, nextSongProgress;
+@synthesize currentSongProgressView, nextSongLabel, nextSongProgressView, songsCachedLabel, cacheSizeLabel, cacheSettingLabel, cacheSettingSizeLabel, freeSpaceLabel, songInfoToggleButton;
 
 #pragma mark - Lifecycle
 
@@ -23,9 +24,8 @@
 {
     [super viewDidLoad];
 	
-	
-	currentSongProgress = 0.;
-	nextSongProgress = 0.;
+	self.currentSongProgress = 0.;
+	self.nextSongProgress = 0.;
 		
 	if (settingsS.isCacheUnlocked)
 	{
@@ -49,7 +49,7 @@
 		{
 			subView.hidden = YES;
 		}
-		songInfoToggleButton.enabled = NO;
+		self.songInfoToggleButton.enabled = NO;
 		
 		UIImageView *noCacheScreen = [[UIImageView alloc] init];
 		noCacheScreen.userInteractionEnabled = YES;
@@ -96,17 +96,17 @@
 {	
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
-	 currentSongProgressView = nil;
-	 nextSongLabel = nil;
-	 nextSongProgressView = nil;
+	 self.currentSongProgressView = nil;
+	 self.nextSongLabel = nil;
+	 self.nextSongProgressView = nil;
 	
-	 songsCachedLabel = nil;
-	 cacheSizeLabel = nil;
-	 cacheSettingLabel = nil;
-	 cacheSettingSizeLabel = nil;
-	 freeSpaceLabel = nil;
+	 self.songsCachedLabel = nil;
+	 self.cacheSizeLabel = nil;
+	 self.cacheSettingLabel = nil;
+	 self.cacheSettingSizeLabel = nil;
+	 self.freeSpaceLabel = nil;
 	
-	 songInfoToggleButton = nil;
+	 self.songInfoToggleButton = nil;
 }
 
 - (void)didReceiveMemoryWarning 
@@ -134,73 +134,73 @@
 	{
 		// Set the current song progress bar
 		if (![self.currentSong isTempCached])
-			currentSongProgress = self.currentSong.downloadProgress;
+			self.currentSongProgress = self.currentSong.downloadProgress;
 		
-		nextSongProgress = self.nextSong.downloadProgress;
+		self.nextSongProgress = self.nextSong.downloadProgress;
 	}
 	
 	if (settingsS.isJukeboxEnabled)
 	{
-		currentSongProgressView.progress = 0.0;
-		currentSongProgressView.alpha = 0.2;
+		self.currentSongProgressView.progress = 0.0;
+		self.currentSongProgressView.alpha = 0.2;
 		
-		nextSongProgressView.progress = 0.0;
-		nextSongProgressView.alpha = 0.2;
+		self.nextSongProgressView.progress = 0.0;
+		self.nextSongProgressView.alpha = 0.2;
 	}
 	else
 	{
 		// Set the current song progress bar
 		if ([self.currentSong isTempCached])
 		{
-			currentSongProgressView.progress = 0.0;
-			currentSongProgressView.alpha = 0.2;
+			self.currentSongProgressView.progress = 0.0;
+			self.currentSongProgressView.alpha = 0.2;
 		}
 		else
 		{
-			currentSongProgressView.progress = currentSongProgress;
-			currentSongProgressView.alpha = 1.0;
+			self.currentSongProgressView.progress = self.currentSongProgress;
+			self.currentSongProgressView.alpha = 1.0;
 		}
 				
 		// Set the next song progress bar
 		if (self.nextSong.path != nil)
 		{
 			// Make sure label and progress view aren't greyed out
-			nextSongLabel.alpha = 1.0;
-			nextSongProgressView.alpha = 1.0;
+			self.nextSongLabel.alpha = 1.0;
+			self.nextSongProgressView.alpha = 1.0;
 		}
 		else
 		{
 			// There is no next song, so return 0 and grey out the label and progress view
-			nextSongLabel.alpha = 0.2;
-			nextSongProgressView.alpha = 0.2;
+			self.nextSongLabel.alpha = 0.2;
+			self.nextSongProgressView.alpha = 0.2;
 		}
-		nextSongProgressView.progress = nextSongProgress;
+		self.nextSongProgressView.progress = self.nextSongProgress;
 	}
 	
 	// Set the number of songs cached label
 	NSUInteger cachedSongs = cacheS.numberOfCachedSongs;
 	if (cachedSongs == 1)
-		songsCachedLabel.text = @"1 song";
+		self.songsCachedLabel.text = @"1 song";
 	else
-		songsCachedLabel.text = [NSString stringWithFormat:@"%i songs", cachedSongs];
+		self.songsCachedLabel.text = [NSString stringWithFormat:@"%i songs", cachedSongs];
 	
 	// Set the cache setting labels
 	if (settingsS.cachingType == ISMSCachingType_minSpace)
 	{
-		cacheSettingLabel.text = @"Min Free Space:";
-		cacheSettingSizeLabel.text = [NSString formatFileSize:settingsS.minFreeSpace];
+		self.cacheSettingLabel.text = @"Min Free Space:";
+		self.cacheSettingSizeLabel.text = [NSString formatFileSize:settingsS.minFreeSpace];
 	}
 	else
 	{
-		cacheSettingLabel.text = @"Max Cache Size:";
-		cacheSettingSizeLabel.text = [NSString formatFileSize:settingsS.maxCacheSize];
+		self.cacheSettingLabel.text = @"Max Cache Size:";
+		self.cacheSettingSizeLabel.text = [NSString formatFileSize:settingsS.maxCacheSize];
 	}
 	
 	// Set the free space label
-	freeSpaceLabel.text = [NSString formatFileSize:cacheS.freeSpace];
+	self.freeSpaceLabel.text = [NSString formatFileSize:cacheS.freeSpace];
 	
 	// Set the cache size label
-	cacheSizeLabel.text = [NSString formatFileSize:cacheS.cacheSize];
+	self.cacheSizeLabel.text = [NSString formatFileSize:cacheS.cacheSize];
 	
 	[self performSelector:@selector(updateStats) withObject:nil afterDelay:1.0];
 }

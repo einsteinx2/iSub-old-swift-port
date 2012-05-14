@@ -33,10 +33,10 @@ typedef enum
 - (NSUInteger)indexForOffsetFromCurrentIndex:(NSUInteger)offset;
 
 // Convenience properties
-@property (unsafe_unretained, readonly) Song *prevSong;
-@property (unsafe_unretained, readonly) Song *currentDisplaySong;
-@property (unsafe_unretained, readonly) Song *currentSong;
-@property (unsafe_unretained, readonly) Song *nextSong;
+- (Song *)prevSong;
+- (Song *)currentDisplaySong;
+- (Song *)currentSong;
+- (Song *)nextSong;
 
 @property NSInteger shuffleIndex;
 @property NSInteger normalIndex;

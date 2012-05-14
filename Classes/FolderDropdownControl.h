@@ -11,19 +11,14 @@
 @interface FolderDropdownControl : UIView <NSXMLParserDelegate>
 
 @property (nonatomic, strong) CALayer *arrowImage;
-
 @property (nonatomic) CGFloat sizeIncrease;
-
 @property (nonatomic, strong) NSMutableDictionary *updatedfolders;	
 @property (nonatomic, strong) UILabel *selectedFolderLabel;
-
 @property (nonatomic, strong) NSMutableData *receivedData;
 @property (nonatomic, strong) NSURLConnection *connection;
-
 @property (nonatomic, strong) NSMutableArray *labels;
 @property (nonatomic, strong) NSDictionary *folders;
 @property (nonatomic) BOOL isOpen;
-
 @property (nonatomic, strong) NSNumber *selectedFolderId;
 
 // Colors

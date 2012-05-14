@@ -12,12 +12,11 @@
 @class FMDatabase, Artist, Album, Song, SUSSubFolderLoader;
 
 @interface SUSSubFolderDAO : NSObject <SUSLoaderDelegate, SUSLoaderManager>
-{
-    NSUInteger albumStartRow;
-    NSUInteger songStartRow;
-    NSUInteger albumsCount;
-    NSUInteger songsCount;
-}
+
+@property NSUInteger albumStartRow;
+@property NSUInteger songStartRow;
+@property NSUInteger albumsCount;
+@property NSUInteger songsCount;
 
 @property (unsafe_unretained) id<SUSLoaderDelegate> delegate;
 @property (strong) SUSSubFolderLoader *loader;
@@ -25,13 +24,11 @@
 @property (copy) NSString *myId;
 @property (copy) Artist *myArtist;
 
-@property (readonly) NSUInteger albumsCount;
-@property (readonly) NSUInteger songsCount;
 @property (readonly) NSUInteger totalCount;
 @property (readonly) BOOL hasLoaded;
 @property (readonly) NSUInteger folderLength;
 
-@property (unsafe_unretained, readonly) NSArray *sectionInfo;
+- (NSArray *)sectionInfo;
 
 - (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate;
 - (id)initWithDelegate:(id<SUSLoaderDelegate>)theDelegate andId:(NSString *)folderId andArtist:(Artist *)anArtist;

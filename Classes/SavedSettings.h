@@ -123,11 +123,12 @@ typedef enum
 @property NSInteger bitRate;
 
 // Document Paths
-@property (unsafe_unretained, readonly) NSString *documentsPath;
-@property (unsafe_unretained, readonly) NSString *databasePath;
-@property (unsafe_unretained, readonly) NSString *cachesPath;
-@property (unsafe_unretained, readonly) NSString *songCachePath;
-@property (unsafe_unretained, readonly) NSString *tempCachePath;
+
+- (NSString *)documentsPath;
+- (NSString *)databasePath;
+- (NSString *)cachesPath;
+- (NSString *)songCachePath;
+- (NSString *)tempCachePath;
 
 /*- (BOOL)isSelectedIndexForBassEffectADefault:(BassEffectType)type;
 - (NSUInteger)selectedIndexForBassEffect:(BassEffectType)type;

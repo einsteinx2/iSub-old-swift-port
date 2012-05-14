@@ -802,7 +802,7 @@
 	queueAll = [[SUSQueueAllLoader alloc] init];
 	
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	self.databaseFolderPath = [[paths objectAtIndexSafe: 0] stringByAppendingPathComponent:@"database"];
+	databaseFolderPath = [[paths objectAtIndexSafe: 0] stringByAppendingPathComponent:@"database"];
 	
 	// Make sure database directory exists, if not create them
 	BOOL isDir = YES;

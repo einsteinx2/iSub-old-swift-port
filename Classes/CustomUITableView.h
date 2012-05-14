@@ -7,13 +7,11 @@
 //
 
 @interface CustomUITableView : UITableView 
-{	
-	CGPoint startTouchPosition;
-	BOOL hasSwiped;
-	UITableViewCell *cellShowingOverlay;
-	UITableViewCell *tapAndHoldCell;
-}
 
+@property CGPoint startTouchPosition;
+@property BOOL hasSwiped;
+@property (strong) UITableViewCell *cellShowingOverlay;
+@property (strong) UITableViewCell *tapAndHoldCell;
 @property (strong) NSDate *lastDeleteToggle;
 
 - (BOOL)isTouchHorizontal:(UITouch *)touch;

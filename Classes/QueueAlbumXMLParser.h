@@ -10,9 +10,8 @@
 @class Artist, Album, Song;
 
 @interface QueueAlbumXMLParser : NSObject <NSXMLParserDelegate>
-{
-	NSMutableString *currentElementValue;
-}
+
+@property (strong) NSMutableString *currentElementValue;
 
 @property (strong) Artist *myArtist;
 @property (strong) NSMutableArray *listOfAlbums;

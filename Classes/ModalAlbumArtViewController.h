@@ -19,7 +19,6 @@
 @property (nonatomic, strong) IBOutlet UILabel *albumLabel;
 @property (nonatomic, strong) IBOutlet UILabel *durationLabel;
 @property (nonatomic, strong) IBOutlet UILabel *trackCountLabel;
-
 @property (nonatomic, copy) Album *myAlbum;
 @property (nonatomic) NSUInteger numberOfTracks;
 @property (nonatomic) NSUInteger albumLength;

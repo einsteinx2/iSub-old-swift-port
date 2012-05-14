@@ -25,9 +25,7 @@
 	self = [super init];
 	if (self != nil)
 	{
-		
 		receivedData = [[NSMutableData alloc] init];
-		
 		isGetInfo = NO;
 	}	
 	return self;
@@ -52,12 +50,12 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-	[receivedData setLength:0];
+	[self.receivedData setLength:0];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
 {
-	[receivedData appendData:incrementalData];
+	[self.receivedData appendData:incrementalData];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
@@ -67,14 +65,14 @@
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error controlling the Jukebox.\n\nError %i: %@", [error code], [error localizedDescription]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
 	
-	 receivedData = nil;
+	self.receivedData = nil;
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {			
 	[jukeboxS.connectionQueue connectionFinished:theConnection];
 	
-	if (isGetInfo)
+	if (self.isGetInfo)
 	{
 		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
 		JukeboxXMLParser *parser = (JukeboxXMLParser*)[[JukeboxXMLParser alloc] initXMLParser];
@@ -87,10 +85,12 @@
 		
 		
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
+		
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_JukeboxSongInfo];
 	}
 	else
 	{
-		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
+		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:self.receivedData];
 		JukeboxXMLParser *parser = (JukeboxXMLParser*)[[JukeboxXMLParser alloc] initXMLParser];
 		[xmlParser setDelegate:parser];
 		[xmlParser parse];
@@ -99,7 +99,7 @@
 		[jukeboxS jukeboxGetInfo];
 	}
 	
-	 receivedData = nil;
+	self.receivedData = nil;
 }
 
 

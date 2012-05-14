@@ -142,6 +142,8 @@
 	{
 		self.title = @"Servers";
 		
+		self.tableView.tableFooterView = nil;
+		
 		self.tableView.scrollEnabled = YES;
 		self.navigationItem.rightBarButtonItem = self.editButtonItem;
 		

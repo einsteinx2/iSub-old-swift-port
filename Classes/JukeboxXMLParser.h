@@ -7,16 +7,6 @@
 //
 
 @interface JukeboxXMLParser : NSObject <NSXMLParserDelegate>
-{	
-	/*DatabaseControlsSingleton *databaseControls;
-	ViewObjectsSingleton *viewObjects;*/
-
-	NSUInteger currentIndex;
-	BOOL isPlaying;
-	float gain;
-	
-	NSMutableArray *listOfSongs;
-}
 
 @property NSUInteger currentIndex;
 @property BOOL isPlaying;

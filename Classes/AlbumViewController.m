@@ -51,7 +51,7 @@
 @synthesize playAllShuffleAllView;
 @synthesize albumInfoView, albumInfoArtHolderView, albumInfoArtView, albumInfoAlbumLabel, albumInfoArtistLabel, albumInfoDurationLabel, albumInfoLabelHolderView, albumInfoTrackCountLabel, albumInfoArtReflection;
 
-@synthesize reloading, refreshHeaderView;
+@synthesize isReloading, refreshHeaderView;
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -487,11 +487,11 @@
 {	
 	if (scrollView.isDragging) 
 	{
-		if (self.refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !self.reloading) 
+		if (self.refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !self.isReloading) 
 		{
 			[self.refreshHeaderView setState:EGOOPullRefreshNormal];
 		} 
-		else if (self.refreshHeaderView.state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !self.reloading) 
+		else if (self.refreshHeaderView.state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !self.isReloading) 
 		{
 			[self.refreshHeaderView setState:EGOOPullRefreshPulling];
 		}
@@ -500,9 +500,9 @@
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-	if (scrollView.contentOffset.y <= - 65.0f && !self.reloading) 
+	if (scrollView.contentOffset.y <= - 65.0f && !self.isReloading) 
 	{
-		self.reloading = YES;
+		self.isReloading = YES;
 		[viewObjectsS showAlbumLoadingScreen:self.view sender:self];
 		[self.dataModel startLoad];
 		[self.refreshHeaderView setState:EGOOPullRefreshLoading];
@@ -515,7 +515,7 @@
 
 - (void)dataSourceDidFinishLoadingNewData
 {
-	self.reloading = NO;
+	self.isReloading = NO;
 	
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:.3];

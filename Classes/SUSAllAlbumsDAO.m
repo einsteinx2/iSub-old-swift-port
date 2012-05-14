@@ -15,22 +15,6 @@
 #import "SUSAllSongsLoader.h"
 
 @implementation SUSAllAlbumsDAO
-@synthesize index;
-
-- (void)setup
-{
-	index = nil;
-}
-
-- (id)init
-{
-    if ((self = [super init]))
-	{
-        [self setup];
-    }
-    
-    return self;
-}
 
 - (FMDatabaseQueue *)dbQueue
 {

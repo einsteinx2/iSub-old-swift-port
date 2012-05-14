@@ -10,13 +10,11 @@
 @class Artist;
 
 @interface SUSQueueAllLoader : SUSLoader 
-{
-	BOOL isQueue;
-	BOOL isShuffleButton;
-	BOOL doShowPlayer;
-	
-	BOOL isCancelled;
-}
+
+@property BOOL isQueue;
+@property BOOL isShuffleButton;
+@property BOOL doShowPlayer;
+@property BOOL isCancelled;
 
 @property (copy) NSString *currentPlaylist;
 @property (copy) NSString *shufflePlaylist;

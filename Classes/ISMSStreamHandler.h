@@ -28,7 +28,7 @@
 @property (strong) NSThread *loadingThread;
 @property BOOL isTempCache;
 @property NSUInteger bitrate;
-@property (unsafe_unretained, readonly) NSString *filePath;
+- (NSString *)filePath;
 @property BOOL partialPrecacheSleep;
 @property BOOL isDownloading;
 @property BOOL isCurrentSong;

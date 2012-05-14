@@ -11,19 +11,20 @@
 #import "iSubAppDelegate.h"
 
 @implementation CurrentPlaylistBackgroundViewController
+@synthesize playlistView;
 
 - (void)viewDidLoad 
 {
-	playlistView = [[CurrentPlaylistViewController alloc] initWithNibName:@"CurrentPlaylistViewController" bundle:nil];
-	[self.view addSubview:playlistView.view];
+	self.playlistView = [[CurrentPlaylistViewController alloc] initWithNibName:@"CurrentPlaylistViewController" bundle:nil];
+	[self.view addSubview:self.playlistView.view];
 		
     [super viewDidLoad];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-	[playlistView viewDidDisappear:NO];
-	 playlistView = nil;
+	[self.playlistView viewDidDisappear:NO];
+	self.playlistView = nil;
 }
 
 - (void)didReceiveMemoryWarning 

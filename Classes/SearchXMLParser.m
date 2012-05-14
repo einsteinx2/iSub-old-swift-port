@@ -57,7 +57,7 @@
 		
 			if (aSong.path)
 			{
-				[listOfSongs addObject:aSong];
+				[self.listOfSongs addObject:aSong];
 			}
 		
 		}
@@ -66,14 +66,14 @@
 	{
 		Album *anAlbum = [[Album alloc] initWithAttributeDict:attributeDict];
 		
-		[listOfAlbums addObject:anAlbum];
+		[self.listOfAlbums addObject:anAlbum];
 		
 	}
 	else if ([elementName isEqualToString:@"artist"])
 	{
 		Artist *anArtist = [[Artist alloc] initWithAttributeDict:attributeDict];
 		
-		[listOfArtists addObject:anArtist];
+		[self.listOfArtists addObject:anArtist];
 		
 	}
 }
@@ -84,14 +84,10 @@
 
 }
 
-
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName 
-  namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName 
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName 
 {
 	
 	
 }
-
-
 
 @end

@@ -23,9 +23,7 @@
     if ((self = [super init]))
     {
         delegate = theDelegate;
-		loader = nil;
     }
-    
     return self;
 }
 
@@ -33,7 +31,6 @@
 {
 	[loader cancelLoad];
 	loader.delegate = nil;
-    loader = nil;
 }
 
 - (FMDatabaseQueue *)dbQueue

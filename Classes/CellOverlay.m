@@ -67,9 +67,9 @@
 
 - (void)enableButtons
 {
-	inputBlocker.userInteractionEnabled = YES;
-	downloadButton.userInteractionEnabled = YES;
-	queueButton.userInteractionEnabled = YES;
+	self.inputBlocker.userInteractionEnabled = YES;
+	self.downloadButton.userInteractionEnabled = YES;
+	self.queueButton.userInteractionEnabled = YES;
 }
 
 @end

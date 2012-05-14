@@ -56,13 +56,13 @@
     [super layoutSubviews];
 	
 	// Automatically set the width based on the width of the text
-	albumNameLabel.frame = CGRectMake(0, 0, 230, 60);
-	CGSize expectedLabelSize = [albumNameLabel.text sizeWithFont:albumNameLabel.font constrainedToSize:CGSizeMake(1000,60) lineBreakMode:albumNameLabel.lineBreakMode]; 
+	self.albumNameLabel.frame = CGRectMake(0, 0, 230, 60);
+	CGSize expectedLabelSize = [self.albumNameLabel.text sizeWithFont:self.albumNameLabel.font constrainedToSize:CGSizeMake(1000,60) lineBreakMode:self.albumNameLabel.lineBreakMode]; 
 	CGRect newFrame = albumNameLabel.frame;
 	newFrame.size.width = expectedLabelSize.width;
-	albumNameLabel.frame = newFrame;
+	self.albumNameLabel.frame = newFrame;
 	
-	coverArtView.frame = CGRectMake(0, 0, 60, 60);
+	self.coverArtView.frame = CGRectMake(0, 0, 60, 60);
 }
 
 
@@ -89,17 +89,17 @@
 	if (viewObjectsS.isOfflineMode)
 	{
 		dbQueue = databaseS.songCacheDbQueue;
-		query = [NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)];
+		query = [NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", self.segment, (self.segment + 1)];
 	}
 	else
 	{
 		dbQueue = databaseS.genresDbQueue;
-		query = [NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)];
+		query = [NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", self.segment, (self.segment + 1)];
 	}
 	
 	[dbQueue inDatabase:^(FMDatabase *db)
 	{
-		FMResultSet *result = [db executeQuery:query, seg1, albumNameLabel.text, genre];
+		FMResultSet *result = [db executeQuery:query, self.seg1, self.albumNameLabel.text, self.genre];
 		while ([result next])
 		{
 			if ([result stringForColumnIndex:0] != nil)
@@ -131,17 +131,17 @@
 	if (viewObjectsS.isOfflineMode)
 	{
 		dbQueue = databaseS.songCacheDbQueue;
-		query = [NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)];
+		query = [NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", self.segment, (self.segment + 1)];
 	}
 	else
 	{
 		dbQueue = databaseS.genresDbQueue;
-		query = [NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", segment, (segment + 1)];
+		query = [NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", self.segment, (self.segment + 1)];
 	}
 	
 	[dbQueue inDatabase:^(FMDatabase *db)
 	{
-		FMResultSet *result = [db executeQuery:query, seg1, albumNameLabel.text, genre];
+		FMResultSet *result = [db executeQuery:query, self.seg1, self.albumNameLabel.text, self.genre];
 		while ([result next])
 		{
 			if ([result stringForColumnIndex:0] != nil)
@@ -166,13 +166,13 @@
 
 - (void)scrollLabels
 {
-	if (albumNameLabel.frame.size.width > albumNameScrollView.frame.size.width)
+	if (self.albumNameLabel.frame.size.width > self.albumNameScrollView.frame.size.width)
 	{
 		[UIView beginAnimations:@"scroll" context:nil];
 		[UIView setAnimationDelegate:self];
 		[UIView setAnimationDidStopSelector:@selector(textScrollingStopped)];
-		[UIView setAnimationDuration:albumNameLabel.frame.size.width/(float)150];
-		albumNameScrollView.contentOffset = CGPointMake(albumNameLabel.frame.size.width - albumNameScrollView.frame.size.width + 10, 0);
+		[UIView setAnimationDuration:self.albumNameLabel.frame.size.width/(float)150];
+		self.albumNameScrollView.contentOffset = CGPointMake(self.albumNameLabel.frame.size.width - self.albumNameScrollView.frame.size.width + 10, 0);
 		[UIView commitAnimations];
 	}
 }
@@ -180,8 +180,8 @@
 - (void)textScrollingStopped
 {
 	[UIView beginAnimations:@"scroll" context:nil];
-	[UIView setAnimationDuration:albumNameLabel.frame.size.width/(float)150];
-	albumNameScrollView.contentOffset = CGPointZero;
+	[UIView setAnimationDuration:self.albumNameLabel.frame.size.width/(float)150];
+	self.albumNameScrollView.contentOffset = CGPointZero;
 	[UIView commitAnimations];
 }
 

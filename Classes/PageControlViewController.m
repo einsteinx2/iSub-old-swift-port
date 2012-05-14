@@ -37,9 +37,9 @@
     //[super viewWillAppear:animated];
 	[super viewDidLoad];
 	
-	numberOfPages = 1;
-	if (settingsS.isLyricsEnabled) numberOfPages++;
-	if (settingsS.isCacheStatusEnabled) numberOfPages++;
+	self.numberOfPages = 1;
+	if (settingsS.isLyricsEnabled) self.numberOfPages++;
+	if (settingsS.isCacheStatusEnabled) self.numberOfPages++;
 	
 	// view controllers are created lazily
     // in the meantime, load the array with placeholders which will be replaced on demand
@@ -65,20 +65,20 @@
 		//contentSize = CGSizeMake(300 * numberOfPages, numberOfPages == 1 ? 270 : 250);
 		//height = numberOfPages == 1 ? 270 : 250;
 	}
-	scrollView.height = height;
-    scrollView.contentSize = contentSize;
-    scrollView.showsHorizontalScrollIndicator = NO;
-    scrollView.showsVerticalScrollIndicator = NO;
-    scrollView.scrollsToTop = NO;
-    scrollView.delegate = self;
+	self.scrollView.height = height;
+    self.scrollView.contentSize = contentSize;
+    self.scrollView.showsHorizontalScrollIndicator = NO;
+    self.scrollView.showsVerticalScrollIndicator = NO;
+    self.scrollView.scrollsToTop = NO;
+    self.scrollView.delegate = self;
 	
-    pageControl.numberOfPages = numberOfPages;
-    pageControl.currentPage = 0;
+    self.pageControl.numberOfPages = numberOfPages;
+    self.pageControl.currentPage = 0;
 	
-	if (numberOfPages == 1)
+	if (self.numberOfPages == 1)
 	{
-		pageControlHolder.hidden = YES;
-		pageControl.hidden = YES;
+		self.pageControlHolder.hidden = YES;
+		self.pageControl.hidden = YES;
 	}
 	
 	// Load all the pages for better performance
@@ -96,16 +96,16 @@
 	// Only add the gesture recognizer on iOS 3.2 and above where it is supported
 	if (NSClassFromString(@"UISwipeGestureRecognizer"))
 	{
-		swipeDetector = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(hideSongInfo)];
-		if ([swipeDetector respondsToSelector:@selector(locationInView:)]) 
+		self.swipeDetector = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(hideSongInfo)];
+		if ([self.swipeDetector respondsToSelector:@selector(locationInView:)]) 
 		{
-			swipeDetector.delegate = (id<UIGestureRecognizerDelegate>)self;
-			swipeDetector.direction = UISwipeGestureRecognizerDirectionRight;
-			[scrollView addGestureRecognizer:swipeDetector];
+			self.swipeDetector.delegate = (id<UIGestureRecognizerDelegate>)self;
+			self.swipeDetector.direction = UISwipeGestureRecognizerDirectionRight;
+			[self.scrollView addGestureRecognizer:self.swipeDetector];
 		}
 		else
 		{
-			 swipeDetector = nil;
+			 self.swipeDetector = nil;
 		}
 	}
 }
@@ -123,16 +123,16 @@
 - (void)resetScrollView
 {
 	DLog(@"PageControlViewController resetScrollView called");
-	[scrollView setContentOffset:CGPointZero animated:YES];
+	[self.scrollView setContentOffset:CGPointZero animated:YES];
 }
 
 
 - (void)loadScrollViewWithPage:(int)page 
 {
     if (page < 0) return;
-    if (page >= numberOfPages) return;
+    if (page >= self.numberOfPages) return;
 	
-	UIViewController *controller = (UIViewController *) [viewControllers objectAtIndexSafe:page];
+	UIViewController *controller = (UIViewController *) [self.viewControllers objectAtIndexSafe:page];
     if ((NSNull *)controller != [NSNull null]) return; 
 	
     // Replace the placeholder
@@ -153,7 +153,7 @@
 			break;
 	}
 	
-	[viewControllers replaceObjectAtIndex:page withObject:controller];
+	[self.viewControllers replaceObjectAtIndex:page withObject:controller];
 	
     // Add the controller's view to the scroll view
 	/*CGRect frame = scrollView.frame;
@@ -161,16 +161,16 @@
 	frame.origin.y = 0;*/
 	CGRect frame = CGRectMake(self.scrollView.frame.size.width * page, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
 	controller.view.frame = frame;
-	[scrollView addSubview:controller.view];
+	[self.scrollView addSubview:controller.view];
 }
 
 - (void)unloadScrollViewPage:(NSUInteger)page
 {
-	UIViewController *controller = (UIViewController *) [viewControllers objectAtIndexSafe:page];
+	UIViewController *controller = (UIViewController *) [self.viewControllers objectAtIndexSafe:page];
 	if ((NSNull *)controller != [NSNull null])
 	{
 		[controller.view removeFromSuperview];
-		[viewControllers replaceObjectAtIndex:page withObject:[NSNull null]];
+		[self.viewControllers replaceObjectAtIndex:page withObject:[NSNull null]];
 	}
 }
 
@@ -179,7 +179,7 @@
     // We don't want a "feedback loop" between the UIPageControl and the scroll delegate in
     // which a scroll event generated from the user hitting the page control triggers updates from
     // the delegate method. We use a boolean to disable the delegate logic when the page control is used.
-    if (pageControlUsed) 
+    if (self.pageControlUsed) 
 	{
 		// Send a notification so the playlist view hides the edit controls
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"hideEditControls"];
@@ -189,9 +189,9 @@
     }
 	
     // Switch the indicator when more than 50% of the previous/next page is visible
-    CGFloat pageWidth = scrollView.bounds.size.width;
-    int page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
-    pageControl.currentPage = page;
+    CGFloat pageWidth = self.scrollView.bounds.size.width;
+    int page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+    self.pageControl.currentPage = page;
 	
     // load the visible page and the page on either side of it (to avoid flashes when the user starts scrolling)
     [self loadScrollViewWithPage:page - 1];
@@ -231,19 +231,19 @@
 
 // At the begin of scroll dragging, reset the boolean used when scrolls originate from the UIPageControl
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    pageControlUsed = NO;
+    self.pageControlUsed = NO;
 }
 
 
 // At the end of scroll animation, reset the boolean used when scrolls originate from the UIPageControl
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    pageControlUsed = NO;
+    self.pageControlUsed = NO;
 }
 
 
 - (IBAction)changePage:(id)sender 
 {
-    int page = pageControl.currentPage;
+    int page = self.pageControl.currentPage;
 	
     // load the visible page and the page on either side of it (to avoid flashes when the user starts scrolling)
     [self loadScrollViewWithPage:page - 1];
@@ -251,16 +251,16 @@
     [self loadScrollViewWithPage:page + 1];
     
 	// update the scroll view to the appropriate page
-    CGRect frame = scrollView.bounds;
+    CGRect frame = self.scrollView.bounds;
     frame.origin.x = frame.size.width * page;
     frame.origin.y = 0;
-    [scrollView scrollRectToVisible:frame animated:YES];
+    [self.scrollView scrollRectToVisible:frame animated:YES];
     
 	// Set the boolean used when scrolls originate from the UIPageControl. See scrollViewDidScroll: above.
-    pageControlUsed = YES;
+    self.pageControlUsed = YES;
 }
 
-- (void) hideSongInfo
+- (void)hideSongInfo
 {
 	[NSNotificationCenter postNotificationToMainThreadWithName:@"hideSongInfo"];
 }
@@ -275,7 +275,7 @@
 {
 	[super viewDidDisappear:animated];
 	
-	for (UIViewController *subView in viewControllers)
+	for (UIViewController *subView in self.viewControllers)
 	{
 		if ((NSNull*)subView != [NSNull null])
 		{
@@ -284,13 +284,12 @@
 		}
 	}
 	
-	 viewControllers = nil;
+	self.viewControllers = nil;
 }
 
 - (void)dealloc 
 {
-	[scrollView removeGestureRecognizer:swipeDetector];
-	
+	[self.scrollView removeGestureRecognizer:self.swipeDetector];
 }
 
 @end

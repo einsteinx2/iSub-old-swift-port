@@ -61,6 +61,7 @@
 
 @implementation iPhoneStreamingPlayerViewController
 
+@synthesize back30Button, forw30Button;
 @synthesize originalViewFrames, extraButtons, extraButtonsButton, extraButtonsBackground;
 @synthesize bookmarkCountLabel, progressSlider, elapsedTimeLabel, remainingTimeLabel, shuffleButton, repeatButton, bookmarkButton, currentAlbumButton;
 @synthesize updateTimer, progressTimer, hasMoved, oldPosition, byteOffset, currentSong, pauseSlider, downloadProgress, sliderMultipleLabel;
@@ -106,9 +107,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jukeboxToggled) name:ISMSNotification_JukeboxDisabled object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jukeboxToggled) name:ISMSNotification_JukeboxEnabled object:nil];
 	
 	DLog(@"coverArtImageView class: %@", NSStringFromClass(coverArtImageView.class));
 	
@@ -295,22 +293,39 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)registerForNotifications
 {
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jukeboxToggled) 
+												 name:ISMSNotification_JukeboxDisabled object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jukeboxToggled) 
+												 name:ISMSNotification_JukeboxEnabled object:nil];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPlayButtonImage) 
 												 name:ISMSNotification_SongPlaybackEnded object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPlayButtonImage) 
+    
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPlayButtonImage) 
 												 name:ISMSNotification_SongPlaybackPaused object:nil];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setPauseButtonImage) 
 												 name:ISMSNotification_SongPlaybackStarted object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) 
+												 name:ISMSNotification_JukeboxSongInfo object:nil];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) 
 												 name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) 
 												 name:ISMSNotification_ServerSwitched object:nil];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) 
 												 name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateShuffleIcon) 
 												 name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songInfoToggle:) 
 												 name:@"hideSongInfo" object:nil];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(largeSongInfoWasToggled) name:ISMSNotification_LargeSongInfoToggle object:nil];
 	
 	if (IS_IPAD())
@@ -329,6 +344,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 - (void)unregisterForNotifications
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self 
+													name:ISMSNotification_JukeboxEnabled object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self 
+													name:ISMSNotification_JukeboxDisabled object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self 
 													name:ISMSNotification_SongPlaybackEnded object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self 
 													name:ISMSNotification_SongPlaybackPaused object:nil];
@@ -338,6 +357,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 													name:ISMSNotification_ServerSwitched object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self 
 													name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self 
+													name:ISMSNotification_JukeboxSongInfo object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self 
 													name:@"hideSongInfo" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self 
@@ -705,13 +726,29 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		progressSlider.enabled = NO;
 	}
 	
-	if(playlistS.repeatMode == 1)
+	[repeatButton setImage:[UIImage imageNamed:@"controller-repeat.png"] forState:0];
+	repeatButton.enabled = NO;
+	if (!settingsS.isJukeboxEnabled)
 	{
-		[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one.png"] forState:0];
+		repeatButton.enabled = YES;
+		if(playlistS.repeatMode == 1)
+		{
+			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one.png"] forState:0];
+		}
+		else if(playlistS.repeatMode == 2)
+		{
+			[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all.png"] forState:0];
+		}
 	}
-	else if(playlistS.repeatMode == 2)
+	
+	eqButton.enabled = YES;
+	back30Button.enabled = YES;
+	forw30Button.enabled = YES;
+	if (settingsS.isJukeboxEnabled)
 	{
-		[repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all.png"] forState:0];
+		eqButton.enabled = NO;
+		back30Button.enabled = NO;
+		forw30Button.enabled = NO;
 	}
 	
 	[self updateShuffleIcon];
@@ -768,6 +805,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[self.jukeboxVolumeView removeFromSuperview];
 		self.jukeboxVolumeView = nil;
 		
+		self.view.backgroundColor = [UIColor blackColor];
+		
 		//volumeSlider.backgroundColor = [UIColor greenColor];
 		CGRect newFrame = CGRectMake(10, 0, volumeSlider.width-20, volumeSlider.height);
 		//CGRect newFrame = CGRectMake(volumeSlider.x, volumeSlider.y-10, volumeSlider.width, 30);
@@ -776,6 +815,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		//[self.view addSubview:volumeView];
 		//[volumeView sizeToFit];
 	}
+	
+	[self initSongInfo];
 }
 
 - (void)jukeboxVolumeChanged:(id)sender

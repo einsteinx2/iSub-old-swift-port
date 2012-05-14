@@ -10,6 +10,6 @@
 
 @interface StackContainerView : UIView
 
-@property (unsafe_unretained, nonatomic, readonly) UIView *insideView;
+- (UIView *)insideView;
 
 @end

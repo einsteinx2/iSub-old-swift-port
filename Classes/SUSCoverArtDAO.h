@@ -18,8 +18,8 @@
 @property (copy) NSString *coverArtId;
 @property BOOL isLarge;
 
-@property (unsafe_unretained, readonly) UIImage *coverArtImage;
-@property (unsafe_unretained, readonly) UIImage *defaultCoverArtImage;
+- (UIImage *)coverArtImage;
+- (UIImage *)defaultCoverArtImage;
 @property (readonly) BOOL isCoverArtCached;
 
 - (id)initWithDelegate:(NSObject<SUSLoaderDelegate> *)theDelegate;

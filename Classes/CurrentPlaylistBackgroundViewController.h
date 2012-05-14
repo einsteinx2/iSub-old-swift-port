@@ -10,8 +10,7 @@
 @class CurrentPlaylistViewController;
 
 @interface CurrentPlaylistBackgroundViewController : UIViewController 
-{
-	CurrentPlaylistViewController *playlistView;
-}
+
+@property (nonatomic, strong) CurrentPlaylistViewController *playlistView;
 
 @end

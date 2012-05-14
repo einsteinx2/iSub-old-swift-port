@@ -38,10 +38,9 @@
 @implementation FoldersViewController
 
 @synthesize searchBar, headerView;
-//@synthesize indexes, folders, foldersSearch;
 @synthesize isSearching;
 @synthesize dropdown;
-@synthesize reloading=_reloading, refreshHeaderView;
+@synthesize isReloading, refreshHeaderView;
 @synthesize dataModel;
 @synthesize countLabel, reloadTimeLabel, blockerButton;
 @synthesize searchOverlay, dismissButton;
@@ -677,24 +676,24 @@
 {	
 	if (scrollView.isDragging) 
 	{
-		if (refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !_reloading) 
+		if (self.refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !self.isReloading) 
 		{
-			[refreshHeaderView setState:EGOOPullRefreshNormal];
+			[self.refreshHeaderView setState:EGOOPullRefreshNormal];
 		} 
-		else if (refreshHeaderView.state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !_reloading) 
+		else if (self.refreshHeaderView.state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !self.isReloading) 
 		{
-			[refreshHeaderView setState:EGOOPullRefreshPulling];
+			[self.refreshHeaderView setState:EGOOPullRefreshPulling];
 		}
 	}
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-	if (scrollView.contentOffset.y <= - 65.0f && !_reloading) 
+	if (scrollView.contentOffset.y <= - 65.0f && !self.isReloading) 
 	{
-		_reloading = YES;
+		self.isReloading = YES;
 		[self loadData:[settingsS rootFoldersSelectedFolderId]];
-		[refreshHeaderView setState:EGOOPullRefreshLoading];
+		[self.refreshHeaderView setState:EGOOPullRefreshLoading];
 		[UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:0.2];
 		self.tableView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
@@ -704,14 +703,14 @@
 
 - (void)dataSourceDidFinishLoadingNewData
 {
-	_reloading = NO;
+	self.isReloading = NO;
 	
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:.3];
 	[self.tableView setContentInset:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
 	[UIView commitAnimations];
 	
-	[refreshHeaderView setState:EGOOPullRefreshNormal];
+	[self.refreshHeaderView setState:EGOOPullRefreshNormal];
 }
 
 @end

@@ -15,7 +15,6 @@
 @property (nonatomic, strong) IBOutlet UITextField *passwordField;
 @property (nonatomic, strong) IBOutlet UIButton *cancelButton;
 @property (nonatomic, strong) IBOutlet UIButton *saveButton;	
-
 @property (unsafe_unretained) ServerTypeViewController *parentController;
 
 - (IBAction) cancelButtonPressed:(id)sender;

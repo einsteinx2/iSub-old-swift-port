@@ -153,20 +153,20 @@
 - (void)viewDidAppear:(BOOL)animated
 {
 	[super viewDidAppear:animated];
-	if (isFirstLoad)
+	if (self.isFirstLoad)
 	{
-		isFirstLoad = NO;
+		self.isFirstLoad = NO;
 		[self showHome];
 	}
 }
 
--(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 	
 }
 
--(void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
 	[super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }
@@ -303,7 +303,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
-    return [cellContents count];
+    return self.cellContents.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
@@ -315,8 +315,8 @@
         cell = [[MenuTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
 	
-	cell.textLabel.text = [[cellContents objectAtIndex:indexPath.row] objectForKey:kCellText];
-	cell.imageView.image = [[cellContents objectAtIndex:indexPath.row] objectForKey:kCellImage];
+	cell.textLabel.text = [[self.cellContents objectAtIndex:indexPath.row] objectForKey:kCellText];
+	cell.imageView.image = [[self.cellContents objectAtIndex:indexPath.row] objectForKey:kCellImage];
 	cell.glowView.hidden = YES;
 	cell.imageView.alpha = 0.6;
 
@@ -401,7 +401,7 @@
 	controller.view.layer.masksToBounds = YES;
 	[[iSubAppDelegate sharedInstance].ipadRootViewController.stackScrollViewController addViewInSlider:controller invokeByController:self isStackStartView:YES];
 	
-	lastSelectedRow = indexPath.row;
+	self.lastSelectedRow = indexPath.row;
 }
 
 #pragma mark - Memory management

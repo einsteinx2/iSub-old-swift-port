@@ -11,45 +11,31 @@
 @class Album, SUSAllAlbumsDAO, EGORefreshTableHeaderView, LoadingScreen, SUSAllSongsDAO;
 
 @interface AllAlbumsViewController : UITableViewController <UISearchBarDelegate, SUSLoaderDelegate> 
-{	
-	UIButton *reloadButton;
-	UILabel *reloadLabel;
-	UIImageView *reloadImage;
-	UILabel *countLabel;
-	UILabel *reloadTimeLabel;
-	IBOutlet UISearchBar *searchBar;
-	
-	BOOL letUserSelectRow;
-	NSURL *url;
-	
-	BOOL isAllAlbumsLoading;
-	NSInteger numberOfRows;
-		
-	BOOL isProcessingArtists;
-		
-	BOOL isSearching;
-	
-	EGORefreshTableHeaderView *refreshHeaderView;
-	BOOL _reloading;
-	
-	UIView *searchOverlay;
-	UIButton *dismissButton;
-}
 
+@property (strong) UIButton *reloadButton;
+@property (strong) UILabel *reloadLabel;
+@property (strong) UIImageView *reloadImage;
+@property (strong) UILabel *countLabel;
+@property (strong) UILabel *reloadTimeLabel;
+@property (strong) IBOutlet UISearchBar *searchBar;
+@property BOOL letUserSelectRow;
+@property (strong) NSURL *url;
+@property BOOL isAllAlbumsLoading;
+@property BOOL isProcessingArtists;
+@property BOOL isSearching;
+@property (strong) EGORefreshTableHeaderView *refreshHeaderView;
+@property BOOL isReloading;
+@property (strong) UIView *searchOverlay;
+@property (strong) UIButton *dismissButton;
 @property (strong) SUSAllAlbumsDAO *dataModel;
 @property (strong) SUSAllSongsDAO *allSongsDataModel;
-
 @property (strong) UIView *headerView;
 @property (strong) NSArray *sectionInfo;
-
 @property (strong) LoadingScreen *loadingScreen;
 
-- (void) addCount;
-
-- (void) doneSearching_Clicked:(id)sender;
-
+- (void)addCount;
+- (void)doneSearching_Clicked:(id)sender;
 - (void)dataSourceDidFinishLoadingNewData;
-
 - (void)showLoadingScreen;
 - (void)hideLoadingScreen;
 

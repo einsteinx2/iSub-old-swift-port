@@ -10,7 +10,6 @@
 
 @property (nonatomic) BOOL isNoBookmarksScreenShowing;
 @property (nonatomic, strong) UIImageView *noBookmarksScreen;
-
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) UILabel *bookmarkCountLabel;
 @property (nonatomic, strong) UIButton *deleteBookmarksButton;
@@ -18,7 +17,6 @@
 @property (nonatomic, strong) UILabel *spacerLabel;
 @property (nonatomic, strong) UILabel *editBookmarksLabel;
 @property (nonatomic, strong) UIButton *editBookmarksButton;
-
 @property (nonatomic, strong) NSArray *bookmarkIds;
 
 @end

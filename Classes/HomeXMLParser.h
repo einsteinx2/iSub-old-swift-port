@@ -10,12 +10,9 @@
 @class Index, Artist, Album, Song;
 
 @interface HomeXMLParser : NSObject <NSXMLParserDelegate> 
-{
-	NSMutableString *currentElementValue;	
-}
 
+@property (strong) NSMutableString *currentElementValue;
 @property (copy) NSString *myId;
-
 @property (strong) NSMutableArray *listOfAlbums;
 
 - (HomeXMLParser *) initXMLParser;

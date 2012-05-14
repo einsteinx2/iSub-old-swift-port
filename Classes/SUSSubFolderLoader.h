@@ -10,11 +10,10 @@
 
 @class Artist, Album, Song;
 @interface SUSSubFolderLoader : SUSLoader
-{
-    NSUInteger albumsCount;
-    NSUInteger songsCount;
-    NSUInteger folderLength;
-}
+
+@property (nonatomic) NSUInteger albumsCount;
+@property (nonatomic) NSUInteger songsCount;
+@property (nonatomic) NSUInteger folderLength;
 
 @property (copy) NSString *myId;
 @property (copy) Artist *myArtist;

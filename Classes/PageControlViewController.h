@@ -8,8 +8,6 @@
 
 @class PagingScrollView;
 @interface PageControlViewController : UIViewController <UIScrollViewDelegate>
-{
-}
 
 @property (strong) IBOutlet UIScrollView *scrollView;
 @property (strong) IBOutlet UIPageControl *pageControl;

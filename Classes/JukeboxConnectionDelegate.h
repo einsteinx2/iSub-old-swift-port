@@ -11,12 +11,6 @@
 @class MusicSingleton;
 
 @interface JukeboxConnectionDelegate : NSObject 
-{
-	NSMutableData *receivedData;
-	
-	BOOL isGetInfo;
-	
-}
 
 @property (strong) NSMutableData *receivedData;
 @property BOOL isGetInfo;

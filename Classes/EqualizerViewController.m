@@ -22,7 +22,7 @@
 #import "GCDWrapper.h"
 
 @implementation EqualizerViewController
-@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath, gainBoostLabel, isPresetPickerShowing, controlsContainer, gainBoostAmountLabel, lastGainValue, wasVisualizerOffBeforeRotation, swipeDetectorLeft, swipeDetectorRight, landscapeButtonsHolder;//, hidePickerTimer; //drawTimer;
+@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath, gainBoostLabel, isPresetPickerShowing, controlsContainer, gainBoostAmountLabel, lastGainValue, wasVisualizerOffBeforeRotation, swipeDetectorLeft, swipeDetectorRight, landscapeButtonsHolder, overlay, dismissButton;//, hidePickerTimer; //drawTimer;
 
 #define hidePickerTimer @"EqualizerViewController hide picker timer"
 

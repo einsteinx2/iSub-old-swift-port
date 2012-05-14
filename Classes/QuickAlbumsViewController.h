@@ -14,7 +14,6 @@
 @property (nonatomic, strong) NSURLConnection *connection;
 @property (nonatomic, strong) NSMutableData *receivedData;
 @property (nonatomic, strong) NSString *modifier;
-
 @property (nonatomic, strong) IBOutlet UIButton *randomButton;
 @property (nonatomic, strong) IBOutlet UIButton *frequentButton;
 @property (nonatomic, strong) IBOutlet UIButton *newestButton;

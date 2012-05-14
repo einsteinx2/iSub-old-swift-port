@@ -18,7 +18,6 @@
 @property (nonatomic, strong) UILabel *editSongsLabel;
 @property (nonatomic, strong) UIButton *editSongsButton;
 @property (nonatomic) BOOL isSaveEditShowing;
-
 @property (nonatomic, strong) UIImageView *playAllImage;
 @property (nonatomic, strong) UILabel *playAllLabel;
 @property (nonatomic, strong) UIButton *playAllButton;
@@ -26,18 +25,13 @@
 @property (nonatomic, strong) UIImageView *shuffleImage;
 @property (nonatomic, strong) UILabel *shuffleLabel;
 @property (nonatomic, strong) UIButton *shuffleButton;
-
 @property (nonatomic) BOOL isNoSongsScreenShowing;
 @property (nonatomic, strong) UIImageView *noSongsScreen;
-
 @property (nonatomic, strong) UIButton *jukeboxInputBlocker;
-
 @property (nonatomic) BOOL showIndex;
-
 @property (nonatomic, strong) NSMutableArray *listOfArtists;
 @property (nonatomic, strong) NSMutableArray *listOfArtistsSections;
 @property (nonatomic, strong) NSArray *sectionInfo;
-
 @property (nonatomic, strong) UILabel *cacheSizeLabel;
 
 - (void)updateCacheSizeLabel;

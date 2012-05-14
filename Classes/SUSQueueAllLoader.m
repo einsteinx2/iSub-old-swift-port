@@ -28,15 +28,13 @@
 @implementation SUSQueueAllLoader
 
 @synthesize currentPlaylist, shufflePlaylist, myArtist, folderIds;
+@synthesize isQueue, isShuffleButton, doShowPlayer, isCancelled;
 
 - (id)init
 {
 	if ((self = [super init]))
 	{
-			
-		myArtist = nil;
 		folderIds = [[NSMutableArray alloc] initWithCapacity:10];
-		
 		isCancelled = NO;
 	}
 
@@ -45,10 +43,10 @@
 
 - (void)loadAlbumFolder
 {		
-	if (isCancelled)
+	if (self.isCancelled)
 		return;
 	
-	NSString *folderId = [folderIds objectAtIndexSafe:0];
+	NSString *folderId = [self.folderIds objectAtIndexSafe:0];
 	//DLog(@"Loading folderid: %@", folderId);
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:folderId forKey:@"id"];
@@ -69,30 +67,30 @@
 - (void)cancelLoad
 {
 	DLog(@"cancelLoad called");
-	isCancelled = YES;
+	self.isCancelled = YES;
 	[super cancelLoad];
 	[viewObjectsS hideLoadingScreen];
 }
 
 - (void)finishLoad
 {	
-	if (isCancelled)
+	if (self.isCancelled)
 		return;
 	
 	// Continue the iteration
-	if ([folderIds count] > 0)
+	if ([self.folderIds count] > 0)
 	{
 		[self loadAlbumFolder];
 	}
 	else 
 	{
-		if (isShuffleButton)
+		if (self.isShuffleButton)
 		{
 			// Perform the shuffle
 			[databaseS shufflePlaylist];
 		}
 		
-		if (isQueue)
+		if (self.isQueue)
 		{
 			if (settingsS.isJukeboxEnabled)
 			{
@@ -106,7 +104,7 @@
 		
 		[viewObjectsS hideLoadingScreen];
 		
-		if (doShowPlayer)
+		if (self.doShowPlayer)
 		{
 			[musicS showPlayer];
 		}
@@ -120,9 +118,9 @@
 
 - (void)loadData:(NSString *)folderId artist:(Artist *)theArtist //isQueue:(BOOL)queue 
 {	
-	isCancelled = NO;
+	self.isCancelled = NO;
 	
-	[folderIds addObject:folderId];
+	[self.folderIds addObject:folderId];
 	self.myArtist = theArtist;
 	
 	//jukeboxSongIds = [[NSMutableArray alloc] init];
@@ -143,33 +141,33 @@
 
 - (void)queueData:(NSString *)folderId artist:(Artist *)theArtist
 {
-	isQueue = YES;
-	isShuffleButton = NO;
-	doShowPlayer = NO;
+	self.isQueue = YES;
+	self.isShuffleButton = NO;
+	self.doShowPlayer = NO;
 	[self loadData:folderId artist:theArtist];
 }
 
 - (void)cacheData:(NSString *)folderId artist:(Artist *)theArtist
 {
-	isQueue = NO;
-	isShuffleButton = NO;
-	doShowPlayer = NO;
+	self.isQueue = NO;
+	self.isShuffleButton = NO;
+	self.doShowPlayer = NO;
 	[self loadData:folderId artist:theArtist];
 }
 
 - (void)playAllData:(NSString *)folderId artist:(Artist *)theArtist
 {
-	isQueue = YES;
-	isShuffleButton = NO;
-	doShowPlayer = YES;
+	self.isQueue = YES;
+	self.isShuffleButton = NO;
+	self.doShowPlayer = YES;
 	[self loadData:folderId artist:theArtist];
 }
 
 - (void)shuffleData:(NSString *)folderId artist:(Artist *)theArtist
 {
-	isQueue = YES;
-	isShuffleButton = YES;
-	doShowPlayer = YES;
+	self.isQueue = YES;
+	self.isShuffleButton = YES;
+	self.doShowPlayer = YES;
 	[self loadData:folderId artist:theArtist];
 }
 
@@ -213,7 +211,7 @@
 	self.connection = nil;
 	
 	// Remove the processed folder from array
-	[folderIds removeObjectAtIndex:0];
+	[self.folderIds removeObjectAtIndex:0];
 	
 	// Continue the iteration
 	[self finishLoad];
@@ -235,7 +233,7 @@
 	{
 		@autoreleasepool 
 		{
-			if (isQueue)
+			if (self.isQueue)
 			{
 				[aSong addToCurrentPlaylistDbQueue];
 			}
@@ -247,40 +245,25 @@
 	}
 	
 	// Remove the processed folder from array
-	if ([folderIds count] > 0)
-		[folderIds removeObjectAtIndex:0];
+	if ([self.folderIds count] > 0)
+		[self.folderIds removeObjectAtIndex:0];
 	
 	NSUInteger maxIndex = [parser.listOfAlbums count] - 1;
 	for (int i = maxIndex; i >= 0; i--)
 	{
 		NSString *albumId = [[parser.listOfAlbums objectAtIndexSafe:i] albumId];
-		[folderIds insertObject:albumId atIndex:0];
+		[self.folderIds insertObject:albumId atIndex:0];
 	}
-
 	
 	self.receivedData = nil;
 	self.connection = nil;
 	
 	// Continue the iteration
 	//[self performSelector:@selector(finishLoad) withObject:nil afterDelay:0.05];
-	if (isQueue)
+	if (self.isQueue)
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 	
 	[self finishLoad];
 }
-
-
-#pragma mark Memory Management
-
-/*- (void)dealloc
-{
-	[currentPlaylist release]; currentPlaylist = nil;
-	[shufflePlaylist release]; shufflePlaylist = nil;
-	[myArtist release]; myArtist = nil;
-	
-	
-	[super dealloc];
-}*/
-
 
 @end

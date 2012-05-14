@@ -1,4 +1,4 @@
-    //
+//
 //  RootView.m
 //  StackScrollView
 //
@@ -59,6 +59,7 @@
 
 @implementation iPadRootViewController
 @synthesize menuViewController, stackScrollViewController;
+@synthesize rootView, leftMenuView, rightSlideView;
 
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 
@@ -75,29 +76,29 @@
 {
     [super viewDidLoad];
 	
-	rootView = [[UIViewExt alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-	rootView.autoresizingMask = UIViewAutoresizingFlexibleWidth + UIViewAutoresizingFlexibleHeight;
-	[rootView setBackgroundColor:[UIColor clearColor]];
+	self.rootView = [[UIViewExt alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+	self.rootView.autoresizingMask = UIViewAutoresizingFlexibleWidth + UIViewAutoresizingFlexibleHeight;
+	[self.rootView setBackgroundColor:[UIColor clearColor]];
 	
-	leftMenuView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
-	leftMenuView.autoresizingMask = UIViewAutoresizingFlexibleHeight;	
-	menuViewController = [[MenuViewController alloc] initWithFrame:CGRectMake(0, 0, leftMenuView.frame.size.width, leftMenuView.frame.size.height)];
-	[menuViewController.view setBackgroundColor:[UIColor clearColor]];
-	[menuViewController viewWillAppear:FALSE];
-	[menuViewController viewDidAppear:FALSE];
-	[leftMenuView addSubview:menuViewController.view];
+	self.leftMenuView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
+	self.leftMenuView.autoresizingMask = UIViewAutoresizingFlexibleHeight;	
+	self.menuViewController = [[MenuViewController alloc] initWithFrame:CGRectMake(0, 0, self.leftMenuView.frame.size.width, self.leftMenuView.frame.size.height)];
+	[self.menuViewController.view setBackgroundColor:[UIColor clearColor]];
+	[self.menuViewController viewWillAppear:FALSE];
+	[self.menuViewController viewDidAppear:FALSE];
+	[self.leftMenuView addSubview:self.menuViewController.view];
 	
-	rightSlideView = [[UIView alloc] initWithFrame:CGRectMake(leftMenuView.frame.size.width, 0, rootView.frame.size.width - leftMenuView.frame.size.width, rootView.frame.size.height)];
-	rightSlideView.autoresizingMask = UIViewAutoresizingFlexibleWidth + UIViewAutoresizingFlexibleHeight;
-	stackScrollViewController = [[StackScrollViewController alloc] init];	
-	[stackScrollViewController.view setFrame:CGRectMake(0, 0, rightSlideView.frame.size.width, rightSlideView.frame.size.height)];
-	[stackScrollViewController.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth + UIViewAutoresizingFlexibleHeight];
-	[stackScrollViewController viewWillAppear:NO];
-	[stackScrollViewController viewDidAppear:NO];
-	[rightSlideView addSubview:stackScrollViewController.view];
+	self.rightSlideView = [[UIView alloc] initWithFrame:CGRectMake(self.leftMenuView.frame.size.width, 0, self.rootView.frame.size.width - self.leftMenuView.frame.size.width, self.rootView.frame.size.height)];
+	self.rightSlideView.autoresizingMask = UIViewAutoresizingFlexibleWidth + UIViewAutoresizingFlexibleHeight;
+	self.stackScrollViewController = [[StackScrollViewController alloc] init];	
+	[self.stackScrollViewController.view setFrame:CGRectMake(0, 0, self.rightSlideView.frame.size.width, self.rightSlideView.frame.size.height)];
+	[self.stackScrollViewController.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth + UIViewAutoresizingFlexibleHeight];
+	[self.stackScrollViewController viewWillAppear:NO];
+	[self.stackScrollViewController viewDidAppear:NO];
+	[self.rightSlideView addSubview:self.stackScrollViewController.view];
 	
-	[rootView addSubview:leftMenuView];
-	[rootView addSubview:rightSlideView];
+	[self.rootView addSubview:self.leftMenuView];
+	[self.rootView addSubview:self.rightSlideView];
 	self.view.backgroundColor = [[UIColor scrollViewTexturedBackgroundColor] colorWithAlphaComponent:0.7];
 	//self.view.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
 	[self.view addSubview:rootView];
@@ -112,22 +113,22 @@
     return YES;
 }
 
--(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation 
 {
-	[menuViewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-	[stackScrollViewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+	[self.menuViewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+	[self.stackScrollViewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
--(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-	[menuViewController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-	[stackScrollViewController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+	[self.menuViewController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+	[self.stackScrollViewController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }
 
--(void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-	[menuViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
-	[stackScrollViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+	[self.menuViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+	[self.stackScrollViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }	
 - (void)didReceiveMemoryWarning 
 {

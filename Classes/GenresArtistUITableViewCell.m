@@ -50,14 +50,14 @@
     [super layoutSubviews];
 	
 	self.contentView.frame = CGRectMake(0, 0, 320, 44);
-	artistNameScrollView.frame = CGRectMake(5, 0, 250, 44);
+	self.artistNameScrollView.frame = CGRectMake(5, 0, 250, 44);
 	
 	// Automatically set the width based on the width of the text
-	artistNameLabel.frame = CGRectMake(0, 0, 250, 44);
-	CGSize expectedLabelSize = [artistNameLabel.text sizeWithFont:artistNameLabel.font constrainedToSize:CGSizeMake(1000,44) lineBreakMode:artistNameLabel.lineBreakMode]; 
-	CGRect newFrame = artistNameLabel.frame;
+	self.artistNameLabel.frame = CGRectMake(0, 0, 250, 44);
+	CGSize expectedLabelSize = [self.artistNameLabel.text sizeWithFont:self.artistNameLabel.font constrainedToSize:CGSizeMake(1000,44) lineBreakMode:self.artistNameLabel.lineBreakMode]; 
+	CGRect newFrame = self.artistNameLabel.frame;
 	newFrame.size.width = expectedLabelSize.width;
-	artistNameLabel.frame = newFrame;
+	self.artistNameLabel.frame = newFrame;
 }
 
 
@@ -94,7 +94,7 @@
 	
 	[dbQueue inDatabase:^(FMDatabase *db)
 	{
-		FMResultSet *result = [db executeQuery:query, artistNameLabel.text, genre];
+		FMResultSet *result = [db executeQuery:query, self.artistNameLabel.text, self.genre];
 		while ([result next])
 		{
 			if ([result stringForColumnIndex:0] != nil)
@@ -136,7 +136,7 @@
 	
 	[dbQueue inDatabase:^(FMDatabase *db)
 	{
-		FMResultSet *result = [db executeQuery:query, artistNameLabel.text, genre];
+		FMResultSet *result = [db executeQuery:query, self.artistNameLabel.text, self.genre];
 		while ([result next])
 		{
 			if ([result stringForColumnIndex:0] != nil)
@@ -161,13 +161,13 @@
 
 - (void)scrollLabels
 {
-	if (artistNameLabel.frame.size.width > artistNameScrollView.frame.size.width)
+	if (self.artistNameLabel.frame.size.width > self.artistNameScrollView.frame.size.width)
 	{
 		[UIView beginAnimations:@"scroll" context:nil];
 		[UIView setAnimationDelegate:self];
 		[UIView setAnimationDidStopSelector:@selector(textScrollingStopped)];
-		[UIView setAnimationDuration:artistNameLabel.frame.size.width/(float)150];
-		artistNameScrollView.contentOffset = CGPointMake(artistNameLabel.frame.size.width - artistNameScrollView.frame.size.width + 10, 0);
+		[UIView setAnimationDuration:self.artistNameLabel.frame.size.width/(float)150];
+		self.artistNameScrollView.contentOffset = CGPointMake(self.artistNameLabel.frame.size.width - self.artistNameScrollView.frame.size.width + 10, 0);
 		[UIView commitAnimations];
 	}
 }
@@ -175,8 +175,8 @@
 - (void)textScrollingStopped
 {
 	[UIView beginAnimations:@"scroll" context:nil];
-	[UIView setAnimationDuration:artistNameLabel.frame.size.width/(float)150];
-	artistNameScrollView.contentOffset = CGPointZero;
+	[UIView setAnimationDuration:self.artistNameLabel.frame.size.width/(float)150];
+	self.artistNameScrollView.contentOffset = CGPointZero;
 	[UIView commitAnimations];
 }
 

@@ -14,16 +14,12 @@
 @interface AlbumViewController : UITableViewController <SUSLoaderDelegate, AsynchronousImageViewDelegate>
 
 @property (nonatomic, strong) EGORefreshTableHeaderView *refreshHeaderView;
-@property (nonatomic) BOOL reloading;
-	
+@property (nonatomic) BOOL isReloading;
 @property (nonatomic, copy) NSString *myId;
 @property (nonatomic, strong) Artist *myArtist;
 @property (nonatomic, strong) Album *myAlbum;
-
 @property (nonatomic, strong) NSArray *sectionInfo;
-
 @property (nonatomic, strong) SUSSubFolderDAO *dataModel;
-
 @property (nonatomic, strong) IBOutlet UIView *playAllShuffleAllView;
 @property (nonatomic, strong) IBOutlet UIView *albumInfoView;
 @property (nonatomic, strong) IBOutlet UIView *albumInfoArtHolderView;

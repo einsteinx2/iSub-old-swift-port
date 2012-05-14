@@ -34,7 +34,7 @@
 		artistNameLabel.backgroundColor = [UIColor clearColor];
 		artistNameLabel.textAlignment = UITextAlignmentLeft; // default
 		artistNameLabel.font = [UIFont boldSystemFontOfSize:20];
-		[self.artistNameScrollView addSubview:artistNameLabel];
+		[artistNameScrollView addSubview:artistNameLabel];
 	}
 	
 	return self;
@@ -45,15 +45,15 @@
     [super layoutSubviews];
 	
 	// Automatically set the width based on the width of the text
-	artistNameLabel.frame = CGRectMake(0, 0, 280, 44);
-	CGSize expectedLabelSize = [artistNameLabel.text sizeWithFont:artistNameLabel.font constrainedToSize:CGSizeMake(1000,44) lineBreakMode:artistNameLabel.lineBreakMode];
+	self.artistNameLabel.frame = CGRectMake(0, 0, 280, 44);
+	CGSize expectedLabelSize = [self.artistNameLabel.text sizeWithFont:self.artistNameLabel.font constrainedToSize:CGSizeMake(1000,44) lineBreakMode:self.artistNameLabel.lineBreakMode];
 	//DLog(@"%@: size: %@", artistNameLabel.text, NSStringFromCGSize(expectedLabelSize));
 	
 	if (expectedLabelSize.width > 280)
 	{
-		CGRect frame = artistNameLabel.frame;
+		CGRect frame = self.artistNameLabel.frame;
 		frame.size.width = expectedLabelSize.width;
-		artistNameLabel.frame = frame;
+		self.artistNameLabel.frame = frame;
 	}
 }
 
@@ -62,7 +62,7 @@
 
 - (void)downloadAction
 {
-	[databaseS downloadAllSongs:myArtist.artistId artist:myArtist];
+	[databaseS downloadAllSongs:self.myArtist.artistId artist:self.myArtist];
 	
 	self.overlayView.downloadButton.alpha = .3;
 	self.overlayView.downloadButton.enabled = NO;
@@ -72,7 +72,7 @@
 
 - (void)queueAction
 {
-	[databaseS queueAllSongs:myArtist.artistId artist:myArtist];
+	[databaseS queueAllSongs:self.myArtist.artistId artist:self.myArtist];
 	[self hideOverlay];
 }
 
@@ -80,13 +80,13 @@
 
 - (void)scrollLabels
 {
-	if (artistNameLabel.frame.size.width > artistNameScrollView.frame.size.width)
+	if (self.artistNameLabel.frame.size.width > self.artistNameScrollView.frame.size.width)
 	{
 		[UIView beginAnimations:@"scroll" context:nil];
 		[UIView setAnimationDelegate:self];
 		[UIView setAnimationDidStopSelector:@selector(textScrollingStopped)];
-		[UIView setAnimationDuration:artistNameLabel.frame.size.width/(float)150];
-		artistNameScrollView.contentOffset = CGPointMake(artistNameLabel.frame.size.width - artistNameScrollView.frame.size.width + 10, 0);
+		[UIView setAnimationDuration:self.artistNameLabel.frame.size.width/(float)150];
+		self.artistNameScrollView.contentOffset = CGPointMake(self.artistNameLabel.frame.size.width - self.artistNameScrollView.frame.size.width + 10, 0);
 		[UIView commitAnimations];
 	}
 }
@@ -94,8 +94,8 @@
 - (void)textScrollingStopped
 {
 	[UIView beginAnimations:@"scroll" context:nil];
-	[UIView setAnimationDuration:artistNameLabel.frame.size.width/150.];
-	artistNameScrollView.contentOffset = CGPointZero;
+	[UIView setAnimationDuration:self.artistNameLabel.frame.size.width/150.];
+	self.artistNameScrollView.contentOffset = CGPointZero;
 	[UIView commitAnimations];
 }
 

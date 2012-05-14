@@ -42,8 +42,8 @@
 
 - (NSUInteger)count
 {
-	if (nowPlayingSongDicts)
-		return [nowPlayingSongDicts count];
+	if (self.nowPlayingSongDicts)
+		return [self.nowPlayingSongDicts count];
 	
 	return 0;
 }
@@ -52,7 +52,7 @@
 {
 	if (index < self.count)
 	{
-		NSDictionary *songDict = [nowPlayingSongDicts objectAtIndexSafe:index];
+		NSDictionary *songDict = [self.nowPlayingSongDicts objectAtIndexSafe:index];
 		Song *aSong = [songDict objectForKey:@"song"];
 		return aSong;
 	}
@@ -63,7 +63,7 @@
 {
 	if (index < self.count)
 	{
-		NSDictionary *songDict = [nowPlayingSongDicts objectAtIndexSafe:index];
+		NSDictionary *songDict = [self.nowPlayingSongDicts objectAtIndexSafe:index];
 		NSUInteger minutesAgo = [[songDict objectForKey:@"minutesAgo"] intValue];
 		
 		if (minutesAgo == 1)
@@ -78,7 +78,7 @@
 {
 	if (index < self.count)
 	{
-		NSDictionary *songDict = [nowPlayingSongDicts objectAtIndexSafe:index];
+		NSDictionary *songDict = [self.nowPlayingSongDicts objectAtIndexSafe:index];
 		return [songDict objectForKey:@"username"];
 	}
 	return nil;
@@ -88,7 +88,7 @@
 {
 	if (index < self.count)
 	{
-		NSDictionary *songDict = [nowPlayingSongDicts objectAtIndexSafe:index];
+		NSDictionary *songDict = [self.nowPlayingSongDicts objectAtIndexSafe:index];
 		return [songDict objectForKey:@"playerName"];
 	}
 	return nil;
@@ -96,7 +96,6 @@
 
 - (void)playSongAtIndex:(NSUInteger)index
 {
-	
 	// Clear the current playlist
 	if (settingsS.isJukeboxEnabled)
 		[databaseS resetJukeboxPlaylist];

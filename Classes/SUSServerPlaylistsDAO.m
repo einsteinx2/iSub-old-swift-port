@@ -29,7 +29,6 @@
 {
 	[loader cancelLoad];
 	loader.delegate = nil;
-    loader = nil;
 }
 
 - (FMDatabaseQueue *)dbQueue

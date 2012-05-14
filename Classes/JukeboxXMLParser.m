@@ -62,9 +62,9 @@
 	}
 	else if ([elementName isEqualToString:@"jukeboxPlaylist"])
 	{
-		currentIndex = [[attributeDict objectForKey:@"currentIndex"] intValue];
-		isPlaying = [[attributeDict objectForKey:@"playing"] boolValue];
-		gain = [[attributeDict objectForKey:@"gain"] floatValue];
+		self.currentIndex = [[attributeDict objectForKey:@"currentIndex"] intValue];
+		self.isPlaying = [[attributeDict objectForKey:@"playing"] boolValue];
+		self.gain = [[attributeDict objectForKey:@"gain"] floatValue];
 		
 		[databaseS resetJukeboxPlaylist];
 	}

@@ -346,7 +346,7 @@
 	NSInteger currentMaxBitrate = settingsS.currentMaxBitrate;
 	
 	// Default to 128 if there is no bitrate for this song object (should never happen)
-	int rate = self.bitRate ? [self.bitRate intValue] : 128;
+	int rate = (!self.bitRate || [self.bitRate intValue] == 0) ? 128 : [self.bitRate intValue];
 	
 	// Check if this is being transcoded to the best of our knowledge
 	if (self.transcodedSuffix)

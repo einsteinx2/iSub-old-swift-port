@@ -7,10 +7,8 @@
 //
 
 @interface GenresViewController : UITableViewController 
-{
-	
-	BOOL isNoGenresScreenShowing;
-	UIImageView *noGenresScreen;
-}
+
+@property (nonatomic) BOOL isNoGenresScreenShowing;
+@property (nonatomic, strong) UIImageView *noGenresScreen;
 
 @end

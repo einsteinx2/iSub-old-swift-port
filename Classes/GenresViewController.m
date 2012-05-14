@@ -22,7 +22,7 @@
 #import "UIViewController+PushViewControllerCustom.h"
 
 @implementation GenresViewController
-
+@synthesize isNoGenresScreenShowing, noGenresScreen;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -41,8 +41,7 @@
 
 	//DLog(@"Cache viewDidLoad");
 	
-	
-	isNoGenresScreenShowing = NO;
+	self.isNoGenresScreenShowing = NO;
 	
 	self.title = @"Genres";
 	
@@ -65,15 +64,15 @@
 
 - (void)showNoGenresScreen
 {
-	if (isNoGenresScreenShowing == NO)
+	if (self.isNoGenresScreenShowing == NO)
 	{
-		isNoGenresScreenShowing = YES;
-		noGenresScreen = [[UIImageView alloc] init];
-		noGenresScreen.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
-		noGenresScreen.frame = CGRectMake(40, 100, 240, 180);
-		noGenresScreen.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 2);
-		noGenresScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
-		noGenresScreen.alpha = .80;
+		self.isNoGenresScreenShowing = YES;
+		self.noGenresScreen = [[UIImageView alloc] init];
+		self.noGenresScreen.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
+		self.noGenresScreen.frame = CGRectMake(40, 100, 240, 180);
+		self.noGenresScreen.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 2);
+		self.noGenresScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
+		self.noGenresScreen.alpha = .80;
 		
 		UILabel *textLabel = [[UILabel alloc] init];
 		textLabel.backgroundColor = [UIColor clearColor];
@@ -88,9 +87,9 @@
 			[textLabel setText:@"Load The\nSongs Tab\nFirst"];
 		}
 		textLabel.frame = CGRectMake(20, 20, 200, 140);
-		[noGenresScreen addSubview:textLabel];
+		[self.noGenresScreen addSubview:textLabel];
 		
-		[self.view addSubview:noGenresScreen];
+		[self.view addSubview:self.noGenresScreen];
 		
 	}
 }
@@ -130,10 +129,10 @@
 
 -(void)viewWillDisappear:(BOOL)animated
 {
-	if (isNoGenresScreenShowing == YES)
+	if (self.isNoGenresScreenShowing == YES)
 	{
-		[noGenresScreen removeFromSuperview];
-		isNoGenresScreenShowing = NO;
+		[self.noGenresScreen removeFromSuperview];
+		self.isNoGenresScreenShowing = NO;
 	}
 }
 

@@ -66,4 +66,6 @@
 #define ISMSNotification_JukeboxEnabled @"ISMS jukebox enabled"
 #define ISMSNotification_JukeboxDisabled @"ISMS jukebox disabled"
 
+#define ISMSNotification_JukeboxSongInfo @"ISMS Jukebox song info"
+
 #endif

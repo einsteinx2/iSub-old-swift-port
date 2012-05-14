@@ -13,7 +13,7 @@
 
 @implementation EqualizerPointView
 @synthesize parentSize;
-@synthesize position, handle;
+@synthesize position, handle, eqValue;
 
 - (id)initWithCGPoint:(CGPoint)point parentSize:(CGSize)size
 {	

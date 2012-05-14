@@ -26,12 +26,12 @@
 
 @synthesize myId;
 @synthesize listOfAlbums;
+@synthesize currentElementValue;
  
 - (HomeXMLParser *) initXMLParser 
 {	
 	if ((self = [super init]))
 	{
-		
 		listOfAlbums = [[NSMutableArray alloc] init];
 	}
 
@@ -130,7 +130,7 @@
 			//Add album object to lookup dictionary and list array
 			if ( ![anAlbum.title isEqualToString:@".AppleDouble"] )
 			{
-				[listOfAlbums addObject:anAlbum];
+				[self.listOfAlbums addObject:anAlbum];
 			}
 						
 		}
@@ -138,17 +138,17 @@
 }
 
 
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string { 
-	
-	if(!currentElementValue) 
-		currentElementValue = [[NSMutableString alloc] initWithString:string];
+- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
+{	
+	if(!self.currentElementValue) 
+		self.currentElementValue = [[NSMutableString alloc] initWithString:string];
 	else
-		[currentElementValue appendString:string];
+		[self.currentElementValue appendString:string];
 }
 
 
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName 
-  namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName 
+{
 	
 	
 }

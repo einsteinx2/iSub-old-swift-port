@@ -20,7 +20,7 @@
 
 @implementation QueueAlbumXMLParser
 
-@synthesize myArtist, listOfAlbums, listOfSongs;
+@synthesize myArtist, listOfAlbums, listOfSongs, currentElementValue;
 
 - (id)initXMLParser 
 {	
@@ -101,10 +101,10 @@
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string { 
 	
-	if(!currentElementValue) 
-		currentElementValue = [[NSMutableString alloc] initWithString:string];
+	if(!self.currentElementValue) 
+		self.currentElementValue = [[NSMutableString alloc] initWithString:string];
 	else
-		[currentElementValue appendString:string];
+		[self.currentElementValue appendString:string];
 }
 
 

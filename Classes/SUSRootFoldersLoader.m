@@ -15,13 +15,7 @@
 
 @implementation SUSRootFoldersLoader
 
-@synthesize selectedFolderId;
-
-- (void)setup
-{
-    [super setup];
-}
-
+@synthesize selectedFolderId, tempRecordCount;
 
 - (SUSLoaderType)type
 {
@@ -39,9 +33,9 @@
 {
 	NSString *tableModifier = @"_all";
 	
-	if (selectedFolderId != nil && [selectedFolderId intValue] != -1)
+	if (self.selectedFolderId != nil && [self.selectedFolderId intValue] != -1)
 	{
-		tableModifier = [NSString stringWithFormat:@"_%@", [selectedFolderId stringValue]];
+		tableModifier = [NSString stringWithFormat:@"_%@", [self.selectedFolderId stringValue]];
 	}
 	
 	return tableModifier;
@@ -57,7 +51,7 @@
 		[db executeUpdate:@"CREATE TEMPORARY TABLE rootFolderNameCacheTemp (id TEXT, name TEXT)"];
 	}];
 	
-	tempRecordCount = 0;
+	self.tempRecordCount = 0;
 }
 
 - (BOOL)clearRootFolderTempTable
@@ -146,23 +140,22 @@
 	{
 		[self.dbQueue inDatabase:^(FMDatabase *db)
 		{
-			 
 			NSString *query = @"INSERT INTO rootFolderNameCacheTemp VALUES (?, ?)";
 			[db executeUpdate:query, folderId, [name cleanString]];
 			hadError = [db hadError];
-			tempRecordCount++;
+			self.tempRecordCount++;
 		}];
 	}
 	
 	// Flush temp records to main cache if necessary
-	if (tempRecordCount == TEMP_FLUSH_AMOUNT)
+	if (self.tempRecordCount == TEMP_FLUSH_AMOUNT)
 	{
 		if (![self moveRootFolderTempTableRecordsToMainCache])
 			hadError = YES;
 		
 		[self resetRootFolderTempTable];
 		
-		tempRecordCount = 0;
+		self.tempRecordCount = 0;
 	}
     
 	return !hadError;
@@ -174,9 +167,9 @@
 {
 	DLog(@"Starting load");
     NSDictionary *parameters = nil;
-	if (selectedFolderId != nil && [selectedFolderId intValue] != -1)
+	if (self.selectedFolderId != nil && [self.selectedFolderId intValue] != -1)
 	{
-        parameters = [NSDictionary dictionaryWithObject:n2N([selectedFolderId stringValue]) forKey:@"musicFolderId"];
+        parameters = [NSDictionary dictionaryWithObject:n2N([self.selectedFolderId stringValue]) forKey:@"musicFolderId"];
 	}
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getIndexes" andParameters:parameters];
@@ -270,8 +263,8 @@
 			TBXMLElement *shortcutElement = [TBXML childElementNamed:@"shortcut" parentElement:indexesElement];
 			while (shortcutElement != nil)
 			{
-				@autoreleasepool {
-				
+				@autoreleasepool
+				{
 					rowIndex = 1;
 					rowCount++;
 					sectionCount++;
@@ -286,7 +279,6 @@
 					
 					// Get the next shortcut
 					shortcutElement = [TBXML nextSiblingNamed:@"shortcut" searchFromElement:shortcutElement];
-				
 				}
 			}
 			
@@ -300,8 +292,8 @@
 			TBXMLElement *indexElement = [TBXML childElementNamed:@"index" parentElement:indexesElement];
 			while (indexElement != nil)
 			{
-				@autoreleasepool {
-				
+				@autoreleasepool 
+				{
 					NSTimeInterval dbInserts = 0;
 					sectionCount = 0;
 					rowIndex = rowCount + 1;
@@ -310,8 +302,8 @@
 					TBXMLElement *artistElement = [TBXML childElementNamed:@"artist" parentElement:indexElement];
 					while (artistElement != nil)
 					{
-						@autoreleasepool {
-						
+						@autoreleasepool 
+						{
 							rowCount++;
 							sectionCount++;
 							

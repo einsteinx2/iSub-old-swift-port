@@ -7,23 +7,20 @@
 //
 
 @interface CurrentPlaylistViewController : UITableViewController 
-{
-	UIView *headerView;
-	UILabel *savePlaylistLabel;
-	UILabel *deleteSongsLabel;
-	UILabel *playlistCountLabel;
-	UIButton *savePlaylistButton;
-	UILabel *editPlaylistLabel;
-		
-	//NSTimer *songHighlightTimer;
-			
-	BOOL savePlaylistLocal;
-	
-	NSMutableData *receivedData;
-	NSURLConnection *connection;
-	NSMutableURLRequest *request;
-}
 
+@property (strong) UIView *headerView;
+@property (strong) UILabel *savePlaylistLabel;
+@property (strong) UILabel *deleteSongsLabel;
+@property (strong) UILabel *playlistCountLabel;
+@property (strong) UIButton *savePlaylistButton;
+@property (strong) UILabel *editPlaylistLabel;
+
+//NSTimer *songHighlightTimer;
+
+@property BOOL savePlaylistLocal;
+
+@property (strong) NSMutableData *receivedData;
+@property (strong) NSURLConnection *connection;
 @property (strong) NSMutableURLRequest *request;
 
 @property (strong) UITextField *playlistNameTextField;

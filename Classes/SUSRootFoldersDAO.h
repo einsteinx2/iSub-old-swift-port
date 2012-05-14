@@ -28,7 +28,7 @@
 @property (readonly) NSArray *indexPositions;
 @property (readonly) NSArray *indexCounts;
 
-@property (unsafe_unretained, readonly) NSString *tableModifier;
+- (NSString *)tableModifier;
 
 @property (strong) NSNumber *selectedFolderId;
 @property (readonly) BOOL isRootFolderIdCached;

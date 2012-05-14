@@ -16,13 +16,6 @@
 
 #pragma mark - Lifecycle
 
-- (void)setup
-{
-    [super setup];
-	chatMessages = nil;
-}
-
-
 - (SUSLoaderType)type
 {
     return SUSLoaderType_Chat;

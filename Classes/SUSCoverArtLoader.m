@@ -114,7 +114,7 @@ static void initialize_navigationBarImages()
 
 - (BOOL)downloadArtIfNotExists
 {
-	if (coverArtId)
+	if (self.coverArtId)
 	{
 		if (![self isCoverArtCached])
 		{

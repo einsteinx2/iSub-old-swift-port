@@ -15,14 +15,16 @@
 {
 	__strong NSArray *index;
 }
+
 @property (unsafe_unretained) id<SUSLoaderDelegate> delegate;
 
 @property (readonly) NSUInteger count;
 @property (readonly) NSUInteger searchCount;
-@property (unsafe_unretained, readonly) NSArray *index;
 @property (readonly) BOOL isDataLoaded;
 
 @property (strong) SUSAllSongsLoader *loader;
+
+- (NSArray *)index;
 
 - (id)initWithDelegate:(NSObject <SUSLoaderDelegate> *)theDelegate;
 - (void)restartLoad;

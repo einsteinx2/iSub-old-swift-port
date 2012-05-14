@@ -14,11 +14,8 @@
 
 @property (nonatomic) BOOL isNothingPlayingScreenShowing;
 @property (nonatomic, strong) UIImageView *nothingPlayingScreen;
-
 @property (nonatomic, strong) NSMutableData *receivedData;
-
 @property (nonatomic, strong) SUSNowPlayingDAO *dataModel;
-
 @property (nonatomic, strong) EGORefreshTableHeaderView *refreshHeaderView;
 @property (nonatomic) BOOL reloading;
 

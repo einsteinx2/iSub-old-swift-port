@@ -60,18 +60,18 @@
     [super layoutSubviews];
 	
 	// Automatically set the width based on the width of the text
-	albumNameLabel.frame = CGRectMake(0, 0, 230, 60);
-	CGSize expectedLabelSize = [albumNameLabel.text sizeWithFont:albumNameLabel.font constrainedToSize:CGSizeMake(1000,60) lineBreakMode:albumNameLabel.lineBreakMode]; 
-	CGRect frame = albumNameLabel.frame;
+	self.albumNameLabel.frame = CGRectMake(0, 0, 230, 60);
+	CGSize expectedLabelSize = [albumNameLabel.text sizeWithFont:albumNameLabel.font constrainedToSize:CGSizeMake(1000,60) lineBreakMode:self.albumNameLabel.lineBreakMode]; 
+	CGRect frame = self.albumNameLabel.frame;
 	frame.size.width = expectedLabelSize.width;
-	albumNameLabel.frame = frame;
+	self.albumNameLabel.frame = frame;
 	
-	coverArtView.frame = CGRectMake(0, 0, 60, 60);
+	self.coverArtView.frame = CGRectMake(0, 0, 60, 60);
 }
 
 - (void)dealloc 
 {
-	coverArtView.delegate = nil;
+	self.coverArtView.delegate = nil;
 	/*[coverArtView release]; coverArtView = nil;
 	[albumNameScrollView release]; albumNameScrollView = nil;
 	[albumNameLabel release]; albumNameLabel = nil;
@@ -86,7 +86,7 @@
 
 - (void)downloadAction
 {
-	[databaseS downloadAllSongs:myId artist:myArtist];
+	[databaseS downloadAllSongs:self.myId artist:self.myArtist];
 	
 	self.overlayView.downloadButton.alpha = .3;
 	self.overlayView.downloadButton.enabled = NO;
@@ -96,7 +96,7 @@
 
 - (void)queueAction
 {
-	[databaseS queueAllSongs:myId artist:myArtist];
+	[databaseS queueAllSongs:self.myId artist:self.myArtist];
 	[self hideOverlay];
 }
 
@@ -104,13 +104,13 @@
 
 - (void)scrollLabels
 {
-	if (albumNameLabel.frame.size.width > albumNameScrollView.frame.size.width)
+	if (self.albumNameLabel.frame.size.width > self.albumNameScrollView.frame.size.width)
 	{
 		[UIView beginAnimations:@"scroll" context:nil];
 		[UIView setAnimationDelegate:self];
 		[UIView setAnimationDidStopSelector:@selector(textScrollingStopped)];
-		[UIView setAnimationDuration:albumNameLabel.frame.size.width/150.];
-		albumNameScrollView.contentOffset = CGPointMake(albumNameLabel.frame.size.width - albumNameScrollView.frame.size.width + 10, 0);
+		[UIView setAnimationDuration:self.albumNameLabel.frame.size.width/150.];
+		self.albumNameScrollView.contentOffset = CGPointMake(self.albumNameLabel.frame.size.width - self.albumNameScrollView.frame.size.width + 10, 0);
 		[UIView commitAnimations];
 	}
 }
@@ -118,8 +118,8 @@
 - (void)textScrollingStopped
 {
 	[UIView beginAnimations:@"scroll" context:nil];
-	[UIView setAnimationDuration:albumNameLabel.frame.size.width/150.];
-	albumNameScrollView.contentOffset = CGPointZero;
+	[UIView setAnimationDuration:self.albumNameLabel.frame.size.width/150.];
+	self.albumNameScrollView.contentOffset = CGPointZero;
 	[UIView commitAnimations];
 }
 

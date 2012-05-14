@@ -51,11 +51,11 @@
     [super layoutSubviews];
 		
 	// Automatically set the width based on the width of the text
-	genreNameLabel.frame = CGRectMake(0, 0, 270, 44);
-	CGSize expectedLabelSize = [genreNameLabel.text sizeWithFont:genreNameLabel.font constrainedToSize:CGSizeMake(1000,44) lineBreakMode:genreNameLabel.lineBreakMode]; 
-	CGRect newFrame = genreNameLabel.frame;
+	self.genreNameLabel.frame = CGRectMake(0, 0, 270, 44);
+	CGSize expectedLabelSize = [genreNameLabel.text sizeWithFont:self.genreNameLabel.font constrainedToSize:CGSizeMake(1000,44) lineBreakMode:self.genreNameLabel.lineBreakMode]; 
+	CGRect newFrame = self.genreNameLabel.frame;
 	newFrame.size.width = expectedLabelSize.width;
-	genreNameLabel.frame = newFrame;
+	self.genreNameLabel.frame = newFrame;
 }
 
 #pragma mark - Overlay
@@ -92,7 +92,7 @@
 	
 	[dbQueue inDatabase:^(FMDatabase *db)
 	{
-		FMResultSet *result = [db executeQuery:query, genreNameLabel.text];
+		FMResultSet *result = [db executeQuery:query, self.genreNameLabel.text];
 		
 		while ([result next])
 		{
@@ -135,7 +135,7 @@
 	
 	[dbQueue inDatabase:^(FMDatabase *db)
 	{
-		FMResultSet *result = [db executeQuery:query, genreNameLabel.text];
+		FMResultSet *result = [db executeQuery:query, self.genreNameLabel.text];
 		
 		while ([result next])
 		{
@@ -161,13 +161,13 @@
 
 - (void)scrollLabels
 {
-	if (genreNameLabel.frame.size.width > genreNameScrollView.frame.size.width)
+	if (self.genreNameLabel.frame.size.width > self.genreNameScrollView.frame.size.width)
 	{
 		[UIView beginAnimations:@"scroll" context:nil];
 		[UIView setAnimationDelegate:self];
 		[UIView setAnimationDidStopSelector:@selector(textScrollingStopped)];
-		[UIView setAnimationDuration:genreNameLabel.frame.size.width/(float)150];
-		genreNameScrollView.contentOffset = CGPointMake(genreNameLabel.frame.size.width - genreNameScrollView.frame.size.width + 10, 0);
+		[UIView setAnimationDuration:self.genreNameLabel.frame.size.width/(float)150];
+		self.genreNameScrollView.contentOffset = CGPointMake(self.genreNameLabel.frame.size.width - self.genreNameScrollView.frame.size.width + 10, 0);
 		[UIView commitAnimations];
 	}
 }
@@ -175,8 +175,8 @@
 - (void)textScrollingStopped
 {
 	[UIView beginAnimations:@"scroll" context:nil];
-	[UIView setAnimationDuration:genreNameLabel.frame.size.width/(float)150];
-	genreNameScrollView.contentOffset = CGPointZero;
+	[UIView setAnimationDuration:self.genreNameLabel.frame.size.width/(float)150];
+	self.genreNameScrollView.contentOffset = CGPointZero;
 	[UIView commitAnimations];
 }
 

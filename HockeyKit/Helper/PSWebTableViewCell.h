@@ -36,7 +36,7 @@
 
 @property (nonatomic, strong) UIWebView *webView;
 @property (nonatomic, copy) NSString *webViewContent;
-@property (nonatomic, unsafe_unretained) CGSize webViewSize;
+@property (nonatomic) CGSize webViewSize;
 @property (nonatomic, strong) UIColor *cellBackgroundColor;
 
 - (void)addWebView;

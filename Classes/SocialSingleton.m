@@ -191,16 +191,16 @@
 	
 	DLog(@"Asked to tweet %@", currentSong.title);
 	
-	if (twitterEngine.isAuthorized && settingsS.isTwitterEnabled && !viewObjectsS.isOfflineMode)
+	if (self.twitterEngine.isAuthorized && settingsS.isTwitterEnabled && !viewObjectsS.isOfflineMode)
 	{
 		if (currentSong.artist && currentSong.title)
 		{
 			//DLog(@"------------- tweeting song --------------");
 			NSString *tweet = [NSString stringWithFormat:@"is listening to \"%@\" by %@", currentSong.title, currentSong.artist];
 			if ([tweet length] <= 140)
-				[twitterEngine sendUpdate:tweet];
+				[self.twitterEngine sendUpdate:tweet];
 			else
-				[twitterEngine sendUpdate:[tweet substringToIndex:140]];
+				[self.twitterEngine sendUpdate:[tweet substringToIndex:140]];
 			
 			DLog(@"Tweeted: %@", tweet);
 		}
@@ -304,7 +304,6 @@
 - (void)setup
 {
 	//initialize here
-	twitterEngine = nil;
 	[self createTwitterEngine];
 	
 	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songStarted) name:ISMSNotification_SongPlaybackStarted object:nil];

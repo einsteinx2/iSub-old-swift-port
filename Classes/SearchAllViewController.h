@@ -11,11 +11,9 @@
 @interface SearchAllViewController : UITableViewController 
 
 @property (strong) NSMutableArray *cellNames;
-
 @property (strong) NSArray *listOfArtists;
 @property (strong) NSArray *listOfAlbums;
 @property (strong) NSArray *listOfSongs;
-
 @property (strong) NSString *query;
 
 @end

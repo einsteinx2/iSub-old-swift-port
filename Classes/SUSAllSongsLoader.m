@@ -50,11 +50,7 @@ static BOOL isAllSongsLoading = NO;
 - (void)setup
 {
     [super setup];
-    
 	
-	currentArtist = nil;
-	currentAlbum = nil;
-	rootFolders = nil;
 	notificationTimeArtist = [[NSDate alloc] init];
 	notificationTimeAlbum = [[NSDate alloc] init];
 	notificationTimeSong = [[NSDate alloc] init];

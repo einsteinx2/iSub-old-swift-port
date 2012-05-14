@@ -44,6 +44,8 @@
 @implementation AllSongsViewController
 
 @synthesize headerView, sectionInfo, dataModel, loadingScreen;
+@synthesize reloadImage, reloadLabel, refreshHeaderView, reloadButton, reloadTimeLabel, countLabel;
+@synthesize letUserSelectRow, searchBar, numberOfRows, url, isSearching, isProcessingArtists, isReloading, searchOverlay, dismissButton;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -57,9 +59,9 @@
 
 - (void)createDataModel
 {
-	dataModel.delegate = nil;
+	self.dataModel.delegate = nil;
 	self.dataModel = [[SUSAllSongsDAO alloc] init];
-	dataModel.delegate = self;
+	self.dataModel.delegate = self;
 }
 
 - (void)viewDidLoad
@@ -70,9 +72,9 @@
 	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
 
 	// Set defaults
-	isSearching = NO;
-	letUserSelectRow = YES;	
-	isProcessingArtists = YES;
+	self.isSearching = NO;
+	self.letUserSelectRow = YES;	
+	self.isProcessingArtists = YES;
 	
 	[self createDataModel];
 	
@@ -80,9 +82,9 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadingFinishedNotification) name:ISMSNotification_AllSongsLoadingFinished object:nil];
 	
 	// Add the pull to refresh view
-	refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
-	refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
-	[self.tableView addSubview:refreshHeaderView];
+	self.refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
+	self.refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
+	[self.tableView addSubview:self.refreshHeaderView];
 	
 	if (IS_IPAD())
 	{
@@ -113,7 +115,7 @@
 		}
 		
 		// Check if the data has been loaded
-		if (dataModel.isDataLoaded)
+		if (self.dataModel.isDataLoaded)
 		{
 			[self addCount];
 		}
@@ -150,45 +152,45 @@
 - (void)addCount
 {
 	// Build the search and reload view
-	headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 90)];
-	headerView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
+	self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 90)];
+	self.headerView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
 	
-	reloadButton = [UIButton buttonWithType:UIButtonTypeCustom];
-	reloadButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	reloadButton.frame = CGRectMake(0, 0, 320, 40);
+	self.reloadButton = [UIButton buttonWithType:UIButtonTypeCustom];
+	self.reloadButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	self.reloadButton.frame = CGRectMake(0, 0, 320, 40);
 	//[reloadButton addTarget:self action:@selector(reloadAction:) forControlEvents:UIControlEventTouchUpInside];
-	[headerView addSubview:reloadButton];
+	[self.headerView addSubview:self.reloadButton];
 	
-	countLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, 320, 30)];
-	countLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	countLabel.backgroundColor = [UIColor clearColor];
-	countLabel.textColor = [UIColor colorWithRed:156.0/255.0 green:161.0/255.0 blue:168.0/255.0 alpha:1];
-	countLabel.textAlignment = UITextAlignmentCenter;
-	countLabel.font = [UIFont boldSystemFontOfSize:30];
-	[headerView addSubview:countLabel];
+	self.countLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, 320, 30)];
+	self.countLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	self.countLabel.backgroundColor = [UIColor clearColor];
+	self.countLabel.textColor = [UIColor colorWithRed:156.0/255.0 green:161.0/255.0 blue:168.0/255.0 alpha:1];
+	self.countLabel.textAlignment = UITextAlignmentCenter;
+	self.countLabel.font = [UIFont boldSystemFontOfSize:30];
+	[self.headerView addSubview:self.countLabel];
 
-	searchBar = [[UISearchBar  alloc] initWithFrame:CGRectMake(0, 50, 320, 40)];
-	searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	searchBar.delegate = self;
-	searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
-	searchBar.placeholder = @"Song name";
-	[headerView addSubview:searchBar];
+	self.searchBar = [[UISearchBar  alloc] initWithFrame:CGRectMake(0, 50, 320, 40)];
+	self.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	self.searchBar.delegate = self;
+	self.searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
+	self.searchBar.placeholder = @"Song name";
+	[self.headerView addSubview:self.searchBar];
 	
-	reloadTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 36, 320, 12)];
-	reloadTimeLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	reloadTimeLabel.backgroundColor = [UIColor clearColor];
-	reloadTimeLabel.textColor = [UIColor colorWithRed:176.0/255.0 green:181.0/255.0 blue:188.0/255.0 alpha:1];
-	reloadTimeLabel.textAlignment = UITextAlignmentCenter;
-	reloadTimeLabel.font = [UIFont systemFontOfSize:11];
-	[headerView addSubview:reloadTimeLabel];
+	self.reloadTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 36, 320, 12)];
+	self.reloadTimeLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	self.reloadTimeLabel.backgroundColor = [UIColor clearColor];
+	self.reloadTimeLabel.textColor = [UIColor colorWithRed:176.0/255.0 green:181.0/255.0 blue:188.0/255.0 alpha:1];
+	self.reloadTimeLabel.textAlignment = UITextAlignmentCenter;
+	self.reloadTimeLabel.font = [UIFont systemFontOfSize:11];
+	[self.headerView addSubview:self.reloadTimeLabel];
 	
-	countLabel.text = [NSString stringWithFormat:@"%i Songs", dataModel.count];
+	self.countLabel.text = [NSString stringWithFormat:@"%i Songs", self.dataModel.count];
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 	[formatter setDateStyle:NSDateFormatterMediumStyle];
 	[formatter setTimeStyle:NSDateFormatterShortStyle];
-	reloadTimeLabel.text = [NSString stringWithFormat:@"last reload: %@", [formatter stringFromDate:[defaults objectForKey:[NSString stringWithFormat:@"%@songsReloadTime", settingsS.urlString]]]];
+	self.reloadTimeLabel.text = [NSString stringWithFormat:@"last reload: %@", [formatter stringFromDate:[defaults objectForKey:[NSString stringWithFormat:@"%@songsReloadTime", settingsS.urlString]]]];
 	
 	self.tableView.tableHeaderView = headerView;
 	[self.tableView reloadData];
@@ -205,8 +207,6 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
 	dataModel.delegate = nil;
-	searchBar = nil;
-	url = nil;
 }
 
 #pragma mark - LoaderDelegate methods
@@ -261,36 +261,36 @@
 
 	if ([notification.name isEqualToString:ISMSNotification_AllSongsLoadingArtists])
 	{
-		isProcessingArtists = YES;
-		loadingScreen.loadingTitle1.text = @"Processing Artist:";
-		loadingScreen.loadingTitle2.text = @"Processing Album:";
+		self.isProcessingArtists = YES;
+		self.loadingScreen.loadingTitle1.text = @"Processing Artist:";
+		self.loadingScreen.loadingTitle2.text = @"Processing Album:";
 	}
 	else if ([notification.name isEqualToString:ISMSNotification_AllSongsLoadingAlbums])
 	{
-		isProcessingArtists = NO;
-		loadingScreen.loadingTitle1.text = @"Processing Album:";
-		loadingScreen.loadingTitle2.text = @"Processing Song:";
+		self.isProcessingArtists = NO;
+		self.loadingScreen.loadingTitle1.text = @"Processing Album:";
+		self.loadingScreen.loadingTitle2.text = @"Processing Song:";
 	}
 	else if ([notification.name isEqualToString:ISMSNotification_AllSongsArtistName])
 	{
-		isProcessingArtists = YES;
-		loadingScreen.loadingTitle1.text = @"Processing Artist:";
-		loadingScreen.loadingTitle2.text = @"Processing Album:";
-		loadingScreen.loadingMessage1.text = name;
+		self.isProcessingArtists = YES;
+		self.loadingScreen.loadingTitle1.text = @"Processing Artist:";
+		self.loadingScreen.loadingTitle2.text = @"Processing Album:";
+		self.loadingScreen.loadingMessage1.text = name;
 	}
 	else if ([notification.name isEqualToString:ISMSNotification_AllSongsAlbumName])
 	{
 		if (isProcessingArtists)
-			loadingScreen.loadingMessage2.text = name;
+			self.loadingScreen.loadingMessage2.text = name;
 		else
-			loadingScreen.loadingMessage1.text = name;
+			self.loadingScreen.loadingMessage1.text = name;
 	}
 	else if ([notification.name isEqualToString:ISMSNotification_AllSongsSongName])
 	{
-		isProcessingArtists = NO;
-		loadingScreen.loadingTitle1.text = @"Processing Album:";
-		loadingScreen.loadingTitle2.text = @"Processing Song:";
-		loadingScreen.loadingMessage2.text = name;
+		self.isProcessingArtists = NO;
+		self.loadingScreen.loadingTitle1.text = @"Processing Album:";
+		self.loadingScreen.loadingTitle2.text = @"Processing Song:";
+		self.loadingScreen.loadingMessage2.text = name;
 	}
 }
 
@@ -313,7 +313,7 @@
 	self.tableView.allowsSelection = YES;
 	
 	// Hide the loading screen
-	[loadingScreen hide];
+	[self.loadingScreen hide];
 	self.loadingScreen = nil;
 }
 
@@ -360,7 +360,7 @@
 		{
 			[self showLoadingScreen];
 			
-			[dataModel restartLoad];
+			[self.dataModel restartLoad];
 			self.tableView.tableHeaderView = nil;
 			[self.tableView reloadData];
 		}
@@ -368,7 +368,7 @@
 		{
 			[self showLoadingScreen];
 			
-			[dataModel startLoad];
+			[self.dataModel startLoad];
 			self.tableView.tableHeaderView = nil;
 			[self.tableView reloadData];
 		}	
@@ -381,29 +381,29 @@
 
 - (void)createSearchOverlay
 {
-	searchOverlay = [[UIView alloc] init];
+	self.searchOverlay = [[UIView alloc] init];
 	//searchOverlay.frame = CGRectMake(0, 74, 480, 480);
-	searchOverlay.frame = CGRectMake(0, 0, 480, 480);
-	searchOverlay.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	searchOverlay.backgroundColor = [UIColor colorWithWhite:0 alpha:.80];
-	searchOverlay.alpha = 0.0;
+	self.searchOverlay.frame = CGRectMake(0, 0, 480, 480);
+	self.searchOverlay.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	self.searchOverlay.backgroundColor = [UIColor colorWithWhite:0 alpha:.80];
+	self.searchOverlay.alpha = 0.0;
 	//[self.view.superview addSubview:searchOverlay];
 	//[self.tableView.tableFooterView addSubview:searchOverlay];
-	self.tableView.tableFooterView = searchOverlay;//self.tableView.tableFooterView;
+	self.tableView.tableFooterView = self.searchOverlay;//self.tableView.tableFooterView;
 	
-	dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
-	dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	[dismissButton addTarget:self action:@selector(doneSearching_Clicked:) forControlEvents:UIControlEventTouchUpInside];
-	dismissButton.frame = self.view.bounds;
-	dismissButton.enabled = NO;
-	[searchOverlay addSubview:dismissButton];
+	self.dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
+	self.dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	[self.dismissButton addTarget:self action:@selector(doneSearching_Clicked:) forControlEvents:UIControlEventTouchUpInside];
+	self.dismissButton.frame = self.view.bounds;
+	self.dismissButton.enabled = NO;
+	[self.searchOverlay addSubview:self.dismissButton];
 	
 	// Animate the search overlay on screen
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:.3];
 	[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-	searchOverlay.alpha = 1;
-	dismissButton.enabled = YES;
+	self.searchOverlay.alpha = 1;
+	self.dismissButton.enabled = YES;
 	[UIView commitAnimations];
 }
 
@@ -417,16 +417,16 @@
 		[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
 		[UIView setAnimationDelegate:self];
 		[UIView setAnimationDidStopSelector:@selector(removeSearchOverlay)];
-		searchOverlay.alpha = 0;
-		dismissButton.enabled = NO;
+		self.searchOverlay.alpha = 0;
+		self.dismissButton.enabled = NO;
 		[UIView commitAnimations];
 	}
 }
 
 - (void)removeSearchOverlay
 {
-	[searchOverlay removeFromSuperview];
-	searchOverlay = nil;
+	[self.searchOverlay removeFromSuperview];
+	self.searchOverlay = nil;
 	
 	[self.tableView addFooterShadow];
 }
@@ -441,12 +441,12 @@
 	{
 		[self createSearchOverlay];
 		
-		letUserSelectRow = NO;
+		self.letUserSelectRow = NO;
 		self.tableView.scrollEnabled = NO;
 	}
 	
 	// Remove the index bar
-	isSearching = YES;
+	self.isSearching = YES;
 	[self.tableView reloadData];
 	
 	//Add the done button.
@@ -460,10 +460,10 @@
 	{
 		[self hideSearchOverlay];
 		
-		isSearching = YES;
-		letUserSelectRow = YES;
+		self.isSearching = YES;
+		self.letUserSelectRow = YES;
 		self.tableView.scrollEnabled = YES;
-		[dataModel searchForSongName:searchText];
+		[self.dataModel searchForSongName:searchText];
 	}
 	else 
 	{
@@ -471,8 +471,8 @@
 		
 		[self createSearchOverlay];
 		
-		isSearching = NO;
-		letUserSelectRow = NO;
+		self.isSearching = NO;
+		self.letUserSelectRow = NO;
 		self.tableView.scrollEnabled = NO;
 		[databaseS.allSongsDbQueue inDatabase:^(FMDatabase *db)
 		{
@@ -485,7 +485,7 @@
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)theSearchBar 
 {	
-	[searchBar resignFirstResponder];
+	[self.searchBar resignFirstResponder];
 }
 
 - (void) doneSearching_Clicked:(id)sender 
@@ -493,11 +493,11 @@
 	self.tableView.tableHeaderView = nil;
 	[self addCount];
 	
-	searchBar.text = @"";
-	[searchBar resignFirstResponder];
+	self.searchBar.text = @"";
+	[self.searchBar resignFirstResponder];
 	
-	isSearching = NO;
-	letUserSelectRow = YES;
+	self.isSearching = NO;
+	self.letUserSelectRow = YES;
 	self.navigationItem.leftBarButtonItem = nil;
 	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
 	self.tableView.scrollEnabled = YES;
@@ -518,14 +518,14 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section 
 {
-	if(isSearching)
+	if(self.isSearching)
 		return @"";
 	
-	if ([dataModel.index count] == 0)
+	if ([self.dataModel.index count] == 0)
 		return @"";
 	
 	NSString *title = @"";
-	if ([dataModel.index count] > section)
+	if ([self.dataModel.index count] > section)
 		title = [(Index *)[dataModel.index objectAtIndexSafe:section] name];
 	
 	return title;
@@ -534,7 +534,7 @@
 // Following 2 methods handle the right side index
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView 
 {
-	if(isSearching)
+	if(self.isSearching)
 	{
 		return nil;
 	}
@@ -567,7 +567,7 @@
 
 - (NSIndexPath *)tableView :(UITableView *)theTableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	if(letUserSelectRow)
+	if(self.letUserSelectRow)
 		return indexPath;
 	else
 		return nil;
@@ -575,27 +575,27 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView 
 {
-	if (isSearching)
+	if (self.isSearching)
 	{
 		return 1;
 	}
 	else
 	{
-		NSUInteger count = [[dataModel index] count];
+		NSUInteger count = [[self.dataModel index] count];
 		return count;
 	}
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	if (isSearching)
+	if (self.isSearching)
 	{
-		return dataModel.searchCount;
+		return self.dataModel.searchCount;
 	}
 	else 
 	{
-		if ([dataModel.index count] > section)
-			return [(Index *)[dataModel.index objectAtIndexSafe:section] count];
+		if ([self.dataModel.index count] > section)
+			return [(Index *)[self.dataModel.index objectAtIndexSafe:section] count];
 		return 0;
 	}
 }
@@ -611,18 +611,18 @@
 	cell.indexPath = indexPath;
 	
 	Song *aSong = nil;
-	if(isSearching)
+	if(self.isSearching)
 	{
-		aSong = [dataModel songForPositionInSearch:(indexPath.row + 1)];
+		aSong = [self.dataModel songForPositionInSearch:(indexPath.row + 1)];
 	}
 	else
 	{
-		NSUInteger sectionStartIndex = [(Index *)[dataModel.index objectAtIndexSafe:indexPath.section] position];
-		aSong = [dataModel songForPosition:(sectionStartIndex + indexPath.row + 1)];
+		NSUInteger sectionStartIndex = [(Index *)[self.dataModel.index objectAtIndexSafe:indexPath.section] position];
+		aSong = [self.dataModel songForPosition:(sectionStartIndex + indexPath.row + 1)];
 	}
 	
 	cell.md5 = [aSong.path md5];
-	cell.isSearching = isSearching;
+	cell.isSearching = self.isSearching;
 	
 	cell.coverArtView.coverArtId = aSong.coverArtId;
 	
@@ -666,14 +666,14 @@
 		
 		// Add selected song to the playlist
 		Song *aSong = nil;
-		if(isSearching)
+		if(self.isSearching)
 		{
-			aSong = [dataModel songForPositionInSearch:(indexPath.row + 1)];
+			aSong = [self.dataModel songForPositionInSearch:(indexPath.row + 1)];
 		}
 		else
 		{
-			NSUInteger sectionStartIndex = [(Index *)[dataModel.index objectAtIndexSafe:indexPath.section] position];
-			aSong = [dataModel songForPosition:(sectionStartIndex + indexPath.row + 1)];
+			NSUInteger sectionStartIndex = [(Index *)[self.dataModel.index objectAtIndexSafe:indexPath.section] position];
+			aSong = [self.dataModel songForPosition:(sectionStartIndex + indexPath.row + 1)];
 		}
 		
 		[aSong addToCurrentPlaylistDbQueue];
@@ -709,24 +709,24 @@
 {	
 	if (scrollView.isDragging) 
 	{
-		if (refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !_reloading) 
+		if (self.refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !self.isReloading) 
 		{
-			[refreshHeaderView setState:EGOOPullRefreshNormal];
+			[self.refreshHeaderView setState:EGOOPullRefreshNormal];
 		} 
-		else if (refreshHeaderView.state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !_reloading) 
+		else if (self.refreshHeaderView.state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !self.isReloading) 
 		{
-			[refreshHeaderView setState:EGOOPullRefreshPulling];
+			[self.refreshHeaderView setState:EGOOPullRefreshPulling];
 		}
 	}
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-	if (scrollView.contentOffset.y <= - 65.0f && !_reloading) 
+	if (scrollView.contentOffset.y <= - 65.0f && !self.isReloading) 
 	{
-		_reloading = YES;
+		self.isReloading = YES;
 		[self reloadAction:nil];
-		[refreshHeaderView setState:EGOOPullRefreshLoading];
+		[self.refreshHeaderView setState:EGOOPullRefreshLoading];
 		[UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:0.2];
 		self.tableView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
@@ -736,7 +736,7 @@
 
 - (void)dataSourceDidFinishLoadingNewData
 {
-	_reloading = NO;
+	self.isReloading = NO;
 	
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:.3];

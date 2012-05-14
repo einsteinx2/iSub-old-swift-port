@@ -21,9 +21,9 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 
 @implementation StackScrollViewController
 
-@synthesize slideViews, borderViews, viewControllersStack, slideStartPosition;
+@synthesize slideViews, borderViews, viewControllersStack, slideStartPosition, viewAtLeft, viewAtLeft2, viewAtRight, viewAtRight2, viewAtLeftAtTouchBegan, viewAtRightAtTouchBegan, dragDirection, viewXPosition, displacementPosition, lastTouchPoint, positionOfViewAtLeftAtTouchBegan, positionOfViewAtRightAtTouchBegan;
 
--(id)init
+- (id)init
 {
 	if((self = [super init])) 
 	{
@@ -108,30 +108,30 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 
 - (void)arrangeVerticalBar 
 {
-	if ([[slideViews subviews] count] > 2) 
+	if ([[self.slideViews subviews] count] > 2) 
 	{
-		[[borderViews viewWithTag:2] setHidden:YES];
-		[[borderViews viewWithTag:1] setHidden:YES];
+		[[self.borderViews viewWithTag:2] setHidden:YES];
+		[[self.borderViews viewWithTag:1] setHidden:YES];
 		
 		NSInteger stackCount = 0;
-		if (viewAtLeft != nil ) 
+		if (self.viewAtLeft != nil ) 
 		{
-			stackCount = [[slideViews subviews] indexOfObject:viewAtLeft];
+			stackCount = [[self.slideViews subviews] indexOfObject:self.viewAtLeft];
 		}
 		
-		if (viewAtLeft != nil && viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION) 
+		if (self.viewAtLeft != nil && self.viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION) 
 		{
 			stackCount += 1;
 		}
 		
 		if (stackCount == 2) 
 		{
-			[[borderViews viewWithTag:2] setHidden:YES];
+			[[self.borderViews viewWithTag:2] setHidden:YES];
 		}
 		if (stackCount >= 3)
 		{
-			[[borderViews viewWithTag:2] setHidden:YES];
-			[[borderViews viewWithTag:1] setHidden:YES];
+			[[self.borderViews viewWithTag:2] setHidden:YES];
+			[[self.borderViews viewWithTag:1] setHidden:YES];
 		}
 	}
 }
@@ -143,21 +143,21 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 	
 	if (recognizer.state == UIGestureRecognizerStateBegan) 
 	{
-		displacementPosition = 0;
-		positionOfViewAtRightAtTouchBegan = viewAtRight.frame.origin;
-		positionOfViewAtLeftAtTouchBegan = viewAtLeft.frame.origin;
-		viewAtRightAtTouchBegan = viewAtRight;
-		viewAtLeftAtTouchBegan = viewAtLeft;
-		[viewAtLeft.layer removeAllAnimations];
-		[viewAtRight.layer removeAllAnimations];
-		[viewAtRight2.layer removeAllAnimations];
-		[viewAtLeft2.layer removeAllAnimations];
-		if (viewAtLeft2 != nil) 
+		self.displacementPosition = 0;
+		self.positionOfViewAtRightAtTouchBegan = viewAtRight.frame.origin;
+		self.positionOfViewAtLeftAtTouchBegan = viewAtLeft.frame.origin;
+		self.viewAtRightAtTouchBegan = viewAtRight;
+		self.viewAtLeftAtTouchBegan = viewAtLeft;
+		[self.viewAtLeft.layer removeAllAnimations];
+		[self.viewAtRight.layer removeAllAnimations];
+		[self.viewAtRight2.layer removeAllAnimations];
+		[self.viewAtLeft2.layer removeAllAnimations];
+		if (self.viewAtLeft2 != nil) 
 		{
-			NSInteger viewAtLeft2Position = [[slideViews subviews] indexOfObject:viewAtLeft2];
+			NSInteger viewAtLeft2Position = [[self.slideViews subviews] indexOfObject:self.viewAtLeft2];
 			if (viewAtLeft2Position > 0) 
 			{
-				[((UIView*)[[slideViews subviews] objectAtIndex:viewAtLeft2Position -1]) setHidden:NO];
+				[((UIView*)[[self.slideViews subviews] objectAtIndex:viewAtLeft2Position-1]) setHidden:NO];
 			}
 		}
 		
@@ -167,130 +167,132 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 	
 	CGPoint location =  [recognizer locationInView:self.view];
 	
-	if (lastTouchPoint != -1) 
+	if (self.lastTouchPoint != -1) 
 	{
-		if (location.x < lastTouchPoint) 
+		if (location.x < self.lastTouchPoint) 
 		{			
-			if (dragDirection == StackScrollViewDragRight) 
+			if (self.dragDirection == StackScrollViewDragRight) 
 			{
-				positionOfViewAtRightAtTouchBegan = viewAtRight.frame.origin;
-				positionOfViewAtLeftAtTouchBegan = viewAtLeft.frame.origin;
-				displacementPosition = translatedPoint.x * -1;
+				self.positionOfViewAtRightAtTouchBegan = self.viewAtRight.frame.origin;
+				self.positionOfViewAtLeftAtTouchBegan = self.viewAtLeft.frame.origin;
+				self.displacementPosition = translatedPoint.x * -1;
 			}				
 			
-			dragDirection = StackScrollViewDragLeft;
+			self.dragDirection = StackScrollViewDragLeft;
 			
-			if (viewAtRight != nil) 
+			if (self.viewAtRight != nil) 
 			{
-				if (viewAtLeft.frame.origin.x <= SLIDE_VIEWS_MINUS_X_POSITION) 
+				if (self.viewAtLeft.frame.origin.x <= SLIDE_VIEWS_MINUS_X_POSITION) 
 				{						
-					if ([[slideViews subviews] indexOfObject:viewAtRight] < ([[slideViews subviews] count]-1)) 
+					if ([[self.slideViews subviews] indexOfObject:self.viewAtRight] < ([[self.slideViews subviews] count]-1)) 
 					{
-						viewAtLeft2 = viewAtLeft;
-						viewAtLeft = viewAtRight;
-						viewAtRight2.hidden = NO;
-						viewAtRight = viewAtRight2;
-						if ([[slideViews subviews] indexOfObject:viewAtRight] < ([[slideViews subviews] count]-1))
+						self.viewAtLeft2 = self.viewAtLeft;
+						self.viewAtLeft = self.viewAtRight;
+						self.viewAtRight2.hidden = NO;
+						self.viewAtRight = viewAtRight2;
+						if ([[self.slideViews subviews] indexOfObject:self.viewAtRight] < ([[self.slideViews subviews] count]-1))
 						{
-							viewAtRight2 = [[slideViews subviews] objectAtIndex:[[slideViews subviews] indexOfObject:viewAtRight] + 1];
+							self.viewAtRight2 = [[self.slideViews subviews] objectAtIndex:[[self.slideViews subviews] indexOfObject:self.viewAtRight] + 1];
 						}
 						else 
 						{
-							viewAtRight2 = nil;
+							self.viewAtRight2 = nil;
 						}							
-						positionOfViewAtRightAtTouchBegan = viewAtRight.frame.origin;
-						positionOfViewAtLeftAtTouchBegan = viewAtLeft.frame.origin;
-						displacementPosition = translatedPoint.x * -1;							
-						if ([[slideViews subviews] indexOfObject:viewAtLeft2] > 1)
+						self.positionOfViewAtRightAtTouchBegan = self.viewAtRight.frame.origin;
+						self.positionOfViewAtLeftAtTouchBegan = self.viewAtLeft.frame.origin;
+						self.displacementPosition = translatedPoint.x * -1;							
+						if ([[self.slideViews subviews] indexOfObject:self.viewAtLeft2] > 1)
 						{
-							[[[slideViews subviews] objectAtIndex:[[slideViews subviews] indexOfObject:viewAtLeft2] - 2] setHidden:YES];
+							[[[self.slideViews subviews] objectAtIndex:[[self.slideViews subviews] indexOfObject:self.viewAtLeft2] - 2] setHidden:YES];
 						}
 					}
 				}
 				
-				if (viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION && viewAtRight.frame.origin.x + viewAtRight.frame.size.width > self.view.frame.size.width) 
+				if (self.viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION && self.viewAtRight.frame.origin.x + self.viewAtRight.frame.size.width > self.view.frame.size.width) 
 				{
-					if ((positionOfViewAtRightAtTouchBegan.x + translatedPoint.x + displacementPosition + viewAtRight.frame.size.width) <= self.view.frame.size.width) 
+					if ((self.positionOfViewAtRightAtTouchBegan.x + translatedPoint.x + self.displacementPosition + self.viewAtRight.frame.size.width) <= self.view.frame.size.width) 
 					{
-						[viewAtRight setFrame:CGRectMake(self.view.frame.size.width - viewAtRight.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
+						[self.viewAtRight setFrame:CGRectMake(self.view.frame.size.width - self.viewAtRight.frame.size.width, self.viewAtRight.frame.origin.y, self.viewAtRight.frame.size.width, self.viewAtRight.frame.size.height)];
 					}
 					else
 					{
-						[viewAtRight setFrame:CGRectMake(positionOfViewAtRightAtTouchBegan.x + translatedPoint.x + displacementPosition, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
+						[self.viewAtRight setFrame:CGRectMake(self.positionOfViewAtRightAtTouchBegan.x + translatedPoint.x + self.displacementPosition, self.viewAtRight.frame.origin.y, self.viewAtRight.frame.size.width, self.viewAtRight.frame.size.height)];
 					}
 				}
-				else if (([[slideViews subviews] indexOfObject:viewAtRight] == [[slideViews subviews] count]-1) && viewAtRight.frame.origin.x <= (self.view.frame.size.width - viewAtRight.frame.size.width)) 
+				else if (([[self.slideViews subviews] indexOfObject:self.viewAtRight] == [[self.slideViews subviews] count]-1) && self.viewAtRight.frame.origin.x <= (self.view.frame.size.width - self.viewAtRight.frame.size.width)) 
 				{
-					if ((positionOfViewAtRightAtTouchBegan.x + translatedPoint.x + displacementPosition) <= SLIDE_VIEWS_MINUS_X_POSITION)
+					if ((self.positionOfViewAtRightAtTouchBegan.x + translatedPoint.x + self.displacementPosition) <= SLIDE_VIEWS_MINUS_X_POSITION)
 					{
-						[viewAtRight setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
+						[self.viewAtRight setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION, self.viewAtRight.frame.origin.y, self.viewAtRight.frame.size.width, self.viewAtRight.frame.size.height)];
 					}
 					else
 					{
-						[viewAtRight setFrame:CGRectMake(positionOfViewAtRightAtTouchBegan.x + translatedPoint.x + displacementPosition, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
+						[self.viewAtRight setFrame:CGRectMake(self.positionOfViewAtRightAtTouchBegan.x + translatedPoint.x + self.displacementPosition, self.viewAtRight.frame.origin.y, self.viewAtRight.frame.size.width, self.viewAtRight.frame.size.height)];
 					}
 				}
 				else
 				{						
-					if (positionOfViewAtLeftAtTouchBegan.x + translatedPoint.x + displacementPosition <= SLIDE_VIEWS_MINUS_X_POSITION) 
+					if (self.positionOfViewAtLeftAtTouchBegan.x + translatedPoint.x + self.displacementPosition <= SLIDE_VIEWS_MINUS_X_POSITION) 
 					{
-						[viewAtLeft setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
+						[self.viewAtLeft setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION, self.viewAtLeft.frame.origin.y, self.viewAtLeft.frame.size.width, self.viewAtLeft.frame.size.height)];
 					}
 					else
 					{
-						[viewAtLeft setFrame:CGRectMake(positionOfViewAtLeftAtTouchBegan.x + translatedPoint.x + displacementPosition , viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
+						[self.viewAtLeft setFrame:CGRectMake(self.positionOfViewAtLeftAtTouchBegan.x + translatedPoint.x + self.displacementPosition , self.viewAtLeft.frame.origin.y, self.viewAtLeft.frame.size.width, self.viewAtLeft.frame.size.height)];
 					}						
-					[viewAtRight setFrame:CGRectMake(viewAtLeft.frame.origin.x + viewAtLeft.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
+					[self.viewAtRight setFrame:CGRectMake(self.viewAtLeft.frame.origin.x + self.viewAtLeft.frame.size.width, self.viewAtRight.frame.origin.y, self.viewAtRight.frame.size.width, self.viewAtRight.frame.size.height)];
 					
-					if (viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION)
+					if (self.viewAtLeft.frame.origin.x == SLIDE_VIEWS_MINUS_X_POSITION)
 					{
-						positionOfViewAtRightAtTouchBegan = viewAtRight.frame.origin;
-						positionOfViewAtLeftAtTouchBegan = viewAtLeft.frame.origin;
-						displacementPosition = translatedPoint.x * -1;
+						self.positionOfViewAtRightAtTouchBegan = self.viewAtRight.frame.origin;
+						self.positionOfViewAtLeftAtTouchBegan = self.viewAtLeft.frame.origin;
+						self.displacementPosition = translatedPoint.x * -1;
 					}
 					
 				}
 				
-			}else {
-				[viewAtLeft setFrame:CGRectMake(positionOfViewAtLeftAtTouchBegan.x + translatedPoint.x + displacementPosition , viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
+			}
+			else 
+			{
+				[self.viewAtLeft setFrame:CGRectMake(self.positionOfViewAtLeftAtTouchBegan.x + translatedPoint.x + self.displacementPosition , self.viewAtLeft.frame.origin.y, self.viewAtLeft.frame.size.width, self.viewAtLeft.frame.size.height)];
 			}
 			
 			[self arrangeVerticalBar];
 			
 		}
-		else if (location.x > lastTouchPoint) 
+		else if (location.x > self.lastTouchPoint) 
 		{	
-			if (dragDirection == StackScrollViewDragLeft)
+			if (self.dragDirection == StackScrollViewDragLeft)
 			{
-				positionOfViewAtRightAtTouchBegan = viewAtRight.frame.origin;
-				positionOfViewAtLeftAtTouchBegan = viewAtLeft.frame.origin;
-				displacementPosition = translatedPoint.x;
+				self.positionOfViewAtRightAtTouchBegan = self.viewAtRight.frame.origin;
+				self.positionOfViewAtLeftAtTouchBegan = self.viewAtLeft.frame.origin;
+				self.displacementPosition = translatedPoint.x;
 			}	
 			
-			dragDirection = StackScrollViewDragRight;
+			self.dragDirection = StackScrollViewDragRight;
 			
-			if (viewAtLeft != nil) 
+			if (self.viewAtLeft != nil) 
 			{
-				if (viewAtRight.frame.origin.x >= self.view.frame.size.width) 
+				if (self.viewAtRight.frame.origin.x >= self.view.frame.size.width) 
 				{
-					if ([[slideViews subviews] indexOfObject:viewAtLeft] > 0) 
+					if ([[self.slideViews subviews] indexOfObject:self.viewAtLeft] > 0) 
 					{							
-						viewAtRight2.hidden = YES;
-						viewAtRight2 = viewAtRight;
-						viewAtRight = viewAtLeft;
-						viewAtLeft = viewAtLeft2;						
-						if ([[slideViews subviews] indexOfObject:viewAtLeft] > 0)
+						self.viewAtRight2.hidden = YES;
+						self.viewAtRight2 = self.viewAtRight;
+						self.viewAtRight = self.viewAtLeft;
+						self.viewAtLeft = self.viewAtLeft2;						
+						if ([[self.slideViews subviews] indexOfObject:self.viewAtLeft] > 0)
 						{
-							viewAtLeft2 = [[slideViews subviews] objectAtIndex:[[slideViews subviews] indexOfObject:viewAtLeft] - 1];
-							viewAtLeft2.hidden = NO;
+							self.viewAtLeft2 = [[self.slideViews subviews] objectAtIndex:[[self.slideViews subviews] indexOfObject:self.viewAtLeft] - 1];
+							self.viewAtLeft2.hidden = NO;
 						}
 						else
 						{
-							viewAtLeft2 = nil;
+							self.viewAtLeft2 = nil;
 						}
-						positionOfViewAtRightAtTouchBegan = viewAtRight.frame.origin;
-						positionOfViewAtLeftAtTouchBegan = viewAtLeft.frame.origin;
-						displacementPosition = translatedPoint.x;
+						self.positionOfViewAtRightAtTouchBegan = self.viewAtRight.frame.origin;
+						self.positionOfViewAtLeftAtTouchBegan = self.viewAtLeft.frame.origin;
+						self.displacementPosition = translatedPoint.x;
 						
 						[self arrangeVerticalBar];
 					}

@@ -12,33 +12,18 @@
 @class CustomUITextView, EGORefreshTableHeaderView, SUSChatDAO;
 
 @interface ChatViewController : UITableViewController <UITextViewDelegate, SUSLoaderDelegate> 
-{
-	UIView *headerView;
-	CustomUITextView *textInput;
-	
-	UIView *chatMessageOverlay;
-	UIButton *dismissButton;
-	
-	BOOL isNoChatMessagesScreenShowing;
-	UIImageView *noChatMessagesScreen;
-	
-	NSMutableArray *chatMessages;
-	
-	NSInteger lastCheck;
-	
-	NSMutableData *receivedData;
-	
-	EGORefreshTableHeaderView *refreshHeaderView;
-	BOOL _reloading;
-}
 
+@property (strong) UIView *headerView;
+@property (strong) CustomUITextView *textInput;
+@property (strong) UIView *chatMessageOverlay;
+@property (strong) UIButton *dismissButton;
+@property BOOL isNoChatMessagesScreenShowing;
 @property (strong) UIImageView *noChatMessagesScreen;
 @property (strong) NSMutableArray *chatMessages;
-
+@property (strong) NSMutableData *receivedData;
+@property (strong) EGORefreshTableHeaderView *refreshHeaderView;
+@property BOOL isReloading;
 @property NSInteger lastCheck;
-
-@property(assign,getter=isReloading) BOOL reloading;
-
 @property (strong) SUSChatDAO *dataModel;
 
 - (void)cancelLoad;

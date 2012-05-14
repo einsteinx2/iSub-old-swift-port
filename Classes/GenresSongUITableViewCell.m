@@ -78,17 +78,17 @@
     [super layoutSubviews];
 	
 	// Automatically set the width based on the width of the text
-	songNameLabel.frame = CGRectMake(0, 0, 235, 37);
-	CGSize expectedLabelSize = [songNameLabel.text sizeWithFont:songNameLabel.font constrainedToSize:CGSizeMake(1000,60) lineBreakMode:songNameLabel.lineBreakMode]; 
-	CGRect newFrame = songNameLabel.frame;
+	self.songNameLabel.frame = CGRectMake(0, 0, 235, 37);
+	CGSize expectedLabelSize = [self.songNameLabel.text sizeWithFont:self.songNameLabel.font constrainedToSize:CGSizeMake(1000,60) lineBreakMode:self.songNameLabel.lineBreakMode]; 
+	CGRect newFrame = self.songNameLabel.frame;
 	newFrame.size.width = expectedLabelSize.width;
-	songNameLabel.frame = newFrame;
+	self.songNameLabel.frame = newFrame;
 	
-	artistNameLabel.frame = CGRectMake(0, 33, 235, 15);
-	expectedLabelSize = [artistNameLabel.text sizeWithFont:artistNameLabel.font constrainedToSize:CGSizeMake(1000,60) lineBreakMode:artistNameLabel.lineBreakMode]; 
-	newFrame = artistNameLabel.frame;
+	self.artistNameLabel.frame = CGRectMake(0, 33, 235, 15);
+	expectedLabelSize = [self.artistNameLabel.text sizeWithFont:self.artistNameLabel.font constrainedToSize:CGSizeMake(1000,60) lineBreakMode:self.artistNameLabel.lineBreakMode]; 
+	newFrame = self.artistNameLabel.frame;
 	newFrame.size.width = expectedLabelSize.width;
-	artistNameLabel.frame = newFrame;
+	self.artistNameLabel.frame = newFrame;
 }
 
 #pragma mark - Overlay
@@ -106,7 +106,7 @@
 		}
 		else
 		{
-			if ([[databaseS.songCacheDbQueue stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", md5] isEqualToString:@"YES"]) 
+			if ([[databaseS.songCacheDbQueue stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", self.md5] isEqualToString:@"YES"]) 
 			{
 				self.overlayView.downloadButton.alpha = .3;
 				self.overlayView.downloadButton.enabled = NO;
@@ -139,24 +139,24 @@
 
 - (void)scrollLabels
 {
-	CGFloat scrollWidth = songNameLabel.frame.size.width > artistNameLabel.frame.size.width ? songNameLabel.frame.size.width : artistNameLabel.frame.size.width;
-	if (scrollWidth > songNameScrollView.frame.size.width)
+	CGFloat scrollWidth = self.songNameLabel.frame.size.width > self.artistNameLabel.frame.size.width ? self.songNameLabel.frame.size.width : self.artistNameLabel.frame.size.width;
+	if (scrollWidth > self.songNameScrollView.frame.size.width)
 	{
 		[UIView beginAnimations:@"scroll" context:nil];
 		[UIView setAnimationDelegate:self];
 		[UIView setAnimationDidStopSelector:@selector(textScrollingStopped)];
-		[UIView setAnimationDuration:songNameLabel.frame.size.width/150.];
-		songNameScrollView.contentOffset = CGPointMake(scrollWidth - songNameScrollView.frame.size.width + 10, 0);
+		[UIView setAnimationDuration:self.songNameLabel.frame.size.width/150.];
+		self.songNameScrollView.contentOffset = CGPointMake(scrollWidth - self.songNameScrollView.frame.size.width + 10, 0);
 		[UIView commitAnimations];
 	}
 }
 
 - (void)textScrollingStopped
 {
-	CGFloat scrollWidth = songNameLabel.frame.size.width > artistNameLabel.frame.size.width ? songNameLabel.frame.size.width : artistNameLabel.frame.size.width;
+	CGFloat scrollWidth = self.songNameLabel.frame.size.width > self.artistNameLabel.frame.size.width ? self.songNameLabel.frame.size.width : self.artistNameLabel.frame.size.width;
 	[UIView beginAnimations:@"scroll" context:nil];
 	[UIView setAnimationDuration:scrollWidth/150.];
-	songNameScrollView.contentOffset = CGPointZero;
+	self.songNameScrollView.contentOffset = CGPointZero;
 	[UIView commitAnimations];
 }
 

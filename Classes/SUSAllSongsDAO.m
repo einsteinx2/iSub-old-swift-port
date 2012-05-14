@@ -202,7 +202,7 @@
 {
 	if (![SUSAllSongsLoader isLoading])
 	{
-		 index = nil;
+		index = nil;
 		self.loader = [[SUSAllSongsLoader alloc] initWithDelegate:self.delegate];
 		[self.loader startLoad];
 	}

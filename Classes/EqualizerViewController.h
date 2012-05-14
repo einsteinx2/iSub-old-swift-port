@@ -11,52 +11,32 @@
 
 @class EqualizerView, EqualizerPointView, EqualizerPathView, BassParamEqValue, BassEffectDAO, NWPickerField, SnappySlider;//, GCDTimer;
 @interface EqualizerViewController : UIViewController <NWPickerFieldDelegate, DDSocialDialogDelegate, UITableViewDelegate, UITableViewDataSource>
-{
-	UIView *overlay;
-	UIButton *dismissButton;
-}
-@property (strong) IBOutlet UIView *controlsContainer;
 
+@property (strong) UIView *overlay;
+@property (strong) UIButton *dismissButton;
+@property (strong) IBOutlet UIView *controlsContainer;
 @property BOOL isPresetPickerShowing;
 @property (strong) IBOutlet NWPickerField *presetPicker;
-
 @property (strong) IBOutlet UIButton *toggleButton;
-//@property (retain) IBOutlet UIImageView *drawImage;
 @property (strong) IBOutlet EqualizerPathView *equalizerPath;
 @property (strong) IBOutlet EqualizerView *equalizerView;
 @property (strong) NSMutableArray *equalizerPointViews;
-
 @property (strong) IBOutlet SnappySlider *gainSlider;
 @property (strong) IBOutlet UILabel *gainBoostAmountLabel;
 @property (strong) IBOutlet UILabel *gainBoostLabel;
 @property CGFloat lastGainValue;
-
 @property (strong) BassEffectDAO *effectDAO;
-
-//@property (retain) NSTimer *drawTimer;
-
-@property (unsafe_unretained) EqualizerPointView *selectedView;
-
+@property (strong) EqualizerPointView *selectedView;
 @property (strong) UIButton *deletePresetButton;
 @property (strong) UIButton *savePresetButton;
 @property BOOL isSavePresetButtonShowing;
 @property BOOL isDeletePresetButtonShowing;
 @property (strong) UITextField *presetNameTextField;
-
 @property (strong) DDSocialDialog *saveDialog;
-
 @property BOOL wasVisualizerOffBeforeRotation;
-
 @property (strong) UISwipeGestureRecognizer *swipeDetectorLeft;
 @property (strong) UISwipeGestureRecognizer *swipeDetectorRight;
-
 @property (strong) IBOutlet UIView *landscapeButtonsHolder;
-
-//@property (retain) GCDTimer *hidePickerTimer;
-
-//- (BOOL)isTouchingEqView:(UITouch *)touch;
-
-//- (CGPoint)centerForBassEqValue:(BassParamEqValue *)value;
 
 - (IBAction)dismiss:(id)sender;
 - (IBAction)type:(id)sender;
@@ -65,8 +45,6 @@
 
 - (void)createEqViews;
 - (void)removeEqViews;
-//- (void)setupPalette;
-//- (void)createBitmapToDraw;
 
 - (void)promptForSavePresetName;
 - (void)hideSavePresetButton:(BOOL)animated;

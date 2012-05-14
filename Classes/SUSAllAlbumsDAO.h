@@ -9,11 +9,15 @@
 @class FMDatabase, Album;
 
 @interface SUSAllAlbumsDAO : NSObject
+{
+	__strong NSArray *index;
+}
 
 @property (readonly) NSUInteger count;
 @property (readonly) NSUInteger searchCount;
-@property (unsafe_unretained, readonly) NSArray *index;
 @property (readonly) BOOL isDataLoaded;
+
+- (NSArray *)index;
 
 - (Album *)albumForPosition:(NSUInteger)position;
 - (void)clearSearchTable;

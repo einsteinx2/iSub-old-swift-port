@@ -10,7 +10,6 @@
 
 @property (nonatomic, strong) NSMutableArray *listOfAlbums;
 @property (nonatomic, strong) NSMutableArray *listOfSongs;
-
 @property (nonatomic, strong) NSArray *sectionInfo;
 @property (nonatomic, strong) NSArray *segments;
 

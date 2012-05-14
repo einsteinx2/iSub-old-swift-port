@@ -41,14 +41,13 @@
 {
 	[loader cancelLoad];
 	loader.delegate = nil;
-    loader = nil;
 }
 
 #pragma mark - Private DB Methods
 
 - (FMDatabaseQueue *)dbQueue
 {
-	if (isLarge)
+	if (self.isLarge)
 		return IS_IPAD() ? databaseS.coverArtCacheDb540Queue : databaseS.coverArtCacheDb320Queue;
 	else
 		return databaseS.coverArtCacheDb60Queue;
@@ -58,13 +57,13 @@
 
 - (UIImage *)coverArtImage
 {
-    NSData *imageData = [self.dbQueue dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [coverArtId md5]];
+    NSData *imageData = [self.dbQueue dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [self.coverArtId md5]];
     return imageData ? [UIImage imageWithData:imageData] : self.defaultCoverArtImage;
 }
 
 - (UIImage *)defaultCoverArtImage
 {	
-	if (isLarge)
+	if (self.isLarge)
 		return IS_IPAD() ? [UIImage imageNamed:@"default-album-art-ipad.png"] : [UIImage imageNamed:@"default-album-art.png"];
 	else
 		return [UIImage imageNamed:@"default-album-art-small.png"];
@@ -72,15 +71,15 @@
 
 - (BOOL)isCoverArtCached
 {
-	if (!coverArtId) 
+	if (!self.coverArtId) 
 		return NO;
 	
-    return [self.dbQueue stringForQuery:@"SELECT id FROM coverArtCache WHERE id = ?", [coverArtId md5]] ? YES : NO;
+    return [self.dbQueue stringForQuery:@"SELECT id FROM coverArtCache WHERE id = ?", [self.coverArtId md5]] ? YES : NO;
 }
 
 - (void)downloadArtIfNotExists
 {
-	if (coverArtId)
+	if (self.coverArtId)
 	{
 		if (!self.isCoverArtCached)
 			[self startLoad];

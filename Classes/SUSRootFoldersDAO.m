@@ -23,33 +23,12 @@
 
 #pragma mark - Lifecycle
 
-- (void)setup
-{
-	indexNames = nil;
-	indexPositions = nil;
-	indexCounts = nil;
-	selectedFolderId = nil;
-}
-
-- (id)init
-{
-    self = [super init];
-    if (self) 
-	{
-		[self setup];
-    }
-    
-    return self;
-}
-
 - (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate
 {
     if ((self = [super init]))
 	{
 		delegate = theDelegate;
-		[self setup];
-    }
-    
+    }    
     return self;
 }
 
@@ -57,7 +36,6 @@
 {
 	[loader cancelLoad];
 	loader.delegate = nil;
-    loader = nil;
 }
 
 #pragma mark - Properties
@@ -70,12 +48,10 @@
 - (NSString *)tableModifier
 {
 	NSString *tableModifier = @"_all";
-	
 	if (selectedFolderId != nil && [self.selectedFolderId intValue] != -1)
 	{
 		tableModifier = [NSString stringWithFormat:@"_%@", [self.selectedFolderId stringValue]];
 	}
-	
 	return tableModifier;
 }
 
@@ -140,7 +116,7 @@
 		[result close];
 	}];
 		
-	if ([positions count] == 0)
+	if (positions.count == 0)
 		return nil;
 	else
 		return [NSArray arrayWithArray:positions];
@@ -162,7 +138,7 @@
 		[result close];
 	}];
 		
-	if ([counts count] == 0)
+	if (counts.count == 0)
 		return nil;
 	else
 		return [NSArray arrayWithArray:counts];
@@ -295,9 +271,9 @@
 	@synchronized(self)
 	{
 		selectedFolderId = newSelectedFolderId;
-		 indexNames = nil;
-		 indexCounts = nil;
-		 indexPositions = nil;
+		indexNames = nil;
+		indexCounts = nil;
+		indexPositions = nil;
 	}
 }
 

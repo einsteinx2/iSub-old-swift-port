@@ -17,30 +17,12 @@
 
 #pragma mark - Lifecycle
 
-- (void)setup
-{
-    loader = nil;
-}
-
-- (id)init
-{
-    self = [super init];
-    if (self) 
-	{
-		[self setup];
-    }
-    
-    return self;
-}
-
 - (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate
 {
     if ((self = [super init])) 
 	{
 		delegate = theDelegate;
-		[self setup];
-    }
-    
+    }    
     return self;
 }
 
@@ -48,7 +30,6 @@
 {
 	[loader cancelLoad];
 	loader.delegate = nil;
-    loader = nil;
 }
 
 #pragma mark - Public DAO Methods

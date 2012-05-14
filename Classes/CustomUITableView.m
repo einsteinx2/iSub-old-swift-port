@@ -20,7 +20,7 @@
 
 @implementation CustomUITableView
 
-@synthesize lastDeleteToggle;
+@synthesize lastDeleteToggle, startTouchPosition, hasSwiped, cellShowingOverlay, tapAndHoldCell;
 
 #pragma mark Lifecycle
 
@@ -76,7 +76,7 @@
 		
 		// Handle multi delete touching
 		if (self.editing &&
-			point.x < 40. && [[NSDate date] timeIntervalSinceDate:lastDeleteToggle] > 0.25)
+			point.x < 40. && [[NSDate date] timeIntervalSinceDate:self.lastDeleteToggle] > 0.25)
 		{
 			self.lastDeleteToggle = [NSDate date];
 			if ([cell isKindOfClass:[CustomUITableViewCell class]])
@@ -86,7 +86,7 @@
 		}
 		
 		// Remove overlays
-		if (!hasSwiped)
+		if (!self.hasSwiped)
 		{			
 			[self hideAllOverlays:cell];
 			
@@ -148,13 +148,13 @@
     CGPoint currentTouchPosition = [[touches anyObject] locationInView:self];
 	UITableViewCell *cell = [self cellForRowAtIndexPath: [self indexPathForRowAtPoint:currentTouchPosition]];
 	
-	if (!hasSwiped) 
+	if (!self.hasSwiped) 
 	{
 		// Check if this is a full swipe
-		if (fabsf(startTouchPosition.x - currentTouchPosition.x) >= ISMSHorizSwipeDragMin 
-			&& fabsf(startTouchPosition.y - currentTouchPosition.y) <= ISMSVertSwipeDragMax)
+		if (fabsf(self.startTouchPosition.x - currentTouchPosition.x) >= ISMSHorizSwipeDragMin 
+			&& fabsf(self.startTouchPosition.y - currentTouchPosition.y) <= ISMSVertSwipeDragMax)
 		{			
-			hasSwiped = YES;
+			self.hasSwiped = YES;
 			self.scrollEnabled = NO;			
 			
 			// Temporarily disable the cells so we don't get accidental selections
@@ -164,7 +164,7 @@
 			[self hideAllOverlays:nil];
 			
 			// Detect the direction
-			if (startTouchPosition.x < currentTouchPosition.x) 
+			if (self.startTouchPosition.x < currentTouchPosition.x) 
 			{
 				// Right swipe
 				if (settingsS.isSwipeEnabled && !IS_IPAD())
@@ -173,7 +173,7 @@
 					{
 						[(CustomUITableViewCell *)cell showOverlay];
 					}
-					cellShowingOverlay = cell;
+					self.cellShowingOverlay = cell;
 				}
 			} 
 			else 
@@ -194,12 +194,12 @@
 
 - (void)tapAndHoldFired
 {
-    hasSwiped = YES;
-	if ([tapAndHoldCell isKindOfClass:[CustomUITableViewCell class]])
+    self.hasSwiped = YES;
+	if ([self.tapAndHoldCell isKindOfClass:[CustomUITableViewCell class]])
 	{
-		[(CustomUITableViewCell *)tapAndHoldCell showOverlay];
+		[(CustomUITableViewCell *)self.tapAndHoldCell showOverlay];
 	}
-	cellShowingOverlay = tapAndHoldCell;
+	self.cellShowingOverlay = self.tapAndHoldCell;
 }
 
 - (void)cancelTapAndHold
@@ -213,14 +213,14 @@
 	self.scrollEnabled = YES;
 		
 	// Handle swipe
-    startTouchPosition = [[touches anyObject] locationInView:self];
-	hasSwiped = NO;
-	cellShowingOverlay = nil;
+    self.startTouchPosition = [[touches anyObject] locationInView:self];
+	self.hasSwiped = NO;
+	self.cellShowingOverlay = nil;
 
 	// Handle tap and hold
 	if (settingsS.isTapAndHoldEnabled)
 	{
-		tapAndHoldCell = [self cellForRowAtIndexPath: [self indexPathForRowAtPoint:startTouchPosition]];
+		self.tapAndHoldCell = [self cellForRowAtIndexPath: [self indexPathForRowAtPoint:self.startTouchPosition]];
 		[self performSelector:@selector(tapAndHoldFired) withObject:nil afterDelay:ISMSTapAndHoldDelay];
 	}
 	
@@ -248,12 +248,12 @@
 	
 	[self cancelTapAndHold];
 
-	if (hasSwiped)
+	if (self.hasSwiped)
 	{
 		// Enable the buttons if the overlay is showing
-		if ([cellShowingOverlay isKindOfClass:[CustomUITableViewCell class]])
+		if ([self.cellShowingOverlay isKindOfClass:[CustomUITableViewCell class]])
 		{
-			[[(CustomUITableViewCell *)cellShowingOverlay overlayView] enableButtons];
+			[[(CustomUITableViewCell *)self.cellShowingOverlay overlayView] enableButtons];
 		}
 	}
 	else
@@ -267,7 +267,7 @@
 			[self.delegate tableView:self didSelectRowAtIndexPath:[self indexPathForCell:cell]];
 		}
 	}
-	hasSwiped = NO;
+	self.hasSwiped = NO;
 		
 	[super touchesEnded:touches withEvent:event];
 }
@@ -278,11 +278,11 @@
 	
 	self.allowsSelection = YES;
 	self.scrollEnabled = YES;
-	hasSwiped = NO;
+	self.hasSwiped = NO;
 	
-	if ([cellShowingOverlay isKindOfClass:[CustomUITableViewCell class]])
+	if ([self.cellShowingOverlay isKindOfClass:[CustomUITableViewCell class]])
 	{
-		[[(CustomUITableViewCell *)cellShowingOverlay overlayView] enableButtons];
+		[[(CustomUITableViewCell *)self.cellShowingOverlay overlayView] enableButtons];
 	}
 		
 	[super touchesCancelled:touches withEvent:event];

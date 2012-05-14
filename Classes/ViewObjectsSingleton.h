@@ -13,9 +13,8 @@
 @class FoldersViewController, Artist, LoadingScreen, Album, AlbumViewController, Server;
 
 @interface ViewObjectsSingleton : NSObject <UITabBarControllerDelegate, UINavigationControllerDelegate, MBProgressHUDDelegate>
-{		
-	MBProgressHUD *HUD;
-}
+
+@property (strong) MBProgressHUD *HUD;
 
 // XMLParser objects used to tell the parser how to parse
 //

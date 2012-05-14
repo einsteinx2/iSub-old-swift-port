@@ -48,12 +48,12 @@
     [super layoutSubviews];
 		
 	// Automatically set the height based on the height of the message text
-	CGSize expectedLabelSize = [messageLabel.text sizeWithFont:messageLabel.font constrainedToSize:CGSizeMake(310,CGFLOAT_MAX) lineBreakMode:messageLabel.lineBreakMode];
+	CGSize expectedLabelSize = [self.messageLabel.text sizeWithFont:self.messageLabel.font constrainedToSize:CGSizeMake(310,CGFLOAT_MAX) lineBreakMode:self.messageLabel.lineBreakMode];
 	if (expectedLabelSize.height < 40)
 		expectedLabelSize.height = 40;
-	CGRect newFrame = messageLabel.frame;
+	CGRect newFrame = self.messageLabel.frame;
 	newFrame.size.height = expectedLabelSize.height;
-	messageLabel.frame = newFrame;
+	self.messageLabel.frame = newFrame;
 }
 
 #pragma mark - Overlay

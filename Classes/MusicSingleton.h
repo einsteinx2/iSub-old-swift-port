@@ -13,10 +13,8 @@
 @class Song;
 
 @interface MusicSingleton : NSObject
-{		
-	BOOL isAutoNextNotificationOn;
-}
 
+@property BOOL isAutoNextNotificationOn;
 @property (readonly) BOOL showPlayerIcon;
 
 + (id)sharedInstance;

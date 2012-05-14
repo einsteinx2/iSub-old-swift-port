@@ -11,16 +11,12 @@
 
 @class BassParamEqValue;
 @interface EqualizerPointView : UIImageView
-{
-	BassParamEqValue *eqValue;
-}
 
 @property (strong) BassParamEqValue *eqValue;
 @property (readonly) NSUInteger frequency;
 @property (readonly) CGFloat gain;
 @property (readonly) HFX handle;
 @property CGPoint position;
-
 @property CGSize parentSize;
 
 - (id)initWithCGPoint:(CGPoint)point parentSize:(CGSize)size;

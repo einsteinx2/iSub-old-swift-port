@@ -49,12 +49,6 @@
 	return self;
 }
 
-- (void)dealloc 
-{
-	 myProduct = nil;
-	
-}
-
 - (SKProduct *)myProduct
 {
 	@synchronized(self)
@@ -69,13 +63,13 @@
 	{
 		myProduct = product;
 		
-		titleLabel.text = [myProduct localizedTitle];
-		descLabel.text = [myProduct localizedDescription];
+		self.titleLabel.text = [myProduct localizedTitle];
+		self.descLabel.text = [myProduct localizedDescription];
 		
 		if ([MKStoreManager isFeaturePurchased:[myProduct productIdentifier]])
 		{
-			priceLabel.textColor = [UIColor colorWithRed:0.0 green:.66 blue:0.0 alpha:1.0];
-			priceLabel.text = @"Unlocked";
+			self.priceLabel.textColor = [UIColor colorWithRed:0.0 green:.66 blue:0.0 alpha:1.0];
+			self.priceLabel.text = @"Unlocked";
 			
 			self.contentView.alpha = .40;
 		}
@@ -85,7 +79,7 @@
 			[numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
 			[numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
 			[numberFormatter setLocale:myProduct.priceLocale];
-			priceLabel.text = [numberFormatter stringFromNumber:myProduct.price];
+			self.priceLabel.text = [numberFormatter stringFromNumber:myProduct.price];
 		}
 	}
 }

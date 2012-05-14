@@ -12,9 +12,7 @@
 
 @property (nonatomic, strong) NSMutableData *receivedData;
 @property (nonatomic, strong) NSURLConnection *connection;
-
 @property (nonatomic, strong) NSMutableArray *listOfAlbums;
-
 @property (nonatomic, copy) NSString *modifier;
 @property (nonatomic) NSUInteger offset;
 @property (nonatomic) BOOL isMoreAlbums;

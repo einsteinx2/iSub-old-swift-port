@@ -15,11 +15,10 @@
 @class UIViewExt;
 
 @interface iPadRootViewController : UIViewController 
-{
-	UIViewExt* rootView;
-	UIView* leftMenuView;
-	UIView* rightSlideView;
-}
+
+@property (strong) UIViewExt* rootView;
+@property (strong) UIView* leftMenuView;
+@property (strong) UIView* rightSlideView;
 
 @property (strong) MenuViewController* menuViewController;
 @property (strong) StackScrollViewController* stackScrollViewController;
