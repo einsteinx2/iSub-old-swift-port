@@ -5743,6 +5743,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/Twitter+OAuth/Libraries & Headers\"",
 					"\"$(SRCROOT)/FlurryAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
@@ -5790,6 +5791,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/Twitter+OAuth/Libraries & Headers\"",
 					"\"$(SRCROOT)/FlurryAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
@@ -5880,6 +5882,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/Twitter+OAuth/Libraries & Headers\"",
 					"\"$(SRCROOT)/FlurryAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
