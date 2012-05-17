@@ -366,6 +366,11 @@
 		self.audioEngineBufferNumberOfSeconds = 10;
 	}
 	
+	if (![userDefaults objectForKey:@"isLockScreenArtEnabled"])
+	{
+		self.isLockScreenArtEnabled = YES;
+	}
+	
 	[userDefaults synchronize];
 }
 

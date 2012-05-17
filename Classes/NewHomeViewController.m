@@ -449,6 +449,8 @@
 		[self.jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off-ipad.png"] forState:UIControlStateNormal];
 	else
 		[self.jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off.png"] forState:UIControlStateNormal];
+	
+	[self initSongInfo];
 }
 
 - (IBAction)jukebox
@@ -488,7 +490,9 @@
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_JukeboxEnabled];
 			
 			[FlurryAnalytics logEvent:@"JukeboxEnabled"];
-		}	
+		}
+		
+		[self initSongInfo];
 	}
 	else
 	{
