@@ -274,7 +274,7 @@
 		
 	effectDAO = [[BassEffectDAO alloc] initWithType:BassEffectType_ParametricEQ];
 
-	DLog(@"effectDAO.selectedPresetIndex: %i", effectDAO.selectedPresetIndex);
+	//DLog(@"effectDAO.selectedPresetIndex: %i", effectDAO.selectedPresetIndex);
 	[presetPicker selectRow:effectDAO.selectedPresetIndex inComponent:0 animated:NO];
 	
 	[self updateToggleButton];
@@ -332,19 +332,31 @@
 		{
 			[equalizerView nextType];
 		}
-	}	
+	}
 	
 	overlay = nil;
 	
-	swipeDetectorLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:equalizerView action:@selector(nextType)];
+	swipeDetectorLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeLeft)];
 	swipeDetectorLeft.direction = UISwipeGestureRecognizerDirectionLeft;
 	[equalizerView addGestureRecognizer:swipeDetectorLeft];
 
-	swipeDetectorRight = [[UISwipeGestureRecognizer alloc] initWithTarget:equalizerView action:@selector(prevType)];
+	swipeDetectorRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeRight)];
 	swipeDetectorRight.direction = UISwipeGestureRecognizerDirectionRight;
 	[equalizerView addGestureRecognizer:swipeDetectorRight];
 	
 	[FlurryAnalytics logEvent:@"Equalizer"];
+}
+
+- (void)swipeLeft
+{
+	if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
+		[equalizerView nextType];
+}
+
+- (void)swipeRight
+{
+	if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
+		[equalizerView prevType];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -417,7 +429,7 @@
 	equalizerPointViews = [[NSMutableArray alloc] initWithCapacity:[[audioEngineS equalizerValues] count]];
 	for (BassParamEqValue *value in audioEngineS.equalizerValues)
 	{
-		DLog(@"eq handle: %i", value.handle);
+		//DLog(@"eq handle: %i", value.handle);
 		EqualizerPointView *eqView = [[EqualizerPointView alloc] initWithEqValue:value parentSize:self.equalizerView.frame.size];
 		[equalizerPointViews addObject:eqView];
 		
@@ -427,8 +439,8 @@
 		//else
 		//	[self.view insertSubview:eqView belowSubview:self.controlsContainer];
 	}
-	DLog(@"equalizerValues: %@", audioEngineS.equalizerValues);
-	DLog(@"equalizerViews: %@", equalizerPointViews);
+	//DLog(@"equalizerValues: %@", audioEngineS.equalizerValues);
+	//DLog(@"equalizerViews: %@", equalizerPointViews);
 
 	//Draw the path
 	[self createAndDrawEqualizerPath];
@@ -641,7 +653,7 @@
 		// Save the preset
 		if (buttonIndex)
 		{
-			DLog(@"Preset name: %@", presetNameTextField.text);
+			//DLog(@"Preset name: %@", presetNameTextField.text);
 			[effectDAO saveCustomPreset:[self serializedEqPoints] name:presetNameTextField.text];
 			[effectDAO deleteTempCustomPreset];
 			[presetPicker reloadAllComponents];
@@ -680,9 +692,9 @@
 {	
 	// Detect touch anywhere
 	UITouch *touch = [touches anyObject];
-	DLog(@"touch began");
+	//DLog(@"touch began");
 	
-	DLog(@"tap count: %i", [touch tapCount]);
+	//DLog(@"tap count: %i", [touch tapCount]);
 	
 	UIView *touchedView = [self.view hitTest:[touch locationInView:self.view] withEvent:nil];
 	if ([touchedView isKindOfClass:[EqualizerPointView class]])
@@ -692,7 +704,7 @@
 		if ([touch tapCount] == 2)
 		{
 			// remove the point
-			DLog(@"double tap, remove point");
+			//DLog(@"double tap, remove point");
 			
 			[audioEngineS removeEqualizerValue:self.selectedView.eqValue];
 			[equalizerPointViews removeObject:self.selectedView];
@@ -727,7 +739,7 @@
 			if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
 			{
 				// add a point
-				DLog(@"double tap, adding point");
+				//DLog(@"double tap, adding point");
 				
 				// Find the tap point
 				CGPoint point = [touch locationInView:self.equalizerView];
@@ -797,7 +809,7 @@
 
 - (void)updateToggleButton
 {
-	if(audioEngineS.isEqualizerOn)
+	if(settingsS.isEqualizerOn)
 	{
 		[toggleButton setTitle:@"EQ is ON" forState:UIControlStateNormal];
 		UIColor *blue = [UIColor colorWithRed:98./255. green:180./255. blue:223./255. alpha:1.];

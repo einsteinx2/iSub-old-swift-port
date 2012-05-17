@@ -92,6 +92,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentPlaylistCount) name:@"updateCurrentPlaylistCount" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewWillAppear:) name:ISMSNotification_StorePurchaseComplete object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songsQueued) name:ISMSNotification_CurrentPlaylistSongsQueued object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_JukeboxSongInfo object:nil];
 }
 
 - (void)unregisterForNotifications
@@ -103,6 +104,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"updateCurrentPlaylistCount" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_StorePurchaseComplete object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistSongsQueued object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_JukeboxSongInfo object:nil];
 }
 
 - (void)viewDidLoad 
@@ -177,12 +179,16 @@
 	else
 	{
 		self.tableView.tableHeaderView.hidden = YES;
+		//[self performSelector:@selector(addNoPlaylistsScreen) withObject:nil afterDelay:0.1];
 		[self addNoPlaylistsScreen];
 	}
 	
 	[FlurryAnalytics logEvent:@"PlaylistsTab"];
 
 	[self registerForNotifications];
+	
+	if (settingsS.isJukeboxEnabled)
+		[jukeboxS jukeboxGetInfo];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -260,7 +266,7 @@
 }
 
 
-- (void) removeSaveEditButtons
+- (void)removeSaveEditButtons
 {
 	// Remove the save and edit buttons if showing
 	if (self.isPlaylistSaveEditShowing == YES)
@@ -279,7 +285,7 @@
 }
 
 
-- (void) addSaveEditButtons
+- (void)addSaveEditButtons
 {
 	if (self.isPlaylistSaveEditShowing == NO)
 	{
@@ -414,7 +420,7 @@
 	}
 }
 
-- (void) removeNoPlaylistsScreen
+- (void)removeNoPlaylistsScreen
 {
 	// Remove the no playlists overlay screen if it's showing
 	if (self.isNoPlaylistsScreenShowing)
@@ -424,7 +430,7 @@
 	}
 }
 
-- (void) addNoPlaylistsScreen
+- (void)addNoPlaylistsScreen
 {
 	[self removeNoPlaylistsScreen];
 	
@@ -432,7 +438,7 @@
 	self.noPlaylistsScreen = [[UIImageView alloc] init];
 	self.noPlaylistsScreen.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
 	self.noPlaylistsScreen.frame = CGRectMake(40, 100, 240, 180);
-	self.noPlaylistsScreen.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 2);
+	self.noPlaylistsScreen.center = CGPointMake(self.view.frame.size.width / 2, self.view.frame.size.height / 2);
 	self.noPlaylistsScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
 	self.noPlaylistsScreen.alpha = .80;
 	self.noPlaylistsScreen.userInteractionEnabled = YES;
@@ -494,7 +500,6 @@
 	}
 	
 	[self.view addSubview:self.noPlaylistsScreen];
-	
 	
 	if (!IS_IPAD())
 	{
@@ -1621,7 +1626,10 @@ static NSString *kName_Error = @"error";
 		
 		if (settingsS.isJukeboxEnabled)
 		{
-			aSong = [Song songFromDbRow:indexPath.row inTable:@"jukeboxCurrentPlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
+			if (playlistS.isShuffle)
+				aSong = [Song songFromDbRow:indexPath.row inTable:@"jukeboxShufflePlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
+			else
+				aSong = [Song songFromDbRow:indexPath.row inTable:@"jukeboxCurrentPlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
 		}
 		else
 		{
@@ -1633,7 +1641,7 @@ static NSString *kName_Error = @"error";
 		
 		cell.coverArtView.coverArtId = aSong.coverArtId;
 		
-		if (indexPath.row == playlistS.currentIndex && !audioEngineS.isBassFreed)
+		if (indexPath.row == playlistS.currentIndex && (!audioEngineS.isBassFreed || (settingsS.isJukeboxEnabled && jukeboxS.jukeboxIsPlaying)))
 		{
 			cell.nowPlayingImageView.hidden = NO;
 			cell.numberLabel.hidden = YES;

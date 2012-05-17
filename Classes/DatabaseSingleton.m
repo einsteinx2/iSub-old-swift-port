@@ -715,7 +715,7 @@
 	[queueAll queueData:folderId artist:theArtist];
 }
 
-- (void)queueSong:(Song *)aSong
+/*- (void)queueSong:(Song *)aSong
 {
 	if (settingsS.isJukeboxEnabled)
 	{
@@ -730,7 +730,7 @@
 	}
 	
 	[streamManagerS fillStreamQueue:audioEngineS.isStarted];
-}
+}*/
 
 - (void)playAllSongs:(NSString *)folderId artist:(Artist *)theArtist
 {
@@ -738,7 +738,15 @@
 	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:queueAll];
 	
 	// Clear the current and shuffle playlists
-	[self resetCurrentPlaylistDb];
+	if (settingsS.isJukeboxEnabled)
+	{
+		[databaseS resetJukeboxPlaylist];
+		[jukeboxS jukeboxClearRemotePlaylist];
+	}
+	else
+	{
+		[databaseS resetCurrentPlaylistDb];
+	}
 	
 	// Set shuffle off in case it's on
 	playlistS.isShuffle = NO;
@@ -753,7 +761,15 @@
 	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:queueAll];
 	
 	// Clear the current and shuffle playlists
-	[self resetCurrentPlaylistDb];
+	if (settingsS.isJukeboxEnabled)
+	{
+		[databaseS resetJukeboxPlaylist];
+		[jukeboxS jukeboxClearRemotePlaylist];
+	}
+	else
+	{
+		[databaseS resetCurrentPlaylistDb];
+	}
 
 	// Set shuffle on
 	playlistS.isShuffle = YES;

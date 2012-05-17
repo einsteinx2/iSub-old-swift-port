@@ -97,7 +97,7 @@ typedef struct
 @property BOOL hasNotifiedSubsonic;
 @property BOOL hasScrobbled;
 
-@property BOOL isEqualizerOn;
+//@property BOOL isEqualizerOn;
 @property unsigned long long startByteOffset;
 @property double startSecondsOffset;
 @property HSTREAM currentStream;

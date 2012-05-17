@@ -357,9 +357,14 @@
 		{
 			// Clear the current playlist
 			if (settingsS.isJukeboxEnabled)
+			{
 				[databaseS resetJukeboxPlaylist];
+				[jukeboxS jukeboxClearRemotePlaylist];
+			}
 			else
+			{
 				[databaseS resetCurrentPlaylistDb];
+			}
 			
 			// Add the songs to the playlist 
 			NSMutableArray *songIds = [[NSMutableArray alloc] init];

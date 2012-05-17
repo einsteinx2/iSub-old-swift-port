@@ -320,8 +320,8 @@
 	
 }
 
-- (void)jukeboxGetInfo
-{	
+- (void)jukeboxGetInfoInternal
+{
 	JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
 	connDelegate.isGetInfo = YES;
     
@@ -331,7 +331,10 @@
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
 	{
-		[databaseS resetJukeboxPlaylist];
+		if (playlistS.isShuffle)
+			[databaseS resetShufflePlaylist];
+		else
+			[databaseS resetJukeboxPlaylist];
 		
 		[connectionQueue registerConnection:connection];
 		[connectionQueue startQueue];
@@ -342,7 +345,13 @@
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
 	}
-	
+}
+
+- (void)jukeboxGetInfo
+{	
+	// Make sure this doesn't run a bunch of times in a row
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(jukeboxGetInfoInternal) object:nil];
+	[self performSelector:@selector(jukeboxGetInfoInternal) withObject:nil afterDelay:0.5];
 }
 
 #pragma mark - Memory management

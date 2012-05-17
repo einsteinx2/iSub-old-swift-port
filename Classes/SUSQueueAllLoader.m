@@ -94,7 +94,7 @@
 		{
 			if (settingsS.isJukeboxEnabled)
 			{
-				[jukeboxS jukeboxReplacePlaylistWithLocal];
+				//[jukeboxS jukeboxReplacePlaylistWithLocal];
 			}
 			else
 			{

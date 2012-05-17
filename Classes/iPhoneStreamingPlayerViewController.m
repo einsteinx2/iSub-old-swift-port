@@ -100,8 +100,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[self songInfoToggle:nil];
 	
 	StoreViewController *store = [[StoreViewController alloc] init];
-	[self pushViewControllerCustom:store];
-	//[self.navigationController pushViewController:store animated:YES];
+	//[self pushViewControllerCustom:store];
+	[self.navigationController pushViewController:store animated:YES];
 }
 
 - (void)viewDidLoad
@@ -245,7 +245,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			[self setPlayButtonImage];
 	}
 	
-	NSString *imageName = audioEngineS.isEqualizerOn ? @"controller-equalizer-on.png" : @"controller-equalizer.png";
+	NSString *imageName = settingsS.isEqualizerOn ? @"controller-equalizer-on.png" : @"controller-equalizer.png";
 	[eqButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
 	
 	[self quickSecondsSetLabels];
@@ -328,16 +328,14 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(largeSongInfoWasToggled) name:ISMSNotification_LargeSongInfoToggle object:nil];
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showStore) name:@"player show store" object:nil];
+	
 	if (IS_IPAD())
 	{
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showPlayerOverlayTemp) 
 													 name:ISMSNotification_ShowPlayer object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) 
 													 name:ISMSNotification_ShowPlayer object:nil];
-	}
-	else
-	{
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showStore) name:@"player show store" object:nil];
 	}
 }
 
@@ -365,15 +363,13 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 													name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_LargeSongInfoToggle object:nil];
 	
+	[[NSNotificationCenter defaultCenter] removeObserver:self 
+													name:@"player show store" object:nil];
+	
 	if (IS_IPAD())
 	{
 		[[NSNotificationCenter defaultCenter] removeObserver:self 
 														name:ISMSNotification_ShowPlayer object:nil];
-	}	
-	else
-	{
-		[[NSNotificationCenter defaultCenter] removeObserver:self 
-														name:@"player show store" object:nil];
 	}
 }
 
@@ -1493,10 +1489,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {	
 	if (playlistS.isShuffle)
 	{
-		if (!settingsS.isJukeboxEnabled)
-		{
-			[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-on.png"] forState:0];
-		}
+		[shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-on.png"] forState:0];
 	}
 	else
 	{

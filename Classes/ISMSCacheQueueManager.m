@@ -187,18 +187,53 @@
 
 - (void)ISMSStreamHandlerConnectionFinished:(ISMSStreamHandler *)handler
 {
-	if (handler.totalBytesTransferred < 500)
+	BOOL isSuccess = YES;
+	
+	if (handler.totalBytesTransferred == 0)
 	{
-		// Show an alert and delete the file, this was not a song but an XML error
-		// TODO: Parse with TBXML and display proper error
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"No song data returned. This could be because your Subsonic API trial has expired, this song is not an mp3 and the Subsonic transcoding plugins failed, or another reason." delegate:appDelegateS cancelButtonTitle:@"OK" otherButtonTitles: nil];
+		// Not a trial issue, but no data was returned at all
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Uh oh!" message:@"We asked to cache a song, but the server didn't send anything!\n\nIt's likely that Subsonic's transcoding failed.\n\nIf you need help, please tap the Support button on the Home tab." delegate:appDelegateS cancelButtonTitle:@"OK" otherButtonTitles: nil];
 		[alert show];
 		[[NSFileManager defaultManager] removeItemAtPath:handler.filePath error:NULL];
+		isSuccess = NO;
 	}
-	else
+	else if (handler.totalBytesTransferred < 1000)
+	{
+		BOOL isLicenseIssue = NO;
+		// Verify that it's a license issue
+		NSData *receivedData = [NSData dataWithContentsOfFile:handler.filePath];
+		TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
+		TBXMLElement *root = tbxml.rootXMLElement;
+		if (root) 
+		{
+			TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
+			if (error)
+			{
+				NSString *code = [TBXML valueOfAttributeNamed:@"code" forElement:error];
+				//NSString *message = [TBXML valueOfAttributeNamed:@"message" forElement:error];
+				if ([code isEqualToString:@"60"])
+				{
+					isLicenseIssue = YES;
+				}
+			}
+		}
+		
+		if (isLicenseIssue)
+		{
+			// This is a trial period message, alert the user and stop streaming
+			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic API Trial Expired" message:@"You can purchase a license for Subsonic by logging in to the web interface and clicking the red Donate link on the top right.\n\nPlease remember, iSub is a 3rd party client for Subsonic, and this license and trial is for Subsonic and not iSub.\n\nIf you didn't know about the Subsonic license requirement, and do not wish to purchase it, please tap the Support button on the Home tab and contact iSub support for a refund." delegate:appDelegateS cancelButtonTitle:@"OK" otherButtonTitles: nil];
+			[alert show];
+			[[NSFileManager defaultManager] removeItemAtPath:handler.filePath error:NULL];
+			isSuccess = NO;
+		}	
+	}
+	
+	if (isSuccess)
 	{		
 		// Mark song as cached
 		self.currentQueuedSong.isFullyCached = YES;
+		
+		// Mark song as cached
 		[self.currentQueuedSong removeFromCacheQueueDbQueue];
 		self.currentQueuedSong = nil;
 		
@@ -210,6 +245,10 @@
 		
 		// Download the next song in the queue
 		[self startDownloadQueue];
+	}
+	else 
+	{
+		[self stopDownloadQueue];
 	}
 }
 

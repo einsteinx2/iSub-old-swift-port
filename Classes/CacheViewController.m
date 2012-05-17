@@ -108,7 +108,7 @@
 {
 	[super viewDidLoad];
 	
-	DLog(@"isVisible: %@", NSStringFromBOOL(self.isVisible));
+	//DLog(@"isVisible: %@", NSStringFromBOOL(self.isVisible));
 	
 	//DLog(@"Cache viewDidLoad");
 	
@@ -259,7 +259,7 @@
 {	
 	[super viewWillAppear:animated];
 	
-	DLog(@"isVisible: %@", NSStringFromBOOL(self.isVisible));
+	//DLog(@"isVisible: %@", NSStringFromBOOL(self.isVisible));
 	
 	[self registerForNotifications];
 	
@@ -310,7 +310,7 @@
 {
 	[super viewWillDisappear:animated];
 	
-	DLog(@"isVisible: %@", NSStringFromBOOL(self.isVisible));
+	//DLog(@"isVisible: %@", NSStringFromBOOL(self.isVisible));
 	
 	[self unregisterForNotifications];
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateQueueDownloadProgress) object:nil];
@@ -330,7 +330,7 @@
 
 - (void)segmentAction:(id)sender
 {
-	DLog(@"isVisible: %@", NSStringFromBOOL(self.isVisible));
+	//DLog(@"isVisible: %@", NSStringFromBOOL(self.isVisible));
 	
 	if (self.segmentedControl.selectedSegmentIndex == 0)
 	{
@@ -422,7 +422,15 @@
 	else
 		isShuffle = NO;
 	
-	[databaseS resetCurrentPlaylistDb];
+	if (settingsS.isJukeboxEnabled)
+	{
+		[databaseS resetJukeboxPlaylist];
+		[jukeboxS jukeboxClearRemotePlaylist];
+	}
+	else
+	{
+		[databaseS resetCurrentPlaylistDb];
+	}
 	
 	[databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)
 	{
@@ -451,7 +459,7 @@
 	}
 	
 	if (settingsS.isJukeboxEnabled)
-		[jukeboxS jukeboxReplacePlaylistWithLocal];
+		[jukeboxS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:0]];
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 	
@@ -492,7 +500,7 @@
 			// Create the section index
 			[db executeUpdate:@"DROP TABLE IF EXISTS cachedSongsArtistIndex"];
 			[db executeUpdate:@"CREATE TEMP TABLE cachedSongsArtistIndex (artist TEXT)"];
-			DLog(@"listOfArtists: %@", self.listOfArtists);
+			//DLog(@"listOfArtists: %@", self.listOfArtists);
 			for (NSString *artist in self.listOfArtists)
 			{
 				[db executeUpdate:@"INSERT INTO cachedSongsArtistIndex (artist) VALUES (?)", [artist stringWithoutIndefiniteArticle], nil];
@@ -500,7 +508,7 @@
 		}];
 		
 		self.sectionInfo = [databaseS sectionInfoFromTable:@"cachedSongsArtistIndex" inDatabaseQueue:databaseS.songCacheDbQueue withColumn:@"artist"];
-		DLog(@"sectionInfo: %@", sectionInfo);
+		//DLog(@"sectionInfo: %@", sectionInfo);
 		self.showIndex = YES;
 		if ([self.sectionInfo count] < 5)
 			self.showIndex = NO;
@@ -556,7 +564,7 @@
 				for (NSString *md5 in multiDeleteList)
 				{
 					NSString *dbMd5 = [db stringForQuery:@"SELECT md5 FROM cacheQueueList WHERE md5 = ?", md5];
-					DLog(@"md5: %@   dbMD5: %@", md5, dbMd5);
+					//DLog(@"md5: %@   dbMD5: %@", md5, dbMd5);
 					if (!dbMd5) 
 						[viewObjectsS.multiDeleteList removeObject:md5];
 				}
@@ -1143,7 +1151,7 @@
 				{
 					for (NSString *folderName in section)
 					{
-						DLog(@"folderName: %@", folderName);
+						//DLog(@"folderName: %@", folderName);
 						[viewObjectsS.multiDeleteList addObject:folderName];
 					}
 				}
@@ -1191,7 +1199,7 @@
 {
 	if (self.segmentedControl.selectedSegmentIndex == 0 && settingsS.isCacheUnlocked)
 	{
-		DLog(@"sectionInfo count: %i", [self.sectionInfo count]);
+		//DLog(@"sectionInfo count: %i", [self.sectionInfo count]);
 		return [self.sectionInfo count];
 	}
 	

@@ -61,7 +61,7 @@
 	__block BOOL hadError;
 	[self.dbQueue inDatabase:^(FMDatabase *db)
 	{
-		[db executeUpdate:@"INSERT INTO albumsCache (folderId, title, albumId, coverArtId, artistName, artistId) VALUES (?, ?, ?, ?, ?, ?)", [myId md5], anAlbum.title, anAlbum.albumId, anAlbum.coverArtId, anAlbum.artistName, anAlbum.artistId];
+		[db executeUpdate:@"INSERT INTO albumsCache (folderId, title, albumId, coverArtId, artistName, artistId) VALUES (?, ?, ?, ?, ?, ?)", [myId md5], [anAlbum.title cleanString], anAlbum.albumId, anAlbum.coverArtId, [anAlbum.artistName cleanString], anAlbum.artistId];
 		
 		hadError = [db hadError];
 		if (hadError)
@@ -76,7 +76,8 @@
 	__block BOOL hadError;
 	[self.dbQueue inDatabase:^(FMDatabase *db)
 	{
-		[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO songsCache (folderId, %@) VALUES (?, %@)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [myId md5], aSong.title, aSong.songId, aSong.artist, aSong.album, aSong.genre, aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size, aSong.parentId];
+		//DLog(@"aSong.title: %@  clean: %@", aSong.title, [aSong.title cleanString]);
+		[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO songsCache (folderId, %@) VALUES (?, %@)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [myId md5], [aSong.title cleanString], aSong.songId, [aSong.artist cleanString], [aSong.album cleanString], [aSong.genre cleanString], aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size, aSong.parentId];
 		
 		hadError = [db hadError];
 		if (hadError)
@@ -190,7 +191,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	            
-	DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
+	//DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
 	
     // Parse the data
 	//

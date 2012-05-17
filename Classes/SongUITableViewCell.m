@@ -15,6 +15,7 @@
 #import "NSString+md5.h"
 #import "CellOverlay.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "JukeboxSingleton.h"
 
 @implementation SongUITableViewCell
 

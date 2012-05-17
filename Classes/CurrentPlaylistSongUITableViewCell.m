@@ -108,18 +108,10 @@
 
 - (void)queueAction
 {	
-	//DLog(@"queueAction");
-	if (playlistS.isShuffle)
-	{
-		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"shufflePlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
-		[databaseS queueSong:aSong];
-	}
-	else
-	{
-		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"currentPlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
-		[databaseS queueSong:aSong];
-	}
-	
+	NSString *tableName = playlistS.isShuffle ? @"shufflePlaylist" : @"currentPlaylist";
+	Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:tableName inDatabaseQueue:databaseS.currentPlaylistDbQueue];
+	[aSong addToCurrentPlaylistDbQueue];
+
 	[self hideOverlay];
 	[NSNotificationCenter postNotificationToMainThreadWithName:@"updateCurrentPlaylistCount"];
 	[(UITableView*)self.superview reloadData];

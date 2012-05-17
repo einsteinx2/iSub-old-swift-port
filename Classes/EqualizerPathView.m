@@ -10,6 +10,7 @@
 #import "UIBezierPath+Smoothing.h"
 #import "BassParamEqValue.h"
 #import "AudioEngine.h"
+#import "SavedSettings.h"
 
 static CGColorRef strokeColor;
 static CGColorRef fillColorOff;
@@ -135,7 +136,7 @@ static CGColorRef fillColorOn;
 	CGFloat halfEqWidth = eqWidth / 2.0;
 		
 	CGContextRef context = UIGraphicsGetCurrentContext();
-	CGContextSetFillColorWithColor(context, audioEngineS.isEqualizerOn ? fillColorOn : fillColorOff);
+	CGContextSetFillColorWithColor(context, settingsS.isEqualizerOn ? fillColorOn : fillColorOff);
 	CGContextSetBlendMode(context, kCGBlendModeLighten);
 	
 	for (int i = 0; i < length; i++)

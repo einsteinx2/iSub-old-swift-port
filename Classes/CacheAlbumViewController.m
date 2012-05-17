@@ -28,6 +28,7 @@
 #import "StackScrollViewController.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "GCDWrapper.h"
+#import "JukeboxSingleton.h"
 
 @implementation CacheAlbumViewController
 
@@ -282,7 +283,15 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	
 	BOOL isShuffle = [shuffle isEqualToString:@"YES"];
 	
-	[databaseS resetCurrentPlaylistDb];
+	if (settingsS.isJukeboxEnabled)
+	{
+		[databaseS resetJukeboxPlaylist];
+		[jukeboxS jukeboxClearRemotePlaylist];
+	}
+	else
+	{
+		[databaseS resetCurrentPlaylistDb];
+	}
 	
 	NSMutableString *query = [NSMutableString stringWithString:@"SELECT md5 FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? "];
 	for (int i = 2; i <= segment; i++)
@@ -431,7 +440,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 		//cell.segment = segment;
 		//cell.seg1 = seg1;
 		cell.segments = [NSArray arrayWithArray:self.segments];
-		DLog(@"segments: %@", cell.segments);
+		//DLog(@"segments: %@", cell.segments);
 		
 		NSString *md5 = [[self.listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:0];
 		NSString *coverArtId = [databaseS.songCacheDbQueue stringForQuery:@"SELECT coverArtId FROM cachedSongs WHERE md5 = ?", md5];
@@ -534,12 +543,12 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 				[query appendFormat:@" AND seg%i = ? ", i];
 			}
 			[query appendFormat:@"GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", segment+1, segment+1];
-			DLog(@"query: %@", query);
+			//DLog(@"query: %@", query);
 
 			NSMutableArray *newSegments = [NSMutableArray arrayWithArray:segments];
 			[newSegments addObject:cacheAlbumViewController.title];
 			cacheAlbumViewController.segments = [NSArray arrayWithArray:newSegments];
-			DLog(@"newSegments: %@", newSegments);
+			//DLog(@"newSegments: %@", newSegments);
 			
 			[databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)
 			{
@@ -585,7 +594,15 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 		{			
 			NSUInteger a = indexPath.row - self.listOfAlbums.count;
 			
-			[databaseS resetCurrentPlaylistDb];
+			if (settingsS.isJukeboxEnabled)
+			{
+				[databaseS resetJukeboxPlaylist];
+				[jukeboxS jukeboxClearRemotePlaylist];
+			}
+			else
+			{
+				[databaseS resetCurrentPlaylistDb];
+			}
 			for (NSArray *song in self.listOfSongs)
 			{
 				Song *aSong = [Song songFromCacheDbQueue:[song objectAtIndexSafe:0]];

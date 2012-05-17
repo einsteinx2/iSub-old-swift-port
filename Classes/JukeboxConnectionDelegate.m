@@ -74,6 +74,7 @@
 	
 	if (self.isGetInfo)
 	{
+		DLog(@"%@", [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
 		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
 		JukeboxXMLParser *parser = (JukeboxXMLParser*)[[JukeboxXMLParser alloc] initXMLParser];
 		[xmlParser setDelegate:parser];
@@ -82,7 +83,6 @@
 		playlistS.currentIndex = parser.currentIndex;
 		jukeboxS.jukeboxGain = parser.gain;
 		jukeboxS.jukeboxIsPlaying = parser.isPlaying;
-		
 		
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
 		
@@ -94,7 +94,6 @@
 		JukeboxXMLParser *parser = (JukeboxXMLParser*)[[JukeboxXMLParser alloc] initXMLParser];
 		[xmlParser setDelegate:parser];
 		[xmlParser parse];
-		
 		
 		[jukeboxS jukeboxGetInfo];
 	}

@@ -87,7 +87,7 @@
 				songMD5 = [databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
 			else
 				songMD5 = [databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
-			DLog(@"removing %@", songMD5);
+			//DLog(@"removing %@", songMD5);
 			[Song removeSongFromCacheDbQueueByMD5:songMD5];			
 		}
 	}
@@ -117,7 +117,7 @@
 			
 			unsigned long long songSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:songPath error:NULL] fileSize];
 			
-			DLog(@"removing %@", songMD5);
+			//DLog(@"removing %@", songMD5);
 			[Song removeSongFromCacheDbQueueByMD5:songMD5];
 			
 			size -= songSize;

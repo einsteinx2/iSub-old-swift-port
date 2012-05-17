@@ -88,7 +88,7 @@
 	__block BOOL hadError;
 	[self.dbQueue inDatabase:^(FMDatabase *db)
 	{
-		DLog(@"tableModifier: %@", self.tableModifier);
+		//DLog(@"tableModifier: %@", self.tableModifier);
 		NSString *query = @"INSERT INTO rootFolderNameCache%@ SELECT * FROM rootFolderNameCacheTemp";
 		[db executeUpdate:[NSString stringWithFormat:query, self.tableModifier]];
 		hadError = [db hadError];
@@ -165,7 +165,7 @@
 
 - (void)startLoad
 {
-	DLog(@"Starting load");
+	//DLog(@"Starting load");
     NSDictionary *parameters = nil;
 	if (self.selectedFolderId != nil && [self.selectedFolderId intValue] != -1)
 	{
@@ -173,9 +173,9 @@
 	}
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getIndexes" andParameters:parameters];
-    DLog(@"loading folders url: %@", [[request URL] absoluteString]);
-	DLog(@"loading folders body: %@", [[NSString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding]);
-	DLog(@"loading folders header: %@", [request allHTTPHeaderFields]);
+    //DLog(@"loading folders url: %@", [[request URL] absoluteString]);
+	//DLog(@"loading folders body: %@", [[NSString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding]);
+	//DLog(@"loading folders header: %@", [request allHTTPHeaderFields]);
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)
 	{
@@ -285,7 +285,7 @@
 			if (rowIndex > 0)
 			{
 				[self addRootFolderIndexToCache:rowIndex count:sectionCount name:@"★"];
-				DLog(@"Adding shortcut to index table, count %i", sectionCount);
+				//DLog(@"Adding shortcut to index table, count %i", sectionCount);
 			}
 			
 			// Parse the letter indexes

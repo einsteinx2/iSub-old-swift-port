@@ -472,12 +472,17 @@ static NSString *kName_Error = @"error";
 		return;
 	
 	if (viewObjectsS.isCellEnabled)
-	{		
+	{
 		// Clear the current playlist
 		if (settingsS.isJukeboxEnabled)
+		{
 			[databaseS resetJukeboxPlaylist];
+			[jukeboxS jukeboxClearRemotePlaylist];
+		}
 		else
+		{
 			[databaseS resetCurrentPlaylistDb];
+		}
 		
 		[databaseS.localPlaylistsDbQueue inDatabase:^(FMDatabase *db)
 		{

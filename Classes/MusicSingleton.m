@@ -166,11 +166,6 @@ double startSongSeconds = 0.0;
 - (void)playSongAtPosition:(NSInteger)position
 {	
 	playlistS.currentIndex = position;
-
-	DLog(@"before handler stack: %@", streamManagerS.handlerStack);
-	DLog(@"currentSong: %@", playlistS.currentSong);
-	[streamManagerS removeAllStreamsExceptForSong:playlistS.currentSong];
-	DLog(@"after handler stack: %@\n   ", streamManagerS.handlerStack);
 	
 	if (settingsS.isJukeboxEnabled)
 	{
@@ -178,6 +173,7 @@ double startSongSeconds = 0.0;
 	}
 	else
 	{		
+		[streamManagerS removeAllStreamsExceptForSong:playlistS.currentSong];
 		[self startSong];
 	}
 }

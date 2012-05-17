@@ -102,11 +102,10 @@
 		[query appendFormat:@" AND seg%i = ? ", i];
 	}
 	[query appendFormat:@"ORDER BY seg%i COLLATE NOCASE", segment+1, segment+1];
-	
+	//DLog(@"query: %@", query);
 	NSMutableArray *songMd5s = [[NSMutableArray alloc] initWithCapacity:0];
 	[databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)
 	{
-		NSMutableArray *songMd5s = [NSMutableArray arrayWithCapacity:0];
 		FMResultSet *result = [db executeQuery:query withArgumentsInArray:newSegments];
 		while ([result next])
 		{
@@ -116,6 +115,7 @@
 		[result close];
 	}];
 	
+	//DLog(@"songMd5s: %@", songMd5s);
 	for (NSString *md5 in songMd5s)
 	{
 		[Song removeSongFromCacheDbQueueByMD5:md5];

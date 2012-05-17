@@ -188,7 +188,7 @@
 		}
 	}
 	
-	DLog(@"redirectUrlString: %@", redirectUrlString);
+	//DLog(@"redirectUrlString: %@", redirectUrlString);
 	
 	settingsS.redirectUrlString = [NSString stringWithString:redirectUrlString];
 }
@@ -209,7 +209,7 @@
 	
 - (void)SUSServerURLCheckPassed:(SUSServerChecker *)checker
 {
-	DLog(@"server check passed");
+	//DLog(@"server check passed");
 	 checker = nil;
 	[viewObjectsS hideLoadingScreen];
 	

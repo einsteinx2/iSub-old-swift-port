@@ -31,7 +31,7 @@
 
 - (void)dealloc
 {
-	DLog(@"BassUserInfo dealloc called!!");
+	//DLog(@"BassUserInfo dealloc called!!");
 	myFileHandle = NULL;
 }
 

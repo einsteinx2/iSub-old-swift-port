@@ -43,6 +43,8 @@
 
 - (BOOL)insertIntoCachedSongsLayoutDbQueue;
 
+- (BOOL)isCurrentPlayingSong;
+
 + (NSString *)standardSongColumnSchema;
 + (NSString *)standardSongColumnNames;
 + (NSString *)standardSongColumnQMarks;

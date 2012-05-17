@@ -12,6 +12,7 @@
 #import "BassParamEqValue.h"
 #import "NSArray+FirstObject.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "SavedSettings.h"
 
 @implementation BassEffectDAO
 @synthesize type, presets;
@@ -50,8 +51,8 @@
 
 - (void)setup
 {
-	DLog(@"default presets: %@", self.defaultPresets);
-	DLog(@"user presets: %@", self.userPresets);
+	//DLog(@"default presets: %@", self.defaultPresets);
+	//DLog(@"user presets: %@", self.userPresets);
 	NSMutableDictionary *presetsDict = [NSMutableDictionary dictionaryWithCapacity:0];
 	
 	[presetsDict addEntriesFromDictionary:self.defaultPresets];
@@ -202,7 +203,7 @@ NSInteger presetSort(id preset1, id preset2, void *context)
 		
 	if (type == BassEffectType_ParametricEQ)
 	{
-		BOOL wasEqualizerOn = audioEngineS.isEqualizerOn;
+		BOOL wasEqualizerOn = settingsS.isEqualizerOn;
 		[audioEngineS removeAllEqualizerValues];
 		
 		for (int i = 0; i < [self.selectedPresetValues count]; i++)

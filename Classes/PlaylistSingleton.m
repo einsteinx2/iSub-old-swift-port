@@ -210,7 +210,10 @@
 	Song *aSong = nil;
 	if (settingsS.isJukeboxEnabled)
 	{
-		aSong = [Song songFromDbRow:index inTable:@"jukeboxCurrentPlaylist" inDatabaseQueue:self.dbQueue];
+		if (self.isShuffle)
+			aSong = [Song songFromDbRow:index inTable:@"jukeboxShufflePlaylist" inDatabaseQueue:self.dbQueue];
+		else
+			aSong = [Song songFromDbRow:index inTable:@"jukeboxCurrentPlaylist" inDatabaseQueue:self.dbQueue];
 	}
 	else
 	{
@@ -399,7 +402,10 @@
 	int count = 0;
 	if (settingsS.isJukeboxEnabled)
 	{
-		count = [self.dbQueue intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"];
+		if (self.isShuffle)
+			count = [self.dbQueue intForQuery:@"SELECT COUNT(*) FROM jukeboxShufflePlaylist"];
+		else
+			count = [self.dbQueue intForQuery:@"SELECT COUNT(*) FROM jukeboxCurrentPlaylist"];
 	}
 	else
 	{
@@ -465,7 +471,7 @@
 		if (settingsS.isJukeboxEnabled)
 		{
 			[jukeboxS jukeboxReplacePlaylistWithLocal];
-			//[musicS playSongAtPosition:];
+			[jukeboxS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:0]];
 		}
 				
 		// Send a notification to update the playlist view
@@ -500,7 +506,7 @@
 			
 			[jukeboxS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:1]];
 			
-			self.isShuffle = NO;
+			//self.isShuffle = NO;
 		}
 		
 		// Send a notification to update the playlist view 

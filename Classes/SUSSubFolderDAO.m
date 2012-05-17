@@ -150,12 +150,16 @@
 {
 	// Clear the current playlist
 	if (settingsS.isJukeboxEnabled)
+	{
 		[databaseS resetJukeboxPlaylist];
+		[jukeboxS jukeboxClearRemotePlaylist];
+	}
 	else
+	{
 		[databaseS resetCurrentPlaylistDb];
+	}
 	
 	// Add the songs to the playlist
-	NSMutableArray *songIds = [[NSMutableArray alloc] init];
 	for (int i = self.albumsCount; i < self.totalCount; i++)
 	{
 		@autoreleasepool 
@@ -164,19 +168,7 @@
 			//DLog(@"song parentId: %@", aSong.parentId);
 			//DLog(@"adding song to playlist: %@", aSong);
 			[aSong addToCurrentPlaylistDbQueue];
-			
-			// In jukebox mode, collect the song ids to send to the server
-			if (settingsS.isJukeboxEnabled)
-				[songIds addObject:aSong.songId];
 		}
-	}
-	
-	// If jukebox mode, send song ids to server
-	if (settingsS.isJukeboxEnabled)
-	{
-		[jukeboxS jukeboxStop];
-		[jukeboxS jukeboxClearPlaylist];
-		[jukeboxS jukeboxAddSongs:songIds];
 	}
 	
 	// Set player defaults

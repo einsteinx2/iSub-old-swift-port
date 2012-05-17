@@ -159,12 +159,19 @@
 
 - (void)playAllSongs
 {	
-	
 	// Turn off shuffle mode in case it's on
 	playlistS.isShuffle = NO;
 	
 	// Reset the current playlist
-	[databaseS resetCurrentPlaylistDb];
+	if (settingsS.isJukeboxEnabled)
+	{
+		[databaseS resetJukeboxPlaylist];
+		[jukeboxS jukeboxClearRemotePlaylist];
+	}
+	else
+	{
+		[databaseS resetCurrentPlaylistDb];
+	}
 	
 	FMDatabaseQueue *dbQueue;
 	NSString *query;
@@ -201,7 +208,7 @@
 	}];
 	
 	if (settingsS.isJukeboxEnabled)
-		[jukeboxS jukeboxReplacePlaylistWithLocal];
+		[jukeboxS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:0]];
 	
 	// Hide loading screen
 	[viewObjectsS hideLoadingScreen];
@@ -214,12 +221,19 @@
 
 - (void)shuffleSongs
 {		
-	
 	// Turn off shuffle mode to reduce inserts
 	playlistS.isShuffle = NO;
 	
 	// Reset the current playlist
-	[databaseS resetCurrentPlaylistDb];
+	if (settingsS.isJukeboxEnabled)
+	{
+		[databaseS resetJukeboxPlaylist];
+		[jukeboxS jukeboxClearRemotePlaylist];
+	}
+	else
+	{
+		[databaseS resetCurrentPlaylistDb];
+	}
 	
 	// Get the ID of all matching records (everything in genre ordered by artist)
 	FMDatabaseQueue *dbQueue;
@@ -256,7 +270,7 @@
 	[databaseS shufflePlaylist];
 	
 	if (settingsS.isJukeboxEnabled)
-		[jukeboxS jukeboxReplacePlaylistWithLocal];
+		[jukeboxS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:0]];
 	
 	// Set the isShuffle flag
 	playlistS.isShuffle = YES;

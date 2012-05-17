@@ -45,6 +45,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_BassFreed object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_JukeboxSongInfo object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentPlaylistCount) name:@"updateCurrentPlaylistCount" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songsQueued) name:ISMSNotification_CurrentPlaylistSongsQueued object:nil];
 }
@@ -58,6 +59,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"updateCurrentPlaylistCount" object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_StorePurchaseComplete object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistSongsQueued object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_JukeboxSongInfo object:nil];
 }
 
 - (void)viewDidLoad 
@@ -646,7 +648,10 @@
 	Song *aSong;
 	if (settingsS.isJukeboxEnabled)
 	{
-		aSong = [Song songFromDbRow:indexPath.row inTable:@"jukeboxCurrentPlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
+		if (playlistS.isShuffle)
+			aSong = [Song songFromDbRow:indexPath.row inTable:@"jukeboxShufflePlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
+		else
+			aSong = [Song songFromDbRow:indexPath.row inTable:@"jukeboxCurrentPlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
 	}
 	else
 	{
@@ -656,7 +661,7 @@
 			aSong = [Song songFromDbRow:indexPath.row inTable:@"currentPlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
 	}
 	
-	if (indexPath.row == playlistS.currentIndex && !audioEngineS.isBassFreed)
+	if (indexPath.row == playlistS.currentIndex && (!audioEngineS.isBassFreed || (settingsS.isJukeboxEnabled && jukeboxS.jukeboxIsPlaying)))
 	{
 		cell.numberLabel.hidden = YES;
 		cell.nowPlayingImageView.hidden = NO;

@@ -13,7 +13,12 @@
 
 - (NSString *)cleanString
 {
-	return [[self gtm_stringByUnescapingFromHTML] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	NSString *clean = [self gtm_stringByUnescapingFromHTML];
+	if (clean)
+		clean = [clean stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	
+	return clean ? clean : self;
+	//return [[self gtm_stringByUnescapingFromHTML] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 }
 
 @end

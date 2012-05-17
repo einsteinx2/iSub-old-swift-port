@@ -224,13 +224,13 @@ static void destroy_versionArrays()
 
 - (void)startEqDisplay
 {
-	DLog(@"starting eq display");
+	//DLog(@"starting eq display");
 	self.drawTimer = [NSTimer scheduledTimerWithTimeInterval:drawInterval target:self selector:@selector(drawTheEq) userInfo:nil repeats:YES];
 }
 
 - (void)stopEqDisplay
 {
-	DLog(@"stopping eq display");
+	//DLog(@"stopping eq display");
 	[drawTimer invalidate]; drawTimer = nil;
 }
 
@@ -386,7 +386,7 @@ static void destroy_versionArrays()
 // the same size as our display area.
 - (void)layoutSubviews
 {
-	DLog(@"self.layer.frame: %@", NSStringFromCGRect(self.layer.frame));
+	//DLog(@"self.layer.frame: %@", NSStringFromCGRect(self.layer.frame));
 	//self.layer.frame = self.frame;
 	//DLog(@"self.layer.frame: %@", NSStringFromCGRect(self.layer.frame));
 	NSLog(@"  ");
@@ -539,7 +539,7 @@ static void destroy_versionArrays()
 			break;
 	}
 	settingsS.currentVisualizerType = visualType;
-	DLog(@"visualType: %i   currentVisualizerType: %i", visualType, settingsS.currentVisualizerType);
+	//DLog(@"visualType: %i   currentVisualizerType: %i", visualType, settingsS.currentVisualizerType);
 }
 
 - (void)nextType

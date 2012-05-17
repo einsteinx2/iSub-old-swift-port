@@ -27,6 +27,7 @@
 #import "UIViewController+PushViewControllerCustom.h"
 #import "FMDatabaseQueue.h"
 #import "FMDatabaseQueueAdditions.h"
+#import "JukeboxSingleton.h"
 
 @implementation BookmarksViewController
 @synthesize bookmarkIds;
@@ -547,7 +548,15 @@
 	if (!indexPath)
 		return;
 	
-	[databaseS resetCurrentPlaylistDb];
+	if (settingsS.isJukeboxEnabled)
+	{
+		[databaseS resetJukeboxPlaylist];
+		[jukeboxS jukeboxClearRemotePlaylist];
+	}
+	else
+	{
+		[databaseS resetCurrentPlaylistDb];
+	}
 	playlistS.isShuffle = NO;
 	
 	__block NSUInteger bookmarkId = 0;

@@ -98,21 +98,18 @@
 {
 	// Clear the current playlist
 	if (settingsS.isJukeboxEnabled)
+	{
 		[databaseS resetJukeboxPlaylist];
+		[jukeboxS jukeboxClearRemotePlaylist];
+	}
 	else
+	{
 		[databaseS resetCurrentPlaylistDb];
+	}
 	
 	// Add the song to the empty playlist
 	Song *aSong = [self songForIndex:index];
 	[aSong addToCurrentPlaylistDbQueue];
-	
-	// If jukebox mode, send song ids to server
-	if (settingsS.isJukeboxEnabled)
-	{
-		[jukeboxS jukeboxStop];
-		[jukeboxS jukeboxClearPlaylist];
-		[jukeboxS jukeboxAddSong:aSong.songId];
-	}
 	
 	// Set player defaults
 	playlistS.isShuffle = NO;

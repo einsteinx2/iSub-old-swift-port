@@ -573,6 +573,7 @@
 			//DLog(@"indexPositions: %@", [dataModel indexPositions]);
 			NSUInteger sectionStartIndex = [[[self.dataModel indexPositions] objectAtIndexSafe:indexPath.section] intValue];
 			anArtist = [self.dataModel artistForPosition:(sectionStartIndex + indexPath.row)];
+			DLog(@"artist: %@", anArtist);
 		}
 	}
 	cell.myArtist = anArtist;

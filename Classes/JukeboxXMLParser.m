@@ -15,6 +15,7 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "PlaylistSingleton.h"
 
 @implementation JukeboxXMLParser
 
@@ -66,13 +67,21 @@
 		self.isPlaying = [[attributeDict objectForKey:@"playing"] boolValue];
 		self.gain = [[attributeDict objectForKey:@"gain"] floatValue];
 		
-		[databaseS resetJukeboxPlaylist];
+		if (playlistS.isShuffle)
+			[databaseS resetShufflePlaylist];
+		else
+			[databaseS resetJukeboxPlaylist];
 	}
 	else if ([elementName isEqualToString:@"entry"])
 	{
 		Song *aSong = [[Song alloc] initWithAttributeDict:attributeDict];
 		if (aSong.path)
-			[aSong addToCurrentPlaylistDbQueue];
+		{
+			if (playlistS.isShuffle)
+				[aSong insertIntoTable:@"jukeboxShufflePlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
+			else
+				[aSong insertIntoTable:@"jukeboxCurrentPlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
+		}
 	}
 }
 

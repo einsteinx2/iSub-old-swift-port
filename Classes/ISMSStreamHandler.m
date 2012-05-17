@@ -21,6 +21,7 @@
 #import "PlaylistSingleton.h"
 #import "ISMSNetworkIndicator.h"
 #import "GCDWrapper.h"
+#import "TBXML.h"
 
 #define ISMSNumSecondsToPartialPreCacheDefault 20
 #define ISMSNumBytesToPartialPreCache(bitrate) (BytesForSecondsAtBitrate(self.secondsToPartialPrecache, bitrate))
@@ -537,7 +538,7 @@
 	DLog(@"localSize: %llu   contentLength: %llu", mySong.localFileSize, self.contentLength);
 		
 	// Check to see if we're within 100K of the contentLength (to allow some leeway for contentLength estimation of transcoded songs
-	if (self.contentLength != ULLONG_MAX && mySong.localFileSize < self.contentLength - BytesToKB(100) && self.numberOfContentLengthFailures < ISMSMaxContentLengthFailures)
+	if (self.contentLength != ULLONG_MAX && mySong.localFileSize < self.contentLength && self.numberOfContentLengthFailures < ISMSMaxContentLengthFailures)
 	{
 		self.numberOfContentLengthFailures++;
 		// This is a failed connection that didn't call didFailInternal for some reason, so call didFailWithError

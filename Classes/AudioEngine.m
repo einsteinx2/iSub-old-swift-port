@@ -26,7 +26,7 @@
 #import "GCDWrapper.h"
 
 @implementation AudioEngine
-@synthesize isEqualizerOn, startByteOffset, startSecondsOffset, isPlaying, isFastForward, bassReinitSampleRate, presilenceStream, bufferLengthMillis, bassUpdatePeriod;
+@synthesize startByteOffset, startSecondsOffset, isPlaying, isFastForward, bassReinitSampleRate, presilenceStream, bufferLengthMillis, bassUpdatePeriod;
 @synthesize fileStream1, fileStream2, fileStreamTempo1, fileStreamTempo2, volumeFx, outStream, BASSisFilestream1, currentStreamSyncObject, ringBufferSyncObject;
 @synthesize eqValueArray, eqHandleArray, eqDataType, eqReadSyncObject, bassUserInfoDict;//fileStreamUserInfo1, fileStreamUserInfo2;
 @synthesize shouldResumeFromInterruption;
@@ -246,10 +246,10 @@ void CALLBACK MyStreamFreeCallback(HSYNC handle, DWORD channel, DWORD data, void
 	@autoreleasepool 
 	{
 		// Stream is done, remove the user info object from the dictionary
-		DLog(@"removing user info from dict");
-		DLog(@"%@", sharedInstance.bassUserInfoDict);
+		//DLog(@"removing user info from dict");
+		//DLog(@"%@", sharedInstance.bassUserInfoDict);
 		[sharedInstance removeUserInfoForStream:channel];
-		DLog(@"%@", sharedInstance.bassUserInfoDict);
+		//DLog(@"%@", sharedInstance.bassUserInfoDict);
 	}
 }
 
@@ -265,9 +265,9 @@ void CALLBACK MyFileCloseProc(void *user)
 	userInfo.shouldBreakWaitLoop = YES;
 	userInfo.shouldBreakWaitLoopForever = YES;
 	
-	@autoreleasepool {
-		DLog(@"closing file: %@", userInfo.mySong.title);
-	}
+	//@autoreleasepool {
+	//	DLog(@"closing file: %@", userInfo.mySong.title);
+	//}
 	
 	// Close the file handle
 	if (userInfo.myFileHandle != NULL)
@@ -303,7 +303,7 @@ QWORD CALLBACK MyFileLenProc(void *user)
 			length = [theSong.size longLongValue];
 		}
 		
-		DLog(@"checking %@ length: %llu", theSong.title, length);
+		//DLog(@"checking %@ length: %llu", theSong.title, length);
 		return length;
 	}
 }
@@ -326,7 +326,7 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 	{
 		fpos_t pos;
 		fgetpos(userInfo.myFileHandle, &pos);
-		DLog(@"bytesRead: %u   pos: %llu", bytesRead, pos);
+		//DLog(@"bytesRead: %u   pos: %llu", bytesRead, pos);
 		//fpos_t newpos = pos - bytesRead;
 		//fsetpos(userInfo.myFileHandle, &newpos);
 		fsetpos(userInfo.myFileHandle, &pos);
@@ -354,7 +354,7 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 	
 	BOOL success = !fseek(userInfo.myFileHandle, offset, SEEK_SET);
 	
-	DLog(@"seeking to %llu", offset);
+	//DLog(@"seeking to %llu", offset);
 	
 	return success;
 }
@@ -863,7 +863,7 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 	
 	if (songEnded)
 	{
-		DLog(@"buffersUsedSinceSongEnd: %llu   buffersTilSongEnd: %u", buffersUsedSinceSongEnd, buffersTilSongEnd);
+		//DLog(@"buffersUsedSinceSongEnd: %llu   buffersTilSongEnd: %u", buffersUsedSinceSongEnd, buffersTilSongEnd);
 		if (buffersUsedSinceSongEnd >= buffersTilSongEnd)
 		{
 			[self songEnded];
@@ -883,14 +883,14 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 		{
 			// The stream should end, but only because we need to re-init BASS for the next song
 			[GCDWrapper runInMainThreadAfterDelay:delay block:^{ [self start]; }];
-			DLog(@"Must reinit bass");
+			//DLog(@"Must reinit bass");
 		}
 		else
 		{
 			// The stream should end, because there is no more music to play
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnded];
 			
-			DLog(@"Stream not active, freeing BASS");
+			//DLog(@"Stream not active, freeing BASS");
 			[GCDWrapper runInMainThreadAfterDelay:delay block:^{ [self bassFree]; }];
 			
 			// Handle song caching being disabled
@@ -1009,7 +1009,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 
 - (void)bassSetGainLevel:(float)gain
 {
-	CGFloat modifiedGainValue = self.isEqualizerOn ? gain - ISMS_EqualizerGainReduction : gain;
+	CGFloat modifiedGainValue = settingsS.isEqualizerOn ? gain - ISMS_EqualizerGainReduction : gain;
 	modifiedGainValue = modifiedGainValue < 0. ? 0. : modifiedGainValue;
 	
 	BASS_BFX_VOLUME volumeParamsInit = {0, modifiedGainValue};
@@ -1023,6 +1023,9 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	
 	// Destroy any existing BASS instance
 	[self bassFree];
+	
+	if (settingsS.isJukeboxEnabled)
+		return;
 	
 	// Initialize BASS
 	BASS_SetConfig(BASS_CONFIG_IOS_MIXAUDIO, 0); // Disable mixing.	To be called before BASS_Init.
@@ -1162,7 +1165,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 
 - (void)seekToPositionInBytes:(QWORD)bytes inStream:(HSTREAM)stream
 {
-	DLog(@"Seeking to %llu bytes", bytes);
+	//DLog(@"Seeking to %llu bytes", bytes);
 	//DLog(@"fileStream1: %i   fileStream2: %i    currentStream: %i", fileStream1, fileStream2, self.currentStream);
 	
 	if (songEnded)
@@ -1230,6 +1233,9 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 
 - (void)prepareNextSongStream
 {
+	if (settingsS.isJukeboxEnabled)
+		return;
+	
 	[self performSelector:@selector(prepareNextSongStreamInternal:) 
 				 onThread:startSongThread 
 			   withObject:nil 
@@ -1239,6 +1245,9 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 - (void)prepareNextSongStreamInternal:(Song *)nextSong
 {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(prepareNextSongStreamInternal:) object:nextSong];
+
+	if (settingsS.isJukeboxEnabled)
+		return;
 	
 	if (self.nextStream)
 		BASS_StreamFree(self.nextStream);
@@ -1275,11 +1284,11 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		NSInteger streamSampleRate = [self bassStreamSampleRate:self.nextStream];
 		NSInteger preferredSampleRate = [self preferredSampleRate:streamSampleRate];
 		NSInteger bassSampleRate = [self bassSampleRate];
-		DLog(@"streamRate: %i  prefRate: %i  bassRate: %i:", streamSampleRate, preferredSampleRate, bassSampleRate);
+		//DLog(@"streamRate: %i  prefRate: %i  bassRate: %i:", streamSampleRate, preferredSampleRate, bassSampleRate);
 		
 		if (bassSampleRate != preferredSampleRate)
 		{
-			DLog(@"bass does not equal pref");
+			//DLog(@"bass does not equal pref");
 			// Set a flag to know to re-init BASS later and free the stream
 			self.bassReinitSampleRate = preferredSampleRate;
 			BASS_StreamFree(self.nextStream);
@@ -1322,11 +1331,11 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		[GCDWrapper timerInMainQueueAfterDelay:RETRY_DELAY withName:nextSongRetryTimer performBlock:^{ [self prepareNextSongStream:nextSong]; }];
 	}
 	
-	DLog(@"nextSong: %i\n   ", self.nextStream);
+	//DLog(@"nextSong: %i\n   ", self.nextStream);
 }
 
 - (BOOL)prepareFileStream1
-{
+{	
 	Song *currentSong = playlistS.currentSong;
 	if (currentSong.fileExists)
 	{	
@@ -1370,6 +1379,9 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 // Run in background to prevent pausing the main thread
 - (void)startWithOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds
 {	
+	if (settingsS.isJukeboxEnabled)
+		return;
+	
 	NSMutableDictionary *bytesOrSeconds = [NSMutableDictionary dictionaryWithCapacity:2];
 	if (byteOffset) [bytesOrSeconds setObject:byteOffset forKey:@"byteOffset"];
 	if (seconds) [bytesOrSeconds setObject:seconds forKey:@"seconds"];
@@ -1389,6 +1401,9 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 // Runs in background thread
 - (void)startWithOffsetInBytesorSecondsInternal:(NSDictionary *)bytesOrSeconds
 {
+	if (settingsS.isJukeboxEnabled)
+		return;
+	
 	NSInteger count = playlistS.count;
 	if (playlistS.currentIndex >= count) playlistS.currentIndex = count - 1;
 	
@@ -1459,7 +1474,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 			self.outStream = BASS_StreamCreate(info.freq, info.chans, 0, &MyStreamProc, 0);
 
 			// Enable the equalizer if it's turned on
-			if (self.isEqualizerOn)
+			if (settingsS.isEqualizerOn)
 			{
 				[self applyEqualizerValues:self.eqValueArray toStream:self.outStream];
 			}
@@ -1516,7 +1531,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 				 && currentSong.localFileSize < MIN_FILESIZE_TO_FAIL)
 		{
 			// Failed to create the stream, retrying
-			DLog(@"------failed to create stream, retrying in 2 seconds------");	
+			//DLog(@"------failed to create stream, retrying in 2 seconds------");	
 			
 			[GCDWrapper timerInMainQueueAfterDelay:RETRY_DELAY withName:startSongRetryTimer performBlock:^{ [self startWithOffsetInBytes:byteOffset orSeconds:seconds]; }];
 		}
@@ -1800,7 +1815,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	
 	//DLog(@"removed %i effect channels", i);
 	[self.eqHandleArray removeAllObjects];
-	self.isEqualizerOn = NO;
+	settingsS.isEqualizerOn = NO;
 }
 
 - (void)clearEqualizerValues
@@ -1825,7 +1840,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		
 		[self.eqHandleArray addObject:[BassEffectHandle handleWithEffectHandle:handle]];
 	}
-	self.isEqualizerOn = YES;
+	settingsS.isEqualizerOn = YES;
 }
 
 - (void)applyEqualizerValues:(NSArray *)values
@@ -1837,7 +1852,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 {
 	[self.eqValueArray replaceObjectAtIndex:value.arrayIndex withObject:value]; 
 	
-	if (self.isEqualizerOn)
+	if (settingsS.isEqualizerOn)
 	{
 		BASS_DX8_PARAMEQ p = value.parameters;
 		//DLog(@"updating eq for handle: %i   new freq: %f   new gain: %f", value.handle, p.fCenter, p.fGain);
@@ -1851,7 +1866,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	BassParamEqValue *eqValue = [BassParamEqValue valueWithParams:value arrayIndex:index];
 	[self.eqValueArray addObject:eqValue];
 	
-	if (self.isEqualizerOn)
+	if (settingsS.isEqualizerOn)
 	{
 		HFX handle = BASS_ChannelSetFX(self.outStream, BASS_FX_DX8_PARAMEQ, 0);
 		BASS_FXSetParameters(handle, &value);
@@ -1865,7 +1880,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 
 - (NSArray *)removeEqualizerValue:(BassParamEqValue *)value
 {
-	if (self.isEqualizerOn)
+	if (settingsS.isEqualizerOn)
 	{
 		// Disable the effect channel
 		BASS_ChannelRemoveFX(self.outStream, value.handle);
@@ -1895,7 +1910,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 
 - (BOOL)toggleEqualizer
 {
-	if (self.isEqualizerOn)
+	if (settingsS.isEqualizerOn)
 	{
 		[self clearEqualizerValues];
 		[self bassSetGainLevel:settingsS.gainMultiplier];
@@ -1997,7 +2012,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	eqDataType = ISMS_BASS_EQ_DATA_TYPE_none;
 	isFastForward = NO;
 	isPlaying = NO;
-	isEqualizerOn = NO;
+	//isEqualizerOn = NO;
     startByteOffset = 0;
 	currentStreamSyncObject = [[NSObject alloc] init];
 	eqReadSyncObject = [[NSObject alloc] init];

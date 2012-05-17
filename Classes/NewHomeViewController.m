@@ -698,7 +698,6 @@
 {	
 	DLog(@"received data: %@", [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
 	
-	
 	if (isSearch)
 	{
 		// It's a search
@@ -775,20 +774,28 @@
 	else
 	{
 		// It's generating the 100 random songs list
-
 		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
 		SearchXMLParser *parser = (SearchXMLParser*)[[SearchXMLParser alloc] initXMLParser];
 		[xmlParser setDelegate:parser];
 		[xmlParser parse];
 				
-		[databaseS resetCurrentPlaylistDb];
+		if (settingsS.isJukeboxEnabled)
+		{
+			[databaseS resetJukeboxPlaylist];
+			[jukeboxS jukeboxClearRemotePlaylist];
+		}
+		else
+		{
+			[databaseS resetCurrentPlaylistDb];
+		}
+		
 		for(Song *aSong in parser.listOfSongs)
 		{
 			[aSong addToCurrentPlaylistDbQueue];
 		}
 		
-		if (settingsS.isJukeboxEnabled)
-			[jukeboxS jukeboxReplacePlaylistWithLocal];
+		//if (settingsS.isJukeboxEnabled)
+		//	[jukeboxS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:0]];
 				
 		playlistS.isShuffle = NO;
 		

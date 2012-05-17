@@ -20,6 +20,8 @@
 #import "ISMSCacheQueueManager.h"
 #import "iSubAppDelegate.h"
 #import "GCDWrapper.h"
+#import "ISMSStreamManager.h"
+#import "JukeboxSingleton.h"
 
 @implementation Song (DAO)
 
@@ -32,7 +34,7 @@
 {
 	// Filesystem check
 	BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:self.currentPath]; 
-	DLog(@"fileExists: %@  at path: %@", NSStringFromBOOL(fileExists), self.currentPath);
+	//DLog(@"fileExists: %@  at path: %@", NSStringFromBOOL(fileExists), self.currentPath);
 	return fileExists;
 	
 	// Database check
@@ -74,7 +76,7 @@
 	if (isFullyCached)
 	{
 		
-		DLog(@"%@: UPDATE cachedSongs SET finished = 'YES', cachedDate = %llu WHERE md5 = '%@'", self.title, (unsigned long long)[[NSDate date] timeIntervalSince1970], [self.path md5]);
+		//DLog(@"%@: UPDATE cachedSongs SET finished = 'YES', cachedDate = %llu WHERE md5 = '%@'", self.title, (unsigned long long)[[NSDate date] timeIntervalSince1970], [self.path md5]);
 		[self.dbQueue inDatabase:^(FMDatabase *db)
 		{
 			[db executeUpdate:@"UPDATE cachedSongs SET finished = 'YES', cachedDate = ? WHERE md5 = ?", [NSNumber numberWithUnsignedLongLong:(unsigned long long)[[NSDate date] timeIntervalSince1970]], [self.path md5]];
@@ -388,7 +390,6 @@
 	
 	if (settingsS.isJukeboxEnabled)
 	{
-		//DLog(@"inserting %@", aSong.title);
 		if (![self insertIntoTable:@"jukeboxCurrentPlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue])
 			success = NO;
 
@@ -397,6 +398,8 @@
 			if (![self insertIntoTable:@"jukeboxShufflePlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue])
 				success = NO;
 		}
+		
+		[jukeboxS jukeboxAddSong:self.songId];
 	}
 	else
 	{
@@ -408,6 +411,8 @@
 			if (![self insertIntoTable:@"shufflePlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue])
 				success = NO;
 		}
+		
+		[streamManagerS fillStreamQueue:audioEngineS.isStarted];
 	}
 	
 	return success;
@@ -421,11 +426,15 @@
 	{
 		if (![self insertIntoTable:@"jukeboxShufflePlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue])
 			success = NO;
+		
+		[jukeboxS jukeboxAddSong:self.songId];
 	}
 	else
 	{
 		if (![self insertIntoTable:@"shufflePlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue])
 			success = NO;
+		
+		[streamManagerS fillStreamQueue:audioEngineS.isStarted];
 	}
 	
 	return success;
@@ -464,7 +473,7 @@
 	if (playlistS.currentSong && !settingsS.isJukeboxEnabled &&
 		[[playlistS.currentSong.path md5] isEqualToString:md5])
 	{
-		DLog(@"stopping the player before deleting the file");
+		//DLog(@"stopping the player before deleting the file");
         [audioEngineS stop];
 	}
 		
@@ -598,6 +607,18 @@
 + (NSString *)standardSongColumnQMarks
 {
 	return @"?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+}
+
+- (BOOL)isCurrentPlayingSong
+{
+	if (settingsS.isJukeboxEnabled)
+	{
+		return jukeboxS.jukeboxIsPlaying && [self isEqualToSong:playlistS.currentSong];
+	}
+	else
+	{
+		return [self isEqualToSong:audioEngineS.currentStreamSong];
+	}
 }
 
 @end

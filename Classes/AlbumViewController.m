@@ -203,7 +203,7 @@
 		self.tableView.tableHeaderView = nil;
 		[self.tableView removeFooterShadow];
 	}
-	else if (myAlbum && dataModel.songsCount)
+	else if (dataModel.songsCount > 0)
 	{
 		if (!self.tableView.tableHeaderView)
 		{
@@ -221,14 +221,21 @@
 			self.tableView.tableHeaderView = headerView;
 		}
 		
+		if (!self.myAlbum)
+		{
+			Album *anAlbum = [[Album alloc] init];
+			Song *aSong = [dataModel songForTableViewRow:0];
+			anAlbum.title = aSong.album;
+			anAlbum.artistName = aSong.artist;
+			anAlbum.coverArtId = aSong.coverArtId;
+			self.myAlbum = anAlbum;
+		}
+		
 		albumInfoArtView.coverArtId = myAlbum.coverArtId;
-		
-		DLog(@"player coverArtId: %@", myAlbum.coverArtId);
-		
 		albumInfoArtistLabel.text = myAlbum.artistName;
 		albumInfoAlbumLabel.text = myAlbum.title;
-		albumInfoDurationLabel.text = [NSString formatTime:dataModel.folderLength];
 		
+		albumInfoDurationLabel.text = [NSString formatTime:dataModel.folderLength];
 		albumInfoTrackCountLabel.text = [NSString stringWithFormat:@"%i Tracks", dataModel.songsCount];
 		if (dataModel.songsCount == 1)
 			albumInfoTrackCountLabel.text = [NSString stringWithFormat:@"%i Track", dataModel.songsCount];
@@ -360,7 +367,7 @@
 		        
 		cell.mySong = aSong;
 		
-		if ([aSong isEqualToSong:audioEngineS.currentStreamSong])
+		if (aSong.isCurrentPlayingSong)
 		{
 			cell.nowPlayingImageView.hidden = NO;
 			cell.trackNumberLabel.hidden = YES;
@@ -376,6 +383,7 @@
 				cell.trackNumberLabel.text = @"";
 		}
 		
+		//DLog(@"aSong.title: %@", aSong.title);
 		cell.songNameLabel.text = aSong.title;
 		
 		if ( aSong.artist)

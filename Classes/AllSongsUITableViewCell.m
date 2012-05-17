@@ -126,16 +126,10 @@
 
 - (void)queueAction
 {	
-	if (self.isSearching) 
-	{
-		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"allSongsSearch" inDatabaseQueue:databaseS.allSongsDbQueue];
-		[databaseS queueSong:aSong];
-	}
-	else 
-	{
-		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"allSongs" inDatabaseQueue:databaseS.allSongsDbQueue];
-		[databaseS queueSong:aSong];
-	}
+	NSString *tableName = self.isSearching ? @"allSongsSearch" : @"allSongs";
+	Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:tableName inDatabaseQueue:databaseS.allSongsDbQueue];
+	
+	[aSong addToCurrentPlaylistDbQueue];
 	
 	[self hideOverlay];
 }

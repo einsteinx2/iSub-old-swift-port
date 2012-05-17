@@ -146,7 +146,7 @@
 
 - (void)queueAction
 {	
-	[databaseS queueSong:self.mySong];
+	[self.mySong addToCurrentPlaylistDbQueue];
 	
 	[self hideOverlay];
 }

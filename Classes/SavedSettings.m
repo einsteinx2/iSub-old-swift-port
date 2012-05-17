@@ -383,6 +383,7 @@
 	audioEngineStartNumberOfSeconds = [userDefaults integerForKey:@"audioEngineStartNumberOfSeconds"];
 	isShowLargeSongInfoInPlayer = [userDefaults boolForKey:@"isShowLargeSongInfoInPlayer"];
 	isLockScreenArtEnabled = [userDefaults boolForKey:@"isLockScreenArtEnabled"];
+	isEqualizerOn = [userDefaults boolForKey:@"isEqualizerOn"];
 		
 	NSString *url = [userDefaults stringForKey:@"url"];
 	if (url)
@@ -1373,6 +1374,24 @@
 			[userDefaults setBool:isEnabled forKey:@"isLockScreenArtEnabled"];
 			[userDefaults synchronize];
 		}
+	}
+}
+
+- (BOOL)isEqualizerOn
+{
+	@synchronized(self)
+	{
+		return isEqualizerOn;
+	}
+}
+
+- (void)setIsEqualizerOn:(BOOL)isOn
+{
+	@synchronized(self)
+	{
+		isEqualizerOn = isOn;
+		[userDefaults setBool:isEqualizerOn forKey:@"isEqualizerOn"];
+		[userDefaults synchronize];
 	}
 }
 
