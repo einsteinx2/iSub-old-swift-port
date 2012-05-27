@@ -251,8 +251,8 @@
 			{
 				while ([result next])
 				{
-					if ([result stringForColumnIndex:0] != nil)
-						[artistViewController.listOfArtists addObject:[NSString stringWithString:[result stringForColumnIndex:0]]];
+					NSString *artist = [result stringForColumnIndex:0];
+					if (artist) [artistViewController.listOfArtists addObject:artist];
 				}
 			}
 			[result close];

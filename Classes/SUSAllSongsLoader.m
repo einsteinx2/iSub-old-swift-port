@@ -414,21 +414,24 @@ static NSInteger order (id a, id b, void* context)
 			[db executeUpdate:@"CREATE TABLE allAlbumsIndexCache (name TEXT, position INTEGER, count INTEGER)"];
 			for (int i = 0; i < [sectionInfo count]; i++)
 			{
-				NSArray *section = [sectionInfo objectAtIndexSafe:i];
-				NSArray *nextSection = nil;
-				if (i + 1 < [sectionInfo count])
-					nextSection = [sectionInfo objectAtIndexSafe:i+1];
-				
-				NSString *name = [section objectAtIndexSafe:0];
-				NSNumber *position = [section objectAtIndexSafe:1];
-				DLog(@"position: %i", [position intValue]);
-				NSNumber *count = nil;
-				if (nextSection)
-					count = [NSNumber numberWithInt:([[nextSection objectAtIndexSafe:1] intValue] - [position intValue])];
-				else
-					count = [NSNumber numberWithInt:[db intForQuery:@"SELECT COUNT(*) FROM allAlbums WHERE ROWID > ?", position]];
-				
-				[db executeUpdate:@"INSERT INTO allAlbumsIndexCache (name, position, count) VALUES (?, ?, ?)", name, position, count];
+				@autoreleasepool 
+				{
+					NSArray *section = [sectionInfo objectAtIndexSafe:i];
+					NSArray *nextSection = nil;
+					if (i + 1 < [sectionInfo count])
+						nextSection = [sectionInfo objectAtIndexSafe:i+1];
+					
+					NSString *name = [section objectAtIndexSafe:0];
+					NSNumber *position = [section objectAtIndexSafe:1];
+					DLog(@"position: %i", [position intValue]);
+					NSNumber *count = nil;
+					if (nextSection)
+						count = [NSNumber numberWithInt:([[nextSection objectAtIndexSafe:1] intValue] - [position intValue])];
+					else
+						count = [NSNumber numberWithInt:[db intForQuery:@"SELECT COUNT(*) FROM allAlbums WHERE ROWID > ?", position]];
+					
+					[db executeUpdate:@"INSERT INTO allAlbumsIndexCache (name, position, count) VALUES (?, ?, ?)", name, position, count];
+				}
 			}
 			
 			// Count the table
@@ -436,7 +439,10 @@ static NSInteger order (id a, id b, void* context)
 			FMResultSet *result = [db executeQuery:@"SELECT count FROM allAlbumsIndexCache"];
 			while ([result next])
 			{
-				allAlbumsCount += [result intForColumn:@"count"];
+				@autoreleasepool 
+				{
+					allAlbumsCount += [result intForColumn:@"count"];
+				}
 			}
 			[result close];
 			[db executeUpdate:@"INSERT INTO allAlbumsCount VALUES (?)", [NSNumber numberWithInt:allAlbumsCount]];
@@ -448,22 +454,25 @@ static NSInteger order (id a, id b, void* context)
 		{
 			[db executeUpdate:@"DROP TABLE allSongsIndexCache"];
 			[db executeUpdate:@"CREATE TABLE allSongsIndexCache (name TEXT, position INTEGER, count INTEGER)"];
-			for (int i = 0; i < [sectionInfo count]; i++)
+			for (int i = 0; i < sectionInfo.count; i++)
 			{
-				NSArray *section = [sectionInfo objectAtIndexSafe:i];
-				NSArray *nextSection = nil;
-				if (i + 1 < [sectionInfo count])
-					nextSection = [sectionInfo objectAtIndexSafe:i+1];
-				
-				NSString *name = [section objectAtIndexSafe:0];
-				NSNumber *position = [section objectAtIndexSafe:1];
-				NSNumber *count = nil;
-				if (nextSection)
-					count = [NSNumber numberWithInt:([[nextSection objectAtIndexSafe:1] intValue] - [position intValue])];
-				else
-					count = [NSNumber numberWithInt:[db intForQuery:@"SELECT COUNT(*) FROM allSongs WHERE ROWID > ?", position]];
-				
-				[db executeUpdate:@"INSERT INTO allSongsIndexCache (name, position, count) VALUES (?, ?, ?)", name, position, count];
+				@autoreleasepool 
+				{
+					NSArray *section = [sectionInfo objectAtIndexSafe:i];
+					NSArray *nextSection = nil;
+					if (i + 1 < [sectionInfo count])
+						nextSection = [sectionInfo objectAtIndexSafe:i+1];
+					
+					NSString *name = [section objectAtIndexSafe:0];
+					NSNumber *position = [section objectAtIndexSafe:1];
+					NSNumber *count = nil;
+					if (nextSection)
+						count = [NSNumber numberWithInt:([[nextSection objectAtIndexSafe:1] intValue] - [position intValue])];
+					else
+						count = [NSNumber numberWithInt:[db intForQuery:@"SELECT COUNT(*) FROM allSongs WHERE ROWID > ?", position]];
+					
+					[db executeUpdate:@"INSERT INTO allSongsIndexCache (name, position, count) VALUES (?, ?, ?)", name, position, count];
+				}
 			}
 			
 			// Count the table
@@ -522,8 +531,16 @@ static NSInteger order (id a, id b, void* context)
 		FMResultSet *result = [db executeQuery:@"SELECT * FROM sectionInfo"];
 		while ([result next])
 		{
-			[sections addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], 
-								 [NSNumber numberWithInt:[result intForColumnIndex:1]], nil]];
+			@autoreleasepool 
+			{
+				NSString *name = [result stringForColumnIndex:0];
+				NSNumber *index = [result objectForColumnIndex:1];
+				
+				if (name && index)
+				{
+					[sections addObject:[NSArray arrayWithObjects:name, index, nil]];
+				}
+			}
 		}
 		[result close];
 	}];
@@ -608,22 +625,23 @@ static NSString *kName_Error = @"error";
 
 - (void)parseData:(NSURLConnection*)theConnection
 {
-	@autoreleasepool {
-	
-	/*if (iteration == -1)
+	@autoreleasepool 
 	{
-		DLog(@"parsing data for artist: %@", currentArtist.name);
-	}
-	else
-	{
-		DLog(@"parsing data for album: %@", currentAlbum.title);
-	}*/
 	
-	// Parse the data
-	//
+		/*if (iteration == -1)
+		 {
+		 DLog(@"parsing data for artist: %@", currentArtist.name);
+		 }
+		 else
+		 {
+		 DLog(@"parsing data for album: %@", currentAlbum.title);
+		 }*/
+		
+		// Parse the data
+		//
 		TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData];
-    TBXMLElement *root = tbxml.rootXMLElement;
-    if (root) 
+		TBXMLElement *root = tbxml.rootXMLElement;
+		if (root) 
 		{
 			TBXMLElement *error = [TBXML childElementNamed:kName_Error parentElement:root];
 			if (error)
@@ -633,14 +651,15 @@ static NSString *kName_Error = @"error";
 				[self subsonicErrorCode:[code intValue] message:message];
 			}
 			
-        TBXMLElement *directory = [TBXML childElementNamed:kName_Directory parentElement:root];
-        if (directory) 
+			TBXMLElement *directory = [TBXML childElementNamed:kName_Directory parentElement:root];
+			if (directory) 
 			{
 				//NSDate *startTime = [NSDate date];
-            TBXMLElement *child = [TBXML childElementNamed:kName_Child parentElement:directory];
-            while (child != nil) 
+				TBXMLElement *child = [TBXML childElementNamed:kName_Child parentElement:directory];
+				while (child != nil) 
 				{
-					@autoreleasepool {
+					@autoreleasepool 
+					{
 						if ([[TBXML valueOfAttributeNamed:@"isDir" forElement:child] isEqualToString:@"true"])
 						{
 							//Initialize the Album.
@@ -702,12 +721,12 @@ static NSString *kName_Error = @"error";
 									{
 										// Flush the records to disk
 										[databaseS.allSongsDbQueue inDatabase:^(FMDatabase *db)
-										{
-											[db executeUpdate:@"INSERT INTO allSongsUnsorted SELECT * FROM allSongsTemp"];
-											[db executeUpdate:@"DROP TABLE IF EXISTS allSongsTemp"];
-											NSString *query = [NSString stringWithFormat:@"CREATE TEMPORARY TABLE allSongsTemp (%@)", [Song standardSongColumnSchema]];
-											[db executeUpdate:query];
-										}];
+										 {
+											 [db executeUpdate:@"INSERT INTO allSongsUnsorted SELECT * FROM allSongsTemp"];
+											 [db executeUpdate:@"DROP TABLE IF EXISTS allSongsTemp"];
+											 NSString *query = [NSString stringWithFormat:@"CREATE TEMPORARY TABLE allSongsTemp (%@)", [Song standardSongColumnSchema]];
+											 [db executeUpdate:query];
+										 }];
 										self.tempSongsCount = 0;
 									}
 									
@@ -715,46 +734,46 @@ static NSString *kName_Error = @"error";
 									if (aSong.genre)
 									{
 										[databaseS.genresDbQueue inDatabase:^(FMDatabase *db)
-										{
-											// Add the genre to the genre table
-											[db executeUpdate:@"INSERT INTO genresTemp (genre) VALUES (?)", aSong.genre];
-											self.tempGenresCount++;
-											
-											if (self.tempGenresCount == WRITE_BUFFER_AMOUNT)
-											{
-												// Flush the records to disk
-												[db executeUpdate:@"INSERT OR IGNORE INTO genresUnsorted SELECT * FROM genresTemp"];
-												//[databaseS.genresDb executeUpdate:@"DELETE * FROM genresTemp"];
-												[db executeUpdate:@"DROP TABLE IF EXISTS genresTemp"];
-												[db executeUpdate:@"CREATE TEMPORARY TABLE genresTemp (genre TEXT)"];
-												self.tempGenresCount = 0;
-											}
-											
-											// Insert the song into the genresLayout table
-											NSArray *splitPath = [aSong.path componentsSeparatedByString:@"/"];
-											if ([splitPath count] <= 9)
-											{
-												NSMutableArray *segments = [[NSMutableArray alloc] initWithArray:splitPath];
-												while ([segments count] < 9)
-												{
-													[segments addObject:@""];
-												}
-												
-												NSString *query = @"INSERT INTO genresLayoutTemp (md5, genre, segs, seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-												[db executeUpdate:query, [aSong.path md5], aSong.genre, [NSNumber numberWithInt:[splitPath count]], [segments objectAtIndexSafe:0], [segments objectAtIndexSafe:1], [segments objectAtIndexSafe:2], [segments objectAtIndexSafe:3], [segments objectAtIndexSafe:4], [segments objectAtIndexSafe:5], [segments objectAtIndexSafe:6], [segments objectAtIndexSafe:7], [segments objectAtIndexSafe:8]];
-												self.tempGenresLayoutCount++;
-												
-												if (tempGenresLayoutCount == WRITE_BUFFER_AMOUNT)
-												{
-													// Flush the records to disk
-													[db executeUpdate:@"INSERT OR IGNORE INTO genresLayout SELECT * FROM genresLayoutTemp"];
-													//[databaseS.genresDb executeUpdate:@"DELETE * FROM genresLayoutTemp"];
-													[db executeUpdate:@"DROP TABLE IF EXISTS genresLayoutTemp"];
-													[db executeUpdate:@"CREATE TEMPORARY TABLE genresLayoutTemp (md5 TEXT, genre TEXT, segs INTEGER, seg1 TEXT, seg2 TEXT, seg3 TEXT, seg4 TEXT, seg5 TEXT, seg6 TEXT, seg7 TEXT, seg8 TEXT, seg9 TEXT)"];
-													self.tempGenresLayoutCount = 0;
-												}
-											}
-										}];
+										 {
+											 // Add the genre to the genre table
+											 [db executeUpdate:@"INSERT INTO genresTemp (genre) VALUES (?)", aSong.genre];
+											 self.tempGenresCount++;
+											 
+											 if (self.tempGenresCount == WRITE_BUFFER_AMOUNT)
+											 {
+												 // Flush the records to disk
+												 [db executeUpdate:@"INSERT OR IGNORE INTO genresUnsorted SELECT * FROM genresTemp"];
+												 //[databaseS.genresDb executeUpdate:@"DELETE * FROM genresTemp"];
+												 [db executeUpdate:@"DROP TABLE IF EXISTS genresTemp"];
+												 [db executeUpdate:@"CREATE TEMPORARY TABLE genresTemp (genre TEXT)"];
+												 self.tempGenresCount = 0;
+											 }
+											 
+											 // Insert the song into the genresLayout table
+											 NSArray *splitPath = [aSong.path componentsSeparatedByString:@"/"];
+											 if ([splitPath count] <= 9)
+											 {
+												 NSMutableArray *segments = [[NSMutableArray alloc] initWithArray:splitPath];
+												 while ([segments count] < 9)
+												 {
+													 [segments addObject:@""];
+												 }
+												 
+												 NSString *query = @"INSERT INTO genresLayoutTemp (md5, genre, segs, seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8, seg9) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+												 [db executeUpdate:query, [aSong.path md5], aSong.genre, [NSNumber numberWithInt:[splitPath count]], [segments objectAtIndexSafe:0], [segments objectAtIndexSafe:1], [segments objectAtIndexSafe:2], [segments objectAtIndexSafe:3], [segments objectAtIndexSafe:4], [segments objectAtIndexSafe:5], [segments objectAtIndexSafe:6], [segments objectAtIndexSafe:7], [segments objectAtIndexSafe:8]];
+												 self.tempGenresLayoutCount++;
+												 
+												 if (tempGenresLayoutCount == WRITE_BUFFER_AMOUNT)
+												 {
+													 // Flush the records to disk
+													 [db executeUpdate:@"INSERT OR IGNORE INTO genresLayout SELECT * FROM genresLayoutTemp"];
+													 //[databaseS.genresDb executeUpdate:@"DELETE * FROM genresLayoutTemp"];
+													 [db executeUpdate:@"DROP TABLE IF EXISTS genresLayoutTemp"];
+													 [db executeUpdate:@"CREATE TEMPORARY TABLE genresLayoutTemp (md5 TEXT, genre TEXT, segs INTEGER, seg1 TEXT, seg2 TEXT, seg3 TEXT, seg4 TEXT, seg5 TEXT, seg6 TEXT, seg7 TEXT, seg8 TEXT, seg9 TEXT)"];
+													 self.tempGenresLayoutCount = 0;
+												 }
+											 }
+										 }];
 									}
 								}
 							}
@@ -768,12 +787,12 @@ static NSString *kName_Error = @"error";
 						}
 						
 						child = [TBXML nextSiblingNamed:kName_Child searchFromElement:child];
-					
+						
 					}
-            }
+				}
 				//DLog(@"artist or album folder processing time: %f", [[NSDate date] timeIntervalSinceDate:startTime]);
-        }
-    }
+			}
+		}
 		
 		// Close the connection
 		//

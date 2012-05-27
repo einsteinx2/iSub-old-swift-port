@@ -877,10 +877,13 @@
 			[db executeUpdate:@"CREATE TABLE localPlaylistsTemp(playlist TEXT, md5 TEXT)"];
 			for (NSNumber *index in [viewObjectsS.multiDeleteList reverseObjectEnumerator])
 			{
-				NSInteger rowId = [index integerValue] + 1;
-				NSString *md5 = [databaseS.localPlaylistsDbQueue stringForQuery:[NSString stringWithFormat:@"SELECT md5 FROM localPlaylists WHERE ROWID = %i", rowId]];
-				[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE playlist%@", md5]];
-				[db executeUpdate:@"DELETE FROM localPlaylists WHERE md5 = ?", md5];
+				@autoreleasepool 
+				{
+					NSInteger rowId = [index integerValue] + 1;
+					NSString *md5 = [databaseS.localPlaylistsDbQueue stringForQuery:[NSString stringWithFormat:@"SELECT md5 FROM localPlaylists WHERE ROWID = %i", rowId]];
+					[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE playlist%@", md5]];
+					[db executeUpdate:@"DELETE FROM localPlaylists WHERE md5 = ?", md5];
+				}
 			}
 			[db executeUpdate:@"INSERT INTO localPlaylistsTemp SELECT * FROM localPlaylists"];
 			[db executeUpdate:@"DROP TABLE localPlaylists"];
@@ -1098,6 +1101,7 @@
 						
 						[db executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, [settingsS.urlString md5]], @"currentPlaylistDb"];
 						if ([db hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [db lastErrorCode], [db lastErrorMessage]); }
+						
 						if (playlistS.isShuffle)
 							[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM shufflePlaylist", [self.playlistNameTextField.text md5]]];
 						else
@@ -1142,6 +1146,7 @@
 					
 					[db executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, [settingsS.urlString md5]], @"currentPlaylistDb"];
 					if ([db hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [db lastErrorCode], [db lastErrorMessage]); }
+					
 					if (playlistS.isShuffle)
 						[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM shufflePlaylist", [self.playlistNameTextField.text md5]]];
 					else 

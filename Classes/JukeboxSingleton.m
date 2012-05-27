@@ -218,8 +218,11 @@
 		
 		while ([result next])
 		{
-			if ([result stringForColumnIndex:0] != nil)
-				[songIds addObject:[NSString stringWithString:[result stringForColumnIndex:0]]];
+			@autoreleasepool 
+			{
+				NSString *songId = [result stringForColumnIndex:0];
+				if (songId) [songIds addObject:songId];
+			}
 		}
 		[result close];
 	}];

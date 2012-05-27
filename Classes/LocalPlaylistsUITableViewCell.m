@@ -107,7 +107,7 @@
 	{
 		[databaseS.localPlaylistsDbQueue inDatabase:^(FMDatabase *db)
 		{
-			[db executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, [settingsS.urlString md5]], @"currentPlaylistDb"];
+			[db executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, settingsS.urlString.md5], @"currentPlaylistDb"];
 			if ([db hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [db lastErrorCode], [db lastErrorMessage]); }
 			[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", md5]];
 			if ([db hadError]) { DLog(@"Err performing query %d: %@", [db lastErrorCode], [db lastErrorMessage]); }

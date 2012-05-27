@@ -65,7 +65,7 @@
 	__block BOOL isFullyCached;
 	[self.dbQueue inDatabase:^(FMDatabase *db)
 	{
-		 isFullyCached = [[db stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", [self.path md5]] boolValue];
+		isFullyCached = [db stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", [self.path md5]] ? YES : NO;
 	}];
 	return isFullyCached;
 }

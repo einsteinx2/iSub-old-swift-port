@@ -103,21 +103,24 @@
 
 - (void)deleteAllSongs
 {
-	NSMutableArray *songMd5s = [[NSMutableArray alloc] initWithCapacity:0];
+	NSMutableArray *songMd5s = [[NSMutableArray alloc] initWithCapacity:50];
 	[databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)
 	{
 		FMResultSet *result = [db executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ", artistNameLabel.text];
 		while ([result next])
 		{
-			if ([result stringForColumnIndex:0] != nil)
-				[songMd5s addObject:[result stringForColumnIndex:0]];
+			NSString *md5 = [result stringForColumnIndex:0];
+			if (md5) [songMd5s addObject:md5];
 		}
 		[result close];
 	}];
 	
 	for (NSString *md5 in songMd5s)
 	{
-		[Song removeSongFromCacheDbQueueByMD5:md5];
+		@autoreleasepool 
+		{
+			[Song removeSongFromCacheDbQueueByMD5:md5];
+		}
 	}
 	
 	[cacheS findCacheSize];
@@ -143,16 +146,26 @@
 
 - (void)queueAllSongs
 {
+	NSMutableArray *songMd5s = [[NSMutableArray alloc] initWithCapacity:50];
 	[databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)
 	{
 		FMResultSet *result = [db executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text];
 		while ([result next])
 		{
-			if ([result stringForColumnIndex:0] != nil)
-				[[Song songFromCacheDb:db md5:[result stringForColumnIndex:0]] addToCurrentPlaylistDbQueue];
+			NSString *md5 = [result stringForColumnIndex:0];
+			if (md5) [songMd5s addObject:md5];
 		}
 		[result close];
 	}];
+	
+	for (NSString *md5 in songMd5s)
+	{
+		@autoreleasepool 
+		{
+			Song *aSong = [Song songFromCacheDbQueue:md5];
+			[aSong addToCurrentPlaylistDbQueue];
+		}
+	}
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 	

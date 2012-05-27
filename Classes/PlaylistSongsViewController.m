@@ -488,7 +488,7 @@ static NSString *kName_Error = @"error";
 		{
 			if (viewObjectsS.isLocalPlaylist)
 			{			
-				[db executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, [settingsS.urlString md5]], @"currentPlaylistDb"];
+				[db executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, settingsS.urlString.md5], @"currentPlaylistDb"];
 				if ([db hadError]) { DLog(@"Err attaching the localPlaylistsDb %d: %@", [db lastErrorCode], [db lastErrorMessage]); }
 				if (settingsS.isJukeboxEnabled)
 					[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO jukeboxCurrentPlaylist SELECT * FROM playlist%@", self.md5]];
@@ -498,7 +498,7 @@ static NSString *kName_Error = @"error";
 			}
 			else
 			{
-				[db executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, [settingsS.urlString md5]], @"currentPlaylistDb"];
+				[db executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, settingsS.urlString.md5], @"currentPlaylistDb"];
 				if ([db hadError]) { DLog(@"Err attaching the localPlaylistsDb %d: %@", [db lastErrorCode], [db lastErrorMessage]); }
 				if (settingsS.isJukeboxEnabled)
 					[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO jukeboxCurrentPlaylist SELECT * FROM splaylist%@", self.md5]];

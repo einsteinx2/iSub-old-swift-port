@@ -207,7 +207,8 @@
 		FMResultSet *result = [db executeQuery:@"SELECT bookmarkId FROM bookmarks"];
 		while ([result next])
 		{
-			[bookmarkIdsTemp addObject:[NSNumber numberWithInt:[result intForColumnIndex:0]]];
+			NSNumber *bookmarkId = [result objectForColumnIndex:0];
+			if (bookmarkId) [bookmarkIdsTemp addObject:bookmarkId];
 		}
 		[result close];
 	}];

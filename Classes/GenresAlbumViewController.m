@@ -195,6 +195,7 @@
 		query = [NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment];
 	}
 	
+	NSMutableArray *songMd5s = [NSMutableArray arrayWithCapacity:0];
 	[dbQueue inDatabase:^(FMDatabase *db)
 	{
 		FMResultSet *result = [db executeQuery:query, seg1, self.title, genre];
@@ -202,17 +203,21 @@
 		{		
 			@autoreleasepool 
 			{
-				if ([result stringForColumnIndex:0] != nil)
-				{
-					NSString *songIdMD5 = [NSString stringWithString:[result stringForColumnIndex:0]];
-					Song *aSong = [Song songFromGenreDb:db md5:songIdMD5];
-					
-					[aSong addToCurrentPlaylistDbQueue];
-				}
+				NSString *md5 = [result stringForColumnIndex:0];
+				if (md5) [songMd5s addObject:md5];
 			}
 		}
 		[result close];
 	}];
+	
+	for (NSString *md5 in songMd5s)
+	{
+		@autoreleasepool 
+		{
+			Song *aSong = [Song songFromGenreDbQueue:md5];
+			[aSong addToCurrentPlaylistDbQueue];
+		}
+	}
 	
 	if (settingsS.isJukeboxEnabled)
 		[jukeboxS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:0]];
@@ -257,6 +262,7 @@
 		query = [NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment];
 	}
 	
+	NSMutableArray *songMd5s = [NSMutableArray arrayWithCapacity:0];
 	[dbQueue inDatabase:^(FMDatabase *db)
 	{
 		FMResultSet *result = [db executeQuery:query, seg1, self.title, genre];
@@ -264,16 +270,21 @@
 		{
 			@autoreleasepool 
 			{
-				if ([result stringForColumnIndex:0] != nil)
-				{
-					NSString *songIdMD5 = [result stringForColumnIndex:0];
-					Song *aSong = [Song songFromGenreDb:db md5:songIdMD5];
-					[aSong addToCurrentPlaylistDbQueue];
-				}
+				NSString *md5 = [result stringForColumnIndex:0];
+				if (md5) [songMd5s addObject:md5];
 			}
 		}
 		[result close];
 	}];
+	
+	for (NSString *md5 in songMd5s)
+	{
+		@autoreleasepool 
+		{
+			Song *aSong = [Song songFromGenreDbQueue:md5];
+			[aSong addToCurrentPlaylistDbQueue];
+		}
+	}
 	
 	// Shuffle the playlist
 	[databaseS shufflePlaylist];
@@ -472,14 +483,22 @@
 				FMResultSet *result = [db executeQuery:query, seg1, [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1], genre];
 				while ([result next])
 				{
-					if ([result intForColumnIndex:1] > (segment + 1))
+					@autoreleasepool 
 					{
-						[genresAlbumViewController.listOfAlbums addObject:[NSArray arrayWithObjects:[NSString stringWithString:[result stringForColumnIndex:0]], 
-																		   [NSString stringWithString:[result stringForColumnIndex:2]], nil]];
-					}
-					else
-					{
-						[genresAlbumViewController.listOfSongs addObject:[NSString stringWithString:[result stringForColumnIndex:0]]];
+						NSString *md5 = [result stringForColumnIndex:0];
+						NSInteger segs = [result intForColumnIndex:1];
+						NSString *seg = [result stringForColumnIndex:2];
+						
+						if (segs > (segment + 1))
+						{
+							if (md5 && seg)
+								[genresAlbumViewController.listOfAlbums addObject:[NSArray arrayWithObjects:md5, seg, nil]];
+						}
+						else
+						{
+							if (md5)
+								[genresAlbumViewController.listOfSongs addObject:md5];
+						}
 					}
 				}
 				[result close];
