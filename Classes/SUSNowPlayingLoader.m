@@ -97,10 +97,16 @@
 {	            
     // Parse the data
 	//
-	TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData];
-    TBXMLElement *root = tbxml.rootXMLElement;
-    if (root) 
+	NSError *error;
+    TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData error:&error];
+	if (error)
 	{
+		[self informDelegateLoadingFailed:error];
+	}
+	else
+	{
+		TBXMLElement *root = tbxml.rootXMLElement;
+		
 		TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
 		if (error)
 		{
@@ -113,7 +119,7 @@
 			TBXMLElement *nowPlaying = [TBXML childElementNamed:@"nowPlaying" parentElement:root];
 			if (nowPlaying)
 			{
-                // Loop through the songs
+				// Loop through the songs
 				TBXMLElement *entry = [TBXML childElementNamed:@"entry" parentElement:nowPlaying];
 				while (entry != nil)
 				{
@@ -147,12 +153,12 @@
 					}
 				}
 			}
-            else
-            {
-                // TODO create error
-                //NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NoLyricsElement];
-                [self informDelegateLoadingFailed:nil];
-            }
+			else
+			{
+				// TODO create error
+				//NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NoLyricsElement];
+				[self informDelegateLoadingFailed:nil];
+			}
 		}
 	}
 	

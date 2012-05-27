@@ -191,48 +191,50 @@
 {	
     // Parse the data
     //
-    TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData];
-    TBXMLElement *root = tbxml.rootXMLElement;
-    if (root) 
-    {
-        TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
-        if (error)
-        {
-            // TODO: handle error
-        }
-        else
-        {
-            TBXMLElement *playlist = [TBXML childElementNamed:@"playlist" parentElement:root];
-            if (playlist)
-            {
-                NSString *md5 = [serverPlaylist.playlistName md5];
-                [databaseS removeServerPlaylistTable:md5];
-                [databaseS createServerPlaylistTable:md5];
-                
-                TBXMLElement *entry = [TBXML childElementNamed:@"entry" parentElement:playlist];
-                while (entry != nil)
-                {
-                    @autoreleasepool {
-                    
-                        Song *aSong = [[Song alloc] initWithTBXMLElement:entry];
-                        [aSong insertIntoServerPlaylistWithPlaylistId:md5];
-                        if (isDownload)
-                        {
-                            [aSong addToCacheQueueDbQueue];
-                        }
-                        else
-                        {
-                            [aSong addToCurrentPlaylistDbQueue];
-                        }
-                        
-                        // Get the next message
-                        entry = [TBXML nextSiblingNamed:@"entry" searchFromElement:entry];
-                    
-                    }
-                }
-            }
-        }
-    }
+	NSError *error;
+    TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData error:&error];
+	if (!error)
+	{
+		TBXMLElement *root = tbxml.rootXMLElement;
+
+		TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
+		if (error)
+		{
+			// TODO: handle error
+		}
+		else
+		{
+			TBXMLElement *playlist = [TBXML childElementNamed:@"playlist" parentElement:root];
+			if (playlist)
+			{
+				NSString *md5 = [serverPlaylist.playlistName md5];
+				[databaseS removeServerPlaylistTable:md5];
+				[databaseS createServerPlaylistTable:md5];
+				
+				TBXMLElement *entry = [TBXML childElementNamed:@"entry" parentElement:playlist];
+				while (entry != nil)
+				{
+					@autoreleasepool {
+						
+						Song *aSong = [[Song alloc] initWithTBXMLElement:entry];
+						[aSong insertIntoServerPlaylistWithPlaylistId:md5];
+						if (isDownload)
+						{
+							[aSong addToCacheQueueDbQueue];
+						}
+						else
+						{
+							[aSong addToCurrentPlaylistDbQueue];
+						}
+						
+						// Get the next message
+						entry = [TBXML nextSiblingNamed:@"entry" searchFromElement:entry];
+						
+					}
+				}
+			}
+		}
+	}
 	
 	// Hide the loading screen
 	[viewObjectsS hideLoadingScreen];

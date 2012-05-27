@@ -1,16 +1,15 @@
 
-#import "NSDataAdditions.h"
-
+#import "TBXML+Compression.h"
 #import <zlib.h>
 
 
-@implementation NSData (NSDataAdditions)
+@implementation NSData (TBXML_Compression)
 
 // ================================================================================================
 //  Created by Tom Bradley on 21/10/2009.
-//  Version 1.4
+//  Version 1.5
 //  
-//  Copyright (c) 2009 Tom Bradley
+//  Copyright 2012 71Squared All rights reserved.
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -71,9 +70,8 @@ static char encodingTable[64] = {
 	'w','x','y','z','0','1','2','3','4','5','6','7','8','9','+','/' };
 
 
-+ (NSData *) dataWithBase64EncodedString:(NSString *) string {
-    NSData *result = [[NSData alloc] initWithBase64EncodedString:string];
-    return result;
++ (NSData *) newDataWithBase64EncodedString:(NSString *) string {
+    return [[NSData alloc] initWithBase64EncodedString:string];
 }
 
 - (id) initWithBase64EncodedString:(NSString *) string {
@@ -83,7 +81,7 @@ static char encodingTable[64] = {
         unsigned long ixtext = 0;
         unsigned long lentext = 0;
         unsigned char ch = 0;
-        unsigned char inbuf[4], outbuf[3];
+        unsigned char inbuf[4] = {0,0,0,0}, outbuf[3] = {0,0,0};
         short i = 0, ixinbuf = 0;
         BOOL flignore = NO;
         BOOL flendtext = NO;

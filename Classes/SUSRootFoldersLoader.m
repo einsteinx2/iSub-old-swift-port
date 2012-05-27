@@ -240,8 +240,13 @@
 	//NSDate *startTime = [NSDate date];
 	
 	//DLog(@"%@", [[[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding] autorelease]);
-	TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData];
-	if (tbxml.rootXMLElement)
+	NSError *error;
+    TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData error:&error];
+	if (error)
+	{
+		[self informDelegateLoadingFailed:error];
+	}
+	else
 	{
 		// Check for an error response
 		TBXMLElement *errorElement = [TBXML childElementNamed:@"error" parentElement:tbxml.rootXMLElement];
@@ -339,28 +344,28 @@
 				}
 			}
 		}
+		
+		// Move any remaining temp records to main cache
+		[self moveRootFolderTempTableRecordsToMainCache];
+		[self resetRootFolderTempTable];
+		
+		// Release the XML parser
+		
+		//DLog(@"Folders load time: %f", [[NSDate date] timeIntervalSinceDate:startTime]);
+		
+		// Update the count
+		[self rootFolderUpdateCount];
+		
+		// Save the reload time
+		[settingsS setRootFoldersReloadTime:[NSDate date]];
+		
+		// Notify the delegate that the loading is finished
+		[self informDelegateLoadingFinished];
 	}
-	
-	// Move any remaining temp records to main cache
-	[self moveRootFolderTempTableRecordsToMainCache];
-	[self resetRootFolderTempTable];
-	
-	// Release the XML parser
-	
-	//DLog(@"Folders load time: %f", [[NSDate date] timeIntervalSinceDate:startTime]);
 	
 	// Clean up the connection
 	self.connection = nil;
 	self.receivedData = nil;
-	
-	// Update the count
-	[self rootFolderUpdateCount];
-	
-	// Save the reload time
-	[settingsS setRootFoldersReloadTime:[NSDate date]];
-	
-	// Notify the delegate that the loading is finished
-	[self informDelegateLoadingFinished];
 }
 
 @end

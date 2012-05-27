@@ -304,39 +304,41 @@
 	{
         // Parse the data
         //
-        TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData];
-        TBXMLElement *root = tbxml.rootXMLElement;
-        if (root) 
-        {
-            TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
-            if (error)
-            {
-                // TODO: handle error
-            }
-            else
-            {
-                TBXMLElement *playlist = [TBXML childElementNamed:@"playlist" parentElement:root];
-                if (playlist)
-                {
-                    [databaseS removeServerPlaylistTable:self.md5];
-                    [databaseS createServerPlaylistTable:self.md5];
-                    
-                    TBXMLElement *entry = [TBXML childElementNamed:@"entry" parentElement:playlist];
-                    while (entry != nil)
-                    {
-                        @autoreleasepool {
-                        
-                            Song *aSong = [[Song alloc] initWithTBXMLElement:entry];
-                            [aSong insertIntoServerPlaylistWithPlaylistId:self.md5];
-                            
-                            // Get the next message
-                            entry = [TBXML nextSiblingNamed:@"entry" searchFromElement:entry];
-                        
-                        }
-                    }
-                }
-            }
-        }
+		NSError *error;
+		TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData error:&error];
+		if (!error)
+		{
+			TBXMLElement *root = tbxml.rootXMLElement;
+
+			TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
+			if (error)
+			{
+				// TODO: handle error
+			}
+			else
+			{
+				TBXMLElement *playlist = [TBXML childElementNamed:@"playlist" parentElement:root];
+				if (playlist)
+				{
+					[databaseS removeServerPlaylistTable:self.md5];
+					[databaseS createServerPlaylistTable:self.md5];
+					
+					TBXMLElement *entry = [TBXML childElementNamed:@"entry" parentElement:playlist];
+					while (entry != nil)
+					{
+						@autoreleasepool {
+							
+							Song *aSong = [[Song alloc] initWithTBXMLElement:entry];
+							[aSong insertIntoServerPlaylistWithPlaylistId:self.md5];
+							
+							// Get the next message
+							entry = [TBXML nextSiblingNamed:@"entry" searchFromElement:entry];
+							
+						}
+					}
+				}
+			}
+		}
 		
 		self.tableView.scrollEnabled = YES;
 
@@ -371,10 +373,12 @@ static NSString *kName_Error = @"error";
 {	
 	// Parse the data
 	//
-	TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
-    TBXMLElement *root = tbxml.rootXMLElement;
-    if (root) 
+	NSError *error;
+    TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData error:&error];
+	if (!error)
 	{
+		TBXMLElement *root = tbxml.rootXMLElement;
+
 		TBXMLElement *error = [TBXML childElementNamed:kName_Error parentElement:root];
 		if (error)
 		{

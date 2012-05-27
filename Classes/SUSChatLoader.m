@@ -105,10 +105,16 @@
 {	
 	// Parse the data
 	//
-	TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData];
-    TBXMLElement *root = tbxml.rootXMLElement;
-    if (root) 
+	NSError *error;
+    TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData error:&error];
+	if (error)
 	{
+		[self informDelegateLoadingFailed:error];
+	}
+	else
+	{
+		TBXMLElement *root = tbxml.rootXMLElement;
+
 		TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
 		if (error)
 		{
@@ -125,26 +131,24 @@
 				TBXMLElement *chatMessage = [TBXML childElementNamed:@"chatMessage" parentElement:chatMessagesElement];
 				while (chatMessage != nil)
 				{
-					@autoreleasepool {
-					
-					// Create the chat message object and add it to the array
+					@autoreleasepool
+					{
+						// Create the chat message object and add it to the array
 						ChatMessage *aChatMessage = [[ChatMessage alloc] initWithTBXMLElement:chatMessage];
 						[self.chatMessages addObject:aChatMessage];
 						
 						// Get the next message
 						chatMessage = [TBXML nextSiblingNamed:@"chatMessage" searchFromElement:chatMessage];
-					
 					}
 				}
 			}
 		}
+		// Notify the delegate that the loading is finished
+		[self informDelegateLoadingFinished];
 	}
-	
+
 	self.receivedData = nil;
 	self.connection = nil;
-	
-	// Notify the delegate that the loading is finished
-	[self informDelegateLoadingFinished];
 }
 
 @end

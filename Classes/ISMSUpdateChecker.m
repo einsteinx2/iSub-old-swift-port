@@ -103,12 +103,14 @@
 	// TODO: test this
 	BOOL showAlert = NO;
 	//DLog(@"receivedData: %@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
-	TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
-    TBXMLElement *root = tbxml.rootXMLElement;
-    if (root) 
+	NSError *error;
+    TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData error:&error];
+	if (!error)
 	{
-        if ([[TBXML elementName:root] isEqualToString:@"update"])
-        {
+		TBXMLElement *root = tbxml.rootXMLElement;
+
+		if ([[TBXML elementName:root] isEqualToString:@"update"])
+		{
 			NSString *currentVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
 			self.theNewVersion = [TBXML valueOfAttributeNamed:@"version" forElement:root];
 			self.message = [TBXML valueOfAttributeNamed:@"message" forElement:root];
@@ -137,7 +139,7 @@
 					[newVersionPadded addObject:@"0"];
 				}
 			}
-
+			
 			//DLog(@"currentVersionSplit: %@", currentVersionSplit);
 			//DLog(@"newVersionSplit: %@", newVersionSplit);
 			//DLog(@"currentVersionPadded: %@", currentVersionPadded);
@@ -183,8 +185,6 @@
 	
 	if (showAlert)
 		[self showAlert];
-	else
-		;
 }
 
 @end

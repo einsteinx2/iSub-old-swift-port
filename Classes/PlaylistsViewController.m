@@ -1313,10 +1313,12 @@ static NSString *kName_Error = @"error";
 {	
 	// Parse the data
 	//
-	TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
-    TBXMLElement *root = tbxml.rootXMLElement;
-    if (root) 
+	NSError *error;
+    TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData error:&error];
+	if (!error)
 	{
+		TBXMLElement *root = tbxml.rootXMLElement;
+		
 		TBXMLElement *error = [TBXML childElementNamed:kName_Error parentElement:root];
 		if (error)
 		{
@@ -1325,7 +1327,6 @@ static NSString *kName_Error = @"error";
 			[self subsonicErrorCode:code message:message];
 		}
 	}
-	
 	
 	[viewObjectsS hideLoadingScreen];
 }

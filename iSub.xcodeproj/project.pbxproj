@@ -485,8 +485,6 @@
 		53159EBA156F69D0001B0268 /* CustomUITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B20F5A12C2D7AC00A90DD9 /* CustomUITabBarController.m */; };
 		53159EBB156F69D0001B0268 /* BBSimpleConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B64CF212C96129007F1ED5 /* BBSimpleConnectionQueue.m */; };
 		53159EBC156F69D0001B0268 /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 538DF6E712CC25C300DB6D8C /* Server.m */; };
-		53159EBD156F69D0001B0268 /* NSDataAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D9996B12D40C4000A97412 /* NSDataAdditions.m */; };
-		53159EBE156F69D0001B0268 /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D9996D12D40C4000A97412 /* TBXML.m */; };
 		53159EBF156F69D0001B0268 /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 5382BA8C12DA4039005A3D1A /* UIDevice+Hardware.m */; };
 		53159EC0156F69D0001B0268 /* ServerTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB23012E0027800389DA1 /* ServerTypeViewController.m */; };
 		53159EC1156F69D0001B0268 /* UbuntuServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB2A012E2348A00389DA1 /* UbuntuServerEditViewController.m */; };
@@ -1046,8 +1044,6 @@
 		5315A34C156F7064001B0268 /* CustomUITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B20F5A12C2D7AC00A90DD9 /* CustomUITabBarController.m */; };
 		5315A34D156F7064001B0268 /* BBSimpleConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B64CF212C96129007F1ED5 /* BBSimpleConnectionQueue.m */; };
 		5315A34E156F7064001B0268 /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 538DF6E712CC25C300DB6D8C /* Server.m */; };
-		5315A34F156F7064001B0268 /* NSDataAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D9996B12D40C4000A97412 /* NSDataAdditions.m */; };
-		5315A350156F7064001B0268 /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D9996D12D40C4000A97412 /* TBXML.m */; };
 		5315A351156F7064001B0268 /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 5382BA8C12DA4039005A3D1A /* UIDevice+Hardware.m */; };
 		5315A352156F7064001B0268 /* ServerTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB23012E0027800389DA1 /* ServerTypeViewController.m */; };
 		5315A353156F7064001B0268 /* UbuntuServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB2A012E2348A00389DA1 /* UbuntuServerEditViewController.m */; };
@@ -2144,8 +2140,6 @@
 		53BC2821139AF0DD00A825F1 /* CustomUITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B20F5A12C2D7AC00A90DD9 /* CustomUITabBarController.m */; };
 		53BC2822139AF0DD00A825F1 /* BBSimpleConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B64CF212C96129007F1ED5 /* BBSimpleConnectionQueue.m */; };
 		53BC2823139AF0DD00A825F1 /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 538DF6E712CC25C300DB6D8C /* Server.m */; };
-		53BC2824139AF0DD00A825F1 /* NSDataAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D9996B12D40C4000A97412 /* NSDataAdditions.m */; };
-		53BC2825139AF0DD00A825F1 /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D9996D12D40C4000A97412 /* TBXML.m */; };
 		53BC2826139AF0DD00A825F1 /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 5382BA8C12DA4039005A3D1A /* UIDevice+Hardware.m */; };
 		53BC2827139AF0DD00A825F1 /* ServerTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB23012E0027800389DA1 /* ServerTypeViewController.m */; };
 		53BC2828139AF0DD00A825F1 /* UbuntuServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB2A012E2348A00389DA1 /* UbuntuServerEditViewController.m */; };
@@ -2308,8 +2302,6 @@
 		53D74D581471BE160025F8F1 /* Song+DAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D551471BE160025F8F1 /* Song+DAO.m */; };
 		53D8ACB3116C47E600E5C9CB /* PageControlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D8ACB1116C47E600E5C9CB /* PageControlViewController.m */; };
 		53D8ACB4116C47E600E5C9CB /* PageControlViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53D8ACB2116C47E600E5C9CB /* PageControlViewController.xib */; };
-		53D9996E12D40C4000A97412 /* NSDataAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D9996B12D40C4000A97412 /* NSDataAdditions.m */; };
-		53D9996F12D40C4000A97412 /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D9996D12D40C4000A97412 /* TBXML.m */; };
 		53DCF3FE13BFEAD3009160F9 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		53DCF3FF13BFEAD3009160F9 /* FoldersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* FoldersViewController.xib */; };
 		53DCF40013BFEAD3009160F9 /* AlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F2D3ED113A338500107D63 /* AlbumViewController.xib */; };
@@ -2627,8 +2619,6 @@
 		53DCF58213BFEAD3009160F9 /* CustomUITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B20F5A12C2D7AC00A90DD9 /* CustomUITabBarController.m */; };
 		53DCF58313BFEAD3009160F9 /* BBSimpleConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B64CF212C96129007F1ED5 /* BBSimpleConnectionQueue.m */; };
 		53DCF58413BFEAD3009160F9 /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 538DF6E712CC25C300DB6D8C /* Server.m */; };
-		53DCF58513BFEAD3009160F9 /* NSDataAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D9996B12D40C4000A97412 /* NSDataAdditions.m */; };
-		53DCF58613BFEAD3009160F9 /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D9996D12D40C4000A97412 /* TBXML.m */; };
 		53DCF58713BFEAD3009160F9 /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 5382BA8C12DA4039005A3D1A /* UIDevice+Hardware.m */; };
 		53DCF58813BFEAD3009160F9 /* ServerTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB23012E0027800389DA1 /* ServerTypeViewController.m */; };
 		53DCF58913BFEAD3009160F9 /* UbuntuServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB2A012E2348A00389DA1 /* UbuntuServerEditViewController.m */; };
@@ -2754,6 +2744,21 @@
 		53F2D3EF113A338500107D63 /* AlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F2D3ED113A338500107D63 /* AlbumViewController.xib */; };
 		53F2D420113A4E2C00107D63 /* Album.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D41F113A4E2C00107D63 /* Album.m */; };
 		53F2D5A6113A63F300107D63 /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D5A5113A63F300107D63 /* Song.m */; };
+		53F396121571DB9F0026E70B /* TBXML+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F3960D1571DB9F0026E70B /* TBXML+Compression.m */; };
+		53F396131571DB9F0026E70B /* TBXML+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F3960D1571DB9F0026E70B /* TBXML+Compression.m */; };
+		53F396141571DB9F0026E70B /* TBXML+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F3960D1571DB9F0026E70B /* TBXML+Compression.m */; };
+		53F396151571DB9F0026E70B /* TBXML+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F3960D1571DB9F0026E70B /* TBXML+Compression.m */; };
+		53F396161571DB9F0026E70B /* TBXML+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F3960D1571DB9F0026E70B /* TBXML+Compression.m */; };
+		53F396171571DB9F0026E70B /* TBXML+HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F3960F1571DB9F0026E70B /* TBXML+HTTP.m */; };
+		53F396181571DB9F0026E70B /* TBXML+HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F3960F1571DB9F0026E70B /* TBXML+HTTP.m */; };
+		53F396191571DB9F0026E70B /* TBXML+HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F3960F1571DB9F0026E70B /* TBXML+HTTP.m */; };
+		53F3961A1571DB9F0026E70B /* TBXML+HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F3960F1571DB9F0026E70B /* TBXML+HTTP.m */; };
+		53F3961B1571DB9F0026E70B /* TBXML+HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F3960F1571DB9F0026E70B /* TBXML+HTTP.m */; };
+		53F3961C1571DB9F0026E70B /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F396111571DB9F0026E70B /* TBXML.m */; };
+		53F3961D1571DB9F0026E70B /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F396111571DB9F0026E70B /* TBXML.m */; };
+		53F3961E1571DB9F0026E70B /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F396111571DB9F0026E70B /* TBXML.m */; };
+		53F3961F1571DB9F0026E70B /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F396111571DB9F0026E70B /* TBXML.m */; };
+		53F396201571DB9F0026E70B /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F396111571DB9F0026E70B /* TBXML.m */; };
 		53F4A074116FF48400BB8411 /* DebugViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F4A072116FF48400BB8411 /* DebugViewController.m */; };
 		53F4A075116FF48500BB8411 /* DebugViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F4A073116FF48400BB8411 /* DebugViewController.xib */; };
 		53F4A07D116FF7EE00BB8411 /* CurrentPlaylistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F4A07B116FF7EE00BB8411 /* CurrentPlaylistViewController.m */; };
@@ -3539,10 +3544,6 @@
 		53D8ACB0116C47E600E5C9CB /* PageControlViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageControlViewController.h; sourceTree = "<group>"; };
 		53D8ACB1116C47E600E5C9CB /* PageControlViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PageControlViewController.m; sourceTree = "<group>"; };
 		53D8ACB2116C47E600E5C9CB /* PageControlViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PageControlViewController.xib; sourceTree = "<group>"; };
-		53D9996A12D40C4000A97412 /* NSDataAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDataAdditions.h; sourceTree = "<group>"; };
-		53D9996B12D40C4000A97412 /* NSDataAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDataAdditions.m; sourceTree = "<group>"; };
-		53D9996C12D40C4000A97412 /* TBXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBXML.h; sourceTree = "<group>"; };
-		53D9996D12D40C4000A97412 /* TBXML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBXML.m; sourceTree = "<group>"; };
 		53DCF5C613BFEAD3009160F9 /* iSub Lite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Lite.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53DCF5C813BFEB51009160F9 /* iSub-Info-Lite.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "iSub-Info-Lite.plist"; sourceTree = "<group>"; };
 		53DE597814F18E7A00206529 /* AUIAnimatableLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUIAnimatableLabel.h; sourceTree = "<group>"; };
@@ -3602,6 +3603,12 @@
 		53F2D41F113A4E2C00107D63 /* Album.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Album.m; sourceTree = "<group>"; };
 		53F2D5A4113A63F300107D63 /* Song.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Song.h; sourceTree = "<group>"; };
 		53F2D5A5113A63F300107D63 /* Song.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Song.m; sourceTree = "<group>"; };
+		53F3960C1571DB9F0026E70B /* TBXML+Compression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TBXML+Compression.h"; sourceTree = "<group>"; };
+		53F3960D1571DB9F0026E70B /* TBXML+Compression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TBXML+Compression.m"; sourceTree = "<group>"; };
+		53F3960E1571DB9F0026E70B /* TBXML+HTTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TBXML+HTTP.h"; sourceTree = "<group>"; };
+		53F3960F1571DB9F0026E70B /* TBXML+HTTP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TBXML+HTTP.m"; sourceTree = "<group>"; };
+		53F396101571DB9F0026E70B /* TBXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBXML.h; sourceTree = "<group>"; };
+		53F396111571DB9F0026E70B /* TBXML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBXML.m; sourceTree = "<group>"; };
 		53F4A071116FF48400BB8411 /* DebugViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugViewController.h; sourceTree = "<group>"; };
 		53F4A072116FF48400BB8411 /* DebugViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebugViewController.m; sourceTree = "<group>"; };
 		53F4A073116FF48400BB8411 /* DebugViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DebugViewController.xib; sourceTree = "<group>"; };
@@ -4501,12 +4508,12 @@
 				5382A81812D82CE8005A3D1A /* Categories */,
 				5327F4EC12B9533A00735119 /* MKStoreManager */,
 				53260B71127D012300B745B4 /* EGOTableViewPullRefresh */,
-				53D9996912D40C4000A97412 /* TBXML */,
 				53C035D21544B9CE00034569 /* FMDB */,
 				537D9167151315D300BFEE30 /* FlurryAnalytics */,
 				53A7E4BB1516DB1D002DA214 /* Twitter+OAuth */,
 				5326610A1521930500DE39C1 /* HockeyKit */,
 				532661501521930E00DE39C1 /* QuincyKit */,
+				53F3960B1571DB9F0026E70B /* TBXML */,
 				5305C1D81157EA7A00BC78F0 /* Reachability.h */,
 				5305C1D91157EA7A00BC78F0 /* Reachability.m */,
 				53B52A9611ADB7AD005776B5 /* sqlite3.h */,
@@ -5034,17 +5041,6 @@
 			name = "Intro Screen";
 			sourceTree = "<group>";
 		};
-		53D9996912D40C4000A97412 /* TBXML */ = {
-			isa = PBXGroup;
-			children = (
-				53D9996A12D40C4000A97412 /* NSDataAdditions.h */,
-				53D9996B12D40C4000A97412 /* NSDataAdditions.m */,
-				53D9996C12D40C4000A97412 /* TBXML.h */,
-				53D9996D12D40C4000A97412 /* TBXML.m */,
-			);
-			path = TBXML;
-			sourceTree = "<group>";
-		};
 		53DE597714F18E6200206529 /* AUAnimatedText */ = {
 			isa = PBXGroup;
 			children = (
@@ -5117,6 +5113,19 @@
 			);
 			name = General;
 			sourceTree = "<group>";
+		};
+		53F3960B1571DB9F0026E70B /* TBXML */ = {
+			isa = PBXGroup;
+			children = (
+				53F3960C1571DB9F0026E70B /* TBXML+Compression.h */,
+				53F3960D1571DB9F0026E70B /* TBXML+Compression.m */,
+				53F3960E1571DB9F0026E70B /* TBXML+HTTP.h */,
+				53F3960F1571DB9F0026E70B /* TBXML+HTTP.m */,
+				53F396101571DB9F0026E70B /* TBXML.h */,
+				53F396111571DB9F0026E70B /* TBXML.m */,
+			);
+			path = TBXML;
+			sourceTree = SOURCE_ROOT;
 		};
 		53F4A070116FF44400BB8411 /* Player */ = {
 			isa = PBXGroup;
@@ -6971,8 +6980,6 @@
 				53B20F5B12C2D7AC00A90DD9 /* CustomUITabBarController.m in Sources */,
 				53B64CF312C96129007F1ED5 /* BBSimpleConnectionQueue.m in Sources */,
 				538DF6E812CC25C300DB6D8C /* Server.m in Sources */,
-				53D9996E12D40C4000A97412 /* NSDataAdditions.m in Sources */,
-				53D9996F12D40C4000A97412 /* TBXML.m in Sources */,
 				5382BA8D12DA4039005A3D1A /* UIDevice+Hardware.m in Sources */,
 				535CB23212E0027800389DA1 /* ServerTypeViewController.m in Sources */,
 				535CB2A212E2348A00389DA1 /* UbuntuServerEditViewController.m in Sources */,
@@ -7114,6 +7121,9 @@
 				5388462315465E6A0074080E /* CALayer+SublayerWithName.m in Sources */,
 				538846281546638F0074080E /* UITableView+Shadows.m in Sources */,
 				537D954B1549DC9700EB043D /* GCDWrapper.m in Sources */,
+				53F396121571DB9F0026E70B /* TBXML+Compression.m in Sources */,
+				53F396171571DB9F0026E70B /* TBXML+HTTP.m in Sources */,
+				53F3961C1571DB9F0026E70B /* TBXML.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7209,8 +7219,6 @@
 				53159EBA156F69D0001B0268 /* CustomUITabBarController.m in Sources */,
 				53159EBB156F69D0001B0268 /* BBSimpleConnectionQueue.m in Sources */,
 				53159EBC156F69D0001B0268 /* Server.m in Sources */,
-				53159EBD156F69D0001B0268 /* NSDataAdditions.m in Sources */,
-				53159EBE156F69D0001B0268 /* TBXML.m in Sources */,
 				53159EBF156F69D0001B0268 /* UIDevice+Hardware.m in Sources */,
 				53159EC0156F69D0001B0268 /* ServerTypeViewController.m in Sources */,
 				53159EC1156F69D0001B0268 /* UbuntuServerEditViewController.m in Sources */,
@@ -7355,6 +7363,9 @@
 				53159F7A156F6E2F001B0268 /* iSubTestController.m in Sources */,
 				53159F7D156F6E83001B0268 /* KIFTestScenario+FoldersTab.m in Sources */,
 				53159F80156F6E96001B0268 /* KIFTestScenario+CacheTab.m in Sources */,
+				53F396151571DB9F0026E70B /* TBXML+Compression.m in Sources */,
+				53F3961A1571DB9F0026E70B /* TBXML+HTTP.m in Sources */,
+				53F3961F1571DB9F0026E70B /* TBXML.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7450,8 +7461,6 @@
 				5315A34C156F7064001B0268 /* CustomUITabBarController.m in Sources */,
 				5315A34D156F7064001B0268 /* BBSimpleConnectionQueue.m in Sources */,
 				5315A34E156F7064001B0268 /* Server.m in Sources */,
-				5315A34F156F7064001B0268 /* NSDataAdditions.m in Sources */,
-				5315A350156F7064001B0268 /* TBXML.m in Sources */,
 				5315A351156F7064001B0268 /* UIDevice+Hardware.m in Sources */,
 				5315A352156F7064001B0268 /* ServerTypeViewController.m in Sources */,
 				5315A353156F7064001B0268 /* UbuntuServerEditViewController.m in Sources */,
@@ -7593,6 +7602,9 @@
 				5315A3DB156F7064001B0268 /* CALayer+SublayerWithName.m in Sources */,
 				5315A3DC156F7064001B0268 /* UITableView+Shadows.m in Sources */,
 				5315A3DD156F7064001B0268 /* GCDWrapper.m in Sources */,
+				53F396161571DB9F0026E70B /* TBXML+Compression.m in Sources */,
+				53F3961B1571DB9F0026E70B /* TBXML+HTTP.m in Sources */,
+				53F396201571DB9F0026E70B /* TBXML.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7688,8 +7700,6 @@
 				53BC2821139AF0DD00A825F1 /* CustomUITabBarController.m in Sources */,
 				53BC2822139AF0DD00A825F1 /* BBSimpleConnectionQueue.m in Sources */,
 				53BC2823139AF0DD00A825F1 /* Server.m in Sources */,
-				53BC2824139AF0DD00A825F1 /* NSDataAdditions.m in Sources */,
-				53BC2825139AF0DD00A825F1 /* TBXML.m in Sources */,
 				53BC2826139AF0DD00A825F1 /* UIDevice+Hardware.m in Sources */,
 				53BC2827139AF0DD00A825F1 /* ServerTypeViewController.m in Sources */,
 				53BC2828139AF0DD00A825F1 /* UbuntuServerEditViewController.m in Sources */,
@@ -7831,6 +7841,9 @@
 				5388462515465E6A0074080E /* CALayer+SublayerWithName.m in Sources */,
 				5388462A1546638F0074080E /* UITableView+Shadows.m in Sources */,
 				537D954D1549DC9700EB043D /* GCDWrapper.m in Sources */,
+				53F396141571DB9F0026E70B /* TBXML+Compression.m in Sources */,
+				53F396191571DB9F0026E70B /* TBXML+HTTP.m in Sources */,
+				53F3961E1571DB9F0026E70B /* TBXML.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7926,8 +7939,6 @@
 				53DCF58213BFEAD3009160F9 /* CustomUITabBarController.m in Sources */,
 				53DCF58313BFEAD3009160F9 /* BBSimpleConnectionQueue.m in Sources */,
 				53DCF58413BFEAD3009160F9 /* Server.m in Sources */,
-				53DCF58513BFEAD3009160F9 /* NSDataAdditions.m in Sources */,
-				53DCF58613BFEAD3009160F9 /* TBXML.m in Sources */,
 				53DCF58713BFEAD3009160F9 /* UIDevice+Hardware.m in Sources */,
 				53DCF58813BFEAD3009160F9 /* ServerTypeViewController.m in Sources */,
 				53DCF58913BFEAD3009160F9 /* UbuntuServerEditViewController.m in Sources */,
@@ -8069,6 +8080,9 @@
 				5388462415465E6A0074080E /* CALayer+SublayerWithName.m in Sources */,
 				538846291546638F0074080E /* UITableView+Shadows.m in Sources */,
 				537D954C1549DC9700EB043D /* GCDWrapper.m in Sources */,
+				53F396131571DB9F0026E70B /* TBXML+Compression.m in Sources */,
+				53F396181571DB9F0026E70B /* TBXML+HTTP.m in Sources */,
+				53F3961D1571DB9F0026E70B /* TBXML.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

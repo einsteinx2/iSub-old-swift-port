@@ -147,10 +147,18 @@
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
 	//DLog(@"receivedData: %@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
-	TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
-    TBXMLElement *root = tbxml.rootXMLElement;
-    if (root) 
+	NSError *error;
+    TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData error:&error];
+	if (error)
 	{
+		// This is not XML, so fail
+		[self.delegate SUSServerURLCheckFailed:self withError:error];
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerCheckFailed];
+	}
+	else
+	{
+		TBXMLElement *root = tbxml.rootXMLElement;
+	
         if ([[TBXML elementName:root] isEqualToString:@"subsonic-response"])
         {
 			self.versionString = [TBXML valueOfAttributeNamed:@"version" forElement:root];
@@ -205,13 +213,6 @@
 			[self.delegate SUSServerURLCheckFailed:self withError:error];
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerCheckFailed];
         }
-    }
-    else
-    {
-        // This is not XML, so fail
-        NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NotXML];
-		[self.delegate SUSServerURLCheckFailed:self withError:error];
-		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerCheckFailed];
     }
     
 	self.receivedData = nil;

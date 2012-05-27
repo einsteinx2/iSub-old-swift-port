@@ -1,13 +1,10 @@
-
-
-
-@interface NSData (NSDataAdditions)
+@interface NSData (TBXML_Compression)
 
 // ================================================================================================
 //  Created by Tom Bradley on 21/10/2009.
-//  Version 1.4
+//  Version 1.5
 //  
-//  Copyright (c) 2009 Tom Bradley
+//  Copyright 2012 71Squared All rights reserved.
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +26,7 @@
 // ================================================================================================
 
 + (NSData *) dataWithUncompressedContentsOfFile:(NSString *)aFile;
-	
+
 	
 
 // ================================================================================================
@@ -41,7 +38,7 @@
 //
 // FOUND HERE http://idevkit.com/forums/tutorials-code-samples-sdk/8-nsdata-base64-extension.html
 // ================================================================================================
-+ (NSData *) dataWithBase64EncodedString:(NSString *) string;
++ (NSData *) newDataWithBase64EncodedString:(NSString *) string;
 - (id) initWithBase64EncodedString:(NSString *) string;
 
 - (NSString *) base64Encoding;

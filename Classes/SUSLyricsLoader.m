@@ -118,10 +118,19 @@
 {	    
     // Parse the data
 	//
-	TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData];
-    TBXMLElement *root = tbxml.rootXMLElement;
-    if (root) 
+	NSError *error;
+    TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData error:&error];
+	if (error)
 	{
+		NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NoLyricsElement];
+		[self informDelegateLoadingFailed:error];
+		
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_LyricsFailed];
+	}
+	else
+	{
+		TBXMLElement *root = tbxml.rootXMLElement;
+
 		TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
 		if (error)
 		{
@@ -136,7 +145,7 @@
 			TBXMLElement *lyrics = [TBXML childElementNamed:@"lyrics" parentElement:root];
 			if (lyrics)
 			{
-                self.loadedLyrics = [TBXML textForElement:lyrics];
+				self.loadedLyrics = [TBXML textForElement:lyrics];
 				if ([self.loadedLyrics isEqualToString:@""])
 				{
 					DLog(@"lyrics tag found, but it's empty");
@@ -153,24 +162,17 @@
 					[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_LyricsDownloaded];
 				}
 			}
-            else
-            {
+			else
+			{
 				DLog(@"no lyrics tag found");
-                self.loadedLyrics = nil;
-                NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NoLyricsElement];
-                [self informDelegateLoadingFailed:error];
+				self.loadedLyrics = nil;
+				NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NoLyricsElement];
+				[self informDelegateLoadingFailed:error];
 				
 				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_LyricsFailed];
-            }
+			}
 		}
 	}
-    else
-    {
-        NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NoLyricsElement];
-        [self informDelegateLoadingFailed:error];
-		
-		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_LyricsFailed];
-    }
 	
 	self.receivedData = nil;
 	self.connection = nil;

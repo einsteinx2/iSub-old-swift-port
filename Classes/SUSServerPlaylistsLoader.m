@@ -97,10 +97,16 @@
 {
     // Parse the data
 	//
-	TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData];
-    TBXMLElement *root = tbxml.rootXMLElement;
-    if (root) 
+	NSError *error;
+    TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData error:&error];
+	if (error)
 	{
+		[self informDelegateLoadingFailed:error];
+	}
+	else
+	{
+		TBXMLElement *root = tbxml.rootXMLElement;
+		
 		TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
 		if (error)
 		{
@@ -139,11 +145,6 @@
             // Notify the delegate that the loading is finished
 			[self informDelegateLoadingFinished];
 		}
-	}
-	else
-	{
-		// Inform the delegate that loading failed
-		[self informDelegateLoadingFailed:nil];
 	}
 	
 	self.receivedData = nil;

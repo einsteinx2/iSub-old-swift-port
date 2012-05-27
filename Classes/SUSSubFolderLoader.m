@@ -195,10 +195,16 @@
 	
     // Parse the data
 	//
-	TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData];
-    TBXMLElement *root = tbxml.rootXMLElement;
-    if (root) 
+	NSError *error;
+    TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData error:&error];
+	if (error)
 	{
+		[self informDelegateLoadingFailed:error];
+	}
+	else
+    {
+		TBXMLElement *root = tbxml.rootXMLElement;
+
 		TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
 		if (error)
 		{

@@ -202,10 +202,12 @@
 		BOOL isLicenseIssue = NO;
 		// Verify that it's a license issue
 		NSData *receivedData = [NSData dataWithContentsOfFile:handler.filePath];
-		TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData];
-		TBXMLElement *root = tbxml.rootXMLElement;
-		if (root) 
+		NSError *error;
+		TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData error:&error];
+		if (!error)
 		{
+			TBXMLElement *root = tbxml.rootXMLElement;
+			
 			TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
 			if (error)
 			{
