@@ -83,12 +83,15 @@
 		// Remove the oldest songs based on either oldest played or oldest cached until free space is more than minFreeSpace
 		while (self.freeSpace < settingsS.minFreeSpace)
 		{
-			if (settingsS.autoDeleteCacheType == 0)
-				songMD5 = [databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
-			else
-				songMD5 = [databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
-			//DLog(@"removing %@", songMD5);
-			[Song removeSongFromCacheDbQueueByMD5:songMD5];			
+			@autoreleasepool 
+			{
+				if (settingsS.autoDeleteCacheType == 0)
+					songMD5 = [databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
+				else
+					songMD5 = [databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
+				//DLog(@"removing %@", songMD5);
+				[Song removeSongFromCacheDbQueueByMD5:songMD5];	
+			}
 		}
 	}
 	else if (settingsS.cachingType == ISMSCachingType_maxSize)
@@ -97,30 +100,33 @@
 		unsigned long long size = self.cacheSize;
 		while (size > settingsS.maxCacheSize)
 		{
-			if (settingsS.autoDeleteCacheType == 0)
+			@autoreleasepool 
 			{
-				songMD5 = [databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
+				if (settingsS.autoDeleteCacheType == 0)
+				{
+					songMD5 = [databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
+				}
+				else
+				{
+					songMD5 = [databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
+				}
+				//songSize = [databaseS.songCacheDbQueue intForQuery:@"SELECT size FROM cachedSongs WHERE md5 = ?", songMD5];
+				Song *aSong = [Song songFromCacheDbQueue:songMD5];
+				// Determine the name of the file we are downloading.
+				//DLog(@"currentSongObject.path: %@", currentSongObject.path);
+				NSString *songPath = nil;
+				if (aSong.transcodedSuffix)
+					songPath = [settingsS.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", songMD5, aSong.transcodedSuffix]];
+				else
+					songPath = [settingsS.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", songMD5, aSong.suffix]];
+				
+				unsigned long long songSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:songPath error:NULL] fileSize];
+				
+				//DLog(@"removing %@", songMD5);
+				[Song removeSongFromCacheDbQueueByMD5:songMD5];
+				
+				size -= songSize;
 			}
-			else
-			{
-				songMD5 = [databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
-			}
-			//songSize = [databaseS.songCacheDbQueue intForQuery:@"SELECT size FROM cachedSongs WHERE md5 = ?", songMD5];
-			Song *aSong = [Song songFromCacheDbQueue:songMD5];
-			// Determine the name of the file we are downloading.
-			//DLog(@"currentSongObject.path: %@", currentSongObject.path);
-			NSString *songPath = nil;
-			if (aSong.transcodedSuffix)
-				songPath = [settingsS.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", songMD5, aSong.transcodedSuffix]];
-			else
-				songPath = [settingsS.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", songMD5, aSong.suffix]];
-			
-			unsigned long long songSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:songPath error:NULL] fileSize];
-			
-			//DLog(@"removing %@", songMD5);
-			[Song removeSongFromCacheDbQueueByMD5:songMD5];
-			
-			size -= songSize;
 		}
 	}
 	
@@ -133,9 +139,13 @@
 - (void)findCacheSize
 {
 	unsigned long long size = 0;
-	for (NSString *path in [[NSFileManager defaultManager] subpathsAtPath:settingsS.songCachePath]) 
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSArray *subpaths = [fileManager subpathsAtPath:settingsS.songCachePath];
+	for (NSString *path in subpaths) 
 	{
-		size += [[[NSFileManager defaultManager] attributesOfItemAtPath:[settingsS.songCachePath stringByAppendingPathComponent:path] error:NULL] fileSize];
+		NSString *fullPath = [settingsS.songCachePath stringByAppendingPathComponent:path];
+		NSDictionary *attributes = [fileManager attributesOfItemAtPath:fullPath error:NULL];
+		size += [attributes fileSize];
 	}
 	
 	cacheSize = size;

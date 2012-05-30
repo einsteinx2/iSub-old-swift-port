@@ -56,11 +56,14 @@
 		FMResultSet *result = [db executeQuery:@"SELECT * FROM allAlbumsIndexCache"];
 		while ([result next])
 		{
-			Index *item = [[Index alloc] init];
-			item.name = [result stringForColumn:@"name"];
-			item.position = [result intForColumn:@"position"];
-			item.count = [result intForColumn:@"count"];
-			[indexItems addObject:item];
+			@autoreleasepool 
+			{
+				Index *item = [[Index alloc] init];
+				item.name = [result stringForColumn:@"name"];
+				item.position = [result intForColumn:@"position"];
+				item.count = [result intForColumn:@"count"];
+				[indexItems addObject:item];
+			}
 		}
 		[result close];
 	}];

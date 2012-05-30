@@ -625,32 +625,35 @@
 			UIApplication *application = [UIApplication sharedApplication];
 			while ([application backgroundTimeRemaining] > 1.0 && isInBackground) 
 			{
-				//DLog(@"backgroundTimeRemaining: %f", [application backgroundTimeRemaining]);
-				
-				// Sleep early is nothing is happening after 500 seconds
-				if ([application backgroundTimeRemaining] < 200.0 && !cacheQueueManagerS.isQueueDownloading)
+				@autoreleasepool 
 				{
-					DLog("Sleeping early, isQueueListDownloading: %i", cacheQueueManagerS.isQueueDownloading);
-					[application endBackgroundTask:backgroundTask];
-					backgroundTask = UIBackgroundTaskInvalid;
-					break;
-				}
-				
-				// Warn at 2 minute mark if cache queue is downloading
-				if ([application backgroundTimeRemaining] < 120.0 && cacheQueueManagerS.isQueueDownloading)
-				{
-					UILocalNotification *localNotif = [[UILocalNotification alloc] init];
-					if (localNotif) 
+					//DLog(@"backgroundTimeRemaining: %f", [application backgroundTimeRemaining]);
+					
+					// Sleep early is nothing is happening after 500 seconds
+					if ([application backgroundTimeRemaining] < 200.0 && !cacheQueueManagerS.isQueueDownloading)
 					{
-						localNotif.alertBody = NSLocalizedString(@"Songs are still caching. Please return to iSub within 2 minutes, or it will be put to sleep and your song caching will be paused.", nil);
-						localNotif.alertAction = NSLocalizedString(@"Open iSub", nil);
-						[application presentLocalNotificationNow:localNotif];
+						DLog("Sleeping early, isQueueListDownloading: %i", cacheQueueManagerS.isQueueDownloading);
+						[application endBackgroundTask:backgroundTask];
+						backgroundTask = UIBackgroundTaskInvalid;
 						break;
 					}
+					
+					// Warn at 2 minute mark if cache queue is downloading
+					if ([application backgroundTimeRemaining] < 120.0 && cacheQueueManagerS.isQueueDownloading)
+					{
+						UILocalNotification *localNotif = [[UILocalNotification alloc] init];
+						if (localNotif) 
+						{
+							localNotif.alertBody = NSLocalizedString(@"Songs are still caching. Please return to iSub within 2 minutes, or it will be put to sleep and your song caching will be paused.", nil);
+							localNotif.alertAction = NSLocalizedString(@"Open iSub", nil);
+							[application presentLocalNotificationNow:localNotif];
+							break;
+						}
+					}
+					
+					// Sleep for a second to avoid a fast loop eating all cpu cycles
+					sleep(1);
 				}
-				
-				// Sleep for a second to avoid a fast loop eating all cpu cycles
-				sleep(1);
 			}
 		});
 	}
@@ -886,20 +889,21 @@
 	else
 	{
 		ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
+		serverListViewController.hidesBottomBarWhenPushed = YES;
 		
-		if (self.currentTabBarController.selectedIndex == 4)
+		if (self.currentTabBarController.selectedIndex >= 4)
 		{
-			[self.currentTabBarController.moreNavigationController popToViewController:[currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
+			//[self.currentTabBarController.moreNavigationController popToViewController:[currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
 			[self.currentTabBarController.moreNavigationController pushViewController:serverListViewController animated:YES];
 		}
 		else if (self.currentTabBarController.selectedIndex == NSNotFound)
 		{
-			[self.currentTabBarController.moreNavigationController popToRootViewControllerAnimated:YES];
+			//[self.currentTabBarController.moreNavigationController popToRootViewControllerAnimated:YES];
 			[self.currentTabBarController.moreNavigationController pushViewController:serverListViewController animated:YES];
 		}
 		else
 		{
-			[(UINavigationController*)self.currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
+			//[(UINavigationController*)self.currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
 			[(UINavigationController*)self.currentTabBarController.selectedViewController pushViewController:serverListViewController animated:YES];
 		}
 	}

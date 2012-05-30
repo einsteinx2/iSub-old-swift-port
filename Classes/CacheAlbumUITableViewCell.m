@@ -109,8 +109,11 @@
 		FMResultSet *result = [db executeQuery:query withArgumentsInArray:newSegments];
 		while ([result next])
 		{
-			NSString *md5 = [result stringForColumnIndex:0];
-			if (md5) [songMd5s addObject:md5];
+			@autoreleasepool 
+			{
+				NSString *md5 = [result stringForColumnIndex:0];
+				if (md5) [songMd5s addObject:md5];
+			}
 		}
 		[result close];
 	}];

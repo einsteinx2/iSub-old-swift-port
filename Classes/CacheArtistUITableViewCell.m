@@ -109,8 +109,11 @@
 		FMResultSet *result = [db executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ", artistNameLabel.text];
 		while ([result next])
 		{
-			NSString *md5 = [result stringForColumnIndex:0];
-			if (md5) [songMd5s addObject:md5];
+			@autoreleasepool 
+			{
+				NSString *md5 = [result stringForColumnIndex:0];
+				if (md5) [songMd5s addObject:md5];
+			}
 		}
 		[result close];
 	}];
@@ -152,8 +155,11 @@
 		FMResultSet *result = [db executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ORDER BY seg2 COLLATE NOCASE", artistNameLabel.text];
 		while ([result next])
 		{
-			NSString *md5 = [result stringForColumnIndex:0];
-			if (md5) [songMd5s addObject:md5];
+			@autoreleasepool 
+			{
+				NSString *md5 = [result stringForColumnIndex:0];
+				if (md5) [songMd5s addObject:md5];
+			}
 		}
 		[result close];
 	}];

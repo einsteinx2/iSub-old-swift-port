@@ -42,6 +42,7 @@
 #import "JukeboxSingleton.h"
 #import "AsynchronousImageView.h"
 #import "iPadRootViewController.h"
+#import "MenuViewController.h"
 
 @implementation NewHomeViewController
 
@@ -188,9 +189,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
-	
-	viewObjectsS.isSettingsShowing = NO;
-	
+		
 	//////////// Handle landscape bug
 	//BOOL rotationDisabled = [[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"];
 	BOOL rotationDisabled = settingsS.isRotationLockEnabled;
@@ -408,17 +407,17 @@
 - (IBAction)settings
 {
 	[appDelegateS showSettings];
-	/*ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
+	return;
+	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
 	if (IS_IPAD())
 	{
-		[self pushViewControllerCustomWithNavControllerOnIpad:serverListViewController];
+		[appDelegateS.ipadRootViewController.menuViewController showSettings];
 	}
 	else
 	{
 		serverListViewController.hidesBottomBarWhenPushed = YES;
 		[self.navigationController pushViewController:serverListViewController animated:YES];
 	}
-	[serverListViewController release];*/
 }
 
 - (IBAction)player

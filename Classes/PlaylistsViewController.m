@@ -842,9 +842,11 @@
 	if (self.segmentedControl.selectedSegmentIndex == 0)
 	{
 		[playlistS deleteSongs:viewObjectsS.multiDeleteList];
-		self.currentPlaylistCount = playlistS.count;
+		[self updateCurrentPlaylistCount];
 		
-		// Create indexPaths from multiDeleteList and delete the rows in the table view
+		[self.tableView reloadData];
+		
+		/*// Create indexPaths from multiDeleteList and delete the rows in the table view
 		NSMutableArray *indexes = [[NSMutableArray alloc] init];
 		for (NSNumber *index in viewObjectsS.multiDeleteList)
 		{
@@ -861,7 +863,7 @@
 		@catch (NSException *exception) 
 		{
 			DLog(@"Exception: %@ - %@", exception.name, exception.reason);
-		}
+		}*/
 		
 		[self editPlaylistAction:nil];
 		[self segmentAction:nil];
@@ -880,7 +882,7 @@
 				@autoreleasepool 
 				{
 					NSInteger rowId = [index integerValue] + 1;
-					NSString *md5 = [databaseS.localPlaylistsDbQueue stringForQuery:[NSString stringWithFormat:@"SELECT md5 FROM localPlaylists WHERE ROWID = %i", rowId]];
+					NSString *md5 = [db stringForQuery:[NSString stringWithFormat:@"SELECT md5 FROM localPlaylists WHERE ROWID = %i", rowId]];
 					[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE playlist%@", md5]];
 					[db executeUpdate:@"DELETE FROM localPlaylists WHERE md5 = ?", md5];
 				}
@@ -890,7 +892,9 @@
 			[db executeUpdate:@"ALTER TABLE localPlaylistsTemp RENAME TO localPlaylists"];
 		}];
 		
-		// Create indexPaths from multiDeleteList and delete the rows from the tableView
+		[self.tableView reloadData];
+		
+		/*// Create indexPaths from multiDeleteList and delete the rows from the tableView
 		NSMutableArray *indexes = [[NSMutableArray alloc] init];
 		for (NSNumber *index in viewObjectsS.multiDeleteList)
 		{
@@ -904,7 +908,7 @@
 		@catch (NSException *exception) 
 		{
 			DLog(@"Exception: %@ - %@", exception.name, exception.reason);
-		}
+		}*/
 		
 		
 		[self editPlaylistAction:nil];

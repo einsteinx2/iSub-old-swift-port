@@ -35,7 +35,6 @@ typedef enum
 	ISMS_BASS_EQ_DATA_TYPE_line
 } ISMS_BASS_EQ_DATA_TYPE;
 
-
 typedef struct
 {
 	void *buffer;

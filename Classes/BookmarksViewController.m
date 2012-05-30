@@ -207,8 +207,11 @@
 		FMResultSet *result = [db executeQuery:@"SELECT bookmarkId FROM bookmarks"];
 		while ([result next])
 		{
-			NSNumber *bookmarkId = [result objectForColumnIndex:0];
-			if (bookmarkId) [bookmarkIdsTemp addObject:bookmarkId];
+			@autoreleasepool 
+			{
+				NSNumber *bookmarkId = [result objectForColumnIndex:0];
+				if (bookmarkId) [bookmarkIdsTemp addObject:bookmarkId];
+			}
 		}
 		[result close];
 	}];

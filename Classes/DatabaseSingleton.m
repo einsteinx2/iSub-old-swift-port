@@ -342,14 +342,17 @@
 		FMResultSet *result = [db executeQuery:query];
 		while ([result next])
 		{
-			NSString *tableName = [result stringForColumnIndex:0];
-			if ([tableName length] > 8)
+			@autoreleasepool 
 			{
-				NSString *tableNameSubstring = [tableName substringToIndex:8];
-				if ([tableNameSubstring isEqualToString:@"playlist"] ||
-					[tableNameSubstring isEqualToString:@"splaylis"])
+				NSString *tableName = [result stringForColumnIndex:0];
+				if ([tableName length] > 8)
 				{
-					[playlistTableNames addObject:tableName];
+					NSString *tableNameSubstring = [tableName substringToIndex:8];
+					if ([tableNameSubstring isEqualToString:@"playlist"] ||
+						[tableNameSubstring isEqualToString:@"splaylis"])
+					{
+						[playlistTableNames addObject:tableName];
+					}
 				}
 			}
 		}
@@ -456,8 +459,11 @@
 		FMResultSet *result = [db executeQuery:query];
 		while ([result next])
 		{
-			NSString *tableName = [result stringForColumnIndex:0];
-			[playlistTableNames addObject:tableName];
+			@autoreleasepool 
+			{
+				NSString *tableName = [result stringForColumnIndex:0];
+				[playlistTableNames addObject:tableName];
+			}
 		}
 		[result close];
 		

@@ -110,8 +110,11 @@
 		FMResultSet *result = [db executeQuery:query];
 		while ([result next])
 		{
-			NSNumber *position = [NSNumber numberWithInt:[result intForColumn:@"position"]];
-			[positions addObject:position];
+			@autoreleasepool 
+			{
+				NSNumber *position = [NSNumber numberWithInt:[result intForColumn:@"position"]];
+				[positions addObject:position];
+			}
 		}
 		[result close];
 	}];
@@ -132,8 +135,11 @@
 		FMResultSet *result = [db executeQuery:query];
 		while ([result next])
 		{
-			NSNumber *folderCount = [NSNumber numberWithInt:[result intForColumn:@"count"]];
-			[counts addObject:folderCount];
+			@autoreleasepool 
+			{
+				NSNumber *folderCount = [NSNumber numberWithInt:[result intForColumn:@"count"]];
+				[counts addObject:folderCount];
+			}
 		}
 		[result close];
 	}];
@@ -153,9 +159,12 @@
 		FMResultSet *result = [db executeQuery:query, [NSNumber numberWithInt:position]];
 		while ([result next])
 		{
-			NSString *name = [result stringForColumn:@"name"];
-			NSString *folderId = [result stringForColumn:@"id"];
-			anArtist = [Artist artistWithName:name andArtistId:folderId];
+			@autoreleasepool 
+			{
+				NSString *name = [result stringForColumn:@"name"];
+				NSString *folderId = [result stringForColumn:@"id"];
+				anArtist = [Artist artistWithName:name andArtistId:folderId];
+			}
 		}
 		[result close];
 	}];
@@ -172,9 +181,12 @@
 		FMResultSet *result = [db executeQuery:query, [NSNumber numberWithInt:position]];
 		while ([result next])
 		{
-			NSString *name = [result stringForColumn:@"name"];
-			NSString *folderId = [result stringForColumn:@"id"];
-			anArtist = [Artist artistWithName:name andArtistId:folderId];
+			@autoreleasepool 
+			{
+				NSString *name = [result stringForColumn:@"name"];
+				NSString *folderId = [result stringForColumn:@"id"];
+				anArtist = [Artist artistWithName:name andArtistId:folderId];
+			}
 		}
 		[result close];
 	}];
@@ -245,9 +257,12 @@
 		FMResultSet *result = [db executeQuery:@"SELECT * FROM rootFolderDropdownCache"];
 		while ([result next])
 		{
-			NSNumber *folderId = [NSNumber numberWithInt:[result intForColumn:@"id"]];
-			NSString *folderName = [result stringForColumn:@"name"];
-			[folders setObject:folderName forKey:folderId];
+			@autoreleasepool 
+			{
+				NSNumber *folderId = [NSNumber numberWithInt:[result intForColumn:@"id"]];
+				NSString *folderName = [result stringForColumn:@"name"];
+				[folders setObject:folderName forKey:folderId];
+			}
 		}
 		[result close];
 	}];

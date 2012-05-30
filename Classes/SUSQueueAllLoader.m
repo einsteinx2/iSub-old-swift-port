@@ -211,7 +211,8 @@
 	self.connection = nil;
 	
 	// Remove the processed folder from array
-	[self.folderIds removeObjectAtIndex:0];
+	if (self.folderIds.count > 0)
+		[self.folderIds removeObjectAtIndex:0];
 	
 	// Continue the iteration
 	[self finishLoad];

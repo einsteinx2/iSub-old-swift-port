@@ -481,7 +481,7 @@
 - (NSString *)cachesPath
 {
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-	return [paths objectAtIndexSafe: 0];
+	return [paths objectAtIndexSafe:0];
 }
 
 - (NSString *)songCachePath

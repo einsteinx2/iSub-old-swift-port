@@ -66,7 +66,8 @@
 
 -(void) sendNotification:(NSString*) notificationName {
 	NSDictionary* userInfo = [NSDictionary dictionaryWithObject:[NSValue valueWithCGRect:self.bounds] forKey:UIPickerViewBoundsUserInfoKey];
-	[NSNotificationCenter postNotificationToMainThreadWithName:notificationName object:self.field userInfo:userInfo];
+	//[NSNotificationCenter postNotificationToMainThreadWithName:notificationName object:self.field userInfo:userInfo];
+	[NSNotificationCenter postNotificationToMainThreadWithName:notificationName userInfo:userInfo];
 }
 
 -(void) toggle {

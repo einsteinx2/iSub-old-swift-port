@@ -85,8 +85,6 @@
 
 @property (copy) NSString *currentLoadingFolderId;
 
-@property BOOL isSettingsShowing;
-
 @property BOOL isNoNetworkAlertShowing;
 
 @property BOOL isLoadingScreenShowing;

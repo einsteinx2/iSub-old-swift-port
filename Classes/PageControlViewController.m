@@ -93,21 +93,10 @@
 	[self loadScrollViewWithPage:0];
     [self loadScrollViewWithPage:1];
 	
-	// Only add the gesture recognizer on iOS 3.2 and above where it is supported
-	if (NSClassFromString(@"UISwipeGestureRecognizer"))
-	{
-		self.swipeDetector = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(hideSongInfo)];
-		if ([self.swipeDetector respondsToSelector:@selector(locationInView:)]) 
-		{
-			self.swipeDetector.delegate = (id<UIGestureRecognizerDelegate>)self;
-			self.swipeDetector.direction = UISwipeGestureRecognizerDirectionRight;
-			[self.scrollView addGestureRecognizer:self.swipeDetector];
-		}
-		else
-		{
-			 self.swipeDetector = nil;
-		}
-	}
+	self.swipeDetector = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(hideSongInfo)];
+	self.swipeDetector.delegate = (id<UIGestureRecognizerDelegate>)self;
+	self.swipeDetector.direction = UISwipeGestureRecognizerDirectionRight;
+	[self.scrollView addGestureRecognizer:self.swipeDetector];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch

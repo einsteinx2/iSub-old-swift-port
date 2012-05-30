@@ -461,7 +461,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {	
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
-	[pageControlViewController viewDidDisappear:NO];
 	coverArtImageView.delegate = nil;
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -1257,7 +1256,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			progressSlider.value = newValue;
 		}
 		
-		byteOffset = audioEngineS.bitRate * 128 * progressSlider.value;
+		byteOffset = audioEngineS.estimatedBitrate * 128 * progressSlider.value;
+		DLog(@"bitrate: %i slider: %f byteOffset: %i localFileSize: %llu", audioEngineS.estimatedBitrate, progressSlider.value, byteOffset, currentSong.localFileSize);
 		
 		if (currentSong.isTempCached)
 		{

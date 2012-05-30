@@ -495,8 +495,11 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 	{
 		ISMS_AudioBuffer *audioBuffer = ringBuffer->buffers[ringBuffer->writePosition];
 		[self clearAudioBuffer:audioBuffer];
-				
-		audioBuffer->buffer = buffer;
+		
+		void *tempBuffer = malloc(sizeof(char) * length);
+		memcpy(tempBuffer, buffer, length);
+		
+		audioBuffer->buffer = tempBuffer;
 		audioBuffer->length = length;
 		audioBuffer->isFilled = YES;
 				
@@ -1850,7 +1853,8 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 
 - (void)updateEqParameter:(BassParamEqValue *)value
 {
-	[self.eqValueArray replaceObjectAtIndex:value.arrayIndex withObject:value]; 
+	if (self.eqValueArray.count > value.arrayIndex)
+		[self.eqValueArray replaceObjectAtIndex:value.arrayIndex withObject:value]; 
 	
 	if (settingsS.isEqualizerOn)
 	{

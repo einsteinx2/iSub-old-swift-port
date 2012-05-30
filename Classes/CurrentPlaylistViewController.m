@@ -387,6 +387,9 @@
 			}
 			
 			[self editPlaylistAction:nil];
+			
+			[self updateCurrentPlaylistCount];
+			[self.tableView reloadData];
 		}
 		else
 		{
@@ -395,8 +398,11 @@
 			//
 			
 			[playlistS deleteSongs:viewObjectsS.multiDeleteList];
+			
+			[self updateCurrentPlaylistCount];
+			[self.tableView reloadData];
 						
-			// Create indexPaths from multiDeleteList and delete the rows in the table view
+			/*// Create indexPaths from multiDeleteList and delete the rows in the table view
 			NSMutableArray *indexes = [[NSMutableArray alloc] init];
 			for (NSNumber *index in viewObjectsS.multiDeleteList)
 			{
@@ -413,8 +419,7 @@
 			@catch (NSException *exception) 
 			{
 				DLog(@"Exception: %@ - %@", exception.name, exception.reason);
-			}
-		
+			}*/
 			
 			[self editPlaylistAction:nil];
 		}

@@ -105,7 +105,7 @@
 		return YES;
 	}
 	
-	DLog(@"delegate (%@) did not respond to loading finished", self.delegate);
+	//DLog(@"delegate (%@) did not respond to loading finished", self.delegate);
 	return NO;
 }
 

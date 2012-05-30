@@ -1,0 +1,142 @@
+iSub Integration Tests:
+
+Home Tab:
+- Server shuffle (All Folders)
+- Server shuffle (specific folder)
+- Support (Send email)
+- Support (Forum)
+- Open Chat
+  - Chat (post message)
+- Settings (check each tab)
+- Settings (test each setting)
+- Tap center to go to player
+- Tap right corner player icon to go to player
+- Server search (All)
+  - Try each sub-section
+  - Load more results by scrolling in a subsection
+  - select a result from each section
+- Server search (each other specific search)
+  - select a result from each section
+- Toggle jukebox mode
+
+Folders Tab:
+- Switch folders
+- Reload folder
+- Reload all folders
+- Open an artist
+- Search for an artist
+- Slide and queue an artist
+- Slide and cache an artist
+- Scroll all the way to bottom
+- Play all in album
+- Shuffle all in album
+- Slide and queue album
+- Slide and cache album
+- Open player
+
+Playlists Tab:
+  - Current Tab:
+    - Toggle edit mode
+    - In edit, select all and close edit
+    - In edit, select all and delete
+    - In edit, re-order songs
+    - In edit, delete multiple songs
+    - In edit, delete single song
+    - Delete the current playing song
+    - Save playlist, local
+    - Save playlist, server
+    - Slide and cache song
+    - Slide and queue song
+  - Local tab:
+    - In edit, select all and close edit
+    - In edit, select all and delete
+    - In edit, delete multiple playlists
+    - In edit, delete single playlist
+    - Save to Server a playlist
+    - Slide and cache playlist
+    - Slide and queue playlist
+  - Server Tab
+    - Toggle edit mode
+    - In edit, select all and close edit
+    - In edit, select all and delete
+    - In edit, delete multiple playlists
+    - In edit, delete single playlist
+    - Slide and cache playlist
+    - Slide and queue playlist
+- Open player
+
+Cache tab:
+  - Cached section:
+    - Play all whole cache
+    - Shuffle whole cache
+    - Slide and queue artist
+    - Slide and delete artist
+    - Slide and queue album
+    - Slide and delete album
+    - Slide and queue song
+    - Slide and delete song
+    - Open artist
+    - Play all artist
+    - Shuffle artist
+    - Open album
+    - Play all album
+    - Shuffle album
+    - Play song
+  - Downloading section:
+    - Toggle edit mode
+    - In edit, select all and close edit
+    - In edit, select all and delete
+    - In edit, delete multiple songs
+    - In edit, delete single song
+- Open player
+
+Playing Tab:
+- Select song to play
+- Slide and queue song
+- Slide and cache song
+- Reload the list
+- Open player
+
+Bookmarks tab
+- Open a bookmark
+- Toggle edit mode
+- In edit, clear all
+- In edit, delete multiple bookmarks
+- In edit, delete single bookmark
+- Open player
+
+Chat tab:
+- Reload chat
+- post message
+- Open player
+
+Player:
+- Skip back 30
+- Skip forward 30
+- Save bookmark
+- Repeat one
+- Repeat all
+- Shuffle
+- Unshuffle
+- Seek in song
+- Seek past cache point
+- Toggle extra buttons
+- Toggle playlist
+
+Player playlist:
+- Toggle edit mode
+- In edit, select all and close edit
+- In edit, select all and delete
+- In edit, re-order songs
+- In edit, delete multiple songs
+- In edit, delete single song
+- Delete the current playing song
+- Save playlist, local
+- Save playlist, server
+
+Equalizer:
+- Try each visualizer type
+- Toggle EQ
+- Switch presets
+- Edit a preset and save the edit
+- Delete a saved preset

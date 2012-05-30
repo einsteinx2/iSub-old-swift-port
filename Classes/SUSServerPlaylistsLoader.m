@@ -127,14 +127,13 @@
 				TBXMLElement *playlist = [TBXML childElementNamed:@"playlist" parentElement:playlists];
 				while (playlist != nil)
 				{
-					@autoreleasepool {
-                    
-                    SUSServerPlaylist *serverPlaylist = [[SUSServerPlaylist alloc] initWithTBXMLElement:playlist];
-                    [tempArray addObject:serverPlaylist];
-					
-					// Get the next message
-					playlist = [TBXML nextSiblingNamed:@"playlist" searchFromElement:playlist];
-					
+					@autoreleasepool 
+					{
+						SUSServerPlaylist *serverPlaylist = [[SUSServerPlaylist alloc] initWithTBXMLElement:playlist];
+						[tempArray addObject:serverPlaylist];
+						
+						// Get the next message
+						playlist = [TBXML nextSiblingNamed:@"playlist" searchFromElement:playlist];
 					}
 				}
                 

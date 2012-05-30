@@ -55,8 +55,6 @@
 
 @synthesize currentLoadingFolderId;
 
-@synthesize isSettingsShowing;
-
 @synthesize isNoNetworkAlertShowing;
 
 @synthesize isLoadingScreenShowing;

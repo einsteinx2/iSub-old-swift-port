@@ -480,7 +480,10 @@ static NSInteger order (id a, id b, void* context)
 			FMResultSet *result = [db executeQuery:@"SELECT count FROM allSongsIndexCache"];
 			while ([result next])
 			{
-				allSongsCount += [result intForColumn:@"count"];
+				@autoreleasepool 
+				{
+					allSongsCount += [result intForColumn:@"count"];
+				}
 			}
 			[result close];
 			[db executeUpdate:@"INSERT INTO allSongsCount VALUES (?)", [NSNumber numberWithInt:allSongsCount]];
@@ -491,6 +494,7 @@ static NSInteger order (id a, id b, void* context)
         {
             [SUSAllSongsLoader setIsLoading:NO];
 			[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self informDelegateLoadingFailed:nil]; }];
+			viewObjectsS.cancelLoading = NO;
             return;
         }
         

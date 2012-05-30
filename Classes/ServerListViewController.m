@@ -47,21 +47,6 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-	[super viewWillAppear:animated];
-	
-	viewObjectsS.isSettingsShowing = YES;
-}
-
-/* DOESN'T GET CALLED, setting isSettingShowing to NO in NewHomeViewController viewWillAppear instead
-- (void)viewWillDisappear:(BOOL)animated
-{
-	[super viewWillDisappear:animated];
-	
-	viewObjectsS.isSettingsShowing = NO;
-}*/
-
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
@@ -286,9 +271,12 @@
 			viewObjectsS.cancelLoading = YES;
 		}
 		
-		while (viewObjectsS.cancelLoading == YES)
+		
+		while (viewObjectsS.cancelLoading)
 		{
-			DLog(@"waiting for the load to cancel before continuing");
+			//NSLog(@"waiting for the load to cancel before continuing");
+			if (!viewObjectsS.cancelLoading)
+				break;
 		}
 		
 		// Stop any playing song and remove old tab bar controller from window

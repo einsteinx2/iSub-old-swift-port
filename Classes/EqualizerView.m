@@ -378,7 +378,13 @@ static void destroy_versionArrays()
 	
 	//Display the buffer
 	glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
-	[context presentRenderbuffer:GL_RENDERBUFFER_OES];
+	
+	UIApplicationState state = [UIApplication sharedApplication].applicationState;
+	if (state == UIApplicationStateActive)
+	{
+		// Make sure we didn't resign active while the method was already running
+		[context presentRenderbuffer:GL_RENDERBUFFER_OES];
+	}
 }
 
 // If our view is resized, we'll be asked to layout subviews.

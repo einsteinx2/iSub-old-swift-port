@@ -226,35 +226,34 @@
 				TBXMLElement *child = [TBXML childElementNamed:@"child" parentElement:directory];
 				while (child != nil)
 				{
-					@autoreleasepool {
-                    
-                    if ([[TBXML valueOfAttributeNamed:@"isDir" forElement:child] boolValue])
-                    {
-						Album *anAlbum = [[Album alloc] initWithTBXMLElement:child artistId:myArtist.artistId artistName:myArtist.name];
-						if (![anAlbum.title isEqualToString:@".AppleDouble"])
+					@autoreleasepool 
+					{
+						if ([[TBXML valueOfAttributeNamed:@"isDir" forElement:child] boolValue])
 						{
-							[self insertAlbumIntoFolderCache:anAlbum];
-							albumsCount++;
-						}
-                    }
-                    else
-                    {
-						BOOL isVideo = [[TBXML valueOfAttributeNamed:@"isVideo" forElement:child] boolValue]; 
-						if (!isVideo)
-						{
-							Song *aSong = [[Song alloc] initWithTBXMLElement:child];
-							if (aSong.path)
+							Album *anAlbum = [[Album alloc] initWithTBXMLElement:child artistId:myArtist.artistId artistName:myArtist.name];
+							if (![anAlbum.title isEqualToString:@".AppleDouble"])
 							{
-								[self insertSongIntoFolderCache:aSong];
-								songsCount++;
-								folderLength += [aSong.duration intValue];
+								[self insertAlbumIntoFolderCache:anAlbum];
+								albumsCount++;
 							}
 						}
-                    }
-					
-					// Get the next message
-					child = [TBXML nextSiblingNamed:@"child" searchFromElement:child];
-					
+						else
+						{
+							BOOL isVideo = [[TBXML valueOfAttributeNamed:@"isVideo" forElement:child] boolValue]; 
+							if (!isVideo)
+							{
+								Song *aSong = [[Song alloc] initWithTBXMLElement:child];
+								if (aSong.path)
+								{
+									[self insertSongIntoFolderCache:aSong];
+									songsCount++;
+									folderLength += [aSong.duration intValue];
+								}
+							}
+						}
+						
+						// Get the next message
+						child = [TBXML nextSiblingNamed:@"child" searchFromElement:child];
 					}
 				}
                 

@@ -179,7 +179,7 @@
 			{
 				if ([index integerValue] <= self.currentIndex)
 				{
-					numberBefore = numberBefore + 1;
+					numberBefore++;
 				}
 			}
 		}
@@ -194,7 +194,8 @@
 		
 		if (goToNextSong)
 		{
-			[self incrementIndex];
+			if (self.currentIndex != 0)
+				[self incrementIndex];
 			[musicS startSong];
 		}
 		else

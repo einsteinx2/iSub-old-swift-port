@@ -291,34 +291,37 @@
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveResponse:(NSURLResponse *)response
 {
-	if ([response isKindOfClass:[NSHTTPURLResponse class]])
+	@autoreleasepool 
 	{
-		NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-		DLog(@"allHeaderFields: %@", [httpResponse allHeaderFields]);
-		DLog(@"statusCode: %i - %@", [httpResponse statusCode], [NSHTTPURLResponse localizedStringForStatusCode:[httpResponse statusCode]]);
-		
-		if ([httpResponse statusCode] >= 500)
+		if ([response isKindOfClass:[NSHTTPURLResponse class]])
 		{
-			// This is a failure, cancel the connection and call the didFail delegate method
-			[self.connection cancel];
-			[self connection:self.connection didFailWithError:nil];
-		}
-		else
-		{
-			if (self.contentLength == ULLONG_MAX)
+			NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+			DLog(@"allHeaderFields: %@", [httpResponse allHeaderFields]);
+			DLog(@"statusCode: %i - %@", [httpResponse statusCode], [NSHTTPURLResponse localizedStringForStatusCode:[httpResponse statusCode]]);
+			
+			if ([httpResponse statusCode] >= 500)
 			{
-				// Set the content length if it isn't set already, only set the first connection, not on retries
-				NSString *contentLengthString = [[httpResponse allHeaderFields] objectForKey:@"Content-Length"];
-				if (contentLengthString)
+				// This is a failure, cancel the connection and call the didFail delegate method
+				[self.connection cancel];
+				[self connection:self.connection didFailWithError:nil];
+			}
+			else
+			{
+				if (self.contentLength == ULLONG_MAX)
 				{
-					NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-					self.contentLength = [[formatter numberFromString:contentLengthString] unsignedLongLongValue];
+					// Set the content length if it isn't set already, only set the first connection, not on retries
+					NSString *contentLengthString = [[httpResponse allHeaderFields] objectForKey:@"Content-Length"];
+					if (contentLengthString)
+					{
+						NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+						self.contentLength = [[formatter numberFromString:contentLengthString] unsignedLongLongValue];
+					}
 				}
 			}
 		}
+		
+		self.bytesTransferred = 0;
 	}
-	
-	self.bytesTransferred = 0;
 }
 
 - (double)maxBytesPerIntervalForBitrate:(double)rate is3G:(BOOL)is3G
@@ -341,135 +344,138 @@
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
 {	
-	if (self.isCanceled)
-		return;
-	
-	if (isSpeedLoggingEnabled)
+	@autoreleasepool 
 	{
-		if (!self.speedLoggingDate)
+		if (self.isCanceled)
+			return;
+		
+		if (isSpeedLoggingEnabled)
 		{
-			self.speedLoggingDate = [NSDate date];
-			self.speedLoggingLastSize = self.totalBytesTransferred;
-		}
-	}
-	
-	NSMutableDictionary *threadDict = [[NSThread currentThread] threadDictionary];
-	NSDate *throttlingDate = [threadDict objectForKey:@"throttlingDate"];
-	NSUInteger dataLength = [incrementalData length];
-	
-	self.totalBytesTransferred += dataLength;
-	self.bytesTransferred += dataLength;
-	
-	if (self.fileHandle)
-	{
-		// Save the data to the file
-		@try
-		{
-			[self.fileHandle writeData:incrementalData];
-		}
-		@catch (NSException *exception) 
-		{
-			DLog(@"Failed to write to file %@, %@ - %@", self.mySong, exception.name, exception.description);
-			[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self cancel]; }];
+			if (!self.speedLoggingDate)
+			{
+				self.speedLoggingDate = [NSDate date];
+				self.speedLoggingLastSize = self.totalBytesTransferred;
+			}
 		}
 		
-		// Notify delegate if enough bytes received to start playback
-		if (!self.isDelegateNotifiedToStartPlayback && self.totalBytesTransferred >= ISMSMinBytesToStartPlayback(self.bitrate))
-		{
-			DLog(@"telling player to start, min bytes: %u, total bytes: %llu, bitrate: %u", ISMSMinBytesToStartPlayback(self.bitrate), self.totalBytesTransferred, self.bitrate);
-			self.isDelegateNotifiedToStartPlayback = YES;
-			//DLog(@"player told to start playback");
-			[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self startPlaybackInternal]; }];
-		}
+		NSMutableDictionary *threadDict = [[NSThread currentThread] threadDictionary];
+		NSDate *throttlingDate = [threadDict objectForKey:@"throttlingDate"];
+		NSUInteger dataLength = [incrementalData length];
 		
-		// Log progress
-		if (isProgressLoggingEnabled)
-			DLog(@"downloadedLengthA:  %llu   bytesRead: %i", self.totalBytesTransferred, dataLength);
+		self.totalBytesTransferred += dataLength;
+		self.bytesTransferred += dataLength;
 		
-		// If near beginning of file, don't throttle
-		if (self.totalBytesTransferred < ISMSMinBytesToStartLimiting(self.bitrate))
+		if (self.fileHandle)
 		{
+			// Save the data to the file
+			@try
+			{
+				[self.fileHandle writeData:incrementalData];
+			}
+			@catch (NSException *exception) 
+			{
+				DLog(@"Failed to write to file %@, %@ - %@", self.mySong, exception.name, exception.description);
+				[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self cancel]; }];
+			}
+			
+			// Notify delegate if enough bytes received to start playback
+			if (!self.isDelegateNotifiedToStartPlayback && self.totalBytesTransferred >= ISMSMinBytesToStartPlayback(self.bitrate))
+			{
+				DLog(@"telling player to start, min bytes: %u, total bytes: %llu, bitrate: %u", ISMSMinBytesToStartPlayback(self.bitrate), self.totalBytesTransferred, self.bitrate);
+				self.isDelegateNotifiedToStartPlayback = YES;
+				//DLog(@"player told to start playback");
+				[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self startPlaybackInternal]; }];
+			}
+			
+			// Log progress
+			if (isProgressLoggingEnabled)
+				DLog(@"downloadedLengthA:  %llu   bytesRead: %i", self.totalBytesTransferred, dataLength);
+			
+			// If near beginning of file, don't throttle
+			if (self.totalBytesTransferred < ISMSMinBytesToStartLimiting(self.bitrate))
+			{
+				NSDate *now = [[NSDate alloc] init];
+				[threadDict setObject:now forKey:@"throttlingDate"];
+				self.bytesTransferred = 0;		
+			}
+			
+			// Check if we should throttle
 			NSDate *now = [[NSDate alloc] init];
-			[threadDict setObject:now forKey:@"throttlingDate"];
-			self.bytesTransferred = 0;		
-		}
-		
-		// Check if we should throttle
-		NSDate *now = [[NSDate alloc] init];
-		NSTimeInterval intervalSinceLastThrottle = [now timeIntervalSinceDate:throttlingDate];
-		if (intervalSinceLastThrottle > ISMSThrottleTimeInterval && self.totalBytesTransferred > ISMSMinBytesToStartLimiting(self.bitrate))
-		{
-			NSTimeInterval delay = 0.0;
-			
-			double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)self.bitrate is3G:!appDelegateS.isWifi];
-			double numberOfIntervals = intervalSinceLastThrottle / ISMSThrottleTimeInterval;
-			double maxBytesPerTotalInterval = maxBytesPerInterval * numberOfIntervals;
-			
-			if (self.bytesTransferred > maxBytesPerTotalInterval)
+			NSTimeInterval intervalSinceLastThrottle = [now timeIntervalSinceDate:throttlingDate];
+			if (intervalSinceLastThrottle > ISMSThrottleTimeInterval && self.totalBytesTransferred > ISMSMinBytesToStartLimiting(self.bitrate))
 			{
-				double speedDifferenceFactor = (double)self.bytesTransferred / maxBytesPerTotalInterval;
-				delay = (speedDifferenceFactor * intervalSinceLastThrottle) - intervalSinceLastThrottle;
+				NSTimeInterval delay = 0.0;
 				
-				if (isThrottleLoggingEnabled)
-					DLog(@"Pausing for %f  interval: %f  bytesTransferred: %llu maxBytes: %f", delay, intervalSinceLastThrottle, self.bytesTransferred, maxBytesPerTotalInterval);
+				double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)self.bitrate is3G:!appDelegateS.isWifi];
+				double numberOfIntervals = intervalSinceLastThrottle / ISMSThrottleTimeInterval;
+				double maxBytesPerTotalInterval = maxBytesPerInterval * numberOfIntervals;
 				
-				self.bytesTransferred = 0;
-			}
-			
-			[NSThread sleepForTimeInterval:delay];
-			
-			if (self.isCanceled)
-				return;
-			
-			NSDate *newThrottlingDate = [[NSDate alloc] init];
-			[threadDict setObject:newThrottlingDate forKey:@"throttlingDate"];
-		}
-		
-		// Handle partial pre-cache next song
-		if (!self.isCurrentSong && !self.isTempCache && settingsS.isPartialCacheNextSong && self.partialPrecacheSleep)
-		{
-			NSUInteger partialPrecacheSize = ISMSNumBytesToPartialPreCache(self.mySong.estimatedBitrate);
-			if (self.totalBytesTransferred >= partialPrecacheSize)
-			{
-				[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self partialPrecachePausedInternal]; }];
-				while (self.partialPrecacheSleep && !self.tempBreakPartialPrecache)
+				if (self.bytesTransferred > maxBytesPerTotalInterval)
 				{
-					[NSThread sleepForTimeInterval:0.1];
+					double speedDifferenceFactor = (double)self.bytesTransferred / maxBytesPerTotalInterval;
+					delay = (speedDifferenceFactor * intervalSinceLastThrottle) - intervalSinceLastThrottle;
+					
+					if (isThrottleLoggingEnabled)
+						DLog(@"Pausing for %f  interval: %f  bytesTransferred: %llu maxBytes: %f", delay, intervalSinceLastThrottle, self.bytesTransferred, maxBytesPerTotalInterval);
+					
+					self.bytesTransferred = 0;
 				}
-				self.tempBreakPartialPrecache = NO;
-				[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self partialPrecacheUnpausedInternal]; }];
+				
+				[NSThread sleepForTimeInterval:delay];
+				
+				if (self.isCanceled)
+					return;
+				
+				NSDate *newThrottlingDate = [[NSDate alloc] init];
+				[threadDict setObject:newThrottlingDate forKey:@"throttlingDate"];
+			}
+			
+			// Handle partial pre-cache next song
+			if (!self.isCurrentSong && !self.isTempCache && settingsS.isPartialCacheNextSong && self.partialPrecacheSleep)
+			{
+				NSUInteger partialPrecacheSize = ISMSNumBytesToPartialPreCache(self.mySong.estimatedBitrate);
+				if (self.totalBytesTransferred >= partialPrecacheSize)
+				{
+					[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self partialPrecachePausedInternal]; }];
+					while (self.partialPrecacheSleep && !self.tempBreakPartialPrecache)
+					{
+						[NSThread sleepForTimeInterval:0.1];
+					}
+					self.tempBreakPartialPrecache = NO;
+					[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self partialPrecacheUnpausedInternal]; }];
+				}
 			}
 		}
-	}
-	else
-	{
-		if (!self.isCanceled)
+		else
 		{
-			// There is no file handle for some reason, cancel the connection
-			[self.connection cancel];
-			[self connection:self.connection didFailWithError:nil];
+			if (!self.isCanceled)
+			{
+				// There is no file handle for some reason, cancel the connection
+				[self.connection cancel];
+				[self connection:self.connection didFailWithError:nil];
+			}
 		}
-	}
-	
-#if isSpeedLoggingEnabled
-	if (isSpeedLoggingEnabled)
-	{
-		NSTimeInterval speedInteval = [[NSDate date] timeIntervalSinceDate:self.speedLoggingDate];
 		
-		// Check every 10 seconds
-		if (speedInteval >= 10.0)
+#if isSpeedLoggingEnabled
+		if (isSpeedLoggingEnabled)
 		{
-			unsigned long long transferredSinceLastCheck = self.totalBytesTransferred - self.speedLoggingLastSize;
+			NSTimeInterval speedInteval = [[NSDate date] timeIntervalSinceDate:self.speedLoggingDate];
 			
-			double speedInBytes = (double)transferredSinceLastCheck / speedInteval;
-			double speedInKbytes = speedInBytes / 1024.;
-			DLog(@"rate: %f  speedInterval: %f  transferredSinceLastCheck: %llu", speedInKbytes, speedInteval, transferredSinceLastCheck);
-			
-			self.speedLoggingLastSize = self.totalBytesTransferred;
-			self.speedLoggingDate = [NSDate date];
+			// Check every 10 seconds
+			if (speedInteval >= 10.0)
+			{
+				unsigned long long transferredSinceLastCheck = self.totalBytesTransferred - self.speedLoggingLastSize;
+				
+				double speedInBytes = (double)transferredSinceLastCheck / speedInteval;
+				double speedInKbytes = speedInBytes / 1024.;
+				DLog(@"rate: %f  speedInterval: %f  transferredSinceLastCheck: %llu", speedInKbytes, speedInteval, transferredSinceLastCheck);
+				
+				self.speedLoggingLastSize = self.totalBytesTransferred;
+				self.speedLoggingDate = [NSDate date];
+			}
 		}
-	}
 #endif
+	}
 }
 
 // Main Thread

@@ -78,6 +78,7 @@
 	self.isCountShowing = NO;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(serverSwitched) name:ISMSNotification_ServerSwitched object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFolders) name:ISMSNotification_ServerCheckPassed object:nil];
 		
 	// Add the pull to refresh view
 	self.refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
@@ -312,6 +313,8 @@
 
 - (void)folderDropdownSelectFolder:(NSNumber *)folderId
 {
+	[self.dropdown selectFolderWithId:folderId];
+	 
 	// Save the default
 	settingsS.rootFoldersSelectedFolderId = folderId;
 	
@@ -337,8 +340,13 @@
 		[self.tableView reloadData];
 		[self removeCount];
 	}
-	
+		
 	[self folderDropdownSelectFolder:[NSNumber numberWithInteger:-1]];
+}
+
+- (void)updateFolders
+{
+	[self.dropdown updateFolders];
 }
 
 #pragma mark - Button handling methods

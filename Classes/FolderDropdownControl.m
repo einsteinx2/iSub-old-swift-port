@@ -69,13 +69,13 @@
 		
 		[self updateFolders];
 		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFolders) name:ISMSNotification_ServerCheckPassed object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(serverSwitched) name:ISMSNotification_ServerSwitched object:nil];
+		//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFolders) name:ISMSNotification_ServerCheckPassed object:nil];
+		//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(serverSwitched) name:ISMSNotification_ServerSwitched object:nil];
     }
     return self;
 }
 
-- (void)serverSwitched
+/*- (void)serverSwitched
 {
 	[self selectFolderWithId:[NSNumber numberWithInteger:-1]];
 }
@@ -83,7 +83,7 @@
 - (void)dealloc
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];	
-}
+}*/
 
 NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 {
