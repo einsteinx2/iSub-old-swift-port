@@ -496,10 +496,7 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 		ISMS_AudioBuffer *audioBuffer = ringBuffer->buffers[ringBuffer->writePosition];
 		[self clearAudioBuffer:audioBuffer];
 		
-		void *tempBuffer = malloc(sizeof(char) * length);
-		memcpy(tempBuffer, buffer, length);
-		
-		audioBuffer->buffer = tempBuffer;
+		audioBuffer->buffer = buffer;
 		audioBuffer->length = length;
 		audioBuffer->isFilled = YES;
 				

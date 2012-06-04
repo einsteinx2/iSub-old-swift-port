@@ -411,11 +411,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "359848877.58745"
+         timestampString = "360382374.592709"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1733"
-         endingLineNumber = "1733"
+         startingLineNumber = "1730"
+         endingLineNumber = "1730"
          landmarkName = "-setNextStreamTempo:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -425,11 +425,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "359848877.58745"
+         timestampString = "360382374.592709"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1744"
-         endingLineNumber = "1744"
+         startingLineNumber = "1741"
+         endingLineNumber = "1741"
          landmarkName = "-nextReadingStream"
          landmarkType = "5">
       </FileBreakpoint>
@@ -439,11 +439,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "359848877.58745"
+         timestampString = "360382374.592709"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1746"
-         endingLineNumber = "1746"
+         startingLineNumber = "1743"
+         endingLineNumber = "1743"
          landmarkName = "-nextReadingStream"
          landmarkType = "5">
       </FileBreakpoint>
@@ -453,11 +453,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "359848877.58745"
+         timestampString = "360382374.592709"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1751"
-         endingLineNumber = "1751"
+         startingLineNumber = "1748"
+         endingLineNumber = "1748"
          landmarkName = "-BASSisFilestream1"
          landmarkType = "5">
       </FileBreakpoint>
@@ -467,11 +467,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "359848877.58745"
+         timestampString = "360382374.592709"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1734"
-         endingLineNumber = "1734"
+         startingLineNumber = "1731"
+         endingLineNumber = "1731"
          landmarkName = "-setNextStreamTempo:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -481,11 +481,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "359848877.58745"
+         timestampString = "360382374.592709"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1738"
-         endingLineNumber = "1738"
+         startingLineNumber = "1735"
+         endingLineNumber = "1735"
          landmarkName = "-setNextStreamTempo:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1307,11 +1307,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "359848877.58745"
+         timestampString = "360382374.592709"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1397"
-         endingLineNumber = "1397"
+         startingLineNumber = "1394"
+         endingLineNumber = "1394"
          landmarkName = "@implementation AudioEngine"
          landmarkType = "3">
       </FileBreakpoint>
@@ -5211,11 +5211,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "359848877.58745"
+         timestampString = "360382374.592709"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1431"
-         endingLineNumber = "1431"
+         startingLineNumber = "1428"
+         endingLineNumber = "1428"
          landmarkName = "-startWithOffsetInBytesorSecondsInternal:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5224,11 +5224,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "359848877.58745"
+         timestampString = "360382374.592709"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1450"
-         endingLineNumber = "1450"
+         startingLineNumber = "1447"
+         endingLineNumber = "1447"
          landmarkName = "-startWithOffsetInBytesorSecondsInternal:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5237,11 +5237,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "359848877.58745"
+         timestampString = "360382374.592709"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1449"
-         endingLineNumber = "1449"
+         startingLineNumber = "1446"
+         endingLineNumber = "1446"
          landmarkName = "-startWithOffsetInBytesorSecondsInternal:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5380,11 +5380,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "359848877.58745"
+         timestampString = "360382374.592709"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "665"
-         endingLineNumber = "665"
+         startingLineNumber = "662"
+         endingLineNumber = "662"
          landmarkName = "-estimatedBitrate"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5393,11 +5393,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "359848877.58745"
+         timestampString = "360382374.592709"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "659"
-         endingLineNumber = "659"
+         startingLineNumber = "656"
+         endingLineNumber = "656"
          landmarkName = "-estimatedBitrate"
          landmarkType = "5">
       </FileBreakpoint>
