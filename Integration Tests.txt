@@ -28,6 +28,8 @@ Folders Tab:
 - Slide and queue an artist
 - Slide and cache an artist
 - Scroll all the way to bottom
+- Play all in artist
+- Shuffle all in artist
 - Play all in album
 - Shuffle all in album
 - Slide and queue album
@@ -38,10 +40,10 @@ Playlists Tab:
   - Current Tab:
     - Toggle edit mode
     - In edit, select all and close edit
-    - In edit, select all and delete
     - In edit, re-order songs
-    - In edit, delete multiple songs
     - In edit, delete single song
+    - In edit, delete multiple songs
+    - In edit, select all and delete
     - Delete the current playing song
     - Save playlist, local
     - Save playlist, server
@@ -49,18 +51,18 @@ Playlists Tab:
     - Slide and queue song
   - Local tab:
     - In edit, select all and close edit
-    - In edit, select all and delete
     - In edit, delete multiple playlists
     - In edit, delete single playlist
+    - In edit, select all and delete
     - Save to Server a playlist
     - Slide and cache playlist
     - Slide and queue playlist
   - Server Tab
     - Toggle edit mode
     - In edit, select all and close edit
-    - In edit, select all and delete
     - In edit, delete multiple playlists
     - In edit, delete single playlist
+    - In edit, select all and delete
     - Slide and cache playlist
     - Slide and queue playlist
 - Open player
@@ -126,10 +128,10 @@ Player:
 Player playlist:
 - Toggle edit mode
 - In edit, select all and close edit
-- In edit, select all and delete
 - In edit, re-order songs
 - In edit, delete multiple songs
 - In edit, delete single song
+- In edit, clear all
 - Delete the current playing song
 - Save playlist, local
 - Save playlist, server

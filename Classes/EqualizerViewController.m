@@ -320,6 +320,8 @@
 		self.gainSlider.y += 7;
 		self.gainBoostLabel.y += 7;
 		self.gainBoostAmountLabel.y += 7;
+		self.savePresetButton.y -= 10;
+		self.deletePresetButton.y -= 10;
 	}
 	
 	if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation) && !IS_IPAD())
