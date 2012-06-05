@@ -77,6 +77,11 @@
 		self.navigationItem.rightBarButtonItem = nil;
 	}
 	
+	if (IS_IPAD())
+	{
+		self.view.backgroundColor = ISMSiPadBackgroundColor;
+	}
+	
 	[self.tableView addHeaderShadow];
 	[self.tableView addFooterShadow];
 }
@@ -202,12 +207,15 @@
 	
 	// Set background color
 	cell.backgroundView = [viewObjectsS createCellBackground:row];
+	cell.textLabel.backgroundColor = cell.backgroundView.backgroundColor;
 	
 	if (isMoreResults)
 	{
 		cell.textLabel.text = @"Loading more results...";
 		UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-		indicator.center = CGPointMake(300, 30);
+		CGFloat y = [self tableView:nil heightForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]] / 2.;
+		indicator.center = CGPointMake(300, y);
+		indicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 		[cell addSubview:indicator];
 		[indicator startAnimating];
 		
@@ -452,7 +460,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	//DLog(@"%@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
+	//DLog(@"%@", [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
 	
 	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
 	SearchXMLParser *parser = [[SearchXMLParser alloc] initXMLParser];

@@ -56,6 +56,11 @@
 		[cellNames addObject:@"Songs"];
 	}
 	
+	if (IS_IPAD())
+	{
+		self.view.backgroundColor = ISMSiPadBackgroundColor;
+	}
+	
 	[self.tableView addHeaderShadow];
 	[self.tableView addFooterShadow];
 }
