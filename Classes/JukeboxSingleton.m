@@ -17,6 +17,7 @@
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "SavedSettings.h"
 
 @implementation JukeboxSingleton
 
@@ -325,6 +326,9 @@
 
 - (void)jukeboxGetInfoInternal
 {
+	if (!settingsS.isJukeboxEnabled)
+		return;
+	
 	JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
 	connDelegate.isGetInfo = YES;
     
@@ -348,6 +352,10 @@
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error controlling the Jukebox.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
 	}
+	
+	// Keep reloading every 30 seconds if there is no activity so that the player stays updated if visible
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(jukeboxGetInfoInternal) object:nil];
+	[self performSelector:@selector(jukeboxGetInfoInternal) withObject:nil afterDelay:30.];
 }
 
 - (void)jukeboxGetInfo
