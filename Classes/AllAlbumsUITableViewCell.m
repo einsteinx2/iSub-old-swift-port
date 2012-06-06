@@ -11,6 +11,7 @@
 #import "DatabaseSingleton.h"
 #import "Album.h"
 #import "CellOverlay.h"
+#import "ViewObjectsSingleton.h"
 
 @implementation AllAlbumsUITableViewCell
 
@@ -77,6 +78,14 @@
 }
 
 #pragma mark - Overlay
+
+- (void)showOverlay
+{	
+	[super showOverlay];
+
+	self.overlayView.downloadButton.alpha = (float)!viewObjectsS.isOfflineMode;
+	self.overlayView.downloadButton.enabled = !viewObjectsS.isOfflineMode;
+}
 
 - (void)downloadAction
 {

@@ -24,6 +24,7 @@
 #import "MusicSingleton.h"
 #import "SocialSingleton.h"
 #import "GCDWrapper.h"
+#import "ViewObjectsSingleton.h"
 
 @implementation AudioEngine
 @synthesize startByteOffset, startSecondsOffset, isPlaying, isFastForward, bassReinitSampleRate, presilenceStream, bufferLengthMillis, bassUpdatePeriod;
@@ -884,6 +885,11 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 			// The stream should end, but only because we need to re-init BASS for the next song
 			[GCDWrapper runInMainThreadAfterDelay:delay block:^{ [self start]; }];
 			//DLog(@"Must reinit bass");
+		}
+		else if (viewObjectsS.isOfflineMode)
+		{
+			// We're offline and this song is not available, skip to the next one
+			[GCDWrapper runInMainThreadAfterDelay:delay block:^{ [musicS startSong]; }];
 		}
 		else
 		{

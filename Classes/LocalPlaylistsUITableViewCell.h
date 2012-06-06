@@ -12,6 +12,8 @@
 
 @property (copy) NSString *md5;
 
+@property NSUInteger playlistCount;
+
 @property (strong) UILabel *playlistCountLabel;
 @property (strong) UIScrollView *playlistNameScrollView;
 @property (strong) UILabel *playlistNameLabel;

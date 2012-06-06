@@ -18,6 +18,7 @@
 @property (assign) NSDate *playedDate;
 
 + (Song *)songFromDbResult:(FMResultSet *)result;
++ (Song *)songFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabase:(FMDatabase *)db;
 + (Song *)songFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabaseQueue:(FMDatabaseQueue *)dbQueue;
 + (Song *)songFromDbForMD5:(NSString *)md5 inTable:(NSString *)table inDatabaseQueue:(FMDatabaseQueue *)dbQueue;
 + (Song *)songFromGenreDb:(FMDatabase *)db md5:(NSString *)md5;

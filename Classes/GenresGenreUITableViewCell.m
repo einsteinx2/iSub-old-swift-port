@@ -63,15 +63,9 @@
 - (void)showOverlay
 {
 	[super showOverlay];
-	
-	if (self.isOverlayShowing)
-	{
-		if (viewObjectsS.isOfflineMode)
-		{
-			self.overlayView.downloadButton.enabled = NO;
-			self.overlayView.downloadButton.hidden = YES;
-		}
-	}
+
+	self.overlayView.downloadButton.alpha = (float)!viewObjectsS.isOfflineMode;
+	self.overlayView.downloadButton.enabled = !viewObjectsS.isOfflineMode;
 }
 
 - (void)downloadAllSongs

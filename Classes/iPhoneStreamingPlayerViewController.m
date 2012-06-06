@@ -1364,6 +1364,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)saveBookmark
 {
+	// TODO: somehow this is saving the incorrect playlist index sometimes
 	__block NSUInteger bookmarksCount;
 	[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
 	{
@@ -1371,19 +1372,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		NSInteger bookmarkId = [db intForQuery:@"SELECT MAX(bookmarkId) FROM bookmarks"]; 
 		
-		NSString *tableName = nil;
-		if (settingsS.isJukeboxEnabled)
-		{
-			tableName = @"jukeboxCurrentPlaylist";
-			if (playlistS.isShuffle) 
-				tableName = @"jukeboxShufflePlaylist";
-		}
-		else 
-		{
-			tableName = @"currentPlaylist";
-			if (playlistS.isShuffle) 
-				tableName = @"shufflePlaylist";
-		}
+		NSString *currTable = settingsS.isJukeboxEnabled ? @"jukeboxCurrentPlaylist" : @"currentPlaylist";
+		NSString *shufTable = settingsS.isJukeboxEnabled ? @"jukeboxShufflePlaylist" : @"shufflePlaylist";
+		NSString *table = playlistS.isShuffle ? shufTable : currTable;
+		DLog(@"table: %@", table);
 		
 		// Save the playlist
 		NSString *dbName = viewObjectsS.isOfflineMode ? @"%@/offlineCurrentPlaylist.db" : @"%@/%@currentPlaylist.db";
@@ -1391,7 +1383,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmark%i (%@)", bookmarkId, [Song standardSongColumnSchema]]];
 		
-		[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmark%i SELECT * FROM currentPlaylistDb.%@", bookmarkId, tableName]]; 
+		[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmark%i SELECT * FROM currentPlaylistDb.%@", bookmarkId, table]]; 
 		
 		bookmarksCount = [db intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", currentSong.songId];
 		

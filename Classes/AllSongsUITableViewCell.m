@@ -14,7 +14,7 @@
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "CellOverlay.h"
-
+#import "ViewObjectsSingleton.h"
 
 @implementation AllSongsUITableViewCell
 
@@ -86,10 +86,12 @@
 #pragma mark - Overlay
 
 - (void)showOverlay
-{
+{	
 	[super showOverlay];
 	
-	if (self.isOverlayShowing)
+	self.overlayView.downloadButton.alpha = (float)!viewObjectsS.isOfflineMode;
+	self.overlayView.downloadButton.enabled = !viewObjectsS.isOfflineMode;
+	if (!viewObjectsS.isOfflineMode)
 	{
 		if ([[databaseS.songCacheDbQueue stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", self.md5] isEqualToString:@"YES"]) 
 		{

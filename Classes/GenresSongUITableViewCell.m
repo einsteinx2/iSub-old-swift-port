@@ -96,21 +96,16 @@
 - (void)showOverlay
 {
 	[super showOverlay];
+
+	self.overlayView.downloadButton.alpha = (float)!viewObjectsS.isOfflineMode;
+	self.overlayView.downloadButton.enabled = !viewObjectsS.isOfflineMode;
 	
-	if (self.isOverlayShowing)
+	if (!viewObjectsS.isOfflineMode)
 	{
-		if (viewObjectsS.isOfflineMode)
+		if ([[databaseS.songCacheDbQueue stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", self.md5] isEqualToString:@"YES"]) 
 		{
+			self.overlayView.downloadButton.alpha = .3;
 			self.overlayView.downloadButton.enabled = NO;
-			self.overlayView.downloadButton.hidden = YES;
-		}
-		else
-		{
-			if ([[databaseS.songCacheDbQueue stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", self.md5] isEqualToString:@"YES"]) 
-			{
-				self.overlayView.downloadButton.alpha = .3;
-				self.overlayView.downloadButton.enabled = NO;
-			}
 		}
 	}
 }

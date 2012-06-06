@@ -13,6 +13,7 @@
 #import "CellOverlay.h"
 #import "DatabaseSingleton.h"
 #import "MusicSingleton.h"
+#import "ViewObjectsSingleton.h"
 
 @implementation PlayingUITableViewCell
 
@@ -95,6 +96,14 @@
 }
 
 #pragma mark - Overlay
+
+- (void)showOverlay
+{
+	[super showOverlay];
+	
+	self.overlayView.downloadButton.alpha = (float)!viewObjectsS.isOfflineMode;
+	self.overlayView.downloadButton.enabled = !viewObjectsS.isOfflineMode;
+}
 
 - (void)downloadAction
 {

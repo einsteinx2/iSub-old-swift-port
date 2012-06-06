@@ -87,7 +87,13 @@
 		if (self.isShuffleButton)
 		{
 			// Perform the shuffle
+			if (settingsS.isJukeboxEnabled)
+				[jukeboxS jukeboxClearRemotePlaylist];
+			
 			[databaseS shufflePlaylist];
+			
+			if (settingsS.isJukeboxEnabled)
+				[jukeboxS jukeboxReplacePlaylistWithLocal];
 		}
 		
 		if (self.isQueue)
@@ -107,11 +113,6 @@
 		if (self.doShowPlayer)
 		{
 			[musicS showPlayer];
-		}
-		
-		if (settingsS.isJukeboxEnabled)
-		{
-			playlistS.isShuffle = NO;
 		}
 	}
 }

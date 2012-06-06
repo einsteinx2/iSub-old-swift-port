@@ -578,26 +578,29 @@
 		offsetSeconds = [result intForColumn:@"position"];
 		offsetBytes = [result intForColumn:@"bytes"];
 		[result close];
-		
-		result = [db executeQuery:@"SELECT * FROM bookmarks WHERE bookmarkId = ?", [self.bookmarkIds objectAtIndexSafe:indexPath.row]];
-		;
-		[result close];
 	}];
 		
 	// See if there's a playlist table for this bookmark
 	if ([databaseS.bookmarksDbQueue tableExists:[NSString stringWithFormat:@"bookmark%i", bookmarkId]])
 	{		
 		// Save the playlist
-		NSString *dbName = viewObjectsS.isOfflineMode ? @"%@/offlineCurrentPlaylist.db" : @"%@/%@currentPlaylist.db";
+		NSString *databaseName = viewObjectsS.isOfflineMode ? @"offlineCurrentPlaylist.db" : [NSString stringWithFormat:@"%@currentPlaylist.db", [settingsS.urlString md5]];
+		NSString *currTable = settingsS.isJukeboxEnabled ? @"jukeboxCurrentPlaylist" : @"currentPlaylist";
+		NSString *shufTable = settingsS.isJukeboxEnabled ? @"jukeboxShufflePlaylist" : @"shufflePlaylist";
+		NSString *table = playlistS.isShuffle ? shufTable : currTable;
+		DLog(@"loading table: %@", table);
 		
 		[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
 		{
-			[db executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:dbName, settingsS.databasePath, [[settingsS urlString] md5]], @"currentPlaylistDb"];
+			[db executeUpdate:@"ATTACH DATABASE ? AS ?", [databaseS.databaseFolderPath stringByAppendingPathComponent:databaseName], @"currentPlaylistDb"];
 			
-			[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylistDb.currentPlaylist SELECT * FROM bookmark%i", bookmarkId]]; 
+			[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylistDb.%@ SELECT * FROM bookmark%i", table, bookmarkId]]; 
 			
 			[db executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 		}];
+		
+		if (settingsS.isJukeboxEnabled)
+			[jukeboxS jukeboxReplacePlaylistWithLocal];
 	}
 	else 
 	{
@@ -626,8 +629,11 @@
 		// Use the bitrate to get byteoffset
 		offsetBytes = BytesForSecondsAtBitrate(offsetSeconds, bitrate);
 	}
-
-	[musicS startSongAtOffsetInBytes:offsetBytes andSeconds:offsetSeconds];
+	
+	if (settingsS.isJukeboxEnabled)
+		[musicS playSongAtPosition:playlistIndex];
+	else
+		[musicS startSongAtOffsetInBytes:offsetBytes andSeconds:offsetSeconds];
 }
 
 

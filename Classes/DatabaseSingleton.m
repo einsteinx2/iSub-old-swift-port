@@ -296,7 +296,15 @@
 	}];
 	
 	// Setup the bookmarks database
-	path = [NSString stringWithFormat:@"%@/%@bookmarks.db", databaseFolderPath, urlStringMd5];
+	if (viewObjectsS.isOfflineMode) 
+	{
+		path = [NSString stringWithFormat:@"%@/bookmarks.db", databaseFolderPath];
+	}
+	else
+	{
+		path = [NSString stringWithFormat:@"%@/%@bookmarks.db", databaseFolderPath, urlStringMd5];
+	}
+	
 	self.bookmarksDbQueue = [FMDatabaseQueue databaseQueueWithPath:path];
 	[self.bookmarksDbQueue inDatabase:^(FMDatabase *db)
 	{
@@ -386,6 +394,20 @@
 			[db executeUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
 		}
 	}];
+	
+	[self.songCacheDbQueue inDatabase:^(FMDatabase *db)
+	 {
+		 if (![db tableExists:@"genresTableFixed"])
+		 {
+			 [db executeUpdate:@"DROP TABLE IF EXISTS genresTemp"];
+			 [db executeUpdate:@"CREATE TABLE genresTemp (genre TEXT)"];
+			 [db executeUpdate:@"INSERT INTO genresTemp SELECT * FROM genres"];
+			 [db executeUpdate:@"DROP TABLE genres"];
+			 [db executeUpdate:@"ALTER TABLE genresTemp RENAME TO genres"];
+			 [db executeUpdate:@"CREATE UNIQUE INDEX genreNames ON genres (genre)"];
+			 [db executeUpdate:@"CREATE TABLE genresTableFixed (a INTEGER)"];
+		 }
+	 }];
 }
 
 - (void)closeAllDatabases

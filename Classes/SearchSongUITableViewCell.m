@@ -124,13 +124,13 @@
 {
 	[super showOverlay];
 	
-	if (self.isOverlayShowing)
+	self.overlayView.downloadButton.alpha = (float)!viewObjectsS.isOfflineMode;
+	self.overlayView.downloadButton.enabled = !viewObjectsS.isOfflineMode;
+	
+	if (self.mySong.isFullyCached && !viewObjectsS.isOfflineMode)
 	{
-		if (self.mySong.isFullyCached)
-		{
-			self.overlayView.downloadButton.alpha = .3;
-			self.overlayView.downloadButton.enabled = NO;
-		}
+		self.overlayView.downloadButton.alpha = .3;
+		self.overlayView.downloadButton.enabled = NO;
 	}
 }
 

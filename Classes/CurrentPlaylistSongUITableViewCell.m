@@ -16,6 +16,7 @@
 #import "CellOverlay.h"
 #import "PlaylistSingleton.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "SavedSettings.h"
 
 @implementation CurrentPlaylistSongUITableViewCell
 
@@ -93,12 +94,21 @@
 
 #pragma mark - Overlay
 
+- (void)showOverlay
+{
+	[super showOverlay];
+	
+	self.overlayView.downloadButton.alpha = (float)!viewObjectsS.isOfflineMode;
+	self.overlayView.downloadButton.enabled = !viewObjectsS.isOfflineMode;
+}
+
 - (void)downloadAction
 {	
-	if (playlistS.isShuffle) 
-		[[Song songFromDbRow:self.indexPath.row inTable:@"shufflePlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue] addToCacheQueueDbQueue];
-	else 
-		[[Song songFromDbRow:self.indexPath.row inTable:@"currentPlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue] addToCacheQueueDbQueue];
+	NSString *currTable = settingsS.isJukeboxEnabled ? @"jukeboxCurrentPlaylist" : @"currentPlaylist";
+	NSString *shufTable = settingsS.isJukeboxEnabled ? @"jukeboxShufflePlaylist" : @"shufflePlaylist";
+	NSString *table = playlistS.isShuffle ? shufTable : currTable;
+	
+	[[Song songFromDbRow:self.indexPath.row inTable:table inDatabaseQueue:databaseS.currentPlaylistDbQueue] addToCacheQueueDbQueue];
 	
 	self.overlayView.downloadButton.alpha = .3;
 	self.overlayView.downloadButton.enabled = NO;
@@ -108,8 +118,11 @@
 
 - (void)queueAction
 {	
-	NSString *tableName = playlistS.isShuffle ? @"shufflePlaylist" : @"currentPlaylist";
-	Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:tableName inDatabaseQueue:databaseS.currentPlaylistDbQueue];
+	NSString *currTable = settingsS.isJukeboxEnabled ? @"jukeboxCurrentPlaylist" : @"currentPlaylist";
+	NSString *shufTable = settingsS.isJukeboxEnabled ? @"jukeboxShufflePlaylist" : @"shufflePlaylist";
+	NSString *table = playlistS.isShuffle ? shufTable : currTable;
+	
+	Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:table inDatabaseQueue:databaseS.currentPlaylistDbQueue];
 	[aSong addToCurrentPlaylistDbQueue];
 
 	[self hideOverlay];

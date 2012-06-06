@@ -513,8 +513,19 @@
 		if (!genreTest)
 		{
 			[db executeUpdate:@"DELETE FROM genres WHERE genre = ?", genre];
-			if ([db hadError])
-				hadError = YES;
+			if ([db hadError]) hadError = YES;
+			
+			[db executeUpdate:@"DROP TABLE IF EXISTS genresTemp"];
+			[db executeUpdate:@"CREATE TABLE genresTemp"];
+			if ([db hadError]) hadError = YES;
+			[db executeUpdate:@"INSERT INTO genresTemp SELECT * FROM genres"];
+			if ([db hadError]) hadError = YES;
+			[db executeUpdate:@"DROP TABLE genres"];
+			if ([db hadError]) hadError = YES;
+			[db executeUpdate:@"ALTER TABLE genresTemp RENAME TO genres"];
+			if ([db hadError]) hadError = YES;
+			[db executeUpdate:@"CREATE UNIQUE INDEX genreNames ON genres (genre)"];
+			if ([db hadError]) hadError = YES;
 		}
 	}];
 	 

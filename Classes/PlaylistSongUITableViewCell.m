@@ -18,14 +18,12 @@
 
 @implementation PlaylistSongUITableViewCell
 
-@synthesize playlistMD5, coverArtView, numberLabel, nameScrollView, songNameLabel, artistNameLabel;
+@synthesize coverArtView, numberLabel, nameScrollView, songNameLabel, artistNameLabel, mySong;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
 {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) 
-	{
-		playlistMD5 = nil;
-		
+	{		
 		coverArtView = [[AsynchronousImageView alloc] init];
 		coverArtView.isLarge = NO;
 		[self.contentView addSubview:coverArtView];
@@ -102,13 +100,24 @@
 	[self hideOverlay];
 }*/
 
+- (void)showOverlay
+{
+	[super showOverlay];
+	
+	self.overlayView.downloadButton.alpha = (float)!viewObjectsS.isOfflineMode;
+	self.overlayView.downloadButton.enabled = !viewObjectsS.isOfflineMode;
+	
+	if (self.mySong.isFullyCached && !viewObjectsS.isOfflineMode)
+	{
+		self.overlayView.downloadButton.alpha = .3;
+		self.overlayView.downloadButton.enabled = NO;
+	}
+}
+
 - (void)downloadAction
 {
-	if (viewObjectsS.isLocalPlaylist)
-		[[Song songFromDbRow:self.indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", self.playlistMD5] inDatabaseQueue:databaseS.localPlaylistsDbQueue] addToCacheQueueDbQueue];
-	else
-		[[Song songFromServerPlaylistId:self.playlistMD5 row:self.indexPath.row] addToCacheQueueDbQueue];
-
+	[self.mySong addToCacheQueueDbQueue];
+	
 	self.overlayView.downloadButton.alpha = .3;
 	self.overlayView.downloadButton.enabled = NO;
 	
@@ -117,10 +126,7 @@
 
 - (void)queueAction
 {
-	if (viewObjectsS.isLocalPlaylist)
-		[[Song songFromDbRow:self.indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", self.playlistMD5] inDatabaseQueue:databaseS.localPlaylistsDbQueue] addToCurrentPlaylistDbQueue];
-	else
-		[[Song songFromServerPlaylistId:playlistMD5 row:self.indexPath.row] addToCurrentPlaylistDbQueue];
+	[self.mySong addToCurrentPlaylistDbQueue];
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 	

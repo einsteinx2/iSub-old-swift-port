@@ -73,6 +73,14 @@
 
 #pragma mark - Overlay
 
+- (void)showOverlay
+{
+	[super showOverlay];
+	
+	self.overlayView.downloadButton.alpha = (float)!viewObjectsS.isOfflineMode;
+	self.overlayView.downloadButton.enabled = !viewObjectsS.isOfflineMode;
+}
+
 - (void)downloadAction
 {
 	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];

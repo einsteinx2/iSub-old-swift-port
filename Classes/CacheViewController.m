@@ -227,23 +227,6 @@
 	
 	if (IS_IPAD())
 		self.view.backgroundColor = ISMSiPadBackgroundColor;
-		
-	self.tableView.scrollEnabled = YES;
-	[self.jukeboxInputBlocker removeFromSuperview];
-	self.jukeboxInputBlocker = nil;
-	if (settingsS.isJukeboxEnabled)
-	{
-		self.tableView.scrollEnabled = NO;
-		
-		self.jukeboxInputBlocker = [UIButton buttonWithType:UIButtonTypeCustom];
-		self.jukeboxInputBlocker.frame = CGRectMake(0, 0, 1004, 1004);
-		[self.view addSubview:self.jukeboxInputBlocker];
-		
-		UIView *colorView = [[UIView alloc] initWithFrame:self.jukeboxInputBlocker.frame];
-		colorView.backgroundColor = [UIColor blackColor];
-		colorView.alpha = 0.5;
-		[self.jukeboxInputBlocker addSubview:colorView];
-	}
 	
 	if(musicS.showPlayerIcon)
 	{
@@ -284,6 +267,23 @@
 	{
 		self.tableView.tableHeaderView.hidden = YES;
 		[self addNoSongsScreen];
+	}
+	
+	self.tableView.scrollEnabled = YES;
+	[self.jukeboxInputBlocker removeFromSuperview];
+	self.jukeboxInputBlocker = nil;
+	if (settingsS.isJukeboxEnabled)
+	{
+		self.tableView.scrollEnabled = NO;
+		
+		self.jukeboxInputBlocker = [UIButton buttonWithType:UIButtonTypeCustom];
+		self.jukeboxInputBlocker.frame = CGRectMake(0, 0, 1004, 1004);
+		[self.view addSubview:self.jukeboxInputBlocker];
+		
+		UIView *colorView = [[UIView alloc] initWithFrame:self.jukeboxInputBlocker.frame];
+		colorView.backgroundColor = [UIColor blackColor];
+		colorView.alpha = 0.5;
+		[self.jukeboxInputBlocker addSubview:colorView];
 	}
 }
 

@@ -76,6 +76,9 @@ double startSongSeconds = 0.0;
 	
 	Song *currentSong = playlistS.currentSong;
 	
+	if (!currentSong)
+		return;
+	
 	// Check to see if the song is already cached
 	if (currentSong.isFullyCached)
 	{
@@ -89,14 +92,16 @@ double startSongSeconds = 0.0;
 	}
 	else if (!currentSong.isFullyCached && viewObjectsS.isOfflineMode)
 	{
-		// The song is not fully cached and this is offline mode, so warn that it can't be played
+		/*// The song is not fully cached and this is offline mode, so warn that it can't be played
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" 
 																	message:@"Unable to play this song in offline mode as it isn't fully cached." 
 																   delegate:self 
 														  cancelButtonTitle:@"Ok" 
 														  otherButtonTitles:nil];
 		alert.tag = 4;
-		[alert show];
+		[alert show];*/
+		
+		[self playSongAtPosition:playlistS.nextIndex];
 	}
 	else
 	{
@@ -172,7 +177,7 @@ double startSongSeconds = 0.0;
 		[jukeboxS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:position]];
 	}
 	else
-	{		
+	{	
 		[streamManagerS removeAllStreamsExceptForSong:playlistS.currentSong];
 		[self startSong];
 	}

@@ -149,9 +149,7 @@
 
 - (void)showPlayer
 {
-	// Start the player	
-	[musicS playSongAtPosition:0];
-	
+	// Start the player		
 	if (IS_IPAD())
 	{
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
@@ -219,8 +217,7 @@
 		}
 	}
 	
-	if (settingsS.isJukeboxEnabled)
-		[jukeboxS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:0]];
+	[musicS playSongAtPosition:0];
 	
 	// Hide loading screen
 	[viewObjectsS hideLoadingScreen];
@@ -289,8 +286,7 @@
 	// Shuffle the playlist
 	[databaseS shufflePlaylist];
 	
-	if (settingsS.isJukeboxEnabled)
-		[jukeboxS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:0]];
+	[musicS playSongAtPosition:0];
 	
 	// Set the isShuffle flag
 	playlistS.isShuffle = YES;
@@ -447,7 +443,6 @@
 	}
 }
 
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {	
 	if (!indexPath)
@@ -509,7 +504,7 @@
 		else
 		{
 			// Find the new playlist position
-			NSUInteger songRow = indexPath.row - [listOfAlbums count];
+			NSUInteger songRow = indexPath.row - listOfAlbums.count;
 			
 			// Clear the current playlist
 			if (settingsS.isJukeboxEnabled)
@@ -526,8 +521,8 @@
 			NSMutableArray *songIds = [[NSMutableArray alloc] init];
 			for(NSString *songMD5 in listOfSongs)
 			{
-				@autoreleasepool {
-				
+				@autoreleasepool
+				{
 					Song *aSong = [Song songFromGenreDbQueue:songMD5];
 
 					[aSong addToCurrentPlaylistDbQueue];

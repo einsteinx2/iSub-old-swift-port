@@ -34,11 +34,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/PlayingUITableViewCell.m"
-         timestampString = "360092991.114986"
+         timestampString = "360641911.418689"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "101"
-         endingLineNumber = "101"
+         startingLineNumber = "110"
+         endingLineNumber = "110"
          landmarkName = "-downloadAction"
          landmarkType = "5">
       </FileBreakpoint>
@@ -47,11 +47,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/PlayingUITableViewCell.m"
-         timestampString = "360093039.479834"
+         timestampString = "360641911.418689"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "100"
-         endingLineNumber = "100"
+         startingLineNumber = "109"
+         endingLineNumber = "109"
          landmarkName = "-downloadAction"
          landmarkType = "5">
       </FileBreakpoint>
@@ -121,29 +121,55 @@
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
-         shouldBeEnabled = "Yes"
+         shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/PlaylistSongsViewController.m"
-         timestampString = "360216780.350301"
+         timestampString = "360639122.27246"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "274"
-         endingLineNumber = "274"
-         landmarkName = "-connection:didFailWithError:"
+         startingLineNumber = "307"
+         endingLineNumber = "307"
+         landmarkName = "-connectionDidFinishLoading:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "Classes/PlaylistSongsViewController.m"
-         timestampString = "360216845.790377"
+         filePath = "Classes/GenresAlbumViewController.m"
+         timestampString = "360633642.898021"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "304"
-         endingLineNumber = "304"
-         landmarkName = "-connectionDidFinishLoading:"
+         startingLineNumber = "549"
+         endingLineNumber = "549"
+         landmarkName = "-tableView:didSelectRowAtIndexPath:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Classes/GenresAlbumViewController.m"
+         timestampString = "360633642.898021"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "448"
+         endingLineNumber = "448"
+         landmarkName = "-tableView:didSelectRowAtIndexPath:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Classes/PlaylistSingleton.m"
+         timestampString = "360633257.464165"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "302"
+         endingLineNumber = "302"
+         landmarkName = "-setCurrentIndex:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

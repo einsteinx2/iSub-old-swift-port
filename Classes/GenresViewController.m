@@ -90,7 +90,6 @@
 		[self.noGenresScreen addSubview:textLabel];
 		
 		[self.view addSubview:self.noGenresScreen];
-		
 	}
 }
 

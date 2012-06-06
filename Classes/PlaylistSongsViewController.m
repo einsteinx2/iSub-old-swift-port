@@ -63,30 +63,33 @@
 	{
 		self.title = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT playlist FROM localPlaylists WHERE md5 = ?", self.md5];
 		
-		UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
-		headerView.backgroundColor = viewObjectsS.darkNormal;
-		
-		UIImageView *sendImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"upload-playlist.png"]];
-		sendImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-		sendImage.frame = CGRectMake(23, 11, 24, 24);
-		[headerView addSubview:sendImage];
-		
-		UILabel *sendLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 320, 50)];
-		sendLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
-		sendLabel.backgroundColor = [UIColor clearColor];
-		sendLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
-		sendLabel.textAlignment = UITextAlignmentCenter;
-		sendLabel.font = [UIFont boldSystemFontOfSize:30];
-		sendLabel.text = @"Save to Server";
-		[headerView addSubview:sendLabel];
-		
-		UIButton *sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		sendButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
-		sendButton.frame = CGRectMake(0, 0, 320, 40);
-		[sendButton addTarget:self action:@selector(uploadPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
-		[headerView addSubview:sendButton];
-		
-		self.tableView.tableHeaderView = headerView;
+		if (!viewObjectsS.isOfflineMode)
+		{
+			UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
+			headerView.backgroundColor = viewObjectsS.darkNormal;
+			
+			UIImageView *sendImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"upload-playlist.png"]];
+			sendImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+			sendImage.frame = CGRectMake(23, 11, 24, 24);
+			[headerView addSubview:sendImage];
+			
+			UILabel *sendLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 320, 50)];
+			sendLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+			sendLabel.backgroundColor = [UIColor clearColor];
+			sendLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
+			sendLabel.textAlignment = UITextAlignmentCenter;
+			sendLabel.font = [UIFont boldSystemFontOfSize:30];
+			sendLabel.text = @"Save to Server";
+			[headerView addSubview:sendLabel];
+			
+			UIButton *sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
+			sendButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+			sendButton.frame = CGRectMake(0, 0, 320, 40);
+			[sendButton addTarget:self action:@selector(uploadPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
+			[headerView addSubview:sendButton];
+			
+			self.tableView.tableHeaderView = headerView;
+		}
 		
 		if (!IS_IPAD())
 		{
@@ -167,8 +170,8 @@
 	
 	if (viewObjectsS.isLocalPlaylist)
 	{
-		//appDelegate.listOfPlaylistSongs = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@%@List", appDelegateS.defaultUrl, appDelegateS.localPlaylist]]];
-		//appDelegate.dictOfPlaylistSongs = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@%@Dict", appDelegateS.defaultUrl, appDelegateS.localPlaylist]]];
+		self.playlistCount = [databaseS.localPlaylistsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", self.md5]];
+		[self.tableView reloadData];
 	}
 	else
 	{
@@ -404,15 +407,7 @@ static NSString *kName_Error = @"error";
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
-	if (viewObjectsS.isLocalPlaylist)
-	{
-		return [databaseS.localPlaylistsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", self.md5]];
-	}
-	else
-	{
-		return playlistCount;
-		//return [viewObjectsS.listOfPlaylistSongs count];
-	}
+	return self.playlistCount;
 }
 
 
@@ -427,7 +422,6 @@ static NSString *kName_Error = @"error";
 	}
 	
 	cell.indexPath = indexPath;
-	cell.playlistMD5 = self.md5;
 	
 	// Set up the cell...
 	Song *aSong;
@@ -439,8 +433,9 @@ static NSString *kName_Error = @"error";
 	else
 	{
 		//aSong = [viewObjectsS.listOfPlaylistSongs objectAtIndexSafe:indexPath.row];
-		aSong = [Song songFromServerPlaylistId:md5 row:indexPath.row];
+		aSong = [Song songFromServerPlaylistId:self.md5 row:indexPath.row];
 	}
+	cell.mySong = aSong;
 	
 	cell.coverArtView.coverArtId = aSong.coverArtId;
 	
@@ -470,6 +465,62 @@ static NSString *kName_Error = @"error";
 	return cell;
 }
 
+- (void)didSelectRowInternal:(NSIndexPath *)indexPath
+{
+	// Clear the current playlist
+	if (settingsS.isJukeboxEnabled)
+	{
+		[databaseS resetJukeboxPlaylist];
+		[jukeboxS jukeboxClearRemotePlaylist];
+	}
+	else
+	{
+		[databaseS resetCurrentPlaylistDb];
+	}
+	
+	playlistS.isShuffle = NO;
+	
+	/*for (int i = 0; i < self.playlistCount; i++)
+	{
+		@autoreleasepool
+		{
+			Song *aSong;
+			if (viewObjectsS.isLocalPlaylist)
+			{
+				aSong = [Song songFromDbRow:i inTable:[NSString stringWithFormat:@"playlist%@", self.md5] inDatabaseQueue:databaseS.localPlaylistsDbQueue];
+			}
+			else
+			{
+				aSong = [Song songFromServerPlaylistId:self.md5 row:i];
+			}
+			
+			[aSong addToCurrentPlaylistDbQueue];
+		}
+	}*/
+	
+	// Need to do this for speed
+	NSString *databaseName = viewObjectsS.isOfflineMode ? @"offlineCurrentPlaylist.db" : [NSString stringWithFormat:@"%@currentPlaylist.db", [settingsS.urlString md5]];
+	NSString *currTableName = settingsS.isJukeboxEnabled ? @"jukeboxCurrentPlaylist" : @"currentPlaylist";
+	NSString *playTableName = [NSString stringWithFormat:@"%@%@", viewObjectsS.isLocalPlaylist ? @"playlist" : @"splaylist", self.md5];
+	[databaseS.localPlaylistsDbQueue inDatabase:^(FMDatabase *db)
+	 {
+		 [db executeUpdate:@"ATTACH DATABASE ? AS ?", [databaseS.databaseFolderPath stringByAppendingPathComponent:databaseName], @"currentPlaylistDb"];
+		 if ([db hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [db lastErrorCode], [db lastErrorMessage]); }
+		 
+		 [db executeUpdate:[NSString stringWithFormat:@"INSERT INTO %@ SELECT * FROM %@", currTableName, playTableName]];
+		 [db executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
+	 }];
+	
+	if (settingsS.isJukeboxEnabled)
+		[jukeboxS jukeboxReplacePlaylistWithLocal];
+
+	[musicS playSongAtPosition:indexPath.row];
+	
+	[viewObjectsS hideLoadingScreen];
+	
+	[self showPlayer];
+}
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
@@ -478,60 +529,14 @@ static NSString *kName_Error = @"error";
 	
 	if (viewObjectsS.isCellEnabled)
 	{
-		// Clear the current playlist
-		if (settingsS.isJukeboxEnabled)
-		{
-			[databaseS resetJukeboxPlaylist];
-			[jukeboxS jukeboxClearRemotePlaylist];
-		}
-		else
-		{
-			[databaseS resetCurrentPlaylistDb];
-		}
-		
-		[databaseS.localPlaylistsDbQueue inDatabase:^(FMDatabase *db)
-		{
-			if (viewObjectsS.isLocalPlaylist)
-			{			
-				[db executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, settingsS.urlString.md5], @"currentPlaylistDb"];
-				if ([db hadError]) { DLog(@"Err attaching the localPlaylistsDb %d: %@", [db lastErrorCode], [db lastErrorMessage]); }
-				if (settingsS.isJukeboxEnabled)
-					[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO jukeboxCurrentPlaylist SELECT * FROM playlist%@", self.md5]];
-				else
-					[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", self.md5]];
-				[db executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
-			}
-			else
-			{
-				[db executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, settingsS.urlString.md5], @"currentPlaylistDb"];
-				if ([db hadError]) { DLog(@"Err attaching the localPlaylistsDb %d: %@", [db lastErrorCode], [db lastErrorMessage]); }
-				if (settingsS.isJukeboxEnabled)
-					[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO jukeboxCurrentPlaylist SELECT * FROM splaylist%@", self.md5]];
-				else
-					[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM splaylist%@", self.md5]];
-				[db executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
-			}
-		}];
-		
-		if (settingsS.isJukeboxEnabled)
-		{
-			[jukeboxS jukeboxReplacePlaylistWithLocal];
-		}
-			
-		playlistS.isShuffle = NO;
-		
-		[musicS playSongAtPosition:indexPath.row];
-		
-		[self showPlayer];
+		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
+		[self performSelector:@selector(didSelectRowInternal:) withObject:indexPath afterDelay:0.05];
 	}
 	else
 	{
 		[self.tableView deselectRowAtIndexPath:indexPath animated:NO];
 	}
 }
-
-
-
 
 #pragma mark -
 #pragma mark Pull to refresh methods

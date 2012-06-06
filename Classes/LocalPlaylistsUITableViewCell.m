@@ -20,7 +20,7 @@
 
 @implementation LocalPlaylistsUITableViewCell
 
-@synthesize md5, playlistCountLabel, playlistNameScrollView, playlistNameLabel;
+@synthesize md5, playlistCountLabel, playlistNameScrollView, playlistNameLabel, playlistCount;
 
 #pragma mark - Lifecycle
 
@@ -71,6 +71,14 @@
 
 #pragma mark - Overlay
 
+- (void)showOverlay
+{
+	[super showOverlay];
+	
+	self.overlayView.downloadButton.alpha = (float)!viewObjectsS.isOfflineMode;
+	self.overlayView.downloadButton.enabled = !viewObjectsS.isOfflineMode;
+}
+
 - (void)downloadAllSongs
 {
 	int count = [databaseS.localPlaylistsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", self.md5]];
@@ -96,30 +104,18 @@
 
 - (void)queueAllSongs
 {
-	if (settingsS.isJukeboxEnabled)
+	for (int i = 0; i < self.playlistCount; i++)
 	{
-		/*[databaseS.localPlaylistsDb executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/currentPlaylist.db", databaseS.databaseFolderPath], @"currentPlaylistDb"];
-		 if ([databaseS.localPlaylistsDb hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [databaseS.localPlaylistsDb lastErrorCode], [databaseS.localPlaylistsDb lastErrorMessage]); }
-		 [databaseS.localPlaylistsDb executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", self.md5]];
-		 [databaseS.localPlaylistsDb executeUpdate:@"DETACH DATABASE currentPlaylistDb"];*/
-	}
-	else
-	{
-		[databaseS.localPlaylistsDbQueue inDatabase:^(FMDatabase *db)
+		@autoreleasepool
 		{
-			[db executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, settingsS.urlString.md5], @"currentPlaylistDb"];
-			if ([db hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [db lastErrorCode], [db lastErrorMessage]); }
-			[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylist SELECT * FROM playlist%@", md5]];
-			if ([db hadError]) { DLog(@"Err performing query %d: %@", [db lastErrorCode], [db lastErrorMessage]); }
-			[db executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
-		}];
-		
-		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+			Song *aSong = [Song songFromDbRow:i inTable:[NSString stringWithFormat:@"playlist%@", self.md5] inDatabaseQueue:databaseS.localPlaylistsDbQueue];
+			[aSong addToCurrentPlaylistDbQueue];
+		}
 	}
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 	
 	[viewObjectsS hideLoadingScreen];
 }
-
 
 - (void)queueAction
 {
