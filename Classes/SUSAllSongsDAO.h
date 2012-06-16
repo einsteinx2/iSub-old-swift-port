@@ -6,17 +6,17 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-#import "SUSLoaderDelegate.h"
-#import "SUSLoaderManager.h"
+#import "ISMSLoaderDelegate.h"
+#import "ISMSLoaderManager.h"
 
 @class FMDatabase, Song, SUSAllSongsLoader;
 
-@interface SUSAllSongsDAO : NSObject <SUSLoaderManager, SUSLoaderDelegate>
+@interface SUSAllSongsDAO : NSObject <ISMSLoaderManager, ISMSLoaderDelegate>
 {
 	__strong NSArray *index;
 }
 
-@property (unsafe_unretained) id<SUSLoaderDelegate> delegate;
+@property (unsafe_unretained) id<ISMSLoaderDelegate> delegate;
 
 @property (readonly) NSUInteger count;
 @property (readonly) NSUInteger searchCount;
@@ -26,7 +26,7 @@
 
 - (NSArray *)index;
 
-- (id)initWithDelegate:(NSObject <SUSLoaderDelegate> *)theDelegate;
+- (id)initWithDelegate:(NSObject <ISMSLoaderDelegate> *)theDelegate;
 - (void)restartLoad;
 - (void)startLoad;
 - (void)cancelLoad;

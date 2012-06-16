@@ -28,7 +28,7 @@
 #import "AudioEngine.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "SUSCoverArtDAO.h"
-#import "SUSCoverArtLoader.h"
+#import "ISMSCoverArtLoader.h"
 #import "ISMSStreamHandler.h"
 #import "CacheSingleton.h"
 #import "NSNotificationCenter+MainThread.h"

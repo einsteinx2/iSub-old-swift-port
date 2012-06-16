@@ -150,7 +150,7 @@
 	}
 }
 
-- (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
+- (void)loadingFailed:(ISMSLoader*)theLoader withError:(NSError *)error
 {
 	[self.activityIndicator removeFromSuperview];
 	self.activityIndicator = nil;
@@ -162,7 +162,7 @@
 	}
 }
 
-- (void)loadingFinished:(SUSLoader*)theLoader
+- (void)loadingFinished:(ISMSLoader*)theLoader
 {
 	[self.activityIndicator removeFromSuperview];
 	self.activityIndicator = nil;

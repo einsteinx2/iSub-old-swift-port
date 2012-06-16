@@ -15,7 +15,7 @@
 #import "NSString+md5.h"
 #import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
-#import "SUSCoverArtLoader.h"
+#import "ISMSCoverArtLoader.h"
 #import "SavedSettings.h"
 #import "CacheSingleton.h"
 #import "PlaylistSingleton.h"
@@ -132,6 +132,7 @@
 	}
 
 	// Create the file handle
+	NSLog(@"filePath: %@", self.filePath);
 	self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.filePath];
 	
 	if (self.fileHandle)
@@ -159,21 +160,28 @@
 		self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.filePath];
 	}
 	
-	NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(mySong.songId), @"id", nil];
-	[parameters setObject:@"true" forKey:@"estimateContentLength"];
-	
-	if (self.maxBitrateSetting == NSIntegerMax)
+	if ([settingsS.serverType isEqualToString:SUBSONIC] || [settingsS.serverType isEqualToString:UBUNTU_ONE])
 	{
-		self.maxBitrateSetting = settingsS.currentMaxBitrate;
+		NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(mySong.songId), @"id", nil];
+		[parameters setObject:@"true" forKey:@"estimateContentLength"];
+		
+		if (self.maxBitrateSetting == NSIntegerMax)
+		{
+			self.maxBitrateSetting = settingsS.currentMaxBitrate;
+		}
+		
+		if (self.maxBitrateSetting != 0)
+		{
+			NSString *maxBitRate = [[NSString alloc] initWithFormat:@"%i", self.maxBitrateSetting];
+			[parameters setObject:n2N(maxBitRate) forKey:@"maxBitRate"];
+		}
+		self.request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters byteOffset:byteOffset];
+	}
+	else if ([settingsS.serverType isEqualToString:PERSONAL_MEDIA_SERVER]) 
+	{
+		self.request = [NSMutableURLRequest requestWithPMSAction:@"stream" item:self.mySong.songId];
 	}
 	
-	if (self.maxBitrateSetting != 0)
-	{
-		NSString *maxBitRate = [[NSString alloc] initWithFormat:@"%i", self.maxBitrateSetting];
-		[parameters setObject:n2N(maxBitRate) forKey:@"maxBitRate"];
-	}
-	self.request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters byteOffset:byteOffset];
-
 	self.loadingThread = [[NSThread alloc] initWithTarget:self selector:@selector(startConnection) object:nil];
 	
 	self.bitrate = mySong.estimatedBitrate;

@@ -6,14 +6,14 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "SUSLoaderDelegate.h"
-#import "SUSLoaderManager.h"
+#import "ISMSLoaderDelegate.h"
+#import "ISMSLoaderManager.h"
 
-@class FMDatabase, SUSCoverArtLoader;
-@interface SUSCoverArtDAO : NSObject <SUSLoaderDelegate, SUSLoaderManager>
+@class FMDatabase, ISMSCoverArtLoader;
+@interface SUSCoverArtDAO : NSObject <ISMSLoaderDelegate, ISMSLoaderManager>
 
-@property (unsafe_unretained) NSObject<SUSLoaderDelegate> *delegate;
-@property (strong) SUSCoverArtLoader *loader;
+@property (unsafe_unretained) NSObject<ISMSLoaderDelegate> *delegate;
+@property (strong) ISMSCoverArtLoader *loader;
 
 @property (copy) NSString *coverArtId;
 @property BOOL isLarge;
@@ -22,8 +22,8 @@
 - (UIImage *)defaultCoverArtImage;
 @property (readonly) BOOL isCoverArtCached;
 
-- (id)initWithDelegate:(NSObject<SUSLoaderDelegate> *)theDelegate;
-- (id)initWithDelegate:(NSObject<SUSLoaderDelegate> *)delegate coverArtId:(NSString *)artId isLarge:(BOOL)large;
+- (id)initWithDelegate:(NSObject<ISMSLoaderDelegate> *)theDelegate;
+- (id)initWithDelegate:(NSObject<ISMSLoaderDelegate> *)delegate coverArtId:(NSString *)artId isLarge:(BOOL)large;
 
 - (void)downloadArtIfNotExists;
 

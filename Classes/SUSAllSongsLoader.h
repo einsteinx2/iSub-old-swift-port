@@ -6,14 +6,14 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-#import "SUSLoader.h"
+#import "ISMSLoader.h"
 
 #define READ_BUFFER_AMOUNT 400
 #define WRITE_BUFFER_AMOUNT 400
 
 @class Artist, Album, SUSRootFoldersDAO;
 
-@interface SUSAllSongsLoader : SUSLoader
+@interface SUSAllSongsLoader : ISMSLoader
 
 @property NSInteger iteration;
 @property NSUInteger albumCount;

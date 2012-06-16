@@ -18,7 +18,7 @@
 @implementation SUSLyricsDAO
 @synthesize loader, delegate;
 
-- (id)initWithDelegate:(NSObject <SUSLoaderDelegate> *)theDelegate
+- (id)initWithDelegate:(NSObject <ISMSLoaderDelegate> *)theDelegate
 {
     if ((self = [super init]))
     {
@@ -69,7 +69,7 @@
     return nil;
 }
 
-#pragma mark - SUSLoader manager
+#pragma mark - ISMSLoader manager
 
 - (void)startLoad
 {
@@ -83,9 +83,9 @@
 	self.loader = nil;
 }
 
-#pragma mark - SUSLoader delegate
+#pragma mark - ISMSLoader delegate
 
-- (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
+- (void)loadingFailed:(ISMSLoader*)theLoader withError:(NSError *)error
 {
 	self.loader.delegate = nil;
 	self.loader = nil;
@@ -96,7 +96,7 @@
 	}
 }
 
-- (void)loadingFinished:(SUSLoader*)theLoader
+- (void)loadingFinished:(ISMSLoader*)theLoader
 {
 	self.loader.delegate = nil;
 	self.loader = nil;

@@ -13,22 +13,30 @@
 
 @synthesize title, albumId, coverArtId, artistName, artistId;
 
+- (id)initWithPMSDictionary:(NSDictionary *)dictionary
+{
+	if ((self = [super init]))
+	{
+		//title = [dictionary objectForKey:@"albumName"];
+		//albumId = [dictionary objectForKey:@"albumId"];
+		// albums are folders for now
+		title = N2n([dictionary objectForKey:@"folderName"]);
+		albumId = N2n([dictionary objectForKey:@"folderId"]);
+		coverArtId = N2n([dictionary objectForKey:@"artId"]);
+		artistName = N2n([dictionary objectForKey:@"artistName"]);
+		artistId = N2n([dictionary objectForKey:@"artistId"]);
+	}
+	return self;
+}
+
 - (id)initWithTBXMLElement:(TBXMLElement *)element artistId:(NSString *)artistIdToSet artistName:(NSString *)artistNameToSet
 {
 	if ((self = [super init]))
 	{
-		title = nil;
-		albumId = nil;
-		coverArtId = nil;
-		artistName = nil;
-		artistId = nil;
-		
-		self.title = [[TBXML valueOfAttributeNamed:@"title" forElement:element] cleanString];
-		self.albumId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
-		if([TBXML valueOfAttributeNamed:@"coverArt" forElement:element])
-			self.coverArtId = [TBXML valueOfAttributeNamed:@"coverArt" forElement:element];
-		if (artistIdToSet != nil)
-			self.artistId = [NSString stringWithString:artistIdToSet];
+		title = [[TBXML valueOfAttributeNamed:@"title" forElement:element] cleanString];
+		albumId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
+		coverArtId = [TBXML valueOfAttributeNamed:@"coverArt" forElement:element];
+		artistId = [NSString stringWithString:artistIdToSet];
 		self.artistName = [artistNameToSet cleanString];
 	}
 	
@@ -39,26 +47,11 @@
 {
 	if ((self = [super init]))
 	{
-		title = nil;
-		albumId = nil;
-		coverArtId = nil;
-		artistName = nil;
-		artistId = nil;
-		
-		if([attributeDict objectForKey:@"title"])
-			self.title = [attributeDict objectForKey:@"title"];
-		
-		if([attributeDict objectForKey:@"id"])
-			self.albumId = [attributeDict objectForKey:@"id"];
-		
-		if([attributeDict objectForKey:@"coverArt"])
-			self.coverArtId = [attributeDict objectForKey:@"coverArt"];
-		
-		if([attributeDict objectForKey:@"artist"])
-			self.artistName = [attributeDict objectForKey:@"artist"];
-		
-		if([attributeDict objectForKey:@"parent"])
-			self.artistId = [attributeDict objectForKey:@"parent"];
+		title = [attributeDict objectForKey:@"title"];
+		albumId = [attributeDict objectForKey:@"id"];
+		coverArtId = [attributeDict objectForKey:@"coverArt"];
+		artistName = [attributeDict objectForKey:@"artist"];
+		artistId = [attributeDict objectForKey:@"parent"];
 	}
 	
 	return self;
@@ -69,25 +62,14 @@
 {
 	if ((self = [super init]))
 	{
-		title = nil;
-		albumId = nil;
-		coverArtId = nil;
-		artistName = nil;
-		artistId = nil;
-		
-		if([attributeDict objectForKey:@"title"])
-			self.title = [attributeDict objectForKey:@"title"];
-		
-		if([attributeDict objectForKey:@"id"])
-			self.albumId = [attributeDict objectForKey:@"id"];
-		
-		if([attributeDict objectForKey:@"coverArt"])
-			self.coverArtId = [attributeDict objectForKey:@"coverArt"];
+		title = [attributeDict objectForKey:@"title"];
+		albumId = [attributeDict objectForKey:@"id"];
+		coverArtId = [attributeDict objectForKey:@"coverArt"];
 		
 		if (myArtist)
 		{
-			self.artistName = myArtist.name;
-			self.artistId = myArtist.artistId;
+			artistName = myArtist.name;
+			artistId = myArtist.artistId;
 		}
 	}
 	

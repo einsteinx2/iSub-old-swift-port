@@ -18,6 +18,12 @@
 #import "Reachability.h"
 #import "NSArray+Additions.h"
 
+// Test server details
+#define DEFAULT_SERVER_TYPE SUBSONIC
+#define DEFAULT_URL @"http://isubapp.com:9001"
+#define DEFAULT_USER_NAME @"isub-guest"
+#define DEFAULT_PASSWORD @"1sub1snumb3r0n3"
+
 @implementation SavedSettings
 
 @synthesize serverList, redirectUrlString;
@@ -389,27 +395,36 @@
 	isShowLargeSongInfoInPlayer = [userDefaults boolForKey:@"isShowLargeSongInfoInPlayer"];
 	isLockScreenArtEnabled = [userDefaults boolForKey:@"isLockScreenArtEnabled"];
 	isEqualizerOn = [userDefaults boolForKey:@"isEqualizerOn"];
-		
-	NSString *url = [userDefaults stringForKey:@"url"];
-	if (url)
-	{
-		urlString = [[NSString alloc] initWithString:url];
-	}
 	
-	NSString *user = [userDefaults stringForKey:@"username"];
-	if (user)
-	{
-		username = [[NSString alloc] initWithString:user];
-	}
-	
-	NSString *pass = [userDefaults stringForKey:@"password"];
-	if (pass)
-	{
-		password = [[NSString alloc] initWithString:pass];
-	}
+	serverType = [userDefaults stringForKey:@"serverType"];
+	serverType = serverType ? serverType : DEFAULT_SERVER_TYPE;
+	urlString = [userDefaults stringForKey:@"url"];
+	urlString = urlString ? urlString : DEFAULT_URL;
+	username = [userDefaults stringForKey:@"username"];
+	username = username ? username : DEFAULT_USER_NAME;
+	password = [userDefaults stringForKey:@"password"];
+	password = password ? password : DEFAULT_PASSWORD;
 }
 
 #pragma mark - Login Settings
+
+- (NSString *)serverType
+{
+	@synchronized(self)
+	{
+		return serverType;
+	}
+}
+
+- (void)setServerType:(NSString *)type
+{
+	@synchronized(self)
+	{
+		serverType = [type copy];
+		[userDefaults setObject:type forKey:@"serverType"];
+		[userDefaults synchronize];
+	}
+}
 
 - (NSString *)urlString
 {
@@ -1400,11 +1415,6 @@
 	}
 }
 
-// Test server details
-#define DEFAULT_URL @"http://isubapp.com:9001"
-#define DEFAULT_USER_NAME @"isub-guest"
-#define DEFAULT_PASSWORD @"1sub1snumb3r0n3"
-
 - (BOOL)isTestServer
 {
 	return [urlString isEqualToString:DEFAULT_URL];
@@ -1421,12 +1431,14 @@
 	
 	userDefaults = [NSUserDefaults standardUserDefaults];
 	serverList = nil;
-	urlString = [[NSString alloc] initWithString:DEFAULT_URL];
-	username = [[NSString alloc] initWithString:DEFAULT_USER_NAME];
-	password = [[NSString alloc] initWithString:DEFAULT_PASSWORD];
+	
 	redirectUrlString = nil;
 	
+	DLog(@"urlString: %@", urlString);
+	
 	[self createInitialSettings];
+	
+	DLog(@"urlString: %@", urlString);
     
 	// If the settings are not set up, convert them
 	if ([userDefaults boolForKey:@"areSettingsSetup"])
@@ -1438,8 +1450,12 @@
 		}
 	}
 	
+	DLog(@"urlString: %@", urlString);
+	
 	// Cache certain settings to memory for speed
 	[self memCacheDefaults];
+	
+	DLog(@"urlString: %@", urlString);
 }
 
 + (id)sharedInstance

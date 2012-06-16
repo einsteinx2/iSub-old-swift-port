@@ -9,14 +9,14 @@
 #import "ISMSCacheQueueManager.h"
 #import "Song.h"
 #import "Song+DAO.h"
-#import "SUSLoader.h"
+#import "ISMSLoader.h"
 #import "DatabaseSingleton.h"
 #import "PlaylistSingleton.h"
 #import "SavedSettings.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "SUSLyricsLoader.h"
-#import "SUSCoverArtLoader.h"
+#import "ISMSCoverArtLoader.h"
 #import "ViewObjectsSingleton.h"
 #import "iSubAppDelegate.h"
 #import "ISMSStreamManager.h"
@@ -32,13 +32,13 @@
 
 #pragma mark - Lyric Loader Delegate
 
-- (void)loadingFailed:(SUSLoader *)theLoader withError:(NSError *)error
+- (void)loadingFailed:(ISMSLoader *)theLoader withError:(NSError *)error
 {
 	//DLog(@"theLoader: %@", theLoader);
 	theLoader.delegate = nil;
 }
 
-- (void)loadingFinished:(SUSLoader *)theLoader
+- (void)loadingFinished:(ISMSLoader *)theLoader
 {
 	//DLog(@"theLoader: %@", theLoader);
 	theLoader.delegate = nil;
@@ -113,12 +113,12 @@
 	if (self.currentQueuedSong.coverArtId)
 	{
 		NSString *coverArtId = self.currentQueuedSong.coverArtId;
-		SUSCoverArtLoader *playerArt = [[SUSCoverArtLoader alloc] initWithDelegate:self 
+		ISMSCoverArtLoader *playerArt = [[ISMSCoverArtLoader alloc] initWithDelegate:self 
 																		coverArtId:coverArtId
 																		   isLarge:YES];
 		[playerArt downloadArtIfNotExists];
 		
-		SUSCoverArtLoader *tableArt = [[SUSCoverArtLoader alloc] initWithDelegate:self
+		ISMSCoverArtLoader *tableArt = [[ISMSCoverArtLoader alloc] initWithDelegate:self
 																	   coverArtId:coverArtId 
 																		  isLarge:NO];
 		[tableArt downloadArtIfNotExists];

@@ -10,6 +10,7 @@
 
 #define SUBSONIC @"Subsonic"
 #define UBUNTU_ONE @"Ubuntu One"
+#define PERSONAL_MEDIA_SERVER @"Personal Media Server"
 
 /*typedef enum {
 	ServerTypeSubsonic,

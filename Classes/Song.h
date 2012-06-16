@@ -39,6 +39,8 @@
 
 - (id)copyWithZone:(NSZone *)zone;
 
+- (id)initWithPMSDictionary:(NSDictionary *)dictionary;
+
 - (id)initWithTBXMLElement:(TBXMLElement *)element;
 - (id)initWithAttributeDict:(NSDictionary *)attributeDict;
 

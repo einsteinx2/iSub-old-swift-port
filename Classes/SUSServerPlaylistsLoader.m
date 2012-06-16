@@ -29,9 +29,9 @@
     return databaseS.localPlaylistsDbQueue;
 }
 
-- (SUSLoaderType)type
+- (ISMSLoaderType)type
 {
-    return SUSLoaderType_ServerPlaylist;
+    return ISMSLoaderType_ServerPlaylist;
 }
 
 #pragma mark - Private DB Methods

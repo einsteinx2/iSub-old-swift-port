@@ -28,9 +28,9 @@
 }
 
 
-- (SUSLoaderType)type
+- (ISMSLoaderType)type
 {
-    return SUSLoaderType_NowPlaying;
+    return ISMSLoaderType_NowPlaying;
 }
 
 #pragma mark - Loader Methods

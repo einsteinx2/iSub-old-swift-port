@@ -12,12 +12,12 @@
 
 #import "DatabaseSingleton.h"
 #import "NSString+md5.h"
-#import "SUSCoverArtLoader.h"
+#import "ISMSCoverArtLoader.h"
 
 @implementation SUSCoverArtDAO
 @synthesize delegate, isLarge, coverArtId, loader;
 
-- (id)initWithDelegate:(NSObject<SUSLoaderDelegate> *)theDelegate
+- (id)initWithDelegate:(NSObject<ISMSLoaderDelegate> *)theDelegate
 {
 	if ((self = [super init]))
 	{
@@ -26,7 +26,7 @@
 	return self;
 }
 
-- (id)initWithDelegate:(NSObject<SUSLoaderDelegate> *)theDelegate coverArtId:(NSString *)artId isLarge:(BOOL)large
+- (id)initWithDelegate:(NSObject<ISMSLoaderDelegate> *)theDelegate coverArtId:(NSString *)artId isLarge:(BOOL)large
 {
 	if ((self = [super init]))
 	{
@@ -96,7 +96,7 @@
 
 - (void)startLoad
 {	
-    self.loader = [[SUSCoverArtLoader alloc] initWithDelegate:self coverArtId:self.coverArtId isLarge:self.isLarge];
+    self.loader = [[ISMSCoverArtLoader alloc] initWithDelegate:self coverArtId:self.coverArtId isLarge:self.isLarge];
     [self.loader startLoad];
 }
 
@@ -109,7 +109,7 @@
 
 #pragma mark - Loader Delegate Methods
 
-- (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
+- (void)loadingFailed:(ISMSLoader*)theLoader withError:(NSError *)error
 {
 	self.loader.delegate = nil;
 	self.loader = nil;
@@ -120,7 +120,7 @@
 	}
 }
 
-- (void)loadingFinished:(SUSLoader*)theLoader
+- (void)loadingFinished:(ISMSLoader*)theLoader
 {
 	self.loader.delegate = nil;
 	self.loader = nil;

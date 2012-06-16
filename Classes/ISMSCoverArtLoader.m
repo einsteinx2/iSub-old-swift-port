@@ -6,20 +6,21 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "SUSCoverArtLoader.h"
+#import "ISMSCoverArtLoader.h"
 #import "DatabaseSingleton.h"
 #import "ViewObjectsSingleton.h"
 #import "NSString+md5.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "NSNotificationCenter+MainThread.h"
+#import "SavedSettings.h"
 
-@interface SUSCoverArtLoader()
+@interface ISMSCoverArtLoader()
 // Keep strong reference to self so we don't die until done downloading when used standalone
-@property (strong) SUSCoverArtLoader *selfRef;
+@property (strong) ISMSCoverArtLoader *selfRef;
 @end
 
-@implementation SUSCoverArtLoader
+@implementation ISMSCoverArtLoader
 @synthesize selfRef;
 
 static NSMutableArray *loadingImageNames;
@@ -39,7 +40,7 @@ static void initialize_navigationBarImages()
 
 #pragma mark - Lifecycle
 
-- (id)initWithDelegate:(NSObject<SUSLoaderDelegate>*)delegate coverArtId:(NSString *)artId isLarge:(BOOL)large
+- (id)initWithDelegate:(NSObject<ISMSLoaderDelegate>*)delegate coverArtId:(NSString *)artId isLarge:(BOOL)large
 {
 	if ((self = [super initWithDelegate:delegate]))
 	{
@@ -57,9 +58,9 @@ static void initialize_navigationBarImages()
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (SUSLoaderType)type
+- (ISMSLoaderType)type
 {
-    return SUSLoaderType_CoverArt;
+    return ISMSLoaderType_CoverArt;
 }
 
 - (void)coverArtDownloadFinished:(NSNotification *)notification
@@ -151,21 +152,34 @@ static void initialize_navigationBarImages()
 						size = SCREEN_SCALE() == 2.0 ? @"120" : @"60";
 					}
 					
-					NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(size), @"size", n2N(self.coverArtId), @"id", nil];
-					NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getCoverArt" andParameters:parameters];
-					
-					self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
-					if (self.connection)
+					NSDictionary *parameters = nil;
+					NSMutableURLRequest *request = nil;
+					if ([settingsS.serverType isEqualToString:SUBSONIC] || [settingsS.serverType isEqualToString:UBUNTU_ONE])
 					{
-						self.receivedData = [NSMutableData data];
-					} 
-					else 
+						parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(size), @"size", n2N(self.coverArtId), @"id", nil];
+						request = [NSMutableURLRequest requestWithSUSAction:@"getCoverArt" andParameters:parameters];
+					}
+					else if ([settingsS.serverType isEqualToString:PERSONAL_MEDIA_SERVER]) 
 					{
-						// Inform the delegate that the loading failed.
-						NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
-						[self informDelegateLoadingFailed:error];
-						
-						self.selfRef = nil;
+						parameters = [NSDictionary dictionaryWithObject:n2N(size) forKey:@"size"];
+						request = [NSMutableURLRequest requestWithPMSAction:@"cover" item:self.coverArtId andParameters:parameters];
+					}
+				
+					if (request)
+					{
+						self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+						if (self.connection)
+						{
+							self.receivedData = [NSMutableData data];
+						} 
+						else 
+						{
+							// Inform the delegate that the loading failed.
+							NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
+							[self informDelegateLoadingFailed:error];
+							
+							self.selfRef = nil;
+						}
 					}
 				}
 			}

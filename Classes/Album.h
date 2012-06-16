@@ -23,6 +23,8 @@
 
 - (id)copyWithZone:(NSZone *)zone;
 
+- (id)initWithPMSDictionary:(NSDictionary *)dictionary;
+
 - (id)initWithAttributeDict:(NSDictionary *)attributeDict;
 - (id)initWithAttributeDict:(NSDictionary *)attributeDict artist:(Artist *)myArtist;
 - (id)initWithTBXMLElement:(TBXMLElement *)element artistId:(NSString *)artistIdToSet artistName:(NSString *)artistNameToSet;

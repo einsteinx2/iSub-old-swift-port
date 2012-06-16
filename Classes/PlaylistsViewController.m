@@ -1204,14 +1204,14 @@
 	}
 }
 
-#pragma mark - SUSLoader Delegate
+#pragma mark - ISMSLoader Delegate
 
-- (void)loadingFailed:(SUSLoader *)theLoader withError:(NSError *)error
+- (void)loadingFailed:(ISMSLoader *)theLoader withError:(NSError *)error
 {
     [viewObjectsS hideLoadingScreen];
 }
 
-- (void)loadingFinished:(SUSLoader *)theLoader
+- (void)loadingFinished:(ISMSLoader *)theLoader
 {    
     [self.tableView reloadData];
     

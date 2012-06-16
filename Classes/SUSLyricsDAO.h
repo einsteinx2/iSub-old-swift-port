@@ -6,16 +6,16 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "SUSLoaderDelegate.h"
-#import "SUSLoaderManager.h"
+#import "ISMSLoaderDelegate.h"
+#import "ISMSLoaderManager.h"
 
 @class SUSLyricsLoader, FMDatabase;
-@interface SUSLyricsDAO : NSObject <SUSLoaderDelegate, SUSLoaderManager>
+@interface SUSLyricsDAO : NSObject <ISMSLoaderDelegate, ISMSLoaderManager>
 
-@property (unsafe_unretained) NSObject <SUSLoaderDelegate> *delegate;
+@property (unsafe_unretained) NSObject <ISMSLoaderDelegate> *delegate;
 @property (strong) SUSLyricsLoader *loader;
 
-- (id)initWithDelegate:(NSObject <SUSLoaderDelegate> *)theDelegate;
+- (id)initWithDelegate:(NSObject <ISMSLoaderDelegate> *)theDelegate;
 - (NSString *)loadLyricsForArtist:(NSString *)artist andTitle:(NSString *)title;
 
 #pragma mark - Public DAO Methods

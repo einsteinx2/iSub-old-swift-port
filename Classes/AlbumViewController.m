@@ -224,7 +224,7 @@
 		if (!self.myAlbum)
 		{
 			Album *anAlbum = [[Album alloc] init];
-			Song *aSong = [dataModel songForTableViewRow:0];
+			Song *aSong = [self.dataModel songForTableViewRow:self.dataModel.albumsCount];
 			anAlbum.title = aSong.album;
 			anAlbum.artistName = aSong.artist;
 			anAlbum.coverArtId = aSong.coverArtId;
@@ -364,6 +364,7 @@
 		cell.indexPath = indexPath;
         
         Song *aSong = [self.dataModel songForTableViewRow:indexPath.row];
+		//DLog(@"aSong: %@", aSong);
 		        
 		cell.mySong = aSong;
 		
@@ -462,9 +463,9 @@
 	}
 }
 
-#pragma mark - SUSLoader delegate
+#pragma mark - ISMSLoader delegate
 
-- (void)loadingFailed:(SUSLoader *)theLoader withError:(NSError *)error
+- (void)loadingFailed:(ISMSLoader *)theLoader withError:(NSError *)error
 {
     // Inform the user that the connection failed.
 	NSString *message = [NSString stringWithFormat:@"There was an error loading the album.\n\nError %i: %@", [error code], [error localizedDescription]];
@@ -479,7 +480,7 @@
 		[self.tableView removeBottomShadow];
 }
 
-- (void)loadingFinished:(SUSLoader *)theLoader
+- (void)loadingFinished:(ISMSLoader *)theLoader
 {
     [viewObjectsS hideLoadingScreen];
 	

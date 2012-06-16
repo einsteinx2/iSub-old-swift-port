@@ -16,9 +16,9 @@
 
 #pragma mark - Lifecycle
 
-- (SUSLoaderType)type
+- (ISMSLoaderType)type
 {
-    return SUSLoaderType_Chat;
+    return ISMSLoaderType_Chat;
 }
 
 #pragma mark - Loader Methods

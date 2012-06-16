@@ -123,14 +123,14 @@
 	textView.text = lyrics;
 }
 
-/*#pragma mark - SUSLoader delegate
+/*#pragma mark - ISMSLoader delegate
 
-- (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
+- (void)loadingFailed:(ISMSLoader*)theLoader withError:(NSError *)error
 {
     textView.text = @"\n\nNo lyrics found";
 }
 
-- (void)loadingFinished:(SUSLoader*)theLoader
+- (void)loadingFinished:(ISMSLoader*)theLoader
 {
 	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
     textView.text = [dataModel lyricsForArtist:currentSong.artist andTitle:currentSong.title];

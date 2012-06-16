@@ -6,12 +6,12 @@
 //  Copyright Ben Baron 2010. All rights reserved.
 //
 
-#import "SUSLoaderDelegate.h"
+#import "ISMSLoaderDelegate.h"
 #import "FolderDropdownDelegate.h"
 
 @class Artist, EGORefreshTableHeaderView, FolderDropdownControl, SUSRootFoldersDAO;
 
-@interface FoldersViewController : UITableViewController <UISearchBarDelegate, SUSLoaderDelegate, FolderDropdownDelegate>
+@interface FoldersViewController : UITableViewController <UISearchBarDelegate, ISMSLoaderDelegate, FolderDropdownDelegate>
 
 @property (nonatomic) BOOL letUserSelectRow;
 @property (nonatomic) BOOL isSearching;
@@ -31,8 +31,8 @@
 - (void)doneSearching_Clicked:(id)sender;
 
 // Loader Delegate Methods
-- (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error;
-- (void)loadingFinished:(SUSLoader*)theLoader;
+- (void)loadingFailed:(ISMSLoader*)theLoader withError:(NSError *)error;
+- (void)loadingFinished:(ISMSLoader*)theLoader;
 
 // FolderDropdown Delegate Methods
 - (void)folderDropdownMoveViewsY:(float)y;

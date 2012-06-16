@@ -9,11 +9,12 @@
 #import "ServerTypeViewController.h"
 #import "SubsonicServerEditViewController.h"
 #import "UbuntuServerEditViewController.h"
+#import "PMSServerEditViewControllerViewController.h"
 #import "iSubAppDelegate.h"
 #import "SavedSettings.h"
 
 @implementation ServerTypeViewController
-@synthesize subsonicButton, ubuntuButton, cancelButton, serverEditViewController;
+@synthesize subsonicButton, ubuntuButton, cancelButton, serverEditViewController, pmsButton;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -21,6 +22,17 @@
 		return NO;
 	
     return YES;
+}
+
+- (void)viewDidLoad
+{
+	[super viewDidLoad];
+	
+	if (IS_BETA())
+	{
+		pmsButton.enabled = YES;
+		pmsButton.hidden = NO;
+	}
 }
 
 - (IBAction)buttonAction:(id)sender
@@ -49,6 +61,18 @@
 		subView = ubuntuServerEditViewController.view;
 		
 		[FlurryAnalytics logEvent:@"ServerType" withParameters:[NSDictionary dictionaryWithObject:@"UbuntuOne" forKey:@"type"]];
+	}
+	else if (sender == self.pmsButton)
+	{
+		PMSServerEditViewControllerViewController *pms = [[PMSServerEditViewControllerViewController alloc] initWithNibName:@"PMSServerEditViewControllerViewController" bundle:nil];
+		pms.parentController = self;
+		pms.view.frame = self.view.bounds;
+		pms.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		[self.view addSubview:pms.view];
+		self.serverEditViewController = pms;
+		subView = pms.view;
+		
+		[FlurryAnalytics logEvent:@"ServerType" withParameters:[NSDictionary dictionaryWithObject:@"PMS" forKey:@"type"]];
 	}
 	else if (sender == self.cancelButton)
 	{

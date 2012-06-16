@@ -6,11 +6,11 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "SUSServerChecker.h"
+#import "ISMSServerChecker.h"
 
 @class ServerTypeViewController, ServerListViewController;
 
-@interface SubsonicServerEditViewController : UIViewController <SUSServerURLCheckerDelegate>
+@interface SubsonicServerEditViewController : UIViewController <ISMSServerCheckerDelegate>
 
 @property (nonatomic, strong) IBOutlet UITextField *urlField;
 @property (nonatomic, strong) IBOutlet UITextField *usernameField;

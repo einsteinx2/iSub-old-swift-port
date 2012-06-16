@@ -6,15 +6,31 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-#import "SUSLoader.h"
+#import "ISMSLoader.h"
 #import "SavedSettings.h"
 #import "MusicSingleton.h"
 #import "Song.h"
 
-@implementation SUSLoader
+@implementation ISMSLoader
 
 @synthesize connection, receivedData;
 @synthesize delegate;
+
++ (id)loader
+{
+	[NSException raise:NSInternalInconsistencyException 
+				format:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)];
+	
+	return nil;
+}
+
++ (id)loaderWithDelegate:(id <ISMSLoaderDelegate>)theDelegate
+{
+	[NSException raise:NSInternalInconsistencyException 
+				format:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)];
+	
+	return nil;
+}
 
 - (void)setup
 {
@@ -32,7 +48,7 @@
     return self;
 }
 
-- (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate
+- (id)initWithDelegate:(id <ISMSLoaderDelegate>)theDelegate
 {
 	self = [super init];
     if (self) 
@@ -45,9 +61,9 @@
 }
 
 
-- (SUSLoaderType)type
+- (ISMSLoaderType)type
 {
-    return SUSLoaderType_Generic;
+    return ISMSLoaderType_Generic;
 }
 
 - (void)startLoad

@@ -17,7 +17,7 @@
 
 #pragma mark - Lifecycle
 
-- (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate
+- (id)initWithDelegate:(id <ISMSLoaderDelegate>)theDelegate
 {
     if ((self = [super init])) 
 	{
@@ -119,7 +119,7 @@
 
 #pragma mark - Loader Delegate Methods
 
-- (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
+- (void)loadingFailed:(ISMSLoader*)theLoader withError:(NSError *)error
 {
 	self.loader.delegate = nil;
 	self.loader = nil;
@@ -130,7 +130,7 @@
 	}
 }
 
-- (void)loadingFinished:(SUSLoader*)theLoader
+- (void)loadingFinished:(ISMSLoader*)theLoader
 {
 	self.chatMessages = [NSArray arrayWithArray:self.loader.chatMessages];
 	

@@ -13,6 +13,9 @@
 #import "NSString+md5.h"
 #import "SUSRootFoldersDAO.h"
 #import "NSMutableURLRequest+SUS.h"
+#import "SavedSettings.h"
+#import "Server.h"
+#import "SBJson.h"
 
 @implementation FolderDropdownControl
 @synthesize selectedFolderId, isOpen, labels, folders;
@@ -326,9 +329,31 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 {	
 	//DLog(@"folder dropdown connection finished: %@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
 	
-	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:self.receivedData];
-	[xmlParser setDelegate:self];
-	[xmlParser parse];
+	if ([settingsS.serverType isEqualToString:SUBSONIC] || [settingsS.serverType isEqualToString:UBUNTU_ONE])
+	{
+		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:self.receivedData];
+		[xmlParser setDelegate:self];
+		[xmlParser parse];
+	}
+	else if ([settingsS.serverType isEqualToString:PERSONAL_MEDIA_SERVER])
+	{
+		self.updatedfolders = [[NSMutableDictionary alloc] init];
+		[self.updatedfolders setObject:@"All Folders" forKey:[NSNumber numberWithInt:-1]];
+		
+		
+		NSString *responseString = [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding];
+		DLog(@"folder dropdown: %@", responseString);
+		NSDictionary *response = [responseString JSONValue];
+		
+		NSArray *responseFolders = [response objectForKey:@"folders"];
+		for (NSDictionary *folder in responseFolders)
+		{
+			NSNumber *folderId = [NSNumber numberWithInt:[[folder objectForKey:@"folderId"] intValue]];
+			NSString *folderName = [folder objectForKey:@"folderName"];
+			
+			[self.updatedfolders setObject:folderName forKey:folderId];
+		}
+	}
 	
 	self.receivedData = nil;
 	self.connection = nil;

@@ -140,11 +140,6 @@
 		aSong.size = [NSNumber numberWithInt:[result intForColumn:@"size"]];
 	}
 	
-	if ([aSong path] == nil)
-	{
-		 aSong = nil;
-	}
-	
 	return aSong;
 }
 
@@ -162,6 +157,7 @@
 {
 	row++;
 	Song *aSong = nil;
+	//DLog(@"query: %@", [NSString stringWithFormat:@"SELECT * FROM %@ WHERE ROWID = %i", table, row]);
 	FMResultSet *result = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE ROWID = %i", table, row]];
 	if ([db hadError]) 
 	{

@@ -219,9 +219,9 @@
 	[self showPlayer];
 }
 
-#pragma mark - SUSLoader delegate
+#pragma mark - ISMSLoader delegate
 
-- (void)loadingFailed:(SUSLoader *)theLoader withError:(NSError *)error
+- (void)loadingFailed:(ISMSLoader *)theLoader withError:(NSError *)error
 {
     // Inform the user that the connection failed.
 	NSString *message = [NSString stringWithFormat:@"There was an error loading the now playing list.\n\nError %i: %@", [error code], [error localizedDescription]];
@@ -233,7 +233,7 @@
 	[self dataSourceDidFinishLoadingNewData];
 }
 
-- (void)loadingFinished:(SUSLoader *)theLoader
+- (void)loadingFinished:(ISMSLoader *)theLoader
 {
     [viewObjectsS hideLoadingScreen];
 	

@@ -12,15 +12,13 @@
 #import "iSubAppDelegate.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
-
 #import "NSString+md5.h"
 #import "Artist.h"
 #import "Album.h"
 #import "Song.h"
-#import "QueueAlbumXMLParser.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "UIDevice+Hardware.h"
-#import "SUSQueueAllLoader.h"
+#import "ISMSQueueAllLoader.h"
 #import "SavedSettings.h"
 #import "GTMNSString+HTML.h"
 #import "PlaylistSingleton.h"
@@ -843,7 +841,7 @@
 
 - (void)setup 
 {
-	queueAll = [[SUSQueueAllLoader alloc] init];
+	queueAll = [ISMSQueueAllLoader loader];
 	
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	databaseFolderPath = [[paths objectAtIndexSafe: 0] stringByAppendingPathComponent:@"database"];

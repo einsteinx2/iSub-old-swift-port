@@ -6,9 +6,9 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "SUSLoader.h"
+#import "ISMSLoader.h"
 
-@interface SUSChatLoader : SUSLoader
+@interface SUSChatLoader : ISMSLoader
 
 @property (strong) NSMutableArray *chatMessages;
 
