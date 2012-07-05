@@ -232,7 +232,7 @@
 			[db executeUpdate:@"DROP TABLE IF EXISTS albumIndex"];
 		}];
 		
-		return [sectionInfo count] < 5 ? nil : sectionInfo;
+		return [sectionInfo count] < 2 ? nil : sectionInfo;
 	}
 	
 	return nil;

@@ -483,7 +483,8 @@
 {
 	self.isPartialPrecacheSleeping = YES;
 	
-	[ISMSNetworkIndicator doneUsingNetwork];
+	if (!self.isCanceled)
+		[ISMSNetworkIndicator doneUsingNetwork];
 	
 	if ([self.delegate respondsToSelector:@selector(ISMSStreamHandlerPartialPrecachePaused:)])
 		[self.delegate ISMSStreamHandlerPartialPrecachePaused:self];
@@ -494,7 +495,8 @@
 {
 	self.isPartialPrecacheSleeping = NO;
 	
-	[ISMSNetworkIndicator usingNetwork];
+	if (!self.isCanceled)
+		[ISMSNetworkIndicator usingNetwork];
 	
 	if ([self.delegate respondsToSelector:@selector(ISMSStreamHandlerPartialPrecacheUnpaused:)])
 		[self.delegate ISMSStreamHandlerPartialPrecacheUnpaused:self];

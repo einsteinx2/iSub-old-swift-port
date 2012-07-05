@@ -368,8 +368,11 @@
 	
 	if (isSessionStarted)
 	{
-		[FlurryAnalytics setSessionReportsOnPauseEnabled:YES];
 		[FlurryAnalytics setSecureTransportEnabled:YES];
+		
+		// These set to no as per Flurry support instructions to prevent crashes
+		[FlurryAnalytics setSessionReportsOnPauseEnabled:NO];
+		[FlurryAnalytics setSessionReportsOnCloseEnabled:NO];
 		
 		// Send the firmware version
 		UIDevice *device = [UIDevice currentDevice];
