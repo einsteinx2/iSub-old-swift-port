@@ -6,6 +6,8 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+#import <QuartzCore/QuartzCore.h>
+
 @interface UIView (Tools) 
 
 @property (nonatomic) CGFloat left;

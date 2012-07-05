@@ -17,7 +17,7 @@
 
 #pragma mark Data loading
 
-- (void)startLoad
+- (NSURLRequest *)createRequest
 {
 	//DLog(@"Starting load");
     NSDictionary *parameters = nil;
@@ -26,61 +26,10 @@
         parameters = [NSDictionary dictionaryWithObject:n2N([self.selectedFolderId stringValue]) forKey:@"musicFolderId"];
 	}
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getIndexes" andParameters:parameters];
-	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
-	if (self.connection)
-	{
-		// Create the NSMutableData to hold the received data.
-		// receivedData is an instance variable declared elsewhere.
-		self.receivedData = [NSMutableData data];
-	} 
-	else 
-	{
-		// Inform the delegate that the loading failed.
-		NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
-		[self informDelegateLoadingFailed:error];
-	}
+    return [NSMutableURLRequest requestWithSUSAction:@"getIndexes" parameters:parameters];
 }
 
-#pragma mark Connection Delegate
-
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
-{
-	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
-		return YES; // Self-signed cert will be accepted
-	
-	return NO;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{	
-	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
-	{
-		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
-	}
-	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-	[self.receivedData setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
-{
-    [self.receivedData appendData:incrementalData];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
-{
-	self.receivedData = nil;
-	self.connection = nil;
-	
-	// Inform the delegate that loading failed
-	[self informDelegateLoadingFailed:error];
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
+- (void)processResponse
 {			
 	// Clear the database
 	[self resetRootFolderCache];

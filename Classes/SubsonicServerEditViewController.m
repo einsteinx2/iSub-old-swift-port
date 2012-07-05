@@ -168,7 +168,7 @@
 
 #pragma mark - Server URL Checker delegate
 
-- (void)SUSServerURLCheckRedirected:(ISMSServerChecker *)checker redirectUrl:(NSURL *)url
+- (void)ISMSServerURLCheckRedirected:(ISMSServerChecker *)checker redirectUrl:(NSURL *)url
 {
 	NSMutableString *redirectUrlString = [NSMutableString stringWithFormat:@"%@://%@", url.scheme, url.host];
 	if (url.port)

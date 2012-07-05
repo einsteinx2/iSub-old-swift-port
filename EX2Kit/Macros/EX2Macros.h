@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Ben Baron. All rights reserved.
 //
 
-#ifndef iSub_Macros_h
-#define iSub_Macros_h
+#ifndef EX2Kit_Macros_h
+#define EX2Kit_Macros_h
 
 // 240.0 is the minimum URL connection timeout enforced by CFNetwork
 // Unless an HTTP Post body is created then it may default to 74.0
@@ -87,7 +87,7 @@
 #define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 
 #define n2N(value) (value ? value : [NSNull null])
-#define N2n(value) ((NSNull *)value == [NSNull null] ? nil : value);
+#define N2n(value) (value == [NSNull null] ? nil : value)
 
 //static id n2N(id value) { return value ? value : [NSNull null]; }
 

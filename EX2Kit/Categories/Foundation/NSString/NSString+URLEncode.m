@@ -12,10 +12,10 @@
 
 + (NSString *)URLEncodeString:(NSString *)string 
 { 
-    NSString *result = (NSString *)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, 
-                    (CFStringRef)string, NULL, CFSTR(";/?:@&=$+{}[]<>,"), kCFStringEncodingUTF8); 
+    NSString *result = (__bridge NSString *)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, 
+                    (__bridge CFStringRef)string, NULL, CFSTR(";/?:@&=$+{}[]<>,"), kCFStringEncodingUTF8); 
     
-    return [result autorelease]; 
+    return result;
 } 
 
 - (NSString *)URLEncodeString 

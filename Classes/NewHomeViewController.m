@@ -371,7 +371,7 @@
             parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"100", @"size", n2N(folderId), @"musicFolderId", nil];
 	}
 
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getRandomSongs" andParameters:parameters];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getRandomSongs" parameters:parameters];
     
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)
@@ -627,7 +627,7 @@
         parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"count", n2N(searchTerms), @"any", nil];
 	}
 		
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:action andParameters:parameters];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:action parameters:parameters];
     
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)

@@ -19,18 +19,6 @@
 
 @synthesize loadedLyrics, artist, title;
 
-#pragma mark - Lifecycle
-
-- (void)setup
-{
-	[super setup];
-}
-
-- (void)dealloc
-{
-	self.delegate = nil;
-}
-
 - (FMDatabaseQueue *)dbQueue
 {
     return databaseS.lyricsDbQueue;
@@ -41,80 +29,20 @@
     return ISMSLoaderType_Lyrics;
 }
 
-#pragma mark - Loader Methods
-
-- (void)startLoad
+- (NSURLRequest *)createRequest
 {
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(self.artist), @"artist", n2N(self.title), @"title", nil];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getLyrics" andParameters:parameters];
-   
-	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
-	if (self.connection)
-	{
-		self.receivedData = [NSMutableData data];
-	} 
-	else 
-	{
-		NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
-		[self informDelegateLoadingFailed:error];
-	}
-}
-
-#pragma mark - Private DB Methods
-
-- (void)insertLyricsIntoDb
-{
-	[self.dbQueue inDatabase:^(FMDatabase *db)
-	{
-		[db executeUpdate:@"INSERT INTO lyrics (artist, title, lyrics) VALUES (?, ?, ?)", self.artist, self.title, self.loadedLyrics];
-		if ([db hadError]) 
-			DLog(@"Err inserting lyrics %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-	}];
-}
-
-#pragma mark - Connection Delegate
-
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
-{
-	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
-		return YES; // Self-signed cert will be accepted
-	
-	return NO;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{	
-	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
-	{
-		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
-	}
-	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-	[self.receivedData setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
-{
-    [self.receivedData appendData:incrementalData];
+    return [NSMutableURLRequest requestWithSUSAction:@"getLyrics" parameters:parameters];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
-    self.loadedLyrics = nil;
-    
-	self.receivedData = nil;
-	self.connection = nil;
-	
-	// Inform the delegate that loading failed
-	[self informDelegateLoadingFailed:error];
+    [super connection:theConnection didFailWithError:error];
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_LyricsFailed];
 }	
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
+- (void)processResponse
 {	    
     // Parse the data
 	//
@@ -176,6 +104,16 @@
 	
 	self.receivedData = nil;
 	self.connection = nil;
+}
+
+- (void)insertLyricsIntoDb
+{
+	[self.dbQueue inDatabase:^(FMDatabase *db)
+	 {
+		 [db executeUpdate:@"INSERT INTO lyrics (artist, title, lyrics) VALUES (?, ?, ?)", self.artist, self.title, self.loadedLyrics];
+		 if ([db hadError]) 
+			 DLog(@"Err inserting lyrics %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+	 }];
 }
 
 @end

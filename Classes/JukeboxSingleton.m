@@ -32,7 +32,7 @@
     NSString *positionString = [position stringValue];
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"skip", @"action", n2N(positionString), @"index", nil];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" parameters:parameters];
 	
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
@@ -57,7 +57,7 @@
 	JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
 	
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:@"start" forKey:@"action"];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" parameters:parameters];
 	
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
@@ -82,7 +82,7 @@
 	JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:@"stop" forKey:@"action"];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" parameters:parameters];
 	
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
@@ -137,7 +137,7 @@
     NSString *gainString = [NSString stringWithFormat:@"%f", level];
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"setGain", @"action", n2N(gainString), @"gain", nil];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" parameters:parameters];
 	
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
@@ -159,7 +159,7 @@
 	JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"add", @"action", n2N(songId), @"id", nil];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" parameters:parameters];
 	
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
@@ -185,7 +185,7 @@
         NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:@"add" forKey:@"action"];
 		[parameters setObject:n2N(songIds) forKey:@"id"];
 		
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" parameters:parameters];
 		
         NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 		if (connection)
@@ -237,7 +237,7 @@
 	JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"remove", @"action", n2N(songId), @"id", nil];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" parameters:parameters];
 	
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
@@ -259,7 +259,7 @@
 	JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:@"clear" forKey:@"action"];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" parameters:parameters];
 	
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
@@ -283,7 +283,7 @@
 	JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:@"clear" forKey:@"action"];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" parameters:parameters];
 	
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
@@ -305,7 +305,7 @@
 	JukeboxConnectionDelegate *connDelegate = [[JukeboxConnectionDelegate alloc] init];
 	
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:@"shuffle" forKey:@"action"];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" parameters:parameters];
     
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
@@ -333,7 +333,7 @@
 	connDelegate.isGetInfo = YES;
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:@"get" forKey:@"action"];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" andParameters:parameters];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"jukeboxControl" parameters:parameters];
 	
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)

@@ -1,14 +1,14 @@
 //
-//  GCDWrapper.m
+//  EX2Dispatch.m
 //  iSub
 //
 //  Created by Ben Baron on 4/26/12.
 //  Copyright (c) 2012 Ben Baron. All rights reserved.
 //
 
-#import "GCDWrapper.h"
+#import "EX2Dispatch.h"
 
-@implementation GCDWrapper
+@implementation EX2Dispatch
 
 #pragma mark - Blocks after delay
 
@@ -74,7 +74,7 @@ static void initialize_navigationBarImages()
 	syncObject = [[NSObject alloc] init];
 }
 
-+ (BOOL)timerInQueue:(dispatch_queue_t)queue afterDelay:(NSTimeInterval)delay withName:(NSString *)name performBlock:(void (^)(void))block
++ (BOOL)timerInQueue:(dispatch_queue_t)queue afterDelay:(NSTimeInterval)delay withName:(NSString *)name repeats:(BOOL)repeats performBlock:(void (^)(void))block
 {
 	@synchronized(syncObject)
 	{
@@ -93,8 +93,11 @@ static void initialize_navigationBarImages()
 			// Run the block
 			block();
 			
-			// Make sure it only runs once
-			[self cancelTimerBlockWithName:name];
+			if (!repeats)
+			{
+				// Make sure it only runs once
+				[self cancelTimerBlockWithName:name];
+			}
 		});
 		
 		// Add it to the dictionary
@@ -108,14 +111,14 @@ static void initialize_navigationBarImages()
 	}
 }
 
-+ (BOOL)timerInMainQueueAfterDelay:(NSTimeInterval)delay withName:(NSString *)name performBlock:(void (^)(void))block
++ (BOOL)timerInMainQueueAfterDelay:(NSTimeInterval)delay withName:(NSString *)name repeats:(BOOL)repeats performBlock:(void (^)(void))block
 {
-	return [self timerInQueue:dispatch_get_main_queue() afterDelay:delay withName:name performBlock:block];
+	return [self timerInQueue:dispatch_get_main_queue() afterDelay:delay withName:name repeats:repeats performBlock:block];
 }
 
-+ (BOOL)timerInCurrentQueueAfterDelay:(NSTimeInterval)delay withName:(NSString *)name performBlock:(void (^)(void))block
++ (BOOL)timerInCurrentQueueAfterDelay:(NSTimeInterval)delay withName:(NSString *)name repeats:(BOOL)repeats performBlock:(void (^)(void))block
 {
-	return [self timerInQueue:dispatch_get_current_queue() afterDelay:delay withName:name performBlock:block];
+	return [self timerInQueue:dispatch_get_current_queue() afterDelay:delay withName:name repeats:repeats performBlock:block];
 }
 
 + (void)cancelTimerBlockWithName:(NSString *)name

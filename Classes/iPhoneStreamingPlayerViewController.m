@@ -25,7 +25,6 @@
 #import "AudioEngine.h"
 #import "EqualizerViewController.h"
 #import "SUSCoverArtDAO.h"
-#import "UIApplication+StatusBar.h"
 #import "OBSlider.h"
 #import "ISMSStreamManager.h"
 #import "ISMSStreamHandler.h"

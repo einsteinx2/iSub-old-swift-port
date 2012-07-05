@@ -20,7 +20,7 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "NSArray+Additions.h"
-#import "GCDWrapper.h"
+#import "EX2Dispatch.h"
 
 @interface SUSAllSongsLoader (Private)
 
@@ -309,7 +309,7 @@ static NSInteger order (id a, id b, void* context)
 		dirId = [self.currentAlbum.albumId copy];
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(dirId) forKey:@"id"];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getMusicDirectory" andParameters:parameters];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getMusicDirectory" parameters:parameters];
     
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)
@@ -401,7 +401,7 @@ static NSInteger order (id a, id b, void* context)
         {
             viewObjectsS.cancelLoading = NO;
 			[SUSAllSongsLoader setIsLoading:NO];
-			[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self informDelegateLoadingFailed:nil]; }];
+			[EX2Dispatch runInMainThreadAndWaitUntilDone:NO block:^{ [self informDelegateLoadingFailed:nil]; }];
             return;
         }
         
@@ -493,7 +493,7 @@ static NSInteger order (id a, id b, void* context)
         if (viewObjectsS.cancelLoading)
         {
             [SUSAllSongsLoader setIsLoading:NO];
-			[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self informDelegateLoadingFailed:nil]; }];
+			[EX2Dispatch runInMainThreadAndWaitUntilDone:NO block:^{ [self informDelegateLoadingFailed:nil]; }];
 			viewObjectsS.cancelLoading = NO;
             return;
         }
@@ -513,7 +513,7 @@ static NSInteger order (id a, id b, void* context)
 		[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:[NSString stringWithFormat:@"%@isAllSongsLoading", settingsS.urlString]];
 		[[NSUserDefaults standardUserDefaults] synchronize];
 		
-		[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self informDelegateLoadingFinished]; }];
+		[EX2Dispatch runInMainThreadAndWaitUntilDone:NO block:^{ [self informDelegateLoadingFinished]; }];
 		
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AllSongsLoadingFinished];
     }

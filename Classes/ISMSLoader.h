@@ -27,10 +27,12 @@
 - (void)setup;
 - (id)initWithDelegate:(NSObject<ISMSLoaderDelegate> *)theDelegate;
 
-- (void)startLoad; // Override this
-- (void)cancelLoad; // Override this
+- (void)startLoad;
+- (void)cancelLoad;
+- (NSURLRequest *)createRequest; // Override this
+- (void)processResponse; // Override this
 
-- (void) subsonicErrorCode:(NSInteger)errorCode message:(NSString *)message;
+- (void)subsonicErrorCode:(NSInteger)errorCode message:(NSString *)message;
 
 - (BOOL)informDelegateLoadingFailed:(NSError *)error;
 - (BOOL)informDelegateLoadingFinished;

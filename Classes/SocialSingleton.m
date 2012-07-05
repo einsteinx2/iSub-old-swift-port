@@ -96,7 +96,7 @@
 		if (![lastCachedSong isEqualToSong:currentSong])
 		{
 			NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(currentSong.songId), @"id", nil];
-			NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters byteOffset:0];
+			NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" parameters:parameters byteOffset:0];
 			NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 			NSLog(@"%@", conn);
 			//DLog(@"notified Subsonic about %@", currentSong.title);
@@ -135,7 +135,7 @@
 	{
 		NSString *isSubmissionString = [NSString stringWithFormat:@"%i", isSubmission];
 		NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(aSong.songId), @"id", n2N(isSubmissionString), @"submission", nil];
-		NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"scrobble" andParameters:parameters];
+		NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"scrobble" parameters:parameters];
 		
 		NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 		NSLog(@"%@", conn);

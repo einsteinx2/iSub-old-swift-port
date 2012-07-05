@@ -20,7 +20,7 @@
 #import "CacheSingleton.h"
 #import "PlaylistSingleton.h"
 #import "ISMSNetworkIndicator.h"
-#import "GCDWrapper.h"
+#import "EX2Dispatch.h"
 #import "TBXML.h"
 
 #define ISMSNumSecondsToPartialPreCacheDefault 20
@@ -175,11 +175,11 @@
 			NSString *maxBitRate = [[NSString alloc] initWithFormat:@"%i", self.maxBitrateSetting];
 			[parameters setObject:n2N(maxBitRate) forKey:@"maxBitRate"];
 		}
-		self.request = [NSMutableURLRequest requestWithSUSAction:@"stream" andParameters:parameters byteOffset:byteOffset];
+		self.request = [NSMutableURLRequest requestWithSUSAction:@"stream" parameters:parameters byteOffset:byteOffset];
 	}
 	else if ([settingsS.serverType isEqualToString:PERSONAL_MEDIA_SERVER]) 
 	{
-		self.request = [NSMutableURLRequest requestWithPMSAction:@"stream" item:self.mySong.songId];
+		self.request = [NSMutableURLRequest requestWithPMSAction:@"stream" item:self.mySong.songId parameters:nil byteOffset:byteOffset];
 	}
 	
 	self.loadingThread = [[NSThread alloc] initWithTarget:self selector:@selector(startConnection) object:nil];
@@ -211,14 +211,14 @@
 		if (self.connection)
 		{
 			self.isDownloading = YES;
-			[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self startConnectionInternalSuccess]; }];
+			[EX2Dispatch runInMainThreadAndWaitUntilDone:NO block:^{ [self startConnectionInternalSuccess]; }];
 			//DLog(@"Stream handler download starting for %@", mySong);
 			CFRunLoopRun();
 			//DLog(@"Stream handler runloop finished for %@", mySong);
 		}
 		else
 		{
-			[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self startConnectionInternalFailure]; }];
+			[EX2Dispatch runInMainThreadAndWaitUntilDone:NO block:^{ [self startConnectionInternalFailure]; }];
 		}
 	}
 }
@@ -383,7 +383,7 @@
 			@catch (NSException *exception) 
 			{
 				DLog(@"Failed to write to file %@, %@ - %@", self.mySong, exception.name, exception.description);
-				[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self cancel]; }];
+				[EX2Dispatch runInMainThreadAndWaitUntilDone:NO block:^{ [self cancel]; }];
 			}
 			
 			// Notify delegate if enough bytes received to start playback
@@ -392,7 +392,7 @@
 				DLog(@"telling player to start, min bytes: %u, total bytes: %llu, bitrate: %u", ISMSMinBytesToStartPlayback(self.bitrate), self.totalBytesTransferred, self.bitrate);
 				self.isDelegateNotifiedToStartPlayback = YES;
 				//DLog(@"player told to start playback");
-				[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self startPlaybackInternal]; }];
+				[EX2Dispatch runInMainThreadAndWaitUntilDone:NO block:^{ [self startPlaybackInternal]; }];
 			}
 			
 			// Log progress
@@ -444,13 +444,13 @@
 				NSUInteger partialPrecacheSize = ISMSNumBytesToPartialPreCache(self.mySong.estimatedBitrate);
 				if (self.totalBytesTransferred >= partialPrecacheSize)
 				{
-					[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self partialPrecachePausedInternal]; }];
+					[EX2Dispatch runInMainThreadAndWaitUntilDone:NO block:^{ [self partialPrecachePausedInternal]; }];
 					while (self.partialPrecacheSleep && !self.tempBreakPartialPrecache)
 					{
 						[NSThread sleepForTimeInterval:0.1];
 					}
 					self.tempBreakPartialPrecache = NO;
-					[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self partialPrecacheUnpausedInternal]; }];
+					[EX2Dispatch runInMainThreadAndWaitUntilDone:NO block:^{ [self partialPrecacheUnpausedInternal]; }];
 				}
 			}
 		}
@@ -522,7 +522,7 @@
 	DLog(@"error domain: %@  code: %i description: %@", error.domain, error.code, error.description);
 	
 	// Perform these operations on the main thread
-	[GCDWrapper runInMainThreadAndWaitUntilDone:YES block:^{ [self didFailInternal:error]; }];
+	[EX2Dispatch runInMainThreadAndWaitUntilDone:YES block:^{ [self didFailInternal:error]; }];
 	
 	// Stop the run loop so the thread can die
 	[self cancelRunLoop];
@@ -564,11 +564,11 @@
 		if (!self.isDelegateNotifiedToStartPlayback)
 		{
 			self.isDelegateNotifiedToStartPlayback = YES;
-			[GCDWrapper runInMainThreadAndWaitUntilDone:YES block:^{ [self startPlaybackInternal]; }];
+			[EX2Dispatch runInMainThreadAndWaitUntilDone:YES block:^{ [self startPlaybackInternal]; }];
 		}
 		
 		// Perform these operations on the main thread
-		[GCDWrapper runInMainThreadAndWaitUntilDone:YES block:^{ [self didFinishLoadingInternal]; }];
+		[EX2Dispatch runInMainThreadAndWaitUntilDone:YES block:^{ [self didFinishLoadingInternal]; }];
 		
 		// Stop the run loop so the thread can die
 		[self cancelRunLoop];

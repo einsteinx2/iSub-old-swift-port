@@ -819,7 +819,7 @@
 	 }];
 	[parameters setObject:[NSArray arrayWithArray:songIds] forKey:@"songId"];
 
-	self.request = [NSMutableURLRequest requestWithSUSAction:@"createPlaylist" andParameters:parameters];
+	self.request = [NSMutableURLRequest requestWithSUSAction:@"createPlaylist" parameters:parameters];
 	
 	self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (self.connection)
@@ -1016,7 +1016,7 @@
                     NSString *playlistId = [[self.serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:[index intValue]] playlistId];
                     NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(playlistId) forKey:@"id"];
                     DLog(@"parameters: %@", parameters);
-                    NSMutableURLRequest *aRequest = [NSMutableURLRequest requestWithSUSAction:@"deletePlaylist" andParameters:parameters];
+                    NSMutableURLRequest *aRequest = [NSMutableURLRequest requestWithSUSAction:@"deletePlaylist" parameters:parameters];
                     
 					self.connection = [[NSURLConnection alloc] initWithRequest:aRequest delegate:self startImmediately:NO];
 					if (self.connection)

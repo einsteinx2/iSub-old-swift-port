@@ -86,7 +86,7 @@
 	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
 	
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(self.serverPlaylist.playlistId) forKey:@"id"];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getPlaylist" andParameters:parameters];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getPlaylist" parameters:parameters];
     
     self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)
@@ -110,7 +110,7 @@
 	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
 	
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(self.serverPlaylist.playlistId) forKey:@"id"];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getPlaylist" andParameters:parameters];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getPlaylist" parameters:parameters];
     
     self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)

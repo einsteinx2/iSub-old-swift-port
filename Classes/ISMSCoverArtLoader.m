@@ -157,12 +157,12 @@ static void initialize_navigationBarImages()
 					if ([settingsS.serverType isEqualToString:SUBSONIC] || [settingsS.serverType isEqualToString:UBUNTU_ONE])
 					{
 						parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(size), @"size", n2N(self.coverArtId), @"id", nil];
-						request = [NSMutableURLRequest requestWithSUSAction:@"getCoverArt" andParameters:parameters];
+						request = [NSMutableURLRequest requestWithSUSAction:@"getCoverArt" parameters:parameters];
 					}
 					else if ([settingsS.serverType isEqualToString:PERSONAL_MEDIA_SERVER]) 
 					{
 						parameters = [NSDictionary dictionaryWithObject:n2N(size) forKey:@"size"];
-						request = [NSMutableURLRequest requestWithPMSAction:@"cover" item:self.coverArtId andParameters:parameters];
+						request = [NSMutableURLRequest requestWithPMSAction:@"cover" item:self.coverArtId parameters:parameters];
 					}
 				
 					if (request)

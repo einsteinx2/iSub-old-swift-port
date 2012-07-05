@@ -23,7 +23,7 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "MusicSingleton.h"
 #import "SocialSingleton.h"
-#import "GCDWrapper.h"
+#import "EX2Dispatch.h"
 #import "ViewObjectsSingleton.h"
 
 @implementation AudioEngine
@@ -212,7 +212,7 @@ void BASSLogError()
 - (QWORD)preSilenceLengthForSong:(Song *)aSong
 {
 	// Create a decode channel
-	[GCDWrapper runInMainThreadAndWaitUntilDone:YES block:^{ [self preSilenceLengthInternal:aSong]; }];
+	[EX2Dispatch runInMainThreadAndWaitUntilDone:YES block:^{ [self preSilenceLengthInternal:aSong]; }];
 	
 	if (presilenceStream)
 	{
@@ -860,7 +860,7 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 
 - (DWORD)bassGetOutputData:(void *)buffer length:(DWORD)length
 {	
-	[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [self handleSocial]; }];
+	[EX2Dispatch runInMainThreadAndWaitUntilDone:NO block:^{ [self handleSocial]; }];
 	
 	if (songEnded)
 	{
@@ -883,13 +883,13 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 		if (self.bassReinitSampleRate > 0)
 		{
 			// The stream should end, but only because we need to re-init BASS for the next song
-			[GCDWrapper runInMainThreadAfterDelay:delay block:^{ [self start]; }];
+			[EX2Dispatch runInMainThreadAfterDelay:delay block:^{ [self start]; }];
 			//DLog(@"Must reinit bass");
 		}
 		else if (viewObjectsS.isOfflineMode)
 		{
 			// We're offline and this song is not available, skip to the next one
-			[GCDWrapper runInMainThreadAfterDelay:delay block:^{ [musicS startSong]; }];
+			[EX2Dispatch runInMainThreadAfterDelay:delay block:^{ [musicS startSong]; }];
 		}
 		else
 		{
@@ -897,12 +897,12 @@ static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadPro
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnded];
 			
 			//DLog(@"Stream not active, freeing BASS");
-			[GCDWrapper runInMainThreadAfterDelay:delay block:^{ [self bassFree]; }];
+			[EX2Dispatch runInMainThreadAfterDelay:delay block:^{ [self bassFree]; }];
 			
 			// Handle song caching being disabled
 			if (!settingsS.isSongCachingEnabled || !settingsS.isNextSongCacheEnabled)
 			{
-				[GCDWrapper runInMainThreadAfterDelay:delay+.1 block:^{ [musicS startSong]; }];
+				[EX2Dispatch runInMainThreadAfterDelay:delay+.1 block:^{ [musicS startSong]; }];
 			}
 		}
 		
@@ -1090,8 +1090,8 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		//[self.nextSongRetryTimer gcdCancelTimerBlock];
 		//self.nextSongRetryTimer = nil;
 		
-		[GCDWrapper cancelTimerBlockWithName:startSongRetryTimer];
-		[GCDWrapper cancelTimerBlockWithName:nextSongRetryTimer];
+		[EX2Dispatch cancelTimerBlockWithName:startSongRetryTimer];
+		[EX2Dispatch cancelTimerBlockWithName:nextSongRetryTimer];
 		
 		ringBuffer->stopFilling = YES;
 		
@@ -1334,7 +1334,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		// tell the stream manager to download a few more seconds of data
 		[streamManagerS downloadMoreOfPrecacheStream];
 		
-		[GCDWrapper timerInMainQueueAfterDelay:RETRY_DELAY withName:nextSongRetryTimer performBlock:^{ [self prepareNextSongStream:nextSong]; }];
+		[EX2Dispatch timerInMainQueueAfterDelay:RETRY_DELAY withName:nextSongRetryTimer repeats:NO performBlock:^{ [self prepareNextSongStream:nextSong]; }];
 	}
 	
 	//DLog(@"nextSong: %i\n   ", self.nextStream);
@@ -1539,7 +1539,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 			// Failed to create the stream, retrying
 			//DLog(@"------failed to create stream, retrying in 2 seconds------");	
 			
-			[GCDWrapper timerInMainQueueAfterDelay:RETRY_DELAY withName:startSongRetryTimer performBlock:^{ [self startWithOffsetInBytes:byteOffset orSeconds:seconds]; }];
+			[EX2Dispatch timerInMainQueueAfterDelay:RETRY_DELAY withName:startSongRetryTimer repeats:NO performBlock:^{ [self startWithOffsetInBytes:byteOffset orSeconds:seconds]; }];
 		}
 	}
 }

@@ -266,7 +266,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	self.connection = nil;
 	
 	//DLog(@"Folder dropdown: updating folders");
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getMusicFolders" andParameters:nil];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getMusicFolders" parameters:nil];
 	//DLog(@"folder dropdown url: %@   body: %@  headers: %@", [[request URL] absoluteString], [[[NSString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding] autorelease], [request allHTTPHeaderFields]);
     
 	self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];

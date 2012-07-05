@@ -10,6 +10,9 @@
 
 @implementation UIImageView (Reflection)
 
+CGImageRef CreateGradientImageRef(CGSize size);
+CGContextRef CreateReflectionBitmapContext(CGSize size);
+
 CGImageRef CreateGradientImageRef(CGSize size)
 {
 	CGImageRef theCGImage = NULL;

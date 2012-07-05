@@ -48,7 +48,7 @@
 #import "MenuViewController.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "ISMSCacheQueueManager.h"
-#import "GCDWrapper.h"
+#import "EX2Dispatch.h"
 
 @implementation iSubAppDelegate
 
@@ -876,12 +876,12 @@
 	if ([note.object isKindOfClass:[Reachability class]])
 	{
 		// Cancel any previous requests
-		[GCDWrapper cancelTimerBlockWithName:@"Reachability Changed"];
+		[EX2Dispatch cancelTimerBlockWithName:@"Reachability Changed"];
 		
 		// Perform the actual check in two seconds to make sure it's the last message received
 		// this prevents a bug where the status changes from wifi to not reachable, but first it receives
 		// some messages saying it's still on wifi, then gets the not reachable messages
-		[GCDWrapper timerInMainQueueAfterDelay:2.0 withName:@"Reachability Changed" performBlock:
+		[EX2Dispatch timerInMainQueueAfterDelay:2.0 withName:@"Reachability Changed" repeats:NO performBlock:
 		 ^{
 			 [self reachabilityChangedInternal:note.object];
 		 }];

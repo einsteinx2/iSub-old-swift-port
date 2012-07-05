@@ -19,7 +19,7 @@
 #import "NSArray+Additions.h"
 #import "ISMSCacheQueueManager.h"
 #import "iSubAppDelegate.h"
-#import "GCDWrapper.h"
+#import "EX2Dispatch.h"
 #import "ISMSStreamManager.h"
 #import "JukeboxSingleton.h"
 
@@ -374,7 +374,7 @@
 		if ([NSThread isMainThread])
 			[cacheQueueManagerS startDownloadQueue];
 		else
-			[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^{ [cacheQueueManagerS startDownloadQueue]; }];
+			[EX2Dispatch runInMainThreadAndWaitUntilDone:NO block:^{ [cacheQueueManagerS startDownloadQueue]; }];
 	}
 	
 	return !hadError;

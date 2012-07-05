@@ -35,63 +35,10 @@
 
 #pragma mark - Loader Methods
 
-- (void)startLoad
+- (NSURLRequest *)createRequest
 {
-	NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getNowPlaying"
-															   andParameters:nil];
-    
-	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	if (connection)
-	{
-		self.receivedData = [NSMutableData data];
-		self.nowPlayingSongDicts = [NSMutableArray arrayWithCapacity:0];
-	} 
-	else 
-	{
-		NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
-		[self informDelegateLoadingFailed:error];
-	}
+	return [NSMutableURLRequest requestWithSUSAction:@"getNowPlaying" parameters:nil];
 }
-
-#pragma mark - Connection Delegate
-
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
-{
-	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
-		return YES; // Self-signed cert will be accepted
-	
-	return NO;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{	
-	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
-	{
-		NSURLCredential *cred = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
-		[challenge.sender useCredential:cred
-			 forAuthenticationChallenge:challenge]; 
-	}
-	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-	[self.receivedData setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
-{
-    [self.receivedData appendData:incrementalData];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
-{   	
-	self.receivedData = nil;
-	self.connection = nil;
-	
-	// Inform the delegate that loading failed
-	[self informDelegateLoadingFailed:error];
-}	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	            

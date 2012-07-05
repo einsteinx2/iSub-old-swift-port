@@ -27,7 +27,7 @@
 #import "iPadRootViewController.h"
 #import "StackScrollViewController.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "GCDWrapper.h"
+#import "EX2Dispatch.h"
 #import "JukeboxSingleton.h"
 
 @implementation CacheAlbumViewController
@@ -355,7 +355,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	}
 			
 	// Must do UI stuff in main thread
-	[GCDWrapper runInMainThreadAndWaitUntilDone:NO block:^ { [self loadPlayAllPlaylist2]; }];
+	[EX2Dispatch runInMainThreadAndWaitUntilDone:NO block:^ { [self loadPlayAllPlaylist2]; }];
 }
 
 
