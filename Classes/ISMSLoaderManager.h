@@ -6,10 +6,10 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-@protocol SUSLoaderManager <NSObject>
+@protocol ISMSLoaderManager <NSObject>
 
 @required
-- (id)initWithDelegate:(NSObject <SUSLoaderDelegate> *)theDelegate;
+- (id)initWithDelegate:(NSObject <ISMSLoaderDelegate> *)theDelegate;
 - (void)startLoad;
 - (void)cancelLoad;
 

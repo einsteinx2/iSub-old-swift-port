@@ -245,7 +245,7 @@
 	[self.dataModel startLoad];
 }
 
-- (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
+- (void)loadingFailed:(ISMSLoader*)theLoader withError:(NSError *)error
 {	
 	viewObjectsS.isArtistsLoading = NO;
 	
@@ -259,7 +259,7 @@
 	[alert show];
 }
 
-- (void)loadingFinished:(SUSLoader*)theLoader
+- (void)loadingFinished:(ISMSLoader*)theLoader
 {	
     //DLog(@"loadingFinished called");
 	if (isCountShowing)
@@ -581,7 +581,7 @@
 			//DLog(@"indexPositions: %@", [dataModel indexPositions]);
 			NSUInteger sectionStartIndex = [[[self.dataModel indexPositions] objectAtIndexSafe:indexPath.section] intValue];
 			anArtist = [self.dataModel artistForPosition:(sectionStartIndex + indexPath.row)];
-			DLog(@"artist: %@", anArtist);
+			//DLog(@"artist: %@", anArtist);
 		}
 	}
 	cell.myArtist = anArtist;

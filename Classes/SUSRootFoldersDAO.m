@@ -14,7 +14,7 @@
 #import "Artist.h"
 #import "Index.h"
 #import "SavedSettings.h"
-#import "SUSRootFoldersLoader.h"
+#import "ISMSRootFoldersLoader.h"
 #import "Song+DAO.h"
 
 @implementation SUSRootFoldersDAO
@@ -23,7 +23,7 @@
 
 #pragma mark - Lifecycle
 
-- (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate
+- (id)initWithDelegate:(id <ISMSLoaderDelegate>)theDelegate
 {
     if ((self = [super init]))
 	{
@@ -365,7 +365,7 @@
 
 - (void)startLoad
 {
-    self.loader = [[SUSRootFoldersLoader alloc] initWithDelegate:self];
+    self.loader = [ISMSRootFoldersLoader loaderWithDelegate:self];
 	self.loader.selectedFolderId = self.selectedFolderId;
     [self.loader startLoad];
 }
@@ -379,7 +379,7 @@
 
 #pragma mark - Loader Delegate Methods
 
-- (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
+- (void)loadingFailed:(ISMSLoader*)theLoader withError:(NSError *)error
 {
 	self.loader.delegate = nil;
 	self.loader = nil;
@@ -390,7 +390,7 @@
 	}
 }
 
-- (void)loadingFinished:(SUSLoader*)theLoader
+- (void)loadingFinished:(ISMSLoader*)theLoader
 {
 	self.loader.delegate = nil;
 	self.loader = nil;

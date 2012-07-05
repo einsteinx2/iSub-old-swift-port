@@ -7,11 +7,11 @@
 //
 
 #import "CustomUITextView.h"
-#import "SUSLoaderDelegate.h"
+#import "ISMSLoaderDelegate.h"
 
 @class CustomUITextView, EGORefreshTableHeaderView, SUSChatDAO;
 
-@interface ChatViewController : UITableViewController <UITextViewDelegate, SUSLoaderDelegate> 
+@interface ChatViewController : UITableViewController <UITextViewDelegate, ISMSLoaderDelegate> 
 
 @property (strong) UIView *headerView;
 @property (strong) CustomUITextView *textInput;

@@ -211,14 +211,14 @@
 
 #pragma mark - LoaderDelegate methods
 
-- (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
+- (void)loadingFailed:(ISMSLoader*)theLoader withError:(NSError *)error
 {
 	[self.tableView reloadData];
 	[self createDataModel];
     [self hideLoadingScreen];
 }
 
-- (void)loadingFinished:(SUSLoader*)theLoader
+- (void)loadingFinished:(ISMSLoader*)theLoader
 {
 	// Don't do anything, handled by the notification
 }

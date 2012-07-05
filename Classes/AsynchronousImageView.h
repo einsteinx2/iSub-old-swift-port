@@ -5,11 +5,11 @@
 //  Created by Слава on 22.10.09.
 //  Copyright 2009 Slava Bushtruk. All rights reserved.
 //
-#import "SUSLoaderDelegate.h"
+#import "ISMSLoaderDelegate.h"
 
 @protocol AsynchronousImageViewDelegate;
 @class SUSCoverArtDAO;
-@interface AsynchronousImageView : UIImageView <SUSLoaderDelegate>
+@interface AsynchronousImageView : UIImageView <ISMSLoaderDelegate>
 
 @property (unsafe_unretained) IBOutlet NSObject<AsynchronousImageViewDelegate> *delegate;
 @property (copy) NSString *coverArtId;

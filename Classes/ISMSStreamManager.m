@@ -19,7 +19,7 @@
 #import "PlaylistSingleton.h"
 #import "NSArray+FirstObject.h"
 #import "AudioEngine.h"
-#import "SUSCoverArtLoader.h"
+#import "ISMSCoverArtLoader.h"
 #import "SUSLyricsDAO.h"
 #import "ViewObjectsSingleton.h"
 #import "NSArray+Additions.h"
@@ -398,12 +398,12 @@
 		// Also download the album art
 		if (song.coverArtId)
 		{
-			SUSCoverArtLoader *playerArt = [[SUSCoverArtLoader alloc] initWithDelegate:self coverArtId:song.coverArtId isLarge:YES];
+			ISMSCoverArtLoader *playerArt = [[ISMSCoverArtLoader alloc] initWithDelegate:self coverArtId:song.coverArtId isLarge:YES];
 			[playerArt downloadArtIfNotExists];
 			//if (![playerArt downloadArtIfNotExists])
 			//	;
 			
-			SUSCoverArtLoader *tableArt = [[SUSCoverArtLoader alloc] initWithDelegate:self coverArtId:song.coverArtId isLarge:NO];
+			ISMSCoverArtLoader *tableArt = [[ISMSCoverArtLoader alloc] initWithDelegate:self coverArtId:song.coverArtId isLarge:NO];
 			[tableArt downloadArtIfNotExists];
 			//if (![tableArt downloadArtIfNotExists])
 			//	;
@@ -668,14 +668,14 @@
 	}
 }
 
-#pragma mark - SUSLoader handler
+#pragma mark - ISMSLoader handler
 
-- (void)loadingFailed:(SUSLoader *)theLoader withError:(NSError *)error
+- (void)loadingFailed:(ISMSLoader *)theLoader withError:(NSError *)error
 {
 	theLoader.delegate = nil;
 }
 
-- (void)loadingFinished:(SUSLoader *)theLoader
+- (void)loadingFinished:(ISMSLoader *)theLoader
 {
 	theLoader.delegate = nil;
 }

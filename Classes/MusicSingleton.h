@@ -8,7 +8,7 @@
 
 #define musicS ((MusicSingleton *)[MusicSingleton sharedInstance])
 
-#import "SUSLoaderDelegate.h"
+#import "ISMSLoaderDelegate.h"
 
 @class Song;
 

@@ -7,11 +7,11 @@
 //
 
 #import "BBSimpleConnectionQueue.h"
-#import "SUSLoaderDelegate.h"
+#import "ISMSLoaderDelegate.h"
 
 @class BBSimpleConnectionQueue, SUSServerPlaylistsDAO;
 
-@interface PlaylistsViewController : UITableViewController <BBSimpleConnectionQueueDelegate, SUSLoaderDelegate>
+@interface PlaylistsViewController : UITableViewController <BBSimpleConnectionQueueDelegate, ISMSLoaderDelegate>
 
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) UISegmentedControl *segmentedControl;

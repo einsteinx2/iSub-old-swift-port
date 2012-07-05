@@ -6,21 +6,21 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-#import "SUSLoaderDelegate.h"
-#import "SUSLoaderManager.h"
+#import "ISMSLoaderDelegate.h"
+#import "ISMSLoaderManager.h"
 
-@class Artist, FMDatabase, SUSRootFoldersLoader;
+@class Artist, FMDatabase, ISMSRootFoldersLoader;
 
-@interface SUSRootFoldersDAO : NSObject <SUSLoaderManager, SUSLoaderDelegate>
+@interface SUSRootFoldersDAO : NSObject <ISMSLoaderManager, ISMSLoaderDelegate>
 {		
 	NSUInteger count;
 	NSUInteger searchCount;
 	NSUInteger tempRecordCount;
 }
 
-@property (unsafe_unretained) id<SUSLoaderDelegate> delegate;
+@property (unsafe_unretained) id<ISMSLoaderDelegate> delegate;
 
-@property (strong) SUSRootFoldersLoader *loader;
+@property (strong) ISMSRootFoldersLoader *loader;
 
 @property (readonly) NSUInteger count;
 @property (readonly) NSUInteger searchCount;
@@ -36,14 +36,14 @@
 + (void)setFolderDropdownFolders:(NSDictionary *)folders;
 + (NSDictionary *)folderDropdownFolders;
 
-- (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate;
+- (id)initWithDelegate:(id <ISMSLoaderDelegate>)theDelegate;
 
 - (Artist *)artistForPosition:(NSUInteger)position;
 - (void)clearSearchTable;
 - (void)searchForFolderName:(NSString *)name;
 - (Artist *)artistForPositionInSearch:(NSUInteger)position;
 
-- (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate;
+- (id)initWithDelegate:(id <ISMSLoaderDelegate>)theDelegate;
 - (void)startLoad;
 - (void)cancelLoad;
 

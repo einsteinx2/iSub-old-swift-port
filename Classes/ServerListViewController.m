@@ -243,9 +243,10 @@
 	[defaults synchronize];
 	
 	// Update the variables
-	settingsS.urlString = [NSString stringWithString:viewObjectsS.serverToEdit.url];
-	settingsS.username = [NSString stringWithString:viewObjectsS.serverToEdit.username];
-	settingsS.password = [NSString stringWithString:viewObjectsS.serverToEdit.password];
+	settingsS.serverType = viewObjectsS.serverToEdit.type;
+	settingsS.urlString = viewObjectsS.serverToEdit.url;
+	settingsS.username = viewObjectsS.serverToEdit.username;
+	settingsS.password = viewObjectsS.serverToEdit.password;
     settingsS.redirectUrlString = self.theNewRedirectionUrl;
 	
 	DLog(@" settingsS.urlString: %@   settingsS.redirectUrlString: %@", settingsS.urlString, settingsS.redirectUrlString);
@@ -422,7 +423,7 @@
 	{
 		self.theNewRedirectionUrl = nil;
 		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
-		SUSServerChecker *checker = [[SUSServerChecker alloc] initWithDelegate:self];
+		ISMSServerChecker *checker = [[ISMSServerChecker alloc] initWithDelegate:self];
 		[checker checkServerUrlString:viewObjectsS.serverToEdit.url username:viewObjectsS.serverToEdit.username password:viewObjectsS.serverToEdit.password];
 	}
 }
@@ -484,7 +485,7 @@
     }   
 }
 
-- (void)SUSServerURLCheckFailed:(SUSServerChecker *)checker withError:(NSError *)error
+- (void)ISMSServerURLCheckFailed:(ISMSServerChecker *)checker withError:(NSError *)error
 {	
 	UIAlertView *alert = nil;
 	if (error.code == ISMSErrorCode_IncorrectCredentials)
@@ -504,15 +505,16 @@
     [viewObjectsS hideLoadingScreen];
 }
 
-- (void)SUSServerURLCheckPassed:(SUSServerChecker *)checker
+- (void)ISMSServerURLCheckPassed:(ISMSServerChecker *)checker
 {
 	settingsS.isNewSearchAPI = checker.isNewSearchAPI;
     
 	checker = nil;
 	
-	settingsS.urlString = [NSString stringWithString:viewObjectsS.serverToEdit.url];
-	settingsS.username = [NSString stringWithString:viewObjectsS.serverToEdit.username];
-	settingsS.password = [NSString stringWithString:viewObjectsS.serverToEdit.password];
+	settingsS.serverType = viewObjectsS.serverToEdit.type;
+	settingsS.urlString = viewObjectsS.serverToEdit.url;
+	settingsS.username = viewObjectsS.serverToEdit.username;
+	settingsS.password = viewObjectsS.serverToEdit.password;
     settingsS.redirectUrlString = self.theNewRedirectionUrl;
 	
 	[self switchServer:nil];
@@ -521,7 +523,7 @@
     [viewObjectsS hideLoadingScreen];
 }
 
-- (void)SUSServerURLCheckRedirected:(SUSServerChecker *)checker redirectUrl:(NSURL *)url
+- (void)ISMSServerURLCheckRedirected:(ISMSServerChecker *)checker redirectUrl:(NSURL *)url
 {
     self.theNewRedirectionUrl = [NSString stringWithFormat:@"%@://%@:%@", url.scheme, url.host, url.port];
 }

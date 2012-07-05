@@ -15,26 +15,32 @@
 @synthesize title, songId, parentId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix;
 @synthesize duration, bitRate, track, year, size;
 
+- (id)initWithPMSDictionary:(NSDictionary *)dictionary
+{
+	if ((self = [super init]))
+	{
+		title = N2n([dictionary objectForKey:@"songName"]);
+		songId = N2n([dictionary objectForKey:@"itemId"]);
+		parentId = N2n([dictionary objectForKey:@"folderId"]);
+		artist = N2n([dictionary objectForKey:@"artistName"]);
+		album = N2n([dictionary objectForKey:@"albumName"]);
+		genre = N2n([dictionary objectForKey:@"genreName"]);
+		coverArtId = N2n([dictionary objectForKey:@"artId"]);
+		path = N2n([dictionary objectForKey:@"fileName"]);
+		suffix = N2n([dictionary objectForKey:@"fileType"]);
+		duration = N2n([dictionary objectForKey:@"duration"]);
+		bitRate = N2n([dictionary objectForKey:@"bitrate"]);
+		track = N2n([dictionary objectForKey:@"trackNumber"]);
+		year = N2n([dictionary objectForKey:@"year"]);
+		size = N2n([dictionary objectForKey:@"fileSize"]);
+	}
+	return self;
+}
+
 - (id)initWithTBXMLElement:(TBXMLElement *)element
 {
 	if ((self = [super init]))
 	{
-		title = nil;
-		songId = nil;
-		parentId = nil;
-		artist = nil;
-		album = nil;
-		genre = nil;
-		coverArtId = nil;
-		path = nil;
-		suffix = nil;
-		transcodedSuffix = nil;
-		duration = nil;
-		bitRate = nil;
-		track = nil;
-		year = nil;
-		size = nil;
-		
 		self.title = [[TBXML valueOfAttributeNamed:@"title" forElement:element] cleanString];
 		self.songId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
 		if ([TBXML valueOfAttributeNamed:@"parent" forElement:element])
@@ -71,22 +77,6 @@
 {
 	if ((self = [super init]))
 	{
-		title = nil;
-		songId = nil;
-		parentId = nil;
-		artist = nil;
-		album = nil;
-		genre = nil;
-		coverArtId = nil;
-		path = nil;
-		suffix = nil;
-		transcodedSuffix = nil;
-		duration = nil;
-		bitRate = nil;
-		track = nil;
-		year = nil;
-		size = nil;
-		
 		if ([attributeDict objectForKey:@"title"])
 			self.title = [attributeDict objectForKey:@"title"];
 		
@@ -161,22 +151,6 @@
 {
 	if ((self = [super init]))
 	{
-		title = nil;
-		songId = nil;
-		parentId = nil;
-		artist = nil;
-		album = nil;
-		genre = nil;
-		coverArtId = nil;
-		path = nil;
-		suffix = nil;
-		transcodedSuffix = nil;
-		duration = nil;
-		bitRate = nil;
-		track = nil;
-		year = nil;
-		size = nil;
-		
 		// Check if this object is using the new encoding
 		if ([decoder containsValueForKey:@"songId"])
 		{

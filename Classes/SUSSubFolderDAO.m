@@ -10,7 +10,7 @@
 #import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "SUSSubFolderLoader.h"
+#import "ISMSSubFolderLoader.h"
 #import "NSString+md5.h"
 #import "Album.h"
 #import "Song.h"
@@ -54,7 +54,7 @@
     return self;
 }
 
-- (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate
+- (id)initWithDelegate:(id <ISMSLoaderDelegate>)theDelegate
 {
     if ((self = [super init])) 
 	{
@@ -64,7 +64,7 @@
     return self;
 }
 
-- (id)initWithDelegate:(id<SUSLoaderDelegate>)theDelegate andId:(NSString *)folderId andArtist:(Artist *)anArtist
+- (id)initWithDelegate:(id<ISMSLoaderDelegate>)theDelegate andId:(NSString *)folderId andArtist:(Artist *)anArtist
 {
 	if ((self = [super init])) 
 	{
@@ -247,7 +247,7 @@
 
 - (void)startLoad
 {	
-    self.loader = [[SUSSubFolderLoader alloc] initWithDelegate:self];
+    self.loader = [ISMSSubFolderLoader loaderWithDelegate:self];
     self.loader.myId = self.myId;
     self.loader.myArtist = self.myArtist;
     [self.loader startLoad];
@@ -262,7 +262,7 @@
 
 #pragma mark - Loader Delegate Methods
 
-- (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
+- (void)loadingFailed:(ISMSLoader*)theLoader withError:(NSError *)error
 {
 	self.loader.delegate = nil;
 	self.loader = nil;
@@ -273,7 +273,7 @@
 	}
 }
 
-- (void)loadingFinished:(SUSLoader*)theLoader
+- (void)loadingFinished:(ISMSLoader*)theLoader
 {
 	self.loader.delegate = nil;
 	self.loader = nil;

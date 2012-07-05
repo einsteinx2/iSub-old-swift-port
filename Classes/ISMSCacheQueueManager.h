@@ -6,13 +6,13 @@
 //  Copyright (c) 2012 Ben Baron. All rights reserved.
 //
 
-#import "SUSLoaderDelegate.h"
+#import "ISMSLoaderDelegate.h"
 #import "ISMSStreamHandlerDelegate.h"
 
 #define cacheQueueManagerS ((ISMSCacheQueueManager *)[ISMSCacheQueueManager sharedInstance])
 
 @class Song, ISMSStreamHandler;
-@interface ISMSCacheQueueManager : NSObject <SUSLoaderDelegate, ISMSStreamHandlerDelegate>
+@interface ISMSCacheQueueManager : NSObject <ISMSLoaderDelegate, ISMSStreamHandlerDelegate>
 
 @property BOOL isQueueDownloading;
 @property (copy) Song *currentQueuedSong;

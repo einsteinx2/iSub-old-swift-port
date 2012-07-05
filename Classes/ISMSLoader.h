@@ -7,20 +7,25 @@
 //
 
 
-#import "SUSLoaderDelegate.h"
+#import "ISMSLoaderDelegate.h"
 #import "NSError+ISMSError.h"
 #import "NSMutableURLRequest+SUS.h"
+#import "NSMutableURLRequest+PMS.h"
+#import "Server.h"
 
-@interface SUSLoader : NSObject <NSURLConnectionDelegate>
+@interface ISMSLoader : NSObject <NSURLConnectionDelegate>
 
-@property (unsafe_unretained) NSObject<SUSLoaderDelegate> *delegate;
+@property (unsafe_unretained) NSObject<ISMSLoaderDelegate> *delegate;
 
 @property (strong) NSURLConnection *connection;
 @property (strong) NSMutableData *receivedData;
-@property (readonly) SUSLoaderType type;
+@property (readonly) ISMSLoaderType type;
+
++ (id)loader;
++ (id)loaderWithDelegate:(id <ISMSLoaderDelegate>)theDelegate;
 
 - (void)setup;
-- (id)initWithDelegate:(NSObject<SUSLoaderDelegate> *)theDelegate;
+- (id)initWithDelegate:(NSObject<ISMSLoaderDelegate> *)theDelegate;
 
 - (void)startLoad; // Override this
 - (void)cancelLoad; // Override this

@@ -6,11 +6,11 @@
 //  Copyright Ben Baron 2010. All rights reserved.
 //
 
-#import "SUSLoaderDelegate.h"
+#import "ISMSLoaderDelegate.h"
 
 @class Song, Album, SUSAllSongsDAO, LoadingScreen, EGORefreshTableHeaderView;
 
-@interface AllSongsViewController : UITableViewController <UISearchBarDelegate, SUSLoaderDelegate> 
+@interface AllSongsViewController : UITableViewController <UISearchBarDelegate, ISMSLoaderDelegate> 
 
 @property (strong) UIButton *reloadButton;
 @property (strong) UILabel *reloadLabel;
@@ -34,8 +34,8 @@
 
 - (void)addCount;
 - (void)doneSearching_Clicked:(id)sender;
-- (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error;
-- (void)loadingFinished:(SUSLoader*)theLoader;
+- (void)loadingFailed:(ISMSLoader*)theLoader withError:(NSError *)error;
+- (void)loadingFinished:(ISMSLoader*)theLoader;
 - (void)dataSourceDidFinishLoadingNewData;
 
 - (void)showLoadingScreen;

@@ -223,9 +223,9 @@
 	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
 }
 
-#pragma mark - SUSLoader delegate
+#pragma mark - ISMSLoader delegate
 
-- (void)loadingFailed:(SUSLoader*)theLoader withError:(NSError *)error
+- (void)loadingFailed:(ISMSLoader*)theLoader withError:(NSError *)error
 {
 	[viewObjectsS hideLoadingScreen];
 	
@@ -238,7 +238,7 @@
 	}
 }
 
-- (void)loadingFinished:(SUSLoader*)theLoader
+- (void)loadingFinished:(ISMSLoader*)theLoader
 {
 	[viewObjectsS hideLoadingScreen];
 	

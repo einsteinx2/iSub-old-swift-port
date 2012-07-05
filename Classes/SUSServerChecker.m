@@ -1,46 +1,18 @@
 //
-//  ServerURLChecker.m
+//  SUSServerChecker.m
 //  iSub
 //
-//  Created by Benjamin Baron on 10/29/11.
-//  Copyright (c) 2011 Ben Baron. All rights reserved.
+//  Created by Benjamin Baron on 6/14/12.
+//  Copyright (c) 2012 Ben Baron. All rights reserved.
 //
 
 #import "SUSServerChecker.h"
+#import "NSMutableURLRequest+SUS.h"
 #import "TBXML.h"
 #import "NSError+ISMSError.h"
-#import "NSMutableURLRequest+SUS.h"
-#import "SavedSettings.h"
-#import "NSArray+Additions.h"
 #import "NSNotificationCenter+MainThread.h"
 
-@interface SUSServerChecker (Private)
-- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error;
-@end
-
 @implementation SUSServerChecker
-
-@synthesize receivedData, delegate, request, isNewSearchAPI, connection;
-@synthesize majorVersion, minorVersion, versionString;
-
-- (id)init
-{
-	if ((self = [super init]))
-	{
-		isNewSearchAPI = NO;	
-	}
-	return self;
-}
-
-- (id)initWithDelegate:(NSObject<SUSServerURLCheckerDelegate> *)theDelegate
-{
-    if ((self = [super init]))
-	{
-        delegate = theDelegate;
-		isNewSearchAPI = NO;
-	}	
-	return self;
-}
 
 - (void)checkServerUrlString:(NSString *)urlString username:(NSString *)username password:(NSString *)password
 {
@@ -61,21 +33,8 @@
 	else
     {
         NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
-        [self.delegate SUSServerURLCheckFailed:self withError:error];
+        [self.delegate ISMSServerURLCheckFailed:self withError:error];
     }
-}
-
-- (void)checkTimedOut
-{
-	//DLog(@"check timed out");
-	[self.connection cancel];
-	NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotReachServer];
-	[self connection:self.connection didFailWithError:error];
-}
-
-- (void)cancelLoad
-{
-	[self checkTimedOut];
 }
 
 #pragma mark - Connection Delegate
@@ -109,7 +68,7 @@
         // Notify the delegate
         if ([self.delegate respondsToSelector:@selector(SUSServerURLCheckRedirected:redirectUrl:)])
         {
-             [self.delegate SUSServerURLCheckRedirected:self redirectUrl:[inRequest URL]];
+			[self.delegate ISMSServerURLCheckRedirected:self redirectUrl:[inRequest URL]];
         }
         
         NSMutableURLRequest *r = [self.request mutableCopy]; // original request
@@ -137,7 +96,7 @@
 	self.request = nil;
     self.receivedData = nil;
 	
-	[self.delegate SUSServerURLCheckFailed:self withError:error];
+	[self.delegate ISMSServerURLCheckFailed:self withError:error];
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerCheckFailed];
 }
@@ -146,25 +105,26 @@
 {	
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
-	//DLog(@"receivedData: %@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
+	DLog(@"receivedData: %@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
+	
 	NSError *error;
     TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData error:&error];
 	if (error)
 	{
 		// This is not XML, so fail
-		[self.delegate SUSServerURLCheckFailed:self withError:error];
+		[self.delegate ISMSServerURLCheckFailed:self withError:error];
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerCheckFailed];
 	}
 	else
 	{
 		TBXMLElement *root = tbxml.rootXMLElement;
-	
+		
         if ([[TBXML elementName:root] isEqualToString:@"subsonic-response"])
         {
 			self.versionString = [TBXML valueOfAttributeNamed:@"version" forElement:root];
-			if (versionString)
+			if (self.versionString)
 			{
-				NSArray *splitVersion = [versionString componentsSeparatedByString:@"."];
+				NSArray *splitVersion = [self.versionString componentsSeparatedByString:@"."];
 				if ([splitVersion count] > 0)
 				{
 					self.majorVersion = [[splitVersion objectAtIndexSafe:0] intValue];
@@ -189,20 +149,20 @@
 				{
 					// Incorrect credentials, so fail
 					NSError *anError = [NSError errorWithISMSCode:ISMSErrorCode_IncorrectCredentials];
-					[self.delegate SUSServerURLCheckFailed:self withError:anError];
+					[self.delegate ISMSServerURLCheckFailed:self withError:anError];
 					[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerCheckFailed];
 				}
 				else
 				{
 					// This is a Subsonic server, so pass
-					[self.delegate SUSServerURLCheckPassed:self];
+					[self.delegate ISMSServerURLCheckPassed:self];
 					[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerCheckPassed];
 				}
 			}
 			else
 			{
 				// This is a Subsonic server, so pass
-				[self.delegate SUSServerURLCheckPassed:self];
+				[self.delegate ISMSServerURLCheckPassed:self];
 				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerCheckPassed];
 			}
         }
@@ -210,7 +170,7 @@
         {
             // This is not a Subsonic server, so fail
             NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NotASubsonicServer];
-			[self.delegate SUSServerURLCheckFailed:self withError:error];
+			[self.delegate ISMSServerURLCheckFailed:self withError:error];
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerCheckFailed];
         }
     }
@@ -219,6 +179,5 @@
 	self.connection = nil;
     self.receivedData = nil;
 }
-
 
 @end

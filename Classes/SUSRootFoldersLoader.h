@@ -6,17 +6,8 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "SUSLoader.h"
+#import "ISMSRootFoldersLoader.h"
 
-#define TEMP_FLUSH_AMOUNT 400
-
-@class FMDatabase;
-
-@interface SUSRootFoldersLoader : SUSLoader
-
-@property NSUInteger tempRecordCount;
-@property (strong) NSNumber *selectedFolderId;
-
-- (NSString *)tableModifier;
+@interface SUSRootFoldersLoader : ISMSRootFoldersLoader
 
 @end

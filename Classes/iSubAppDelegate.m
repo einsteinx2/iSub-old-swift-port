@@ -100,6 +100,9 @@
 	// Start the save defaults timer and mem cache initial defaults
 	[settingsS setupSaveState];
 	
+	DLog(@"settingsS: %@", settingsS);
+	DLog(@"urlString: %@", settingsS.urlString);
+	
 	// Setup network reachability notifications
 	self.wifiReach = [Reachability reachabilityForLocalWiFi];
 	[wifiReach startNotifier];
@@ -110,6 +113,8 @@
 	[UIDevice currentDevice].batteryMonitoringEnabled = YES;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(batteryStateChanged:) name:@"UIDeviceBatteryStateDidChangeNotification" object:[UIDevice currentDevice]];
 	[self batteryStateChanged:nil];	
+	
+	DLog(@"urlString: %@", settingsS.urlString);
 
 	// Handle offline mode
 	if (settingsS.isForceOfflineMode)
@@ -133,6 +138,8 @@
 		viewObjectsS.isOfflineMode = NO;
 	}
 	
+	DLog(@"urlString: %@", settingsS.urlString);
+	
 	showIntro = NO;
 	if (settingsS.isTestServer)
 	{
@@ -147,6 +154,8 @@
 		}
 	}
 	
+	DLog(@"urlString: %@", settingsS.urlString);
+	
 	// Make sure audio engine and cache singletons get loaded
 	[AudioEngine sharedInstance];
 	[CacheSingleton sharedInstance];
@@ -159,6 +168,8 @@
 	[self loadHockeyApp];
 	//[self loadCrittercism];
 	
+	DLog(@"urlString: %@", settingsS.urlString);
+	
 	[self loadInAppPurchaseStore];
 		
 	// Setup Twitter connection
@@ -166,6 +177,8 @@
 	{
 		[socialS createTwitterEngine];
 	}
+	
+	DLog(@"urlString: %@", settingsS.urlString);
 		
 	// Create and display UI
 	introController = nil;
@@ -228,6 +241,8 @@
 		window.backgroundColor = viewObjectsS.windowColor;
 	[window makeKeyAndVisible];	
 	
+	DLog(@"urlString: %@", settingsS.urlString);
+	
 	// Check the server status in the background
     if (!viewObjectsS.isOfflineMode)
 	{
@@ -252,6 +267,7 @@
 
 - (void)checkServer
 {
+	DLog(@"urlString: %@", settingsS.urlString);
 	ISMSUpdateChecker *updateChecker = [[ISMSUpdateChecker alloc] init];
 	[updateChecker checkForUpdate];
 
@@ -261,7 +277,7 @@
 	// have internet access or if the host url entered was wrong.
     if (!viewObjectsS.isOfflineMode) 
 	{
-        self.serverChecker = [[SUSServerChecker alloc] initWithDelegate:self];
+        self.serverChecker = [[ISMSServerChecker alloc] initWithDelegate:self];
 		[self.serverChecker checkServerUrlString:settingsS.urlString 
 										username:settingsS.username 
 										password:settingsS.password];
@@ -275,7 +291,7 @@
 
 #pragma mark - SUS Server Check Delegate
 
-- (void)SUSServerURLCheckRedirected:(SUSServerChecker *)checker redirectUrl:(NSURL *)url
+- (void)ISMSServerURLCheckRedirected:(ISMSServerChecker *)checker redirectUrl:(NSURL *)url
 {
 	NSMutableString *redirectUrlString = [NSMutableString stringWithFormat:@"%@://%@", url.scheme, url.host];
 	if (url.port)
@@ -300,7 +316,7 @@
 	settingsS.redirectUrlString = [NSString stringWithString:redirectUrlString];
 }
 
-- (void)SUSServerURLCheckFailed:(SUSServerChecker *)checker withError:(NSError *)error
+- (void)ISMSServerURLCheckFailed:(ISMSServerChecker *)checker withError:(NSError *)error
 {
 	[viewObjectsS hideLoadingScreen];
 	
@@ -321,7 +337,7 @@
 	settingsS.isNewSearchAPI = checker.isNewSearchAPI;
 }
 
-- (void)SUSServerURLCheckPassed:(SUSServerChecker *)checker
+- (void)ISMSServerURLCheckPassed:(ISMSServerChecker *)checker
 {
     //DLog(@"server check passed");
 	

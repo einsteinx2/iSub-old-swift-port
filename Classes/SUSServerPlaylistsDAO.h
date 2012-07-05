@@ -6,13 +6,13 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "SUSLoaderDelegate.h"
-#import "SUSLoaderManager.h"
+#import "ISMSLoaderDelegate.h"
+#import "ISMSLoaderManager.h"
 
 @class SUSServerPlaylistsLoader, FMDatabase;
-@interface SUSServerPlaylistsDAO : NSObject <SUSLoaderDelegate, SUSLoaderManager>
+@interface SUSServerPlaylistsDAO : NSObject <ISMSLoaderDelegate, ISMSLoaderManager>
 
-@property (unsafe_unretained) NSObject <SUSLoaderDelegate> *delegate;
+@property (unsafe_unretained) NSObject <ISMSLoaderDelegate> *delegate;
 @property (strong) SUSServerPlaylistsLoader *loader;
 
 #pragma mark - Public DAO Methods

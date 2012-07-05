@@ -18,6 +18,7 @@
 #import "ISMSStreamManager.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "ViewObjectsSingleton.h"
+#import "AudioEngine.h"
 
 // Twitter secret keys
 #define kOAuthConsumerKey				@"nYKAEcLstFYnI9EEnv6g"
@@ -33,7 +34,8 @@
 - (NSTimeInterval)scrobbleDelay
 {
 	// Scrobble in 30 seconds (or settings amount) if not canceled
-	Song *currentSong = playlistS.currentSong;
+	//Song *currentSong = playlistS.currentSong;
+	Song *currentSong = audioEngineS.currentStreamSong;
 	NSTimeInterval scrobbleDelay = 30.0;
 	if (currentSong.duration != nil)
 	{

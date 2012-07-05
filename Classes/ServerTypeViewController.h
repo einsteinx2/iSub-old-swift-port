@@ -13,6 +13,8 @@
 @property (nonatomic, strong) IBOutlet UIButton *cancelButton;
 @property (nonatomic, strong) UIViewController *serverEditViewController;
 
+@property (nonatomic, strong) IBOutlet UIButton *pmsButton;
+
 - (IBAction) buttonAction:(id)sender;
 
 @end

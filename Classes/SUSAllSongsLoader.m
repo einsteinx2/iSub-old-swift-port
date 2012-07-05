@@ -57,9 +57,9 @@ static BOOL isAllSongsLoading = NO;
 }
 
 
-- (SUSLoaderType)type
+- (ISMSLoaderType)type
 {
-    return SUSLoaderType_AllSongs;
+    return ISMSLoaderType_AllSongs;
 }
 
 #pragma mark Data loading

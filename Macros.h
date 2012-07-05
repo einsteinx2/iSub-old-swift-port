@@ -87,6 +87,7 @@
 #define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 
 #define n2N(value) (value ? value : [NSNull null])
+#define N2n(value) ((NSNull *)value == [NSNull null] ? nil : value);
 
 //static id n2N(id value) { return value ? value : [NSNull null]; }
 

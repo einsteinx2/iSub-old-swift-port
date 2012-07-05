@@ -6,11 +6,11 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "SUSServerChecker.h"
+#import "ISMSServerChecker.h"
 
 @class SettingsTabViewController, HelpTabViewController;
 
-@interface ServerListViewController : UITableViewController <SUSServerURLCheckerDelegate>
+@interface ServerListViewController : UITableViewController <ISMSServerCheckerDelegate>
 
 @property (nonatomic) BOOL isEditing;
 @property (nonatomic, strong) UIView *headerView;

@@ -6,11 +6,11 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "SUSLoaderDelegate.h"
+#import "ISMSLoaderDelegate.h"
 
 @class SUSNowPlayingDAO, EGORefreshTableHeaderView;
 
-@interface PlayingViewController : UITableViewController <SUSLoaderDelegate>
+@interface PlayingViewController : UITableViewController <ISMSLoaderDelegate>
 
 @property (nonatomic) BOOL isNothingPlayingScreenShowing;
 @property (nonatomic, strong) UIImageView *nothingPlayingScreen;

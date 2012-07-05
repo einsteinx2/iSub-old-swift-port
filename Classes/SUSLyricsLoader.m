@@ -36,9 +36,9 @@
     return databaseS.lyricsDbQueue;
 }
 
-- (SUSLoaderType)type
+- (ISMSLoaderType)type
 {
-    return SUSLoaderType_Lyrics;
+    return ISMSLoaderType_Lyrics;
 }
 
 #pragma mark - Loader Methods

@@ -161,14 +161,14 @@
 	{
 		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
 		
-		SUSServerChecker *checker = [[SUSServerChecker alloc] initWithDelegate:self];
+		ISMSServerChecker *checker = [[ISMSServerChecker alloc] initWithDelegate:self];
 		[checker checkServerUrlString:urlField.text username:usernameField.text password:passwordField.text];
 	}
 }
 
 #pragma mark - Server URL Checker delegate
 
-- (void)SUSServerURLCheckRedirected:(SUSServerChecker *)checker redirectUrl:(NSURL *)url
+- (void)SUSServerURLCheckRedirected:(ISMSServerChecker *)checker redirectUrl:(NSURL *)url
 {
 	NSMutableString *redirectUrlString = [NSMutableString stringWithFormat:@"%@://%@", url.scheme, url.host];
 	if (url.port)
@@ -193,7 +193,7 @@
 	settingsS.redirectUrlString = [NSString stringWithString:redirectUrlString];
 }
 
-- (void)SUSServerURLCheckFailed:(SUSServerChecker *)checker withError:(NSError *)error
+- (void)ISMSServerURLCheckFailed:(ISMSServerChecker *)checker withError:(NSError *)error
 {
 	checker = nil;
 	[viewObjectsS hideLoadingScreen];
@@ -207,7 +207,7 @@
 	[alert show];
 }	
 	
-- (void)SUSServerURLCheckPassed:(SUSServerChecker *)checker
+- (void)ISMSServerURLCheckPassed:(ISMSServerChecker *)checker
 {
 	//DLog(@"server check passed");
 	 checker = nil;

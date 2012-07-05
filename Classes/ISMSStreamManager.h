@@ -7,14 +7,14 @@
 //
 
 #import "ISMSStreamHandlerDelegate.h"
-#import "SUSLoaderDelegate.h"
+#import "ISMSLoaderDelegate.h"
 
 #define streamManagerS ((ISMSStreamManager *)[ISMSStreamManager sharedInstance])
 
 #define ISMSNumberOfStreamsToQueue 2
 
 @class Song, ISMSStreamHandler, SUSLyricsDAO;
-@interface ISMSStreamManager : NSObject <ISMSStreamHandlerDelegate, SUSLoaderDelegate>
+@interface ISMSStreamManager : NSObject <ISMSStreamHandlerDelegate, ISMSLoaderDelegate>
 
 @property (strong) NSMutableArray *handlerStack;
 @property (strong) SUSLyricsDAO *lyricsDAO;

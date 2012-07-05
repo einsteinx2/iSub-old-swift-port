@@ -6,20 +6,20 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-#import "SUSLoaderDelegate.h"
-#import "SUSLoaderManager.h"
+#import "ISMSLoaderDelegate.h"
+#import "ISMSLoaderManager.h"
 
-@class FMDatabase, Artist, Album, Song, SUSSubFolderLoader;
+@class FMDatabase, Artist, Album, Song, ISMSSubFolderLoader;
 
-@interface SUSSubFolderDAO : NSObject <SUSLoaderDelegate, SUSLoaderManager>
+@interface SUSSubFolderDAO : NSObject <ISMSLoaderDelegate, ISMSLoaderManager>
 
 @property NSUInteger albumStartRow;
 @property NSUInteger songStartRow;
 @property NSUInteger albumsCount;
 @property NSUInteger songsCount;
 
-@property (unsafe_unretained) id<SUSLoaderDelegate> delegate;
-@property (strong) SUSSubFolderLoader *loader;
+@property (unsafe_unretained) id<ISMSLoaderDelegate> delegate;
+@property (strong) ISMSSubFolderLoader *loader;
 
 @property (copy) NSString *myId;
 @property (copy) Artist *myArtist;
@@ -30,8 +30,8 @@
 
 - (NSArray *)sectionInfo;
 
-- (id)initWithDelegate:(id <SUSLoaderDelegate>)theDelegate;
-- (id)initWithDelegate:(id<SUSLoaderDelegate>)theDelegate andId:(NSString *)folderId andArtist:(Artist *)anArtist;
+- (id)initWithDelegate:(id <ISMSLoaderDelegate>)theDelegate;
+- (id)initWithDelegate:(id<ISMSLoaderDelegate>)theDelegate andId:(NSString *)folderId andArtist:(Artist *)anArtist;
 
 - (Album *)albumForTableViewRow:(NSUInteger)row;
 - (Song *)songForTableViewRow:(NSUInteger)row;

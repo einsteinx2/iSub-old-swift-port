@@ -22,6 +22,7 @@ typedef enum
 	NSUserDefaults *userDefaults;
 	
 	NSMutableArray *serverList;
+	NSString *serverType;
 	NSString *urlString;
 	NSString *username;
 	NSString *password;
@@ -55,6 +56,7 @@ typedef enum
 
 // Server Login Settings
 @property (strong) NSMutableArray *serverList;
+@property (copy) NSString *serverType;
 @property (copy) NSString *urlString;
 @property (copy) NSString *username;
 @property (copy) NSString *password;
