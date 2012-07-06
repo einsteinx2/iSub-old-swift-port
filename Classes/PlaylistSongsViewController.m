@@ -121,7 +121,7 @@
 -(void)loadData
 {
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(serverPlaylist.playlistId) forKey:@"id"];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getPlaylist" andParameters:parameters];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getPlaylist" parameters:parameters];
 	
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)
@@ -223,7 +223,7 @@
 	}
 	[parameters setObject:[NSArray arrayWithArray:songIds] forKey:@"songId"];
 	
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"createPlaylist" andParameters:parameters];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"createPlaylist" parameters:parameters];
 	
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)

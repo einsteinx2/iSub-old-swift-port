@@ -68,8 +68,19 @@
 
 - (void)startLoad
 {
-	[NSException raise:NSInternalInconsistencyException 
-				format:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)];
+	self.connection = [NSURLConnection connectionWithRequest:[self createRequest] delegate:self];
+	if (self.connection)
+	{
+		// Create the NSMutableData to hold the received data.
+		// receivedData is an instance variable declared elsewhere.
+		self.receivedData = [NSMutableData data];
+	} 
+	else 
+	{
+		// Inform the delegate that the loading failed.
+		NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
+		[self informDelegateLoadingFailed:error];
+	}
 }
 
 - (void)cancelLoad
@@ -80,7 +91,20 @@
 	self.receivedData = nil;
 }
 
-- (void) subsonicErrorCode:(NSInteger)errorCode message:(NSString *)message
+- (NSURLRequest *)createRequest
+{
+	[NSException raise:NSInternalInconsistencyException 
+				format:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)];
+	return nil;
+}
+
+- (void)processResponse
+{
+	[NSException raise:NSInternalInconsistencyException 
+				format:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)];
+}
+
+- (void)subsonicErrorCode:(NSInteger)errorCode message:(NSString *)message
 {
 	DLog(@"Subsonic error: %@", message);
 	
@@ -123,6 +147,53 @@
 	
 	//DLog(@"delegate (%@) did not respond to loading finished", self.delegate);
 	return NO;
+}
+
+#pragma mark Connection Delegate
+
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
+{
+	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
+		return YES; // Self-signed cert will be accepted
+	
+	return NO;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{	
+	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+	{
+		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
+	}
+	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+	[self.receivedData setLength:0];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
+{
+    [self.receivedData appendData:incrementalData];
+}
+
+- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
+{
+	self.receivedData = nil;
+	self.connection = nil;
+	
+	// Inform the delegate that loading failed
+	[self informDelegateLoadingFailed:error];
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
+{			
+	[self processResponse];
+	
+	// Clean up the connection
+	self.connection = nil;
+	self.receivedData = nil;
 }
 
 @end

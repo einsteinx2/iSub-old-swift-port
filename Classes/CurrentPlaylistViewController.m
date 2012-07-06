@@ -471,7 +471,7 @@
 	 }];
 	[parameters setObject:[NSArray arrayWithArray:songIds] forKey:@"songId"];
 	
-	self.request = [NSMutableURLRequest requestWithSUSAction:@"createPlaylist" andParameters:parameters];
+	self.request = [NSMutableURLRequest requestWithSUSAction:@"createPlaylist" parameters:parameters];
 	
 	self.connection = [[NSURLConnection alloc] initWithRequest:self.request delegate:self];
 	if (self.connection)

@@ -15,11 +15,10 @@
 #import "SavedSettings.h"
 #import "EqualizerPathView.h"
 #import "NSArray+FirstObject.h"
-#import "UIApplication+StatusBar.h"
 #import "SnappySlider.h"
 #import "NWPickerView.h"
 #import "NSNotificationCenter+MainThread.h"
-#import "GCDWrapper.h"
+#import "EX2Dispatch.h"
 
 @implementation EqualizerViewController
 @synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath, gainBoostLabel, isPresetPickerShowing, controlsContainer, gainBoostAmountLabel, lastGainValue, wasVisualizerOffBeforeRotation, swipeDetectorLeft, swipeDetectorRight, landscapeButtonsHolder, overlay, dismissButton;//, hidePickerTimer; //drawTimer;
@@ -42,7 +41,7 @@
 	[UIView setAnimationDuration:duration];
 	if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
 	{
-		[UIApplication setStatusBarHidden:NO withAnimation:YES];
+		[[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
 		equalizerPath.alpha = 1.0;
 		for (EqualizerPointView *view in equalizerPointViews)
 		{
@@ -72,7 +71,7 @@
 	}
 	else
 	{
-		[UIApplication setStatusBarHidden:YES withAnimation:YES];
+		[[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
 		equalizerPath.alpha = 0.0;
 		for (EqualizerPointView *view in equalizerPointViews)
 		{
@@ -122,7 +121,7 @@
 {
 	[presetPicker resignFirstResponder];
 	//self.hidePickerTimer = nil;
-	[GCDWrapper cancelTimerBlockWithName:hidePickerTimer];
+	[EX2Dispatch cancelTimerBlockWithName:hidePickerTimer];
 }
 
 - (void)createOverlay
@@ -177,7 +176,7 @@
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[[NSNotificationCenter defaultCenter] removeObserver:presetPicker];
-	[GCDWrapper cancelTimerBlockWithName:hidePickerTimer];
+	[EX2Dispatch cancelTimerBlockWithName:hidePickerTimer];
 	//[hidePickerTimer release]; hidePickerTimer = nil;
 	
 	
@@ -238,7 +237,7 @@
 
 - (void)pickerWillHide
 {
-	[GCDWrapper cancelTimerBlockWithName:hidePickerTimer];
+	[EX2Dispatch cancelTimerBlockWithName:hidePickerTimer];
 	
 	controlsContainer.y += 60;
 	controlsContainer.height -= 60;
@@ -369,7 +368,7 @@
 	
 	if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
 	{
-		[UIApplication setStatusBarHidden:YES withAnimation:NO];
+		[[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
 		equalizerPath.alpha = 0.0;
 		
 		for (EqualizerPointView *view in equalizerPointViews)
@@ -459,7 +458,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-	[GCDWrapper cancelTimerBlockWithName:hidePickerTimer];
+	[EX2Dispatch cancelTimerBlockWithName:hidePickerTimer];
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_BassEffectPresetLoaded object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIPickerViewWillShownNotification object:nil];

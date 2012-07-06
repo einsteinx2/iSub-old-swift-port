@@ -9,8 +9,7 @@
 #ifndef iSub_Imports_h
 #define iSub_Imports_h
 
-#import "Macros.h"
-#import "Categories.h"
+#import "EX2Kit.h"
 
 #import "ISMSNotificationNames.h"
 #import "ISMSErrorDomain.h"

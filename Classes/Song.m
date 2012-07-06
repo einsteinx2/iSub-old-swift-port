@@ -19,20 +19,26 @@
 {
 	if ((self = [super init]))
 	{
-		title = N2n([dictionary objectForKey:@"songName"]);
+		NSString *songName = [dictionary objectForKey:@"songName"];
+		NSString *titleKey = !songName || songName.length == 0  ? @"fileName" : @"songName";
+		title = [dictionary objectForKey:titleKey];
 		songId = N2n([dictionary objectForKey:@"itemId"]);
 		parentId = N2n([dictionary objectForKey:@"folderId"]);
 		artist = N2n([dictionary objectForKey:@"artistName"]);
 		album = N2n([dictionary objectForKey:@"albumName"]);
 		genre = N2n([dictionary objectForKey:@"genreName"]);
 		coverArtId = N2n([dictionary objectForKey:@"artId"]);
-		path = N2n([dictionary objectForKey:@"fileName"]);
 		suffix = N2n([dictionary objectForKey:@"fileType"]);
 		duration = N2n([dictionary objectForKey:@"duration"]);
 		bitRate = N2n([dictionary objectForKey:@"bitrate"]);
 		track = N2n([dictionary objectForKey:@"trackNumber"]);
 		year = N2n([dictionary objectForKey:@"year"]);
 		size = N2n([dictionary objectForKey:@"fileSize"]);
+		 
+		// Generate "path" from artist, album and song name
+		NSString *artistName = artist ? artist : @"Unknown";
+		NSString *albumName = album ? album : @"Unknown";
+		path = [NSString stringWithFormat:@"%@/%@/%@", artistName, albumName, title];
 	}
 	return self;
 }

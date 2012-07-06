@@ -13,9 +13,8 @@
 
 @implementation NSMutableURLRequest (PMS)
 
-+ (NSMutableURLRequest *)requestWithPMSAction:(NSString *)action item:(NSString *)item forUrlString:(NSString *)url username:(NSString *)user password:(NSString *)pass andParameters:(NSDictionary *)parameters byteOffset:(NSUInteger)offset
++ (NSMutableURLRequest *)requestWithPMSAction:(NSString *)action item:(NSString *)item urlString:(NSString *)url username:(NSString *)user password:(NSString *)pass parameters:(NSDictionary *)parameters byteOffset:(NSUInteger)offset
 {
-	
 	NSMutableString *urlString;
 	if (item)
 		urlString = [NSMutableString stringWithFormat:@"%@/api/%@/%@", url, action, item];
@@ -94,12 +93,12 @@
     return request;
 }
 
-+ (NSMutableURLRequest *)requestWithPMSAction:(NSString *)action item:(NSString *)item forUrlString:(NSString *)url username:(NSString *)user password:(NSString *)pass andParameters:(NSDictionary *)parameters
++ (NSMutableURLRequest *)requestWithPMSAction:(NSString *)action item:(NSString *)item urlString:(NSString *)url username:(NSString *)user password:(NSString *)pass parameters:(NSDictionary *)parameters
 {
-	return [NSMutableURLRequest requestWithPMSAction:action item:item forUrlString:url username:user password:pass andParameters:nil byteOffset:0];
+	return [NSMutableURLRequest requestWithPMSAction:action item:item urlString:url username:user password:pass parameters:nil byteOffset:0];
 }
 
-+ (NSMutableURLRequest *)requestWithPMSAction:(NSString *)action item:(NSString *)item andParameters:(NSDictionary *)parameters byteOffset:(NSUInteger)offset
++ (NSMutableURLRequest *)requestWithPMSAction:(NSString *)action item:(NSString *)item parameters:(NSDictionary *)parameters byteOffset:(NSUInteger)offset
 {
 	NSString *urlString = settingsS.urlString;
 	if (settingsS.redirectUrlString)
@@ -112,21 +111,21 @@
 	
 	return [NSMutableURLRequest requestWithPMSAction:action 
 												item:item
-										forUrlString:urlString 
+										urlString:urlString 
 											username:settingsS.username
 											password:settingsS.password 
-									   andParameters:parameters 
+									   parameters:parameters 
 										  byteOffset:offset];
 }
 
-+ (NSMutableURLRequest *)requestWithPMSAction:(NSString *)action item:(NSString *)item andParameters:(NSDictionary *)parameters
++ (NSMutableURLRequest *)requestWithPMSAction:(NSString *)action item:(NSString *)item parameters:(NSDictionary *)parameters
 {
-	return [NSMutableURLRequest requestWithPMSAction:action item:item andParameters:parameters byteOffset:0];
+	return [NSMutableURLRequest requestWithPMSAction:action item:item parameters:parameters byteOffset:0];
 }
 
 + (NSMutableURLRequest *)requestWithPMSAction:(NSString *)action item:(NSString *)item
 {
-	return [NSMutableURLRequest requestWithPMSAction:action item:item andParameters:nil];
+	return [NSMutableURLRequest requestWithPMSAction:action item:item parameters:nil];
 }
 
 @end

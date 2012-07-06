@@ -123,7 +123,7 @@
     self.modifier = theModifier;
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"size", n2N(self.modifier), @"type", nil];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getAlbumList" andParameters:parameters];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getAlbumList" parameters:parameters];
     
     self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)
@@ -192,6 +192,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
+	DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
     HomeAlbumViewController *albumViewController = [[HomeAlbumViewController alloc] initWithNibName:@"HomeAlbumViewController" bundle:nil];
 	albumViewController.title = [self.titles objectForKey:self.modifier];
 	

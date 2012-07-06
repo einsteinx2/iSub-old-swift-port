@@ -14,7 +14,6 @@
 #import "FMDatabaseAdditions.h"
 
 #import "Album.h"
-#import "UIApplication+StatusBar.h"
 #import "UIImageView+Reflection.h"
 #import "SavedSettings.h"
  
@@ -46,10 +45,8 @@
 		
 		[UIView commitAnimations];
 		
-		if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation))
-			[UIApplication setStatusBarHidden:YES withAnimation:YES];
-		else 
-			[UIApplication setStatusBarHidden:NO withAnimation:YES];
+		[[UIApplication sharedApplication] setStatusBarHidden:UIInterfaceOrientationIsLandscape(toInterfaceOrientation) 
+												withAnimation:UIStatusBarAnimationSlide];
 	}
 }
 
@@ -101,12 +98,12 @@
 	{
 		if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
 		{
-			[UIApplication setStatusBarHidden:YES withAnimation:YES];
+			[[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
 			albumArt.width = 480;
 		}
 		else
 		{
-			[UIApplication setStatusBarHidden:NO withAnimation:YES];
+			[[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
 		}
 	}
 }
@@ -123,7 +120,7 @@
 - (IBAction)dismiss:(id)sender
 {
 	if (!IS_IPAD())
-		[UIApplication setStatusBarHidden:NO withAnimation:YES];
+		[[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
 	
 	[self dismissModalViewControllerAnimated:YES];
 }

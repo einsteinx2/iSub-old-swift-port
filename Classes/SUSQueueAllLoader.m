@@ -25,7 +25,7 @@
 	//DLog(@"Loading folderid: %@", folderId);
     
 	NSDictionary *parameters = [NSDictionary dictionaryWithObject:folderId forKey:@"id"];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getMusicDirectory" andParameters:parameters];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getMusicDirectory" parameters:parameters];
 	
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)

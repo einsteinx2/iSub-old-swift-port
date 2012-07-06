@@ -40,7 +40,7 @@
 
 - (void)startLoad
 {
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getPlaylists" andParameters:nil];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getPlaylists" parameters:nil];
     
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)

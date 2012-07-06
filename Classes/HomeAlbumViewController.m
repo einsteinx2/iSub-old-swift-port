@@ -114,7 +114,7 @@
 	
 	NSString *offsetString = [NSString stringWithFormat:@"%i", offset];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"size", n2N(modifier), @"type", n2N(offsetString), @"offset", nil];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getAlbumList" andParameters:parameters];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getAlbumList" parameters:parameters];
 	
     self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)

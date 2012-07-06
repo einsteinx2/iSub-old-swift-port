@@ -37,7 +37,7 @@
 - (void)sendChatMessage:(NSString *)message
 {
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(message) forKey:@"message"];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"addChatMessage" andParameters:parameters];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"addChatMessage" parameters:parameters];
 
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)

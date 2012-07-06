@@ -185,7 +185,7 @@
         parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"count", n2N(query), @"any", n2N(offsetString), @"offset", nil];
 	}
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:action andParameters:parameters];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:action parameters:parameters];
 
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)

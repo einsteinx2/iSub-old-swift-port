@@ -10,10 +10,10 @@
 
 @interface NSMutableURLRequest (PMS)
 
-+ (NSMutableURLRequest *)requestWithPMSAction:(NSString *)action item:(NSString *)item forUrlString:(NSString *)url username:(NSString *)user password:(NSString *)pass andParameters:(NSDictionary *)parameters byteOffset:(NSUInteger)offset;
-+ (NSMutableURLRequest *)requestWithPMSAction:(NSString *)action item:(NSString *)item forUrlString:(NSString *)url username:(NSString *)user password:(NSString *)pass andParameters:(NSDictionary *)parameters;
-+ (NSMutableURLRequest *)requestWithPMSAction:(NSString *)action item:(NSString *)item andParameters:(NSDictionary *)parameters byteOffset:(NSUInteger)offset;
-+ (NSMutableURLRequest *)requestWithPMSAction:(NSString *)action item:(NSString *)item andParameters:(NSDictionary *)parameters;
++ (NSMutableURLRequest *)requestWithPMSAction:(NSString *)action item:(NSString *)item urlString:(NSString *)url username:(NSString *)user password:(NSString *)pass parameters:(NSDictionary *)parameters byteOffset:(NSUInteger)offset;
++ (NSMutableURLRequest *)requestWithPMSAction:(NSString *)action item:(NSString *)item urlString:(NSString *)url username:(NSString *)user password:(NSString *)pass parameters:(NSDictionary *)parameters;
++ (NSMutableURLRequest *)requestWithPMSAction:(NSString *)action item:(NSString *)item parameters:(NSDictionary *)parameters byteOffset:(NSUInteger)offset;
++ (NSMutableURLRequest *)requestWithPMSAction:(NSString *)action item:(NSString *)item parameters:(NSDictionary *)parameters;
 + (NSMutableURLRequest *)requestWithPMSAction:(NSString *)action item:(NSString *)item;
 
 @end

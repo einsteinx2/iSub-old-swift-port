@@ -28,7 +28,7 @@
 #import "JukeboxSingleton.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "GCDWrapper.h"
+#import "EX2Dispatch.h"
 
 @implementation GenresAlbumViewController
 

@@ -20,10 +20,10 @@
     
 	NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithPMSAction:@"status"
 																		   item:nil 
-																   forUrlString:urlString
+																   urlString:urlString
 																       username:username 
 																	   password:password
-																  andParameters:nil];
+																  parameters:nil];
 	[theRequest setTimeoutInterval:ISMSServerCheckTimeout];
 	self.request = theRequest;
 	self.connection = [NSURLConnection connectionWithRequest:self.request delegate:self];
@@ -67,7 +67,7 @@
     if (inRedirectResponse) 
     {
         // Notify the delegate
-        if ([self.delegate respondsToSelector:@selector(SUSServerURLCheckRedirected:redirectUrl:)])
+        if ([self.delegate respondsToSelector:@selector(ISMSServerURLCheckRedirected:redirectUrl:)])
         {
 			[self.delegate ISMSServerURLCheckRedirected:self redirectUrl:[inRequest URL]];
         }

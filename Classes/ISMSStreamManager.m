@@ -26,7 +26,7 @@
 #import "iSubAppDelegate.h"
 #import "ISMSCacheQueueManager.h"
 #import "NSNotificationCenter+MainThread.h"
-#import "GCDWrapper.h"
+#import "EX2Dispatch.h"
 #import "TBXML.h"
 
 #define maxNumOfReconnects 5
@@ -554,7 +554,7 @@
 		if (handler.isTempCache)
 		{
 			// TODO: get rid of this ugly hack
-			[GCDWrapper runInMainThreadAfterDelay:1.0 block:
+			[EX2Dispatch runInMainThreadAfterDelay:1.0 block:
 			 ^{
 				 DLog(@"byteOffset: %llu   secondsOffset: %f", handler.byteOffset, handler.secondsOffset);
 				 audioEngineS.startByteOffset = handler.byteOffset;
