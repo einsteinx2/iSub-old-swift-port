@@ -755,7 +755,7 @@
 			[aSong insertIntoTable:@"shufflePlaylist" inDatabaseQueue:self.currentPlaylistDbQueue];
 	}
 	
-	[streamManagerS fillStreamQueue:audioEngineS.isStarted];
+	[streamManagerS fillStreamQueue:audioEngineS.player.isStarted];
 }*/
 
 - (void)playAllSongs:(NSString *)folderId artist:(Artist *)theArtist

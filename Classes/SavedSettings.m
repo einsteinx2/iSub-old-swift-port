@@ -17,6 +17,7 @@
 #import "iSubAppDelegate.h"
 #import "Reachability.h"
 #import "NSArray+Additions.h"
+#import "BassGaplessPlayer.h"
 
 // Test server details
 #define DEFAULT_SERVER_TYPE SUBSONIC
@@ -95,12 +96,12 @@
 	{
 		BOOL isDefaultsDirty = NO;
 		
-		if (audioEngineS.isPlaying != isPlaying)
+		if (audioEngineS.player.isPlaying != isPlaying)
 		{
 			if (self.isJukeboxEnabled)
 				isPlaying = NO;
 			else
-				isPlaying = audioEngineS.isPlaying;
+				isPlaying = audioEngineS.player.isPlaying;
 			
 			[userDefaults setBool:isPlaying forKey:@"isPlaying"];
 			isDefaultsDirty = YES;
@@ -134,23 +135,23 @@
 			isDefaultsDirty = YES;
 		}
 		
-		if (audioEngineS.bitRate != bitRate && audioEngineS.bitRate >= 0)
+		if (audioEngineS.player.bitRate != bitRate && audioEngineS.player.bitRate >= 0)
 		{
-			bitRate = audioEngineS.bitRate;
+			bitRate = audioEngineS.player.bitRate;
 			[userDefaults setInteger:bitRate forKey:@"bitRate"];
 			isDefaultsDirty = YES;
 		}
 		
-		if (secondsOffset != audioEngineS.progress)
+		if (secondsOffset != audioEngineS.player.progress)
 		{
-			secondsOffset = audioEngineS.progress;
+			secondsOffset = audioEngineS.player.progress;
 			[userDefaults setDouble:secondsOffset forKey:@"seekTime"];
 			isDefaultsDirty = YES;
 		}
 		
-		if (byteOffset != audioEngineS.currentByteOffset)
+		if (byteOffset != audioEngineS.player.currentByteOffset)
 		{
-			byteOffset = audioEngineS.currentByteOffset;
+			byteOffset = audioEngineS.player.currentByteOffset;
 			NSNumber *num = [NSNumber numberWithUnsignedLongLong:byteOffset];
 			[userDefaults setObject:num forKey:@"byteOffset"];
 			isDefaultsDirty = YES;

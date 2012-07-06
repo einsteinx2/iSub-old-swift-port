@@ -166,7 +166,7 @@
 		
 		// Correct the value of currentPlaylistPosition
 		// If the current song was deleted make sure to set goToNextSong so the next song will play
-		if ([indexesMut containsObject:[NSNumber numberWithInt:self.currentIndex]] && audioEngineS.isPlaying)
+		if ([indexesMut containsObject:[NSNumber numberWithInt:self.currentIndex]] && audioEngineS.player.isPlaying)
 		{
 			goToNextSong = YES;
 		}

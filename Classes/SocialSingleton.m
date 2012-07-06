@@ -10,7 +10,7 @@
 #import "SA_OAuthTwitterEngine.h"
 #import "SA_OAuthTwitterController.h"
 #import "CustomUIAlertView.h"
-
+#import "BassGaplessPlayer.h"
 #import "SavedSettings.h"
 #import "PlaylistSingleton.h"
 #import "Song.h"
@@ -26,16 +26,42 @@
 
 @implementation SocialSingleton
 
-@synthesize twitterEngine;
+@synthesize twitterEngine, playerHasScrobbled, playerHasTweeted;
 
 #pragma mark -
 #pragma mark Class instance methods
+
+- (void)playerClearSocial
+{
+	self.playerHasTweeted = NO;
+	self.playerHasScrobbled = NO;
+}
+
+- (void)playerHandleSocial
+{
+	if (!self.playerHasTweeted && audioEngineS.player.progress >= socialS.tweetDelay)
+	{
+		self.playerHasTweeted = YES;
+		
+		[EX2Dispatch runInMainThread:^{
+			[self tweetSong];
+		}];
+	}
+	
+	if (!self.playerHasScrobbled && audioEngineS.player.progress >= socialS.scrobbleDelay)
+	{
+		self.playerHasScrobbled = YES;
+		[EX2Dispatch runInMainThread:^{
+			[self scrobbleSongAsSubmission];
+		}];
+	}
+}
 
 - (NSTimeInterval)scrobbleDelay
 {
 	// Scrobble in 30 seconds (or settings amount) if not canceled
 	//Song *currentSong = playlistS.currentSong;
-	Song *currentSong = audioEngineS.currentStreamSong;
+	Song *currentSong = audioEngineS.player.currentStream.song;
 	NSTimeInterval scrobbleDelay = 30.0;
 	if (currentSong.duration != nil)
 	{

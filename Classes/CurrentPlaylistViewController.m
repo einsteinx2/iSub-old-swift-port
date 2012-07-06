@@ -394,7 +394,7 @@
 			}
 			else
 			{
-                [audioEngineS stop];
+                [audioEngineS.player stop];
 				[databaseS resetCurrentPlaylistDb];
 			}
 			
@@ -680,7 +680,7 @@
 			aSong = [Song songFromDbRow:indexPath.row inTable:@"currentPlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
 	}
 	
-	if (indexPath.row == playlistS.currentIndex && (!audioEngineS.isBassFreed || (settingsS.isJukeboxEnabled && jukeboxS.jukeboxIsPlaying)))
+	if (indexPath.row == playlistS.currentIndex && (audioEngineS.player.isStarted || (settingsS.isJukeboxEnabled && jukeboxS.jukeboxIsPlaying)))
 	{
 		cell.numberLabel.hidden = YES;
 		cell.nowPlayingImageView.hidden = NO;

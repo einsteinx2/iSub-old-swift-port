@@ -473,7 +473,7 @@
 		}
 		else
 		{
-            [audioEngineS stop];
+            [audioEngineS.player stop];
 			
 			// Jukebox mode is off, turn it on
 			if (IS_IPAD())

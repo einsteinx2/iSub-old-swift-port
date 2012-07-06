@@ -95,7 +95,7 @@
 			}
 			else
 			{
-				[streamManagerS fillStreamQueue:audioEngineS.isStarted];
+				[streamManagerS fillStreamQueue:audioEngineS.player.isStarted];
 			}
 		}
 		

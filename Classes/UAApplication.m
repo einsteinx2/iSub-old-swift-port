@@ -69,7 +69,14 @@
 	}
 	else
 	{
-        [audioEngineS playPause];
+        if (audioEngineS.player)
+		{
+			[audioEngineS.player playPause];
+		}
+		else
+		{
+			[musicS startSong];
+		}
 	}
 }
 

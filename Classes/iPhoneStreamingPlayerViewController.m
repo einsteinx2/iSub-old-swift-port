@@ -238,7 +238,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	}
 	else
 	{
-		if(audioEngineS.isPlaying)
+		if(audioEngineS.player.isPlaying)
 			[self setPauseButtonImage];
 		else
 			[self setPlayButtonImage];
@@ -962,14 +962,21 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	}
 	else
 	{
-		[audioEngineS playPause];
+		if (audioEngineS.player)
+		{
+			[audioEngineS.player playPause];
+		}
+		else
+		{
+			[musicS startSong];
+		}
 	}
 }
 
 - (IBAction)prevButtonPressed:(id)sender
 {	
 	//DLog(@"track position: %f", audioEngineS.progress);
-	if (audioEngineS.progress > 10.0)
+	if (audioEngineS.player.progress > 10.0)
 	{
 		if (settingsS.isJukeboxEnabled)
 			[jukeboxS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:playlistS.currentIndex]];
@@ -1255,12 +1262,12 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			progressSlider.value = newValue;
 		}
 		
-		byteOffset = audioEngineS.estimatedBitrate * 128 * progressSlider.value;
-		DLog(@"bitrate: %i slider: %f byteOffset: %i localFileSize: %llu", audioEngineS.estimatedBitrate, progressSlider.value, byteOffset, currentSong.localFileSize);
+		byteOffset = [BassWrapper estimateBitrate:audioEngineS.player.currentStream] * 128 * progressSlider.value;
+		DLog(@"bitrate: %i slider: %f byteOffset: %i localFileSize: %llu", [BassWrapper estimateBitrate:audioEngineS.player.currentStream], progressSlider.value, byteOffset, currentSong.localFileSize);
 		
 		if (currentSong.isTempCached)
 		{
-            [audioEngineS stop];
+            [audioEngineS.player stop];
 			
 			audioEngineS.startByteOffset = byteOffset;
 			audioEngineS.startSecondsOffset = progressSlider.value;
@@ -1280,7 +1287,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		{			
 			if (currentSong.isFullyCached || byteOffset <= currentSong.localFileSize)
 			{
-				[audioEngineS seekToPositionInSeconds:progressSlider.value];
+				[audioEngineS.player seekToPositionInSeconds:progressSlider.value];
 				pauseSlider = NO;
 				hasMoved = NO;
 			}
@@ -1345,7 +1352,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 - (IBAction)bookmarkButtonToggle:(id)sender
 {
 	bookmarkPosition = (int)progressSlider.value;
-	bookmarkBytePosition = audioEngineS.currentByteOffset;
+	bookmarkBytePosition = audioEngineS.player.currentByteOffset;
 	
 	UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Bookmark Name:" message:@"this gets covered" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
 	bookmarkNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 24.0)];
@@ -1408,7 +1415,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		}
 		else if(buttonIndex == 1)
 		{
-            [audioEngineS stop];
+            [audioEngineS.player stop];
 			audioEngineS.startByteOffset = byteOffset;
 			audioEngineS.startSecondsOffset = progressSlider.value;
 			
@@ -1541,17 +1548,17 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		{
 			// Handle the case where Subsonic didn't detect the song length
 			if ((!currentSong.duration || [currentSong.duration intValue] <= 0) &&
-					 currentSong.isFullyCached && audioEngineS.isStarted)
+					 currentSong.isFullyCached && audioEngineS.player.isStarted)
 			{
-				progressSlider.maximumValue = audioEngineS.currentStreamDuration;
+				progressSlider.maximumValue = audioEngineS.player.currentStream.song.duration.floatValue;
 				progressSlider.enabled = YES;
 			}
 			
 			double progress = 0;
-			if (audioEngineS.isPlaying)
-				progress = audioEngineS.progress;
+			if (audioEngineS.player.isPlaying)
+				progress = audioEngineS.player.progress;
 			else
-				progress = [currentSong isEqualToSong:audioEngineS.currentStreamSong] ? audioEngineS.progress : 0.;
+				progress = [currentSong isEqualToSong:audioEngineS.player.currentStream.song] ? audioEngineS.player.progress : 0.;
 			
 			if (lastProgress != ceil(progress))
 			{
@@ -1562,9 +1569,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 				
 				// Handle the case where Subsonic didn't detect the song length
 				if ((!currentSong.duration || [currentSong.duration intValue] <= 0) &&
-					currentSong.isFullyCached && audioEngineS.isStarted)
+					currentSong.isFullyCached && audioEngineS.player.isStarted)
 				{
-					remainingTime = [NSString formatTime:(audioEngineS.currentStreamDuration - progress)];
+					remainingTime = [NSString formatTime:(audioEngineS.player.currentStream.song.duration.floatValue - progress)];
 				}
 				
 				progressSlider.value = progress;
@@ -1583,10 +1590,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)updateFormatLabel
 {
-	if ([currentSong isEqualToSong:audioEngineS.currentStreamSong] && audioEngineS.bitRate > 0)
-		formatLabel.text = [NSString stringWithFormat:@"%i kbps %@", audioEngineS.bitRate, audioEngineS.currentStreamFormat];
-	else if ([currentSong isEqualToSong:audioEngineS.currentStreamSong])
-		formatLabel.text = audioEngineS.currentStreamFormat;
+	if ([currentSong isEqualToSong:audioEngineS.player.currentStream.song] && audioEngineS.player.bitRate > 0)
+		formatLabel.text = [NSString stringWithFormat:@"%i kbps %@", audioEngineS.player.bitRate, [BassWrapper formatForChannel:audioEngineS.player.currentStream.stream]];
+	else if ([currentSong isEqualToSong:audioEngineS.player.currentStream.song])
+		formatLabel.text = [BassWrapper formatForChannel:audioEngineS.player.currentStream.stream];
 	else
 		formatLabel.text = @"";
 }

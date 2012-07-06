@@ -61,11 +61,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/UAApplication.m"
-         timestampString = "351825845.62183"
+         timestampString = "363230885.982185"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "73"
-         endingLineNumber = "73"
+         startingLineNumber = "80"
+         endingLineNumber = "80"
          landmarkName = "-playPauseStop"
          landmarkType = "5">
       </FileBreakpoint>
@@ -411,13 +411,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "360643997.884199"
+         timestampString = "363230885.982185"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1736"
-         endingLineNumber = "1736"
-         landmarkName = "-setNextStreamTempo:"
-         landmarkType = "5">
+         startingLineNumber = "1733"
+         endingLineNumber = "1733">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -425,13 +423,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "360643997.884199"
+         timestampString = "363230885.982185"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1747"
-         endingLineNumber = "1747"
-         landmarkName = "-nextReadingStream"
-         landmarkType = "5">
+         startingLineNumber = "1744"
+         endingLineNumber = "1744">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -439,13 +435,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "360643997.884199"
+         timestampString = "363230885.982185"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1749"
-         endingLineNumber = "1749"
-         landmarkName = "-nextReadingStream"
-         landmarkType = "5">
+         startingLineNumber = "1746"
+         endingLineNumber = "1746">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -453,13 +447,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "360643997.884199"
+         timestampString = "363230885.982185"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1754"
-         endingLineNumber = "1754"
-         landmarkName = "-BASSisFilestream1"
-         landmarkType = "5">
+         startingLineNumber = "1751"
+         endingLineNumber = "1751">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -467,13 +459,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "360643997.884199"
+         timestampString = "363230885.982185"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1737"
-         endingLineNumber = "1737"
-         landmarkName = "-setNextStreamTempo:"
-         landmarkType = "5">
+         startingLineNumber = "1734"
+         endingLineNumber = "1734">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -481,13 +471,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "360643997.884199"
+         timestampString = "363230885.982185"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1741"
-         endingLineNumber = "1741"
-         landmarkName = "-setNextStreamTempo:"
-         landmarkType = "5">
+         startingLineNumber = "1738"
+         endingLineNumber = "1738">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -495,13 +483,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "360643997.884199"
+         timestampString = "363230885.982185"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "356"
-         endingLineNumber = "356"
-         landmarkName = "MyFileSeekProc()"
-         landmarkType = "7">
+         startingLineNumber = "353"
+         endingLineNumber = "353">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -556,8 +542,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "46"
          endingLineNumber = "46"
-         landmarkName = "@interface iPhoneStreamingPlayerViewController()"
-         landmarkType = "2">
+         landmarkName = "originalViewFrames"
+         landmarkType = "19">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "Yes"
@@ -906,8 +892,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "46"
          endingLineNumber = "46"
-         landmarkName = "@interface iPhoneStreamingPlayerViewController()"
-         landmarkType = "2">
+         landmarkName = "originalViewFrames"
+         landmarkType = "19">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -920,8 +906,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "46"
          endingLineNumber = "46"
-         landmarkName = "@interface iPhoneStreamingPlayerViewController()"
-         landmarkType = "2">
+         landmarkName = "originalViewFrames"
+         landmarkType = "19">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -934,8 +920,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "46"
          endingLineNumber = "46"
-         landmarkName = "@interface iPhoneStreamingPlayerViewController()"
-         landmarkType = "2">
+         landmarkName = "originalViewFrames"
+         landmarkType = "19">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -948,8 +934,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "46"
          endingLineNumber = "46"
-         landmarkName = "@interface iPhoneStreamingPlayerViewController()"
-         landmarkType = "2">
+         landmarkName = "originalViewFrames"
+         landmarkType = "19">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -962,8 +948,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "46"
          endingLineNumber = "46"
-         landmarkName = "@interface iPhoneStreamingPlayerViewController()"
-         landmarkType = "2">
+         landmarkName = "originalViewFrames"
+         landmarkType = "19">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -976,8 +962,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "46"
          endingLineNumber = "46"
-         landmarkName = "@interface iPhoneStreamingPlayerViewController()"
-         landmarkType = "2">
+         landmarkName = "originalViewFrames"
+         landmarkType = "19">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -990,8 +976,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "46"
          endingLineNumber = "46"
-         landmarkName = "@interface iPhoneStreamingPlayerViewController()"
-         landmarkType = "2">
+         landmarkName = "originalViewFrames"
+         landmarkType = "19">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -1004,8 +990,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "46"
          endingLineNumber = "46"
-         landmarkName = "@interface iPhoneStreamingPlayerViewController()"
-         landmarkType = "2">
+         landmarkName = "originalViewFrames"
+         landmarkType = "19">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -1018,8 +1004,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "46"
          endingLineNumber = "46"
-         landmarkName = "@interface iPhoneStreamingPlayerViewController()"
-         landmarkType = "2">
+         landmarkName = "originalViewFrames"
+         landmarkType = "19">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -1167,11 +1153,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/Song+DAO.m"
-         timestampString = "357938269.202077"
+         timestampString = "363230885.982185"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "126"
-         endingLineNumber = "126"
+         startingLineNumber = "127"
+         endingLineNumber = "127"
          landmarkName = "+songFromDbResult:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1195,13 +1181,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "360643997.884199"
+         timestampString = "363230885.982185"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "272"
-         endingLineNumber = "272"
-         landmarkName = "MyFileCloseProc()"
-         landmarkType = "7">
+         startingLineNumber = "269"
+         endingLineNumber = "269">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -1237,13 +1221,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "360643997.884199"
+         timestampString = "363230885.982185"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1400"
-         endingLineNumber = "1400"
-         landmarkName = "@implementation AudioEngine"
-         landmarkType = "3">
+         startingLineNumber = "1397"
+         endingLineNumber = "1397">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -1251,11 +1233,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/Song+DAO.m"
-         timestampString = "357938269.202077"
+         timestampString = "363230885.982185"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "33"
-         endingLineNumber = "33"
+         startingLineNumber = "34"
+         endingLineNumber = "34"
          landmarkName = "-fileExists"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1802,8 +1784,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "46"
          endingLineNumber = "46"
-         landmarkName = "@interface iPhoneStreamingPlayerViewController()"
-         landmarkType = "2">
+         landmarkName = "originalViewFrames"
+         landmarkType = "19">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -4582,11 +4564,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/EqualizerViewController.m"
-         timestampString = "357938269.202077"
+         timestampString = "363230885.982185"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "138"
-         endingLineNumber = "138"
+         startingLineNumber = "139"
+         endingLineNumber = "139"
          landmarkName = "-createOverlay"
          landmarkType = "5">
       </FileBreakpoint>
@@ -4933,13 +4915,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "360643997.884199"
+         timestampString = "363230885.982185"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "340"
-         endingLineNumber = "340"
-         landmarkName = "MyFileReadProc()"
-         landmarkType = "7">
+         startingLineNumber = "337"
+         endingLineNumber = "337">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -4964,8 +4944,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "46"
          endingLineNumber = "46"
-         landmarkName = "@interface iPhoneStreamingPlayerViewController()"
-         landmarkType = "2">
+         landmarkName = "originalViewFrames"
+         landmarkType = "19">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -4977,8 +4957,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "46"
          endingLineNumber = "46"
-         landmarkName = "@interface iPhoneStreamingPlayerViewController()"
-         landmarkType = "2">
+         landmarkName = "originalViewFrames"
+         landmarkType = "19">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -5050,11 +5030,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/EqualizerViewController.m"
-         timestampString = "357938269.202077"
+         timestampString = "363230885.982185"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "124"
-         endingLineNumber = "124"
+         startingLineNumber = "125"
+         endingLineNumber = "125"
          landmarkName = "-dismissPicker"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5063,11 +5043,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/EqualizerViewController.m"
-         timestampString = "357938269.202077"
+         timestampString = "363230885.982185"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "138"
-         endingLineNumber = "138"
+         startingLineNumber = "139"
+         endingLineNumber = "139"
          landmarkName = "-createOverlay"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5081,8 +5061,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "46"
          endingLineNumber = "46"
-         landmarkName = "@interface iPhoneStreamingPlayerViewController()"
-         landmarkType = "2">
+         landmarkName = "originalViewFrames"
+         landmarkType = "19">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -5094,8 +5074,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "46"
          endingLineNumber = "46"
-         landmarkName = "@interface iPhoneStreamingPlayerViewController()"
-         landmarkType = "2">
+         landmarkName = "originalViewFrames"
+         landmarkType = "19">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -5115,52 +5095,46 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "360698349.726135"
+         timestampString = "363230885.982185"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1614"
-         endingLineNumber = "1614"
-         landmarkName = "-showEq:"
-         landmarkType = "5">
+         startingLineNumber = "1621"
+         endingLineNumber = "1621"
+         landmarkName = "@implementation iPhoneStreamingPlayerViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "360643997.884199"
+         timestampString = "363230885.982185"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1434"
-         endingLineNumber = "1434"
-         landmarkName = "-startWithOffsetInBytesorSecondsInternal:"
-         landmarkType = "5">
+         startingLineNumber = "1431"
+         endingLineNumber = "1431">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "360643997.884199"
+         timestampString = "363230885.982185"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1453"
-         endingLineNumber = "1453"
-         landmarkName = "-startWithOffsetInBytesorSecondsInternal:"
-         landmarkType = "5">
+         startingLineNumber = "1450"
+         endingLineNumber = "1450">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "360643997.884199"
+         timestampString = "363230885.982185"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1452"
-         endingLineNumber = "1452"
-         landmarkName = "-startWithOffsetInBytesorSecondsInternal:"
-         landmarkType = "5">
+         startingLineNumber = "1449"
+         endingLineNumber = "1449">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -5297,26 +5271,22 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "360643997.884199"
+         timestampString = "363230885.982185"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "663"
-         endingLineNumber = "663"
-         landmarkName = "-estimatedBitrate"
-         landmarkType = "5">
+         startingLineNumber = "660"
+         endingLineNumber = "660">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/AudioEngine.m"
-         timestampString = "360643997.884199"
+         timestampString = "363230885.982185"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "657"
-         endingLineNumber = "657"
-         landmarkName = "-estimatedBitrate"
-         landmarkType = "5">
+         startingLineNumber = "654"
+         endingLineNumber = "654">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"

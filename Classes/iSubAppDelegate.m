@@ -709,7 +709,7 @@
 	
 	[settingsS saveState];
 	
-	[audioEngineS bassFree];
+	[audioEngineS.player stop];
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
@@ -756,7 +756,7 @@
 	
 	viewObjectsS.isOfflineMode = YES;
 		
-	[audioEngineS stop];
+	[audioEngineS.player stop];
 	
 	[streamManagerS cancelAllStreams];
 	
@@ -792,7 +792,7 @@
 		
 	viewObjectsS.isOfflineMode = NO;
 	
-	[audioEngineS stop];
+	[audioEngineS.player stop];
 	
 	if (IS_IPAD())
 		[self.ipadRootViewController.menuViewController toggleOfflineMode];

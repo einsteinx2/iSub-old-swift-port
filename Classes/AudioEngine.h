@@ -14,7 +14,7 @@
 #import "BassStream.h"
 #import "BassEqualizer.h"
 #import "BassVisualizer.h"
-#import "BassEncryptedGaplessPlayer.h"
+#import "BassGaplessPlayer.h"
 
 #define audioEngineS ((AudioEngine *)[AudioEngine sharedInstance])
 
@@ -27,7 +27,7 @@
 
 @property (readonly) BassEqualizer *equalizer;
 @property (readonly) BassVisualizer *visualizer;
-@property (strong) BassEncryptedGaplessPlayer *player;
+@property (strong) BassGaplessPlayer *player;
 
 @property NSUInteger startByteOffset;
 @property NSUInteger startSecondsOffset;

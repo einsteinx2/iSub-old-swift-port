@@ -16,7 +16,6 @@
 #import "ViewObjectsSingleton.h"
 #import "ISMSStreamManager.h"
 #import "SocialSingleton.h"
-#import "SUSRegisterActionLoader.h"
 #import "DDLog.h"
 
 @implementation BassGaplessPlayer
@@ -332,15 +331,6 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		
 		[socialS playerClearSocial];
 		
-		// The song finished playing completely, submit the registerAction
-		[GCDWrapper runInMainThreadAndWaitUntilDone:YES block:^
-		 {
-			 self.registerActionLoader.duration += self.progress - self.registerActionLoader.lastStartPosition;
-			 DDLogInfo(@"song ended, progress: %f   duration: %f", self.progress, self.registerActionLoader.duration);
-			 [self.registerActionLoader startLoad];
-			 self.registerActionLoader = nil;
-		 }];
-		
 		// Remove the stream from the queue
 		[self.streamQueue removeObjectAtIndexSafe:0];
 		
@@ -348,22 +338,11 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		[playlistS incrementIndex];
 		
 		// Get the next song in the queue
-		[GCDWrapper runInMainThread:^
+		[EX2Dispatch runInMainThread:^
 		 {
 			 [self prepareNextSongStream:playlistS.nextSong];
 		 }];
-		
-		Song *endedSong = userInfo.song;
-		
-		// If the song is not marked as downloaded, then delete it
-		if (!endedSong.isDownloaded)
-		{
-			if (![endedSong isEqualToSong:playlistS.currentSong])
-			{
-				[endedSong removeFromCachedSongsTable];
-			}
-		}
-		
+				
 		// Send song end notification
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnded];
 		
@@ -380,14 +359,6 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 			
 			// Mark the last played time in the database for cache cleanup
 			playlistS.currentSong.playedDate = [NSDate date];
-			
-			// Setup the register action loader
-			self.registerActionLoader = [[SUSRegisterActionLoader alloc] initWithSong:self.currentStream.song
-																			   action:SongActionPlay 
-																			timestamp:[[NSDate date] timeIntervalSince1970] 
-																			 duration:0
-																	   connectionType:[SUSRegisterActionLoader currentConnectionType]
-																			 delegate:nil];
 		}
 		else
 		{
@@ -563,8 +534,8 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 {
 	@synchronized(self.visualizer)
 	{
-		[GCDWrapper cancelTimerBlockWithName:startSongRetryTimer];
-		[GCDWrapper cancelTimerBlockWithName:nextSongRetryTimer];
+		[EX2Dispatch cancelTimerBlockWithName:startSongRetryTimer];
+		[EX2Dispatch cancelTimerBlockWithName:nextSongRetryTimer];
 		
 		self.stopFillingRingBuffer = YES;
 		
@@ -633,7 +604,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 
 - (void)startWithOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds
 {
-	[GCDWrapper runInQueue:streamGcdQueue waitUntilDone:NO block:^
+	[EX2Dispatch runInQueue:streamGcdQueue waitUntilDone:NO block:^
 	 {
 		 NSInteger count = playlistS.count;
 		 if (playlistS.currentIndex >= count) playlistS.currentIndex = count - 1;
@@ -706,14 +677,6 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 				 // This is a new song so notify Last.FM that it's playing
 				 [socialS scrobbleSongAsPlaying];
 				 
-				 // Setup the register action loader
-				 self.registerActionLoader = [[SUSRegisterActionLoader alloc] initWithSong:currentSong
-																					action:SongActionPlay 
-																				 timestamp:[[NSDate date] timeIntervalSince1970] 
-																				  duration:0
-																			connectionType:[SUSRegisterActionLoader currentConnectionType]
-																				  delegate:nil];
-				 
 				 // Prepare the next song
 				 [self prepareNextSongStream];
 				 
@@ -733,14 +696,15 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 					 // Failed to create the stream, retrying
 					 DDLogError(@"------failed to create stream, retrying in 2 seconds------");
 					 
-					 [GCDWrapper timerInMainQueueAfterDelay:ISMS_BassStreamRetryDelay 
+					 [EX2Dispatch timerInMainQueueAfterDelay:ISMS_BassStreamRetryDelay 
 												   withName:startSongRetryTimer 
+													repeats:NO
 											   performBlock:^{ [self startWithOffsetInBytes:byteOffset orSeconds:seconds]; }];
 				 }
 			 }
 			 else
 			 {
-				 [currentSong removeFromCachedSongsTable];
+				 [currentSong removeFromCachedSongsTableDbQueue];
 				 [musicS performSelectorOnMainThread:@selector(startSong) withObject:nil waitUntilDone:NO];
 			 }
 		 }
@@ -754,7 +718,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 
 - (void)prepareNextSongStream:(Song *)nextSong
 {
-	[GCDWrapper runInQueue:streamGcdQueue waitUntilDone:NO block:^
+	[EX2Dispatch runInQueue:streamGcdQueue waitUntilDone:NO block:^
 	 {
 		 // Remove any additional streams
 		 NSUInteger count = self.streamQueue.count;
@@ -797,8 +761,9 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 			 // tell the stream manager to download a few more seconds of data
 			 [streamManagerS downloadMoreOfPrecacheStream];
 			 
-			 [GCDWrapper timerInMainQueueAfterDelay:ISMS_BassStreamRetryDelay 
+			 [EX2Dispatch timerInMainQueueAfterDelay:ISMS_BassStreamRetryDelay 
 										   withName:nextSongRetryTimer 
+											repeats:NO
 									   performBlock:^{ [self prepareNextSongStream:theSong]; }];
 		 }
 	 }];
@@ -850,14 +815,6 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 
 - (void)stop
 {
-	// The song finished playing completely, submit the registerAction
-	[GCDWrapper runInMainThreadAndWaitUntilDone:YES block:^{
-		self.registerActionLoader.duration += self.progress - self.registerActionLoader.lastStartPosition;
-		DDLogVerbose(@"song stopped, progress: %f   duration: %f", self.progress, self.registerActionLoader.duration);
-		[self.registerActionLoader startLoad];
-		self.registerActionLoader = nil;
-	}];
-	
     if (self.isPlaying) 
 	{
 		BASS_Pause();
@@ -913,10 +870,6 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	if (!userInfo)
 		return;
 	
-	// Update the registerAction duration
-	self.registerActionLoader.duration += self.progress - self.registerActionLoader.lastStartPosition;
-	DDLogVerbose(@"song seek, progress: %f   duration: %f", self.progress, self.registerActionLoader.duration);
-	
 	if (userInfo.isEnded)
 	{
 		userInfo.isEnded = NO;
@@ -947,10 +900,6 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 			
 			if (didPause)
 				[self playPause];
-			
-			// Update the registerAction start position
-			DDLogVerbose(@"finished seeking, progress: %f", self.progress);
-			self.registerActionLoader.lastStartPosition = self.progress;
 		}
 		else
 		{

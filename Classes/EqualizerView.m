@@ -16,6 +16,7 @@
 
 #import "BassParamEqValue.h"
 #import "SavedSettings.h"
+#import "BassVisualizer.h"
 
 //CLASS IMPLEMENTATIONS:
 
@@ -244,10 +245,10 @@ static void destroy_versionArrays()
 
 - (void)drawTheEq
 {		
-	if (!audioEngineS.isPlaying || visualType == ISMSBassVisualType_none)
+	if (!audioEngineS.player || visualType == ISMSBassVisualType_none)
 		return;
 	
-	[audioEngineS readEqData];
+	[audioEngineS.visualizer readAudioData];
 	
 	switch(visualType)
 	{
@@ -261,7 +262,7 @@ static void destroy_versionArrays()
 			[self eraseBitBuffer];
 			for (x = 0; x < specWidth; x++) 
 			{
-				int v=(32767 - [audioEngineS lineSpecData:x]) * specHeight/65536; // invert and scale to fit display
+				int v=(32767 - [audioEngineS.visualizer lineSpecData:x]) * specHeight/65536; // invert and scale to fit display
 				if (!x) 
 					y = v;
 				do 
@@ -282,7 +283,7 @@ static void destroy_versionArrays()
 			for (x=0;x<specWidth/2;x++) 
 			{
 #if 1
-				y=sqrt([audioEngineS fftData:x+1]) * 3 * specHeight - 4; // scale it (sqrt to make low values more visible)
+				y=sqrt([audioEngineS.visualizer fftData:x+1]) * 3 * specHeight - 4; // scale it (sqrt to make low values more visible)
 #else
 				y=[audioEngineS fftData:x+1] * 10 * specHeight; // scale it (linearly)
 #endif
@@ -310,8 +311,8 @@ static void destroy_versionArrays()
 				
 				for (; b0 < b1; b0++)
 				{
-					if (peak < [audioEngineS fftData:1+b0])
-						peak = [audioEngineS fftData:1+b0];
+					if (peak < [audioEngineS.visualizer fftData:1+b0])
+						peak = [audioEngineS.visualizer fftData:1+b0];
 				}
 				
 				y = sqrt(peak) * 3 * specHeight - 4; // scale it (sqrt to make low values more visible)
@@ -333,7 +334,7 @@ static void destroy_versionArrays()
 		{
 			for (x=0; x < specHeight; x++) 
 			{
-				y = sqrt([audioEngineS fftData:x+1]) * 3 * 127; // scale it (sqrt to make low values more visible)
+				y = sqrt([audioEngineS.visualizer fftData:x+1]) * 3 * 127; // scale it (sqrt to make low values more visible)
 				if (y > 127)
 					y = 127; // cap it
 				specbuf[(specHeight - 1 - x) * specWidth + specpos] = palette[specHeight - 1 + y]; // plot it
@@ -509,32 +510,32 @@ static void destroy_versionArrays()
 	switch (type)
 	{
 		case ISMSBassVisualType_none:
-			[audioEngineS stopReadingEqData];
+			audioEngineS.visualizer.type = BassVisualizerTypeNone;
 			[self eraseBitBuffer];
 			[self erase];
 			visualType = ISMSBassVisualType_none;
 			break;
 			
 		case ISMSBassVisualType_line:
-			[audioEngineS startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_line];
+			audioEngineS.visualizer.type = BassVisualizerTypeLine;
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			visualType = ISMSBassVisualType_line; 
 			break;
 			
 		case ISMSBassVisualType_skinnyBar:
-			[audioEngineS startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_fft];
+			audioEngineS.visualizer.type = BassVisualizerTypeFFT;
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			visualType = ISMSBassVisualType_skinnyBar; 
 			break;
 			
 		case ISMSBassVisualType_fatBar:
-			[audioEngineS startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_fft];
+			audioEngineS.visualizer.type = BassVisualizerTypeFFT;
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			visualType = ISMSBassVisualType_fatBar;
 			break;
 			
 		case ISMSBassVisualType_aphexFace:
-			[audioEngineS startReadingEqData:ISMS_BASS_EQ_DATA_TYPE_fft];
+			audioEngineS.visualizer.type = BassVisualizerTypeFFT;
 			[self eraseBitBuffer];
             specpos = 0;
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

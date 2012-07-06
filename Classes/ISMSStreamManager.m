@@ -509,7 +509,7 @@
 	if (nextSong) [songsToSkip addObject:nextSong];
 	
 	[self removeAllStreamsExceptForSongs:songsToSkip];
-	[self fillStreamQueue:audioEngineS.isStarted];
+	[self fillStreamQueue:audioEngineS.player.isStarted];
 }
 
 - (void)downloadMoreOfPrecacheStream
@@ -565,7 +565,7 @@
 	else if ([handler.mySong isEqualToSong:nextSong])
 	{
 		//DLog(@"preparing next song stream");
-		[audioEngineS prepareNextSongStream];
+		[audioEngineS.player prepareNextSongStream];
 	}
 	
 	[self saveHandlerStack];
@@ -664,7 +664,7 @@
 	else 
 	{
 		[self removeAllStreams];
-		[audioEngineS bassFree];
+		[audioEngineS.player stop];
 	}
 }
 

@@ -22,6 +22,7 @@
 #import "EX2Dispatch.h"
 #import "ISMSStreamManager.h"
 #import "JukeboxSingleton.h"
+#import "BassGaplessPlayer.h"
 
 @implementation Song (DAO)
 
@@ -408,7 +409,7 @@
 				success = NO;
 		}
 		
-		[streamManagerS fillStreamQueue:audioEngineS.isStarted];
+		[streamManagerS fillStreamQueue:audioEngineS.player.isStarted];
 	}
 	
 	return success;
@@ -430,7 +431,7 @@
 		if (![self insertIntoTable:@"shufflePlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue])
 			success = NO;
 		
-		[streamManagerS fillStreamQueue:audioEngineS.isStarted];
+		[streamManagerS fillStreamQueue:audioEngineS.player.isStarted];
 	}
 	
 	return success;
@@ -470,7 +471,7 @@
 		[[playlistS.currentSong.path md5] isEqualToString:md5])
 	{
 		//DLog(@"stopping the player before deleting the file");
-        [audioEngineS stop];
+        [audioEngineS.player stop];
 	}
 		
 	__block BOOL hadError = NO;	
@@ -547,9 +548,9 @@
 	if (self.isPartiallyCached)
 	{		
 		CGFloat bitrate = (CGFloat)self.estimatedBitrate;
-		if (audioEngineS.isPlaying)
+		if (audioEngineS.player.isPlaying)
 		{
-			bitrate = [audioEngineS estimatedBitrate];
+			bitrate = [BassWrapper estimateBitrate:audioEngineS.player.currentStream];
 		}
 		
 		CGFloat seconds = [self.duration floatValue];
@@ -559,11 +560,11 @@
 			if ([playlistS.currentSong isEqualToSong:self])
 			{
 				// This is the current playing song, so see if BASS has an actual bitrate for it
-				if (audioEngineS.bitRate > 0)
+				if (audioEngineS.player.bitRate > 0)
 				{
 					// Bass has a non-zero bitrate, so use that for the calculation
 					// convert to bytes per second, multiply by number of seconds
-					bitrate = (CGFloat)audioEngineS.bitRate;
+					bitrate = (CGFloat)audioEngineS.player.bitRate;
 					seconds = [self.duration floatValue];
 					
 				}
@@ -624,7 +625,7 @@
 	}
 	else
 	{
-		return [self isEqualToSong:audioEngineS.currentStreamSong];
+		return [self isEqualToSong:audioEngineS.player.currentStream.song];
 	}
 }
 

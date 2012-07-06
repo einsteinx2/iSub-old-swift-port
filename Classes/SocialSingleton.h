@@ -21,6 +21,7 @@
 @property (readonly) NSTimeInterval tweetDelay;
 
 + (id)sharedInstance;
+
 - (void)createTwitterEngine;
 - (void)destroyTwitterEngine;
 
@@ -29,5 +30,10 @@
 - (void)scrobbleSong:(Song *)aSong isSubmission:(BOOL)isSubmission;
 - (void)tweetSong;
 - (void)notifySubsonic;
+
+@property (nonatomic) BOOL playerHasTweeted;
+@property (nonatomic) BOOL playerHasScrobbled;
+- (void)playerHandleSocial;
+- (void)playerClearSocial;
 
 @end

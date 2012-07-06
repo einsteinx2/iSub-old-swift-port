@@ -22,11 +22,8 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "MusicSingleton.h"
 #import "SocialSingleton.h"
-#import "GCDWrapper.h"
 #import "ViewObjectsSingleton.h"
-#import "SUSRegisterActionLoader.h"
-#import "AnghamiAppDelegate.h"
-#import "EX2RingBuffer.h"
+#import "iSubAppDelegate.h"
 #import "DDLog.h"
 
 @implementation AudioEngine
@@ -74,7 +71,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	self.player = nil;
 	
 	// Create a new player
-	self.player = [[BassEncryptedGaplessPlayer alloc] init];
+	self.player = [[BassGaplessPlayer alloc] init];
 	[self.player startWithOffsetInBytes:byteOffset orSeconds:seconds];
 }
 

@@ -1599,7 +1599,7 @@ static NSString *kName_Error = @"error";
 		
 		cell.coverArtView.coverArtId = aSong.coverArtId;
 		
-		if (indexPath.row == playlistS.currentIndex && (!audioEngineS.isBassFreed || (settingsS.isJukeboxEnabled && jukeboxS.jukeboxIsPlaying)))
+		if (indexPath.row == playlistS.currentIndex && (audioEngineS.player.isStarted || (settingsS.isJukeboxEnabled && jukeboxS.jukeboxIsPlaying)))
 		{
 			cell.nowPlayingImageView.hidden = NO;
 			cell.numberLabel.hidden = YES;

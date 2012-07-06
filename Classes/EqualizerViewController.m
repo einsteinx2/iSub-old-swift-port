@@ -19,6 +19,7 @@
 #import "NWPickerView.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "EX2Dispatch.h"
+#import "BassVisualizer.h"
 
 @implementation EqualizerViewController
 @synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath, gainBoostLabel, isPresetPickerShowing, controlsContainer, gainBoostAmountLabel, lastGainValue, wasVisualizerOffBeforeRotation, swipeDetectorLeft, swipeDetectorRight, landscapeButtonsHolder, overlay, dismissButton;//, hidePickerTimer; //drawTimer;
@@ -427,8 +428,8 @@
 {
 	[self removeEqViews];
 		
-	equalizerPointViews = [[NSMutableArray alloc] initWithCapacity:[[audioEngineS equalizerValues] count]];
-	for (BassParamEqValue *value in audioEngineS.equalizerValues)
+	equalizerPointViews = [[NSMutableArray alloc] initWithCapacity:audioEngineS.equalizer.equalizerValues.count];
+	for (BassParamEqValue *value in audioEngineS.equalizer.equalizerValues)
 	{
 		//DLog(@"eq handle: %i", value.handle);
 		EqualizerPointView *eqView = [[EqualizerPointView alloc] initWithEqValue:value parentSize:self.equalizerView.frame.size];
@@ -470,9 +471,9 @@
 	[self.equalizerView stopEqDisplay];
 	
 	[equalizerView removeFromSuperview];
-	 equalizerView = nil;
+	equalizerView = nil;
 	
-	[audioEngineS stopReadingEqData];
+	audioEngineS.visualizer.type = BassVisualizerTypeNone;
 	
 	self.navigationController.navigationBar.hidden = NO;
 }
@@ -677,7 +678,7 @@
 	CGFloat maxValue = self.gainSlider.maximumValue;
 	
 	settingsS.gainMultiplier = gainValue;
-	[audioEngineS bassSetGainLevel:gainValue];
+	audioEngineS.equalizer.gain = gainValue;
 	
 	CGFloat difference = fabsf(gainValue - self.lastGainValue);
 	if (difference >= .1 || gainValue == minValue || gainValue == maxValue)
@@ -707,7 +708,7 @@
 			// remove the point
 			//DLog(@"double tap, remove point");
 			
-			[audioEngineS removeEqualizerValue:self.selectedView.eqValue];
+			[audioEngineS.equalizer removeEqualizerValue:self.selectedView.eqValue];
 			[equalizerPointViews removeObject:self.selectedView];
 			[self.selectedView removeFromSuperview];
 			self.selectedView = nil;
@@ -747,7 +748,7 @@
 				
 				// Create the eq view
 				EqualizerPointView *eqView = [[EqualizerPointView alloc] initWithCGPoint:point parentSize:self.equalizerView.bounds.size];
-				BassParamEqValue *value = [audioEngineS addEqualizerValue:eqView.eqValue.parameters];
+				BassParamEqValue *value = [audioEngineS.equalizer addEqualizerValue:eqView.eqValue.parameters];
 				eqView.eqValue = value;
 				
 				// Add the view
@@ -770,7 +771,7 @@
 		if (CGRectContainsPoint(equalizerView.frame, location))
 		{
 			self.selectedView.center = [touch locationInView:self.view];
-			[audioEngineS updateEqParameter:self.selectedView.eqValue];
+			[audioEngineS.equalizer updateEqParameter:self.selectedView.eqValue];
 			
 			[self createAndDrawEqualizerPath];
 		}
@@ -782,7 +783,7 @@
 	// Apply the EQ
 	if (self.selectedView != nil)
 	{
-		[audioEngineS updateEqParameter:self.selectedView.eqValue];
+		[audioEngineS.equalizer updateEqParameter:self.selectedView.eqValue];
 		self.selectedView = nil;
 		
 		[self saveTempCustomPreset];
@@ -798,7 +799,7 @@
 
 - (IBAction)toggle:(id)sender
 {
-	if ([audioEngineS toggleEqualizer])
+	if ([audioEngineS.equalizer toggleEqualizer])
 	{
 		[self removeEqViews];
 		[self createEqViews];

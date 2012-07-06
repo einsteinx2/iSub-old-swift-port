@@ -51,7 +51,7 @@ double startSongSeconds = 0.0;
 	DLog(@"starting song at offset");
 	
 	// Destroy the streamer to start a new song
-	[audioEngineS stop];
+	[audioEngineS.player stop];
 	
 	Song *currentSong = playlistS.currentSong;
 	
@@ -88,7 +88,7 @@ double startSongSeconds = 0.0;
 		
 		// Fill the stream queue
 		if (!viewObjectsS.isOfflineMode)
-			[streamManagerS fillStreamQueue:audioEngineS.isStarted];
+			[streamManagerS fillStreamQueue:audioEngineS.player.isStarted];
 	}
 	else if (!currentSong.isFullyCached && viewObjectsS.isOfflineMode)
 	{
@@ -115,7 +115,7 @@ double startSongSeconds = 0.0;
 		{
 			// The song is caching, start streaming from the local copy
 			ISMSStreamHandler *handler = [streamManagerS handlerForSong:currentSong];
-			if (!audioEngineS.isPlaying && handler.isDelegateNotifiedToStartPlayback)
+			if (!audioEngineS.player.isPlaying && handler.isDelegateNotifiedToStartPlayback)
 			{
 				// Only start the player if the handler isn't going to do it itself
 				[audioEngineS startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] 
@@ -130,7 +130,7 @@ double startSongSeconds = 0.0;
 			
 			// The song is caching, start streaming from the local copy
 			ISMSStreamHandler *handler = [streamManagerS handlerForSong:currentSong];
-			if (!audioEngineS.isPlaying && handler.isDelegateNotifiedToStartPlayback)
+			if (!audioEngineS.player.isPlaying && handler.isDelegateNotifiedToStartPlayback)
 			{
 				// Only start the player if the handler isn't going to do it itself
 				[audioEngineS startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] 
@@ -158,7 +158,7 @@ double startSongSeconds = 0.0;
 			
 			// Fill the stream queue
 			if (settingsS.isSongCachingEnabled)
-				[streamManagerS fillStreamQueue:audioEngineS.isStarted];
+				[streamManagerS fillStreamQueue:audioEngineS.player.isStarted];
 		}
 	}
 }
@@ -185,7 +185,7 @@ double startSongSeconds = 0.0;
 
 - (void)prevSong
 {	
-	if (audioEngineS.progress > 10.0)
+	if (audioEngineS.player.progress > 10.0)
 	{
 		// Past 10 seconds in the song, so restart playback instead of changing songs
 		[self playSongAtPosition:playlistS.currentIndex];
@@ -272,7 +272,7 @@ double startSongSeconds = 0.0;
 		NSNumber *playlistCount = [NSNumber numberWithInt:playlistS.count];
 		if (playlistCount)
 			[trackInfo setObject:playlistCount forKey:MPNowPlayingInfoPropertyPlaybackQueueCount];
-		NSNumber *progress = [NSNumber numberWithDouble:audioEngineS.progress];
+		NSNumber *progress = [NSNumber numberWithDouble:audioEngineS.player.progress];
 		if (progress)
 			[trackInfo setObject:progress forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
 		
