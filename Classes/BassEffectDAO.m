@@ -1,6 +1,6 @@
 //
 //  BassEffectDAO.m
-//  iSub
+//  Anghami
 //
 //  Created by Benjamin Baron on 12/4/11.
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
@@ -203,17 +203,16 @@ NSInteger presetSort(id preset1, id preset2, void *context)
 		
 	if (type == BassEffectType_ParametricEQ)
 	{
-		BOOL wasEqualizerOn = settingsS.isEqualizerOn;
-		[audioEngineS removeAllEqualizerValues];
+		[audioEngineS.equalizer removeAllEqualizerValues];
 		
 		for (int i = 0; i < [self.selectedPresetValues count]; i++)
 		{
 			BassEffectValue *value = [self valueForIndex:i];
-			[audioEngineS addEqualizerValue:BASS_DX8_PARAMEQFromPoint(value.percentX, value.percentY, DEFAULT_BANDWIDTH)];
+			[audioEngineS.equalizer addEqualizerValue:BASS_DX8_PARAMEQFromPoint(value.percentX, value.percentY, DEFAULT_BANDWIDTH)];
 		}
 		
-		if (wasEqualizerOn)
-			[audioEngineS toggleEqualizer];
+		if (settingsS.isEqualizerOn)
+			[audioEngineS.equalizer toggleEqualizer];
 	}
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_BassEffectPresetLoaded];
@@ -281,12 +280,12 @@ NSInteger presetSort(id preset1, id preset2, void *context)
 		[mutableUserPresets addEntriesFromDictionary:self.userPresets];
 	
 	// Add new temp custom preset
-	NSMutableDictionary *presetDict = [NSMutableDictionary dictionaryWithCapacity:0];
-	[presetDict setObject:[NSNumber numberWithInt:presetId] forKey:@"presetId"];
-	[presetDict setObject:name forKey:@"name"];
-	[presetDict setObject:arrayOfPoints forKey:@"values"];
-	[presetDict setObject:[NSNumber numberWithBool:NO] forKey:@"isDefault"];
-	[mutableUserPresets setObject:presetDict forKey:[[NSNumber numberWithInt:presetId] stringValue]];
+	NSMutableDictionary *newPresetDict = [NSMutableDictionary dictionaryWithCapacity:0];
+	[newPresetDict setObject:[NSNumber numberWithInt:presetId] forKey:@"presetId"];
+	[newPresetDict setObject:name forKey:@"name"];
+	[newPresetDict setObject:arrayOfPoints forKey:@"values"];
+	[newPresetDict setObject:[NSNumber numberWithBool:NO] forKey:@"isDefault"];
+	[mutableUserPresets setObject:newPresetDict forKey:[[NSNumber numberWithInt:presetId] stringValue]];
 	[mutableAllUserPresets setObject:mutableUserPresets forKey:[[NSNumber numberWithInt:type] stringValue]];
 	[defaults setObject:mutableAllUserPresets forKey:@"BassEffectUserPresets"];
 	[defaults synchronize];

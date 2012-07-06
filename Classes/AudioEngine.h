@@ -7,176 +7,34 @@
 //
 
 #import "bass.h"
-#import "bassflac.h"
 #import "bass_fx.h"
-#import "bass_ape.h"
-#import "bass_mpc.h"
-#import "basswv.h"
 #import "bassmix.h"
 #import <AudioToolbox/AudioToolbox.h>
+#import "BassWrapper.h"
+#import "BassStream.h"
+#import "BassEqualizer.h"
+#import "BassVisualizer.h"
+#import "BassEncryptedGaplessPlayer.h"
 
 #define audioEngineS ((AudioEngine *)[AudioEngine sharedInstance])
 
-#define ISMS_BASSBufferSize 800
-#define ISMS_defaultSampleRate 44100
-
-// Stream create failure retry values
-#define RETRY_DELAY 2.0
-#define MIN_FILESIZE_TO_FAIL (1024 * 1024 * 3)
-
-#define ISMS_EqualizerGainReduction 0.35
-
-//#define ISMS_NumSecondsToWaitForAudioData 5
-
-typedef enum
-{
-	ISMS_BASS_EQ_DATA_TYPE_none,
-	ISMS_BASS_EQ_DATA_TYPE_fft,
-	ISMS_BASS_EQ_DATA_TYPE_line
-} ISMS_BASS_EQ_DATA_TYPE;
-
-typedef struct
-{
-	void *buffer;
-	DWORD length;
-	BOOL isFilled;
-	//BOOL hasRead;
-} ISMS_AudioBuffer;
-
-typedef struct
-{
-	ISMS_AudioBuffer **buffers;
-	DWORD readPosition;
-	DWORD writePosition;
-	DWORD length;
-	DWORD freeSlots;
-	DWORD filledSlots;
-	DWORD bufferSize;
-	BOOL stopFilling;
-} ISMS_RingBuffer;
-
-@class Song, BassParamEqValue, BassUserInfo, GCDTimer;
+@class Song, BassParamEqValue, BassStream, GCDTimer, SUSRegisterActionLoader, EX2RingBuffer;
 @interface AudioEngine : NSObject
-{
-	// Equalizer
-	float fftData[1024];
-	short *lineSpecBuf;
-	int lineSpecBufSize;
-	
-	ISMS_RingBuffer *ringBuffer;
-	DWORD buffersTilSongEnd;
-	QWORD buffersUsedSinceSongEnd;
-	BOOL songEnded;
-}
 
 + (id)sharedInstance;
 
-@property (strong) NSMutableArray *eqValueArray;
-@property (strong) NSMutableArray *eqHandleArray;
-@property ISMS_BASS_EQ_DATA_TYPE eqDataType;
-
-// BASS streams
-@property BOOL BASSisFilestream1;
-@property HSTREAM fileStream1;
-@property HSTREAM fileStreamTempo1;
-@property HSTREAM fileStream2;
-@property HSTREAM fileStreamTempo2;
-@property HSTREAM outStream;
-@property HFX volumeFx;
-
-@property BOOL isPlaying;
-@property (readonly) BOOL isStarted;
-@property (readonly) NSInteger bitRate;
-@property (readonly) QWORD currentByteOffset;
-@property (readonly) double progress;
-@property (readonly) double currentStreamDuration;
-@property (readonly) NSArray *equalizerValues;
-
-@property BOOL hasTweeted;
-@property BOOL hasNotifiedSubsonic;
-@property BOOL hasScrobbled;
-
-//@property BOOL isEqualizerOn;
-@property unsigned long long startByteOffset;
-@property double startSecondsOffset;
-@property HSTREAM currentStream;
-@property HSTREAM currentStreamTempo;
-@property (readonly) HSTREAM currentReadingStream;
-@property HSTREAM nextStream;
-@property HSTREAM nextStreamTempo;
-@property (readonly) HSTREAM nextReadingStream;
-@property HSTREAM presilenceStream;
-@property BOOL isFastForward;
-@property NSInteger audioSessionSampleRate;
-@property NSInteger bassReinitSampleRate;
-@property NSUInteger bufferLengthMillis;
-@property NSUInteger bassUpdatePeriod;
-@property (strong) NSThread *startSongThread;
-
 @property BOOL shouldResumeFromInterruption;
 
-@property (strong) NSMutableDictionary *bassUserInfoDict;
+@property (readonly) BassEqualizer *equalizer;
+@property (readonly) BassVisualizer *visualizer;
+@property (strong) BassEncryptedGaplessPlayer *player;
 
-@property (strong) Song *currentStreamSong;
-@property (readonly) NSString *currentStreamFormat;
-
-@property (strong) NSObject *currentStreamSyncObject;
-@property (strong) NSObject *eqReadSyncObject;
-@property (strong) NSObject *ringBufferSyncObject;
-
-@property (strong) BassUserInfo *waitLoopUserInfo;
-
-@property BOOL isBassFreed;
-
-//@property (retain) GCDTimer *nextSongRetryTimer;
-//@property (retain) GCDTimer *startSongRetryTimer;
-
-const char *GetCTypeString(DWORD ctype, HPLUGIN plugin);
-
-// Playback methods
-//
-- (void)startWithOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds;
-- (void)seekToPositionInBytes:(QWORD)bytes inStream:(HSTREAM)stream;
-- (void)seekToPositionInBytes:(QWORD)bytes;
-- (void)seekToPositionInSeconds:(double)seconds inStream:(HSTREAM)stream;
-- (void)seekToPositionInSeconds:(double)seconds;
-- (void)start;
-- (void)stop;
-- (void)pause;
-- (void)playPause;
+@property NSUInteger startByteOffset;
+@property NSUInteger startSecondsOffset;
 
 // BASS methods
 //
-- (unsigned long long)preSilenceLengthForSong:(Song *)aSong;
-- (void)bassInit:(NSUInteger)sampleRate;
-- (void)bassInit;
-- (BOOL)bassFree;
-- (void)prepareNextSongStream;
-- (void)clearEqualizerValuesFromStream:(HSTREAM)stream;
-- (void)clearEqualizerValues;
-- (void)applyEqualizerValues:(NSArray *)values toStream:(HSTREAM)stream;
-- (void)applyEqualizerValues:(NSArray *)values;
-- (BOOL)toggleEqualizer;
-- (void)updateEqParameter:(BassParamEqValue *)value;
-- (BassParamEqValue *)addEqualizerValue:(BASS_DX8_PARAMEQ)value;
-- (NSArray *)removeEqualizerValue:(BassParamEqValue *)value;
-- (void)removeAllEqualizerValues;
-- (void)readEqData;
-- (float)fftData:(NSUInteger)index;
-- (short)lineSpecData:(NSUInteger)index;
-- (void)bassSetGainLevel:(float)gain;
-- (uint32_t)bassGetOutputData:(void *)buffer length:(uint32_t)length;
-- (NSInteger)bassSampleRate;
-- (NSInteger)bassStreamSampleRate:(HSTREAM)stream;
-- (NSInteger)preferredSampleRate:(NSUInteger)sampleRate;
-
-- (void)stopReadingEqData;
-- (void)startReadingEqData:(ISMS_BASS_EQ_DATA_TYPE)type;
-
-- (BassUserInfo *)userInfoForStream:(HSTREAM)stream;
-- (void)setUserInfo:(BassUserInfo *)userInfo forStream:(HSTREAM)stream;
-- (void)removeUserInfoForStream:(HSTREAM)stream;
-
-- (NSUInteger)estimatedBitrate;
+- (void)startWithOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds;
+- (void)start;
 
 @end
