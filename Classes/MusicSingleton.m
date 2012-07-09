@@ -11,7 +11,6 @@
 #import "ViewObjectsSingleton.h"
 #import "iSubAppDelegate.h"
 #import "Song.h"
-#import "NSString+md5.h"
 #import "FMDatabaseAdditions.h"
 #import "Reachability.h"
 #import "JukeboxXMLParser.h"
@@ -31,7 +30,6 @@
 #import "ISMSCoverArtLoader.h"
 #import "ISMSStreamHandler.h"
 #import "CacheSingleton.h"
-#import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
 #import "ISMSCacheQueueManager.h"
 

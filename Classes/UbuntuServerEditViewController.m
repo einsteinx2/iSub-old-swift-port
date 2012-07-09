@@ -15,8 +15,6 @@
 #import "Server.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
-#import "NSArray+Additions.h"
-#import "NSNotificationCenter+MainThread.h"
 #import "iPadRootViewController.h"
 #import "ServerTypeViewController.h"
 #import "MenuViewController.h"

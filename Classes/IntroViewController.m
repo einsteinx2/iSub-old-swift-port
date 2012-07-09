@@ -11,7 +11,6 @@
 #import "ServerListViewController.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "SavedSettings.h"
-#import "NSNotificationCenter+MainThread.h"
 
 @implementation IntroViewController
 @synthesize introVideo, testServer, ownServer, sunkenLogo;

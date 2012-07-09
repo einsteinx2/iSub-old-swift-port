@@ -10,7 +10,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import "iSubAppDelegate.h"
 #import "CustomUIAlertView.h"
-#import "NSString+md5.h"
 #import "SUSRootFoldersDAO.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "SavedSettings.h"

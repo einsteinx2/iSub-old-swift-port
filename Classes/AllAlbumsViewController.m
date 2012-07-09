@@ -20,7 +20,6 @@
 #import "Artist.h"
 #import "Album.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString+md5.h"
 #import "LoadingScreen.h"
 #import "FoldersViewController.h"
 #import "SA_OAuthTwitterEngine.h"

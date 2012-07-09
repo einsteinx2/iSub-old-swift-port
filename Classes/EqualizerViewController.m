@@ -14,11 +14,7 @@
 #import "BassEffectDAO.h"
 #import "SavedSettings.h"
 #import "EqualizerPathView.h"
-#import "NSArray+FirstObject.h"
-#import "SnappySlider.h"
 #import "NWPickerView.h"
-#import "NSNotificationCenter+MainThread.h"
-#import "EX2Dispatch.h"
 #import "BassVisualizer.h"
 
 @implementation EqualizerViewController

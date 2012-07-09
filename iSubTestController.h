@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Ben Baron. All rights reserved.
 //
 
-#import "KIFTestController.h"
+#import <Kif/KIFTestController.h>
 
 @interface iSubTestController : KIFTestController
 

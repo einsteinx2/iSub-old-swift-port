@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Ben Baron. All rights reserved.
 //
 
-#import "KIFTestScenario.h"
+#import <Kif/KIFTestScenario.h>
 
 @interface KIFTestScenario (CacheTab)
 

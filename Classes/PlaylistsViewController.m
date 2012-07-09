@@ -31,11 +31,7 @@
 #import "SUSServerPlaylist.h"
 #import "PlaylistSingleton.h"
 #import "AudioEngine.h"
-//
-#import "NSNotificationCenter+MainThread.h"
-#import "NSArray+Additions.h"
 #import "UIViewController+PushViewControllerCustom.h"
-#import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
 
 @interface PlaylistsViewController (Private)

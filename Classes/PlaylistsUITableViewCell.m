@@ -12,14 +12,12 @@
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
 #import "CellOverlay.h"
-#import "NSString+md5.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "SUSServerPlaylist.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "CustomUIAlertView.h"
 #import "Song.h"
 #import "TBXML.h"
-#import "NSNotificationCenter+MainThread.h"
 
 @implementation PlaylistsUITableViewCell
 

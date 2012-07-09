@@ -10,13 +10,11 @@
 #import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
-#import "NSString+md5.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "Song.h"
 #import "CellOverlay.h"
 #import "SavedSettings.h"
-#import "NSNotificationCenter+MainThread.h"
 
 @implementation LocalPlaylistsUITableViewCell
 

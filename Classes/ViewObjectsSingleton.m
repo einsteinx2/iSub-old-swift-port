@@ -10,9 +10,7 @@
 #import "iSubAppDelegate.h"
 #import "MKStoreManager.h"
 #import "Server.h"
-#import "UIDevice+Hardware.h"
 #import "SavedSettings.h"
-#import "NSArray+Additions.h"
 
 @implementation ViewObjectsSingleton
 

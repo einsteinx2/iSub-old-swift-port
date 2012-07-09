@@ -10,7 +10,6 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "TBXML.h"
 #import "NSError+ISMSError.h"
-#import "NSNotificationCenter+MainThread.h"
 
 @implementation SUSServerChecker
 

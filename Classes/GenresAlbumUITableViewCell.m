@@ -15,7 +15,6 @@
 #import "FMDatabaseQueueAdditions.h"
 #import "CellOverlay.h"
 #import "Song.h"
-#import "NSNotificationCenter+MainThread.h"
 
 
 @implementation GenresAlbumUITableViewCell

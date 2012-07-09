@@ -12,7 +12,6 @@
 #import "Album.h"
 #import "Artist.h"
 #import "Song.h"
-#import "NSNotificationCenter+MainThread.h"
 
 @implementation PMSQueueAllLoader
 

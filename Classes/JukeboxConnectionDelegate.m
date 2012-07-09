@@ -13,7 +13,6 @@
 #import "BBSimpleConnectionQueue.h"
 #import "CustomUIAlertView.h"
 #import "PlaylistSingleton.h"
-#import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
 
 @implementation JukeboxConnectionDelegate

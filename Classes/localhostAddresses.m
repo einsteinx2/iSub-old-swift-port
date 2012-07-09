@@ -4,7 +4,6 @@
 //
 
 #import "LocalhostAddresses.h"
-#import "NSNotificationCenter+MainThread.h"
 
 #import <ifaddrs.h>
 #import <netinet/in.h>

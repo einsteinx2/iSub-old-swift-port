@@ -55,7 +55,6 @@
 #import <CoreFoundation/CoreFoundation.h>
 
 #import "Reachability.h"
-#import "NSNotificationCenter+MainThread.h"
 
 #define kShouldPrintReachabilityFlags 0
 

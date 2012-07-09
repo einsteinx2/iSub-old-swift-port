@@ -7,7 +7,6 @@
 //
 
 #import "BassStream.h"
-#import "EX2FileDecryptor.h"
 
 @interface BassEncryptedStream : BassStream
 

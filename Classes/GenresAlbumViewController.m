@@ -18,17 +18,13 @@
 #import "Album.h"
 #import "Song.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString+md5.h"
 #import "AllSongsUITableViewCell.h"
 #import "AsynchronousImageView.h"
 #import "SavedSettings.h"
-#import "NSString+time.h"
 #import "PlaylistSingleton.h"
-#import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "EX2Dispatch.h"
 
 @implementation GenresAlbumViewController
 

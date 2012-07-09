@@ -19,10 +19,8 @@
 #import "Song.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "NSString+md5.h"
 #import "SavedSettings.h"
 #import "PlaylistSingleton.h"
-#import "NSNotificationCenter+MainThread.h"
 #import "JukeboxSingleton.h"
 #import "UIViewController+PushViewControllerCustom.h"
 

@@ -8,7 +8,6 @@
 
 #import "ISMSUpdateChecker.h"
 #import "TBXML.h"
-#import "NSArray+Additions.h"
 
 @implementation ISMSUpdateChecker
 @synthesize receivedData, connection, request, theNewVersion, message;

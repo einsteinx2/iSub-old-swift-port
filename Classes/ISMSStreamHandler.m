@@ -12,7 +12,6 @@
 #import "iSubAppDelegate.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "NSError+ISMSError.h"
-#import "NSString+md5.h"
 #import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
 #import "ISMSCoverArtLoader.h"
@@ -20,7 +19,6 @@
 #import "CacheSingleton.h"
 #import "PlaylistSingleton.h"
 #import "ISMSNetworkIndicator.h"
-#import "EX2Dispatch.h"
 #import "TBXML.h"
 
 #define ISMSNumSecondsToPartialPreCacheDefault 20

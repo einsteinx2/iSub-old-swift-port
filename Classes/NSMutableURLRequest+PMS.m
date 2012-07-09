@@ -8,7 +8,6 @@
 
 #import "NSMutableURLRequest+PMS.h"
 #import "SavedSettings.h"
-#import "NSString+URLEncode.h"
 #import "NSData+Base64.h"
 
 @implementation NSMutableURLRequest (PMS)

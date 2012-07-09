@@ -7,8 +7,6 @@
 #import "HTTPServer.h"
 #import "HTTPResponse.h"
 #import "AsyncSocket.h"
-#import "NSArray+Additions.h"
-#import "NSNotificationCenter+MainThread.h"
 
 @implementation MyHTTPConnection
 

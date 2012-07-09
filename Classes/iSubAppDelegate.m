@@ -12,7 +12,6 @@
 #import "MusicSingleton.h"
 #import "SocialSingleton.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString+md5.h"
 #import "ServerListViewController.h"
 #import "FoldersViewController.h"
 #import "Reachability.h"
@@ -23,10 +22,8 @@
 #include <netinet/in.h> 
 #include <netdb.h>
 #include <arpa/inet.h>
-#import "NSString+hex.h"
 #import "MKStoreManager.h"
 #import "Server.h"
-#import "UIDevice+Hardware.h"
 #import "IntroViewController.h"
 #import "CustomUIAlertView.h"
 #import "HTTPServer.h"
@@ -40,15 +37,10 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "ISMSStreamManager.h"
 #import "AudioEngine.h"
-#import "UIDevice+Software.h"
-#import "NSObject+ListMethods.h"
 #import "ISMSUpdateChecker.h"
-#import "NSArray+Additions.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
-#import "NSNotificationCenter+MainThread.h"
 #import "ISMSCacheQueueManager.h"
-#import "EX2Dispatch.h"
 
 @implementation iSubAppDelegate
 

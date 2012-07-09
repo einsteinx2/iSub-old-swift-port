@@ -11,6 +11,8 @@
 @class Song, BassGaplessPlayer;
 @interface BassStream : NSObject
 
+@property (nonatomic, strong) BassGaplessPlayer *player;
+
 @property (nonatomic) HSTREAM stream;
 @property (nonatomic, copy) Song *song;
 

@@ -18,18 +18,14 @@
 #import "SA_OAuthTwitterEngine.h"
 #import "SA_OAuthTwitterController.h"
 
-#import "UIDevice+Hardware.h"
 
-#import "NSString+md5.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 
 #import "SavedSettings.h"
-#import "NSArray+Additions.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
-#import "NSNotificationCenter+MainThread.h"
 
 @implementation SettingsTabViewController
 

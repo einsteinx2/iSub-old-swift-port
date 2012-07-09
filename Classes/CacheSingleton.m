@@ -14,7 +14,6 @@
 
 #import "Song.h"
 #import "ISMSStreamManager.h"
-#import "NSNotificationCenter+MainThread.h"
 #import "ISMSCacheQueueManager.h"
 
 @implementation CacheSingleton

@@ -7,7 +7,6 @@
 //
 
 #import "SUSChatDAO.h"
-#import "NSString+rfcEncode.h"
 #import "SUSChatLoader.h"
 #import "NSError+ISMSError.h"
 #import "NSMutableURLRequest+SUS.h"

@@ -15,8 +15,6 @@
 #import "SavedSettings.h"
 #import "EqualizerViewController.h"
 #import "PagingScrollView.h"
-#import "NSArray+Additions.h"
-#import "NSNotificationCenter+MainThread.h"
 
 @interface PageControlViewController (PrivateMethods)
 

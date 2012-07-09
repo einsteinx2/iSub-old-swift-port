@@ -11,14 +11,12 @@
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "ISMSSubFolderLoader.h"
-#import "NSString+md5.h"
 #import "Album.h"
 #import "Song.h"
 #import "MusicSingleton.h"
 #import "SavedSettings.h"
 #import "PlaylistSingleton.h"
 #import "JukeboxSingleton.h"
-#import "NSNotificationCenter+MainThread.h"
 
 @interface SUSSubFolderDAO (Private) 
 - (NSUInteger)findFirstAlbumRow;

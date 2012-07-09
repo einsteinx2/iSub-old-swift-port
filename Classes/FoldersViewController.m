@@ -14,7 +14,6 @@
 #import "AlbumViewController.h"
 #import "Artist.h"
 #import "ArtistUITableViewCell.h"
-#import "NSString+md5.h"
 #import "FMDatabaseAdditions.h"
 #import "ViewObjectsSingleton.h"
 #import "CustomUIAlertView.h"

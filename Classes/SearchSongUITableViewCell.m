@@ -13,7 +13,6 @@
 #import "DatabaseSingleton.h"
 #import "Song.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString+md5.h"
 #import "CellOverlay.h"
 
 @implementation SearchSongUITableViewCell

@@ -12,7 +12,6 @@
 #import "CacheSingleton.h"
 #import "Song.h"
 #import "PlaylistSingleton.h"
-#import "NSNotificationCenter+MainThread.h"
 
 @implementation DebugViewController
 @synthesize currentSong, nextSong, currentSongProgress, nextSongProgress;

@@ -9,7 +9,6 @@
 #import "CacheQueueSongUITableViewCell.h"
 #import "AsynchronousImageView.h"
 #import "ViewObjectsSingleton.h"
-#import "NSNotificationCenter+MainThread.h"
 
 @implementation CacheQueueSongUITableViewCell
 

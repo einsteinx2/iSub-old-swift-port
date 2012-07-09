@@ -13,7 +13,6 @@
 #import "DatabaseSingleton.h"
 #import "CellOverlay.h"
 #import "Song.h"
-#import "NSNotificationCenter+MainThread.h"
 #import "FMDatabaseQueueAdditions.h"
 
 @implementation PlaylistSongUITableViewCell

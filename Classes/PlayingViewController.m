@@ -17,12 +17,10 @@
 #import "AsynchronousImageView.h"
 #import "Song.h"
 #import "FMDatabaseAdditions.h"
-#import "NSString+md5.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "SUSNowPlayingDAO.h"
-#import "NSNotificationCenter+MainThread.h"
 #import "EGORefreshTableHeaderView.h"
 #import "UIViewController+PushViewControllerCustom.h"
 

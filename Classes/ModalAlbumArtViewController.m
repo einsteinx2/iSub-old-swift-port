@@ -9,12 +9,9 @@
 #import "ModalAlbumArtViewController.h"
 #import "AsynchronousImageView.h"
 #import "DatabaseSingleton.h"
-#import "NSString+md5.h"
 #import "iSubAppDelegate.h"
 #import "FMDatabaseAdditions.h"
-
 #import "Album.h"
-#import "UIImageView+Reflection.h"
 #import "SavedSettings.h"
  
 @implementation ModalAlbumArtViewController

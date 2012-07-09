@@ -12,7 +12,6 @@
 #import "ViewObjectsSingleton.h"
 #import "StoreUITableViewCell.h"
 #import "SavedSettings.h"
-#import "NSArray+Additions.h"
 
 @implementation StoreViewController
 

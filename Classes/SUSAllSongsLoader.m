@@ -12,15 +12,11 @@
 #import "SavedSettings.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "NSString+md5.h"
 #import "Artist.h"
 #import "Album.h"
 #import "Song.h"
 #import "SUSRootFoldersDAO.h"
 #import "NSMutableURLRequest+SUS.h"
-#import "NSNotificationCenter+MainThread.h"
-#import "NSArray+Additions.h"
-#import "EX2Dispatch.h"
 
 @interface SUSAllSongsLoader (Private)
 

@@ -18,7 +18,6 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import <CFNetwork/CFNetwork.h>
 #import "FMDatabaseAdditions.h"
-#import "NSString+md5.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SavedSettings.h"
 #import "PlaylistSingleton.h"
@@ -28,11 +27,7 @@
 #import "OBSlider.h"
 #import "ISMSStreamManager.h"
 #import "ISMSStreamHandler.h"
-#import "NSArray+FirstObject.h"
-#import "UIImageView+Reflection.h"
-#import "NSArray+Additions.h"
 #import "JukeboxSingleton.h"
-#import "CALayer+ImageFromLayer.h"
 #import "SavedSettings.h"
 #import "StoreViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"

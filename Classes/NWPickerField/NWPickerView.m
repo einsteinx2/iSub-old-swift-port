@@ -28,7 +28,6 @@
 
 #import "NWPickerView.h"
 #import "NWPickerField.h"
-#import "NSNotificationCenter+MainThread.h"
 
 @interface NWPickerField(PickerViewExtension)
 // call in our picker field to now if control was hidden or not. Used

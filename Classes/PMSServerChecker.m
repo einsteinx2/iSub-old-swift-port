@@ -9,7 +9,6 @@
 #import "PMSServerChecker.h"
 #import "NSMutableURLRequest+PMS.h"
 #import "NSError+ISMSError.h"
-#import "NSNotificationCenter+MainThread.h"
 #import "SBJson.h"
 
 @implementation PMSServerChecker

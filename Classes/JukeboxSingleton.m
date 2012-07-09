@@ -16,7 +16,6 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "NSNotificationCenter+MainThread.h"
 #import "SavedSettings.h"
 
 @implementation JukeboxSingleton

@@ -7,7 +7,6 @@
 //
 
 #import "SavedSettings.h"
-#import "NSString+md5.h"
 #import "MusicSingleton.h"
 #import "Song.h"
 #import "Server.h"
@@ -16,7 +15,6 @@
 #import "AudioEngine.h"
 #import "iSubAppDelegate.h"
 #import "Reachability.h"
-#import "NSArray+Additions.h"
 #import "BassGaplessPlayer.h"
 
 // Test server details

@@ -7,7 +7,6 @@
 //
 
 #import "LoadingScreen.h"
-#import "NSArray+Additions.h"
 
 @implementation LoadingScreen
 

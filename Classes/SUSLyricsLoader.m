@@ -12,8 +12,6 @@
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 
-#import "NSString+rfcEncode.h"
-#import "NSNotificationCenter+MainThread.h"
 
 @implementation SUSLyricsLoader
 

@@ -19,7 +19,6 @@
 #import "Artist.h"
 #import "Album.h"
 #import "Song.h"
-#import "NSString+md5.h"
 #import "FMDatabaseAdditions.h"
 #import "LoadingScreen.h"
 #import "HomeXMLParser.h"
@@ -27,7 +26,6 @@
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
-#import "NSArray+Additions.h"
 #import "UIViewController+PushViewControllerCustom.h"
 
 @implementation HomeAlbumViewController

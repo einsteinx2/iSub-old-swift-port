@@ -9,10 +9,8 @@
 #import "ISMSCoverArtLoader.h"
 #import "DatabaseSingleton.h"
 #import "ViewObjectsSingleton.h"
-#import "NSString+md5.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "NSNotificationCenter+MainThread.h"
 #import "SavedSettings.h"
 
 @interface ISMSCoverArtLoader()

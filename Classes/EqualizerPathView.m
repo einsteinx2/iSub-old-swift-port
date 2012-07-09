@@ -7,7 +7,6 @@
 //
 
 #import "EqualizerPathView.h"
-#import "UIBezierPath+Smoothing.h"
 #import "BassParamEqValue.h"
 #import "AudioEngine.h"
 #import "SavedSettings.h"

@@ -13,9 +13,7 @@
 #import "DatabaseSingleton.h"
 #import "SavedSettings.h"
 #import "PlaylistSingleton.h"
-#import "NSArray+Additions.h"
 #import "JukeboxSingleton.h"
-#import "NSNotificationCenter+MainThread.h"
 
 @implementation SUSNowPlayingDAO
 @synthesize delegate, loader, nowPlayingSongDicts;

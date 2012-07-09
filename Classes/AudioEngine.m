@@ -9,9 +9,7 @@
 #import "AudioEngine.h"
 #import "Song.h"
 #import "PlaylistSingleton.h"
-#import "NSString+cStringUTF8.h"
 #import "BassParamEqValue.h"
-#import "NSNotificationCenter+MainThread.h"
 #include <AudioToolbox/AudioToolbox.h>
 #include "MusicSingleton.h"
 #import "BassEffectDAO.h"
@@ -64,6 +62,48 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
     }
 }
 
+#pragma mark - Audio Session methods
+
+void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue) 
+{			
+	DDLogCInfo(@"audioRouteChangeListenerCallback called, propertyId: %lu  isMainThread: %@", inPropertyID, NSStringFromBOOL([NSThread isMainThread]));
+	
+    // ensure that this callback was invoked for a route change
+    if (inPropertyID != kAudioSessionProperty_AudioRouteChange) 
+		return;
+	
+	if (sharedInstance.player.isPlaying)
+	{
+		// Determines the reason for the route change, to ensure that it is not
+		// because of a category change.
+		CFDictionaryRef routeChangeDictionary = inPropertyValue;
+		CFNumberRef routeChangeReasonRef = CFDictionaryGetValue (routeChangeDictionary, CFSTR (kAudioSession_AudioRouteChangeKey_Reason));
+		SInt32 routeChangeReason;
+		CFNumberGetValue (routeChangeReasonRef, kCFNumberSInt32Type, &routeChangeReason);
+		
+		DDLogCInfo(@"route change reason: %li", routeChangeReason);
+		
+        // "Old device unavailable" indicates that a headset was unplugged, or that the
+        // device was removed from a dock connector that supports audio output. This is
+        // the recommended test for when to pause audio.
+        if (routeChangeReason == kAudioSessionRouteChangeReason_OldDeviceUnavailable) 
+		{
+			[sharedInstance.player playPause];
+			
+            DDLogCInfo(@"Output device removed, so application audio was paused.");
+        }
+		else 
+		{
+            DDLogCInfo(@"A route change occurred that does not require pausing of application audio.");
+        }
+    }
+	else 
+	{	
+        DDLogCInfo(@"Audio route change while application audio is stopped.");
+        return;
+    }
+}
+
 - (void)startWithOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds
 {
 	// Dispose of the old player
@@ -104,6 +144,9 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveMemoryWarning) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
 	
 	AudioSessionInitialize(NULL, NULL, interruptionListenerCallback, NULL);
+	
+	// Add the callbacks for headphone removal and other audio takeover
+	AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, NULL);
 }
 
 + (id)sharedInstance

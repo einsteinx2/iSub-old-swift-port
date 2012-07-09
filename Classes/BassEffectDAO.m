@@ -10,8 +10,6 @@
 #import "BassEffectDAO.h"
 #import "BassEffectValue.h"
 #import "BassParamEqValue.h"
-#import "NSArray+FirstObject.h"
-#import "NSNotificationCenter+MainThread.h"
 #import "SavedSettings.h"
 
 @implementation BassEffectDAO

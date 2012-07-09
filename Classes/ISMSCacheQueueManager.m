@@ -20,7 +20,6 @@
 #import "ViewObjectsSingleton.h"
 #import "iSubAppDelegate.h"
 #import "ISMSStreamManager.h"
-#import "NSNotificationCenter+MainThread.h"
 #import "CacheSingleton.h"
 #import "ISMSStreamHandler.h"
 

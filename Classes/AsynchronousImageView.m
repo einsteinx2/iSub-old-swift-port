@@ -14,11 +14,9 @@
 #import "MusicSingleton.h"
 #import "DatabaseSingleton.h"
 #import "Song.h"
-#import "NSString+md5.h"
 #import "FMDatabaseAdditions.h"
 #import "PageControlViewController.h"
 #import "NSMutableURLRequest+SUS.h"
-#import "NSNotificationCenter+MainThread.h"
 #import "SUSCoverArtDAO.h"
 #import "AsynchronousImageViewDelegate.h"
 

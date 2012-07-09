@@ -7,7 +7,6 @@
 //
 
 #import "StackContainerView.h"
-#import "NSArray+Additions.h"
 
 @implementation StackContainerView
 

@@ -11,7 +11,6 @@
 #import "FMDatabaseQueueAdditions.h"
 
 #import "DatabaseSingleton.h"
-#import "NSString+md5.h"
 #import "ISMSCoverArtLoader.h"
 
 @implementation SUSCoverArtDAO

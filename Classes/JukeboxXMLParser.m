@@ -14,7 +14,6 @@
 #import "DatabaseSingleton.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
-#import "NSNotificationCenter+MainThread.h"
 #import "PlaylistSingleton.h"
 
 @implementation JukeboxXMLParser

@@ -11,7 +11,6 @@
 #import "ViewObjectsSingleton.h"
 #import "iSubAppDelegate.h"
 #import "SavedSettings.h"
-#import "NSArray+Additions.h"
 #import "UIViewController+PushViewControllerCustom.h"
 
 @implementation SearchAllViewController

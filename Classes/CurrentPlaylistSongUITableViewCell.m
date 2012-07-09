@@ -15,7 +15,6 @@
 #import "Song.h"
 #import "CellOverlay.h"
 #import "PlaylistSingleton.h"
-#import "NSNotificationCenter+MainThread.h"
 #import "SavedSettings.h"
 
 @implementation CurrentPlaylistSongUITableViewCell
