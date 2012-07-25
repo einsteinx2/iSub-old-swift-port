@@ -41,6 +41,9 @@
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
 #import "ISMSCacheQueueManager.h"
+#import "DDLog.h"
+#import "DDTTYLogger.h"
+#import "DDFileLogger.h"
 
 @implementation iSubAppDelegate
 
@@ -91,6 +94,17 @@
 
 	// Start the save defaults timer and mem cache initial defaults
 	[settingsS setupSaveState];
+	
+	if (!IS_ADHOC() && !IS_RELEASE())
+	{
+		// Don't turn on console logging for adhoc or release builds
+		[DDLog addLogger:[DDTTYLogger sharedInstance]];
+		[[DDTTYLogger sharedInstance] setColorsEnabled:YES];
+	}
+	DDFileLogger *fileLogger = [[DDFileLogger alloc] init];
+	fileLogger.rollingFrequency = 60 * 60 * 24; // 24 hour rolling
+	fileLogger.logFileManager.maximumNumberOfLogFiles = 7;
+	[DDLog addLogger:fileLogger];
 	
 	DLog(@"settingsS: %@", settingsS);
 	DLog(@"urlString: %@", settingsS.urlString);

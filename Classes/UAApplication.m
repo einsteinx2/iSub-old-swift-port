@@ -12,7 +12,10 @@
 #import "SavedSettings.h"
 #import "AudioEngine.h"
 #import "JukeboxSingleton.h"
- 
+#import "DDLog.h"
+
+static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+
 @implementation UAApplication
 
 - (id) init 
@@ -60,21 +63,32 @@
 
 - (void)playPauseStop
 {
+	DDLogVerbose(@"playPauseStop called");
 	if (settingsS.isJukeboxEnabled)
 	{
+		DDLogVerbose(@"playPauseStop jukebox is enabled");
 		if (jukeboxS.jukeboxIsPlaying)
+		{
+			DDLogVerbose(@"jukebox is playing, playPauseStop jukeboxStop called");
 			[jukeboxS jukeboxStop];
+		}
 		else
+		{
+			DDLogVerbose(@"jukebox NOT playing, playPauseStop jukeboxPlay called");
 			[jukeboxS jukeboxPlay];
+		}
 	}
 	else
 	{
+		DDLogVerbose(@"playPauseStop jukebox NOT enabled");
         if (audioEngineS.player)
 		{
+			DDLogVerbose(@"audio engine player exists, playPauseStop [audioEngineS.player playPause] called");
 			[audioEngineS.player playPause];
 		}
 		else
 		{
+			DDLogVerbose(@"audio engine player doesn't exist, playPauseStop [musicS startSong] called");
 			[musicS startSong];
 		}
 	}
@@ -86,27 +100,27 @@
 	switch(event.subtype) 
 	{
 		case UIEventSubtypeRemoteControlPlay:
-			//DLog(@"UIEventSubtypeRemoteControlPlay");
+			DDLogVerbose(@"UIEventSubtypeRemoteControlPlay, calling playPauseStop");
 			[self playPauseStop];
 			break;
 		case UIEventSubtypeRemoteControlPause:
-			//DLog(@"UIEventSubtypeRemoteControlPause");
+			DDLogVerbose(@"UIEventSubtypeRemoteControlPause, calling playPauseStop");
 			[self playPauseStop];
 			break;
 		case UIEventSubtypeRemoteControlStop:
-			//DLog(@"UIEventSubtypeRemoteControlStop");
+			DDLogVerbose(@"UIEventSubtypeRemoteControlStop, calling playPauseStop");
 			[self playPauseStop];
 			break;
 		case UIEventSubtypeRemoteControlTogglePlayPause:
-			//DLog(@"UIEventSubtypeRemoteControlTogglePlayPause");
+			DDLogVerbose(@"UIEventSubtypeRemoteControlTogglePlayPause, calling playPauseStop");
 			[self playPauseStop];
 			break;
 		case UIEventSubtypeRemoteControlNextTrack:
-			//DLog(@"UIEventSubtypeRemoteControlNextTrack");
+			DDLogVerbose(@"UIEventSubtypeRemoteControlNextTrack, calling nextSong");
 			[musicS nextSong];
 			break;
 		case UIEventSubtypeRemoteControlPreviousTrack:
-			//DLog(@"UIEventSubtypeRemoteControlPreviousTrack");
+			DDLogVerbose(@"UIEventSubtypeRemoteControlPreviousTrack, calling prevSong");
 			[musicS prevSong];
 			break;
 		default:
