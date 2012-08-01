@@ -87,7 +87,7 @@
 **/
 - (BOOL)supportsPOST:(NSString *)path withSize:(UInt64)contentLength
 {
-//	DLog(@"POST:%@", path);
+////DLog(@"POST:%@", path);
 	
 	dataStartIndex = 0;
 	multipartData = [[NSMutableArray alloc] init];
@@ -115,7 +115,7 @@
 	
 	if (requestContentLength > 0)  // Process POST data
 	{
-		DLog(@"processing post data: %llu", requestContentLength);
+	//DLog(@"processing post data: %llu", requestContentLength);
 		
 		if ([multipartData count] < 2) return nil;
 		
@@ -137,7 +137,7 @@
 			int count = 2;	//number of times the separator shows up at the end of file data
 			
 			NSFileHandle* dataToTrim = [multipartData lastObject];
-			DLog(@"data: %@", dataToTrim);
+		//DLog(@"data: %@", dataToTrim);
 			
 			for (unsigned long long i = [dataToTrim offsetInFile] - l; i > 0; i--)
 			{
@@ -150,12 +150,12 @@
 				}
 			}
 			
-			DLog(@"NewFileUploaded");
+		//DLog(@"NewFileUploaded");
 			[NSNotificationCenter postNotificationToMainThreadWithName:@"NewFileUploaded"];
 		}
 		
 		for (int n = 1; n < [multipartData count] - 1; n++)
-			DLog(@"%@", [[NSString alloc] initWithBytes:[[multipartData objectAtIndexSafe:n] bytes] length:[[multipartData objectAtIndexSafe:n] length] encoding:NSUTF8StringEncoding]);
+		//DLog(@"%@", [[NSString alloc] initWithBytes:[[multipartData objectAtIndexSafe:n] bytes] length:[[multipartData objectAtIndexSafe:n] length] encoding:NSUTF8StringEncoding]);
 		
 		[postInfo release];
 		[multipartData release];

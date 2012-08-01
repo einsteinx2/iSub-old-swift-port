@@ -221,7 +221,7 @@
 		[self setPort:[asyncSocket localPort]];
 		
 		// Output console message for debugging purposes
-		DLog(@"Started HTTP server on port %hu", port);
+	//DLog(@"Started HTTP server on port %hu", port);
 		
 		// We can only publish our bonjour service if a type has been set
 		if(type != nil)
@@ -244,7 +244,7 @@
 	}
 	else
 	{
-		DLog(@"Failed to start HTTP Server: %@", *error);
+	//DLog(@"Failed to start HTTP Server: %@", *error);
 	}
 	
 	return success;
@@ -332,7 +332,7 @@
 {
 	// Override me to do something here...
 	
-	DLog(@"Bonjour Service Published: domain(%@) type(%@) name(%@)", [ns domain], [ns type], [ns name]);
+//DLog(@"Bonjour Service Published: domain(%@) type(%@) name(%@)", [ns domain], [ns type], [ns name]);
 }
 
 /**
@@ -343,8 +343,8 @@
 {
 	// Override me to do something here...
 	
-	DLog(@"Failed to Publish Service: domain(%@) type(%@) name(%@)", [ns domain], [ns type], [ns name]);
-	DLog(@"Error Dict: %@", errorDict);
+//DLog(@"Failed to Publish Service: domain(%@) type(%@) name(%@)", [ns domain], [ns type], [ns name]);
+//DLog(@"Error Dict: %@", errorDict);
 }
 
 @end

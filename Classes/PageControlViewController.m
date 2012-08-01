@@ -109,7 +109,7 @@
 
 - (void)resetScrollView
 {
-	DLog(@"PageControlViewController resetScrollView called");
+//DLog(@"PageControlViewController resetScrollView called");
 	[self.scrollView setContentOffset:CGPointZero animated:YES];
 }
 

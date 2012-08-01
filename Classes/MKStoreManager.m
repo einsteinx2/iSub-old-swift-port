@@ -101,7 +101,7 @@ static MKStoreManager* _sharedStoreManager;
         if (_sharedStoreManager == nil) {
 						
 #if TARGET_IPHONE_SIMULATOR
-			DLog(@"You are running in Simulator MKStoreKit runs only on devices");
+		//DLog(@"You are running in Simulator MKStoreKit runs only on devices");
 #else
             _sharedStoreManager = [[self alloc] init];					
 			_sharedStoreManager.purchasableObjects = [[NSMutableArray alloc] init];
@@ -184,7 +184,7 @@ static MKStoreManager* _sharedStoreManager;
 	}
 	
 	for(NSString *invalidProduct in response.invalidProductIdentifiers)
-		DLog(@"Problem in iTunes connect configuration for product: %@", invalidProduct);
+	//DLog(@"Problem in iTunes connect configuration for product: %@", invalidProduct);
 #endif
 	
 	[request autorelease];
@@ -232,7 +232,7 @@ static MKStoreManager* _sharedStoreManager;
 		NSString *description = [NSString stringWithFormat:@"%@ (%@)",[product localizedTitle], formattedString];
 		
 #ifndef NDEBUG
-		DLog(@"Product %d - %@", i, description);
+	//DLog(@"Product %d - %@", i, description);
 #endif
 		[productDescriptions addObject: description];
 	}
@@ -392,7 +392,7 @@ static MKStoreManager* _sharedStoreManager;
 {
 
 #ifndef NDEBUG
-	DLog(@"User cancelled transaction: %@", [transaction description]);
+//DLog(@"User cancelled transaction: %@", [transaction description]);
 #endif
 	
 	if([_delegate respondsToSelector:@selector(transactionCanceled)])

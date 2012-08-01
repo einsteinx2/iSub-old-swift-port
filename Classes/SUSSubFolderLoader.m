@@ -24,7 +24,7 @@
 
 - (void)processResponse
 {	            
-	DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
+//DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
 	
     // Parse the data
 	//

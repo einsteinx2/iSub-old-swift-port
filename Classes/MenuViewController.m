@@ -68,7 +68,7 @@
 		// Create the menu
 		[self loadCellContents];
 		tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 565.) style:UITableViewStylePlain];
-		DLog(@"tableView.frame: %@", NSStringFromCGRect(tableView.frame));
+	//DLog(@"tableView.frame: %@", NSStringFromCGRect(tableView.frame));
 		tableView.delegate = self;
 		tableView.dataSource = self;
 		tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;

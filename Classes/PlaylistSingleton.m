@@ -518,7 +518,7 @@
 
 - (void)didReceiveMemoryWarning
 {
-	DLog(@"received memory warning");
+//DLog(@"received memory warning");
 	
 	
 }

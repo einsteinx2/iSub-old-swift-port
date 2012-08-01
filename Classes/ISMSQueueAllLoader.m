@@ -36,7 +36,7 @@
 	{
 		return [[SUSQueueAllLoader alloc] init];
 	}
-	else if ([settingsS.serverType isEqualToString:PERSONAL_MEDIA_SERVER]) 
+	else if ([settingsS.serverType isEqualToString:WAVEBOX]) 
 	{
 		return [[PMSQueueAllLoader alloc] init];
 	}
@@ -50,12 +50,12 @@
 
 - (void)startLoad
 {
-	DLog(@"must use loadData:artist:");
+//DLog(@"must use loadData:artist:");
 }
 
 - (void)cancelLoad
 {
-	DLog(@"cancelLoad called");
+//DLog(@"cancelLoad called");
 	self.isCancelled = YES;
 	[super cancelLoad];
 	[viewObjectsS hideLoadingScreen];
@@ -211,7 +211,7 @@
 	// Continue the iteration
 	[self finishLoad];
 	
-	DLog(@"QueueAll CONNECTION FAILED!!!");
+//DLog(@"QueueAll CONNECTION FAILED!!!");
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
@@ -243,7 +243,7 @@
 		[self.folderIds insertObject:albumId atIndex:0];
 	}
 	[self.listOfAlbums removeAllObjects];
-	DLog(@"folderIds: %@", folderIds);
+//DLog(@"folderIds: %@", folderIds);
 	
 	self.receivedData = nil;
 	self.connection = nil;

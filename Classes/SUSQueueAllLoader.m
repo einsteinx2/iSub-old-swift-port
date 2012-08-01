@@ -81,6 +81,9 @@
 							}
 						}
 					}
+					
+					// Get the next child
+					child = [TBXML nextSiblingNamed:@"child" searchFromElement:child];
 				}
 			}
 		}

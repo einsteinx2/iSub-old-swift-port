@@ -104,7 +104,7 @@
 {	
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
-	DLog(@"receivedData: %@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
+//DLog(@"receivedData: %@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
 	
 	NSError *error;
     TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData error:&error];

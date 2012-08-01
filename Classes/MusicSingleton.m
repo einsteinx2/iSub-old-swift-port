@@ -49,7 +49,7 @@ double startSongSeconds = 0.0;
 	if (![NSThread mainThread])
 		return;
 
-	DLog(@"starting song at offset");
+//DLog(@"starting song at offset");
 	
 	// Destroy the streamer to start a new song
 	[audioEngineS.player stop];
@@ -212,8 +212,8 @@ double startSongSeconds = 0.0;
 {	
 	Song *currentSong = playlistS.currentSong;
 		
-	DLog(@"isRecover: %@  currentSong: %@", NSStringFromBOOL(settingsS.isRecover), currentSong);
-	DLog(@"byteOffset: %llu   seekTime: %f\n   ", settingsS.byteOffset, settingsS.seekTime);
+//DLog(@"isRecover: %@  currentSong: %@", NSStringFromBOOL(settingsS.isRecover), currentSong);
+//DLog(@"byteOffset: %llu   seekTime: %f\n   ", settingsS.byteOffset, settingsS.seekTime);
 	
 	if (currentSong && settingsS.isRecover)
 	{
@@ -300,7 +300,7 @@ double startSongSeconds = 0.0;
 
 - (void)didReceiveMemoryWarning
 {
-	DLog(@"received memory warning");
+//DLog(@"received memory warning");
 	
 	
 }

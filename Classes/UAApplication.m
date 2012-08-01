@@ -49,7 +49,7 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 {
 	if (motion == UIEventSubtypeMotionShake) 
 	{
-		DLog(@"oh ya, shake it now!");
+	//DLog(@"oh ya, shake it now!");
 	}
 }
 

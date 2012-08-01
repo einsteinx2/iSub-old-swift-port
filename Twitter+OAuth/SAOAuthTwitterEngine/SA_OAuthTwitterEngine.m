@@ -370,7 +370,7 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-	DLog(@"Tweet did receive response");
+//DLog(@"Tweet did receive response");
 	[receivedData release];
 	receivedData = [[NSMutableData alloc] initWithCapacity:0];
 	
@@ -379,20 +379,20 @@
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
 {
-	DLog(@"Tweet did receive data");
+//DLog(@"Tweet did receive data");
     [receivedData appendData:incrementalData];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
-	DLog(@"Tweet connection failed");
+//DLog(@"Tweet connection failed");
 	[receivedData release]; receivedData = nil;
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {
-	DLog(@"Tweet connection succeeded");
-	DLog(@"Response: %@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
+//DLog(@"Tweet connection succeeded");
+//DLog(@"Response: %@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
 	[receivedData release]; receivedData = nil;
 }*/
 

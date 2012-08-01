@@ -73,7 +73,7 @@
 
 - (void)startLoad
 {
-	DLog(@"this shouldn't be called");
+//DLog(@"this shouldn't be called");
 }
 
 - (void)cancelLoad

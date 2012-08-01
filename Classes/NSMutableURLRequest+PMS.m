@@ -19,7 +19,7 @@
 		urlString = [NSMutableString stringWithFormat:@"%@/api/%@/%@", url, action, item];
 	else
 		urlString = [NSMutableString stringWithFormat:@"%@/api/%@", url, action];
-	DLog(@"urlString: %@", urlString);
+//DLog(@"urlString: %@", urlString);
 	NSString *username = [user URLEncodeString];
 	NSString *password = [pass URLEncodeString];
 	NSString *version = @"1";
@@ -106,7 +106,7 @@
 		urlString = settingsS.redirectUrlString;
 	}
 	
-	DLog(@"username: %@   password: %@", settingsS.username, settingsS.password);
+//DLog(@"username: %@   password: %@", settingsS.username, settingsS.password);
 	
 	return [NSMutableURLRequest requestWithPMSAction:action 
 												item:item

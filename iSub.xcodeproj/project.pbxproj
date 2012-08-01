@@ -3701,6 +3701,7 @@
 				53B15EB3145D02EC007A04F6 /* NSError+ISMSError.m */,
 				537A466F14783F3E004591C9 /* ISMSNotificationNames.h */,
 				5346C20315598A950038A5F8 /* Imports.h */,
+				534F1636139B1F5900127A02 /* buildnumber.xcconfig */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -3722,7 +3723,6 @@
 				53BC2867139AF11400A825F1 /* iSub-Info-Beta.plist */,
 				53CC217D132DC79F003521B5 /* Entitlements.plist */,
 				539797F41162CEB100F41D8B /* Images */,
-				534F1636139B1F5900127A02 /* buildnumber.xcconfig */,
 				5347A1B7148C5044000288D8 /* BassEffectDefaultPresets.plist */,
 			);
 			name = Resources;
@@ -8431,10 +8431,13 @@
 			baseConfigurationReference = 534F1636139B1F5900127A02 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(VALID_ARCHS)";
+				ARCHS = (
+					armv7,
+					armv6,
+				);
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -8474,6 +8477,8 @@
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = "iSub Beta";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -8484,7 +8489,10 @@
 			baseConfigurationReference = 534F1636139B1F5900127A02 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(VALID_ARCHS)";
+				ARCHS = (
+					armv7,
+					armv6,
+				);
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
@@ -8539,7 +8547,10 @@
 			baseConfigurationReference = 534F1636139B1F5900127A02 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(VALID_ARCHS)";
+				ARCHS = (
+					armv7,
+					armv6,
+				);
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";

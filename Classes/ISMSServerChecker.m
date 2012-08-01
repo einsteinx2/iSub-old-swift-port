@@ -28,7 +28,7 @@
 		checker.delegate = theDelegate;
 		return checker;
 	}
-	else if ([settingsS.serverType isEqualToString:PERSONAL_MEDIA_SERVER]) 
+	else if ([settingsS.serverType isEqualToString:WAVEBOX]) 
 	{
 		PMSServerChecker *checker = [[PMSServerChecker alloc] init];
 		checker.delegate = theDelegate;

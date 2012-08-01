@@ -285,7 +285,7 @@
 {
 	//[self.tableView beginUpdates];
 	self.tableView.tableHeaderView.height += y;
-	self.searchBar.y += y;
+	self.searchBar.y += (y - self.searchBar.height); // Doesn't make any sense, but necessary to prevent search box from getting out of place
 	self.blockerButton.frame = self.tableView.tableHeaderView.frame;
 	
 	/*for (UIView *subView in self.tableView.subviews)
@@ -640,7 +640,7 @@
 
 - (NSIndexPath *)tableView :(UITableView *)theTableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	DLog(@"will indexPath.row: %i", indexPath.row);
+//DLog(@"will indexPath.row: %i", indexPath.row);
 	if(self.letUserSelectRow)
 		return indexPath;
 	else
@@ -654,7 +654,7 @@
 	
 	if (viewObjectsS.isCellEnabled)
 	{
-		DLog(@"did indexPath.row: %i", indexPath.row);
+	//DLog(@"did indexPath.row: %i", indexPath.row);
 		Artist *anArtist = nil;
 		if(self.isSearching)
 		{

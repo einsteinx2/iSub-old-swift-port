@@ -291,7 +291,7 @@
 
 - (void)didReceiveMemoryWarning
 {
-	DLog(@"received memory warning");
+//DLog(@"received memory warning");
 }
 
 #pragma mark - Singleton methods

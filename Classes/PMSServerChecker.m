@@ -106,7 +106,7 @@
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
 	NSString *responseString = [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding];
-	DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
+//DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
 	
 	NSDictionary *response = [responseString JSONValue];
 	

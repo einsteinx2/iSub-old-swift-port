@@ -860,7 +860,7 @@
 		}
 		@catch (NSException *exception) 
 		{
-			DLog(@"Exception: %@ - %@", exception.name, exception.reason);
+		//DLog(@"Exception: %@ - %@", exception.name, exception.reason);
 		}*/
 		
 		[self editPlaylistAction:nil];
@@ -905,7 +905,7 @@
 		}
 		@catch (NSException *exception) 
 		{
-			DLog(@"Exception: %@ - %@", exception.name, exception.reason);
+		//DLog(@"Exception: %@ - %@", exception.name, exception.reason);
 		}*/
 		
 		
@@ -1022,7 +1022,7 @@
 					} 
 					else 
 					{
-						DLog(@"There was an error deleting a server playlist, could not create network request");
+					//DLog(@"There was an error deleting a server playlist, could not create network request");
 					}
 				}
 			}
@@ -1447,7 +1447,7 @@ static NSString *kName_Error = @"error";
 			NSString *shufTable = settingsS.isJukeboxEnabled ? @"jukeboxShufflePlaylist" : @"shufflePlaylist";
 			NSString *table = playlistS.isShuffle ? shufTable : currTable;
 			
-			DLog(@"table: %@", table);
+		//DLog(@"table: %@", table);
 			
 			[db executeUpdate:@"DROP TABLE moveTemp"];
 			NSString *query = [NSString stringWithFormat:@"CREATE TABLE moveTemp (%@)", [Song standardSongColumnSchema]];

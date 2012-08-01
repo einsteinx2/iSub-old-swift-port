@@ -53,7 +53,7 @@
 		FMResultSet *result = [db executeQuery:@"SELECT * FROM cacheQueue WHERE finished = 'NO' LIMIT 1"];
 		if ([db hadError]) 
 		{
-			DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+		//DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
 		}
 		else
 		{
@@ -75,7 +75,7 @@
 	if (cacheS.freeSpace <= BytesToMB(25))
 		return;
 	
-	DLog(@"starting download queue");
+//DLog(@"starting download queue");
 	
 	// Check if there's another queued song and that were are on Wifi
 	self.currentQueuedSong = self.currentQueuedSongInDb;
@@ -140,7 +140,7 @@
 
 - (void)stopDownloadQueue
 {
-	DLog(@"stopping download queue");
+//DLog(@"stopping download queue");
 	self.isQueueDownloading = NO;
 	
 	[self.currentStreamHandler cancel];
@@ -278,8 +278,8 @@
 	if ([response isKindOfClass:[NSHTTPURLResponse class]])
 	{
 		NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-		DLog(@"allHeaderFields: %@", [httpResponse allHeaderFields]);
-		DLog(@"statusCode: %i - %@", [httpResponse statusCode], [NSHTTPURLResponse localizedStringForStatusCode:[httpResponse statusCode]]);
+	//DLog(@"allHeaderFields: %@", [httpResponse allHeaderFields]);
+	//DLog(@"statusCode: %i - %@", [httpResponse statusCode], [NSHTTPURLResponse localizedStringForStatusCode:[httpResponse statusCode]]);
 		
 		if ([httpResponse statusCode] >= 500)
 		{
@@ -322,7 +322,7 @@
 	}
 	@catch (NSException *exception) 
 	{
-		DLog(@"Failed to write to file %@, %@ - %@", self.currentQueuedSong, exception.name, exception.description);
+	//DLog(@"Failed to write to file %@, %@ - %@", self.currentQueuedSong, exception.name, exception.description);
 		[self stopDownloadQueue];
 	}
 }
@@ -344,8 +344,8 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	DLog(@"theConnection: %@", theConnection);
-	DLog(@"queue download finished: %@", self.currentQueuedSong.title);
+//DLog(@"theConnection: %@", theConnection);
+//DLog(@"queue download finished: %@", self.currentQueuedSong.title);
 	
 	// Check to see if we're within 100K of the contentLength (to allow some leeway for contentLength estimation of transcoded songs
 	if (self.contentLength != ULLONG_MAX && currentQueuedSong.localFileSize < self.contentLength - BytesToKB(100) && self.numberOfContentLengthFailures < ISMSMaxContentLengthFailures)
@@ -393,7 +393,7 @@
 
 - (void)didReceiveMemoryWarning
 {
-	DLog(@"received memory warning");
+//DLog(@"received memory warning");
 	
 	
 }

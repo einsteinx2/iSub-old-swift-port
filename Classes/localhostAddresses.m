@@ -46,7 +46,7 @@
 	NSString *netIP = [NSString stringWithContentsOfURL:netIPURL encoding:NSUTF8StringEncoding error:nil];
 	if (netIP)
 		[result setObject:netIP forKey:@"www"];
-	DLog(@"IP addresses: %@", result);
+//DLog(@"IP addresses: %@", result);
 	[NSNotificationCenter postNotificationToMainThreadWithName:@"LocalhostAdressesResolved" object:result];
 	
 	[pool release];

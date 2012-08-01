@@ -63,33 +63,23 @@ void CALLBACK MyStreamEndCallback(HSYNC handle, DWORD channel, DWORD data, void 
 {
 	@autoreleasepool 
 	{
-		// Free and remove the channel
-		BASS_StreamFree(channel);
-		
 		BassStream *userInfo = (__bridge BassStream *)user;
 		if (userInfo)
 		{
+
+			// This is the current playing song, remove this one
+			//DLog(@"ending song: %@", userInfo.song);
+			userInfo.bufferSpaceTilSongEnd = userInfo.player.ringBuffer.filledSpaceLength;
+			userInfo.isEnded = YES;
+			
+			// Plug in the next one
 			NSUInteger index = [userInfo.player.streamQueue indexOfObject:userInfo];
-			if (index == 0)
+			userInfo = [userInfo.player.streamQueue objectAtIndexSafe:index+1];
+			//DLog(@"queuing song: %@", userInfo.song);
+			if (userInfo)
 			{
-				// This is the current playing song, remove this one
-				//[sharedInstance.streamQueue removeObjectAtIndex:0];
-				userInfo.bufferSpaceTilSongEnd = userInfo.player.ringBuffer.filledSpaceLength;
-				userInfo.isEnded = YES;
-				
-				// Plug in the next one
-				userInfo = [userInfo.player.streamQueue objectAtIndexSafe:1];
-				if (userInfo)
-				{
-					// There's another stream so play it
-					BASS_Mixer_StreamAddChannel(userInfo.player.mixerStream, userInfo.stream, 0);
-				}
-			}
-			else
-			{
-				// Not sure why this would happen, just remove this stream from the queue
-				//ssert(0 && "somehow this stream ended but was not the current playing stream");
-				//[sharedInstance.streamQueue removeObjectAtIndex:index];
+				// There's another stream so play it
+				BASS_Mixer_StreamAddChannel(userInfo.player.mixerStream, userInfo.stream, 0);
 			}
 		}
 	}
@@ -279,12 +269,21 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 {
 	@autoreleasepool 
 	{
+		//DLog(@"song: %@", userInfo.song);
+		
 		userInfo.isEndedCalled = YES;
 		
 		[socialS playerClearSocial];
 		
 		// Remove the stream from the queue
 		[self.streamQueue removeObjectAtIndexSafe:0];
+		
+		// Remove the stream from the queue
+		if (userInfo)
+		{
+			BASS_StreamFree(userInfo.stream);
+		}
+		[self.streamQueue removeObject:userInfo];
 		
 		// Increment current playlist index
 		[playlistS incrementIndex];
@@ -672,6 +671,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	[EX2Dispatch runInQueue:streamGcdQueue waitUntilDone:NO block:^
 	 {
 		 // Remove any additional streams
+		 // TODO: need to remove this, and not call prepareNextSong when not necessary
 		 NSUInteger count = self.streamQueue.count;
 		 while (count > 2)
 		 {
@@ -703,10 +703,8 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		 
 		 if (!success)
 		 {
-#ifdef DEBUG
 			 NSInteger errorCode = BASS_ErrorGetCode();
 			 DDLogError(@"nextSong stream error: %i - %@", errorCode, [BassWrapper stringFromErrorCode:errorCode]);
-#endif
 			 
 			 // If the stream is currently stuck in the wait loop for partial precaching
 			 // tell the stream manager to download a few more seconds of data

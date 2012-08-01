@@ -357,7 +357,7 @@
 		}
 		NSString *name = [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1];
 		cell.albumNameLabel.text = name;
-		DLog(@"name: %@", name);
+	//DLog(@"name: %@", name);
 		
 		cell.coverArtView.coverArtId = coverArtId;
 		

@@ -32,7 +32,7 @@
 @synthesize theNewRedirectionUrl, settingsTabViewController, helpTabViewController;
 @synthesize isEditing, headerView, segmentedControl;
 
--(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
 		return NO;
@@ -247,7 +247,7 @@
 	settingsS.password = viewObjectsS.serverToEdit.password;
     settingsS.redirectUrlString = self.theNewRedirectionUrl;
 	
-	DLog(@" settingsS.urlString: %@   settingsS.redirectUrlString: %@", settingsS.urlString, settingsS.redirectUrlString);
+//DLog(@" settingsS.urlString: %@   settingsS.redirectUrlString: %@", settingsS.urlString, settingsS.redirectUrlString);
 		
 	if(self == [[self.navigationController viewControllers] objectAtIndexSafe:0] && !IS_IPAD())
 	{
@@ -266,7 +266,7 @@
 		// Cancel any tab loads
 		if ([SUSAllSongsLoader isLoading])
 		{
-			DLog(@"detected all songs loading");
+		//DLog(@"detected all songs loading");
 			viewObjectsS.cancelLoading = YES;
 		}
 		
@@ -411,7 +411,7 @@
 		return;
 	
 	viewObjectsS.serverToEdit = [settingsS.serverList objectAtIndexSafe:indexPath.row];
-	DLog(@"viewObjectsS.serverToEdit.url: %@", viewObjectsS.serverToEdit.url);
+//DLog(@"viewObjectsS.serverToEdit.url: %@", viewObjectsS.serverToEdit.url);
 
 	if (self.isEditing)
 	{
@@ -471,7 +471,7 @@
 		}
 		@catch (NSException *exception) 
 		{
-			DLog(@"Exception: %@ - %@", exception.name, exception.reason);
+		//DLog(@"Exception: %@ - %@", exception.name, exception.reason);
 		}
 		
 		[self.tableView reloadData];

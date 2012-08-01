@@ -76,7 +76,7 @@
 	
 	audioEngineS.startByteOffset = byteOffset;
 	audioEngineS.startSecondsOffset = secondsOffset;
-	DLog(@"startByteOffset: %llu  startSecondsOffset: %f", byteOffset, secondsOffset);
+//DLog(@"startByteOffset: %llu  startSecondsOffset: %f", byteOffset, secondsOffset);
 }
 
 - (void)setupSaveState
@@ -1433,11 +1433,11 @@
 	
 	redirectUrlString = nil;
 	
-	DLog(@"urlString: %@", urlString);
+//DLog(@"urlString: %@", urlString);
 	
 	[self createInitialSettings];
 	
-	DLog(@"urlString: %@", urlString);
+//DLog(@"urlString: %@", urlString);
     
 	// If the settings are not set up, convert them
 	if ([userDefaults boolForKey:@"areSettingsSetup"])
@@ -1449,12 +1449,12 @@
 		}
 	}
 	
-	DLog(@"urlString: %@", urlString);
+//DLog(@"urlString: %@", urlString);
 	
 	// Cache certain settings to memory for speed
 	[self memCacheDefaults];
 	
-	DLog(@"urlString: %@", urlString);
+//DLog(@"urlString: %@", urlString);
 }
 
 + (id)sharedInstance

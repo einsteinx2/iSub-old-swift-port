@@ -133,24 +133,24 @@
 
 - (void)scrobbleSongAsSubmission
 {	
-	DLog(@"Asked to scrobble %@ as submission", playlistS.currentSong.title);
+//DLog(@"Asked to scrobble %@ as submission", playlistS.currentSong.title);
 	if (settingsS.isScrobbleEnabled && !viewObjectsS.isOfflineMode)
 	{
 		Song *currentSong = playlistS.currentSong;
 		[self scrobbleSong:currentSong isSubmission:YES];
-		DLog(@"Scrobbled %@ as submission", currentSong.title);
+	//DLog(@"Scrobbled %@ as submission", currentSong.title);
 	}
 }
 
 - (void)scrobbleSongAsPlaying
 {
-	DLog(@"Asked to scrobble %@ as playing", playlistS.currentSong.title);
+//DLog(@"Asked to scrobble %@ as playing", playlistS.currentSong.title);
 	// If scrobbling is enabled, send "now playing" call
 	if (settingsS.isScrobbleEnabled && !viewObjectsS.isOfflineMode)
 	{
 		Song *currentSong = playlistS.currentSong;
 		[self scrobbleSong:currentSong isSubmission:NO];
-		DLog(@"Scrobbled %@ as playing", currentSong.title);
+	//DLog(@"Scrobbled %@ as playing", currentSong.title);
 	}
 }
 
@@ -196,7 +196,7 @@
 	if ([incrementalData length] > 0)
 	{
 		// Subsonic has been notified, cancel the connection
-		DLog(@"Subsonic has been notified, cancel the connection");
+	//DLog(@"Subsonic has been notified, cancel the connection");
 		[theConnection cancel];
 	}
 }
@@ -216,7 +216,7 @@
 {
 	Song *currentSong = playlistS.currentSong;
 	
-	DLog(@"Asked to tweet %@", currentSong.title);
+//DLog(@"Asked to tweet %@", currentSong.title);
 	
 	if (self.twitterEngine.isAuthorized && settingsS.isTwitterEnabled && !viewObjectsS.isOfflineMode)
 	{
@@ -229,7 +229,7 @@
 			else
 				[self.twitterEngine sendUpdate:[tweet substringToIndex:140]];
 			
-			DLog(@"Tweeted: %@", tweet);
+		//DLog(@"Tweeted: %@", tweet);
 		}
 		else 
 		{
@@ -321,7 +321,7 @@
 
 - (void)didReceiveMemoryWarning
 {
-	DLog(@"received memory warning");
+//DLog(@"received memory warning");
 	
 	
 }

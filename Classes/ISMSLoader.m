@@ -106,7 +106,7 @@
 
 - (void)subsonicErrorCode:(NSInteger)errorCode message:(NSString *)message
 {
-	DLog(@"Subsonic error: %@", message);
+//DLog(@"Subsonic error: %@", message);
 	
 	NSDictionary *dict = [NSDictionary dictionaryWithObject:message forKey:NSLocalizedDescriptionKey];
 	NSError *error = [NSError errorWithDomain:SUSErrorDomain code:errorCode userInfo:dict];
@@ -114,7 +114,7 @@
 	
 	/*if ([parseState isEqualToString: @"allAlbums"])
 	{
-		DLog(@"Subsonic error: %@", message);
+	//DLog(@"Subsonic error: %@", message);
 	}
 	else
 	{
@@ -133,7 +133,7 @@
 		return YES;
 	}
 	
-	DLog(@"delegate (%@) did not respond to loading failed", self.delegate);
+//DLog(@"delegate (%@) did not respond to loading failed", self.delegate);
 	return NO;
 }
 

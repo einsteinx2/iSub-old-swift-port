@@ -1059,7 +1059,7 @@
 	}
 	@catch (NSException *exception) 
 	{
-		DLog(@"Exception: %@ - %@", exception.name, exception.reason);
+	//DLog(@"Exception: %@ - %@", exception.name, exception.reason);
 	}
 }
 

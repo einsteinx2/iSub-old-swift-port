@@ -243,7 +243,7 @@
 			FMResultSet *result = [db executeQuery:query, artistViewController.title];
 			if ([db hadError])
 			{
-				DLog(@"Error grabbing the artists for this genre... Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+			//DLog(@"Error grabbing the artists for this genre... Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
 			}
 			else 
 			{

@@ -28,7 +28,7 @@
 	{
 		return [[SUSSubFolderLoader alloc] initWithDelegate:theDelegate];
 	}
-	else if ([settingsS.serverType isEqualToString:PERSONAL_MEDIA_SERVER]) 
+	else if ([settingsS.serverType isEqualToString:WAVEBOX]) 
 	{
 		return [[PMSSubFolderLoader alloc] initWithDelegate:theDelegate];
 	}

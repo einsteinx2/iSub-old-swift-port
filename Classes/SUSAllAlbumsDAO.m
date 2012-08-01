@@ -43,7 +43,7 @@
 		[db executeUpdate:@"CREATE TEMPORARY TABLE IF NOT EXISTS allAlbumsNameSearch (rowIdInAllAlbums INTEGER)"];
 		value = [db intForQuery:@"SELECT count(*) FROM allAlbumsNameSearch"];
 		
-		DLog(@"allAlbumsNameSearch count: %i   value: %i", [db intForQuery:@"SELECT count(*) FROM allAlbumsNameSearch"], value);
+	//DLog(@"allAlbumsNameSearch count: %i   value: %i", [db intForQuery:@"SELECT count(*) FROM allAlbumsNameSearch"], value);
 	}];
 	return value;
 }
@@ -117,7 +117,7 @@
 		NSString *query = @"INSERT INTO allAlbumsNameSearch SELECT ROWID FROM allAlbums WHERE title LIKE ? LIMIT 100";
 		[db executeUpdate:query, [NSString stringWithFormat:@"%%%@%%", name]];
 		if ([db hadError])
-			DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+		//DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
 		DLog(@"allAlbumsNameSearch count: %i", [db intForQuery:@"SELECT count(*) FROM allAlbumsNameSearch"]);
 	}];
 }

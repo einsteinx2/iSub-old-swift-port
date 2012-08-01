@@ -107,7 +107,7 @@
 	self.enableBasicAuthSwitch.on = settingsS.isBasicAuthEnabled;
 	
 	self.enableSongsTabSwitch.on = settingsS.isSongsTabEnabled;
-	DLog(@"isSongsTabEnabled: %i", settingsS.isSongsTabEnabled);
+//DLog(@"isSongsTabEnabled: %i", settingsS.isSongsTabEnabled);
 	
 	self.recoverSegmentedControl.selectedSegmentIndex = settingsS.recoverSetting;
 	
@@ -719,7 +719,7 @@
 - (void)textFieldDidChange:(UITextField *)textField
 {
 	[self updateCacheSpaceSlider];
-	DLog(@"file size: %llu   formatted: %@", [textField.text fileSizeFromFormat], [NSString formatFileSize:[textField.text fileSizeFromFormat]]);
+//DLog(@"file size: %llu   formatted: %@", [textField.text fileSizeFromFormat], [NSString formatFileSize:[textField.text fileSizeFromFormat]]);
 }
 
 @end

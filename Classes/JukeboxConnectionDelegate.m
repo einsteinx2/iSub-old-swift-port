@@ -73,7 +73,7 @@
 	
 	if (self.isGetInfo)
 	{
-		DLog(@"%@", [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
+	//DLog(@"%@", [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
 		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
 		JukeboxXMLParser *parser = (JukeboxXMLParser*)[[JukeboxXMLParser alloc] initXMLParser];
 		[xmlParser setDelegate:parser];

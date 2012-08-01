@@ -37,7 +37,7 @@
 	{
 		if ([handler.mySong isEqualToSong:aSong])
 		{
-			DLog(@"handler.mySong: %@    aSong: %@", handler.mySong.title, aSong.title);
+		//DLog(@"handler.mySong: %@    aSong: %@", handler.mySong.title, aSong.title);
 			return handler;
 		}
 	}
@@ -418,7 +418,8 @@
 }
 
 - (void)queueStreamForSong:(Song *)song isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload
-{	
+{
+	//DLog(@"queuing stream for song: %@", song.title);
 	[self queueStreamForSong:song byteOffset:0 secondsOffset:0.0 atIndex:[self.handlerStack count] isTempCache:isTemp isStartDownload:isStartDownload];
 }
 
@@ -538,7 +539,7 @@
 	Song *currentSong = playlistS.currentSong;
 	Song *nextSong = playlistS.nextSong;
 	
-	DLog(@"starting playback for %@  file size: %llu", handler.mySong, handler.totalBytesTransferred);
+//DLog(@"starting playback for %@  file size: %llu", handler.mySong, handler.totalBytesTransferred);
 	
 	if ([handler.mySong isEqualToSong:currentSong])
 	{
@@ -633,6 +634,8 @@
 	
 	if (isSuccess)
 	{
+		//DLog(@"finished downloading song: %@", handler.mySong.title);
+		
 		// Mark song as cached
 		if (!handler.isTempCache)
 			handler.mySong.isFullyCached = YES;
@@ -678,7 +681,7 @@
 
 - (void)didReceiveMemoryWarning
 {
-	DLog(@"received memory warning");
+//DLog(@"received memory warning");
 	
 }
 

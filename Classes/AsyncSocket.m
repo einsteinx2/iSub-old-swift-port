@@ -1477,7 +1477,7 @@ Failed:;
 	CFDataRef peeraddr = CFSocketCopyPeerAddress(socket);
 	if(peeraddr == NULL)
 	{
-		DLog(@"AsyncSocket couldn't determine IP version of socket");
+	//DLog(@"AsyncSocket couldn't determine IP version of socket");
 		
 		if (errPtr) *errPtr = [self getSocketError];
 		return NO;

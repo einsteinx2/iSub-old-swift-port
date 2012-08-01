@@ -75,7 +75,7 @@
 		return NO;
 	
 	// Cancel and release the timer
-	DLog(@"canceling timer block");
+//DLog(@"canceling timer block");
 	dispatch_source_cancel(timer); 
 	dispatch_release(timer);
 	timer = nil;

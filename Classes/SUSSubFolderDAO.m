@@ -122,7 +122,7 @@
 		[result next];
 		if ([db hadError]) 
 		{
-			DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+		//DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
 		}
 		else
 		{

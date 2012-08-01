@@ -160,7 +160,7 @@
 	FMResultSet *result = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE ROWID = %i", table, row]];
 	if ([db hadError]) 
 	{
-		DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+	//DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
 	}
 	else
 	{
@@ -198,7 +198,7 @@
 	FMResultSet *result = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE md5 = ?", table], md5];
 	if ([db hadError]) 
 	{
-		DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+	//DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
 	}
 	else
 	{
@@ -246,7 +246,7 @@
 	
 	if ([db hadError]) 
 	{
-		DLog(@"Err inserting song %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+	//DLog(@"Err inserting song %d: %@", [db lastErrorCode], [db lastErrorMessage]);
 	}
 	
 	return ![db hadError];
@@ -268,7 +268,7 @@
 		hadError = [db hadError];
 		if (hadError)
 		{
-			DLog(@"Err inserting song %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+		//DLog(@"Err inserting song %d: %@", [db lastErrorCode], [db lastErrorMessage]);
 		}
 	}];
 	return !hadError;
@@ -284,7 +284,7 @@
 		hadError = [db hadError];
 		if (hadError) 
 		{
-			DLog(@"Err inserting song into genre table %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+		//DLog(@"Err inserting song into genre table %d: %@", [db lastErrorCode], [db lastErrorMessage]);
 		}
 	}];
 	
@@ -301,7 +301,7 @@
 		hadError = [db hadError];
 		if (hadError) 
 		{
-			DLog(@"Err inserting song into cached songs table %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+		//DLog(@"Err inserting song into cached songs table %d: %@", [db lastErrorCode], [db lastErrorMessage]);
 		}
 	}];
 	return !hadError;
@@ -318,7 +318,7 @@
 	
 	if ([self.db hadError]) 
 	{
-		DLog(@"Err removing song from cached songs table %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
+	//DLog(@"Err removing song from cached songs table %d: %@", [self.db lastErrorCode], [self.db lastErrorMessage]);
 	}
 	
 	return ![self.db hadError];*/
@@ -334,7 +334,7 @@
 		hadError = [db hadError];
 		if (hadError) 
 		{
-			DLog(@"Err removing song from cache queue table %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+		//DLog(@"Err removing song from cache queue table %d: %@", [db lastErrorCode], [db lastErrorMessage]);
 		}
 	}];
 	return !hadError;
@@ -362,7 +362,7 @@
 			hadError = [db hadError];
 			if (hadError)
 			{
-				DLog(@"Err adding song to cache queue %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+			//DLog(@"Err adding song to cache queue %d: %@", [db lastErrorCode], [db lastErrorMessage]);
 			}
 		}];
 	}
@@ -441,7 +441,7 @@
 	NSArray *splitPath = [self.path componentsSeparatedByString:@"/"];
 	
 	__block BOOL hadError = YES;
-
+	
 	if ([splitPath count] <= 9)
 	{
 		NSMutableArray *segments = [[NSMutableArray alloc] initWithArray:splitPath];
@@ -507,18 +507,21 @@
 		NSString *genreTest = [db stringForQuery:@"SELECT genre FROM genresSongs WHERE genre = ? LIMIT 1", genre];
 		if (!genreTest)
 		{
+			DLog(@"deleting from genres table");
 			[db executeUpdate:@"DELETE FROM genres WHERE genre = ?", genre];
 			if ([db hadError]) hadError = YES;
 			
 			[db executeUpdate:@"DROP TABLE IF EXISTS genresTemp"];
-			[db executeUpdate:@"CREATE TABLE genresTemp"];
+			[db executeUpdate:@"CREATE TABLE genresTemp (genre TEXT)"];
 			if ([db hadError]) hadError = YES;
+			DLog(@"created genres temp, error %i", hadError);
 			[db executeUpdate:@"INSERT INTO genresTemp SELECT * FROM genres"];
 			if ([db hadError]) hadError = YES;
 			[db executeUpdate:@"DROP TABLE genres"];
 			if ([db hadError]) hadError = YES;
 			[db executeUpdate:@"ALTER TABLE genresTemp RENAME TO genres"];
 			if ([db hadError]) hadError = YES;
+			DLog(@"renamed genrestemp to genres, error %i", hadError);
 			[db executeUpdate:@"CREATE UNIQUE INDEX genreNames ON genres (genre)"];
 			if ([db hadError]) hadError = YES;
 		}

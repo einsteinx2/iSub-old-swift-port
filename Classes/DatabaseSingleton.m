@@ -244,8 +244,10 @@
 			[db executeUpdate:@"CREATE INDEX seg8 ON cachedSongsLayout (seg8)"];
 			[db executeUpdate:@"CREATE INDEX seg9 ON cachedSongsLayout (seg9)"];
 		}
+		DLog(@"checking if genres table exists");
 		if (![db tableExists:@"genres"]) 
 		{
+			DLog(@"doesn't exist, creating genres table");
 			[db executeUpdate:@"CREATE TABLE genres(genre TEXT UNIQUE)"];
 		}
 		if (![db tableExists:@"genresSongs"]) 
@@ -595,7 +597,7 @@
 	FMResultSet *result = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE ROWID = %i", table, row]];
 	if ([db hadError]) 
 	{
-		DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+	//DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
 	}
 	else
 	{
@@ -660,7 +662,7 @@
 	[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO %@ (title, albumId, coverArtId, artistName, artistId) VALUES (?, ?, ?, ?, ?)", table], anAlbum.title, anAlbum.albumId, anAlbum.coverArtId, anAlbum.artistName, anAlbum.artistId];
 	
 	if ([db hadError]) {
-		DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+	//DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
 	}
 	
 	return ![db hadError];
@@ -828,7 +830,7 @@
 
 - (void)didReceiveMemoryWarning
 {
-	DLog(@"received memory warning");
+//DLog(@"received memory warning");
 	
 	
 }

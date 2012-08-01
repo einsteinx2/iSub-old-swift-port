@@ -23,7 +23,7 @@
 - (void)processResponse
 {	            
 	NSString *responseString = [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding];
-	DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
+//DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
 	
 	NSDictionary *response = [responseString JSONValue];
 	
@@ -51,7 +51,7 @@
 		@autoreleasepool 
 		{
 			Song *aSong = [[Song alloc] initWithPMSDictionary:song];
-			DLog(@"aSong: %@", aSong);
+		//DLog(@"aSong: %@", aSong);
 			self.folderLength += aSong.duration.intValue;
 			[self insertSongIntoFolderCache:aSong];
 		}

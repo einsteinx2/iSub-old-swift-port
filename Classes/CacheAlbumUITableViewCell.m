@@ -95,12 +95,12 @@
 	
 	NSUInteger segment = [newSegments count];
 
-	NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ", segment+1];
+	NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = %i ", segment+1];
 	for (int i = 2; i <= segment; i++)
 	{
 		[query appendFormat:@" AND seg%i = ? ", i];
 	}
-	[query appendFormat:@"ORDER BY seg%i COLLATE NOCASE", segment+1, segment+1];
+	[query appendFormat:@"ORDER BY seg%i COLLATE NOCASE", segment+1];
 	//DLog(@"query: %@", query);
 	NSMutableArray *songMd5s = [[NSMutableArray alloc] initWithCapacity:0];
 	[databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)
@@ -152,12 +152,12 @@
 	
 	NSUInteger segment = [newSegments count];
 	
-	NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ", segment+1];
+	NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = %i ", segment+1];
 	for (int i = 2; i <= segment; i++)
 	{
 		[query appendFormat:@" AND seg%i = ? ", i];
 	}
-	[query appendFormat:@"ORDER BY seg%i COLLATE NOCASE", segment+1, segment+1];
+	[query appendFormat:@"ORDER BY seg%i COLLATE NOCASE", segment+1];
 	
 	NSMutableArray *songMd5s = [NSMutableArray arrayWithCapacity:20];
 	[databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)

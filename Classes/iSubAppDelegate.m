@@ -106,8 +106,8 @@
 	fileLogger.logFileManager.maximumNumberOfLogFiles = 7;
 	[DDLog addLogger:fileLogger];
 	
-	DLog(@"settingsS: %@", settingsS);
-	DLog(@"urlString: %@", settingsS.urlString);
+//DLog(@"settingsS: %@", settingsS);
+//DLog(@"urlString: %@", settingsS.urlString);
 	
 	// Setup network reachability notifications
 	self.wifiReach = [Reachability reachabilityForLocalWiFi];
@@ -120,7 +120,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(batteryStateChanged:) name:@"UIDeviceBatteryStateDidChangeNotification" object:[UIDevice currentDevice]];
 	[self batteryStateChanged:nil];	
 	
-	DLog(@"urlString: %@", settingsS.urlString);
+//DLog(@"urlString: %@", settingsS.urlString);
 
 	// Handle offline mode
 	if (settingsS.isForceOfflineMode)
@@ -144,7 +144,7 @@
 		viewObjectsS.isOfflineMode = NO;
 	}
 	
-	DLog(@"urlString: %@", settingsS.urlString);
+//DLog(@"urlString: %@", settingsS.urlString);
 	
 	showIntro = NO;
 	if (settingsS.isTestServer)
@@ -160,7 +160,7 @@
 		}
 	}
 	
-	DLog(@"urlString: %@", settingsS.urlString);
+//DLog(@"urlString: %@", settingsS.urlString);
 	
 	// Make sure audio engine and cache singletons get loaded
 	[AudioEngine sharedInstance];
@@ -174,7 +174,7 @@
 	[self loadHockeyApp];
 	//[self loadCrittercism];
 	
-	DLog(@"urlString: %@", settingsS.urlString);
+//DLog(@"urlString: %@", settingsS.urlString);
 	
 	[self loadInAppPurchaseStore];
 		
@@ -184,7 +184,7 @@
 		[socialS createTwitterEngine];
 	}
 	
-	DLog(@"urlString: %@", settingsS.urlString);
+//DLog(@"urlString: %@", settingsS.urlString);
 		
 	// Create and display UI
 	introController = nil;
@@ -217,7 +217,7 @@
 		[viewControllers addObject:supportNavigationController];
 		[mainTabBarController setViewControllers:viewControllers animated:NO];
 		[vc logMethods];
-		DLog(@"toolbarItems: %@", [vc toolbarItems]);*/
+	//DLog(@"toolbarItems: %@", [vc toolbarItems]);*/
 		
 		//DLog(@"isOfflineMode: %i", viewObjectsS.isOfflineMode);
 		if (viewObjectsS.isOfflineMode)
@@ -247,7 +247,7 @@
 		window.backgroundColor = viewObjectsS.windowColor;
 	[window makeKeyAndVisible];	
 	
-	DLog(@"urlString: %@", settingsS.urlString);
+//DLog(@"urlString: %@", settingsS.urlString);
 	
 	// Check the server status in the background
     if (!viewObjectsS.isOfflineMode)
@@ -273,7 +273,7 @@
 
 - (void)checkServer
 {
-	DLog(@"urlString: %@", settingsS.urlString);
+//DLog(@"urlString: %@", settingsS.urlString);
 	ISMSUpdateChecker *updateChecker = [[ISMSUpdateChecker alloc] init];
 	[updateChecker checkForUpdate];
 
@@ -317,7 +317,7 @@
 		}
 	}
 	
-	DLog(@"redirectUrlString: %@", redirectUrlString);
+//DLog(@"redirectUrlString: %@", redirectUrlString);
 	
 	settingsS.redirectUrlString = [NSString stringWithString:redirectUrlString];
 }
@@ -464,7 +464,7 @@
 
 - (void)crittercismDidCrashOnLastLoad
 {
-	DLog(@"App crashed on last load. Do something here.");
+//DLog(@"App crashed on last load. Do something here.");
 	
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh no! :(" message:@"It looks like iSub crashed recently!\n\nWell never fear, iSub support is happy to help. \n\nWould you like to send an email to support?" delegate:self cancelButtonTitle:@"No Thanks" otherButtonTitles:@"Yes Please", nil];
 	alert.tag = 7;
@@ -487,10 +487,10 @@
 			[SFHFKeychainUtils storeUsername:kFeatureCacheId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
 			[SFHFKeychainUtils storeUsername:kFeatureAllId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
 			
-			DLog(@"is kFeaturePlaylistsId enabled: %i", [MKStoreManager isFeaturePurchased:kFeaturePlaylistsId]);
-			DLog(@"is kFeatureJukeboxId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureJukeboxId]);
-			DLog(@"is kFeatureCacheId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureCacheId]);
-			DLog(@"is kFeatureAllId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureAllId]);
+		//DLog(@"is kFeaturePlaylistsId enabled: %i", [MKStoreManager isFeaturePurchased:kFeaturePlaylistsId]);
+		//DLog(@"is kFeatureJukeboxId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureJukeboxId]);
+		//DLog(@"is kFeatureCacheId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureCacheId]);
+		//DLog(@"is kFeatureAllId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureAllId]);
 		}
 	}
 }
@@ -536,12 +536,12 @@
 
 - (void)displayInfoUpdate:(NSNotification *) notification
 {
-	DLog(@"displayInfoUpdate:");
+//DLog(@"displayInfoUpdate:");
 	
 	if(notification)
 	{
 		addresses = [[notification object] copy];
-		DLog(@"addresses: %@", addresses);
+	//DLog(@"addresses: %@", addresses);
 	}
 	
 	if(addresses == nil)
@@ -574,7 +574,7 @@
 		info = [info stringByAppendingString:@"Web: Unable to determine external IP\n"];
 	
 	//displayInfo.text = info;
-	DLog(@"info: %@", info);
+//DLog(@"info: %@", info);
 }
 
 
@@ -597,7 +597,7 @@
 		NSError *error;
 		if(![httpServer start:&error])
 		{
-			DLog(@"Error starting HTTP Server: %@", error);
+		//DLog(@"Error starting HTTP Server: %@", error);
 		}
 		
 		[self displayInfoUpdate:nil];
@@ -657,7 +657,7 @@
 					// Sleep early is nothing is happening after 500 seconds
 					if ([application backgroundTimeRemaining] < 200.0 && !cacheQueueManagerS.isQueueDownloading)
 					{
-						DLog("Sleeping early, isQueueListDownloading: %i", cacheQueueManagerS.isQueueDownloading);
+					//DLog("Sleeping early, isQueueListDownloading: %i", cacheQueueManagerS.isQueueDownloading);
 						[application endBackgroundTask:backgroundTask];
 						backgroundTask = UIBackgroundTaskInvalid;
 						break;

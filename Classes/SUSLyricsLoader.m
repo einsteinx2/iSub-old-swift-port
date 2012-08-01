@@ -74,14 +74,14 @@
 				self.loadedLyrics = [TBXML textForElement:lyrics];
 				if ([self.loadedLyrics isEqualToString:@""])
 				{
-					DLog(@"lyrics tag found, but it's empty");
+				//DLog(@"lyrics tag found, but it's empty");
 					self.loadedLyrics = nil;
 					NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NoLyricsFound];
 					[self informDelegateLoadingFailed:error];
 				}
 				else
 				{
-					DLog(@"lyrics tag found, and it's got lyrics! \\o/");
+				//DLog(@"lyrics tag found, and it's got lyrics! \\o/");
 					[self insertLyricsIntoDb];
 					[self informDelegateLoadingFinished];
 					
@@ -90,7 +90,7 @@
 			}
 			else
 			{
-				DLog(@"no lyrics tag found");
+			//DLog(@"no lyrics tag found");
 				self.loadedLyrics = nil;
 				NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NoLyricsElement];
 				[self informDelegateLoadingFailed:error];

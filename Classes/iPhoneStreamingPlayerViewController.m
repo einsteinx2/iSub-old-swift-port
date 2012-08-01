@@ -102,7 +102,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {
 	[super viewDidLoad];
 	
-	DLog(@"coverArtImageView class: %@", NSStringFromClass(coverArtImageView.class));
+//DLog(@"coverArtImageView class: %@", NSStringFromClass(coverArtImageView.class));
 	
 	extraButtonsButtonOffImage = [UIImage imageNamed:@"controller-extras.png"];
 	extraButtonsButtonOnImage = [UIImage imageNamed:@"controller-extras-on.png"];
@@ -673,7 +673,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
     [self setSongTitle];
 	coverArtImageView.coverArtId = currentSong.coverArtId;
-	DLog(@"player coverArtId: %@", currentSong.coverArtId);
+//DLog(@"player coverArtId: %@", currentSong.coverArtId);
     [self createReflection];
     
 	// Update the icon in top right
@@ -1258,7 +1258,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		}
 		
 		byteOffset = [BassWrapper estimateBitrate:audioEngineS.player.currentStream] * 128 * progressSlider.value;
-		DLog(@"bitrate: %i slider: %f byteOffset: %i localFileSize: %llu", [BassWrapper estimateBitrate:audioEngineS.player.currentStream], progressSlider.value, byteOffset, currentSong.localFileSize);
+	//DLog(@"bitrate: %i slider: %f byteOffset: %i localFileSize: %llu", [BassWrapper estimateBitrate:audioEngineS.player.currentStream], progressSlider.value, byteOffset, currentSong.localFileSize);
 		
 		if (currentSong.isTempCached)
 		{
@@ -1376,7 +1376,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		NSString *currTable = settingsS.isJukeboxEnabled ? @"jukeboxCurrentPlaylist" : @"currentPlaylist";
 		NSString *shufTable = settingsS.isJukeboxEnabled ? @"jukeboxShufflePlaylist" : @"shufflePlaylist";
 		NSString *table = playlistS.isShuffle ? shufTable : currTable;
-		DLog(@"table: %@", table);
+	//DLog(@"table: %@", table);
 		
 		// Save the playlist
 		NSString *dbName = viewObjectsS.isOfflineMode ? @"%@/offlineCurrentPlaylist.db" : @"%@/%@currentPlaylist.db";
@@ -1494,7 +1494,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (IBAction)currentAlbumPressed:(id)sender
 {
-	DLog(@"parentId: %@", currentSong.parentId);
+//DLog(@"parentId: %@", currentSong.parentId);
 }
 
 - (void)updateDownloadProgress

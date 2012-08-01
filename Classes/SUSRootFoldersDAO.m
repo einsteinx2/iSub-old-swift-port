@@ -198,8 +198,7 @@
 {
 	[self.dbQueue inDatabase:^(FMDatabase *db)
 	{
-		NSString *query = [NSString stringWithFormat:@"DELETE FROM rootFolderNameSearch", self.tableModifier];
-		[db executeUpdate:query];
+		[db executeUpdate:@"DELETE FROM rootFolderNameSearch"];
 	}];
 }
 
@@ -217,7 +216,7 @@
 		query = [NSString stringWithFormat:@"INSERT INTO rootFolderNameSearch SELECT * FROM rootFolderNameCache%@ WHERE name LIKE ? LIMIT 100", self.tableModifier];
 		[db executeUpdate:query, [NSString stringWithFormat:@"%%%@%%", name]];
 		if ([db hadError]) {
-			DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+		//DLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
 		}
 	}];
 }

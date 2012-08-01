@@ -108,18 +108,18 @@
 
 -(void)oneTap
 {
-	DLog(@"Single tap");
+//DLog(@"Single tap");
 }
 
 -(void)twoTaps
 {
-	DLog(@"Double tap");
+//DLog(@"Double tap");
 	//[self reloadCoverArt];
 }
 
 -(void)threeTaps
 {
-	DLog(@"Triple tap");
+//DLog(@"Triple tap");
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event 
@@ -165,8 +165,8 @@
 	[self.activityIndicator removeFromSuperview];
 	self.activityIndicator = nil;
 	
-	DLog(@"isLarge: %@", NSStringFromBOOL(self.isLarge));
-	DLog(@"delegate: %@", self.delegate);
+//DLog(@"isLarge: %@", NSStringFromBOOL(self.isLarge));
+//DLog(@"delegate: %@", self.delegate);
 	
 	self.image = self.coverArtDAO.coverArtImage;
 	self.coverArtDAO = nil;

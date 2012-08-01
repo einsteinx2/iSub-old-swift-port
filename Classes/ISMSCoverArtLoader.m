@@ -157,7 +157,7 @@ static void initialize_navigationBarImages()
 						parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(size), @"size", n2N(self.coverArtId), @"id", nil];
 						request = [NSMutableURLRequest requestWithSUSAction:@"getCoverArt" parameters:parameters];
 					}
-					else if ([settingsS.serverType isEqualToString:PERSONAL_MEDIA_SERVER]) 
+					else if ([settingsS.serverType isEqualToString:WAVEBOX]) 
 					{
 						parameters = [NSDictionary dictionaryWithObject:n2N(size) forKey:@"size"];
 						request = [NSMutableURLRequest requestWithPMSAction:@"cover" item:self.coverArtId parameters:parameters];

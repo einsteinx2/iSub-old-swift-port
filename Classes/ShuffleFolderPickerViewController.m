@@ -52,7 +52,7 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
 	NSDictionary *folders = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];*/
 	
 	NSDictionary *folders = [SUSRootFoldersDAO folderDropdownFolders];
-	DLog(@"folders: %@", folders);
+//DLog(@"folders: %@", folders);
 	
 	NSArray *allFoldersKeyPair = nil;
 	self.sortedFolders = [NSMutableArray arrayWithCapacity:[folders count]];
@@ -126,7 +126,7 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-	DLog(@"[sortedFolders count]: %i", [sortedFolders count]);
+//DLog(@"[sortedFolders count]: %i", [sortedFolders count]);
     return [sortedFolders count];
 }
 

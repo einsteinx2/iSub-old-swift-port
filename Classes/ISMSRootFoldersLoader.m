@@ -20,7 +20,7 @@
 	{
 		return [[SUSRootFoldersLoader alloc] initWithDelegate:theDelegate];
 	}
-	else if ([settingsS.serverType isEqualToString:PERSONAL_MEDIA_SERVER]) 
+	else if ([settingsS.serverType isEqualToString:WAVEBOX]) 
 	{
 		return [[PMSRootFoldersLoader alloc] initWithDelegate:theDelegate];
 	}

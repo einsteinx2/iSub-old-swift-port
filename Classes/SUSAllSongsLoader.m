@@ -123,7 +123,7 @@ static NSInteger order (id a, id b, void* context)
 		{
 			self.currentRow = [databaseS.allSongsDbQueue intForQuery:@"SELECT albumNum FROM resumeLoad"];
 			self.albumCount = [databaseS.allAlbumsDbQueue intForQuery:@"SELECT COUNT(*) FROM allAlbumsUnsorted"];
-			DLog(@"albumCount: %i", albumCount);
+		//DLog(@"albumCount: %i", albumCount);
 			
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AllSongsLoadingAlbums];
 			
@@ -133,7 +133,7 @@ static NSInteger order (id a, id b, void* context)
 		{
 			self.currentRow = [databaseS.allSongsDbQueue intForQuery:@"SELECT albumNum FROM resumeLoad"];
 			self.albumCount = [databaseS.allAlbumsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM subalbums%i", iteration]];
-			DLog(@"subalbums%i albumCount: %i", self.iteration, self.albumCount);
+		//DLog(@"subalbums%i albumCount: %i", self.iteration, self.albumCount);
 			
 			if (self.albumCount > 0)
 			{
@@ -149,13 +149,13 @@ static NSInteger order (id a, id b, void* context)
 					[db executeUpdate:@"UPDATE resumeLoad SET albumNum = ?, iteration = ?", [NSNumber numberWithInt:0], [NSNumber numberWithInt:self.iteration]];
 				}];
 				
-				DLog(@"calling loadSort");
+			//DLog(@"calling loadSort");
 				[self loadSort];
 			}
 		}
 		else if (self.iteration == 4)
 		{
-			DLog(@"calling loadSort");
+		//DLog(@"calling loadSort");
 			[self loadSort];
 		}
 		else if (self.iteration == 5)
@@ -194,7 +194,7 @@ static NSInteger order (id a, id b, void* context)
 {
 	@autoreleasepool 
 	{
-		DLog(@"url md5: %@", [settingsS.urlString md5]);
+	//DLog(@"url md5: %@", [settingsS.urlString md5]);
 		
 		// Remove the old databases
 		[databaseS.allAlbumsDbQueue close]; databaseS.allAlbumsDbQueue = nil;
@@ -281,7 +281,7 @@ static NSInteger order (id a, id b, void* context)
 	if (self.iteration == -1)
 	{
 		self.currentArtist = [self.rootFolders artistForPosition:self.currentRow];
-		DLog(@"current artist: %@", self.currentArtist.name);
+	//DLog(@"current artist: %@", self.currentArtist.name);
 		
 		[self sendArtistNotification:self.currentArtist.name];
 	}
@@ -291,7 +291,7 @@ static NSInteger order (id a, id b, void* context)
 			self.currentAlbum = [databaseS albumFromDbRow:self.currentRow inTable:@"allAlbumsUnsorted" inDatabaseQueue:databaseS.allAlbumsDbQueue];
 		else
 			self.currentAlbum = [databaseS albumFromDbRow:self.currentRow inTable:[NSString stringWithFormat:@"subalbums%i", self.iteration] inDatabaseQueue:databaseS.allAlbumsDbQueue];
-		DLog(@"current album: %@", self.currentAlbum.title);
+	//DLog(@"current album: %@", self.currentAlbum.title);
 		
 		self.currentArtist = [Artist artistWithName:self.currentAlbum.artistName andArtistId:self.currentAlbum.artistId];
 		
@@ -316,11 +316,11 @@ static NSInteger order (id a, id b, void* context)
 	{
 		if (self.iteration == -1)
 		{
-			DLog(@"%@", [NSString stringWithFormat:@"There was an error grabbing the song list for artist: %@", self.currentArtist.name]);
+		//DLog(@"%@", [NSString stringWithFormat:@"There was an error grabbing the song list for artist: %@", self.currentArtist.name]);
 		}
 		else
 		{
-			DLog(@"%@", [NSString stringWithFormat:@"There was an error grabbing the song list for album: %@", self.currentAlbum.title]);
+		//DLog(@"%@", [NSString stringWithFormat:@"There was an error grabbing the song list for album: %@", self.currentAlbum.title]);
 		}
 	}
 }
@@ -334,7 +334,7 @@ static NSInteger order (id a, id b, void* context)
 			// Sort the tables
 			[db executeUpdate:@"DROP TABLE IF EXISTS allAlbums"];
 			[db executeUpdate:@"CREATE VIRTUAL TABLE allAlbums USING FTS3(title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT, tokenize=porter)"];
-			DLog(@"sorting allAlbums");
+		//DLog(@"sorting allAlbums");
 			[db executeUpdate:@"INSERT INTO allAlbums SELECT * FROM allAlbumsUnsorted ORDER BY title COLLATE NOCASE"];
 		}];
 		
@@ -343,7 +343,7 @@ static NSInteger order (id a, id b, void* context)
 			[db executeUpdate:@"DROP TABLE IF EXISTS allSongs"];
 			NSString *query = [NSString stringWithFormat:@"CREATE VIRTUAL TABLE allSongs USING FTS3 (%@, tokenize=porter)", [Song standardSongColumnSchema]];
 			[db executeUpdate:query];
-			DLog(@"sorting allSongs");
+		//DLog(@"sorting allSongs");
 			[db executeUpdate:@"INSERT INTO allSongs SELECT * FROM allSongsUnsorted ORDER BY title COLLATE NOCASE"];
 		}];
 		
@@ -351,7 +351,7 @@ static NSInteger order (id a, id b, void* context)
 		{
 			[db executeUpdate:@"DROP TABLE IF EXISTS genres"];
 			[db executeUpdate:@"CREATE TABLE genres (genre TEXT UNIQUE)"];
-			DLog(@"sorting genres");
+		//DLog(@"sorting genres");
 			[db executeUpdate:@"INSERT INTO genres SELECT * FROM genresUnsorted ORDER BY genre COLLATE NOCASE"];
 		}];
 		
@@ -375,7 +375,7 @@ static NSInteger order (id a, id b, void* context)
 			[db executeUpdate:@"DROP TABLE genresTemp"];
 		}];
 
-		DLog(@"calling loadFinish");
+	//DLog(@"calling loadFinish");
 		[self loadFinish];
 	}
 }
@@ -419,7 +419,7 @@ static NSInteger order (id a, id b, void* context)
 					
 					NSString *name = [section objectAtIndexSafe:0];
 					NSNumber *position = [section objectAtIndexSafe:1];
-					DLog(@"position: %i", [position intValue]);
+				//DLog(@"position: %i", [position intValue]);
 					NSNumber *count = nil;
 					if (nextSection)
 						count = [NSNumber numberWithInt:([[nextSection objectAtIndexSafe:1] intValue] - [position intValue])];
@@ -873,7 +873,7 @@ static NSString *kName_Error = @"error";
 				}
 				else if (self.iteration == 4)
 				{
-					DLog(@"calling loadSort");
+				//DLog(@"calling loadSort");
 					[self loadSort];
 				}
 			}
@@ -942,7 +942,7 @@ static NSString *kName_Error = @"error";
 				}
 				else if (self.iteration == 4)
 				{
-					DLog(@"calling loadSort");
+				//DLog(@"calling loadSort");
 					[self loadSort];
 				}
 			}

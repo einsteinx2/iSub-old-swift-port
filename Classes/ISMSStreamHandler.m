@@ -175,7 +175,7 @@
 		}
 		self.request = [NSMutableURLRequest requestWithSUSAction:@"stream" parameters:parameters byteOffset:byteOffset];
 	}
-	else if ([settingsS.serverType isEqualToString:PERSONAL_MEDIA_SERVER]) 
+	else if ([settingsS.serverType isEqualToString:WAVEBOX]) 
 	{
 		self.request = [NSMutableURLRequest requestWithPMSAction:@"stream" item:self.mySong.songId parameters:nil byteOffset:byteOffset];
 	}
@@ -302,8 +302,8 @@
 		if ([response isKindOfClass:[NSHTTPURLResponse class]])
 		{
 			NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-			DLog(@"allHeaderFields: %@", [httpResponse allHeaderFields]);
-			DLog(@"statusCode: %i - %@", [httpResponse statusCode], [NSHTTPURLResponse localizedStringForStatusCode:[httpResponse statusCode]]);
+		//DLog(@"allHeaderFields: %@", [httpResponse allHeaderFields]);
+		//DLog(@"statusCode: %i - %@", [httpResponse statusCode], [NSHTTPURLResponse localizedStringForStatusCode:[httpResponse statusCode]]);
 			
 			if ([httpResponse statusCode] >= 500)
 			{
@@ -380,14 +380,14 @@
 			}
 			@catch (NSException *exception) 
 			{
-				DLog(@"Failed to write to file %@, %@ - %@", self.mySong, exception.name, exception.description);
+			//DLog(@"Failed to write to file %@, %@ - %@", self.mySong, exception.name, exception.description);
 				[EX2Dispatch runInMainThreadAndWaitUntilDone:NO block:^{ [self cancel]; }];
 			}
 			
 			// Notify delegate if enough bytes received to start playback
 			if (!self.isDelegateNotifiedToStartPlayback && self.totalBytesTransferred >= ISMSMinBytesToStartPlayback(self.bitrate))
 			{
-				DLog(@"telling player to start, min bytes: %u, total bytes: %llu, bitrate: %u", ISMSMinBytesToStartPlayback(self.bitrate), self.totalBytesTransferred, self.bitrate);
+			//DLog(@"telling player to start, min bytes: %u, total bytes: %llu, bitrate: %u", ISMSMinBytesToStartPlayback(self.bitrate), self.totalBytesTransferred, self.bitrate);
 				self.isDelegateNotifiedToStartPlayback = YES;
 				//DLog(@"player told to start playback");
 				[EX2Dispatch runInMainThreadAndWaitUntilDone:NO block:^{ [self startPlaybackInternal]; }];
@@ -395,7 +395,7 @@
 			
 			// Log progress
 			if (isProgressLoggingEnabled)
-				DLog(@"downloadedLengthA:  %llu   bytesRead: %i", self.totalBytesTransferred, dataLength);
+			//DLog(@"downloadedLengthA:  %llu   bytesRead: %i", self.totalBytesTransferred, dataLength);
 			
 			// If near beginning of file, don't throttle
 			if (self.totalBytesTransferred < ISMSMinBytesToStartLimiting(self.bitrate))
@@ -422,7 +422,7 @@
 					delay = (speedDifferenceFactor * intervalSinceLastThrottle) - intervalSinceLastThrottle;
 					
 					if (isThrottleLoggingEnabled)
-						DLog(@"Pausing for %f  interval: %f  bytesTransferred: %llu maxBytes: %f", delay, intervalSinceLastThrottle, self.bytesTransferred, maxBytesPerTotalInterval);
+					//DLog(@"Pausing for %f  interval: %f  bytesTransferred: %llu maxBytes: %f", delay, intervalSinceLastThrottle, self.bytesTransferred, maxBytesPerTotalInterval);
 					
 					self.bytesTransferred = 0;
 				}
@@ -474,7 +474,7 @@
 				
 				double speedInBytes = (double)transferredSinceLastCheck / speedInteval;
 				double speedInKbytes = speedInBytes / 1024.;
-				DLog(@"rate: %f  speedInterval: %f  transferredSinceLastCheck: %llu", speedInKbytes, speedInteval, transferredSinceLastCheck);
+			//DLog(@"rate: %f  speedInterval: %f  transferredSinceLastCheck: %llu", speedInKbytes, speedInteval, transferredSinceLastCheck);
 				
 				self.speedLoggingLastSize = self.totalBytesTransferred;
 				self.speedLoggingDate = [NSDate date];
@@ -518,8 +518,8 @@
 // loadingThread
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
-	DLog(@"Connection Failed for %@", mySong.title);
-	DLog(@"error domain: %@  code: %i description: %@", error.domain, error.code, error.description);
+//DLog(@"Connection Failed for %@", mySong.title);
+//DLog(@"error domain: %@  code: %i description: %@", error.domain, error.code, error.description);
 	
 	// Perform these operations on the main thread
 	[EX2Dispatch runInMainThreadAndWaitUntilDone:YES block:^{ [self didFailInternal:error]; }];
@@ -548,8 +548,8 @@
 // loadingThread
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {		
-	DLog(@"Connection Finished Successfully for %@", mySong.title);
-	DLog(@"localSize: %llu   contentLength: %llu", mySong.localFileSize, self.contentLength);
+//DLog(@"Connection Finished Successfully for %@", mySong.title);
+//DLog(@"localSize: %llu   contentLength: %llu", mySong.localFileSize, self.contentLength);
 		
 	// Check to see if we're within 100K of the contentLength (to allow some leeway for contentLength estimation of transcoded songs
 	if (self.contentLength != ULLONG_MAX && mySong.localFileSize < self.contentLength && self.numberOfContentLengthFailures < ISMSMaxContentLengthFailures)

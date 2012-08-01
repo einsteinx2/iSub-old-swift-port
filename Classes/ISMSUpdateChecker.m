@@ -173,7 +173,7 @@
 			}
 			@catch (NSException *exception) 
 			{
-				DLog(@"Range exception checking update version - %@: %@", [exception name], [exception reason]);
+			//DLog(@"Range exception checking update version - %@: %@", [exception name], [exception reason]);
 			}
 		}
 	}

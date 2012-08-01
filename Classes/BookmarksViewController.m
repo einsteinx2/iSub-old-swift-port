@@ -347,7 +347,7 @@
 		}
 		@catch (NSException *exception) 
 		{
-			DLog(@"Exception: %@ - %@", exception.name, exception.reason);
+		//DLog(@"Exception: %@ - %@", exception.name, exception.reason);
 		}
 		
 		
@@ -584,7 +584,7 @@
 		NSString *currTable = settingsS.isJukeboxEnabled ? @"jukeboxCurrentPlaylist" : @"currentPlaylist";
 		NSString *shufTable = settingsS.isJukeboxEnabled ? @"jukeboxShufflePlaylist" : @"shufflePlaylist";
 		NSString *table = playlistS.isShuffle ? shufTable : currTable;
-		DLog(@"loading table: %@", table);
+	//DLog(@"loading table: %@", table);
 		
 		[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
 		{

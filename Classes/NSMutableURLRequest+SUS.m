@@ -22,7 +22,7 @@ static NSSet *setOfVersions = nil;
 
 + (void)initialize
 {
-	DLog(@"NSMutableURLRequest initialize called");
+//DLog(@"NSMutableURLRequest initialize called");
     ver1_0_0 = [[NSArray alloc] initWithObjects:@"ping", @"getLicense", @"getMusicFolders", @"getNowPlaying", @"getIndexes", @"getMusicDirectory", @"search", @"getPlaylists", @"getPlaylist", @"download", @"stream", @"getCoverArt", @"1.0.0", nil];
     ver1_2_0 = [[NSArray alloc] initWithObjects:@"createPlaylist", @"deletePlaylist", @"getChatMessages", @"addChatMessage", @"getAlbumList", @"getRandomSongs", @"getLyrics", @"jukeboxControl", @"1.2.0", nil];
     ver1_3_0 = [[NSArray alloc] initWithObjects:@"getUser", @"deleteUser", @"1.3.0", nil];
@@ -154,7 +154,7 @@ static NSSet *setOfVersions = nil;
 		urlString = settingsS.redirectUrlString;
 	}
 	
-	DLog(@"username: %@   password: %@", settingsS.username, settingsS.password);
+//DLog(@"username: %@   password: %@", settingsS.username, settingsS.password);
 	
 	return [NSMutableURLRequest requestWithSUSAction:action 
 										urlString:urlString 

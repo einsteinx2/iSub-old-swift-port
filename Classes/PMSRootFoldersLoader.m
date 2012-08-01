@@ -46,7 +46,7 @@
 	//NSDate *startTime = [NSDate date];
 	
 	NSString *responseString = [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding];
-	DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
+//DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
 	
 	NSDictionary *response = [responseString JSONValue];
 	
@@ -95,7 +95,7 @@
 		NSString *name = [index objectAtIndex:0];
 		NSInteger row = [[index objectAtIndex:1] intValue];
 		NSInteger count = nextIndex ? [[nextIndex objectAtIndex:1] intValue] - row : totalCount - row;
-		DLog(@"name: %@  row: %i  count: %i", name, row, count);
+	//DLog(@"name: %@  row: %i  count: %i", name, row, count);
 		[self addRootFolderIndexToCache:row count:count name:name];
 	}*/
 	[self addRootFolderIndexToCache:1 count:totalCount name:@"All"];

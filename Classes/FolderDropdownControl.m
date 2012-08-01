@@ -334,14 +334,14 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 		[xmlParser setDelegate:self];
 		[xmlParser parse];
 	}
-	else if ([settingsS.serverType isEqualToString:PERSONAL_MEDIA_SERVER])
+	else if ([settingsS.serverType isEqualToString:WAVEBOX])
 	{
 		self.updatedfolders = [[NSMutableDictionary alloc] init];
 		[self.updatedfolders setObject:@"All Folders" forKey:[NSNumber numberWithInt:-1]];
 		
 		
 		NSString *responseString = [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding];
-		DLog(@"folder dropdown: %@", responseString);
+	//DLog(@"folder dropdown: %@", responseString);
 		NSDictionary *response = [responseString JSONValue];
 		
 		NSArray *responseFolders = [response objectForKey:@"folders"];
@@ -362,7 +362,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
-	DLog(@"Error parsing update XML response");
+//DLog(@"Error parsing update XML response");
 }
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName 

@@ -357,7 +357,7 @@
 	{
 		NSDictionary *userInfo = [notification userInfo];
 		NSString *folderId = [NSString stringWithFormat:@"%i", [[userInfo objectForKey:@"folderId"] intValue]];
-		DLog(@"folderId: %@    %i", folderId, [[userInfo objectForKey:@"folderId"] intValue]);
+	//DLog(@"folderId: %@    %i", folderId, [[userInfo objectForKey:@"folderId"] intValue]);
 		
 		if ([folderId intValue] < 0)
             parameters = [NSDictionary dictionaryWithObject:@"100" forKey:@"size"];
@@ -586,7 +586,7 @@
 	[self.searchBar resignFirstResponder];
 	
 	NSString *searchTerms = [searchBar.text stringByTrimmingLeadingAndTrailingWhitespace];
-	DLog(@"-%@-", searchTerms);
+//DLog(@"-%@-", searchTerms);
 	
     NSDictionary *parameters = nil;
     NSString *action = nil;
@@ -693,7 +693,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-	DLog(@"received data: %@", [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
+//DLog(@"received data: %@", [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
 	
 	if (isSearch)
 	{

@@ -149,7 +149,7 @@
 		theServer.url = self.urlField.text;
 		theServer.username = self.usernameField.text;
 		theServer.password = self.passwordField.text;
-		theServer.type = PERSONAL_MEDIA_SERVER;
+		theServer.type = WAVEBOX;
 		
 		if (!settingsS.serverList)
 			settingsS.serverList = [NSMutableArray arrayWithCapacity:1];
