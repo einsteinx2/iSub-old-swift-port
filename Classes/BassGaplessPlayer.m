@@ -14,7 +14,6 @@
 #import "ViewObjectsSingleton.h"
 #import "ISMSStreamManager.h"
 #import "SocialSingleton.h"
-#import "DDLog.h"
 
 @implementation BassGaplessPlayer
 @synthesize streamGcdQueue;
@@ -32,7 +31,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 
 // Stream create failure retry values
 #define ISMS_BassStreamRetryDelay 2.0
-#define ISMS_BassStreamMinFilesizeToFail BytesToMB(3)
+#define ISMS_BassStreamMinFilesizeToFail BytesFromMiB(3)
 
 #define startSongRetryTimer @"startSong"
 #define nextSongRetryTimer @"nextSong"
@@ -43,7 +42,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 	{
 		streamQueue = [NSMutableArray arrayWithCapacity:5];
 		streamGcdQueue = dispatch_queue_create("com.anghami.BassStreamQueue", NULL);
-		ringBuffer = [EX2RingBuffer ringBufferWithLength:BytesToKB(640)];
+		ringBuffer = [EX2RingBuffer ringBufferWithLength:BytesFromKiB(640)];
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStream) name:ISMSNotification_RepeatModeChanged object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStream) name:ISMSNotification_CurrentPlaylistOrderChanged object:nil];
@@ -326,7 +325,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 
 - (void)keepRingBufferFilledInternal
 {
-	NSUInteger readSize = BytesToKB(64);
+	NSUInteger readSize = BytesFromKiB(64);
 	while (!self.stopFillingRingBuffer)
 	{
 		// Fill the buffer if there is empty space

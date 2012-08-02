@@ -285,7 +285,7 @@
 {
 	//[self.tableView beginUpdates];
 	self.tableView.tableHeaderView.height += y;
-	self.searchBar.y += (y - self.searchBar.height); // Doesn't make any sense, but necessary to prevent search box from getting out of place
+	self.searchBar.y += y;
 	self.blockerButton.frame = self.tableView.tableHeaderView.frame;
 	
 	/*for (UIView *subView in self.tableView.subviews)

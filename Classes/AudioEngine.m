@@ -22,7 +22,6 @@
 #import "SocialSingleton.h"
 #import "ViewObjectsSingleton.h"
 #import "iSubAppDelegate.h"
-#import "DDLog.h"
 
 @implementation AudioEngine
 @synthesize shouldResumeFromInterruption;

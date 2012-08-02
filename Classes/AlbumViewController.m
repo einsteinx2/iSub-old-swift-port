@@ -25,7 +25,6 @@
 #import "ModalAlbumArtViewController.h"
 #import "CustomUIAlertView.h"
 #import "SavedSettings.h"
-#import "NSData+Base64.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "SUSSubFolderDAO.h"
 #import "UIViewController+PushViewControllerCustom.h"

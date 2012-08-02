@@ -21,6 +21,21 @@
 		5301583D15081B0A00B54CEF /* settings-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5301583915081B0A00B54CEF /* settings-tabbaricon@2x.png */; };
 		5301583E15081B0A00B54CEF /* settings-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5301583915081B0A00B54CEF /* settings-tabbaricon@2x.png */; };
 		5301583F15081B0A00B54CEF /* settings-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5301583915081B0A00B54CEF /* settings-tabbaricon@2x.png */; };
+		5301F4B315CA41F3005FAC69 /* EX2Kit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5301F4AF15CA41F3005FAC69 /* EX2Kit.framework */; };
+		5301F4B415CA41F3005FAC69 /* EX2Kit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5301F4AF15CA41F3005FAC69 /* EX2Kit.framework */; };
+		5301F4B515CA41F3005FAC69 /* EX2Kit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5301F4AF15CA41F3005FAC69 /* EX2Kit.framework */; };
+		5301F4B615CA41F3005FAC69 /* EX2Kit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5301F4AF15CA41F3005FAC69 /* EX2Kit.framework */; };
+		5301F4B715CA41F3005FAC69 /* EX2Kit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5301F4AF15CA41F3005FAC69 /* EX2Kit.framework */; };
+		5301F4B815CA41F3005FAC69 /* EX2NotificationBar.nib in Resources */ = {isa = PBXBuildFile; fileRef = 5301F4B115CA41F3005FAC69 /* EX2NotificationBar.nib */; };
+		5301F4B915CA41F3005FAC69 /* EX2NotificationBar.nib in Resources */ = {isa = PBXBuildFile; fileRef = 5301F4B115CA41F3005FAC69 /* EX2NotificationBar.nib */; };
+		5301F4BA15CA41F3005FAC69 /* EX2NotificationBar.nib in Resources */ = {isa = PBXBuildFile; fileRef = 5301F4B115CA41F3005FAC69 /* EX2NotificationBar.nib */; };
+		5301F4BB15CA41F3005FAC69 /* EX2NotificationBar.nib in Resources */ = {isa = PBXBuildFile; fileRef = 5301F4B115CA41F3005FAC69 /* EX2NotificationBar.nib */; };
+		5301F4BC15CA41F3005FAC69 /* EX2NotificationBar.nib in Resources */ = {isa = PBXBuildFile; fileRef = 5301F4B115CA41F3005FAC69 /* EX2NotificationBar.nib */; };
+		5301F4BD15CA41F3005FAC69 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5301F4B215CA41F3005FAC69 /* README.txt */; };
+		5301F4BE15CA41F3005FAC69 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5301F4B215CA41F3005FAC69 /* README.txt */; };
+		5301F4BF15CA41F3005FAC69 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5301F4B215CA41F3005FAC69 /* README.txt */; };
+		5301F4C015CA41F3005FAC69 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5301F4B215CA41F3005FAC69 /* README.txt */; };
+		5301F4C115CA41F3005FAC69 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5301F4B215CA41F3005FAC69 /* README.txt */; };
 		53030315116ADF8B00B0AF5D /* reload-table.png in Resources */ = {isa = PBXBuildFile; fileRef = 53030314116ADF8B00B0AF5D /* reload-table.png */; };
 		530388A9116571920043292D /* AllSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 530388A8116571920043292D /* AllSongsViewController.m */; };
 		53049CBF119617660098582B /* AllSongsUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53049CBE119617660098582B /* AllSongsUITableViewCell.m */; };
@@ -549,7 +564,6 @@
 		53159F2E156F69D0001B0268 /* MGTwitterUsersLibXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4E81516DB1D002DA214 /* MGTwitterUsersLibXMLParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53159F2F156F69D0001B0268 /* MGTwitterUsersParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4EA1516DB1D002DA214 /* MGTwitterUsersParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53159F30156F69D0001B0268 /* MGTwitterXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4EC1516DB1D002DA214 /* MGTwitterXMLParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		53159F31156F69D0001B0268 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4EE1516DB1D002DA214 /* NSData+Base64.m */; };
 		53159F32156F69D0001B0268 /* NSString+UUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4F01516DB1D002DA214 /* NSString+UUID.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53159F33156F69D0001B0268 /* SA_OAuthTwitterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4F31516DB1D002DA214 /* SA_OAuthTwitterController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53159F34156F69D0001B0268 /* SA_OAuthTwitterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4F51516DB1D002DA214 /* SA_OAuthTwitterEngine.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -1206,39 +1220,6 @@
 		5345207C15A6678F003E0BC0 /* BassVisualizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345207B15A6678F003E0BC0 /* BassVisualizer.m */; };
 		5345207D15A6678F003E0BC0 /* BassVisualizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345207B15A6678F003E0BC0 /* BassVisualizer.m */; };
 		5345207E15A6678F003E0BC0 /* BassVisualizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345207B15A6678F003E0BC0 /* BassVisualizer.m */; };
-		5345219C15A66AFA003E0BC0 /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345218D15A66AFA003E0BC0 /* DDAbstractDatabaseLogger.m */; };
-		5345219D15A66AFA003E0BC0 /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345218D15A66AFA003E0BC0 /* DDAbstractDatabaseLogger.m */; };
-		5345219E15A66AFA003E0BC0 /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345218D15A66AFA003E0BC0 /* DDAbstractDatabaseLogger.m */; };
-		5345219F15A66AFA003E0BC0 /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345218D15A66AFA003E0BC0 /* DDAbstractDatabaseLogger.m */; };
-		534521A115A66AFA003E0BC0 /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345218F15A66AFA003E0BC0 /* DDASLLogger.m */; };
-		534521A215A66AFA003E0BC0 /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345218F15A66AFA003E0BC0 /* DDASLLogger.m */; };
-		534521A315A66AFA003E0BC0 /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345218F15A66AFA003E0BC0 /* DDASLLogger.m */; };
-		534521A415A66AFA003E0BC0 /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345218F15A66AFA003E0BC0 /* DDASLLogger.m */; };
-		534521A615A66AFA003E0BC0 /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345219115A66AFA003E0BC0 /* DDFileLogger.m */; };
-		534521A715A66AFA003E0BC0 /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345219115A66AFA003E0BC0 /* DDFileLogger.m */; };
-		534521A815A66AFA003E0BC0 /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345219115A66AFA003E0BC0 /* DDFileLogger.m */; };
-		534521A915A66AFA003E0BC0 /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345219115A66AFA003E0BC0 /* DDFileLogger.m */; };
-		534521AB15A66AFA003E0BC0 /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345219315A66AFA003E0BC0 /* DDLog.m */; };
-		534521AC15A66AFA003E0BC0 /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345219315A66AFA003E0BC0 /* DDLog.m */; };
-		534521AD15A66AFA003E0BC0 /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345219315A66AFA003E0BC0 /* DDLog.m */; };
-		534521AE15A66AFA003E0BC0 /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345219315A66AFA003E0BC0 /* DDLog.m */; };
-		534521B015A66AFA003E0BC0 /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345219515A66AFA003E0BC0 /* DDTTYLogger.m */; };
-		534521B115A66AFA003E0BC0 /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345219515A66AFA003E0BC0 /* DDTTYLogger.m */; };
-		534521B215A66AFA003E0BC0 /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345219515A66AFA003E0BC0 /* DDTTYLogger.m */; };
-		534521B315A66AFA003E0BC0 /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345219515A66AFA003E0BC0 /* DDTTYLogger.m */; };
-		534521B515A66AFA003E0BC0 /* ContextFilterLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345219815A66AFA003E0BC0 /* ContextFilterLogFormatter.m */; };
-		534521B615A66AFA003E0BC0 /* ContextFilterLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345219815A66AFA003E0BC0 /* ContextFilterLogFormatter.m */; };
-		534521B715A66AFA003E0BC0 /* ContextFilterLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345219815A66AFA003E0BC0 /* ContextFilterLogFormatter.m */; };
-		534521B815A66AFA003E0BC0 /* ContextFilterLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345219815A66AFA003E0BC0 /* ContextFilterLogFormatter.m */; };
-		534521BA15A66AFA003E0BC0 /* DispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345219A15A66AFA003E0BC0 /* DispatchQueueLogFormatter.m */; };
-		534521BB15A66AFA003E0BC0 /* DispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345219A15A66AFA003E0BC0 /* DispatchQueueLogFormatter.m */; };
-		534521BC15A66AFA003E0BC0 /* DispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345219A15A66AFA003E0BC0 /* DispatchQueueLogFormatter.m */; };
-		534521BD15A66AFA003E0BC0 /* DispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5345219A15A66AFA003E0BC0 /* DispatchQueueLogFormatter.m */; };
-		534521BF15A66AFA003E0BC0 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5345219B15A66AFA003E0BC0 /* README.txt */; };
-		534521C015A66AFA003E0BC0 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5345219B15A66AFA003E0BC0 /* README.txt */; };
-		534521C115A66AFA003E0BC0 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5345219B15A66AFA003E0BC0 /* README.txt */; };
-		534521C215A66AFA003E0BC0 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5345219B15A66AFA003E0BC0 /* README.txt */; };
-		534521C315A66AFA003E0BC0 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5345219B15A66AFA003E0BC0 /* README.txt */; };
 		5347A1B8148C5044000288D8 /* BassEffectDefaultPresets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5347A1B7148C5044000288D8 /* BassEffectDefaultPresets.plist */; };
 		5347A1B9148C5044000288D8 /* BassEffectDefaultPresets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5347A1B7148C5044000288D8 /* BassEffectDefaultPresets.plist */; };
 		5347A1BA148C5044000288D8 /* BassEffectDefaultPresets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5347A1B7148C5044000288D8 /* BassEffectDefaultPresets.plist */; };
@@ -1577,9 +1558,6 @@
 		53A7E5211516DB1D002DA214 /* MGTwitterXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4EC1516DB1D002DA214 /* MGTwitterXMLParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A7E5221516DB1D002DA214 /* MGTwitterXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4EC1516DB1D002DA214 /* MGTwitterXMLParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A7E5231516DB1D002DA214 /* MGTwitterXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4EC1516DB1D002DA214 /* MGTwitterXMLParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		53A7E5241516DB1D002DA214 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4EE1516DB1D002DA214 /* NSData+Base64.m */; };
-		53A7E5251516DB1D002DA214 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4EE1516DB1D002DA214 /* NSData+Base64.m */; };
-		53A7E5261516DB1D002DA214 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4EE1516DB1D002DA214 /* NSData+Base64.m */; };
 		53A7E5271516DB1D002DA214 /* NSString+UUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4F01516DB1D002DA214 /* NSString+UUID.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A7E5281516DB1D002DA214 /* NSString+UUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4F01516DB1D002DA214 /* NSString+UUID.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A7E5291516DB1D002DA214 /* NSString+UUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A7E4F01516DB1D002DA214 /* NSString+UUID.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -2107,11 +2085,6 @@
 		53C7FDB0150F1DE7008DA51C /* home-support@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FDA4150F1DE7008DA51C /* home-support@2x.png */; };
 		53CC217E132DC79F003521B5 /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53CC217D132DC79F003521B5 /* Entitlements.plist */; };
 		53CED25F113E2FF100B09699 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */; };
-		53D44F7F15AA616400CDD3B8 /* EX2Kit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D44F7E15AA616400CDD3B8 /* EX2Kit.framework */; };
-		53D44F8015AA616400CDD3B8 /* EX2Kit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D44F7E15AA616400CDD3B8 /* EX2Kit.framework */; };
-		53D44F8115AA616400CDD3B8 /* EX2Kit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D44F7E15AA616400CDD3B8 /* EX2Kit.framework */; };
-		53D44F8215AA616400CDD3B8 /* EX2Kit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D44F7E15AA616400CDD3B8 /* EX2Kit.framework */; };
-		53D44F8315AA616400CDD3B8 /* EX2Kit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D44F7E15AA616400CDD3B8 /* EX2Kit.framework */; };
 		53D44F8515AA621B00CDD3B8 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D44F8415AA621A00CDD3B8 /* Accelerate.framework */; };
 		53D74D51147185AB0025F8F1 /* PlaylistSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D50147185AB0025F8F1 /* PlaylistSingleton.m */; };
 		53D74D52147185AB0025F8F1 /* PlaylistSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D50147185AB0025F8F1 /* PlaylistSingleton.m */; };
@@ -2606,6 +2579,9 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5301583815081B0A00B54CEF /* settings-tabbaricon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "settings-tabbaricon.png"; path = "Images/Tab Bar Icons/settings-tabbaricon.png"; sourceTree = "<group>"; };
 		5301583915081B0A00B54CEF /* settings-tabbaricon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "settings-tabbaricon@2x.png"; path = "Images/Tab Bar Icons/settings-tabbaricon@2x.png"; sourceTree = "<group>"; };
+		5301F4AF15CA41F3005FAC69 /* EX2Kit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EX2Kit.framework; sourceTree = "<group>"; };
+		5301F4B115CA41F3005FAC69 /* EX2NotificationBar.nib */ = {isa = PBXFileReference; lastKnownFileType = file; path = EX2NotificationBar.nib; sourceTree = "<group>"; };
+		5301F4B215CA41F3005FAC69 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		53030314116ADF8B00B0AF5D /* reload-table.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reload-table.png"; path = "Images/Other/reload-table.png"; sourceTree = "<group>"; };
 		530388A7116571920043292D /* AllSongsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllSongsViewController.h; sourceTree = "<group>"; };
 		530388A8116571920043292D /* AllSongsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AllSongsViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -2829,21 +2805,6 @@
 		5345206C15A6677B003E0BC0 /* BassEffectValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassEffectValue.m; sourceTree = "<group>"; };
 		5345207A15A6678F003E0BC0 /* BassVisualizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassVisualizer.h; sourceTree = "<group>"; };
 		5345207B15A6678F003E0BC0 /* BassVisualizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassVisualizer.m; sourceTree = "<group>"; };
-		5345218C15A66AFA003E0BC0 /* DDAbstractDatabaseLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDAbstractDatabaseLogger.h; sourceTree = "<group>"; };
-		5345218D15A66AFA003E0BC0 /* DDAbstractDatabaseLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDAbstractDatabaseLogger.m; sourceTree = "<group>"; };
-		5345218E15A66AFA003E0BC0 /* DDASLLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDASLLogger.h; sourceTree = "<group>"; };
-		5345218F15A66AFA003E0BC0 /* DDASLLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDASLLogger.m; sourceTree = "<group>"; };
-		5345219015A66AFA003E0BC0 /* DDFileLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDFileLogger.h; sourceTree = "<group>"; };
-		5345219115A66AFA003E0BC0 /* DDFileLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDFileLogger.m; sourceTree = "<group>"; };
-		5345219215A66AFA003E0BC0 /* DDLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDLog.h; sourceTree = "<group>"; };
-		5345219315A66AFA003E0BC0 /* DDLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDLog.m; sourceTree = "<group>"; };
-		5345219415A66AFA003E0BC0 /* DDTTYLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDTTYLogger.h; sourceTree = "<group>"; };
-		5345219515A66AFA003E0BC0 /* DDTTYLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTTYLogger.m; sourceTree = "<group>"; };
-		5345219715A66AFA003E0BC0 /* ContextFilterLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContextFilterLogFormatter.h; sourceTree = "<group>"; };
-		5345219815A66AFA003E0BC0 /* ContextFilterLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContextFilterLogFormatter.m; sourceTree = "<group>"; };
-		5345219915A66AFA003E0BC0 /* DispatchQueueLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DispatchQueueLogFormatter.h; sourceTree = "<group>"; };
-		5345219A15A66AFA003E0BC0 /* DispatchQueueLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DispatchQueueLogFormatter.m; sourceTree = "<group>"; };
-		5345219B15A66AFA003E0BC0 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		5346C20315598A950038A5F8 /* Imports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Imports.h; sourceTree = "<group>"; };
 		5347A1B7148C5044000288D8 /* BassEffectDefaultPresets.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BassEffectDefaultPresets.plist; sourceTree = "<group>"; };
 		5348A59911879C3A0078994D /* CustomUITableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomUITableView.h; sourceTree = "<group>"; };
@@ -3157,8 +3118,6 @@
 		53A7E4EA1516DB1D002DA214 /* MGTwitterUsersParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGTwitterUsersParser.m; sourceTree = "<group>"; };
 		53A7E4EB1516DB1D002DA214 /* MGTwitterXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGTwitterXMLParser.h; sourceTree = "<group>"; };
 		53A7E4EC1516DB1D002DA214 /* MGTwitterXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGTwitterXMLParser.m; sourceTree = "<group>"; };
-		53A7E4ED1516DB1D002DA214 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
-		53A7E4EE1516DB1D002DA214 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
 		53A7E4EF1516DB1D002DA214 /* NSString+UUID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+UUID.h"; sourceTree = "<group>"; };
 		53A7E4F01516DB1D002DA214 /* NSString+UUID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+UUID.m"; sourceTree = "<group>"; };
 		53A7E4F21516DB1D002DA214 /* SA_OAuthTwitterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SA_OAuthTwitterController.h; sourceTree = "<group>"; };
@@ -3337,7 +3296,6 @@
 		53CC217D132DC79F003521B5 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		53CED25C113E2FF100B09699 /* SubsonicServerEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubsonicServerEditViewController.h; sourceTree = "<group>"; };
 		53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubsonicServerEditViewController.m; sourceTree = "<group>"; };
-		53D44F7E15AA616400CDD3B8 /* EX2Kit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EX2Kit.framework; path = Frameworks/EX2Kit.framework; sourceTree = SOURCE_ROOT; };
 		53D44F8415AA621A00CDD3B8 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		53D74D4F147185AB0025F8F1 /* PlaylistSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistSingleton.h; sourceTree = "<group>"; };
 		53D74D50147185AB0025F8F1 /* PlaylistSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistSingleton.m; sourceTree = "<group>"; };
@@ -3489,7 +3447,7 @@
 				537D95511549ECEC00EB043D /* libbass_ape.a in Frameworks */,
 				537D95541549ECEC00EB043D /* libbass_mpc.a in Frameworks */,
 				537D95571549ECEC00EB043D /* libbasswv.a in Frameworks */,
-				53D44F7F15AA616400CDD3B8 /* EX2Kit.framework in Frameworks */,
+				5301F4B315CA41F3005FAC69 /* EX2Kit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3528,7 +3486,7 @@
 				53159F69156F69D0001B0268 /* libbass_mpc.a in Frameworks */,
 				53159F6A156F69D0001B0268 /* libbasswv.a in Frameworks */,
 				5377429A15AA4DC700DD547D /* kif.framework in Frameworks */,
-				53D44F8215AA616400CDD3B8 /* EX2Kit.framework in Frameworks */,
+				5301F4B615CA41F3005FAC69 /* EX2Kit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3567,7 +3525,7 @@
 				5315A3FE156F7064001B0268 /* libbass_ape.a in Frameworks */,
 				5315A3FF156F7064001B0268 /* libbass_mpc.a in Frameworks */,
 				5315A400156F7064001B0268 /* libbasswv.a in Frameworks */,
-				53D44F8315AA616400CDD3B8 /* EX2Kit.framework in Frameworks */,
+				5301F4B715CA41F3005FAC69 /* EX2Kit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3606,7 +3564,7 @@
 				537D95531549ECEC00EB043D /* libbass_ape.a in Frameworks */,
 				537D95561549ECEC00EB043D /* libbass_mpc.a in Frameworks */,
 				537D95591549ECEC00EB043D /* libbasswv.a in Frameworks */,
-				53D44F8115AA616400CDD3B8 /* EX2Kit.framework in Frameworks */,
+				5301F4B515CA41F3005FAC69 /* EX2Kit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3644,7 +3602,7 @@
 				537D95521549ECEC00EB043D /* libbass_ape.a in Frameworks */,
 				537D95551549ECEC00EB043D /* libbass_mpc.a in Frameworks */,
 				537D95581549ECEC00EB043D /* libbasswv.a in Frameworks */,
-				53D44F8015AA616400CDD3B8 /* EX2Kit.framework in Frameworks */,
+				5301F4B415CA41F3005FAC69 /* EX2Kit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3731,6 +3689,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5301F4AE15CA41F3005FAC69 /* EX2Kit.embeddedframework */,
 				53D44F8415AA621A00CDD3B8 /* Accelerate.framework */,
 				53C7FD9C150F0E94008DA51C /* MessageUI.framework */,
 				53A2BE27147DF13600E44822 /* OpenGLES.framework */,
@@ -3754,6 +3713,25 @@
 				5382F65614856F3C001C14C8 /* libSystem.dylib */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5301F4AE15CA41F3005FAC69 /* EX2Kit.embeddedframework */ = {
+			isa = PBXGroup;
+			children = (
+				5301F4AF15CA41F3005FAC69 /* EX2Kit.framework */,
+				5301F4B015CA41F3005FAC69 /* Resources */,
+			);
+			name = EX2Kit.embeddedframework;
+			path = Frameworks/EX2Kit.embeddedframework;
+			sourceTree = "<group>";
+		};
+		5301F4B015CA41F3005FAC69 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5301F4B115CA41F3005FAC69 /* EX2NotificationBar.nib */,
+				5301F4B215CA41F3005FAC69 /* README.txt */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		5304BCE111BD58E3000EF6F9 /* NSURLConnectionDelegates */ = {
@@ -4118,37 +4096,6 @@
 			name = Visualizer;
 			sourceTree = "<group>";
 		};
-		5345218B15A66AFA003E0BC0 /* Lumberjack */ = {
-			isa = PBXGroup;
-			children = (
-				5345218C15A66AFA003E0BC0 /* DDAbstractDatabaseLogger.h */,
-				5345218D15A66AFA003E0BC0 /* DDAbstractDatabaseLogger.m */,
-				5345218E15A66AFA003E0BC0 /* DDASLLogger.h */,
-				5345218F15A66AFA003E0BC0 /* DDASLLogger.m */,
-				5345219015A66AFA003E0BC0 /* DDFileLogger.h */,
-				5345219115A66AFA003E0BC0 /* DDFileLogger.m */,
-				5345219215A66AFA003E0BC0 /* DDLog.h */,
-				5345219315A66AFA003E0BC0 /* DDLog.m */,
-				5345219415A66AFA003E0BC0 /* DDTTYLogger.h */,
-				5345219515A66AFA003E0BC0 /* DDTTYLogger.m */,
-				5345219615A66AFA003E0BC0 /* Extensions */,
-			);
-			name = Lumberjack;
-			path = CocoaLumberjack/Lumberjack;
-			sourceTree = SOURCE_ROOT;
-		};
-		5345219615A66AFA003E0BC0 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				5345219715A66AFA003E0BC0 /* ContextFilterLogFormatter.h */,
-				5345219815A66AFA003E0BC0 /* ContextFilterLogFormatter.m */,
-				5345219915A66AFA003E0BC0 /* DispatchQueueLogFormatter.h */,
-				5345219A15A66AFA003E0BC0 /* DispatchQueueLogFormatter.m */,
-				5345219B15A66AFA003E0BC0 /* README.txt */,
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
 		535366D914CB55AC00954448 /* Audio Engine */ = {
 			isa = PBXGroup;
 			children = (
@@ -4395,8 +4342,6 @@
 		539797F21162CE7700F41D8B /* Support Classes */ = {
 			isa = PBXGroup;
 			children = (
-				53D44F7E15AA616400CDD3B8 /* EX2Kit.framework */,
-				5345218B15A66AFA003E0BC0 /* Lumberjack */,
 				53DE597714F18E6200206529 /* AUAnimatedText */,
 				53DFB2FF148C27080066FF94 /* NWPickerField */,
 				535B724F134CEE0A003E0E1C /* DDSocialDialog */,
@@ -4675,8 +4620,6 @@
 				53A7E4EA1516DB1D002DA214 /* MGTwitterUsersParser.m */,
 				53A7E4EB1516DB1D002DA214 /* MGTwitterXMLParser.h */,
 				53A7E4EC1516DB1D002DA214 /* MGTwitterXMLParser.m */,
-				53A7E4ED1516DB1D002DA214 /* NSData+Base64.h */,
-				53A7E4EE1516DB1D002DA214 /* NSData+Base64.m */,
 				53A7E4EF1516DB1D002DA214 /* NSString+UUID.h */,
 				53A7E4F01516DB1D002DA214 /* NSString+UUID.m */,
 			);
@@ -5560,8 +5503,9 @@
 				5326615C1521930E00DE39C1 /* LICENSE.txt in Resources */,
 				5326615F1521930E00DE39C1 /* Quincy.bundle in Resources */,
 				533C65C915ABB9D3003EAF29 /* PMSServerEditViewControllerViewController.xib in Resources */,
-				534521BF15A66AFA003E0BC0 /* README.txt in Resources */,
 				533C657515ABB952003EAF29 /* NewHomeViewController.xib in Resources */,
+				5301F4B815CA41F3005FAC69 /* EX2NotificationBar.nib in Resources */,
+				5301F4BD15CA41F3005FAC69 /* README.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5865,8 +5809,9 @@
 				53159E61156F69D0001B0268 /* README.mkdown in Resources */,
 				53159E62156F69D0001B0268 /* LICENSE.txt in Resources */,
 				53159E63156F69D0001B0268 /* Quincy.bundle in Resources */,
-				534521C215A66AFA003E0BC0 /* README.txt in Resources */,
 				533C657815ABB952003EAF29 /* NewHomeViewController.xib in Resources */,
+				5301F4BB15CA41F3005FAC69 /* EX2NotificationBar.nib in Resources */,
+				5301F4C015CA41F3005FAC69 /* README.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6170,8 +6115,9 @@
 				5315A2F3156F7064001B0268 /* README.mkdown in Resources */,
 				5315A2F4156F7064001B0268 /* LICENSE.txt in Resources */,
 				5315A2F5156F7064001B0268 /* Quincy.bundle in Resources */,
-				534521C315A66AFA003E0BC0 /* README.txt in Resources */,
 				533C657915ABB952003EAF29 /* NewHomeViewController.xib in Resources */,
+				5301F4BC15CA41F3005FAC69 /* EX2NotificationBar.nib in Resources */,
+				5301F4C115CA41F3005FAC69 /* README.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6471,8 +6417,9 @@
 				5326615E1521930E00DE39C1 /* LICENSE.txt in Resources */,
 				532661611521930E00DE39C1 /* Quincy.bundle in Resources */,
 				533C65CB15ABB9D3003EAF29 /* PMSServerEditViewControllerViewController.xib in Resources */,
-				534521C115A66AFA003E0BC0 /* README.txt in Resources */,
 				533C657715ABB952003EAF29 /* NewHomeViewController.xib in Resources */,
+				5301F4BA15CA41F3005FAC69 /* EX2NotificationBar.nib in Resources */,
+				5301F4BF15CA41F3005FAC69 /* README.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6776,8 +6723,9 @@
 				5326615D1521930E00DE39C1 /* LICENSE.txt in Resources */,
 				532661601521930E00DE39C1 /* Quincy.bundle in Resources */,
 				533C65CA15ABB9D3003EAF29 /* PMSServerEditViewControllerViewController.xib in Resources */,
-				534521C015A66AFA003E0BC0 /* README.txt in Resources */,
 				533C657615ABB952003EAF29 /* NewHomeViewController.xib in Resources */,
+				5301F4B915CA41F3005FAC69 /* EX2NotificationBar.nib in Resources */,
+				5301F4BE15CA41F3005FAC69 /* README.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6976,7 +6924,6 @@
 				53A7E51B1516DB1D002DA214 /* MGTwitterUsersLibXMLParser.m in Sources */,
 				53A7E51E1516DB1D002DA214 /* MGTwitterUsersParser.m in Sources */,
 				53A7E5211516DB1D002DA214 /* MGTwitterXMLParser.m in Sources */,
-				53A7E5241516DB1D002DA214 /* NSData+Base64.m in Sources */,
 				53A7E5271516DB1D002DA214 /* NSString+UUID.m in Sources */,
 				53A7E52A1516DB1D002DA214 /* SA_OAuthTwitterController.m in Sources */,
 				53A7E52D1516DB1D002DA214 /* SA_OAuthTwitterEngine.m in Sources */,
@@ -7035,13 +6982,6 @@
 				5345207315A6677B003E0BC0 /* BassEffectDAO.m in Sources */,
 				5345207615A6677B003E0BC0 /* BassEffectValue.m in Sources */,
 				5345207C15A6678F003E0BC0 /* BassVisualizer.m in Sources */,
-				5345219C15A66AFA003E0BC0 /* DDAbstractDatabaseLogger.m in Sources */,
-				534521A115A66AFA003E0BC0 /* DDASLLogger.m in Sources */,
-				534521A615A66AFA003E0BC0 /* DDFileLogger.m in Sources */,
-				534521AB15A66AFA003E0BC0 /* DDLog.m in Sources */,
-				534521B015A66AFA003E0BC0 /* DDTTYLogger.m in Sources */,
-				534521B515A66AFA003E0BC0 /* ContextFilterLogFormatter.m in Sources */,
-				534521BA15A66AFA003E0BC0 /* DispatchQueueLogFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7220,7 +7160,6 @@
 				53159F2E156F69D0001B0268 /* MGTwitterUsersLibXMLParser.m in Sources */,
 				53159F2F156F69D0001B0268 /* MGTwitterUsersParser.m in Sources */,
 				53159F30156F69D0001B0268 /* MGTwitterXMLParser.m in Sources */,
-				53159F31156F69D0001B0268 /* NSData+Base64.m in Sources */,
 				53159F32156F69D0001B0268 /* NSString+UUID.m in Sources */,
 				53159F33156F69D0001B0268 /* SA_OAuthTwitterController.m in Sources */,
 				53159F34156F69D0001B0268 /* SA_OAuthTwitterEngine.m in Sources */,
@@ -7250,13 +7189,6 @@
 				53F396151571DB9F0026E70B /* TBXML+Compression.m in Sources */,
 				53F3961A1571DB9F0026E70B /* TBXML+HTTP.m in Sources */,
 				53F3961F1571DB9F0026E70B /* TBXML.m in Sources */,
-				5345219F15A66AFA003E0BC0 /* DDAbstractDatabaseLogger.m in Sources */,
-				534521A415A66AFA003E0BC0 /* DDASLLogger.m in Sources */,
-				534521A915A66AFA003E0BC0 /* DDFileLogger.m in Sources */,
-				534521AE15A66AFA003E0BC0 /* DDLog.m in Sources */,
-				534521B315A66AFA003E0BC0 /* DDTTYLogger.m in Sources */,
-				534521B815A66AFA003E0BC0 /* ContextFilterLogFormatter.m in Sources */,
-				534521BD15A66AFA003E0BC0 /* DispatchQueueLogFormatter.m in Sources */,
 				5377429B15AA507900DD547D /* AudioEngine.m in Sources */,
 				5377429C15AA508900DD547D /* BassWrapper.m in Sources */,
 				5377429D15AA50AB00DD547D /* PMSServerEditViewControllerViewController.m in Sources */,
@@ -7460,7 +7392,6 @@
 				53A7E51D1516DB1D002DA214 /* MGTwitterUsersLibXMLParser.m in Sources */,
 				53A7E5201516DB1D002DA214 /* MGTwitterUsersParser.m in Sources */,
 				53A7E5231516DB1D002DA214 /* MGTwitterXMLParser.m in Sources */,
-				53A7E5261516DB1D002DA214 /* NSData+Base64.m in Sources */,
 				53A7E5291516DB1D002DA214 /* NSString+UUID.m in Sources */,
 				53A7E52C1516DB1D002DA214 /* SA_OAuthTwitterController.m in Sources */,
 				53A7E52F1516DB1D002DA214 /* SA_OAuthTwitterEngine.m in Sources */,
@@ -7519,13 +7450,6 @@
 				5345207515A6677B003E0BC0 /* BassEffectDAO.m in Sources */,
 				5345207815A6677B003E0BC0 /* BassEffectValue.m in Sources */,
 				5345207E15A6678F003E0BC0 /* BassVisualizer.m in Sources */,
-				5345219E15A66AFA003E0BC0 /* DDAbstractDatabaseLogger.m in Sources */,
-				534521A315A66AFA003E0BC0 /* DDASLLogger.m in Sources */,
-				534521A815A66AFA003E0BC0 /* DDFileLogger.m in Sources */,
-				534521AD15A66AFA003E0BC0 /* DDLog.m in Sources */,
-				534521B215A66AFA003E0BC0 /* DDTTYLogger.m in Sources */,
-				534521B715A66AFA003E0BC0 /* ContextFilterLogFormatter.m in Sources */,
-				534521BC15A66AFA003E0BC0 /* DispatchQueueLogFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7704,7 +7628,6 @@
 				53A7E51C1516DB1D002DA214 /* MGTwitterUsersLibXMLParser.m in Sources */,
 				53A7E51F1516DB1D002DA214 /* MGTwitterUsersParser.m in Sources */,
 				53A7E5221516DB1D002DA214 /* MGTwitterXMLParser.m in Sources */,
-				53A7E5251516DB1D002DA214 /* NSData+Base64.m in Sources */,
 				53A7E5281516DB1D002DA214 /* NSString+UUID.m in Sources */,
 				53A7E52B1516DB1D002DA214 /* SA_OAuthTwitterController.m in Sources */,
 				53A7E52E1516DB1D002DA214 /* SA_OAuthTwitterEngine.m in Sources */,
@@ -7763,13 +7686,6 @@
 				5345207415A6677B003E0BC0 /* BassEffectDAO.m in Sources */,
 				5345207715A6677B003E0BC0 /* BassEffectValue.m in Sources */,
 				5345207D15A6678F003E0BC0 /* BassVisualizer.m in Sources */,
-				5345219D15A66AFA003E0BC0 /* DDAbstractDatabaseLogger.m in Sources */,
-				534521A215A66AFA003E0BC0 /* DDASLLogger.m in Sources */,
-				534521A715A66AFA003E0BC0 /* DDFileLogger.m in Sources */,
-				534521AC15A66AFA003E0BC0 /* DDLog.m in Sources */,
-				534521B115A66AFA003E0BC0 /* DDTTYLogger.m in Sources */,
-				534521B615A66AFA003E0BC0 /* ContextFilterLogFormatter.m in Sources */,
-				534521BB15A66AFA003E0BC0 /* DispatchQueueLogFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7930,6 +7846,7 @@
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)/QuincyKit\"",
 					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)/Frameworks/EX2Kit.embeddedframework\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -7978,6 +7895,7 @@
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)/QuincyKit\"",
 					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)/Frameworks/EX2Kit.embeddedframework\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = iSub_Prefix.pch;
@@ -8062,6 +7980,7 @@
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)/QuincyKit\"",
 					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)/Frameworks/EX2Kit.embeddedframework\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -8116,6 +8035,7 @@
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)/QuincyKit\"",
 					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)/Frameworks/EX2Kit.embeddedframework\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -8171,6 +8091,7 @@
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)/QuincyKit\"",
 					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)/Frameworks/EX2Kit.embeddedframework\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -8227,6 +8148,7 @@
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)/QuincyKit\"",
 					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)/Frameworks/EX2Kit.embeddedframework\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = iSub_Prefix.pch;
@@ -8277,6 +8199,7 @@
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)/QuincyKit\"",
 					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)/Frameworks/EX2Kit.embeddedframework\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -8332,6 +8255,7 @@
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)/QuincyKit\"",
 					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)/Frameworks/EX2Kit.embeddedframework\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -8388,6 +8312,7 @@
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)/QuincyKit\"",
 					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)/Frameworks/EX2Kit.embeddedframework\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = iSub_Prefix.pch;
@@ -8444,6 +8369,7 @@
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)/QuincyKit\"",
 					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)/Frameworks/EX2Kit.embeddedframework\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -8502,6 +8428,7 @@
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)/QuincyKit\"",
 					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)/Frameworks/EX2Kit.embeddedframework\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -8560,6 +8487,7 @@
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)/QuincyKit\"",
 					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)/Frameworks/EX2Kit.embeddedframework\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = iSub_Prefix.pch;
@@ -8611,6 +8539,7 @@
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)/QuincyKit\"",
 					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)/Frameworks/EX2Kit.embeddedframework\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -8662,6 +8591,7 @@
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)/QuincyKit\"",
 					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)/Frameworks/EX2Kit.embeddedframework\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -8712,6 +8642,7 @@
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)/QuincyKit\"",
 					"\"$(SRCROOT)/Frameworks\"",
+					"\"$(SRCROOT)/Frameworks/EX2Kit.embeddedframework\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = iSub_Prefix.pch;

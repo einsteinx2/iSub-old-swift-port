@@ -12,7 +12,6 @@
 #import "SavedSettings.h"
 #import "AudioEngine.h"
 #import "JukeboxSingleton.h"
-#import "DDLog.h"
 
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 

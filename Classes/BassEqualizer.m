@@ -8,7 +8,6 @@
 
 #import "BassEqualizer.h"
 #import "SavedSettings.h"
-#import "DDLog.h"
 
 #define ISMS_EqualizerGainReduction 0.35
 

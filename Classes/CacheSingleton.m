@@ -68,7 +68,7 @@
 		if (possibleSize < maxCacheSize)
 		{
 			// Set the max cache size to 25MB less than the free space
-			settingsS.maxCacheSize = possibleSize - BytesToMB(25);
+			settingsS.maxCacheSize = possibleSize - BytesFromMiB(25);
 		}
 	}
 }

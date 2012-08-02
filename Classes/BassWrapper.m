@@ -8,7 +8,6 @@
 
 #import "BassWrapper.h"
 #import "Song.h"
-#import "DDLog.h"
 
 static const int ddLogLevel = LOG_LEVEL_INFO;
 

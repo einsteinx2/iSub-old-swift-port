@@ -41,9 +41,6 @@
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
 #import "ISMSCacheQueueManager.h"
-#import "DDLog.h"
-#import "DDTTYLogger.h"
-#import "DDFileLogger.h"
 
 @implementation iSubAppDelegate
 

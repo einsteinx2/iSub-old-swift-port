@@ -72,7 +72,7 @@
 	[self stopDownloadQueue];
 	
 	// For simplicity sake, just make sure we never go under 50 MB and let the cache check process take care of the rest
-	if (cacheS.freeSpace <= BytesToMB(25))
+	if (cacheS.freeSpace <= BytesFromMiB(25))
 		return;
 	
 //DLog(@"starting download queue");

@@ -8,7 +8,7 @@
 
 #import "NSMutableURLRequest+SUS.h"
 #import "SavedSettings.h"
-#import "NSData+Base64.h"
+#import "TBXML+Compression.h"
 
 @implementation NSMutableURLRequest (SUS)
 
