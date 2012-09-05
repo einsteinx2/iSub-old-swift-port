@@ -159,8 +159,8 @@ static void initialize_navigationBarImages()
 					}
 					else if ([settingsS.serverType isEqualToString:WAVEBOX]) 
 					{
-						parameters = [NSDictionary dictionaryWithObject:n2N(size) forKey:@"size"];
-						request = [NSMutableURLRequest requestWithPMSAction:@"cover" item:self.coverArtId parameters:parameters];
+						parameters = [NSDictionary dictionaryWithObjectsAndKeys:n2N(size), @"size", n2N(self.coverArtId), @"id", nil];
+						request = [NSMutableURLRequest requestWithPMSAction:@"art" parameters:parameters];
 					}
 				
 					if (request)

@@ -68,7 +68,8 @@
 
 - (void)startLoad
 {
-	self.connection = [NSURLConnection connectionWithRequest:[self createRequest] delegate:self];
+    self.request = [self createRequest];
+	self.connection = [NSURLConnection connectionWithRequest:self.request delegate:self];
 	if (self.connection)
 	{
 		// Create the NSMutableData to hold the received data.
@@ -150,6 +151,28 @@
 }
 
 #pragma mark Connection Delegate
+
+- (NSURLRequest *)connection:(NSURLConnection *)inConnection willSendRequest:(NSURLRequest *)inRequest redirectResponse:(NSURLResponse *)inRedirectResponse
+{
+    if (inRedirectResponse)
+    {
+        // Notify the delegate
+        if ([self.delegate respondsToSelector:@selector(loadingRedirected:redirectUrl:)])
+        {
+			[self.delegate loadingRedirected:self redirectUrl:inRequest.URL];
+        }
+        
+        NSMutableURLRequest *r = [self.request mutableCopy]; // original request
+		[r setTimeoutInterval:ISMSServerCheckTimeout];
+        [r setURL:[inRequest URL]];
+        return r;
+    }
+    else
+    {
+        //DLog(@"returning inRequest");
+        return inRequest;
+    }
+}
 
 - (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
 {

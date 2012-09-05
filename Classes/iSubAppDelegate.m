@@ -41,6 +41,7 @@
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
 #import "ISMSCacheQueueManager.h"
+#import "ISMSStatusLoader.h"
 
 @implementation iSubAppDelegate
 
@@ -48,7 +49,7 @@
 
 // Main interface elements for iPhone
 @synthesize background, currentTabBarController, mainTabBarController, offlineTabBarController;
-@synthesize homeNavigationController, playerNavigationController, artistsNavigationController, rootViewController, allAlbumsNavigationController, allSongsNavigationController, playlistsNavigationController, bookmarksNavigationController, playingNavigationController, genresNavigationController, cacheNavigationController, chatNavigationController, supportNavigationController, serverChecker;
+@synthesize homeNavigationController, playerNavigationController, artistsNavigationController, rootViewController, allAlbumsNavigationController, allSongsNavigationController, playlistsNavigationController, bookmarksNavigationController, playingNavigationController, genresNavigationController, cacheNavigationController, chatNavigationController, supportNavigationController, serverChecker, statusLoader;
 
 // Main interface elemements for iPad
 @synthesize ipadRootViewController;
@@ -270,7 +271,7 @@
 
 - (void)checkServer
 {
-//DLog(@"urlString: %@", settingsS.urlString);
+    //DLog(@"urlString: %@", settingsS.urlString);
 	ISMSUpdateChecker *updateChecker = [[ISMSUpdateChecker alloc] init];
 	[updateChecker checkForUpdate];
 
@@ -280,16 +281,90 @@
 	// have internet access or if the host url entered was wrong.
     if (!viewObjectsS.isOfflineMode) 
 	{
-        self.serverChecker = [[ISMSServerChecker alloc] initWithDelegate:self];
-		[self.serverChecker checkServerUrlString:settingsS.urlString 
-										username:settingsS.username 
-										password:settingsS.password];
+        if ([settingsS.serverType isEqualToString:SUBSONIC])
+        {
+            self.serverChecker = [ISMSServerChecker loaderWithDelegate:self];
+            [self.serverChecker checkServerUrlString:settingsS.urlString
+                                            username:settingsS.username
+                                            password:settingsS.password];
+        }
+        else
+        {
+            self.statusLoader = [ISMSStatusLoader loaderWithDelegate:self];
+            [self.statusLoader startLoad];
+        }
     }
 	
 	// Do a server check every half hour
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(checkServer) object:nil];
 	NSTimeInterval delay = 30 * 60; // 30 minutes
 	[self performSelector:@selector(checkServer) withObject:nil afterDelay:delay];
+}
+
+#pragma mark - ISMS Loader Delegate
+
+- (void)loadingRedirected:(ISMSLoader *)theLoader redirectUrl:(NSURL *)url
+{
+    NSMutableString *redirectUrlString = [NSMutableString stringWithFormat:@"%@://%@", url.scheme, url.host];
+	if (url.port)
+		[redirectUrlString appendFormat:@":%@", url.port];
+	
+	if ([url.pathComponents count] > 3)
+	{
+		for (NSString *component in url.pathComponents)
+		{
+			if ([component isEqualToString:@"api"])
+				break;
+			
+			if (![component isEqualToString:@"/"])
+			{
+				[redirectUrlString appendFormat:@"/%@", component];
+			}
+		}
+	}
+	
+    DLog(@"redirectUrlString: %@", redirectUrlString);
+	
+	settingsS.redirectUrlString = [NSString stringWithString:redirectUrlString];
+}
+
+- (void)loadingFailed:(ISMSLoader *)theLoader withError:(NSError *)error
+{
+    if (theLoader.type == ISMSLoaderType_Status)
+    {
+        [viewObjectsS hideLoadingScreen];
+        
+        if(!viewObjectsS.isOfflineMode)
+        {
+            /*UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", [error code], [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Settings", nil];
+             alert.tag = 3;
+             [alert show];
+             [alert release];
+             
+             [self enterOfflineModeForce];*/
+            
+            [self enterOfflineMode];
+        }
+        
+        self.statusLoader = nil;
+    }
+}
+
+- (void)loadingFinished:(ISMSLoader *)theLoader
+{
+    if (theLoader.type == ISMSLoaderType_Status)
+    {
+        self.statusLoader = nil;
+        
+        //DLog(@"server verification passed, hiding loading screen");
+        [viewObjectsS hideLoadingScreen];
+        
+        if (!IS_IPAD() && !viewObjectsS.isOfflineMode)
+            [viewObjectsS orderMainTabBarController];
+        
+        // Start the queued downloads if Wifi is available
+        [cacheQueueManagerS startDownloadQueue];
+    }
 }
 
 #pragma mark - SUS Server Check Delegate

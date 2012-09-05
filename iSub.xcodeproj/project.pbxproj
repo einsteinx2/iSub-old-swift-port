@@ -15,6 +15,18 @@
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		28C286E10D94DF7D0034E888 /* FoldersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* FoldersViewController.m */; };
 		28F335F11007B36200424DE2 /* FoldersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* FoldersViewController.xib */; };
+		5301219C15E563C900A14CD0 /* PMSLoginLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5301219B15E563C900A14CD0 /* PMSLoginLoader.m */; };
+		5301219D15E563C900A14CD0 /* PMSLoginLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5301219B15E563C900A14CD0 /* PMSLoginLoader.m */; };
+		5301219E15E563C900A14CD0 /* PMSLoginLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5301219B15E563C900A14CD0 /* PMSLoginLoader.m */; };
+		530121A115E5659200A14CD0 /* ISMSStatusLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 530121A015E5659200A14CD0 /* ISMSStatusLoader.m */; };
+		530121A215E5659200A14CD0 /* ISMSStatusLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 530121A015E5659200A14CD0 /* ISMSStatusLoader.m */; };
+		530121A315E5659200A14CD0 /* ISMSStatusLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 530121A015E5659200A14CD0 /* ISMSStatusLoader.m */; };
+		530121A715E565AC00A14CD0 /* PMSStatusLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 530121A615E565AC00A14CD0 /* PMSStatusLoader.m */; };
+		530121A815E565AC00A14CD0 /* PMSStatusLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 530121A615E565AC00A14CD0 /* PMSStatusLoader.m */; };
+		530121A915E565AC00A14CD0 /* PMSStatusLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 530121A615E565AC00A14CD0 /* PMSStatusLoader.m */; };
+		530121B315E56E9300A14CD0 /* SUSStatusLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 530121B215E56E9300A14CD0 /* SUSStatusLoader.m */; };
+		530121B415E56E9300A14CD0 /* SUSStatusLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 530121B215E56E9300A14CD0 /* SUSStatusLoader.m */; };
+		530121B515E56E9300A14CD0 /* SUSStatusLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 530121B215E56E9300A14CD0 /* SUSStatusLoader.m */; };
 		5301583A15081B0A00B54CEF /* settings-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5301583815081B0A00B54CEF /* settings-tabbaricon.png */; };
 		5301583B15081B0A00B54CEF /* settings-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5301583815081B0A00B54CEF /* settings-tabbaricon.png */; };
 		5301583C15081B0A00B54CEF /* settings-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5301583815081B0A00B54CEF /* settings-tabbaricon.png */; };
@@ -2577,6 +2589,14 @@
 		28C286E00D94DF7D0034E888 /* FoldersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FoldersViewController.m; sourceTree = "<group>"; };
 		28F335F01007B36200424DE2 /* FoldersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FoldersViewController.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		5301219A15E563C900A14CD0 /* PMSLoginLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSLoginLoader.h; sourceTree = "<group>"; };
+		5301219B15E563C900A14CD0 /* PMSLoginLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSLoginLoader.m; sourceTree = "<group>"; };
+		5301219F15E5659200A14CD0 /* ISMSStatusLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSStatusLoader.h; sourceTree = "<group>"; };
+		530121A015E5659200A14CD0 /* ISMSStatusLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSStatusLoader.m; sourceTree = "<group>"; };
+		530121A515E565AC00A14CD0 /* PMSStatusLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSStatusLoader.h; sourceTree = "<group>"; };
+		530121A615E565AC00A14CD0 /* PMSStatusLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSStatusLoader.m; sourceTree = "<group>"; };
+		530121B115E56E9300A14CD0 /* SUSStatusLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSStatusLoader.h; sourceTree = "<group>"; };
+		530121B215E56E9300A14CD0 /* SUSStatusLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSStatusLoader.m; sourceTree = "<group>"; };
 		5301583815081B0A00B54CEF /* settings-tabbaricon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "settings-tabbaricon.png"; path = "Images/Tab Bar Icons/settings-tabbaricon.png"; sourceTree = "<group>"; };
 		5301583915081B0A00B54CEF /* settings-tabbaricon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "settings-tabbaricon@2x.png"; path = "Images/Tab Bar Icons/settings-tabbaricon@2x.png"; sourceTree = "<group>"; };
 		5301F4AF15CA41F3005FAC69 /* EX2Kit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EX2Kit.framework; sourceTree = "<group>"; };
@@ -3713,6 +3733,19 @@
 				5382F65614856F3C001C14C8 /* libSystem.dylib */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		530121A415E5659600A14CD0 /* Status */ = {
+			isa = PBXGroup;
+			children = (
+				5301219F15E5659200A14CD0 /* ISMSStatusLoader.h */,
+				530121A015E5659200A14CD0 /* ISMSStatusLoader.m */,
+				530121B115E56E9300A14CD0 /* SUSStatusLoader.h */,
+				530121B215E56E9300A14CD0 /* SUSStatusLoader.m */,
+				530121A515E565AC00A14CD0 /* PMSStatusLoader.h */,
+				530121A615E565AC00A14CD0 /* PMSStatusLoader.m */,
+			);
+			name = Status;
 			sourceTree = "<group>";
 		};
 		5301F4AE15CA41F3005FAC69 /* EX2Kit.embeddedframework */ = {
@@ -4857,6 +4890,7 @@
 		53CCF6E9158C1267008B2E56 /* Generic */ = {
 			isa = PBXGroup;
 			children = (
+				530121A415E5659600A14CD0 /* Status */,
 				5380367F158C50CD009B17FB /* Playlists */,
 				53CCF6E8158C1237008B2E56 /* Cover Art */,
 				53703BCC15882BC700B1FB33 /* Root Folders */,
@@ -4884,6 +4918,8 @@
 		53CCF6EB158C1284008B2E56 /* PMS Specific */ = {
 			isa = PBXGroup;
 			children = (
+				5301219A15E563C900A14CD0 /* PMSLoginLoader.h */,
+				5301219B15E563C900A14CD0 /* PMSLoginLoader.m */,
 			);
 			name = "PMS Specific";
 			sourceTree = "<group>";
@@ -6982,6 +7018,10 @@
 				5345207315A6677B003E0BC0 /* BassEffectDAO.m in Sources */,
 				5345207615A6677B003E0BC0 /* BassEffectValue.m in Sources */,
 				5345207C15A6678F003E0BC0 /* BassVisualizer.m in Sources */,
+				5301219C15E563C900A14CD0 /* PMSLoginLoader.m in Sources */,
+				530121A115E5659200A14CD0 /* ISMSStatusLoader.m in Sources */,
+				530121A715E565AC00A14CD0 /* PMSStatusLoader.m in Sources */,
+				530121B315E56E9300A14CD0 /* SUSStatusLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7450,6 +7490,10 @@
 				5345207515A6677B003E0BC0 /* BassEffectDAO.m in Sources */,
 				5345207815A6677B003E0BC0 /* BassEffectValue.m in Sources */,
 				5345207E15A6678F003E0BC0 /* BassVisualizer.m in Sources */,
+				5301219E15E563C900A14CD0 /* PMSLoginLoader.m in Sources */,
+				530121A315E5659200A14CD0 /* ISMSStatusLoader.m in Sources */,
+				530121A915E565AC00A14CD0 /* PMSStatusLoader.m in Sources */,
+				530121B515E56E9300A14CD0 /* SUSStatusLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7686,6 +7730,10 @@
 				5345207415A6677B003E0BC0 /* BassEffectDAO.m in Sources */,
 				5345207715A6677B003E0BC0 /* BassEffectValue.m in Sources */,
 				5345207D15A6678F003E0BC0 /* BassVisualizer.m in Sources */,
+				5301219D15E563C900A14CD0 /* PMSLoginLoader.m in Sources */,
+				530121A215E5659200A14CD0 /* ISMSStatusLoader.m in Sources */,
+				530121A815E565AC00A14CD0 /* PMSStatusLoader.m in Sources */,
+				530121B415E56E9300A14CD0 /* SUSStatusLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

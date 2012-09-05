@@ -19,11 +19,13 @@
 #import "ServerTypeViewController.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
+#import "PMSLoginLoader.h"
 
 @implementation PMSServerEditViewControllerViewController
 
 @synthesize parentController, theNewRedirectUrl;
 @synthesize urlField, usernameField, passwordField, cancelButton, saveButton;
+@synthesize loader;
 
 #pragma mark - Rotation
 
@@ -135,7 +137,7 @@
 }
 
 
-- (IBAction) saveButtonPressed:(id)sender
+- (IBAction)saveButtonPressed:(id)sender
 {
 	if (![self checkUrl:urlField.text])
 	{
@@ -145,80 +147,11 @@
 	
 	if ([self checkUrl:urlField.text] && [self checkUsername:usernameField.text] && [self checkPassword:passwordField.text])
 	{
-		Server *theServer = [[Server alloc] init];
-		theServer.url = self.urlField.text;
-		theServer.username = self.usernameField.text;
-		theServer.password = self.passwordField.text;
-		theServer.type = WAVEBOX;
-		
-		if (!settingsS.serverList)
-			settingsS.serverList = [NSMutableArray arrayWithCapacity:1];
-		
-		if(viewObjectsS.serverToEdit)
-		{					
-			// Replace the entry in the server list
-			NSInteger index = [settingsS.serverList indexOfObject:viewObjectsS.serverToEdit];
-			[settingsS.serverList replaceObjectAtIndex:index withObject:theServer];
-			
-			// Update the serverToEdit to the new details
-			viewObjectsS.serverToEdit = theServer;
-			
-			// Save the plist values
-			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-			[defaults setObject:theServer.url forKey:@"url"];
-			[defaults setObject:theServer.username forKey:@"username"];
-			[defaults setObject:theServer.password forKey:@"password"];
-			[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settingsS.serverList] forKey:@"servers"];
-			[defaults synchronize];
-			
-			[NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
-			[NSNotificationCenter postNotificationToMainThreadWithName:@"showSaveButton"];
-			
-			if (self.parentController)
-				[self.parentController dismissModalViewControllerAnimated:YES];
-			
-			[self dismissModalViewControllerAnimated:YES];
-			
-			NSDictionary *userInfo = nil;
-			if (self.theNewRedirectUrl)
-			{
-				userInfo = [NSDictionary dictionaryWithObject:self.theNewRedirectUrl forKey:@"theNewRedirectUrl"];
-			}
-			[NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer" userInfo:userInfo];
-		}
-		else
-		{
-			// Create the entry in serverList
-			viewObjectsS.serverToEdit = theServer;
-			[settingsS.serverList addObject:viewObjectsS.serverToEdit];
-			
-			// Save the plist values
-			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-			[defaults setObject:self.urlField.text forKey:@"url"];
-			[defaults setObject:self.usernameField.text forKey:@"username"];
-			[defaults setObject:self.passwordField.text forKey:@"password"];
-			[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settingsS.serverList] forKey:@"servers"];
-			[defaults synchronize];
-			
-			[NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
-			[NSNotificationCenter postNotificationToMainThreadWithName:@"showSaveButton"];
-			
-			if (self.parentController)
-				[self.parentController dismissModalViewControllerAnimated:YES];
-			
-			[self dismissModalViewControllerAnimated:YES];
-			
-			if (IS_IPAD())
-				[appDelegateS.ipadRootViewController.menuViewController showHome];
-			
-			NSDictionary *userInfo = nil;
-			if (self.theNewRedirectUrl)
-			{
-				userInfo = [NSDictionary dictionaryWithObject:self.theNewRedirectUrl forKey:@"theNewRedirectUrl"];
-			}
-			[NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer" userInfo:userInfo];
-		}
-	}
+        [viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Logging in"];
+        
+        self.loader = [[PMSLoginLoader alloc] initWithDelegate:self urlString:urlField.text username:usernameField.text password:passwordField.text];
+        [self.loader startLoad];
+    }
 }
 
 #pragma mark - UITextField delegate
@@ -239,6 +172,132 @@
 	[self.usernameField resignFirstResponder];
 	[self.passwordField resignFirstResponder];
 	[super touchesBegan:touches withEvent:event];
+}
+
+#pragma mark - Loader delegate
+
+- (void)loadingRedirected:(ISMSLoader *)theLoader redirectUrl:(NSURL *)url
+{
+    NSMutableString *redirectUrlString = [NSMutableString stringWithFormat:@"%@://%@", url.scheme, url.host];
+	if (url.port)
+		[redirectUrlString appendFormat:@":%@", url.port];
+	
+	if ([url.pathComponents count] > 3)
+	{
+		for (NSString *component in url.pathComponents)
+		{
+			if ([component isEqualToString:@"api"])
+				break;
+			
+			if (![component isEqualToString:@"/"])
+			{
+				[redirectUrlString appendFormat:@"/%@", component];
+			}
+		}
+	}
+	
+	//DLog(@"redirectUrlString: %@", redirectUrlString);
+	
+	settingsS.redirectUrlString = [NSString stringWithString:redirectUrlString];
+}
+
+- (void)loadingFailed:(ISMSLoader *)theLoader withError:(NSError *)error
+{
+    self.loader.delegate = nil;
+    self.loader = nil;
+	[viewObjectsS hideLoadingScreen];
+	
+	NSString *message = @"";
+	if (error.code == ISMSErrorCode_IncorrectCredentials)
+		message = @"Either your username or password is incorrect. Please try again";
+	else
+		message = [NSString stringWithFormat:@"Either the WaveBox URL is incorrect, the WaveBox server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\nError code %i:\n%@", [error code], [error localizedDescription]];
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	[alert show];
+}
+
+- (void)loadingFinished:(ISMSLoader *)theLoader
+{
+    [viewObjectsS hideLoadingScreen];
+    
+    Server *theServer = [[Server alloc] init];
+    theServer.url = self.urlField.text;
+    theServer.username = self.usernameField.text;
+    theServer.password = self.passwordField.text;
+    theServer.type = WAVEBOX;
+    
+    settingsS.sessionId = self.loader.sessionId;
+    
+    if (!settingsS.serverList)
+        settingsS.serverList = [NSMutableArray arrayWithCapacity:1];
+    
+    if(viewObjectsS.serverToEdit)
+    {
+        // Replace the entry in the server list
+        NSInteger index = [settingsS.serverList indexOfObject:viewObjectsS.serverToEdit];
+        [settingsS.serverList replaceObjectAtIndex:index withObject:theServer];
+        
+        // Update the serverToEdit to the new details
+        viewObjectsS.serverToEdit = theServer;
+        
+        // Save the plist values
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setObject:theServer.url forKey:@"url"];
+        [defaults setObject:theServer.username forKey:@"username"];
+        [defaults setObject:theServer.password forKey:@"password"];
+        [defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settingsS.serverList] forKey:@"servers"];
+        [defaults synchronize];
+        
+        [NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
+        [NSNotificationCenter postNotificationToMainThreadWithName:@"showSaveButton"];
+        
+        if (self.parentController)
+            [self.parentController dismissModalViewControllerAnimated:YES];
+        
+        [self dismissModalViewControllerAnimated:YES];
+        
+        NSDictionary *userInfo = nil;
+        if (self.theNewRedirectUrl)
+        {
+            userInfo = [NSDictionary dictionaryWithObject:self.theNewRedirectUrl forKey:@"theNewRedirectUrl"];
+        }
+        [NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer" userInfo:userInfo];
+    }
+    else
+    {
+        // Create the entry in serverList
+        viewObjectsS.serverToEdit = theServer;
+        [settingsS.serverList addObject:viewObjectsS.serverToEdit];
+        
+        // Save the plist values
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setObject:self.urlField.text forKey:@"url"];
+        [defaults setObject:self.usernameField.text forKey:@"username"];
+        [defaults setObject:self.passwordField.text forKey:@"password"];
+        [defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settingsS.serverList] forKey:@"servers"];
+        [defaults synchronize];
+        
+        [NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
+        [NSNotificationCenter postNotificationToMainThreadWithName:@"showSaveButton"];
+        
+        if (self.parentController)
+            [self.parentController dismissModalViewControllerAnimated:YES];
+        
+        [self dismissModalViewControllerAnimated:YES];
+        
+        if (IS_IPAD())
+            [appDelegateS.ipadRootViewController.menuViewController showHome];
+        
+        NSDictionary *userInfo = nil;
+        if (self.theNewRedirectUrl)
+        {
+            userInfo = [NSDictionary dictionaryWithObject:self.theNewRedirectUrl forKey:@"theNewRedirectUrl"];
+        }
+        [NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer" userInfo:userInfo];
+    }
+    
+    self.loader.delegate = nil;
+    self.loader = nil;
 }
 
 @end

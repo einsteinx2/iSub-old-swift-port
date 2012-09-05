@@ -28,6 +28,9 @@
 @property NSUInteger minorVersion;
 @property (copy) NSString *versionString;
 
++ (id)loaderWithDelegate:(id<ISMSServerCheckerDelegate>)theDelegate serverType:(NSString *)serverType;
++ (id)loaderWithDelegate:(id<ISMSServerCheckerDelegate>)theDelegate;
+
 - (id)initWithDelegate:(id<ISMSServerCheckerDelegate>)theDelegate;
 
 - (void)checkServerUrlString:(NSString *)urlString username:(NSString *)username password:(NSString *)password;

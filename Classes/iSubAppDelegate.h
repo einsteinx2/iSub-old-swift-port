@@ -11,12 +11,13 @@
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 #import "BWHockeyManager.h"
+#import "ISMSLoaderDelegate.h"
 
 #define appDelegateS [iSubAppDelegate sharedInstance]
 
-@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, Reachability, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController, HTTPServer;
+@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, Reachability, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController, HTTPServer, ISMSStatusLoader;
 
-@interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate, ISMSServerCheckerDelegate, MFMailComposeViewControllerDelegate, BWHockeyManagerDelegate>
+@interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate, ISMSServerCheckerDelegate, MFMailComposeViewControllerDelegate, BWHockeyManagerDelegate, ISMSLoaderDelegate>
 {		
 	UIWindow *window;
 	
@@ -44,6 +45,8 @@
 }
 
 - (void)startStopServer;
+
+@property (strong) ISMSStatusLoader *statusLoader;
 
 @property (strong) ISMSServerChecker *serverChecker;
 

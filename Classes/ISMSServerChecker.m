@@ -20,21 +20,32 @@
 @synthesize receivedData, delegate, request, isNewSearchAPI, connection;
 @synthesize majorVersion, minorVersion, versionString;
 
-- (id)initWithDelegate:(id<ISMSServerCheckerDelegate>)theDelegate
++ (id)loaderWithDelegate:(id<ISMSServerCheckerDelegate>)theDelegate serverType:(NSString *)serverType
 {
-	if ([settingsS.serverType isEqualToString:SUBSONIC] || [settingsS.serverType isEqualToString:UBUNTU_ONE])
+    if ([serverType isEqualToString:SUBSONIC] || [serverType isEqualToString:UBUNTU_ONE])
 	{
 		SUSServerChecker *checker = [[SUSServerChecker alloc] init];
 		checker.delegate = theDelegate;
 		return checker;
 	}
-	else if ([settingsS.serverType isEqualToString:WAVEBOX]) 
+	else if ([serverType isEqualToString:WAVEBOX])
 	{
 		PMSServerChecker *checker = [[PMSServerChecker alloc] init];
 		checker.delegate = theDelegate;
 		return checker;
 	}
 	return nil;
+}
+
++ (id)loaderWithDelegate:(id<ISMSServerCheckerDelegate>)theDelegate
+{
+    return [self loaderWithDelegate:theDelegate serverType:settingsS.serverType];
+}
+
+- (id)initWithDelegate:(id<ISMSServerCheckerDelegate>)theDelegate
+{
+    assert(0 && "Must be subclassed");
+    return nil;
 }
 
 - (void)checkServerUrlString:(NSString *)urlString username:(NSString *)username password:(NSString *)password

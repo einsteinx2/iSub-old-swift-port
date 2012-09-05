@@ -26,6 +26,7 @@ typedef enum
 	NSString *urlString;
 	NSString *username;
 	NSString *password;
+    NSString *sessionId;
 	
 	BOOL isPopupsEnabled;
 	BOOL isJukeboxEnabled;
@@ -60,6 +61,7 @@ typedef enum
 @property (copy) NSString *urlString;
 @property (copy) NSString *username;
 @property (copy) NSString *password;
+@property (copy) NSString *sessionId;
 
 @property (copy) NSString *redirectUrlString;
 

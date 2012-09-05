@@ -16,11 +16,16 @@ typedef enum
     ISMSLoaderType_Lyrics,
     ISMSLoaderType_CoverArt,
     ISMSLoaderType_ServerPlaylist,
-	ISMSLoaderType_NowPlaying
+	ISMSLoaderType_NowPlaying,
+    ISMSLoaderType_Status,
+    ISMSLoaderType_Login
 } ISMSLoaderType;
 
 @class ISMSLoader;
 @protocol ISMSLoaderDelegate <NSObject>
+
+@optional
+- (void)loadingRedirected:(ISMSLoader *)theLoader redirectUrl:(NSURL *)url;
 
 @required
 - (void)loadingFailed:(ISMSLoader*)theLoader withError:(NSError *)error;

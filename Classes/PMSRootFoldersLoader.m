@@ -20,19 +20,14 @@
 
 - (NSURLRequest *)createRequest
 {
-	//DLog(@"Starting load");
     NSString *action = @"folders";
-	NSString *item;
+    
 	if (self.selectedFolderId != nil && [self.selectedFolderId intValue] != -1)
 	{
-		item = [self.selectedFolderId stringValue];
+        return [NSMutableURLRequest requestWithPMSAction:action itemId:self.selectedFolderId.stringValue];
 	}
-	
-	/*// Treat artists as folders for now
-	NSString *action = @"artists";
-	NSString *item;*/
     
-    return [NSMutableURLRequest requestWithPMSAction:action item:item];
+    return [NSMutableURLRequest requestWithPMSAction:action];
 }
 
 - (void)processResponse
@@ -46,7 +41,7 @@
 	//NSDate *startTime = [NSDate date];
 	
 	NSString *responseString = [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding];
-//DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
+    DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
 	
 	NSDictionary *response = [responseString JSONValue];
 	
@@ -84,21 +79,22 @@
 	
 	// Update the count
 	NSInteger totalCount = [self rootFolderUpdateCount];
-	
-	/*NSString *tableName = [NSString stringWithFormat:@"rootFolderNameCache%@", self.tableModifier];
+    
+	NSString *tableName = [NSString stringWithFormat:@"rootFolderNameCache%@", self.tableModifier];
 	NSArray *indexes = [databaseS sectionInfoFromTable:tableName inDatabaseQueue:self.dbQueue withColumn:@"name"];
+    DLog(@"indexes: %@", indexes);
 	for (int i = 0; i < indexes.count; i++)
 	{
-		NSArray *index = [indexes objectAtIndex:0];
+		NSArray *index = [indexes objectAtIndex:i];
 		NSArray *nextIndex = [indexes objectAtIndexSafe:i+1];
 		
 		NSString *name = [index objectAtIndex:0];
-		NSInteger row = [[index objectAtIndex:1] intValue];
+		NSInteger row = [[index objectAtIndex:1] intValue] + 1; // Add 1 to compensate for sqlite row numbering
 		NSInteger count = nextIndex ? [[nextIndex objectAtIndex:1] intValue] - row : totalCount - row;
-	//DLog(@"name: %@  row: %i  count: %i", name, row, count);
+        DLog(@"name: %@  row: %i  count: %i", name, row, count);
 		[self addRootFolderIndexToCache:row count:count name:name];
-	}*/
-	[self addRootFolderIndexToCache:1 count:totalCount name:@"All"];
+	}
+	//[self addRootFolderIndexToCache:1 count:totalCount name:@"All"];
 	
 	// Save the reload time
 	[settingsS setRootFoldersReloadTime:[NSDate date]];

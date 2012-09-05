@@ -1,0 +1,56 @@
+//
+//  PMSLoginLoader.m
+//  iSub
+//
+//  Created by Ben Baron on 8/22/12.
+//  Copyright (c) 2012 Ben Baron. All rights reserved.
+//
+
+#import "PMSLoginLoader.h"
+#import "SBJson.h"
+
+@implementation PMSLoginLoader
+@synthesize urlString, username, password, sessionId;
+
+- (ISMSLoaderType)type
+{
+    return ISMSLoaderType_Login;
+}
+
+- (id)initWithDelegate:(NSObject<ISMSLoaderDelegate> *)theDelegate urlString:(NSString *)theUrlString username:(NSString *)theUsername password:(NSString *)thePassword
+{
+    if ((self = [super initWithDelegate:theDelegate]))
+    {
+        urlString = theUrlString;
+        username = theUsername;
+        password = thePassword;
+    }
+    return self;
+}
+
+- (NSURLRequest *)createRequest
+{
+    if (self.urlString == nil || self.username == nil || self.password == nil)
+        return nil;
+    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:self.username, @"u", self.password, @"p", nil];
+    return [NSMutableURLRequest requestWithPMSAction:@"login" urlString:self.urlString parameters:parameters byteOffset:0];
+}
+
+- (void)processResponse
+{
+	NSString *responseString = [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding];
+    DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
+	
+	NSDictionary *response = [responseString JSONValue];
+    
+    self.sessionId = [response objectForKey:@"sessionId"];
+	
+	self.receivedData = nil;
+	self.connection = nil;
+	
+	// Notify the delegate that the loading is finished
+	[self informDelegateLoadingFinished];
+}
+
+@end

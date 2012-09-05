@@ -8,8 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "ServerTypeViewController.h"
+#import "ISMSLoaderDelegate.h"
 
-@interface PMSServerEditViewControllerViewController : UIViewController
+@class PMSLoginLoader;
+@interface PMSServerEditViewControllerViewController : UIViewController <ISMSLoaderDelegate>
+
+@property (nonatomic, strong) PMSLoginLoader *loader;
 
 @property (nonatomic, strong) IBOutlet UITextField *urlField;
 @property (nonatomic, strong) IBOutlet UITextField *usernameField;

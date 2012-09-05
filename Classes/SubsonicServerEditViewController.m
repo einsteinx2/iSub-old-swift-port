@@ -19,6 +19,7 @@
 #import "ServerTypeViewController.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
+#import "SUSServerChecker.h"
 
 @implementation SubsonicServerEditViewController
 
@@ -158,8 +159,8 @@
 	if ([self checkUrl:urlField.text] && [self checkUsername:usernameField.text] && [self checkPassword:passwordField.text])
 	{
 		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
-		
-		ISMSServerChecker *checker = [[ISMSServerChecker alloc] initWithDelegate:self];
+        		
+		SUSServerChecker *checker = [[SUSServerChecker alloc] initWithDelegate:self];
 		[checker checkServerUrlString:urlField.text username:usernameField.text password:passwordField.text];
 	}
 }

@@ -73,6 +73,7 @@
 	secondsOffset = self.seekTime;
 	isRecover = self.isRecover;
 	recoverSetting = self.recoverSetting;
+    sessionId = self.sessionId;
 	
 	audioEngineS.startByteOffset = byteOffset;
 	audioEngineS.startSecondsOffset = secondsOffset;
@@ -403,6 +404,7 @@
 	username = username ? username : DEFAULT_USER_NAME;
 	password = [userDefaults stringForKey:@"password"];
 	password = password ? password : DEFAULT_PASSWORD;
+    sessionId = [userDefaults stringForKey:[NSString stringWithFormat:@"sessionId%@", self.urlString.md5]];
 }
 
 #pragma mark - Login Settings
@@ -475,6 +477,26 @@
 	{
 		password = [pass copy];
 		[userDefaults setObject:pass forKey:@"password"];
+		[userDefaults synchronize];
+	}
+}
+
+- (NSString *)sessionId
+{
+	@synchronized(self)
+	{
+		return sessionId;
+	}
+}
+
+- (void)setSessionId:(NSString *)sId
+{
+	@synchronized(self)
+	{
+		sessionId = [sId copy];
+        
+        NSString *key = [NSString stringWithFormat:@"sessionId%@", self.urlString.md5];
+		[userDefaults setObject:sessionId forKey:key];
 		[userDefaults synchronize];
 	}
 }
@@ -1418,7 +1440,6 @@
 {
 	return [urlString isEqualToString:DEFAULT_URL];
 }
-
 
 #pragma mark - Singleton methods
 

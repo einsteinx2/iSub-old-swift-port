@@ -18,13 +18,14 @@
 @property (unsafe_unretained) NSObject<ISMSLoaderDelegate> *delegate;
 
 @property (strong) NSURLConnection *connection;
+@property (strong) NSURLRequest *request;
 @property (strong) NSMutableData *receivedData;
 @property (readonly) ISMSLoaderType type;
 
 + (id)loader;
 + (id)loaderWithDelegate:(id <ISMSLoaderDelegate>)theDelegate;
 
-- (void)setup;
+- (void)setup; // Override this
 - (id)initWithDelegate:(NSObject<ISMSLoaderDelegate> *)theDelegate;
 
 - (void)startLoad;

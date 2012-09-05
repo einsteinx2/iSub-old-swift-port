@@ -18,6 +18,7 @@
 #import "Server.h"
 #import "ServerTypeViewController.h"
 #import "UbuntuServerEditViewController.h"
+#import "PMSServerEditViewControllerViewController.h"
 #import "CustomUIAlertView.h"
 #import "Reachability.h"
 #import "SavedSettings.h"
@@ -26,11 +27,13 @@
 #import "ISMSStreamManager.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
+#import "PMSLoginLoader.h"
 
 @implementation ServerListViewController
 
 @synthesize theNewRedirectionUrl, settingsTabViewController, helpTabViewController;
 @synthesize isEditing, headerView, segmentedControl;
+@synthesize loginLoader;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -48,8 +51,7 @@
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
-
-	
+    
 	self.theNewRedirectionUrl = nil;
 	
 	self.tableView.allowsSelectionDuringEditing = YES;
@@ -187,8 +189,10 @@
 	viewObjectsS.serverToEdit = nil;
 	
 	ServerTypeViewController *serverTypeViewController = [[ServerTypeViewController alloc] initWithNibName:@"ServerTypeViewController" bundle:nil];
+    
 	if ([serverTypeViewController respondsToSelector:@selector(setModalPresentationStyle:)])
 		serverTypeViewController.modalPresentationStyle = UIModalPresentationFormSheet;
+    
 	if (IS_IPAD())
 		[appDelegateS.ipadRootViewController presentModalViewController:serverTypeViewController animated:YES];
 	else
@@ -209,20 +213,27 @@
 
 - (void)showServerEditScreen
 {
-	if (viewObjectsS.serverToEdit.type == UBUNTU_ONE)
+	if ([viewObjectsS.serverToEdit.type isEqualToString:UBUNTU_ONE])
 	{
 		UbuntuServerEditViewController *ubuntuServerEditViewController = [[UbuntuServerEditViewController alloc] initWithNibName:@"UbuntuServerEditViewController" bundle:nil];
 		if ([ubuntuServerEditViewController respondsToSelector:@selector(setModalPresentationStyle:)])
 			ubuntuServerEditViewController.modalPresentationStyle = UIModalPresentationFormSheet;
 		[self presentModalViewController:ubuntuServerEditViewController animated:YES];
 	}
-	else // Default to Subsonic
+	else if ([viewObjectsS.serverToEdit.type isEqualToString:SUBSONIC])
 	{
 		SubsonicServerEditViewController *subsonicServerEditViewController = [[SubsonicServerEditViewController alloc] initWithNibName:@"SubsonicServerEditViewController" bundle:nil];
 		if ([subsonicServerEditViewController respondsToSelector:@selector(setModalPresentationStyle:)])
 			subsonicServerEditViewController.modalPresentationStyle = UIModalPresentationFormSheet;
 		[self presentModalViewController:subsonicServerEditViewController animated:YES];
 	}
+    else if ([viewObjectsS.serverToEdit.type isEqualToString:WAVEBOX])
+    {
+        PMSServerEditViewControllerViewController *pmsServerEditViewController = [[PMSServerEditViewControllerViewController alloc] initWithNibName:@"PMSServerEditViewControllerViewController" bundle:nil];
+		if ([pmsServerEditViewController respondsToSelector:@selector(setModalPresentationStyle:)])
+			pmsServerEditViewController.modalPresentationStyle = UIModalPresentationFormSheet;
+		[self presentModalViewController:pmsServerEditViewController animated:YES];
+    }
 }
 
 - (void)switchServer:(NSNotification*)notification 
@@ -411,7 +422,7 @@
 		return;
 	
 	viewObjectsS.serverToEdit = [settingsS.serverList objectAtIndexSafe:indexPath.row];
-//DLog(@"viewObjectsS.serverToEdit.url: %@", viewObjectsS.serverToEdit.url);
+    //DLog(@"viewObjectsS.serverToEdit.url: %@", viewObjectsS.serverToEdit.url);
 
 	if (self.isEditing)
 	{
@@ -421,8 +432,17 @@
 	{
 		self.theNewRedirectionUrl = nil;
 		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
-		ISMSServerChecker *checker = [[ISMSServerChecker alloc] initWithDelegate:self];
-		[checker checkServerUrlString:viewObjectsS.serverToEdit.url username:viewObjectsS.serverToEdit.username password:viewObjectsS.serverToEdit.password];
+        
+        if ([viewObjectsS.serverToEdit.type isEqualToString:SUBSONIC] || [viewObjectsS.serverToEdit.type isEqualToString:UBUNTU_ONE])
+        {
+            ISMSServerChecker *checker = [ISMSServerChecker loaderWithDelegate:self serverType:viewObjectsS.serverToEdit.type];
+            [checker checkServerUrlString:viewObjectsS.serverToEdit.url username:viewObjectsS.serverToEdit.username password:viewObjectsS.serverToEdit.password];
+        }
+        else if ([viewObjectsS.serverToEdit.type isEqualToString:WAVEBOX])
+        {
+            self.loginLoader = [[PMSLoginLoader alloc] initWithDelegate:self urlString:viewObjectsS.serverToEdit.url username:viewObjectsS.serverToEdit.username password:viewObjectsS.serverToEdit.password];
+            [self.loginLoader startLoad];
+        }
 	}
 }
 
@@ -481,6 +501,73 @@
 		[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject: settingsS.serverList] forKey:@"servers"];
 		[defaults synchronize];
     }   
+}
+
+- (void)loadingRedirected:(ISMSLoader *)theLoader redirectUrl:(NSURL *)url
+{
+    /*NSMutableString *redirectUrlString = [NSMutableString stringWithFormat:@"%@://%@", url.scheme, url.host];
+	if (url.port)
+		[redirectUrlString appendFormat:@":%@", url.port];
+	
+	if ([url.pathComponents count] > 3)
+	{
+		for (NSString *component in url.pathComponents)
+		{
+			if ([component isEqualToString:@"api"])
+				break;
+			
+			if (![component isEqualToString:@"/"])
+			{
+				[redirectUrlString appendFormat:@"/%@", component];
+			}
+		}
+	}
+	
+	//DLog(@"redirectUrlString: %@", redirectUrlString);
+	
+	settingsS.redirectUrlString = [NSString stringWithString:redirectUrlString];*/
+    
+    self.theNewRedirectionUrl = [NSString stringWithFormat:@"%@://%@:%@", url.scheme, url.host, url.port];
+}
+
+- (void)loadingFailed:(ISMSLoader *)theLoader withError:(NSError *)error
+{
+    UIAlertView *alert = nil;
+	if (error.code == ISMSErrorCode_IncorrectCredentials)
+	{
+		alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either your username or password is incorrect\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", [error code], [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	}
+	else
+	{
+		alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the WaveBox URL is incorrect, the WaveBox server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", [error code], [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	}
+	alert.tag = 3;
+	[alert show];
+    
+    self.loginLoader.delegate = nil;
+    self.loginLoader = nil;
+        
+    DLog(@"server verification failed, hiding loading screen");
+    [viewObjectsS hideLoadingScreen];
+}
+
+- (void)loadingFinished:(ISMSLoader *)theLoader
+{    	
+	settingsS.serverType = viewObjectsS.serverToEdit.type;
+	settingsS.urlString = viewObjectsS.serverToEdit.url;
+	settingsS.username = viewObjectsS.serverToEdit.username;
+	settingsS.password = viewObjectsS.serverToEdit.password;
+    settingsS.redirectUrlString = self.theNewRedirectionUrl;
+    
+    settingsS.sessionId = self.loginLoader.sessionId;
+    
+    self.loginLoader.delegate = nil;
+    self.loginLoader = nil;
+	
+	[self switchServer:nil];
+    
+    DLog(@"server verification passed, hiding loading screen");
+    [viewObjectsS hideLoadingScreen];
 }
 
 - (void)ISMSServerURLCheckFailed:(ISMSServerChecker *)checker withError:(NSError *)error

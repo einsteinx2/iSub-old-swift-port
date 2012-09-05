@@ -17,13 +17,13 @@
 
 - (NSURLRequest *)createRequest
 {
-    return [NSMutableURLRequest requestWithPMSAction:@"folders" item:self.myId];
+    return [NSMutableURLRequest requestWithPMSAction:@"folders" itemId:self.myId];
 }
 
 - (void)processResponse
 {	            
 	NSString *responseString = [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding];
-//DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
+    //DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
 	
 	NSDictionary *response = [responseString JSONValue];
 	
@@ -32,7 +32,7 @@
 	//NSArray *albums = [response objectForKey:@"albums"];
 	
 	NSArray *folders = [response objectForKey:@"folders"];
-	NSArray *songs = [response objectForKey:@"songs"];
+	NSArray *mediaItems = [response objectForKey:@"mediaItems"];
 
 	self.albumsCount = folders.count;
 	for (NSDictionary *folder in folders)
@@ -44,18 +44,24 @@
 		}
 	}
 	
-	self.songsCount = songs.count;
 	self.folderLength = 0;
-	for (NSDictionary *song in songs)
+    int i = 0;
+	for (NSDictionary *mediaItem in mediaItems)
 	{
 		@autoreleasepool 
 		{
-			Song *aSong = [[Song alloc] initWithPMSDictionary:song];
-		//DLog(@"aSong: %@", aSong);
-			self.folderLength += aSong.duration.intValue;
-			[self insertSongIntoFolderCache:aSong];
+            // Only parse songs
+            if ([[mediaItem objectForKey:@"itemTypeId"] isEqual:[NSNumber numberWithInt:3]])
+            {
+                Song *aSong = [[Song alloc] initWithPMSDictionary:mediaItem];
+                //DLog(@"aSong: %@", aSong);
+                self.folderLength += aSong.duration.intValue;
+                [self insertSongIntoFolderCache:aSong];
+                i++;
+            }
 		}
 	}
+    self.songsCount = i;
 	
 	[self insertAlbumsCount];
 	[self insertSongsCount];

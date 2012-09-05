@@ -177,7 +177,8 @@
 	}
 	else if ([settingsS.serverType isEqualToString:WAVEBOX]) 
 	{
-		self.request = [NSMutableURLRequest requestWithPMSAction:@"stream" item:self.mySong.songId parameters:nil byteOffset:byteOffset];
+        NSDictionary *parameters = [NSDictionary dictionaryWithObject:self.mySong.songId forKey:@"id"];
+		self.request = [NSMutableURLRequest requestWithPMSAction:@"stream" parameters:parameters byteOffset:byteOffset];
 	}
 	
 	self.loadingThread = [[NSThread alloc] initWithTarget:self selector:@selector(startConnection) object:nil];

@@ -12,6 +12,7 @@
 #import "CustomUIAlertView.h"
 #import "SUSRootFoldersDAO.h"
 #import "NSMutableURLRequest+SUS.h"
+#import "NSMutableURLRequest+PMS.h"
 #import "SavedSettings.h"
 #import "Server.h"
 #import "SBJson.h"
@@ -265,8 +266,18 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	self.connection = nil;
 	
 	//DLog(@"Folder dropdown: updating folders");
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getMusicFolders" parameters:nil];
-	//DLog(@"folder dropdown url: %@   body: %@  headers: %@", [[request URL] absoluteString], [[[NSString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding] autorelease], [request allHTTPHeaderFields]);
+    NSMutableURLRequest *request;
+    
+    if ([settingsS.serverType isEqualToString:SUBSONIC] || [settingsS.serverType isEqualToString:UBUNTU_ONE])
+	{
+        request = [NSMutableURLRequest requestWithSUSAction:@"getMusicFolders" parameters:nil];
+	}
+    else if ([settingsS.serverType isEqualToString:WAVEBOX])
+	{
+        NSDictionary *parameters = [NSDictionary dictionaryWithObject:@"true" forKey:@"mediaFolders"];
+        request = [NSMutableURLRequest requestWithPMSAction:@"folders" parameters:parameters];
+    }
+    //DLog(@"folder dropdown url: %@   body: %@  headers: %@", [[request URL] absoluteString], [[[NSString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding] autorelease], [request allHTTPHeaderFields]);
     
 	self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	if (self.connection)
@@ -341,7 +352,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 		
 		
 		NSString *responseString = [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding];
-	//DLog(@"folder dropdown: %@", responseString);
+        DLog(@"folder dropdown: %@", responseString);
 		NSDictionary *response = [responseString JSONValue];
 		
 		NSArray *responseFolders = [response objectForKey:@"folders"];
@@ -352,6 +363,11 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 			
 			[self.updatedfolders setObject:folderName forKey:folderId];
 		}
+        
+        self.folders = [NSDictionary dictionaryWithDictionary:self.updatedfolders];
+		
+		// Save the default
+		[SUSRootFoldersDAO setFolderDropdownFolders:self.folders];
 	}
 	
 	self.receivedData = nil;

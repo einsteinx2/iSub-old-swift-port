@@ -7,10 +7,13 @@
 //
 
 #import "ISMSServerChecker.h"
+#import "ISMSLoaderDelegate.h"
 
-@class SettingsTabViewController, HelpTabViewController;
+@class SettingsTabViewController, HelpTabViewController, PMSLoginLoader;
 
-@interface ServerListViewController : UITableViewController <ISMSServerCheckerDelegate>
+@interface ServerListViewController : UITableViewController <ISMSServerCheckerDelegate, ISMSLoaderDelegate>
+
+@property (nonatomic, strong) PMSLoginLoader *loginLoader;
 
 @property (nonatomic) BOOL isEditing;
 @property (nonatomic, strong) UIView *headerView;

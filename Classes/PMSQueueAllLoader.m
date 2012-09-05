@@ -21,9 +21,9 @@
 		return;
 	
 	NSString *folderId = [self.folderIds objectAtIndexSafe:0];
-//DLog(@"Loading folderid: %@", folderId);
+    //DLog(@"Loading folderid: %@", folderId);
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithPMSAction:@"folders" item:folderId];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithPMSAction:@"folders" itemId:folderId];
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (self.connection)
 	{
@@ -34,7 +34,7 @@
 - (void)process
 {
 	NSString *responseString = [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding];
-//DLog(@"queue all: %@", responseString);
+    //DLog(@"queue all: %@", responseString);
 	NSDictionary *response = [responseString JSONValue];
 	
 	NSArray *folders = [response objectForKey:@"folders"];
@@ -48,8 +48,8 @@
 			[self.listOfAlbums addObject:anAlbum];
 		}
 	}
-//DLog(@"folders: %@", folders);
-//DLog(@"listOfAlbums: %@", self.listOfAlbums);
+    //DLog(@"folders: %@", folders);
+    //DLog(@"listOfAlbums: %@", self.listOfAlbums);
 
 	for (NSDictionary *song in songs)
 	{

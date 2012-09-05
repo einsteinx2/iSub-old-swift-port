@@ -15,11 +15,10 @@
 
 - (void)checkServerUrlString:(NSString *)urlString username:(NSString *)username password:(NSString *)password
 {
-    self.receivedData = [NSMutableData dataWithCapacity:0];
+    /*self.receivedData = [NSMutableData dataWithCapacity:0];
     
 	NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithPMSAction:@"status"
-																		   item:nil 
-																   urlString:urlString
+                                                                      urlString:urlString
 																       username:username 
 																	   password:password
 																  parameters:nil];
@@ -34,7 +33,7 @@
     {
         NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
         [self.delegate ISMSServerURLCheckFailed:self withError:error];
-    }
+    }*/
 }
 
 #pragma mark - Connection Delegate
@@ -106,7 +105,7 @@
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	
 	NSString *responseString = [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding];
-//DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
+    DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
 	
 	NSDictionary *response = [responseString JSONValue];
 	

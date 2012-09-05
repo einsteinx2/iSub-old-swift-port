@@ -28,11 +28,11 @@
 {
 	[super viewDidLoad];
 	
-	if (IS_BETA())
+	/*if (IS_BETA())
 	{
 		pmsButton.enabled = YES;
 		pmsButton.hidden = NO;
-	}
+	}*/
 }
 
 - (IBAction)buttonAction:(id)sender
