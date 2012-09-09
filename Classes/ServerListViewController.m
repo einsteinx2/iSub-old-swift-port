@@ -28,12 +28,12 @@
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
 #import "PMSLoginLoader.h"
+#import "SUSStatusLoader.h"
 
 @implementation ServerListViewController
 
 @synthesize theNewRedirectionUrl, settingsTabViewController, helpTabViewController;
 @synthesize isEditing, headerView, segmentedControl;
-@synthesize loginLoader;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -435,13 +435,16 @@
         
         if ([viewObjectsS.serverToEdit.type isEqualToString:SUBSONIC] || [viewObjectsS.serverToEdit.type isEqualToString:UBUNTU_ONE])
         {
-            ISMSServerChecker *checker = [ISMSServerChecker loaderWithDelegate:self serverType:viewObjectsS.serverToEdit.type];
-            [checker checkServerUrlString:viewObjectsS.serverToEdit.url username:viewObjectsS.serverToEdit.username password:viewObjectsS.serverToEdit.password];
+            SUSStatusLoader *statusLoader = [SUSStatusLoader loaderWithDelegate:self];
+            statusLoader.urlString = viewObjectsS.serverToEdit.url;
+            statusLoader.username = viewObjectsS.serverToEdit.username;
+            statusLoader.password = viewObjectsS.serverToEdit.password;
+            [statusLoader startLoad];
         }
         else if ([viewObjectsS.serverToEdit.type isEqualToString:WAVEBOX])
         {
-            self.loginLoader = [[PMSLoginLoader alloc] initWithDelegate:self urlString:viewObjectsS.serverToEdit.url username:viewObjectsS.serverToEdit.username password:viewObjectsS.serverToEdit.password];
-            [self.loginLoader startLoad];
+            PMSLoginLoader *loginLoader = [[PMSLoginLoader alloc] initWithDelegate:self urlString:viewObjectsS.serverToEdit.url username:viewObjectsS.serverToEdit.username password:viewObjectsS.serverToEdit.password];
+            [loginLoader startLoad];
         }
 	}
 }
@@ -505,7 +508,7 @@
 
 - (void)loadingRedirected:(ISMSLoader *)theLoader redirectUrl:(NSURL *)url
 {
-    /*NSMutableString *redirectUrlString = [NSMutableString stringWithFormat:@"%@://%@", url.scheme, url.host];
+    NSMutableString *redirectUrlString = [NSMutableString stringWithFormat:@"%@://%@", url.scheme, url.host];
 	if (url.port)
 		[redirectUrlString appendFormat:@":%@", url.port];
 	
@@ -513,7 +516,7 @@
 	{
 		for (NSString *component in url.pathComponents)
 		{
-			if ([component isEqualToString:@"api"])
+			if ([component isEqualToString:@"api"] || [component isEqualToString:@"rest"])
 				break;
 			
 			if (![component isEqualToString:@"/"])
@@ -523,11 +526,11 @@
 		}
 	}
 	
-	//DLog(@"redirectUrlString: %@", redirectUrlString);
+    DLog(@"redirectUrlString: %@", redirectUrlString);
 	
-	settingsS.redirectUrlString = [NSString stringWithString:redirectUrlString];*/
+	self.theNewRedirectionUrl = [NSString stringWithString:redirectUrlString];
     
-    self.theNewRedirectionUrl = [NSString stringWithFormat:@"%@://%@:%@", url.scheme, url.host, url.port];
+    //self.theNewRedirectionUrl = [NSString stringWithFormat:@"%@://%@:%@", url.scheme, url.host, url.port];
 }
 
 - (void)loadingFailed:(ISMSLoader *)theLoader withError:(NSError *)error
@@ -543,9 +546,6 @@
 	}
 	alert.tag = 3;
 	[alert show];
-    
-    self.loginLoader.delegate = nil;
-    self.loginLoader = nil;
         
     DLog(@"server verification failed, hiding loading screen");
     [viewObjectsS hideLoadingScreen];
@@ -559,58 +559,15 @@
 	settingsS.password = viewObjectsS.serverToEdit.password;
     settingsS.redirectUrlString = self.theNewRedirectionUrl;
     
-    settingsS.sessionId = self.loginLoader.sessionId;
-    
-    self.loginLoader.delegate = nil;
-    self.loginLoader = nil;
+    if (theLoader.type == ISMSLoaderType_Login)
+    {
+        settingsS.sessionId = ((PMSLoginLoader *)theLoader).sessionId;
+    }
 	
 	[self switchServer:nil];
     
     DLog(@"server verification passed, hiding loading screen");
     [viewObjectsS hideLoadingScreen];
-}
-
-- (void)ISMSServerURLCheckFailed:(ISMSServerChecker *)checker withError:(NSError *)error
-{	
-	UIAlertView *alert = nil;
-	if (error.code == ISMSErrorCode_IncorrectCredentials)
-	{
-		alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either your username or password is incorrect\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", [error code], [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	}
-	else
-	{
-		alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", [error code], [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	}
-	alert.tag = 3;
-	[alert show];
-    
-	checker = nil;
-	    
-    DLog(@"server verification failed, hiding loading screen");
-    [viewObjectsS hideLoadingScreen];
-}
-
-- (void)ISMSServerURLCheckPassed:(ISMSServerChecker *)checker
-{
-	settingsS.isNewSearchAPI = checker.isNewSearchAPI;
-    
-	checker = nil;
-	
-	settingsS.serverType = viewObjectsS.serverToEdit.type;
-	settingsS.urlString = viewObjectsS.serverToEdit.url;
-	settingsS.username = viewObjectsS.serverToEdit.username;
-	settingsS.password = viewObjectsS.serverToEdit.password;
-    settingsS.redirectUrlString = self.theNewRedirectionUrl;
-	
-	[self switchServer:nil];
-    
-    DLog(@"server verification passed, hiding loading screen");
-    [viewObjectsS hideLoadingScreen];
-}
-
-- (void)ISMSServerURLCheckRedirected:(ISMSServerChecker *)checker redirectUrl:(NSURL *)url
-{
-    self.theNewRedirectionUrl = [NSString stringWithFormat:@"%@://%@:%@", url.scheme, url.host, url.port];
 }
 
 @end

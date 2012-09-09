@@ -10,4 +10,12 @@
 
 @interface SUSStatusLoader : ISMSStatusLoader
 
+@property (strong) NSString *urlString;
+@property (strong) NSString *username;
+@property (strong) NSString *password;
+@property BOOL isNewSearchAPI;
+@property NSUInteger majorVersion;
+@property NSUInteger minorVersion;
+@property (copy) NSString *versionString;
+
 @end

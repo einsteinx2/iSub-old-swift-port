@@ -19,7 +19,7 @@
 #import "ServerTypeViewController.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
-#import "SUSServerChecker.h"
+#import "SUSStatusLoader.h"
 
 @implementation SubsonicServerEditViewController
 
@@ -136,7 +136,7 @@
 }
 
 
-- (IBAction) saveButtonPressed:(id)sender
+- (IBAction)saveButtonPressed:(id)sender
 {
 	if (![self checkUrl:urlField.text])
 	{
@@ -160,14 +160,17 @@
 	{
 		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
         		
-		SUSServerChecker *checker = [[SUSServerChecker alloc] initWithDelegate:self];
-		[checker checkServerUrlString:urlField.text username:usernameField.text password:passwordField.text];
+		SUSStatusLoader *loader = [[SUSStatusLoader alloc] initWithDelegate:self];
+        loader.urlString = urlField.text;
+        loader.username = usernameField.text;
+        loader.password = passwordField.text;
+        [loader startLoad];
 	}
 }
 
 #pragma mark - Server URL Checker delegate
 
-- (void)ISMSServerURLCheckRedirected:(ISMSServerChecker *)checker redirectUrl:(NSURL *)url
+- (void)loadingRedirected:(ISMSLoader *)theLoader redirectUrl:(NSURL *)url
 {
 	NSMutableString *redirectUrlString = [NSMutableString stringWithFormat:@"%@://%@", url.scheme, url.host];
 	if (url.port)
@@ -192,9 +195,8 @@
 	settingsS.redirectUrlString = [NSString stringWithString:redirectUrlString];
 }
 
-- (void)ISMSServerURLCheckFailed:(ISMSServerChecker *)checker withError:(NSError *)error
+- (void)loadingFailed:(ISMSLoader *)theLoader withError:(NSError *)error
 {
-	checker = nil;
 	[viewObjectsS hideLoadingScreen];
 	
 	NSString *message = @"";
@@ -206,10 +208,9 @@
 	[alert show];
 }	
 	
-- (void)ISMSServerURLCheckPassed:(ISMSServerChecker *)checker
+- (void)loadingFinished:(ISMSLoader *)theLoader
 {
 	//DLog(@"server check passed");
-	 checker = nil;
 	[viewObjectsS hideLoadingScreen];
 	
 	Server *theServer = [[Server alloc] init];

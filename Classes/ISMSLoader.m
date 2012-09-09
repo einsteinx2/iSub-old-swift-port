@@ -69,19 +69,28 @@
 - (void)startLoad
 {
     self.request = [self createRequest];
-	self.connection = [NSURLConnection connectionWithRequest:self.request delegate:self];
-	if (self.connection)
-	{
-		// Create the NSMutableData to hold the received data.
-		// receivedData is an instance variable declared elsewhere.
-		self.receivedData = [NSMutableData data];
-	} 
-	else 
-	{
-		// Inform the delegate that the loading failed.
+    if (self.request)
+    {
+        self.connection = [NSURLConnection connectionWithRequest:self.request delegate:self];
+        if (self.connection)
+        {
+            // Create the NSMutableData to hold the received data.
+            // receivedData is an instance variable declared elsewhere.
+            self.receivedData = [NSMutableData data];
+        }
+        else
+        {
+            // Inform the delegate that the loading failed.
+            NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
+            [self informDelegateLoadingFailed:error];
+        }
+    }
+    else
+    {
+        // Inform the delegate that the loading failed.
 		NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
 		[self informDelegateLoadingFailed:error];
-	}
+    }
 }
 
 - (void)cancelLoad

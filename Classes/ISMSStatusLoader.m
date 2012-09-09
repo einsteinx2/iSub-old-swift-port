@@ -22,7 +22,7 @@
 {
 	if ([settingsS.serverType isEqualToString:SUBSONIC] || [settingsS.serverType isEqualToString:UBUNTU_ONE])
 	{
-		return nil;//[[SUSRootFoldersLoader alloc] initWithDelegate:theDelegate];
+		return [[SUSStatusLoader alloc] initWithDelegate:theDelegate];
 	}
 	else if ([settingsS.serverType isEqualToString:WAVEBOX])
 	{

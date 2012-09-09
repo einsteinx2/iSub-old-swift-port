@@ -17,7 +17,7 @@
 @property HFX volumeFx;
 @end
 
-static const int ddLogLevel = LOG_LEVEL_INFO;
+LOG_LEVEL_ISUB_DEFAULT
 
 @implementation BassEqualizer
 @synthesize channel, volumeFx, eqHandles, eqValues, isEqActive, gain;

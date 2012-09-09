@@ -15,6 +15,7 @@
 #import "BassEqualizer.h"
 #import "BassVisualizer.h"
 #import "BassGaplessPlayer.h"
+#import "iSubBassGaplessPlayerDelegate.h"
 
 #define audioEngineS ((AudioEngine *)[AudioEngine sharedInstance])
 
@@ -32,9 +33,13 @@
 @property NSUInteger startByteOffset;
 @property NSUInteger startSecondsOffset;
 
+@property (strong) iSubBassGaplessPlayerDelegate *delegate;
+
 // BASS methods
 //
 - (void)startWithOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds;
 - (void)start;
+
+- (void)startEmptyPlayer;
 
 @end

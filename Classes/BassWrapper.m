@@ -9,7 +9,7 @@
 #import "BassWrapper.h"
 #import "Song.h"
 
-static const int ddLogLevel = LOG_LEVEL_INFO;
+LOG_LEVEL_ISUB_DEFAULT
 
 @implementation BassWrapper
 
@@ -49,8 +49,11 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 	 }
 	 }*/ 
 	// check built-in stream formats...
-	//if (ctype==BASS_CTYPE_STREAM_FLAC) return @"FLAC";
-	//if (ctype==BASS_CTYPE_STREAM_FLAC_OGG) return @"FLAC";
+    if (i.ctype==BASS_CTYPE_STREAM_WV) return @"WV";
+	if (i.ctype==BASS_CTYPE_STREAM_MPC) return @"MPC";
+	if (i.ctype==BASS_CTYPE_STREAM_APE) return @"APE";
+	if (i.ctype==BASS_CTYPE_STREAM_FLAC) return @"FLAC";
+	if (i.ctype==BASS_CTYPE_STREAM_FLAC_OGG) return @"FLAC";
 	if (i.ctype==BASS_CTYPE_STREAM_OGG) return @"OGG";
 	if (i.ctype==BASS_CTYPE_STREAM_MP1) return @"MP1";
 	if (i.ctype==BASS_CTYPE_STREAM_MP2) return @"MP2";
@@ -176,8 +179,9 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 		case BASS_CTYPE_STREAM_WAV_FLOAT:
 		case BASS_CTYPE_STREAM_WAV:
 		case BASS_CTYPE_STREAM_AIFF:
-			//case BASS_CTYPE_STREAM_FLAC:
-			//case BASS_CTYPE_STREAM_FLAC_OGG:
+        case BASS_CTYPE_STREAM_WV:
+        case BASS_CTYPE_STREAM_FLAC:
+        case BASS_CTYPE_STREAM_FLAC_OGG:
 			if (bitrate < 330 || bitrate > 12000)
 				bitrate = songForStream.estimatedBitrate;
 			break;
@@ -186,6 +190,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 		case BASS_CTYPE_STREAM_MP1:
 		case BASS_CTYPE_STREAM_MP2:
 		case BASS_CTYPE_STREAM_MP3:
+        case BASS_CTYPE_STREAM_MPC:
 			if (bitrate > 450)
 				bitrate = songForStream.estimatedBitrate;
 			break;	

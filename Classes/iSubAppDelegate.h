@@ -7,7 +7,6 @@
 //
 
 #import "MKStoreManager.h"
-#import "ISMSServerChecker.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 #import "BWHockeyManager.h"
@@ -17,7 +16,7 @@
 
 @class BBSplitViewController, iPadRootViewController, InitialDetailViewController, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, Reachability, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController, HTTPServer, ISMSStatusLoader;
 
-@interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate, ISMSServerCheckerDelegate, MFMailComposeViewControllerDelegate, BWHockeyManagerDelegate, ISMSLoaderDelegate>
+@interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate, MFMailComposeViewControllerDelegate, BWHockeyManagerDelegate, ISMSLoaderDelegate>
 {		
 	UIWindow *window;
 	
@@ -47,8 +46,6 @@
 - (void)startStopServer;
 
 @property (strong) ISMSStatusLoader *statusLoader;
-
-@property (strong) ISMSServerChecker *serverChecker;
 
 @property (nonatomic) IBOutlet UIWindow *window;
 

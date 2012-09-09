@@ -13,3 +13,16 @@
     #import <QuartzCore/QuartzCore.h>
     #import "Imports.h"
 #endif
+
+
+#ifdef BETA
+#define LOG_LEVEL_ISUB_DEFAULT static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+#else
+#define LOG_LEVEL_ISUB_DEFAULT static const int ddLogLevel = LOG_LEVEL_INFO;
+#endif
+
+#ifdef BETA
+#define LOG_LEVEL_ISUB_DEBUG static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+#else
+#define LOG_LEVEL_ISUB_DEBUG static const int ddLogLevel = LOG_LEVEL_INFO;
+#endif

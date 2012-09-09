@@ -14,9 +14,12 @@
 #import "BassStream.h"
 #import "BassEqualizer.h"
 #import "BassVisualizer.h"
+#import "BassGaplessPlayerDelegate.h"
 
 @class EX2RingBuffer, SUSRegisterActionLoader;
 @interface BassGaplessPlayer : NSObject
+
+@property id<BassGaplessPlayerDelegate> delegate;
 
 @property dispatch_queue_t streamGcdQueue;
 
@@ -42,9 +45,8 @@
 
 @property (strong) BassEqualizer *equalizer;
 @property (strong) BassVisualizer *visualizer;
-		   
-// Registering actions
-@property (strong) SUSRegisterActionLoader *registerActionLoader;
+        
+- (id)initWithDelegate:(id<BassGaplessPlayerDelegate>)theDelegate;
 
 // BASS methods
 //
@@ -60,5 +62,7 @@
 - (void)playPause;
 - (void)seekToPositionInBytes:(QWORD)bytes;
 - (void)seekToPositionInSeconds:(double)seconds;
+
+- (void)bassInit;
 
 @end

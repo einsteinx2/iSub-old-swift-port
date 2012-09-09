@@ -6,14 +6,11 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "ISMSServerChecker.h"
 #import "ISMSLoaderDelegate.h"
 
 @class SettingsTabViewController, HelpTabViewController, PMSLoginLoader;
 
-@interface ServerListViewController : UITableViewController <ISMSServerCheckerDelegate, ISMSLoaderDelegate>
-
-@property (nonatomic, strong) PMSLoginLoader *loginLoader;
+@interface ServerListViewController : UITableViewController <ISMSLoaderDelegate>
 
 @property (nonatomic) BOOL isEditing;
 @property (nonatomic, strong) UIView *headerView;

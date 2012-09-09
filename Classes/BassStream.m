@@ -10,7 +10,7 @@
 #import "Song.h"
 
 @implementation BassStream
-@synthesize song, fileHandle, shouldBreakWaitLoop, neededSize, isWaiting, writePath, isTempCached, shouldBreakWaitLoopForever, isSongStarted, isFileUnderrun, wasFileJustUnderrun, stream, isEnded, isEndedCalled, bufferSpaceTilSongEnd, player;
+@synthesize player, song, fileHandle, shouldBreakWaitLoop, neededSize, isWaiting, writePath, isTempCached, shouldBreakWaitLoopForever, isSongStarted, isFileUnderrun, wasFileJustUnderrun, stream, isEnded, isEndedCalled, bufferSpaceTilSongEnd;
 
 - (id)init
 {

@@ -27,8 +27,9 @@
 @synthesize shouldResumeFromInterruption;
 @synthesize player;
 @synthesize startByteOffset, startSecondsOffset;
+@synthesize delegate;
 
-static const int ddLogLevel = LOG_LEVEL_INFO;
+LOG_LEVEL_ISUB_DEFAULT
 
 // Singleton object
 static AudioEngine *sharedInstance = nil;
@@ -60,8 +61,6 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 		}
     }
 }
-
-#pragma mark - Audio Session methods
 
 void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue) 
 {			
@@ -110,13 +109,28 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 	self.player = nil;
 	
 	// Create a new player
-	self.player = [[BassGaplessPlayer alloc] init];
+	self.player = [[BassGaplessPlayer alloc] initWithDelegate:self.delegate];
 	[self.player startWithOffsetInBytes:byteOffset orSeconds:seconds];
 }
 
 - (void)start
 {
 	[self startWithOffsetInBytes:[NSNumber numberWithInt:0] orSeconds:nil];
+}
+
+- (void)startEmptyPlayer
+{
+    // Dispose of the old player
+	[self.player stop];
+	self.player = nil;
+    
+    // Create a new player and just initialize BASS, but don't play anything
+    self.player = [[BassGaplessPlayer alloc] initWithDelegate:self.delegate];
+    [self.player bassInit];
+    
+    // Pause the player
+    //BASS_Pause();
+    //self.player.isPlaying = NO;
 }
 
 - (BassEqualizer *)equalizer
@@ -146,6 +160,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 	
 	// Add the callbacks for headphone removal and other audio takeover
 	AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, NULL);
+    
+    delegate = [[iSubBassGaplessPlayerDelegate alloc] init];
 }
 
 + (id)sharedInstance

@@ -42,6 +42,7 @@
 #import "MenuViewController.h"
 #import "ISMSCacheQueueManager.h"
 #import "ISMSStatusLoader.h"
+#import "SUSStatusLoader.h"
 
 @implementation iSubAppDelegate
 
@@ -49,7 +50,7 @@
 
 // Main interface elements for iPhone
 @synthesize background, currentTabBarController, mainTabBarController, offlineTabBarController;
-@synthesize homeNavigationController, playerNavigationController, artistsNavigationController, rootViewController, allAlbumsNavigationController, allSongsNavigationController, playlistsNavigationController, bookmarksNavigationController, playingNavigationController, genresNavigationController, cacheNavigationController, chatNavigationController, supportNavigationController, serverChecker, statusLoader;
+@synthesize homeNavigationController, playerNavigationController, artistsNavigationController, rootViewController, allAlbumsNavigationController, allSongsNavigationController, playlistsNavigationController, bookmarksNavigationController, playingNavigationController, genresNavigationController, cacheNavigationController, chatNavigationController, supportNavigationController, statusLoader;
 
 // Main interface elemements for iPad
 @synthesize ipadRootViewController;
@@ -104,8 +105,8 @@
 	fileLogger.logFileManager.maximumNumberOfLogFiles = 7;
 	[DDLog addLogger:fileLogger];
 	
-//DLog(@"settingsS: %@", settingsS);
-//DLog(@"urlString: %@", settingsS.urlString);
+    //DLog(@"settingsS: %@", settingsS);
+    //DLog(@"urlString: %@", settingsS.urlString);
 	
 	// Setup network reachability notifications
 	self.wifiReach = [Reachability reachabilityForLocalWiFi];
@@ -118,7 +119,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(batteryStateChanged:) name:@"UIDeviceBatteryStateDidChangeNotification" object:[UIDevice currentDevice]];
 	[self batteryStateChanged:nil];	
 	
-//DLog(@"urlString: %@", settingsS.urlString);
+    //DLog(@"urlString: %@", settingsS.urlString);
 
 	// Handle offline mode
 	if (settingsS.isForceOfflineMode)
@@ -265,7 +266,7 @@
 // Check server cancel load
 - (void)cancelLoad
 {
-	[self.serverChecker cancelLoad];
+	[self.statusLoader cancelLoad];
 	[viewObjectsS hideLoadingScreen];
 }
 
@@ -281,18 +282,15 @@
 	// have internet access or if the host url entered was wrong.
     if (!viewObjectsS.isOfflineMode) 
 	{
+        self.statusLoader = [ISMSStatusLoader loaderWithDelegate:self];
         if ([settingsS.serverType isEqualToString:SUBSONIC])
         {
-            self.serverChecker = [ISMSServerChecker loaderWithDelegate:self];
-            [self.serverChecker checkServerUrlString:settingsS.urlString
-                                            username:settingsS.username
-                                            password:settingsS.password];
+            SUSStatusLoader *subsonicLoader = (SUSStatusLoader *)self.statusLoader;
+            subsonicLoader.urlString = settingsS.urlString;
+            subsonicLoader.username = settingsS.username;
+            subsonicLoader.password = settingsS.password;
         }
-        else
-        {
-            self.statusLoader = [ISMSStatusLoader loaderWithDelegate:self];
-            [self.statusLoader startLoad];
-        }
+        [self.statusLoader startLoad];
     }
 	
 	// Do a server check every half hour
@@ -313,7 +311,7 @@
 	{
 		for (NSString *component in url.pathComponents)
 		{
-			if ([component isEqualToString:@"api"])
+			if ([component isEqualToString:@"api"] || [component isEqualToString:@"rest"])
 				break;
 			
 			if (![component isEqualToString:@"/"])
@@ -347,6 +345,11 @@
         }
         
         self.statusLoader = nil;
+        
+        if ([theLoader isKindOfClass:[SUSStatusLoader class]])
+        {
+             settingsS.isNewSearchAPI = ((SUSStatusLoader *)theLoader).isNewSearchAPI;
+        }
     }
 }
 
@@ -354,6 +357,11 @@
 {
     if (theLoader.type == ISMSLoaderType_Status)
     {
+        if ([theLoader isKindOfClass:[SUSStatusLoader class]])
+        {
+            settingsS.isNewSearchAPI = ((SUSStatusLoader *)theLoader).isNewSearchAPI;
+        }
+        
         self.statusLoader = nil;
         
         //DLog(@"server verification passed, hiding loading screen");
@@ -365,72 +373,6 @@
         // Start the queued downloads if Wifi is available
         [cacheQueueManagerS startDownloadQueue];
     }
-}
-
-#pragma mark - SUS Server Check Delegate
-
-- (void)ISMSServerURLCheckRedirected:(ISMSServerChecker *)checker redirectUrl:(NSURL *)url
-{
-	NSMutableString *redirectUrlString = [NSMutableString stringWithFormat:@"%@://%@", url.scheme, url.host];
-	if (url.port)
-		[redirectUrlString appendFormat:@":%@", url.port];
-	
-	if ([url.pathComponents count] > 3)
-	{
-		for (NSString *component in url.pathComponents)
-		{
-			if ([component isEqualToString:@"rest"])
-				break;
-			
-			if (![component isEqualToString:@"/"])
-			{
-				[redirectUrlString appendFormat:@"/%@", component];
-			}
-		}
-	}
-	
-//DLog(@"redirectUrlString: %@", redirectUrlString);
-	
-	settingsS.redirectUrlString = [NSString stringWithString:redirectUrlString];
-}
-
-- (void)ISMSServerURLCheckFailed:(ISMSServerChecker *)checker withError:(NSError *)error
-{
-	[viewObjectsS hideLoadingScreen];
-	
-    if(!viewObjectsS.isOfflineMode)
-	{
-		/*UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", [error code], [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Settings", nil];
-		alert.tag = 3;
-		[alert show];
-		[alert release];
-		
-		[self enterOfflineModeForce];*/
-		
-		[self enterOfflineMode];
-	}
-    
-	self.serverChecker = nil;
-	
-	settingsS.isNewSearchAPI = checker.isNewSearchAPI;
-}
-
-- (void)ISMSServerURLCheckPassed:(ISMSServerChecker *)checker
-{
-    //DLog(@"server check passed");
-	
-	settingsS.isNewSearchAPI = checker.isNewSearchAPI;
-    
-    self.serverChecker = nil;
-    
-    //DLog(@"server verification passed, hiding loading screen");
-    [viewObjectsS hideLoadingScreen];
-	
-	if (!IS_IPAD() && !viewObjectsS.isOfflineMode)
-		[viewObjectsS orderMainTabBarController];
-	
-	// Start the queued downloads if Wifi is available
-	[cacheQueueManagerS startDownloadQueue];
 }
 
 #pragma mark -

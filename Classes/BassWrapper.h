@@ -8,6 +8,10 @@
 
 #import "bass.h"
 #import "bass_fx.h"
+#import "bassflac.h"
+#import "basswv.h"
+#import "bass_mpc.h"
+#import "bass_ape.h"
 #import "bassmix.h"
 #include <AudioToolbox/AudioToolbox.h>
 #import "BassStream.h"

@@ -7,7 +7,7 @@
 //
 
 #import "BassGaplessPlayer.h"
-#import "Song.h"
+#import "Song+DAO.h"
 #import "PlaylistSingleton.h"
 #import "MusicSingleton.h"
 #import "SavedSettings.h"
@@ -16,15 +16,15 @@
 #import "SocialSingleton.h"
 
 @implementation BassGaplessPlayer
+@synthesize delegate;
 @synthesize streamGcdQueue;
 @synthesize ringBuffer, stopFillingRingBuffer;
 @synthesize streamQueue, outStream, mixerStream;
 @synthesize isPlaying, isStarted, bitRate, currentByteOffset, waitLoopStream;
 @synthesize startByteOffset, startSecondsOffset;
-@synthesize registerActionLoader;
 @synthesize equalizer, visualizer;
 
-static const int ddLogLevel = LOG_LEVEL_INFO;
+LOG_LEVEL_ISUB_DEFAULT
 
 #define ISMS_BASSBufferSize 800
 #define ISMS_defaultSampleRate 44100
@@ -48,7 +48,17 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStream) name:ISMSNotification_CurrentPlaylistOrderChanged object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStream) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	}
-	return self;
+	
+    return self;
+}
+
+- (id)initWithDelegate:(id<BassGaplessPlayerDelegate>)theDelegate
+{
+    if (([self init]))
+    {
+        delegate = theDelegate;
+    }
+    return self;
 }
 
 - (void)dealloc
@@ -62,23 +72,34 @@ void CALLBACK MyStreamEndCallback(HSYNC handle, DWORD channel, DWORD data, void 
 {
 	@autoreleasepool 
 	{
+		// Free and remove the channel
+		//BASS_Mixer_ChannelRemove(channel);
+		//BASS_StreamFree(channel);
+		
 		BassStream *userInfo = (__bridge BassStream *)user;
 		if (userInfo)
 		{
-
-			// This is the current playing song, remove this one
-			//DLog(@"ending song: %@", userInfo.song);
-			userInfo.bufferSpaceTilSongEnd = userInfo.player.ringBuffer.filledSpaceLength;
-			userInfo.isEnded = YES;
-			
-			// Plug in the next one
 			NSUInteger index = [userInfo.player.streamQueue indexOfObject:userInfo];
-			userInfo = [userInfo.player.streamQueue objectAtIndexSafe:index+1];
-			//DLog(@"queuing song: %@", userInfo.song);
-			if (userInfo)
+			if (index == 0)
 			{
-				// There's another stream so play it
-				BASS_Mixer_StreamAddChannel(userInfo.player.mixerStream, userInfo.stream, 0);
+				// This is the current playing song, remove this one
+				//[sharedInstance.streamQueue removeObjectAtIndex:0];
+				userInfo.bufferSpaceTilSongEnd = userInfo.player.ringBuffer.filledSpaceLength;
+				userInfo.isEnded = YES;
+				
+				// Plug in the next one
+				userInfo = [userInfo.player.streamQueue objectAtIndexSafe:1];
+				if (userInfo)
+				{
+					// There's another stream so play it
+					BASS_Mixer_StreamAddChannel(userInfo.player.mixerStream, userInfo.stream, 0);
+				}
+			}
+			else
+			{
+				// Not sure why this would happen, just remove this stream from the queue
+				//ssert(0 && "somehow this stream ended but was not the current playing stream");
+				//[sharedInstance.streamQueue removeObjectAtIndex:index];
 			}
 		}
 	}
@@ -89,16 +110,19 @@ void CALLBACK MyFileCloseProc(void *user)
 	if (user == NULL)
 		return;
 	
-	// Get the user info object
-	BassStream *userInfo = (__bridge BassStream *)user;
-	
-	// Tell the read wait loop to break in case it's waiting
-	userInfo.shouldBreakWaitLoop = YES;
-	userInfo.shouldBreakWaitLoopForever = YES;
-	
-	// Close the file handle
-	if (userInfo.fileHandle)
-		[userInfo.fileHandle closeFile];
+	@autoreleasepool 
+	{
+		// Get the user info object
+		BassStream *userInfo = (__bridge BassStream *)user;
+		
+		// Tell the read wait loop to break in case it's waiting
+		userInfo.shouldBreakWaitLoop = YES;
+		userInfo.shouldBreakWaitLoopForever = YES;
+		
+		// Close the file handle
+		if (userInfo.fileHandle)
+			[userInfo.fileHandle closeFile];
+	}
 }
 
 QWORD CALLBACK MyFileLenProc(void *user)
@@ -139,36 +163,39 @@ DWORD CALLBACK MyFileReadProc(void *buffer, DWORD length, void *user)
 	if (buffer == NULL || user == NULL)
 		return 0;
 	
-	BassStream *userInfo = (__bridge BassStream *)user;
-	if (!userInfo.fileHandle)
-		return 0;
-	
-	// Read from the file
-	
-	NSData *readData;
-	@try 
+	@autoreleasepool
 	{
-		readData = [userInfo.fileHandle readDataOfLength:length];
+		BassStream *userInfo = (__bridge BassStream *)user;
+		if (!userInfo.fileHandle)
+			return 0;
+		
+		// Read from the file
+		
+		NSData *readData;
+		@try 
+		{
+			readData = [userInfo.fileHandle readDataOfLength:length];
+		}
+		@catch (NSException *exception) {
+			readData = nil;
+		}
+		
+		DWORD bytesRead = readData.length;
+		if (bytesRead > 0)
+		{
+			// Copy the data to the buffer
+			[readData getBytes:buffer length:bytesRead];
+		}
+		
+		if (bytesRead < length && userInfo.isSongStarted && !userInfo.wasFileJustUnderrun)
+		{
+			userInfo.isFileUnderrun = YES;
+		}
+		
+		userInfo.wasFileJustUnderrun = NO;
+		
+		return bytesRead;
 	}
-	@catch (NSException *exception) {
-		readData = nil;
-	}
-	
-	DWORD bytesRead = readData.length;
-	if (bytesRead > 0)
-	{
-		// Copy the data to the buffer
-		[readData getBytes:buffer length:bytesRead];
-	}
-	
-	if (bytesRead < length && userInfo.isSongStarted && !userInfo.wasFileJustUnderrun)
-	{
-		userInfo.isFileUnderrun = YES;
-	}
-	
-	userInfo.wasFileJustUnderrun = NO;
-	
-	return bytesRead;
 }
 
 BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
@@ -176,23 +203,26 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 	if (user == NULL)
 		return NO;
 	
-	// Seek to the requested offset (returns false if data not downloaded that far)
-	BassStream *userInfo = (__bridge BassStream *)user;
-	if (!userInfo.fileHandle)
-		return NO;
-	
-	BOOL success = YES;
-	
-	@try {
-		[userInfo.fileHandle seekToFileOffset:offset];
+	@autoreleasepool 
+	{
+		// Seek to the requested offset (returns false if data not downloaded that far)
+		BassStream *userInfo = (__bridge BassStream *)user;
+		if (!userInfo.fileHandle)
+			return NO;
+		
+		BOOL success = YES;
+		
+		@try {
+			[userInfo.fileHandle seekToFileOffset:offset];
+		}
+		@catch (NSException *exception) {
+			success = NO;
+		}
+		
+		DDLogCVerbose(@"seeking to %llu  success: %@", offset, NSStringFromBOOL(success));
+		
+		return success;
 	}
-	@catch (NSException *exception) {
-		success = NO;
-	}
-	
-	DDLogCVerbose(@"seeking to %llu  success: %@", offset, NSStringFromBOOL(success));
-	
-	return success;
 }
 
 static BASS_FILEPROCS fileProcs = {MyFileCloseProc, MyFileLenProc, MyFileReadProc, MyFileSeekProc};
@@ -209,8 +239,9 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 }
 
 - (DWORD)bassGetOutputData:(void *)buffer length:(DWORD)length
-{	
-	[socialS playerHandleSocial];
+{
+    // Done at end now
+	//[socialS playerHandleSocial];
 	
 	BassStream *userInfo = self.currentStream;
 	
@@ -268,28 +299,33 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 {
 	@autoreleasepool 
 	{
-		//DLog(@"song: %@", userInfo.song);
-		
 		userInfo.isEndedCalled = YES;
-		
-		[socialS playerClearSocial];
-		
-		// Remove the stream from the queue
-		[self.streamQueue removeObjectAtIndexSafe:0];
+        
+        if ([self.delegate respondsToSelector:@selector(bassSongEndedCalled)])
+        {
+            [self.delegate bassSongEndedCalled];
+        }
 		
 		// Remove the stream from the queue
 		if (userInfo)
 		{
 			BASS_StreamFree(userInfo.stream);
 		}
-		[self.streamQueue removeObject:userInfo];
+		[self.streamQueue removeObjectAtIndexSafe:0];
 		
 		// Increment current playlist index
 		[playlistS incrementIndex];
 		
 		// Get the next song in the queue
 		[self prepareNextSongStream:playlistS.nextSong];
-				
+		
+		Song *endedSong = userInfo.song;
+        
+        if ([self.delegate respondsToSelector:@selector(bassSongEndedPlaylistIncremented:)])
+        {
+            [self.delegate bassSongEndedPlaylistIncremented:endedSong];
+        }
+		
 		// Send song end notification
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnded];
 		
@@ -301,11 +337,14 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 			
 			// Send song start notification
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
-			
-			[socialS scrobbleSongAsPlaying];
-			
-			// Mark the last played time in the database for cache cleanup
-			playlistS.currentSong.playedDate = [NSDate date];
+            
+            // Mark the last played time in the database for cache cleanup
+			self.currentStream.song.playedDate = [NSDate date];
+            
+            if ([self.delegate respondsToSelector:@selector(bassSongEndedFinishedIsPlaying)])
+            {
+                [self.delegate bassSongEndedFinishedIsPlaying];
+            }
 		}
 		else
 		{
@@ -325,128 +364,133 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 
 - (void)keepRingBufferFilledInternal
 {
-	NSUInteger readSize = BytesFromKiB(64);
-	while (!self.stopFillingRingBuffer)
+	@autoreleasepool 
 	{
-		// Fill the buffer if there is empty space
-		if (self.ringBuffer.freeSpaceLength > readSize)
-		{
-			@autoreleasepool 
+		NSUInteger readSize = BytesFromKiB(64);
+		while (!self.stopFillingRingBuffer)
+		{						
+			// Fill the buffer if there is empty space
+			if (self.ringBuffer.freeSpaceLength > readSize)
 			{
-				//if (BASS_ChannelIsActive(self.outStream))
+				@autoreleasepool 
 				{
-					/* 
-					 * Read data to fill the buffer
-					 */ 
-					
-					BassStream *userInfo = self.currentStream;
-					
-					void *tempBuffer = malloc(sizeof(char) * readSize);
-					DWORD tempLength = BASS_ChannelGetData(self.mixerStream, tempBuffer, readSize);
-					if (tempLength) 
+					//if (BASS_ChannelIsActive(self.outStream))
 					{
-						userInfo.isSongStarted = YES;
+						/* 
+						 * Read data to fill the buffer
+						 */ 
 						
-						[self.ringBuffer fillWithBytes:tempBuffer length:tempLength];
-					}
-					free(tempBuffer);
-					
-					/*
-					 * Handle pausing to wait for more data
-					 */ 
-					
-					if (userInfo.isFileUnderrun && BASS_ChannelIsActive(userInfo.stream))
-					{
-						// Get a strong reference to the current song's userInfo object, so that
-						// if the stream is freed while the wait loop is sleeping, the object will
-						// still be around to respond to shouldBreakWaitLoop
-						self.waitLoopStream = userInfo;
+						BassStream *userInfo = self.currentStream;
 						
-						// Mark the stream as waiting
-						userInfo.isWaiting = YES;
-						userInfo.isFileUnderrun = NO;
-						userInfo.wasFileJustUnderrun = YES;
-						
-						// Handle waiting for additional data
-						Song *theSong = userInfo.song;
-						if (!theSong.isFullyCached)
+						void *tempBuffer = malloc(sizeof(char) * readSize);
+						DWORD tempLength = BASS_ChannelGetData(self.mixerStream, tempBuffer, readSize);
+						if (tempLength) 
 						{
-							if (viewObjectsS.isOfflineMode)
+							userInfo.isSongStarted = YES;
+							
+							[self.ringBuffer fillWithBytes:tempBuffer length:tempLength];
+						}
+						free(tempBuffer);
+						
+						/*
+						 * Handle pausing to wait for more data
+						 */ 
+						
+						if (userInfo.isFileUnderrun && BASS_ChannelIsActive(userInfo.stream))
+						{
+							// Get a strong reference to the current song's userInfo object, so that
+							// if the stream is freed while the wait loop is sleeping, the object will
+							// still be around to respond to shouldBreakWaitLoop
+							self.waitLoopStream = userInfo;
+							
+							// Mark the stream as waiting
+							userInfo.isWaiting = YES;
+							userInfo.isFileUnderrun = NO;
+							userInfo.wasFileJustUnderrun = YES;
+							
+							// Handle waiting for additional data
+							Song *theSong = userInfo.song;
+							if (!theSong.isFullyCached)
 							{
-								// This is offline mode and the song can not continue to play
-								[self moveToNextSong];
-							}
-							else
-							{
-								// Calculate the needed size:
-								// Choose either the current player bitrate, or if for some reason it is not detected properly, 
-								// use the best estimated bitrate. Then use that to determine how much data to let download to continue.
-								
-								unsigned long long size = theSong.localFileSize;
-								NSUInteger bitrate = [BassWrapper estimateBitrate:userInfo];
-								
-								unsigned long long bytesToWait = BytesForSecondsAtBitrate(settingsS.audioEngineBufferNumberOfSeconds, bitrate);
-								userInfo.neededSize = size + bytesToWait;
-								
-								DDLogCVerbose(@"audioEngineBufferNumberOfSeconds: %u", settingsS.audioEngineBufferNumberOfSeconds);
-								DDLogCVerbose(@"AUDIO ENGINE - waiting for %llu   neededSize: %llu", bytesToWait, userInfo.neededSize);
-								
-								// Sleep for 10000 microseconds, or 1/100th of a second
-								#define sleepTime 10000
-								// Check file size every second, so 1000000 microseconds
-								#define fileSizeCheckWait 1000000
-								QWORD totalSleepTime = 0;
-								while (YES)
+								if (viewObjectsS.isOfflineMode)
 								{
-									// Check if we should break every 100th of a second
-									usleep(sleepTime);
-									totalSleepTime += sleepTime;
-									if (userInfo.shouldBreakWaitLoop || userInfo.shouldBreakWaitLoopForever)
-										break;
+									// This is offline mode and the song can not continue to play
+									[self moveToNextSong];
+								}
+								else
+								{
+									// Calculate the needed size:
+									// Choose either the current player bitrate, or if for some reason it is not detected properly, 
+									// use the best estimated bitrate. Then use that to determine how much data to let download to continue.
 									
-									// Only check the file size every second
-									if (totalSleepTime >= fileSizeCheckWait)
+									unsigned long long size = theSong.localFileSize;
+									NSUInteger bitrate = [BassWrapper estimateBitrate:userInfo];
+									
+									unsigned long long bytesToWait = BytesForSecondsAtBitrate(settingsS.audioEngineBufferNumberOfSeconds, bitrate);
+									userInfo.neededSize = size + bytesToWait;
+									
+									DDLogCVerbose(@"audioEngineBufferNumberOfSeconds: %u", settingsS.audioEngineBufferNumberOfSeconds);
+									DDLogCVerbose(@"AUDIO ENGINE - waiting for %llu   neededSize: %llu", bytesToWait, userInfo.neededSize);
+									
+									// Sleep for 10000 microseconds, or 1/100th of a second
+#define sleepTime 10000
+									// Check file size every second, so 1000000 microseconds
+#define fileSizeCheckWait 1000000
+									QWORD totalSleepTime = 0;
+									while (YES)
 									{
-										@autoreleasepool 
+										// Check if we should break every 100th of a second
+										usleep(sleepTime);
+										totalSleepTime += sleepTime;
+										if (userInfo.shouldBreakWaitLoop || userInfo.shouldBreakWaitLoopForever)
+											break;
+										
+										// Only check the file size every second
+										if (totalSleepTime >= fileSizeCheckWait)
 										{
-											totalSleepTime = 0;
-											
-											// If enough of the file has downloaded, break the loop
-											if (userInfo.localFileSize >= userInfo.neededSize)
-												break;
-											// Handle temp cached songs ending. When they end, they are set as the last temp cached song, so we know it's done and can stop waiting for data.
-											else if (theSong.isTempCached && [theSong isEqualToSong:streamManagerS.lastTempCachedSong])
-												break;
-											// If the song has finished caching, we can stop waiting
-											else if (theSong.isFullyCached)
-												break;
-											// If we're not in offline mode, stop waiting and try next song
-											else if (viewObjectsS.isOfflineMode)
+											@autoreleasepool 
 											{
-												[self moveToNextSong];
-												break;
+												totalSleepTime = 0;
+												
+												// If enough of the file has downloaded, break the loop
+												if (userInfo.localFileSize >= userInfo.neededSize)
+													break;
+												// Handle temp cached songs ending. When they end, they are set as the last temp cached song, so we know it's done and can stop waiting for data.
+												else if (theSong.isTempCached && [theSong isEqualToSong:streamManagerS.lastTempCachedSong])
+													break;
+												// If the song has finished caching, we can stop waiting
+												else if (theSong.isFullyCached)
+													break;
+												// If we're not in offline mode, stop waiting and try next song
+												else if (viewObjectsS.isOfflineMode)
+												{
+													[self moveToNextSong];
+													break;
+												}
 											}
 										}
 									}
+									DDLogCVerbose(@"done waiting");
 								}
-								DDLogCVerbose(@"done waiting");
 							}
+							
+							userInfo.isWaiting = NO;
+							userInfo.shouldBreakWaitLoop = NO;
+							self.waitLoopStream = nil;
 						}
-						
-						userInfo.isWaiting = NO;
-						userInfo.shouldBreakWaitLoop = NO;
-						self.waitLoopStream = nil;
 					}
 				}
 			}
+			
+			// Sleep for 1/4th of a second to prevent a tight loop
+			usleep(150000);
 		}
-		
-		// Sleep for 1/4th of a second to prevent a tight loop
-		usleep(150000);
 	}
 }
 
 #pragma mark - BASS methods
+
+extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 
 - (void)bassInit:(NSUInteger)sampleRate
 {
@@ -463,6 +507,11 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	{
 		DDLogError(@"Can't initialize device");
 	}
+    
+    BASS_PluginLoad(&BASSFLACplugin, 0); // load the Flac plugin
+    BASS_PluginLoad(&BASSWVplugin, 0); // load the WavePack plugin
+    BASS_PluginLoad(&BASS_APEplugin, 0); // load the Monkey's Audio plugin
+    BASS_PluginLoad(&BASS_MPCplugin, 0); // load the MusePack plugin
 	
 	self.stopFillingRingBuffer = NO;
 	
@@ -500,6 +549,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		
 		[self.ringBuffer reset];
 		
+		[socialS playerHandleSocial];
 		[socialS playerClearSocial];
 		
 		[self.streamQueue removeAllObjects];
@@ -574,7 +624,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 			 {
 				 self.mixerStream = BASS_Mixer_StreamCreate(ISMS_defaultSampleRate, 2, BASS_STREAM_DECODE);//|BASS_MIXER_END);
 				 BASS_Mixer_StreamAddChannel(self.mixerStream, userInfo.stream, 0);
-				 self.outStream = BASS_StreamCreate(ISMS_defaultSampleRate, 2, 0, &MyStreamProc, (__bridge void *)self);
+				 self.outStream = BASS_StreamCreate(ISMS_defaultSampleRate, 2, 0, &MyStreamProc, (__bridge void*)self);
 				 
 				 self.visualizer.channel = self.outStream;
 				 
@@ -622,9 +672,11 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 				 // Start playback
 				 BASS_ChannelPlay(self.outStream, FALSE);
 				 self.isPlaying = YES;
-				 
-				 // This is a new song so notify Last.FM that it's playing
-				 [socialS scrobbleSongAsPlaying];
+                 
+                 if ([self.delegate respondsToSelector:@selector(bassFirstStreamStarted)])
+                 {
+                     [self.delegate bassFirstStreamStarted];
+                 }
 				 
 				 // Prepare the next song
 				 [self prepareNextSongStream];
@@ -632,7 +684,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 				 // Notify listeners that playback has started
 				 [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
 				 
-				 playlistS.currentSong.playedDate = [NSDate date];
+				 currentSong.playedDate = [NSDate date];
 			 }
 			 else if (!userInfo && !currentSong.isFullyCached && currentSong.localFileSize < ISMS_BassStreamMinFilesizeToFail)
 			 {
@@ -640,14 +692,21 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 				 {
 					 [self moveToNextSong];
 				 }
+				 else if (!currentSong.fileExists)
+				 {
+					 DDLogError(@"Stream for song %@ failed, file is not on disk, so calling [musicS startSong]", userInfo.song.title);
+					 // File was removed, most likely because the decryption failed, so start again normally
+					 [currentSong removeFromCachedSongsTableDbQueue];
+					 [musicS performSelectorOnMainThread:@selector(startSong) withObject:nil waitUntilDone:NO];
+				 }
 				 else
 				 {
 					 // Failed to create the stream, retrying
 					 DDLogError(@"------failed to create stream, retrying in 2 seconds------");
 					 
 					 [EX2Dispatch timerInMainQueueAfterDelay:ISMS_BassStreamRetryDelay 
-												   withName:startSongRetryTimer 
-													repeats:NO
+												   withName:startSongRetryTimer
+                                                    repeats:NO
 											   performBlock:^{ [self startWithOffsetInBytes:byteOffset orSeconds:seconds]; }];
 				 }
 			 }
@@ -670,7 +729,6 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	[EX2Dispatch runInQueue:streamGcdQueue waitUntilDone:NO block:^
 	 {
 		 // Remove any additional streams
-		 // TODO: need to remove this, and not call prepareNextSong when not necessary
 		 NSUInteger count = self.streamQueue.count;
 		 while (count > 2)
 		 {
@@ -702,16 +760,18 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		 
 		 if (!success)
 		 {
+#ifdef DEBUG
 			 NSInteger errorCode = BASS_ErrorGetCode();
 			 DDLogError(@"nextSong stream error: %i - %@", errorCode, [BassWrapper stringFromErrorCode:errorCode]);
+#endif
 			 
 			 // If the stream is currently stuck in the wait loop for partial precaching
 			 // tell the stream manager to download a few more seconds of data
 			 [streamManagerS downloadMoreOfPrecacheStream];
 			 
 			 [EX2Dispatch timerInMainQueueAfterDelay:ISMS_BassStreamRetryDelay 
-										   withName:nextSongRetryTimer 
-											repeats:NO
+										   withName:nextSongRetryTimer
+                                            repeats:NO
 									   performBlock:^{ [self prepareNextSongStream:theSong]; }];
 		 }
 	 }];
@@ -763,6 +823,11 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 
 - (void)stop
 {
+    if ([self.delegate respondsToSelector:@selector(bassStopped)])
+    {
+        [self.delegate bassStopped];
+    }
+	
     if (self.isPlaying) 
 	{
 		BASS_Pause();
@@ -817,6 +882,11 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	BassStream *userInfo = self.currentStream;
 	if (!userInfo)
 		return;
+    
+    if ([self.delegate respondsToSelector:@selector(bassSeekToPositionStarted)])
+    {
+        [self.delegate bassSeekToPositionStarted];
+    }
 	
 	if (userInfo.isEnded)
 	{
@@ -848,6 +918,11 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 			
 			if (didPause)
 				[self playPause];
+            
+            if ([self.delegate respondsToSelector:@selector(bassSeekToPositionSuccess)])
+            {
+                [self.delegate bassSeekToPositionSuccess];
+            }
 		}
 		else
 		{
