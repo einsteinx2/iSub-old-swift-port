@@ -3927,7 +3927,6 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5308A47515FC335E000456CB /* Dependencies */,
 				5308A37515FC3356000456CB /* EX2Kit */,
 				53D44F8415AA621A00CDD3B8 /* Accelerate.framework */,
 				53C7FD9C150F0E94008DA51C /* MessageUI.framework */,
@@ -4043,8 +4042,9 @@
 		5308A37515FC3356000456CB /* EX2Kit */ = {
 			isa = PBXGroup;
 			children = (
-				5308A37615FC3356000456CB /* Categories */,
 				5308A3C915FC3356000456CB /* EX2Kit.h */,
+				5308A47515FC335E000456CB /* Dependencies */,
+				5308A37615FC3356000456CB /* Categories */,
 				5308A3CA15FC3356000456CB /* Macros */,
 				5308A3CC15FC3356000456CB /* Non-UI Components */,
 				5308A3D815FC3356000456CB /* Static Classes */,
@@ -4243,7 +4243,7 @@
 				5308A48C15FC335E000456CB /* RNCryptor.m */,
 			);
 			name = Dependencies;
-			path = Frameworks/EX2Kit/Dependencies;
+			path = ../Dependencies;
 			sourceTree = "<group>";
 		};
 		5308A47915FC335E000456CB /* Lumberjack */ = {
