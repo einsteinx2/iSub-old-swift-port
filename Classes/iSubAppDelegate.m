@@ -253,7 +253,6 @@
 	{
 		//DLog(@"adding loading screen");
 		[viewObjectsS showAlbumLoadingScreen:self.window sender:self];
-		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 		
 		[self checkServer];
 	}
