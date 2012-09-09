@@ -77,7 +77,7 @@ return ret;
 {
 	__block BOOL exists;
 	[self inDatabase:^(FMDatabase *db) {
-		exists = [db columnExists:tableName columnName:columnName];
+		exists = [db columnExists:columnName inTableWithName:tableName];
 	}];
 	return exists;
 }

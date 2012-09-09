@@ -330,7 +330,7 @@
 		
 		[dbQueue inDatabase:^(FMDatabase *db)
 		{
-			if (![db columnExists:table columnName:columnName])
+			if (![db columnExists:columnName inTableWithName:table])
 			{
 				NSString *query = [NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ TEXT", table, columnName];
 				[db executeUpdate:query];
@@ -364,7 +364,7 @@
 		
 		for (NSString *table in playlistTableNames)
 		{
-			if (![db columnExists:table columnName:columnName])
+			if (![db columnExists:columnName inTableWithName:table])
 			{
 				NSString *query = [NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ TEXT", table, columnName];
 				[db executeUpdate:query];
@@ -375,7 +375,7 @@
 	// Update the bookmarks table to new format
 	[self.bookmarksDbQueue inDatabase:^(FMDatabase *db)
 	{
-		if (![db columnExists:@"bookmarks" columnName:@"bookmarkId"])
+		if (![db columnExists:@"bookmarkId" inTableWithName:@"bookmarks"])
 		{
 			// Create the new table
 			[db executeUpdate:@"DROP TABLE IF EXISTS bookmarksTemp"];

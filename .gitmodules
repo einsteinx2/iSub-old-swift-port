@@ -10,3 +10,9 @@
 [submodule "Frameworks/FMDB"]
 	path = Frameworks/FMDB
 	url = git@github.com:ccgus/fmdb.git
+[submodule "Frameworks/TBXML"]
+	path = Frameworks/TBXML
+	url = git@github.com:71squared/TBXML.git
+[submodule "Frameworks/SBJson"]
+	path = Frameworks/SBJson
+	url = git@github.com:stig/json-framework.git
