@@ -9,4 +9,4 @@
 	url = git@github.com:einsteinx2/EX2Kit.git
 [submodule "Frameworks/FMDB"]
 	path = Frameworks/FMDB
-	url = https://github.com/ccgus/fmdb.git
+	url = git@github.com:ccgus/fmdb.git
