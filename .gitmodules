@@ -2,8 +2,11 @@
 	path = Frameworks/KIF
 	url = git@github.com:square/KIF.git
 [submodule "CocoaLumberjack"]
-	path = CocoaLumberjack
+	path = Frameworks/CocoaLumberjack
 	url = git@github.com:robbiehanson/CocoaLumberjack.git
 [submodule "Frameworks/EX2Kit"]
 	path = Frameworks/EX2Kit
 	url = git@github.com:einsteinx2/EX2Kit.git
+[submodule "Frameworks/FMDB"]
+	path = Frameworks/FMDB
+	url = https://github.com/ccgus/fmdb.git
