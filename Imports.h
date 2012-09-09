@@ -9,7 +9,7 @@
 #ifndef iSub_Imports_h
 #define iSub_Imports_h
 
-#import <EX2Kit/EX2Kit.h>
+#import "EX2Kit.h"
 
 #import "ISMSNotificationNames.h"
 #import "ISMSErrorDomain.h"

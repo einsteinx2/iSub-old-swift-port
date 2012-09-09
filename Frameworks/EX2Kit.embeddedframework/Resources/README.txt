@@ -1,1 +1,0 @@
-../EX2Kit.framework/Resources/README.txt

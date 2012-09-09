@@ -7,3 +7,6 @@
 [submodule "CocoaLumberjack"]
 	path = CocoaLumberjack
 	url = https://github.com/robbiehanson/CocoaLumberjack.git
+[submodule "Frameworks/EX2Kit"]
+	path = Frameworks/EX2Kit
+	url = git@github.com:einsteinx2/EX2Kit.git
