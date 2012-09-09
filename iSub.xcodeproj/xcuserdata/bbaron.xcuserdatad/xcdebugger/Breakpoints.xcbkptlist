@@ -1252,7 +1252,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "113"
          endingLineNumber = "113"
-         landmarkName = "-dealloc"
+         landmarkName = "-maxBytesPerIntervalForBitrate:is3G:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -4738,7 +4738,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "113"
          endingLineNumber = "113"
-         landmarkName = "-dealloc"
+         landmarkName = "-maxBytesPerIntervalForBitrate:is3G:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -4750,9 +4750,7 @@
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "550"
-         endingLineNumber = "550"
-         landmarkName = "-connectionDidFinishLoading:"
-         landmarkType = "5">
+         endingLineNumber = "550">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -4764,7 +4762,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "113"
          endingLineNumber = "113"
-         landmarkName = "-dealloc"
+         landmarkName = "-maxBytesPerIntervalForBitrate:is3G:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -4970,7 +4968,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "113"
          endingLineNumber = "113"
-         landmarkName = "-dealloc"
+         landmarkName = "-maxBytesPerIntervalForBitrate:is3G:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -4983,7 +4981,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "113"
          endingLineNumber = "113"
-         landmarkName = "-dealloc"
+         landmarkName = "-maxBytesPerIntervalForBitrate:is3G:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -4996,7 +4994,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "113"
          endingLineNumber = "113"
-         landmarkName = "-dealloc"
+         landmarkName = "-maxBytesPerIntervalForBitrate:is3G:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -5404,6 +5402,19 @@
          endingLineNumber = "71"
          landmarkName = "-JSONValue"
          landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Classes/BassGaplessPlayer.m"
+         timestampString = "368911107.3809"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "219"
+         endingLineNumber = "219"
+         landmarkName = "MyFileSeekProc()"
+         landmarkType = "7">
       </FileBreakpoint>
    </FileBreakpoints>
    <SymbolicBreakpoints>

@@ -24,7 +24,11 @@
 
 @property (readonly) BOOL isQueueDownloading;
 
+@property (readonly) Song *currentStreamingSong;
+
 + (id)sharedInstance;
+
+- (void)delayedSetup;
 
 - (ISMSStreamHandler *)handlerForSong:(Song *)aSong;
 - (BOOL)isSongInQueue:(Song *)aSong;
@@ -64,5 +68,7 @@
 - (void)loadHandlerStack;
 
 - (void)downloadMoreOfPrecacheStream;
+
+- (void)stealHandlerForCacheQueue:(ISMSStreamHandler *)handler;
 
 @end

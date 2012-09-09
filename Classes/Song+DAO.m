@@ -530,7 +530,7 @@
 	// Delete the song from disk
 	NSString *suffixToUse = transcodedSuffix ? transcodedSuffix : suffix;
 	NSString *fileName = [settingsS.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", md5, suffixToUse]];
-	///////// REWRITE TO CATCH THIS NSFILEMANAGER ERROR ///////////
+	//TODO://///// REWRITE TO CATCH THIS NSFILEMANAGER ERROR ///////////
 	[[NSFileManager defaultManager] removeItemAtPath:fileName error:NULL];
 	
 	if (!cacheQueueManagerS.isQueueDownloading)

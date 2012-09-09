@@ -17,7 +17,7 @@
 @property BOOL isQueueDownloading;
 @property (copy) Song *currentQueuedSong;
 @property (strong) ISMSStreamHandler *currentStreamHandler;
-- (Song *)currentQueuedSongInDb;
+@property (unsafe_unretained, readonly) Song *currentQueuedSongInDb;
 
 
 /*@property NSUInteger downloadLength;
@@ -35,5 +35,7 @@
 - (void)resumeDownloadQueue:(NSNumber *)byteOffset;
 
 - (void)removeCurrentSong;
+
+- (BOOL)isSongInQueue:(Song *)aSong;
 
 @end

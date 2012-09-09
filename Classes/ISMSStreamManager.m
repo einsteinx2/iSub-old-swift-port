@@ -14,6 +14,7 @@
 #import "SavedSettings.h"
 #import "MusicSingleton.h"
 #import "ISMSStreamHandler.h"
+#import "ISMSCFNetworkStreamHandler.h"
 #import "PlaylistSingleton.h"
 #import "AudioEngine.h"
 #import "ISMSCoverArtLoader.h"
@@ -23,10 +24,20 @@
 #import "ISMSCacheQueueManager.h"
 #import "TBXML.h"
 
+LOG_LEVEL_ISUB_DEFAULT
 #define maxNumOfReconnects 5
 
 @implementation ISMSStreamManager
 @synthesize handlerStack, lyricsDAO, lastCachedSong, lastTempCachedSong;
+
+- (Song *)currentStreamingSong
+{
+	if (!self.isQueueDownloading)
+		return nil;
+	
+	ISMSStreamHandler *handler = [self.handlerStack firstObjectSafe];
+	return handler.mySong;
+}
 
 - (ISMSStreamHandler *)handlerForSong:(Song *)aSong
 {
@@ -37,7 +48,7 @@
 	{
 		if ([handler.mySong isEqualToSong:aSong])
 		{
-		//DLog(@"handler.mySong: %@    aSong: %@", handler.mySong.title, aSong.title);
+			//DLog(@"handler.mySong: %@    aSong: %@", handler.mySong.title, aSong.title);
 			return handler;
 		}
 	}
@@ -79,12 +90,6 @@
 	{
 		if (![handlersToSkip containsObject:handler])
 		{
-			if (handler.isDownloading)
-			{
-				if (!cacheQueueManagerS.isQueueDownloading)
-					[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-			}
-			
 			// If we're trying to resume, cancel the request
 			[NSObject cancelPreviousPerformRequestsWithTarget:self 
 													 selector:@selector(resumeHandler:)
@@ -152,12 +157,6 @@
 		// Find the handler object and cancel it
 		ISMSStreamHandler *handler = [self.handlerStack objectAtIndexSafe:index];
 		
-		if (handler.isDownloading)
-		{
-			if (!cacheQueueManagerS.isQueueDownloading)
-				[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-		}
-		
 		[handler cancel];
 		
 		// If we're trying to resume, cancel the request
@@ -197,17 +196,21 @@
 // Main worker method
 - (void)removeAllStreamsExcept:(NSArray *)handlersToSkip
 {
-	// Cancel the handlers
-	[self cancelAllStreamsExcept:handlersToSkip];
-	
 	// Remove the handlers
 	NSArray *handlers = [NSArray arrayWithArray:self.handlerStack];
 	for (ISMSStreamHandler *handler in handlers)
 	{
 		if (![handlersToSkip containsObject:handler])
 		{
-			[self.handlerStack removeObject:handler];
-			[handler.mySong removeFromCachedSongsTableDbQueue];
+            [self cancelStream:handler];
+            [self.handlerStack removeObject:handler];
+            
+            if (!handler.mySong.isFullyCached && !handler.mySong.isTempCached && !([cacheQueueManagerS.currentQueuedSong isEqualToSong:handler.mySong] && cacheQueueManagerS.isQueueDownloading))
+            {
+                DLog(@"Removing song from cached songs table: %@", handler.mySong);
+                [handler.mySong removeFromCachedSongsTableDbQueue];
+            }
+			//[handler.mySong removeFromCachedSongsTableDbQueue];
 		}
 	}
 	
@@ -282,9 +285,12 @@
 		[self cancelStreamAtIndex:index];
 		
 		ISMSStreamHandler *handler = [self.handlerStack objectAtIndex:index];
-		if (!handler.mySong.isFullyCached && !handler.mySong.isTempCached)
-			[handler.mySong removeFromCachedSongsTableDbQueue];
-		[self.handlerStack removeObjectAtIndex:index];
+		if (!handler.mySong.isFullyCached && !handler.mySong.isTempCached && !([cacheQueueManagerS.currentQueuedSong isEqualToSong:handler.mySong] && cacheQueueManagerS.isQueueDownloading))
+        {
+            DLog(@"Removing song from cached songs table: %@", handler.mySong);
+            [handler.mySong removeFromCachedSongsTableDbQueue];
+        }
+        [self.handlerStack removeObjectAtIndexSafe:index];
 	}
 	
 	[self saveHandlerStack];
@@ -325,7 +331,25 @@
 	// As an added check, verify that this handler is still in the stack
 	if ([self isSongInQueue:handler.mySong])
 	{
-		[handler start:YES];
+		if (cacheQueueManagerS.isQueueDownloading && [cacheQueueManagerS.currentQueuedSong isEqualToSong:handler.mySong])
+		{
+			// This song is already being downloaded by the cache queue, so just start the player
+			[self ISMSStreamHandlerStartPlayback:handler];
+			
+			// Remove the handler from the stack
+			[self removeStream:handler];
+			
+			// Start the next handler which is now the first object
+			if ([self.handlerStack count] > 0)
+			{
+				ISMSStreamHandler *handler = [self.handlerStack firstObjectSafe];
+				[self startHandler:handler];
+			}
+		}
+		else
+		{
+			[handler start:YES];
+		}
 	}
 }
 
@@ -334,14 +358,34 @@
 	if (!handler)
 		return;
 	
-	[handler start:resume];
-	[lyricsDAO loadLyricsForArtist:handler.mySong.artist andTitle:handler.mySong.title];
+	if (cacheQueueManagerS.isQueueDownloading && [cacheQueueManagerS.currentQueuedSong isEqualToSong:handler.mySong])
+	{
+		// This song is already being downloaded by the cache queue, so just start the player
+		[self ISMSStreamHandlerStartPlayback:handler];
+		
+		// Remove the handler from the stack
+		[self removeStream:handler];
+		
+		// Start the next handler which is now the first object
+		if ([self.handlerStack count] > 0)
+		{
+			ISMSStreamHandler *handler = [self.handlerStack firstObjectSafe];
+			[self startHandler:handler];
+		}
+	}
+	else
+	{
+		[handler start:resume];
+		[lyricsDAO loadLyricsForArtist:handler.mySong.artist andTitle:handler.mySong.title];
+	}
 }
 
 - (void)startHandler:(ISMSStreamHandler *)handler
 {
 	if (!handler)
 		return;
+	
+	DDLogVerbose(@"starting handler, handlerStack: %@", self.handlerStack);
 	
 	[self startHandler:handler resume:NO];
 }
@@ -366,6 +410,21 @@
 	{
 		handler.delegate = self;
 	}
+	
+	DDLogVerbose(@"load handler stack, handlerStack: %@", self.handlerStack);
+
+}
+
+#pragma mark - Handler Stealing
+
+// Hand of handler to cache queue
+- (void)stealHandlerForCacheQueue:(ISMSStreamHandler *)handler
+{
+	DDLogInfo(@"cache queue manager stole handler for: %@", handler.mySong.title);
+	handler.partialPrecacheSleep = NO;
+	[self.handlerStack removeObject:handler];
+	[self saveHandlerStack];
+	[self fillStreamQueue];
 }
 
 #pragma mark Download
@@ -375,7 +434,7 @@
 	if (!song)
 		return;
 	
-	ISMSStreamHandler *handler = [[ISMSStreamHandler alloc] initWithSong:song 
+	ISMSStreamHandler *handler = [[ISMSCFNetworkStreamHandler alloc] initWithSong:song 
 															byteOffset:byteOffset
 														 secondsOffset:secondsOffset
 																isTemp:isTemp
@@ -448,24 +507,19 @@
 		numStreamsToQueue = ISMSNumberOfStreamsToQueue;
 	}
 	
-	if ([self.handlerStack count] < numStreamsToQueue)
+	if (self.handlerStack.count < numStreamsToQueue)
 	{
-		NSInteger currentIndex = playlistS.currentIndex;
-		for (int i = currentIndex; i < currentIndex + numStreamsToQueue; i++)
+		for (int i = 0; i < numStreamsToQueue; i++)
 		{
-			Song *aSong = [playlistS songForIndex:i];
-			if (aSong && ![self isSongInQueue:aSong] && !aSong.isFullyCached && !viewObjectsS.isOfflineMode)
+			Song *aSong = [playlistS songForIndex:[playlistS indexForOffsetFromCurrentIndex:i]];
+			if (aSong && ![self isSongInQueue:aSong] && !aSong.isFullyCached && !viewObjectsS.isOfflineMode && ![cacheQueueManagerS.currentQueuedSong isEqualToSong:aSong])
 			{
-				// The cache queue is downloading this song, remove it before continuing
-				if ([cacheQueueManagerS.currentQueuedSong isEqualToSong:aSong])
-				{
-					[cacheQueueManagerS removeCurrentSong];
-				}	
-				
 				// Queue the song for download
 				[self queueStreamForSong:aSong isTempCache:!settingsS.isSongCachingEnabled isStartDownload:isStartDownload];
 			}
 		}
+		
+		DDLogVerbose(@"fill stream queue, handlerStack: %@", self.handlerStack);
 	}
 }
 
@@ -549,12 +603,14 @@
 		if (handler.isTempCache)
 		{
 			// TODO: get rid of this ugly hack
-			[EX2Dispatch runInMainThreadAfterDelay:1.0 block:
-			 ^{
-				 DLog(@"byteOffset: %llu   secondsOffset: %f", handler.byteOffset, handler.secondsOffset);
-				 audioEngineS.startByteOffset = handler.byteOffset;
-				 audioEngineS.startSecondsOffset = handler.secondsOffset;
-			 }];
+			[EX2Dispatch timerInMainQueueAfterDelay:1.0 
+										   withName:@"temp song set byteOffset/seconds"
+                                            repeats:NO
+									   performBlock:^{
+				//DLog(@"byteOffset: %llu   secondsOffset: %f", handler.byteOffset, handler.secondsOffset);
+				audioEngineS.player.startByteOffset = handler.byteOffset;
+				audioEngineS.player.startSecondsOffset = handler.secondsOffset;
+			}];
 		}
 	}
 	else if ([handler.mySong isEqualToSong:nextSong])
@@ -583,6 +639,7 @@
 		//DLog(@"removing stream handler");
 		//DLog(@"handlerStack: %@", self.handlerStack);
 		// Tried max number of times so remove
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_StreamHandlerSongFailed];
 		[self removeStream:handler];
 	}
 }
@@ -638,7 +695,16 @@
 		
 		// Mark song as cached
 		if (!handler.isTempCache)
+        	{
+            		if ([cacheQueueManagerS isSongInQueue:handler.mySong])
+            		{
+                		//handler.mySong.isDownloaded = YES;
+                		[handler.mySong removeFromCacheQueueDbQueue];
+            		}
+            
+           		DLog(@"Marking isFullyCached = YES for %@", handler.mySong);
 			handler.mySong.isFullyCached = YES;
+		}
 		
 		// Update the last cached song
 		self.lastCachedSong = handler.mySong;
@@ -652,16 +718,15 @@
 		// Start the next handler which is now the first object
 		if ([self.handlerStack count] > 0)
 		{
-			ISMSStreamHandler *handler = (ISMSStreamHandler *)[self.handlerStack firstObjectSafe];
+			ISMSStreamHandler *handler = [self.handlerStack firstObjectSafe];
 			[self startHandler:handler];
 		}
 		
-		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_StreamHandlerSongDownloaded];
-	}
-	else 
-	{
-		[self removeAllStreams];
-		[audioEngineS.player stop];
+		// Keep the queue filled
+		[self fillStreamQueue];
+		NSDictionary *userInfo = [NSDictionary dictionaryWithObject:handler.mySong.songId forKey:@"songId"];
+		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_StreamHandlerSongDownloaded 
+													  userInfo:userInfo];
 	}
 }
 
@@ -686,6 +751,19 @@
 }
 
 #pragma mark - Singleton methods
+
+- (void)delayedSetup
+{
+	for (ISMSStreamHandler *handler in handlerStack)
+	{
+		// Resume any handlers that were downloading when iSub closed
+		if (handler.isDownloading && !handler.isTempCache)
+		{
+			DDLogVerbose(@"resuming starting handler");
+			[handler start:YES];
+		}
+	}
+}
 
 - (void)setup
 {
