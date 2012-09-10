@@ -7057,7 +7057,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"$CONFIGURATION\" == \"AdHoc\" ]\nthen /usr/bin/perl -pe 's/(BUILD_NUMBER = )(\\d+)/$1.($2+1)/eg' -i buildnumber.xcconfig\nfi";
+			shellScript = "if [ \"$CONFIGURATION\" == \"AdHoc\" ]\nthen /usr/bin/perl -pe 's/(BUILD_NUMBER = )(\\d+)/$1.($2+1)/eg' -i Other/buildnumber.xcconfig\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
