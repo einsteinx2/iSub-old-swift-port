@@ -88,23 +88,31 @@
 - (void)showOverlay
 {	
 	[super showOverlay];
-	
-	self.overlayView.downloadButton.alpha = (float)!viewObjectsS.isOfflineMode;
+    
+    self.overlayView.downloadButton.alpha = (float)!viewObjectsS.isOfflineMode;
 	self.overlayView.downloadButton.enabled = !viewObjectsS.isOfflineMode;
-	if (!viewObjectsS.isOfflineMode)
+    
+    if (!viewObjectsS.isOfflineMode)
 	{
-		if ([[databaseS.songCacheDbQueue stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", self.md5] isEqualToString:@"YES"]) 
+		if ([[databaseS.songCacheDbQueue stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", self.md5] isEqualToString:@"YES"])
 		{
 			self.overlayView.downloadButton.alpha = .3;
 			self.overlayView.downloadButton.enabled = NO;
 		}
-		else 
+		else
 		{
 			self.overlayView.downloadButton.alpha = .8;
 			[self.overlayView.downloadButton addTarget:self action:@selector(downloadAction) forControlEvents:UIControlEventTouchUpInside];
 			self.overlayView.downloadButton.enabled = YES;
 		}
 	}
+    
+    // If video, disable download button
+    if ([[databaseS.songCacheDbQueue stringForQuery:@"SELECT isVideo FROM cachedSongs WHERE md5 = ?", self.md5] isEqualToString:@"YES"])
+    {
+        self.overlayView.downloadButton.alpha = .3;
+        self.overlayView.downloadButton.enabled = NO;
+    }
 }
 
 - (void)downloadAction

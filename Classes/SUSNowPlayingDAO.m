@@ -92,7 +92,7 @@
 	return nil;
 }
 
-- (void)playSongAtIndex:(NSUInteger)index
+- (Song *)playSongAtIndex:(NSUInteger)index
 {
 	// Clear the current playlist
 	if (settingsS.isJukeboxEnabled)
@@ -111,11 +111,11 @@
 	
 	// Set player defaults
 	playlistS.isShuffle = NO;
+    
+    [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 	
 	// Start the song
-	[musicS playSongAtPosition:0];
-	
-	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+	return [musicS playSongAtPosition:0];
 }
 
 #pragma mark - Loader Manager Methods

@@ -511,11 +511,11 @@ static NSString *kName_Error = @"error";
 	if (settingsS.isJukeboxEnabled)
 		[jukeboxS jukeboxReplacePlaylistWithLocal];
 
-	[musicS playSongAtPosition:indexPath.row];
-	
-	[viewObjectsS hideLoadingScreen];
-	
-	[self showPlayer];
+    [viewObjectsS hideLoadingScreen];
+    
+    Song *playedSong = [musicS playSongAtPosition:indexPath.row];
+    if (!playedSong.isVideo)
+        [self showPlayer];
 }
 
 

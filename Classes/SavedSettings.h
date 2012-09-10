@@ -101,6 +101,7 @@ typedef enum
 @property BOOL isUpdateCheckEnabled;
 @property BOOL isUpdateCheckQuestionAsked;
 @property BOOL isNewSearchAPI;
+@property BOOL isVideoSupported;
 @property (readonly) BOOL isTestServer;
 @property BOOL isBasicAuthEnabled;
 @property BOOL isTapAndHoldEnabled;

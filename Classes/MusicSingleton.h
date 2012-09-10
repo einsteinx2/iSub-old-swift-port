@@ -10,18 +10,18 @@
 
 #import "ISMSLoaderDelegate.h"
 
-@class Song;
-
+@class Song, MPMoviePlayerController;
 @interface MusicSingleton : NSObject
 
 @property BOOL isAutoNextNotificationOn;
 @property (readonly) BOOL showPlayerIcon;
+@property (strong) MPMoviePlayerController *moviePlayer;
 
 + (id)sharedInstance;
 
 - (void)startSongAtOffsetInBytes:(unsigned long long)bytes andSeconds:(double)seconds;
 - (void)startSong;
-- (void)playSongAtPosition:(NSInteger)position;
+- (Song *)playSongAtPosition:(NSInteger)position;
 - (void)nextSong;
 - (void)prevSong;
 - (void)resumeSong;

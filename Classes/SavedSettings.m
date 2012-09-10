@@ -14,7 +14,6 @@
 #import "PlaylistSingleton.h"
 #import "AudioEngine.h"
 #import "iSubAppDelegate.h"
-#import "Reachability.h"
 #import "BassGaplessPlayer.h"
 
 // Test server details
@@ -1068,6 +1067,25 @@
 	@synchronized(self)
 	{
 		[userDefaults setBool:isUpdateCheckQuestionAsked forKey:@"isUpdateCheckQuestionAsked"];
+		[userDefaults synchronize];
+	}
+}
+
+- (BOOL)isVideoSupported
+{
+	@synchronized(self)
+	{
+		NSString *key = [NSString stringWithFormat:@"isVideoSupported%@", [urlString md5]];
+		return [userDefaults boolForKey:key];
+	}
+}
+
+- (void)setIsVideoSupported:(BOOL)isVideoSupported
+{
+	@synchronized(self)
+	{
+		NSString *key = [NSString stringWithFormat:@"isVideoSupported%@", [urlString md5]];
+		[userDefaults setBool:isVideoSupported forKey:key];
 		[userDefaults synchronize];
 	}
 }

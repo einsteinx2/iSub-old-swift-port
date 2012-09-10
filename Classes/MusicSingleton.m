@@ -12,7 +12,6 @@
 #import "iSubAppDelegate.h"
 #import "Song.h"
 #import "FMDatabaseAdditions.h"
-#import "Reachability.h"
 #import "JukeboxXMLParser.h"
 #import "JukeboxConnectionDelegate.h"
 #import "BBSimpleConnectionQueue.h"
@@ -32,11 +31,13 @@
 #import "CacheSingleton.h"
 #import "JukeboxSingleton.h"
 #import "ISMSCacheQueueManager.h"
+#import "iPadRootViewController.h"
+#import "MenuViewController.h"
 
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 
 @implementation MusicSingleton
-@synthesize isAutoNextNotificationOn;
+@synthesize isAutoNextNotificationOn, moviePlayer;
 
 #pragma mark Control Methods
 
@@ -70,6 +71,8 @@ double startSongSeconds = 0.0;
 // TODO: put this method somewhere and name it properly
 - (void)startSongAtOffsetInSeconds2
 {
+    [self removeMoviePlayer];
+    
 	//DLog(@"startSongAtOffsetInSeconds2");	
 	// Always clear the temp cache
 	[cacheS clearTempCache];
@@ -168,19 +171,44 @@ double startSongSeconds = 0.0;
 	[self startSongAtOffsetInBytes:0 andSeconds:0.0];
 }
 
-- (void)playSongAtPosition:(NSInteger)position
-{	
+- (Song *)playSongAtPosition:(NSInteger)position
+{
 	playlistS.currentIndex = position;
-	
+    Song *currentSong = playlistS.currentSong;
+ 
+    if (!currentSong.isVideo)
+    {
+        // Remove the video player if this is not a video
+        [self removeMoviePlayer];
+    }
+    
 	if (settingsS.isJukeboxEnabled)
 	{
-		[jukeboxS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:position]];
+        if (currentSong.isVideo)
+        {
+            currentSong = nil;
+            [EX2SlidingNotification slidingNotificationOnMainWindowWithMessage:@"Cannot play videos in Jukebox mode." image:nil];
+        }
+        else
+        {
+            [jukeboxS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:position]];
+        }
 	}
 	else
-	{	
+	{
 		[streamManagerS removeAllStreamsExceptForSong:playlistS.currentSong];
-		[self startSong];
+        
+        if (currentSong.isVideo)
+        {
+            [self playVideo:currentSong];
+        }
+        else
+        {
+            [self startSong];
+        }
 	}
+    
+    return currentSong;
 }
 
 - (void)prevSong
@@ -293,6 +321,137 @@ double startSongSeconds = 0.0;
 	// Run this every 30 seconds to update the progress and keep it in sync
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateLockScreenInfo) object:nil];
 	[self performSelector:@selector(updateLockScreenInfo) withObject:nil afterDelay:30.0];
+}
+
+- (void)createMoviePlayer
+{
+    if (!self.moviePlayer)
+    {
+        self.moviePlayer = [[MPMoviePlayerController alloc] init];//WithContentURL:[NSURL URLWithString:urlString]];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayerExitedFullscreen:) name:MPMoviePlayerDidExitFullscreenNotification object:self.moviePlayer];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayBackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:self.moviePlayer];
+        
+        moviePlayer.controlStyle = MPMovieControlStyleDefault;
+        moviePlayer.shouldAutoplay = YES;
+        moviePlayer.movieSourceType = MPMovieSourceTypeStreaming;
+        moviePlayer.allowsAirPlay = YES;
+        
+        //[(IS_IPAD() ? appDelegateS.ipadRootViewController.menuViewController.playerHolder : appDelegateS.mainTabBarController.view) addSubview:moviePlayer.view];
+        
+        if (IS_IPAD())
+        {
+            [appDelegateS.ipadRootViewController.menuViewController.playerHolder addSubview:moviePlayer.view];
+            moviePlayer.view.frame = moviePlayer.view.superview.bounds;
+        }
+        else
+        {
+            [appDelegateS.mainTabBarController.view addSubview:moviePlayer.view];
+            moviePlayer.view.frame = CGRectZero;
+        }
+        
+        [moviePlayer setFullscreen:YES animated:YES];
+    }
+}
+
+- (void)removeMoviePlayer
+{
+    if (self.moviePlayer)
+    {
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:MPMoviePlayerDidExitFullscreenNotification object:self.moviePlayer];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:self.moviePlayer];
+        
+        // Dispose of any existing movie player
+        [self.moviePlayer stop];
+        [self.moviePlayer.view removeFromSuperview];
+        self.moviePlayer = nil;
+    }
+}
+
+- (void)playVideo:(Song *)aSong
+{
+    if (!aSong.isVideo || !settingsS.isVideoSupported)
+        return;
+        
+    if (IS_IPAD())
+    {
+        // Turn off repeat one so user doesn't get stuck
+        if (playlistS.repeatMode == ISMSRepeatMode_RepeatOne)
+            playlistS.repeatMode = ISMSRepeatMode_Normal;
+    }
+    
+    NSString *serverType = settingsS.serverType;
+    if ([serverType isEqualToString:SUBSONIC] || [serverType isEqualToString:UBUNTU_ONE])
+    {
+        [self playSubsonicVideo:aSong];
+    }
+    else if ([serverType isEqualToString:WAVEBOX])
+    {
+        [self playWaveBoxVideo:aSong];
+    }
+}
+
+- (void)playSubsonicVideo:(Song *)aSong
+{
+    [audioEngineS.player stop];
+    
+    if (!aSong.itemId)
+        return;
+    
+    NSDictionary *parameters = @{ @"id" : aSong.itemId, @"bitRate" : @[@"60", @"512"] };
+    NSURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"hls" parameters:parameters];
+    
+    NSString *urlString = [NSString stringWithFormat:@"%@?%@", request.URL.absoluteString, [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]];
+    
+    //NSString *urlString = [NSString stringWithFormat:@"%@/rest/hls.m3u8?c=iSub&v=1.8.0&u=%@&p=%@&id=%@", settingsS.urlString, [settingsS.username URLEncodeString], [settingsS.password URLEncodeString], aSong.itemId];
+    DLog(@"urlString: %@", urlString);
+    
+    [self createMoviePlayer];
+    
+    self.moviePlayer.contentURL = [NSURL URLWithString:urlString];
+    //[moviePlayer prepareToPlay];
+    [moviePlayer play];
+}
+
+- (void)playWaveBoxVideo:(Song *)aSong
+{
+    
+}
+
+- (void)moviePlayerExitedFullscreen:(NSNotification *)notification
+{
+    // Hack to fix broken navigation bar positioning
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    UIView *view = [window.subviews lastObject];
+    if (view)
+    {
+        [view removeFromSuperview];
+        [window addSubview:view];
+    }
+    
+    if (!IS_IPAD())
+    {
+        [self removeMoviePlayer];
+    }
+}
+
+- (void)moviePlayBackDidFinish:(NSNotification *)notification
+{
+    DLog(@"userInfo: %@", notification.userInfo);
+    if (notification.userInfo)
+    {
+        NSNumber *reason = [notification.userInfo objectForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey];
+        if (reason && reason.integerValue == MPMovieFinishReasonPlaybackEnded)
+        {
+            // Playback ended normally, so start the next item
+            [playlistS incrementIndex];
+            [self playSongAtPosition:playlistS.currentIndex];
+        }
+    }
+    else
+    {
+        //[self removeMoviePlayer];
+    }
 }
 
 #pragma mark - Memory management

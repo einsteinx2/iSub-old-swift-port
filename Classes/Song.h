@@ -7,8 +7,9 @@
 //
 
 #import "TBXML.h"
+#import "MediaItem.h"
 
-@interface Song : NSObject <NSCoding, NSCopying> 
+@interface Song : NSObject <NSCoding, NSCopying, MediaItem>
 
 @property (copy) NSString *title;
 @property (copy) NSString *songId;
@@ -25,6 +26,7 @@
 @property (copy) NSNumber *track;
 @property (copy) NSNumber *year;
 @property (copy) NSNumber *size;
+@property BOOL isVideo;
 
 - (NSString *)localSuffix;
 - (NSString *)localPath;
@@ -40,7 +42,6 @@
 - (id)copyWithZone:(NSZone *)zone;
 
 - (id)initWithPMSDictionary:(NSDictionary *)dictionary;
-
 - (id)initWithTBXMLElement:(TBXMLElement *)element;
 - (id)initWithAttributeDict:(NSDictionary *)attributeDict;
 

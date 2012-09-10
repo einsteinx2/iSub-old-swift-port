@@ -14,7 +14,7 @@
 
 #define appDelegateS [iSubAppDelegate sharedInstance]
 
-@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, Reachability, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController, HTTPServer, ISMSStatusLoader;
+@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController, HTTPServer, ISMSStatusLoader;
 
 @interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate, MFMailComposeViewControllerDelegate, BWHockeyManagerDelegate, ISMSLoaderDelegate>
 {		
@@ -28,7 +28,7 @@
 	
 	// Network connectivity objects
 	//
-    Reachability *wifiReach;
+    EX2Reachability *wifiReach;
 	int reachabilityStatus;
 	
 	// Multitasking stuff
@@ -74,7 +74,7 @@
 
 // Network connectivity objects and variables
 //
-@property (strong) Reachability *wifiReach;
+@property (strong) EX2Reachability *wifiReach;
 @property (readonly) BOOL isWifi;
 
 // Multitasking stuff

@@ -12,6 +12,7 @@
 @interface MenuViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> 
 
 @property (strong) UITableView *tableView;
+@property (strong) UIView *playerHolder;
 @property (strong) UINavigationController *playerNavController;
 @property (strong) iPhoneStreamingPlayerViewController *playerController;
 @property (strong) NSMutableArray *cellContents;

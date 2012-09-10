@@ -212,9 +212,9 @@
 	if (!indexPath)
 		return;
 	
-	[self.dataModel playSongAtIndex:indexPath.row];
-	
-	[self showPlayer];
+	Song *playedSong = [self.dataModel playSongAtIndex:indexPath.row];
+	if (!playedSong.isVideo)
+        [self showPlayer];
 }
 
 #pragma mark - ISMSLoader delegate

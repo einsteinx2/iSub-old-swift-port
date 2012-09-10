@@ -395,12 +395,12 @@
 			// Set player defaults
 			playlistS.isShuffle = NO;
 			
+            [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+            
 			// Start the song
-			[musicS playSongAtPosition:indexPath.row];
-			
-			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
-			
-			[self showPlayer];
+			Song *playedSong = [musicS playSongAtPosition:indexPath.row];
+			if (!playedSong.isVideo)
+                [self showPlayer];
 			
 			return;
 		}

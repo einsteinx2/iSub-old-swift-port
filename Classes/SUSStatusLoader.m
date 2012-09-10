@@ -46,13 +46,19 @@
 				{
 					self.majorVersion = [[splitVersion objectAtIndexSafe:0] intValue];
 					if (self.majorVersion >= 2)
+                    {
 						self.isNewSearchAPI = YES;
+                        self.isVideoSupported = YES;
+                    }
 					
 					if ([splitVersion count] > 1)
 					{
 						self.minorVersion = [[splitVersion objectAtIndexSafe:1] intValue];
-						if ((self.majorVersion >= 1 && self.minorVersion >= 4))
+						if (self.majorVersion >= 1 && self.minorVersion >= 4)
 							self.isNewSearchAPI = YES;
+                        
+                        if (self.majorVersion >= 1 && self.minorVersion >= 7)
+                            self.isVideoSupported = YES;
 					}
 				}
 			}

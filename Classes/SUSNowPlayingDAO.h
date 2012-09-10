@@ -25,6 +25,6 @@
 - (NSString *)playTimeForIndex:(NSUInteger)index;
 - (NSString *)usernameForIndex:(NSUInteger)index;
 - (NSString *)playerNameForIndex:(NSUInteger)index;
-- (void)playSongAtIndex:(NSUInteger)index;
+- (Song *)playSongAtIndex:(NSUInteger)index;
 
 @end

@@ -71,8 +71,6 @@
 	return self;
 }
 
-
-
 - (void)layoutSubviews 
 {
     [super layoutSubviews];
@@ -96,18 +94,22 @@
 - (void)showOverlay
 {
 	[super showOverlay];
-	
-	self.overlayView.downloadButton.alpha = (float)!viewObjectsS.isOfflineMode;
-	self.overlayView.downloadButton.enabled = !viewObjectsS.isOfflineMode;
+    
+    if ([playlistS songForIndex:self.indexPath.row].isVideo)
+    {
+        self.overlayView.downloadButton.alpha = .3;
+        self.overlayView.downloadButton.enabled = NO;
+    }
+    else
+    {
+        self.overlayView.downloadButton.alpha = (float)!viewObjectsS.isOfflineMode;
+        self.overlayView.downloadButton.enabled = !viewObjectsS.isOfflineMode;
+    }
 }
 
 - (void)downloadAction
 {	
-	NSString *currTable = settingsS.isJukeboxEnabled ? @"jukeboxCurrentPlaylist" : @"currentPlaylist";
-	NSString *shufTable = settingsS.isJukeboxEnabled ? @"jukeboxShufflePlaylist" : @"shufflePlaylist";
-	NSString *table = playlistS.isShuffle ? shufTable : currTable;
-	
-	[[Song songFromDbRow:self.indexPath.row inTable:table inDatabaseQueue:databaseS.currentPlaylistDbQueue] addToCacheQueueDbQueue];
+	[[playlistS songForIndex:self.indexPath.row] addToCacheQueueDbQueue];
 	
 	self.overlayView.downloadButton.alpha = .3;
 	self.overlayView.downloadButton.enabled = NO;
@@ -117,12 +119,7 @@
 
 - (void)queueAction
 {	
-	NSString *currTable = settingsS.isJukeboxEnabled ? @"jukeboxCurrentPlaylist" : @"currentPlaylist";
-	NSString *shufTable = settingsS.isJukeboxEnabled ? @"jukeboxShufflePlaylist" : @"shufflePlaylist";
-	NSString *table = playlistS.isShuffle ? shufTable : currTable;
-	
-	Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:table inDatabaseQueue:databaseS.currentPlaylistDbQueue];
-	[aSong addToCurrentPlaylistDbQueue];
+	[[playlistS songForIndex:self.indexPath.row] addToCurrentPlaylistDbQueue];
 
 	[self hideOverlay];
 	[NSNotificationCenter postNotificationToMainThreadWithName:@"updateCurrentPlaylistCount"];

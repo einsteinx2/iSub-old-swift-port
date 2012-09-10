@@ -103,6 +103,18 @@ LOG_LEVEL_ISUB_DEBUG
 		
 		return;
 	}
+    
+    // Check if this is a video
+    if (self.currentQueuedSong.isVideo)
+    {
+        // Remove from the queue
+        [self.currentQueuedSong removeFromCacheQueueDbQueue];
+        
+        // Continue the queue
+		[self startDownloadQueue];
+        
+        return;
+    }
 	
 	// Check if the song is fully cached and if so, remove it from the queue and return
 	if (self.currentQueuedSong.isFullyCached)
@@ -121,6 +133,7 @@ LOG_LEVEL_ISUB_DEBUG
 		
 		// Continue the queue
 		[self startDownloadQueue];
+        
 		return;
 	}
 	

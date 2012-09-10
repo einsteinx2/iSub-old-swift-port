@@ -12,6 +12,7 @@
 #import "SavedSettings.h"
 #import "AudioEngine.h"
 #import "JukeboxSingleton.h"
+#import "PlaylistSingleton.h"
 
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 
@@ -87,8 +88,8 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 		}
 		else
 		{
-			DDLogVerbose(@"audio engine player doesn't exist, playPauseStop [musicS startSong] called");
-			[musicS startSong];
+			DDLogVerbose(@"audio engine player doesn't exist, playPauseStop [musicS playSongAtPosition:playlistS.currentIndex] called");
+			[musicS playSongAtPosition:playlistS.currentIndex];
 		}
 	}
 }

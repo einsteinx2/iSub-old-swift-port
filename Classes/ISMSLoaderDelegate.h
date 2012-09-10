@@ -18,7 +18,8 @@ typedef enum
     ISMSLoaderType_ServerPlaylist,
 	ISMSLoaderType_NowPlaying,
     ISMSLoaderType_Status,
-    ISMSLoaderType_Login
+    ISMSLoaderType_Login,
+    ISMSLoaderType_HLS
 } ISMSLoaderType;
 
 @class ISMSLoader;

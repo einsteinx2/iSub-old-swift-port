@@ -8,7 +8,6 @@
 
 #import "HelpTabViewController.h"
 #import "iSubAppDelegate.h"
-#import "Reachability.h"
 #import "SavedSettings.h"
 
 @implementation HelpTabViewController

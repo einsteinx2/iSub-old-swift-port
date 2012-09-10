@@ -30,6 +30,7 @@
 #import "UIViewController+PushViewControllerCustom.h"
 #import "AudioEngine.h"
 #import "iPadRootViewController.h"
+#import <MediaPlayer/MediaPlayer.h>
 
 @interface AlbumViewController (Private)
 - (void)dataSourceDidFinishLoadingNewData;
@@ -435,19 +436,10 @@
 		}
 		else
 		{
-			[self.dataModel playSongAtTableViewRow:indexPath.row];
-			
-			// Show the player
-			if (IS_IPAD())
-			{
-				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
-			}
-			else
-			{
-				iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-				streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-				[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-			}
+            Song *playedSong = [self.dataModel playSongAtTableViewRow:indexPath.row];
+            
+            if (!playedSong.isVideo)
+                [self showPlayer];
 		}
 	}
 	else

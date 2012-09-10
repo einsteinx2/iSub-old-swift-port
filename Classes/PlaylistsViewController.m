@@ -1715,16 +1715,16 @@ static NSString *kName_Error = @"error";
 	{
 		if (segmentedControl.selectedSegmentIndex == 0)
 		{
-			[musicS playSongAtPosition:indexPath.row];
-						
-			[self showPlayer];
+            Song *playedSong = [musicS playSongAtPosition:indexPath.row];
+            if (!playedSong.isVideo)
+                [self showPlayer];
 		}
 		else if (segmentedControl.selectedSegmentIndex == 1)
 		{
 			PlaylistSongsViewController *playlistSongsViewController = [[PlaylistSongsViewController alloc] initWithNibName:@"PlaylistSongsViewController" bundle:nil];
 			playlistSongsViewController.md5 = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT md5 FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
 			[self pushViewControllerCustom:playlistSongsViewController];
-		}		
+		}
 		else if (segmentedControl.selectedSegmentIndex == 2)
 		{
 			PlaylistSongsViewController *playlistSongsViewController = [[PlaylistSongsViewController alloc] initWithNibName:@"PlaylistSongsViewController" bundle:nil];

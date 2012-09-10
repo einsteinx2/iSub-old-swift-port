@@ -144,7 +144,7 @@
 	return [Song songFromDbRow:row-1 inTable:@"songsCache" inDatabaseQueue:self.dbQueue];
 }
 
-- (void)playSongAtDbRow:(NSUInteger)row
+- (Song *)playSongAtDbRow:(NSUInteger)row
 {
 	// Clear the current playlist
 	if (settingsS.isJukeboxEnabled)
@@ -171,11 +171,11 @@
 	
 	// Set player defaults
 	playlistS.isShuffle = NO;
+    
+    [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 	
 	// Start the song
-	[musicS playSongAtPosition:(row - self.songStartRow)];
-	
-	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+	return [musicS playSongAtPosition:(row - self.songStartRow)];
 }
 
 #pragma mark - Public DAO Methods
@@ -207,10 +207,10 @@
     return [self findSongForDbRow:dbRow];
 }
 
-- (void)playSongAtTableViewRow:(NSUInteger)row
+- (Song *)playSongAtTableViewRow:(NSUInteger)row
 {
 	NSUInteger dbRow = songStartRow + (row - self.albumsCount);
-	[self playSongAtDbRow:dbRow];
+	return [self playSongAtDbRow:dbRow];
 }
 
 - (NSArray *)sectionInfo

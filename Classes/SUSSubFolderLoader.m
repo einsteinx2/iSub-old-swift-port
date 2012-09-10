@@ -11,6 +11,8 @@
 #import "Album.h"
 #import "Song.h"
 #import "Artist.h"
+#import "Video.h"
+#import "SavedSettings.h"
 
 @implementation SUSSubFolderLoader
 
@@ -24,7 +26,7 @@
 
 - (void)processResponse
 {	            
-//DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
+    DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
 	
     // Parse the data
 	//
@@ -72,17 +74,13 @@
 						}
 						else
 						{
-							BOOL isVideo = [[TBXML valueOfAttributeNamed:@"isVideo" forElement:child] boolValue]; 
-							if (!isVideo)
-							{
-								Song *aSong = [[Song alloc] initWithTBXMLElement:child];
-								if (aSong.path)
-								{
-									[self insertSongIntoFolderCache:aSong];
-									self.songsCount++;
-									self.folderLength += [aSong.duration intValue];
-								}
-							}
+							Song *aSong = [[Song alloc] initWithTBXMLElement:child];
+                            if (aSong.path && (settingsS.isVideoSupported || !aSong.isVideo))
+                            {
+                                [self insertSongIntoFolderCache:aSong];
+                                self.songsCount++;
+                                self.folderLength += [aSong.duration intValue];
+                            }
 						}
 						
 						// Get the next message

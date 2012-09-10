@@ -351,7 +351,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 			DDLogInfo(@"songEnded: self.isPlaying = NO");
 			[EX2Dispatch runInMainThread:^
 			 {
-				 [musicS startSong];
+				 [musicS playSongAtPosition:playlistS.currentIndex];
 			 }];
 		}
 	}
@@ -694,10 +694,13 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 				 }
 				 else if (!currentSong.fileExists)
 				 {
-					 DDLogError(@"Stream for song %@ failed, file is not on disk, so calling [musicS startSong]", userInfo.song.title);
+					 DDLogError(@"Stream for song %@ failed, file is not on disk, so calling [musicS playSongAtPosition:playlistS.currentIndex]", userInfo.song.title);
 					 // File was removed, most likely because the decryption failed, so start again normally
 					 [currentSong removeFromCachedSongsTableDbQueue];
-					 [musicS performSelectorOnMainThread:@selector(startSong) withObject:nil waitUntilDone:NO];
+                     [EX2Dispatch runInMainThread:^
+                      {
+                          [musicS playSongAtPosition:playlistS.currentIndex];
+                      }];
 				 }
 				 else
 				 {
@@ -741,7 +744,7 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 		 Song *theSong = nextSong ? nextSong : playlistS.nextSong;
 		 
 		 DDLogVerbose(@"nextSong.localFileSize: %llu", theSong.localFileSize);
-		 if (theSong.localFileSize == 0)
+		 if (theSong.localFileSize == 0 || theSong.isVideo)
 			 return;
 		 
 		 DDLogVerbose(@"preparing next song stream for %@  file: %@", theSong.title, theSong.currentPath);

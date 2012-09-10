@@ -14,7 +14,6 @@
 #import "FMDatabaseAdditions.h"
 #import "ServerListViewController.h"
 #import "FoldersViewController.h"
-#import "Reachability.h"
 #import "Album.h"
 #import "Song.h"
 #import <CoreFoundation/CoreFoundation.h>
@@ -109,7 +108,7 @@
     //DLog(@"urlString: %@", settingsS.urlString);
 	
 	// Setup network reachability notifications
-	self.wifiReach = [Reachability reachabilityForLocalWiFi];
+	self.wifiReach = [EX2Reachability reachabilityForLocalWiFi];
 	[wifiReach startNotifier];
 	[[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reachabilityChanged:) name: kReachabilityChangedNotification object:nil];
 	[wifiReach currentReachabilityStatus];
@@ -347,7 +346,8 @@
         
         if ([theLoader isKindOfClass:[SUSStatusLoader class]])
         {
-             settingsS.isNewSearchAPI = ((SUSStatusLoader *)theLoader).isNewSearchAPI;
+            settingsS.isNewSearchAPI = ((SUSStatusLoader *)theLoader).isNewSearchAPI;
+            settingsS.isVideoSupported = ((SUSStatusLoader *)theLoader).isVideoSupported;
         }
     }
 }
@@ -359,6 +359,7 @@
         if ([theLoader isKindOfClass:[SUSStatusLoader class]])
         {
             settingsS.isNewSearchAPI = ((SUSStatusLoader *)theLoader).isNewSearchAPI;
+            settingsS.isVideoSupported = ((SUSStatusLoader *)theLoader).isVideoSupported;
         }
         
         self.statusLoader = nil;
@@ -836,7 +837,7 @@
 	[musicS updateLockScreenInfo];
 }
 
-- (void)reachabilityChangedInternal:(Reachability *)curReach
+- (void)reachabilityChangedInternal:(EX2Reachability *)curReach
 {	
 	if ([curReach currentReachabilityStatus] == NotReachable)
 	{
@@ -895,7 +896,7 @@
 	if (settingsS.isForceOfflineMode)
 		return;
 	
-	if ([note.object isKindOfClass:[Reachability class]])
+	if ([note.object isKindOfClass:[EX2Reachability class]])
 	{
 		// Cancel any previous requests
 		[EX2Dispatch cancelTimerBlockWithName:@"Reachability Changed"];

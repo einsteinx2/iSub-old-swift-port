@@ -125,7 +125,7 @@
 	self.overlayView.downloadButton.alpha = (float)!viewObjectsS.isOfflineMode;
 	self.overlayView.downloadButton.enabled = !viewObjectsS.isOfflineMode;
 	
-	if (self.mySong.isFullyCached && !viewObjectsS.isOfflineMode)
+	if ((self.mySong.isFullyCached && !viewObjectsS.isOfflineMode) || self.mySong.isVideo)
 	{
 		self.overlayView.downloadButton.alpha = .3;
 		self.overlayView.downloadButton.enabled = NO;

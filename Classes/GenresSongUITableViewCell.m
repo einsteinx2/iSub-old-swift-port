@@ -101,7 +101,8 @@
 	
 	if (!viewObjectsS.isOfflineMode)
 	{
-		if ([[databaseS.songCacheDbQueue stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", self.md5] isEqualToString:@"YES"]) 
+		if ([[databaseS.songCacheDbQueue stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", self.md5] isEqualToString:@"YES"] ||
+            [[databaseS.songCacheDbQueue stringForQuery:@"SELECT isVideo FROM cachedSongs WHERE md5 = ?", self.md5] isEqualToString:@"YES"])
 		{
 			self.overlayView.downloadButton.alpha = .3;
 			self.overlayView.downloadButton.enabled = NO;

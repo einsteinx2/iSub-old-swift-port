@@ -18,23 +18,27 @@ static NSArray *ver1_3_0 = nil;
 static NSArray *ver1_4_0 = nil;
 static NSArray *ver1_5_0 = nil;
 static NSArray *ver1_6_0 = nil;
+static NSArray *ver1_8_0 = nil;
 static NSSet *setOfVersions = nil;
 
 + (void)initialize
 {
 //DLog(@"NSMutableURLRequest initialize called");
-    ver1_0_0 = [[NSArray alloc] initWithObjects:@"ping", @"getLicense", @"getMusicFolders", @"getNowPlaying", @"getIndexes", @"getMusicDirectory", @"search", @"getPlaylists", @"getPlaylist", @"download", @"stream", @"getCoverArt", @"1.0.0", nil];
-    ver1_2_0 = [[NSArray alloc] initWithObjects:@"createPlaylist", @"deletePlaylist", @"getChatMessages", @"addChatMessage", @"getAlbumList", @"getRandomSongs", @"getLyrics", @"jukeboxControl", @"1.2.0", nil];
-    ver1_3_0 = [[NSArray alloc] initWithObjects:@"getUser", @"deleteUser", @"1.3.0", nil];
-    ver1_4_0 = [[NSArray alloc] initWithObjects:@"search2", @"1.4.0", nil];
-    ver1_5_0 = [[NSArray alloc] initWithObjects:@"scrobble", @"1.5.0", nil];
-    ver1_6_0 = [[NSArray alloc] initWithObjects:@"getPodcasts", @"getShares", @"createShare", @"updateShare", @"deleteShare", @"setRating", @"1.6.0", nil];
-    setOfVersions = [[NSSet alloc] initWithObjects:ver1_0_0, ver1_2_0, ver1_3_0, ver1_4_0, ver1_5_0, ver1_6_0, nil];
+    ver1_0_0 = @[@"ping", @"getLicense", @"getMusicFolders", @"getNowPlaying", @"getIndexes", @"getMusicDirectory", @"search", @"getPlaylists", @"getPlaylist", @"download", @"stream", @"getCoverArt", @"1.0.0"];
+    ver1_2_0 = @[@"createPlaylist", @"deletePlaylist", @"getChatMessages", @"addChatMessage", @"getAlbumList", @"getRandomSongs", @"getLyrics", @"jukeboxControl", @"1.2.0"];
+    ver1_3_0 = @[@"getUser", @"deleteUser", @"1.3.0"];
+    ver1_4_0 = @[@"search2", @"1.4.0"];
+    ver1_5_0 = @[@"scrobble", @"1.5.0"];
+    ver1_6_0 = @[@"getPodcasts", @"getShares", @"createShare", @"updateShare", @"deleteShare", @"setRating", @"1.6.0"];
+    ver1_8_0 = @[@"hls", @"1.8.0"];
+    setOfVersions = [[NSSet alloc] initWithObjects:ver1_0_0, ver1_2_0, ver1_3_0, ver1_4_0, ver1_5_0, ver1_6_0, ver1_8_0, nil];
 }
 
 + (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action urlString:(NSString *)url username:(NSString *)user password:(NSString *)pass parameters:(NSDictionary *)parameters byteOffset:(NSUInteger)offset
 {
 	NSMutableString *urlString = [NSMutableString stringWithFormat:@"%@/rest/%@.view", url, action];
+    if ([action isEqualToString:@"hls"])
+        urlString = [NSMutableString stringWithFormat:@"%@/rest/%@.m3u8", url, action];
 	NSString *username = [user URLEncodeString];
 	NSString *password = [pass URLEncodeString];
 	NSString *version = nil;

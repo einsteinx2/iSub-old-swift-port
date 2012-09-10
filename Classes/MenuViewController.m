@@ -31,7 +31,7 @@
 #define kCellImage @"CellImage"
 
 @implementation MenuViewController
-@synthesize tableView, cellContents, isFirstLoad, lastSelectedRow, playerController, playerNavController;
+@synthesize tableView, cellContents, isFirstLoad, lastSelectedRow, playerHolder, playerController, playerNavController;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -56,14 +56,20 @@
 		shade.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
 		[background addSubview:shade];
 		[self.view addSubview:background];
+        
+        playerHolder = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 440)];
+        playerHolder.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+        playerHolder.bottom = self.view.bottom;
+        [self.view addSubview:playerHolder];
 		
 		playerController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 		playerNavController = [[UINavigationController alloc] initWithRootViewController:playerController];
 		playerNavController.view.frame = CGRectMake(0, 0, 320, 440);
-		playerNavController.view.bottom = self.view.bottom;
-		playerNavController.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-		playerNavController.navigationBar.tintColor = [UIColor blackColor];		
-		[self.view addSubview:playerNavController.view];
+        playerNavController.navigationBar.tintColor = [UIColor blackColor];
+		//playerNavController.view.bottom = self.view.bottom;
+		//playerNavController.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+		//[self.view addSubview:playerNavController.view];
+        [self.playerHolder addSubview:playerNavController.view];
 		
 		// Create the menu
 		[self loadCellContents];

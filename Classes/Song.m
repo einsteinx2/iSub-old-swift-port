@@ -9,11 +9,12 @@
 #import "Song.h"
 #import "SavedSettings.h"
 #include <sys/stat.h>
+#import <MediaPlayer/MediaPlayer.h>
 
 @implementation Song
 
 @synthesize title, songId, parentId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix;
-@synthesize duration, bitRate, track, year, size;
+@synthesize duration, bitRate, track, year, size, isVideo;
 
 - (id)initWithPMSDictionary:(NSDictionary *)dictionary
 {
@@ -74,6 +75,8 @@
 			self.year = [numberFormatter numberFromString:[TBXML valueOfAttributeNamed:@"year" forElement:element]];
 		if([TBXML valueOfAttributeNamed:@"size" forElement:element])
 			self.size = [numberFormatter numberFromString:[TBXML valueOfAttributeNamed:@"size" forElement:element]];
+        if([TBXML valueOfAttributeNamed:@"isVideo" forElement:element])
+            self.isVideo = [[TBXML valueOfAttributeNamed:@"isVideo" forElement:element] boolValue];
 	}
 	
 	return self;
@@ -128,10 +131,14 @@
 		
 		if ([attributeDict objectForKey:@"size"])
 			self.size = [numberFormatter numberFromString:[attributeDict objectForKey:@"size"]];
+        
+        if ([attributeDict objectForKey:@"isVideo"])
+			self.isVideo = [[attributeDict objectForKey:@"isVideo"] boolValue];
 	}
 	
 	return self;
 }
+
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
@@ -150,8 +157,8 @@
 	[encoder encodeObject:track forKey:@"track"];
 	[encoder encodeObject:year forKey:@"year"];
 	[encoder encodeObject:size forKey:@"size"];
+    [encoder encodeBool:isVideo forKey:@"isVideo"];
 }
-
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
@@ -175,6 +182,7 @@
 			track = [decoder decodeObjectForKey:@"track"];
 			year = [decoder decodeObjectForKey:@"year"];
 			size = [decoder decodeObjectForKey:@"size"];
+            isVideo = [decoder decodeBoolForKey:@"isVideo"];
 		}
 		else
 		{
@@ -198,8 +206,7 @@
 	return self;
 }
 
-
--(id)copyWithZone:(NSZone *)zone
+- (id)copyWithZone:(NSZone *)zone
 {
 	Song *newSong = [[Song alloc] init];
 
@@ -219,6 +226,7 @@
 	newSong.track = self.track;
 	newSong.year = self.year;
 	newSong.size = self.size;
+    newSong.isVideo = self.isVideo;
 	
 	return newSong;
 }
@@ -228,8 +236,6 @@
 	//return [NSString stringWithFormat:@"%@: title: %@, songId: %@", [super description], title, songId];
 	return [NSString stringWithFormat:@"%@  title: %@", [super description], title];
 }
-
-
 
 - (NSUInteger)hash
 {
@@ -257,7 +263,8 @@
 		([bitRate isEqualToNumber:otherSong.bitRate] || (bitRate == nil && otherSong.bitRate == nil)) &&
 		([track isEqualToNumber:otherSong.track] || (track == nil && otherSong.track == nil)) &&
 		([year isEqualToNumber:otherSong.year] || (year == nil && otherSong.year == nil)) &&
-		([size isEqualToNumber:otherSong.size] || (size == nil && otherSong.size == nil)))
+		([size isEqualToNumber:otherSong.size] || (size == nil && otherSong.size == nil)) &&
+        isVideo == otherSong.isVideo)
 		return YES;
 	
 	return NO;
@@ -272,6 +279,16 @@
         return NO;
 	
     return [self isEqualToSong:other];
+}
+
+- (NSString *)itemId
+{
+    return self.songId;
+}
+
+- (void)setItemId:(NSString *)itemId
+{
+    self.songId = itemId;
 }
 
 - (NSString *)localSuffix

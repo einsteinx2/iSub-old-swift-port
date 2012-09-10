@@ -322,7 +322,8 @@
 	// Add parentId column to tables if necessary
 	NSArray *parentIdDatabaseQueues = [NSArray arrayWithObjects:albumListCacheDbQueue, currentPlaylistDbQueue, currentPlaylistDbQueue, currentPlaylistDbQueue, currentPlaylistDbQueue, songCacheDbQueue, songCacheDbQueue, cacheQueueDbQueue, songCacheDbQueue, cacheQueueDbQueue, nil];
 	NSArray *parentIdTables = [NSArray arrayWithObjects:@"songsCache", @"currentPlaylist", @"shufflePlaylist", @"jukeboxCurrentPlaylist", @"jukeboxShufflePlaylist", @"cachedSongs", @"genresSongs", @"cacheQueue", @"cachedSongsList", @"queuedSongsList", nil];
-	NSString *columnName = @"parentId";
+	NSString *parentIdColumnName = @"parentId";
+    NSString *isVideoColumnName = @"isVideo";
 	for (int i = 0; i < [parentIdDatabaseQueues count]; i++)
 	{
 		FMDatabaseQueue *dbQueue = [parentIdDatabaseQueues objectAtIndexSafe:i];
@@ -330,9 +331,15 @@
 		
 		[dbQueue inDatabase:^(FMDatabase *db)
 		{
-			if (![db columnExists:columnName inTableWithName:table])
+			if (![db columnExists:parentIdColumnName inTableWithName:table])
 			{
-				NSString *query = [NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ TEXT", table, columnName];
+				NSString *query = [NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ TEXT", table, parentIdColumnName];
+				[db executeUpdate:query];
+			}
+            
+            if (![db columnExists:isVideoColumnName inTableWithName:table])
+			{
+				NSString *query = [NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ TEXT", table, isVideoColumnName];
 				[db executeUpdate:query];
 			}
 		}];
@@ -364,9 +371,15 @@
 		
 		for (NSString *table in playlistTableNames)
 		{
-			if (![db columnExists:columnName inTableWithName:table])
+			if (![db columnExists:parentIdColumnName inTableWithName:table])
 			{
-				NSString *query = [NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ TEXT", table, columnName];
+				NSString *query = [NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ TEXT", table, parentIdColumnName];
+				[db executeUpdate:query];
+			}
+            
+            if (![db columnExists:isVideoColumnName inTableWithName:table])
+			{
+				NSString *query = [NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ TEXT", table, isVideoColumnName];
 				[db executeUpdate:query];
 			}
 		}

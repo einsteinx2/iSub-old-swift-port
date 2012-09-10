@@ -112,7 +112,24 @@ static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStr
 	}
 	else if ([settingsS.serverType isEqualToString:WAVEBOX])
 	{
-        NSDictionary *parameters = [NSDictionary dictionaryWithObject:self.mySong.songId forKey:@"id"];
+        NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:self.mySong.songId forKey:@"id"];
+        
+        if (self.maxBitrateSetting < 192)
+        {
+            [parameters setObject:@"MP3" forKey:@"transType"];
+            
+            NSString *transQuality;
+            switch (self.maxBitrateSetting)
+            {
+                case 64: transQuality = @"Low"; break;
+                case 96: transQuality = @"Medium"; break;
+                case 128: transQuality = @"High"; break;
+                case 160:
+                default: transQuality = @"Extreme"; break;
+            }
+            [parameters setObject:transQuality forKey:@"transQuality"];
+        }
+        
 		request = [NSMutableURLRequest requestWithPMSAction:@"stream" parameters:parameters byteOffset:self.byteOffset];
 	}
     

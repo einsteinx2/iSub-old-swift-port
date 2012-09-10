@@ -195,7 +195,7 @@
 		{
 			if (self.currentIndex != 0)
 				[self incrementIndex];
-			[musicS startSong];
+			[musicS playSongAtPosition:self.currentIndex];
 		}
 		else
 		{

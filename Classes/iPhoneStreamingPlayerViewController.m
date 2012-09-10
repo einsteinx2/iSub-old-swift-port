@@ -704,6 +704,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	hasMoved = NO;
 	oldPosition = 0.0;
 	progressSlider.minimumValue = 0.0;
+    progressSlider.alpha = 1.0;
+    elapsedTimeLabel.alpha = 1.0;
+    remainingTimeLabel.alpha = 1.0;
 	if (!settingsS.isJukeboxEnabled && currentSong.duration && [currentSong.duration intValue] > 0)
 	{
 		progressSlider.maximumValue = [currentSong.duration floatValue];
@@ -713,6 +716,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	{
 		progressSlider.maximumValue = 0.0;
 		progressSlider.enabled = NO;
+        progressSlider.alpha = 0.5;
+        elapsedTimeLabel.alpha = 0.5;
+        remainingTimeLabel.alpha = 0.5;
 	}
 	
 	[repeatButton setImage:[UIImage imageNamed:@"controller-repeat.png"] forState:0];
@@ -763,6 +769,21 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	self.genreLabel.text = self.currentSong.genre ? self.currentSong.genre : @"";
 	self.yearLabel.text = [self.currentSong.year intValue] != 0 ? [self.currentSong.year stringValue] : @"";
 	[self updateFormatLabel];
+    
+    if (currentSong.isVideo)
+    {
+        // Disable buttons for video
+        eqButton.enabled = NO;
+        back30Button.enabled = NO;
+        forw30Button.enabled = NO;
+        progressSlider.enabled = NO;
+        progressSlider.alpha = 0.5;
+        bookmarkButton.enabled = NO;
+        elapsedTimeLabel.alpha = 0.5;
+        remainingTimeLabel.alpha = 0.5;
+        progressSlider.maximumValue = 0.0;
+        
+    }
 }
 
 - (void)jukeboxToggled
@@ -963,7 +984,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		}
 		else
 		{
-			[musicS startSong];
+			[musicS playSongAtPosition:playlistS.currentIndex];
 		}
 	}
 }

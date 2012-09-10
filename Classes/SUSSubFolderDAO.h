@@ -36,6 +36,6 @@
 - (Album *)albumForTableViewRow:(NSUInteger)row;
 - (Song *)songForTableViewRow:(NSUInteger)row;
 
-- (void)playSongAtTableViewRow:(NSUInteger)row;
+- (Song *)playSongAtTableViewRow:(NSUInteger)row;
 
 @end

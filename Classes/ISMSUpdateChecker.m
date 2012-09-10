@@ -9,15 +9,24 @@
 #import "ISMSUpdateChecker.h"
 #import "TBXML.h"
 
+@interface ISMSUpdateChecker ()
+@property (strong) ISMSUpdateChecker *selfRef;
+@end
+
 @implementation ISMSUpdateChecker
-@synthesize receivedData, connection, request, theNewVersion, message;
+@synthesize receivedData, connection, request, theNewVersion, message, selfRef;
 
 - (void)checkForUpdate
 {
-    self.receivedData = [NSMutableData dataWithCapacity:0];
+    
 	self.request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://isubapp.com/update.xml"]];
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
-	if (!self.connection)
+	if (self.connection)
+    {
+        self.selfRef = self;
+        self.receivedData = [NSMutableData dataWithCapacity:0];
+    }
+    else
 	{
 		self.receivedData = nil;
 		self.request = nil;
@@ -44,6 +53,7 @@
 		//[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftwareUpdate?id=id362920532"]];
 	}
 	
+    self.selfRef = nil;
 }
 
 #pragma mark - Connection Delegate
@@ -95,13 +105,14 @@
     self.receivedData = nil;
 	self.request = nil;
 
+    self.selfRef = nil;
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {		
 	// TODO: test this
 	BOOL showAlert = NO;
-	//DLog(@"receivedData: %@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
+	DLog(@"update checker: %@", [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
 	NSError *error;
     TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData error:&error];
 	if (!error)
@@ -139,10 +150,10 @@
 				}
 			}
 			
-			//DLog(@"currentVersionSplit: %@", currentVersionSplit);
-			//DLog(@"newVersionSplit: %@", newVersionSplit);
-			//DLog(@"currentVersionPadded: %@", currentVersionPadded);
-			//DLog(@"newVersionPadded: %@", newVersionPadded);
+			DLog(@"currentVersionSplit: %@", currentVersionSplit);
+			DLog(@"newVersionSplit: %@", newVersionSplit);
+			DLog(@"currentVersionPadded: %@", currentVersionPadded);
+			DLog(@"newVersionPadded: %@", newVersionPadded);
 			
 			@try 
 			{
@@ -184,6 +195,8 @@
 	
 	if (showAlert)
 		[self showAlert];
+    else
+        self.selfRef = nil;
 }
 
 @end

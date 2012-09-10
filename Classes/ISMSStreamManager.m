@@ -512,7 +512,7 @@ LOG_LEVEL_ISUB_DEFAULT
 		for (int i = 0; i < numStreamsToQueue; i++)
 		{
 			Song *aSong = [playlistS songForIndex:[playlistS indexForOffsetFromCurrentIndex:i]];
-			if (aSong && ![self isSongInQueue:aSong] && !aSong.isFullyCached && !viewObjectsS.isOfflineMode && ![cacheQueueManagerS.currentQueuedSong isEqualToSong:aSong])
+			if (aSong && !aSong.isVideo && ![self isSongInQueue:aSong] && !aSong.isFullyCached && !viewObjectsS.isOfflineMode && ![cacheQueueManagerS.currentQueuedSong isEqualToSong:aSong])
 			{
 				// Queue the song for download
 				[self queueStreamForSong:aSong isTempCache:!settingsS.isSongCachingEnabled isStartDownload:isStartDownload];
