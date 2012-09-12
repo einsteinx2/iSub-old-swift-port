@@ -434,7 +434,7 @@
         
         if ([viewObjectsS.serverToEdit.type isEqualToString:SUBSONIC] || [viewObjectsS.serverToEdit.type isEqualToString:UBUNTU_ONE])
         {
-            SUSStatusLoader *statusLoader = [SUSStatusLoader loaderWithDelegate:self];
+            SUSStatusLoader *statusLoader = [[SUSStatusLoader alloc] initWithDelegate:self];
             statusLoader.urlString = viewObjectsS.serverToEdit.url;
             statusLoader.username = viewObjectsS.serverToEdit.username;
             statusLoader.password = viewObjectsS.serverToEdit.password;
