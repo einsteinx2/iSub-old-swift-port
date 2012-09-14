@@ -91,17 +91,17 @@ static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStr
 	}
 	
 	self.bitrate = self.mySong.estimatedBitrate;
+    
+    if (self.maxBitrateSetting == NSIntegerMax)
+    {
+        self.maxBitrateSetting = settingsS.currentMaxBitrate;
+    }
 	
     NSURLRequest *request;
 	if ([settingsS.serverType isEqualToString:SUBSONIC] || [settingsS.serverType isEqualToString:UBUNTU_ONE])
 	{
 		NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(self.mySong.songId), @"id", nil];
 		[parameters setObject:@"true" forKey:@"estimateContentLength"];
-		
-		if (self.maxBitrateSetting == NSIntegerMax)
-		{
-			self.maxBitrateSetting = settingsS.currentMaxBitrate;
-		}
 		
 		if (self.maxBitrateSetting != 0)
 		{
