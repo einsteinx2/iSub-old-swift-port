@@ -10,14 +10,13 @@
 #import "TBXML.h"
 
 @implementation SUSStatusLoader
-@synthesize urlString, username, password, isNewSearchAPI, majorVersion, minorVersion, versionString;
 
 - (NSURLRequest *)createRequest
 {
     if (!self.urlString || !self.username || !self.password)
         return nil;
     
-    return [NSMutableURLRequest requestWithSUSAction:@"ping" urlString:urlString username:username password:password parameters:nil];
+    return [NSMutableURLRequest requestWithSUSAction:@"ping" urlString:self.urlString username:self.username password:self.password parameters:nil];
 }
 
 - (void)processResponse

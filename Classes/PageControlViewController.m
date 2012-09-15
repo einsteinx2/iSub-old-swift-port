@@ -10,9 +10,6 @@
 #import "CurrentPlaylistBackgroundViewController.h"
 #import "LyricsViewController.h"
 #import "DebugViewController.h"
-#import "iSubAppDelegate.h"
-#import "MusicSingleton.h"
-#import "SavedSettings.h"
 #import "EqualizerViewController.h"
 #import "PagingScrollView.h"
 

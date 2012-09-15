@@ -8,7 +8,6 @@
 
 #import "CustomUITextView.h"
 
-
 @implementation CustomUITextView
 
 - (void)drawRect:(CGRect)rect 

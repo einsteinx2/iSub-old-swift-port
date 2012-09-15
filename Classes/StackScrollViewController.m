@@ -9,7 +9,6 @@
 #import "StackScrollViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "StackContainerView.h"
-#import "SavedSettings.h"
 
 const NSInteger SLIDE_VIEWS_MINUS_X_POSITION = 0;//-190;//-130;
 const NSInteger SLIDE_VIEWS_START_X_POS = 0;

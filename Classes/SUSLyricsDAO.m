@@ -10,27 +10,24 @@
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 
-#import "DatabaseSingleton.h"
 #import "SUSLyricsLoader.h"
 #import <QuartzCore/QuartzCore.h>
-#import "SavedSettings.h"
 
 @implementation SUSLyricsDAO
-@synthesize loader, delegate;
 
 - (id)initWithDelegate:(NSObject <ISMSLoaderDelegate> *)theDelegate
 {
     if ((self = [super init]))
     {
-        delegate = theDelegate;
+        _delegate = theDelegate;
     }
     return self;
 }
 
 - (void)dealloc
 {
-	[loader cancelLoad];
-	loader.delegate = nil;
+	[_loader cancelLoad];
+	_loader.delegate = nil;
 }
 
 - (FMDatabaseQueue *)dbQueue

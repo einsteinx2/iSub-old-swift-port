@@ -14,13 +14,11 @@
 @end
 
 @implementation ISMSUpdateChecker
-@synthesize receivedData, connection, request, theNewVersion, message, selfRef;
 
 - (void)checkForUpdate
 {
-    
 	self.request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://isubapp.com/update.xml"]];
-	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+	self.connection = [NSURLConnection connectionWithRequest:self.request delegate:self];
 	if (self.connection)
     {
         self.selfRef = self;
@@ -37,8 +35,8 @@
 
 - (void)showAlert
 {
-	NSString *title = [NSString stringWithFormat:@"Free Update %@ Available", theNewVersion];
-	NSString *finalMessage = [message stringByReplacingOccurrencesOfString:@"\\n" withString:@"\n"];
+	NSString *title = [NSString stringWithFormat:@"Free Update %@ Available", self.theNewVersion];
+	NSString *finalMessage = [self.message stringByReplacingOccurrencesOfString:@"\\n" withString:@"\n"];
 	
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:finalMessage delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles:@"App Store", nil];
 	[alert show];
@@ -77,14 +75,14 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-	[receivedData setLength:0];
+	[self.receivedData setLength:0];
 }
 
 - (NSURLRequest *)connection:(NSURLConnection *)inConnection willSendRequest:(NSURLRequest *)inRequest redirectResponse:(NSURLResponse *)inRedirectResponse
 {
     if (inRedirectResponse) 
     {
-        NSMutableURLRequest *r = [request mutableCopy]; // original request
+        NSMutableURLRequest *r = [self.request mutableCopy]; // original request
         [r setURL:[inRequest URL]];
         return r;
     } 
@@ -96,7 +94,7 @@
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
 {
-	[receivedData appendData:incrementalData];
+	[self.receivedData appendData:incrementalData];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
@@ -112,7 +110,7 @@
 {		
 	// TODO: test this
 	BOOL showAlert = NO;
-	DLog(@"update checker: %@", [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
+	DLog(@"update checker: %@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
 	NSError *error;
     TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData error:&error];
 	if (!error)
@@ -129,7 +127,7 @@
 			//DLog(@"message = %@", message);
 			
 			NSArray *currentVersionSplit = [currentVersion componentsSeparatedByString:@"."];
-			NSArray *newVersionSplit = [theNewVersion componentsSeparatedByString:@"."];
+			NSArray *newVersionSplit = [self.theNewVersion componentsSeparatedByString:@"."];
 			
 			NSMutableArray *currentVersionPadded = [NSMutableArray arrayWithArray:currentVersionSplit];
 			NSMutableArray *newVersionPadded = [NSMutableArray arrayWithArray:newVersionSplit];

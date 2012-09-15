@@ -8,62 +8,62 @@
 
 #import "FolderDropdownControl.h"
 #import <QuartzCore/QuartzCore.h>
-#import "iSubAppDelegate.h"
 #import "CustomUIAlertView.h"
 #import "SUSRootFoldersDAO.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "NSMutableURLRequest+PMS.h"
-#import "SavedSettings.h"
 #import "Server.h"
 #import "SBJson.h"
 
+@interface FolderDropdownControl ()
+{
+    __strong NSDictionary *_folders;
+}
+@end
+
 @implementation FolderDropdownControl
-@synthesize selectedFolderId, isOpen, labels, folders;
-@synthesize borderColor, textColor, lightColor, darkColor;
-@synthesize delegate, receivedData, connection;
-@synthesize selectedFolderLabel, arrowImage, sizeIncrease, updatedfolders;
 
 - (id)initWithFrame:(CGRect)frame 
 {
     self = [super initWithFrame:frame];
     if (self) 
 	{
-		selectedFolderId = [NSNumber numberWithInt:-1];
-		folders = [SUSRootFoldersDAO folderDropdownFolders];
-		labels = [[NSMutableArray alloc] init];
-		isOpen = NO;
-		borderColor = [[UIColor alloc] initWithRed:156.0/255.0 green:161.0/255.0 blue:168.0/255.0 alpha:1];
-		textColor   = [[UIColor alloc] initWithRed:106.0/255.0 green:111.0/255.0 blue:118.0/255.0 alpha:1];
-		lightColor  = [[UIColor alloc] initWithRed:206.0/255.0 green:211.0/255.0 blue:218.0/255.0 alpha:1];
-		darkColor   = [[UIColor alloc] initWithRed:196.0/255.0 green:201.0/255.0 blue:208.0/255.0 alpha:1];
+		_selectedFolderId = [NSNumber numberWithInt:-1];
+		_folders = [SUSRootFoldersDAO folderDropdownFolders];
+		_labels = [[NSMutableArray alloc] init];
+		_isOpen = NO;
+		_borderColor = [[UIColor alloc] initWithRed:156.0/255.0 green:161.0/255.0 blue:168.0/255.0 alpha:1];
+		_textColor   = [[UIColor alloc] initWithRed:106.0/255.0 green:111.0/255.0 blue:118.0/255.0 alpha:1];
+		_lightColor  = [[UIColor alloc] initWithRed:206.0/255.0 green:211.0/255.0 blue:218.0/255.0 alpha:1];
+		_darkColor   = [[UIColor alloc] initWithRed:196.0/255.0 green:201.0/255.0 blue:208.0/255.0 alpha:1];
 		
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		self.userInteractionEnabled = YES;
 		self.backgroundColor = [UIColor clearColor];
-		self.layer.borderColor = borderColor.CGColor;
+		self.layer.borderColor = _borderColor.CGColor;
 		self.layer.borderWidth = 2.0;
 		self.layer.cornerRadius = 8;
 		self.layer.masksToBounds = YES;
 		
-		selectedFolderLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, self.frame.size.width - 10, 30)];
-		selectedFolderLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		selectedFolderLabel.userInteractionEnabled = YES;
-		selectedFolderLabel.backgroundColor = [UIColor clearColor];
-		selectedFolderLabel.textColor = borderColor;
-		selectedFolderLabel.textAlignment = UITextAlignmentCenter;
-		selectedFolderLabel.font = [UIFont boldSystemFontOfSize:20];
-		selectedFolderLabel.text = @"All Folders";
-		[self addSubview:selectedFolderLabel];
+		_selectedFolderLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, self.frame.size.width - 10, 30)];
+		_selectedFolderLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		_selectedFolderLabel.userInteractionEnabled = YES;
+		_selectedFolderLabel.backgroundColor = [UIColor clearColor];
+		_selectedFolderLabel.textColor = _borderColor;
+		_selectedFolderLabel.textAlignment = UITextAlignmentCenter;
+		_selectedFolderLabel.font = [UIFont boldSystemFontOfSize:20];
+		_selectedFolderLabel.text = @"All Folders";
+		[self addSubview:_selectedFolderLabel];
 		
 		UIView *arrowImageView = [[UIView alloc] initWithFrame:CGRectMake(193, 7, 18, 18)];
 		arrowImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 		[self addSubview:arrowImageView];
 		
-		arrowImage = [[CALayer alloc] init];
-		arrowImage.frame = CGRectMake(0, 0, 18, 18);
-		arrowImage.contentsGravity = kCAGravityResizeAspect;
-		arrowImage.contents = (id)[UIImage imageNamed:@"folder-dropdown-arrow.png"].CGImage;
-		[[arrowImageView layer] addSublayer:arrowImage];
+		_arrowImage = [[CALayer alloc] init];
+		_arrowImage.frame = CGRectMake(0, 0, 18, 18);
+		_arrowImage.contentsGravity = kCAGravityResizeAspect;
+		_arrowImage.contents = (id)[UIImage imageNamed:@"folder-dropdown-arrow.png"].CGImage;
+		[[arrowImageView layer] addSublayer:_arrowImage];
 		
 		UIButton *dropdownButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 220, 30)];
 		dropdownButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -97,14 +97,13 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 
 - (NSDictionary *)folders
 {
-	return folders;
+	return _folders;
 }
 
 - (void)setFolders:(NSDictionary *)namesAndIds
 {
 	// Set the property
-	folders = nil;
-	folders = namesAndIds;
+	_folders = namesAndIds;
 	
 	// Remove old labels
 	for (UILabel *label in self.labels)
@@ -113,14 +112,14 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	}
 	[self.labels removeAllObjects];
 	
-	self.sizeIncrease = [folders count] * 30.0f;
+	self.sizeIncrease = _folders.count * 30.0f;
 	
-	NSMutableArray *sortedValues = [NSMutableArray arrayWithCapacity:folders.count];
-	for (NSNumber *key in [folders allKeys])
+	NSMutableArray *sortedValues = [NSMutableArray arrayWithCapacity:_folders.count];
+	for (NSNumber *key in _folders.allKeys)
 	{
 		if ([key intValue] != -1)
 		{
-			NSArray *keyValuePair = [NSArray arrayWithObjects:key, [folders objectForKey:key], nil];
+			NSArray *keyValuePair = [NSArray arrayWithObjects:key, [_folders objectForKey:key], nil];
 			[sortedValues addObject:keyValuePair];
 		}
 	}
@@ -212,7 +211,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 		[CATransaction commit];
 	}
 	
-	isOpen = !isOpen;
+	self.isOpen = !self.isOpen;
 }
 
 - (void)closeDropdown
@@ -246,7 +245,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	//DLog(@"Folder selected: %@ -- %i", label.text, label.tag);
 	
 	self.selectedFolderId = [NSNumber numberWithInt:label.tag];
-	self.selectedFolderLabel.text = [folders objectForKey:self.selectedFolderId];
+	self.selectedFolderLabel.text = [self.folders objectForKey:self.selectedFolderId];
 	//[self toggleDropdown:nil];
 	[self closeDropdownFast];
 	
@@ -257,7 +256,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 - (void)selectFolderWithId:(NSNumber *)folderId
 {
 	self.selectedFolderId = folderId;
-	self.selectedFolderLabel.text = [folders objectForKey:self.selectedFolderId];
+	self.selectedFolderLabel.text = [self.folders objectForKey:self.selectedFolderId];
 }
 
 - (void)updateFolders

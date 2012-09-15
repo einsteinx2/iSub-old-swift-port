@@ -8,11 +8,8 @@
 
 #import "ModalAlbumArtViewController.h"
 #import "AsynchronousImageView.h"
-#import "DatabaseSingleton.h"
-#import "iSubAppDelegate.h"
 #import "FMDatabaseAdditions.h"
 #import "Album.h"
-#import "SavedSettings.h"
  
 @implementation ModalAlbumArtViewController
 @synthesize albumArt, artistLabel, albumLabel, myAlbum, numberOfTracks, albumLength, durationLabel, trackCountLabel, labelHolderView, albumArtReflection;

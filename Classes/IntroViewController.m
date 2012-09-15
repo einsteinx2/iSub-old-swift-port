@@ -7,10 +7,8 @@
 //
 
 #import "IntroViewController.h"
-#import "iSubAppDelegate.h"
 #import "ServerListViewController.h"
 #import <MediaPlayer/MediaPlayer.h>
-#import "SavedSettings.h"
 
 @implementation IntroViewController
 @synthesize introVideo, testServer, ownServer, sunkenLogo;

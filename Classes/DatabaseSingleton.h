@@ -1,10 +1,13 @@
 //
-//  DatabaseControlsSingleton.h
+//  DatabaseSingleton.h
 //  iSub
 //
 //  Created by Ben Baron on 10/15/10.
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
+
+#ifndef iSub_DatabaseSingleton_h
+#define iSub_DatabaseSingleton_h
 
 #define databaseS ((DatabaseSingleton *)[DatabaseSingleton sharedInstance])
 
@@ -68,3 +71,5 @@
 - (void)updateTableDefinitions;
 
 @end
+
+#endif

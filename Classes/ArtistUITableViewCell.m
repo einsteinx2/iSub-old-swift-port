@@ -7,10 +7,8 @@
 //
 
 #import "ArtistUITableViewCell.h"
-#import "DatabaseSingleton.h"
 #import "Artist.h"
 #import "CellOverlay.h"
-#import "ViewObjectsSingleton.h"
 
 @implementation ArtistUITableViewCell
 

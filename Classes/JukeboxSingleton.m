@@ -9,18 +9,13 @@
 #import "JukeboxSingleton.h"
 #import "JukeboxConnectionDelegate.h"
 #import "NSMutableURLRequest+SUS.h"
-#import "PlaylistSingleton.h"
 #import "BBSimpleConnectionQueue.h"
 #import "CustomUIAlertView.h"
-#import "DatabaseSingleton.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "SavedSettings.h"
 
 @implementation JukeboxSingleton
-
-@synthesize jukeboxIsPlaying, jukeboxGain, connectionQueue;
 
 #pragma mark - Jukebox Control methods
 
@@ -38,8 +33,8 @@
 	{		
 		playlistS.currentIndex = [position intValue];
 		
-		[connectionQueue registerConnection:connection];
-		[connectionQueue startQueue];
+		[self.connectionQueue registerConnection:connection];
+		[self.connectionQueue startQueue];
 	} 
 	else 
 	{
@@ -61,8 +56,8 @@
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
 	{
-		[connectionQueue registerConnection:connection];
-		[connectionQueue startQueue];
+		[self.connectionQueue registerConnection:connection];
+		[self.connectionQueue startQueue];
 	}
 	else
 	{
@@ -72,7 +67,7 @@
 	}
 	
 	
-	jukeboxIsPlaying = YES;
+	self.jukeboxIsPlaying = YES;
 }
 
 - (void)jukeboxStop
@@ -86,8 +81,8 @@
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
 	{
-		[connectionQueue registerConnection:connection];
-		[connectionQueue startQueue];
+		[self.connectionQueue registerConnection:connection];
+		[self.connectionQueue startQueue];
 	}
 	else
 	{
@@ -96,8 +91,7 @@
 		[alert show];
 	}
 	
-	
-	jukeboxIsPlaying = NO;
+	self.jukeboxIsPlaying = NO;
 }
 
 - (void)jukeboxPrevSong
@@ -107,7 +101,7 @@
 	{						
 		[self jukeboxPlaySongAtPosition:[NSNumber numberWithInt:index]];
 		
-		jukeboxIsPlaying = YES;
+		self.jukeboxIsPlaying = YES;
 	}
 }
 
@@ -118,14 +112,14 @@
 	{		
 		[self jukeboxPlaySongAtPosition:[NSNumber numberWithInt:index]];
 		
-		jukeboxIsPlaying = YES;
+		self.jukeboxIsPlaying = YES;
 	}
 	else
 	{
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnded];
 		[self jukeboxStop];
 		
-		jukeboxIsPlaying = NO;
+		self.jukeboxIsPlaying = NO;
 	}
 }
 
@@ -141,8 +135,8 @@
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
 	{
-		[connectionQueue registerConnection:connection];
-		[connectionQueue startQueue];
+		[self.connectionQueue registerConnection:connection];
+		[self.connectionQueue startQueue];
 	}
 	else
 	{
@@ -163,8 +157,8 @@
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
 	{
-		[connectionQueue registerConnection:connection];
-		[connectionQueue startQueue];
+		[self.connectionQueue registerConnection:connection];
+		[self.connectionQueue startQueue];
 	}
 	else
 	{
@@ -189,8 +183,8 @@
         NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 		if (connection)
 		{
-			[connectionQueue registerConnection:connection];
-			[connectionQueue startQueue];
+			[self.connectionQueue registerConnection:connection];
+			[self.connectionQueue startQueue];
 		}
 		else
 		{
@@ -241,8 +235,8 @@
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
 	{
-		[connectionQueue registerConnection:connection];
-		[connectionQueue startQueue];
+		[self.connectionQueue registerConnection:connection];
+		[self.connectionQueue startQueue];
 	}
 	else
 	{
@@ -265,8 +259,8 @@
 	{
 		[databaseS resetJukeboxPlaylist];
 		
-		[connectionQueue registerConnection:connection];
-		[connectionQueue startQueue];
+		[self.connectionQueue registerConnection:connection];
+		[self.connectionQueue startQueue];
 	}
 	else
 	{
@@ -287,8 +281,8 @@
 	NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
 	if (connection)
 	{
-		[connectionQueue registerConnection:connection];
-		[connectionQueue startQueue];
+		[self.connectionQueue registerConnection:connection];
+		[self.connectionQueue startQueue];
 	}
 	else
 	{
@@ -311,8 +305,8 @@
 	{
 		[databaseS resetJukeboxPlaylist];
 		
-		[connectionQueue registerConnection:connection];
-		[connectionQueue startQueue];
+		[self.connectionQueue registerConnection:connection];
+		[self.connectionQueue startQueue];
 	}
 	else
 	{
@@ -342,8 +336,8 @@
 		else
 			[databaseS resetJukeboxPlaylist];
 		
-		[connectionQueue registerConnection:connection];
-		[connectionQueue startQueue];
+		[self.connectionQueue registerConnection:connection];
+		[self.connectionQueue startQueue];
 	}
 	else
 	{
@@ -377,7 +371,7 @@
 
 - (void)setup
 {
-	connectionQueue = [[BBSimpleConnectionQueue alloc] init];
+	_connectionQueue = [[BBSimpleConnectionQueue alloc] init];
 
 	[[NSNotificationCenter defaultCenter] addObserver:self 
 											 selector:@selector(didReceiveMemoryWarning) 

@@ -10,7 +10,6 @@
 #import "SBJson.h"
 
 @implementation PMSLoginLoader
-@synthesize urlString, username, password, sessionId;
 
 - (ISMSLoaderType)type
 {
@@ -21,9 +20,9 @@
 {
     if ((self = [super initWithDelegate:theDelegate]))
     {
-        urlString = theUrlString;
-        username = theUsername;
-        password = thePassword;
+        _urlString = theUrlString;
+        _username = theUsername;
+        _password = thePassword;
     }
     return self;
 }

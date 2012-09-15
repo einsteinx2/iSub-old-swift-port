@@ -10,18 +10,12 @@
 
 @implementation BassEffectValue
 
-@synthesize type, percentX, percentY, isDefault;
-
 - (id)init
 {
 	if ((self = [super init]))
 	{
-		type = 0;
-		percentX = 0.;
-		percentY = 0.;
-		isDefault = YES;
+		_isDefault = YES;
 	}
-	
 	return self;
 }
 

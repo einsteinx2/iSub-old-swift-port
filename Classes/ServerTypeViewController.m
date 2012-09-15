@@ -10,8 +10,6 @@
 #import "SubsonicServerEditViewController.h"
 #import "UbuntuServerEditViewController.h"
 #import "PMSServerEditViewControllerViewController.h"
-#import "iSubAppDelegate.h"
-#import "SavedSettings.h"
 
 @implementation ServerTypeViewController
 @synthesize subsonicButton, ubuntuButton, cancelButton, serverEditViewController, pmsButton;

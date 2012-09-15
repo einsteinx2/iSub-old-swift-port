@@ -9,7 +9,6 @@
 #import "SUSNowPlayingLoader.h"
 #import "FMDatabaseAdditions.h"
 #import "TBXML.h"
-#import "DatabaseSingleton.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "Album.h"
 #import "Song.h"
@@ -17,15 +16,7 @@
 
 @implementation SUSNowPlayingLoader
 
-@synthesize nowPlayingSongDicts;
-
 #pragma mark - Lifecycle
-
-- (void)setup
-{
-	[super setup];
-}
-
 
 - (ISMSLoaderType)type
 {
@@ -73,24 +64,11 @@
 					{
 						NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:0];
 						
-						Song *aSong = [[Song alloc] initWithTBXMLElement:entry];
-						[dict setObject:aSong forKey:@"song"];
-						
-						NSString *username = [TBXML valueOfAttributeNamed:@"username" forElement:entry];
-						if (username)
-							[dict setObject:username forKey:@"username"];
-						
-						NSString *minutesAgo = [TBXML valueOfAttributeNamed:@"minutesAgo" forElement:entry];
-						if (minutesAgo)
-							[dict setObject:minutesAgo forKey:@"minutesAgo"];
-						
-						NSString *playerId = [TBXML valueOfAttributeNamed:@"playerId" forElement:entry];
-						if (playerId)
-							[dict setObject:playerId forKey:@"playerId"];
-						
-						NSString *playerName = [TBXML valueOfAttributeNamed:@"playerName" forElement:entry];
-						if (playerName)
-							[dict setObject:playerName forKey:@"playerName"];
+						[dict setObjectSafe:[[Song alloc] initWithTBXMLElement:entry] forKey:@"song"];
+						[dict setObjectSafe:[TBXML valueOfAttributeNamed:@"username" forElement:entry] forKey:@"username"];
+						[dict setObjectSafe:[TBXML valueOfAttributeNamed:@"minutesAgo" forElement:entry] forKey:@"minutesAgo"];
+						[dict setObjectSafe:[TBXML valueOfAttributeNamed:@"playerId" forElement:entry] forKey:@"playerId"];
+						[dict setObjectSafe:[TBXML valueOfAttributeNamed:@"playerName" forElement:entry] forKey:@"playerName"];
 						
 						[self.nowPlayingSongDicts addObject:dict];
 						

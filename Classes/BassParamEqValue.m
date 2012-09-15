@@ -9,15 +9,14 @@
 #import "BassParamEqValue.h"
 
 @implementation BassParamEqValue
-@synthesize parameters, handle, arrayIndex;
 
 - (id)initWithParameters:(BASS_DX8_PARAMEQ)params handle:(HFX)theHandle arrayIndex:(NSUInteger)index
 {
 	if ((self = [super init]))
 	{
-		parameters = params;
-		handle = theHandle;
-		arrayIndex = index;
+		_parameters = params;
+		_handle = theHandle;
+		_arrayIndex = index;
 	}
 	
 	return self;
@@ -50,32 +49,32 @@
 
 - (float)frequency
 {
-	return parameters.fCenter;
+	return _parameters.fCenter;
 }
 
 - (void)setFrequency:(float)frequency
 {
-	parameters.fCenter = frequency;
+	_parameters.fCenter = frequency;
 }
 
 - (float)gain
 {
-	return parameters.fGain;
+	return _parameters.fGain;
 }
 
 - (void)setGain:(float)gain
 {
-	parameters.fGain = gain;
+	_parameters.fGain = gain;
 }
 
 - (float)bandwidth
 {
-	return parameters.fBandwidth;
+	return _parameters.fBandwidth;
 }
 
 - (void)setBandwidth:(float)bandwidth
 {
-	parameters.fBandwidth = bandwidth;
+	_parameters.fBandwidth = bandwidth;
 }
 
 BASS_DX8_PARAMEQ BASS_DX8_PARAMEQMake(float center, float gain, float bandwidth)
@@ -100,7 +99,7 @@ BASS_DX8_PARAMEQ BASS_DX8_PARAMEQFromPoint(float percentX, float percentY, float
 
 - (NSUInteger)hash
 {
-	return abs(parameters.fCenter) + abs(parameters.fGain) + abs(parameters.fBandwidth) + abs(handle);
+	return abs(self.parameters.fCenter) + abs(self.parameters.fGain) + abs(self.parameters.fBandwidth) + abs(self.handle);
 }
 
 - (BOOL)isEqualToBassParamEqValue:(BassParamEqValue *)otherValue
@@ -108,10 +107,10 @@ BASS_DX8_PARAMEQ BASS_DX8_PARAMEQFromPoint(float percentX, float percentY, float
 	if (self == otherValue)
         return YES;
 	
-	if (parameters.fCenter == otherValue.parameters.fCenter &&
-		parameters.fGain == otherValue.parameters.fGain &&
-		parameters.fBandwidth == otherValue.parameters.fBandwidth &&
-		handle == otherValue.handle)
+	if (self.parameters.fCenter == otherValue.parameters.fCenter &&
+		self.parameters.fGain == otherValue.parameters.fGain &&
+		self.parameters.fBandwidth == otherValue.parameters.fBandwidth &&
+		self.handle == otherValue.handle)
 		return YES;
 	
 	return NO;

@@ -7,21 +7,17 @@
 //
 
 #import "FoldersViewController.h"
-#import "iSubAppDelegate.h"
-#import "MusicSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "AlbumViewController.h"
 #import "Artist.h"
 #import "ArtistUITableViewCell.h"
 #import "FMDatabaseAdditions.h"
-#import "ViewObjectsSingleton.h"
 #import "CustomUIAlertView.h"
 #import "EGORefreshTableHeaderView.h"
 #import <QuartzCore/QuartzCore.h>
 #import "FolderDropdownControl.h"
 #import "SUSRootFoldersDAO.h"
-#import "SavedSettings.h"
 #import "SUSAllSongsLoader.h"
 #import "SeparaterView.h"
 #import "UIViewController+PushViewControllerCustom.h"

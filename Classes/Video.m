@@ -9,17 +9,16 @@
 #import "Video.h"
 
 @implementation Video
-@synthesize itemId, title;
 
 - (NSString *)description
 {
 	//return [NSString stringWithFormat:@"%@: title: %@, songId: %@", [super description], title, songId];
-	return [NSString stringWithFormat:@"%@  title: %@", [super description], title];
+	return [NSString stringWithFormat:@"%@  title: %@", [super description], self.title];
 }
 
 - (NSUInteger)hash
 {
-	return [itemId hash];
+	return self.itemId.hash;
 }
 
 - (BOOL)isEqualToVideo:(Video *)otherVideo
@@ -27,10 +26,10 @@
     if (self == otherVideo)
         return YES;
 	
-	if (!itemId || !otherVideo.itemId)
+	if (!self.itemId || !otherVideo.itemId)
 		return NO;
 	
-	return [itemId isEqualToString:otherVideo.itemId];
+	return [self.itemId isEqualToString:otherVideo.itemId];
 }
 
 - (BOOL)isEqual:(id)other

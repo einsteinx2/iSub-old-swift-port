@@ -1,5 +1,5 @@
 //
-//  SUSCurrentPlaylistDAO.m
+//  PlaylistSingleton.h
 //  iSub
 //
 //  Created by Ben Baron on 11/14/11.
@@ -8,17 +8,12 @@
 
 #import "PlaylistSingleton.h"
 #import "Song.h"
-#import "DatabaseSingleton.h"
-#import "SavedSettings.h"
 #import "MusicSingleton.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 
-#import "AudioEngine.h"
-#import "JukeboxSingleton.h"
 
 @implementation PlaylistSingleton
-@synthesize shuffleIndex, normalIndex, isShuffle;
 
 #pragma mark - Private DB Methods
 

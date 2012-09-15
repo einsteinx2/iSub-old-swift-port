@@ -7,10 +7,7 @@
 //
 
 #import "AlbumViewController.h"
-#import "iSubAppDelegate.h"
-#import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "AlbumUITableViewCell.h"
 #import "SongUITableViewCell.h"
@@ -24,11 +21,9 @@
 #import "EGORefreshTableHeaderView.h"
 #import "ModalAlbumArtViewController.h"
 #import "CustomUIAlertView.h"
-#import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "SUSSubFolderDAO.h"
 #import "UIViewController+PushViewControllerCustom.h"
-#import "AudioEngine.h"
 #import "iPadRootViewController.h"
 #import <MediaPlayer/MediaPlayer.h>
 

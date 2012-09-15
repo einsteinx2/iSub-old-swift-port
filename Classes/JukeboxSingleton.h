@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Ben Baron. All rights reserved.
 //
 
+#ifndef iSub_JukeboxSingleton_h
+#define iSub_JukeboxSingleton_h
+
 #import <Foundation/Foundation.h>
 
 #define jukeboxS ((JukeboxSingleton *)[JukeboxSingleton sharedInstance])
@@ -36,3 +39,5 @@
 - (void)jukeboxGetInfo;
 
 @end
+
+#endif

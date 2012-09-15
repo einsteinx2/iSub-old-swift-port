@@ -7,18 +7,13 @@
 //
 
 #import "LocalPlaylistsUITableViewCell.h"
-#import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "Song.h"
 #import "CellOverlay.h"
-#import "SavedSettings.h"
 
 @implementation LocalPlaylistsUITableViewCell
-
-@synthesize md5, playlistCountLabel, playlistNameScrollView, playlistNameLabel, playlistCount;
 
 #pragma mark - Lifecycle
 
@@ -26,27 +21,27 @@
 {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]))
 	{
-		playlistCountLabel = [[UILabel alloc] init];
-		playlistCountLabel.backgroundColor = [UIColor clearColor];
-		playlistCountLabel.textAlignment = UITextAlignmentLeft; // default
-		playlistCountLabel.font = [UIFont systemFontOfSize:16];
-		playlistCountLabel.textColor = [UIColor colorWithWhite:.45 alpha:1];
-		[self.contentView addSubview:playlistCountLabel];
+		_playlistCountLabel = [[UILabel alloc] init];
+		_playlistCountLabel.backgroundColor = [UIColor clearColor];
+		_playlistCountLabel.textAlignment = UITextAlignmentLeft; // default
+		_playlistCountLabel.font = [UIFont systemFontOfSize:16];
+		_playlistCountLabel.textColor = [UIColor colorWithWhite:.45 alpha:1];
+		[self.contentView addSubview:_playlistCountLabel];
 		
-		playlistNameScrollView = [[UIScrollView alloc] init];
-		playlistNameScrollView.frame = CGRectMake(5, 0, 310, 44);
-		playlistNameScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		playlistNameScrollView.showsVerticalScrollIndicator = NO;
-		playlistNameScrollView.showsHorizontalScrollIndicator = NO;
-		playlistNameScrollView.userInteractionEnabled = NO;
-		playlistNameScrollView.decelerationRate = UIScrollViewDecelerationRateFast;
-		[self.contentView addSubview:playlistNameScrollView];
+		_playlistNameScrollView = [[UIScrollView alloc] init];
+		_playlistNameScrollView.frame = CGRectMake(5, 0, 310, 44);
+		_playlistNameScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		_playlistNameScrollView.showsVerticalScrollIndicator = NO;
+		_playlistNameScrollView.showsHorizontalScrollIndicator = NO;
+		_playlistNameScrollView.userInteractionEnabled = NO;
+		_playlistNameScrollView.decelerationRate = UIScrollViewDecelerationRateFast;
+		[self.contentView addSubview:_playlistNameScrollView];
 		
-		playlistNameLabel = [[UILabel alloc] init];
-		playlistNameLabel.backgroundColor = [UIColor clearColor];
-		playlistNameLabel.textAlignment = UITextAlignmentLeft; // default
-		playlistNameLabel.font = [UIFont boldSystemFontOfSize:20];
-		[playlistNameScrollView addSubview:playlistNameLabel];
+		_playlistNameLabel = [[UILabel alloc] init];
+		_playlistNameLabel.backgroundColor = [UIColor clearColor];
+		_playlistNameLabel.textAlignment = UITextAlignmentLeft; // default
+		_playlistNameLabel.font = [UIFont boldSystemFontOfSize:20];
+		[_playlistNameScrollView addSubview:_playlistNameLabel];
     }
     return self;
 }

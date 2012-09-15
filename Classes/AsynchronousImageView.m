@@ -10,9 +10,7 @@
 //
 
 #import "AsynchronousImageView.h"
-#import "iSubAppDelegate.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "Song.h"
 #import "FMDatabaseAdditions.h"
 #import "PageControlViewController.h"
@@ -20,17 +18,21 @@
 #import "SUSCoverArtDAO.h"
 #import "AsynchronousImageViewDelegate.h"
 
-@implementation AsynchronousImageView
+@interface AsynchronousImageView ()
+{
+    __strong NSString *_coverArtId;
+}
+@end
 
-@synthesize coverArtDAO, coverArtId, isLarge, activityIndicator, delegate;
+@implementation AsynchronousImageView
 
 - (id)initWithFrame:(CGRect)frame coverArtId:(NSString *)artId isLarge:(BOOL)large delegate:(NSObject<AsynchronousImageViewDelegate> *)theDelegate
 {
 	if ((self = [super initWithFrame:frame]))
 	{
-		isLarge = large;
-		self.coverArtId = artId;
-		delegate = theDelegate;
+		_isLarge = large;
+        [self setCoverArtId:artId];
+		_delegate = theDelegate;
 	}
 	return self;
 }
@@ -39,7 +41,7 @@
 {
 	@synchronized(self)
 	{
-		return coverArtId;
+		return _coverArtId;
 	}
 }
 
@@ -58,7 +60,7 @@
 			self.coverArtDAO = nil;
 		}
 		
-		coverArtId = [artId copy];
+		_coverArtId = [artId copy];
 		
 		self.coverArtDAO = [[SUSCoverArtDAO alloc] initWithDelegate:self coverArtId:self.coverArtId isLarge:self.isLarge];
 		if (self.coverArtDAO.isCoverArtCached)
@@ -69,7 +71,7 @@
 		{
 			self.image = self.coverArtDAO.defaultCoverArtImage;
 			
-			if (coverArtId && self.isLarge)
+			if (_coverArtId && self.isLarge)
 			{
 				self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
 				self.activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;

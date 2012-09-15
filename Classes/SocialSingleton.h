@@ -1,10 +1,13 @@
 //
-//  SocialControlsSingleton.h
+//  SocialSingleton.h
 //  iSub
 //
 //  Created by Ben Baron on 10/15/10.
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
+
+#ifndef iSub_SocialSingleton_h
+#define iSub_SocialSingleton_h
 
 #define socialS ((SocialSingleton *)[SocialSingleton sharedInstance])
 
@@ -37,3 +40,5 @@
 - (void)playerClearSocial;
 
 @end
+
+#endif

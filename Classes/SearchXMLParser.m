@@ -7,7 +7,6 @@
 //
 
 #import "SearchXMLParser.h"
-#import "iSubAppDelegate.h"
 #import "Song.h"
 #import "Album.h"
 #import "Artist.h"
@@ -15,15 +14,13 @@
 
 @implementation SearchXMLParser
 
-@synthesize listOfArtists, listOfAlbums, listOfSongs;
-
 - (id)initXMLParser 
 {	
 	if ((self = [super init]))
 	{
-		listOfArtists = [[NSMutableArray alloc] init];
-		listOfAlbums = [[NSMutableArray alloc] init];
-		listOfSongs = [[NSMutableArray alloc] init];
+		_listOfArtists = [[NSMutableArray alloc] init];
+		_listOfAlbums = [[NSMutableArray alloc] init];
+		_listOfSongs = [[NSMutableArray alloc] init];
 	}
 
 	return self;

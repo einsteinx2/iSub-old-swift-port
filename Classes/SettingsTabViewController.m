@@ -7,22 +7,12 @@
 //
 
 #import "SettingsTabViewController.h"
-#import "iSubAppDelegate.h"
-#import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
-#import "SocialSingleton.h"
-#import "DatabaseSingleton.h"
 #import "FoldersViewController.h"
-#import "CacheSingleton.h"
-
 #import "SA_OAuthTwitterEngine.h"
 #import "SA_OAuthTwitterController.h"
-
-
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
-
-#import "SavedSettings.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"

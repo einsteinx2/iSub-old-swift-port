@@ -9,41 +9,43 @@
 #import "StoreUITableViewCell.h"
 #import "MKStoreManager.h"
 
-@implementation StoreUITableViewCell
+@interface StoreUITableViewCell ()
+{
+    __strong SKProduct *_myProduct;
+}
+@end
 
-@synthesize titleLabel, descLabel, priceLabel, myProduct;
+@implementation StoreUITableViewCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
 {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) 
-	{
-		myProduct = nil;
+	{		
+		_titleLabel = [[UILabel alloc] init];
+		_titleLabel.frame = CGRectMake(10, 10, 250, 25);
+		_titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+		_titleLabel.font = [UIFont boldSystemFontOfSize:20];
+		_titleLabel.textColor = [UIColor blackColor];
+		_titleLabel.textAlignment = UITextAlignmentLeft;
+		[self.contentView addSubview:_titleLabel];
 		
-		titleLabel = [[UILabel alloc] init];
-		titleLabel.frame = CGRectMake(10, 10, 250, 25);
-		titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
-		titleLabel.font = [UIFont boldSystemFontOfSize:20];
-		titleLabel.textColor = [UIColor blackColor];
-		titleLabel.textAlignment = UITextAlignmentLeft;
-		[self.contentView addSubview:titleLabel];
+		_descLabel = [[UILabel alloc] init];
+		_descLabel.frame = CGRectMake(10, 40, 310, 100);
+		_descLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		_descLabel.font = [UIFont systemFontOfSize:14];
+		_descLabel.textColor = [UIColor grayColor];
+		_descLabel.textAlignment = UITextAlignmentLeft;
+		_descLabel.numberOfLines = 0;
+		[self.contentView addSubview:_descLabel];
 		
-		descLabel = [[UILabel alloc] init];
-		descLabel.frame = CGRectMake(10, 40, 310, 100);
-		descLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		descLabel.font = [UIFont systemFontOfSize:14];
-		descLabel.textColor = [UIColor grayColor];
-		descLabel.textAlignment = UITextAlignmentLeft;
-		descLabel.numberOfLines = 0;
-		[self.contentView addSubview:descLabel];
-		
-		priceLabel = [[UILabel alloc] init];
-		priceLabel.frame = CGRectMake(250, 10, 60, 20);
-		priceLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-		priceLabel.font = [UIFont boldSystemFontOfSize:20];
-		priceLabel.textColor = [UIColor redColor];
-		priceLabel.textAlignment = UITextAlignmentRight;
-		priceLabel.adjustsFontSizeToFitWidth = YES;
-		[self.contentView addSubview:priceLabel];
+		_priceLabel = [[UILabel alloc] init];
+		_priceLabel.frame = CGRectMake(250, 10, 60, 20);
+		_priceLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+		_priceLabel.font = [UIFont boldSystemFontOfSize:20];
+		_priceLabel.textColor = [UIColor redColor];
+		_priceLabel.textAlignment = UITextAlignmentRight;
+		_priceLabel.adjustsFontSizeToFitWidth = YES;
+		[self.contentView addSubview:_priceLabel];
 	}
 	
 	return self;
@@ -53,7 +55,7 @@
 {
 	@synchronized(self)
 	{
-		return myProduct;
+		return _myProduct;
 	}
 }
 
@@ -61,12 +63,12 @@
 {
 	@synchronized(self)
 	{
-		myProduct = product;
+		_myProduct = product;
 		
-		self.titleLabel.text = [myProduct localizedTitle];
-		self.descLabel.text = [myProduct localizedDescription];
+		self.titleLabel.text = [_myProduct localizedTitle];
+		self.descLabel.text = [_myProduct localizedDescription];
 		
-		if ([MKStoreManager isFeaturePurchased:[myProduct productIdentifier]])
+		if ([MKStoreManager isFeaturePurchased:[_myProduct productIdentifier]])
 		{
 			self.priceLabel.textColor = [UIColor colorWithRed:0.0 green:.66 blue:0.0 alpha:1.0];
 			self.priceLabel.text = @"Unlocked";
@@ -78,8 +80,8 @@
 			NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
 			[numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
 			[numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-			[numberFormatter setLocale:myProduct.priceLocale];
-			self.priceLabel.text = [numberFormatter stringFromNumber:myProduct.price];
+			[numberFormatter setLocale:_myProduct.priceLocale];
+			self.priceLabel.text = [numberFormatter stringFromNumber:_myProduct.price];
 		}
 	}
 }

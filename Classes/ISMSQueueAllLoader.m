@@ -7,28 +7,18 @@
 //
 
 #import "ISMSQueueAllLoader.h"
-#import "iSubAppDelegate.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
-#import "ViewObjectsSingleton.h"
 #import "Album.h"
 #import "Song.h"
 #import "FMDatabaseAdditions.h"
 #import "CustomUIAlertView.h"
-#import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "ISMSStreamManager.h"
 #import "PlaylistSingleton.h"
-#import "JukeboxSingleton.h"
-#import "AudioEngine.h"
 #import "SUSQueueAllLoader.h"
 #import "PMSQueueAllLoader.h"
 
 @implementation ISMSQueueAllLoader
-
-@synthesize currentPlaylist, shufflePlaylist, myArtist, folderIds;
-@synthesize isQueue, isShuffleButton, doShowPlayer, isCancelled;
-@synthesize listOfAlbums, listOfSongs;
 
 + (id)loader
 {

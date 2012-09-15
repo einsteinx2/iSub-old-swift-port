@@ -10,10 +10,6 @@
 @protocol BBSimpleConnectionQueueDelegate;
 
 @interface BBSimpleConnectionQueue : NSObject 
-{
-	NSMutableArray *connectionStack;
-	BOOL isRunning;
-}
 
 @property (readonly) NSMutableArray *connectionStack;
 @property (readonly) BOOL isRunning;

@@ -8,12 +8,8 @@
 
 #import "SearchSongsViewController.h"
 #import "SearchSongUITableViewCell.h"
-#import "iSubAppDelegate.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
-#import "ViewObjectsSingleton.h"
 #import "SearchXMLParser.h"
-#import "ViewObjectsSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "FMDatabaseAdditions.h"
 #import "ServerListViewController.h"
@@ -25,10 +21,7 @@
 #import "AsynchronousImageView.h"
 #import "AlbumViewController.h"
 #import "CustomUIAlertView.h"
-#import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
-#import "PlaylistSingleton.h"
-#import "JukeboxSingleton.h"
 #import "UIViewController+PushViewControllerCustom.h"
 
 @implementation SearchSongsViewController

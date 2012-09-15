@@ -7,10 +7,7 @@
 //
 
 #import "GenresAlbumViewController.h"
-#import "iSubAppDelegate.h"
-#import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "GenresAlbumUITableViewCell.h"
 #import "GenresSongUITableViewCell.h"
@@ -20,9 +17,6 @@
 #import "FMDatabaseAdditions.h"
 #import "AllSongsUITableViewCell.h"
 #import "AsynchronousImageView.h"
-#import "SavedSettings.h"
-#import "PlaylistSingleton.h"
-#import "JukeboxSingleton.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "FMDatabaseQueueAdditions.h"
 

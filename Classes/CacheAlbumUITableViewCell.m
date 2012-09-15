@@ -7,14 +7,11 @@
 //
 
 #import "CacheAlbumUITableViewCell.h"
-#import "ViewObjectsSingleton.h"
-#import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 
 #import "CellOverlay.h"
 #import "Song.h"
-#import "CacheSingleton.h"
 #import "ISMSCacheQueueManager.h"
 
 @implementation CacheAlbumUITableViewCell

@@ -7,14 +7,10 @@
 //
 
 #import "PMSServerEditViewControllerViewController.h"
-#import "iSubAppDelegate.h"
-#import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "FoldersViewController.h"
 #import "Server.h"
 #import "CustomUIAlertView.h"
-#import "SavedSettings.h"
 #import "ServerListViewController.h"
 #import "ServerTypeViewController.h"
 #import "iPadRootViewController.h"
@@ -22,10 +18,6 @@
 #import "PMSLoginLoader.h"
 
 @implementation PMSServerEditViewControllerViewController
-
-@synthesize parentController, theNewRedirectUrl;
-@synthesize urlField, usernameField, passwordField, cancelButton, saveButton;
-@synthesize loader;
 
 #pragma mark - Rotation
 
@@ -69,13 +61,13 @@
 	
 	if ([[url substringFromIndex:(url.length - 1)] isEqualToString:@"/"])
 	{
-		urlField.text = [url substringToIndex:([url length] - 1)];
+		self.urlField.text = [url substringToIndex:([url length] - 1)];
 		return YES;
 	}
 	
 	if (url.length < 7)
 	{
-		urlField.text = [NSString stringWithFormat:@"http://%@", url];
+		self.urlField.text = [NSString stringWithFormat:@"http://%@", url];
 		return YES;
 	}
 	else
@@ -94,7 +86,7 @@
 			}
 			
 			if (addHttp)
-				urlField.text = [NSString stringWithFormat:@"http://%@", url];
+				self.urlField.text = [NSString stringWithFormat:@"http://%@", url];
 			
 			return YES;
 		}
@@ -139,17 +131,17 @@
 
 - (IBAction)saveButtonPressed:(id)sender
 {
-	if (![self checkUrl:urlField.text])
+	if (![self checkUrl:self.urlField.text])
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"The URL must be in the format: http://mywebsite.com:port/folder\n\nBoth the :port and /folder are optional" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		[alert show];
 	}
 	
-	if ([self checkUrl:urlField.text] && [self checkUsername:usernameField.text] && [self checkPassword:passwordField.text])
+	if ([self checkUrl:self.urlField.text] && [self checkUsername:self.usernameField.text] && [self checkPassword:self.passwordField.text])
 	{
         [viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Logging in"];
         
-        self.loader = [[PMSLoginLoader alloc] initWithDelegate:self urlString:urlField.text username:usernameField.text password:passwordField.text];
+        self.loader = [[PMSLoginLoader alloc] initWithDelegate:self urlString:self.urlField.text username:self.usernameField.text password:self.passwordField.text];
         [self.loader startLoad];
     }
 }

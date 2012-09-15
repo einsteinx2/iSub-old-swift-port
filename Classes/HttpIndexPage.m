@@ -7,7 +7,6 @@
 //
 
 #import "HttpIndexPage.h"
-#import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
 
 @interface HttpIndexPage (Private) 

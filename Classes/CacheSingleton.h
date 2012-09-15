@@ -6,6 +6,9 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
+#ifndef iSub_CacheSingleton_h
+#define iSub_CacheSingleton_h
+
 #define cacheS ((CacheSingleton *)[CacheSingleton sharedInstance])
 
 @interface CacheSingleton : NSObject
@@ -25,5 +28,6 @@
 - (void)clearTempCache;
 - (void)findCacheSize;
 
-
 @end
+
+#endif

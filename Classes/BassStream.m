@@ -10,13 +10,12 @@
 #import "Song.h"
 
 @implementation BassStream
-@synthesize player, song, fileHandle, shouldBreakWaitLoop, neededSize, isWaiting, writePath, isTempCached, shouldBreakWaitLoopForever, isSongStarted, isFileUnderrun, wasFileJustUnderrun, stream, isEnded, isEndedCalled, bufferSpaceTilSongEnd;
 
 - (id)init
 {
 	if ((self = [super init]))
 	{
-		neededSize = ULLONG_MAX;
+		_neededSize = ULLONG_MAX;
 	}
 	return self;
 }
@@ -28,7 +27,7 @@
 
 - (NSUInteger)hash
 {
-	return stream;
+	return _stream;
 }
 
 - (BOOL)isEqualToStream:(BassStream *)otherStream 
@@ -36,10 +35,10 @@
     if (self == otherStream)
         return YES;
 	
-	if (!song || !otherStream.song)
+	if (!self.song || !otherStream.song)
 		return NO;
 	
-	if ([song isEqualToSong:otherStream.song] && stream == otherStream.stream)
+	if ([self.song isEqualToSong:otherStream.song] && self.stream == otherStream.stream)
 		return YES;
 	
 	return NO;

@@ -7,7 +7,6 @@
 //
 
 #import "CellOverlay.h"
-#import "ViewObjectsSingleton.h"
 
 @implementation CellOverlay
 

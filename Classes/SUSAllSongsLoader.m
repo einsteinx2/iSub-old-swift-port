@@ -7,9 +7,6 @@
 //
 
 #import "SUSAllSongsLoader.h"
-#import "ViewObjectsSingleton.h"
-#import "DatabaseSingleton.h"
-#import "SavedSettings.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "Artist.h"
@@ -38,18 +35,13 @@ static BOOL isAllSongsLoading = NO;
 + (BOOL)isLoading { return isAllSongsLoading; }
 + (void)setIsLoading:(BOOL)isLoading { isAllSongsLoading = isLoading; }
 
-@synthesize currentArtist, currentAlbum, rootFolders, notificationTimeArtist, notificationTimeAlbum, notificationTimeSong, notificationTimeArtistAlbum;
-@synthesize iteration, artistCount, albumCount, currentRow;
-@synthesize tempAlbumsCount, tempSongsCount, tempGenresCount, tempGenresLayoutCount;
-@synthesize totalAlbumsProcessed, totalSongsProcessed;
-
 - (void)setup
 {
     [super setup];
 	
-	notificationTimeArtist = [[NSDate alloc] init];
-	notificationTimeAlbum = [[NSDate alloc] init];
-	notificationTimeSong = [[NSDate alloc] init];
+	_notificationTimeArtist = [[NSDate alloc] init];
+	_notificationTimeAlbum = [[NSDate alloc] init];
+	_notificationTimeSong = [[NSDate alloc] init];
 }
 
 
@@ -129,10 +121,10 @@ static NSInteger order (id a, id b, void* context)
 			
 			[self loadAlbumFolder];
 		}
-		else if (iteration < 4)
+		else if (self.iteration < 4)
 		{
 			self.currentRow = [databaseS.allSongsDbQueue intForQuery:@"SELECT albumNum FROM resumeLoad"];
-			self.albumCount = [databaseS.allAlbumsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM subalbums%i", iteration]];
+			self.albumCount = [databaseS.allAlbumsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM subalbums%i", self.iteration]];
 		//DLog(@"subalbums%i albumCount: %i", self.iteration, self.albumCount);
 			
 			if (self.albumCount > 0)
@@ -765,7 +757,7 @@ static NSString *kName_Error = @"error";
 												 [db executeUpdate:query, [aSong.path md5], aSong.genre, [NSNumber numberWithInt:[splitPath count]], [segments objectAtIndexSafe:0], [segments objectAtIndexSafe:1], [segments objectAtIndexSafe:2], [segments objectAtIndexSafe:3], [segments objectAtIndexSafe:4], [segments objectAtIndexSafe:5], [segments objectAtIndexSafe:6], [segments objectAtIndexSafe:7], [segments objectAtIndexSafe:8]];
 												 self.tempGenresLayoutCount++;
 												 
-												 if (tempGenresLayoutCount == WRITE_BUFFER_AMOUNT)
+												 if (self.tempGenresLayoutCount == WRITE_BUFFER_AMOUNT)
 												 {
 													 // Flush the records to disk
 													 [db executeUpdate:@"INSERT OR IGNORE INTO genresLayout SELECT * FROM genresLayoutTemp"];
@@ -942,7 +934,7 @@ static NSString *kName_Error = @"error";
 				}
 				else if (self.iteration == 4)
 				{
-				//DLog(@"calling loadSort");
+                    //DLog(@"calling loadSort");
 					[self loadSort];
 				}
 			}

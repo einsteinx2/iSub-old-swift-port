@@ -6,6 +6,9 @@
 //  Copyright Ben Baron 2010. All rights reserved.
 //
 
+#ifndef iSub_iSubAppDelegate_h
+#define iSub_iSubAppDelegate_h
+
 #import "MKStoreManager.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -17,40 +20,15 @@
 @class BBSplitViewController, iPadRootViewController, InitialDetailViewController, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController, HTTPServer, ISMSStatusLoader;
 
 @interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate, MFMailComposeViewControllerDelegate, BWHockeyManagerDelegate, ISMSLoaderDelegate>
-{		
-	UIWindow *window;
-	
-	IntroViewController *introController;
-	
-	// Main interface elements for iPhone
-	//
-	SettingsViewController *settingsViewController;
-	
-	// Network connectivity objects
-	//
-    EX2Reachability *wifiReach;
-	int reachabilityStatus;
-	
-	// Multitasking stuff
-	UIBackgroundTaskIdentifier backgroundTask;	
-	
-	BOOL showIntro;
-	
-	HTTPServer *httpServer;
-	NSDictionary *addresses;
-	BOOL *isHttpServerOn;
-	
-	BOOL isInBackground;
-}
 
 - (void)startStopServer;
 
 @property (strong) ISMSStatusLoader *statusLoader;
 
-@property (nonatomic) IBOutlet UIWindow *window;
+@property (strong, nonatomic) IBOutlet UIWindow *window;
 
-// Main interface elements for iPhone
-//
+@property (strong) IntroViewController *introController;
+@property (strong) SettingsViewController *settingsViewController;
 @property (strong) IBOutlet UIImageView *background;
 @property (strong) UITabBarController *currentTabBarController;
 @property (strong) IBOutlet UITabBarController *mainTabBarController;
@@ -79,6 +57,14 @@
 
 // Multitasking stuff
 @property UIBackgroundTaskIdentifier backgroundTask;
+@property BOOL isInBackground;
+
+@property BOOL showIntro;
+
+@property (strong) HTTPServer *httpServer;
+@property (strong) NSDictionary *addresses;
+@property BOOL isHttpServerOn;
+
 
 + (iSubAppDelegate *)sharedInstance;
 
@@ -107,4 +93,5 @@
 
 @end
 
+#endif
 

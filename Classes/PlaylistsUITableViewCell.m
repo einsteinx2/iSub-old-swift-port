@@ -6,11 +6,8 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "iSubAppDelegate.h"
 #import "PlaylistsUITableViewCell.h"
-#import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "CellOverlay.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "SUSServerPlaylist.h"

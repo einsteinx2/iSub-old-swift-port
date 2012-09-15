@@ -8,21 +8,9 @@
 
 #import "BassGaplessPlayer.h"
 #import "Song+DAO.h"
-#import "PlaylistSingleton.h"
-#import "MusicSingleton.h"
-#import "SavedSettings.h"
-#import "ViewObjectsSingleton.h"
 #import "ISMSStreamManager.h"
-#import "SocialSingleton.h"
 
 @implementation BassGaplessPlayer
-@synthesize delegate;
-@synthesize streamGcdQueue;
-@synthesize ringBuffer, stopFillingRingBuffer;
-@synthesize streamQueue, outStream, mixerStream;
-@synthesize isPlaying, isStarted, bitRate, currentByteOffset, waitLoopStream;
-@synthesize startByteOffset, startSecondsOffset;
-@synthesize equalizer, visualizer;
 
 LOG_LEVEL_ISUB_DEFAULT
 
@@ -40,9 +28,9 @@ LOG_LEVEL_ISUB_DEFAULT
 {
 	if ((self = [super init]))
 	{
-		streamQueue = [NSMutableArray arrayWithCapacity:5];
-		streamGcdQueue = dispatch_queue_create("com.anghami.BassStreamQueue", NULL);
-		ringBuffer = [EX2RingBuffer ringBufferWithLength:BytesFromKiB(640)];
+		_streamQueue = [NSMutableArray arrayWithCapacity:5];
+		_streamGcdQueue = dispatch_queue_create("com.anghami.BassStreamQueue", NULL);
+		_ringBuffer = [EX2RingBuffer ringBufferWithLength:BytesFromKiB(640)];
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStream) name:ISMSNotification_RepeatModeChanged object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStream) name:ISMSNotification_CurrentPlaylistOrderChanged object:nil];
@@ -56,7 +44,7 @@ LOG_LEVEL_ISUB_DEFAULT
 {
     if (([self init]))
     {
-        delegate = theDelegate;
+        _delegate = theDelegate;
     }
     return self;
 }
@@ -332,8 +320,8 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		if (self.isPlaying)
 		{
 			DDLogInfo(@"songEnded: self.isPlaying = YES");
-			startSecondsOffset = 0;
-			startByteOffset = 0;
+			self.startSecondsOffset = 0;
+			self.startByteOffset = 0;
 			
 			// Send song start notification
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
@@ -603,7 +591,7 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 
 - (void)startWithOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds
 {
-	[EX2Dispatch runInQueue:streamGcdQueue waitUntilDone:NO block:^
+	[EX2Dispatch runInQueue:self.streamGcdQueue waitUntilDone:NO block:^
 	 {
 		 NSInteger count = playlistS.count;
 		 if (playlistS.currentIndex >= count) playlistS.currentIndex = count - 1;
@@ -729,7 +717,7 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 
 - (void)prepareNextSongStream:(Song *)nextSong
 {
-	[EX2Dispatch runInQueue:streamGcdQueue waitUntilDone:NO block:^
+	[EX2Dispatch runInQueue:self.streamGcdQueue waitUntilDone:NO block:^
 	 {
 		 // Remove any additional streams
 		 NSUInteger count = self.streamQueue.count;
@@ -789,7 +777,7 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 
 - (QWORD)currentByteOffset
 {
-	return BASS_StreamGetFilePosition(self.currentStream.stream, BASS_FILEPOS_CURRENT) + startByteOffset;
+	return BASS_StreamGetFilePosition(self.currentStream.stream, BASS_FILEPOS_CURRENT) + self.startByteOffset;
 }
 
 - (double)progress
@@ -804,7 +792,7 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 	if (seconds < 0)
 		return [playlistS.currentSong.duration doubleValue] + seconds;
 	
-	return seconds + startSecondsOffset;
+	return seconds + self.startSecondsOffset;
 }
 
 - (BassStream *)currentStream
@@ -864,10 +852,10 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 			{
 				// The playlist finished
 				playlistS.currentIndex = count - 1;
-				startByteOffset = 0;
-				startSecondsOffset = 0.;
+				self.startByteOffset = 0;
+				self.startSecondsOffset = 0.;
 			}
-			[musicS startSongAtOffsetInBytes:startByteOffset andSeconds:startSecondsOffset];
+			[musicS startSongAtOffsetInBytes:self.startByteOffset andSeconds:self.startSecondsOffset];
 		}
 		else
 		{

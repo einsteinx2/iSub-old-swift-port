@@ -7,14 +7,10 @@
 //
 
 #import "UbuntuServerEditViewController.h"
-#import "iSubAppDelegate.h"
-#import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "FoldersViewController.h"
 #import "Server.h"
 #import "CustomUIAlertView.h"
-#import "SavedSettings.h"
 #import "iPadRootViewController.h"
 #import "ServerTypeViewController.h"
 #import "MenuViewController.h"
@@ -22,8 +18,6 @@
 #define URL @"https://streaming.one.ubuntu.com"
 
 @implementation UbuntuServerEditViewController
-
-@synthesize parentController, usernameField, passwordField, saveButton, cancelButton;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {

@@ -11,12 +11,12 @@
 @class Song, BassGaplessPlayer;
 @interface BassStream : NSObject
 
-@property (nonatomic) BassGaplessPlayer *player;
+@property (strong, nonatomic) BassGaplessPlayer *player;
 
 @property (nonatomic) HSTREAM stream;
 @property (nonatomic, copy) Song *song;
 
-@property (nonatomic) NSFileHandle *fileHandle;
+@property (strong, nonatomic) NSFileHandle *fileHandle;
 @property BOOL shouldBreakWaitLoop;
 @property BOOL shouldBreakWaitLoopForever;
 @property unsigned long long neededSize;

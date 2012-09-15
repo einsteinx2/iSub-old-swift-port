@@ -7,10 +7,7 @@
 //
 
 #import "PlaylistsViewController.h"
-#import "iSubAppDelegate.h"
-#import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "ServerListViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "PlaylistsUITableViewCell.h"
@@ -24,15 +21,12 @@
 #import "StoreViewController.h"
 #import "CustomUIAlertView.h"
 #import "TBXML.h"
-#import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "OrderedDictionary.h"
 #import "SUSServerPlaylistsDAO.h"
 #import "SUSServerPlaylist.h"
 #import "PlaylistSingleton.h"
-#import "AudioEngine.h"
 #import "UIViewController+PushViewControllerCustom.h"
-#import "JukeboxSingleton.h"
 
 @interface PlaylistsViewController (Private)
 

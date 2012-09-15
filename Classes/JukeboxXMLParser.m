@@ -7,24 +7,17 @@
 //
 
 #import "JukeboxXMLParser.h"
-#import "iSubAppDelegate.h"
 #import "Song.h"
 #import "ServerListViewController.h"
-#import "ViewObjectsSingleton.h"
-#import "DatabaseSingleton.h"
 #import "CustomUIAlertView.h"
-#import "SavedSettings.h"
-#import "PlaylistSingleton.h"
 
 @implementation JukeboxXMLParser
-
-@synthesize currentIndex, isPlaying, gain, listOfSongs;
 
 - (id)initXMLParser 
 {	
 	if ((self = [super init]))
 	{
-		listOfSongs = [[NSMutableArray alloc] init];
+		_listOfSongs = [[NSMutableArray alloc] init];
 	}
 	
 	return self;
@@ -83,8 +76,5 @@
 		}
 	}
 }
-
-
-
 
 @end

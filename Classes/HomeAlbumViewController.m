@@ -7,10 +7,7 @@
 //
 
 #import "HomeAlbumViewController.h"
-#import "iSubAppDelegate.h"
-#import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "AlbumViewController.h"
 #import "AllAlbumsUITableViewCell.h"
@@ -24,7 +21,6 @@
 #import "HomeXMLParser.h"
 #import "ServerListViewController.h"
 #import "CustomUIAlertView.h"
-#import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "UIViewController+PushViewControllerCustom.h"
 

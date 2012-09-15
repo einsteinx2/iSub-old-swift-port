@@ -1,5 +1,5 @@
 //
-//  DatabaseControlsSingleton.m
+//  DatabaseSingleton.m
 //  iSub
 //
 //  Created by Ben Baron on 10/15/10.
@@ -7,9 +7,6 @@
 //
 
 #import "DatabaseSingleton.h"
-#import "ViewObjectsSingleton.h"
-#import "MusicSingleton.h"
-#import "iSubAppDelegate.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "Artist.h"
@@ -17,16 +14,11 @@
 #import "Song.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ISMSQueueAllLoader.h"
-#import "SavedSettings.h"
 #import "PlaylistSingleton.h"
 #import "ISMSStreamManager.h"
 #import "JukeboxSingleton.h"
-#import "AudioEngine.h"
 
 @implementation DatabaseSingleton
-
-@synthesize databaseFolderPath, queueAll;
-@synthesize allAlbumsDbQueue, allSongsDbQueue, coverArtCacheDb540Queue, coverArtCacheDb320Queue, coverArtCacheDb60Queue, albumListCacheDbQueue, genresDbQueue, currentPlaylistDbQueue, localPlaylistsDbQueue, songCacheDbQueue, cacheQueueDbQueue, lyricsDbQueue, bookmarksDbQueue;
 
 #pragma mark -
 #pragma mark class instance methods
@@ -36,7 +28,7 @@
 	NSString *urlStringMd5 = [[settingsS urlString] md5];
 	
 	// Setup the allAlbums database
-	NSString *path = [NSString stringWithFormat:@"%@/%@allAlbums.db", databaseFolderPath, urlStringMd5];
+	NSString *path = [NSString stringWithFormat:@"%@/%@allAlbums.db", self.databaseFolderPath, urlStringMd5];
 	self.allAlbumsDbQueue = [FMDatabaseQueue databaseQueueWithPath:path];
 	[self.allAlbumsDbQueue inDatabase:^(FMDatabase *db) 
 	{
@@ -44,7 +36,7 @@
 	}];
 	
 	// Setup the allSongs database
-	path = [NSString stringWithFormat:@"%@/%@allSongs.db", databaseFolderPath, urlStringMd5];
+	path = [NSString stringWithFormat:@"%@/%@allSongs.db", self.databaseFolderPath, urlStringMd5];
 	self.allSongsDbQueue = [FMDatabaseQueue databaseQueueWithPath:path];
 	[self.allSongsDbQueue inDatabase:^(FMDatabase *db) 
 	{
@@ -52,7 +44,7 @@
 	}];
 	
 	// Setup the Genres database
-	path = [NSString stringWithFormat:@"%@/%@genres.db", databaseFolderPath, urlStringMd5];
+	path = [NSString stringWithFormat:@"%@/%@genres.db", self.databaseFolderPath, urlStringMd5];
 	self.genresDbQueue = [FMDatabaseQueue databaseQueueWithPath:path];
 	[self.genresDbQueue inDatabase:^(FMDatabase *db) 
 	{
@@ -71,7 +63,7 @@
 	}
 	
 	// Setup the album list cache database
-	NSString *path = [NSString stringWithFormat:@"%@/%@albumListCache.db", databaseFolderPath, urlStringMd5];
+	NSString *path = [NSString stringWithFormat:@"%@/%@albumListCache.db", self.databaseFolderPath, urlStringMd5];
 	self.albumListCacheDbQueue = [FMDatabaseQueue databaseQueueWithPath:path];
 	[self.albumListCacheDbQueue inDatabase:^(FMDatabase *db) 
 	{
@@ -112,7 +104,7 @@
 	if (IS_IPAD())
 	{
 		// Only load large album art DB if this is an iPad
-		path = [NSString stringWithFormat:@"%@/coverArtCache540.db", databaseFolderPath];
+		path = [NSString stringWithFormat:@"%@/coverArtCache540.db", self.databaseFolderPath];
 		self.coverArtCacheDb540Queue = [FMDatabaseQueue databaseQueueWithPath:path];
 		[self.coverArtCacheDb540Queue inDatabase:^(FMDatabase *db) 
 		{
@@ -127,7 +119,7 @@
 	else
 	{
 		// Only load small album art DB if this is not an iPad
-		path = [NSString stringWithFormat:@"%@/coverArtCache320.db", databaseFolderPath];
+		path = [NSString stringWithFormat:@"%@/coverArtCache320.db", self.databaseFolderPath];
 		self.coverArtCacheDb320Queue = [FMDatabaseQueue databaseQueueWithPath:path];
 		[self.coverArtCacheDb320Queue inDatabase:^(FMDatabase *db) 
 		{
@@ -141,7 +133,7 @@
 	}
 	
 	// Setup album cell cover art cache database
-	path = [NSString stringWithFormat:@"%@/coverArtCache60.db", databaseFolderPath];
+	path = [NSString stringWithFormat:@"%@/coverArtCache60.db", self.databaseFolderPath];
 	self.coverArtCacheDb60Queue = [FMDatabaseQueue databaseQueueWithPath:path];
 	[self.coverArtCacheDb60Queue inDatabase:^(FMDatabase *db) 
 	{
@@ -156,11 +148,11 @@
 	// Setup the current playlist database
 	if (viewObjectsS.isOfflineMode) 
 	{
-		path = [NSString stringWithFormat:@"%@/offlineCurrentPlaylist.db", databaseFolderPath];
+		path = [NSString stringWithFormat:@"%@/offlineCurrentPlaylist.db", self.databaseFolderPath];
 	}
 	else 
 	{
-		path = [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseFolderPath, urlStringMd5];		
+		path = [NSString stringWithFormat:@"%@/%@currentPlaylist.db", self.databaseFolderPath, urlStringMd5];		
 	}
 	
 	self.currentPlaylistDbQueue = [FMDatabaseQueue databaseQueueWithPath:path];
@@ -189,11 +181,11 @@
 	// Setup the local playlists database
 	if (viewObjectsS.isOfflineMode) 
 	{
-		path = [NSString stringWithFormat:@"%@/offlineLocalPlaylists.db", databaseFolderPath];
+		path = [NSString stringWithFormat:@"%@/offlineLocalPlaylists.db", self.databaseFolderPath];
 	}
 	else 
 	{
-		path = [NSString stringWithFormat:@"%@/%@localPlaylists.db", databaseFolderPath, urlStringMd5];
+		path = [NSString stringWithFormat:@"%@/%@localPlaylists.db", self.databaseFolderPath, urlStringMd5];
 	}
 	
 	self.localPlaylistsDbQueue = [FMDatabaseQueue databaseQueueWithPath:path];
@@ -210,11 +202,11 @@
 	// Setup the song cache database
 	// Check if the songCache DB is in the documents directory
 	NSFileManager *fileManager = [NSFileManager defaultManager];
-	if ([fileManager fileExistsAtPath:[databaseFolderPath stringByAppendingPathComponent:@"songCache.db"]]) 
+	if ([fileManager fileExistsAtPath:[self.databaseFolderPath stringByAppendingPathComponent:@"songCache.db"]]) 
 	{
 		// The song cache Db is in the old place and needs to be moved
-		[fileManager moveItemAtURL:[NSURL fileURLWithPath:[databaseFolderPath stringByAppendingPathComponent:@"songCache.db"]]
-							 toURL:[NSURL fileURLWithPath:[ settingsS.cachesPath stringByAppendingPathComponent:@"songCache.db"]] error:nil];
+		[fileManager moveItemAtURL:[NSURL fileURLWithPath:[self.databaseFolderPath stringByAppendingPathComponent:@"songCache.db"]]
+							 toURL:[NSURL fileURLWithPath:[settingsS.cachesPath stringByAppendingPathComponent:@"songCache.db"]] error:nil];
 	}
 	
 	path = [settingsS.cachesPath stringByAppendingPathComponent:@"songCache.db"];
@@ -257,10 +249,10 @@
 		}
 	}];
 	
-	if ([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", databaseFolderPath, [ settingsS.urlString md5]]]) 
+	if ([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", self.databaseFolderPath, [ settingsS.urlString md5]]]) 
 	{
 		// The song cache queue Db is in the old place and needs to be moved
-		[fileManager moveItemAtURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", databaseFolderPath, [ settingsS.urlString md5]]] 
+		[fileManager moveItemAtURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", self.databaseFolderPath, [ settingsS.urlString md5]]] 
 							 toURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", settingsS.cachesPath, [ settingsS.urlString md5]]] error:nil];
 	}
 	
@@ -278,7 +270,7 @@
 	}];
 		
 	// Setup the lyrics database
-	path = [NSString stringWithFormat:@"%@/lyrics.db", databaseFolderPath];
+	path = [NSString stringWithFormat:@"%@/lyrics.db", self.databaseFolderPath];
 	self.lyricsDbQueue = [FMDatabaseQueue databaseQueueWithPath:path];
 	[self.lyricsDbQueue inDatabase:^(FMDatabase *db)
 	{
@@ -294,11 +286,11 @@
 	// Setup the bookmarks database
 	if (viewObjectsS.isOfflineMode) 
 	{
-		path = [NSString stringWithFormat:@"%@/bookmarks.db", databaseFolderPath];
+		path = [NSString stringWithFormat:@"%@/bookmarks.db", self.databaseFolderPath];
 	}
 	else
 	{
-		path = [NSString stringWithFormat:@"%@/%@bookmarks.db", databaseFolderPath, urlStringMd5];
+		path = [NSString stringWithFormat:@"%@/%@bookmarks.db", self.databaseFolderPath, urlStringMd5];
 	}
 	
 	self.bookmarksDbQueue = [FMDatabaseQueue databaseQueueWithPath:path];
@@ -320,8 +312,8 @@
 - (void)updateTableDefinitions
 {
 	// Add parentId column to tables if necessary
-	NSArray *parentIdDatabaseQueues = [NSArray arrayWithObjects:albumListCacheDbQueue, currentPlaylistDbQueue, currentPlaylistDbQueue, currentPlaylistDbQueue, currentPlaylistDbQueue, songCacheDbQueue, songCacheDbQueue, cacheQueueDbQueue, songCacheDbQueue, cacheQueueDbQueue, nil];
-	NSArray *parentIdTables = [NSArray arrayWithObjects:@"songsCache", @"currentPlaylist", @"shufflePlaylist", @"jukeboxCurrentPlaylist", @"jukeboxShufflePlaylist", @"cachedSongs", @"genresSongs", @"cacheQueue", @"cachedSongsList", @"queuedSongsList", nil];
+	NSArray *parentIdDatabaseQueues = @[self.albumListCacheDbQueue, self.currentPlaylistDbQueue, self.currentPlaylistDbQueue, self.currentPlaylistDbQueue, self.currentPlaylistDbQueue, self.songCacheDbQueue, self.songCacheDbQueue, self.cacheQueueDbQueue, self.songCacheDbQueue, self.cacheQueueDbQueue];
+	NSArray *parentIdTables = @[@"songsCache", @"currentPlaylist", @"shufflePlaylist", @"jukeboxCurrentPlaylist", @"jukeboxShufflePlaylist", @"cachedSongs", @"genresSongs", @"cacheQueue", @"cachedSongsList", @"queuedSongsList"];
 	NSString *parentIdColumnName = @"parentId";
     NSString *isVideoColumnName = @"isVideo";
 	for (int i = 0; i < [parentIdDatabaseQueues count]; i++)
@@ -421,18 +413,18 @@
 
 - (void)closeAllDatabases
 {
-	[allAlbumsDbQueue close]; self.allAlbumsDbQueue = nil;
-	[allSongsDbQueue close]; self.allSongsDbQueue = nil;
-	[genresDbQueue close]; self.genresDbQueue = nil;
-	[albumListCacheDbQueue close]; self.albumListCacheDbQueue = nil;
-	[coverArtCacheDb540Queue close]; self.coverArtCacheDb540Queue = nil;
-	[coverArtCacheDb320Queue close]; self.coverArtCacheDb320Queue = nil;
-	[coverArtCacheDb60Queue close]; self.coverArtCacheDb60Queue = nil;
-	[currentPlaylistDbQueue close]; self.currentPlaylistDbQueue = nil;
-	[localPlaylistsDbQueue close]; self.localPlaylistsDbQueue = nil;
-	[songCacheDbQueue close]; self.songCacheDbQueue = nil;
-	[cacheQueueDbQueue close]; self.cacheQueueDbQueue = nil;
-	[bookmarksDbQueue close]; self.bookmarksDbQueue = nil;	
+	[self.allAlbumsDbQueue close]; self.allAlbumsDbQueue = nil;
+	[self.allSongsDbQueue close]; self.allSongsDbQueue = nil;
+	[self.genresDbQueue close]; self.genresDbQueue = nil;
+	[self.albumListCacheDbQueue close]; self.albumListCacheDbQueue = nil;
+	[self.coverArtCacheDb540Queue close]; self.coverArtCacheDb540Queue = nil;
+	[self.coverArtCacheDb320Queue close]; self.coverArtCacheDb320Queue = nil;
+	[self.coverArtCacheDb60Queue close]; self.coverArtCacheDb60Queue = nil;
+	[self.currentPlaylistDbQueue close]; self.currentPlaylistDbQueue = nil;
+	[self.localPlaylistsDbQueue close]; self.localPlaylistsDbQueue = nil;
+	[self.songCacheDbQueue close]; self.songCacheDbQueue = nil;
+	[self.cacheQueueDbQueue close]; self.cacheQueueDbQueue = nil;
+	[self.bookmarksDbQueue close]; self.bookmarksDbQueue = nil;	
 }
 
 - (void)resetCoverArtCache
@@ -737,19 +729,19 @@
 - (void)downloadAllSongs:(NSString *)folderId artist:(Artist *)theArtist
 {
 	// Show loading screen
-	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:queueAll];
+	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self.queueAll];
 	
 	// Download all the songs
-	[queueAll cacheData:folderId artist:theArtist];
+	[self.queueAll cacheData:folderId artist:theArtist];
 }
 
 - (void)queueAllSongs:(NSString *)folderId artist:(Artist *)theArtist
 {
 	// Show loading screen
-	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:queueAll];
+	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self.queueAll];
 	
 	// Queue all the songs
-	[queueAll queueData:folderId artist:theArtist];
+	[self.queueAll queueData:folderId artist:theArtist];
 }
 
 /*- (void)queueSong:(Song *)aSong
@@ -772,7 +764,7 @@
 - (void)playAllSongs:(NSString *)folderId artist:(Artist *)theArtist
 {
 	// Show loading screen
-	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:queueAll];
+	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self.queueAll];
 	
 	// Clear the current and shuffle playlists
 	if (settingsS.isJukeboxEnabled)
@@ -789,13 +781,13 @@
 	playlistS.isShuffle = NO;
 	
 	// Queue all the songs
-	[queueAll playAllData:folderId artist:theArtist];
+	[self.queueAll playAllData:folderId artist:theArtist];
 }
 
 - (void)shuffleAllSongs:(NSString *)folderId artist:(Artist *)theArtist
 {
 	// Show loading screen
-	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:queueAll];
+	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self.queueAll];
 	
 	// Clear the current and shuffle playlists
 	if (settingsS.isJukeboxEnabled)
@@ -812,7 +804,7 @@
 	playlistS.isShuffle = YES;
 	
 	// Queue all the songs
-	[queueAll shuffleData:folderId artist:theArtist];
+	[self.queueAll shuffleData:folderId artist:theArtist];
 }
 
 - (void)shufflePlaylist
@@ -852,16 +844,16 @@
 
 - (void)setup 
 {
-	queueAll = [ISMSQueueAllLoader loader];
+	_queueAll = [ISMSQueueAllLoader loader];
 	
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	databaseFolderPath = [[paths objectAtIndexSafe: 0] stringByAppendingPathComponent:@"database"];
+	_databaseFolderPath = [[paths objectAtIndexSafe: 0] stringByAppendingPathComponent:@"database"];
 	
 	// Make sure database directory exists, if not create them
 	BOOL isDir = YES;
-	if (![[NSFileManager defaultManager] fileExistsAtPath:databaseFolderPath isDirectory:&isDir]) 
+	if (![[NSFileManager defaultManager] fileExistsAtPath:_databaseFolderPath isDirectory:&isDir])
 	{
-		[[NSFileManager defaultManager] createDirectoryAtPath:databaseFolderPath withIntermediateDirectories:YES attributes:nil error:NULL];
+		[[NSFileManager defaultManager] createDirectoryAtPath:_databaseFolderPath withIntermediateDirectories:YES attributes:nil error:NULL];
 	}	
 	
 	[self setupDatabases];

@@ -11,8 +11,6 @@
 
 @implementation Album
 
-@synthesize title, albumId, coverArtId, artistName, artistId;
-
 - (id)initWithPMSDictionary:(NSDictionary *)dictionary
 {
 	if ((self = [super init]))
@@ -20,11 +18,11 @@
 		//title = [dictionary objectForKey:@"albumName"];
 		//albumId = [dictionary objectForKey:@"albumId"];
 		// albums are folders for now
-		title = N2n([dictionary objectForKey:@"folderName"]);
-		albumId = N2n([dictionary objectForKey:@"folderId"]);
-		coverArtId = N2n([dictionary objectForKey:@"artId"]);
-		artistName = N2n([dictionary objectForKey:@"artistName"]);
-		artistId = N2n([dictionary objectForKey:@"artistId"]);
+		_title = N2n([dictionary objectForKey:@"folderName"]);
+		_albumId = N2n([dictionary objectForKey:@"folderId"]);
+		_coverArtId = N2n([dictionary objectForKey:@"artId"]);
+		_artistName = N2n([dictionary objectForKey:@"artistName"]);
+		_artistId = N2n([dictionary objectForKey:@"artistId"]);
 	}
 	return self;
 }
@@ -33,11 +31,11 @@
 {
 	if ((self = [super init]))
 	{
-		title = [[TBXML valueOfAttributeNamed:@"title" forElement:element] cleanString];
-		albumId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
-		coverArtId = [TBXML valueOfAttributeNamed:@"coverArt" forElement:element];
-		artistId = [NSString stringWithString:artistIdToSet];
-		self.artistName = [artistNameToSet cleanString];
+		_title = [[TBXML valueOfAttributeNamed:@"title" forElement:element] cleanString];
+		_albumId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
+		_coverArtId = [TBXML valueOfAttributeNamed:@"coverArt" forElement:element];
+		_artistId = [NSString stringWithString:artistIdToSet];
+		_artistName = [artistNameToSet cleanString];
 	}
 	
 	return self;
@@ -47,11 +45,11 @@
 {
 	if ((self = [super init]))
 	{
-		title = [attributeDict objectForKey:@"title"];
-		albumId = [attributeDict objectForKey:@"id"];
-		coverArtId = [attributeDict objectForKey:@"coverArt"];
-		artistName = [attributeDict objectForKey:@"artist"];
-		artistId = [attributeDict objectForKey:@"parent"];
+		_title = [attributeDict objectForKey:@"title"];
+		_albumId = [attributeDict objectForKey:@"id"];
+		_coverArtId = [attributeDict objectForKey:@"coverArt"];
+		_artistName = [attributeDict objectForKey:@"artist"];
+		_artistId = [attributeDict objectForKey:@"parent"];
 	}
 	
 	return self;
@@ -62,61 +60,61 @@
 {
 	if ((self = [super init]))
 	{
-		title = [attributeDict objectForKey:@"title"];
-		albumId = [attributeDict objectForKey:@"id"];
-		coverArtId = [attributeDict objectForKey:@"coverArt"];
+		_title = [attributeDict objectForKey:@"title"];
+		_albumId = [attributeDict objectForKey:@"id"];
+		_coverArtId = [attributeDict objectForKey:@"coverArt"];
 		
 		if (myArtist)
 		{
-			artistName = myArtist.name;
-			artistId = myArtist.artistId;
+			_artistName = myArtist.name;
+			_artistId = myArtist.artistId;
 		}
 	}
 	
 	return self;
 }
 
--(void) encodeWithCoder: (NSCoder *) encoder
+- (void)encodeWithCoder:(NSCoder *)encoder
 {
-	[encoder encodeObject: title];
-	[encoder encodeObject: albumId];
-	[encoder encodeObject: coverArtId];
-	[encoder encodeObject: artistName];
-	[encoder encodeObject: artistId];
+	[encoder encodeObject:self.title];
+	[encoder encodeObject:self.albumId];
+	[encoder encodeObject:self.coverArtId];
+	[encoder encodeObject:self.artistName];
+	[encoder encodeObject:self.artistId];
 }
 
 
--(id) initWithCoder: (NSCoder *) decoder
+- (id)initWithCoder:(NSCoder *)decoder
 {
 	if ((self = [super init]))
 	{
-		title = [decoder decodeObject];
-		albumId = [decoder decodeObject];
-		coverArtId = [decoder decodeObject];
-		artistName = [decoder decodeObject];
-		artistId = [decoder decodeObject];
+		_title = [decoder decodeObject];
+		_albumId = [decoder decodeObject];
+		_coverArtId = [decoder decodeObject];
+		_artistName = [decoder decodeObject];
+		_artistId = [decoder decodeObject];
 	}
 	
 	return self;
 }
 
 
--(id) copyWithZone: (NSZone *) zone
+- (id)copyWithZone:(NSZone *)zone
 {
 	Album *anAlbum = [[Album alloc] init];
 	
-	anAlbum.title = [title copy];
-	anAlbum.albumId = [albumId copy];
-	anAlbum.coverArtId = [coverArtId copy];
-	anAlbum.artistName = [artistName copy];
-	anAlbum.artistId = [artistId copy];
+	anAlbum.title = [self.title copy];
+	anAlbum.albumId = [self.albumId copy];
+	anAlbum.coverArtId = [self.coverArtId copy];
+	anAlbum.artistName = [self.artistName copy];
+	anAlbum.artistId = [self.artistId copy];
 	
 	return anAlbum;
 }
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"%@: title: %@, albumId: %@, coverArtId: %@, artistName: %@, artistId: %@", [super description], title, albumId, coverArtId, artistName, artistId];
+	return [NSString stringWithFormat:@"%@: title: %@, albumId: %@, coverArtId: %@, artistName: %@, artistId: %@", [super description], self.title, self.self.albumId, self.coverArtId, self.artistName, self.artistId];
 }
 
 

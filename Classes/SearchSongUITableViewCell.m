@@ -8,9 +8,7 @@
 
 #import "SearchSongUITableViewCell.h"
 #import "AsynchronousImageView.h"
-#import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "Song.h"
 #import "FMDatabaseAdditions.h"
 #import "CellOverlay.h"

@@ -8,18 +8,16 @@
 
 #import "ISMSStreamHandler.h"
 #import "Song.h"
-#import "PlaylistSingleton.h"
 
 
 @implementation ISMSStreamHandler
-@synthesize totalBytesTransferred, bytesTransferred, mySong, byteOffset, delegate, isDelegateNotifiedToStartPlayback, numOfReconnects, isTempCache, bitrate, secondsOffset, partialPrecacheSleep, isDownloading, isCurrentSong, shouldResume, contentLength, maxBitrateSetting, speedLoggingDate, speedLoggingLastSize, isCanceled, numberOfContentLengthFailures, isPartialPrecacheSleeping, secondsToPartialPrecache, tempBreakPartialPrecache, fileHandle;
 
 - (void)setup
 {
-	partialPrecacheSleep = YES;
-	contentLength = ULLONG_MAX;
-	maxBitrateSetting = NSIntegerMax;
-	secondsToPartialPrecache = ISMSNumSecondsToPartialPreCacheDefault;
+	_partialPrecacheSleep = YES;
+	_contentLength = ULLONG_MAX;
+	_maxBitrateSetting = NSIntegerMax;
+	_secondsToPartialPrecache = ISMSNumSecondsToPartialPreCacheDefault;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playlistIndexChanged) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 }
@@ -35,15 +33,15 @@
 
 - (id)initWithSong:(Song *)song byteOffset:(unsigned long long)bOffset secondsOffset:(double)sOffset isTemp:(BOOL)isTemp delegate:(NSObject<ISMSStreamHandlerDelegate> *)theDelegate
 {
-	if ((self = [super init]))
+	if ((self = [self init]))
 	{
 		[self setup];
 		
-		mySong = [song copy];
-		delegate = theDelegate;
-		byteOffset = bOffset;
-		secondsOffset = sOffset;
-		isTempCache = isTemp;
+		_mySong = [song copy];
+		_delegate = theDelegate;
+		_byteOffset = bOffset;
+		_secondsOffset = sOffset;
+		_isTempCache = isTemp;
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playlistIndexChanged) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	}
@@ -63,7 +61,7 @@
 
 - (NSString *)filePath
 {
-	return self.isTempCache ? mySong.localTempPath : mySong.localPath;
+	return self.isTempCache ? self.mySong.localTempPath : self.mySong.localPath;
 }
 
 - (void)start
@@ -129,7 +127,7 @@
 
 - (NSUInteger)hash
 {
-	return [mySong.songId hash];
+	return [self.mySong.songId hash];
 }
 
 - (BOOL)isEqualToISMSStreamHandler:(ISMSStreamHandler *)otherHandler 
@@ -137,7 +135,7 @@
 	if (self == otherHandler)
 		return YES;
 	
-	return [mySong isEqualToSong:otherHandler.mySong];
+	return [self.mySong isEqualToSong:otherHandler.mySong];
 }
 
 - (BOOL)isEqual:(id)other 
@@ -171,14 +169,14 @@
 	{		
 		[self setup];
 		
-		mySong = [[decoder decodeObjectForKey:@"mySong"] copy];
-		byteOffset = [decoder decodeInt64ForKey:@"byteOffset"];
-		secondsOffset = [decoder decodeDoubleForKey:@"secondsOffset"];
-		isDelegateNotifiedToStartPlayback = [decoder decodeBoolForKey:@"isDelegateNotifiedToStartPlayback"];
-		isTempCache = [decoder decodeBoolForKey:@"isTempCache"];
-		isDownloading = [decoder decodeBoolForKey:@"isDownloading"];
-		contentLength = [decoder decodeInt64ForKey:@"contentLength"];
-		maxBitrateSetting = [decoder decodeInt32ForKey:@"maxBitrateSetting"];
+		_mySong = [[decoder decodeObjectForKey:@"mySong"] copy];
+		_byteOffset = [decoder decodeInt64ForKey:@"byteOffset"];
+		_secondsOffset = [decoder decodeDoubleForKey:@"secondsOffset"];
+		_isDelegateNotifiedToStartPlayback = [decoder decodeBoolForKey:@"isDelegateNotifiedToStartPlayback"];
+		_isTempCache = [decoder decodeBoolForKey:@"isTempCache"];
+		_isDownloading = [decoder decodeBoolForKey:@"isDownloading"];
+		_contentLength = [decoder decodeInt64ForKey:@"contentLength"];
+		_maxBitrateSetting = [decoder decodeInt32ForKey:@"maxBitrateSetting"];
 	}
 	
 	return self;

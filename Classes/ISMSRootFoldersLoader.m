@@ -12,8 +12,6 @@
 
 @implementation ISMSRootFoldersLoader
 
-@synthesize selectedFolderId, tempRecordCount;
-
 + (id)loaderWithDelegate:(NSObject<ISMSLoaderDelegate> *)theDelegate
 {
 	if ([settingsS.serverType isEqualToString:SUBSONIC] || [settingsS.serverType isEqualToString:UBUNTU_ONE])

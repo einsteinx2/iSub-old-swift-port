@@ -10,17 +10,12 @@
 
 @implementation BBSimpleConnectionQueue
 
-@synthesize connectionStack, isRunning, delegate;
-
-- (id) init
+- (id)init
 {
 	if ((self = [super init]))
 	{
-		connectionStack = [[NSMutableArray alloc] init];
-		
-		isRunning = NO;
-		
-		delegate = nil;
+		_connectionStack = [[NSMutableArray alloc] init];
+		_isRunning = NO;
 	}
 	
 	return self;
@@ -29,38 +24,37 @@
 
 - (void)registerConnection:(NSURLConnection *)connection
 {
-	[connectionStack addObject:connection];
+	[self.connectionStack addObject:connection];
 	//DLog(@"CONNECTION QUEUE REGISTER: %i connections registered", [connectionStack count]);
 }
 
 - (void)connectionFinished:(NSURLConnection *)connection
 {
-	if ([connectionStack count] > 0)
-		[connectionStack removeObjectAtIndex:0];
+	if ([self.connectionStack count] > 0)
+		[self.connectionStack removeObjectAtIndex:0];
 	
 	//DLog(@"CONNECTION QUEUE FINISHED: %i connections registered", [connectionStack count]);
 	
-	if (isRunning && [connectionStack count] > 0)
+	if (self.isRunning && [self.connectionStack count] > 0)
 	{
-		NSURLConnection *connection = [connectionStack objectAtIndexSafe:0];
+		NSURLConnection *connection = [self.connectionStack objectAtIndexSafe:0];
 		[connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 		[connection start];
 	}
 	else
 	{
-		isRunning = NO;
-		
-		[delegate connectionQueueDidFinish:self];
+		_isRunning = NO;
+		[self.delegate connectionQueueDidFinish:self];
 	}
 }
 
 - (void)startQueue
 {	
-	if ([connectionStack count] > 0 && !isRunning)
+	if (self.connectionStack.count > 0 && !self.isRunning)
 	{
-		isRunning = YES;
+		_isRunning = YES;
 
-		NSURLConnection *connection = [connectionStack objectAtIndexSafe:0];
+		NSURLConnection *connection = [self.connectionStack objectAtIndexSafe:0];
 		[connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 		[connection start];
 	}
@@ -68,19 +62,19 @@
 
 - (void)stopQueue
 {
-	isRunning = NO;
+	_isRunning = NO;
 }
 
 - (void)clearQueue
 {
 	[self stopQueue];
 	
-	for (NSURLConnection *connection in connectionStack)
+	for (NSURLConnection *connection in self.connectionStack)
 	{
 		[connection cancel];
 	}
 	
-	[connectionStack removeAllObjects];
+	[self.connectionStack removeAllObjects];
 }
 
 @end

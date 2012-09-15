@@ -11,9 +11,7 @@
 #import "Song+DAO.h"
 #import "Song.h"
 #import "CellOverlay.h"
-#import "DatabaseSingleton.h"
 #import "MusicSingleton.h"
-#import "ViewObjectsSingleton.h"
 
 @implementation PlayingUITableViewCell
 

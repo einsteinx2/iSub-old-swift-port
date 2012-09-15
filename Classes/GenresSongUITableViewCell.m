@@ -6,9 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "GenresSongUITableViewCell.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"

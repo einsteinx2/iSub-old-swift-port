@@ -19,7 +19,7 @@
 @class EX2RingBuffer, SUSRegisterActionLoader;
 @interface BassGaplessPlayer : NSObject
 
-@property id<BassGaplessPlayerDelegate> delegate;
+@property (unsafe_unretained) id<BassGaplessPlayerDelegate> delegate;
 
 @property dispatch_queue_t streamGcdQueue;
 

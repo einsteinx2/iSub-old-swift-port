@@ -10,17 +10,15 @@
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 
-#import "DatabaseSingleton.h"
 #import "ISMSCoverArtLoader.h"
 
 @implementation SUSCoverArtDAO
-@synthesize delegate, isLarge, coverArtId, loader;
 
 - (id)initWithDelegate:(NSObject<ISMSLoaderDelegate> *)theDelegate
 {
 	if ((self = [super init]))
 	{
-		delegate = theDelegate;
+		_delegate = theDelegate;
 	}
 	return self;
 }
@@ -29,17 +27,17 @@
 {
 	if ((self = [super init]))
 	{
-		delegate = theDelegate;
-		isLarge = large;
-		coverArtId = [artId copy];
+		_delegate = theDelegate;
+		_isLarge = large;
+		_coverArtId = [artId copy];
 	}
 	return self;
 }
 
 - (void)dealloc
 {
-	[loader cancelLoad];
-	loader.delegate = nil;
+	[_loader cancelLoad];
+	_loader.delegate = nil;
 }
 
 #pragma mark - Private DB Methods

@@ -7,12 +7,7 @@
 //
 
 #import "UAApplication.h"
-#import "MusicSingleton.h"
-#import "iSubAppDelegate.h"
-#import "SavedSettings.h"
-#import "AudioEngine.h"
 #import "JukeboxSingleton.h"
-#import "PlaylistSingleton.h"
 
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 

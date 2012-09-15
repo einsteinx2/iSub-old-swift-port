@@ -9,7 +9,28 @@
 #ifndef iSub_Imports_h
 #define iSub_Imports_h
 
+typedef enum
+{
+    ISMSBassVisualType_none      = 0,
+    ISMSBassVisualType_line      = 1,
+    ISMSBassVisualType_skinnyBar = 2,
+    ISMSBassVisualType_fatBar    = 3,
+    ISMSBassVisualType_aphexFace = 4,
+    ISMSBassVisualType_maxValue  = 5
+} ISMSBassVisualType;
+
 #import "EX2Kit.h"
+
+#import "iSubAppDelegate.h"
+#import "AudioEngine.h"
+#import "SavedSettings.h"
+#import "PlaylistSingleton.h"
+#import "CacheSingleton.h"
+#import "DatabaseSingleton.h"
+#import "MusicSingleton.h"
+#import "SocialSingleton.h"
+#import "ViewObjectsSingleton.h"
+#import "JukeboxSingleton.h"
 
 #import "ISMSNotificationNames.h"
 #import "ISMSErrorDomain.h"
@@ -28,14 +49,6 @@
 #define ISMSiPadBackgroundColor [UIColor colorWithPatternImage:[UIImage imageNamed:@"underPageBackground.png"]]
 #define ISMSiPadCornerRadius 5.
 
-typedef enum
-{
-    ISMSBassVisualType_none         = 0,
-    ISMSBassVisualType_line         = 1,
-    ISMSBassVisualType_skinnyBar = 2,
-    ISMSBassVisualType_fatBar     = 3,
-    ISMSBassVisualType_aphexFace = 4,
-    ISMSBassVisualType_maxValue  = 5
-} ISMSBassVisualType;
+
 
 #endif

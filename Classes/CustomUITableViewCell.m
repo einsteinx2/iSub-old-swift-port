@@ -7,7 +7,6 @@
 //
 
 #import "CustomUITableViewCell.h"
-#import "ViewObjectsSingleton.h"
 #import "CellOverlay.h"
 
 @implementation CustomUITableViewCell

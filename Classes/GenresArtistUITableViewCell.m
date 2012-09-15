@@ -7,9 +7,7 @@
 //
 
 #import "GenresArtistUITableViewCell.h"
-#import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "CellOverlay.h"

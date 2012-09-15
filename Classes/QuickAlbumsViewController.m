@@ -8,11 +8,8 @@
 
 #import "QuickAlbumsViewController.h"
 #import "HomeAlbumViewController.h"
-#import "iSubAppDelegate.h"
-#import "ViewObjectsSingleton.h"
 #import "HomeXMLParser.h"
 #import "CustomUIAlertView.h"
-#import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "iPadRootViewController.h"
 #import "StackScrollViewController.h"

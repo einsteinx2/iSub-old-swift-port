@@ -10,7 +10,6 @@
 #import "FMDatabaseAdditions.h"
 #import "CellOverlay.h"
 #import "Song.h"
-#import "CacheSingleton.h"
 
 @implementation CacheSongUITableViewCell
 

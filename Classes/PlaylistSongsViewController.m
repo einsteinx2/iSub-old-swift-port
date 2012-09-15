@@ -7,10 +7,7 @@
 //
 
 #import "PlaylistSongsViewController.h"
-#import "iSubAppDelegate.h"
-#import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "PlaylistSongUITableViewCell.h"
@@ -21,13 +18,10 @@
 #import "EGORefreshTableHeaderView.h"
 #import "CustomUIAlertView.h"
 #import "TBXML.h"
-#import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "OrderedDictionary.h"
 #import "SUSServerPlaylist.h"
 
-#import "PlaylistSingleton.h"
-#import "JukeboxSingleton.h"
 #import "UIViewController+PushViewControllerCustom.h"
 
 @interface PlaylistSongsViewController (Private)

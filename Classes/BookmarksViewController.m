@@ -8,29 +8,20 @@
 
 #import "BookmarksViewController.h"
 #import "BookmarkUITableViewCell.h"
-#import "iSubAppDelegate.h"
-#import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "ServerListViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "Song.h"
 #import "FMDatabaseAdditions.h"
 #import "CustomUIAlertView.h"
-#import "SavedSettings.h"
 #import "Song+DAO.h"
-#import "PlaylistSingleton.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "FMDatabaseQueue.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "JukeboxSingleton.h"
 
 @implementation BookmarksViewController
-@synthesize bookmarkIds;
-@synthesize isNoBookmarksScreenShowing, noBookmarksScreen, headerView, bookmarkCountLabel, deleteBookmarksLabel, deleteBookmarksButton, spacerLabel, editBookmarksLabel, editBookmarksButton;
 
-#pragma mark -
-#pragma mark View lifecycle
+#pragma mark - View lifecycle
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {

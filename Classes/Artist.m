@@ -10,33 +10,21 @@
 
 @implementation Artist
 
-@synthesize name, artistId;
-
-+ (Artist *) artistWithName:(NSString *)theName andArtistId:(NSString *)theId
++ (Artist *)artistWithName:(NSString *)theName andArtistId:(NSString *)theId
 {
 	Artist *anArtist = [[Artist alloc] init];
-	
-	anArtist.name = nil;
-	anArtist.artistId = nil;
-	
 	anArtist.name = theName;
 	anArtist.artistId = theId;
 	
 	return anArtist;
 }
 
-- (id) initWithAttributeDict:(NSDictionary *)attributeDict
+- (id)initWithAttributeDict:(NSDictionary *)attributeDict
 {
 	if ((self = [super init]))
 	{
-		name = nil;
-		artistId = nil;
-		
-		if ([attributeDict objectForKey:@"name"])
-			self.name = [attributeDict objectForKey:@"name"];
-		
-		if ([attributeDict objectForKey:@"id"])
-			self.artistId = [attributeDict objectForKey:@"id"];
+		self.name = [attributeDict objectForKey:@"name"];
+		self.artistId = [attributeDict objectForKey:@"id"];
 	}
 	
 	return self;
@@ -46,50 +34,44 @@
 {
 	if ((self = [super init]))
 	{
-		name = nil;
-		artistId = nil;
-		
-		if ([TBXML valueOfAttributeNamed:@"name" forElement:element])
-			self.name = [TBXML valueOfAttributeNamed:@"name" forElement:element];
-		
-		if ([TBXML valueOfAttributeNamed:@"id" forElement:element])
-			self.artistId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
+		self.name = [TBXML valueOfAttributeNamed:@"name" forElement:element];
+		self.artistId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
 	}
 	
 	return self;
 }
 
--(void) encodeWithCoder: (NSCoder *) encoder
+- (void)encodeWithCoder:(NSCoder *)encoder
 {
-	[encoder encodeObject: name];
-	[encoder encodeObject: artistId];
+	[encoder encodeObject:self.name];
+	[encoder encodeObject:self.artistId];
 }
 
 
--(id) initWithCoder: (NSCoder *) decoder
+- (id)initWithCoder:(NSCoder *)decoder
 {
 	if ((self = [super init]))
 	{
-		name = [decoder decodeObject];
-		artistId = [decoder decodeObject];
+		_name = [decoder decodeObject];
+		_artistId = [decoder decodeObject];
 	}
 	
 	return self;
 }
 
--(id) copyWithZone: (NSZone *) zone
+- (id)copyWithZone:(NSZone *)zone
 {
 	Artist *anArtist = [[Artist alloc] init];
 	
-	anArtist.name = [name copy];
-	anArtist.artistId = [artistId copy];
+	anArtist.name = [self.name copy];
+	anArtist.artistId = [self.artistId copy];
 	
 	return anArtist;
 }
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"%@: name: %@, artistId: %@", [super description], name, artistId];
+	return [NSString stringWithFormat:@"%@: name: %@, artistId: %@", [super description], self.name, self.artistId];
 }
 
 

@@ -13,9 +13,10 @@
 
 @interface SUSRootFoldersDAO : NSObject <ISMSLoaderManager, ISMSLoaderDelegate>
 {		
-	NSUInteger count;
-	NSUInteger searchCount;
-	NSUInteger tempRecordCount;
+	NSUInteger _tempRecordCount;
+    NSArray *_indexNames;
+    NSArray *_indexPositions;
+    NSArray *_indexCounts;
 }
 
 @property (unsafe_unretained) id<ISMSLoaderDelegate> delegate;

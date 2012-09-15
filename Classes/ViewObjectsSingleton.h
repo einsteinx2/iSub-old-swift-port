@@ -6,6 +6,9 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+#ifndef iSub_ViewObjectsSingleton_h
+#define iSub_ViewObjectsSingleton_h
+
 #define viewObjectsS ((ViewObjectsSingleton *)[ViewObjectsSingleton sharedInstance])
 
 #import "MBProgressHUD.h"
@@ -105,3 +108,5 @@
 - (UIView *)createCellBackground:(NSUInteger)row;
 
 @end
+
+#endif

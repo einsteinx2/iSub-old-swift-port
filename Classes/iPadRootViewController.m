@@ -11,7 +11,6 @@
 
 #import "MenuViewController.h"
 #import "StackScrollViewController.h"
-#import "SavedSettings.h"
 
 
 @interface UIViewExt : UIView

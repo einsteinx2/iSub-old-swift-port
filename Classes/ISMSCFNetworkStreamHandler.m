@@ -10,25 +10,20 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "NSMutableURLRequest+PMS.h"
 #import "Song.h"
-#import "SavedSettings.h"
-#import "PlaylistSingleton.h"
-#import "iSubAppDelegate.h"
-#import "CacheSingleton.h"
 #import "Server.h"
 
 @interface ISMSCFNetworkStreamHandler ()
 {
-	UInt8		buffer[16 * 1024];				//	Create a 16K buffer
-	CFIndex		bytesRead;
-	CFReadStreamRef readStreamRef;
-	NSTimeInterval lastThrottle;
+	UInt8		_buffer[16 * 1024];				//	Create a 16K buffer
+	CFIndex		_bytesRead;
+	CFReadStreamRef _readStreamRef;
+	NSTimeInterval _lastThrottle;
 }
 @property (strong) ISMSCFNetworkStreamHandler *selfRef;
 - (void)readStreamClientCallBack:(CFReadStreamRef)stream type:(CFStreamEventType)type;
 @end
 
 @implementation ISMSCFNetworkStreamHandler
-@synthesize selfRef;
 
 // Logging
 #define isProgressLoggingEnabled 0
@@ -156,10 +151,10 @@ static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStr
 	DDLogInfo(@"body: %@", [[NSString alloc] initWithData:(__bridge NSData *)body encoding:NSUTF8StringEncoding]);
 	
 	// Create the stream for the request.
-	readStreamRef = CFReadStreamCreateForHTTPRequest(kCFAllocatorDefault, messageRef);
-	if (readStreamRef == NULL) goto Bail;
+	_readStreamRef = CFReadStreamCreateForHTTPRequest(kCFAllocatorDefault, messageRef);
+	if (_readStreamRef == NULL) goto Bail;
 	
-	CFRetain(readStreamRef);
+	CFRetain(_readStreamRef);
 	
 	//	There are times when a server checks the User-Agent to match a well known browser.  This is what Safari used at the time the sample was written
 	//CFHTTPMessageSetHeaderFieldValue( messageRef, CFSTR("User-Agent"), CFSTR("Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) AppleWebKit/125.5.5 (KHTML, like Gecko) Safari/125")); 
@@ -168,7 +163,7 @@ static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStr
 	CFHTTPMessageSetHeaderFieldValue( messageRef, CFSTR("Cache-Control"), CFSTR("no-cache"));
 	
 	// Enable stream redirection
-	if (CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyHTTPShouldAutoredirect, kCFBooleanTrue) == false)
+	if (CFReadStreamSetProperty(_readStreamRef, kCFStreamPropertyHTTPShouldAutoredirect, kCFBooleanTrue) == false)
 		goto Bail;
 	
 	// Handle SSL connections
@@ -184,15 +179,15 @@ static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStr
 		 [NSNull null], kCFStreamSSLPeerName,
 		 nil];
 		
-		CFReadStreamSetProperty(readStreamRef, kCFStreamPropertySSLSettings, (__bridge CFDictionaryRef)sslSettings);
+		CFReadStreamSetProperty(_readStreamRef, kCFStreamPropertySSLSettings, (__bridge CFDictionaryRef)sslSettings);
 	}
 	
 	// Handle proxy
 	CFDictionaryRef proxyDict = CFNetworkCopySystemProxySettings();
-	CFReadStreamSetProperty(readStreamRef, kCFStreamPropertyHTTPProxy, proxyDict);
+	CFReadStreamSetProperty(_readStreamRef, kCFStreamPropertyHTTPProxy, proxyDict);
 	
 	// Set the client notifier
-	if (CFReadStreamSetClient(readStreamRef, kNetworkEvents, ReadStreamClientCallBack, &ctxt) == false)
+	if (CFReadStreamSetClient(_readStreamRef, kNetworkEvents, ReadStreamClientCallBack, &ctxt) == false)
 		goto Bail;
 	
 	if ([self.mySong isEqualToSong:[playlistS currentSong]])
@@ -201,7 +196,7 @@ static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStr
 	}
 	
 	// Schedule the stream
-	CFReadStreamScheduleWithRunLoop(readStreamRef, CFRunLoopGetMain(), kCFRunLoopCommonModes);
+	CFReadStreamScheduleWithRunLoop(_readStreamRef, CFRunLoopGetMain(), kCFRunLoopCommonModes);
     
     [self startTimeOutTimer];
 	
@@ -209,7 +204,7 @@ static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStr
 	[EX2NetworkIndicator usingNetwork];
 	
 	// Start the HTTP connection
-	if (CFReadStreamOpen(readStreamRef) == false)
+	if (CFReadStreamOpen(_readStreamRef) == false)
 		goto Bail;
 	
 	//DLog(@"--- STARTING HTTP CONNECTION");
@@ -261,7 +256,7 @@ Bail:
 		 
 		 self.isDownloading = NO;
 		 
-		 if (readStreamRef == NULL)
+		 if (_readStreamRef == NULL)
 		 {
 			 //DLog(@"------------------------------ stream is nil so returning");
 			 return;
@@ -272,12 +267,12 @@ Bail:
 		 //	otherwise your notifier may be called after you released the stream leaving you with a 
 		 //	bogus stream within your notifier.
 		 //DLog(@"canceling stream: %@", readStreamRef);
-		 CFReadStreamSetClient(readStreamRef, kCFStreamEventNone, NULL, NULL);
-		 CFReadStreamUnscheduleFromRunLoop(readStreamRef, CFRunLoopGetMain(), kCFRunLoopCommonModes);
-		 CFReadStreamClose(readStreamRef);
-		 CFRelease(readStreamRef);
+		 CFReadStreamSetClient(_readStreamRef, kCFStreamEventNone, NULL, NULL);
+		 CFReadStreamUnscheduleFromRunLoop(_readStreamRef, CFRunLoopGetMain(), kCFRunLoopCommonModes);
+		 CFReadStreamClose(_readStreamRef);
+		 CFRelease(_readStreamRef);
 		 
-		 readStreamRef = NULL;		 
+		 _readStreamRef = NULL;
 	 }];
 }
 
@@ -294,11 +289,11 @@ static void ReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType t
 	if (self.isCanceled)
 		return;
 	
-	if (readStreamRef != NULL)
+	if (_readStreamRef != NULL)
 	{
 		// Schedule the stream
-		lastThrottle = CFAbsoluteTimeGetCurrent();
-		CFReadStreamScheduleWithRunLoop(readStreamRef, CFRunLoopGetMain(), kCFRunLoopCommonModes);
+		_lastThrottle = CFAbsoluteTimeGetCurrent();
+		CFReadStreamScheduleWithRunLoop(_readStreamRef, CFRunLoopGetMain(), kCFRunLoopCommonModes);
 	}
 }
 
@@ -321,9 +316,9 @@ static void ReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType t
 	}
 	else if (type == kCFStreamEventHasBytesAvailable)
 	{
-		bytesRead = CFReadStreamRead(stream, buffer, sizeof(buffer));
+		_bytesRead = CFReadStreamRead(stream, _buffer, sizeof(_buffer));
 				
-		if (bytesRead > 0)	// If zero bytes were read, wait for the EOF to come.
+		if (_bytesRead > 0)	// If zero bytes were read, wait for the EOF to come.
 		{
             // Reset the time out timer since some bytes were received
             [self startTimeOutTimer];
@@ -333,7 +328,7 @@ static void ReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType t
                 // Save the data to the file
                 @try
                 {
-                    [self.fileHandle writeData:[NSData dataWithBytesNoCopy:buffer length:bytesRead freeWhenDone:NO]];
+                    [self.fileHandle writeData:[NSData dataWithBytesNoCopy:_buffer length:_bytesRead freeWhenDone:NO]];
                 }
                 @catch (NSException *exception)
                 {
@@ -351,8 +346,8 @@ static void ReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType t
 					[self cancel];
                 }
 				
-				self.totalBytesTransferred += bytesRead;
-				self.bytesTransferred += bytesRead;
+				self.totalBytesTransferred += _bytesRead;
+				self.bytesTransferred += _bytesRead;
                 
                 //DLog(@"downloading song, bytes transferred ")
 				
@@ -371,7 +366,7 @@ static void ReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType t
 				
 				// Check if we should throttle
 				NSTimeInterval now = CFAbsoluteTimeGetCurrent();
-				NSTimeInterval intervalSinceLastThrottle = now - lastThrottle;
+				NSTimeInterval intervalSinceLastThrottle = now - _lastThrottle;
 				if (intervalSinceLastThrottle > ISMSThrottleTimeInterval && self.totalBytesTransferred > ISMSMinBytesToStartLimiting(self.bitrate))
 				{
 					NSTimeInterval delay = 0.0;
@@ -404,7 +399,7 @@ static void ReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType t
 				[self downloadFailed];
 			}
 		}
-		else if (bytesRead < 0)		// Less than zero is an error
+		else if (_bytesRead < 0)		// Less than zero is an error
 		{
 			DDLogCError(@"Stream handler: An occured in the download bytesRead < 0");
 			[self downloadFailed];
@@ -446,9 +441,9 @@ static void ReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType t
 - (void)downloadDone
 {
 	// Get the response header
-	if (readStreamRef != NULL)
+	if (_readStreamRef != NULL)
 	{
-		CFHTTPMessageRef myResponse = (CFHTTPMessageRef)CFReadStreamCopyProperty(readStreamRef, kCFStreamPropertyHTTPResponseHeader);
+		CFHTTPMessageRef myResponse = (CFHTTPMessageRef)CFReadStreamCopyProperty(_readStreamRef, kCFStreamPropertyHTTPResponseHeader);
 		CFStringRef myStatusLine = CFHTTPMessageCopyResponseStatusLine(myResponse);
 		DDLogCInfo(@"http response status: %@", myStatusLine);
 		

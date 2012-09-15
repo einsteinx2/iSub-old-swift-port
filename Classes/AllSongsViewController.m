@@ -8,10 +8,7 @@
 
 
 #import "AllSongsViewController.h"
-#import "iSubAppDelegate.h"
-#import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "AllSongsUITableViewCell.h"
@@ -25,12 +22,9 @@
 #import "TBXML.h"
 #import "CustomUITableView.h"
 #import "CustomUIAlertView.h"
-#import "SavedSettings.h"
 #import "SUSAllSongsDAO.h"
 #import "SUSAllSongsLoader.h"
 #import "EGORefreshTableHeaderView.h"
-#import "PlaylistSingleton.h"
-#import "JukeboxSingleton.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "FMDatabaseQueueAdditions.h"
 

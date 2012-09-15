@@ -7,17 +7,12 @@
 //
 
 #import "ISMSURLConnectionStreamHandler.h"
-#import "MusicSingleton.h"
 #import "Song.h"
-#import "iSubAppDelegate.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "NSMutableURLRequest+PMS.h"
 #import "NSError+ISMSError.h"
 #import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
-#import "SavedSettings.h"
-#import "CacheSingleton.h"
-#import "PlaylistSingleton.h"
 #import "Server.h"
 
 LOG_LEVEL_ISUB_DEFAULT
@@ -34,7 +29,6 @@ LOG_LEVEL_ISUB_DEFAULT
 #define ISMSDownloadTimeoutTimer @"ISMSDownloadTimeoutTimer"
 
 @implementation ISMSURLConnectionStreamHandler
-@synthesize connection, request, loadingThread;
 
 // Create the request and start the connection in loadingThread
 - (void)start:(BOOL)resume
@@ -139,7 +133,7 @@ LOG_LEVEL_ISUB_DEFAULT
 {
 	@autoreleasepool 
 	{
-		self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+		self.connection = [NSURLConnection connectionWithRequest:self.request delegate:self];
 		if (self.connection)
 		{
 			self.isDownloading = YES;
@@ -209,7 +203,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	[self.fileHandle closeFile];
 	self.fileHandle = nil;
 		
-	[self performSelector:@selector(cancelRunLoop) onThread:loadingThread withObject:nil waitUntilDone:NO];	
+	[self performSelector:@selector(cancelRunLoop) onThread:self.loadingThread withObject:nil waitUntilDone:NO];	
 }
 
 // Stop the current run loop

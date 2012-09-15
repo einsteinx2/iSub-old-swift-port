@@ -10,40 +10,31 @@
 
 @implementation ChatMessage
 
-@synthesize timestamp, user, message;
-
 - (id)initWithTBXMLElement:(TBXMLElement *)element
 {
 	if ((self = [super init]))
 	{
-		timestamp = NSIntegerMin;
-		user = nil;
-		message = nil;
+		_timestamp = NSIntegerMin;
+
+        NSString *time = [TBXML valueOfAttributeNamed:@"time" forElement:element];
+		if (time)
+			self.timestamp = [[time substringToIndex:10] intValue];
 		
-		if ([TBXML valueOfAttributeNamed:@"time" forElement:element])
-			self.timestamp = [[[TBXML valueOfAttributeNamed:@"time" forElement:element] substringToIndex:10] intValue];
-		
-		if ([TBXML valueOfAttributeNamed:@"username" forElement:element])
-			self.user = [[TBXML valueOfAttributeNamed:@"username" forElement:element] cleanString];
-		
-		if ([TBXML valueOfAttributeNamed:@"message" forElement:element])
-			self.message = [[TBXML valueOfAttributeNamed:@"message" forElement:element] cleanString];
+		self.user = [[TBXML valueOfAttributeNamed:@"username" forElement:element] cleanString];
+		self.message = [[TBXML valueOfAttributeNamed:@"message" forElement:element] cleanString];
 	}
 	
 	return self;
 }
 
--(id)copyWithZone: (NSZone *) zone
+- (id)copyWithZone:(NSZone *)zone
 {
 	ChatMessage *newChatMessage = [[ChatMessage alloc] init];
-	newChatMessage.timestamp = timestamp;
+	newChatMessage.timestamp = self.timestamp;
 	newChatMessage.user = self.user;
 	newChatMessage.message = self.message;
 	
 	return newChatMessage;
 }
-
-
-
 
 @end

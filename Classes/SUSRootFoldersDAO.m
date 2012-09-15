@@ -7,19 +7,15 @@
 //
 
 #import "SUSRootFoldersDAO.h"
-#import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "TBXML.h"
 #import "Artist.h"
 #import "Index.h"
-#import "SavedSettings.h"
 #import "ISMSRootFoldersLoader.h"
 #import "Song+DAO.h"
 
 @implementation SUSRootFoldersDAO
-
-@synthesize indexNames, indexPositions, indexCounts, loader, delegate, selectedFolderId;
 
 #pragma mark - Lifecycle
 
@@ -27,15 +23,15 @@
 {
     if ((self = [super init]))
 	{
-		delegate = theDelegate;
+		_delegate = theDelegate;
     }    
     return self;
 }
 
 - (void)dealloc
 {
-	[loader cancelLoad];
-	loader.delegate = nil;
+	[_loader cancelLoad];
+	_loader.delegate = nil;
 }
 
 #pragma mark - Properties
@@ -48,7 +44,7 @@
 - (NSString *)tableModifier
 {
 	NSString *tableModifier = @"_all";
-	if (selectedFolderId != nil && [self.selectedFolderId intValue] != -1)
+	if (self.selectedFolderId != nil && [self.selectedFolderId intValue] != -1)
 	{
 		tableModifier = [NSString stringWithFormat:@"_%@", [self.selectedFolderId stringValue]];
 	}
@@ -273,10 +269,10 @@
 {
 	@synchronized(self)
 	{
-		if (selectedFolderId == nil)
+		if (self.selectedFolderId == nil)
 			return [NSNumber numberWithInt:-1];
 		else
-			return selectedFolderId;
+			return self.selectedFolderId;
 	}
 }
 
@@ -284,10 +280,10 @@
 {
 	@synchronized(self)
 	{
-		selectedFolderId = newSelectedFolderId;
-		indexNames = nil;
-		indexCounts = nil;
-		indexPositions = nil;
+		self.selectedFolderId = newSelectedFolderId;
+		_indexNames = nil;
+		_indexCounts = nil;
+		_indexPositions = nil;
 	}
 }
 
@@ -308,31 +304,31 @@
 
 - (NSArray *)indexNames
 {
-	if (indexNames == nil || [indexNames count] == 0)
+	if (_indexNames == nil || _indexNames.count == 0)
 	{
-		indexNames = [self rootFolderIndexNames];
+		_indexNames = [self rootFolderIndexNames];
 	}
 	
-	return indexNames;
+	return _indexNames;
 }
 
 - (NSArray *)indexPositions
 {
-	if (indexPositions == nil || [indexPositions count] == 0)
+	if (_indexPositions == nil || _indexPositions.count == 0)
 	{
-		indexPositions = [self rootFolderIndexPositions];
+		_indexPositions = [self rootFolderIndexPositions];
 	}
-	return indexPositions;
+	return _indexPositions;
 }
 
 - (NSArray *)indexCounts
 {
-	if (indexCounts == nil)
+	if (_indexCounts == nil)
 	{
-		indexCounts = [self rootFolderIndexCounts];
+		_indexCounts = [self rootFolderIndexCounts];
 	}
 	
-	return indexCounts;
+	return _indexCounts;
 }
 
 - (Artist *)artistForPosition:(NSUInteger)position
@@ -394,9 +390,9 @@
 	self.loader.delegate = nil;
 	self.loader = nil;
 		
-	indexNames = nil;
-	indexPositions = nil;
-	indexCounts = nil;
+	_indexNames = nil;
+	_indexPositions = nil;
+	_indexCounts = nil;
 	
 	// Force all subfolders to reload
 	[self.dbQueue inDatabase:^(FMDatabase *db)

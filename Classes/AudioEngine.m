@@ -8,26 +8,16 @@
 
 #import "AudioEngine.h"
 #import "Song.h"
-#import "PlaylistSingleton.h"
 #import "BassParamEqValue.h"
 #include <AudioToolbox/AudioToolbox.h>
 #include "MusicSingleton.h"
 #import "BassEffectDAO.h"
 #import <sys/stat.h>
 #import "BassStream.h"
-#import "SavedSettings.h"
 #import "ISMSStreamManager.h"
 #import "NSMutableURLRequest+SUS.h"
-#import "MusicSingleton.h"
-#import "SocialSingleton.h"
-#import "ViewObjectsSingleton.h"
-#import "iSubAppDelegate.h"
 
 @implementation AudioEngine
-@synthesize shouldResumeFromInterruption;
-@synthesize player;
-@synthesize startByteOffset, startSecondsOffset;
-@synthesize delegate;
 
 LOG_LEVEL_ISUB_DEFAULT
 
@@ -161,7 +151,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 	// Add the callbacks for headphone removal and other audio takeover
 	AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, NULL);
     
-    delegate = [[iSubBassGaplessPlayerDelegate alloc] init];
+    _delegate = [[iSubBassGaplessPlayerDelegate alloc] init];
 }
 
 + (id)sharedInstance

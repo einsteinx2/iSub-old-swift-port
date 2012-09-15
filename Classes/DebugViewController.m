@@ -7,11 +7,7 @@
 //
 
 #import "DebugViewController.h"
-#import "MusicSingleton.h"
-#import "SavedSettings.h"
-#import "CacheSingleton.h"
 #import "Song.h"
-#import "PlaylistSingleton.h"
 
 @implementation DebugViewController
 @synthesize currentSong, nextSong, currentSongProgress, nextSongProgress;

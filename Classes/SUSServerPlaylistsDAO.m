@@ -9,17 +9,15 @@
 #import "SUSServerPlaylistsDAO.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "DatabaseSingleton.h"
 #import "SUSServerPlaylistsLoader.h"
 
 @implementation SUSServerPlaylistsDAO
-@synthesize delegate, serverPlaylists, loader;
 
 - (id)initWithDelegate:(NSObject <ISMSLoaderDelegate> *)theDelegate
 {
     if ((self = [super init]))
     {
-        delegate = theDelegate;
+        _delegate = theDelegate;
     }
     
     return self;
@@ -27,8 +25,8 @@
 
 - (void)dealloc
 {
-	[loader cancelLoad];
-	loader.delegate = nil;
+	[_loader cancelLoad];
+	_loader.delegate = nil;
 }
 
 - (FMDatabaseQueue *)dbQueue
@@ -71,7 +69,7 @@
 
 - (void)loadingFinished:(ISMSLoader*)theLoader
 {
-	self.serverPlaylists = [NSArray arrayWithArray:loader.serverPlaylists];
+	self.serverPlaylists = [NSArray arrayWithArray:self.loader.serverPlaylists];
 	
 	self.loader.delegate = nil;
 	self.loader = nil;

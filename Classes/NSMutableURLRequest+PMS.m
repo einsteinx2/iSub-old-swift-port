@@ -7,7 +7,6 @@
 //
 
 #import "NSMutableURLRequest+PMS.h"
-#import "SavedSettings.h"
 #import "TBXML+Compression.h"
 
 @implementation NSMutableURLRequest (PMS)

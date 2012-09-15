@@ -10,16 +10,10 @@
 #import "FMDatabaseQueue.h"
 #import "FMDatabaseAdditions.h"
 
-#import "DatabaseSingleton.h"
-#import "ViewObjectsSingleton.h"
-#import "SavedSettings.h"
 #import "MusicSingleton.h"
 #import "PlaylistSingleton.h"
-#import "AudioEngine.h"
 #import "ISMSCacheQueueManager.h"
-#import "iSubAppDelegate.h"
 #import "ISMSStreamManager.h"
-#import "JukeboxSingleton.h"
 #import "BassGaplessPlayer.h"
 
 @implementation Song (DAO)

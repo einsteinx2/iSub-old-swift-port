@@ -10,26 +10,25 @@
 
 @interface BassVisualizer()
 {
-	float *fftData;
-	short *lineSpecBuf;
-	int lineSpecBufSize;
+	float *_fftData;
+	short *_lineSpecBuf;
+	int _lineSpecBufSize;
 }
 @end
 
 @implementation BassVisualizer
-@synthesize channel, type;
 
 - (id)init
 {
 	if ((self = [super init]))
 	{		
 		if (SCREEN_SCALE() == 1.0)// && !IS_IPAD())
-			lineSpecBufSize = 256 * sizeof(short);
+			_lineSpecBufSize = 256 * sizeof(short);
 		else
-			lineSpecBufSize = 512 * sizeof(short);
-		lineSpecBuf = malloc(lineSpecBufSize);
+			_lineSpecBufSize = 512 * sizeof(short);
+		_lineSpecBuf = malloc(_lineSpecBufSize);
 		
-		fftData = malloc(sizeof(float) * 1024);
+		_fftData = malloc(sizeof(float) * 1024);
 	}
 	return self;
 }
@@ -38,22 +37,22 @@
 {
 	if ((self = [self init]))
 	{
-		channel = theChannel;
+		_channel = theChannel;
 	}
 	return self;
 }
 
 - (void)dealloc
 {
-	free(lineSpecBuf);
-	free(fftData);
+	free(_lineSpecBuf);
+	free(_fftData);
 }
 
 - (float)fftData:(NSUInteger)index
 {
 	@synchronized(self)
 	{
-		return fftData[index];
+		return _fftData[index];
 	}
 }
 
@@ -61,7 +60,7 @@
 {
 	@synchronized(self)
 	{
-		return lineSpecBuf[index];
+		return _lineSpecBuf[index];
 	}
 }
 
@@ -71,16 +70,16 @@
 	dispatch_async(queue, ^{
 		@synchronized(self)
 		{
-			if (!channel)
+			if (!_channel)
 				return;
 			
 			// Get the FFT data for visualizer
 			if (self.type == BassVisualizerTypeFFT)
-				BASS_ChannelGetData(self.channel, fftData, BASS_DATA_FFT2048);
+				BASS_ChannelGetData(self.channel, _fftData, BASS_DATA_FFT2048);
 			
 			// Get the data for line spec visualizer
 			if (self.type == BassVisualizerTypeLine)
-				BASS_ChannelGetData(self.channel, lineSpecBuf, lineSpecBufSize);
+				BASS_ChannelGetData(self.channel, _lineSpecBuf, _lineSpecBufSize);
 		}
 	});
 }

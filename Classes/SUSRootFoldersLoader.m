@@ -10,8 +10,6 @@
 #import "TBXML.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "DatabaseSingleton.h"
-#import "SavedSettings.h"
 
 @implementation SUSRootFoldersLoader
 

@@ -7,10 +7,7 @@
 //
 
 #import "CacheAlbumViewController.h"
-#import "iSubAppDelegate.h"
-#import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "CacheAlbumUITableViewCell.h"
 #import "CacheSongUITableViewCell.h"
@@ -19,14 +16,11 @@
 #import "Song.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
-#import "PlaylistSingleton.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "iPadRootViewController.h"
 #import "StackScrollViewController.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "JukeboxSingleton.h"
 
 @implementation CacheAlbumViewController
 

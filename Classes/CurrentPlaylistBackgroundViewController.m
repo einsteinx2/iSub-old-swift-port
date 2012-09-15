@@ -8,7 +8,6 @@
 
 #import "CurrentPlaylistBackgroundViewController.h"
 #import "CurrentPlaylistViewController.h"
-#import "iSubAppDelegate.h"
 
 @implementation CurrentPlaylistBackgroundViewController
 @synthesize playlistView;

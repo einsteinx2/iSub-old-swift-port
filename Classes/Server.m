@@ -10,27 +10,12 @@
 
 @implementation Server
 
-@synthesize url, username, password, type;
-
-- (id) init
-{
-	if ((self = [super init]))
-	{
-		url = nil;
-		username = nil;
-		password = nil;
-		type = nil;
-	}
-	
-	return self;
-}
-
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-	[encoder encodeObject:url];
-	[encoder encodeObject:username];
-	[encoder encodeObject:password];
-	[encoder encodeObject:type];
+	[encoder encodeObject:self.url];
+	[encoder encodeObject:self.username];
+	[encoder encodeObject:self.password];
+	[encoder encodeObject:self.type];
 }
 
 
@@ -38,10 +23,10 @@
 {
 	if ((self = [super init]))
 	{
-		url = [decoder decodeObject];
-		username = [decoder decodeObject];
-		password = [decoder decodeObject];
-		type = [decoder decodeObject];
+		_url = [decoder decodeObject];
+		_username = [decoder decodeObject];
+		_password = [decoder decodeObject];
+		_type = [decoder decodeObject];
 	}
 	
 	return self;
@@ -49,7 +34,7 @@
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"%@  type: %@", [super description], type];
+	return [NSString stringWithFormat:@"%@  type: %@", [super description], self.type];
 }
 
 

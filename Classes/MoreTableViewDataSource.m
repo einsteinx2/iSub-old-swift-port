@@ -7,15 +7,12 @@
 //
 
 #import "MoreTableViewDataSource.h"
-#import "ViewObjectsSingleton.h"
 
 @implementation MoreTableViewDataSource
 
-@synthesize originalDataSource;
-
 - (MoreTableViewDataSource *)initWithDataSource:(id<UITableViewDataSource>) dataSource
 {
-    originalDataSource = dataSource;
+    _originalDataSource = dataSource;
     self = [super init];
 	
     return self;
@@ -23,13 +20,13 @@
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section
 {
-    return [originalDataSource tableView:table numberOfRowsInSection:section];
+    return [self.originalDataSource tableView:table numberOfRowsInSection:section];
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [originalDataSource tableView:tableView cellForRowAtIndexPath:indexPath];
+    UITableViewCell *cell = [self.originalDataSource tableView:tableView cellForRowAtIndexPath:indexPath];
     cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
 	//cell.textColor = [UIColor whiteColor];
     return cell;

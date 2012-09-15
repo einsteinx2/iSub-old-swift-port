@@ -6,14 +6,11 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "SongUITableViewCell.h"
 #import "FMDatabaseAdditions.h"
 #import "Song.h"
 #import "CellOverlay.h"
-#import "JukeboxSingleton.h"
 
 @implementation SongUITableViewCell
 

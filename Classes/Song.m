@@ -7,14 +7,10 @@
 //
 
 #import "Song.h"
-#import "SavedSettings.h"
 #include <sys/stat.h>
 #import <MediaPlayer/MediaPlayer.h>
 
 @implementation Song
-
-@synthesize title, songId, parentId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix;
-@synthesize duration, bitRate, track, year, size, isVideo;
 
 - (id)initWithPMSDictionary:(NSDictionary *)dictionary
 {
@@ -22,24 +18,24 @@
 	{
 		NSString *songName = [dictionary objectForKey:@"songName"];
 		NSString *titleKey = !songName || songName.length == 0  ? @"fileName" : @"songName";
-		title = [dictionary objectForKey:titleKey];
-		songId = N2n([dictionary objectForKey:@"itemId"]);
-		parentId = N2n([dictionary objectForKey:@"folderId"]);
-		artist = N2n([dictionary objectForKey:@"artistName"]);
-		album = N2n([dictionary objectForKey:@"albumName"]);
-		genre = N2n([dictionary objectForKey:@"genreName"]);
-		coverArtId = N2n([dictionary objectForKey:@"artId"]);
-		suffix = N2n([dictionary objectForKey:@"fileType"]);
-		duration = N2n([dictionary objectForKey:@"duration"]);
-		bitRate = N2n([dictionary objectForKey:@"bitrate"]);
-		track = N2n([dictionary objectForKey:@"trackNumber"]);
-		year = N2n([dictionary objectForKey:@"year"]);
-		size = N2n([dictionary objectForKey:@"fileSize"]);
+		_title = [dictionary objectForKey:titleKey];
+		_songId = N2n([dictionary objectForKey:@"itemId"]);
+		_parentId = N2n([dictionary objectForKey:@"folderId"]);
+		_artist = N2n([dictionary objectForKey:@"artistName"]);
+		_album = N2n([dictionary objectForKey:@"albumName"]);
+		_genre = N2n([dictionary objectForKey:@"genreName"]);
+		_coverArtId = N2n([dictionary objectForKey:@"artId"]);
+		_suffix = N2n([dictionary objectForKey:@"fileType"]);
+		_duration = N2n([dictionary objectForKey:@"duration"]);
+		_bitRate = N2n([dictionary objectForKey:@"bitrate"]);
+		_track = N2n([dictionary objectForKey:@"trackNumber"]);
+		_year = N2n([dictionary objectForKey:@"year"]);
+		_size = N2n([dictionary objectForKey:@"fileSize"]);
 		 
 		// Generate "path" from artist, album and song name
-		NSString *artistName = artist ? artist : @"Unknown";
-		NSString *albumName = album ? album : @"Unknown";
-		path = [NSString stringWithFormat:@"%@/%@/%@", artistName, albumName, title];
+		NSString *artistName = _artist ? _artist : @"Unknown";
+		NSString *albumName = _album ? _album : @"Unknown";
+		_path = [NSString stringWithFormat:@"%@/%@/%@", artistName, albumName, _title];
 	}
 	return self;
 }
@@ -50,33 +46,31 @@
 	{
 		self.title = [[TBXML valueOfAttributeNamed:@"title" forElement:element] cleanString];
 		self.songId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
-		if ([TBXML valueOfAttributeNamed:@"parent" forElement:element])
-			self.parentId = [TBXML valueOfAttributeNamed:@"parent" forElement:element];
+		self.parentId = [TBXML valueOfAttributeNamed:@"parent" forElement:element];
 		self.artist = [[TBXML valueOfAttributeNamed:@"artist" forElement:element] cleanString];
-		if([TBXML valueOfAttributeNamed:@"album" forElement:element])
-			self.album = [[TBXML valueOfAttributeNamed:@"album" forElement:element] cleanString];
-		if([TBXML valueOfAttributeNamed:@"genre" forElement:element])
-			self.genre = [[TBXML valueOfAttributeNamed:@"genre" forElement:element] cleanString];
-		if([TBXML valueOfAttributeNamed:@"coverArt" forElement:element])
-			self.coverArtId = [TBXML valueOfAttributeNamed:@"coverArt" forElement:element];
+		self.album = [[TBXML valueOfAttributeNamed:@"album" forElement:element] cleanString];
+		self.genre = [[TBXML valueOfAttributeNamed:@"genre" forElement:element] cleanString];
+		self.coverArtId = [TBXML valueOfAttributeNamed:@"coverArt" forElement:element];
 		self.path = [[TBXML valueOfAttributeNamed:@"path" forElement:element] cleanString];
 		self.suffix = [TBXML valueOfAttributeNamed:@"suffix" forElement:element];
-		if ([TBXML valueOfAttributeNamed:@"transcodedSuffix" forElement:element])
-			self.transcodedSuffix = [TBXML valueOfAttributeNamed:@"transcodedSuffix" forElement:element];
+		self.transcodedSuffix = [TBXML valueOfAttributeNamed:@"transcodedSuffix" forElement:element];
 		
-		NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-		if([TBXML valueOfAttributeNamed:@"duration" forElement:element])
-			self.duration = [numberFormatter numberFromString:[TBXML valueOfAttributeNamed:@"duration" forElement:element]];
-		if([TBXML valueOfAttributeNamed:@"bitRate" forElement:element])
-			self.bitRate = [numberFormatter numberFromString:[TBXML valueOfAttributeNamed:@"bitRate" forElement:element]];
-		if([TBXML valueOfAttributeNamed:@"track" forElement:element])
-			self.track = [numberFormatter numberFromString:[TBXML valueOfAttributeNamed:@"track" forElement:element]];
-		if([TBXML valueOfAttributeNamed:@"year" forElement:element])
-			self.year = [numberFormatter numberFromString:[TBXML valueOfAttributeNamed:@"year" forElement:element]];
-		if([TBXML valueOfAttributeNamed:@"size" forElement:element])
-			self.size = [numberFormatter numberFromString:[TBXML valueOfAttributeNamed:@"size" forElement:element]];
-        if([TBXML valueOfAttributeNamed:@"isVideo" forElement:element])
-            self.isVideo = [[TBXML valueOfAttributeNamed:@"isVideo" forElement:element] boolValue];
+        NSString *durationString = [TBXML valueOfAttributeNamed:@"duration" forElement:element];
+		if(durationString) self.duration = @(durationString.intValue);
+        
+        NSString *bitRateString = [TBXML valueOfAttributeNamed:@"bitRate" forElement:element];
+		if(bitRateString) self.bitRate = @(bitRateString.intValue);
+
+        NSString *trackString = [TBXML valueOfAttributeNamed:@"track" forElement:element];
+		if(trackString) self.track = @(trackString.intValue);
+        
+        NSString *yearString = [TBXML valueOfAttributeNamed:@"year" forElement:element];
+		if(yearString) self.year = @(yearString.intValue);
+        
+        NSString *sizeString = [TBXML valueOfAttributeNamed:@"size" forElement:element];
+        if (sizeString) self.size = @(sizeString.longLongValue);
+        
+        self.isVideo = [[TBXML valueOfAttributeNamed:@"isVideo" forElement:element] boolValue];
 	}
 	
 	return self;
@@ -142,22 +136,22 @@
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-	[encoder encodeObject:title forKey:@"title"];
-	[encoder encodeObject:songId forKey:@"songId"];
-	[encoder encodeObject:parentId forKey:@"parentId"];
-	[encoder encodeObject:artist forKey:@"artist"];
-	[encoder encodeObject:album forKey:@"album"];
-	[encoder encodeObject:genre forKey:@"genre"];
-	[encoder encodeObject:coverArtId forKey:@"coverArtId"];
-	[encoder encodeObject:path forKey:@"path"];
-	[encoder encodeObject:suffix forKey:@"suffix"];
-	[encoder encodeObject:transcodedSuffix forKey:@"transcodedSuffix"];
-	[encoder encodeObject:duration forKey:@"duration"];
-	[encoder encodeObject:bitRate forKey:@"bitRate"];
-	[encoder encodeObject:track forKey:@"track"];
-	[encoder encodeObject:year forKey:@"year"];
-	[encoder encodeObject:size forKey:@"size"];
-    [encoder encodeBool:isVideo forKey:@"isVideo"];
+	[encoder encodeObject:self.title forKey:@"title"];
+	[encoder encodeObject:self.songId forKey:@"songId"];
+	[encoder encodeObject:self.parentId forKey:@"parentId"];
+	[encoder encodeObject:self.artist forKey:@"artist"];
+	[encoder encodeObject:self.album forKey:@"album"];
+	[encoder encodeObject:self.genre forKey:@"genre"];
+	[encoder encodeObject:self.coverArtId forKey:@"coverArtId"];
+	[encoder encodeObject:self.path forKey:@"path"];
+	[encoder encodeObject:self.suffix forKey:@"suffix"];
+	[encoder encodeObject:self.transcodedSuffix forKey:@"transcodedSuffix"];
+	[encoder encodeObject:self.duration forKey:@"duration"];
+	[encoder encodeObject:self.bitRate forKey:@"bitRate"];
+	[encoder encodeObject:self.track forKey:@"track"];
+	[encoder encodeObject:self.year forKey:@"year"];
+	[encoder encodeObject:self.size forKey:@"size"];
+    [encoder encodeBool:self.isVideo forKey:@"isVideo"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
@@ -167,39 +161,39 @@
 		// Check if this object is using the new encoding
 		if ([decoder containsValueForKey:@"songId"])
 		{
-			title = [decoder decodeObjectForKey:@"title"];
-			songId = [decoder decodeObjectForKey:@"songId"];
-			parentId = [decoder decodeObjectForKey:@"parentId"];
-			artist = [decoder decodeObjectForKey:@"artist"];
-			album = [decoder decodeObjectForKey:@"album"];
-			genre = [decoder decodeObjectForKey:@"genre"];
-			coverArtId = [decoder decodeObjectForKey:@"coverArtId"];
-			path = [decoder decodeObjectForKey:@"path"];
-			suffix = [decoder decodeObjectForKey:@"suffix"];
-			transcodedSuffix = [decoder decodeObjectForKey:@"transcodedSuffix"];
-			duration =[decoder decodeObjectForKey:@"duration"];
-			bitRate = [decoder decodeObjectForKey:@"bitRate"];
-			track = [decoder decodeObjectForKey:@"track"];
-			year = [decoder decodeObjectForKey:@"year"];
-			size = [decoder decodeObjectForKey:@"size"];
-            isVideo = [decoder decodeBoolForKey:@"isVideo"];
+			_title = [decoder decodeObjectForKey:@"title"];
+			_songId = [decoder decodeObjectForKey:@"songId"];
+			_parentId = [decoder decodeObjectForKey:@"parentId"];
+			_artist = [decoder decodeObjectForKey:@"artist"];
+			_album = [decoder decodeObjectForKey:@"album"];
+			_genre = [decoder decodeObjectForKey:@"genre"];
+			_coverArtId = [decoder decodeObjectForKey:@"coverArtId"];
+			_path = [decoder decodeObjectForKey:@"path"];
+			_suffix = [decoder decodeObjectForKey:@"suffix"];
+			_transcodedSuffix = [decoder decodeObjectForKey:@"transcodedSuffix"];
+			_duration =[decoder decodeObjectForKey:@"duration"];
+			_bitRate = [decoder decodeObjectForKey:@"bitRate"];
+			_track = [decoder decodeObjectForKey:@"track"];
+			_year = [decoder decodeObjectForKey:@"year"];
+			_size = [decoder decodeObjectForKey:@"size"];
+            _isVideo = [decoder decodeBoolForKey:@"isVideo"];
 		}
 		else
 		{
-			title = [decoder decodeObject];
-			songId = [decoder decodeObject];
-			artist = [decoder decodeObject];
-			album = [decoder decodeObject];
-			genre = [decoder decodeObject];
-			coverArtId = [decoder decodeObject];
-			path = [decoder decodeObject];
-			suffix = [decoder decodeObject];
-			transcodedSuffix = [decoder decodeObject];
-			duration = [decoder decodeObject];
-			bitRate = [decoder decodeObject];
-			track = [decoder decodeObject];
-			year = [decoder decodeObject];
-			size = [decoder decodeObject];
+			_title = [decoder decodeObject];
+			_songId = [decoder decodeObject];
+			_artist = [decoder decodeObject];
+			_album = [decoder decodeObject];
+			_genre = [decoder decodeObject];
+			_coverArtId = [decoder decodeObject];
+			_path = [decoder decodeObject];
+			_suffix = [decoder decodeObject];
+			_transcodedSuffix = [decoder decodeObject];
+			_duration = [decoder decodeObject];
+			_bitRate = [decoder decodeObject];
+			_track = [decoder decodeObject];
+			_year = [decoder decodeObject];
+			_size = [decoder decodeObject];
 		}
 	}
 	
@@ -234,12 +228,12 @@
 - (NSString *)description
 {
 	//return [NSString stringWithFormat:@"%@: title: %@, songId: %@", [super description], title, songId];
-	return [NSString stringWithFormat:@"%@  title: %@", [super description], title];
+	return [NSString stringWithFormat:@"%@  title: %@", [super description], self.title];
 }
 
 - (NSUInteger)hash
 {
-	return [songId hash];
+	return self.songId.hash;
 }
 
 - (BOOL)isEqualToSong:(Song	*)otherSong 
@@ -247,24 +241,24 @@
     if (self == otherSong)
         return YES;
 	
-	if (!songId || !otherSong.songId || !path || !otherSong.path)
+	if (!self.songId || !otherSong.songId || !self.path || !otherSong.path)
 		return NO;
 	
-	if (([songId isEqualToString:otherSong.songId] || (songId == nil && otherSong.songId == nil)) &&
-		([path isEqualToString:otherSong.path] || (path == nil && otherSong.path == nil)) &&
-		([title isEqualToString:otherSong.title] || (title == nil && otherSong.title == nil)) &&
-		([artist isEqualToString:otherSong.artist] || (artist == nil && otherSong.artist == nil)) &&
-		([album isEqualToString:otherSong.album] || (album == nil && otherSong.album == nil)) &&
-		([genre isEqualToString:otherSong.genre] || (genre == nil && otherSong.genre == nil)) &&
-		([coverArtId isEqualToString:otherSong.coverArtId] || (coverArtId == nil && otherSong.coverArtId == nil)) &&
-		([suffix isEqualToString:otherSong.suffix] || (suffix == nil && otherSong.suffix == nil)) &&
-		([transcodedSuffix isEqualToString:otherSong.transcodedSuffix] || (transcodedSuffix == nil && otherSong.transcodedSuffix == nil)) &&
-		([duration isEqualToNumber:otherSong.duration] || (duration == nil && otherSong.duration == nil)) &&
-		([bitRate isEqualToNumber:otherSong.bitRate] || (bitRate == nil && otherSong.bitRate == nil)) &&
-		([track isEqualToNumber:otherSong.track] || (track == nil && otherSong.track == nil)) &&
-		([year isEqualToNumber:otherSong.year] || (year == nil && otherSong.year == nil)) &&
-		([size isEqualToNumber:otherSong.size] || (size == nil && otherSong.size == nil)) &&
-        isVideo == otherSong.isVideo)
+	if (([self.songId isEqualToString:otherSong.songId] || (self.songId == nil && otherSong.songId == nil)) &&
+		([self.path isEqualToString:otherSong.path] || (self.path == nil && otherSong.path == nil)) &&
+		([self.title isEqualToString:otherSong.title] || (self.title == nil && otherSong.title == nil)) &&
+		([self.artist isEqualToString:otherSong.artist] || (self.artist == nil && otherSong.artist == nil)) &&
+		([self.album isEqualToString:otherSong.album] || (self.album == nil && otherSong.album == nil)) &&
+		([self.genre isEqualToString:otherSong.genre] || (self.genre == nil && otherSong.genre == nil)) &&
+		([self.coverArtId isEqualToString:otherSong.coverArtId] || (self.coverArtId == nil && otherSong.coverArtId == nil)) &&
+		([self.suffix isEqualToString:otherSong.suffix] || (self.suffix == nil && otherSong.suffix == nil)) &&
+		([self.transcodedSuffix isEqualToString:otherSong.transcodedSuffix] || (self.transcodedSuffix == nil && otherSong.transcodedSuffix == nil)) &&
+		([self.duration isEqualToNumber:otherSong.duration] || (self.duration == nil && otherSong.duration == nil)) &&
+		([self.bitRate isEqualToNumber:otherSong.bitRate] || (self.bitRate == nil && otherSong.bitRate == nil)) &&
+		([self.track isEqualToNumber:otherSong.track] || (self.track == nil && otherSong.track == nil)) &&
+		([self.year isEqualToNumber:otherSong.year] || (self.year == nil && otherSong.year == nil)) &&
+		([self.size isEqualToNumber:otherSong.size] || (self.size == nil && otherSong.size == nil)) &&
+        self.isVideo == otherSong.isVideo)
 		return YES;
 	
 	return NO;
@@ -293,21 +287,21 @@
 
 - (NSString *)localSuffix
 {
-	if (transcodedSuffix)
-		return transcodedSuffix;
+	if (self.transcodedSuffix)
+		return self.transcodedSuffix;
 	
-	return suffix;
+	return self.suffix;
 }
 
 - (NSString *)localPath
 {
-	NSString *fileName = self.localSuffix ? [[path md5] stringByAppendingPathExtension:self.localSuffix] : nil;
+	NSString *fileName = self.localSuffix ? [self.path.md5 stringByAppendingPathExtension:self.localSuffix] : nil;
 	return fileName ? [settingsS.songCachePath stringByAppendingPathComponent:fileName] : nil;
 }
 
 - (NSString *)localTempPath
 {
-	NSString *fileName = self.localSuffix ? [[path md5] stringByAppendingPathExtension:self.localSuffix] : nil;
+	NSString *fileName = self.localSuffix ? [self.path.md5 stringByAppendingPathExtension:self.localSuffix] : nil;
 	return fileName ? [settingsS.tempCachePath stringByAppendingPathComponent:fileName] : nil;
 }
 

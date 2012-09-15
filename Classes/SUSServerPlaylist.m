@@ -9,20 +9,13 @@
 #import "SUSServerPlaylist.h"
 
 @implementation SUSServerPlaylist
-@synthesize playlistId, playlistName;
 
 - (id)initWithTBXMLElement:(TBXMLElement *)element
 {
 	if ((self = [super init]))
 	{
-		playlistId = nil;
-		playlistName = nil;
-		
-		if ([TBXML valueOfAttributeNamed:@"id" forElement:element])
-			self.playlistId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
-		
-		if ([TBXML valueOfAttributeNamed:@"name" forElement:element])
-			self.playlistName = [[TBXML valueOfAttributeNamed:@"name" forElement:element] cleanString];
+		_playlistId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
+		_playlistName = [[TBXML valueOfAttributeNamed:@"name" forElement:element] cleanString];
 	}
 	
 	return self;

@@ -1,10 +1,13 @@
 //
-//  SUSCurrentPlaylistDAO.h
+//  PlaylistSingleton.h
 //  iSub
 //
 //  Created by Ben Baron on 11/14/11.
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
+
+#ifndef iSub_PlaylistSingleton_h
+#define iSub_PlaylistSingleton_h
 
 #define playlistS ((PlaylistSingleton *)[PlaylistSingleton sharedInstance])
 
@@ -54,3 +57,5 @@ typedef enum
 - (void)shuffleToggle;
 
 @end
+
+#endif

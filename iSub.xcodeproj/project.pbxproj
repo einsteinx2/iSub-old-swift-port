@@ -1513,6 +1513,9 @@
 		53ABE54411665B6B00197877 /* PlaylistsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE54211665B6B00197877 /* PlaylistsViewController.xib */; };
 		53ABE54C11665C3800197877 /* PlaylistsUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE54B11665C3800197877 /* PlaylistsUITableViewCell.m */; };
 		53ABE54F1166641B00197877 /* PlaylistSongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE54E1166641B00197877 /* PlaylistSongUITableViewCell.m */; };
+		53ACBC88160500FD0008FA47 /* NSMutableDictionary+Safe.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBC87160500FD0008FA47 /* NSMutableDictionary+Safe.m */; };
+		53ACBC89160500FD0008FA47 /* NSMutableDictionary+Safe.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBC87160500FD0008FA47 /* NSMutableDictionary+Safe.m */; };
+		53ACBC8A160500FD0008FA47 /* NSMutableDictionary+Safe.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ACBC87160500FD0008FA47 /* NSMutableDictionary+Safe.m */; };
 		53ADBBBC133525BD0098FAE6 /* folder-dropdown-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ADBBBA133525BD0098FAE6 /* folder-dropdown-arrow.png */; };
 		53ADBBBD133525BD0098FAE6 /* folder-dropdown-arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ADBBBB133525BD0098FAE6 /* folder-dropdown-arrow@2x.png */; };
 		53ADBBC013352DB40098FAE6 /* FolderDropdownControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ADBBBF13352DB40098FAE6 /* FolderDropdownControl.m */; };
@@ -3221,6 +3224,8 @@
 		53ABE54B11665C3800197877 /* PlaylistsUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistsUITableViewCell.m; sourceTree = "<group>"; };
 		53ABE54D1166641B00197877 /* PlaylistSongUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistSongUITableViewCell.h; sourceTree = "<group>"; };
 		53ABE54E1166641B00197877 /* PlaylistSongUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistSongUITableViewCell.m; sourceTree = "<group>"; };
+		53ACBC86160500FD0008FA47 /* NSMutableDictionary+Safe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+Safe.h"; sourceTree = "<group>"; };
+		53ACBC87160500FD0008FA47 /* NSMutableDictionary+Safe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+Safe.m"; sourceTree = "<group>"; };
 		53ADBBBA133525BD0098FAE6 /* folder-dropdown-arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "folder-dropdown-arrow.png"; path = "Images/Other/folder-dropdown-arrow.png"; sourceTree = "<group>"; };
 		53ADBBBB133525BD0098FAE6 /* folder-dropdown-arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "folder-dropdown-arrow@2x.png"; path = "Images/Other/folder-dropdown-arrow@2x.png"; sourceTree = "<group>"; };
 		53ADBBBE13352DB40098FAE6 /* FolderDropdownControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FolderDropdownControl.h; sourceTree = "<group>"; };
@@ -5130,6 +5135,8 @@
 				53F1413B15FD5D37004D00D5 /* NSObject+ListMethods.h */,
 				53F1413C15FD5D37004D00D5 /* NSObject+ListMethods.m */,
 				53F1413D15FD5D37004D00D5 /* NSString */,
+				53ACBC86160500FD0008FA47 /* NSMutableDictionary+Safe.h */,
+				53ACBC87160500FD0008FA47 /* NSMutableDictionary+Safe.m */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -7353,6 +7360,7 @@
 				53F1425C15FD5D7A004D00D5 /* ContextFilterLogFormatter.m in Sources */,
 				53F1425F15FD5D7A004D00D5 /* DispatchQueueLogFormatter.m in Sources */,
 				53F1426515FD5D7A004D00D5 /* RNCryptor.m in Sources */,
+				53ACBC88160500FD0008FA47 /* NSMutableDictionary+Safe.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7826,6 +7834,7 @@
 				53F1425E15FD5D7A004D00D5 /* ContextFilterLogFormatter.m in Sources */,
 				53F1426115FD5D7A004D00D5 /* DispatchQueueLogFormatter.m in Sources */,
 				53F1426715FD5D7A004D00D5 /* RNCryptor.m in Sources */,
+				53ACBC8A160500FD0008FA47 /* NSMutableDictionary+Safe.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8120,6 +8129,7 @@
 				53F1425D15FD5D7A004D00D5 /* ContextFilterLogFormatter.m in Sources */,
 				53F1426015FD5D7A004D00D5 /* DispatchQueueLogFormatter.m in Sources */,
 				53F1426615FD5D7A004D00D5 /* RNCryptor.m in Sources */,
+				53ACBC89160500FD0008FA47 /* NSMutableDictionary+Safe.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

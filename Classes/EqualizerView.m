@@ -12,10 +12,8 @@
 #import "ConstantsAndMacros.h"
 
 #import "EqualizerView.h"
-#import "AudioEngine.h"
 
 #import "BassParamEqValue.h"
-#import "SavedSettings.h"
 #import "BassVisualizer.h"
 
 //CLASS IMPLEMENTATIONS:

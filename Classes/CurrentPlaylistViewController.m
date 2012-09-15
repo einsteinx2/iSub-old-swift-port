@@ -8,18 +8,12 @@
 
 #import "CurrentPlaylistViewController.h"
 #import "CurrentPlaylistSongSmallUITableViewCell.h"
-#import "iSubAppDelegate.h"
-#import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "Song.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "CustomUIAlertView.h"
-#import "SavedSettings.h"
 #import "PlaylistSingleton.h"
-#import "AudioEngine.h"
-#import "JukeboxSingleton.h"
 #import "StoreViewController.h"
 #import "NSMutableURLRequest+SUS.h"
 

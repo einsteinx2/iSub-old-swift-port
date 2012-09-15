@@ -8,9 +8,7 @@
 
 #import "AlbumUITableViewCell.h"
 #import "AsynchronousImageView.h"
-#import "DatabaseSingleton.h"
 #import "CellOverlay.h"
-#import "ViewObjectsSingleton.h"
 
 @implementation AlbumUITableViewCell
 

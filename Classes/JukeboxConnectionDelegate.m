@@ -9,23 +9,18 @@
 #import "JukeboxConnectionDelegate.h"
 #import "JukeboxXMLParser.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "BBSimpleConnectionQueue.h"
 #import "CustomUIAlertView.h"
-#import "PlaylistSingleton.h"
-#import "JukeboxSingleton.h"
 
 @implementation JukeboxConnectionDelegate
 
-@synthesize receivedData, isGetInfo;
-
-- (id) init
+- (id)init
 {
 	self = [super init];
 	if (self != nil)
 	{
-		receivedData = [[NSMutableData alloc] init];
-		isGetInfo = NO;
+		_receivedData = [[NSMutableData alloc] init];
+		_isGetInfo = NO;
 	}	
 	return self;
 }
@@ -73,8 +68,8 @@
 	
 	if (self.isGetInfo)
 	{
-	//DLog(@"%@", [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
-		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
+        //DLog(@"%@", [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
+		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:self.receivedData];
 		JukeboxXMLParser *parser = (JukeboxXMLParser*)[[JukeboxXMLParser alloc] initXMLParser];
 		[xmlParser setDelegate:parser];
 		[xmlParser parse];

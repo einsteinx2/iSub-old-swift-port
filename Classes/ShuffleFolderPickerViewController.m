@@ -7,13 +7,9 @@
 //
 
 #import "ShuffleFolderPickerViewController.h"
-#import "iSubAppDelegate.h"
 #import "SUSRootFoldersDAO.h"
-#import "SavedSettings.h"
 
 @implementation ShuffleFolderPickerViewController
-
-@synthesize sortedFolders, myDialog;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -23,7 +19,6 @@
     }
     return self;
 }
-
 
 - (void)didReceiveMemoryWarning
 {
@@ -65,7 +60,7 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
 		}
 		else
 		{
-			[sortedFolders addObject:keyValuePair];
+			[self.sortedFolders addObject:keyValuePair];
 		}
 	}
 	
@@ -77,10 +72,10 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
 	}];*/
 	
 	// Sort by folder name
-	[sortedFolders sortUsingFunction:folderSort1 context:NULL];
+	[self.sortedFolders sortUsingFunction:folderSort1 context:NULL];
 	
 	// Add the All Folders entry back
-	[sortedFolders insertObject:allFoldersKeyPair atIndex:0];
+	[self.sortedFolders insertObject:allFoldersKeyPair atIndex:0];
 	
 	[self.tableView reloadData];
 }
@@ -127,7 +122,7 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
 {
     // Return the number of rows in the section.
 //DLog(@"[sortedFolders count]: %i", [sortedFolders count]);
-    return [sortedFolders count];
+    return self.sortedFolders.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -139,8 +134,8 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
-    NSString *folder = [[sortedFolders objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1];
-	NSUInteger tag = [[[sortedFolders objectAtIndexSafe:indexPath.row] objectAtIndexSafe:0] intValue];
+    NSString *folder = [[self.sortedFolders objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1];
+	NSUInteger tag = [[[self.sortedFolders objectAtIndexSafe:indexPath.row] objectAtIndexSafe:0] intValue];
 	
 	cell.textLabel.text = folder;
 	cell.tag = tag;
@@ -157,7 +152,7 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:@"performServerShuffle" userInfo:userInfo];
 	
-	[myDialog dismiss:YES];
+	[self.myDialog dismiss:YES];
 }
 
 @end

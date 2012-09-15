@@ -12,15 +12,12 @@
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "TBXML.h"
-#import "DatabaseSingleton.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "Album.h"
 #import "Song.h"
 #import "Artist.h"
-#import "SavedSettings.h"
 
 @implementation ISMSSubFolderLoader
-@synthesize myId, myArtist, albumsCount, songsCount, folderLength;
 
 + (id)loaderWithDelegate:(NSObject<ISMSLoaderDelegate> *)theDelegate
 {
@@ -56,11 +53,11 @@
 	{
 		//Initialize the arrays.
 		[db beginTransaction];
-		[db executeUpdate:@"DELETE FROM albumsCache WHERE folderId = ?", [myId md5]];
-		[db executeUpdate:@"DELETE FROM songsCache WHERE folderId = ?", [myId md5]];
-		[db executeUpdate:@"DELETE FROM albumsCacheCount WHERE folderId = ?", [myId md5]];
-		[db executeUpdate:@"DELETE FROM songsCacheCount WHERE folderId = ?", [myId md5]];
-		[db executeUpdate:@"DELETE FROM folderLength WHERE folderId = ?", [myId md5]];
+		[db executeUpdate:@"DELETE FROM albumsCache WHERE folderId = ?", self.myId.md5];
+		[db executeUpdate:@"DELETE FROM songsCache WHERE folderId = ?", self.myId.md5];
+		[db executeUpdate:@"DELETE FROM albumsCacheCount WHERE folderId = ?", self.myId.md5];
+		[db executeUpdate:@"DELETE FROM songsCacheCount WHERE folderId = ?", self.myId.md5];
+		[db executeUpdate:@"DELETE FROM folderLength WHERE folderId = ?", self.myId.md5];
 		[db commit];
 		
 		hadError = [db hadError];
@@ -76,7 +73,7 @@
 	__block BOOL hadError;
 	[self.dbQueue inDatabase:^(FMDatabase *db)
 	{
-		[db executeUpdate:@"INSERT INTO albumsCache (folderId, title, albumId, coverArtId, artistName, artistId) VALUES (?, ?, ?, ?, ?, ?)", [myId md5], [anAlbum.title cleanString], anAlbum.albumId, anAlbum.coverArtId, [anAlbum.artistName cleanString], anAlbum.artistId];
+		[db executeUpdate:@"INSERT INTO albumsCache (folderId, title, albumId, coverArtId, artistName, artistId) VALUES (?, ?, ?, ?, ?, ?)", self.myId.md5, [anAlbum.title cleanString], anAlbum.albumId, anAlbum.coverArtId, [anAlbum.artistName cleanString], anAlbum.artistId];
 		
 		hadError = [db hadError];
 		if (hadError)
@@ -92,7 +89,7 @@
 	[self.dbQueue inDatabase:^(FMDatabase *db)
 	{
 		//DLog(@"aSong.title: %@  clean: %@", aSong.title, [aSong.title cleanString]);
-		[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO songsCache (folderId, %@) VALUES (?, %@)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [myId md5], [aSong.title cleanString], aSong.songId, [aSong.artist cleanString], [aSong.album cleanString], [aSong.genre cleanString], aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size, aSong.parentId, NSStringFromBOOL(aSong.isVideo)];
+		[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO songsCache (folderId, %@) VALUES (?, %@)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], self.myId.md5, [aSong.title cleanString], aSong.songId, [aSong.artist cleanString], [aSong.album cleanString], [aSong.genre cleanString], aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size, aSong.parentId, NSStringFromBOOL(aSong.isVideo)];
 		
 		hadError = [db hadError];
 		if (hadError)
@@ -107,7 +104,7 @@
 	__block BOOL hadError;
 	[self.dbQueue inDatabase:^(FMDatabase *db)
 	{
-		[db executeUpdate:@"INSERT INTO albumsCacheCount (folderId, count) VALUES (?, ?)", [myId md5], [NSNumber numberWithInt:albumsCount]];
+		[db executeUpdate:@"INSERT INTO albumsCacheCount (folderId, count) VALUES (?, ?)", self.myId.md5, [NSNumber numberWithInt:self.albumsCount]];
 		
 		hadError = [db hadError];
 		if ([db hadError])
@@ -122,7 +119,7 @@
 	__block BOOL hadError;
 	[self.dbQueue inDatabase:^(FMDatabase *db)
 	{
-		[db executeUpdate:@"INSERT INTO songsCacheCount (folderId, count) VALUES (?, ?)", [myId md5], [NSNumber numberWithInt:songsCount]];
+		[db executeUpdate:@"INSERT INTO songsCacheCount (folderId, count) VALUES (?, ?)", self.myId.md5, [NSNumber numberWithInt:self.songsCount]];
 		
 		hadError = [db hadError];
 		if (hadError)
@@ -137,7 +134,7 @@
 	__block BOOL hadError;
 	[self.dbQueue inDatabase:^(FMDatabase *db)
 	{
-		[db executeUpdate:@"INSERT INTO folderLength (folderId, length) VALUES (?, ?)", [myId md5], [NSNumber numberWithInt:folderLength]];
+		[db executeUpdate:@"INSERT INTO folderLength (folderId, length) VALUES (?, ?)", self.myId.md5, [NSNumber numberWithInt:self.folderLength]];
 		
 		hadError = [db hadError];
 		if ([db hadError])

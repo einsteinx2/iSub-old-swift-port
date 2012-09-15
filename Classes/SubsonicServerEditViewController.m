@@ -7,14 +7,10 @@
 //
 
 #import "SubsonicServerEditViewController.h"
-#import "iSubAppDelegate.h"
-#import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "FoldersViewController.h"
 #import "Server.h"
 #import "CustomUIAlertView.h"
-#import "SavedSettings.h"
 #import "ServerListViewController.h"
 #import "ServerTypeViewController.h"
 #import "iPadRootViewController.h"
@@ -22,9 +18,6 @@
 #import "SUSStatusLoader.h"
 
 @implementation SubsonicServerEditViewController
-
-@synthesize parentController, theNewRedirectUrl;
-@synthesize urlField, usernameField, passwordField, cancelButton, saveButton;
 
 #pragma mark - Rotation
 
@@ -68,13 +61,13 @@
 	
 	if ([[url substringFromIndex:(url.length - 1)] isEqualToString:@"/"])
 	{
-		urlField.text = [url substringToIndex:([url length] - 1)];
+		self.urlField.text = [url substringToIndex:([url length] - 1)];
 		return YES;
 	}
 	
 	if (url.length < 7)
 	{
-		urlField.text = [NSString stringWithFormat:@"http://%@", url];
+		self.urlField.text = [NSString stringWithFormat:@"http://%@", url];
 		return YES;
 	}
 	else
@@ -93,7 +86,7 @@
 			}
 			
 			if (addHttp)
-				urlField.text = [NSString stringWithFormat:@"http://%@", url];
+				self.urlField.text = [NSString stringWithFormat:@"http://%@", url];
 			
 			return YES;
 		}
@@ -138,32 +131,32 @@
 
 - (IBAction)saveButtonPressed:(id)sender
 {
-	if (![self checkUrl:urlField.text])
+	if (![self checkUrl:self.urlField.text])
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"The URL must be in the format: http://mywebsite.com:port/folder\n\nBoth the :port and /folder are optional" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		[alert show];
 	}
 	
-	if (![self checkUsername:usernameField.text])
+	if (![self checkUsername:self.usernameField.text])
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a username" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		[alert show];
 	}
 	
-	if (![self checkPassword:passwordField.text])
+	if (![self checkPassword:self.passwordField.text])
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a password" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		[alert show];
 	}
 	
-	if ([self checkUrl:urlField.text] && [self checkUsername:usernameField.text] && [self checkPassword:passwordField.text])
+	if ([self checkUrl:self.urlField.text] && [self checkUsername:self.usernameField.text] && [self checkPassword:self.passwordField.text])
 	{
 		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
         		
 		SUSStatusLoader *loader = [[SUSStatusLoader alloc] initWithDelegate:self];
-        loader.urlString = urlField.text;
-        loader.username = usernameField.text;
-        loader.password = passwordField.text;
+        loader.urlString = self.urlField.text;
+        loader.username = self.usernameField.text;
+        loader.password = self.passwordField.text;
         [loader startLoad];
 	}
 }

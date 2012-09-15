@@ -7,20 +7,15 @@
 //
 
 #import "ISMSStreamManager.h"
-#import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
 #import "Song.h"
 #import "NSMutableURLRequest+SUS.h"
-#import "SavedSettings.h"
 #import "MusicSingleton.h"
 #import "ISMSStreamHandler.h"
 #import "ISMSCFNetworkStreamHandler.h"
 #import "PlaylistSingleton.h"
-#import "AudioEngine.h"
 #import "ISMSCoverArtLoader.h"
 #import "SUSLyricsDAO.h"
-#import "ViewObjectsSingleton.h"
-#import "iSubAppDelegate.h"
 #import "ISMSCacheQueueManager.h"
 #import "TBXML.h"
 
@@ -28,7 +23,6 @@ LOG_LEVEL_ISUB_DEFAULT
 #define maxNumOfReconnects 5
 
 @implementation ISMSStreamManager
-@synthesize handlerStack, lyricsDAO, lastCachedSong, lastTempCachedSong;
 
 - (Song *)currentStreamingSong
 {
@@ -376,7 +370,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	else
 	{
 		[handler start:resume];
-		[lyricsDAO loadLyricsForArtist:handler.mySong.artist andTitle:handler.mySong.title];
+		[self.lyricsDAO loadLyricsForArtist:handler.mySong.artist andTitle:handler.mySong.title];
 	}
 }
 
@@ -565,7 +559,7 @@ LOG_LEVEL_ISUB_DEFAULT
 {
 	if (self.isQueueDownloading)
 	{
-		ISMSStreamHandler *currentHandler = [handlerStack objectAtIndexSafe:0];
+		ISMSStreamHandler *currentHandler = [self.handlerStack objectAtIndexSafe:0];
 		if (currentHandler.isPartialPrecacheSleeping)
 		{
 			// Allow 10 more seconds of audio data to download
@@ -754,7 +748,7 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (void)delayedSetup
 {
-	for (ISMSStreamHandler *handler in handlerStack)
+	for (ISMSStreamHandler *handler in self.handlerStack)
 	{
 		// Resume any handlers that were downloading when iSub closed
 		if (handler.isDownloading && !handler.isTempCache)
@@ -769,16 +763,16 @@ LOG_LEVEL_ISUB_DEFAULT
 {
 	// Load the handler stack, it may have been full when iSub was closed
 	[self loadHandlerStack];
-	handlerStack = handlerStack ? handlerStack : [[NSMutableArray alloc] initWithCapacity:0];
-	if ([handlerStack count] > 0)
+	self.handlerStack = self.handlerStack ? self.handlerStack : [[NSMutableArray alloc] initWithCapacity:0];
+	if ([self.handlerStack count] > 0)
 	{
-		if ([(ISMSStreamHandler *)[handlerStack firstObject] isTempCache])
+		if ([(ISMSStreamHandler *)[self.handlerStack firstObject] isTempCache])
 		{
 			[self removeAllStreams];
 		}
 		else
 		{
-			for (ISMSStreamHandler *handler in handlerStack)
+			for (ISMSStreamHandler *handler in self.handlerStack)
 			{
 				// Resume any handlers that were downloading when iSub closed
 				if (handler.isDownloading && !handler.isTempCache)
@@ -789,8 +783,8 @@ LOG_LEVEL_ISUB_DEFAULT
 		}
 	}
 	
-	lastCachedSong = nil;
-	lyricsDAO = [[SUSLyricsDAO alloc] initWithDelegate:self]; 
+	self.lastCachedSong = nil;
+	self.lyricsDAO = [[SUSLyricsDAO alloc] initWithDelegate:self]; 
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(songCachingToggled) 

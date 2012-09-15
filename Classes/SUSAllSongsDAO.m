@@ -10,19 +10,16 @@
 #import "SUSAllSongsLoader.h"
 #import "Index.h"
 #import "Song.h"
-#import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 
 @implementation SUSAllSongsDAO
 
-@synthesize loader, delegate;
-
 - (id)initWithDelegate:(NSObject <ISMSLoaderDelegate> *)theDelegate
 {
     if ((self = [super init]))
 	{
-		delegate = theDelegate;
+		_delegate = theDelegate;
     }
     
     return self;
@@ -30,8 +27,8 @@
 
 - (void)dealloc
 {
-	[loader cancelLoad];
-	loader.delegate = nil;
+	[_loader cancelLoad];
+	_loader.delegate = nil;
 }
 
 - (FMDatabaseQueue *)dbQueue

@@ -10,26 +10,19 @@
 //
 
 #import "HomeXMLParser.h"
-#import "iSubAppDelegate.h"
-#import "DatabaseSingleton.h"
 #import "ServerListViewController.h"
 #import "Album.h"
 #import "Song.h"
 #import "FMDatabaseAdditions.h"
-#import "ViewObjectsSingleton.h"
 #import "CustomUIAlertView.h"
 
 @implementation HomeXMLParser
-
-@synthesize myId;
-@synthesize listOfAlbums;
-@synthesize currentElementValue;
  
 - (HomeXMLParser *) initXMLParser 
 {	
 	if ((self = [super init]))
 	{
-		listOfAlbums = [[NSMutableArray alloc] init];
+		_listOfAlbums = [[NSMutableArray alloc] init];
 	}
 
 	return self;

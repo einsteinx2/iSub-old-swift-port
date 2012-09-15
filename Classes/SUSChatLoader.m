@@ -12,8 +12,6 @@
 
 @implementation SUSChatLoader
 
-@synthesize chatMessages;
-
 #pragma mark - Lifecycle
 
 - (ISMSLoaderType)type
@@ -61,8 +59,7 @@
 					@autoreleasepool
 					{
 						// Create the chat message object and add it to the array
-						ChatMessage *aChatMessage = [[ChatMessage alloc] initWithTBXMLElement:chatMessage];
-						[self.chatMessages addObject:aChatMessage];
+						[self.chatMessages addObjectSafe:[[ChatMessage alloc] initWithTBXMLElement:chatMessage]];
 						
 						// Get the next message
 						chatMessage = [TBXML nextSiblingNamed:@"chatMessage" searchFromElement:chatMessage];

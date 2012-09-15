@@ -7,10 +7,8 @@
 //
 
 #import "CustomUITableView.h"
-#import "ViewObjectsSingleton.h"
 #import "CustomUITableViewCell.h"
 #import "CellOverlay.h"
-#import "SavedSettings.h"
 
 #define ISMSHorizSwipeDragMin 3
 #define ISMSVertSwipeDragMax 80

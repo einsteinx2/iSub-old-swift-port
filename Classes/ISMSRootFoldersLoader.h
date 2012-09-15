@@ -9,8 +9,6 @@
 #import "ISMSLoader.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "DatabaseSingleton.h"
-#import "SavedSettings.h"
 
 #define TEMP_FLUSH_AMOUNT 400
 

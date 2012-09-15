@@ -6,6 +6,9 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
+#ifndef iSub_SavedSettings_h
+#define iSub_SavedSettings_h
+
 #import "BassEffectDAO.h"
 
 #define settingsS ((SavedSettings *)[SavedSettings sharedInstance])
@@ -19,40 +22,40 @@ typedef enum
 @class AudioEngine;
 @interface SavedSettings : NSObject 
 {    
-	NSUserDefaults *userDefaults;
+	__strong NSUserDefaults *_userDefaults;
 	
-	NSMutableArray *serverList;
-	NSString *serverType;
-	NSString *urlString;
-	NSString *username;
-	NSString *password;
-    NSString *sessionId;
+	__strong NSMutableArray *_serverList;
+	__strong NSString *_serverType;
+	__strong NSString *_urlString;
+	__strong NSString *_username;
+	__strong NSString *_password;
+    __strong NSString *_sessionId;
 	
-	BOOL isPopupsEnabled;
-	BOOL isJukeboxEnabled;
-	BOOL isScreenSleepEnabled;
-	float gainMultiplier;
-	BOOL isPartialCacheNextSong;
-	BOOL isExtraPlayerControlsShowing;
-	BOOL isPlayerPlaylistShowing;
-	NSUInteger quickSkipNumberOfSeconds;
-	NSUInteger audioEngineStartNumberOfSeconds;
-	NSUInteger audioEngineBufferNumberOfSeconds;
-	BOOL isShowLargeSongInfoInPlayer;
-	BOOL isLockScreenArtEnabled;
-	BOOL isEqualizerOn;
+	BOOL _isPopupsEnabled;
+	BOOL _isJukeboxEnabled;
+	BOOL _isScreenSleepEnabled;
+	float _gainMultiplier;
+	BOOL _isPartialCacheNextSong;
+	BOOL _isExtraPlayerControlsShowing;
+	BOOL _isPlayerPlaylistShowing;
+	NSUInteger _quickSkipNumberOfSeconds;
+	NSUInteger _audioEngineStartNumberOfSeconds;
+	NSUInteger _audioEngineBufferNumberOfSeconds;
+	BOOL _isShowLargeSongInfoInPlayer;
+	BOOL _isLockScreenArtEnabled;
+	BOOL _isEqualizerOn;
 	
 	// State Saving
-	BOOL isPlaying;	
-	BOOL isShuffle;
-	NSInteger normalPlaylistIndex;
-	NSInteger shufflePlaylistIndex;
-	NSInteger repeatMode;
-	NSInteger bitRate;
-	unsigned long long byteOffset;
-	double secondsOffset;
-	BOOL isRecover;
-	NSInteger recoverSetting;
+	BOOL _isPlaying;
+	BOOL _isShuffle;
+	NSInteger _normalPlaylistIndex;
+	NSInteger _shufflePlaylistIndex;
+	NSInteger _repeatMode;
+	NSInteger _bitRate;
+	unsigned long long _byteOffset;
+	double _secondsOffset;
+	BOOL _isRecover;
+	NSInteger _recoverSetting;
 }
 
 // Server Login Settings
@@ -151,3 +154,5 @@ typedef enum
 + (id)sharedInstance;
 
 @end
+
+#endif

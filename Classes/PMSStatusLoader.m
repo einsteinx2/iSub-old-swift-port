@@ -10,7 +10,6 @@
 #import "SBJson.h"
 
 @implementation PMSStatusLoader
-@synthesize error, version;
 
 - (NSURLRequest *)createRequest
 {

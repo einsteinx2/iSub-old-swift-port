@@ -10,20 +10,15 @@
 #import "SUSNowPlayingLoader.h"
 #import "Song.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
-#import "SavedSettings.h"
-#import "PlaylistSingleton.h"
-#import "JukeboxSingleton.h"
 
 @implementation SUSNowPlayingDAO
-@synthesize delegate, loader, nowPlayingSongDicts;
 
 - (id)initWithDelegate:(id <ISMSLoaderDelegate>)theDelegate
 {
     if ((self = [super init])) 
 	{
-		delegate = theDelegate;
-		nowPlayingSongDicts = nil;
+		_delegate = theDelegate;
+		_nowPlayingSongDicts = nil;
     }
     
     return self;
@@ -31,9 +26,9 @@
 
 - (void)dealloc
 {
-	[loader cancelLoad];
-	loader.delegate = nil;
-    loader = nil;
+	[_loader cancelLoad];
+	_loader.delegate = nil;
+    _loader = nil;
 }
 
 #pragma mark - Public DAO Methods

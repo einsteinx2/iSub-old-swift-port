@@ -11,7 +11,6 @@
 #import "Album.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "DatabaseSingleton.h"
 #import "SUSAllSongsLoader.h"
 
 @implementation SUSAllAlbumsDAO

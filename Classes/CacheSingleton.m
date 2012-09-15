@@ -7,8 +7,6 @@
 //
 
 #import "CacheSingleton.h"
-#import "SavedSettings.h"
-#import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 
@@ -17,8 +15,6 @@
 #import "ISMSCacheQueueManager.h"
 
 @implementation CacheSingleton
-
-@synthesize cacheCheckInterval, cacheSize;//, cacheCheckTimer;
 
 - (unsigned long long)totalSpace
 {
@@ -36,7 +32,7 @@
 
 - (void)startCacheCheckTimerWithInterval:(NSTimeInterval)interval
 {
-	cacheCheckInterval = interval;
+	self.cacheCheckInterval = interval;
 	[self stopCacheCheckTimer];
 	
 	[self checkCache];
@@ -147,7 +143,7 @@
 		size += [attributes fileSize];
 	}
 	
-	cacheSize = size;
+	_cacheSize = size;
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CacheSizeChecked];
 }
@@ -212,7 +208,7 @@
 	
 	[self stopCacheCheckTimer];
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(checkCache) object:nil];
-	[self performSelector:@selector(checkCache) withObject:nil afterDelay:cacheCheckInterval];
+	[self performSelector:@selector(checkCache) withObject:nil afterDelay:self.cacheCheckInterval];
 }
 
 - (void)clearTempCache
@@ -256,7 +252,7 @@
 	});
 
 	// Setup the cache check interval
-	cacheCheckInterval = 60.0;
+	_cacheCheckInterval = 60.0;
 	
 	// Do the first check sooner
 	[self performSelector:@selector(checkCache) withObject:nil afterDelay:11.0];

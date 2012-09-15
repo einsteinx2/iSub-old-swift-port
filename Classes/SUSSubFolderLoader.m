@@ -12,7 +12,6 @@
 #import "Song.h"
 #import "Artist.h"
 #import "Video.h"
-#import "SavedSettings.h"
 
 @implementation SUSSubFolderLoader
 

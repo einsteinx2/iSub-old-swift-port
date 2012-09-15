@@ -8,9 +8,6 @@
 
 #import "SearchAllViewController.h"
 #import "SearchSongsViewController.h"
-#import "ViewObjectsSingleton.h"
-#import "iSubAppDelegate.h"
-#import "SavedSettings.h"
 #import "UIViewController+PushViewControllerCustom.h"
 
 @implementation SearchAllViewController

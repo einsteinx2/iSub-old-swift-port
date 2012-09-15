@@ -6,14 +6,11 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "AudioEngine.h"
 #import "BassEffectDAO.h"
 #import "BassEffectValue.h"
 #import "BassParamEqValue.h"
-#import "SavedSettings.h"
 
 @implementation BassEffectDAO
-@synthesize type, presets;
 
 #pragma mark - Lifecycle
 
@@ -21,7 +18,7 @@
 {
 	if ((self = [super init]))
 	{
-		type = effectType;
+		_type = effectType;
 		[self setup];
 	}
 	
@@ -58,7 +55,7 @@
 	if (userPresets)
 		[presetsDict addEntriesFromDictionary:userPresets];
 
-	presets = [[NSDictionary alloc] initWithDictionary:presetsDict];
+	_presets = [[NSDictionary alloc] initWithDictionary:presetsDict];
 }
 
 #pragma mark - Public DAO Methods
@@ -90,7 +87,7 @@ NSInteger presetSort(id preset1, id preset2, void *context)
 - (NSDictionary *)userPresets
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	return [[defaults objectForKey:@"BassEffectUserPresets"] objectForKey:[[NSNumber numberWithInt:type] stringValue]];
+	return [[defaults objectForKey:@"BassEffectUserPresets"] objectForKey:[[NSNumber numberWithInt:self.type] stringValue]];
 }
 
 - (NSArray *)userPresetsArray
@@ -122,7 +119,7 @@ NSInteger presetSort(id preset1, id preset2, void *context)
 - (NSDictionary *)defaultPresets
 {
 	// Load default presets
-	return [[self readPlist:@"BassEffectDefaultPresets"] objectForKey:[[NSNumber numberWithInt:type] stringValue]];
+	return [[self readPlist:@"BassEffectDefaultPresets"] objectForKey:[[NSNumber numberWithInt:self.type] stringValue]];
 }
 
 - (NSUInteger)userPresetsCount
@@ -149,7 +146,7 @@ NSInteger presetSort(id preset1, id preset2, void *context)
 - (NSUInteger)selectedPresetId
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	return [[[defaults objectForKey:@"BassEffectSelectedPresetId"] objectForKey:[[NSNumber numberWithInt:type] stringValue]] intValue];
+	return [[[defaults objectForKey:@"BassEffectSelectedPresetId"] objectForKey:[[NSNumber numberWithInt:self.type] stringValue]] intValue];
 }
 
 - (void)setSelectedPresetId:(NSUInteger)preset
@@ -159,7 +156,7 @@ NSInteger presetSort(id preset1, id preset2, void *context)
 	if ([defaults objectForKey:@"BassEffectSelectedPresetId"])
 		[selectedPresetIds addEntriesFromDictionary:[defaults objectForKey:@"BassEffectSelectedPresetId"]];
 	
-	[selectedPresetIds setObject:[NSNumber numberWithInt:preset] forKey:[[NSNumber numberWithInt:type] stringValue]];
+	[selectedPresetIds setObject:[NSNumber numberWithInt:preset] forKey:[[NSNumber numberWithInt:self.type] stringValue]];
 	[defaults setObject:selectedPresetIds forKey:@"BassEffectSelectedPresetId"];
 	[defaults synchronize];
 }
@@ -199,7 +196,7 @@ NSInteger presetSort(id preset1, id preset2, void *context)
 {
 	self.selectedPresetId = presetId;
 		
-	if (type == BassEffectType_ParametricEQ)
+	if (self.type == BassEffectType_ParametricEQ)
 	{
 		[audioEngineS.equalizer removeAllEqualizerValues];
 		
@@ -242,7 +239,7 @@ NSInteger presetSort(id preset1, id preset2, void *context)
 		[mutableUserPresets addEntriesFromDictionary:self.userPresets];
 	
 	[mutableUserPresets removeObjectForKey:[[NSNumber numberWithInt:presetId] stringValue]];
-	[mutableAllUserPresets setObject:mutableUserPresets forKey:[[NSNumber numberWithInt:type] stringValue]];
+	[mutableAllUserPresets setObject:mutableUserPresets forKey:[[NSNumber numberWithInt:self.type] stringValue]];
 	[defaults setObject:mutableAllUserPresets forKey:@"BassEffectUserPresets"];
 	[defaults synchronize];
 	
@@ -284,7 +281,7 @@ NSInteger presetSort(id preset1, id preset2, void *context)
 	[newPresetDict setObject:arrayOfPoints forKey:@"values"];
 	[newPresetDict setObject:[NSNumber numberWithBool:NO] forKey:@"isDefault"];
 	[mutableUserPresets setObject:newPresetDict forKey:[[NSNumber numberWithInt:presetId] stringValue]];
-	[mutableAllUserPresets setObject:mutableUserPresets forKey:[[NSNumber numberWithInt:type] stringValue]];
+	[mutableAllUserPresets setObject:mutableUserPresets forKey:[[NSNumber numberWithInt:self.type] stringValue]];
 	[defaults setObject:mutableAllUserPresets forKey:@"BassEffectUserPresets"];
 	[defaults synchronize];
 	

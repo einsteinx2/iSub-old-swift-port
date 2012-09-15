@@ -11,16 +11,11 @@
 #import "Song+DAO.h"
 #import "ISMSLoader.h"
 #import "DatabaseSingleton.h"
-#import "PlaylistSingleton.h"
-#import "SavedSettings.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "SUSLyricsLoader.h"
 #import "ISMSCoverArtLoader.h"
-#import "ViewObjectsSingleton.h"
-#import "iSubAppDelegate.h"
 #import "ISMSStreamManager.h"
-#import "CacheSingleton.h"
 #import "ISMSStreamHandler.h"
 
 #import "ISMSURLConnectionStreamHandler.h"
@@ -32,8 +27,6 @@ LOG_LEVEL_ISUB_DEBUG
 #define maxNumOfReconnects 5
 
 @implementation ISMSCacheQueueManager
-@synthesize isQueueDownloading, currentQueuedSong, currentStreamHandler;
-//@synthesize fileHandle, downloadLength, connection, contentLength, numberOfContentLengthFailures;
 
 #pragma mark - Lyric Loader Delegate
 

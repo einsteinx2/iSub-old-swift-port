@@ -12,7 +12,6 @@
 #import "NSMutableURLRequest+SUS.h"
 
 @implementation SUSChatDAO
-@synthesize loader, delegate, chatMessages, connection, receivedData;
 
 #pragma mark - Lifecycle
 
@@ -20,15 +19,15 @@
 {
     if ((self = [super init])) 
 	{
-		delegate = theDelegate;
+		_delegate = theDelegate;
     }    
     return self;
 }
 
 - (void)dealloc
 {
-	[loader cancelLoad];
-	loader.delegate = nil;
+	[_loader cancelLoad];
+	_loader.delegate = nil;
 }
 
 #pragma mark - Public DAO Methods

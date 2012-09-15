@@ -9,7 +9,6 @@
 #import "ISMSStatusLoader.h"
 #import "PMSStatusLoader.h"
 #import "SUSStatusLoader.h"
-#import "SavedSettings.h"
 
 @implementation ISMSStatusLoader
 

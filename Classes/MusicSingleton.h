@@ -1,10 +1,13 @@
 //
-//  musicSSingleton.h
+//  MusicSingleton.h
 //  iSub
 //
 //  Created by Ben Baron on 10/15/10.
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
+
+#ifndef iSub_MusicSingleton_h
+#define iSub_MusicSingleton_h
 
 #define musicS ((MusicSingleton *)[MusicSingleton sharedInstance])
 
@@ -29,3 +32,5 @@
 - (void)updateLockScreenInfo;
 
 @end
+
+#endif

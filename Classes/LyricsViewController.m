@@ -7,39 +7,32 @@
 //
 
 #import "LyricsViewController.h"
-#import "iSubAppDelegate.h"
-#import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
 #import "Song.h"
 #import "SUSLyricsDAO.h"
-#import "PlaylistSingleton.h"
 
 @implementation LyricsViewController
-
-@synthesize textView, dataModel;
 
 #pragma mark - Lifecycle
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
 {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) 
-	{		
-        
+	{
         //dataModel = [[SUSLyricsDAO alloc] initWithDelegate:self];
-		dataModel = [[SUSLyricsDAO alloc] init];
+		_dataModel = [[SUSLyricsDAO alloc] init];
 		
         // Custom initialization
 		self.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 300)];
 		self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		
-		textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 45, 320, 255)];
-		textView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		textView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.8];
-		textView.textColor = [UIColor whiteColor];
-		textView.font = [UIFont systemFontOfSize:16.5];
-		textView.editable = NO;
+		_textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 45, 320, 255)];
+		_textView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		_textView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.8];
+		_textView.textColor = [UIColor whiteColor];
+		_textView.font = [UIFont systemFontOfSize:16.5];
+		_textView.editable = NO;
         
 		/*Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
         NSString *lyrics = [dataModel lyricsForArtist:currentSong.artist andTitle:currentSong.title];
@@ -61,7 +54,7 @@
 			}
 		}*/
 		[self updateLyricsLabel];
-		[self.view addSubview:textView];
+		[self.view addSubview:_textView];
 		
 		UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 45)];
 		titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -78,7 +71,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
 	[super viewDidAppear:animated];
-	
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLyricsLabel) name:ISMSNotification_SongPlaybackStarted object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLyricsLabel) name:ISMSNotification_LyricsDownloaded object:nil];
@@ -108,19 +100,19 @@
 
 - (void)dealloc 
 {
-	dataModel.delegate = nil;
+	_dataModel.delegate = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)updateLyricsLabel
 {	
 	Song *currentSong = playlistS.currentSong;
-	NSString *lyrics = [dataModel loadLyricsForArtist:currentSong.artist andTitle:currentSong.title];
+	NSString *lyrics = [self.dataModel loadLyricsForArtist:currentSong.artist andTitle:currentSong.title];
 	//DLog(@"lyrics = %@", lyrics);
 	if (!lyrics)
 		lyrics = @"\n\nNo lyrics found";
 	
-	textView.text = lyrics;
+	self.textView.text = lyrics;
 }
 
 /*#pragma mark - ISMSLoader delegate

@@ -8,22 +8,17 @@
 
 #import "Index.h"
 
-
 @implementation Index
-
-@synthesize name, position, count;
 
 - (id)init
 {
 	if ((self = [super init]))
 	{
-		name = nil;
-		position = NSUIntegerMax;
-		count = NSUIntegerMax;
+		_position = NSUIntegerMax;
+		_count = NSUIntegerMax;
 	}
 	
 	return self;
 }
-
 
 @end

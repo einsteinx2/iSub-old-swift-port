@@ -7,14 +7,9 @@
 //
 
 #import "ISMSLoader.h"
-#import "SavedSettings.h"
-#import "MusicSingleton.h"
 #import "Song.h"
 
 @implementation ISMSLoader
-
-@synthesize connection, receivedData;
-@synthesize delegate;
 
 + (id)loader
 {
@@ -54,7 +49,7 @@
     if (self) 
 	{
         [self setup];
-		delegate = theDelegate;
+		_delegate = theDelegate;
 	}
 	
 	return self;

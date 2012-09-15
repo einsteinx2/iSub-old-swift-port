@@ -11,21 +11,16 @@
 #import "SA_OAuthTwitterController.h"
 #import "CustomUIAlertView.h"
 #import "BassGaplessPlayer.h"
-#import "SavedSettings.h"
 #import "PlaylistSingleton.h"
 #import "Song.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "ISMSStreamManager.h"
-#import "ViewObjectsSingleton.h"
-#import "AudioEngine.h"
 
 // Twitter secret keys
 #define kOAuthConsumerKey				@"nYKAEcLstFYnI9EEnv6g"
 #define kOAuthConsumerSecret			@"wXSWVvY7GN1e8Z2KFaR9A5skZKtHzpchvMS7Elpu0"
 
 @implementation SocialSingleton
-
-@synthesize twitterEngine, playerHasScrobbled, playerHasTweeted;
 
 #pragma mark -
 #pragma mark Class instance methods
@@ -244,7 +239,7 @@
 
 - (void)createTwitterEngine
 {
-	if (twitterEngine)
+	if (self.twitterEngine)
 		return;
 	
 	self.twitterEngine = [[SA_OAuthTwitterEngine alloc] initOAuthWithDelegate: self];

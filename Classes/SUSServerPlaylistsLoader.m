@@ -9,12 +9,10 @@
 #import "SUSServerPlaylistsLoader.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "DatabaseSingleton.h"
 #import "TBXML.h"
 #import "SUSServerPlaylist.h"
 
 @implementation SUSServerPlaylistsLoader
-@synthesize serverPlaylists;
 
 #pragma mark - Lifecycle
 

@@ -8,14 +8,9 @@
 
 #import "StoreViewController.h"
 #import "MKStoreManager.h"
-#import "iSubAppDelegate.h"
-#import "ViewObjectsSingleton.h"
 #import "StoreUITableViewCell.h"
-#import "SavedSettings.h"
 
 @implementation StoreViewController
-
-@synthesize storeItems, storeManager, checkProductsTimer;
 
 #pragma mark - View lifecycle
 
@@ -72,13 +67,13 @@
 
 - (void)cancelLoad
 {
-	[checkProductsTimer invalidate]; checkProductsTimer = nil;
+	[self.checkProductsTimer invalidate]; self.checkProductsTimer = nil;
 	[viewObjectsS hideLoadingScreen];
 }
 
 - (void)checkProducts
 {
-	self.storeItems = [[NSArray alloc] initWithArray:storeManager.purchasableObjects];
+	self.storeItems = [[NSArray alloc] initWithArray:self.storeManager.purchasableObjects];
 	
 	if (self.storeItems.count > 0)
 	{
@@ -98,7 +93,7 @@
 	NSMutableArray *sorted = [[NSMutableArray alloc] init];
 	NSMutableArray *temp = [[NSMutableArray alloc] init];
 	
-	for (SKProduct *product in storeItems)
+	for (SKProduct *product in self.storeItems)
 	{
 		if ([MKStoreManager isFeaturePurchased:[product productIdentifier]])
 		{
@@ -153,7 +148,7 @@
 	{
 		NSUInteger adjustedRow = indexPath.row - 1;
 		cell = [[StoreUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-		((StoreUITableViewCell *)cell).myProduct = [storeItems objectAtIndexSafe:adjustedRow];
+		((StoreUITableViewCell *)cell).myProduct = [self.storeItems objectAtIndexSafe:adjustedRow];
 	}
 	return cell;
 }

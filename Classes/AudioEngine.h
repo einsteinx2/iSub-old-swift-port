@@ -6,6 +6,9 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
+#ifndef iSub_AudioEngine_h
+#define iSub_AudioEngine_h
+
 #import "bass.h"
 #import "bass_fx.h"
 #import "bassmix.h"
@@ -43,3 +46,5 @@
 - (void)startEmptyPlayer;
 
 @end
+
+#endif

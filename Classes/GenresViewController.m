@@ -9,15 +9,11 @@
 #import "GenresViewController.h"
 #import "GenresArtistViewController.h"
 #import "GenresGenreUITableViewCell.h"
-#import "iSubAppDelegate.h"
-#import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
-#import "SavedSettings.h"
 #import "UIViewController+PushViewControllerCustom.h"
 
 @implementation GenresViewController

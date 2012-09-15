@@ -9,12 +9,10 @@
 #import "AllSongsUITableViewCell.h"
 #import "AsynchronousImageView.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "Song.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "CellOverlay.h"
-#import "ViewObjectsSingleton.h"
 
 @implementation AllSongsUITableViewCell
 

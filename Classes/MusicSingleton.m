@@ -7,9 +7,6 @@
 //
 
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
-#import "ViewObjectsSingleton.h"
-#import "iSubAppDelegate.h"
 #import "Song.h"
 #import "FMDatabaseAdditions.h"
 #import "JukeboxXMLParser.h"
@@ -17,19 +14,15 @@
 #import "BBSimpleConnectionQueue.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "CustomUIAlertView.h"
-#import "SavedSettings.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "OrderedDictionary.h"
 #import "SUSLyricsLoader.h" 
 #import "ISMSStreamManager.h"
 #import "PlaylistSingleton.h"
-#import "AudioEngine.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "SUSCoverArtDAO.h"
 #import "ISMSCoverArtLoader.h"
 #import "ISMSStreamHandler.h"
-#import "CacheSingleton.h"
-#import "JukeboxSingleton.h"
 #import "ISMSCacheQueueManager.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
@@ -37,7 +30,6 @@
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 
 @implementation MusicSingleton
-@synthesize isAutoNextNotificationOn, moviePlayer;
 
 #pragma mark Control Methods
 
@@ -49,7 +41,7 @@ double startSongSeconds = 0.0;
 	if (![NSThread mainThread])
 		return;
 
-//DLog(@"starting song at offset");
+    //DLog(@"starting song at offset");
 	
 	// Destroy the streamer to start a new song
 	[audioEngineS.player stop];
@@ -332,25 +324,25 @@ double startSongSeconds = 0.0;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayerExitedFullscreen:) name:MPMoviePlayerDidExitFullscreenNotification object:self.moviePlayer];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayBackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:self.moviePlayer];
         
-        moviePlayer.controlStyle = MPMovieControlStyleDefault;
-        moviePlayer.shouldAutoplay = YES;
-        moviePlayer.movieSourceType = MPMovieSourceTypeStreaming;
-        moviePlayer.allowsAirPlay = YES;
+        self.moviePlayer.controlStyle = MPMovieControlStyleDefault;
+        self.moviePlayer.shouldAutoplay = YES;
+        self.moviePlayer.movieSourceType = MPMovieSourceTypeStreaming;
+        self.moviePlayer.allowsAirPlay = YES;
         
         //[(IS_IPAD() ? appDelegateS.ipadRootViewController.menuViewController.playerHolder : appDelegateS.mainTabBarController.view) addSubview:moviePlayer.view];
         
         if (IS_IPAD())
         {
-            [appDelegateS.ipadRootViewController.menuViewController.playerHolder addSubview:moviePlayer.view];
-            moviePlayer.view.frame = moviePlayer.view.superview.bounds;
+            [appDelegateS.ipadRootViewController.menuViewController.playerHolder addSubview:self.moviePlayer.view];
+            self.moviePlayer.view.frame = self.moviePlayer.view.superview.bounds;
         }
         else
         {
-            [appDelegateS.mainTabBarController.view addSubview:moviePlayer.view];
-            moviePlayer.view.frame = CGRectZero;
+            [appDelegateS.mainTabBarController.view addSubview:self.moviePlayer.view];
+            self.moviePlayer.view.frame = CGRectZero;
         }
         
-        [moviePlayer setFullscreen:YES animated:YES];
+        [self.moviePlayer setFullscreen:YES animated:YES];
     }
 }
 
@@ -410,7 +402,7 @@ double startSongSeconds = 0.0;
     
     self.moviePlayer.contentURL = [NSURL URLWithString:urlString];
     //[moviePlayer prepareToPlay];
-    [moviePlayer play];
+    [self.moviePlayer play];
 }
 
 - (void)playWaveBoxVideo:(Song *)aSong

@@ -8,9 +8,7 @@
 
 #import "PlaylistSongUITableViewCell.h"
 #import "AsynchronousImageView.h"
-#import "ViewObjectsSingleton.h"
 #import "MusicSingleton.h"
-#import "DatabaseSingleton.h"
 #import "CellOverlay.h"
 #import "Song.h"
 #import "FMDatabaseQueueAdditions.h"

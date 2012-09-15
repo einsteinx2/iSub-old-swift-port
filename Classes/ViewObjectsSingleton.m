@@ -7,55 +7,10 @@
 //
 
 #import "ViewObjectsSingleton.h"
-#import "iSubAppDelegate.h"
 #import "MKStoreManager.h"
 #import "Server.h"
-#import "SavedSettings.h"
 
 @implementation ViewObjectsSingleton
-
-@synthesize HUD;
-
-// XMLParser objects used to tell the parser how to parse
-@synthesize parseState, allAlbumsParseState, allSongsParseState;
-
-// Home page objects
-@synthesize homeListOfAlbums;
-
-// Artists page objects
-@synthesize isArtistsLoading;
-
-// Albums page objects and variables
-@synthesize currentArtistName, currentArtistId; 
-
-/*// All albums view objects
-@synthesize allAlbumsListOfAlbums, allAlbumsAlbumObject, allAlbumsListOfSongs, allAlbumsCurrentArtistName, allAlbumsCurrentArtistId, allAlbumsLoadingScreen, allAlbumsLoadingProgress, isAlbumsLoading;
-
-// All songs view objects
-@synthesize isSongsLoading;*/
-
-// Playlists view objects
-@synthesize listOfPlaylists, listOfPlaylistSongs, localPlaylist, listOfLocalPlaylists, isLocalPlaylist;
-
-// Settings page objects
-@synthesize serverToEdit;
-
-// Chat page objects
-@synthesize chatMessages;
-
-// New stuff
-@synthesize isCellEnabled, cellEnabledTimer, queueAlbumListOfAlbums, queueAlbumListOfSongs, multiDeleteList, isOfflineMode, isOnlineModeAlertShowing, cancelLoading;
-
-// Cell colors
-@synthesize lightRed, darkRed, lightYellow, darkYellow, lightGreen, darkGreen, lightBlue, darkBlue, lightNormal, darkNormal, windowColor, jukeboxColor;
-
-@synthesize deleteButtonImage, cacheButtonImage, queueButtonImage;
-
-@synthesize currentLoadingFolderId;
-
-@synthesize isNoNetworkAlertShowing;
-
-@synthesize isLoadingScreenShowing;
 
 #pragma mark -
 #pragma mark Class instance methods
@@ -63,7 +18,7 @@
 
 - (void)enableCells
 {
-	isCellEnabled = YES;
+	self.isCellEnabled = YES;
 }
 
 - (void)hudWasHidden:(MBProgressHUD *)hud 
@@ -80,13 +35,13 @@
 
 - (void)showLoadingScreen:(UIView *)view withMessage:(NSString *)message
 {
-	if (isLoadingScreenShowing)
+	if (self.isLoadingScreenShowing)
 		return;
 	
 	self.isLoadingScreenShowing = YES;
 	
 	self.HUD = [[MBProgressHUD alloc] initWithView:view];
-	[appDelegateS.window addSubview:HUD];
+	[appDelegateS.window addSubview:self.HUD];
 	self.HUD.delegate = self;
 	self.HUD.labelText = message ? message : @"Loading";
 	[self.HUD show:YES];
@@ -123,7 +78,7 @@
 	
 	self.isLoadingScreenShowing = NO;
 	
-	[HUD hide:YES];
+	[self.HUD hide:YES];
 }
 
 - (UIColor *)currentDarkColor
@@ -298,36 +253,36 @@
 
 - (void)setup
 {
-	lightRed = [UIColor colorWithRed:255/255.0 green:146/255.0 blue:115/255.0 alpha:1];
-	darkRed = [UIColor colorWithRed:226/255.0 green:0/255.0 blue:0/255.0 alpha:1];
+	_lightRed = [UIColor colorWithRed:255/255.0 green:146/255.0 blue:115/255.0 alpha:1];
+	_darkRed = [UIColor colorWithRed:226/255.0 green:0/255.0 blue:0/255.0 alpha:1];
 	
-	lightYellow = [UIColor colorWithRed:255/255.0 green:233/255.0 blue:115/255.0 alpha:1];
-	darkYellow = [UIColor colorWithRed:255/255.0 green:215/255.0 blue:0/255.0 alpha:1];
+	_lightYellow = [UIColor colorWithRed:255/255.0 green:233/255.0 blue:115/255.0 alpha:1];
+	_darkYellow = [UIColor colorWithRed:255/255.0 green:215/255.0 blue:0/255.0 alpha:1];
 	
-	lightGreen = [UIColor colorWithRed:169/255.0 green:241/255.0 blue:108/255.0 alpha:1];
-	darkGreen = [UIColor colorWithRed:103/255.0 green:227/255.0 blue:0/255.0 alpha:1];
+	_lightGreen = [UIColor colorWithRed:169/255.0 green:241/255.0 blue:108/255.0 alpha:1];
+	_darkGreen = [UIColor colorWithRed:103/255.0 green:227/255.0 blue:0/255.0 alpha:1];
 	
-	//lightBlue = [[UIColor colorWithRed:100/255.0 green:168/255.0 blue:209/255.0 alpha:1] retain];
-	//darkBlue = [[UIColor colorWithRed:9/255.0 green:105/255.0 blue:162/255.0 alpha:1] retain];
+	//_lightBlue = [[UIColor colorWithRed:100/255.0 green:168/255.0 blue:209/255.0 alpha:1] retain];
+	//_darkBlue = [[UIColor colorWithRed:9/255.0 green:105/255.0 blue:162/255.0 alpha:1] retain];
 	
-	lightBlue = [UIColor colorWithRed:87/255.0 green:198/255.0 blue:255/255.0 alpha:1];
-	darkBlue = [UIColor colorWithRed:28/255.0 green:163/255.0 blue:255/255.0 alpha:1];
+	_lightBlue = [UIColor colorWithRed:87/255.0 green:198/255.0 blue:255/255.0 alpha:1];
+	_darkBlue = [UIColor colorWithRed:28/255.0 green:163/255.0 blue:255/255.0 alpha:1];
 	
-	//lightBlue = [[UIColor colorWithRed:14/255.0 green:148/255.0 blue:218/255.0 alpha:1] retain];
-	//darkBlue = [[UIColor colorWithRed:54/255.0 green:142/255.0 blue:188/255.0 alpha:1] retain];
+	//_lightBlue = [[UIColor colorWithRed:14/255.0 green:148/255.0 blue:218/255.0 alpha:1] retain];
+	//_darkBlue = [[UIColor colorWithRed:54/255.0 green:142/255.0 blue:188/255.0 alpha:1] retain];
 	
-	lightNormal = [UIColor whiteColor];
-	darkNormal = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
+	_lightNormal = [UIColor whiteColor];
+	_darkNormal = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
 	
-	//windowColor = [[UIColor colorWithRed:241.0/255.0 green:246.0/255.0 blue:253.0/255.0 alpha:1] retain];
-	//windowColor = [[UIColor colorWithRed:206.0/255.0 green:211.0/255.0 blue:218.0/255.0 alpha:1] retain];
-	windowColor = [UIColor colorWithWhite:.3 alpha:1];
-	jukeboxColor = [UIColor colorWithRed:140.0/255.0 green:0.0 blue:0.0 alpha:1.0];
+	//_windowColor = [[UIColor colorWithRed:241.0/255.0 green:246.0/255.0 blue:253.0/255.0 alpha:1] retain];
+	//_windowColor = [[UIColor colorWithRed:206.0/255.0 green:211.0/255.0 blue:218.0/255.0 alpha:1] retain];
+	_windowColor = [UIColor colorWithWhite:.3 alpha:1];
+	_jukeboxColor = [UIColor colorWithRed:140.0/255.0 green:0.0 blue:0.0 alpha:1.0];
 	
-	isCellEnabled = YES;
-	deleteButtonImage = [UIImage imageNamed:@"delete-button.png"];
-	cacheButtonImage = [UIImage imageNamed:@"cache-button.png"];
-	queueButtonImage = [UIImage imageNamed:@"queue-button.png"];
+	_isCellEnabled = YES;
+	_deleteButtonImage = [UIImage imageNamed:@"delete-button.png"];
+	_cacheButtonImage = [UIImage imageNamed:@"cache-button.png"];
+	_queueButtonImage = [UIImage imageNamed:@"queue-button.png"];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self 
 											 selector:@selector(didReceiveMemoryWarning) 

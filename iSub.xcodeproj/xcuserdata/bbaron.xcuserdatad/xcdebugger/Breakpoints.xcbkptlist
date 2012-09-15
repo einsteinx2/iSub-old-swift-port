@@ -1016,20 +1016,6 @@
          timestampString = "363491038.229329"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "25"
-         endingLineNumber = "25"
-         landmarkName = "@synthesize coverArtDAO, coverArtId, isLarge, activityIndicator, delegate;"
-         landmarkType = "19">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Classes/AsynchronousImageView.m"
-         timestampString = "363491038.229329"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
          startingLineNumber = "26"
          endingLineNumber = "26"
          landmarkName = "@implementation AsynchronousImageView"

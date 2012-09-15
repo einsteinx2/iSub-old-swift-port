@@ -10,8 +10,6 @@
 
 @implementation LoadingScreen
 
-@synthesize inputBlocker, loadingScreenRectangle, loadingLabel, loadingTitle1, loadingMessage1, loadingTitle2, loadingMessage2 , activityIndicator;
-
 - (id)initOnView:(UIView *)superView withMessage:(NSArray *)message blockInput:(BOOL)blockInput mainWindow:(BOOL)mainWindow
 {
 	//[self showLoadingScreen:view withMessage:message blockInput:blockInput mainWindow:mainWindow];
@@ -38,56 +36,56 @@
 			//DLog(@"mainWindow");
 			CGRect frame = self.loadingScreenRectangle.frame;
 			frame.origin.y -= 40;
-			self.loadingScreenRectangle.frame = frame;
+			_loadingScreenRectangle.frame = frame;
 			
-			frame = self.loadingLabel.frame;
+			frame = _loadingLabel.frame;
 			frame.origin.y -= 40;
-			self.loadingLabel.frame = frame;
+			_loadingLabel.frame = frame;
 			
-			frame = self.loadingTitle1.frame;
+			frame = _loadingTitle1.frame;
 			frame.origin.y -= 40;
-			self.loadingTitle1.frame = frame;
+			_loadingTitle1.frame = frame;
 			
-			frame = self.loadingMessage1.frame;
+			frame = _loadingMessage1.frame;
 			frame.origin.y -= 40;
-			self.loadingMessage1.frame = frame;
+			_loadingMessage1.frame = frame;
 			
-			frame = self.loadingTitle2.frame;
+			frame = _loadingTitle2.frame;
 			frame.origin.y -= 40;
-			self.loadingTitle2.frame = frame;
+			_loadingTitle2.frame = frame;
 			
-			frame = self.loadingMessage2.frame;
+			frame = _loadingMessage2.frame;
 			frame.origin.y -= 40;
-			self.loadingMessage2.frame = frame;
+			_loadingMessage2.frame = frame;
 			
-			frame = self.activityIndicator.frame;
+			frame = _activityIndicator.frame;
 			frame.origin.y -= 40;
-			self.activityIndicator.frame = frame;
+			_activityIndicator.frame = frame;
 		}
 		
 		if (message)
 		{
 			if ([message count] == 4)
 			{
-				self.loadingTitle1.text = [message objectAtIndexSafe:0];
-				self.loadingMessage1.text = [message objectAtIndexSafe:1];
-				self.loadingTitle2.text = [message objectAtIndexSafe:2];
-				self.loadingMessage2.text = [message objectAtIndexSafe:3];
+				_loadingTitle1.text = [message objectAtIndexSafe:0];
+				_loadingMessage1.text = [message objectAtIndexSafe:1];
+				_loadingTitle2.text = [message objectAtIndexSafe:2];
+				_loadingMessage2.text = [message objectAtIndexSafe:3];
 			}
 			else
 			{
-				self.loadingTitle1.text = @"";
-				self.loadingMessage1.text = @"";
-				self.loadingTitle2.text = @"";
-				self.loadingMessage2.text = @"";
+				_loadingTitle1.text = @"";
+				_loadingMessage1.text = @"";
+				_loadingTitle2.text = @"";
+				_loadingMessage2.text = @"";
 			}
 		}
 		else 
 		{
-			self.loadingTitle1.text = @"";
-			self.loadingMessage1.text = @"";
-			self.loadingTitle2.text = @"";
-			self.loadingMessage2.text = @"";
+			_loadingTitle1.text = @"";
+            _loadingMessage1.text = @"";
+			_loadingTitle2.text = @"";
+			_loadingMessage2.text = @"";
 		}
 	}
 	return self;

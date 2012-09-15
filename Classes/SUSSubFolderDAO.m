@@ -7,16 +7,12 @@
 //
 
 #import "SUSSubFolderDAO.h"
-#import "DatabaseSingleton.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "ISMSSubFolderLoader.h"
 #import "Album.h"
 #import "Song.h"
 #import "MusicSingleton.h"
-#import "SavedSettings.h"
-#import "PlaylistSingleton.h"
-#import "JukeboxSingleton.h"
 
 @interface SUSSubFolderDAO (Private) 
 - (NSUInteger)findFirstAlbumRow;
@@ -27,18 +23,16 @@
 @end
 
 @implementation SUSSubFolderDAO
-@synthesize delegate, loader, myId, myArtist;
-@synthesize albumsCount, songsCount, folderLength, albumStartRow, songStartRow;
 
 #pragma mark - Lifecycle
 
 - (void)setup
 {
-    albumStartRow = [self findFirstAlbumRow];
-    songStartRow = [self findFirstSongRow];
-    albumsCount = [self findAlbumsCount];
-    songsCount = [self findSongsCount];
-    folderLength = [self findFolderLength];
+    _albumStartRow = [self findFirstAlbumRow];
+    _songStartRow = [self findFirstSongRow];
+    _albumsCount = [self findAlbumsCount];
+    _songsCount = [self findSongsCount];
+    _folderLength = [self findFolderLength];
 	//DLog(@"albumsCount: %i", albumsCount);
 	//DLog(@"songsCount: %i", songsCount);
 }
@@ -76,8 +70,8 @@
 
 - (void)dealloc
 {
-	[loader cancelLoad];
-	loader.delegate = nil;
+	[_loader cancelLoad];
+	_loader.delegate = nil;
 }
 
 - (FMDatabaseQueue *)dbQueue
@@ -209,7 +203,7 @@
 
 - (Song *)playSongAtTableViewRow:(NSUInteger)row
 {
-	NSUInteger dbRow = songStartRow + (row - self.albumsCount);
+	NSUInteger dbRow = self.songStartRow + (row - self.albumsCount);
 	return [self playSongAtDbRow:dbRow];
 }
 

@@ -7,11 +7,14 @@
 //
 
 #import "BassEqualizer.h"
-#import "SavedSettings.h"
 
 #define ISMS_EqualizerGainReduction 0.35
 
 @interface BassEqualizer()
+{
+    HCHANNEL _channel;
+    float _gain;
+}
 @property (nonatomic, strong) NSMutableArray *eqHandles;
 @property (nonatomic, strong) NSMutableArray *eqValues;
 @property HFX volumeFx;
@@ -20,33 +23,32 @@
 LOG_LEVEL_ISUB_DEFAULT
 
 @implementation BassEqualizer
-@synthesize channel, volumeFx, eqHandles, eqValues, isEqActive, gain;
 
 - (id)initWithChannel:(HCHANNEL)theChannel
 {
 	if ((self = [super init]))
 	{
-		channel = channel;
-		eqValues = [[NSMutableArray alloc] initWithCapacity:4];
-		eqHandles = [[NSMutableArray alloc] initWithCapacity:4];
+		[self setChannel:theChannel];
+		_eqValues = [[NSMutableArray alloc] initWithCapacity:4];
+		_eqHandles = [[NSMutableArray alloc] initWithCapacity:4];
 	}
 	return self;
 }
 
 - (HCHANNEL)channel
 {
-	return channel;
+	return _channel;
 }
 
 - (void)setChannel:(HCHANNEL)theChannel
 {
-	if (channel != theChannel)
+	if (_channel != theChannel)
 	{
 		// Remove any EQ points
 		[self removeAllEqualizerValues];
 		
 		// Set the channel
-		channel = theChannel;
+		_channel = theChannel;
 	}
 
 }
@@ -56,7 +58,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	int i = 0;
 	for (NSNumber *handle in self.eqHandles)
 	{
-		BASS_ChannelRemoveFX(channel, handle.unsignedIntValue);
+		BASS_ChannelRemoveFX(self.channel, handle.unsignedIntValue);
 		i++;
 	}
 	
@@ -67,7 +69,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	
 	//DLog(@"removed %i effect channels", i);
 	[self.eqHandles removeAllObjects];
-	isEqActive = NO;
+	_isEqActive = NO;
 }
 
 - (void)applyEqualizerValues
@@ -84,7 +86,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	
 	for (BassParamEqValue *value in self.eqValues)
 	{
-		HFX handle = BASS_ChannelSetFX(channel, BASS_FX_DX8_PARAMEQ, 0);
+		HFX handle = BASS_ChannelSetFX(self.channel, BASS_FX_DX8_PARAMEQ, 0);
 		BASS_DX8_PARAMEQ p = value.parameters;
 		BASS_FXSetParameters(handle, &p);
 		
@@ -92,14 +94,14 @@ LOG_LEVEL_ISUB_DEFAULT
 		
 		[self.eqHandles addObject:[NSNumber numberWithUnsignedInt:handle]];
 	}
-	isEqActive = YES;
+	_isEqActive = YES;
 }
 
 - (void)updateEqParameter:(BassParamEqValue *)value
 {
 	[self.eqValues replaceObjectAtIndex:value.arrayIndex withObject:value]; 
 	
-	if (isEqActive)
+	if (self.isEqActive)
 	{
 		BASS_DX8_PARAMEQ p = value.parameters;
 		DDLogVerbose(@"updating eq for handle: %i   new freq: %f   new gain: %f", value.handle, p.fCenter, p.fGain);
@@ -113,9 +115,9 @@ LOG_LEVEL_ISUB_DEFAULT
 	BassParamEqValue *eqValue = [BassParamEqValue valueWithParams:value arrayIndex:index];
 	[self.eqValues addObject:eqValue];
 	
-	if (isEqActive)
+	if (self.isEqActive)
 	{
-		HFX handle = BASS_ChannelSetFX(channel, BASS_FX_DX8_PARAMEQ, 0);
+		HFX handle = BASS_ChannelSetFX(self.channel, BASS_FX_DX8_PARAMEQ, 0);
 		BASS_FXSetParameters(handle, &value);
 		eqValue.handle = handle;
 		
@@ -127,10 +129,10 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (NSArray *)removeEqualizerValue:(BassParamEqValue *)value
 {
-	if (isEqActive)
+	if (self.isEqActive)
 	{
 		// Disable the effect channel
-		BASS_ChannelRemoveFX(channel, value.handle);
+		BASS_ChannelRemoveFX(self.channel, value.handle);
 	}
 	
 	// Remove the handle
@@ -154,12 +156,12 @@ LOG_LEVEL_ISUB_DEFAULT
 	
 	[self.eqValues removeAllObjects];
 	
-	isEqActive = NO;
+	_isEqActive = NO;
 }
 
 - (BOOL)toggleEqualizer
 {
-	if (isEqActive)
+	if (self.isEqActive)
 	{
 		[self clearEqualizerValues];
 		self.gain = settingsS.gainMultiplier;
@@ -182,17 +184,17 @@ LOG_LEVEL_ISUB_DEFAULT
 {
 	if (self.volumeFx)
 	{
-		BASS_ChannelRemoveFX(channel, self.volumeFx);
+		BASS_ChannelRemoveFX(self.channel, self.volumeFx);
 	}
 	
-	self.volumeFx = BASS_ChannelSetFX(channel, BASS_FX_BFX_VOLUME, 1);
+	self.volumeFx = BASS_ChannelSetFX(self.channel, BASS_FX_BFX_VOLUME, 1);
 }
 
 - (void)setGain:(float)theGain
 {
-	gain = theGain;
+	_gain = theGain;
 	
-	CGFloat modifiedGainValue = self.isEqActive ? gain - ISMS_EqualizerGainReduction : gain;
+	CGFloat modifiedGainValue = self.isEqActive ? _gain - ISMS_EqualizerGainReduction : _gain;
 	modifiedGainValue = modifiedGainValue < 0. ? 0. : modifiedGainValue;
 	
 	BASS_BFX_VOLUME volumeParamsInit = {0, modifiedGainValue};
@@ -202,7 +204,7 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (float)gain
 {
-	return gain;
+	return _gain;
 }
 
 - (void)dealloc

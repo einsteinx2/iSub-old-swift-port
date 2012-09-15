@@ -7,10 +7,7 @@
 //
 
 #import "iSubAppDelegate.h"
-#import "ViewObjectsSingleton.h"
 #import "DatabaseSingleton.h"
-#import "MusicSingleton.h"
-#import "SocialSingleton.h"
 #import "FMDatabaseAdditions.h"
 #import "ServerListViewController.h"
 #import "FoldersViewController.h"
@@ -31,11 +28,8 @@
 #import "SFHFKeychainUtils.h"
 #import "BWQuincyManager.h"
 #import "BWHockeyManager.h"
-#import "SavedSettings.h"
-#import "CacheSingleton.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "ISMSStreamManager.h"
-#import "AudioEngine.h"
 #import "ISMSUpdateChecker.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
@@ -44,22 +38,6 @@
 #import "SUSStatusLoader.h"
 
 @implementation iSubAppDelegate
-
-@synthesize window;
-
-// Main interface elements for iPhone
-@synthesize background, currentTabBarController, mainTabBarController, offlineTabBarController;
-@synthesize homeNavigationController, playerNavigationController, artistsNavigationController, rootViewController, allAlbumsNavigationController, allSongsNavigationController, playlistsNavigationController, bookmarksNavigationController, playingNavigationController, genresNavigationController, cacheNavigationController, chatNavigationController, supportNavigationController, statusLoader;
-
-// Main interface elemements for iPad
-@synthesize ipadRootViewController;
-
-// Network connectivity objects
-@synthesize wifiReach;
-
-// Multitasking stuff
-@synthesize backgroundTask;
-
 
 + (iSubAppDelegate *)sharedInstance
 {
@@ -109,9 +87,9 @@
 	
 	// Setup network reachability notifications
 	self.wifiReach = [EX2Reachability reachabilityForLocalWiFi];
-	[wifiReach startNotifier];
+	[self.wifiReach startNotifier];
 	[[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reachabilityChanged:) name: kReachabilityChangedNotification object:nil];
-	[wifiReach currentReachabilityStatus];
+	[self.wifiReach currentReachabilityStatus];
 	
 	// Check battery state and register for notifications
 	[UIDevice currentDevice].batteryMonitoringEnabled = YES;
@@ -129,7 +107,7 @@
 		alert.tag = 4;
 		[alert performSelector:@selector(show) withObject:nil afterDelay:1.1];
 	}
-	else if ([wifiReach currentReachabilityStatus] == NotReachable)
+	else if ([self.wifiReach currentReachabilityStatus] == NotReachable)
 	{
 		viewObjectsS.isOfflineMode = YES;
 		
@@ -144,7 +122,7 @@
 	
 //DLog(@"urlString: %@", settingsS.urlString);
 	
-	showIntro = NO;
+	self.showIntro = NO;
 	if (settingsS.isTestServer)
 	{
 		if (viewObjectsS.isOfflineMode)
@@ -154,7 +132,7 @@
 		}
 		else
 		{
-			showIntro = YES;
+			self.showIntro = YES;
 		}
 	}
 	
@@ -164,7 +142,7 @@
 	[AudioEngine sharedInstance];
 	[CacheSingleton sharedInstance];
 	
-    introController = nil;
+    self.introController = nil;
 	
 	//DLog(@"md5: %@", [settings.urlString md5]);
 	
@@ -185,25 +163,25 @@
 //DLog(@"urlString: %@", settingsS.urlString);
 		
 	// Create and display UI
-	introController = nil;
+	self.introController = nil;
 	if (IS_IPAD())
 	{
-		ipadRootViewController = [[iPadRootViewController alloc] initWithNibName:nil bundle:nil];
+		self.ipadRootViewController = [[iPadRootViewController alloc] initWithNibName:nil bundle:nil];
 		[self.window setBackgroundColor:[UIColor clearColor]];
-		[self.window addSubview:ipadRootViewController.view];
+		[self.window addSubview:self.ipadRootViewController.view];
 		[self.window makeKeyAndVisible];
 		
-		if (showIntro)
+		if (self.showIntro)
 		{
-			introController = [[IntroViewController alloc] init];
-			introController.modalPresentationStyle = UIModalPresentationFormSheet;
-			[ipadRootViewController presentModalViewController:introController animated:NO];
+			self.introController = [[IntroViewController alloc] init];
+			self.introController.modalPresentationStyle = UIModalPresentationFormSheet;
+			[self.ipadRootViewController presentModalViewController:self.introController animated:NO];
 		}
 	}
 	else
 	{
 		// Setup the tabBarController
-		mainTabBarController.moreNavigationController.navigationBar.barStyle = UIBarStyleBlack;
+		self.mainTabBarController.moreNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 		/*// Add the support tab
 		[Crittercism showCrittercism:nil];
 		UIViewController *vc = (UIViewController *)[Crittercism sharedInstance].crittercismViewController;
@@ -233,17 +211,17 @@
 			[self.window addSubview:self.mainTabBarController.view];
 		}
 		
-		if (showIntro)
+		if (self.showIntro)
 		{
-			introController = [[IntroViewController alloc] init];
-			[self.currentTabBarController presentModalViewController:introController animated:NO];
+			self.introController = [[IntroViewController alloc] init];
+			[self.currentTabBarController presentModalViewController:self.introController animated:NO];
 		}
 	}
 	if (settingsS.isJukeboxEnabled)
-		window.backgroundColor = viewObjectsS.jukeboxColor;
+		self.window.backgroundColor = viewObjectsS.jukeboxColor;
 	else 
-		window.backgroundColor = viewObjectsS.windowColor;
-	[window makeKeyAndVisible];	
+		self.window.backgroundColor = viewObjectsS.windowColor;
+	[self.window makeKeyAndVisible];	
 	
 //DLog(@"urlString: %@", settingsS.urlString);
 	
@@ -512,11 +490,11 @@
 - (void)createHTTPServer
 {
 	// Create http server
-	httpServer = [HTTPServer new];
-	[httpServer setType:@"_http._tcp."];
-	[httpServer setConnectionClass:[MyHTTPConnection class]];
+	self.httpServer = [[HTTPServer alloc] init];
+	[self.httpServer setType:@"_http._tcp."];
+	[self.httpServer setConnectionClass:[MyHTTPConnection class]];
 	NSString *root = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES) objectAtIndexSafe:0];
-	[httpServer setDocumentRoot:[NSURL fileURLWithPath:root]];
+	[self.httpServer setDocumentRoot:[NSURL fileURLWithPath:root]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(displayInfoUpdate:) name:@"LocalhostAdressesResolved" object:nil];
 	[LocalhostAddresses performSelectorInBackground:@selector(list) withObject:nil];
 }
@@ -554,25 +532,25 @@
 	
 	if(notification)
 	{
-		addresses = [[notification object] copy];
+		self.addresses = [[notification object] copy];
 	//DLog(@"addresses: %@", addresses);
 	}
 	
-	if(addresses == nil)
+	if(self.addresses == nil)
 	{
 		return;
 	}
 	
 	NSString *info;
-	UInt16 port = [httpServer port];
+	UInt16 port = [self.httpServer port];
 	
 	NSString *localIP = nil;
 	
-	localIP = [addresses objectForKey:@"en0"];
+	localIP = [self.addresses objectForKey:@"en0"];
 	
 	if (!localIP)
 	{
-		localIP = [addresses objectForKey:@"en1"];
+		localIP = [self.addresses objectForKey:@"en1"];
 	}
 	
 	if (!localIP)
@@ -580,7 +558,7 @@
 	else
 		info = [NSString stringWithFormat:@"http://iphone.local:%d		http://%@:%d\n", port, localIP, port];
 	
-	NSString *wwwIP = [addresses objectForKey:@"www"];
+	NSString *wwwIP = [self.addresses objectForKey:@"www"];
 	
 	if (wwwIP)
 		info = [info stringByAppendingFormat:@"Web: %@:%d\n", wwwIP, port];
@@ -594,9 +572,9 @@
 
 - (void)startStopServer
 {
-	if (isHttpServerOn)
+	if (self.isHttpServerOn)
 	{
-		[httpServer stop];
+		[self.httpServer stop];
 	}
 	else
 	{
@@ -609,7 +587,7 @@
 		//	[httpServer setPort:8080];
 		
 		NSError *error;
-		if(![httpServer start:&error])
+		if(![self.httpServer start:&error])
 		{
 		//DLog(@"Error starting HTTP Server: %@", error);
 		}
@@ -645,24 +623,24 @@
 	
 	if ([[UIApplication sharedApplication] respondsToSelector:@selector(beginBackgroundTaskWithExpirationHandler:)])
     {
-		backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:
+		self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:
 						  ^{
 							  // App is about to be put to sleep, stop the cache download queue
 							  if (cacheQueueManagerS.isQueueDownloading)
 								  [cacheQueueManagerS stopDownloadQueue];
 							  
 							  // Make sure to end the background so we don't get killed by the OS
-							  [application endBackgroundTask:backgroundTask];
-							  backgroundTask = UIBackgroundTaskInvalid;
+							  [application endBackgroundTask:self.backgroundTask];
+							  self.backgroundTask = UIBackgroundTaskInvalid;
 						  }];
 		
 		// Check the remaining background time and alert the user if necessary
 		dispatch_queue_t queue = dispatch_queue_create("isub.backgroundqueue", 0);
 		dispatch_async(queue, 
 		^{
-			isInBackground = YES;
+			self.isInBackground = YES;
 			UIApplication *application = [UIApplication sharedApplication];
-			while ([application backgroundTimeRemaining] > 1.0 && isInBackground) 
+			while ([application backgroundTimeRemaining] > 1.0 && self.isInBackground) 
 			{
 				@autoreleasepool 
 				{
@@ -672,8 +650,8 @@
 					if ([application backgroundTimeRemaining] < 200.0 && !cacheQueueManagerS.isQueueDownloading)
 					{
 					//DLog("Sleeping early, isQueueListDownloading: %i", cacheQueueManagerS.isQueueDownloading);
-						[application endBackgroundTask:backgroundTask];
-						backgroundTask = UIBackgroundTaskInvalid;
+						[application endBackgroundTask:self.backgroundTask];
+						self.backgroundTask = UIBackgroundTaskInvalid;
 						break;
 					}
 					
@@ -705,11 +683,11 @@
 	
 	if ([[UIApplication sharedApplication] respondsToSelector:@selector(endBackgroundTask:)])
     {
-		isInBackground = NO;
-		if (backgroundTask != UIBackgroundTaskInvalid)
+		self.isInBackground = NO;
+		if (self.backgroundTask != UIBackgroundTaskInvalid)
 		{
-			[[UIApplication sharedApplication] endBackgroundTask:backgroundTask];
-			backgroundTask = UIBackgroundTaskInvalid;
+			[[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
+			self.backgroundTask = UIBackgroundTaskInvalid;
 		}
 	}
 
@@ -805,7 +783,7 @@
 
 - (void)enterOnlineModeForce
 {
-	if ([wifiReach currentReachabilityStatus] == NotReachable)
+	if ([self.wifiReach currentReachabilityStatus] == NotReachable)
 		return;
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_EnteringOnlineMode];
@@ -831,7 +809,7 @@
 	else
 	{
 		[viewObjectsS orderMainTabBarController];
-		[window addSubview:mainTabBarController.view];
+		[self.window addSubview:self.mainTabBarController.view];
 	}
 	
 	[musicS updateLockScreenInfo];
@@ -913,7 +891,7 @@
 
 - (BOOL)isWifi
 {
-	if ([wifiReach currentReachabilityStatus] == ReachableViaWiFi || IS_3G_UNRESTRICTED)
+	if ([self.wifiReach currentReachabilityStatus] == ReachableViaWiFi || IS_3G_UNRESTRICTED)
 		return YES;
 	else
 		return NO;

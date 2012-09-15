@@ -7,11 +7,8 @@
 //
 
 #import "ISMSCoverArtLoader.h"
-#import "DatabaseSingleton.h"
-#import "ViewObjectsSingleton.h"
 #import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueueAdditions.h"
-#import "SavedSettings.h"
 
 @interface ISMSCoverArtLoader()
 // Keep strong reference to self so we don't die until done downloading when used standalone
@@ -19,7 +16,6 @@
 @end
 
 @implementation ISMSCoverArtLoader
-@synthesize selfRef;
 
 static NSMutableArray *loadingImageNames;
 static NSObject *syncObject;
@@ -34,16 +30,14 @@ static void initialize_navigationBarImages()
 #define ISMSNotification_CoverArtFinishedInternal @"ISMS cover art finished internal notification"
 #define ISMSNotification_CoverArtFailedInternal @"ISMS cover art failed internal notification"
 
-@synthesize coverArtId, isLarge;
-
 #pragma mark - Lifecycle
 
 - (id)initWithDelegate:(NSObject<ISMSLoaderDelegate>*)delegate coverArtId:(NSString *)artId isLarge:(BOOL)large
 {
 	if ((self = [super initWithDelegate:delegate]))
 	{
-		isLarge = large;
-		coverArtId = [artId copy];
+		_isLarge = large;
+		_coverArtId = [artId copy];
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(coverArtDownloadFinished:) name:ISMSNotification_CoverArtFinishedInternal object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(coverArtDownloadFailed:) name:ISMSNotification_CoverArtFailedInternal object:nil];
@@ -70,7 +64,7 @@ static void initialize_navigationBarImages()
 			// My art download finished, so notify my delegate
 			[self informDelegateLoadingFinished];
 			
-			if (isLarge)
+			if (self.isLarge)
 				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AlbumArtLargeDownloaded];
 		}
 	}
@@ -94,7 +88,7 @@ static void initialize_navigationBarImages()
 
 - (FMDatabaseQueue *)dbQueue
 {
-	if (isLarge)
+	if (self.isLarge)
 	{
 		return IS_IPAD() ? databaseS.coverArtCacheDb540Queue : databaseS.coverArtCacheDb320Queue;
 	}
@@ -138,7 +132,7 @@ static void initialize_navigationBarImages()
 					// This art is not loading, so start loading it
 					
 					NSString *size = nil;
-					if (isLarge)
+					if (self.isLarge)
 					{
 						if (IS_IPAD())
 							size = SCREEN_SCALE() == 2.0 ? @"1080" : @"540";

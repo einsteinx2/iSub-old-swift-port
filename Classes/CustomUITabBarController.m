@@ -8,7 +8,6 @@
 
 #import "CustomUITabBarController.h"
 #import "MoreTableViewDataSource.h"
-#import "ViewObjectsSingleton.h"
 
 @implementation CustomUITabBarController
 
