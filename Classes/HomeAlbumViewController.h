@@ -6,7 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@class Artist, Album;
+@class ISMSArtist, ISMSAlbum;
 
 @interface HomeAlbumViewController : UITableViewController 
 

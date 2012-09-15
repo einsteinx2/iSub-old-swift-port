@@ -6,9 +6,9 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "ChatMessage.h"
+#import "ISMSChatMessage.h"
 
-@implementation ChatMessage
+@implementation ISMSChatMessage
 
 - (id)initWithTBXMLElement:(TBXMLElement *)element
 {
@@ -29,7 +29,7 @@
 
 - (id)copyWithZone:(NSZone *)zone
 {
-	ChatMessage *newChatMessage = [[ChatMessage alloc] init];
+	ISMSChatMessage *newChatMessage = [[ISMSChatMessage alloc] init];
 	newChatMessage.timestamp = self.timestamp;
 	newChatMessage.user = self.user;
 	newChatMessage.message = self.message;

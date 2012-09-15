@@ -7,20 +7,11 @@
 //
 
 #import "SUSServerPlaylistsLoader.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
-#import "TBXML.h"
 #import "SUSServerPlaylist.h"
 
 @implementation SUSServerPlaylistsLoader
 
 #pragma mark - Lifecycle
-
-- (void)setup
-{
-	[super setup];
-}
-
 
 - (FMDatabaseQueue *)dbQueue
 {

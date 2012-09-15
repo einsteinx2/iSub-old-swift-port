@@ -12,19 +12,10 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "PlaylistsUITableViewCell.h"
 #import "CurrentPlaylistSongUITableViewCell.h"
-#import "AsynchronousImageView.h"
 #import "LocalPlaylistsUITableViewCell.h"
 #import "PlaylistSongsViewController.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
-#import "Song.h"
 #import "StoreViewController.h"
-#import "CustomUIAlertView.h"
-#import "TBXML.h"
-#import "NSMutableURLRequest+SUS.h"
-#import "OrderedDictionary.h"
 #import "SUSServerPlaylistsDAO.h"
-#import "SUSServerPlaylist.h"
 #import "PlaylistSingleton.h"
 #import "UIViewController+PushViewControllerCustom.h"
 
@@ -142,7 +133,7 @@
 	
 	[self.tableView addFooterShadow];
 	
-	self.connectionQueue = [[BBSimpleConnectionQueue alloc] init];
+	self.connectionQueue = [[EX2SimpleConnectionQueue alloc] init];
 	self.connectionQueue.delegate = self;
 }
 
@@ -802,7 +793,7 @@
 		 {
 			 @autoreleasepool 
 			 {
-				 Song *aSong = [Song songFromDbRow:i inTable:table inDatabase:db];
+				 ISMSSong *aSong = [ISMSSong songFromDbRow:i inTable:table inDatabase:db];
 				 [songIds addObject:n2N(aSong.songId)];
 			 }
 		 }
@@ -1109,7 +1100,7 @@
 					[databaseS.localPlaylistsDbQueue inDatabase:^(FMDatabase *db)
 					{
 						[db executeUpdate:@"INSERT INTO localPlaylists (playlist, md5) VALUES (?, ?)", self.playlistNameTextField.text, [self.playlistNameTextField.text md5]];
-						[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [self.playlistNameTextField.text md5], [Song standardSongColumnSchema]]];
+						[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [self.playlistNameTextField.text md5], [ISMSSong standardSongColumnSchema]]];
 						
 						[db executeUpdate:@"ATTACH DATABASE ? AS ?", [databaseS.databaseFolderPath stringByAppendingPathComponent:databaseName], @"currentPlaylist"];
 						//[db executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:@"%@/%@currentPlaylist.db", databaseS.databaseFolderPath, [settingsS.urlString md5]], @"currentPlaylistDb"];
@@ -1157,7 +1148,7 @@
 				{
 					// If yes, overwrite the playlist
 					[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE playlist%@", [self.playlistNameTextField.text md5]]];
-					[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [self.playlistNameTextField.text md5], [Song standardSongColumnSchema]]];
+					[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [self.playlistNameTextField.text md5], [ISMSSong standardSongColumnSchema]]];
 					
 					[db executeUpdate:@"ATTACH DATABASE ? AS ?", [databaseS.databaseFolderPath stringByAppendingPathComponent:databaseName], @"currentPlaylistDb"];
 					if ([db hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [db lastErrorCode], [db lastErrorMessage]); }
@@ -1444,7 +1435,7 @@ static NSString *kName_Error = @"error";
 		//DLog(@"table: %@", table);
 			
 			[db executeUpdate:@"DROP TABLE moveTemp"];
-			NSString *query = [NSString stringWithFormat:@"CREATE TABLE moveTemp (%@)", [Song standardSongColumnSchema]];
+			NSString *query = [NSString stringWithFormat:@"CREATE TABLE moveTemp (%@)", [ISMSSong standardSongColumnSchema]];
 			[db executeUpdate:query];
 			
 			if (fromRow < toRow)
@@ -1585,7 +1576,7 @@ static NSString *kName_Error = @"error";
 			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
 		}
 		
-		Song *aSong = [playlistS songForIndex:indexPath.row];
+		ISMSSong *aSong = [playlistS songForIndex:indexPath.row];
 		
 		cell.coverArtView.coverArtId = aSong.coverArtId;
 		
@@ -1709,7 +1700,7 @@ static NSString *kName_Error = @"error";
 	{
 		if (segmentedControl.selectedSegmentIndex == 0)
 		{
-            Song *playedSong = [musicS playSongAtPosition:indexPath.row];
+            ISMSSong *playedSong = [musicS playSongAtPosition:indexPath.row];
             if (!playedSong.isVideo)
                 [self showPlayer];
 		}

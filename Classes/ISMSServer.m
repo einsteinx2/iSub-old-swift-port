@@ -6,9 +6,9 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "Server.h"
+#import "ISMSServer.h"
 
-@implementation Server
+@implementation ISMSServer
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {

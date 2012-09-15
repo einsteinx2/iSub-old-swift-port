@@ -6,8 +6,6 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-
-
 @class MusicSingleton;
 
 @interface JukeboxConnectionDelegate : NSObject 

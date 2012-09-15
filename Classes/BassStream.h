@@ -8,13 +8,13 @@
 
 #import "bass.h"
 
-@class Song, BassGaplessPlayer;
+@class ISMSSong, BassGaplessPlayer;
 @interface BassStream : NSObject
 
 @property (strong, nonatomic) BassGaplessPlayer *player;
 
 @property (nonatomic) HSTREAM stream;
-@property (nonatomic, copy) Song *song;
+@property (nonatomic, copy) ISMSSong *song;
 
 @property (strong, nonatomic) NSFileHandle *fileHandle;
 @property BOOL shouldBreakWaitLoop;

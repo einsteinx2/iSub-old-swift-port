@@ -12,7 +12,7 @@
 
 @interface SearchSongUITableViewCell : CustomUITableViewCell 
 
-@property (copy) Song *mySong;
+@property (copy) ISMSSong *mySong;
 @property NSUInteger row;
 
 @property (strong) AsynchronousImageView *coverArtView;

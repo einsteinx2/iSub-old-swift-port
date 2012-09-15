@@ -7,9 +7,6 @@
 //
 
 #import "ISMSStreamManager.h"
-#import "FMDatabaseAdditions.h"
-#import "Song.h"
-#import "NSMutableURLRequest+SUS.h"
 #import "MusicSingleton.h"
 #import "ISMSStreamHandler.h"
 #import "ISMSCFNetworkStreamHandler.h"
@@ -17,14 +14,13 @@
 #import "ISMSCoverArtLoader.h"
 #import "SUSLyricsDAO.h"
 #import "ISMSCacheQueueManager.h"
-#import "TBXML.h"
 
 LOG_LEVEL_ISUB_DEFAULT
 #define maxNumOfReconnects 5
 
 @implementation ISMSStreamManager
 
-- (Song *)currentStreamingSong
+- (ISMSSong *)currentStreamingSong
 {
 	if (!self.isQueueDownloading)
 		return nil;
@@ -33,7 +29,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	return handler.mySong;
 }
 
-- (ISMSStreamHandler *)handlerForSong:(Song *)aSong
+- (ISMSStreamHandler *)handlerForSong:(ISMSSong *)aSong
 {
 	if (!aSong)
 		return nil;
@@ -49,7 +45,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	return nil;
 }
 
-- (BOOL)isSongFirstInQueue:(Song *)aSong
+- (BOOL)isSongFirstInQueue:(ISMSSong *)aSong
 {
 	if (!aSong)
 		return NO;
@@ -58,7 +54,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	return [aSong isEqualToSong:firstHandler.mySong];
 }
 
-- (BOOL)isSongDownloading:(Song *)aSong
+- (BOOL)isSongDownloading:(ISMSSong *)aSong
 {
 	if (!aSong)
 		return NO;
@@ -109,7 +105,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	
 	// Gather the handler objects to cancel
 	NSMutableArray *handlersToSkip = [NSMutableArray arrayWithCapacity:[songsToSkip count]];
-	for (Song *aSong in songsToSkip)
+	for (ISMSSong *aSong in songsToSkip)
 	{
 		ISMSStreamHandler *handler = [self handlerForSong:aSong];
 		if (handler)
@@ -121,7 +117,7 @@ LOG_LEVEL_ISUB_DEFAULT
 }
 
 // Convenience method
-- (void)cancelAllStreamsExceptForSong:(Song *)aSong
+- (void)cancelAllStreamsExceptForSong:(ISMSSong *)aSong
 {
 	// If aSong == nil, just cancel all handlers
 	if (![self handlerForSong:aSong])
@@ -177,7 +173,7 @@ LOG_LEVEL_ISUB_DEFAULT
 }
 
 // Convenience method
-- (void)cancelStreamForSong:(Song *)aSong
+- (void)cancelStreamForSong:(ISMSSong *)aSong
 {
 	// If aSong == nil, do nothing
 	if (!aSong)
@@ -236,7 +232,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	
 	// Gather the handler objects to skip
 	NSMutableArray *handlersToSkip = [NSMutableArray arrayWithCapacity:[songsToSkip count]];
-	for (Song *aSong in songsToSkip)
+	for (ISMSSong *aSong in songsToSkip)
 	{
 		ISMSStreamHandler *handler = [self handlerForSong:aSong];
 		if (handler) 
@@ -248,7 +244,7 @@ LOG_LEVEL_ISUB_DEFAULT
 }
 
 // Convenience method
-- (void)removeAllStreamsExceptForSong:(Song *)aSong
+- (void)removeAllStreamsExceptForSong:(ISMSSong *)aSong
 {
 	// If aSong == nil, remove all handlers
 	if (![self handlerForSong:aSong])
@@ -302,7 +298,7 @@ LOG_LEVEL_ISUB_DEFAULT
 }
 
 // Convenience method
-- (void)removeStreamForSong:(Song *)aSong
+- (void)removeStreamForSong:(ISMSSong *)aSong
 {
 	// If aSong == nil, do nothing
 	if (!aSong)
@@ -423,7 +419,7 @@ LOG_LEVEL_ISUB_DEFAULT
 
 #pragma mark Download
 
-- (void)queueStreamForSong:(Song *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload
+- (void)queueStreamForSong:(ISMSSong *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload
 {
 	if (!song)
 		return;
@@ -460,23 +456,23 @@ LOG_LEVEL_ISUB_DEFAULT
 	[self saveHandlerStack];
 }
 
-- (void)queueStreamForSong:(Song *)song atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload
+- (void)queueStreamForSong:(ISMSSong *)song atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload
 {	
 	[self queueStreamForSong:song byteOffset:0 secondsOffset:0.0 atIndex:index isTempCache:isTemp isStartDownload:isStartDownload];
 }
 
-- (void)queueStreamForSong:(Song *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload
+- (void)queueStreamForSong:(ISMSSong *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload
 {
 	[self queueStreamForSong:song byteOffset:byteOffset secondsOffset:secondsOffset atIndex:[self.handlerStack count] isTempCache:isTemp isStartDownload:isStartDownload];
 }
 
-- (void)queueStreamForSong:(Song *)song isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload
+- (void)queueStreamForSong:(ISMSSong *)song isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload
 {
 	//DLog(@"queuing stream for song: %@", song.title);
 	[self queueStreamForSong:song byteOffset:0 secondsOffset:0.0 atIndex:[self.handlerStack count] isTempCache:isTemp isStartDownload:isStartDownload];
 }
 
-- (BOOL)isSongInQueue:(Song *)aSong
+- (BOOL)isSongInQueue:(ISMSSong *)aSong
 {
 	BOOL isSongInQueue = NO;
 	for (ISMSStreamHandler *handler in self.handlerStack)
@@ -505,7 +501,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	{
 		for (int i = 0; i < numStreamsToQueue; i++)
 		{
-			Song *aSong = [playlistS songForIndex:[playlistS indexForOffsetFromCurrentIndex:i]];
+			ISMSSong *aSong = [playlistS songForIndex:[playlistS indexForOffsetFromCurrentIndex:i]];
 			if (aSong && !aSong.isVideo && ![self isSongInQueue:aSong] && !aSong.isFullyCached && !viewObjectsS.isOfflineMode && ![cacheQueueManagerS.currentQueuedSong isEqualToSong:aSong])
 			{
 				// Queue the song for download
@@ -545,8 +541,8 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (void)currentPlaylistOrderChanged
 {
-	Song *currentSong = playlistS.currentSong;
-	Song *nextSong = playlistS.nextSong;
+	ISMSSong *currentSong = playlistS.currentSong;
+	ISMSSong *nextSong = playlistS.nextSong;
 	NSMutableArray *songsToSkip = [NSMutableArray arrayWithCapacity:2];
 	if (currentSong) [songsToSkip addObject:currentSong];
 	if (nextSong) [songsToSkip addObject:nextSong];
@@ -584,8 +580,8 @@ LOG_LEVEL_ISUB_DEFAULT
 	// Update the last cached song
 	self.lastCachedSong = handler.mySong;
 	
-	Song *currentSong = playlistS.currentSong;
-	Song *nextSong = playlistS.nextSong;
+	ISMSSong *currentSong = playlistS.currentSong;
+	ISMSSong *nextSong = playlistS.nextSong;
 	
 //DLog(@"starting playback for %@  file size: %llu", handler.mySong, handler.totalBytesTransferred);
 	

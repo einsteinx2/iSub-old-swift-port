@@ -7,7 +7,7 @@
 //
 #import "ISMSLoader.h"
 
-@class Artist;
+@class ISMSArtist;
 
 @interface ISMSQueueAllLoader : ISMSLoader 
 
@@ -19,20 +19,23 @@
 @property (copy) NSString *currentPlaylist;
 @property (copy) NSString *shufflePlaylist;
 
-@property (strong) Artist *myArtist;
+@property (strong) ISMSArtist *myArtist;
 
 @property (strong) NSMutableArray *folderIds;
 
 @property (strong) NSMutableArray *listOfAlbums;
 @property (strong) NSMutableArray *listOfSongs;
 
-- (void)loadData:(NSString *)folderId artist:(Artist *)theArtist;// isQueue:(BOOL)queue;
+- (void)loadData:(NSString *)folderId artist:(ISMSArtist *)theArtist;// isQueue:(BOOL)queue;
 
-- (void)queueData:(NSString *)folderId artist:(Artist *)theArtist;
-- (void)cacheData:(NSString *)folderId artist:(Artist *)theArtist;
-- (void)playAllData:(NSString *)folderId artist:(Artist *)theArtist;
-- (void)shuffleData:(NSString *)folderId artist:(Artist *)theArtist;
+- (void)queueData:(NSString *)folderId artist:(ISMSArtist *)theArtist;
+- (void)cacheData:(NSString *)folderId artist:(ISMSArtist *)theArtist;
+- (void)playAllData:(NSString *)folderId artist:(ISMSArtist *)theArtist;
+- (void)shuffleData:(NSString *)folderId artist:(ISMSArtist *)theArtist;
 
 - (void)finishLoad;
 
 @end
+
+#import "SUSQueueAllLoader.h"
+#import "PMSQueueAllLoader.h"

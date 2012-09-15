@@ -8,7 +8,7 @@
 
 #import "ISMSLoaderDelegate.h"
 
-@class Album, SUSAllAlbumsDAO, EGORefreshTableHeaderView, LoadingScreen, SUSAllSongsDAO;
+@class ISMSAlbum, SUSAllAlbumsDAO, EGORefreshTableHeaderView, LoadingScreen, SUSAllSongsDAO;
 
 @interface AllAlbumsViewController : UITableViewController <UISearchBarDelegate, ISMSLoaderDelegate> 
 

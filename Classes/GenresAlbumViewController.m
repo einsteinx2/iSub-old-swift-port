@@ -11,14 +11,8 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "GenresAlbumUITableViewCell.h"
 #import "GenresSongUITableViewCell.h"
-#import "Artist.h"
-#import "Album.h"
-#import "Song.h"
-#import "FMDatabaseAdditions.h"
 #import "AllSongsUITableViewCell.h"
-#import "AsynchronousImageView.h"
 #import "UIViewController+PushViewControllerCustom.h"
-#import "FMDatabaseQueueAdditions.h"
 
 @implementation GenresAlbumViewController
 
@@ -202,7 +196,7 @@
 	{
 		@autoreleasepool 
 		{
-			Song *aSong = [Song songFromGenreDbQueue:md5];
+			ISMSSong *aSong = [ISMSSong songFromGenreDbQueue:md5];
 			[aSong addToCurrentPlaylistDbQueue];
 		}
 	}
@@ -268,7 +262,7 @@
 	{
 		@autoreleasepool 
 		{
-			Song *aSong = [Song songFromGenreDbQueue:md5];
+			ISMSSong *aSong = [ISMSSong songFromGenreDbQueue:md5];
 			[aSong addToCurrentPlaylistDbQueue];
 		}
 	}
@@ -376,7 +370,7 @@
 		NSUInteger a = indexPath.row - [listOfAlbums count];
 		cell.md5 = [listOfSongs objectAtIndexSafe:a];
 		
-		Song *aSong = [Song songFromGenreDbQueue:cell.md5];
+		ISMSSong *aSong = [ISMSSong songFromGenreDbQueue:cell.md5];
 		
 		if (aSong.track)
 		{
@@ -513,7 +507,7 @@
 			{
 				@autoreleasepool
 				{
-					Song *aSong = [Song songFromGenreDbQueue:songMD5];
+					ISMSSong *aSong = [ISMSSong songFromGenreDbQueue:songMD5];
 
 					[aSong addToCurrentPlaylistDbQueue];
 					
@@ -538,7 +532,7 @@
             [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 			
 			// Start the song
-            Song *playedSong = [musicS playSongAtPosition:songRow];
+            ISMSSong *playedSong = [musicS playSongAtPosition:songRow];
             if (!playedSong.isVideo)
                 [self showPlayer];
 		}

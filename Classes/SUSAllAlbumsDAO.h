@@ -6,7 +6,7 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-@class FMDatabase, Album;
+@class FMDatabase, ISMSAlbum;
 
 @interface SUSAllAlbumsDAO : NSObject
 {
@@ -19,10 +19,10 @@
 
 - (NSArray *)index;
 
-- (Album *)albumForPosition:(NSUInteger)position;
+- (ISMSAlbum *)albumForPosition:(NSUInteger)position;
 - (void)clearSearchTable;
 - (void)searchForAlbumName:(NSString *)name;
-- (Album *)albumForPositionInSearch:(NSUInteger)position;
+- (ISMSAlbum *)albumForPositionInSearch:(NSUInteger)position;
 - (void)clearSearchTable;
 
 @end

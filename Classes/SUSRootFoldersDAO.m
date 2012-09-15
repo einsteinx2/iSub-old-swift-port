@@ -7,13 +7,7 @@
 //
 
 #import "SUSRootFoldersDAO.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
-#import "TBXML.h"
-#import "Artist.h"
-#import "Index.h"
 #import "ISMSRootFoldersLoader.h"
-#import "Song+DAO.h"
 
 @implementation SUSRootFoldersDAO
 
@@ -146,9 +140,9 @@
 		return [NSArray arrayWithArray:counts];
 }
 
-- (Artist *)rootFolderArtistForPosition:(NSUInteger)position
+- (ISMSArtist *)rootFolderArtistForPosition:(NSUInteger)position
 {
-	__block Artist *anArtist = nil;
+	__block ISMSArtist *anArtist = nil;
 	[self.dbQueue inDatabase:^(FMDatabase *db)
 	{
 		NSString *query = [NSString stringWithFormat:@"SELECT * FROM rootFolderNameCache%@ WHERE ROWID = ?", self.tableModifier];
@@ -159,7 +153,7 @@
 			{
 				NSString *name = [result stringForColumn:@"name"];
 				NSString *folderId = [result stringForColumn:@"id"];
-				anArtist = [Artist artistWithName:name andArtistId:folderId];
+				anArtist = [ISMSArtist artistWithName:name andArtistId:folderId];
 			}
 		}
 		[result close];
@@ -168,9 +162,9 @@
 	return anArtist;
 }
 
-- (Artist *)rootFolderArtistForPositionInSearch:(NSUInteger)position
+- (ISMSArtist *)rootFolderArtistForPositionInSearch:(NSUInteger)position
 {
-	__block Artist *anArtist = nil;
+	__block ISMSArtist *anArtist = nil;
 	[self.dbQueue inDatabase:^(FMDatabase *db)
 	{
 		NSString *query = @"SELECT * FROM rootFolderNameSearch WHERE ROWID = ?";
@@ -181,7 +175,7 @@
 			{
 				NSString *name = [result stringForColumn:@"name"];
 				NSString *folderId = [result stringForColumn:@"id"];
-				anArtist = [Artist artistWithName:name andArtistId:folderId];
+				anArtist = [ISMSArtist artistWithName:name andArtistId:folderId];
 			}
 		}
 		[result close];
@@ -331,12 +325,12 @@
 	return _indexCounts;
 }
 
-- (Artist *)artistForPosition:(NSUInteger)position
+- (ISMSArtist *)artistForPosition:(NSUInteger)position
 {
 	return [self rootFolderArtistForPosition:position];
 }
 
-- (Artist *)artistForPositionInSearch:(NSUInteger)position
+- (ISMSArtist *)artistForPositionInSearch:(NSUInteger)position
 {
 	return [self rootFolderArtistForPositionInSearch:position];
 }
@@ -405,7 +399,7 @@
 		[db executeUpdate:@"CREATE TABLE albumListCache (id TEXT PRIMARY KEY, data BLOB)"];
 		[db executeUpdate:@"CREATE TABLE albumsCache (folderId TEXT, title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
 		[db executeUpdate:@"CREATE INDEX albumsFolderId ON albumsCache (folderId)"];
-		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE songsCache (folderId TEXT, %@)", [Song standardSongColumnSchema]]];
+		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE songsCache (folderId TEXT, %@)", [ISMSSong standardSongColumnSchema]]];
 		[db executeUpdate:@"CREATE INDEX songsFolderId ON songsCache (folderId)"];
 		[db executeUpdate:@"CREATE TABLE albumsCacheCount (folderId TEXT, count INTEGER)"];
 		[db executeUpdate:@"CREATE INDEX albumsCacheCountFolderId ON albumsCacheCount (folderId)"];

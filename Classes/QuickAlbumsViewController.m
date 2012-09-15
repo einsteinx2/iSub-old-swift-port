@@ -9,8 +9,6 @@
 #import "QuickAlbumsViewController.h"
 #import "HomeAlbumViewController.h"
 #import "HomeXMLParser.h"
-#import "CustomUIAlertView.h"
-#import "NSMutableURLRequest+SUS.h"
 #import "iPadRootViewController.h"
 #import "StackScrollViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"

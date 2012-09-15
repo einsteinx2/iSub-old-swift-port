@@ -11,16 +11,9 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "CacheAlbumUITableViewCell.h"
 #import "CacheSongUITableViewCell.h"
-#import "Artist.h"
-#import "Album.h"
-#import "Song.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
-#import "NSMutableURLRequest+SUS.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "iPadRootViewController.h"
 #import "StackScrollViewController.h"
-#import "FMDatabaseQueueAdditions.h"
 
 @implementation CacheAlbumViewController
 
@@ -326,7 +319,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	{
 		@autoreleasepool 
 		{
-			Song *aSong = [Song songFromCacheDbQueue:md5];
+			ISMSSong *aSong = [ISMSSong songFromCacheDbQueue:md5];
 			[aSong addToCurrentPlaylistDbQueue];
 		}
 	}
@@ -508,7 +501,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 		NSUInteger a = indexPath.row - self.listOfAlbums.count;
 		cell.md5 = [[self.listOfSongs objectAtIndexSafe:a] objectAtIndexSafe:0];
 		
-		Song *aSong = [Song songFromCacheDbQueue:cell.md5];
+		ISMSSong *aSong = [ISMSSong songFromCacheDbQueue:cell.md5];
 		
 		if (aSong.track)
 		{
@@ -639,7 +632,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			}
 			for (NSArray *song in self.listOfSongs)
 			{
-				Song *aSong = [Song songFromCacheDbQueue:[song objectAtIndexSafe:0]];
+				ISMSSong *aSong = [ISMSSong songFromCacheDbQueue:[song objectAtIndexSafe:0]];
 				[aSong addToCurrentPlaylistDbQueue];
 			}
 						

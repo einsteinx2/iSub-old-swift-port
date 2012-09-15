@@ -12,16 +12,8 @@
 #import "AlbumUITableViewCell.h"
 #import "SongUITableViewCell.h"
 #import "AllSongsUITableViewCell.h"
-#import "AsynchronousImageView.h"
-#import "Artist.h"
-#import "Album.h"
-#import "Song.h"
-#import "FMDatabaseAdditions.h"
-#import "LoadingScreen.h"
 #import "EGORefreshTableHeaderView.h"
 #import "ModalAlbumArtViewController.h"
-#import "CustomUIAlertView.h"
-#import "NSMutableURLRequest+SUS.h"
 #import "SUSSubFolderDAO.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "iPadRootViewController.h"
@@ -52,7 +44,7 @@
 
 #pragma mark Lifecycle
 
-- (AlbumViewController *)initWithArtist:(Artist *)anArtist orAlbum:(Album *)anAlbum
+- (AlbumViewController *)initWithArtist:(ISMSArtist *)anArtist orAlbum:(ISMSAlbum *)anAlbum
 {
 	if (anArtist == nil && anAlbum == nil)
 	{
@@ -75,7 +67,7 @@
 		{
 			self.title = anAlbum.title;
 			self.myId = anAlbum.albumId;
-			self.myArtist = [Artist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
+			self.myArtist = [ISMSArtist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
 			self.myAlbum = anAlbum;
 		}
 		
@@ -212,8 +204,8 @@
 		
 		if (!self.myAlbum)
 		{
-			Album *anAlbum = [[Album alloc] init];
-			Song *aSong = [self.dataModel songForTableViewRow:self.dataModel.albumsCount];
+			ISMSAlbum *anAlbum = [[ISMSAlbum alloc] init];
+			ISMSSong *aSong = [self.dataModel songForTableViewRow:self.dataModel.albumsCount];
 			anAlbum.title = aSong.album;
 			anAlbum.artistName = aSong.artist;
 			anAlbum.coverArtId = aSong.coverArtId;
@@ -321,10 +313,10 @@
 			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		}
 		
-        Album *anAlbum = [self.dataModel albumForTableViewRow:indexPath.row];
+        ISMSAlbum *anAlbum = [self.dataModel albumForTableViewRow:indexPath.row];
         
         cell.myId = anAlbum.albumId;
-		cell.myArtist = [Artist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
+		cell.myArtist = [ISMSArtist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
 		if (sectionInfo)
 			cell.isIndexShowing = YES;
 		
@@ -352,7 +344,7 @@
 		}
 		cell.indexPath = indexPath;
         
-        Song *aSong = [self.dataModel songForTableViewRow:indexPath.row];
+        ISMSSong *aSong = [self.dataModel songForTableViewRow:indexPath.row];
 		//DLog(@"aSong: %@", aSong);
 		        
 		cell.mySong = aSong;
@@ -424,14 +416,14 @@
 	{
 		if (indexPath.row < dataModel.albumsCount)
 		{
-            Album *anAlbum = [dataModel albumForTableViewRow:indexPath.row];
+            ISMSAlbum *anAlbum = [dataModel albumForTableViewRow:indexPath.row];
             			
 			AlbumViewController *albumViewController = [[AlbumViewController alloc] initWithArtist:nil orAlbum:anAlbum];	
 			[self pushViewControllerCustom:albumViewController];
 		}
 		else
 		{
-            Song *playedSong = [self.dataModel playSongAtTableViewRow:indexPath.row];
+            ISMSSong *playedSong = [self.dataModel playSongAtTableViewRow:indexPath.row];
             
             if (!playedSong.isVideo)
                 [self showPlayer];

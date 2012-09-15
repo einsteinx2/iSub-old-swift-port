@@ -6,10 +6,10 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "Song.h"
+#import "ISMSSong.h"
 
 @class FMDatabase, FMDatabaseQueue, FMResultSet;
-@interface Song (DAO)
+@interface ISMSSong (DAO)
 
 @property BOOL isPartiallyCached;
 @property BOOL isFullyCached;
@@ -17,15 +17,15 @@
 @property (readonly) BOOL fileExists;
 @property (assign) NSDate *playedDate;
 
-+ (Song *)songFromDbResult:(FMResultSet *)result;
-+ (Song *)songFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabase:(FMDatabase *)db;
-+ (Song *)songFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabaseQueue:(FMDatabaseQueue *)dbQueue;
-+ (Song *)songFromDbForMD5:(NSString *)md5 inTable:(NSString *)table inDatabaseQueue:(FMDatabaseQueue *)dbQueue;
-+ (Song *)songFromGenreDb:(FMDatabase *)db md5:(NSString *)md5;
-+ (Song *)songFromGenreDbQueue:(NSString *)md5;
-+ (Song *)songFromCacheDb:(FMDatabase *)db md5:(NSString *)md5;
-+ (Song *)songFromCacheDbQueue:(NSString *)md5;
-+ (Song *)songFromServerPlaylistId:(NSString *)md5 row:(NSUInteger)row;
++ (ISMSSong *)songFromDbResult:(FMResultSet *)result;
++ (ISMSSong *)songFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabase:(FMDatabase *)db;
++ (ISMSSong *)songFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabaseQueue:(FMDatabaseQueue *)dbQueue;
++ (ISMSSong *)songFromDbForMD5:(NSString *)md5 inTable:(NSString *)table inDatabaseQueue:(FMDatabaseQueue *)dbQueue;
++ (ISMSSong *)songFromGenreDb:(FMDatabase *)db md5:(NSString *)md5;
++ (ISMSSong *)songFromGenreDbQueue:(NSString *)md5;
++ (ISMSSong *)songFromCacheDb:(FMDatabase *)db md5:(NSString *)md5;
++ (ISMSSong *)songFromCacheDbQueue:(NSString *)md5;
++ (ISMSSong *)songFromServerPlaylistId:(NSString *)md5 row:(NSUInteger)row;
 
 - (BOOL)insertIntoTable:(NSString *)table inDatabaseQueue:(FMDatabaseQueue *)dbQueue;
 - (BOOL)insertIntoServerPlaylistWithPlaylistId:(NSString *)md5;

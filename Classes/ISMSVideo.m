@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Ben Baron. All rights reserved.
 //
 
-#import "Video.h"
+#import "ISMSVideo.h"
 
-@implementation Video
+@implementation ISMSVideo
 
 - (NSString *)description
 {
@@ -21,7 +21,7 @@
 	return self.itemId.hash;
 }
 
-- (BOOL)isEqualToVideo:(Video *)otherVideo
+- (BOOL)isEqualToVideo:(ISMSVideo *)otherVideo
 {
     if (self == otherVideo)
         return YES;

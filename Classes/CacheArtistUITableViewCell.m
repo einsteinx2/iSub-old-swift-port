@@ -7,10 +7,7 @@
 //
 
 #import "CacheArtistUITableViewCell.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
 #import "CellOverlay.h"
-#import "Song.h"
 #import "ISMSCacheQueueManager.h"
 
 @implementation CacheArtistUITableViewCell
@@ -118,7 +115,7 @@
 	{
 		@autoreleasepool 
 		{
-			[Song removeSongFromCacheDbQueueByMD5:md5];
+			[ISMSSong removeSongFromCacheDbQueueByMD5:md5];
 		}
 	}
 	
@@ -164,7 +161,7 @@
 	{
 		@autoreleasepool 
 		{
-			Song *aSong = [Song songFromCacheDbQueue:md5];
+			ISMSSong *aSong = [ISMSSong songFromCacheDbQueue:md5];
 			[aSong addToCurrentPlaylistDbQueue];
 		}
 	}

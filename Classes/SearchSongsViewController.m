@@ -11,17 +11,10 @@
 #import "MusicSingleton.h"
 #import "SearchXMLParser.h"
 #import "iPhoneStreamingPlayerViewController.h"
-#import "FMDatabaseAdditions.h"
 #import "ServerListViewController.h"
 #import "ArtistUITableViewCell.h"
 #import "AlbumUITableViewCell.h"
-#import "Artist.h"
-#import "Album.h"
-#import "Song.h"
-#import "AsynchronousImageView.h"
 #import "AlbumViewController.h"
-#import "CustomUIAlertView.h"
-#import "NSMutableURLRequest+SUS.h"
 #import "UIViewController+PushViewControllerCustom.h"
 
 @implementation SearchSongsViewController
@@ -238,7 +231,7 @@
 				cell = [[ArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 			}
 						
-			Artist *anArtist = [self.listOfArtists objectAtIndexSafe:indexPath.row];
+			ISMSArtist *anArtist = [self.listOfArtists objectAtIndexSafe:indexPath.row];
 			cell.myArtist = anArtist;
 			
 			[cell.artistNameLabel setText:anArtist.name];
@@ -263,9 +256,9 @@
 				cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 			}
 						
-			Album *anAlbum = [self.listOfAlbums objectAtIndexSafe:indexPath.row];
+			ISMSAlbum *anAlbum = [self.listOfAlbums objectAtIndexSafe:indexPath.row];
 			cell.myId = anAlbum.albumId;
-			cell.myArtist = [Artist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
+			cell.myArtist = [ISMSArtist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
 			cell.isIndexShowing = NO;
 			
 			cell.coverArtView.coverArtId = anAlbum.coverArtId;
@@ -325,7 +318,7 @@
 	{
 		if (viewObjectsS.isCellEnabled && indexPath.row != self.listOfArtists.count)
 		{
-			Artist *anArtist = [listOfArtists objectAtIndexSafe:indexPath.row];
+			ISMSArtist *anArtist = [listOfArtists objectAtIndexSafe:indexPath.row];
 			AlbumViewController *albumView = [[AlbumViewController alloc] initWithArtist:anArtist orAlbum:nil];
 			
 			[self pushViewControllerCustom:albumView];
@@ -338,7 +331,7 @@
 	{
 		if (viewObjectsS.isCellEnabled && indexPath.row != self.listOfAlbums.count)
 		{
-			Album *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
+			ISMSAlbum *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
 			AlbumViewController *albumView = [[AlbumViewController alloc] initWithArtist:nil orAlbum:anAlbum];
 			
 			[self pushViewControllerCustom:albumView];
@@ -364,7 +357,7 @@
 			
 			// Add the songs to the playlist 
 			NSMutableArray *songIds = [[NSMutableArray alloc] init];
-			for (Song *aSong in listOfSongs)
+			for (ISMSSong *aSong in listOfSongs)
 			{
 				@autoreleasepool {
 				
@@ -391,7 +384,7 @@
             [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
             
 			// Start the song
-			Song *playedSong = [musicS playSongAtPosition:indexPath.row];
+			ISMSSong *playedSong = [musicS playSongAtPosition:indexPath.row];
 			if (!playedSong.isVideo)
                 [self showPlayer];
 			

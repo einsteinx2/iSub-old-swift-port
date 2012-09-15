@@ -870,16 +870,6 @@
 	{
 		[self hideDeletePresetButton:YES];
 	}
-	
-	/*self.hidePickerTimer = [GCDTimer gcdTimerInMainQueueAfterDelay:5.0 performBlock:^{
-		[NSNotificationCenter postNotificationToMainThreadWithName:@"hidePresetPicker"];
-	}];*/
-	
-	/*// Dismiss the picker view after a few seconds
-	[NSObject gcdCancelTimerBlockWithName:hidePickerTimer];
-	[self gcdTimerPerformBlockInMainQueue:^{
-		[NSNotificationCenter postNotificationToMainThreadWithName:@"hidePresetPicker"];
-	} afterDelay:5.0 withName:hidePickerTimer];*/
 }
 
 #pragma mark - TableView delegate for save dialog -

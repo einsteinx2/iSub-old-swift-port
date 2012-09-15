@@ -6,9 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-
-
-@interface Index : NSObject 
+@interface ISMSIndex : NSObject
 
 @property (copy) NSString *name;
 @property NSUInteger position;

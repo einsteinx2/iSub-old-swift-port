@@ -7,7 +7,6 @@
 //
 
 #import "ISMSLoader.h"
-#import "Song.h"
 
 @implementation ISMSLoader
 
@@ -54,7 +53,6 @@
 	
 	return self;
 }
-
 
 - (ISMSLoaderType)type
 {

@@ -7,7 +7,6 @@
 //
 
 #import "iSubBassGaplessPlayerDelegate.h"
-#import "Song.h"
 
 @implementation iSubBassGaplessPlayerDelegate
 
@@ -36,7 +35,7 @@
     
 }
 
-- (void)bassSongEndedPlaylistIncremented:(Song *)endedSong
+- (void)bassSongEndedPlaylistIncremented:(ISMSSong *)endedSong
 {
     
 }

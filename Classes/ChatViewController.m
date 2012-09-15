@@ -8,14 +8,9 @@
 
 #import "ChatViewController.h"
 #import "ChatUITableViewCell.h"
-#import "ChatMessage.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
-#import "AsynchronousImageView.h"
-#import "Song.h"
-#import "FMDatabaseAdditions.h"
 #import "EGORefreshTableHeaderView.h"
-#import "CustomUIAlertView.h"
 #import "SUSChatDAO.h"
 #import "NSError+ISMSError.h"
 #import "SeparaterView.h"
@@ -307,7 +302,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
 	// Automatically set the height based on the height of the message text
-	ChatMessage *aChatMessage = [dataModel.chatMessages objectAtIndexSafe:indexPath.row];
+	ISMSChatMessage *aChatMessage = [dataModel.chatMessages objectAtIndexSafe:indexPath.row];
 	CGSize expectedLabelSize = [aChatMessage.message sizeWithFont:[UIFont systemFontOfSize:20] constrainedToSize:CGSizeMake(310,CGFLOAT_MAX) lineBreakMode:UILineBreakModeWordWrap];
 	if (expectedLabelSize.height < 40)
 		expectedLabelSize.height = 40;
@@ -354,7 +349,7 @@
 	}
 
     // Set up the cell...
-	ChatMessage *aChatMessage = [dataModel.chatMessages objectAtIndexSafe:indexPath.row];
+	ISMSChatMessage *aChatMessage = [dataModel.chatMessages objectAtIndexSafe:indexPath.row];
 	cell.userNameLabel.text = [NSString stringWithFormat:@"%@ - %@", aChatMessage.user, [self formatDate:aChatMessage.timestamp]];
 	cell.messageLabel.text = aChatMessage.message;
 	

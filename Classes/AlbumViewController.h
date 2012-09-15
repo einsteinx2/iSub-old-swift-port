@@ -7,17 +7,16 @@
 //
 
 #import "ISMSLoaderDelegate.h"
-#import "AsynchronousImageViewDelegate.h"
 
-@class Artist, Album, EGORefreshTableHeaderView, SUSSubFolderDAO, AsynchronousImageView;
+@class ISMSArtist, ISMSAlbum, EGORefreshTableHeaderView, SUSSubFolderDAO, AsynchronousImageView;
 
 @interface AlbumViewController : UITableViewController <ISMSLoaderDelegate, AsynchronousImageViewDelegate>
 
 @property (nonatomic, strong) EGORefreshTableHeaderView *refreshHeaderView;
 @property (nonatomic) BOOL isReloading;
 @property (nonatomic, copy) NSString *myId;
-@property (nonatomic, strong) Artist *myArtist;
-@property (nonatomic, strong) Album *myAlbum;
+@property (nonatomic, strong) ISMSArtist *myArtist;
+@property (nonatomic, strong) ISMSAlbum *myAlbum;
 @property (nonatomic, strong) NSArray *sectionInfo;
 @property (nonatomic, strong) SUSSubFolderDAO *dataModel;
 @property (nonatomic, strong) IBOutlet UIView *playAllShuffleAllView;
@@ -31,7 +30,7 @@
 @property (nonatomic, strong) IBOutlet UILabel *albumInfoTrackCountLabel;
 @property (nonatomic, strong) IBOutlet UILabel *albumInfoDurationLabel; 
 
-- (AlbumViewController *)initWithArtist:(Artist *)anArtist orAlbum:(Album *)anAlbum;
+- (AlbumViewController *)initWithArtist:(ISMSArtist *)anArtist orAlbum:(ISMSAlbum *)anAlbum;
 
 - (void)cancelLoad;
 

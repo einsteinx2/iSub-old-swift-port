@@ -12,21 +12,12 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "AllSongsUITableViewCell.h"
-#import "AsynchronousImageView.h"
-#import "Index.h"
-#import "Album.h"
-#import "Song.h"
-#import "FMDatabaseAdditions.h"
-#import "LoadingScreen.h"
 #import "FoldersViewController.h"
-#import "TBXML.h"
 #import "CustomUITableView.h"
-#import "CustomUIAlertView.h"
 #import "SUSAllSongsDAO.h"
 #import "SUSAllSongsLoader.h"
 #import "EGORefreshTableHeaderView.h"
 #import "UIViewController+PushViewControllerCustom.h"
-#import "FMDatabaseQueueAdditions.h"
 
 @interface AllSongsViewController (Private)
 - (void)hideLoadingScreen;
@@ -517,7 +508,7 @@
 	
 	NSString *title = @"";
 	if ([self.dataModel.index count] > section)
-		title = [(Index *)[dataModel.index objectAtIndexSafe:section] name];
+		title = [(ISMSIndex *)[dataModel.index objectAtIndexSafe:section] name];
 	
 	return title;
 }
@@ -533,7 +524,7 @@
 	{
 		NSMutableArray *titles = [NSMutableArray arrayWithCapacity:0];
 		[titles addObject:@"{search}"];
-		for (Index *item in dataModel.index)
+		for (ISMSIndex *item in dataModel.index)
 		{
 			[titles addObject:item.name];
 		}
@@ -586,7 +577,7 @@
 	else 
 	{
 		if ([self.dataModel.index count] > section)
-			return [(Index *)[self.dataModel.index objectAtIndexSafe:section] count];
+			return [(ISMSIndex *)[self.dataModel.index objectAtIndexSafe:section] count];
 		return 0;
 	}
 }
@@ -601,14 +592,14 @@
 	}
 	cell.indexPath = indexPath;
 	
-	Song *aSong = nil;
+	ISMSSong *aSong = nil;
 	if(self.isSearching)
 	{
 		aSong = [self.dataModel songForPositionInSearch:(indexPath.row + 1)];
 	}
 	else
 	{
-		NSUInteger sectionStartIndex = [(Index *)[self.dataModel.index objectAtIndexSafe:indexPath.section] position];
+		NSUInteger sectionStartIndex = [(ISMSIndex *)[self.dataModel.index objectAtIndexSafe:indexPath.section] position];
 		aSong = [self.dataModel songForPosition:(sectionStartIndex + indexPath.row + 1)];
 	}
 	
@@ -656,14 +647,14 @@
 			[databaseS resetCurrentPlaylistDb];
 		
 		// Add selected song to the playlist
-		Song *aSong = nil;
+		ISMSSong *aSong = nil;
 		if(self.isSearching)
 		{
 			aSong = [self.dataModel songForPositionInSearch:(indexPath.row + 1)];
 		}
 		else
 		{
-			NSUInteger sectionStartIndex = [(Index *)[self.dataModel.index objectAtIndexSafe:indexPath.section] position];
+			NSUInteger sectionStartIndex = [(ISMSIndex *)[self.dataModel.index objectAtIndexSafe:indexPath.section] position];
 			aSong = [self.dataModel songForPosition:(sectionStartIndex + indexPath.row + 1)];
 		}
 		
@@ -683,7 +674,7 @@
         [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 
 		// Start the song
-		Song *playedSong = [musicS playSongAtPosition:0];
+		ISMSSong *playedSong = [musicS playSongAtPosition:0];
 		if (!playedSong.isVideo)
             [self showPlayer];
 	}

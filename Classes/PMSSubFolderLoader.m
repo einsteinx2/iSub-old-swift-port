@@ -7,9 +7,6 @@
 //
 
 #import "PMSSubFolderLoader.h"
-#import "SBJson.h"
-#import "Album.h"
-#import "Song.h"
 
 @implementation PMSSubFolderLoader
 
@@ -39,7 +36,7 @@
 	{
 		@autoreleasepool 
 		{
-			Album *anAlbum = [[Album alloc] initWithPMSDictionary:folder];
+			ISMSAlbum *anAlbum = [[ISMSAlbum alloc] initWithPMSDictionary:folder];
 			[self insertAlbumIntoFolderCache:anAlbum];
 		}
 	}
@@ -53,7 +50,7 @@
             // Only parse songs
             if ([[mediaItem objectForKey:@"itemTypeId"] isEqual:[NSNumber numberWithInt:3]])
             {
-                Song *aSong = [[Song alloc] initWithPMSDictionary:mediaItem];
+                ISMSSong *aSong = [[ISMSSong alloc] initWithPMSDictionary:mediaItem];
                 //DLog(@"aSong: %@", aSong);
                 self.folderLength += aSong.duration.intValue;
                 [self insertSongIntoFolderCache:aSong];

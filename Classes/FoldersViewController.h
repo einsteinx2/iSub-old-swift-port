@@ -9,7 +9,7 @@
 #import "ISMSLoaderDelegate.h"
 #import "FolderDropdownDelegate.h"
 
-@class Artist, EGORefreshTableHeaderView, FolderDropdownControl, SUSRootFoldersDAO;
+@class ISMSArtist, EGORefreshTableHeaderView, FolderDropdownControl, SUSRootFoldersDAO;
 
 @interface FoldersViewController : UITableViewController <UISearchBarDelegate, ISMSLoaderDelegate, FolderDropdownDelegate>
 

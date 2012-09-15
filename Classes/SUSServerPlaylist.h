@@ -6,7 +6,6 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "TBXML.h"
 
 @interface SUSServerPlaylist : NSObject <NSCopying>
 

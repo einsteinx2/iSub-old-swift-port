@@ -7,7 +7,6 @@
 //
 
 #import "ArtistUITableViewCell.h"
-#import "Artist.h"
 #import "CellOverlay.h"
 
 @implementation ArtistUITableViewCell

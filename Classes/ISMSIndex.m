@@ -6,9 +6,9 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "Index.h"
+#import "ISMSIndex.h"
 
-@implementation Index
+@implementation ISMSIndex
 
 - (id)init
 {

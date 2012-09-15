@@ -9,12 +9,9 @@
 #import "MusicSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "PageControlViewController.h"
-#import "AsynchronousImageView.h"
-#import "Song.h"
 #import <QuartzCore/CoreAnimation.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import <CFNetwork/CFNetwork.h>
-#import "FMDatabaseAdditions.h"
 #import <QuartzCore/QuartzCore.h>
 #import "PlaylistSingleton.h"
 #import "EqualizerViewController.h"
@@ -1383,7 +1380,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	__block NSUInteger bookmarksCount;
 	[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
 	{
-		[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmarks (playlistIndex, name, position, %@, bytes) VALUES (?, ?, ?, %@, ?)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], [NSNumber numberWithInt:playlistS.currentIndex], bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size, currentSong.parentId, [NSNumber numberWithUnsignedLongLong:bookmarkBytePosition]];
+		[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmarks (playlistIndex, name, position, %@, bytes) VALUES (?, ?, ?, %@, ?)", [ISMSSong standardSongColumnNames], [ISMSSong standardSongColumnQMarks]], [NSNumber numberWithInt:playlistS.currentIndex], bookmarkNameTextField.text, [NSNumber numberWithInt:bookmarkPosition], currentSong.title, currentSong.songId, currentSong.artist, currentSong.album, currentSong.genre, currentSong.coverArtId, currentSong.path, currentSong.suffix, currentSong.transcodedSuffix, currentSong.duration, currentSong.bitRate, currentSong.track, currentSong.year, currentSong.size, currentSong.parentId, [NSNumber numberWithUnsignedLongLong:bookmarkBytePosition]];
 		
 		NSInteger bookmarkId = [db intForQuery:@"SELECT MAX(bookmarkId) FROM bookmarks"]; 
 		
@@ -1396,7 +1393,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		NSString *dbName = viewObjectsS.isOfflineMode ? @"%@/offlineCurrentPlaylist.db" : @"%@/%@currentPlaylist.db";
 		[db executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:dbName, settingsS.databasePath, settingsS.urlString.md5], @"currentPlaylistDb"];
 		
-		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmark%i (%@)", bookmarkId, [Song standardSongColumnSchema]]];
+		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmark%i (%@)", bookmarkId, [ISMSSong standardSongColumnSchema]]];
 		
 		[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmark%i SELECT * FROM currentPlaylistDb.%@", bookmarkId, table]]; 
 		

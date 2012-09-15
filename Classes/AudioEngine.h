@@ -22,7 +22,7 @@
 
 #define audioEngineS ((AudioEngine *)[AudioEngine sharedInstance])
 
-@class Song, BassParamEqValue, BassStream, GCDTimer, SUSRegisterActionLoader, EX2RingBuffer;
+@class ISMSSong, BassParamEqValue, BassStream, SUSRegisterActionLoader, EX2RingBuffer;
 @interface AudioEngine : NSObject
 
 + (id)sharedInstance;

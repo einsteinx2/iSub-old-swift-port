@@ -7,11 +7,7 @@
 //
 
 #import "AllSongsUITableViewCell.h"
-#import "AsynchronousImageView.h"
 #import "MusicSingleton.h"
-#import "Song.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
 #import "CellOverlay.h"
 
 @implementation AllSongsUITableViewCell
@@ -117,12 +113,12 @@
 {
 	if (self.isSearching) 
 	{
-		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"allSongsSearch" inDatabaseQueue:databaseS.allSongsDbQueue];
+		ISMSSong *aSong = [ISMSSong songFromDbRow:self.indexPath.row inTable:@"allSongsSearch" inDatabaseQueue:databaseS.allSongsDbQueue];
 		[aSong addToCacheQueueDbQueue];
 	}
 	else 
 	{
-		Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:@"allSongs" inDatabaseQueue:databaseS.allSongsDbQueue];
+		ISMSSong *aSong = [ISMSSong songFromDbRow:self.indexPath.row inTable:@"allSongs" inDatabaseQueue:databaseS.allSongsDbQueue];
 		[aSong addToCacheQueueDbQueue];
 	}
 	
@@ -135,7 +131,7 @@
 - (void)queueAction
 {	
 	NSString *tableName = self.isSearching ? @"allSongsSearch" : @"allSongs";
-	Song *aSong = [Song songFromDbRow:self.indexPath.row inTable:tableName inDatabaseQueue:databaseS.allSongsDbQueue];
+	ISMSSong *aSong = [ISMSSong songFromDbRow:self.indexPath.row inTable:tableName inDatabaseQueue:databaseS.allSongsDbQueue];
 	
 	[aSong addToCurrentPlaylistDbQueue];
 	

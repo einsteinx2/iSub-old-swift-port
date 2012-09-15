@@ -7,9 +7,7 @@
 //
 
 #import "JukeboxXMLParser.h"
-#import "Song.h"
 #import "ServerListViewController.h"
-#import "CustomUIAlertView.h"
 
 @implementation JukeboxXMLParser
 
@@ -24,7 +22,7 @@
 }
 
 
-- (void) subsonicErrorCode:(NSString *)errorCode message:(NSString *)message
+- (void)subsonicErrorCode:(NSString *)errorCode message:(NSString *)message
 {
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:message delegate:appDelegateS cancelButtonTitle:@"Ok" otherButtonTitles:@"Settings", nil];
 	alert.tag = 1;
@@ -66,7 +64,7 @@
 	}
 	else if ([elementName isEqualToString:@"entry"])
 	{
-		Song *aSong = [[Song alloc] initWithAttributeDict:attributeDict];
+		ISMSSong *aSong = [[ISMSSong alloc] initWithAttributeDict:attributeDict];
 		if (aSong.path)
 		{
 			if (playlistS.isShuffle)

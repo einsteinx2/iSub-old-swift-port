@@ -21,10 +21,10 @@
 
 - (id)initWithDelegate:(id <ISMSLoaderDelegate>)theDelegate;
 
-- (Song *)songForIndex:(NSUInteger)index;
+- (ISMSSong *)songForIndex:(NSUInteger)index;
 - (NSString *)playTimeForIndex:(NSUInteger)index;
 - (NSString *)usernameForIndex:(NSUInteger)index;
 - (NSString *)playerNameForIndex:(NSUInteger)index;
-- (Song *)playSongAtIndex:(NSUInteger)index;
+- (ISMSSong *)playSongAtIndex:(NSUInteger)index;
 
 @end

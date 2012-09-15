@@ -7,12 +7,7 @@
 //
 
 #import "SUSSubFolderDAO.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
 #import "ISMSSubFolderLoader.h"
-#import "Album.h"
-#import "Song.h"
-#import "MusicSingleton.h"
 
 @interface SUSSubFolderDAO (Private) 
 - (NSUInteger)findFirstAlbumRow;
@@ -56,7 +51,7 @@
     return self;
 }
 
-- (id)initWithDelegate:(id<ISMSLoaderDelegate>)theDelegate andId:(NSString *)folderId andArtist:(Artist *)anArtist
+- (id)initWithDelegate:(id<ISMSLoaderDelegate>)theDelegate andId:(NSString *)folderId andArtist:(ISMSArtist *)anArtist
 {
 	if ((self = [super init])) 
 	{
@@ -106,9 +101,9 @@
     return [self.dbQueue intForQuery:@"SELECT length FROM folderLength WHERE folderId = ?", [self.myId md5]];
 }
 
-- (Album *)findAlbumForDbRow:(NSUInteger)row
+- (ISMSAlbum *)findAlbumForDbRow:(NSUInteger)row
 {
-    __block Album *anAlbum = nil;
+    __block ISMSAlbum *anAlbum = nil;
 	
 	[self.dbQueue inDatabase:^(FMDatabase *db)
 	{
@@ -120,7 +115,7 @@
 		}
 		else
 		{
-			anAlbum = [[Album alloc] init];
+			anAlbum = [[ISMSAlbum alloc] init];
 			anAlbum.title = [result stringForColumn:@"title"];
 			anAlbum.albumId = [result stringForColumn:@"albumId"];
 			anAlbum.coverArtId = [result stringForColumn:@"coverArtId"];
@@ -133,12 +128,12 @@
 	return anAlbum;
 }
 
-- (Song *)findSongForDbRow:(NSUInteger)row
+- (ISMSSong *)findSongForDbRow:(NSUInteger)row
 { 
-	return [Song songFromDbRow:row-1 inTable:@"songsCache" inDatabaseQueue:self.dbQueue];
+	return [ISMSSong songFromDbRow:row-1 inTable:@"songsCache" inDatabaseQueue:self.dbQueue];
 }
 
-- (Song *)playSongAtDbRow:(NSUInteger)row
+- (ISMSSong *)playSongAtDbRow:(NSUInteger)row
 {
 	// Clear the current playlist
 	if (settingsS.isJukeboxEnabled)
@@ -156,7 +151,7 @@
 	{
 		@autoreleasepool 
 		{
-			Song *aSong = [self songForTableViewRow:i];
+			ISMSSong *aSong = [self songForTableViewRow:i];
 			//DLog(@"song parentId: %@", aSong.parentId);
 			//DLog(@"adding song to playlist: %@", aSong);
 			[aSong addToCurrentPlaylistDbQueue];
@@ -187,21 +182,21 @@
     return self.albumsCount + self.songsCount;
 }
 
-- (Album *)albumForTableViewRow:(NSUInteger)row
+- (ISMSAlbum *)albumForTableViewRow:(NSUInteger)row
 {
     NSUInteger dbRow = self.albumStartRow + row;
     
     return [self findAlbumForDbRow:dbRow];
 }
 
-- (Song *)songForTableViewRow:(NSUInteger)row
+- (ISMSSong *)songForTableViewRow:(NSUInteger)row
 {
     NSUInteger dbRow = self.songStartRow + (row - self.albumsCount);
     
     return [self findSongForDbRow:dbRow];
 }
 
-- (Song *)playSongAtTableViewRow:(NSUInteger)row
+- (ISMSSong *)playSongAtTableViewRow:(NSUInteger)row
 {
 	NSUInteger dbRow = self.songStartRow + (row - self.albumsCount);
 	return [self playSongAtDbRow:dbRow];

@@ -7,12 +7,8 @@
 //
 
 #import "ISMSCacheQueueManager.h"
-#import "Song.h"
-#import "Song+DAO.h"
 #import "ISMSLoader.h"
 #import "DatabaseSingleton.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
 #import "SUSLyricsLoader.h"
 #import "ISMSCoverArtLoader.h"
 #import "ISMSStreamManager.h"
@@ -44,14 +40,14 @@ LOG_LEVEL_ISUB_DEBUG
 
 #pragma mark Download Methods
 
-- (BOOL)isSongInQueue:(Song *)aSong
+- (BOOL)isSongInQueue:(ISMSSong *)aSong
 {
 	return [databaseS.cacheQueueDbQueue boolForQuery:@"SELECT COUNT(*) FROM cacheQueue WHERE songId = ? LIMIT 1", aSong.songId];
 }
 
-- (Song *)currentQueuedSongInDb
+- (ISMSSong *)currentQueuedSongInDb
 {
-	__block Song *aSong = nil;
+	__block ISMSSong *aSong = nil;
 	
 	[databaseS.cacheQueueDbQueue inDatabase:^(FMDatabase *db)
 	 {
@@ -62,7 +58,7 @@ LOG_LEVEL_ISUB_DEBUG
 		 }
 		 else
 		 {
-			 aSong = [Song songFromDbResult:result];
+			 aSong = [ISMSSong songFromDbResult:result];
 		 }
 		 
 		 [result close]; 

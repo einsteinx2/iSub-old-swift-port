@@ -7,8 +7,6 @@
 //
 
 #import "ISMSLoader.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
 
 #define TEMP_FLUSH_AMOUNT 400
 
@@ -32,3 +30,6 @@
 - (BOOL)addRootFolderToTempCache:(NSString*)folderId name:(NSString*)name;
 
 @end
+
+#import "SUSRootFoldersLoader.h"
+#import "PMSRootFoldersLoader.h"

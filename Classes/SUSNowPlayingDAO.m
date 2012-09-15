@@ -8,7 +8,6 @@
 
 #import "SUSNowPlayingDAO.h"
 #import "SUSNowPlayingLoader.h"
-#import "Song.h"
 #import "MusicSingleton.h"
 
 @implementation SUSNowPlayingDAO
@@ -41,12 +40,12 @@
 	return 0;
 }
 
-- (Song *)songForIndex:(NSUInteger)index
+- (ISMSSong *)songForIndex:(NSUInteger)index
 {
 	if (index < self.count)
 	{
 		NSDictionary *songDict = [self.nowPlayingSongDicts objectAtIndexSafe:index];
-		Song *aSong = [songDict objectForKey:@"song"];
+		ISMSSong *aSong = [songDict objectForKey:@"song"];
 		return aSong;
 	}
 	return nil;
@@ -87,7 +86,7 @@
 	return nil;
 }
 
-- (Song *)playSongAtIndex:(NSUInteger)index
+- (ISMSSong *)playSongAtIndex:(NSUInteger)index
 {
 	// Clear the current playlist
 	if (settingsS.isJukeboxEnabled)
@@ -101,7 +100,7 @@
 	}
 	
 	// Add the song to the empty playlist
-	Song *aSong = [self songForIndex:index];
+	ISMSSong *aSong = [self songForIndex:index];
 	[aSong addToCurrentPlaylistDbQueue];
 	
 	// Set player defaults

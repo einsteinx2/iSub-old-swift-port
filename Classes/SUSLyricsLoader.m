@@ -7,9 +7,6 @@
 //
 
 #import "SUSLyricsLoader.h"
-#import "TBXML.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
 
 
 @implementation SUSLyricsLoader

@@ -7,10 +7,6 @@
 //
 
 #import "SUSAllAlbumsDAO.h"
-#import "Index.h"
-#import "Album.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
 #import "SUSAllSongsLoader.h"
 
 @implementation SUSAllAlbumsDAO
@@ -57,7 +53,7 @@
 		{
 			@autoreleasepool 
 			{
-				Index *item = [[Index alloc] init];
+				ISMSIndex *item = [[ISMSIndex alloc] init];
 				item.name = [result stringForColumn:@"name"];
 				item.position = [result intForColumn:@"position"];
 				item.count = [result intForColumn:@"count"];
@@ -69,15 +65,15 @@
 	return [NSArray arrayWithArray:indexItems];
 }
 
-- (Album *)allAlbumsAlbumForPosition:(NSUInteger)position
+- (ISMSAlbum *)allAlbumsAlbumForPosition:(NSUInteger)position
 {
-	__block Album *anAlbum = nil;
+	__block ISMSAlbum *anAlbum = nil;
 	[self.dbQueue inDatabase:^(FMDatabase *db)
 	{		
 		FMResultSet *result = [db executeQuery:@"SELECT * FROM allAlbums WHERE ROWID = ?", [NSNumber numberWithInt:position]];
 		if ([result next])
 		{
-			anAlbum = [[Album alloc] init];
+			anAlbum = [[ISMSAlbum alloc] init];
 			anAlbum.title = [result stringForColumn:@"title"];
 			anAlbum.albumId = [result stringForColumn:@"albumId"];
 			anAlbum.coverArtId = [result stringForColumn:@"coverArtId"];
@@ -90,7 +86,7 @@
 	return anAlbum;
 }
 
-- (Album *)allAlbumsAlbumForPositionInSearch:(NSUInteger)position
+- (ISMSAlbum *)allAlbumsAlbumForPositionInSearch:(NSUInteger)position
 {
 	NSUInteger rowId = [self.dbQueue intForQuery:@"SELECT rowIdInAllAlbums FROM allAlbumsNameSearch WHERE ROWID = ?", [NSNumber numberWithInt:position]];
 	return [self allAlbumsAlbumForPosition:rowId];
@@ -161,12 +157,12 @@
 	return index;
 }
 
-- (Album *)albumForPosition:(NSUInteger)position
+- (ISMSAlbum *)albumForPosition:(NSUInteger)position
 {
 	return [self allAlbumsAlbumForPosition:position];
 }
 
-- (Album *)albumForPositionInSearch:(NSUInteger)position
+- (ISMSAlbum *)albumForPositionInSearch:(NSUInteger)position
 {
 	return [self allAlbumsAlbumForPositionInSearch:position];
 }

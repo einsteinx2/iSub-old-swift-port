@@ -12,16 +12,8 @@
 #import "AlbumViewController.h"
 #import "AllAlbumsUITableViewCell.h"
 #import "SongUITableViewCell.h"
-#import "AsynchronousImageView.h"
-#import "Artist.h"
-#import "Album.h"
-#import "Song.h"
-#import "FMDatabaseAdditions.h"
-#import "LoadingScreen.h"
 #import "HomeXMLParser.h"
 #import "ServerListViewController.h"
-#import "CustomUIAlertView.h"
-#import "NSMutableURLRequest+SUS.h"
 #import "UIViewController+PushViewControllerCustom.h"
 
 @implementation HomeAlbumViewController
@@ -227,9 +219,9 @@
 		}
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		
-		Album *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
+		ISMSAlbum *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
 		cell.myId = anAlbum.albumId;
-		cell.myArtist = [Artist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
+		cell.myArtist = [ISMSArtist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
 		
 		cell.coverArtView.coverArtId = anAlbum.coverArtId;
 		
@@ -285,7 +277,7 @@
 	
 	if (viewObjectsS.isCellEnabled && indexPath.row != self.listOfAlbums.count)
 	{
-		Album *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
+		ISMSAlbum *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
 		AlbumViewController *albumViewController = [[AlbumViewController alloc] initWithArtist:nil orAlbum:anAlbum];
 		[self pushViewControllerCustom:albumViewController];
 		//[self.navigationController pushViewController:albumViewController animated:YES];

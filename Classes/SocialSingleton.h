@@ -30,7 +30,7 @@
 
 - (void)scrobbleSongAsPlaying;
 - (void)scrobbleSongAsSubmission;
-- (void)scrobbleSong:(Song *)aSong isSubmission:(BOOL)isSubmission;
+- (void)scrobbleSong:(ISMSSong *)aSong isSubmission:(BOOL)isSubmission;
 - (void)tweetSong;
 - (void)notifySubsonic;
 

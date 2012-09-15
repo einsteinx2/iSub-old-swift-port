@@ -15,20 +15,12 @@
 #import "ChatViewController.h"
 #import "SearchSongsViewController.h"
 #import "StoreViewController.h"
-#import "CustomUIAlertView.h"
-#import "AsynchronousImageView.h"
-#import "Song.h"
-#import "FMDatabaseAdditions.h"
 #import "ShuffleFolderPickerViewController.h"
 #import "FolderPickerDialog.h"
 #import "SearchAllViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "SUSRootFoldersDAO.h"
-#import "NSMutableURLRequest+SUS.h"
-#import "NSMutableURLRequest+SUS.h"
 #import "PlaylistSingleton.h"
 #import "UIViewController+PushViewControllerCustom.h"
-#import "AsynchronousImageView.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
 
@@ -263,7 +255,7 @@
 
 - (void)initSongInfo
 {
-	Song *currentSong = playlistS.currentSong ? playlistS.currentSong : playlistS.prevSong;
+	ISMSSong *currentSong = playlistS.currentSong ? playlistS.currentSong : playlistS.prevSong;
 	
 	if (currentSong != nil)
 	{		
@@ -687,7 +679,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
-//DLog(@"received data: %@", [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
+    //DLog(@"received data: %@", [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
 	
 	if (isSearch)
 	{
@@ -780,7 +772,7 @@
 			[databaseS resetCurrentPlaylistDb];
 		}
 		
-		for(Song *aSong in parser.listOfSongs)
+		for(ISMSSong *aSong in parser.listOfSongs)
 		{
 			[aSong addToCurrentPlaylistDbQueue];
 		}

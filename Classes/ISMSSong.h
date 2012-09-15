@@ -6,10 +6,9 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "TBXML.h"
-#import "MediaItem.h"
+#import "ISMSMediaItem.h"
 
-@interface Song : NSObject <NSCoding, NSCopying, MediaItem>
+@interface ISMSSong : NSObject <NSCoding, NSCopying, ISMSMediaItem>
 
 @property (copy) NSString *title;
 @property (copy) NSString *songId;
@@ -45,8 +44,8 @@
 - (id)initWithTBXMLElement:(TBXMLElement *)element;
 - (id)initWithAttributeDict:(NSDictionary *)attributeDict;
 
-- (BOOL)isEqualToSong:(Song	*)otherSong;
+- (BOOL)isEqualToSong:(ISMSSong	*)otherSong;
 
 @end
 
-#import "Song+DAO.h"
+#import "ISMSSong+DAO.h"

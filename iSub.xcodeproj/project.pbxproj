@@ -391,11 +391,11 @@
 		53159E5B156F69D0001B0268 /* playing-cell-icon-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F8C15167CBA0081A83A /* playing-cell-icon-white@2x.png */; };
 		53159E66156F69D0001B0268 /* iSubAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* iSubAppDelegate.m */; };
 		53159E67156F69D0001B0268 /* FoldersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* FoldersViewController.m */; };
-		53159E68156F69D0001B0268 /* Artist.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1D61139F05200107D63 /* Artist.m */; };
-		53159E69156F69D0001B0268 /* Index.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1FD1139F5A500107D63 /* Index.m */; };
+		53159E68156F69D0001B0268 /* ISMSArtist.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1D61139F05200107D63 /* ISMSArtist.m */; };
+		53159E69156F69D0001B0268 /* ISMSIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1FD1139F5A500107D63 /* ISMSIndex.m */; };
 		53159E6A156F69D0001B0268 /* AlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D3EC113A338500107D63 /* AlbumViewController.m */; };
-		53159E6B156F69D0001B0268 /* Album.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D41F113A4E2C00107D63 /* Album.m */; };
-		53159E6C156F69D0001B0268 /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D5A5113A63F300107D63 /* Song.m */; };
+		53159E6B156F69D0001B0268 /* ISMSAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D41F113A4E2C00107D63 /* ISMSAlbum.m */; };
+		53159E6C156F69D0001B0268 /* ISMSSong.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D5A5113A63F300107D63 /* ISMSSong.m */; };
 		53159E6D156F69D0001B0268 /* iPhoneStreamingPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F675AE113B048600822059 /* iPhoneStreamingPlayerViewController.m */; };
 		53159E6E156F69D0001B0268 /* AsynchronousImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 533A2D06113C61CA00B3A376 /* AsynchronousImageView.m */; };
 		53159E6F156F69D0001B0268 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */; };
@@ -444,7 +444,7 @@
 		53159E9D156F69D0001B0268 /* LyricsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 534050F911E9966C004AEC41 /* LyricsViewController.m */; };
 		53159E9E156F69D0001B0268 /* ChatUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC491219E48800F426CD /* ChatUITableViewCell.m */; };
 		53159E9F156F69D0001B0268 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC4B1219E48800F426CD /* ChatViewController.m */; };
-		53159EA0156F69D0001B0268 /* ChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC561219EEEB00F426CD /* ChatMessage.m */; };
+		53159EA0156F69D0001B0268 /* ISMSChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC561219EEEB00F426CD /* ISMSChatMessage.m */; };
 		53159EA1156F69D0001B0268 /* CustomUITextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BB7EC9121B8D8F00BEE7E8 /* CustomUITextView.m */; };
 		53159EA2156F69D0001B0268 /* ViewObjectsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751C61268A36200A4793F /* ViewObjectsSingleton.m */; };
 		53159EA3156F69D0001B0268 /* MusicSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CC1268A3BE00A4793F /* MusicSingleton.m */; };
@@ -468,8 +468,7 @@
 		53159EB7156F69D0001B0268 /* StoreUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53AAB77912B98699007EA08B /* StoreUITableViewCell.m */; };
 		53159EB9156F69D0001B0268 /* MoreTableViewDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B20F5512C2D72300A90DD9 /* MoreTableViewDataSource.m */; };
 		53159EBA156F69D0001B0268 /* CustomUITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B20F5A12C2D7AC00A90DD9 /* CustomUITabBarController.m */; };
-		53159EBB156F69D0001B0268 /* BBSimpleConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B64CF212C96129007F1ED5 /* BBSimpleConnectionQueue.m */; };
-		53159EBC156F69D0001B0268 /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 538DF6E712CC25C300DB6D8C /* Server.m */; };
+		53159EBC156F69D0001B0268 /* ISMSServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 538DF6E712CC25C300DB6D8C /* ISMSServer.m */; };
 		53159EC0156F69D0001B0268 /* ServerTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB23012E0027800389DA1 /* ServerTypeViewController.m */; };
 		53159EC1156F69D0001B0268 /* UbuntuServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB2A012E2348A00389DA1 /* UbuntuServerEditViewController.m */; };
 		53159EC2156F69D0001B0268 /* ISMSQueueAllLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB68F12E383F400389DA1 /* ISMSQueueAllLoader.m */; };
@@ -485,8 +484,6 @@
 		53159ECC156F69D0001B0268 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45485133D6F8200741030 /* HTTPConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53159ECD156F69D0001B0268 /* HTTPResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45487133D6F8200741030 /* HTTPResponse.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53159ECE156F69D0001B0268 /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45489133D6F8200741030 /* HTTPServer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		53159ECF156F69D0001B0268 /* HttpIndexPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45493133D710C00741030 /* HttpIndexPage.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		53159ED0156F69D0001B0268 /* MyHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A4549C133D75E300741030 /* MyHTTPConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53159ED1156F69D0001B0268 /* LocalhostAddresses.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A454AE133D7E2700741030 /* LocalhostAddresses.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53159ED3156F69D0001B0268 /* DDSocialDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7251134CEE1E003E0E1C /* DDSocialDialog.m */; };
 		53159ED4156F69D0001B0268 /* DDSocialLoginDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7253134CEE1E003E0E1C /* DDSocialLoginDialog.m */; };
@@ -512,14 +509,13 @@
 		53159EEC156F69D0001B0268 /* SUSLyricsDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 539B3091145E78AE00D06475 /* SUSLyricsDAO.m */; };
 		53159EED156F69D0001B0268 /* NSMutableURLRequest+SUS.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B36D7B145F95E5005538F3 /* NSMutableURLRequest+SUS.m */; };
 		53159EEF156F69D0001B0268 /* ISMSCoverArtLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53880A9214608DBA00C7DE62 /* ISMSCoverArtLoader.m */; };
-		53159EF0156F69D0001B0268 /* OrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F11B751460F96D0010820B /* OrderedDictionary.m */; };
 		53159EF1156F69D0001B0268 /* SUSServerPlaylistsDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F11B7A1460FBAD0010820B /* SUSServerPlaylistsDAO.m */; };
 		53159EF2156F69D0001B0268 /* SUSServerPlaylistsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53EC180014675A6F00601C2D /* SUSServerPlaylistsLoader.m */; };
 		53159EF3156F69D0001B0268 /* SUSServerPlaylist.m in Sources */ = {isa = PBXBuildFile; fileRef = 53EC1805146760E000601C2D /* SUSServerPlaylist.m */; };
 		53159EF4156F69D0001B0268 /* ISMSSubFolderLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A698D91467B34D00DCAFCB /* ISMSSubFolderLoader.m */; };
 		53159EF5156F69D0001B0268 /* ISMSStreamManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 535AC24D146C8E0300E19492 /* ISMSStreamManager.m */; };
 		53159EF7156F69D0001B0268 /* PlaylistSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D50147185AB0025F8F1 /* PlaylistSingleton.m */; };
-		53159EF8156F69D0001B0268 /* Song+DAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D551471BE160025F8F1 /* Song+DAO.m */; };
+		53159EF8156F69D0001B0268 /* ISMSSong+DAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D551471BE160025F8F1 /* ISMSSong+DAO.m */; };
 		53159EFC156F69D0001B0268 /* EqualizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5365857F1478920B00FE57A5 /* EqualizerViewController.m */; };
 		53159EFD156F69D0001B0268 /* EqualizerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5365859214789AD900FE57A5 /* EqualizerView.m */; };
 		53159F00156F69D0001B0268 /* SUSCoverArtDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B6D69147C377100BA28B9 /* SUSCoverArtDAO.m */; };
@@ -543,7 +539,6 @@
 		53159F1E156F69D0001B0268 /* StackContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E9A3014F43F41006CB0BC /* StackContainerView.m */; };
 		53159F1F156F69D0001B0268 /* JukeboxSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53733C5F14F8630F001D8104 /* JukeboxSingleton.m */; };
 		53159F20156F69D0001B0268 /* ISMSCacheQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53733C6F14FC4B09001D8104 /* ISMSCacheQueueManager.m */; };
-		53159F41156F69D0001B0268 /* GCDTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A17060152A7BC200822521 /* GCDTimer.m */; };
 		53159F4D156F69D0001B0268 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53C7FD9C150F0E94008DA51C /* MessageUI.framework */; };
 		53159F4E156F69D0001B0268 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DE598214F1932C00206529 /* CoreText.framework */; };
 		53159F4F156F69D0001B0268 /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5382F65614856F3C001C14C8 /* libSystem.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -1006,6 +1001,9 @@
 		533C65E515ABBA09003EAF29 /* AlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E915ABBA09003EAF29 /* AlbumViewController.xib */; };
 		533C65E615ABBA09003EAF29 /* AlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E915ABBA09003EAF29 /* AlbumViewController.xib */; };
 		533C65E715ABBA09003EAF29 /* AlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E915ABBA09003EAF29 /* AlbumViewController.xib */; };
+		533F6519160531E9000098E1 /* SUSQuickAlbumsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 533F6518160531E9000098E1 /* SUSQuickAlbumsLoader.m */; };
+		533F651A160531E9000098E1 /* SUSQuickAlbumsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 533F6518160531E9000098E1 /* SUSQuickAlbumsLoader.m */; };
+		533F651B160531E9000098E1 /* SUSQuickAlbumsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 533F6518160531E9000098E1 /* SUSQuickAlbumsLoader.m */; };
 		53404FE111E9487C004AEC41 /* controller-next@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE011E9487C004AEC41 /* controller-next@2x.png */; };
 		53404FEA11E9488A004AEC41 /* controller-pause@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE211E9488A004AEC41 /* controller-pause@2x.png */; };
 		53404FEB11E9488A004AEC41 /* controller-play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE311E9488A004AEC41 /* controller-play@2x.png */; };
@@ -1370,13 +1368,13 @@
 		537742A315AA513600DD547D /* SUSSubFolderLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53703BE81588409B00B1FB33 /* SUSSubFolderLoader.m */; };
 		537742A415AA514500DD547D /* PMSSubFolderLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53703BED158840A800B1FB33 /* PMSSubFolderLoader.m */; };
 		537742A815AA519A00DD547D /* PMSRootFoldersLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53703BC815882BBF00B1FB33 /* PMSRootFoldersLoader.m */; };
-		537747A515FD2C870047CAF1 /* Video.m in Sources */ = {isa = PBXBuildFile; fileRef = 537747A415FD2C870047CAF1 /* Video.m */; };
-		537747A615FD2C870047CAF1 /* Video.m in Sources */ = {isa = PBXBuildFile; fileRef = 537747A415FD2C870047CAF1 /* Video.m */; };
-		537747A715FD2C870047CAF1 /* Video.m in Sources */ = {isa = PBXBuildFile; fileRef = 537747A415FD2C870047CAF1 /* Video.m */; };
+		537747A515FD2C870047CAF1 /* ISMSVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 537747A415FD2C870047CAF1 /* ISMSVideo.m */; };
+		537747A615FD2C870047CAF1 /* ISMSVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 537747A415FD2C870047CAF1 /* ISMSVideo.m */; };
+		537747A715FD2C870047CAF1 /* ISMSVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 537747A415FD2C870047CAF1 /* ISMSVideo.m */; };
 		5379DC4F1219E48800F426CD /* ChatUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC491219E48800F426CD /* ChatUITableViewCell.m */; };
 		5379DC501219E48800F426CD /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC4B1219E48800F426CD /* ChatViewController.m */; };
 		5379DC511219E48800F426CD /* ChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5379DC4C1219E48800F426CD /* ChatViewController.xib */; };
-		5379DC571219EEEB00F426CD /* ChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC561219EEEB00F426CD /* ChatMessage.m */; };
+		5379DC571219EEEB00F426CD /* ISMSChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC561219EEEB00F426CD /* ISMSChatMessage.m */; };
 		537DE2D9113F008C00875852 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DE2D8113F008C00875852 /* CoreFoundation.framework */; };
 		537E9A0A14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */; };
 		537E9A0B14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */; };
@@ -1428,7 +1426,7 @@
 		5388A42D1198AD840049BA9E /* unselected.png in Resources */ = {isa = PBXBuildFile; fileRef = 5388A42B1198AD840049BA9E /* unselected.png */; };
 		538C01B012C3DCC40061545B /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C01AE12C3DCC40061545B /* back.png */; };
 		538C01B112C3DCC40061545B /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C01AF12C3DCC40061545B /* back@2x.png */; };
-		538DF6E812CC25C300DB6D8C /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 538DF6E712CC25C300DB6D8C /* Server.m */; };
+		538DF6E812CC25C300DB6D8C /* ISMSServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 538DF6E712CC25C300DB6D8C /* ISMSServer.m */; };
 		538F646A137105610049C6ED /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 538F6469137105610049C6ED /* SFHFKeychainUtils.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5393295315FD08F100A0E290 /* ISMSStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5393294D15FD08EF00A0E290 /* ISMSStreamHandler.m */; };
 		5393295415FD08F100A0E290 /* ISMSStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5393294D15FD08EF00A0E290 /* ISMSStreamHandler.m */; };
@@ -1459,9 +1457,6 @@
 		539D6075145E0D7D0018AA90 /* ISMSUpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 539D6074145E0D7D0018AA90 /* ISMSUpdateChecker.m */; };
 		539D6076145E0D7D0018AA90 /* ISMSUpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 539D6074145E0D7D0018AA90 /* ISMSUpdateChecker.m */; };
 		539D6077145E0D7D0018AA90 /* ISMSUpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 539D6074145E0D7D0018AA90 /* ISMSUpdateChecker.m */; };
-		53A17061152A7BC200822521 /* GCDTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A17060152A7BC200822521 /* GCDTimer.m */; };
-		53A17062152A7BC200822521 /* GCDTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A17060152A7BC200822521 /* GCDTimer.m */; };
-		53A17063152A7BC200822521 /* GCDTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A17060152A7BC200822521 /* GCDTimer.m */; };
 		53A2213611A8489900C1ACD4 /* cache-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A2213411A8489900C1ACD4 /* cache-button.png */; };
 		53A2213711A8489900C1ACD4 /* queue-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A2213511A8489900C1ACD4 /* queue-button.png */; };
 		53A2BE24147DF09800E44822 /* EqualizerPointView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A2BE23147DF09800E44822 /* EqualizerPointView.m */; };
@@ -1478,8 +1473,6 @@
 		53A4548F133D6F8200741030 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45485133D6F8200741030 /* HTTPConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A45490133D6F8200741030 /* HTTPResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45487133D6F8200741030 /* HTTPResponse.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A45491133D6F8200741030 /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45489133D6F8200741030 /* HTTPServer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		53A45494133D710C00741030 /* HttpIndexPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45493133D710C00741030 /* HttpIndexPage.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		53A4549D133D75E900741030 /* MyHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A4549C133D75E300741030 /* MyHTTPConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A454AF133D7E2800741030 /* LocalhostAddresses.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A454AE133D7E2700741030 /* LocalhostAddresses.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53A698DA1467B34D00DCAFCB /* ISMSSubFolderLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A698D91467B34D00DCAFCB /* ISMSSubFolderLoader.m */; };
 		53A698DB1467B34D00DCAFCB /* ISMSSubFolderLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A698D91467B34D00DCAFCB /* ISMSSubFolderLoader.m */; };
@@ -1549,7 +1542,6 @@
 		53B52BA611ADE0A6005776B5 /* GenresViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53B52BA411ADE0A6005776B5 /* GenresViewController.xib */; };
 		53B64B7F12C9173E007F1ED5 /* Default-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B64B7E12C9173E007F1ED5 /* Default-Portrait.png */; };
 		53B64B9712C917E4007F1ED5 /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B64B9612C917E4007F1ED5 /* Default-Landscape.png */; };
-		53B64CF312C96129007F1ED5 /* BBSimpleConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B64CF212C96129007F1ED5 /* BBSimpleConnectionQueue.m */; };
 		53B8A1FB11704E100005AA86 /* play-all-note.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B8A1FA11704E100005AA86 /* play-all-note.png */; };
 		53B9D0B41279FAEF00CAB0E0 /* SearchSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B9D0B21279FAEF00CAB0E0 /* SearchSongsViewController.m */; };
 		53B9D0B81279FB6B00CAB0E0 /* SearchSongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B9D0B71279FB6B00CAB0E0 /* SearchSongUITableViewCell.m */; };
@@ -1761,11 +1753,11 @@
 		53BC2796139AF0DD00A825F1 /* PlaylistSongsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 536AB8101353DCF700DABD83 /* PlaylistSongsViewController.xib */; };
 		53BC279C139AF0DD00A825F1 /* iSubAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* iSubAppDelegate.m */; };
 		53BC279D139AF0DD00A825F1 /* FoldersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* FoldersViewController.m */; };
-		53BC279E139AF0DD00A825F1 /* Artist.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1D61139F05200107D63 /* Artist.m */; };
-		53BC279F139AF0DD00A825F1 /* Index.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1FD1139F5A500107D63 /* Index.m */; };
+		53BC279E139AF0DD00A825F1 /* ISMSArtist.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1D61139F05200107D63 /* ISMSArtist.m */; };
+		53BC279F139AF0DD00A825F1 /* ISMSIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1FD1139F5A500107D63 /* ISMSIndex.m */; };
 		53BC27A1139AF0DD00A825F1 /* AlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D3EC113A338500107D63 /* AlbumViewController.m */; };
-		53BC27A2139AF0DD00A825F1 /* Album.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D41F113A4E2C00107D63 /* Album.m */; };
-		53BC27A3139AF0DD00A825F1 /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D5A5113A63F300107D63 /* Song.m */; };
+		53BC27A2139AF0DD00A825F1 /* ISMSAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D41F113A4E2C00107D63 /* ISMSAlbum.m */; };
+		53BC27A3139AF0DD00A825F1 /* ISMSSong.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D5A5113A63F300107D63 /* ISMSSong.m */; };
 		53BC27A4139AF0DD00A825F1 /* iPhoneStreamingPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F675AE113B048600822059 /* iPhoneStreamingPlayerViewController.m */; };
 		53BC27A5139AF0DD00A825F1 /* AsynchronousImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 533A2D06113C61CA00B3A376 /* AsynchronousImageView.m */; };
 		53BC27A7139AF0DD00A825F1 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */; };
@@ -1814,7 +1806,7 @@
 		53BC27E5139AF0DD00A825F1 /* LyricsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 534050F911E9966C004AEC41 /* LyricsViewController.m */; };
 		53BC27F8139AF0DD00A825F1 /* ChatUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC491219E48800F426CD /* ChatUITableViewCell.m */; };
 		53BC27F9139AF0DD00A825F1 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC4B1219E48800F426CD /* ChatViewController.m */; };
-		53BC27FB139AF0DD00A825F1 /* ChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC561219EEEB00F426CD /* ChatMessage.m */; };
+		53BC27FB139AF0DD00A825F1 /* ISMSChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC561219EEEB00F426CD /* ISMSChatMessage.m */; };
 		53BC27FC139AF0DD00A825F1 /* CustomUITextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BB7EC9121B8D8F00BEE7E8 /* CustomUITextView.m */; };
 		53BC27FD139AF0DD00A825F1 /* ViewObjectsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751C61268A36200A4793F /* ViewObjectsSingleton.m */; };
 		53BC27FE139AF0DD00A825F1 /* MusicSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CC1268A3BE00A4793F /* MusicSingleton.m */; };
@@ -1838,8 +1830,7 @@
 		53BC281E139AF0DD00A825F1 /* StoreUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53AAB77912B98699007EA08B /* StoreUITableViewCell.m */; };
 		53BC2820139AF0DD00A825F1 /* MoreTableViewDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B20F5512C2D72300A90DD9 /* MoreTableViewDataSource.m */; };
 		53BC2821139AF0DD00A825F1 /* CustomUITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B20F5A12C2D7AC00A90DD9 /* CustomUITabBarController.m */; };
-		53BC2822139AF0DD00A825F1 /* BBSimpleConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B64CF212C96129007F1ED5 /* BBSimpleConnectionQueue.m */; };
-		53BC2823139AF0DD00A825F1 /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 538DF6E712CC25C300DB6D8C /* Server.m */; };
+		53BC2823139AF0DD00A825F1 /* ISMSServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 538DF6E712CC25C300DB6D8C /* ISMSServer.m */; };
 		53BC2827139AF0DD00A825F1 /* ServerTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB23012E0027800389DA1 /* ServerTypeViewController.m */; };
 		53BC2828139AF0DD00A825F1 /* UbuntuServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB2A012E2348A00389DA1 /* UbuntuServerEditViewController.m */; };
 		53BC2829139AF0DD00A825F1 /* ISMSQueueAllLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB68F12E383F400389DA1 /* ISMSQueueAllLoader.m */; };
@@ -1855,8 +1846,6 @@
 		53BC2833139AF0DD00A825F1 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45485133D6F8200741030 /* HTTPConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53BC2834139AF0DD00A825F1 /* HTTPResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45487133D6F8200741030 /* HTTPResponse.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53BC2835139AF0DD00A825F1 /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45489133D6F8200741030 /* HTTPServer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		53BC2836139AF0DD00A825F1 /* HttpIndexPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45493133D710C00741030 /* HttpIndexPage.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		53BC2837139AF0DD00A825F1 /* MyHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A4549C133D75E300741030 /* MyHTTPConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53BC2838139AF0DD00A825F1 /* LocalhostAddresses.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A454AE133D7E2700741030 /* LocalhostAddresses.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53BC283A139AF0DD00A825F1 /* DDSocialDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7251134CEE1E003E0E1C /* DDSocialDialog.m */; };
 		53BC283B139AF0DD00A825F1 /* DDSocialLoginDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7253134CEE1E003E0E1C /* DDSocialLoginDialog.m */; };
@@ -1968,9 +1957,9 @@
 		53D74D51147185AB0025F8F1 /* PlaylistSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D50147185AB0025F8F1 /* PlaylistSingleton.m */; };
 		53D74D52147185AB0025F8F1 /* PlaylistSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D50147185AB0025F8F1 /* PlaylistSingleton.m */; };
 		53D74D53147185AB0025F8F1 /* PlaylistSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D50147185AB0025F8F1 /* PlaylistSingleton.m */; };
-		53D74D561471BE160025F8F1 /* Song+DAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D551471BE160025F8F1 /* Song+DAO.m */; };
-		53D74D571471BE160025F8F1 /* Song+DAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D551471BE160025F8F1 /* Song+DAO.m */; };
-		53D74D581471BE160025F8F1 /* Song+DAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D551471BE160025F8F1 /* Song+DAO.m */; };
+		53D74D561471BE160025F8F1 /* ISMSSong+DAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D551471BE160025F8F1 /* ISMSSong+DAO.m */; };
+		53D74D571471BE160025F8F1 /* ISMSSong+DAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D551471BE160025F8F1 /* ISMSSong+DAO.m */; };
+		53D74D581471BE160025F8F1 /* ISMSSong+DAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D74D551471BE160025F8F1 /* ISMSSong+DAO.m */; };
 		53D8ACB3116C47E600E5C9CB /* PageControlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D8ACB1116C47E600E5C9CB /* PageControlViewController.m */; };
 		53D8ACB4116C47E600E5C9CB /* PageControlViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53D8ACB2116C47E600E5C9CB /* PageControlViewController.xib */; };
 		53DCA11F15FC5B3E009344C2 /* FMDatabaseQueueAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DCA11E15FC5B3E009344C2 /* FMDatabaseQueueAdditions.m */; };
@@ -2192,11 +2181,11 @@
 		53DCF4FA13BFEAD3009160F9 /* Icon@2x-Beta.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BC286B139AF17B00A825F1 /* Icon@2x-Beta.png */; };
 		53DCF4FD13BFEAD3009160F9 /* iSubAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* iSubAppDelegate.m */; };
 		53DCF4FE13BFEAD3009160F9 /* FoldersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* FoldersViewController.m */; };
-		53DCF4FF13BFEAD3009160F9 /* Artist.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1D61139F05200107D63 /* Artist.m */; };
-		53DCF50013BFEAD3009160F9 /* Index.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1FD1139F5A500107D63 /* Index.m */; };
+		53DCF4FF13BFEAD3009160F9 /* ISMSArtist.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1D61139F05200107D63 /* ISMSArtist.m */; };
+		53DCF50013BFEAD3009160F9 /* ISMSIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1FD1139F5A500107D63 /* ISMSIndex.m */; };
 		53DCF50213BFEAD3009160F9 /* AlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D3EC113A338500107D63 /* AlbumViewController.m */; };
-		53DCF50313BFEAD3009160F9 /* Album.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D41F113A4E2C00107D63 /* Album.m */; };
-		53DCF50413BFEAD3009160F9 /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D5A5113A63F300107D63 /* Song.m */; };
+		53DCF50313BFEAD3009160F9 /* ISMSAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D41F113A4E2C00107D63 /* ISMSAlbum.m */; };
+		53DCF50413BFEAD3009160F9 /* ISMSSong.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D5A5113A63F300107D63 /* ISMSSong.m */; };
 		53DCF50513BFEAD3009160F9 /* iPhoneStreamingPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F675AE113B048600822059 /* iPhoneStreamingPlayerViewController.m */; };
 		53DCF50613BFEAD3009160F9 /* AsynchronousImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 533A2D06113C61CA00B3A376 /* AsynchronousImageView.m */; };
 		53DCF50813BFEAD3009160F9 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */; };
@@ -2245,7 +2234,7 @@
 		53DCF54613BFEAD3009160F9 /* LyricsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 534050F911E9966C004AEC41 /* LyricsViewController.m */; };
 		53DCF55913BFEAD3009160F9 /* ChatUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC491219E48800F426CD /* ChatUITableViewCell.m */; };
 		53DCF55A13BFEAD3009160F9 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC4B1219E48800F426CD /* ChatViewController.m */; };
-		53DCF55C13BFEAD3009160F9 /* ChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC561219EEEB00F426CD /* ChatMessage.m */; };
+		53DCF55C13BFEAD3009160F9 /* ISMSChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC561219EEEB00F426CD /* ISMSChatMessage.m */; };
 		53DCF55D13BFEAD3009160F9 /* CustomUITextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BB7EC9121B8D8F00BEE7E8 /* CustomUITextView.m */; };
 		53DCF55E13BFEAD3009160F9 /* ViewObjectsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751C61268A36200A4793F /* ViewObjectsSingleton.m */; };
 		53DCF55F13BFEAD3009160F9 /* MusicSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CC1268A3BE00A4793F /* MusicSingleton.m */; };
@@ -2269,8 +2258,7 @@
 		53DCF57F13BFEAD3009160F9 /* StoreUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53AAB77912B98699007EA08B /* StoreUITableViewCell.m */; };
 		53DCF58113BFEAD3009160F9 /* MoreTableViewDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B20F5512C2D72300A90DD9 /* MoreTableViewDataSource.m */; };
 		53DCF58213BFEAD3009160F9 /* CustomUITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B20F5A12C2D7AC00A90DD9 /* CustomUITabBarController.m */; };
-		53DCF58313BFEAD3009160F9 /* BBSimpleConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B64CF212C96129007F1ED5 /* BBSimpleConnectionQueue.m */; };
-		53DCF58413BFEAD3009160F9 /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 538DF6E712CC25C300DB6D8C /* Server.m */; };
+		53DCF58413BFEAD3009160F9 /* ISMSServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 538DF6E712CC25C300DB6D8C /* ISMSServer.m */; };
 		53DCF58813BFEAD3009160F9 /* ServerTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB23012E0027800389DA1 /* ServerTypeViewController.m */; };
 		53DCF58913BFEAD3009160F9 /* UbuntuServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB2A012E2348A00389DA1 /* UbuntuServerEditViewController.m */; };
 		53DCF58A13BFEAD3009160F9 /* ISMSQueueAllLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 535CB68F12E383F400389DA1 /* ISMSQueueAllLoader.m */; };
@@ -2286,8 +2274,6 @@
 		53DCF59413BFEAD3009160F9 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45485133D6F8200741030 /* HTTPConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53DCF59513BFEAD3009160F9 /* HTTPResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45487133D6F8200741030 /* HTTPResponse.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53DCF59613BFEAD3009160F9 /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45489133D6F8200741030 /* HTTPServer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		53DCF59713BFEAD3009160F9 /* HttpIndexPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A45493133D710C00741030 /* HttpIndexPage.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		53DCF59813BFEAD3009160F9 /* MyHTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A4549C133D75E300741030 /* MyHTTPConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53DCF59913BFEAD3009160F9 /* LocalhostAddresses.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A454AE133D7E2700741030 /* LocalhostAddresses.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53DCF59B13BFEAD3009160F9 /* DDSocialDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7251134CEE1E003E0E1C /* DDSocialDialog.m */; };
 		53DCF59C13BFEAD3009160F9 /* DDSocialLoginDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7253134CEE1E003E0E1C /* DDSocialLoginDialog.m */; };
@@ -2377,9 +2363,6 @@
 		53EC1807146760E000601C2D /* SUSServerPlaylist.m in Sources */ = {isa = PBXBuildFile; fileRef = 53EC1805146760E000601C2D /* SUSServerPlaylist.m */; };
 		53EC1808146760E000601C2D /* SUSServerPlaylist.m in Sources */ = {isa = PBXBuildFile; fileRef = 53EC1805146760E000601C2D /* SUSServerPlaylist.m */; };
 		53F0CD8211589F0A00A665CD /* progress-label-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F0CD8111589F0A00A665CD /* progress-label-background.png */; };
-		53F11B761460F96D0010820B /* OrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F11B751460F96D0010820B /* OrderedDictionary.m */; };
-		53F11B771460F96D0010820B /* OrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F11B751460F96D0010820B /* OrderedDictionary.m */; };
-		53F11B781460F96D0010820B /* OrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F11B751460F96D0010820B /* OrderedDictionary.m */; };
 		53F11B7B1460FBAD0010820B /* SUSServerPlaylistsDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F11B7A1460FBAD0010820B /* SUSServerPlaylistsDAO.m */; };
 		53F11B7C1460FBAD0010820B /* SUSServerPlaylistsDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F11B7A1460FBAD0010820B /* SUSServerPlaylistsDAO.m */; };
 		53F11B7D1460FBAD0010820B /* SUSServerPlaylistsDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F11B7A1460FBAD0010820B /* SUSServerPlaylistsDAO.m */; };
@@ -2563,11 +2546,11 @@
 		53F1426515FD5D7A004D00D5 /* RNCryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F1424915FD5D7A004D00D5 /* RNCryptor.m */; };
 		53F1426615FD5D7A004D00D5 /* RNCryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F1424915FD5D7A004D00D5 /* RNCryptor.m */; };
 		53F1426715FD5D7A004D00D5 /* RNCryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F1424915FD5D7A004D00D5 /* RNCryptor.m */; };
-		53F2D1D71139F05200107D63 /* Artist.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1D61139F05200107D63 /* Artist.m */; };
-		53F2D1FE1139F5A500107D63 /* Index.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1FD1139F5A500107D63 /* Index.m */; };
+		53F2D1D71139F05200107D63 /* ISMSArtist.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1D61139F05200107D63 /* ISMSArtist.m */; };
+		53F2D1FE1139F5A500107D63 /* ISMSIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D1FD1139F5A500107D63 /* ISMSIndex.m */; };
 		53F2D3EE113A338500107D63 /* AlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D3EC113A338500107D63 /* AlbumViewController.m */; };
-		53F2D420113A4E2C00107D63 /* Album.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D41F113A4E2C00107D63 /* Album.m */; };
-		53F2D5A6113A63F300107D63 /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D5A5113A63F300107D63 /* Song.m */; };
+		53F2D420113A4E2C00107D63 /* ISMSAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D41F113A4E2C00107D63 /* ISMSAlbum.m */; };
+		53F2D5A6113A63F300107D63 /* ISMSSong.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D5A5113A63F300107D63 /* ISMSSong.m */; };
 		53F4A074116FF48400BB8411 /* DebugViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F4A072116FF48400BB8411 /* DebugViewController.m */; };
 		53F4A07D116FF7EE00BB8411 /* CurrentPlaylistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F4A07B116FF7EE00BB8411 /* CurrentPlaylistViewController.m */; };
 		53F4A07E116FF7EE00BB8411 /* CurrentPlaylistViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F4A07C116FF7EE00BB8411 /* CurrentPlaylistViewController.xib */; };
@@ -2778,6 +2761,15 @@
 		533C65DA15ABB9F0003EAF29 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/DebugViewController.xib; sourceTree = "<group>"; };
 		533C65E115ABB9F5003EAF29 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/EqualizerViewController.xib; sourceTree = "<group>"; };
 		533C65E815ABBA09003EAF29 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/AlbumViewController.xib; sourceTree = "<group>"; };
+		533F6517160531E9000098E1 /* SUSQuickAlbumsLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSQuickAlbumsLoader.h; sourceTree = "<group>"; };
+		533F6518160531E9000098E1 /* SUSQuickAlbumsLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSQuickAlbumsLoader.m; sourceTree = "<group>"; };
+		533F651C160533F4000098E1 /* Defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Defines.h; path = Other/Defines.h; sourceTree = "<group>"; };
+		533F651D16053B21000098E1 /* ISMSDataModelObjects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSDataModelObjects.h; sourceTree = "<group>"; };
+		533F65201605429E000098E1 /* ISMSCustomUIObjects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSCustomUIObjects.h; sourceTree = "<group>"; };
+		533F652116054507000098E1 /* SUSLoaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSLoaders.h; sourceTree = "<group>"; };
+		533F65221605451B000098E1 /* PMSLoaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSLoaders.h; sourceTree = "<group>"; };
+		533F65231605452E000098E1 /* ISMSLoaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSLoaders.h; sourceTree = "<group>"; };
+		533F652416054614000098E1 /* ISMSDataAccessObjects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSDataAccessObjects.h; sourceTree = "<group>"; };
 		53404FE011E9487C004AEC41 /* controller-next@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-next@2x.png"; path = "Images/Player Icons/controller-next@2x.png"; sourceTree = "<group>"; };
 		53404FE211E9488A004AEC41 /* controller-pause@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-pause@2x.png"; path = "Images/Player Icons/controller-pause@2x.png"; sourceTree = "<group>"; };
 		53404FE311E9488A004AEC41 /* controller-play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-play@2x.png"; path = "Images/Player Icons/controller-play@2x.png"; sourceTree = "<group>"; };
@@ -3075,16 +3067,16 @@
 		53733C6E14FC4B09001D8104 /* ISMSCacheQueueManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSCacheQueueManager.h; sourceTree = "<group>"; };
 		53733C6F14FC4B09001D8104 /* ISMSCacheQueueManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSCacheQueueManager.m; sourceTree = "<group>"; };
 		5377429915AA4DC700DD547D /* kif.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = kif.framework; path = Frameworks/kif.framework; sourceTree = "<group>"; };
-		5377479E15FD2BB00047CAF1 /* MediaItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaItem.h; sourceTree = "<group>"; };
-		537747A315FD2C870047CAF1 /* Video.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Video.h; sourceTree = "<group>"; };
-		537747A415FD2C870047CAF1 /* Video.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Video.m; sourceTree = "<group>"; };
+		5377479E15FD2BB00047CAF1 /* ISMSMediaItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSMediaItem.h; sourceTree = "<group>"; };
+		537747A315FD2C870047CAF1 /* ISMSVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSVideo.h; sourceTree = "<group>"; };
+		537747A415FD2C870047CAF1 /* ISMSVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSVideo.m; sourceTree = "<group>"; };
 		5379DC481219E48800F426CD /* ChatUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatUITableViewCell.h; sourceTree = "<group>"; };
 		5379DC491219E48800F426CD /* ChatUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatUITableViewCell.m; sourceTree = "<group>"; };
 		5379DC4A1219E48800F426CD /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
 		5379DC4B1219E48800F426CD /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
 		5379DC4C1219E48800F426CD /* ChatViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatViewController.xib; sourceTree = "<group>"; };
-		5379DC551219EEEB00F426CD /* ChatMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ChatMessage.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		5379DC561219EEEB00F426CD /* ChatMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatMessage.m; sourceTree = "<group>"; };
+		5379DC551219EEEB00F426CD /* ISMSChatMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ISMSChatMessage.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		5379DC561219EEEB00F426CD /* ISMSChatMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSChatMessage.m; sourceTree = "<group>"; };
 		537DE2D8113F008C00875852 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		537E9A0814F323EE006CB0BC /* UIViewController+PushViewControllerCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+PushViewControllerCustom.h"; sourceTree = "<group>"; };
 		537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+PushViewControllerCustom.m"; sourceTree = "<group>"; };
@@ -3124,8 +3116,8 @@
 		5388A42B1198AD840049BA9E /* unselected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = unselected.png; path = Images/Other/unselected.png; sourceTree = "<group>"; };
 		538C01AE12C3DCC40061545B /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back.png; path = Images/Other/back.png; sourceTree = "<group>"; };
 		538C01AF12C3DCC40061545B /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "back@2x.png"; path = "Images/Other/back@2x.png"; sourceTree = "<group>"; };
-		538DF6E612CC25C300DB6D8C /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Server.h; sourceTree = "<group>"; };
-		538DF6E712CC25C300DB6D8C /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Server.m; sourceTree = "<group>"; };
+		538DF6E612CC25C300DB6D8C /* ISMSServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSServer.h; sourceTree = "<group>"; };
+		538DF6E712CC25C300DB6D8C /* ISMSServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSServer.m; sourceTree = "<group>"; };
 		538F6468137105610049C6ED /* SFHFKeychainUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFHFKeychainUtils.h; sourceTree = "<group>"; };
 		538F6469137105610049C6ED /* SFHFKeychainUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHFKeychainUtils.m; sourceTree = "<group>"; };
 		5393294C15FD08EF00A0E290 /* ISMSStreamHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSStreamHandler.h; sourceTree = "<group>"; };
@@ -3156,8 +3148,6 @@
 		539B3091145E78AE00D06475 /* SUSLyricsDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSLyricsDAO.m; sourceTree = "<group>"; };
 		539D6073145E0D7D0018AA90 /* ISMSUpdateChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSUpdateChecker.h; sourceTree = "<group>"; };
 		539D6074145E0D7D0018AA90 /* ISMSUpdateChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSUpdateChecker.m; sourceTree = "<group>"; };
-		53A1705F152A7BC200822521 /* GCDTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDTimer.h; sourceTree = "<group>"; };
-		53A17060152A7BC200822521 /* GCDTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDTimer.m; sourceTree = "<group>"; };
 		53A2213411A8489900C1ACD4 /* cache-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cache-button.png"; path = "Images/Other/cache-button.png"; sourceTree = "<group>"; };
 		53A2213511A8489900C1ACD4 /* queue-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "queue-button.png"; path = "Images/Other/queue-button.png"; sourceTree = "<group>"; };
 		53A2BE22147DF09800E44822 /* EqualizerPointView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EqualizerPointView.h; sourceTree = "<group>"; };
@@ -3179,10 +3169,6 @@
 		53A45487133D6F8200741030 /* HTTPResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPResponse.m; sourceTree = "<group>"; };
 		53A45488133D6F8200741030 /* HTTPServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPServer.h; sourceTree = "<group>"; };
 		53A45489133D6F8200741030 /* HTTPServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPServer.m; sourceTree = "<group>"; };
-		53A45492133D710C00741030 /* HttpIndexPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpIndexPage.h; sourceTree = "<group>"; };
-		53A45493133D710C00741030 /* HttpIndexPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpIndexPage.m; sourceTree = "<group>"; };
-		53A4549B133D75E000741030 /* MyHTTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyHTTPConnection.h; sourceTree = "<group>"; };
-		53A4549C133D75E300741030 /* MyHTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyHTTPConnection.m; sourceTree = "<group>"; };
 		53A454AD133D7E2700741030 /* LocalhostAddresses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalhostAddresses.h; sourceTree = "<group>"; };
 		53A454AE133D7E2700741030 /* LocalhostAddresses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalhostAddresses.m; sourceTree = "<group>"; };
 		53A698D81467B34D00DCAFCB /* ISMSSubFolderLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSSubFolderLoader.h; sourceTree = "<group>"; };
@@ -3262,8 +3248,6 @@
 		53B52BA411ADE0A6005776B5 /* GenresViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GenresViewController.xib; sourceTree = "<group>"; };
 		53B64B7E12C9173E007F1ED5 /* Default-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait.png"; path = "Images/Other/Default-Portrait.png"; sourceTree = "<group>"; };
 		53B64B9612C917E4007F1ED5 /* Default-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape.png"; path = "Images/Other/Default-Landscape.png"; sourceTree = "<group>"; };
-		53B64CF112C96129007F1ED5 /* BBSimpleConnectionQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BBSimpleConnectionQueue.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		53B64CF212C96129007F1ED5 /* BBSimpleConnectionQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBSimpleConnectionQueue.m; sourceTree = "<group>"; };
 		53B8A1FA11704E100005AA86 /* play-all-note.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "play-all-note.png"; path = "Images/Other/play-all-note.png"; sourceTree = "<group>"; };
 		53B9D0B11279FAEF00CAB0E0 /* SearchSongsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchSongsViewController.h; sourceTree = "<group>"; };
 		53B9D0B21279FAEF00CAB0E0 /* SearchSongsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchSongsViewController.m; sourceTree = "<group>"; };
@@ -3346,8 +3330,8 @@
 		53D44F8415AA621A00CDD3B8 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		53D74D4F147185AB0025F8F1 /* PlaylistSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistSingleton.h; sourceTree = "<group>"; };
 		53D74D50147185AB0025F8F1 /* PlaylistSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistSingleton.m; sourceTree = "<group>"; };
-		53D74D541471BE150025F8F1 /* Song+DAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Song+DAO.h"; sourceTree = "<group>"; };
-		53D74D551471BE160025F8F1 /* Song+DAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Song+DAO.m"; sourceTree = "<group>"; };
+		53D74D541471BE150025F8F1 /* ISMSSong+DAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ISMSSong+DAO.h"; sourceTree = "<group>"; };
+		53D74D551471BE160025F8F1 /* ISMSSong+DAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ISMSSong+DAO.m"; sourceTree = "<group>"; };
 		53D8ACB0116C47E600E5C9CB /* PageControlViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageControlViewController.h; sourceTree = "<group>"; };
 		53D8ACB1116C47E600E5C9CB /* PageControlViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PageControlViewController.m; sourceTree = "<group>"; };
 		53D8ACB2116C47E600E5C9CB /* PageControlViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PageControlViewController.xib; sourceTree = "<group>"; };
@@ -3401,8 +3385,6 @@
 		53EC1804146760E000601C2D /* SUSServerPlaylist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSServerPlaylist.h; sourceTree = "<group>"; };
 		53EC1805146760E000601C2D /* SUSServerPlaylist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSServerPlaylist.m; sourceTree = "<group>"; };
 		53F0CD8111589F0A00A665CD /* progress-label-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "progress-label-background.png"; path = "Images/Other/progress-label-background.png"; sourceTree = "<group>"; };
-		53F11B741460F96D0010820B /* OrderedDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderedDictionary.h; sourceTree = "<group>"; };
-		53F11B751460F96D0010820B /* OrderedDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderedDictionary.m; sourceTree = "<group>"; };
 		53F11B791460FBAD0010820B /* SUSServerPlaylistsDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSServerPlaylistsDAO.h; sourceTree = "<group>"; };
 		53F11B7A1460FBAD0010820B /* SUSServerPlaylistsDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSServerPlaylistsDAO.m; sourceTree = "<group>"; };
 		53F1412015FD550C004D00D5 /* buildnumber.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = buildnumber.xcconfig; path = Other/buildnumber.xcconfig; sourceTree = "<group>"; };
@@ -3536,16 +3518,16 @@
 		53F1424715FD5D7A004D00D5 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		53F1424815FD5D7A004D00D5 /* RNCryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCryptor.h; sourceTree = "<group>"; };
 		53F1424915FD5D7A004D00D5 /* RNCryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNCryptor.m; sourceTree = "<group>"; };
-		53F2D1D51139F05200107D63 /* Artist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Artist.h; sourceTree = "<group>"; };
-		53F2D1D61139F05200107D63 /* Artist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Artist.m; sourceTree = "<group>"; };
-		53F2D1FC1139F5A500107D63 /* Index.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Index.h; sourceTree = "<group>"; };
-		53F2D1FD1139F5A500107D63 /* Index.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Index.m; sourceTree = "<group>"; };
+		53F2D1D51139F05200107D63 /* ISMSArtist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSArtist.h; sourceTree = "<group>"; };
+		53F2D1D61139F05200107D63 /* ISMSArtist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSArtist.m; sourceTree = "<group>"; };
+		53F2D1FC1139F5A500107D63 /* ISMSIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSIndex.h; sourceTree = "<group>"; };
+		53F2D1FD1139F5A500107D63 /* ISMSIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSIndex.m; sourceTree = "<group>"; };
 		53F2D3EB113A338500107D63 /* AlbumViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumViewController.h; sourceTree = "<group>"; };
 		53F2D3EC113A338500107D63 /* AlbumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AlbumViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		53F2D41E113A4E2C00107D63 /* Album.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Album.h; sourceTree = "<group>"; };
-		53F2D41F113A4E2C00107D63 /* Album.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Album.m; sourceTree = "<group>"; };
-		53F2D5A4113A63F300107D63 /* Song.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Song.h; sourceTree = "<group>"; };
-		53F2D5A5113A63F300107D63 /* Song.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Song.m; sourceTree = "<group>"; };
+		53F2D41E113A4E2C00107D63 /* ISMSAlbum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSAlbum.h; sourceTree = "<group>"; };
+		53F2D41F113A4E2C00107D63 /* ISMSAlbum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSAlbum.m; sourceTree = "<group>"; };
+		53F2D5A4113A63F300107D63 /* ISMSSong.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSSong.h; sourceTree = "<group>"; };
+		53F2D5A5113A63F300107D63 /* ISMSSong.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSSong.m; sourceTree = "<group>"; };
 		53F4A071116FF48400BB8411 /* DebugViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugViewController.h; sourceTree = "<group>"; };
 		53F4A072116FF48400BB8411 /* DebugViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebugViewController.m; sourceTree = "<group>"; };
 		53F4A07A116FF7EE00BB8411 /* CurrentPlaylistViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CurrentPlaylistViewController.h; sourceTree = "<group>"; };
@@ -3767,7 +3749,6 @@
 				539A356513D3E46700D80554 /* Data Model */,
 				539797F01162CE4B00F41D8B /* View Controllers */,
 				539797F21162CE7700F41D8B /* Support Classes */,
-				539797F31162CE9300F41D8B /* Custom Objects */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -3803,6 +3784,7 @@
 			children = (
 				53493F2A15FC6AD20059492E /* iSub_Prefix.pch */,
 				53493F2615FC6AC40059492E /* main.m */,
+				533F651C160533F4000098E1 /* Defines.h */,
 				53493F3315FC6BF10059492E /* Imports.h */,
 				53493F3415FC6BF10059492E /* ISMSErrorDomain.h */,
 				53493F3515FC6BF10059492E /* ISMSNotificationNames.h */,
@@ -4145,9 +4127,57 @@
 			name = "XML Parsers";
 			sourceTree = "<group>";
 		};
+		533F651E1605419A000098E1 /* Data Model Objects */ = {
+			isa = PBXGroup;
+			children = (
+				533F651D16053B21000098E1 /* ISMSDataModelObjects.h */,
+				53F2D1FC1139F5A500107D63 /* ISMSIndex.h */,
+				53F2D1FD1139F5A500107D63 /* ISMSIndex.m */,
+				53F2D1D51139F05200107D63 /* ISMSArtist.h */,
+				53F2D1D61139F05200107D63 /* ISMSArtist.m */,
+				53F2D41E113A4E2C00107D63 /* ISMSAlbum.h */,
+				53F2D41F113A4E2C00107D63 /* ISMSAlbum.m */,
+				5377479E15FD2BB00047CAF1 /* ISMSMediaItem.h */,
+				53F2D5A4113A63F300107D63 /* ISMSSong.h */,
+				53F2D5A5113A63F300107D63 /* ISMSSong.m */,
+				537747A315FD2C870047CAF1 /* ISMSVideo.h */,
+				537747A415FD2C870047CAF1 /* ISMSVideo.m */,
+				538DF6E612CC25C300DB6D8C /* ISMSServer.h */,
+				538DF6E712CC25C300DB6D8C /* ISMSServer.m */,
+				5379DC551219EEEB00F426CD /* ISMSChatMessage.h */,
+				5379DC561219EEEB00F426CD /* ISMSChatMessage.m */,
+				53EC1804146760E000601C2D /* SUSServerPlaylist.h */,
+				53EC1805146760E000601C2D /* SUSServerPlaylist.m */,
+			);
+			name = "Data Model Objects";
+			sourceTree = "<group>";
+		};
+		533F651F16054282000098E1 /* Custom UI Objects */ = {
+			isa = PBXGroup;
+			children = (
+				533F65201605429E000098E1 /* ISMSCustomUIObjects.h */,
+				532D9B41131AE19700FD8CA7 /* CustomUIAlertView.h */,
+				532D9B42131AE19700FD8CA7 /* CustomUIAlertView.m */,
+				53BB7EC8121B8D8F00BEE7E8 /* CustomUITextView.h */,
+				53BB7EC9121B8D8F00BEE7E8 /* CustomUITextView.m */,
+				53733C6414F88D62001D8104 /* AsynchronousImageViewDelegate.h */,
+				533A2D05113C61C900B3A376 /* AsynchronousImageView.h */,
+				533A2D06113C61CA00B3A376 /* AsynchronousImageView.m */,
+				53B5298811AD9B79005776B5 /* LoadingScreen.h */,
+				53B5298911AD9B79005776B5 /* LoadingScreen.m */,
+				536B5D5D11C8183D00CC1D69 /* LoadingScreen.xib */,
+				53B20F5912C2D7AC00A90DD9 /* CustomUITabBarController.h */,
+				53B20F5A12C2D7AC00A90DD9 /* CustomUITabBarController.m */,
+				53B20F5412C2D72300A90DD9 /* MoreTableViewDataSource.h */,
+				53B20F5512C2D72300A90DD9 /* MoreTableViewDataSource.m */,
+			);
+			name = "Custom UI Objects";
+			sourceTree = "<group>";
+		};
 		534098BA142E5DBA00455754 /* DAOs */ = {
 			isa = PBXGroup;
 			children = (
+				533F652416054614000098E1 /* ISMSDataAccessObjects.h */,
 				53EB49911401B71C0014E59A /* SUSRootFoldersDAO.h */,
 				53EB49921401B71C0014E59A /* SUSRootFoldersDAO.m */,
 				53E82A96140720BC0051D44B /* SUSSubFolderDAO.h */,
@@ -4162,8 +4192,8 @@
 				539B3091145E78AE00D06475 /* SUSLyricsDAO.m */,
 				53F11B791460FBAD0010820B /* SUSServerPlaylistsDAO.h */,
 				53F11B7A1460FBAD0010820B /* SUSServerPlaylistsDAO.m */,
-				53D74D541471BE150025F8F1 /* Song+DAO.h */,
-				53D74D551471BE160025F8F1 /* Song+DAO.m */,
+				53D74D541471BE150025F8F1 /* ISMSSong+DAO.h */,
+				53D74D551471BE160025F8F1 /* ISMSSong+DAO.m */,
 				531B6D68147C377100BA28B9 /* SUSCoverArtDAO.h */,
 				531B6D69147C377100BA28B9 /* SUSCoverArtDAO.m */,
 				53C0C9B014CF5D0C006A8DF3 /* SUSNowPlayingDAO.h */,
@@ -4375,8 +4405,6 @@
 		536F9D7D119783D4002E526A /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				1D3623240D0F684500981E51 /* iSubAppDelegate.h */,
-				1D3623250D0F684500981E51 /* iSubAppDelegate.m */,
 				53493F3F15FC6CAE0059492E /* MainWindow-iPad.xib */,
 				53493F4015FC6CAE0059492E /* MainWindow.xib */,
 			);
@@ -4584,60 +4612,12 @@
 				53B52A9511ADB7AD005776B5 /* sqlite3.c */,
 				5324C6C413345D75004E6C79 /* OBSlider.h */,
 				5324C6C513345D75004E6C79 /* OBSlider.m */,
-				53F11B741460F96D0010820B /* OrderedDictionary.h */,
-				53F11B751460F96D0010820B /* OrderedDictionary.m */,
 				532590FF14EE22C100DF4BDB /* MBProgressHUD.h */,
 				5325910014EE22C400DF4BDB /* MBProgressHUD.m */,
-			);
-			name = "Support Classes";
-			sourceTree = "<group>";
-		};
-		539797F31162CE9300F41D8B /* Custom Objects */ = {
-			isa = PBXGroup;
-			children = (
 				532862D911C573AD00B40FF0 /* UAApplication.h */,
 				532862DA11C573AD00B40FF0 /* UAApplication.m */,
-				532D9B41131AE19700FD8CA7 /* CustomUIAlertView.h */,
-				532D9B42131AE19700FD8CA7 /* CustomUIAlertView.m */,
-				53F2D1FC1139F5A500107D63 /* Index.h */,
-				53F2D1FD1139F5A500107D63 /* Index.m */,
-				53F2D1D51139F05200107D63 /* Artist.h */,
-				53F2D1D61139F05200107D63 /* Artist.m */,
-				53F2D41E113A4E2C00107D63 /* Album.h */,
-				53F2D41F113A4E2C00107D63 /* Album.m */,
-				5377479E15FD2BB00047CAF1 /* MediaItem.h */,
-				53F2D5A4113A63F300107D63 /* Song.h */,
-				53F2D5A5113A63F300107D63 /* Song.m */,
-				537747A315FD2C870047CAF1 /* Video.h */,
-				537747A415FD2C870047CAF1 /* Video.m */,
-				5379DC551219EEEB00F426CD /* ChatMessage.h */,
-				5379DC561219EEEB00F426CD /* ChatMessage.m */,
-				53BB7EC8121B8D8F00BEE7E8 /* CustomUITextView.h */,
-				53BB7EC9121B8D8F00BEE7E8 /* CustomUITextView.m */,
-				53733C6414F88D62001D8104 /* AsynchronousImageViewDelegate.h */,
-				533A2D05113C61C900B3A376 /* AsynchronousImageView.h */,
-				533A2D06113C61CA00B3A376 /* AsynchronousImageView.m */,
-				53B5298811AD9B79005776B5 /* LoadingScreen.h */,
-				53B5298911AD9B79005776B5 /* LoadingScreen.m */,
-				536B5D5D11C8183D00CC1D69 /* LoadingScreen.xib */,
-				53B20F5912C2D7AC00A90DD9 /* CustomUITabBarController.h */,
-				53B20F5A12C2D7AC00A90DD9 /* CustomUITabBarController.m */,
-				53B20F5412C2D72300A90DD9 /* MoreTableViewDataSource.h */,
-				53B20F5512C2D72300A90DD9 /* MoreTableViewDataSource.m */,
-				53B64CF112C96129007F1ED5 /* BBSimpleConnectionQueue.h */,
-				53B64CF212C96129007F1ED5 /* BBSimpleConnectionQueue.m */,
-				538DF6E612CC25C300DB6D8C /* Server.h */,
-				538DF6E712CC25C300DB6D8C /* Server.m */,
-				53A4549B133D75E000741030 /* MyHTTPConnection.h */,
-				53A4549C133D75E300741030 /* MyHTTPConnection.m */,
-				53A45492133D710C00741030 /* HttpIndexPage.h */,
-				53A45493133D710C00741030 /* HttpIndexPage.m */,
-				53EC1804146760E000601C2D /* SUSServerPlaylist.h */,
-				53EC1805146760E000601C2D /* SUSServerPlaylist.m */,
-				53A1705F152A7BC200822521 /* GCDTimer.h */,
-				53A17060152A7BC200822521 /* GCDTimer.m */,
 			);
-			name = "Custom Objects";
+			name = "Support Classes";
 			sourceTree = "<group>";
 		};
 		539797F41162CEB100F41D8B /* Images */ = {
@@ -4730,8 +4710,10 @@
 			children = (
 				5308A35015FBFE2A000456CB /* iSubBassGaplessPlayerDelegate.h */,
 				5308A35115FBFE2A000456CB /* iSubBassGaplessPlayerDelegate.m */,
+				533F651F16054282000098E1 /* Custom UI Objects */,
+				533F651E1605419A000098E1 /* Data Model Objects */,
 				5308A31615FBFDAE000456CB /* Audio Engine */,
-				53E82A9C140721D50051D44B /* General */,
+				53E82A9C140721D50051D44B /* Singletons */,
 				53FB066011EE1C4E008A30C7 /* ISMSStreamManager */,
 				53E82A9B140721BD0051D44B /* Server Loading */,
 				5304BCE111BD58E3000EF6F9 /* NSURLConnectionDelegates */,
@@ -4994,6 +4976,7 @@
 		53CCF6E9158C1267008B2E56 /* Generic */ = {
 			isa = PBXGroup;
 			children = (
+				533F65231605452E000098E1 /* ISMSLoaders.h */,
 				530121A415E5659600A14CD0 /* Status */,
 				5380367F158C50CD009B17FB /* Playlists */,
 				53CCF6E8158C1237008B2E56 /* Cover Art */,
@@ -5007,6 +4990,7 @@
 		53CCF6EA158C127B008B2E56 /* Subsonic Specific */ = {
 			isa = PBXGroup;
 			children = (
+				533F652116054507000098E1 /* SUSLoaders.h */,
 				534098A5142D491100455754 /* SUSAllSongsLoader.h */,
 				534098A6142D491100455754 /* SUSAllSongsLoader.m */,
 				535EFD8C145D153900EDF867 /* SUSChatLoader.h */,
@@ -5015,6 +4999,8 @@
 				539B308C145E750700D06475 /* SUSLyricsLoader.m */,
 				53C0C9AB14CF570E006A8DF3 /* SUSNowPlayingLoader.h */,
 				53C0C9AC14CF570E006A8DF3 /* SUSNowPlayingLoader.m */,
+				533F6517160531E9000098E1 /* SUSQuickAlbumsLoader.h */,
+				533F6518160531E9000098E1 /* SUSQuickAlbumsLoader.m */,
 			);
 			name = "Subsonic Specific";
 			sourceTree = "<group>";
@@ -5022,6 +5008,7 @@
 		53CCF6EB158C1284008B2E56 /* PMS Specific */ = {
 			isa = PBXGroup;
 			children = (
+				533F65221605451B000098E1 /* PMSLoaders.h */,
 				5301219A15E563C900A14CD0 /* PMSLoginLoader.h */,
 				5301219B15E563C900A14CD0 /* PMSLoginLoader.m */,
 			);
@@ -5060,15 +5047,19 @@
 				53B36D7B145F95E5005538F3 /* NSMutableURLRequest+SUS.m */,
 				53703BCD15882CC000B1FB33 /* NSMutableURLRequest+PMS.h */,
 				53703BCE15882CC000B1FB33 /* NSMutableURLRequest+PMS.m */,
+				539D6073145E0D7D0018AA90 /* ISMSUpdateChecker.h */,
+				539D6074145E0D7D0018AA90 /* ISMSUpdateChecker.m */,
 				534098BA142E5DBA00455754 /* DAOs */,
 				534098BB142E5DC500455754 /* Loaders */,
 			);
 			name = "Server Loading";
 			sourceTree = "<group>";
 		};
-		53E82A9C140721D50051D44B /* General */ = {
+		53E82A9C140721D50051D44B /* Singletons */ = {
 			isa = PBXGroup;
 			children = (
+				1D3623240D0F684500981E51 /* iSubAppDelegate.h */,
+				1D3623250D0F684500981E51 /* iSubAppDelegate.m */,
 				5386FB8514062A390009F73F /* SavedSettings.h */,
 				5386FB8614062A3A0009F73F /* SavedSettings.m */,
 				53D74D4F147185AB0025F8F1 /* PlaylistSingleton.h */,
@@ -5085,10 +5076,8 @@
 				53C751C61268A36200A4793F /* ViewObjectsSingleton.m */,
 				53733C5E14F8630F001D8104 /* JukeboxSingleton.h */,
 				53733C5F14F8630F001D8104 /* JukeboxSingleton.m */,
-				539D6073145E0D7D0018AA90 /* ISMSUpdateChecker.h */,
-				539D6074145E0D7D0018AA90 /* ISMSUpdateChecker.m */,
 			);
-			name = General;
+			name = Singletons;
 			sourceTree = "<group>";
 		};
 		53F1412415FD5D37004D00D5 /* EX2Kit */ = {
@@ -7075,11 +7064,11 @@
 			files = (
 				1D3623260D0F684500981E51 /* iSubAppDelegate.m in Sources */,
 				28C286E10D94DF7D0034E888 /* FoldersViewController.m in Sources */,
-				53F2D1D71139F05200107D63 /* Artist.m in Sources */,
-				53F2D1FE1139F5A500107D63 /* Index.m in Sources */,
+				53F2D1D71139F05200107D63 /* ISMSArtist.m in Sources */,
+				53F2D1FE1139F5A500107D63 /* ISMSIndex.m in Sources */,
 				53F2D3EE113A338500107D63 /* AlbumViewController.m in Sources */,
-				53F2D420113A4E2C00107D63 /* Album.m in Sources */,
-				53F2D5A6113A63F300107D63 /* Song.m in Sources */,
+				53F2D420113A4E2C00107D63 /* ISMSAlbum.m in Sources */,
+				53F2D5A6113A63F300107D63 /* ISMSSong.m in Sources */,
 				53F675AF113B048600822059 /* iPhoneStreamingPlayerViewController.m in Sources */,
 				533A2D07113C61CA00B3A376 /* AsynchronousImageView.m in Sources */,
 				53CED25F113E2FF100B09699 /* SubsonicServerEditViewController.m in Sources */,
@@ -7128,7 +7117,7 @@
 				534050FB11E9966C004AEC41 /* LyricsViewController.m in Sources */,
 				5379DC4F1219E48800F426CD /* ChatUITableViewCell.m in Sources */,
 				5379DC501219E48800F426CD /* ChatViewController.m in Sources */,
-				5379DC571219EEEB00F426CD /* ChatMessage.m in Sources */,
+				5379DC571219EEEB00F426CD /* ISMSChatMessage.m in Sources */,
 				53BB7ECA121B8D8F00BEE7E8 /* CustomUITextView.m in Sources */,
 				53C751C71268A36200A4793F /* ViewObjectsSingleton.m in Sources */,
 				53C751CD1268A3BE00A4793F /* MusicSingleton.m in Sources */,
@@ -7152,8 +7141,7 @@
 				53AAB77A12B98699007EA08B /* StoreUITableViewCell.m in Sources */,
 				53B20F5612C2D72300A90DD9 /* MoreTableViewDataSource.m in Sources */,
 				53B20F5B12C2D7AC00A90DD9 /* CustomUITabBarController.m in Sources */,
-				53B64CF312C96129007F1ED5 /* BBSimpleConnectionQueue.m in Sources */,
-				538DF6E812CC25C300DB6D8C /* Server.m in Sources */,
+				538DF6E812CC25C300DB6D8C /* ISMSServer.m in Sources */,
 				535CB23212E0027800389DA1 /* ServerTypeViewController.m in Sources */,
 				535CB2A212E2348A00389DA1 /* UbuntuServerEditViewController.m in Sources */,
 				535CB69012E383F400389DA1 /* ISMSQueueAllLoader.m in Sources */,
@@ -7169,8 +7157,6 @@
 				53A4548F133D6F8200741030 /* HTTPConnection.m in Sources */,
 				53A45490133D6F8200741030 /* HTTPResponse.m in Sources */,
 				53A45491133D6F8200741030 /* HTTPServer.m in Sources */,
-				53A45494133D710C00741030 /* HttpIndexPage.m in Sources */,
-				53A4549D133D75E900741030 /* MyHTTPConnection.m in Sources */,
 				53A454AF133D7E2800741030 /* LocalhostAddresses.m in Sources */,
 				535B7254134CEE1E003E0E1C /* DDSocialDialog.m in Sources */,
 				535B7255134CEE1E003E0E1C /* DDSocialLoginDialog.m in Sources */,
@@ -7196,14 +7182,13 @@
 				539B3092145E78AF00D06475 /* SUSLyricsDAO.m in Sources */,
 				53B36D7C145F95E5005538F3 /* NSMutableURLRequest+SUS.m in Sources */,
 				53880A9314608DBA00C7DE62 /* ISMSCoverArtLoader.m in Sources */,
-				53F11B761460F96D0010820B /* OrderedDictionary.m in Sources */,
 				53F11B7B1460FBAD0010820B /* SUSServerPlaylistsDAO.m in Sources */,
 				53EC180114675A6F00601C2D /* SUSServerPlaylistsLoader.m in Sources */,
 				53EC1806146760E000601C2D /* SUSServerPlaylist.m in Sources */,
 				53A698DA1467B34D00DCAFCB /* ISMSSubFolderLoader.m in Sources */,
 				535AC24E146C8E0300E19492 /* ISMSStreamManager.m in Sources */,
 				53D74D51147185AB0025F8F1 /* PlaylistSingleton.m in Sources */,
-				53D74D561471BE160025F8F1 /* Song+DAO.m in Sources */,
+				53D74D561471BE160025F8F1 /* ISMSSong+DAO.m in Sources */,
 				536585811478920D00FE57A5 /* EqualizerViewController.m in Sources */,
 				5365859314789ADA00FE57A5 /* EqualizerView.m in Sources */,
 				531B6D6A147C377100BA28B9 /* SUSCoverArtDAO.m in Sources */,
@@ -7227,7 +7212,6 @@
 				537E9A3114F43F43006CB0BC /* StackContainerView.m in Sources */,
 				53733C6014F8630F001D8104 /* JukeboxSingleton.m in Sources */,
 				53733C7014FC4B09001D8104 /* ISMSCacheQueueManager.m in Sources */,
-				53A17061152A7BC200822521 /* GCDTimer.m in Sources */,
 				53703BC41588291F00B1FB33 /* ISMSRootFoldersLoader.m in Sources */,
 				53703BC915882BBF00B1FB33 /* PMSRootFoldersLoader.m in Sources */,
 				53703BCF15882CC100B1FB33 /* NSMutableURLRequest+PMS.m in Sources */,
@@ -7303,7 +7287,7 @@
 				5393295315FD08F100A0E290 /* ISMSStreamHandler.m in Sources */,
 				5393295615FD08F100A0E290 /* ISMSURLConnectionStreamHandler.m in Sources */,
 				5393295915FD08F100A0E290 /* ISMSCFNetworkStreamHandler.m in Sources */,
-				537747A515FD2C870047CAF1 /* Video.m in Sources */,
+				537747A515FD2C870047CAF1 /* ISMSVideo.m in Sources */,
 				53F1419C15FD5D37004D00D5 /* NSArray+FirstObject.m in Sources */,
 				53F1419F15FD5D37004D00D5 /* NSArray+Safe.m in Sources */,
 				53F141A215FD5D37004D00D5 /* NSMutableArray+Safe.m in Sources */,
@@ -7361,6 +7345,7 @@
 				53F1425F15FD5D7A004D00D5 /* DispatchQueueLogFormatter.m in Sources */,
 				53F1426515FD5D7A004D00D5 /* RNCryptor.m in Sources */,
 				53ACBC88160500FD0008FA47 /* NSMutableDictionary+Safe.m in Sources */,
+				533F6519160531E9000098E1 /* SUSQuickAlbumsLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7370,11 +7355,11 @@
 			files = (
 				53159E66156F69D0001B0268 /* iSubAppDelegate.m in Sources */,
 				53159E67156F69D0001B0268 /* FoldersViewController.m in Sources */,
-				53159E68156F69D0001B0268 /* Artist.m in Sources */,
-				53159E69156F69D0001B0268 /* Index.m in Sources */,
+				53159E68156F69D0001B0268 /* ISMSArtist.m in Sources */,
+				53159E69156F69D0001B0268 /* ISMSIndex.m in Sources */,
 				53159E6A156F69D0001B0268 /* AlbumViewController.m in Sources */,
-				53159E6B156F69D0001B0268 /* Album.m in Sources */,
-				53159E6C156F69D0001B0268 /* Song.m in Sources */,
+				53159E6B156F69D0001B0268 /* ISMSAlbum.m in Sources */,
+				53159E6C156F69D0001B0268 /* ISMSSong.m in Sources */,
 				53159E6D156F69D0001B0268 /* iPhoneStreamingPlayerViewController.m in Sources */,
 				53159E6E156F69D0001B0268 /* AsynchronousImageView.m in Sources */,
 				53159E6F156F69D0001B0268 /* SubsonicServerEditViewController.m in Sources */,
@@ -7423,7 +7408,7 @@
 				53159E9D156F69D0001B0268 /* LyricsViewController.m in Sources */,
 				53159E9E156F69D0001B0268 /* ChatUITableViewCell.m in Sources */,
 				53159E9F156F69D0001B0268 /* ChatViewController.m in Sources */,
-				53159EA0156F69D0001B0268 /* ChatMessage.m in Sources */,
+				53159EA0156F69D0001B0268 /* ISMSChatMessage.m in Sources */,
 				53159EA1156F69D0001B0268 /* CustomUITextView.m in Sources */,
 				53159EA2156F69D0001B0268 /* ViewObjectsSingleton.m in Sources */,
 				53159EA3156F69D0001B0268 /* MusicSingleton.m in Sources */,
@@ -7447,8 +7432,7 @@
 				53159EB7156F69D0001B0268 /* StoreUITableViewCell.m in Sources */,
 				53159EB9156F69D0001B0268 /* MoreTableViewDataSource.m in Sources */,
 				53159EBA156F69D0001B0268 /* CustomUITabBarController.m in Sources */,
-				53159EBB156F69D0001B0268 /* BBSimpleConnectionQueue.m in Sources */,
-				53159EBC156F69D0001B0268 /* Server.m in Sources */,
+				53159EBC156F69D0001B0268 /* ISMSServer.m in Sources */,
 				53159EC0156F69D0001B0268 /* ServerTypeViewController.m in Sources */,
 				53159EC1156F69D0001B0268 /* UbuntuServerEditViewController.m in Sources */,
 				53159EC2156F69D0001B0268 /* ISMSQueueAllLoader.m in Sources */,
@@ -7464,8 +7448,6 @@
 				53159ECC156F69D0001B0268 /* HTTPConnection.m in Sources */,
 				53159ECD156F69D0001B0268 /* HTTPResponse.m in Sources */,
 				53159ECE156F69D0001B0268 /* HTTPServer.m in Sources */,
-				53159ECF156F69D0001B0268 /* HttpIndexPage.m in Sources */,
-				53159ED0156F69D0001B0268 /* MyHTTPConnection.m in Sources */,
 				53159ED1156F69D0001B0268 /* LocalhostAddresses.m in Sources */,
 				53159ED3156F69D0001B0268 /* DDSocialDialog.m in Sources */,
 				53159ED4156F69D0001B0268 /* DDSocialLoginDialog.m in Sources */,
@@ -7491,14 +7473,13 @@
 				53159EEC156F69D0001B0268 /* SUSLyricsDAO.m in Sources */,
 				53159EED156F69D0001B0268 /* NSMutableURLRequest+SUS.m in Sources */,
 				53159EEF156F69D0001B0268 /* ISMSCoverArtLoader.m in Sources */,
-				53159EF0156F69D0001B0268 /* OrderedDictionary.m in Sources */,
 				53159EF1156F69D0001B0268 /* SUSServerPlaylistsDAO.m in Sources */,
 				53159EF2156F69D0001B0268 /* SUSServerPlaylistsLoader.m in Sources */,
 				53159EF3156F69D0001B0268 /* SUSServerPlaylist.m in Sources */,
 				53159EF4156F69D0001B0268 /* ISMSSubFolderLoader.m in Sources */,
 				53159EF5156F69D0001B0268 /* ISMSStreamManager.m in Sources */,
 				53159EF7156F69D0001B0268 /* PlaylistSingleton.m in Sources */,
-				53159EF8156F69D0001B0268 /* Song+DAO.m in Sources */,
+				53159EF8156F69D0001B0268 /* ISMSSong+DAO.m in Sources */,
 				53159EFC156F69D0001B0268 /* EqualizerViewController.m in Sources */,
 				53159EFD156F69D0001B0268 /* EqualizerView.m in Sources */,
 				53159F00156F69D0001B0268 /* SUSCoverArtDAO.m in Sources */,
@@ -7522,7 +7503,6 @@
 				53159F1E156F69D0001B0268 /* StackContainerView.m in Sources */,
 				53159F1F156F69D0001B0268 /* JukeboxSingleton.m in Sources */,
 				53159F20156F69D0001B0268 /* ISMSCacheQueueManager.m in Sources */,
-				53159F41156F69D0001B0268 /* GCDTimer.m in Sources */,
 				5377429D15AA50AB00DD547D /* PMSServerEditViewControllerViewController.m in Sources */,
 				5377429F15AA50E500DD547D /* PMSQueueAllLoader.m in Sources */,
 				5377429E15AA50D800DD547D /* SUSQueueAllLoader.m in Sources */,
@@ -7549,11 +7529,11 @@
 			files = (
 				53BC279C139AF0DD00A825F1 /* iSubAppDelegate.m in Sources */,
 				53BC279D139AF0DD00A825F1 /* FoldersViewController.m in Sources */,
-				53BC279E139AF0DD00A825F1 /* Artist.m in Sources */,
-				53BC279F139AF0DD00A825F1 /* Index.m in Sources */,
+				53BC279E139AF0DD00A825F1 /* ISMSArtist.m in Sources */,
+				53BC279F139AF0DD00A825F1 /* ISMSIndex.m in Sources */,
 				53BC27A1139AF0DD00A825F1 /* AlbumViewController.m in Sources */,
-				53BC27A2139AF0DD00A825F1 /* Album.m in Sources */,
-				53BC27A3139AF0DD00A825F1 /* Song.m in Sources */,
+				53BC27A2139AF0DD00A825F1 /* ISMSAlbum.m in Sources */,
+				53BC27A3139AF0DD00A825F1 /* ISMSSong.m in Sources */,
 				53BC27A4139AF0DD00A825F1 /* iPhoneStreamingPlayerViewController.m in Sources */,
 				53BC27A5139AF0DD00A825F1 /* AsynchronousImageView.m in Sources */,
 				53BC27A7139AF0DD00A825F1 /* SubsonicServerEditViewController.m in Sources */,
@@ -7602,7 +7582,7 @@
 				53BC27E5139AF0DD00A825F1 /* LyricsViewController.m in Sources */,
 				53BC27F8139AF0DD00A825F1 /* ChatUITableViewCell.m in Sources */,
 				53BC27F9139AF0DD00A825F1 /* ChatViewController.m in Sources */,
-				53BC27FB139AF0DD00A825F1 /* ChatMessage.m in Sources */,
+				53BC27FB139AF0DD00A825F1 /* ISMSChatMessage.m in Sources */,
 				53BC27FC139AF0DD00A825F1 /* CustomUITextView.m in Sources */,
 				53BC27FD139AF0DD00A825F1 /* ViewObjectsSingleton.m in Sources */,
 				53BC27FE139AF0DD00A825F1 /* MusicSingleton.m in Sources */,
@@ -7626,8 +7606,7 @@
 				53BC281E139AF0DD00A825F1 /* StoreUITableViewCell.m in Sources */,
 				53BC2820139AF0DD00A825F1 /* MoreTableViewDataSource.m in Sources */,
 				53BC2821139AF0DD00A825F1 /* CustomUITabBarController.m in Sources */,
-				53BC2822139AF0DD00A825F1 /* BBSimpleConnectionQueue.m in Sources */,
-				53BC2823139AF0DD00A825F1 /* Server.m in Sources */,
+				53BC2823139AF0DD00A825F1 /* ISMSServer.m in Sources */,
 				53BC2827139AF0DD00A825F1 /* ServerTypeViewController.m in Sources */,
 				53BC2828139AF0DD00A825F1 /* UbuntuServerEditViewController.m in Sources */,
 				53BC2829139AF0DD00A825F1 /* ISMSQueueAllLoader.m in Sources */,
@@ -7643,8 +7622,6 @@
 				53BC2833139AF0DD00A825F1 /* HTTPConnection.m in Sources */,
 				53BC2834139AF0DD00A825F1 /* HTTPResponse.m in Sources */,
 				53BC2835139AF0DD00A825F1 /* HTTPServer.m in Sources */,
-				53BC2836139AF0DD00A825F1 /* HttpIndexPage.m in Sources */,
-				53BC2837139AF0DD00A825F1 /* MyHTTPConnection.m in Sources */,
 				53BC2838139AF0DD00A825F1 /* LocalhostAddresses.m in Sources */,
 				53BC283A139AF0DD00A825F1 /* DDSocialDialog.m in Sources */,
 				53BC283B139AF0DD00A825F1 /* DDSocialLoginDialog.m in Sources */,
@@ -7670,14 +7647,13 @@
 				539B3094145E78AF00D06475 /* SUSLyricsDAO.m in Sources */,
 				53B36D7E145F95E5005538F3 /* NSMutableURLRequest+SUS.m in Sources */,
 				53880A9514608DBA00C7DE62 /* ISMSCoverArtLoader.m in Sources */,
-				53F11B781460F96D0010820B /* OrderedDictionary.m in Sources */,
 				53F11B7D1460FBAD0010820B /* SUSServerPlaylistsDAO.m in Sources */,
 				53EC180314675A6F00601C2D /* SUSServerPlaylistsLoader.m in Sources */,
 				53EC1808146760E000601C2D /* SUSServerPlaylist.m in Sources */,
 				53A698DC1467B34D00DCAFCB /* ISMSSubFolderLoader.m in Sources */,
 				535AC250146C8E0300E19492 /* ISMSStreamManager.m in Sources */,
 				53D74D53147185AB0025F8F1 /* PlaylistSingleton.m in Sources */,
-				53D74D581471BE160025F8F1 /* Song+DAO.m in Sources */,
+				53D74D581471BE160025F8F1 /* ISMSSong+DAO.m in Sources */,
 				536585831478920D00FE57A5 /* EqualizerViewController.m in Sources */,
 				5365859514789ADA00FE57A5 /* EqualizerView.m in Sources */,
 				531B6D6C147C377100BA28B9 /* SUSCoverArtDAO.m in Sources */,
@@ -7701,7 +7677,6 @@
 				537E9A3314F43F43006CB0BC /* StackContainerView.m in Sources */,
 				53733C6214F8630F001D8104 /* JukeboxSingleton.m in Sources */,
 				53733C7214FC4B09001D8104 /* ISMSCacheQueueManager.m in Sources */,
-				53A17063152A7BC200822521 /* GCDTimer.m in Sources */,
 				53703BC61588291F00B1FB33 /* ISMSRootFoldersLoader.m in Sources */,
 				53703BCB15882BBF00B1FB33 /* PMSRootFoldersLoader.m in Sources */,
 				53703BD115882CC100B1FB33 /* NSMutableURLRequest+PMS.m in Sources */,
@@ -7777,7 +7752,7 @@
 				5393295515FD08F100A0E290 /* ISMSStreamHandler.m in Sources */,
 				5393295815FD08F100A0E290 /* ISMSURLConnectionStreamHandler.m in Sources */,
 				5393295B15FD08F100A0E290 /* ISMSCFNetworkStreamHandler.m in Sources */,
-				537747A715FD2C870047CAF1 /* Video.m in Sources */,
+				537747A715FD2C870047CAF1 /* ISMSVideo.m in Sources */,
 				53F1419E15FD5D37004D00D5 /* NSArray+FirstObject.m in Sources */,
 				53F141A115FD5D37004D00D5 /* NSArray+Safe.m in Sources */,
 				53F141A415FD5D37004D00D5 /* NSMutableArray+Safe.m in Sources */,
@@ -7835,6 +7810,7 @@
 				53F1426115FD5D7A004D00D5 /* DispatchQueueLogFormatter.m in Sources */,
 				53F1426715FD5D7A004D00D5 /* RNCryptor.m in Sources */,
 				53ACBC8A160500FD0008FA47 /* NSMutableDictionary+Safe.m in Sources */,
+				533F651B160531E9000098E1 /* SUSQuickAlbumsLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7844,11 +7820,11 @@
 			files = (
 				53DCF4FD13BFEAD3009160F9 /* iSubAppDelegate.m in Sources */,
 				53DCF4FE13BFEAD3009160F9 /* FoldersViewController.m in Sources */,
-				53DCF4FF13BFEAD3009160F9 /* Artist.m in Sources */,
-				53DCF50013BFEAD3009160F9 /* Index.m in Sources */,
+				53DCF4FF13BFEAD3009160F9 /* ISMSArtist.m in Sources */,
+				53DCF50013BFEAD3009160F9 /* ISMSIndex.m in Sources */,
 				53DCF50213BFEAD3009160F9 /* AlbumViewController.m in Sources */,
-				53DCF50313BFEAD3009160F9 /* Album.m in Sources */,
-				53DCF50413BFEAD3009160F9 /* Song.m in Sources */,
+				53DCF50313BFEAD3009160F9 /* ISMSAlbum.m in Sources */,
+				53DCF50413BFEAD3009160F9 /* ISMSSong.m in Sources */,
 				53DCF50513BFEAD3009160F9 /* iPhoneStreamingPlayerViewController.m in Sources */,
 				53DCF50613BFEAD3009160F9 /* AsynchronousImageView.m in Sources */,
 				53DCF50813BFEAD3009160F9 /* SubsonicServerEditViewController.m in Sources */,
@@ -7897,7 +7873,7 @@
 				53DCF54613BFEAD3009160F9 /* LyricsViewController.m in Sources */,
 				53DCF55913BFEAD3009160F9 /* ChatUITableViewCell.m in Sources */,
 				53DCF55A13BFEAD3009160F9 /* ChatViewController.m in Sources */,
-				53DCF55C13BFEAD3009160F9 /* ChatMessage.m in Sources */,
+				53DCF55C13BFEAD3009160F9 /* ISMSChatMessage.m in Sources */,
 				53DCF55D13BFEAD3009160F9 /* CustomUITextView.m in Sources */,
 				53DCF55E13BFEAD3009160F9 /* ViewObjectsSingleton.m in Sources */,
 				53DCF55F13BFEAD3009160F9 /* MusicSingleton.m in Sources */,
@@ -7921,8 +7897,7 @@
 				53DCF57F13BFEAD3009160F9 /* StoreUITableViewCell.m in Sources */,
 				53DCF58113BFEAD3009160F9 /* MoreTableViewDataSource.m in Sources */,
 				53DCF58213BFEAD3009160F9 /* CustomUITabBarController.m in Sources */,
-				53DCF58313BFEAD3009160F9 /* BBSimpleConnectionQueue.m in Sources */,
-				53DCF58413BFEAD3009160F9 /* Server.m in Sources */,
+				53DCF58413BFEAD3009160F9 /* ISMSServer.m in Sources */,
 				53DCF58813BFEAD3009160F9 /* ServerTypeViewController.m in Sources */,
 				53DCF58913BFEAD3009160F9 /* UbuntuServerEditViewController.m in Sources */,
 				53DCF58A13BFEAD3009160F9 /* ISMSQueueAllLoader.m in Sources */,
@@ -7938,8 +7913,6 @@
 				53DCF59413BFEAD3009160F9 /* HTTPConnection.m in Sources */,
 				53DCF59513BFEAD3009160F9 /* HTTPResponse.m in Sources */,
 				53DCF59613BFEAD3009160F9 /* HTTPServer.m in Sources */,
-				53DCF59713BFEAD3009160F9 /* HttpIndexPage.m in Sources */,
-				53DCF59813BFEAD3009160F9 /* MyHTTPConnection.m in Sources */,
 				53DCF59913BFEAD3009160F9 /* LocalhostAddresses.m in Sources */,
 				53DCF59B13BFEAD3009160F9 /* DDSocialDialog.m in Sources */,
 				53DCF59C13BFEAD3009160F9 /* DDSocialLoginDialog.m in Sources */,
@@ -7965,14 +7938,13 @@
 				539B3093145E78AF00D06475 /* SUSLyricsDAO.m in Sources */,
 				53B36D7D145F95E5005538F3 /* NSMutableURLRequest+SUS.m in Sources */,
 				53880A9414608DBA00C7DE62 /* ISMSCoverArtLoader.m in Sources */,
-				53F11B771460F96D0010820B /* OrderedDictionary.m in Sources */,
 				53F11B7C1460FBAD0010820B /* SUSServerPlaylistsDAO.m in Sources */,
 				53EC180214675A6F00601C2D /* SUSServerPlaylistsLoader.m in Sources */,
 				53EC1807146760E000601C2D /* SUSServerPlaylist.m in Sources */,
 				53A698DB1467B34D00DCAFCB /* ISMSSubFolderLoader.m in Sources */,
 				535AC24F146C8E0300E19492 /* ISMSStreamManager.m in Sources */,
 				53D74D52147185AB0025F8F1 /* PlaylistSingleton.m in Sources */,
-				53D74D571471BE160025F8F1 /* Song+DAO.m in Sources */,
+				53D74D571471BE160025F8F1 /* ISMSSong+DAO.m in Sources */,
 				536585821478920D00FE57A5 /* EqualizerViewController.m in Sources */,
 				5365859414789ADA00FE57A5 /* EqualizerView.m in Sources */,
 				531B6D6B147C377100BA28B9 /* SUSCoverArtDAO.m in Sources */,
@@ -7996,7 +7968,6 @@
 				537E9A3214F43F43006CB0BC /* StackContainerView.m in Sources */,
 				53733C6114F8630F001D8104 /* JukeboxSingleton.m in Sources */,
 				53733C7114FC4B09001D8104 /* ISMSCacheQueueManager.m in Sources */,
-				53A17062152A7BC200822521 /* GCDTimer.m in Sources */,
 				53703BC51588291F00B1FB33 /* ISMSRootFoldersLoader.m in Sources */,
 				53703BCA15882BBF00B1FB33 /* PMSRootFoldersLoader.m in Sources */,
 				53703BD015882CC100B1FB33 /* NSMutableURLRequest+PMS.m in Sources */,
@@ -8072,7 +8043,7 @@
 				5393295415FD08F100A0E290 /* ISMSStreamHandler.m in Sources */,
 				5393295715FD08F100A0E290 /* ISMSURLConnectionStreamHandler.m in Sources */,
 				5393295A15FD08F100A0E290 /* ISMSCFNetworkStreamHandler.m in Sources */,
-				537747A615FD2C870047CAF1 /* Video.m in Sources */,
+				537747A615FD2C870047CAF1 /* ISMSVideo.m in Sources */,
 				53F1419D15FD5D37004D00D5 /* NSArray+FirstObject.m in Sources */,
 				53F141A015FD5D37004D00D5 /* NSArray+Safe.m in Sources */,
 				53F141A315FD5D37004D00D5 /* NSMutableArray+Safe.m in Sources */,
@@ -8130,6 +8101,7 @@
 				53F1426015FD5D7A004D00D5 /* DispatchQueueLogFormatter.m in Sources */,
 				53F1426615FD5D7A004D00D5 /* RNCryptor.m in Sources */,
 				53ACBC89160500FD0008FA47 /* NSMutableDictionary+Safe.m in Sources */,
+				533F651A160531E9000098E1 /* SUSQuickAlbumsLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

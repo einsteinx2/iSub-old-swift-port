@@ -7,11 +7,6 @@
 //
 
 #import "PMSQueueAllLoader.h"
-#import "SBJson.h"
-#import "CustomUIAlertView.h"
-#import "Album.h"
-#import "Artist.h"
-#import "Song.h"
 
 @implementation PMSQueueAllLoader
 
@@ -44,7 +39,7 @@
 	{
 		@autoreleasepool 
 		{
-			Album *anAlbum = [[Album alloc] initWithPMSDictionary:folder];
+			ISMSAlbum *anAlbum = [[ISMSAlbum alloc] initWithPMSDictionary:folder];
 			[self.listOfAlbums addObject:anAlbum];
 		}
 	}
@@ -55,7 +50,7 @@
 	{
 		@autoreleasepool 
 		{
-			Song *aSong = [[Song alloc] initWithPMSDictionary:song];
+			ISMSSong *aSong = [[ISMSSong alloc] initWithPMSDictionary:song];
 			[self.listOfSongs addObject:aSong];
 		}
 	}

@@ -6,7 +6,6 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "NSMutableURLRequest+SUS.h"
 #import "TBXML+Compression.h"
 
 @implementation NSMutableURLRequest (SUS)

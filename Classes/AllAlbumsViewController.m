@@ -13,21 +13,14 @@
 #import "AlbumViewController.h"
 #import "AllAlbumsUITableViewCell.h"
 #import "AllSongsUITableViewCell.h"
-#import "Index.h"
-#import "Artist.h"
-#import "Album.h"
-#import "FMDatabaseAdditions.h"
-#import "LoadingScreen.h"
 #import "FoldersViewController.h"
 #import "SA_OAuthTwitterEngine.h"
 #import "CustomUITableView.h"
-#import "CustomUIAlertView.h"
 #import "SUSAllAlbumsDAO.h"
 #import "EGORefreshTableHeaderView.h"
 #import "SUSAllSongsLoader.h"
 #import "SUSAllSongsDAO.h"
 #import "UIViewController+PushViewControllerCustom.h"
-#import "FMDatabaseQueueAdditions.h"
 
 @implementation AllAlbumsViewController
 
@@ -419,7 +412,7 @@
 	if ([self.dataModel.index count] == 0)
 		return @"";
 	
-	NSString *title = [(Index *)[self.dataModel.index objectAtIndexSafe:section] name];
+	NSString *title = [(ISMSIndex *)[self.dataModel.index objectAtIndexSafe:section] name];
 	
 	return title;
 }
@@ -435,7 +428,7 @@
 	{
 		NSMutableArray *titles = [NSMutableArray arrayWithCapacity:0];
 		[titles addObject:@"{search}"];
-		for (Index *item in self.dataModel.index)
+		for (ISMSIndex *item in self.dataModel.index)
 		{
 			[titles addObject:item.name];
 		}
@@ -476,7 +469,7 @@
 	}
 	else 
 	{
-		return [(Index *)[self.dataModel.index objectAtIndexSafe:section] count];
+		return [(ISMSIndex *)[self.dataModel.index objectAtIndexSafe:section] count];
 	}
 }
 
@@ -492,19 +485,19 @@
 	}
 	cell.accessoryType = UITableViewCellAccessoryNone;
 		
-	Album *anAlbum = nil;
+	ISMSAlbum *anAlbum = nil;
 	if(self.isSearching)
 	{
 		anAlbum = [self.dataModel albumForPositionInSearch:(indexPath.row + 1)];
 	}
 	else
 	{
-		NSUInteger sectionStartIndex = [(Index *)[self.dataModel.index objectAtIndexSafe:indexPath.section] position];
+		NSUInteger sectionStartIndex = [(ISMSIndex *)[self.dataModel.index objectAtIndexSafe:indexPath.section] position];
 		anAlbum = [self.dataModel albumForPosition:(sectionStartIndex + indexPath.row + 1)];
 	}
 	
 	cell.myId = anAlbum.albumId;
-	cell.myArtist = [Artist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
+	cell.myArtist = [ISMSArtist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
 	
 	cell.coverArtView.coverArtId = anAlbum.coverArtId;
 	
@@ -524,14 +517,14 @@
 	
 	if (viewObjectsS.isCellEnabled)
 	{
-		Album *anAlbum = nil;
+		ISMSAlbum *anAlbum = nil;
 		if(isSearching)
 		{
 			anAlbum = [self.dataModel albumForPositionInSearch:(indexPath.row + 1)];
 		}
 		else
 		{
-			NSUInteger sectionStartIndex = [(Index *)[self.dataModel.index objectAtIndexSafe:indexPath.section] position];
+			NSUInteger sectionStartIndex = [(ISMSIndex *)[self.dataModel.index objectAtIndexSafe:indexPath.section] position];
 			anAlbum = [self.dataModel albumForPosition:(sectionStartIndex + indexPath.row + 1)];
 		}
 		

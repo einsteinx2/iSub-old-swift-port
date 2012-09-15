@@ -11,8 +11,6 @@
 #import "FoldersViewController.h"
 #import "SA_OAuthTwitterEngine.h"
 #import "SA_OAuthTwitterController.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"

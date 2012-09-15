@@ -9,7 +9,7 @@
 #import "ISMSLoaderDelegate.h"
 #import "ISMSLoaderManager.h"
 
-@class FMDatabase, Song, SUSAllSongsLoader;
+@class FMDatabase, ISMSSong, SUSAllSongsLoader;
 
 @interface SUSAllSongsDAO : NSObject <ISMSLoaderManager, ISMSLoaderDelegate>
 {
@@ -31,10 +31,10 @@
 - (void)startLoad;
 - (void)cancelLoad;
 
-- (Song *)songForPosition:(NSUInteger)position;
+- (ISMSSong *)songForPosition:(NSUInteger)position;
 - (void)clearSearchTable;
 - (void)searchForSongName:(NSString *)name;
-- (Song *)songForPositionInSearch:(NSUInteger)position;
+- (ISMSSong *)songForPositionInSearch:(NSUInteger)position;
 - (void)clearSearchTable;
 
 @end

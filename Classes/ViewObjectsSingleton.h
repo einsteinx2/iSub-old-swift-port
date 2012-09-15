@@ -13,7 +13,7 @@
 
 #import "MBProgressHUD.h"
 
-@class FoldersViewController, Artist, LoadingScreen, Album, AlbumViewController, Server;
+@class FoldersViewController, ISMSArtist, LoadingScreen, ISMSAlbum, AlbumViewController, ISMSServer;
 
 @interface ViewObjectsSingleton : NSObject <UITabBarControllerDelegate, UINavigationControllerDelegate, MBProgressHUDDelegate>
 
@@ -48,7 +48,7 @@
 
 // Settings page objects
 //
-@property (strong) Server *serverToEdit;
+@property (strong) ISMSServer *serverToEdit;
 
 // Chat page objects
 //

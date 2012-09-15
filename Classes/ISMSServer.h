@@ -7,7 +7,6 @@
 //
 
 
-
 #define SUBSONIC @"Subsonic"
 #define UBUNTU_ONE @"Ubuntu One"
 #define WAVEBOX @"WaveBox"
@@ -18,7 +17,7 @@
 } ServerType;*/
 
 
-@interface Server : NSObject <NSCoding>
+@interface ISMSServer : NSObject <NSCoding>
 
 @property (copy) NSString *url;
 @property (copy) NSString *username;

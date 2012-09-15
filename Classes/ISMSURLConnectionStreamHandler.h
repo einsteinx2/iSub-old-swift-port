@@ -9,7 +9,7 @@
 #import "ISMSStreamHandlerDelegate.h"
 #import "ISMSStreamHandler.h"
 
-@class Song, EX2FileEncryptor;
+@class ISMSSong, EX2FileEncryptor;
 @interface ISMSURLConnectionStreamHandler : ISMSStreamHandler <NSURLConnectionDelegate>
 
 @property (strong) NSURLConnection *connection;

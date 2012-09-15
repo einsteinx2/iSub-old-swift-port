@@ -13,48 +13,48 @@
 
 #define ISMSNumberOfStreamsToQueue 2
 
-@class Song, ISMSStreamHandler, SUSLyricsDAO;
+@class ISMSSong, ISMSStreamHandler, SUSLyricsDAO;
 @interface ISMSStreamManager : NSObject <ISMSStreamHandlerDelegate, ISMSLoaderDelegate>
 
 @property (strong) NSMutableArray *handlerStack;
 @property (strong) SUSLyricsDAO *lyricsDAO;
 
-@property (copy) Song *lastCachedSong;
-@property (copy) Song *lastTempCachedSong;
+@property (copy) ISMSSong *lastCachedSong;
+@property (copy) ISMSSong *lastTempCachedSong;
 
 @property (readonly) BOOL isQueueDownloading;
 
-@property (readonly) Song *currentStreamingSong;
+@property (readonly) ISMSSong *currentStreamingSong;
 
 + (id)sharedInstance;
 
 - (void)delayedSetup;
 
-- (ISMSStreamHandler *)handlerForSong:(Song *)aSong;
-- (BOOL)isSongInQueue:(Song *)aSong;
-- (BOOL)isSongFirstInQueue:(Song *)aSong;
-- (BOOL)isSongDownloading:(Song *)aSong;
+- (ISMSStreamHandler *)handlerForSong:(ISMSSong *)aSong;
+- (BOOL)isSongInQueue:(ISMSSong *)aSong;
+- (BOOL)isSongFirstInQueue:(ISMSSong *)aSong;
+- (BOOL)isSongDownloading:(ISMSSong *)aSong;
 
 - (void)cancelAllStreamsExcept:(NSArray *)handlersToSkip;
 - (void)cancelAllStreamsExceptForSongs:(NSArray *)songsToSkip;
-- (void)cancelAllStreamsExceptForSong:(Song *)aSong;
+- (void)cancelAllStreamsExceptForSong:(ISMSSong *)aSong;
 - (void)cancelAllStreams;
 - (void)cancelStreamAtIndex:(NSUInteger)index;
 - (void)cancelStream:(ISMSStreamHandler *)handler;
-- (void)cancelStreamForSong:(Song *)aSong;
+- (void)cancelStreamForSong:(ISMSSong *)aSong;
 
 - (void)removeAllStreamsExcept:(NSArray *)handlersToSkip;
 - (void)removeAllStreamsExceptForSongs:(NSArray *)songsToSkip;
-- (void)removeAllStreamsExceptForSong:(Song *)aSong;
+- (void)removeAllStreamsExceptForSong:(ISMSSong *)aSong;
 - (void)removeAllStreams;
 - (void)removeStreamAtIndex:(NSUInteger)index;
 - (void)removeStream:(ISMSStreamHandler *)handler;
-- (void)removeStreamForSong:(Song *)aSong;
+- (void)removeStreamForSong:(ISMSSong *)aSong;
 
-- (void)queueStreamForSong:(Song *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload;
-- (void)queueStreamForSong:(Song *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload;
-- (void)queueStreamForSong:(Song *)song atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload;
-- (void)queueStreamForSong:(Song *)song isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload;
+- (void)queueStreamForSong:(ISMSSong *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload;
+- (void)queueStreamForSong:(ISMSSong *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload;
+- (void)queueStreamForSong:(ISMSSong *)song atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload;
+- (void)queueStreamForSong:(ISMSSong *)song isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload;
 
 - (void)fillStreamQueue:(BOOL)isStartDownload;
 

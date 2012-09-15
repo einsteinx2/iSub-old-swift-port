@@ -6,9 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "AsynchronousImageViewDelegate.h"
-
-@class AsynchronousImageView, PageControlViewController, MPVolumeView, OBSlider, Song;
+@class PageControlViewController, MPVolumeView, OBSlider, Song;
 
 @interface iPhoneStreamingPlayerViewController : UIViewController <AsynchronousImageViewDelegate>
 
@@ -63,7 +61,7 @@
 @property (nonatomic) BOOL hasMoved;
 @property (nonatomic) float oldPosition;
 @property (nonatomic) NSUInteger byteOffset;
-@property (copy) Song *currentSong;
+@property (copy) ISMSSong *currentSong;
 @property (strong) UITextField *bookmarkNameTextField;
 @property (strong) NSArray *bookmarkEntry;
 @property (nonatomic) NSInteger bookmarkIndex;

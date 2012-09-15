@@ -7,8 +7,6 @@
 //
 
 #import "SUSChatLoader.h"
-#import "TBXML.h"
-#import "ChatMessage.h"
 
 @implementation SUSChatLoader
 
@@ -59,7 +57,7 @@
 					@autoreleasepool
 					{
 						// Create the chat message object and add it to the array
-						[self.chatMessages addObjectSafe:[[ChatMessage alloc] initWithTBXMLElement:chatMessage]];
+						[self.chatMessages addObjectSafe:[[ISMSChatMessage alloc] initWithTBXMLElement:chatMessage]];
 						
 						// Get the next message
 						chatMessage = [TBXML nextSiblingNamed:@"chatMessage" searchFromElement:chatMessage];

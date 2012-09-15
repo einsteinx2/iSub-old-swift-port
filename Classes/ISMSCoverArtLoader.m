@@ -7,8 +7,6 @@
 //
 
 #import "ISMSCoverArtLoader.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
 
 @interface ISMSCoverArtLoader()
 // Keep strong reference to self so we don't die until done downloading when used standalone

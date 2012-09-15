@@ -11,13 +11,8 @@
 #import "MusicSingleton.h"
 #import "ServerListViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
-#import "Song.h"
-#import "FMDatabaseAdditions.h"
-#import "CustomUIAlertView.h"
-#import "Song+DAO.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "FMDatabaseQueue.h"
-#import "FMDatabaseQueueAdditions.h"
 
 @implementation BookmarksViewController
 
@@ -303,7 +298,7 @@
 		[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
 		{
 			[db executeUpdate:@"DROP TABLE IF EXISTS bookmarks"];
-			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarks (bookmarkId INTEGER PRIMARY KEY, playlistIndex INTEGER, name TEXT, position INTEGER, %@, bytes INTEGER)", [Song standardSongColumnSchema]]];
+			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarks (bookmarkId INTEGER PRIMARY KEY, playlistIndex INTEGER, name TEXT, position INTEGER, %@, bytes INTEGER)", [ISMSSong standardSongColumnSchema]]];
 			[db executeUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
 		}];
 				
@@ -355,7 +350,7 @@
 	NSInteger toRow = toIndexPath.row + 1;
 	
 	[databaseS.bookmarksDb executeUpdate:@"DROP TABLE bookmarksTemp"];
-	[databaseS.bookmarksDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarks (bookmarkId INTEGER PRIMARY KEY, playlistIndex INTEGER, name TEXT, position INTEGER, %@, bytes INTEGER)", [Song standardSongColumnSchema]]];
+	[databaseS.bookmarksDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarks (bookmarkId INTEGER PRIMARY KEY, playlistIndex INTEGER, name TEXT, position INTEGER, %@, bytes INTEGER)", [ISMSSong standardSongColumnSchema]]];
 		
 	if (fromRow < toRow)
 	{
@@ -498,13 +493,13 @@
 	}
 	
     // Set up the cell...
-	__block Song *aSong;
+	__block ISMSSong *aSong;
 	__block NSString *name = nil;
 	__block int position = 0;
 	[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
 	{
 		FMResultSet *result = [db executeQuery:@"SELECT * FROM bookmarks WHERE bookmarkId = ?", [self.bookmarkIds objectAtIndexSafe:indexPath.row]];
-		aSong = [Song songFromDbResult:result];
+		aSong = [ISMSSong songFromDbResult:result];
 		name = [result stringForColumn:@"name"];
 		position = [result intForColumn:@"position"];
 		[result close];
@@ -554,12 +549,12 @@
 	__block NSUInteger playlistIndex = 0;
 	__block NSUInteger offsetSeconds = 0;
 	__block NSUInteger offsetBytes = 0;
-	__block Song *aSong;
+	__block ISMSSong *aSong;
 	
 	[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
 	{
 		FMResultSet *result = [db executeQuery:@"SELECT * FROM bookmarks WHERE bookmarkId = ?", [self.bookmarkIds objectAtIndexSafe:indexPath.row]];
-		aSong = [Song songFromDbResult:result];
+		aSong = [ISMSSong songFromDbResult:result];
 		bookmarkId = [result intForColumn:@"bookmarkId"];
 		playlistIndex = [result intForColumn:@"playlistIndex"];
 		offsetSeconds = [result intForColumn:@"position"];

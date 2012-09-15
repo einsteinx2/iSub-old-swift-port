@@ -7,10 +7,7 @@
 //
 
 #import "SearchSongUITableViewCell.h"
-#import "AsynchronousImageView.h"
 #import "MusicSingleton.h"
-#import "Song.h"
-#import "FMDatabaseAdditions.h"
 #import "CellOverlay.h"
 
 @implementation SearchSongUITableViewCell
@@ -75,7 +72,7 @@
 	self.artistNameLabel.frame = newFrame;
 }
 
-- (Song *)mySong
+- (ISMSSong *)mySong
 {
 	@synchronized(self)
 	{
@@ -83,7 +80,7 @@
 	}
 }
 
-- (void)setMySong:(Song *)aSong
+- (void)setMySong:(ISMSSong *)aSong
 {
 	@synchronized(self)
 	{

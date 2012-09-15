@@ -11,11 +11,6 @@
 #import "MusicSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
-#import "AsynchronousImageView.h"
-#import "Song.h"
-#import "FMDatabaseAdditions.h"
-#import "CustomUIAlertView.h"
-#import "NSMutableURLRequest+SUS.h"
 #import "SUSNowPlayingDAO.h"
 #import "EGORefreshTableHeaderView.h"
 #import "UIViewController+PushViewControllerCustom.h"
@@ -164,7 +159,7 @@
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	}
 	
-	Song *aSong = [self.dataModel songForIndex:indexPath.row];
+	ISMSSong *aSong = [self.dataModel songForIndex:indexPath.row];
 	cell.mySong = aSong;
 	
 	// Set the cover art
@@ -208,7 +203,7 @@
 	if (!indexPath)
 		return;
 	
-	Song *playedSong = [self.dataModel playSongAtIndex:indexPath.row];
+	ISMSSong *playedSong = [self.dataModel playSongAtIndex:indexPath.row];
 	if (!playedSong.isVideo)
         [self showPlayer];
 }

@@ -8,7 +8,7 @@
 
 #import "ISMSLoader.h"
 
-@class Artist, Album, Song, FMDatabaseQueue;
+@class ISMSArtist, ISMSAlbum, ISMSSong, FMDatabaseQueue;
 @interface ISMSSubFolderLoader : ISMSLoader
 
 @property (nonatomic) NSUInteger albumsCount;
@@ -16,17 +16,20 @@
 @property (nonatomic) NSUInteger folderLength;
 
 @property (copy) NSString *myId;
-@property (copy) Artist *myArtist;
+@property (copy) ISMSArtist *myArtist;
 
 // Database methods
 - (FMDatabaseQueue *)dbQueue;
 - (ISMSLoaderType)type;
 - (BOOL)resetDb;
-- (BOOL)insertAlbumIntoFolderCache:(Album *)anAlbum;
-- (BOOL)insertSongIntoFolderCache:(Song *)aSong;
+- (BOOL)insertAlbumIntoFolderCache:(ISMSAlbum *)anAlbum;
+- (BOOL)insertSongIntoFolderCache:(ISMSSong *)aSong;
 - (BOOL)insertAlbumsCount;
 - (BOOL)insertSongsCount;
 - (BOOL)insertFolderLength;
 
 
 @end
+
+#import "SUSSubFolderLoader.h"
+#import "PMSSubFolderLoader.h"

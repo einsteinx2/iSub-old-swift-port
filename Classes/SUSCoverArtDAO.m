@@ -7,8 +7,6 @@
 //
 
 #import "SUSCoverArtDAO.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
 
 #import "ISMSCoverArtLoader.h"
 

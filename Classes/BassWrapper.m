@@ -7,7 +7,6 @@
 //
 
 #import "BassWrapper.h"
-#import "Song.h"
 
 LOG_LEVEL_ISUB_DEFAULT
 
@@ -169,7 +168,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	
 	BASS_CHANNELINFO i;
 	BASS_ChannelGetInfo(bassStream.stream, &i);
-	Song *songForStream = bassStream.song;
+	ISMSSong *songForStream = bassStream.song;
 	
 	// Check the current stream format, and make sure that the bitrate is in the correct range
 	// otherwise use the song's estimated bitrate instead (to keep something like a 10000 kbitrate on an mp3 from being used for buffering)

@@ -11,3 +11,6 @@
 @interface ISMSStatusLoader : ISMSLoader
 
 @end
+
+#import "PMSStatusLoader.h"
+#import "SUSStatusLoader.h"

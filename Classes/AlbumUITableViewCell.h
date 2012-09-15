@@ -8,12 +8,12 @@
 
 #import "CustomUITableViewCell.h"
 
-@class AsynchronousImageView, Artist;
+@class AsynchronousImageView, ISMSArtist;
 
 @interface AlbumUITableViewCell : CustomUITableViewCell 
 
 @property (copy) NSString *myId;
-@property (strong) Artist *myArtist;
+@property (strong) ISMSArtist *myArtist;
 
 @property (strong) AsynchronousImageView *coverArtView;
 @property (strong) UIScrollView *albumNameScrollView;

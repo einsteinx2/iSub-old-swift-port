@@ -9,7 +9,7 @@
 #import "ISMSLoaderDelegate.h"
 #import "ISMSLoaderManager.h"
 
-@class Artist, FMDatabase, ISMSRootFoldersLoader;
+@class ISMSArtist, FMDatabase, ISMSRootFoldersLoader;
 
 @interface SUSRootFoldersDAO : NSObject <ISMSLoaderManager, ISMSLoaderDelegate>
 {		
@@ -39,10 +39,10 @@
 
 - (id)initWithDelegate:(id <ISMSLoaderDelegate>)theDelegate;
 
-- (Artist *)artistForPosition:(NSUInteger)position;
+- (ISMSArtist *)artistForPosition:(NSUInteger)position;
 - (void)clearSearchTable;
 - (void)searchForFolderName:(NSString *)name;
-- (Artist *)artistForPositionInSearch:(NSUInteger)position;
+- (ISMSArtist *)artistForPositionInSearch:(NSUInteger)position;
 
 - (id)initWithDelegate:(id <ISMSLoaderDelegate>)theDelegate;
 - (void)startLoad;

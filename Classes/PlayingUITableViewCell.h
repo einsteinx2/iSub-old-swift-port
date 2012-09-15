@@ -11,7 +11,7 @@
 @class AsynchronousImageView, Song;
 @interface PlayingUITableViewCell : CustomUITableViewCell 
 
-@property (copy) Song *mySong;
+@property (copy) ISMSSong *mySong;
 @property (strong) AsynchronousImageView *coverArtView;
 @property (strong) UILabel *userNameLabel;
 @property (strong) UIScrollView *nameScrollView;

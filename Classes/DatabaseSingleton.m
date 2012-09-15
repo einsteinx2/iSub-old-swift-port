@@ -7,11 +7,6 @@
 //
 
 #import "DatabaseSingleton.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
-#import "Artist.h"
-#import "Album.h"
-#import "Song.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ISMSQueueAllLoader.h"
 #import "PlaylistSingleton.h"
@@ -80,7 +75,7 @@
 		}
 		if (![db tableExists:@"songsCache"]) 
 		{
-			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE songsCache (folderId TEXT, %@)", [Song standardSongColumnSchema]]];
+			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE songsCache (folderId TEXT, %@)", [ISMSSong standardSongColumnSchema]]];
 			[db executeUpdate:@"CREATE INDEX songsFolderId ON songsCache (folderId)"];
 		}
         if (![db tableExists:@"albumsCacheCount"])
@@ -162,19 +157,19 @@
 		
 		if (![db tableExists:@"currentPlaylist"]) 
 		{
-			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE currentPlaylist (%@)", [Song standardSongColumnSchema]]];
+			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE currentPlaylist (%@)", [ISMSSong standardSongColumnSchema]]];
 		}
 		if (![db tableExists:@"shufflePlaylist"]) 
 		{
-			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE shufflePlaylist (%@)", [Song standardSongColumnSchema]]];
+			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE shufflePlaylist (%@)", [ISMSSong standardSongColumnSchema]]];
 		}
 		if (![db tableExists:@"jukeboxCurrentPlaylist"])
 		{
-			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxCurrentPlaylist (%@)", [Song standardSongColumnSchema]]];
+			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxCurrentPlaylist (%@)", [ISMSSong standardSongColumnSchema]]];
 		}
 		if (![db tableExists:@"jukeboxShufflePlaylist"]) 
 		{
-			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxShufflePlaylist (%@)", [Song standardSongColumnSchema]]];
+			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxShufflePlaylist (%@)", [ISMSSong standardSongColumnSchema]]];
 		}
 	}];	
 	
@@ -217,7 +212,7 @@
 		
 		if (![db tableExists:@"cachedSongs"])
 		{
-			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE cachedSongs (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, %@)", [Song standardSongColumnSchema]]];
+			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE cachedSongs (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, %@)", [ISMSSong standardSongColumnSchema]]];
 			[db executeUpdate:@"CREATE INDEX cachedDate ON cachedSongs (cachedDate DESC)"];
 			[db executeUpdate:@"CREATE INDEX playedDate ON cachedSongs (playedDate DESC)"];
 		}
@@ -244,7 +239,7 @@
 		}
 		if (![db tableExists:@"genresSongs"]) 
 		{
-			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE genresSongs (md5 TEXT UNIQUE, %@)", [Song standardSongColumnSchema]]];
+			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE genresSongs (md5 TEXT UNIQUE, %@)", [ISMSSong standardSongColumnSchema]]];
 			[db executeUpdate:@"CREATE INDEX songGenre ON genresSongs (genre)"];
 		}
 	}];
@@ -264,7 +259,7 @@
 		
 		if (![db tableExists:@"cacheQueue"]) 
 		{
-			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE cacheQueue (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, %@)", [Song standardSongColumnSchema]]];
+			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE cacheQueue (md5 TEXT UNIQUE, finished TEXT, cachedDate INTEGER, playedDate INTEGER, %@)", [ISMSSong standardSongColumnSchema]]];
 			//[cacheQueueDb executeUpdate:@"CREATE INDEX queueDate ON cacheQueue (cachedDate DESC)"];
 		}
 	}];
@@ -300,8 +295,8 @@
 		
 		if (![db tableExists:@"bookmarks"]) 
 		{
-			//[bookmarksDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarks (name TEXT, position INTEGER, %@, bytes INTEGER)", [Song standardSongColumnSchema]]];
-			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarks (bookmarkId INTEGER PRIMARY KEY, playlistIndex INTEGER, name TEXT, position INTEGER, %@, bytes INTEGER)", [Song standardSongColumnSchema]]];
+			//[bookmarksDb executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarks (name TEXT, position INTEGER, %@, bytes INTEGER)", [ISMSSong standardSongColumnSchema]]];
+			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarks (bookmarkId INTEGER PRIMARY KEY, playlistIndex INTEGER, name TEXT, position INTEGER, %@, bytes INTEGER)", [ISMSSong standardSongColumnSchema]]];
 			[db executeUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
 		}
 	}];
@@ -384,7 +379,7 @@
 		{
 			// Create the new table
 			[db executeUpdate:@"DROP TABLE IF EXISTS bookmarksTemp"];
-			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarksTemp (bookmarkId INTEGER PRIMARY KEY, playlistIndex INTEGER, name TEXT, position INTEGER, %@, bytes INTEGER)", [Song standardSongColumnSchema]]];
+			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarksTemp (bookmarkId INTEGER PRIMARY KEY, playlistIndex INTEGER, name TEXT, position INTEGER, %@, bytes INTEGER)", [ISMSSong standardSongColumnSchema]]];
 			
 			// Move the records
 			[db executeUpdate:@"INSERT INTO bookmarksTemp (playlistIndex, name, position, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size) SELECT 0, name, position, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size FROM bookmarks"];
@@ -461,7 +456,7 @@
 		[db executeUpdate:@"CREATE TABLE albumListCache (id TEXT PRIMARY KEY, data BLOB)"];
 		[db executeUpdate:@"CREATE TABLE albumsCache (folderId TEXT, title TEXT, albumId TEXT, coverArtId TEXT, artistName TEXT, artistId TEXT)"];
 		[db executeUpdate:@"CREATE INDEX albumsFolderId ON albumsCache (folderId)"];
-		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE songsCache (folderId TEXT, %@)", [Song standardSongColumnSchema]]];
+		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE songsCache (folderId TEXT, %@)", [ISMSSong standardSongColumnSchema]]];
 		[db executeUpdate:@"CREATE INDEX songsFolderId ON songsCache (folderId)"];
 		[db executeUpdate:@"CREATE TABLE albumsCacheCount (folderId TEXT, count INTEGER)"];
 		[db executeUpdate:@"CREATE INDEX albumsCacheCountFolderId ON albumsCacheCount (folderId)"];
@@ -513,10 +508,10 @@
 		[db executeUpdate:@"DROP TABLE IF EXISTS jukeboxShufflePlaylist"];
 		
 		// Create the tables
-		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE currentPlaylist (%@)", [Song standardSongColumnSchema]]];
-		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE shufflePlaylist (%@)", [Song standardSongColumnSchema]]];	
-		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxCurrentPlaylist (%@)", [Song standardSongColumnSchema]]];
-		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxShufflePlaylist (%@)", [Song standardSongColumnSchema]]];
+		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE currentPlaylist (%@)", [ISMSSong standardSongColumnSchema]]];
+		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE shufflePlaylist (%@)", [ISMSSong standardSongColumnSchema]]];	
+		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxCurrentPlaylist (%@)", [ISMSSong standardSongColumnSchema]]];
+		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxShufflePlaylist (%@)", [ISMSSong standardSongColumnSchema]]];
 	}];	
 }
 
@@ -527,12 +522,12 @@
 		if (settingsS.isJukeboxEnabled)
 		{
 			[db executeUpdate:@"DROP TABLE jukeboxCurrentPlaylist"];
-			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxCurrentPlaylist (%@)", [Song standardSongColumnSchema]]];	
+			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxCurrentPlaylist (%@)", [ISMSSong standardSongColumnSchema]]];	
 		}
 		else
 		{	
 			[db executeUpdate:@"DROP TABLE currentPlaylist"];
-			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE currentPlaylist (%@)", [Song standardSongColumnSchema]]];	
+			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE currentPlaylist (%@)", [ISMSSong standardSongColumnSchema]]];	
 		}
 	}];
 }
@@ -544,12 +539,12 @@
 		if (settingsS.isJukeboxEnabled)
 		{
 			[db executeUpdate:@"DROP TABLE jukeboxShufflePlaylist"];
-			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxShufflePlaylist (%@)", [Song standardSongColumnSchema]]];	
+			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxShufflePlaylist (%@)", [ISMSSong standardSongColumnSchema]]];	
 		}
 		else
 		{	
 			[db executeUpdate:@"DROP TABLE shufflePlaylist"];
-			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE shufflePlaylist (%@)", [Song standardSongColumnSchema]]];	
+			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE shufflePlaylist (%@)", [ISMSSong standardSongColumnSchema]]];	
 		}
 	}];
 }
@@ -559,10 +554,10 @@
 	[self.currentPlaylistDbQueue inDatabase:^(FMDatabase *db)
 	{
 		[db executeUpdate:@"DROP TABLE jukeboxCurrentPlaylist"];
-		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxCurrentPlaylist (%@)", [Song standardSongColumnSchema]]];
+		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxCurrentPlaylist (%@)", [ISMSSong standardSongColumnSchema]]];
 		
 		[db executeUpdate:@"DROP TABLE jukeboxShufflePlaylist"];
-		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxShufflePlaylist (%@)", [Song standardSongColumnSchema]]];	
+		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxShufflePlaylist (%@)", [ISMSSong standardSongColumnSchema]]];	
 	}];
 }
 
@@ -570,7 +565,7 @@
 {
 	[self.localPlaylistsDbQueue inDatabase:^(FMDatabase *db)
 	{
-		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE splaylist%@ (%@)", md5, [Song standardSongColumnSchema]]];
+		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE splaylist%@ (%@)", md5, [ISMSSong standardSongColumnSchema]]];
 	}];	
 }
 
@@ -582,9 +577,9 @@
 	}];
 }
 
-- (Album *)albumFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabaseQueue:(FMDatabaseQueue *)dbQueue
+- (ISMSAlbum *)albumFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabaseQueue:(FMDatabaseQueue *)dbQueue
 {
-	__block Album *anAlbum = nil;
+	__block ISMSAlbum *anAlbum = nil;
 	
 	[dbQueue inDatabase:^(FMDatabase *db)
 	{
@@ -594,10 +589,10 @@
 	return anAlbum;
 }
 
-- (Album *)albumFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabase:(FMDatabase *)db
+- (ISMSAlbum *)albumFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabase:(FMDatabase *)db
 {
 	row++;
-	Album *anAlbum = nil;
+	ISMSAlbum *anAlbum = nil;
 	
 	FMResultSet *result = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@ WHERE ROWID = %i", table, row]];
 	if ([db hadError]) 
@@ -608,7 +603,7 @@
 	{
 		if ([result next])
 		{
-			anAlbum = [[Album alloc] init];
+			anAlbum = [[ISMSAlbum alloc] init];
 
 			if ([result stringForColumn:@"title"] != nil)
 				anAlbum.title = [NSString stringWithString:[result stringForColumn:@"title"]];
@@ -633,7 +628,7 @@
 	return [self.localPlaylistsDbQueue intForQuery:query];
 }
 
-- (BOOL)insertAlbumIntoFolderCache:(Album *)anAlbum forId:(NSString *)folderId
+- (BOOL)insertAlbumIntoFolderCache:(ISMSAlbum *)anAlbum forId:(NSString *)folderId
 {
 	__block BOOL hadError;
 	
@@ -650,7 +645,7 @@
 	return !hadError;
 }
 
-- (BOOL)insertAlbum:(Album *)anAlbum intoTable:(NSString *)table inDatabaseQueue:(FMDatabaseQueue *)dbQueue
+- (BOOL)insertAlbum:(ISMSAlbum *)anAlbum intoTable:(NSString *)table inDatabaseQueue:(FMDatabaseQueue *)dbQueue
 {
 	__block BOOL success;
 	
@@ -662,7 +657,7 @@
 	return success;
 }
 
-- (BOOL)insertAlbum:(Album *)anAlbum intoTable:(NSString *)table inDatabase:(FMDatabase *)db
+- (BOOL)insertAlbum:(ISMSAlbum *)anAlbum intoTable:(NSString *)table inDatabase:(FMDatabase *)db
 {
 	[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO %@ (title, albumId, coverArtId, artistName, artistId) VALUES (?, ?, ?, ?, ?)", table], anAlbum.title, anAlbum.albumId, anAlbum.coverArtId, anAlbum.artistName, anAlbum.artistId];
 	
@@ -726,7 +721,7 @@
 }
 
 
-- (void)downloadAllSongs:(NSString *)folderId artist:(Artist *)theArtist
+- (void)downloadAllSongs:(NSString *)folderId artist:(ISMSArtist *)theArtist
 {
 	// Show loading screen
 	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self.queueAll];
@@ -735,7 +730,7 @@
 	[self.queueAll cacheData:folderId artist:theArtist];
 }
 
-- (void)queueAllSongs:(NSString *)folderId artist:(Artist *)theArtist
+- (void)queueAllSongs:(NSString *)folderId artist:(ISMSArtist *)theArtist
 {
 	// Show loading screen
 	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self.queueAll];
@@ -744,7 +739,7 @@
 	[self.queueAll queueData:folderId artist:theArtist];
 }
 
-/*- (void)queueSong:(Song *)aSong
+/*- (void)queueSong:(ISMSSong *)aSong
 {
 	if (settingsS.isJukeboxEnabled)
 	{
@@ -761,7 +756,7 @@
 	[streamManagerS fillStreamQueue:audioEngineS.player.isStarted];
 }*/
 
-- (void)playAllSongs:(NSString *)folderId artist:(Artist *)theArtist
+- (void)playAllSongs:(NSString *)folderId artist:(ISMSArtist *)theArtist
 {
 	// Show loading screen
 	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self.queueAll];
@@ -784,7 +779,7 @@
 	[self.queueAll playAllData:folderId artist:theArtist];
 }
 
-- (void)shuffleAllSongs:(NSString *)folderId artist:(Artist *)theArtist
+- (void)shuffleAllSongs:(NSString *)folderId artist:(ISMSArtist *)theArtist
 {
 	// Show loading screen
 	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self.queueAll];

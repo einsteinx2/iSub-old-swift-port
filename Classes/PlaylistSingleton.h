@@ -18,7 +18,7 @@ typedef enum
 	ISMSRepeatMode_RepeatAll = 2
 } ISMSRepeatMode;
 
-@class Song, FMDatabase;
+@class ISMSSong, FMDatabase;
 @interface PlaylistSingleton : NSObject
 {
 	NSInteger shuffleIndex;
@@ -28,7 +28,7 @@ typedef enum
 
 + (id)sharedInstance;
 
-- (Song *)songForIndex:(NSUInteger)index;
+- (ISMSSong *)songForIndex:(NSUInteger)index;
 - (NSInteger)decrementIndex;
 - (NSInteger)incrementIndex;
 
@@ -36,10 +36,10 @@ typedef enum
 - (NSUInteger)indexForOffsetFromCurrentIndex:(NSUInteger)offset;
 
 // Convenience properties
-- (Song *)prevSong;
-- (Song *)currentDisplaySong;
-- (Song *)currentSong;
-- (Song *)nextSong;
+- (ISMSSong *)prevSong;
+- (ISMSSong *)currentDisplaySong;
+- (ISMSSong *)currentSong;
+- (ISMSSong *)nextSong;
 
 @property NSInteger shuffleIndex;
 @property NSInteger normalIndex;

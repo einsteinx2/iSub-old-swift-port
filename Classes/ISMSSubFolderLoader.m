@@ -7,15 +7,6 @@
 //
 
 #import "ISMSSubFolderLoader.h"
-#import "SUSSubFolderLoader.h"
-#import "PMSSubFolderLoader.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
-#import "TBXML.h"
-#import "NSMutableURLRequest+SUS.h"
-#import "Album.h"
-#import "Song.h"
-#import "Artist.h"
 
 @implementation ISMSSubFolderLoader
 
@@ -68,7 +59,7 @@
 	return !hadError;
 }
 
-- (BOOL)insertAlbumIntoFolderCache:(Album *)anAlbum
+- (BOOL)insertAlbumIntoFolderCache:(ISMSAlbum *)anAlbum
 {
 	__block BOOL hadError;
 	[self.dbQueue inDatabase:^(FMDatabase *db)
@@ -83,13 +74,13 @@
 	return !hadError;
 }
 
-- (BOOL)insertSongIntoFolderCache:(Song *)aSong
+- (BOOL)insertSongIntoFolderCache:(ISMSSong *)aSong
 {
 	__block BOOL hadError;
 	[self.dbQueue inDatabase:^(FMDatabase *db)
 	{
 		//DLog(@"aSong.title: %@  clean: %@", aSong.title, [aSong.title cleanString]);
-		[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO songsCache (folderId, %@) VALUES (?, %@)", [Song standardSongColumnNames], [Song standardSongColumnQMarks]], self.myId.md5, [aSong.title cleanString], aSong.songId, [aSong.artist cleanString], [aSong.album cleanString], [aSong.genre cleanString], aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size, aSong.parentId, NSStringFromBOOL(aSong.isVideo)];
+		[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO songsCache (folderId, %@) VALUES (?, %@)", [ISMSSong standardSongColumnNames], [ISMSSong standardSongColumnQMarks]], self.myId.md5, [aSong.title cleanString], aSong.songId, [aSong.artist cleanString], [aSong.album cleanString], [aSong.genre cleanString], aSong.coverArtId, aSong.path, aSong.suffix, aSong.transcodedSuffix, aSong.duration, aSong.bitRate, aSong.track, aSong.year, aSong.size, aSong.parentId, NSStringFromBOOL(aSong.isVideo)];
 		
 		hadError = [db hadError];
 		if (hadError)

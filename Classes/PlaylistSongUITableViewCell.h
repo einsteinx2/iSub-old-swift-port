@@ -12,7 +12,7 @@
 
 @interface PlaylistSongUITableViewCell : CustomUITableViewCell 
 
-@property (strong) Song *mySong;
+@property (strong) ISMSSong *mySong;
 
 @property (strong) AsynchronousImageView *coverArtView;
 @property (strong) UILabel *numberLabel;

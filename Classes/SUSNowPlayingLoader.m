@@ -7,12 +7,6 @@
 //
 
 #import "SUSNowPlayingLoader.h"
-#import "FMDatabaseAdditions.h"
-#import "TBXML.h"
-#import "NSMutableURLRequest+SUS.h"
-#import "Album.h"
-#import "Song.h"
-#import "Artist.h"
 
 @implementation SUSNowPlayingLoader
 
@@ -64,7 +58,7 @@
 					{
 						NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:0];
 						
-						[dict setObjectSafe:[[Song alloc] initWithTBXMLElement:entry] forKey:@"song"];
+						[dict setObjectSafe:[[ISMSSong alloc] initWithTBXMLElement:entry] forKey:@"song"];
 						[dict setObjectSafe:[TBXML valueOfAttributeNamed:@"username" forElement:entry] forKey:@"username"];
 						[dict setObjectSafe:[TBXML valueOfAttributeNamed:@"minutesAgo" forElement:entry] forKey:@"minutesAgo"];
 						[dict setObjectSafe:[TBXML valueOfAttributeNamed:@"playerId" forElement:entry] forKey:@"playerId"];

@@ -8,17 +8,12 @@
 
 #import "CacheViewController.h"
 #import "CacheAlbumViewController.h"
-#import "Song.h"
 #import "MusicSingleton.h"
 #import "CacheQueueSongUITableViewCell.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
-#import "AsynchronousImageView.h"
 #import "ServerListViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "CacheArtistUITableViewCell.h"
 #import "StoreViewController.h"
-#import "CustomUIAlertView.h"
 #import "PlaylistSingleton.h"
 #import "ISMSCacheQueueManager.h"
 #import "UIViewController+PushViewControllerCustom.h"
@@ -442,7 +437,7 @@
 	{
 		@autoreleasepool 
 		{
-			Song *aSong = [Song songFromCacheDbQueue:md5];
+			ISMSSong *aSong = [ISMSSong songFromCacheDbQueue:md5];
 			[aSong addToCurrentPlaylistDbQueue];
 		}
 	}
@@ -557,7 +552,7 @@
 		[databaseS.cacheQueueDbQueue inDatabase:^(FMDatabase *db)
 		{
 			[db executeUpdate:@"DROP TABLE IF EXISTS cacheQueueList"];
-			//[databaseS.cacheQueueDb executeUpdate:[NSString stringWithFormat:@"CREATE TEMP TABLE cacheQueueList (md5 TEXT, finished TEXT, cachedDate INTEGER, playedDate INTEGER, %@)", [Song standardSongColumnSchema]]];
+			//[databaseS.cacheQueueDb executeUpdate:[NSString stringWithFormat:@"CREATE TEMP TABLE cacheQueueList (md5 TEXT, finished TEXT, cachedDate INTEGER, playedDate INTEGER, %@)", [ISMSSong standardSongColumnSchema]]];
 			[db executeUpdate:@"CREATE TEMP TABLE cacheQueueList (md5 TEXT)"];
 			[db executeUpdate:@"INSERT INTO cacheQueueList SELECT md5 FROM cacheQueue"];
 			
@@ -1082,7 +1077,7 @@
 	{
 		@autoreleasepool 
 		{
-			[Song removeSongFromCacheDbQueueByMD5:md5];
+			[ISMSSong removeSongFromCacheDbQueueByMD5:md5];
 		}
 	}
 	
@@ -1347,13 +1342,13 @@
 		}
 		cell.indexPath = indexPath;
 
-		__block Song *aSong;
+		__block ISMSSong *aSong;
 		__block NSDate *cached;
 		
 		[databaseS.cacheQueueDbQueue inDatabase:^(FMDatabase *db)
 		{
 			FMResultSet *result = [db executeQuery:@"SELECT * FROM cacheQueue JOIN cacheQueueList USING(md5) WHERE cacheQueueList.ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
-			aSong = [Song songFromDbResult:result];
+			aSong = [ISMSSong songFromDbResult:result];
 			cached = [NSDate dateWithTimeIntervalSince1970:[result doubleForColumn:@"cachedDate"]];
 			cell.md5 = [result stringForColumn:@"md5"];
 			[result close];

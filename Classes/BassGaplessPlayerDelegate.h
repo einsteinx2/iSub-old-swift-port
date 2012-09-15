@@ -15,7 +15,7 @@
 - (void)bassStopped;
 - (void)bassFirstStreamStarted;
 - (void)bassSongEndedCalled;
-- (void)bassSongEndedPlaylistIncremented:(Song *)endedSong;
+- (void)bassSongEndedPlaylistIncremented:(ISMSSong *)endedSong;
 - (void)bassSongEndedFinishedIsPlaying;
 
 @end

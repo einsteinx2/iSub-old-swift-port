@@ -6,10 +6,9 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "Album.h"
-#import "Artist.h"
+#import "ISMSAlbum.h"
 
-@implementation Album
+@implementation ISMSAlbum
 
 - (id)initWithPMSDictionary:(NSDictionary *)dictionary
 {
@@ -56,7 +55,7 @@
 }
 
 
-- (id)initWithAttributeDict:(NSDictionary *)attributeDict artist:(Artist *)myArtist
+- (id)initWithAttributeDict:(NSDictionary *)attributeDict artist:(ISMSArtist *)myArtist
 {
 	if ((self = [super init]))
 	{
@@ -101,7 +100,7 @@
 
 - (id)copyWithZone:(NSZone *)zone
 {
-	Album *anAlbum = [[Album alloc] init];
+	ISMSAlbum *anAlbum = [[ISMSAlbum alloc] init];
 	
 	anAlbum.title = [self.title copy];
 	anAlbum.albumId = [self.albumId copy];

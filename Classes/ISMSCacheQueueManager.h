@@ -11,13 +11,13 @@
 
 #define cacheQueueManagerS ((ISMSCacheQueueManager *)[ISMSCacheQueueManager sharedInstance])
 
-@class Song, ISMSStreamHandler;
+@class ISMSSong, ISMSStreamHandler;
 @interface ISMSCacheQueueManager : NSObject <ISMSLoaderDelegate, ISMSStreamHandlerDelegate>
 
 @property BOOL isQueueDownloading;
-@property (copy) Song *currentQueuedSong;
+@property (copy) ISMSSong *currentQueuedSong;
 @property (strong) ISMSStreamHandler *currentStreamHandler;
-@property (unsafe_unretained, readonly) Song *currentQueuedSongInDb;
+@property (unsafe_unretained, readonly) ISMSSong *currentQueuedSongInDb;
 
 
 /*@property NSUInteger downloadLength;
@@ -36,6 +36,6 @@
 
 - (void)removeCurrentSong;
 
-- (BOOL)isSongInQueue:(Song *)aSong;
+- (BOOL)isSongInQueue:(ISMSSong *)aSong;
 
 @end

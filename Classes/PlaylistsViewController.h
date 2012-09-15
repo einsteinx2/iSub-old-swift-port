@@ -6,12 +6,11 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "BBSimpleConnectionQueue.h"
 #import "ISMSLoaderDelegate.h"
 
 @class BBSimpleConnectionQueue, SUSServerPlaylistsDAO;
 
-@interface PlaylistsViewController : UITableViewController <BBSimpleConnectionQueueDelegate, ISMSLoaderDelegate>
+@interface PlaylistsViewController : UITableViewController <EX2SimpleConnectionQueueDelegate, ISMSLoaderDelegate>
 
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) UISegmentedControl *segmentedControl;
@@ -25,7 +24,7 @@
 @property (nonatomic, strong) UILabel *editPlaylistLabel;
 @property (nonatomic, strong) UIButton *editPlaylistButton;
 @property (nonatomic) BOOL isPlaylistSaveEditShowing;
-@property (nonatomic, strong) BBSimpleConnectionQueue *connectionQueue;
+@property (nonatomic, strong) EX2SimpleConnectionQueue *connectionQueue;
 @property (nonatomic) BOOL savePlaylistLocal;
 @property (nonatomic, strong) NSMutableData *receivedData;
 @property (nonatomic, strong) NSURLConnection *connection;

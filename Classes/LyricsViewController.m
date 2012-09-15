@@ -8,8 +8,6 @@
 
 #import "LyricsViewController.h"
 #import "MusicSingleton.h"
-#import "FMDatabaseAdditions.h"
-#import "Song.h"
 #import "SUSLyricsDAO.h"
 
 @implementation LyricsViewController
@@ -34,7 +32,7 @@
 		_textView.font = [UIFont systemFontOfSize:16.5];
 		_textView.editable = NO;
         
-		/*Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+		/*ISMSSong *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
         NSString *lyrics = [dataModel lyricsForArtist:currentSong.artist andTitle:currentSong.title];
                 
 		if (lyrics)
@@ -106,7 +104,7 @@
 
 - (void)updateLyricsLabel
 {	
-	Song *currentSong = playlistS.currentSong;
+	ISMSSong *currentSong = playlistS.currentSong;
 	NSString *lyrics = [self.dataModel loadLyricsForArtist:currentSong.artist andTitle:currentSong.title];
 	//DLog(@"lyrics = %@", lyrics);
 	if (!lyrics)
@@ -124,7 +122,7 @@
 
 - (void)loadingFinished:(ISMSLoader*)theLoader
 {
-	Song *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
+	ISMSSong *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
     textView.text = [dataModel lyricsForArtist:currentSong.artist andTitle:currentSong.title];
 }*/
 

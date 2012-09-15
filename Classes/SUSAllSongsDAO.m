@@ -8,10 +8,6 @@
 
 #import "SUSAllSongsDAO.h"
 #import "SUSAllSongsLoader.h"
-#import "Index.h"
-#import "Song.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
 
 @implementation SUSAllSongsDAO
 
@@ -65,7 +61,7 @@
 		FMResultSet *result = [db executeQuery:@"SELECT * FROM allSongsIndexCache"];
 		while ([result next])
 		{
-			Index *item = [[Index alloc] init];
+			ISMSIndex *item = [[ISMSIndex alloc] init];
 			item.name = [result stringForColumn:@"name"];
 			item.position = [result intForColumn:@"position"];
 			item.count = [result intForColumn:@"count"];
@@ -76,12 +72,12 @@
 	return [NSArray arrayWithArray:indexItems];
 }
 
-- (Song *)allSongsSongForPosition:(NSUInteger)position
+- (ISMSSong *)allSongsSongForPosition:(NSUInteger)position
 {
-	return [Song songFromDbRow:position-1 inTable:@"allSongs" inDatabaseQueue:self.dbQueue];
+	return [ISMSSong songFromDbRow:position-1 inTable:@"allSongs" inDatabaseQueue:self.dbQueue];
 }
 
-- (Song *)allSongsSongForPositionInSearch:(NSUInteger)position
+- (ISMSSong *)allSongsSongForPositionInSearch:(NSUInteger)position
 {
 	NSUInteger rowId = [self.dbQueue intForQuery:@"SELECT rowIdInAllSongs FROM allSongsNameSearch WHERE ROWID = ?", [NSNumber numberWithInt:position]];
 	return [self allSongsSongForPosition:rowId];
@@ -151,12 +147,12 @@
 	return index;
 }
 
-- (Song *)songForPosition:(NSUInteger)position
+- (ISMSSong *)songForPosition:(NSUInteger)position
 {
 	return [self allSongsSongForPosition:position];
 }
 
-- (Song *)songForPositionInSearch:(NSUInteger)position
+- (ISMSSong *)songForPositionInSearch:(NSUInteger)position
 {
 	return [self allSongsSongForPositionInSearch:position];
 }

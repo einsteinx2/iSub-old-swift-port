@@ -8,8 +8,6 @@
 
 #import "MusicSingleton.h"
 #import "SongUITableViewCell.h"
-#import "FMDatabaseAdditions.h"
-#import "Song.h"
 #import "CellOverlay.h"
 
 @implementation SongUITableViewCell

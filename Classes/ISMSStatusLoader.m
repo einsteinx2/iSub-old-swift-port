@@ -7,8 +7,6 @@
 //
 
 #import "ISMSStatusLoader.h"
-#import "PMSStatusLoader.h"
-#import "SUSStatusLoader.h"
 
 @implementation ISMSStatusLoader
 

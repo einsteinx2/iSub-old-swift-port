@@ -6,11 +6,11 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "Song.h"
+#import "ISMSSong.h"
 #include <sys/stat.h>
 #import <MediaPlayer/MediaPlayer.h>
 
-@implementation Song
+@implementation ISMSSong
 
 - (id)initWithPMSDictionary:(NSDictionary *)dictionary
 {
@@ -202,7 +202,7 @@
 
 - (id)copyWithZone:(NSZone *)zone
 {
-	Song *newSong = [[Song alloc] init];
+	ISMSSong *newSong = [[ISMSSong alloc] init];
 
 	// Can directly assign because properties have "copy" type
 	newSong.title = self.title;
@@ -236,7 +236,7 @@
 	return self.songId.hash;
 }
 
-- (BOOL)isEqualToSong:(Song	*)otherSong 
+- (BOOL)isEqualToSong:(ISMSSong *)otherSong
 {
     if (self == otherSong)
         return YES;

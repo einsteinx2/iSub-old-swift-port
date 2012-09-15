@@ -11,11 +11,6 @@
 #import "MusicSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "GenresArtistUITableViewCell.h"
-#import "Artist.h"
-#import "Album.h"
-#import "Song.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
 #import "UIViewController+PushViewControllerCustom.h"
 
 @implementation GenresArtistViewController
@@ -199,7 +194,7 @@
 	{
 		@autoreleasepool 
 		{
-			Song *aSong = [Song songFromGenreDbQueue:md5];
+			ISMSSong *aSong = [ISMSSong songFromGenreDbQueue:md5];
 			[aSong addToCurrentPlaylistDbQueue];
 		}
 	}
@@ -265,7 +260,7 @@
 	{
 		@autoreleasepool 
 		{
-			Song *aSong = [Song songFromGenreDbQueue:md5];
+			ISMSSong *aSong = [ISMSSong songFromGenreDbQueue:md5];
 			[aSong addToCurrentPlaylistDbQueue];
 		}
 	}

@@ -8,7 +8,6 @@
 
 #import "ViewObjectsSingleton.h"
 #import "MKStoreManager.h"
-#import "Server.h"
 
 @implementation ViewObjectsSingleton
 

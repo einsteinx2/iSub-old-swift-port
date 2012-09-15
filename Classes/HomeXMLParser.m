@@ -11,10 +11,6 @@
 
 #import "HomeXMLParser.h"
 #import "ServerListViewController.h"
-#import "Album.h"
-#import "Song.h"
-#import "FMDatabaseAdditions.h"
-#import "CustomUIAlertView.h"
 
 @implementation HomeXMLParser
  
@@ -74,7 +70,7 @@
 	{
 		if ( [[attributeDict objectForKey:@"isDir"] isEqualToString:@"true"] )
 		{
-			Album *anAlbum = [[Album alloc] init];
+			ISMSAlbum *anAlbum = [[ISMSAlbum alloc] init];
 			
 			//Extract the attributes here.
 			anAlbum.title = [[attributeDict objectForKey:@"title"] cleanString];

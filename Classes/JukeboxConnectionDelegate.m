@@ -8,9 +8,6 @@
 
 #import "JukeboxConnectionDelegate.h"
 #import "JukeboxXMLParser.h"
-#import "MusicSingleton.h"
-#import "BBSimpleConnectionQueue.h"
-#import "CustomUIAlertView.h"
 
 @implementation JukeboxConnectionDelegate
 

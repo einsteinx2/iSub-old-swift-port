@@ -9,13 +9,8 @@
 #import "CurrentPlaylistViewController.h"
 #import "CurrentPlaylistSongSmallUITableViewCell.h"
 #import "MusicSingleton.h"
-#import "Song.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
-#import "CustomUIAlertView.h"
 #import "PlaylistSingleton.h"
 #import "StoreViewController.h"
-#import "NSMutableURLRequest+SUS.h"
 
 @implementation CurrentPlaylistViewController
 
@@ -455,7 +450,7 @@
 		 {
 			 @autoreleasepool 
 			 {
-				 Song *aSong = [Song songFromDbRow:i inTable:table inDatabase:db];
+				 ISMSSong *aSong = [ISMSSong songFromDbRow:i inTable:table inDatabase:db];
 				 [songIds addObject:n2N(aSong.songId)];
 			 }
 		 }
@@ -535,7 +530,7 @@
 					[databaseS.localPlaylistsDbQueue inDatabase:^(FMDatabase *db)
 					{
 						[db executeUpdate:@"INSERT INTO localPlaylists (playlist, md5) VALUES (?, ?)", self.playlistNameTextField.text, [self.playlistNameTextField.text md5]];
-						[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [self.playlistNameTextField.text md5], [Song standardSongColumnSchema]]];
+						[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [self.playlistNameTextField.text md5], [ISMSSong standardSongColumnSchema]]];
 						
 						[db executeUpdate:@"ATTACH DATABASE ? AS ?", [databaseS.databaseFolderPath stringByAppendingPathComponent:databaseName], @"currentPlaylistDb"];
 						if ([db hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [db lastErrorCode], [db lastErrorMessage]); }
@@ -577,7 +572,7 @@
 				[databaseS.localPlaylistsDbQueue inDatabase:^(FMDatabase *db)
 				{
 					[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE playlist%@", [playlistNameTextField.text md5]]];
-					[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [playlistNameTextField.text md5], [Song standardSongColumnSchema]]];
+					[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [playlistNameTextField.text md5], [ISMSSong standardSongColumnSchema]]];
 					
 					[db executeUpdate:@"ATTACH DATABASE ? AS ?", [databaseS.databaseFolderPath stringByAppendingPathComponent:databaseName], @"currentPlaylistDb"];
 					if ([db hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [db lastErrorCode], [db lastErrorMessage]); }
@@ -655,20 +650,20 @@
 		cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
 	}
 	
-	Song *aSong;
+	ISMSSong *aSong;
 	if (settingsS.isJukeboxEnabled)
 	{
 		if (playlistS.isShuffle)
-			aSong = [Song songFromDbRow:indexPath.row inTable:@"jukeboxShufflePlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
+			aSong = [ISMSSong songFromDbRow:indexPath.row inTable:@"jukeboxShufflePlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
 		else
-			aSong = [Song songFromDbRow:indexPath.row inTable:@"jukeboxCurrentPlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
+			aSong = [ISMSSong songFromDbRow:indexPath.row inTable:@"jukeboxCurrentPlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
 	}
 	else
 	{
 		if (playlistS.isShuffle)
-			aSong = [Song songFromDbRow:indexPath.row inTable:@"shufflePlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
+			aSong = [ISMSSong songFromDbRow:indexPath.row inTable:@"shufflePlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
 		else
-			aSong = [Song songFromDbRow:indexPath.row inTable:@"currentPlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
+			aSong = [ISMSSong songFromDbRow:indexPath.row inTable:@"currentPlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
 	}
 	
 	if (indexPath.row == playlistS.currentIndex && (audioEngineS.player.isStarted || (settingsS.isJukeboxEnabled && jukeboxS.jukeboxIsPlaying)))
@@ -731,7 +726,7 @@
 		 NSString *table = playlistS.isShuffle ? shufTable : currTable;
 		 		 
 		 [db executeUpdate:@"DROP TABLE moveTemp"];
-		 NSString *query = [NSString stringWithFormat:@"CREATE TABLE moveTemp (%@)", [Song standardSongColumnSchema]];
+		 NSString *query = [NSString stringWithFormat:@"CREATE TABLE moveTemp (%@)", [ISMSSong standardSongColumnSchema]];
 		 [db executeUpdate:query];
 		 
 		 if (fromRow < toRow)

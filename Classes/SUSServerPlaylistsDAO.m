@@ -7,8 +7,6 @@
 //
 
 #import "SUSServerPlaylistsDAO.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
 #import "SUSServerPlaylistsLoader.h"
 
 @implementation SUSServerPlaylistsDAO

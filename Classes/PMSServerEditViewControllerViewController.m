@@ -9,8 +9,6 @@
 #import "PMSServerEditViewControllerViewController.h"
 #import "MusicSingleton.h"
 #import "FoldersViewController.h"
-#import "Server.h"
-#import "CustomUIAlertView.h"
 #import "ServerListViewController.h"
 #import "ServerTypeViewController.h"
 #import "iPadRootViewController.h"
@@ -212,7 +210,7 @@
 {
     [viewObjectsS hideLoadingScreen];
     
-    Server *theServer = [[Server alloc] init];
+    ISMSServer *theServer = [[ISMSServer alloc] init];
     theServer.url = self.urlField.text;
     theServer.username = self.usernameField.text;
     theServer.password = self.passwordField.text;

@@ -7,10 +7,6 @@
 //
 
 #import "SearchXMLParser.h"
-#import "Song.h"
-#import "Album.h"
-#import "Artist.h"
-#import "CustomUIAlertView.h"
 
 @implementation SearchXMLParser
 
@@ -50,7 +46,7 @@
 	{
 		if (![[attributeDict objectForKey:@"isVideo"] isEqualToString:@"true"])
 		{
-			Song *aSong = [[Song alloc] initWithAttributeDict:attributeDict];
+			ISMSSong *aSong = [[ISMSSong alloc] initWithAttributeDict:attributeDict];
 		
 			if (aSong.path)
 			{
@@ -61,14 +57,14 @@
 	}
 	else if ([elementName isEqualToString:@"album"])
 	{
-		Album *anAlbum = [[Album alloc] initWithAttributeDict:attributeDict];
+		ISMSAlbum *anAlbum = [[ISMSAlbum alloc] initWithAttributeDict:attributeDict];
 		
 		[self.listOfAlbums addObject:anAlbum];
 		
 	}
 	else if ([elementName isEqualToString:@"artist"])
 	{
-		Artist *anArtist = [[Artist alloc] initWithAttributeDict:attributeDict];
+		ISMSArtist *anArtist = [[ISMSArtist alloc] initWithAttributeDict:attributeDict];
 		
 		[self.listOfArtists addObject:anArtist];
 		

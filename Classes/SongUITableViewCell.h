@@ -12,7 +12,7 @@
 
 @interface SongUITableViewCell : CustomUITableViewCell 
 
-@property (copy) Song *mySong;
+@property (copy) ISMSSong *mySong;
 
 @property (strong) UILabel *trackNumberLabel;
 @property (strong) UIScrollView *songNameScrollView;

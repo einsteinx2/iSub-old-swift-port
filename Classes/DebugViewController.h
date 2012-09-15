@@ -23,8 +23,8 @@
 
 @property (strong) IBOutlet UIButton *songInfoToggleButton;
 
-@property (copy) Song *currentSong;
-@property (copy) Song *nextSong;
+@property (copy) ISMSSong *currentSong;
+@property (copy) ISMSSong *nextSong;
 @property float currentSongProgress;
 @property float nextSongProgress;
 

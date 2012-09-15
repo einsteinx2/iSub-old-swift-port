@@ -7,7 +7,6 @@
 //
 
 #import "SUSStatusLoader.h"
-#import "TBXML.h"
 
 @implementation SUSStatusLoader
 

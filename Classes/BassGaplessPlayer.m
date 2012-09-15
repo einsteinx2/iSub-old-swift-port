@@ -7,7 +7,6 @@
 //
 
 #import "BassGaplessPlayer.h"
-#import "Song+DAO.h"
 #import "ISMSStreamManager.h"
 
 @implementation BassGaplessPlayer
@@ -125,7 +124,7 @@ QWORD CALLBACK MyFileLenProc(void *user)
 			return 0;
 		
 		QWORD length = 0;
-		Song *theSong = userInfo.song;
+		ISMSSong *theSong = userInfo.song;
 		if (userInfo.shouldBreakWaitLoopForever)
 		{
 			return 0;
@@ -244,7 +243,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		}
 	}
 	
-	Song *currentSong = userInfo.song;
+	ISMSSong *currentSong = userInfo.song;
 	if (bytesRead == 0 && !BASS_ChannelIsActive(userInfo.stream) && (currentSong.isFullyCached || currentSong.isTempCached))
 	{
 		self.isPlaying = NO;
@@ -307,7 +306,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		// Get the next song in the queue
 		[self prepareNextSongStream:playlistS.nextSong];
 		
-		Song *endedSong = userInfo.song;
+		ISMSSong *endedSong = userInfo.song;
         
         if ([self.delegate respondsToSelector:@selector(bassSongEndedPlaylistIncremented:)])
         {
@@ -397,7 +396,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 							userInfo.wasFileJustUnderrun = YES;
 							
 							// Handle waiting for additional data
-							Song *theSong = userInfo.song;
+							ISMSSong *theSong = userInfo.song;
 							if (!theSong.isFullyCached)
 							{
 								if (viewObjectsS.isOfflineMode)
@@ -548,7 +547,7 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 	}
 }
 
-- (BassStream *)prepareStreamForSong:(Song *)aSong
+- (BassStream *)prepareStreamForSong:(ISMSSong *)aSong
 {
 	DDLogVerbose(@"preparing stream for %@  file: %@", aSong.title, aSong.currentPath);
 	if (aSong.fileExists)
@@ -596,7 +595,7 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 		 NSInteger count = playlistS.count;
 		 if (playlistS.currentIndex >= count) playlistS.currentIndex = count - 1;
 		 
-		 Song *currentSong = playlistS.currentSong;
+		 ISMSSong *currentSong = playlistS.currentSong;
 		 if (!currentSong)
 			 return;
 		 
@@ -715,7 +714,7 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 	[self prepareNextSongStream:nil];
 }
 
-- (void)prepareNextSongStream:(Song *)nextSong
+- (void)prepareNextSongStream:(ISMSSong *)nextSong
 {
 	[EX2Dispatch runInQueue:self.streamGcdQueue waitUntilDone:NO block:^
 	 {
@@ -729,7 +728,7 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 			 count = self.streamQueue.count; 
 		 }
 		 
-		 Song *theSong = nextSong ? nextSong : playlistS.nextSong;
+		 ISMSSong *theSong = nextSong ? nextSong : playlistS.nextSong;
 		 
 		 DDLogVerbose(@"nextSong.localFileSize: %llu", theSong.localFileSize);
 		 if (theSong.localFileSize == 0 || theSong.isVideo)

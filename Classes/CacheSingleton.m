@@ -7,10 +7,7 @@
 //
 
 #import "CacheSingleton.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
 
-#import "Song.h"
 #import "ISMSStreamManager.h"
 #import "ISMSCacheQueueManager.h"
 
@@ -85,7 +82,7 @@
 				else
 					songMD5 = [databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
 				//DLog(@"removing %@", songMD5);
-				[Song removeSongFromCacheDbQueueByMD5:songMD5];	
+				[ISMSSong removeSongFromCacheDbQueueByMD5:songMD5];	
 			}
 		}
 	}
@@ -106,7 +103,7 @@
 					songMD5 = [databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
 				}
 				//songSize = [databaseS.songCacheDbQueue intForQuery:@"SELECT size FROM cachedSongs WHERE md5 = ?", songMD5];
-				Song *aSong = [Song songFromCacheDbQueue:songMD5];
+				ISMSSong *aSong = [ISMSSong songFromCacheDbQueue:songMD5];
 				// Determine the name of the file we are downloading.
 				//DLog(@"currentSongObject.path: %@", currentSongObject.path);
 				NSString *songPath = nil;
@@ -118,7 +115,7 @@
 				unsigned long long songSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:songPath error:NULL] fileSize];
 				
 				//DLog(@"removing %@", songMD5);
-				[Song removeSongFromCacheDbQueueByMD5:songMD5];
+				[ISMSSong removeSongFromCacheDbQueueByMD5:songMD5];
 				
 				size -= songSize;
 			}

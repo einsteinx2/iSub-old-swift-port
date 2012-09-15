@@ -17,11 +17,9 @@
 
 #define appDelegateS [iSubAppDelegate sharedInstance]
 
-@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, Index, Artist, Album, Song, IntroViewController, HTTPServer, ISMSStatusLoader;
+@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, IntroViewController, ISMSStatusLoader;
 
 @interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate, MFMailComposeViewControllerDelegate, BWHockeyManagerDelegate, ISMSLoaderDelegate>
-
-- (void)startStopServer;
 
 @property (strong) ISMSStatusLoader *statusLoader;
 
@@ -61,11 +59,6 @@
 
 @property BOOL showIntro;
 
-@property (strong) HTTPServer *httpServer;
-@property (strong) NSDictionary *addresses;
-@property BOOL isHttpServerOn;
-
-
 + (iSubAppDelegate *)sharedInstance;
 
 - (void)enterOnlineModeForce;
@@ -75,9 +68,8 @@
 - (void)loadHockeyApp;
 //- (void)loadCrittercism;
 - (void)loadInAppPurchaseStore;
-- (void)createHTTPServer;
 
-- (void)reachabilityChanged: (NSNotification *)note;
+- (void)reachabilityChanged:(NSNotification *)note;
 - (NSInteger)getHour;
 
 - (void)showSettings;

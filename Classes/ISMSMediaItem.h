@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Ben Baron. All rights reserved.
 //
 
-@protocol MediaItem <NSObject>
+@protocol ISMSMediaItem <NSObject>
 
 @property (copy) NSString *itemId;
 @property (copy) NSString *title;

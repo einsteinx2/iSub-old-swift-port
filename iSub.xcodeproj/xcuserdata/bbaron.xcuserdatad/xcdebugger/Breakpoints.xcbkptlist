@@ -542,8 +542,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "originalViewFrames"
-         landmarkType = "19">
+         landmarkName = "-registerForNotifications"
+         landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "Yes"
@@ -892,8 +892,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "originalViewFrames"
-         landmarkType = "19">
+         landmarkName = "-registerForNotifications"
+         landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -906,8 +906,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "originalViewFrames"
-         landmarkType = "19">
+         landmarkName = "-registerForNotifications"
+         landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -920,8 +920,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "originalViewFrames"
-         landmarkType = "19">
+         landmarkName = "-registerForNotifications"
+         landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -934,8 +934,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "originalViewFrames"
-         landmarkType = "19">
+         landmarkName = "-registerForNotifications"
+         landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -948,8 +948,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "originalViewFrames"
-         landmarkType = "19">
+         landmarkName = "-registerForNotifications"
+         landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -962,8 +962,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "originalViewFrames"
-         landmarkType = "19">
+         landmarkName = "-registerForNotifications"
+         landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -976,8 +976,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "originalViewFrames"
-         landmarkType = "19">
+         landmarkName = "-registerForNotifications"
+         landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -990,8 +990,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "originalViewFrames"
-         landmarkType = "19">
+         landmarkName = "-registerForNotifications"
+         landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -1004,8 +1004,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "originalViewFrames"
-         landmarkType = "19">
+         landmarkName = "-registerForNotifications"
+         landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -1017,9 +1017,7 @@
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "26"
-         endingLineNumber = "26"
-         landmarkName = "@implementation AsynchronousImageView"
-         landmarkType = "3">
+         endingLineNumber = "26">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -1197,9 +1195,7 @@
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "362"
-         endingLineNumber = "362"
-         landmarkName = "-estimatedBitrate"
-         landmarkType = "5">
+         endingLineNumber = "362">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -1392,8 +1388,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "67"
          endingLineNumber = "67"
-         landmarkName = "-willRotateToInterfaceOrientation:duration:"
-         landmarkType = "5">
+         landmarkName = "@implementation PlaylistsViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -1406,7 +1402,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "71"
          endingLineNumber = "71"
-         landmarkName = "-willRotateToInterfaceOrientation:duration:"
+         landmarkName = "-registerForNotifications"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1560,7 +1556,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "62"
          endingLineNumber = "62"
-         landmarkName = "-createDataModel"
+         landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1574,7 +1570,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "62"
          endingLineNumber = "62"
-         landmarkName = "-createDataModel"
+         landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1616,7 +1612,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "131"
          endingLineNumber = "131"
-         landmarkName = "-startLoad"
+         landmarkName = "-cancelLoad"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1686,7 +1682,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "62"
          endingLineNumber = "62"
-         landmarkName = "-createDataModel"
+         landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1756,7 +1752,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "62"
          endingLineNumber = "62"
-         landmarkName = "-createDataModel"
+         landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1770,8 +1766,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "originalViewFrames"
-         landmarkType = "19">
+         landmarkName = "-registerForNotifications"
+         landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -4928,8 +4924,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "originalViewFrames"
-         landmarkType = "19">
+         landmarkName = "-registerForNotifications"
+         landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -4941,8 +4937,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "originalViewFrames"
-         landmarkType = "19">
+         landmarkName = "-registerForNotifications"
+         landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -5019,8 +5015,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "121"
          endingLineNumber = "121"
-         landmarkName = "-dismissPicker"
-         landmarkType = "5">
+         landmarkName = "@implementation EqualizerViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -5045,8 +5041,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "originalViewFrames"
-         landmarkType = "19">
+         landmarkName = "-registerForNotifications"
+         landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -5058,8 +5054,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "originalViewFrames"
-         landmarkType = "19">
+         landmarkName = "-registerForNotifications"
+         landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -5083,9 +5079,7 @@
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1637"
-         endingLineNumber = "1637"
-         landmarkName = "@implementation iPhoneStreamingPlayerViewController"
-         landmarkType = "3">
+         endingLineNumber = "1637">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -5130,8 +5124,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "168"
          endingLineNumber = "168"
-         landmarkName = "@implementation MusicSingleton"
-         landmarkType = "3">
+         landmarkName = "-playSongAtPosition:"
+         landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -5234,7 +5228,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "248"
          endingLineNumber = "248"
-         landmarkName = "-applicationDidFinishLaunching:"
+         landmarkName = "-checkServer"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -5247,7 +5241,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "152"
          endingLineNumber = "152"
-         landmarkName = "-startSongAtOffsetInSeconds2"
+         landmarkName = "-startSong"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -5307,9 +5301,7 @@
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "363"
-         endingLineNumber = "363"
-         landmarkName = "-estimatedBitrate"
-         landmarkType = "5">
+         endingLineNumber = "363">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -5399,8 +5391,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "219"
          endingLineNumber = "219"
-         landmarkName = "MyFileSeekProc()"
-         landmarkType = "7">
+         landmarkName = "@implementation BassGaplessPlayer"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -5412,7 +5404,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "359"
          endingLineNumber = "359"
-         landmarkName = "-removeMoviePlayer"
+         landmarkName = "-playVideo:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -5425,8 +5417,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "401"
          endingLineNumber = "401"
-         landmarkName = "-playSubsonicVideo:"
-         landmarkType = "5">
+         landmarkName = "@implementation MusicSingleton"
+         landmarkType = "3">
       </FileBreakpoint>
    </FileBreakpoints>
    <SymbolicBreakpoints>

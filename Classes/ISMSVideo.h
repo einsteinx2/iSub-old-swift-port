@@ -6,13 +6,13 @@
 //  Copyright (c) 2012 Ben Baron. All rights reserved.
 //
 
-#import "MediaItem.h"
+#import "ISMSMediaItem.h"
 
-@interface Video : NSObject <MediaItem>
+@interface ISMSVideo : NSObject <ISMSMediaItem>
 
 @property (copy) NSString *itemId;
 @property (copy) NSString *title;
 
-- (BOOL)isEqualToVideo:(Video *)otherVideo;
+- (BOOL)isEqualToVideo:(ISMSVideo *)otherVideo;
 
 @end

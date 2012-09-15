@@ -8,13 +8,13 @@
 
 #import "CustomUITableViewCell.h"
 
-@class Artist;
+@class ISMSArtist;
 
 @interface ArtistUITableViewCell : CustomUITableViewCell 
 
 @property (strong) UIScrollView *artistNameScrollView;
 @property (strong) UILabel *artistNameLabel;
 
-@property (strong) Artist *myArtist;
+@property (strong) ISMSArtist *myArtist;
 
 @end

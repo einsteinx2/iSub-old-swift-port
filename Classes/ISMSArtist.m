@@ -6,13 +6,13 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "Artist.h"
+#import "ISMSArtist.h"
 
-@implementation Artist
+@implementation ISMSArtist
 
-+ (Artist *)artistWithName:(NSString *)theName andArtistId:(NSString *)theId
++ (ISMSArtist *)artistWithName:(NSString *)theName andArtistId:(NSString *)theId
 {
-	Artist *anArtist = [[Artist alloc] init];
+	ISMSArtist *anArtist = [[ISMSArtist alloc] init];
 	anArtist.name = theName;
 	anArtist.artistId = theId;
 	
@@ -61,7 +61,7 @@
 
 - (id)copyWithZone:(NSZone *)zone
 {
-	Artist *anArtist = [[Artist alloc] init];
+	ISMSArtist *anArtist = [[ISMSArtist alloc] init];
 	
 	anArtist.name = [self.name copy];
 	anArtist.artistId = [self.artistId copy];

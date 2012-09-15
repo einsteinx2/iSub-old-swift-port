@@ -9,12 +9,6 @@
 #import "PlaylistsUITableViewCell.h"
 #import "MusicSingleton.h"
 #import "CellOverlay.h"
-#import "NSMutableURLRequest+SUS.h"
-#import "SUSServerPlaylist.h"
-#import "NSMutableURLRequest+SUS.h"
-#import "CustomUIAlertView.h"
-#import "Song.h"
-#import "TBXML.h"
 
 @implementation PlaylistsUITableViewCell
 
@@ -219,7 +213,7 @@
 				{
 					@autoreleasepool {
 						
-						Song *aSong = [[Song alloc] initWithTBXMLElement:entry];
+						ISMSSong *aSong = [[ISMSSong alloc] initWithTBXMLElement:entry];
 						[aSong insertIntoServerPlaylistWithPlaylistId:md5];
 						if (isDownload)
 						{

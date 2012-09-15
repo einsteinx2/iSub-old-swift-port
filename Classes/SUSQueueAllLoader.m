@@ -7,11 +7,6 @@
 //
 
 #import "SUSQueueAllLoader.h"
-#import "TBXML.h"
-#import "CustomUIAlertView.h"
-#import "Album.h"
-#import "Artist.h"
-#import "Song.h"
 
 @implementation SUSQueueAllLoader
 
@@ -61,7 +56,7 @@
 					BOOL isDir = [[TBXML valueOfAttributeNamed:@"isDir" forElement:child] boolValue];
 					if (isDir)
 					{
-						Album *anAlbum = [[Album alloc] initWithTBXMLElement:child artistId:self.myArtist.artistId artistName:self.myArtist.name];
+						ISMSAlbum *anAlbum = [[ISMSAlbum alloc] initWithTBXMLElement:child artistId:self.myArtist.artistId artistName:self.myArtist.name];
 						
 						//Add album object to lookup dictionary and list array
 						if (![anAlbum.title isEqualToString:@".AppleDouble"])
@@ -74,7 +69,7 @@
 						BOOL isVideo = [[TBXML valueOfAttributeNamed:@"isVideo" forElement:child] boolValue];
 						if (!isVideo)
 						{
-							Song *aSong = [[Song alloc] initWithTBXMLElement:child];
+							ISMSSong *aSong = [[ISMSSong alloc] initWithTBXMLElement:child];
 							if (aSong.path)
 							{
 								[self.listOfSongs addObject:aSong];

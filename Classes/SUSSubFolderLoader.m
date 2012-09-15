@@ -7,11 +7,6 @@
 //
 
 #import "SUSSubFolderLoader.h"
-#import "TBXML.h"
-#import "Album.h"
-#import "Song.h"
-#import "Artist.h"
-#import "Video.h"
 
 @implementation SUSSubFolderLoader
 
@@ -64,7 +59,7 @@
 					{
 						if ([[TBXML valueOfAttributeNamed:@"isDir" forElement:child] boolValue])
 						{
-							Album *anAlbum = [[Album alloc] initWithTBXMLElement:child artistId:self.myArtist.artistId artistName:self.myArtist.name];
+							ISMSAlbum *anAlbum = [[ISMSAlbum alloc] initWithTBXMLElement:child artistId:self.myArtist.artistId artistName:self.myArtist.name];
 							if (![anAlbum.title isEqualToString:@".AppleDouble"])
 							{
 								[self insertAlbumIntoFolderCache:anAlbum];
@@ -73,7 +68,7 @@
 						}
 						else
 						{
-							Song *aSong = [[Song alloc] initWithTBXMLElement:child];
+							ISMSSong *aSong = [[ISMSSong alloc] initWithTBXMLElement:child];
                             if (aSong.path && (settingsS.isVideoSupported || !aSong.isVideo))
                             {
                                 [self insertSongIntoFolderCache:aSong];

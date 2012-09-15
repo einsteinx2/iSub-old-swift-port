@@ -7,7 +7,6 @@
 //
 
 #import "AudioEngine.h"
-#import "Song.h"
 #import "BassParamEqValue.h"
 #include <AudioToolbox/AudioToolbox.h>
 #include "MusicSingleton.h"
@@ -15,7 +14,6 @@
 #import <sys/stat.h>
 #import "BassStream.h"
 #import "ISMSStreamManager.h"
-#import "NSMutableURLRequest+SUS.h"
 
 @implementation AudioEngine
 

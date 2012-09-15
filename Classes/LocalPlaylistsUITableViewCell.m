@@ -8,9 +8,6 @@
 
 #import "LocalPlaylistsUITableViewCell.h"
 #import "MusicSingleton.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
-#import "Song.h"
 #import "CellOverlay.h"
 
 @implementation LocalPlaylistsUITableViewCell
@@ -77,7 +74,7 @@
 	int count = [databaseS.localPlaylistsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", self.md5]];
 	for (int i = 0; i < count; i++)
 	{
-		[[Song songFromDbRow:i inTable:[NSString stringWithFormat:@"playlist%@", self.md5] inDatabaseQueue:databaseS.localPlaylistsDbQueue] addToCacheQueueDbQueue];
+		[[ISMSSong songFromDbRow:i inTable:[NSString stringWithFormat:@"playlist%@", self.md5] inDatabaseQueue:databaseS.localPlaylistsDbQueue] addToCacheQueueDbQueue];
 	}
 	
 	// Hide the loading screen
@@ -101,7 +98,7 @@
 	{
 		@autoreleasepool
 		{
-			Song *aSong = [Song songFromDbRow:i inTable:[NSString stringWithFormat:@"playlist%@", self.md5] inDatabaseQueue:databaseS.localPlaylistsDbQueue];
+			ISMSSong *aSong = [ISMSSong songFromDbRow:i inTable:[NSString stringWithFormat:@"playlist%@", self.md5] inDatabaseQueue:databaseS.localPlaylistsDbQueue];
 			[aSong addToCurrentPlaylistDbQueue];
 		}
 	}

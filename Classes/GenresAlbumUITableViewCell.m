@@ -8,11 +8,7 @@
 
 #import "GenresAlbumUITableViewCell.h"
 #import "MusicSingleton.h"
-#import "AsynchronousImageView.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
 #import "CellOverlay.h"
-#import "Song.h"
 
 
 @implementation GenresAlbumUITableViewCell
@@ -108,7 +104,7 @@
 	{
 		@autoreleasepool 
 		{
-			Song *aSong = [Song songFromGenreDbQueue:md5];
+			ISMSSong *aSong = [ISMSSong songFromGenreDbQueue:md5];
 			[aSong addToCacheQueueDbQueue];
 		}
 	}
@@ -163,7 +159,7 @@
 	{
 		@autoreleasepool 
 		{
-			Song *aSong = [Song songFromGenreDbQueue:md5];
+			ISMSSong *aSong = [ISMSSong songFromGenreDbQueue:md5];
 			[aSong addToCurrentPlaylistDbQueue];
 		}
 	}

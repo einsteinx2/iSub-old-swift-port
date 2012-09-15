@@ -10,14 +10,10 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "AlbumViewController.h"
-#import "Artist.h"
 #import "ArtistUITableViewCell.h"
-#import "FMDatabaseAdditions.h"
-#import "CustomUIAlertView.h"
 #import "EGORefreshTableHeaderView.h"
 #import <QuartzCore/QuartzCore.h>
 #import "FolderDropdownControl.h"
-#import "SUSRootFoldersDAO.h"
 #import "SUSAllSongsLoader.h"
 #import "SeparaterView.h"
 #import "UIViewController+PushViewControllerCustom.h"
@@ -564,7 +560,7 @@
 		cell = [[ArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 	}
 
-	Artist *anArtist = nil;
+	ISMSArtist *anArtist = nil;
 	if(self.isSearching)
 	{
 		anArtist = [self.dataModel artistForPositionInSearch:(indexPath.row + 1)];
@@ -651,7 +647,7 @@
 	if (viewObjectsS.isCellEnabled)
 	{
 	//DLog(@"did indexPath.row: %i", indexPath.row);
-		Artist *anArtist = nil;
+		ISMSArtist *anArtist = nil;
 		if(self.isSearching)
 		{
 			anArtist = [self.dataModel artistForPositionInSearch:(indexPath.row + 1)];

@@ -7,13 +7,6 @@
 //
 
 #import "SUSAllSongsLoader.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
-#import "Artist.h"
-#import "Album.h"
-#import "Song.h"
-#import "SUSRootFoldersDAO.h"
-#import "NSMutableURLRequest+SUS.h"
 
 @interface SUSAllSongsLoader (Private)
 
@@ -168,7 +161,7 @@ static NSInteger order (id a, id b, void* context)
 	[databaseS.allSongsDbQueue inDatabase:^(FMDatabase *db)
 	{
 		[db executeUpdate:@"DROP TABLE IF EXISTS allSongsTemp"];
-		NSString *query = [NSString stringWithFormat:@"CREATE TEMPORARY TABLE allSongsTemp (%@)", [Song standardSongColumnSchema]];
+		NSString *query = [NSString stringWithFormat:@"CREATE TEMPORARY TABLE allSongsTemp (%@)", [ISMSSong standardSongColumnSchema]];
 		[db executeUpdate:query];
 	}];
 	
@@ -223,12 +216,12 @@ static NSInteger order (id a, id b, void* context)
 			// Create allSongs tables
 			[db executeUpdate:@"CREATE TABLE resumeLoad (albumNum INTEGER, iteration INTEGER)"];
 			[db executeUpdate:@"INSERT INTO resumeLoad (albumNum, iteration) VALUES (1, 0)"];
-			NSString *query = [NSString stringWithFormat:@"CREATE VIRTUAL TABLE allSongs USING FTS3 (%@, tokenize=porter)", [Song standardSongColumnSchema]];
+			NSString *query = [NSString stringWithFormat:@"CREATE VIRTUAL TABLE allSongs USING FTS3 (%@, tokenize=porter)", [ISMSSong standardSongColumnSchema]];
 			[db executeUpdate:query];
 			//[db executeUpdate:@"CREATE INDEX title ON allSongs (title ASC)"];
 			//[db executeUpdate:@"CREATE INDEX songGenre ON allSongs (genre)"];
 			
-			query = [NSString stringWithFormat:@"CREATE TABLE allSongsUnsorted (%@)", [Song standardSongColumnSchema]];
+			query = [NSString stringWithFormat:@"CREATE TABLE allSongsUnsorted (%@)", [ISMSSong standardSongColumnSchema]];
 			[db executeUpdate:query];
 			//[db executeUpdate:@"CREATE INDEX title ON allSongsUnsorted (title ASC)"];
 			[db executeUpdate:@"CREATE TABLE allSongsCount (count INTEGER)"];
@@ -285,7 +278,7 @@ static NSInteger order (id a, id b, void* context)
 			self.currentAlbum = [databaseS albumFromDbRow:self.currentRow inTable:[NSString stringWithFormat:@"subalbums%i", self.iteration] inDatabaseQueue:databaseS.allAlbumsDbQueue];
 	//DLog(@"current album: %@", self.currentAlbum.title);
 		
-		self.currentArtist = [Artist artistWithName:self.currentAlbum.artistName andArtistId:self.currentAlbum.artistId];
+		self.currentArtist = [ISMSArtist artistWithName:self.currentAlbum.artistName andArtistId:self.currentAlbum.artistId];
 		
 		[self sendAlbumNotification:self.currentAlbum.title];
 	}
@@ -333,7 +326,7 @@ static NSInteger order (id a, id b, void* context)
 		[databaseS.allSongsDbQueue inDatabase:^(FMDatabase *db)
 		{
 			[db executeUpdate:@"DROP TABLE IF EXISTS allSongs"];
-			NSString *query = [NSString stringWithFormat:@"CREATE VIRTUAL TABLE allSongs USING FTS3 (%@, tokenize=porter)", [Song standardSongColumnSchema]];
+			NSString *query = [NSString stringWithFormat:@"CREATE VIRTUAL TABLE allSongs USING FTS3 (%@, tokenize=porter)", [ISMSSong standardSongColumnSchema]];
 			[db executeUpdate:query];
 		//DLog(@"sorting allSongs");
 			[db executeUpdate:@"INSERT INTO allSongs SELECT * FROM allSongsUnsorted ORDER BY title COLLATE NOCASE"];
@@ -657,7 +650,7 @@ static NSString *kName_Error = @"error";
 						if ([[TBXML valueOfAttributeNamed:@"isDir" forElement:child] isEqualToString:@"true"])
 						{
 							//Initialize the Album.
-							Album *anAlbum = [[Album alloc] initWithTBXMLElement:child artistId:self.currentArtist.artistId artistName:self.currentArtist.name];
+							ISMSAlbum *anAlbum = [[ISMSAlbum alloc] initWithTBXMLElement:child artistId:self.currentArtist.artistId artistName:self.currentArtist.name];
 							
 							// Skip if it's .AppleDouble, otherwise process it
 							if (![anAlbum.title isEqualToString:@".AppleDouble"])
@@ -698,7 +691,7 @@ static NSString *kName_Error = @"error";
 						else
 						{
 							//Initialize the Song.
-							Song *aSong = [[Song alloc] initWithTBXMLElement:child];
+							ISMSSong *aSong = [[ISMSSong alloc] initWithTBXMLElement:child];
 							
 							// Add song object to the allSongs and genre databases
 							if (![aSong.title isEqualToString:@".AppleDouble"])
@@ -718,7 +711,7 @@ static NSString *kName_Error = @"error";
 										 {
 											 [db executeUpdate:@"INSERT INTO allSongsUnsorted SELECT * FROM allSongsTemp"];
 											 [db executeUpdate:@"DROP TABLE IF EXISTS allSongsTemp"];
-											 NSString *query = [NSString stringWithFormat:@"CREATE TEMPORARY TABLE allSongsTemp (%@)", [Song standardSongColumnSchema]];
+											 NSString *query = [NSString stringWithFormat:@"CREATE TEMPORARY TABLE allSongsTemp (%@)", [ISMSSong standardSongColumnSchema]];
 											 [db executeUpdate:query];
 										 }];
 										self.tempSongsCount = 0;
@@ -822,7 +815,7 @@ static NSString *kName_Error = @"error";
 				{
 					[db executeUpdate:@"INSERT INTO allSongsUnsorted SELECT * FROM allSongsTemp"];
 					[db executeUpdate:@"DROP TABLE IF EXISTS allSongsTemp"];
-					NSString *query = [NSString stringWithFormat:@"CREATE TEMPORARY TABLE allSongsTemp (%@)", [Song standardSongColumnSchema]];
+					NSString *query = [NSString stringWithFormat:@"CREATE TEMPORARY TABLE allSongsTemp (%@)", [ISMSSong standardSongColumnSchema]];
 					[db executeUpdate:query];
 				}];
 				self.tempSongsCount = 0;
@@ -897,7 +890,7 @@ static NSString *kName_Error = @"error";
 				{
 					[db executeUpdate:@"INSERT INTO allSongsUnsorted SELECT * FROM allSongsTemp"];
 					[db executeUpdate:@"DROP TABLE IF EXISTS allSongsTemp"];
-					NSString *query = [NSString stringWithFormat:@"CREATE TEMPORARY TABLE allSongsTemp (%@)", [Song standardSongColumnSchema]];
+					NSString *query = [NSString stringWithFormat:@"CREATE TEMPORARY TABLE allSongsTemp (%@)", [ISMSSong standardSongColumnSchema]];
 					[db executeUpdate:query];
 				}];
 				self.tempSongsCount = 0;

@@ -6,7 +6,6 @@
 //  Copyright (c) 2012 Ben Baron. All rights reserved.
 //
 
-#import "NSMutableURLRequest+PMS.h"
 #import "TBXML+Compression.h"
 
 @implementation NSMutableURLRequest (PMS)

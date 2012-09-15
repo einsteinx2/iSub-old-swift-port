@@ -9,8 +9,6 @@
 #import "UbuntuServerEditViewController.h"
 #import "MusicSingleton.h"
 #import "FoldersViewController.h"
-#import "Server.h"
-#import "CustomUIAlertView.h"
 #import "iPadRootViewController.h"
 #import "ServerTypeViewController.h"
 #import "MenuViewController.h"
@@ -96,7 +94,7 @@
 	
 	if ([self checkUsername:self.usernameField.text] && [self checkPassword:self.passwordField.text])
 	{
-		Server *theServer = [[Server alloc] init];
+		ISMSServer *theServer = [[ISMSServer alloc] init];
 		theServer.url = URL;
 		theServer.username = self.usernameField.text;
 		theServer.password = self.passwordField.text;

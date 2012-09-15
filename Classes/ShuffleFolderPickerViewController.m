@@ -7,7 +7,6 @@
 //
 
 #import "ShuffleFolderPickerViewController.h"
-#import "SUSRootFoldersDAO.h"
 
 @implementation ShuffleFolderPickerViewController
 

@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 Ben Baron. All rights reserved.
 //
 
+#import "FMDatabaseAdditions.h"
 #import "FMDatabaseQueue.h"
 
 @interface FMDatabaseQueue (Additions)

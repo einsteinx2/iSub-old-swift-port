@@ -7,35 +7,21 @@
 //
 
 #import "iSubAppDelegate.h"
-#import "DatabaseSingleton.h"
-#import "FMDatabaseAdditions.h"
 #import "ServerListViewController.h"
 #import "FoldersViewController.h"
-#import "Album.h"
-#import "Song.h"
 #import <CoreFoundation/CoreFoundation.h>
 #import <SystemConfiguration/SCNetworkReachability.h>
 #include <netinet/in.h> 
 #include <netdb.h>
 #include <arpa/inet.h>
 #import "MKStoreManager.h"
-#import "Server.h"
 #import "IntroViewController.h"
-#import "CustomUIAlertView.h"
-#import "HTTPServer.h"
-#import "MyHTTPConnection.h"
-#import "LocalhostAddresses.h"
 #import "SFHFKeychainUtils.h"
 #import "BWQuincyManager.h"
 #import "BWHockeyManager.h"
-#import "NSMutableURLRequest+SUS.h"
-#import "ISMSStreamManager.h"
 #import "ISMSUpdateChecker.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
-#import "ISMSCacheQueueManager.h"
-#import "ISMSStatusLoader.h"
-#import "SUSStatusLoader.h"
 
 @implementation iSubAppDelegate
 
@@ -479,24 +465,12 @@
 			[SFHFKeychainUtils storeUsername:kFeatureCacheId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
 			[SFHFKeychainUtils storeUsername:kFeatureAllId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
 			
-		//DLog(@"is kFeaturePlaylistsId enabled: %i", [MKStoreManager isFeaturePurchased:kFeaturePlaylistsId]);
-		//DLog(@"is kFeatureJukeboxId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureJukeboxId]);
-		//DLog(@"is kFeatureCacheId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureCacheId]);
-		//DLog(@"is kFeatureAllId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureAllId]);
+            //DLog(@"is kFeaturePlaylistsId enabled: %i", [MKStoreManager isFeaturePurchased:kFeaturePlaylistsId]);
+            //DLog(@"is kFeatureJukeboxId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureJukeboxId]);
+            //DLog(@"is kFeatureCacheId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureCacheId]);
+            //DLog(@"is kFeatureAllId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureAllId]);
 		}
 	}
-}
-
-- (void)createHTTPServer
-{
-	// Create http server
-	self.httpServer = [[HTTPServer alloc] init];
-	[self.httpServer setType:@"_http._tcp."];
-	[self.httpServer setConnectionClass:[MyHTTPConnection class]];
-	NSString *root = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES) objectAtIndexSafe:0];
-	[self.httpServer setDocumentRoot:[NSURL fileURLWithPath:root]];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(displayInfoUpdate:) name:@"LocalhostAdressesResolved" object:nil];
-	[LocalhostAddresses performSelectorInBackground:@selector(list) withObject:nil];
 }
 
 - (void)startRedirectingLogToFile
@@ -523,76 +497,6 @@
 	{
 		if (settingsS.isScreenSleepEnabled)
 			[UIApplication sharedApplication].idleTimerDisabled = NO;
-	}
-}
-
-- (void)displayInfoUpdate:(NSNotification *) notification
-{
-//DLog(@"displayInfoUpdate:");
-	
-	if(notification)
-	{
-		self.addresses = [[notification object] copy];
-	//DLog(@"addresses: %@", addresses);
-	}
-	
-	if(self.addresses == nil)
-	{
-		return;
-	}
-	
-	NSString *info;
-	UInt16 port = [self.httpServer port];
-	
-	NSString *localIP = nil;
-	
-	localIP = [self.addresses objectForKey:@"en0"];
-	
-	if (!localIP)
-	{
-		localIP = [self.addresses objectForKey:@"en1"];
-	}
-	
-	if (!localIP)
-		info = @"Wifi: No Connection!\n";
-	else
-		info = [NSString stringWithFormat:@"http://iphone.local:%d		http://%@:%d\n", port, localIP, port];
-	
-	NSString *wwwIP = [self.addresses objectForKey:@"www"];
-	
-	if (wwwIP)
-		info = [info stringByAppendingFormat:@"Web: %@:%d\n", wwwIP, port];
-	else
-		info = [info stringByAppendingString:@"Web: Unable to determine external IP\n"];
-	
-	//displayInfo.text = info;
-//DLog(@"info: %@", info);
-}
-
-
-- (void)startStopServer
-{
-	if (self.isHttpServerOn)
-	{
-		[self.httpServer stop];
-	}
-	else
-	{
-		// You may OPTIONALLY set a port for the server to run on.
-		// 
-		// If you don't set a port, the HTTP server will allow the OS to automatically pick an available port,
-		// which avoids the potential problem of port conflicts. Allowing the OS server to automatically pick
-		// an available port is probably the best way to do it if using Bonjour, since with Bonjour you can
-		// automatically discover services, and the ports they are running on.
-		//	[httpServer setPort:8080];
-		
-		NSError *error;
-		if(![self.httpServer start:&error])
-		{
-		//DLog(@"Error starting HTTP Server: %@", error);
-		}
-		
-		[self displayInfoUpdate:nil];
 	}
 }
 

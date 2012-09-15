@@ -7,8 +7,6 @@
 //
 
 #import "SavedSettings.h"
-#import "Song.h"
-#import "Server.h"
 #import "MKStoreManager.h"
 #import "PlaylistSingleton.h"
 #import "BassGaplessPlayer.h"
@@ -192,7 +190,7 @@
 				
 				for (NSArray *serverInfo in servers)
 				{
-					Server *aServer = [[Server alloc] init];
+					ISMSServer *aServer = [[ISMSServer alloc] init];
 					aServer.url = [NSString stringWithString:[serverInfo objectAtIndexSafe:0]];
 					aServer.username = [NSString stringWithString:[serverInfo objectAtIndexSafe:1]];
 					aServer.password = [NSString stringWithString:[serverInfo objectAtIndexSafe:2]];

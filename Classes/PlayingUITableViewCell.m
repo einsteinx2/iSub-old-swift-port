@@ -7,9 +7,6 @@
 //
 
 #import "PlayingUITableViewCell.h"
-#import "AsynchronousImageView.h"
-#import "Song+DAO.h"
-#import "Song.h"
 #import "CellOverlay.h"
 #import "MusicSingleton.h"
 

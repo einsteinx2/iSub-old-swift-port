@@ -11,7 +11,7 @@
 
 #define databaseS ((DatabaseSingleton *)[DatabaseSingleton sharedInstance])
 
-@class FMDatabase, FMDatabaseQueue, Artist, Album, Song, ISMSQueueAllLoader;
+@class FMDatabase, FMDatabaseQueue, ISMSArtist, ISMSAlbum, ISMSSong, ISMSQueueAllLoader;
 
 @interface DatabaseSingleton : NSObject 
 
@@ -50,22 +50,22 @@
 - (void)createServerPlaylistTable:(NSString *)md5;
 - (void)removeServerPlaylistTable:(NSString *)md5;
 
-- (Album *)albumFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabaseQueue:(FMDatabaseQueue *)dbQueue;
-- (Album *)albumFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabase:(FMDatabase *)db;
-- (BOOL)insertAlbumIntoFolderCache:(Album *)anAlbum forId:(NSString *)folderId;
-- (BOOL)insertAlbum:(Album *)anAlbum intoTable:(NSString *)table inDatabaseQueue:(FMDatabaseQueue *)dbQueue;
-- (BOOL)insertAlbum:(Album *)anAlbum intoTable:(NSString *)table inDatabase:(FMDatabase *)db;
+- (ISMSAlbum *)albumFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabaseQueue:(FMDatabaseQueue *)dbQueue;
+- (ISMSAlbum *)albumFromDbRow:(NSUInteger)row inTable:(NSString *)table inDatabase:(FMDatabase *)db;
+- (BOOL)insertAlbumIntoFolderCache:(ISMSAlbum *)anAlbum forId:(NSString *)folderId;
+- (BOOL)insertAlbum:(ISMSAlbum *)anAlbum intoTable:(NSString *)table inDatabaseQueue:(FMDatabaseQueue *)dbQueue;
+- (BOOL)insertAlbum:(ISMSAlbum *)anAlbum intoTable:(NSString *)table inDatabase:(FMDatabase *)db;
 
 - (NSUInteger)serverPlaylistCount:(NSString *)md5;
 
 - (NSArray *)sectionInfoFromTable:(NSString *)table inDatabaseQueue:(FMDatabaseQueue *)dbQueue withColumn:(NSString *)column;
 - (NSArray *)sectionInfoFromTable:(NSString *)table inDatabase:(FMDatabase *)database withColumn:(NSString *)column;
 
-//- (void)queueSong:(Song *)aSong;
-- (void)queueAllSongs:(NSString *)folderId artist:(Artist *)theArtist;
-- (void)downloadAllSongs:(NSString *)folderId artist:(Artist *)theArtist;
-- (void)playAllSongs:(NSString *)folderId artist:(Artist *)theArtist;
-- (void)shuffleAllSongs:(NSString *)folderId artist:(Artist *)theArtist;
+//- (void)queueSong:(ISMSSong *)aSong;
+- (void)queueAllSongs:(NSString *)folderId artist:(ISMSArtist *)theArtist;
+- (void)downloadAllSongs:(NSString *)folderId artist:(ISMSArtist *)theArtist;
+- (void)playAllSongs:(NSString *)folderId artist:(ISMSArtist *)theArtist;
+- (void)shuffleAllSongs:(NSString *)folderId artist:(ISMSArtist *)theArtist;
 - (void)shufflePlaylist;
 
 - (void)updateTableDefinitions;

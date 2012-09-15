@@ -6,8 +6,7 @@
 //  Copyright 2008 www.iPhoneSDKArticles.com.
 //
 
-
-@class Index, Artist, Album, Song;
+@class Index, ISMSArtist, ISMSAlbum, Song;
 
 @interface HomeXMLParser : NSObject <NSXMLParserDelegate> 
 

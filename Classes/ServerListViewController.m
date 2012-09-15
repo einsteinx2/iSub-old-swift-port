@@ -12,11 +12,9 @@
 #import "SettingsTabViewController.h"
 #import "HelpTabViewController.h"
 #import "FoldersViewController.h"
-#import "Server.h"
 #import "ServerTypeViewController.h"
 #import "UbuntuServerEditViewController.h"
 #import "PMSServerEditViewControllerViewController.h"
-#import "CustomUIAlertView.h"
 #import "SUSAllSongsLoader.h"
 #import "ISMSStreamManager.h"
 #import "iPadRootViewController.h"
@@ -352,7 +350,7 @@
 	static NSString *cellIdentifier = @"ServerListCell";
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 	
-	Server *aServer = [settingsS.serverList objectAtIndexSafe:indexPath.row];
+	ISMSServer *aServer = [settingsS.serverList objectAtIndexSafe:indexPath.row];
 	
 	// Set up the cell...
 	UILabel *serverNameLabel = [[UILabel alloc] init];
@@ -472,7 +470,7 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) 
 	{
 		// Alert user to select new default server if they deleting the default
-		if ([ settingsS.urlString isEqualToString:[(Server *)[ settingsS.serverList objectAtIndexSafe:indexPath.row] url]])
+		if ([ settingsS.urlString isEqualToString:[(ISMSServer *)[ settingsS.serverList objectAtIndexSafe:indexPath.row] url]])
 		{
 			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Make sure to select a new server" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 			alert.tag = 4;

@@ -7,7 +7,6 @@
 //
 
 #import "ISMSUpdateChecker.h"
-#import "TBXML.h"
 
 @interface ISMSUpdateChecker ()
 @property (strong) ISMSUpdateChecker *selfRef;

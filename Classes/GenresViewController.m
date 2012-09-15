@@ -10,8 +10,6 @@
 #import "GenresArtistViewController.h"
 #import "GenresGenreUITableViewCell.h"
 #import "MusicSingleton.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"

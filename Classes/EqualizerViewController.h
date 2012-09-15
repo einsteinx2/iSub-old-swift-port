@@ -9,7 +9,7 @@
 #import "NWPickerField.h"
 #import "DDSocialDialog.h"
 
-@class EqualizerView, EqualizerPointView, EqualizerPathView, BassParamEqValue, BassEffectDAO, NWPickerField, SnappySlider;//, GCDTimer;
+@class EqualizerView, EqualizerPointView, EqualizerPathView, BassParamEqValue, BassEffectDAO, NWPickerField, SnappySlider;
 @interface EqualizerViewController : UIViewController <NWPickerFieldDelegate, DDSocialDialogDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (strong) UIView *overlay;

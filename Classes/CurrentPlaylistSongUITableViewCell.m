@@ -7,10 +7,7 @@
 //
 
 #import "CurrentPlaylistSongUITableViewCell.h"
-#import "AsynchronousImageView.h"
 #import "MusicSingleton.h"
-#import "FMDatabaseAdditions.h"
-#import "Song.h"
 #import "CellOverlay.h"
 
 @implementation CurrentPlaylistSongUITableViewCell

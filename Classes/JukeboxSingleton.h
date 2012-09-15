@@ -13,12 +13,11 @@
 
 #define jukeboxS ((JukeboxSingleton *)[JukeboxSingleton sharedInstance])
 
-@class BBSimpleConnectionQueue;
 @interface JukeboxSingleton : NSObject
 
 @property BOOL jukeboxIsPlaying;
 @property float jukeboxGain;
-@property (strong) BBSimpleConnectionQueue *connectionQueue;
+@property (strong) EX2SimpleConnectionQueue *connectionQueue;
 
 + (id)sharedInstance;
 

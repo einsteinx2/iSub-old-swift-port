@@ -7,7 +7,6 @@
 //
 
 #import "CacheQueueSongUITableViewCell.h"
-#import "AsynchronousImageView.h"
 
 @implementation CacheQueueSongUITableViewCell
 

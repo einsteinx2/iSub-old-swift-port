@@ -7,7 +7,6 @@
 //
 
 
-
 @interface CustomUIAlertView : UIAlertView 
 {
 

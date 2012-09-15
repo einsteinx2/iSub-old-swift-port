@@ -6,12 +6,10 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-
 #import "ISMSLoaderDelegate.h"
 #import "NSError+ISMSError.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "NSMutableURLRequest+PMS.h"
-#import "Server.h"
 
 @interface ISMSLoader : NSObject <NSURLConnectionDelegate>
 
@@ -39,3 +37,5 @@
 - (BOOL)informDelegateLoadingFinished;
 
 @end
+
+#import "ISMSLoaders.h"

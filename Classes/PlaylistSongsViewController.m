@@ -11,16 +11,7 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "PlaylistSongUITableViewCell.h"
-#import "AsynchronousImageView.h"
-#import "Song.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
 #import "EGORefreshTableHeaderView.h"
-#import "CustomUIAlertView.h"
-#import "TBXML.h"
-#import "NSMutableURLRequest+SUS.h"
-#import "OrderedDictionary.h"
-#import "SUSServerPlaylist.h"
 
 #import "UIViewController+PushViewControllerCustom.h"
 
@@ -323,7 +314,7 @@
 					{
 						@autoreleasepool {
 							
-							Song *aSong = [[Song alloc] initWithTBXMLElement:entry];
+							ISMSSong *aSong = [[ISMSSong alloc] initWithTBXMLElement:entry];
 							[aSong insertIntoServerPlaylistWithPlaylistId:self.md5];
 							
 							// Get the next message
@@ -415,16 +406,16 @@ static NSString *kName_Error = @"error";
 	cell.indexPath = indexPath;
 	
 	// Set up the cell...
-	Song *aSong;
+	ISMSSong *aSong;
 	if (viewObjectsS.isLocalPlaylist)
 	{
-		aSong = [Song songFromDbRow:indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", self.md5] inDatabaseQueue:databaseS.localPlaylistsDbQueue];
+		aSong = [ISMSSong songFromDbRow:indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", self.md5] inDatabaseQueue:databaseS.localPlaylistsDbQueue];
 		//DLog(@"aSong: %@", aSong);
 	}
 	else
 	{
 		//aSong = [viewObjectsS.listOfPlaylistSongs objectAtIndexSafe:indexPath.row];
-		aSong = [Song songFromServerPlaylistId:self.md5 row:indexPath.row];
+		aSong = [ISMSSong songFromServerPlaylistId:self.md5 row:indexPath.row];
 	}
 	cell.mySong = aSong;
 	
@@ -475,14 +466,14 @@ static NSString *kName_Error = @"error";
 	{
 		@autoreleasepool
 		{
-			Song *aSong;
+			ISMSSong *aSong;
 			if (viewObjectsS.isLocalPlaylist)
 			{
-				aSong = [Song songFromDbRow:i inTable:[NSString stringWithFormat:@"playlist%@", self.md5] inDatabaseQueue:databaseS.localPlaylistsDbQueue];
+				aSong = [ISMSSong songFromDbRow:i inTable:[NSString stringWithFormat:@"playlist%@", self.md5] inDatabaseQueue:databaseS.localPlaylistsDbQueue];
 			}
 			else
 			{
-				aSong = [Song songFromServerPlaylistId:self.md5 row:i];
+				aSong = [ISMSSong songFromServerPlaylistId:self.md5 row:i];
 			}
 			
 			[aSong addToCurrentPlaylistDbQueue];
@@ -507,7 +498,7 @@ static NSString *kName_Error = @"error";
 
     [viewObjectsS hideLoadingScreen];
     
-    Song *playedSong = [musicS playSongAtPosition:indexPath.row];
+    ISMSSong *playedSong = [musicS playSongAtPosition:indexPath.row];
     if (!playedSong.isVideo)
         [self showPlayer];
 }

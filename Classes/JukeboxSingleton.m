@@ -8,12 +8,6 @@
 
 #import "JukeboxSingleton.h"
 #import "JukeboxConnectionDelegate.h"
-#import "NSMutableURLRequest+SUS.h"
-#import "BBSimpleConnectionQueue.h"
-#import "CustomUIAlertView.h"
-#import "FMDatabase.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
 
 @implementation JukeboxSingleton
 
@@ -371,7 +365,7 @@
 
 - (void)setup
 {
-	_connectionQueue = [[BBSimpleConnectionQueue alloc] init];
+	_connectionQueue = [[EX2SimpleConnectionQueue alloc] init];
 
 	[[NSNotificationCenter defaultCenter] addObserver:self 
 											 selector:@selector(didReceiveMemoryWarning) 

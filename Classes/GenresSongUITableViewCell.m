@@ -8,10 +8,7 @@
 
 #import "MusicSingleton.h"
 #import "GenresSongUITableViewCell.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
 #import "CellOverlay.h"
-#import "Song.h"
 
 @implementation GenresSongUITableViewCell
 
@@ -110,7 +107,7 @@
 
 - (void)downloadAction
 {
-	[[Song songFromGenreDbQueue:md5] addToCacheQueueDbQueue];	
+	[[ISMSSong songFromGenreDbQueue:md5] addToCacheQueueDbQueue];	
 		
 	self.overlayView.downloadButton.alpha = .3;
 	self.overlayView.downloadButton.enabled = NO;
@@ -121,7 +118,7 @@
 - (void)queueAction
 {
 	//DLog(@"queueAction");
-	[[Song songFromGenreDbQueue:md5] addToCurrentPlaylistDbQueue];
+	[[ISMSSong songFromGenreDbQueue:md5] addToCurrentPlaylistDbQueue];
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 	

@@ -7,7 +7,6 @@
 //
 
 #import "DebugViewController.h"
-#import "Song.h"
 
 @implementation DebugViewController
 @synthesize currentSong, nextSong, currentSongProgress, nextSongProgress;

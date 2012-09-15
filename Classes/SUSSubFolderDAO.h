@@ -9,7 +9,7 @@
 #import "ISMSLoaderDelegate.h"
 #import "ISMSLoaderManager.h"
 
-@class FMDatabase, Artist, Album, Song, ISMSSubFolderLoader;
+@class FMDatabase, ISMSArtist, ISMSAlbum, ISMSSong, ISMSSubFolderLoader;
 
 @interface SUSSubFolderDAO : NSObject <ISMSLoaderDelegate, ISMSLoaderManager>
 
@@ -22,7 +22,7 @@
 @property (strong) ISMSSubFolderLoader *loader;
 
 @property (copy) NSString *myId;
-@property (copy) Artist *myArtist;
+@property (copy) ISMSArtist *myArtist;
 
 @property (readonly) NSUInteger totalCount;
 @property (readonly) BOOL hasLoaded;
@@ -31,11 +31,11 @@
 - (NSArray *)sectionInfo;
 
 - (id)initWithDelegate:(id <ISMSLoaderDelegate>)theDelegate;
-- (id)initWithDelegate:(id<ISMSLoaderDelegate>)theDelegate andId:(NSString *)folderId andArtist:(Artist *)anArtist;
+- (id)initWithDelegate:(id<ISMSLoaderDelegate>)theDelegate andId:(NSString *)folderId andArtist:(ISMSArtist *)anArtist;
 
-- (Album *)albumForTableViewRow:(NSUInteger)row;
-- (Song *)songForTableViewRow:(NSUInteger)row;
+- (ISMSAlbum *)albumForTableViewRow:(NSUInteger)row;
+- (ISMSSong *)songForTableViewRow:(NSUInteger)row;
 
-- (Song *)playSongAtTableViewRow:(NSUInteger)row;
+- (ISMSSong *)playSongAtTableViewRow:(NSUInteger)row;
 
 @end

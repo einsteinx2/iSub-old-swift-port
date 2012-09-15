@@ -7,10 +7,7 @@
 //
 
 #import "PlaylistSingleton.h"
-#import "Song.h"
 #import "MusicSingleton.h"
-#import "FMDatabaseAdditions.h"
-#import "FMDatabaseQueueAdditions.h"
 
 
 @implementation PlaylistSingleton
@@ -31,12 +28,12 @@
 		if (settingsS.isJukeboxEnabled)
 		{
 			[db executeUpdate:@"DROP TABLE jukeboxCurrentPlaylist"];
-			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxCurrentPlaylist (%@)", [Song standardSongColumnSchema]]];	
+			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxCurrentPlaylist (%@)", [ISMSSong standardSongColumnSchema]]];	
 		}
 		else
 		{	
 			[db executeUpdate:@"DROP TABLE currentPlaylist"];
-			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE currentPlaylist (%@)", [Song standardSongColumnSchema]]];	
+			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE currentPlaylist (%@)", [ISMSSong standardSongColumnSchema]]];	
 		}
 	}];
 }
@@ -48,12 +45,12 @@
 		if (settingsS.isJukeboxEnabled)
 		{
 			[db executeUpdate:@"DROP TABLE jukeboxShufflePlaylist"];
-			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxShufflePlaylist (%@)", [Song standardSongColumnSchema]]];	
+			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxShufflePlaylist (%@)", [ISMSSong standardSongColumnSchema]]];	
 		}
 		else
 		{	
 			[db executeUpdate:@"DROP TABLE shufflePlaylist"];
-			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE shufflePlaylist (%@)", [Song standardSongColumnSchema]]];	
+			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE shufflePlaylist (%@)", [ISMSSong standardSongColumnSchema]]];	
 		}
 	}];
 }
@@ -80,7 +77,7 @@
 				[self.dbQueue inDatabase:^(FMDatabase *db)
 				{
 					[db executeUpdate:@"DROP TABLE IF EXISTS jukeboxTemp"];
-					[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxTemp(%@)", [Song standardSongColumnSchema]]];
+					[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE jukeboxTemp(%@)", [ISMSSong standardSongColumnSchema]]];
 					
 					for (NSNumber *index in [indexesMut reverseObjectEnumerator])
 					{
@@ -111,7 +108,7 @@
 					[self.dbQueue inDatabase:^(FMDatabase *db)
 					{
 						[db executeUpdate:@"DROP TABLE IF EXISTS shuffleTemp"];
-						[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE shuffleTemp(%@)", [Song standardSongColumnSchema]]];
+						[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE shuffleTemp(%@)", [ISMSSong standardSongColumnSchema]]];
 						
 						for (NSNumber *index in [indexesMut reverseObjectEnumerator])
 						{
@@ -139,7 +136,7 @@
 					[self.dbQueue inDatabase:^(FMDatabase *db)
 					{
 						[db executeUpdate:@"DROP TABLE currentTemp"];
-						[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE currentTemp(%@)", [Song standardSongColumnSchema]]];
+						[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE currentTemp(%@)", [ISMSSong standardSongColumnSchema]]];
 						
 						for (NSNumber *index in [indexesMut reverseObjectEnumerator])
 						{
@@ -200,30 +197,30 @@
 	}
 }
 
-- (Song *)songForIndex:(NSUInteger)index
+- (ISMSSong *)songForIndex:(NSUInteger)index
 {
-	Song *aSong = nil;
+	ISMSSong *aSong = nil;
 	if (settingsS.isJukeboxEnabled)
 	{
 		if (self.isShuffle)
-			aSong = [Song songFromDbRow:index inTable:@"jukeboxShufflePlaylist" inDatabaseQueue:self.dbQueue];
+			aSong = [ISMSSong songFromDbRow:index inTable:@"jukeboxShufflePlaylist" inDatabaseQueue:self.dbQueue];
 		else
-			aSong = [Song songFromDbRow:index inTable:@"jukeboxCurrentPlaylist" inDatabaseQueue:self.dbQueue];
+			aSong = [ISMSSong songFromDbRow:index inTable:@"jukeboxCurrentPlaylist" inDatabaseQueue:self.dbQueue];
 	}
 	else
 	{
 		if (self.isShuffle)
-			aSong = [Song songFromDbRow:index inTable:@"shufflePlaylist" inDatabaseQueue:self.dbQueue];
+			aSong = [ISMSSong songFromDbRow:index inTable:@"shufflePlaylist" inDatabaseQueue:self.dbQueue];
 		else
-			aSong = [Song songFromDbRow:index inTable:@"currentPlaylist" inDatabaseQueue:self.dbQueue];
+			aSong = [ISMSSong songFromDbRow:index inTable:@"currentPlaylist" inDatabaseQueue:self.dbQueue];
 	}
 	
 	return aSong;
 }
 
-- (Song *)prevSong
+- (ISMSSong *)prevSong
 {
-	Song *aSong = nil;
+	ISMSSong *aSong = nil;
 	@synchronized(self.class)
 	{
 		if (self.currentIndex - 1 >= 0)
@@ -232,21 +229,21 @@
 	return aSong;
 }
 
-- (Song *)currentDisplaySong
+- (ISMSSong *)currentDisplaySong
 {
 	// Either the current song, or the previous song if we're past the end of the playlist
-	Song *aSong = self.currentSong;
+	ISMSSong *aSong = self.currentSong;
 	if (!aSong)
 		aSong = self.prevSong;
 	return aSong;
 }
 
-- (Song *)currentSong
+- (ISMSSong *)currentSong
 {
 	return [self songForIndex:self.currentIndex];	
 }
 
-- (Song *)nextSong
+- (ISMSSong *)nextSong
 {
 	return [self songForIndex:self.nextIndex];
 }
@@ -474,7 +471,7 @@
 	}
 	else
 	{
-		Song *currentSong = self.currentSong;
+		ISMSSong *currentSong = self.currentSong;
 		
 		NSNumber *oldPlaylistPosition = [NSNumber numberWithInt:(self.currentIndex + 1)];
 		self.shuffleIndex = 0;

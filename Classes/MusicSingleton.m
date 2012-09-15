@@ -7,25 +7,13 @@
 //
 
 #import "MusicSingleton.h"
-#import "Song.h"
-#import "FMDatabaseAdditions.h"
 #import "JukeboxXMLParser.h"
 #import "JukeboxConnectionDelegate.h"
-#import "BBSimpleConnectionQueue.h"
 #import "iPhoneStreamingPlayerViewController.h"
-#import "CustomUIAlertView.h"
-#import "NSMutableURLRequest+SUS.h"
-#import "OrderedDictionary.h"
-#import "SUSLyricsLoader.h" 
-#import "ISMSStreamManager.h"
-#import "PlaylistSingleton.h"
 #import <MediaPlayer/MediaPlayer.h>
-#import "SUSCoverArtDAO.h"
-#import "ISMSCoverArtLoader.h"
-#import "ISMSStreamHandler.h"
-#import "ISMSCacheQueueManager.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
+#import "ISMSStreamHandler.h"
 
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 
@@ -46,7 +34,7 @@ double startSongSeconds = 0.0;
 	// Destroy the streamer to start a new song
 	[audioEngineS.player stop];
 	
-	Song *currentSong = playlistS.currentSong;
+	ISMSSong *currentSong = playlistS.currentSong;
 	
 	if (!currentSong)
 		return;
@@ -69,7 +57,7 @@ double startSongSeconds = 0.0;
 	// Always clear the temp cache
 	[cacheS clearTempCache];
 	
-	Song *currentSong = playlistS.currentSong;
+	ISMSSong *currentSong = playlistS.currentSong;
 	
 	if (!currentSong)
 		return;
@@ -163,10 +151,10 @@ double startSongSeconds = 0.0;
 	[self startSongAtOffsetInBytes:0 andSeconds:0.0];
 }
 
-- (Song *)playSongAtPosition:(NSInteger)position
+- (ISMSSong *)playSongAtPosition:(NSInteger)position
 {
 	playlistS.currentIndex = position;
-    Song *currentSong = playlistS.currentSong;
+    ISMSSong *currentSong = playlistS.currentSong;
  
     if (!currentSong.isVideo)
     {
@@ -229,7 +217,7 @@ double startSongSeconds = 0.0;
 // Resume song after iSub shuts down
 - (void)resumeSong
 {    
-	Song *currentSong = playlistS.currentSong;
+	ISMSSong *currentSong = playlistS.currentSong;
 		
 //DLog(@"isRecover: %@  currentSong: %@", NSStringFromBOOL(settingsS.isRecover), currentSong);
 //DLog(@"byteOffset: %llu   seekTime: %f\n   ", settingsS.byteOffset, settingsS.seekTime);
@@ -279,7 +267,7 @@ double startSongSeconds = 0.0;
 		/* we're on iOS 5, so set up the now playing center */
 		NSMutableDictionary *trackInfo = [NSMutableDictionary dictionaryWithCapacity:10];
 		
-		Song *currentSong = playlistS.currentSong;
+		ISMSSong *currentSong = playlistS.currentSong;
 		if (currentSong.title)
 			[trackInfo setObject:currentSong.title forKey:MPMediaItemPropertyTitle];
 		if (currentSong.album)
@@ -360,7 +348,7 @@ double startSongSeconds = 0.0;
     }
 }
 
-- (void)playVideo:(Song *)aSong
+- (void)playVideo:(ISMSSong *)aSong
 {
     if (!aSong.isVideo || !settingsS.isVideoSupported)
         return;
@@ -383,7 +371,7 @@ double startSongSeconds = 0.0;
     }
 }
 
-- (void)playSubsonicVideo:(Song *)aSong
+- (void)playSubsonicVideo:(ISMSSong *)aSong
 {
     [audioEngineS.player stop];
     
@@ -405,7 +393,7 @@ double startSongSeconds = 0.0;
     [self.moviePlayer play];
 }
 
-- (void)playWaveBoxVideo:(Song *)aSong
+- (void)playWaveBoxVideo:(ISMSSong *)aSong
 {
     
 }

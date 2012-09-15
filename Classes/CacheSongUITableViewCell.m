@@ -7,9 +7,7 @@
 //
 
 #import "CacheSongUITableViewCell.h"
-#import "FMDatabaseAdditions.h"
 #import "CellOverlay.h"
-#import "Song.h"
 
 @implementation CacheSongUITableViewCell
 
@@ -104,7 +102,7 @@
 
 - (void)deleteAction
 {
-	[Song removeSongFromCacheDbQueueByMD5:md5];
+	[ISMSSong removeSongFromCacheDbQueueByMD5:md5];
 	
 	[cacheS findCacheSize];
 		
@@ -119,7 +117,7 @@
 
 - (void)queueAction
 {	
-	[[Song songFromCacheDbQueue:md5] addToCurrentPlaylistDbQueue];
+	[[ISMSSong songFromCacheDbQueue:md5] addToCurrentPlaylistDbQueue];
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 

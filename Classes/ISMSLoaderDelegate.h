@@ -19,7 +19,8 @@ typedef enum
 	ISMSLoaderType_NowPlaying,
     ISMSLoaderType_Status,
     ISMSLoaderType_Login,
-    ISMSLoaderType_HLS
+    ISMSLoaderType_HLS,
+    ISMSLoaderType_QuickAlbums
 } ISMSLoaderType;
 
 @class ISMSLoader;

@@ -7,9 +7,6 @@
 //
 
 #import "ModalAlbumArtViewController.h"
-#import "AsynchronousImageView.h"
-#import "FMDatabaseAdditions.h"
-#import "Album.h"
  
 @implementation ModalAlbumArtViewController
 @synthesize albumArt, artistLabel, albumLabel, myAlbum, numberOfTracks, albumLength, durationLabel, trackCountLabel, labelHolderView, albumArtReflection;
@@ -44,7 +41,7 @@
 	}
 }
 
-- (id)initWithAlbum:(Album *)theAlbum numberOfTracks:(NSUInteger)tracks albumLength:(NSUInteger)length
+- (id)initWithAlbum:(ISMSAlbum *)theAlbum numberOfTracks:(NSUInteger)tracks albumLength:(NSUInteger)length
 {
 	if ((self = [super initWithNibName:@"ModalAlbumArtViewController" bundle:nil]))
 	{

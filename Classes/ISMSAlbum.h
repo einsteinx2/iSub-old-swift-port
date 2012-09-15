@@ -6,11 +6,9 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "TBXML.h"
+@class ISMSArtist;
 
-@class Artist;
-
-@interface Album : NSObject <NSCoding, NSCopying> 
+@interface ISMSAlbum : NSObject <NSCoding, NSCopying> 
 
 @property (copy) NSString *title;
 @property (copy) NSString *albumId;
@@ -26,6 +24,6 @@
 - (id)initWithPMSDictionary:(NSDictionary *)dictionary;
 
 - (id)initWithAttributeDict:(NSDictionary *)attributeDict;
-- (id)initWithAttributeDict:(NSDictionary *)attributeDict artist:(Artist *)myArtist;
+- (id)initWithAttributeDict:(NSDictionary *)attributeDict artist:(ISMSArtist *)myArtist;
 - (id)initWithTBXMLElement:(TBXMLElement *)element artistId:(NSString *)artistIdToSet artistName:(NSString *)artistNameToSet;
 @end

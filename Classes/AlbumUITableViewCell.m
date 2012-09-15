@@ -7,7 +7,6 @@
 //
 
 #import "AlbumUITableViewCell.h"
-#import "AsynchronousImageView.h"
 #import "CellOverlay.h"
 
 @implementation AlbumUITableViewCell

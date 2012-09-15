@@ -8,15 +8,8 @@
 
 #import "ISMSQueueAllLoader.h"
 #import "MusicSingleton.h"
-#import "Album.h"
-#import "Song.h"
-#import "FMDatabaseAdditions.h"
-#import "CustomUIAlertView.h"
-#import "NSMutableURLRequest+SUS.h"
 #import "ISMSStreamManager.h"
 #import "PlaylistSingleton.h"
-#import "SUSQueueAllLoader.h"
-#import "PMSQueueAllLoader.h"
 
 @implementation ISMSQueueAllLoader
 
@@ -96,7 +89,7 @@
 	}
 }
 
-- (void)loadData:(NSString *)folderId artist:(Artist *)theArtist //isQueue:(BOOL)queue 
+- (void)loadData:(NSString *)folderId artist:(ISMSArtist *)theArtist //isQueue:(BOOL)queue 
 {	
 	self.folderIds = [NSMutableArray arrayWithCapacity:0];
 	self.listOfSongs = [NSMutableArray arrayWithCapacity:0];
@@ -123,7 +116,7 @@
 	[self loadAlbumFolder];
 }
 
-- (void)queueData:(NSString *)folderId artist:(Artist *)theArtist
+- (void)queueData:(NSString *)folderId artist:(ISMSArtist *)theArtist
 {
 	self.isQueue = YES;
 	self.isShuffleButton = NO;
@@ -131,7 +124,7 @@
 	[self loadData:folderId artist:theArtist];
 }
 
-- (void)cacheData:(NSString *)folderId artist:(Artist *)theArtist
+- (void)cacheData:(NSString *)folderId artist:(ISMSArtist *)theArtist
 {
 	self.isQueue = NO;
 	self.isShuffleButton = NO;
@@ -139,7 +132,7 @@
 	[self loadData:folderId artist:theArtist];
 }
 
-- (void)playAllData:(NSString *)folderId artist:(Artist *)theArtist
+- (void)playAllData:(NSString *)folderId artist:(ISMSArtist *)theArtist
 {
 	self.isQueue = YES;
 	self.isShuffleButton = NO;
@@ -147,7 +140,7 @@
 	[self loadData:folderId artist:theArtist];
 }
 
-- (void)shuffleData:(NSString *)folderId artist:(Artist *)theArtist
+- (void)shuffleData:(NSString *)folderId artist:(ISMSArtist *)theArtist
 {
 	self.isQueue = YES;
 	self.isShuffleButton = YES;
@@ -210,7 +203,7 @@
 	[self process];
 	
 	// Add the songs
-	for (Song *aSong in self.listOfSongs)
+	for (ISMSSong *aSong in self.listOfSongs)
 	{
 		if (self.isQueue)
 		{

@@ -9,11 +9,8 @@
 #import "SocialSingleton.h"
 #import "SA_OAuthTwitterEngine.h"
 #import "SA_OAuthTwitterController.h"
-#import "CustomUIAlertView.h"
 #import "BassGaplessPlayer.h"
 #import "PlaylistSingleton.h"
-#import "Song.h"
-#import "NSMutableURLRequest+SUS.h"
 #import "ISMSStreamManager.h"
 
 // Twitter secret keys
@@ -54,8 +51,8 @@
 - (NSTimeInterval)scrobbleDelay
 {
 	// Scrobble in 30 seconds (or settings amount) if not canceled
-	//Song *currentSong = playlistS.currentSong;
-	Song *currentSong = audioEngineS.player.currentStream.song;
+	//ISMSSong *currentSong = playlistS.currentSong;
+	ISMSSong *currentSong = audioEngineS.player.currentStream.song;
 	NSTimeInterval scrobbleDelay = 30.0;
 	if (currentSong.duration != nil)
 	{
@@ -88,7 +85,7 @@
 	[self performSelector:@selector(tweetSong) withObject:nil afterDelay:30.0];
 
 	// Scrobble in 30 seconds (or settings amount) if not canceled
-	Song *currentSong = playlistS.currentSong;
+	ISMSSong *currentSong = playlistS.currentSong;
 	NSTimeInterval scrobbleDelay = 30.0;
 	if (currentSong.duration != nil)
 	{
@@ -110,8 +107,8 @@
 	if (!viewObjectsS.isOfflineMode)
 	{
 		// If this song wasn't just cached, then notify Subsonic of the playback
-		Song *lastCachedSong = streamManagerS.lastCachedSong;
-		Song *currentSong = playlistS.currentSong;
+		ISMSSong *lastCachedSong = streamManagerS.lastCachedSong;
+		ISMSSong *currentSong = playlistS.currentSong;
 		//DLog(@"Asked to notify Subsonic about %@ ", currentSong.title);
 		if (![lastCachedSong isEqualToSong:currentSong])
 		{
@@ -131,7 +128,7 @@
 //DLog(@"Asked to scrobble %@ as submission", playlistS.currentSong.title);
 	if (settingsS.isScrobbleEnabled && !viewObjectsS.isOfflineMode)
 	{
-		Song *currentSong = playlistS.currentSong;
+		ISMSSong *currentSong = playlistS.currentSong;
 		[self scrobbleSong:currentSong isSubmission:YES];
 	//DLog(@"Scrobbled %@ as submission", currentSong.title);
 	}
@@ -143,13 +140,13 @@
 	// If scrobbling is enabled, send "now playing" call
 	if (settingsS.isScrobbleEnabled && !viewObjectsS.isOfflineMode)
 	{
-		Song *currentSong = playlistS.currentSong;
+		ISMSSong *currentSong = playlistS.currentSong;
 		[self scrobbleSong:currentSong isSubmission:NO];
 	//DLog(@"Scrobbled %@ as playing", currentSong.title);
 	}
 }
 
-- (void)scrobbleSong:(Song*)aSong isSubmission:(BOOL)isSubmission
+- (void)scrobbleSong:(ISMSSong*)aSong isSubmission:(BOOL)isSubmission
 {
 	if (settingsS.isScrobbleEnabled && !viewObjectsS.isOfflineMode)
 	{
@@ -209,7 +206,7 @@
 
 - (void)tweetSong
 {
-	Song *currentSong = playlistS.currentSong;
+	ISMSSong *currentSong = playlistS.currentSong;
 	
 //DLog(@"Asked to tweet %@", currentSong.title);
 	
