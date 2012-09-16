@@ -8,6 +8,10 @@
 
 #import "ISMSLoader.h"
 
+@interface ISMSLoader ()
+@property (nonatomic, strong) ISMSLoader *selfRef;
+@end
+
 @implementation ISMSLoader
 
 + (id)loader
@@ -70,6 +74,8 @@
             // Create the NSMutableData to hold the received data.
             // receivedData is an instance variable declared elsewhere.
             self.receivedData = [NSMutableData data];
+            
+            self.selfRef = self;
         }
         else
         {
@@ -92,6 +98,8 @@
 	[self.connection cancel];
 	self.connection = nil;
 	self.receivedData = nil;
+    
+    self.selfRef = nil;
 }
 
 - (NSURLRequest *)createRequest
@@ -133,10 +141,12 @@
 	if ([self.delegate respondsToSelector:@selector(loadingFailed:withError:)])
 	{
 		[self.delegate loadingFailed:self withError:error];
+        self.selfRef = nil;
 		return YES;
 	}
 	
-//DLog(@"delegate (%@) did not respond to loading failed", self.delegate);
+    //DLog(@"delegate (%@) did not respond to loading failed", self.delegate);
+    self.selfRef = nil;
 	return NO;
 }
 
@@ -145,11 +155,13 @@
 	if ([self.delegate respondsToSelector:@selector(loadingFinished:)])
 	{
 		[self.delegate loadingFinished:self];
+        self.selfRef = nil;
 		return YES;
 	}
 	
 	//DLog(@"delegate (%@) did not respond to loading finished", self.delegate);
-	return NO;
+	self.selfRef = nil;
+    return NO;
 }
 
 #pragma mark Connection Delegate
@@ -213,7 +225,9 @@
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
-{			
+{
+    DLog(@"loader type: %i response:\n%@", self.type, [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
+    
 	[self processResponse];
 	
 	// Clean up the connection

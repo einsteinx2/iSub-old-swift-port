@@ -6,20 +6,18 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@interface QuickAlbumsViewController : UIViewController 
+@interface QuickAlbumsViewController : UIViewController <ISMSLoaderDelegate>
 
 @property (nonatomic, unsafe_unretained) UIViewController *parent;
 
 @property (nonatomic, strong) NSDictionary *titles;
 @property (nonatomic, strong) NSURLConnection *connection;
 @property (nonatomic, strong) NSMutableData *receivedData;
-@property (nonatomic, strong) NSString *modifier;
 @property (nonatomic, strong) IBOutlet UIButton *randomButton;
 @property (nonatomic, strong) IBOutlet UIButton *frequentButton;
 @property (nonatomic, strong) IBOutlet UIButton *newestButton;
 @property (nonatomic, strong) IBOutlet UIButton *recentButton;
 @property (nonatomic, strong) IBOutlet UIButton *cancelButton;
-
 
 - (IBAction)random;
 - (IBAction)frequent;

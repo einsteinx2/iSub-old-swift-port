@@ -9,6 +9,12 @@
 #import "SUSRootFoldersDAO.h"
 #import "ISMSRootFoldersLoader.h"
 
+@interface SUSRootFoldersDAO ()
+{
+    __strong NSNumber *_selectedFolderId;
+}
+@end
+
 @implementation SUSRootFoldersDAO
 
 #pragma mark - Lifecycle
@@ -263,18 +269,18 @@
 {
 	@synchronized(self)
 	{
-		if (self.selectedFolderId == nil)
-			return [NSNumber numberWithInt:-1];
+		if (_selectedFolderId == nil)
+			return @(-1);
 		else
-			return self.selectedFolderId;
+			return _selectedFolderId;
 	}
 }
 
-- (void)setSelectedFolderId:(NSNumber *)newSelectedFolderId
+- (void)setSelectedFolderId:(NSNumber *)selectedFolderId
 {
 	@synchronized(self)
 	{
-		self.selectedFolderId = newSelectedFolderId;
+		_selectedFolderId = selectedFolderId;
 		_indexNames = nil;
 		_indexCounts = nil;
 		_indexPositions = nil;

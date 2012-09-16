@@ -19,9 +19,6 @@
 
 @implementation QuickAlbumsViewController
 
-@synthesize parent, titles, connection, receivedData, modifier;
-@synthesize randomButton, frequentButton, newestButton, recentButton, cancelButton;
-
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
@@ -59,7 +56,7 @@
 {	
 	if ((self = [super initWithNibName:@"QuickAlbumsViewController" bundle:nil]))
     {
-		self.titles = [[NSDictionary alloc] initWithObjectsAndKeys:@"Recently Played", @"recent", @"Frequently Played", @"frequent", @"Newest Albums", @"newest", @"Random Albums", @"random", nil];
+		_titles = [[NSDictionary alloc] initWithObjectsAndKeys:@"Recently Played", @"recent", @"Frequently Played", @"frequent", @"Newest Albums", @"newest", @"Random Albums", @"random", nil];
     }
 	
 	return self;
@@ -113,10 +110,16 @@
 }
 
 - (void)albumLoad:(NSString*)theModifier
-{		
-    self.modifier = theModifier;
+{
+    [viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
+        
+    SUSQuickAlbumsLoader *loader = [[SUSQuickAlbumsLoader alloc] initWithDelegate:self];
+    loader.modifier = theModifier;
+    [loader startLoad];
     
-    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"size", n2N(self.modifier), @"type", nil];
+
+    
+    /*NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"size", n2N(self.modifier), @"type", nil];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getAlbumList" parameters:parameters];
     
     self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
@@ -133,7 +136,32 @@
 		[alert show];
         
         [viewObjectsS hideLoadingScreen];
-	}
+	}*/
+}
+
+- (void)loadingFailed:(ISMSLoader *)theLoader withError:(NSError *)error
+{
+    [viewObjectsS hideLoadingScreen];
+
+    CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error grabbing the album list.\n\nError:%@", error.localizedDescription] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alert show];
+}
+
+- (void)loadingFinished:(ISMSLoader *)theLoader
+{
+    [viewObjectsS hideLoadingScreen];
+
+    SUSQuickAlbumsLoader *loader = (SUSQuickAlbumsLoader *)theLoader;
+    
+    HomeAlbumViewController *albumViewController = [[HomeAlbumViewController alloc] initWithNibName:@"HomeAlbumViewController" bundle:nil];
+	albumViewController.title = [self.titles objectForKey:loader.modifier];
+    
+    albumViewController.listOfAlbums = [NSMutableArray arrayWithArray:loader.listOfAlbums];
+    albumViewController.modifier = loader.modifier;
+    	
+	[self.parent pushViewControllerCustom:albumViewController];
+    
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -142,72 +170,6 @@
     [super didReceiveMemoryWarning];
     
     // Release any cached data, images, etc that aren't in use.
-}
-
-#pragma mark - Connection Delegate
-
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
-{
-	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
-		return YES; // Self-signed cert will be accepted
-	
-	return NO;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{	
-	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
-	{
-		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
-	}
-	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-	[self.receivedData setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
-{
-    [self.receivedData appendData:incrementalData];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
-{
-    [viewObjectsS hideLoadingScreen];
-    
-    CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error grabbing the album list.\n\nError:%@", error.localizedDescription] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [alert show];
-    
-	self.receivedData = nil;
-	self.connection = nil;
-}	
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
-{	
-//DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
-    HomeAlbumViewController *albumViewController = [[HomeAlbumViewController alloc] initWithNibName:@"HomeAlbumViewController" bundle:nil];
-	albumViewController.title = [self.titles objectForKey:self.modifier];
-	
-    NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:self.receivedData];
-    HomeXMLParser *parser = [[HomeXMLParser alloc] initXMLParser];
-    [xmlParser setDelegate:parser];
-    [xmlParser parse];
-    
-    albumViewController.listOfAlbums = [NSMutableArray arrayWithArray:parser.listOfAlbums];
-    albumViewController.modifier = self.modifier;
-    
-    
-    self.modifier = nil;
-	
-	[self.parent pushViewControllerCustom:albumViewController];
-    
-	self.receivedData = nil;
-	self.connection = nil;
-    
-    [viewObjectsS hideLoadingScreen];
-    [self dismissModalViewControllerAnimated:YES];
 }
 
 @end

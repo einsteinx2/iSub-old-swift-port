@@ -450,7 +450,6 @@
 		53159EA3156F69D0001B0268 /* MusicSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CC1268A3BE00A4793F /* MusicSingleton.m */; };
 		53159EA4156F69D0001B0268 /* SocialSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CF1268A3D400A4793F /* SocialSingleton.m */; };
 		53159EA5156F69D0001B0268 /* DatabaseSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751D21268A43A00A4793F /* DatabaseSingleton.m */; };
-		53159EA7156F69D0001B0268 /* HomeXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F1596126F711100F524BD /* HomeXMLParser.m */; };
 		53159EA8156F69D0001B0268 /* HomeAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F166D126FA2E600F524BD /* HomeAlbumViewController.m */; };
 		53159EA9156F69D0001B0268 /* SearchXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E75E83127123B300BC1A19 /* SearchXMLParser.m */; };
 		53159EAA156F69D0001B0268 /* SearchSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B9D0B21279FAEF00CAB0E0 /* SearchSongsViewController.m */; };
@@ -839,7 +838,6 @@
 		531B6D6A147C377100BA28B9 /* SUSCoverArtDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B6D69147C377100BA28B9 /* SUSCoverArtDAO.m */; };
 		531B6D6B147C377100BA28B9 /* SUSCoverArtDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B6D69147C377100BA28B9 /* SUSCoverArtDAO.m */; };
 		531B6D6C147C377100BA28B9 /* SUSCoverArtDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B6D69147C377100BA28B9 /* SUSCoverArtDAO.m */; };
-		531F1597126F711100F524BD /* HomeXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F1596126F711100F524BD /* HomeXMLParser.m */; };
 		531F166E126FA2E600F524BD /* HomeAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F166D126FA2E600F524BD /* HomeAlbumViewController.m */; };
 		5324C6C613345D75004E6C79 /* OBSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5324C6C513345D75004E6C79 /* OBSlider.m */; };
 		5325910114EE22C700DF4BDB /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 5325910014EE22C400DF4BDB /* MBProgressHUD.m */; };
@@ -1812,7 +1810,6 @@
 		53BC27FE139AF0DD00A825F1 /* MusicSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CC1268A3BE00A4793F /* MusicSingleton.m */; };
 		53BC27FF139AF0DD00A825F1 /* SocialSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CF1268A3D400A4793F /* SocialSingleton.m */; };
 		53BC2800139AF0DD00A825F1 /* DatabaseSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751D21268A43A00A4793F /* DatabaseSingleton.m */; };
-		53BC2802139AF0DD00A825F1 /* HomeXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F1596126F711100F524BD /* HomeXMLParser.m */; };
 		53BC2803139AF0DD00A825F1 /* HomeAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F166D126FA2E600F524BD /* HomeAlbumViewController.m */; };
 		53BC2809139AF0DD00A825F1 /* SearchXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E75E83127123B300BC1A19 /* SearchXMLParser.m */; };
 		53BC280A139AF0DD00A825F1 /* SearchSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B9D0B21279FAEF00CAB0E0 /* SearchSongsViewController.m */; };
@@ -2240,7 +2237,6 @@
 		53DCF55F13BFEAD3009160F9 /* MusicSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CC1268A3BE00A4793F /* MusicSingleton.m */; };
 		53DCF56013BFEAD3009160F9 /* SocialSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751CF1268A3D400A4793F /* SocialSingleton.m */; };
 		53DCF56113BFEAD3009160F9 /* DatabaseSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C751D21268A43A00A4793F /* DatabaseSingleton.m */; };
-		53DCF56313BFEAD3009160F9 /* HomeXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F1596126F711100F524BD /* HomeXMLParser.m */; };
 		53DCF56413BFEAD3009160F9 /* HomeAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F166D126FA2E600F524BD /* HomeAlbumViewController.m */; };
 		53DCF56A13BFEAD3009160F9 /* SearchXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E75E83127123B300BC1A19 /* SearchXMLParser.m */; };
 		53DCF56B13BFEAD3009160F9 /* SearchSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B9D0B21279FAEF00CAB0E0 /* SearchSongsViewController.m */; };
@@ -2330,6 +2326,9 @@
 		53DE59A314F1A7B000206529 /* controller-forw30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DE599314F1A7B000206529 /* controller-forw30@2x.png */; };
 		53DE59A414F1A7B000206529 /* controller-forw30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DE599314F1A7B000206529 /* controller-forw30@2x.png */; };
 		53DE59A514F1A7B000206529 /* controller-forw30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DE599314F1A7B000206529 /* controller-forw30@2x.png */; };
+		53DF253D16055B3F009051DA /* ISMSOldDataModelDecoders.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DF253C16055B3F009051DA /* ISMSOldDataModelDecoders.m */; };
+		53DF253E16055B3F009051DA /* ISMSOldDataModelDecoders.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DF253C16055B3F009051DA /* ISMSOldDataModelDecoders.m */; };
+		53DF253F16055B3F009051DA /* ISMSOldDataModelDecoders.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DF253C16055B3F009051DA /* ISMSOldDataModelDecoders.m */; };
 		53DF310711D3EE26007552A4 /* GenresGenreUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DF310611D3EE26007552A4 /* GenresGenreUITableViewCell.m */; };
 		53DFB307148C27080066FF94 /* downArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DFB300148C27080066FF94 /* downArrow.png */; };
 		53DFB308148C27080066FF94 /* downArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DFB300148C27080066FF94 /* downArrow.png */; };
@@ -2684,8 +2683,6 @@
 		53191DEF1167CFDC00E1C08A /* current-server.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "current-server.png"; path = "Images/Other/current-server.png"; sourceTree = "<group>"; };
 		531B6D68147C377100BA28B9 /* SUSCoverArtDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSCoverArtDAO.h; sourceTree = "<group>"; };
 		531B6D69147C377100BA28B9 /* SUSCoverArtDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSCoverArtDAO.m; sourceTree = "<group>"; };
-		531F1595126F711100F524BD /* HomeXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeXMLParser.h; sourceTree = "<group>"; };
-		531F1596126F711100F524BD /* HomeXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeXMLParser.m; sourceTree = "<group>"; };
 		531F166C126FA2E600F524BD /* HomeAlbumViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeAlbumViewController.h; sourceTree = "<group>"; };
 		531F166D126FA2E600F524BD /* HomeAlbumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeAlbumViewController.m; sourceTree = "<group>"; };
 		5324C6C413345D75004E6C79 /* OBSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBSlider.h; sourceTree = "<group>"; };
@@ -3361,6 +3358,8 @@
 		53DE599114F1A7B000206529 /* controller-extras-on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-extras-on@2x.png"; path = "Images/Player Icons/controller-extras-on@2x.png"; sourceTree = "<group>"; };
 		53DE599214F1A7B000206529 /* controller-forw30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-forw30.png"; path = "Images/Player Icons/controller-forw30.png"; sourceTree = "<group>"; };
 		53DE599314F1A7B000206529 /* controller-forw30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-forw30@2x.png"; path = "Images/Player Icons/controller-forw30@2x.png"; sourceTree = "<group>"; };
+		53DF253B16055B3F009051DA /* ISMSOldDataModelDecoders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSOldDataModelDecoders.h; sourceTree = "<group>"; };
+		53DF253C16055B3F009051DA /* ISMSOldDataModelDecoders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSOldDataModelDecoders.m; sourceTree = "<group>"; };
 		53DF310511D3EE26007552A4 /* GenresGenreUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenresGenreUITableViewCell.h; sourceTree = "<group>"; };
 		53DF310611D3EE26007552A4 /* GenresGenreUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenresGenreUITableViewCell.m; sourceTree = "<group>"; };
 		53DFB300148C27080066FF94 /* downArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = downArrow.png; sourceTree = "<group>"; };
@@ -4119,8 +4118,6 @@
 			children = (
 				53BA48661284C2340010B380 /* JukeboxXMLParser.h */,
 				53BA48671284C2340010B380 /* JukeboxXMLParser.m */,
-				531F1595126F711100F524BD /* HomeXMLParser.h */,
-				531F1596126F711100F524BD /* HomeXMLParser.m */,
 				53E75E82127123B300BC1A19 /* SearchXMLParser.h */,
 				53E75E83127123B300BC1A19 /* SearchXMLParser.m */,
 			);
@@ -4148,6 +4145,8 @@
 				5379DC561219EEEB00F426CD /* ISMSChatMessage.m */,
 				53EC1804146760E000601C2D /* SUSServerPlaylist.h */,
 				53EC1805146760E000601C2D /* SUSServerPlaylist.m */,
+				53DF253B16055B3F009051DA /* ISMSOldDataModelDecoders.h */,
+				53DF253C16055B3F009051DA /* ISMSOldDataModelDecoders.m */,
 			);
 			name = "Data Model Objects";
 			sourceTree = "<group>";
@@ -7123,7 +7122,6 @@
 				53C751CD1268A3BE00A4793F /* MusicSingleton.m in Sources */,
 				53C751D01268A3D400A4793F /* SocialSingleton.m in Sources */,
 				53C751D31268A43A00A4793F /* DatabaseSingleton.m in Sources */,
-				531F1597126F711100F524BD /* HomeXMLParser.m in Sources */,
 				531F166E126FA2E600F524BD /* HomeAlbumViewController.m in Sources */,
 				53E75E84127123B300BC1A19 /* SearchXMLParser.m in Sources */,
 				53B9D0B41279FAEF00CAB0E0 /* SearchSongsViewController.m in Sources */,
@@ -7346,6 +7344,7 @@
 				53F1426515FD5D7A004D00D5 /* RNCryptor.m in Sources */,
 				53ACBC88160500FD0008FA47 /* NSMutableDictionary+Safe.m in Sources */,
 				533F6519160531E9000098E1 /* SUSQuickAlbumsLoader.m in Sources */,
+				53DF253D16055B3F009051DA /* ISMSOldDataModelDecoders.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7414,7 +7413,6 @@
 				53159EA3156F69D0001B0268 /* MusicSingleton.m in Sources */,
 				53159EA4156F69D0001B0268 /* SocialSingleton.m in Sources */,
 				53159EA5156F69D0001B0268 /* DatabaseSingleton.m in Sources */,
-				53159EA7156F69D0001B0268 /* HomeXMLParser.m in Sources */,
 				53159EA8156F69D0001B0268 /* HomeAlbumViewController.m in Sources */,
 				53159EA9156F69D0001B0268 /* SearchXMLParser.m in Sources */,
 				53159EAA156F69D0001B0268 /* SearchSongsViewController.m in Sources */,
@@ -7588,7 +7586,6 @@
 				53BC27FE139AF0DD00A825F1 /* MusicSingleton.m in Sources */,
 				53BC27FF139AF0DD00A825F1 /* SocialSingleton.m in Sources */,
 				53BC2800139AF0DD00A825F1 /* DatabaseSingleton.m in Sources */,
-				53BC2802139AF0DD00A825F1 /* HomeXMLParser.m in Sources */,
 				53BC2803139AF0DD00A825F1 /* HomeAlbumViewController.m in Sources */,
 				53BC2809139AF0DD00A825F1 /* SearchXMLParser.m in Sources */,
 				53BC280A139AF0DD00A825F1 /* SearchSongsViewController.m in Sources */,
@@ -7811,6 +7808,7 @@
 				53F1426715FD5D7A004D00D5 /* RNCryptor.m in Sources */,
 				53ACBC8A160500FD0008FA47 /* NSMutableDictionary+Safe.m in Sources */,
 				533F651B160531E9000098E1 /* SUSQuickAlbumsLoader.m in Sources */,
+				53DF253F16055B3F009051DA /* ISMSOldDataModelDecoders.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7879,7 +7877,6 @@
 				53DCF55F13BFEAD3009160F9 /* MusicSingleton.m in Sources */,
 				53DCF56013BFEAD3009160F9 /* SocialSingleton.m in Sources */,
 				53DCF56113BFEAD3009160F9 /* DatabaseSingleton.m in Sources */,
-				53DCF56313BFEAD3009160F9 /* HomeXMLParser.m in Sources */,
 				53DCF56413BFEAD3009160F9 /* HomeAlbumViewController.m in Sources */,
 				53DCF56A13BFEAD3009160F9 /* SearchXMLParser.m in Sources */,
 				53DCF56B13BFEAD3009160F9 /* SearchSongsViewController.m in Sources */,
@@ -8102,6 +8099,7 @@
 				53F1426615FD5D7A004D00D5 /* RNCryptor.m in Sources */,
 				53ACBC89160500FD0008FA47 /* NSMutableDictionary+Safe.m in Sources */,
 				533F651A160531E9000098E1 /* SUSQuickAlbumsLoader.m in Sources */,
+				53DF253E16055B3F009051DA /* ISMSOldDataModelDecoders.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
