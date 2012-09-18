@@ -45,6 +45,8 @@
 
 @property (strong) BassEqualizer *equalizer;
 @property (strong) BassVisualizer *visualizer;
+
+@property NSUInteger currentPlaylistIndex;
         
 - (id)initWithDelegate:(id<BassGaplessPlayerDelegate>)theDelegate;
 
@@ -52,7 +54,7 @@
 //
 - (DWORD)bassGetOutputData:(void *)buffer length:(DWORD)length;
 - (void)startWithOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds;
-- (void)prepareNextSongStream;
+//- (void)prepareNextSongStream;
 
 // Playback methods
 //
@@ -64,5 +66,9 @@
 - (void)seekToPositionInSeconds:(double)seconds;
 
 - (void)bassInit;
+
+- (BassStream *)prepareStreamForSong:(Song *)aSong;
+
+//- (void)prepareNextSongStream:(Song *)nextSong;
 
 @end

@@ -7,42 +7,62 @@
 //
 
 #import "iSubBassGaplessPlayerDelegate.h"
+#import "BassGaplessPlayer.h"
 
 @implementation iSubBassGaplessPlayerDelegate
 
-- (void)bassSeekToPositionStarted
+- (void)bassSeekToPositionStarted:(BassGaplessPlayer*)player
 {
     
 }
 
-- (void)bassSeekToPositionSuccess
+- (void)bassSeekToPositionSuccess:(BassGaplessPlayer*)player
 {
     
 }
 
-- (void)bassStopped
+- (void)bassStopped:(BassGaplessPlayer*)player
 {
     
 }
 
-- (void)bassFirstStreamStarted
+- (void)bassFirstStreamStarted:(BassGaplessPlayer*)player
 {
     
 }
 
-- (void)bassSongEndedCalled
+- (void)bassSongEndedCalled:(BassGaplessPlayer*)player
 {
-    
+    // Increment current playlist index
+    [playlistS incrementIndex];
 }
 
+<<<<<<< Updated upstream
 - (void)bassSongEndedPlaylistIncremented:(ISMSSong *)endedSong
+=======
+- (void)bassFreed:(BassGaplessPlayer *)player
+>>>>>>> Stashed changes
 {
-    
+    //[socialS playerHandleSocial];
+    //[socialS playerClearSocial];
 }
 
-- (void)bassSongEndedFinishedIsPlaying
+- (NSUInteger)bassNextIndex:(BassGaplessPlayer*)player
 {
-    
+    return [playlistS indexForOffset:1 fromIndex:player.currentPlaylistIndex];
+}
+
+- (Song *)bassSongForIndex:(NSUInteger)index player:(BassGaplessPlayer *)player
+{
+    return [playlistS songForIndex:index];
+}
+
+- (void)bassRetrySongPlay:(BassGaplessPlayer *)player
+{
+    [EX2Dispatch runInMainThread:^
+     {
+         [musicS playSongAtPosition:playlistS.currentIndex];
+     }];
 }
 
 @end

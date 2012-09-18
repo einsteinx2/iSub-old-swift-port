@@ -32,7 +32,7 @@ typedef enum
 - (NSInteger)decrementIndex;
 - (NSInteger)incrementIndex;
 
-
+- (NSUInteger)indexForOffset:(NSUInteger)offset fromIndex:(NSUInteger)index;
 - (NSUInteger)indexForOffsetFromCurrentIndex:(NSUInteger)offset;
 
 // Convenience properties

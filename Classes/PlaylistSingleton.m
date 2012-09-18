@@ -358,14 +358,13 @@
 	}
 }
 
-- (NSUInteger)indexForOffsetFromCurrentIndex:(NSUInteger)offset
+- (NSUInteger)indexForOffset:(NSUInteger)offset fromIndex:(NSUInteger)index
 {
 	@synchronized(self.class)
 	{
-		NSUInteger index = self.currentIndex;
-		switch (self.repeatMode) 
+		switch (self.repeatMode)
 		{
-			case ISMSRepeatMode_RepeatAll:	
+			case ISMSRepeatMode_RepeatAll:
 				for (int i = 0; i < offset; i++)
 				{
 					index = [self songForIndex:index + 1] ? index + 1 : 0;
@@ -386,6 +385,11 @@
 		
 		return index;
 	}
+}
+
+- (NSUInteger)indexForOffsetFromCurrentIndex:(NSUInteger)offset
+{
+	return [self indexForOffset:offset fromIndex:self.currentIndex];
 }
 
 // TODO: cache this into a variable and change only when needed

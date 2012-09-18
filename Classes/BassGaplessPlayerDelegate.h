@@ -6,16 +6,20 @@
 //  Copyright (c) 2012 Ben Baron. All rights reserved.
 //
 
-@class Song;
+@class Song, BassGaplessPlayer;
 @protocol BassGaplessPlayerDelegate <NSObject>
 
 @optional
-- (void)bassSeekToPositionStarted;
-- (void)bassSeekToPositionSuccess;
-- (void)bassStopped;
-- (void)bassFirstStreamStarted;
-- (void)bassSongEndedCalled;
-- (void)bassSongEndedPlaylistIncremented:(ISMSSong *)endedSong;
-- (void)bassSongEndedFinishedIsPlaying;
+- (void)bassSeekToPositionStarted:(BassGaplessPlayer*)player;
+- (void)bassSeekToPositionSuccess:(BassGaplessPlayer*)player;
+- (void)bassStopped:(BassGaplessPlayer*)player;
+- (void)bassFirstStreamStarted:(BassGaplessPlayer*)player;
+- (void)bassSongEndedCalled:(BassGaplessPlayer*)player;
+- (void)bassFreed:(BassGaplessPlayer *)player;
+
+@required
+- (Song *)bassSongForIndex:(NSUInteger)index player:(BassGaplessPlayer *)player;
+- (NSUInteger)bassNextIndex:(BassGaplessPlayer*)player;
+- (void)bassRetrySongPlay:(BassGaplessPlayer*)player;
 
 @end
