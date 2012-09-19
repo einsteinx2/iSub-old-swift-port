@@ -1465,11 +1465,11 @@
 	
 	_redirectUrlString = nil;
 	
-//DLog(@"urlString: %@", urlString);
+    //DLog(@"urlString: %@", urlString);
 	
 	[self createInitialSettings];
 	
-//DLog(@"urlString: %@", urlString);
+    //DLog(@"urlString: %@", urlString);
     
 	// If the settings are not set up, convert them
 	if ([_userDefaults boolForKey:@"areSettingsSetup"])

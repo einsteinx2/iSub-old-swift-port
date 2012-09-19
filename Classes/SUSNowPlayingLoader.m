@@ -24,8 +24,8 @@
 	return [NSMutableURLRequest requestWithSUSAction:@"getNowPlaying" parameters:nil];
 }
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
-{	            
+- (void)processResponse
+{
     // Parse the data
 	//
 	NSError *error;

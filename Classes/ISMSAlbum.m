@@ -26,6 +26,20 @@
 	return self;
 }
 
+- (id)initWithTBXMLElement:(TBXMLElement *)element
+{
+	if ((self = [super init]))
+	{
+		_title = [[TBXML valueOfAttributeNamed:@"title" forElement:element] cleanString];
+		_albumId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
+		_coverArtId = [TBXML valueOfAttributeNamed:@"coverArt" forElement:element];
+		_artistId = [TBXML valueOfAttributeNamed:@"parent" forElement:element];
+		_artistName = [[TBXML valueOfAttributeNamed:@"artist" forElement:element] cleanString];
+	}
+	
+	return self;
+}
+
 - (id)initWithTBXMLElement:(TBXMLElement *)element artistId:(NSString *)artistIdToSet artistName:(NSString *)artistNameToSet
 {
 	if ((self = [super init]))

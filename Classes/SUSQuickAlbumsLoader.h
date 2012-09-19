@@ -10,4 +10,7 @@
 
 @interface SUSQuickAlbumsLoader : ISMSLoader
 
+@property (strong) NSMutableArray *listOfAlbums;
+@property (strong) NSString *modifier;
+
 @end

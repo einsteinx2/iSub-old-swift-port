@@ -21,10 +21,11 @@
 
 - (NSURLRequest *)createRequest
 {
-	return [NSMutableURLRequest requestWithSUSAction:@"getNowPlaying" parameters:nil];
+	NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"size", n2N(self.modifier), @"type", nil];
+    return [NSMutableURLRequest requestWithSUSAction:@"getAlbumList" parameters:parameters];
 }
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection
+- (void)processResponse
 {
     // Parse the data
 	//
@@ -47,44 +48,44 @@
 		}
 		else
 		{
-			/*TBXMLElement *nowPlaying = [TBXML childElementNamed:@"nowPlaying" parentElement:root];
-			if (nowPlaying)
+            TBXMLElement *albumList = [TBXML childElementNamed:@"albumList" parentElement:root];
+			if (albumList)
 			{
-				// Loop through the songs
-				TBXMLElement *entry = [TBXML childElementNamed:@"entry" parentElement:nowPlaying];
-				while (entry != nil)
+                self.listOfAlbums = [NSMutableArray arrayWithCapacity:0];
+                
+                // Loop through the songs
+				TBXMLElement *album = [TBXML childElementNamed:@"album" parentElement:albumList];
+				while (album != nil)
 				{
 					@autoreleasepool
 					{
-						NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:0];
-						
-						[dict setObjectSafe:[[ISMSSong alloc] initWithTBXMLElement:entry] forKey:@"song"];
-						[dict setObjectSafe:[TBXML valueOfAttributeNamed:@"username" forElement:entry] forKey:@"username"];
-						[dict setObjectSafe:[TBXML valueOfAttributeNamed:@"minutesAgo" forElement:entry] forKey:@"minutesAgo"];
-						[dict setObjectSafe:[TBXML valueOfAttributeNamed:@"playerId" forElement:entry] forKey:@"playerId"];
-						[dict setObjectSafe:[TBXML valueOfAttributeNamed:@"playerName" forElement:entry] forKey:@"playerName"];
-						
-						[self.nowPlayingSongDicts addObject:dict];
-						
+						ISMSAlbum *anAlbum = [[ISMSAlbum alloc] initWithTBXMLElement:album];
+                        
+                        //Add album object to lookup dictionary and list array
+                        if (![anAlbum.title isEqualToString:@".AppleDouble"])
+                        {
+                            [self.listOfAlbums addObject:anAlbum];
+                        }
+                        
 						// Get the next message
-						entry = [TBXML nextSiblingNamed:@"entry" searchFromElement:entry];
+						album = [TBXML nextSiblingNamed:@"album" searchFromElement:album];
 					}
 				}
+                
+                // Notify the delegate that the loading is finished
+                [self informDelegateLoadingFinished];
 			}
 			else
 			{
 				// TODO create error
 				//NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NoLyricsElement];
 				[self informDelegateLoadingFailed:nil];
-			}*/
+            }
 		}
 	}
 	
 	self.receivedData = nil;
 	self.connection = nil;
-	
-	// Notify the delegate that the loading is finished
-	[self informDelegateLoadingFinished];
 }
 
 @end
