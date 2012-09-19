@@ -58,6 +58,7 @@ double startSongSeconds = 0.0;
 	[cacheS clearTempCache];
 	
 	ISMSSong *currentSong = playlistS.currentSong;
+    NSUInteger currentIndex = playlistS.currentIndex;
 	
 	if (!currentSong)
 		return;
@@ -66,8 +67,7 @@ double startSongSeconds = 0.0;
 	if (currentSong.isFullyCached)
 	{
 		// The song is fully cached, start streaming from the local copy
-		[audioEngineS startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] 
-							orSeconds:[NSNumber numberWithDouble:startSongSeconds]];
+        [audioEngineS startSong:currentSong atIndex:currentIndex withOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] orSeconds:[NSNumber numberWithDouble:startSongSeconds]];
 		
 		// Fill the stream queue
 		if (!viewObjectsS.isOfflineMode)
@@ -101,8 +101,7 @@ double startSongSeconds = 0.0;
 			if (!audioEngineS.player.isPlaying && handler.isDelegateNotifiedToStartPlayback)
 			{
 				// Only start the player if the handler isn't going to do it itself
-				[audioEngineS startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] 
-									orSeconds:[NSNumber numberWithDouble:startSongSeconds]];
+                [audioEngineS startSong:currentSong atIndex:currentIndex withOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] orSeconds:[NSNumber numberWithDouble:startSongSeconds]];
 			}
 		}
 		else if ([streamManagerS isSongFirstInQueue:currentSong] && ![streamManagerS isQueueDownloading])
@@ -116,8 +115,7 @@ double startSongSeconds = 0.0;
 			if (!audioEngineS.player.isPlaying && handler.isDelegateNotifiedToStartPlayback)
 			{
 				// Only start the player if the handler isn't going to do it itself
-				[audioEngineS startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] 
-									orSeconds:[NSNumber numberWithDouble:startSongSeconds]];
+                [audioEngineS startSong:currentSong atIndex:currentIndex withOffsetInBytes:[NSNumber numberWithUnsignedLongLong:startSongBytes] orSeconds:[NSNumber numberWithDouble:startSongSeconds]];
 			}
 		}
 		else
@@ -378,7 +376,7 @@ double startSongSeconds = 0.0;
     if (!aSong.itemId)
         return;
     
-    NSDictionary *parameters = @{ @"id" : aSong.itemId, @"bitRate" : @[@"60", @"512"] };
+    NSDictionary *parameters = @{ @"id" : aSong.itemId, @"bitRate" : @[@"1024",@"60"] };
     NSURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"hls" parameters:parameters];
     
     NSString *urlString = [NSString stringWithFormat:@"%@?%@", request.URL.absoluteString, [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]];

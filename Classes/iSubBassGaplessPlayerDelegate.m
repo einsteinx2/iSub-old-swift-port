@@ -43,22 +43,32 @@
     //[socialS playerClearSocial];
 }
 
-- (NSUInteger)bassNextIndex:(BassGaplessPlayer*)player
+- (NSUInteger)bassIndexAtOffset:(NSInteger)offset fromIndex:(NSUInteger)index player:(BassGaplessPlayer *)player
 {
-    return [playlistS indexForOffset:1 fromIndex:player.currentPlaylistIndex];
+    return [playlistS indexForOffset:offset fromIndex:index];
 }
 
-- (Song *)bassSongForIndex:(NSUInteger)index player:(BassGaplessPlayer *)player
+- (ISMSSong *)bassSongForIndex:(NSUInteger)index player:(BassGaplessPlayer *)player
 {
     return [playlistS songForIndex:index];
 }
 
-- (void)bassRetrySongPlay:(BassGaplessPlayer *)player
+- (void)bassRetrySongAtIndex:(NSUInteger)index player:(BassGaplessPlayer*)player;
 {
     [EX2Dispatch runInMainThread:^
      {
-         [musicS playSongAtPosition:playlistS.currentIndex];
+         [musicS playSongAtPosition:index];
      }];
+}
+
+- (void)bassUpdateLockScreenInfo:(BassGaplessPlayer *)player
+{
+	[musicS updateLockScreenInfo];
+}
+
+- (void)bassRetrySongAtOffsetInBytes:(NSUInteger)bytes andSeconds:(NSUInteger)seconds player:(BassGaplessPlayer*)player
+{
+    [musicS startSongAtOffsetInBytes:bytes andSeconds:seconds];
 }
 
 @end

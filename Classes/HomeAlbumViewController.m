@@ -16,9 +16,6 @@
 #import "UIViewController+PushViewControllerCustom.h"
 
 @implementation HomeAlbumViewController
-@synthesize listOfAlbums;
-@synthesize offset, isMoreAlbums, modifier;
-@synthesize receivedData, connection, isLoading;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
@@ -34,10 +31,7 @@
 	
     if (self != nil)
     {
-
-		offset = 0;
-		isMoreAlbums = YES;
-		isLoading = NO;
+		_isMoreAlbums = YES;
     }
 	
     return self;
@@ -96,85 +90,25 @@
 	
 	self.isLoading = YES;
 	self.offset += 20;
-	
-	NSString *offsetString = [NSString stringWithFormat:@"%i", offset];
-    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"size", n2N(modifier), @"type", n2N(offsetString), @"offset", nil];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getAlbumList" parameters:parameters];
-	
-    self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
-	if (self.connection)
-	{
-		self.receivedData = [NSMutableData data];
-		
-		//[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
-	} 
-	else 
-	{
-		// Inform the user that the connection failed.
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error doing the search.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert show];
-	}
-}
-
-- (void)cancelLoad
-{
-	[self.connection cancel];
-	self.connection = nil;
-	self.receivedData = nil;
-	self.isLoading = NO;
-	//[viewObjectsS hideLoadingScreen];
-}
-
-#pragma mark - Connection Delegate
-
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
-{
-	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
-		return YES; // Self-signed cert will be accepted
-	
-	return NO;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{	
-	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
-	{
-		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
-	}
-	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-	[self.receivedData setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
-{
-    [self.receivedData appendData:incrementalData];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
-{
-	self.receivedData = nil;
-	self.connection = nil;
-	
-	self.isLoading = NO;
-	
-	//[viewObjectsS hideLoadingScreen];
     
+    self.loader = [[SUSQuickAlbumsLoader alloc] initWithDelegate:self];
+    self.loader.modifier = self.modifier;
+    self.loader.offset = self.offset;
+    [self.loader startLoad];
+}
+
+- (void)loadingFailed:(ISMSLoader *)theLoader withError:(NSError *)error
+{
+    self.loader = nil;
+	self.isLoading = NO;
+	    
     CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"There was an error doing the search.\n\nError:%@", error.localizedDescription] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alert show];
 }	
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
-{	
-    NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:self.receivedData];
-    HomeXMLParser *parser = [[HomeXMLParser alloc] initXMLParser];
-    [xmlParser setDelegate:parser];
-    [xmlParser parse];
-    
-    if ([parser.listOfAlbums count] == 0)
+- (void)loadingFinished:(ISMSLoader *)theLoader
+{
+    if (self.loader.listOfAlbums.count == 0)
     {
         // There are no more songs
 		self.isMoreAlbums = NO;
@@ -182,18 +116,14 @@
     else 
     {
         // Add the new results to the list of songs
-        [listOfAlbums addObjectsFromArray:parser.listOfAlbums];
+        [self.listOfAlbums addObjectsFromArray:self.loader.listOfAlbums];
     }
-    
     
     // Reload the table
     [self.tableView reloadData];
     self.isLoading = NO;
     
-	self.receivedData = nil;
-	self.connection = nil;
-	
-	//[viewObjectsS hideLoadingScreen];
+	self.loader = nil;
 }
 
 #pragma mark Table view methods
@@ -218,7 +148,7 @@
 		}
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		
-		ISMSAlbum *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
+		ISMSAlbum *anAlbum = [self.listOfAlbums objectAtIndexSafe:indexPath.row];
 		cell.myId = anAlbum.albumId;
 		cell.myArtist = [ISMSArtist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
 		
@@ -276,7 +206,7 @@
 	
 	if (viewObjectsS.isCellEnabled && indexPath.row != self.listOfAlbums.count)
 	{
-		ISMSAlbum *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
+		ISMSAlbum *anAlbum = [self.listOfAlbums objectAtIndexSafe:indexPath.row];
 		AlbumViewController *albumViewController = [[AlbumViewController alloc] initWithArtist:nil orAlbum:anAlbum];
 		[self pushViewControllerCustom:albumViewController];
 		//[self.navigationController pushViewController:albumViewController animated:YES];

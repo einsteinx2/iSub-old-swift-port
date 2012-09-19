@@ -40,9 +40,7 @@
 
 // BASS methods
 //
-- (void)startWithOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds;
-- (void)start;
-
+- (void)startSong:(ISMSSong *)aSong atIndex:(NSUInteger)index withOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds;
 - (void)startEmptyPlayer;
 
 @end

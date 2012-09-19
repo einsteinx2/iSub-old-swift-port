@@ -7,6 +7,7 @@
 //
 
 #import "ISMSCFNetworkStreamHandler.h"
+#import "BassGaplessPlayer.h"
 
 @interface ISMSCFNetworkStreamHandler ()
 {
@@ -15,6 +16,7 @@
 	CFReadStreamRef _readStreamRef;
 	NSTimeInterval _lastThrottle;
 }
+@property (nonatomic) BOOL isPrecacheSleeping;
 @property (strong) ISMSCFNetworkStreamHandler *selfRef;
 - (void)readStreamClientCallBack:(CFReadStreamRef)stream type:(CFStreamEventType)type;
 @end
@@ -224,9 +226,6 @@ Bail:
 	self.isDownloading = NO;
 	self.isCanceled = YES;
 	
-	// Pop out of infinite loop if partially pre-cached
-	self.partialPrecacheSleep = NO;
-	
 	// Close the file handle
 	[self.fileHandle closeFile];
 	self.fileHandle = nil;
@@ -388,6 +387,33 @@ static void ReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType t
 					// Continue after the delay
 					[self performSelector:@selector(continueDownload) withObject:nil afterDelay:delay];
 				}
+                
+                // Handle partial pre-cache next song
+                if (!self.isCurrentSong && !self.isTempCache && settingsS.isPartialCacheNextSong && self.partialPrecacheSleep)
+                {
+                    NSUInteger partialPrecacheSize = ISMSNumBytesToPartialPreCache(self.mySong.estimatedBitrate);
+                    if (self.totalBytesTransferred >= partialPrecacheSize)
+                    {
+                        // First verify that the stream can be opened
+                        if (audioEngineS.player)
+                        {
+                            if ([audioEngineS.player prepareStreamForSong:self.mySong])
+                            {
+                                // The stream worked, so go ahead and pause the download
+                                self.isPrecacheSleeping = YES;
+                                CFReadStreamUnscheduleFromRunLoop(stream, CFRunLoopGetMain(), kCFRunLoopCommonModes);
+                                if ([self.delegate respondsToSelector:@selector(ISMSStreamHandlerPartialPrecachePaused:)])
+                                {
+                                    [self.delegate ISMSStreamHandlerPartialPrecachePaused:self];
+                                }
+                            }
+                            else
+                            {
+                                self.secondsToPartialPrecache += 10;
+                            }
+                        }
+                    }
+                }
 			}
 			else
 			{
@@ -478,6 +504,21 @@ static void ReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType t
 	}
     
     self.selfRef = nil;
+}
+
+- (void)setPartialPrecacheSleep:(BOOL)partialPrecacheSleep
+{
+    [super setPartialPrecacheSleep:partialPrecacheSleep];
+    if (!partialPrecacheSleep && self.isPartialPrecacheSleeping)
+    {
+        self.isPartialPrecacheSleeping = NO;
+        [self continueDownload];
+        
+        if ([self.delegate respondsToSelector:@selector(ISMSStreamHandlerPartialPrecacheUnpaused:)])
+        {
+            [self.delegate ISMSStreamHandlerPartialPrecacheUnpaused:self];
+        }
+    }
 }
 
 @end

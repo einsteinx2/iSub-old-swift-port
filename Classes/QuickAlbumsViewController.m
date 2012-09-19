@@ -8,7 +8,6 @@
 
 #import "QuickAlbumsViewController.h"
 #import "HomeAlbumViewController.h"
-#import "HomeXMLParser.h"
 #import "iPadRootViewController.h"
 #import "StackScrollViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
@@ -110,34 +109,12 @@
 }
 
 - (void)albumLoad:(NSString*)theModifier
-<<<<<<< HEAD
 {
     [viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
         
     SUSQuickAlbumsLoader *loader = [[SUSQuickAlbumsLoader alloc] initWithDelegate:self];
     loader.modifier = theModifier;
     [loader startLoad];
-    
-
-    
-    /*NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"size", n2N(self.modifier), @"type", nil];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getAlbumList" parameters:parameters];
-    
-    self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
-	if (self.connection)
-	{
-		self.receivedData = [NSMutableData dataWithCapacity:0];
-		
-		[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
-	} 
-	else 
-	{
-		// Inform the user that the connection failed.
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error loading the albums.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert show];
-        
-        [viewObjectsS hideLoadingScreen];
-	}*/
 }
 
 - (void)loadingFailed:(ISMSLoader *)theLoader withError:(NSError *)error

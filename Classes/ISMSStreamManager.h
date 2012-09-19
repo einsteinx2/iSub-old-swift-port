@@ -67,8 +67,6 @@
 - (void)saveHandlerStack;
 - (void)loadHandlerStack;
 
-- (void)downloadMoreOfPrecacheStream;
-
 - (void)stealHandlerForCacheQueue:(ISMSStreamHandler *)handler;
 
 @end

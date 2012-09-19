@@ -53,12 +53,12 @@
 // BASS methods
 //
 - (DWORD)bassGetOutputData:(void *)buffer length:(DWORD)length;
-- (void)startWithOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds;
+- (void)startSong:(ISMSSong *)aSong atIndex:(NSUInteger)index withOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds;
 //- (void)prepareNextSongStream;
 
 // Playback methods
 //
-- (void)start;
+//- (void)start;
 - (void)stop;
 - (void)pause;
 - (void)playPause;
@@ -67,8 +67,8 @@
 
 - (void)bassInit;
 
-- (BassStream *)prepareStreamForSong:(Song *)aSong;
+- (BassStream *)prepareStreamForSong:(ISMSSong *)aSong;
 
-//- (void)prepareNextSongStream:(Song *)nextSong;
+//- (void)prepareNextSongStream:(ISMSSong *)nextSong;
 
 @end

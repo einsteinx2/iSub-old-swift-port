@@ -551,22 +551,6 @@ LOG_LEVEL_ISUB_DEFAULT
 	[self fillStreamQueue:audioEngineS.player.isStarted];
 }
 
-- (void)downloadMoreOfPrecacheStream
-{
-	if (self.isQueueDownloading)
-	{
-		ISMSStreamHandler *currentHandler = [self.handlerStack objectAtIndexSafe:0];
-		if (currentHandler.isPartialPrecacheSleeping)
-		{
-			// Allow 10 more seconds of audio data to download
-			currentHandler.secondsToPartialPrecache += 10;
-			
-			// Break the wait loop, but leave partial precaching on
-			currentHandler.tempBreakPartialPrecache = YES;
-		}
-	}
-}
-
 #pragma mark - ISMSStreamHandler delegate
 
 - (void)ISMSStreamHandlerStarted:(ISMSStreamHandler *)handler
@@ -579,34 +563,23 @@ LOG_LEVEL_ISUB_DEFAULT
 {	
 	// Update the last cached song
 	self.lastCachedSong = handler.mySong;
-	
-	ISMSSong *currentSong = playlistS.currentSong;
-	ISMSSong *nextSong = playlistS.nextSong;
-	
-    //DLog(@"starting playback for %@  file size: %llu", handler.mySong, handler.totalBytesTransferred);
-	
-	if ([handler.mySong isEqualToSong:currentSong])
+    
+    ISMSSong *currentSong = playlistS.currentSong;
+	if ([handler.mySong isEqualToSong:playlistS.currentSong])
 	{
-		[audioEngineS start];
+		[audioEngineS startSong:currentSong atIndex:playlistS.currentIndex withOffsetInBytes:@0 orSeconds:@0];
 		
 		// Only for temp cached files
 		if (handler.isTempCache)
 		{
 			// TODO: get rid of this ugly hack
-			[EX2Dispatch timerInMainQueueAfterDelay:1.0 
-										   withName:@"temp song set byteOffset/seconds"
-                                            repeats:NO
-									   performBlock:^{
-				//DLog(@"byteOffset: %llu   secondsOffset: %f", handler.byteOffset, handler.secondsOffset);
-				audioEngineS.player.startByteOffset = handler.byteOffset;
-				audioEngineS.player.startSecondsOffset = handler.secondsOffset;
-			}];
+			[EX2Dispatch timerInMainQueueAfterDelay:1.0 withName:@"temp song set byteOffset/seconds" repeats:NO performBlock:^
+             {
+                 //DLog(@"byteOffset: %llu   secondsOffset: %f", handler.byteOffset, handler.secondsOffset);
+                 audioEngineS.player.startByteOffset = handler.byteOffset;
+                 audioEngineS.player.startSecondsOffset = handler.secondsOffset;
+             }];
 		}
-	}
-	else if ([handler.mySong isEqualToSong:nextSong])
-	{
-		//DLog(@"preparing next song stream");
-		//[audioEngineS.player prepareNextSongStream];
 	}
 	
 	[self saveHandlerStack];

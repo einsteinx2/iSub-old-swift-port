@@ -16,10 +16,12 @@
 - (void)bassFirstStreamStarted:(BassGaplessPlayer*)player;
 - (void)bassSongEndedCalled:(BassGaplessPlayer*)player;
 - (void)bassFreed:(BassGaplessPlayer *)player;
+- (void)bassUpdateLockScreenInfo:(BassGaplessPlayer *)player;
 
 @required
-- (Song *)bassSongForIndex:(NSUInteger)index player:(BassGaplessPlayer *)player;
-- (NSUInteger)bassNextIndex:(BassGaplessPlayer*)player;
-- (void)bassRetrySongPlay:(BassGaplessPlayer*)player;
+- (ISMSSong *)bassSongForIndex:(NSUInteger)index player:(BassGaplessPlayer *)player;
+- (NSUInteger)bassIndexAtOffset:(NSInteger)offset fromIndex:(NSUInteger)index player:(BassGaplessPlayer *)player;
+- (void)bassRetrySongAtIndex:(NSUInteger)index player:(BassGaplessPlayer*)player;
+- (void)bassRetrySongAtOffsetInBytes:(NSUInteger)bytes andSeconds:(NSUInteger)seconds player:(BassGaplessPlayer*)player;
 
 @end

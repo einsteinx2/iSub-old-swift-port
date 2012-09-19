@@ -8,6 +8,11 @@
 
 #import "BassGaplessPlayer.h"
 
+@interface BassGaplessPlayer ()
+- (NSUInteger)nextIndex;
+- (ISMSSong *)nextSong;
+@end
+
 @implementation BassGaplessPlayer
 
 LOG_LEVEL_ISUB_DEFAULT
@@ -30,9 +35,10 @@ LOG_LEVEL_ISUB_DEFAULT
 		_streamGcdQueue = dispatch_queue_create("com.anghami.BassStreamQueue", NULL);
 		_ringBuffer = [EX2RingBuffer ringBufferWithLength:BytesFromKiB(640)];
 		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStream) name:ISMSNotification_RepeatModeChanged object:nil];
+		/*// Don't need these anymore because the next song is only loaded right at the end
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStream) name:ISMSNotification_RepeatModeChanged object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStream) name:ISMSNotification_CurrentPlaylistOrderChanged object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStream) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStream) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];*/
 	}
 	
     return self;
@@ -66,8 +72,8 @@ void CALLBACK MyStreamEndCallback(HSYNC handle, DWORD channel, DWORD data, void 
 		if (userInfo)
 		{
             // Prepare the next song in the queue
-            Song *nextSong = [userInfo.player.delegate nextSong:userInfo.player];
-            BassStream *nextStream = [userInfo.player prepareStreamForSong:nextSong];
+            BassStream *nextStream = [userInfo.player prepareStreamForSong:[userInfo.player nextSong]];
+            [userInfo.player.streamQueue addObject:nextStream];
             BASS_Mixer_StreamAddChannel(userInfo.player.mixerStream, nextStream.stream, 0);
             
             // Mark as ended and set the buffer space til end for the UI
@@ -243,10 +249,12 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnded];
 		
 		DDLogVerbose(@"Stream not active, freeing BASS");
-		[self performSelectorOnMainThread:@selector(bassFree) withObject:nil waitUntilDone:NO];
+        [EX2Dispatch runInMainThread:^{
+            [self bassFree];
+        }];
 		
 		// Start the next song if for some reason this one isn't ready
-		[musicS performSelectorOnMainThread:@selector(startSong) withObject:nil waitUntilDone:NO];
+        [self.delegate bassRetrySongAtIndex:self.currentPlaylistIndex player:self];
 		
 		return BASS_STREAMPROC_END;
 	}
@@ -255,10 +263,10 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 }
 
 - (void)moveToNextSong
-{
-	if (playlistS.nextSong)
+{    
+	if ([self nextSong])
 	{
-		[musicS playSongAtPosition:playlistS.nextIndex];
+        [self.delegate bassRetrySongAtIndex:[self nextIndex] player:self];
 	}
 	else
 	{
@@ -284,24 +292,10 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 			BASS_StreamFree(userInfo.stream);
 		}
 		[self.streamQueue removeObjectAtIndexSafe:0];
-<<<<<<< Updated upstream
-		
-		// Increment current playlist index
-		[playlistS incrementIndex];
-		
-		// Get the next song in the queue
-		[self prepareNextSongStream:playlistS.nextSong];
-		
-		ISMSSong *endedSong = userInfo.song;
         
-        if ([self.delegate respondsToSelector:@selector(bassSongEndedPlaylistIncremented:)])
-        {
-            [self.delegate bassSongEndedPlaylistIncremented:endedSong];
-        }
-		
-=======
-				
->>>>>>> Stashed changes
+        // Update our index position
+        self.currentPlaylistIndex = [self nextIndex];
+
 		// Send song end notification
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnded];
 		
@@ -320,10 +314,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		else
 		{
 			DDLogInfo(@"songEnded: self.isPlaying = NO");
-			[EX2Dispatch runInMainThread:^
-			 {
-				 [musicS playSongAtPosition:playlistS.currentIndex];
-			 }];
+            [self.delegate bassRetrySongAtIndex:self.currentPlaylistIndex player:self];
 		}
 	}
 }
@@ -574,19 +565,11 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 	return nil;
 }
 
-- (void)startSong:(Song *)aSong atIndex:(NSUInteger)index withOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds
+- (void)startSong:(ISMSSong *)aSong atIndex:(NSUInteger)index withOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds
 {
 	[EX2Dispatch runInQueue:self.streamGcdQueue waitUntilDone:NO block:^
 	 {
-<<<<<<< Updated upstream
-		 NSInteger count = playlistS.count;
-		 if (playlistS.currentIndex >= count) playlistS.currentIndex = count - 1;
-		 
-		 ISMSSong *currentSong = playlistS.currentSong;
-		 if (!currentSong)
-=======
 		 if (!aSong)
->>>>>>> Stashed changes
 			 return;
          
          self.currentPlaylistIndex = index;
@@ -673,13 +656,11 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 				 }
 				 else if (!aSong.fileExists)
 				 {
-					 DDLogError(@"Stream for song %@ failed, file is not on disk, so calling [musicS playSongAtPosition:playlistS.currentIndex]", userInfo.song.title);
+					 DDLogError(@"Stream for song %@ failed, file is not on disk, so calling retrying the song", userInfo.song.title);
 					 // File was removed, most likely because the decryption failed, so start again normally
 					 [aSong removeFromCachedSongsTableDbQueue];
-                     [EX2Dispatch runInMainThread:^
-                      {
-                          [musicS playSongAtPosition:playlistS.currentIndex];
-                      }];
+                     
+                     [self.delegate bassRetrySongAtIndex:self.currentPlaylistIndex player:self];
 				 }
 				 else
 				 {
@@ -689,86 +670,29 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 					 [EX2Dispatch timerInMainQueueAfterDelay:ISMS_BassStreamRetryDelay 
 												   withName:startSongRetryTimer
                                                     repeats:NO
-											   performBlock:^{ [self startWithOffsetInBytes:byteOffset orSeconds:seconds]; }];
+                                                performBlock:^{ [self startSong:aSong atIndex:index withOffsetInBytes:byteOffset orSeconds:seconds]; }];
 				 }
 			 }
 			 else
 			 {
-				 [currentSong removeFromCachedSongsTableDbQueue];
-				 [musicS performSelectorOnMainThread:@selector(startSong) withObject:nil waitUntilDone:NO];
+				 [aSong removeFromCachedSongsTableDbQueue];
+                 
+                 [self.delegate bassRetrySongAtIndex:self.currentPlaylistIndex player:self];
 			 }
 		 }
 	 }];
 }
 
-/*- (void)plugInStream:(BassStream *)userInfo
+- (NSUInteger)nextIndex
 {
-    // Plug in the next one
-    if (userInfo)
-    {
-        // There's another stream so play it
-        BASS_Mixer_StreamAddChannel(self.mixerStream, userInfo.stream, 0);
-    }
-}*/
+    return [self.delegate bassIndexAtOffset:1 fromIndex:self.currentPlaylistIndex player:self];
+}
 
-<<<<<<< Updated upstream
-- (void)prepareNextSongStream:(ISMSSong *)nextSong
-=======
-/*- (void)prepareSongStream:(Song *)nextSong
->>>>>>> Stashed changes
+- (ISMSSong *)nextSong
 {
-	[EX2Dispatch runInQueue:self.streamGcdQueue waitUntilDone:NO block:^
-	 {
-		 // Remove any additional streams
-		 //NSUInteger count = self.streamQueue.count;
-		 //while (count > 2)
-		 //{
-		//	 BassStream *userInfo = [self.streamQueue lastObject];
-		///	 BASS_StreamFree(userInfo.stream);
-	//		 [self.streamQueue removeLastObject];
-	//		 count = self.streamQueue.count;
-	//	 }
-		 
-		 ISMSSong *theSong = nextSong ? nextSong : playlistS.nextSong;
-		 
-		 DDLogVerbose(@"nextSong.localFileSize: %llu", theSong.localFileSize);
-		 if (theSong.localFileSize == 0 || theSong.isVideo)
-			 return;
-		 
-		 DDLogVerbose(@"preparing next song stream for %@  file: %@", theSong.title, theSong.currentPath);
-		 
-		 BOOL success = NO;
-		 if (theSong.fileExists)
-		 {
-			 BassStream *userInfo = [self prepareStreamForSong:theSong];
-			 if (userInfo)
-			 {
-				 DDLogVerbose(@"nextSong: %i\n   ", userInfo.stream);
-				 [self.streamQueue addObject:userInfo];
-				 success = YES;
-                 
-                 [self plugInStream:userInfo];
-			 }
-		 }
-		 
-		 if (!success)
-		 {
-#ifdef DEBUG
-			 NSInteger errorCode = BASS_ErrorGetCode();
-			 DDLogError(@"nextSong stream error: %i - %@", errorCode, [BassWrapper stringFromErrorCode:errorCode]);
-#endif
-			 
-			 // If the stream is currently stuck in the wait loop for partial precaching
-			 // tell the stream manager to download a few more seconds of data
-			 [streamManagerS downloadMoreOfPrecacheStream];
-			 
-			 [EX2Dispatch timerInMainQueueAfterDelay:ISMS_BassStreamRetryDelay 
-										   withName:nextSongRetryTimer
-                                            repeats:NO
-									   performBlock:^{ [self prepareNextSongStream:theSong]; }];
-		 }
-	 }];
-}*/
+    return [self.delegate bassSongForIndex:[self nextIndex] player:self];
+    
+}
 
 #pragma mark - Audio Engine Properties
 
@@ -792,7 +716,13 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 	pcmBytePosition = pcmBytePosition < 0 ? 0 : pcmBytePosition; 
 	double seconds = BASS_ChannelBytes2Seconds(self.currentStream.stream, pcmBytePosition);
 	if (seconds < 0)
-		return [playlistS.currentSong.duration doubleValue] + seconds;
+    {
+        // Use the previous song (i.e the one still coming out of the speakers), since we're actually finishing it right now
+        NSUInteger previousIndex = [self.delegate bassIndexAtOffset:-1 fromIndex:self.currentPlaylistIndex player:self];
+        ISMSSong *previousSong = [self.delegate bassSongForIndex:previousIndex player:self];
+        
+		return previousSong.duration.doubleValue + seconds;
+    }
 	
 	return seconds + self.startSecondsOffset;
 }
@@ -808,11 +738,6 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 }
 
 #pragma mark - Playback methods
-
-- (void)start
-{
-	[self startWithOffsetInBytes:[NSNumber numberWithInt:0] orSeconds:nil];
-}
 
 - (void)stop
 {
@@ -849,15 +774,18 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 	{
 		if (self.currentStream == 0)
 		{
-			NSInteger count = playlistS.count;
-			if (playlistS.currentIndex >= count) 
-			{
-				// The playlist finished
-				playlistS.currentIndex = count - 1;
-				self.startByteOffset = 0;
-				self.startSecondsOffset = 0.;
-			}
-			[musicS startSongAtOffsetInBytes:self.startByteOffset andSeconds:self.startSecondsOffset];
+            // See if we're at the end of the playlist
+            ISMSSong *currentSong = [self.delegate bassSongForIndex:self.currentPlaylistIndex player:self];
+            if (currentSong)
+            {
+                [self.delegate bassRetrySongAtOffsetInBytes:self.startByteOffset andSeconds:self.startSecondsOffset player:self];
+            }
+            else
+            {
+                self.currentPlaylistIndex = [self.delegate bassIndexAtOffset:-1 fromIndex:self.currentPlaylistIndex player:self];
+                currentSong = [self.delegate bassSongForIndex:self.currentPlaylistIndex player:self];
+                [self.delegate bassRetrySongAtIndex:self.currentPlaylistIndex player:self];
+            }
 		}
 		else
 		{
@@ -866,8 +794,11 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackStarted];
 		}
 	}
-	
-	[musicS updateLockScreenInfo];
+    
+    if ([self.delegate respondsToSelector:@selector(bassUpdateLockScreenInfo:)])
+    {
+        [self.delegate bassUpdateLockScreenInfo:self];
+    }
 }
 
 - (void)seekToPositionInBytes:(QWORD)bytes
@@ -885,7 +816,7 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 	{
 		userInfo.isEnded = NO;
 		[self bassFree];
-		[self startWithOffsetInBytes:[NSNumber numberWithUnsignedLongLong:bytes] orSeconds:nil];
+		[self startSong:self.currentStream.song atIndex:self.currentPlaylistIndex withOffsetInBytes:[NSNumber numberWithUnsignedLongLong:bytes] orSeconds:nil];
 	}
 	else
 	{

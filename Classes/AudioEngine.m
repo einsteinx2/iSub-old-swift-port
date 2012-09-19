@@ -90,7 +90,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     }
 }
 
-- (void)startWithOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds
+- (void)startSong:(ISMSSong *)aSong atIndex:(NSUInteger)index withOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds
 {
 	// Dispose of the old player
 	[self.player stop];
@@ -98,12 +98,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 	
 	// Create a new player
 	self.player = [[BassGaplessPlayer alloc] initWithDelegate:self.delegate];
-	[self.player startWithOffsetInBytes:byteOffset orSeconds:seconds];
-}
-
-- (void)start
-{
-	[self startWithOffsetInBytes:[NSNumber numberWithInt:0] orSeconds:nil];
+	[self.player startSong:aSong atIndex:index withOffsetInBytes:byteOffset orSeconds:seconds];
 }
 
 - (void)startEmptyPlayer

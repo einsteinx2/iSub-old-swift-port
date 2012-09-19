@@ -542,7 +542,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "-registerForNotifications"
+         landmarkName = "-createLandscapeViews"
          landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
@@ -892,7 +892,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "-registerForNotifications"
+         landmarkName = "-createLandscapeViews"
          landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
@@ -906,7 +906,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "-registerForNotifications"
+         landmarkName = "-createLandscapeViews"
          landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
@@ -920,7 +920,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "-registerForNotifications"
+         landmarkName = "-createLandscapeViews"
          landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
@@ -934,7 +934,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "-registerForNotifications"
+         landmarkName = "-createLandscapeViews"
          landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
@@ -948,7 +948,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "-registerForNotifications"
+         landmarkName = "-createLandscapeViews"
          landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
@@ -962,7 +962,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "-registerForNotifications"
+         landmarkName = "-createLandscapeViews"
          landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
@@ -976,7 +976,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "-registerForNotifications"
+         landmarkName = "-createLandscapeViews"
          landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
@@ -990,7 +990,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "-registerForNotifications"
+         landmarkName = "-createLandscapeViews"
          landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1004,7 +1004,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "-registerForNotifications"
+         landmarkName = "-createLandscapeViews"
          landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1080,62 +1080,6 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "Classes/MusicSingleton.m"
-         timestampString = "368938319.843585"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "105"
-         endingLineNumber = "105"
-         landmarkName = "-startSongAtOffsetInSeconds2"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Classes/MusicSingleton.m"
-         timestampString = "368938319.843585"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "105"
-         endingLineNumber = "105"
-         landmarkName = "-startSongAtOffsetInSeconds2"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Classes/MusicSingleton.m"
-         timestampString = "368938319.843585"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "105"
-         endingLineNumber = "105"
-         landmarkName = "-startSongAtOffsetInSeconds2"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Classes/MusicSingleton.m"
-         timestampString = "368938319.843585"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "105"
-         endingLineNumber = "105"
-         landmarkName = "-startSongAtOffsetInSeconds2"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
          filePath = "Classes/Song+DAO.m"
          timestampString = "363491038.229329"
          startingColumnNumber = "9223372036854775807"
@@ -1143,20 +1087,6 @@
          startingLineNumber = "125"
          endingLineNumber = "125"
          landmarkName = "+songFromDbResult:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Classes/MusicSingleton.m"
-         timestampString = "368938319.843585"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "105"
-         endingLineNumber = "105"
-         landmarkName = "-startSongAtOffsetInSeconds2"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1766,7 +1696,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "-registerForNotifications"
+         landmarkName = "-createLandscapeViews"
          landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
@@ -4751,58 +4681,6 @@
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "Classes/MusicSingleton.m"
-         timestampString = "368938319.843585"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "105"
-         endingLineNumber = "105"
-         landmarkName = "-startSongAtOffsetInSeconds2"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Classes/MusicSingleton.m"
-         timestampString = "368938319.843585"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "105"
-         endingLineNumber = "105"
-         landmarkName = "-startSongAtOffsetInSeconds2"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Classes/MusicSingleton.m"
-         timestampString = "368938319.843585"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "105"
-         endingLineNumber = "105"
-         landmarkName = "-startSongAtOffsetInSeconds2"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Classes/MusicSingleton.m"
-         timestampString = "368938319.843585"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "105"
-         endingLineNumber = "105"
-         landmarkName = "-startSongAtOffsetInSeconds2"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "Classes/CacheViewController.m"
          timestampString = "368926809.058579"
          startingColumnNumber = "9223372036854775807"
@@ -4810,32 +4688,6 @@
          startingLineNumber = "122"
          endingLineNumber = "122"
          landmarkName = "-viewDidLoad"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Classes/MusicSingleton.m"
-         timestampString = "368938319.843585"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "105"
-         endingLineNumber = "105"
-         landmarkName = "-startSongAtOffsetInSeconds2"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Classes/MusicSingleton.m"
-         timestampString = "368938319.843585"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "105"
-         endingLineNumber = "105"
-         landmarkName = "-startSongAtOffsetInSeconds2"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -4924,7 +4776,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "-registerForNotifications"
+         landmarkName = "-createLandscapeViews"
          landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
@@ -4937,7 +4789,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "-registerForNotifications"
+         landmarkName = "-createLandscapeViews"
          landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
@@ -5041,7 +4893,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "-registerForNotifications"
+         landmarkName = "-createLandscapeViews"
          landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
@@ -5054,7 +4906,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "41"
          endingLineNumber = "41"
-         landmarkName = "-registerForNotifications"
+         landmarkName = "-createLandscapeViews"
          landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
@@ -5241,7 +5093,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "152"
          endingLineNumber = "152"
-         landmarkName = "-startSong"
+         landmarkName = "-playSongAtPosition:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
