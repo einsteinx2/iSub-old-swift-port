@@ -37,11 +37,7 @@
     [playlistS incrementIndex];
 }
 
-<<<<<<< Updated upstream
-- (void)bassSongEndedPlaylistIncremented:(ISMSSong *)endedSong
-=======
 - (void)bassFreed:(BassGaplessPlayer *)player
->>>>>>> Stashed changes
 {
     //[socialS playerHandleSocial];
     //[socialS playerClearSocial];
