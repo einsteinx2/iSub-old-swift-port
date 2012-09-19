@@ -583,7 +583,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	ISMSSong *currentSong = playlistS.currentSong;
 	ISMSSong *nextSong = playlistS.nextSong;
 	
-//DLog(@"starting playback for %@  file size: %llu", handler.mySong, handler.totalBytesTransferred);
+    //DLog(@"starting playback for %@  file size: %llu", handler.mySong, handler.totalBytesTransferred);
 	
 	if ([handler.mySong isEqualToSong:currentSong])
 	{
@@ -606,7 +606,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	else if ([handler.mySong isEqualToSong:nextSong])
 	{
 		//DLog(@"preparing next song stream");
-		[audioEngineS.player prepareNextSongStream];
+		//[audioEngineS.player prepareNextSongStream];
 	}
 	
 	[self saveHandlerStack];

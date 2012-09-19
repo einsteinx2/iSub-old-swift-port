@@ -21,7 +21,7 @@
 
 - (NSURLRequest *)createRequest
 {
-	NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"size", n2N(self.modifier), @"type", nil];
+	NSDictionary *parameters = @{@"size":@"20", @"type":n2N(self.modifier), @"offset":[NSString stringWithFormat:@"%u", self.offset]};
     return [NSMutableURLRequest requestWithSUSAction:@"getAlbumList" parameters:parameters];
 }
 

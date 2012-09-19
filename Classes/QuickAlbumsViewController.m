@@ -110,6 +110,7 @@
 }
 
 - (void)albumLoad:(NSString*)theModifier
+<<<<<<< HEAD
 {
     [viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
         

@@ -12,5 +12,6 @@
 
 @property (strong) NSMutableArray *listOfAlbums;
 @property (strong) NSString *modifier;
+@property NSUInteger offset;
 
 @end
