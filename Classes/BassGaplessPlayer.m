@@ -73,8 +73,11 @@ void CALLBACK MyStreamEndCallback(HSYNC handle, DWORD channel, DWORD data, void 
 		{
             // Prepare the next song in the queue
             BassStream *nextStream = [userInfo.player prepareStreamForSong:[userInfo.player nextSong]];
-            [userInfo.player.streamQueue addObject:nextStream];
-            BASS_Mixer_StreamAddChannel(userInfo.player.mixerStream, nextStream.stream, 0);
+            if (nextStream)
+            {
+                [userInfo.player.streamQueue addObject:nextStream];
+                BASS_Mixer_StreamAddChannel(userInfo.player.mixerStream, nextStream.stream, 0);
+            }
             
             // Mark as ended and set the buffer space til end for the UI
             userInfo.bufferSpaceTilSongEnd = userInfo.player.ringBuffer.filledSpaceLength;
@@ -291,7 +294,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		{
 			BASS_StreamFree(userInfo.stream);
 		}
-		[self.streamQueue removeObjectAtIndexSafe:0];
+		[self.streamQueue removeObject:userInfo];
         
         // Update our index position
         self.currentPlaylistIndex = [self nextIndex];
