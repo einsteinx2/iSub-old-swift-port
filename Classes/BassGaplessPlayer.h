@@ -67,8 +67,7 @@
 
 - (void)bassInit;
 
+- (BOOL)testStreamForSong:(ISMSSong *)aSong;
 - (BassStream *)prepareStreamForSong:(ISMSSong *)aSong;
-
-//- (void)prepareNextSongStream:(ISMSSong *)nextSong;
 
 @end

@@ -16,9 +16,9 @@
 {
 	if ((self = [super init]))
 	{
-		NSString *songName = [dictionary objectForKey:@"songName"];
+		NSString *songName = N2n([dictionary objectForKey:@"songName"]);
 		NSString *titleKey = !songName || songName.length == 0  ? @"fileName" : @"songName";
-		_title = [dictionary objectForKey:titleKey];
+		_title = N2n([dictionary objectForKey:titleKey]);
 		_songId = N2n([dictionary objectForKey:@"itemId"]);
 		_parentId = N2n([dictionary objectForKey:@"folderId"]);
 		_artist = N2n([dictionary objectForKey:@"artistName"]);

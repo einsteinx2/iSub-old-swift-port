@@ -144,6 +144,13 @@ static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStr
 	CFHTTPMessageSetHeaderFieldValue(messageRef, CFSTR("HOST"), (__bridge CFStringRef)[request.URL host]);    
 	//CFHTTPMessageSetHeaderFieldValue(messageRef, CFSTR("Content-Length"), (__bridge CFStringRef)[NSString stringWithFormat:@"%d", [request.HTTPBody length]]);    
 	CFHTTPMessageSetHeaderFieldValue(messageRef, CFSTR("Content-Type"), CFSTR("application/x-www-form-urlencoded"));//CFSTR("charset=utf-8"));
+    
+    // Setup the range header if necessary
+    if (self.byteOffset > 0)
+    {
+        NSString *range = [NSString stringWithFormat:@"bytes=%llu-", self.byteOffset];
+        CFHTTPMessageSetHeaderFieldValue(messageRef, CFSTR("Range"), (__bridge CFStringRef)range);
+    }
 	
 	CFDataRef body = CFHTTPMessageCopyBody(messageRef);
 	DDLogInfo(@"body: %@", [[NSString alloc] initWithData:(__bridge NSData *)body encoding:NSUTF8StringEncoding]);
@@ -397,7 +404,7 @@ static void ReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType t
                         // First verify that the stream can be opened
                         if (audioEngineS.player)
                         {
-                            if ([audioEngineS.player prepareStreamForSong:self.mySong])
+                            if ([audioEngineS.player testStreamForSong:self.mySong])
                             {
                                 // The stream worked, so go ahead and pause the download
                                 self.isPrecacheSleeping = YES;

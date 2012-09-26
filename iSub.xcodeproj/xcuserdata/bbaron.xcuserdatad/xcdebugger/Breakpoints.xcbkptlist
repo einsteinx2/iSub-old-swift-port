@@ -248,7 +248,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "222"
          endingLineNumber = "222"
-         landmarkName = "-songForIndex:"
+         landmarkName = "-prevSong"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -262,8 +262,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "253"
          endingLineNumber = "253"
-         landmarkName = "@implementation PlaylistSingleton"
-         landmarkType = "3">
+         landmarkName = "-normalIndex"
+         landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -4989,8 +4989,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "227"
          endingLineNumber = "227"
-         landmarkName = "-applicationDidFinishLaunching:"
-         landmarkType = "5">
+         landmarkName = "@implementation iSubAppDelegate"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -5270,6 +5270,19 @@
          startingLineNumber = "156"
          endingLineNumber = "156"
          landmarkName = "-loadingFinished:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Classes/ISMSCFNetworkStreamHandler.m"
+         timestampString = "370371335.987348"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "152"
+         endingLineNumber = "152"
+         landmarkName = "-start:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

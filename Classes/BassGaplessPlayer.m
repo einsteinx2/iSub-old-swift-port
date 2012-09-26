@@ -527,6 +527,28 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 	}
 }
 
+- (BOOL)testStreamForSong:(ISMSSong *)aSong
+{
+    DDLogVerbose(@"testing stream for %@  file: %@", aSong.title, aSong.currentPath);
+	if (aSong.fileExists)
+	{
+		// Create the stream
+        HSTREAM fileStream = BASS_StreamCreateFile(NO, aSong.localPath.cStringUTF8, 0, aSong.size.longValue, BASS_STREAM_DECODE|BASS_SAMPLE_FLOAT);
+		if(!fileStream) fileStream = fileStream = BASS_StreamCreateFile(NO, aSong.localPath.cStringUTF8, 0, aSong.size.longValue, BASS_STREAM_DECODE|BASS_SAMPLE_SOFTWARE|BASS_SAMPLE_FLOAT);
+		if (fileStream)
+		{
+			return YES;
+		}
+		
+		// Failed to create the stream
+		DDLogError(@"failed to create test stream for song: %@  filename: %@", aSong.title, aSong.currentPath);
+		return NO;
+	}
+	
+	// File doesn't exist
+    return NO;
+}
+
 - (BassStream *)prepareStreamForSong:(ISMSSong *)aSong
 {
 	DDLogVerbose(@"preparing stream for %@  file: %@", aSong.title, aSong.currentPath);
