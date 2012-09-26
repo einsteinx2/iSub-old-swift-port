@@ -18,7 +18,7 @@
 @property NSUInteger albumsCount;
 @property NSUInteger songsCount;
 
-@property (unsafe_unretained) id<ISMSLoaderDelegate> delegate;
+@property (weak) id<ISMSLoaderDelegate> delegate;
 @property (strong) ISMSSubFolderLoader *loader;
 
 @property (copy) NSString *myId;

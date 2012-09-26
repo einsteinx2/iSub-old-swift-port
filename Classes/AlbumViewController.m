@@ -34,6 +34,11 @@
 
 @synthesize isReloading, refreshHeaderView;
 
+- (BOOL)shouldAutorotate
+{
+    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+}
+
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)

@@ -452,6 +452,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 #pragma mark Rotation
 
+- (BOOL)shouldAutorotate
+{
+    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+}
+
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)

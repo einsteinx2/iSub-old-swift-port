@@ -12,7 +12,7 @@
 @class SUSLyricsLoader, FMDatabase;
 @interface SUSLyricsDAO : NSObject <ISMSLoaderDelegate, ISMSLoaderManager>
 
-@property (unsafe_unretained) NSObject <ISMSLoaderDelegate> *delegate;
+@property (weak) NSObject <ISMSLoaderDelegate> *delegate;
 @property (strong) SUSLyricsLoader *loader;
 
 - (id)initWithDelegate:(NSObject <ISMSLoaderDelegate> *)theDelegate;

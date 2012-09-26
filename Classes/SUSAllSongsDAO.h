@@ -16,7 +16,7 @@
 	__strong NSArray *index;
 }
 
-@property (unsafe_unretained) id<ISMSLoaderDelegate> delegate;
+@property (weak) id<ISMSLoaderDelegate> delegate;
 
 @property (readonly) NSUInteger count;
 @property (readonly) NSUInteger searchCount;

@@ -12,7 +12,7 @@
 @class SUSNowPlayingLoader, Song;
 @interface SUSNowPlayingDAO : NSObject <ISMSLoaderDelegate, ISMSLoaderManager>
 
-@property (unsafe_unretained) id<ISMSLoaderDelegate> delegate;
+@property (weak) id<ISMSLoaderDelegate> delegate;
 @property (strong) SUSNowPlayingLoader *loader;
 
 @property (strong) NSArray *nowPlayingSongDicts;

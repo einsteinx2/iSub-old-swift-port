@@ -19,6 +19,11 @@
 
 @synthesize parentController, versionLabel, manualOfflineModeSwitch, checkUpdatesSwitch, autoReloadArtistSwitch, disablePopupsSwitch, disableRotationSwitch, disableScreenSleepSwitch, enableBasicAuthSwitch, enableSongsTabSwitch, enableSongsTabLabel, enableSongsTabDesc, recoverSegmentedControl, maxBitrateWifiSegmentedControl, maxBitrate3GSegmentedControl, enableLyricsSwitch, enableCacheStatusSwitch, autoPlayerInfoSwitch, enableSwipeSwitch, enableTapAndHoldSwitch, enableSongCachingSwitch, enableNextSongCacheLabel, enableNextSongCacheSwitch, enableNextSongPartialCacheLabel, enableNextSongPartialCacheSwitch, cachingTypeSegmentedControl, totalSpace, freeSpace, cacheSpaceLabel1, cacheSpaceLabel2, freeSpaceLabel, totalSpaceLabel, totalSpaceBackground, freeSpaceBackground, cacheSpaceSlider, cacheSpaceDescLabel, autoDeleteCacheSwitch, autoDeleteCacheTypeSegmentedControl, cacheSongCellColorSegmentedControl, twitterSigninButton, twitterStatusLabel, twitterEnabledSwitch, enableScrobblingSwitch, scrobblePercentLabel, scrobblePercentSlider, quickSkipSegmentControl, secondsToStartPlayerSegmentControl, secondsToBufferSegmentControl, showLargeSongInfoSwitch, loadedTime, enableLockScreenArt, enableLockArtLabel, swipeCellsLabel, tapHoldCellsLabel;
 
+- (BOOL)shouldAutorotate
+{
+    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)

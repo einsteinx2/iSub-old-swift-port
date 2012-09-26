@@ -31,7 +31,7 @@
 - (id)initWithSong:(ISMSSong *)song byteOffset:(unsigned long long)bOffset secondsOffset:(double)sOffset isTemp:(BOOL)isTemp delegate:(NSObject<ISMSStreamHandlerDelegate> *)theDelegate;
 - (id)initWithSong:(ISMSSong *)song isTemp:(BOOL)isTemp delegate:(NSObject<ISMSStreamHandlerDelegate> *)theDelegate;
 
-@property (unsafe_unretained) NSObject<ISMSStreamHandlerDelegate> *delegate;
+@property (weak) NSObject<ISMSStreamHandlerDelegate> *delegate;
 @property (copy) ISMSSong *mySong;
 @property unsigned long long byteOffset;
 @property double secondsOffset;
@@ -41,7 +41,7 @@
 @property NSUInteger numOfReconnects;
 @property BOOL isTempCache;
 @property NSUInteger bitrate;
-@property (unsafe_unretained, readonly) NSString *filePath;
+@property (weak, readonly) NSString *filePath;
 @property BOOL partialPrecacheSleep;
 @property BOOL isDownloading;
 @property BOOL isCurrentSong;

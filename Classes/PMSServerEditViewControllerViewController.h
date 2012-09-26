@@ -20,7 +20,7 @@
 @property (nonatomic, strong) IBOutlet UITextField *passwordField;
 @property (nonatomic, strong) IBOutlet UIButton *cancelButton;
 @property (nonatomic, strong) IBOutlet UIButton *saveButton;
-@property (nonatomic, unsafe_unretained) ServerTypeViewController *parentController;
+@property (nonatomic, weak) ServerTypeViewController *parentController;
 @property (nonatomic, copy) NSString *theNewRedirectUrl;
 
 - (IBAction) cancelButtonPressed:(id)sender;

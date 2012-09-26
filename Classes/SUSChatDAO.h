@@ -13,7 +13,7 @@
 @interface SUSChatDAO : NSObject <ISMSLoaderManager, ISMSLoaderDelegate>
 
 @property (strong) SUSChatLoader *loader;
-@property (unsafe_unretained) NSObject <ISMSLoaderDelegate> *delegate;
+@property (weak) NSObject <ISMSLoaderDelegate> *delegate;
 
 @property (strong) NSArray *chatMessages;
 

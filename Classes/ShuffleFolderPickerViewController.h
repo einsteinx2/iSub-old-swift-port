@@ -13,6 +13,6 @@
 @interface ShuffleFolderPickerViewController : UITableViewController 
 
 @property (strong) NSMutableArray *sortedFolders;
-@property (unsafe_unretained) FolderPickerDialog *myDialog;
+@property (weak) FolderPickerDialog *myDialog;
 
 @end

@@ -29,6 +29,11 @@
 @synthesize reloadImage, reloadLabel, refreshHeaderView, reloadButton, reloadTimeLabel, countLabel;
 @synthesize letUserSelectRow, searchBar, numberOfRows, url, isSearching, isProcessingArtists, isReloading, searchOverlay, dismissButton;
 
+- (BOOL)shouldAutorotate
+{
+    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)

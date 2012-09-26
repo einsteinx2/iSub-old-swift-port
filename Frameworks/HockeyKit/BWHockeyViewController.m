@@ -576,6 +576,11 @@
 #pragma mark -
 #pragma mark Rotation
 
+- (BOOL)shouldAutorotate
+{
+    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
   BOOL shouldAutorotate;
   

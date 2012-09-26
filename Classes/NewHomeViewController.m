@@ -29,6 +29,11 @@
 @synthesize receivedData, connection;
 @synthesize playerButton, jukeboxButton, searchBar, searchSegment, searchSegmentBackground, searchOverlay, dismissButton, isSearch, quickLabel, shuffleLabel, jukeboxLabel, settingsLabel, chatLabel, playerLabel, coverArtBorder, coverArtView, artistLabel, albumLabel, songLabel;
 
+- (BOOL)shouldAutorotate
+{
+    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+}
+
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)

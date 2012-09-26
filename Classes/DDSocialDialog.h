@@ -63,13 +63,13 @@ typedef enum{
 	UIDeviceOrientation orientation_;
 	BOOL showingKeyboard_;
 	
-	id <DDSocialDialogDelegate> __unsafe_unretained dialogDelegate_;
+	id <DDSocialDialogDelegate> __weak dialogDelegate_;
 }
 
 @property (nonatomic, readonly) DDSocialDialogTheme theme;
 @property (nonatomic, readonly) UILabel *titleLabel;
 @property (nonatomic) UIView *contentView;
-@property (nonatomic, unsafe_unretained) id <DDSocialDialogDelegate> dialogDelegate;
+@property (nonatomic, weak) id <DDSocialDialogDelegate> dialogDelegate;
 
 - (id)initWithFrame:(CGRect)frame theme:(DDSocialDialogTheme)theme;
 - (void)dismiss:(BOOL)animated;

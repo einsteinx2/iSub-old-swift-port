@@ -260,7 +260,11 @@ static MKStoreManager* _sharedStoreManager;
 	
 	if ([SKPaymentQueue canMakePayments])
 	{
-		SKPayment *payment = [SKPayment paymentWithProductIdentifier:featureId];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"productIdentifier == '%@'", featureId];
+        SKProduct *product = [[self.purchasableObjects filteredArrayUsingPredicate:predicate] objectAtIndexSafe:0];
+        SKPayment *payment = [SKPayment paymentWithProduct:product];
+        
+		//SKPayment *payment = [SKPayment paymentWithProductIdentifier:featureId];
 		[[SKPaymentQueue defaultQueue] addPayment:payment];
 	}
 	else
@@ -417,7 +421,7 @@ static MKStoreManager* _sharedStoreManager;
 // Read my blog post http://mk.sg/31
 - (BOOL) canCurrentDeviceUseFeature: (NSString*) featureID
 {
-	NSString *uniqueID = [[UIDevice currentDevice] uniqueIdentifier];
+	/*NSString *uniqueID = [[UIDevice currentDevice] uniqueIdentifier];
 	// check udid and featureid with developer's server
 	
 	if(ownServer == nil) return NO; // sanity check
@@ -454,7 +458,9 @@ static MKStoreManager* _sharedStoreManager;
 	}
 	
 	[responseString release];
-	return retVal;
+	return retVal;*/
+    
+    return NO;
 }
 
 // This function is only used if you want to enable in-app purchases for free for reviewers

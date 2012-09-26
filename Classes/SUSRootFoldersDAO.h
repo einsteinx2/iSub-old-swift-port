@@ -19,7 +19,7 @@
     NSArray *_indexCounts;
 }
 
-@property (unsafe_unretained) id<ISMSLoaderDelegate> delegate;
+@property (weak) id<ISMSLoaderDelegate> delegate;
 
 @property (strong) ISMSRootFoldersLoader *loader;
 

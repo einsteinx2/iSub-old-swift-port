@@ -27,7 +27,7 @@
 @property (nonatomic, strong) UIColor *lightColor;
 @property (nonatomic, strong) UIColor *darkColor;
 
-@property (nonatomic, unsafe_unretained) id<FolderDropdownDelegate> delegate;
+@property (nonatomic, weak) id<FolderDropdownDelegate> delegate;
 
 - (void)selectFolderWithId:(NSNumber *)folderId;
 - (void)updateFolders;

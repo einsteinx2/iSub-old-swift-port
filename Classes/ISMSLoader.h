@@ -13,7 +13,7 @@
 
 @interface ISMSLoader : NSObject <NSURLConnectionDelegate>
 
-@property (unsafe_unretained) NSObject<ISMSLoaderDelegate> *delegate;
+@property (weak) NSObject<ISMSLoaderDelegate> *delegate;
 
 @property (strong) NSURLConnection *connection;
 @property (strong) NSURLRequest *request;

@@ -30,6 +30,11 @@
 	return (iSubAppDelegate*)[UIApplication sharedApplication].delegate;
 }
 
+- (BOOL)shouldAutorotate
+{
+    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
 {
 	if (settingsS.isRotationLockEnabled && interfaceOrientation != UIInterfaceOrientationPortrait)
@@ -154,7 +159,8 @@
 	{
 		self.ipadRootViewController = [[iPadRootViewController alloc] initWithNibName:nil bundle:nil];
 		[self.window setBackgroundColor:[UIColor clearColor]];
-		[self.window addSubview:self.ipadRootViewController.view];
+		//[self.window addSubview:self.ipadRootViewController.view];
+        self.window.rootViewController = self.ipadRootViewController;
 		[self.window makeKeyAndVisible];
 		
 		if (self.showIntro)
@@ -186,7 +192,8 @@
 		{
 			//DLog(@"--------------- isOfflineMode");
 			self.currentTabBarController = self.offlineTabBarController;
-			[self.window addSubview:self.offlineTabBarController.view];
+			//[self.window addSubview:self.offlineTabBarController.view];
+            self.window.rootViewController = self.offlineTabBarController;
 		}
 		else 
 		{
@@ -194,7 +201,8 @@
 			self.currentTabBarController = self.mainTabBarController;
 			
 			//[viewObjectsS orderMainTabBarController]; // Do this after server check
-			[self.window addSubview:self.mainTabBarController.view];
+			//[self.window addSubview:self.mainTabBarController.view];
+            self.window.rootViewController = self.mainTabBarController;
 		}
 		
 		if (self.showIntro)
@@ -679,7 +687,8 @@
 	else
 	{
 		self.currentTabBarController = self.offlineTabBarController;
-		[self.window addSubview:self.offlineTabBarController.view];
+		//[self.window addSubview:self.offlineTabBarController.view];
+        self.window.rootViewController = self.offlineTabBarController;
 	}
 	
 	[musicS updateLockScreenInfo];
@@ -713,7 +722,8 @@
 	else
 	{
 		[viewObjectsS orderMainTabBarController];
-		[self.window addSubview:self.mainTabBarController.view];
+		//[self.window addSubview:self.mainTabBarController.view];
+        self.window.rootViewController = self.mainTabBarController;
 	}
 	
 	[musicS updateLockScreenInfo];

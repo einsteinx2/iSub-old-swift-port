@@ -54,12 +54,12 @@
 	UITextField *passwordField_;
 	UITableView *tableView_;
 	
-	id <DDSocialLoginDialogDelegate> __unsafe_unretained delegate_;
+	id <DDSocialLoginDialogDelegate> __weak delegate_;
 }
 
 @property (nonatomic, readonly, copy) NSString *username;
 @property (nonatomic, readonly, copy) NSString *password;
-@property (nonatomic, unsafe_unretained) id <DDSocialLoginDialogDelegate> delegate;
+@property (nonatomic, weak) id <DDSocialLoginDialogDelegate> delegate;
 
 - (id)initWithDelegate:(id)delegate theme:(DDSocialDialogTheme)theme;
 @end

@@ -1254,6 +1254,9 @@
 		53493F4E15FC6D210059492E /* iSubTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53493F4915FC6D200059492E /* iSubTestController.m */; };
 		53493F4F15FC6D210059492E /* KIFTestScenario+CacheTab.m in Sources */ = {isa = PBXBuildFile; fileRef = 53493F4B15FC6D200059492E /* KIFTestScenario+CacheTab.m */; };
 		53493F5015FC6D210059492E /* KIFTestScenario+FoldersTab.m in Sources */ = {isa = PBXBuildFile; fileRef = 53493F4D15FC6D210059492E /* KIFTestScenario+FoldersTab.m */; };
+		5349AD041613724D003603AF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5349AD031613724D003603AF /* Default-568h@2x.png */; };
+		5349AD051613724D003603AF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5349AD031613724D003603AF /* Default-568h@2x.png */; };
+		5349AD061613724D003603AF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5349AD031613724D003603AF /* Default-568h@2x.png */; };
 		534E43B71155659A000B4134 /* AlbumUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 534E43B61155659A000B4134 /* AlbumUITableViewCell.m */; };
 		534E443F1155AD01000B4134 /* default-album-art-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 534E443E1155AD01000B4134 /* default-album-art-small.png */; };
 		534E44711155B106000B4134 /* SongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 534E44701155B106000B4134 /* SongUITableViewCell.m */; };
@@ -2953,6 +2956,7 @@
 		53493F4C15FC6D210059492E /* KIFTestScenario+FoldersTab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "KIFTestScenario+FoldersTab.h"; path = "Testing/KIF_Integration_Tests/KIFTestScenario+FoldersTab.h"; sourceTree = "<group>"; };
 		53493F4D15FC6D210059492E /* KIFTestScenario+FoldersTab.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "KIFTestScenario+FoldersTab.m"; path = "Testing/KIF_Integration_Tests/KIFTestScenario+FoldersTab.m"; sourceTree = "<group>"; };
 		53493F5115FC6D280059492E /* iSub-Integration-Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "iSub-Integration-Tests-Info.plist"; path = "Testing/KIF_Integration_Tests/iSub-Integration-Tests-Info.plist"; sourceTree = "<group>"; };
+		5349AD031613724D003603AF /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Images/Other/Default-568h@2x.png"; sourceTree = "<group>"; };
 		534E43B51155659A000B4134 /* AlbumUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AlbumUITableViewCell.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		534E43B61155659A000B4134 /* AlbumUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumUITableViewCell.m; sourceTree = "<group>"; };
 		534E443E1155AD01000B4134 /* default-album-art-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art-small.png"; path = "Images/Other/default-album-art-small.png"; sourceTree = "<group>"; };
@@ -4682,6 +4686,7 @@
 				5305C2051157F4F800BC78F0 /* Default.png */,
 				53B20D1C12C27AAA00A90DD9 /* Default@2x.png */,
 				53B64B7E12C9173E007F1ED5 /* Default-Portrait.png */,
+				5349AD031613724D003603AF /* Default-568h@2x.png */,
 				53C7FD71150EFF7A008DA51C /* Default-Portrait@2x.png */,
 				53B64B9612C917E4007F1ED5 /* Default-Landscape.png */,
 				53C7FD70150EFF7A008DA51C /* Default-Landscape@2x.png */,
@@ -5869,6 +5874,7 @@
 				53F1422615FD5D37004D00D5 /* EX2SlidingNotification.xib in Resources */,
 				53F1422C15FD5D37004D00D5 /* EX2TabBarController.xib in Resources */,
 				53F1426215FD5D7A004D00D5 /* README.txt in Resources */,
+				5349AD041613724D003603AF /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6729,6 +6735,7 @@
 				53F1422815FD5D37004D00D5 /* EX2SlidingNotification.xib in Resources */,
 				53F1422E15FD5D37004D00D5 /* EX2TabBarController.xib in Resources */,
 				53F1426415FD5D7A004D00D5 /* README.txt in Resources */,
+				5349AD061613724D003603AF /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7034,6 +7041,7 @@
 				53F1422715FD5D37004D00D5 /* EX2SlidingNotification.xib in Resources */,
 				53F1422D15FD5D37004D00D5 /* EX2TabBarController.xib in Resources */,
 				53F1426315FD5D7A004D00D5 /* README.txt in Resources */,
+				5349AD051613724D003603AF /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8250,7 +8258,7 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(VALID_ARCHS)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -8269,7 +8277,7 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "Other/iSub-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Classes\"",
@@ -8300,7 +8308,7 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(VALID_ARCHS)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
@@ -8317,7 +8325,7 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "Other/iSub-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Classes\"",
@@ -8347,10 +8355,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
-				ARCHS = (
-					armv6,
-					armv7,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Benjamin Baron";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Benjamin Baron";
@@ -8386,7 +8391,7 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(VALID_ARCHS)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = Other/Entitlements.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Datastar Consulting Services, Inc.";
@@ -8409,7 +8414,7 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "Other/iSub-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Classes\"",
@@ -8440,10 +8445,7 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = (
-					armv6,
-					armv7,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -8496,10 +8498,7 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = (
-					armv6,
-					armv7,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Datastar Consulting Services, Inc.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Datastar Consulting Services, Inc.";
@@ -8553,10 +8552,7 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = (
-					armv6,
-					armv7,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
@@ -8654,7 +8650,7 @@
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "armv6 armv7";
+				VALID_ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 			};
 			name = Debug;
 		};
@@ -8711,7 +8707,7 @@
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "armv6 armv7";
+				VALID_ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 			};
 			name = AdHoc;
 		};
@@ -8765,7 +8761,7 @@
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "armv6 armv7";
+				VALID_ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 			};
 			name = Release;
 		};
@@ -8774,10 +8770,7 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = (
-					armv7,
-					armv6,
-				);
+				ARCHS = armv7;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -8803,7 +8796,7 @@
 					/usr/include/libxml2,
 				);
 				INFOPLIST_FILE = "Other/iSub-Info-Beta.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Classes\"",
@@ -8835,10 +8828,7 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = (
-					armv7,
-					armv6,
-				);
+				ARCHS = armv7;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = Other/Entitlements.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -8865,7 +8855,7 @@
 					/usr/include/libxml2,
 				);
 				INFOPLIST_FILE = "Other/iSub-Info-Beta.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Classes\"",
@@ -8897,10 +8887,7 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = (
-					armv7,
-					armv6,
-				);
+				ARCHS = armv7;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -8924,7 +8911,7 @@
 					/usr/include/libxml2,
 				);
 				INFOPLIST_FILE = "Other/iSub-Info-Beta.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Classes\"",
@@ -8954,7 +8941,7 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(VALID_ARCHS)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -8976,7 +8963,7 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "Other/iSub-Info-Lite.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Classes\"",
@@ -9007,7 +8994,7 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(VALID_ARCHS)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = Other/Entitlements.plist;
 				CODE_SIGN_IDENTITY = "";
@@ -9031,7 +9018,7 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "Other/iSub-Info-Lite.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Classes\"",
@@ -9060,7 +9047,7 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(VALID_ARCHS)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
@@ -9080,7 +9067,7 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "Other/iSub-Info-Lite.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Classes\"",
@@ -9110,10 +9097,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
-				ARCHS = (
-					armv6,
-					armv7,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Benjamin Baron (T2FQV5U2DH)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Benjamin Baron (T2FQV5U2DH)";
@@ -9147,10 +9131,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
-				ARCHS = (
-					armv6,
-					armv7,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Benjamin Baron";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Benjamin Baron";
 				GCC_C_LANGUAGE_STANDARD = c99;

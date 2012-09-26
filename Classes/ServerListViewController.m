@@ -27,6 +27,11 @@
 @synthesize theNewRedirectionUrl, settingsTabViewController, helpTabViewController;
 @synthesize isEditing, headerView, segmentedControl;
 
+- (BOOL)shouldAutorotate
+{
+    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {
 	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)

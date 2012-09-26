@@ -12,7 +12,7 @@
 @class FMDatabase, ISMSCoverArtLoader;
 @interface SUSCoverArtDAO : NSObject <ISMSLoaderDelegate, ISMSLoaderManager>
 
-@property (unsafe_unretained) NSObject<ISMSLoaderDelegate> *delegate;
+@property (weak) NSObject<ISMSLoaderDelegate> *delegate;
 @property (strong) ISMSCoverArtLoader *loader;
 
 @property (copy) NSString *coverArtId;

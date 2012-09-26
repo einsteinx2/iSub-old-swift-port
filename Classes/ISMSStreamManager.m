@@ -15,7 +15,7 @@
 #import "SUSLyricsDAO.h"
 #import "ISMSCacheQueueManager.h"
 
-LOG_LEVEL_ISUB_DEFAULT
+LOG_LEVEL_ISUB_DEBUG
 #define maxNumOfReconnects 5
 
 @implementation ISMSStreamManager

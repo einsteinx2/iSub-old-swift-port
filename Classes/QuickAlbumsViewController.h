@@ -8,7 +8,7 @@
 
 @interface QuickAlbumsViewController : UIViewController <ISMSLoaderDelegate>
 
-@property (nonatomic, unsafe_unretained) UIViewController *parent;
+@property (nonatomic, weak) UIViewController *parent;
 
 @property (nonatomic, strong) NSDictionary *titles;
 @property (nonatomic, strong) NSURLConnection *connection;

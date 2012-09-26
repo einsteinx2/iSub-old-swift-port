@@ -18,20 +18,20 @@ typedef enum
 @interface BassEffectDAO : NSObject
 
 @property BassEffectType type;
-@property (unsafe_unretained, readonly) NSArray *presetsArray;
+@property (weak, readonly) NSArray *presetsArray;
 @property (strong) NSDictionary *presets;
-@property (unsafe_unretained, readonly) NSArray *userPresetsArray;
-@property (unsafe_unretained, readonly) NSArray *userPresetsArrayMinusCustom;
-@property (unsafe_unretained, readonly) NSDictionary *userPresets;
-@property (unsafe_unretained, readonly) NSDictionary *defaultPresets;
+@property (weak, readonly) NSArray *userPresetsArray;
+@property (weak, readonly) NSArray *userPresetsArrayMinusCustom;
+@property (weak, readonly) NSDictionary *userPresets;
+@property (weak, readonly) NSDictionary *defaultPresets;
 
 @property (readonly) NSUInteger userPresetsCount;
 @property (readonly) NSUInteger defaultPresetsCount;
 
 @property (readonly) NSUInteger selectedPresetIndex;
 @property NSUInteger selectedPresetId;
-@property (unsafe_unretained, readonly) NSDictionary *selectedPreset;
-@property (unsafe_unretained, readonly) NSArray *selectedPresetValues;
+@property (weak, readonly) NSDictionary *selectedPreset;
+@property (weak, readonly) NSArray *selectedPresetValues;
 
 - (id)initWithType:(BassEffectType)effectType;
 - (void)setup;

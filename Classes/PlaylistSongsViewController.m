@@ -28,6 +28,10 @@
 @synthesize reloading, refreshHeaderView;
 @synthesize connection, receivedData, playlistCount; 
 
+- (BOOL)shouldAutorotate
+{
+    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+}
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
 {

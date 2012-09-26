@@ -17,7 +17,7 @@
 @property BOOL isQueueDownloading;
 @property (copy) ISMSSong *currentQueuedSong;
 @property (strong) ISMSStreamHandler *currentStreamHandler;
-@property (unsafe_unretained, readonly) ISMSSong *currentQueuedSongInDb;
+@property (weak, readonly) ISMSSong *currentQueuedSongInDb;
 
 
 /*@property NSUInteger downloadLength;
