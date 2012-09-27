@@ -127,8 +127,7 @@ static void initialize_navigationBarImages()
 			{
 				if (![loadingImageNames containsObject:self.coverArtId])
 				{
-					// This art is not loading, so start loading it
-					
+					// This art is not loading, so start loading it					
 					NSString *size = nil;
 					if (self.isLarge)
 					{
@@ -161,8 +160,10 @@ static void initialize_navigationBarImages()
 						if (self.connection)
 						{
 							self.receivedData = [NSMutableData data];
-						} 
-						else 
+                            
+                            [loadingImageNames addObject:self.coverArtId];
+						}
+						else
 						{
 							// Inform the delegate that the loading failed.
 							NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
@@ -175,6 +176,16 @@ static void initialize_navigationBarImages()
 			}
 		}
 	}
+}
+
+- (void)cancelLoad
+{
+    [super cancelLoad];
+    
+    @synchronized(syncObject)
+    {
+        [loadingImageNames removeObject:self.coverArtId];
+    }
 }
 
 #pragma mark - Connection Delegate
@@ -207,7 +218,12 @@ static void initialize_navigationBarImages()
 }
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
-{  
+{
+    @synchronized(syncObject)
+    {
+        [loadingImageNames removeObject:self.coverArtId];
+    }
+    
 	self.receivedData = nil;
 	self.connection = nil;
 	
@@ -220,6 +236,11 @@ static void initialize_navigationBarImages()
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {
+    @synchronized(syncObject)
+    {
+        [loadingImageNames removeObject:self.coverArtId];
+    }
+    
 	// Check to see if the data is a valid image. If so, use it; if not, use the default image.
 	if([UIImage imageWithData:self.receivedData])
 	{

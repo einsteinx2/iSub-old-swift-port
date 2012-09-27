@@ -14,6 +14,8 @@
     #import "Imports.h"
 #endif
 
+// Uncomment this to silence all logs except in clases with LOG_LEVEL_ISUB_DEBUG
+// helpful for debugging to get rid of logging you don't need
 //#define SILENT
 
 #ifdef BETA

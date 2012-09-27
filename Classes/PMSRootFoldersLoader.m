@@ -84,7 +84,7 @@
 		
 		NSString *name = [index objectAtIndex:0];
 		NSInteger row = [[index objectAtIndex:1] intValue] + 1; // Add 1 to compensate for sqlite row numbering
-		NSInteger count = nextIndex ? [[nextIndex objectAtIndex:1] intValue] - row : totalCount - row;
+		NSInteger count = nextIndex ? [[nextIndex objectAtIndex:1] intValue] - row : totalCount - row + 1;
         DLog(@"name: %@  row: %i  count: %i", name, row, count);
 		[self addRootFolderIndexToCache:row count:count name:name];
 	}

@@ -58,7 +58,7 @@
 @synthesize largeOverlayArtist, largeOverlaySong, largeOverlayAlbum, largeOverlayView;
 
 @synthesize artistLabel, albumLabel, titleLabel;
-@synthesize playButton, nextButton, prevButton, eqButton, volumeSlider, coverArtImageView, reflectionView, songInfoToggleButton, activityIndicator;
+@synthesize playButton, nextButton, prevButton, eqButton, volumeSlider, coverArtImageView, reflectionView, songInfoToggleButton;
 @synthesize artistTitleLabel, albumTitleLabel, songTitleLabel;
 @synthesize volumeView, jukeboxVolumeView;
 @synthesize reflectionHeight, isFlipped, isExtraButtonsShowing, pageControlViewController, bookmarkBytePosition;
@@ -116,8 +116,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(backAction:)];
 	
 	// Initialize the song info
-	[self initSongInfo];
+	//[self initSongInfo];
 	
+    // This also calls init song info, so no need to call it explicitly above
 	[self jukeboxToggled];
 	
 	// Setup the cover art reflection
@@ -127,7 +128,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	reflectionView.alpha = kDefaultReflectionOpacity;
 	if (isFlipped)
 		reflectionView.alpha = 0.0;
-    [activityIndicator stopAnimating];
 	
 	// Register for all notifications
 	[self registerForNotifications];

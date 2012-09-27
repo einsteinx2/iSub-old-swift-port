@@ -90,7 +90,8 @@
 }
 
 - (void)startLoad
-{	
+{
+    [self cancelLoad];
     self.loader = [[ISMSCoverArtLoader alloc] initWithDelegate:self coverArtId:self.coverArtId isLarge:self.isLarge];
     [self.loader startLoad];
 }
@@ -119,7 +120,7 @@
 {
 	self.loader.delegate = nil;
 	self.loader = nil;
-		
+    
 	if ([self.delegate respondsToSelector:@selector(loadingFinished:)])
 	{
 		[self.delegate loadingFinished:nil];

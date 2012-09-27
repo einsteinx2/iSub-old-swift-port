@@ -348,7 +348,8 @@ double startSongSeconds = 0.0;
 
 - (void)playVideo:(ISMSSong *)aSong
 {
-    if (!aSong.isVideo || !settingsS.isVideoSupported)
+    NSString *serverType = settingsS.serverType;
+    if (!aSong.isVideo || (([serverType isEqualToString:SUBSONIC] || [serverType isEqualToString:UBUNTU_ONE]) && !settingsS.isVideoSupported))
         return;
         
     if (IS_IPAD())
@@ -358,7 +359,6 @@ double startSongSeconds = 0.0;
             playlistS.repeatMode = ISMSRepeatMode_Normal;
     }
     
-    NSString *serverType = settingsS.serverType;
     if ([serverType isEqualToString:SUBSONIC] || [serverType isEqualToString:UBUNTU_ONE])
     {
         [self playSubsonicVideo:aSong];
@@ -376,7 +376,7 @@ double startSongSeconds = 0.0;
     if (!aSong.itemId)
         return;
     
-    NSDictionary *parameters = @{ @"id" : aSong.itemId, @"bitRate" : @[@"1024",@"60"] };
+    NSDictionary *parameters = @{ @"id" : aSong.itemId, @"bitRate" : @[@"1536", @"1024",@"512", @"256", @"60"] };
     NSURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"hls" parameters:parameters];
     
     NSString *urlString = [NSString stringWithFormat:@"%@?%@", request.URL.absoluteString, [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]];
@@ -393,7 +393,24 @@ double startSongSeconds = 0.0;
 
 - (void)playWaveBoxVideo:(ISMSSong *)aSong
 {
+    [audioEngineS.player stop];
     
+    if (!aSong.itemId)
+        return;
+    
+    NSDictionary *parameters = @{ @"id" : aSong.itemId, @"transQuality" : @[@"1536", @"1024",@"512", @"256", @"60"] };
+    NSURLRequest *request = [NSMutableURLRequest requestWithPMSAction:@"transcodehls" parameters:parameters];
+    
+    NSString *urlString = [NSString stringWithFormat:@"%@?%@", request.URL.absoluteString, [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]];
+    
+    //NSString *urlString = [NSString stringWithFormat:@"%@/rest/hls.m3u8?c=iSub&v=1.8.0&u=%@&p=%@&id=%@", settingsS.urlString, [settingsS.username URLEncodeString], [settingsS.password URLEncodeString], aSong.itemId];
+    DLog(@"urlString: %@", urlString);
+    
+    [self createMoviePlayer];
+    
+    self.moviePlayer.contentURL = [NSURL URLWithString:urlString];
+    //[moviePlayer prepareToPlay];
+    [self.moviePlayer play];
 }
 
 - (void)moviePlayerExitedFullscreen:(NSNotification *)notification

@@ -15,6 +15,8 @@
 #import "SUSCoverArtDAO.h"
 #import "AsynchronousImageViewDelegate.h"
 
+LOG_LEVEL_ISUB_DEBUG
+
 @interface AsynchronousImageView ()
 {
     __strong NSString *_coverArtId;
@@ -149,6 +151,8 @@
 
 - (void)loadingFailed:(ISMSLoader*)theLoader withError:(NSError *)error
 {
+    DDLogVerbose(@"async cover art loading failed");
+    
 	[self.activityIndicator removeFromSuperview];
 	self.activityIndicator = nil;
 	
@@ -161,14 +165,16 @@
 
 - (void)loadingFinished:(ISMSLoader*)theLoader
 {
+    DLog(@"async cover art loading finished for: %@", self.coverArtId);
+    
 	[self.activityIndicator removeFromSuperview];
 	self.activityIndicator = nil;
 	
-//DLog(@"isLarge: %@", NSStringFromBOOL(self.isLarge));
-//DLog(@"delegate: %@", self.delegate);
+   //DLog(@"isLarge: %@", NSStringFromBOOL(self.isLarge));
+   //DLog(@"delegate: %@", self.delegate);
 	
 	self.image = self.coverArtDAO.coverArtImage;
-	self.coverArtDAO = nil;
+    self.coverArtDAO = nil;
 	
 	if ([self.delegate respondsToSelector:@selector(asyncImageViewFinishedLoading:)])
 	{

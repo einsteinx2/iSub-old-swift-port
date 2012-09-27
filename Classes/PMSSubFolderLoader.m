@@ -30,6 +30,7 @@
 	
 	NSArray *folders = [response objectForKey:@"folders"];
 	NSArray *songs = [response objectForKey:@"songs"];
+    NSArray *videos = [response objectForKey:@"videos"];
 
 	self.albumsCount = folders.count;
 	for (NSDictionary *folder in folders)
@@ -42,7 +43,6 @@
 	}
 	
 	self.folderLength = 0;
-    int i = 0;
 	for (NSDictionary *song in songs)
 	{
 		@autoreleasepool 
@@ -51,10 +51,22 @@
             //DLog(@"aSong: %@", aSong);
             self.folderLength += aSong.duration.intValue;
             [self insertSongIntoFolderCache:aSong];
-            i++;
 		}
 	}
-    self.songsCount = i;
+    
+    for (NSDictionary *video in videos)
+	{
+		@autoreleasepool
+		{
+            ISMSSong *aSong = [[ISMSSong alloc] initWithPMSDictionary:video];
+            aSong.isVideo = YES;
+            //DLog(@"aSong: %@", aSong);
+            self.folderLength += aSong.duration.intValue;
+            [self insertSongIntoFolderCache:aSong];
+		}
+	}
+    
+    self.songsCount = songs.count + videos.count;
 	
 	[self insertAlbumsCount];
 	[self insertSongsCount];

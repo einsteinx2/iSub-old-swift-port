@@ -321,6 +321,10 @@
             settingsS.isNewSearchAPI = ((SUSStatusLoader *)theLoader).isNewSearchAPI;
             settingsS.isVideoSupported = ((SUSStatusLoader *)theLoader).isVideoSupported;
         }
+        else if ([theLoader isKindOfClass:[PMSStatusLoader class]])
+        {
+            settingsS.isVideoSupported = YES;
+        }
     }
 }
 

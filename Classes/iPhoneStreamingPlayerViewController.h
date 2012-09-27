@@ -30,7 +30,6 @@
 @property (strong) IBOutlet AsynchronousImageView *coverArtImageView;
 @property (strong) IBOutlet UIImageView *reflectionView;
 @property (strong) IBOutlet UIButton *songInfoToggleButton;
-@property (strong) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (strong) UILabel *artistLabel;
 @property (strong) UILabel *albumLabel;
 @property (strong) UILabel *titleLabel;

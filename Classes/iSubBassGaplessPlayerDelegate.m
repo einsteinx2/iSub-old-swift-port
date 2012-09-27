@@ -11,6 +11,26 @@
 
 @implementation iSubBassGaplessPlayerDelegate
 
+- (id)init
+{
+    if ((self = [super init]))
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(grabCurrentPlaylistIndex:) name:ISMSNotification_CurrentPlaylistOrderChanged object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(grabCurrentPlaylistIndex:) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
+    }
+    return self;
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)grabCurrentPlaylistIndex:(NSNotification *)notification
+{
+    
+}
+
 - (void)bassSeekToPositionStarted:(BassGaplessPlayer*)player
 {
     
@@ -51,6 +71,11 @@
 - (ISMSSong *)bassSongForIndex:(NSUInteger)index player:(BassGaplessPlayer *)player
 {
     return [playlistS songForIndex:index];
+}
+
+- (NSUInteger)bassCurrentPlaylistIndex:(BassGaplessPlayer *)player
+{
+    return playlistS.currentIndex;
 }
 
 - (void)bassRetrySongAtIndex:(NSUInteger)index player:(BassGaplessPlayer*)player;

@@ -15,7 +15,7 @@
 
 @implementation BassGaplessPlayer
 
-LOG_LEVEL_ISUB_DEFAULT
+LOG_LEVEL_ISUB_DEBUG
 
 #define ISMS_BASSBufferSize 800
 #define ISMS_defaultSampleRate 44100
@@ -35,10 +35,10 @@ LOG_LEVEL_ISUB_DEFAULT
 		_streamGcdQueue = dispatch_queue_create("com.anghami.BassStreamQueue", NULL);
 		_ringBuffer = [EX2RingBuffer ringBufferWithLength:BytesFromKiB(640)];
 		
-		/*// Don't need these anymore because the next song is only loaded right at the end
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStream) name:ISMSNotification_RepeatModeChanged object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStream) name:ISMSNotification_CurrentPlaylistOrderChanged object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prepareNextSongStream) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];*/
+		// Keep track of the playlist index
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatePlaylistIndex:) name:ISMSNotification_CurrentPlaylistOrderChanged object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatePlaylistIndex:) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatePlaylistIndex:) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
 	}
 	
     return self;
@@ -64,19 +64,21 @@ void CALLBACK MyStreamEndCallback(HSYNC handle, DWORD channel, DWORD data, void 
 {
 	@autoreleasepool 
 	{
-		// Free and remove the channel
-		//BASS_Mixer_ChannelRemove(channel);
-		//BASS_StreamFree(channel);
-		
 		BassStream *userInfo = (__bridge BassStream *)user;
 		if (userInfo)
 		{
             // Prepare the next song in the queue
+            DDLogCVerbose(@"Preparing stream for: %@", [userInfo.player nextSong]);
             BassStream *nextStream = [userInfo.player prepareStreamForSong:[userInfo.player nextSong]];
             if (nextStream)
             {
+                DDLogCVerbose(@"Stream prepared successfully for: %@", [userInfo.player nextSong]);
                 [userInfo.player.streamQueue addObject:nextStream];
                 BASS_Mixer_StreamAddChannel(userInfo.player.mixerStream, nextStream.stream, 0);
+            }
+            else
+            {
+                DDLogCVerbose(@"Could NOT create stream for: %@", [userInfo.player nextSong]);
             }
             
             // Mark as ended and set the buffer space til end for the UI
@@ -284,6 +286,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	{
 		userInfo.isEndedCalled = YES;
         
+        // The delegate is responsible for incrementing the playlist index
         if ([self.delegate respondsToSelector:@selector(bassSongEndedCalled:)])
         {
             [self.delegate bassSongEndedCalled:self];
@@ -296,8 +299,9 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		}
 		[self.streamQueue removeObject:userInfo];
         
-        // Update our index position
-        self.currentPlaylistIndex = [self nextIndex];
+        // Instead wait for the playlist index changed notification
+        /*// Update our index position
+        self.currentPlaylistIndex = [self nextIndex];*/
 
 		// Send song end notification
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnded];
@@ -716,7 +720,13 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
 - (ISMSSong *)nextSong
 {
     return [self.delegate bassSongForIndex:[self nextIndex] player:self];
-    
+}
+
+// Called via a notification whenever the playlist index changes
+- (void)updatePlaylistIndex:(NSNotification *)notification
+{
+    self.currentPlaylistIndex = [self.delegate bassCurrentPlaylistIndex:self];
+    DDLogVerbose(@"Updating playlist index to: %u", self.currentPlaylistIndex);
 }
 
 #pragma mark - Audio Engine Properties
