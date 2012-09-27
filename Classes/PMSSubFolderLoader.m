@@ -29,7 +29,7 @@
 	//NSArray *albums = [response objectForKey:@"albums"];
 	
 	NSArray *folders = [response objectForKey:@"folders"];
-	NSArray *mediaItems = [response objectForKey:@"mediaItems"];
+	NSArray *songs = [response objectForKey:@"songs"];
 
 	self.albumsCount = folders.count;
 	for (NSDictionary *folder in folders)
@@ -43,19 +43,15 @@
 	
 	self.folderLength = 0;
     int i = 0;
-	for (NSDictionary *mediaItem in mediaItems)
+	for (NSDictionary *song in songs)
 	{
 		@autoreleasepool 
 		{
-            // Only parse songs
-            if ([[mediaItem objectForKey:@"itemTypeId"] isEqual:[NSNumber numberWithInt:3]])
-            {
-                ISMSSong *aSong = [[ISMSSong alloc] initWithPMSDictionary:mediaItem];
-                //DLog(@"aSong: %@", aSong);
-                self.folderLength += aSong.duration.intValue;
-                [self insertSongIntoFolderCache:aSong];
-                i++;
-            }
+            ISMSSong *aSong = [[ISMSSong alloc] initWithPMSDictionary:song];
+            //DLog(@"aSong: %@", aSong);
+            self.folderLength += aSong.duration.intValue;
+            [self insertSongIntoFolderCache:aSong];
+            i++;
 		}
 	}
     self.songsCount = i;
