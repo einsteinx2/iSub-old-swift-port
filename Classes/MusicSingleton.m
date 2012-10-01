@@ -71,7 +71,8 @@ double startSongSeconds = 0.0;
 		
 		// Fill the stream queue
 		if (!viewObjectsS.isOfflineMode)
-			[streamManagerS fillStreamQueue:audioEngineS.player.isStarted];
+            [streamManagerS fillStreamQueue:YES];
+			//[streamManagerS fillStreamQueue:audioEngineS.player.isStarted];
 	}
 	else if (!currentSong.isFullyCached && viewObjectsS.isOfflineMode)
 	{

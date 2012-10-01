@@ -29,7 +29,16 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
-	<array/>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>isubbeta</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>com.einsteinx2.isubbeta</string>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>${BUILD_NUMBER}</string>
 	<key>LSRequiresIPhoneOS</key>

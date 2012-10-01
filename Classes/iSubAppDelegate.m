@@ -56,9 +56,16 @@
 }*/
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application
-{   
+{
     //NSSetUncaughtExceptionHandler(&onUncaughtException);
 
+    // Adjust the window to the correct size before anything else loads to prevent
+    // various sizing/positioning issues
+    CGSize screenSize = [[UIScreen mainScreen] preferredMode].size;
+    CGFloat screenScale = [UIScreen mainScreen].scale;
+    screenScale = screenScale == 0. ? 1. : screenScale;
+    self.window.size = CGSizeMake(screenSize.width / screenScale, screenSize.height / screenScale);
+    
 	// Start the save defaults timer and mem cache initial defaults
 	[settingsS setupSaveState];
 	
@@ -235,6 +242,58 @@
 	// Recover current state if player was interrupted
 	[ISMSStreamManager sharedInstance];
 	[musicS resumeSong];
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    // Handle being openned by a URL
+    DLog(@"url host: %@ path components: %@", url.host, url.pathComponents );
+    
+    if (url.host)
+    {
+        if ([[url.host lowercaseString] isEqualToString:@"play"])
+        {
+            if (audioEngineS.player)
+            {
+                if (!audioEngineS.player.isPlaying)
+                {
+                    [audioEngineS.player playPause];
+                }
+            }
+            else
+            {
+                [musicS playSongAtPosition:playlistS.currentIndex];
+            }
+        }
+        else if ([[url.host lowercaseString] isEqualToString:@"pause"])
+        {
+            if (audioEngineS.player.isPlaying)
+            {
+                [audioEngineS.player playPause];
+            }
+        }
+        else if ([[url.host lowercaseString] isEqualToString:@"playpause"])
+        {
+            if (audioEngineS.player)
+            {
+                [audioEngineS.player playPause];
+            }
+            else
+            {
+                [musicS playSongAtPosition:playlistS.currentIndex];
+            }
+        }
+        else if ([[url.host lowercaseString] isEqualToString:@"next"])
+        {
+            [musicS playSongAtPosition:playlistS.nextIndex];
+        }
+        else if ([[url.host lowercaseString] isEqualToString:@"prev"])
+        {
+            [musicS playSongAtPosition:playlistS.prevIndex];
+        }
+    }
+    
+    return YES;
 }
 
 // Check server cancel load
@@ -804,7 +863,7 @@
 		// Perform the actual check in two seconds to make sure it's the last message received
 		// this prevents a bug where the status changes from wifi to not reachable, but first it receives
 		// some messages saying it's still on wifi, then gets the not reachable messages
-		[EX2Dispatch timerInMainQueueAfterDelay:2.0 withName:@"Reachability Changed" repeats:NO performBlock:
+		[EX2Dispatch timerInMainQueueAfterDelay:6.0 withName:@"Reachability Changed" repeats:NO performBlock:
 		 ^{
 			 [self reachabilityChangedInternal:note.object];
 		 }];
