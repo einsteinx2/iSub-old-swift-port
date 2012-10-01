@@ -163,6 +163,8 @@
         self.window.rootViewController = self.ipadRootViewController;
 		[self.window makeKeyAndVisible];
 		
+        [self.window makeKeyAndVisible];
+        
 		if (self.showIntro)
 		{
 			self.introController = [[IntroViewController alloc] init];
@@ -204,6 +206,8 @@
 			//[self.window addSubview:self.mainTabBarController.view];
             self.window.rootViewController = self.mainTabBarController;
 		}
+        
+        [self.window makeKeyAndVisible];
 		
 		if (self.showIntro)
 		{
@@ -211,11 +215,11 @@
 			[self.currentTabBarController presentModalViewController:self.introController animated:NO];
 		}
 	}
+    
 	if (settingsS.isJukeboxEnabled)
 		self.window.backgroundColor = viewObjectsS.jukeboxColor;
 	else 
 		self.window.backgroundColor = viewObjectsS.windowColor;
-	[self.window makeKeyAndVisible];	
 	
 //DLog(@"urlString: %@", settingsS.urlString);
 	

@@ -100,7 +100,8 @@
 		[self dismissModalViewControllerAnimated:NO];
 		
 		// Hack to get this working on iOS 4, can't call it directly because it doesn't detect the selected tab correctly
-		[appDelegateS performSelector:@selector(showSettings) withObject:nil afterDelay:1.0];
+		//[appDelegateS performSelector:@selector(showSettings) withObject:nil afterDelay:1.0];
+        [appDelegateS showSettings];
 	}
 }
 

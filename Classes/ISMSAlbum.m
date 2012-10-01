@@ -14,14 +14,21 @@
 {
 	if ((self = [super init]))
 	{
-		//title = [dictionary objectForKey:@"albumName"];
-		//albumId = [dictionary objectForKey:@"albumId"];
-		// albums are folders for now
+		// NOTE: IDs are apparantly stored as NSNumbers when deserialized because
+        // they are integer strings
+        
 		_title = N2n([dictionary objectForKey:@"folderName"]);
-		_albumId = N2n([dictionary objectForKey:@"folderId"]);
-		_coverArtId = N2n([dictionary objectForKey:@"artId"]);
-		_artistName = N2n([dictionary objectForKey:@"artistName"]);
-		_artistId = N2n([dictionary objectForKey:@"artistId"]);
+		
+        id albumId = N2n([dictionary objectForKey:@"folderId"]);
+        _albumId = albumId ? [NSString stringWithFormat:@"%@", albumId] : nil;
+		
+        id coverArtId = N2n([dictionary objectForKey:@"artId"]);
+        _coverArtId = coverArtId ? [NSString stringWithFormat:@"%@", coverArtId] : nil;
+		
+        _artistName = N2n([dictionary objectForKey:@"artistName"]);
+		
+        id artistId = N2n([dictionary objectForKey:@"artistId"]);
+        _artistId = artistId ? [NSString stringWithFormat:@"%@", artistId] : nil;
 	}
 	return self;
 }

@@ -221,6 +221,9 @@
     theServer.password = self.passwordField.text;
     theServer.type = WAVEBOX;
     
+    settingsS.urlString = self.loader.urlString;
+    settingsS.username = self.loader.username;
+    settingsS.password = self.loader.password;
     settingsS.sessionId = self.loader.sessionId;
     
     if (!settingsS.serverList)
