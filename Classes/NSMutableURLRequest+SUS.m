@@ -34,7 +34,8 @@ static NSSet *setOfVersions = nil;
 
 + (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action urlString:(NSString *)url username:(NSString *)user password:(NSString *)pass parameters:(NSDictionary *)parameters byteOffset:(NSUInteger)offset
 {
-	NSMutableString *urlString = [NSMutableString stringWithFormat:@"%@/rest/%@.view", url, action];
+    NSMutableString *urlString = [url isEqualToString:@"https://one.ubuntu.com/music"] ? [NSMutableString stringWithFormat:@"%@/api/1.0/%@.view", url, action] :
+                                                                                         [NSMutableString stringWithFormat:@"%@/rest/%@.view", url, action];
     if ([action isEqualToString:@"hls"])
         urlString = [NSMutableString stringWithFormat:@"%@/rest/%@.m3u8", url, action];
 	NSString *username = [user URLEncodeString];
@@ -100,7 +101,7 @@ static NSSet *setOfVersions = nil;
 		loadingTimeout = ISMSServerCheckTimeout;
 	}
 	
-	if ([url isEqualToString:@"https://streaming.one.ubuntu.com"])
+	if ([url isEqualToString:@"https://one.ubuntu.com/music"])
 	{
 		// This is Ubuntu One, send as GET request
 		[urlString appendFormat:@"?%@", postString];
@@ -111,7 +112,7 @@ static NSSet *setOfVersions = nil;
 									  cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData 
 								  timeoutInterval:loadingTimeout];
 	
-	if ([url isEqualToString:@"https://streaming.one.ubuntu.com"])
+	if ([url isEqualToString:@"https://one.ubuntu.com/music"])
 	{
 		[request setHTTPMethod:@"GET"]; 
 	}
