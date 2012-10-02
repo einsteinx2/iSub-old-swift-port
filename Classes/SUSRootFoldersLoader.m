@@ -34,7 +34,7 @@
 	
 	//NSDate *startTime = [NSDate date];
 	
-	//DLog(@"%@", [[[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding] autorelease]);
+	//DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
 	NSError *error;
     TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData error:&error];
 	if (error)
