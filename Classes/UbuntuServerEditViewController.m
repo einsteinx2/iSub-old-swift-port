@@ -13,7 +13,7 @@
 #import "ServerTypeViewController.h"
 #import "MenuViewController.h"
 
-#define URL @"https://streaming.one.ubuntu.com"
+#define URL @"https://one.ubuntu.com/music"
 
 @implementation UbuntuServerEditViewController
 
