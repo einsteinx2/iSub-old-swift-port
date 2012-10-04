@@ -24,13 +24,21 @@ LOG_LEVEL_ISUB_DEFAULT
 
 @implementation BassEqualizer
 
-- (id)initWithChannel:(HCHANNEL)theChannel
+- (id)init
 {
-	if ((self = [super init]))
+    if ((self = [super init]))
 	{
-		[self setChannel:theChannel];
 		_eqValues = [[NSMutableArray alloc] initWithCapacity:4];
 		_eqHandles = [[NSMutableArray alloc] initWithCapacity:4];
+	}
+	return self;
+}
+
+- (id)initWithChannel:(HCHANNEL)theChannel
+{
+	if ((self = [self init]))
+	{
+		[self setChannel:theChannel];
 	}
 	return self;
 }
@@ -161,6 +169,8 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (BOOL)toggleEqualizer
 {
+    settingsS.isEqualizerOn = !self.isEqActive;
+    
 	if (self.isEqActive)
 	{
 		[self clearEqualizerValues];
@@ -188,6 +198,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	}
 	
 	self.volumeFx = BASS_ChannelSetFX(self.channel, BASS_FX_BFX_VOLUME, 1);
+    self.gain = settingsS.gainMultiplier;
 }
 
 - (void)setGain:(float)theGain

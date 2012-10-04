@@ -251,9 +251,9 @@ NSString* UIPickerViewDidHideNotification = @"UIPickerViewDidHideNotification";
 	self.text = [NSString stringWithFormat:formatString array:componentStrings];
 	
 	// notify the delegate
-	if (didFinishLoading)
+	//if (didFinishLoading)
 		[delegate pickerField:self selectedRow:row inComponent:component];
-	else
-		didFinishLoading = YES;
+	//else
+	//	didFinishLoading = YES;
 }
 @end

@@ -270,7 +270,12 @@
 	equalizerView = [[EqualizerView alloc] initWithFrame:frame];
 	equalizerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
 	[self.view addSubview:equalizerView];*/
-		
+    
+    if (!audioEngineS.player)
+    {
+        [audioEngineS startEmptyPlayer];
+    }
+
 	effectDAO = [[BassEffectDAO alloc] initWithType:BassEffectType_ParametricEQ];
 
 	//DLog(@"effectDAO.selectedPresetIndex: %i", effectDAO.selectedPresetIndex);

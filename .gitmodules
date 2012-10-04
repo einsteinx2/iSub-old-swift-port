@@ -16,3 +16,6 @@
 [submodule "Frameworks/TBXML"]
 	path = Frameworks/TBXML
 	url = git@github.com:einsteinx2/TBXML.git
+[submodule "Frameworks/HockeySDK"]
+	path = Frameworks/HockeySDK
+	url = git://github.com/bitstadium/HockeySDK-iOS.git

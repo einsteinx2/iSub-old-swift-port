@@ -42,7 +42,8 @@ static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStr
 {
 	[self terminateDownload];
 	
-	self.selfRef = self;
+    if (!self.selfRef)
+        self.selfRef = self;
 	
 	//DLog(@"downloadCFNetA url: %@", [url absoluteString]);
 	
@@ -53,7 +54,9 @@ static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStr
 	
 	self.totalBytesTransferred = 0;
 	self.bytesTransferred = 0;
-	self.byteOffset = 0;
+    
+    if (!resume)
+        self.byteOffset = 0;
     	
 	// Create the file handle
 	self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.filePath];
@@ -132,11 +135,10 @@ static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStr
 		return;
 	}
 	
-	CFHTTPMessageRef messageRef = NULL;
 	CFStreamClientContext ctxt = {0, (__bridge void*)self, NULL, NULL, NULL};
 	
 	// Create the POST request
-	messageRef = CFHTTPMessageCreateRequest(kCFAllocatorDefault, CFSTR("POST"), (__bridge CFURLRef)request.URL, kCFHTTPVersion1_1);
+	CFHTTPMessageRef messageRef = CFHTTPMessageCreateRequest(kCFAllocatorDefault, CFSTR("POST"), (__bridge CFURLRef)request.URL, kCFHTTPVersion1_1);
 	if (messageRef == NULL) goto Bail;
 	
 	CFHTTPMessageSetBody(messageRef, (__bridge CFDataRef)request.HTTPBody);

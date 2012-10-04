@@ -459,7 +459,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 
 #pragma mark - BASS methods
 
-extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
+extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOPUSplugin;
 
 - (void)bassInit:(NSUInteger)sampleRate
 {
@@ -481,6 +481,7 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin;
     BASS_PluginLoad(&BASSWVplugin, 0); // load the WavePack plugin
     BASS_PluginLoad(&BASS_APEplugin, 0); // load the Monkey's Audio plugin
     BASS_PluginLoad(&BASS_MPCplugin, 0); // load the MusePack plugin
+    BASS_PluginLoad(&BASSOPUSplugin, 0); // load the OPUS plugin
 	
 	self.stopFillingRingBuffer = NO;
 	

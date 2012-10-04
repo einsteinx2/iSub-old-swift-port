@@ -17,8 +17,6 @@
 #import "MKStoreManager.h"
 #import "IntroViewController.h"
 #import "SFHFKeychainUtils.h"
-#import "BWQuincyManager.h"
-#import "BWHockeyManager.h"
 #import "ISMSUpdateChecker.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
@@ -462,22 +460,37 @@
 	// HockyApp Kits
 	if (IS_BETA() && IS_ADHOC() && !IS_LITE())
 	{
-		[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
+		/*[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
 		
 		[[BWHockeyManager sharedHockeyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
 		[[BWHockeyManager sharedHockeyManager] setAlwaysShowUpdateReminder:NO];
-		[[BWHockeyManager sharedHockeyManager] setDelegate:self];
+		[[BWHockeyManager sharedHockeyManager] setDelegate:self];*/
+        
+        [[BITHockeyManager sharedHockeyManager] configureWithBetaIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"
+                                                             liveIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"
+                                                                   delegate:self];
+        [[BITHockeyManager sharedHockeyManager].updateManager setAlwaysShowUpdateReminder:NO];
+        [[BITHockeyManager sharedHockeyManager] startManager];
 	}
 	else if (IS_RELEASE())
 	{
 		if (IS_LITE())
-			[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7"];
+			//[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7"];
+            [[BITHockeyManager sharedHockeyManager] configureWithBetaIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7"
+                                                                 liveIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7"
+                                                                       delegate:self];
 		else
-			[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb"];
+			//[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb"];
+            [[BITHockeyManager sharedHockeyManager] configureWithBetaIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb"
+                                                                 liveIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb"
+                                                                       delegate:self];
 	}
-	[[BWQuincyManager sharedQuincyManager] setAutoSubmitCrashReport:YES];
+	//[[BWQuincyManager sharedQuincyManager] setAutoSubmitCrashReport:YES];
+    [[[BITHockeyManager sharedHockeyManager] crashManager] setCrashManagerStatus:BITCrashManagerStatusAutoSend];
+    [[[BITHockeyManager sharedHockeyManager] crashManager] setDelegate:self];
 	
-	if ([[BWQuincyManager sharedQuincyManager] didCrashInLastSession])
+	//if ([[BWQuincyManager sharedQuincyManager] didCrashInLastSession])
+    if ([[[BITHockeyManager sharedHockeyManager] crashManager] didCrashInLastSession])
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh no! iSub crashed!" message:@"iSub support has received your anonymous crash logs and they will be investigated. \n\nWould you also like to send an email to support with more details?" delegate:self cancelButtonTitle:@"No Thanks" otherButtonTitles:@"Send Email", @"Visit iSub Forum", nil];
 		alert.tag = 7;
@@ -485,12 +498,46 @@
 	}
 }
 
-- (NSString *)customDeviceIdentifier 
+//- (NSString *)customDeviceIdentifier
+- (NSString *)customDeviceIdentifierForUpdateManager
 {
 #ifdef ADHOC
     if ([[UIDevice currentDevice] respondsToSelector:@selector(uniqueIdentifier)])
 		return [[UIDevice currentDevice] performSelector:@selector(uniqueIdentifier)];
 #endif
+	
+	return nil;
+}
+
+- (NSString *)applicationLogForCrashManager:(BITCrashManager *)crashManager
+{
+	NSString *logsFolder = [settingsS.cachesPath stringByAppendingPathComponent:@"Logs"];
+	NSArray *logFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:logsFolder error:nil];
+	
+	NSTimeInterval modifiedTime = 0.;
+	NSString *fileNameToUse;
+	for (NSString *file in logFiles)
+	{
+		NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[logsFolder stringByAppendingPathComponent:file] error:nil];
+		NSDate *modified = [attributes fileModificationDate];
+		//DLog(@"Checking file %@ with modified time of %f", file, [modified timeIntervalSince1970]);
+		if (modified && [modified timeIntervalSince1970] >= modifiedTime)
+		{
+			//DLog(@"Using this file, since it's modified time %f is higher than %f", [modified timeIntervalSince1970], modifiedTime);
+			
+			// This file is newer
+			fileNameToUse = file;
+			modifiedTime = [modified timeIntervalSince1970];
+		}
+	}
+	
+	if (fileNameToUse)
+	{
+		NSString *logPath = [logsFolder stringByAppendingPathComponent:fileNameToUse];
+		NSString *contents = [[NSString alloc] initWithContentsOfFile:logPath encoding:NSUTF8StringEncoding error:nil];
+		//DLog(@"Sending contents with length %u from path %@", contents.length, logPath);
+		return contents;
+	}
 	
 	return nil;
 }
@@ -1024,7 +1071,7 @@
 					[mailer setMailComposeDelegate:self];
 					[mailer setToRecipients:[NSArray arrayWithObject:@"support@isubapp.com"]];
 					
-					if ([BWQuincyManager sharedQuincyManager].didCrashInLastSession)
+					if ([[[BITHockeyManager sharedHockeyManager] crashManager] didCrashInLastSession])
 					{
 						// Set version label
 						NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
