@@ -157,8 +157,7 @@ static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStr
         CFHTTPMessageSetHeaderFieldValue(messageRef, CFSTR("Range"), (__bridge CFStringRef)range);
     }
 	
-	CFDataRef body = CFHTTPMessageCopyBody(messageRef);
-	DDLogInfo(@"body: %@", [[NSString alloc] initWithData:(__bridge NSData *)body encoding:NSUTF8StringEncoding]);
+	DDLogInfo(@"body: %@", [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]);
 	
 	// Create the stream for the request.
 	_readStreamRef = CFReadStreamCreateForHTTPRequest(kCFAllocatorDefault, messageRef);
@@ -193,6 +192,7 @@ static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStr
 	// Handle proxy
 	CFDictionaryRef proxyDict = CFNetworkCopySystemProxySettings();
 	CFReadStreamSetProperty(_readStreamRef, kCFStreamPropertyHTTPProxy, proxyDict);
+    CFRelease(proxyDict);
 	
 	// Set the client notifier
 	if (CFReadStreamSetClient(_readStreamRef, kNetworkEvents, ReadStreamClientCallBack, &ctxt) == false)
@@ -477,12 +477,13 @@ static void ReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType t
 	{
 		CFHTTPMessageRef myResponse = (CFHTTPMessageRef)CFReadStreamCopyProperty(_readStreamRef, kCFStreamPropertyHTTPResponseHeader);
 		CFStringRef myStatusLine = CFHTTPMessageCopyResponseStatusLine(myResponse);
-		DDLogCInfo(@"http response status: %@", myStatusLine);
+		DDLogInfo(@"http response status: %@", myStatusLine);
 		
-		CFStringRef contentLength = CFHTTPMessageCopyHeaderFieldValue(myResponse, (CFStringRef)@"Content-Length");
-		DDLogCInfo(@"contentLength: %@", contentLength);
+		self.contentLength = [(__bridge_transfer NSString *)CFHTTPMessageCopyHeaderFieldValue(myResponse, CFSTR("Content-Length")) longLongValue];
+		DDLogInfo(@"contentLength: %llu", self.contentLength);
 		
-		self.contentLength = [((__bridge NSString *)contentLength) longLongValue];
+        CFRelease(myResponse);
+        CFRelease(myStatusLine);
 	}
 	
 	[self terminateDownload];

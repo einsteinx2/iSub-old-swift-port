@@ -1523,8 +1523,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	else
 	{
 		self.downloadProgress.hidden = NO;
-		
-		// Keep between 0 and 1
+        
+        // Keep between 0 and 1
 		float modifier = self.currentSong.downloadProgress;
 		modifier = modifier < 0. ? 0. : modifier;
 		modifier = modifier > 1. ? 1. : modifier;
@@ -1534,8 +1534,12 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		// If the song is fully cached, add the right side border
 		width = modifier >= 1. ? width + downloadProgressBorder : width;
-
-		self.downloadProgress.width = width;
+		
+        /*[UIView animateWithDuration:0.3 animations:^
+         {
+             self.downloadProgress.width = width;
+         }];*/
+        self.downloadProgress.width = width;
 	}
 	
 	[self performSelector:@selector(updateDownloadProgress) withObject:nil afterDelay:1.0];

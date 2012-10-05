@@ -55,6 +55,7 @@ LOG_LEVEL_ISUB_DEBUG
 
 - (void)dealloc
 {
+    dispatch_release(_streamGcdQueue);
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -104,7 +105,10 @@ void CALLBACK MyFileCloseProc(void *user)
 		
 		// Close the file handle
 		if (userInfo.fileHandle)
+        {
 			[userInfo.fileHandle closeFile];
+            userInfo.fileHandle = nil;
+        }
 	}
 }
 

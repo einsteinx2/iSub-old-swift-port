@@ -20,6 +20,11 @@
 	return self;
 }
 
+- (void)dealloc
+{
+    [_fileHandle closeFile];
+}
+
 - (unsigned long long)localFileSize
 {
 	return [[[NSFileManager defaultManager] attributesOfItemAtPath:self.writePath error:NULL] fileSize];
