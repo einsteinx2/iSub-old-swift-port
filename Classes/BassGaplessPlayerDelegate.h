@@ -17,6 +17,7 @@
 - (void)bassSongEndedCalled:(BassGaplessPlayer*)player;
 - (void)bassFreed:(BassGaplessPlayer *)player;
 - (void)bassUpdateLockScreenInfo:(BassGaplessPlayer *)player;
+- (void)bassFailedToCreateNextStreamForIndex:(NSUInteger)index player:(BassGaplessPlayer *)player;
 
 @required
 - (ISMSSong *)bassSongForIndex:(NSUInteger)index player:(BassGaplessPlayer *)player;

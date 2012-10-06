@@ -77,7 +77,7 @@ LOG_LEVEL_ISUB_DEBUG
 	
 	// Check if there's another queued song and that were are on Wifi
 	self.currentQueuedSong = self.currentQueuedSongInDb;
-	if (!self.currentQueuedSong || (!appDelegateS.isWifi && !IS_3G_UNRESTRICTED) || viewObjectsS.isOfflineMode)
+	if (!self.currentQueuedSong || (!appDelegateS.isWifi && !IS_3G_UNRESTRICTED && !settingsS.isManualCachingOnWWANEnabled) || viewObjectsS.isOfflineMode)
 		return;
     
     DDLogVerbose(@"starting download queue for: %@", self.currentQueuedSong);

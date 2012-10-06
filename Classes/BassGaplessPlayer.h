@@ -32,6 +32,7 @@
 @property (readonly) BassStream *currentStream;
 @property (nonatomic) HSTREAM outStream;
 @property (nonatomic) HSTREAM mixerStream;
+@property (nonatomic) NSUInteger bassOutputBufferLengthMillis;
 
 @property BOOL isPlaying;
 @property (readonly) BOOL isStarted;
@@ -62,8 +63,8 @@
 - (void)stop;
 - (void)pause;
 - (void)playPause;
-- (void)seekToPositionInBytes:(QWORD)bytes;
-- (void)seekToPositionInSeconds:(double)seconds;
+- (void)seekToPositionInBytes:(QWORD)bytes fadeVolume:(BOOL)fadeVolume;
+- (void)seekToPositionInSeconds:(double)seconds fadeVolume:(BOOL)fadeVolume;
 
 - (void)bassInit;
 

@@ -61,6 +61,22 @@ LOG_LEVEL_ISUB_DEBUG
 
 #pragma mark - Decode Stream Callbacks
 
+void CALLBACK MyStreamSlideCallback(HSYNC handle, DWORD channel, DWORD data, void *user)
+{
+	@autoreleasepool
+	{
+        BassGaplessPlayer *player = (__bridge BassGaplessPlayer *)user;
+        
+        float volumeLevel;
+        BOOL success = BASS_ChannelGetAttribute(player.outStream, BASS_ATTRIB_VOL, &volumeLevel);
+        
+        if (success && volumeLevel == 0.0)
+        {
+            BASS_ChannelSlideAttribute(player.outStream, BASS_ATTRIB_VOL, 1, 200);
+        }
+    }
+}
+
 void CALLBACK MyStreamEndCallback(HSYNC handle, DWORD channel, DWORD data, void *user)
 {
 	@autoreleasepool 
@@ -69,17 +85,19 @@ void CALLBACK MyStreamEndCallback(HSYNC handle, DWORD channel, DWORD data, void 
 		if (userInfo)
 		{
             // Prepare the next song in the queue
-            DDLogCVerbose(@"Preparing stream for: %@", [userInfo.player nextSong]);
-            BassStream *nextStream = [userInfo.player prepareStreamForSong:[userInfo.player nextSong]];
+            ISMSSong *nextSong = [userInfo.player nextSong];
+            DDLogCVerbose(@"Preparing stream for: %@", nextSong);
+            BassStream *nextStream = [userInfo.player prepareStreamForSong:nextSong];
             if (nextStream)
             {
-                DDLogCVerbose(@"Stream prepared successfully for: %@", [userInfo.player nextSong]);
+                DDLogCVerbose(@"Stream prepared successfully for: %@", nextSong);
                 [userInfo.player.streamQueue addObject:nextStream];
                 BASS_Mixer_StreamAddChannel(userInfo.player.mixerStream, nextStream.stream, 0);
             }
             else
             {
-                DDLogCVerbose(@"Could NOT create stream for: %@", [userInfo.player nextSong]);
+                DDLogCVerbose(@"Could NOT create stream for: %@", nextSong);
+                userInfo.isNextSongStreamFailed = YES;
             }
             
             // Mark as ended and set the buffer space til end for the UI
@@ -242,9 +260,9 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 			[self songEnded:userInfo];
 		}
 	}
-	
-	ISMSSong *currentSong = userInfo.song;
-	if (bytesRead == 0 && !BASS_ChannelIsActive(userInfo.stream) && (currentSong.isFullyCached || currentSong.isTempCached))
+    
+    ISMSSong *currentSong = userInfo.song;
+	if (!currentSong || (bytesRead == 0 && !BASS_ChannelIsActive(userInfo.stream) && (currentSong.isFullyCached || currentSong.isTempCached)))
 	{
 		self.isPlaying = NO;
 		
@@ -322,11 +340,22 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
             // Mark the last played time in the database for cache cleanup
 			self.currentStream.song.playedDate = [NSDate date];
 		}
-		else
-		{
-			DDLogInfo(@"songEnded: self.isPlaying = NO");
+        /*else
+        {
+            DDLogInfo(@"songEnded: self.isPlaying = NO");
             [self.delegate bassRetrySongAtIndex:self.currentPlaylistIndex player:self];
-		}
+        }*/
+        
+        if (userInfo.isNextSongStreamFailed)
+        {
+            if ([self.delegate respondsToSelector:@selector(bassFailedToCreateNextStreamForIndex:player:)])
+            {
+                [EX2Dispatch runInMainThread:^
+                 {
+                     [self.delegate bassFailedToCreateNextStreamForIndex:self.currentPlaylistIndex player:self];
+                 }];
+            }
+        }
 	}
 }
 
@@ -476,16 +505,21 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOP
 	BASS_SetConfig(BASS_CONFIG_IOS_MIXAUDIO, 0); // Disable mixing.	To be called before BASS_Init.
 	BASS_SetConfig(BASS_CONFIG_BUFFER, BASS_GetConfig(BASS_CONFIG_UPDATEPERIOD) + ISMS_BASSBufferSize); // set the buffer length to the minimum amount + 200ms
 	BASS_SetConfig(BASS_CONFIG_FLOATDSP, true); // set DSP effects to use floating point math to avoid clipping within the effects chain
-	if (!BASS_Init(-1, sampleRate, 0, NULL, NULL)) 	// Initialize default device.
+	if (BASS_Init(-1, sampleRate, 0, NULL, NULL)) 	// Initialize default device.
 	{
-		DDLogError(@"Can't initialize device");
+        self.bassOutputBufferLengthMillis = BASS_GetConfig(BASS_CONFIG_BUFFER);
+        
+        BASS_PluginLoad(&BASSFLACplugin, 0); // load the Flac plugin
+        BASS_PluginLoad(&BASSWVplugin, 0); // load the WavePack plugin
+        BASS_PluginLoad(&BASS_APEplugin, 0); // load the Monkey's Audio plugin
+        BASS_PluginLoad(&BASS_MPCplugin, 0); // load the MusePack plugin
+        BASS_PluginLoad(&BASSOPUSplugin, 0); // load the OPUS plugin
 	}
-    
-    BASS_PluginLoad(&BASSFLACplugin, 0); // load the Flac plugin
-    BASS_PluginLoad(&BASSWVplugin, 0); // load the WavePack plugin
-    BASS_PluginLoad(&BASS_APEplugin, 0); // load the Monkey's Audio plugin
-    BASS_PluginLoad(&BASS_MPCplugin, 0); // load the MusePack plugin
-    BASS_PluginLoad(&BASSOPUSplugin, 0); // load the OPUS plugin
+    else
+    {
+        self.bassOutputBufferLengthMillis = 0;
+        DDLogError(@"Can't initialize device");
+    }
 	
 	self.stopFillingRingBuffer = NO;
 	
@@ -542,8 +576,8 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOP
 	if (aSong.fileExists)
 	{
 		// Create the stream
-        HSTREAM fileStream = BASS_StreamCreateFile(NO, aSong.localPath.cStringUTF8, 0, aSong.size.longValue, BASS_STREAM_DECODE|BASS_SAMPLE_FLOAT);
-		if(!fileStream) fileStream = fileStream = BASS_StreamCreateFile(NO, aSong.localPath.cStringUTF8, 0, aSong.size.longValue, BASS_STREAM_DECODE|BASS_SAMPLE_SOFTWARE|BASS_SAMPLE_FLOAT);
+        HSTREAM fileStream = BASS_StreamCreateFile(NO, aSong.currentPath.cStringUTF8, 0, aSong.size.longValue, BASS_STREAM_DECODE|BASS_SAMPLE_FLOAT);
+		if(!fileStream) fileStream = fileStream = BASS_StreamCreateFile(NO, aSong.currentPath.cStringUTF8, 0, aSong.size.longValue, BASS_STREAM_DECODE|BASS_SAMPLE_SOFTWARE|BASS_SAMPLE_FLOAT);
 		if (fileStream)
 		{
 			return YES;
@@ -621,6 +655,9 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOP
 				 self.mixerStream = BASS_Mixer_StreamCreate(ISMS_defaultSampleRate, 2, BASS_STREAM_DECODE);//|BASS_MIXER_END);
 				 BASS_Mixer_StreamAddChannel(self.mixerStream, userInfo.stream, 0);
 				 self.outStream = BASS_StreamCreate(ISMS_defaultSampleRate, 2, 0, &MyStreamProc, (__bridge void*)self);
+                 
+                 // Add the slide callback to handle fades
+                 BASS_ChannelSetSync(self.outStream, BASS_SYNC_SLIDE, 0, MyStreamSlideCallback, (__bridge void*)self);
 				 
 				 self.visualizer.channel = self.outStream;
 				 
@@ -647,19 +684,19 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOP
 					 
 					 if (seconds)
 					 {
-						 [self seekToPositionInSeconds:seconds.doubleValue];
+						 [self seekToPositionInSeconds:seconds.doubleValue fadeVolume:NO];
 					 }
 					 else
 					 {
 						 if (self.startByteOffset > 0)
-							 [self seekToPositionInBytes:self.startByteOffset];
+							 [self seekToPositionInBytes:self.startByteOffset fadeVolume:NO];
 					 }
 				 }
 				 else if (seconds)
 				 {
 					 self.startSecondsOffset = seconds.doubleValue;
 					 if (self.startSecondsOffset > 0.0)
-						 [self seekToPositionInSeconds:self.startSecondsOffset];
+						 [self seekToPositionInSeconds:self.startSecondsOffset fadeVolume:NO];
 				 }
 				 
 				 // Start filling the ring buffer
@@ -752,7 +789,8 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOP
 		return 0;
 	
 	NSInteger pcmBytePosition = BASS_Mixer_ChannelGetPosition(self.currentStream.stream, BASS_POS_BYTE);
-	pcmBytePosition -= self.ringBuffer.filledSpaceLength;
+    //DLog(@"pcmBytePosition: %i  self.ringBuffer.filledSpaceLength: %i", pcmBytePosition, self.ringBuffer.filledSpaceLength);
+	pcmBytePosition -= (self.ringBuffer.filledSpaceLength * 2); // Not sure why but this has to be multiplied by 2 for accurate reading
 	pcmBytePosition = pcmBytePosition < 0 ? 0 : pcmBytePosition; 
 	double seconds = BASS_ChannelBytes2Seconds(self.currentStream.stream, pcmBytePosition);
 	if (seconds < 0)
@@ -841,7 +879,7 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOP
     }
 }
 
-- (void)seekToPositionInBytes:(QWORD)bytes
+- (void)seekToPositionInBytes:(QWORD)bytes fadeVolume:(BOOL)fadeVolume
 {
 	BassStream *userInfo = self.currentStream;
 	if (!userInfo)
@@ -860,14 +898,6 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOP
 	}
 	else
 	{
-		BOOL didPause = NO;
-		
-		if (self.isPlaying)
-		{
-			[self pause];
-			didPause = YES;
-		}
-		
 		if (BASS_Mixer_ChannelSetPosition(userInfo.stream, bytes, BASS_POS_BYTE))
 		{
 			self.startByteOffset = bytes;
@@ -879,9 +909,11 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOP
 			}
 			
 			[self.ringBuffer reset];
-			
-			if (didPause)
-				[self playPause];
+            
+            if (fadeVolume)
+            {
+                BASS_ChannelSlideAttribute(self.outStream, BASS_ATTRIB_VOL, 0, self.bassOutputBufferLengthMillis);
+            }
             
             if ([self.delegate respondsToSelector:@selector(bassSeekToPositionSuccess:)])
             {
@@ -895,10 +927,10 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOP
 	}
 }
 
-- (void)seekToPositionInSeconds:(double)seconds
+- (void)seekToPositionInSeconds:(double)seconds fadeVolume:(BOOL)fadeVolume
 {
 	QWORD bytes = BASS_ChannelSeconds2Bytes(self.currentStream.stream, seconds);
-	[self seekToPositionInBytes:bytes];
+	[self seekToPositionInBytes:bytes fadeVolume:fadeVolume];
 }
 
 @end

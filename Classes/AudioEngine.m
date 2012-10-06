@@ -106,7 +106,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 - (void)startEmptyPlayer
-{
+{    
     // Dispose of the old player
 	[self.player stop];
 	self.player = nil;

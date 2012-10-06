@@ -712,6 +712,28 @@
 	}
 }
 
+- (BOOL)isManualCachingOnWWANEnabled
+{
+	@synchronized(self)
+	{
+		return [_userDefaults boolForKey:@"isManualCachingOnWWANEnabled"];
+	}
+}
+
+- (void)setIsManualCachingOnWWANEnabled:(BOOL)isManualCachingOnWWANEnabled
+{
+	@synchronized(self)
+	{
+		[_userDefaults setBool:isManualCachingOnWWANEnabled forKey:@"isManualCachingOnWWANEnabled"];
+		[_userDefaults synchronize];
+        
+        if (appDelegateS.wifiReach.currentReachabilityStatus == ReachableViaWWAN)
+        {
+            isManualCachingOnWWANEnabled ? [cacheQueueManagerS startDownloadQueue] : [cacheQueueManagerS stopDownloadQueue];
+        }
+	}
+}
+
 - (NSInteger)cachingType
 {
 	@synchronized(self)

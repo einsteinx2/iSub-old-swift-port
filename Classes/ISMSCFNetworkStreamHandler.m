@@ -140,24 +140,31 @@ static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStr
 	
 	CFStreamClientContext ctxt = {0, (__bridge void*)self, NULL, NULL, NULL};
 	
-	// Create the POST request
-	CFHTTPMessageRef messageRef = CFHTTPMessageCreateRequest(kCFAllocatorDefault, CFSTR("POST"), (__bridge CFURLRef)request.URL, kCFHTTPVersion1_1);
+	// Create the request
+	CFHTTPMessageRef messageRef = CFHTTPMessageCreateRequest(kCFAllocatorDefault, (__bridge CFStringRef)request.HTTPMethod, (__bridge CFURLRef)request.URL, kCFHTTPVersion1_1);
 	if (messageRef == NULL) goto Bail;
-	
-	CFHTTPMessageSetBody(messageRef, (__bridge CFDataRef)request.HTTPBody);
-	
-	CFHTTPMessageSetHeaderFieldValue(messageRef, CFSTR("HOST"), (__bridge CFStringRef)[request.URL host]);    
-	//CFHTTPMessageSetHeaderFieldValue(messageRef, CFSTR("Content-Length"), (__bridge CFStringRef)[NSString stringWithFormat:@"%d", [request.HTTPBody length]]);    
-	CFHTTPMessageSetHeaderFieldValue(messageRef, CFSTR("Content-Type"), CFSTR("application/x-www-form-urlencoded"));//CFSTR("charset=utf-8"));
     
-    // Setup the range header if necessary
-    if (self.byteOffset > 0)
+    // Set the URL
+    CFHTTPMessageSetHeaderFieldValue(messageRef, CFSTR("HOST"), (__bridge CFStringRef)[request.URL host]);
+	
+    // Set the request type
+    if ([request.HTTPMethod isEqualToString:@"POST"])
     {
-        NSString *range = [NSString stringWithFormat:@"bytes=%llu-", self.byteOffset];
-        CFHTTPMessageSetHeaderFieldValue(messageRef, CFSTR("Range"), (__bridge CFStringRef)range);
+        CFHTTPMessageSetBody(messageRef, (__bridge CFDataRef)request.HTTPBody);
+    }
+    
+    // Set all the headers
+    if (request.allHTTPHeaderFields.count > 0)
+    {
+        for (NSString *key in request.allHTTPHeaderFields.allKeys)
+        {
+            NSString *value = [request.allHTTPHeaderFields objectForKey:key];
+            if (value)
+                CFHTTPMessageSetHeaderFieldValue(messageRef, (__bridge CFStringRef)key, (__bridge CFStringRef)value);
+        }
     }
 	
-	DDLogInfo(@"body: %@", [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]);
+	DDLogInfo(@"url: %@\nheaders: %@\nbody: %@", request.URL.absoluteString, request.allHTTPHeaderFields, [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]);
 	
 	// Create the stream for the request.
 	_readStreamRef = CFReadStreamCreateForHTTPRequest(kCFAllocatorDefault, messageRef);
@@ -165,9 +172,6 @@ static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStr
 	
 	//	There are times when a server checks the User-Agent to match a well known browser.  This is what Safari used at the time the sample was written
 	//CFHTTPMessageSetHeaderFieldValue( messageRef, CFSTR("User-Agent"), CFSTR("Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) AppleWebKit/125.5.5 (KHTML, like Gecko) Safari/125")); 
-	
-	// Set a no cache policy
-	CFHTTPMessageSetHeaderFieldValue( messageRef, CFSTR("Cache-Control"), CFSTR("no-cache"));
 	
 	// Enable stream redirection
 	if (CFReadStreamSetProperty(_readStreamRef, kCFStreamPropertyHTTPShouldAutoredirect, kCFBooleanTrue) == false)
@@ -376,7 +380,8 @@ static void ReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType t
 				{
 					NSTimeInterval delay = 0.0;
 					
-					double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)self.bitrate is3G:!appDelegateS.isWifi];
+                    BOOL isWifi = appDelegateS.isWifi || self.delegate == cacheQueueManagerS;
+					double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)self.bitrate is3G:!isWifi];
 					double numberOfIntervals = intervalSinceLastThrottle / ISMSThrottleTimeInterval;
 					double maxBytesPerTotalInterval = maxBytesPerInterval * numberOfIntervals;
 					

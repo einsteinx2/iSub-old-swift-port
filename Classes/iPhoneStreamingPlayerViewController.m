@@ -980,6 +980,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		else
 		{
 			[musicS playSongAtPosition:playlistS.currentIndex];
+            //[musicS startSongAtOffsetInBytes:<#(unsigned long long)#> andSeconds:<#(double)#>]
 		}
 	}
 }
@@ -1298,7 +1299,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		{			
 			if (currentSong.isFullyCached || byteOffset <= currentSong.localFileSize)
 			{
-				[audioEngineS.player seekToPositionInSeconds:progressSlider.value];
+				[audioEngineS.player seekToPositionInSeconds:progressSlider.value fadeVolume:YES];
 				pauseSlider = NO;
 				hasMoved = NO;
 			}
@@ -1535,11 +1536,17 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		// If the song is fully cached, add the right side border
 		width = modifier >= 1. ? width + downloadProgressBorder : width;
 		
-        /*[UIView animateWithDuration:0.3 animations:^
-         {
-             self.downloadProgress.width = width;
-         }];*/
-        self.downloadProgress.width = width;
+        if (width > self.downloadProgress.width && (width - self.downloadProgress.width < downloadProgressWidth + downloadProgressBorder))
+        {
+            [UIView animateWithDuration:1. delay:0. options:UIViewAnimationCurveLinear animations:^
+             {
+                 self.downloadProgress.width = width;
+             } completion:nil];
+        }
+        else
+        {
+            self.downloadProgress.width = width;
+        }
 	}
 	
 	[self performSelector:@selector(updateDownloadProgress) withObject:nil afterDelay:1.0];

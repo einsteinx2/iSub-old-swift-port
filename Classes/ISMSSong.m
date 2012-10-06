@@ -295,13 +295,15 @@
 
 - (NSString *)localPath
 {
-	NSString *fileName = self.localSuffix ? [self.path.md5 stringByAppendingPathExtension:self.localSuffix] : nil;
-	return fileName ? [settingsS.songCachePath stringByAppendingPathComponent:fileName] : nil;
+	//NSString *fileName = self.localSuffix ? [self.path.md5 stringByAppendingPathExtension:self.localSuffix] : nil;
+    NSString *fileName = self.path.md5;    
+    return fileName ? [settingsS.songCachePath stringByAppendingPathComponent:fileName] : nil;
 }
 
 - (NSString *)localTempPath
 {
-	NSString *fileName = self.localSuffix ? [self.path.md5 stringByAppendingPathExtension:self.localSuffix] : nil;
+	//NSString *fileName = self.localSuffix ? [self.path.md5 stringByAppendingPathExtension:self.localSuffix] : nil;
+    NSString *fileName = self.path.md5;
 	return fileName ? [settingsS.tempCachePath stringByAppendingPathComponent:fileName] : nil;
 }
 

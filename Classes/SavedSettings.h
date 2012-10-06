@@ -84,6 +84,7 @@ typedef enum
 @property (readonly) NSInteger currentMaxBitrate;
 @property BOOL isSongCachingEnabled;
 @property BOOL isNextSongCacheEnabled;
+@property BOOL isManualCachingOnWWANEnabled;
 @property NSInteger cachingType;
 @property unsigned long long maxCacheSize;
 @property unsigned long long minFreeSpace;

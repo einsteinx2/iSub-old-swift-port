@@ -11,6 +11,8 @@
 #import "ISMSStreamManager.h"
 #import "ISMSCacheQueueManager.h"
 
+LOG_LEVEL_ISUB_DEFAULT
+
 @implementation CacheSingleton
 
 - (unsigned long long)totalSpace
@@ -238,11 +240,38 @@
 		[defaultManager moveItemAtURL:[NSURL fileURLWithPath:[settingsS.documentsPath stringByAppendingPathComponent:@"songCache"]] 
 								toURL:[NSURL fileURLWithPath:settingsS.songCachePath] error:nil];
 	}
+    
 	// Make sure songCache directory exists, if not create it
 	if (![[NSFileManager defaultManager] fileExistsAtPath:settingsS.songCachePath]) 
 	{
 		[[NSFileManager defaultManager] createDirectoryAtPath:settingsS.songCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
 	}
+    
+    // Rename any cache files that still have extensions
+    NSDirectoryEnumerator *direnum = [[NSFileManager defaultManager] enumeratorAtPath:settingsS.songCachePath];
+    NSString *filename;
+    while ((filename = [direnum nextObject]))
+    {
+        // Check if it contains an extension
+        NSRange range = [filename rangeOfString:@"."];
+        if (range.location != NSNotFound)
+        {
+            NSString *filenameNew = [[filename componentsSeparatedByString:@"."] firstObjectSafe];
+            DDLogVerbose(@"Moving filename: %@ to new filename: %@", filename, filenameNew);
+            if (filenameNew)
+            {
+                NSString *fromPath = [settingsS.songCachePath stringByAppendingPathComponent:filename];
+                NSString *toPath = [settingsS.songCachePath stringByAppendingPathComponent:filenameNew];
+                NSError *error;
+                
+                if (![[NSFileManager defaultManager] moveItemAtPath:fromPath toPath:toPath error:&error])
+                {
+                    DDLogVerbose(@"ERROR Moving filename: %@ to new filename: %@", filename, filenameNew);
+                }
+            }
+        }
+    }
+    
 	// Clear the temp cache directory
 	dispatch_async(dispatch_get_main_queue(), ^{
 		[self clearTempCache];

@@ -32,4 +32,6 @@
 @property BOOL isEndedCalled;
 @property (nonatomic) NSInteger bufferSpaceTilSongEnd;
 
+@property BOOL isNextSongStreamFailed;
+
 @end

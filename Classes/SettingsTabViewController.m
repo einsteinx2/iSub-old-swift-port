@@ -116,6 +116,7 @@
 	self.enableLockScreenArt.on = settingsS.isLockScreenArtEnabled;
 	
 	// Cache Settings
+    self.enableManualCachingOnWWANSwitch.on = settingsS.isManualCachingOnWWANEnabled;
 	self.enableSongCachingSwitch.on = settingsS.isSongCachingEnabled;
 	self.enableNextSongCacheSwitch.on = settingsS.isNextSongCacheEnabled;
 	self.enableNextSongPartialCacheSwitch.on = settingsS.isPartialCacheNextSong;
@@ -429,6 +430,20 @@
 		{
 			settingsS.isScrobbleEnabled = self.enableScrobblingSwitch.on;
 		}
+        else if (sender == self.enableManualCachingOnWWANSwitch)
+        {
+            if (self.enableManualCachingOnWWANSwitch.on)
+            {
+                // Prompt the warning
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"This feature can use a large amount of data. Please be sure to monitor your data plan usage to avoid overage charges from your wireless provider." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+                alert.tag = 2;
+                [alert show];
+            }
+            else
+            {
+                settingsS.isManualCachingOnWWANEnabled = NO;
+            }
+        }
 		else if (sender == self.enableSongCachingSwitch)
 		{
 			settingsS.isSongCachingEnabled = self.enableSongCachingSwitch.on;
@@ -583,6 +598,18 @@
 		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Processing"];
 		[self performSelector:@selector(resetAlbumArtCache) withObject:nil afterDelay:0.05];
 	}
+    else if (alertView.tag == 2)
+    {
+        if (buttonIndex == 0)
+        {
+            // They canceled, turn off the switch
+            self.enableManualCachingOnWWANSwitch.on = NO;
+        }
+        else
+        {
+            settingsS.isManualCachingOnWWANEnabled = YES;
+        }
+    }
 }
 
 - (void)updateCacheSpaceSlider

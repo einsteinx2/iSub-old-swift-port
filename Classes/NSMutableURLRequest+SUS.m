@@ -120,6 +120,7 @@ static NSSet *setOfVersions = nil;
 	{
 		[request setHTTPMethod:@"POST"]; 
 		[request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
+        [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
 	}
 	
 	// Set the HTTP Basic Auth
@@ -137,6 +138,9 @@ static NSSet *setOfVersions = nil;
 		NSString *rangeString = [NSString stringWithFormat:@"bytes=%i-", offset];
 		[request setValue:rangeString forHTTPHeaderField:@"Range"];
 	}
+    
+    // Turn off request caching
+    [request setValue:@"no-cache" forHTTPHeaderField:@"Cache-Control"];
 	
 	DLog(@"request: %@", request);
     

@@ -492,7 +492,7 @@ LOG_LEVEL_ISUB_DEBUG
 		return;
 	
 	NSUInteger numStreamsToQueue = 1;
-	if (settingsS.isNextSongCacheEnabled)
+	if (settingsS.isSongCachingEnabled && settingsS.isNextSongCacheEnabled)
 	{
 		numStreamsToQueue = ISMSNumberOfStreamsToQueue;
 	}
@@ -502,7 +502,7 @@ LOG_LEVEL_ISUB_DEBUG
 		for (int i = 0; i < numStreamsToQueue; i++)
 		{
 			ISMSSong *aSong = [playlistS songForIndex:[playlistS indexForOffsetFromCurrentIndex:i]];
-			if (aSong && !aSong.isVideo && ![self isSongInQueue:aSong] && !aSong.isFullyCached && !viewObjectsS.isOfflineMode && ![cacheQueueManagerS.currentQueuedSong isEqualToSong:aSong])
+			if (aSong && !aSong.isVideo && ![self isSongInQueue:aSong] && ![self.lastTempCachedSong isEqualToSong:aSong] && !aSong.isFullyCached && !viewObjectsS.isOfflineMode && ![cacheQueueManagerS.currentQueuedSong isEqualToSong:aSong])
 			{
 				// Queue the song for download
 				[self queueStreamForSong:aSong isTempCache:!settingsS.isSongCachingEnabled isStartDownload:isStartDownload];
@@ -658,14 +658,14 @@ LOG_LEVEL_ISUB_DEBUG
 		
 		// Mark song as cached
 		if (!handler.isTempCache)
-        	{
-            		if ([cacheQueueManagerS isSongInQueue:handler.mySong])
-            		{
-                		//handler.mySong.isDownloaded = YES;
-                		[handler.mySong removeFromCacheQueueDbQueue];
-            		}
+        {
+            if ([cacheQueueManagerS isSongInQueue:handler.mySong])
+            {
+                //handler.mySong.isDownloaded = YES;
+                [handler.mySong removeFromCacheQueueDbQueue];
+            }
             
-           		DLog(@"Marking isFullyCached = YES for %@", handler.mySong);
+            DLog(@"Marking isFullyCached = YES for %@", handler.mySong);
 			handler.mySong.isFullyCached = YES;
 		}
 		

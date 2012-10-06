@@ -8,6 +8,7 @@
 
 #import "iSubBassGaplessPlayerDelegate.h"
 #import "BassGaplessPlayer.h"
+#import "ISMSStreamHandler.h"
 
 @implementation iSubBassGaplessPlayerDelegate
 
@@ -94,6 +95,21 @@
 - (void)bassRetrySongAtOffsetInBytes:(NSUInteger)bytes andSeconds:(NSUInteger)seconds player:(BassGaplessPlayer*)player
 {
     [musicS startSongAtOffsetInBytes:bytes andSeconds:seconds];
+}
+
+- (void)bassFailedToCreateNextStreamForIndex:(NSUInteger)index player:(BassGaplessPlayer *)player
+{
+    // The song ended, and we tried to make the next stream but it failed
+    ISMSSong *aSong = [playlistS songForIndex:index];
+    ISMSStreamHandler *handler = [streamManagerS handlerForSong:aSong];
+    if (!handler.isDownloading || handler.isDelegateNotifiedToStartPlayback)
+    {
+        // If the song isn't downloading, or it is and it already informed the player to play (i.e. the playlist will stop if we don't force a retry), then retry
+        [EX2Dispatch runInMainThread:^
+         {
+             [musicS playSongAtPosition:index];
+         }];
+    }
 }
 
 @end
