@@ -57,6 +57,8 @@
 @property BOOL tempBreakPartialPrecache;
 @property NSFileHandle *fileHandle;
 
+@property BOOL isEnableRateLimiting;
+
 - (void)start:(BOOL)resume;
 - (void)start;
 - (void)cancel;

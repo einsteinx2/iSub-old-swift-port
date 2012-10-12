@@ -456,7 +456,17 @@
 		}
 		else if (sender == self.enableNextSongPartialCacheSwitch)
 		{
-			settingsS.isPartialCacheNextSong = self.enableNextSongPartialCacheSwitch.on;
+            if (self.enableNextSongPartialCacheSwitch.on)
+            {
+                // Prompt the warning
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Due to changes in Subsonic, this will cause audio corruption if transcoding is enabled.\n\nIf you're not sure what that means, choose cancel." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+                alert.tag = 3;
+                [alert show];
+            }
+            else
+            {
+                settingsS.isPartialCacheNextSong = NO;
+            }
 		}
 		else if (sender == self.autoDeleteCacheSwitch)
 		{
@@ -603,11 +613,22 @@
         if (buttonIndex == 0)
         {
             // They canceled, turn off the switch
-            self.enableManualCachingOnWWANSwitch.on = NO;
+            [self.enableManualCachingOnWWANSwitch setOn:NO animated:YES];
         }
         else
         {
             settingsS.isManualCachingOnWWANEnabled = YES;
+        }
+    }
+    else if (alertView.tag == 3)
+    {
+        if (buttonIndex == 0)
+        {
+            [self.enableNextSongPartialCacheSwitch setOn:NO animated:YES];
+        }
+        else
+        {
+            settingsS.isPartialCacheNextSong = YES;
         }
     }
 }

@@ -373,35 +373,38 @@ static void ReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType t
 						[self.delegate ISMSStreamHandlerStartPlayback:self];
 				}
 				
-				// Check if we should throttle
-				NSTimeInterval now = CFAbsoluteTimeGetCurrent();
-				NSTimeInterval intervalSinceLastThrottle = now - _lastThrottle;
-				if (intervalSinceLastThrottle > ISMSThrottleTimeInterval && self.totalBytesTransferred > ISMSMinBytesToStartLimiting(self.bitrate))
-				{
-					NSTimeInterval delay = 0.0;
-					
-                    BOOL isWifi = appDelegateS.isWifi || self.delegate == cacheQueueManagerS;
-					double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)self.bitrate is3G:!isWifi];
-					double numberOfIntervals = intervalSinceLastThrottle / ISMSThrottleTimeInterval;
-					double maxBytesPerTotalInterval = maxBytesPerInterval * numberOfIntervals;
-					
-					if (self.bytesTransferred > maxBytesPerTotalInterval)
-					{
-						double speedDifferenceFactor = (double)self.bytesTransferred / maxBytesPerTotalInterval;
-						delay = (speedDifferenceFactor * intervalSinceLastThrottle) - intervalSinceLastThrottle;
-						
-						if (isThrottleLoggingEnabled)
-							DDLogCInfo(@"Pausing for %f  interval: %f  bytesTransferred: %llu maxBytes: %f", delay, intervalSinceLastThrottle, self.bytesTransferred, maxBytesPerTotalInterval);
-						
-						self.bytesTransferred = 0;
-					}
-					
-					// Pause by unscheduling from the runloop
-					CFReadStreamUnscheduleFromRunLoop(stream, CFRunLoopGetMain(), kCFRunLoopCommonModes);
-					
-					// Continue after the delay
-					[self performSelector:@selector(continueDownload) withObject:nil afterDelay:delay];
-				}
+                if (self.isEnableRateLimiting)
+                {
+                    // Check if we should throttle
+                    NSTimeInterval now = CFAbsoluteTimeGetCurrent();
+                    NSTimeInterval intervalSinceLastThrottle = now - _lastThrottle;
+                    if (intervalSinceLastThrottle > ISMSThrottleTimeInterval && self.totalBytesTransferred > ISMSMinBytesToStartLimiting(self.bitrate))
+                    {
+                        NSTimeInterval delay = 0.0;
+                        
+                        BOOL isWifi = appDelegateS.isWifi || self.delegate == cacheQueueManagerS;
+                        double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)self.bitrate is3G:!isWifi];
+                        double numberOfIntervals = intervalSinceLastThrottle / ISMSThrottleTimeInterval;
+                        double maxBytesPerTotalInterval = maxBytesPerInterval * numberOfIntervals;
+                        
+                        if (self.bytesTransferred > maxBytesPerTotalInterval)
+                        {
+                            double speedDifferenceFactor = (double)self.bytesTransferred / maxBytesPerTotalInterval;
+                            delay = (speedDifferenceFactor * intervalSinceLastThrottle) - intervalSinceLastThrottle;
+                            
+                            if (isThrottleLoggingEnabled)
+                                DDLogCInfo(@"Pausing for %f  interval: %f  bytesTransferred: %llu maxBytes: %f", delay, intervalSinceLastThrottle, self.bytesTransferred, maxBytesPerTotalInterval);
+                            
+                            self.bytesTransferred = 0;
+                        }
+                        
+                        // Pause by unscheduling from the runloop
+                        CFReadStreamUnscheduleFromRunLoop(stream, CFRunLoopGetMain(), kCFRunLoopCommonModes);
+                        
+                        // Continue after the delay
+                        [self performSelector:@selector(continueDownload) withObject:nil afterDelay:delay];
+                    }
+                }
                 
                 // Handle partial pre-cache next song
                 if (!self.isCurrentSong && !self.isTempCache && settingsS.isPartialCacheNextSong && self.partialPrecacheSleep)

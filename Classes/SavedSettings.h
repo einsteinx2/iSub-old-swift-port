@@ -128,6 +128,8 @@ typedef enum
 
 @property BOOL isEqualizerOn;
 
+@property NSUInteger oneTimeRunIncrementor;
+
 // State Saving
 @property BOOL isRecover;
 @property double seekTime;

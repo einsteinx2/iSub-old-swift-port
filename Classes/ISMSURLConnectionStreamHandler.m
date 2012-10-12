@@ -322,36 +322,39 @@ LOG_LEVEL_ISUB_DEFAULT
 			self.bytesTransferred = 0;		
 		}
 		
-		// Check if we should throttle
-		NSDate *now = [[NSDate alloc] init];
-		NSTimeInterval intervalSinceLastThrottle = [now timeIntervalSinceDate:throttlingDate];
-		if (intervalSinceLastThrottle > ISMSThrottleTimeInterval && self.totalBytesTransferred > ISMSMinBytesToStartLimiting(self.bitrate))
-		{
-			NSTimeInterval delay = 0.0;
-			
-			double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)self.bitrate is3G:!appDelegateS.isWifi];
-			double numberOfIntervals = intervalSinceLastThrottle / ISMSThrottleTimeInterval;
-			double maxBytesPerTotalInterval = maxBytesPerInterval * numberOfIntervals;
-			
-			if (self.bytesTransferred > maxBytesPerTotalInterval)
-			{
-				double speedDifferenceFactor = (double)self.bytesTransferred / maxBytesPerTotalInterval;
-				delay = (speedDifferenceFactor * intervalSinceLastThrottle) - intervalSinceLastThrottle;
-				
-				if (isThrottleLoggingEnabled)
-					DDLogInfo(@"Pausing for %f  interval: %f  bytesTransferred: %llu maxBytes: %f", delay, intervalSinceLastThrottle, self.bytesTransferred, maxBytesPerTotalInterval);
-				
-				self.bytesTransferred = 0;
-			}
-			
-			[NSThread sleepForTimeInterval:delay];
-			
-			if (self.isCanceled)
-				return;
-			
-			NSDate *newThrottlingDate = [[NSDate alloc] init];
-			[threadDict setObject:newThrottlingDate forKey:@"throttlingDate"];
-		}
+        if (self.isEnableRateLimiting)
+        {
+            // Check if we should throttle
+            NSDate *now = [[NSDate alloc] init];
+            NSTimeInterval intervalSinceLastThrottle = [now timeIntervalSinceDate:throttlingDate];
+            if (intervalSinceLastThrottle > ISMSThrottleTimeInterval && self.totalBytesTransferred > ISMSMinBytesToStartLimiting(self.bitrate))
+            {
+                NSTimeInterval delay = 0.0;
+                
+                double maxBytesPerInterval = [self maxBytesPerIntervalForBitrate:(double)self.bitrate is3G:!appDelegateS.isWifi];
+                double numberOfIntervals = intervalSinceLastThrottle / ISMSThrottleTimeInterval;
+                double maxBytesPerTotalInterval = maxBytesPerInterval * numberOfIntervals;
+                
+                if (self.bytesTransferred > maxBytesPerTotalInterval)
+                {
+                    double speedDifferenceFactor = (double)self.bytesTransferred / maxBytesPerTotalInterval;
+                    delay = (speedDifferenceFactor * intervalSinceLastThrottle) - intervalSinceLastThrottle;
+                    
+                    if (isThrottleLoggingEnabled)
+                        DDLogInfo(@"Pausing for %f  interval: %f  bytesTransferred: %llu maxBytes: %f", delay, intervalSinceLastThrottle, self.bytesTransferred, maxBytesPerTotalInterval);
+                    
+                    self.bytesTransferred = 0;
+                }
+                
+                [NSThread sleepForTimeInterval:delay];
+                
+                if (self.isCanceled)
+                    return;
+                
+                NSDate *newThrottlingDate = [[NSDate alloc] init];
+                [threadDict setObject:newThrottlingDate forKey:@"throttlingDate"];
+            }
+        }
 		
 		// Handle partial pre-cache next song
 		if (!self.isCurrentSong && !self.isTempCache && settingsS.isPartialCacheNextSong && self.partialPrecacheSleep)

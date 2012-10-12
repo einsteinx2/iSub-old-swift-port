@@ -245,9 +245,11 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 
 - (DWORD)bassGetOutputData:(void *)buffer length:(DWORD)length
 {
-    // Done at end now
-	//[socialS playerHandleSocial];
-	
+	if ([self.delegate respondsToSelector:@selector(bassRetrievingOutputData:)])
+    {
+        [self.delegate bassRetrievingOutputData:self];
+    }
+    
 	BassStream *userInfo = self.currentStream;
 	
 	NSUInteger bytesRead = [self.ringBuffer drainBytes:buffer length:length];

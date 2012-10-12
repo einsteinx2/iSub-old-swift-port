@@ -56,6 +56,9 @@
 {
     // Increment current playlist index
     [playlistS incrementIndex];
+    
+    // Clear the social post status
+    [socialS playerClearSocial];
 }
 
 - (void)bassFreed:(BassGaplessPlayer *)player
@@ -110,6 +113,11 @@
              [musicS playSongAtPosition:index];
          }];
     }
+}
+
+- (void)bassRetrievingOutputData:(BassGaplessPlayer *)player
+{
+    [socialS playerHandleSocial];
 }
 
 @end

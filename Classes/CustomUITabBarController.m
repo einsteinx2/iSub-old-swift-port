@@ -11,6 +11,19 @@
 
 @implementation CustomUITabBarController
 
+- (BOOL)shouldAutorotate
+{
+    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+}
+
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation
+{
+	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
+		return NO;
+	
+    return YES;
+}
+
 - (void)viewDidLoad 
 {
     [super viewDidLoad];

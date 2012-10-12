@@ -55,6 +55,16 @@
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application
 {
+    // Make sure audio engine and cache singletons get loaded
+	[AudioEngine sharedInstance];
+	[CacheSingleton sharedInstance];
+    
+    // Start the save defaults timer and mem cache initial defaults
+	[settingsS setupSaveState];
+    
+    // Run the one time actions
+    [self oneTimeRun];
+    
     //NSSetUncaughtExceptionHandler(&onUncaughtException);
 
     // Adjust the window to the correct size before anything else loads to prevent
@@ -63,9 +73,6 @@
     CGFloat screenScale = [UIScreen mainScreen].scale;
     screenScale = screenScale == 0. ? 1. : screenScale;
     self.window.size = CGSizeMake(screenSize.width / screenScale, screenSize.height / screenScale);
-    
-	// Start the save defaults timer and mem cache initial defaults
-	[settingsS setupSaveState];
 	
 	if (!IS_ADHOC() && !IS_RELEASE())
 	{
@@ -132,11 +139,7 @@
 		}
 	}
 	
-//DLog(@"urlString: %@", settingsS.urlString);
-	
-	// Make sure audio engine and cache singletons get loaded
-	[AudioEngine sharedInstance];
-	[CacheSingleton sharedInstance];
+//DLog(@"urlString: %@", settingsS.urlString)
 	
     self.introController = nil;
 	
@@ -240,6 +243,15 @@
 	// Recover current state if player was interrupted
 	[ISMSStreamManager sharedInstance];
 	[musicS resumeSong];
+}
+
+- (void)oneTimeRun
+{
+    if (settingsS.oneTimeRunIncrementor < 1)
+    {
+        settingsS.isPartialCacheNextSong = NO;
+        settingsS.oneTimeRunIncrementor = 1;
+    }
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation

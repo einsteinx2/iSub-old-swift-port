@@ -1474,6 +1474,23 @@
 	return [_urlString isEqualToString:DEFAULT_URL];
 }
 
+- (NSUInteger)oneTimeRunIncrementor
+{
+	@synchronized(self)
+	{
+		return [_userDefaults integerForKey:@"oneTimeRunIncrementor"];
+	}
+}
+
+- (void)setOneTimeRunIncrementor:(NSUInteger)oneTimeRunIncrementor
+{
+	@synchronized(self)
+	{
+        [_userDefaults setInteger:oneTimeRunIncrementor forKey:@"oneTimeRunIncrementor"];
+        [_userDefaults synchronize];
+	}
+}
+
 #pragma mark - Singleton methods
 
 - (void)setup
