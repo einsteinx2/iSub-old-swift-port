@@ -468,21 +468,15 @@
 	}
 		
 	__block BOOL hadError = NO;	
-	__block NSString *transcodedSuffix = nil;
-	__block NSString *suffix = nil;
 	
 	[databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)
 	{
 		// Get the song info
-		FMResultSet *result = [db executeQuery:@"SELECT genre, transcodedSuffix, suffix FROM cachedSongs WHERE md5 = ?", md5];
+		FMResultSet *result = [db executeQuery:@"SELECT genre FROM cachedSongs WHERE md5 = ?", md5];
 		[result next];
 		NSString *genre = nil;
 		if ([result stringForColumnIndex:0] != nil)
 			genre = [NSString stringWithString:[result stringForColumn:@"genre"]];
-		if ([result stringForColumnIndex:1] != nil)
-			transcodedSuffix = [NSString stringWithString:[result stringForColumn:@"transcodedSuffix"]];
-		if ([result stringForColumnIndex:2] != nil)
-			suffix = [NSString stringWithString:[result stringForColumn:@"suffix"]];
 		[result close];
 		if ([db hadError])
 			hadError = YES;
@@ -523,8 +517,7 @@
 	}];
 	 
 	// Delete the song from disk
-	NSString *suffixToUse = transcodedSuffix ? transcodedSuffix : suffix;
-	NSString *fileName = [settingsS.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", md5, suffixToUse]];
+	NSString *fileName = [settingsS.songCachePath stringByAppendingPathComponent:md5];
 	//TODO://///// REWRITE TO CATCH THIS NSFILEMANAGER ERROR ///////////
 	[[NSFileManager defaultManager] removeItemAtPath:fileName error:NULL];
 	

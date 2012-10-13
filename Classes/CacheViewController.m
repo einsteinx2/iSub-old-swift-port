@@ -542,14 +542,29 @@
 			}
 			[self.listOfArtistsSections addObject:section];
 		}
-		
-		if (self.isSaveEditShowing)
+        
+        NSUInteger cachedSongsCount = [databaseS.songCacheDbQueue intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES' AND md5 != ''"];
+		if (cachedSongsCount == 0)
 		{
-			NSUInteger cachedSongsCount = [databaseS.songCacheDbQueue intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES' AND md5 != ''"];
-			if ([databaseS.songCacheDbQueue intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES' AND md5 != ''"] == 1)
-				self.songsCountLabel.text = [NSString stringWithFormat:@"1 Song"];
-			else 
-				self.songsCountLabel.text = [NSString stringWithFormat:@"%i Songs", cachedSongsCount];
+			[self removeSaveEditButtons];
+			[self addNoSongsScreen];
+			[self addNoSongsScreen];
+		}
+		else
+		{
+			if (self.isSaveEditShowing)
+			{
+				if (cachedSongsCount == 1)
+					self.songsCountLabel.text = [NSString stringWithFormat:@"1 Song"];
+				else
+					self.songsCountLabel.text = [NSString stringWithFormat:@"%i Songs", cachedSongsCount];
+			}
+			else if (viewObjectsS.isOfflineMode == NO)
+			{
+				[self addSaveEditButtons];
+			}
+			
+			[self removeNoSongsScreen];
 		}
 	}
 	else
@@ -1053,6 +1068,11 @@
 	{
 	//DLog(@"Exception: %@ - %@", exception.name, exception.reason);
 	}
+    
+    if (segmentedControl.selectedSegmentIndex == 0)
+    {
+        [self segmentAction:nil];
+    }
 }
 
 - (void)deleteCachedSongs

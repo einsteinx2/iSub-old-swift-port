@@ -147,8 +147,8 @@
 	
 	NSUInteger segment = [newSegments count];
 	
-	NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = %i ", segment+1];
-	for (int i = 2; i <= segment; i++)
+	NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE segs = %i ", segment+1];
+	for (int i = 1; i <= segment; i++)
 	{
 		[query appendFormat:@" AND seg%i = ? ", i];
 	}

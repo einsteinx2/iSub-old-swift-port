@@ -64,12 +64,9 @@
 		
 		//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 		//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
-		
-		if ([databaseS.currentPlaylistDbQueue intForQuery:@"SELECT COUNT(*) FROM currentPlaylist"] > 0)
-		{
-			[self selectRow];
-		}
-		
+        
+        [self updateCurrentPlaylistCount];
+				
 		// Setup header view
 		self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
 		self.headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
@@ -90,8 +87,6 @@
 		self.playlistCountLabel.textAlignment = UITextAlignmentCenter;
 		self.playlistCountLabel.font = [UIFont boldSystemFontOfSize:12];
 		[self.headerView addSubview:self.playlistCountLabel];
-		
-		[self updateCurrentPlaylistCount];
 		
 		self.savePlaylistButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		self.savePlaylistButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
@@ -179,6 +174,8 @@
 	//DLog(@"end: %f", [[NSDate date] timeIntervalSinceDate:start]);
 	
 	[self.tableView reloadData];
+    
+    [self selectRow];
 }
 
 - (void)showStore

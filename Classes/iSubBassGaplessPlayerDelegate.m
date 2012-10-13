@@ -49,7 +49,7 @@
 
 - (void)bassFirstStreamStarted:(BassGaplessPlayer*)player
 {
-    
+    [socialS playerClearSocial];
 }
 
 - (void)bassSongEndedCalled:(BassGaplessPlayer*)player
@@ -63,8 +63,7 @@
 
 - (void)bassFreed:(BassGaplessPlayer *)player
 {
-    //[socialS playerHandleSocial];
-    //[socialS playerClearSocial];
+    [socialS playerClearSocial];
 }
 
 - (NSUInteger)bassIndexAtOffset:(NSInteger)offset fromIndex:(NSUInteger)index player:(BassGaplessPlayer *)player
