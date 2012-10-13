@@ -62,6 +62,7 @@
 								<string key="NSFrameSize">{320, 320}</string>
 								<reference key="NSSuperview" ref="951283596"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView" ref="107990392"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<int key="IBUIContentHorizontalAlignment">0</int>
@@ -438,7 +439,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBUIButton" id="112753761">
 								<reference key="NSNextResponder" ref="1059901012"/>
-								<int key="NSvFlags">269</int>
+								<int key="NSvFlags">293</int>
 								<string key="NSFrame">{{78, -1}, {45, 45}}</string>
 								<reference key="NSSuperview" ref="1059901012"/>
 								<reference key="NSWindow"/>
@@ -817,12 +818,12 @@
 			</object>
 			<object class="IBUIView" id="206463117">
 				<reference key="NSNextResponder"/>
-				<int key="NSvFlags">266</int>
+				<int key="NSvFlags">258</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<object class="IBUILabel" id="617649556">
 						<reference key="NSNextResponder" ref="206463117"/>
-						<int key="NSvFlags">294</int>
+						<int key="NSvFlags">292</int>
 						<string key="NSFrameSize">{70, 25}</string>
 						<reference key="NSSuperview" ref="206463117"/>
 						<reference key="NSWindow"/>

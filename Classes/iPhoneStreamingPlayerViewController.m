@@ -107,6 +107,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	//coverArtImageView.delegate = self;
 
 	// Create the extra views not in the XIB file
+    if (IS_TALL_SCREEN() && UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+    {
+        [self showTallPlayerButtons];
+    }
 	[self createDownloadProgressView];
 	[self createLandscapeViews];
 	
@@ -170,6 +174,42 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			 swipeDetector = nil;
 		}
 	}
+}
+
+- (void)showTallPlayerButtons
+{
+    [self.songInfoView removeFromSuperview];
+    [self.extraButtons removeFromSuperview];
+    
+    self.extraButtonsButton.hidden = YES;
+    self.extraButtonsButton.enabled = NO;
+    
+    if (self.coverArtHolderView.y != 100.)
+    {
+        for (UIView *subview in self.view.subviews)
+        {
+            subview.y += 100.;
+        }
+    }
+    
+    self.songInfoView.x = 0.;
+    self.songInfoView.y = 73.;
+    self.songInfoView.width = 320.;
+    [self.view addSubview:self.songInfoView];
+    
+    self.extraButtons.x = 0.;
+    self.extraButtons.width = 320.;
+    [self.view addSubview:self.extraButtons];
+}
+
+- (void)removeTallPlayerButtons
+{
+    [self.songInfoView removeFromSuperview];
+    
+    [self.extraButtons removeFromSuperview];
+    
+    self.extraButtonsButton.hidden = NO;
+    self.extraButtonsButton.enabled = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -478,6 +518,22 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	{
 		[self removeSongTitle];
 	}
+    
+    if (IS_TALL_SCREEN() && UIInterfaceOrientationIsLandscape(toInterfaceOrientation))
+    {
+        [UIView animateWithDuration:.25 animations:^
+         {
+             self.extraButtons.alpha = 0.0;
+             self.songInfoView.alpha = 0.0;
+         }
+        completion:^(BOOL finished)
+         {
+             if (finished)
+             {
+                 [self removeTallPlayerButtons];
+             }
+         }];
+    }
 	
 	if (!IS_IPAD())
 	{
@@ -509,6 +565,13 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			CGFloat width = 320 * self.pageControlViewController.numberOfPages;
 			CGFloat height = self.pageControlViewController.numberOfPages == 1 ? 320 : 300;
 			self.pageControlViewController.scrollView.contentSize = CGSizeMake(width, height);
+            
+            if (IS_TALL_SCREEN())
+            {
+                self.artistLabel.x -= 44.;
+                self.albumLabel.x -= 44.;
+                self.titleLabel.x -= 44.;
+            }
 		}
 		else if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation))
 		{
@@ -534,6 +597,16 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			CGFloat width = 300 * pageControlViewController.numberOfPages;
 			CGFloat height = pageControlViewController.numberOfPages == 1 ? 270 : 250;
 			pageControlViewController.scrollView.contentSize = CGSizeMake(width, height);
+            
+            if (IS_TALL_SCREEN())
+            {
+                NSArray *viewsToSkip = @[self.reflectionView];//, self.artistLabel, self.albumLabel, self.titleLabel];
+                for(UIView *subview in self.view.subviews)
+                {
+                    if (![viewsToSkip containsObject:subview])
+                        subview.x += 44.;
+                }
+            }
 		}
 		[UIView commitAnimations];
 	}
@@ -547,6 +620,21 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	{
 		[self createSongTitle];
 	}
+    
+    if (IS_TALL_SCREEN())
+    {
+        if (UIInterfaceOrientationIsLandscape(fromInterfaceOrientation))
+		{
+            self.extraButtons.alpha = 0.0;
+            self.songInfoView.alpha = 0.0;
+            [self showTallPlayerButtons];
+            [UIView animateWithDuration:.25 animations:^
+             {
+                 self.extraButtons.alpha = 1.0;
+                 self.songInfoView.alpha = 1.0;
+             }];
+        }
+    }
 }
 
 #pragma mark Main
@@ -1034,8 +1122,14 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)extraButtonsToggleAnimated:(BOOL)animated saveState:(BOOL)saveState
 {
+    if (IS_TALL_SCREEN() && UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+        return;
+    
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideExtraButtons) object:nil];
 	
+    self.extraButtons.alpha = 1.0;
+    self.songInfoView.alpha = 1.0;
+    
 	CGPoint extraButtonsHidden = CGPointMake(0, -extraButtons.height);
 	CGPoint extraButtonsVisible = CGPointMake(0, 0);
 	
