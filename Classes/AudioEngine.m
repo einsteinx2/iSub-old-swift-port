@@ -26,7 +26,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 {
     if (interruptionState == kAudioSessionBeginInterruption) 
 	{
-		DDLogCVerbose(@"audio session begin interruption");
+		DDLogCVerbose(@"[AudioEngine] audio session begin interruption");
 		if (sharedInstance.player.isPlaying)
 		{
 			sharedInstance.shouldResumeFromInterruption = YES;
@@ -39,7 +39,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
     } 
 	else if (interruptionState == kAudioSessionEndInterruption) 
 	{
-        DDLogCVerbose(@"audio session interruption ended, isPlaying: %@   isMainThread: %@", NSStringFromBOOL(sharedInstance.player.isPlaying), NSStringFromBOOL([NSThread isMainThread]));
+        DDLogCVerbose(@"[AudioEngine] audio session interruption ended, isPlaying: %@   isMainThread: %@", NSStringFromBOOL(sharedInstance.player.isPlaying), NSStringFromBOOL([NSThread isMainThread]));
 		if (sharedInstance.shouldResumeFromInterruption)
 		{
 			[sharedInstance.player playPause];
@@ -52,7 +52,7 @@ void interruptionListenerCallback(void *inUserData, UInt32 interruptionState)
 
 void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue) 
 {			
-	DDLogCInfo(@"audioRouteChangeListenerCallback called, propertyId: %lu  isMainThread: %@", inPropertyID, NSStringFromBOOL([NSThread isMainThread]));
+	DDLogCInfo(@"[AudioEngine] audioRouteChangeListenerCallback called, propertyId: %lu  isMainThread: %@", inPropertyID, NSStringFromBOOL([NSThread isMainThread]));
 	
     // ensure that this callback was invoked for a route change
     if (inPropertyID != kAudioSessionProperty_AudioRouteChange) 
@@ -67,7 +67,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 		SInt32 routeChangeReason;
 		CFNumberGetValue (routeChangeReasonRef, kCFNumberSInt32Type, &routeChangeReason);
 		
-		DDLogCInfo(@"route change reason: %li", routeChangeReason);
+		DDLogCInfo(@"[AudioEngine] route change reason: %li", routeChangeReason);
 		
         // "Old device unavailable" indicates that a headset was unplugged, or that the
         // device was removed from a dock connector that supports audio output. This is
@@ -76,16 +76,16 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 		{
 			[sharedInstance.player playPause];
 			
-            DDLogCInfo(@"Output device removed, so application audio was paused.");
+            DDLogCInfo(@"[AudioEngine] Output device removed, so application audio was paused.");
         }
 		else 
 		{
-            DDLogCInfo(@"A route change occurred that does not require pausing of application audio.");
+            DDLogCInfo(@"[AudioEngine] A route change occurred that does not require pausing of application audio.");
         }
     }
 	else 
 	{	
-        DDLogCInfo(@"Audio route change while application audio is stopped.");
+        DDLogCInfo(@"[AudioEngine] Audio route change while application audio is stopped.");
         return;
     }
 }
@@ -138,7 +138,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 - (void)didReceiveMemoryWarning
 {
-	DDLogError(@"received memory warning");
+	DDLogError(@"[AudioEngine] received memory warning");
 }
 
 #pragma mark - Singleton methods

@@ -19,3 +19,6 @@
 [submodule "Frameworks/HockeySDK"]
 	path = Frameworks/HockeySDK
 	url = git://github.com/bitstadium/HockeySDK-iOS.git
+[submodule "Frameworks/ZipKit"]
+	path = Frameworks/ZipKit
+	url = git@github.com:einsteinx2/ZipKit.git

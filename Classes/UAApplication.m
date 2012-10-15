@@ -58,32 +58,32 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 
 - (void)playPauseStop
 {
-	DDLogVerbose(@"playPauseStop called");
+	DDLogVerbose(@"[UAApplication] playPauseStop called");
 	if (settingsS.isJukeboxEnabled)
 	{
-		DDLogVerbose(@"playPauseStop jukebox is enabled");
+		DDLogVerbose(@"[UAApplication] playPauseStop jukebox is enabled");
 		if (jukeboxS.jukeboxIsPlaying)
 		{
-			DDLogVerbose(@"jukebox is playing, playPauseStop jukeboxStop called");
+			DDLogVerbose(@"[UAApplication] jukebox is playing, playPauseStop jukeboxStop called");
 			[jukeboxS jukeboxStop];
 		}
 		else
 		{
-			DDLogVerbose(@"jukebox NOT playing, playPauseStop jukeboxPlay called");
+			DDLogVerbose(@"[UAApplication] jukebox NOT playing, playPauseStop jukeboxPlay called");
 			[jukeboxS jukeboxPlay];
 		}
 	}
 	else
 	{
-		DDLogVerbose(@"playPauseStop jukebox NOT enabled");
+		DDLogVerbose(@"[UAApplication] playPauseStop jukebox NOT enabled");
         if (audioEngineS.player)
 		{
-			DDLogVerbose(@"audio engine player exists, playPauseStop [audioEngineS.player playPause] called");
+			DDLogVerbose(@"[UAApplication] audio engine player exists, playPauseStop [audioEngineS.player playPause] called");
 			[audioEngineS.player playPause];
 		}
 		else
 		{
-			DDLogVerbose(@"audio engine player doesn't exist, playPauseStop [musicS playSongAtPosition:playlistS.currentIndex] called");
+			DDLogVerbose(@"[UAApplication] audio engine player doesn't exist, playPauseStop [musicS playSongAtPosition:playlistS.currentIndex] called");
 			[musicS playSongAtPosition:playlistS.currentIndex];
 		}
 	}
@@ -91,23 +91,23 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 
 - (void)remoteControlReceivedWithEvent:(UIEvent *)event 
 {
-	DDLogVerbose(@"remoteControlReceivedWithEvent type: %i  subtype: %i  timestamp: %f", event.type, event.subtype, event.timestamp);
+	DDLogVerbose(@"[UAApplication] remoteControlReceivedWithEvent type: %i  subtype: %i  timestamp: %f", event.type, event.subtype, event.timestamp);
 	switch(event.subtype) 
 	{
 		case UIEventSubtypeRemoteControlPlay:
-			DDLogVerbose(@"UIEventSubtypeRemoteControlPlay, calling playPauseStop");
+			DDLogVerbose(@"[UAApplication] UIEventSubtypeRemoteControlPlay, calling playPauseStop");
 			[self playPauseStop];
 			break;
 		case UIEventSubtypeRemoteControlPause:
-			DDLogVerbose(@"UIEventSubtypeRemoteControlPause, calling playPauseStop");
+			DDLogVerbose(@"[UAApplication] UIEventSubtypeRemoteControlPause, calling playPauseStop");
 			[self playPauseStop];
 			break;
 		case UIEventSubtypeRemoteControlStop:
-			DDLogVerbose(@"UIEventSubtypeRemoteControlStop, calling playPauseStop");
+			DDLogVerbose(@"[UAApplication] UIEventSubtypeRemoteControlStop, calling playPauseStop");
 			[self playPauseStop];
 			break;
 		case UIEventSubtypeRemoteControlTogglePlayPause:
-			DDLogVerbose(@"UIEventSubtypeRemoteControlTogglePlayPause, calling playPauseStop");
+			DDLogVerbose(@"[UAApplication] UIEventSubtypeRemoteControlTogglePlayPause, calling playPauseStop");
 			[self playPauseStop];
 			break;
 		case UIEventSubtypeRemoteControlNextTrack:
@@ -115,7 +115,7 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 			[musicS nextSong];
 			break;
 		case UIEventSubtypeRemoteControlPreviousTrack:
-			DDLogVerbose(@"UIEventSubtypeRemoteControlPreviousTrack, calling prevSong");
+			DDLogVerbose(@"[UAApplication] UIEventSubtypeRemoteControlPreviousTrack, calling prevSong");
 			[musicS prevSong];
 			break;
 		default:

@@ -81,22 +81,24 @@ void CALLBACK MyStreamEndCallback(HSYNC handle, DWORD channel, DWORD data, void 
 {
 	@autoreleasepool 
 	{
+        DDLogCVerbose(@"[BassGaplessPlayer] Stream End Callback called");
+        
 		BassStream *userInfo = (__bridge BassStream *)user;
 		if (userInfo)
 		{
             // Prepare the next song in the queue
             ISMSSong *nextSong = [userInfo.player nextSong];
-            DDLogCVerbose(@"Preparing stream for: %@", nextSong);
+            DDLogCVerbose(@"[BassGaplessPlayer]  Preparing stream for: %@", nextSong);
             BassStream *nextStream = [userInfo.player prepareStreamForSong:nextSong];
             if (nextStream)
             {
-                DDLogCVerbose(@"Stream prepared successfully for: %@", nextSong);
+                DDLogCVerbose(@"[BassGaplessPlayer] Stream prepared successfully for: %@", nextSong);
                 [userInfo.player.streamQueue addObject:nextStream];
                 BASS_Mixer_StreamAddChannel(userInfo.player.mixerStream, nextStream.stream, 0);
             }
             else
             {
-                DDLogCVerbose(@"Could NOT create stream for: %@", nextSong);
+                DDLogCVerbose(@"[BassGaplessPlayer] Could NOT create stream for: %@", nextSong);
                 userInfo.isNextSongStreamFailed = YES;
             }
             
@@ -158,7 +160,7 @@ QWORD CALLBACK MyFileLenProc(void *user)
 			length = [theSong.size longLongValue];
 		}
 		
-		DDLogCVerbose(@"checking %@ length: %llu", theSong.title, length);
+		DDLogCVerbose(@"[BassGaplessPlayer] checking %@ length: %llu", theSong.title, length);
 		return length;
 	}
 }
@@ -224,7 +226,7 @@ BOOL CALLBACK MyFileSeekProc(QWORD offset, void *user)
 			success = NO;
 		}
 		
-		DDLogCVerbose(@"seeking to %llu  success: %@", offset, NSStringFromBOOL(success));
+		DDLogCVerbose(@"[BassGaplessPlayer] seeking to %llu  success: %@", offset, NSStringFromBOOL(success));
 		
 		return success;
 	}
@@ -277,7 +279,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		// The stream should end, because there is no more music to play
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_SongPlaybackEnded];
 		
-		DDLogVerbose(@"Stream not active, freeing BASS");
+		DDLogVerbose(@"[BassGaplessPlayer] Stream not active, freeing BASS");
         [EX2Dispatch runInMainThread:^{
             [self bassFree];
         }];
@@ -332,7 +334,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		
 		if (self.isPlaying)
 		{
-			DDLogInfo(@"songEnded: self.isPlaying = YES");
+			DDLogInfo(@"[BassGaplessPlayer] songEnded: self.isPlaying = YES");
 			self.startSecondsOffset = 0;
 			self.startByteOffset = 0;
 			
@@ -344,7 +346,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		}
         /*else
         {
-            DDLogInfo(@"songEnded: self.isPlaying = NO");
+            DDLogInfo(@"[BassGaplessPlayer] songEnded: self.isPlaying = NO");
             [self.delegate bassRetrySongAtIndex:self.currentPlaylistIndex player:self];
         }*/
         
@@ -433,8 +435,8 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 									unsigned long long bytesToWait = BytesForSecondsAtBitrate(settingsS.audioEngineBufferNumberOfSeconds, bitrate);
 									userInfo.neededSize = size + bytesToWait;
 									
-									DDLogCVerbose(@"audioEngineBufferNumberOfSeconds: %u", settingsS.audioEngineBufferNumberOfSeconds);
-									DDLogCVerbose(@"AUDIO ENGINE - waiting for %llu   neededSize: %llu", bytesToWait, userInfo.neededSize);
+									DDLogCVerbose(@"[BassGaplessPlayer] audioEngineBufferNumberOfSeconds: %u", settingsS.audioEngineBufferNumberOfSeconds);
+									DDLogCVerbose(@"[BassGaplessPlayer] AUDIO ENGINE - waiting for %llu   neededSize: %llu", bytesToWait, userInfo.neededSize);
 									
 									// Sleep for 10000 microseconds, or 1/100th of a second
 #define sleepTime 10000
@@ -474,7 +476,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 											}
 										}
 									}
-									DDLogCVerbose(@"done waiting");
+									DDLogCVerbose(@"[BassGaplessPlayer] done waiting");
 								}
 							}
 							
@@ -520,7 +522,7 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOP
     else
     {
         self.bassOutputBufferLengthMillis = 0;
-        DDLogError(@"Can't initialize device");
+        DDLogError(@"[BassGaplessPlayer] Can't initialize device");
     }
 	
 	self.stopFillingRingBuffer = NO;
@@ -574,7 +576,7 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOP
 
 - (BOOL)testStreamForSong:(ISMSSong *)aSong
 {
-    DDLogVerbose(@"testing stream for %@  file: %@", aSong.title, aSong.currentPath);
+    DDLogVerbose(@"[BassGaplessPlayer] testing stream for %@  file: %@", aSong.title, aSong.currentPath);
 	if (aSong.fileExists)
 	{
 		// Create the stream
@@ -586,7 +588,7 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOP
 		}
 		
 		// Failed to create the stream
-		DDLogError(@"failed to create test stream for song: %@  filename: %@", aSong.title, aSong.currentPath);
+		DDLogError(@"[BassGaplessPlayer] failed to create test stream for song: %@  filename: %@", aSong.title, aSong.currentPath);
 		return NO;
 	}
 	
@@ -596,7 +598,7 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOP
 
 - (BassStream *)prepareStreamForSong:(ISMSSong *)aSong
 {
-	DDLogVerbose(@"preparing stream for %@  file: %@", aSong.title, aSong.currentPath);
+	DDLogVerbose(@"[BassGaplessPlayer] preparing stream for %@  file: %@", aSong.title, aSong.currentPath);
 	if (aSong.fileExists)
 	{	
 		// Create the user info object for the stream
@@ -608,7 +610,7 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOP
 		if (!userInfo.fileHandle)
 		{
 			// File failed to open
-			DDLogError(@"File failed to open");
+			DDLogError(@"[BassGaplessPlayer] File failed to open");
 			return nil;
 		}
 		
@@ -627,7 +629,7 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOP
 		}
 		
 		// Failed to create the stream
-		DDLogError(@"failed to create stream for song: %@  filename: %@", aSong.title, aSong.currentPath);
+		DDLogError(@"[BassGaplessPlayer] failed to create stream for song: %@  filename: %@", aSong.title, aSong.currentPath);
 		return nil;
 	}
 	
@@ -729,7 +731,7 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOP
 				 }
 				 else if (!aSong.fileExists)
 				 {
-					 DDLogError(@"Stream for song %@ failed, file is not on disk, so calling retrying the song", userInfo.song.title);
+					 DDLogError(@"[BassGaplessPlayer] Stream for song %@ failed, file is not on disk, so calling retrying the song", userInfo.song.title);
 					 // File was removed, most likely because the decryption failed, so start again normally
 					 [aSong removeFromCachedSongsTableDbQueue];
                      
@@ -738,7 +740,7 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOP
 				 else
 				 {
 					 // Failed to create the stream, retrying
-					 DDLogError(@"------failed to create stream, retrying in 2 seconds------");
+					 DDLogError(@"[BassGaplessPlayer] ------failed to create stream, retrying in 2 seconds------");
 					 
 					 [EX2Dispatch timerInMainQueueAfterDelay:ISMS_BassStreamRetryDelay 
 												   withName:startSongRetryTimer
@@ -770,7 +772,7 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOP
 - (void)updatePlaylistIndex:(NSNotification *)notification
 {
     self.currentPlaylistIndex = [self.delegate bassCurrentPlaylistIndex:self];
-    DDLogVerbose(@"Updating playlist index to: %u", self.currentPlaylistIndex);
+    DDLogVerbose(@"[BassGaplessPlayer] Updating playlist index to: %u", self.currentPlaylistIndex);
 }
 
 #pragma mark - Audio Engine Properties

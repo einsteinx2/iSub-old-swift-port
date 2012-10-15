@@ -192,24 +192,24 @@ double startSongSeconds = 0.0;
 
 - (void)prevSong
 {	
-	DDLogVerbose(@"musicS prevSong called");
+	DDLogVerbose(@"[MusicSingleton] prevSong called");
 	if (audioEngineS.player.progress > 10.0)
 	{
 		// Past 10 seconds in the song, so restart playback instead of changing songs
-		DDLogVerbose(@"musicS prevSong Past 10 seconds in the song, so restart playback instead of changing songs, calling playSongAtPosition:%u", playlistS.currentIndex);
+		DDLogVerbose(@"[MusicSingleton] prevSong Past 10 seconds in the song, so restart playback instead of changing songs, calling playSongAtPosition:%u", playlistS.currentIndex);
 		[self playSongAtPosition:playlistS.currentIndex];
 	}
 	else
 	{
 		// Within first 10 seconds, go to previous song
-		DDLogVerbose(@"musicS prevSong within first 10 seconds, so go to previous, calling playSongAtPosition:%u", playlistS.prevIndex);
+		DDLogVerbose(@"[MusicSingleton] prevSong within first 10 seconds, so go to previous, calling playSongAtPosition:%u", playlistS.prevIndex);
 		[self playSongAtPosition:playlistS.prevIndex];
 	}
 }
 
 - (void)nextSong
 {
-	DDLogVerbose(@"musicS nextSong called, calling playSongAtPosition:%u", playlistS.nextIndex);
+	DDLogVerbose(@"[MusicSingleton] nextSong called, calling playSongAtPosition:%u", playlistS.nextIndex);
 	[self playSongAtPosition:playlistS.nextIndex];
 }
 

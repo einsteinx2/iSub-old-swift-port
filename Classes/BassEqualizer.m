@@ -112,7 +112,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	if (self.isEqActive)
 	{
 		BASS_DX8_PARAMEQ p = value.parameters;
-		DDLogVerbose(@"updating eq for handle: %i   new freq: %f   new gain: %f", value.handle, p.fCenter, p.fGain);
+		DDLogVerbose(@"[BassEqualizer] updating eq for handle: %i   new freq: %f   new gain: %f", value.handle, p.fCenter, p.fGain);
 		BASS_FXSetParameters(value.handle, &p);
 	}
 }

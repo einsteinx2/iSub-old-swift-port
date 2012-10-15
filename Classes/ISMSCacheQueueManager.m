@@ -80,7 +80,7 @@ LOG_LEVEL_ISUB_DEBUG
 	if (!self.currentQueuedSong || (!appDelegateS.isWifi && !IS_3G_UNRESTRICTED && !settingsS.isManualCachingOnWWANEnabled) || viewObjectsS.isOfflineMode)
 		return;
     
-    DDLogVerbose(@"starting download queue for: %@", self.currentQueuedSong);
+    DDLogVerbose(@"[ISMSCacheQueueManager] starting download queue for: %@", self.currentQueuedSong);
 	
 	// For simplicity sake, just make sure we never go under 25 MB and let the cache check process take care of the rest
 	if (cacheS.freeSpace <= BytesFromMiB(25))
@@ -108,7 +108,7 @@ LOG_LEVEL_ISUB_DEBUG
 	// Check if the song is fully cached and if so, remove it from the queue and return
 	if (self.currentQueuedSong.isFullyCached)
 	{
-		DDLogVerbose(@"Marking %@ as downloaded because it's already fully cached", self.currentQueuedSong.title);
+		DDLogVerbose(@"[ISMSCacheQueueManager] Marking %@ as downloaded because it's already fully cached", self.currentQueuedSong.title);
 		
 		// Mark it as downloaded
 		//self.currentQueuedSong.isDownloaded = YES;
@@ -157,7 +157,7 @@ LOG_LEVEL_ISUB_DEBUG
 	ISMSStreamHandler *handler = [streamManagerS handlerForSong:self.currentQueuedSong];
 	if (handler)
 	{
-		DDLogVerbose(@"stealing %@ from stream manager", handler.mySong.title);
+		DDLogVerbose(@"[ISMSCacheQueueManager] stealing %@ from stream manager", handler.mySong.title);
 		
 		// It's in the stream queue so steal the handler
 		self.currentStreamHandler = handler;
@@ -170,7 +170,7 @@ LOG_LEVEL_ISUB_DEBUG
 	}
 	else
 	{
-		DDLogVerbose(@"CQ creating download handler for %@", self.currentQueuedSong.title);
+		DDLogVerbose(@"[ISMSCacheQueueManager] CQ creating download handler for %@", self.currentQueuedSong.title);
 		self.currentStreamHandler = [[ISMSCFNetworkStreamHandler alloc] initWithSong:self.currentQueuedSong isTemp:NO delegate:self];
 		self.currentStreamHandler.partialPrecacheSleep = NO;
 		[self.currentStreamHandler start];

@@ -83,6 +83,9 @@
 
 - (void)checkServer;
 
+- (NSString *)zipAllLogFiles;
+
+
 @end
 
 #endif

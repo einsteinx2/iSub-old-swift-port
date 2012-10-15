@@ -16,7 +16,7 @@ LOG_LEVEL_ISUB_DEFAULT
 {
 #ifdef DEBUG
 	NSInteger errorCode = BASS_ErrorGetCode();
-	DDLogError(@"BASS error: %i - %@", errorCode, [BassWrapper stringFromErrorCode:errorCode]);
+	DDLogError(@"[BassWrapper] BASS error: %i - %@", errorCode, [BassWrapper stringFromErrorCode:errorCode]);
 #endif
 }
 
@@ -27,7 +27,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	//BASS_ChannelGetInfo(channel, &i);
 	//QWORD bytes = BASS_ChannelGetLength(channel, BASS_POS_BYTE);
 	//DWORD time = BASS_ChannelBytes2Seconds(channel, bytes);
-	//DDLogInfo("channel type = %x (%@)\nlength = %llu (%u:%02u)  flags: %i  freq: %i  origres: %i", i.ctype, [BassWrapper formatForChannel:channel], bytes, time/60, time%60, i.flags, i.freq, i.origres);
+	//DDLogInfo("[BassWrapper] channel type = %x (%@)\nlength = %llu (%u:%02u)  flags: %i  freq: %i  origres: %i", i.ctype, [BassWrapper formatForChannel:channel], bytes, time/60, time%60, i.flags, i.freq, i.origres);
 #endif
 }
 

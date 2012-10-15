@@ -20,6 +20,8 @@
 #import "ISMSUpdateChecker.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
+#import "ZKFileArchive.h"
+#import "ZKDefs.h"
 
 @implementation iSubAppDelegate
 
@@ -521,9 +523,9 @@
 	return nil;
 }
 
-- (NSString *)applicationLogForCrashManager:(BITCrashManager *)crashManager
+- (NSString *)latestLogFileName
 {
-	NSString *logsFolder = [settingsS.cachesPath stringByAppendingPathComponent:@"Logs"];
+    NSString *logsFolder = [settingsS.cachesPath stringByAppendingPathComponent:@"Logs"];
 	NSArray *logFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:logsFolder error:nil];
 	
 	NSTimeInterval modifiedTime = 0.;
@@ -542,6 +544,14 @@
 			modifiedTime = [modified timeIntervalSince1970];
 		}
 	}
+    
+    return fileNameToUse;
+}
+
+- (NSString *)applicationLogForCrashManager:(BITCrashManager *)crashManager
+{
+    NSString *logsFolder = [settingsS.cachesPath stringByAppendingPathComponent:@"Logs"];
+	NSString *fileNameToUse = [self latestLogFileName];
 	
 	if (fileNameToUse)
 	{
@@ -552,6 +562,34 @@
 	}
 	
 	return nil;
+}
+
+- (NSString *)zipAllLogFiles
+{
+    // Remove any log zip files that exist
+    NSArray *zipFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:settingsS.cachesPath error:nil];
+    for (NSString *file in zipFiles)
+	{
+		if ([file hasSuffix:@".zip"])
+        {
+            // Delete the file
+            [[NSFileManager defaultManager] removeItemAtPath:[settingsS.cachesPath stringByAppendingPathComponent:file] error:nil];
+        }
+	}
+    
+    NSString *fileName = [self latestLogFileName];
+    NSString *zipFileName = [fileName stringByAppendingPathExtension:@"zip"];
+    NSString *zipFilePath = [settingsS.cachesPath stringByAppendingPathComponent:zipFileName];
+    NSString *logsFolder = [settingsS.cachesPath stringByAppendingPathComponent:@"Logs"];
+    
+    // Zip the logs
+    ZKFileArchive *archive = [ZKFileArchive archiveWithArchivePath:zipFilePath];
+    NSInteger result = [archive deflateDirectory:logsFolder relativeToPath:settingsS.cachesPath usingResourceFork:NO];
+    if (result == zkSucceeded)
+    {
+        return zipFilePath;
+    }
+    return nil;
 }
 
 /*- (void)loadCrittercism
@@ -755,7 +793,6 @@
 
 
 #pragma mark Helper Methods
-
 
 - (void)enterOfflineMode
 {
@@ -1107,6 +1144,18 @@
 					{
 						[mailer setSubject:@"I need some help with iSub :)"];
 					}
+                    
+                    NSString *zippedLogs = [self zipAllLogFiles];
+                    if (zippedLogs)
+                    {
+                        NSError *fileError;
+                        NSData *zipData = [NSData dataWithContentsOfFile:zippedLogs options:NSDataReadingMappedIfSafe error:&fileError];
+                        if (!fileError)
+                        {
+                            NSString *fileName = [NSString stringWithFormat:@"Logs-%@", [zippedLogs lastPathComponent]];
+                            [mailer addAttachmentData:zipData mimeType:@"application/x-zip-compressed" fileName:fileName];
+                        }
+                    }
 					
 					if (IS_IPAD())
 						[self.ipadRootViewController presentModalViewController:mailer animated:YES];

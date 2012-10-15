@@ -375,7 +375,7 @@ LOG_LEVEL_ISUB_DEBUG
 	if (!handler)
 		return;
 	
-	DDLogVerbose(@"starting handler, handlerStack: %@", self.handlerStack);
+	DDLogVerbose(@"[ISMSStreamManager] starting handler, handlerStack: %@", self.handlerStack);
 	
 	[self startHandler:handler resume:NO];
 }
@@ -401,7 +401,7 @@ LOG_LEVEL_ISUB_DEBUG
 		handler.delegate = self;
 	}
 	
-	DDLogVerbose(@"load handler stack, handlerStack: %@", self.handlerStack);
+	DDLogVerbose(@"[ISMSStreamManager] load handler stack, handlerStack: %@", self.handlerStack);
 
 }
 
@@ -410,7 +410,7 @@ LOG_LEVEL_ISUB_DEBUG
 // Hand of handler to cache queue
 - (void)stealHandlerForCacheQueue:(ISMSStreamHandler *)handler
 {
-	DDLogInfo(@"cache queue manager stole handler for: %@", handler.mySong.title);
+	DDLogInfo(@"[ISMSStreamManager] cache queue manager stole handler for: %@", handler.mySong.title);
 	handler.partialPrecacheSleep = NO;
 	[self.handlerStack removeObject:handler];
 	[self saveHandlerStack];
@@ -509,7 +509,7 @@ LOG_LEVEL_ISUB_DEBUG
 			}
 		}
 		
-		DDLogVerbose(@"fill stream queue, handlerStack: %@", self.handlerStack);
+		DDLogVerbose(@"[ISMSStreamManager] fill stream queue, handlerStack: %@", self.handlerStack);
 	}
 }
 
@@ -722,7 +722,7 @@ LOG_LEVEL_ISUB_DEBUG
 		// Resume any handlers that were downloading when iSub closed
 		if (handler.isDownloading && !handler.isTempCache)
 		{
-			DDLogVerbose(@"resuming starting handler");
+			DDLogVerbose(@"[ISMSStreamManager] resuming starting handler");
 			[handler start:YES];
 		}
 	}

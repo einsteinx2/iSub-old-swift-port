@@ -257,7 +257,7 @@ LOG_LEVEL_ISUB_DEFAULT
         if (range.location != NSNotFound)
         {
             NSString *filenameNew = [[filename componentsSeparatedByString:@"."] firstObjectSafe];
-            DDLogVerbose(@"Moving filename: %@ to new filename: %@", filename, filenameNew);
+            DDLogVerbose(@"[CacheSingleton] Moving filename: %@ to new filename: %@", filename, filenameNew);
             if (filenameNew)
             {
                 NSString *fromPath = [settingsS.songCachePath stringByAppendingPathComponent:filename];
@@ -266,7 +266,7 @@ LOG_LEVEL_ISUB_DEFAULT
                 
                 if (![[NSFileManager defaultManager] moveItemAtPath:fromPath toPath:toPath error:&error])
                 {
-                    DDLogVerbose(@"ERROR Moving filename: %@ to new filename: %@", filename, filenameNew);
+                    DDLogVerbose(@"[CacheSingleton] ERROR Moving filename: %@ to new filename: %@", filename, filenameNew);
                 }
             }
         }

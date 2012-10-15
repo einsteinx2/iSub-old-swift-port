@@ -37,7 +37,7 @@ LOG_LEVEL_ISUB_DEFAULT
 		}
 	}
 	
-	DDLogVerbose(@"Stream handler start:%@ for: %@", NSStringFromBOOL(resume), self.mySong.title);
+	DDLogVerbose(@"[ISMSURLConnectionStreamHandler] Stream handler start:%@ for: %@", NSStringFromBOOL(resume), self.mySong.title);
 	
 	self.totalBytesTransferred = 0;
 	self.bytesTransferred = 0;
@@ -117,7 +117,7 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (void)connectionTimedOut
 {
-	DDLogVerbose(@"Stream handler connectionTimedOut for %@", self.mySong);
+	DDLogVerbose(@"[ISMSURLConnectionStreamHandler] Stream handler connectionTimedOut for %@", self.mySong);
 	
 	[self cancel];
 	[self didFailInternal:nil];
@@ -156,7 +156,7 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (void)startConnectionInternalSuccess
 {
-	DDLogVerbose(@"Stream handler startConnectionInternalSuccess for %@", self.mySong);
+	DDLogVerbose(@"[ISMSURLConnectionStreamHandler] Stream handler startConnectionInternalSuccess for %@", self.mySong);
 
 	if (!self.isTempCache)
 		self.mySong.isPartiallyCached = YES;
@@ -169,7 +169,7 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (void)startConnectionInternalFailure
 {
-	DDLogVerbose(@"start connection failed");
+	DDLogVerbose(@"[ISMSURLConnectionStreamHandler] start connection failed");
 	NSError *error = [[NSError alloc] initWithISMSCode:ISMSErrorCode_CouldNotCreateConnection];
 	if ([self.delegate respondsToSelector:@selector(ISMSStreamHandlerConnectionFailed:withError:)])
 		[self.delegate ISMSStreamHandlerConnectionFailed:self withError:error];
@@ -190,7 +190,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	// Pop out of infinite loop if partially pre-cached
 	self.partialPrecacheSleep = NO;
 	
-	DDLogVerbose(@"Stream handler request canceled for %@", self.mySong);
+	DDLogVerbose(@"[ISMSURLConnectionStreamHandler] Stream handler request canceled for %@", self.mySong);
 	[self.connection cancel]; 
 	self.connection = nil;
 	
@@ -212,7 +212,7 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (BOOL)connection:(NSURLConnection *)theConnection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
 {
-	DDLogVerbose(@"Stream handler canAuthenticateAgainstProtectionSpace for %@", self.mySong);
+	DDLogVerbose(@"[ISMSURLConnectionStreamHandler] Stream handler canAuthenticateAgainstProtectionSpace for %@", self.mySong);
 
 	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
 		return YES; // Self-signed cert will be accepted
@@ -222,7 +222,7 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {	
-	DDLogVerbose(@"Stream handler didReceiveAuthenticationChallenge for %@", self.mySong);
+	DDLogVerbose(@"[ISMSURLConnectionStreamHandler] Stream handler didReceiveAuthenticationChallenge for %@", self.mySong);
 
 	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
 	{
@@ -233,7 +233,7 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveResponse:(NSURLResponse *)response
 {
-	DDLogVerbose(@"Stream handler didReceiveResponse for %@", self.mySong);
+	DDLogVerbose(@"[ISMSURLConnectionStreamHandler] Stream handler didReceiveResponse for %@", self.mySong);
 
 	if ([response isKindOfClass:[NSHTTPURLResponse class]])
 	{
@@ -312,7 +312,7 @@ LOG_LEVEL_ISUB_DEFAULT
 		
 		// Log progress
 		if (isProgressLoggingEnabled)
-			DDLogInfo(@"downloadedLengthA:  %llu   bytesRead: %i", self.totalBytesTransferred, dataLength);
+			DDLogInfo(@"[ISMSURLConnectionStreamHandler] downloadedLengthA:  %llu   bytesRead: %i", self.totalBytesTransferred, dataLength);
 		
 		// If near beginning of file, don't throttle
 		if (self.totalBytesTransferred < ISMSMinBytesToStartLimiting(self.bitrate))
@@ -341,7 +341,7 @@ LOG_LEVEL_ISUB_DEFAULT
                     delay = (speedDifferenceFactor * intervalSinceLastThrottle) - intervalSinceLastThrottle;
                     
                     if (isThrottleLoggingEnabled)
-                        DDLogInfo(@"Pausing for %f  interval: %f  bytesTransferred: %llu maxBytes: %f", delay, intervalSinceLastThrottle, self.bytesTransferred, maxBytesPerTotalInterval);
+                        DDLogInfo(@"[ISMSURLConnectionStreamHandler] Pausing for %f  interval: %f  bytesTransferred: %llu maxBytes: %f", delay, intervalSinceLastThrottle, self.bytesTransferred, maxBytesPerTotalInterval);
                     
                     self.bytesTransferred = 0;
                 }
@@ -374,7 +374,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	}
 	else
 	{
-		DDLogVerbose(@"Stream handler did receive data but encryptor was nil for %@", self.mySong);
+		DDLogVerbose(@"[ISMSURLConnectionStreamHandler] Stream handler did receive data but encryptor was nil for %@", self.mySong);
 
 		if (!self.isCanceled)
 		{
@@ -396,7 +396,7 @@ LOG_LEVEL_ISUB_DEFAULT
 			
 			double speedInBytes = (double)transferredSinceLastCheck / speedInteval;
 			double speedInKbytes = speedInBytes / 1024.;
-			DDLogInfo(@"rate: %f  speedInterval: %f  transferredSinceLastCheck: %llu", speedInKbytes, speedInteval, transferredSinceLastCheck);
+			DDLogInfo(@"[ISMSURLConnectionStreamHandler] rate: %f  speedInterval: %f  transferredSinceLastCheck: %llu", speedInKbytes, speedInteval, transferredSinceLastCheck);
 			
 			self.speedLoggingLastSize = self.totalBytesTransferred;
 			self.speedLoggingDate = [NSDate date];
@@ -448,8 +448,8 @@ LOG_LEVEL_ISUB_DEFAULT
 	//[EX2Dispatch cancelTimerBlockWithName:ISMSDownloadTimeoutTimer];
 	[self performSelectorOnMainThread:@selector(stopTimeOutTimer) withObject:nil waitUntilDone:NO];
 	
-	DDLogError(@"Connection Failed for %@", self.mySong.title);
-	DDLogError(@"error domain: %@  code: %i description: %@", error.domain, error.code, error.description);
+	DDLogError(@"[ISMSURLConnectionStreamHandler] Connection Failed for %@", self.mySong.title);
+	DDLogError(@"[ISMSURLConnectionStreamHandler] error domain: %@  code: %i description: %@", error.domain, error.code, error.description);
 	
 	// Perform these operations on the main thread
 	[self performSelectorOnMainThread:@selector(didFailInternal:) withObject:error waitUntilDone:YES];
@@ -461,7 +461,7 @@ LOG_LEVEL_ISUB_DEFAULT
 // Main Thread
 - (void)didFailInternal:(NSError *)error
 {
-	DDLogVerbose(@"Stream handler didFailInternal for %@", self.mySong);
+	DDLogVerbose(@"[ISMSURLConnectionStreamHandler] Stream handler didFailInternal for %@", self.mySong);
 
 	//[EX2Dispatch cancelTimerBlockWithName:ISMSDownloadTimeoutTimer];
 	[self performSelectorOnMainThread:@selector(stopTimeOutTimer) withObject:nil waitUntilDone:NO];
