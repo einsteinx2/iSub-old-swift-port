@@ -565,22 +565,13 @@
 }
 
 - (NSString *)zipAllLogFiles
-{
-    // Remove any log zip files that exist
-    NSArray *zipFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:settingsS.cachesPath error:nil];
-    for (NSString *file in zipFiles)
-	{
-		if ([file hasSuffix:@".zip"])
-        {
-            // Delete the file
-            [[NSFileManager defaultManager] removeItemAtPath:[settingsS.cachesPath stringByAppendingPathComponent:file] error:nil];
-        }
-	}
-    
-    NSString *fileName = [self latestLogFileName];
-    NSString *zipFileName = [fileName stringByAppendingPathExtension:@"zip"];
+{    
+    NSString *zipFileName = @"iSub Logs.zip";
     NSString *zipFilePath = [settingsS.cachesPath stringByAppendingPathComponent:zipFileName];
     NSString *logsFolder = [settingsS.cachesPath stringByAppendingPathComponent:@"Logs"];
+    
+    // Delete the old zip if exists
+    [[NSFileManager defaultManager] removeItemAtPath:zipFilePath error:nil];
     
     // Zip the logs
     ZKFileArchive *archive = [ZKFileArchive archiveWithArchivePath:zipFilePath];
@@ -1152,8 +1143,7 @@
                         NSData *zipData = [NSData dataWithContentsOfFile:zippedLogs options:NSDataReadingMappedIfSafe error:&fileError];
                         if (!fileError)
                         {
-                            NSString *fileName = [NSString stringWithFormat:@"Logs-%@", [zippedLogs lastPathComponent]];
-                            [mailer addAttachmentData:zipData mimeType:@"application/x-zip-compressed" fileName:fileName];
+                            [mailer addAttachmentData:zipData mimeType:@"application/x-zip-compressed" fileName:[zippedLogs lastPathComponent]];
                         }
                     }
 					
