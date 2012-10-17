@@ -7887,7 +7887,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -8312,10 +8312,11 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
+					"\"$(TARGET_BUILD_DIR)/usr/local/lib/include\"",
+					"\"$(OBJROOT)/UninstalledProducts/include\"",
 					"$(SRCROOT)",
 					/usr/include/libxml2,
 					"$(SRCROOT)/Frameworks/HockeySDK/Classes",
-					"$(SRCROOT)/Frameworks/EX2Kit/EX2Kit/**",
 					"$(SRCROOT)/Frameworks/ZipKit/**",
 				);
 				INFOPLIST_FILE = "Other/iSub-Info-Beta.plist";
@@ -8371,10 +8372,11 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
+					"\"$(TARGET_BUILD_DIR)/usr/local/lib/include\"",
+					"\"$(OBJROOT)/UninstalledProducts/include\"",
 					"$(SRCROOT)",
 					/usr/include/libxml2,
 					"$(SRCROOT)/Frameworks/HockeySDK/Classes",
-					"$(SRCROOT)/Frameworks/EX2Kit/EX2Kit/**",
 					"$(SRCROOT)/Frameworks/ZipKit/**",
 				);
 				INFOPLIST_FILE = "Other/iSub-Info-Beta.plist";
@@ -8427,10 +8429,11 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
+					"\"$(TARGET_BUILD_DIR)/usr/local/lib/include\"",
+					"\"$(OBJROOT)/UninstalledProducts/include\"",
 					"$(SRCROOT)",
 					/usr/include/libxml2,
 					"$(SRCROOT)/Frameworks/HockeySDK/Classes",
-					"$(SRCROOT)/Frameworks/EX2Kit/EX2Kit/**",
 					"$(SRCROOT)/Frameworks/ZipKit/**",
 				);
 				INFOPLIST_FILE = "Other/iSub-Info-Beta.plist";
@@ -8644,7 +8647,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -8677,7 +8680,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-all_load",

@@ -13,7 +13,7 @@
 #import "Defines.h"
 
 // Frameworks
-#import "EX2Kit.h"
+#import <EX2Kit/EX2Kit.h>
 #import "TBXML.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "FlurryAnalytics.h"
