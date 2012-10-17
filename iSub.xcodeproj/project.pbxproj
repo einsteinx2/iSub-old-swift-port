@@ -3649,6 +3649,9 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				53F15FC3162BA3ED00C24FC1 /* EX2Kit.xcodeproj */,
+				53F15DFB162B9D6E00C24FC1 /* ZipKit.xcodeproj */,
+				53A64E07161E2DA900FCBBAF /* HockeySDK.xcodeproj */,
 				53493E7215FC64DB0059492E /* Twitter+OAuth */,
 				53703B7B1588261900B1FB33 /* SBJson */,
 				53F3960B1571DB9F0026E70B /* TBXML */,
@@ -3677,9 +3680,6 @@
 				53EB4AA51405FE1B00CBA075 /* libz.dylib */,
 				5382F65614856F3C001C14C8 /* libSystem.dylib */,
 				53A64E22161E2E6400FCBBAF /* CrashReporter.framework */,
-				53F15FC3162BA3ED00C24FC1 /* EX2Kit.xcodeproj */,
-				53F15DFB162B9D6E00C24FC1 /* ZipKit.xcodeproj */,
-				53A64E07161E2DA900FCBBAF /* HockeySDK.xcodeproj */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -7787,8 +7787,7 @@
 				HEADER_SEARCH_PATHS = (
 					/usr/include/libxml2,
 					"$(SRCROOT)/Frameworks/HockeySDK/Classes",
-					"$(SRCROOT)/Frameworks/EX2Kit/EX2Kit/**",
-					"$(SRCROOT)/Frameworks/ZipKit/**",
+					"\"$(TARGET_BUILD_DIR)/usr/local/lib/include\"",
 				);
 				INFOPLIST_FILE = "Other/iSub-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -7839,8 +7838,7 @@
 				HEADER_SEARCH_PATHS = (
 					/usr/include/libxml2,
 					"$(SRCROOT)/Frameworks/HockeySDK/Classes",
-					"$(SRCROOT)/Frameworks/EX2Kit/EX2Kit/**",
-					"$(SRCROOT)/Frameworks/ZipKit/**",
+					"\"$(TARGET_BUILD_DIR)/usr/local/lib/include\"",
 				);
 				INFOPLIST_FILE = "Other/iSub-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -7932,8 +7930,7 @@
 				HEADER_SEARCH_PATHS = (
 					/usr/include/libxml2,
 					"$(SRCROOT)/Frameworks/HockeySDK/Classes",
-					"$(SRCROOT)/Frameworks/EX2Kit/EX2Kit/**",
-					"$(SRCROOT)/Frameworks/ZipKit/**",
+					"\"$(TARGET_BUILD_DIR)/usr/local/lib/include\"",
 				);
 				INFOPLIST_FILE = "Other/iSub-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -8317,7 +8314,6 @@
 					"$(SRCROOT)",
 					/usr/include/libxml2,
 					"$(SRCROOT)/Frameworks/HockeySDK/Classes",
-					"$(SRCROOT)/Frameworks/ZipKit/**",
 				);
 				INFOPLIST_FILE = "Other/iSub-Info-Beta.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -8377,7 +8373,6 @@
 					"$(SRCROOT)",
 					/usr/include/libxml2,
 					"$(SRCROOT)/Frameworks/HockeySDK/Classes",
-					"$(SRCROOT)/Frameworks/ZipKit/**",
 				);
 				INFOPLIST_FILE = "Other/iSub-Info-Beta.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -8434,7 +8429,6 @@
 					"$(SRCROOT)",
 					/usr/include/libxml2,
 					"$(SRCROOT)/Frameworks/HockeySDK/Classes",
-					"$(SRCROOT)/Frameworks/ZipKit/**",
 				);
 				INFOPLIST_FILE = "Other/iSub-Info-Beta.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -8486,10 +8480,10 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
-					/usr/include/libxml2,
+					"\"$(TARGET_BUILD_DIR)/usr/local/lib/include\"",
+					"\"$(OBJROOT)/UninstalledProducts/include\"",
 					"$(SRCROOT)/Frameworks/HockeySDK/Classes",
-					"$(SRCROOT)/Frameworks/EX2Kit/EX2Kit/**",
-					"$(SRCROOT)/Frameworks/ZipKit/**",
+					/usr/include/libxml2,
 				);
 				INFOPLIST_FILE = "Other/iSub-Info-Lite.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -8545,10 +8539,10 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
-					/usr/include/libxml2,
+					"\"$(TARGET_BUILD_DIR)/usr/local/lib/include\"",
+					"\"$(OBJROOT)/UninstalledProducts/include\"",
 					"$(SRCROOT)/Frameworks/HockeySDK/Classes",
-					"$(SRCROOT)/Frameworks/EX2Kit/EX2Kit/**",
-					"$(SRCROOT)/Frameworks/ZipKit/**",
+					/usr/include/libxml2,
 				);
 				INFOPLIST_FILE = "Other/iSub-Info-Lite.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -8598,10 +8592,10 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
-					/usr/include/libxml2,
+					"\"$(TARGET_BUILD_DIR)/usr/local/lib/include\"",
+					"\"$(OBJROOT)/UninstalledProducts/include\"",
 					"$(SRCROOT)/Frameworks/HockeySDK/Classes",
-					"$(SRCROOT)/Frameworks/EX2Kit/EX2Kit/**",
-					"$(SRCROOT)/Frameworks/ZipKit/**",
+					/usr/include/libxml2,
 				);
 				INFOPLIST_FILE = "Other/iSub-Info-Lite.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;

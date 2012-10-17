@@ -20,8 +20,6 @@
 #import "ISMSUpdateChecker.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
-#import "ZKFileArchive.h"
-#import "ZKDefs.h"
 
 @implementation iSubAppDelegate
 

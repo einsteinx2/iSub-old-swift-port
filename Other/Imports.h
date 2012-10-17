@@ -14,6 +14,7 @@
 
 // Frameworks
 #import <EX2Kit/EX2Kit.h>
+#import <ZipKit/ZipKit.h>
 #import "TBXML.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "FlurryAnalytics.h"
