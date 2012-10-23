@@ -310,6 +310,8 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 {
 	@autoreleasepool 
 	{
+        self.previousSongForProgress = userInfo.song;
+        
 		userInfo.isEndedCalled = YES;
         
         // The delegate is responsible for incrementing the playlist index
@@ -800,10 +802,11 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOP
 	if (seconds < 0)
     {
         // Use the previous song (i.e the one still coming out of the speakers), since we're actually finishing it right now
-        NSUInteger previousIndex = [self.delegate bassIndexAtOffset:-1 fromIndex:self.currentPlaylistIndex player:self];
+        /*NSUInteger previousIndex = [self.delegate bassIndexAtOffset:-1 fromIndex:self.currentPlaylistIndex player:self];
         ISMSSong *previousSong = [self.delegate bassSongForIndex:previousIndex player:self];
+		return previousSong.duration.doubleValue + seconds;*/
         
-		return previousSong.duration.doubleValue + seconds;
+        return self.previousSongForProgress.duration.doubleValue + seconds;
     }
 	
 	return seconds + self.startSecondsOffset;

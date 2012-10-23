@@ -30,6 +30,7 @@
 // BASS streams
 @property (strong) NSMutableArray *streamQueue;
 @property (readonly) BassStream *currentStream;
+@property (copy) ISMSSong *previousSongForProgress;
 @property (nonatomic) HSTREAM outStream;
 @property (nonatomic) HSTREAM mixerStream;
 @property (nonatomic) NSUInteger bassOutputBufferLengthMillis;

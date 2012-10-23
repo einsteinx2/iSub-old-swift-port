@@ -308,83 +308,76 @@
 
 - (NSInteger)prevIndex
 {
-	@synchronized(self.class)
-	{
-		switch (self.repeatMode) 
-		{
-			case ISMSRepeatMode_RepeatOne:
-				return self.currentIndex;
-				break;
-			case ISMSRepeatMode_RepeatAll:	
-				if (self.currentIndex == 0)
-					return self.count - 1;
-				else
-					return self.currentIndex - 1;
-				break;
-			case ISMSRepeatMode_Normal:
-				if (self.currentIndex == 0)
-					return self.currentIndex;
-				else
-					return self.currentIndex - 1;
-			default:
-				break;
-		}
-	}
+    NSInteger currentIndexTemp = self.currentIndex;
+	switch (self.repeatMode)
+    {
+        case ISMSRepeatMode_RepeatOne:
+            return currentIndexTemp;
+            break;
+        case ISMSRepeatMode_RepeatAll:
+            if (currentIndexTemp == 0)
+                return self.count - 1;
+            else
+                return currentIndexTemp - 1;
+            break;
+        case ISMSRepeatMode_Normal:
+            if (currentIndexTemp == 0)
+                return currentIndexTemp;
+            else
+                return currentIndexTemp - 1;
+        default:
+            break;
+    }
 }
 
 - (NSInteger)nextIndex
 {
-	@synchronized(self.class)
-	{
-		switch (self.repeatMode) 
-		{
-			case ISMSRepeatMode_RepeatOne:
-				return self.currentIndex;
-				break;
-			case ISMSRepeatMode_RepeatAll:	
-				if ([self songForIndex:self.currentIndex + 1])
-					return self.currentIndex + 1;
-				else
-					return 0;
-				break;
-			case ISMSRepeatMode_Normal:
-				if (![self songForIndex:self.currentIndex] && ![self songForIndex:self.currentIndex + 1])
-					return self.currentIndex;
-				else
-					return self.currentIndex + 1;
-			default:
-				break;
-		}
-	}
+    NSInteger currentIndexTemp = self.currentIndex;
+    switch (self.repeatMode)
+    {
+        case ISMSRepeatMode_RepeatOne:
+            return currentIndexTemp;
+            break;
+        case ISMSRepeatMode_RepeatAll:
+            if ([self songForIndex:currentIndexTemp + 1])
+                return currentIndexTemp + 1;
+            else
+                return 0;
+            break;
+        case ISMSRepeatMode_Normal:
+            if (![self songForIndex:currentIndexTemp] && ![self songForIndex:currentIndexTemp + 1])
+                return currentIndexTemp;
+            else
+                return currentIndexTemp + 1;
+        default:
+            break;
+    }
 }
 
 - (NSUInteger)indexForOffset:(NSUInteger)offset fromIndex:(NSUInteger)index
 {
-	@synchronized(self.class)
-	{
-		switch (self.repeatMode)
-		{
-			case ISMSRepeatMode_RepeatAll:
-				for (int i = 0; i < offset; i++)
-				{
-					index = [self songForIndex:index + 1] ? index + 1 : 0;
-				}
-				break;
-			case ISMSRepeatMode_Normal:
-				for (int i = 0; i < offset; i++)
-				{
-					if (![self songForIndex:index] && ![self songForIndex:index + 1])
-						index = index;
-					else
-						index++;
-				}
-				break;
-			default:
-				break;
-		}
-		
-		return index;
-	}
+	switch (self.repeatMode)
+    {
+        case ISMSRepeatMode_RepeatAll:
+            for (int i = 0; i < offset; i++)
+            {
+                index = [self songForIndex:index + 1] ? index + 1 : 0;
+            }
+            break;
+        case ISMSRepeatMode_Normal:
+            for (int i = 0; i < offset; i++)
+            {
+                if (![self songForIndex:index] && ![self songForIndex:index + 1])
+                    index = index;
+                else
+                    index++;
+            }
+            break;
+        default:
+            break;
+    }
+    
+    return index;
 }
 
 - (NSUInteger)indexForOffsetFromCurrentIndex:(NSUInteger)offset
