@@ -280,6 +280,18 @@
 
 	//DLog(@"effectDAO.selectedPresetIndex: %i", effectDAO.selectedPresetIndex);
 	[presetPicker selectRow:effectDAO.selectedPresetIndex inComponent:0 animated:NO];
+    
+    if (IS_TALL_SCREEN())
+    {
+        UIView *pickerBackground = [[UIView alloc] initWithFrame:CGRectMake(0., 365, 320., 140)];
+        pickerBackground.backgroundColor = UIColor.greenColor;
+        pickerBackground.clipsToBounds = YES;
+        [self.view addSubview:pickerBackground];
+        
+        presetPicker.pickerView.hidden = NO;
+        presetPicker.pickerView.y = -38.;
+        [pickerBackground addSubview:presetPicker.pickerView];
+    }
 	
 	[self updateToggleButton];
 	

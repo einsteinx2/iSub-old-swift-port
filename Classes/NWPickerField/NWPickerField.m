@@ -99,6 +99,11 @@ NSString* UIPickerViewDidHideNotification = @"UIPickerViewDidHideNotification";
 	
 }
 
+- (NWPickerView *)pickerView
+{
+    return pickerView;
+}
+
 -(void) didMoveToSuperview {
 	// lets create a hidden picker view.
 	pickerView = [[NWPickerView alloc] initWithFrame:CGRectZero];

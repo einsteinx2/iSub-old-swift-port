@@ -665,6 +665,8 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOP
 				 BASS_Mixer_StreamAddChannel(self.mixerStream, userInfo.stream, 0);
 				 self.outStream = BASS_StreamCreate(ISMS_defaultSampleRate, 2, 0, &MyStreamProc, (__bridge void*)self);
                  
+                 BASS_Start();
+                 
                  // Add the slide callback to handle fades
                  BASS_ChannelSetSync(self.outStream, BASS_SYNC_SLIDE, 0, MyStreamSlideCallback, (__bridge void*)self);
 				 

@@ -55,6 +55,8 @@ extern NSString* UIPickerViewDidHideNotification;
 @property(nonatomic,weak) IBOutlet id delegate;
 @property(nonatomic, copy) NSString* formatString;
 
+- (NWPickerView *)pickerView;
+
 -(void) selectRow:(NSInteger)row inComponent:(NSInteger)component animated:(BOOL)animated;
 -(NSInteger) selectedRowInComponent:(NSInteger)component;
 

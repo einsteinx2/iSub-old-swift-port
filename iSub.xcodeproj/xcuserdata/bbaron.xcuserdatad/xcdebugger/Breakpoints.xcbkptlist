@@ -5408,11 +5408,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/EqualizerViewController.m"
-         timestampString = "371074752.430513"
+         timestampString = "373091970.750554"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "436"
-         endingLineNumber = "436"
+         startingLineNumber = "448"
+         endingLineNumber = "448"
          landmarkName = "-createEqViews"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5460,11 +5460,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/EqualizerViewController.m"
-         timestampString = "371074933.77602"
+         timestampString = "373091970.750554"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "862"
-         endingLineNumber = "862"
+         startingLineNumber = "874"
+         endingLineNumber = "874"
          landmarkName = "-pickerField:selectedRow:inComponent:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5635,6 +5635,19 @@
          startingLineNumber = "468"
          endingLineNumber = "468"
          landmarkName = "-createLandscapeViews"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Classes/EqualizerViewController.m"
+         timestampString = "373091966.807863"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "291"
+         endingLineNumber = "291"
+         landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

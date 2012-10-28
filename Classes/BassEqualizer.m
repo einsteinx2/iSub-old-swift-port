@@ -8,7 +8,7 @@
 
 #import "BassEqualizer.h"
 
-#define ISMS_EqualizerGainReduction 0.35
+#define ISMS_EqualizerGainReduction 0.45
 
 @interface BassEqualizer()
 {

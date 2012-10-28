@@ -243,7 +243,7 @@ static void destroy_versionArrays()
 
 - (void)drawTheEq
 {		
-	if (!audioEngineS.player || visualType == ISMSBassVisualType_none)
+	if (!audioEngineS.player.isPlaying || visualType == ISMSBassVisualType_none)
 		return;
 	
 	[audioEngineS.visualizer readAudioData];
