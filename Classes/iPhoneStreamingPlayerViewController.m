@@ -92,7 +92,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {
 	[super viewDidLoad];
 	
-//DLog(@"coverArtImageView class: %@", NSStringFromClass(coverArtImageView.class));
+    //DLog(@"coverArtImageView class: %@", NSStringFromClass(coverArtImageView.class));
 	
 	extraButtonsButtonOffImage = [UIImage imageNamed:@"controller-extras.png"];
 	extraButtonsButtonOnImage = [UIImage imageNamed:@"controller-extras-on.png"];
@@ -111,6 +111,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
     {
         [self showTallPlayerButtons];
     }
+    
 	[self createDownloadProgressView];
 	[self createLandscapeViews];
 	
@@ -174,6 +175,17 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			 swipeDetector = nil;
 		}
 	}
+    
+    // Fix starting in landscape on iPhone 5
+    if (IS_TALL_SCREEN() && UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
+    {
+        NSArray *viewsToSkip = @[self.reflectionView, self.artistLabel, self.albumLabel, self.titleLabel];
+        for(UIView *subview in self.view.subviews)
+        {
+            if (![viewsToSkip containsObject:subview])
+                subview.x += 44.;
+        }
+    }
 }
 
 - (void)showTallPlayerButtons
@@ -418,7 +430,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	// Setup landscape orientation if necessary
 	if (!IS_IPAD())
 	{
-		self.artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(305, 60, 170, 30)];
+		self.artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(349, 60, 170, 30)];
 		self.artistLabel.backgroundColor = [UIColor clearColor];
 		self.artistLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
 		self.artistLabel.font = [UIFont boldSystemFontOfSize:22];
@@ -427,7 +439,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[self.view addSubview:self.artistLabel];
 		[self.view sendSubviewToBack:self.artistLabel];
 		
-		self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(305, 90, 170, 30)];
+		self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(349, 90, 170, 30)];
 		self.titleLabel.backgroundColor = [UIColor clearColor];
 		self.titleLabel.textColor = [UIColor whiteColor];
 		self.titleLabel.font = [UIFont boldSystemFontOfSize:24];
@@ -436,7 +448,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[self.view addSubview:self.titleLabel];
 		[self.view sendSubviewToBack:self.titleLabel];
 		
-		self.albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(305, 120, 170, 30)];
+		self.albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(349, 120, 170, 30)];
 		self.albumLabel.backgroundColor = [UIColor clearColor];
 		self.albumLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
 		self.albumLabel.font = [UIFont systemFontOfSize:22];
@@ -453,6 +465,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[positions setObject:[NSValue valueWithCGRect:nextButton.frame] forKey:@"nextButton"];
 		[positions setObject:[NSValue valueWithCGRect:eqButton.frame] forKey:@"eqButton"];
 		[positions setObject:[NSValue valueWithCGRect:extraButtonsButton.frame] forKey:@"extraButtonsButton"];
+        [positions setObject:[NSValue valueWithCGRect:self.artistLabel.frame] forKey:@"artistLabel"];
+        [positions setObject:[NSValue valueWithCGRect:self.albumLabel.frame] forKey:@"albumLabel"];
+        [positions setObject:[NSValue valueWithCGRect:self.titleLabel.frame] forKey:@"titleLabel"];
 		self.originalViewFrames = [NSDictionary dictionaryWithDictionary:positions];
 		
 		if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
@@ -548,6 +563,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			self.eqButton.frame = [[self.originalViewFrames objectForKey:@"eqButton"] CGRectValue];
 			self.extraButtonsButton.frame = [[self.originalViewFrames objectForKey:@"extraButtonsButton"] CGRectValue];
 			self.volumeSlider.frame = [[self.originalViewFrames objectForKey:@"volumeSlider"] CGRectValue];
+            //self.artistLabel.frame = [[self.originalViewFrames objectForKey:@"artistLabel"] CGRectValue];
+            //self.albumLabel.frame = [[self.originalViewFrames objectForKey:@"albumLabel"] CGRectValue];
+            //self.titleLabel.frame = [[self.originalViewFrames objectForKey:@"titleLabel"] CGRectValue];
 			
 			CGRect volumeFrame = [[self.originalViewFrames objectForKey:@"volumeSlider"] CGRectValue];
 			volumeFrame.origin.x = 0;
@@ -565,13 +583,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			CGFloat width = 320 * self.pageControlViewController.numberOfPages;
 			CGFloat height = self.pageControlViewController.numberOfPages == 1 ? 320 : 300;
 			self.pageControlViewController.scrollView.contentSize = CGSizeMake(width, height);
-            
-            if (IS_TALL_SCREEN())
-            {
-                self.artistLabel.x -= 44.;
-                self.albumLabel.x -= 44.;
-                self.titleLabel.x -= 44.;
-            }
+            [self.pageControlViewController changePage:self.pageControlViewController.pageControl];
 		}
 		else if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation))
 		{
@@ -582,6 +594,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			self.eqButton.origin = CGPointMake(328, 20);
 			self.extraButtonsButton.origin = CGPointMake(418, 20);
 			self.volumeSlider.frame = CGRectMake(300, 244, 180, 55);
+            self.artistLabel.frame = [[self.originalViewFrames objectForKey:@"artistLabel"] CGRectValue];
+            self.albumLabel.frame = [[self.originalViewFrames objectForKey:@"albumLabel"] CGRectValue];
+            self.titleLabel.frame = [[self.originalViewFrames objectForKey:@"titleLabel"] CGRectValue];
 			
 			if (settingsS.isJukeboxEnabled)
 				self.jukeboxVolumeView.frame = CGRectMake(0, 0, 180, 22.5);
@@ -597,10 +612,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			CGFloat width = 300 * pageControlViewController.numberOfPages;
 			CGFloat height = pageControlViewController.numberOfPages == 1 ? 270 : 250;
 			pageControlViewController.scrollView.contentSize = CGSizeMake(width, height);
+            [self.pageControlViewController changePage:self.pageControlViewController.pageControl];
             
             if (IS_TALL_SCREEN())
             {
-                NSArray *viewsToSkip = @[self.reflectionView];//, self.artistLabel, self.albumLabel, self.titleLabel];
+                NSArray *viewsToSkip = @[self.reflectionView, self.artistLabel, self.albumLabel, self.titleLabel];
                 for(UIView *subview in self.view.subviews)
                 {
                     if (![viewsToSkip containsObject:subview])

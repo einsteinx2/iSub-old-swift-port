@@ -531,6 +531,9 @@ extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOP
 	
 	self.equalizer = [[BassEqualizer alloc] init];
 	self.visualizer = [[BassVisualizer alloc] init];
+    
+    // Calling BASS_Stop() here prevents the > icon from showing in the status bar when playback isn't actually happening yet
+    BASS_Stop();
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_BassInitialized];
 }

@@ -362,7 +362,7 @@
 		}];
 	}
 
-	if (!cacheQueueManagerS.isQueueDownloading && appDelegateS.isWifi)
+	if (!cacheQueueManagerS.isQueueDownloading)
 	{
 		// Make sure this is called from the main thread
 		if ([NSThread isMainThread])

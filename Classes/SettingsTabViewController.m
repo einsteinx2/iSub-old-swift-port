@@ -17,8 +17,6 @@
 
 @implementation SettingsTabViewController
 
-@synthesize parentController, versionLabel, manualOfflineModeSwitch, checkUpdatesSwitch, autoReloadArtistSwitch, disablePopupsSwitch, disableRotationSwitch, disableScreenSleepSwitch, enableBasicAuthSwitch, enableSongsTabSwitch, enableSongsTabLabel, enableSongsTabDesc, recoverSegmentedControl, maxBitrateWifiSegmentedControl, maxBitrate3GSegmentedControl, enableLyricsSwitch, enableCacheStatusSwitch, autoPlayerInfoSwitch, enableSwipeSwitch, enableTapAndHoldSwitch, enableSongCachingSwitch, enableNextSongCacheLabel, enableNextSongCacheSwitch, enableNextSongPartialCacheLabel, enableNextSongPartialCacheSwitch, cachingTypeSegmentedControl, totalSpace, freeSpace, cacheSpaceLabel1, cacheSpaceLabel2, freeSpaceLabel, totalSpaceLabel, totalSpaceBackground, freeSpaceBackground, cacheSpaceSlider, cacheSpaceDescLabel, autoDeleteCacheSwitch, autoDeleteCacheTypeSegmentedControl, cacheSongCellColorSegmentedControl, twitterSigninButton, twitterStatusLabel, twitterEnabledSwitch, enableScrobblingSwitch, scrobblePercentLabel, scrobblePercentSlider, quickSkipSegmentControl, secondsToStartPlayerSegmentControl, secondsToBufferSegmentControl, showLargeSongInfoSwitch, loadedTime, enableLockScreenArt, enableLockArtLabel, swipeCellsLabel, tapHoldCellsLabel;
-
 - (BOOL)shouldAutorotate
 {
     return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
@@ -123,8 +121,8 @@
 		
 	self.totalSpace = cacheS.totalSpace;
 	self.freeSpace = cacheS.freeSpace;
-	self.freeSpaceLabel.text = [NSString stringWithFormat:@"Free space: %@", [NSString formatFileSize:freeSpace]];
-	self.totalSpaceLabel.text = [NSString stringWithFormat:@"Total space: %@", [NSString formatFileSize:totalSpace]];
+	self.freeSpaceLabel.text = [NSString stringWithFormat:@"Free space: %@", [NSString formatFileSize:self.freeSpace]];
+	self.totalSpaceLabel.text = [NSString stringWithFormat:@"Total space: %@", [NSString formatFileSize:self.totalSpace]];
 	float percentFree = (float) self.freeSpace / (float) self.totalSpace;
 	CGRect frame = self.freeSpaceBackground.frame;
 	frame.size.width = frame.size.width * percentFree;
@@ -189,7 +187,7 @@
 		self.cacheSongCellColorSegmentedControl.enabled = NO; self.cacheSongCellColorSegmentedControl.alpha = 0.5;
 	}
 	
-	[cacheSpaceLabel2 addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+	[self.cacheSpaceLabel2 addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 	
 	switch (settingsS.audioEngineStartNumberOfSeconds) 
 	{
@@ -256,7 +254,7 @@
 		//self.cacheSpaceSlider.value = [[appDelegateS.settingsDictionary objectForKey:@"minFreeSpace"] floatValue] / totalSpace;
 		self.cacheSpaceSlider.value = (float)settingsS.minFreeSpace / self.totalSpace;
 	}
-	else if (cachingTypeSegmentedControl.selectedSegmentIndex == 1)
+	else if (self.cachingTypeSegmentedControl.selectedSegmentIndex == 1)
 	{
 		self.cacheSpaceLabel1.text = @"Maximum cache size:";
 		//self.cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegateS.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue]];
@@ -268,7 +266,7 @@
 
 - (IBAction)segmentAction:(id)sender
 {
-	if ([[NSDate date] timeIntervalSinceDate:loadedTime] > 0.5)
+	if ([[NSDate date] timeIntervalSinceDate:self.loadedTime] > 0.5)
 	{
 		if (sender == self.recoverSegmentedControl)
 		{
@@ -673,7 +671,7 @@
 			settingsS.maxCacheSize = self.freeSpace - 52428800;
 			self.cacheSpaceSlider.value = ((float)settingsS.maxCacheSize / (float)self.totalSpace); // Leave 50MB space
 		}
-		else if (cacheSpaceSlider.value * totalSpace < 52428800)
+		else if (self.cacheSpaceSlider.value * self.totalSpace < 52428800)
 		{
 			settingsS.maxCacheSize = 52428800;
 			self.cacheSpaceSlider.value = ((float)settingsS.maxCacheSize / (float)self.totalSpace); // Leave 50MB space

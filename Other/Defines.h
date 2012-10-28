@@ -17,10 +17,6 @@
 #define ISMSJukeboxTimeout 60.0
 #define ISMSServerCheckTimeout 15.0
 
-// 3G restrictions
-#define IS_3G_UNRESTRICTED NO   // 3G is restricted (safe for App Store)
-//#define IS_3G_UNRESTRICTED YES  // 3G is NOT restricted (NOT safe for App Store)
-
 #define ISMSiPadBackgroundColor [UIColor colorWithPatternImage:[UIImage imageNamed:@"underPageBackground.png"]]
 #define ISMSiPadCornerRadius 5.
 

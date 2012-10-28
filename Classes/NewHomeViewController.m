@@ -46,7 +46,6 @@
 {
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 	
-	//BOOL rotationDisabled = [[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"];
 	BOOL rotationDisabled = settingsS.isRotationLockEnabled;
 	
 	if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
@@ -76,6 +75,21 @@
 	{
 		if (!IS_IPAD())
 		{
+            if (IS_TALL_SCREEN())
+            {
+                for (UIView *aView in self.topRow)
+                {
+                    aView.y -= 30;
+                }
+                
+                self.coverArtBorder.y -= 40;
+                
+                for (UIView *aView in self.bottomRow)
+                {
+                    aView.y += 40;
+                }
+            }
+            
 			// Animate the segmented control off screen
 			[UIView beginAnimations:nil context:NULL];
 			[UIView setAnimationDuration:.3];
@@ -97,6 +111,28 @@
 	}
 }
 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    // Since the values in viewWillRotate would have to be rounded, we need to do it here instead
+    // Add a short animation to make it look less jerky
+    if (IS_TALL_SCREEN() && UIInterfaceOrientationIsLandscape(fromInterfaceOrientation))
+    {
+        [UIView animateWithDuration:.15 animations:^{
+            for (UIView *aView in self.topRow)
+            {
+                aView.y += 30;
+            }
+            
+            self.coverArtBorder.y += 40;
+            
+            for (UIView *aView in self.bottomRow)
+            {
+                aView.y -= 40;
+            }
+        }];
+    }
+}
+
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
@@ -104,7 +140,6 @@
 	self.searchSegment.selectedSegmentIndex = 3;
 	
 	self.title = @"Home";
-	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settings)] autorelease];
 
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jukeboxOff) name:ISMSNotification_JukeboxDisabled object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initSongInfo) name:ISMSNotification_SongPlaybackStarted object:nil];
@@ -113,7 +148,6 @@
 
 	if (!IS_IPAD())
 	{
-		//coverArtBorder = [[UIView alloc] initWithFrame:CGRectMake(15, 180, 290, 60)];
 		self.coverArtBorder = [UIButton buttonWithType:UIButtonTypeCustom];
 		self.coverArtBorder.frame = CGRectMake(15, 177, 290, 60);
 		self.coverArtBorder.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
@@ -123,13 +157,10 @@
 		
 		self.coverArtView = [[AsynchronousImageView alloc] init];
 		self.coverArtView.isLarge = NO;
-		//coverArtView.frame = CGRectMake(2, 2, 56, 56);
 		self.coverArtView.frame = CGRectMake(0, 0, 60, 60);
 		self.coverArtView.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
 		self.coverArtView.layer.borderWidth = 2.0f;
 		
-		//[coverArtBorder addSubview:coverArtView];
-		//[self.view addSubview:coverArtBorder];
 		[self.coverArtBorder addSubview:self.coverArtView];
 		
 		self.artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 3, 220, 17)];
@@ -163,12 +194,25 @@
 		self.songLabel.textAlignment = UITextAlignmentCenter;
 		self.songLabel.shadowOffset = CGSizeMake(0, 2);
 		self.songLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
-		[self.coverArtBorder addSubview:self.songLabel];				
-		
+		[self.coverArtBorder addSubview:self.songLabel];
+        		
 		[self initSongInfo];
-	}	
-	
-	//self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"backgroundImage_repeat.png"]];
+	}
+    
+    if (IS_TALL_SCREEN() && UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+    {
+        for (UIView *aView in self.topRow)
+        {
+            aView.y += 30;
+        }
+
+        self.coverArtBorder.y += 40;
+        
+        for (UIView *aView in self.bottomRow)
+        {
+            aView.y -= 40;
+        }
+    }	
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -176,7 +220,6 @@
 	[super viewWillAppear:animated];
 		
 	//////////// Handle landscape bug
-	//BOOL rotationDisabled = [[[iSubAppDelegate sharedInstance].settingsDictionary objectForKey:@"lockRotationSetting"] isEqualToString:@"YES"];
 	BOOL rotationDisabled = settingsS.isRotationLockEnabled;
 	
 	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && !rotationDisabled)

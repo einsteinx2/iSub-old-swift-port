@@ -154,11 +154,8 @@
 		[self setEditing:NO animated:NO];
 		self.navigationItem.rightBarButtonItem = nil;
 		self.helpTabViewController = [[HelpTabViewController alloc] initWithNibName:@"HelpTabViewController" bundle:nil];
-		if (IS_IPAD())
-		{
-			self.helpTabViewController.view.frame = self.view.bounds;
-			self.helpTabViewController.view.height -= 40.;
-		}
+		self.helpTabViewController.view.frame = self.view.bounds;
+        self.helpTabViewController.view.height -= 40.;
 		self.tableView.tableFooterView = self.helpTabViewController.view;
 		[self.tableView addFooterShadow];
 		[self.tableView reloadData];

@@ -1400,7 +1400,7 @@
 			{
 				cell.cacheInfoLabel.text = [NSString stringWithFormat:@"Added %@ - Progress: %@", [NSString relativeTime:cached], [NSString formatFileSize:cacheQueueManagerS.currentQueuedSong.localFileSize]];
 			}
-			else if (appDelegateS.isWifi)
+			else if (appDelegateS.isWifi || settingsS.isManualCachingOnWWANEnabled)
 			{
 				cell.cacheInfoLabel.text = [NSString stringWithFormat:@"Added %@ - Progress: Waiting...", [NSString relativeTime:cached]];
 			}

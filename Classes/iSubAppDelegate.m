@@ -69,10 +69,13 @@
 
     // Adjust the window to the correct size before anything else loads to prevent
     // various sizing/positioning issues
-    CGSize screenSize = [[UIScreen mainScreen] preferredMode].size;
-    CGFloat screenScale = [UIScreen mainScreen].scale;
-    screenScale = screenScale == 0. ? 1. : screenScale;
-    self.window.size = CGSizeMake(screenSize.width / screenScale, screenSize.height / screenScale);
+    /*if (!IS_IPAD())
+    {
+        CGSize screenSize = [[UIScreen mainScreen] preferredMode].size;
+        CGFloat screenScale = [UIScreen mainScreen].scale;
+        screenScale = screenScale == 0. ? 1. : screenScale;
+        self.window.size = CGSizeMake(screenSize.width / screenScale, screenSize.height / screenScale);
+    }*/
 	
 	if (!IS_ADHOC() && !IS_RELEASE())
 	{
@@ -885,21 +888,14 @@
 {	
 	if ([curReach currentReachabilityStatus] == NotReachable)
 	{
-		//DLog(@"Reachability Changed: NotReachable");
-		//reachabilityStatus = 0;
-		//[self stopDownloadQueue];
-		
 		//Change over to offline mode
 		if (!viewObjectsS.isOfflineMode)
 		{
 			[self enterOfflineMode];
 		}
 	}
-	else if ([curReach currentReachabilityStatus] == ReachableViaWiFi || IS_3G_UNRESTRICTED)
+	else
 	{
-		//DLog(@"Reachability Changed: ReachableViaWiFi");
-		//reachabilityStatus = 2;
-		
 		[self checkServer];
 		
 		if (viewObjectsS.isOfflineMode)
@@ -908,28 +904,17 @@
 		}
 		else
 		{
-			//DLog(@"musicS.isQueueListDownloading: %i", musicS.isQueueListDownloading);
-			if (!cacheQueueManagerS.isQueueDownloading) 
-			{
-				//DLog(@"Calling [musicS downloadNextQueuedSong]");
-				[cacheQueueManagerS startDownloadQueue];
-			}
-		}
-	}
-	else if ([curReach currentReachabilityStatus] == ReachableViaWWAN)
-	{
-		[self checkServer];
-		
-		//DLog(@"Reachability Changed: ReachableViaWWAN");
-		//reachabilityStatus = 1;
-		
-		if (viewObjectsS.isOfflineMode)
-		{
-			[self enterOnlineMode];
-		}
-		else 
-		{
-			[cacheQueueManagerS stopDownloadQueue];
+            if ([curReach currentReachabilityStatus] == ReachableViaWiFi || settingsS.isManualCachingOnWWANEnabled)
+            {
+                if (!cacheQueueManagerS.isQueueDownloading)
+                {
+                    [cacheQueueManagerS startDownloadQueue];
+                }
+            }
+			else
+            {
+                [cacheQueueManagerS stopDownloadQueue];
+            }
 		}
 	}
 }
@@ -957,7 +942,7 @@
 
 - (BOOL)isWifi
 {
-	if ([self.wifiReach currentReachabilityStatus] == ReachableViaWiFi || IS_3G_UNRESTRICTED)
+	if ([self.wifiReach currentReachabilityStatus] == ReachableViaWiFi)
 		return YES;
 	else
 		return NO;
