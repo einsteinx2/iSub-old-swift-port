@@ -1341,7 +1341,14 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		backgroundLayer.frame = backgroundFrame;
 		backgroundLayer.backgroundColor = [UIColor colorWithWhite:0 alpha:.72].CGColor;
 		backgroundLayer.cornerRadius = cornerRadius;
-		self.sliderMultipleLabel.backgroundColor = [UIColor colorWithPatternImage:[backgroundLayer imageFromLayer]];
+        //self.sliderMultipleLabel.backgroundColor = [UIColor colorWithPatternImage:[backgroundLayer imageFromLayer]];
+        
+        CGRect cropRect = CGRectMake(0., cornerRadius, self.sliderMultipleLabel.width, self.sliderMultipleLabel.height);
+        CGImageRef imageRef = CGImageCreateWithImageInRect([[backgroundLayer imageFromLayer] CGImage], cropRect);
+        UIImage *flippedImage = [UIImage imageWithCGImage:imageRef];
+        CGImageRelease(imageRef);
+        self.sliderMultipleLabel.backgroundColor = [UIColor colorWithPatternImage:flippedImage];
+        self.sliderMultipleLabel.top = IS_TALL_SCREEN() ? 0. : self.extraButtons.height - 1.;
 
 		[self.coverArtHolderView addSubview:self.sliderMultipleLabel];
 	}
