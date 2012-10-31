@@ -59,6 +59,10 @@
 
 @property BOOL showIntro;
 
+@property (strong) NSURL *referringAppUrl;
+
+- (void)backToReferringApp;
+
 + (iSubAppDelegate *)sharedInstance;
 
 - (void)enterOnlineModeForce;

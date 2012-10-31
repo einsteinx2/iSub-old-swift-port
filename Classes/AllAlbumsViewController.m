@@ -65,6 +65,7 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createDataModel) name:ISMSNotification_ServerSwitched object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadingFinishedNotification) name:ISMSNotification_AllSongsLoadingFinished object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addURLRefBackButton) name:UIApplicationDidBecomeActiveNotification object:nil];
 	
 	// Add the pull to refresh view
 	self.refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
@@ -128,10 +129,19 @@
 	[self.tableView reloadData];
 }
 
+- (void)addURLRefBackButton
+{
+    self.navigationItem.leftBarButtonItem = nil;
+    if (appDelegateS.referringAppUrl && appDelegateS.mainTabBarController.selectedIndex != 4)
+    {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:appDelegateS action:@selector(backToReferringApp)];
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated 
 {
 	[super viewWillAppear:animated];
-
+    
 	// Don't run this while the table is updating
 	if ([SUSAllSongsLoader isLoading])
 	{
@@ -139,13 +149,12 @@
 	}
 	else
 	{
+        [self addURLRefBackButton];
+
+        self.navigationItem.rightBarButtonItem = nil;
 		if(musicS.showPlayerIcon)
 		{
 			self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
-		}
-		else
-		{
-			self.navigationItem.rightBarButtonItem = nil;
 		}
 		
 		// Check if the data has been loaded

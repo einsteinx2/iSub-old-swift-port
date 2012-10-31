@@ -218,15 +218,17 @@
 	
 	if (IS_IPAD())
 		self.view.backgroundColor = ISMSiPadBackgroundColor;
-	
-	if(musicS.showPlayerIcon)
-	{
-		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
-	}
-	else
-	{
-		self.navigationItem.rightBarButtonItem = nil;
-	}
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addURLRefBackButton) name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+- (void)addURLRefBackButton
+{
+    self.navigationItem.leftBarButtonItem = nil;
+    if (appDelegateS.referringAppUrl && appDelegateS.mainTabBarController.selectedIndex != 4)
+    {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:appDelegateS action:@selector(backToReferringApp)];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated 
@@ -276,6 +278,14 @@
 		colorView.alpha = 0.5;
 		[self.jukeboxInputBlocker addSubview:colorView];
 	}
+    
+    [self addURLRefBackButton];
+    
+    self.navigationItem.rightBarButtonItem = nil;
+    if(musicS.showPlayerIcon)
+	{
+		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
+	}    
 }
 
 - (void)viewDidAppear:(BOOL)animated

@@ -306,7 +306,21 @@
         }
     }
     
+    NSDictionary *queryParameters = url.queryParameterDictionary;
+    if ([queryParameters.allKeys containsObject:@"ref"])
+    {
+        self.referringAppUrl = [NSURL URLWithString:[queryParameters objectForKey:@"ref"]];
+    }
+    
     return YES;
+}
+
+- (void)backToReferringApp
+{
+    if (self.referringAppUrl)
+    {
+        [[UIApplication sharedApplication] openURL:self.referringAppUrl];
+    }
 }
 
 // Check server cancel load

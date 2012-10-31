@@ -65,13 +65,27 @@
 	self.refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
 	[self.tableView addSubview:self.refreshHeaderView];
 		
-	[self.tableView addFooterShadow];	
+	[self.tableView addFooterShadow];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addURLRefBackButton) name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+- (void)addURLRefBackButton
+{
+    self.navigationItem.leftBarButtonItem = nil;
+    if (appDelegateS.referringAppUrl && appDelegateS.mainTabBarController.selectedIndex != 4)
+    {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:appDelegateS action:@selector(backToReferringApp)];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated 
 {
     [super viewWillAppear:animated];
+    
+    [self addURLRefBackButton];
 	
+    self.navigationItem.rightBarButtonItem = nil;
 	if(musicS.showPlayerIcon)
 	{
 		UIImage *playingImage = [UIImage imageNamed:@"now-playing.png"];
@@ -80,10 +94,6 @@
 																	  target:self 
 																	  action:@selector(nowPlayingAction:)];
 		self.navigationItem.rightBarButtonItem = buttonItem;
-	}
-	else
-	{
-		self.navigationItem.rightBarButtonItem = nil;
 	}
 	
 	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
