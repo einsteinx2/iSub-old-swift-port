@@ -89,12 +89,11 @@
 	
 	NSUInteger segment = [newSegments count];
 
-	NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE segs = %i ", segment+1];
-	for (int i = 1; i <= segment; i++)
+	NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? "];
+	for (int i = 2; i <= segment; i++)
 	{
 		[query appendFormat:@" AND seg%i = ? ", i];
 	}
-	[query appendFormat:@"ORDER BY seg%i COLLATE NOCASE", segment+1];
     
 	DLog(@"query: %@, parameter: %@", query, newSegments);
 	NSMutableArray *songMd5s = [[NSMutableArray alloc] initWithCapacity:0];

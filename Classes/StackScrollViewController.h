@@ -17,6 +17,8 @@ typedef enum
 
 @interface StackScrollViewController :  UIViewController <UIScrollViewDelegate, UIGestureRecognizerDelegate> 
 
+@property (nonatomic) BOOL isSlidingEnabled;
+
 @property (nonatomic, strong) UIView *slideViews;
 @property (nonatomic, strong) UIView* borderViews;
 

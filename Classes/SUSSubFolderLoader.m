@@ -51,7 +51,8 @@
                 self.songsCount = 0;
                 self.folderLength = 0;
                 
-                // Loop through the chat messages
+                NSMutableArray *albums = [[NSMutableArray alloc] initWithCapacity:0];
+                
 				TBXMLElement *child = [TBXML childElementNamed:@"child" parentElement:directory];
 				while (child != nil)
 				{
@@ -62,8 +63,9 @@
 							ISMSAlbum *anAlbum = [[ISMSAlbum alloc] initWithTBXMLElement:child artistId:self.myArtist.artistId artistName:self.myArtist.name];
 							if (![anAlbum.title isEqualToString:@".AppleDouble"])
 							{
-								[self insertAlbumIntoFolderCache:anAlbum];
-								self.albumsCount++;
+								/*[self insertAlbumIntoFolderCache:anAlbum];
+								self.albumsCount++;*/
+                                [albums addObject:anAlbum];
 							}
 						}
 						else
@@ -81,6 +83,17 @@
 						child = [TBXML nextSiblingNamed:@"child" searchFromElement:child];
 					}
 				}
+                
+                // Hack for Subsonic 4.7 breaking alphabetical order
+                [albums sortUsingComparator:^NSComparisonResult(ISMSAlbum *obj1, ISMSAlbum *obj2) {
+                    return [obj1.title caseInsensitiveCompareWithoutIndefiniteArticles:obj2.title];
+                }];
+                for (ISMSAlbum *anAlbum in albums)
+                {
+                    [self insertAlbumIntoFolderCache:anAlbum];
+                }
+                self.albumsCount = albums.count;
+                //
                 
                 [self insertAlbumsCount];
                 [self insertSongsCount];

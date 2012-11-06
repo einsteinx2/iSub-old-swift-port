@@ -281,7 +281,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	_cacheCheckInterval = 60.0;
 	
 	// Do the first check sooner
-	[self performSelector:@selector(checkCache) withObject:nil afterDelay:11.0];
+	[self performSelector:@selector(checkCache) withObject:nil afterDelay:0.05];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self 
 											 selector:@selector(didReceiveMemoryWarning) 

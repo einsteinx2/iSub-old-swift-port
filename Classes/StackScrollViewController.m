@@ -19,12 +19,14 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 
 @implementation StackScrollViewController
 
-@synthesize slideViews, borderViews, viewControllersStack, slideStartPosition, viewAtLeft, viewAtLeft2, viewAtRight, viewAtRight2, viewAtLeftAtTouchBegan, viewAtRightAtTouchBegan, dragDirection, viewXPosition, displacementPosition, lastTouchPoint, positionOfViewAtLeftAtTouchBegan, positionOfViewAtRightAtTouchBegan;
+@synthesize slideViews, borderViews, viewControllersStack, slideStartPosition, viewAtLeft, viewAtLeft2, viewAtRight, viewAtRight2, viewAtLeftAtTouchBegan, viewAtRightAtTouchBegan, dragDirection, viewXPosition, displacementPosition, lastTouchPoint, positionOfViewAtLeftAtTouchBegan, positionOfViewAtRightAtTouchBegan, isSlidingEnabled;
 
 - (id)init
 {
 	if((self = [super init])) 
 	{
+        isSlidingEnabled = YES;
+        
 		viewControllersStack = [[NSMutableArray alloc] init]; 
 		borderViews = [[UIView alloc] initWithFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION - 2, -2, 2, self.view.frame.size.height)];
 		[borderViews setBackgroundColor:[UIColor clearColor]];
@@ -137,6 +139,9 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 
 - (void)handlePanFrom:(UIPanGestureRecognizer *)recognizer
 {
+    if (!self.isSlidingEnabled)
+        return;
+    
 	CGPoint translatedPoint = [recognizer translationInView:self.view];
 	
 	if (recognizer.state == UIGestureRecognizerStateBegan) 
