@@ -4017,9 +4017,6 @@
 							<string>revertMinFreeSpaceSlider</string>
 							<string>segmentAction:</string>
 							<string>switchAction:</string>
-							<string>touchDown:</string>
-							<string>touchUpInside:</string>
-							<string>touchUpOutside:</string>
 							<string>twitterButtonAction</string>
 							<string>updateMinFreeSpaceLabel</string>
 							<string>updateMinFreeSpaceSetting</string>
@@ -4028,9 +4025,6 @@
 						</object>
 						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -4050,9 +4044,6 @@
 							<string>revertMinFreeSpaceSlider</string>
 							<string>segmentAction:</string>
 							<string>switchAction:</string>
-							<string>touchDown:</string>
-							<string>touchUpInside:</string>
-							<string>touchUpOutside:</string>
 							<string>twitterButtonAction</string>
 							<string>updateMinFreeSpaceLabel</string>
 							<string>updateMinFreeSpaceSetting</string>
@@ -4075,18 +4066,6 @@
 							</object>
 							<object class="IBActionInfo">
 								<string key="name">switchAction:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">touchDown:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">touchUpInside:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">touchUpOutside:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
@@ -4495,10 +4474,6 @@
 		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
-		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencyDefaults">
-			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaTouchPlugin.iPhoneOS</string>
-			<real value="1536" key="NS.object.0"/>
-		</object>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDevelopmentDependencies">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaTouchPlugin.InterfaceBuilder3</string>
 			<integer value="3000" key="NS.object.0"/>
