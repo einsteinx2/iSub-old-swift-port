@@ -14,8 +14,6 @@
 
 @implementation SongInfoPlaylistCustomUITableView
 
-@synthesize lastDeleteToggle;
-
 - (id)initWithFrame:(CGRect)frame 
 {
     if ((self = [super initWithFrame:frame])) 
@@ -40,7 +38,7 @@
 {
 	if (self.editing)
 	{
-		if ((point.x < 40) && ([[NSDate date] timeIntervalSinceDate:lastDeleteToggle] > 0.25))
+		if ((point.x < 40) && ([[NSDate date] timeIntervalSinceDate:self.lastDeleteToggle] > 0.25))
 		{
 			self.lastDeleteToggle = [NSDate date];
 			//DLog(@"calling toggleDelete");

@@ -14,9 +14,6 @@
 
 @implementation CurrentPlaylistViewController
 
-@synthesize playlistNameTextField, request, currentPlaylistCount;
-@synthesize headerView, savePlaylistLabel, deleteSongsLabel, playlistCountLabel, savePlaylistLocal, editPlaylistLabel, savePlaylistButton, receivedData, connection;
-
 #pragma mark -
 #pragma mark View lifecycle
 
@@ -240,7 +237,7 @@
 	if (self.currentPlaylistCount == 1)
 		self.playlistCountLabel.text = [NSString stringWithFormat:@"1 song"];
 	else 
-		self.playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", currentPlaylistCount];
+		self.playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", self.currentPlaylistCount];
 }
 
 - (void)editPlaylistAction:(id)sender
@@ -568,15 +565,15 @@
 				NSString *databaseName = viewObjectsS.isOfflineMode ? @"offlineCurrentPlaylist.db" : [NSString stringWithFormat:@"%@currentPlaylist.db", [settingsS.urlString md5]];
 				[databaseS.localPlaylistsDbQueue inDatabase:^(FMDatabase *db)
 				{
-					[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE playlist%@", [playlistNameTextField.text md5]]];
-					[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [playlistNameTextField.text md5], [ISMSSong standardSongColumnSchema]]];
+					[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE playlist%@", [self.playlistNameTextField.text md5]]];
+					[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [self.playlistNameTextField.text md5], [ISMSSong standardSongColumnSchema]]];
 					
 					[db executeUpdate:@"ATTACH DATABASE ? AS ?", [databaseS.databaseFolderPath stringByAppendingPathComponent:databaseName], @"currentPlaylistDb"];
 					if ([db hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [db lastErrorCode], [db lastErrorMessage]); }
 					if (playlistS.isShuffle)
-						[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM shufflePlaylist", [playlistNameTextField.text md5]]];
+						[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM shufflePlaylist", [self.playlistNameTextField.text md5]]];
 					else
-						[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM currentPlaylist", [playlistNameTextField.text md5]]];
+						[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM currentPlaylist", [self.playlistNameTextField.text md5]]];
 					[db executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 				}];
 			}
@@ -584,10 +581,10 @@
 			{
 				[databaseS.localPlaylistsDbQueue inDatabase:^(FMDatabase *db)
 				{
-					[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE splaylist%@", [playlistNameTextField.text md5]]];
+					[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE splaylist%@", [self.playlistNameTextField.text md5]]];
 				}];
 				
-				[self uploadPlaylist:playlistNameTextField.text];
+				[self uploadPlaylist:self.playlistNameTextField.text];
 			}
 		}
 	}
@@ -894,7 +891,7 @@
 {
     if (inRedirectResponse) 
 	{
-        NSMutableURLRequest *newRequest = [request mutableCopy];
+        NSMutableURLRequest *newRequest = [self.request mutableCopy];
         [newRequest setURL:[inRequest URL]];
         return newRequest;
     } 

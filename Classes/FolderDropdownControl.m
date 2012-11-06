@@ -59,10 +59,12 @@
 		_arrowImage.contents = (id)[UIImage imageNamed:@"folder-dropdown-arrow.png"].CGImage;
 		[[arrowImageView layer] addSublayer:_arrowImage];
 		
-		UIButton *dropdownButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 220, 30)];
-		dropdownButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		[dropdownButton addTarget:self action:@selector(toggleDropdown:) forControlEvents:UIControlEventTouchUpInside];
-		[self addSubview:dropdownButton];
+		_dropdownButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 220, 30)];
+		_dropdownButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		[_dropdownButton addTarget:self action:@selector(toggleDropdown:) forControlEvents:UIControlEventTouchUpInside];
+        _dropdownButton.accessibilityLabel = _selectedFolderLabel.text;
+        _dropdownButton.accessibilityHint = @"Switches folders";
+		[self addSubview:_dropdownButton];
 		
 		[self updateFolders];
 		
@@ -157,21 +159,43 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 		folderLabel.font = [UIFont boldSystemFontOfSize:20];
 		folderLabel.text = folder;
 		folderLabel.tag = tag;
+        folderLabel.isAccessibilityElement = NO;
 		[self addSubview:folderLabel];
 		[self.labels addObject:folderLabel];
 		
 		UIButton *folderButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		folderButton.frame = buttonFrame;
 		folderButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        folderButton.accessibilityLabel = folderLabel.text;
 		[folderButton addTarget:self action:@selector(selectFolder:) forControlEvents:UIControlEventTouchUpInside];
 		[folderLabel addSubview:folderButton];
+        folderButton.isAccessibilityElement = self.isOpen;
 	}
 }
 
 - (void)toggleDropdown:(id)sender
 {
-	if (!self.isOpen)
+	if (self.isOpen)
 	{
+        // Close it
+        [UIView animateWithDuration:.25 animations:^
+         {
+             self.height -= self.sizeIncrease;
+             [self.delegate folderDropdownMoveViewsY:-self.sizeIncrease];
+         }
+        completion:^(BOOL finished)
+         {
+             [self.delegate folderDropdownViewsFinishedMoving];
+         }];
+		
+		[CATransaction begin];
+		[CATransaction setAnimationDuration:.25];
+		self.arrowImage.transform = CATransform3DMakeRotation((M_PI / 180.0) * 0.0f, 0.0f, 0.0f, 1.0f);
+		[CATransaction commit];
+    }
+    else
+    {
+        // Open it
 		[UIView animateWithDuration:.25 animations:^
 		{
 			self.height += self.sizeIncrease;
@@ -187,25 +211,22 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 		self.arrowImage.transform = CATransform3DMakeRotation((M_PI / 180.0) * -60.0f, 0.0f, 0.0f, 1.0f);
 		[CATransaction commit];
 	}
-	else
-	{
-		[UIView animateWithDuration:.25 animations:^
-		{
-			self.height -= self.sizeIncrease;
-			[self.delegate folderDropdownMoveViewsY:-self.sizeIncrease];
-		}
-		completion:^(BOOL finished)
-		{
-			[self.delegate folderDropdownViewsFinishedMoving];
-		}];
-		
-		[CATransaction begin];
-		[CATransaction setAnimationDuration:.25];
-		self.arrowImage.transform = CATransform3DMakeRotation((M_PI / 180.0) * 0.0f, 0.0f, 0.0f, 1.0f);
-		[CATransaction commit];
-	}
 	
 	self.isOpen = !self.isOpen;
+    
+    // Remove accessibility when not visible
+    for (UILabel *label in self.labels)
+    {
+        for (UIView *subview in label.subviews)
+        {
+            if ([subview isKindOfClass:[UIButton class]])
+            {
+                subview.isAccessibilityElement = self.isOpen;
+            }
+        }
+    }
+    
+    UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil);
 }
 
 - (void)closeDropdown
@@ -240,6 +261,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	
 	self.selectedFolderId = [NSNumber numberWithInt:label.tag];
 	self.selectedFolderLabel.text = [self.folders objectForKey:self.selectedFolderId];
+    self.dropdownButton.accessibilityLabel = self.selectedFolderLabel.text;
 	//[self toggleDropdown:nil];
 	[self closeDropdownFast];
 	
@@ -251,6 +273,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 {
 	self.selectedFolderId = folderId;
 	self.selectedFolderLabel.text = [self.folders objectForKey:self.selectedFolderId];
+    self.dropdownButton.accessibilityLabel = self.selectedFolderLabel.text;
 }
 
 - (void)updateFolders

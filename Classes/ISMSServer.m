@@ -23,10 +23,10 @@
 {
 	if ((self = [super init]))
 	{
-		_url = [decoder decodeObject];
-		_username = [decoder decodeObject];
-		_password = [decoder decodeObject];
-		_type = [decoder decodeObject];
+		_url = [[decoder decodeObject] copy];
+		_username = [[decoder decodeObject] copy];
+		_password = [[decoder decodeObject] copy];
+		_type = [[decoder decodeObject] copy];
 	}
 	
 	return self;
@@ -36,7 +36,5 @@
 {
 	return [NSString stringWithFormat:@"%@  type: %@", [super description], self.type];
 }
-
-
 
 @end

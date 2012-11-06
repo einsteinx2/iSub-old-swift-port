@@ -183,10 +183,14 @@
 	SeparaterView *sepView = [[SeparaterView alloc] initWithFrame:sepFrame];
 	[self.headerView addSubview:sepView];
 	
-	self.blockerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-	self.blockerButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.blockerButton.frame = self.headerView.frame;
-	[self.headerView addSubview:self.blockerButton];
+    // This is a hack to prevent unwanted taps in the header, but it messes with voice over
+	if (!UIAccessibilityIsVoiceOverRunning())
+    {
+        self.blockerButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.blockerButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        self.blockerButton.frame = self.headerView.frame;
+        [self.headerView addSubview:self.blockerButton];
+    }
 	
 	self.countLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, 320, 30)];
 	self.countLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -227,6 +231,21 @@
 	[self.headerView addSubview:self.dropdown];
 	
 	[self updateCount];
+    
+    // Special handling for voice over users
+    if (UIAccessibilityIsVoiceOverRunning())
+    {
+        // Add a refresh button
+        UIButton *voiceOverRefresh = [UIButton buttonWithType:UIButtonTypeCustom];
+        voiceOverRefresh.frame = CGRectMake(0, 0, 50, 50);
+        [voiceOverRefresh addTarget:self action:@selector(reloadAction:) forControlEvents:UIControlEventTouchUpInside];
+        voiceOverRefresh.accessibilityLabel = @"Reload Folders";
+        [self.headerView addSubview:voiceOverRefresh];
+        
+        // Resize the two labels at the top so the refresh button can be pressed
+        self.countLabel.frame = CGRectMake(50, 5, 220, 30);
+        self.reloadTimeLabel.frame = CGRectMake(50, 36, 220, 12);
+    }
 	
 	self.tableView.tableHeaderView = self.headerView;
 }

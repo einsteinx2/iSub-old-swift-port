@@ -16,7 +16,6 @@
 #import "BassVisualizer.h"
 
 @implementation EqualizerViewController
-@synthesize equalizerView, equalizerPointViews, selectedView, toggleButton, effectDAO, presetPicker, deletePresetButton, savePresetButton, isSavePresetButtonShowing, isDeletePresetButtonShowing, presetNameTextField, saveDialog, gainSlider, equalizerPath, gainBoostLabel, isPresetPickerShowing, controlsContainer, gainBoostAmountLabel, lastGainValue, wasVisualizerOffBeforeRotation, swipeDetectorLeft, swipeDetectorRight, landscapeButtonsHolder, overlay, dismissButton;//, hidePickerTimer; //drawTimer;
 
 #define hidePickerTimer @"EqualizerViewController hide picker timer"
 
@@ -42,8 +41,8 @@
 	if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
 	{
 		[[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
-		equalizerPath.alpha = 1.0;
-		for (EqualizerPointView *view in equalizerPointViews)
+		self.equalizerPath.alpha = 1.0;
+		for (EqualizerPointView *view in self.equalizerPointViews)
 		{
 			view.alpha = 1.0;
 		}
@@ -62,7 +61,7 @@
 			
 			if (self.wasVisualizerOffBeforeRotation)
 			{
-				[equalizerView changeType:ISMSBassVisualType_none];
+				[self.equalizerView changeType:ISMSBassVisualType_none];
 			}
 			
 			/*if (self.landscapeButtonsHolder.superview)
@@ -72,8 +71,8 @@
 	else
 	{
 		[[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-		equalizerPath.alpha = 0.0;
-		for (EqualizerPointView *view in equalizerPointViews)
+		self.equalizerPath.alpha = 0.0;
+		for (EqualizerPointView *view in self.equalizerPointViews)
 		{
 			view.alpha = 0.0;
 		}
@@ -85,10 +84,10 @@
 			self.controlsContainer.alpha = 0.0;
 			self.controlsContainer.userInteractionEnabled = NO;
 			
-			self.wasVisualizerOffBeforeRotation = (equalizerView.visualType == ISMSBassVisualType_none);
+			self.wasVisualizerOffBeforeRotation = (self.equalizerView.visualType == ISMSBassVisualType_none);
 			if (self.wasVisualizerOffBeforeRotation)
 			{
-				[equalizerView nextType];
+				[self.equalizerView nextType];
 			}
 		}
 	}
@@ -119,40 +118,39 @@
 
 - (void)dismissPicker
 {
-	[presetPicker resignFirstResponder];
+	[self.presetPicker resignFirstResponder];
 	//self.hidePickerTimer = nil;
 	[EX2Dispatch cancelTimerBlockWithName:hidePickerTimer];
 }
 
 - (void)createOverlay
 {
-	overlay = [[UIView alloc] init];
-	//searchOverlay.frame = CGRectMake(0, 74, 480, 480);
-	overlay.frame = self.view.frame;
-	overlay.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	overlay.backgroundColor = [UIColor colorWithWhite:0 alpha:.80];
-	overlay.alpha = 0.0;
-	[self.view insertSubview:overlay belowSubview:self.controlsContainer];
+	self.overlay = [[UIView alloc] init];
+	self.overlay.frame = self.view.frame;
+	self.overlay.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	self.overlay.backgroundColor = [UIColor colorWithWhite:0 alpha:.80];
+	self.overlay.alpha = 0.0;
+	[self.view insertSubview:self.overlay belowSubview:self.controlsContainer];
 	
-	dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
-	dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	[dismissButton addTarget:self action:@selector(dismissPicker) forControlEvents:UIControlEventTouchUpInside];
-	dismissButton.frame = self.view.bounds;
-	dismissButton.enabled = NO;
-	[overlay addSubview:dismissButton];
+	self.dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
+	self.dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	[self.dismissButton addTarget:self action:@selector(dismissPicker) forControlEvents:UIControlEventTouchUpInside];
+	self.dismissButton.frame = self.view.bounds;
+	self.dismissButton.enabled = NO;
+	[self.overlay addSubview:self.dismissButton];
 
 	// Animate the search overlay on screen
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:.3];
 	[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-	overlay.alpha = 1;
-	dismissButton.enabled = YES;
+	self.overlay.alpha = 1;
+	self.dismissButton.enabled = YES;
 	[UIView commitAnimations];
 }
 
 - (void)hideOverlay
 {
-	if (overlay)
+	if (self.overlay)
 	{
 		// Animate the search overlay off screen
 		[UIView beginAnimations:nil context:NULL];
@@ -160,22 +158,22 @@
 		[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
 		[UIView setAnimationDelegate:self];
 		[UIView setAnimationDidStopSelector:@selector(removeOverlay)];
-		overlay.alpha = 0;
-		dismissButton.enabled = NO;
+		self.overlay.alpha = 0;
+		self.dismissButton.enabled = NO;
 		[UIView commitAnimations];
 	}
 }
 
 - (void)removeOverlay
 {
-	[overlay removeFromSuperview];
-	overlay = nil;
+	[self.overlay removeFromSuperview];
+	self.overlay = nil;
 }
 
 - (void)dealloc
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[[NSNotificationCenter defaultCenter] removeObserver:presetPicker];
+	[[NSNotificationCenter defaultCenter] removeObserver:self.presetPicker];
 	[EX2Dispatch cancelTimerBlockWithName:hidePickerTimer];
 	//[hidePickerTimer release]; hidePickerTimer = nil;
 	
@@ -213,12 +211,12 @@
 
 - (void)pickerWillShown
 {
-	controlsContainer.y -= 60;
-	controlsContainer.height += 60;
+	self.controlsContainer.y -= 60;
+	self.controlsContainer.height += 60;
 	
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:.3];
-	for (UIView *subview in controlsContainer.subviews)
+	for (UIView *subview in self.controlsContainer.subviews)
 	{
 		if (![subview isKindOfClass:[NWPickerView class]])
 			subview.hidden = YES;
@@ -239,12 +237,12 @@
 {
 	[EX2Dispatch cancelTimerBlockWithName:hidePickerTimer];
 	
-	controlsContainer.y += 60;
-	controlsContainer.height -= 60;
+	self.controlsContainer.y += 60;
+	self.controlsContainer.height -= 60;
 	
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:.3];
-	for (UIView *subview in controlsContainer.subviews)
+	for (UIView *subview in self.controlsContainer.subviews)
 	{
 		subview.hidden = NO;
 	}
@@ -276,10 +274,10 @@
         [audioEngineS startEmptyPlayer];
     }
 
-	effectDAO = [[BassEffectDAO alloc] initWithType:BassEffectType_ParametricEQ];
+	self.effectDAO = [[BassEffectDAO alloc] initWithType:BassEffectType_ParametricEQ];
 
 	//DLog(@"effectDAO.selectedPresetIndex: %i", effectDAO.selectedPresetIndex);
-	[presetPicker selectRow:effectDAO.selectedPresetIndex inComponent:0 animated:NO];
+	[self.presetPicker selectRow:self.effectDAO.selectedPresetIndex inComponent:0 animated:NO];
     
     if (IS_TALL_SCREEN())
     {
@@ -288,38 +286,38 @@
         pickerBackground.clipsToBounds = YES;
         [self.view addSubview:pickerBackground];
         
-        presetPicker.pickerView.hidden = NO;
-        presetPicker.pickerView.y = -38.;
-        [pickerBackground addSubview:presetPicker.pickerView];
+        self.presetPicker.pickerView.hidden = NO;
+        self.presetPicker.pickerView.y = -38.;
+        [pickerBackground addSubview:self.presetPicker.pickerView];
     }
 	
 	[self updateToggleButton];
 	
 	[self.equalizerView startEqDisplay];
 	
-	isSavePresetButtonShowing = NO;
+	self.isSavePresetButtonShowing = NO;
 	self.savePresetButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-	CGRect f = presetPicker.frame;
-	savePresetButton.frame = CGRectMake(f.origin.x + f.size.width - 60., f.origin.y, 60., 30.);
-	[savePresetButton setTitle:@"Save" forState:UIControlStateNormal];
-	[savePresetButton addTarget:self action:@selector(promptToSaveCustomPreset) forControlEvents:UIControlEventTouchUpInside];
-	savePresetButton.alpha = 0.;
-	savePresetButton.enabled = NO;
-	[self.controlsContainer addSubview:savePresetButton];
+	CGRect f = self.presetPicker.frame;
+	self.savePresetButton.frame = CGRectMake(f.origin.x + f.size.width - 60., f.origin.y, 60., 30.);
+	[self.savePresetButton setTitle:@"Save" forState:UIControlStateNormal];
+	[self.savePresetButton addTarget:self action:@selector(promptToSaveCustomPreset) forControlEvents:UIControlEventTouchUpInside];
+	self.savePresetButton.alpha = 0.;
+	self.savePresetButton.enabled = NO;
+	[self.controlsContainer addSubview:self.savePresetButton];
 	
 	self.deletePresetButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-	deletePresetButton.frame = CGRectMake(f.origin.x + f.size.width - 60., f.origin.y, 60., 30.);
-	[deletePresetButton setTitle:@"Delete" forState:UIControlStateNormal];
-	[deletePresetButton addTarget:self action:@selector(promptToDeleteCustomPreset) forControlEvents:UIControlEventTouchUpInside];
-	deletePresetButton.alpha = 0.;
-	deletePresetButton.enabled = NO;
-	[self.controlsContainer addSubview:deletePresetButton];
+	self.deletePresetButton.frame = CGRectMake(f.origin.x + f.size.width - 60., f.origin.y, 60., 30.);
+	[self.deletePresetButton setTitle:@"Delete" forState:UIControlStateNormal];
+	[self.deletePresetButton addTarget:self action:@selector(promptToDeleteCustomPreset) forControlEvents:UIControlEventTouchUpInside];
+	self.deletePresetButton.alpha = 0.;
+	self.deletePresetButton.enabled = NO;
+	[self.controlsContainer addSubview:self.deletePresetButton];
 	
-	if (effectDAO.selectedPresetId == BassEffectTempCustomPresetId)
+	if (self.effectDAO.selectedPresetId == BassEffectTempCustomPresetId)
 	{
 		[self showSavePresetButton:NO];
 	}
-	else if (![[effectDAO.selectedPreset objectForKey:@"isDefault"] boolValue])
+	else if (![[self.effectDAO.selectedPreset objectForKey:@"isDefault"] boolValue])
 	{
 		[self showDeletePresetButton:NO];
 	}
@@ -345,22 +343,22 @@
 		self.controlsContainer.alpha = 0.0;
 		self.controlsContainer.userInteractionEnabled = NO;
 		
-		self.wasVisualizerOffBeforeRotation = (equalizerView.visualType == ISMSBassVisualType_none);
+		self.wasVisualizerOffBeforeRotation = (self.equalizerView.visualType == ISMSBassVisualType_none);
 		if (self.wasVisualizerOffBeforeRotation)
 		{
-			[equalizerView nextType];
+			[self.equalizerView nextType];
 		}
 	}
 	
-	overlay = nil;
+	self.overlay = nil;
 	
-	swipeDetectorLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeLeft)];
-	swipeDetectorLeft.direction = UISwipeGestureRecognizerDirectionLeft;
-	[equalizerView addGestureRecognizer:swipeDetectorLeft];
+	self.swipeDetectorLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeLeft)];
+	self.swipeDetectorLeft.direction = UISwipeGestureRecognizerDirectionLeft;
+	[self.equalizerView addGestureRecognizer:self.swipeDetectorLeft];
 
-	swipeDetectorRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeRight)];
-	swipeDetectorRight.direction = UISwipeGestureRecognizerDirectionRight;
-	[equalizerView addGestureRecognizer:swipeDetectorRight];
+	self.swipeDetectorRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeRight)];
+	self.swipeDetectorRight.direction = UISwipeGestureRecognizerDirectionRight;
+	[self.equalizerView addGestureRecognizer:self.swipeDetectorRight];
 	
 	[FlurryAnalytics logEvent:@"Equalizer"];
 }
@@ -368,13 +366,13 @@
 - (void)swipeLeft
 {
 	if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
-		[equalizerView nextType];
+		[self.equalizerView nextType];
 }
 
 - (void)swipeRight
 {
 	if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
-		[equalizerView prevType];
+		[self.equalizerView prevType];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -386,9 +384,9 @@
 	if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
 	{
 		[[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
-		equalizerPath.alpha = 0.0;
+		self.equalizerPath.alpha = 0.0;
 		
-		for (EqualizerPointView *view in equalizerPointViews)
+		for (EqualizerPointView *view in self.equalizerPointViews)
 		{
 			view.alpha = 0.0;
 		}
@@ -399,7 +397,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createEqViews) name:ISMSNotification_BassEffectPresetLoaded object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pickerWillShown) name:UIPickerViewWillShownNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pickerWillHide) name:UIPickerViewWillHideNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:presetPicker selector:@selector(resignFirstResponder) name:@"hidePresetPicker" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self.presetPicker selector:@selector(resignFirstResponder) name:@"hidePresetPicker" object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -416,18 +414,18 @@
 - (void)createAndDrawEqualizerPath
 {	
 	// Sort the points
-	NSUInteger length = [equalizerPointViews count];
-	CGPoint *points = malloc(sizeof(CGPoint) * [equalizerPointViews count]);
+	NSUInteger length = [self.equalizerPointViews count];
+	CGPoint *points = malloc(sizeof(CGPoint) * [self.equalizerPointViews count]);
 	//for (EqualizerPointView *eqView in equalizerPointViews)
 	for (int i = 0; i < length; i++)
 	{
-		EqualizerPointView *eqView = [equalizerPointViews objectAtIndex:i];
+		EqualizerPointView *eqView = [self.equalizerPointViews objectAtIndex:i];
 		points[i] = eqView.center;
 	}
 	//equalizerPath.points = points;
 	//equalizerPath.length = length;
 	
-	[equalizerPath setPoints:points length:length];
+	[self.equalizerPath setPoints:points length:length];
 	
 	/*NSMutableArray *points = [NSMutableArray arrayWithCapacity:[equalizerPointViews count]];
 	for (EqualizerPointView *eqView in equalizerPointViews)
@@ -444,14 +442,14 @@
 {
 	[self removeEqViews];
 		
-	equalizerPointViews = [[NSMutableArray alloc] initWithCapacity:audioEngineS.equalizer.equalizerValues.count];
+	self.equalizerPointViews = [[NSMutableArray alloc] initWithCapacity:audioEngineS.equalizer.equalizerValues.count];
 	for (BassParamEqValue *value in audioEngineS.equalizer.equalizerValues)
 	{
 		//DLog(@"eq handle: %i", value.handle);
 		EqualizerPointView *eqView = [[EqualizerPointView alloc] initWithEqValue:value parentSize:self.equalizerView.frame.size];
-		[equalizerPointViews addObject:eqView];
+		[self.equalizerPointViews addObject:eqView];
 		
-		[self.view insertSubview:eqView aboveSubview:equalizerPath];
+		[self.view insertSubview:eqView aboveSubview:self.equalizerPath];
 		//if (overlay)
 		//	[self.view insertSubview:eqView belowSubview:overlay];
 		//else
@@ -466,11 +464,11 @@
 
 - (void)removeEqViews
 {
-	for (EqualizerPointView *eqView in equalizerPointViews)
+	for (EqualizerPointView *eqView in self.equalizerPointViews)
 	{
 		[eqView removeFromSuperview];
 	}
-	 equalizerPointViews = nil;
+    self.equalizerPointViews = nil;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -486,8 +484,8 @@
 	
 	[self.equalizerView stopEqDisplay];
 	
-	[equalizerView removeFromSuperview];
-	equalizerView = nil;
+	[self.equalizerView removeFromSuperview];
+	self.equalizerView = nil;
 	
 	audioEngineS.visualizer.type = BassVisualizerTypeNone;
 	
@@ -504,7 +502,7 @@
 
 - (void)hideSavePresetButton:(BOOL)animated
 {	
-	isSavePresetButtonShowing = NO;
+	self.isSavePresetButtonShowing = NO;
 	
 	if (animated)
 	{
@@ -512,22 +510,22 @@
 		[UIView setAnimationDuration:.5];
 	}
 	
-	presetPicker.width += 65.;
-	savePresetButton.alpha = 0.;
+	self.presetPicker.width += 65.;
+	self.savePresetButton.alpha = 0.;
 	
 	if (animated)
 	{
 		[UIView commitAnimations];
 	}
 	
-	savePresetButton.enabled = NO;
+	self.savePresetButton.enabled = NO;
 }
 
 - (void)showSavePresetButton:(BOOL)animated
 {
-	isSavePresetButtonShowing = YES;
+	self.isSavePresetButtonShowing = YES;
 	
-	savePresetButton.enabled = YES;
+	self.savePresetButton.enabled = YES;
 	
 	if (animated)
 	{
@@ -535,8 +533,8 @@
 		[UIView setAnimationDuration:.5];
 	}
 	
-	presetPicker.width -= 65.;
-	savePresetButton.alpha = 1.;
+	self.presetPicker.width -= 65.;
+	self.savePresetButton.alpha = 1.;
 	
 	if (animated)
 	{
@@ -546,7 +544,7 @@
 
 - (void)hideDeletePresetButton:(BOOL)animated
 {	
-	isDeletePresetButtonShowing = NO;
+	self.isDeletePresetButtonShowing = NO;
 	
 	if (animated)
 	{
@@ -554,22 +552,22 @@
 		[UIView setAnimationDuration:.5];
 	}
 	
-	presetPicker.width += 65.;
-	deletePresetButton.alpha = 0.;
+	self.presetPicker.width += 65.;
+	self.deletePresetButton.alpha = 0.;
 	
 	if (animated)
 	{
 		[UIView commitAnimations];
 	}
 	
-	deletePresetButton.enabled = NO;
+	self.deletePresetButton.enabled = NO;
 }
 
 - (void)showDeletePresetButton:(BOOL)animated
 {
-	isDeletePresetButtonShowing = YES;
+	self.isDeletePresetButtonShowing = YES;
 	
-	deletePresetButton.enabled = YES;
+	self.deletePresetButton.enabled = YES;
 	
 	if (animated)
 	{
@@ -577,8 +575,8 @@
 		[UIView setAnimationDuration:.5];
 	}
 	
-	presetPicker.width -= 65.;
-	deletePresetButton.alpha = 1.;
+	self.presetPicker.width -= 65.;
+	self.deletePresetButton.alpha = 1.;
 	
 	if (animated)
 	{
@@ -589,7 +587,7 @@
 - (NSArray *)serializedEqPoints
 {
 	NSMutableArray *points = [NSMutableArray arrayWithCapacity:0];
-	for (EqualizerPointView *pointView in equalizerPointViews)
+	for (EqualizerPointView *pointView in self.equalizerPointViews)
 	{
 		[points addObject:NSStringFromCGPoint(pointView.position)];
 	}
@@ -598,15 +596,15 @@
 
 - (void)saveTempCustomPreset
 {
-	[effectDAO saveTempCustomPreset:[self serializedEqPoints]];
+	[self.effectDAO saveTempCustomPreset:[self serializedEqPoints]];
 	
-	[presetPicker reloadAllComponents];
-	[presetPicker selectRow:effectDAO.selectedPresetIndex inComponent:0 animated:NO];
+	[self.presetPicker reloadAllComponents];
+	[self.presetPicker selectRow:self.effectDAO.selectedPresetIndex inComponent:0 animated:NO];
 }
 
 - (void)promptToDeleteCustomPreset
 {
-	NSString *title = [NSString stringWithFormat:@"\"%@\"", [effectDAO.selectedPreset objectForKey:@"name"]];
+	NSString *title = [NSString stringWithFormat:@"\"%@\"", [self.effectDAO.selectedPreset objectForKey:@"name"]];
 	UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:title message:@"Are you sure you want to delete this preset?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Delete", nil];
 	myAlertView.tag = 1;
 	[myAlertView show];
@@ -614,21 +612,21 @@
 
 - (void)promptToSaveCustomPreset
 {
-	NSUInteger count = [effectDAO.userPresets count];
-	if ([effectDAO.userPresets objectForKey:[[NSNumber numberWithInt:BassEffectTempCustomPresetId] stringValue]])
+	NSUInteger count = [self.effectDAO.userPresets count];
+	if ([self.effectDAO.userPresets objectForKey:[[NSNumber numberWithInt:BassEffectTempCustomPresetId] stringValue]])
 		count--;
 	
 	if (count > 0)
 	{
 		self.saveDialog = [[DDSocialDialog alloc] initWithFrame:CGRectMake(0., 0., 300., 300.) theme:DDSocialDialogThemeISub];
-		saveDialog.dialogDelegate = self;
-		saveDialog.titleLabel.text = @"Choose Preset To Save";
-		UITableView *saveTable = [[UITableView alloc] initWithFrame:saveDialog.contentView.frame style:UITableViewStylePlain];
+		self.saveDialog.dialogDelegate = self;
+		self.saveDialog.titleLabel.text = @"Choose Preset To Save";
+		UITableView *saveTable = [[UITableView alloc] initWithFrame:self.saveDialog.contentView.frame style:UITableViewStylePlain];
 		saveTable.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		saveTable.dataSource = self;
 		saveTable.delegate = self;
-		[saveDialog.contentView addSubview:saveTable];
-		[saveDialog show];
+		[self.saveDialog.contentView addSubview:saveTable];
+		[self.saveDialog show];
 	}
 	else
 	{
@@ -661,9 +659,9 @@
 		// Delete the preset
 		if (buttonIndex)
 		{
-			[effectDAO deleteCustomPresetForId:effectDAO.selectedPresetId];
-			[presetPicker reloadAllComponents];
-			[presetPicker selectRow:effectDAO.selectedPresetIndex inComponent:0 animated:YES];
+			[self.effectDAO deleteCustomPresetForId:self.effectDAO.selectedPresetId];
+			[self.presetPicker reloadAllComponents];
+			[self.presetPicker selectRow:self.effectDAO.selectedPresetIndex inComponent:0 animated:YES];
 		}
 	}
 	else if (alertView.tag == 2)
@@ -672,10 +670,10 @@
 		if (buttonIndex)
 		{
 			//DLog(@"Preset name: %@", presetNameTextField.text);
-			[effectDAO saveCustomPreset:[self serializedEqPoints] name:presetNameTextField.text];
-			[effectDAO deleteTempCustomPreset];
-			[presetPicker reloadAllComponents];
-			[presetPicker selectRow:effectDAO.selectedPresetIndex inComponent:0 animated:YES];
+			[self.effectDAO saveCustomPreset:[self serializedEqPoints] name:self.presetNameTextField.text];
+			[self.effectDAO deleteTempCustomPreset];
+			[self.presetPicker reloadAllComponents];
+			[self.presetPicker selectRow:self.effectDAO.selectedPresetIndex inComponent:0 animated:YES];
 		}
 	}
 	else if (alertView.tag == 3)
@@ -699,8 +697,8 @@
 	CGFloat difference = fabsf(gainValue - self.lastGainValue);
 	if (difference >= .1 || gainValue == minValue || gainValue == maxValue)
 	{
-		gainBoostAmountLabel.text = [NSString stringWithFormat:@"%.1fx", gainValue];
-		lastGainValue = gainValue;
+		self.gainBoostAmountLabel.text = [NSString stringWithFormat:@"%.1fx", gainValue];
+		self.lastGainValue = gainValue;
 	}
 }
 
@@ -725,7 +723,7 @@
 			//DLog(@"double tap, remove point");
 			
 			[audioEngineS.equalizer removeEqualizerValue:self.selectedView.eqValue];
-			[equalizerPointViews removeObject:self.selectedView];
+			[self.equalizerPointViews removeObject:self.selectedView];
 			[self.selectedView removeFromSuperview];
 			self.selectedView = nil;
 			
@@ -768,7 +766,7 @@
 				eqView.eqValue = value;
 				
 				// Add the view
-				[equalizerPointViews addObject:eqView];
+				[self.equalizerPointViews addObject:eqView];
 				[self.view addSubview:eqView];
 				
 				[self saveTempCustomPreset];
@@ -784,7 +782,7 @@
 		UITouch *touch = [touches anyObject];
 		
 		CGPoint location = [touch locationInView:self.equalizerView];
-		if (CGRectContainsPoint(equalizerView.frame, location))
+		if (CGRectContainsPoint(self.equalizerView.frame, location))
 		{
 			self.selectedView.center = [touch locationInView:self.view];
 			[audioEngineS.equalizer updateEqParameter:self.selectedView.eqValue];
@@ -822,30 +820,30 @@
 	}
 	[self updateToggleButton];
 	
-	[equalizerPath setNeedsDisplay];
+	[self.equalizerPath setNeedsDisplay];
 }
 
 - (void)updateToggleButton
 {
 	if(settingsS.isEqualizerOn)
 	{
-		[toggleButton setTitle:@"EQ is ON" forState:UIControlStateNormal];
+		[self.toggleButton setTitle:@"EQ is ON" forState:UIControlStateNormal];
 		UIColor *blue = [UIColor colorWithRed:98./255. green:180./255. blue:223./255. alpha:1.];
-		[toggleButton setTitleColor:blue forState:UIControlStateNormal];
-		toggleButton.titleLabel.font = [UIFont boldSystemFontOfSize:24];
+		[self.toggleButton setTitleColor:blue forState:UIControlStateNormal];
+		self.toggleButton.titleLabel.font = [UIFont boldSystemFontOfSize:24];
 	}
 	else
 	{
-		[toggleButton setTitle:@"EQ is OFF" forState:UIControlStateNormal];
+		[self.toggleButton setTitle:@"EQ is OFF" forState:UIControlStateNormal];
 		UIColor *grey = [UIColor colorWithWhite:.75 alpha:1.];
-		[toggleButton setTitleColor:grey forState:UIControlStateNormal];
-		toggleButton.titleLabel.font = [UIFont boldSystemFontOfSize:20];
+		[self.toggleButton setTitleColor:grey forState:UIControlStateNormal];
+		self.toggleButton.titleLabel.font = [UIFont boldSystemFontOfSize:20];
 	}
 }
 
 - (IBAction)type:(id)sender
 {
-	[equalizerView nextType];
+	[self.equalizerView nextType];
 }
 
 #pragma mark -
@@ -859,36 +857,36 @@
 
 - (NSInteger)pickerField:(NWPickerField*)pickerField numberOfRowsInComponent:(NSInteger)component
 {
-	return [effectDAO.presets count];	
+	return [self.effectDAO.presets count];	
 }
 
 - (NSString *)pickerField:(NWPickerField *)pickerField titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-	return [[effectDAO.presetsArray objectAtIndexSafe:row] objectForKey:@"name"];
+	return [[self.effectDAO.presetsArray objectAtIndexSafe:row] objectForKey:@"name"];
 }
 
 - (void)pickerField:(NWPickerField *)pickerField selectedRow:(NSInteger)row inComponent:(NSInteger)component
 {
 	//[pickerField resignFirstResponder];
 	
-	[effectDAO selectPresetAtIndex:row];
+	[self.effectDAO selectPresetAtIndex:row];
 	
-	BOOL isDefault = [[effectDAO.selectedPreset objectForKey:@"isDefault"] boolValue];
+	BOOL isDefault = [[self.effectDAO.selectedPreset objectForKey:@"isDefault"] boolValue];
 	
-	if (effectDAO.selectedPresetId == BassEffectTempCustomPresetId && !isSavePresetButtonShowing)
+	if (self.effectDAO.selectedPresetId == BassEffectTempCustomPresetId && !self.isSavePresetButtonShowing)
 	{
 		[self showSavePresetButton:YES];
 	}
-	else if (effectDAO.selectedPresetId != BassEffectTempCustomPresetId && isSavePresetButtonShowing)
+	else if (self.effectDAO.selectedPresetId != BassEffectTempCustomPresetId && self.isSavePresetButtonShowing)
 	{
 		[self hideSavePresetButton:YES];
 	}
 	
-	if (effectDAO.selectedPresetId != BassEffectTempCustomPresetId && !isDeletePresetButtonShowing && !isDefault)
+	if (self.effectDAO.selectedPresetId != BassEffectTempCustomPresetId && !self.isDeletePresetButtonShowing && !isDefault)
 	{
 		[self showDeletePresetButton:YES];
 	}
-	else if ((effectDAO.selectedPresetId == BassEffectTempCustomPresetId || isDefault) && isDeletePresetButtonShowing)
+	else if ((self.effectDAO.selectedPresetId == BassEffectTempCustomPresetId || isDefault) && self.isDeletePresetButtonShowing)
 	{
 		[self hideDeletePresetButton:YES];
 	}
@@ -909,7 +907,7 @@
 		case 0:
 			return 1;
 		case 1:
-			return [effectDAO.userPresetsArrayMinusCustom count];
+			return [self.effectDAO.userPresetsArrayMinusCustom count];
 		default:
 			return 0;
 	}
@@ -929,7 +927,7 @@
 			cell.textLabel.text = @"New Preset";
 			break;
 		case 1:
-			preset = [effectDAO.userPresetsArrayMinusCustom objectAtIndexSafe:indexPath.row];
+			preset = [self.effectDAO.userPresetsArrayMinusCustom objectAtIndexSafe:indexPath.row];
 			cell.tag = [[preset objectForKey:@"presetId"] intValue];
 			cell.textLabel.text = [preset objectForKey:@"name"];
 			break;
@@ -965,12 +963,12 @@
 	{
 		// Save over an existing preset
 		UITableViewCell *currentTableCell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
-		[effectDAO saveCustomPreset:[self serializedEqPoints] name:currentTableCell.textLabel.text presetId:currentTableCell.tag];
-		[effectDAO deleteTempCustomPreset];
-		[presetPicker reloadAllComponents];
-		[presetPicker selectRow:effectDAO.selectedPresetIndex inComponent:0 animated:YES];
+		[self.effectDAO saveCustomPreset:[self serializedEqPoints] name:currentTableCell.textLabel.text presetId:currentTableCell.tag];
+		[self.effectDAO deleteTempCustomPreset];
+		[self.presetPicker reloadAllComponents];
+		[self.presetPicker selectRow:self.effectDAO.selectedPresetIndex inComponent:0 animated:YES];
 	}
-	[saveDialog dismiss:YES];
+	[self.saveDialog dismiss:YES];
 }
 
 

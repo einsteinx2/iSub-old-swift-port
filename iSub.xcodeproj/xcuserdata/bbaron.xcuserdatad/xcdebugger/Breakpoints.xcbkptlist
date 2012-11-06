@@ -108,8 +108,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "122"
          endingLineNumber = "122"
-         landmarkName = "-updateLyricsLabel"
-         landmarkType = "5">
+         landmarkName = "@implementation LyricsViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -122,8 +122,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "123"
          endingLineNumber = "123"
-         landmarkName = "-updateLyricsLabel"
-         landmarkType = "5">
+         landmarkName = "@implementation LyricsViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -817,11 +817,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/CurrentPlaylistViewController.m"
-         timestampString = "371855767.89035"
+         timestampString = "373482515.096644"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "91"
-         endingLineNumber = "91"
+         startingLineNumber = "88"
+         endingLineNumber = "88"
          landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>
@@ -831,11 +831,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/CurrentPlaylistViewController.m"
-         timestampString = "371855767.89035"
+         timestampString = "373482515.096644"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "91"
-         endingLineNumber = "91"
+         startingLineNumber = "88"
+         endingLineNumber = "88"
          landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>
@@ -845,11 +845,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/CurrentPlaylistViewController.m"
-         timestampString = "363491038.229329"
+         timestampString = "373482515.096644"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "62"
-         endingLineNumber = "62"
+         startingLineNumber = "59"
+         endingLineNumber = "59"
          landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1539,11 +1539,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/PageControlViewController.m"
-         timestampString = "363491038.229329"
+         timestampString = "373482515.096644"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "49"
-         endingLineNumber = "49"
+         startingLineNumber = "47"
+         endingLineNumber = "47"
          landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1553,11 +1553,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/PageControlViewController.m"
-         timestampString = "363491038.229329"
+         timestampString = "373482515.096644"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "49"
-         endingLineNumber = "49"
+         startingLineNumber = "47"
+         endingLineNumber = "47"
          landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1567,11 +1567,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/PageControlViewController.m"
-         timestampString = "363491038.229329"
+         timestampString = "373482515.096644"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "49"
-         endingLineNumber = "49"
+         startingLineNumber = "47"
+         endingLineNumber = "47"
          landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1581,11 +1581,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/PageControlViewController.m"
-         timestampString = "363491038.229329"
+         timestampString = "373482515.096644"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "49"
-         endingLineNumber = "49"
+         startingLineNumber = "47"
+         endingLineNumber = "47"
          landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1595,11 +1595,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/PageControlViewController.m"
-         timestampString = "363491038.229329"
+         timestampString = "373482515.096644"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "49"
-         endingLineNumber = "49"
+         startingLineNumber = "47"
+         endingLineNumber = "47"
          landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>
@@ -4310,11 +4310,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/EqualizerViewController.m"
-         timestampString = "370374744.327224"
+         timestampString = "373482515.096644"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "140"
-         endingLineNumber = "140"
+         startingLineNumber = "138"
+         endingLineNumber = "138"
          landmarkName = "-createOverlay"
          landmarkType = "5">
       </FileBreakpoint>
@@ -4592,11 +4592,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/CurrentPlaylistViewController.m"
-         timestampString = "371855767.89035"
+         timestampString = "373482515.096644"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "91"
-         endingLineNumber = "91"
+         startingLineNumber = "88"
+         endingLineNumber = "88"
          landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>
@@ -4670,11 +4670,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/EqualizerViewController.m"
-         timestampString = "370374744.327224"
+         timestampString = "373482515.096644"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "126"
-         endingLineNumber = "126"
+         startingLineNumber = "125"
+         endingLineNumber = "125"
          landmarkName = "@implementation EqualizerViewController"
          landmarkType = "3">
       </FileBreakpoint>
@@ -4683,11 +4683,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/EqualizerViewController.m"
-         timestampString = "370374744.327224"
+         timestampString = "373482515.096644"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "140"
-         endingLineNumber = "140"
+         startingLineNumber = "138"
+         endingLineNumber = "138"
          landmarkName = "-createOverlay"
          landmarkType = "5">
       </FileBreakpoint>
@@ -4709,11 +4709,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "373098404.662327"
+         timestampString = "373482515.096644"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1765"
-         endingLineNumber = "1765">
+         startingLineNumber = "1745"
+         endingLineNumber = "1745">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -4942,11 +4942,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/FoldersViewController.m"
-         timestampString = "373254017.792302"
+         timestampString = "373484136.458328"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "215"
-         endingLineNumber = "215"
+         startingLineNumber = "219"
+         endingLineNumber = "219"
          landmarkName = "-addCount"
          landmarkType = "5">
       </FileBreakpoint>
@@ -4955,11 +4955,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/FoldersViewController.m"
-         timestampString = "373254017.792302"
+         timestampString = "373484572.685628"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "302"
-         endingLineNumber = "302"
+         startingLineNumber = "321"
+         endingLineNumber = "321"
          landmarkName = "-folderDropdownMoveViewsY:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5083,11 +5083,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "373082930.791264"
+         timestampString = "373482515.096644"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "318"
-         endingLineNumber = "318"
+         startingLineNumber = "299"
+         endingLineNumber = "299"
          landmarkName = "-asyncImageViewFinishedLoading:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5187,11 +5187,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/FoldersViewController.m"
-         timestampString = "373254017.792302"
+         timestampString = "373484572.685628"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "559"
-         endingLineNumber = "559"
+         startingLineNumber = "578"
+         endingLineNumber = "578"
          landmarkName = "-tableView:numberOfRowsInSection:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5200,11 +5200,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/FoldersViewController.m"
-         timestampString = "373254017.792302"
+         timestampString = "373484572.685628"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "560"
-         endingLineNumber = "560"
+         startingLineNumber = "579"
+         endingLineNumber = "579"
          landmarkName = "-tableView:numberOfRowsInSection:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5408,11 +5408,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/EqualizerViewController.m"
-         timestampString = "373091970.750554"
+         timestampString = "373482515.096644"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "448"
-         endingLineNumber = "448"
+         startingLineNumber = "446"
+         endingLineNumber = "446"
          landmarkName = "-createEqViews"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5460,11 +5460,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/EqualizerViewController.m"
-         timestampString = "373091970.750554"
+         timestampString = "373482515.096644"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "874"
-         endingLineNumber = "874"
+         startingLineNumber = "872"
+         endingLineNumber = "872"
          landmarkName = "-pickerField:selectedRow:inComponent:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5473,11 +5473,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/EqualizerViewController.m"
-         timestampString = "371074956.827887"
+         timestampString = "373482515.096644"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "274"
-         endingLineNumber = "274"
+         startingLineNumber = "272"
+         endingLineNumber = "272"
          landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5525,7 +5525,7 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/ISMSSong+DAO.m"
-         timestampString = "371852861.572374"
+         timestampString = "373479411.039256"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "522"
@@ -5577,11 +5577,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "373083613.455642"
+         timestampString = "373482515.096644"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "570"
-         endingLineNumber = "570"
+         startingLineNumber = "551"
+         endingLineNumber = "551"
          landmarkName = "-willRotateToInterfaceOrientation:duration:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5590,11 +5590,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "373083613.455642"
+         timestampString = "373482515.096644"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "550"
-         endingLineNumber = "550"
+         startingLineNumber = "531"
+         endingLineNumber = "531"
          landmarkName = "-willRotateToInterfaceOrientation:duration:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5603,11 +5603,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "373083725.464614"
+         timestampString = "373482515.096644"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "621"
-         endingLineNumber = "621"
+         startingLineNumber = "602"
+         endingLineNumber = "602"
          landmarkName = "-willRotateToInterfaceOrientation:duration:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5629,11 +5629,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "373083633.780176"
+         timestampString = "373482515.096644"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "468"
-         endingLineNumber = "468"
+         startingLineNumber = "449"
+         endingLineNumber = "449"
          landmarkName = "-createLandscapeViews"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5642,11 +5642,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/EqualizerViewController.m"
-         timestampString = "373091966.807863"
+         timestampString = "373482515.096644"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "291"
-         endingLineNumber = "291"
+         startingLineNumber = "289"
+         endingLineNumber = "289"
          landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>

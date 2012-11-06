@@ -17,6 +17,8 @@
 #define kOAuthConsumerKey				@"nYKAEcLstFYnI9EEnv6g"
 #define kOAuthConsumerSecret			@"wXSWVvY7GN1e8Z2KFaR9A5skZKtHzpchvMS7Elpu0"
 
+LOG_LEVEL_ISUB_DEFAULT
+
 @implementation SocialSingleton
 
 #pragma mark -
@@ -26,10 +28,23 @@
 {
 	self.playerHasTweeted = NO;
 	self.playerHasScrobbled = NO;
+    self.playerHasNotifiedSubsonic = NO;
 }
 
 - (void)playerHandleSocial
 {
+    if (!self.playerHasNotifiedSubsonic && audioEngineS.player.progress >= socialS.subsonicDelay)
+    {
+        if ([settingsS.serverType isEqualToString:SUBSONIC])
+        {
+            [EX2Dispatch runInMainThread:^{
+                [self notifySubsonic];
+            }];
+        }
+        
+        self.playerHasNotifiedSubsonic = YES;
+    }
+    
 	if (!self.playerHasTweeted && audioEngineS.player.progress >= socialS.tweetDelay)
 	{
 		self.playerHasTweeted = YES;
@@ -51,7 +66,6 @@
 - (NSTimeInterval)scrobbleDelay
 {
 	// Scrobble in 30 seconds (or settings amount) if not canceled
-	//ISMSSong *currentSong = playlistS.currentSong;
 	ISMSSong *currentSong = audioEngineS.player.currentStream.song;
 	NSTimeInterval scrobbleDelay = 30.0;
 	if (currentSong.duration != nil)
@@ -74,34 +88,6 @@
 	return 30.0;
 }
 
-/*- (void)songStarted
-{
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	
-	// Notify Subsonic of play in 10 seconds if not canceled
-	[self performSelector:@selector(notifySubsonic) withObject:nil afterDelay:10.0];
-	
-	// Tweet in 30 seconds if not canceled
-	[self performSelector:@selector(tweetSong) withObject:nil afterDelay:30.0];
-
-	// Scrobble in 30 seconds (or settings amount) if not canceled
-	ISMSSong *currentSong = playlistS.currentSong;
-	NSTimeInterval scrobbleDelay = 30.0;
-	if (currentSong.duration != nil)
-	{
-		float scrobblePercent = settingsS.scrobblePercent;
-		float duration = [currentSong.duration floatValue];
-		scrobbleDelay = scrobblePercent * duration;
-	}
-	[self performSelector:@selector(scrobbleSong) withObject:nil afterDelay:scrobbleDelay];
-	
-	// If scrobbling is enabled, send "now playing" call
-	if (settingsS.isScrobbleEnabled)
-	{
-		[self scrobbleSong:currentSong isSubmission:NO];
-	}
-}*/
-
 - (void)notifySubsonic
 {
 	if (!viewObjectsS.isOfflineMode)
@@ -109,14 +95,15 @@
 		// If this song wasn't just cached, then notify Subsonic of the playback
 		ISMSSong *lastCachedSong = streamManagerS.lastCachedSong;
 		ISMSSong *currentSong = playlistS.currentSong;
-		//DLog(@"Asked to notify Subsonic about %@ ", currentSong.title);
 		if (![lastCachedSong isEqualToSong:currentSong])
 		{
 			NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(currentSong.songId), @"id", nil];
 			NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" parameters:parameters byteOffset:0];
 			NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-			NSLog(@"%@", conn);
-			//DLog(@"notified Subsonic about %@", currentSong.title);
+            if (conn)
+            {
+                DDLogVerbose(@"notified Subsonic about cached song %@", currentSong.title);
+            }
 		}
 	}
 }
@@ -125,7 +112,7 @@
 
 - (void)scrobbleSongAsSubmission
 {	
-//DLog(@"Asked to scrobble %@ as submission", playlistS.currentSong.title);
+    //DLog(@"Asked to scrobble %@ as submission", playlistS.currentSong.title);
 	if (settingsS.isScrobbleEnabled && !viewObjectsS.isOfflineMode)
 	{
 		ISMSSong *currentSong = playlistS.currentSong;
@@ -136,7 +123,7 @@
 
 - (void)scrobbleSongAsPlaying
 {
-//DLog(@"Asked to scrobble %@ as playing", playlistS.currentSong.title);
+    //DLog(@"Asked to scrobble %@ as playing", playlistS.currentSong.title);
 	// If scrobbling is enabled, send "now playing" call
 	if (settingsS.isScrobbleEnabled && !viewObjectsS.isOfflineMode)
 	{
@@ -188,7 +175,7 @@
 	if ([incrementalData length] > 0)
 	{
 		// Subsonic has been notified, cancel the connection
-	//DLog(@"Subsonic has been notified, cancel the connection");
+        //DLog(@"Subsonic has been notified, cancel the connection");
 		[theConnection cancel];
 	}
 }
@@ -208,7 +195,7 @@
 {
 	ISMSSong *currentSong = playlistS.currentSong;
 	
-//DLog(@"Asked to tweet %@", currentSong.title);
+    //DLog(@"Asked to tweet %@", currentSong.title);
 	
 	if (self.twitterEngine.isAuthorized && settingsS.isTwitterEnabled && !viewObjectsS.isOfflineMode)
 	{
@@ -221,7 +208,7 @@
 			else
 				[self.twitterEngine sendUpdate:[tweet substringToIndex:140]];
 			
-		//DLog(@"Tweeted: %@", tweet);
+            //DLog(@"Tweeted: %@", tweet);
 		}
 		else 
 		{
@@ -313,24 +300,16 @@
 
 - (void)didReceiveMemoryWarning
 {
-//DLog(@"received memory warning");
-	
-	
+    //DLog(@"received memory warning");
 }
 
 #pragma mark - Singleton methods
 
 - (void)setup
 {
-	//initialize here
 	[self createTwitterEngine];
 	
-	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songStarted) name:ISMSNotification_SongPlaybackStarted object:nil];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self 
-											 selector:@selector(didReceiveMemoryWarning) 
-												 name:UIApplicationDidReceiveMemoryWarningNotification 
-											   object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveMemoryWarning) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
 }
 
 + (id)sharedInstance

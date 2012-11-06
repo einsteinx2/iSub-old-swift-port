@@ -34,6 +34,7 @@
 - (void)tweetSong;
 - (void)notifySubsonic;
 
+@property (nonatomic) BOOL playerHasNotifiedSubsonic;
 @property (nonatomic) BOOL playerHasTweeted;
 @property (nonatomic) BOOL playerHasScrobbled;
 - (void)playerHandleSocial;

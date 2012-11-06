@@ -23,19 +23,19 @@
 {
 	if ((self = [super init]))
 	{
-		self.name = [attributeDict objectForKey:@"name"];
-		self.artistId = [attributeDict objectForKey:@"id"];
+		_name = [[attributeDict objectForKey:@"name"] cleanString];
+		_artistId = [[attributeDict objectForKey:@"id"] cleanString];
 	}
 	
 	return self;
 }
 
-- (id) initWithTBXMLElement:(TBXMLElement *)element
+- (id)initWithTBXMLElement:(TBXMLElement *)element
 {
 	if ((self = [super init]))
 	{
-		self.name = [TBXML valueOfAttributeNamed:@"name" forElement:element];
-		self.artistId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
+		_name = [[TBXML valueOfAttributeNamed:@"name" forElement:element] cleanString];
+		_artistId = [[TBXML valueOfAttributeNamed:@"id" forElement:element] cleanString];
 	}
 	
 	return self;
@@ -47,13 +47,12 @@
 	[encoder encodeObject:self.artistId];
 }
 
-
 - (id)initWithCoder:(NSCoder *)decoder
 {
 	if ((self = [super init]))
 	{
-		_name = [decoder decodeObject];
-		_artistId = [decoder decodeObject];
+		_name = [[decoder decodeObject] copy];
+		_artistId = [[decoder decodeObject] copy];
 	}
 	
 	return self;
@@ -63,8 +62,8 @@
 {
 	ISMSArtist *anArtist = [[ISMSArtist alloc] init];
 	
-	anArtist.name = [self.name copy];
-	anArtist.artistId = [self.artistId copy];
+	anArtist.name = self.name;
+	anArtist.artistId = self.artistId;
 	
 	return anArtist;
 }

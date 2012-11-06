@@ -20,6 +20,7 @@
 @property (nonatomic, strong) NSDictionary *folders;
 @property (nonatomic) BOOL isOpen;
 @property (nonatomic, strong) NSNumber *selectedFolderId;
+@property (nonatomic, strong) UIButton *dropdownButton;
 
 // Colors
 @property (nonatomic, strong) UIColor *borderColor;

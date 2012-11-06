@@ -9,8 +9,6 @@
 #import "DebugViewController.h"
 
 @implementation DebugViewController
-@synthesize currentSong, nextSong, currentSongProgress, nextSongProgress;
-@synthesize currentSongProgressView, nextSongLabel, nextSongProgressView, songsCachedLabel, cacheSizeLabel, cacheSettingLabel, cacheSettingSizeLabel, freeSpaceLabel, songInfoToggleButton;
 
 #pragma mark - Lifecycle
 

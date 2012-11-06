@@ -23,8 +23,6 @@
 
 @implementation PageControlViewController
 
-@synthesize scrollView, pageControl, viewControllers, numberOfPages, pageControlUsed, pageControlHolder, swipeDetector;
-
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 //- (void)viewWillAppear:(BOOL)animated 
 - (void)viewDidLoad
@@ -39,24 +37,24 @@
 	// view controllers are created lazily
     // in the meantime, load the array with placeholders which will be replaced on demand
     NSMutableArray *controllers = [[NSMutableArray alloc] init];
-    for (unsigned i = 0; i < numberOfPages; i++) {
+    for (unsigned i = 0; i < self.numberOfPages; i++) {
         [controllers addObject:[NSNull null]];
     }
     self.viewControllers = controllers;
 	
 	// a page is the width of the scroll view
-    scrollView.pagingEnabled = YES;
+    self.scrollView.pagingEnabled = YES;
 	CGSize contentSize;
 	CGFloat height;
 	if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) || IS_IPAD())
 	{
-		contentSize = CGSizeMake(320 * numberOfPages, numberOfPages == 1 ? 320 : 300);
-		height = numberOfPages == 1 ? 320 : 300;
+		contentSize = CGSizeMake(320 * self.numberOfPages, self.numberOfPages == 1 ? 320 : 300);
+		height = self.numberOfPages == 1 ? 320 : 300;
 	}
 	else
 	{
-		contentSize = CGSizeMake(300 * numberOfPages, numberOfPages == 1 ? 270 : 250);
-		height = numberOfPages == 1 ? 320 : 300;
+		contentSize = CGSizeMake(300 * self.numberOfPages, self.numberOfPages == 1 ? 270 : 250);
+		height = self.numberOfPages == 1 ? 320 : 300;
 		//contentSize = CGSizeMake(300 * numberOfPages, numberOfPages == 1 ? 270 : 250);
 		//height = numberOfPages == 1 ? 270 : 250;
 	}
@@ -67,7 +65,7 @@
     self.scrollView.scrollsToTop = NO;
     self.scrollView.delegate = self;
 	
-    self.pageControl.numberOfPages = numberOfPages;
+    self.pageControl.numberOfPages = self.numberOfPages;
     self.pageControl.currentPage = 0;
 	
 	if (self.numberOfPages == 1)

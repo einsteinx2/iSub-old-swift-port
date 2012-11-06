@@ -28,11 +28,6 @@
 
 @implementation EqualizerView
 
-@synthesize  location;
-@synthesize  previousLocation;
-@synthesize drawTimer;
-@synthesize visualType;
-
 static float drawInterval = 1./20.;
 static int specWidth; //256 or 512
 static int specHeight; //256 or 512
@@ -152,7 +147,7 @@ static void destroy_versionArrays()
 {
 	self.userInteractionEnabled = YES;
 	
-	drawTimer = nil;
+	self.drawTimer = nil;
 	
 	//[self createBitmapToDraw];
 	
@@ -230,7 +225,8 @@ static void destroy_versionArrays()
 - (void)stopEqDisplay
 {
 	//DLog(@"stopping eq display");
-	[drawTimer invalidate]; drawTimer = nil;
+	[self.drawTimer invalidate];
+    self.drawTimer = nil;
 }
 
 - (void)createBitmapToDraw
@@ -243,12 +239,12 @@ static void destroy_versionArrays()
 
 - (void)drawTheEq
 {		
-	if (!audioEngineS.player.isPlaying || visualType == ISMSBassVisualType_none)
+	if (!audioEngineS.player.isPlaying || self.visualType == ISMSBassVisualType_none)
 		return;
 	
 	[audioEngineS.visualizer readAudioData];
 	
-	switch(visualType)
+	switch(self.visualType)
 	{
 		int x, y, y1;
 		
@@ -468,7 +464,7 @@ static void destroy_versionArrays()
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
-	[drawTimer invalidate]; 
+	[self.drawTimer invalidate]; 
 	
 	if (imageTexture)
 	{
@@ -511,25 +507,25 @@ static void destroy_versionArrays()
 			audioEngineS.visualizer.type = BassVisualizerTypeNone;
 			[self eraseBitBuffer];
 			[self erase];
-			visualType = ISMSBassVisualType_none;
+			self.visualType = ISMSBassVisualType_none;
 			break;
 			
 		case ISMSBassVisualType_line:
 			audioEngineS.visualizer.type = BassVisualizerTypeLine;
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			visualType = ISMSBassVisualType_line; 
+			self.visualType = ISMSBassVisualType_line; 
 			break;
 			
 		case ISMSBassVisualType_skinnyBar:
 			audioEngineS.visualizer.type = BassVisualizerTypeFFT;
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			visualType = ISMSBassVisualType_skinnyBar; 
+			self.visualType = ISMSBassVisualType_skinnyBar; 
 			break;
 			
 		case ISMSBassVisualType_fatBar:
 			audioEngineS.visualizer.type = BassVisualizerTypeFFT;
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			visualType = ISMSBassVisualType_fatBar;
+			self.visualType = ISMSBassVisualType_fatBar;
 			break;
 			
 		case ISMSBassVisualType_aphexFace:
@@ -537,13 +533,13 @@ static void destroy_versionArrays()
 			[self eraseBitBuffer];
             specpos = 0;
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			visualType = ISMSBassVisualType_aphexFace; 
+			self.visualType = ISMSBassVisualType_aphexFace; 
 			break;
 			
 		case ISMSBassVisualType_maxValue:
 			break;
 	}
-	settingsS.currentVisualizerType = visualType;
+	settingsS.currentVisualizerType = self.visualType;
 	//DLog(@"visualType: %i   currentVisualizerType: %i", visualType, settingsS.currentVisualizerType);
 }
 

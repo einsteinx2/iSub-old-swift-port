@@ -38,9 +38,9 @@
 	if ((self = [super init]))
 	{
 		_title = [[TBXML valueOfAttributeNamed:@"title" forElement:element] cleanString];
-		_albumId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
-		_coverArtId = [TBXML valueOfAttributeNamed:@"coverArt" forElement:element];
-		_artistId = [TBXML valueOfAttributeNamed:@"parent" forElement:element];
+		_albumId = [[TBXML valueOfAttributeNamed:@"id" forElement:element] cleanString];
+		_coverArtId = [[TBXML valueOfAttributeNamed:@"coverArt" forElement:element] cleanString];
+		_artistId = [[TBXML valueOfAttributeNamed:@"parent" forElement:element] cleanString];
 		_artistName = [[TBXML valueOfAttributeNamed:@"artist" forElement:element] cleanString];
 	}
 	
@@ -52,9 +52,9 @@
 	if ((self = [super init]))
 	{
 		_title = [[TBXML valueOfAttributeNamed:@"title" forElement:element] cleanString];
-		_albumId = [TBXML valueOfAttributeNamed:@"id" forElement:element];
-		_coverArtId = [TBXML valueOfAttributeNamed:@"coverArt" forElement:element];
-		_artistId = [NSString stringWithString:artistIdToSet];
+		_albumId = [[TBXML valueOfAttributeNamed:@"id" forElement:element] cleanString];
+		_coverArtId = [[TBXML valueOfAttributeNamed:@"coverArt" forElement:element] cleanString];
+		_artistId = [artistIdToSet cleanString];
 		_artistName = [artistNameToSet cleanString];
 	}
 	
@@ -65,11 +65,11 @@
 {
 	if ((self = [super init]))
 	{
-		_title = [attributeDict objectForKey:@"title"];
-		_albumId = [attributeDict objectForKey:@"id"];
-		_coverArtId = [attributeDict objectForKey:@"coverArt"];
-		_artistName = [attributeDict objectForKey:@"artist"];
-		_artistId = [attributeDict objectForKey:@"parent"];
+		_title = [[attributeDict objectForKey:@"title"] cleanString];
+		_albumId = [[attributeDict objectForKey:@"id"] cleanString];
+		_coverArtId = [[attributeDict objectForKey:@"coverArt"] cleanString];
+		_artistName = [[attributeDict objectForKey:@"artist"] cleanString];
+		_artistId = [[attributeDict objectForKey:@"parent"] cleanString];
 	}
 	
 	return self;
@@ -80,9 +80,9 @@
 {
 	if ((self = [super init]))
 	{
-		_title = [attributeDict objectForKey:@"title"];
-		_albumId = [attributeDict objectForKey:@"id"];
-		_coverArtId = [attributeDict objectForKey:@"coverArt"];
+		_title = [[attributeDict objectForKey:@"title"] cleanString];
+		_albumId = [[attributeDict objectForKey:@"id"] cleanString];
+		_coverArtId = [[attributeDict objectForKey:@"coverArt"] cleanString];
 		
 		if (myArtist)
 		{
@@ -108,11 +108,11 @@
 {
 	if ((self = [super init]))
 	{
-		_title = [decoder decodeObject];
-		_albumId = [decoder decodeObject];
-		_coverArtId = [decoder decodeObject];
-		_artistName = [decoder decodeObject];
-		_artistId = [decoder decodeObject];
+		_title = [[decoder decodeObject] copy];
+		_albumId = [[decoder decodeObject] copy];
+		_coverArtId = [[decoder decodeObject] copy];
+		_artistName = [[decoder decodeObject] copy];
+		_artistId = [[decoder decodeObject] copy];
 	}
 	
 	return self;

@@ -10,7 +10,6 @@
 #import "CurrentPlaylistViewController.h"
 
 @implementation CurrentPlaylistBackgroundViewController
-@synthesize playlistView;
 
 - (void)viewDidLoad 
 {

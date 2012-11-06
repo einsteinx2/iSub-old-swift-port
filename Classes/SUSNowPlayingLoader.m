@@ -47,6 +47,8 @@
 		}
 		else
 		{
+            self.nowPlayingSongDicts = [[NSMutableArray alloc] initWithCapacity:0];
+            
 			TBXMLElement *nowPlaying = [TBXML childElementNamed:@"nowPlaying" parentElement:root];
 			if (nowPlaying)
 			{

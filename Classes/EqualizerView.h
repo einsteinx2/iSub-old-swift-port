@@ -27,13 +27,11 @@
 	GLuint depthRenderbuffer;
 	
 	GLuint	imageTexture;
-	CGPoint	location;
-	CGPoint	previousLocation;
 	BOOL needsErase;
 }
 
-@property (readwrite) CGPoint location;
-@property (readwrite) CGPoint previousLocation;
+@property CGPoint location;
+@property CGPoint previousLocation;
 
 @property (strong) NSTimer *drawTimer;
 

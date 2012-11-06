@@ -47,6 +47,8 @@
 		}
 		else
 		{
+            self.chatMessages = [NSMutableArray arrayWithCapacity:0];
+            
 			TBXMLElement *chatMessagesElement = [TBXML childElementNamed:@"chatMessages" parentElement:root];
 			if (chatMessagesElement)
 			{
