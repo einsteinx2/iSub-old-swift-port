@@ -59,10 +59,13 @@ static void initialize_navigationBarImages()
 	{
 		if ([self.coverArtId isEqualToString:notification.object])
 		{
+            // We can get deallocated inside informDelegateLoadingFinished, so grab the isLarge BOOL now
+            BOOL large = self.isLarge;
+            
 			// My art download finished, so notify my delegate
 			[self informDelegateLoadingFinished];
 			
-			if (self.isLarge)
+			if (large)
 				[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_AlbumArtLargeDownloaded];
 		}
 	}

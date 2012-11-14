@@ -31,11 +31,14 @@
 {
 	[super viewDidLoad];
 	
-	/*if (IS_BETA())
+    if (!IS_BETA())
 	{
-		pmsButton.enabled = YES;
-		pmsButton.hidden = NO;
-	}*/
+		pmsButton.enabled = NO;
+		pmsButton.hidden = YES;
+        
+        subsonicButton.y += 50.;
+        ubuntuButton.y -= 50.;
+	}
 }
 
 - (IBAction)buttonAction:(id)sender

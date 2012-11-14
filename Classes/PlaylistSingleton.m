@@ -354,24 +354,41 @@
     }
 }
 
-- (NSUInteger)indexForOffset:(NSUInteger)offset fromIndex:(NSUInteger)index
+- (NSUInteger)indexForOffset:(NSInteger)offset fromIndex:(NSInteger)index
 {
 	switch (self.repeatMode)
     {
         case ISMSRepeatMode_RepeatAll:
-            for (int i = 0; i < offset; i++)
+            if (offset >= 0)
             {
-                index = [self songForIndex:index + 1] ? index + 1 : 0;
+                // This is done instead of just calculating based on count because count is expensive to get
+                for (int i = 0; i < offset; i++)
+                {
+                    index = [self songForIndex:index + 1] ? index + 1 : 0;
+                }
+            }
+            else
+            {
+                index = index + offset >= 0 ? index + offset : self.count + index + offset;
             }
             break;
         case ISMSRepeatMode_Normal:
-            for (int i = 0; i < offset; i++)
+            if (offset >= 0)
             {
-                if (![self songForIndex:index] && ![self songForIndex:index + 1])
-                    index = index;
-                else
-                    index++;
+                // This is done instead of just calculating based on count because count is expensive to get
+                for (int i = 0; i < offset; i++)
+                {
+                    if (![self songForIndex:index] && ![self songForIndex:index + 1])
+                        index = index;
+                    else
+                        index++;
+                }
             }
+            else
+            {
+                index = index + offset >= 0 ? index + offset : 0;
+            }
+            
             break;
         default:
             break;
@@ -380,7 +397,7 @@
     return index;
 }
 
-- (NSUInteger)indexForOffsetFromCurrentIndex:(NSUInteger)offset
+- (NSUInteger)indexForOffsetFromCurrentIndex:(NSInteger)offset
 {
 	return [self indexForOffset:offset fromIndex:self.currentIndex];
 }

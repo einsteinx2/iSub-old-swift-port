@@ -32,8 +32,8 @@ typedef enum
 - (NSInteger)decrementIndex;
 - (NSInteger)incrementIndex;
 
-- (NSUInteger)indexForOffset:(NSUInteger)offset fromIndex:(NSUInteger)index;
-- (NSUInteger)indexForOffsetFromCurrentIndex:(NSUInteger)offset;
+- (NSUInteger)indexForOffset:(NSInteger)offset fromIndex:(NSInteger)index;
+- (NSUInteger)indexForOffsetFromCurrentIndex:(NSInteger)offset;
 
 // Convenience properties
 - (ISMSSong *)prevSong;

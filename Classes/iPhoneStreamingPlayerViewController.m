@@ -185,20 +185,16 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
         }
     }
     
-    self.songInfoView.x = 0.;
-    self.songInfoView.y = 73.;
-    self.songInfoView.width = 320.;
+    self.songInfoView.frame = CGRectMake(0., 73., 320., self.songInfoView.height);
     [self.view addSubview:self.songInfoView];
     
-    self.extraButtons.x = 0.;
-    self.extraButtons.width = 320.;
+    self.extraButtons.frame = CGRectMake(0., 0., 320., self.extraButtons.height);
     [self.view addSubview:self.extraButtons];
 }
 
 - (void)removeTallPlayerButtons
 {
     [self.songInfoView removeFromSuperview];
-    
     [self.extraButtons removeFromSuperview];
     
     self.extraButtonsButton.hidden = NO;
@@ -266,6 +262,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[self.eqButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
 	
 	[self quickSecondsSetLabels];
+
 }
 
 - (void)quickSecondsSetLabels
@@ -527,8 +524,21 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
              if (finished)
              {
                  [self removeTallPlayerButtons];
+                 
+                 if (settingsS.isExtraPlayerControlsShowing)
+                 {
+                     self.isExtraButtonsShowing = NO;
+                     [self extraButtonsToggleAnimated:YES saveState:NO];
+                 }
              }
          }];
+    }
+    else if (IS_TALL_SCREEN())
+    {
+        if (self.isExtraButtonsShowing)
+        {
+            [self extraButtonsToggleAnimated:NO saveState:NO];
+        }
     }
 	
 	if (!IS_IPAD())
@@ -618,19 +628,16 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[self createSongTitle];
 	}
     
-    if (IS_TALL_SCREEN())
+    if (IS_TALL_SCREEN() && UIInterfaceOrientationIsLandscape(fromInterfaceOrientation))
     {
-        if (UIInterfaceOrientationIsLandscape(fromInterfaceOrientation))
-		{
-            self.extraButtons.alpha = 0.0;
-            self.songInfoView.alpha = 0.0;
-            [self showTallPlayerButtons];
-            [UIView animateWithDuration:.25 animations:^
-             {
-                 self.extraButtons.alpha = 1.0;
-                 self.songInfoView.alpha = 1.0;
-             }];
-        }
+        self.extraButtons.alpha = 0.0;
+        self.songInfoView.alpha = 0.0;
+        [self showTallPlayerButtons];
+        [UIView animateWithDuration:.25 animations:^
+         {
+             self.extraButtons.alpha = 1.0;
+             self.songInfoView.alpha = 1.0;
+         }];
     }
 }
 

@@ -41,7 +41,6 @@
 	//
 	self.loadedTime = [NSDate date];
 	
-	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTwitterUIElements) name:@"twitterAuthenticated" object:nil];
 	
 	// Set version label

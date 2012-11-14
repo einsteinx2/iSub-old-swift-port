@@ -1504,6 +1504,14 @@
 		53B52BA611ADE0A6005776B5 /* GenresViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53B52BA411ADE0A6005776B5 /* GenresViewController.xib */; };
 		53B64B7F12C9173E007F1ED5 /* Default-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B64B7E12C9173E007F1ED5 /* Default-Portrait.png */; };
 		53B64B9712C917E4007F1ED5 /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B64B9612C917E4007F1ED5 /* Default-Landscape.png */; };
+		53B65ABB16533E4800472DBF /* back-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B65AB916533E4800472DBF /* back-tabbaricon.png */; };
+		53B65ABC16533E4800472DBF /* back-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B65AB916533E4800472DBF /* back-tabbaricon.png */; };
+		53B65ABD16533E4800472DBF /* back-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B65AB916533E4800472DBF /* back-tabbaricon.png */; };
+		53B65ABE16533E4800472DBF /* back-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B65AB916533E4800472DBF /* back-tabbaricon.png */; };
+		53B65ABF16533E4800472DBF /* back-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B65ABA16533E4800472DBF /* back-tabbaricon@2x.png */; };
+		53B65AC016533E4800472DBF /* back-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B65ABA16533E4800472DBF /* back-tabbaricon@2x.png */; };
+		53B65AC116533E4800472DBF /* back-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B65ABA16533E4800472DBF /* back-tabbaricon@2x.png */; };
+		53B65AC216533E4800472DBF /* back-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B65ABA16533E4800472DBF /* back-tabbaricon@2x.png */; };
 		53B8A1FB11704E100005AA86 /* play-all-note.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B8A1FA11704E100005AA86 /* play-all-note.png */; };
 		53B9D0B41279FAEF00CAB0E0 /* SearchSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B9D0B21279FAEF00CAB0E0 /* SearchSongsViewController.m */; };
 		53B9D0B81279FB6B00CAB0E0 /* SearchSongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B9D0B71279FB6B00CAB0E0 /* SearchSongUITableViewCell.m */; };
@@ -3188,6 +3196,8 @@
 		53B52BA411ADE0A6005776B5 /* GenresViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GenresViewController.xib; sourceTree = "<group>"; };
 		53B64B7E12C9173E007F1ED5 /* Default-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait.png"; path = "Images/Other/Default-Portrait.png"; sourceTree = "<group>"; };
 		53B64B9612C917E4007F1ED5 /* Default-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape.png"; path = "Images/Other/Default-Landscape.png"; sourceTree = "<group>"; };
+		53B65AB916533E4800472DBF /* back-tabbaricon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "back-tabbaricon.png"; path = "Images/Tab Bar Icons/back-tabbaricon.png"; sourceTree = "<group>"; };
+		53B65ABA16533E4800472DBF /* back-tabbaricon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "back-tabbaricon@2x.png"; path = "Images/Tab Bar Icons/back-tabbaricon@2x.png"; sourceTree = "<group>"; };
 		53B8A1FA11704E100005AA86 /* play-all-note.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "play-all-note.png"; path = "Images/Other/play-all-note.png"; sourceTree = "<group>"; };
 		53B9D0B11279FAEF00CAB0E0 /* SearchSongsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchSongsViewController.h; sourceTree = "<group>"; };
 		53B9D0B21279FAEF00CAB0E0 /* SearchSongsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchSongsViewController.m; sourceTree = "<group>"; };
@@ -4544,6 +4554,8 @@
 		53AAF1A411DA910400447FF7 /* Tab Bar Icons */ = {
 			isa = PBXGroup;
 			children = (
+				53B65AB916533E4800472DBF /* back-tabbaricon.png */,
+				53B65ABA16533E4800472DBF /* back-tabbaricon@2x.png */,
 				535CA9C512DBCA9000389DA1 /* folders-tabbaricon.png */,
 				535CA9C612DBCA9000389DA1 /* folders-tabbaricon@2x.png */,
 				5314B4EC126FD20300CDB511 /* home-tabbaricon.png */,
@@ -5525,6 +5537,8 @@
 				53493F4115FC6CAE0059492E /* MainWindow-iPad.xib in Resources */,
 				53493F4415FC6CAE0059492E /* MainWindow.xib in Resources */,
 				5349AD041613724D003603AF /* Default-568h@2x.png in Resources */,
+				53B65ABB16533E4800472DBF /* back-tabbaricon.png in Resources */,
+				53B65ABF16533E4800472DBF /* back-tabbaricon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5804,6 +5818,8 @@
 				53159E5A156F69D0001B0268 /* playing-cell-icon-white.png in Resources */,
 				53159E5B156F69D0001B0268 /* playing-cell-icon-white@2x.png in Resources */,
 				533C657815ABB952003EAF29 /* NewHomeViewController.xib in Resources */,
+				53B65ABE16533E4800472DBF /* back-tabbaricon.png in Resources */,
+				53B65AC216533E4800472DBF /* back-tabbaricon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6380,6 +6396,8 @@
 				53493F4615FC6CAE0059492E /* MainWindow.xib in Resources */,
 				5349AD061613724D003603AF /* Default-568h@2x.png in Resources */,
 				53A64E24161E2EA300FCBBAF /* HockeySDKResources.bundle in Resources */,
+				53B65ABD16533E4800472DBF /* back-tabbaricon.png in Resources */,
+				53B65AC116533E4800472DBF /* back-tabbaricon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6679,6 +6697,8 @@
 				53493F4215FC6CAE0059492E /* MainWindow-iPad.xib in Resources */,
 				53493F4515FC6CAE0059492E /* MainWindow.xib in Resources */,
 				5349AD051613724D003603AF /* Default-568h@2x.png in Resources */,
+				53B65ABC16533E4800472DBF /* back-tabbaricon.png in Resources */,
+				53B65AC016533E4800472DBF /* back-tabbaricon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

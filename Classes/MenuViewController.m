@@ -162,53 +162,6 @@
 	}
 }
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-	
-}
-
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-	[super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-	
-	//[self createHeaderView:!UIInterfaceOrientationIsPortrait(fromInterfaceOrientation)];
-	
-	/*if (UIInterfaceOrientationIsLandscape(fromInterfaceOrientation))
-	{
-		[self createHeaderView:YES];
-		self.tableView.tableHeaderView.height = 1.;
-		
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:.1];
-		[UIView setAnimationTransition:UIViewAnimationOptionCurveEaseInOut forView:nil cache:YES];
-		
-		self.tableView.tableHeaderView.height = 70.;
-		//self.tableView.tableHeaderView = self.tableView.tableHeaderView;
-		[UIView commitAnimations];		
-	}
-	else
-	{
-		[self createHeaderView:NO];
-		self.tableView.tableHeaderView.height = 70.;
-		
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:.1];
-		[UIView setAnimationTransition:UIViewAnimationOptionCurveEaseInOut forView:nil cache:YES];
-		
-		self.tableView.tableHeaderView.height = 1.;
-		//self.tableView.tableHeaderView = self.tableView.tableHeaderView;
-		[UIView commitAnimations];	
-	}
-	
-	self.tableView.tableHeaderView = self.tableView.tableHeaderView;*/
-}
-
 - (BOOL)shouldAutorotate
 {
     return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
@@ -223,28 +176,17 @@
     return YES;
 }
 
-- (void)centerCells:(UIInterfaceOrientation)orientation
-{
-	/*float totalCellHeight = 93.5 * [rowNames count];
-	if (UIInterfaceOrientationIsLandscape(orientation))
-	{
-		self.tableView.tableHeaderView = nil;
-	}
-	else
-	{
-		float height = (1004.0 - totalCellHeight) / 2.0;
-		CGRect frame = CGRectMake(0, 0, 200, height);
-		UIView *header = [[[UIView alloc] initWithFrame:frame] autorelease];
-		self.tableView.tableHeaderView = header;
-	}*/
-}
-
 - (void)loadCellContents
 {
 	self.tableView.scrollEnabled = NO;
 	
 	self.cellContents = [NSMutableArray arrayWithCapacity:10];
 	
+    if (appDelegateS.referringAppUrl)
+    {
+        [self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"back-tabbaricon.png"], kCellImage, @"Back", kCellText, nil]];
+    }
+    
 	if (viewObjectsS.isOfflineMode)
 	{
 		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"settings-tabbaricon.png"], kCellImage, @"Settings", kCellText, nil]];
@@ -273,9 +215,7 @@
 		}
 	}
 	
-	[self.tableView reloadData];
-	
-	//[self centerCells:self.interfaceOrientation];
+	[self.tableView reloadData];    
 }
 
 - (void)showSettings
@@ -328,6 +268,21 @@
 {
 	if (!indexPath)
 		return;
+    
+    // Handle the special case of the back button / ref url
+    if (appDelegateS.referringAppUrl)
+    {
+        if (indexPath.row == 0)
+        {
+            // Fix the cell highlighting
+            [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:self.lastSelectedRow inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+            
+            // Go back to the other app
+            [[UIApplication sharedApplication] openURL:appDelegateS.referringAppUrl];
+            return;
+        }
+    }
 	
 	// Set the tabel cell glow
 	//
@@ -344,13 +299,16 @@
 
 - (void)showControllerForIndexPath:(NSIndexPath *)indexPath
 {
+    // If we have the back button displayed, subtract 1 from the row to get the correct action
+    NSUInteger row = appDelegateS.referringAppUrl ? indexPath.row - 1 : indexPath.row;
+    
 	// Present the view controller
 	//
 	UIViewController *controller;
 	
 	if (viewObjectsS.isOfflineMode)
 	{
-		switch (indexPath.row) 
+		switch (row) 
 		{
 			case 0:
 			{
@@ -370,7 +328,7 @@
 	}
 	else
 	{
-		switch (indexPath.row) 
+		switch (row) 
 		{
 			case 0:
 			{

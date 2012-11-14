@@ -310,6 +310,12 @@
     if ([queryParameters.allKeys containsObject:@"ref"])
     {
         self.referringAppUrl = [NSURL URLWithString:[queryParameters objectForKey:@"ref"]];
+        
+        // On the iPad we need to reload the menu table to see the back button
+        if (IS_IPAD())
+        {
+            [self.ipadRootViewController.menuViewController loadCellContents];
+        }
     }
     
     return YES;
