@@ -576,7 +576,7 @@
 	__block NSDate *playedDate;
 	[self.dbQueue inDatabase:^(FMDatabase *db)
 	{
-		NSUInteger playedTime = [db intForQuery:@"SELECT playedDate FROM cachedSongs WHERE md5 = ?", [self.songId md5]];
+		NSUInteger playedTime = [db intForQuery:@"SELECT playedDate FROM cachedSongs WHERE md5 = ?", self.path.md5];
 		playedDate = [NSDate dateWithTimeIntervalSince1970:playedTime];
 	}];
 	return playedDate; 
@@ -587,7 +587,7 @@
 	[self.dbQueue inDatabase:^(FMDatabase *db)
 	{
 		NSString *query = @"UPDATE cachedSongs SET playedDate = ? WHERE md5 = ?";
-		[db executeUpdate:query, [NSNumber numberWithUnsignedLongLong:(unsigned long long)[playedDate timeIntervalSince1970]], [self.songId md5]];
+		[db executeUpdate:query, @((unsigned long long)[playedDate timeIntervalSince1970]), self.path.md5];
 	}];
 }
 

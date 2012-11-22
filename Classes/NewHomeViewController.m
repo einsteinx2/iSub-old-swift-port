@@ -69,6 +69,34 @@
 			self.albumLabel.alpha = 1.0;
 			self.songLabel.alpha = 1.0;
 			[UIView commitAnimations];
+            
+            if (IS_TALL_SCREEN())
+            {
+                [UIView animateWithDuration:duration animations:^
+                 {
+                     for (UIView *aView in self.topRow)
+                     {
+                         aView.y = 75.;
+                     }
+                     
+                     for (UIView *aView in self.topRowLabels)
+                     {
+                         aView.y = 145.;
+                     }
+                     
+                     self.coverArtBorder.y = 217.;
+                     
+                     for (UIView *aView in self.bottomRow)
+                     {
+                         aView.y = 115;
+                     }
+                     
+                     for (UIView *aView in self.bottomRowLabels)
+                     {
+                         aView.y = 160;
+                     }
+                 }];
+            }
 		}
 	}
 	else if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation) && !rotationDisabled)
@@ -113,30 +141,67 @@
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-    // Since the values in viewWillRotate would have to be rounded, we need to do it here instead
-    // Add a short animation to make it look less jerky
-    if (IS_TALL_SCREEN() && UIInterfaceOrientationIsLandscape(fromInterfaceOrientation))
+    DLog(@"y: %@", self.bottomRowLabels.firstObjectSafe);
+
+    
+    // Since the values in viewWillRotate would have to be rounded, we need to fix them here
+    if (IS_TALL_SCREEN())
     {
-        [UIView animateWithDuration:.15 animations:^{
+        if (UIInterfaceOrientationIsLandscape(fromInterfaceOrientation))
+        {
             for (UIView *aView in self.topRow)
             {
-                aView.y += 30;
+                aView.y = 75.;
             }
             
-            self.coverArtBorder.y += 40;
+            for (UIView *aView in self.topRowLabels)
+            {
+                aView.y = 145.;
+            }
+            
+            self.coverArtBorder.y = 217.;
             
             for (UIView *aView in self.bottomRow)
             {
-                aView.y -= 40;
+                aView.y = 313.;
             }
-        }];
-    }
+            
+            for (UIView *aView in self.bottomRowLabels)
+            {
+                aView.y = 381;
+            }
+        }
+        else
+        {
+            for (UIView *aView in self.topRow)
+            {
+                aView.y = 45.;
+            }
+            
+            for (UIView *aView in self.topRowLabels)
+            {
+                aView.y = 115.;
+            }
+            
+            self.coverArtBorder.y = 177.;
+            
+            for (UIView *aView in self.bottomRow)
+            {
+                aView.y = 127.;
+            }
+            
+            for (UIView *aView in self.bottomRowLabels)
+            {
+                aView.y = 159.;
+            }
+        }
+    }    
 }
 
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
-	
+    
 	self.searchSegment.selectedSegmentIndex = 3;
 	
 	self.title = @"Home";
@@ -199,21 +264,6 @@
         		
 		[self initSongInfo];
 	}
-    
-    if (IS_TALL_SCREEN() && UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
-    {
-        for (UIView *aView in self.topRow)
-        {
-            aView.y += 30;
-        }
-
-        self.coverArtBorder.y += 40;
-        
-        for (UIView *aView in self.bottomRow)
-        {
-            aView.y -= 40;
-        }
-    }	
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -239,6 +289,12 @@
 			self.artistLabel.alpha = 1.0;
 			self.albumLabel.alpha = 1.0;
 			self.songLabel.alpha = 1.0;
+            
+            if (IS_TALL_SCREEN())
+            {
+                // Make sure everything's in the right place
+                [self didRotateFromInterfaceOrientation:UIInterfaceOrientationLandscapeLeft];
+            }
 		}
 	}
 	else if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation) && !rotationDisabled)
@@ -257,6 +313,12 @@
 			self.artistLabel.alpha = 0.0;
 			self.albumLabel.alpha = 0.0;
 			self.songLabel.alpha = 0.0;
+            
+            if (IS_TALL_SCREEN())
+            {
+                // Make sure everything's in the right place
+                [self didRotateFromInterfaceOrientation:UIInterfaceOrientationPortrait];
+            }
 		}
 	}
     

@@ -33,8 +33,11 @@
 @property (nonatomic, strong) NSURLConnection *connection;
 @property (nonatomic, strong) NSMutableData *receivedData;
 
-@property (nonatomic, strong) IBOutletCollection(UIView) NSArray *topRow;
-@property (nonatomic, strong) IBOutletCollection(UIView) NSArray *bottomRow;
+@property (nonatomic, strong) IBOutletCollection(UIButton) NSArray *topRow;
+@property (nonatomic, strong) IBOutletCollection(UILabel) NSArray *topRowLabels;
+
+@property (nonatomic, strong) IBOutletCollection(UIButton) NSArray *bottomRow;
+@property (nonatomic, strong) IBOutletCollection(UILabel) NSArray *bottomRowLabels;
 
 - (IBAction)quickAlbums;
 - (IBAction)serverShuffle;

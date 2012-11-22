@@ -108,12 +108,8 @@ LOG_LEVEL_ISUB_DEFAULT
 				ISMSSong *aSong = [ISMSSong songFromCacheDbQueue:songMD5];
 				// Determine the name of the file we are downloading.
 				//DLog(@"currentSongObject.path: %@", currentSongObject.path);
-				NSString *songPath = nil;
-				if (aSong.transcodedSuffix)
-					songPath = [settingsS.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", songMD5, aSong.transcodedSuffix]];
-				else
-					songPath = [settingsS.songCachePath stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", songMD5, aSong.suffix]];
-				
+                
+				NSString *songPath = [settingsS.songCachePath stringByAppendingPathComponent:aSong.path.md5];
 				unsigned long long songSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:songPath error:NULL] fileSize];
 				
 				//DLog(@"removing %@", songMD5);
