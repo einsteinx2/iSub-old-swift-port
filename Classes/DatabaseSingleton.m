@@ -13,6 +13,8 @@
 #import "ISMSStreamManager.h"
 #import "JukeboxSingleton.h"
 
+LOG_LEVEL_ISUB_DEFAULT
+
 @implementation DatabaseSingleton
 
 #pragma mark -
@@ -193,18 +195,34 @@
 			[db executeUpdate:@"CREATE TABLE localPlaylists (playlist TEXT, md5 TEXT)"];
 		}
 	}];
+    
+    // Handle moving the song cache database if necessary
+    path = [[settingsS.currentCacheRoot stringByAppendingPathComponent:@"database"] stringByAppendingPathComponent:@"songCache.db"];
+    NSFileManager *defaultManager = [NSFileManager defaultManager];
+    if (![defaultManager fileExistsAtPath:path])
+    {
+        // First check to see if it's in the old Library/Caches location
+        NSString *oldPath = [settingsS.cachesPath stringByAppendingPathComponent:@"songCache.db"];
+        if ([defaultManager fileExistsAtPath:oldPath])
+        {
+            // It exists there, so move it to the new location
+            NSError *error;
+            [defaultManager moveItemAtPath:oldPath toPath:path error:&error];
+            
+            if (error)
+            {
+                DDLogError(@"Error moving cache path from %@ to %@", oldPath, path);
+            }
+            else
+            {
+                DDLogInfo(@"Moved cache path from %@ to %@", oldPath, path);
+                
+                // Now set the file not to be backed up
+                [[NSURL fileURLWithPath:path] addSkipBackupAttribute];
+            }
+        }
+    }
 	
-	// Setup the song cache database
-	// Check if the songCache DB is in the documents directory
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-	if ([fileManager fileExistsAtPath:[self.databaseFolderPath stringByAppendingPathComponent:@"songCache.db"]]) 
-	{
-		// The song cache Db is in the old place and needs to be moved
-		[fileManager moveItemAtURL:[NSURL fileURLWithPath:[self.databaseFolderPath stringByAppendingPathComponent:@"songCache.db"]]
-							 toURL:[NSURL fileURLWithPath:[settingsS.cachesPath stringByAppendingPathComponent:@"songCache.db"]] error:nil];
-	}
-	
-	path = [settingsS.cachesPath stringByAppendingPathComponent:@"songCache.db"];
 	self.songCacheDbQueue = [FMDatabaseQueue databaseQueueWithPath:path];
 	[self.songCacheDbQueue inDatabase:^(FMDatabase *db)
 	{
@@ -244,14 +262,32 @@
 		}
 	}];
 	
-	if ([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", self.databaseFolderPath, [ settingsS.urlString md5]]]) 
-	{
-		// The song cache queue Db is in the old place and needs to be moved
-		[fileManager moveItemAtURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", self.databaseFolderPath, [ settingsS.urlString md5]]] 
-							 toURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@cacheQueue.db", settingsS.cachesPath, [ settingsS.urlString md5]]] error:nil];
-	}
+	// Handle moving the song cache database if necessary
+	path = [NSString stringWithFormat:@"%@/database/%@cacheQueue.db", settingsS.currentCacheRoot, settingsS.urlString.md5];
+    if (![defaultManager fileExistsAtPath:path])
+    {
+        // First check to see if it's in the old Library/Caches location
+        NSString *oldPath = [NSString stringWithFormat:@"%@/%@cacheQueue.db", settingsS.cachesPath, settingsS.urlString.md5];
+        if ([defaultManager fileExistsAtPath:oldPath])
+        {
+            // It exists there, so move it to the new location
+            NSError *error;
+            [defaultManager moveItemAtPath:oldPath toPath:path error:&error];
+            
+            if (error)
+            {
+                DDLogError(@"Error moving cache path from %@ to %@", oldPath, path);
+            }
+            else
+            {
+                DDLogInfo(@"Moved cache path from %@ to %@", oldPath, path);
+                
+                // Now set the file not to be backed up
+                [[NSURL fileURLWithPath:path] addSkipBackupAttribute];
+            }
+        }
+    }
 	
-	path = [NSString stringWithFormat:@"%@/%@cacheQueue.db", settingsS.cachesPath, [settingsS.urlString md5]];
 	self.cacheQueueDbQueue = [FMDatabaseQueue databaseQueueWithPath:path];
 	[self.cacheQueueDbQueue inDatabase:^(FMDatabase *db)
 	{

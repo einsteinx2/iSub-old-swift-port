@@ -17,9 +17,16 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (unsigned long long)totalSpace
 {
-	NSString *path = settingsS.cachesPath;
-	NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfFileSystemForPath:path error:NULL];
-	return [[attributes objectForKey:NSFileSystemSize] unsignedLongLongValue];
+	NSDictionary *attributes;
+    unsigned long long size = 0;
+    
+    attributes = [[NSFileManager defaultManager] attributesOfFileSystemForPath:settingsS.songCachePath error:NULL];
+	size = [attributes[NSFileSystemSize] unsignedLongLongValue];
+    
+    attributes = [[NSFileManager defaultManager] attributesOfFileSystemForPath:settingsS.tempCachePath error:NULL];
+	size += [attributes[NSFileSystemSize] unsignedLongLongValue];
+    
+    return size;
 }
 
 - (unsigned long long)freeSpace
@@ -228,19 +235,40 @@ LOG_LEVEL_ISUB_DEFAULT
 - (void)setup
 {
 	NSFileManager *defaultManager = [NSFileManager defaultManager];
-	
-	// Move the cache path if necessary
-	if ([defaultManager fileExistsAtPath:[settingsS.documentsPath stringByAppendingPathComponent:@"songCache"]]) 
-	{
-		// The song cache is in the old place, move it
-		[defaultManager moveItemAtURL:[NSURL fileURLWithPath:[settingsS.documentsPath stringByAppendingPathComponent:@"songCache"]] 
-								toURL:[NSURL fileURLWithPath:settingsS.songCachePath] error:nil];
-	}
-    
+        
 	// Make sure songCache directory exists, if not create it
-	if (![[NSFileManager defaultManager] fileExistsAtPath:settingsS.songCachePath]) 
+	if (![defaultManager fileExistsAtPath:settingsS.songCachePath])
 	{
-		[[NSFileManager defaultManager] createDirectoryAtPath:settingsS.songCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
+        // First check to see if it's in the old Library/Caches location
+        NSString *oldPath = [settingsS.cachesPath stringByAppendingPathComponent:@"songCache"];
+        if ([defaultManager fileExistsAtPath:oldPath])
+        {
+            // It exists there, so move it to the new location
+            NSError *error;
+            [defaultManager moveItemAtPath:oldPath toPath:settingsS.songCachePath error:&error];
+            
+            if (error)
+            {
+                DDLogError(@"Error moving cache path from %@ to %@", oldPath, settingsS.songCachePath);
+            }
+            else
+            {
+                DDLogInfo(@"Moved cache path from %@ to %@", oldPath, settingsS.songCachePath);
+                
+                // Now set all of the files to not be backed up
+                NSArray *cachedSongNames = [defaultManager contentsOfDirectoryAtPath:settingsS.songCachePath error:nil];
+                for (NSString *songName in cachedSongNames)
+                {
+                    NSURL *fileUrl = [NSURL fileURLWithPath:[settingsS.songCachePath stringByAppendingPathComponent:songName]];
+                    [fileUrl addSkipBackupAttribute];
+                }
+            }
+        }
+        else
+        {
+            // It doesn't exist in the old location, so just create it in the new one
+            [defaultManager createDirectoryAtPath:settingsS.songCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
+        }
 	}
     
     // Rename any cache files that still have extensions
