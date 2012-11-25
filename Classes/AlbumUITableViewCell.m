@@ -86,8 +86,8 @@
 {
 	[super showOverlay];
 	
-	self.overlayView.downloadButton.alpha = (float)!viewObjectsS.isOfflineMode;
-	self.overlayView.downloadButton.enabled = !viewObjectsS.isOfflineMode;
+	self.overlayView.downloadButton.alpha = (float)!settingsS.isOfflineMode;
+	self.overlayView.downloadButton.enabled = !settingsS.isOfflineMode;
 }
 
 - (void)downloadAction

@@ -7,7 +7,6 @@
 //
 
 #import "StoreViewController.h"
-#import "MKStoreManager.h"
 #import "StoreUITableViewCell.h"
 
 @implementation StoreViewController

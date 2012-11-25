@@ -14,12 +14,14 @@
 #include <netinet/in.h> 
 #include <netdb.h>
 #include <arpa/inet.h>
-#import "MKStoreManager.h"
 #import "IntroViewController.h"
-#import "SFHFKeychainUtils.h"
-#import "ISMSUpdateChecker.h"
+#import <LibSub/SFHFKeychainUtils.h>
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
+#import "iPhoneStreamingPlayerViewController.h"
+#import <LibSub/ISMSUpdateChecker.h>
+#import <LibSub/MKStoreManager.h>
+#import <MediaPlayer/MediaPlayer.h>
 
 @implementation iSubAppDelegate
 
@@ -52,6 +54,13 @@
 {
     NSLog(@"uncaught exception: %@", exception.description);
 }*/
+
+- (void)showPlayer
+{
+    iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
+    streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
+    [(UINavigationController*)self.currentTabBarController.selectedViewController pushViewController:streamingPlayerViewController animated:YES];
+}
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application
 {
@@ -107,7 +116,7 @@
 	// Handle offline mode
 	if (settingsS.isForceOfflineMode)
 	{
-		viewObjectsS.isOfflineMode = YES;
+		settingsS.isOfflineMode = YES;
 		
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Offline mode switch on, entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		alert.tag = 4;
@@ -115,7 +124,7 @@
 	}
 	else if ([self.wifiReach currentReachabilityStatus] == NotReachable)
 	{
-		viewObjectsS.isOfflineMode = YES;
+		settingsS.isOfflineMode = YES;
 		
 		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"No network detected, entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 		alert.tag = 4;
@@ -123,7 +132,7 @@
 	}
 	else 
 	{
-		viewObjectsS.isOfflineMode = NO;
+		settingsS.isOfflineMode = NO;
 	}
 	
 //DLog(@"urlString: %@", settingsS.urlString);
@@ -131,7 +140,7 @@
 	self.showIntro = NO;
 	if (settingsS.isTestServer)
 	{
-		if (viewObjectsS.isOfflineMode)
+		if (settingsS.isOfflineMode)
 		{
 			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome!" message:@"Looks like this is your first time using iSub or you haven't set up your Subsonic account info yet.\n\nYou'll need an internet connection to watch the intro video and use the included demo account." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 			[alert performSelector:@selector(show) withObject:nil afterDelay:1.0];
@@ -157,7 +166,7 @@
 	[self loadInAppPurchaseStore];
 		
 	// Setup Twitter connection
-	if (!viewObjectsS.isOfflineMode && [[NSUserDefaults standardUserDefaults] objectForKey:@"twitterAuthData"])
+	if (!settingsS.isOfflineMode && [[NSUserDefaults standardUserDefaults] objectForKey:@"twitterAuthData"])
 	{
 		[socialS createTwitterEngine];
 	}
@@ -200,8 +209,8 @@
 		[vc logMethods];
 	//DLog(@"toolbarItems: %@", [vc toolbarItems]);*/
 		
-		//DLog(@"isOfflineMode: %i", viewObjectsS.isOfflineMode);
-		if (viewObjectsS.isOfflineMode)
+		//DLog(@"isOfflineMode: %i", settingsS.isOfflineMode);
+		if (settingsS.isOfflineMode)
 		{
 			//DLog(@"--------------- isOfflineMode");
 			self.currentTabBarController = self.offlineTabBarController;
@@ -235,7 +244,7 @@
 //DLog(@"urlString: %@", settingsS.urlString);
 	
 	// Check the server status in the background
-    if (!viewObjectsS.isOfflineMode)
+    if (!settingsS.isOfflineMode)
 	{
 		//DLog(@"adding loading screen");
 		[viewObjectsS showAlbumLoadingScreen:self.window sender:self];
@@ -243,9 +252,24 @@
 		[self checkServer];
 	}
     
+    [NSNotificationCenter addObserverOnMainThread:self selector:@selector(showPlayer) name:ISMSNotification_ShowPlayer object:nil];
+    [NSNotificationCenter addObserverOnMainThread:self selector:@selector(playVideoNotification:) name:ISMSNotification_PlayVideo object:nil];
+    [NSNotificationCenter addObserverOnMainThread:self selector:@selector(removeMoviePlayer) name:ISMSNotification_RemoveMoviePlayer object:nil];
+    [NSNotificationCenter addObserverOnMainThread:self selector:@selector(jukeboxToggled) name:ISMSNotification_JukeboxDisabled object:nil];
+    [NSNotificationCenter addObserverOnMainThread:self selector:@selector(jukeboxToggled) name:ISMSNotification_JukeboxEnabled object:nil];
+        
 	// Recover current state if player was interrupted
 	[ISMSStreamManager sharedInstance];
 	[musicS resumeSong];
+}
+
+- (void)jukeboxToggled
+{
+    // Change the background color when jukebox is on
+    if (settingsS.isJukeboxEnabled)
+        appDelegateS.window.backgroundColor = viewObjectsS.jukeboxColor;
+    else
+        appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
 }
 
 - (void)oneTimeRun
@@ -346,7 +370,7 @@
 	// if it's not then display an alert and allow user to change settings if they want.
 	// This is in case the user is, for instance, connected to a wifi network but does not 
 	// have internet access or if the host url entered was wrong.
-    if (!viewObjectsS.isOfflineMode) 
+    if (!settingsS.isOfflineMode) 
 	{
         self.statusLoader = [ISMSStatusLoader loaderWithDelegate:self];
         if ([settingsS.serverType isEqualToString:SUBSONIC])
@@ -398,7 +422,7 @@
     {
         [viewObjectsS hideLoadingScreen];
         
-        if(!viewObjectsS.isOfflineMode)
+        if(!settingsS.isOfflineMode)
         {
             /*UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", [error code], [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Settings", nil];
              alert.tag = 3;
@@ -439,7 +463,7 @@
         //DLog(@"server verification passed, hiding loading screen");
         [viewObjectsS hideLoadingScreen];
         
-        if (!IS_IPAD() && !viewObjectsS.isOfflineMode)
+        if (!IS_IPAD() && !settingsS.isOfflineMode)
             [viewObjectsS orderMainTabBarController];
         
         // Start the queued downloads if Wifi is available
@@ -834,12 +858,12 @@
 
 - (void)enterOfflineModeForce
 {
-	if (viewObjectsS.isOfflineMode)
+	if (settingsS.isOfflineMode)
 		return;
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_EnteringOfflineMode];
 	
-	viewObjectsS.isOfflineMode = YES;
+	settingsS.isOfflineMode = YES;
 		
 	[audioEngineS.player stop];
 	
@@ -876,7 +900,7 @@
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_EnteringOnlineMode];
 		
-	viewObjectsS.isOfflineMode = NO;
+	settingsS.isOfflineMode = NO;
 	
 	[audioEngineS.player stop];
 	
@@ -909,7 +933,7 @@
 	if ([curReach currentReachabilityStatus] == NotReachable)
 	{
 		//Change over to offline mode
-		if (!viewObjectsS.isOfflineMode)
+		if (!settingsS.isOfflineMode)
 		{
 			[self enterOfflineMode];
 		}
@@ -918,7 +942,7 @@
 	{
 		[self checkServer];
 		
-		if (viewObjectsS.isOfflineMode)
+		if (settingsS.isOfflineMode)
 		{
 			[self enterOnlineMode];
 		}
@@ -1075,7 +1099,7 @@
 			
 			if (buttonIndex == 1)
 			{
-				if (viewObjectsS.isOfflineMode)
+				if (settingsS.isOfflineMode)
 				{
 					[self enterOnlineModeForce];
 				}
@@ -1344,14 +1368,162 @@
 	[alert show];
 }
 
+#pragma mark - Movie Playing
 
-#pragma mark -
-#pragma mark Memory management
-#pragma mark -
+- (void)createMoviePlayer
+{
+    if (!self.moviePlayer)
+    {
+        self.moviePlayer = [[MPMoviePlayerController alloc] init];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayerExitedFullscreen:) name:MPMoviePlayerDidExitFullscreenNotification object:self.moviePlayer];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayBackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:self.moviePlayer];
+        
+        self.moviePlayer.controlStyle = MPMovieControlStyleDefault;
+        self.moviePlayer.shouldAutoplay = YES;
+        self.moviePlayer.movieSourceType = MPMovieSourceTypeStreaming;
+        self.moviePlayer.allowsAirPlay = YES;
+        
+        if (IS_IPAD())
+        {
+            [appDelegateS.ipadRootViewController.menuViewController.playerHolder addSubview:self.moviePlayer.view];
+            self.moviePlayer.view.frame = self.moviePlayer.view.superview.bounds;
+        }
+        else
+        {
+            [appDelegateS.mainTabBarController.view addSubview:self.moviePlayer.view];
+            self.moviePlayer.view.frame = CGRectZero;
+        }
+        
+        [self.moviePlayer setFullscreen:YES animated:YES];
+    }
+}
 
-//
-// Not necessary in the application delegate, all memory is automatically reclaimed by OS on closing
-//
+- (void)removeMoviePlayer
+{
+    if (self.moviePlayer)
+    {
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:MPMoviePlayerDidExitFullscreenNotification object:self.moviePlayer];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:self.moviePlayer];
+        
+        // Dispose of any existing movie player
+        [self.moviePlayer stop];
+        [self.moviePlayer.view removeFromSuperview];
+        self.moviePlayer = nil;
+    }
+}
+
+- (void)playVideoNotification:(NSNotification *)notification
+{
+    id aSong = notification.userInfo[@"song"];
+    if (aSong && [aSong isKindOfClass:[ISMSSong class]])
+    {
+        [self playVideo:aSong];
+    }
+}
+
+- (void)playVideo:(ISMSSong *)aSong
+{
+    NSString *serverType = settingsS.serverType;
+    if (!aSong.isVideo || (([serverType isEqualToString:SUBSONIC] || [serverType isEqualToString:UBUNTU_ONE]) && !settingsS.isVideoSupported))
+        return;
+    
+    if (IS_IPAD())
+    {
+        // Turn off repeat one so user doesn't get stuck
+        if (playlistS.repeatMode == ISMSRepeatMode_RepeatOne)
+            playlistS.repeatMode = ISMSRepeatMode_Normal;
+    }
+    
+    if ([serverType isEqualToString:SUBSONIC] || [serverType isEqualToString:UBUNTU_ONE])
+    {
+        [self playSubsonicVideo:aSong];
+    }
+    else if ([serverType isEqualToString:WAVEBOX])
+    {
+        [self playWaveBoxVideo:aSong];
+    }
+}
+
+- (void)playSubsonicVideo:(ISMSSong *)aSong
+{
+    [audioEngineS.player stop];
+    
+    if (!aSong.itemId)
+        return;
+    
+    NSDictionary *parameters = @{ @"id" : aSong.itemId, @"bitRate" : @[@"1536", @"1024",@"512", @"256", @"60"] };
+    NSURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"hls" parameters:parameters];
+    
+    NSString *urlString = [NSString stringWithFormat:@"%@?%@", request.URL.absoluteString, [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]];
+    
+    //NSString *urlString = [NSString stringWithFormat:@"%@/rest/hls.m3u8?c=iSub&v=1.8.0&u=%@&p=%@&id=%@", settingsS.urlString, [settingsS.username URLEncodeString], [settingsS.password URLEncodeString], aSong.itemId];
+    DLog(@"urlString: %@", urlString);
+    
+    [self createMoviePlayer];
+    
+    self.moviePlayer.contentURL = [NSURL URLWithString:urlString];
+    //[moviePlayer prepareToPlay];
+    [self.moviePlayer play];
+}
+
+- (void)playWaveBoxVideo:(ISMSSong *)aSong
+{
+    [audioEngineS.player stop];
+    
+    if (!aSong.itemId)
+        return;
+    
+    NSDictionary *parameters = @{ @"id" : aSong.itemId, @"transQuality" : @[@"1536", @"1024",@"512", @"256", @"60"] };
+    NSURLRequest *request = [NSMutableURLRequest requestWithPMSAction:@"transcodehls" parameters:parameters];
+    
+    NSString *urlString = [NSString stringWithFormat:@"%@?%@", request.URL.absoluteString, [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]];
+    
+    //NSString *urlString = [NSString stringWithFormat:@"%@/rest/hls.m3u8?c=iSub&v=1.8.0&u=%@&p=%@&id=%@", settingsS.urlString, [settingsS.username URLEncodeString], [settingsS.password URLEncodeString], aSong.itemId];
+    DLog(@"urlString: %@", urlString);
+    
+    [self createMoviePlayer];
+    
+    self.moviePlayer.contentURL = [NSURL URLWithString:urlString];
+    //[moviePlayer prepareToPlay];
+    [self.moviePlayer play];
+}
+
+- (void)moviePlayerExitedFullscreen:(NSNotification *)notification
+{
+    // Hack to fix broken navigation bar positioning
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    UIView *view = [window.subviews lastObject];
+    if (view)
+    {
+        [view removeFromSuperview];
+        [window addSubview:view];
+    }
+    
+    if (!IS_IPAD())
+    {
+        [self removeMoviePlayer];
+    }
+}
+
+- (void)moviePlayBackDidFinish:(NSNotification *)notification
+{
+    DLog(@"userInfo: %@", notification.userInfo);
+    if (notification.userInfo)
+    {
+        NSNumber *reason = [notification.userInfo objectForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey];
+        if (reason && reason.integerValue == MPMovieFinishReasonPlaybackEnded)
+        {
+            // Playback ended normally, so start the next item
+            [playlistS incrementIndex];
+            [musicS playSongAtPosition:playlistS.currentIndex];
+        }
+    }
+    else
+    {
+        //[self removeMoviePlayer];
+    }
+}
 
 
 @end

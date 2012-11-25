@@ -7,7 +7,6 @@
 //
 
 #import "GenresAlbumViewController.h"
-#import "MusicSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "GenresAlbumUITableViewCell.h"
 #import "GenresSongUITableViewCell.h"
@@ -171,7 +170,7 @@
 	FMDatabaseQueue *dbQueue;
 	NSString *query;
 	
-	if (viewObjectsS.isOfflineMode)
+	if (settingsS.isOfflineMode)
 	{
 		dbQueue = databaseS.songCacheDbQueue;
 		query = [NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment];
@@ -237,7 +236,7 @@
 	FMDatabaseQueue *dbQueue;
 	NSString *query;
 	
-	if (viewObjectsS.isOfflineMode)
+	if (settingsS.isOfflineMode)
 	{
 		dbQueue = databaseS.songCacheDbQueue;
 		query = [NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", (segment - 1), segment];
@@ -342,7 +341,7 @@
 		
 		NSString *md5 = [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:0];
 		NSString *coverArtId;
-		if (viewObjectsS.isOfflineMode) {
+		if (settingsS.isOfflineMode) {
 			coverArtId = [databaseS.songCacheDbQueue stringForQuery:@"SELECT coverArtId FROM genresSongs WHERE md5 = ?", md5];
 		}
 		else {
@@ -399,7 +398,7 @@
 			cell.songDurationLabel.text = @"";
 		
 		cell.backgroundView = [[UIView alloc] init];
-		if (viewObjectsS.isOfflineMode)
+		if (settingsS.isOfflineMode)
 		{
 			if(indexPath.row % 2 == 0)
 			{
@@ -451,7 +450,7 @@
 			
 			FMDatabaseQueue *dbQueue;
 			NSString *query;
-			if (viewObjectsS.isOfflineMode)
+			if (settingsS.isOfflineMode)
 			{
 				dbQueue = databaseS.songCacheDbQueue;
 				query = [NSString stringWithFormat:@"SELECT md5, segs, seg%i FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", (segment + 1), segment, (segment + 1), (segment + 1)];

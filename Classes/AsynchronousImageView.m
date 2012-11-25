@@ -10,9 +10,7 @@
 //
 
 #import "AsynchronousImageView.h"
-#import "MusicSingleton.h"
 #import "PageControlViewController.h"
-#import "SUSCoverArtDAO.h"
 #import "AsynchronousImageViewDelegate.h"
 
 LOG_LEVEL_ISUB_DEBUG

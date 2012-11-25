@@ -6,22 +6,17 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "MusicSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "PageControlViewController.h"
 #import <QuartzCore/CoreAnimation.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import <CFNetwork/CFNetwork.h>
 #import <QuartzCore/QuartzCore.h>
-#import "PlaylistSingleton.h"
 #import "EqualizerViewController.h"
-#import "SUSCoverArtDAO.h"
 #import "OBSlider.h"
-#import "ISMSStreamManager.h"
-#import "ISMSStreamHandler.h"
 #import "StoreViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
-#import "FMDatabaseQueue.h"
+#import <LibSub/ISMSStreamHandler.h>
 
 #define downloadProgressBorder 4.
 #define downloadProgressWidth (self.progressSlider.frame.size.width - (downloadProgressBorder * 2))
@@ -1498,7 +1493,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
         //DLog(@"table: %@", table);
 		
 		// Save the playlist
-		NSString *dbName = viewObjectsS.isOfflineMode ? @"%@/offlineCurrentPlaylist.db" : @"%@/%@currentPlaylist.db";
+		NSString *dbName = settingsS.isOfflineMode ? @"%@/offlineCurrentPlaylist.db" : @"%@/%@currentPlaylist.db";
 		[db executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:dbName, settingsS.databasePath, settingsS.urlString.md5], @"currentPlaylistDb"];
 		
 		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmark%i (%@)", bookmarkId, [ISMSSong standardSongColumnSchema]]];

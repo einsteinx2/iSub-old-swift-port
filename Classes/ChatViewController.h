@@ -6,7 +6,6 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "ISMSLoaderDelegate.h"
 
 @class CustomUITextView, EGORefreshTableHeaderView, SUSChatDAO;
 

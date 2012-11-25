@@ -8,19 +8,14 @@
 
 #import "ServerListViewController.h"
 #import "SubsonicServerEditViewController.h"
-#import "MusicSingleton.h"
 #import "SettingsTabViewController.h"
 #import "HelpTabViewController.h"
 #import "FoldersViewController.h"
 #import "ServerTypeViewController.h"
 #import "UbuntuServerEditViewController.h"
 #import "PMSServerEditViewControllerViewController.h"
-#import "SUSAllSongsLoader.h"
-#import "ISMSStreamManager.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
-#import "PMSLoginLoader.h"
-#import "SUSStatusLoader.h"
 
 @implementation ServerListViewController
 
@@ -272,14 +267,14 @@
 		if ([SUSAllSongsLoader isLoading])
 		{
 		//DLog(@"detected all songs loading");
-			viewObjectsS.cancelLoading = YES;
+			settingsS.isCancelLoading = YES;
 		}
 		
 		
-		while (viewObjectsS.cancelLoading)
+		while (settingsS.isCancelLoading)
 		{
 			//NSLog(@"waiting for the load to cancel before continuing");
-			if (!viewObjectsS.cancelLoading)
+			if (!settingsS.isCancelLoading)
 				break;
 		}
 		
@@ -289,9 +284,9 @@
 		[audioEngineS.player stop];
 		 settingsS.isJukeboxEnabled = NO;
 		
-		if (viewObjectsS.isOfflineMode)
+		if (settingsS.isOfflineMode)
 		{
-			viewObjectsS.isOfflineMode = NO;
+			settingsS.isOfflineMode = NO;
 			
 			if (IS_IPAD())
 			{

@@ -7,7 +7,6 @@
 //
 
 #import "PlaylistsViewController.h"
-#import "MusicSingleton.h"
 #import "ServerListViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "PlaylistsUITableViewCell.h"
@@ -15,8 +14,6 @@
 #import "LocalPlaylistsUITableViewCell.h"
 #import "PlaylistSongsViewController.h"
 #import "StoreViewController.h"
-#import "SUSServerPlaylistsDAO.h"
-#import "PlaylistSingleton.h"
 #import "UIViewController+PushViewControllerCustom.h"
 
 @interface PlaylistsViewController (Private)
@@ -109,14 +106,14 @@
 	
     self.title = @"Playlists";
 	
-	if (viewObjectsS.isOfflineMode)
+	if (settingsS.isOfflineMode)
 		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)];
 	
 	// Setup segmented control in the header view
 	self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
 	self.headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
 	
-	if (viewObjectsS.isOfflineMode)
+	if (settingsS.isOfflineMode)
 		self.segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Current", @"Offline Playlists", nil]];
 	else
 		self.segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Current", @"Local", @"Server", nil]];
@@ -925,7 +922,7 @@
 		{
 			if (!self.tableView.editing)
 			{
-				if (viewObjectsS.isOfflineMode)
+				if (settingsS.isOfflineMode)
 				{
 					[self showSavePlaylistTextBoxAlert];
 				}
@@ -1100,13 +1097,13 @@
 		[self.playlistNameTextField resignFirstResponder];
 		if(buttonIndex == 1)
 		{
-			if (self.savePlaylistLocal || viewObjectsS.isOfflineMode)
+			if (self.savePlaylistLocal || settingsS.isOfflineMode)
 			{
 				// Check if the playlist exists, if not create the playlist table and add the entry to localPlaylists table
 				NSString *test = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT md5 FROM localPlaylists WHERE md5 = ?", [self.playlistNameTextField.text md5]];
 				if (!test)
 				{
-					NSString *databaseName = viewObjectsS.isOfflineMode ? @"offlineCurrentPlaylist.db" : [NSString stringWithFormat:@"%@currentPlaylist.db", [settingsS.urlString md5]];
+					NSString *databaseName = settingsS.isOfflineMode ? @"offlineCurrentPlaylist.db" : [NSString stringWithFormat:@"%@currentPlaylist.db", [settingsS.urlString md5]];
 					NSString *currTable = settingsS.isJukeboxEnabled ? @"jukeboxCurrentPlaylist" : @"currentPlaylist";
 					NSString *shufTable = settingsS.isJukeboxEnabled ? @"jukeboxShufflePlaylist" : @"shufflePlaylist";
 					NSString *table = playlistS.isShuffle ? shufTable : currTable;
@@ -1151,9 +1148,9 @@
 	{
 		if(buttonIndex == 1)
 		{
-			if (self.savePlaylistLocal || viewObjectsS.isOfflineMode)
+			if (self.savePlaylistLocal || settingsS.isOfflineMode)
 			{
-				NSString *databaseName = viewObjectsS.isOfflineMode ? @"offlineCurrentPlaylist.db" : [NSString stringWithFormat:@"%@currentPlaylist.db", [settingsS.urlString md5]];
+				NSString *databaseName = settingsS.isOfflineMode ? @"offlineCurrentPlaylist.db" : [NSString stringWithFormat:@"%@currentPlaylist.db", [settingsS.urlString md5]];
 				NSString *currTable = settingsS.isJukeboxEnabled ? @"jukeboxCurrentPlaylist" : @"currentPlaylist";
 				NSString *shufTable = settingsS.isJukeboxEnabled ? @"jukeboxShufflePlaylist" : @"shufflePlaylist";
 				NSString *table = playlistS.isShuffle ? shufTable : currTable;

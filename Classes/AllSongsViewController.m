@@ -8,16 +8,14 @@
 
 
 #import "AllSongsViewController.h"
-#import "MusicSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "AllSongsUITableViewCell.h"
 #import "FoldersViewController.h"
 #import "CustomUITableView.h"
-#import "SUSAllSongsDAO.h"
-#import "SUSAllSongsLoader.h"
 #import "EGORefreshTableHeaderView.h"
 #import "UIViewController+PushViewControllerCustom.h"
+#import "LoadingScreen.h"
 
 @interface AllSongsViewController (Private)
 - (void)hideLoadingScreen;

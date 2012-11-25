@@ -9,7 +9,6 @@
 #import "GenresViewController.h"
 #import "GenresArtistViewController.h"
 #import "GenresGenreUITableViewCell.h"
-#import "MusicSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
@@ -43,7 +42,7 @@
 	
 	self.title = @"Genres";
 	
-	if (viewObjectsS.isOfflineMode)
+	if (settingsS.isOfflineMode)
 		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)];
 	
 	//Set defaults
@@ -80,7 +79,7 @@
 		textLabel.font = [UIFont boldSystemFontOfSize:32];
 		textLabel.textAlignment = UITextAlignmentCenter;
 		textLabel.numberOfLines = 0;
-		if (viewObjectsS.isOfflineMode) {
+		if (settingsS.isOfflineMode) {
 			[textLabel setText:@"No Cached\nSongs"];
 		}
 		else {
@@ -114,7 +113,7 @@
 		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
 	}
 	
-	if (viewObjectsS.isOfflineMode)
+	if (settingsS.isOfflineMode)
 	{
 		if ([databaseS.songCacheDbQueue intForQuery:@"SELECT COUNT(*) FROM genres"] == 0)
 		{
@@ -172,7 +171,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
     // Return the number of rows in the section.
-	if (viewObjectsS.isOfflineMode)
+	if (settingsS.isOfflineMode)
 		return [databaseS.songCacheDbQueue intForQuery:@"SELECT COUNT(*) FROM genres"];
 	else
 		return [databaseS.genresDbQueue intForQuery:@"SELECT COUNT(*) FROM genres"];
@@ -196,7 +195,7 @@
 	else
 		cell.backgroundView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
 	
-	if (viewObjectsS.isOfflineMode)
+	if (settingsS.isOfflineMode)
 	{
 		cell.genreNameLabel.text = [databaseS.songCacheDbQueue stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
 	}
@@ -220,7 +219,7 @@
 	if (viewObjectsS.isCellEnabled)
 	{
 		GenresArtistViewController *artistViewController = [[GenresArtistViewController alloc] initWithNibName:@"GenresArtistViewController" bundle:nil];
-		if (viewObjectsS.isOfflineMode) 
+		if (settingsS.isOfflineMode) 
 		{
 			NSString *title = [databaseS.songCacheDbQueue stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
 			artistViewController.title = [NSString stringWithString:title ? title : @""];
@@ -235,7 +234,7 @@
 		FMDatabaseQueue *dbQueue;
 		NSString *query;
 		
-		if (viewObjectsS.isOfflineMode) 
+		if (settingsS.isOfflineMode) 
 		{
 			dbQueue = databaseS.songCacheDbQueue;
 			query = @"SELECT seg1 FROM cachedSongsLayout a INNER JOIN genresSongs b ON a.md5 = b.md5 WHERE b.genre = ? GROUP BY seg1 ORDER BY seg1 COLLATE NOCASE";

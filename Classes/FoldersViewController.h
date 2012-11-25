@@ -6,7 +6,6 @@
 //  Copyright Ben Baron 2010. All rights reserved.
 //
 
-#import "ISMSLoaderDelegate.h"
 #import "FolderDropdownDelegate.h"
 
 @class ISMSArtist, EGORefreshTableHeaderView, FolderDropdownControl, SUSRootFoldersDAO;

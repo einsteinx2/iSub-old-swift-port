@@ -8,14 +8,13 @@
 
 #import "SearchSongsViewController.h"
 #import "SearchSongUITableViewCell.h"
-#import "MusicSingleton.h"
-#import "SearchXMLParser.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "ArtistUITableViewCell.h"
 #import "AlbumUITableViewCell.h"
 #import "AlbumViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
+#import <LibSub/SearchXMLParser.h>
 
 @implementation SearchSongsViewController
 

@@ -6,7 +6,6 @@
 //  Copyright Ben Baron 2010. All rights reserved.
 //
 
-#import "ISMSLoaderDelegate.h"
 
 @class ISMSSong, ISMSAlbum, SUSAllSongsDAO, LoadingScreen, EGORefreshTableHeaderView;
 

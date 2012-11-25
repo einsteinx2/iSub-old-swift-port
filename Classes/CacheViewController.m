@@ -8,14 +8,11 @@
 
 #import "CacheViewController.h"
 #import "CacheAlbumViewController.h"
-#import "MusicSingleton.h"
 #import "CacheQueueSongUITableViewCell.h"
 #import "ServerListViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "CacheArtistUITableViewCell.h"
 #import "StoreViewController.h"
-#import "PlaylistSingleton.h"
-#import "ISMSCacheQueueManager.h"
 #import "UIViewController+PushViewControllerCustom.h"
 
 @interface CacheViewController ()
@@ -114,7 +111,7 @@
 		
 	self.tableView.separatorColor = [UIColor clearColor];
 	
-	if (viewObjectsS.isOfflineMode)
+	if (settingsS.isOfflineMode)
 	{
 		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] 
 																				  style:UIBarButtonItemStyleBordered 
@@ -132,13 +129,13 @@
 	self.segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.segmentedControl.tintColor = [UIColor colorWithWhite:.57 alpha:1];
 	self.segmentedControl.selectedSegmentIndex = 0;
-	if (viewObjectsS.isOfflineMode) 
+	if (settingsS.isOfflineMode) 
 	{
 		self.segmentedControl.hidden = YES;
 	}
 	[self.headerView addSubview:self.segmentedControl];
 	
-	if (viewObjectsS.isOfflineMode) 
+	if (settingsS.isOfflineMode) 
 	{
 		self.headerView.frame = CGRectMake(0, 0, 320, 50);
 		self.headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -202,7 +199,7 @@
 	[self.tableView addHeaderShadow];
 	[self.tableView addFooterShadow];
 	
-	if (viewObjectsS.isOfflineMode)
+	if (settingsS.isOfflineMode)
 	{
 		self.title = @"Artists";
 	}
@@ -353,7 +350,7 @@
 		{
 			[self removeNoSongsScreen];
 			
-			if (viewObjectsS.isOfflineMode == NO)
+			if (settingsS.isOfflineMode == NO)
 			{
 				[self addSaveEditButtons];
 			}
@@ -569,7 +566,7 @@
 				else
 					self.songsCountLabel.text = [NSString stringWithFormat:@"%i Songs", cachedSongsCount];
 			}
-			else if (viewObjectsS.isOfflineMode == NO)
+			else if (settingsS.isOfflineMode == NO)
 			{
 				[self addSaveEditButtons];
 			}

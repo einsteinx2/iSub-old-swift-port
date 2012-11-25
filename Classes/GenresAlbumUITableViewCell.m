@@ -7,7 +7,6 @@
 //
 
 #import "GenresAlbumUITableViewCell.h"
-#import "MusicSingleton.h"
 #import "CellOverlay.h"
 
 
@@ -65,8 +64,8 @@
 {
 	[super showOverlay];
 
-	self.overlayView.downloadButton.alpha = (float)!viewObjectsS.isOfflineMode;
-	self.overlayView.downloadButton.enabled = !viewObjectsS.isOfflineMode;
+	self.overlayView.downloadButton.alpha = (float)!settingsS.isOfflineMode;
+	self.overlayView.downloadButton.enabled = !settingsS.isOfflineMode;
 }
 
 - (void)downloadAllSongs
@@ -74,7 +73,7 @@
 	FMDatabaseQueue *dbQueue;
 	NSString *query;
 	
-	if (viewObjectsS.isOfflineMode)
+	if (settingsS.isOfflineMode)
 	{
 		dbQueue = databaseS.songCacheDbQueue;
 		query = [NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", self.segment, (self.segment + 1)];
@@ -129,7 +128,7 @@
 	FMDatabaseQueue *dbQueue;
 	NSString *query;
 	
-	if (viewObjectsS.isOfflineMode)
+	if (settingsS.isOfflineMode)
 	{
 		dbQueue = databaseS.songCacheDbQueue;
 		query = [NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", self.segment, (self.segment + 1)];

@@ -7,7 +7,6 @@
 //
 
 #import "CacheAlbumViewController.h"
-#import "MusicSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "CacheAlbumUITableViewCell.h"
 #import "CacheSongUITableViewCell.h"

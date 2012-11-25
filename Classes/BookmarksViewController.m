@@ -8,11 +8,9 @@
 
 #import "BookmarksViewController.h"
 #import "BookmarkUITableViewCell.h"
-#import "MusicSingleton.h"
 #import "ServerListViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
-#import "FMDatabaseQueue.h"
 
 @implementation BookmarksViewController
 
@@ -50,7 +48,7 @@
 	
 	self.title = @"Bookmarks";
 	
-	if (viewObjectsS.isOfflineMode)
+	if (settingsS.isOfflineMode)
 		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)];
 	
 	if (IS_IPAD())
@@ -109,7 +107,7 @@
 		textLabel.font = [UIFont boldSystemFontOfSize:32];
 		textLabel.textAlignment = UITextAlignmentCenter;
 		textLabel.numberOfLines = 0;
-		if (viewObjectsS.isOfflineMode) {
+		if (settingsS.isOfflineMode) {
 			[textLabel setText:@"No Offline\nBookmarks"];
 		}
 		else {
@@ -580,7 +578,7 @@
 	if ([databaseS.bookmarksDbQueue tableExists:[NSString stringWithFormat:@"bookmark%i", bookmarkId]])
 	{		
 		// Save the playlist
-		NSString *databaseName = viewObjectsS.isOfflineMode ? @"offlineCurrentPlaylist.db" : [NSString stringWithFormat:@"%@currentPlaylist.db", [settingsS.urlString md5]];
+		NSString *databaseName = settingsS.isOfflineMode ? @"offlineCurrentPlaylist.db" : [NSString stringWithFormat:@"%@currentPlaylist.db", [settingsS.urlString md5]];
 		NSString *currTable = settingsS.isJukeboxEnabled ? @"jukeboxCurrentPlaylist" : @"currentPlaylist";
 		NSString *shufTable = settingsS.isJukeboxEnabled ? @"jukeboxShufflePlaylist" : @"shufflePlaylist";
 		NSString *table = playlistS.isShuffle ? shufTable : currTable;

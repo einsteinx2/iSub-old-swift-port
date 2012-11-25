@@ -7,8 +7,8 @@
 //
 
 #import "AllSongsUITableViewCell.h"
-#import "MusicSingleton.h"
 #import "CellOverlay.h"
+#import "AsynchronousImageView.h"
 
 @implementation AllSongsUITableViewCell
 
@@ -83,10 +83,10 @@
 {	
 	[super showOverlay];
     
-    self.overlayView.downloadButton.alpha = (float)!viewObjectsS.isOfflineMode;
-	self.overlayView.downloadButton.enabled = !viewObjectsS.isOfflineMode;
+    self.overlayView.downloadButton.alpha = (float)!settingsS.isOfflineMode;
+	self.overlayView.downloadButton.enabled = !settingsS.isOfflineMode;
     
-    if (!viewObjectsS.isOfflineMode)
+    if (!settingsS.isOfflineMode)
 	{
 		if ([[databaseS.songCacheDbQueue stringForQuery:@"SELECT finished FROM cachedSongs WHERE md5 = ?", self.md5] isEqualToString:@"YES"])
 		{

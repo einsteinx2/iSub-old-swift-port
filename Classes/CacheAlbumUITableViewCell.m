@@ -9,7 +9,6 @@
 #import "CacheAlbumUITableViewCell.h"
 
 #import "CellOverlay.h"
-#import "ISMSCacheQueueManager.h"
 
 @implementation CacheAlbumUITableViewCell
 

@@ -8,10 +8,8 @@
 
 #import "PlayingViewController.h"
 #import "PlayingUITableViewCell.h"
-#import "MusicSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
-#import "SUSNowPlayingDAO.h"
 #import "EGORefreshTableHeaderView.h"
 #import "UIViewController+PushViewControllerCustom.h"
 

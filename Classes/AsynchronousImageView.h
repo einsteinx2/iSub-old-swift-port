@@ -5,7 +5,6 @@
 //  Created by Слава on 22.10.09.
 //  Copyright 2009 Slava Bushtruk. All rights reserved.
 //
-#import "ISMSLoaderDelegate.h"
 
 @protocol AsynchronousImageViewDelegate;
 @class SUSCoverArtDAO;

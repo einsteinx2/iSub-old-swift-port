@@ -7,7 +7,6 @@
 //
 
 #import "ViewObjectsSingleton.h"
-#import "MKStoreManager.h"
 
 @implementation ViewObjectsSingleton
 
@@ -27,6 +26,11 @@
 	self.HUD = nil;
 }
 
+- (void)showLoadingScreenOnMainWindowNotification:(NSNotification *)notification
+{
+    [self showLoadingScreenOnMainWindowWithMessage:notification.userInfo[@"message"]];
+}
+
 - (void)showLoadingScreenOnMainWindowWithMessage:(NSString *)message
 {	
 	[self showLoadingScreen:appDelegateS.window withMessage:message];
@@ -44,6 +48,16 @@
 	self.HUD.delegate = self;
 	self.HUD.labelText = message ? message : @"Loading";
 	[self.HUD show:YES];
+}
+
+- (void)showAlbumLoadingScreenOnMainWindowNotification:(NSNotification *)notification
+{
+    [self showAlbumLoadingScreenOnMainWindowWithSender:notification.userInfo[@"sender"]];
+}
+
+- (void)showAlbumLoadingScreenOnMainWindowWithSender:(id)sender
+{
+    [self showAlbumLoadingScreen:appDelegateS.window sender:sender];
 }
 
 - (void)showAlbumLoadingScreen:(UIView *)view sender:(id)sender
@@ -124,19 +138,19 @@
 
 - (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
-	if (self.isOfflineMode == NO)
+	if (settingsS.isOfflineMode == NO)
 		[[NSUserDefaults standardUserDefaults] setInteger:appDelegateS.mainTabBarController.selectedIndex forKey:@"mainTabBarControllerSelectedIndex"];
 }
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
-	if (self.isOfflineMode == NO)
+	if (settingsS.isOfflineMode == NO)
 		[[NSUserDefaults standardUserDefaults] setInteger:appDelegateS.mainTabBarController.selectedIndex forKey:@"mainTabBarControllerSelectedIndex"];
 }
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {
-	if (self.isOfflineMode == NO)
+	if (settingsS.isOfflineMode == NO)
 		[[NSUserDefaults standardUserDefaults] setInteger:appDelegateS.mainTabBarController.selectedIndex forKey:@"mainTabBarControllerSelectedIndex"];
 }
 
@@ -283,10 +297,9 @@
 	_cacheButtonImage = [UIImage imageNamed:@"cache-button.png"];
 	_queueButtonImage = [UIImage imageNamed:@"queue-button.png"];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self 
-											 selector:@selector(didReceiveMemoryWarning) 
-												 name:UIApplicationDidReceiveMemoryWarningNotification 
-											   object:nil];
+	[NSNotificationCenter addObserverOnMainThread:self selector:@selector(didReceiveMemoryWarning) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+    [NSNotificationCenter addObserverOnMainThread:self selector:@selector(showAlbumLoadingScreenOnMainWindowNotification:) name:ISMSNotification_ShowAlbumLoadingScreenOnMainWindow object:nil];
+    [NSNotificationCenter addObserverOnMainThread:self selector:@selector(showLoadingScreenOnMainWindowNotification:) name:ISMSNotification_ShowLoadingScreenOnMainWindow object:nil];
 }
 
 + (id)sharedInstance

@@ -7,7 +7,6 @@
 //
 
 #import "HomeAlbumViewController.h"
-#import "MusicSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "AlbumViewController.h"
 #import "AllAlbumsUITableViewCell.h"

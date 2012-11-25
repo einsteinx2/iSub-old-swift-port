@@ -8,7 +8,6 @@
 
 #import "GenresArtistViewController.h"
 #import "GenresAlbumViewController.h"
-#import "MusicSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "GenresArtistUITableViewCell.h"
 #import "UIViewController+PushViewControllerCustom.h"
@@ -168,7 +167,7 @@
 	FMDatabaseQueue *dbQueue;
 	NSString *query;
 	
-	if (viewObjectsS.isOfflineMode)
+	if (settingsS.isOfflineMode)
 	{
 		dbQueue = databaseS.songCacheDbQueue;
 		query = @"SELECT md5 FROM cachedSongsLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE";
@@ -235,7 +234,7 @@
 	// Get the ID of all matching records (everything in genre ordered by artist)
 	FMDatabaseQueue *dbQueue;
 	NSString *query;
-	if (viewObjectsS.isOfflineMode)
+	if (settingsS.isOfflineMode)
 	{
 		dbQueue = databaseS.songCacheDbQueue;
 		query = @"SELECT md5 FROM cachedSongsLayout WHERE genre = ? ORDER BY seg1 COLLATE NOCASE";
@@ -353,7 +352,7 @@
 		
 		FMDatabaseQueue *dbQueue;
 		NSString *query;
-		if (viewObjectsS.isOfflineMode)
+		if (settingsS.isOfflineMode)
 		{
 			dbQueue = databaseS.songCacheDbQueue;
 			query = @"SELECT md5, segs, seg2 FROM cachedSongsLayout WHERE seg1 = ? AND genre = ? GROUP BY seg2 ORDER BY seg2 COLLATE NOCASE";

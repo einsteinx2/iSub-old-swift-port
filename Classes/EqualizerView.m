@@ -13,9 +13,6 @@
 
 #import "EqualizerView.h"
 
-#import "BassParamEqValue.h"
-#import "BassVisualizer.h"
-
 //CLASS IMPLEMENTATIONS:
 
 // A class extension to declare private methods

@@ -9,8 +9,6 @@
 #import "NewHomeViewController.h"
 #import "ServerListViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
-#import "SearchXMLParser.h"
-#import "MusicSingleton.h"
 #import "QuickAlbumsViewController.h"
 #import "ChatViewController.h"
 #import "SearchSongsViewController.h"
@@ -19,10 +17,10 @@
 #import "FolderPickerDialog.h"
 #import "SearchAllViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "PlaylistSingleton.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
+#import <LibSub/SearchXMLParser.h>
 
 @implementation NewHomeViewController
 

@@ -22,3 +22,6 @@
 [submodule "Frameworks/ZipKit"]
 	path = Frameworks/ZipKit
 	url = git@github.com:einsteinx2/ZipKit.git
+[submodule "Frameworks/libSub"]
+	path = Frameworks/libSub
+	url = git@bitbucket.org:einsteinx2/libsub.git

@@ -60,9 +60,8 @@
 @property (strong) NSMutableArray *queueAlbumListOfAlbums;
 @property (strong) NSMutableArray *queueAlbumListOfSongs;
 @property (strong) NSMutableArray *multiDeleteList;
-@property BOOL isOfflineMode;
+//@property BOOL isOfflineMode;
 @property BOOL isOnlineModeAlertShowing;
-@property BOOL cancelLoading;
 
 // Cell colors
 //
@@ -98,6 +97,7 @@
 
 - (void)showLoadingScreenOnMainWindowWithMessage:(NSString *)message;
 - (void)showLoadingScreen:(UIView *)view withMessage:(NSString *)message;
+- (void)showAlbumLoadingScreenOnMainWindowWithSender:(id)sender;
 - (void)showAlbumLoadingScreen:(UIView *)view sender:(id)sender;
 - (void)hideLoadingScreen;
 - (UIColor *) currentLightColor;

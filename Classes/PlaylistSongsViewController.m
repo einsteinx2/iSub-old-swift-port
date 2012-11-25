@@ -7,7 +7,6 @@
 //
 
 #import "PlaylistSongsViewController.h"
-#import "MusicSingleton.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "PlaylistSongUITableViewCell.h"
@@ -49,7 +48,7 @@
 	{
 		self.title = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT playlist FROM localPlaylists WHERE md5 = ?", self.md5];
 		
-		if (!viewObjectsS.isOfflineMode)
+		if (!settingsS.isOfflineMode)
 		{
 			UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
 			headerView.backgroundColor = viewObjectsS.darkNormal;
@@ -485,7 +484,7 @@ static NSString *kName_Error = @"error";
 	}*/
 	
 	// Need to do this for speed
-	NSString *databaseName = viewObjectsS.isOfflineMode ? @"offlineCurrentPlaylist.db" : [NSString stringWithFormat:@"%@currentPlaylist.db", [settingsS.urlString md5]];
+	NSString *databaseName = settingsS.isOfflineMode ? @"offlineCurrentPlaylist.db" : [NSString stringWithFormat:@"%@currentPlaylist.db", [settingsS.urlString md5]];
 	NSString *currTableName = settingsS.isJukeboxEnabled ? @"jukeboxCurrentPlaylist" : @"currentPlaylist";
 	NSString *playTableName = [NSString stringWithFormat:@"%@%@", viewObjectsS.isLocalPlaylist ? @"playlist" : @"splaylist", self.md5];
 	[databaseS.localPlaylistsDbQueue inDatabase:^(FMDatabase *db)

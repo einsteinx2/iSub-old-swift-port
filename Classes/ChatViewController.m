@@ -11,8 +11,6 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "EGORefreshTableHeaderView.h"
-#import "SUSChatDAO.h"
-#import "NSError+ISMSError.h"
 #import "SeparaterView.h"
 
 @interface ChatViewController (Private)

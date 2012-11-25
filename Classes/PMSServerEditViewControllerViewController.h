@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "ServerTypeViewController.h"
-#import "ISMSLoaderDelegate.h"
 
 @class PMSLoginLoader;
 @interface PMSServerEditViewControllerViewController : UIViewController <ISMSLoaderDelegate>

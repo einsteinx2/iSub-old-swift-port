@@ -6,9 +6,6 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "bass.h"
-#import "BassParamEqValue.h"
-
 @class BassParamEqValue;
 @interface EqualizerPointView : UIImageView
 

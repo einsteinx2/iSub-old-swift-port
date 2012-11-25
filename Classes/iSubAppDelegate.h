@@ -9,17 +9,18 @@
 #ifndef iSub_iSubAppDelegate_h
 #define iSub_iSubAppDelegate_h
 
-#import "MKStoreManager.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
+
+#import <LibSub/ISMSLoaderDelegate.h>
+#import <EX2Kit/EX2Reachability.h>
 #import "HockeySDK.h"
-#import "ISMSLoaderDelegate.h"
 
 #define appDelegateS [iSubAppDelegate sharedInstance]
 
-@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, IntroViewController, ISMSStatusLoader;
+@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, SA_OAuthTwitterEngine, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, IntroViewController, ISMSStatusLoader, MPMoviePlayerController;
 
-@interface iSubAppDelegate : NSObject <UIApplicationDelegate, MKStoreKitDelegate, MFMailComposeViewControllerDelegate, BITHockeyManagerDelegate, BITCrashManagerDelegate, ISMSLoaderDelegate>
+@interface iSubAppDelegate : NSObject <UIApplicationDelegate, MFMailComposeViewControllerDelegate, BITHockeyManagerDelegate, BITCrashManagerDelegate, ISMSLoaderDelegate>
 
 @property (strong) ISMSStatusLoader *statusLoader;
 
@@ -60,6 +61,8 @@
 @property BOOL showIntro;
 
 @property (strong) NSURL *referringAppUrl;
+
+@property (strong) MPMoviePlayerController *moviePlayer;
 
 - (void)backToReferringApp;
 

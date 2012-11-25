@@ -7,7 +7,6 @@
 //
 
 #import "LocalPlaylistsUITableViewCell.h"
-#import "MusicSingleton.h"
 #import "CellOverlay.h"
 
 @implementation LocalPlaylistsUITableViewCell
@@ -65,8 +64,8 @@
 {
 	[super showOverlay];
 	
-	self.overlayView.downloadButton.alpha = (float)!viewObjectsS.isOfflineMode;
-	self.overlayView.downloadButton.enabled = !viewObjectsS.isOfflineMode;
+	self.overlayView.downloadButton.alpha = (float)!settingsS.isOfflineMode;
+	self.overlayView.downloadButton.enabled = !settingsS.isOfflineMode;
 }
 
 - (void)downloadAllSongs

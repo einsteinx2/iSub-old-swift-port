@@ -7,13 +7,11 @@
 //
 
 #import "SubsonicServerEditViewController.h"
-#import "MusicSingleton.h"
 #import "FoldersViewController.h"
 #import "ServerListViewController.h"
 #import "ServerTypeViewController.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
-#import "SUSStatusLoader.h"
 
 @implementation SubsonicServerEditViewController
 

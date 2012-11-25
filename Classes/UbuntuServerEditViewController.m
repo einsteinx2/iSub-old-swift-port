@@ -7,7 +7,6 @@
 //
 
 #import "UbuntuServerEditViewController.h"
-#import "MusicSingleton.h"
 #import "FoldersViewController.h"
 #import "iPadRootViewController.h"
 #import "ServerTypeViewController.h"

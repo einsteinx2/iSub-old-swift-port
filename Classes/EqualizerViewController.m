@@ -9,11 +9,8 @@
 #import "EqualizerViewController.h"
 #import "EqualizerView.h"
 #import "EqualizerPointView.h"
-#import "BassParamEqValue.h"
-#import "BassEffectDAO.h"
 #import "EqualizerPathView.h"
 #import "NWPickerView.h"
-#import "BassVisualizer.h"
 
 @implementation EqualizerViewController
 

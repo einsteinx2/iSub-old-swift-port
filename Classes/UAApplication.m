@@ -7,7 +7,6 @@
 //
 
 #import "UAApplication.h"
-#import "JukeboxSingleton.h"
 
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 

@@ -8,8 +8,6 @@
 
 #import "CurrentPlaylistViewController.h"
 #import "CurrentPlaylistSongSmallUITableViewCell.h"
-#import "MusicSingleton.h"
-#import "PlaylistSingleton.h"
 #import "StoreViewController.h"
 
 @implementation CurrentPlaylistViewController
@@ -346,7 +344,7 @@
 	{
 		if (!self.tableView.editing)
 		{
-			if (viewObjectsS.isOfflineMode)
+			if (settingsS.isOfflineMode)
 			{
 				[self showSavePlaylistAlert];
 			}
@@ -510,13 +508,13 @@
 		[self.playlistNameTextField resignFirstResponder];
 		if(buttonIndex == 1)
 		{
-			if (self.savePlaylistLocal || viewObjectsS.isOfflineMode)
+			if (self.savePlaylistLocal || settingsS.isOfflineMode)
 			{
 				// Check if the playlist exists, if not create the playlist table and add the entry to localPlaylists table
 				NSString *test = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT md5 FROM localPlaylists WHERE md5 = ?", [self.playlistNameTextField.text md5]];
 				if (!test)
 				{
-					NSString *databaseName = viewObjectsS.isOfflineMode ? @"offlineCurrentPlaylist.db" : [NSString stringWithFormat:@"%@currentPlaylist.db", [settingsS.urlString md5]];
+					NSString *databaseName = settingsS.isOfflineMode ? @"offlineCurrentPlaylist.db" : [NSString stringWithFormat:@"%@currentPlaylist.db", [settingsS.urlString md5]];
 					NSString *currTable = settingsS.isJukeboxEnabled ? @"jukeboxCurrentPlaylist" : @"currentPlaylist";
 					NSString *shufTable = settingsS.isJukeboxEnabled ? @"jukeboxShufflePlaylist" : @"shufflePlaylist";
 					NSString *table = playlistS.isShuffle ? shufTable : currTable;
@@ -560,9 +558,9 @@
 		if(buttonIndex == 1)
 		{
 			// If yes, overwrite the playlist
-			if (self.savePlaylistLocal || viewObjectsS.isOfflineMode)
+			if (self.savePlaylistLocal || settingsS.isOfflineMode)
 			{
-				NSString *databaseName = viewObjectsS.isOfflineMode ? @"offlineCurrentPlaylist.db" : [NSString stringWithFormat:@"%@currentPlaylist.db", [settingsS.urlString md5]];
+				NSString *databaseName = settingsS.isOfflineMode ? @"offlineCurrentPlaylist.db" : [NSString stringWithFormat:@"%@currentPlaylist.db", [settingsS.urlString md5]];
 				[databaseS.localPlaylistsDbQueue inDatabase:^(FMDatabase *db)
 				{
 					[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE playlist%@", [self.playlistNameTextField.text md5]]];

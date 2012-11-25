@@ -7,8 +7,6 @@
 //
 
 #import "LyricsViewController.h"
-#import "MusicSingleton.h"
-#import "SUSLyricsDAO.h"
 
 @implementation LyricsViewController
 
@@ -41,7 +39,7 @@
 		}
 		else
 		{
-			if (viewObjectsS.isOfflineMode)
+			if (settingsS.isOfflineMode)
 			{
 				textView.text = @"\n\nNo lyrics found";
 			}
