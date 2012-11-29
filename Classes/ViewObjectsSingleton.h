@@ -82,9 +82,6 @@
 @property (strong) UIImage *cacheButtonImage;
 @property (strong) UIImage *queueButtonImage;
 
-
-//@property BOOL isJukebox;
-
 @property (copy) NSString *currentLoadingFolderId;
 
 @property BOOL isNoNetworkAlertShowing;

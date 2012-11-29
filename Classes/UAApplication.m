@@ -12,10 +12,9 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 
 @implementation UAApplication
 
-- (id) init 
+- (id)init 
 {
-	self = [super init];
-	if (self != nil) 
+	if ((self = [super init]))
 	{
 		[self becomeFirstResponder];
 		
@@ -25,15 +24,15 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 	return self;
 }
 
-#pragma mark -
-#pragma mark UIResponder
+#pragma mark - UIResponder
+
 -(BOOL)canBecomeFirstResponder 
 {
     return YES;
 }
 
-#pragma mark -
-#pragma mark Motion
+#pragma mark - Motion
+
 - (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event 
 {
 	
@@ -43,7 +42,7 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 {
 	if (motion == UIEventSubtypeMotionShake) 
 	{
-	//DLog(@"oh ya, shake it now!");
+        //DLog(@"oh ya, shake it now!");
 	}
 }
 
@@ -52,8 +51,7 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 	
 }
 
-#pragma mark -
-#pragma mark Remote Control
+#pragma mark - Remote Control
 
 - (void)playPauseStop
 {
@@ -121,6 +119,5 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 			return;
 	}	
 }
-
 
 @end

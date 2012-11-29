@@ -46,7 +46,6 @@
 		5304FC6114F30A6A00A2AD42 /* underPageBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 5304FC6014F30A6900A2AD42 /* underPageBackground.png */; };
 		5304FC6214F30A6A00A2AD42 /* underPageBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 5304FC6014F30A6900A2AD42 /* underPageBackground.png */; };
 		5304FC6314F30A6A00A2AD42 /* underPageBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 5304FC6014F30A6900A2AD42 /* underPageBackground.png */; };
-		5305C0831661C0E500462DDB /* EX2KitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5305C0821661C0E500462DDB /* EX2KitResources.bundle */; };
 		5305C2061157F4F800BC78F0 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 5305C2051157F4F800BC78F0 /* Default.png */; };
 		5306236D14D3295300D320A8 /* EqualizerPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306236C14D3295300D320A8 /* EqualizerPathView.m */; };
 		5306236E14D3295300D320A8 /* EqualizerPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306236C14D3295300D320A8 /* EqualizerPathView.m */; };
@@ -85,6 +84,13 @@
 		530B960911E8ED33002EA08E /* settings-page@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530B960811E8ED33002EA08E /* settings-page@2x.png */; };
 		530CE7F2119B8E8C00728ED5 /* CurrentPlaylistSongSmallUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 530CE7F1119B8E8C00728ED5 /* CurrentPlaylistSongSmallUITableViewCell.m */; };
 		530CE844119B9D9100728ED5 /* SongInfoPlaylistCustomUITableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 530CE843119B9D9100728ED5 /* SongInfoPlaylistCustomUITableView.m */; };
+		530D20FD16670085009DAF1B /* EX2KitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 530D20FA16670062009DAF1B /* EX2KitResources.bundle */; };
+		530D20FE1667009B009DAF1B /* EX2KitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 530D20FA16670062009DAF1B /* EX2KitResources.bundle */; };
+		530D2100166700B4009DAF1B /* HockeySDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 536C9B981661B96A005A73C6 /* HockeySDKResources.bundle */; };
+		530D2101166700C5009DAF1B /* EX2KitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 530D20FA16670062009DAF1B /* EX2KitResources.bundle */; };
+		530D2102166700C7009DAF1B /* HockeySDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 536C9B981661B96A005A73C6 /* HockeySDKResources.bundle */; };
+		530D2104166700DC009DAF1B /* EX2KitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 530D20FA16670062009DAF1B /* EX2KitResources.bundle */; };
+		530D2105166700DE009DAF1B /* HockeySDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 536C9B981661B96A005A73C6 /* HockeySDKResources.bundle */; };
 		5311F5D51194DCEE009ACE8E /* ArtistUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5311F5D41194DCEE009ACE8E /* ArtistUITableViewCell.m */; };
 		5312E1AF11B8C23100AFC08D /* bookmarks-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5312E1AD11B8C23100AFC08D /* bookmarks-tabbaricon.png */; };
 		5312E1B011B8C23100AFC08D /* genres-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5312E1AE11B8C23100AFC08D /* genres-tabbaricon.png */; };
@@ -1933,6 +1939,69 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		530D20F716670062009DAF1B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 530D20F216670062009DAF1B /* EX2Kit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 53F15ED7162B9F1B00C24FC1;
+			remoteInfo = EX2Kit;
+		};
+		530D20F916670062009DAF1B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 530D20F216670062009DAF1B /* EX2Kit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 53F15EE9162B9F6800C24FC1;
+			remoteInfo = EX2KitResources;
+		};
+		530D20FB1667007C009DAF1B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 530D20F216670062009DAF1B /* EX2Kit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 53F15EE8162B9F6800C24FC1;
+			remoteInfo = EX2KitResources;
+		};
+		530D2106166700E9009DAF1B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 530D20F216670062009DAF1B /* EX2Kit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 53F15EE8162B9F6800C24FC1;
+			remoteInfo = EX2KitResources;
+		};
+		530D2108166700ED009DAF1B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 530D20F216670062009DAF1B /* EX2Kit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 53F15EE8162B9F6800C24FC1;
+			remoteInfo = EX2KitResources;
+		};
+		530D210A166700F9009DAF1B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5374F26A1661C56000529EF3 /* libSub.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 536C947216618FA4005A73C6;
+			remoteInfo = libSub;
+		};
+		530D210C166700F9009DAF1B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 530D20F216670062009DAF1B /* EX2Kit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 53F15EE8162B9F6800C24FC1;
+			remoteInfo = EX2KitResources;
+		};
+		530D210E166700F9009DAF1B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 536C9B7F1661B94F005A73C6 /* HockeySDK.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 1E5954CB15B6F24A00A03429;
+			remoteInfo = HockeySDKLib;
+		};
+		530D2110166700F9009DAF1B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 536C9B7F1661B94F005A73C6 /* HockeySDK.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 1E59550915B6F45800A03429;
+			remoteInfo = HockeySDKResources;
+		};
 		536C9B851661B96A005A73C6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 536C9B7F1661B94F005A73C6 /* HockeySDK.xcodeproj */;
@@ -2069,7 +2138,6 @@
 		5304FC4B14F2F59400A2AD42 /* backgroundImage_repeat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backgroundImage_repeat.png; sourceTree = "<group>"; };
 		5304FC5C14F309F000A2AD42 /* underPageBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "underPageBackground@2x.png"; sourceTree = "<group>"; };
 		5304FC6014F30A6900A2AD42 /* underPageBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = underPageBackground.png; sourceTree = "<group>"; };
-		5305C0821661C0E500462DDB /* EX2KitResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; name = EX2KitResources.bundle; path = "/Users/bbaron/Library/Developer/Xcode/DerivedData/iSub-eryjdyaitcrhjjearccuanxhorpg/Build/Products/Debug-iphoneos/EX2KitResources.bundle"; sourceTree = "<absolute>"; };
 		5305C2051157F4F800BC78F0 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Images/Other/Default.png; sourceTree = "<group>"; };
 		5306236B14D3295300D320A8 /* EqualizerPathView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EqualizerPathView.h; sourceTree = "<group>"; };
 		5306236C14D3295300D320A8 /* EqualizerPathView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EqualizerPathView.m; sourceTree = "<group>"; };
@@ -2094,6 +2162,7 @@
 		530CE7F1119B8E8C00728ED5 /* CurrentPlaylistSongSmallUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CurrentPlaylistSongSmallUITableViewCell.m; sourceTree = "<group>"; };
 		530CE842119B9D9100728ED5 /* SongInfoPlaylistCustomUITableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SongInfoPlaylistCustomUITableView.h; sourceTree = "<group>"; };
 		530CE843119B9D9100728ED5 /* SongInfoPlaylistCustomUITableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongInfoPlaylistCustomUITableView.m; sourceTree = "<group>"; };
+		530D20F216670062009DAF1B /* EX2Kit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = EX2Kit.xcodeproj; path = Frameworks/libSub/Frameworks/EX2Kit/Project/EX2Kit.xcodeproj; sourceTree = "<group>"; };
 		5311F5D31194DCEE009ACE8E /* ArtistUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ArtistUITableViewCell.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		5311F5D41194DCEE009ACE8E /* ArtistUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArtistUITableViewCell.m; sourceTree = "<group>"; };
 		5312E1AD11B8C23100AFC08D /* bookmarks-tabbaricon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bookmarks-tabbaricon.png"; path = "Images/Tab Bar Icons/bookmarks-tabbaricon.png"; sourceTree = "<group>"; };
@@ -2739,7 +2808,6 @@
 				539797F01162CE4B00F41D8B /* View Controllers */,
 				533F651F16054282000098E1 /* Custom UI Objects */,
 				536C97A416619845005A73C6 /* 3rd Party UI Components */,
-				539797F21162CE7700F41D8B /* Support Classes */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -2807,8 +2875,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5305C0821661C0E500462DDB /* EX2KitResources.bundle */,
 				53A64E22161E2E6400FCBBAF /* CrashReporter.framework */,
+				530D20F216670062009DAF1B /* EX2Kit.xcodeproj */,
 				5374F26A1661C56000529EF3 /* libSub.xcodeproj */,
 				536C9B7F1661B94F005A73C6 /* HockeySDK.xcodeproj */,
 				53D44F8415AA621A00CDD3B8 /* Accelerate.framework */,
@@ -2859,6 +2927,15 @@
 				537E9A5414F4CE41006CB0BC /* underPageBackgroundDark@2x.png */,
 			);
 			name = iPad;
+			sourceTree = "<group>";
+		};
+		530D20F316670062009DAF1B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				530D20F816670062009DAF1B /* libEX2Kit.a */,
+				530D20FA16670062009DAF1B /* EX2KitResources.bundle */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		53159F77156F6DC6001B0268 /* KIF Integration Tests */ = {
@@ -3193,13 +3270,6 @@
 				53A1CEC0126D396A006BB76F /* IAP Store */,
 			);
 			name = "View Controllers";
-			sourceTree = "<group>";
-		};
-		539797F21162CE7700F41D8B /* Support Classes */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Support Classes";
 			sourceTree = "<group>";
 		};
 		539797F41162CEB100F41D8B /* Images */ = {
@@ -3618,6 +3688,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				530D2107166700E9009DAF1B /* PBXTargetDependency */,
 				5374F29C1661C59200529EF3 /* PBXTargetDependency */,
 				5374F2981661C59200529EF3 /* PBXTargetDependency */,
 				5374F29A1661C59200529EF3 /* PBXTargetDependency */,
@@ -3638,6 +3709,10 @@
 			buildRules = (
 			);
 			dependencies = (
+				530D210B166700F9009DAF1B /* PBXTargetDependency */,
+				530D210D166700F9009DAF1B /* PBXTargetDependency */,
+				530D210F166700F9009DAF1B /* PBXTargetDependency */,
+				530D2111166700F9009DAF1B /* PBXTargetDependency */,
 			);
 			name = "iSub Integration Tests";
 			productName = iSubTESTING;
@@ -3673,6 +3748,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				530D20FC1667007C009DAF1B /* PBXTargetDependency */,
 				5374F28D1661C56E00529EF3 /* PBXTargetDependency */,
 				536C9B861661B96A005A73C6 /* PBXTargetDependency */,
 				536C9B881661B96A005A73C6 /* PBXTargetDependency */,
@@ -3693,6 +3769,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				530D2109166700ED009DAF1B /* PBXTargetDependency */,
 				5374F2941661C57E00529EF3 /* PBXTargetDependency */,
 				5374F2901661C57E00529EF3 /* PBXTargetDependency */,
 				5374F2921661C57E00529EF3 /* PBXTargetDependency */,
@@ -3727,6 +3804,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 530D20F316670062009DAF1B /* Products */;
+					ProjectRef = 530D20F216670062009DAF1B /* EX2Kit.xcodeproj */;
+				},
+				{
 					ProductGroup = 536C9B801661B94F005A73C6 /* Products */;
 					ProjectRef = 536C9B7F1661B94F005A73C6 /* HockeySDK.xcodeproj */;
 				},
@@ -3747,6 +3828,20 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		530D20F816670062009DAF1B /* libEX2Kit.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libEX2Kit.a;
+			remoteRef = 530D20F716670062009DAF1B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		530D20FA16670062009DAF1B /* EX2KitResources.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = EX2KitResources.bundle;
+			remoteRef = 530D20F916670062009DAF1B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		536C9B901661B96A005A73C6 /* HockeySDK.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -4087,6 +4182,8 @@
 				5349AD041613724D003603AF /* Default-568h@2x.png in Resources */,
 				53B65ABB16533E4800472DBF /* back-tabbaricon.png in Resources */,
 				53B65ABF16533E4800472DBF /* back-tabbaricon@2x.png in Resources */,
+				530D2101166700C5009DAF1B /* EX2KitResources.bundle in Resources */,
+				530D2102166700C7009DAF1B /* HockeySDKResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4368,6 +4465,8 @@
 				533C657815ABB952003EAF29 /* NewHomeViewController.xib in Resources */,
 				53B65ABE16533E4800472DBF /* back-tabbaricon.png in Resources */,
 				53B65AC216533E4800472DBF /* back-tabbaricon@2x.png in Resources */,
+				530D2104166700DC009DAF1B /* EX2KitResources.bundle in Resources */,
+				530D2105166700DE009DAF1B /* HockeySDKResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4943,7 +5042,7 @@
 				53B65ABD16533E4800472DBF /* back-tabbaricon.png in Resources */,
 				53B65AC116533E4800472DBF /* back-tabbaricon@2x.png in Resources */,
 				536C9B9A1661B98B005A73C6 /* HockeySDKResources.bundle in Resources */,
-				5305C0831661C0E500462DDB /* EX2KitResources.bundle in Resources */,
+				530D20FD16670085009DAF1B /* EX2KitResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5242,6 +5341,8 @@
 				5349AD051613724D003603AF /* Default-568h@2x.png in Resources */,
 				53B65ABC16533E4800472DBF /* back-tabbaricon.png in Resources */,
 				53B65AC016533E4800472DBF /* back-tabbaricon@2x.png in Resources */,
+				530D20FE1667009B009DAF1B /* EX2KitResources.bundle in Resources */,
+				530D2100166700B4009DAF1B /* HockeySDKResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5694,6 +5795,41 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		530D20FC1667007C009DAF1B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = EX2KitResources;
+			targetProxy = 530D20FB1667007C009DAF1B /* PBXContainerItemProxy */;
+		};
+		530D2107166700E9009DAF1B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = EX2KitResources;
+			targetProxy = 530D2106166700E9009DAF1B /* PBXContainerItemProxy */;
+		};
+		530D2109166700ED009DAF1B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = EX2KitResources;
+			targetProxy = 530D2108166700ED009DAF1B /* PBXContainerItemProxy */;
+		};
+		530D210B166700F9009DAF1B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = libSub;
+			targetProxy = 530D210A166700F9009DAF1B /* PBXContainerItemProxy */;
+		};
+		530D210D166700F9009DAF1B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = EX2KitResources;
+			targetProxy = 530D210C166700F9009DAF1B /* PBXContainerItemProxy */;
+		};
+		530D210F166700F9009DAF1B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = HockeySDKLib;
+			targetProxy = 530D210E166700F9009DAF1B /* PBXContainerItemProxy */;
+		};
+		530D2111166700F9009DAF1B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = HockeySDKResources;
+			targetProxy = 530D2110166700F9009DAF1B /* PBXContainerItemProxy */;
+		};
 		536C9B861661B96A005A73C6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = HockeySDKLib;
@@ -5904,7 +6040,12 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				HEADER_SEARCH_PATHS = "\"$(TARGET_BUILD_DIR)/usr/local/lib/include\"";
+				HEADER_SEARCH_PATHS = (
+					"\"$(TARGET_BUILD_DIR)/usr/local/lib/include\"",
+					"\"$(OBJROOT)/UninstalledProducts/include\"",
+					"$(SRCROOT)",
+					"$(SRCROOT)/Frameworks/HockeySDK/Classes",
+				);
 				INFOPLIST_FILE = "Other/iSub-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -5948,7 +6089,12 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				HEADER_SEARCH_PATHS = "\"$(TARGET_BUILD_DIR)/usr/local/lib/include\"";
+				HEADER_SEARCH_PATHS = (
+					"\"$(TARGET_BUILD_DIR)/usr/local/lib/include\"",
+					"\"$(OBJROOT)/UninstalledProducts/include\"",
+					"$(SRCROOT)",
+					"$(SRCROOT)/Frameworks/HockeySDK/Classes",
+				);
 				INFOPLIST_FILE = "Other/iSub-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -6033,7 +6179,12 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				HEADER_SEARCH_PATHS = "\"$(TARGET_BUILD_DIR)/usr/local/lib/include\"";
+				HEADER_SEARCH_PATHS = (
+					"\"$(TARGET_BUILD_DIR)/usr/local/lib/include\"",
+					"\"$(OBJROOT)/UninstalledProducts/include\"",
+					"$(SRCROOT)",
+					"$(SRCROOT)/Frameworks/HockeySDK/Classes",
+				);
 				INFOPLIST_FILE = "Other/iSub-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (

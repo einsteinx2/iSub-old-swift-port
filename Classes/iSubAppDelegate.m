@@ -40,9 +40,6 @@
 	if (settingsS.isRotationLockEnabled && interfaceOrientation != UIInterfaceOrientationPortrait)
 		return NO;
 	return YES;
-	
-    // Return YES for supported orientations
-    //return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
 #pragma mark -
@@ -97,9 +94,6 @@
 	fileLogger.logFileManager.maximumNumberOfLogFiles = 7;
 	[DDLog addLogger:fileLogger];
 	
-    //DLog(@"settingsS: %@", settingsS);
-    //DLog(@"urlString: %@", settingsS.urlString);
-	
 	// Setup network reachability notifications
 	self.wifiReach = [EX2Reachability reachabilityForLocalWiFi];
 	[self.wifiReach startNotifier];
@@ -111,8 +105,6 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(batteryStateChanged:) name:@"UIDeviceBatteryStateDidChangeNotification" object:[UIDevice currentDevice]];
 	[self batteryStateChanged:nil];	
 	
-    //DLog(@"urlString: %@", settingsS.urlString);
-
 	// Handle offline mode
 	if (settingsS.isForceOfflineMode)
 	{
@@ -134,9 +126,7 @@
 	{
 		settingsS.isOfflineMode = NO;
 	}
-	
-//DLog(@"urlString: %@", settingsS.urlString);
-	
+		
 	self.showIntro = NO;
 	if (settingsS.isTestServer)
 	{
@@ -150,9 +140,7 @@
 			self.showIntro = YES;
 		}
 	}
-	
-//DLog(@"urlString: %@", settingsS.urlString)
-	
+		
     self.introController = nil;
 	
 	//DLog(@"md5: %@", [settings.urlString md5]);
@@ -160,9 +148,7 @@
 	[self loadFlurryAnalytics];
 	[self loadHockeyApp];
 	//[self loadCrittercism];
-	
-//DLog(@"urlString: %@", settingsS.urlString);
-	
+		
 	[self loadInAppPurchaseStore];
 		
 	// Setup Twitter connection
@@ -170,9 +156,7 @@
 	{
 		[socialS createTwitterEngine];
 	}
-	
-//DLog(@"urlString: %@", settingsS.urlString);
-		
+			
 	// Create and display UI
 	self.introController = nil;
 	if (IS_IPAD())
@@ -207,7 +191,7 @@
 		[viewControllers addObject:supportNavigationController];
 		[mainTabBarController setViewControllers:viewControllers animated:NO];
 		[vc logMethods];
-	//DLog(@"toolbarItems: %@", [vc toolbarItems]);*/
+         //DLog(@"toolbarItems: %@", [vc toolbarItems]);*/
 		
 		//DLog(@"isOfflineMode: %i", settingsS.isOfflineMode);
 		if (settingsS.isOfflineMode)
@@ -240,9 +224,7 @@
 		self.window.backgroundColor = viewObjectsS.jukeboxColor;
 	else 
 		self.window.backgroundColor = viewObjectsS.windowColor;
-	
-//DLog(@"urlString: %@", settingsS.urlString);
-	
+		
 	// Check the server status in the background
     if (!settingsS.isOfflineMode)
 	{
@@ -516,40 +498,26 @@
 
 - (void)loadHockeyApp
 {
+    BITHockeyManager *hockeyManager = [BITHockeyManager sharedHockeyManager];
+    
 	// HockyApp Kits
 	if (IS_BETA() && IS_ADHOC() && !IS_LITE())
 	{
-		/*[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
-		
-		[[BWHockeyManager sharedHockeyManager] setAppIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"];
-		[[BWHockeyManager sharedHockeyManager] setAlwaysShowUpdateReminder:NO];
-		[[BWHockeyManager sharedHockeyManager] setDelegate:self];*/
-        
-        [[BITHockeyManager sharedHockeyManager] configureWithBetaIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"
-                                                             liveIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af"
-                                                                   delegate:self];
-        [[BITHockeyManager sharedHockeyManager].updateManager setAlwaysShowUpdateReminder:NO];
-        [[BITHockeyManager sharedHockeyManager] startManager];
+        [hockeyManager configureWithBetaIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af" liveIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af" delegate:self];
+        hockeyManager.updateManager.alwaysShowUpdateReminder = NO;
+        [hockeyManager startManager];
 	}
 	else if (IS_RELEASE())
 	{
 		if (IS_LITE())
-			//[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7"];
-            [[BITHockeyManager sharedHockeyManager] configureWithBetaIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7"
-                                                                 liveIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7"
-                                                                       delegate:self];
+            [hockeyManager configureWithBetaIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7" liveIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7" delegate:self];
 		else
-			//[[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb"];
-            [[BITHockeyManager sharedHockeyManager] configureWithBetaIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb"
-                                                                 liveIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb"
-                                                                       delegate:self];
+            [hockeyManager configureWithBetaIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb" liveIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb" delegate:self];
 	}
-	//[[BWQuincyManager sharedQuincyManager] setAutoSubmitCrashReport:YES];
-    [[[BITHockeyManager sharedHockeyManager] crashManager] setCrashManagerStatus:BITCrashManagerStatusAutoSend];
-    [[[BITHockeyManager sharedHockeyManager] crashManager] setDelegate:self];
+    hockeyManager.crashManager.crashManagerStatus = BITCrashManagerStatusAutoSend;
+    hockeyManager.crashManager.delegate = self;
 	
-	//if ([[BWQuincyManager sharedQuincyManager] didCrashInLastSession])
-    if ([[[BITHockeyManager sharedHockeyManager] crashManager] didCrashInLastSession])
+    if (hockeyManager.crashManager.didCrashInLastSession)
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh no! iSub crashed!" message:@"iSub support has received your anonymous crash logs and they will be investigated. \n\nWould you also like to send an email to support with more details?" delegate:self cancelButtonTitle:@"No Thanks" otherButtonTitles:@"Send Email", @"Visit iSub Forum", nil];
 		alert.tag = 7;
@@ -557,7 +525,15 @@
 	}
 }
 
-//- (NSString *)customDeviceIdentifier
+#ifdef ADHOC
+- (NSString *)userNameForCrashManager:(BITCrashManager *)crashManager
+{
+    if ([[UIDevice currentDevice] respondsToSelector:@selector(uniqueIdentifier)])
+        return [[UIDevice currentDevice] performSelector:@selector(uniqueIdentifier)];
+    return nil;
+}
+#endif
+
 - (NSString *)customDeviceIdentifierForUpdateManager
 {
 #ifdef ADHOC

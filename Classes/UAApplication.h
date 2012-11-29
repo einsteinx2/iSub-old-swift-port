@@ -7,10 +7,6 @@
 //
 
 
-
-
-@interface UAApplication : UIApplication {
-
-}
+@interface UAApplication : UIApplication
 
 @end
