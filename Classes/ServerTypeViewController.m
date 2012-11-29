@@ -31,14 +31,11 @@
 {
 	[super viewDidLoad];
 	
-    if (!IS_BETA())
-	{
-		pmsButton.enabled = NO;
-		pmsButton.hidden = YES;
-        
-        subsonicButton.y += 50.;
-        ubuntuButton.y -= 50.;
-	}
+    // For release versions, there is no option for server type at the moment as Ubuntu One support has been removed
+    if (IS_RELEASE())
+    {
+        [self buttonAction:self.subsonicButton];
+    }
 }
 
 - (IBAction)buttonAction:(id)sender
@@ -86,13 +83,13 @@
 		return;
 	}
 	
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.5];
-	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:self.view cache:YES];
+	//[UIView beginAnimations:nil context:NULL];
+	//[UIView setAnimationDuration:.5];
+	//[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:self.view cache:YES];
 	
 	[self.view addSubview:subView];
 	
-	[UIView commitAnimations];
+	//[UIView commitAnimations];
 }
 
 @end

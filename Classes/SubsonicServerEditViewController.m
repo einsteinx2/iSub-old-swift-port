@@ -106,7 +106,7 @@
 	return password.length > 0;
 }
 
-- (IBAction) cancelButtonPressed:(id)sender
+- (IBAction)cancelButtonPressed:(id)sender
 {
 	viewObjectsS.serverToEdit = nil;
 	

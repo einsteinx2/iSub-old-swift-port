@@ -186,6 +186,8 @@
 		[appDelegateS.ipadRootViewController presentModalViewController:serverTypeViewController animated:YES];
 	else
 		[self presentModalViewController:serverTypeViewController animated:YES];
+    
+    
 }
 
 - (void)saveAction:(id)sender
