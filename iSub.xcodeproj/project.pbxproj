@@ -2876,8 +2876,8 @@
 			isa = PBXGroup;
 			children = (
 				53A64E22161E2E6400FCBBAF /* CrashReporter.framework */,
-				530D20F216670062009DAF1B /* EX2Kit.xcodeproj */,
 				5374F26A1661C56000529EF3 /* libSub.xcodeproj */,
+				530D20F216670062009DAF1B /* EX2Kit.xcodeproj */,
 				536C9B7F1661B94F005A73C6 /* HockeySDK.xcodeproj */,
 				53D44F8415AA621A00CDD3B8 /* Accelerate.framework */,
 				53C7FD9C150F0E94008DA51C /* MessageUI.framework */,
@@ -6539,7 +6539,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -6562,10 +6562,10 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
-					"\"$(TARGET_BUILD_DIR)/usr/local/lib/include\"",
-					"\"$(OBJROOT)/UninstalledProducts/include\"",
-					"$(SRCROOT)",
-					"$(SRCROOT)/Frameworks/HockeySDK/Classes",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/Frameworks/HockeySDK/Classes\"",
+					"\"$(SRCROOT)/Frameworks/libSub/Sub\"",
+					"\"$(SRCROOT)/Frameworks/libSub/Frameworks/EX2Kit/EX2Kit\"/**",
 				);
 				INFOPLIST_FILE = "Other/iSub-Info-Beta.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -6586,6 +6586,7 @@
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
@@ -6593,7 +6594,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = Other/Entitlements.plist;
@@ -6617,10 +6618,10 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
-					"\"$(TARGET_BUILD_DIR)/usr/local/lib/include\"",
-					"\"$(OBJROOT)/UninstalledProducts/include\"",
-					"$(SRCROOT)",
-					"$(SRCROOT)/Frameworks/HockeySDK/Classes",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/Frameworks/HockeySDK/Classes\"",
+					"\"$(SRCROOT)/Frameworks/libSub/Sub\"",
+					"\"$(SRCROOT)/Frameworks/libSub/Frameworks/EX2Kit/EX2Kit\"/**",
 				);
 				INFOPLIST_FILE = "Other/iSub-Info-Beta.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -6641,6 +6642,7 @@
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = AdHoc;
 		};
@@ -6648,7 +6650,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -6669,10 +6671,10 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
-					"\"$(TARGET_BUILD_DIR)/usr/local/lib/include\"",
-					"\"$(OBJROOT)/UninstalledProducts/include\"",
-					"$(SRCROOT)",
-					"$(SRCROOT)/Frameworks/HockeySDK/Classes",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/Frameworks/HockeySDK/Classes\"",
+					"\"$(SRCROOT)/Frameworks/libSub/Sub\"",
+					"\"$(SRCROOT)/Frameworks/libSub/Frameworks/EX2Kit/EX2Kit\"/**",
 				);
 				INFOPLIST_FILE = "Other/iSub-Info-Beta.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -6691,6 +6693,7 @@
 				PRODUCT_NAME = "iSub Beta";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
 		};

@@ -878,8 +878,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "93"
          endingLineNumber = "93"
-         landmarkName = "-initWithArtist:orAlbum:"
-         landmarkType = "5">
+         landmarkName = "@implementation AlbumViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -892,8 +892,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "93"
          endingLineNumber = "93"
-         landmarkName = "-initWithArtist:orAlbum:"
-         landmarkType = "5">
+         landmarkName = "@implementation AlbumViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -906,8 +906,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "93"
          endingLineNumber = "93"
-         landmarkName = "-initWithArtist:orAlbum:"
-         landmarkType = "5">
+         landmarkName = "@implementation AlbumViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -920,8 +920,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "93"
          endingLineNumber = "93"
-         landmarkName = "-initWithArtist:orAlbum:"
-         landmarkType = "5">
+         landmarkName = "@implementation AlbumViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -1474,8 +1474,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "93"
          endingLineNumber = "93"
-         landmarkName = "-initWithArtist:orAlbum:"
-         landmarkType = "5">
+         landmarkName = "@implementation AlbumViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -4328,8 +4328,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "93"
          endingLineNumber = "93"
-         landmarkName = "-initWithArtist:orAlbum:"
-         landmarkType = "5">
+         landmarkName = "@implementation AlbumViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -4341,8 +4341,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "93"
          endingLineNumber = "93"
-         landmarkName = "-initWithArtist:orAlbum:"
-         landmarkType = "5">
+         landmarkName = "@implementation AlbumViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -5088,7 +5088,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "296"
          endingLineNumber = "296"
-         landmarkName = "-asyncImageViewFinishedLoading:"
+         landmarkName = "-largeSongInfoWasToggled"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint

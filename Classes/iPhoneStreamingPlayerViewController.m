@@ -16,7 +16,7 @@
 #import "OBSlider.h"
 #import "StoreViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
-#import <LibSub/ISMSStreamHandler.h>
+#import "LibSub/ISMSStreamHandler.h"
 
 #define downloadProgressBorder 4.
 #define downloadProgressWidth (self.progressSlider.frame.size.width - (downloadProgressBorder * 2))

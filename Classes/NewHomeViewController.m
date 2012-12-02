@@ -20,7 +20,7 @@
 #import "UIViewController+PushViewControllerCustom.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
-#import <LibSub/SearchXMLParser.h>
+#import "LibSub/SearchXMLParser.h"
 
 @implementation NewHomeViewController
 

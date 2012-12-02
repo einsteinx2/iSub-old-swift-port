@@ -7,7 +7,7 @@
 //
 
 #import "StoreUITableViewCell.h"
-#import <LibSub/MKStoreManager.h>
+#import "LibSub/MKStoreManager.h"
 
 @interface StoreUITableViewCell ()
 {

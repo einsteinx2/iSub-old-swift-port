@@ -11,8 +11,8 @@
 
 #import "Defines.h"
 #import "iSubAppDelegate.h"
-#import <LibSub/LibSub.h>
-#import <EX2Kit/EX2Kit.h>
+#import "LibSub.h"
+#import "EX2Kit.h"
 #import "ViewObjectsSingleton.h"
 #import "AsynchronousImageView.h"
 #import "AsynchronousImageViewDelegate.h"
