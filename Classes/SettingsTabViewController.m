@@ -8,8 +8,8 @@
 
 #import "SettingsTabViewController.h"
 #import "FoldersViewController.h"
-#import "LibSub/SA_OAuthTwitterEngine.h"
-#import "LibSub/SA_OAuthTwitterController.h"
+#import "SA_OAuthTwitterEngine.h"
+#import "SA_OAuthTwitterController.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"

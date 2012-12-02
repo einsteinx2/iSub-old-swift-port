@@ -6,7 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "LibSub/MKStoreManager.h"
+#import "MKStoreManager.h"
 
 @interface StoreViewController : UITableViewController
 

@@ -15,12 +15,12 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #import "IntroViewController.h"
-#import "LibSub/SFHFKeychainUtils.h"
+#import "SFHFKeychainUtils.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
-#import "LibSub/ISMSUpdateChecker.h"
-#import "LibSub/MKStoreManager.h"
+#import "ISMSUpdateChecker.h"
+#import "MKStoreManager.h"
 #import <MediaPlayer/MediaPlayer.h>
 
 @implementation iSubAppDelegate

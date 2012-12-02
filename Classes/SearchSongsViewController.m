@@ -14,7 +14,7 @@
 #import "AlbumUITableViewCell.h"
 #import "AlbumViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
-#import "LibSub/SearchXMLParser.h"
+#import "SearchXMLParser.h"
 
 @implementation SearchSongsViewController
 
