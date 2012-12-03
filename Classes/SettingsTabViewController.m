@@ -96,6 +96,8 @@
 	self.disableScreenSleepSwitch.on = !settingsS.isScreenSleepEnabled;
 	
 	self.enableBasicAuthSwitch.on = settingsS.isBasicAuthEnabled;
+    
+    self.disableCellUsageSwitch.on = settingsS.isDisableUsageOver3G;
 	
 	self.enableSongsTabSwitch.on = settingsS.isSongsTabEnabled;
 //DLog(@"isSongsTabEnabled: %i", settingsS.isSongsTabEnabled);
@@ -216,6 +218,9 @@
 		case 120: self.secondsToBufferSegmentControl.selectedSegmentIndex = 8; break;
 		default: break;
 	}
+    
+    self.maxVideoBitrate3GSegmentedControl.selectedSegmentIndex = settingsS.maxVideoBitrate3G;
+    self.maxVideoBitrateWifiSegmentedControl.selectedSegmentIndex = settingsS.maxVideoBitrateWifi;
 }
 
 - (void)reloadTwitterUIElements
@@ -344,6 +349,14 @@
 				default: break;
 			}
 		}
+        else if (sender == self.maxVideoBitrate3GSegmentedControl)
+        {
+            settingsS.maxVideoBitrate3G = self.maxVideoBitrate3GSegmentedControl.selectedSegmentIndex;
+        }
+        else if (sender == self.maxVideoBitrateWifiSegmentedControl)
+        {
+            settingsS.maxVideoBitrateWifi = self.maxVideoBitrateWifiSegmentedControl.selectedSegmentIndex;
+        }
 	}
 }
 
@@ -562,6 +575,39 @@
 		{
 			settingsS.isLockScreenArtEnabled = self.enableLockScreenArt.on;
 		}
+        else if (sender == self.disableCellUsageSwitch)
+        {
+            settingsS.isDisableUsageOver3G = self.disableCellUsageSwitch.on;
+            
+            BOOL handleStupidity = NO;
+            if (!settingsS.isOfflineMode && settingsS.isDisableUsageOver3G && ![LibSub isWifi])
+            {
+                // We're on 3G and we just disabled use on 3G, so go offline
+                [appDelegateS enterOfflineModeForce];
+                
+                handleStupidity = YES;
+            }
+            else if (settingsS.isOfflineMode && !settingsS.isDisableUsageOver3G && ![LibSub isWifi])
+            {
+                // We're on 3G and we just enabled use on 3G, so go online if we're offline
+                [appDelegateS enterOfflineModeForce];
+                
+                handleStupidity = YES;
+            }
+            
+            if (handleStupidity)
+            {
+                // Handle the moreNavigationController stupidity
+                if (appDelegateS.currentTabBarController.selectedIndex == 4)
+                {
+                    [appDelegateS.currentTabBarController.moreNavigationController popToViewController:[appDelegateS.currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
+                }
+                else
+                {
+                    [(UINavigationController*)appDelegateS.currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
+                }
+            }
+        }
 	}
 }
 

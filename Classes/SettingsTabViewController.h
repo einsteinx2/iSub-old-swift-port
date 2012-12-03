@@ -17,6 +17,7 @@
 @property (nonatomic, strong) IBOutlet UISwitch *disableRotationSwitch;
 @property (nonatomic, strong) IBOutlet UISwitch *disableScreenSleepSwitch;
 @property (nonatomic, strong) IBOutlet UISwitch *enableBasicAuthSwitch;
+@property (nonatomic, strong) IBOutlet UISwitch *disableCellUsageSwitch;
 @property (nonatomic, strong) IBOutlet UISwitch *enableSongsTabSwitch;
 @property (nonatomic, strong) IBOutlet UILabel *enableSongsTabLabel;
 @property (nonatomic, strong) IBOutlet UILabel *enableSongsTabDesc;
@@ -62,6 +63,8 @@
 @property (nonatomic, strong) IBOutlet UILabel *enableLockArtLabel;
 @property (nonatomic, strong) IBOutlet UILabel *swipeCellsLabel;
 @property (nonatomic, strong) IBOutlet UILabel *tapHoldCellsLabel;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *maxVideoBitrateWifiSegmentedControl;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *maxVideoBitrate3GSegmentedControl;
 @property (nonatomic, strong) NSDate *loadedTime;
 
 - (void)toggleCacheControlsVisibility;

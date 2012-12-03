@@ -22,6 +22,10 @@
 #import "ISMSUpdateChecker.h"
 #import "MKStoreManager.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "StoreViewController.h"
+#import "UIViewController+PushViewControllerCustom.h"
+
+LOG_LEVEL_ISUB_DEFAULT
 
 @implementation iSubAppDelegate
 
@@ -122,7 +126,15 @@
 		alert.tag = 4;
 		[alert performSelector:@selector(show) withObject:nil afterDelay:1.1];
 	}
-	else 
+    else if ([self.wifiReach currentReachabilityStatus] == ReachableViaWWAN && settingsS.isDisableUsageOver3G)
+    {
+        settingsS.isOfflineMode = YES;
+		
+		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"You are not on Wifi, and have chosen to disable use over cellular. Entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+		alert.tag = 4;
+		[alert performSelector:@selector(show) withObject:nil afterDelay:1.1];
+    }
+	else
 	{
 		settingsS.isOfflineMode = NO;
 	}
@@ -413,6 +425,8 @@
              
              [self enterOfflineModeForce];*/
             
+            DDLogVerbose(@"Loading failed for loading type %i, entering offline mode. Error: %@", theLoader.type, error);
+            
             [self enterOfflineMode];
         }
         
@@ -645,8 +659,8 @@
 		{
 			// Reset features
 			[SFHFKeychainUtils storeUsername:kFeaturePlaylistsId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
-			[SFHFKeychainUtils storeUsername:kFeatureJukeboxId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
 			[SFHFKeychainUtils storeUsername:kFeatureCacheId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
+            [SFHFKeychainUtils storeUsername:kFeatureVideoId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
 			[SFHFKeychainUtils storeUsername:kFeatureAllId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
 			
             //DLog(@"is kFeaturePlaylistsId enabled: %i", [MKStoreManager isFeaturePurchased:kFeaturePlaylistsId]);
@@ -911,9 +925,19 @@
 		//Change over to offline mode
 		if (!settingsS.isOfflineMode)
 		{
+            DDLogVerbose(@"Reachability changed to NotReachable, prompting to go to offline mode");
 			[self enterOfflineMode];
 		}
 	}
+    else if ([curReach currentReachabilityStatus] == ReachableViaWWAN && settingsS.isDisableUsageOver3G)
+    {
+        if (!settingsS.isOfflineMode)
+		{            
+			[self enterOfflineModeForce];
+            
+            [[EX2SlidingNotification slidingNotificationOnMainWindowWithMessage:@"You have chosen to disable usage over cellular in settings and are no longer on Wifi. Entering offline mode." image:nil] showAndHideSlidingNotification];
+		}
+    }
 	else
 	{
 		[self checkServer];
@@ -1327,8 +1351,8 @@
 		message = @"You may now use the playlist feature.";
 	else if ([productId isEqualToString:kFeatureCacheId])
 		message = @"You may now use the song caching feature.";
-	else if ([productId isEqualToString:kFeatureJukeboxId])
-		message = @"You may now use the jukebox feature.";
+	else if ([productId isEqualToString:kFeatureVideoId])
+		message = @"You may now stream videos.";
 	else
 		message = @"";
 	
@@ -1400,35 +1424,56 @@
 
 - (void)playVideo:(ISMSSong *)aSong
 {
-    NSString *serverType = settingsS.serverType;
-    if (!aSong.isVideo || (([serverType isEqualToString:SUBSONIC] || [serverType isEqualToString:UBUNTU_ONE]) && !settingsS.isVideoSupported))
-        return;
+    DLog(@"video unlocked: %i", [MKStoreManager isFeaturePurchased:kFeatureVideoId]);
+    DLog(@"all unlocked: %i", [MKStoreManager isFeaturePurchased:kFeatureAllId]);
+    DLog(@"IS_LITE(): %i", IS_LITE());
+    DLog(@"!IS_LITE() || [MKStoreManager isFeaturePurchased:kFeatureVideoId] || [MKStoreManager isFeaturePurchased:kFeatureAllId]: %i", (!IS_LITE() || [MKStoreManager isFeaturePurchased:kFeatureVideoId] || [MKStoreManager isFeaturePurchased:kFeatureAllId]));
+    DLog(@"settingsS.isVideoUnlocked: %i", settingsS.isVideoUnlocked);
     
-    if (IS_IPAD())
+    if (settingsS.isVideoUnlocked)
     {
-        // Turn off repeat one so user doesn't get stuck
-        if (playlistS.repeatMode == ISMSRepeatMode_RepeatOne)
-            playlistS.repeatMode = ISMSRepeatMode_Normal;
+        NSString *serverType = settingsS.serverType;
+        if (!aSong.isVideo || (([serverType isEqualToString:SUBSONIC] || [serverType isEqualToString:UBUNTU_ONE]) && !settingsS.isVideoSupported))
+            return;
+        
+        if (IS_IPAD())
+        {
+            // Turn off repeat one so user doesn't get stuck
+            if (playlistS.repeatMode == ISMSRepeatMode_RepeatOne)
+                playlistS.repeatMode = ISMSRepeatMode_Normal;
+        }
+        
+        if ([serverType isEqualToString:SUBSONIC] || [serverType isEqualToString:UBUNTU_ONE])
+        {
+            [self playSubsonicVideo:aSong bitrates:settingsS.currentVideoBitrates];
+        }
+        else if ([serverType isEqualToString:WAVEBOX])
+        {
+            [self playWaveBoxVideo:aSong bitrates:settingsS.currentVideoBitrates];
+        }
     }
-    
-    if ([serverType isEqualToString:SUBSONIC] || [serverType isEqualToString:UBUNTU_ONE])
-    {
-        [self playSubsonicVideo:aSong];
-    }
-    else if ([serverType isEqualToString:WAVEBOX])
-    {
-        [self playWaveBoxVideo:aSong];
-    }
+    else
+	{
+		StoreViewController *store = [[StoreViewController alloc] init];
+        if (IS_IPAD())
+        {
+            [store pushViewControllerCustom:store];
+        }
+        else
+        {
+            [self.currentTabBarController.selectedViewController pushViewControllerCustom:store];
+        }
+	}
 }
 
-- (void)playSubsonicVideo:(ISMSSong *)aSong
+- (void)playSubsonicVideo:(ISMSSong *)aSong bitrates:(NSArray *)bitrates
 {
     [audioEngineS.player stop];
     
-    if (!aSong.itemId)
+    if (!aSong.itemId || !bitrates)
         return;
     
-    NSDictionary *parameters = @{ @"id" : aSong.itemId, @"bitRate" : @[@"1536", @"1024",@"512", @"256", @"60"] };
+    NSDictionary *parameters = @{ @"id" : aSong.itemId, @"bitRate" : bitrates };
     NSURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"hls" parameters:parameters];
     
     NSString *urlString = [NSString stringWithFormat:@"%@?%@", request.URL.absoluteString, [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]];
@@ -1443,14 +1488,14 @@
     [self.moviePlayer play];
 }
 
-- (void)playWaveBoxVideo:(ISMSSong *)aSong
+- (void)playWaveBoxVideo:(ISMSSong *)aSong bitrates:(NSArray *)bitrates
 {
     [audioEngineS.player stop];
     
-    if (!aSong.itemId)
+    if (!aSong.itemId || !bitrates)
         return;
     
-    NSDictionary *parameters = @{ @"id" : aSong.itemId, @"transQuality" : @[@"1536", @"1024",@"512", @"256", @"60"] };
+    NSDictionary *parameters = @{ @"id" : aSong.itemId, @"transQuality" : bitrates };
     NSURLRequest *request = [NSMutableURLRequest requestWithPMSAction:@"transcodehls" parameters:parameters];
     
     NSString *urlString = [NSString stringWithFormat:@"%@?%@", request.URL.absoluteString, [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]];

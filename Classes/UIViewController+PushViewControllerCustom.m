@@ -25,7 +25,10 @@
 	}
 	else
 	{
-		[self.navigationController pushViewController:viewController animated:YES];
+        if ([self isKindOfClass:[UINavigationController class]])
+            [(UINavigationController *)self pushViewController:viewController animated:YES];
+        else
+            [self.navigationController pushViewController:viewController animated:YES];
 	}
 }
 

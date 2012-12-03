@@ -553,6 +553,12 @@
     if (theLoader.type == ISMSLoaderType_Login)
     {
         settingsS.sessionId = ((PMSLoginLoader *)theLoader).sessionId;
+        settingsS.isVideoSupported = YES;
+    }
+    else if (theLoader.type == ISMSLoaderType_Status && [viewObjectsS.serverToEdit.type isEqualToString:SUBSONIC])
+    {
+        settingsS.isVideoSupported = ((SUSStatusLoader *)theLoader).isVideoSupported;
+        settingsS.isNewSearchAPI = ((SUSStatusLoader *)theLoader).isNewSearchAPI;
     }
 	
 	[self switchServer:nil];

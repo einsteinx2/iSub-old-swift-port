@@ -2991,6 +2991,9 @@
 		532E6FD311AB31CF000A0E3B /* Settings view */ = {
 			isa = PBXGroup;
 			children = (
+				5398F26A11DA61DA00007870 /* SettingsTabViewController.h */,
+				5398F26B11DA61DA00007870 /* SettingsTabViewController.m */,
+				533C65D415ABB9D6003EAF29 /* SettingsTabViewController.xib */,
 				53614AC7116432DA0088ABC0 /* ServerListViewController.h */,
 				53614AC8116432DA0088ABC0 /* ServerListViewController.m */,
 				533C65B315ABB9C6003EAF29 /* ServerListViewController.xib */,
@@ -3006,9 +3009,6 @@
 				53703BD21588390800B1FB33 /* PMSServerEditViewControllerViewController.h */,
 				53703BD31588390900B1FB33 /* PMSServerEditViewControllerViewController.m */,
 				533C65CD15ABB9D3003EAF29 /* PMSServerEditViewControllerViewController.xib */,
-				5398F26A11DA61DA00007870 /* SettingsTabViewController.h */,
-				5398F26B11DA61DA00007870 /* SettingsTabViewController.m */,
-				533C65D415ABB9D6003EAF29 /* SettingsTabViewController.xib */,
 				5398F27511DA627500007870 /* HelpTabViewController.h */,
 				5398F27611DA627500007870 /* HelpTabViewController.m */,
 				5398F27711DA627500007870 /* HelpTabViewController.xib */,

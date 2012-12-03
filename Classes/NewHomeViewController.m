@@ -551,51 +551,42 @@
 
 - (IBAction)jukebox
 {
-	if (settingsS.isJukeboxUnlocked)
-	{
-		if (settingsS.isJukeboxEnabled)
-		{
-			// Jukebox mode is on, turn it off
-			if (IS_IPAD())
-				[self.jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off-ipad.png"] forState:UIControlStateNormal];
-			else
-				[self.jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off.png"] forState:UIControlStateNormal];
-			settingsS.isJukeboxEnabled = NO;
-						
-			appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
-			
-			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_JukeboxDisabled];
-			
-			[FlurryAnalytics logEvent:@"JukeboxDisabled"];
-		}
-		else
-		{
-            [audioEngineS.player stop];
-			
-			// Jukebox mode is off, turn it on
-			if (IS_IPAD())
-				[self.jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-on-ipad.png"] forState:UIControlStateNormal];
-			else
-				[self.jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-on.png"] forState:UIControlStateNormal];
-			settingsS.isJukeboxEnabled = YES;
-			
-			[jukeboxS jukeboxGetInfo];
-			
-			appDelegateS.window.backgroundColor = viewObjectsS.jukeboxColor;
-			
-			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_JukeboxEnabled];
-			
-			[FlurryAnalytics logEvent:@"JukeboxEnabled"];
-		}
-		
-		[self initSongInfo];
-	}
-	else
-	{
-		StoreViewController *store = [[StoreViewController alloc] init];
-		[self pushViewControllerCustom:store];
-		//[self.navigationController pushViewController:store animated:YES];
-	}
+    if (settingsS.isJukeboxEnabled)
+    {
+        // Jukebox mode is on, turn it off
+        if (IS_IPAD())
+            [self.jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off-ipad.png"] forState:UIControlStateNormal];
+        else
+            [self.jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-off.png"] forState:UIControlStateNormal];
+        settingsS.isJukeboxEnabled = NO;
+        
+        appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
+        
+        [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_JukeboxDisabled];
+        
+        [FlurryAnalytics logEvent:@"JukeboxDisabled"];
+    }
+    else
+    {
+        [audioEngineS.player stop];
+        
+        // Jukebox mode is off, turn it on
+        if (IS_IPAD())
+            [self.jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-on-ipad.png"] forState:UIControlStateNormal];
+        else
+            [self.jukeboxButton setImage:[UIImage imageNamed:@"home-jukebox-on.png"] forState:UIControlStateNormal];
+        settingsS.isJukeboxEnabled = YES;
+        
+        [jukeboxS jukeboxGetInfo];
+        
+        appDelegateS.window.backgroundColor = viewObjectsS.jukeboxColor;
+        
+        [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_JukeboxEnabled];
+        
+        [FlurryAnalytics logEvent:@"JukeboxEnabled"];
+    }
+    
+    [self initSongInfo];
 }
 
 - (void)didReceiveMemoryWarning {
