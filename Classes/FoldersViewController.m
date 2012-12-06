@@ -102,7 +102,6 @@
 
 - (void)addURLRefBackButton
 {
-    self.navigationItem.leftBarButtonItem = nil;
     if (appDelegateS.referringAppUrl && appDelegateS.mainTabBarController.selectedIndex != 4)
     {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:appDelegateS action:@selector(backToReferringApp)];
@@ -481,7 +480,6 @@
 	}
 	
 	//Add the done button.
-	self.navigationItem.leftBarButtonItem = nil;
 	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneSearching_Clicked:)];
 }
 

@@ -363,7 +363,6 @@
 
 - (void)addURLRefBackButton
 {
-    self.navigationItem.leftBarButtonItem = nil;
     if (appDelegateS.referringAppUrl && appDelegateS.mainTabBarController.selectedIndex != 4)
     {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:appDelegateS action:@selector(backToReferringApp)];
