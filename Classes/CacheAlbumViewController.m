@@ -483,7 +483,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			cell.coverArtView.image = [UIImage imageNamed:@"default-album-art-small.png"];
 		}
 		
-		[cell.albumNameLabel setText:[name cleanString]];
+		[cell.albumNameLabel setText:name];
 		cell.backgroundView = [[UIView alloc] init];
 		if(indexPath.row % 2 == 0)
 			cell.backgroundView.backgroundColor = [UIColor whiteColor];

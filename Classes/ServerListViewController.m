@@ -248,7 +248,9 @@
 	settingsS.username = viewObjectsS.serverToEdit.username;
 	settingsS.password = viewObjectsS.serverToEdit.password;
     settingsS.redirectUrlString = self.theNewRedirectionUrl;
-	
+    settingsS.isVideoSupported = [notification.userInfo[@"isVideoSupported"] boolValue];
+    settingsS.isNewSearchAPI = [notification.userInfo[@"isNewSearchAPI"] boolValue];
+    
 //DLog(@" settingsS.urlString: %@   settingsS.redirectUrlString: %@", settingsS.urlString, settingsS.redirectUrlString);
 		
 	if(self == [[self.navigationController viewControllers] objectAtIndexSafe:0] && !IS_IPAD())

@@ -1353,7 +1353,7 @@
 			cell.isIndexShowing = YES;
 		
 		// Set up the cell...
-		[cell.artistNameLabel setText:[name cleanString]];
+		[cell.artistNameLabel setText:name];
 		
 		cell.backgroundView = [[UIView alloc] init];
 		if(indexPath.row % 2 == 0)

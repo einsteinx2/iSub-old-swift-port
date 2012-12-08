@@ -224,7 +224,7 @@
 		
 		// Update the serverToEdit to the new details
 		viewObjectsS.serverToEdit = theServer;
-		
+        
 		// Save the plist values
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		[defaults setObject:theServer.url forKey:@"url"];
@@ -241,11 +241,14 @@
 		
 		[self dismissModalViewControllerAnimated:YES];
 		
-		NSDictionary *userInfo = nil;
+		NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:0];
 		if (self.theNewRedirectUrl)
 		{
-			userInfo = [NSDictionary dictionaryWithObject:self.theNewRedirectUrl forKey:@"theNewRedirectUrl"];
+			userInfo[@"theNewRedirectUrl"] = self.theNewRedirectUrl;
 		}
+        userInfo[@"isVideoSupported"] = @(((SUSStatusLoader *)theLoader).isVideoSupported);
+        userInfo[@"isNewSearchAPI"] = @(((SUSStatusLoader *)theLoader).isNewSearchAPI);
+        
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer" userInfo:userInfo];
 	}
 	else
@@ -253,6 +256,9 @@
 		// Create the entry in serverList
 		viewObjectsS.serverToEdit = theServer;
 		[settingsS.serverList addObject:viewObjectsS.serverToEdit];
+        
+        settingsS.isVideoSupported = ((SUSStatusLoader *)theLoader).isVideoSupported;
+        settingsS.isNewSearchAPI = ((SUSStatusLoader *)theLoader).isNewSearchAPI;
 		
 		// Save the plist values
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -273,11 +279,14 @@
 		if (IS_IPAD())
 			[appDelegateS.ipadRootViewController.menuViewController showHome];
 				
-		NSDictionary *userInfo = nil;
+		NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:0];
 		if (self.theNewRedirectUrl)
 		{
-			userInfo = [NSDictionary dictionaryWithObject:self.theNewRedirectUrl forKey:@"theNewRedirectUrl"];
+			userInfo[@"theNewRedirectUrl"] = self.theNewRedirectUrl;
 		}
+        userInfo[@"isVideoSupported"] = @(((SUSStatusLoader *)theLoader).isVideoSupported);
+        userInfo[@"isNewSearchAPI"] = @(((SUSStatusLoader *)theLoader).isNewSearchAPI);
+        
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer" userInfo:userInfo];
 	}
 	

@@ -1646,7 +1646,7 @@ static NSString *kName_Error = @"error";
 		}
 		cell.contentView.backgroundColor = [UIColor clearColor];
 		cell.playlistNameLabel.backgroundColor = [UIColor clearColor];
-		cell.playlistNameLabel.text = [[databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT playlist FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]] cleanString];
+		cell.playlistNameLabel.text = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT playlist FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
 		cell.md5 = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT md5 FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
 		cell.playlistCount = [databaseS.localPlaylistsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", cell.md5]];
 		if (cell.playlistCount == 1)
@@ -1724,7 +1724,7 @@ static NSString *kName_Error = @"error";
 		{
 			PlaylistSongsViewController *playlistSongsViewController = [[PlaylistSongsViewController alloc] initWithNibName:@"PlaylistSongsViewController" bundle:nil];
             SUSServerPlaylist *playlist = [serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];
-			playlistSongsViewController.md5 = [[playlist.playlistName cleanString] md5];
+			playlistSongsViewController.md5 = [playlist.playlistName md5];
             playlistSongsViewController.serverPlaylist = playlist;
 			[self pushViewControllerCustom:playlistSongsViewController];
 		}

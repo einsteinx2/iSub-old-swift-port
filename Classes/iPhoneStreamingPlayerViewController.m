@@ -1059,7 +1059,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	}
 	else
 	{
-		if (audioEngineS.player)
+		if (audioEngineS.player && !playlistS.currentSong.isVideo)
 		{
 			[audioEngineS.player playPause];
 		}
