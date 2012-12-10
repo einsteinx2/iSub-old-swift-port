@@ -18,7 +18,7 @@
 // helpful for debugging to get rid of logging you don't need
 //#define SILENT
 
-#ifdef BETA
+/*#ifdef BETA
   #ifdef SILENT
     #define LOG_LEVEL_ISUB_DEFAULT static const int ddLogLevel = LOG_LEVEL_OFF;
   #else
@@ -32,4 +32,4 @@
   #define LOG_LEVEL_ISUB_DEBUG static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 #else
   #define LOG_LEVEL_ISUB_DEBUG static const int ddLogLevel = LOG_LEVEL_INFO;
-#endif
+#endif*/
