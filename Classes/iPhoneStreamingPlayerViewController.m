@@ -1483,7 +1483,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	__block NSUInteger bookmarksCount;
 	[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
 	{
-		[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmarks (playlistIndex, name, position, %@, bytes) VALUES (?, ?, ?, %@, ?)", [ISMSSong standardSongColumnNames], [ISMSSong standardSongColumnQMarks]], [NSNumber numberWithInt:playlistS.currentIndex], self.bookmarkNameTextField.text, [NSNumber numberWithInt:self.bookmarkPosition], self.currentSong.title, self.currentSong.songId, self.currentSong.artist, self.currentSong.album, self.currentSong.genre, self.currentSong.coverArtId, self.currentSong.path, self.currentSong.suffix, self.currentSong.transcodedSuffix, self.currentSong.duration, self.currentSong.bitRate, self.currentSong.track, self.currentSong.year, self.currentSong.size, self.currentSong.parentId, [NSNumber numberWithUnsignedLongLong:self.bookmarkBytePosition]];
+        NSString *query = [NSString stringWithFormat:@"INSERT INTO bookmarks (playlistIndex, name, position, %@, bytes) VALUES (?, ?, ?, %@, ?)", [ISMSSong standardSongColumnNames], [ISMSSong standardSongColumnQMarks]];
+		[db executeUpdate:query, @(playlistS.currentIndex), self.bookmarkNameTextField.text, @(self.bookmarkPosition), self.currentSong.title, self.currentSong.songId, self.currentSong.artist, self.currentSong.album, self.currentSong.genre, self.currentSong.coverArtId, self.currentSong.path, self.currentSong.suffix, self.currentSong.transcodedSuffix, self.currentSong.duration, self.currentSong.bitRate, self.currentSong.track, self.currentSong.year, self.currentSong.size, self.currentSong.parentId, @(self.currentSong.isVideo), @(self.bookmarkBytePosition)];
 		
 		NSInteger bookmarkId = [db intForQuery:@"SELECT MAX(bookmarkId) FROM bookmarks"]; 
 		
@@ -1699,7 +1700,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			}
 		}
 		
-		if (self.isExtraButtonsShowing)
+		if (self.isExtraButtonsShowing || IS_TALL_SCREEN())
 			[self updateFormatLabel];
 	}
 	
