@@ -403,7 +403,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	// Setup landscape orientation if necessary
 	if (!IS_IPAD())
 	{
-		self.artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(349, 60, 170, 30)];
+		self.artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(IS_TALL_SCREEN() ? 349 : 305, 60, 170, 30)];
 		self.artistLabel.backgroundColor = [UIColor clearColor];
 		self.artistLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
 		self.artistLabel.font = [UIFont boldSystemFontOfSize:22];
@@ -412,7 +412,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[self.view addSubview:self.artistLabel];
 		[self.view sendSubviewToBack:self.artistLabel];
 		
-		self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(349, 90, 170, 30)];
+		self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(IS_TALL_SCREEN() ? 349 : 305, 90, 170, 30)];
 		self.titleLabel.backgroundColor = [UIColor clearColor];
 		self.titleLabel.textColor = [UIColor whiteColor];
 		self.titleLabel.font = [UIFont boldSystemFontOfSize:24];
@@ -421,7 +421,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[self.view addSubview:self.titleLabel];
 		[self.view sendSubviewToBack:self.titleLabel];
 		
-		self.albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(349, 120, 170, 30)];
+		self.albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(IS_TALL_SCREEN() ? 349 : 305, 120, 170, 30)];
 		self.albumLabel.backgroundColor = [UIColor clearColor];
 		self.albumLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
 		self.albumLabel.font = [UIFont systemFontOfSize:22];
