@@ -1372,7 +1372,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		}
 		
 		self.byteOffset = [BassWrapper estimateBitrate:audioEngineS.player.currentStream] * 128 * self.progressSlider.value;
-	//DLog(@"bitrate: %i slider: %f byteOffset: %i localFileSize: %llu", [BassWrapper estimateBitrate:audioEngineS.player.currentStream], progressSlider.value, byteOffset, currentSong.localFileSize);
+        //DLog(@"bitrate: %i slider: %f byteOffset: %i localFileSize: %llu", [BassWrapper estimateBitrate:audioEngineS.player.currentStream], progressSlider.value, byteOffset, currentSong.localFileSize);
 		
 		if (self.currentSong.isTempCached)
 		{
