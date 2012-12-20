@@ -527,6 +527,7 @@ LOG_LEVEL_ISUB_DEFAULT
             [hockeyManager configureWithBetaIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7" liveIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7" delegate:self];
 		else
             [hockeyManager configureWithBetaIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb" liveIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb" delegate:self];
+        [hockeyManager startManager];
 	}
     hockeyManager.crashManager.crashManagerStatus = BITCrashManagerStatusAutoSend;
     hockeyManager.crashManager.delegate = self;
