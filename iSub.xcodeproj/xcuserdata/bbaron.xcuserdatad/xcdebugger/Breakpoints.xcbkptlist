@@ -4675,8 +4675,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "125"
          endingLineNumber = "125"
-         landmarkName = "@implementation EqualizerViewController"
-         landmarkType = "3">
+         landmarkName = "-createOverlay"
+         landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -5581,6 +5581,19 @@
          startingLineNumber = "289"
          endingLineNumber = "289"
          landmarkName = "-viewDidLoad"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Frameworks/libSub/Sub/ISMSSong.m"
+         timestampString = "378009314.095641"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "50"
+         endingLineNumber = "50"
+         landmarkName = "-initWithTBXMLElement:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
