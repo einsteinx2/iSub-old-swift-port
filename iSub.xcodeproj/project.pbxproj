@@ -468,262 +468,6 @@
 		53159F5E156F69D0001B0268 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 53EB4AA51405FE1B00CBA075 /* libz.dylib */; };
 		53159F5F156F69D0001B0268 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5327F52412B955F100735119 /* StoreKit.framework */; };
 		53159F60156F69D0001B0268 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F7A127131B7F3B002C829D /* Security.framework */; };
-		5315A1CE156F7064001B0268 /* FoldersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* FoldersViewController.xib */; };
-		5315A1D0156F7064001B0268 /* controller-next.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D7F113C963300B3A376 /* controller-next.png */; };
-		5315A1D1156F7064001B0268 /* controller-pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D80113C963300B3A376 /* controller-pause.png */; };
-		5315A1D2156F7064001B0268 /* controller-play.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D81113C963300B3A376 /* controller-play.png */; };
-		5315A1D3156F7064001B0268 /* controller-previous.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D82113C963300B3A376 /* controller-previous.png */; };
-		5315A1D5156F7064001B0268 /* default-album-art.png in Resources */ = {isa = PBXBuildFile; fileRef = 535A8899113F62DD00979783 /* default-album-art.png */; };
-		5315A1D6156F7064001B0268 /* settings-page.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D612811441F5B00DFCE56 /* settings-page.png */; };
-		5315A1D7156F7064001B0268 /* controller-repeat-all.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D615C11442AA000DFCE56 /* controller-repeat-all.png */; };
-		5315A1D8156F7064001B0268 /* controller-repeat-one.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D615D11442AA000DFCE56 /* controller-repeat-one.png */; };
-		5315A1D9156F7064001B0268 /* controller-repeat.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D615E11442AA000DFCE56 /* controller-repeat.png */; };
-		5315A1DA156F7064001B0268 /* controller-shuffle-on.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D615F11442AA000DFCE56 /* controller-shuffle-on.png */; };
-		5315A1DB156F7064001B0268 /* controller-shuffle.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D616011442AA000DFCE56 /* controller-shuffle.png */; };
-		5315A1DC156F7064001B0268 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D624311444E4600DFCE56 /* Icon.png */; };
-		5315A1DD156F7064001B0268 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AA300311461A04003E57E3 /* background.png */; };
-		5315A1DE156F7064001B0268 /* default-album-art-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 534E443E1155AD01000B4134 /* default-album-art-small.png */; };
-		5315A1DF156F7064001B0268 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 5305C2051157F4F800BC78F0 /* Default.png */; };
-		5315A1E0156F7064001B0268 /* progress-label-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F0CD8111589F0A00A665CD /* progress-label-background.png */; };
-		5315A1E1156F7064001B0268 /* AllAlbumsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 539797FD1162D4D200F41D8B /* AllAlbumsViewController.xib */; };
-		5315A1E2156F7064001B0268 /* loading-screen-image.png in Resources */ = {isa = PBXBuildFile; fileRef = 539799781163084200F41D8B /* loading-screen-image.png */; };
-		5315A1E4156F7064001B0268 /* AllSongsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53614BD7116467420088ABC0 /* AllSongsViewController.xib */; };
-		5315A1E5156F7064001B0268 /* PlayingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE3621165C83900197877 /* PlayingViewController.xib */; };
-		5315A1E6156F7064001B0268 /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE4EE1166538500197877 /* gear.png */; };
-		5315A1E7156F7064001B0268 /* artists-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE50D1166584900197877 /* artists-tabbaricon.png */; };
-		5315A1E8156F7064001B0268 /* playlists-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE518116658C700197877 /* playlists-tabbaricon.png */; };
-		5315A1E9156F7064001B0268 /* albums-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE51E1166590700197877 /* albums-tabbaricon.png */; };
-		5315A1EA156F7064001B0268 /* songs-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE524116659D900197877 /* songs-tabbaricon.png */; };
-		5315A1EB156F7064001B0268 /* playing-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE52A11665A3700197877 /* playing-tabbaricon.png */; };
-		5315A1EC156F7064001B0268 /* PlaylistsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE54211665B6B00197877 /* PlaylistsViewController.xib */; };
-		5315A1ED156F7064001B0268 /* current-server.png in Resources */ = {isa = PBXBuildFile; fileRef = 53191DEF1167CFDC00E1C08A /* current-server.png */; };
-		5315A1EF156F7064001B0268 /* now-playing.png in Resources */ = {isa = PBXBuildFile; fileRef = 530AD58D116913AC00AD2540 /* now-playing.png */; };
-		5315A1F0156F7064001B0268 /* reload-table.png in Resources */ = {isa = PBXBuildFile; fileRef = 53030314116ADF8B00B0AF5D /* reload-table.png */; };
-		5315A1F1156F7064001B0268 /* PageControlViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53D8ACB2116C47E600E5C9CB /* PageControlViewController.xib */; };
-		5315A1F3156F7064001B0268 /* CurrentPlaylistViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F4A07C116FF7EE00BB8411 /* CurrentPlaylistViewController.xib */; };
-		5315A1F4156F7064001B0268 /* CurrentPlaylistBackgroundViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F4A228117011B900BB8411 /* CurrentPlaylistBackgroundViewController.xib */; };
-		5315A1F5156F7064001B0268 /* play-all-note.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B8A1FA11704E100005AA86 /* play-all-note.png */; };
-		5315A1F6156F7064001B0268 /* BookmarksViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5388A3B3119899260049BA9E /* BookmarksViewController.xib */; };
-		5315A1F7156F7064001B0268 /* selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 5388A42A1198AD840049BA9E /* selected.png */; };
-		5315A1F8156F7064001B0268 /* unselected.png in Resources */ = {isa = PBXBuildFile; fileRef = 5388A42B1198AD840049BA9E /* unselected.png */; };
-		5315A1F9156F7064001B0268 /* cache-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A2213411A8489900C1ACD4 /* cache-button.png */; };
-		5315A1FA156F7064001B0268 /* queue-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 53A2213511A8489900C1ACD4 /* queue-button.png */; };
-		5315A1FB156F7064001B0268 /* GenresViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53B52BA411ADE0A6005776B5 /* GenresViewController.xib */; };
-		5315A1FC156F7064001B0268 /* CacheViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 530B417111B607A200743C09 /* CacheViewController.xib */; };
-		5315A1FD156F7064001B0268 /* bookmarks-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5312E1AD11B8C23100AFC08D /* bookmarks-tabbaricon.png */; };
-		5315A1FE156F7064001B0268 /* genres-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5312E1AE11B8C23100AFC08D /* genres-tabbaricon.png */; };
-		5315A1FF156F7064001B0268 /* cache-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5312E1B311B8C31E00AFC08D /* cache-tabbaricon.png */; };
-		5315A200156F7064001B0268 /* LoadingScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 536B5D5D11C8183D00CC1D69 /* LoadingScreen.xib */; };
-		5315A201156F7064001B0268 /* CacheAlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 538229F511C98091003F1E23 /* CacheAlbumViewController.xib */; };
-		5315A202156F7064001B0268 /* GenresAlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53523D8E11CD5889006AEA48 /* GenresAlbumViewController.xib */; };
-		5315A203156F7064001B0268 /* GenresArtistViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53523D9311CD61F7006AEA48 /* GenresArtistViewController.xib */; };
-		5315A204156F7064001B0268 /* delete-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314C7B311D4157D000CA726 /* delete-button.png */; };
-		5315A206156F7064001B0268 /* HelpTabViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5398F27711DA627500007870 /* HelpTabViewController.xib */; };
-		5315A207156F7064001B0268 /* iPhoneStreamingPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5398F2B511DA8B1000007870 /* iPhoneStreamingPlayerViewController.xib */; };
-		5315A208156F7064001B0268 /* albums-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF18811DA8D7500447FF7 /* albums-tabbaricon@2x.png */; };
-		5315A209156F7064001B0268 /* artists-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF18C11DA90D800447FF7 /* artists-tabbaricon@2x.png */; };
-		5315A20A156F7064001B0268 /* bookmarks-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF18D11DA90D800447FF7 /* bookmarks-tabbaricon@2x.png */; };
-		5315A20B156F7064001B0268 /* cache-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF18E11DA90D800447FF7 /* cache-tabbaricon@2x.png */; };
-		5315A20C156F7064001B0268 /* genres-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF18F11DA90D800447FF7 /* genres-tabbaricon@2x.png */; };
-		5315A20D156F7064001B0268 /* playing-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF19011DA90D800447FF7 /* playing-tabbaricon@2x.png */; };
-		5315A20E156F7064001B0268 /* playlists-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF19111DA90D800447FF7 /* playlists-tabbaricon@2x.png */; };
-		5315A20F156F7064001B0268 /* songs-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF19211DA90D800447FF7 /* songs-tabbaricon@2x.png */; };
-		5315A210156F7064001B0268 /* gear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF1C311DA983700447FF7 /* gear@2x.png */; };
-		5315A211156F7064001B0268 /* background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF1D811DA9DB600447FF7 /* background@2x.png */; };
-		5315A212156F7064001B0268 /* now-playing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF1DD11DA9F0200447FF7 /* now-playing@2x.png */; };
-		5315A213156F7064001B0268 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF1E711DAA1BC00447FF7 /* Icon@2x.png */; };
-		5315A214156F7064001B0268 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF1EB11DAA21600447FF7 /* Icon-72.png */; };
-		5315A215156F7064001B0268 /* current-server@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2511E822CC00FE3ECD /* current-server@2x.png */; };
-		5315A216156F7064001B0268 /* default-album-art-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2711E823A100FE3ECD /* default-album-art-small@2x.png */; };
-		5315A217156F7064001B0268 /* default-album-art@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2811E823A100FE3ECD /* default-album-art@2x.png */; };
-		5315A218156F7064001B0268 /* reload-table@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE4D11E827A100FE3ECD /* reload-table@2x.png */; };
-		5315A219156F7064001B0268 /* cache-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE6011E82A8700FE3ECD /* cache-button@2x.png */; };
-		5315A21A156F7064001B0268 /* queue-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE6811E82CD700FE3ECD /* queue-button@2x.png */; };
-		5315A21B156F7064001B0268 /* delete-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE6C11E82D7700FE3ECD /* delete-button@2x.png */; };
-		5315A21C156F7064001B0268 /* selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530B95E711E8E5C3002EA08E /* selected@2x.png */; };
-		5315A21D156F7064001B0268 /* unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530B95EB11E8E7B7002EA08E /* unselected@2x.png */; };
-		5315A21E156F7064001B0268 /* play-all-note@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530B960211E8E99C002EA08E /* play-all-note@2x.png */; };
-		5315A21F156F7064001B0268 /* loading-screen-image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530B960611E8EC86002EA08E /* loading-screen-image@2x.png */; };
-		5315A220156F7064001B0268 /* settings-page@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530B960811E8ED33002EA08E /* settings-page@2x.png */; };
-		5315A221156F7064001B0268 /* controller-next@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE011E9487C004AEC41 /* controller-next@2x.png */; };
-		5315A222156F7064001B0268 /* controller-pause@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE211E9488A004AEC41 /* controller-pause@2x.png */; };
-		5315A223156F7064001B0268 /* controller-play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE311E9488A004AEC41 /* controller-play@2x.png */; };
-		5315A224156F7064001B0268 /* controller-previous@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE411E9488A004AEC41 /* controller-previous@2x.png */; };
-		5315A225156F7064001B0268 /* controller-repeat-all@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE511E9488A004AEC41 /* controller-repeat-all@2x.png */; };
-		5315A226156F7064001B0268 /* controller-repeat-one@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE611E9488A004AEC41 /* controller-repeat-one@2x.png */; };
-		5315A227156F7064001B0268 /* controller-repeat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE711E9488A004AEC41 /* controller-repeat@2x.png */; };
-		5315A228156F7064001B0268 /* controller-shuffle-on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE811E9488A004AEC41 /* controller-shuffle-on@2x.png */; };
-		5315A229156F7064001B0268 /* controller-shuffle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE911E9488A004AEC41 /* controller-shuffle@2x.png */; };
-		5315A22A156F7064001B0268 /* controller-bookmark-on.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FF611E94AA5004AEC41 /* controller-bookmark-on.png */; };
-		5315A22B156F7064001B0268 /* controller-bookmark-on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FF711E94AA5004AEC41 /* controller-bookmark-on@2x.png */; };
-		5315A22C156F7064001B0268 /* controller-bookmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FF811E94AA5004AEC41 /* controller-bookmark.png */; };
-		5315A22D156F7064001B0268 /* controller-bookmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FF911E94AA5004AEC41 /* controller-bookmark@2x.png */; };
-		5315A232156F7064001B0268 /* ChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5379DC4C1219E48800F426CD /* ChatViewController.xib */; };
-		5315A233156F7064001B0268 /* comment-write.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BB7F9B121B95A600BEE7E8 /* comment-write.png */; };
-		5315A234156F7064001B0268 /* comment-write-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BB7FAB121B96E400BEE7E8 /* comment-write-pressed.png */; };
-		5315A235156F7064001B0268 /* chat-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BB7FB3121B97BA00BEE7E8 /* chat-tabbaricon.png */; };
-		5315A236156F7064001B0268 /* chat-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BB7FB4121B97BA00BEE7E8 /* chat-tabbaricon@2x.png */; };
-		5315A237156F7064001B0268 /* comment-write-pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BB8009121B9CA200BEE7E8 /* comment-write-pressed@2x.png */; };
-		5315A238156F7064001B0268 /* comment-write@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BB800A121B9CA200BEE7E8 /* comment-write@2x.png */; };
-		5315A23A156F7064001B0268 /* home-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314B4EC126FD20300CDB511 /* home-tabbaricon.png */; };
-		5315A23B156F7064001B0268 /* home-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314B4ED126FD20300CDB511 /* home-tabbaricon@2x.png */; };
-		5315A23E156F7064001B0268 /* blackArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7A127D012300B745B4 /* blackArrow.png */; };
-		5315A23F156F7064001B0268 /* blackArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7B127D012300B745B4 /* blackArrow@2x.png */; };
-		5315A240156F7064001B0268 /* blueArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7C127D012300B745B4 /* blueArrow.png */; };
-		5315A241156F7064001B0268 /* blueArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7D127D012300B745B4 /* blueArrow@2x.png */; };
-		5315A242156F7064001B0268 /* grayArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7E127D012300B745B4 /* grayArrow.png */; };
-		5315A243156F7064001B0268 /* grayArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7F127D012300B745B4 /* grayArrow@2x.png */; };
-		5315A244156F7064001B0268 /* whiteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B80127D012300B745B4 /* whiteArrow.png */; };
-		5315A245156F7064001B0268 /* whiteArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B81127D012300B745B4 /* whiteArrow@2x.png */; };
-		5315A24A156F7064001B0268 /* home-background-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8C803129728F9007BDC0E /* home-background-ipad.png */; };
-		5315A24D156F7064001B0268 /* home-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC621297949A007BDC0E /* home-background.png */; };
-		5315A24E156F7064001B0268 /* home-background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC631297949A007BDC0E /* home-background@2x.png */; };
-		5315A24F156F7064001B0268 /* home-jukebox-off-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC641297949A007BDC0E /* home-jukebox-off-ipad.png */; };
-		5315A250156F7064001B0268 /* home-jukebox-off.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC651297949A007BDC0E /* home-jukebox-off.png */; };
-		5315A251156F7064001B0268 /* home-jukebox-off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC661297949A007BDC0E /* home-jukebox-off@2x.png */; };
-		5315A252156F7064001B0268 /* home-jukebox-on-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC671297949A007BDC0E /* home-jukebox-on-ipad.png */; };
-		5315A253156F7064001B0268 /* home-jukebox-on.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC681297949A007BDC0E /* home-jukebox-on.png */; };
-		5315A254156F7064001B0268 /* home-jukebox-on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC691297949A007BDC0E /* home-jukebox-on@2x.png */; };
-		5315A255156F7064001B0268 /* home-quick-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC701297949A007BDC0E /* home-quick-ipad.png */; };
-		5315A256156F7064001B0268 /* home-quick.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC711297949A007BDC0E /* home-quick.png */; };
-		5315A257156F7064001B0268 /* home-quick@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC721297949A007BDC0E /* home-quick@2x.png */; };
-		5315A258156F7064001B0268 /* home-settings-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC731297949A007BDC0E /* home-settings-ipad.png */; };
-		5315A259156F7064001B0268 /* home-settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC741297949A007BDC0E /* home-settings.png */; };
-		5315A25A156F7064001B0268 /* home-settings@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC751297949A007BDC0E /* home-settings@2x.png */; };
-		5315A25B156F7064001B0268 /* home-shuffle-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC761297949A007BDC0E /* home-shuffle-ipad.png */; };
-		5315A25C156F7064001B0268 /* home-shuffle.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC771297949A007BDC0E /* home-shuffle.png */; };
-		5315A25D156F7064001B0268 /* home-shuffle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC781297949A007BDC0E /* home-shuffle@2x.png */; };
-		5315A25E156F7064001B0268 /* controller-stop.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327F1BE12B8243C00735119 /* controller-stop.png */; };
-		5315A25F156F7064001B0268 /* controller-stop@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327F1BF12B8243C00735119 /* controller-stop@2x.png */; };
-		5315A260156F7064001B0268 /* StoreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5327F58412B95D2900735119 /* StoreViewController.xib */; };
-		5315A261156F7064001B0268 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20D1C12C27AAA00A90DD9 /* Default@2x.png */; };
-		5315A262156F7064001B0268 /* home-quick-random.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DCD12C2945400A90DD9 /* home-quick-random.png */; };
-		5315A263156F7064001B0268 /* home-quick-random@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DD112C2957A00A90DD9 /* home-quick-random@2x.png */; };
-		5315A264156F7064001B0268 /* home-quick-recent@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DD512C298E500A90DD9 /* home-quick-recent@2x.png */; };
-		5315A265156F7064001B0268 /* home-quick-recent.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DD612C298E500A90DD9 /* home-quick-recent.png */; };
-		5315A266156F7064001B0268 /* home-quick-newest@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DD712C298E500A90DD9 /* home-quick-newest@2x.png */; };
-		5315A267156F7064001B0268 /* home-quick-newest.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DD812C298E500A90DD9 /* home-quick-newest.png */; };
-		5315A268156F7064001B0268 /* home-quick-frequent@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DD912C298E500A90DD9 /* home-quick-frequent@2x.png */; };
-		5315A269156F7064001B0268 /* home-quick-frequent.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DDA12C298E500A90DD9 /* home-quick-frequent.png */; };
-		5315A26A156F7064001B0268 /* home-quick-cancel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DDB12C298E500A90DD9 /* home-quick-cancel@2x.png */; };
-		5315A26B156F7064001B0268 /* home-quick-cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DDC12C298E500A90DD9 /* home-quick-cancel.png */; };
-		5315A26C156F7064001B0268 /* home-quick-topbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DE512C29A7600A90DD9 /* home-quick-topbar@2x.png */; };
-		5315A26D156F7064001B0268 /* home-quick-topbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DE612C29A7600A90DD9 /* home-quick-topbar.png */; };
-		5315A26E156F7064001B0268 /* home-chat-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20E2B12C2A60D00A90DD9 /* home-chat-ipad.png */; };
-		5315A26F156F7064001B0268 /* home-chat.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20E2C12C2A60D00A90DD9 /* home-chat.png */; };
-		5315A270156F7064001B0268 /* home-chat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20E2D12C2A60D00A90DD9 /* home-chat@2x.png */; };
-		5315A271156F7064001B0268 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C01AE12C3DCC40061545B /* back.png */; };
-		5315A272156F7064001B0268 /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C01AF12C3DCC40061545B /* back@2x.png */; };
-		5315A273156F7064001B0268 /* Default-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B64B7E12C9173E007F1ED5 /* Default-Portrait.png */; };
-		5315A274156F7064001B0268 /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B64B9612C917E4007F1ED5 /* Default-Landscape.png */; };
-		5315A275156F7064001B0268 /* folders-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CA9C512DBCA9000389DA1 /* folders-tabbaricon.png */; };
-		5315A276156F7064001B0268 /* folders-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CA9C612DBCA9000389DA1 /* folders-tabbaricon@2x.png */; };
-		5315A277156F7064001B0268 /* player-overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CAC6612DC2D6D00389DA1 /* player-overlay.png */; };
-		5315A278156F7064001B0268 /* player-overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CAC6712DC2D6D00389DA1 /* player-overlay@2x.png */; };
-		5315A279156F7064001B0268 /* server-subsonic.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB22012E0014A00389DA1 /* server-subsonic.png */; };
-		5315A27A156F7064001B0268 /* server-subsonic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB22112E0014A00389DA1 /* server-subsonic@2x.png */; };
-		5315A27B156F7064001B0268 /* server-ubuntu.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB22212E0014A00389DA1 /* server-ubuntu.png */; };
-		5315A27C156F7064001B0268 /* server-ubuntu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB22312E0014A00389DA1 /* server-ubuntu@2x.png */; };
-		5315A27F156F7064001B0268 /* ubuntu-add-server.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB2A612E2372B00389DA1 /* ubuntu-add-server.png */; };
-		5315A280156F7064001B0268 /* ubuntu-add-server@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB2A712E2372B00389DA1 /* ubuntu-add-server@2x.png */; };
-		5315A281156F7064001B0268 /* server-button-subsonic.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB48612E2664700389DA1 /* server-button-subsonic.png */; };
-		5315A282156F7064001B0268 /* server-button-subsonic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB48712E2664700389DA1 /* server-button-subsonic@2x.png */; };
-		5315A283156F7064001B0268 /* server-button-ubuntu.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB48812E2664700389DA1 /* server-button-ubuntu.png */; };
-		5315A284156F7064001B0268 /* server-button-ubuntu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB48912E2664700389DA1 /* server-button-ubuntu@2x.png */; };
-		5315A285156F7064001B0268 /* default-album-art-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB58312E27A5400389DA1 /* default-album-art-ipad.png */; };
-		5315A288156F7064001B0268 /* intro-bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6051A12F1EFD4003C6895 /* intro-bottom.png */; };
-		5315A289156F7064001B0268 /* intro-bottom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6051B12F1EFD4003C6895 /* intro-bottom@2x.png */; };
-		5315A28A156F7064001B0268 /* intro-foreground.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6051C12F1EFD4003C6895 /* intro-foreground.png */; };
-		5315A28B156F7064001B0268 /* intro-foreground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6051D12F1EFD4003C6895 /* intro-foreground@2x.png */; };
-		5315A28C156F7064001B0268 /* intro-top.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6052012F1EFD4003C6895 /* intro-top.png */; };
-		5315A28D156F7064001B0268 /* intro-top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6052112F1EFD4003C6895 /* intro-top@2x.png */; };
-		5315A28F156F7064001B0268 /* intro-rowbackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6053112F1F19F003C6895 /* intro-rowbackground.png */; };
-		5315A290156F7064001B0268 /* intro-rowbackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6053212F1F19F003C6895 /* intro-rowbackground@2x.png */; };
-		5315A291156F7064001B0268 /* intro-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6053912F1F2F5003C6895 /* intro-arrow.png */; };
-		5315A292156F7064001B0268 /* intro-arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6053A12F1F2F5003C6895 /* intro-arrow@2x.png */; };
-		5315A293156F7064001B0268 /* intro-rowbackground-dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6053D12F1F493003C6895 /* intro-rowbackground-dark.png */; };
-		5315A294156F7064001B0268 /* intro-rowbackground-dark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6053E12F1F493003C6895 /* intro-rowbackground-dark@2x.png */; };
-		5315A295156F7064001B0268 /* intro-icon-testserver.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6054112F1F755003C6895 /* intro-icon-testserver.png */; };
-		5315A296156F7064001B0268 /* intro-icon-testserver@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6054212F1F755003C6895 /* intro-icon-testserver@2x.png */; };
-		5315A297156F7064001B0268 /* intro-icon-video.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6054312F1F755003C6895 /* intro-icon-video.png */; };
-		5315A298156F7064001B0268 /* intro-icon-video@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6054412F1F755003C6895 /* intro-icon-video@2x.png */; };
-		5315A299156F7064001B0268 /* intro-sunkenlogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6054912F1FB4B003C6895 /* intro-sunkenlogo.png */; };
-		5315A29A156F7064001B0268 /* intro-sunkenlogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6054A12F1FB4B003C6895 /* intro-sunkenlogo@2x.png */; };
-		5315A29B156F7064001B0268 /* intro-icon-ownserver.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6054D12F1FCC6003C6895 /* intro-icon-ownserver.png */; };
-		5315A29C156F7064001B0268 /* intro-icon-ownserver@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6054E12F1FCC6003C6895 /* intro-icon-ownserver@2x.png */; };
-		5315A29D156F7064001B0268 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 537FCC5312F8F7F400F1D996 /* iTunesArtwork */; };
-		5315A2A0156F7064001B0268 /* folder-dropdown-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ADBBBA133525BD0098FAE6 /* folder-dropdown-arrow.png */; };
-		5315A2A1156F7064001B0268 /* folder-dropdown-arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ADBBBB133525BD0098FAE6 /* folder-dropdown-arrow@2x.png */; };
-		5315A2A2156F7064001B0268 /* controller-bookmark-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B726D134D0900003E0E1C /* controller-bookmark-ipad.png */; };
-		5315A2A3156F7064001B0268 /* controller-bookmark-on-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B726E134D0900003E0E1C /* controller-bookmark-on-ipad.png */; };
-		5315A2A4156F7064001B0268 /* controller-repeat-all-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B726F134D0900003E0E1C /* controller-repeat-all-ipad.png */; };
-		5315A2A5156F7064001B0268 /* controller-repeat-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B7270134D0900003E0E1C /* controller-repeat-ipad.png */; };
-		5315A2A6156F7064001B0268 /* controller-repeat-one-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B7271134D0900003E0E1C /* controller-repeat-one-ipad.png */; };
-		5315A2A7156F7064001B0268 /* controller-shuffle-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B7272134D0900003E0E1C /* controller-shuffle-ipad.png */; };
-		5315A2A8156F7064001B0268 /* controller-shuffle-on-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B7273134D0900003E0E1C /* controller-shuffle-on-ipad.png */; };
-		5315A2AA156F7064001B0268 /* upload-playlist.png in Resources */ = {isa = PBXBuildFile; fileRef = 5353B83A134D8019005C589E /* upload-playlist.png */; };
-		5315A2AB156F7064001B0268 /* upload-playlist@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5353B83B134D8019005C589E /* upload-playlist@2x.png */; };
-		5315A2AD156F7064001B0268 /* PlaylistSongsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 536AB8101353DCF700DABD83 /* PlaylistSongsViewController.xib */; };
-		5315A2AF156F7064001B0268 /* Icon-72-Beta.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BC2869139AF17B00A825F1 /* Icon-72-Beta.png */; };
-		5315A2B0156F7064001B0268 /* Icon-Beta.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BC286A139AF17B00A825F1 /* Icon-Beta.png */; };
-		5315A2B1156F7064001B0268 /* Icon@2x-Beta.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BC286B139AF17B00A825F1 /* Icon@2x-Beta.png */; };
-		5315A2B4156F7064001B0268 /* downArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DFB300148C27080066FF94 /* downArrow.png */; };
-		5315A2B6156F7064001B0268 /* controller-equalizer.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306238A14D4BB7E00D320A8 /* controller-equalizer.png */; };
-		5315A2B7156F7064001B0268 /* controller-equalizer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306238B14D4BB7E00D320A8 /* controller-equalizer@2x.png */; };
-		5315A2B8156F7064001B0268 /* eqView.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306239214D4BCAD00D320A8 /* eqView.png */; };
-		5315A2B9156F7064001B0268 /* eqView@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306239314D4BCAD00D320A8 /* eqView@2x.png */; };
-		5315A2BA156F7064001B0268 /* ModalAlbumArtViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 532B552614D641C500B8AA67 /* ModalAlbumArtViewController.xib */; };
-		5315A2BB156F7064001B0268 /* controller-equalizer-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467B14D7BDFA008B35F6 /* controller-equalizer-ipad.png */; };
-		5315A2BC156F7064001B0268 /* controller-next-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467C14D7BDFA008B35F6 /* controller-next-ipad.png */; };
-		5315A2BD156F7064001B0268 /* controller-pause-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467D14D7BDFA008B35F6 /* controller-pause-ipad.png */; };
-		5315A2BE156F7064001B0268 /* controller-play-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467E14D7BDFA008B35F6 /* controller-play-ipad.png */; };
-		5315A2BF156F7064001B0268 /* controller-previous-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467F14D7BDFA008B35F6 /* controller-previous-ipad.png */; };
-		5315A2C0156F7064001B0268 /* controller-extras.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327A5D114DA1E4400DEE1B6 /* controller-extras.png */; };
-		5315A2C1156F7064001B0268 /* controller-extras@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327A5D214DA1E4400DEE1B6 /* controller-extras@2x.png */; };
-		5315A2C2156F7064001B0268 /* controller-extras-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327A5D914DA221100DEE1B6 /* controller-extras-ipad.png */; };
-		5315A2C3156F7064001B0268 /* controller-extras-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327A5DD14DA245600DEE1B6 /* controller-extras-background.png */; };
-		5315A2C4156F7064001B0268 /* controller-extras-background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327A5DE14DA245600DEE1B6 /* controller-extras-background@2x.png */; };
-		5315A2C5156F7064001B0268 /* controller-album.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327A5E514DA553B00DEE1B6 /* controller-album.png */; };
-		5315A2C6156F7064001B0268 /* controller-album@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327A5E614DA553B00DEE1B6 /* controller-album@2x.png */; };
-		5315A2C7156F7064001B0268 /* support-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C4406614E87F5000A7DC41 /* support-tabbaricon.png */; };
-		5315A2C8156F7064001B0268 /* support-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C4406714E87F5000A7DC41 /* support-tabbaricon@2x.png */; };
-		5315A2C9156F7064001B0268 /* controller-extrabuttons-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DE598614F19BAF00206529 /* controller-extrabuttons-background.png */; };
-		5315A2CA156F7064001B0268 /* controller-extrabuttons-background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DE598714F19BAF00206529 /* controller-extrabuttons-background@2x.png */; };
-		5315A2CB156F7064001B0268 /* controller-back30.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DE598E14F1A7B000206529 /* controller-back30.png */; };
-		5315A2CC156F7064001B0268 /* controller-back30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DE598F14F1A7B000206529 /* controller-back30@2x.png */; };
-		5315A2CD156F7064001B0268 /* controller-extras-on.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DE599014F1A7B000206529 /* controller-extras-on.png */; };
-		5315A2CE156F7064001B0268 /* controller-extras-on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DE599114F1A7B000206529 /* controller-extras-on@2x.png */; };
-		5315A2CF156F7064001B0268 /* controller-forw30.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DE599214F1A7B000206529 /* controller-forw30.png */; };
-		5315A2D0156F7064001B0268 /* controller-forw30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DE599314F1A7B000206529 /* controller-forw30@2x.png */; };
-		5315A2D1156F7064001B0268 /* glow.png in Resources */ = {isa = PBXBuildFile; fileRef = 5304FC4A14F2F59400A2AD42 /* glow.png */; };
-		5315A2D2156F7064001B0268 /* backgroundImage_repeat.png in Resources */ = {isa = PBXBuildFile; fileRef = 5304FC4B14F2F59400A2AD42 /* backgroundImage_repeat.png */; };
-		5315A2D3156F7064001B0268 /* underPageBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5304FC5C14F309F000A2AD42 /* underPageBackground@2x.png */; };
-		5315A2D4156F7064001B0268 /* underPageBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 5304FC6014F30A6900A2AD42 /* underPageBackground.png */; };
-		5315A2D5156F7064001B0268 /* controller-speed-tab.png in Resources */ = {isa = PBXBuildFile; fileRef = 537E9A3F14F4B5D1006CB0BC /* controller-speed-tab.png */; };
-		5315A2D6156F7064001B0268 /* controller-speed-tab@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 537E9A4014F4B5D1006CB0BC /* controller-speed-tab@2x.png */; };
-		5315A2D7156F7064001B0268 /* controller-equalizer-on.png in Resources */ = {isa = PBXBuildFile; fileRef = 537E9A4714F4B84D006CB0BC /* controller-equalizer-on.png */; };
-		5315A2D8156F7064001B0268 /* controller-equalizer-on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 537E9A4814F4B84D006CB0BC /* controller-equalizer-on@2x.png */; };
-		5315A2D9156F7064001B0268 /* underPageBackgroundDark.png in Resources */ = {isa = PBXBuildFile; fileRef = 537E9A5314F4CE3F006CB0BC /* underPageBackgroundDark.png */; };
-		5315A2DA156F7064001B0268 /* underPageBackgroundDark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 537E9A5414F4CE41006CB0BC /* underPageBackgroundDark@2x.png */; };
-		5315A2DB156F7064001B0268 /* settings-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5301583815081B0A00B54CEF /* settings-tabbaricon.png */; };
-		5315A2DC156F7064001B0268 /* settings-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5301583915081B0A00B54CEF /* settings-tabbaricon@2x.png */; };
-		5315A2DD156F7064001B0268 /* Default-Landscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD70150EFF7A008DA51C /* Default-Landscape@2x.png */; };
-		5315A2DE156F7064001B0268 /* Default-Portrait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD71150EFF7A008DA51C /* Default-Portrait@2x.png */; };
-		5315A2DF156F7064001B0268 /* home-chat-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD78150F00C5008DA51C /* home-chat-ipad@2x.png */; };
-		5315A2E0156F7064001B0268 /* home-jukebox-off-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD79150F00C5008DA51C /* home-jukebox-off-ipad@2x.png */; };
-		5315A2E1156F7064001B0268 /* home-jukebox-on-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD7A150F00C5008DA51C /* home-jukebox-on-ipad@2x.png */; };
-		5315A2E2156F7064001B0268 /* home-quick-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD7D150F00C5008DA51C /* home-quick-ipad@2x.png */; };
-		5315A2E3156F7064001B0268 /* home-settings-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD7E150F00C5008DA51C /* home-settings-ipad@2x.png */; };
-		5315A2E4156F7064001B0268 /* home-shuffle-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD7F150F00C5008DA51C /* home-shuffle-ipad@2x.png */; };
-		5315A2E5156F7064001B0268 /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD98150F03D6008DA51C /* Icon-72@2x.png */; };
-		5315A2E6156F7064001B0268 /* home-support-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FDA1150F1DE7008DA51C /* home-support-ipad.png */; };
-		5315A2E7156F7064001B0268 /* home-support-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FDA2150F1DE7008DA51C /* home-support-ipad@2x.png */; };
-		5315A2E8156F7064001B0268 /* home-support.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FDA3150F1DE7008DA51C /* home-support.png */; };
-		5315A2E9156F7064001B0268 /* home-support@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FDA4150F1DE7008DA51C /* home-support@2x.png */; };
-		5315A2EA156F7064001B0268 /* playing-cell-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F831516703F0081A83A /* playing-cell-icon.png */; };
-		5315A2EB156F7064001B0268 /* playing-cell-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F841516703F0081A83A /* playing-cell-icon@2x.png */; };
-		5315A2EC156F7064001B0268 /* playing-cell-icon-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F8B15167CBA0081A83A /* playing-cell-icon-white.png */; };
-		5315A2ED156F7064001B0268 /* playing-cell-icon-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F8C15167CBA0081A83A /* playing-cell-icon-white@2x.png */; };
 		5315A3E3156F7064001B0268 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53C7FD9C150F0E94008DA51C /* MessageUI.framework */; };
 		5315A3E4156F7064001B0268 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DE598214F1932C00206529 /* CoreText.framework */; };
 		5315A3E5156F7064001B0268 /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5382F65614856F3C001C14C8 /* libSystem.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -818,62 +562,50 @@
 		533C657615ABB952003EAF29 /* NewHomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C657B15ABB952003EAF29 /* NewHomeViewController.xib */; };
 		533C657715ABB952003EAF29 /* NewHomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C657B15ABB952003EAF29 /* NewHomeViewController.xib */; };
 		533C657815ABB952003EAF29 /* NewHomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C657B15ABB952003EAF29 /* NewHomeViewController.xib */; };
-		533C657915ABB952003EAF29 /* NewHomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C657B15ABB952003EAF29 /* NewHomeViewController.xib */; };
 		533C657C15ABB975003EAF29 /* NewHomeViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C658215ABB975003EAF29 /* NewHomeViewController-iPad.xib */; };
 		533C657D15ABB975003EAF29 /* NewHomeViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C658215ABB975003EAF29 /* NewHomeViewController-iPad.xib */; };
 		533C657E15ABB975003EAF29 /* NewHomeViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C658215ABB975003EAF29 /* NewHomeViewController-iPad.xib */; };
 		533C657F15ABB975003EAF29 /* NewHomeViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C658215ABB975003EAF29 /* NewHomeViewController-iPad.xib */; };
-		533C658015ABB975003EAF29 /* NewHomeViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C658215ABB975003EAF29 /* NewHomeViewController-iPad.xib */; };
 		533C658315ABB9A2003EAF29 /* QuickAlbumsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C658915ABB9A2003EAF29 /* QuickAlbumsViewController.xib */; };
 		533C658415ABB9A2003EAF29 /* QuickAlbumsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C658915ABB9A2003EAF29 /* QuickAlbumsViewController.xib */; };
 		533C658515ABB9A2003EAF29 /* QuickAlbumsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C658915ABB9A2003EAF29 /* QuickAlbumsViewController.xib */; };
 		533C658615ABB9A2003EAF29 /* QuickAlbumsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C658915ABB9A2003EAF29 /* QuickAlbumsViewController.xib */; };
-		533C658715ABB9A2003EAF29 /* QuickAlbumsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C658915ABB9A2003EAF29 /* QuickAlbumsViewController.xib */; };
 		533C658A15ABB9A9003EAF29 /* HomeAlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C659015ABB9A9003EAF29 /* HomeAlbumViewController.xib */; };
 		533C658B15ABB9A9003EAF29 /* HomeAlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C659015ABB9A9003EAF29 /* HomeAlbumViewController.xib */; };
 		533C658C15ABB9A9003EAF29 /* HomeAlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C659015ABB9A9003EAF29 /* HomeAlbumViewController.xib */; };
 		533C658D15ABB9A9003EAF29 /* HomeAlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C659015ABB9A9003EAF29 /* HomeAlbumViewController.xib */; };
-		533C658E15ABB9A9003EAF29 /* HomeAlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C659015ABB9A9003EAF29 /* HomeAlbumViewController.xib */; };
 		533C659115ABB9AD003EAF29 /* SearchSongsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C659715ABB9AD003EAF29 /* SearchSongsViewController.xib */; };
 		533C659215ABB9AD003EAF29 /* SearchSongsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C659715ABB9AD003EAF29 /* SearchSongsViewController.xib */; };
 		533C659315ABB9AD003EAF29 /* SearchSongsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C659715ABB9AD003EAF29 /* SearchSongsViewController.xib */; };
 		533C659415ABB9AD003EAF29 /* SearchSongsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C659715ABB9AD003EAF29 /* SearchSongsViewController.xib */; };
-		533C659515ABB9AD003EAF29 /* SearchSongsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C659715ABB9AD003EAF29 /* SearchSongsViewController.xib */; };
 		533C659815ABB9B0003EAF29 /* ShuffleFolderPickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C659E15ABB9B0003EAF29 /* ShuffleFolderPickerViewController.xib */; };
 		533C659915ABB9B0003EAF29 /* ShuffleFolderPickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C659E15ABB9B0003EAF29 /* ShuffleFolderPickerViewController.xib */; };
 		533C659A15ABB9B0003EAF29 /* ShuffleFolderPickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C659E15ABB9B0003EAF29 /* ShuffleFolderPickerViewController.xib */; };
 		533C659B15ABB9B0003EAF29 /* ShuffleFolderPickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C659E15ABB9B0003EAF29 /* ShuffleFolderPickerViewController.xib */; };
-		533C659C15ABB9B0003EAF29 /* ShuffleFolderPickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C659E15ABB9B0003EAF29 /* ShuffleFolderPickerViewController.xib */; };
 		533C659F15ABB9B3003EAF29 /* SearchAllViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65A515ABB9B3003EAF29 /* SearchAllViewController.xib */; };
 		533C65A015ABB9B3003EAF29 /* SearchAllViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65A515ABB9B3003EAF29 /* SearchAllViewController.xib */; };
 		533C65A115ABB9B3003EAF29 /* SearchAllViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65A515ABB9B3003EAF29 /* SearchAllViewController.xib */; };
 		533C65A215ABB9B3003EAF29 /* SearchAllViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65A515ABB9B3003EAF29 /* SearchAllViewController.xib */; };
-		533C65A315ABB9B3003EAF29 /* SearchAllViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65A515ABB9B3003EAF29 /* SearchAllViewController.xib */; };
 		533C65A615ABB9BD003EAF29 /* IntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65AC15ABB9BD003EAF29 /* IntroViewController.xib */; };
 		533C65A715ABB9BD003EAF29 /* IntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65AC15ABB9BD003EAF29 /* IntroViewController.xib */; };
 		533C65A815ABB9BD003EAF29 /* IntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65AC15ABB9BD003EAF29 /* IntroViewController.xib */; };
 		533C65A915ABB9BD003EAF29 /* IntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65AC15ABB9BD003EAF29 /* IntroViewController.xib */; };
-		533C65AA15ABB9BD003EAF29 /* IntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65AC15ABB9BD003EAF29 /* IntroViewController.xib */; };
 		533C65AD15ABB9C6003EAF29 /* ServerListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65B315ABB9C6003EAF29 /* ServerListViewController.xib */; };
 		533C65AE15ABB9C6003EAF29 /* ServerListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65B315ABB9C6003EAF29 /* ServerListViewController.xib */; };
 		533C65AF15ABB9C6003EAF29 /* ServerListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65B315ABB9C6003EAF29 /* ServerListViewController.xib */; };
 		533C65B015ABB9C6003EAF29 /* ServerListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65B315ABB9C6003EAF29 /* ServerListViewController.xib */; };
-		533C65B115ABB9C6003EAF29 /* ServerListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65B315ABB9C6003EAF29 /* ServerListViewController.xib */; };
 		533C65B415ABB9C9003EAF29 /* ServerTypeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65BA15ABB9C9003EAF29 /* ServerTypeViewController.xib */; };
 		533C65B515ABB9C9003EAF29 /* ServerTypeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65BA15ABB9C9003EAF29 /* ServerTypeViewController.xib */; };
 		533C65B615ABB9C9003EAF29 /* ServerTypeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65BA15ABB9C9003EAF29 /* ServerTypeViewController.xib */; };
 		533C65B715ABB9C9003EAF29 /* ServerTypeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65BA15ABB9C9003EAF29 /* ServerTypeViewController.xib */; };
-		533C65B815ABB9C9003EAF29 /* ServerTypeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65BA15ABB9C9003EAF29 /* ServerTypeViewController.xib */; };
 		533C65BB15ABB9CC003EAF29 /* SubsonicServerEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65C115ABB9CC003EAF29 /* SubsonicServerEditViewController.xib */; };
 		533C65BC15ABB9CC003EAF29 /* SubsonicServerEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65C115ABB9CC003EAF29 /* SubsonicServerEditViewController.xib */; };
 		533C65BD15ABB9CC003EAF29 /* SubsonicServerEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65C115ABB9CC003EAF29 /* SubsonicServerEditViewController.xib */; };
 		533C65BE15ABB9CC003EAF29 /* SubsonicServerEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65C115ABB9CC003EAF29 /* SubsonicServerEditViewController.xib */; };
-		533C65BF15ABB9CC003EAF29 /* SubsonicServerEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65C115ABB9CC003EAF29 /* SubsonicServerEditViewController.xib */; };
 		533C65C215ABB9D0003EAF29 /* UbuntuServerEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65C815ABB9D0003EAF29 /* UbuntuServerEditViewController.xib */; };
 		533C65C315ABB9D0003EAF29 /* UbuntuServerEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65C815ABB9D0003EAF29 /* UbuntuServerEditViewController.xib */; };
 		533C65C415ABB9D0003EAF29 /* UbuntuServerEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65C815ABB9D0003EAF29 /* UbuntuServerEditViewController.xib */; };
 		533C65C515ABB9D0003EAF29 /* UbuntuServerEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65C815ABB9D0003EAF29 /* UbuntuServerEditViewController.xib */; };
-		533C65C615ABB9D0003EAF29 /* UbuntuServerEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65C815ABB9D0003EAF29 /* UbuntuServerEditViewController.xib */; };
 		533C65C915ABB9D3003EAF29 /* PMSServerEditViewControllerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65CD15ABB9D3003EAF29 /* PMSServerEditViewControllerViewController.xib */; };
 		533C65CA15ABB9D3003EAF29 /* PMSServerEditViewControllerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65CD15ABB9D3003EAF29 /* PMSServerEditViewControllerViewController.xib */; };
 		533C65CB15ABB9D3003EAF29 /* PMSServerEditViewControllerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65CD15ABB9D3003EAF29 /* PMSServerEditViewControllerViewController.xib */; };
@@ -881,22 +613,18 @@
 		533C65CF15ABB9D6003EAF29 /* SettingsTabViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65D415ABB9D6003EAF29 /* SettingsTabViewController.xib */; };
 		533C65D015ABB9D6003EAF29 /* SettingsTabViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65D415ABB9D6003EAF29 /* SettingsTabViewController.xib */; };
 		533C65D115ABB9D6003EAF29 /* SettingsTabViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65D415ABB9D6003EAF29 /* SettingsTabViewController.xib */; };
-		533C65D215ABB9D6003EAF29 /* SettingsTabViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65D415ABB9D6003EAF29 /* SettingsTabViewController.xib */; };
 		533C65D515ABB9F0003EAF29 /* DebugViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65DB15ABB9F0003EAF29 /* DebugViewController.xib */; };
 		533C65D615ABB9F0003EAF29 /* DebugViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65DB15ABB9F0003EAF29 /* DebugViewController.xib */; };
 		533C65D715ABB9F0003EAF29 /* DebugViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65DB15ABB9F0003EAF29 /* DebugViewController.xib */; };
 		533C65D815ABB9F0003EAF29 /* DebugViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65DB15ABB9F0003EAF29 /* DebugViewController.xib */; };
-		533C65D915ABB9F0003EAF29 /* DebugViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65DB15ABB9F0003EAF29 /* DebugViewController.xib */; };
 		533C65DC15ABB9F5003EAF29 /* EqualizerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E215ABB9F5003EAF29 /* EqualizerViewController.xib */; };
 		533C65DD15ABB9F5003EAF29 /* EqualizerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E215ABB9F5003EAF29 /* EqualizerViewController.xib */; };
 		533C65DE15ABB9F5003EAF29 /* EqualizerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E215ABB9F5003EAF29 /* EqualizerViewController.xib */; };
 		533C65DF15ABB9F5003EAF29 /* EqualizerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E215ABB9F5003EAF29 /* EqualizerViewController.xib */; };
-		533C65E015ABB9F5003EAF29 /* EqualizerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E215ABB9F5003EAF29 /* EqualizerViewController.xib */; };
 		533C65E315ABBA09003EAF29 /* AlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E915ABBA09003EAF29 /* AlbumViewController.xib */; };
 		533C65E415ABBA09003EAF29 /* AlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E915ABBA09003EAF29 /* AlbumViewController.xib */; };
 		533C65E515ABBA09003EAF29 /* AlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E915ABBA09003EAF29 /* AlbumViewController.xib */; };
 		533C65E615ABBA09003EAF29 /* AlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E915ABBA09003EAF29 /* AlbumViewController.xib */; };
-		533C65E715ABBA09003EAF29 /* AlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E915ABBA09003EAF29 /* AlbumViewController.xib */; };
 		53404FE111E9487C004AEC41 /* controller-next@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE011E9487C004AEC41 /* controller-next@2x.png */; };
 		53404FEA11E9488A004AEC41 /* controller-pause@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE211E9488A004AEC41 /* controller-pause@2x.png */; };
 		53404FEB11E9488A004AEC41 /* controller-play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE311E9488A004AEC41 /* controller-play@2x.png */; };
@@ -1032,7 +760,6 @@
 		536C994E16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 536C994B16619F5D005A73C6 /* ViewObjectsSingleton.m */; };
 		536C994F16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 536C994B16619F5D005A73C6 /* ViewObjectsSingleton.m */; };
 		536C995016619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 536C994B16619F5D005A73C6 /* ViewObjectsSingleton.m */; };
-		536C995116619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 536C994B16619F5D005A73C6 /* ViewObjectsSingleton.m */; };
 		536C9B991661B979005A73C6 /* libHockeySDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 536C9B961661B96A005A73C6 /* libHockeySDK.a */; };
 		536C9B9A1661B98B005A73C6 /* HockeySDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 536C9B981661B96A005A73C6 /* HockeySDKResources.bundle */; };
 		536D612911441F5B00DFCE56 /* settings-page.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D612811441F5B00DFCE56 /* settings-page.png */; };
@@ -1939,6 +1666,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		5304A04B168FB555009B2732 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5374F26A1661C56000529EF3 /* libSub.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5304A01D168FB35F009B2732;
+			remoteInfo = libSubTests;
+		};
 		530D20F716670062009DAF1B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 530D20F216670062009DAF1B /* EX2Kit.xcodeproj */;
@@ -2172,7 +1906,7 @@
 		5314B4ED126FD20300CDB511 /* home-tabbaricon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-tabbaricon@2x.png"; path = "Images/Tab Bar Icons/home-tabbaricon@2x.png"; sourceTree = "<group>"; };
 		5314C7B311D4157D000CA726 /* delete-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "delete-button.png"; path = "Images/Other/delete-button.png"; sourceTree = "<group>"; };
 		53159F6F156F69D0001B0268 /* iSub Integration Tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Integration Tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5315A405156F7064001B0268 /* iSub Integration Tests copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Integration Tests copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5315A405156F7064001B0268 /* iSub Unit Tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Unit Tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53191DEF1167CFDC00E1C08A /* current-server.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "current-server.png"; path = "Images/Other/current-server.png"; sourceTree = "<group>"; };
 		531F166C126FA2E600F524BD /* HomeAlbumViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeAlbumViewController.h; sourceTree = "<group>"; };
 		531F166D126FA2E600F524BD /* HomeAlbumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeAlbumViewController.m; sourceTree = "<group>"; };
@@ -2819,7 +2553,7 @@
 				53BC2865139AF0DD00A825F1 /* iSub Beta.app */,
 				53DCF5C613BFEAD3009160F9 /* iSub Lite.app */,
 				53159F6F156F69D0001B0268 /* iSub Integration Tests.app */,
-				5315A405156F7064001B0268 /* iSub Integration Tests copy.app */,
+				5315A405156F7064001B0268 /* iSub Unit Tests.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3195,6 +2929,7 @@
 			isa = PBXGroup;
 			children = (
 				5374F2821661C56000529EF3 /* libSub.a */,
+				5304A04C168FB555009B2732 /* libSubTests.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3733,7 +3468,7 @@
 			);
 			name = "iSub Unit Tests";
 			productName = iSubTESTING;
-			productReference = 5315A405156F7064001B0268 /* iSub Integration Tests copy.app */;
+			productReference = 5315A405156F7064001B0268 /* iSub Unit Tests.app */;
 			productType = "com.apple.product-type.application";
 		};
 		53BC269F139AF0DD00A825F1 /* iSub Beta */ = {
@@ -3828,6 +3563,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		5304A04C168FB555009B2732 /* libSubTests.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = libSubTests.app;
+			remoteRef = 5304A04B168FB555009B2732 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		530D20F816670062009DAF1B /* libEX2Kit.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -4474,278 +4216,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5315A1CE156F7064001B0268 /* FoldersViewController.xib in Resources */,
-				533C65E715ABBA09003EAF29 /* AlbumViewController.xib in Resources */,
-				5315A1D0156F7064001B0268 /* controller-next.png in Resources */,
-				5315A1D1156F7064001B0268 /* controller-pause.png in Resources */,
-				5315A1D2156F7064001B0268 /* controller-play.png in Resources */,
-				5315A1D3156F7064001B0268 /* controller-previous.png in Resources */,
-				533C65BF15ABB9CC003EAF29 /* SubsonicServerEditViewController.xib in Resources */,
-				5315A1D5156F7064001B0268 /* default-album-art.png in Resources */,
-				5315A1D6156F7064001B0268 /* settings-page.png in Resources */,
-				5315A1D7156F7064001B0268 /* controller-repeat-all.png in Resources */,
-				5315A1D8156F7064001B0268 /* controller-repeat-one.png in Resources */,
-				5315A1D9156F7064001B0268 /* controller-repeat.png in Resources */,
-				5315A1DA156F7064001B0268 /* controller-shuffle-on.png in Resources */,
-				5315A1DB156F7064001B0268 /* controller-shuffle.png in Resources */,
-				5315A1DC156F7064001B0268 /* Icon.png in Resources */,
-				5315A1DD156F7064001B0268 /* background.png in Resources */,
-				5315A1DE156F7064001B0268 /* default-album-art-small.png in Resources */,
-				5315A1DF156F7064001B0268 /* Default.png in Resources */,
-				5315A1E0156F7064001B0268 /* progress-label-background.png in Resources */,
-				5315A1E1156F7064001B0268 /* AllAlbumsViewController.xib in Resources */,
-				5315A1E2156F7064001B0268 /* loading-screen-image.png in Resources */,
-				533C65B115ABB9C6003EAF29 /* ServerListViewController.xib in Resources */,
-				5315A1E4156F7064001B0268 /* AllSongsViewController.xib in Resources */,
-				5315A1E5156F7064001B0268 /* PlayingViewController.xib in Resources */,
-				5315A1E6156F7064001B0268 /* gear.png in Resources */,
-				5315A1E7156F7064001B0268 /* artists-tabbaricon.png in Resources */,
-				5315A1E8156F7064001B0268 /* playlists-tabbaricon.png in Resources */,
-				5315A1E9156F7064001B0268 /* albums-tabbaricon.png in Resources */,
-				5315A1EA156F7064001B0268 /* songs-tabbaricon.png in Resources */,
-				5315A1EB156F7064001B0268 /* playing-tabbaricon.png in Resources */,
-				5315A1EC156F7064001B0268 /* PlaylistsViewController.xib in Resources */,
-				5315A1ED156F7064001B0268 /* current-server.png in Resources */,
-				5315A1EF156F7064001B0268 /* now-playing.png in Resources */,
-				5315A1F0156F7064001B0268 /* reload-table.png in Resources */,
-				5315A1F1156F7064001B0268 /* PageControlViewController.xib in Resources */,
-				533C65D915ABB9F0003EAF29 /* DebugViewController.xib in Resources */,
-				5315A1F3156F7064001B0268 /* CurrentPlaylistViewController.xib in Resources */,
-				5315A1F4156F7064001B0268 /* CurrentPlaylistBackgroundViewController.xib in Resources */,
-				5315A1F5156F7064001B0268 /* play-all-note.png in Resources */,
-				5315A1F6156F7064001B0268 /* BookmarksViewController.xib in Resources */,
-				5315A1F7156F7064001B0268 /* selected.png in Resources */,
-				5315A1F8156F7064001B0268 /* unselected.png in Resources */,
-				5315A1F9156F7064001B0268 /* cache-button.png in Resources */,
-				5315A1FA156F7064001B0268 /* queue-button.png in Resources */,
-				5315A1FB156F7064001B0268 /* GenresViewController.xib in Resources */,
-				5315A1FC156F7064001B0268 /* CacheViewController.xib in Resources */,
-				5315A1FD156F7064001B0268 /* bookmarks-tabbaricon.png in Resources */,
-				5315A1FE156F7064001B0268 /* genres-tabbaricon.png in Resources */,
-				5315A1FF156F7064001B0268 /* cache-tabbaricon.png in Resources */,
-				5315A200156F7064001B0268 /* LoadingScreen.xib in Resources */,
-				5315A201156F7064001B0268 /* CacheAlbumViewController.xib in Resources */,
-				5315A202156F7064001B0268 /* GenresAlbumViewController.xib in Resources */,
-				5315A203156F7064001B0268 /* GenresArtistViewController.xib in Resources */,
-				5315A204156F7064001B0268 /* delete-button.png in Resources */,
-				533C65D215ABB9D6003EAF29 /* SettingsTabViewController.xib in Resources */,
-				5315A206156F7064001B0268 /* HelpTabViewController.xib in Resources */,
-				5315A207156F7064001B0268 /* iPhoneStreamingPlayerViewController.xib in Resources */,
-				5315A208156F7064001B0268 /* albums-tabbaricon@2x.png in Resources */,
-				5315A209156F7064001B0268 /* artists-tabbaricon@2x.png in Resources */,
-				5315A20A156F7064001B0268 /* bookmarks-tabbaricon@2x.png in Resources */,
-				5315A20B156F7064001B0268 /* cache-tabbaricon@2x.png in Resources */,
-				5315A20C156F7064001B0268 /* genres-tabbaricon@2x.png in Resources */,
-				5315A20D156F7064001B0268 /* playing-tabbaricon@2x.png in Resources */,
-				5315A20E156F7064001B0268 /* playlists-tabbaricon@2x.png in Resources */,
-				5315A20F156F7064001B0268 /* songs-tabbaricon@2x.png in Resources */,
-				5315A210156F7064001B0268 /* gear@2x.png in Resources */,
-				5315A211156F7064001B0268 /* background@2x.png in Resources */,
-				5315A212156F7064001B0268 /* now-playing@2x.png in Resources */,
-				5315A213156F7064001B0268 /* Icon@2x.png in Resources */,
-				5315A214156F7064001B0268 /* Icon-72.png in Resources */,
-				5315A215156F7064001B0268 /* current-server@2x.png in Resources */,
-				5315A216156F7064001B0268 /* default-album-art-small@2x.png in Resources */,
-				5315A217156F7064001B0268 /* default-album-art@2x.png in Resources */,
-				5315A218156F7064001B0268 /* reload-table@2x.png in Resources */,
-				5315A219156F7064001B0268 /* cache-button@2x.png in Resources */,
-				5315A21A156F7064001B0268 /* queue-button@2x.png in Resources */,
-				5315A21B156F7064001B0268 /* delete-button@2x.png in Resources */,
-				5315A21C156F7064001B0268 /* selected@2x.png in Resources */,
-				5315A21D156F7064001B0268 /* unselected@2x.png in Resources */,
-				5315A21E156F7064001B0268 /* play-all-note@2x.png in Resources */,
-				5315A21F156F7064001B0268 /* loading-screen-image@2x.png in Resources */,
-				5315A220156F7064001B0268 /* settings-page@2x.png in Resources */,
-				5315A221156F7064001B0268 /* controller-next@2x.png in Resources */,
-				5315A222156F7064001B0268 /* controller-pause@2x.png in Resources */,
-				5315A223156F7064001B0268 /* controller-play@2x.png in Resources */,
-				5315A224156F7064001B0268 /* controller-previous@2x.png in Resources */,
-				5315A225156F7064001B0268 /* controller-repeat-all@2x.png in Resources */,
-				5315A226156F7064001B0268 /* controller-repeat-one@2x.png in Resources */,
-				5315A227156F7064001B0268 /* controller-repeat@2x.png in Resources */,
-				5315A228156F7064001B0268 /* controller-shuffle-on@2x.png in Resources */,
-				5315A229156F7064001B0268 /* controller-shuffle@2x.png in Resources */,
-				5315A22A156F7064001B0268 /* controller-bookmark-on.png in Resources */,
-				5315A22B156F7064001B0268 /* controller-bookmark-on@2x.png in Resources */,
-				5315A22C156F7064001B0268 /* controller-bookmark.png in Resources */,
-				5315A22D156F7064001B0268 /* controller-bookmark@2x.png in Resources */,
-				5315A232156F7064001B0268 /* ChatViewController.xib in Resources */,
-				5315A233156F7064001B0268 /* comment-write.png in Resources */,
-				5315A234156F7064001B0268 /* comment-write-pressed.png in Resources */,
-				5315A235156F7064001B0268 /* chat-tabbaricon.png in Resources */,
-				5315A236156F7064001B0268 /* chat-tabbaricon@2x.png in Resources */,
-				5315A237156F7064001B0268 /* comment-write-pressed@2x.png in Resources */,
-				5315A238156F7064001B0268 /* comment-write@2x.png in Resources */,
-				533C658E15ABB9A9003EAF29 /* HomeAlbumViewController.xib in Resources */,
-				5315A23A156F7064001B0268 /* home-tabbaricon.png in Resources */,
-				5315A23B156F7064001B0268 /* home-tabbaricon@2x.png in Resources */,
-				533C659515ABB9AD003EAF29 /* SearchSongsViewController.xib in Resources */,
-				5315A23E156F7064001B0268 /* blackArrow.png in Resources */,
-				5315A23F156F7064001B0268 /* blackArrow@2x.png in Resources */,
-				5315A240156F7064001B0268 /* blueArrow.png in Resources */,
-				5315A241156F7064001B0268 /* blueArrow@2x.png in Resources */,
-				5315A242156F7064001B0268 /* grayArrow.png in Resources */,
-				5315A243156F7064001B0268 /* grayArrow@2x.png in Resources */,
-				5315A244156F7064001B0268 /* whiteArrow.png in Resources */,
-				5315A245156F7064001B0268 /* whiteArrow@2x.png in Resources */,
-				533C658715ABB9A2003EAF29 /* QuickAlbumsViewController.xib in Resources */,
-				5315A24A156F7064001B0268 /* home-background-ipad.png in Resources */,
-				533C658015ABB975003EAF29 /* NewHomeViewController-iPad.xib in Resources */,
-				5315A24D156F7064001B0268 /* home-background.png in Resources */,
-				5315A24E156F7064001B0268 /* home-background@2x.png in Resources */,
-				5315A24F156F7064001B0268 /* home-jukebox-off-ipad.png in Resources */,
-				5315A250156F7064001B0268 /* home-jukebox-off.png in Resources */,
-				5315A251156F7064001B0268 /* home-jukebox-off@2x.png in Resources */,
-				5315A252156F7064001B0268 /* home-jukebox-on-ipad.png in Resources */,
-				5315A253156F7064001B0268 /* home-jukebox-on.png in Resources */,
-				5315A254156F7064001B0268 /* home-jukebox-on@2x.png in Resources */,
-				5315A255156F7064001B0268 /* home-quick-ipad.png in Resources */,
-				5315A256156F7064001B0268 /* home-quick.png in Resources */,
-				5315A257156F7064001B0268 /* home-quick@2x.png in Resources */,
-				5315A258156F7064001B0268 /* home-settings-ipad.png in Resources */,
-				5315A259156F7064001B0268 /* home-settings.png in Resources */,
-				5315A25A156F7064001B0268 /* home-settings@2x.png in Resources */,
-				5315A25B156F7064001B0268 /* home-shuffle-ipad.png in Resources */,
-				5315A25C156F7064001B0268 /* home-shuffle.png in Resources */,
-				5315A25D156F7064001B0268 /* home-shuffle@2x.png in Resources */,
-				5315A25E156F7064001B0268 /* controller-stop.png in Resources */,
-				5315A25F156F7064001B0268 /* controller-stop@2x.png in Resources */,
-				5315A260156F7064001B0268 /* StoreViewController.xib in Resources */,
-				5315A261156F7064001B0268 /* Default@2x.png in Resources */,
-				5315A262156F7064001B0268 /* home-quick-random.png in Resources */,
-				5315A263156F7064001B0268 /* home-quick-random@2x.png in Resources */,
-				5315A264156F7064001B0268 /* home-quick-recent@2x.png in Resources */,
-				5315A265156F7064001B0268 /* home-quick-recent.png in Resources */,
-				5315A266156F7064001B0268 /* home-quick-newest@2x.png in Resources */,
-				5315A267156F7064001B0268 /* home-quick-newest.png in Resources */,
-				5315A268156F7064001B0268 /* home-quick-frequent@2x.png in Resources */,
-				5315A269156F7064001B0268 /* home-quick-frequent.png in Resources */,
-				5315A26A156F7064001B0268 /* home-quick-cancel@2x.png in Resources */,
-				5315A26B156F7064001B0268 /* home-quick-cancel.png in Resources */,
-				5315A26C156F7064001B0268 /* home-quick-topbar@2x.png in Resources */,
-				5315A26D156F7064001B0268 /* home-quick-topbar.png in Resources */,
-				5315A26E156F7064001B0268 /* home-chat-ipad.png in Resources */,
-				5315A26F156F7064001B0268 /* home-chat.png in Resources */,
-				5315A270156F7064001B0268 /* home-chat@2x.png in Resources */,
-				5315A271156F7064001B0268 /* back.png in Resources */,
-				5315A272156F7064001B0268 /* back@2x.png in Resources */,
-				5315A273156F7064001B0268 /* Default-Portrait.png in Resources */,
-				5315A274156F7064001B0268 /* Default-Landscape.png in Resources */,
-				5315A275156F7064001B0268 /* folders-tabbaricon.png in Resources */,
-				5315A276156F7064001B0268 /* folders-tabbaricon@2x.png in Resources */,
-				5315A277156F7064001B0268 /* player-overlay.png in Resources */,
-				5315A278156F7064001B0268 /* player-overlay@2x.png in Resources */,
-				5315A279156F7064001B0268 /* server-subsonic.png in Resources */,
-				5315A27A156F7064001B0268 /* server-subsonic@2x.png in Resources */,
-				5315A27B156F7064001B0268 /* server-ubuntu.png in Resources */,
-				5315A27C156F7064001B0268 /* server-ubuntu@2x.png in Resources */,
-				533C65B815ABB9C9003EAF29 /* ServerTypeViewController.xib in Resources */,
-				533C65C615ABB9D0003EAF29 /* UbuntuServerEditViewController.xib in Resources */,
-				5315A27F156F7064001B0268 /* ubuntu-add-server.png in Resources */,
-				5315A280156F7064001B0268 /* ubuntu-add-server@2x.png in Resources */,
-				5315A281156F7064001B0268 /* server-button-subsonic.png in Resources */,
-				5315A282156F7064001B0268 /* server-button-subsonic@2x.png in Resources */,
-				5315A283156F7064001B0268 /* server-button-ubuntu.png in Resources */,
-				5315A284156F7064001B0268 /* server-button-ubuntu@2x.png in Resources */,
-				5315A285156F7064001B0268 /* default-album-art-ipad.png in Resources */,
-				5315A288156F7064001B0268 /* intro-bottom.png in Resources */,
-				5315A289156F7064001B0268 /* intro-bottom@2x.png in Resources */,
-				5315A28A156F7064001B0268 /* intro-foreground.png in Resources */,
-				5315A28B156F7064001B0268 /* intro-foreground@2x.png in Resources */,
-				5315A28C156F7064001B0268 /* intro-top.png in Resources */,
-				5315A28D156F7064001B0268 /* intro-top@2x.png in Resources */,
-				533C65AA15ABB9BD003EAF29 /* IntroViewController.xib in Resources */,
-				5315A28F156F7064001B0268 /* intro-rowbackground.png in Resources */,
-				5315A290156F7064001B0268 /* intro-rowbackground@2x.png in Resources */,
-				5315A291156F7064001B0268 /* intro-arrow.png in Resources */,
-				5315A292156F7064001B0268 /* intro-arrow@2x.png in Resources */,
-				5315A293156F7064001B0268 /* intro-rowbackground-dark.png in Resources */,
-				5315A294156F7064001B0268 /* intro-rowbackground-dark@2x.png in Resources */,
-				5315A295156F7064001B0268 /* intro-icon-testserver.png in Resources */,
-				5315A296156F7064001B0268 /* intro-icon-testserver@2x.png in Resources */,
-				5315A297156F7064001B0268 /* intro-icon-video.png in Resources */,
-				5315A298156F7064001B0268 /* intro-icon-video@2x.png in Resources */,
-				5315A299156F7064001B0268 /* intro-sunkenlogo.png in Resources */,
-				5315A29A156F7064001B0268 /* intro-sunkenlogo@2x.png in Resources */,
-				5315A29B156F7064001B0268 /* intro-icon-ownserver.png in Resources */,
-				5315A29C156F7064001B0268 /* intro-icon-ownserver@2x.png in Resources */,
-				5315A29D156F7064001B0268 /* iTunesArtwork in Resources */,
-				5315A2A0156F7064001B0268 /* folder-dropdown-arrow.png in Resources */,
-				5315A2A1156F7064001B0268 /* folder-dropdown-arrow@2x.png in Resources */,
-				5315A2A2156F7064001B0268 /* controller-bookmark-ipad.png in Resources */,
-				5315A2A3156F7064001B0268 /* controller-bookmark-on-ipad.png in Resources */,
-				5315A2A4156F7064001B0268 /* controller-repeat-all-ipad.png in Resources */,
-				5315A2A5156F7064001B0268 /* controller-repeat-ipad.png in Resources */,
-				5315A2A6156F7064001B0268 /* controller-repeat-one-ipad.png in Resources */,
-				5315A2A7156F7064001B0268 /* controller-shuffle-ipad.png in Resources */,
-				5315A2A8156F7064001B0268 /* controller-shuffle-on-ipad.png in Resources */,
-				533C65A315ABB9B3003EAF29 /* SearchAllViewController.xib in Resources */,
-				5315A2AA156F7064001B0268 /* upload-playlist.png in Resources */,
-				5315A2AB156F7064001B0268 /* upload-playlist@2x.png in Resources */,
-				533C659C15ABB9B0003EAF29 /* ShuffleFolderPickerViewController.xib in Resources */,
-				5315A2AD156F7064001B0268 /* PlaylistSongsViewController.xib in Resources */,
-				5315A2AF156F7064001B0268 /* Icon-72-Beta.png in Resources */,
-				5315A2B0156F7064001B0268 /* Icon-Beta.png in Resources */,
-				5315A2B1156F7064001B0268 /* Icon@2x-Beta.png in Resources */,
-				533C65E015ABB9F5003EAF29 /* EqualizerViewController.xib in Resources */,
-				5315A2B4156F7064001B0268 /* downArrow.png in Resources */,
-				5315A2B6156F7064001B0268 /* controller-equalizer.png in Resources */,
-				5315A2B7156F7064001B0268 /* controller-equalizer@2x.png in Resources */,
-				5315A2B8156F7064001B0268 /* eqView.png in Resources */,
-				5315A2B9156F7064001B0268 /* eqView@2x.png in Resources */,
-				5315A2BA156F7064001B0268 /* ModalAlbumArtViewController.xib in Resources */,
-				5315A2BB156F7064001B0268 /* controller-equalizer-ipad.png in Resources */,
-				5315A2BC156F7064001B0268 /* controller-next-ipad.png in Resources */,
-				5315A2BD156F7064001B0268 /* controller-pause-ipad.png in Resources */,
-				5315A2BE156F7064001B0268 /* controller-play-ipad.png in Resources */,
-				5315A2BF156F7064001B0268 /* controller-previous-ipad.png in Resources */,
-				5315A2C0156F7064001B0268 /* controller-extras.png in Resources */,
-				5315A2C1156F7064001B0268 /* controller-extras@2x.png in Resources */,
-				5315A2C2156F7064001B0268 /* controller-extras-ipad.png in Resources */,
-				5315A2C3156F7064001B0268 /* controller-extras-background.png in Resources */,
-				5315A2C4156F7064001B0268 /* controller-extras-background@2x.png in Resources */,
-				5315A2C5156F7064001B0268 /* controller-album.png in Resources */,
-				5315A2C6156F7064001B0268 /* controller-album@2x.png in Resources */,
-				5315A2C7156F7064001B0268 /* support-tabbaricon.png in Resources */,
-				5315A2C8156F7064001B0268 /* support-tabbaricon@2x.png in Resources */,
-				5315A2C9156F7064001B0268 /* controller-extrabuttons-background.png in Resources */,
-				5315A2CA156F7064001B0268 /* controller-extrabuttons-background@2x.png in Resources */,
-				5315A2CB156F7064001B0268 /* controller-back30.png in Resources */,
-				5315A2CC156F7064001B0268 /* controller-back30@2x.png in Resources */,
-				5315A2CD156F7064001B0268 /* controller-extras-on.png in Resources */,
-				5315A2CE156F7064001B0268 /* controller-extras-on@2x.png in Resources */,
-				5315A2CF156F7064001B0268 /* controller-forw30.png in Resources */,
-				5315A2D0156F7064001B0268 /* controller-forw30@2x.png in Resources */,
-				5315A2D1156F7064001B0268 /* glow.png in Resources */,
-				5315A2D2156F7064001B0268 /* backgroundImage_repeat.png in Resources */,
-				5315A2D3156F7064001B0268 /* underPageBackground@2x.png in Resources */,
-				5315A2D4156F7064001B0268 /* underPageBackground.png in Resources */,
-				5315A2D5156F7064001B0268 /* controller-speed-tab.png in Resources */,
-				5315A2D6156F7064001B0268 /* controller-speed-tab@2x.png in Resources */,
-				5315A2D7156F7064001B0268 /* controller-equalizer-on.png in Resources */,
-				5315A2D8156F7064001B0268 /* controller-equalizer-on@2x.png in Resources */,
-				5315A2D9156F7064001B0268 /* underPageBackgroundDark.png in Resources */,
-				5315A2DA156F7064001B0268 /* underPageBackgroundDark@2x.png in Resources */,
-				5315A2DB156F7064001B0268 /* settings-tabbaricon.png in Resources */,
-				5315A2DC156F7064001B0268 /* settings-tabbaricon@2x.png in Resources */,
-				5315A2DD156F7064001B0268 /* Default-Landscape@2x.png in Resources */,
-				5315A2DE156F7064001B0268 /* Default-Portrait@2x.png in Resources */,
-				5315A2DF156F7064001B0268 /* home-chat-ipad@2x.png in Resources */,
-				5315A2E0156F7064001B0268 /* home-jukebox-off-ipad@2x.png in Resources */,
-				5315A2E1156F7064001B0268 /* home-jukebox-on-ipad@2x.png in Resources */,
-				5315A2E2156F7064001B0268 /* home-quick-ipad@2x.png in Resources */,
-				5315A2E3156F7064001B0268 /* home-settings-ipad@2x.png in Resources */,
-				5315A2E4156F7064001B0268 /* home-shuffle-ipad@2x.png in Resources */,
-				5315A2E5156F7064001B0268 /* Icon-72@2x.png in Resources */,
-				5315A2E6156F7064001B0268 /* home-support-ipad.png in Resources */,
-				5315A2E7156F7064001B0268 /* home-support-ipad@2x.png in Resources */,
-				5315A2E8156F7064001B0268 /* home-support.png in Resources */,
-				5315A2E9156F7064001B0268 /* home-support@2x.png in Resources */,
-				5315A2EA156F7064001B0268 /* playing-cell-icon.png in Resources */,
-				5315A2EB156F7064001B0268 /* playing-cell-icon@2x.png in Resources */,
-				5315A2EC156F7064001B0268 /* playing-cell-icon-white.png in Resources */,
-				5315A2ED156F7064001B0268 /* playing-cell-icon-white@2x.png in Resources */,
-				533C657915ABB952003EAF29 /* NewHomeViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5580,7 +5050,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				536C995116619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6322,7 +5791,7 @@
 				GCC_PREFIX_HEADER = Other/iSub_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
-					"RUN_KIF_TESTS=1",
+					"UNIT_TESTS=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -6338,7 +5807,7 @@
 					"-lz",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
-				PRODUCT_NAME = "iSub Integration Tests copy";
+				PRODUCT_NAME = "iSub Unit Tests";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
@@ -6366,7 +5835,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"ADHOC=1",
-					"RUN_KIF_TESTS=1",
+					"UNIT_TESTS=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -6382,7 +5851,7 @@
 					"-lz",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
-				PRODUCT_NAME = "iSub Integration Tests copy";
+				PRODUCT_NAME = "iSub Unit Tests";
 				PROVISIONING_PROFILE = "C5A919D9-34BF-4BDD-B88B-9BE4768CED37";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C5A919D9-34BF-4BDD-B88B-9BE4768CED37";
 				SDKROOT = iphoneos;
@@ -6407,7 +5876,7 @@
 				GCC_PREFIX_HEADER = Other/iSub_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"RELEASE=1",
-					"RUN_KIF_TESTS=1",
+					"UNIT_TESTS=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -6423,7 +5892,7 @@
 					"-lz",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
-				PRODUCT_NAME = "iSub Integration Tests copy";
+				PRODUCT_NAME = "iSub Unit Tests";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;

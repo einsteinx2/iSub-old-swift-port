@@ -190,34 +190,6 @@
 	}
 	
 	[self.cacheSpaceLabel2 addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-	
-	switch (settingsS.audioEngineStartNumberOfSeconds) 
-	{
-		case 5: self.secondsToStartPlayerSegmentControl.selectedSegmentIndex = 0; break;
-		case 10: self.secondsToStartPlayerSegmentControl.selectedSegmentIndex = 1; break;
-		case 15: self.secondsToStartPlayerSegmentControl.selectedSegmentIndex = 2; break;
-		case 20: self.secondsToStartPlayerSegmentControl.selectedSegmentIndex = 3; break;
-		case 25: self.secondsToStartPlayerSegmentControl.selectedSegmentIndex = 4; break;
-		case 30: self.secondsToStartPlayerSegmentControl.selectedSegmentIndex = 5; break;
-		case 45: self.secondsToStartPlayerSegmentControl.selectedSegmentIndex = 6; break;
-		case 60: self.secondsToStartPlayerSegmentControl.selectedSegmentIndex = 7; break;
-		case 120: self.secondsToStartPlayerSegmentControl.selectedSegmentIndex = 8; break;
-		default: break;
-	}
-	
-	switch (settingsS.audioEngineBufferNumberOfSeconds) 
-	{
-		case 5: self.secondsToBufferSegmentControl.selectedSegmentIndex = 0; break;
-		case 10: self.secondsToBufferSegmentControl.selectedSegmentIndex = 1; break;
-		case 15: self.secondsToBufferSegmentControl.selectedSegmentIndex = 2; break;
-		case 20: self.secondsToBufferSegmentControl.selectedSegmentIndex = 3; break;
-		case 25: self.secondsToBufferSegmentControl.selectedSegmentIndex = 4; break;
-		case 30: self.secondsToBufferSegmentControl.selectedSegmentIndex = 5; break;
-		case 45: self.secondsToBufferSegmentControl.selectedSegmentIndex = 6; break;
-		case 60: self.secondsToBufferSegmentControl.selectedSegmentIndex = 7; break;
-		case 120: self.secondsToBufferSegmentControl.selectedSegmentIndex = 8; break;
-		default: break;
-	}
     
     self.maxVideoBitrate3GSegmentedControl.selectedSegmentIndex = settingsS.maxVideoBitrate3G;
     self.maxVideoBitrateWifiSegmentedControl.selectedSegmentIndex = settingsS.maxVideoBitrateWifi;
@@ -316,38 +288,6 @@
 			
 			if (IS_IPAD())
 				[appDelegateS.ipadRootViewController.menuViewController.playerController quickSecondsSetLabels];
-		}
-		else if (sender == self.secondsToStartPlayerSegmentControl)
-		{
-			switch (self.secondsToStartPlayerSegmentControl.selectedSegmentIndex) 
-			{
-				case 0: settingsS.audioEngineStartNumberOfSeconds = 5; break;
-				case 1: settingsS.audioEngineStartNumberOfSeconds = 10; break;
-				case 2: settingsS.audioEngineStartNumberOfSeconds = 15; break;
-				case 3: settingsS.audioEngineStartNumberOfSeconds = 20; break;
-				case 4: settingsS.audioEngineStartNumberOfSeconds = 25; break;
-				case 5: settingsS.audioEngineStartNumberOfSeconds = 30; break;
-				case 6: settingsS.audioEngineStartNumberOfSeconds = 45; break;
-				case 7: settingsS.audioEngineStartNumberOfSeconds = 60; break;
-				case 8: settingsS.audioEngineStartNumberOfSeconds = 120; break;
-				default: break;
-			}
-		}
-		else if (sender == self.secondsToBufferSegmentControl)
-		{
-			switch (self.secondsToBufferSegmentControl.selectedSegmentIndex) 
-			{
-				case 0: settingsS.audioEngineBufferNumberOfSeconds = 5; break;
-				case 1: settingsS.audioEngineBufferNumberOfSeconds = 10; break;
-				case 2: settingsS.audioEngineBufferNumberOfSeconds = 15; break;
-				case 3: settingsS.audioEngineBufferNumberOfSeconds = 20; break;
-				case 4: settingsS.audioEngineBufferNumberOfSeconds = 25; break;
-				case 5: settingsS.audioEngineBufferNumberOfSeconds = 30; break;
-				case 6: settingsS.audioEngineBufferNumberOfSeconds = 45; break;
-				case 7: settingsS.audioEngineBufferNumberOfSeconds = 60; break;
-				case 8: settingsS.audioEngineBufferNumberOfSeconds = 120; break;
-				default: break;
-			}
 		}
         else if (sender == self.maxVideoBitrate3GSegmentedControl)
         {
