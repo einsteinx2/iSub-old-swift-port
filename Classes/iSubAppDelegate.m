@@ -24,6 +24,8 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import "StoreViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
+#import "HTTPServer.h"
+#import "HLSProxyConnection.h"
 
 LOG_LEVEL_ISUB_DEFAULT
 
@@ -251,7 +253,9 @@ LOG_LEVEL_ISUB_DEFAULT
     [NSNotificationCenter addObserverOnMainThread:self selector:@selector(removeMoviePlayer) name:ISMSNotification_RemoveMoviePlayer object:nil];
     [NSNotificationCenter addObserverOnMainThread:self selector:@selector(jukeboxToggled) name:ISMSNotification_JukeboxDisabled object:nil];
     [NSNotificationCenter addObserverOnMainThread:self selector:@selector(jukeboxToggled) name:ISMSNotification_JukeboxEnabled object:nil];
-        
+    
+    [self startHLSProxy];
+    
 	// Recover current state if player was interrupted
 	[ISMSStreamManager sharedInstance];
 	[musicS resumeSong];
@@ -273,6 +277,20 @@ LOG_LEVEL_ISUB_DEFAULT
         settingsS.isPartialCacheNextSong = NO;
         settingsS.oneTimeRunIncrementor = 1;
     }
+}
+
+- (void)startHLSProxy
+{
+    self.hlsProxyServer = [[HTTPServer alloc] init];
+    self.hlsProxyServer.connectionClass = [HLSProxyConnection class];
+    
+    NSError *error;
+	BOOL success = [self.hlsProxyServer start:&error];
+	
+	if(!success)
+	{
+		DDLogError(@"Error starting HLS proxy server: %@", error);
+	}
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
@@ -1425,12 +1443,6 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (void)playVideo:(ISMSSong *)aSong
 {
-    DLog(@"video unlocked: %i", [MKStoreManager isFeaturePurchased:kFeatureVideoId]);
-    DLog(@"all unlocked: %i", [MKStoreManager isFeaturePurchased:kFeatureAllId]);
-    DLog(@"IS_LITE(): %i", IS_LITE());
-    DLog(@"!IS_LITE() || [MKStoreManager isFeaturePurchased:kFeatureVideoId] || [MKStoreManager isFeaturePurchased:kFeatureAllId]: %i", (!IS_LITE() || [MKStoreManager isFeaturePurchased:kFeatureVideoId] || [MKStoreManager isFeaturePurchased:kFeatureAllId]));
-    DLog(@"settingsS.isVideoUnlocked: %i", settingsS.isVideoUnlocked);
-    
     if (settingsS.isVideoUnlocked)
     {
         NSString *serverType = settingsS.serverType;
@@ -1474,13 +1486,14 @@ LOG_LEVEL_ISUB_DEFAULT
     if (!aSong.itemId || !bitrates)
         return;
     
-    NSDictionary *parameters = @{ @"id" : aSong.itemId, @"bitRate" : bitrates };
+    NSDictionary *parameters = @{ @"id" : aSong.itemId, @"bitRate" : @"1000" };//bitrates };
     NSURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"hls" parameters:parameters];
     
-    NSString *urlString = [NSString stringWithFormat:@"%@?%@", request.URL.absoluteString, [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]];
-    
-    //NSString *urlString = [NSString stringWithFormat:@"%@/rest/hls.m3u8?c=iSub&v=1.8.0&u=%@&p=%@&id=%@", settingsS.urlString, [settingsS.username URLEncodeString], [settingsS.password URLEncodeString], aSong.itemId];
-    DLog(@"urlString: %@", urlString);
+    // If we're on HTTPS, use our proxy to allow for playback from a self signed server
+    NSString *host = request.URL.absoluteString;
+    host = [host.lowercaseString hasPrefix:@"https"] ? [NSString stringWithFormat:@"http://localhost:%u%@", self.hlsProxyServer.listeningPort, request.URL.relativePath] : host;
+    NSString *urlString = [NSString stringWithFormat:@"%@?%@", host, [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]];
+    DLog(@"HLS urlString: %@", urlString);
     
     [self createMoviePlayer];
     
