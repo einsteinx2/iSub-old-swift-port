@@ -365,11 +365,9 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	{
 		self.updatedfolders = [[NSMutableDictionary alloc] init];
 		[self.updatedfolders setObject:@"All Folders" forKey:[NSNumber numberWithInt:-1]];
-		
-		
-		NSString *responseString = [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding];
-        DLog(@"folder dropdown: %@", responseString);
-		NSDictionary *response = [responseString JSONValue];
+				
+        DLog(@"folder dropdown: %@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
+		NSDictionary *response = [[[SBJsonParser alloc] init] objectWithData:self.receivedData];
 		
 		NSArray *responseFolders = [response objectForKey:@"folders"];
 		for (NSDictionary *folder in responseFolders)

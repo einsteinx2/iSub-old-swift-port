@@ -689,7 +689,7 @@
 		if (!socialS.twitterEngine)
 			[socialS createTwitterEngine];
 		
-		UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine:socialS.twitterEngine delegate:socialS];
+		UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine:socialS.twitterEngine delegate:(id)socialS];
 		if (controller) 
 		{
 			if (IS_IPAD())

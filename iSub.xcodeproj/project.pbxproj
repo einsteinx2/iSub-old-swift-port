@@ -1841,6 +1841,20 @@
 			remoteGlobalIDString = 536C947216618FA4005A73C6;
 			remoteInfo = libSub;
 		};
+		53970B57169233CF00C092BF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 530D20F216670062009DAF1B /* EX2Kit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5304A20F16901857009B2732;
+			remoteInfo = EX2KitOSX;
+		};
+		53970B5F169233CF00C092BF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5374F26A1661C56000529EF3 /* libSub.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5304A1991690173B009B2732;
+			remoteInfo = libSubOSX;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -2668,6 +2682,7 @@
 			children = (
 				530D20F816670062009DAF1B /* libEX2Kit.a */,
 				530D20FA16670062009DAF1B /* EX2KitResources.bundle */,
+				53970B58169233CF00C092BF /* EX2KitOSX.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2930,6 +2945,7 @@
 			children = (
 				5374F2821661C56000529EF3 /* libSub.a */,
 				5304A04C168FB555009B2732 /* libSubTests.app */,
+				53970B60169233CF00C092BF /* libSubOSX.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3624,6 +3640,20 @@
 			fileType = archive.ar;
 			path = libSub.a;
 			remoteRef = 5374F2811661C56000529EF3 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		53970B58169233CF00C092BF /* EX2KitOSX.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = EX2KitOSX.framework;
+			remoteRef = 53970B57169233CF00C092BF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		53970B60169233CF00C092BF /* libSubOSX.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = libSubOSX.framework;
+			remoteRef = 53970B5F169233CF00C092BF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -5501,7 +5531,6 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Other/iSub_Prefix.pch;
-				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -5537,7 +5566,6 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Other/iSub_Prefix.pch;
-				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE=1";
 				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -5578,6 +5606,7 @@
 					"DEBUG=1",
 					"ADHOC=1",
 					"CONFIGURATION_$(CONFIGURATION)",
+					"IOS=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -5626,10 +5655,6 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Other/iSub_Prefix.pch;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"ADHOC=1",
-				);
 				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -5668,7 +5693,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Other/iSub_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
+					"$(inherited)",
 					"RUN_KIF_TESTS=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
@@ -5709,8 +5734,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Other/iSub_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"ADHOC=1",
+					"$(inherited)",
 					"RUN_KIF_TESTS=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
@@ -5749,7 +5773,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Other/iSub_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"RELEASE=1",
+					"$(inherited)",
 					"RUN_KIF_TESTS=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
@@ -5790,7 +5814,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Other/iSub_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
+					"$(inherited)",
 					"UNIT_TESTS=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
@@ -5833,8 +5857,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Other/iSub_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"ADHOC=1",
+					"$(inherited)",
 					"UNIT_TESTS=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
@@ -5875,7 +5898,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Other/iSub_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"RELEASE=1",
+					"$(inherited)",
 					"UNIT_TESTS=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
@@ -5918,7 +5941,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Other/iSub_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
+					"$(inherited)",
 					"BETA=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
@@ -5961,7 +5984,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Other/iSub_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"ADHOC=1",
+					"$(inherited)",
 					"BETA=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
@@ -6001,7 +6024,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Other/iSub_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"RELEASE=1",
+					"$(inherited)",
 					"BETA=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
@@ -6041,7 +6064,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Other/iSub_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
+					"$(inherited)",
 					"LITE=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
@@ -6083,8 +6106,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Other/iSub_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"ADHOC=1",
+					"$(inherited)",
 					"LITE=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
@@ -6121,7 +6143,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Other/iSub_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"RELEASE=1",
+					"$(inherited)",
 					"LITE=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
@@ -6163,6 +6185,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"CONFIGURATION_$(CONFIGURATION)",
+					"IOS=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -6211,6 +6234,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"RELEASE=1",
 					"CONFIGURATION_$(CONFIGURATION)",
+					"IOS=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
