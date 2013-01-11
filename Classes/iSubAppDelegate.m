@@ -872,6 +872,10 @@ LOG_LEVEL_ISUB_DEFAULT
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_EnteringOfflineMode];
 	
+    settingsS.isJukeboxEnabled = NO;
+    appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
+    [FlurryAnalytics logEvent:@"JukeboxDisabled"];
+    
 	settingsS.isOfflineMode = YES;
 		
 	[audioEngineS.player stop];

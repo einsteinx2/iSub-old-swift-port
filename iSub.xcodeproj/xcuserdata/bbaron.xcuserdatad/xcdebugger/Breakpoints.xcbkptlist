@@ -61,11 +61,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Classes/UAApplication.m"
-         timestampString = "375570687.450586"
+         timestampString = "379572843.089294"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "78"
-         endingLineNumber = "78"
+         startingLineNumber = "75"
+         endingLineNumber = "75"
          landmarkName = "-playPauseStop"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5405,19 +5405,6 @@
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "Classes/EqualizerViewController.m"
-         timestampString = "373482515.096644"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "272"
-         endingLineNumber = "272"
-         landmarkName = "-viewDidLoad"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "Classes/CacheSingleton.m"
          timestampString = "375253839.332316"
          startingColumnNumber = "9223372036854775807"
@@ -5568,19 +5555,6 @@
          startingLineNumber = "446"
          endingLineNumber = "446"
          landmarkName = "-createLandscapeViews"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Classes/EqualizerViewController.m"
-         timestampString = "373482515.096644"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "289"
-         endingLineNumber = "289"
-         landmarkName = "-viewDidLoad"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
