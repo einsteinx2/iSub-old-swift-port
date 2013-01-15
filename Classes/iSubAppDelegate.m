@@ -464,6 +464,7 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (void)loadingFinished:(ISMSLoader *)theLoader
 {
+    // This happens right on app launch
     if (theLoader.type == ISMSLoaderType_Status)
     {
         if ([theLoader isKindOfClass:[SUSStatusLoader class]])
@@ -480,8 +481,13 @@ LOG_LEVEL_ISUB_DEFAULT
         if (!IS_IPAD() && !settingsS.isOfflineMode)
             [viewObjectsS orderMainTabBarController];
         
-        // Start the queued downloads if Wifi is available
-        [cacheQueueManagerS startDownloadQueue];
+        // Since the download queue has been a frequent source of crashes in the past, and we start this on launch automatically
+        // potentially resulting in a crash loop, do NOT start the download queue automatically if the app crashed on last launch.
+        if (![BITHockeyManager sharedHockeyManager].crashManager.didCrashInLastSession)
+        {
+            // Start the queued downloads if Wifi is available
+            [cacheQueueManagerS startDownloadQueue];
+        }
     }
 }
 
