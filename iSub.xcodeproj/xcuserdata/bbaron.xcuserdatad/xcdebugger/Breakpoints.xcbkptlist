@@ -5340,19 +5340,6 @@
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "Classes/EqualizerViewController.m"
-         timestampString = "373482515.096644"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "446"
-         endingLineNumber = "446"
-         landmarkName = "-createEqViews"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "Classes/BassEffectDAO.m"
          timestampString = "371072206.559597"
          startingColumnNumber = "9223372036854775807"
@@ -5386,19 +5373,6 @@
          startingLineNumber = "122"
          endingLineNumber = "122"
          landmarkName = "-addEqualizerValue:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Classes/EqualizerViewController.m"
-         timestampString = "373482515.096644"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "872"
-         endingLineNumber = "872"
-         landmarkName = "-pickerField:selectedRow:inComponent:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -5633,19 +5607,6 @@
          startingLineNumber = "63"
          endingLineNumber = "63"
          landmarkName = "-processResponse"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Frameworks/libSub/Sub/ISMSCacheQueueManager.m"
-         timestampString = "379969139.321611"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "74"
-         endingLineNumber = "74"
-         landmarkName = "-startDownloadQueue"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

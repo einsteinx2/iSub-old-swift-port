@@ -253,57 +253,24 @@
 {
     [super viewDidLoad];
 	
-	/*CGRect frame;
-	if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation) && !IS_IPAD())
-	{
-		frame = CGRectMake(0, 0, 480, 320);
-	}
-	else
-	{
-		frame = CGRectMake(0, 0, 320, 320);
-	}
-	equalizerView = [[EqualizerView alloc] initWithFrame:frame];
-	equalizerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
-	[self.view addSubview:equalizerView];*/
-    
     if (!audioEngineS.player)
     {
         [audioEngineS startEmptyPlayer];
     }
-
-	self.effectDAO = [[BassEffectDAO alloc] initWithType:BassEffectType_ParametricEQ];
-
-	//DLog(@"effectDAO.selectedPresetIndex: %i", effectDAO.selectedPresetIndex);
-	[self.presetPicker selectRow:self.effectDAO.selectedPresetIndex inComponent:0 animated:NO];
-    
-    if (IS_TALL_SCREEN())
-    {
-        UIView *pickerBackground = [[UIView alloc] initWithFrame:CGRectMake(0., 365, 320., 140)];
-        pickerBackground.backgroundColor = UIColor.greenColor;
-        pickerBackground.clipsToBounds = YES;
-        [self.view addSubview:pickerBackground];
-        
-        self.presetPicker.pickerView.hidden = NO;
-        self.presetPicker.pickerView.y = -38.;
-        [pickerBackground addSubview:self.presetPicker.pickerView];
-    }
-	
-	[self updateToggleButton];
-	
-	[self.equalizerView startEqDisplay];
 	
 	self.isSavePresetButtonShowing = NO;
 	self.savePresetButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 	CGRect f = self.presetPicker.frame;
-	self.savePresetButton.frame = CGRectMake(f.origin.x + f.size.width - 60., f.origin.y, 60., 30.);
+	self.savePresetButton.frame = CGRectMake(f.origin.x + f.size.width - 65., f.origin.y, 60., 30.);
 	[self.savePresetButton setTitle:@"Save" forState:UIControlStateNormal];
 	[self.savePresetButton addTarget:self action:@selector(promptToSaveCustomPreset) forControlEvents:UIControlEventTouchUpInside];
 	self.savePresetButton.alpha = 0.;
 	self.savePresetButton.enabled = NO;
 	[self.controlsContainer addSubview:self.savePresetButton];
 	
+    self.isDeletePresetButtonShowing = NO;
 	self.deletePresetButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-	self.deletePresetButton.frame = CGRectMake(f.origin.x + f.size.width - 60., f.origin.y, 60., 30.);
+	self.deletePresetButton.frame = CGRectMake(f.origin.x + f.size.width - 65., f.origin.y, 60., 30.);
 	[self.deletePresetButton setTitle:@"Delete" forState:UIControlStateNormal];
 	[self.deletePresetButton addTarget:self action:@selector(promptToDeleteCustomPreset) forControlEvents:UIControlEventTouchUpInside];
 	self.deletePresetButton.alpha = 0.;
@@ -318,6 +285,14 @@
 	{
 		[self showDeletePresetButton:NO];
 	}
+    
+    self.effectDAO = [[BassEffectDAO alloc] initWithType:BassEffectType_ParametricEQ];
+    
+	[self.presetPicker selectRow:self.effectDAO.selectedPresetIndex inComponent:0 animated:NO];
+	
+	[self updateToggleButton];
+	
+	[self.equalizerView startEqDisplay];
 	
 	NSArray *detents = [NSArray arrayWithObjects:[NSNumber numberWithFloat:1.], [NSNumber numberWithFloat:2.], [NSNumber numberWithFloat:3.], nil];
 	self.gainSlider.snapDistance = .13;
@@ -334,6 +309,23 @@
 		self.savePresetButton.y -= 10;
 		self.deletePresetButton.y -= 10;
 	}
+    
+    if (IS_TALL_SCREEN())
+    {
+        UIView *pickerBackground = [[UIView alloc] initWithFrame:CGRectMake(0., 45., 320., 140.)];//CGRectMake(0., 365, 320., 140)];
+        pickerBackground.clipsToBounds = YES;
+        [self.controlsContainer addSubview:pickerBackground];
+        
+        self.presetPicker.pickerView.hidden = NO;
+        self.presetPicker.pickerView.y = -38.;
+        [pickerBackground addSubview:self.presetPicker.pickerView];
+        
+        [self.controlsContainer bringSubviewToFront:self.savePresetButton];
+        [self.controlsContainer bringSubviewToFront:self.deletePresetButton];
+        
+        self.savePresetButton.x -= 5.;
+        self.deletePresetButton.x -= 5.;
+    }
 	
 	if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation) && !IS_IPAD())
 	{
@@ -507,7 +499,7 @@
 		[UIView setAnimationDuration:.5];
 	}
 	
-	self.presetPicker.width += 65.;
+	self.presetPicker.width = 300.;
 	self.savePresetButton.alpha = 0.;
 	
 	if (animated)
@@ -520,6 +512,8 @@
 
 - (void)showSavePresetButton:(BOOL)animated
 {
+    [self hideDeletePresetButton:NO];
+    
 	self.isSavePresetButtonShowing = YES;
 	
 	self.savePresetButton.enabled = YES;
@@ -530,7 +524,7 @@
 		[UIView setAnimationDuration:.5];
 	}
 	
-	self.presetPicker.width -= 65.;
+	self.presetPicker.width = 300. - 65.;
 	self.savePresetButton.alpha = 1.;
 	
 	if (animated)
@@ -549,7 +543,7 @@
 		[UIView setAnimationDuration:.5];
 	}
 	
-	self.presetPicker.width += 65.;
+	self.presetPicker.width = 300.;
 	self.deletePresetButton.alpha = 0.;
 	
 	if (animated)
@@ -562,6 +556,8 @@
 
 - (void)showDeletePresetButton:(BOOL)animated
 {
+    [self hideSavePresetButton:NO];
+    
 	self.isDeletePresetButtonShowing = YES;
 	
 	self.deletePresetButton.enabled = YES;
@@ -572,7 +568,7 @@
 		[UIView setAnimationDuration:.5];
 	}
 	
-	self.presetPicker.width -= 65.;
+	self.presetPicker.width = 300. - 65.;
 	self.deletePresetButton.alpha = 1.;
 	
 	if (animated)
