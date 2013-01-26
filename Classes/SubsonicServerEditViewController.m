@@ -186,7 +186,7 @@
 	
 	//DLog(@"redirectUrlString: %@", redirectUrlString);
 	
-	settingsS.redirectUrlString = [NSString stringWithString:redirectUrlString];
+	self.theNewRedirectUrl = [NSString stringWithString:redirectUrlString];
 }
 
 - (void)loadingFailed:(ISMSLoader *)theLoader withError:(NSError *)error
@@ -248,6 +248,8 @@
 		}
         userInfo[@"isVideoSupported"] = @(((SUSStatusLoader *)theLoader).isVideoSupported);
         userInfo[@"isNewSearchAPI"] = @(((SUSStatusLoader *)theLoader).isNewSearchAPI);
+        if (self.theNewRedirectUrl)
+            userInfo[@"theNewRedirectUrl"] = self.theNewRedirectUrl;
         
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer" userInfo:userInfo];
 	}
@@ -286,6 +288,8 @@
 		}
         userInfo[@"isVideoSupported"] = @(((SUSStatusLoader *)theLoader).isVideoSupported);
         userInfo[@"isNewSearchAPI"] = @(((SUSStatusLoader *)theLoader).isNewSearchAPI);
+        if (self.theNewRedirectUrl)
+            userInfo[@"theNewRedirectUrl"] = self.theNewRedirectUrl;
         
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer" userInfo:userInfo];
 	}
