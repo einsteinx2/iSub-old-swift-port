@@ -13,6 +13,8 @@
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
 
+LOG_LEVEL_ISUB_DEFAULT
+
 @implementation PMSServerEditViewControllerViewController
 
 #pragma mark - Rotation
@@ -229,6 +231,12 @@
     
     if(viewObjectsS.serverToEdit)
     {
+        // If we're finishing up editing a server, it's selected.  We should
+        // update its media database.
+        
+        // to do: update media database.
+        
+        
         // Replace the entry in the server list
         NSInteger index = [settingsS.serverList indexOfObject:viewObjectsS.serverToEdit];
         [settingsS.serverList replaceObjectAtIndex:index withObject:theServer];
@@ -261,6 +269,52 @@
     }
     else
     {
+        // Since we're creating a new server in the list, it should have
+        // a UUID to identify it and so we can reliably have unique names
+        // for our media databases.
+        CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
+        theServer.uuid = (__bridge_transfer NSString *)CFUUIDCreateString(kCFAllocatorDefault, uuid);
+        CFRelease(uuid);
+        
+        settingsS.uuid = theServer.uuid;
+        
+        // Download the database.
+        WBDatabaseLoader *dbLoader = [[WBDatabaseLoader alloc] initWithCallbackBlock:^(BOOL success, NSError *error, ISMSLoader *theLoader)
+        {
+            if (success)
+            {
+                DDLogVerbose(@"Got the database.");
+                [databaseS setCurrentMetadataDatabase];
+                [viewObjectsS hideLoadingScreen];
+                [NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
+                [NSNotificationCenter postNotificationToMainThreadWithName:@"showSaveButton"];
+                
+                if (self.parentController)
+                    [self.parentController dismissModalViewControllerAnimated:YES];
+                
+                [self dismissModalViewControllerAnimated:YES];
+                
+                if (IS_IPAD())
+                    [appDelegateS.ipadRootViewController.menuViewController showHome];
+                
+                NSDictionary *userInfo = nil;
+                if (self.theNewRedirectUrl)
+                {
+                    userInfo = [NSDictionary dictionaryWithObject:self.theNewRedirectUrl forKey:@"theNewRedirectUrl"];
+                }
+                [NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer" userInfo:userInfo];
+            }
+            else
+            {
+                DLog(@"Failed to get the database.");
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Uh oh!" message:@"WaveBox failed to provide us with its metadata database." delegate:nil cancelButtonTitle:@"Close" otherButtonTitles:nil];
+                [alert show];
+            }
+        } serverUuid: theServer.uuid];
+        
+        [viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Syncing metadata"];
+        [dbLoader startLoad];
+        
         // Create the entry in serverList
         viewObjectsS.serverToEdit = theServer;
         [settingsS.serverList addObject:viewObjectsS.serverToEdit];
@@ -272,24 +326,6 @@
         [defaults setObject:self.passwordField.text forKey:@"password"];
         [defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settingsS.serverList] forKey:@"servers"];
         [defaults synchronize];
-        
-        [NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
-        [NSNotificationCenter postNotificationToMainThreadWithName:@"showSaveButton"];
-        
-        if (self.parentController)
-            [self.parentController dismissModalViewControllerAnimated:YES];
-        
-        [self dismissModalViewControllerAnimated:YES];
-        
-        if (IS_IPAD())
-            [appDelegateS.ipadRootViewController.menuViewController showHome];
-        
-        NSDictionary *userInfo = nil;
-        if (self.theNewRedirectUrl)
-        {
-            userInfo = [NSDictionary dictionaryWithObject:self.theNewRedirectUrl forKey:@"theNewRedirectUrl"];
-        }
-        [NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer" userInfo:userInfo];
     }
     
     self.loader.delegate = nil;

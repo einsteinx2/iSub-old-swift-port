@@ -556,6 +556,7 @@
     {
         settingsS.sessionId = ((PMSLoginLoader *)theLoader).sessionId;
         settingsS.isVideoSupported = YES;
+        [databaseS setCurrentMetadataDatabase];
     }
     else if (theLoader.type == ISMSLoaderType_Status && [viewObjectsS.serverToEdit.type isEqualToString:SUBSONIC])
     {
