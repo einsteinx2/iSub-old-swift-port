@@ -117,7 +117,7 @@
 {
     [viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
         
-    SUSQuickAlbumsLoader *loader = [[SUSQuickAlbumsLoader alloc] initWithDelegate:self];
+    ISMSQuickAlbumsLoader *loader = [ISMSQuickAlbumsLoader loaderWithDelegate:self];
     loader.modifier = theModifier;
     [loader startLoad];
 }
