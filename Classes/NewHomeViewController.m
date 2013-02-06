@@ -448,41 +448,32 @@
 
 - (void)performServerShuffle:(NSNotification*)notification 
 {
-	// Start the 100 record open search to create shuffle list
-	self.isSearch = NO;
-	NSDictionary *parameters = nil;
-	if (notification == nil)
-	{
-        parameters = [NSDictionary dictionaryWithObject:@"100" forKey:@"size"];
-	}
-	else 
-	{
-		NSDictionary *userInfo = [notification userInfo];
-		NSString *folderId = [NSString stringWithFormat:@"%i", [[userInfo objectForKey:@"folderId"] intValue]];
-	//DLog(@"folderId: %@    %i", folderId, [[userInfo objectForKey:@"folderId"] intValue]);
-		
-		if ([folderId intValue] < 0)
-            parameters = [NSDictionary dictionaryWithObject:@"100" forKey:@"size"];
-		else
-            parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"100", @"size", n2N(folderId), @"musicFolderId", nil];
-	}
-
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"getRandomSongs" parameters:parameters];
+    ISMSServerShuffleLoader *loader = [ISMSServerShuffleLoader loaderWithCallbackBlock:^(BOOL success, NSError *error, ISMSLoader *loader)
+    {
+        [viewObjectsS hideLoadingScreen];
+        
+        if (success)
+        {
+            [musicS playSongAtPosition:0];
+            [self showPlayer];
+        }
+        else
+        {
+            CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error creating the server shuffle list.\n\nThe connection could not be created" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
+        }
+    }];
+    // Display the loading screen
+    [viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
+    loader.notification = notification;
+    [loader startLoad];
     
-	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
-	if (self.connection)
-	{
-		self.receivedData = [NSMutableData data];
-		
-		// Display the loading screen
-		[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
-	} 
-	else 
-	{
-		// Inform the user that the connection failed.
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error creating the server shuffle list.\n\nThe connection could not be created" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert show];
-	}
+
+}
+
+- (void)wbServerShuffle:(NSNotification *)notification
+{
+
 }
 
 - (void)cancelLoad
@@ -863,45 +854,7 @@
 	}
 	else
 	{
-		// It's generating the 100 random songs list
-		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
-		SearchXMLParser *parser = (SearchXMLParser*)[[SearchXMLParser alloc] initXMLParser];
-		[xmlParser setDelegate:parser];
-		[xmlParser parse];
-				
-		if (settingsS.isJukeboxEnabled)
-		{
-			[databaseS resetJukeboxPlaylist];
-			[jukeboxS jukeboxClearRemotePlaylist];
-		}
-		else
-		{
-			[databaseS resetCurrentPlaylistDb];
-		}
-		
-		for(ISMSSong *aSong in parser.listOfSongs)
-		{
-			[aSong addToCurrentPlaylistDbQueue];
-		}
-		
-		//if (settingsS.isJukeboxEnabled)
-		//	[jukeboxS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:0]];
-				
-		playlistS.isShuffle = NO;
-		
-		// Hide the loading screen
-		[viewObjectsS hideLoadingScreen];
-		
-		[musicS playSongAtPosition:0];
-		
-		
-		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
-		
-		[self showPlayer];
-	}
-	
-	self.connection = nil;
-	self.receivedData = nil;
+    }
 }
 
 

@@ -39,7 +39,10 @@
 - (void)showLoadingScreen:(UIView *)view withMessage:(NSString *)message
 {
 	if (self.isLoadingScreenShowing)
+    {
+        self.HUD.labelText = message ? message : self.HUD.labelText;
 		return;
+    }
 	
 	self.isLoadingScreenShowing = YES;
 	

@@ -212,9 +212,7 @@ LOG_LEVEL_ISUB_DEFAULT
 }
 
 - (void)loadingFinished:(ISMSLoader *)theLoader
-{
-    [viewObjectsS hideLoadingScreen];
-    
+{    
     ISMSServer *theServer = [[ISMSServer alloc] init];
     theServer.url = self.urlField.text;
     theServer.username = self.usernameField.text;
@@ -231,6 +229,8 @@ LOG_LEVEL_ISUB_DEFAULT
     
     if(viewObjectsS.serverToEdit)
     {
+        [viewObjectsS hideLoadingScreen];
+
         // If we're finishing up editing a server, it's selected.  We should
         // update its media database.
         
@@ -311,7 +311,6 @@ LOG_LEVEL_ISUB_DEFAULT
                 [alert show];
             }
         } serverUuid: theServer.uuid];
-        
         [viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Syncing metadata"];
         [dbLoader startLoad];
         

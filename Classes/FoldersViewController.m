@@ -724,11 +724,14 @@
 	{
 		self.isReloading = YES;
 		[self loadData:[settingsS rootFoldersSelectedFolderId]];
-		[self.refreshHeaderView setState:EGOOPullRefreshLoading];
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:0.2];
-		self.tableView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
-		[UIView commitAnimations];
+        if ([settingsS.serverType isEqualToString:SUBSONIC] || [settingsS.serverType isEqualToString:UBUNTU_ONE])
+        {
+            [self.refreshHeaderView setState:EGOOPullRefreshLoading];
+            [UIView beginAnimations:nil context:NULL];
+            [UIView setAnimationDuration:0.2];
+            self.tableView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
+            [UIView commitAnimations];
+        }
 	}
 }
 

@@ -278,153 +278,28 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 
 - (void)updateFolders
 {    
-	[self.connection cancel];
-	self.connection = nil;
-	
-	//DLog(@"Folder dropdown: updating folders");
-    NSMutableURLRequest *request;
+	//[self.connection cancel];
+	//self.connection = nil;
     
-    if ([settingsS.serverType isEqualToString:SUBSONIC] || [settingsS.serverType isEqualToString:UBUNTU_ONE])
-	{
-        request = [NSMutableURLRequest requestWithSUSAction:@"getMusicFolders" parameters:nil];
-	}
-    else if ([settingsS.serverType isEqualToString:WAVEBOX])
-	{
-        NSDictionary *parameters = [NSDictionary dictionaryWithObject:@"true" forKey:@"mediaFolders"];
-        request = [NSMutableURLRequest requestWithPMSAction:@"folders" parameters:parameters];
-    }
-    //DLog(@"folder dropdown url: %@   body: %@  headers: %@", [[request URL] absoluteString], [[[NSString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding] autorelease], [request allHTTPHeaderFields]);
+    ISMSDropdownFolderLoader *loader = [ISMSDropdownFolderLoader loaderWithCallbackBlock:^(BOOL success, NSError *error, ISMSLoader *loader)
+    {
+        ISMSDropdownFolderLoader *theLoader = (ISMSDropdownFolderLoader *)loader;
+        if (success)
+        {
+            self.folders = theLoader.updatedfolders;
+            ALog(@"%@", self.folders);
+            ALog(@"%@", theLoader.updatedfolders);
+            [SUSRootFoldersDAO setFolderDropdownFolders:self.folders];
+        }
+        else
+        {
+            // failed.  how to report this to the user?
+        }
+    }];
+    [loader startLoad];
     
-	self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-	if (self.connection)
-	{
-		// Create the NSMutableData to hold the received data.
-		// receivedData is an instance variable declared elsewhere.
-		self.receivedData = [[NSMutableData alloc] initWithCapacity:0];
-	} 
-	else 
-	{		
-		// Inform the user that the connection failed.
-		NSString *message = [NSString stringWithFormat:@"There was an error loading the music folders for the dropdown."];
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert show];
-	}
-}
-
-#pragma mark Connection Delegate
-
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
-{
-	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
-		return YES; // Self-signed cert will be accepted
-	
-	return NO;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{	
-	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
-	{
-		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
-	}
-	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-	[self.receivedData setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
-{
-    [self.receivedData appendData:incrementalData];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
-{
-	// Inform the user that the connection failed.
-	NSString *message = [NSString stringWithFormat:@"There was an error loading the music folders for the dropdown.\n\nError %i: %@", [error code], [error localizedDescription]];
-	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	[alert show];
-	
-	self.receivedData = nil;
-	self.connection = nil;
-}	
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
-{	
-	//DLog(@"folder dropdown connection finished: %@", [[[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding] autorelease]);
-	
-	if ([settingsS.serverType isEqualToString:SUBSONIC] || [settingsS.serverType isEqualToString:UBUNTU_ONE])
-	{
-		NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:self.receivedData];
-		[xmlParser setDelegate:self];
-		[xmlParser parse];
-	}
-	else if ([settingsS.serverType isEqualToString:WAVEBOX])
-	{
-		self.updatedfolders = [[NSMutableDictionary alloc] init];
-		[self.updatedfolders setObject:@"All Folders" forKey:[NSNumber numberWithInt:-1]];
-				
-        DLog(@"folder dropdown: %@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
-		NSDictionary *response = [[[SBJsonParser alloc] init] objectWithData:self.receivedData];
-		
-		NSArray *responseFolders = [response objectForKey:@"folders"];
-		for (NSDictionary *folder in responseFolders)
-		{
-			NSNumber *folderId = [NSNumber numberWithInt:[[folder objectForKey:@"folderId"] intValue]];
-			NSString *folderName = [folder objectForKey:@"folderName"];
-			
-			[self.updatedfolders setObject:folderName forKey:folderId];
-		}
-        
-        self.folders = [NSDictionary dictionaryWithDictionary:self.updatedfolders];
-		
-		// Save the default
-		[SUSRootFoldersDAO setFolderDropdownFolders:self.folders];
-	}
-	
-	self.receivedData = nil;
-	self.connection = nil;
-}
-
-#pragma XMLParser delegate
-
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
-{
-//DLog(@"Error parsing update XML response");
-}
-
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName 
-  namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName 
-	attributes:(NSDictionary *)attributeDict 
-{
-	if([elementName isEqualToString:@"musicFolders"])
-	{
-		self.updatedfolders = [[NSMutableDictionary alloc] init];
-		
-		[self.updatedfolders setObject:@"All Folders" forKey:[NSNumber numberWithInt:-1]];
-	}
-	else if ([elementName isEqualToString:@"musicFolder"])
-	{
-		NSNumber *folderId = [NSNumber numberWithInt:[[attributeDict objectForKey:@"id"] intValue]];
-		NSString *folderName = [attributeDict objectForKey:@"name"];
-		
-		[self.updatedfolders setObject:folderName forKey:folderId];
-	}
-}
-
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName 
-  namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
-{
-	if([elementName isEqualToString:@"musicFolders"])
-	{
-		self.folders = [NSDictionary dictionaryWithDictionary:self.updatedfolders];
-		
-		// Save the default
-		[SUSRootFoldersDAO setFolderDropdownFolders:self.folders];
-		
-	}
+    // Save the default
+    [SUSRootFoldersDAO setFolderDropdownFolders:self.folders];
 }
 
 @end
