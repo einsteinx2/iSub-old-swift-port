@@ -1673,12 +1673,23 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 				self.progressSlider.maximumValue = audioEngineS.player.currentStream.song.duration.floatValue;
 				self.progressSlider.enabled = YES;
 			}
-			
+            			
 			double progress = 0;
 			if (audioEngineS.player.isPlaying)
 				progress = audioEngineS.player.progress;
 			else
-				progress = [self.currentSong isEqualToSong:audioEngineS.player.currentStream.song] ? audioEngineS.player.progress : 0.;
+            {
+                if (!audioEngineS.player.currentStream.song)
+                {
+                    progress = (double)audioEngineS.startSecondsOffset;
+                    
+                }
+                else
+                {
+                    progress = [self.currentSong isEqualToSong:audioEngineS.player.currentStream.song] ? audioEngineS.player.progress : 0.;
+                }
+//                ALog(@"startsecs - startSecondsOffset: %f, progress: %f, self.currentSong: %@, audioengine.currentSong: %@", (double)audioEngineS.startSecondsOffset, progress, self.currentSong, audioEngineS.player.currentStream.song);
+            }
 			
 			if (self.lastProgress != ceil(progress))
 			{
