@@ -4713,7 +4713,9 @@
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1753"
-         endingLineNumber = "1753">
+         endingLineNumber = "1753"
+         landmarkName = "@implementation iPhoneStreamingPlayerViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -5609,6 +5611,19 @@
          landmarkName = "-processResponse"
          landmarkType = "5">
       </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Frameworks/libSub/Sub/BassGaplessPlayer.m"
+         timestampString = "382833447.212655"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "934"
+         endingLineNumber = "934"
+         landmarkName = "-progress"
+         landmarkType = "5">
+      </FileBreakpoint>
    </FileBreakpoints>
    <SymbolicBreakpoints>
       <SymbolicBreakpoint
@@ -5628,7 +5643,7 @@
    </SymbolicBreakpoints>
    <ExceptionBreakpoints>
       <ExceptionBreakpoint
-         shouldBeEnabled = "Yes"
+         shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          scope = "1"
