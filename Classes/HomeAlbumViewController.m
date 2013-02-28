@@ -95,7 +95,7 @@
 	self.isLoading = YES;
 	self.offset += 20;
     
-    self.loader = [[SUSQuickAlbumsLoader alloc] initWithDelegate:self];
+    self.loader = [ISMSQuickAlbumsLoader loaderWithDelegate:self];
     self.loader.modifier = self.modifier;
     self.loader.offset = self.offset;
     [self.loader startLoad];
