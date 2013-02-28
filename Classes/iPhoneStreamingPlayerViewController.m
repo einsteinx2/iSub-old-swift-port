@@ -213,7 +213,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		self.view.backgroundColor = [UIColor blackColor]; 
 	}
 	
-	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) || IS_IPAD())
 	{
 		[self createSongTitle];
 	}
@@ -497,15 +497,18 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 	
-	if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
-	{
-		//[self setSongTitle];
-		[self createSongTitle];
-	}
-	else
-	{
-		[self removeSongTitle];
-	}
+    if (!IS_IPAD())
+    {
+        if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
+        {
+            //[self setSongTitle];
+            [self createSongTitle];
+        }
+        else
+        {
+            [self removeSongTitle];
+        }
+    }
     
     if (IS_TALL_SCREEN() && UIInterfaceOrientationIsLandscape(toInterfaceOrientation))
     {
@@ -618,7 +621,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {
 	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 	
-	if (UIInterfaceOrientationIsLandscape(fromInterfaceOrientation))
+	if (!IS_IPAD() && UIInterfaceOrientationIsLandscape(fromInterfaceOrientation))
 	{
 		[self createSongTitle];
 	}

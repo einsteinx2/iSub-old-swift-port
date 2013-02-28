@@ -460,7 +460,7 @@
 		53159F56156F69D0001B0268 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675DB113B093900822059 /* CFNetwork.framework */; };
 		53159F57156F69D0001B0268 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675E1113B095900822059 /* QuartzCore.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		53159F58156F69D0001B0268 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675E7113B096400822059 /* AudioToolbox.framework */; };
-		53159F59156F69D0001B0268 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DE2D8113F008C00875852 /* CoreFoundation.framework */; };
+		53159F59156F69D0001B0268 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DE2D8113F008C00875852 /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		53159F5A156F69D0001B0268 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 536D620A1144495400DFCE56 /* SystemConfiguration.framework */; };
 		53159F5B156F69D0001B0268 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53544D891187DED400B63DB9 /* CoreLocation.framework */; };
 		53159F5C156F69D0001B0268 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5354914A11B03FC900928E0F /* MobileCoreServices.framework */; };
@@ -781,7 +781,7 @@
 		5379DC4F1219E48800F426CD /* ChatUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC491219E48800F426CD /* ChatUITableViewCell.m */; };
 		5379DC501219E48800F426CD /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC4B1219E48800F426CD /* ChatViewController.m */; };
 		5379DC511219E48800F426CD /* ChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5379DC4C1219E48800F426CD /* ChatViewController.xib */; };
-		537DE2D9113F008C00875852 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DE2D8113F008C00875852 /* CoreFoundation.framework */; };
+		537DE2D9113F008C00875852 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DE2D8113F008C00875852 /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		537E9A0A14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */; };
 		537E9A0B14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */; };
 		537E9A0C14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */; };
@@ -1200,7 +1200,7 @@
 		53BC2854139AF0DD00A825F1 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675DB113B093900822059 /* CFNetwork.framework */; };
 		53BC2855139AF0DD00A825F1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675E1113B095900822059 /* QuartzCore.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		53BC2856139AF0DD00A825F1 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675E7113B096400822059 /* AudioToolbox.framework */; };
-		53BC2857139AF0DD00A825F1 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DE2D8113F008C00875852 /* CoreFoundation.framework */; };
+		53BC2857139AF0DD00A825F1 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DE2D8113F008C00875852 /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		53BC2858139AF0DD00A825F1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 536D620A1144495400DFCE56 /* SystemConfiguration.framework */; };
 		53BC2859139AF0DD00A825F1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53544D891187DED400B63DB9 /* CoreLocation.framework */; };
 		53BC285A139AF0DD00A825F1 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5354914A11B03FC900928E0F /* MobileCoreServices.framework */; };
@@ -1284,6 +1284,22 @@
 		53D44F8515AA621B00CDD3B8 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D44F8415AA621A00CDD3B8 /* Accelerate.framework */; };
 		53D8ACB3116C47E600E5C9CB /* PageControlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D8ACB1116C47E600E5C9CB /* PageControlViewController.m */; };
 		53D8ACB4116C47E600E5C9CB /* PageControlViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53D8ACB2116C47E600E5C9CB /* PageControlViewController.xib */; };
+		53D9D24D16DEF85F002F55F7 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24B16DEF847002F55F7 /* Twitter.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		53D9D24E16DEF85F002F55F7 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24916DEF843002F55F7 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		53D9D24F16DEF85F002F55F7 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24716DEF83E002F55F7 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		53D9D25016DEF85F002F55F7 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24516DEF839002F55F7 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		53D9D25116DEF869002F55F7 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24B16DEF847002F55F7 /* Twitter.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		53D9D25216DEF869002F55F7 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24916DEF843002F55F7 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		53D9D25316DEF869002F55F7 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24716DEF83E002F55F7 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		53D9D25416DEF869002F55F7 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24516DEF839002F55F7 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		53D9D25516DEF86F002F55F7 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24B16DEF847002F55F7 /* Twitter.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		53D9D25616DEF86F002F55F7 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24916DEF843002F55F7 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		53D9D25716DEF86F002F55F7 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24716DEF83E002F55F7 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		53D9D25816DEF86F002F55F7 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24516DEF839002F55F7 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		53D9D25916DEF87B002F55F7 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24B16DEF847002F55F7 /* Twitter.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		53D9D25A16DEF87B002F55F7 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24916DEF843002F55F7 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		53D9D25B16DEF87B002F55F7 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24716DEF83E002F55F7 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		53D9D25C16DEF87B002F55F7 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24516DEF839002F55F7 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		53DCF3FF13BFEAD3009160F9 /* FoldersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* FoldersViewController.xib */; };
 		53DCF40113BFEAD3009160F9 /* controller-next.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D7F113C963300B3A376 /* controller-next.png */; };
 		53DCF40213BFEAD3009160F9 /* controller-pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D80113C963300B3A376 /* controller-pause.png */; };
@@ -1566,7 +1582,7 @@
 		53DCF5B513BFEAD3009160F9 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675DB113B093900822059 /* CFNetwork.framework */; };
 		53DCF5B613BFEAD3009160F9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675E1113B095900822059 /* QuartzCore.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		53DCF5B713BFEAD3009160F9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675E7113B096400822059 /* AudioToolbox.framework */; };
-		53DCF5B813BFEAD3009160F9 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DE2D8113F008C00875852 /* CoreFoundation.framework */; };
+		53DCF5B813BFEAD3009160F9 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DE2D8113F008C00875852 /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		53DCF5B913BFEAD3009160F9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 536D620A1144495400DFCE56 /* SystemConfiguration.framework */; };
 		53DCF5BA13BFEAD3009160F9 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53544D891187DED400B63DB9 /* CoreLocation.framework */; };
 		53DCF5BB13BFEAD3009160F9 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5354914A11B03FC900928E0F /* MobileCoreServices.framework */; };
@@ -2321,6 +2337,10 @@
 		53D8ACB0116C47E600E5C9CB /* PageControlViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageControlViewController.h; sourceTree = "<group>"; };
 		53D8ACB1116C47E600E5C9CB /* PageControlViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PageControlViewController.m; sourceTree = "<group>"; };
 		53D8ACB2116C47E600E5C9CB /* PageControlViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PageControlViewController.xib; sourceTree = "<group>"; };
+		53D9D24516DEF839002F55F7 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		53D9D24716DEF83E002F55F7 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		53D9D24916DEF843002F55F7 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		53D9D24B16DEF847002F55F7 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		53DCF5C613BFEAD3009160F9 /* iSub Lite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Lite.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53DE597814F18E7A00206529 /* AUIAnimatableLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUIAnimatableLabel.h; sourceTree = "<group>"; };
 		53DE597914F18E7A00206529 /* AUIAnimatableLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUIAnimatableLabel.m; sourceTree = "<group>"; };
@@ -2397,11 +2417,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53C7FDA0150F0EAF008DA51C /* MessageUI.framework in Frameworks */,
+				53D9D24D16DEF85F002F55F7 /* Twitter.framework in Frameworks */,
+				53D9D24E16DEF85F002F55F7 /* AdSupport.framework in Frameworks */,
+				53D9D24F16DEF85F002F55F7 /* Accounts.framework in Frameworks */,
+				53D9D25016DEF85F002F55F7 /* Social.framework in Frameworks */,
 				5374F29D1661C59A00529EF3 /* libHockeySDK.a in Frameworks */,
 				5374F29E1661C59A00529EF3 /* libSub.a in Frameworks */,
 				5349DF75161E3B290044A781 /* CrashReporter.framework in Frameworks */,
 				5349DF87161E408A0044A781 /* Accelerate.framework in Frameworks */,
-				53C7FDA0150F0EAF008DA51C /* MessageUI.framework in Frameworks */,
 				53DE598514F1933800206529 /* CoreText.framework in Frameworks */,
 				5382F65714856F3C001C14C8 /* libSystem.dylib in Frameworks */,
 				53A2BE2A147DF14600E44822 /* OpenGLES.framework in Frameworks */,
@@ -2429,6 +2453,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				53159F4D156F69D0001B0268 /* MessageUI.framework in Frameworks */,
+				53D9D25916DEF87B002F55F7 /* Twitter.framework in Frameworks */,
+				53D9D25A16DEF87B002F55F7 /* AdSupport.framework in Frameworks */,
+				53D9D25B16DEF87B002F55F7 /* Accounts.framework in Frameworks */,
+				53D9D25C16DEF87B002F55F7 /* Social.framework in Frameworks */,
 				53159F4E156F69D0001B0268 /* CoreText.framework in Frameworks */,
 				53159F4F156F69D0001B0268 /* libSystem.dylib in Frameworks */,
 				53159F50156F69D0001B0268 /* OpenGLES.framework in Frameworks */,
@@ -2484,11 +2512,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53C7FD9E150F0EA9008DA51C /* MessageUI.framework in Frameworks */,
+				53D9D25516DEF86F002F55F7 /* Twitter.framework in Frameworks */,
+				53D9D25616DEF86F002F55F7 /* AdSupport.framework in Frameworks */,
+				53D9D25716DEF86F002F55F7 /* Accounts.framework in Frameworks */,
+				53D9D25816DEF86F002F55F7 /* Social.framework in Frameworks */,
 				5374F28E1661C57400529EF3 /* libSub.a in Frameworks */,
 				536C9B991661B979005A73C6 /* libHockeySDK.a in Frameworks */,
 				53A64E23161E2E6400FCBBAF /* CrashReporter.framework in Frameworks */,
 				53D44F8515AA621B00CDD3B8 /* Accelerate.framework in Frameworks */,
-				53C7FD9E150F0EA9008DA51C /* MessageUI.framework in Frameworks */,
 				53DE598314F1932C00206529 /* CoreText.framework in Frameworks */,
 				5382F65914856F5B001C14C8 /* libSystem.dylib in Frameworks */,
 				53A2BE28147DF13600E44822 /* OpenGLES.framework in Frameworks */,
@@ -2515,11 +2547,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53C7FD9F150F0EAC008DA51C /* MessageUI.framework in Frameworks */,
+				53D9D25116DEF869002F55F7 /* Twitter.framework in Frameworks */,
+				53D9D25216DEF869002F55F7 /* AdSupport.framework in Frameworks */,
+				53D9D25316DEF869002F55F7 /* Accounts.framework in Frameworks */,
+				53D9D25416DEF869002F55F7 /* Social.framework in Frameworks */,
 				5374F2951661C58900529EF3 /* libHockeySDK.a in Frameworks */,
 				5374F2961661C58900529EF3 /* libSub.a in Frameworks */,
 				5349DF74161E3B260044A781 /* CrashReporter.framework in Frameworks */,
 				5349DF86161E40860044A781 /* Accelerate.framework in Frameworks */,
-				53C7FD9F150F0EAC008DA51C /* MessageUI.framework in Frameworks */,
 				5382F65814856F4F001C14C8 /* libSystem.dylib in Frameworks */,
 				53A2BE29147DF14300E44822 /* OpenGLES.framework in Frameworks */,
 				53B38C131475940400CD8A99 /* AVFoundation.framework in Frameworks */,
@@ -2640,6 +2676,10 @@
 				53544D891187DED400B63DB9 /* CoreLocation.framework */,
 				5354914A11B03FC900928E0F /* MobileCoreServices.framework */,
 				53DE598214F1932C00206529 /* CoreText.framework */,
+				53D9D24B16DEF847002F55F7 /* Twitter.framework */,
+				53D9D24916DEF843002F55F7 /* AdSupport.framework */,
+				53D9D24716DEF83E002F55F7 /* Accounts.framework */,
+				53D9D24516DEF839002F55F7 /* Social.framework */,
 				536AD1D211EA628200387CB0 /* libxml2.dylib */,
 				53EB4AA51405FE1B00CBA075 /* libz.dylib */,
 				5382F65614856F3C001C14C8 /* libSystem.dylib */,
@@ -5553,7 +5593,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

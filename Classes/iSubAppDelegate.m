@@ -737,6 +737,8 @@ LOG_LEVEL_ISUB_DEFAULT
 	//DLog(@"applicationDidBecomeActive called");
 	
 	//DLog(@"applicationDidBecomeActive finished");
+    
+    [self checkServer];
 }
 
 
@@ -759,6 +761,9 @@ LOG_LEVEL_ISUB_DEFAULT
 							  // Make sure to end the background so we don't get killed by the OS
 							  [application endBackgroundTask:self.backgroundTask];
 							  self.backgroundTask = UIBackgroundTaskInvalid;
+                              
+                              // Cancel the next server check otherwise it will fire immediately on launch
+                              [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(checkServer) object:nil];
 						  }];
 		
 		// Check the remaining background time and alert the user if necessary
@@ -776,9 +781,12 @@ LOG_LEVEL_ISUB_DEFAULT
 					// Sleep early is nothing is happening after 500 seconds
 					if ([application backgroundTimeRemaining] < 200.0 && !cacheQueueManagerS.isQueueDownloading)
 					{
-					//DLog("Sleeping early, isQueueListDownloading: %i", cacheQueueManagerS.isQueueDownloading);
+                        //DLog("Sleeping early, isQueueListDownloading: %i", cacheQueueManagerS.isQueueDownloading);
 						[application endBackgroundTask:self.backgroundTask];
 						self.backgroundTask = UIBackgroundTaskInvalid;
+                        
+                        // Cancel the next server check otherwise it will fire immediately on launch
+                        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(checkServer) object:nil];
 						break;
 					}
 					
@@ -1507,6 +1515,7 @@ LOG_LEVEL_ISUB_DEFAULT
     
     [self createMoviePlayer];
     
+    [self.moviePlayer stop]; // Doing this to prevent potential crash
     self.moviePlayer.contentURL = [NSURL URLWithString:urlString];
     //[moviePlayer prepareToPlay];
     [self.moviePlayer play];
@@ -1529,6 +1538,7 @@ LOG_LEVEL_ISUB_DEFAULT
     
     [self createMoviePlayer];
     
+    [self.moviePlayer stop]; // Doing this to prevent potential crash
     self.moviePlayer.contentURL = [NSURL URLWithString:urlString];
     //[moviePlayer prepareToPlay];
     [self.moviePlayer play];

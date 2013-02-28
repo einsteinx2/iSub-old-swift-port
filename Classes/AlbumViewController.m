@@ -112,6 +112,10 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createReflection) name:@"createReflection"  object:nil];
 }
 
+- (void)reloadData
+{
+    [self.tableView reloadData];
+}
 
 - (void)viewWillAppear:(BOOL)animated 
 {	
@@ -128,8 +132,8 @@
 	
 	[self.tableView reloadData];
 		
-	[[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(reloadData) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(reloadData) name:ISMSNotification_SongPlaybackStarted object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData) name:ISMSNotification_SongPlaybackStarted object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -138,8 +142,8 @@
 	
 	[self.dataModel cancelLoad];
 	
-	[[NSNotificationCenter defaultCenter] removeObserver:self.tableView name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];	
-	[[NSNotificationCenter defaultCenter] removeObserver:self.tableView name:ISMSNotification_SongPlaybackStarted object:nil];	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackStarted object:nil];	
 }
 
 - (void)didReceiveMemoryWarning 
@@ -151,7 +155,6 @@
 - (void)dealloc 
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[[NSNotificationCenter defaultCenter] removeObserver:self.tableView];
 	
 	albumInfoArtView.delegate = nil;
 	dataModel.delegate = nil;

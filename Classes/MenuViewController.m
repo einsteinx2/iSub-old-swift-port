@@ -70,7 +70,7 @@
 		
 		// Create the menu
 		[self loadCellContents];
-		tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 565.) style:UITableViewStylePlain];
+		tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, UIInterfaceOrientationIsPortrait(self.interfaceOrientation) ? 565. : 585.) style:UITableViewStylePlain];
 	//DLog(@"tableView.frame: %@", NSStringFromCGRect(tableView.frame));
 		tableView.delegate = self;
 		tableView.dataSource = self;

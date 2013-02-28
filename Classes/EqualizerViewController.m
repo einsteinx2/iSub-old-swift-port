@@ -37,7 +37,6 @@
 	[UIView setAnimationDuration:duration];
 	if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
 	{
-		[[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
 		self.equalizerPath.alpha = 1.0;
 		for (EqualizerPointView *view in self.equalizerPointViews)
 		{
@@ -53,6 +52,8 @@
 		
 		if (!IS_IPAD())
 		{
+            [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+
 			self.controlsContainer.alpha = 1.0;
 			self.controlsContainer.userInteractionEnabled = YES;
 			
@@ -67,7 +68,6 @@
 	}
 	else
 	{
-		[[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
 		self.equalizerPath.alpha = 0.0;
 		for (EqualizerPointView *view in self.equalizerPointViews)
 		{
@@ -78,6 +78,8 @@
 		
 		if (!IS_IPAD())
 		{
+            [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+
 			self.controlsContainer.alpha = 0.0;
 			self.controlsContainer.userInteractionEnabled = NO;
 			
@@ -370,7 +372,7 @@
 		
 	[self createEqViews];
 	
-	if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
+	if (!IS_IPAD() && UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
 	{
 		[[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
 		self.equalizerPath.alpha = 0.0;
@@ -745,7 +747,7 @@
 			[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(type:) object:nil];
 			
 			// Only create EQ points in portrait mode when EQ is visible
-			if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+			if (IS_IPAD() || UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
 			{
 				// add a point
 				//DLog(@"double tap, adding point");
