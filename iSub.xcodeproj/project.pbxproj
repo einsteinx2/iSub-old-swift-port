@@ -673,9 +673,6 @@
 		53493F2715FC6AC40059492E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 53493F2615FC6AC40059492E /* main.m */; };
 		53493F2815FC6AC40059492E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 53493F2615FC6AC40059492E /* main.m */; };
 		53493F2915FC6AC40059492E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 53493F2615FC6AC40059492E /* main.m */; };
-		53493F2D15FC6BD90059492E /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53493F2B15FC6BD90059492E /* Entitlements.plist */; };
-		53493F2E15FC6BD90059492E /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53493F2B15FC6BD90059492E /* Entitlements.plist */; };
-		53493F2F15FC6BD90059492E /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53493F2B15FC6BD90059492E /* Entitlements.plist */; };
 		53493F3015FC6BD90059492E /* KeychainAccessGroups.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53493F2C15FC6BD90059492E /* KeychainAccessGroups.plist */; };
 		53493F3115FC6BD90059492E /* KeychainAccessGroups.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53493F2C15FC6BD90059492E /* KeychainAccessGroups.plist */; };
 		53493F3215FC6BD90059492E /* KeychainAccessGroups.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53493F2C15FC6BD90059492E /* KeychainAccessGroups.plist */; };
@@ -2021,7 +2018,6 @@
 		53493F1C15FC6AA60059492E /* iSub-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "iSub-Info.plist"; path = "Other/iSub-Info.plist"; sourceTree = "<group>"; };
 		53493F2615FC6AC40059492E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Other/main.m; sourceTree = "<group>"; };
 		53493F2A15FC6AD20059492E /* iSub_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iSub_Prefix.pch; path = Other/iSub_Prefix.pch; sourceTree = "<group>"; };
-		53493F2B15FC6BD90059492E /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Entitlements.plist; path = Other/Entitlements.plist; sourceTree = "<group>"; };
 		53493F2C15FC6BD90059492E /* KeychainAccessGroups.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = KeychainAccessGroups.plist; path = Other/KeychainAccessGroups.plist; sourceTree = "<group>"; };
 		53493F3315FC6BF10059492E /* Imports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Imports.h; path = Other/Imports.h; sourceTree = "<group>"; };
 		53493F3715FC6C3A0059492E /* BassEffectDefaultPresets.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = BassEffectDefaultPresets.plist; path = Other/BassEffectDefaultPresets.plist; sourceTree = "<group>"; };
@@ -2600,7 +2596,6 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				53493F2B15FC6BD90059492E /* Entitlements.plist */,
 				53493F2C15FC6BD90059492E /* KeychainAccessGroups.plist */,
 				537FCC5312F8F7F400F1D996 /* iTunesArtwork */,
 				536D624311444E4600DFCE56 /* Icon.png */,
@@ -3946,7 +3941,6 @@
 				53493F0F15FC6A0F0059492E /* twitter-signout@2x.png in Resources */,
 				53493F1415FC6A3A0059492E /* shuffle-small.png in Resources */,
 				53493F1715FC6A3A0059492E /* shuffle-small@2x.png in Resources */,
-				53493F2D15FC6BD90059492E /* Entitlements.plist in Resources */,
 				53493F3015FC6BD90059492E /* KeychainAccessGroups.plist in Resources */,
 				53493F3815FC6C3A0059492E /* BassEffectDefaultPresets.plist in Resources */,
 				53493F4115FC6CAE0059492E /* MainWindow-iPad.xib in Resources */,
@@ -4533,7 +4527,6 @@
 				53493F1115FC6A0F0059492E /* twitter-signout@2x.png in Resources */,
 				53493F1615FC6A3A0059492E /* shuffle-small.png in Resources */,
 				53493F1915FC6A3A0059492E /* shuffle-small@2x.png in Resources */,
-				53493F2F15FC6BD90059492E /* Entitlements.plist in Resources */,
 				53493F3215FC6BD90059492E /* KeychainAccessGroups.plist in Resources */,
 				53493F3A15FC6C3B0059492E /* BassEffectDefaultPresets.plist in Resources */,
 				53493F4315FC6CAE0059492E /* MainWindow-iPad.xib in Resources */,
@@ -4833,7 +4826,6 @@
 				53493F1015FC6A0F0059492E /* twitter-signout@2x.png in Resources */,
 				53493F1515FC6A3A0059492E /* shuffle-small.png in Resources */,
 				53493F1815FC6A3A0059492E /* shuffle-small@2x.png in Resources */,
-				53493F2E15FC6BD90059492E /* Entitlements.plist in Resources */,
 				53493F3115FC6BD90059492E /* KeychainAccessGroups.plist in Resources */,
 				53493F3915FC6C3B0059492E /* BassEffectDefaultPresets.plist in Resources */,
 				53493F4215FC6CAE0059492E /* MainWindow-iPad.xib in Resources */,
