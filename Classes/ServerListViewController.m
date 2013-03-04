@@ -247,6 +247,8 @@
 	settingsS.urlString = viewObjectsS.serverToEdit.url;
 	settingsS.username = viewObjectsS.serverToEdit.username;
 	settingsS.password = viewObjectsS.serverToEdit.password;
+    settingsS.uuid = viewObjectsS.serverToEdit.uuid;
+    settingsS.lastQueryId = viewObjectsS.serverToEdit.lastQueryId;
     settingsS.redirectUrlString = self.theNewRedirectionUrl;
     settingsS.isVideoSupported = [notification.userInfo[@"isVideoSupported"] boolValue];
     settingsS.isNewSearchAPI = [notification.userInfo[@"isNewSearchAPI"] boolValue];

@@ -15,6 +15,8 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "iPadRootViewController.h"
 #import "StackScrollViewController.h"
+#import <Accounts/Accounts.h>
+#import <Social/Social.h>
 
 @implementation SettingsTabViewController
 
@@ -154,8 +156,10 @@
 	}
 	
 	// Twitter settings
-	if (socialS.twitterEngine.isAuthorized)
+	if (settingsS.currentTwitterAccount)
 	{
+        ACAccountStore *store = [[ACAccountStore alloc] init];
+        ACAccount *account = [store accountWithIdentifier:settingsS.currentTwitterAccount];
 		self.twitterEnabledSwitch.enabled = YES;
 		if (settingsS.isTwitterEnabled)
 			self.twitterEnabledSwitch.on = YES;
@@ -164,7 +168,7 @@
 		
 		self.twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signout.png"];
 		
-		self.twitterStatusLabel.text = [NSString stringWithFormat:@"%@ signed in", [socialS.twitterEngine username]];
+		self.twitterStatusLabel.text = [NSString stringWithFormat:@"%@ signed in", [account username]];
 	}
 	else
 	{
@@ -197,28 +201,63 @@
 
 - (void)reloadTwitterUIElements
 {
-	if (socialS.twitterEngine)
-	{
-		self.twitterEnabledSwitch.enabled = YES;
-		//if ([[appDelegateS.settingsDictionary objectForKey:@"twitterEnabledSetting"] isEqualToString:@"YES"])
-		if (settingsS.isTwitterEnabled)
-			self.twitterEnabledSwitch.on = YES;
-		else
-			self.twitterEnabledSwitch.on = NO;
-		
-		self.twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signout.png"];
-		
-		self.twitterStatusLabel.text = [NSString stringWithFormat:@"%@ signed in", [socialS.twitterEngine username]];
-	}
-	else
-	{
-		self.twitterEnabledSwitch.on = NO;
+    void (^enableTwitterUI)(ACAccount*) = ^(ACAccount *acct)
+    {
+        // Get account and communicate with Twitter API
+        self.twitterEnabledSwitch.enabled = YES;
+        //if ([[appDelegateS.settingsDictionary objectForKey:@"twitterEnabledSetting"] isEqualToString:@"YES"])
+        if (settingsS.isTwitterEnabled)
+            self.twitterEnabledSwitch.on = YES;
+        else
+            self.twitterEnabledSwitch.on = NO;
+        
+        self.twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signout.png"];
+        
+        self.twitterStatusLabel.text = [NSString stringWithFormat:@"%@ signed in", [acct username]];
+    };
+    
+    void (^disableTwitterUI)(void) = ^()
+    {
+        self.twitterEnabledSwitch.on = NO;
 		self.twitterEnabledSwitch.enabled = NO;
 		
 		self.twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signin.png"];
-
+        
 		self.twitterStatusLabel.text = @"Signed out";
-	}
+    };
+    
+    if (settingsS.currentTwitterAccount)
+    {
+        ACAccount *account = [[[ACAccountStore alloc] init] accountWithIdentifier:settingsS.currentTwitterAccount];
+        enableTwitterUI(account);
+    }
+    else
+    {
+        disableTwitterUI();
+    }
+    
+//	if (socialS.twitterEngine)
+//	{
+//		self.twitterEnabledSwitch.enabled = YES;
+//		//if ([[appDelegateS.settingsDictionary objectForKey:@"twitterEnabledSetting"] isEqualToString:@"YES"])
+//		if (settingsS.isTwitterEnabled)
+//			self.twitterEnabledSwitch.on = YES;
+//		else
+//			self.twitterEnabledSwitch.on = NO;
+//		
+//		self.twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signout.png"];
+//		
+//		self.twitterStatusLabel.text = [NSString stringWithFormat:@"%@ signed in", [socialS.twitterEngine username]];
+//	}
+//	else
+//	{
+//		self.twitterEnabledSwitch.on = NO;
+//		self.twitterEnabledSwitch.enabled = NO;
+//		
+//		self.twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signin.png"];
+//
+//		self.twitterStatusLabel.text = @"Signed out";
+//	}
 }
 
 - (void)cachingTypeToggle
@@ -679,26 +718,52 @@
 
 - (IBAction)twitterButtonAction
 {
-	if (socialS.twitterEngine.isAuthorized)
-	{
-		[socialS destroyTwitterEngine];
-		[self reloadTwitterUIElements];
-	}
-	else
-	{
-		if (!socialS.twitterEngine)
-			[socialS createTwitterEngine];
-		
-		UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine:socialS.twitterEngine delegate:(id)socialS];
-		if (controller) 
-		{
-			if (IS_IPAD())
-				[appDelegateS.ipadRootViewController presentModalViewController:controller animated:YES];
-			else
-				[self.parentController presentModalViewController:controller animated:YES];
-		}
-	}
+    ACAccountStore *account = [[ACAccountStore alloc] init];
+    ACAccountType *accountType = [account accountTypeWithAccountTypeIdentifier:
+                                  ACAccountTypeIdentifierTwitter];
+    
+    if (settingsS.currentTwitterAccount)
+    {
+        settingsS.currentTwitterAccount = nil;
+        [self reloadTwitterUIElements];
+    }
+    else
+    {
+        [account requestAccessToAccountsWithType:accountType options:nil
+                                      completion:^(BOOL granted, NSError *error)
+        {
+            if (granted == YES)
+            {
+                // Get account and communicate with Twitter API
+                ALog(@"We're in!  Haha!");
+                ACAccount *lastAccount = (ACAccount *)[[account accounts] lastObject];
+                settingsS.currentTwitterAccount = [lastAccount identifier];
+                [self reloadTwitterUIElements];
+            }
+        }];
+    }
 }
+
+//	if (socialS.twitterEngine.isAuthorized)
+//	{
+//		[socialS destroyTwitterEngine];
+//		[self reloadTwitterUIElements];
+//	}
+//	else
+//	{
+//		if (!socialS.twitterEngine)
+//			[socialS createTwitterEngine];
+//		
+//		UIViewController *controller = [SA_OAuthTwitterController controllerToEnterCredentialsWithTwitterEngine:socialS.twitterEngine delegate:(id)socialS];
+//		if (controller) 
+//		{
+//			if (IS_IPAD())
+//				[appDelegateS.ipadRootViewController presentModalViewController:controller animated:YES];
+//			else
+//				[self.parentController presentModalViewController:controller animated:YES];
+//		}
+//	}
+//}
 
 - (IBAction)updateScrobblePercentLabel
 {
