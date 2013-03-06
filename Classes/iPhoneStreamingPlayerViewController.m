@@ -1694,9 +1694,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 //                ALog(@"startsecs - startSecondsOffset: %f, progress: %f, self.currentSong: %@, audioengine.currentSong: %@", (double)audioEngineS.startSecondsOffset, progress, self.currentSong, audioEngineS.player.currentStream.song);
             }
 			
-			if (self.lastProgress != ceil(progress))
+			if (self.lastProgress != floor(progress))
 			{
-				self.lastProgress = ceil(progress);
+				self.lastProgress = floor(progress);
 				
 				NSString *elapsedTime = [NSString formatTime:progress];
 				NSString *remainingTime = [NSString formatTime:([self.currentSong.duration doubleValue] - progress)];

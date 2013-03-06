@@ -217,6 +217,7 @@ LOG_LEVEL_ISUB_DEFAULT
     theServer.url = self.urlField.text;
     theServer.username = self.usernameField.text;
     theServer.password = self.passwordField.text;
+    
     theServer.type = WAVEBOX;
     
     settingsS.urlString = self.loader.urlString;
@@ -281,9 +282,11 @@ LOG_LEVEL_ISUB_DEFAULT
         // Download the database.
         WBDatabaseLoader *dbLoader = [[WBDatabaseLoader alloc] initWithCallbackBlock:^(BOOL success, NSError *error, ISMSLoader *theLoader)
         {
+            WBDatabaseLoader *typedLoader = (WBDatabaseLoader *)theLoader;
             if (success)
             {
                 DDLogVerbose(@"Got the database.");
+                theServer.lastQueryId = typedLoader.lastQueryId;
                 [databaseS setCurrentMetadataDatabase];
                 [viewObjectsS hideLoadingScreen];
                 [NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
@@ -302,6 +305,21 @@ LOG_LEVEL_ISUB_DEFAULT
                 {
                     userInfo = [NSDictionary dictionaryWithObject:self.theNewRedirectUrl forKey:@"theNewRedirectUrl"];
                 }
+                
+                // Create the entry in serverList
+                viewObjectsS.serverToEdit = theServer;
+                [settingsS.serverList addObject:viewObjectsS.serverToEdit];
+                
+                // Save the plist values
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                [defaults setObject:self.urlField.text forKey:@"url"];
+                [defaults setObject:self.usernameField.text forKey:@"username"];
+                [defaults setObject:self.passwordField.text forKey:@"password"];
+                [defaults setObject:viewObjectsS.serverToEdit.lastQueryId forKey:@"lastQueryId"];
+                [defaults setObject:viewObjectsS.serverToEdit.uuid forKey:@"uuid"];
+                [defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settingsS.serverList] forKey:@"servers"];
+                [defaults synchronize];
+                
                 [NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer" userInfo:userInfo];
             }
             else
@@ -313,18 +331,6 @@ LOG_LEVEL_ISUB_DEFAULT
         } serverUuid: theServer.uuid];
         [viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Syncing metadata"];
         [dbLoader startLoad];
-        
-        // Create the entry in serverList
-        viewObjectsS.serverToEdit = theServer;
-        [settingsS.serverList addObject:viewObjectsS.serverToEdit];
-        
-        // Save the plist values
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        [defaults setObject:self.urlField.text forKey:@"url"];
-        [defaults setObject:self.usernameField.text forKey:@"username"];
-        [defaults setObject:self.passwordField.text forKey:@"password"];
-        [defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settingsS.serverList] forKey:@"servers"];
-        [defaults synchronize];
     }
     
     self.loader.delegate = nil;
