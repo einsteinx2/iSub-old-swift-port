@@ -20,14 +20,28 @@
 
 NSInteger trackSort2(id obj1, id obj2, void *context)
 {
-	NSUInteger track1 = [(NSNumber*)[(NSArray*)obj1 objectAtIndexSafe:1] intValue];
-	NSUInteger track2 = [(NSNumber*)[(NSArray*)obj2 objectAtIndexSafe:1] intValue];
-	if (track1 < track2)
-		return NSOrderedAscending;
-	else if (track1 == track2)
-		return NSOrderedSame;
-	else
-		return NSOrderedDescending;
+	NSUInteger track1TrackNum = [(NSNumber*)[(NSArray*)obj1 objectAtIndexSafe:1] intValue];
+	NSUInteger track2TrackNum = [(NSNumber*)[(NSArray*)obj2 objectAtIndexSafe:1] intValue];
+    NSUInteger track1DiscNum = [(NSNumber*)[(NSArray*)obj1 objectAtIndexSafe:2] intValue];
+    NSUInteger track2DiscNum = [(NSNumber*)[(NSArray*)obj2 objectAtIndexSafe:2] intValue];
+    
+    // first check the disc numbers.  if t1d < t2d, ascending
+    if (track1DiscNum < track2DiscNum)
+        return NSOrderedAscending;
+    
+    // if they're equal, check the track numbers
+    else if (track1DiscNum == track2DiscNum)
+    {
+        if (track1TrackNum < track2TrackNum)
+            return NSOrderedAscending;
+        else if (track1TrackNum == track2TrackNum)
+            return NSOrderedSame;
+        else
+            return NSOrderedDescending;
+    }
+    
+    // if t1d > t2d, descending
+	else return NSOrderedDescending;
 }
 
 - (BOOL)shouldAutorotate
@@ -146,7 +160,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			[db commit];
 			
 			secInfo = [databaseS sectionInfoFromTable:@"albumIndex" inDatabase:db withColumn:@"album"];
-			[db executeUpdate:@"DROP TABLE IF EXSITS albumIndex"];
+			[db executeUpdate:@"DROP TABLE IF EXISTS albumIndex"];
 		}];
 		
 		if (secInfo)
@@ -199,12 +213,13 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 				NSInteger segs = [result intForColumnIndex:1];
 				NSString *seg = [result stringForColumnIndex:2];
 				NSInteger track = [result intForColumnIndex:3];
+                NSInteger discNumber = [result intForColumn:@"discNumber"];
 				
 				if (segs > (segment + 1))
 				{
 					if (md5 && seg)
 					{
-						NSArray *albumEntry = [NSArray arrayWithObjects:md5, seg, nil];
+                        NSArray *albumEntry = @[md5, seg];
 						[self.listOfAlbums addObject:albumEntry];
 					}
 				}
@@ -212,7 +227,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 				{
 					if (md5)
 					{
-						NSArray *songEntry = [NSArray arrayWithObjects:md5, [NSNumber numberWithInt:track], nil];
+                        NSArray *songEntry = @[md5, [NSNumber numberWithInteger:track], [NSNumber numberWithInteger:discNumber]];
 						[self.listOfSongs addObject:songEntry];
 						
 						BOOL multipleSameTrackNumbers = NO;
@@ -554,7 +569,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			cacheAlbumViewController.listOfAlbums = [NSMutableArray arrayWithCapacity:1];
 			cacheAlbumViewController.listOfSongs = [NSMutableArray arrayWithCapacity:1];
 
-			NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5, segs, seg%i, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? ", segment+1];
+			NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5, segs, seg%i, track, cachedSongs.discNumber FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? ", segment+1];
 			for (int i = 2; i <= segment; i++)
 			{
 				[query appendFormat:@" AND seg%i = ? ", i];
@@ -578,6 +593,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 						NSInteger segs = [result intForColumnIndex:1];
 						NSString *seg = [result stringForColumnIndex:2];
 						NSInteger track = [result intForColumnIndex:3];
+                        NSInteger discNumber = [result intForColumn:@"discNumber"];
 						
 						if (segs > (segment + 1))
 						{
@@ -591,7 +607,13 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 						{
 							if (md5)
 							{
-								NSArray *songEntry = [NSArray arrayWithObjects:md5, [NSNumber numberWithInt:track], nil];
+                                NSMutableArray *songEntry = [NSMutableArray arrayWithObjects:md5, [NSNumber numberWithInteger:track], nil];
+                                
+                                if (discNumber != 0)
+                                {
+                                    [songEntry addObject:[NSNumber numberWithInteger:discNumber]];
+                                }
+                                
 								[cacheAlbumViewController.listOfSongs addObject:songEntry];
 								
 								BOOL multipleSameTrackNumbers = NO;
@@ -599,8 +621,14 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 								for (NSArray *song in cacheAlbumViewController.listOfSongs)
 								{
 									NSNumber *track = [song objectAtIndexSafe:1];
+                                    NSNumber *discNumber = [song objectAtIndexSafe:2];
 									
-									if ([trackNumbers containsObject:track])
+                                    // Wow, that got messy quick.  In the second part we're checking that the entry at the index
+                                    // of the object we found doesn't have the same disc number as the one we're about to add.  If
+                                    // it does, we have a problem, but if not, we can add it anyway and let the sort method sort it
+                                    // out.  Hahah.  See what I did there?
+									if ([trackNumbers containsObject:track] &&
+                                        (discNumber == nil || cacheAlbumViewController.listOfSongs[[trackNumbers indexOfObject:track]][2] == discNumber))
 									{
 										multipleSameTrackNumbers = YES;
 										break;
