@@ -122,6 +122,12 @@
 	self.enableSongCachingSwitch.on = settingsS.isSongCachingEnabled;
 	self.enableNextSongCacheSwitch.on = settingsS.isNextSongCacheEnabled;
 	self.enableNextSongPartialCacheSwitch.on = settingsS.isPartialCacheNextSong;
+    self.enableBackupCacheSwitch.on = settingsS.isBackupCacheEnabled;
+    
+    if (SYSTEM_VERSION_LESS_THAN(@"5.0.1"))
+    {
+        self.enableBackupCacheSwitch.enabled = NO;
+    }
 		
 	self.totalSpace = cacheS.totalSpace;
 	self.freeSpace = cacheS.freeSpace;
@@ -458,6 +464,20 @@
                 settingsS.isPartialCacheNextSong = NO;
             }
 		}
+        else if (sender == self.enableBackupCacheSwitch)
+		{
+            if (self.enableBackupCacheSwitch.on)
+            {
+                // Prompt the warning
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"This setting can take up a large amount of space on your computer or iCloud storage. Are you sure you want to backup your cached songs?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+                alert.tag = 4;
+                [alert show];
+            }
+            else
+            {
+                settingsS.isBackupCacheEnabled = NO;
+            }
+		}
 		else if (sender == self.autoDeleteCacheSwitch)
 		{
 			settingsS.isAutoDeleteCacheEnabled = self.autoDeleteCacheSwitch.on;
@@ -652,6 +672,17 @@
         else
         {
             settingsS.isPartialCacheNextSong = YES;
+        }
+    }
+    else if (alertView.tag == 4)
+    {
+        if (buttonIndex == 0)
+        {
+            [self.enableBackupCacheSwitch setOn:NO animated:YES];
+        }
+        else
+        {
+            settingsS.isBackupCacheEnabled = YES;
         }
     }
 }

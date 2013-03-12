@@ -455,6 +455,7 @@
 
 - (void)removeEqViews
 {
+    NSLog(@"removeEqViews");
 	for (EqualizerPointView *eqView in self.equalizerPointViews)
 	{
 		[eqView removeFromSuperview];
@@ -808,6 +809,7 @@
 
 - (IBAction)toggle:(id)sender
 {
+    
 	if ([audioEngineS.equalizer toggleEqualizer])
 	{
 		[self removeEqViews];
@@ -820,6 +822,7 @@
 
 - (void)updateToggleButton
 {
+    NSLog(@"Update Toggle Button  %d",settingsS.isEqualizerOn);
 	if(settingsS.isEqualizerOn)
 	{
 		[self.toggleButton setTitle:@"EQ is ON" forState:UIControlStateNormal];
