@@ -17,6 +17,7 @@
 #import "StackScrollViewController.h"
 #import <Accounts/Accounts.h>
 #import <Social/Social.h>
+#import "IDTwitterAccountChooserViewController.h"
 
 @implementation SettingsTabViewController
 
@@ -205,13 +206,12 @@
     {
         // Get account and communicate with Twitter API
         self.twitterEnabledSwitch.enabled = YES;
-        //if ([[appDelegateS.settingsDictionary objectForKey:@"twitterEnabledSetting"] isEqualToString:@"YES"])
         if (settingsS.isTwitterEnabled)
             self.twitterEnabledSwitch.on = YES;
         else
             self.twitterEnabledSwitch.on = NO;
         
-        self.twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signout.png"];
+        [self.twitterSigninButton setImage:[UIImage imageNamed:@"twitter-signout.png"] forState:UIControlStateNormal];
         
         self.twitterStatusLabel.text = [NSString stringWithFormat:@"%@ signed in", [acct username]];
     };
@@ -221,8 +221,8 @@
         self.twitterEnabledSwitch.on = NO;
 		self.twitterEnabledSwitch.enabled = NO;
 		
-		self.twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signin.png"];
-        
+        [self.twitterSigninButton setImage:[UIImage imageNamed:@"twitter-signin.png"] forState:UIControlStateNormal];
+                
 		self.twitterStatusLabel.text = @"Signed out";
     };
     
@@ -235,29 +235,6 @@
     {
         disableTwitterUI();
     }
-    
-//	if (socialS.twitterEngine)
-//	{
-//		self.twitterEnabledSwitch.enabled = YES;
-//		//if ([[appDelegateS.settingsDictionary objectForKey:@"twitterEnabledSetting"] isEqualToString:@"YES"])
-//		if (settingsS.isTwitterEnabled)
-//			self.twitterEnabledSwitch.on = YES;
-//		else
-//			self.twitterEnabledSwitch.on = NO;
-//		
-//		self.twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signout.png"];
-//		
-//		self.twitterStatusLabel.text = [NSString stringWithFormat:@"%@ signed in", [socialS.twitterEngine username]];
-//	}
-//	else
-//	{
-//		self.twitterEnabledSwitch.on = NO;
-//		self.twitterEnabledSwitch.enabled = NO;
-//		
-//		self.twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signin.png"];
-//
-//		self.twitterStatusLabel.text = @"Signed out";
-//	}
 }
 
 - (void)cachingTypeToggle
@@ -719,8 +696,7 @@
 - (IBAction)twitterButtonAction
 {
     ACAccountStore *account = [[ACAccountStore alloc] init];
-    ACAccountType *accountType = [account accountTypeWithAccountTypeIdentifier:
-                                  ACAccountTypeIdentifierTwitter];
+    ACAccountType *accountType = [account accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
     
     if (settingsS.currentTwitterAccount)
     {
@@ -729,16 +705,37 @@
     }
     else
     {
-        [account requestAccessToAccountsWithType:accountType options:nil
-                                      completion:^(BOOL granted, NSError *error)
+        [account requestAccessToAccountsWithType:accountType withCompletionHandler:^(BOOL granted, NSError *error)
         {
             if (granted == YES)
             {
-                // Get account and communicate with Twitter API
-                ALog(@"We're in!  Haha!");
-                ACAccount *lastAccount = (ACAccount *)[[account accounts] lastObject];
-                settingsS.currentTwitterAccount = [lastAccount identifier];
-                [self reloadTwitterUIElements];
+                [EX2Dispatch runInMainThread:^
+                 {
+                     if ([[account accounts] count] == 1)
+                     {
+                         settingsS.currentTwitterAccount = [[[account accounts] firstObjectSafe] identifier];
+                         [self reloadTwitterUIElements];
+                     }
+                     else if ([[account accounts] count] > 1)
+                     {
+                         // more than one account, use Chooser
+                         IDTwitterAccountChooserViewController *chooser = [[IDTwitterAccountChooserViewController alloc] initWithRootViewController:nil];
+                         [chooser setTwitterAccounts:[account accounts]];
+                         [chooser setCompletionHandler:^(ACAccount *account)
+                          {
+                              if (account)
+                              {
+                                  settingsS.currentTwitterAccount = [account identifier];
+                                  [self reloadTwitterUIElements];
+                              }
+                          }];
+                         [self.parentController.navigationController presentModalViewController:chooser animated:YES];
+                     }
+                     else
+                     {
+                         [[[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"To use this feature, please add a Twitter account in the iOS Settings app.", @"No twitter accounts alert") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                     }
+                 }];
             }
         }];
     }
