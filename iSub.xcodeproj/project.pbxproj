@@ -695,6 +695,10 @@
 		5349DF75161E3B290044A781 /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A64E22161E2E6400FCBBAF /* CrashReporter.framework */; };
 		5349DF86161E40860044A781 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D44F8415AA621A00CDD3B8 /* Accelerate.framework */; };
 		5349DF87161E408A0044A781 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D44F8415AA621A00CDD3B8 /* Accelerate.framework */; };
+		5349F14F16E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5349F14E16E9458B00E56582 /* IDTwitterAccountChooserViewController.m */; };
+		5349F15016E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5349F14E16E9458B00E56582 /* IDTwitterAccountChooserViewController.m */; };
+		5349F15116E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5349F14E16E9458B00E56582 /* IDTwitterAccountChooserViewController.m */; };
+		5349F15216E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5349F14E16E9458B00E56582 /* IDTwitterAccountChooserViewController.m */; };
 		534E43B71155659A000B4134 /* AlbumUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 534E43B61155659A000B4134 /* AlbumUITableViewCell.m */; };
 		534E443F1155AD01000B4134 /* default-album-art-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 534E443E1155AD01000B4134 /* default-album-art-small.png */; };
 		534E44711155B106000B4134 /* SongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 534E44701155B106000B4134 /* SongUITableViewCell.m */; };
@@ -2048,6 +2052,8 @@
 		53493F4D15FC6D210059492E /* KIFTestScenario+FoldersTab.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "KIFTestScenario+FoldersTab.m"; path = "Testing/KIF_Integration_Tests/KIFTestScenario+FoldersTab.m"; sourceTree = "<group>"; };
 		53493F5115FC6D280059492E /* iSub-Integration-Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "iSub-Integration-Tests-Info.plist"; path = "Testing/KIF_Integration_Tests/iSub-Integration-Tests-Info.plist"; sourceTree = "<group>"; };
 		5349AD031613724D003603AF /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Images/Other/Default-568h@2x.png"; sourceTree = "<group>"; };
+		5349F14D16E9458B00E56582 /* IDTwitterAccountChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDTwitterAccountChooserViewController.h; sourceTree = "<group>"; };
+		5349F14E16E9458B00E56582 /* IDTwitterAccountChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDTwitterAccountChooserViewController.m; sourceTree = "<group>"; };
 		534E43B51155659A000B4134 /* AlbumUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AlbumUITableViewCell.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		534E43B61155659A000B4134 /* AlbumUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumUITableViewCell.m; sourceTree = "<group>"; };
 		534E443E1155AD01000B4134 /* default-album-art-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art-small.png"; path = "Images/Other/default-album-art-small.png"; sourceTree = "<group>"; };
@@ -2904,6 +2910,8 @@
 				5324C6C513345D75004E6C79 /* OBSlider.m */,
 				532590FF14EE22C100DF4BDB /* MBProgressHUD.h */,
 				5325910014EE22C400DF4BDB /* MBProgressHUD.m */,
+				5349F14D16E9458B00E56582 /* IDTwitterAccountChooserViewController.h */,
+				5349F14E16E9458B00E56582 /* IDTwitterAccountChooserViewController.m */,
 			);
 			name = "3rd Party UI Components";
 			path = ..;
@@ -4999,6 +5007,7 @@
 				53703BD51588390A00B1FB33 /* PMSServerEditViewControllerViewController.m in Sources */,
 				53493F2715FC6AC40059492E /* main.m in Sources */,
 				536C994D16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
+				5349F14F16E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5105,6 +5114,7 @@
 				53493F4F15FC6D210059492E /* KIFTestScenario+CacheTab.m in Sources */,
 				53493F5015FC6D210059492E /* KIFTestScenario+FoldersTab.m in Sources */,
 				536C995016619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
+				5349F15216E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5216,6 +5226,7 @@
 				53703BD71588390A00B1FB33 /* PMSServerEditViewControllerViewController.m in Sources */,
 				53493F2915FC6AC40059492E /* main.m in Sources */,
 				536C994F16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
+				5349F15116E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5320,6 +5331,7 @@
 				53703BD61588390A00B1FB33 /* PMSServerEditViewControllerViewController.m in Sources */,
 				53493F2815FC6AC40059492E /* main.m in Sources */,
 				536C994E16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
+				5349F15016E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

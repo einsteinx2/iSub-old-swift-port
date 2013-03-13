@@ -164,12 +164,6 @@ LOG_LEVEL_ISUB_DEFAULT
 	//[self loadCrittercism];
 		
 	[self loadInAppPurchaseStore];
-		
-	// Setup Twitter connection
-	if (!settingsS.isOfflineMode && [[NSUserDefaults standardUserDefaults] objectForKey:@"twitterAuthData"])
-	{
-		[socialS createTwitterEngine];
-	}
 			
 	// Create and display UI
 	self.introController = nil;
