@@ -232,6 +232,8 @@
 	if (notification.userInfo)
 	{
 		self.theNewRedirectionUrl = [notification.userInfo objectForKey:@"theNewRedirectUrl"];
+        settingsS.isVideoSupported = [notification.userInfo[@"isVideoSupported"] boolValue];
+        settingsS.isNewSearchAPI = [notification.userInfo[@"isNewSearchAPI"] boolValue];
 	}
 	
 	// Save the plist values
@@ -250,8 +252,6 @@
     settingsS.uuid = viewObjectsS.serverToEdit.uuid;
     settingsS.lastQueryId = viewObjectsS.serverToEdit.lastQueryId;
     settingsS.redirectUrlString = self.theNewRedirectionUrl;
-    settingsS.isVideoSupported = [notification.userInfo[@"isVideoSupported"] boolValue];
-    settingsS.isNewSearchAPI = [notification.userInfo[@"isNewSearchAPI"] boolValue];
     
 //DLog(@" settingsS.urlString: %@   settingsS.redirectUrlString: %@", settingsS.urlString, settingsS.redirectUrlString);
 		

@@ -86,6 +86,16 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
     if (IS_TALL_SCREEN() && UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
     {
         [self showTallPlayerButtons];
+        
+        // Only show Extra Buttons Button if the Show Large Song Info setting is turned on
+        if (!settingsS.isShowLargeSongInfoInPlayer)
+        {
+            self.extraButtonsButton.hidden = YES;
+        }
+        else
+        {
+            self.extraButtonsButton.hidden = NO;
+        }
     }
     
 	[self createDownloadProgressView];
@@ -166,11 +176,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)showTallPlayerButtons
 {
-    [self.songInfoView removeFromSuperview];
-    [self.extraButtons removeFromSuperview];
+    //[self.songInfoView removeFromSuperview];
+    //[self.extraButtons removeFromSuperview];
     
-    self.extraButtonsButton.hidden = YES;
-    self.extraButtonsButton.enabled = NO;
+    //self.extraButtonsButton.hidden = YES;
+    self.extraButtonsButton.enabled = YES;
     
     if (self.coverArtHolderView.y != 100.)
     {
@@ -1124,7 +1134,48 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 - (void)extraButtonsToggleAnimated:(BOOL)animated saveState:(BOOL)saveState
 {
     if (IS_TALL_SCREEN() && UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+    {
+        
+        if (self.isExtraButtonsShowing)
+        {
+            NSLog(@"AHHHHHH GOT HERE");
+            [self.extraButtonsButton setImage:self.extraButtonsButtonOffImage forState:UIControlStateNormal];
+            
+            self.largeOverlayView.alpha = 0.0;
+            
+            if (animated)
+            {
+                [UIView commitAnimations];
+            }
+            else
+            {
+                [self.largeOverlayView removeFromSuperview];
+            }
+        }
+        else
+        {
+            [self.extraButtonsButton setImage:self.extraButtonsButtonOnImage forState:UIControlStateNormal];
+
+            if (settingsS.isShowLargeSongInfoInPlayer)
+            {
+                //largeOverlayView.origin = CGPointMake(0, extraButtons.height);
+                //largeOverlayView.width = coverArtImageView.width;
+                self.largeOverlayView.frame = self.coverArtImageView.bounds;//CGRectMake(0, self.extraButtons.height, self.coverArtImageView.width, self.coverArtImageView.height - self.extraButtons.height - self.songInfoView.height);
+                self.largeOverlayView.alpha = 0.0;
+                [self.coverArtImageView addSubview:self.largeOverlayView];
+            }
+            self.largeOverlayView.alpha = 1.0;
+            
+            if (animated)
+                [UIView commitAnimations];
+        }
+        
+        self.isExtraButtonsShowing = !self.isExtraButtonsShowing;
+        
+        if (saveState)
+            settingsS.isExtraPlayerControlsShowing = self.isExtraButtonsShowing;
         return;
+    }
     
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideExtraButtons) object:nil];
 	
