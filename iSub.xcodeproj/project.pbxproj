@@ -746,6 +746,9 @@
 		535CB58412E27A5400389DA1 /* default-album-art-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB58312E27A5400389DA1 /* default-album-art-ipad.png */; };
 		53614ACA116432DA0088ABC0 /* ServerListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53614AC8116432DA0088ABC0 /* ServerListViewController.m */; };
 		53614BD9116467420088ABC0 /* AllSongsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53614BD7116467420088ABC0 /* AllSongsViewController.xib */; };
+		5363B1CA1707CBDE0008696F /* libHockeySDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 536C9B901661B96A005A73C6 /* libHockeySDK.a */; };
+		5363B1CF1707CBE50008696F /* libHockeySDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 536C9B901661B96A005A73C6 /* libHockeySDK.a */; };
+		5363B1D01707CBEA0008696F /* libHockeySDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 536C9B901661B96A005A73C6 /* libHockeySDK.a */; };
 		536585811478920D00FE57A5 /* EqualizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5365857F1478920B00FE57A5 /* EqualizerViewController.m */; };
 		536585821478920D00FE57A5 /* EqualizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5365857F1478920B00FE57A5 /* EqualizerViewController.m */; };
 		536585831478920D00FE57A5 /* EqualizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5365857F1478920B00FE57A5 /* EqualizerViewController.m */; };
@@ -761,7 +764,6 @@
 		536C994E16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 536C994B16619F5D005A73C6 /* ViewObjectsSingleton.m */; };
 		536C994F16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 536C994B16619F5D005A73C6 /* ViewObjectsSingleton.m */; };
 		536C995016619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 536C994B16619F5D005A73C6 /* ViewObjectsSingleton.m */; };
-		536C9B991661B979005A73C6 /* libHockeySDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 536C9B961661B96A005A73C6 /* libHockeySDK.a */; };
 		536C9B9A1661B98B005A73C6 /* HockeySDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 536C9B981661B96A005A73C6 /* HockeySDKResources.bundle */; };
 		536D612911441F5B00DFCE56 /* settings-page.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D612811441F5B00DFCE56 /* settings-page.png */; };
 		536D616111442AA000DFCE56 /* controller-repeat-all.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D615C11442AA000DFCE56 /* controller-repeat-all.png */; };
@@ -776,9 +778,7 @@
 		53703BD61588390A00B1FB33 /* PMSServerEditViewControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53703BD31588390900B1FB33 /* PMSServerEditViewControllerViewController.m */; };
 		53703BD71588390A00B1FB33 /* PMSServerEditViewControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53703BD31588390900B1FB33 /* PMSServerEditViewControllerViewController.m */; };
 		5374F28E1661C57400529EF3 /* libSub.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5374F2821661C56000529EF3 /* libSub.a */; };
-		5374F2951661C58900529EF3 /* libHockeySDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 536C9B961661B96A005A73C6 /* libHockeySDK.a */; };
 		5374F2961661C58900529EF3 /* libSub.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5374F2821661C56000529EF3 /* libSub.a */; };
-		5374F29D1661C59A00529EF3 /* libHockeySDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 536C9B961661B96A005A73C6 /* libHockeySDK.a */; };
 		5374F29E1661C59A00529EF3 /* libSub.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5374F2821661C56000529EF3 /* libSub.a */; };
 		5377429A15AA4DC700DD547D /* kif.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5377429915AA4DC700DD547D /* kif.framework */; };
 		5377429D15AA50AB00DD547D /* PMSServerEditViewControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53703BD31588390900B1FB33 /* PMSServerEditViewControllerViewController.m */; };
@@ -1774,27 +1774,6 @@
 			remoteGlobalIDString = 1E59544115B6C3DC00A03429;
 			remoteInfo = HockeySDK;
 		};
-		536C9B911661B96A005A73C6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 536C9B7F1661B94F005A73C6 /* HockeySDK.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E400561A148D79B500EB22B9;
-			remoteInfo = "HockeySDK-Device";
-		};
-		536C9B931661B96A005A73C6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 536C9B7F1661B94F005A73C6 /* HockeySDK.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 1E59547C15B6C41300A03429;
-			remoteInfo = "HockeySDK-Simulator";
-		};
-		536C9B951661B96A005A73C6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 536C9B7F1661B94F005A73C6 /* HockeySDK.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 1E5954F215B6F24A00A03429;
-			remoteInfo = HockeySDKLib;
-		};
 		536C9B971661B96A005A73C6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 536C9B7F1661B94F005A73C6 /* HockeySDK.xcodeproj */;
@@ -2423,12 +2402,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5363B1CA1707CBDE0008696F /* libHockeySDK.a in Frameworks */,
 				53C7FDA0150F0EAF008DA51C /* MessageUI.framework in Frameworks */,
 				53D9D24D16DEF85F002F55F7 /* Twitter.framework in Frameworks */,
 				53D9D24E16DEF85F002F55F7 /* AdSupport.framework in Frameworks */,
 				53D9D24F16DEF85F002F55F7 /* Accounts.framework in Frameworks */,
 				53D9D25016DEF85F002F55F7 /* Social.framework in Frameworks */,
-				5374F29D1661C59A00529EF3 /* libHockeySDK.a in Frameworks */,
 				5374F29E1661C59A00529EF3 /* libSub.a in Frameworks */,
 				5349DF75161E3B290044A781 /* CrashReporter.framework in Frameworks */,
 				5349DF87161E408A0044A781 /* Accelerate.framework in Frameworks */,
@@ -2518,13 +2497,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5363B1D01707CBEA0008696F /* libHockeySDK.a in Frameworks */,
 				53C7FD9E150F0EA9008DA51C /* MessageUI.framework in Frameworks */,
 				53D9D25516DEF86F002F55F7 /* Twitter.framework in Frameworks */,
 				53D9D25616DEF86F002F55F7 /* AdSupport.framework in Frameworks */,
 				53D9D25716DEF86F002F55F7 /* Accounts.framework in Frameworks */,
 				53D9D25816DEF86F002F55F7 /* Social.framework in Frameworks */,
 				5374F28E1661C57400529EF3 /* libSub.a in Frameworks */,
-				536C9B991661B979005A73C6 /* libHockeySDK.a in Frameworks */,
 				53A64E23161E2E6400FCBBAF /* CrashReporter.framework in Frameworks */,
 				53D44F8515AA621B00CDD3B8 /* Accelerate.framework in Frameworks */,
 				53DE598314F1932C00206529 /* CoreText.framework in Frameworks */,
@@ -2553,12 +2532,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5363B1CF1707CBE50008696F /* libHockeySDK.a in Frameworks */,
 				53C7FD9F150F0EAC008DA51C /* MessageUI.framework in Frameworks */,
 				53D9D25116DEF869002F55F7 /* Twitter.framework in Frameworks */,
 				53D9D25216DEF869002F55F7 /* AdSupport.framework in Frameworks */,
 				53D9D25316DEF869002F55F7 /* Accounts.framework in Frameworks */,
 				53D9D25416DEF869002F55F7 /* Social.framework in Frameworks */,
-				5374F2951661C58900529EF3 /* libHockeySDK.a in Frameworks */,
 				5374F2961661C58900529EF3 /* libSub.a in Frameworks */,
 				5349DF74161E3B260044A781 /* CrashReporter.framework in Frameworks */,
 				5349DF86161E40860044A781 /* Accelerate.framework in Frameworks */,
@@ -2920,10 +2899,7 @@
 		536C9B801661B94F005A73C6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				536C9B901661B96A005A73C6 /* HockeySDK.framework */,
-				536C9B921661B96A005A73C6 /* libHockeySDK-iphoneos.a */,
-				536C9B941661B96A005A73C6 /* libHockeySDK-iphonesimulator.a */,
-				536C9B961661B96A005A73C6 /* libHockeySDK.a */,
+				536C9B901661B96A005A73C6 /* libHockeySDK.a */,
 				536C9B981661B96A005A73C6 /* HockeySDKResources.bundle */,
 			);
 			name = Products;
@@ -3643,32 +3619,11 @@
 			remoteRef = 530D20F916670062009DAF1B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		536C9B901661B96A005A73C6 /* HockeySDK.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = HockeySDK.framework;
-			remoteRef = 536C9B8F1661B96A005A73C6 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		536C9B921661B96A005A73C6 /* libHockeySDK-iphoneos.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libHockeySDK-iphoneos.a";
-			remoteRef = 536C9B911661B96A005A73C6 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		536C9B941661B96A005A73C6 /* libHockeySDK-iphonesimulator.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libHockeySDK-iphonesimulator.a";
-			remoteRef = 536C9B931661B96A005A73C6 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		536C9B961661B96A005A73C6 /* libHockeySDK.a */ = {
+		536C9B901661B96A005A73C6 /* libHockeySDK.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libHockeySDK.a;
-			remoteRef = 536C9B951661B96A005A73C6 /* PBXContainerItemProxy */;
+			remoteRef = 536C9B8F1661B96A005A73C6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		536C9B981661B96A005A73C6 /* HockeySDKResources.bundle */ = {
@@ -5604,8 +5559,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Datastar Consulting Services, Inc.";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Datastar Consulting Services, Inc.";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -5625,8 +5580,8 @@
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = iSub;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "427B9683-BFE6-4212-95B9-7FD0BCA8F3B4";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "427B9683-BFE6-4212-95B9-7FD0BCA8F3B4";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -5690,7 +5645,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_ENTITLEMENTS = Other/Entitlements.plist;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -6142,7 +6097,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_ENTITLEMENTS = Other/Entitlements.plist;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;

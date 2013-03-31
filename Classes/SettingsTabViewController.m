@@ -191,6 +191,9 @@
 	if (settingsS.isCacheUnlocked == NO)
 	{
 		// Caching is disabled, so disable the controls
+        self.enableBackupCacheSwitch.enabled = NO; self.enableBackupCacheLabel.alpha = 0.5;
+        self.enableManualCachingOnWWANSwitch.enabled = NO; self.enableManualCachingOnWWANLabel.alpha = 0.5;
+        self.enableSongCachingLabel.alpha = 0.5;
 		self.enableSongCachingSwitch.enabled = NO; self.enableSongCachingSwitch.alpha = 0.5;
 		self.enableNextSongCacheSwitch.enabled = NO; self.enableNextSongCacheSwitch.alpha = 0.5;
 		self.cachingTypeSegmentedControl.enabled = NO; self.cachingTypeSegmentedControl.alpha = 0.5;

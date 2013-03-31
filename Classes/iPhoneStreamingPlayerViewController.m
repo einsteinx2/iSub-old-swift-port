@@ -123,9 +123,12 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	// Register for all notifications
 	[self registerForNotifications];
 	
-	[self extraButtonsToggleAnimated:NO saveState:NO];
-	if (!settingsS.isExtraPlayerControlsShowing)
-		[self performSelector:@selector(hideExtraButtons) withObject:nil afterDelay:4.0];
+    if (!IS_TALL_SCREEN())
+    {
+        [self extraButtonsToggleAnimated:NO saveState:NO];
+        if (!settingsS.isExtraPlayerControlsShowing)
+            [self performSelector:@selector(hideExtraButtons) withObject:nil afterDelay:4.0];
+    }
 	
 	// Show the song info screen automatically if the setting is enabled
 	if (settingsS.isPlayerPlaylistShowing)

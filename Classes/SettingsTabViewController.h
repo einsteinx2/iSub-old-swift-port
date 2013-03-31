@@ -29,7 +29,9 @@
 @property (nonatomic, strong) IBOutlet UISwitch *autoPlayerInfoSwitch;
 @property (nonatomic, strong) IBOutlet UISwitch *enableSwipeSwitch;
 @property (nonatomic, strong) IBOutlet UISwitch *enableTapAndHoldSwitch;
+@property (nonatomic, strong) IBOutlet UILabel *enableManualCachingOnWWANLabel;
 @property (nonatomic, strong) IBOutlet UISwitch *enableManualCachingOnWWANSwitch;
+@property (nonatomic, strong) IBOutlet UILabel *enableSongCachingLabel;
 @property (nonatomic, strong) IBOutlet UISwitch *enableSongCachingSwitch;
 @property (nonatomic, strong) IBOutlet UILabel *enableNextSongCacheLabel;
 @property (nonatomic, strong) IBOutlet UISwitch *enableNextSongCacheSwitch;

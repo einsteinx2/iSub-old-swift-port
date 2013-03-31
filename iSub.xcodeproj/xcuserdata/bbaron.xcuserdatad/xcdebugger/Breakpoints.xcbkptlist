@@ -4555,11 +4555,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/SettingsTabViewController.m"
-         timestampString = "384390907.456627"
+         timestampString = "386387655.147155"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "550"
-         endingLineNumber = "550"
+         startingLineNumber = "553"
+         endingLineNumber = "553"
          landmarkName = "-switchAction:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -4568,11 +4568,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/SettingsTabViewController.m"
-         timestampString = "384390907.456627"
+         timestampString = "386387655.147155"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "550"
-         endingLineNumber = "550"
+         startingLineNumber = "553"
+         endingLineNumber = "553"
          landmarkName = "-switchAction:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -4709,13 +4709,13 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "383714073.205381"
+         timestampString = "386394123.127336"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1756"
-         endingLineNumber = "1756"
-         landmarkName = "@implementation iPhoneStreamingPlayerViewController"
-         landmarkType = "3">
+         startingLineNumber = "1759"
+         endingLineNumber = "1759"
+         landmarkName = "-updateSlider"
+         landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -5020,12 +5020,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "374553032.846942"
+         timestampString = "386394123.127336"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "296"
-         endingLineNumber = "296"
-         landmarkName = "-largeSongInfoWasToggled"
+         startingLineNumber = "299"
+         endingLineNumber = "299"
+         landmarkName = "-viewWillDisappear:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -5473,11 +5473,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "383714073.205381"
+         timestampString = "386394123.127336"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "564"
-         endingLineNumber = "564"
+         startingLineNumber = "567"
+         endingLineNumber = "567"
          landmarkName = "-willRotateToInterfaceOrientation:duration:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5486,11 +5486,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "383714073.205381"
+         timestampString = "386394123.127336"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "537"
-         endingLineNumber = "537"
+         startingLineNumber = "540"
+         endingLineNumber = "540"
          landmarkName = "-willRotateToInterfaceOrientation:duration:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5499,11 +5499,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "383714073.205381"
+         timestampString = "386394123.127336"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "615"
-         endingLineNumber = "615"
+         startingLineNumber = "618"
+         endingLineNumber = "618"
          landmarkName = "-willRotateToInterfaceOrientation:duration:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5525,11 +5525,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "374553032.846942"
+         timestampString = "386394123.127336"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "446"
-         endingLineNumber = "446"
+         startingLineNumber = "449"
+         endingLineNumber = "449"
          landmarkName = "-createLandscapeViews"
          landmarkType = "5">
       </FileBreakpoint>
@@ -5551,12 +5551,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-         timestampString = "383714073.205381"
+         timestampString = "386394123.127336"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "876"
-         endingLineNumber = "876"
-         landmarkName = "-jukeboxToggled"
+         startingLineNumber = "879"
+         endingLineNumber = "879"
+         landmarkName = "-initSongInfo"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
