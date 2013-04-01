@@ -1137,11 +1137,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 - (void)extraButtonsToggleAnimated:(BOOL)animated saveState:(BOOL)saveState
 {
     if (IS_TALL_SCREEN() && UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
-    {
-        
+    {        
         if (self.isExtraButtonsShowing)
         {
-            NSLog(@"AHHHHHH GOT HERE");
             [self.extraButtonsButton setImage:self.extraButtonsButtonOffImage forState:UIControlStateNormal];
             
             self.largeOverlayView.alpha = 0.0;
@@ -1540,9 +1538,15 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	__block NSUInteger bookmarksCount;
 	[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
 	{
-        NSString *query = [NSString stringWithFormat:@"INSERT INTO bookmarks (playlistIndex, name, position, %@, bytes) VALUES (?, ?, ?, %@, ?)", [ISMSSong standardSongColumnNames], [ISMSSong standardSongColumnQMarks]];
-		[db executeUpdate:query, @(playlistS.currentIndex), self.bookmarkNameTextField.text, @(self.bookmarkPosition), self.currentSong.title, self.currentSong.songId, self.currentSong.artist, self.currentSong.album, self.currentSong.genre, self.currentSong.coverArtId, self.currentSong.path, self.currentSong.suffix, self.currentSong.transcodedSuffix, self.currentSong.duration, self.currentSong.bitRate, self.currentSong.track, self.currentSong.year, self.currentSong.size, self.currentSong.parentId, @(self.currentSong.isVideo), @(self.bookmarkBytePosition)];
+        //NSString *query = [NSString stringWithFormat:@"INSERT INTO bookmarks (playlistIndex, name, position, %@, bytes) VALUES (?, ?, ?, %@, ?)", [ISMSSong standardSongColumnNames], [ISMSSong standardSongColumnQMarks]];
+		//[db executeUpdate:query, @(playlistS.currentIndex), self.bookmarkNameTextField.text, @(self.bookmarkPosition), self.currentSong.title, self.currentSong.songId, self.currentSong.artist, self.currentSong.album, self.currentSong.genre, self.currentSong.coverArtId, self.currentSong.path, self.currentSong.suffix, self.currentSong.transcodedSuffix, self.currentSong.duration, self.currentSong.bitRate, self.currentSong.track, self.currentSong.year, self.currentSong.size, self.currentSong.parentId, @(self.currentSong.isVideo), self.currentSong.discNumber, @(self.bookmarkBytePosition)];
 		
+        sdNSString *query = [NSString stringWithFormat:@"INSERT INTO bookmarks (playlistIndex, name, position, %@, bytes) VALUES (?, ?, ?, %@, ?)", [ISMSSong standardSongColumnNames], [ISMSSong standardSongColumnQMarks]];
+		[db executeUpdate:query, @(playlistS.currentIndex), self.bookmarkNameTextField.text, @(self.bookmarkPosition), self.currentSong.title, self.currentSong.songId, self.currentSong.artist, self.currentSong.album, self.currentSong.genre, self.currentSong.coverArtId, self.currentSong.path, self.currentSong.suffix, self.currentSong.transcodedSuffix, self.currentSong.duration, self.currentSong.bitRate, self.currentSong.track, self.currentSong.year, self.currentSong.size, self.currentSong.parentId, @(self.currentSong.isVideo), self.currentSong.discNumber, @(self.bookmarkBytePosition)];
+        
+        
+        //@"title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size, parentId, isVideo, discNumber";
+        
 		NSInteger bookmarkId = [db intForQuery:@"SELECT MAX(bookmarkId) FROM bookmarks"]; 
 		
 		NSString *currTable = settingsS.isJukeboxEnabled ? @"jukeboxCurrentPlaylist" : @"currentPlaylist";
