@@ -48,6 +48,12 @@
 		float width = self.frame.size.width == 320 ? 90.0 : (self.frame.size.width / 3.0) - 50.0;
 		downloadButton.center = CGPointMake(width, self.frame.size.height / 2);
 		[inputBlocker addSubview:downloadButton];
+        
+        // If the cache feature is not unlocked, don't allow the user to cache songs
+        if (!settingsS.isCacheUnlocked)
+        {
+            downloadButton.enabled = NO;
+        }
 		
 		queueButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		queueButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
@@ -59,6 +65,12 @@
 		width = self.frame.size.width == 320 ? 230.0 : ((self.frame.size.width / 3.0) * 2.0) + 40.0;
 		queueButton.center = CGPointMake(width, self.frame.size.height / 2);
 		[inputBlocker addSubview:queueButton];
+        
+        // If the playlist feature is not unlocked, don't allow the user to queue songs
+        if (!settingsS.isPlaylistUnlocked)
+        {
+            queueButton.enabled = NO;
+        }
 	}
 	return self;
 }
