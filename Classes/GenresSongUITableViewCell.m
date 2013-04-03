@@ -102,6 +102,11 @@
 			self.overlayView.downloadButton.enabled = NO;
 		}
 	}
+    
+    if (!settingsS.isCacheUnlocked)
+    {
+        self.overlayView.downloadButton.enabled = NO;
+    }
 }
 
 - (void)downloadAction
