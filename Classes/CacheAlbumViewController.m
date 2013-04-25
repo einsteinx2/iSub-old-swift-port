@@ -621,14 +621,14 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 								for (NSArray *song in cacheAlbumViewController.listOfSongs)
 								{
 									NSNumber *track = [song objectAtIndexSafe:1];
-                                    NSNumber *discNumber = [song objectAtIndexSafe:2];
+                                    NSNumber *disc = [song objectAtIndexSafe:2];
 									
                                     // Wow, that got messy quick.  In the second part we're checking that the entry at the index
                                     // of the object we found doesn't have the same disc number as the one we're about to add.  If
                                     // it does, we have a problem, but if not, we can add it anyway and let the sort method sort it
                                     // out.  Hahah.  See what I did there?
 									if ([trackNumbers containsObject:track] &&
-                                        (discNumber == nil || cacheAlbumViewController.listOfSongs[[trackNumbers indexOfObject:track]][2] == discNumber))
+                                        (disc == nil || [[cacheAlbumViewController.listOfSongs[[trackNumbers indexOfObject:track]] objectAtIndexSafe:2] isEqual:disc]))
 									{
 										multipleSameTrackNumbers = YES;
 										break;
