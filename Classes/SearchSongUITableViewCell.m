@@ -16,12 +16,14 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
 {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]))
-	{
+	{        
 		coverArtView = [[AsynchronousImageView alloc] init];
+        coverArtView.frame = CGRectMake(0, 0, 60, 60);
 		coverArtView.isLarge = NO;
 		[self.contentView addSubview:coverArtView];
 		
 		songNameScrollView = [[UIScrollView alloc] init];
+        songNameScrollView.frame = CGRectMake(65, 0, 250, 60);
 		songNameScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		songNameScrollView.showsVerticalScrollIndicator = NO;
 		songNameScrollView.showsHorizontalScrollIndicator = NO;
@@ -53,9 +55,6 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-	
-	self.coverArtView.frame = CGRectMake(0, 0, 60, 60);
-	self.songNameScrollView.frame = CGRectMake(65, 0, 250, 60);
 	
 	// Automatically set the width based on the width of the text
 	self.songNameLabel.frame = CGRectMake(0, 0, 250, 35);
