@@ -440,8 +440,6 @@
 		53159F0F156F69D0001B0268 /* EqualizerPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306236C14D3295300D320A8 /* EqualizerPathView.m */; };
 		53159F11156F69D0001B0268 /* SeparaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 532B554114D7397000B8AA67 /* SeparaterView.m */; };
 		53159F16156F69D0001B0268 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 5325910014EE22C400DF4BDB /* MBProgressHUD.m */; };
-		53159F17156F69D0001B0268 /* AUIAnimatableLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DE597914F18E7A00206529 /* AUIAnimatableLabel.m */; };
-		53159F18156F69D0001B0268 /* UIFont+CoreTextExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DE597B14F18E7A00206529 /* UIFont+CoreTextExtensions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53159F19156F69D0001B0268 /* iPadRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5304FC1C14F2F0D100A2AD42 /* iPadRootViewController.m */; };
 		53159F1A156F69D0001B0268 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5304FC1E14F2F0D100A2AD42 /* MenuViewController.m */; };
 		53159F1B156F69D0001B0268 /* StackScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5304FC2214F2F0D100A2AD42 /* StackScrollViewController.m */; };
@@ -819,6 +817,9 @@
 		5382F65714856F3C001C14C8 /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5382F65614856F3C001C14C8 /* libSystem.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
 		5382F65814856F4F001C14C8 /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5382F65614856F3C001C14C8 /* libSystem.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
 		5382F65914856F5B001C14C8 /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5382F65614856F3C001C14C8 /* libSystem.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
+		538725F217CC19B200CE92F1 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538725F117CC19B200CE92F1 /* CoreTelephony.framework */; };
+		538725F317CC19C300CE92F1 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538725F117CC19B200CE92F1 /* CoreTelephony.framework */; };
+		538725F417CC19CA00CE92F1 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538725F117CC19B200CE92F1 /* CoreTelephony.framework */; };
 		5388A2F01198741E0049BA9E /* LocalPlaylistsUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5388A2EF1198741E0049BA9E /* LocalPlaylistsUITableViewCell.m */; };
 		5388A3B4119899260049BA9E /* BookmarksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5388A3B2119899260049BA9E /* BookmarksViewController.m */; };
 		5388A3B5119899260049BA9E /* BookmarksViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5388A3B3119899260049BA9E /* BookmarksViewController.xib */; };
@@ -1593,12 +1594,6 @@
 		53DCF5BD13BFEAD3009160F9 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 536AD1D211EA628200387CB0 /* libxml2.dylib */; };
 		53DCF5BF13BFEAD3009160F9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5327F52412B955F100735119 /* StoreKit.framework */; };
 		53DCF5C013BFEAD3009160F9 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F7A127131B7F3B002C829D /* Security.framework */; };
-		53DE597C14F18E7A00206529 /* AUIAnimatableLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DE597914F18E7A00206529 /* AUIAnimatableLabel.m */; };
-		53DE597D14F18E7A00206529 /* AUIAnimatableLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DE597914F18E7A00206529 /* AUIAnimatableLabel.m */; };
-		53DE597E14F18E7A00206529 /* AUIAnimatableLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DE597914F18E7A00206529 /* AUIAnimatableLabel.m */; };
-		53DE597F14F18E7A00206529 /* UIFont+CoreTextExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DE597B14F18E7A00206529 /* UIFont+CoreTextExtensions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		53DE598014F18E7A00206529 /* UIFont+CoreTextExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DE597B14F18E7A00206529 /* UIFont+CoreTextExtensions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		53DE598114F18E7A00206529 /* UIFont+CoreTextExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DE597B14F18E7A00206529 /* UIFont+CoreTextExtensions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		53DE598314F1932C00206529 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DE598214F1932C00206529 /* CoreText.framework */; };
 		53DE598414F1933400206529 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DE598214F1932C00206529 /* CoreText.framework */; };
 		53DE598514F1933800206529 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DE598214F1932C00206529 /* CoreText.framework */; };
@@ -2151,6 +2146,7 @@
 		53822A0011C986A4003F1E23 /* CacheArtistUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheArtistUITableViewCell.h; sourceTree = "<group>"; };
 		53822A0111C986A4003F1E23 /* CacheArtistUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheArtistUITableViewCell.m; sourceTree = "<group>"; };
 		5382F65614856F3C001C14C8 /* libSystem.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libSystem.dylib; path = usr/lib/libSystem.dylib; sourceTree = SDKROOT; };
+		538725F117CC19B200CE92F1 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		5388A2EE1198741E0049BA9E /* LocalPlaylistsUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalPlaylistsUITableViewCell.h; sourceTree = "<group>"; };
 		5388A2EF1198741E0049BA9E /* LocalPlaylistsUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalPlaylistsUITableViewCell.m; sourceTree = "<group>"; };
 		5388A3B1119899260049BA9E /* BookmarksViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BookmarksViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -2327,10 +2323,6 @@
 		53D9D24916DEF843002F55F7 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		53D9D24B16DEF847002F55F7 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		53DCF5C613BFEAD3009160F9 /* iSub Lite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Lite.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		53DE597814F18E7A00206529 /* AUIAnimatableLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUIAnimatableLabel.h; sourceTree = "<group>"; };
-		53DE597914F18E7A00206529 /* AUIAnimatableLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUIAnimatableLabel.m; sourceTree = "<group>"; };
-		53DE597A14F18E7A00206529 /* UIFont+CoreTextExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+CoreTextExtensions.h"; sourceTree = "<group>"; };
-		53DE597B14F18E7A00206529 /* UIFont+CoreTextExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+CoreTextExtensions.m"; sourceTree = "<group>"; };
 		53DE598214F1932C00206529 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		53DE598614F19BAF00206529 /* controller-extrabuttons-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-extrabuttons-background.png"; path = "Images/Player Icons/controller-extrabuttons-background.png"; sourceTree = "<group>"; };
 		53DE598714F19BAF00206529 /* controller-extrabuttons-background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-extrabuttons-background@2x.png"; path = "Images/Player Icons/controller-extrabuttons-background@2x.png"; sourceTree = "<group>"; };
@@ -2402,6 +2394,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				538725F417CC19CA00CE92F1 /* CoreTelephony.framework in Frameworks */,
 				5363B1CA1707CBDE0008696F /* libHockeySDK.a in Frameworks */,
 				53C7FDA0150F0EAF008DA51C /* MessageUI.framework in Frameworks */,
 				53D9D24D16DEF85F002F55F7 /* Twitter.framework in Frameworks */,
@@ -2497,6 +2490,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				538725F217CC19B200CE92F1 /* CoreTelephony.framework in Frameworks */,
 				5363B1D01707CBEA0008696F /* libHockeySDK.a in Frameworks */,
 				53C7FD9E150F0EA9008DA51C /* MessageUI.framework in Frameworks */,
 				53D9D25516DEF86F002F55F7 /* Twitter.framework in Frameworks */,
@@ -2532,6 +2526,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				538725F317CC19C300CE92F1 /* CoreTelephony.framework in Frameworks */,
 				5363B1CF1707CBE50008696F /* libHockeySDK.a in Frameworks */,
 				53C7FD9F150F0EAC008DA51C /* MessageUI.framework in Frameworks */,
 				53D9D25116DEF869002F55F7 /* Twitter.framework in Frameworks */,
@@ -2639,6 +2634,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				538725F117CC19B200CE92F1 /* CoreTelephony.framework */,
 				53A64E22161E2E6400FCBBAF /* CrashReporter.framework */,
 				5374F26A1661C56000529EF3 /* libSub.xcodeproj */,
 				530D20F216670062009DAF1B /* EX2Kit.xcodeproj */,
@@ -2881,7 +2877,6 @@
 		536C97A416619845005A73C6 /* 3rd Party UI Components */ = {
 			isa = PBXGroup;
 			children = (
-				53DE597714F18E6200206529 /* AUAnimatedText */,
 				53DFB2FF148C27080066FF94 /* NWPickerField */,
 				535B724F134CEE0A003E0E1C /* DDSocialDialog */,
 				53260B71127D012300B745B4 /* EGOTableViewPullRefresh */,
@@ -3326,18 +3321,6 @@
 				533C65AC15ABB9BD003EAF29 /* IntroViewController.xib */,
 			);
 			name = "Intro Screen";
-			sourceTree = "<group>";
-		};
-		53DE597714F18E6200206529 /* AUAnimatedText */ = {
-			isa = PBXGroup;
-			children = (
-				53DE597814F18E7A00206529 /* AUIAnimatableLabel.h */,
-				53DE597914F18E7A00206529 /* AUIAnimatableLabel.m */,
-				53DE597A14F18E7A00206529 /* UIFont+CoreTextExtensions.h */,
-				53DE597B14F18E7A00206529 /* UIFont+CoreTextExtensions.m */,
-			);
-			name = AUAnimatedText;
-			path = Classes;
 			sourceTree = "<group>";
 		};
 		53DFB2FF148C27080066FF94 /* NWPickerField */ = {
@@ -4951,8 +4934,6 @@
 				5306236D14D3295300D320A8 /* EqualizerPathView.m in Sources */,
 				532B554214D7397000B8AA67 /* SeparaterView.m in Sources */,
 				5325910114EE22C700DF4BDB /* MBProgressHUD.m in Sources */,
-				53DE597C14F18E7A00206529 /* AUIAnimatableLabel.m in Sources */,
-				53DE597F14F18E7A00206529 /* UIFont+CoreTextExtensions.m in Sources */,
 				5304FC2D14F2F0D100A2AD42 /* iPadRootViewController.m in Sources */,
 				5304FC3014F2F0D100A2AD42 /* MenuViewController.m in Sources */,
 				5304FC3614F2F0D100A2AD42 /* StackScrollViewController.m in Sources */,
@@ -5056,8 +5037,6 @@
 				53159F0F156F69D0001B0268 /* EqualizerPathView.m in Sources */,
 				53159F11156F69D0001B0268 /* SeparaterView.m in Sources */,
 				53159F16156F69D0001B0268 /* MBProgressHUD.m in Sources */,
-				53159F17156F69D0001B0268 /* AUIAnimatableLabel.m in Sources */,
-				53159F18156F69D0001B0268 /* UIFont+CoreTextExtensions.m in Sources */,
 				53159F19156F69D0001B0268 /* iPadRootViewController.m in Sources */,
 				53159F1A156F69D0001B0268 /* MenuViewController.m in Sources */,
 				53159F1B156F69D0001B0268 /* StackScrollViewController.m in Sources */,
@@ -5170,8 +5149,6 @@
 				5306236F14D3295300D320A8 /* EqualizerPathView.m in Sources */,
 				532B554414D7397000B8AA67 /* SeparaterView.m in Sources */,
 				5325910314EE22C700DF4BDB /* MBProgressHUD.m in Sources */,
-				53DE597E14F18E7A00206529 /* AUIAnimatableLabel.m in Sources */,
-				53DE598114F18E7A00206529 /* UIFont+CoreTextExtensions.m in Sources */,
 				5304FC2F14F2F0D100A2AD42 /* iPadRootViewController.m in Sources */,
 				5304FC3214F2F0D100A2AD42 /* MenuViewController.m in Sources */,
 				5304FC3814F2F0D100A2AD42 /* StackScrollViewController.m in Sources */,
@@ -5275,8 +5252,6 @@
 				5306236E14D3295300D320A8 /* EqualizerPathView.m in Sources */,
 				532B554314D7397000B8AA67 /* SeparaterView.m in Sources */,
 				5325910214EE22C700DF4BDB /* MBProgressHUD.m in Sources */,
-				53DE597D14F18E7A00206529 /* AUIAnimatableLabel.m in Sources */,
-				53DE598014F18E7A00206529 /* UIFont+CoreTextExtensions.m in Sources */,
 				5304FC2E14F2F0D100A2AD42 /* iPadRootViewController.m in Sources */,
 				5304FC3114F2F0D100A2AD42 /* MenuViewController.m in Sources */,
 				5304FC3714F2F0D100A2AD42 /* StackScrollViewController.m in Sources */,
@@ -5632,7 +5607,7 @@
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PROVISIONING_PROFILE = "B369E010-40BF-431E-9772-8034FA350669";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B369E010-40BF-431E-9772-8034FA350669";
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos6.1;
 				SYMROOT = build;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -5960,7 +5935,7 @@
 				PRODUCT_NAME = "iSub Beta";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos6.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
 			};
@@ -6003,7 +5978,7 @@
 				PRODUCT_NAME = "iSub Beta";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos6.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
 			};
@@ -6043,7 +6018,7 @@
 				PRODUCT_NAME = "iSub Beta";
 				PROVISIONING_PROFILE = "556D68C0-4481-4C0A-BD41-3F1FC030E1E0";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "556D68C0-4481-4C0A-BD41-3F1FC030E1E0";
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos6.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
 			};
@@ -6213,7 +6188,7 @@
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PROVISIONING_PROFILE = "DAB12A2B-4321-4624-B97C-2B9C9C4A24D6";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "DAB12A2B-4321-4624-B97C-2B9C9C4A24D6";
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos6.1;
 				SYMROOT = build;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -6262,7 +6237,7 @@
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PROVISIONING_PROFILE = "D4A8945F-4511-4F9F-B707-8A73518A9D3B";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D4A8945F-4511-4F9F-B707-8A73518A9D3B";
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos6.1;
 				SYMROOT = build;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
