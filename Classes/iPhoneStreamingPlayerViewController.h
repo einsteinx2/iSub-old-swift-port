@@ -61,7 +61,6 @@
 @property (nonatomic) float oldPosition;
 @property (nonatomic) NSUInteger byteOffset;
 @property (copy) ISMSSong *currentSong;
-@property (strong) UITextField *bookmarkNameTextField;
 @property (strong) NSArray *bookmarkEntry;
 @property (nonatomic) NSInteger bookmarkIndex;
 @property (nonatomic) int bookmarkPosition;

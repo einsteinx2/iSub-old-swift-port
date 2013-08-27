@@ -31,7 +31,6 @@
 @property (strong) UIButton *savePresetButton;
 @property BOOL isSavePresetButtonShowing;
 @property BOOL isDeletePresetButtonShowing;
-@property (strong) UITextField *presetNameTextField;
 @property (strong) DDSocialDialog *saveDialog;
 @property BOOL wasVisualizerOffBeforeRotation;
 @property (strong) UISwipeGestureRecognizer *swipeDetectorLeft;

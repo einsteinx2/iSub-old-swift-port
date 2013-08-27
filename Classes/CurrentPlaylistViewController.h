@@ -23,8 +23,6 @@
 @property (strong) NSURLConnection *connection;
 @property (strong) NSMutableURLRequest *request;
 
-@property (strong) UITextField *playlistNameTextField;
-
 @property NSUInteger currentPlaylistCount;
 
 - (void) selectRow;

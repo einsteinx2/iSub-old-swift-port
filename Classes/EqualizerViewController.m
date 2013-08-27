@@ -632,20 +632,10 @@
 
 - (void)promptForSavePresetName
 {
-	UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"New Preset Name:" message:@"      \n      " delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
-	myAlertView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
-	self.presetNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 24.0)];
-	self.presetNameTextField.layer.cornerRadius = 3.;
-	[self.presetNameTextField setBackgroundColor:[UIColor whiteColor]];
-	[myAlertView addSubview:self.presetNameTextField];
-	if ([[[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."] objectAtIndexSafe:0] isEqualToString:@"3"])
-	{
-		CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 100.0);
-		[myAlertView setTransform:myTransform];
-	}
+	UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"New Preset Name:" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
+	myAlertView.alertViewStyle = UIAlertViewStylePlainTextInput;
 	myAlertView.tag = 2;
 	[myAlertView show];
-	[self.presetNameTextField becomeFirstResponder];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -666,7 +656,8 @@
 		if (buttonIndex)
 		{
 			//DLog(@"Preset name: %@", presetNameTextField.text);
-			[self.effectDAO saveCustomPreset:[self serializedEqPoints] name:self.presetNameTextField.text];
+            NSString *text = [alertView textFieldAtIndex:0].text;
+			[self.effectDAO saveCustomPreset:[self serializedEqPoints] name:text];
 			[self.effectDAO deleteTempCustomPreset];
 			[self.presetPicker reloadAllComponents];
 			[self.presetPicker selectRow:self.effectDAO.selectedPresetIndex inComponent:0 animated:YES];

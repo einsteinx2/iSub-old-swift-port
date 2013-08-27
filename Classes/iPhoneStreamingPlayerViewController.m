@@ -1518,21 +1518,12 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	self.bookmarkPosition = (int)self.progressSlider.value;
 	self.bookmarkBytePosition = audioEngineS.player.currentByteOffset;
 	
-	UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Bookmark Name:" message:@"this gets covered" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
-	self.bookmarkNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 24.0)];
-	self.bookmarkNameTextField.layer.cornerRadius = 3.;
-	[self.bookmarkNameTextField setBackgroundColor:[UIColor whiteColor]];
-	[myAlertView addSubview:self.bookmarkNameTextField];
-	if ([[[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."] objectAtIndexSafe:0] isEqualToString:@"3"])
-	{
-		CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 100.0);
-		[myAlertView setTransform:myTransform];
-	}
+	UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Bookmark Name:" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
+    myAlertView.alertViewStyle = UIAlertViewStylePlainTextInput;
 	[myAlertView show];
-	[self.bookmarkNameTextField becomeFirstResponder];
 }
 
-- (void)saveBookmark
+- (void)saveBookmark:(NSString *)name
 {
 	// TODO: somehow this is saving the incorrect playlist index sometimes
 	__block NSUInteger bookmarksCount;
@@ -1542,7 +1533,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		//[db executeUpdate:query, @(playlistS.currentIndex), self.bookmarkNameTextField.text, @(self.bookmarkPosition), self.currentSong.title, self.currentSong.songId, self.currentSong.artist, self.currentSong.album, self.currentSong.genre, self.currentSong.coverArtId, self.currentSong.path, self.currentSong.suffix, self.currentSong.transcodedSuffix, self.currentSong.duration, self.currentSong.bitRate, self.currentSong.track, self.currentSong.year, self.currentSong.size, self.currentSong.parentId, @(self.currentSong.isVideo), self.currentSong.discNumber, @(self.bookmarkBytePosition)];
 		
         NSString *query = [NSString stringWithFormat:@"INSERT INTO bookmarks (playlistIndex, name, position, %@, bytes) VALUES (?, ?, ?, %@, ?)", [ISMSSong standardSongColumnNames], [ISMSSong standardSongColumnQMarks]];
-		[db executeUpdate:query, @(playlistS.currentIndex), self.bookmarkNameTextField.text, @(self.bookmarkPosition), self.currentSong.title, self.currentSong.songId, self.currentSong.artist, self.currentSong.album, self.currentSong.genre, self.currentSong.coverArtId, self.currentSong.path, self.currentSong.suffix, self.currentSong.transcodedSuffix, self.currentSong.duration, self.currentSong.bitRate, self.currentSong.track, self.currentSong.year, self.currentSong.size, self.currentSong.parentId, @(self.currentSong.isVideo), self.currentSong.discNumber, @(self.bookmarkBytePosition)];
+		[db executeUpdate:query, @(playlistS.currentIndex), name, @(self.bookmarkPosition), self.currentSong.title, self.currentSong.songId, self.currentSong.artist, self.currentSong.album, self.currentSong.genre, self.currentSong.coverArtId, self.currentSong.path, self.currentSong.suffix, self.currentSong.transcodedSuffix, self.currentSong.duration, self.currentSong.bitRate, self.currentSong.track, self.currentSong.year, self.currentSong.size, self.currentSong.parentId, @(self.currentSong.isVideo), self.currentSong.discNumber, @(self.bookmarkBytePosition)];
         
         
         //@"title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size, parentId, isVideo, discNumber";
@@ -1605,13 +1596,13 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	}
 	else if([alertView.title isEqualToString:@"Bookmark Name:"])
 	{
-		[self.bookmarkNameTextField resignFirstResponder];
+        NSString *text = [alertView textFieldAtIndex:0].text;
 		if(buttonIndex == 1)
 		{
 			__block BOOL exists;
 			[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
 			{
-				exists = [db intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE name = ? LIMIT 1", self.bookmarkNameTextField.text];
+				exists = [db intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE name = ? LIMIT 1", text];
 			}];
 			
 			// Check if the bookmark exists
@@ -1619,29 +1610,31 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			{
 				// Bookmark exists so ask to overwrite
 				UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Overwrite?" message:@"There is already a bookmark with this name. Overwrite it?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+                [myAlertView ex2SetCustomObject:text forKey:@"name"];
 				[myAlertView show];
 			}
 			else
 			{
 				// Bookmark doesn't exist so save it
-				[self saveBookmark];
+				[self saveBookmark:text];
 			}
 		}
 	}
 	else if([alertView.title isEqualToString:@"Overwrite?"])
 	{
+        NSString *text = [alertView ex2CustomObjectForKey:@"name"];
 		if(buttonIndex == 1)
 		{
 			// Overwrite the bookmark
 			[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
 			{
-				NSUInteger bookmarkId = [db intForQuery:@"SELECT bookmarkId FROM bookmarks WHERE name = ?", self.bookmarkNameTextField.text];
+				NSUInteger bookmarkId = [db intForQuery:@"SELECT bookmarkId FROM bookmarks WHERE name = ?", text];
 				
-				[db executeUpdate:@"DELETE FROM bookmarks WHERE name = ?", self.bookmarkNameTextField.text];
+				[db executeUpdate:@"DELETE FROM bookmarks WHERE name = ?", text];
 				[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS bookmark%i", bookmarkId]];
 			}];
 			
-			[self saveBookmark];
+			[self saveBookmark:text];
 		}
 	}
 }

@@ -381,11 +381,11 @@
             continueAfterRunningActions = "No"
             isPathRelative = "1"
             filePath = "Classes/PlaylistsViewController.m"
-            timestampString = "370374744.327224"
+            timestampString = "399258230.738839"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "126"
-            endingLineNumber = "126"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
             landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
@@ -398,11 +398,11 @@
             continueAfterRunningActions = "No"
             isPathRelative = "1"
             filePath = "Classes/PlaylistsViewController.m"
-            timestampString = "370374744.327224"
+            timestampString = "399258230.738839"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "126"
-            endingLineNumber = "126"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
             landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
@@ -962,11 +962,11 @@
             continueAfterRunningActions = "No"
             isPathRelative = "1"
             filePath = "Classes/PlaylistsViewController.m"
-            timestampString = "370374744.327224"
+            timestampString = "399258230.738839"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "126"
-            endingLineNumber = "126"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
             landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
@@ -979,11 +979,11 @@
             continueAfterRunningActions = "No"
             isPathRelative = "1"
             filePath = "Classes/PlaylistsViewController.m"
-            timestampString = "370374744.327224"
+            timestampString = "399258230.738839"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "126"
-            endingLineNumber = "126"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
             landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
@@ -1381,11 +1381,11 @@
             continueAfterRunningActions = "No"
             isPathRelative = "1"
             filePath = "Classes/PlaylistsViewController.m"
-            timestampString = "370374744.327224"
+            timestampString = "399258230.738839"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "126"
-            endingLineNumber = "126"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
             landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
@@ -1398,11 +1398,11 @@
             continueAfterRunningActions = "No"
             isPathRelative = "1"
             filePath = "Classes/PlaylistsViewController.m"
-            timestampString = "370374744.327224"
+            timestampString = "399258230.738839"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "126"
-            endingLineNumber = "126"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
             landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
@@ -1415,11 +1415,11 @@
             continueAfterRunningActions = "No"
             isPathRelative = "1"
             filePath = "Classes/PlaylistsViewController.m"
-            timestampString = "370374744.327224"
+            timestampString = "399258230.738839"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "72"
-            endingLineNumber = "72"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
             landmarkName = "-registerForNotifications"
             landmarkType = "5">
          </BreakpointContent>
@@ -1432,11 +1432,11 @@
             continueAfterRunningActions = "No"
             isPathRelative = "1"
             filePath = "Classes/PlaylistsViewController.m"
-            timestampString = "370374744.327224"
+            timestampString = "399258230.738839"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "76"
-            endingLineNumber = "76"
+            startingLineNumber = "75"
+            endingLineNumber = "75"
             landmarkName = "-registerForNotifications"
             landmarkType = "5">
          </BreakpointContent>
@@ -5731,11 +5731,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-            timestampString = "399252389.722043"
+            timestampString = "399256908.993711"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1776"
-            endingLineNumber = "1776"
+            startingLineNumber = "1769"
+            endingLineNumber = "1769"
             landmarkName = "-updateSlider"
             landmarkType = "5">
          </BreakpointContent>
@@ -6919,6 +6919,22 @@
             startingLineNumber = "245"
             endingLineNumber = "245"
             landmarkName = "-ISMSStreamHandlerConnectionFailed:withError:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Classes/CurrentPlaylistViewController.m"
+            timestampString = "399257425.135399"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "499"
+            endingLineNumber = "499"
+            landmarkName = "-alertView:clickedButtonAtIndex:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

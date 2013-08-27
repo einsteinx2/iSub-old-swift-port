@@ -469,19 +469,9 @@
 
 - (void)showSavePlaylistAlert
 {
-	UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Playlist Name:" message:@"      \n      " delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
-	myAlertView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
-	self.playlistNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 47.0, 260.0, 24.0)];
-	self.playlistNameTextField.layer.cornerRadius = 3.;
-	[self.playlistNameTextField setBackgroundColor:[UIColor whiteColor]];
-	[myAlertView addSubview:self.playlistNameTextField];
-	if ([[[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."] objectAtIndexSafe:0] isEqualToString:@"3"])
-	{
-		CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 100.0);
-		[myAlertView setTransform:myTransform];
-	}
+	UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Playlist Name:" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
+	myAlertView.alertViewStyle = UIAlertViewStylePlainTextInput;
 	[myAlertView show];
-	[self.playlistNameTextField becomeFirstResponder];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -505,13 +495,13 @@
 	}
     else if([alertView.title isEqualToString:@"Playlist Name:"])
 	{
-		[self.playlistNameTextField resignFirstResponder];
+        NSString *text = [alertView textFieldAtIndex:0].text;
 		if(buttonIndex == 1)
 		{
 			if (self.savePlaylistLocal || settingsS.isOfflineMode)
 			{
 				// Check if the playlist exists, if not create the playlist table and add the entry to localPlaylists table
-				NSString *test = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT md5 FROM localPlaylists WHERE md5 = ?", [self.playlistNameTextField.text md5]];
+				NSString *test = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT md5 FROM localPlaylists WHERE md5 = ?", [text md5]];
 				if (!test)
 				{
 					NSString *databaseName = settingsS.isOfflineMode ? @"offlineCurrentPlaylist.db" : [NSString stringWithFormat:@"%@currentPlaylist.db", [settingsS.urlString md5]];
@@ -521,12 +511,12 @@
 					
 					[databaseS.localPlaylistsDbQueue inDatabase:^(FMDatabase *db)
 					{
-						[db executeUpdate:@"INSERT INTO localPlaylists (playlist, md5) VALUES (?, ?)", self.playlistNameTextField.text, [self.playlistNameTextField.text md5]];
-						[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [self.playlistNameTextField.text md5], [ISMSSong standardSongColumnSchema]]];
+						[db executeUpdate:@"INSERT INTO localPlaylists (playlist, md5) VALUES (?, ?)", text, [text md5]];
+						[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [text md5], [ISMSSong standardSongColumnSchema]]];
 						
 						[db executeUpdate:@"ATTACH DATABASE ? AS ?", [databaseS.databaseFolderPath stringByAppendingPathComponent:databaseName], @"currentPlaylistDb"];
 						if ([db hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [db lastErrorCode], [db lastErrorMessage]); }
-						[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM %@", [self.playlistNameTextField.text md5], table]];
+						[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM %@", [text md5], table]];
 						[db executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 					}];
 				}
@@ -534,27 +524,30 @@
 				{
 					// If it exists, ask to overwrite
 					UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Overwrite?" message:@"There is already a playlist with this name. Would you like to overwrite it?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+                    [myAlertView ex2SetCustomObject:text forKey:@"name"];
 					[myAlertView show];
 				}
 			}
 			else
 			{
-				NSString *tableName = [NSString stringWithFormat:@"splaylist%@", [self.playlistNameTextField.text md5]];
+				NSString *tableName = [NSString stringWithFormat:@"splaylist%@", [text md5]];
 				if ([databaseS.localPlaylistsDbQueue tableExists:tableName])
 				{
 					// If it exists, ask to overwrite
 					UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Overwrite?" message:@"There is already a playlist with this name. Would you like to overwrite it?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+                    [myAlertView ex2SetCustomObject:text forKey:@"name"];
 					[myAlertView show];
 				}
 				else 
 				{
-					[self uploadPlaylist:self.playlistNameTextField.text];
+					[self uploadPlaylist:text];
 				}
 			}
 		}
 	}
 	else if([alertView.title isEqualToString:@"Overwrite?"])
 	{
+        NSString *text = [alertView ex2CustomObjectForKey:@"name"];
 		if(buttonIndex == 1)
 		{
 			// If yes, overwrite the playlist
@@ -563,15 +556,15 @@
 				NSString *databaseName = settingsS.isOfflineMode ? @"offlineCurrentPlaylist.db" : [NSString stringWithFormat:@"%@currentPlaylist.db", [settingsS.urlString md5]];
 				[databaseS.localPlaylistsDbQueue inDatabase:^(FMDatabase *db)
 				{
-					[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE playlist%@", [self.playlistNameTextField.text md5]]];
-					[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [self.playlistNameTextField.text md5], [ISMSSong standardSongColumnSchema]]];
+					[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE playlist%@", [text md5]]];
+					[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE playlist%@ (%@)", [text md5], [ISMSSong standardSongColumnSchema]]];
 					
 					[db executeUpdate:@"ATTACH DATABASE ? AS ?", [databaseS.databaseFolderPath stringByAppendingPathComponent:databaseName], @"currentPlaylistDb"];
 					if ([db hadError]) { DLog(@"Err attaching the currentPlaylistDb %d: %@", [db lastErrorCode], [db lastErrorMessage]); }
 					if (playlistS.isShuffle)
-						[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM shufflePlaylist", [self.playlistNameTextField.text md5]]];
+						[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM shufflePlaylist", [text md5]]];
 					else
-						[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM currentPlaylist", [self.playlistNameTextField.text md5]]];
+						[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO playlist%@ SELECT * FROM currentPlaylist", [text md5]]];
 					[db executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 				}];
 			}
@@ -579,10 +572,10 @@
 			{
 				[databaseS.localPlaylistsDbQueue inDatabase:^(FMDatabase *db)
 				{
-					[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE splaylist%@", [self.playlistNameTextField.text md5]]];
+					[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE splaylist%@", [text md5]]];
 				}];
 				
-				[self uploadPlaylist:self.playlistNameTextField.text];
+				[self uploadPlaylist:text];
 			}
 		}
 	}

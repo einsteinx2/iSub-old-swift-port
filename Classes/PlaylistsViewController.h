@@ -30,7 +30,6 @@
 @property (nonatomic, strong) NSMutableURLRequest *request;
 @property (nonatomic, strong) SUSServerPlaylistsDAO *serverPlaylistsDataModel;
 @property (nonatomic) NSUInteger currentPlaylistCount;
-@property (nonatomic, strong) UITextField *playlistNameTextField;
 
 - (void)showDeleteButton;
 - (void)hideDeleteButton;
