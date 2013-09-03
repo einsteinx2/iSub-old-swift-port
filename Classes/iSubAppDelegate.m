@@ -733,6 +733,8 @@ LOG_LEVEL_ISUB_DEFAULT
 	//DLog(@"applicationDidBecomeActive finished");
     
     [self checkServer];
+    
+    [self checkWaveBoxRelease];
 }
 
 
@@ -1224,6 +1226,23 @@ LOG_LEVEL_ISUB_DEFAULT
 				[[UIApplication sharedApplication] openURL:url];
 			}
 		}
+        case 10:
+        {            
+            // WaveBox Release message
+            settingsS.isStopCheckingWaveboxRelease = YES;
+            if (buttonIndex == 1)
+            {
+                // More Info
+                NSString *moreInfoUrl = [alertView ex2CustomObjectForKey:@"moreInfoUrl"];
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:moreInfoUrl]];
+            }
+            else if (buttonIndex == 2)
+            {
+                // App Store
+                NSString *appStoreUrl = [alertView ex2CustomObjectForKey:@"appStoreUrl"];
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:appStoreUrl]];
+            }
+        }
 	}
 }
 
@@ -1299,6 +1318,40 @@ LOG_LEVEL_ISUB_DEFAULT
 	//NSInteger sec = [dateComponents second];
 	
 	return [dateComponents hour];
+}
+
+- (void)checkWaveBoxRelease
+{
+    if (!settingsS.isStopCheckingWaveboxRelease && !settingsS.isWaveBoxAlertShowing)
+    {
+        [EX2Dispatch runInBackground:^
+         {
+             NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://isubapp.com/wavebox.json"]];
+             if (data.length > 0)
+             {
+                 NSDictionary *dict = [[[SBJsonParser alloc] init] objectWithData:data];
+                 NSString *title = dict[@"title"];
+                 NSString *message = dict[@"message"];
+                 NSString *moreInfoUrl = dict[@"moreInfoUrl"];
+                 NSString *appStoreUrl = dict[@"appStoreUrl"];
+                 if (title && message && moreInfoUrl && appStoreUrl)
+                 {
+                     if (!settingsS.isWaveBoxAlertShowing)
+                     {
+                         settingsS.isWaveBoxAlertShowing = YES;
+                         [EX2Dispatch runInMainThread:^
+                          {
+                              UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"Not Now" otherButtonTitles:@"More Info", @"Install Now", nil];
+                              alert.tag = 10;
+                              [alert ex2SetCustomObject:moreInfoUrl forKey:@"moreInfoUrl"];
+                              [alert ex2SetCustomObject:appStoreUrl forKey:@"appStoreUrl"];
+                              [alert show];
+                          }];
+                     }
+                 }
+             }
+         }];
+    }
 }
 
 #pragma mark -
