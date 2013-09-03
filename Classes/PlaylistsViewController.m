@@ -173,7 +173,7 @@
 		[self addNoPlaylistsScreen];
 	}
 	
-	[FlurryAnalytics logEvent:@"PlaylistsTab"];
+	[Flurry logEvent:@"PlaylistsTab"];
 
 	[self registerForNotifications];
 	

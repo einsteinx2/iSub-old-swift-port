@@ -152,7 +152,7 @@
 		
 	[self loadData];
 	
-	[FlurryAnalytics logEvent:@"ChatTab"];
+	[Flurry logEvent:@"ChatTab"];
 }
 
 -(void)viewWillDisappear:(BOOL)animated

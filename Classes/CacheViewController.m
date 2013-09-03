@@ -242,7 +242,7 @@
 	[self updateQueueDownloadProgress];
 	[self updateCacheSizeLabel];
 	
-	[FlurryAnalytics logEvent:@"CacheTab"];
+	[Flurry logEvent:@"CacheTab"];
 	
 	// Reload the data in case it changed
 	if (settingsS.isCacheUnlocked)

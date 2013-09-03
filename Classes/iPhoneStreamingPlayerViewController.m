@@ -1482,7 +1482,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	self.progressSlider.value = newValue;
 	[self movedSlider:nil];
 	
-	[FlurryAnalytics logEvent:@"QuickSkip"];
+	[Flurry logEvent:@"QuickSkip"];
 }
 
 - (IBAction)skipForward30:(id)sender
@@ -1491,7 +1491,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	self.progressSlider.value = self.progressSlider.value + seconds;
 	[self movedSlider:nil];
 	
-	[FlurryAnalytics logEvent:@"QuickSkip"];
+	[Flurry logEvent:@"QuickSkip"];
 }
 
 - (IBAction) repeatButtonToggle:(id)sender

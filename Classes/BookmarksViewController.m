@@ -184,7 +184,7 @@
 	
 	[self.tableView reloadData];
 	
-	[FlurryAnalytics logEvent:@"BookmarksTab"];
+	[Flurry logEvent:@"BookmarksTab"];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

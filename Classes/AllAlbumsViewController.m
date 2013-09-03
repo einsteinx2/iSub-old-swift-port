@@ -179,7 +179,7 @@
 	
 	[self.tableView reloadData];
 	
-	[FlurryAnalytics logEvent:@"AllAlbumsTab"];
+	[Flurry logEvent:@"AllAlbumsTab"];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

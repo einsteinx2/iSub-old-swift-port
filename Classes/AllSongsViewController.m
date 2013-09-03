@@ -132,7 +132,7 @@
 	
 	[self.tableView reloadData];
 	
-	[FlurryAnalytics logEvent:@"AllSongsTab"];
+	[Flurry logEvent:@"AllSongsTab"];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

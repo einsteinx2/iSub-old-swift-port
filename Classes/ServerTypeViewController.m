@@ -51,7 +51,7 @@
 		subView = subsonicServerEditViewController.view;
 		self.serverEditViewController = subsonicServerEditViewController;
 		
-		[FlurryAnalytics logEvent:@"ServerType" withParameters:[NSDictionary dictionaryWithObject:@"Subsonic" forKey:@"type"]];
+		[Flurry logEvent:@"ServerType" withParameters:[NSDictionary dictionaryWithObject:@"Subsonic" forKey:@"type"]];
 	}
 	else if (sender == self.ubuntuButton)
 	{
@@ -63,7 +63,7 @@
 		self.serverEditViewController = ubuntuServerEditViewController;
 		subView = ubuntuServerEditViewController.view;
 		
-		[FlurryAnalytics logEvent:@"ServerType" withParameters:[NSDictionary dictionaryWithObject:@"UbuntuOne" forKey:@"type"]];
+		[Flurry logEvent:@"ServerType" withParameters:[NSDictionary dictionaryWithObject:@"UbuntuOne" forKey:@"type"]];
 	}
 	else if (sender == self.pmsButton)
 	{
@@ -75,7 +75,7 @@
 		self.serverEditViewController = pms;
 		subView = pms.view;
 		
-		[FlurryAnalytics logEvent:@"ServerType" withParameters:[NSDictionary dictionaryWithObject:@"PMS" forKey:@"type"]];
+		[Flurry logEvent:@"ServerType" withParameters:[NSDictionary dictionaryWithObject:@"PMS" forKey:@"type"]];
 	}
 	else if (sender == self.cancelButton)
 	{

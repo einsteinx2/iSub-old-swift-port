@@ -358,7 +358,7 @@
 	self.searchSegment.enabled = NO;
 	self.searchSegmentBackground.alpha = 0.0;
 	
-	[FlurryAnalytics logEvent:@"HomeTab"];
+	[Flurry logEvent:@"HomeTab"];
 }
 
 - (void)addURLRefBackButton
@@ -554,7 +554,7 @@
         
         [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_JukeboxDisabled];
         
-        [FlurryAnalytics logEvent:@"JukeboxDisabled"];
+        [Flurry logEvent:@"JukeboxDisabled"];
     }
     else
     {
@@ -573,7 +573,7 @@
         
         [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_JukeboxEnabled];
         
-        [FlurryAnalytics logEvent:@"JukeboxEnabled"];
+        [Flurry logEvent:@"JukeboxEnabled"];
     }
     
     [self initSongInfo];

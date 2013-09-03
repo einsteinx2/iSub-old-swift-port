@@ -351,7 +351,7 @@
 	self.swipeDetectorRight.direction = UISwipeGestureRecognizerDirectionRight;
 	[self.equalizerView addGestureRecognizer:self.swipeDetectorRight];
 	
-	[FlurryAnalytics logEvent:@"Equalizer"];
+	[Flurry logEvent:@"Equalizer"];
 }
 
 - (void)swipeLeft

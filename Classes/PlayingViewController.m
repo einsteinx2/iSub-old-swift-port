@@ -97,7 +97,7 @@
 	
 	[self.dataModel startLoad];
 	
-	[FlurryAnalytics logEvent:@"NowPlayingTab"];
+	[Flurry logEvent:@"NowPlayingTab"];
 }
 
 - (void)cancelLoad

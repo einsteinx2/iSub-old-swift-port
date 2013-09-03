@@ -495,36 +495,36 @@ LOG_LEVEL_ISUB_DEFAULT
 		if (IS_LITE())
 		{
 			// Lite version key
-			[FlurryAnalytics startSession:@"MQV1D5WQYUTCDAD6PFLU"];
+			[Flurry startSession:@"MQV1D5WQYUTCDAD6PFLU"];
 			isSessionStarted = YES;
 		}
 		else
 		{
 			// Full version key
-			[FlurryAnalytics startSession:@"3KK4KKD2PSEU5APF7PNX"];
+			[Flurry startSession:@"3KK4KKD2PSEU5APF7PNX"];
 			isSessionStarted = YES;
 		}
 	}
 	else if (IS_BETA())
 	{
 		// Beta version key
-		[FlurryAnalytics startSession:@"KNN9DUXQEENZUG4Q12UA"];
+		[Flurry startSession:@"KNN9DUXQEENZUG4Q12UA"];
 		isSessionStarted = YES;
 	}
 	
 	if (isSessionStarted)
 	{
-		[FlurryAnalytics setSecureTransportEnabled:YES];
+		[Flurry setSecureTransportEnabled:YES];
 		
 		// These set to no as per Flurry support instructions to prevent crashes
-		[FlurryAnalytics setSessionReportsOnPauseEnabled:NO];
-		[FlurryAnalytics setSessionReportsOnCloseEnabled:NO];
+		[Flurry setSessionReportsOnPauseEnabled:NO];
+		[Flurry setSessionReportsOnCloseEnabled:NO];
 		
 		// Send the firmware version
 		UIDevice *device = [UIDevice currentDevice];
 		NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:[device completeVersionString], @"FirmwareVersion", 
 																		  [device platform], @"HardwareVersion", nil];
-		[FlurryAnalytics logEvent:@"DeviceInfo" withParameters:params];
+		[Flurry logEvent:@"DeviceInfo" withParameters:params];
 	}
 }
 
@@ -884,7 +884,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	
     settingsS.isJukeboxEnabled = NO;
     appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
-    [FlurryAnalytics logEvent:@"JukeboxDisabled"];
+    [Flurry logEvent:@"JukeboxDisabled"];
     
 	settingsS.isOfflineMode = YES;
 		

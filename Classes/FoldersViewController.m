@@ -128,7 +128,7 @@
 		}
 	}
 	
-	[FlurryAnalytics logEvent:@"FoldersTab"];
+	[Flurry logEvent:@"FoldersTab"];
 }
 
 
