@@ -15,7 +15,6 @@
 @property (strong) NSDate *lastDeleteToggle;
 
 - (BOOL)isTouchHorizontal:(UITouch *)touch;
-- (BOOL)isTouchVertical:(UITouch *)touch;
 - (void)lookForSwipeGestureInTouches:(NSSet *)touches withEvent:(UIEvent *)event;
 
 - (void)disableCellsTemporarily;

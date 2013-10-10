@@ -126,19 +126,11 @@
 - (BOOL)isTouchHorizontal:(UITouch *)touch 
 {
     CGPoint currentTouchPosition = [touch locationInView:self];
-	if (fabsf(startTouchPosition.x - currentTouchPosition.x) >= 1.0) 
-		return YES;
-	
-	return NO;
-}
-
-- (BOOL)isTouchVertical:(UITouch *)touch
-{
-	CGPoint currentTouchPosition = [touch locationInView:self];
-	if (fabsf(startTouchPosition.y - currentTouchPosition.y) >= 2.0) 
-		return YES;
-	
-	return NO;
+    CGFloat xMovement = fabsf(startTouchPosition.x - currentTouchPosition.x);
+    CGFloat yMovement = fabsf(startTouchPosition.y - currentTouchPosition.y);
+    NSLog(@"xMovement: %f  yMovement: %f", xMovement, yMovement);
+    
+	return xMovement > yMovement;
 }
 
 - (void)lookForSwipeGestureInTouches:(NSSet *)touches withEvent:(UIEvent *)event 
