@@ -20,10 +20,16 @@
 		UIView* bgView = [[UIView alloc] init];
 		bgView.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.25f];
 		self.selectedBackgroundView = bgView;
+        
+        self.backgroundColor = [UIColor clearColor];
+        self.contentView.backgroundColor = [UIColor clearColor];
+        self.backgroundView = [[UIView alloc] init];
+        self.backgroundView.backgroundColor = [UIColor clearColor];
 				
 		self.textLabel.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
 		self.textLabel.shadowOffset = CGSizeMake(0, 2);
 		self.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
+        self.textLabel.backgroundColor = [UIColor clearColor];
 		
 		self.imageView.contentMode = UIViewContentModeCenter;
 		
