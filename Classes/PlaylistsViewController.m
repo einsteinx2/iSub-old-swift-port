@@ -121,7 +121,10 @@
 	self.segmentedControl.selectedSegmentIndex = 0;
 	self.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
 	self.segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.segmentedControl.tintColor = [UIColor colorWithWhite:.57 alpha:1];
+    if (IS_IOS7())
+        self.segmentedControl.tintColor = ISMSHeaderColor;
+	else
+        self.segmentedControl.tintColor = [UIColor colorWithWhite:.57 alpha:1];
 	[self.segmentedControl addTarget:self action:@selector(segmentAction:) forControlEvents:UIControlEventValueChanged];
 	[self.headerView addSubview:self.segmentedControl];
 	
@@ -1684,7 +1687,7 @@ static NSString *kName_Error = @"error";
 		if(indexPath.row % 2 == 0)
 			cell.backgroundView.backgroundColor = [UIColor whiteColor];
 		else
-			cell.backgroundView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];			
+			cell.backgroundView.backgroundColor = ISMSHeaderColor;			
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		
 		return cell;		

@@ -171,11 +171,8 @@ LOG_LEVEL_ISUB_DEFAULT
 	{
 		self.ipadRootViewController = [[iPadRootViewController alloc] initWithNibName:nil bundle:nil];
 		[self.window setBackgroundColor:[UIColor clearColor]];
-		//[self.window addSubview:self.ipadRootViewController.view];
         self.window.rootViewController = self.ipadRootViewController;
 		[self.window makeKeyAndVisible];
-		
-        [self.window makeKeyAndVisible];
         
 		if (self.showIntro)
 		{
@@ -186,6 +183,14 @@ LOG_LEVEL_ISUB_DEFAULT
 	}
 	else
 	{
+        if (IS_IOS7())
+        {
+            //[[UITabBar appearance] setBarStyle:UIBarStyleBlack];
+            [[UITabBar appearance] setBarTintColor:[UIColor blackColor]];
+            self.mainTabBarController.tabBar.translucent = NO;
+            self.offlineTabBarController.tabBar.translucent = NO;
+        }
+        
 		// Setup the tabBarController
 		self.mainTabBarController.moreNavigationController.navigationBar.barStyle = UIBarStyleBlack;
 		/*// Add the support tab
@@ -831,10 +836,7 @@ LOG_LEVEL_ISUB_DEFAULT
 {
 	//DLog(@"applicationWillTerminate called");
 	
-	if (IS_MULTITASKING())
-	{
-		[[UIApplication sharedApplication] endReceivingRemoteControlEvents];
-	}
+	[[UIApplication sharedApplication] endReceivingRemoteControlEvents];
 	
 	[settingsS saveState];
 	

@@ -249,13 +249,20 @@
 
 - (UIView *)createCellBackground:(NSUInteger)row
 {
-	UIView *backgroundView = [[UIView alloc] init];
-	if(row % 2 == 0)
-		backgroundView.backgroundColor = self.lightNormal;
-	else
-		backgroundView.backgroundColor = self.darkNormal;
-	
-	return backgroundView;
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7"))
+    {
+        return [[UIView alloc] init];
+    }
+    else
+    {
+        UIView *backgroundView = [[UIView alloc] init];
+        if(row % 2 == 0)
+            backgroundView.backgroundColor = self.lightNormal;
+        else
+            backgroundView.backgroundColor = self.darkNormal;
+        
+        return backgroundView;
+    }
 }
 
 #pragma mark - Memory management
@@ -288,7 +295,7 @@
 	//_darkBlue = [[UIColor colorWithRed:54/255.0 green:142/255.0 blue:188/255.0 alpha:1] retain];
 	
 	_lightNormal = [UIColor whiteColor];
-	_darkNormal = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
+	_darkNormal = ISMSHeaderColor;
 	
 	//_windowColor = [[UIColor colorWithRed:241.0/255.0 green:246.0/255.0 blue:253.0/255.0 alpha:1] retain];
 	//_windowColor = [[UIColor colorWithRed:206.0/255.0 green:211.0/255.0 blue:218.0/255.0 alpha:1] retain];

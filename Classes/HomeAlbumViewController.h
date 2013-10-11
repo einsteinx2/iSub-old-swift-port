@@ -8,7 +8,7 @@
 
 @class ISMSArtist, ISMSAlbum;
 
-@interface HomeAlbumViewController : UITableViewController <ISMSLoaderDelegate>
+@interface HomeAlbumViewController : CustomUITableViewController <ISMSLoaderDelegate>
 
 @property (nonatomic, strong) SUSQuickAlbumsLoader *loader;
 

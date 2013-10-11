@@ -9,7 +9,7 @@
 
 @class EGORefreshTableHeaderView, SUSServerPlaylist;
 
-@interface PlaylistSongsViewController : UITableViewController
+@interface PlaylistSongsViewController : CustomUITableViewController
 
 @property (strong) EGORefreshTableHeaderView *refreshHeaderView;
 @property(nonatomic) BOOL reloading;

@@ -62,16 +62,15 @@
 		playerController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 		playerNavController = [[UINavigationController alloc] initWithRootViewController:playerController];
 		playerNavController.view.frame = CGRectMake(0, 0, 320, 440);
-        playerNavController.navigationBar.tintColor = [UIColor blackColor];
-		//playerNavController.view.bottom = self.view.bottom;
-		//playerNavController.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-		//[self.view addSubview:playerNavController.view];
+        if (IS_IOS7())
+            playerNavController.navigationBar.barTintColor = [UIColor blackColor];
+        else
+            playerNavController.navigationBar.tintColor = [UIColor blackColor];
         [self.playerHolder addSubview:playerNavController.view];
 		
 		// Create the menu
 		[self loadCellContents];
 		tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, UIInterfaceOrientationIsPortrait(self.interfaceOrientation) ? 565. : 585.) style:UITableViewStylePlain];
-	//DLog(@"tableView.frame: %@", NSStringFromCGRect(tableView.frame));
 		tableView.delegate = self;
 		tableView.dataSource = self;
 		tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
@@ -83,15 +82,11 @@
 		UIView *footerView = [self createFooterView];
 		self.tableView.tableHeaderView = headerView;
 		self.tableView.tableFooterView = footerView;
-		
-		[self.view addRightShadowWithWidth:12. alpha:0.5];
-		
+				
 		isFirstLoad = YES;
 		lastSelectedRow = NSIntegerMax;
 	
 		[self.view addSubview:tableView];
-		
-		//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSettings) name:@"show settings" object:nil];
 	}
     return self;
 }

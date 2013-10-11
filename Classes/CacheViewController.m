@@ -127,7 +127,10 @@
 	self.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
 	self.segmentedControl.frame = CGRectMake(5, 5, 310, 36);
 	self.segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.segmentedControl.tintColor = [UIColor colorWithWhite:.57 alpha:1];
+    if (IS_IOS7())
+        self.segmentedControl.tintColor = ISMSHeaderColor;
+	else
+        self.segmentedControl.tintColor = [UIColor colorWithWhite:.57 alpha:1];
 	self.segmentedControl.selectedSegmentIndex = 0;
 	if (settingsS.isOfflineMode) 
 	{
@@ -153,7 +156,7 @@
 		self.playAllLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 160, 50)];
 		self.playAllLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
 		self.playAllLabel.backgroundColor = [UIColor clearColor];
-		self.playAllLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
+		self.playAllLabel.textColor = ISMSHeaderTextColor;
 		self.playAllLabel.textAlignment = UITextAlignmentCenter;
 		self.playAllLabel.font = [UIFont boldSystemFontOfSize:30];
 		self.playAllLabel.text = @"Play All";
@@ -167,7 +170,7 @@
 		
 		self.spacerLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(158, -2, 6, 50)];
 		self.spacerLabel2.backgroundColor = [UIColor clearColor];
-		self.spacerLabel2.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
+		self.spacerLabel2.textColor = ISMSHeaderTextColor;
 		self.spacerLabel2.font = [UIFont systemFontOfSize:40];
 		self.spacerLabel2.text = @"|";
 		self.spacerLabel2.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
@@ -181,7 +184,7 @@
 		self.shuffleLabel = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 160, 50)];
 		self.shuffleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
 		self.shuffleLabel.backgroundColor = [UIColor clearColor];
-		self.shuffleLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
+		self.shuffleLabel.textColor = ISMSHeaderTextColor;
 		self.shuffleLabel.textAlignment = UITextAlignmentCenter;
 		self.shuffleLabel.font = [UIFont boldSystemFontOfSize:30];
 		self.shuffleLabel.text = @"Shuffle";
@@ -808,7 +811,7 @@
 			self.playAllLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 160, 50)];
 			self.playAllLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 			self.playAllLabel.backgroundColor = [UIColor clearColor];
-			self.playAllLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
+			self.playAllLabel.textColor = ISMSHeaderTextColor;
 			self.playAllLabel.textAlignment = UITextAlignmentCenter;
 			self.playAllLabel.font = [UIFont boldSystemFontOfSize:30];
 			self.playAllLabel.text = @"Play All";
@@ -823,7 +826,7 @@
 			self.spacerLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(158, -2, 6, 50)];
 			self.spacerLabel2.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 			self.spacerLabel2.backgroundColor = [UIColor clearColor];
-			self.spacerLabel2.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
+			self.spacerLabel2.textColor = ISMSHeaderTextColor;
 			self.spacerLabel2.font = [UIFont systemFontOfSize:40];
 			self.spacerLabel2.text = @"|";
 			[self.headerView2 addSubview:self.spacerLabel2];
@@ -836,7 +839,7 @@
 			self.shuffleLabel = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 160, 50)];
 			self.shuffleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
 			self.shuffleLabel.backgroundColor = [UIColor clearColor];
-			self.shuffleLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
+			self.shuffleLabel.textColor = ISMSHeaderTextColor;
 			self.shuffleLabel.textAlignment = UITextAlignmentCenter;
 			self.shuffleLabel.font = [UIFont boldSystemFontOfSize:30];
 			self.shuffleLabel.text = @"Shuffle";

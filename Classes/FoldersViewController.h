@@ -10,7 +10,7 @@
 
 @class ISMSArtist, EGORefreshTableHeaderView, FolderDropdownControl, SUSRootFoldersDAO;
 
-@interface FoldersViewController : UITableViewController <UISearchBarDelegate, ISMSLoaderDelegate, FolderDropdownDelegate>
+@interface FoldersViewController : CustomUITableViewController <UISearchBarDelegate, ISMSLoaderDelegate, FolderDropdownDelegate>
 
 @property (nonatomic) BOOL letUserSelectRow;
 @property (nonatomic) BOOL isSearching;

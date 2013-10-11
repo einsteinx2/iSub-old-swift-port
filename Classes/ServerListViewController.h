@@ -8,7 +8,7 @@
 
 @class SettingsTabViewController, HelpTabViewController, PMSLoginLoader;
 
-@interface ServerListViewController : UITableViewController <ISMSLoaderDelegate>
+@interface ServerListViewController : CustomUITableViewController <ISMSLoaderDelegate>
 
 @property (nonatomic) BOOL isEditing;
 @property (nonatomic, strong) UIView *headerView;

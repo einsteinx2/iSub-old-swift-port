@@ -192,7 +192,7 @@
 	if(indexPath.row % 2 == 0)
 		cell.backgroundView.backgroundColor = [UIColor whiteColor];
 	else
-		cell.backgroundView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
+		cell.backgroundView.backgroundColor = ISMSHeaderColor;
 	
 	if (settingsS.isOfflineMode)
 	{

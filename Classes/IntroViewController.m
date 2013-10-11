@@ -49,6 +49,8 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissFast) name:ISMSNotification_EnteringOfflineMode object:nil];
 }
 

@@ -6,7 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@interface CacheViewController : UITableViewController 
+@interface CacheViewController : CustomUITableViewController 
 
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) UIView *headerView2;

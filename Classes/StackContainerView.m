@@ -14,8 +14,8 @@
 {
 	self.userInteractionEnabled = YES;
 
-	[self addLeftShadow];
-	[self addRightShadow];
+	[self addLeftShadowWithWidth:5. alpha:.5];
+	//[self addRightShadowWithWidth:2. alpha:.25];
 }
 
 - (id)init

@@ -10,7 +10,7 @@
 #import "NewHomeViewController.h"
 
 
-@interface ShuffleFolderPickerViewController : UITableViewController 
+@interface ShuffleFolderPickerViewController : CustomUITableViewController 
 
 @property (strong) NSMutableArray *sortedFolders;
 @property (weak) FolderPickerDialog *myDialog;

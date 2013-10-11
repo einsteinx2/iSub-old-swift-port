@@ -8,7 +8,7 @@
 
 @class SUSNowPlayingDAO, EGORefreshTableHeaderView;
 
-@interface PlayingViewController : UITableViewController <ISMSLoaderDelegate>
+@interface PlayingViewController : CustomUITableViewController <ISMSLoaderDelegate>
 
 @property (nonatomic) BOOL isNothingPlayingScreenShowing;
 @property (nonatomic, strong) UIImageView *nothingPlayingScreen;

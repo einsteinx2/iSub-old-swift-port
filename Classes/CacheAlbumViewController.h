@@ -6,7 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@interface CacheAlbumViewController : UITableViewController 
+@interface CacheAlbumViewController : CustomUITableViewController 
 
 @property (nonatomic, strong) NSMutableArray *listOfAlbums;
 @property (nonatomic, strong) NSMutableArray *listOfSongs;

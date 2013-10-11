@@ -438,7 +438,6 @@
 		53159F05156F69D0001B0268 /* NWPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DFB306148C27080066FF94 /* NWPickerView.m */; };
 		53159F09156F69D0001B0268 /* CustomUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398FA4314A44590002808E1 /* CustomUITableViewCell.m */; };
 		53159F0F156F69D0001B0268 /* EqualizerPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306236C14D3295300D320A8 /* EqualizerPathView.m */; };
-		53159F11156F69D0001B0268 /* SeparaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 532B554114D7397000B8AA67 /* SeparaterView.m */; };
 		53159F16156F69D0001B0268 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 5325910014EE22C400DF4BDB /* MBProgressHUD.m */; };
 		53159F19156F69D0001B0268 /* iPadRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5304FC1C14F2F0D100A2AD42 /* iPadRootViewController.m */; };
 		53159F1A156F69D0001B0268 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5304FC1E14F2F0D100A2AD42 /* MenuViewController.m */; };
@@ -532,9 +531,6 @@
 		532B552714D641C500B8AA67 /* ModalAlbumArtViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 532B552614D641C500B8AA67 /* ModalAlbumArtViewController.xib */; };
 		532B552814D641C500B8AA67 /* ModalAlbumArtViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 532B552614D641C500B8AA67 /* ModalAlbumArtViewController.xib */; };
 		532B552914D641C500B8AA67 /* ModalAlbumArtViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 532B552614D641C500B8AA67 /* ModalAlbumArtViewController.xib */; };
-		532B554214D7397000B8AA67 /* SeparaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 532B554114D7397000B8AA67 /* SeparaterView.m */; };
-		532B554314D7397000B8AA67 /* SeparaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 532B554114D7397000B8AA67 /* SeparaterView.m */; };
-		532B554414D7397000B8AA67 /* SeparaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 532B554114D7397000B8AA67 /* SeparaterView.m */; };
 		532D9B43131AE19700FD8CA7 /* CustomUIAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 532D9B42131AE19700FD8CA7 /* CustomUIAlertView.m */; };
 		5332468014D7BDFA008B35F6 /* controller-equalizer-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467B14D7BDFA008B35F6 /* controller-equalizer-ipad.png */; };
 		5332468114D7BDFA008B35F6 /* controller-equalizer-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467B14D7BDFA008B35F6 /* controller-equalizer-ipad.png */; };
@@ -700,6 +696,10 @@
 		534E43B71155659A000B4134 /* AlbumUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 534E43B61155659A000B4134 /* AlbumUITableViewCell.m */; };
 		534E443F1155AD01000B4134 /* default-album-art-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 534E443E1155AD01000B4134 /* default-album-art-small.png */; };
 		534E44711155B106000B4134 /* SongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 534E44701155B106000B4134 /* SongUITableViewCell.m */; };
+		53500EC118064EED00D0A490 /* CustomUITableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53500EC018064EED00D0A490 /* CustomUITableViewController.m */; };
+		53500EC218064EED00D0A490 /* CustomUITableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53500EC018064EED00D0A490 /* CustomUITableViewController.m */; };
+		53500EC318064EED00D0A490 /* CustomUITableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53500EC018064EED00D0A490 /* CustomUITableViewController.m */; };
+		53500EC418064EED00D0A490 /* CustomUITableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53500EC018064EED00D0A490 /* CustomUITableViewController.m */; };
 		53523D8A11CD580D006AEA48 /* GenresAlbumUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53523D8711CD580D006AEA48 /* GenresAlbumUITableViewCell.m */; };
 		53523D8B11CD580D006AEA48 /* GenresArtistUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53523D8911CD580D006AEA48 /* GenresArtistUITableViewCell.m */; };
 		53523D8F11CD5889006AEA48 /* GenresAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53523D8D11CD5889006AEA48 /* GenresAlbumViewController.m */; };
@@ -1946,8 +1946,6 @@
 		532862DA11C573AD00B40FF0 /* UAApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UAApplication.m; sourceTree = "<group>"; };
 		532B227A156F762100C72D1B /* GHUnitIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GHUnitIOS.framework; path = Frameworks/GHUnitIOS.framework; sourceTree = "<group>"; };
 		532B552614D641C500B8AA67 /* ModalAlbumArtViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ModalAlbumArtViewController.xib; sourceTree = "<group>"; };
-		532B554014D7397000B8AA67 /* SeparaterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SeparaterView.h; sourceTree = "<group>"; };
-		532B554114D7397000B8AA67 /* SeparaterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SeparaterView.m; sourceTree = "<group>"; };
 		532D9B41131AE19700FD8CA7 /* CustomUIAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomUIAlertView.h; sourceTree = "<group>"; };
 		532D9B42131AE19700FD8CA7 /* CustomUIAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomUIAlertView.m; sourceTree = "<group>"; };
 		5332467B14D7BDFA008B35F6 /* controller-equalizer-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-equalizer-ipad.png"; path = "Images/Player Icons/controller-equalizer-ipad.png"; sourceTree = "<group>"; };
@@ -2033,6 +2031,8 @@
 		534E443E1155AD01000B4134 /* default-album-art-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art-small.png"; path = "Images/Other/default-album-art-small.png"; sourceTree = "<group>"; };
 		534E446F1155B106000B4134 /* SongUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SongUITableViewCell.h; sourceTree = "<group>"; };
 		534E44701155B106000B4134 /* SongUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongUITableViewCell.m; sourceTree = "<group>"; };
+		53500EBF18064EED00D0A490 /* CustomUITableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomUITableViewController.h; sourceTree = "<group>"; };
+		53500EC018064EED00D0A490 /* CustomUITableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomUITableViewController.m; sourceTree = "<group>"; };
 		53523D8611CD580D006AEA48 /* GenresAlbumUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenresAlbumUITableViewCell.h; sourceTree = "<group>"; };
 		53523D8711CD580D006AEA48 /* GenresAlbumUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenresAlbumUITableViewCell.m; sourceTree = "<group>"; };
 		53523D8811CD580D006AEA48 /* GenresArtistUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenresArtistUITableViewCell.h; sourceTree = "<group>"; };
@@ -2784,6 +2784,8 @@
 		533A207B12887EA300539BAE /* Table Cells */ = {
 			isa = PBXGroup;
 			children = (
+				53500EBF18064EED00D0A490 /* CustomUITableViewController.h */,
+				53500EC018064EED00D0A490 /* CustomUITableViewController.m */,
 				5348A59911879C3A0078994D /* CustomUITableView.h */,
 				5348A59A11879C3A0078994D /* CustomUITableView.m */,
 				5398FA4214A4458F002808E1 /* CustomUITableViewCell.h */,
@@ -3015,8 +3017,6 @@
 		539797F01162CE4B00F41D8B /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				532B554014D7397000B8AA67 /* SeparaterView.h */,
-				532B554114D7397000B8AA67 /* SeparaterView.m */,
 				530AB2C512713F4B002981DB /* iPad */,
 				533A207B12887EA300539BAE /* Table Cells */,
 				53F4A070116FF44400BB8411 /* Player */,
@@ -4872,6 +4872,7 @@
 				5348A59B11879C3A0078994D /* CustomUITableView.m in Sources */,
 				5311F5D51194DCEE009ACE8E /* ArtistUITableViewCell.m in Sources */,
 				53049CBF119617660098582B /* AllSongsUITableViewCell.m in Sources */,
+				53500EC118064EED00D0A490 /* CustomUITableViewController.m in Sources */,
 				536F9F3D1197B0B9002E526A /* CurrentPlaylistSongUITableViewCell.m in Sources */,
 				5388A2F01198741E0049BA9E /* LocalPlaylistsUITableViewCell.m in Sources */,
 				5388A3B4119899260049BA9E /* BookmarksViewController.m in Sources */,
@@ -4932,7 +4933,6 @@
 				53DFB310148C27080066FF94 /* NWPickerView.m in Sources */,
 				5398FA4414A44591002808E1 /* CustomUITableViewCell.m in Sources */,
 				5306236D14D3295300D320A8 /* EqualizerPathView.m in Sources */,
-				532B554214D7397000B8AA67 /* SeparaterView.m in Sources */,
 				5325910114EE22C700DF4BDB /* MBProgressHUD.m in Sources */,
 				5304FC2D14F2F0D100A2AD42 /* iPadRootViewController.m in Sources */,
 				5304FC3014F2F0D100A2AD42 /* MenuViewController.m in Sources */,
@@ -5027,6 +5027,7 @@
 				53159ED7156F69D0001B0268 /* PagingScrollView.m in Sources */,
 				53159ED8156F69D0001B0268 /* ShuffleFolderPickerViewController.m in Sources */,
 				53159ED9156F69D0001B0268 /* PlaylistSongsViewController.m in Sources */,
+				53500EC418064EED00D0A490 /* CustomUITableViewController.m in Sources */,
 				53159EFC156F69D0001B0268 /* EqualizerViewController.m in Sources */,
 				53159EFD156F69D0001B0268 /* EqualizerView.m in Sources */,
 				53159F02156F69D0001B0268 /* EqualizerPointView.m in Sources */,
@@ -5035,7 +5036,6 @@
 				53159F05156F69D0001B0268 /* NWPickerView.m in Sources */,
 				53159F09156F69D0001B0268 /* CustomUITableViewCell.m in Sources */,
 				53159F0F156F69D0001B0268 /* EqualizerPathView.m in Sources */,
-				53159F11156F69D0001B0268 /* SeparaterView.m in Sources */,
 				53159F16156F69D0001B0268 /* MBProgressHUD.m in Sources */,
 				53159F19156F69D0001B0268 /* iPadRootViewController.m in Sources */,
 				53159F1A156F69D0001B0268 /* MenuViewController.m in Sources */,
@@ -5087,6 +5087,7 @@
 				53BC27BD139AF0DD00A825F1 /* CustomUITableView.m in Sources */,
 				53BC27C0139AF0DD00A825F1 /* ArtistUITableViewCell.m in Sources */,
 				53BC27C1139AF0DD00A825F1 /* AllSongsUITableViewCell.m in Sources */,
+				53500EC318064EED00D0A490 /* CustomUITableViewController.m in Sources */,
 				53BC27C2139AF0DD00A825F1 /* CurrentPlaylistSongUITableViewCell.m in Sources */,
 				53BC27C3139AF0DD00A825F1 /* LocalPlaylistsUITableViewCell.m in Sources */,
 				53BC27C4139AF0DD00A825F1 /* BookmarksViewController.m in Sources */,
@@ -5147,7 +5148,6 @@
 				53DFB312148C27080066FF94 /* NWPickerView.m in Sources */,
 				5398FA4614A44591002808E1 /* CustomUITableViewCell.m in Sources */,
 				5306236F14D3295300D320A8 /* EqualizerPathView.m in Sources */,
-				532B554414D7397000B8AA67 /* SeparaterView.m in Sources */,
 				5325910314EE22C700DF4BDB /* MBProgressHUD.m in Sources */,
 				5304FC2F14F2F0D100A2AD42 /* iPadRootViewController.m in Sources */,
 				5304FC3214F2F0D100A2AD42 /* MenuViewController.m in Sources */,
@@ -5190,6 +5190,7 @@
 				53DCF51E13BFEAD3009160F9 /* CustomUITableView.m in Sources */,
 				53DCF52113BFEAD3009160F9 /* ArtistUITableViewCell.m in Sources */,
 				53DCF52213BFEAD3009160F9 /* AllSongsUITableViewCell.m in Sources */,
+				53500EC218064EED00D0A490 /* CustomUITableViewController.m in Sources */,
 				53DCF52313BFEAD3009160F9 /* CurrentPlaylistSongUITableViewCell.m in Sources */,
 				53DCF52413BFEAD3009160F9 /* LocalPlaylistsUITableViewCell.m in Sources */,
 				53DCF52513BFEAD3009160F9 /* BookmarksViewController.m in Sources */,
@@ -5250,7 +5251,6 @@
 				53DFB311148C27080066FF94 /* NWPickerView.m in Sources */,
 				5398FA4514A44591002808E1 /* CustomUITableViewCell.m in Sources */,
 				5306236E14D3295300D320A8 /* EqualizerPathView.m in Sources */,
-				532B554314D7397000B8AA67 /* SeparaterView.m in Sources */,
 				5325910214EE22C700DF4BDB /* MBProgressHUD.m in Sources */,
 				5304FC2E14F2F0D100A2AD42 /* iPadRootViewController.m in Sources */,
 				5304FC3114F2F0D100A2AD42 /* MenuViewController.m in Sources */,

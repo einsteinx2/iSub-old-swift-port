@@ -72,7 +72,10 @@
 	[self.segmentedControl addTarget:self action:@selector(segmentAction:) forControlEvents:UIControlEventValueChanged];
 	self.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
 	self.segmentedControl.frame = CGRectMake(5, 2, 310, 36);
-	self.segmentedControl.tintColor = [UIColor colorWithWhite:.57 alpha:1];
+    if (IS_IOS7())
+        self.segmentedControl.tintColor = ISMSHeaderColor;
+	else
+        self.segmentedControl.tintColor = [UIColor colorWithWhite:.57 alpha:1];
 	self.segmentedControl.selectedSegmentIndex = 0;
 	[self.headerView addSubview:self.segmentedControl];
 	

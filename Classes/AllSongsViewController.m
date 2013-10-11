@@ -69,7 +69,7 @@
 	
 	// Add the pull to refresh view
 	self.refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
-	self.refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
+	self.refreshHeaderView.backgroundColor = [UIColor whiteColor];
 	[self.tableView addSubview:self.refreshHeaderView];
 	
 	if (IS_IPAD())
@@ -146,7 +146,7 @@
 {
 	// Build the search and reload view
 	self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 90)];
-	self.headerView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
+	self.headerView.backgroundColor = ISMSHeaderColor;
 	
 	self.reloadButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	self.reloadButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -157,7 +157,7 @@
 	self.countLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, 320, 30)];
 	self.countLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.countLabel.backgroundColor = [UIColor clearColor];
-	self.countLabel.textColor = [UIColor colorWithRed:156.0/255.0 green:161.0/255.0 blue:168.0/255.0 alpha:1];
+	self.countLabel.textColor = [UIColor blackColor];
 	self.countLabel.textAlignment = UITextAlignmentCenter;
 	self.countLabel.font = [UIFont boldSystemFontOfSize:30];
 	[self.headerView addSubview:self.countLabel];

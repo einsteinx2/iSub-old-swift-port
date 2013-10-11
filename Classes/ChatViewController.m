@@ -11,7 +11,6 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "EGORefreshTableHeaderView.h"
-#import "SeparaterView.h"
 
 @interface ChatViewController (Private)
 - (void)dataSourceDidFinishLoadingNewData;
@@ -82,6 +81,12 @@
 {
     [super viewDidLoad];
 	
+    if (IS_IOS7())
+    {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
+    
 	self.isNoChatMessagesScreenShowing = NO;
 	
 	self.tableView.separatorColor = [UIColor clearColor];
@@ -91,11 +96,7 @@
 	// Create text input box in header
 	self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 82)];
 	self.headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.headerView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
-	
-	CGRect sepFrame = CGRectMake(0, 0, self.headerView.bounds.size.width, 2);
-	SeparaterView *sepView = [[SeparaterView alloc] initWithFrame:sepFrame];
-	[self.headerView addSubview:sepView];
+	self.headerView.backgroundColor = ISMSHeaderColor;
 	
 	self.textInput = [[CustomUITextView alloc] initWithFrame:CGRectMake(5, 5, 240, 72)];
 	self.textInput.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -115,7 +116,7 @@
 
 	// Add the pull to refresh view
 	self.refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
-	self.refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
+	self.refreshHeaderView.backgroundColor = [UIColor whiteColor];
 	[self.tableView addSubview:self.refreshHeaderView];
 	
 	if (IS_IPAD())

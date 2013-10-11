@@ -6,7 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@interface GenresAlbumViewController : UITableViewController 
+@interface GenresAlbumViewController : CustomUITableViewController 
 
 @property (strong) NSMutableArray *listOfAlbums;
 @property (strong) NSMutableArray *listOfSongs;

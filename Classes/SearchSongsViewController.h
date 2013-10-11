@@ -19,7 +19,7 @@ typedef enum {
 	ISMSSearchSongsSearchType_Songs
 } ISMSSearchSongsSearchType;
 
-@interface SearchSongsViewController : UITableViewController 
+@interface SearchSongsViewController : CustomUITableViewController 
 
 @property (copy) NSString *query;
 @property ISMSSearchSongsSearchType searchType;

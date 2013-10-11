@@ -61,7 +61,7 @@
 			UILabel *sendLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 320, 50)];
 			sendLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 			sendLabel.backgroundColor = [UIColor clearColor];
-			sendLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
+			sendLabel.textColor = ISMSHeaderTextColor;
 			sendLabel.textAlignment = UITextAlignmentCenter;
 			sendLabel.font = [UIFont boldSystemFontOfSize:30];
 			sendLabel.text = @"Save to Server";
@@ -89,7 +89,7 @@
 		
 		// Add the pull to refresh view
 		self.refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
-		self.refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
+		self.refreshHeaderView.backgroundColor = [UIColor whiteColor];
 		[self.tableView addSubview:refreshHeaderView];
 	}
 	

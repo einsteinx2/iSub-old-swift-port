@@ -138,7 +138,7 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 
 
 - (void)handlePanFrom:(UIPanGestureRecognizer *)recognizer
-{
+{    
     if (!self.isSlidingEnabled)
         return;
     

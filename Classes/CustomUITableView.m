@@ -25,9 +25,15 @@
 - (void)setup
 {
 	lastDeleteToggle = [NSDate date];
+    
+    if (IS_IOS7())
+    {
+        self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        self.sectionIndexBackgroundColor = [UIColor clearColor];
+    }
 }
 
-- (id)initWithFrame:(CGRect)frame 
+- (id)initWithFrame:(CGRect)frame
 {
     if ((self = [super initWithFrame:frame])) 
 	{		
@@ -44,7 +50,6 @@
 	}
 	return self;
 }
-
 
 #pragma mark Touch gestures interception
 

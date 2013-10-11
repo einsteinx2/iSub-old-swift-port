@@ -8,7 +8,7 @@
 
 
 
-@interface SearchAllViewController : UITableViewController 
+@interface SearchAllViewController : CustomUITableViewController 
 
 @property (strong) NSMutableArray *cellNames;
 @property (strong) NSArray *listOfArtists;

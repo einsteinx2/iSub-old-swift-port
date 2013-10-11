@@ -6,7 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@interface CurrentPlaylistViewController : UITableViewController 
+@interface CurrentPlaylistViewController : CustomUITableViewController 
 
 @property (strong) UIView *headerView;
 @property (strong) UILabel *savePlaylistLabel;

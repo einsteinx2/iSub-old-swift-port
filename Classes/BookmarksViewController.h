@@ -6,7 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@interface BookmarksViewController : UITableViewController
+@interface BookmarksViewController : CustomUITableViewController
 
 @property (nonatomic) BOOL isNoBookmarksScreenShowing;
 @property (nonatomic, strong) UIImageView *noBookmarksScreen;

@@ -26,10 +26,10 @@
 		_folders = [SUSRootFoldersDAO folderDropdownFolders];
 		_labels = [[NSMutableArray alloc] init];
 		_isOpen = NO;
-		_borderColor = [[UIColor alloc] initWithRed:156.0/255.0 green:161.0/255.0 blue:168.0/255.0 alpha:1];
-		_textColor   = [[UIColor alloc] initWithRed:106.0/255.0 green:111.0/255.0 blue:118.0/255.0 alpha:1];
-		_lightColor  = [[UIColor alloc] initWithRed:206.0/255.0 green:211.0/255.0 blue:218.0/255.0 alpha:1];
-		_darkColor   = [[UIColor alloc] initWithRed:196.0/255.0 green:201.0/255.0 blue:208.0/255.0 alpha:1];
+		_borderColor = ISMSHeaderTextColor;
+		_textColor   = ISMSHeaderTextColor;
+		_lightColor  = [UIColor whiteColor];
+		_darkColor   = [UIColor whiteColor];
 		
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		self.userInteractionEnabled = YES;

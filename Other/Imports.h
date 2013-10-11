@@ -18,5 +18,6 @@
 #import "AsynchronousImageViewDelegate.h"
 #import "CustomUIAlertView.h"
 #import "CustomUITextView.h"
+#import "CustomUITableViewController.h"
 
 #endif

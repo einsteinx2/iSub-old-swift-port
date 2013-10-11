@@ -88,7 +88,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 		
 	// Add the play all button + shuffle button
 	UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
-	headerView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
+	headerView.backgroundColor = ISMSHeaderColor;
 	
 	UIImageView *playAllImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play-all-note.png"]];
 	playAllImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
@@ -98,7 +98,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	UILabel *playAllLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 160, 50)];
 	playAllLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 	playAllLabel.backgroundColor = [UIColor clearColor];
-	playAllLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
+	playAllLabel.textColor = ISMSHeaderTextColor;
 	playAllLabel.textAlignment = UITextAlignmentCenter;
 	playAllLabel.font = [UIFont boldSystemFontOfSize:30];
 	playAllLabel.text = @"Play All";
@@ -113,7 +113,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	UILabel *spacerLabel = [[UILabel alloc] initWithFrame:CGRectMake(158, -2, 6, 50)];
 	spacerLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 	spacerLabel.backgroundColor = [UIColor clearColor];
-	spacerLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
+	spacerLabel.textColor = ISMSHeaderTextColor;
 	spacerLabel.font = [UIFont systemFontOfSize:40];
 	spacerLabel.text = @"|";
 	[headerView addSubview:spacerLabel];
@@ -126,7 +126,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	UILabel *shuffleLabel = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 160, 50)];
 	shuffleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
 	shuffleLabel.backgroundColor = [UIColor clearColor];
-	shuffleLabel.textColor = [UIColor colorWithRed:186.0/255.0 green:191.0/255.0 blue:198.0/255.0 alpha:1];
+	shuffleLabel.textColor = ISMSHeaderTextColor;
 	shuffleLabel.textAlignment = UITextAlignmentCenter;
 	shuffleLabel.font = [UIFont boldSystemFontOfSize:30];
 	shuffleLabel.text = @"Shuffle";
@@ -503,7 +503,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 		if(indexPath.row % 2 == 0)
 			cell.backgroundView.backgroundColor = [UIColor whiteColor];
 		else
-			cell.backgroundView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];		
+			cell.backgroundView.backgroundColor = ISMSHeaderColor;		
 		
 		return cell;
 	}
@@ -547,7 +547,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 		if(indexPath.row % 2 == 0)
 			cell.backgroundView.backgroundColor = [UIColor whiteColor];
 		else
-			cell.backgroundView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];		
+			cell.backgroundView.backgroundColor = ISMSHeaderColor;		
 		
 		return cell;
 	}

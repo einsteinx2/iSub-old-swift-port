@@ -9,7 +9,7 @@
 
 @class BBSimpleConnectionQueue, SUSServerPlaylistsDAO;
 
-@interface PlaylistsViewController : UITableViewController <EX2SimpleConnectionQueueDelegate, ISMSLoaderDelegate>
+@interface PlaylistsViewController : CustomUITableViewController <EX2SimpleConnectionQueueDelegate, ISMSLoaderDelegate>
 
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) UISegmentedControl *segmentedControl;

@@ -60,6 +60,11 @@
 @synthesize menuViewController, stackScrollViewController;
 @synthesize rootView, leftMenuView, rightSlideView;
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
@@ -101,6 +106,13 @@
 	self.view.backgroundColor = [[UIColor scrollViewTexturedBackgroundColor] colorWithAlphaComponent:0.7];
 	//self.view.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
 	[self.view addSubview:rootView];
+    
+    // On iOS 7, don't let the status bar text cover the content
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7"))
+    {
+        self.rootView.height -= 20.;
+        self.rootView.y += 20.;
+    }
 }
 
 - (BOOL)shouldAutorotate

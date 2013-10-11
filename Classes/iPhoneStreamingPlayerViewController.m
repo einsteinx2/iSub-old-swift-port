@@ -67,6 +67,12 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
+    
+    if (IS_IOS7())
+    {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
 	
     //DLog(@"coverArtImageView class: %@", NSStringFromClass(coverArtImageView.class));
 	
@@ -212,9 +218,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
-	
-	//[UIApplication setStatusBarHidden:NO withAnimation:NO];
-	
+		
 	if (settingsS.isJukeboxEnabled)
 	{
 		[jukeboxS jukeboxGetInfo];
@@ -230,21 +234,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	{
 		[self createSongTitle];
 	}
-	
-	/*if (!IS_IPAD())
-	{
-		if (animated)
-		{
-			[UIApplication setStatusBarHidden:YES withAnimation:YES];
-			[UIView beginAnimations:nil context:nil];
-			[UIView setAnimationDuration:0.3];
-		}
-		
-		self.navigationController.navigationBar.y = 0;
-			 
-		if (animated)
-			 [UIView commitAnimations];
-	}*/
 	
 	[self updateDownloadProgress];
 	[self updateSlider];
@@ -283,13 +272,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 - (void)viewWillDisappear:(BOOL)animated
 {
 	[super viewWillDisappear:animated];
-	
-	/*if (!IS_IPAD())
-	{
-		//[self.navigationController setWantsFullScreenLayout:NO];
-		[UIApplication setStatusBarHidden:NO withAnimation:YES];
-		self.navigationController.navigationBar.y = 20;
-	}*/
 	
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	if (!settingsS.isExtraPlayerControlsShowing)

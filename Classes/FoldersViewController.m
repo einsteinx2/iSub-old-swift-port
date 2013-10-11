@@ -14,7 +14,6 @@
 #import "EGORefreshTableHeaderView.h"
 #import <QuartzCore/QuartzCore.h>
 #import "FolderDropdownControl.h"
-#import "SeparaterView.h"
 #import "UIViewController+PushViewControllerCustom.h"
 
 @interface FoldersViewController (Private)
@@ -77,7 +76,7 @@
 		
 	// Add the pull to refresh view
 	self.refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
-	self.refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
+	self.refreshHeaderView.backgroundColor = [UIColor whiteColor];
 	[self.tableView addSubview:self.refreshHeaderView];
 	
 	if (IS_IPAD())
@@ -175,11 +174,7 @@
 	
 	self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 126)];
 	self.headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.headerView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:238.0/255.0 alpha:1];
-	
-	CGRect sepFrame = CGRectMake(0, 0, self.headerView.bounds.size.width, 2);
-	SeparaterView *sepView = [[SeparaterView alloc] initWithFrame:sepFrame];
-	[self.headerView addSubview:sepView];
+	self.headerView.backgroundColor = ISMSHeaderColor;
 	
     // This is a hack to prevent unwanted taps in the header, but it messes with voice over
 	if (!UIAccessibilityIsVoiceOverRunning())
@@ -193,7 +188,7 @@
 	self.countLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, 320, 30)];
 	self.countLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.countLabel.backgroundColor = [UIColor clearColor];
-	self.countLabel.textColor = [UIColor colorWithRed:156.0/255.0 green:161.0/255.0 blue:168.0/255.0 alpha:1];
+	self.countLabel.textColor = ISMSHeaderTextColor;
 	self.countLabel.textAlignment = UITextAlignmentCenter;
 	self.countLabel.font = [UIFont boldSystemFontOfSize:30];
 	[self.headerView addSubview:self.countLabel];
@@ -201,7 +196,7 @@
 	self.reloadTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 36, 320, 12)];
 	self.reloadTimeLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.reloadTimeLabel.backgroundColor = [UIColor clearColor];
-	self.reloadTimeLabel.textColor = [UIColor colorWithRed:176.0/255.0 green:181.0/255.0 blue:188.0/255.0 alpha:1];
+	self.reloadTimeLabel.textColor = ISMSHeaderTextColor;
 	self.reloadTimeLabel.textAlignment = UITextAlignmentCenter;
 	self.reloadTimeLabel.font = [UIFont systemFontOfSize:11];
 	[self.headerView addSubview:self.reloadTimeLabel];

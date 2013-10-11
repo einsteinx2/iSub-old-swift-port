@@ -11,7 +11,12 @@
 
 #define ISMSJukeboxTimeout 60.0
 
-#define ISMSiPadBackgroundColor [UIColor colorWithPatternImage:[UIImage imageNamed:@"underPageBackground.png"]]
+#define ISMSHeaderColor [UIColor colorWithRedInt:200 greenInt:200 blueInt:206 alpha:1]
+#define ISMSHeaderTextColor [UIColor colorWithRedInt:77 greenInt:77 blueInt:77 alpha:1]
+
+#define ISMSiPadBackgroundColor [UIColor colorWithRedInt:200 greenInt:200 blueInt:206 alpha:1]
 #define ISMSiPadCornerRadius 5.
+
+#define ISMSiPhoneBackgroundColor 
 
 #endif
