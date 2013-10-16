@@ -14,7 +14,5 @@
 #import "AsynchronousImageViewDelegate.h"
 #import "AsynchronousImageView.h"
 #import "LoadingScreen.h"
-#import "CustomUITabBarController.h"
-#import "MoreTableViewDataSource.h"
 
 #endif
