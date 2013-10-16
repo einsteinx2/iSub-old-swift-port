@@ -617,22 +617,16 @@
 	cell.isSearching = self.isSearching;
 	
 	cell.coverArtView.coverArtId = aSong.coverArtId;
-	
-	cell.backgroundView = [[UIView alloc] init];
-	if(indexPath.row % 2 == 0)
-	{
-		if (aSong.isFullyCached)
-			cell.backgroundView.backgroundColor = [viewObjectsS currentLightColor];
-		else
-			cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
-	}
-	else
-	{
-		if (aSong.isFullyCached)
-			cell.backgroundView.backgroundColor = [viewObjectsS currentDarkColor];
-		else
-			cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
-	}
+    
+    if (aSong.isFullyCached)
+    {
+        cell.backgroundView = [[UIView alloc] init];
+        cell.backgroundView.backgroundColor = [viewObjectsS currentLightColor];
+    }
+    else
+    {
+        cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
+    }
 	
 	[cell.songNameLabel setText:aSong.title];
 	if (aSong.album)

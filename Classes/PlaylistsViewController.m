@@ -1604,21 +1604,15 @@ static NSString *kName_Error = @"error";
 		else
 			cell.artistNameLabel.text = aSong.artist;
 		
-		cell.backgroundView = [[UIView alloc] init];
-		if(indexPath.row % 2 == 0)
-		{
-			if ([databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
-				cell.backgroundView.backgroundColor = [viewObjectsS currentLightColor];
-			else
-				cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
-		}
-		else
-		{
-			if ([databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
-				cell.backgroundView.backgroundColor = [viewObjectsS currentDarkColor];
-			else
-				cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
-		}
+        if (aSong.isFullyCached)
+        {
+            cell.backgroundView = [[UIView alloc] init];
+            cell.backgroundView.backgroundColor = [viewObjectsS currentLightColor];
+        }
+        else
+        {
+            cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
+        }
 		
 		return cell;
 	}
@@ -1652,11 +1646,7 @@ static NSString *kName_Error = @"error";
 		{
 			cell.playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", cell.playlistCount];
 		}
-		cell.backgroundView = [[UIView alloc] init];
-		if(indexPath.row % 2 == 0)
-			cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
-		else
-			cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;				
+		cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		
 		return cell;
@@ -1683,11 +1673,7 @@ static NSString *kName_Error = @"error";
 		cell.playlistNameLabel.backgroundColor = [UIColor clearColor];
         SUSServerPlaylist *playlist = [self.serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];        
         cell.playlistNameLabel.text = playlist.playlistName;
-		cell.backgroundView = [[UIView alloc] init];
-		if(indexPath.row % 2 == 0)
-			cell.backgroundView.backgroundColor = [UIColor whiteColor];
-		else
-			cell.backgroundView.backgroundColor = ISMSHeaderColor;			
+		cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];		
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		
 		return cell;		

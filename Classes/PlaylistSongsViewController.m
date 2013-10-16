@@ -424,21 +424,15 @@ static NSString *kName_Error = @"error";
 	
 	cell.coverArtView.coverArtId = aSong.coverArtId;
 	
-	cell.backgroundView = [[UIView alloc] init];
-	if(indexPath.row % 2 == 0)
-	{
-		if ([databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
-			cell.backgroundView.backgroundColor = [viewObjectsS currentLightColor];
-		else
-			cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
-	}
-	else
-	{
-		if ([databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", [aSong.path md5]] != nil)
-			cell.backgroundView.backgroundColor = [viewObjectsS currentDarkColor];
-		else
-			cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
-	}
+    if (aSong.isFullyCached)
+    {
+        cell.backgroundView = [[UIView alloc] init];
+        cell.backgroundView.backgroundColor = [viewObjectsS currentLightColor];
+    }
+    else
+    {
+        cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
+    }
 	
 	[cell.numberLabel setText:[NSString stringWithFormat:@"%i", (indexPath.row + 1)]];
 	[cell.songNameLabel setText:aSong.title];

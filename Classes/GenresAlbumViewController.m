@@ -353,11 +353,7 @@
 		
 		cell.coverArtView.coverArtId = coverArtId;
 		
-		cell.backgroundView = [[UIView alloc] init];
-		if(indexPath.row % 2 == 0)
-			cell.backgroundView.backgroundColor = [UIColor whiteColor];
-		else
-			cell.backgroundView.backgroundColor = ISMSHeaderColor;		
+		cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
 		
 		return cell;
 	}
@@ -397,34 +393,21 @@
 		else
 			cell.songDurationLabel.text = @"";
 		
-		cell.backgroundView = [[UIView alloc] init];
 		if (settingsS.isOfflineMode)
 		{
-			if(indexPath.row % 2 == 0)
-			{
-				cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
-			}
-			else
-			{
-				cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
-			}	
+			cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
 		}
 		else
 		{
-			if(indexPath.row % 2 == 0)
-			{
-				if ([databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", cell.md5] != nil)
-					cell.backgroundView.backgroundColor = [viewObjectsS currentLightColor];
-				else
-					cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
-			}
-			else
-			{
-				if ([databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ? and finished = 'YES'", cell.md5] != nil)
-					cell.backgroundView.backgroundColor = [viewObjectsS currentDarkColor];
-				else
-					cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
-			}
+			if (aSong.isFullyCached)
+            {
+                cell.backgroundView = [[UIView alloc] init];
+                cell.backgroundView.backgroundColor = [viewObjectsS currentLightColor];
+            }
+            else
+            {
+                cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
+            }
 		}
 		
 		return cell;

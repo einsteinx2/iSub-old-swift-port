@@ -271,11 +271,7 @@
 			
 			
 			// Setup cell backgrond color
-			cell.backgroundView = [[UIView alloc] init];
-			if(indexPath.row % 2 == 0)
-				cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
-			else
-				cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
+			cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
 			
 			return cell;
 		}

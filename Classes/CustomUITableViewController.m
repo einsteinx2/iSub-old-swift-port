@@ -16,6 +16,12 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jukeboxToggled) name:ISMSNotification_JukeboxEnabled object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jukeboxToggled) name:ISMSNotification_JukeboxDisabled object:nil];
+    
+    if (SYSTEM_VERSION_LESS_THAN(@"7"))
+    {
+        self.navigationController.navigationBar.translucent = NO;
+        self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated

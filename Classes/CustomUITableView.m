@@ -25,10 +25,10 @@
 - (void)setup
 {
 	lastDeleteToggle = [NSDate date];
+    self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     
     if (IS_IOS7())
     {
-        self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         self.sectionIndexBackgroundColor = [UIColor clearColor];
     }
 }

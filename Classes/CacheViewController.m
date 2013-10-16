@@ -1358,11 +1358,7 @@
 		// Set up the cell...
 		[cell.artistNameLabel setText:name];
 		
-		cell.backgroundView = [[UIView alloc] init];
-		if(indexPath.row % 2 == 0)
-			cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
-		else
-			cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
+		cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
 		
 		return cell;
 	}
@@ -1397,11 +1393,7 @@
 		
 		cell.coverArtView.coverArtId = aSong.coverArtId;
 		
-		cell.backgroundView = [[UIView alloc] init];
-		if(indexPath.row % 2 == 0)
-			cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
-		else
-			cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
+		cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
 		
 		if (indexPath.row == 0)
 		{

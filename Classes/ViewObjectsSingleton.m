@@ -249,18 +249,14 @@
 
 - (UIView *)createCellBackground:(NSUInteger)row
 {
-    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7"))
+    if (IS_IOS7())
     {
         return [[UIView alloc] init];
     }
     else
     {
         UIView *backgroundView = [[UIView alloc] init];
-        if(row % 2 == 0)
-            backgroundView.backgroundColor = self.lightNormal;
-        else
-            backgroundView.backgroundColor = self.darkNormal;
-        
+        backgroundView.backgroundColor = self.lightNormal;
         return backgroundView;
     }
 }

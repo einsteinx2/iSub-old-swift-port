@@ -178,11 +178,7 @@
 	cell.coverArtView.coverArtId = aSong.coverArtId;
 	
 	// Create the background view
-	cell.backgroundView = [[UIView alloc] init];
-	if(indexPath.row % 2 == 0)
-		cell.backgroundView.backgroundColor = viewObjectsS.lightNormal;
-	else
-		cell.backgroundView.backgroundColor = viewObjectsS.darkNormal;
+	cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
 	
 	// Set the title label
 	NSString *playTime = [self.dataModel playTimeForIndex:indexPath.row];

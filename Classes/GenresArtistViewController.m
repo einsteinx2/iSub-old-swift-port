@@ -325,12 +325,9 @@
 	NSString *name = [listOfArtists objectAtIndexSafe:indexPath.row];
 	
 	[cell.artistNameLabel setText:name];
-	cell.backgroundView = [[UIView alloc] init];
-	if(indexPath.row % 2 == 0)
-		cell.backgroundView.backgroundColor = [UIColor whiteColor];
-	else
-		cell.backgroundView.backgroundColor = ISMSHeaderColor;		
-	
+    
+    cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
+    
 	return cell;
 }
 

@@ -499,12 +499,8 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 		}
 		
 		[cell.albumNameLabel setText:name];
-		cell.backgroundView = [[UIView alloc] init];
-		if(indexPath.row % 2 == 0)
-			cell.backgroundView.backgroundColor = [UIColor whiteColor];
-		else
-			cell.backgroundView.backgroundColor = ISMSHeaderColor;		
-		
+		cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
+        
 		return cell;
 	}
 	else
@@ -543,11 +539,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 		else
 			cell.songDurationLabel.text = @"";
 		
-		cell.backgroundView = [[UIView alloc] init];
-		if(indexPath.row % 2 == 0)
-			cell.backgroundView.backgroundColor = [UIColor whiteColor];
-		else
-			cell.backgroundView.backgroundColor = ISMSHeaderColor;		
+		cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];	
 		
 		return cell;
 	}

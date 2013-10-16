@@ -185,7 +185,6 @@ LOG_LEVEL_ISUB_DEFAULT
 	{
         if (IS_IOS7())
         {
-            //[[UITabBar appearance] setBarStyle:UIBarStyleBlack];
             [[UITabBar appearance] setBarTintColor:[UIColor blackColor]];
             self.mainTabBarController.tabBar.translucent = NO;
             self.offlineTabBarController.tabBar.translucent = NO;
