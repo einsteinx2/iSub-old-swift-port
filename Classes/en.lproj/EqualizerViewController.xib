@@ -13,7 +13,7 @@
                 <outlet property="gainBoostLabel" destination="35" id="36"/>
                 <outlet property="gainSlider" destination="24" id="30"/>
                 <outlet property="landscapeButtonsHolder" destination="48" id="51"/>
-                <outlet property="presetPicker" destination="20" id="23"/>
+                <outlet property="presetLabel" destination="C2q-Ob-mWN" id="Amr-GU-QP5"/>
                 <outlet property="toggleButton" destination="12" id="13"/>
                 <outlet property="view" destination="4" id="26"/>
             </connections>
@@ -124,15 +124,20 @@
                                 <action selector="toggle:" destination="-1" eventType="touchUpInside" id="14"/>
                             </connections>
                         </button>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="20" customClass="NWPickerField">
-                            <rect key="frame" x="10" y="63.5" width="300" height="31"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <textInputTraits key="textInputTraits"/>
-                            <connections>
-                                <outlet property="delegate" destination="-1" id="21"/>
-                            </connections>
-                        </textField>
+                        <view contentMode="scaleToFill" id="sAV-eq-Z4w">
+                            <rect key="frame" x="10" y="64" width="300" height="31"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Preset Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="C2q-Ob-mWN">
+                                    <rect key="frame" x="10" y="0.0" width="280" height="31"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
                 </view>

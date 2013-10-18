@@ -6,17 +6,17 @@
 //  Copyright (c) 2011 Ben Baron. All rights reserved.
 //
 
-#import "NWPickerField.h"
 #import "DDSocialDialog.h"
 
-@class EqualizerView, EqualizerPointView, EqualizerPathView, BassParamEqValue, BassEffectDAO, NWPickerField, SnappySlider;
-@interface EqualizerViewController : UIViewController <NWPickerFieldDelegate, DDSocialDialogDelegate, UITableViewDelegate, UITableViewDataSource>
+@class EqualizerView, EqualizerPointView, EqualizerPathView, BassParamEqValue, BassEffectDAO, SnappySlider;
+@interface EqualizerViewController : UIViewController <DDSocialDialogDelegate, UITableViewDelegate, UITableViewDataSource, UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property (strong) UIView *overlay;
 @property (strong) UIButton *dismissButton;
 @property (strong) IBOutlet UIView *controlsContainer;
 @property BOOL isPresetPickerShowing;
-@property (strong) IBOutlet NWPickerField *presetPicker;
+@property (strong) IBOutlet UIPickerView *presetPicker;
+@property (strong) IBOutlet UILabel *presetLabel;
 @property (strong) IBOutlet UIButton *toggleButton;
 @property (strong) IBOutlet EqualizerPathView *equalizerPath;
 @property (strong) IBOutlet EqualizerView *equalizerView;

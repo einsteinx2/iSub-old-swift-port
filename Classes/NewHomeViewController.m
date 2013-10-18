@@ -279,7 +279,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
-		
+    
 	//////////// Handle landscape bug
 	BOOL rotationDisabled = settingsS.isRotationLockEnabled;
 	

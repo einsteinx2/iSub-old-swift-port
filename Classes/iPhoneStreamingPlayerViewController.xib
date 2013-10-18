@@ -186,7 +186,7 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <slider opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="75" customClass="OBSlider">
-                            <rect key="frame" x="50" y="6" width="220" height="29"/>
+                            <rect key="frame" x="50" y="3" width="220" height="29"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <accessibility key="accessibilityConfiguration">
@@ -200,7 +200,7 @@
                             </connections>
                         </slider>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="0:00" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="78">
-                            <rect key="frame" x="5" y="9" width="42" height="21"/>
+                            <rect key="frame" x="5" y="10" width="42" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
@@ -209,7 +209,7 @@
                             <size key="shadowOffset" width="0.0" height="2"/>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="-3:00" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="79">
-                            <rect key="frame" x="273" y="9" width="42" height="21"/>
+                            <rect key="frame" x="273" y="8" width="42" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>

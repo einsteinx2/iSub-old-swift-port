@@ -10,11 +10,12 @@
 #import "EqualizerView.h"
 #import "EqualizerPointView.h"
 #import "EqualizerPathView.h"
-#import "NWPickerView.h"
+#import "FXBlurView.h"
 
 @implementation EqualizerViewController
 
 #define hidePickerTimer @"EqualizerViewController hide picker timer"
+#define hidePickerTimerDelay 5.
 
 - (BOOL)shouldAutorotate
 {
@@ -115,64 +116,9 @@
 	[backViewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
-- (void)dismissPicker
-{
-	[self.presetPicker resignFirstResponder];
-	//self.hidePickerTimer = nil;
-	[EX2Dispatch cancelTimerBlockWithName:hidePickerTimer];
-}
-
-- (void)createOverlay
-{
-	self.overlay = [[UIView alloc] init];
-	self.overlay.frame = self.view.frame;
-	self.overlay.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	self.overlay.backgroundColor = [UIColor colorWithWhite:0 alpha:.80];
-	self.overlay.alpha = 0.0;
-	[self.view insertSubview:self.overlay belowSubview:self.controlsContainer];
-	
-	self.dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
-	self.dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	[self.dismissButton addTarget:self action:@selector(dismissPicker) forControlEvents:UIControlEventTouchUpInside];
-	self.dismissButton.frame = self.view.bounds;
-	self.dismissButton.enabled = NO;
-	[self.overlay addSubview:self.dismissButton];
-
-	// Animate the search overlay on screen
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.3];
-	[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-	self.overlay.alpha = 1;
-	self.dismissButton.enabled = YES;
-	[UIView commitAnimations];
-}
-
-- (void)hideOverlay
-{
-	if (self.overlay)
-	{
-		// Animate the search overlay off screen
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:.3];
-		[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-		[UIView setAnimationDelegate:self];
-		[UIView setAnimationDidStopSelector:@selector(removeOverlay)];
-		self.overlay.alpha = 0;
-		self.dismissButton.enabled = NO;
-		[UIView commitAnimations];
-	}
-}
-
-- (void)removeOverlay
-{
-	[self.overlay removeFromSuperview];
-	self.overlay = nil;
-}
-
 - (void)dealloc
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[[NSNotificationCenter defaultCenter] removeObserver:self.presetPicker];
 	[EX2Dispatch cancelTimerBlockWithName:hidePickerTimer];
 	//[hidePickerTimer release]; hidePickerTimer = nil;
 	
@@ -181,79 +127,14 @@
 
 #pragma mark - View lifecycle
 
-/*- (void)showLandscapeVisualizerButtons
-{
-	if (self.landscapeButtonsHolder.superview)
-		return;
-	
-	self.landscapeButtonsHolder.alpha = 0.0;
-	[self.view addSubview:self.landscapeButtonsHolder];
-	[UIView animateWithDuration:0.3 animations:^{
-		self.landscapeButtonsHolder.alpha = 1.0;
-	}completion: ^(BOOL finished){
-		[self performSelector:@selector(hideLandscapeVisualizerButtons) withObject:nil afterDelay:5.0];
-	}];
-}
-
-- (void)hideLandscapeVisualizerButtons
-{
-	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideLandscapeVisualizerButtons) object:nil];
-	
-	[UIView animateWithDuration:0.3  
-	animations: ^{
-		self.landscapeButtonsHolder.alpha = 0.0;
-	}				 
-	completion: ^(BOOL finished){
-		[self.landscapeButtonsHolder removeFromSuperview];
-	}];
-}*/
-
-- (void)pickerWillShown
-{
-	self.controlsContainer.y -= 60;
-	self.controlsContainer.height += 60;
-	
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.3];
-	for (UIView *subview in self.controlsContainer.subviews)
-	{
-		if (![subview isKindOfClass:[NWPickerView class]])
-			subview.hidden = YES;
-	}
-	[UIView commitAnimations];
-	
-	[self createOverlay];
-	self.isPresetPickerShowing = YES;
-	
-	/*// Dismiss the picker view after a few seconds
-	[NSObject gcdCancelTimerBlockWithName:hidePickerTimer];
-	[self gcdTimerPerformBlockInMainQueue:^{
-		[NSNotificationCenter postNotificationToMainThreadWithName:@"hidePresetPicker"];
-	} afterDelay:5.0 withName:hidePickerTimer];*/
-}
-
-- (void)pickerWillHide
-{
-	[EX2Dispatch cancelTimerBlockWithName:hidePickerTimer];
-	
-	self.controlsContainer.y += 60;
-	self.controlsContainer.height -= 60;
-	
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.3];
-	for (UIView *subview in self.controlsContainer.subviews)
-	{
-		subview.hidden = NO;
-	}
-	[UIView commitAnimations];
-	
-	[self hideOverlay];
-	self.isPresetPickerShowing = NO;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.presetLabel.superview.layer.cornerRadius = 4.;
+    self.presetLabel.superview.layer.masksToBounds = YES;
+    UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showPresetPicker:)];
+    [self.presetLabel.superview addGestureRecognizer:recognizer];
 	
     if (!audioEngineS.player)
     {
@@ -262,7 +143,7 @@
 	
 	self.isSavePresetButtonShowing = NO;
 	self.savePresetButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-	CGRect f = self.presetPicker.frame;
+	CGRect f = self.presetLabel.superview.frame;
 	self.savePresetButton.frame = CGRectMake(f.origin.x + f.size.width - 65., f.origin.y, 60., 30.);
 	[self.savePresetButton setTitle:@"Save" forState:UIControlStateNormal];
 	[self.savePresetButton addTarget:self action:@selector(promptToSaveCustomPreset) forControlEvents:UIControlEventTouchUpInside];
@@ -278,20 +159,13 @@
 	self.deletePresetButton.alpha = 0.;
 	self.deletePresetButton.enabled = NO;
 	[self.controlsContainer addSubview:self.deletePresetButton];
-	
-	if (self.effectDAO.selectedPresetId == BassEffectTempCustomPresetId)
-	{
-		[self showSavePresetButton:NO];
-	}
-	else if (![[self.effectDAO.selectedPreset objectForKey:@"isDefault"] boolValue])
-	{
-		[self showDeletePresetButton:NO];
-	}
     
     self.effectDAO = [[BassEffectDAO alloc] initWithType:BassEffectType_ParametricEQ];
+    if (!audioEngineS.player.equalizer.equalizerValues.count)
+        [self.effectDAO selectPresetAtIndex:self.effectDAO.selectedPresetIndex];
     
-	[self.presetPicker selectRow:self.effectDAO.selectedPresetIndex inComponent:0 animated:NO];
-	
+    [self updatePresetPicker];
+    
 	[self updateToggleButton];
 	
 	[self.equalizerView startEqDisplay];
@@ -314,14 +188,6 @@
     
     if (IS_TALL_SCREEN())
     {
-        UIView *pickerBackground = [[UIView alloc] initWithFrame:CGRectMake(0., 45., 320., 140.)];//CGRectMake(0., 365, 320., 140)];
-        pickerBackground.clipsToBounds = YES;
-        [self.controlsContainer addSubview:pickerBackground];
-        
-        self.presetPicker.pickerView.hidden = NO;
-        self.presetPicker.pickerView.y = -38.;
-        [pickerBackground addSubview:self.presetPicker.pickerView];
-        
         [self.controlsContainer bringSubviewToFront:self.savePresetButton];
         [self.controlsContainer bringSubviewToFront:self.deletePresetButton];
         
@@ -386,9 +252,7 @@
 	self.navigationController.navigationBar.hidden = YES;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createEqViews) name:ISMSNotification_BassEffectPresetLoaded object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pickerWillShown) name:UIPickerViewWillShownNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pickerWillHide) name:UIPickerViewWillHideNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self.presetPicker selector:@selector(resignFirstResponder) name:@"hidePresetPicker" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissPicker) name:@"hidePresetPicker" object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -468,8 +332,6 @@
 	[EX2Dispatch cancelTimerBlockWithName:hidePickerTimer];
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_BassEffectPresetLoaded object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIPickerViewWillShownNotification object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIPickerViewWillHideNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hidePresetPicker" object:nil];
 	
 	[self removeEqViews];
@@ -502,7 +364,7 @@
 		[UIView setAnimationDuration:.5];
 	}
 	
-	self.presetPicker.width = 300.;
+	self.presetLabel.superview.width = 300.;
 	self.savePresetButton.alpha = 0.;
 	
 	if (animated)
@@ -527,7 +389,7 @@
 		[UIView setAnimationDuration:.5];
 	}
 	
-	self.presetPicker.width = 300. - 65.;
+	self.presetLabel.superview.width = 300. - 70.;
 	self.savePresetButton.alpha = 1.;
 	
 	if (animated)
@@ -546,7 +408,7 @@
 		[UIView setAnimationDuration:.5];
 	}
 	
-	self.presetPicker.width = 300.;
+	self.presetLabel.superview.width = 300.;
 	self.deletePresetButton.alpha = 0.;
 	
 	if (animated)
@@ -571,7 +433,7 @@
 		[UIView setAnimationDuration:.5];
 	}
 	
-	self.presetPicker.width = 300. - 65.;
+	self.presetLabel.superview.width = 300. - 70.;
 	self.deletePresetButton.alpha = 1.;
 	
 	if (animated)
@@ -594,8 +456,7 @@
 {
 	[self.effectDAO saveTempCustomPreset:[self serializedEqPoints]];
 	
-	[self.presetPicker reloadAllComponents];
-	[self.presetPicker selectRow:self.effectDAO.selectedPresetIndex inComponent:0 animated:NO];
+	[self updatePresetPicker];
 }
 
 - (void)promptToDeleteCustomPreset
@@ -646,8 +507,7 @@
 		if (buttonIndex)
 		{
 			[self.effectDAO deleteCustomPresetForId:self.effectDAO.selectedPresetId];
-			[self.presetPicker reloadAllComponents];
-			[self.presetPicker selectRow:self.effectDAO.selectedPresetIndex inComponent:0 animated:YES];
+			[self updatePresetPicker];
 		}
 	}
 	else if (alertView.tag == 2)
@@ -659,8 +519,7 @@
             NSString *text = [alertView textFieldAtIndex:0].text;
 			[self.effectDAO saveCustomPreset:[self serializedEqPoints] name:text];
 			[self.effectDAO deleteTempCustomPreset];
-			[self.presetPicker reloadAllComponents];
-			[self.presetPicker selectRow:self.effectDAO.selectedPresetIndex inComponent:0 animated:YES];
+			[self updatePresetPicker];
 		}
 	}
 	else if (alertView.tag == 3)
@@ -755,6 +614,8 @@
 				// Add the view
 				[self.equalizerPointViews addObject:eqView];
 				[self.view addSubview:eqView];
+                
+                [self createAndDrawEqualizerPath];
 				
 				[self saveTempCustomPreset];
 			}
@@ -800,7 +661,6 @@
 
 - (IBAction)toggle:(id)sender
 {
-    
 	if ([audioEngineS.equalizer toggleEqualizer])
 	{
 		[self removeEqViews];
@@ -836,29 +696,93 @@
 }
 
 #pragma mark -
-#pragma mark NWPickerField
+#pragma mark Preset Picker
 #pragma mark -
 
-- (NSInteger)numberOfComponentsInPickerField:(NWPickerField*)pickerField
+- (void)updatePresetPicker
 {
-	return 1;
+    [self.presetPicker reloadAllComponents];
+    [self.presetPicker selectRow:self.effectDAO.selectedPresetIndex inComponent:0 animated:YES];
+    self.presetLabel.text = self.effectDAO.selectedPreset[@"name"];
+    
+    if (self.effectDAO.selectedPresetId == BassEffectTempCustomPresetId)
+	{
+		[self showSavePresetButton:NO];
+	}
+	else if (![[self.effectDAO.selectedPreset objectForKey:@"isDefault"] boolValue])
+	{
+		[self showDeletePresetButton:NO];
+	}
 }
 
-- (NSInteger)pickerField:(NWPickerField*)pickerField numberOfRowsInComponent:(NSInteger)component
+- (void)showPresetPicker:(id)sender
 {
-	return [self.effectDAO.presets count];	
-}
-
-- (NSString *)pickerField:(NWPickerField *)pickerField titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-	return [[self.effectDAO.presetsArray objectAtIndexSafe:row] objectForKey:@"name"];
-}
-
-- (void)pickerField:(NWPickerField *)pickerField selectedRow:(NSInteger)row inComponent:(NSInteger)component
-{
-	//[pickerField resignFirstResponder];
+    self.overlay = [[UIView alloc] init];
+	self.overlay.frame = self.view.frame;
+	self.overlay.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	self.overlay.backgroundColor = [UIColor colorWithWhite:0 alpha:.80];
+	self.overlay.alpha = 0.0;
+	[self.view insertSubview:self.overlay belowSubview:self.controlsContainer];
 	
-	[self.effectDAO selectPresetAtIndex:row];
+	self.dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
+	self.dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	[self.dismissButton addTarget:self action:@selector(dismissPicker) forControlEvents:UIControlEventTouchUpInside];
+	self.dismissButton.frame = self.view.bounds;
+	self.dismissButton.enabled = NO;
+	[self.overlay addSubview:self.dismissButton];
+    
+    if (!self.presetPicker)
+    {
+        self.presetPicker = [[UIPickerView alloc] init];
+        self.presetPicker.dataSource = self;
+        self.presetPicker.delegate = self;
+        
+        FXBlurView *blurView = [[FXBlurView alloc] initWithFrame:self.presetPicker.bounds];
+        blurView.tintColor = [UIColor whiteColor];
+        [blurView addSubview:self.presetPicker];
+        blurView.height += 32.;
+        blurView.y = self.view.height;
+        
+        [self.view addSubview:blurView];
+        
+        [self updatePresetPicker];
+    }
+    
+    [UIView animateWithDuration:.3 delay:0. options:UIViewAnimationOptionCurveEaseOut animations:^{
+        self.overlay.alpha = 1;
+        self.dismissButton.enabled = YES;
+        self.presetPicker.superview.bottom = self.view.height;
+    } completion:nil];
+    
+	self.isPresetPickerShowing = YES;
+    
+    /*[EX2Dispatch timerInMainQueueAfterDelay:hidePickerTimerDelay withName:hidePickerTimer repeats:NO performBlock:^{
+        [self dismissPicker];
+    }];*/
+}
+
+- (void)dismissPicker
+{
+	[self.presetPicker resignFirstResponder];
+	
+	[EX2Dispatch cancelTimerBlockWithName:hidePickerTimer];
+    
+    if (self.overlay)
+	{
+		[UIView animateWithDuration:.3 delay:0. options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.overlay.alpha = 0;
+            self.dismissButton.enabled = NO;
+            self.presetPicker.superview.y = self.view.height;
+        } completion:^(BOOL finished) {
+            [self.overlay removeFromSuperview];
+            self.overlay = nil;
+        }];
+	}
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    [self.effectDAO selectPresetAtIndex:row];
 	
 	BOOL isDefault = [[self.effectDAO.selectedPreset objectForKey:@"isDefault"] boolValue];
 	
@@ -879,6 +803,28 @@
 	{
 		[self hideDeletePresetButton:YES];
 	}
+    
+    [EX2Dispatch cancelTimerBlockWithName:hidePickerTimer];
+    /*[EX2Dispatch timerInMainQueueAfterDelay:hidePickerTimerDelay withName:hidePickerTimer repeats:NO performBlock:^{
+        [self dismissPicker];
+    }];*/
+    
+    [self updatePresetPicker];
+}
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    return [[self.effectDAO.presetsArray objectAtIndexSafe:row] objectForKey:@"name"];
+}
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return self.effectDAO.presets.count;
 }
 
 #pragma mark - TableView delegate for save dialog -
@@ -954,8 +900,7 @@
 		UITableViewCell *currentTableCell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
 		[self.effectDAO saveCustomPreset:[self serializedEqPoints] name:currentTableCell.textLabel.text presetId:currentTableCell.tag];
 		[self.effectDAO deleteTempCustomPreset];
-		[self.presetPicker reloadAllComponents];
-		[self.presetPicker selectRow:self.effectDAO.selectedPresetIndex inComponent:0 animated:YES];
+		[self updatePresetPicker];
 	}
 	[self.saveDialog dismiss:YES];
 }
