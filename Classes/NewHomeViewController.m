@@ -280,10 +280,7 @@
 {
 	[super viewWillAppear:animated];
     
-	//////////// Handle landscape bug
-	BOOL rotationDisabled = settingsS.isRotationLockEnabled;
-	
-	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && !rotationDisabled)
+	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
 	{
 		if (!IS_IPAD())
 		{
@@ -307,7 +304,7 @@
             }
 		}
 	}
-	else if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation) && !rotationDisabled)
+	else if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
 	{
 		if (!IS_IPAD())
 		{
