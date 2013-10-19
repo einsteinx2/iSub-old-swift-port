@@ -782,6 +782,10 @@
 		5379DC501219E48800F426CD /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC4B1219E48800F426CD /* ChatViewController.m */; };
 		5379DC511219E48800F426CD /* ChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5379DC4C1219E48800F426CD /* ChatViewController.xib */; };
 		537DE2D9113F008C00875852 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DE2D8113F008C00875852 /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		537E6C1E181208A200127E29 /* CustomUITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E6C1D181208A200127E29 /* CustomUITabBarController.m */; };
+		537E6C1F181208A200127E29 /* CustomUITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E6C1D181208A200127E29 /* CustomUITabBarController.m */; };
+		537E6C20181208A200127E29 /* CustomUITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E6C1D181208A200127E29 /* CustomUITabBarController.m */; };
+		537E6C21181208A200127E29 /* CustomUITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E6C1D181208A200127E29 /* CustomUITabBarController.m */; };
 		537E9A0A14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */; };
 		537E9A0B14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */; };
 		537E9A0C14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */; };
@@ -2107,6 +2111,8 @@
 		5379DC4B1219E48800F426CD /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
 		5379DC4C1219E48800F426CD /* ChatViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatViewController.xib; sourceTree = "<group>"; };
 		537DE2D8113F008C00875852 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		537E6C1C181208A200127E29 /* CustomUITabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomUITabBarController.h; sourceTree = "<group>"; };
+		537E6C1D181208A200127E29 /* CustomUITabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomUITabBarController.m; sourceTree = "<group>"; };
 		537E9A0814F323EE006CB0BC /* UIViewController+PushViewControllerCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+PushViewControllerCustom.h"; sourceTree = "<group>"; };
 		537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+PushViewControllerCustom.m"; sourceTree = "<group>"; };
 		537E9A2F14F43F3F006CB0BC /* StackContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StackContainerView.h; sourceTree = "<group>"; };
@@ -2827,6 +2833,8 @@
 				53B5298811AD9B79005776B5 /* LoadingScreen.h */,
 				53B5298911AD9B79005776B5 /* LoadingScreen.m */,
 				536B5D5D11C8183D00CC1D69 /* LoadingScreen.xib */,
+				537E6C1C181208A200127E29 /* CustomUITabBarController.h */,
+				537E6C1D181208A200127E29 /* CustomUITabBarController.m */,
 			);
 			name = "Custom UI Objects";
 			sourceTree = "<group>";
@@ -4835,6 +4843,7 @@
 				5388A2F01198741E0049BA9E /* LocalPlaylistsUITableViewCell.m in Sources */,
 				5388A3B4119899260049BA9E /* BookmarksViewController.m in Sources */,
 				5388A3B81198997B0049BA9E /* BookmarkUITableViewCell.m in Sources */,
+				537E6C1E181208A200127E29 /* CustomUITabBarController.m in Sources */,
 				530CE7F2119B8E8C00728ED5 /* CurrentPlaylistSongSmallUITableViewCell.m in Sources */,
 				530CE844119B9D9100728ED5 /* SongInfoPlaylistCustomUITableView.m in Sources */,
 				53B5298A11AD9B79005776B5 /* LoadingScreen.m in Sources */,
@@ -4930,6 +4939,7 @@
 				53159E83156F69D0001B0268 /* ArtistUITableViewCell.m in Sources */,
 				53159E84156F69D0001B0268 /* AllSongsUITableViewCell.m in Sources */,
 				53159E85156F69D0001B0268 /* CurrentPlaylistSongUITableViewCell.m in Sources */,
+				537E6C21181208A200127E29 /* CustomUITabBarController.m in Sources */,
 				53159E86156F69D0001B0268 /* LocalPlaylistsUITableViewCell.m in Sources */,
 				53159E87156F69D0001B0268 /* BookmarksViewController.m in Sources */,
 				53159E88156F69D0001B0268 /* BookmarkUITableViewCell.m in Sources */,
@@ -5042,6 +5052,7 @@
 				53BC27C3139AF0DD00A825F1 /* LocalPlaylistsUITableViewCell.m in Sources */,
 				53BC27C4139AF0DD00A825F1 /* BookmarksViewController.m in Sources */,
 				53BC27C5139AF0DD00A825F1 /* BookmarkUITableViewCell.m in Sources */,
+				537E6C20181208A200127E29 /* CustomUITabBarController.m in Sources */,
 				53BC27C6139AF0DD00A825F1 /* CurrentPlaylistSongSmallUITableViewCell.m in Sources */,
 				53BC27C7139AF0DD00A825F1 /* SongInfoPlaylistCustomUITableView.m in Sources */,
 				53BC27CC139AF0DD00A825F1 /* LoadingScreen.m in Sources */,
@@ -5141,6 +5152,7 @@
 				53DCF52413BFEAD3009160F9 /* LocalPlaylistsUITableViewCell.m in Sources */,
 				53DCF52513BFEAD3009160F9 /* BookmarksViewController.m in Sources */,
 				53DCF52613BFEAD3009160F9 /* BookmarkUITableViewCell.m in Sources */,
+				537E6C1F181208A200127E29 /* CustomUITabBarController.m in Sources */,
 				53DCF52713BFEAD3009160F9 /* CurrentPlaylistSongSmallUITableViewCell.m in Sources */,
 				53DCF52813BFEAD3009160F9 /* SongInfoPlaylistCustomUITableView.m in Sources */,
 				53DCF52D13BFEAD3009160F9 /* LoadingScreen.m in Sources */,
