@@ -685,8 +685,12 @@
     NSString *action = nil;
 	if (settingsS.isNewSearchAPI)
 	{
+        // Due to a Subsonic bug, to get good search results, we need to add a * to the end of
+        // Latin based languages, but not to unicode languages like Japanese.
+        BOOL isLatin = [searchTerms canBeConvertedToEncoding:NSISOLatin1StringEncoding];
+		NSString *searchTermsString = isLatin ? [NSString stringWithFormat:@"%@*", searchTerms] : searchTerms;
+        
         action = @"search2";
-		NSString *searchTermsString = [NSString stringWithFormat:@"%@*", searchTerms];
 		if (self.searchSegment.selectedSegmentIndex == 0)
 		{
             parameters = [NSDictionary dictionaryWithObjectsAndKeys:@"20", @"artistCount", @"0", @"albumCount", @"0", @"songCount", 
