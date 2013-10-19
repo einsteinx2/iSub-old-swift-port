@@ -258,7 +258,7 @@
     
 //DLog(@" settingsS.urlString: %@   settingsS.redirectUrlString: %@", settingsS.urlString, settingsS.redirectUrlString);
 		
-	if(self == [[self.navigationController viewControllers] objectAtIndexSafe:0] && !IS_IPAD())
+	if (self == [[self.navigationController viewControllers] objectAtIndexSafe:0] && !IS_IPAD())
 	{
 		[self.navigationController.view removeFromSuperview];
 	}
@@ -311,9 +311,6 @@
 			}
 		}
 		
-		if (!IS_IPAD())
-			[appDelegateS.mainTabBarController.view removeFromSuperview];
-		
 		// Reset the databases
 		[databaseS closeAllDatabases];
 		
@@ -322,11 +319,7 @@
 		// Reset the tabs
 		if (!IS_IPAD())
 			[appDelegateS.rootViewController.navigationController popToRootViewControllerAnimated:NO];
-				
-		// Add the tab bar controller back to the window
-		if (!IS_IPAD())
-			[appDelegateS.window addSubview:[appDelegateS.mainTabBarController view]];
-		
+        
 		appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
 		
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerSwitched];
