@@ -8,7 +8,7 @@
 
 @class PageControlViewController, MPVolumeView, OBSlider, Song;
 
-@interface iPhoneStreamingPlayerViewController : UIViewController <AsynchronousImageViewDelegate>
+@interface iPhoneStreamingPlayerViewController : UIViewController <AsynchronousImageViewDelegate, UIGestureRecognizerDelegate>
 
 @property NSUInteger reflectionHeight;
 @property BOOL isFlipped;

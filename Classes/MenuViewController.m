@@ -60,7 +60,7 @@
         [self.view addSubview:playerHolder];
 		
 		playerController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-		playerNavController = [[UINavigationController alloc] initWithRootViewController:playerController];
+		playerNavController = [[CustomUINavigationController alloc] initWithRootViewController:playerController];
 		playerNavController.view.frame = CGRectMake(0, 0, 320, 440);
         if (IS_IOS7())
             playerNavController.navigationBar.barTintColor = [UIColor blackColor];
@@ -308,7 +308,7 @@
 			case 0:
 			{
 				ServerListViewController *settings = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
-				UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:settings];
+				UINavigationController *navController = [[CustomUINavigationController alloc] initWithRootViewController:settings];
 				navController.navigationBar.tintColor = [UIColor blackColor];
 				controller = (UIViewController *)navController;
 				break;
@@ -328,7 +328,7 @@
 			case 0:
 			{
 				ServerListViewController *settings = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
-				UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:settings];
+				UINavigationController *navController = [[CustomUINavigationController alloc] initWithRootViewController:settings];
 				navController.navigationBar.tintColor = [UIColor blackColor];
 				controller = (UIViewController *)navController;
 				break;

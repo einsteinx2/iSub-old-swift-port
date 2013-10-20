@@ -48,7 +48,7 @@
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </tabBar>
             <viewControllers>
-                <navigationController title="Home" id="163">
+                <navigationController title="Home" id="163" customClass="CustomUINavigationController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" tag="9" title="Home" image="home-tabbaricon.png" id="164"/>
                     <toolbarItems/>
@@ -74,7 +74,7 @@
                         </viewController>
                     </viewControllers>
                 </navigationController>
-                <navigationController id="27">
+                <navigationController id="27" customClass="CustomUINavigationController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" title="Folders" image="folders-tabbaricon.png" id="28"/>
                     <toolbarItems/>
@@ -100,7 +100,7 @@
                         </viewController>
                     </viewControllers>
                 </navigationController>
-                <navigationController id="69">
+                <navigationController id="69" customClass="CustomUINavigationController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" tag="3" title="Playlists" image="playlists-tabbaricon.png" id="70"/>
                     <toolbarItems/>
@@ -126,7 +126,7 @@
                         </viewController>
                     </viewControllers>
                 </navigationController>
-                <navigationController id="100">
+                <navigationController id="100" customClass="CustomUINavigationController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" tag="7" title="Cache" image="cache-tabbaricon.png" id="101"/>
                     <toolbarItems/>
@@ -152,7 +152,7 @@
                         </viewController>
                     </viewControllers>
                 </navigationController>
-                <navigationController id="35">
+                <navigationController id="35" customClass="CustomUINavigationController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" tag="1" title="Albums" image="albums-tabbaricon.png" id="36"/>
                     <toolbarItems/>
@@ -178,7 +178,7 @@
                         </viewController>
                     </viewControllers>
                 </navigationController>
-                <navigationController id="53">
+                <navigationController id="53" customClass="CustomUINavigationController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" tag="2" title="Songs" image="songs-tabbaricon.png" id="54"/>
                     <toolbarItems/>
@@ -204,7 +204,7 @@
                         </viewController>
                     </viewControllers>
                 </navigationController>
-                <navigationController title="Bookmarks" id="86">
+                <navigationController title="Bookmarks" id="86" customClass="CustomUINavigationController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" tag="4" title="Bookmarks" image="bookmarks-tabbaricon.png" id="90"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
@@ -227,7 +227,7 @@
                         </viewController>
                     </viewControllers>
                 </navigationController>
-                <navigationController id="64">
+                <navigationController id="64" customClass="CustomUINavigationController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" tag="5" title="Playing" image="playing-tabbaricon.png" id="65"/>
                     <toolbarItems/>
@@ -253,7 +253,7 @@
                         </viewController>
                     </viewControllers>
                 </navigationController>
-                <navigationController id="93">
+                <navigationController id="93" customClass="CustomUINavigationController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" tag="6" title="Genres" image="genres-tabbaricon.png" id="94"/>
                     <toolbarItems/>
@@ -279,7 +279,7 @@
                         </viewController>
                     </viewControllers>
                 </navigationController>
-                <navigationController id="156">
+                <navigationController id="156" customClass="CustomUINavigationController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" tag="8" title="Chat" image="chat-tabbaricon.png" id="157"/>
                     <toolbarItems/>
@@ -323,7 +323,7 @@
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </tabBar>
             <viewControllers>
-                <navigationController id="120">
+                <navigationController id="120" customClass="CustomUINavigationController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" title="Folders" image="folders-tabbaricon.png" id="121"/>
                     <toolbarItems/>
@@ -349,7 +349,7 @@
                         </viewController>
                     </viewControllers>
                 </navigationController>
-                <navigationController id="125">
+                <navigationController id="125" customClass="CustomUINavigationController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" title="Genres" image="genres-tabbaricon.png" id="126"/>
                     <toolbarItems/>
@@ -375,7 +375,7 @@
                         </viewController>
                     </viewControllers>
                 </navigationController>
-                <navigationController id="130">
+                <navigationController id="130" customClass="CustomUINavigationController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" title="Playlists" image="playing-tabbaricon.png" id="131"/>
                     <toolbarItems/>
@@ -401,7 +401,7 @@
                         </viewController>
                     </viewControllers>
                 </navigationController>
-                <navigationController id="135">
+                <navigationController id="135" customClass="CustomUINavigationController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" title="Bookmarks" image="bookmarks-tabbaricon.png" id="136"/>
                     <toolbarItems/>
@@ -436,15 +436,11 @@
     <resources>
         <image name="albums-tabbaricon.png" width="30" height="30"/>
         <image name="bookmarks-tabbaricon.png" width="30" height="30"/>
-        <image name="bookmarks-tabbaricon.png" width="30" height="30"/>
         <image name="cache-tabbaricon.png" width="30" height="30"/>
         <image name="chat-tabbaricon.png" width="30" height="30"/>
         <image name="folders-tabbaricon.png" width="30" height="30"/>
-        <image name="folders-tabbaricon.png" width="30" height="30"/>
-        <image name="genres-tabbaricon.png" width="30" height="30"/>
         <image name="genres-tabbaricon.png" width="30" height="30"/>
         <image name="home-tabbaricon.png" width="30" height="30"/>
-        <image name="playing-tabbaricon.png" width="30" height="30"/>
         <image name="playing-tabbaricon.png" width="30" height="30"/>
         <image name="playlists-tabbaricon.png" width="30" height="30"/>
         <image name="songs-tabbaricon.png" width="30" height="30"/>

@@ -19,5 +19,6 @@
 #import "CustomUIAlertView.h"
 #import "CustomUITextView.h"
 #import "CustomUITableViewController.h"
+#import "CustomUINavigationController.h"
 
 #endif

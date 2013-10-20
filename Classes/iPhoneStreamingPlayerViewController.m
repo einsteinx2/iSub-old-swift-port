@@ -72,6 +72,15 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
     {
         self.edgesForExtendedLayout = UIRectEdgeNone;
         self.automaticallyAdjustsScrollViewInsets = NO;
+        
+        self.volumeSlider.y -= 5.;
+        self.eqButton.y -= 5.;
+        self.prevButton.y -= 5.;
+        self.playButton.y -= 5.;
+        self.nextButton.y -= 5.;
+        self.extraButtonsButton.y -= 5.;
+        
+        self.progressSlider.superview.y -= 2.;
     }
 	
     //DLog(@"coverArtImageView class: %@", NSStringFromClass(coverArtImageView.class));
@@ -110,8 +119,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	// Setup the navigation controller buttons
 	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"player-overlay.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(songInfoToggle:)];
 	if (!IS_IPAD())
+    {
 		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(backAction:)];
-	
+    }
+    
 	// Initialize the song info
 	//[self initSongInfo];
 	
@@ -156,20 +167,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		self.volumeSlider.y += 5;
 	}
 	
-	// Only add the gesture recognizer on iOS 3.2 and above where it is supported
-	if (NSClassFromString(@"UISwipeGestureRecognizer"))
-	{
-		self.swipeDetector = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(songInfoToggle:)];
-		if ([self.swipeDetector respondsToSelector:@selector(locationInView:)])
-		{
-			self.swipeDetector.direction = UISwipeGestureRecognizerDirectionLeft;
-			[self.songInfoToggleButton addGestureRecognizer:self.swipeDetector];
-		}
-		else
-		{
-			 self.swipeDetector = nil;
-		}
-	}
+	self.swipeDetector = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(songInfoToggle:)];
+    self.swipeDetector.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.songInfoToggleButton addGestureRecognizer:self.swipeDetector];
+    self.swipeDetector.delegate = self;
     
     // Fix starting in landscape on iPhone 5
     if (IS_TALL_SCREEN() && UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
@@ -388,6 +389,12 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	self.downloadProgress.width = 0.0;
 	self.downloadProgress.layer.cornerRadius = 5;
 	[self.progressSlider addSubview:self.downloadProgress];
+    
+    if (IS_IOS7())
+    {
+        self.downloadProgress.height -= 14.;
+        [self.downloadProgress centerVertically];
+    }
 	
 	if (settingsS.isJukeboxEnabled)
 		self.downloadProgress.hidden = YES;
@@ -915,12 +922,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)backAction:(id)sender
 {
-	NSArray *viewControllers = self.navigationController.viewControllers;
-	NSInteger count = [viewControllers count];
-	
-	UIViewController *backVC = [viewControllers objectAtIndexSafe:(count - 2)];
-	
-	[self.navigationController popToViewController:backVC animated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)updateBarButtonImage

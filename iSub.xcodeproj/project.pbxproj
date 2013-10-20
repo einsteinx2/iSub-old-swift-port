@@ -1213,6 +1213,10 @@
 		53BC286C139AF17B00A825F1 /* Icon-72-Beta.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BC2869139AF17B00A825F1 /* Icon-72-Beta.png */; };
 		53BC286D139AF17B00A825F1 /* Icon-Beta.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BC286A139AF17B00A825F1 /* Icon-Beta.png */; };
 		53BC286E139AF17B00A825F1 /* Icon@2x-Beta.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BC286B139AF17B00A825F1 /* Icon@2x-Beta.png */; };
+		53BCC51B181387B300442E86 /* CustomUINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BCC51A181387B300442E86 /* CustomUINavigationController.m */; };
+		53BCC51C181387B300442E86 /* CustomUINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BCC51A181387B300442E86 /* CustomUINavigationController.m */; };
+		53BCC51D181387B300442E86 /* CustomUINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BCC51A181387B300442E86 /* CustomUINavigationController.m */; };
+		53BCC51E181387B300442E86 /* CustomUINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BCC51A181387B300442E86 /* CustomUINavigationController.m */; };
 		53C22CCF128EE81C00FFBA67 /* ModalAlbumArtViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C22CCE128EE81C00FFBA67 /* ModalAlbumArtViewController.m */; };
 		53C4406814E87F5000A7DC41 /* support-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C4406614E87F5000A7DC41 /* support-tabbaricon.png */; };
 		53C4406914E87F5000A7DC41 /* support-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C4406614E87F5000A7DC41 /* support-tabbaricon.png */; };
@@ -2256,6 +2260,8 @@
 		53BC2869139AF17B00A825F1 /* Icon-72-Beta.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72-Beta.png"; path = "Images/App Icons/Icon-72-Beta.png"; sourceTree = "<group>"; };
 		53BC286A139AF17B00A825F1 /* Icon-Beta.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Beta.png"; path = "Images/App Icons/Icon-Beta.png"; sourceTree = "<group>"; };
 		53BC286B139AF17B00A825F1 /* Icon@2x-Beta.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x-Beta.png"; path = "Images/App Icons/Icon@2x-Beta.png"; sourceTree = "<group>"; };
+		53BCC519181387B300442E86 /* CustomUINavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomUINavigationController.h; sourceTree = "<group>"; };
+		53BCC51A181387B300442E86 /* CustomUINavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomUINavigationController.m; sourceTree = "<group>"; };
 		53C22CCD128EE81C00FFBA67 /* ModalAlbumArtViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModalAlbumArtViewController.h; sourceTree = "<group>"; };
 		53C22CCE128EE81C00FFBA67 /* ModalAlbumArtViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModalAlbumArtViewController.m; sourceTree = "<group>"; };
 		53C4406614E87F5000A7DC41 /* support-tabbaricon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "support-tabbaricon.png"; path = "Images/Tab Bar Icons/support-tabbaricon.png"; sourceTree = "<group>"; };
@@ -2835,6 +2841,8 @@
 				536B5D5D11C8183D00CC1D69 /* LoadingScreen.xib */,
 				537E6C1C181208A200127E29 /* CustomUITabBarController.h */,
 				537E6C1D181208A200127E29 /* CustomUITabBarController.m */,
+				53BCC519181387B300442E86 /* CustomUINavigationController.h */,
+				53BCC51A181387B300442E86 /* CustomUINavigationController.m */,
 			);
 			name = "Custom UI Objects";
 			sourceTree = "<group>";
@@ -4822,6 +4830,7 @@
 				53CED25F113E2FF100B09699 /* SubsonicServerEditViewController.m in Sources */,
 				534E43B71155659A000B4134 /* AlbumUITableViewCell.m in Sources */,
 				534E44711155B106000B4134 /* SongUITableViewCell.m in Sources */,
+				53BCC51B181387B300442E86 /* CustomUINavigationController.m in Sources */,
 				539796E41162B68800F41D8B /* AllAlbumsViewController.m in Sources */,
 				539797FA1162D3F100F41D8B /* AllAlbumsUITableViewCell.m in Sources */,
 				53614ACA116432DA0088ABC0 /* ServerListViewController.m in Sources */,
@@ -4920,6 +4929,7 @@
 				53159E6D156F69D0001B0268 /* iPhoneStreamingPlayerViewController.m in Sources */,
 				53159E6E156F69D0001B0268 /* AsynchronousImageView.m in Sources */,
 				53159E6F156F69D0001B0268 /* SubsonicServerEditViewController.m in Sources */,
+				53BCC51E181387B300442E86 /* CustomUINavigationController.m in Sources */,
 				53159E70156F69D0001B0268 /* AlbumUITableViewCell.m in Sources */,
 				53159E71156F69D0001B0268 /* SongUITableViewCell.m in Sources */,
 				53159E73156F69D0001B0268 /* AllAlbumsViewController.m in Sources */,
@@ -5031,6 +5041,7 @@
 				53BC27A7139AF0DD00A825F1 /* SubsonicServerEditViewController.m in Sources */,
 				53BC27A8139AF0DD00A825F1 /* AlbumUITableViewCell.m in Sources */,
 				53BC27AA139AF0DD00A825F1 /* SongUITableViewCell.m in Sources */,
+				53BCC51D181387B300442E86 /* CustomUINavigationController.m in Sources */,
 				53BC27AC139AF0DD00A825F1 /* AllAlbumsViewController.m in Sources */,
 				53BC27AD139AF0DD00A825F1 /* AllAlbumsUITableViewCell.m in Sources */,
 				53BC27AE139AF0DD00A825F1 /* ServerListViewController.m in Sources */,
@@ -5131,6 +5142,7 @@
 				53DCF50813BFEAD3009160F9 /* SubsonicServerEditViewController.m in Sources */,
 				53DCF50913BFEAD3009160F9 /* AlbumUITableViewCell.m in Sources */,
 				53DCF50B13BFEAD3009160F9 /* SongUITableViewCell.m in Sources */,
+				53BCC51C181387B300442E86 /* CustomUINavigationController.m in Sources */,
 				53DCF50D13BFEAD3009160F9 /* AllAlbumsViewController.m in Sources */,
 				53DCF50E13BFEAD3009160F9 /* AllAlbumsUITableViewCell.m in Sources */,
 				53DCF50F13BFEAD3009160F9 /* ServerListViewController.m in Sources */,
