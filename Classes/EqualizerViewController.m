@@ -17,6 +17,11 @@
 #define hidePickerTimer @"EqualizerViewController hide picker timer"
 #define hidePickerTimerDelay 5.
 
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
 - (BOOL)shouldAutorotate
 {
     return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
@@ -130,6 +135,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.toggleButton.layer.masksToBounds = YES;
+    self.toggleButton.layer.cornerRadius = 2.;
     
     self.presetLabel.superview.layer.cornerRadius = 4.;
     self.presetLabel.superview.layer.masksToBounds = YES;
@@ -677,16 +685,12 @@
 	if(settingsS.isEqualizerOn)
 	{
 		[self.toggleButton setTitle:@"EQ is ON" forState:UIControlStateNormal];
-		UIColor *blue = [UIColor colorWithRed:98./255. green:180./255. blue:223./255. alpha:1.];
-		[self.toggleButton setTitleColor:blue forState:UIControlStateNormal];
-		self.toggleButton.titleLabel.font = ISMSBoldFont(24);
+        self.toggleButton.backgroundColor = [UIColor colorWithWhite:1. alpha:.15];
 	}
 	else
 	{
 		[self.toggleButton setTitle:@"EQ is OFF" forState:UIControlStateNormal];
-		UIColor *grey = [UIColor colorWithWhite:.75 alpha:1.];
-		[self.toggleButton setTitleColor:grey forState:UIControlStateNormal];
-		self.toggleButton.titleLabel.font = ISMSBoldFont(20);
+		self.toggleButton.backgroundColor = [UIColor clearColor];
 	}
 }
 

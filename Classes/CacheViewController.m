@@ -685,13 +685,13 @@
 	{
 		// Modify the header view to include the save and edit buttons
 		self.isSaveEditShowing = YES;
-		int y = 45;
+		int y = 43;
 		
 		self.headerView.frame = CGRectMake(0, 0, 320, y + 100);
 		if (self.segmentedControl.selectedSegmentIndex == 1)
 			self.headerView.frame = CGRectMake(0, 0, 320, y + 50);
 		
-		self.songsCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, y, 227, 34)];
+		self.songsCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, y, 160, 34)];
 		self.songsCountLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 		self.songsCountLabel.backgroundColor = [UIColor clearColor];
 		self.songsCountLabel.textColor = [UIColor whiteColor];
@@ -714,7 +714,7 @@
 		}
 		[self.headerView addSubview:self.songsCountLabel];
 		
-		self.cacheSizeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, y + 33, 227, 14)];
+		self.cacheSizeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, y + 33, 160, 14)];
 		self.cacheSizeLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 		self.cacheSizeLabel.backgroundColor = [UIColor clearColor];
 		self.cacheSizeLabel.textColor = [UIColor whiteColor];
@@ -745,12 +745,12 @@
 		[self updateCacheSizeLabel];
 		
 		self.deleteSongsButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		self.deleteSongsButton.frame = CGRectMake(0, y, 230, 50);
+		self.deleteSongsButton.frame = CGRectMake(0, y, 160, 50);
 		self.deleteSongsButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 		[self.deleteSongsButton addTarget:self action:@selector(deleteSongsAction:) forControlEvents:UIControlEventTouchUpInside];
 		[self.headerView addSubview:self.deleteSongsButton];
 		
-		self.editSongsLabel = [[UILabel alloc] initWithFrame:CGRectMake(234, y, 86, 50)];
+		self.editSongsLabel = [[UILabel alloc] initWithFrame:CGRectMake(160, y, 160, 50)];
 		self.editSongsLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
 		self.editSongsLabel.backgroundColor = [UIColor clearColor];
 		self.editSongsLabel.textColor = [UIColor whiteColor];
@@ -760,12 +760,12 @@
 		[self.headerView addSubview:self.editSongsLabel];
 		
 		self.editSongsButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		self.editSongsButton.frame = CGRectMake(234, y, 86, 40);
+		self.editSongsButton.frame = CGRectMake(160, y, 160, 40);
 		self.editSongsButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
 		[self.editSongsButton addTarget:self action:@selector(editSongsAction:) forControlEvents:UIControlEventTouchUpInside];
 		[self.headerView addSubview:self.editSongsButton];	
 		
-		self.deleteSongsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, y, 227, 50)];
+		self.deleteSongsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, y, 160, 50)];
 		self.deleteSongsLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 		self.deleteSongsLabel.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:.5];
 		self.deleteSongsLabel.textColor = [UIColor whiteColor];
@@ -780,7 +780,7 @@
 		self.headerView2 = nil;
 		if (self.segmentedControl.selectedSegmentIndex == 0)
 		{
-			self.headerView2 = [[UIView alloc] initWithFrame:CGRectMake(0, y + 50, 320, 50)];
+			self.headerView2 = [[UIView alloc] initWithFrame:CGRectMake(0, y + 52, 320, 50)];
 			self.headerView2.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 			self.headerView2.backgroundColor = viewObjectsS.darkNormal;
 			[self.headerView addSubview:self.headerView2];
@@ -807,7 +807,7 @@
 			
 			self.shuffleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shuffle-small.png"]];
 			self.shuffleImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-			self.shuffleImage.frame = CGRectMake(180, 12, 24, 26);
+			self.shuffleImage.frame = CGRectMake(180, 14, 24, 26);
 			[self.headerView2 addSubview:self.shuffleImage];
 			
 			self.shuffleLabel = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 160, 50)];
@@ -857,7 +857,7 @@
 		UILabel *textLabel = [[UILabel alloc] init];
 		textLabel.backgroundColor = [UIColor clearColor];
 		textLabel.textColor = [UIColor whiteColor];
-		textLabel.font = ISMSBoldFont(32);
+		textLabel.font = ISMSBoldFont(30);
 		textLabel.textAlignment = UITextAlignmentCenter;
 		textLabel.numberOfLines = 0;
 		if (settingsS.isCacheUnlocked)

@@ -71,6 +71,8 @@
 @property (nonatomic, strong) IBOutlet UISegmentedControl *maxVideoBitrate3GSegmentedControl;
 @property (nonatomic, strong) NSDate *loadedTime;
 
+@property (nonatomic, strong) IBOutletCollection(UISwitch) NSArray *switches;
+
 - (void)toggleCacheControlsVisibility;
 - (void)cachingTypeToggle;
 - (IBAction)segmentAction:(id)sender;

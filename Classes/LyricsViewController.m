@@ -56,7 +56,7 @@
 		titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		titleLabel.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.8];
 		titleLabel.textColor = [UIColor whiteColor];
-		titleLabel.font = ISMSBoldFont(32);
+		titleLabel.font = ISMSBoldFont(30);
 		titleLabel.textAlignment = UITextAlignmentCenter;
 		titleLabel.text = @"Lyrics";
 		[self.view addSubview:titleLabel];

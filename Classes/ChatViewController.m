@@ -187,7 +187,7 @@
 		UILabel *textLabel = [[UILabel alloc] init];
 		textLabel.backgroundColor = [UIColor clearColor];
 		textLabel.textColor = [UIColor whiteColor];
-		textLabel.font = ISMSBoldFont(32);
+		textLabel.font = ISMSBoldFont(30);
 		textLabel.textAlignment = UITextAlignmentCenter;
 		textLabel.numberOfLines = 0;
 		[textLabel setText:@"No Chat Messages\non the\nServer"];

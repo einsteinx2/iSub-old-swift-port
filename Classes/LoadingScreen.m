@@ -145,7 +145,7 @@
 	loadingLabel = [[UILabel alloc] init];
 	loadingLabel.backgroundColor = [UIColor clearColor];
 	loadingLabel.textColor = [UIColor whiteColor];
-	loadingLabel.font = ISMSBoldFont(32);
+	loadingLabel.font = ISMSBoldFont(30);
 	loadingLabel.textAlignment = UITextAlignmentCenter;
 	[loadingLabel setText:@"Loading"];
 	loadingLabel.frame = CGRectMake(10, 15, 220, 50);
